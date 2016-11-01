@@ -28,6 +28,7 @@ class AddTableSubInvoice(Migration):
         t.column('PaymState', 'integer', format="9", initial="0", max_width=4, label="Payment Status", column_label="Paym.Stat", position=28, order=170, help="Payment status")
         t.column('VATBasis', 'decimal', format="->>,>>9.99", decimals=3, initial="0", max_width=220, label="Tax Basis", extent=10, position=29, order=140, help="Base sum for tax")
         t.column('VATAccount', 'integer', format=">>>>>>>9", initial="0", max_width=180, label="VAT Account", column_label="VATAcct", extent=10, position=30, order=220, help="Account number of VAT")
+        t.column('FixedNumber', 'character', format="x(11)", initial=self.unknown, max_width=22, label="FixedNumber", position=31, order=230)
         t.index('InvNum', [['InvNum'], ['SubInvNum']], area="Dyn_Index_1", primary=True, unique=True)
         t.index('CLI', [['Brand'], ['CLI']], area="Dyn_Index_1")
         t.index('CustNum', [['CustNum']], area="Dyn_Index_1")

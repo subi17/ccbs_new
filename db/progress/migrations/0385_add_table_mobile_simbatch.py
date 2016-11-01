@@ -5,7 +5,7 @@ class AddTableSimBatch(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('SimBatch', area="Sta_Data_128", dump_name="simbatch", desc='''
+        t = self.table('SimBatch', area="Sta_Data_128_2", dump_name="simbatch", desc='''
 ''')
         t.column('SimBatch', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="Batch#", column_label="Batch#", position=2, order=10, help="Sequence for a Simbatch")
         t.column('ManCode', 'character', format="x(8)", initial="", max_width=16, label="Manufacturer", column_label="Manufacturer", position=3, order=20, help="Code of Manufacturer")

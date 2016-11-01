@@ -18,6 +18,7 @@ class AddTableDFTimeTable(Migration):
         t.column('FileNameTag', 'character', format="x(20)", initial="", max_width=40, label="File Name Tag", column_label="Tag", position=13, order=100, help="Value for tag used in file name")
         t.column('Ongoing', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="Ongoing Run Started", column_label="Ongoing", position=14, order=110, help="Starting time of an ongoing run")
         t.column('UseReplica', 'logical', format="Yes/No", initial="No", max_width=1, label="UseReplica", column_label="UseReplica", position=15, order=120, help="To find Production/Replication")
+        t.column('DumpTrigger', 'logical', format="yes/no", initial="no", max_width=1, label="Triggered Dump", column_label="DumpTrigger", position=16, order=130, help="Triggered Dump")
         t.index('DumpID', [['Brand'], ['DumpID'], ['ToDate', 'DESC']], area="Sta_Index_2", primary=True)
 
     def down(self):

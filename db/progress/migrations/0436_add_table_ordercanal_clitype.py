@@ -5,7 +5,7 @@ class AddTableCLIType(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('CLIType', area="Sta_Data_256", dump_name="mobtype", desc='''
+        t = self.table('CLIType', area="Sta_Data_256", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-clitype.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-clitype.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="mobtype", desc='''
 
 
 ''')
@@ -39,6 +39,8 @@ class AddTableCLIType(Migration):
         t.column('UsageType', 'integer', format="9", initial="1", max_width=4, label="Usage Type", column_label="UsageType", position=29, order=280)
         t.column('BundleType', 'logical', format="True/False", initial="False", max_width=1, label="Bundle Based Type", column_label="BundleType", position=30, order=290)
         t.column('BaseBundle', 'character', format="x(12)", initial="", max_width=24, label="BaseBundle", column_label="BaseBundle", position=32, order=300, help="Base voice/data bundle")
+        t.column('FixedLineDownload', 'character', format="x(8)", initial="", max_width=16, label="Fixed Line Download", column_label="FixedLineDownload", position=33, order=310, help="Fixed line download speed")
+        t.column('FixedLineUpload', 'character', format="x(8)", initial="", max_width=16, label="Fixed Line Upload", column_label="FixedLineUpload", position=34, order=320, help="Fixed line upload speed")
         t.index('Clitype', [['Brand'], ['Clitype']], area="Sta_Index_2", primary=True, unique=True)
         t.index('CliType_s', [['Clitype']], area="Sta_Index_2")
 

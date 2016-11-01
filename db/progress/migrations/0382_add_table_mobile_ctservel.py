@@ -5,7 +5,7 @@ class AddTableCTServEl(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('CTServEl', area="Sta_Data_128", label="CLIType Service Elements", dump_name="ctservel", desc="Service elements of a CLI type")
+        t = self.table('CTServEl', area="Sta_Data_128_2", label="CLIType Service Elements", dump_name="ctservel", desc="Service elements of a CLI type")
         t.column('CLIType', 'character', format="x(8)", initial="", max_width=16, label="CLI Type", column_label="CLIType", position=2, order=20, help="CLI type")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", column_label="Brand", position=3, order=10, help="Code Of Brand")
         t.column('ServCom', 'character', format="x(12)", initial="", max_width=24, label="Service Component", column_label="Component", position=4, order=40, help="Code of Service Component")

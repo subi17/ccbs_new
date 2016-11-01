@@ -5,7 +5,7 @@ class AddTableSimMan(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('SimMan', area="Sta_Data_128", dump_name="simman", desc='''
+        t = self.table('SimMan', area="Sta_Data_128_2", dump_name="simman", desc='''
 SIM manufacturer
 ''')
         t.column('Mancode', 'character', mandatory=True, format="x(8)", initial="", max_width=16, label="Manufacturer", column_label="Manufacturer", position=2, order=10, help="Code of Manufacturer")

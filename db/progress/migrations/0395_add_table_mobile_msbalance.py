@@ -5,7 +5,7 @@ class AddTableMSBalance(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('MSBalance', area="Sta_Data_128", label="Mobsub Balance", dump_name="msbalance", desc="Subscription balances")
+        t = self.table('MSBalance', area="Sta_Data_128_2", label="Mobsub Balance", dump_name="msbalance", desc="Subscription balances")
         t.column('MSSeq', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="Subscription ID", column_label="SubsID", position=2, order=10, help="Subscription ID")
         t.column('BalType', 'character', format="x(8)", initial="", max_width=16, label="Balance Type", column_label="Balance", position=3, order=20, help="Balance type")
         t.column('Amount', 'decimal', format="->>>>>>>9.99", decimals=5, initial="0", max_width=20, label="Balance", position=4, order=30, help="Current balance")

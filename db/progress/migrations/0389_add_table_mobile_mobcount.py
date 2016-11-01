@@ -5,7 +5,7 @@ class AddTableMobCount(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('MobCount', area="Sta_Data_128", dump_name="mobcount")
+        t = self.table('MobCount', area="Sta_Data_128_2", dump_name="mobcount")
         t.column('MsSeq', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="SubSeq", column_label="SubSeq", position=2, order=10, help="Sequence for a Subscription")
         t.column('CountType', 'character', format="x(8)", initial="", max_width=16, label="MC-Type", column_label="MC-Type", position=3, order=20, help="Mobile Counter Type")
         t.column('Balance', 'decimal', format="->>,>>9.99", decimals=2, initial="0", max_width=17, label="Balance", column_label="Balance", position=4, order=30, help="Current unbilled balance")
