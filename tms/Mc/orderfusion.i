@@ -96,7 +96,6 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       FusionMessage.OrderID = iiOrderID
       FusionMessage.MsSeq = Order.Msseq WHEN AVAIL Order
       FusionMessage.CreatedTS = fMakeTS()
-      FusionMessage.MessageID = GUID(GENERATE-UUID)
       FusionMessage.MessageType = icMessageType
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}
       FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_TMS}
