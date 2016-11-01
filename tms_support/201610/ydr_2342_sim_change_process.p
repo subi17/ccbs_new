@@ -2,9 +2,9 @@
 gcBrand = "1".
 katun   = "OTANOK".
 
-{tmsconst.i}
-{timestamp.i}
-{msreqfunc.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/msreqfunc.i}
 
 DEF STREAM sIn.
 DEF STREAM sOut.

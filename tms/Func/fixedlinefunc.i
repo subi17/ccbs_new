@@ -11,7 +11,7 @@
 &IF "{&FIXEDLINEFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 /*Function returns Trie if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */

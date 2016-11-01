@@ -8,8 +8,8 @@
   ---------------------------------------------------------------------- */
 /* &GLOBAL-DEFINE BrTable Order */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 
 DEFINE TEMP-TABLE ttOrder NO-UNDO
@@ -155,7 +155,7 @@ BROWSE:
         ufk[8] = 8
         ehto = 3 ufkey = FALSE.
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.

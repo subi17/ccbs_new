@@ -8,7 +8,7 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 
 DEF TEMP-TABLE ttDocs LIKE FusionMessage.
@@ -88,7 +88,7 @@ form
     " Message Contents " NO-LABELS 
     FRAME fDetails.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 fCollect(iiOrderId).
@@ -153,7 +153,7 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 

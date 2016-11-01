@@ -245,7 +245,7 @@ REPEAT WITH FRAME frTop:
                   MESSAGE "Mobile line provisioning is not complete" 
                      VIEW-AS ALERT-BOX. 
                   ufkey = TRUE.
-                  RUN ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT BROWSE.
                END.
 
