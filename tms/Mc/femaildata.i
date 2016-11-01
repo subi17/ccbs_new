@@ -2065,10 +2065,8 @@ PROCEDURE pGetWELCOMEPROMO:
 
    DEF VAR lcErr AS CHAR NO-UNDO.
 
-   lcErr = fGetOrderData (INPUT iiOrderNBR).
-
    ASSIGN
-      olgErr   = ""
+      lcErr = fGetOrderData (INPUT iiOrderNBR)
       lcResult = ""
       .
 
