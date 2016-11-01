@@ -66,7 +66,8 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
 
 END FUNCTION. 
 
-IF pcMSISDN BEGINS "9" THEN   /* Fixed line number */
+IF pcMSISDN BEGINS "8" OR
+   pcMSISDN BEGINS "9" THEN   /* Fixed line number */
    FIND mobsub NO-LOCK WHERE
         mobsub.brand = gcBrand AND
         mobsub.fixednumber = pcMSISDN NO-ERROR.
