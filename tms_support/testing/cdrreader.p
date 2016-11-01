@@ -114,10 +114,15 @@ PROCEDURE pUserInput:
             IF FRAME-FIELD = "lcCli" THEN DO:
                FIND FIRST mobsub WHERE
                           mobsub.cli = INPUT lcCli
-               NO-LOCK NO-ERROR.
+                          NO-LOCK NO-ERROR.
                IF NOT AVAIL mobsub then do:
-                  MESSAGE "Subcription" lcCli "not found" VIEW-AS ALERT-BOX ERROR.
-                  NEXT.
+                  FIND FIRST mobsub WHERE
+                             mobsub.FixedNumber = INPUT lcCli
+                             NO-LOCK NO-ERROR.
+                  IF NOT AVAIL mobsub then do:
+                     MESSAGE "Subcription" lcCli "not found" VIEW-AS ALERT-BOX ERROR.
+                     NEXT.
+                  END.
                end.
                ASSIGN
                   lcCLIType = mobsub.clitype

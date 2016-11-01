@@ -49,25 +49,17 @@ DISP
    STRING(TODAY,"99.99.9999") + " " + STRING(TIME,"HH:MM:SS") @ lcTime
 WITH FRAME frmMain.
 
-
-FUNCTION fToUTF8 RETURNS CHARACTER 
-         (INPUT pcText AS CHARACTER) :
- RETURN  CODEPAGE-CONVERT(pcText,"UTF-8",SESSION:CHARSET).
-END FUNCTION. 
-
-
-
 /* order struct */ 
 FUNCTION fFillOrderStruct RETURNS LOGICAL 
          (INPUT pcStruct AS CHARACTER):
 
    /* mandatory */
-   add_string(pcStruct,"channel", fToUTF8("order " +  Order.OrderChannel)).
-   add_string(pcStruct, "orderer_ip", fToUTF8(Order.OrdererIP)).
-   add_string(pcStruct, "contractid", fToUTF8(Order.ContractId)).
-   add_string(pcStruct, "cli", fToUTF8(Order.CLI)). 
-   add_string(pcStruct, "subscription_type", fToUTF8(Order.CLIType)).
-   add_string(pcStruct, "order_id", fToUTF8(STRING(Order.OrderId))).
+   add_string(pcStruct,"channel", "order " +  Order.OrderChannel).
+   add_string(pcStruct, "orderer_ip", Order.OrdererIP).
+   add_string(pcStruct, "contractid", Order.ContractId).
+   add_string(pcStruct, "cli", Order.CLI). 
+   add_string(pcStruct, "subscription_type", Order.CLIType).
+   add_string(pcStruct, "order_id", STRING(Order.OrderId)).
    /* optionals  */
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = gcBrand AND
@@ -76,10 +68,10 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    IF AVAIL OrderCustomer THEN   /* BankAccount without IBAN format */
        /* note: added temporary support for old format since it's possible
           that closed retention orders are reopened */
-       add_string(pcStruct, "billing_data", fToUTF8(
+       add_string(pcStruct, "billing_data", 
          (IF LENGTH(OrderCustomer.BankCode) > 20 
           THEN SUBSTRING(OrderCustomer.BankCode,5)
-          ELSE OrderCustomer.BankCode))).
+          ELSE OrderCustomer.BankCode)).
 
    FIND FIRST OrderPayment WHERE 
               OrderPayment.Brand = gcBrand AND
@@ -87,15 +79,15 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    
    IF AVAIL OrderPayment THEN DO:
         IF OrderPayment.Method EQ {&ORDERPAYMENT_M_POD}  THEN 
-           add_string(pcStruct, "payment_method",fToUTF8("on_delivery")).
+           add_string(pcStruct, "payment_method","on_delivery").
         ELSE IF OrderPayment.Method EQ {&ORDERPAYMENT_M_PAYPAL} THEN
-           add_string(pcStruct, "payment_method",fToUTF8("PAYPAL")).
+           add_string(pcStruct, "payment_method","PAYPAL").
         ELSE 
-           add_string(pcStruct, "payment_method",fToUTF8("credit_card")).
+           add_string(pcStruct, "payment_method","credit_card").
  
 
 
-        add_string(pcStruct,"payment_reference", fToUTF8(OrderPayment.CCReference)).
+        add_string(pcStruct,"payment_reference", OrderPayment.CCReference).
    END.
    
    FIND FIRST Memo WHERE 
@@ -114,23 +106,23 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    add_timestamp(pcStruct,"price_selection_time", Order.CrStamp).
    
    IF Order.Offer NE "" THEN 
-      add_string(pcStruct,"offer_id",fToUTF8(Order.Offer)).
+      add_string(pcStruct,"offer_id",Order.Offer).
    IF Order.Referee NE "" THEN 
-      add_string(pcStruct,"referee",fToUTF8(Order.Referee)).
+      add_string(pcStruct,"referee",Order.Referee).
 
    CASE Order.OrderType :
-        WHEN  0 THEN add_string(pcStruct,"number_type",fToUTF8("new")). 
-        WHEN  1 OR WHEN  3 THEN add_string(pcStruct,"number_type",fToUTF8("mnp")).
-        WHEN  2 THEN add_string(pcStruct,"number_type",fToUTF8("renewal")).
+        WHEN  0 THEN add_string(pcStruct,"number_type","new"). 
+        WHEN  1 OR WHEN  3 THEN add_string(pcStruct,"number_type","mnp").
+        WHEN  2 THEN add_string(pcStruct,"number_type","renewal").
    END.
    
    IF Order.CurrOper NE "" THEN DO: 
-      add_string(pcStruct,"old_operator",fToUTF8(Order.CurrOper)).
-      add_string(pcStruct,"old_icc",fToUTF8(Order.OldIcc)).
+      add_string(pcStruct,"old_operator",Order.CurrOper).
+      add_string(pcStruct,"old_icc",Order.OldIcc).
       IF Order.oldpaytype EQ TRUE THEN 
-        add_string(pcStruct,"old_billing_category",fToUTF8("prepaid")).
+        add_string(pcStruct,"old_billing_category","prepaid").
       ELSE 
-        add_string(pcStruct,"old_billing_category",fToUTF8("postpaid")).
+        add_string(pcStruct,"old_billing_category","postpaid").
    END.
 
    FIND FIRST OrderTopup WHERE  
@@ -141,16 +133,16 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    
    IF Order.FAT NE 0 THEN DO:
        add_double(pcStruct,"fat",Order.FAT).
-       add_string(pcStruct,"fatgroup",fToUTF8(Order.FTGrp)).
+       add_string(pcStruct,"fatgroup",Order.FTGrp).
    END.
    
    IF Order.ICC NE "" THEN 
-       add_string(pcStruct,"icc",fToUTF8(Order.ICC)).
+       add_string(pcStruct,"icc",Order.ICC).
    
-   add_string(pcStruct,"salesman",fToUTF8(Order.Salesman)).
+   add_string(pcStruct,"salesman",Order.Salesman).
    
    IF Order.Campaign NE "" THEN 
-       add_string(pcStruct,"campaign_code",fToUTF8(Order.Campaign)).
+       add_string(pcStruct,"campaign_code",Order.Campaign).
    
    FIND FIRST Memo WHERE 
               Memo.Brand = gcBrand AND
@@ -158,18 +150,18 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
               Memo.KeyValue  = STRING(Order.OrderId) AND
               Memo.MemoTitle EQ "Info" NO-LOCK NO-ERROR.
    IF AVAIL Memo THEN 
-      add_string(pcStruct,"memo",fToUTF8(Memo.MemoText)).
+      add_string(pcStruct,"memo",Memo.MemoText).
   
-   add_string(pcStruct,"date",fToUTF8(substr(string(Order.CrStamp,"99999999.99999"),1,8))).
+   add_string(pcStruct,"date",substr(string(Order.CrStamp,"99999999.99999"),1,8)).
 
   lcOrderTime = substr(string(Order.CrStamp,"99999999.99999"),10,5).
   lcOrderTime = STRING(integer(lcOrderTime),"HH:MM:SS").
   lcOrderTime = REPLACE(lcOrderTime,":","").
 
-   add_string(pcStruct,"time",fToUTF8(lcOrderTime)).
+   add_string(pcStruct,"time",lcOrderTime).
 
-   add_string(pcStruct,"order_status",fToUTF8(Order.StatusCode)).
-   add_string(pcStruct,"risk_code",fToUTF8(Order.RiskCode)).  
+   add_string(pcStruct,"order_status",Order.StatusCode).
+   add_string(pcStruct,"risk_code",Order.RiskCode).  
 
    RETURN TRUE.
 END.
@@ -186,51 +178,51 @@ FUNCTION fFillCustomerStruct RETURNS LOGICAL
 
    IF NOT AVAIL OrderCustomer THEN RETURN FALSE.
 
-   add_string(pcStruct,"fname",fToUTF8(OrderCustomer.FirstName)).
-   add_string(pcStruct,"lname",fToUTF8(OrderCustomer.Surname1)).
-   add_string(pcStruct,"lname2",fToUTF8(OrderCustomer.Surname2)).
-   add_string(pcStruct,"site_name",fToUTF8(OrderCustomer.Company)).
-   add_string(pcStruct,"region",fToUTF8(OrderCustomer.Region)).
+   add_string(pcStruct,"fname",OrderCustomer.FirstName).
+   add_string(pcStruct,"lname",OrderCustomer.Surname1).
+   add_string(pcStruct,"lname2",OrderCustomer.Surname2).
+   add_string(pcStruct,"site_name",OrderCustomer.Company).
+   add_string(pcStruct,"region",OrderCustomer.Region).
    add_int(pcStruct,"zip",INT(OrderCustomer.ZipCode)).
-   add_string(pcStruct,"city",fToUTF8(OrderCustomer.PostOffice)).
-   add_string(pcStruct,"country",fToUTF8(OrderCustomer.Country)).
-   add_string(pcStruct,"nationality",fToUTF8(OrderCustomer.Nationality)).
-   add_string(pcStruct,"email",fToUTF8(OrderCustomer.Email)).
-   add_string(pcStruct,"title",fToUTF8(OrderCustomer.custtitle)).
-   add_string(pcStruct,"sms_number",fToUTF8(OrderCustomer.MobileNumber)).
-   add_string(pcStruct,"phone_number",fToUTF8(OrderCustomer.FixedNumber)).
-   add_string(pcStruct,"street_code",fToUTF8(OrderCustomer.AddressCodC)).
-   add_string(pcStruct,"city_code",fToUTF8(OrderCustomer.AddressCodP)).
+   add_string(pcStruct,"city",OrderCustomer.PostOffice).
+   add_string(pcStruct,"country",OrderCustomer.Country).
+   add_string(pcStruct,"nationality",OrderCustomer.Nationality).
+   add_string(pcStruct,"email",OrderCustomer.Email).
+   add_string(pcStruct,"title",OrderCustomer.custtitle).
+   add_string(pcStruct,"sms_number",OrderCustomer.MobileNumber).
+   add_string(pcStruct,"phone_number",OrderCustomer.FixedNumber).
+   add_string(pcStruct,"street_code",OrderCustomer.AddressCodC).
+   add_string(pcStruct,"city_code",OrderCustomer.AddressCodP).
    add_datetime(pcStruct,"birthday",OrderCustomer.Birthday).
    add_boolean(pcStruct,"self_employed",OrderCustomer.SelfEmployed).
    add_datetime(pcStruct,"foundation_date",OrderCustomer.FoundationDate).
-   add_string(pcStruct,"language",fToUTF8(OrderCustomer.Language)).
+   add_string(pcStruct,"language",OrderCustomer.Language).
    add_boolean(pcStruct,"mark_sms",OrderCustomer.OperSMSMarketing).
    add_boolean(pcStruct,"mark_email",OrderCustomer.OperEmailMarketing).
    add_boolean(pcStruct,"mark_post",OrderCustomer.OperPostMarketing).
    add_boolean(pcStruct,"mark_sms_3rd",OrderCustomer.OutSMSMarketing).
    add_boolean(pcStruct,"mark_email_3rd",OrderCustomer.OutEMailMarketing).
    add_boolean(pcStruct,"mark_post_3rd",OrderCustomer.OutPostMarketing).
-   add_string(pcStruct,"id_type",fToUTF8(OrderCustomer.CustIdType)).
+   add_string(pcStruct,"id_type",OrderCustomer.CustIdType).
  
    IF Order.OrdererId NE "" AND OrderCustomer.RowType NE 5 THEN DO:
-      add_string(pcStruct,"person_id",fToUTF8(Order.OrdererId)).
-      add_string(pcStruct,"company_id",fToUTF8(OrderCustomer.CustId)).
+      add_string(pcStruct,"person_id",Order.OrdererId).
+      add_string(pcStruct,"company_id",OrderCustomer.CustId).
    END.
    ELSE 
-      add_string(pcStruct,"person_id",fToUTF8(OrderCustomer.CustId)).
+      add_string(pcStruct,"person_id",OrderCustomer.CustId).
 
    IF OrderCustomer.BuildingNum NE "" THEN
-      add_string(pcStruct,"building_number",fToUTF8(OrderCustomer.BuildingNum)).
+      add_string(pcStruct,"building_number",OrderCustomer.BuildingNum).
 
    IF OrderCustomer.AddressCompl NE "" THEN 
-      add_string(pcStruct,"complements",fToUTF8(OrderCustomer.AddressCompl)).
+      add_string(pcStruct,"complements",OrderCustomer.AddressCompl).
 
 
    IF OrderCustomer.Street NE "" THEN
-      add_string(pcStruct,"street", fToUTF8(OrderCustomer.Street)).
+      add_string(pcStruct,"street", OrderCustomer.Street).
    ELSE 
-      add_string(pcStruct,"street",fToUTF8(OrderCustomer.Address)).
+      add_string(pcStruct,"street",OrderCustomer.Address).
 
    add_boolean(pcStruct,"retrieved",OrderCustomer.custDataRetr).
    RETURN TRUE.
@@ -248,28 +240,28 @@ FUNCTION fFillAddressStruct RETURNS LOGICAL
 
    IF NOT AVAIL OrderCustomer THEN RETURN FALSE.
 
-   add_string(pcStruct,"fname",fToUTF8(OrderCustomer.FirstName)).
-   add_string(pcStruct,"lname", fToUTF8(OrderCustomer.Surname1)).
-   add_string(pcStruct,"lname2",fToUTF8(OrderCustomer.Surname2)).
-   add_string(pcStruct,"region",fToUTF8(OrderCustomer.Region)).
+   add_string(pcStruct,"fname",OrderCustomer.FirstName).
+   add_string(pcStruct,"lname", OrderCustomer.Surname1).
+   add_string(pcStruct,"lname2",OrderCustomer.Surname2).
+   add_string(pcStruct,"region",OrderCustomer.Region).
    add_int(pcStruct,"zip",INT(OrderCustomer.ZipCode)).
-   add_string(pcStruct,"city",fToUTF8(OrderCustomer.PostOffice)).
+   add_string(pcStruct,"city",OrderCustomer.PostOffice).
 
-   add_string(pcStruct,"street_code",fToUTF8(OrderCustomer.AddressCodC)).
-   add_string(pcStruct,"city_code",fToUTF8(OrderCustomer.AddressCodP)).
+   add_string(pcStruct,"street_code",OrderCustomer.AddressCodC).
+   add_string(pcStruct,"city_code",OrderCustomer.AddressCodP).
 
    IF OrderCustomer.BuildingNum NE "" THEN
-      add_string(pcStruct,"building_number",fToUTF8(OrderCustomer.BuildingNum)).
+      add_string(pcStruct,"building_number",OrderCustomer.BuildingNum).
 
    IF OrderCustomer.AddressCompl NE "" THEN 
-      add_string(pcStruct,"complements",fToUTF8(OrderCustomer.AddressCompl)).
+      add_string(pcStruct,"complements",OrderCustomer.AddressCompl).
    IF OrderCustomer.Street NE "" THEN 
-      add_string(pcStruct,"street",fToUTF8(OrderCustomer.Street)).
+      add_string(pcStruct,"street",OrderCustomer.Street).
    ELSE 
-      add_string(pcStruct,"street",fToUTF8(OrderCustomer.Address)).
+      add_string(pcStruct,"street",OrderCustomer.Address).
 
    IF OrderCustomer.KialaCode > "" THEN 
-      add_string(pcStruct,"kiala_code",fToUTF8(OrderCustomer.KialaCode)). 
+      add_string(pcStruct,"kiala_code",OrderCustomer.KialaCode). 
 
    RETURN TRUE.
 END.
@@ -284,7 +276,7 @@ FUNCTION fFillAccessoryStruct RETURNS LOGICAL
               OrderAccessory.OrderId = Order.OrderId AND
               OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) NO-ERROR.
    IF NOT AVAIL OrderAccessory THEN RETURN FALSE.
-   add_string(pcStruct,"imei",fToUTF8(OrderAccessory.IMEI)).
+   add_string(pcStruct,"imei",OrderAccessory.IMEI).
    IF OrderAccessory.Discount NE 0 THEN 
    add_double(pcStruct,"discount",OrderAccessory.Discount).
    

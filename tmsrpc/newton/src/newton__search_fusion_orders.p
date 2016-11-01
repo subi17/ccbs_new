@@ -26,6 +26,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
+{Syst/tmsconst.i}
 gcBrand = "1".
 
 DEF VAR pcInputStruct AS CHAR NO-UNDO. 
@@ -245,9 +246,13 @@ IF lcFixedLineNumber > "" THEN
 IF lcSalesman > "" THEN
    fAddQueryCondition("OrderFusion.Salesman = " + QUOTER(lcSalesMan)).
 
-IF lcFusionOrderStatus > "" THEN
+/* legacy status PFIN is converted to FIN and order status 79 */
+IF lcFusionOrderStatus > "" THEN DO:
    fAddQueryCondition("OrderFusion.FusionStatus = " +
-                      QUOTER(lcFusionOrderStatus)).
+       (IF lcFusionOrderStatus EQ "PFIN"
+        THEN QUOTER({&FUSION_ORDER_STATUS_FINALIZED})
+        ELSE QUOTER(lcFusionOrderStatus))).
+END.
 
 IF lcSubQuery > "" THEN 
    lcQuery = lcQuery + lcSubQuery.
@@ -255,10 +260,14 @@ IF lcSubQuery > "" THEN
 IF lcQuery EQ lcBaseQuery THEN
    RETURN appl_err("At least one search parameter is mandatory").
 
-IF lcMsisdn EQ "" OR (lcCustomerId > "" AND lcCustomerIdType > "") THEN 
+IF NOT lcMsisdn > "" THEN
    lcQuery = lcQuery + ', EACH Order NO-LOCK WHERE' +
                       ' Order.Brand = OrderFusion.Brand' + 
                        ' AND Order.OrderId = OrderFusion.OrderId'.
+
+IF lcFusionOrderStatus EQ "PFIN" THEN
+   lcQuery = lcQuery + " AND Order.StatusCode = " +
+                      QUOTER({&ORDER_STATUS_PENDING_MOBILE_LINE}).
 
 IF lcMsisdn > "" THEN
    lcQuery = lcQuery + ' AND Order.CLI = ' + QUOTER(lcMsisdn).

@@ -39,7 +39,7 @@ IF ilNewSubs THEN DO:
                     "*",
                     "",
                     MobSub.MSSeq,
-                    MobSub.ActivationDate,
+                    idtDate,
                     TRUE,    /* only those that don't already exist */
                     FALSE,   /* create fees */
                     FALSE,   /* solog (this is used for new mobsubs only) */
@@ -51,7 +51,7 @@ IF ilNewSubs THEN DO:
                     "TMSService",
                     "",
                     MobSub.MSSeq,
-                    MobSub.ActivationDate,
+                    idtDate,
                     TRUE,    /* only those that don't already exist */
                     FALSE,   /* create fees */
                     FALSE,   /* solog (this is used for new mobsubs only) */
@@ -63,13 +63,13 @@ IF ilNewSubs THEN DO:
    /* then the elements that have been defined as basic */
    fProfileExtention(MobSub.CLIType,
                      MobSub.MsSeq,
-                     MobSub.ActivationDate,
+                     idtDate,
                      FALSE).  /* create fees */
 END.
 
 ELSE RUN pDefaultServices (MobSub.CLIType,
                            MobSub.MSSeq,
-                           MobSub.ActivationDate,
+                           idtDate,
                            FALSE,   /* all changed ones */
                            FALSE,   /* create fees */
                            FALSE,   /* solog */

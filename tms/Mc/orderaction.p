@@ -114,7 +114,7 @@ FIND FIRST Order WHERE
 IF NOT AVAILABLE Order THEN DO:
    MESSAGE "Order not available"
    VIEW-AS ALERT-BOX ERROR.
-   RETURN.
+   RETURN "".
 END.
 
 RUN local-Find-First.
@@ -126,7 +126,7 @@ IF AVAILABLE OrderAction THEN ASSIGN
 ELSE DO:
    IF lcRight NE "RW" THEN DO:
       MESSAGE "No items available" VIEW-AS ALERT-BOX INFORMATION.
-      RETURN.
+      RETURN "".
    END.
    ASSIGN
       Memory       = ?
@@ -456,7 +456,7 @@ RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
-
+RETURN "".
 
 PROCEDURE local-find-this:
 

@@ -44,6 +44,7 @@ DEF VAR llPenalty    AS LOG  NO-UNDO.
 DEF VAR lcOutOper    AS CHAR NO-UNDO.
 DEF VAR llYoigoCLI   AS LOG  NO-UNDO.
 DEF VAR liBillPerm   AS INT  NO-UNDO. 
+DEF VAR liError      AS INT  NO-UNDO. 
 
 DEF STREAM sRead.
 DEF STREAM sLog.
@@ -113,13 +114,22 @@ REPEAT:
       fError("Invalid data format").
       NEXT.
    END.
-
-   fDeleteMsValidation(liMsSeq, OUTPUT lcError).
-   IF lcError NE "" THEN DO:
-      fError(lcError).
+   
+   /* validate reason code */
+   IF NOT CAN-FIND(FIRST TMSCodes WHERE
+                         TMSCodes.TableName = "MsRequest"  AND
+                         TMSCOdes.FieldName = "TermReason" AND
+                         TMSCodes.CodeValue = lcReason)
+   THEN DO:
+      fError("Invalid reason code"). 
       NEXT.
    END.
 
+   liError = fDeleteMsValidation(liMsSeq, INT(lcReason), OUTPUT lcError).
+   IF liError NE 0 THEN DO:
+      fError(lcError).
+      NEXT.
+   END.
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR.
    
@@ -141,15 +151,6 @@ REPEAT:
    /* Yoigo MSISDN? */
    llYoigoCLI = fIsYoigoCLI(Mobsub.CLI).
 
-   /* validate reason code */
-   IF NOT CAN-FIND(FIRST TMSCodes WHERE
-                         TMSCodes.TableName = "MsRequest"  AND
-                         TMSCOdes.FieldName = "TermReason" AND
-                         TMSCodes.CodeValue = lcReason)
-   THEN DO:
-      fError("Invalid reason code"). 
-      NEXT.
-   END.
    IF (MobSub.PayType = TRUE AND LOOKUP(lcReason,"6,7,8") = 0) OR
       (MobSub.PayType = FALSE AND LOOKUP(lcReason,"4,7,8,10,3,1") = 0) THEN DO:
       fError("Invalid reason code"). 

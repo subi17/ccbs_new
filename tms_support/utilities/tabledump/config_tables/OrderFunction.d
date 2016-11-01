@@ -24,3 +24,5 @@
 55 "Change Customer Data" "orderhold,iiOrderId,MODIFY"
 57 "Release in control with secure" "orderinctrl,iiOrderId,1"
 59 "Document Management" "dms"
+60 "Show Convergent data" "convview"
+61 "Cancel fixed line order" "fusion_order_cancel,iiOrderId"

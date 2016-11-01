@@ -260,10 +260,10 @@ FUNCTION fSendPortabilityActivationRequestsQuery RETURNS LOGICAL
       ELSE DO:
          IF ttPortabilityQuery.Nationality NE "NIF" THEN
             add_string(lcDatosPersonales, "nacionalidad", ttPortabilityQuery.Nationality).
-         add_string(lcDatosPersonales, "nombre", fConvertToUTF8(ttPortabilityQuery.FirstName)).
-         add_string(lcDatosPersonales, "primerApellido", fConvertToUTF8(ttPortabilityQuery.Surname1)).
+         add_string(lcDatosPersonales, "nombre", ttPortabilityQuery.FirstName).
+         add_string(lcDatosPersonales, "primerApellido", ttPortabilityQuery.Surname1).
          IF ttPortabilityQuery.SurName2 NE "" THEN 
-         add_string(lcDatosPersonales, "segundoApellido", fConvertToUTF8(ttPortabilityQuery.Surname2)).
+         add_string(lcDatosPersonales, "segundoApellido", ttPortabilityQuery.Surname2).
       END.
    END.   
 

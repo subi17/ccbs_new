@@ -300,6 +300,28 @@ IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
       ELSE RUN StarEventMakeModifyEvent(lhOrderCustomer).
    END.
 END.
+/* YPR-4984, Router delivered to customer */
+IF liLOStatusId EQ 99998 AND lcIMEI > "" THEN DO:
+   FIND FIRST OrderFusion WHERE
+              OrderFusion.Brand EQ gcBrand AND
+              OrderFusion.orderid EQ Order.OrderId NO-ERROR.
+   IF AVAIL OrderFusion THEN DO:
+      FIND FIRST FusionMessage WHERE
+                 FusionMessage.orderID EQ Order.OrderId AND
+                 FusionMessage.messagetype EQ 
+                    {&FUSIONMESSAGE_TYPE_LOGISTICS} AND
+                 FusionMessage.messageStatus EQ {&FUSIONMESSAGE_STATUS_SENT}
+                 NO-ERROR.
+      OrderFusion.serialnumber = lcIMEI.           
+      IF AVAIL FusionMessage THEN
+         FusionMessage.messageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
+   END.
+END.
+
+/* Remove router prefix 9999 for SMS sending */
+IF STRING(liLOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
+   liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId),
+                      LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
 
 fSendDextraSMS(Order.OrderID, liLOStatusId, liCourierId).
 

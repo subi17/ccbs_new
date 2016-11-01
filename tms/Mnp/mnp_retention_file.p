@@ -31,6 +31,7 @@ FUNCTION fGetPenalty RETURN DECIMAL
   CONTRACT_LOOP:
    FOR EACH DCCLI WHERE
             DCCLI.Brand = gcBrand AND
+            DCCLI.DCEvent BEGINS "TERM" AND
             DCCLI.MsSeq = Mobsub.Msseq AND
             DCCLI.ValidTo >= TODAY NO-LOCK,
       FIRST DayCampaign WHERE

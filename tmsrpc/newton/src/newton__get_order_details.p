@@ -32,6 +32,7 @@
                  offer_id;string;offer id 
                  logistics_file;string;logistics file name (Dextra file) 
                  data_bundle_id;string;data bundle id for subscription_type
+                 msstatus;int;mobile line status
  * @mnp status;string;mnp status (AENV,ASOL,...)
       tms_request_id;string;TMS request id
       mnp_request_id;string;MNP request id
@@ -75,25 +76,24 @@
                    city;string;
                    country;string;
  * @fusion_data  fixed_number_type;string;NEW/MNP
-                 fixed_mnp_old_operator;string;
+                 fixed_line_mnp_old_operator_name;string;
+                 fixed_line_mnp_old_operator_code;string;
+                 fixed_line_serial_number;string;
+                 fixed_line_adsl_linkstate;string;optional;ADSL link state
                  fixed_mnp_time_of_change;string;
                  fixed_line_number;string;
                  fusion_order_status;string;
-                 fixed_line_order_id;string;
                  fixed_line_order_status;string;
-                 fixed_line_order_sub_status;string;
-                 external_ticket;string;
                  fixed_line_product;string;fusion order product code
+                 fixed_line_appointment_date;string;installation appointment date
                  customer_type;string;
                  allow_mobile_order_release;boolean;For Fusion orders
-                 phone_book;boolean;
-                 contractid;string;
                  install_address;struct;
                  billing_address;struct;
                  update_ts;string;optional
   @install_address fname;string;
                     lname;string;
-                    lname2;string;
+                    surname_2;string;
                     phone_number;string;
                     address;string;
                     city;string;
@@ -102,6 +102,18 @@
                     additional_address;string;
                     region;string;
                     profession;string;
+                    email;string;
+                    gescal;string;
+                    address_compl;string;optional;Address Complement
+                    floor;string;optional;Complement for floor
+                    street_type;string;optional;street type
+                    bis_duplicate;string;optional;bis
+                    block;string;optional;block
+                    door;string;optional;door
+                    letter;string;optional;letter
+                    stair;string;optional;stair
+                    hand;string;optional;hand
+                    km;string;optional;km
   @billing_address address;string;
                     city;string;
                     zip;string;
@@ -306,6 +318,10 @@ IF LOOKUP(Order.CliType,lcBundleCLITypes) > 0 THEN
 
 add_string(gcSubscription,"data_bundle_id",lcDataBundle).
 
+FIND FIRST MobSub WHERE
+           MobSub.MsSeq EQ Order.MsSeq NO-LOCK NO-ERROR.
+IF AVAIL MobSub THEN add_int(gcSubscription,"msstatus",MobSub.MsStatus).
+
 /* mnp data */
 
 gcArrayMnp  = add_array(top_struct, "mnp").
@@ -491,18 +507,17 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
       lcFusionStruct = add_struct(top_struct, "fusion_data").
       add_string(lcFusionStruct, "fixed_number_type",OrderFusion.FixedNumberType).
       add_string(lcFusionStruct, "fixed_line_number",OrderFusion.FixedNumber).
-      add_string(lcFusionStruct, "fixed_mnp_old_operator",OrderFusion.FixedCurrOper).
+      add_string(lcFusionStruct, "fixed_line_mnp_old_operator_name",OrderFusion.FixedCurrOper).
+      add_string(lcFusionStruct, "fixed_line_mnp_old_operator_code",OrderFusion.FixedCurrOperCode).
+      add_string(lcFusionStruct, "fixed_line_serial_number",OrderFusion.SerialNumber).
+      add_string(lcFusionStruct, "fixed_line_adsl_linkstate",OrderFusion.ADSLLinkState).
       add_string(lcFusionStruct, "fixed_mnp_time_of_change",OrderFusion.FixedMNPTime).
       add_string(lcFusionStruct, "fusion_order_status",OrderFusion.FusionStatus).
-      add_string(lcFusionStruct, "fixed_line_order_id",OrderFusion.FixedOrderId).
       add_string(lcFusionStruct, "fixed_line_order_status",OrderFusion.FixedStatus).
-      add_string(lcFusionStruct, "fixed_line_order_sub_status",OrderFusion.FixedSubStatus).
-      add_string(lcFusionStruct, "external_ticket",OrderFusion.ExternalTicket).
       add_string(lcFusionStruct, "customer_type",OrderFusion.Customer).
       add_string(lcFusionStruct, "fixed_line_product",OrderFusion.Product).
-      add_boolean(lcFusionStruct, "phone_book",OrderFusion.PhoneBook).
-      add_string(lcFusionStruct, "contractid", OrderFusion.FixedContractId).
       add_string(lcFusionStruct, "update_ts", STRING(OrderFusion.UpdateTS)).
+      add_string(lcFusionStruct, "fixed_line_appointment_date",OrderFusion.AppointmentDate).
       add_boolean(lcFusionStruct, "allow_mobile_order_release",
          (OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING})).
 
@@ -518,7 +533,9 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
          add_string(lcFixedInstallAddress, "fname", OrderCustomer.FirstName). 
          add_string(lcFixedInstallAddress, "lname", OrderCustomer.SurName1).
          add_string(lcFixedInstallAddress, "surname_2", OrderCustomer.SurName2).
-         add_string(lcFixedInstallAddress, "phone_number", OrderCustomer.FixedNumber).
+         add_string(lcFixedInstallAddress, "phone_number", 
+            (IF OrderCustomer.MobileNumber > "" THEN OrderCustomer.MobileNumber 
+             ELSE OrderCustomer.FixedNumber)).
          add_string(lcFixedInstallAddress, "address", OrderCustomer.Address).
          add_string(lcFixedInstallAddress, "additional_address", OrderCustomer.AddressCompl).
          add_string(lcFixedInstallAddress, "city", OrderCustomer.PostOffice).
@@ -526,6 +543,18 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
          add_string(lcFixedInstallAddress, "street_number", OrderCustomer.BuildingNum).
          add_string(lcFixedInstallAddress, "region", OrderCustomer.Region).
          add_string(lcFixedInstallAddress, "profession", OrderCustomer.Profession).
+         add_string(lcFixedInstallAddress, "email", OrderCustomer.Email).
+         add_string(lcFixedInstallAddress, "gescal", OrderCustomer.Gescal).
+         add_string(lcFixedInstallAddress, "address_compl", OrderCustomer.AddressCompl).
+         add_string(lcFixedInstallAddress, "floor", OrderCustomer.Floor).
+         add_string(lcFixedInstallAddress, "street_type", OrderCustomer.StreetType).
+         add_string(lcFixedInstallAddress, "bis_duplicate", OrderCustomer.BisDuplicate).
+         add_string(lcFixedInstallAddress, "block", OrderCustomer.Block).
+         add_string(lcFixedInstallAddress, "door", OrderCustomer.Door).
+         add_string(lcFixedInstallAddress, "letter", OrderCustomer.Letter).
+         add_string(lcFixedInstallAddress, "stair", OrderCustomer.Stair).
+         add_string(lcFixedInstallAddress, "hand", OrderCustomer.Hand).
+         add_string(lcFixedInstallAddress, "km", OrderCustomer.Km).
       END.
       
       FIND FIRST OrderCustomer WHERE 

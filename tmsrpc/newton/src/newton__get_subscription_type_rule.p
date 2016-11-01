@@ -9,7 +9,9 @@
                 stc_date;datetime;mandatory;
                 penalty_contract;string;optional;(TERM or PAYTERM+TERM)
                 penalty_amount;double;optional;penalty amount
-                extension;boolean;optional;TRUE if extension is allowed */
+                extension;boolean;optional;TRUE if extension is allowed 
+                warnings;array;optional;Contract related warnings
+ */
 
  /*
    17.09.2015 hugo.lujan YPR-2524 [Q25] - TMS - STC from Postpaid to Prepaid
@@ -34,6 +36,7 @@ gcBrand = "1".
 {Func/fctchange.i}
 {Func/main_add_lines.i}
 {Func/fdss.i}
+{Func/fixedlinefunc.i}
 
 /* Input parameters */
 DEF VAR piMsSeq            AS INT     NO-UNDO.
@@ -51,17 +54,11 @@ DEF VAR warning_array      AS CHAR NO-UNDO.
 DEF VAR ldePendingFee      AS DEC  NO-UNDO.
 DEF VAR ldePeriodFee       AS DEC  NO-UNDO.
 DEF VAR lderesidualFee     AS DEC  NO-UNDO.
-DEF VAR ldeTermPendingFee  AS DEC  NO-UNDO EXTENT 2.
 DEF VAR ldeTotalPenaltyFee AS DEC  NO-UNDO EXTENT 2.
-DEF VAR liCount            AS INT  NO-UNDO.
 DEF VAR liTotalPeriods     AS INT  NO-UNDO.
 DEF VAR lcPenaltyCode      AS CHAR NO-UNDO.
-DEF VAR lcInstallmentCode  AS CHAR NO-UNDO.
 DEF VAR lcPriceList        AS CHAR NO-UNDO.
-DEF VAR lcOrigBundle       AS CHAR NO-UNDO.
 DEF VAR lcOrigCLIType      AS CHAR NO-UNDO.
-DEF VAR llRenewal          AS LOG  NO-UNDO.
-DEF VAR lcCLIType          AS CHAR NO-UNDO.
 DEF VAR lcFinancedInfo AS CHAR NO-UNDO. 
 DEF VAR ldaSTCDates AS DATE NO-UNDO EXTENT 2.
 DEF VAR liLengthAfterExtension AS INT NO-UNDO EXTENT 2.
@@ -69,11 +66,6 @@ DEF VAR liLoop AS INT NO-UNDO.
 DEF VAR ldePenaltyFactor AS DEC NO-UNDO. 
 DEF VAR ldtFrom AS DATE NO-UNDO. 
 DEF VAR ldtTo AS DATE NO-UNDO. 
-DEF VAR liMonths AS INT NO-UNDO. 
-DEF VAR lcIPLContracts   AS CHAR NO-UNDO.
-DEF VAR lcFLATContracts  AS CHAR NO-UNDO.
-DEF VAR lcCONTDContracts AS CHAR NO-UNDO.
-DEF VAR lcCONTSContracts AS CHAR NO-UNDO.
 DEF VAR lcCONTSFContracts AS CHAR NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 DEF VAR lcFusionTariffs  AS CHAR NO-UNDO.
@@ -105,7 +97,7 @@ DEF BUFFER lbMobSub        FOR MobSub.
 IF validate_request(param_toplevel_id, "int,string,string") EQ ? THEN RETURN.
 piMsSeq         = get_pos_int(param_toplevel_id,"0").
 pcNewCLIType    = get_string(param_toplevel_id,"1").
-pcTariffBundle  = get_string(param_toplevel_id,"2").
+pcTariffBundle  = get_string(param_toplevel_id,"2").  /* tariff_bundle */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -136,7 +128,6 @@ END.
 ELSE pcTariffBundle = "".
 
 ASSIGN
-   lcOrigCLIType  = MobSub.CLIType
    ldaSTCDates[1] = TODAY + 1
    ldaSTCDates[2] = fLastDayOfMonth(TODAY) + 1
    ldeNextMonthTS = fMake2DT(ldaSTCDates[2],0)
@@ -146,10 +137,6 @@ lliSTCAllowed = fIsiSTCAllowed(INPUT Mobsub.MsSeq).
 
 IF MobSub.PayType = FALSE THEN DO:
    ASSIGN
-      lcIPLContracts        = fCParamC("IPL_CONTRACTS")
-      lcCONTDContracts      = fCParamC("CONTD_CONTRACTS")
-      lcFLATContracts       = fCParamC("FLAT_CONTRACTS")
-      lcCONTSContracts      = fCParamC("CONTS_CONTRACTS")
       lcCONTSFContracts     = fCParamC("CONTSF_CONTRACTS")
       lcFusionTariffs       = fCParamC("FUSION_SUBS_TYPE")
       lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
@@ -208,35 +195,28 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
            
       penalty_struct = add_struct(penalty_array,"").
       add_datetime(penalty_struct, "stc_date", ldaSTCDates[liLoop]).
+      
+      IF ldeTotalPenaltyFee[liLoop] <= 0 THEN NEXT.
 
       IF CLIType.PayType = {&CLITYPE_PAYTYPE_PREPAID} THEN DO:
 
-         IF ldeTotalPenaltyFee[liLoop] <= 0 THEN NEXT.
          add_string(penalty_struct, "penalty_contract", lcPenaltyCode).
          add_double(penalty_struct,"penalty_amount",ldeTotalPenaltyFee[liLoop]).
       END. /* IF CLIType.PayType = 2 THEN DO: */
       /* postpaid */
       ELSE DO:
 
-         IF ldeTermPendingFee[liLoop] <= 0 THEN NEXT.
-         IF OldCLIType.CompareFee <= CLIType.CompareFee AND
-            NOT (LOOKUP(OldCLIType.CliType,"CONT7,CONTD9") > 0 
-                 AND CLIType.CLIType EQ "CONT8")
-            THEN NEXT.
-
          IF LOOKUP(MobSub.CLIType,lcBundleCLITypes) > 0 THEN DO:
             IF MobSub.TariffBundle EQ CLIType.CLIType THEN NEXT.
          END.
          ELSE IF MobSub.CLIType EQ CLIType.CLIType THEN NEXT.
 
-         /* special handling for Fusion tariffs, YDR-1137 */
-         add_string(penalty_struct, "penalty_contract",
-           (IF LOOKUP(CLIType.CLIType,lcFusionTariffs) > 0 OR
-               LOOKUP(CLIType.CLIType,lcCONTSFContracts) > 0
-            THEN lcPenaltyCode ELSE "TERM")).
+         add_string(penalty_struct, "penalty_contract", lcPenaltyCode).
          add_double(penalty_struct,"penalty_amount",
-            ldeTermPendingFee[liLoop]).
-         IF liLengthAfterExtension[liLoop] <=
+            ldeTotalPenaltyFee[liLoop]).
+
+         IF liLengthAfterExtension[liLoop] NE 0 AND
+            liLengthAfterExtension[liLoop] <=
             (IF LOOKUP(CLIType.CLIType,lcFusionTariffs) > 0 OR
                 LOOKUP(CLIType.CLIType,lcCONTSFContracts) > 0
             THEN 36 ELSE 30)
@@ -426,7 +406,6 @@ IF NOT MobSub.PayType THEN DO:
    END.
 
    /* Count possible penalty fee for contract termination */
-   liCount = 0.
    CONTRACT_LOOP:
    FOR EACH DCCLI NO-LOCK WHERE
             DCCLI.MsSeq = MobSub.MsSeq AND
@@ -439,10 +418,9 @@ IF NOT MobSub.PayType THEN DO:
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeModel NE "" AND
             DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
+
+      ldePeriodFee = 0.
    
-      liCount = liCount + 1.
-      IF liCount > 1 THEN LEAVE CONTRACT_LOOP.
-  
       IF DCCLI.Amount NE ? THEN ldePeriodFee = DCCLI.Amount.
       ELSE DO:
          lcPriceList = fFeeModelPriceList(MobSub.Custnum,
@@ -460,6 +438,30 @@ IF NOT MobSub.PayType THEN DO:
 
       IF ldePeriodFee EQ 0 THEN NEXT.
          
+      IF CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID} THEN DO:
+
+         lcOrigCLIType = fGetReferenceTariff(DCCLI.DCEvent,
+                                             DCCLI.ValidFrom,
+                                             DCCLI.RenewalDate,
+                                             MobSub.MsSeq).
+         
+         FIND FIRST OldCLIType NO-LOCK WHERE
+                    OldCLIType.CLIType = lcOrigCLIType NO-ERROR.
+         IF NOT AVAILABLE OldCLIType THEN
+            RETURN appl_err(SUBST("Current CLIType entry &1 not found",
+                                  lcOrigCLIType)).
+
+         IF DCCLI.DCEvent BEGINS "TERM" THEN DO:
+            IF OldCLIType.CompareFee <= CLIType.CompareFee AND
+               NOT (LOOKUP(OldCLIType.CliType,"CONT7,CONTD9") > 0 
+                    AND CLIType.CLIType EQ "CONT8")
+               THEN NEXT.
+         END.
+         ELSE IF DCCLI.DCEvent BEGINS "FTERM" AND
+            fIsConvergenceTariff(CLIType.CLIType) AND
+            OldCLIType.CompareFee <= CLIType.CompareFee THEN NEXT.
+      END.
+         
       ldtTo = DATETIME(DCCLI.ValidTo,0).
 
       /* calculate a factor for the fee (full / proportional) */
@@ -472,21 +474,19 @@ IF NOT MobSub.PayType THEN DO:
                                               DayCampaign.TermFeeCalc).
          
          IF ldePenaltyFactor EQ 0 THEN NEXT.
+         IF TRUNCATE(ldePenaltyFactor * ldePeriodFee,0) EQ 0 THEN NEXT.
           
-         ASSIGN ldeTermPendingFee[liLoop] = 
-            TRUNCATE(ldePenaltyFactor * ldePeriodFee,0)
+         ASSIGN
             ldeTotalPenaltyFee[liLoop] = ldeTotalPenaltyFee[liLoop]
-               + ldeTermPendingFee[liLoop]
-            lcPenaltyCode = lcPenaltyCode + "+TERM" WHEN liLoop EQ 1
+               + TRUNCATE(ldePenaltyFactor * ldePeriodFee,0) 
+            lcPenaltyCode = lcPenaltyCode + "+TERM" WHEN
+               INDEX(lcPenaltyCode,"+TERM") = 0
             ldtFrom = DATETIME(ldaSTCDates[liLoop],0)
             liLengthAfterExtension[liLoop] =
-              INTERVAL(ldtTo,ldtFrom,"months") + 13.
+              INTERVAL(ldtTo,ldtFrom,"months") + 13
+              WHEN DCCLI.DCEvent BEGINS "TERM".
       END.
 
-      lcOrigCLIType = fGetReferenceTariff(DCCLI.DCEvent,
-                                          DCCLI.ValidFrom,
-                                          DCCLI.RenewalDate,
-                                          MobSub.MsSeq).
 
    END. /* FOR EACH DCCLI NO-LOCK WHERE */
 
@@ -557,11 +557,6 @@ IF NOT MobSub.PayType THEN DO:
    END. /* IF lcDSSBundleId > "" AND */
 
 END. /* IF NOT MobSub.PayType THEN DO: */
-
-FIND FIRST OldCLIType WHERE
-           OldCLIType.CLIType = lcOrigCLIType NO-LOCK NO-ERROR.
-IF NOT AVAILABLE OldCLIType THEN
-   RETURN appl_err(SUBST("Current CLIType entry &1 not found", lcOrigCLIType)).
 
 fAddCLITypeStruct().
 

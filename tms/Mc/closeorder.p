@@ -43,6 +43,23 @@ IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES} + ",12") > 0 THEN DO:
    RETURN lcError.
 END. 
 
+IF NOT ilSilent AND
+   Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN DO:
+
+   FIND FIRST OrderFusion NO-LOCK WHERE
+              OrderFusion.Brand   = Order.Brand AND
+              OrderFusion.OrderId = Order.OrderID NO-ERROR.
+   IF AVAIL OrderFusion AND 
+            OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_FINALIZED} AND
+            OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_CANCELLED} THEN DO:
+
+      MESSAGE "Not allowed: Ongoing fixed line installation"
+      VIEW-AS ALERT-BOX ERROR.
+      
+      RETURN "".
+   END.
+END.
+
 llOk = FALSE.
    
 FOR EACH MNPProcess WHERE
@@ -195,6 +212,7 @@ END.
 
 /* YDR-16 and YDR-415 */
 IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
+   Order.ICC > "" AND
    Order.OrderType <= 1 THEN DO:
 
    FIND SIM WHERE
@@ -217,7 +235,8 @@ END. /* IF Order.OrderType = 3 THEN DO: */
 
 /* Release SIM in case of YDR-1825 */
 IF Order.OrderType = 1 AND
-   LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 THEN DO:
+   LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 AND
+   Order.ICC > "" THEN DO:
    FIND SIM NO-LOCK WHERE
         SIM.ICC = Order.ICC AND
         SIM.SimStat = 20 NO-ERROR.

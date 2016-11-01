@@ -102,11 +102,11 @@ DEF VAR llShowHistory AS LOG NO-UNDO INIT FALSE.
 lBrHdr = " TARIFF MAINTENANCE " + string(pvm,"99-99-99") + " " .
 
 form
-   Tariff.Brand       column-label "Bran"     format "x(4)"
+   Tariff.Brand       column-label "Bra"      format "x(3)"
    Tariff.ValidFrom   column-label "From"     format "999999"
    Tariff.ValidTo     column-label "To"       format "999999"
    Tariff.PriceList   column-label "PL/BNr"   format "x(10)"
-   Tariff.CCN         column-label "CCN"      format ">>9"
+   Tariff.CCN         column-label "CCN"      format ">>>9"
    lcCName            column-label "Name"     format "x(9)"
    Tariff.BDest     column-label "BDest" format "X(12)"
    Tariff.Price[1]    column-label "Price1"   format ">>9.9999"
@@ -123,7 +123,7 @@ FRAME sel.
 form /* ADD */
    "Rate ID.....:" Tariff.TariffNum FORMAT ">>>>>9"
       help "Tarif ID number" SKIP
-   "CCN ........:" Tariff.CCN
+   "CCN ........:" Tariff.CCN FORMAT ">>>9"
       help "Call case number"
       CCN.CCNName  format "x(30)" AT 32 SKIP
    "BDestination:" Tariff.BDest FORMAT "x(20)"
