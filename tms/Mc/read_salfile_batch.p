@@ -173,7 +173,6 @@ PROCEDURE pHandleSALfile:
       FusionMessage.OrderID = INT(icYoigoOrderID)
       FusionMessage.CreatedTS = fMakeTS()
       FusionMessage.UpdateTS = FusionMessage.CreatedTS
-      FusionMessage.MessageID = GUID(GENERATE-UUID)
       FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_LOGISTICS} 
       FusionMessage.Source = "MasMovil"
       FusionMessage.msseq = iiMsSeq
