@@ -55,26 +55,70 @@ MSStat14: MSStat
   StatusName: "Returned from other operator"
 
 MSStat15: MSStat
+  StatusCode: 18
+  StatusName: "1861709617121881N12245486C1E9B36renewal_"
+
+MSStat16: MSStat
+  StatusCode: 19
+  StatusName: "1861279622559655N1654136510FD2E76renewal"
+
+MSStat17: MSStat
   StatusCode: 21
   StatusName: "Available, not send to Vista"
 
-MSStat16: MSStat
+MSStat18: MSStat
   StatusCode: 22
   StatusName: "In Use, Assigned to Order"
 
-MSStat17: MSStat
+MSStat19: MSStat
   StatusCode: 24
   StatusName: "Failed MNP"
 
-MSStat18: MSStat
+MSStat20: MSStat
   StatusCode: 25
   StatusName: "Waiting Outporting"
 
-MSStat19: MSStat
+MSStat21: MSStat
   StatusCode: 26
   StatusName: "Waiting Terminating"
 
-MSStat20: MSStat
+MSStat22: MSStat
   StatusCode: 27
   StatusName: "Process ongoing"
+
+MSStat23: MSStat
+  StatusCode: 29
+  StatusName: "1861942647376221N12341629C37A646renewal_"
+
+MSStat24: MSStat
+  StatusCode: 48
+  StatusName: "1862746620666546N33297703177476ccDELIVER"
+
+MSStat25: MSStat
+  StatusCode: 50
+  StatusName: "1862615633528856N33289183173C06ccDELIVER"
+
+MSStat26: MSStat
+  StatusCode: 52
+  StatusName: "1864313654396204N11913566BC8E056fusion_p"
+
+MSStat27: MSStat
+  StatusCode: 58
+  StatusName: "1862413673000474N15826132FFB6DC6renewal_"
+
+MSStat28: MSStat
+  StatusCode: 70
+  StatusName: "1862475622795175N33286173172836selfDELIV"
+
+MSStat29: MSStat
+  StatusCode: 72
+  StatusName: "1862431633528806N33284883171FD6ccDELIVER"
+
+MSStat30: MSStat
+  StatusCode: 85
+  StatusName: "1863780633601007N379392638EEFC6ccDELIVER"
+
+MSStat31: MSStat
+  StatusCode: 92
+  StatusName: "1863381687519739N10329202A2E8076renewal_"
 

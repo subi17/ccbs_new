@@ -193,7 +193,7 @@ DCServiceComponent23: DCServiceComponent
   DCServicePackageID: 8
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "1073741824#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2011-10-01
   ToDate: 2049-12-31
   DCServiceComponentID: 23
@@ -211,7 +211,7 @@ DCServiceComponent25: DCServiceComponent
   DCServicePackageID: 24
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "314572800#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "314572800#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2011-10-01
   ToDate: 2049-12-31
   DCServiceComponentID: 25
@@ -229,7 +229,7 @@ DCServiceComponent27: DCServiceComponent
   DCServicePackageID: 10
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "1073741824#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2011-10-01
   ToDate: 2049-12-31
   DCServiceComponentID: 27
@@ -265,7 +265,7 @@ DCServiceComponent31: DCServiceComponent
   DCServicePackageID: 6
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "1073741824#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2011-10-01
   ToDate: 2049-12-31
   DCServiceComponentID: 31
@@ -274,7 +274,7 @@ DCServiceComponent32: DCServiceComponent
   DCServicePackageID: 9
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "314572800#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "314572800#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2011-10-01
   ToDate: 2049-12-31
   DCServiceComponentID: 32
@@ -292,7 +292,7 @@ DCServiceComponent34: DCServiceComponent
   DCServicePackageID: 21
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "314572800#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "314572800#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2011-10-01
   ToDate: 2049-12-31
   DCServiceComponentID: 34
@@ -327,7 +327,7 @@ DCServiceComponent38: DCServiceComponent
   DCServicePackageID: 27
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "1073741824#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
   DCServiceComponentID: 38
@@ -353,7 +353,7 @@ DCServiceComponent41: DCServiceComponent
   DCServicePackageID: 30
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "1073741824#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
   DCServiceComponentID: 41
@@ -379,7 +379,7 @@ DCServiceComponent44: DCServiceComponent
   DCServicePackageID: 33
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "1073741824#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
   DCServiceComponentID: 44
@@ -509,7 +509,7 @@ DCServiceComponent59: DCServiceComponent
   DCServicePackageID: 46
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "314572800#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "314572800#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
   DCServiceComponentID: 59
@@ -518,7 +518,7 @@ DCServiceComponent60: DCServiceComponent
   DCServicePackageID: 47
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "UPGRADE#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "UPGRADE#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2012-03-23
   ToDate: 2049-12-31
   DCServiceComponentID: 60
@@ -614,7 +614,7 @@ DCServiceComponent71: DCServiceComponent
   DCServicePackageID: 58
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "1073741824#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2012-12-01
   ToDate: 2049-12-31
   DCServiceComponentID: 71
@@ -632,7 +632,7 @@ DCServiceComponent73: DCServiceComponent
   DCServicePackageID: 60
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "15728640#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "15728640#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2012-12-01
   ToDate: 2049-12-31
   DCServiceComponentID: 73
@@ -695,7 +695,7 @@ DCServiceComponent80: DCServiceComponent
   DCServicePackageID: 67
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "524288000#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "524288000#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
   DCServiceComponentID: 80
@@ -875,7 +875,7 @@ DCServiceComponent100: DCServiceComponent
   DCServicePackageID: 81
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "1610612736#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "1610612736#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2015-09-15
   ToDate: 2049-12-31
   DCServiceComponentID: 101
@@ -884,7 +884,7 @@ DCServiceComponent101: DCServiceComponent
   DCServicePackageID: 73
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "314572800#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "314572800#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2015-09-15
   ToDate: 2049-12-31
   DCServiceComponentID: 102
@@ -893,7 +893,7 @@ DCServiceComponent102: DCServiceComponent
   DCServicePackageID: 90
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "209715200#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  DefParam: "209715200#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2015-06-01
   ToDate: 2049-12-31
   DCServiceComponentID: 103
@@ -906,4 +906,13 @@ DCServiceComponent103: DCServiceComponent
   FromDate: 2015-12-01
   ToDate: 2049-12-31
   DCServiceComponentID: 104
+
+DCServiceComponent104: DCServiceComponent
+  DCServicePackageID: 92
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS2GB#ADDBUNDLE"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  DCServiceComponentID: 105
 

@@ -41,3 +41,11 @@ SIMStat11: SIMStat
   SimStat: 69
   SSName: "New LO"
 
+SIMStat12: SIMStat
+  SimStat: 70
+  SSName: "Universal SIM"
+
+SIMStat13: SIMStat
+  SimStat: 71
+  SSName: "Direct SIMS"
+

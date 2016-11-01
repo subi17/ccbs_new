@@ -607,3 +607,18 @@ TMRule41: TMRule
   PayType: 1
   TicketType: 1
 
+TMRule42: TMRule
+  Brand: "1"
+  TMRuleSeq: 42
+  Name: "VOICE 5000 Minutes"
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "1"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+

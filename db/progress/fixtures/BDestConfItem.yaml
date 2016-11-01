@@ -1,210 +1,12 @@
 BDestConfItem1: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
-  BDest: "11837"
-  RateCCN: 67
-  FromDate: 2012-01-16
-  ToDate: 2049-12-31
-  BDCItemID: 92
-
-BDestConfItem2: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11859"
-  RateCCN: 67
-  FromDate: 2012-01-16
-  ToDate: 2049-12-31
-  BDCItemID: 93
-
-BDestConfItem3: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11865"
-  RateCCN: 67
-  FromDate: 2012-01-16
-  ToDate: 2049-12-31
-  BDCItemID: 94
-
-BDestConfItem4: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11826"
-  RateCCN: 67
-  FromDate: 2012-01-16
-  ToDate: 2049-12-31
-  BDCItemID: 95
-
-BDestConfItem5: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11884"
-  RateCCN: 67
-  FromDate: 2012-05-01
-  ToDate: 2049-12-31
-  BDCItemID: 96
-
-BDestConfItem6: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11856"
-  RateCCN: 67
-  FromDate: 2012-08-01
-  ToDate: 2049-12-31
-  BDCItemID: 97
-
-BDestConfItem7: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11857"
-  RateCCN: 67
-  FromDate: 2012-09-01
-  ToDate: 2049-12-31
-  BDCItemID: 98
-
-BDestConfItem8: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11883"
-  RateCCN: 67
-  FromDate: 2012-10-31
-  ToDate: 2049-12-31
-  BDCItemID: 99
-
-BDestConfItem9: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11849"
-  RateCCN: 67
-  FromDate: 2013-01-01
-  ToDate: 2049-12-31
-  BDCItemID: 100
-
-BDestConfItem10: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11836"
-  RateCCN: 67
-  FromDate: 2013-03-01
-  ToDate: 2049-12-31
-  BDCItemID: 101
-
-BDestConfItem11: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11898"
-  RateCCN: 67
-  FromDate: 2012-03-01
-  ToDate: 2049-12-31
-  BDCItemID: 102
-
-BDestConfItem12: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11885"
-  RateCCN: 67
-  FromDate: 2013-04-01
-  ToDate: 2049-12-31
-  BDCItemID: 103
-
-BDestConfItem13: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11879"
-  RateCCN: 67
-  FromDate: 2013-04-01
-  ToDate: 2049-12-31
-  BDCItemID: 104
-
-BDestConfItem14: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11899"
-  RateCCN: 67
-  FromDate: 2013-08-01
-  ToDate: 2049-12-31
-  BDCItemID: 105
-
-BDestConfItem15: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11834"
-  RateCCN: 67
-  FromDate: 2014-01-30
-  ToDate: 2049-12-31
-  BDCItemID: 106
-
-BDestConfItem16: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11897"
-  RateCCN: 67
-  FromDate: 2014-02-27
-  ToDate: 2049-12-31
-  BDCItemID: 107
-
-BDestConfItem17: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11890"
-  RateCCN: 67
-  FromDate: 2014-05-29
-  ToDate: 2049-12-31
-  BDCItemID: 108
-
-BDestConfItem18: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11891"
-  RateCCN: 67
-  FromDate: 2014-08-28
-  ToDate: 2049-12-31
-  BDCItemID: 109
-
-BDestConfItem19: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11895"
-  RateCCN: 67
-  FromDate: 2014-08-28
-  ToDate: 2049-12-31
-  BDCItemID: 110
-
-BDestConfItem20: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11892"
-  RateCCN: 67
-  FromDate: 2014-11-01
-  ToDate: 2049-12-31
-  BDCItemID: 111
-
-BDestConfItem21: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11894"
-  RateCCN: 67
-  FromDate: 2014-11-27
-  ToDate: 2049-12-31
-  BDCItemID: 112
-
-BDestConfItem22: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
-  BDest: "11841"
-  RateCCN: 67
-  FromDate: 2015-02-25
-  ToDate: 2049-12-31
-  BDCItemID: 113
-
-BDestConfItem23: BDestConfItem
-  Brand: "1"
-  BDCGroup: "DUR11CCN66"
   RateCCN: 67
   FromDate: 2006-12-01
   ToDate: 2009-10-20
   BDCItemID: 80
 
-BDestConfItem24: BDestConfItem
+BDestConfItem2: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11810"
@@ -213,7 +15,7 @@ BDestConfItem24: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 5
 
-BDestConfItem25: BDestConfItem
+BDestConfItem3: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11811"
@@ -222,7 +24,7 @@ BDestConfItem25: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 6
 
-BDestConfItem26: BDestConfItem
+BDestConfItem4: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11812"
@@ -231,7 +33,7 @@ BDestConfItem26: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 7
 
-BDestConfItem27: BDestConfItem
+BDestConfItem5: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11813"
@@ -240,7 +42,7 @@ BDestConfItem27: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 8
 
-BDestConfItem28: BDestConfItem
+BDestConfItem6: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11815"
@@ -249,7 +51,7 @@ BDestConfItem28: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 9
 
-BDestConfItem29: BDestConfItem
+BDestConfItem7: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11816"
@@ -258,7 +60,7 @@ BDestConfItem29: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 10
 
-BDestConfItem30: BDestConfItem
+BDestConfItem8: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11817"
@@ -267,7 +69,7 @@ BDestConfItem30: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 11
 
-BDestConfItem31: BDestConfItem
+BDestConfItem9: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11818"
@@ -276,7 +78,7 @@ BDestConfItem31: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 12
 
-BDestConfItem32: BDestConfItem
+BDestConfItem10: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11819"
@@ -285,7 +87,7 @@ BDestConfItem32: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 13
 
-BDestConfItem33: BDestConfItem
+BDestConfItem11: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11874"
@@ -294,7 +96,7 @@ BDestConfItem33: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 85
 
-BDestConfItem34: BDestConfItem
+BDestConfItem12: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11820"
@@ -303,7 +105,7 @@ BDestConfItem34: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 15
 
-BDestConfItem35: BDestConfItem
+BDestConfItem13: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11821"
@@ -312,7 +114,7 @@ BDestConfItem35: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 16
 
-BDestConfItem36: BDestConfItem
+BDestConfItem14: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11822"
@@ -321,7 +123,7 @@ BDestConfItem36: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 17
 
-BDestConfItem37: BDestConfItem
+BDestConfItem15: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11823"
@@ -330,7 +132,7 @@ BDestConfItem37: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 18
 
-BDestConfItem38: BDestConfItem
+BDestConfItem16: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11824"
@@ -339,7 +141,7 @@ BDestConfItem38: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 19
 
-BDestConfItem39: BDestConfItem
+BDestConfItem17: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11825"
@@ -348,7 +150,7 @@ BDestConfItem39: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 20
 
-BDestConfItem40: BDestConfItem
+BDestConfItem18: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11827"
@@ -357,7 +159,7 @@ BDestConfItem40: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 21
 
-BDestConfItem41: BDestConfItem
+BDestConfItem19: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11828"
@@ -366,7 +168,7 @@ BDestConfItem41: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 22
 
-BDestConfItem42: BDestConfItem
+BDestConfItem20: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11829"
@@ -375,7 +177,7 @@ BDestConfItem42: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 23
 
-BDestConfItem43: BDestConfItem
+BDestConfItem21: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11830"
@@ -384,7 +186,7 @@ BDestConfItem43: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 24
 
-BDestConfItem44: BDestConfItem
+BDestConfItem22: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11832"
@@ -393,7 +195,7 @@ BDestConfItem44: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 25
 
-BDestConfItem45: BDestConfItem
+BDestConfItem23: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11833"
@@ -402,7 +204,7 @@ BDestConfItem45: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 26
 
-BDestConfItem46: BDestConfItem
+BDestConfItem24: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11835"
@@ -411,7 +213,7 @@ BDestConfItem46: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 27
 
-BDestConfItem47: BDestConfItem
+BDestConfItem25: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11838"
@@ -420,7 +222,7 @@ BDestConfItem47: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 28
 
-BDestConfItem48: BDestConfItem
+BDestConfItem26: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11840"
@@ -429,7 +231,7 @@ BDestConfItem48: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 29
 
-BDestConfItem49: BDestConfItem
+BDestConfItem27: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11842"
@@ -438,7 +240,7 @@ BDestConfItem49: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 30
 
-BDestConfItem50: BDestConfItem
+BDestConfItem28: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11843"
@@ -447,7 +249,7 @@ BDestConfItem50: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 31
 
-BDestConfItem51: BDestConfItem
+BDestConfItem29: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11844"
@@ -456,7 +258,7 @@ BDestConfItem51: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 32
 
-BDestConfItem52: BDestConfItem
+BDestConfItem30: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11845"
@@ -465,7 +267,7 @@ BDestConfItem52: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 33
 
-BDestConfItem53: BDestConfItem
+BDestConfItem31: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11846"
@@ -474,7 +276,7 @@ BDestConfItem53: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 34
 
-BDestConfItem54: BDestConfItem
+BDestConfItem32: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11848"
@@ -483,7 +285,7 @@ BDestConfItem54: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 35
 
-BDestConfItem55: BDestConfItem
+BDestConfItem33: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11850"
@@ -492,7 +294,7 @@ BDestConfItem55: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 36
 
-BDestConfItem56: BDestConfItem
+BDestConfItem34: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11851"
@@ -501,7 +303,7 @@ BDestConfItem56: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 37
 
-BDestConfItem57: BDestConfItem
+BDestConfItem35: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11852"
@@ -510,7 +312,7 @@ BDestConfItem57: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 38
 
-BDestConfItem58: BDestConfItem
+BDestConfItem36: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11853"
@@ -519,7 +321,7 @@ BDestConfItem58: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 39
 
-BDestConfItem59: BDestConfItem
+BDestConfItem37: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11854"
@@ -528,7 +330,7 @@ BDestConfItem59: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 40
 
-BDestConfItem60: BDestConfItem
+BDestConfItem38: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11858"
@@ -537,7 +339,7 @@ BDestConfItem60: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 41
 
-BDestConfItem61: BDestConfItem
+BDestConfItem39: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11860"
@@ -546,7 +348,7 @@ BDestConfItem61: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 42
 
-BDestConfItem62: BDestConfItem
+BDestConfItem40: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11862"
@@ -555,7 +357,7 @@ BDestConfItem62: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 43
 
-BDestConfItem63: BDestConfItem
+BDestConfItem41: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11863"
@@ -564,7 +366,7 @@ BDestConfItem63: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 44
 
-BDestConfItem64: BDestConfItem
+BDestConfItem42: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11864"
@@ -573,7 +375,7 @@ BDestConfItem64: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 45
 
-BDestConfItem65: BDestConfItem
+BDestConfItem43: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11866"
@@ -582,7 +384,7 @@ BDestConfItem65: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 46
 
-BDestConfItem66: BDestConfItem
+BDestConfItem44: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11868"
@@ -591,7 +393,7 @@ BDestConfItem66: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 47
 
-BDestConfItem67: BDestConfItem
+BDestConfItem45: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11869"
@@ -600,7 +402,7 @@ BDestConfItem67: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 48
 
-BDestConfItem68: BDestConfItem
+BDestConfItem46: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11870"
@@ -609,7 +411,7 @@ BDestConfItem68: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 49
 
-BDestConfItem69: BDestConfItem
+BDestConfItem47: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11871"
@@ -618,7 +420,7 @@ BDestConfItem69: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 50
 
-BDestConfItem70: BDestConfItem
+BDestConfItem48: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11872"
@@ -627,7 +429,7 @@ BDestConfItem70: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 51
 
-BDestConfItem71: BDestConfItem
+BDestConfItem49: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11873"
@@ -636,7 +438,7 @@ BDestConfItem71: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 52
 
-BDestConfItem72: BDestConfItem
+BDestConfItem50: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11875"
@@ -645,7 +447,7 @@ BDestConfItem72: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 53
 
-BDestConfItem73: BDestConfItem
+BDestConfItem51: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11876"
@@ -654,7 +456,7 @@ BDestConfItem73: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 54
 
-BDestConfItem74: BDestConfItem
+BDestConfItem52: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11877"
@@ -663,7 +465,7 @@ BDestConfItem74: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 55
 
-BDestConfItem75: BDestConfItem
+BDestConfItem53: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11878"
@@ -672,7 +474,7 @@ BDestConfItem75: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 56
 
-BDestConfItem76: BDestConfItem
+BDestConfItem54: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11880"
@@ -681,7 +483,7 @@ BDestConfItem76: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 57
 
-BDestConfItem77: BDestConfItem
+BDestConfItem55: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11881"
@@ -690,7 +492,7 @@ BDestConfItem77: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 58
 
-BDestConfItem78: BDestConfItem
+BDestConfItem56: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11882"
@@ -699,7 +501,7 @@ BDestConfItem78: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 59
 
-BDestConfItem79: BDestConfItem
+BDestConfItem57: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11886"
@@ -708,7 +510,7 @@ BDestConfItem79: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 60
 
-BDestConfItem80: BDestConfItem
+BDestConfItem58: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11888"
@@ -717,7 +519,7 @@ BDestConfItem80: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 61
 
-BDestConfItem81: BDestConfItem
+BDestConfItem59: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11847"
@@ -726,7 +528,7 @@ BDestConfItem81: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 86
 
-BDestConfItem82: BDestConfItem
+BDestConfItem60: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11831"
@@ -735,7 +537,7 @@ BDestConfItem82: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 87
 
-BDestConfItem83: BDestConfItem
+BDestConfItem61: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11839"
@@ -744,7 +546,7 @@ BDestConfItem83: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 88
 
-BDestConfItem84: BDestConfItem
+BDestConfItem62: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11861"
@@ -753,7 +555,7 @@ BDestConfItem84: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 89
 
-BDestConfItem85: BDestConfItem
+BDestConfItem63: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11867"
@@ -762,7 +564,7 @@ BDestConfItem85: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 90
 
-BDestConfItem86: BDestConfItem
+BDestConfItem64: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDest: "11814"
@@ -771,7 +573,214 @@ BDestConfItem86: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 91
 
+BDestConfItem65: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11837"
+  RateCCN: 67
+  FromDate: 2012-01-16
+  ToDate: 2049-12-31
+  BDCItemID: 92
+
+BDestConfItem66: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11859"
+  RateCCN: 67
+  FromDate: 2012-01-16
+  ToDate: 2049-12-31
+  BDCItemID: 93
+
+BDestConfItem67: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11865"
+  RateCCN: 67
+  FromDate: 2012-01-16
+  ToDate: 2049-12-31
+  BDCItemID: 94
+
+BDestConfItem68: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11826"
+  RateCCN: 67
+  FromDate: 2012-01-16
+  ToDate: 2049-12-31
+  BDCItemID: 95
+
+BDestConfItem69: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11884"
+  RateCCN: 67
+  FromDate: 2012-05-01
+  ToDate: 2049-12-31
+  BDCItemID: 96
+
+BDestConfItem70: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11856"
+  RateCCN: 67
+  FromDate: 2012-08-01
+  ToDate: 2049-12-31
+  BDCItemID: 97
+
+BDestConfItem71: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11857"
+  RateCCN: 67
+  FromDate: 2012-09-01
+  ToDate: 2049-12-31
+  BDCItemID: 98
+
+BDestConfItem72: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11883"
+  RateCCN: 67
+  FromDate: 2012-10-31
+  ToDate: 2049-12-31
+  BDCItemID: 99
+
+BDestConfItem73: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11849"
+  RateCCN: 67
+  FromDate: 2013-01-01
+  ToDate: 2049-12-31
+  BDCItemID: 100
+
+BDestConfItem74: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11836"
+  RateCCN: 67
+  FromDate: 2013-03-01
+  ToDate: 2049-12-31
+  BDCItemID: 101
+
+BDestConfItem75: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11898"
+  RateCCN: 67
+  FromDate: 2012-03-01
+  ToDate: 2049-12-31
+  BDCItemID: 102
+
+BDestConfItem76: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11885"
+  RateCCN: 67
+  FromDate: 2013-04-01
+  ToDate: 2049-12-31
+  BDCItemID: 103
+
+BDestConfItem77: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11879"
+  RateCCN: 67
+  FromDate: 2013-04-01
+  ToDate: 2049-12-31
+  BDCItemID: 104
+
+BDestConfItem78: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11899"
+  RateCCN: 67
+  FromDate: 2013-08-01
+  ToDate: 2049-12-31
+  BDCItemID: 105
+
+BDestConfItem79: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11834"
+  RateCCN: 67
+  FromDate: 2014-01-30
+  ToDate: 2049-12-31
+  BDCItemID: 106
+
+BDestConfItem80: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11897"
+  RateCCN: 67
+  FromDate: 2014-02-27
+  ToDate: 2049-12-31
+  BDCItemID: 107
+
+BDestConfItem81: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11890"
+  RateCCN: 67
+  FromDate: 2014-05-29
+  ToDate: 2049-12-31
+  BDCItemID: 108
+
+BDestConfItem82: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11891"
+  RateCCN: 67
+  FromDate: 2014-08-28
+  ToDate: 2049-12-31
+  BDCItemID: 109
+
+BDestConfItem83: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11895"
+  RateCCN: 67
+  FromDate: 2014-08-28
+  ToDate: 2049-12-31
+  BDCItemID: 110
+
+BDestConfItem84: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11892"
+  RateCCN: 67
+  FromDate: 2014-11-01
+  ToDate: 2049-12-31
+  BDCItemID: 111
+
+BDestConfItem85: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11894"
+  RateCCN: 67
+  FromDate: 2014-11-27
+  ToDate: 2049-12-31
+  BDCItemID: 112
+
+BDestConfItem86: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11841"
+  RateCCN: 67
+  FromDate: 2015-02-25
+  ToDate: 2049-12-31
+  BDCItemID: 113
+
 BDestConfItem87: BDestConfItem
+  Brand: "1"
+  BDCGroup: "DUR11CCN66"
+  BDest: "11887"
+  RateCCN: 67
+  FromDate: 2016-06-10
+  ToDate: 2049-12-31
+  BDCItemID: 115
+
+BDestConfItem88: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN69"
   BDest: "9051"
@@ -780,7 +789,7 @@ BDestConfItem87: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 81
 
-BDestConfItem88: BDestConfItem
+BDestConfItem89: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN69"
   BDest: "9052"
@@ -789,7 +798,7 @@ BDestConfItem88: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 82
 
-BDestConfItem89: BDestConfItem
+BDestConfItem90: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN69"
   BDest: "9054"
@@ -798,7 +807,7 @@ BDestConfItem89: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 83
 
-BDestConfItem90: BDestConfItem
+BDestConfItem91: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR11CCN69"
   BDest: "9055"
@@ -807,7 +816,7 @@ BDestConfItem90: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 84
 
-BDestConfItem91: BDestConfItem
+BDestConfItem92: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR20CCN64"
   RateCCN: 64
@@ -815,7 +824,7 @@ BDestConfItem91: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 62
 
-BDestConfItem92: BDestConfItem
+BDestConfItem93: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR20CCN64"
   RateCCN: 631
@@ -823,7 +832,7 @@ BDestConfItem92: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 114
 
-BDestConfItem93: BDestConfItem
+BDestConfItem94: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   RateCCN: 68
@@ -831,7 +840,7 @@ BDestConfItem93: BDestConfItem
   ToDate: 2009-10-20
   BDCItemID: 63
 
-BDestConfItem94: BDestConfItem
+BDestConfItem95: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11814"
@@ -840,7 +849,7 @@ BDestConfItem94: BDestConfItem
   ToDate: 2012-01-15
   BDCItemID: 64
 
-BDestConfItem95: BDestConfItem
+BDestConfItem96: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11826"
@@ -849,7 +858,7 @@ BDestConfItem95: BDestConfItem
   ToDate: 2012-01-15
   BDCItemID: 65
 
-BDestConfItem96: BDestConfItem
+BDestConfItem97: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11834"
@@ -858,7 +867,7 @@ BDestConfItem96: BDestConfItem
   ToDate: 2014-01-29
   BDCItemID: 66
 
-BDestConfItem97: BDestConfItem
+BDestConfItem98: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11836"
@@ -867,7 +876,7 @@ BDestConfItem97: BDestConfItem
   ToDate: 2013-02-28
   BDCItemID: 67
 
-BDestConfItem98: BDestConfItem
+BDestConfItem99: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11837"
@@ -876,7 +885,7 @@ BDestConfItem98: BDestConfItem
   ToDate: 2012-01-15
   BDCItemID: 68
 
-BDestConfItem99: BDestConfItem
+BDestConfItem100: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11841"
@@ -885,7 +894,7 @@ BDestConfItem99: BDestConfItem
   ToDate: 2015-02-24
   BDCItemID: 69
 
-BDestConfItem100: BDestConfItem
+BDestConfItem101: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11847"
@@ -894,7 +903,7 @@ BDestConfItem100: BDestConfItem
   ToDate: 2010-05-31
   BDCItemID: 70
 
-BDestConfItem101: BDestConfItem
+BDestConfItem102: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11855"
@@ -903,7 +912,7 @@ BDestConfItem101: BDestConfItem
   ToDate: 2049-12-31
   BDCItemID: 71
 
-BDestConfItem102: BDestConfItem
+BDestConfItem103: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11859"
@@ -912,7 +921,7 @@ BDestConfItem102: BDestConfItem
   ToDate: 2012-01-15
   BDCItemID: 72
 
-BDestConfItem103: BDestConfItem
+BDestConfItem104: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11861"
@@ -921,7 +930,7 @@ BDestConfItem103: BDestConfItem
   ToDate: 2011-08-31
   BDCItemID: 73
 
-BDestConfItem104: BDestConfItem
+BDestConfItem105: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11865"
@@ -930,7 +939,7 @@ BDestConfItem104: BDestConfItem
   ToDate: 2012-01-15
   BDCItemID: 74
 
-BDestConfItem105: BDestConfItem
+BDestConfItem106: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11883"
@@ -939,7 +948,7 @@ BDestConfItem105: BDestConfItem
   ToDate: 2012-10-30
   BDCItemID: 75
 
-BDestConfItem106: BDestConfItem
+BDestConfItem107: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11884"
@@ -948,7 +957,7 @@ BDestConfItem106: BDestConfItem
   ToDate: 2012-04-30
   BDCItemID: 76
 
-BDestConfItem107: BDestConfItem
+BDestConfItem108: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11885"
@@ -957,16 +966,16 @@ BDestConfItem107: BDestConfItem
   ToDate: 2013-03-31
   BDCItemID: 77
 
-BDestConfItem108: BDestConfItem
+BDestConfItem109: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11887"
   RateCCN: 67
   FromDate: 2009-10-21
-  ToDate: 2049-12-31
+  ToDate: 2016-06-09
   BDCItemID: 78
 
-BDestConfItem109: BDestConfItem
+BDestConfItem110: BDestConfItem
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDest: "11889"

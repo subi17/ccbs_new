@@ -126,453 +126,481 @@ ServiceLimitGroup18: ServiceLimitGroup
 
 ServiceLimitGroup19: ServiceLimitGroup
   Brand: "1"
+  GroupCode: "CONTDSL"
+  GroupName: "Contrato DSL"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+
+ServiceLimitGroup20: ServiceLimitGroup
+  Brand: "1"
   GroupCode: "CONTF10"
   GroupName: "Contrato 10 flat rate"
   ValidFrom: 2012-02-22
   ValidTo: 2049-12-31
 
-ServiceLimitGroup20: ServiceLimitGroup
+ServiceLimitGroup21: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTF11"
   GroupName: "Contrato Flat 11"
   ValidFrom: 2015-04-14
   ValidTo: 2049-12-31
 
-ServiceLimitGroup21: ServiceLimitGroup
+ServiceLimitGroup22: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTF20"
   GroupName: "Contrato 20 flat rate"
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup22: ServiceLimitGroup
+ServiceLimitGroup23: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTF20D"
   GroupName: "Contrato 20D flat rate"
   ValidFrom: 2012-02-22
   ValidTo: 2049-12-31
 
-ServiceLimitGroup23: ServiceLimitGroup
+ServiceLimitGroup24: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTF30"
   GroupName: "Contrato 30 flat rate"
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup24: ServiceLimitGroup
+ServiceLimitGroup25: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTF40"
   GroupName: "Contrato 40 flat rate"
   ValidFrom: 2012-02-22
   ValidTo: 2049-12-31
 
-ServiceLimitGroup25: ServiceLimitGroup
+ServiceLimitGroup26: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTF55"
   GroupName: "Contrato 55 flat rate"
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup26: ServiceLimitGroup
+ServiceLimitGroup27: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTF8"
   GroupName: "Contrato Flat 8"
   ValidFrom: 2015-04-14
   ValidTo: 2049-12-31
 
-ServiceLimitGroup27: ServiceLimitGroup
+ServiceLimitGroup28: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTFF2"
   GroupName: "Fusion 2 Flat service package"
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup28: ServiceLimitGroup
+ServiceLimitGroup29: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "CONTFH300"
+  GroupName: "Contrato FH300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+
+ServiceLimitGroup30: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "CONTFH50"
+  GroupName: "Contrato FH50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+
+ServiceLimitGroup31: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTRATO2"
   GroupName: "Contrato2 Flat rates"
   ValidFrom: 2007-01-01
   ValidTo: 1950-12-31
 
-ServiceLimitGroup29: ServiceLimitGroup
+ServiceLimitGroup32: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTS12"
   GroupName: "Contrato S 12"
   ValidFrom: 2015-04-14
   ValidTo: 2049-12-31
 
-ServiceLimitGroup30: ServiceLimitGroup
+ServiceLimitGroup33: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTS15"
   GroupName: "Contrato S"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup31: ServiceLimitGroup
+ServiceLimitGroup34: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTS16"
   GroupName: "Contrato S"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup32: ServiceLimitGroup
+ServiceLimitGroup35: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTS20"
   GroupName: "Contrato S"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup33: ServiceLimitGroup
+ServiceLimitGroup36: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTS21"
   GroupName: "Contrato S"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup34: ServiceLimitGroup
+ServiceLimitGroup37: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTS25"
   GroupName: "Contrato S"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup35: ServiceLimitGroup
+ServiceLimitGroup38: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTS26"
   GroupName: "Contrato S"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup36: ServiceLimitGroup
+ServiceLimitGroup39: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "CONTS2GB"
+  GroupName: "La Combinada 20 Naranja"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+
+ServiceLimitGroup40: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTS30"
   GroupName: "Contrato S"
   ValidFrom: 2012-05-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup37: ServiceLimitGroup
+ServiceLimitGroup41: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTS32"
   GroupName: "Contrato S"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup38: ServiceLimitGroup
+ServiceLimitGroup42: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTS35"
   GroupName: "Contrato S"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup39: ServiceLimitGroup
+ServiceLimitGroup43: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTS39"
   GroupName: "Contrato S"
   ValidFrom: 2012-09-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup40: ServiceLimitGroup
+ServiceLimitGroup44: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTSF10"
   GroupName: "Fusion 10 S service package"
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup41: ServiceLimitGroup
+ServiceLimitGroup45: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTSF14"
   GroupName: "Fusion 14 S service package"
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup42: ServiceLimitGroup
+ServiceLimitGroup46: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DATA200_UPSELL"
   GroupName: "Mobile Data Usage Upsell 200"
   ValidFrom: 2015-06-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup43: ServiceLimitGroup
+ServiceLimitGroup47: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DATA5"
   GroupName: "Mobile Data Usage Bundle 5"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup44: ServiceLimitGroup
+ServiceLimitGroup48: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DATA5_UPSELL"
   GroupName: "Cont Data Usage Bundle 5"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup45: ServiceLimitGroup
+ServiceLimitGroup49: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DATA6"
   GroupName: "Mobile Data Usage Bundle 6"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup46: ServiceLimitGroup
+ServiceLimitGroup50: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DATA6_UPSELL"
   GroupName: "Mobile Data Usage Upsell 6"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup47: ServiceLimitGroup
+ServiceLimitGroup51: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DATA7"
   GroupName: "Mobile Data Usage Bundle 7"
   ValidFrom: 2015-12-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup48: ServiceLimitGroup
+ServiceLimitGroup52: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DATA9_UPSELL"
   GroupName: "Cont Data Usage Bundle 9"
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup49: ServiceLimitGroup
+ServiceLimitGroup53: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DSS"
   GroupName: "DSS continuous billing period"
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimitGroup50: ServiceLimitGroup
+ServiceLimitGroup54: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DSS2"
   GroupName: "Data Sharing Service 2"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup51: ServiceLimitGroup
+ServiceLimitGroup55: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DSS200_UPSELL"
   GroupName: "DSS200 Bundle Upsell"
   ValidFrom: 2015-06-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup52: ServiceLimitGroup
+ServiceLimitGroup56: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DSS2_UPSELL"
   GroupName: "DSS 2 Bundle Upsell"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup53: ServiceLimitGroup
+ServiceLimitGroup57: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DSS_UPSELL"
   GroupName: "DSS Bundle Upsel"
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimitGroup54: ServiceLimitGroup
+ServiceLimitGroup58: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DSS_UPSELL_UPGRADE"
   GroupName: "Upsell Upgrade DSS customer"
   ValidFrom: 2012-03-23
   ValidTo: 2049-12-31
 
-ServiceLimitGroup55: ServiceLimitGroup
+ServiceLimitGroup59: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DUB"
   GroupName: "Data Usage Bundle 500 MB"
   ValidFrom: 2011-01-31
   ValidTo: 2049-12-31
 
-ServiceLimitGroup56: ServiceLimitGroup
+ServiceLimitGroup60: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DUB2"
   GroupName: "Data Usage Bundle 1 GB"
   ValidFrom: 2012-05-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup57: ServiceLimitGroup
+ServiceLimitGroup61: ServiceLimitGroup
   Brand: "1"
   GroupCode: "DUB3"
   GroupName: "Data Usage Bundle 1 GB"
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup58: ServiceLimitGroup
+ServiceLimitGroup62: ServiceLimitGroup
   Brand: "1"
   GroupCode: "FREE100MINUTES"
   GroupName: "Free 100 Minutes voice package"
   ValidFrom: 2016-06-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup59: ServiceLimitGroup
+ServiceLimitGroup63: ServiceLimitGroup
   Brand: "1"
   GroupCode: "HSPA_ROAM_EU"
   GroupName: "HSPA Roaming EU"
   ValidFrom: 2012-10-10
   ValidTo: 2049-12-31
 
-ServiceLimitGroup60: ServiceLimitGroup
+ServiceLimitGroup64: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUB"
   GroupName: "Mobile Data Usage Bundle conti"
   ValidFrom: 2010-03-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup61: ServiceLimitGroup
+ServiceLimitGroup65: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUB2"
   GroupName: "Mobile Data Usage Bundle 2"
   ValidFrom: 2011-02-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup62: ServiceLimitGroup
+ServiceLimitGroup66: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUB2_UPSELL"
   GroupName: "Mobile Data Usage Bundle 2"
   ValidFrom: 2011-02-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup63: ServiceLimitGroup
+ServiceLimitGroup67: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUB3"
   GroupName: "Mobile Data Usage Bundle 3"
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimitGroup64: ServiceLimitGroup
+ServiceLimitGroup68: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUB3_UPSELL"
   GroupName: "Mobile Data Usage Bundle 3"
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimitGroup65: ServiceLimitGroup
+ServiceLimitGroup69: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUB4"
   GroupName: "Mobile Data Usage Bundle 4"
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimitGroup66: ServiceLimitGroup
+ServiceLimitGroup70: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUB4_UPSELL"
   GroupName: "Mobile Data Usage Bundle 4"
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimitGroup67: ServiceLimitGroup
+ServiceLimitGroup71: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUB5"
   GroupName: "Mobile Data Usage Bundle 5"
   ValidFrom: 2012-03-22
   ValidTo: 2049-12-31
 
-ServiceLimitGroup68: ServiceLimitGroup
+ServiceLimitGroup72: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUB5_UPSELL"
   GroupName: "Mobile Data Usage Bundle 5"
   ValidFrom: 2012-03-22
   ValidTo: 2049-12-31
 
-ServiceLimitGroup69: ServiceLimitGroup
+ServiceLimitGroup73: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUB9"
   GroupName: "Mobile Data Usage Bundle 9"
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup70: ServiceLimitGroup
+ServiceLimitGroup74: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUB_UPSELL"
   GroupName: "MDUB UPSELL"
   ValidFrom: 2010-11-01
   ValidTo: 2049-12-21
 
-ServiceLimitGroup71: ServiceLimitGroup
+ServiceLimitGroup75: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUBACT"
   GroupName: "Mobile Data Usage Bundle 1st"
   ValidFrom: 2010-03-01
   ValidTo: 2011-05-31
 
-ServiceLimitGroup72: ServiceLimitGroup
+ServiceLimitGroup76: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MDUBEND"
   GroupName: "Mobile Data Usage Bundle 1 las"
   ValidFrom: 2010-03-01
   ValidTo: 2011-05-31
 
-ServiceLimitGroup73: ServiceLimitGroup
+ServiceLimitGroup77: ServiceLimitGroup
   Brand: "1"
   GroupCode: "PMDUB"
   GroupName: "Prepaid MDUB"
   ValidFrom: 2011-05-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup74: ServiceLimitGroup
+ServiceLimitGroup78: ServiceLimitGroup
   Brand: "1"
   GroupCode: "PMDUB_UPSELL"
   GroupName: "Pre Mobile Data Usage Bundle"
   ValidFrom: 2011-06-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup75: ServiceLimitGroup
+ServiceLimitGroup79: ServiceLimitGroup
   Brand: "1"
   GroupCode: "TARJ6"
   GroupName: "TARJ6 Bundle"
   ValidFrom: 2013-08-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup76: ServiceLimitGroup
+ServiceLimitGroup80: ServiceLimitGroup
   Brand: "1"
   GroupCode: "TARJ7"
   GroupName: "TARJ7 Bundle"
   ValidFrom: 2013-11-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup77: ServiceLimitGroup
+ServiceLimitGroup81: ServiceLimitGroup
   Brand: "1"
   GroupCode: "TARJ7_UPSELL"
   GroupName: "TARJ7 Upsell"
   ValidFrom: 2013-11-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup78: ServiceLimitGroup
+ServiceLimitGroup82: ServiceLimitGroup
   Brand: "1"
   GroupCode: "TARJ9"
   GroupName: "La del Uno 1 GB"
   ValidFrom: 2015-05-29
   ValidTo: 2049-12-31
 
-ServiceLimitGroup79: ServiceLimitGroup
+ServiceLimitGroup83: ServiceLimitGroup
   Brand: "1"
   GroupCode: "TARJ_UPSELL"
   GroupName: "TARJ UPSELL"
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup80: ServiceLimitGroup
+ServiceLimitGroup84: ServiceLimitGroup
   Brand: "1"
   GroupCode: "TARJD1"
   GroupName: "Tarjeta Datos"
   ValidFrom: 2009-01-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup81: ServiceLimitGroup
+ServiceLimitGroup85: ServiceLimitGroup
   Brand: "1"
   GroupCode: "UPGRADE_UPSELL"
   GroupName: "Upgrade Upsell"
   ValidFrom: 2012-03-23
   ValidTo: 2049-12-31
 
-ServiceLimitGroup82: ServiceLimitGroup
+ServiceLimitGroup86: ServiceLimitGroup
   Brand: "1"
   GroupCode: "VOICE100"
   GroupName: "Voice 100 Minutes Package"
   ValidFrom: 2015-01-01
   ValidTo: 2049-12-31
 
-ServiceLimitGroup83: ServiceLimitGroup
+ServiceLimitGroup87: ServiceLimitGroup
   Brand: "1"
   GroupCode: "VOICE3000"
   GroupName: "Contrato voice"

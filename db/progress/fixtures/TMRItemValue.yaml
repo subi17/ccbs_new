@@ -1242,13 +1242,115 @@ TMRItemValue207: TMRItemValue
 
 TMRItemValue208: TMRItemValue
   TMRuleSeq: 40
+  FromDate: 2016-06-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FREE100MINUTES"
+
+TMRItemValue209: TMRItemValue
+  TMRuleSeq: 40
   FromDate: 2015-01-01
   ToDate: 2049-12-31
   CounterItemValues: "VOICE100"
 
-TMRItemValue209: TMRItemValue
+TMRItemValue210: TMRItemValue
+  TMRuleSeq: 41
+  FromDate: 2016-06-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FREE100MINUTES"
+
+TMRItemValue211: TMRItemValue
   TMRuleSeq: 41
   FromDate: 2015-01-01
   ToDate: 2049-12-31
   CounterItemValues: "VOICE100"
+
+TMRItemValue212: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT23_VOICE_IN,CONT23"
+
+TMRItemValue213: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_VOICE_IN,CONT24"
+
+TMRItemValue214: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS12_VOICE_IN,CONTS"
+
+TMRItemValue215: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSFVOICE10_A,CONTSF"
+
+TMRItemValue216: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSFVOICE14_A,CONTSF"
+
+TMRItemValue217: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE15_A,CONTS"
+
+TMRItemValue218: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE16_A,CONTS"
+
+TMRItemValue219: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE20_A,CONTS"
+
+TMRItemValue220: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE21_A,CONTS"
+
+TMRItemValue221: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE25_A,CONTS"
+
+TMRItemValue222: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE26_A,CONTS"
+
+TMRItemValue223: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE32_A,CONTS"
+
+TMRItemValue224: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE35_A,CONTS"
+
+TMRItemValue225: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE39_A,CONTS"
+
+TMRItemValue226: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE_A,CONTS"
 

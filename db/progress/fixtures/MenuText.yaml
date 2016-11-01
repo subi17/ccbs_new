@@ -5610,3 +5610,15 @@ MenuText1403: MenuText
   MenuNum: 9851
   MenuText: "COMMENT         "
 
+MenuText1404: MenuText
+  MenuNum: 9852
+  MenuText: "FIND    FIXEDNUM"
+
+MenuText1405: MenuText
+  MenuNum: 9853
+  MenuText: "SHOW    MESSAGES"
+
+MenuText1406: MenuText
+  MenuNum: 9854
+  MenuText: "INSTALL ADDRESS"
+

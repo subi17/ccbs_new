@@ -3007,7 +3007,7 @@ RequestAction295: RequestAction
   ValidFrom: 2011-10-05
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STC_DONE|22622"
+  ActionKey: "STC_DONE"
   Action: 13
   PayType: 1
   RequestActionID: 346
@@ -3017,7 +3017,7 @@ RequestAction296: RequestAction
   ValidFrom: 2011-10-05
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STC_DONE|22622"
+  ActionKey: "STC_DONE"
   Action: 13
   PayType: 2
   RequestActionID: 347
@@ -3062,7 +3062,7 @@ RequestAction300: RequestAction
   ValidFrom: 2011-10-05
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STC_DONE|22622"
+  ActionKey: "STC_DONE"
   Action: 13
   RequestActionID: 351
 
@@ -3072,7 +3072,7 @@ RequestAction301: RequestAction
   ValidFrom: 2011-10-05
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "BTCAct|22622"
+  ActionKey: "BTCAct"
   Action: 13
   PayType: 1
   RequestActionID: 352
@@ -3314,7 +3314,7 @@ RequestAction323: RequestAction
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "DSSActOtherSubs|22622"
+  ActionKey: "DSSActOtherSubs"
   Action: 13
   PayType: 1
   RequestActionID: 374
@@ -3325,7 +3325,7 @@ RequestAction324: RequestAction
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "DSSAct|22622"
+  ActionKey: "DSSAct"
   Action: 13
   PayType: 1
   RequestActionID: 375
@@ -3336,7 +3336,7 @@ RequestAction325: RequestAction
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "DSSAutoDeAct|22622"
+  ActionKey: "DSSAutoDeAct"
   Action: 13
   PayType: 1
   RequestActionID: 376
@@ -3347,7 +3347,7 @@ RequestAction326: RequestAction
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "DSSManDeAct|22622"
+  ActionKey: "DSSManDeAct"
   Action: 13
   PayType: 1
   RequestActionID: 377
@@ -3734,7 +3734,7 @@ RequestAction362: RequestAction
   ValidFrom: 2011-12-15
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STC_DONE|22622"
+  ActionKey: "STC_DONE"
   Action: 13
   RequestActionID: 413
 
@@ -3968,7 +3968,7 @@ RequestAction384: RequestAction
   ValidFrom: 2012-03-26
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "MDUB5DeActMan|22622"
+  ActionKey: "MDUB5DeActMan"
   Action: 13
   PayType: 1
   RequestActionID: 435
@@ -3979,7 +3979,7 @@ RequestAction385: RequestAction
   ValidFrom: 2012-03-26
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "BTCActUpgrade|22622"
+  ActionKey: "BTCActUpgrade"
   Action: 13
   PayType: 1
   RequestActionID: 436
@@ -4513,7 +4513,7 @@ RequestAction436: RequestAction
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "UpsellTARJ6Req|22622"
+  ActionKey: "UpsellTARJ6Req"
   Action: 13
   RequestActionID: 487
 
@@ -4523,7 +4523,7 @@ RequestAction437: RequestAction
   ValidFrom: 2012-12-10
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "MDUB9DeActMan|22622"
+  ActionKey: "MDUB9DeActMan"
   Action: 13
   PayType: 1
   RequestActionID: 488
@@ -4568,7 +4568,7 @@ RequestAction441: RequestAction
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "WelcomeTARJ6|622"
+  ActionKey: "WelcomeTARJ6"
   Action: 13
   RequestActionID: 492
 
@@ -4712,7 +4712,7 @@ RequestAction455: RequestAction
   ValidFrom: 2013-01-02
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STC_DONE|22622"
+  ActionKey: "STC_DONE"
   Action: 13
   RequestActionID: 506
 
@@ -4953,7 +4953,7 @@ RequestAction478: RequestAction
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "DATA5DeActMan|22622"
+  ActionKey: "DATA5DeActMan"
   Action: 13
   PayType: 1
   RequestActionID: 529
@@ -5372,7 +5372,7 @@ RequestAction518: RequestAction
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STCCONTFF|22622"
+  ActionKey: "STCCONTFF"
   Action: 13
   RequestActionID: 573
 
@@ -5412,7 +5412,7 @@ RequestAction522: RequestAction
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STCCONTSF10|22622"
+  ActionKey: "STCCONTSF10"
   Action: 13
   RequestActionID: 577
 
@@ -5422,7 +5422,7 @@ RequestAction523: RequestAction
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STCCONTSF14|22622"
+  ActionKey: "STCCONTSF14"
   Action: 13
   RequestActionID: 578
 
@@ -5484,7 +5484,7 @@ RequestAction529: RequestAction
   ValidFrom: 2013-11-01
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "UpsellTARJ7Act|22622"
+  ActionKey: "UpsellTARJ7Act"
   Action: 13
   RequestActionID: 584
 
@@ -5506,7 +5506,7 @@ RequestAction531: RequestAction
   ValidFrom: 2013-11-01
   ValidTo: 2016-01-17
   ActionType: "SMS"
-  ActionKey: "TARJ7DeAct|22622"
+  ActionKey: "TARJ7DeAct"
   Action: 13
   RequestActionID: 586
 
@@ -5536,7 +5536,7 @@ RequestAction534: RequestAction
   ValidFrom: 2014-02-05
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STC_Requested|22622"
+  ActionKey: "STC_Requested"
   Action: 13
   PayType: 1
   RequestActionID: 589
@@ -5546,7 +5546,7 @@ RequestAction535: RequestAction
   ValidFrom: 2014-02-05
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STC_Requested|22622"
+  ActionKey: "STC_Requested"
   Action: 13
   PayType: 2
   RequestActionID: 590
@@ -5558,7 +5558,7 @@ RequestAction536: RequestAction
   ValidFrom: 2014-02-05
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STC_Requested|22622"
+  ActionKey: "STC_Requested"
   Action: 13
   RequestActionID: 591
 
@@ -5569,7 +5569,7 @@ RequestAction537: RequestAction
   ValidFrom: 2014-02-05
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STC_Requested|22622"
+  ActionKey: "STC_Requested"
   Action: 13
   RequestActionID: 592
 
@@ -5580,7 +5580,7 @@ RequestAction538: RequestAction
   ValidFrom: 2014-02-05
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "STC_Requested|22622"
+  ActionKey: "STC_Requested"
   Action: 13
   RequestActionID: 593
 
@@ -5601,7 +5601,7 @@ RequestAction540: RequestAction
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "DATA6DeActMan|22622"
+  ActionKey: "DATA6DeActMan"
   Action: 13
   PayType: 1
   RequestActionID: 595
@@ -5816,7 +5816,7 @@ RequestAction561: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2014-11-26
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-11
   ActionType: "Service"
   ActionKey: "VOIPVIDEO"
   Action: 1
@@ -5934,7 +5934,7 @@ RequestAction572: RequestAction
   ValidFrom: 2015-05-29
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "UpsellTARJ7Act|22622"
+  ActionKey: "UpsellTARJ7Act"
   Action: 13
   RequestActionID: 630
 
@@ -5964,7 +5964,7 @@ RequestAction575: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2015-05-29
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-11
   ActionType: "Service"
   ActionKey: "VOIPVIDEO"
   Action: 1
@@ -6028,8 +6028,206 @@ RequestAction581: RequestAction
   ValidFrom: 2015-12-09
   ValidTo: 2049-12-31
   ActionType: "SMS"
-  ActionKey: "DATA7DeActMan|22622"
+  ActionKey: "DATA7DeActMan"
   Action: 13
   PayType: 1
   RequestActionID: 639
+
+RequestAction582: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL45"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 640
+
+RequestAction583: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL45"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 641
+
+RequestAction584: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL45"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 642
+
+RequestAction585: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 643
+
+RequestAction586: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 644
+
+RequestAction587: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH45_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 645
+
+RequestAction588: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH55_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 646
+
+RequestAction589: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH55_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 647
+
+RequestAction590: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH55_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 648
+
+RequestAction591: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL45"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 649
+
+RequestAction592: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH45_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 650
+
+RequestAction593: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH55_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 651
+
+RequestAction594: RequestAction
+  Brand: "1"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 11
+  PayType: 1
+  RequestActionID: 652
+
+RequestAction595: RequestAction
+  Brand: "1"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 1
+  PayType: 1
+  RequestActionID: 653
+
+RequestAction596: RequestAction
+  Brand: "1"
+  ReqType: 46
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 5
+  PayType: 1
+  RequestActionID: 654
+
+RequestAction597: RequestAction
+  Brand: "1"
+  ReqType: 14
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 1
+  PayType: 1
+  RequestActionID: 655
+
+RequestAction598: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL45"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 656
+
+RequestAction599: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 657
+
+RequestAction600: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH55_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 658
 

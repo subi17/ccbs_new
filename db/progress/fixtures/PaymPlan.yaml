@@ -214,3 +214,12 @@ PaymPlan24: PaymPlan
   PPType: 3
   Brand: "1"
 
+PaymPlan25: PaymPlan
+  PPlanID: 26
+  CustNum: 7515052
+  PPDate: 2016-09-23
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+

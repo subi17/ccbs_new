@@ -12,6 +12,7 @@ DayCampaign1: DayCampaign
   DurType: 1
   FeeModel: "BONO_VOIPMF"
   Effective: 1
+  PayType: 1
 
 DayCampaign2: DayCampaign
   DCEvent: "CONT15"
@@ -29,6 +30,7 @@ DayCampaign2: DayCampaign
   Effective: 1
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 53
+  PayType: 1
 
 DayCampaign3: DayCampaign
   DCEvent: "CONT23"
@@ -45,6 +47,7 @@ DayCampaign3: DayCampaign
   DurUnit: 1
   Effective: 1
   BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
 
 DayCampaign4: DayCampaign
   DCEvent: "CONT24"
@@ -61,6 +64,7 @@ DayCampaign4: DayCampaign
   DurUnit: 1
   Effective: 1
   BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
 
 DayCampaign5: DayCampaign
   DCEvent: "CONT9"
@@ -78,6 +82,7 @@ DayCampaign5: DayCampaign
   Effective: 1
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 53
+  PayType: 1
 
 DayCampaign6: DayCampaign
   DCEvent: "CONTD2"
@@ -96,6 +101,7 @@ DayCampaign6: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 50
+  PayType: 1
 
 DayCampaign7: DayCampaign
   DCEvent: "CONTD2_UPSELL"
@@ -114,6 +120,7 @@ DayCampaign7: DayCampaign
   DurUnit: 3
   Effective: 1
   InstanceLimit: 100
+  PayType: 1
 
 DayCampaign8: DayCampaign
   DCEvent: "CONTD2ACT"
@@ -133,6 +140,7 @@ DayCampaign8: DayCampaign
   Effective: 1
   TermFeeCalc: 1
   StatusCode: 0
+  PayType: 1
 
 DayCampaign9: DayCampaign
   DCEvent: "CONTD2END"
@@ -150,6 +158,7 @@ DayCampaign9: DayCampaign
   DurUnit: 3
   Effective: 1
   StatusCode: 0
+  PayType: 1
 
 DayCampaign10: DayCampaign
   DCEvent: "CONTD3"
@@ -168,6 +177,7 @@ DayCampaign10: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 68
+  PayType: 1
 
 DayCampaign11: DayCampaign
   DCEvent: "CONTD3_UPSELL"
@@ -186,6 +196,7 @@ DayCampaign11: DayCampaign
   DurUnit: 3
   Effective: 1
   InstanceLimit: 100
+  PayType: 1
 
 DayCampaign12: DayCampaign
   DCEvent: "CONTD4"
@@ -204,6 +215,7 @@ DayCampaign12: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 62
+  PayType: 1
 
 DayCampaign13: DayCampaign
   DCEvent: "CONTD4_UPSELL"
@@ -222,6 +234,7 @@ DayCampaign13: DayCampaign
   DurUnit: 3
   Effective: 1
   InstanceLimit: 100
+  PayType: 1
 
 DayCampaign14: DayCampaign
   DCEvent: "CONTD9"
@@ -240,6 +253,7 @@ DayCampaign14: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 59
+  PayType: 1
 
 DayCampaign15: DayCampaign
   DCEvent: "CONTDATA"
@@ -260,6 +274,7 @@ DayCampaign15: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 56
+  PayType: 1
 
 DayCampaign16: DayCampaign
   DCEvent: "CONTDATA_UPSELL"
@@ -278,6 +293,7 @@ DayCampaign16: DayCampaign
   DurUnit: 3
   Effective: 1
   InstanceLimit: 100
+  PayType: 1
 
 DayCampaign17: DayCampaign
   DCEvent: "CONTDATAACT"
@@ -299,6 +315,7 @@ DayCampaign17: DayCampaign
   Effective: 1
   TermFeeCalc: 1
   StatusCode: 0
+  PayType: 1
 
 DayCampaign18: DayCampaign
   DCEvent: "CONTDATAEND"
@@ -318,8 +335,22 @@ DayCampaign18: DayCampaign
   DurUnit: 3
   Effective: 1
   StatusCode: 0
+  PayType: 1
 
 DayCampaign19: DayCampaign
+  DCEvent: "CONTDSL"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  BillCode: "CONTDSLMF"
+  DCName: "La Combinada 20"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTDSLMF"
+  Effective: 1
+
+DayCampaign20: DayCampaign
   DCEvent: "CONTF10"
   ValidFrom: 2012-02-22
   ValidTo: 2049-12-31
@@ -332,8 +363,9 @@ DayCampaign19: DayCampaign
   Effective: 1
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
 
-DayCampaign20: DayCampaign
+DayCampaign21: DayCampaign
   DCEvent: "CONTF11"
   ValidFrom: 2015-04-14
   InclUnit: 4
@@ -349,8 +381,9 @@ DayCampaign20: DayCampaign
   Effective: 1
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign21: DayCampaign
+DayCampaign22: DayCampaign
   DCEvent: "CONTF20"
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
@@ -363,8 +396,9 @@ DayCampaign21: DayCampaign
   Effective: 1
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
 
-DayCampaign22: DayCampaign
+DayCampaign23: DayCampaign
   DCEvent: "CONTF20D"
   ValidFrom: 2012-02-22
   ValidTo: 2049-12-31
@@ -378,8 +412,9 @@ DayCampaign22: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign23: DayCampaign
+DayCampaign24: DayCampaign
   DCEvent: "CONTF30"
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
@@ -393,8 +428,9 @@ DayCampaign23: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign24: DayCampaign
+DayCampaign25: DayCampaign
   DCEvent: "CONTF40"
   ValidFrom: 2012-02-22
   ValidTo: 2049-12-31
@@ -408,8 +444,9 @@ DayCampaign24: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign25: DayCampaign
+DayCampaign26: DayCampaign
   DCEvent: "CONTF55"
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
@@ -423,8 +460,9 @@ DayCampaign25: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign26: DayCampaign
+DayCampaign27: DayCampaign
   DCEvent: "CONTF8"
   ValidFrom: 2015-04-14
   InclUnit: 1
@@ -440,8 +478,9 @@ DayCampaign26: DayCampaign
   Effective: 1
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign27: DayCampaign
+DayCampaign28: DayCampaign
   DCEvent: "CONTFF2"
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
@@ -452,10 +491,38 @@ DayCampaign27: DayCampaign
   DurType: 1
   FeeModel: "CONTFF2MF"
   Effective: 1
+  StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign28: DayCampaign
+DayCampaign29: DayCampaign
+  DCEvent: "CONTFH300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  BillCode: "CONTFH300MF"
+  DCName: "La Combinada 300"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTFH300MF"
+  Effective: 1
+
+DayCampaign30: DayCampaign
+  DCEvent: "CONTFH50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  BillCode: "CONTFH50"
+  DCName: "La Combinada 50"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTFH50MF"
+  Effective: 1
+
+DayCampaign31: DayCampaign
   DCEvent: "CONTM"
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
@@ -467,8 +534,9 @@ DayCampaign28: DayCampaign
   DurType: 4
   FeeModel: "CONTMMF"
   Effective: 1
+  PayType: 1
 
-DayCampaign29: DayCampaign
+DayCampaign32: DayCampaign
   DCEvent: "CONTM2"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
@@ -481,8 +549,9 @@ DayCampaign29: DayCampaign
   FeeModel: "CONTM2MF"
   Effective: 1
   StatusCode: 2
+  PayType: 1
 
-DayCampaign30: DayCampaign
+DayCampaign33: DayCampaign
   DCEvent: "CONTRATO2"
   ValidFrom: 2006-12-01
   ValidTo: 2049-12-31
@@ -495,8 +564,9 @@ DayCampaign30: DayCampaign
   FeeModel: "CONTRATO2"
   Effective: 1
   StatusCode: 0
+  PayType: 1
 
-DayCampaign31: DayCampaign
+DayCampaign34: DayCampaign
   DCEvent: "CONTS12"
   ValidFrom: 2015-04-14
   ValidTo: 2049-12-31
@@ -510,8 +580,9 @@ DayCampaign31: DayCampaign
   Effective: 1
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign32: DayCampaign
+DayCampaign35: DayCampaign
   DCEvent: "CONTS15"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
@@ -524,8 +595,9 @@ DayCampaign32: DayCampaign
   Effective: 1
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
 
-DayCampaign33: DayCampaign
+DayCampaign36: DayCampaign
   DCEvent: "CONTS16"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
@@ -539,8 +611,9 @@ DayCampaign33: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign34: DayCampaign
+DayCampaign37: DayCampaign
   DCEvent: "CONTS20"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
@@ -554,8 +627,9 @@ DayCampaign34: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign35: DayCampaign
+DayCampaign38: DayCampaign
   DCEvent: "CONTS21"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
@@ -569,8 +643,9 @@ DayCampaign35: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign36: DayCampaign
+DayCampaign39: DayCampaign
   DCEvent: "CONTS25"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
@@ -584,8 +659,9 @@ DayCampaign36: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign37: DayCampaign
+DayCampaign40: DayCampaign
   DCEvent: "CONTS26"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
@@ -599,8 +675,24 @@ DayCampaign37: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign38: DayCampaign
+DayCampaign41: DayCampaign
+  DCEvent: "CONTS2GB"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  BillCode: "CONTS2GB"
+  DCName: "La Combinada 20 Naranja"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS2GBMF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+
+DayCampaign42: DayCampaign
   DCEvent: "CONTS30"
   ValidFrom: 2012-05-01
   ValidTo: 2049-12-31
@@ -614,8 +706,9 @@ DayCampaign38: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign39: DayCampaign
+DayCampaign43: DayCampaign
   DCEvent: "CONTS32"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
@@ -629,8 +722,9 @@ DayCampaign39: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign40: DayCampaign
+DayCampaign44: DayCampaign
   DCEvent: "CONTS35"
   ValidFrom: 2013-09-01
   ValidTo: 2016-03-08
@@ -644,8 +738,9 @@ DayCampaign40: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign41: DayCampaign
+DayCampaign45: DayCampaign
   DCEvent: "CONTS39"
   ValidFrom: 2012-09-01
   ValidTo: 2016-03-08
@@ -659,8 +754,9 @@ DayCampaign41: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign42: DayCampaign
+DayCampaign46: DayCampaign
   DCEvent: "CONTSF10"
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
@@ -671,10 +767,12 @@ DayCampaign42: DayCampaign
   DurType: 1
   FeeModel: "CONTSF10MF"
   Effective: 1
+  StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign43: DayCampaign
+DayCampaign47: DayCampaign
   DCEvent: "CONTSF14"
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
@@ -685,10 +783,12 @@ DayCampaign43: DayCampaign
   DurType: 1
   FeeModel: "CONTSF14MF"
   Effective: 1
+  StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign44: DayCampaign
+DayCampaign48: DayCampaign
   DCEvent: "DATA200_UPSELL"
   ValidFrom: 2015-06-01
   InclUnit: 4
@@ -703,8 +803,9 @@ DayCampaign44: DayCampaign
   FeeModel: "DATA200MFUPS"
   Effective: 1
   InstanceLimit: 100
+  PayType: 1
 
-DayCampaign45: DayCampaign
+DayCampaign49: DayCampaign
   DCEvent: "DATA5"
   ValidFrom: 2013-09-01
   InclUnit: 4
@@ -721,8 +822,9 @@ DayCampaign45: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 68
+  PayType: 1
 
-DayCampaign46: DayCampaign
+DayCampaign50: DayCampaign
   DCEvent: "DATA5_UPSELL"
   ValidFrom: 2013-09-01
   InclUnit: 4
@@ -739,8 +841,9 @@ DayCampaign46: DayCampaign
   DurUnit: 3
   Effective: 1
   InstanceLimit: 100
+  PayType: 1
 
-DayCampaign47: DayCampaign
+DayCampaign51: DayCampaign
   DCEvent: "DATA6"
   ValidFrom: 2014-05-01
   InclUnit: 4
@@ -756,8 +859,9 @@ DayCampaign47: DayCampaign
   Effective: 1
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign48: DayCampaign
+DayCampaign52: DayCampaign
   DCEvent: "DATA6_UPSELL"
   ValidFrom: 2014-05-01
   InclUnit: 4
@@ -773,8 +877,9 @@ DayCampaign48: DayCampaign
   FeeModel: "DATA6MFUPS"
   Effective: 1
   InstanceLimit: 100
+  PayType: 1
 
-DayCampaign49: DayCampaign
+DayCampaign53: DayCampaign
   DCEvent: "DATA7"
   ValidFrom: 2015-12-01
   InclUnit: 4
@@ -791,8 +896,9 @@ DayCampaign49: DayCampaign
   StatusCode: 3
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign50: DayCampaign
+DayCampaign54: DayCampaign
   DCEvent: "DATA9_UPSELL"
   ValidFrom: 2012-12-01
   InclUnit: 4
@@ -809,8 +915,9 @@ DayCampaign50: DayCampaign
   Effective: 1
   InstanceLimit: 100
   StatusCode: 2
+  PayType: 1
 
-DayCampaign51: DayCampaign
+DayCampaign55: DayCampaign
   DCEvent: "DSS"
   ValidFrom: 2011-11-23
   InclUnit: 4
@@ -826,8 +933,9 @@ DayCampaign51: DayCampaign
   Effective: 1
   StatusCode: 2
   BundleUpsell: "DSS_UPSELL,DSS200_UPSELL"
+  PayType: 1
 
-DayCampaign52: DayCampaign
+DayCampaign56: DayCampaign
   DCEvent: "DSS2"
   ValidFrom: 2013-09-01
   InclUnit: 4
@@ -841,8 +949,9 @@ DayCampaign52: DayCampaign
   DurType: 1
   Effective: 1
   BundleUpsell: "DSS2_UPSELL,DSS200_UPSELL"
+  PayType: 1
 
-DayCampaign53: DayCampaign
+DayCampaign57: DayCampaign
   DCEvent: "DSS200_UPSELL"
   ValidFrom: 2015-06-01
   InclUnit: 4
@@ -857,8 +966,9 @@ DayCampaign53: DayCampaign
   FeeModel: "DSS200MFUPS"
   Effective: 1
   InstanceLimit: 100
+  PayType: 1
 
-DayCampaign54: DayCampaign
+DayCampaign58: DayCampaign
   DCEvent: "DSS2_UPSELL"
   ValidFrom: 2013-09-01
   InclUnit: 4
@@ -875,8 +985,9 @@ DayCampaign54: DayCampaign
   DurUnit: 3
   Effective: 1
   InstanceLimit: 100
+  PayType: 1
 
-DayCampaign55: DayCampaign
+DayCampaign59: DayCampaign
   DCEvent: "DSS_UPSELL"
   ValidFrom: 2011-11-23
   InclUnit: 4
@@ -893,8 +1004,9 @@ DayCampaign55: DayCampaign
   DurUnit: 3
   Effective: 1
   InstanceLimit: 100
+  PayType: 1
 
-DayCampaign56: DayCampaign
+DayCampaign60: DayCampaign
   DCEvent: "DSS_UPSELL_UPGRADE"
   ValidFrom: 2012-03-23
   InclUnit: 4
@@ -911,8 +1023,9 @@ DayCampaign56: DayCampaign
   Effective: 1
   InstanceLimit: 100
   StatusCode: 2
+  PayType: 1
 
-DayCampaign57: DayCampaign
+DayCampaign61: DayCampaign
   DCEvent: "DUB"
   ValidFrom: 2011-01-31
   InclUnit: 4
@@ -928,8 +1041,9 @@ DayCampaign57: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 1
+  PayType: 1
 
-DayCampaign58: DayCampaign
+DayCampaign62: DayCampaign
   DCEvent: "DUB2"
   ValidFrom: 2012-05-01
   InclUnit: 4
@@ -946,8 +1060,9 @@ DayCampaign58: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 59
+  PayType: 1
 
-DayCampaign59: DayCampaign
+DayCampaign63: DayCampaign
   DCEvent: "DUB3"
   ValidFrom: 2012-12-01
   InclUnit: 4
@@ -963,12 +1078,13 @@ DayCampaign59: DayCampaign
   Effective: 1
   BundleUpsell: "DATA200_UPSELL"
   DSSPriority: 59
+  PayType: 1
 
-DayCampaign60: DayCampaign
+DayCampaign64: DayCampaign
   DCEvent: "FREE100MINUTES"
   ValidFrom: 2016-06-01
   ValidTo: 2049-12-31
-  DCName: "June 2016 promotion free 100 minutes"
+  DCName: "Promo 100 min/mes gratis"
   Brand: "1"
   DCType: "1"
   CalcMethod: 1
@@ -976,8 +1092,24 @@ DayCampaign60: DayCampaign
   DurMonths: 3
   DurUnit: 3
   Effective: 1
+  PayType: 1
 
-DayCampaign61: DayCampaign
+DayCampaign65: DayCampaign
+  DCEvent: "FTERM12-100"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  DCName: "FTERM12 periodical contract"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 12
+  TermFeeModel: "FTERMPERIOD"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+
+DayCampaign66: DayCampaign
   DCEvent: "GPRS"
   ValidFrom: 2006-12-01
   InclUnit: 6
@@ -994,8 +1126,9 @@ DayCampaign61: DayCampaign
   DurType: 1
   DurUnit: 1
   Effective: 1
+  PayType: 1
 
-DayCampaign62: DayCampaign
+DayCampaign67: DayCampaign
   DCEvent: "HSPA_ROAM_EU"
   ValidFrom: 2012-10-10
   InclUnit: 4
@@ -1010,7 +1143,7 @@ DayCampaign62: DayCampaign
   DurUnit: 1
   Effective: 1
 
-DayCampaign63: DayCampaign
+DayCampaign68: DayCampaign
   DCEvent: "MDUB"
   ValidFrom: 2010-03-01
   InclUnit: 4
@@ -1027,8 +1160,9 @@ DayCampaign63: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 68
+  PayType: 1
 
-DayCampaign64: DayCampaign
+DayCampaign69: DayCampaign
   DCEvent: "MDUB2"
   ValidFrom: 2011-02-01
   InclUnit: 4
@@ -1045,8 +1179,9 @@ DayCampaign64: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 62
+  PayType: 1
 
-DayCampaign65: DayCampaign
+DayCampaign70: DayCampaign
   DCEvent: "MDUB2_UPSELL"
   ValidFrom: 2011-02-01
   InclUnit: 4
@@ -1064,8 +1199,9 @@ DayCampaign65: DayCampaign
   Effective: 1
   InstanceLimit: 100
   StatusCode: 2
+  PayType: 1
 
-DayCampaign66: DayCampaign
+DayCampaign71: DayCampaign
   DCEvent: "MDUB3"
   ValidFrom: 2011-11-23
   InclUnit: 4
@@ -1082,8 +1218,9 @@ DayCampaign66: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 56
+  PayType: 1
 
-DayCampaign67: DayCampaign
+DayCampaign72: DayCampaign
   DCEvent: "MDUB3_UPSELL"
   ValidFrom: 2011-11-23
   InclUnit: 4
@@ -1101,8 +1238,9 @@ DayCampaign67: DayCampaign
   Effective: 1
   InstanceLimit: 100
   StatusCode: 2
+  PayType: 1
 
-DayCampaign68: DayCampaign
+DayCampaign73: DayCampaign
   DCEvent: "MDUB4"
   ValidFrom: 2011-11-23
   InclUnit: 4
@@ -1119,8 +1257,9 @@ DayCampaign68: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 50
+  PayType: 1
 
-DayCampaign69: DayCampaign
+DayCampaign74: DayCampaign
   DCEvent: "MDUB4_UPSELL"
   ValidFrom: 2011-11-23
   InclUnit: 4
@@ -1138,8 +1277,9 @@ DayCampaign69: DayCampaign
   Effective: 1
   InstanceLimit: 100
   StatusCode: 2
+  PayType: 1
 
-DayCampaign70: DayCampaign
+DayCampaign75: DayCampaign
   DCEvent: "MDUB5"
   ValidFrom: 2012-03-22
   InclUnit: 4
@@ -1156,8 +1296,9 @@ DayCampaign70: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 65
+  PayType: 1
 
-DayCampaign71: DayCampaign
+DayCampaign76: DayCampaign
   DCEvent: "MDUB5_UPSELL"
   ValidFrom: 2012-03-22
   InclUnit: 4
@@ -1175,8 +1316,9 @@ DayCampaign71: DayCampaign
   Effective: 1
   InstanceLimit: 100
   StatusCode: 2
+  PayType: 1
 
-DayCampaign72: DayCampaign
+DayCampaign77: DayCampaign
   DCEvent: "MDUB9"
   ValidFrom: 2012-12-01
   InclUnit: 4
@@ -1193,8 +1335,9 @@ DayCampaign72: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 59
+  PayType: 1
 
-DayCampaign73: DayCampaign
+DayCampaign78: DayCampaign
   DCEvent: "MDUB_UPSELL"
   ValidFrom: 2010-11-01
   InclUnit: 4
@@ -1212,8 +1355,9 @@ DayCampaign73: DayCampaign
   Effective: 1
   InstanceLimit: 100
   StatusCode: 2
+  PayType: 1
 
-DayCampaign74: DayCampaign
+DayCampaign79: DayCampaign
   DCEvent: "MDUBACT"
   ValidFrom: 2010-03-01
   InclUnit: 4
@@ -1231,8 +1375,9 @@ DayCampaign74: DayCampaign
   Effective: 1
   TermFeeCalc: 1
   StatusCode: 0
+  PayType: 1
 
-DayCampaign75: DayCampaign
+DayCampaign80: DayCampaign
   DCEvent: "MDUBEND"
   ValidFrom: 2010-03-01
   InclUnit: 4
@@ -1248,8 +1393,9 @@ DayCampaign75: DayCampaign
   DurUnit: 3
   Effective: 1
   StatusCode: 0
+  PayType: 1
 
-DayCampaign76: DayCampaign
+DayCampaign81: DayCampaign
   DCEvent: "PAYTERM18_10"
   ValidFrom: 2010-03-01
   ValidTo: 2049-12-31
@@ -1265,8 +1411,9 @@ DayCampaign76: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign77: DayCampaign
+DayCampaign82: DayCampaign
   DCEvent: "PAYTERM18_15"
   ValidFrom: 2010-03-01
   ValidTo: 2049-12-31
@@ -1282,8 +1429,9 @@ DayCampaign77: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign78: DayCampaign
+DayCampaign83: DayCampaign
   DCEvent: "PAYTERM18_20"
   ValidFrom: 2010-03-01
   ValidTo: 2049-12-31
@@ -1299,8 +1447,9 @@ DayCampaign78: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign79: DayCampaign
+DayCampaign84: DayCampaign
   DCEvent: "PAYTERM18_25"
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
@@ -1316,8 +1465,9 @@ DayCampaign79: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign80: DayCampaign
+DayCampaign85: DayCampaign
   DCEvent: "PAYTERM18_3"
   ValidFrom: 2011-08-01
   ValidTo: 2049-12-31
@@ -1333,8 +1483,9 @@ DayCampaign80: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign81: DayCampaign
+DayCampaign86: DayCampaign
   DCEvent: "PAYTERM18_30"
   ValidFrom: 2012-08-01
   ValidTo: 2049-12-31
@@ -1350,8 +1501,9 @@ DayCampaign81: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign82: DayCampaign
+DayCampaign87: DayCampaign
   DCEvent: "PAYTERM18_5"
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
@@ -1367,8 +1519,9 @@ DayCampaign82: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign83: DayCampaign
+DayCampaign88: DayCampaign
   DCEvent: "PAYTERM18_8"
   ValidFrom: 2012-04-02
   ValidTo: 2049-12-31
@@ -1384,8 +1537,9 @@ DayCampaign83: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign84: DayCampaign
+DayCampaign89: DayCampaign
   DCEvent: "PAYTERM24_1"
   ValidFrom: 2014-03-01
   ValidTo: 2049-12-31
@@ -1401,8 +1555,9 @@ DayCampaign84: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign85: DayCampaign
+DayCampaign90: DayCampaign
   DCEvent: "PAYTERM24_10"
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
@@ -1418,8 +1573,9 @@ DayCampaign85: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign86: DayCampaign
+DayCampaign91: DayCampaign
   DCEvent: "PAYTERM24_12"
   ValidFrom: 2014-02-01
   ValidTo: 2049-12-31
@@ -1435,8 +1591,9 @@ DayCampaign86: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign87: DayCampaign
+DayCampaign92: DayCampaign
   DCEvent: "PAYTERM24_15"
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
@@ -1452,8 +1609,9 @@ DayCampaign87: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign88: DayCampaign
+DayCampaign93: DayCampaign
   DCEvent: "PAYTERM24_18"
   ValidFrom: 2014-02-01
   ValidTo: 2049-12-31
@@ -1469,8 +1627,9 @@ DayCampaign88: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign89: DayCampaign
+DayCampaign94: DayCampaign
   DCEvent: "PAYTERM24_2"
   ValidFrom: 2015-09-28
   ValidTo: 2049-12-31
@@ -1486,8 +1645,9 @@ DayCampaign89: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign90: DayCampaign
+DayCampaign95: DayCampaign
   DCEvent: "PAYTERM24_20"
   ValidFrom: 2012-08-01
   ValidTo: 2049-12-31
@@ -1503,8 +1663,9 @@ DayCampaign90: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign91: DayCampaign
+DayCampaign96: DayCampaign
   DCEvent: "PAYTERM24_22"
   ValidFrom: 2014-02-01
   ValidTo: 2049-12-31
@@ -1520,8 +1681,9 @@ DayCampaign91: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign92: DayCampaign
+DayCampaign97: DayCampaign
   DCEvent: "PAYTERM24_25"
   ValidFrom: 2012-08-01
   ValidTo: 2049-12-31
@@ -1537,8 +1699,9 @@ DayCampaign92: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign93: DayCampaign
+DayCampaign98: DayCampaign
   DCEvent: "PAYTERM24_3"
   ValidFrom: 2011-08-01
   ValidTo: 2049-12-31
@@ -1554,8 +1717,9 @@ DayCampaign93: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign94: DayCampaign
+DayCampaign99: DayCampaign
   DCEvent: "PAYTERM24_30"
   ValidFrom: 2012-08-01
   ValidTo: 2049-12-31
@@ -1571,8 +1735,9 @@ DayCampaign94: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign95: DayCampaign
+DayCampaign100: DayCampaign
   DCEvent: "PAYTERM24_4"
   ValidFrom: 2014-03-01
   ValidTo: 2049-12-31
@@ -1588,8 +1753,9 @@ DayCampaign95: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign96: DayCampaign
+DayCampaign101: DayCampaign
   DCEvent: "PAYTERM24_5"
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
@@ -1605,8 +1771,9 @@ DayCampaign96: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign97: DayCampaign
+DayCampaign102: DayCampaign
   DCEvent: "PAYTERM24_6"
   ValidFrom: 2015-11-25
   ValidTo: 2049-12-31
@@ -1622,8 +1789,9 @@ DayCampaign97: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign98: DayCampaign
+DayCampaign103: DayCampaign
   DCEvent: "PAYTERM24_8"
   ValidFrom: 2012-04-02
   ValidTo: 2049-12-31
@@ -1639,8 +1807,9 @@ DayCampaign98: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign99: DayCampaign
+DayCampaign104: DayCampaign
   DCEvent: "PMDUB"
   ValidFrom: 2011-05-01
   InclUnit: 4
@@ -1655,8 +1824,9 @@ DayCampaign99: DayCampaign
   FeeModel: "PMDUBFee"
   Effective: 1
   BundleUpsell: "PMDUB_UPSELL"
+  PayType: 2
 
-DayCampaign100: DayCampaign
+DayCampaign105: DayCampaign
   DCEvent: "PMDUB_UPSELL"
   ValidFrom: 2011-06-01
   InclUnit: 4
@@ -1673,8 +1843,9 @@ DayCampaign100: DayCampaign
   DurUnit: 3
   Effective: 1
   InstanceLimit: 10
+  PayType: 2
 
-DayCampaign101: DayCampaign
+DayCampaign106: DayCampaign
   DCEvent: "POSTRENOVE"
   ValidFrom: 2008-09-01
   ValidTo: 2010-05-26
@@ -1689,8 +1860,9 @@ DayCampaign101: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign102: DayCampaign
+DayCampaign107: DayCampaign
   DCEvent: "POSTRENOVEII"
   ValidFrom: 2009-09-09
   ValidTo: 2010-05-26
@@ -1705,8 +1877,9 @@ DayCampaign102: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign103: DayCampaign
+DayCampaign108: DayCampaign
   DCEvent: "PRERENOVE"
   ValidFrom: 2008-09-01
   ValidTo: 2011-01-26
@@ -1718,8 +1891,9 @@ DayCampaign103: DayCampaign
   DurMonths: 18
   DurUnit: 2
   Effective: 1
+  PayType: 2
 
-DayCampaign104: DayCampaign
+DayCampaign109: DayCampaign
   DCEvent: "PRETERM"
   ValidFrom: 2006-12-01
   ValidTo: 2011-01-26
@@ -1731,8 +1905,9 @@ DayCampaign104: DayCampaign
   DurMonths: 18
   DurUnit: 2
   Effective: 1
+  PayType: 2
 
-DayCampaign105: DayCampaign
+DayCampaign110: DayCampaign
   DCEvent: "RVTERM12"
   ValidFrom: 2015-11-25
   ValidTo: 2049-12-31
@@ -1748,8 +1923,9 @@ DayCampaign105: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 1
+  PayType: 1
 
-DayCampaign106: DayCampaign
+DayCampaign111: DayCampaign
   DCEvent: "SMSFREE"
   ValidFrom: 2010-04-01
   InclUnit: 6
@@ -1764,8 +1940,9 @@ DayCampaign106: DayCampaign
   DurType: 1
   Effective: 1
   InclStartCharge: FALSE
+  PayType: 1
 
-DayCampaign107: DayCampaign
+DayCampaign112: DayCampaign
   DCEvent: "SMSFREEOCT10"
   ValidFrom: 2010-10-01
   InclUnit: 6
@@ -1780,8 +1957,9 @@ DayCampaign107: DayCampaign
   DurType: 1
   Effective: 1
   InclStartCharge: FALSE
+  PayType: 1
 
-DayCampaign108: DayCampaign
+DayCampaign113: DayCampaign
   DCEvent: "SPOTIFY"
   ValidFrom: 2012-07-01
   ValidTo: 2049-12-31
@@ -1794,8 +1972,9 @@ DayCampaign108: DayCampaign
   FeeModel: "SPOTIFYMF"
   Effective: 1
   StatusCode: 0
+  PayType: 1
 
-DayCampaign109: DayCampaign
+DayCampaign114: DayCampaign
   DCEvent: "STERM18"
   ValidFrom: 2012-05-01
   ValidTo: 2049-12-31
@@ -1810,8 +1989,9 @@ DayCampaign109: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign110: DayCampaign
+DayCampaign115: DayCampaign
   DCEvent: "TARJ"
   ValidFrom: 2014-05-01
   InclUnit: 4
@@ -1826,8 +2006,9 @@ DayCampaign110: DayCampaign
   Effective: 1
   StatusCode: 2
   BundleUpsell: "TARJ_UPSELL"
+  PayType: 2
 
-DayCampaign111: DayCampaign
+DayCampaign116: DayCampaign
   DCEvent: "TARJ6"
   ValidFrom: 2013-08-01
   InclUnit: 4
@@ -1842,8 +2023,9 @@ DayCampaign111: DayCampaign
   Effective: 1
   StatusCode: 2
   BundleUpsell: "TARJ_UPSELL"
+  PayType: 2
 
-DayCampaign112: DayCampaign
+DayCampaign117: DayCampaign
   DCEvent: "TARJ7"
   ValidFrom: 2013-11-01
   InclUnit: 4
@@ -1857,8 +2039,9 @@ DayCampaign112: DayCampaign
   FeeModel: "TARJ7_BundleFee"
   Effective: 1
   BundleUpsell: "TARJ7_UPSELL"
+  PayType: 2
 
-DayCampaign113: DayCampaign
+DayCampaign118: DayCampaign
   DCEvent: "TARJ7_UPSELL"
   ValidFrom: 2013-11-01
   InclUnit: 4
@@ -1874,8 +2057,9 @@ DayCampaign113: DayCampaign
   DurUnit: 2
   Effective: 1
   InstanceLimit: 999
+  PayType: 2
 
-DayCampaign114: DayCampaign
+DayCampaign119: DayCampaign
   DCEvent: "TARJ9"
   ValidFrom: 2015-05-29
   InclUnit: 4
@@ -1889,8 +2073,9 @@ DayCampaign114: DayCampaign
   FeeModel: "TARJ9_BundleFee"
   Effective: 1
   BundleUpsell: "TARJ7_UPSELL"
+  PayType: 2
 
-DayCampaign115: DayCampaign
+DayCampaign120: DayCampaign
   DCEvent: "TARJ_UPSELL"
   ValidFrom: 2012-12-01
   InclUnit: 4
@@ -1904,8 +2089,9 @@ DayCampaign115: DayCampaign
   FeeModel: "TARJ_UPSELLFee"
   DurUnit: 1
   Effective: 1
+  PayType: 2
 
-DayCampaign116: DayCampaign
+DayCampaign121: DayCampaign
   DCEvent: "TARJD1"
   ValidFrom: 2009-01-01
   ValidTo: 2049-12-31
@@ -1917,8 +2103,9 @@ DayCampaign116: DayCampaign
   Effective: 1
   InclStartCharge: FALSE
   StatusCode: 2
+  PayType: 2
 
-DayCampaign117: DayCampaign
+DayCampaign122: DayCampaign
   DCEvent: "TERM18"
   ValidFrom: 2006-11-01
   ValidTo: 1954-12-31
@@ -1934,8 +2121,9 @@ DayCampaign117: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign118: DayCampaign
+DayCampaign123: DayCampaign
   DCEvent: "TERM18-150"
   ValidFrom: 2010-03-01
   ValidTo: 1954-12-31
@@ -1950,8 +2138,9 @@ DayCampaign118: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign119: DayCampaign
+DayCampaign124: DayCampaign
   DCEvent: "TERM18-50"
   ValidFrom: 2012-06-13
   ValidTo: 2049-12-31
@@ -1966,8 +2155,9 @@ DayCampaign119: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign120: DayCampaign
+DayCampaign125: DayCampaign
   DCEvent: "TERM18II"
   ValidFrom: 2009-03-01
   ValidTo: 1954-12-31
@@ -1983,8 +2173,9 @@ DayCampaign120: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign121: DayCampaign
+DayCampaign126: DayCampaign
   DCEvent: "TERM18III"
   ValidFrom: 2009-09-09
   ValidTo: 2049-12-31
@@ -1999,8 +2190,9 @@ DayCampaign121: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign122: DayCampaign
+DayCampaign127: DayCampaign
   DCEvent: "TERM18IV"
   ValidFrom: 2010-02-08
   ValidTo: 2049-12-31
@@ -2015,8 +2207,9 @@ DayCampaign122: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign123: DayCampaign
+DayCampaign128: DayCampaign
   DCEvent: "TERM18V"
   ValidFrom: 2010-12-01
   ValidTo: 2049-12-31
@@ -2031,8 +2224,9 @@ DayCampaign123: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign124: DayCampaign
+DayCampaign129: DayCampaign
   DCEvent: "TERM18VI"
   ValidFrom: 2010-12-01
   ValidTo: 2049-12-31
@@ -2047,8 +2241,9 @@ DayCampaign124: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign125: DayCampaign
+DayCampaign130: DayCampaign
   DCEvent: "TERM24"
   ValidFrom: 2010-12-01
   ValidTo: 1954-12-31
@@ -2064,8 +2259,9 @@ DayCampaign125: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign126: DayCampaign
+DayCampaign131: DayCampaign
   DCEvent: "TERM24-125"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
@@ -2080,8 +2276,9 @@ DayCampaign126: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign127: DayCampaign
+DayCampaign132: DayCampaign
   DCEvent: "TERM24-150"
   ValidFrom: 2010-12-01
   ValidTo: 2049-12-31
@@ -2096,8 +2293,9 @@ DayCampaign127: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign128: DayCampaign
+DayCampaign133: DayCampaign
   DCEvent: "TERM24-175"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
@@ -2112,8 +2310,9 @@ DayCampaign128: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign129: DayCampaign
+DayCampaign134: DayCampaign
   DCEvent: "TERM24-225"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
@@ -2128,8 +2327,9 @@ DayCampaign129: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign130: DayCampaign
+DayCampaign135: DayCampaign
   DCEvent: "TERM24-250"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
@@ -2144,8 +2344,9 @@ DayCampaign130: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign131: DayCampaign
+DayCampaign136: DayCampaign
   DCEvent: "TERM24-275"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
@@ -2160,8 +2361,9 @@ DayCampaign131: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign132: DayCampaign
+DayCampaign137: DayCampaign
   DCEvent: "TERM24-50"
   ValidFrom: 2012-06-13
   ValidTo: 2049-12-31
@@ -2176,8 +2378,9 @@ DayCampaign132: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign133: DayCampaign
+DayCampaign138: DayCampaign
   DCEvent: "TERM24-75"
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
@@ -2192,8 +2395,9 @@ DayCampaign133: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign134: DayCampaign
+DayCampaign139: DayCampaign
   DCEvent: "TERM24II"
   ValidFrom: 2010-12-01
   ValidTo: 1954-12-31
@@ -2209,8 +2413,9 @@ DayCampaign134: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign135: DayCampaign
+DayCampaign140: DayCampaign
   DCEvent: "TERM24III"
   ValidFrom: 2010-12-01
   ValidTo: 2049-12-31
@@ -2225,8 +2430,9 @@ DayCampaign135: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign136: DayCampaign
+DayCampaign141: DayCampaign
   DCEvent: "TERM24IV"
   ValidFrom: 2010-12-01
   ValidTo: 1954-12-31
@@ -2241,8 +2447,9 @@ DayCampaign136: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign137: DayCampaign
+DayCampaign142: DayCampaign
   DCEvent: "TERM24V"
   ValidFrom: 2010-12-01
   ValidTo: 2049-12-31
@@ -2257,8 +2464,9 @@ DayCampaign137: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign138: DayCampaign
+DayCampaign143: DayCampaign
   DCEvent: "TERM24VI"
   ValidFrom: 2010-12-01
   ValidTo: 2049-12-31
@@ -2273,8 +2481,9 @@ DayCampaign138: DayCampaign
   DurUnit: 2
   Effective: 1
   TermFeeCalc: 2
+  PayType: 1
 
-DayCampaign139: DayCampaign
+DayCampaign144: DayCampaign
   DCEvent: "UPGRADE_UPSELL"
   ValidFrom: 2012-03-23
   InclUnit: 4
@@ -2290,8 +2499,9 @@ DayCampaign139: DayCampaign
   DurUnit: 3
   Effective: 1
   StatusCode: 2
+  PayType: 1
 
-DayCampaign140: DayCampaign
+DayCampaign145: DayCampaign
   DCEvent: "VOICE100"
   ValidFrom: 2015-01-01
   ValidTo: 2049-12-31
@@ -2302,8 +2512,9 @@ DayCampaign140: DayCampaign
   DurType: 1
   Effective: 1
   BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
 
-DayCampaign141: DayCampaign
+DayCampaign146: DayCampaign
   DCEvent: "VOICE3000"
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
@@ -2315,8 +2526,9 @@ DayCampaign141: DayCampaign
   Effective: 1
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
 
-DayCampaign142: DayCampaign
+DayCampaign147: DayCampaign
   DCEvent: "YOIGOYOIGO"
   ValidFrom: 2008-02-01
   InclUnit: 2
@@ -2332,4 +2544,5 @@ DayCampaign142: DayCampaign
   CalcMethod: 1
   DurType: 1
   Effective: 1
+  PayType: 1
 

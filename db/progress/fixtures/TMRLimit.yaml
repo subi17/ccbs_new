@@ -890,3 +890,23 @@ TMRLimit81: TMRLimit
   Action: 30
   SMSText: "100_Voice100BDest"
 
+TMRLimit82: TMRLimit
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 4800
+  Action: 30
+  SMSText: "VOICE4800Limit"
+
+TMRLimit83: TMRLimit
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 5000
+  Action: 30
+  SMSText: "VOICE5000Limit"
+

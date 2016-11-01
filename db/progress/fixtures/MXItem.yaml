@@ -606,47 +606,47 @@ MXItem121: MXItem
 MXItem122: MXItem
   MXSeq: 59
   MXName: "PerContract"
-  MXValue: "DATA6"
+  MXValue: "MDUB"
 
 MXItem123: MXItem
   MXSeq: 59
   MXName: "PerContract"
-  MXValue: "DATA7"
+  MXValue: "MDUB2"
 
 MXItem124: MXItem
   MXSeq: 59
   MXName: "PerContract"
-  MXValue: "MDUB"
+  MXValue: "MDUB3"
 
 MXItem125: MXItem
   MXSeq: 59
   MXName: "PerContract"
-  MXValue: "MDUB2"
+  MXValue: "MDUB4"
 
 MXItem126: MXItem
   MXSeq: 59
   MXName: "PerContract"
-  MXValue: "MDUB3"
+  MXValue: "MDUB9"
 
 MXItem127: MXItem
   MXSeq: 59
   MXName: "PerContract"
-  MXValue: "MDUB4"
+  MXValue: "MDUB5"
 
 MXItem128: MXItem
   MXSeq: 59
   MXName: "PerContract"
-  MXValue: "MDUB9"
+  MXValue: "DATA5"
 
 MXItem129: MXItem
   MXSeq: 59
   MXName: "PerContract"
-  MXValue: "MDUB5"
+  MXValue: "DATA6"
 
 MXItem130: MXItem
   MXSeq: 59
   MXName: "PerContract"
-  MXValue: "DATA5"
+  MXValue: "DATA7"
 
 MXItem131: MXItem
   MXSeq: 59
@@ -1037,4 +1037,84 @@ MXItem208: MXItem
   MXSeq: 103
   MXName: "SubsTypeTo"
   MXValue: "CONT23"
+
+MXItem209: MXItem
+  MXSeq: 107
+  MXName: "PerContract"
+  MXValue: "CONTS2GB"
+
+MXItem210: MXItem
+  MXSeq: 107
+  MXName: "PerContract"
+  MXValue: "DATA6"
+
+MXItem211: MXItem
+  MXSeq: 107
+  MXName: "SubsTypeTo"
+  MXValue: "CONTDSL45"
+
+MXItem212: MXItem
+  MXSeq: 107
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH45_50"
+
+MXItem213: MXItem
+  MXSeq: 107
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH55_300"
+
+MXItem214: MXItem
+  MXSeq: 108
+  MXName: "PerContract"
+  MXValue: "CONTDSL"
+
+MXItem215: MXItem
+  MXSeq: 108
+  MXName: "SubsTypeTo"
+  MXValue: "CONTDSL*"
+
+MXItem216: MXItem
+  MXSeq: 109
+  MXName: "PerContract"
+  MXValue: "CONTFH50"
+
+MXItem217: MXItem
+  MXSeq: 109
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH45_50"
+
+MXItem218: MXItem
+  MXSeq: 110
+  MXName: "PerContract"
+  MXValue: "CONTFH300"
+
+MXItem219: MXItem
+  MXSeq: 110
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH55_300"
+
+MXItem220: MXItem
+  MXSeq: 111
+  MXName: "PerContract"
+  MXValue: "FTERM*"
+
+MXItem221: MXItem
+  MXSeq: 111
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL*"
+
+MXItem222: MXItem
+  MXSeq: 111
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH*"
+
+MXItem223: MXItem
+  MXSeq: 112
+  MXName: "PerContract"
+  MXValue: "DATA6"
+
+MXItem224: MXItem
+  MXSeq: 112
+  MXName: "SubsTypeTo"
+  MXValue: "CONTDSL45,CONTFH45_50,CONTFH55_300"
 

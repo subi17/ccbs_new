@@ -85,3 +85,7 @@ DialType22: DialType
   DialType: 47
   DTName: "Roaming MT inside EU"
 
+DialType23: DialType
+  DialType: 50
+  DTName: "Fixed Voice Bdest"
+

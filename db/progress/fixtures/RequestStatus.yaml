@@ -87,68 +87,72 @@ RequestStatus17: RequestStatus
 
 RequestStatus18: RequestStatus
   Brand: "1"
+  ReqType: 14
+
+RequestStatus19: RequestStatus
+  Brand: "1"
   ReqType: 15
   Program: "createsolog"
 
-RequestStatus19: RequestStatus
+RequestStatus20: RequestStatus
   Brand: "1"
   ReqType: 15
   ReqStatus: 6
   Program: "changesim"
 
-RequestStatus20: RequestStatus
-  Brand: "1"
-  ReqType: 18
-  Program: "createsolog"
-
 RequestStatus21: RequestStatus
   Brand: "1"
   ReqType: 18
-  ReqStatus: 6
-  Program: "deletemobsub"
+  Program: "createsolog"
 
 RequestStatus22: RequestStatus
   Brand: "1"
   ReqType: 18
-  ReqStatus: 8
+  ReqStatus: 6
   Program: "deletemobsub"
 
 RequestStatus23: RequestStatus
   Brand: "1"
+  ReqType: 18
+  ReqStatus: 8
+  Program: "deletemobsub"
+
+RequestStatus24: RequestStatus
+  Brand: "1"
   ReqType: 19
   Program: "createsolog"
 
-RequestStatus24: RequestStatus
+RequestStatus25: RequestStatus
   Brand: "1"
   ReqType: 19
   ReqStatus: 6
   Program: "changemsisdn"
 
-RequestStatus25: RequestStatus
+RequestStatus26: RequestStatus
   Brand: "1"
   ReqType: 19
   ReqStatus: 8
   Program: "changemsisdn"
 
-RequestStatus26: RequestStatus
-  Brand: "1"
-  ReqType: 22
-
 RequestStatus27: RequestStatus
   Brand: "1"
-  ReqType: 23
+  ReqType: 22
 
 RequestStatus28: RequestStatus
   Brand: "1"
   ReqType: 23
-  ReqStatus: 8
 
 RequestStatus29: RequestStatus
   Brand: "1"
   ReqType: 23
-  ReqStatus: 15
+  ReqStatus: 8
 
 RequestStatus30: RequestStatus
+  Brand: "1"
+  ReqType: 23
+  ReqStatus: 15
+
+RequestStatus31: RequestStatus
   Brand: "1"
   ReqType: 23
   ReqStatus: 17
@@ -156,207 +160,199 @@ RequestStatus30: RequestStatus
   LogFile: "/home/ari/stat17.log"
   LogThreshold: 500010
 
-RequestStatus31: RequestStatus
+RequestStatus32: RequestStatus
   Brand: "1"
   ReqType: 24
 
-RequestStatus32: RequestStatus
+RequestStatus33: RequestStatus
   Brand: "1"
   ReqType: 24
   ReqStatus: 15
 
-RequestStatus33: RequestStatus
+RequestStatus34: RequestStatus
   Brand: "1"
   ReqType: 27
 
-RequestStatus34: RequestStatus
+RequestStatus35: RequestStatus
   Brand: "1"
   ReqType: 28
   Program: "pgrequest"
 
-RequestStatus35: RequestStatus
-  Brand: "1"
-  ReqType: 30
-
 RequestStatus36: RequestStatus
   Brand: "1"
-  ReqType: 31
+  ReqType: 30
 
 RequestStatus37: RequestStatus
   Brand: "1"
   ReqType: 31
-  ReqStatus: 15
 
 RequestStatus38: RequestStatus
   Brand: "1"
-  ReqType: 32
+  ReqType: 31
+  ReqStatus: 15
 
 RequestStatus39: RequestStatus
+  Brand: "1"
+  ReqType: 32
+
+RequestStatus40: RequestStatus
   Brand: "1"
   ReqType: 33
   Program: "creditcheckrequest"
 
-RequestStatus40: RequestStatus
+RequestStatus41: RequestStatus
   Brand: "1"
   ReqType: 33
   ReqStatus: 1
   Program: "creditcheckquery"
 
-RequestStatus41: RequestStatus
-  Brand: "1"
-  ReqType: 34
-
 RequestStatus42: RequestStatus
   Brand: "1"
   ReqType: 34
-  ReqStatus: 8
 
 RequestStatus43: RequestStatus
   Brand: "1"
   ReqType: 34
-  ReqStatus: 15
+  ReqStatus: 8
 
 RequestStatus44: RequestStatus
   Brand: "1"
-  ReqType: 35
+  ReqType: 34
+  ReqStatus: 15
 
 RequestStatus45: RequestStatus
+  Brand: "1"
+  ReqType: 35
+
+RequestStatus46: RequestStatus
   Brand: "1"
   ReqType: 35
   ReqStatus: 7
   InUse: FALSE
 
-RequestStatus46: RequestStatus
+RequestStatus47: RequestStatus
   Brand: "1"
   ReqType: 35
   ReqStatus: 8
 
-RequestStatus47: RequestStatus
+RequestStatus48: RequestStatus
   Brand: "1"
   ReqType: 39
 
-RequestStatus48: RequestStatus
+RequestStatus49: RequestStatus
   Brand: "1"
   ReqType: 40
 
-RequestStatus49: RequestStatus
+RequestStatus50: RequestStatus
   Brand: "1"
   ReqType: 46
 
-RequestStatus50: RequestStatus
+RequestStatus51: RequestStatus
   Brand: "1"
   ReqType: 49
 
-RequestStatus51: RequestStatus
+RequestStatus52: RequestStatus
   Brand: "1"
   ReqType: 65
 
-RequestStatus52: RequestStatus
-  Brand: "1"
-  ReqType: 76
-
 RequestStatus53: RequestStatus
   Brand: "1"
-  ReqType: 78
+  ReqType: 76
 
 RequestStatus54: RequestStatus
   Brand: "1"
   ReqType: 78
-  ReqStatus: 8
 
 RequestStatus55: RequestStatus
   Brand: "1"
-  ReqType: 79
+  ReqType: 78
+  ReqStatus: 8
 
 RequestStatus56: RequestStatus
   Brand: "1"
-  ReqType: 81
+  ReqType: 79
 
 RequestStatus57: RequestStatus
   Brand: "1"
   ReqType: 81
-  ReqStatus: 8
 
 RequestStatus58: RequestStatus
+  Brand: "1"
+  ReqType: 81
+  ReqStatus: 8
+
+RequestStatus59: RequestStatus
   Brand: "1"
   ReqType: 82
   Program: "createsolog"
 
-RequestStatus59: RequestStatus
+RequestStatus60: RequestStatus
   Brand: "1"
   ReqType: 82
   ReqStatus: 6
   Program: "reacmobsub"
 
-RequestStatus60: RequestStatus
+RequestStatus61: RequestStatus
   Brand: "1"
   ReqType: 83
   Program: "createsolog"
 
-RequestStatus61: RequestStatus
+RequestStatus62: RequestStatus
   Brand: "1"
   ReqType: 83
   ReqStatus: 6
   Program: "dss_request"
 
-RequestStatus62: RequestStatus
+RequestStatus63: RequestStatus
   Brand: "1"
   ReqType: 83
   ReqStatus: 8
   Program: "dss_request"
 
-RequestStatus63: RequestStatus
+RequestStatus64: RequestStatus
   Brand: "1"
   ReqType: 84
 
-RequestStatus64: RequestStatus
+RequestStatus65: RequestStatus
   Brand: "1"
   ReqType: 85
 
-RequestStatus65: RequestStatus
+RequestStatus66: RequestStatus
   Brand: "1"
   ReqType: 86
 
-RequestStatus66: RequestStatus
-  Brand: "1"
-  ReqType: 87
-
 RequestStatus67: RequestStatus
   Brand: "1"
-  ReqType: 88
+  ReqType: 87
 
 RequestStatus68: RequestStatus
   Brand: "1"
   ReqType: 88
-  ReqStatus: 8
 
 RequestStatus69: RequestStatus
   Brand: "1"
-  ReqType: 89
+  ReqType: 88
+  ReqStatus: 8
 
 RequestStatus70: RequestStatus
   Brand: "1"
-  ReqType: 90
+  ReqType: 89
 
 RequestStatus71: RequestStatus
   Brand: "1"
-  ReqType: 91
+  ReqType: 90
 
 RequestStatus72: RequestStatus
   Brand: "1"
-  ReqType: 92
-  Program: "publish_invoice"
-  LogEntry: "DB.Connects,4GLTrace:1"
-  LogFile: "/scratch/log/requester/reqstat92.log"
-  LogThreshold: 1048576
-  LogOn: TRUE 
+  ReqType: 91
 
 RequestStatus73: RequestStatus
   Brand: "1"
+  ReqType: 92
+  Program: "publish_invoice"
+
+RequestStatus74: RequestStatus
+  Brand: "1"
   ReqType: 93
   Program: "publish_ifs"
-  LogEntry: "DB.Connects,4GLTrace:1"
-  LogFile: "/scratch/log/requester/reqstat93.log"
-  LogThreshold: 1048576
-  LogOn: TRUE 
 

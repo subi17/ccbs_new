@@ -683,96 +683,102 @@ RZItem114: RZItem
   DialType: 4
 
 RZItem115: RZItem
-  PlmnCode: "ROMCS"
+  PlmnCode: "ROM05"
   CountryPrefix: "40"
   RoamZone: "ROAM_EU"
   DialType: 4
 
 RZItem116: RZItem
-  PlmnCode: "ROMMF"
+  PlmnCode: "ROMCS"
   CountryPrefix: "40"
   RoamZone: "ROAM_EU"
   DialType: 4
 
 RZItem117: RZItem
-  PlmnCode: "ROMMR"
+  PlmnCode: "ROMMF"
   CountryPrefix: "40"
   RoamZone: "ROAM_EU"
   DialType: 4
 
 RZItem118: RZItem
+  PlmnCode: "ROMMR"
+  CountryPrefix: "40"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem119: RZItem
   PlmnCode: "SMOSM"
   CountryPrefix: "378"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem119: RZItem
+RZItem120: RZItem
   PlmnCode: "SVKET"
   CountryPrefix: "421"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem120: RZItem
+RZItem121: RZItem
   PlmnCode: "SVKGT"
   CountryPrefix: "421"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem121: RZItem
+RZItem122: RZItem
   PlmnCode: "SVKO2"
   CountryPrefix: "421"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem122: RZItem
+RZItem123: RZItem
   PlmnCode: "SVNMT"
   CountryPrefix: "386"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem123: RZItem
+RZItem124: RZItem
   PlmnCode: "SVNSM"
   CountryPrefix: "386"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem124: RZItem
+RZItem125: RZItem
   PlmnCode: "SVNVG"
   CountryPrefix: "386"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem125: RZItem
+RZItem126: RZItem
   PlmnCode: "SWEEP"
   CountryPrefix: "46"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem126: RZItem
+RZItem127: RZItem
   PlmnCode: "SWEHU"
   CountryPrefix: "46"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem127: RZItem
+RZItem128: RZItem
   PlmnCode: "SWEIQ"
   CountryPrefix: "46"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem128: RZItem
+RZItem129: RZItem
   PlmnCode: "SWESM"
   CountryPrefix: "46"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem129: RZItem
+RZItem130: RZItem
   PlmnCode: "SWESP"
   CountryPrefix: "46"
   RoamZone: "ROAM_EU"
   DialType: 4
 
-RZItem130: RZItem
+RZItem131: RZItem
   PlmnCode: "SWETR"
   CountryPrefix: "46"
   RoamZone: "ROAM_EU"

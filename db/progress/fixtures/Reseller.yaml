@@ -227,6 +227,7 @@ Reseller30: Reseller
   EMail: "gonzalo.garrido.arsuaga@yoigo.com"
   Brand: "1"
   EntityCode: 99
+  Active: FALSE
 
 Reseller31: Reseller
   Reseller: "PR"
@@ -268,13 +269,20 @@ Reseller35: Reseller
   Active: FALSE
 
 Reseller36: Reseller
+  Reseller: "TM"
+  RsName: "TELESTANT TM"
+  EMail: "Sonia.Borrega.Bahon@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller37: Reseller
   Reseller: "TO"
   RsName: "TELESTANT ONLINE"
   EMail: "maria.barreiro.sanisidro@yoigo.com"
   Brand: "1"
   EntityCode: 99
 
-Reseller37: Reseller
+Reseller38: Reseller
   Reseller: "TP"
   RsName: "YOIGO PHONE HOUSE"
   EMail: "marta.delarosa@yoigo.com"
@@ -283,14 +291,14 @@ Reseller37: Reseller
   FUC1: "323841551"
   FUC2: "332296607"
 
-Reseller38: Reseller
+Reseller39: Reseller
   Reseller: "TR"
   RsName: "TRECEDIS"
   EMail: "Felix.deIturriaga.Gandini@yoigo.com"
   Brand: "1"
   Active: FALSE
 
-Reseller39: Reseller
+Reseller40: Reseller
   Reseller: "TU"
   RsName: "TU Y TU"
   EMail: "Luis.Leyva.Ruano@yoigo.com"
@@ -298,14 +306,14 @@ Reseller39: Reseller
   EntityCode: 99
   Active: FALSE
 
-Reseller40: Reseller
+Reseller41: Reseller
   Reseller: "UN"
   RsName: "UNISONO"
   EMail: "maria.barreiro.sanisidro@yoigo.com"
   Brand: "1"
   EntityCode: 99
 
-Reseller41: Reseller
+Reseller42: Reseller
   Reseller: "UR"
   RsName: "URENDE"
   EMail: "Luis.Leyva.Ruano@yoigo.com"
@@ -313,7 +321,7 @@ Reseller41: Reseller
   EntityCode: 99
   Active: FALSE
 
-Reseller42: Reseller
+Reseller43: Reseller
   Reseller: "WH"
   RsName: "WHISBI"
   EMail: "maria.barreiro.sanisidro@yoigo.com"
@@ -321,7 +329,7 @@ Reseller42: Reseller
   EntityCode: 99
   Active: FALSE
 
-Reseller43: Reseller
+Reseller44: Reseller
   Reseller: "YC"
   RsName: "YOIGO (Customer Care)"
   EMail: "clientes@yoigo.com"

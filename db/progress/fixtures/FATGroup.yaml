@@ -216,6 +216,17 @@ FATGroup18: FATGroup
   ValidPeriods: 500
 
 FATGroup19: FATGroup
+  FtGrp: "GOOGLEVASFAT"
+  FtgName: "VAS Premium Google Service No VAT FAT"
+  BillCode: "GOOGLEVASFAT"
+  Brand: "1"
+  FATType: 2
+  Transfer: TRUE 
+  FatTarget: "0"
+  Priority: 3
+  QtyUnit: "Amt"
+
+FATGroup20: FATGroup
   FtGrp: "IPL15CPACT"
   FtgName: "Campaign FAT for IPL15"
   BillCode: "IPLCPACT"
@@ -227,7 +238,7 @@ FATGroup19: FATGroup
   PeriodQty: 2
   QtyUnit: "Amt"
 
-FATGroup20: FATGroup
+FATGroup21: FATGroup
   FtGrp: "IPL8CPACT"
   FtgName: "Campaign FAT for IPL8"
   BillCode: "IPL8CPACT"
@@ -239,7 +250,7 @@ FATGroup20: FATGroup
   PeriodQty: 3
   QtyUnit: "Amt"
 
-FATGroup21: FATGroup
+FATGroup22: FATGroup
   FtGrp: "IPL8CPACT2"
   FtgName: "Campaign FAT for IPL8"
   BillCode: "IPL8CPACT"
@@ -251,7 +262,7 @@ FATGroup21: FATGroup
   PeriodQty: 2
   QtyUnit: "Amt"
 
-FATGroup22: FATGroup
+FATGroup23: FATGroup
   FtGrp: "MGMPOST"
   FtgName: "MGM FAT for PostPaid users"
   BillCode: "MGMPOST"
@@ -263,7 +274,7 @@ FATGroup22: FATGroup
   Priority: 30
   QtyUnit: "Amt"
 
-FATGroup23: FATGroup
+FATGroup24: FATGroup
   FtGrp: "PG"
   FtgName: "Compensation discount FAT"
   BillCode: "PG001"
@@ -275,7 +286,7 @@ FATGroup23: FATGroup
   Priority: 10
   QtyUnit: "Amt"
 
-FATGroup24: FATGroup
+FATGroup25: FATGroup
   FtGrp: "RETFAT"
   FtgName: "Retention FAT"
   BillCode: "RETFAT"
@@ -286,7 +297,7 @@ FATGroup24: FATGroup
   Priority: 10
   QtyUnit: "Amt"
 
-FATGroup25: FATGroup
+FATGroup26: FATGroup
   FtGrp: "SPOTIFYCPACT"
   FtgName: "Campaign FAT for PostPaid subscription"
   BillCode: "SPOTIFYCPACT"
@@ -297,7 +308,7 @@ FATGroup25: FATGroup
   PeriodQty: 3
   QtyUnit: "Amt"
 
-FATGroup26: FATGroup
+FATGroup27: FATGroup
   FtGrp: "TBONO8"
   FtgName: "Adjustment Bono 8 prepaid"
   BillCode: "ADJMDUB8P"

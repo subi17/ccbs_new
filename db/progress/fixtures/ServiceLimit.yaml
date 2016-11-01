@@ -41,9 +41,21 @@ ServiceLimit4: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2015-08-12
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
 ServiceLimit5: ServiceLimit
+  GroupCode: "CONT23"
+  SLSeq: 114
+  DialType: 4
+  SLCode: "CONT23_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit6: ServiceLimit
   GroupCode: "CONT24"
   SLSeq: 96
   DialType: 7
@@ -54,7 +66,7 @@ ServiceLimit5: ServiceLimit
   ValidFrom: 2015-03-04
   ValidTo: 2049-12-31
 
-ServiceLimit6: ServiceLimit
+ServiceLimit7: ServiceLimit
   GroupCode: "CONT24"
   SLSeq: 97
   SLCode: "CONT24_QTY"
@@ -62,9 +74,21 @@ ServiceLimit6: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2015-03-04
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit7: ServiceLimit
+ServiceLimit8: ServiceLimit
+  GroupCode: "CONT24"
+  SLSeq: 116
+  DialType: 4
+  SLCode: "CONT24_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit9: ServiceLimit
   GroupCode: "CONT9"
   SLSeq: 92
   WebDisp: 0
@@ -76,7 +100,7 @@ ServiceLimit7: ServiceLimit
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimit8: ServiceLimit
+ServiceLimit10: ServiceLimit
   GroupCode: "CONTD2"
   SLSeq: 7
   WebDisp: 0
@@ -88,7 +112,7 @@ ServiceLimit8: ServiceLimit
   ValidFrom: 2009-12-01
   ValidTo: 1950-12-31
 
-ServiceLimit9: ServiceLimit
+ServiceLimit11: ServiceLimit
   GroupCode: "CONTD2_UPSELL"
   SLSeq: 15
   WebDisp: 0
@@ -100,7 +124,7 @@ ServiceLimit9: ServiceLimit
   ValidFrom: 2010-11-01
   ValidTo: 2049-12-31
 
-ServiceLimit10: ServiceLimit
+ServiceLimit12: ServiceLimit
   GroupCode: "CONTD2ACT"
   SLSeq: 8
   WebDisp: 0
@@ -112,7 +136,7 @@ ServiceLimit10: ServiceLimit
   ValidFrom: 2009-12-01
   ValidTo: 1954-12-31
 
-ServiceLimit11: ServiceLimit
+ServiceLimit13: ServiceLimit
   GroupCode: "CONTD2END"
   SLSeq: 9
   WebDisp: 0
@@ -124,7 +148,7 @@ ServiceLimit11: ServiceLimit
   ValidFrom: 2009-12-01
   ValidTo: 1954-12-31
 
-ServiceLimit12: ServiceLimit
+ServiceLimit14: ServiceLimit
   GroupCode: "CONTD3"
   SLSeq: 26
   WebDisp: 0
@@ -136,7 +160,7 @@ ServiceLimit12: ServiceLimit
   ValidFrom: 2011-05-01
   ValidTo: 1954-12-31
 
-ServiceLimit13: ServiceLimit
+ServiceLimit15: ServiceLimit
   GroupCode: "CONTD3_UPSELL"
   SLSeq: 27
   WebDisp: 0
@@ -148,7 +172,7 @@ ServiceLimit13: ServiceLimit
   ValidFrom: 2011-05-01
   ValidTo: 2049-12-31
 
-ServiceLimit14: ServiceLimit
+ServiceLimit16: ServiceLimit
   GroupCode: "CONTD4"
   SLSeq: 32
   WebDisp: 0
@@ -160,7 +184,7 @@ ServiceLimit14: ServiceLimit
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimit15: ServiceLimit
+ServiceLimit17: ServiceLimit
   GroupCode: "CONTD4_UPSELL"
   SLSeq: 31
   WebDisp: 0
@@ -172,7 +196,7 @@ ServiceLimit15: ServiceLimit
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimit16: ServiceLimit
+ServiceLimit18: ServiceLimit
   GroupCode: "CONTD9"
   SLSeq: 57
   WebDisp: 0
@@ -184,7 +208,7 @@ ServiceLimit16: ServiceLimit
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
 
-ServiceLimit17: ServiceLimit
+ServiceLimit19: ServiceLimit
   GroupCode: "CONTDATA"
   SLSeq: 5
   WebDisp: 0
@@ -196,7 +220,7 @@ ServiceLimit17: ServiceLimit
   ValidFrom: 2008-06-11
   ValidTo: 1950-12-31
 
-ServiceLimit18: ServiceLimit
+ServiceLimit20: ServiceLimit
   GroupCode: "CONTDATA_UPSELL"
   SLSeq: 14
   WebDisp: 0
@@ -208,7 +232,7 @@ ServiceLimit18: ServiceLimit
   ValidFrom: 2010-11-01
   ValidTo: 2049-12-31
 
-ServiceLimit19: ServiceLimit
+ServiceLimit21: ServiceLimit
   GroupCode: "CONTDATAACT"
   SLSeq: 4
   WebDisp: 0
@@ -220,7 +244,7 @@ ServiceLimit19: ServiceLimit
   ValidFrom: 2008-06-11
   ValidTo: 1954-12-31
 
-ServiceLimit20: ServiceLimit
+ServiceLimit22: ServiceLimit
   GroupCode: "CONTDATAEND"
   SLSeq: 6
   WebDisp: 0
@@ -232,7 +256,29 @@ ServiceLimit20: ServiceLimit
   ValidFrom: 2009-01-01
   ValidTo: 1954-12-31
 
-ServiceLimit21: ServiceLimit
+ServiceLimit23: ServiceLimit
+  GroupCode: "CONTDSL"
+  SLSeq: 129
+  DialType: 50
+  SLCode: "CONTDSL_QTY"
+  SLName: "BDest"
+  InclUnit: 7
+  InclAmt: 120
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+
+ServiceLimit24: ServiceLimit
+  GroupCode: "CONTDSL"
+  SLSeq: 132
+  DialType: 1
+  SLCode: "CONTDSL_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 60
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+
+ServiceLimit25: ServiceLimit
   GroupCode: "CONTF10"
   SLSeq: 41
   DialType: 4
@@ -246,7 +292,7 @@ ServiceLimit21: ServiceLimit
   LastMonthCalc: 1
   BDestLimit: 100
 
-ServiceLimit22: ServiceLimit
+ServiceLimit26: ServiceLimit
   GroupCode: "CONTF11"
   SLSeq: 102
   DialType: 7
@@ -257,7 +303,7 @@ ServiceLimit22: ServiceLimit
   ValidFrom: 2015-04-14
   ValidTo: 2049-12-31
 
-ServiceLimit23: ServiceLimit
+ServiceLimit27: ServiceLimit
   GroupCode: "CONTF11"
   SLSeq: 103
   DialType: 4
@@ -271,7 +317,7 @@ ServiceLimit23: ServiceLimit
   LastMonthCalc: 1
   BDestLimit: 100
 
-ServiceLimit24: ServiceLimit
+ServiceLimit28: ServiceLimit
   GroupCode: "CONTF20"
   SLSeq: 36
   DialType: 4
@@ -285,7 +331,7 @@ ServiceLimit24: ServiceLimit
   LastMonthCalc: 1
   BDestLimit: 100
 
-ServiceLimit25: ServiceLimit
+ServiceLimit29: ServiceLimit
   GroupCode: "CONTF20D"
   SLSeq: 42
   DialType: 4
@@ -299,7 +345,7 @@ ServiceLimit25: ServiceLimit
   LastMonthCalc: 1
   BDestLimit: 100
 
-ServiceLimit26: ServiceLimit
+ServiceLimit30: ServiceLimit
   GroupCode: "CONTF20D"
   SLSeq: 43
   DialType: 7
@@ -310,7 +356,7 @@ ServiceLimit26: ServiceLimit
   ValidFrom: 2012-02-22
   ValidTo: 2049-12-31
 
-ServiceLimit27: ServiceLimit
+ServiceLimit31: ServiceLimit
   GroupCode: "CONTF30"
   SLSeq: 37
   DialType: 4
@@ -324,7 +370,7 @@ ServiceLimit27: ServiceLimit
   LastMonthCalc: 1
   BDestLimit: 100
 
-ServiceLimit28: ServiceLimit
+ServiceLimit32: ServiceLimit
   GroupCode: "CONTF30"
   SLSeq: 38
   DialType: 7
@@ -335,7 +381,7 @@ ServiceLimit28: ServiceLimit
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
 
-ServiceLimit29: ServiceLimit
+ServiceLimit33: ServiceLimit
   GroupCode: "CONTF40"
   SLSeq: 44
   DialType: 4
@@ -349,7 +395,7 @@ ServiceLimit29: ServiceLimit
   LastMonthCalc: 1
   BDestLimit: 100
 
-ServiceLimit30: ServiceLimit
+ServiceLimit34: ServiceLimit
   GroupCode: "CONTF40"
   SLSeq: 45
   DialType: 7
@@ -360,7 +406,7 @@ ServiceLimit30: ServiceLimit
   ValidFrom: 2012-02-22
   ValidTo: 2049-12-31
 
-ServiceLimit31: ServiceLimit
+ServiceLimit35: ServiceLimit
   GroupCode: "CONTF55"
   SLSeq: 39
   DialType: 4
@@ -374,7 +420,7 @@ ServiceLimit31: ServiceLimit
   LastMonthCalc: 1
   BDestLimit: 100
 
-ServiceLimit32: ServiceLimit
+ServiceLimit36: ServiceLimit
   GroupCode: "CONTF55"
   SLSeq: 40
   DialType: 7
@@ -385,7 +431,7 @@ ServiceLimit32: ServiceLimit
   ValidFrom: 2011-12-01
   ValidTo: 2049-12-31
 
-ServiceLimit33: ServiceLimit
+ServiceLimit37: ServiceLimit
   GroupCode: "CONTF8"
   SLSeq: 98
   DialType: 7
@@ -396,7 +442,7 @@ ServiceLimit33: ServiceLimit
   ValidFrom: 2015-04-14
   ValidTo: 2049-12-31
 
-ServiceLimit34: ServiceLimit
+ServiceLimit38: ServiceLimit
   GroupCode: "CONTF8"
   SLSeq: 99
   DialType: 4
@@ -410,7 +456,7 @@ ServiceLimit34: ServiceLimit
   LastMonthCalc: 1
   BDestLimit: 100
 
-ServiceLimit35: ServiceLimit
+ServiceLimit39: ServiceLimit
   GroupCode: "CONTFF2"
   SLSeq: 75
   DialType: 4
@@ -424,7 +470,7 @@ ServiceLimit35: ServiceLimit
   LastMonthCalc: 1
   BDestLimit: 100
 
-ServiceLimit36: ServiceLimit
+ServiceLimit40: ServiceLimit
   GroupCode: "CONTFF2"
   SLSeq: 76
   DialType: 7
@@ -435,7 +481,51 @@ ServiceLimit36: ServiceLimit
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
 
-ServiceLimit37: ServiceLimit
+ServiceLimit41: ServiceLimit
+  GroupCode: "CONTFH300"
+  SLSeq: 131
+  DialType: 50
+  SLCode: "CONTFH300_QTY"
+  SLName: "BDest"
+  InclUnit: 7
+  InclAmt: 120
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+
+ServiceLimit42: ServiceLimit
+  GroupCode: "CONTFH300"
+  SLSeq: 134
+  DialType: 1
+  SLCode: "CONTFH300_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 60
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+
+ServiceLimit43: ServiceLimit
+  GroupCode: "CONTFH50"
+  SLSeq: 130
+  DialType: 50
+  SLCode: "CONTFH50_QTY"
+  SLName: "BDest"
+  InclUnit: 7
+  InclAmt: 120
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+
+ServiceLimit44: ServiceLimit
+  GroupCode: "CONTFH50"
+  SLSeq: 133
+  DialType: 1
+  SLCode: "CONTFH50_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 60
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+
+ServiceLimit45: ServiceLimit
   GroupCode: "CONTRATO2"
   SLSeq: 1
   DialType: 4
@@ -446,7 +536,7 @@ ServiceLimit37: ServiceLimit
   ValidFrom: 2007-01-01
   ValidTo: 2007-11-30
 
-ServiceLimit38: ServiceLimit
+ServiceLimit46: ServiceLimit
   GroupCode: "CONTRATO2"
   SLSeq: 2
   DialType: 5
@@ -457,7 +547,7 @@ ServiceLimit38: ServiceLimit
   ValidFrom: 2007-01-01
   ValidTo: 1954-12-31
 
-ServiceLimit39: ServiceLimit
+ServiceLimit47: ServiceLimit
   GroupCode: "CONTRATO2"
   SLSeq: 3
   WebDisp: 0
@@ -469,7 +559,7 @@ ServiceLimit39: ServiceLimit
   ValidFrom: 2007-12-01
   ValidTo: 1950-12-31
 
-ServiceLimit40: ServiceLimit
+ServiceLimit48: ServiceLimit
   GroupCode: "CONTS12"
   SLSeq: 100
   DialType: 7
@@ -480,7 +570,7 @@ ServiceLimit40: ServiceLimit
   ValidFrom: 2015-04-14
   ValidTo: 2049-12-31
 
-ServiceLimit41: ServiceLimit
+ServiceLimit49: ServiceLimit
   GroupCode: "CONTS12"
   SLSeq: 101
   SLCode: "CONTS12_QTY"
@@ -488,9 +578,21 @@ ServiceLimit41: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2015-04-14
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit42: ServiceLimit
+ServiceLimit50: ServiceLimit
+  GroupCode: "CONTS12"
+  SLSeq: 117
+  DialType: 4
+  SLCode: "CONTS12_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit51: ServiceLimit
   GroupCode: "CONTS15"
   SLSeq: 64
   SLCode: "S15_QTY"
@@ -498,9 +600,21 @@ ServiceLimit42: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2013-09-01
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit43: ServiceLimit
+ServiceLimit52: ServiceLimit
+  GroupCode: "CONTS15"
+  SLSeq: 115
+  DialType: 4
+  SLCode: "S15_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit53: ServiceLimit
   GroupCode: "CONTS16"
   SLSeq: 89
   DialType: 7
@@ -511,7 +625,7 @@ ServiceLimit43: ServiceLimit
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimit44: ServiceLimit
+ServiceLimit54: ServiceLimit
   GroupCode: "CONTS16"
   SLSeq: 90
   SLCode: "S16_QTY"
@@ -519,9 +633,21 @@ ServiceLimit44: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2014-05-01
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit45: ServiceLimit
+ServiceLimit55: ServiceLimit
+  GroupCode: "CONTS16"
+  SLSeq: 118
+  DialType: 4
+  SLCode: "S16_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit56: ServiceLimit
   GroupCode: "CONTS20"
   SLSeq: 65
   DialType: 7
@@ -532,7 +658,7 @@ ServiceLimit45: ServiceLimit
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimit46: ServiceLimit
+ServiceLimit57: ServiceLimit
   GroupCode: "CONTS20"
   SLSeq: 66
   SLCode: "S20_QTY"
@@ -540,9 +666,21 @@ ServiceLimit46: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2013-09-01
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit47: ServiceLimit
+ServiceLimit58: ServiceLimit
+  GroupCode: "CONTS20"
+  SLSeq: 119
+  DialType: 4
+  SLCode: "S20_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit59: ServiceLimit
   GroupCode: "CONTS21"
   SLSeq: 83
   DialType: 7
@@ -553,7 +691,7 @@ ServiceLimit47: ServiceLimit
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimit48: ServiceLimit
+ServiceLimit60: ServiceLimit
   GroupCode: "CONTS21"
   SLSeq: 84
   SLCode: "S21_QTY"
@@ -561,9 +699,21 @@ ServiceLimit48: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2014-05-01
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit49: ServiceLimit
+ServiceLimit61: ServiceLimit
+  GroupCode: "CONTS21"
+  SLSeq: 120
+  DialType: 4
+  SLCode: "S21_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit62: ServiceLimit
   GroupCode: "CONTS25"
   SLSeq: 67
   DialType: 7
@@ -574,7 +724,7 @@ ServiceLimit49: ServiceLimit
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimit50: ServiceLimit
+ServiceLimit63: ServiceLimit
   GroupCode: "CONTS25"
   SLSeq: 68
   SLCode: "S25_QTY"
@@ -582,9 +732,21 @@ ServiceLimit50: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2013-09-01
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit51: ServiceLimit
+ServiceLimit64: ServiceLimit
+  GroupCode: "CONTS25"
+  SLSeq: 121
+  DialType: 4
+  SLCode: "S25_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit65: ServiceLimit
   GroupCode: "CONTS26"
   SLSeq: 85
   DialType: 7
@@ -595,7 +757,7 @@ ServiceLimit51: ServiceLimit
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimit52: ServiceLimit
+ServiceLimit66: ServiceLimit
   GroupCode: "CONTS26"
   SLSeq: 86
   SLCode: "S26_QTY"
@@ -603,9 +765,44 @@ ServiceLimit52: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2014-05-01
+  ValidTo: 2016-09-30
+
+ServiceLimit67: ServiceLimit
+  GroupCode: "CONTS26"
+  SLSeq: 122
+  DialType: 4
+  SLCode: "S26_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit68: ServiceLimit
+  GroupCode: "CONTS2GB"
+  SLSeq: 135
+  DialType: 7
+  SLCode: "CONTS2GB_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 2048
+  ValidFrom: 2016-10-27
   ValidTo: 2049-12-31
 
-ServiceLimit53: ServiceLimit
+ServiceLimit69: ServiceLimit
+  GroupCode: "CONTS2GB"
+  SLSeq: 136
+  DialType: 4
+  SLCode: "CONTS2GB_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit70: ServiceLimit
   GroupCode: "CONTS30"
   SLSeq: 51
   DialType: 7
@@ -616,7 +813,7 @@ ServiceLimit53: ServiceLimit
   ValidFrom: 2012-05-01
   ValidTo: 2049-12-31
 
-ServiceLimit54: ServiceLimit
+ServiceLimit71: ServiceLimit
   GroupCode: "CONTS30"
   SLSeq: 52
   SLCode: "S30_QTY"
@@ -624,9 +821,21 @@ ServiceLimit54: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2012-05-01
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit55: ServiceLimit
+ServiceLimit72: ServiceLimit
+  GroupCode: "CONTS30"
+  SLSeq: 123
+  DialType: 4
+  SLCode: "S30_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit73: ServiceLimit
   GroupCode: "CONTS32"
   SLSeq: 87
   DialType: 7
@@ -637,7 +846,7 @@ ServiceLimit55: ServiceLimit
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimit56: ServiceLimit
+ServiceLimit74: ServiceLimit
   GroupCode: "CONTS32"
   SLSeq: 88
   SLCode: "S32_QTY"
@@ -645,9 +854,21 @@ ServiceLimit56: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2014-05-01
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit57: ServiceLimit
+ServiceLimit75: ServiceLimit
+  GroupCode: "CONTS32"
+  SLSeq: 124
+  DialType: 4
+  SLCode: "S32_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit76: ServiceLimit
   GroupCode: "CONTS35"
   SLSeq: 69
   DialType: 7
@@ -658,7 +879,7 @@ ServiceLimit57: ServiceLimit
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimit58: ServiceLimit
+ServiceLimit77: ServiceLimit
   GroupCode: "CONTS35"
   SLSeq: 70
   SLCode: "S35_QTY"
@@ -666,9 +887,21 @@ ServiceLimit58: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2013-09-01
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit59: ServiceLimit
+ServiceLimit78: ServiceLimit
+  GroupCode: "CONTS35"
+  SLSeq: 125
+  DialType: 4
+  SLCode: "S35_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit79: ServiceLimit
   GroupCode: "CONTS39"
   SLSeq: 54
   DialType: 7
@@ -679,7 +912,7 @@ ServiceLimit59: ServiceLimit
   ValidFrom: 2012-09-01
   ValidTo: 2049-12-31
 
-ServiceLimit60: ServiceLimit
+ServiceLimit80: ServiceLimit
   GroupCode: "CONTS39"
   SLSeq: 55
   SLCode: "S39_QTY"
@@ -687,9 +920,21 @@ ServiceLimit60: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2012-09-01
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit61: ServiceLimit
+ServiceLimit81: ServiceLimit
+  GroupCode: "CONTS39"
+  SLSeq: 126
+  DialType: 4
+  SLCode: "S39_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit82: ServiceLimit
   GroupCode: "CONTSF10"
   SLSeq: 77
   DialType: 7
@@ -700,7 +945,7 @@ ServiceLimit61: ServiceLimit
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
 
-ServiceLimit62: ServiceLimit
+ServiceLimit83: ServiceLimit
   GroupCode: "CONTSF10"
   SLSeq: 78
   SLCode: "SF10_QTY"
@@ -708,9 +953,21 @@ ServiceLimit62: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2013-10-01
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit63: ServiceLimit
+ServiceLimit84: ServiceLimit
+  GroupCode: "CONTSF10"
+  SLSeq: 127
+  DialType: 4
+  SLCode: "SF10_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit85: ServiceLimit
   GroupCode: "CONTSF14"
   SLSeq: 79
   DialType: 7
@@ -721,7 +978,7 @@ ServiceLimit63: ServiceLimit
   ValidFrom: 2013-10-01
   ValidTo: 2049-12-31
 
-ServiceLimit64: ServiceLimit
+ServiceLimit86: ServiceLimit
   GroupCode: "CONTSF14"
   SLSeq: 80
   SLCode: "SF14_QTY"
@@ -729,9 +986,21 @@ ServiceLimit64: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2013-10-01
-  ValidTo: 2049-12-31
+  ValidTo: 2016-09-30
 
-ServiceLimit65: ServiceLimit
+ServiceLimit87: ServiceLimit
+  GroupCode: "CONTSF14"
+  SLSeq: 128
+  DialType: 4
+  SLCode: "SF14_MIN"
+  SLName: "National Calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  BDestLimit: 300
+
+ServiceLimit88: ServiceLimit
   GroupCode: "DATA200_UPSELL"
   SLSeq: 110
   DialType: 7
@@ -742,7 +1011,7 @@ ServiceLimit65: ServiceLimit
   ValidFrom: 2015-06-01
   ValidTo: 2049-12-31
 
-ServiceLimit66: ServiceLimit
+ServiceLimit89: ServiceLimit
   GroupCode: "DATA5"
   SLSeq: 71
   DialType: 7
@@ -753,7 +1022,7 @@ ServiceLimit66: ServiceLimit
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimit67: ServiceLimit
+ServiceLimit90: ServiceLimit
   GroupCode: "DATA5_UPSELL"
   SLSeq: 72
   DialType: 7
@@ -764,7 +1033,7 @@ ServiceLimit67: ServiceLimit
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimit68: ServiceLimit
+ServiceLimit91: ServiceLimit
   GroupCode: "DATA6"
   SLSeq: 91
   DialType: 7
@@ -775,7 +1044,7 @@ ServiceLimit68: ServiceLimit
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimit69: ServiceLimit
+ServiceLimit92: ServiceLimit
   GroupCode: "DATA6_UPSELL"
   SLSeq: 93
   DialType: 7
@@ -786,7 +1055,7 @@ ServiceLimit69: ServiceLimit
   ValidFrom: 2014-05-01
   ValidTo: 2049-12-31
 
-ServiceLimit70: ServiceLimit
+ServiceLimit93: ServiceLimit
   GroupCode: "DATA7"
   SLSeq: 112
   DialType: 7
@@ -797,7 +1066,7 @@ ServiceLimit70: ServiceLimit
   ValidFrom: 2015-12-01
   ValidTo: 2049-12-31
 
-ServiceLimit71: ServiceLimit
+ServiceLimit94: ServiceLimit
   GroupCode: "DATA9_UPSELL"
   SLSeq: 58
   WebDisp: 0
@@ -809,7 +1078,7 @@ ServiceLimit71: ServiceLimit
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
 
-ServiceLimit72: ServiceLimit
+ServiceLimit95: ServiceLimit
   GroupCode: "DSS"
   SLSeq: 28
   WebDisp: 0
@@ -820,7 +1089,7 @@ ServiceLimit72: ServiceLimit
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimit73: ServiceLimit
+ServiceLimit96: ServiceLimit
   GroupCode: "DSS2"
   SLSeq: 73
   DialType: 7
@@ -830,7 +1099,7 @@ ServiceLimit73: ServiceLimit
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimit74: ServiceLimit
+ServiceLimit97: ServiceLimit
   GroupCode: "DSS200_UPSELL"
   SLSeq: 111
   DialType: 7
@@ -841,7 +1110,7 @@ ServiceLimit74: ServiceLimit
   ValidFrom: 2015-06-01
   ValidTo: 2049-12-31
 
-ServiceLimit75: ServiceLimit
+ServiceLimit98: ServiceLimit
   GroupCode: "DSS2_UPSELL"
   SLSeq: 74
   DialType: 7
@@ -852,7 +1121,7 @@ ServiceLimit75: ServiceLimit
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
 
-ServiceLimit76: ServiceLimit
+ServiceLimit99: ServiceLimit
   GroupCode: "DSS_UPSELL"
   SLSeq: 29
   WebDisp: 0
@@ -864,7 +1133,7 @@ ServiceLimit76: ServiceLimit
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimit77: ServiceLimit
+ServiceLimit100: ServiceLimit
   GroupCode: "DSS_UPSELL_UPGRADE"
   SLSeq: 48
   WebDisp: 0
@@ -875,7 +1144,7 @@ ServiceLimit77: ServiceLimit
   ValidFrom: 2012-03-23
   ValidTo: 2049-12-31
 
-ServiceLimit78: ServiceLimit
+ServiceLimit101: ServiceLimit
   GroupCode: "DUB"
   SLSeq: 20
   WebDisp: 0
@@ -887,7 +1156,7 @@ ServiceLimit78: ServiceLimit
   ValidFrom: 2011-01-31
   ValidTo: 2049-12-31
 
-ServiceLimit79: ServiceLimit
+ServiceLimit102: ServiceLimit
   GroupCode: "DUB2"
   SLSeq: 53
   WebDisp: 0
@@ -899,7 +1168,7 @@ ServiceLimit79: ServiceLimit
   ValidFrom: 2012-05-01
   ValidTo: 2049-12-31
 
-ServiceLimit80: ServiceLimit
+ServiceLimit103: ServiceLimit
   GroupCode: "DUB3"
   SLSeq: 61
   WebDisp: 0
@@ -911,7 +1180,7 @@ ServiceLimit80: ServiceLimit
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
 
-ServiceLimit81: ServiceLimit
+ServiceLimit104: ServiceLimit
   GroupCode: "FREE100MINUTES"
   SLSeq: 113
   WebDisp: 0
@@ -924,7 +1193,7 @@ ServiceLimit81: ServiceLimit
   ValidTo: 2049-12-31
   BDestLimit: 100
 
-ServiceLimit82: ServiceLimit
+ServiceLimit105: ServiceLimit
   GroupCode: "HSPA_ROAM_EU"
   SLSeq: 56
   WebDisp: 0
@@ -936,7 +1205,7 @@ ServiceLimit82: ServiceLimit
   ValidFrom: 2012-10-10
   ValidTo: 2049-12-31
 
-ServiceLimit83: ServiceLimit
+ServiceLimit106: ServiceLimit
   GroupCode: "MDUB"
   SLSeq: 10
   WebDisp: 0
@@ -948,7 +1217,7 @@ ServiceLimit83: ServiceLimit
   ValidFrom: 2010-03-01
   ValidTo: 2049-12-31
 
-ServiceLimit84: ServiceLimit
+ServiceLimit107: ServiceLimit
   GroupCode: "MDUB2"
   SLSeq: 21
   WebDisp: 0
@@ -960,7 +1229,7 @@ ServiceLimit84: ServiceLimit
   ValidFrom: 2011-02-01
   ValidTo: 2049-12-31
 
-ServiceLimit85: ServiceLimit
+ServiceLimit108: ServiceLimit
   GroupCode: "MDUB2_UPSELL"
   SLSeq: 22
   WebDisp: 0
@@ -972,7 +1241,7 @@ ServiceLimit85: ServiceLimit
   ValidFrom: 2011-02-01
   ValidTo: 2049-12-31
 
-ServiceLimit86: ServiceLimit
+ServiceLimit109: ServiceLimit
   GroupCode: "MDUB3"
   SLSeq: 30
   WebDisp: 0
@@ -984,7 +1253,7 @@ ServiceLimit86: ServiceLimit
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimit87: ServiceLimit
+ServiceLimit110: ServiceLimit
   GroupCode: "MDUB3_UPSELL"
   SLSeq: 33
   WebDisp: 0
@@ -996,7 +1265,7 @@ ServiceLimit87: ServiceLimit
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimit88: ServiceLimit
+ServiceLimit111: ServiceLimit
   GroupCode: "MDUB4"
   SLSeq: 34
   WebDisp: 0
@@ -1008,7 +1277,7 @@ ServiceLimit88: ServiceLimit
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimit89: ServiceLimit
+ServiceLimit112: ServiceLimit
   GroupCode: "MDUB4_UPSELL"
   SLSeq: 35
   WebDisp: 0
@@ -1020,7 +1289,7 @@ ServiceLimit89: ServiceLimit
   ValidFrom: 2011-11-23
   ValidTo: 2049-12-31
 
-ServiceLimit90: ServiceLimit
+ServiceLimit113: ServiceLimit
   GroupCode: "MDUB5"
   SLSeq: 46
   WebDisp: 0
@@ -1032,7 +1301,7 @@ ServiceLimit90: ServiceLimit
   ValidFrom: 2012-03-22
   ValidTo: 2049-12-31
 
-ServiceLimit91: ServiceLimit
+ServiceLimit114: ServiceLimit
   GroupCode: "MDUB5_UPSELL"
   SLSeq: 47
   WebDisp: 0
@@ -1044,7 +1313,7 @@ ServiceLimit91: ServiceLimit
   ValidFrom: 2012-03-22
   ValidTo: 2049-12-31
 
-ServiceLimit92: ServiceLimit
+ServiceLimit115: ServiceLimit
   GroupCode: "MDUB9"
   SLSeq: 59
   WebDisp: 0
@@ -1056,7 +1325,7 @@ ServiceLimit92: ServiceLimit
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
 
-ServiceLimit93: ServiceLimit
+ServiceLimit116: ServiceLimit
   GroupCode: "MDUB_UPSELL"
   SLSeq: 13
   WebDisp: 0
@@ -1068,7 +1337,7 @@ ServiceLimit93: ServiceLimit
   ValidFrom: 2010-11-01
   ValidTo: 2049-12-31
 
-ServiceLimit94: ServiceLimit
+ServiceLimit117: ServiceLimit
   GroupCode: "MDUBACT"
   SLSeq: 11
   WebDisp: 0
@@ -1080,7 +1349,7 @@ ServiceLimit94: ServiceLimit
   ValidFrom: 2010-03-01
   ValidTo: 2011-05-03
 
-ServiceLimit95: ServiceLimit
+ServiceLimit118: ServiceLimit
   GroupCode: "MDUBEND"
   SLSeq: 12
   WebDisp: 0
@@ -1092,7 +1361,7 @@ ServiceLimit95: ServiceLimit
   ValidFrom: 2010-03-01
   ValidTo: 2011-05-03
 
-ServiceLimit96: ServiceLimit
+ServiceLimit119: ServiceLimit
   GroupCode: "PMDUB"
   SLSeq: 24
   DialType: 7
@@ -1103,7 +1372,7 @@ ServiceLimit96: ServiceLimit
   ValidFrom: 2011-05-01
   ValidTo: 2049-12-31
 
-ServiceLimit97: ServiceLimit
+ServiceLimit120: ServiceLimit
   GroupCode: "PMDUB_UPSELL"
   SLSeq: 25
   WebDisp: 0
@@ -1115,7 +1384,7 @@ ServiceLimit97: ServiceLimit
   ValidFrom: 2011-06-01
   ValidTo: 2049-12-31
 
-ServiceLimit98: ServiceLimit
+ServiceLimit121: ServiceLimit
   GroupCode: "TARJ6"
   SLSeq: 63
   WebDisp: 0
@@ -1127,7 +1396,7 @@ ServiceLimit98: ServiceLimit
   ValidFrom: 2013-08-01
   ValidTo: 2049-12-31
 
-ServiceLimit99: ServiceLimit
+ServiceLimit122: ServiceLimit
   GroupCode: "TARJ7"
   SLSeq: 81
   DialType: 7
@@ -1138,7 +1407,7 @@ ServiceLimit99: ServiceLimit
   ValidFrom: 2013-11-01
   ValidTo: 2049-12-31
 
-ServiceLimit100: ServiceLimit
+ServiceLimit123: ServiceLimit
   GroupCode: "TARJ7_UPSELL"
   SLSeq: 82
   DialType: 7
@@ -1149,7 +1418,7 @@ ServiceLimit100: ServiceLimit
   ValidFrom: 2013-11-01
   ValidTo: 2049-12-31
 
-ServiceLimit101: ServiceLimit
+ServiceLimit124: ServiceLimit
   GroupCode: "TARJ9"
   SLSeq: 104
   DialType: 7
@@ -1160,7 +1429,7 @@ ServiceLimit101: ServiceLimit
   ValidFrom: 2015-05-29
   ValidTo: 2049-12-31
 
-ServiceLimit102: ServiceLimit
+ServiceLimit125: ServiceLimit
   GroupCode: "TARJ9"
   SLSeq: 105
   DialType: 4
@@ -1171,7 +1440,7 @@ ServiceLimit102: ServiceLimit
   ValidFrom: 2015-05-29
   ValidTo: 2049-12-31
 
-ServiceLimit103: ServiceLimit
+ServiceLimit126: ServiceLimit
   GroupCode: "TARJ_UPSELL"
   SLSeq: 60
   WebDisp: 0
@@ -1183,7 +1452,7 @@ ServiceLimit103: ServiceLimit
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
 
-ServiceLimit104: ServiceLimit
+ServiceLimit127: ServiceLimit
   GroupCode: "TARJD1"
   SLSeq: 23
   WebDisp: 0
@@ -1193,7 +1462,7 @@ ServiceLimit104: ServiceLimit
   ValidFrom: 2009-01-01
   ValidTo: 2049-12-31
 
-ServiceLimit105: ServiceLimit
+ServiceLimit128: ServiceLimit
   GroupCode: "UPGRADE_UPSELL"
   SLSeq: 49
   WebDisp: 0
@@ -1204,7 +1473,7 @@ ServiceLimit105: ServiceLimit
   ValidFrom: 2012-03-23
   ValidTo: 2049-12-31
 
-ServiceLimit106: ServiceLimit
+ServiceLimit129: ServiceLimit
   GroupCode: "VOICE100"
   SLSeq: 95
   WebDisp: 0
@@ -1217,7 +1486,7 @@ ServiceLimit106: ServiceLimit
   ValidTo: 2049-12-31
   BDestLimit: 100
 
-ServiceLimit107: ServiceLimit
+ServiceLimit130: ServiceLimit
   GroupCode: "VOICE3000"
   SLSeq: 62
   WebDisp: 0

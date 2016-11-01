@@ -4185,3 +4185,45 @@ RequestActionRule597: RequestActionRule
   FromDate: 2015-12-09
   ToDate: 2049-12-31
 
+RequestActionRule598: RequestActionRule
+  RequestActionID: 652
+  ParamField: "#FEECOMPARE"
+  ParamValue: "+,ORIGINAL>NEW"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+RequestActionRule599: RequestActionRule
+  RequestActionID: 652
+  ParamField: "ReqCParam1"
+  ParamValue: "+,CONTDSL*,CONTFH*"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+RequestActionRule600: RequestActionRule
+  RequestActionID: 652
+  ParamField: "ReqCParam2"
+  ParamValue: "+,CONTDSL*,CONTFH*"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+RequestActionRule601: RequestActionRule
+  RequestActionID: 652
+  ParamField: "ReqIParam5"
+  ParamValue: "+,0"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+RequestActionRule602: RequestActionRule
+  RequestActionID: 653
+  ParamField: "ReqCParam1"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  ExclParamValue: "CONTDSL*,CONTFH*,CONTSF*,CONTFF"
+
+RequestActionRule603: RequestActionRule
+  RequestActionID: 653
+  ParamField: "ReqCParam2"
+  ParamValue: "+,CONTDSL*,CONTFH*"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+

@@ -41,9 +41,9 @@ RequestQueue4: RequestQueue
 RequestQueue5: RequestQueue
   Brand: "1"
   Queue: 5
-  QName: "SMS invoice"
+  QName: "Bank files"
   Interval: 60
-  Monitor: "REQU5:SMS Invoice"
+  Monitor: "REQU5:Bank files"
   MonitorOn: TRUE 
 
 RequestQueue6: RequestQueue

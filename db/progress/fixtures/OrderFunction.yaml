@@ -128,3 +128,13 @@ OrderFunction26: OrderFunction
   OFName: "Document Management"
   OFModule: "dms"
 
+OrderFunction27: OrderFunction
+  OFID: 60
+  OFName: "Show Convergent data"
+  OFModule: "convview"
+
+OrderFunction28: OrderFunction
+  OFID: 61
+  OFName: "Cancel fixed line order"
+  OFModule: "fusion_order_cancel,iiOrderId"
+

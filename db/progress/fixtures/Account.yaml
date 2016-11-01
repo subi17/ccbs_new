@@ -269,354 +269,378 @@ Account45: Account
   Brand: "1"
 
 Account46: Account
+  AccNum: 55341000
+  AccName: "Installment"
+  AccType: 12
+  Brand: "1"
+
+Account47: Account
+  AccNum: 55342000
+  AccName: "Commission"
+  AccType: 12
+  Brand: "1"
+
+Account48: Account
+  AccNum: 55343000
+  AccName: "Residual"
+  AccType: 12
+  Brand: "1"
+
+Account49: Account
+  AccNum: 55380000
+  AccName: "Google Purchase"
+  AccType: 55
+  Brand: "1"
+
+Account50: Account
   AccNum: 55551111
   AccName: "Own usage"
   AccType: 24
   Brand: "1"
 
-Account47: Account
+Account51: Account
   AccNum: 55552222
   AccName: "Own usage balance"
   AccType: 20
   Brand: "1"
 
-Account48: Account
+Account52: Account
   AccNum: 55555555
   AccName: "Yoigo's Bank account"
   AccType: 4
   Brand: "1"
 
-Account49: Account
+Account53: Account
   AccNum: 60722114
   AccName: "Expense"
   AccType: 13
   Brand: "1"
 
-Account50: Account
+Account54: Account
   AccNum: 60722119
   AccName: "Q25 discount"
   AccType: 60
   Brand: "1"
 
-Account51: Account
+Account55: Account
   AccNum: 62700800
   AccName: "Compensation plan (Postpaid)"
   AccType: 21
   Brand: "1"
 
-Account52: Account
+Account56: Account
   AccNum: 66666666
   AccName: "Bank to NetPlus payments"
   AccType: 4
   Brand: "1"
 
-Account53: Account
+Account57: Account
   AccNum: 67899999
   AccName: "Q25 discount"
   AccType: 60
   Brand: "1"
 
-Account54: Account
+Account58: Account
   AccNum: 69696969
   AccName: "Unidentified Prepaid revenue"
   AccType: 12
   Brand: "1"
 
-Account55: Account
+Account59: Account
   AccNum: 70019000
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account56: Account
+Account60: Account
   AccNum: 70019105
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account57: Account
+Account61: Account
   AccNum: 70019106
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account58: Account
+Account62: Account
   AccNum: 70020105
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account59: Account
+Account63: Account
   AccNum: 70020106
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account60: Account
+Account64: Account
   AccNum: 70023105
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account61: Account
+Account65: Account
   AccNum: 70023106
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account62: Account
+Account66: Account
   AccNum: 70024105
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account63: Account
+Account67: Account
   AccNum: 70510100
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account64: Account
+Account68: Account
   AccNum: 70510101
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account65: Account
+Account69: Account
   AccNum: 70510103
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account66: Account
+Account70: Account
   AccNum: 70510104
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account67: Account
+Account71: Account
   AccNum: 70510116
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account68: Account
+Account72: Account
   AccNum: 70511100
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account69: Account
+Account73: Account
   AccNum: 70511101
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account70: Account
+Account74: Account
   AccNum: 70511103
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account71: Account
+Account75: Account
   AccNum: 70511104
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account72: Account
+Account76: Account
   AccNum: 70511116
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account73: Account
+Account77: Account
   AccNum: 70512100
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account74: Account
+Account78: Account
   AccNum: 70512101
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account75: Account
+Account79: Account
   AccNum: 70512103
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account76: Account
+Account80: Account
   AccNum: 70512104
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account77: Account
+Account81: Account
   AccNum: 70512116
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account78: Account
+Account82: Account
   AccNum: 70513100
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account79: Account
+Account83: Account
   AccNum: 70513101
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account80: Account
+Account84: Account
   AccNum: 70513103
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account81: Account
+Account85: Account
   AccNum: 70513104
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account82: Account
+Account86: Account
   AccNum: 70513116
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account83: Account
+Account87: Account
   AccNum: 70514100
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account84: Account
+Account88: Account
   AccNum: 70514103
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account85: Account
+Account89: Account
   AccNum: 70514104
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account86: Account
+Account90: Account
   AccNum: 70515100
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account87: Account
+Account91: Account
   AccNum: 70516100
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account88: Account
+Account92: Account
   AccNum: 70516103
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account89: Account
+Account93: Account
   AccNum: 70516104
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account90: Account
+Account94: Account
   AccNum: 70517100
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account91: Account
+Account95: Account
   AccNum: 70517103
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account92: Account
+Account96: Account
   AccNum: 70517104
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account93: Account
+Account97: Account
   AccNum: 70518107
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account94: Account
+Account98: Account
   AccNum: 70518109
   AccName: "Charge and Compensation"
   AccType: 12
   Brand: "1"
 
-Account95: Account
+Account99: Account
   AccNum: 70518110
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account96: Account
+Account100: Account
   AccNum: 70518111
   AccName: "Revenue"
   AccType: 12
   Brand: "1"
 
-Account97: Account
+Account101: Account
   AccNum: 70525001
   AccName: "Q25 discount"
   AccType: 70
   Brand: "1"
 
-Account98: Account
+Account102: Account
   AccNum: 75900000
   AccName: "Ingresos por servicios diver."
   AccType: 12
   Brand: "1"
 
-Account99: Account
+Account103: Account
   AccNum: 75902000
   AccName: "Ingresos por servicios diver."
   AccType: 12
   Brand: "1"
 
-Account100: Account
+Account104: Account
   AccNum: 75902002
   AccName: "Ingresos reparaciones clientes"
   AccType: 25
   Brand: "1"
 
-Account101: Account
+Account105: Account
   AccNum: 75902003
   AccName: "Ingresos devolución factura"
   AccType: 26
   Brand: "1"
 
-Account102: Account
+Account106: Account
   AccNum: 77777777
   AccName: "Default and cash customers"
   AccType: 2
   Brand: "1"
 
-Account103: Account
+Account107: Account
   AccNum: 79502004
   AccName: "Charge any type of discount over Q25"
   AccType: 79
   Brand: "1"
 
-Account104: Account
+Account108: Account
   AccNum: 99999999
   AccName: "Account not defined"
   AccType: 1

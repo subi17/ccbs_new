@@ -237,34 +237,54 @@ BItemGroup38: BItemGroup
   InvoiceOrder: 121
 
 BItemGroup39: BItemGroup
+  BIGroup: "44"
+  BIGName: "Google Premium Services"
+  Brand: "1"
+  ReportCode: ","
+  InvoiceOrder: 85
+
+BItemGroup40: BItemGroup
+  BIGroup: "45"
+  BIGName: "Google Discounts & Charges"
+  Brand: "1"
+  ReportCode: ","
+  InvoiceOrder: 86
+
+BItemGroup41: BItemGroup
+  BIGroup: "46"
+  BIGName: "Convergent Monthly fee"
+  Brand: "1"
+  InvoiceOrder: 31
+
+BItemGroup42: BItemGroup
   BIGroup: "5"
   BIGName: "MMS"
   Brand: "1"
   ReportCode: "1002,5"
   InvoiceOrder: 90
 
-BItemGroup40: BItemGroup
+BItemGroup43: BItemGroup
   BIGroup: "6"
   BIGName: "Premium Services"
   Brand: "1"
   ReportCode: "1002,6"
   InvoiceOrder: 80
 
-BItemGroup41: BItemGroup
+BItemGroup44: BItemGroup
   BIGroup: "7"
   BIGName: "Terminals"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 120
 
-BItemGroup42: BItemGroup
+BItemGroup45: BItemGroup
   BIGroup: "8"
   BIGName: "Fixed fees"
   Brand: "1"
   ReportCode: "1001,"
   InvoiceOrder: 20
 
-BItemGroup43: BItemGroup
+BItemGroup46: BItemGroup
   BIGroup: "9"
   BIGName: "SIM"
   Brand: "1"

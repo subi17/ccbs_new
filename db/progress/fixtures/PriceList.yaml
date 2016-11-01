@@ -150,6 +150,15 @@ PriceList17: PriceList
   Brand: "1"
 
 PriceList18: PriceList
+  PriceList: "CONTRATOFIXED"
+  PLName: "Contrato fixed"
+  Memo: "Contrato fixed pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+PriceList19: PriceList
   PriceList: "CONTRATOM"
   PLName: "Contrato M"
   Currency: "EUR"
@@ -157,7 +166,7 @@ PriceList18: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList19: PriceList
+PriceList20: PriceList
   PriceList: "CONTRATOM2"
   PLName: "Contrato M2"
   Currency: "EUR"
@@ -165,7 +174,7 @@ PriceList19: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList20: PriceList
+PriceList21: PriceList
   PriceList: "CONTRATOS"
   PLName: "Contratos"
   Memo: "Contrato S subcription type specific price list"
@@ -174,7 +183,7 @@ PriceList20: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList21: PriceList
+PriceList22: PriceList
   PriceList: "OrderCh"
   PLName: "Order Price list"
   Memo: "Used for product pricing in order channels incl. tax"
@@ -182,7 +191,7 @@ PriceList21: PriceList
   Rounding: 4
   Brand: "1"
 
-PriceList22: PriceList
+PriceList23: PriceList
   PriceList: "ORDERCONT"
   PLName: "Contrato Order Channel Prices"
   Memo: "Contrato Price List in Order Channels"
@@ -190,7 +199,7 @@ PriceList22: PriceList
   Rounding: 4
   Brand: "1"
 
-PriceList23: PriceList
+PriceList24: PriceList
   PriceList: "ORDERCONT2"
   PLName: "Contrato2 Order Channel Prices"
   Memo: "Contrato2 Price List in Order Channels"
@@ -198,7 +207,7 @@ PriceList23: PriceList
   Rounding: 4
   Brand: "1"
 
-PriceList24: PriceList
+PriceList25: PriceList
   PriceList: "ORDERTARJ"
   PLName: "Tarjeta Order Channel Prices"
   Memo: "Tarjeta Price List in Order Channels"
@@ -206,7 +215,7 @@ PriceList24: PriceList
   Rounding: 4
   Brand: "1"
 
-PriceList25: PriceList
+PriceList26: PriceList
   PriceList: "ORDERTARJ2"
   PLName: "Tarjeta2 Order Channel Prices"
   Memo: "Tarjeta2 Price List in Order Channels"
@@ -214,7 +223,7 @@ PriceList25: PriceList
   Rounding: 4
   Brand: "1"
 
-PriceList26: PriceList
+PriceList27: PriceList
   PriceList: "TARJETA"
   PLName: "Tarjeta"
   Memo: "Tarjeta subsciption type specific price list"
@@ -223,7 +232,7 @@ PriceList26: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList27: PriceList
+PriceList28: PriceList
   PriceList: "TARJETA2"
   PLName: "Tarjeta"
   Memo: "Tarjeta 2 subscription type specific price list"
@@ -232,7 +241,7 @@ PriceList27: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList28: PriceList
+PriceList29: PriceList
   PriceList: "TARJETA4"
   PLName: "Tarjeta4"
   Memo: "Tarjeta 4 subscription type specific price list"
@@ -241,7 +250,7 @@ PriceList28: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList29: PriceList
+PriceList30: PriceList
   PriceList: "TARJETA5"
   PLName: "Tarjeta4"
   Memo: "Tarjeta 4 subscription type specific price list"
@@ -250,7 +259,7 @@ PriceList29: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList30: PriceList
+PriceList31: PriceList
   PriceList: "TARJETA6"
   PLName: "Tarjeta 6"
   Currency: "EUR"
@@ -258,7 +267,7 @@ PriceList30: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList31: PriceList
+PriceList32: PriceList
   PriceList: "TARJETA7"
   PLName: "Tarjeta 7"
   Currency: "EUR"
@@ -266,7 +275,7 @@ PriceList31: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList32: PriceList
+PriceList33: PriceList
   PriceList: "TARJETA8"
   PLName: "Tarjeta 8"
   Currency: "EUR"
@@ -274,7 +283,7 @@ PriceList32: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList33: PriceList
+PriceList34: PriceList
   PriceList: "TARJETA9"
   PLName: "Tarjeta 9"
   Currency: "EUR"
@@ -282,7 +291,7 @@ PriceList33: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList34: PriceList
+PriceList35: PriceList
   PriceList: "TARJETADATA"
   PLName: "Tarjeta"
   Memo: "Tarjeta datos subsciption type specific price list"
@@ -291,7 +300,7 @@ PriceList34: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList35: PriceList
+PriceList36: PriceList
   PriceList: "TopUp"
   PLName: "TopUp Payments"
   Memo: "Used for topup payments"

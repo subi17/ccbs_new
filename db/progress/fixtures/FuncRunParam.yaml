@@ -568,7 +568,7 @@ FuncRunParam83: FuncRunParam
   ParamType: "Logical"
   ParamName: "MergeAnalysis"
   ParamSeq: 7
-  DefaultValue: "FALSE"
+  DefaultValue: "TRUE"
 
 FuncRunParam84: FuncRunParam
   FRConfigID: 24

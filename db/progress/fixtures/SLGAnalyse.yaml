@@ -2840,10 +2840,10 @@ SLGAnalyse244: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "095"
+  BDest: "010"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20"
+  ServiceLimitGroup: "CONTF30"
   SLGAType: 1
   Brand: "1"
 
@@ -2852,10 +2852,10 @@ SLGAnalyse245: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "095"
+  BDest: "010"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF55"
+  ServiceLimitGroup: "CONTF20"
   SLGAType: 1
   Brand: "1"
 
@@ -2864,10 +2864,10 @@ SLGAnalyse246: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "096"
+  BDest: "010"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF30"
+  ServiceLimitGroup: "CONTF55"
   SLGAType: 1
   Brand: "1"
 
@@ -2876,10 +2876,10 @@ SLGAnalyse247: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "096"
+  BDest: "011"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20"
+  ServiceLimitGroup: "CONTF30"
   SLGAType: 1
   Brand: "1"
 
@@ -2888,10 +2888,10 @@ SLGAnalyse248: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "096"
+  BDest: "011"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF55"
+  ServiceLimitGroup: "CONTF20"
   SLGAType: 1
   Brand: "1"
 
@@ -2900,10 +2900,10 @@ SLGAnalyse249: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "097"
+  BDest: "011"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF30"
+  ServiceLimitGroup: "CONTF55"
   SLGAType: 1
   Brand: "1"
 
@@ -2912,10 +2912,10 @@ SLGAnalyse250: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "097"
+  BDest: "012"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20"
+  ServiceLimitGroup: "CONTF30"
   SLGAType: 1
   Brand: "1"
 
@@ -2924,10 +2924,10 @@ SLGAnalyse251: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "097"
+  BDest: "012"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF55"
+  ServiceLimitGroup: "CONTF20"
   SLGAType: 1
   Brand: "1"
 
@@ -2936,10 +2936,10 @@ SLGAnalyse252: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "098"
+  BDest: "012"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF30"
+  ServiceLimitGroup: "CONTF55"
   SLGAType: 1
   Brand: "1"
 
@@ -2948,10 +2948,10 @@ SLGAnalyse253: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "098"
+  BDest: "093"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20"
+  ServiceLimitGroup: "CONTF30"
   SLGAType: 1
   Brand: "1"
 
@@ -2960,10 +2960,10 @@ SLGAnalyse254: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "098"
+  BDest: "093"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF55"
+  ServiceLimitGroup: "CONTF20"
   SLGAType: 1
   Brand: "1"
 
@@ -2972,10 +2972,10 @@ SLGAnalyse255: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "010"
-  ValidFrom: 2012-02-22
+  BDest: "093"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20D"
+  ServiceLimitGroup: "CONTF55"
   SLGAType: 1
   Brand: "1"
 
@@ -2984,10 +2984,10 @@ SLGAnalyse256: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "011"
-  ValidFrom: 2012-02-22
+  BDest: "095"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20D"
+  ServiceLimitGroup: "CONTF30"
   SLGAType: 1
   Brand: "1"
 
@@ -2996,10 +2996,10 @@ SLGAnalyse257: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "012"
-  ValidFrom: 2012-02-22
+  BDest: "095"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20D"
+  ServiceLimitGroup: "CONTF20"
   SLGAType: 1
   Brand: "1"
 
@@ -3008,10 +3008,10 @@ SLGAnalyse258: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "093"
-  ValidFrom: 2012-02-22
+  BDest: "095"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20D"
+  ServiceLimitGroup: "CONTF55"
   SLGAType: 1
   Brand: "1"
 
@@ -3020,10 +3020,10 @@ SLGAnalyse259: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "095"
-  ValidFrom: 2012-02-22
+  BDest: "096"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20D"
+  ServiceLimitGroup: "CONTF30"
   SLGAType: 1
   Brand: "1"
 
@@ -3033,9 +3033,9 @@ SLGAnalyse260: SLGAnalyse
   BillCode: "10100005"
   CCN: 81
   BDest: "096"
-  ValidFrom: 2012-02-22
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20D"
+  ServiceLimitGroup: "CONTF20"
   SLGAType: 1
   Brand: "1"
 
@@ -3044,10 +3044,10 @@ SLGAnalyse261: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "097"
-  ValidFrom: 2012-02-22
+  BDest: "096"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20D"
+  ServiceLimitGroup: "CONTF55"
   SLGAType: 1
   Brand: "1"
 
@@ -3056,10 +3056,10 @@ SLGAnalyse262: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "098"
-  ValidFrom: 2012-02-22
+  BDest: "097"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20D"
+  ServiceLimitGroup: "CONTF30"
   SLGAType: 1
   Brand: "1"
 
@@ -3068,10 +3068,10 @@ SLGAnalyse263: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "010"
-  ValidFrom: 2012-02-22
+  BDest: "097"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
+  ServiceLimitGroup: "CONTF20"
   SLGAType: 1
   Brand: "1"
 
@@ -3080,10 +3080,10 @@ SLGAnalyse264: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "011"
-  ValidFrom: 2012-02-22
+  BDest: "097"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
+  ServiceLimitGroup: "CONTF55"
   SLGAType: 1
   Brand: "1"
 
@@ -3092,10 +3092,10 @@ SLGAnalyse265: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "012"
-  ValidFrom: 2012-02-22
+  BDest: "098"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
+  ServiceLimitGroup: "CONTF30"
   SLGAType: 1
   Brand: "1"
 
@@ -3104,10 +3104,10 @@ SLGAnalyse266: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "093"
-  ValidFrom: 2012-02-22
+  BDest: "098"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
+  ServiceLimitGroup: "CONTF20"
   SLGAType: 1
   Brand: "1"
 
@@ -3116,10 +3116,10 @@ SLGAnalyse267: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "095"
-  ValidFrom: 2012-02-22
+  BDest: "098"
+  ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
+  ServiceLimitGroup: "CONTF55"
   SLGAType: 1
   Brand: "1"
 
@@ -3128,10 +3128,10 @@ SLGAnalyse268: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "096"
+  BDest: "010"
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
+  ServiceLimitGroup: "CONTF20D"
   SLGAType: 1
   Brand: "1"
 
@@ -3140,10 +3140,10 @@ SLGAnalyse269: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "097"
+  BDest: "011"
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
+  ServiceLimitGroup: "CONTF20D"
   SLGAType: 1
   Brand: "1"
 
@@ -3152,10 +3152,10 @@ SLGAnalyse270: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "098"
+  BDest: "012"
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
+  ServiceLimitGroup: "CONTF20D"
   SLGAType: 1
   Brand: "1"
 
@@ -3164,10 +3164,10 @@ SLGAnalyse271: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "010"
+  BDest: "093"
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
+  ServiceLimitGroup: "CONTF20D"
   SLGAType: 1
   Brand: "1"
 
@@ -3176,10 +3176,10 @@ SLGAnalyse272: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "011"
+  BDest: "095"
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
+  ServiceLimitGroup: "CONTF20D"
   SLGAType: 1
   Brand: "1"
 
@@ -3188,10 +3188,10 @@ SLGAnalyse273: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "012"
+  BDest: "096"
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
+  ServiceLimitGroup: "CONTF20D"
   SLGAType: 1
   Brand: "1"
 
@@ -3200,10 +3200,10 @@ SLGAnalyse274: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "093"
+  BDest: "097"
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
+  ServiceLimitGroup: "CONTF20D"
   SLGAType: 1
   Brand: "1"
 
@@ -3212,10 +3212,10 @@ SLGAnalyse275: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "095"
+  BDest: "098"
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
+  ServiceLimitGroup: "CONTF20D"
   SLGAType: 1
   Brand: "1"
 
@@ -3224,10 +3224,10 @@ SLGAnalyse276: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "096"
+  BDest: "010"
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
+  ServiceLimitGroup: "CONTF40"
   SLGAType: 1
   Brand: "1"
 
@@ -3236,10 +3236,10 @@ SLGAnalyse277: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "097"
+  BDest: "011"
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
+  ServiceLimitGroup: "CONTF40"
   SLGAType: 1
   Brand: "1"
 
@@ -3248,10 +3248,10 @@ SLGAnalyse278: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "098"
+  BDest: "012"
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
+  ServiceLimitGroup: "CONTF40"
   SLGAType: 1
   Brand: "1"
 
@@ -3260,10 +3260,10 @@ SLGAnalyse279: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "010"
-  ValidFrom: 2011-12-01
+  BDest: "093"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF30"
+  ServiceLimitGroup: "CONTF40"
   SLGAType: 1
   Brand: "1"
 
@@ -3272,10 +3272,10 @@ SLGAnalyse280: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "010"
-  ValidFrom: 2011-12-01
+  BDest: "095"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20"
+  ServiceLimitGroup: "CONTF40"
   SLGAType: 1
   Brand: "1"
 
@@ -3284,10 +3284,10 @@ SLGAnalyse281: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "010"
-  ValidFrom: 2011-12-01
+  BDest: "096"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF55"
+  ServiceLimitGroup: "CONTF40"
   SLGAType: 1
   Brand: "1"
 
@@ -3296,10 +3296,10 @@ SLGAnalyse282: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "011"
-  ValidFrom: 2011-12-01
+  BDest: "097"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF30"
+  ServiceLimitGroup: "CONTF40"
   SLGAType: 1
   Brand: "1"
 
@@ -3308,10 +3308,10 @@ SLGAnalyse283: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "011"
-  ValidFrom: 2011-12-01
+  BDest: "098"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20"
+  ServiceLimitGroup: "CONTF40"
   SLGAType: 1
   Brand: "1"
 
@@ -3320,10 +3320,10 @@ SLGAnalyse284: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "011"
-  ValidFrom: 2011-12-01
+  BDest: "010"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF55"
+  ServiceLimitGroup: "CONTF10"
   SLGAType: 1
   Brand: "1"
 
@@ -3332,10 +3332,10 @@ SLGAnalyse285: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "012"
-  ValidFrom: 2011-12-01
+  BDest: "011"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF30"
+  ServiceLimitGroup: "CONTF10"
   SLGAType: 1
   Brand: "1"
 
@@ -3345,9 +3345,9 @@ SLGAnalyse286: SLGAnalyse
   BillCode: "10100005"
   CCN: 81
   BDest: "012"
-  ValidFrom: 2011-12-01
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20"
+  ServiceLimitGroup: "CONTF10"
   SLGAType: 1
   Brand: "1"
 
@@ -3356,10 +3356,10 @@ SLGAnalyse287: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "012"
-  ValidFrom: 2011-12-01
+  BDest: "093"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF55"
+  ServiceLimitGroup: "CONTF10"
   SLGAType: 1
   Brand: "1"
 
@@ -3368,10 +3368,10 @@ SLGAnalyse288: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "093"
-  ValidFrom: 2011-12-01
+  BDest: "095"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF30"
+  ServiceLimitGroup: "CONTF10"
   SLGAType: 1
   Brand: "1"
 
@@ -3380,10 +3380,10 @@ SLGAnalyse289: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "093"
-  ValidFrom: 2011-12-01
+  BDest: "096"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF20"
+  ServiceLimitGroup: "CONTF10"
   SLGAType: 1
   Brand: "1"
 
@@ -3392,10 +3392,10 @@ SLGAnalyse290: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "093"
-  ValidFrom: 2011-12-01
+  BDest: "097"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF55"
+  ServiceLimitGroup: "CONTF10"
   SLGAType: 1
   Brand: "1"
 
@@ -3404,10 +3404,10 @@ SLGAnalyse291: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
-  BDest: "095"
-  ValidFrom: 2011-12-01
+  BDest: "098"
+  ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF30"
+  ServiceLimitGroup: "CONTF10"
   SLGAType: 1
   Brand: "1"
 
