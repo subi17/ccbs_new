@@ -439,7 +439,7 @@ FUNCTION fErrorLog RETURNS LOGIC
           ErrorLog.ErrorChar = icCLI 
           ErrorLog.ErrorMsg  = icError + CHR(10) + 
                                "Target group: " + STRING(iiITGroupID)
-          ErrorLog.UserCode  = katun.
+          ErrorLog.UserCode  = katun
           ErrorLog.ActionTS  = fMakeTS().
     
 END FUNCTION.
@@ -1496,11 +1496,21 @@ PROCEDURE pCreateInv:
              IF TRUNCATE(ldFromPer,0) = TRUNCATE(ldToPer,0)
              THEN ldToPer = ldToPer + 0.86399.
 
-             FOR FIRST MSOwner NO-LOCK WHERE
+            FIND FIRST MSOwner NO-LOCK WHERE
                        MSOwner.Brand = gcBrand   AND
                        MsOwner.CLI   = ttCLI.CLI AND
                        MsOwner.TsBeg <= ldToPer  AND
-                       MsOwner.TsEnd >= ldFromPer:
+                       MsOwner.TsEnd >= ldFromPer NO-ERROR.
+
+            IF NOT AVAIL MSOwner THEN
+               FIND FIRST MSOwner NO-LOCK WHERE
+                          MSOwner.Brand       = gcBrand   AND
+                          MsOwner.Fixednumber = ttCLI.CLI AND
+                          MsOwner.TsBeg       <= ldToPer  AND
+                          MsOwner.TsEnd       >= ldFromPer NO-ERROR.
+
+
+            IF AVAIL MSOwner THEN DO:
 
                lcMobRep = STRING(fCallSpecDuring(MsOwner.MsSeq,
                                                  idaInvDate)).
@@ -2089,8 +2099,8 @@ PROCEDURE pFixedFee:
                    MSOwner.MsSeq   = INTEGER(FixedFee.KeyValue) AND
                    MsOwner.InvCust = FixedFee.CustNum:
             ASSIGN 
-               lcCLI   = MsOwner.CLI
-               liMsSeq = MsOwner.MsSeq
+               lcCLI     = MsOwner.CLI
+               liMsSeq   = MsOwner.MsSeq
                liAgrCust = MsOwner.AgrCust.
          END.   
       END.
@@ -2246,8 +2256,8 @@ PROCEDURE pSingleFee:
                    MSOwner.MsSeq   = INTEGER(SingleFee.KeyValue) AND
                    MSOwner.InvCust = SingleFee.CustNum:
             ASSIGN 
-               lcCLI   = MsOwner.CLI
-               liMsSeq = MsOwner.MsSeq
+               lcCLI     = MsOwner.CLI
+               liMsSeq   = MsOwner.MsSeq
                liAgrCust = MsOwner.AgrCust.
          END.    
       END.
@@ -3571,10 +3581,11 @@ PROCEDURE pInvoiceHeader:
    DEF VAR liPaymType  AS INT  NO-UNDO. 
    DEF VAR liITGroupID AS INT  NO-UNDO.
    DEF VAR liSeq       AS INT  NO-UNDO. 
-   DEF VAR ldMinConsAmt AS DEC  NO-UNDO. 
-   DEF VAR liITGDeltype AS INT NO-UNDO.
-   DEF VAR llNextInvNdd AS LOG NO-UNDO.
-   DEF VAR lcRegion    AS CHAR NO-UNDO. 
+   DEF VAR ldMinConsAmt  AS DEC  NO-UNDO. 
+   DEF VAR liITGDeltype  AS INT  NO-UNDO.
+   DEF VAR llNextInvNdd  AS LOG  NO-UNDO.
+   DEF VAR lcRegion      AS CHAR NO-UNDO. 
+   DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
 
    DEF BUFFER bufseq  FOR InvSeq.
    DEF BUFFER bChkInv FOR Invoice. 
@@ -3622,8 +3633,9 @@ PROCEDURE pInvoiceHeader:
                    MsOwner.InvCust = Customer.CustNum AND
                    MsOwner.AgrCust = ttRowVat.AgrCust:
             ASSIGN
-               lcCLI      = MsOwner.CLI
-               liUserCust = MsOwner.CustNum.
+               lcCLI         = MsOwner.CLI
+               lcFixedNumber = MsOwner.FixedNumber
+               liUserCust    = MsOwner.CustNum.
          END.
  
          /* no grouping for cash invoices */
@@ -3652,6 +3664,7 @@ PROCEDURE pInvoiceHeader:
             ttSubInv.SubInvNum    = liSubInv
             ttSubInv.MsSeq        = ttRowVat.MsSeq
             ttSubInv.CLI          = lcCLI
+            ttSubInv.FixedNumber  = lcFixedNumber
             ttSubInv.AgrCust      = liAgrCust
             ttSubInv.CustNum      = liUserCust
             ttSubInv.VatPos       = 0.
@@ -4502,7 +4515,7 @@ PROCEDURE pInvoiceHeader:
                 Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
                 Memo.CreUser   = katun
                 Memo.MemoTitle = "Minimum Amount Limit Ignored"
-                Memo.MemoText  = "Reason: " + STRING(liIgnoMin). 
+                Memo.MemoText  = "Reason: " + STRING(liIgnoMin)
                 Memo.CreStamp  = fMakeTS().
       END.
  

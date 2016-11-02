@@ -712,11 +712,21 @@ PROCEDURE pSubInvoice2XML:
       
       /* subscription */
       lhXML:START-ELEMENT("ContractDetail").
-      lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
+      IF ttSub.CliEvent = "F" THEN /* convergent tariff is partially installed. No mobile */
+         lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.FixedNumber).
+      ELSE 
+         lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
       lhXML:START-ELEMENT("ContractType").
       lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName).
       lhXML:WRITE-CHARACTERS(ttSub.CLIType).
       lhXML:END-ELEMENT("ContractType").
+      IF SubInvoice.FixedNumber <> ? AND 
+         ttSub.CliEvent         <> "F" THEN DO:
+         lhXML:START-ELEMENT("CustomContract").
+         lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
+         lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
+         lhXML:END-ELEMENT("CustomContract").
+      END.
 
       IF ttSub.OldCLIType > "" THEN DO:
          lhXML:START-ELEMENT("OldContractType").
@@ -756,7 +766,10 @@ PROCEDURE pSubInvoice2XML:
             lhXML:INSERT-ATTRIBUTE("Type",ttRow.RowType).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroupID",ttRow.RowGroup).
          END.
-         lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
+         IF ttRow.RowCode BEGINS "46" THEN /* Convergent uses CLI Type Name */
+            lhXML:WRITE-DATA-ELEMENT("BillingItem",CAPS(ttSub.CTName)).
+         ELSE
+            lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
          lhXML:WRITE-DATA-ELEMENT("Quantity", STRING(ttRow.RowQty)).
  
          /* duration or data amount */
@@ -898,6 +911,9 @@ PROCEDURE pSubInvoice2XML:
                                            liLanguage,
                                            Invoice.ToDate).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroup", lcBIGroupName).
+            IF ttSub.FixedNumber <> ? THEN 
+               lhXML:INSERT-ATTRIBUTE("BillingItemGroupType",
+                                   TRIM(STRING(ttCall.GroupType = 1,"fixed/mobile"))).
          END.
 
          IF FIRST-OF(ttCall.DateSt) THEN DO:
