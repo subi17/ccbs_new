@@ -63,9 +63,6 @@ create_tmritem("CONTS2GB_VOICE_IN,CONTDSL45",34).
 create_tmritem("CONTS2GB_VOICE_IN,CONTFH45_50",34).
 create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",34).
 
-create_tmritem("CONTS2GB_VOICE_IN,CONTDSL45",42).
-create_tmritem("CONTS2GB_VOICE_IN,CONTFH45_50",42).
-create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",42).
 
 IF CAN-FIND(FIRST bitemgroup WHERE
                   bitemgroup.brand = "1" AND

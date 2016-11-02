@@ -16,8 +16,7 @@
 "CONTDATAACT" 11/06/08 4 17/05/11 "CONTDATA" 4096 "" "" "Contrato Datos 1st billing period" 93 4096 "1" "4" 4 2 1 0 "" "" "TERMCONTDATA" 3 1 1 yes 1 0 0 0 "" 0 1
 "CONTDATAEND" 11/06/08 4 17/05/11 "CONTDATA" 4096 "" "" "Contrato Datos 1st billing period" 93 4096 "1" "4" 4 2 1 0 "" "" "" 3 1 0 yes 1 0 0 0 "" 0 1
 "CONTDATA_UPSELL" 01/11/10 4 31/12/49 "CONTDATA1" 0 "" "" "IPL 25 Upsell" 93 0 "1" "6" 1 2 1 0 "CONTDATAMFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0 1
-"CONTDSL45" 08/09/16 1 31/12/49 "CONTDSL45MF" 0 "" "" "La Infinita 2 GB + DSL" 0 0 "1" "7" 1 1 0 0 "CONTDSL45MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0
-"CONTDSL55" 08/09/16 1 31/12/49 "CONTDSL55MF" 0 "" "" "La Infinita 10 GB + DSL" 0 0 "1" "7" 1 1 0 0 "CONTDSL55MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0
+"CONTDSL" 27/10/16 0 31/12/49 "CONTDSLMF" 0 "" "" "La Combinada 20" 0 0 "1" "1" 1 1 0 0 "CONTDSLMF" "" "" 0 1 0 yes 1 0 0 1 "" 0 0
 "CONTF10" 22/02/12 0 31/12/49 "" 0 "" "" "La Plana 10" 0 0 "1" "1" 1 1 0 0 "CONTF10" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 0 1
 "CONTF11" 14/04/15 4 31/12/49 "FLATMF11" 0 "" "" "La Plana 2,5 GB" 93 0 "1" "1" 1 1 0 0 "CONTF11MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 1 1
 "CONTF20" 01/12/11 0 31/12/49 "" 0 "" "" "La Plana 20" 0 0 "1" "1" 1 1 0 0 "CONTF20" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 0 1
@@ -26,15 +25,12 @@
 "CONTF40" 22/02/12 0 31/12/49 "" 0 "" "" "La Mega Plana 200" 0 0 "1" "1" 1 1 0 0 "CONTF40" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
 "CONTF55" 01/12/11 0 31/12/49 "" 0 "" "" "La Mega Plana 100" 0 0 "1" "1" 1 1 0 0 "CONTF55" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
 "CONTF8" 14/04/15 1 31/12/49 "FLATMF8" 0 "" "" "La Plana 1,2 GB" 0 0 "1" "1" 1 1 0 0 "CONTF8MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 1 1
-"CONTFF2" 01/10/13 0 31/12/49 "" 0 "" "" "FUSIÓN PLANA A LO YOIGO" 0 0 "1" "1" 1 1 0 0 "CONTFF2MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 1 1
-"CONTFH45_50" 08/09/16 1 31/12/49 "CONTFH45_50MF" 0 "" "" "La Infinita 2 GB + FIBER 50M" 0 0 "1" "7" 1 1 0 0 "CONTFH45_50MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0
-"CONTFH55_300" 08/09/16 1 31/12/49 "CONTFH55_300MF" 0 "" "" "La Infinita 2 GB + FIBER 300M" 0 0 "1" "7" 1 1 0 0 "CONTFH55_300MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0
-"CONTFH55_50" 08/09/16 1 31/12/49 "CONTFH55_50MF" 0 "" "" "La Infinita 10 GB + FIBER 50M" 0 0 "1" "7" 1 1 0 0 "CONTFH55_50MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0
-"CONTFH65_300" 08/09/16 1 31/12/49 "CONTFH65_300MF" 0 "" "" "La Infinita 10 GB + FIBER 300M" 0 0 "1" "7" 1 1 0 0 "CONTFH65_300MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0
+"CONTFF2" 01/10/13 0 31/12/49 "" 0 "" "" "FUSIÓN PLANA A LO YOIGO" 0 0 "1" "1" 1 1 0 0 "CONTFF2MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
+"CONTFH300" 27/10/16 0 31/12/49 "CONTFH300MF" 0 "" "" "La Combinada 300" 0 0 "1" "1" 1 1 0 0 "CONTFH300MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 0
+"CONTFH50" 27/10/16 0 31/12/49 "CONTFH50" 0 "" "" "La Combinada 50" 0 0 "1" "1" 1 1 0 0 "CONTFH50MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 0
 "CONTM" 01/12/12 0 31/12/49 "CONTMMF" 0 "" "" "Contrato M" 0 0 "1" "7" 4 4 0 0 "CONTMMF" "" "" 0 1 0 yes 1 0 0 1 "" 0 1
 "CONTM2" 01/09/13 0 31/12/49 "CONTM2MF" 0 "" "" "Contrato M2" 0 0 "1" "7" 4 4 0 0 "CONTM2MF" "" "" 0 1 0 yes 1 0 0 2 "" 0 1
 "CONTRATO2" 01/12/06 0 31/12/49 "" 0 "1" "" "Contrato2 service package" 0 0 "1" "1" 1 1 0 0 "CONTRATO2" "" "" 0 1 0 yes 1 0 0 0 "" 0 1
-"CONTS10GB" 08/09/16 1 31/12/49 "" 0 "" "" "La Infinita 10 GB" 0 0 "1" "1" 1 1 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0
 "CONTS12" 14/04/15 0 31/12/49 "" 0 "" "" "La infinita 2,5 GB adicional" 0 0 "1" "1" 1 1 0 0 "CONTS12MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 1 1
 "CONTS15" 01/09/13 0 31/12/49 "" 0 "" "" "La Infinita 15" 0 0 "1" "1" 1 1 0 0 "CONTS15MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 0 1
 "CONTS16" 01/05/14 0 31/12/49 "" 0 "" "" "La Infinita 600 MB Adicional" 0 0 "1" "1" 1 1 0 0 "CONTS16MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
@@ -42,13 +38,13 @@
 "CONTS21" 01/05/14 0 31/12/49 "" 0 "" "" "La Infinita 600 MB" 0 0 "1" "1" 1 1 0 0 "CONTS21MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
 "CONTS25" 01/09/13 0 31/12/49 "" 0 "" "" "La Infinita 25" 0 0 "1" "1" 1 1 0 0 "CONTS25MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
 "CONTS26" 01/05/14 0 31/12/49 "" 0 "" "" "La Infinita 2 GB" 0 0 "1" "1" 1 1 0 0 "CONTS26MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
-"CONTS2GB" 08/09/16 1 31/12/49 "" 0 "" "" "La Infinita 2 GB" 0 0 "1" "1" 1 1 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0
+"CONTS2GB" 27/10/16 0 31/12/49 "CONTS2GB" 0 "" "" "La Combinada 20 Naranja" 0 0 "1" "1" 1 1 0 0 "CONTS2GBMF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0
 "CONTS30" 01/05/12 0 31/12/49 "" 0 "" "" "La Infinita 30" 0 0 "1" "1" 1 1 0 0 "CONTS30MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
 "CONTS32" 01/05/14 0 31/12/49 "" 0 "" "" "La Infinita 4 GB" 0 0 "1" "1" 1 1 0 0 "CONTS32MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
 "CONTS35" 01/09/13 0 08/03/16 "" 0 "" "" "La Infinita 35" 0 0 "1" "1" 1 1 0 0 "CONTS35MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
 "CONTS39" 01/09/12 0 08/03/16 "" 0 "" "" "La Infinita 39" 0 0 "1" "1" 1 1 0 0 "CONTS39MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
-"CONTSF10" 01/10/13 0 31/12/49 "" 0 "" "" "FUSIÓN FIBRA INFINITA A LO YOIGO" 0 0 "1" "1" 1 1 0 0 "CONTSF10MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 1 1
-"CONTSF14" 01/10/13 0 31/12/49 "" 0 "" "" "FUSIÓN INFINITA A LO YOIGO" 0 0 "1" "1" 1 1 0 0 "CONTSF14MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 1 1
+"CONTSF10" 01/10/13 0 31/12/49 "" 0 "" "" "FUSIÓN FIBRA INFINITA A LO YOIGO" 0 0 "1" "1" 1 1 0 0 "CONTSF10MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
+"CONTSF14" 01/10/13 0 31/12/49 "" 0 "" "" "FUSIÓN INFINITA A LO YOIGO" 0 0 "1" "1" 1 1 0 0 "CONTSF14MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
 "DATA200_UPSELL" 01/06/15 4 31/12/49 "" 0 "" "" "200 MB upsell" 93 0 "1" "6" 1 2 1 0 "DATA200MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1
 "DATA5" 01/09/13 4 31/12/49 "DATA5" 0 "" "" "Bono 5" 93 0 "1" "4" 4 1 0 0 "DATA5MF" "" "" 0 1 0 yes 1 0 0 2 "DATA6_UPSELL,DATA200_UPSELL" 68 1
 "DATA5_UPSELL" 01/09/13 4 31/12/49 "DATA5" 0 "" "" "Data Upsell 5" 93 0 "1" "6" 1 2 1 0 "DATA5MFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0 1
@@ -66,7 +62,7 @@
 "DUB2" 01/05/12 4 31/12/49 "DUB2" 0 "" "" "Data Usage Bundle 1 GB" 93 0 "1" "4" 4 1 0 0 "CONT7MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 59 1
 "DUB3" 01/12/12 4 31/12/49 "DUB3" 0 "" "" "Data Usage Bundle 1 GB" 93 0 "1" "4" 4 1 0 0 "CONT8MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 59 1
 "FREE100MINUTES" 01/06/16 0 31/12/49 "" 0 "" "" "Promo 100 min/mes gratis" 0 0 "1" "1" 1 2 3 0 "" "" "" 3 1 0 yes 1 0 0 1 "" 0 1
-"FTERM12-100" 01/09/16 0 31/12/49 "" 0 "" "" "FTERM12 periodical contract" 0 0 "1" "7" 0 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 0
+"FTERM12-100" 27/10/16 0 31/12/49 "" 0 "" "" "FTERM12 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 0
 "GPRS" 01/12/06 6 31/12/54 "14100001" 1.653 "1" "" "GPRS maximum charge per day" 93 1.653 "1" "2" 2 1 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0 1
 "HSPA_ROAM_EU" 10/10/12 4 31/12/49 "14104019" 0 "" "" "HSPA Roaming EU" 90 0 "1" "8" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0 0
 "MDUB" 01/03/10 4 31/12/49 "MDUB" 0 "" "" "Bono 8" 93 0 "1" "4" 4 1 0 0 "MDUBMF" "" "" 0 1 0 yes 1 0 0 2 "DATA6_UPSELL,DATA200_UPSELL" 68 1

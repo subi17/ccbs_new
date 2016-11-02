@@ -148,6 +148,7 @@ PROCEDURE pTerminate:
    DEF VAR ldaKillDatePostpone AS DATE NO-UNDO.
 
    DEF VAR llHardBook          AS LOG  NO-UNDO INIT FALSE.
+   DEF VAR llCallProc          AS LOG  NO-UNDO.   
    
    ASSIGN liArrivalStatus = MsRequest.ReqStatus
           liMsSeq = MsRequest.MsSeq.
@@ -873,6 +874,29 @@ PROCEDURE pTerminate:
       END.
    END.
 
+   /* YDR-2052, Change the delivery type to paper only if the customer 
+      don't have any other active subscription with delivery type EMAIL or SMS*/
+   IF NOT MobSub.PayType AND 
+      CAN-FIND(FIRST Customer NO-LOCK WHERE
+                     Customer.CustNum = MobSub.CustNum        AND
+                    (Customer.DelType = {&INV_DEL_TYPE_EMAIL} OR
+                     Customer.DelTYpe = {&INV_DEL_TYPE_SMS})) THEN
+   DO:
+      llCallProc = TRUE.
+      
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobsub.Brand    = gcBrand        AND
+               bMobSub.CustNum  = MobSub.CustNum AND
+               bMobSub.MsSeq   <> liMsSeq        AND 
+               bMobSub.PayType  = NO:
+         llCallProc = NO.
+         LEAVE.
+      END.
+      
+      IF llCallProc THEN   
+         RUN pChangeDelType(MobSub.CustNum).
+   END. 
+
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.
    DELETE MobSub.
@@ -1136,4 +1160,42 @@ PROCEDURE pMultiSIMTermination:
                        "").
    END.
    
-END PROCEDURE. 
+END PROCEDURE.
+
+PROCEDURE pChangeDelType:
+   DEFINE INPUT  PARAMETER liCustNum AS INTEGER NO-UNDO.   
+
+   DEF VAR lhCustomer AS HANDLE NO-UNDO. 
+
+   lhCustomer = BUFFER Customer:HANDLE.
+
+   RUN StarEventInitialize(lhCustomer).
+
+   FIND FIRST Customer EXCLUSIVE-LOCK WHERE 
+              Customer.CustNum = liCustNum NO-ERROR.
+
+   IF AVAILABLE Customer THEN      
+   DO:
+
+      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
+
+      /* If subscription termination is on 1st day of month then change the 
+         delivery type and delivery status for invoices generated AND but not delivered */
+      IF DAY(TODAY) = 1 THEN
+      DO:
+         FOR EACH Invoice EXCLUSIVE-LOCK WHERE
+                  Invoice.Brand   = gcBrand          AND
+                  Invoice.CustNum = Customer.CustNum AND
+                  Invoice.InvDate = TODAY            AND
+                  Invoice.InvType = {&INV_TYPE_NORMAL}:
+            Invoice.DelType = {&INV_DEL_TYPE_PAPER}.
+         END.          
+      END.
+
+      Customer.DelType = {&INV_DEL_TYPE_PAPER}.
+
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+
+   END.
+
+END PROCEDURE.

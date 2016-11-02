@@ -8,6 +8,7 @@
 "1" "Bundle List" "Bundle" 54 1 1
 "1" "Bundle List" "Bundle" 56 1 1
 "1" "Bundle list" "Bundle" 91 1 1
+"1" "Convergent Bundle list" "Bundle" 112 1 2
 "1" "denied modules" "DENIED" 18 0 1
 "1" "Per.contract usage" "PERCONTR" 22 1 1
 "1" "Per.contract usage" "PERCONTR" 25 1 3
@@ -37,7 +38,10 @@
 "1" "Per.contract usage" "PERCONTR" 99 1 30
 "1" "Per.contract usage" "PERCONTR" 101 1 31
 "1" "Per.contract usage" "PERCONTR" 103 1 32
-"1" "Per.contract usage" "PERCONTR" 8011 1 33
-"1" "Per.contract usage" "PERCONTR" 8012 1 34
+"1" "Convergent 2GB mobile" "PERCONTR" 107 1 33
+"1" "Convergent CONTDSL" "PERCONTR" 108 1 34
+"1" "Convergent CONTFH50" "PERCONTR" 109 1 35
+"1" "Convergent CONTFH300" "PERCONTR" 110 1 36
+"1" "Convergent permanency" "PERCONTR" 111 1 37
 "1" "ST CHANGE" "STC-IDType" 1 0 1
 "1" "ST CHANGE" "STC-IDType" 3 0 2

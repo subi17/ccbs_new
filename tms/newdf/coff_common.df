@@ -1,10 +1,10 @@
 ADD FIELD "FixedNumber" ON "SubInvoice" AS character 
   FORMAT "x(11)"
-  INITIAL ""
+  INITIAL ?
   LABEL "FixedNumber"
   ORDER 230
 
 ADD INDEX "FixedNumber" ON "SubInvoice" 
-  AREA "Dyn_Index_1"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FixedNumber" ASCENDING 

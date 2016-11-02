@@ -20,7 +20,7 @@ FTERMPERIOD;2;Catalan;Incompliment de permanencia La Combinada
 FTERMPERIOD;3;Basque;La Combinada tarifaren iraunkortasun-epea urratzea
 FTERMPERIOD;5;English;Non-compliance with term contract on La Combinada tariff
 DISCFTERMPERIOD;1;Spanish;Descuento incumplimiento de permanencia La Combinada
-DISCFTERMPERIOD;2;Catalan;Descompte incompliment de permanència La Combinada
+DISCFTERMPERIOD;2;Catalan;Descompte incompliment de permanencia La Combinada
 DISCFTERMPERIOD;3;Basque;La Combinada tarifaren iraunkortasun-epea urratzeagatiko deskontua
 DISCFTERMPERIOD;5;English;Discount on non-compliance with term contract La Combinada tariff
 DISCFHDSL;1;Spanish;Descuento promoción Fijo
