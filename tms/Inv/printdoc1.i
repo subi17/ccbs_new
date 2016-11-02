@@ -59,7 +59,8 @@ DEF TEMP-TABLE ttCall NO-UNDO LIKE MobCDR
    FIELD CDRTable      AS CHAR
    FIELD GroupOrder    AS INT
    FIELD BillItemName  AS CHARACTER
-   FIELD BIGroup LIKE BillItem.BIGroup
+   FIELD BIGroup     LIKE BillItem.BIGroup
+   FIELD GroupType   LIKE BItemGroup.GroupType
    INDEX BIGroup GroupOrder BIGroup.
 
 ASSIGN
@@ -125,7 +126,9 @@ DEF TEMP-TABLE ttHead NO-UNDO
 
 DEF TEMP-TABLE ttSub NO-UNDO
    FIELD CLI          AS CHAR
+   FIELD FixedNumber  AS CHAR
    FIELD CLIType      AS CHAR
+   FIELD CliEvent     AS CHAR
    FIELD CTName       AS CHAR
    FIELD MsSeq        AS INT
    FIELD CallSpec     AS INT
@@ -164,6 +167,7 @@ DEFINE TEMP-TABLE ttBillItemAndGroup NO-UNDO
    FIELD BiGroup         AS CHARACTER
    FIELD BIName          AS CHARACTER
    FIELD GroupOrder      AS INTEGER
+   FIELD GroupType       AS INTEGER
    FIELD PremiumBillCode AS LOGICAL INITIAL FALSE
    FIELD GBBillCode      AS LOGICAL INITIAL FALSE
    INDEX BillCode IS PRIMARY UNIQUE BillCode.
@@ -192,6 +196,7 @@ DEF BUFFER bttRow FOR ttRow.
 FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
    
    DEFINE VARIABLE liGroupOrder AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liGroupType  AS INTEGER   NO-UNDO.
    
    FOR EACH BillItem NO-LOCK WHERE
       BillItem.Brand = gcBrand
@@ -200,11 +205,13 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
       IF FIRST-OF(BillItem.BIGroup)
       THEN DO:
          liGroupOrder = 0.
+         liGroupType  = 0.
          FOR BItemGroup NO-LOCK WHERE
             BItemGroup.Brand   = gcBrand AND
             BItemGroup.BIGroup = BillItem.BIGroup:
 
             liGroupOrder = BItemGroup.InvoiceOrder.
+            liGroupType  = BItemGroup.GroupType.
          END.
       END.
 
@@ -234,7 +241,7 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
          ttBillItemAndGroup.PremiumBillCode = TRUE WHEN BillItem.BIGroup = "6"
          ttBillItemAndGroup.GBBillCode      = TRUE WHEN BillItem.BIGroup = {&BITEM_GRP_GB}
          ttBillItemAndGroup.GroupOrder      = liGroupOrder
-         
+         ttBillItemAndGroup.GroupType       = liGroupType
          .
    END.
 
@@ -869,8 +876,9 @@ PROCEDURE pGetSubInvoiceHeaderData:
    FOR EACH SubInvoice OF Invoice NO-LOCK:
 
       CREATE ttSub.
-      ASSIGN ttSub.CLI   = SubInvoice.CLI
-             ttSub.MsSeq = SubInvoice.MsSeq. 
+      ASSIGN ttSub.CLI         = SubInvoice.CLI
+             ttSub.FixedNumber = SubInvoice.FixedNumber
+             ttSub.MsSeq       = SubInvoice.MsSeq. 
 
       /* user name */
       IF SubInvoice.CustNum = Invoice.CustNum OR SubInvoice.CustNum = 0 THEN 
@@ -896,8 +904,8 @@ PROCEDURE pGetSubInvoiceHeaderData:
          /* subscription has been terminated during billing period */
          FIND FIRST MsRequest WHERE
                     MsRequest.MsSeq     = SubInvoice.MsSeq AND
-                    MsRequest.ReqType   = 18               AND
-                    MsRequest.ReqStat   = 2                AND
+                    MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+                    MsRequest.ReqStat   = {&REQUEST_STATUS_DONE}              AND
                     MsRequest.ActStamp >= ldFromPer        AND
                     MsRequest.ActStamp <= ldToPer          NO-LOCK NO-ERROR.
 
@@ -908,8 +916,8 @@ PROCEDURE pGetSubInvoiceHeaderData:
             IF NOT ttInvoice.PostPoned AND
                NOT CAN-FIND(FIRST MsRequest WHERE
                               MsRequest.MsSeq     = SubInvoice.MsSeq    AND
-                              MsRequest.ReqType   = 82                  AND
-                              MsRequest.ReqStat   = 2                   AND
+                              MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_REACTIVATION} AND
+                              MsRequest.ReqStat   = {&REQUEST_STATUS_DONE}               AND
                               MsRequest.ActStamp  >  ldeActStamp        AND
                               MsRequest.ActStamp <= ldToPer) THEN
                FOR FIRST SingleFee WHERE
@@ -1052,8 +1060,9 @@ PROCEDURE pGetSubInvoiceHeaderData:
             /* latest type is stored -> same type as was used in
                billing run for min. consumption */
             IF liCount = 1 THEN
-               ASSIGN ttSub.CLIType = ttCLIType.CLIType
-                      ttSub.CTName  = ttCLIType.CTName.
+               ASSIGN ttSub.CLIType  = ttCLIType.CLIType
+                      ttSub.CTName   = ttCLIType.CTName
+                      ttSub.CliEvent = ttMSOwner.CLIEvent.
 
             /* Immediate STC logic non-fusion to non-fusion */
             IF lliSTR                AND
@@ -1075,11 +1084,12 @@ PROCEDURE pGetSubInvoiceHeaderData:
          IF liCount = 0 THEN
             FOR FIRST ttMSOwner WHERE ttMSOwner.Type = 1:
                ASSIGN
-                  ttSub.CLIType = ttMsOwner.CLIType
-                  ttSub.CTName = fLocalItemName("CLIType",
-                                                ttSub.CLIType,
-                                                liLanguage,
-                                                Invoice.ToDate).
+                  ttSub.CLIType  = ttMsOwner.CLIType
+                  ttSub.CliEvent = ttMSOwner.CLIEvent
+                  ttSub.CTName   = fLocalItemName("CLIType",
+                                                   ttSub.CLIType,
+                                                   liLanguage,
+                                                   Invoice.ToDate).
             END.
       END.
 
@@ -1441,7 +1451,7 @@ PROCEDURE pMarkPrinted:
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Inv"
                 ITSendLog.SendInfo   = icPrintHouse
-                ITSendLog.UserCode   = katun.
+                ITSendLog.UserCode   = katun
                 ITSendLog.SendStamp  = fMakeTS().
       END.
  
@@ -1532,7 +1542,8 @@ PROCEDURE pCollectCDR:
    DEFINE VARIABLE lcBIGroup      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcBillItemName AS CHARACTER NO-UNDO.
    DEFINE VARIABLE liGroupOrder   AS INTEGER   NO-UNDO.
-   
+   DEFINE VARIABLE liGroupType    AS INTEGER   NO-UNDO.
+
    EMPTY TEMP-TABLE ttCall.
   
    FIND FIRST bCallInvSeq WHERE bCallInvSeq.InvSeq = iiInvSeq NO-LOCK NO-ERROR.
@@ -1577,6 +1588,7 @@ PROCEDURE pCollectCDR:
                ASSIGN
                   liGroupOrder = ttBillItemAndGroup.GroupOrder
                   lcBIGroup    = ttBillItemAndGroup.BIGroup
+                  liGroupType  = ttBillItemAndGroup.GroupType
                   .
                IF iolPremiumNumberText = FALSE AND
                   ttBillItemAndGroup.PremiumBillCode
@@ -1589,6 +1601,7 @@ PROCEDURE pCollectCDR:
             ELSE ASSIGN
                     liGroupOrder = 0
                     lcBiGroup    = ""
+                    liGroupType  = 0
                     .
          END.
 
@@ -1608,6 +1621,7 @@ PROCEDURE pCollectCDR:
             ASSIGN
                  ttCall.GroupOrder   = liGroupOrder
                  ttCall.BIGroup      = lcBIGroup
+                 ttCall.GroupType    = liGroupType
                  ttCall.BillItemName = lcBillItemName
                  ttCall.CDRTable     = "MobCDR"
                  liFound             = liFound + 1
