@@ -849,9 +849,12 @@ DO TRANS:
          lidialtype = ttCall.Dialtype
          liCCN      = ttCall.RateCCN.
 
-      IF ttCall.Spocmt = 66 THEN DO:
+      IF ttCall.Spocmt = 66 OR
+         ttCall.Spocmt = 1066 THEN DO:
         
            liccn = 0.
+           IF ttCall.Spocmt = 66 THEN liTempDialType = 4.
+           ELSE liTempDialType = 1.
            FOR FIRST BDest NO-LOCK WHERE
                      BDest.Brand  = gcBrand AND
                      BDest.Bdest  = ttCall.BDest AND
@@ -861,7 +864,7 @@ DO TRANS:
                      BDest.FromDate <= ttCall.Datest,
                FIRST RateCCN NO-LOCK WHERE
                      RateCCN.BDestID  = Bdest.BDestID AND
-                     RateCCN.DialType = 4 /* ttCall.DialType */ :
+                     RateCCN.DialType = liTempDialType /* ttCall.DialType */ :
 
                ASSIGN
                liCCN      = RateCCN.CCN
@@ -887,10 +890,10 @@ DO TRANS:
       END.
 
       /* YDR-1853 */
-      IF ttCall.Spocmt = 63 AND ttCall.BillDur <= 20 THEN 
+      IF (ttCall.Spocmt = 63 OR ttCall.Spocmt = 1063) AND ttCall.BillDur <= 20 THEN 
          ASSIGN lidialtype = 20
                 liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
-      ELSE IF ttCall.Spocmt = 63 AND ttCall.BillDur > 20 THEN 
+      ELSE IF (ttCall.Spocmt = 63 OR ttCall.Spocmt = 1063) AND ttCall.BillDur > 20 THEN 
          ASSIGN lidialtype = 21
                 liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype). 
 

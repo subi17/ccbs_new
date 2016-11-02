@@ -6,6 +6,7 @@ DEF VAR liModeBI AS INT INIT 1.
 DEF VAR liModeCliType AS INT INIT 1.
 DEF VAR liModeCCN AS INT INIT 1.
 DEF VAR liModeTariff AS INT INIT 1.
+DEF VAR liModebdest AS INT INIT 1.
 
 DEF TEMP-TABLE ttSLGAnalyse NO-UNDO LIKE SLGAnalyse.
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
@@ -15,11 +16,14 @@ DEF BUFFER bSLGAnalyse FOR SLGAnalyse.
 DEF BUFFER bRequestAction FOR RequestAction.
 DEF BUFFER bBillItem FOR BillItem.
 DEF BUFFER bTariff FOR Tariff.
+DEF BUFFER bBDest FOR BDest.
 DEF VAR liActionId AS INT.
 DEFINE BUFFER bBdestConf  FOR BDestConf.
 DEF TEMP-TABLE ttBDestConf NO-UNDO LIKE BDestConf.
 DEFINE BUFFER bBdestConfItem  FOR BDestConfItem.
 DEF TEMP-TABLE ttBDestConfitem NO-UNDO LIKE BDestConfItem.
+DEF TEMP-TABLE ttBDest NO-UNDO LIKE BDest.
+DEF TEMP-TABLE ttRateCCN NO-UNDO LIKE RateCCN.
 DEF VAR i AS INT NO-UNDO.
 
 FUNCTION create_tmritem RETURNS CHAR (INPUT lcitem as CHAR,
@@ -59,6 +63,9 @@ create_tmritem("CONTS2GB_VOICE_IN,CONTDSL45",34).
 create_tmritem("CONTS2GB_VOICE_IN,CONTFH45_50",34).
 create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",34).
 
+create_tmritem("CONTS2GB_VOICE_IN,CONTDSL45",42).
+create_tmritem("CONTS2GB_VOICE_IN,CONTFH45_50",42).
+create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",42).
 
 IF CAN-FIND(FIRST bitemgroup WHERE
                   bitemgroup.brand = "1" AND
@@ -503,7 +510,60 @@ createBillItem("CONT24CF_B", "CONTS2GBCF_B",
                70510100,"1","1","1","003",FALSE,"SL",liModeBI).
 
 
+IF liModeBdest > 0 THEN DO:
+   FOR EACH bBDest WHERE
+            bBdest.desttype EQ 2 AND
+            bBDest.todate > TODAY:
+      FIND FIRST RateCCN WHERE
+                 RateCCN.brand EQ "1" AND
+                 RateCCN.bdest EQ bBdest.bdest AND
+                 RateCCN.desttype EQ bBdest.desttype AND
+                 RateCCN.ccn > 1000 NO-ERROR.
+      IF NOT AVAIL RateCCN THEN DO:
+         FIND FIRST RateCCN WHERE
+                 RateCCN.brand EQ "1" AND
+                 RateCCN.bdest EQ bBdest.bdest NO-ERROR.
+         DISP RateCCN.bdest
+              RateCCN.ccn FORMAT ">>>9".
 
+      END.
+      IF AVAIL RateCCN THEN DO:
+         BUFFER-COPY RateCCN TO ttRateCCN.
+         ttRateCCN.ccn = ttRateCCN.ccn + 1000.
+         ttRateCCN.dialtype = 1.
+         CREATE RateCCN.
+         BUFFER-COPY ttRateCCN TO RateCCN.
+      END.
+      ELSE MESSAGE "not found rateCCN" VIEW-AS ALERT-BOX.
+   END.
+
+   FOR EACH bBDest WHERE
+            bBdest.class EQ 2 AND
+            bBDest.todate > TODAY:
+      FIND FIRST RateCCN WHERE
+                 RateCCN.brand EQ "1" AND
+                 RateCCN.bdestid EQ bBdest.bdestid AND
+                 RateCCN.dialtype EQ 1 NO-ERROR.
+      IF NOT AVAIL RateCCN THEN DO:
+         FIND FIRST RateCCN WHERE
+                 RateCCN.brand EQ "1" AND
+                 RateCCN.bdestid EQ bBdest.bdestid AND
+                 RateCCN.dialtype EQ 4 NO-ERROR.
+           /*
+           DISP RateCCN.bdest
+              RateCCN.ccn FORMAT ">>>9".
+           */
+         IF AVAIL RateCCN THEN DO:
+            BUFFER-COPY RateCCN TO ttRateCCN.
+            ttRateCCN.ccn = ttRateCCN.ccn + 1000.
+            ttRateCCN.dialtype = 1.
+            CREATE RateCCN.
+            BUFFER-COPY ttRateCCN TO RateCCN.
+         END.
+      END.
+   END.
+
+END.
 
 
 
