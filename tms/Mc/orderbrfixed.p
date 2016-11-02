@@ -160,7 +160,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttOrder.OrderId ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttOrder.OrderId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttOrder.OrderId WITH FRAME sel.
       END.
       
