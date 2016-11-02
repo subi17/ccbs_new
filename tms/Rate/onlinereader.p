@@ -113,6 +113,8 @@ DEF VAR liStream  AS INT  NO-UNDO.
 DEF VAR lcReturn  AS CHAR NO-UNDO.
 DEF VAR lhttCall  AS HANDLE NO-UNDO.
 
+DEF VAR liTempDialType AS INT NO-UNDO.
+
 {tmsparam.i RepConfDir        return}. xConfDir        = tmsparam.CharVal.
 {tmsparam.i ErrCDouble        return}. errorcode       = tmsparam.IntVal.
 {tmsparam.i UnknownCustomer   RETURN}. liunkcust       = tmsparam.IntVal.
