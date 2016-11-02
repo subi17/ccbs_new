@@ -79,7 +79,7 @@ PROCEDURE pHandleOrder:
   
    FIND FIRST bOrder WHERE ROWID(bOrder) = ROWID(Order)
    EXCLUSIVE-LOCK NO-ERROR.
-  bfOrder.PayType = FALSE AND
+
    ASSIGN 
       bOrder.CredOK = llOk.
       bOrder.CREventQty = bOrder.CREventQty + 1. 
