@@ -48,9 +48,9 @@ DEF VAR lcHRLPTestMSSeq       AS CHAR NO-UNDO. /*List of numbers accepted in tes
 DEF VAR liHRLPTestLevel       AS INT  NO-UNDO.
 DEF VAR lcLandingPageLink     AS CHAR NO-UNDO.
 DEF VAR lcPassPhrase          AS CHAR NO-UNDO.
-DEF VAR lcQ22PushSpoolDir     AS CHAR NO-UNDO.
-DEF VAR lcQ22PushOutDir       AS CHAR NO-UNDO.
-DEF VAR lcQ22PushFile         AS CHAR NO-UNDO.
+DEF VAR lcQ25PushSpoolDir     AS CHAR NO-UNDO.
+DEF VAR lcQ25PushOutDir       AS CHAR NO-UNDO.
+DEF VAR lcQ25PushFile         AS CHAR NO-UNDO.
 
 DEF STREAM Sout.
 DEF STREAM SHRLP.
@@ -63,9 +63,9 @@ ASSIGN liQ25Logging      = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg
        lcQ25DWHLogDir    = fCParam("Q25","Q25DWHLogDir")
        lcSendingEndTime  = fCParam("Q25","Q25SendingEndTime")
        lcPassPhrase      = fCParam("Q25","Q25PassPhrase")
-       /* Q22 Push Notification */
-       lcQ22PushSpoolDir = fCParam("Q22Push","Q22PushSpoolDir")
-       lcQ22PushOutDir   = fCParam("Q22Push","Q22PushOutDir").
+       /* Q25 Push Notification */
+       lcQ25PushSpoolDir = fCParam("Q25Push","Q25PushSpoolDir")
+       lcQ25PushOutDir   = fCParam("Q25Push","Q25PushOutDir").
 
 IF lcPassPhrase      = "" OR lcPassPhrase      = ? THEN
    lcPassPhrase      = {&Q25_PASSPHRASE}.
@@ -73,15 +73,15 @@ IF lcQ25LogDir       = "" OR lcQ25LogDir       = ? THEN
    lcQ25LogDir       = "/tmp/".
 IF lcQ25SpoolDir     = "" OR lcQ25SpoolDir     = ? THEN
    lcQ25SpoolDir     = "/tmp/".
-IF lcQ22PushSpoolDir = "" OR lcQ22PushSpoolDir = ? THEN
-   lcQ22PushSpoolDir = "/tmp/".
-IF lcQ22PushOutDir   = "" OR lcQ22PushOutDir   = ? THEN
-   lcQ22PushOutDir   = "/tmp/".
+IF lcQ25PushSpoolDir = "" OR lcQ25PushSpoolDir = ? THEN
+   lcQ25PushSpoolDir = "/tmp/".
+IF lcQ25PushOutDir   = "" OR lcQ25PushOutDir   = ? THEN
+   lcQ25PushOutDir   = "/tmp/".
 
 ASSIGN lcQ25DWHLogFile  = lcQ25SpoolDir + "events_" +
                           (REPLACE(STRING(fMakeTS()),".","_")) + ".csv"
-       lcQ22PushFile    = lcQ22PushSpoolDir + "q22_push_notification_" +
-                          (REPLACE(STRING(fMakeTS()),".","_")) + ".csv".
+       lcQ25PushFile    = lcQ25PushSpoolDir + "create_messages_" +
+                          (REPLACE(STRING(fMakeTS()),".","")) + ".csv".
 
 /* Function to check if there is available weekdays for SMS sending after
    specified day.
@@ -534,29 +534,32 @@ FUNCTION fisQ25ExtensionAllowed RETURNS LOGICAL
    RETURN TRUE.
 END.
 
-FUNCTION fQ22PushNotification RETURNS LOGICAL
+FUNCTION fQ25PushNotification RETURNS LOGICAL
    (INPUT icCLI AS CHAR):
 
    DEF VAR lcRequestId   AS CHAR NO-UNDO.
    DEF VAR lcPushRequest AS CHAR NO-UNDO.
 
-   lcRequestId = "010" + SUBSTRING(BASE64-ENCODE(GENERATE-UUID), 1, 22).
+   lcRequestId = "101" + SUBSTRING(BASE64-ENCODE(GENERATE-UUID), 1, 22).
 
    IF INDEX(lcRequestId,"|") > 0 THEN 
       lcRequestId = REPLACE(lcRequestId,"|","0").
 
-   lcPushRequest = lcRequestId      + "|" +  /* request_id           */
-                   "q25"            + "|" +  /* message_category     */
-                   "q22_reminder"   + "|" +  /* message_template_id  */
-                   "3"              + "|" +  /* message_type         */
-                   icCLI            + "|" +  /* recipient_msisdn     */
-                   ""               + "|" +  /* recipient_email      */
-                   ""               + "|" +  /* recipient_group      */
-                   ""               + "|" +  /* product_id           */
-                   ""               + "|" +  /* first_name           */
-                   "".                       /* last_name            */
+   lcPushRequest = lcRequestId      + "|" +  /* 1  request_id           */
+                   "q25"            + "|" +  /* 2  message_category     */
+                   ""               + "|" +  /* 3  sms_recipient        */
+                   ""               + "|" +  /* 4  email_recipient      */
+                   icCLI            + "|" +  /* 5  push_recipient       */
+                   "q25_reminder"   + "|" +  /* 6  message_template_id  */
+                   ""               + "|" +  /* 7  message_body         */
+                   ""               + "|" +  /* 8  message_inapp_link   */
+                   ""               + "|" +  /* 9  message_type_id      */
+                   ""               + "|" +  /* 10 scheduling_policy    */
+                   ""               + "|" +  /* 11 product_id           */
+                   ""               + "|" +  /* 12 first_name           */
+                   "".                       /* 13 last_name            */
 
-    OUTPUT STREAM Push TO VALUE(lcQ22PushFile) APPEND.
+    OUTPUT STREAM Push TO VALUE(lcQ25PushFile) APPEND.
     PUT STREAM Push UNFORMATTED lcPushRequest SKIP.
     OUTPUT STREAM Push CLOSE.
 
@@ -691,6 +694,9 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             END.
          END.
       END.
+      ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_PUSH_SENDING}) THEN DO:
+         fQ25PushNotification(MobSub.CLI)
+      END.
       ELSE DO:
          liLogType = {&Q25_LOGGING_DETAILED}.
          /* Some logging about SMSs to be send. */
@@ -713,13 +719,10 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         iiExecType).
       END.
 
-      /* When customer's installment plan reaches 22nd quote,
-         notification is sent to customer. */
-      IF iiPhase = {&Q25_MONTH_22} THEN fQ22PushNotification(MobSub.CLI).
    END.
 
-   IF iiPhase = {&Q25_MONTH_22} THEN
-      fMove2TransDir(lcQ22PushFile, "", lcQ22PushOutDir).
+   IF iiExecType EQ {&Q25_EXEC_TYPE_PUSH_SENDING}) THEN
+      fMove2TransDir(lcQ25PushFile, "", lcQ25PushOutDir).
 
    /* Logging about amount of situations for testting purposes. */
    /* If ilSendMsgs is False, logging of calculated values to be done */
@@ -931,7 +934,7 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
       ocLine = ocLine + {&Q25_HRLP_DELIM} + icCommand + " Sent successfully".
       lcMemoTitle = "LP Riesgo Pago Final".
       IF icCommand BEGINS "REDIRECTION" THEN
-         lcMemotext = "Redirección a LP Pago Final Riesgo activada".
+         lcMemotext = "RedirecciÃ³n a LP Pago Final Riesgo activada".
       ELSE IF icCommand EQ "remove" THEN
          lcMemotext = "IFS elimina la LP Riesgo Pago Final sin que el " +
                       "cliente la haya visto".
