@@ -694,8 +694,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             END.
          END.
       END.
-      ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_PUSH_SENDING}) THEN DO:
-         fQ25PushNotification(MobSub.CLI)
+      ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_PUSH_SENDING} THEN DO:
+         fQ25PushNotification(MobSub.CLI).
       END.
       ELSE DO:
          liLogType = {&Q25_LOGGING_DETAILED}.
@@ -721,7 +721,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
 
    END.
 
-   IF iiExecType EQ {&Q25_EXEC_TYPE_PUSH_SENDING}) THEN
+   IF iiExecType EQ {&Q25_EXEC_TYPE_PUSH_SENDING} THEN
       fMove2TransDir(lcQ25PushFile, "", lcQ25PushOutDir).
 
    /* Logging about amount of situations for testting purposes. */
