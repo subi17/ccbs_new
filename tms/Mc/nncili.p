@@ -122,7 +122,7 @@ task:
          FixedFee.CustNum   tab
          cname           tab
          FixedFee.BillCode tab
-         fDecToC(FixedFee.Amt,"-zzzzz9.99")   tab
+         fDecToC(FixedFee.Amt,"-zzzzz9.999")   tab
          FixedFee.Interval    tab
          FixedFee.BegPeriod tab
          FixedFee.EndPeriod tab

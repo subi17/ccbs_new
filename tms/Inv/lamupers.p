@@ -537,8 +537,8 @@ FUNCTION fMakeFATimeRow RETURNS LOGICAL
    /* use same vat method for the base amount as fatime has */
    IF Fatime.VatIncl NE lCustVat THEN DO:
       IF Fatime.VatIncl THEN 
-         ldBaseAmt = ROUND(ldBaseAmt * (1 + idVatPerc / 100),2).
-      ELSE ldBaseAmt = ROUND(ldBaseAmt / (1 + idVatPerc / 100),2).
+         ldBaseAmt = ROUND(ldBaseAmt * (1 + idVatPerc / 100),3).
+      ELSE ldBaseAmt = ROUND(ldBaseAmt / (1 + idVatPerc / 100),3).
    END.
 
    FIND bFatime WHERE RECID(bFatime) = RECID(Fatime) EXCLUSIVE-LOCK.
@@ -554,14 +554,14 @@ FUNCTION fMakeFATimeRow RETURNS LOGICAL
          THEN ASSIGN iiQty     = iiQty * (1 - (DiscAmt / ldBaseAmt))
                      ldBaseAmt = ldBaseAmt - DiscAmt.
 
-         ELSE ASSIGN DiscAmt   = ROUND(ldBaseAmt,2)
+         ELSE ASSIGN DiscAmt   = ROUND(ldBaseAmt,3)
                      ldBaseAmt = 0
                      iiQty     = 0.
       END.
       
       /* percentage */  
       ELSE DO:
-         ASSIGN DiscAmt   = ROUND(FATime.FatPerc * ldBaseAmt / 100,2)
+         ASSIGN DiscAmt   = ROUND(FATime.FatPerc * ldBaseAmt / 100,3)
                 iiQty     = iiQty * (1 - (DiscAmt / ldBaseAmt))
                 ldBaseAmt = ldBaseAmt - DiscAmt.
       END.
@@ -575,12 +575,12 @@ FUNCTION fMakeFATimeRow RETURNS LOGICAL
 
       IF iiQty >= FATime.Amt - FATime.Used - FATime.TransQty
       THEN ASSIGN DiscQty   = FATime.Amt - FATime.Used - FATime.TransQty
-                  DiscAmt   = ROUND((ldBaseAmt / iiQty) * DiscQty,2)
+                  DiscAmt   = ROUND((ldBaseAmt / iiQty) * DiscQty,3)
                   ldBaseAmt = ldBaseAmt - DiscAmt
                   iiQty     = iiQty - DiscQty.
 
       ELSE IF iiQty > 0
-      THEN ASSIGN DiscAmt   = ROUND(ldBaseAmt,2) 
+      THEN ASSIGN DiscAmt   = ROUND(ldBaseAmt,3) 
                   ldBaseAmt = 0
                   DiscQty   = iiQty
                   iiQty     = 0.
@@ -597,8 +597,8 @@ FUNCTION fMakeFATimeRow RETURNS LOGICAL
    /* return the base amount with correct vat */
    IF Fatime.VatIncl NE lCustVat THEN DO:
       IF lCustVat THEN 
-         ldBaseAmt = ROUND(ldBaseAmt * (1 + idVatPerc / 100),2).
-      ELSE ldBaseAmt = ROUND(ldBaseAmt / (1 + idVatPerc / 100),2).
+         ldBaseAmt = ROUND(ldBaseAmt * (1 + idVatPerc / 100),3).
+      ELSE ldBaseAmt = ROUND(ldBaseAmt / (1 + idVatPerc / 100),3).
    END.
    idAmt = ldBaseAmt.
    
@@ -1564,9 +1564,9 @@ PROCEDURE pCreateInv:
             same level as those will be */
          FOR EACH ttIR:
             ASSIGN
-               ttIR.dNet     = ROUND(ttIR.dNet,2)
-               ttIR.dGross   = ROUND(ttIR.dGross,2)
-               ttIR.DiscBase = ROUND(ttIR.DiscBase,2).
+               ttIR.dNet     = ROUND(ttIR.dNet,3)
+               ttIR.dGross   = ROUND(ttIR.dGross,3)
+               ttIR.DiscBase = ROUND(ttIR.DiscBase,3).
                
             IF ttIR.AgrCust = 0 THEN 
                ttIR.AgrCust = bCustomer.CustNum.
@@ -1773,9 +1773,9 @@ PROCEDURE pCreateInv:
                END. /* IF FIRST-OF(ttIR.ToDate) THEN DO: */
 
                ASSIGN
-                  /* from several to 2 decimals */
-                  ttIR.Amt        = round(ttIR.dNet,2)
-                  ttIR.GrossAmt   = round(ttIR.dgross,2)
+                  /* from several to 3 decimals */
+                  ttIR.Amt        = round(ttIR.dNet,3)
+                  ttIR.GrossAmt   = round(ttIR.dgross,3)
                   liEventQty      = liEventQty + ttIR.Qty
                   /* into Kbs */
                   ttIR.DataAmt    = ttIR.DataAmt / 1024
@@ -2797,8 +2797,8 @@ PROCEDURE pMinimumConsumption:
 
          /* invrow combining is not yet done, so do subroundings */
          IF LAST-OF(bttIR.Period) THEN ASSIGN
-            ldBaseSum[1] = ROUND(ldBaseSum[1],2)
-            ldBaseSum[2] = ROUND(ldBaseSum[2],2).
+            ldBaseSum[1] = ROUND(ldBaseSum[1],3)
+            ldBaseSum[2] = ROUND(ldBaseSum[2],3).
       END.
             
       IF LAST-OF(bttIR.MsSeq) AND bttIR.MsSeq > 0 AND
@@ -2870,7 +2870,7 @@ PROCEDURE pMinimumConsumption:
             END.   
          END.  
                
-         ldBaseSum[liLoop] = ROUND(ldBaseSum[liLoop],2). 
+         ldBaseSum[liLoop] = ROUND(ldBaseSum[liLoop],3). 
                   
          IF ldBaseSum[liLoop] >= 0 AND ldBaseSum[liLoop] < ldMinCons AND lcMinItem > "" 
          THEN DO:
@@ -3130,7 +3130,7 @@ PROCEDURE pDiscount:
          
                IF ttDiscounts.Unit = "Percentage" THEN 
                   ldDiscount[i] = ROUND(ldBaseAmount[i] * 
-                               (ttDiscounts.Amount / 100),2).
+                               (ttDiscounts.Amount / 100),3).
                ELSE IF ttDiscounts.Unit = "Fixed" THEN DO:
                   IF i EQ 1 THEN 
                      ldDiscount[i] = MIN(ldBaseAmount[i],ttDiscounts.Amount).
@@ -3217,7 +3217,7 @@ PROCEDURE pDiscount:
                      bBasettIR.DiscBase = MAX(0,bBasettIR.DiscBase - ldDivide).
                   ELSE ASSIGN 
                      ldPortion = ROUND(bBasettIR.DiscBase * ldDiscount[i] / 
-                                          ldBaseAmount[i],2)
+                                          ldBaseAmount[i],3)
                      ldPortion = MAX(0,ldPortion)
                      bBasettIR.DiscBase = bBasettIR.DiscBase - ldPortion
                      ldDivide = ldDivide - ldPortion.
@@ -3575,6 +3575,7 @@ PROCEDURE pInvoiceHeader:
    DEF VAR liITGDeltype AS INT NO-UNDO.
    DEF VAR llNextInvNdd AS LOG NO-UNDO.
    DEF VAR lcRegion    AS CHAR NO-UNDO. 
+   DEF VAR ldeTotalInvRow2 AS DEC  NO-UNDO. 
 
    DEF BUFFER bufseq  FOR InvSeq.
    DEF BUFFER bChkInv FOR Invoice. 
@@ -3721,7 +3722,7 @@ PROCEDURE pInvoiceHeader:
       IF lCustVat THEN ASSIGN
          ldBasis                   = ROUND(ttRowVat.VatBasis * 
                                            ttRowVat.VatPerc /
-                                        (100 + ttRowVat.VATPerc),2) 
+                                        (100 + ttRowVat.VATPerc),3) 
          ttSubInv.VatAmount[lloop] = ttSubInv.VatAmount[lloop] + ldBasis        
          ttSubInv.VATAmt           = ttSubInv.VatAmt + ldBasis
          ttSubInv.InvAmt           = ttSubInv.InvAmt + ttRowVat.VatBasis
@@ -3729,19 +3730,25 @@ PROCEDURE pInvoiceHeader:
          ldTotalInv                = ldTotalInv + ttRowVat.VatBasis - ldBasis.
 
       /* VAT excluded from prices */
-      ELSE ASSIGN 
-         ttSubInv.AmtExclVAT       = ttSubInv.AmtExclVat + ttRowVat.VatBasis
-         ldBasis                   = (IF iiInvType = 6 or iiInvType = 7 
-                                     THEN ((ttRowVat.AccVatBasis * 
-                                            (1 + ttRowVat.VATPerc / 100)) - 
-                                           ttRowVat.VatBasis)
-                                      ELSE ttRowVat.VatBasis * 
-                                           ttRowVat.VatPerc / 100)
-         ldBasis                   = ROUND(ldBasis,2)
-         ttSubInv.VatAmount[lloop] = ttSubInv.VatAmount[lloop] + ldBasis
-         ttSubInv.VATAmt           = ttSubInv.VATAmt + ldBasis
-         ttSubInv.InvAmt           = ttSubInv.AmtExclVAT + ttSubInv.VATAmt
-         ldTotalInv                = ldTotalInv + ttRowVat.VatBasis.
+      ELSE DO:
+         ttSubInv.AmtExclVAT = ROUND(ttSubInv.AmtExclVat + ttRowVat.VatBasis,2).
+
+         /* VAT excluded from prices */
+         IF iiInvType = 6 OR iiInvType = 7 THEN
+            ldBasis = ROUND(((ttRowVat.AccVatBasis *
+                             (1 + ttRowVat.VATPerc / 100)) -
+                             ttRowVat.VatBasis),2).
+         ELSE ASSIGN
+            ldeTotalInvRow2 = ROUND(ttRowVat.VatBasis * (1 + ttRowVat.VatPerc / 100),2)
+            ldBasis         = ROUND(ldeTotalInvRow2 - ttSubInv.AmtExclVAT,2).
+
+         ASSIGN
+            ttSubInv.VatAmount[lloop] = ttSubInv.VatAmount[lloop] + ldBasis
+            ttSubInv.VATAmt           = ttSubInv.VATAmt + ldBasis
+            ttSubInv.InvAmt           = ROUND(ttSubInv.AmtExclVAT + ttSubInv.VATAmt,2)
+            ldTotalInv                = ldTotalInv + ttRowVat.VatBasis.
+
+      END.
 
    END.  /* vat data from ttRowVat */
 
