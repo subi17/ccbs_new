@@ -614,7 +614,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
                       FMItem.FeeModel  = FixedFee.FeeModel  AND
                       FMItem.ToDate   >= FixedFee.BegDate   AND
                       FMItem.FromDate <= FixedFee.BegDate:
-               ldeTotalAmount = ROUND(fmitem.FFItemQty * fmitem.Amount,2).
+               ldeTotalAmount = ROUND(fmitem.FFItemQty * fmitem.Amount,3).
                ldeRVPerc = TRUNC(bQ25SingleFee.Amt /
                           (ldeTotalAmount + bQ25SingleFee.Amt) * 100 + 0.05,1).
             END.
@@ -1265,8 +1265,8 @@ PROCEDURE pGetInvoiceRowData:
             ELSE DO:
                IF Invoice.VatIncl = TRUE THEN
                   ldVATAmt = ROUND(InvRow.Amt * InvRow.VATPerc /
-                                  (100 + InvRow.VATPerc),2).
-               ELSE ldVatAmt = ROUND(InvRow.Amt * InvRow.VatPerc / 100,2).
+                                  (100 + InvRow.VATPerc),3).
+               ELSE ldVatAmt = ROUND(InvRow.Amt * InvRow.VatPerc / 100,3).
             END.
          
             ldVATTot = ldVATTot - ldVATAmt.
