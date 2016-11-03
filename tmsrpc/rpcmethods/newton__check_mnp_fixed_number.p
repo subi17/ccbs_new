@@ -2,7 +2,7 @@
  * @input string;mandatory;fixed numebr
  * @output success;boolean;true or error
  */
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/tmsconst.i}
 
 /* Input parameters */

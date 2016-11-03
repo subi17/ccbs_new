@@ -2,7 +2,7 @@
 gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fexternalapi.i}
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Mc/orderfusion.i}
 {Func/orderfunc.i}
 
