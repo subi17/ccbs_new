@@ -899,10 +899,10 @@ DO TRANS:
          ASSIGN lidialtype = 21
                 liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
       ELSE IF ttCall.Spocmt = 1063 AND ttCall.BillDur <= 20 THEN
-         ASSIGN lidialtype = 22
+         ASSIGN lidialtype = 23
                 liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
       ELSE IF ttCall.Spocmt = 1063  AND ttCall.BillDur > 20 THEN
-         ASSIGN lidialtype = 23
+         ASSIGN lidialtype = 24
                 liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).          
 
       ASSIGN

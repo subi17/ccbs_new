@@ -17,6 +17,7 @@ DEF BUFFER bRequestAction FOR RequestAction.
 DEF BUFFER bBillItem FOR BillItem.
 DEF BUFFER bTariff FOR Tariff.
 DEF BUFFER bBDest FOR BDest.
+DEF BUFFER bRateCCN FOR RateCCN.
 DEF VAR liActionId AS INT.
 DEFINE BUFFER bBdestConf  FOR BDestConf.
 DEF TEMP-TABLE ttBDestConf NO-UNDO LIKE BDestConf.
@@ -530,6 +531,41 @@ IF liModeBdest > 0 THEN DO:
             BUFFER-COPY ttRateCCN TO RateCCN.
          END.
       END.
+   END.
+
+   FOR EACH bRateCCN WHERE 
+            bRateCCN.brand EQ "1" AND
+            bRateCCN.dialtype EQ 20:
+      IF bRateCCN.ccn > 1000 THEN NEXT.
+      BUFFER-COPY bRateCCN TO ttRateCCN.
+      ttRateCCN.ccn = ttRateCCN.ccn + 1000.
+      ttRateCCN.dialtype = 23.
+      CREATE RateCCN.
+      BUFFER-COPY ttRateCCN TO RateCCN.
+   END.
+
+   FOR EACH bRateCCN WHERE
+            bRateCCN.brand EQ "1" AND
+            bRateCCN.dialtype EQ 21:
+      IF bRateCCN.ccn > 1000 THEN NEXT.      
+      BUFFER-COPY bRateCCN TO ttRateCCN.
+      ttRateCCN.ccn = ttRateCCN.ccn + 1000.
+      ttRateCCN.dialtype = 24.
+      CREATE RateCCN.
+      BUFFER-COPY ttRateCCN TO RateCCN.
+   END.
+
+   FIND FIRST DialType Where Dialtype.dialtype EQ 23 NO-ERROR.
+   IF NOT AVAIL DialType THEN DO:
+      CREATE DialType.
+      ASSIGN
+         DialType.dialtype = 23
+         DialType.dtName = "Fixed Voice short number (type1)".
+      CREATE DialType.
+      ASSIGN
+         DialType.dialtype = 24
+         DialType.dtName = "Fixed Voice short number (type2)".
+
    END.
 
 END.
