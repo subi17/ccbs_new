@@ -111,10 +111,10 @@ FOR EACH ttCust:
               Invoice.ChgStamp <= ttCust.EndTS   NO-ERROR.
    IF AVAIL Invoice THEN DO:
       IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                        MsRequest.Brand   = "1" AND
-                        MsRequest.ReqType = {&REQTYPE_DUPLICATE_INVOICE} AND
-                        MsRequest.CustNum = TermMobSub.CustNum AND
-                        MsRequest.ReqIParam1 = Invoice.InvNum AND
+                        MsRequest.Brand      = "1"                          AND
+                        MsRequest.ReqType    = {&REQTYPE_DUPLICATE_INVOICE} AND
+                        MsRequest.CustNum    = ttCust.CustNum               AND
+                        MsRequest.ReqIParam1 = Invoice.InvNum               AND
                         LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0) THEN NEXT.
 
       CREATE MsRequest.
