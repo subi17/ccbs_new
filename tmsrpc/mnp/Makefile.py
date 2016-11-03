@@ -113,5 +113,5 @@ def run_agent(*a):
             '-T', '../../var/tmp',
             '-clientlog', '../../var/log/%s_agent.%d.log' % \
             	          (agent_name, os.getpid())]
-    args = mpro + args + extraargs + ['-b', '-p', 'fcgi_agent/nq_xmlrpc.p']
+    args = mpro + args + extraargs + ['-b', '-p', 'fcgi_agent/nq_xmlrpc.p', '-param', ",YES"]
     os.execlp(args[0], *args)

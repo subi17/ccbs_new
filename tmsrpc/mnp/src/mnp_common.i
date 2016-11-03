@@ -23,7 +23,7 @@ gcBrand = "1".
 {Func/msreqfunc.i}
 {Syst/tmsconst.i}
 {Func/log.i}
-DEFINE SHARED VARIABLE lcrequest AS LONGCHAR NO-UNDO.
+DEFINE INPUT PARAMETER icrequest AS LONGCHAR NO-UNDO.
 
 DEF VAR pcStruct AS CHAR NO-UNDO.
 DEF VAR lcFields AS CHARACTER NO-UNDO. 
@@ -115,7 +115,7 @@ FUNCTION fCreateBuzonMessage RETURNS LOGICAL
       DEFINE VARIABLE liBase64IndexEnd AS INTEGER NO-UNDO. 
       DEFINE VARIABLE liBase64Index AS INTEGER NO-UNDO. 
       DEFINE VARIABLE lcBuzonRequest AS LONGCHAR NO-UNDO. 
-      COPY-LOB lcRequest to lcBuzonRequest.
+      COPY-LOB icRequest to lcBuzonRequest.
 
       liBase64IndexEnd = 1.
       liBase64Index = 1.
@@ -134,7 +134,7 @@ FUNCTION fCreateBuzonMessage RETURNS LOGICAL
    
       copy-lob from lcBuzonRequest to MNPBuzon.XMLRequest.
    END.
-   ELSE COPY-LOB from lcRequest to MNPBuzon.XMLRequest.
+   ELSE COPY-LOB from icRequest to MNPBuzon.XMLRequest.
 
    RETURN TRUE.
 
