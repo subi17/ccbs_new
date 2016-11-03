@@ -884,7 +884,7 @@ DO TRANS:
 
       IF (liCCN = 69  OR liCCN = 1069) AND ttCall.BillDur > 11 THEN DO:
          IF CAN-FIND(FIRST ttDuration WHERE 
-                           ttDuration.CallCase = STRING(liCCN) AND
+                           ttDuration.CallCase = "61" AND
                            ttDuration.BDest    = ttCall.BDest AND
                            ttDuration.FromDate <= ttCall.DateSt) THEN 
             IF liCCN EQ 69 THEN liCCN = 61.
@@ -892,12 +892,18 @@ DO TRANS:
       END.
 
       /* YDR-1853 */
-      IF (ttCall.Spocmt = 63 OR ttCall.Spocmt = 1063) AND ttCall.BillDur <= 20 THEN 
+      IF ttCall.Spocmt = 63 AND ttCall.BillDur <= 20 THEN 
          ASSIGN lidialtype = 20
                 liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
-      ELSE IF (ttCall.Spocmt = 63 OR ttCall.Spocmt = 1063) AND ttCall.BillDur > 20 THEN 
+      ELSE IF ttCall.Spocmt = 63  AND ttCall.BillDur > 20 THEN 
          ASSIGN lidialtype = 21
-                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype). 
+                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
+      ELSE IF ttCall.Spocmt = 1063 AND ttCall.BillDur <= 20 THEN
+         ASSIGN lidialtype = 22
+                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
+      ELSE IF ttCall.Spocmt = 1063  AND ttCall.BillDur > 20 THEN
+         ASSIGN lidialtype = 23
+                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).          
 
       ASSIGN
          c_time      = ttCall.timestart
