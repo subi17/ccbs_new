@@ -6,6 +6,7 @@ DEF VAR liModeBI AS INT INIT 1.
 DEF VAR liModeCliType AS INT INIT 1.
 DEF VAR liModeCCN AS INT INIT 1.
 DEF VAR liModeTariff AS INT INIT 1.
+DEF VAR liModebdest AS INT INIT 1.
 
 DEF TEMP-TABLE ttSLGAnalyse NO-UNDO LIKE SLGAnalyse.
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
@@ -15,11 +16,14 @@ DEF BUFFER bSLGAnalyse FOR SLGAnalyse.
 DEF BUFFER bRequestAction FOR RequestAction.
 DEF BUFFER bBillItem FOR BillItem.
 DEF BUFFER bTariff FOR Tariff.
+DEF BUFFER bBDest FOR BDest.
 DEF VAR liActionId AS INT.
 DEFINE BUFFER bBdestConf  FOR BDestConf.
 DEF TEMP-TABLE ttBDestConf NO-UNDO LIKE BDestConf.
 DEFINE BUFFER bBdestConfItem  FOR BDestConfItem.
 DEF TEMP-TABLE ttBDestConfitem NO-UNDO LIKE BDestConfItem.
+DEF TEMP-TABLE ttBDest NO-UNDO LIKE BDest.
+DEF TEMP-TABLE ttRateCCN NO-UNDO LIKE RateCCN.
 DEF VAR i AS INT NO-UNDO.
 
 FUNCTION create_tmritem RETURNS CHAR (INPUT lcitem as CHAR,
@@ -197,9 +201,67 @@ FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    END.
 END.
 
+FUNCTION fcreateMobSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
+                                                INPUT icDCEvent AS CHAR,
+                                                INPUT idaVAlidFrom AS DATE,
+                                                INPUT icclitype AS CHAR,
+                                                INPUT iiUpdateMode AS INT):
+   FOR EACH bSLGAnalyse WHERE
+            bSLGAnalyse.brand EQ "1" AND
+            bSLGAnalyse.clitype EQ icBaseDCEvent AND
+            bSLGAnalyse.validto > TODAY.
+
+      IF bSLGAnalyse.servicelimitgroup NE icBaseDCEvent THEN NEXT. 
+
+      CREATE ttSLGAnalyse.
+      BUFFER-COPY bSLGAnalyse TO ttSLGAnalyse.
+      ttSLGAnalyse.ValidFrom = ldaFrom.
+      ttSLGAnalyse.clitype = icCliType.
+      ttSLGAnalyse.servicelimitgroup = icDCEvent.
+      IF iiUpdateMode NE 0 THEN DO:
+         CREATE SLGAnalyse.
+         BUFFER-COPY ttSLGAnalyse TO SLGAnalyse.
+         DELETE ttSLGAnalyse. /*ror safety reasons*/
+      END.
+      ELSE DISP ttSLGAnalyse.
+   END.
+END.
+
+FUNCTION fModifySLGAnalyse RETURNS LOGICAL ( INPUT icDCEvent AS CHAR,
+                                             INPUT iiUpdateMode AS INT):
+   FOR EACH bSLGAnalyse WHERE
+            bSLGAnalyse.brand EQ "1" AND
+            bSLGAnalyse.clitype EQ icDCEvent AND
+            bSLGAnalyse.validto > TODAY.
+
+      IF bSLGAnalyse.servicelimitgroup BEGINS "CONTDSL" OR 
+         bSLGAnalyse.servicelimitgroup BEGINS "CONTFH" THEN DO:
+         IF bSLGAnalyse.CCN - 1000 < 0 THEN
+            bSLGAnalyse.CCN = bSLGAnalyse.CCN + 1000.
+         IF bSLGAnalyse.BillCode BEGINS "F" THEN 
+            DISP "Billcode already fixed".
+         ELSE 
+            bSLGAnalyse.BillCode = "F" + bSLGAnalyse.BillCode.
+      END.
+
+      ELSE NEXT.
+   END.
+END.
+
+
+
 fcreateSLGAnalyse("CONT24","CONTDSL45",ldaFrom,"CONTDSL45",liMode).
 fcreateSLGAnalyse("CONT24","CONTFH45_50",ldaFrom,"CONTFH45_50",liMode).
 fcreateSLGAnalyse("CONT24","CONTFH55_300",ldaFrom,"CONTFH55_300",liMode).
+
+fcreateMobSLGAnalyse("CONTFH45_50","CONTS2GB",ldaFrom,"CONTDSL45",liMode).
+fcreateMobSLGAnalyse("CONTFH45_50","CONTS2GB",ldaFrom,"CONTFH45_50",liMode).
+fcreateMobSLGAnalyse("CONTFH45_50","CONTS2GB",ldaFrom,"CONTFH55_300",liMode).
+
+fModifySLGAnalyse("CONTDSL45",liMode).
+fModifySLGAnalyse("CONTFH45_50",liMode).
+fModifySLGAnalyse("CONTFH55_300",liMode).
+
 
 /* CCN changes */
 
@@ -258,7 +320,7 @@ FUNCTION createTariff RETURNS LOG (INPUT lcBase AS CHAR,
              ASSIGN
                 ttTariff.CCN = liCCN
                 ttTariff.pricelist = lcPriceList
-                ttTariff.validFrom = 10/15/16.
+                ttTariff.validFrom = ldafrom.
              CREATE Tariff.
              ttTariff.tariffnum = next-value(Tariff).
              ttTariff.billcode = "F" + ttTariff.billcode.
@@ -289,6 +351,44 @@ FUNCTION createTariff RETURNS LOG (INPUT lcBase AS CHAR,
    RETURN TRUE.
 
 END.
+
+FUNCTION createTariffpack RETURNS LOG (INPUT lcBase AS CHAR,
+                                       INPUT lcpricelist AS CHAR,
+                                       INPUT lcBdest AS CHAR,
+                                       INPUT liMode AS INT).
+   IF CAN-FIND(FIRST Tariff WHERE
+                     Tariff.brand EQ "1" AND
+                     Tariff.pricelist EQ lcpricelist AND
+                     Tariff.bdest BEGINS lcBdest) THEN
+      MESSAGE "tariff bdest exists " + lcbdest VIEW-AS ALERT-BOX.
+   ELSE DO:
+      IF liMode > 0 THEN DO:   
+          FOR EACH bTariff WHERE
+                  bTariff.brand EQ "1" AND
+                  bTariff.pricelist EQ lcpricelist AND
+                  bTariff.bdest BEGINS lcBase AND            
+                  bTariff.validto > TODAY:
+             CREATE ttTariff.
+             BUFFER-COPY bTariff TO ttTariff.
+             ASSIGN
+                ttTariff.bdest = REPLACE(ttTariff.bdest,lcBase,lcBdest).
+                ttTariff.billcode = REPLACE(ttTariff.billcode,lcBase,lcBdest).
+                IF ttTariff.bdest EQ "CONTS2GB_DATA_IN" THEN
+                   ttTariff.billcode = "CONTS2GB_DATA_A".
+                ELSE IF ttTariff.bdest EQ "CONTS2GB_DATA_OUT" THEN
+                   ttTariff.billcode = "CONTS2GB_DATA_B".
+             CREATE Tariff.
+             ttTariff.tariffnum = next-value(Tariff).
+             BUFFER-COPY ttTariff TO Tariff.
+             DELETE ttTariff.
+         END.
+      END.
+   END.
+
+
+END.
+
+createTariffpack("CONT24", "CONTRATOS", "CONTS2GB", liModeTariff).
 
 createCCN(1002, "Fixed to International Call", limodeCCN).
 createCCN(1081, "Fixed to National", limodeCCN).
@@ -324,6 +424,157 @@ createTariff("",1081,"CONTRATOFIXED","CONTFH50_QTY_IN",liModeTariff).
 createTariff("",1081,"CONTRATOFIXED","CONTFH50_MIN_IN",liModeTariff).
 createTariff("",1081,"CONTRATOFIXED","CONTFH300_QTY_IN",liModeTariff).
 createTariff("",1081,"CONTRATOFIXED","CONTFH300_MIN_IN",liModeTariff).
+
+
+CREATE PListConf.
+ASSIGN
+   PListConf.dfrom = ldaFrom
+   PlistConf.dto = 12/31/49
+   PListConf.prior = 20
+   PListConf.rateplan = "CONTRATOCONVS"
+   PListConf.startcharge = TRUE
+   PListConf.brand = "1"
+   PListConf.pricelist = "CONTRATOS".
+
+
+Function createBillItem RETURNS LOG ( INPUT icbase AS CHAR,
+                                      INPUT icBillcode AS CHAR,
+                                      INPUT icBiName AS CHAR,
+                                      INPUT iiAccount AS INT,
+                                      INPUT icGroup AS CHAR,
+                                      INPUT icSection AS CHAR,
+                                      INPUT icTaxClass AS CHAR,
+                                      INPUT icSAPRid AS CHAR,
+                                      INPUT ilDispMPM AS LOG,
+                                      INPUT icCostCentre AS CHAR,
+                                      INPUT iiUpdatemode AS INT):
+   IF CAN-FIND(FIRST BillItem WHERE
+                     billitem.brand EQ "1" AND
+                     billItem.billcode EQ icBillcode) THEN DO:
+      MESSAGE "Billitem already exist " + icBillCode VIEW-AS ALERT-BOX.
+      RETURN FALSE.
+   END.
+
+   FIND FIRST BillItem WHERE
+              billitem.brand EQ "1" AND
+              billItem.billcode EQ icBase NO-ERROR.
+
+   IF NOT AVAIL BillItem THEN
+      MESSAGE "Bill item termperiod find failed " + icbase VIEW-AS ALERT-BOX.
+
+   ELSE DO:
+         CREATE ttBillItem.
+         BUFFER-COPY BillItem TO ttBillItem.
+         ASSIGN
+            ttBillItem.BillCode = icBillCode
+            ttBillItem.BIName = icBiName
+            ttBillItem.accnum = iiAccount
+            ttBillItem.altaccnum = iiAccount
+            ttBillItem.euaccnum = iiAccount
+            ttBillItem.euconaccnum = iiAccount
+            ttBillItem.FSaccnum = iiAccount
+            ttBillItem.vipaccnum = iiAccount
+            ttBillItem.InvSect = icSection
+            ttBillItem.taxclass = ictaxclass
+            ttBillItem.saprid = icsaprid
+            ttBillItem.dispMPM = ildispmpm
+            ttBillItem.bigroup = icgroup
+            ttBillItem.costcentre = icCostCentre.
+
+         IF iiUpdateMode NE 0 THEN DO:
+            CREATE BillItem.
+            BUFFER-COPY ttBillItem TO BillItem.
+            DELETE ttBillItem. /*ror safety reasons*/
+         END.
+         ELSE DISP ttBillItem.
+
+   END.
+
+END.
+
+/* Mobile line inside package billing items (La Infinita) */
+createBillItem("CONT24VOICE_A", "CONTS2GBVOICE_A",
+               "Flat rate national Voice",
+               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24CF_A", "CONTS2GBCF_A",
+               "Flat rate national Voice",
+               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_B", "CONTS2GBVOICE_B",
+               "Flat rate national Voice",
+               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24CF_B", "CONTS2GBCF_B",
+               "Flat rate national Voice",
+               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+
+
+IF liModeBdest > 0 THEN DO:
+   FOR EACH bBDest WHERE
+            bBdest.desttype EQ 2 AND
+            bBDest.todate > TODAY:
+      FIND FIRST RateCCN WHERE
+                 RateCCN.brand EQ "1" AND
+                 RateCCN.bdest EQ bBdest.bdest AND
+                 RateCCN.desttype EQ bBdest.desttype AND
+                 RateCCN.ccn > 1000 NO-ERROR.
+      IF NOT AVAIL RateCCN THEN DO:
+         FIND FIRST RateCCN WHERE
+                 RateCCN.brand EQ "1" AND
+                 RateCCN.bdest EQ bBdest.bdest NO-ERROR.
+         DISP RateCCN.bdest
+              RateCCN.ccn FORMAT ">>>9".
+
+      END.
+      IF AVAIL RateCCN THEN DO:
+         BUFFER-COPY RateCCN TO ttRateCCN.
+         ttRateCCN.ccn = ttRateCCN.ccn + 1000.
+         ttRateCCN.dialtype = 1.
+         CREATE RateCCN.
+         BUFFER-COPY ttRateCCN TO RateCCN.
+      END.
+      ELSE MESSAGE "not found rateCCN" VIEW-AS ALERT-BOX.
+   END.
+
+   FOR EACH bBDest WHERE
+            bBdest.class EQ 2 AND
+            bBDest.todate > TODAY:
+      FIND FIRST RateCCN WHERE
+                 RateCCN.brand EQ "1" AND
+                 RateCCN.bdestid EQ bBdest.bdestid AND
+                 RateCCN.dialtype EQ 1 NO-ERROR.
+      IF NOT AVAIL RateCCN THEN DO:
+         FIND FIRST RateCCN WHERE
+                 RateCCN.brand EQ "1" AND
+                 RateCCN.bdestid EQ bBdest.bdestid AND
+                 RateCCN.dialtype EQ 4 NO-ERROR.
+           /*
+           DISP RateCCN.bdest
+              RateCCN.ccn FORMAT ">>>9".
+           */
+         IF AVAIL RateCCN THEN DO:
+            BUFFER-COPY RateCCN TO ttRateCCN.
+            ttRateCCN.ccn = ttRateCCN.ccn + 1000.
+            ttRateCCN.dialtype = 1.
+            CREATE RateCCN.
+            BUFFER-COPY ttRateCCN TO RateCCN.
+         END.
+      END.
+   END.
+
+END.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

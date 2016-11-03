@@ -59,6 +59,18 @@ FUNCTION fAnalBsub RETURNS LOGICAL
 
    CASE ttCall.SpoCMT:
       WHEN 81   THEN b_CallType =  4.
+      WHEN 1081 THEN b_CallType =  1.
+      WHEN 1002 THEN b_CallType =  1.
+      WHEN 1008 THEN b_CallType =  1.
+      WHEN 1063 THEN b_CallType =  1.
+      WHEN 1064 THEN b_CallType =  1.
+      WHEN 1066 THEN DO: 
+         b_CallType =  1.
+          IF       ttCall.BillDur <= 11     THEN b_callType = 20.
+          ELSE  IF ttCall.BillDur <= 70 OR
+                   ttCall.DateSt >= 10/21/9 THEN b_callType = 21.
+          ELSE                                   b_callType = 22.         
+      END.   
       WHEN 1    THEN b_CallType =  4.
       WHEN 30   THEN b_CallType =  12.
       WHEN 51   THEN b_CallType =  5.
@@ -82,7 +94,7 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       WHEN 105  THEN b_CallType =  10.
       WHEN 106  THEN b_CallType =  10.
       /* last category 22 is not needed anymore after 21.10.09 */
-      WHEN 66   THEN DO:
+      WHEN 66 THEN DO:
           IF       ttCall.BillDur <= 11     THEN b_callType = 20.
           ELSE  IF ttCall.BillDur <= 70 OR
                    ttCall.DateSt >= 10/21/9 THEN b_callType = 21.
@@ -105,6 +117,7 @@ FUNCTION fAnalBsub RETURNS LOGICAL
    CASE ttCall.SpoCMT:
    
       WHEN 2  THEN mod_bsub  = "INTERNATIONAL".
+      WHEN 1002 THEN mod_bsub  = "INTERNATIONAL".
       WHEN 3  THEN ASSIGN Mod_bsub  = "ROAMINT"   b_type = 0.
       WHEN 4  THEN ASSIGN Mod_bsub  = "ROAMLOCAL" b_type = 1.
       WHEN 7  THEN ASSIGN Mod_bsub  = "RT" b_type = 0.
