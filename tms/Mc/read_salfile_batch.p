@@ -21,7 +21,7 @@ gcBrand = "1".
 
 DEF VAR lcLine AS CHARACTER NO-UNDO.
 DEF VAR lcSepLine AS CHARACTER NO-UNDO.
-DEF VAR lcSep AS CHARACTER NO-UNDO INIT "|".
+DEF VAR lcSep AS CHARACTER NO-UNDO.
 DEF VAR lcOrigSep AS CHARACTER NO-UNDO INIT ";;".
 
 /* files and dirs */
@@ -44,6 +44,7 @@ DEF VAR lcFileType AS CHAR NO-UNDO.
 DEF VAR llLogWritten AS LOG NO-UNDO INIT FALSE.
 
 ASSIGN
+   lcSep     = chr(255)
    lcRootDir  = fCParam("MasMovil","RootDir")
    lcIncDir  = lcRootDir + "incoming/incoming/"
    lcProcDir = lcRootDir + "incoming/processed"

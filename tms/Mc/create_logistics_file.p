@@ -1538,6 +1538,29 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
    END.
+
+   IF LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN DO:
+      ASSIGN
+         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.AdditionalInfo = "Invalid order status"
+         FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+      NEXT.
+   END.
+   
+   FIND orderfusion NO-LOCK where
+        orderfusion.brand = gcBrand AND
+        orderfusion.orderid = order.orderid NO-ERROR.
+   IF AVAIL orderfusion AND
+      (orderfusion.fusionstatus EQ {&FUSION_ORDER_STATUS_PENDING_CANCELLED} OR
+       OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED})
+      THEN DO:
+      ASSIGN
+         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.AdditionalInfo = "Pending fixed line cancellation"
+         FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+      NEXT.
+   END.
+
    FIND FIRST CliType WHERE
               Clitype.brand EQ gcBrand AND
               Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
