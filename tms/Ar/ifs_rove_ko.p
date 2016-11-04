@@ -50,23 +50,24 @@ PROCEDURE pDump:
             OrderTimeStamp.RowType    = {&ORDERTIMESTAMP_CLOSE} AND
             OrderTimeStamp.TimeStamp >= ldeFrom AND
             OrderTimeStamp.TimeStamp <= ldeTo NO-LOCK,
+      FIRST OrderPayment NO-LOCK WHERE
+            OrderPayment.Brand = gcBrand AND
+            OrderPayment.OrderId = Order.OrderId AND
+            (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR
+             OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}),
       FIRST Order NO-LOCK USE-INDEX OrderId WHERE
             Order.Brand = gcBrand AND
             Order.OrderId = OrderTimeStamp.OrderId AND
             LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 AND
-            ( Order.InvNum = 0 OR
-              ( Order.PayType = FALSE AND
-                Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
-                Order.Logistics > "" AND
-                fTerminalOrder(Order.PayType, Order.Offer, Order.CrStamp) ) ) AND
             INDEX(Order.OrderChannel,"pos") = 0 AND
-            INDEX(Order.OrderChannel,"retention") = 0,
-      FIRST OrderPayment NO-LOCK WHERE
-            OrderPayment.Brand = gcBrand AND
-            OrderPayment.OrderId = Order.OrderId AND
-            (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR 
-             OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}):
-      RUN pWriteToFile.
+            INDEX(Order.OrderChannel,"retention") = 0:
+
+      IF Order.InvNum = 0 OR
+         ( Order.PayType = FALSE AND
+           Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
+           Order.Logistics > "" AND
+           fTerminalOrder(Order.PayType, Order.Offer, Order.CrStamp) )
+      THEN RUN pWriteToFile.
 
    END.
 
@@ -91,35 +92,36 @@ PROCEDURE pDumpRetention:
                 Order.Brand = gcBrand AND
                 Order.OrderId = liOrderId AND
                 LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 AND
-                ( Order.InvNum = 0 OR
-                 ( Order.PayType = FALSE AND
-                   Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
-                   Order.Logistics > "" AND
-                   fTerminalOrder(Order.PayType, Order.Offer, Order.CrStamp) ) ) AND
-                LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) = 0,
-         FIRST OrderPayment NO-LOCK WHERE
-               OrderPayment.Brand = gcBrand AND
-               OrderPayment.OrderId = Order.OrderId AND
+                LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) = 0 AND
+                INDEX(Order.OrderChannel,"retention") = 1,
+          FIRST OrderPayment NO-LOCK WHERE
+                OrderPayment.Brand = gcBrand AND
+                OrderPayment.OrderId = Order.OrderId AND
                (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR
                 OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}):
 
-         IF NOT Order.OrderChannel BEGINS "retention" THEN NEXT.
+         IF Order.InvNum = 0 OR
+            ( Order.PayType = FALSE AND
+              Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
+              Order.Logistics > "" AND
+              fTerminalOrder(Order.PayType, Order.Offer, Order.CrStamp) )
+         THEN DO:
+            /* MNP OUT must be  */
+            FOR EACH MNPSub NO-LOCK WHERE
+                     MNPSub.MsSeq = Order.MsSeq,
+               FIRST MNPProcess WHERE
+                     MNPProcess.MNPSeq = MNPSub.MNPSeq AND
+                     MNPProcess.MNPType = 2 AND
+                     MNPProcess.CreatedTS < Order.CrStamp NO-LOCK:
+               IF fOffSet(MNPProcess.PortingTime,15 * 24) > ldeNow THEN NEXT LOOP.
+            END.
 
-         /* MNP OUT must be  */
-         FOR EACH MNPSub NO-LOCK WHERE
-                  MNPSub.MsSeq = Order.MsSeq,
-            FIRST MNPProcess WHERE
-                  MNPProcess.MNPSeq = MNPSub.MNPSeq AND
-                  MNPProcess.MNPType = 2 AND
-                  MNPProcess.CreatedTS < Order.CrStamp NO-LOCK:
-            IF fOffSet(MNPProcess.PortingTime,15 * 24) > ldeNow THEN NEXT LOOP.
+            RUN pWriteToFile.
+
+            ASSIGN
+               ActionLog.ActionChar = icFile
+               ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
          END.
-         
-         RUN pWriteToFile.
-         
-         ASSIGN
-            ActionLog.ActionChar = icFile
-            ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
       END.
    END.
 
