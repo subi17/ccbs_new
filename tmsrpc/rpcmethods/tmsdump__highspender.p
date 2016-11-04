@@ -73,6 +73,7 @@ FUNCTION process_highspender_row RETURN LOGICAL
                                 phInvCust.ZipCode + " " +
                                 phInvCust.PostOffice).
     add_string(lcStruct, "cli", phHighUsage.CLI).
+    add_string(lcStruct, "subscription_type",MobSub.CLIType).
     add_string(lcStruct, "active_days", pcActiveDays).
     add_string(lcStruct, "reason", phHighUsage.Category).
     add_string(lcStruct, "user_age_group", SUBST("&1 - &2",
