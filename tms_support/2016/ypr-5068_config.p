@@ -127,3 +127,35 @@ ASSIGN
    RepText.FromDate = DATE(10,1,2016)
    RepText.ToDate = DATE(12,31,2049)
    .
+
+CREATE HdrText.
+ASSIGN
+   HdrText.te-nro = 577
+   HdrText.te-kie = 1
+   HdrText.te-text = "Recuerda que tienes <strong>#WELCOMEAMT #EURO</strong> de saldo extra como <strong>regalo de bienvenida.</strong>"
+   HdrText.Brand = "1"
+   .
+
+CREATE HdrText.
+ASSIGN
+   HdrText.te-nro = 577
+   HdrText.te-kie = 5
+   HdrText.te-text = "Remember you have <strong>#WELCOMEAMT #EURO extra sold</strong> with the <strong>welcome promo.</strong>"
+   HdrText.Brand = "1"
+   .
+
+CREATE HdrText.
+ASSIGN
+   HdrText.te-nro = 578
+   HdrText.te-kie = 1
+   HdrText.te-text = "Recuerda que tienes <strong>#WELCOMEAMT #EURO de descuento</strong> en tu primera factura como <strong>regalo de bienvenida.</strong>"
+   HdrText.Brand = "1"
+   .
+
+CREATE HdrText.
+ASSIGN
+   HdrText.te-nro = 578
+   HdrText.te-kie = 5
+   HdrText.te-text = "Remember you have <strong>#WELCOMEAMT #EURO discount</strong> on your first invoice with the <strong>welcome promo.</strong>"
+   HdrText.Brand = "1"
+   .
