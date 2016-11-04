@@ -400,9 +400,10 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    
    CASE FMItem.FFItemQty:
       WHEN 12 THEN DO:
-         /* YOT-4735 Temporarily for UNOE. Might be needed again.
+         /* YOT-4735 Temporarily fix, UNOE financing activated.
+            6666 will mean that the bank will reject it.
+            Temporary change from 6666 to 0212.
             Older change: terminal_financing_read.p TF_Q25_EXTENSION_CODES 
-            Temporary change with YOT-4735 from 0212 to 6666 
          IF lcTFBank EQ {&TF_BANK_UNOE} THEN 
             lcPayTermType[1] = "6666".  
          ELSE */
