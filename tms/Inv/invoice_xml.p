@@ -766,7 +766,7 @@ PROCEDURE pSubInvoice2XML:
             lhXML:INSERT-ATTRIBUTE("Type",ttRow.RowType).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroupID",ttRow.RowGroup).
          END.
-         IF ttRow.RowCode BEGINS "46" THEN /* Convergent uses CLI Type Name */
+         IF ttRow.RowGroup EQ "46" THEN /* Convergent uses CLI Type Name */
             lhXML:WRITE-DATA-ELEMENT("BillingItem",CAPS(ttSub.CTName)).
          ELSE
             lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
