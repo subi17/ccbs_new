@@ -234,7 +234,7 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.OrderId       = 0
       ttOneDelivery.RequestID     = "NRM"
       ttOneDelivery.ActionID      = STRING(SIM.DealerStat)
-      ttOneDelivery.ProductID     = ""
+      ttOneDelivery.ProductID     = "" 
       ttOneDelivery.ContractID    = ""
       ttOneDelivery.NIE           = AgreeCustomer.OrgId WHEN AgreeCustomer.CustIdType = "NIE"
       ttOneDelivery.NIF           = AgreeCustomer.OrgId WHEN AgreeCustomer.CustIdType = "NIF"
@@ -281,7 +281,18 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.NIF           = AgreeCustomer.AuthCustID WHEN AgreeCustomer.AuthCustIDType = "NIF"
       ttOneDelivery.PassPort      = AgreeCustomer.AuthCustID WHEN AgreeCustomer.AuthCustIDType = "PassPort".
    
-  DO i = 1 TO 8:
+   CREATE ttInvRow.
+  
+   ASSIGN
+      ttInvRow.RowNum      = ttOneDelivery.RowNum
+      ttInvRow.ProductId   = "TS00000U3"
+      ttInvRow.ProductDesc = ""
+      ttInvRow.UnitPrice   = ""
+      ttInvRow.Quantity    = ""
+      ttInvRow.Discount    = ""
+      ttInvRow.TotalPrice  = "".
+  
+  DO i = 1 TO 7:
 
       CREATE ttInvRow.
      
@@ -307,8 +318,8 @@ FUNCTION fDelivSIM RETURNS LOG
 
 END FUNCTION.
 
-INPUT  STREAM sIn  FROM "ydr_2342_input.txt".
-OUTPUT STREAM sOut TO   "ydr_2342_output.log".
+INPUT  STREAM sIn  FROM "ydr_2342_input_yoigo_test.txt".
+OUTPUT STREAM sOut TO   "ydr_2342_output_yoigo_test.log".
 
 PUT STREAM sOut UNFORMATTED
    "MSISDN;Reason"
@@ -388,7 +399,8 @@ REPEAT TRANSACTION:
       NEXT msisdn.
    END.
 
-   RUN pCreateReq.
+   RUN pCreateReq. 
+
    IF RETURN-VALUE NE "" THEN DO:
       PUT STREAM sOut UNFORMATTED
          ";" RETURN-VALUE
@@ -405,11 +417,13 @@ REPEAT TRANSACTION:
       DISP liCount.
       PAUSE 0.
    END.
+
 END.
 
 INPUT  STREAM sIn  CLOSE.
 OUTPUT STREAM sOut CLOSE.
 
+/*
 FOR EACH MSREquest NO-LOCK WHERE
          MSREquest.Brand = "1" and
          MSREquest.ReqType = 15 and
@@ -427,8 +441,11 @@ FOR EACH MSREquest NO-LOCK WHERE
    END.
 END.
 
+
 /*Logistics file*/
 RUN pLO.
+
+*/
 
 PROCEDURE pCreateReq:
 
@@ -455,7 +472,7 @@ PROCEDURE pCreateReq:
                SIM.Brand = gcBrand AND
                SIM.Stock = lcStock AND
                SIM.SimStat = {&SIM_SIMSTAT_AVAILABLE} AND
-               SIM.SimArt   = "universal_orange":
+               SIM.SimArt   = "universal":
          
             IF SIM.MsSeq > 0 THEN DO:
                FIND FIRST bOldOrder WHERE
@@ -590,5 +607,5 @@ IF VALID-HANDLE(lhField) THEN DELETE OBJECT lhField.
 IF VALID-HANDLE(lhTable) THEN DELETE OBJECT lhTable.
 
 OUTPUT STREAM sICC CLOSE.
-UNIX SILENT VALUE("mv " + lcFileName + " " + "/store/riftp/logistics/icc/outgoing/").
+/* UNIX SILENT VALUE("mv " + lcFileName + " " + "/store/riftp/logistics/icc/outgoing/"). */
 END PROCEDURE.
