@@ -205,49 +205,62 @@ CLASS HPD.HPDAckHandler:
    
    METHOD PUBLIC VOID mProcessWaitingReplog():
 
-      DEFINE VARIABLE llOK     AS LOGICAL     NO-UNDO.
+      DEFINE VARIABLE llOK              AS LOGICAL     NO-UNDO.
+      DEFINE VARIABLE liTransactionSize AS INTEGER INITIAL 5000 NO-UNDO.
+      DEFINE VARIABLE lii               AS INTEGER     NO-UNDO.
 
       llOK = lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE(lcRepLogQuery, ISO-DATE(ADD-INTERVAL(NOW, liRetryMinutes * (-1), "minutes")))).
 
       IF llOK = FALSE
       THEN RETURN ERROR NEW Progress.Lang.AppError("Query prepare failed for replog query", 1).
 
-      DO TRANSACTION ON ERROR UNDO, THROW:
+      lhRepLogQuery:QUERY-OPEN().
 
-         lhRepLogQuery:QUERY-OPEN().
+      ALLTRANSACTIONS:
+      DO WHILE TRUE ON ERROR UNDO, THROW:
 
-         DO WHILE TRUE ON ERROR UNDO, THROW:
+         lii = 0.
 
-            llOK = lhRepLogQuery:GET-NEXT(EXCLUSIVE-LOCK, NO-WAIT).
+         TRANSACTIONLOOP:
+         DO TRANSACTION ON ERROR UNDO, THROW:
 
-            IF llOK = ?
-            THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
-         
-            /* No more records, or query is not open */
-            IF NOT llOK
-            THEN LEAVE.
+            DO WHILE TRUE ON ERROR UNDO, THROW:
 
-            /* If for some reason RepLog table is locked then skip it */
-            IF lhRepLogTable:LOCKED
-            THEN NEXT.
+               lii = lii + 1.
 
-            IF lhRepLogTable::SendCount >= liMaxSendCount
-            THEN DO:
-               LOG-MANAGER:WRITE-MESSAGE("Max retries reached. ROWID=" + STRING(lhRepLogTable:ROWID), "INFO").
-               mExportReplog("max_retries_reached", "").
-               lhRepLogTable:BUFFER-DELETE().
-               NEXT.
+               IF lii >= liTransactionSize
+               THEN LEAVE TRANSACTIONLOOP.
+
+               llOK = lhRepLogQuery:GET-NEXT(EXCLUSIVE-LOCK, NO-WAIT).
+
+               IF llOK = ?
+               THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
+
+               /* No more records, or query is not open */
+               IF NOT llOK
+               THEN LEAVE ALLTRANSACTIONS.
+
+               /* If for some reason RepLog table is locked then skip it */
+               IF lhRepLogTable:LOCKED
+               THEN NEXT.
+
+               IF lhRepLogTable::SendCount >= liMaxSendCount
+               THEN DO:
+                  LOG-MANAGER:WRITE-MESSAGE("Max retries reached. ROWID=" + STRING(lhRepLogTable:ROWID), "INFO").
+                  mExportReplog("max_retries_reached", "").
+                  lhRepLogTable:BUFFER-DELETE().
+                  NEXT.
+               END.
+
+               lhRepLogTable::SendTime  = ?.
+
             END.
-
-            lhRepLogTable::SendTime  = ?.
-
          END.
-
-         FINALLY:
-            lhRepLogQuery:QUERY-CLOSE().
-         END FINALLY.
-
       END.
+
+      FINALLY:
+         lhRepLogQuery:QUERY-CLOSE().
+      END FINALLY.
 
    END METHOD.
 
