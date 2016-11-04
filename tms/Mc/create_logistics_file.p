@@ -1371,7 +1371,7 @@ FUNCTION fDelivRouter RETURNS LOG
       ttOneDelivery.OrderId       = Order.OrderId
       ttOneDelivery.RequestID     = STRING(Order.OrderId)
       ttOneDelivery.ActionID      = "1" /* Router */
-      ttOneDelivery.ProductID     = "Router001"
+      ttOneDelivery.ProductID     = "R075A67W2"
       ttOneDelivery.ContractID    = STRING(Order.ContractID)
       ttOneDelivery.NIE           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIE"
       ttOneDelivery.NIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIF"
@@ -1401,7 +1401,7 @@ FUNCTION fDelivRouter RETURNS LOG
    CREATE ttInvRow.
    ASSIGN
       ttInvRow.RowNum      = ttOneDelivery.RowNum
-      ttInvRow.ProductId   = "Router001"
+      ttInvRow.ProductId   = "R075A67W2"
       ttInvRow.Quantity    = "1"
       liLoop1              = 1.
 
@@ -1532,7 +1532,7 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
    FIND FIRST Order WHERE
               Order.brand EQ gcBrand AND
               Order.orderId EQ FusionMessage.orderId NO-ERROR.
-   IF NOT AVAIL Order OR INDEX(Order.orderchannel, "telesales") EQ 0 THEN DO:
+   IF NOT AVAIL Order OR INDEX(Order.orderchannel, "pos") > 0 THEN DO:
       ASSIGN
          FusionMessage.UpdateTS = fMakeTS()
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
@@ -1542,7 +1542,7 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
    IF LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN DO:
       ASSIGN
          FusionMessage.UpdateTS = fMakeTS()
-         FusionMessage.AdditionalInfo = "Invalid order status"
+         FusionMessage.FixedStatusDesc = "Invalid order status"
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
    END.
@@ -1556,7 +1556,7 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
       THEN DO:
       ASSIGN
          FusionMessage.UpdateTS = fMakeTS()
-         FusionMessage.AdditionalInfo = "Pending fixed line cancellation"
+         FusionMessage.FixedStatusDesc = "Pending fixed line cancellation"
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
    END.
