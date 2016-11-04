@@ -30,6 +30,12 @@ DEF VAR lcFile             AS CHAR NO-UNDO.
 DEF VAR lcLogFile          AS CHAR NO-UNDO.
 DEF VAR lcTime             AS CHAR NO-UNDO.
 
+IF NOT CAN-FIND(FIRST FusionMessage WHERE 
+         FusionMessage.source EQ "MasMovil" AND
+         FusionMessage.messagestatus EQ {&FUSIONMESSAGE_STATUS_ONGOING} AND
+         FusionMessage.messagetype EQ {&FUSIONMESSAGE_TYPE_LOGISTICS})
+   THEN RETURN.
+
 ASSIGN
        lcDate      = STRING(YEAR(TODAY),"9999") +
                       STRING(MONTH(TODAY),"99") +
@@ -110,7 +116,7 @@ FUNCTION fCreateCentreFileRow RETURNS CHAR
    /*Service code*/
    "ROUTER_ADSL"                   + lcSep +
    /*Product model*/
-   "Router001"                     + lcSep +
+   "R075A67W2"                     + lcSep +
    /*Qvantity*/
    "1"                             + lcSep +
    /*router Serial number*/
