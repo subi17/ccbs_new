@@ -52,7 +52,7 @@ PROCEDURE pDump:
             OrderTimeStamp.TimeStamp <= ldeTo NO-LOCK,
       FIRST OrderPayment NO-LOCK WHERE
             OrderPayment.Brand = gcBrand AND
-            OrderPayment.OrderId = Order.OrderId AND
+            OrderPayment.OrderId = OrderTimeStamp.OrderId AND
             (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR
              OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}),
       FIRST Order NO-LOCK USE-INDEX OrderId WHERE
