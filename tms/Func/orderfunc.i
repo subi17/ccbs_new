@@ -73,12 +73,16 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                NO-ERROR.
 
                IF AVAIL FusionMessage THEN DO:
+
                   IF FusionMessage.MessageStatus NE {&FUSIONMESSAGE_STATUS_NEW} THEN
                      llCancelFusion = TRUE.
-                  ASSIGN
-                     FusionMessage.UpdateTS = fMakeTS()
-                     FusionMessage.messageStatus = 
-                        {&FUSIONMESSAGE_STATUS_CANCELLED}.
+
+                  IF FusionMessage.MessageStatus NE {&FUSIONMESSAGE_STATUS_HANDLED} THEN
+                     ASSIGN
+                        FusionMessage.UpdateTS = fMakeTS()
+                        FusionMessage.FixedStatusDesc = "Order closed"
+                        FusionMessage.messageStatus = 
+                           {&FUSIONMESSAGE_STATUS_CANCELLED}.
                   RELEASE FusionMessage.
                END.
                

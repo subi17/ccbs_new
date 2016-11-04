@@ -789,7 +789,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.Gescal = 
             data[LOOKUP("gescal", gcCustomerStructStringFields)] 
          OrderCustomer.AddressCompl = 
-            data[LOOKUP("address_compl", gcCustomerStructStringFields)]  /* Not used after convergent project */
+            data[LOOKUP("address_compl", gcCustomerStructStringFields)] WHEN
+            data[LOOKUP("address_compl", gcCustomerStructStringFields)] > "" /* Not used after convergent project */
          OrderCustomer.Floor = 
             data[LOOKUP("floor", gcCustomerStructStringFields)]
          OrderCustomer.StreetType = 
