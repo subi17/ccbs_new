@@ -15,6 +15,7 @@
 {tmsconst.i}
 {fmakesms.i}
 {fbundle.i}
+{Mm/active_bundle.i}
 {main_add_lines.i}
 
 DEFINE INPUT PARAMETER iiReqId AS INTEGER   NO-UNDO.
@@ -100,6 +101,24 @@ IF NOT AVAIL Customer THEN DO:
    RETURN.
 END.
 
+IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_FUSION_ORDER} AND
+   MsRequest.ReqIParam2 > 0 THEN DO:
+   FIND OrderFusion NO-LOCK WHERE
+        OrderFusion.Brand = gcBrand AND
+        OrderFusion.OrderId = MsRequest.ReqIParam2 NO-ERROR.
+
+   IF NOT AVAIL OrderFusion THEN DO:
+      fReqError(SUBST("Order not found: &1", MsRequest.ReqIParam2)).
+      RETURN.
+   END.
+
+   IF NOT OrderFusion.FixedNumber > "" THEN DO:
+      fReqError("Fixed number is empty").
+      RETURN.
+   END.
+END.
+
+
 ASSIGN 
    lcBankNumber  = MSRequest.ReqCparam3 
    ldeActStamp   = MSrequest.ReqDParam1
@@ -183,7 +202,8 @@ IF NOT fReqStatus(7,"") THEN DO:
 END.
 
 /* Set new activation ts for clitype change */     
-IF MSREquest.ReqDParam1 > MSRequest.ActStamp THEN
+IF MSREquest.ReqDParam1 > MSRequest.ActStamp OR
+   MSRequest.ReqSource = {&REQUEST_SOURCE_FUSION_ORDER} THEN
      ldeActStamp = MsRequest.ReqDParam1.
 ELSE ldeActStamp = MsRequest.ActStamp.
 
@@ -308,11 +328,16 @@ FIND MsRequest WHERE
      MsRequest.Brand     = gcBrand EXCLUSIVE-LOCK NO-ERROR.
 
 /* Set new activation ts for clitype change */     
-IF MSREquest.ReqDParam1 > MSRequest.ActStamp THEN
+IF MSREquest.ReqDParam1 > MSRequest.ActStamp OR 
+   MSRequest.ReqSource = {&REQUEST_SOURCE_FUSION_ORDER} THEN
    MSRequest.ActStamp =   MSREquest.ReqDParam1 .  
 
 /* Check sub-requests */      
 IF fChkSubRequest(MSrequest.MSRequest) THEN  fReqStatus(8,"").          
+
+IF fIsConvergenceTariff(MobSub.CLIType) AND
+   NOT fIsConvergenceTariff(MSRequest.ReqCParam2) THEN
+   MsRequest.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
 
 /* YDR-1847 */
 fAdditionalLineSTC(iiReqId,

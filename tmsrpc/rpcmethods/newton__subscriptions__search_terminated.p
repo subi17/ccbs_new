@@ -10,6 +10,7 @@
            sub_count;int;total count of found subscriptions
  * @subscription seq;int;subscription ID
                  msisdn;string;MSISDN Number
+                 fixed_number;string;Fixed Line Number
                  subscription_type_id;string;subscription type (e.g. CONT2)
                  custnum;int;customer number of owner
                  name;string;full name of the owner
@@ -77,6 +78,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    sub_struct = add_json_key_struct(result_array, "").
    add_int(sub_struct   , "seq" , TermMobSub.msseq).
    add_string(sub_struct, "msisdn", TermMobSub.Cli).
+   add_string(sub_struct, "fixed_number", TermMobSub.FixedNumber).
    add_string(sub_struct, "subscription_type_id", TermMobSub.CliType).
    add_int(sub_struct, "custnum", Customer.CustNum).
    add_string(sub_struct, "name", SUBST("&1 &2 &3", Customer.FirstName,
@@ -98,7 +100,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    IF Customer.SalesMan EQ "PRE-ACT" THEN
       add_string(sub_struct, "message",
                              "MSIDSN listing is disabled for this customer"). 
-   
+
 END FUNCTION. 
 
 FUNCTION fIsViewableTermMobsub RETURNS LOGICAL
@@ -122,6 +124,11 @@ END FUNCTION.
 
 top_struct = add_struct(response_toplevel_id, "").
 result_array = add_array(top_struct, "subscriptions").
+
+/* Check if search is for MSISDN (default) or Fixed (Number begins 8 or 9) */
+IF pcSearchType EQ "msisdn" AND 
+  (pcInput BEGINS "8" OR
+   pcInput BEGINS "9") THEN pcSearchType = "fixed_number".
 
 IF pcSearchType EQ "msisdn" THEN DO:
    
@@ -154,6 +161,38 @@ IF pcSearchType EQ "msisdn" THEN DO:
    
    llSearchByMobsub = TRUE.
 END. 
+ELSE IF pcSearchType EQ "fixed_number" THEN DO:
+
+   RELEASE ttOwner.
+
+   FOR EACH termmobsub NO-LOCK WHERE
+      termmobsub.brand = gcBrand AND
+      termmobsub.FixedNumber = pcInput,
+      FIRST Customer NO-LOCK WHERE
+            Customer.Custnum = TermMobSub.Custnum:
+
+      IF NOT fIsViewableTermMobsub(TermMobSub.MsSeq) THEN NEXT.
+
+      IF piOffSet = 0 OR Customer.Salesman EQ "PRE-ACT" THEN DO:
+         fAddSubStruct().
+         liSubCount = liSubCount + 1.
+         NEXT.
+      END.
+
+      FIND FIRST ttOwner NO-LOCK where
+                 ttOwner.Custnum = termmobsub.Custnum NO-ERROR.
+      IF AVAIL ttOwner THEN NEXT.
+
+      CREATE ttOwner.
+      ASSIGN
+         ttOwner.Custnum = TermMobsub.Custnum.
+   END.
+
+   IF liSubCount = 0 AND NOT AVAIL ttOwner THEN
+       RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
+
+   llSearchByMobsub = TRUE.
+END.
 ELSE IF pcSearchType EQ "imsi" THEN DO:
    
    RELEASE ttOwner.
@@ -232,6 +271,7 @@ FOR EACH ttOwner NO-LOCK,
           Customer.custnum = TermMobSub.custnum:
      
     IF llSearchByMobsub AND (pcInput EQ TermMobSub.CLI OR
+                             pcInput EQ TermMobSub.FixedNumber OR
                              pcInput EQ TermMobSub.IMSI) THEN NEXT.
 
     IF NOT fIsViewableTermMobsub(TermMobSub.MsSeq) THEN NEXT.

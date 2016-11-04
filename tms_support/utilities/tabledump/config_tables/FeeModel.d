@@ -41,6 +41,7 @@
 "CONTDATAMF" "Contrato Datos Service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTDATAMFUPS" "IPL25 Data Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTDATATOCONTD2" "IPL 25 to IPL 35 Upgrade Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONTDSLMF" "Convergent ADSL monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTF10" "CONTRATOF 10 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTF11MF" "Contrato Flat 11 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTF20" "CONTRATOF 20 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -50,6 +51,8 @@
 "CONTF55" "CONTRATOF 55 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTF8MF" "Contrato Flat 8 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTFF2MF" "CONTRATOFF 2 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONTFH300MF" "Convergent FIBER 300MB monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONTFH50MF" "Convergent FIBER 50MB monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTM2MF" "CONTRATOM2 monthly fe" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTMMF" "CONTRATOM monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTRATO2" "Contrato2 Monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -60,6 +63,7 @@
 "CONTS21MF" "CONTRATOS 21 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTS25MF" "CONTRATOS 25 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTS26MF" "CONTRATOS 26 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONTS2GBMF" "Convergent mobile monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTS30MF" "CONTRATOS 30 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTS32MF" "CONTRATOS 32 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTS35MF" "CONTRATOS 35 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -81,6 +85,7 @@
 "DSSMF" "Data Sharing Service Bundle package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DSSMFUPS" "Data Sharing Service Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "ERROR_RECARGA" "Compensa 20euros" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"FTERMPERIOD" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "HANDSET" "Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_POSTPAID" "Change of ICC Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_PREPAID" "Change of ICC Charge Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
@@ -136,6 +141,7 @@
 "PAYTERM24_8" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM25" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERMCG1E" "Commission fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERMCGBC" "Commission fee CETELEM" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERMCGBS" "Commission fee Sabadell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PMDUBFee" "Prepaid BONO8 Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "POSMNP10" "Post paid - K800i BRONZE" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0

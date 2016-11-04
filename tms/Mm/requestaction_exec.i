@@ -9,6 +9,7 @@
 {tmsconst.i}
 {cparam2.i}
 {fbundle.i}
+{Mm/active_bundle.i}
 
 DEF TEMP-TABLE ttAction NO-UNDO
    FIELD ActionType AS CHAR
@@ -298,6 +299,7 @@ PROCEDURE pCollectRequestActions:
    FOR EACH ttAction WHERE
             ttAction.ActionType = "DCType":
 
+      CONTRACT_LOOP:
       FOR EACH bContract NO-LOCK WHERE
                bContract.Brand  = gcBrand AND
                bContract.DCType = ttAction.ActionKey:
@@ -305,11 +307,16 @@ PROCEDURE pCollectRequestActions:
                   contracts active */
    
          /* contract level rules override type level ones */
-         IF CAN-FIND(FIRST bAction WHERE
-                           bAction.ActionType = "DayCampaign" AND
-                           bAction.ActionKey  = bContract.DCEvent AND
-                           bAction.Action     = ttAction.Action)
-         THEN NEXT.
+         FOR EACH bAction WHERE
+                  bAction.ActionType = "DayCampaign" AND
+                  bAction.ActionKey  = bContract.DCEvent:
+
+            IF bAction.Action = ttAction.Action THEN NEXT CONTRACT_LOOP.
+
+            IF ttAction.Action EQ 2 AND /* terminate */
+               bAction.Action EQ 5      /* leave as it is */
+               THEN NEXT CONTRACT_LOOP.
+         END.
          
          CREATE bAction.
          ASSIGN 

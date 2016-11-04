@@ -10,7 +10,9 @@
 {commpaa.i}
 gcBrand = "1".
 {tmsconst.i}
-{fbundle.i}
+{Func/upsellcount.i}
+{Mm/active_bundle.i}
+{Mm/fbundle.i}
 
 DEF VAR lcResultArray       AS CHAR NO-UNDO. 
 DEF VAR pcStruct            AS CHAR NO-UNDO. 

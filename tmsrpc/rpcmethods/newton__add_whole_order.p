@@ -179,31 +179,37 @@
                  id_type;string;optional;NIF,NIE,CIF or Passport
  * @fusion_data  fixed_line_number_type;string;mandatory;NEW/MNP
                  fixed_line_number;string;optional;
-                 fixed_line_mnp_old_operator;string;optional;
+                 fixed_line_mnp_old_operator_name;string;optional;
+                 fixed_line_mnp_old_operator_code;string;optional;
+                 fixed_line_serial_number;string;optional;
                  fixed_line_mnp_time_of_change;string;optional;
                  fixed_line_product;string;mandatory;fusion order product code
-                 customer_type;string;optional;customer type
-                 phone_book;boolean;optional;
-                 contractid;string;mandatory
+                 customer_type;string;mandatory;customer type
+                 contractid;string;optional;
                  install_address;struct;mandatory;
-                 billing_address;struct;optional;
   @install_address fname;string;optional
                     lname;string;optional;
                     lname2;string;optional;
                     phone_number;string;optional;
-                    street;string;optional;
+                    street;string;mandatory;
                     additional_address;string;optional
                     city;string;mandatory;
                     zip;string;mandatory;
                     street_number;string;optional;
                     region;string;optional;
                     profession;string;optional;
-  @billing_address address;string;optional;
-                    additional_address;string;optional
-                    city;string;mandatory;
-                    zip;string;mandatory;
-                    street_number;string;optional;
-                    region;string;optional;
+                    email;string;optional;
+                    gescal;string;optional;
+                    address_compl;string;optional;Address Complement for floor
+                    floor;string;optional;Complement for floor
+                    street_type;string;optional;street type
+                    bis_duplicate;string;optional;bis
+                    block;string;optional;block
+                    door;string;optional;door
+                    letter;string;optional;letter
+                    stair;string;optional;stair
+                    hand;string;optional;hand
+                    km;string;optional;km
  * @q25_data   q25_extension;boolean;optional;Extension of the Quota 25
                q25_discount;double;optional;Discount amount over the Quota 25
                per_contract_id;int;mandatory;installment contract id (related to q25)
@@ -237,6 +243,7 @@ katun = "NewtonRPC".
 {edefine.i new}*/
 {order_data.i}
 {smsmessage.i}
+{orderfusion.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
@@ -309,6 +316,8 @@ DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
 DEF VAR pcIdentifiedSmsNumber AS CHAR NO-UNDO.
 DEF VAR plMultiOrder AS LOGICAL NO-UNDO.
 DEF VAR pdeShippingCostAmount AS DECIMAL INITIAL ? NO-UNDO.
+DEF VAR pcGescal AS CHAR NO-UNDO. 
+DEF VAR lcCLITypeTrans AS CHAR NO-UNDO. 
 
 /* Real Order Inspection parameters */
 DEF VAR pcROIresult      AS CHAR NO-UNDO.
@@ -346,8 +355,6 @@ DEF VAR lcOrderSMSText         AS CHAR NO-UNDO.
 DEF VAR ldeSMSStamp            AS DEC  NO-UNDO. 
 DEF VAR lcMobileNumber         AS CHAR NO-UNDO. 
    
-DEF VAR lcSMSKey AS CHAR NO-UNDO. 
-
 /* Local variables for order */
 DEF VAR liOrderId       AS INT  NO-UNDO.
 DEF VAR lcSimType       AS CHAR NO-UNDO.
@@ -377,15 +384,14 @@ DEF VAR lcId AS CHARACTER NO-UNDO.
 DEF VAR llPendingMainLineOrder AS LOG NO-UNDO. 
    
 DEF VAR pcFixedInstallAddress AS CHAR NO-UNDO. 
-DEF VAR pcFixedBillingAddress AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineNumberType AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineNumber AS CHAR NO-UNDO. 
-DEF VAR lcFixedLineMNPOldOper AS CHAR NO-UNDO. 
+DEF VAR lcFixedLineMNPOldOperName AS CHAR NO-UNDO.
+DEF VAR lcFixedLineMNPOldOperCode AS CHAR NO-UNDO.
+DEF VAR lcFixedLineSerialNbr AS CHAR NO-UNDO.
 DEF VAR lcFixedLineMNPTime AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineProduct AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineCustomerType AS CHAR NO-UNDO. 
-DEF VAR llPhoneBook AS LOG NO-UNDO. 
-DEF VAR lcFixedContractId AS CHAR NO-UNDO. 
 DEF VAR plSendOffer AS LOG NO-UNDO. 
 DEF VAR plResignationPeriod AS LOG NO-UNDO. 
 DEF VAR plPromotion AS LOG NO-UNDO.
@@ -413,6 +419,7 @@ DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
 
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
+DEF BUFFER lbMobSub FOR MobSub. 
 
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
@@ -612,7 +619,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR ldBirthDay   AS DATE NO-UNDO. 
    DEF VAR llSelfEmployed AS LOGICAL NO-UNDO. 
    DEF VAR ldFoundationDate AS DATE NO-UNDO. 
-   DEF VAR data            AS CHAR EXTENT 29 NO-UNDO.
+   DEF VAR data            AS CHAR EXTENT 40 NO-UNDO.
    DEF VAR lcIdOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR liSubLimit AS INT NO-UNDO. 
@@ -620,6 +627,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR liDelType  AS INT NO-UNDO.
    DEF VAR liActLimit AS INT NO-UNDO.
    DEF VAR liActs AS INT NO-UNDO.
+
+   DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
    data[LOOKUP("country", gcCustomerStructStringFields)] = "ES".
    data[LOOKUP("nationality", gcCustomerStructStringFields)] = "ES".
@@ -782,6 +791,29 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             data[LOOKUP("longitude", gcCustomerStructStringFields)] 
          OrderCustomer.KialaCode = 
             data[LOOKUP("kiala_code", gcCustomerStructStringFields)] 
+         OrderCustomer.Gescal = 
+            data[LOOKUP("gescal", gcCustomerStructStringFields)] 
+         OrderCustomer.AddressCompl = 
+            data[LOOKUP("address_compl", gcCustomerStructStringFields)] WHEN
+            data[LOOKUP("address_compl", gcCustomerStructStringFields)] > "" /* Not used after convergent project */
+         OrderCustomer.Floor = 
+            data[LOOKUP("floor", gcCustomerStructStringFields)]
+         OrderCustomer.StreetType = 
+            data[LOOKUP("street_type", gcCustomerStructStringFields)] 
+         OrderCustomer.BisDuplicate = 
+            data[LOOKUP("bis_duplicate", gcCustomerStructStringFields)] 
+         OrderCustomer.Block = 
+            data[LOOKUP("block", gcCustomerStructStringFields)] 
+         OrderCustomer.Door = 
+            data[LOOKUP("door", gcCustomerStructStringFields)] 
+         OrderCustomer.Letter = 
+            data[LOOKUP("letter", gcCustomerStructStringFields)] 
+         OrderCustomer.Stair = 
+            data[LOOKUP("stair", gcCustomerStructStringFields)] 
+         OrderCustomer.Hand = 
+            data[LOOKUP("hand", gcCustomerStructStringFields)] 
+         OrderCustomer.Km = 
+            data[LOOKUP("km", gcCustomerStructStringFields)] 
          OrderCustomer.SelfEmployed       = llSelfEmployed 
          OrderCustomer.FoundationDate     = ldFoundationDate
          OrderCustomer.Birthday           = ldBirthday
@@ -809,6 +841,43 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                                     OrderCustomer.AddressCompl. 
 
          IF liDelType > 0 THEN OrderCustomer.DelType = liDelType.
+   
+         /* replicate install person data from billing person data */
+         IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} THEN DO:
+      
+            FIND bOrderCustomer NO-LOCK WHERE
+                 bOrderCustomer.Brand = gcBrand AND
+                 bOrderCustomer.OrderID = liOrderId AND
+                 bOrderCustomer.RowType = 1 NO-ERROR.
+            
+            IF AVAIL bOrderCustomer THEN ASSIGN
+               OrderCustomer.FirstName = bOrderCustomer.FirstName
+                  WHEN NOT OrderCustomer.FirstName > ""
+
+               OrderCustomer.SurName1 = bOrderCustomer.Surname1
+                  WHEN NOT OrderCustomer.Surname1 > ""
+
+               OrderCustomer.SurName2 = bOrderCustomer.Surname2
+                  WHEN NOT OrderCustomer.Surname2 > ""
+
+               OrderCustomer.Email = bOrderCustomer.Email
+                  WHEN NOT OrderCustomer.Email > ""
+
+               OrderCustomer.FixedNum = bOrderCustomer.FixedNum
+                  WHEN NOT OrderCustomer.FixedNum > ""
+         
+               OrderCustomer.MobileNumber = bOrderCustomer.MobileNumber
+                  WHEN NOT OrderCustomer.MobileNumber > ""
+
+               OrderCustomer.CustID = (IF lcContactId > "" THEN
+                  lcContactId ELSE bOrderCustomer.CustID)
+                  WHEN NOT OrderCustomer.CustId > ""
+
+               OrderCustomer.CustIDType = (IF lcContactIdType > "" THEN
+                  lcContactIdType ELSE bOrderCustomer.CustIDType)
+                  WHEN NOT OrderCustomer.CustIDType > "".
+               
+         END.
    END.
 
 
@@ -876,7 +945,6 @@ FUNCTION fCheckMSISDN RETURNS CHARACTER:
    END.
    RETURN lcError.
 END.
-
 
 /* YBP-528 */
 FUNCTION fCheckSIM RETURNS CHARACTER:
@@ -1102,24 +1170,29 @@ END.
 
 FUNCTION fCreateOrderFusion RETURNS LOGICAL:
 
+   DEF VAR lcFixedLineAdslLinkState AS CHAR NO-UNDO.
+
+   IF lcFixedLineCustomerType = "ADSL" AND lcFixedLineNumberType = "MNP" 
+      THEN lcFixedLineAdslLinkState = "O".
+   ELSE    lcFixedLineAdslLinkState = "V".
+
    CREATE OrderFusion.
    ASSIGN
       OrderFusion.Brand             = gcBrand
       OrderFusion.OrderId           = liOrderId
-      OrderFusion.FusionStatus      = {&FUSION_ORDER_STATUS_NEW}
-         WHEN LOOKUP(Order.StatusCode,{&ORDER_ROI_STATUSES}) = 0 AND
-         NOT llROIClose
+      OrderFusion.FusionStatus      = {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
       OrderFusion.OrderDate         = ldaOrderDate
       OrderFusion.Salesman          = pcSalesman
       OrderFusion.FixedNumberType   = lcFixedLineNumberType
       OrderFusion.FixedNumber       = lcFixedLineNumber
       OrderFusion.Product           = lcFixedLineProduct
       OrderFusion.CustomerType      = lcFixedLineCustomerType
-      OrderFusion.FixedContractID   = lcFixedContractId
       OrderFusion.FixedMNPTime      = lcFixedLineMNPTime
-      OrderFusion.PhoneBook         = llPhoneBook
-      OrderFusion.FixedCurrOper     = lcFixedLineMNPOldOper
-      OrderFusion.UpdateTS          = fMakeTS().
+      OrderFusion.FixedCurrOper     = lcFixedLineMNPOldOperName
+      OrderFusion.UpdateTS          = fMakeTS()
+      OrderFusion.FixedCurrOperCode = lcFixedLineMNPOldOperCode
+      OrderFusion.SerialNumber      = lcFixedLineSerialNbr
+      OrderFusion.ADSLLinkState     = lcFixedLineAdslLinkState.
 
    RETURN TRUE.
 
@@ -1235,7 +1308,18 @@ gcCustomerStructFields = "birthday," +
                          "kiala_code," + 
                          "ups_hours," +
                          "retrieved," +
-                         "identified_cust_sms_number".
+                         "identified_cust_sms_number," +
+                         "gescal," + 
+                         "address_compl," + 
+                         "floor," + 
+                         "street_type," + 
+                         "bis_duplicate," + 
+                         "block," + 
+                         "door," + 
+                         "letter," + 
+                         "stair," + 
+                         "hand," + 
+                         "km".
 
 /* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
@@ -1266,7 +1350,18 @@ gcCustomerStructStringFields = "city," +
                                "longitude," +
                                "profession," + 
                                "kiala_code," +
-                               "ups_hours".
+                               "ups_hours," +
+                               "gescal," + 
+                               "address_compl," + 
+                               "floor," + 
+                               "street_type," + 
+                               "bis_duplicate," + 
+                               "block," + 
+                               "door," + 
+                               "letter," + 
+                               "stair," + 
+                               "hand," + 
+                               "km".   /* EXTENT value count 40 */
 
 /* common validation */
 /* YBP-513 */
@@ -1491,7 +1586,7 @@ IF pcROIresult = "risk" AND
 /* YBP-524 */
 /* validate MSISDN */
 lcError = fCheckMSISDN().
-IF lcError <> "" THEN appl_err(lcError).
+IF lcError <> "" THEN RETURN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-525 */
@@ -1535,7 +1630,7 @@ IF LOOKUP(pcNumberType,"renewal,stc") > 0 THEN DO:
         MobSub.CLI = pcCli NO-LOCK NO-ERROR. 
    IF NOT AVAIL MobSub THEN 
       RETURN appl_err(SUBST("Mobsub with msisdn &1 not found", pcCli)).
-   
+
    FIND Customer WHERE
         Customer.Brand = gcBrand AND
         Customer.OrgId = lcID AND
@@ -1638,7 +1733,7 @@ END.
 /* YBP-530 */
 IF pcFusionStruct > "" THEN DO:
    lcFusionStructFields = validate_request(pcFusionStruct, 
-      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid!,phone_book,fixed_line_mnp_old_operator,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!,billing_address").
+      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    ASSIGN
@@ -1647,22 +1742,43 @@ IF pcFusionStruct > "" THEN DO:
       lcFixedLineProduct      = get_string(pcFusionStruct,"fixed_line_product")
       lcFixedLineCustomerType = get_string(pcFusionStruct,"customer_type")
       pcFixedInstallAddress = get_struct(pcFusionStruct,"install_address")
-      lcFixedContractId = get_string(pcFusionStruct,"contractid")
-      llPhoneBook = get_bool(pcFusionStruct,"phone_book") WHEN
-         LOOKUP("phone_book", lcFusionStructFields) > 0
-      lcFixedLineNumber       = get_string(pcFusionStruct,"fixed_line_number")
+      lcFixedLineNumber = get_string(pcFusionStruct,"fixed_line_number")
          WHEN LOOKUP("fixed_line_number",lcFusionStructFields) > 0
-      lcFixedLineMNPOldOper   = get_string(pcFusionStruct,
-                                           "fixed_line_mnp_old_operator")
-         WHEN LOOKUP("fixed_line_mnp_old_operator",lcFusionStructFields) > 0
-      lcFixedLineMNPTime = get_string(pcFusionStruct,
-                                     "fixed_line_mnp_time_of_change")
-         WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0
-      pcFixedBillingAddress   = get_struct(pcFusionStruct,"billing_address")
-         WHEN LOOKUP("billing_address",lcFusionStructFields) > 0.
+      lcFixedLineMNPOldOperName = get_string(pcFusionStruct, "fixed_line_mnp_old_operator_name")
+         WHEN LOOKUP("fixed_line_mnp_old_operator_name",lcFusionStructFields) > 0
+      lcFixedLineMNPOldOperCode = get_string(pcFusionStruct, "fixed_line_mnp_old_operator_code")
+         WHEN LOOKUP("fixed_line_mnp_old_operator_code",lcFusionStructFields) > 0
+      lcFixedLineSerialNbr = get_string(pcFusionStruct, "fixed_line_serial_number")
+         WHEN LOOKUP("fixed_line_serial_number",lcFusionStructFields) > 0
+      lcFixedLineMNPTime = get_string(pcFusionStruct, "fixed_line_mnp_time_of_change")
+         WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0.
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
-     
+   
+   IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} AND
+      lcFixedLineNumber EQ "" THEN
+      RETURN appl_err("fixed_line_number is mandatory with fixed_line_number_type=MNP").
+   
+   IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} AND
+      lcFixedLineMNPOldOperCode EQ "" THEN
+      RETURN appl_err("fixed_line_mnp_old_operator_code is mandatory with fixed_line_number_type=MNP").
+
+   IF lcFixedLineNumber NE "" THEN DO:
+      IF AVAIL MobSub AND /* STC or renewal */
+         MobSub.FixedNumber NE ? AND /* STC convergent to convergent */
+         MobSub.FixedNumber NE  lcFixedLineNumber THEN
+         RETURN appl_err(SUBST("Mobsub with Fixed Number &1 not found", lcFixedLineNumber)).
+
+      FIND FIRST lbMobSub WHERE
+                 lbMobSub.Brand = gcBrand AND
+                 lbMobSub.FixedNumber = lcFixedLineNumber AND
+                 lbMobSub.Cli NE pcCLI NO-LOCK NO-ERROR. 
+      IF AVAIL lbMobSub THEN
+         RETURN appl_err("Subscription already exists with Fixed Number " + lcFixedLineNumber).
+      lcError = fOngoingFixedOrders(lcFixedLineNumber,lcFixedLineNumberType).
+      IF lcError <> "" THEN RETURN appl_err(lcError).
+   END.
+
    /* YBP-542 */ 
    lcError = fCreateOrderCustomer(pcFixedInstallAddress, 
                                   gcCustomerStructFields,
@@ -1671,16 +1787,6 @@ IF pcFusionStruct > "" THEN DO:
    IF lcError <> "" THEN RETURN appl_err(lcError).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
   
-   /* YBP-543 */ 
-   IF pcFixedBillingAddress > "" THEN DO:
-      fCreateOrderCustomer(pcFixedBillingAddress,
-                           gcCustomerStructFields,
-                           {&ORDERCUSTOMER_ROWTYPE_FIXED_BILLING},
-                           FALSE).
-      IF lcError <> "" THEN RETURN appl_err(lcError).
-      IF gi_xmlrpc_error NE 0 THEN RETURN.
-   END.
-
    IF NOT pcChannel BEGINS "fusion" THEN
       RETURN appl_err(SUBST("Incorrect fusion order channel &1",pcChannel)).
    
@@ -1712,7 +1818,6 @@ IF pcQ25Struct > "" THEN DO:
       
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-
 
 /* YBP-532 */
 /*********************************************************************
@@ -1770,19 +1875,13 @@ IF pcContactStruct > "" THEN
    fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, TRUE).
    
 /* YBP-553 */
+/* should be called only after rowtype=1 creation */
 IF pcFixedInstallAddress > "" THEN 
    fCreateOrderCustomer(pcFixedInstallAddress,
                         gcCustomerStructFields,
                         {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL},
                         TRUE). 
 
-/* YBP-554 */
-IF pcFixedBillingAddress > "" THEN 
-   fCreateOrderCustomer(pcFixedBillingAddress,
-                        gcCustomerStructFields,
-                        {&ORDERCUSTOMER_ROWTYPE_FIXED_BILLING},
-                        TRUE).
-                                               
 /* YBP-555 */
 /* mobsub handling */
 IF LOOKUP(pcNumberType,"renewal,stc") > 0 THEN DO:
@@ -2215,29 +2314,41 @@ END. /* IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" */
 IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
    NOT llRoiClose THEN DO:
 
-   IF pcMobSubBundleType > "" THEN lcSMSKey = "STCORDER" + pcMobSubBundleType.
-   ELSE lcSMSKey = "STCORDER" + pcSubType.
-               
    lcSTCSMSText = fGetSMSTxt(
-                     lcSMSKey,
+                     "STCORDER_CONVERGENT",
                      TODAY,
                      (IF AVAIL Customer
                       THEN Customer.Language
                       ELSE 1),
                       OUTPUT ldeSMSStamp).
-
-   IF lcSTCSMSText > "" THEN
-   fMakeSchedSMS2(Order.CustNum,
-                  Order.CLI,
-                  {&SMSTYPE_INFO},
-                  lcSTCSMSText,
-                  ldeSMSStamp,
-                  "22622",
-                  "").
+               
+   IF lcSTCSMSText > "" THEN DO:
+      
+      lcCLITypeTrans = fGetItemName(gcBrand,
+                            "CLIType",
+                            Order.CLIType,
+                           (IF AVAIL Customer
+                            THEN Customer.Language
+                            ELSE 1),
+                            TODAY).
+      
+      lcSTCSMSText = REPLACE(lcSTCSMSText,"#CLITYPE",lcCLITypeTrans).
+      
+      fMakeSchedSMS2(Order.CustNum,
+                     Order.CLI,
+                     {&SMSTYPE_INFO},
+                     lcSTCSMSText,
+                     ldeSMSStamp,
+                     "22622",
+                     "").
+   END.
 END.
 
 /* YPR-3317 */
-IF plCustdataRetr AND NOT plMultiOrder THEN DO:
+IF plCustdataRetr AND 
+   NOT plMultiOrder AND 
+   Order.OrderType NE {&ORDER_TYPE_STC} THEN DO:
+
    IF pcIdentifiedSmsNumber EQ "" THEN
       RETURN appl_err(SUBST("Identified customer SMS number missing.")).
    lcOrderSMSText = fGetSMSTxt(
@@ -2288,6 +2399,15 @@ IF plSendOffer AND NOT llROIClose THEN DO:
 
 END.
 
+IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
+
+   IF OrderFusion.FixedNumber EQ "" THEN
+      fCreateFusionReserveNumberMessage(Order.OrderID,
+                                        OUTPUT lcError).
+   ELSE
+      fCreateFusionCreateOrderMessage(Order.OrderId,
+                                      OUTPUT lcError).
+END.
       
 /* YTS-2890 */
 fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").
