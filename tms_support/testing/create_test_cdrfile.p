@@ -167,7 +167,7 @@ repeat:
    if ERROR-STATUS:ERROR THEN NEXT.
 
    /**/
-   IF (lcCDRType <> "VOICE" ) THEN DO:
+   IF (lcCDRType <> "VOICE" AND lcCDRType <> "FIXED" ) THEN DO:
        IF iiMeas NE 0 THEN DO:
           lcLine = REPLACE(lcLine, "|" + ENTRY(liCallDurPos,lcLine,"|") + 
              "|", "|" + STRING(60) + "|") NO-ERROR.

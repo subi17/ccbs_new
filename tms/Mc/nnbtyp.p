@@ -77,7 +77,7 @@ FORM
    BDest.Brand     FORMAT "x(2)"     column-LABEL "Br"
    BDest.BDest     FORMAT "x(15)" 
    BDest.BDName    FORMAT "x(35)"
-   BDest.CCN       FORMAT ">>9"      COLUMN-LABEL "CCN"
+   BDest.CCN       FORMAT ">>>9"      COLUMN-LABEL "CCN"
    lcDestType      FORMAT "x(10)"    COLUMN-LABEL "DestType"
    BDest.ToDate   
 WITH 
@@ -98,7 +98,7 @@ FORM
       help "Destination type"   
       lcDestType NO-LABEL FORMAT "X(30)" SKIP
    BDest.CCN     LABEL "Reporting CCN" COLON 20
-      FORMAT ">>9"
+      FORMAT ">>>9"
       HELP "Reporting CCN" 
       CCN.CCNName NO-LABEL SKIP
    Bdest.Class   LABEL "Class" COLON 20 

@@ -75,8 +75,8 @@ form
    LCGroupType      FORMAT "X(5)" label "Type"
    PNPGroup.PNPGroup FORMAT "X(11)"  
    PNPGroup.Name   FORMAT "X(14)"
-   PNPGroup.RateCCN COLUMN-LABEL "RateCCN"
-   PNPGroup.CCN
+   PNPGroup.RateCCN FORMAT ">>>9" COLUMN-LABEL "RateCCN"
+   PNPGroup.CCN FORMAT ">>>9"
       CCN.CCNName  FORMAT "X(10)"
    PNPGroup.dFrom
    PNPGroup.dto
@@ -93,8 +93,8 @@ form
    "Group code :" PNPGroup.PNPGroup FORMAT "X(11)"  SKIP
    "Group Type :" PNPGroup.GroupType lcGroupType    SKIP 
    "Group name :" PNPGroup.Name      FORMAT "X(40)" SKIP
-   "Rate CCN...:" PnpGroup.RateCCN                  SKIP
-   "Report CCN.:" PNPGroup.ccn 
+   "Rate CCN...:" PnpGroup.RateCCN FORMAT ">>>9"    SKIP
+   "Report CCN.:" PNPGroup.ccn FORMAT ">>>9"
       HELP "Report CCN"
       CCN.CCNName                    SKIP
    "Valid From.:" PNPGroup.dfrom     SKIP
