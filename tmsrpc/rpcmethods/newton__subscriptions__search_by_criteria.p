@@ -37,8 +37,8 @@ katun = "Newton".
 
 /* Input parameters */
 DEF VAR pcCliType      AS CHAR NO-UNDO.
-DEF VAR piSubsLimit    AS INT  NO-UNDO.
-DEF VAR piOffset       AS INT  NO-UNDO.
+DEF VAR piSubsLimit    AS INT NO-UNDO.
+DEF VAR piOffset       AS INT NO-UNDO.
 DEF VAR pcSubsBundleId AS CHAR NO-UNDO.
 DEF VAR pcDataBundleId AS CHAR NO-UNDO.
 DEF VAR pcOtherBundles AS CHAR NO-UNDO.
@@ -80,11 +80,7 @@ DEF VAR plgOrderStatus     AS LOG  NO-UNDO.
 DEF VAR plgEligibleRenewal AS LOG  NO-UNDO INIT ?.
 DEF VAR llUnpaidInv        AS LOG  NO-UNDO.
 
-/* YDA-895 */
-FUNCTION fCheckEligibleRenewal RETURNS LOGICAL () FORWARD.
-FUNCTION fCriteriaCheck        RETURNS LOGICAL () FORWARD.
-FUNCTION fCustInDebtCheck      RETURNS LOGICAL () FORWARD.
-FUNCTION fPersonIdCheck        RETURNS LOGICAL (piPersonIdType AS INT) FORWARD.
+IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct,
@@ -156,34 +152,32 @@ ASSIGN top_struct = add_struct(response_toplevel_id, "")
 liLoopBegTime = TIME.
 
 /* YDA-895 rewrite the logic */
+FUNCTION fCustInDebtCheck RETURNS LOGICAL ():
 
-IF pcCliType NE "" THEN 
-DO:
-   EACH_MOBSUB:
-   FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand   = gcBrand AND
-            Mobsub.CliType = pcCliType:
-      IF NOT fCriteriaCheck() THEN 
+   DEF VAR llDebt       AS LOGICAL   NO-UNDO. 
+   DEF VAR ldtFirstDay  AS DATE      NO-UNDO.
+
+   ldtFirstDay = DATE(MONTH(ADD-INTERVAL(TODAY,-12,"months") + 1),
+                        1,
+                 YEAR(ADD-INTERVAL(TODAY,-12,"months") + 1)).      
+   INVSEARCH_LOOP:
+   FOR EACH Invoice NO-LOCK WHERE
+            Invoice.Brand    = gcBrand            AND
+            Invoice.Custnum  = MobSub.Custnum     AND
+            Invoice.InvType  = {&INV_TYPE_NORMAL} AND 
+            Invoice.InvDate <= TODAY              AND 
+            Invoice.InvDate >= ldtFirstDay        AND
+            Invoice.DueDate  < TODAY - 2:
+      IF Invoice.PaymState NE 2            AND
+         Invoice.InvAmt     > 0            THEN 
       DO:
-         IF (liLoopEndTime - liLoopBegTime >= 30 OR
-             liNumberLimit >= piSubsLimit) THEN LEAVE EACH_MOBSUB.
-         ELSE NEXT EACH_MOBSUB.
-      END.      
+         llDebt = TRUE. /* unpaid invoice */
+         LEAVE INVSEARCH_LOOP.
+      END.
+      llDebt = FALSE. /* invoice(s) found */
    END.
-END.
-ELSE
-DO:
-   EACH_MOBSUB:
-   FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand   = gcBrand:
-      IF NOT fCriteriaCheck() THEN 
-      DO:
-         IF (liLoopEndTime - liLoopBegTime >= 30 OR
-             liNumberLimit >= piSubsLimit) THEN LEAVE EACH_MOBSUB.
-         ELSE NEXT EACH_MOBSUB.
-      END.      
-   END. /* FOR EACH MobSub NO-LOCK WHERE */
-END.
+   RETURN llDebt.
+END FUNCTION.
 
 FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
    
@@ -191,19 +185,26 @@ FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
    DEF VAR lcBarrStatus         AS CHARACTER NO-UNDO.   
    DEF VAR ldaLastTerminal      AS DATE      NO-UNDO INIT ?.
    DEF VAR llCancelledPrerenove AS LOGICAL   NO-UNDO.
-   DEF VAR llPrerenove          AS LOGICAL   NO-UNDO INIT FALSE.
-   DEF VAR liTime               AS INTEGER   NO-UNDO.
-   DEF VAR liConfigDays         AS INTEGER   NO-UNDO.
+   DEF VAR llPrerenove          AS LOGICAL NO-UNDO INIT FALSE.
+   DEF VAR liTime               AS INTEGER NO-UNDO.
+   DEF VAR liConfigDays         AS INTEGER NO-UNDO.
 
    DEF BUFFER bServiceRequest FOR MSRequest.   
    DEF BUFFER bMobSub FOR MobSub.
 
-   /* ongoing ACC or STC */
+   /* ongoing ACC */
    IF CAN-FIND
       (FIRST MsRequest WHERE
              MsRequest.MsSeq = MobSub.MsSeq AND
-            (MsRequest.ReqType = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} OR 
-             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}) AND
+             MsRequest.ReqType = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND 
+       LOOKUP(STRING(MsRequest.ReqStat),{&REQ_INACTIVE_STATUSES}) = 0) THEN      
+      RETURN NO.
+   
+   /* ongoing STC */
+   IF CAN-FIND
+      (FIRST MsRequest WHERE
+             MsRequest.MsSeq = MobSub.MsSeq AND
+             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
        LOOKUP(STRING(MsRequest.ReqStat),{&REQ_INACTIVE_STATUSES}) = 0) THEN      
       RETURN NO.
    
@@ -314,11 +315,41 @@ FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
 
 END FUNCTION.
 
+FUNCTION fPersonIdCheck RETURNS LOGICAL (INPUT liPersonIdType AS INT):
+
+   DEFINE VAR liPersonId AS LOGICAL NO-UNDO INIT YES.
+   IF liPersonIdType = 1 AND 
+      NOT CAN-FIND(FIRST Customer WHERE
+                         Customer.Brand   = gcBrand AND
+                         Customer.CustNum = MobSub.CustNum AND
+                         Customer.CustIdType <> "NIF") THEN
+      liPersonId = NO.
+   ELSE IF liPersonIdType = 2 AND
+        NOT CAN-FIND(FIRST Customer WHERE
+                           Customer.Brand   = gcBrand AND
+                           Customer.CustNum = MobSub.CustNum AND
+                           Customer.CustIdType <> "NIE") THEN
+      liPersonId = NO.
+   ELSE IF liPersonIdType = 3 AND
+        NOT CAN-FIND(FIRST Customer WHERE
+                           Customer.Brand   = gcBrand AND
+                           Customer.CustNum = MobSub.CustNum AND
+                           Customer.CustIdType <> "CIF") THEN
+      liPersonId = NO.
+   ELSE IF liPersonIdType = 4 AND
+        NOT CAN-FIND(FIRST Customer WHERE
+                           Customer.Brand   = gcBrand AND
+                           Customer.CustNum = MobSub.CustNum AND
+                           Customer.CustIdType <> "PASSPORT") THEN
+      liPersonId = NO.
+
+   RETURN liPersonId.
+END FUNCTION.
+
 FUNCTION fCriteriaCheck RETURNS LOGICAL ():   
 
    /* YDA-895 PostPaid or Prepaid */
-   IF plPayType AND NOT MobSub.PayType THEN RETURN NO. 
-   ELSE IF NOT plPayType AND MobSub.PayType THEN RETURN NO.
+   IF plPayType <> MobSub.PayType THEN RETURN NO.    
    /* YDA-895 Voice or Data  */
    IF NOT CAN-FIND(FIRST CliType WHERE 
                          CliType.Brand     = gcBrand AND
@@ -326,10 +357,9 @@ FUNCTION fCriteriaCheck RETURNS LOGICAL ():
                          CliType.UsageType = piUsageType NO-LOCK) THEN
       RETURN NO.
    /* YDA-895 ID of the customer */   
-
    IF NOT fPersonIdCheck(INPUT piPersonIdType) THEN
       RETURN NO.
-
+  
    /* If MobSub loop executes more than 30 seconds 
       then it should terminate the execution */
    IF (liLoopCount MOD 100) = 0 THEN DO:
@@ -361,9 +391,9 @@ FUNCTION fCriteriaCheck RETURNS LOGICAL ():
           IF pdtEndDate <> ? AND ldtOrderDate >= pdtEndDate THEN 
              RETURN NO.
           ELSE IF pdtStartDate <> ? AND ldtOrderDate < pdtStartDate THEN
-             RETURN NO.  /* YDA-895 to narrow down the number of results */
+             RETURN NO. /* YDA-895 to narrow down the number of results */
       END.          
-   END.   
+   END.      
    
    IF plgOrderStatus THEN DO: 
       FOR EACH Order NO-LOCK WHERE 
@@ -408,10 +438,8 @@ FUNCTION fCriteriaCheck RETURNS LOGICAL ():
    /* Eligible for renewal order YDA-895 */
    IF plgEligibleRenewal <> ? THEN 
    DO:
-      IF plgEligibleRenewal AND NOT fCheckEligibleRenewal() THEN
-         RETURN NO.
-      IF NOT plgEligibleRenewal AND fCheckEligibleRenewal() THEN
-         RETURN NO.     
+      IF plgEligibleRenewal <> fCheckEligibleRenewal() THEN
+         RETURN NO.      
    END.
 
       /* Segmentation offer */
@@ -560,9 +588,10 @@ FUNCTION fCriteriaCheck RETURNS LOGICAL ():
    /*Any Barrings Exist*/
    IF plBarring AND fGetActiveBarrings(MobSub.MsSeq) EQ "" THEN RETURN NO.
 
-   /*Unpaid Invoices OR Unpaid Terminal Fees*/
+   /*Unpaid Invoices */
    IF plDebt THEN DO:
-      IF fCustInDebtCheck() THEN
+      /* If not in debt then no need to display */
+      IF NOT fCustInDebtCheck() THEN 
          RETURN NO.
    END.
 
@@ -582,61 +611,36 @@ FUNCTION fCriteriaCheck RETURNS LOGICAL ():
    IF liNumberLimit >= piSubsLimit THEN RETURN NO.
 END FUNCTION.
 
-FUNCTION fCustInDebtCheck RETURNS LOGICAL ():
-
-   DEF VAR llDebt       AS LOGICAL   NO-UNDO. 
-   DEF VAR ldtFirstDay  AS DATE      NO-UNDO.
-
-   ldtFirstDay = DATE(MONTH(ADD-INTERVAL(TODAY,-12,"months") + 1),
-                        1,
-                 YEAR(ADD-INTERVAL(TODAY,-12,"months") + 1)).      
-   INVSEARCH_LOOP:
-   FOR EACH Invoice NO-LOCK WHERE
-            Invoice.Brand    = gcBrand            AND
-            Invoice.Custnum  = MobSub.Custnum     AND
-            Invoice.InvType  = {&INV_TYPE_NORMAL} AND 
-            Invoice.InvDate <= TODAY              AND 
-            Invoice.InvDate >= ldtFirstDay        AND
-            Invoice.DueDate  < TODAY - 2:
-      IF Invoice.PaymState NE 2            AND
-         Invoice.InvAmt     > 0            THEN 
+IF pcCliType NE "" THEN 
+DO:
+   EACH_MOBSUB:
+   FOR EACH MobSub NO-LOCK WHERE
+            MobSub.Brand   = gcBrand AND
+            Mobsub.CliType = pcCliType:
+      IF NOT fCriteriaCheck() THEN 
       DO:
-         llDebt = TRUE. /* unpaid invoice */
-         LEAVE INVSEARCH_LOOP.
-      END.
-      llDebt = FALSE. /* invoice(s) found */
+         IF (liLoopEndTime - liLoopBegTime >= 30 OR
+             liNumberLimit >= piSubsLimit) THEN LEAVE EACH_MOBSUB.
+         ELSE NEXT EACH_MOBSUB.
+      END.      
    END.
-   RETURN llDebt.
-END FUNCTION.
-
-FUNCTION fPersonIdCheck RETURNS LOGICAL 
-   (INPUT liPersonIdType AS INT):
-   IF liPersonIdType = 1 AND 
-      NOT CAN-FIND(FIRST Customer WHERE
-                         Customer.Brand   = gcBrand AND
-                         Customer.CustNum = MobSub.CustNum AND
-                         Customer.CustIdType <> "NIF") THEN
-      RETURN NO.
-   ELSE IF liPersonIdType = 2 AND
-        NOT CAN-FIND(FIRST Customer WHERE
-                           Customer.Brand   = gcBrand AND
-                           Customer.CustNum = MobSub.CustNum AND
-                           Customer.CustIdType <> "NIE") THEN
-      RETURN NO.                        
-   ELSE IF liPersonIdType = 3 AND
-        NOT CAN-FIND(FIRST Customer WHERE
-                           Customer.Brand   = gcBrand AND
-                           Customer.CustNum = MobSub.CustNum AND
-                           Customer.CustIdType <> "CIF") THEN
-      RETURN NO.
-   ELSE IF liPersonIdType = 4 AND
-        NOT CAN-FIND(FIRST Customer WHERE
-                           Customer.Brand   = gcBrand AND
-                           Customer.CustNum = MobSub.CustNum AND
-                           Customer.CustIdType <> "PASSPORT") THEN
-      RETURN NO.                         
-END FUNCTION.
+END.
+ELSE
+DO:
+   EACH_MOBSUB:
+   FOR EACH MobSub NO-LOCK WHERE
+            MobSub.Brand   = gcBrand:
+      IF NOT fCriteriaCheck() THEN 
+      DO:
+         IF (liLoopEndTime - liLoopBegTime >= 30 OR
+             liNumberLimit >= piSubsLimit) THEN LEAVE EACH_MOBSUB.
+         ELSE NEXT EACH_MOBSUB.
+      END.      
+   END. /* FOR EACH MobSub NO-LOCK WHERE */
+END.
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.
+
+
