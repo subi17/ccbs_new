@@ -67,6 +67,27 @@ Make additional fixes
    └------------------------------------------------------------------------------┘
 
 
+-Remove extra fees F1-F1-F2-F5
+   CONT24MF
+   F3 (event contains) 
+   Remove CONTDSLFH and CONTDSL related rows. Final result must be:
+   
+.B........... Items of B-Event 1/CONT24MF: Contrato 24 monthly fee ........... .
+...Price List ProdC        BI Name         From     Type    I BM SL     Price. .
+.1........... ............ ............... ........ ...... .. .. .. .......... .
+.1.CONTRATOS  CONT24MF     CONT24 package  04-03-15 Fixed   1  2 X      23.97. .
+.1.                                                                          . .
+
+   
+-Fix request actions for type 0: F7-F1-F2-F1
+F2 Request actions
+CLIType: CONTDSL58.. + CONTFH58_50 + CONTFH68_300 
+.. Action: 1 Create
+.. ActionType: Daycampaign
+.. ActionKey: CONTS2GB.. -> CONT24............
+Example:
+  663       CONTDSL58     DayCampaign        CONT24       Create      31-12-49.
+
 
 
 
