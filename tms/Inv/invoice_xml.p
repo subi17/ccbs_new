@@ -29,7 +29,7 @@ DEFINE INPUT  PARAMETER iiUpdInterval AS INT  NO-UNDO.
 /* how many were printed */         
 DEFINE OUTPUT PARAMETER oiInvCount    AS INT  NO-UNDO. 
 
-DEF VAR lcCodeVersion AS CHAR   NO-UNDO INIT "3.3".
+DEF VAR lcCodeVersion AS CHAR   NO-UNDO INIT "3.4".
 DEF VAR lcRowText     AS CHAR   NO-UNDO.
 DEF VAR lcTMSUser     AS CHAR   NO-UNDO.
 DEF VAR lcLocalFile   AS CHAR   NO-UNDO.

@@ -1122,9 +1122,10 @@ PROCEDURE pGetSubInvoiceHeaderData:
                ttRow.RowCode BEGINS "33" AND
                ttRow.RowType = "":
 
-         IF ttRow.RowBillCode EQ "TERMPERIOD" AND
-            ttRow.RowVatAmt EQ 0 THEN
-            ttSub.PenaltyAmt = ttSub.PenaltyAmt + ttRow.RowAmt.
+         IF (ttRow.RowBillCode EQ "TERMPERIOD" OR
+             ttRow.RowBillCode EQ "FTERMPERIOD") AND
+             ttRow.RowVatAmt EQ 0 THEN
+             ttSub.PenaltyAmt = ttSub.PenaltyAmt + ttRow.RowAmt.
                   
          IF NOT (ttRow.RowBillCode BEGINS "PAYTERM" OR
                  ttRow.RowBillCode BEGINS "RVTERM") THEN NEXT.
@@ -1242,7 +1243,8 @@ PROCEDURE pGetInvoiceRowData:
          /* Term Penalty amount counted in the same for each loop */
          IF InvRow.RowType = 4 AND
             InvRow.Amt NE 0 AND
-            InvRow.BillCode = "TERMPERIOD" AND
+           (InvRow.BillCode = "TERMPERIOD" OR
+            InvRow.BillCode = "FTERMPERIOD") AND
             InvRow.VatPerc = 0 THEN
             ttInvoice.PenaltyAmt = ttInvoice.PenaltyAmt + InvRow.Amt.
 
