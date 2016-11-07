@@ -545,19 +545,19 @@ FUNCTION fQ25PushNotification RETURNS LOGICAL
    IF INDEX(lcRequestId,"|") > 0 THEN 
       lcRequestId = REPLACE(lcRequestId,"|","0").
 
-   lcPushRequest = lcRequestId      + "|" +  /* 1  request_id           */
-                   "q25"            + "|" +  /* 2  message_category     */
-                   ""               + "|" +  /* 3  sms_recipient        */
-                   ""               + "|" +  /* 4  email_recipient      */
-                   icCLI            + "|" +  /* 5  push_recipient       */
-                   "q25_reminder"   + "|" +  /* 6  message_template_id  */
-                   ""               + "|" +  /* 7  message_body         */
-                   ""               + "|" +  /* 8  message_inapp_link   */
-                   ""               + "|" +  /* 9  message_type_id      */
-                   ""               + "|" +  /* 10 scheduling_policy    */
-                   ""               + "|" +  /* 11 product_id           */
-                   ""               + "|" +  /* 12 first_name           */
-                   "".                       /* 13 last_name            */
+   lcPushRequest = lcRequestId            + "|" +  /* 1  request_id           */
+                   "q25"                  + "|" +  /* 2  message_category     */
+                   ""                     + "|" +  /* 3  sms_recipient        */
+                   ""                     + "|" +  /* 4  email_recipient      */
+                   icCLI                  + "|" +  /* 5  push_recipient       */
+                   "q25/month24-message1" + "|" +  /* 6  message_template_id  */
+                   ""                     + "|" +  /* 7  message_body         */
+                   ""                     + "|" +  /* 8  message_inapp_link   */
+                   ""                     + "|" +  /* 9  message_type_id      */
+                   ""                     + "|" +  /* 10 scheduling_policy    */
+                   ""                     + "|" +  /* 11 product_id           */
+                   ""                     + "|" +  /* 12 first_name           */
+                   "".                             /* 13 last_name            */
 
     OUTPUT STREAM Push TO VALUE(lcQ25PushFile) APPEND.
     PUT STREAM Push UNFORMATTED lcPushRequest SKIP.
