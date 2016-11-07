@@ -884,7 +884,8 @@ DO TRANS:
 
       IF (liCCN = 69  OR liCCN = 1069) AND ttCall.BillDur > 11 THEN DO:
          IF CAN-FIND(FIRST ttDuration WHERE 
-                           ttDuration.CallCase = "61" AND
+                           ttDuration.CallCase = STRING(liCCN - 8) AND
+                                                 /* "61" or "1061" */
                            ttDuration.BDest    = ttCall.BDest AND
                            ttDuration.FromDate <= ttCall.DateSt) THEN 
             IF liCCN EQ 69 THEN liCCN = 61.

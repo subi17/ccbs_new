@@ -247,3 +247,16 @@ createBillItem("CONT24CF_B", "CONTS2GBCF_B",
                "Flat rate national Voice",
                70510100,"1","1","1","003",FALSE,"SL",liModeBI).
 
+CREATE RatePref.
+ASSIGN
+   RatePref.dialtype = 23
+   RatePref.brand = "1"
+   RatePref.prefix = "MOB"
+   RatePref.Ratepref = "".
+
+CREATE RatePref.
+ASSIGN
+   RatePref.dialtype = 24
+   RatePref.brand = "1"
+   RatePref.prefix = "MOB"
+   RatePref.Ratepref = "".
