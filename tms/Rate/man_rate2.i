@@ -323,7 +323,7 @@
 
       IF ttCall.Spocmt = 66 OR
          ttCall.Spocmt = 1066 THEN DO:
-        
+         DEF VAR liTempDialType AS INT NO-UNDO. 
          liccn = 0.
          IF ttCall.Spocmt = 66 THEN liTempDialType = 4.
          ELSE liTempDialType = 1.
