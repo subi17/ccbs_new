@@ -1274,7 +1274,7 @@ PROCEDURE pLimitAction:
 
    /* YPR-5231 */
    IF AVAIL MobSub AND 
-            MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} THEN RETURN.
+            MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} THEN RETURN "".
 
    IF NOT AVAILABLE MobSub THEN liRequest = -1.
    ELSE
