@@ -143,7 +143,7 @@ form
     "BillCode ..........:" BillCode format "x(16)"
         BillItem.BIName  AT 39 SKIP
     "VAT ...............:" FixedFee.VATIncl  skip
-    "Amount ............:" FixedFee.Amt  format "->,>>>,>>9.99"  
+    "Amount ............:" FixedFee.Amt  format "->,>>>,>>9.999"  
        "Included amount .:" AT 39 FixedFee.InclAmt  SKIP
     "Our own cost ......:" FixedFee.OwnCost format "->,>>>,>>9.99"     
        "Unit of incl.amt :" AT 39 FixedFee.InclUnit 

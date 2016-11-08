@@ -92,7 +92,7 @@ form
     ttDSSInfo.BundleLimitinMB  FORMAT ">>>>>>9" LABEL "Limit(MB)"
     ttDSSInfo.SubsUsage                       LABEL "Usage(MB)"
     ttDSSInfo.DataAllocated LABEL "Alloc.(MB)" 
-    ttDSSInfo.BundleFee  FORMAT ">>9.99" LABEL "B.Fee"
+    ttDSSInfo.BundleFee  FORMAT ">>9.999" LABEL "B.Fee"
     ttDSSInfo.Priority      FORMAT ">>9"  LABEL "Pr."
     ttDSSInfo.BundleFeeCalc FORMAT "Yes/No" LABEL "PMF" 
 WITH ROW FrmRow width 78 centered OVERLAY FrmDown  DOWN

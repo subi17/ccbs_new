@@ -59,11 +59,11 @@ REPEAT ON ENDKEY UNDO, RETURN:
              HELP "Fees with these billing items"
              SKIP
           ldOldAmt    
-             FORMAT "->>>>>>9.99" 
+             FORMAT "->>>>>>9.999" 
              LABEL  "Old Amount" 
              HELP   "Amount that is replaced" SKIP
           ldNewAmt    
-             FORMAT "->>>>>>9.99" 
+             FORMAT "->>>>>>9.999" 
              LABEL  "New Amount"
              HELP   "New amount" SKIP
           ldtFromDate

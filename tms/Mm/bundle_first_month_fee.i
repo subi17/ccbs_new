@@ -22,7 +22,7 @@ FUNCTION fCalculateProportionalFee RETURNS DEC
       idUsage = idUsage / (1024 * 1024).
    
    IF idLimit > 0 THEN 
-      RETURN ROUND(MIN(1,idUsage / idLimit) * idBaseAmount,2).
+      RETURN ROUND(MIN(1,idUsage / idLimit) * idBaseAmount,3).
    ELSE RETURN idBaseAmount.
     
 END FUNCTION.
