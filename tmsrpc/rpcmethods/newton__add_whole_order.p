@@ -1392,9 +1392,6 @@ IF lcOrderStruct EQ ? THEN RETURN.
 fGetOrderFields().
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF fDuplicateOrderChk(pcCLI, pcContractId, pdePriceSelTime) THEN
-   RETURN appl_err(SUBST("Duplicate order exist with same contract id: &1 and msisdn: &2", pcContractId, pcCLI)).
-
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
 

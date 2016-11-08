@@ -185,6 +185,28 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    RETURN TRUE.
 END.
 
+FUNCTION fDuplicateOrderChk RETURNS LOGICAL
+(pcCli AS CHAR):
+
+   DEF BUFFER OrderChk FOR Order.
+
+   DEF VAR ldeStartTime AS DEC  NO-UNDO.
+   DEF VAR ldeEndTime   AS DEC  NO-UNDO.
+
+   ASSIGN ldeStartTime = fMake2Dt(TODAY, 0)
+          ldeEndTime   = fMake2Dt(TODAY, 86399).
+
+   IF CAN-FIND(FIRST OrderChk WHERE
+                     OrderChk.Brand      = gcBrand      AND
+                     OrderChk.CLI        = pcCLI        AND
+                     OrderChk.CrStamp   >= ldeStartTime AND
+                     OrderChk.CrStamp   <= ldeEndTime)  THEN
+      RETURN TRUE.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 FUNCTION fOngoingOrders RETURNS LOGICAL
 (pcCli AS CHAR,
  pcNumberType AS CHAR):
@@ -210,6 +232,9 @@ FUNCTION fOngoingOrders RETURNS LOGICAL
 
       RETURN TRUE.
    END.
+   
+   IF pcNumberType EQ "renewal" AND fDuplicateOrderChk(pcCLI) THEN
+      RETURN TRUE.
 
    RETURN FALSE.
 
@@ -248,33 +273,5 @@ FUNCTION fIsPreactivatedCustomer RETURNS LOGICAL
 (iiCustnum AS INTEGER):
    RETURN (LOOKUP(STRING(iiCustnum), "233718,239696,239680,239666") > 0).
 END FUNCTION. 
-
-FUNCTION fDuplicateOrderChk RETURNS LOGICAL
-(pcCli           AS CHAR,
- pcContractId    AS CHAR,
- pdePriceSelTime AS DEC):
-   
-   DEF BUFFER OrderChk FOR Order.
-   
-   DEF VAR ldeStartTime AS DEC  NO-UNDO.
-   DEF VAR ldeEndTime   AS DEC  NO-UNDO.
-   DEF VAR ldaOrderDate AS DATE NO-UNDO.
-   
-   fTS2Date(pdePriceSelTime, OUTPUT ldaOrderDate).
-   
-   ASSIGN ldeStartTime = fMake2Dt(ldaOrderDate, 0)
-          ldeEndTime   = fMake2Dt(ldaOrderDate, 86399).
-   
-   IF CAN-FIND(FIRST OrderChk WHERE
-                     OrderChk.Brand      = gcBrand      AND
-                     OrderChk.ContractID = pcContractID AND
-                     OrderChk.CLI        = pcCLI        AND
-                     OrderChk.CrStamp   >= ldeStartTime AND
-                     OrderChk.CrStamp   <= ldeEndTime)  THEN
-      RETURN TRUE.
-   
-   RETURN FALSE.
-
-END FUNCTION.
 
 &ENDIF
