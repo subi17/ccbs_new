@@ -109,7 +109,7 @@ ASSIGN
    pcBlackBerry   = get_string(pcStruct, "serv_code")
       WHEN LOOKUP("serv_code", lcStruct) > 0
    pdtEndDate     = get_date(pcStruct, "order_end_date")
-      WHEN LOOKUP("order_date", lcStruct) > 0
+      WHEN LOOKUP("order_end_date", lcStruct) > 0
    plgOrderStatus = get_bool(pcStruct, "order_status")
       WHEN LOOKUP("order_status", lcStruct) > 0
    pcOrderType    = get_string(pcStruct, "order_type")
@@ -125,11 +125,11 @@ ASSIGN
    plDebt         = get_bool(pcStruct,"debt")
       WHEN LOOKUP("debt", lcStruct) > 0
    plPayType      = get_bool(pcStruct,"pay_type") 
-      WHEN LOOKUP("paytype", lcStruct) > 0
+      WHEN LOOKUP("pay_type", lcStruct) > 0
    piUsageType    = get_int(pcStruct,"usage_type") 
-      WHEN LOOKUP("usagetype", lcStruct) > 0
+      WHEN LOOKUP("usage_type", lcStruct) > 0
    pdtStartDate   = get_date(pcStruct, "order_start_date")
-      WHEN LOOKUP("order_first_date", lcStruct) > 0
+      WHEN LOOKUP("order_start_date", lcStruct) > 0
    piPersonIdType = get_int(pcStruct, "person_id_type")
       WHEN LOOKUP("person_id_type", lcStruct) > 0. 
     /* Paytype, usagetype, startdate and personidtype YDA-895 */
@@ -357,7 +357,7 @@ FUNCTION fCriteriaCheck RETURNS LOGICAL ():
                          CliType.UsageType = piUsageType NO-LOCK) THEN
       RETURN NO.
    /* YDA-895 ID of the customer */   
-   IF NOT fPersonIdCheck(INPUT piPersonIdType) THEN
+   IF piPersonIdType > 0 AND NOT fPersonIdCheck(INPUT piPersonIdType) THEN
       RETURN NO.
   
    /* If MobSub loop executes more than 30 seconds 
