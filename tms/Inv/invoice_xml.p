@@ -29,7 +29,7 @@ DEFINE INPUT  PARAMETER iiUpdInterval AS INT  NO-UNDO.
 /* how many were printed */         
 DEFINE OUTPUT PARAMETER oiInvCount    AS INT  NO-UNDO. 
 
-DEF VAR lcCodeVersion AS CHAR   NO-UNDO INIT "3.3".
+DEF VAR lcCodeVersion AS CHAR   NO-UNDO INIT "3.4".
 DEF VAR lcRowText     AS CHAR   NO-UNDO.
 DEF VAR lcTMSUser     AS CHAR   NO-UNDO.
 DEF VAR lcLocalFile   AS CHAR   NO-UNDO.
@@ -766,7 +766,8 @@ PROCEDURE pSubInvoice2XML:
             lhXML:INSERT-ATTRIBUTE("Type",ttRow.RowType).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroupID",ttRow.RowGroup).
          END.
-         IF ttRow.RowGroup EQ "46" THEN /* Convergent uses CLI Type Name */
+         IF ttRow.RowType > "" AND
+            ttRow.RowGroup EQ "46" THEN /* Convergent uses CLI Type Name */
             lhXML:WRITE-DATA-ELEMENT("BillingItem",CAPS(ttSub.CTName)).
          ELSE
             lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
