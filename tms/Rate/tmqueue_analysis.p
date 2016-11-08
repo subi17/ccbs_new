@@ -1271,6 +1271,11 @@ PROCEDURE pLimitAction:
 
    /* subscription already terminated -> no action needed */
    FIND MobSub WHERE MobSub.MsSeq = TMQueue.MsSeq NO-LOCK NO-ERROR.
+
+   /* YPR-5231 */
+   IF AVAIL MobSub AND 
+            MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} THEN RETURN.
+
    IF NOT AVAILABLE MobSub THEN liRequest = -1.
    ELSE
    CASE ttLimits.Action:
