@@ -127,7 +127,7 @@ FOR EACH TermReturn NO-LOCK WHERE
                        SingleFee.KeyValue    = STRING(Order.MsSeq) AND
                        SingleFee.OrderId     = Order.OrderId AND
                        SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
-                  IF AVAIL SingleFee THEN lcValue = STRING(SingleFee.Amt).
+                  IF AVAIL SingleFee THEN lcValue = STRING(ROUND(SingleFee.Amt,2)).
                   ELSE lcValue = "".
                END.
                ELSE lcValue = "".

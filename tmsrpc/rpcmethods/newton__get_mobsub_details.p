@@ -338,6 +338,8 @@ IF NOT MobSub.PayType THEN DO:
          ldeFinalAmt = ldeFinalAmt + SingleFee.Amt.
       END.
 
+      ldeFinalAmt = ROUND(ldeFinalAmt,2).
+
       add_double(payterm_struct,"final_fee", ldeFinalAmt).
    END.
 

@@ -562,6 +562,8 @@ IF AVAILABLE Limit THEN DO:
 
    END.
 
+   ldePendingFees = ROUND(ldePendingFees,2).
+
    add_double(top_struct, "allowed_terminal_financing_amount", 
              (Limit.LimitAmt - ldePendingFees)).
 END.

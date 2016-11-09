@@ -51,7 +51,7 @@ FOR EACH SingleFee  NO-LOCK WHERE
 
     lcFeeStruct = add_struct(resp_array,"").
     add_string(lcFeeStruct,"billing_item_id",SingleFee.BillCode).
-    add_double(lcFeeStruct,"amount",SingleFee.Amt).
+    add_double(lcFeeStruct,"amount",ROUND(SingleFee.Amt,2)).
     add_int(lcFeeStruct,"period",SingleFee.BillPeriod).
     add_int(lcFeeStruct,"billed_on_invoice",SingleFee.InvNum).
    

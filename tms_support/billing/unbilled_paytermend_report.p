@@ -74,7 +74,7 @@ PROCEDURE pReport:
                       string(msowner.msseq)   ";"
                       msowner.cli             ";"
                       singlefee.billcode      ";"
-                      string(singlefee.amt)   skip.
+                      string(round(singlefee.amt,2))   skip.
    end. /* for each singlefee where */
 
 

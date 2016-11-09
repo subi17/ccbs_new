@@ -471,7 +471,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       NEXT ORDER_LOOP.
    END.
 
-   ldeTotalAmount = ROUND(ldeFFItemAmount,2).
+   ldeTotalAmount = ROUND(ldeFFItemAmount,3).
 
    IF LENGTH(ttOrderCustomer.BankCode) EQ 24 THEN 
       lcBankCode = SUBSTRING(ttOrderCustomer.BankCode,5).
@@ -573,9 +573,9 @@ PROCEDURE pPrintLine:
    DEF VAR lcRVPerc AS CHAR NO-UNDO. 
       
    ASSIGN
-      lcTotalAmount = REPLACE(REPLACE(TRIM(STRING(ideTotalAmount,"->>>>>>9.99")),",",""),".","")
-      lcRVAmt       = REPLACE(REPLACE(TRIM(STRING(ldeRVAmt,"->>>>>9.99")),",",""),".","")
-      lcRVPerc      = REPLACE(REPLACE(TRIM(STRING(ldeRVPerc,"->>>9.99")),",",""),".","").
+      lcTotalAmount = REPLACE(REPLACE(TRIM(STRING(ideTotalAmount,"->>>>>>9.999")),",",""),".","")
+      lcRVAmt       = REPLACE(REPLACE(TRIM(STRING(ldeRVAmt,"->>>>>9.999")),",",""),".","")
+      lcRVPerc      = REPLACE(REPLACE(TRIM(STRING(ldeRVPerc,"->>>9.999")),",",""),".","").
    
    PUT STREAM sout 
    /*NVENDCAPCTA*/   " " FORMAT "X(8)"
