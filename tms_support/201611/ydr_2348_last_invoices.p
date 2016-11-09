@@ -16,6 +16,8 @@ DEF VAR ldStartTime  AS DEC  NO-UNDO.
 DEF VAR ldEndTime    AS DEC  NO-UNDO.
 DEF VAR ldaStartDate AS DATE NO-UNDO. 
 DEF VAR ldaEndDate   AS DATE NO-UNDO. 
+DEF VAR ldaActDate   AS DATE NO-UNDO.
+DEF VAR liActTime    AS INT  NO-UNDO. 
 
 ASSIGN
    ldaStartDate = DATE(MONTH(TODAY), 1, YEAR(TODAY))
@@ -42,7 +44,7 @@ FOR EACH MsRequest NO-LOCK WHERE
          MsRequest.ActStamp <= ldEndTime:
 
    IF CAN-FIND(FIRST MobSub NO-LOCK WHERE
-                     MobSub.Brand = "1"           AND
+                     MobSub.Brand = "1"              AND
                      MobSub.MsSeq = MsRequest.MsSeq) THEN NEXT.
 
    FIND FIRST TermMobSub NO-LOCK WHERE
@@ -56,13 +58,16 @@ FOR EACH MsRequest NO-LOCK WHERE
                         MobSub.MsSeq   <> TermMobSub.MsSeq    AND
                         MobSub.PayType  = NO)                 THEN NEXT.
 
+      fSplitTS(MsRequest.ActStamp,
+               OUTPUT ldaActDate,
+               OUTPUT liActTime).
+
       FOR EACH EventLog NO-LOCK WHERE
                EventLog.UserCode  = "TermSub"                  AND
                EventLog.TableName = "Customer"                 AND
                EventLog.Key       = STRING(TermMobSub.CustNum) AND
                EventLog.Action    = "Modify"                   AND
-               EventLog.EventDate >= ldaStartDate              AND
-               Eventlog.EventDate <= ldaEndDate                AND
+               EventLog.EventDate >= ldaActDate                AND
                EventLog.EventTime <> ""                        AND
                LOOKUP("DelType",EventLog.Datavalues,CHR(255)) > 0:
 
@@ -107,7 +112,8 @@ FOR EACH ttCust:
    FIND FIRST Invoice NO-LOCK WHERE
               Invoice.Brand     = "1"            AND
               Invoice.CustNum   = ttCust.CustNum AND
-              Invoice.InvDate   = ldaStartDate   AND
+              Invoice.InvDate  >= ldaStartDate   AND
+              Invoice.InvDate  <= ldaEndDate     AND
               Invoice.ChgStamp <= ttCust.EndTS   NO-ERROR.
    IF AVAIL Invoice THEN DO:
       IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
