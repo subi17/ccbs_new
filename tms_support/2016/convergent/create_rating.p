@@ -161,9 +161,10 @@ FUNCTION createTariffpack RETURNS LOG (INPUT lcBase AS CHAR,
                 ttTariff.bdest = REPLACE(ttTariff.bdest,lcBase,lcBdest).
                 ttTariff.billcode = REPLACE(ttTariff.billcode,lcBase,lcBdest).
                 IF ttTariff.bdest EQ "CONTS2GB_DATA_IN" THEN
-                   ttTariff.billcode = "CONTS2GB_DATA_A".
+                   ttTariff.billcode = "CONTS2GB_DATA".
                 ELSE IF ttTariff.bdest EQ "CONTS2GB_DATA_OUT" THEN
-                   ttTariff.billcode = "CONTS2GB_DATA_B".
+                   /*ttTariff.billcode = "CONTS2GB_DATA_B".*/
+                   RETURN TRUE.
              CREATE Tariff.
              ttTariff.tariffnum = next-value(Tariff).
              BUFFER-COPY ttTariff TO Tariff.
@@ -236,27 +237,83 @@ END.
 /* Mobile line inside package billing items (La Infinita) */
 createBillItem("CONT24VOICE_A", "CONTS2GBVOICE_A",
                "Flat rate national Voice",
-               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+               70510100,"1","1","1","022",FALSE,"SL",liModeBI).
 createBillItem("CONT24CF_A", "CONTS2GBCF_A",
-               "Flat rate national Voice",
-               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+               "Flat rate call forwarding",
+               70510100,"1","1","1","022",FALSE,"SL",liModeBI).
 createBillItem("CONT24VOICE_B", "CONTS2GBVOICE_B",
                "Flat rate national Voice",
-               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+               70510100,"1","1","1","022",FALSE,"SL",liModeBI).
 createBillItem("CONT24CF_B", "CONTS2GBCF_B",
-               "Flat rate national Voice",
-               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+               "Flat rate call forwarding",
+               70510100,"1","1","1","022",FALSE,"SL",liModeBI).
+createBillItem("CONTDATA24", "CONTS2GB_DATA",
+               "Cont S national GPRS",
+               70514100,"3","1","1","022",FALSE,"SL",liModeBI).
 
-CREATE RatePref.
-ASSIGN
-   RatePref.dialtype = 23
-   RatePref.brand = "1"
-   RatePref.prefix = "MOB"
-   RatePref.Ratepref = "".
+FIND FIRST RatePref WHERE
+           RatePref.dialtype = 23 AND
+           RatePref.prefix = "MOB" NO-ERROR.
+IF NOT AVAIL RatePref THEN DO:           
+   CREATE RatePref.
+   ASSIGN
+      RatePref.dialtype = 23
+      RatePref.brand = "1"
+      RatePref.prefix = "MOB"
+      RatePref.Ratepref = "".
 
-CREATE RatePref.
-ASSIGN
-   RatePref.dialtype = 24
-   RatePref.brand = "1"
-   RatePref.prefix = "MOB"
-   RatePref.Ratepref = "".
+   CREATE RatePref.
+   ASSIGN
+      RatePref.dialtype = 24
+      RatePref.brand = "1"
+      RatePref.prefix = "MOB"
+      RatePref.Ratepref = "".
+END.
+
+FUNCTION fCreateTrans RETURNS LOG (INPUT icCode AS CHAR,
+                                   INPUT iiLang AS INT,
+                                   INPUT icText AS CHAR):
+   FIND FIRST RepText WHERE
+              Reptext.brand EQ "1" AND
+              Reptext.texttype EQ 1 AND
+              Reptext.linkcode EQ icCode AND
+              Reptext.language EQ iiLang NO-ERROR.
+
+      IF NOT AVAIL RepText THEN DO:
+         CREATE RepText.
+         ASSIGN
+            RepText.Brand    = "1"
+            RepText.TextType = 1               /* Default value */
+            RepText.LinkCode = icCode
+            RepText.Language = iiLang
+            RepText.FromDate = TODAY
+            RepText.ToDate   = 12/31/49
+            RepText.RepText  = icText  NO-ERROR.
+       END.
+   RETURN TRUE.
+END.
+
+fcreateTrans("CONTS2GBVOICE_A",1,"Nacionales").
+fcreateTrans("CONTS2GBVOICE_A",2,"Nacionals").
+fcreateTrans("CONTS2GBVOICE_A",3,"Nazionalak").
+fcreateTrans("CONTS2GBVOICE_A",5,"National").
+
+fcreateTrans("CONTS2GBVOICE_B",1,"Nacionales").
+fcreateTrans("CONTS2GBVOICE_B",2,"Nacionals").
+fcreateTrans("CONTS2GBVOICE_B",3,"Nazionalak").
+fcreateTrans("CONTS2GBVOICE_B",5,"National").
+
+fcreateTrans("CONTS2GBCF_A",1,"Desvío de Llamadas").
+fcreateTrans("CONTS2GBCF_A",2,"Desviament de Trucades").
+fcreateTrans("CONTS2GBCF_A",3,"Dei-desbideraketa").
+fcreateTrans("CONTS2GBCF_A",5,"Call forwarding").
+
+fcreateTrans("CONTS2GBCF_B",1,"Desvío de Llamadas").
+fcreateTrans("CONTS2GBCF_B",2,"Desviament de Trucades").
+fcreateTrans("CONTS2GBCF_B",3,"Dei-desbideraketa").
+fcreateTrans("CONTS2GBCF_B",5,"Call forwarding").
+
+fcreateTrans("CONTS2GB_DATA",1,"Internet").
+fcreateTrans("CONTS2GB_DATA",2,"Internet").
+fcreateTrans("CONTS2GB_DATA",3,"Internet").
+fcreateTrans("CONTS2GB_DATA",5,"Internet").
