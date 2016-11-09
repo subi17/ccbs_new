@@ -185,21 +185,22 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    RETURN TRUE.
 END.
 
+/*Function used to check renewal order is available in the last 6 months, then it will be a duplicate one*/
 FUNCTION fDuplicateOrderChk RETURNS LOGICAL
 (pcCli AS CHAR):
 
    DEF BUFFER ChkOrder FOR Order.
 
    DEF VAR ldeStartTime AS DEC  NO-UNDO.
-   DEF VAR ldeEndTime   AS DEC  NO-UNDO.
 
    ASSIGN ldeStartTime = fMake2Dt(ADD-INTERVAL(TODAY, -6, "months") + 1, 0).
 
    IF CAN-FIND(FIRST ChkOrder WHERE
-                     ChkOrder.Brand      = gcBrand                AND
-                     ChkOrder.CLI        = pcCLI                  AND
-                     ChkOrder.CrStamp   >= ldeStartTime           AND
-                     ChkOrder.OrderType  = {&ORDER_TYPE_RENEWAL}) THEN
+                     ChkOrder.Brand      = gcBrand                    AND
+                     ChkOrder.CLI        = pcCLI                      AND
+                     ChkOrder.CrStamp   >= ldeStartTime               AND
+                     ChkOrder.OrderType  = {&ORDER_TYPE_RENEWAL}      AND
+                     ChkOrder.StatusCode = {&ORDER_STATUS_DELIVERED}) THEN
       RETURN TRUE.
 
    RETURN FALSE.
