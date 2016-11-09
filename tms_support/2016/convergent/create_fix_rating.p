@@ -1,5 +1,5 @@
 {commpaa.i}
-DEF VAR ldaFrom AS DATE INIT 10/27/16.
+DEF VAR ldaFrom AS DATE INIT 11/10/16.
 DEF VAR liMode AS INT INIT 1.
 DEF VAR liMode_ra AS INT INIT 1.
 DEF VAR liModeBI AS INT INIT 1.
@@ -186,32 +186,6 @@ FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       ttSLGAnalyse.clitype = icCliType.
       IF  ttSLGAnalyse.servicelimitgroup EQ icBaseDCEvent THEN
          ttSLGAnalyse.servicelimitgroup = icclitype.
-      IF iiUpdateMode NE 0 THEN DO:
-         CREATE SLGAnalyse.
-         BUFFER-COPY ttSLGAnalyse TO SLGAnalyse.
-         DELETE ttSLGAnalyse. /*ror safety reasons*/
-      END.
-      ELSE DISP ttSLGAnalyse.
-   END.
-END.
-
-FUNCTION fcreateMobSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
-                                                INPUT icDCEvent AS CHAR,
-                                                INPUT idaVAlidFrom AS DATE,
-                                                INPUT icclitype AS CHAR,
-                                                INPUT iiUpdateMode AS INT):
-   FOR EACH bSLGAnalyse WHERE
-            bSLGAnalyse.brand EQ "1" AND
-            bSLGAnalyse.clitype EQ icBaseDCEvent AND
-            bSLGAnalyse.validto > TODAY.
-
-      IF bSLGAnalyse.servicelimitgroup NE icBaseDCEvent THEN NEXT. 
-
-      CREATE ttSLGAnalyse.
-      BUFFER-COPY bSLGAnalyse TO ttSLGAnalyse.
-      ttSLGAnalyse.ValidFrom = ldaFrom.
-      ttSLGAnalyse.clitype = icCliType.
-      ttSLGAnalyse.servicelimitgroup = icDCEvent.
       IF iiUpdateMode NE 0 THEN DO:
          CREATE SLGAnalyse.
          BUFFER-COPY ttSLGAnalyse TO SLGAnalyse.
@@ -572,3 +546,28 @@ IF liModeBdest > 0 THEN DO:
 
 END.
 
+FIND FIRST RatePref WHERE
+           RatePref.dialtype = 23 AND
+           RatePref.prefix = "MOB" NO-ERROR.
+IF NOT AVAIL RatePref THEN DO:
+   CREATE RatePref.
+   ASSIGN
+      RatePref.dialtype = 23
+      RatePref.brand = "1"
+      RatePref.prefix = "MOB"
+      RatePref.Ratepref = "".
+
+   CREATE RatePref.
+   ASSIGN
+      RatePref.dialtype = 24
+      RatePref.brand = "1"
+      RatePref.prefix = "MOB"
+      RatePref.Ratepref = "".
+
+   CREATE RatePref.
+   ASSIGN
+      RatePref.dialtype = 50
+      RatePref.brand = "1"
+      RatePref.prefix = "MOB"
+      RatePref.Ratepref = "".
+END.

@@ -1,5 +1,5 @@
 {commpaa.i}
-DEF VAR ldaFrom AS DATE INIT 10/27/16.
+DEF VAR ldaFrom AS DATE INIT 11/01/16.
 DEF VAR liMode AS INT INIT 1.
 DEF VAR liMode_ra AS INT INIT 1.
 DEF VAR liModeBI AS INT INIT 1.
@@ -56,37 +56,6 @@ create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",34).
 
 /* SLGANALYSE */
 
-FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
-                                             INPUT icDCEvent AS CHAR,
-                                             INPUT idaVAlidFrom AS DATE,
-                                             INPUT icclitype AS CHAR,
-                                             INPUT iiUpdateMode AS INT):
-   FOR EACH bSLGAnalyse WHERE
-            bSLGAnalyse.brand EQ "1" AND
-            bSLGAnalyse.clitype EQ icBaseDCEvent AND
-            bSLGAnalyse.validto > TODAY.
-
-      IF bSLGAnalyse.servicelimitgroup BEGINS "DSS" THEN NEXT.
-      ELSE IF bSLGAnalyse.servicelimitgroup EQ "MDUB3" THEN NEXT.
-      ELSE IF bSLGAnalyse.servicelimitgroup EQ "MDUB4" THEN NEXT.
-      ELSE IF bSLGAnalyse.servicelimitgroup EQ "DATA7" THEN NEXT.
-
-
-      CREATE ttSLGAnalyse.
-      BUFFER-COPY bSLGAnalyse TO ttSLGAnalyse.
-      ttSLGAnalyse.ValidFrom = ldaFrom.
-      ttSLGAnalyse.clitype = icCliType.
-      IF  ttSLGAnalyse.servicelimitgroup EQ icBaseDCEvent THEN
-         ttSLGAnalyse.servicelimitgroup = icclitype.
-      IF iiUpdateMode NE 0 THEN DO:
-         CREATE SLGAnalyse.
-         BUFFER-COPY ttSLGAnalyse TO SLGAnalyse.
-         DELETE ttSLGAnalyse. /*ror safety reasons*/
-      END.
-      ELSE DISP ttSLGAnalyse.
-   END.
-END.
-
 FUNCTION fcreateMobSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                                 INPUT icDCEvent AS CHAR,
                                                 INPUT idaVAlidFrom AS DATE,
@@ -97,7 +66,12 @@ FUNCTION fcreateMobSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
             bSLGAnalyse.clitype EQ icBaseDCEvent AND
             bSLGAnalyse.validto > TODAY.
 
-      IF bSLGAnalyse.servicelimitgroup NE icBaseDCEvent THEN NEXT. 
+      /*IF bSLGAnalyse.servicelimitgroup NE icBaseDCEvent THEN NEXT.*/
+      IF bSLGAnalyse.servicelimitgroup BEGINS "DSS" THEN NEXT.
+      ELSE IF bSLGAnalyse.servicelimitgroup EQ "MDUB3" THEN NEXT.
+      ELSE IF bSLGAnalyse.servicelimitgroup EQ "MDUB4" THEN NEXT.
+      ELSE IF bSLGAnalyse.servicelimitgroup EQ "DATA7" THEN NEXT.
+
 
       CREATE ttSLGAnalyse.
       BUFFER-COPY bSLGAnalyse TO ttSLGAnalyse.
@@ -113,31 +87,9 @@ FUNCTION fcreateMobSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    END.
 END.
 
-FUNCTION fModifySLGAnalyse RETURNS LOGICAL ( INPUT icDCEvent AS CHAR,
-                                             INPUT iiUpdateMode AS INT):
-   FOR EACH bSLGAnalyse WHERE
-            bSLGAnalyse.brand EQ "1" AND
-            bSLGAnalyse.clitype EQ icDCEvent AND
-            bSLGAnalyse.validto > TODAY.
-
-      IF bSLGAnalyse.servicelimitgroup BEGINS "CONTDSL" OR 
-         bSLGAnalyse.servicelimitgroup BEGINS "CONTFH" THEN DO:
-         IF bSLGAnalyse.CCN - 1000 < 0 THEN
-            bSLGAnalyse.CCN = bSLGAnalyse.CCN + 1000.
-         IF bSLGAnalyse.BillCode BEGINS "F" THEN 
-            DISP "Billcode already fixed".
-         ELSE 
-            bSLGAnalyse.BillCode = "F" + bSLGAnalyse.BillCode.
-      END.
-
-      ELSE NEXT.
-   END.
-END.
-
-
-fcreateMobSLGAnalyse("CONTFH45_50","CONTS2GB",ldaFrom,"CONTDSL45",liMode).
-fcreateMobSLGAnalyse("CONTFH45_50","CONTS2GB",ldaFrom,"CONTFH45_50",liMode).
-fcreateMobSLGAnalyse("CONTFH45_50","CONTS2GB",ldaFrom,"CONTFH55_300",liMode).
+fcreateMobSLGAnalyse("CONT24","CONTS2GB",ldaFrom,"CONTDSL45",liMode).
+fcreateMobSLGAnalyse("CONT24","CONTS2GB",ldaFrom,"CONTFH45_50",liMode).
+fcreateMobSLGAnalyse("CONT24","CONTS2GB",ldaFrom,"CONTFH55_300",liMode).
 
 FUNCTION createTariffpack RETURNS LOG (INPUT lcBase AS CHAR,
                                        INPUT lcpricelist AS CHAR,
@@ -250,25 +202,6 @@ createBillItem("CONT24CF_B", "CONTS2GBCF_B",
 createBillItem("CONTDATA24", "CONTS2GB_DATA",
                "Cont S national GPRS",
                70514100,"3","1","1","022",FALSE,"SL",liModeBI).
-
-FIND FIRST RatePref WHERE
-           RatePref.dialtype = 23 AND
-           RatePref.prefix = "MOB" NO-ERROR.
-IF NOT AVAIL RatePref THEN DO:           
-   CREATE RatePref.
-   ASSIGN
-      RatePref.dialtype = 23
-      RatePref.brand = "1"
-      RatePref.prefix = "MOB"
-      RatePref.Ratepref = "".
-
-   CREATE RatePref.
-   ASSIGN
-      RatePref.dialtype = 24
-      RatePref.brand = "1"
-      RatePref.prefix = "MOB"
-      RatePref.Ratepref = "".
-END.
 
 FUNCTION fCreateTrans RETURNS LOG (INPUT icCode AS CHAR,
                                    INPUT iiLang AS INT,
