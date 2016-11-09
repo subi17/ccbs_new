@@ -188,17 +188,18 @@ END.
 FUNCTION fDuplicateOrderChk RETURNS LOGICAL
 (pcCli AS CHAR):
 
-   DEF BUFFER OrderChk FOR Order.
+   DEF BUFFER ChkOrder FOR Order.
 
    DEF VAR ldeStartTime AS DEC  NO-UNDO.
    DEF VAR ldeEndTime   AS DEC  NO-UNDO.
 
    ASSIGN ldeStartTime = fMake2Dt(ADD-INTERVAL(TODAY, -6, "months") + 1, 0).
 
-   IF CAN-FIND(FIRST OrderChk WHERE
-                     OrderChk.Brand      = gcBrand       AND
-                     OrderChk.CLI        = pcCLI         AND
-                     OrderChk.CrStamp   >= ldeStartTime) THEN
+   IF CAN-FIND(FIRST ChkOrder WHERE
+                     ChkOrder.Brand      = gcBrand                AND
+                     ChkOrder.CLI        = pcCLI                  AND
+                     ChkOrder.CrStamp   >= ldeStartTime           AND
+                     ChkOrder.OrderType  = {&ORDER_TYPE_RENEWAL}) THEN
       RETURN TRUE.
 
    RETURN FALSE.
