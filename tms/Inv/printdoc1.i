@@ -1005,7 +1005,8 @@ PROCEDURE pGetSubInvoiceHeaderData:
             IF AVAILABLE CLIType THEN DO:
 
                /* Common Rate Plan for all FLAT tariffs CONTF */
-               IF CLIType.CLIType BEGINS "CONTF" THEN
+               IF CLIType.CLIType BEGINS "CONTF" AND
+                  NOT CLIType.CLIType BEGINS "CONTFH" THEN
                   ttCLIType.RateName = ttCLIType.CTName.
                ELSE
                   ttCLIType.RateName = fLocalItemName("RatePlan",
@@ -1014,7 +1015,8 @@ PROCEDURE pGetSubInvoiceHeaderData:
                                                       Invoice.ToDate).
             END.
 
-            IF ttCLIType.CLIType BEGINS "CONTF" OR
+            IF (ttCLIType.CLIType BEGINS "CONTF" AND
+                NOT CLIType.CLIType BEGINS "CONTFH") OR 
                ttCLIType.CLIType = "CONT15" THEN DO:
 
                lcGroupCode = ttCLIType.CLIType.

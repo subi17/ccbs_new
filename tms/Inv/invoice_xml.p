@@ -789,8 +789,12 @@ PROCEDURE pSubInvoice2XML:
          ELSE IF ttRow.RowGroup = "18" AND
                  ttRow.RowType = "" AND
                  INDEX(ttRow.RowBillCode,"FLAT") > 0 AND
-                 (ttSub.CLIType BEGINS "CONTF" OR
-                  ttSub.OldCLIType BEGINS "CONTF") THEN DO:
+                ((ttSub.CLIType BEGINS "CONTF" AND
+                  NOT ttSub.CLIType BEGINS "CONTFH")
+                  OR
+                  (ttSub.OldCLIType BEGINS "CONTF" AND
+                   NOT ttSub.OldCLIType BEGINS "CONTFH") 
+                  ) THEN DO:
             lhXML:WRITE-DATA-ELEMENT("DataAmount",STRING(ttRow.DataLimit)).
             lhXML:WRITE-DATA-ELEMENT("Duration",STRING(ttRow.VoiceLimit)).
          END.
