@@ -145,7 +145,7 @@ form
     "VAT ...............:" FixedFee.VATIncl  skip
     "Amount ............:" FixedFee.Amt  format "->,>>>,>>9.999"  
        "Included amount .:" AT 39 FixedFee.InclAmt  SKIP
-    "Our own cost ......:" FixedFee.OwnCost format "->,>>>,>>9.99"     
+    "Our own cost ......:" FixedFee.OwnCost format "->,>>>,>>9.999"     
        "Unit of incl.amt :" AT 39 FixedFee.InclUnit 
        lcUnit FORMAT "X(15)" SKIP
     "Incl.amt concerns:" AT 39 FixedFee.InclBillCode 
