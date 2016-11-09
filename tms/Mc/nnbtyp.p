@@ -76,7 +76,7 @@ DEF VAR lcCode       AS CHAR                NO-UNDO.
 FORM
    BDest.Brand     FORMAT "x(2)"     column-LABEL "Br"
    BDest.BDest     FORMAT "x(15)" 
-   BDest.BDName    FORMAT "x(35)"
+   BDest.BDName    FORMAT "x(34)"
    BDest.CCN       FORMAT ">>>9"      COLUMN-LABEL "CCN"
    lcDestType      FORMAT "x(10)"    COLUMN-LABEL "DestType"
    BDest.ToDate   
