@@ -119,19 +119,6 @@ PROCEDURE pCheckSubscriptionForACC:
       RETURN "ERROR".
    END.
 
-   FOR FIRST Limit NO-LOCK WHERE
-             Limit.MsSeq     = MobSub.MsSeq AND
-             Limit.LimitType = 3            AND
-             Limit.TMRuleSeq = 0            AND
-             Limit.ToDate   >= TODAY        AND
-             Limit.FromDate <= TODAY        AND
-             Limit.Custnum   = MobSub.Custnum AND
-             Limit.LimitID   = 0            AND
-             Limit.LimitAmt > 0:
-      ocMessage = "Subscription has a billing suspension / prohibition".
-      RETURN "ERROR".
-   END.
-            
    FIND FIRST MsOwner WHERE MsOwner.MsSeq = MobSub.MsSeq NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MsOwner    OR 
       MsOwner.TsEnd < 99999999 OR

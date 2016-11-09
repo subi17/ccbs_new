@@ -1193,7 +1193,7 @@ PROCEDURE pMsCustMove:
       END.
       
       /* billing denials */
-      FOR EACH Limit EXCLUSIVE-LOCK USE-INDEX MsSeq WHERE
+      FOR EACH Limit NO-LOCK USE-INDEX MsSeq WHERE
                Limit.MsSeq     = MsOwner.MsSeq   AND
                Limit.LimitType = 3               AND
                Limit.TMRuleSeq = 0               AND
@@ -1201,21 +1201,15 @@ PROCEDURE pMsCustMove:
                Limit.LimitID   = 0               AND
                Limit.CustNum   = MobSub.InvCust:
                
-         IF Limit.FromDate >= ldtActDate THEN       
-            Limit.CustNum = iiNewInvCust.       
+          CREATE bLimit.
+          
+          BUFFER-COPY Limit TO bLimit.
+          
+          ASSIGN bLimit.CustNum = iiNewInvCust.
+          
+          RELEASE bLimit.
 
-         ELSE DO:
-            CREATE bLimit.
-            BUFFER-COPY Limit EXCEPT FromDate TO bLimit.
-            ASSIGN
-               bLimit.FromDate = ldtActDate
-               bLimit.CustNum  = iiNewInvCust
-               Limit.ToDate    = ldtActDate - 1.
-            RELEASE bLimit.   
-         END.
-         
-         RELEASE Limit.
-   END.
+      END.
 
    END.
    
