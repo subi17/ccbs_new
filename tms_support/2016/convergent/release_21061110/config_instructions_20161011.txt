@@ -90,6 +90,20 @@ Example:
 
 
 
+F3 F1 F2 -> CONTDSL58 -> F3
+Select TMSService
+F4 -> SHAPER_STP must exist. For example:
+
+.....................CONTDSL58: Components of 'TMSService' ................... .
+.C.Component    From        V S.Type Name                                    . .
+.C............. ........ .... ...... ......................................... .
+.C.SHAPER_STP   02-11-16    1 Addit  Subscription type specific SHAPER parame. .
+.C.SMSINVOICE   02-11-16    0 Basic  SMS invoice for Postpaid                . .
+.C.TYPECHG      02-11-16    1 Basic  CLIType Change                          . .
+.C.                                                                          . .
+
+Make the same operations for CONTFH58_50 and CONTFH68_300.
+
 
 
 
