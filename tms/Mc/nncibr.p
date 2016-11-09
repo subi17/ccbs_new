@@ -110,7 +110,7 @@ WITH FRAME LOG.
       FFItem.Amt.
 
    accumulate FFItem.Amt (total).
-   disp (accum total FFItem.Amt) format "->>>>>9.99".
+   disp (accum total FFItem.Amt) format "->>>>>9.999".
 
    IF FRAME-LINE >= FRAME-DOWN THEN PAUSE 
      message "More rows - press ENTER ! (F4 to QUIT)".

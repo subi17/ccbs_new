@@ -1410,9 +1410,9 @@ PROCEDURE pFinalize:
       IF LOOKUP(lcDCEvent,lcFLATContracts) > 0 THEN
          ASSIGN
             lcSMSText = REPLACE(lcSMSText,"#XXX",STRING(ldeFirstMonthLimit))
-            lcSMSText = REPLACE(lcSMSText,"#YYY",STRING(ldeFirstMonthFee))
+            lcSMSText = REPLACE(lcSMSText,"#YYY",STRING(ROUND(ldeFirstMonthFee,2)))
             lcSMSText = REPLACE(lcSMSText,"#ZZZ",STRING(ldeOtherMonthLimit))
-            lcSMSText = REPLACE(lcSMSText,"#WWW",STRING(ldeOtherMonthFee))
+            lcSMSText = REPLACE(lcSMSText,"#WWW",STRING(ROUND(ldeOtherMonthFee,2)))
             lcSender = "622".
    END. /* IF lcSMSText > "" THEN */
 

@@ -466,7 +466,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    
    IF liFFItemCount NE FMItem.FFItemQty OR 
       (FixedFee.BillCode BEGINS "PAYTERM" AND
-       ROUND(ldeFFItemAmount,2) NE ROUND(fmitem.FFItemQty * fmitem.Amount,2)) THEN DO:
+       ROUND(ldeFFItemAmount,3) NE ROUND(fmitem.FFItemQty * fmitem.Amount,3)) THEN DO:
       FixedFee.FinancedResult = {&TF_STATUS_YOIGO_FF_CHANGED}.
       NEXT ORDER_LOOP.
    END.

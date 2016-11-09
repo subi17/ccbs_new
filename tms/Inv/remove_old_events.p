@@ -254,7 +254,7 @@ PROCEDURE pRemoveFees:
                FixedFee.HostTable lcSep
                FixedFee.KeyValue  lcSep
                bFFItem.BillPeriod lcSep
-               bFFItem.Amt SKIP.
+               ROUND(bFFItem.Amt,2) SKIP.
 
             FIND FIRST FFItem WHERE RECID(FFItem) = RECID(bFFItem)
                EXCLUSIVE-LOCK.

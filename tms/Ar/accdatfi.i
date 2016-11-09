@@ -1078,11 +1078,11 @@ PROCEDURE FindUnbilled:
               /* error in item's period */
               IF liPer1 = 0 OR liPer1 = ? THEN DO:
                  PUT STREAM slog UNFORMATTED
-                    "Contr"            CHR(9)
-                    liPer1             CHR(9)
-                    FFItem.CustNum     CHR(9)
-                    FFItem.BillCode    CHR(9)
-                    FFItem.Amt         SKIP.
+                    "Contr"             CHR(9)
+                    liPer1              CHR(9)
+                    FFItem.CustNum      CHR(9)
+                    FFItem.BillCode     CHR(9)
+                    ROUND(FFItem.Amt,2) SKIP.
                  NEXT. 
               END.
 
@@ -1124,7 +1124,7 @@ PROCEDURE FindUnbilled:
                       liPer1             CHR(9)
                       FFItem.CustNum     CHR(9)
                       FFItem.BillCode    CHR(9)                    
-                      xAmt               SKIP.
+                      ROUND(xAmt,2)      SKIP.
                   NEXT.
               END.
 
@@ -1548,7 +1548,7 @@ PROCEDURE FindInvoices:
                     FFItem.Concerns[1]  CHR(9)
                     FFItem.CustNum      CHR(9)
                     FFItem.BillCode     CHR(9)
-                    FFItem.Amt          SKIP.
+              ROUND(FFItem.Amt,2)       SKIP.
                  NEXT. 
             END.
 
