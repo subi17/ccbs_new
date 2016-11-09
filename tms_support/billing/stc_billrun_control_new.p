@@ -277,12 +277,13 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
       FOR EACH DCCLI NO-LOCK WHERE
                DCCLI.MsSeq      = MsRequest.MsSeq AND
                DCCLI.ValidTo   >= ldtActDate      AND 
-               DCCLI.ValidFrom <= ldtActDate      AND
-	       DCCLI.DCEvent BEGINS "TERM" USE-INDEX MsSeq,
+               DCCLI.ValidFrom <= ldtActDate      USE-INDEX MsSeq,
          FIRST DayCampaign NO-LOCK WHERE
                DayCampaign.Brand   = gcBrand       AND 
                DayCampaign.DCEvent = DCCLI.DCEvent AND
                DayCampaign.DCType  = ({&DCTYPE_DISCOUNT}):
+
+         IF DayCampaign.DCEvent BEGINS "STERM" THEN NEXT.
 
          /* find termination request from it */
          liTermReq = fGetTermReq(MsRequest.MsRequest,
