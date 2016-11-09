@@ -295,3 +295,48 @@ FOR EACH bCliType WHERE
       Clitype.FixedLineUpload = "300M".
    END.
 END.
+
+DEF TEMP-TABLE ttCTServEl NO-UNDO LIKE CTServEl.
+/*
+         FOR EACH CTServEl WHERE
+                  CTServEl.Brand   = "1"          AND
+                  CTServEl.CLIType = "CONTDSL58" AND
+                  CTServEl.ServPac = "TMSService" NO-LOCK:
+    DISP CTServEl.
+END.
+*/
+FUNCTION faddServEl RETURNS LOGICAL (INPUT icCliType AS CHAR,
+                                     INPUT icParam AS CHAR):
+FIND FIRST CTServEl WHERE
+           CTServEl.Brand   = "1"          AND
+           CTServEl.CLIType = icCliType AND
+           CTServEl.ServPac = "TMSService" AND
+           CTServEl.servcom = "SHAPER_STP".
+
+IF NOT AVAIL CTServEl THEN DO:
+   FIND FIRST CTServEl WHERE
+              CTServEl.Brand   = "1"          AND
+              CTServEl.CLIType = "CONT24" AND
+              CTServEl.ServPac = "TMSService" AND
+              CTServEl.servcom = "SHAPER_STP".
+
+   BUFFER-COPY CTServEl EXCEPT CTServEl.CTServEl
+                               CTServEl.CLIType
+                               CTServEl.FromDate
+                               TO ttCTServEl.
+   ASSIGN ttCTServEl.CTServEl = NEXT-VALUE(CTServEl)
+          ttCTServEl.CLIType  = icCliType
+          ttCTServEl.defparam = icParam
+          ttCTServEl.FromDate = TODAY NO-ERROR.
+
+   CREATE CTServEl.
+   BUFFER-COPY ttCTServEl TO CTServEl.
+END.
+END.
+
+fAddServEl("CONTDSL45","CONTS2GB").
+fAddServEl("CONTFH45_50","CONTS2GB").
+fAddServEl("CONTFH55_300","CONTS2GB").
+fAddServEl("CONTDSL58","CONT24").
+fAddServEl("CONTFH58_50","CONT24").
+fAddServEl("CONTFH68_300","CONT24").
