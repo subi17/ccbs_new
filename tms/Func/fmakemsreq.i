@@ -47,6 +47,7 @@
 {fctserval.i}
 {fcustdata.i}
 {tmsconst.i}
+{fixedlinefunc.i}
 
 DEF BUFFER bReqOwner FOR MsOwner.
 DEF BUFFER bReqComp  FOR ServCom.
@@ -1126,20 +1127,30 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
 
    DEFINE VARIABLE liReqType AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcSpecial AS CHARACTER NO-UNDO.
+      
+   IF (icReqParam EQ "CREATE" OR
+      icReqParam EQ "CREATE-FIXED") AND
+      (iiMSSeq  = 0 OR
+       NOT CAN-FIND(Order WHERE
+                    Order.MSSeq = iiMSSeq)) THEN DO:
+      ocResult = "Invalid Order subscription".
+      RETURN 0.
+   END.
 
    CASE icReqParam:
 
-      WHEN "CREATE" THEN DO:
-         liReqType = {&REQTYPE_SUBSCRIPTION_CREATE}. /*13*/
-         IF (iiMSSeq  = 0 OR
-             NOT CAN-FIND(Order WHERE
-                          Order.MSSeq = iiMSSeq)) THEN
-            ocResult = "Invalid Order subscription".
-      END.
+      WHEN "CREATE" THEN liReqType = {&REQTYPE_SUBSCRIPTION_CREATE}. /*13*/
+      
+      WHEN "CREATE-FIXED" THEN liReqType = {&REQTYPE_FIXED_LINE_CREATE}.  /*14*/
 
       WHEN "CHANGEICC" THEN liReqType = {&REQTYPE_ICC_CHANGE}. /*15*/
 
       WHEN "CHANGEMSISDN" THEN liReqType = {&REQTYPE_MSISDN_CHANGE}. /*19*/
+
+      OTHERWISE DO:
+         ocResult = SUBST("Invalid request type: &1", icReqParam).
+         RETURN 0.
+      END.
 
    END.
 
@@ -1302,40 +1313,6 @@ FUNCTION fAfterSalesRequest RETURNS INTEGER
    RETURN liReqCreated.
      
 END FUNCTION.
-
-FUNCTION fPLCRequest RETURNS INTEGER
-   (INPUT  idActStamp     AS DEC,    /* when request should be handled */
-    INPUT  icCLI          AS CHAR,   /* Subscription CLI */
-    INPUT  icOrigCDRType  AS CHAR,   /* Original CDR Type */
-    INPUT  icCSV          AS CHAR,   /* Prepaid Lifecycle CDR data */
-    INPUT  icReqSource    AS CHAR,
-    OUTPUT ocResult       AS CHAR):
-
-   DEF VAR liReqCreated AS INT NO-UNDO.
-   
-   /* set activation time */
-   IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
-
-   fCreateRequest(75,
-                  idActStamp,
-                  "",
-                  FALSE,    /* create fees */
-                  FALSE).   /* sms */
-
-   ASSIGN
-      bCreaReq.CLI         = icCLI 
-      bCreaReq.ReqCParam1  = icOrigCDRType 
-      bCreaReq.ReqCParam2  = icCSV
-      bCreaReq.ReqSource   = icReqSource
-      liReqCreated         = bCreaReq.MsRequest.
- 
-   RELEASE bCreaReq.
-   
-   RETURN liReqCreated.
-     
-END FUNCTION.
-
 
 FUNCTION fChargeCompRequest RETURNS INTEGER
    (INPUT idActStamp     AS DEC,    /* when request should be handled */

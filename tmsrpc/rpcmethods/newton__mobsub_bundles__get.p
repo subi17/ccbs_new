@@ -21,8 +21,9 @@
 gcBrand = "1".
 {timestamp.i}
 {cparam2.i}
-{upsellbundle.i}
-{fdss.i}
+{Mm/active_bundle.i}
+{Mm/fbundle.i}
+{Func/upsellcount.i}
 
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 

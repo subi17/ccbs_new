@@ -29,6 +29,7 @@ DEF VAR lcResult AS CHARACTER NO-UNDO.
 DEF VAR lcCreditReason AS CHARACTER NO-UNDO. 
 DEF VAR liCount AS INTEGER NO-UNDO.
 DEF VAR ldtLOTS AS DATETIME NO-UNDO.
+DEF VAR liError AS INT NO-UNDO. 
 
 DEFINE BUFFER bOrderDelivery FOR OrderDelivery.
 
@@ -198,13 +199,15 @@ ELSE DO:
            MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
 
       IF NOT AVAIL MobSub THEN RETURN "". /* subscription termination already done */
-      fDeleteMsValidation(Order.MsSeq, OUTPUT lcResult).
-
       ASSIGN
          liTermReason = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
          ldeTS = fSecOffSet(fMakeTS(),5).
       
-      IF lcResult EQ "" THEN DO:
+      liError = fDeleteMsValidation(Order.MsSeq,
+                                    liTermReason,
+                                    OUTPUT lcResult).
+      IF liError EQ 0 THEN DO:
+         lcResult = "".
          llYoigoCLI = fIsYoigoCLI(MobSub.CLI).
          llPenaltyFee = fIsPenalty(liTermReason,Order.MsSeq).
          fCheckOrderer(liTermReason, llYoigoCLI, OUTPUT lcResult).

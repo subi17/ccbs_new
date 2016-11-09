@@ -1,3 +1,9 @@
+&IF "{&PROVISION_I}" NE "YES"
+&THEN
+
+
+&GLOBAL-DEFINE PROVISION_I YES
+
 {commali.i}
 {tmsconst.i}
 
@@ -36,8 +42,9 @@ function fMakeCommLine returns CHAR
    END. /* IF icValue = "REACTIVATE" THEN DO: */
    ELSE DO:
       lhMobSub = BUFFER provMobsub:HANDLE.
-      FIND FIRST provMobsub WHERE
-                 provMobsub.MSSeq = ProvSolog.MSSeq  NO-LOCK NO-ERROR.
+      FIND FIRST provMobsub NO-LOCK WHERE
+                 provMobsub.MSSeq = ProvSolog.MSSeq AND
+                 provMobsub.MsStatus NE {&MSSTATUS_FIXED_PROV_ONG} NO-ERROR.
    END. /* ELSE DO: */
 
    IF lhMobSub:AVAILABLE THEN
@@ -212,8 +219,9 @@ function fMakeCommLine2 returns CHAR
    FIND FIRST ProvMSRequest WHERE 
               ProvMSRequest.MSrequest = iiMSRequest NO-LOCK NO-ERROR.
 
-   FIND FIRST provMobsub WHERE
-              provMobsub.MSSeq = ProvSolog.MSSeq NO-LOCK NO-ERROR.
+   FIND FIRST provMobsub NO-LOCK WHERE
+              provMobsub.MSSeq = ProvSolog.MSSeq AND
+              provMobsub.MsStatus NE {&MSSTATUS_FIXED_PROV_ONG} NO-ERROR.
    IF AVAILABLE provMobsub THEN
       lhMobSub = BUFFER provMobsub:HANDLE.
    ELSE DO:
@@ -343,4 +351,4 @@ FUNCTION fGetShaperConfCommLine RETURN CHAR
    RETURN lcCommLine.
 END.
 
-
+&ENDIF

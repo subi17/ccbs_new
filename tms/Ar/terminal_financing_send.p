@@ -54,6 +54,7 @@ DEF VAR lcRootDirCetelem AS CHAR NO-UNDO.
 DEF VAR lcSpoolDirCetelem AS CHAR NO-UNDO.
 DEF VAR lcOutDirCetelem AS CHAR NO-UNDO.
 DEF VAR lcLogDirCetelem AS CHAR NO-UNDO.
+DEF VAR llCetelemOrder AS LOG NO-UNDO.
 
 FOR EACH Reseller NO-LOCK WHERE
          Reseller.Brand = gcBrand:
@@ -197,7 +198,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          OrderCustomer.Brand = gcBrand AND
          OrderCustomer.OrderId = Order.OrderId AND
          OrderCustomer.RowType = 1 BY OrderTimeStamp.TimeStamp:
-   
+
    EMPTY TEMP-TABLE ttOrderCustomer NO-ERROR.
 
    fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
@@ -232,8 +233,20 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    /* direct channels */
    IF INDEX(Order.OrderChannel, "POS") = 0 THEN DO:
 
-      IF lcTFBank NE {&TF_BANK_CETELEM} AND
-         FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
+      llCetelemOrder = CAN-FIND(FIRST OrderAction WHERE
+                           OrderAction.Brand    = gcBrand AND
+                           OrderAction.OrderId  = Order.OrderId AND
+                           OrderAction.ItemType = "TerminalFinancing" AND
+                           OrderAction.ItemKey  = "0225").
+
+      IF llCetelemOrder THEN DO:
+         IF lcTFBank NE {&TF_BANK_CETELEM} AND
+            FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
+      END.
+      ELSE DO:
+         IF lcTFBank NE {&TF_BANK_UNOE} AND
+            FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
+      END.
 
       IF LOOKUP(Order.OrderChannel,"self,renewal") > 0 THEN ASSIGN
          lcFUC[1] = "332577543" 
@@ -387,11 +400,13 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    
    CASE FMItem.FFItemQty:
       WHEN 12 THEN DO:
-         /* YOT-4645 Temporarily for UNOE. Might be needed again.
-            Older change: terminal_financing_read.p TF_Q25_EXTENSION_CODES */
+         /* YOT-4735 Temporarily fix, UNOE financing activated.
+            6666 will mean that the bank will reject it.
+            Temporary change from 6666 to 0212.
+            Older change: terminal_financing_read.p TF_Q25_EXTENSION_CODES 
          IF lcTFBank EQ {&TF_BANK_UNOE} THEN 
-            lcPayTermType[1] = "6666".  /* Temporary change with YOT-4474 from 0212 to 6666 */
-         ELSE 
+            lcPayTermType[1] = "6666".  
+         ELSE */
             lcPayTermType[1] = "0212".
       END.
       WHEN 18 THEN lcPayTermType[1] = "0018".
@@ -635,3 +650,4 @@ PROCEDURE pPrintLine:
    PUT STREAM sout CONTROL CHR(13) CHR(10).
 
 END PROCEDURE. 
+

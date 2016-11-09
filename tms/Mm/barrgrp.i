@@ -3,6 +3,11 @@
    changes:             22.06.06/aam DL8
 */
 
+&IF "{&BARRGRP_I}" NE "YES"
+&THEN
+
+&GLOBAL-DEFINE BARRGRP_I YES
+
 DEF VAR lcDL8 AS CHAR NO-UNDO INIT "PES,SMP".
 
 DEF TEMP-TABLE ttBarring NO-UNDO
@@ -72,4 +77,4 @@ ASSIGN
 ttBarring.ttGroup   = "3"
 ttBarring.ttservcom = "KLU".
 
-
+&ENDIF
