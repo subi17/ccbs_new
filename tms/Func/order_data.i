@@ -243,6 +243,7 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
    DEF VAR lcInitialPayment AS CHARACTER NO-UNDO.
    DEF VAR lcInstallment AS CHARACTER NO-UNDO.
    DEF VAR lcPermanency AS CHARACTER NO-UNDO.
+   DEF VAR lcFixPermText AS CHARACTER NO-UNDO.
    DEF VAR lcOrderType AS CHARACTER NO-UNDO.
    DEF VAR ldReqStamp AS DECIMAL NO-UNDO.
    DEF VAR lcDiscount AS CHARACTER NO-UNDO.
@@ -271,10 +272,22 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
    /* temp code */
    liLang = 1.
 
-   lcTemplate = fGetSMSTxt("OfferSMS",
-                          TODAY,
-                          liLang,
-                          OUTPUT ldReqStamp).
+   IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
+       Order.OrderType EQ {&ORDER_TYPE_MNP}) AND
+       fIsConvergenceTariff(Order.CLIType) THEN DO:
+       lcTemplate = fGetSMSTxt("ConvOrderNewMNP",
+                                TODAY,
+                                liLang,
+                                OUTPUT ldReqStamp).
+      lcFixPermText = " Fijo con 12 meses de permanencia.".
+   END.
+   ELSE DO:
+      lcTemplate = fGetSMSTxt("OfferSMS",
+                             TODAY,
+                             liLang,
+                             OUTPUT ldReqStamp).
+      ldaDeliveryDate = fGetOrderDeliveryDateEstimation(Order.OrderId).
+   END.
    IF lcTemplate EQ ? OR lcTemplate EQ "" THEN RETURN "". 
 
    fGetOfferSMSValues(order.orderid,
@@ -336,8 +349,6 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
                            liPermancyLength,
                            ldePermanencyAmount) WHEN ldePermanencyAmount > 0.
 
-   ldaDeliveryDate = fGetOrderDeliveryDateEstimation(Order.OrderId).
-
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
       lcRenewal =  (IF liLang EQ 5
                     THEN " Renewal"
@@ -386,6 +397,7 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
       lcTemplate = REPLACE(lcTemplate,"#INITIAL_PAYMENT", lcInitialPayment)
       lcTemplate = REPLACE(lcTemplate,"#INSTALLMENTS", lcInstallment)
       lcTemplate = REPLACE(lcTemplate,"#PERMANENCY", lcPermanency)
+      lcTemplate = REPLACE(lcTemplate,"#FIXED_PERMANENCY", lcFixPermText)
       lcTemplate = REPLACE(lcTemplate,"#ORDERTYPE", lcOrderType)
       lcTemplate = REPLACE(lcTemplate,"#DISCOUNT", lcDiscount)
       lcTemplate = REPLACE(lcTemplate,"#DELIVERY_DATE",
