@@ -60,7 +60,13 @@ FUNCTION fAnalBsub RETURNS LOGICAL
 
    CASE ttCall.SpoCMT:
       WHEN 81   THEN b_CallType =  4.
-      WHEN 1081 THEN b_CallType =  1.
+      WHEN 1081 THEN DO:
+         IF b_type EQ 4 THEN
+            b_CallType =  50. /* fixed to fixed */
+         ELSE
+            b_CallType =  1. /* fixed to mobile */
+      END.
+
       WHEN 1002 THEN b_CallType =  1.
       WHEN 1008 THEN b_CallType =  1.
       WHEN 1063 THEN b_CallType =  1.
