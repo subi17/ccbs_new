@@ -940,7 +940,7 @@ BROWSE:
                
         cfc = "puyr". run ufcolor.
         ehto = 9. RUN ufkey. ufkey = TRUE.
-        CLEAR FRAME fFixrd.
+        CLEAR FRAME fFixed.
         SET  lcBrand   WHEN gcAllBrand = TRUE
              lcFixedNumber 
              WITH FRAME fFixed.
