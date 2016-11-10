@@ -1,0 +1,13 @@
+Type;Language Type;Language;Translation Name
+CONTDSL58;1;Spanish;La Combinada Azul 20
+CONTDSL58;2;Catalan;La Combinada Azul 20
+CONTDSL58;3;Basque;La Combinada Azul 20
+CONTDSL58;5;English;La Combinada Azul 20
+CONTFH58_50;1;Spanish;La Combinada Azul 50
+CONTFH58_50;2;Catalan;La Combinada Azul 50
+CONTFH58_50;3;Basque;La Combinada Azul 50
+CONTFH58_50;5;English;La Combinada Azul 50
+CONTFH68_300;1;Spanish;La Combinada Azul 300
+CONTFH68_300;2;Catalan;La Combinada Azul 300
+CONTFH68_300;3;Basque;La Combinada Azul 300
+CONTFH68_300;5;English;La Combinada Azul 300
