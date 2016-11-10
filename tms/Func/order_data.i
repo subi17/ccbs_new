@@ -105,12 +105,13 @@ FUNCTION fGetOfferSMSValues RETURNS LOGICAL
                                lcTariff,
                                liLanguage,
                                ldaOrderDate).
-
-   ocTaxZone = fGetItemName(gcBrand,
-                            "TaxZone",
-                            Region.TaxZone,
-                            liLanguage,
-                             ldaOrderDate).
+   FIND Region WHERE Region.Region = OrderCustomer.Region NO-LOCK NO-ERROR.
+   IF AVAIL Region THEN
+      ocTaxZone = fGetItemName(gcBrand,
+                               "TaxZone",
+                               Region.TaxZone,
+                               liLanguage,
+                               ldaOrderDate).
 
    IF CLIType.CLIType EQ "TARJ7" OR 
       CLIType.CLIType EQ "TARJ9" THEN
@@ -281,13 +282,12 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
                                 OUTPUT ldReqStamp).
       lcFixPermText = " Fijo con 12 meses de permanencia.".
    END.
-   ELSE DO:
+   ELSE 
       lcTemplate = fGetSMSTxt("OfferSMS",
                              TODAY,
                              liLang,
                              OUTPUT ldReqStamp).
-      ldaDeliveryDate = fGetOrderDeliveryDateEstimation(Order.OrderId).
-   END.
+
    IF lcTemplate EQ ? OR lcTemplate EQ "" THEN RETURN "". 
 
    fGetOfferSMSValues(order.orderid,
@@ -348,6 +348,8 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
                             ELSE " con Permanencia de &1 meses en Contrato por el descuento de &2 E el movil"),
                            liPermancyLength,
                            ldePermanencyAmount) WHEN ldePermanencyAmount > 0.
+
+   ldaDeliveryDate = fGetOrderDeliveryDateEstimation(Order.OrderId).
 
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
       lcRenewal =  (IF liLang EQ 5
