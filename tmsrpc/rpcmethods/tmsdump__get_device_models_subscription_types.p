@@ -27,7 +27,7 @@ WHERE BillItem.Brand = "1"
         lcStruct = add_struct(lcArray, "").
         add_string(lcStruct, "device_model_id", BillItem.BillCode).
         add_string(lcStruct, "subscription_type_id", "prepaid").
-        add_double(lcStruct, "price", FMItem.Amount).
+        add_double(lcStruct, "price", ROUND(FMItem.Amount,2)).
     END.
 
     FIND FIRST FMItem
@@ -42,7 +42,7 @@ WHERE BillItem.Brand = "1"
         lcStruct = add_struct(lcArray, "").
         add_string(lcStruct, "device_model_id", BillItem.BillCode).
         add_string(lcStruct, "subscription_type_id", "postpaid").
-        add_double(lcStruct, "price", FMItem.Amount).
+        add_double(lcStruct, "price", ROUND(FMItem.Amount,2)).
     END.
 
 END.

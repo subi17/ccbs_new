@@ -168,7 +168,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_string(lcResultStruct,"bundle_type", lcBundleType).
    add_string(lcResultStruct,"subscription_type_id", lcCLIType).
    add_int(lcResultStruct,"pay_type", DayCampaign.PayType).
-   add_double(lcResultStruct,"monthly_cost", ldeFee).
+   add_double(lcResultStruct,"monthly_cost", ROUND(ldeFee,2)).
    add_int(lcResultStruct,"line_type", liLineType).
    add_int(lcResultStruct,"fixed_line_type", liFixedLineType).
    add_boolean(lcResultStruct,"dss2_compatible", llDss2Compatible).

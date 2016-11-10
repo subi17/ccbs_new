@@ -133,7 +133,7 @@ PROCEDURE pWriteToFile:
          STRING(Order.MsSeq)                  lcDelimiter
          STRING(Order.OrderId)                lcDelimiter
          STRING(liFFItemQty)                  lcDelimiter
-         STRING(ldeFFItemAmt)                 lcDelimiter
+         STRING(ROUND(ldeFFItemAmt,2))        lcDelimiter
          STRING(ldeResidualFee)               lcDelimiter
          STRING(OrderPayment.Method)          lcDelimiter 
          SKIP.
@@ -148,7 +148,7 @@ PROCEDURE pWriteToFile:
          STRING(Order.MsSeq)                  lcDelimiter
          STRING(Order.OrderId)                lcDelimiter
          STRING(liFFItemQty)                  lcDelimiter
-         STRING(ldeFFItemAmt)                 lcDelimiter
+         STRING(ROUND(ldeFFItemAmt,2))        lcDelimiter
          STRING(ldeResidualFee)               lcDelimiter
          STRING(OrderPayment.Method)          lcDelimiter 
          SKIP.

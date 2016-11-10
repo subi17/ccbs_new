@@ -87,7 +87,7 @@ form
     FMItem.Interval      column-label "I"
     FMItem.BillCycle     column-label "BM"
     llservlimit          Column-label "SL" 
-    FMItem.Amount        format "->,>>9.99"
+    FMItem.Amount        format "->,>>9.999"
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(cfc)
@@ -111,7 +111,7 @@ form
     FMItem.BillCycle    COLON 20 SKIP
     FMItem.FFItemQty    COLON 20  FORMAT ">>>"  SKIP
     FMItem.FFEndDate    COLON 20 SKIP
-    FMItem.Amount       COLON 20  FORMAT "->,>>9.99" SKIP
+    FMItem.Amount       COLON 20  FORMAT "->,>>9.999" SKIP
     FMItem.FirstMonthBR COLON 20 
        LABEL "First Fee"
        HELP "Fee for 1. month; 0=broken rental, 1=full month, 2=usage based"

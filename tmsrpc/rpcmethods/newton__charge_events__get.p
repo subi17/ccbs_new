@@ -33,7 +33,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_string(lcResultStruct, "id", FeeMode.FeeModel). 
    add_string(lcResultStruct, "name", FeeModel.FeeName).
 
-   add_double(lcResultStruct, "amount", FMItem.Amount).
+   add_double(lcResultStruct, "amount", ROUND(FMItem.Amount,2)).
    add_string(lcResultStruct, "billing_item_id", FMItem.BillCode).
    FIND TMSParam WHERE 
         TMSParam.Brand = "1" AND

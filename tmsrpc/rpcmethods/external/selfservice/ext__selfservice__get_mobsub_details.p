@@ -183,7 +183,7 @@ ELSE DO:
    THEN DO:
       payterm_struct = add_struct(top_struct,"installment_contract").
       add_int(payterm_struct,"number_of_payments",liTotalPeriods).
-      add_double(payterm_struct,"monthly_fee", ldePeriodFee).
+      add_double(payterm_struct,"monthly_fee", ROUND(ldePeriodFee,2)).
       add_double(payterm_struct,"pending_fee", ldePendingFee).
    END. /* IF AVAIL DCCLI AND */
 

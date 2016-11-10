@@ -116,7 +116,7 @@ form
     FMItem.FromDate
     FMItem.ToDate      
     lcpaytype             format "x(15)" column-label "Valid for "
-    FMItem.Amount        format "->,>>9.99"
+    FMItem.Amount        format "->,>>9.999"
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(cfc)
@@ -137,7 +137,7 @@ form
        "-"  
     FMItem.ToDate NO-LABEL FORMAT "99-99-9999" SKIP
 
-    FMItem.Amount  FORMAT "->,>>9.99" SKIP
+    FMItem.Amount  FORMAT "->,>>9.999" SKIP
          
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(cfc)
