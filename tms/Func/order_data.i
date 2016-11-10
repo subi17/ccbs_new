@@ -105,12 +105,13 @@ FUNCTION fGetOfferSMSValues RETURNS LOGICAL
                                lcTariff,
                                liLanguage,
                                ldaOrderDate).
-
-   ocTaxZone = fGetItemName(gcBrand,
-                            "TaxZone",
-                            Region.TaxZone,
-                            liLanguage,
-                             ldaOrderDate).
+   FIND Region WHERE Region.Region = OrderCustomer.Region NO-LOCK NO-ERROR.
+   IF AVAIL Region THEN
+      ocTaxZone = fGetItemName(gcBrand,
+                               "TaxZone",
+                               Region.TaxZone,
+                               liLanguage,
+                               ldaOrderDate).
 
    IF CLIType.CLIType EQ "TARJ7" OR 
       CLIType.CLIType EQ "TARJ9" THEN
@@ -243,6 +244,7 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
    DEF VAR lcInitialPayment AS CHARACTER NO-UNDO.
    DEF VAR lcInstallment AS CHARACTER NO-UNDO.
    DEF VAR lcPermanency AS CHARACTER NO-UNDO.
+   DEF VAR lcFixPermText AS CHARACTER NO-UNDO.
    DEF VAR lcOrderType AS CHARACTER NO-UNDO.
    DEF VAR ldReqStamp AS DECIMAL NO-UNDO.
    DEF VAR lcDiscount AS CHARACTER NO-UNDO.
@@ -271,10 +273,21 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
    /* temp code */
    liLang = 1.
 
-   lcTemplate = fGetSMSTxt("OfferSMS",
-                          TODAY,
-                          liLang,
-                          OUTPUT ldReqStamp).
+   IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
+       Order.OrderType EQ {&ORDER_TYPE_MNP}) AND
+       fIsConvergenceTariff(Order.CLIType) THEN DO:
+       lcTemplate = fGetSMSTxt("ConvOrderNewMNP",
+                                TODAY,
+                                liLang,
+                                OUTPUT ldReqStamp).
+      lcFixPermText = " Fijo con 12 meses de permanencia.".
+   END.
+   ELSE 
+      lcTemplate = fGetSMSTxt("OfferSMS",
+                             TODAY,
+                             liLang,
+                             OUTPUT ldReqStamp).
+
    IF lcTemplate EQ ? OR lcTemplate EQ "" THEN RETURN "". 
 
    fGetOfferSMSValues(order.orderid,
@@ -386,6 +399,7 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
       lcTemplate = REPLACE(lcTemplate,"#INITIAL_PAYMENT", lcInitialPayment)
       lcTemplate = REPLACE(lcTemplate,"#INSTALLMENTS", lcInstallment)
       lcTemplate = REPLACE(lcTemplate,"#PERMANENCY", lcPermanency)
+      lcTemplate = REPLACE(lcTemplate,"#FIXED_PERMANENCY", lcFixPermText)
       lcTemplate = REPLACE(lcTemplate,"#ORDERTYPE", lcOrderType)
       lcTemplate = REPLACE(lcTemplate,"#DISCOUNT", lcDiscount)
       lcTemplate = REPLACE(lcTemplate,"#DELIVERY_DATE",
