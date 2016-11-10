@@ -1203,9 +1203,11 @@ PROCEDURE pMsCustMove:
                
           CREATE bLimit.
           
-          BUFFER-COPY Limit TO bLimit.
+          BUFFER-COPY Limit EXCEPT FromDate TO bLimit.
           
-          ASSIGN bLimit.CustNum = iiNewInvCust.
+          ASSIGN 
+             bLimit.FromDate = ldtActDate
+             bLimit.CustNum  = iiNewInvCust.
           
           RELEASE bLimit.
 
