@@ -1,0 +1,40 @@
+UPDATE FIELD "Amt" OF "FixedFee"
+  FORMAT "->>>,>>9.999"
+  DECIMALS 3
+  
+UPDATE FIELD "CalcAmt" OF "FixedFee"
+  FORMAT "->>>,>>9.999"
+  DECIMALS 3
+
+UPDATE FIELD "InclAmt" OF "FixedFee"
+  FORMAT "->>>,>>9.999"
+  DECIMALS 3
+
+UPDATE FIELD "OwnCost" OF "FixedFee"
+  FORMAT "->>>,>>9.999"
+  DECIMALS 3
+
+UPDATE FIELD "Amt" OF "SingleFee"
+  FORMAT "->,>>>,>>9.999"
+  DECIMALS 3
+  
+UPDATE FIELD "OwnCost" OF "SingleFee"
+  FORMAT "->,>>>,>>9.999"
+  DECIMALS 3
+  
+UPDATE FIELD "Amt" OF "FFItem"
+  FORMAT "->>>,>>9.999"
+  DECIMALS 3
+  
+UPDATE FIELD "OwnCost" OF "FFItem"
+  FORMAT "->>>,>>9.999"
+  DECIMALS 3
+  
+UPDATE FIELD "Amount" OF "FMItem"
+  FORMAT "->,>>9.999"
+  DECIMALS 3
+
+UPDATE FIELD "InclAmt" OF "FMItem"
+  FORMAT "->,>>9.999"
+  DECIMALS 3
+
