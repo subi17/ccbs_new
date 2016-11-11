@@ -720,7 +720,7 @@ PROCEDURE pSubInvoice2XML:
       lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName).
       lhXML:WRITE-CHARACTERS(ttSub.CLIType).
       lhXML:END-ELEMENT("ContractType").
-      IF SubInvoice.FixedNumber <> ? AND 
+      IF SubInvoice.FixedNumber > "" AND 
          ttSub.CliEvent         <> "F" THEN DO:
          lhXML:START-ELEMENT("CustomContract").
          lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
@@ -916,7 +916,7 @@ PROCEDURE pSubInvoice2XML:
                                            liLanguage,
                                            Invoice.ToDate).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroup", lcBIGroupName).
-            IF ttSub.FixedNumber <> ? THEN 
+            IF ttSub.FixedNumber > "" THEN 
                lhXML:INSERT-ATTRIBUTE("BillingItemGroupType",
                                    TRIM(STRING(ttCall.GroupType = 1,"fixed/mobile"))).
          END.
