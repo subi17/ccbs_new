@@ -292,12 +292,12 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
                                TODAY,
                                liLang,
                                OUTPUT ldReqStamp).
-      /* YPR-5248 Mobile only add permanency text */
+      /* YPR-5248 From Mobile only add permanency text */
       FIND FIRST bMobSub NO-LOCK WHERE
                  bMobSub.MsSeq = Order.MsSeq NO-ERROR.
       IF AVAIL bMobSub AND 
          LOOKUP(bMobSub.CliType,lcFusionCLITypes) = 0 AND
-         NOT fIsConvergenceTariff(Order.CLIType)THEN DO:
+         NOT fIsConvergenceTariff(bMobSub.CliType)THEN DO:
          lcFixPermText = " Fijo con 12 meses de permanencia.".
       END.
    END.
