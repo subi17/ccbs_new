@@ -74,7 +74,7 @@ form
    PNPGroup.Brand   FORMAT "X(4)"  COLUMN-LABEL "BRND"
    LCGroupType      FORMAT "X(5)" label "Type"
    PNPGroup.PNPGroup FORMAT "X(11)"  
-   PNPGroup.Name   FORMAT "X(14)"
+   PNPGroup.Name   FORMAT "X(13)"
    PNPGroup.RateCCN FORMAT ">>>9" COLUMN-LABEL "RateCCN"
    PNPGroup.CCN FORMAT ">>>9"
       CCN.CCNName  FORMAT "X(10)"
