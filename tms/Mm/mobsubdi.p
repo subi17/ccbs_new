@@ -92,6 +92,9 @@ DEF VAR lcDSSBundleId AS CHAR                    NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType  AS CHAR           NO-UNDO.
 DEF VAR lgOngoing AS LOGICAL                     NO-UNDO.
 DEF VAR lrBarring AS ROWID                       NO-UNDO.
+DEF VAR ldeFirstSecond AS DEC NO-UNDO. 
+DEF VAR ldaDate AS DATE NO-UNDO. 
+DEF VAR ldeLastSecond AS DEC NO-UNDO. 
 
 DEF VAR lhSub AS HANDLE NO-UNDO. 
 
@@ -343,6 +346,28 @@ DO WHILE TRUE:
                               ELSE "RERATE SUBSCRIPTION")
       SIDE-LABELS
       FRAME rerate.
+
+      IF NOT llDSSActive THEN DO:
+        
+        ASSIGN
+           ldeFirstSecond = FromPeriod * 100 + 1
+           ldaDate = DATE(EndPeriod MOD 100, 1, INT(EndPeriod / 100)) + 32
+           ldeLastSecond = YEAR(ldaDate) * 10000 + MONTH(ldaDate) * 100 + 1.
+
+         IF CAN-FIND(msowner NO-LOCK WHERE
+                     msowner.CLI = MobSub.CLI AND
+                     msowner.tsbegin >= ldeFirstSecond AND
+                     msowner.tsend < ldeLastSecond) THEN DO:
+         MESSAGE "This subscription has fixed line "
+                 " active so customer will be re-rated."
+                 SKIP
+                 "Do You REALLY want to re-rate the customer: " +
+                 STRING(MobSub.CustNum) 
+         VIEW-AS ALERT-BOX BUTTONS YES-NO TITLE " CONFIRMATION " UPDATE ok.
+         IF NOT ok THEN NEXT.
+         llDSSActive = TRUE.
+         END.
+      END.
       
       IF llDSSActive THEN
          RUN rerate(INPUT "", MobSub.CustNum , INPUT Fromperiod, INPUT Endperiod).
