@@ -249,11 +249,15 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
    DEF VAR ldReqStamp AS DECIMAL NO-UNDO.
    DEF VAR lcDiscount AS CHARACTER NO-UNDO.
    DEF VAR liLang AS INTEGER NO-UNDO.
+   DEF VAR lcFusionCLITypes AS CHAR NO-UNDO.
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
    DEF BUFFER OfferItem FOR OfferItem.
    DEF BUFFER DiscountPlan FOR DiscountPlan.
+   DEF BUFFER bMobSub FOR MobSub. 
+
+   ASSIGN lcFusionCLITypes = fCParamC("FUSION_SUBS_TYPE").
 
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand = gcBrand AND
@@ -281,6 +285,21 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
                                 liLang,
                                 OUTPUT ldReqStamp).
       lcFixPermText = " Fijo con 12 meses de permanencia.".
+   END.
+   ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
+           fIsConvergenceTariff(Order.CLIType) THEN DO:
+      lcTemplate = fGetSMSTxt("ConvOfferSTC",
+                               TODAY,
+                               liLang,
+                               OUTPUT ldReqStamp).
+      /* YPR-5248 Mobile only add permanency text */
+      FIND FIRST bMobSub NO-LOCK WHERE
+                 bMobSub.MsSeq = Order.MsSeq NO-ERROR.
+      IF AVAIL bMobSub AND 
+         LOOKUP(bMobSub.CliType,lcFusionCLITypes) = 0 AND
+         NOT fIsConvergenceTariff(Order.CLIType)THEN DO:
+         lcFixPermText = " Fijo con 12 meses de permanencia.".
+      END.
    END.
    ELSE 
       lcTemplate = fGetSMSTxt("OfferSMS",
