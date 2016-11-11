@@ -358,7 +358,7 @@ DO WHILE TRUE:
                      msowner.CLI = MobSub.CLI AND
                      msowner.tsbegin < ldeLastSecond AND
                      msowner.tsend >= ldeFirstSecond) THEN DO:
-         MESSAGE "This subscription has fixed line "
+         MESSAGE "This subscription has fixed line"
                  " active so customer will be re-rated."
                  SKIP
                  "Do You REALLY want to re-rate the customer: " +
