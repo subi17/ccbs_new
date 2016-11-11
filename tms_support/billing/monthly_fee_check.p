@@ -4,6 +4,7 @@ gcBrand = "1".
 {date.i}
 {cparam2.i}
 {timestamp.i}
+{tmsconst.i}
 
 DEFINE VARIABLE lcOutputFile       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liCount            AS INTEGER   NO-UNDO. 
@@ -423,38 +424,7 @@ ASSIGN liBundleCount = 0
 
 FOR EACH MobSub NO-LOCK WHERE 
          MobSub.Brand = gcBrand:             
-  FIND FIRST CLIType NO-LOCK WHERE 
-             CLIType.CLIType = MobSub.CLIType NO-ERROR.
-  
-  IF NOT AVAIL CLIType THEN NEXT.
-
-  IF MobSub.TariffBundle EQ "" AND
-     CLIType.BaseBundle  EQ "" THEN NEXT.
-
-  IF LOOKUP(CLIType.CLIType,lcBundleBasedCLITypes) > 0 AND 
-     MobSub.TariffBundle EQ ""                         THEN  
-  DO:
-     PUT STREAM strout unformatted 
-        MobSub.MsSeq                  "|"
-        MobSub.CustNum                "|"
-        MobSub.CLI                    "|"
-        "Tariff Bundle not available" SKIP.
-
-     liBundleCount = liBundleCount + 1.
-     NEXT.
-  END.
-
-  IF MobSub.TariffBundle <> "" THEN 
-     lcBundle = MobSub.TariffBundle. 
-  ELSE IF CLIType.BaseBundle <> "" THEN
-     lcBundle = CLIType.BaseBundle.
-  ELSE lcBundle = "".
-
-  RUN pBundleCheck(MobSub.MsSeq,
-                   MobSub.CustNum,
-                   MobSub.CLI,
-                   lcBundle).
-
+    RUN pCheckSubscription((BUFFER Mobsub:HANDLE)).
 END.
 
 FOR EACH MsRequest NO-LOCK WHERE
@@ -466,50 +436,76 @@ FOR EACH MsRequest NO-LOCK WHERE
    FIND FIRST TermMobSub NO-LOCK WHERE 
               TermMobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
    
-   IF NOT AVAIL TermMobSub
-      THEN NEXT.
+   IF NOT AVAIL TermMobSub THEN NEXT.
 
+    RUN pCheckSubscription((BUFFER TermMobSub:HANDLE)).
+END.
+
+PROCEDURE pCheckSubscription:
+
+   DEF INPUT PARAM ihSub AS HANDLE.
+   
    FIND FIRST CLIType NO-LOCK WHERE 
-              CLIType.CLIType = TermMobSub.CLIType NO-ERROR.
+              CLIType.CLIType = ihSub::CLIType NO-ERROR.
      
    IF NOT AVAIL CLIType    THEN NEXT.
+   
+   IF CLIType.FixedLineDownLoad > "" THEN DO:
 
-   IF TermMobSub.TariffBundle EQ "" AND
-      CLIType.BaseBundle      EQ "" THEN NEXT.
+      FIND RequestAction NO-LOCK WHERE
+           RequestAction.Brand = gcBrand AND
+           RequestAction.CLIType = ihSub::CLIType AND
+           RequestAction.ReqType = 14 AND
+           RequestAction.ValidTo >= TODAY AND
+           RequestAction.ActionType = "DayCampaign" AND
+           RequestAction.Action = 1 NO-ERROR.
+
+      IF AVAIL RequestAction THEN
+        RUN pBundleCheck(ihSub::MsSeq,
+                         ihSub::CustNum,
+                         ihSub::CLI,
+                         RequestAction.ActionKey).
+
+      IF ihSub::MSStatus EQ {&MSSTATUS_FIXED_PROV_ONG} THEN NEXT.
+   END.
+
+   IF ihSub::TariffBundle EQ "" AND
+      CLIType.BaseBundle  EQ "" THEN NEXT.
   
    IF LOOKUP(CLIType.CLIType,lcBundleBasedCLITypes) > 0 AND 
-      TermMobSub.TariffBundle EQ ""                         THEN  
+      ihSub::TariffBundle EQ ""                         THEN  
    DO:
       PUT STREAM strout unformatted 
-         TermMobSub.MsSeq                  "|"
-         TermMobSub.CustNum                "|"
-         TermMobSub.CLI                    "|"
+         ihSub::MsSeq                  "|"
+         ihSub::CustNum                "|"
+         ihSub::CLI                    "|"
          "Tariff Bundle not available" SKIP.
 
       liBundleCount = liBundleCount + 1.
       NEXT.
    END.
 
-   IF TermMobSub.TariffBundle <> "" THEN 
-      lcBundle = TermMobSub.TariffBundle. 
+   IF ihSub::TariffBundle <> "" THEN 
+      lcBundle = ihSub::TariffBundle. 
    ELSE IF CLIType.BaseBundle <> "" THEN
       lcBundle = CLIType.BaseBundle.
    ELSE lcBundle = "".
      
-   RUN pBundleCheck(TermMobSub.MsSeq,
-                    TermMobSub.CustNum,
-                    TermMobSub.CLI,
+   RUN pBundleCheck(ihSub::MsSeq,
+                    ihSub::CustNum,
+                    ihSub::CLI,
                     lcBundle).
 
-END.
+END PROCEDURE. 
 
 PROCEDURE pBundleCheck:
-define INPUT parameter iiMsSeq   as integer   no-undo.
-define INPUT parameter iiCustNum AS integer   no-undo.
-define INPUT parameter icCLI     as character no-undo.
-define INPUT parameter icBundle  as character no-undo.
 
-DEF VAR llgAvailable AS LOGICAL NO-UNDO. 
+   define INPUT parameter iiMsSeq   as integer   no-undo.
+   define INPUT parameter iiCustNum AS integer   no-undo.
+   define INPUT parameter icCLI     as character no-undo.
+   define INPUT parameter icBundle  as character no-undo.
+
+   DEF VAR llgAvailable AS LOGICAL NO-UNDO. 
 
   IF NOT CAN-FIND(FIRST ttSubDetails WHERE 
                         ttSubDetails.MsSeq  EQ iiMsSeq   AND 
@@ -526,8 +522,10 @@ DEF VAR llgAvailable AS LOGICAL NO-UNDO.
                    servicelimit.slseq     = mservicelimit.slseq    AND 
                    servicelimit.dialtype  = mservicelimit.dialtype AND 
                    servicelimit.groupcode = icBundle               NO-ERROR.
-        IF AVAIL servicelimit THEN 
+        IF AVAIL servicelimit THEN DO:
            llgAvailable = TRUE.
+           LEAVE.
+        END.
      END.         
      
      IF NOT llgAvailable THEN DO:
