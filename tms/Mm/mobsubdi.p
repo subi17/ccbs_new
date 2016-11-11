@@ -356,8 +356,8 @@ DO WHILE TRUE:
 
          IF CAN-FIND(msowner NO-LOCK WHERE
                      msowner.CLI = MobSub.CLI AND
-                     msowner.tsbegin >= ldeFirstSecond AND
-                     msowner.tsend < ldeLastSecond) THEN DO:
+                     msowner.tsbegin < ldeLastSecond AND
+                     msowner.tsend >= ldeFirstSecond) THEN DO:
          MESSAGE "This subscription has fixed line "
                  " active so customer will be re-rated."
                  SKIP
