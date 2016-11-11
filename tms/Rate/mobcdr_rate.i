@@ -76,6 +76,8 @@ FUNCTION fAnalBsub RETURNS LOGICAL
          IF ttCall.BillDur <= 11     THEN b_callType = 23.
          ELSE b_callType = 24.
       END.   
+      WHEN 1074 THEN b_CallType =  1.
+      WHEN 1075 THEN b_CallType =  1.
       WHEN 1    THEN b_CallType =  4.
       WHEN 30   THEN b_CallType =  12.
       WHEN 51   THEN b_CallType =  5.
