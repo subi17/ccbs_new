@@ -249,6 +249,8 @@ END CASE.
 
 IF lcSMSTxt > "" THEN DO:
 
+   ldeFeeAmount = SingleFee.Amt.
+
    FOR EACH DiscountPlan NO-LOCK WHERE
             DiscountPlan.Brand = gcBrand AND
            (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
@@ -263,8 +265,6 @@ IF lcSMSTxt > "" THEN DO:
    END.
 
    IF ldeFeeAmount > 0 THEN DO:
-
-      ldeFeeAmount = ROUND(ldeFeeAmount,2).
 
       ASSIGN
          /* first payment is done next month to Q25 */

@@ -196,10 +196,10 @@ FUNCTION fRowVat RETURNS DECIMAL
    
    CASE llInvVat:
       WHEN TRUE THEN DO:
-         ldeVatAmt = ROUND(ldeRowAmt * ldeRowPerc / (100 + ldeRowPerc),3).
+         ldeVatAmt = ROUND(ldeRowAmt * ldeRowPerc / (100 + ldeRowPerc),2).
       END.
       WHEN FALSE THEN DO:
-         ldeVatAmt = ROUND(ldeRowAmt * ldeRowPerc / 100,3).
+         ldeVatAmt = ROUND(ldeRowAmt * ldeRowPerc / 100,2).
       END.
    END.
 

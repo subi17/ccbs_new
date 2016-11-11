@@ -50,7 +50,7 @@ FOR EACH fixedfee NO-LOCK where
       put stream sout unformatted
            bfixedfee.begperiod "|"
            bfixedfee.servicelimitgroup "|"
-           ROUND(ffitem.amt,2) "|"
+           ffitem.amt "|"
            bfixedfee.custnum "|"
            bfixedfee.keyvalue "|"
            ldefee "|" 

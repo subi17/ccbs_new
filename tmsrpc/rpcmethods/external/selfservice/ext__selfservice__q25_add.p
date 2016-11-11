@@ -215,8 +215,6 @@ IF lcSMSTxt > "" THEN DO:
 
    IF ldeFeeAmount > 0 THEN DO:
 
-      ldeFeeAmount = ROUND(ldeFeeAmount,2).
-
       ASSIGN
          lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
                              lower(entry(month(ADD-INTERVAL(ldaMonth24Date, 1,

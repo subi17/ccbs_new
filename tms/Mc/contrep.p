@@ -101,7 +101,7 @@ FUNCTION fRemVat RETURNS DECIMAL
              BillItem.BillCode = icBillCode,
        FIRST VatCode OF BillItem NO-LOCK:
 
-       idAmt = ROUND(idAmt / (1 + VatCode.VatPerc / 100),3).
+       idAmt = ROUND(idAmt / (1 + VatCode.VatPerc / 100),2).
    END.
 
    RETURN idAmt.
