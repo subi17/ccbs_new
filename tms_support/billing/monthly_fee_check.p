@@ -292,6 +292,8 @@ FOR EACH servicelimit NO-LOCK,
          
          FIND FIRST CliType WHERE 
                     CliType.CLitype = termmobsub.CLIType NO-LOCK no-error.
+         /* for staging */
+         IF NOT AVAIL CLIType THEN NEXT.
          
          assign liCustnum = termmobsub.custnum
                 lcCli = termmobsub.cli.
