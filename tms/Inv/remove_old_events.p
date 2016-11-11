@@ -219,7 +219,7 @@ PROCEDURE pRemoveFees:
                bSingleFee.HostTable lcSep
                bSingleFee.KeyValue  lcSep
                bSingleFee.BillPeriod lcSep
-               bSingleFee.Amt SKIP.
+               ROUND(bSingleFee.Amt,2) SKIP.
                 
             FIND FIRST SingleFee WHERE RECID(SingleFee) = RECID(bSingleFee)
                EXCLUSIVE-LOCK.
