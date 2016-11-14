@@ -3585,7 +3585,8 @@ PROCEDURE pInvoiceHeader:
    DEF VAR liITGDeltype  AS INT  NO-UNDO.
    DEF VAR llNextInvNdd  AS LOG  NO-UNDO.
    DEF VAR lcRegion      AS CHAR NO-UNDO. 
-   DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
+   DEF VAR lcFixedNumber AS CHAR NO-UNDO INIT ?. 
+   DEF VAR ldeSplitTS    AS DEC NO-UNDO. 
 
    DEF BUFFER bufseq  FOR InvSeq.
    DEF BUFFER bChkInv FOR Invoice. 
@@ -3638,6 +3639,30 @@ PROCEDURE pInvoiceHeader:
                liUserCust    = MsOwner.CustNum.
          END.
  
+         IF ttRowVat.ITGDeltype EQ {&INV_DEL_TYPE_FUSION_EMAIL} OR
+            ttRowVat.ITGDeltype EQ {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} THEN
+            lcFixedNumber = "".
+         /* iSTC from convergent to mobile */
+         ELSE IF lcFixedNumber EQ ? OR lcFixedNumber EQ "" THEN DO:
+
+            FIND FIRST ttInvSplit WHERE
+                       ttInvSplit.AgrCust  = ttRowVat.AgrCust AND
+                       ttInvSplit.MsSeq    = ttRowVat.MsSeq NO-ERROR.
+
+            IF AVAIL ttInvSplit THEN DO:
+
+               ldeSplitTS = fMake2Dt(ttInvSplit.SplitDate, 0).
+
+               FOR FIRST MSOwner NO-LOCK USE-INDEX MsSeq WHERE
+                         MSOwner.MsSeq   = ttRowVat.MsSeq AND
+                         MsOwner.TsBegin < ldeSplitTS AND
+                         MsOwner.InvCust = Customer.CustNum AND
+                         MsOwner.AgrCust = ttRowVat.AgrCust:
+                  lcFixedNumber = MsOwner.FixedNumber.
+               END.
+            END.
+         END.
+                  
          /* no grouping for cash invoices */
          IF llCashInvoice THEN ASSIGN
             liITGroupID = 0
