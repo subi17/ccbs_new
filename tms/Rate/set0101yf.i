@@ -1,7 +1,7 @@
 ASSIGN
  lcCustomerName        =  REPLACE(TRIM(ENTRY( 1,callrec,lcSep)),'"',"")
  liSourceID            = INT(TRIM(ENTRY( 2,callrec,lcSep)))   
- lcSourceName          =     TRIM(ENTRY( 3,callrec,lcSep))
+ lcMSCID               =     TRIM(ENTRY( 3,callrec,lcSep))
  lcRecordType          =     TRIM(ENTRY( 4,callrec,lcSep))
  lcVersion             =     TRIM(ENTRY( 5,callrec,lcSep))
  lcBatchSeq            = INT(TRIM(ENTRY( 7,callrec,lcSep)))  
