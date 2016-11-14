@@ -354,10 +354,11 @@ DO WHILE TRUE:
            ldaDate = DATE(EndPeriod MOD 100, 1, INT(EndPeriod / 100)) + 32
            ldeLastSecond = YEAR(ldaDate) * 10000 + MONTH(ldaDate) * 100 + 1.
 
-         IF CAN-FIND(msowner NO-LOCK WHERE
-                     msowner.CLI = MobSub.CLI AND
-                     msowner.tsbegin < ldeLastSecond AND
-                     msowner.tsend >= ldeFirstSecond) THEN DO:
+         IF CAN-FIND(FIRST msowner NO-LOCK WHERE
+                           msowner.CLI = MobSub.CLI AND
+                           msowner.tsbegin < ldeLastSecond AND
+                           msowner.tsend >= ldeFirstSecond AND
+                           msowner.FixedNumber > "") THEN DO:
          MESSAGE "This subscription has fixed line"
                  " active so customer will be re-rated."
                  SKIP
