@@ -332,19 +332,19 @@ DO FOR DumpLog TRANS:
          DumpLog.CreateStart   = ldStarted
          DumpLog.DumpId        = iiDumpID
          DumpLog.FileName      = lcPlainFile.
-   END. /* DO FOR DumpLog TRANS: */
+   END.
 
-   
-   IF DumpFile.TransDir > "" THEN
-      SET os-file = DumpFile.TransDir + "/" + DumpLog.FileName.
-   ELSE
-      SET os-file = DumpFile.SpoolDir + "/" + DumpLog.FileName.
+   IF oiEventCount <> 0 OR DumpFile.EmptyFile = TRUE THEN DO:
+      IF DumpFile.TransDir > "" THEN
+         SET os-file = DumpFile.TransDir + "/" + DumpLog.FileName.
+      ELSE
+         SET os-file = DumpFile.SpoolDir + "/" + DumpLog.FileName.
 
-   FILE-INFO:FILE-NAME = os-file.
-   ASSIGN
-      DumpLog.CreateEnd     = fMakeTS()
-      DumpLog.Filesize      = DECIMAL(FILE-INFO:FILE-SIZE).
-   
+      FILE-INFO:FILE-NAME = os-file.
+      ASSIGN
+         DumpLog.Filesize      = DECIMAL(FILE-INFO:FILE-SIZE).
+   END.
+   DumpLog.CreateEnd     = fMakeTS().
 
    IF llInterrupted THEN ASSIGN
       DumpLog.DumpLogStatus = 5.
@@ -356,7 +356,7 @@ DO FOR DumpLog TRANS:
    IF oiEventCount EQ {&DUMPLOG_ERROR_NOTIFICATION} THEN ASSIGN
       DumpLog.DumpLogStatus = 1
       oiEventCount = 0.
-END.
+END. /* DO FOR DumpLog TRANS: */
 
 /* notify monitoring */
 IF llInterrupted OR lcFinalFile = "" 
