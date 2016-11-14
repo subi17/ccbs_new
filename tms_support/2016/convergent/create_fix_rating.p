@@ -45,18 +45,34 @@ END.
 create_tmritem("CONTDSL_DATA_IN,CONTDSL45",14).
 create_tmritem("CONTFH50_DATA_IN,CONTFH45_50",14).
 create_tmritem("CONTFH300_DATA_IN,CONTFH55_300",14).
+
+create_tmritem("CONTDSL_DATA_IN,CONTDSL58",14).
+create_tmritem("CONTFH50_DATA_IN,CONTFH58_50",14).
+create_tmritem("CONTFH300_DATA_IN,CONTFH68_300",14).
+
 create_tmritem("CONTS2GB_DATA_IN,CONTDSL45",14).
 create_tmritem("CONTS2GB_DATA_IN,CONTFH45_50",14).
 create_tmritem("CONTS2GB_DATA_IN,CONTFH55_300",14).
+
+create_tmritem("CONTDATA24,CONTDSL58",14).
+create_tmritem("CONTDATA24,CONTFH58_50",14).
+create_tmritem("CONTDATA24,CONTFH68_300",14).
 
 create_tmritem("CONTDSL_QTY_IN,CONTDSL45",34).
 create_tmritem("CONTFH50_QTY_IN,CONTFH45_50",34).
 create_tmritem("CONTFH300_QTY_IN,CONTFH55_300",34).
 
+create_tmritem("CONTDSL_QTY_IN,CONTDSL58",34).
+create_tmritem("CONTFH50_QTY_IN,CONTFH58_50",34).
+create_tmritem("CONTFH300_QTY_IN,CONTFH68_300",34).
+
 create_tmritem("CONTDSL_MIN_IN,CONTDSL45",34).
 create_tmritem("CONTFH50_MIN_IN,CONTFH45_50",34).
 create_tmritem("CONTFH300_MIN_IN,CONTFH55_300",34).
 
+create_tmritem("CONTDSL_MIN_IN,CONTDSL58",34).
+create_tmritem("CONTFH50_MIN_IN,CONTFH58_50",34).
+create_tmritem("CONTFH300_MIN_IN,CONTFH68_300",34).
 
 IF CAN-FIND(FIRST bitemgroup WHERE
                   bitemgroup.brand = "1" AND
@@ -169,6 +185,11 @@ FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                              INPUT idaVAlidFrom AS DATE,
                                              INPUT icclitype AS CHAR,
                                              INPUT iiUpdateMode AS INT):
+   FIND FIRST SLGAnalyse WHERE
+              SLGAnalyse.clitype EQ icclitype AND
+              SLGAnalyse.validto > TODAY NO-ERROR.
+   IF AVAIL SLGAnalyse THEN RETURN TRUE.
+
    FOR EACH bSLGAnalyse WHERE
             bSLGAnalyse.brand EQ "1" AND
             bSLGAnalyse.clitype EQ icBaseDCEvent AND
@@ -226,6 +247,9 @@ fModifySLGAnalyse("CONTDSL45",liMode).
 fModifySLGAnalyse("CONTFH45_50",liMode).
 fModifySLGAnalyse("CONTFH55_300",liMode).
 
+fcreateSLGAnalyse("CONTDSL45","CONTDSL58",ldaFrom,"CONTDSL58",liMode).
+fcreateSLGAnalyse("CONTFH45_50","CONTFH58_50",ldaFrom,"CONTFH58_50",liMode).
+fcreateSLGAnalyse("CONTFH55_300","CONTFH68_300",ldaFrom,"CONTFH68_300",liMode).
 
 /* CCN changes */
 
@@ -322,41 +346,6 @@ FUNCTION createTariff RETURNS LOG (INPUT lcBase AS CHAR,
 
 END.
 
-FUNCTION createTariffpack RETURNS LOG (INPUT lcBase AS CHAR,
-                                       INPUT lcpricelist AS CHAR,
-                                       INPUT lcBdest AS CHAR,
-                                       INPUT liMode AS INT).
-   IF CAN-FIND(FIRST Tariff WHERE
-                     Tariff.brand EQ "1" AND
-                     Tariff.pricelist EQ lcpricelist AND
-                     Tariff.bdest BEGINS lcBdest) THEN
-      MESSAGE "tariff bdest exists " + lcbdest VIEW-AS ALERT-BOX.
-   ELSE DO:
-      IF liMode > 0 THEN DO:   
-          FOR EACH bTariff WHERE
-                  bTariff.brand EQ "1" AND
-                  bTariff.pricelist EQ lcpricelist AND
-                  bTariff.bdest BEGINS lcBase AND            
-                  bTariff.validto > TODAY:
-             CREATE ttTariff.
-             BUFFER-COPY bTariff TO ttTariff.
-             ASSIGN
-                ttTariff.bdest = REPLACE(ttTariff.bdest,lcBase,lcBdest).
-                ttTariff.billcode = REPLACE(ttTariff.billcode,lcBase,lcBdest).
-                IF ttTariff.bdest EQ "CONTS2GB_DATA_IN" THEN
-                   ttTariff.billcode = "CONTS2GB_DATA_A".
-                ELSE IF ttTariff.bdest EQ "CONTS2GB_DATA_OUT" THEN
-                   ttTariff.billcode = "CONTS2GB_DATA_B".
-             CREATE Tariff.
-             ttTariff.tariffnum = next-value(Tariff).
-             BUFFER-COPY ttTariff TO Tariff.
-             DELETE ttTariff.
-         END.
-      END.
-   END.
-
-
-END.
 
 createCCN(1002, "Fixed to International Call", limodeCCN).
 createCCN(1081, "Fixed to National", limodeCCN).
@@ -393,17 +382,21 @@ createTariff("",1081,"CONTRATOFIXED","CONTFH50_MIN_IN",liModeTariff).
 createTariff("",1081,"CONTRATOFIXED","CONTFH300_QTY_IN",liModeTariff).
 createTariff("",1081,"CONTRATOFIXED","CONTFH300_MIN_IN",liModeTariff).
 
-
-CREATE PListConf.
-ASSIGN
-   PListConf.dfrom = ldaFrom
-   PlistConf.dto = 12/31/49
-   PListConf.prior = 20
-   PListConf.rateplan = "CONTRATOCONVS"
-   PListConf.startcharge = TRUE
-   PListConf.brand = "1"
-   PListConf.pricelist = "CONTRATOS".
-
+FIND FIRST PListConf WHERE
+           PListConf.brand EQ "1" AND
+           PListConf.rateplan EQ "CONTRATOCONVS" AND
+           PListConf.pricelist EQ "CONTRATOS" NO-ERROR.
+IF NOT AVAIL PListConf THEN DO:
+   CREATE PListConf.
+   ASSIGN
+      PListConf.dfrom = ldaFrom
+      PlistConf.dto = 12/31/49
+      PListConf.prior = 20
+      PListConf.rateplan = "CONTRATOCONVS"
+      PListConf.startcharge = TRUE
+      PListConf.brand = "1"
+      PListConf.pricelist = "CONTRATOS".
+END.
 
 Function createBillItem RETURNS LOG ( INPUT icbase AS CHAR,
                                       INPUT icBillcode AS CHAR,
@@ -545,6 +538,10 @@ IF liModeBdest > 0 THEN DO:
       ASSIGN
          DialType.dialtype = 24
          DialType.dtName = "Fixed Voice short number (type2)".
+      CREATE DialType.
+      ASSIGN
+         DialType.dialtype = 50
+         DialType.dtName = "Fixed Voice Bdest".
 
    END.
 
@@ -575,3 +572,4 @@ IF NOT AVAIL RatePref THEN DO:
       RatePref.prefix = "MOB"
       RatePref.Ratepref = "".
 END.
+
