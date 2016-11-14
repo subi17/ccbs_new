@@ -65,7 +65,7 @@ DEF VAR ok           AS LOG FORMAT "Yes/No" NO-UNDO.
 
 FORM
     DPBasis.BillCode   /* column-label format */
-    DPBasis.CCN      
+    DPBasis.CCN FORMAT ">>>9"     
     TargName          COLUMN-LABEL "Name of Target" FORMAT "x(30)"
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
@@ -76,7 +76,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
 
 FORM
     "Product Code ...:" DPBasis.BillCode  "OR" at 36 SKIP
-    "CCN ............:" DPBasis.CCN                  SKIP 
+    "CCN ............:" DPBasis.CCN FORMAT ">>>9"    SKIP 
 WITH 
     OVERLAY 
     ROW 2 

@@ -105,6 +105,7 @@ FUNCTION fGetShaperConfId RETURN CHAR
 
    IF INDEX(lcDefParam,"#CLITYPE#") > 0 THEN DO:
 
+      /* for family tariffs */
       IF icDCEvent BEGINS "CONTF" OR
          icDCEvent BEGINS "CONTS" THEN lcTagValue = icDCEvent.
       ELSE IF (icCLIType = "CONTF" OR icCLIType = "CONTS" OR

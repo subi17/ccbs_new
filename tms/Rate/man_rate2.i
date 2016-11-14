@@ -171,7 +171,12 @@
          IF LOOKUP(STRING(ttCall.Spocmt),"3,4,7,17,32") = 0 OR
             (LOOKUP(STRING(ttCall.SpoCMT),"3,7") > 0 AND 
              ttCall.MSCID = "PRE" AND ttCall.PPFlag = 1) THEN DO:
-            fTicketCheck(INPUT "MSOWNER", 
+            IF lcSourceName NE "FIXED" THEN
+               fTicketCheck(INPUT "MSOWNER",
+                            STRING(ttCall.CLI),
+                            OUTPUT oiERrorCode).
+            ELSE 
+            fTicketCheck(INPUT "MSOWNER_FIXED", 
                          STRING(ttCall.CLI),
                          OUTPUT oiERrorCode).
          END.                
@@ -321,9 +326,12 @@
          lidialtype = ttCall.Dialtype
          liCCN      = ttCall.RateCCN.
 
-      IF ttCall.Spocmt = 66 THEN DO:
-        
+      IF ttCall.Spocmt = 66 OR
+         ttCall.Spocmt = 1066 THEN DO:
+         DEF VAR liTempDialType AS INT NO-UNDO. 
          liccn = 0.
+         IF ttCall.Spocmt = 66 THEN liTempDialType = 4.
+         ELSE liTempDialType = 1.
          FOR FIRST BDest NO-LOCK WHERE
                    BDest.Brand  = gcBrand AND
                    BDest.Bdest  = ttCall.BDest AND
@@ -333,7 +341,7 @@
                    BDest.FromDate <= ttCall.DateSt,
              FIRST RateCCN NO-LOCK WHERE
                    RateCCN.BDestID  = Bdest.BDestID AND
-                   RateCCN.DialType = 4 /* ttCall.DialType */ :
+                   RateCCN.DialType = liTempDialType /* ttCall.DialType */ :
            
             ASSIGN
                liCCN      = RateCCN.CCN
@@ -349,12 +357,15 @@
       IF liCCN = 0 OR liCCN = 999 OR ttCall.BType = 2 THEN 
           liCCN = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
 
-      IF liCCN = 69 AND ttCall.BillDur > 11 THEN DO:
-         IF CAN-FIND(FIRST ttDuration WHERE 
-                           ttDuration.CallCase = "61" AND
+      IF (liCCN = 69  OR liCCN = 1069) AND ttCall.BillDur > 11 THEN DO:
+         IF CAN-FIND(FIRST ttDuration WHERE
+                           ttDuration.CallCase = STRING(liCCN - 8) AND
+                                                 /* "61" or "1061" */
                            ttDuration.BDest    = ttCall.BDest AND
-                           ttDuration.FromDate <= ttCall.DateSt) THEN 
-            liCCN = 61.
+                           ttDuration.FromDate <= ttCall.DateSt) THEN DO:
+            IF liCCN EQ 69 THEN liCCN = 61.
+            ELSE liCCN = 1061.
+         END.
       END.
 
       /* YDR-1853 */
@@ -363,6 +374,12 @@
                 liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
       ELSE IF ttCall.Spocmt = 63 AND ttCall.BillDur > 20 THEN 
          ASSIGN lidialtype = 21
+                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
+      ELSE IF ttCall.Spocmt = 1063 AND ttCall.BillDur <= 20 THEN
+         ASSIGN lidialtype = 23
+                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
+      ELSE IF ttCall.Spocmt = 1063 AND ttCall.BillDur > 20 THEN
+         ASSIGN lidialtype = 24
                 liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype). 
       
       ASSIGN                   
