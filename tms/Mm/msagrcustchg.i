@@ -120,7 +120,7 @@ PROCEDURE pCheckSubscriptionForACC:
       RETURN "ERROR".
    END.
    
-   IF icChannel EQ {&DMS_VFR_REQUEST} THEN
+   IF icChannel NE {&REQUEST_SOURCE_NEWTON} THEN
       FOR FIRST Limit NO-LOCK WHERE
                 Limit.MsSeq     = MobSub.MsSeq AND
                 Limit.LimitType = 3            AND

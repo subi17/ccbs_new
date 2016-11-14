@@ -285,19 +285,15 @@ liRequest = fMSCustChangeRequest(
    pdeCharge,
    TRUE,  /* send SMS */
    "",
-   ({&REQUEST_SOURCE_NEWTON}),
+   (IF pcChannel = "newton" THEN {&REQUEST_SOURCE_NEWTON}
+    ELSE IF pcChannel = "retail_newton" THEN {&REQUEST_SOURCE_RETAIL_NEWTON}
+    ELSE {&REQUEST_SOURCE_MANUAL_TMS}),
    0, /* orig. request */
    pcContractId,
    OUTPUT lcError).
   
 IF liRequest = 0 THEN
    RETURN appl_err("Request could not be done; " + lcError).
-ELSE DO:
-   FIND FIRST MsRequest EXCLUSIVE-LOCK WHERE
-              MsRequest.MsRequest = liRequest NO-ERROR.
-   IF AVAIL MsRequest THEN
-      ASSIGN MsRequest.ReqCParam5 = pcChannel.
-END.
 
 DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  "customer",
