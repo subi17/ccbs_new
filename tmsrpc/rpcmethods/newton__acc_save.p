@@ -292,6 +292,12 @@ liRequest = fMSCustChangeRequest(
   
 IF liRequest = 0 THEN
    RETURN appl_err("Request could not be done; " + lcError).
+ELSE DO:
+   FIND FIRST MsRequest EXCLUSIVE-LOCK WHERE
+              MsRequest.MsRequest = liRequest NO-ERROR.
+   IF AVAIL MsRequest THEN
+      ASSIGN MsRequest.ReqCParam5 = pcChannel.
+END.
 
 DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  "customer",

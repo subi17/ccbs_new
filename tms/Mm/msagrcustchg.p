@@ -190,6 +190,7 @@ PROCEDURE pOwnerChange:
 
    RUN pCheckSubscriptionForACC (MsRequest.MsSeq,
                                  MsRequest.MsRequest,
+                                 MsRequest.ReqCParam5,
                                  OUTPUT lcInfo).
    
    IF lcInfo = "" AND MsRequest.ReqIParam1 > 0 THEN
@@ -786,6 +787,7 @@ PROCEDURE pOwnerChange:
          RUN pCheckSubscriptionForACC (
             bMobSub.MsSeq,
             0,
+            MsRequest.ReqCParam5,
             OUTPUT lcInfo).
 
          IF NOT RETURN-VALUE BEGINS "ERROR" THEN DO:
@@ -1193,7 +1195,7 @@ PROCEDURE pMsCustMove:
       END.
       
       /* billing denials */
-      FOR EACH Limit NO-LOCK USE-INDEX MsSeq WHERE
+      FOR EACH Limit EXCLUSIVE-LOCK USE-INDEX MsSeq WHERE
                Limit.MsSeq     = MsOwner.MsSeq   AND
                Limit.LimitType = 3               AND
                Limit.TMRuleSeq = 0               AND
@@ -1201,17 +1203,21 @@ PROCEDURE pMsCustMove:
                Limit.LimitID   = 0               AND
                Limit.CustNum   = MobSub.InvCust:
                
-          CREATE bLimit.
-          
-          BUFFER-COPY Limit EXCEPT FromDate TO bLimit.
-          
-          ASSIGN 
-             bLimit.FromDate = ldtActDate
-             bLimit.CustNum  = iiNewInvCust.
-          
-          RELEASE bLimit.
+         IF Limit.FromDate >= ldtActDate THEN       
+            Limit.CustNum = iiNewInvCust.       
 
-      END.
+         ELSE DO:
+            CREATE bLimit.
+            BUFFER-COPY Limit EXCEPT FromDate TO bLimit.
+            ASSIGN
+               bLimit.FromDate = ldtActDate
+               bLimit.CustNum  = iiNewInvCust
+               Limit.ToDate    = ldtActDate - 1.
+            RELEASE bLimit.   
+         END.
+         
+         RELEASE Limit.
+   END.    
 
    END.
    
@@ -1873,6 +1879,7 @@ PROCEDURE pHandleAdditionalLines:
          RUN pCheckSubscriptionForACC (
             bMobSub.MsSeq,
             0,
+            MsRequest.ReqCParam5,
             OUTPUT lcInfo).
 
          IF NOT RETURN-VALUE BEGINS "ERROR" THEN DO:
