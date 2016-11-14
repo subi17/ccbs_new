@@ -176,7 +176,7 @@
                             STRING(ttCall.CLI),
                             OUTPUT oiERrorCode).
             ELSE 
-            fTicketCheck(INPUT "MSOWNER", 
+            fTicketCheck(INPUT "MSOWNER_FIXED", 
                          STRING(ttCall.CLI),
                          OUTPUT oiERrorCode).
          END.                
