@@ -266,9 +266,10 @@ IF NOT AVAIL mobsub THEN DO:
               CLIType.CliType = Order.CLIType 
    NO-LOCK NO-ERROR.
 
-   FIND FIRST imsi WHERE 
-              imsi.icc = Order.icc
-   NO-LOCK NO-ERROR.
+   IF Msrequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE}
+   THEN RELEASE IMSI.
+   ELSE FIND FIRST imsi NO-LOCK WHERE 
+                   imsi.icc = Order.icc NO-ERROR.
 
    CREATE MobSub. 
 
@@ -349,7 +350,8 @@ IF NOT AVAIL mobsub THEN DO:
    ASSIGN
       MobSub.CLI              = Order.CLI
       MobSub.FixedNumber      = orderfusion.FixedNumber WHEN AVAIL orderfusion
-      Mobsub.icc              = Order.ICC
+      Mobsub.icc              = Order.ICC WHEN MsRequest.ReqType NE 
+                                  {&REQTYPE_FIXED_LINE_CREATE}
       Mobsub.Brand            = Order.Brand 
       Mobsub.MsStatus         = (IF MsRequest.ReqType EQ 
                                     {&REQTYPE_FIXED_LINE_CREATE} 
