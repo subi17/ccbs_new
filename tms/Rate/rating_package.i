@@ -280,7 +280,8 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                   the leftover is rated with normal tariff but without 
                   starting charge */
                IF ldPackageAmt > 0 AND 
-                  liDialType = {&DIAL_TYPE_VOICE} 
+                  liDialType = {&DIAL_TYPE_VOICE} OR
+                  liDialType = {&DIAL_TYPE_FIXED_VOICE}
                THEN DO:
                   c_dur = ldPackageAmt.
                   fTariff().
@@ -310,6 +311,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
 
  
                IF liDialType = {&DIAL_TYPE_VOICE} OR
+                  liDialType = {&DIAL_TYPE_FIXED_VOICE} OR
                   liDialType = {&DIAL_TYPE_GPRS} THEN
                      c_dur = ldAmtUsed.
             END.
