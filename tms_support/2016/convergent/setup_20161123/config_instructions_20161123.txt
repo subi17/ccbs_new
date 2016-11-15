@@ -1,95 +1,106 @@
 -empty tariff creation folder /store/riftp/tariff/incoming/ 
 
--Copy text files from tms_support/2016/convergent/config_20161123 to /store/riftp/tariff/incoming/ 
-   cp *.txt /store/riftp/tariff/incoming/ 
-   -tariff_trans.txt (built of tariff_trans_ypr5291.txt).
+-cp tariff_trans_ypr5291.txt tariff_trans.txt
 
--Execute new_rateplan.p for creating CONTRATOCONVC rate plan. Script also includes fixed and CONTRATO8 proce lists.
+-Copy text files from tms_support/2016/convergent/setup_20161123 to /store/riftp/tariff/incoming/ 
+   cp tariff_trans.txt /store/riftp/tariff/incoming/ 
+   cp tariffcreation*.txt /store/riftp/tariff/incoming/ 
+
+-Execute new_rateplan.p for creating CONTRATOCONVC rate plan. Script also includes fixed and CONTRATO8 price lists.
 
 -Execute create_newtariff.p from ../
+(/apps/yoigo/tms_support/2016/convergent)
+
+-Check logs from /store/riftp/tariff/spool
 
 
 Make additional fixes 
    config_ypr5291.p (New tool: matrix, tmsparam, requestaction)
 
--Make manual fix for service packages: !!!!!!!!!!!!!!!!!!!!!!!!!!!
+-Make manual fix for service packages: 
    F3-F2-F4-F4 CONT9 has extra service packages
       F4 SERVICE PACKAGES -> delete components under items done today and delete also the packages.
       Only old one must remain.
-   |BO|  |Service Package  Name                           From     To      |   |49|
-   |CO|  |---------------- ------------------------------ -------- --------|   |49|
-   |CO|  |SHAPER           Data shaper                    04-03-15 31-12-49|   |49|
-   |CO|  |SHAPER           Data shaper                    02-11-16 31-12-49|   |49|REMOVE
-   |CO|  |SHAPER           Data shaper                    02-11-16 31-12-49|   |49|REMOVE
-   |CO|  |SHAPER           Data shaper                    02-11-16 31-12-49|   |54|REMOVE
+....  ...............  SERVICE PACKAGES OF CONT9 (Active) ...............   ....
+.BO.  .Service Package  Name                           From     To      .   .49.
+.CO.  ................. .............................. ........ .........   .49.
+.CO.  .SHAPER           Data shaper                    01-05-14 31-12-49.   .49.
+.CO.  .SHAPER           Data shaper                    15-11-16 31-12-49.   .49.REMOVE
+.CO.  .SHAPER           Data shaper                    15-11-16 31-12-49.   .49.REMOVE
+.CO.  .SHAPER           Data shaper                    15-11-16 31-12-49.   .54.REMOVE
+.CO.  .                                                                 .   .11.
+
 
 -Make manual Fix for service limits:
-   F3-F2-F4-F5 -> CONT9 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   F3-F2-F4-F5 -> CONT9 
    F3 service Limits
-   |CON|CONT24           CONT24_DATA  Data                                    |   |
-   |CON|CONT24           CONT24_QTY   Bdest                                   |   |
-   |CON|CONT24           CONT24_MIN   National Calls                          |   |
-   |CON|CONT24           CONT24_DATA  Data                                    |   |REMOVE
-   |CON|CONT24           CONT24_MIN   National Calls                          |   |REMOVE
-   |CON|CONT24           CONT24_DATA  Data                                    |   |REMOVE
-   |CON|CONT24           CONT24_MIN   National Calls                          |   |REMOVE
-   |CON|CONT24           CONT24_DATA  Data                                    |   |REMOVE
-   |CON|CONT24           CONT24_MIN   National Calls                          |   |REMOVE
+-> CONT9 
+
+.Gro....................... ServiceLimit Groups CONT9.......................   .
+.....Group Code       ServiceLimit Servicelimit Name                       .   .
+.BON................. ............ .........................................   .
+.CON.CONT9            CONT9        Contrato 9 data                         .   .
+.CON.CONT9            CONT9_DATA   Data                                    .   .
+.CON.CONT9            CONT9_MIN    National Calls                          .   .
+.CON.CONT9            CONT9_DATA   Data                                    .   .REMOVE
+.CON.CONT9            CONT9_MIN    National Calls                          .   .REMOVE
+.CON.CONT9            CONT9_DATA   Data                                    .   .REMOVE
+.CON.CONT9            CONT9_MIN    National Calls                          .   .REMOVE
+
    Delete others than 3 rows in top of the list. Delete first SERVICE LIMIT TARGETS - F3 (F6)
 
-(
+
 -Request action rules F7-F1-F2-F1
    OK   Check 13
    F2
-)
-
-
-
 
 -Request action rules for GROUP 14 
-   F2
+   F2 REQUEST ACTIONS
    -> REMOVE CONTS2GB rows.
    Removing is done with F6
-   ┌------------------------  ACTIONS OF TYPE 14 (Active) ------------------------┐
-   |   ID PType CLIType       Act.Type           Key          Action      To      |
-   |----- ----- ------------- ------------------ ------------ ----------- --------|
-   |  642       CONTDSL45     DayCampaign        CONTDSL      Create      31-12-49|
-   |  661       CONTDSL58     DayCampaign        CONTDSL      Create      31-12-49|
-   |  662       CONTDSL58     DayCampaign        CONTS2GB     Create      31-12-49|***REMOVE
-   |  645       CONTFH45_50   DayCampaign        CONTFH50     Create      31-12-49|
-   |  648       CONTFH55_300  DayCampaign        CONTFH300    Create      31-12-49|
-   |  666       CONTFH58_50   DayCampaign        CONTFH50     Create      31-12-49|
-   |  667       CONTFH58_50   DayCampaign        CONTS2GB     Create      31-12-49|***REMOVE
-   |  671       CONTFH68_300  DayCampaign        CONTFH300    Create      31-12-49|
-   |  672       CONTFH68_300  DayCampaign        CONTS2GB     Create      31-12-49|***REMOVE
-   |  655 Postp               DayCampaign        FTERM12-100  Create      31-12-49|
-   └------------------------------------------------------------------------------┘
+
+.........................  ACTIONS OF TYPE 14 (Active) .........................
+.   ID PType CLIType       Act.Type           Key          Action      To      .
+...... ..... ............. .................. ............ ........... .........
+.  679       CONTDSL40     DayCampaign        CONTDSL      Create      31-12-49.
+.  680       CONTDSL40     DayCampaign        CONTS2GB     Create      31-12-49.REMOVE
+.  642       CONTDSL45     DayCampaign        CONTDSL      Create      31-12-49.
+.  661       CONTDSL58     DayCampaign        CONTDSL      Create      31-12-49.
+.  684       CONTFH40_50   DayCampaign        CONTFH50     Create      31-12-49.
+.  685       CONTFH40_50   DayCampaign        CONTS2GB     Create      31-12-49.REMOVE
+.  645       CONTFH45_50   DayCampaign        CONTFH50     Create      31-12-49.
+.  689       CONTFH50_300  DayCampaign        CONTFH300    Create      31-12-49.
+.  690       CONTFH50_300  DayCampaign        CONTS2GB     Create      31-12-49.REMOVE
+.  648       CONTFH55_300  DayCampaign        CONTFH300    Create      31-12-49.
+................................................................................
 
 
 -Remove extra fees F1-F1-F2-F5
    CONT9MF
    F3 (event contains) 
-   Remove CONTDSLFH and CONTDSL related rows. Final result must be:
+   Remove CONTDSLFH and CONTDSL related rows. Final result must be like CONT24 has:
    
-.B........... Items of B-Event 1/CONT24MF: Contrato 24 monthly fee ........... .
+.................. Xfera Moviles S.A. Billing Events 15-11-16 ..................
+.B............ Items of B-Event 1/CONT9MF: Contrato 9 monthly fee ............ .
 ...Price List ProdC        BI Name         From     Type    I BM SL     Price. .
 .1........... ............ ............... ........ ...... .. .. .. .......... .
-.1.CONTRATOS  CONT24MF     CONT24 package  04-03-15 Fixed   1  2 X      23.97. .
-.1.                                                                          . .
+.1.CONTRATO8  CONT9MF      Cont 9 package  01-05-14 Fixed   1  2 X       9.09. .
+.1.CONTRATOS  CONTDSLMF    Convergent ADSL 15-11-16 Fixed   1  2 X      33.06. . REMOVE
+.1.CONTRATOS  CONTFH300MF  Convergent FIBE 15-11-16 Fixed   1  2 X      41.32. .REMOVE
+.1.CONTRATOS  CONTFH50MF   Convergent FIBE 15-11-16 Fixed   1  2 X      33.06. .REMOVE
 
-   
+  
 -Fix request actions for type 0: F7-F1-F2-F1
 F2 Request actions
-CLIType: CONTDSL58.. + CONTFH58_50 + CONTFH68_300 
+CLIType: CONTDSL40.. + CONTFH40_50 + CONTFH50_300 
 .. Action: 1 Create
 .. ActionType: Daycampaign
-.. ActionKey: CONTS2GB.. -> CONT24............
+.. ActionKey: CONTS2GB.. -> CONT9............
 Example:
-  663       CONTDSL58     DayCampaign        CONT24       Create      31-12-49.
+  691       CONTFH50_300  DayCampaign        CONT9        Create      31-12-49
 
 
-
-F3 F1 F2 -> CONTDSL58 -> F3
+F3 F1 F2 -> CONTDSL40 -> F3
 Select TMSService
 F4 -> SHAPER_STP must exist. For example:
 
@@ -205,4 +216,4 @@ IF LOOKUP("CONTDSL45", TMSParam.charval) = 0 THEN
 
 ================================================================================
 +shaperconf.txt - NOT NEEDED because of existing base bundle.
-+billingitem.txt - NOT NEEDED
+obillingitem.txt - NOT NEEDED

@@ -314,14 +314,14 @@ FIND FIRST CTServEl WHERE
            CTServEl.Brand   = "1"          AND
            CTServEl.CLIType = icCliType AND
            CTServEl.ServPac = "TMSService" AND
-           CTServEl.servcom = "SHAPER_STP".
+           CTServEl.servcom = "SHAPER_STP" NO-ERROR. 
 
 IF NOT AVAIL CTServEl THEN DO:
    FIND FIRST CTServEl WHERE
               CTServEl.Brand   = "1"          AND
               CTServEl.CLIType = "CONT24" AND /*only for base, to be replaced*/
               CTServEl.ServPac = "TMSService" AND
-              CTServEl.servcom = "SHAPER_STP".
+              CTServEl.servcom = "SHAPER_STP" NO-ERROR.
 
    BUFFER-COPY CTServEl EXCEPT CTServEl.CTServEl
                                CTServEl.CLIType
