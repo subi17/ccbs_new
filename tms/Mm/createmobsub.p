@@ -520,7 +520,8 @@ IF NOT AVAIL mobsub THEN DO:
 
          ASSIGN lcSMSText = REPLACE(lcSMSText,"#CLITYPE",lcReplacedTxt)
                 lcSMSText = REPLACE(lcSMSText,"#CLI", MobSub.CLI)
-                lcSMSText = REPLACE(lcSMSText,"#FIXED_NUMBER", MobSub.FixedNumber).
+                lcSMSText = REPLACE(lcSMSText,"#FIXED_NUMBER",
+                              MobSub.FixedNumber) WHEN MobSub.FixedNumber NE ?.
       END.
 
       IF lcSMSText > "" THEN DO:
