@@ -852,6 +852,7 @@
 "MSrequest" "ReqStatus" "Request" "17" "File created" "" "" 1
 "MSRequest" "ReqStatus" "Request" "19" "Waiting" "" "" 1
 "MsRequest" "ReqStatus" "Request" "2" "Done" "" "" 1
+"MsRequest" "ReqStatus" "Request" "20" "Waiting confirmation" "" "" 1
 "MsRequest" "ReqStatus" "Request" "3" "Rejected (error occurred)" "" "" 1
 "MsRequest" "ReqStatus" "Request" "4" "Cancelled" "" "" 1
 "MSrequest" "ReqStatus" "Request" "5" "Pending HLR" "" "" 1
@@ -1279,14 +1280,14 @@
 "RepText" "TextType" "Report" "7" "Tax zone" "" "" 1
 "RepText" "TextType" "Report" "8" "Invoice section" "" "" 1
 "RepText" "TextType" "Report" "9" "CLI Type" "" "" 1
-"requem" "0,0,1,2,3,4,5,6,7,9,8" "SubsLMenu" "1" "Subscription type change" "" "" 1
+"requem" "0,0,1,2,3,4,5,6,7,9,8,19" "SubsLMenu" "1" "Subscription type change" "" "" 1
 "requem" "0,0,1,2,3,4,5,6,9" "SubsLMenu" "0" "Subscription type change" "" "" 1
 "requem" "1,0,1,2,3,4,5,6,7,8,9" "SubsLMenu" "1" "HLR service change" "" "" 1
 "requem" "10,0,2,1,3,4,7,8,9,19" "SubsLMenu" "1" "Agreement customer change" "" "" 1
 "requem" "12,1,2,3,4,9" "SubsLMenu" "0" "Customer´s marketing value update" "" "" 1
 "requem" "13,0,1,2,3,4,5,6,9" "SubsLMenu" "1" "Subscription creation" "" "" 1
 "requem" "14,0,1,2,3,4,9" "SubsLMenu" "1" "Fixed line creation" "" "" 1
-"requem" "15,0,1,2,3,4,5,6,9,15,19" "SubsLMenu" "1" "ICC change" "" "" 1
+"requem" "15,0,1,2,3,4,5,6,9,15,19,20" "SubsLMenu" "1" "ICC change" "" "" 1
 "requem" "18,0,1,2,3,4,5,6,8,9,19" "SubsLMenu" "1" "Subscription termination" "" "" 1
 "requem" "19,0,1,2,3,4,5,6,9" "SubsLMenu" "1" "MSISDN change" "" "" 1
 "requem" "20,0,1,2,3,4,9" "SubsLMenu" "1" "On-demand invoice" "" "" 1
