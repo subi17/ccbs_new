@@ -233,6 +233,9 @@ IF lcError EQ "" THEN
    RUN pCheckSubscriptionForACC (
       MobSub.MsSeq,
       0,
+      (IF pcChannel = "newton" THEN {&REQUEST_SOURCE_NEWTON}
+       ELSE IF pcChannel = "retail_newton" THEN {&REQUEST_SOURCE_RETAIL_NEWTON}
+       ELSE {&REQUEST_SOURCE_MANUAL_TMS}),
       OUTPUT lcError).
 
 IF lcError EQ "" AND AVAIL Customer THEN 
