@@ -4,6 +4,7 @@
 "12" "Change refund payment date" "chgrefundate" 16 ""
 "13" "Change charge type" "chgchargetype" 0 ""
 "14" "Reset activation" "stc_nw_act" 5 ""
+"15" "Release request (set status to 8)" "chmsreqst" 8 ""
 "2" "Reset request (set status to 0)" "chmsreqst" 0 ""
 "3" "Handle request (set status to 9)" "chmsreqst" 9 ""
 "4" "Bypass network (Set status to 6)" "chmsreqst" 6 ""
@@ -11,3 +12,4 @@
 "6" "Run immediately" "runreqnow" 0 ""
 "7" "Approve ICC change for handling" "chmsreqst" 0 ""
 "8" "Approve ACC handling" "chmsreqst" 0 ""
+"9" "Release request (set status to 0)" "chmsreqst" 0 ""
