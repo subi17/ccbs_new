@@ -7,7 +7,7 @@ ASSIGN
  lcBatchSeq            = INT(TRIM(ENTRY( 7,callrec,lcSep)))  
  liRunningindex        = INT(TRIM(ENTRY( 8,callrec,lcSep)))
  lcExtRunningIndex     =     TRIM(ENTRY( 9,callrec,lcSep))  
- lcHandlingTime        =     TRIM(ENTRY(10,callrec,lcSep))
+ lcMediatorTime        =     TRIM(ENTRY(10,callrec,lcSep))
  lcEvent               =     TRIM(ENTRY(11,callrec,lcSep))  
  lcEventSubType        =     TRIM(ENTRY(12,callrec,lcSep)) 
  lcOriginalCdrType     =     TRIM(ENTRY(13,callrec,lcSep))

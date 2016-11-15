@@ -334,9 +334,9 @@ FUNCTION createTariff RETURNS LOG (INPUT lcBase AS CHAR,
                ttTariff.vStartCharge = 0
                ttTariff.tariffnum = next-value(Tariff).
             IF INDEX(ttTariff.bdest, "QTY") > 0 THEN 
-               ttTariff.billcode = "F10100005".
+               ttTariff.billcode = "CONTDSL_QTY_IN".
             ELSE IF INDEX(ttTariff.bdest, "MIN") > 0 THEN
-               ttTariff.billcode = "F10100003".
+               ttTariff.billcode = "CONTDSL_MIN_IN".
             BUFFER-COPY ttTariff TO Tariff.
             DELETE ttTariff.
          END.

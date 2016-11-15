@@ -3587,6 +3587,7 @@ PROCEDURE pInvoiceHeader:
    DEF VAR lcRegion      AS CHAR NO-UNDO. 
    DEF VAR lcFixedNumber AS CHAR NO-UNDO INIT ?. 
    DEF VAR ldeSplitTS    AS DEC NO-UNDO. 
+   DEF VAR ldeToTS     AS DEC NO-UNDO. 
 
    DEF BUFFER bufseq  FOR InvSeq.
    DEF BUFFER bChkInv FOR Invoice. 
@@ -3595,6 +3596,7 @@ PROCEDURE pInvoiceHeader:
    
    ASSIGN 
       lCurRate   = fCurrRate(Customer.Currency,idaInvDate)
+      ldeToTS    = fMake2Dt(idaToDate + 1, 0)
       ldTotalInv = 0
       liAgrCust  = 0.
    
@@ -3631,6 +3633,7 @@ PROCEDURE pInvoiceHeader:
          /* get the latest with msseq index in case msisdn has been changed */
          FOR FIRST MSOwner NO-LOCK USE-INDEX MsSeq WHERE
                    MSOwner.MsSeq   = ttRowVat.MsSeq AND
+                   MSOwner.TSBegin < ldeToTS AND 
                    MsOwner.InvCust = Customer.CustNum AND
                    MsOwner.AgrCust = ttRowVat.AgrCust:
             ASSIGN
