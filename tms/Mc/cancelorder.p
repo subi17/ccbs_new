@@ -27,11 +27,8 @@ DEF VAR liQuarTime AS INTEGER NO-UNDO.
 DEF VAR llPenaltyFee AS LOGICAL NO-UNDO.
 DEF VAR lcResult AS CHARACTER NO-UNDO. 
 DEF VAR lcCreditReason AS CHARACTER NO-UNDO. 
-DEF VAR liCount AS INTEGER NO-UNDO.
 DEF VAR ldtLOTS AS DATETIME NO-UNDO.
 DEF VAR liError AS INT NO-UNDO. 
-
-DEFINE BUFFER bOrderDelivery FOR OrderDelivery.
 
 FIND Order NO-LOCK WHERE
      Order.Brand = gcBrand AND
@@ -44,30 +41,18 @@ IF ilCheckLOStatus THEN DO:
 
    FIND FIRST OrderDelivery OF Order NO-LOCK USE-INDEX OrderId NO-ERROR.
 
-   IF AVAIL OrderDelivery THEN DO:
+   IF NOT AVAILABLE OrderDelivery
+   THEN RETURN "".
 
-      FOR EACH bOrderDelivery NO-LOCK WHERE
-               bOrderDelivery.Brand   = gcBrand AND
-               bOrderDelivery.OrderId = OrderDelivery.OrderId AND
-               bOrderDelivery.LOTimeStamp = OrderDelivery.LOTimeStamp:
-         liCount = liCount + 1.
-      END.
+   ldtLOTS = OrderDelivery.LOTimeStamp.
 
-      IF liCount > 1 THEN DO:
-      
-         ldtLOTS = OrderDelivery.LOTimeStamp.
-
-         FIND FIRST OrderDelivery OF Order NO-LOCK WHERE
-                    OrderDelivery.LOTimeStamp = ldtLOTS AND
-            LOOKUP(STRING(OrderDelivery.LOStatusId),
-            {&DEXTRA_CANCELLED_STATUSES}) > 0
-         NO-ERROR.
-      END.
-   END. /* IF AVAIL OrderDelivery THEN DO: */
-
-   IF NOT AVAIL OrderDelivery OR
-      LOOKUP(STRING(OrderDelivery.LOStatusId),{&DEXTRA_CANCELLED_STATUSES}) = 0
+   FOR EACH OrderDelivery NO-LOCK WHERE
+            OrderDelivery.Brand   = gcBrand AND
+            OrderDelivery.OrderId = Order.OrderId AND
+            OrderDelivery.LOTimeStamp = ldtLOTS:
+      IF LOOKUP(STRING(OrderDelivery.LOStatusId),{&DEXTRA_CANCELLED_STATUSES}) = 0
       THEN RETURN "".
+   END.
 
 END.
 
