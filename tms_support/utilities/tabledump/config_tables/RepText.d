@@ -1044,10 +1044,30 @@
 1 "" 2 "Nacionals" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
 1 "" 3 "Nazionalak" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
 1 "" 5 "National" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONTS2GBCF_A" "1" 10/11/16 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONTS2GBCF_A" "1" 10/11/16 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONTS2GBCF_A" "1" 10/11/16 31/12/49
+1 "" 5 "Call forwarding" 0 "CONTS2GBCF_A" "1" 10/11/16 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONTS2GBCF_B" "1" 10/11/16 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONTS2GBCF_B" "1" 10/11/16 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONTS2GBCF_B" "1" 10/11/16 31/12/49
+1 "" 5 "Call forwarding" 0 "CONTS2GBCF_B" "1" 10/11/16 31/12/49
 1 "" 1 "MÓVIL" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
 1 "" 2 "Mòbil" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
 1 "" 3 "Mugikorra" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
 1 "" 5 "Mobile" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTS2GBVOICE_A" "1" 10/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTS2GBVOICE_A" "1" 10/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTS2GBVOICE_A" "1" 10/11/16 31/12/49
+1 "" 5 "National" 0 "CONTS2GBVOICE_A" "1" 10/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTS2GBVOICE_B" "1" 10/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTS2GBVOICE_B" "1" 10/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTS2GBVOICE_B" "1" 10/11/16 31/12/49
+1 "" 5 "National" 0 "CONTS2GBVOICE_B" "1" 10/11/16 31/12/49
+1 "" 1 "Internet" 0 "CONTS2GB_DATA" "1" 10/11/16 31/12/49
+1 "" 2 "Internet" 0 "CONTS2GB_DATA" "1" 10/11/16 31/12/49
+1 "" 3 "Internet" 0 "CONTS2GB_DATA" "1" 10/11/16 31/12/49
+1 "" 5 "Internet" 0 "CONTS2GB_DATA" "1" 10/11/16 31/12/49
 1 "" 1 "Desvío de Llamadas" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
 1 "" 2 "Desviament de Trucades" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
 1 "" 3 "Dei-desbideraketa" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
@@ -10961,10 +10981,14 @@
 9 "" 2 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 3 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 5 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
-9 "" 1 "La Combinada 20 Naranja" 0 "CONTDSL45" "1" 27/10/16 31/12/49
-9 "" 2 "La Combinada 20 Naranja" 0 "CONTDSL45" "1" 27/10/16 31/12/49
-9 "" 3 "La Combinada 20 Naranja" 0 "CONTDSL45" "1" 27/10/16 31/12/49
-9 "" 5 "La Combinada 20 Naranja" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Azul 20" 0 "CONTDSL58" "1" 10/11/16 31/12/49
+9 "" 2 "La Combinada Azul 20" 0 "CONTDSL58" "1" 10/11/16 31/12/49
+9 "" 3 "La Combinada Azul 20" 0 "CONTDSL58" "1" 10/11/16 31/12/49
+9 "" 5 "La Combinada Azul 20" 0 "CONTDSL58" "1" 10/11/16 31/12/49
 9 "" 1 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 2 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 3 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
@@ -11020,14 +11044,22 @@
 9 "" 4 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
 9 "" 5 "Fusión Plana a lo Yoigo" 0 "CONTFF" "1" 16/06/15 31/12/54
 9 "" 5 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
-9 "" 1 "La Combinada 50 Naranja" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
-9 "" 2 "La Combinada 50 Naranja" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
-9 "" 3 "La Combinada 50 Naranja" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
-9 "" 5 "La Combinada 50 Naranja" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
-9 "" 1 "La Combinada 300 Naranja" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
-9 "" 2 "La Combinada 300 Naranja" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
-9 "" 3 "La Combinada 300 Naranja" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
-9 "" 5 "La Combinada 300 Naranja" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 10/11/16 31/12/49
+9 "" 2 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 10/11/16 31/12/49
+9 "" 3 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 10/11/16 31/12/49
+9 "" 5 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 10/11/16 31/12/49
+9 "" 1 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 10/11/16 31/12/49
+9 "" 2 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 10/11/16 31/12/49
+9 "" 3 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 10/11/16 31/12/49
+9 "" 5 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 10/11/16 31/12/49
 9 "" 1 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 2 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 3 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
