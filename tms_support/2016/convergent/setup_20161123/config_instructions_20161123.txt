@@ -1,0 +1,208 @@
+-empty tariff creation folder /store/riftp/tariff/incoming/ 
+
+-Copy text files from tms_support/2016/convergent/config_20161123 to /store/riftp/tariff/incoming/ 
+   cp *.txt /store/riftp/tariff/incoming/ 
+   -tariff_trans.txt (built of tariff_trans_ypr5291.txt).
+
+-Execute new_rateplan.p for creating CONTRATOCONVC rate plan. Script also includes fixed and CONTRATO8 proce lists.
+
+-Execute create_newtariff.p from ../
+
+
+Make additional fixes 
+   config_ypr5291.p (New tool: matrix, tmsparam, requestaction)
+
+-Make manual fix for service packages: !!!!!!!!!!!!!!!!!!!!!!!!!!!
+   F3-F2-F4-F4 CONT9 has extra service packages
+      F4 SERVICE PACKAGES -> delete components under items done today and delete also the packages.
+      Only old one must remain.
+   |BO|  |Service Package  Name                           From     To      |   |49|
+   |CO|  |---------------- ------------------------------ -------- --------|   |49|
+   |CO|  |SHAPER           Data shaper                    04-03-15 31-12-49|   |49|
+   |CO|  |SHAPER           Data shaper                    02-11-16 31-12-49|   |49|REMOVE
+   |CO|  |SHAPER           Data shaper                    02-11-16 31-12-49|   |49|REMOVE
+   |CO|  |SHAPER           Data shaper                    02-11-16 31-12-49|   |54|REMOVE
+
+-Make manual Fix for service limits:
+   F3-F2-F4-F5 -> CONT9 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   F3 service Limits
+   |CON|CONT24           CONT24_DATA  Data                                    |   |
+   |CON|CONT24           CONT24_QTY   Bdest                                   |   |
+   |CON|CONT24           CONT24_MIN   National Calls                          |   |
+   |CON|CONT24           CONT24_DATA  Data                                    |   |REMOVE
+   |CON|CONT24           CONT24_MIN   National Calls                          |   |REMOVE
+   |CON|CONT24           CONT24_DATA  Data                                    |   |REMOVE
+   |CON|CONT24           CONT24_MIN   National Calls                          |   |REMOVE
+   |CON|CONT24           CONT24_DATA  Data                                    |   |REMOVE
+   |CON|CONT24           CONT24_MIN   National Calls                          |   |REMOVE
+   Delete others than 3 rows in top of the list. Delete first SERVICE LIMIT TARGETS - F3 (F6)
+
+(
+-Request action rules F7-F1-F2-F1
+   OK   Check 13
+   F2
+)
+
+
+
+
+-Request action rules for GROUP 14 
+   F2
+   -> REMOVE CONTS2GB rows.
+   Removing is done with F6
+   ┌------------------------  ACTIONS OF TYPE 14 (Active) ------------------------┐
+   |   ID PType CLIType       Act.Type           Key          Action      To      |
+   |----- ----- ------------- ------------------ ------------ ----------- --------|
+   |  642       CONTDSL45     DayCampaign        CONTDSL      Create      31-12-49|
+   |  661       CONTDSL58     DayCampaign        CONTDSL      Create      31-12-49|
+   |  662       CONTDSL58     DayCampaign        CONTS2GB     Create      31-12-49|***REMOVE
+   |  645       CONTFH45_50   DayCampaign        CONTFH50     Create      31-12-49|
+   |  648       CONTFH55_300  DayCampaign        CONTFH300    Create      31-12-49|
+   |  666       CONTFH58_50   DayCampaign        CONTFH50     Create      31-12-49|
+   |  667       CONTFH58_50   DayCampaign        CONTS2GB     Create      31-12-49|***REMOVE
+   |  671       CONTFH68_300  DayCampaign        CONTFH300    Create      31-12-49|
+   |  672       CONTFH68_300  DayCampaign        CONTS2GB     Create      31-12-49|***REMOVE
+   |  655 Postp               DayCampaign        FTERM12-100  Create      31-12-49|
+   └------------------------------------------------------------------------------┘
+
+
+-Remove extra fees F1-F1-F2-F5
+   CONT9MF
+   F3 (event contains) 
+   Remove CONTDSLFH and CONTDSL related rows. Final result must be:
+   
+.B........... Items of B-Event 1/CONT24MF: Contrato 24 monthly fee ........... .
+...Price List ProdC        BI Name         From     Type    I BM SL     Price. .
+.1........... ............ ............... ........ ...... .. .. .. .......... .
+.1.CONTRATOS  CONT24MF     CONT24 package  04-03-15 Fixed   1  2 X      23.97. .
+.1.                                                                          . .
+
+   
+-Fix request actions for type 0: F7-F1-F2-F1
+F2 Request actions
+CLIType: CONTDSL58.. + CONTFH58_50 + CONTFH68_300 
+.. Action: 1 Create
+.. ActionType: Daycampaign
+.. ActionKey: CONTS2GB.. -> CONT24............
+Example:
+  663       CONTDSL58     DayCampaign        CONT24       Create      31-12-49.
+
+
+
+F3 F1 F2 -> CONTDSL58 -> F3
+Select TMSService
+F4 -> SHAPER_STP must exist. For example:
+
+.....................CONTDSL58: Components of 'TMSService' ................... .
+.C.Component    From        V S.Type Name                                    . .
+.C............. ........ .... ...... ......................................... .
+.C.SHAPER_STP   02-11-16    1 Addit  Subscription type specific SHAPER parame. .
+.C.SMSINVOICE   02-11-16    0 Basic  SMS invoice for Postpaid                . .
+.C.TYPECHG      02-11-16    1 Basic  CLIType Change                          . .
+.C.                                                                          . .
+
+Make the same operations for CONTFH58_50 and CONTFH68_300.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==================1===============================================================
++matrix
+
+
+|1        Convergent CONTDSL        PERCONTR         1 ALLOWED        35       |
+|Bra┌------ Xfera Moviles S.A.  ORDER FUNCTION ITEMS MENU  01-11-16 -------┐   |
+|---|MX Seq Matrix Name MX Item          MX Value           MX Res MX Pr   |   |
+|1  |------ ----------- ---------------- ------------------ ------ -----   |   |
+|1  |  8022 Convergent  PerContract      CONTDSL                 1    35   |   |
+|1  |  8022 Convergent  SubsTypeTo       CONTDSL*                1    35   |   |
+
+
+|1        Convergent CONTFH50       PERCONTR         1 ALLOWED        36       |
+|---|MX Seq Matrix Name MX Item          MX Value           MX Res MX Pr   |   |
+|1  |------ ----------- ---------------- ------------------ ------ -----   |   |
+|1  |  8023 Convergent  PerContract      CONTFH50                1    36   |   |
+|1  |  8023 Convergent  SubsTypeTo       CONTFH45_50             1    36   |   |
+|1  |  8023 Convergent  SubsTypeTo       CONTFH55_50             1    36   |   |
+-lisää oma CONTFH58_50
+
+|1        Convergent CONTFH300      PERCONTR         1 ALLOWED        37       |
+|---|MX Seq Matrix Name MX Item          MX Value           MX Res MX Pr   |   |
+|1  |------ ----------- ---------------- ------------------ ------ -----   |   |
+|1  |  8024 Convergent  PerContract      CONTFH300               1    37   |   |
+|1  |  8024 Convergent  SubsTypeTo       CONTFH55_300            1    37   |   |
+|1  |  8024 Convergent  SubsTypeTo       CONTFH65_300            1    37   |   |
+-lisää oma CONTFH68_300
+
+
+==================================================================================
++tmsparam
+FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "DATA_BUNDLE_BASED_CLITYPES"
+   NO-ERROR.
+
+IF LOOKUP("CONTDSL45", TMSParam.charval) = 0 THEN
+TMSParam.charval = tmsParam.charval + ",CONTDSL45,CONTFH45_50," +
+                   "CONTFH55_300".
+
+FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "POSTPAID_VOICE_TARIFFS"
+   NO-ERROR.
+
+IF LOOKUP("CONTDSL45", TMSParam.charval) = 0 THEN
+   TMSParam.charval = tmsParam.charval + ",CONTDSL45,CONTFH45_50," +
+                      "CONTFH55_300".
+
+
+
+-tmscodes
+-requestaction
+┌------------------------------------------------------------------------------------------------------┐
+|Brand    Type CLIType      From     To       Act.Type             Key          Action PayType       ID|
+|-------- ---- ------------ -------- -------- -------------------- ------------ ------ ------- --------|
+|1           0 CONTDSL45    07-09-16 31-12-49 CTServPac            BB                3       0      679|
+|1           0 CONTDSL45    07-09-16 31-12-49 DayCampaign          CONTDSL45         1       0      680|
+|1          14 CONTDSL45    07-09-16 31-12-49 DayCampaign          CONTDSL           1       0      681|
+|1           0 CONTDSL55    07-09-16 31-12-49 CTServPac            BB                3       0      682|
+|1           0 CONTDSL55    07-09-16 31-12-49 DayCampaign          CONTDSL55         1       0      683|
+|1          14 CONTDSL55    07-09-16 31-12-49 DayCampaign          CONTDSL           1       0      684|
+|1           0 CONTFH45_50  07-09-16 31-12-49 CTServPac            BB                3       0      685|
+|1           0 CONTFH45_50  07-09-16 31-12-49 DayCampaign          CONTFH45_50       1       0      686|
+|1          14 CONTFH45_50  07-09-16 31-12-49 DayCampaign          CONTFH50          1       0      687|
+|1           0 CONTFH55_50  07-09-16 31-12-49 CTServPac            BB                3       0      688|
+|1           0 CONTFH55_50  07-09-16 31-12-49 DayCampaign          CONTFH55_50       1       0      689|
+|1          14 CONTFH55_50  07-09-16 31-12-49 DayCampaign          CONTFH50          1       0      690|
+|1           0 CONTFH55_300 07-09-16 31-12-49 CTServPac            BB                3       0      691|
+|1           0 CONTFH55_300 07-09-16 31-12-49 DayCampaign          CONTFH55_300      1       0      692|
+|1          14 CONTFH55_300 07-09-16 31-12-49 DayCampaign          CONTFH300         1       0      693|
+|1           0 CONTFH65_300 07-09-16 31-12-49 CTServPac            BB                3       0      694|
+|1           0 CONTFH65_300 07-09-16 31-12-49 DayCampaign          CONTFH65_300      1       0      695|
+|1          14 CONTFH65_300 07-09-16 31-12-49 DayCampaign          CONTFH300         1       0      696|
+|1          13 CONTDSL45    07-09-16 31-12-49 DayCampaign          CONTS2GB          1       0      697|
+|1          13 CONTDSL55    07-09-16 31-12-49 DayCampaign          CONTS10GB         1       0      698|
+|1          13 CONTFH45_50  07-09-16 31-12-49 DayCampaign          CONTS2GB          1       0      699|
+|1          13 CONTFH55_50  07-09-16 31-12-49 DayCampaign          CONTS10GB         1       0      700|
+|1          13 CONTFH55_300 07-09-16 31-12-49 DayCampaign          CONTS2GB          1       0      701|
+|1          13 CONTFH65_300 07-09-16 31-12-49 DayCampaign          CONTS10GB         1       0      702|
+|                                                                                                      |
+
+
+================================================================================
++shaperconf.txt - NOT NEEDED because of existing base bundle.
++billingitem.txt - NOT NEEDED
