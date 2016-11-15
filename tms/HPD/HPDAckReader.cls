@@ -78,6 +78,8 @@ CLASS HPD.HPDAckReader ABSTRACT
          ldtzNextCheckTime    = NOW
          .
 
+      mSetNextCheckTime(liCheckWaitMinutes,"minutes").
+
       mlogMsg(SUBSTITUTE("SETTINGS: hostname=&1, port=&2, queueName=&3",
                          lcHostName,
                          STRING(liPortNumber),
@@ -187,10 +189,10 @@ CLASS HPD.HPDAckReader ABSTRACT
    METHOD PUBLIC VOID mProcess():
         
       IF liAckCount >= liAckBatch OR mAckTimePassed()
-      THEN mAckReplog().
+      THEN mDoAckReplog().
       
       IF NOW > ldtzNextCheckTime
-      THEN mCheckReplog().
+      THEN mDoCheckReplog().
       
       IF NOT VALID-OBJECT(loStompConfig)
       THEN mConfig().
@@ -203,9 +205,15 @@ CLASS HPD.HPDAckReader ABSTRACT
       IF llDisconnected
       THEN DO:
          mDisConnect().
+         llDisconnected = FALSE.
+
+         IF liAckCount > 0
+         THEN mDoAckReplog().
+
          mLogMsg("Socket disconnected, retry after 10 seconds","ERROR").
          PAUSE 10 NO-MESSAGE.
-         llDisconnected = FALSE.
+
+         mSetNextCheckTime(10,"seconds").
       END.
       
       CATCH errorobj AS Progress.Lang.Error:
@@ -225,10 +233,11 @@ CLASS HPD.HPDAckReader ABSTRACT
 
    METHOD PUBLIC VOID newStompMessage
       ( INPUT ioStompMessage AS StompMessage ):
+
+      IF llDisconnected
+      THEN RETURN.
          
       DEFINE VARIABLE lcHeader AS CHARACTER NO-UNDO.
-      DEFINE VARIABLE liCnt    AS INTEGER  NO-UNDO.
-      DEFINE VARIABLE llACK    AS LOGICAL   INITIAL TRUE NO-UNDO.
 
       IF ioStompMessage:Body = ""
       THEN DO:
@@ -296,11 +305,25 @@ CLASS HPD.HPDAckReader ABSTRACT
       
    END METHOD.
 
-   /* This is overrided in subclasses, but the logic in here is also used */
-   METHOD PROTECTED VOID mAckReplog():
 
-      /* We assume that subclass overriden method is doing its job
-         before executing following lines. */
+   METHOD PRIVATE VOID mSetNextCheckTime
+      (iiIntervalTime AS INTEGER,
+       icIntervalUnit AS CHARACTER):
+
+      ldtzNextCheckTime = ADD-INTERVAL(ldtzNextCheckTime,iiIntervalTime,icIntervalUnit).
+
+   END METHOD.
+
+
+   METHOD PROTECTED ABSTRACT VOID mAckReplog().
+
+
+   METHOD PROTECTED ABSTRACT VOID mCheckReplog().
+
+
+   METHOD PROTECTED VOID mDoAckReplog():
+
+      mAckReplog().
 
       /* If there are still locked replogs we will resend
          replogs for them again eventually */
@@ -317,15 +340,14 @@ CLASS HPD.HPDAckReader ABSTRACT
       END FINALLY.
       
    END METHOD.
-   
-   /* This is overrided in subclasses, but the logic in here is also used */
-   METHOD PROTECTED VOID mCheckReplog().
-   
-      /* We assume that subclass overriden method is doing its job
-         before executing following line. */
 
-      ldtzNextCheckTime = ADD-INTERVAL(ldtzNextCheckTime,liCheckWaitMinutes,"minutes").
-   
+
+   METHOD PROTECTED VOID mDoCheckReplog().
+
+      mCheckReplog().
+
+      mSetNextCheckTime(liCheckWaitMinutes,"minutes").
+
    END METHOD.
     
 END CLASS.

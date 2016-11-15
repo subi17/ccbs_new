@@ -20,7 +20,7 @@ CLASS HPD.HPDAckReaderMulti INHERITS HPD.HPDAckReader:
 
    DESTRUCTOR PUBLIC HPDAckReaderMulti():
 
-      mAckReplog().
+      mDoAckReplog().
 
       FOR EACH ttAckHandler:
 
@@ -90,23 +90,19 @@ CLASS HPD.HPDAckReaderMulti INHERITS HPD.HPDAckReader:
 
       END.
 
-      SUPER:mAckReplog().
-
    END METHOD.
 
    
    METHOD PROTECTED OVERRIDE VOID mCheckReplog():
 
-      mAckReplog().
+      mDoAckReplog().
       
       FOR EACH ttAckHandler:
                
          CAST(ttAckHandler.objHandler, HPD.HPDAckHandler):mProcessWaitingReplog().
       
       END.
-      
-      SUPER:mCheckReplog().
-      
+
    END METHOD.   
 
 END CLASS.

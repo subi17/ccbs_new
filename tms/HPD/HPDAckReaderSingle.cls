@@ -18,7 +18,7 @@ CLASS HPD.HPDAckReaderSingle INHERITS HPD.HPDAckReader:
 
    DESTRUCTOR PUBLIC HPDAckReaderSingle():
 
-      mAckReplog().
+      mDoAckReplog().
 
       IF VALID-OBJECT(loHPDAckHandler)
       THEN DELETE OBJECT loHPDAckHandler.
@@ -53,19 +53,15 @@ CLASS HPD.HPDAckReaderSingle INHERITS HPD.HPDAckReader:
          PAUSE 1 NO-MESSAGE.
 
       END.
-      
-      SUPER:mAckReplog().
-      
+
    END METHOD.
 
    
    METHOD PROTECTED OVERRIDE VOID mCheckReplog():
 
-      mAckReplog().
+      mDoAckReplog().
 
       loHPDAckHandler:mProcessWaitingReplog().
-      
-      SUPER:mCheckReplog().
 
    END METHOD.
 
