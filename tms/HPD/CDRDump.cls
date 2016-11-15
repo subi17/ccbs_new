@@ -160,7 +160,7 @@ CLASS HPD.CDRDump FINAL INHERITS DumpHandlerWithQuery:
          END.
          /*
          WHEN "DateStTimeStart"
-         THEN IF il<F6><F6>CheckOnly
+         THEN IF ilCheckOnly
               THEN RETURN "OK".
               ELSE RETURN ISO-DATE(DATETIME-TZ(lhMainTable::DateSt, lhMainTable::TimeStart * 1000)).
          WHEN "ReadInTS"
