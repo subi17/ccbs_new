@@ -35,9 +35,9 @@ form
    pnpgroup.name     format "x(10)"
    pnpgroup.BillCode  format "x(8)"
       BillItem.BIName  format "x(10)"
-   pnpgroup.ccn     
+   pnpgroup.ccn FORMAT ">>>9"    
       CCN.CCNName  format "x(10)"
-   pnpgroup.rateccn     column-label "RateCCN"
+   pnpgroup.rateccn FORMAT ">>>9" column-label "RateCCN"
       
    pnpgroup.dto
 
@@ -53,9 +53,9 @@ form
    "Group name :" pnpgroup.name                  SKIP
    "BillItem ...:" pnpgroup.BillCode  
    BillItem.BIName                               SKIP
-   "CCN .......:" pnpgroup.ccn 
+   "CCN .......:" pnpgroup.ccn FORMAT ">>>9" 
    CCN.CCNName                                   SKIP
-   "Rate CCN. .:" pnpgroup.RateCCN                 
+   "Rate CCN. .:" pnpgroup.RateCCN FORMAT ">>>9"                
    lcrateccnname                                 SKIP  
    "Valid From.:" pnpgroup.dfrom                 SKIP
    "Valid To...:" pnpgroup.dto      

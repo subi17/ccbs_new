@@ -61,7 +61,7 @@ DEF BUFFER xxPNPGroup FOR PNPGroup.
 form
    PNPGroup.PNPGroup    
    PNPGroup.name      format "x(34)"
-   PNPGroup.ccn     
+   PNPGroup.ccn       format ">>>9" 
       CCN.CCNName     format "x(10)"
    PNPGroup.dFrom
    PNPGroup.dTo
@@ -76,7 +76,7 @@ form
    "Group code :" PNPGroup.PNPGroup              SKIP
    "Group name :" PNPGroup.name                  SKIP
    "Group Seq. :" PNPGroup.PNPSeq FORMAT ">>>>>>>>9" SKIP
-   "CCN .......:" PNPGroup.ccn 
+   "CCN .......:" PNPGroup.ccn FORMAT ">>>9" 
       CCN.CCNName  SKIP
    "Valid From.:" PNPGroup.dfrom                 SKIP
    "Valid To...:" PNPGroup.dto      
