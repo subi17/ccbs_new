@@ -5,8 +5,8 @@ MonthlyFee;
 CommercialFee;39.67
 ComparisonFee;39.67
 ServiceClass;
-WebStatus;Active
-STCStatus;Active
+WebStatus;Inactive
+STCStatus;Inactive
 PaymentType;Postpaid
 UsageType;Voice
 FirstMonthFeeCalc;Relative
