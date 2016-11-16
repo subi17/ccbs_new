@@ -77,11 +77,11 @@ form
                   "Upper limit must be at least equal to lower limit")
    SKIP
 
-   liCCN[1]  AT 10
+   liCCN[1] FORMAT ">>>9" AT 10
         LABEL "CCN ......."
         HELP  "CCN codes"
    "-" AT 40
-   liCCN[2] 
+   liCCN[2] FORMAT ">>>9"
         NO-LABEL 
         HELP  "CCN codes"
         VALIDATE (INPUT liCCN[2] GE INPUT liCCN[1],
