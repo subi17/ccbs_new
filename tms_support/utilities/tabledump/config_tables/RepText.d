@@ -848,6 +848,14 @@
 1 "" 2 "Fix + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoa + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
 1 "" 5 "Landline + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTDSL_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTDSL_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTDSL_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 5 "National" 0 "CONTDSL_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTDSL_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTDSL_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTDSL_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 5 "National" 0 "CONTDSL_QTY_IN" "1" 16/11/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
@@ -872,10 +880,26 @@
 1 "" 2 "Fix + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoa + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
 1 "" 5 "Landline + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH300_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH300_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH300_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH300_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH300_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH300_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH300_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH300_QTY_IN" "1" 16/11/16 31/12/49
 1 "" 1 "FIJO + INTERNET" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
 1 "" 2 "Fix + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoa + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
 1 "" 5 "Landline + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH50_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH50_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH50_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH50_MIN_IN" "1" 16/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH50_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH50_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH50_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH50_QTY_IN" "1" 16/11/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
@@ -1505,6 +1529,34 @@
 1 "" 2 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
 1 "" 3 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
 1 "" 5 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
+1 "" 1 "Nacionales" 0 "F10100003" "1" 16/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "F10100003" "1" 16/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "F10100003" "1" 16/11/16 31/12/49
+1 "" 5 "National" 0 "F10100003" "1" 16/11/16 31/12/49
+1 "" 1 "Al Extranjero" 0 "F10100004" "1" 16/11/16 31/12/49
+1 "" 2 "A l'estranger" 0 "F10100004" "1" 16/11/16 31/12/49
+1 "" 3 "Atzerrira" 0 "F10100004" "1" 16/11/16 31/12/49
+1 "" 5 "Abroad" 0 "F10100004" "1" 16/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "F10100005" "1" 16/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "F10100005" "1" 16/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "F10100005" "1" 16/11/16 31/12/49
+1 "" 5 "National" 0 "F10100005" "1" 16/11/16 31/12/49
+1 "" 1 "Llamadas Premium" 0 "F15100023" "1" 16/11/16 31/12/49
+1 "" 2 "Trucades Premium" 0 "F15100023" "1" 16/11/16 31/12/49
+1 "" 3 "Premium deiak" 0 "F15100023" "1" 16/11/16 31/12/49
+1 "" 5 "Premium Calls" 0 "F15100023" "1" 16/11/16 31/12/49
+1 "" 1 "NÃºmeros Gratuitos" 0 "F15100027" "1" 16/11/16 31/12/49
+1 "" 2 "NÃºmeros Gratuitos" 0 "F15100027" "1" 16/11/16 31/12/49
+1 "" 3 "Doako zenbakiak" 0 "F15100027" "1" 16/11/16 31/12/49
+1 "" 5 "Free Numbers" 0 "F15100027" "1" 16/11/16 31/12/49
+1 "" 1 "AtenciÃ³n al cliente" 0 "FCCYOIGO" "1" 16/11/16 31/12/49
+1 "" 2 "AtenciÃ³ al client" 0 "FCCYOIGO" "1" 16/11/16 31/12/49
+1 "" 3 "Bezeroarentzako arreta-zerbitzua" 0 "FCCYOIGO" "1" 16/11/16 31/12/49
+1 "" 5 "Customer Service" 0 "FCCYOIGO" "1" 16/11/16 31/12/49
+1 "" 1 "At. otras emp" 0 "FINFSERVICE" "1" 16/11/16 31/12/49
+1 "" 2 "A. altr. empr" 0 "FINFSERVICE" "1" 16/11/16 31/12/49
+1 "" 3 "Bes. enp. at." 0 "FINFSERVICE" "1" 16/11/16 31/12/49
+1 "" 5 "Other co att" 0 "FINFSERVICE" "1" 16/11/16 31/12/49
 1 "" 1 "Desvío de Llamadas" 0 "FLATCF" "1" 01/04/12 31/12/49
 1 "" 1 "Desvio llamadas T. Plana" 0 "FLATCF" "1" 01/01/12 31/03/12
 1 "" 2 "Desviament de Trucades" 0 "FLATCF" "1" 01/04/12 31/12/49
@@ -1617,6 +1669,10 @@
 1 "" 2 "En 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
 1 "" 3 "100 minutuan" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
 1 "" 5 "ln 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
+1 "" 1 "Tipo A" 0 "FSHORTNU" "1" 16/11/16 31/12/49
+1 "" 2 "Tipus A" 0 "FSHORTNU" "1" 16/11/16 31/12/49
+1 "" 3 "A mota" 0 "FSHORTNU" "1" 16/11/16 31/12/49
+1 "" 5 "Level A" 0 "FSHORTNU" "1" 16/11/16 31/12/49
 1 "" 1 "Incumplimiento de permanencia La Combinada" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 2 "Incompliment de permanència La Combinada" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 3 "La Combinada tarifaren iraunkortasun-epea urratzea" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
