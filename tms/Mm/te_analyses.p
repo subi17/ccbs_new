@@ -155,6 +155,13 @@ FUNCTION fGenerateTriggerItem RETURN LOG
         icCli = "".
         LEAVE.
      END.
+
+     IF icCli > "" AND
+        CAN-FIND(FIRST MsOwner NO-LOCK WHERE
+                       MsOwner.CLI = icCli AND
+                       MsOwner.TSBegin < ldeLastSecond AND
+                       MsOwner.TSEnd >= ldeFirstSecond AND
+                       MsOwner.FixedNumber > "") THEN lcCLI = "".
   END.
 
   FIND FIRST ttTriggerItem WHERE 
