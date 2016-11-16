@@ -1,6 +1,5 @@
 DEF VAR lcCustomerName        AS CHAR NO-UNDO.
 DEF VAR liSourceID            AS INT  NO-UNDO.
-DEF VAR lcSourceName          AS CHAR NO-UNDO.
 DEF VAR LcRecordType          AS CHAR NO-UNDO.
 DEF VAR lcVersion             AS CHAR NO-UNDO.  
 DEF VAR lcBatchSeq            AS INT  NO-UNDO.  
@@ -81,4 +80,3 @@ DEF VAR liServiceClass        AS INT  NO-UNDO.
 DEF VAR liAccumulator         AS INT  NO-UNDO.
 DEF VAR liRunningIndex        AS INT  NO-UNDO.
 DEF VAR lcExtRunningIndex     AS CHAR NO-UNDO.
-DEF VAR lcHandlingTime        AS CHAR NO-UNDO.
