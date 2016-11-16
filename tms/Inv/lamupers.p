@@ -440,7 +440,7 @@ FUNCTION fErrorLog RETURNS LOGIC
           ErrorLog.ErrorChar = icCLI 
           ErrorLog.ErrorMsg  = icError + CHR(10) + 
                                "Target group: " + STRING(iiITGroupID)
-          ErrorLog.UserCode  = katun.
+          ErrorLog.UserCode  = katun
           ErrorLog.ActionTS  = fMakeTS().
     
 END FUNCTION.
@@ -1497,11 +1497,21 @@ PROCEDURE pCreateInv:
              IF TRUNCATE(ldFromPer,0) = TRUNCATE(ldToPer,0)
              THEN ldToPer = ldToPer + 0.86399.
 
-             FOR FIRST MSOwner NO-LOCK WHERE
+            FIND FIRST MSOwner NO-LOCK WHERE
                        MSOwner.Brand = gcBrand   AND
                        MsOwner.CLI   = ttCLI.CLI AND
                        MsOwner.TsBeg <= ldToPer  AND
-                       MsOwner.TsEnd >= ldFromPer:
+                       MsOwner.TsEnd >= ldFromPer NO-ERROR.
+
+            IF NOT AVAIL MSOwner THEN
+               FIND FIRST MSOwner NO-LOCK WHERE
+                          MSOwner.Brand       = gcBrand   AND
+                          MsOwner.Fixednumber = ttCLI.CLI AND
+                          MsOwner.TsBeg       <= ldToPer  AND
+                          MsOwner.TsEnd       >= ldFromPer NO-ERROR.
+
+
+            IF AVAIL MSOwner THEN DO:
 
                lcMobRep = STRING(fCallSpecDuring(MsOwner.MsSeq,
                                                  idaInvDate)).
@@ -2090,8 +2100,8 @@ PROCEDURE pFixedFee:
                    MSOwner.MsSeq   = INTEGER(FixedFee.KeyValue) AND
                    MsOwner.InvCust = FixedFee.CustNum:
             ASSIGN 
-               lcCLI   = MsOwner.CLI
-               liMsSeq = MsOwner.MsSeq
+               lcCLI     = MsOwner.CLI
+               liMsSeq   = MsOwner.MsSeq
                liAgrCust = MsOwner.AgrCust.
          END.   
       END.
@@ -2247,8 +2257,8 @@ PROCEDURE pSingleFee:
                    MSOwner.MsSeq   = INTEGER(SingleFee.KeyValue) AND
                    MSOwner.InvCust = SingleFee.CustNum:
             ASSIGN 
-               lcCLI   = MsOwner.CLI
-               liMsSeq = MsOwner.MsSeq
+               lcCLI     = MsOwner.CLI
+               liMsSeq   = MsOwner.MsSeq
                liAgrCust = MsOwner.AgrCust.
          END.    
       END.
@@ -3572,10 +3582,13 @@ PROCEDURE pInvoiceHeader:
    DEF VAR liPaymType  AS INT  NO-UNDO. 
    DEF VAR liITGroupID AS INT  NO-UNDO.
    DEF VAR liSeq       AS INT  NO-UNDO. 
-   DEF VAR ldMinConsAmt AS DEC  NO-UNDO. 
-   DEF VAR liITGDeltype AS INT NO-UNDO.
-   DEF VAR llNextInvNdd AS LOG NO-UNDO.
-   DEF VAR lcRegion    AS CHAR NO-UNDO. 
+   DEF VAR ldMinConsAmt  AS DEC  NO-UNDO. 
+   DEF VAR liITGDeltype  AS INT  NO-UNDO.
+   DEF VAR llNextInvNdd  AS LOG  NO-UNDO.
+   DEF VAR lcRegion      AS CHAR NO-UNDO. 
+   DEF VAR lcFixedNumber AS CHAR NO-UNDO INIT ?. 
+   DEF VAR ldeSplitTS    AS DEC NO-UNDO. 
+   DEF VAR ldeToTS     AS DEC NO-UNDO. 
 
    DEF BUFFER bufseq  FOR InvSeq.
    DEF BUFFER bChkInv FOR Invoice. 
@@ -3584,6 +3597,7 @@ PROCEDURE pInvoiceHeader:
    
    ASSIGN 
       lCurRate   = fCurrRate(Customer.Currency,idaInvDate)
+      ldeToTS    = fMake2Dt(idaToDate + 1, 0)
       ldTotalInv = 0
       liAgrCust  = 0.
    
@@ -3620,13 +3634,39 @@ PROCEDURE pInvoiceHeader:
          /* get the latest with msseq index in case msisdn has been changed */
          FOR FIRST MSOwner NO-LOCK USE-INDEX MsSeq WHERE
                    MSOwner.MsSeq   = ttRowVat.MsSeq AND
+                   MSOwner.TSBegin < ldeToTS AND 
                    MsOwner.InvCust = Customer.CustNum AND
                    MsOwner.AgrCust = ttRowVat.AgrCust:
             ASSIGN
-               lcCLI      = MsOwner.CLI
-               liUserCust = MsOwner.CustNum.
+               lcCLI         = MsOwner.CLI
+               lcFixedNumber = MsOwner.FixedNumber
+               liUserCust    = MsOwner.CustNum.
          END.
  
+         IF ttRowVat.ITGDeltype EQ {&INV_DEL_TYPE_FUSION_EMAIL} OR
+            ttRowVat.ITGDeltype EQ {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} THEN
+            lcFixedNumber = "".
+         /* iSTC from convergent to mobile */
+         ELSE IF lcFixedNumber EQ ? OR lcFixedNumber EQ "" THEN DO:
+
+            FIND FIRST ttInvSplit WHERE
+                       ttInvSplit.AgrCust  = ttRowVat.AgrCust AND
+                       ttInvSplit.MsSeq    = ttRowVat.MsSeq NO-ERROR.
+
+            IF AVAIL ttInvSplit THEN DO:
+
+               ldeSplitTS = fMake2Dt(ttInvSplit.SplitDate, 0).
+
+               FOR FIRST MSOwner NO-LOCK USE-INDEX MsSeq WHERE
+                         MSOwner.MsSeq   = ttRowVat.MsSeq AND
+                         MsOwner.TsBegin < ldeSplitTS AND
+                         MsOwner.InvCust = Customer.CustNum AND
+                         MsOwner.AgrCust = ttRowVat.AgrCust:
+                  lcFixedNumber = MsOwner.FixedNumber.
+               END.
+            END.
+         END.
+                  
          /* no grouping for cash invoices */
          IF llCashInvoice THEN ASSIGN
             liITGroupID = 0
@@ -3653,6 +3693,7 @@ PROCEDURE pInvoiceHeader:
             ttSubInv.SubInvNum    = liSubInv
             ttSubInv.MsSeq        = ttRowVat.MsSeq
             ttSubInv.CLI          = lcCLI
+            ttSubInv.FixedNumber  = lcFixedNumber
             ttSubInv.AgrCust      = liAgrCust
             ttSubInv.CustNum      = liUserCust
             ttSubInv.VatPos       = 0.
@@ -4510,7 +4551,7 @@ PROCEDURE pInvoiceHeader:
                 Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
                 Memo.CreUser   = katun
                 Memo.MemoTitle = "Minimum Amount Limit Ignored"
-                Memo.MemoText  = "Reason: " + STRING(liIgnoMin). 
+                Memo.MemoText  = "Reason: " + STRING(liIgnoMin)
                 Memo.CreStamp  = fMakeTS().
       END.
  
