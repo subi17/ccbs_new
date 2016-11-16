@@ -5,9 +5,11 @@
 
 changes:    20.09.07/aam msseq based invseq 
 */
+&IF "{&INVSEQ_I}" NE "YES"
+&THEN
+&GLOBAL-DEFINE INVSEQ_I YES
 
-
-FUNCTION fNewInvSeq RETURNS INTEGER
+FUNCTION fInvSeq RETURNS INTEGER
    (iiAgrCust AS INT,
     iiInvCust AS INT,
     iiMsSeq   AS INT,
@@ -73,4 +75,4 @@ FUNCTION fNewInvSeq RETURNS INTEGER
    
 END.
 
-
+&ENDIF
