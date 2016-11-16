@@ -1223,7 +1223,8 @@ PROCEDURE pGetDELADDR:
 
    IF Order.DeliverySecure EQ 1 OR
       Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR 
-      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
+      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
+      Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
       lcDelAddress = "". /* YPR-2660 */
    ELSE DO:
       /* separate delivery address */
@@ -1255,7 +1256,8 @@ PROCEDURE pGetDELPOST:
 
       IF Order.DeliverySecure EQ 1 OR
          Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
-         Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
+         Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
+         Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
          lcDelPost = "".
       ELSE DO:
          /* separate delivery address */

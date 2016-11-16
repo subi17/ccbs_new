@@ -1241,7 +1241,12 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.TermAmt     = STRING(ldeAccAmt + ldePayTermFee + ldeResidualAmountVATExcl,"zzz9.99").
 
 
-   IF Order.DeliverySecure EQ 1 THEN liDelType = {&ORDER_DELTYPE_SECURE}.
+   IF Order.DeliverySecure EQ 1
+   THEN DO:
+      IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+      THEN liDeliveryType = {&ORDER_DELTYPE_POS_SECURE}.
+      ELSE liDeliveryType = {&ORDER_DELTYPE_POST_SECURE}.
+   END.
    ELSE IF Order.DeliveryType EQ 0 THEN liDelType = {&ORDER_DELTYPE_COURIER}.
    ELSE liDelType = Order.DeliveryType.
 
