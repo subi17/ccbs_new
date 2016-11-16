@@ -32,7 +32,7 @@ END.
 
 
 /*Used when there is no clitype available directly.*/
-/*Function returns Trie if a tariff can be defined as convergent tariff.
+/*Function returns True if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */
 FUNCTION fHasConvergenceTariff RETURNS LOGICAL
    (iiMsSeq AS INT):
