@@ -274,68 +274,6 @@ FUNCTION fGetCurrentTariff RETURNS CHAR
    RETURN "".
 END.
 
-FUNCTION fGetCONTFFraudCounterFee RETURNS DEC 
-   (iiMsSeq      AS INT,
-    idActiveTime AS DEC):
-
-   DEF VAR ldaFirstDay      AS DATE NO-UNDO.
-   DEF VAR ldeAmount        AS DEC  NO-UNDO.
-   DEF VAR liDaysInMonth    AS INT  NO-UNDO.
-   DEF VAR ldaActDate       AS DATE NO-UNDO.
-   DEF VAR liTime           AS INT  NO-UNDO.
-
-   DEF BUFFER bMServiceLimit FOR MServiceLimit.
-   DEF BUFFER bServiceLimit  FOR ServiceLimit.
-   DEF BUFFER bDayCampaign   FOR DayCampaign.
-   DEF BUFFER Feemodel       FOR FeeModel.
-   DEF BUFFER FMItem         FOR FMItem.
-
-   FINDBUNDLES:
-   FOR EACH bMServiceLimit NO-LOCK WHERE
-            bMServiceLimit.MsSeq   = iiMsSeq AND
-            bMServiceLimit.EndTS  >= idActiveTime AND
-            bMServiceLimit.FromTS <= idActiveTime, 
-      FIRST bServiceLimit NO-LOCK WHERE
-            bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
-      FIRST bDayCampaign NO-LOCK WHERE 
-            bDayCampaign.Brand   = gcBrand AND
-            bDayCampaign.DcEvent = bServiceLimit.GroupCode AND
-            bDayCampaign.DCEvent BEGINS "CONTF",
-      FIRST FeeModel NO-LOCK WHERE
-            FeeModel.Brand    = gcBrand AND
-            FeeModel.FeeModel = bDayCampaign.FeeModel,
-      FIRST FMItem NO-LOCK WHERE
-            FMItem.Brand     = gcBrand AND
-            FMItem.FeeModel  = FeeModel.FeeModel AND
-            FMItem.FromDate <= TODAY AND
-            FMItem.Todate >= TODAY:
-
-      /* pending termination request */
-      IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                        MsRequest.MsSeq = iiMsSeq AND
-                        MsRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION} AND
-                        MsRequest.ReqCParam3 = bServiceLimit.GroupCode AND
-                        LOOKUP(STRING(MsRequest.ReqStatus),
-                                {&REQ_INACTIVE_STATUSES}) = 0 AND
-                        MsRequest.ActStamp <= idActiveTime) THEN
-         NEXT FINDBUNDLES.
-
-      ldaFirstDay = DATE(MONTH(TODAY),1,YEAR(TODAY)).       
-      fSplitTS(bMServiceLimit.FromTS, OUTPUT ldaActDate, OUTPUT liTime).
-
-      IF ldaActDate <= ldaFirstDay THEN ldeAmount = FMItem.Amount.
-      ELSE DO:
-         liDaysInMonth = DAY(fLastDayOfMonth(TODAY)).
-         ldeAmount = ROUND(FMItem.Amount * ((liDaysInMonth - DAY(ldaActDate) + 1) / liDaysInMonth),2).
-      END.
-
-      RETURN ldeAmount.
-   END.
-
-   RETURN 0.
-    
-END FUNCTION.
-
 FUNCTION fGetTerminatedSpecificBundle RETURNS CHAR
    (iiMsSeq      AS INT,
     idActiveTime AS DEC,

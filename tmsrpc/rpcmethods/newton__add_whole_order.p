@@ -200,7 +200,6 @@
                     profession;string;optional;
                     email;string;optional;
                     gescal;string;optional;
-                    address_compl;string;optional;Address Complement for floor
                     floor;string;optional;Complement for floor
                     street_type;string;optional;street type
                     bis_duplicate;string;optional;bis
@@ -619,7 +618,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR ldBirthDay   AS DATE NO-UNDO. 
    DEF VAR llSelfEmployed AS LOGICAL NO-UNDO. 
    DEF VAR ldFoundationDate AS DATE NO-UNDO. 
-   DEF VAR data            AS CHAR EXTENT 40 NO-UNDO.
+   DEF VAR data            AS CHAR EXTENT 39 NO-UNDO.
    DEF VAR lcIdOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR liSubLimit AS INT NO-UNDO. 
@@ -793,9 +792,6 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             data[LOOKUP("kiala_code", gcCustomerStructStringFields)] 
          OrderCustomer.Gescal = 
             data[LOOKUP("gescal", gcCustomerStructStringFields)] 
-         OrderCustomer.AddressCompl = 
-            data[LOOKUP("address_compl", gcCustomerStructStringFields)] WHEN
-            data[LOOKUP("address_compl", gcCustomerStructStringFields)] > "" /* Not used after convergent project */
          OrderCustomer.Floor = 
             data[LOOKUP("floor", gcCustomerStructStringFields)]
          OrderCustomer.StreetType = 
@@ -1310,7 +1306,6 @@ gcCustomerStructFields = "birthday," +
                          "retrieved," +
                          "identified_cust_sms_number," +
                          "gescal," + 
-                         "address_compl," + 
                          "floor," + 
                          "street_type," + 
                          "bis_duplicate," + 
@@ -1352,7 +1347,6 @@ gcCustomerStructStringFields = "city," +
                                "kiala_code," +
                                "ups_hours," +
                                "gescal," + 
-                               "address_compl," + 
                                "floor," + 
                                "street_type," + 
                                "bis_duplicate," + 
@@ -1361,7 +1355,7 @@ gcCustomerStructStringFields = "city," +
                                "letter," + 
                                "stair," + 
                                "hand," + 
-                               "km".   /* EXTENT value count 40 */
+                               "km".   /* EXTENT value count 39 */
 
 /* common validation */
 /* YBP-513 */

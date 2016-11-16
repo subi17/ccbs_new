@@ -495,7 +495,9 @@ IF NOT AVAIL mobsub THEN DO:
                                  OUTPUT ldeSMSStamp).
        ELSE DO:
 
-         lcSMSText = fGetSMSTxt("WelcomeSubs",
+         lcSMSText = fGetSMSTxt((IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE}
+                                 THEN "WelcomeConvergent"
+                                 ELSE "WelcomeSubs"),
                                 TODAY,
                                 Customer.Language,
                                 OUTPUT ldeSMSStamp).   
@@ -517,9 +519,9 @@ IF NOT AVAIL mobsub THEN DO:
                                          TODAY).
 
          ASSIGN lcSMSText = REPLACE(lcSMSText,"#CLITYPE",lcReplacedTxt)
-                lcSMSText = REPLACE(lcSMSText,"#CLI",
-                  (IF MobSub.FixedNumber > "" THEN
-                      MobSub.FixedNumber ELSE MobSub.CLI)).
+                lcSMSText = REPLACE(lcSMSText,"#CLI", MobSub.CLI)
+                lcSMSText = REPLACE(lcSMSText,"#FIXED_NUMBER",
+                              MobSub.FixedNumber) WHEN MobSub.FixedNumber NE ?.
       END.
 
       IF lcSMSText > "" THEN DO:
