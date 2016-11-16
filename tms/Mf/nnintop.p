@@ -65,7 +65,7 @@ form
    "              From Date ...:" date1                                SKIP
    "              To Date .....:" date2                                SKIP
    "              Operator ....:" Operator Operator.OperName AT 39         SKIP
-   "              Country .....:" CCN     CCN.CCNName  AT 39         skip(1) 
+   "              Country .....:" CCN FORMAT ">>>9" CCN.CCNName  AT 39 skip(1) 
    "              File Name ...:" fname                                skip(3)
 WITH centered width 80 NO-LABEL TITLE 
    " Customers International Calls per CGR - CCN " FRAME frm.

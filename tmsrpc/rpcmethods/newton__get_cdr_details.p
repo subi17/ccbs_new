@@ -157,21 +157,22 @@ FUNCTION fMakeHeader RETURNS LOGICAL
 
 /* HEADERS FIRST ROW */
 /* "headers" => 
-  #              Date         Time     Number       Type    Destination  Tariff      Minutes/KB/Pcs   Price
-  "headers" => ["Fecha",     "Hora",  "Numero",    "Tipo",  "Destino",   "Tarifa",   "Mins/KB/Cant.", "Importe"],
-  "rows" => [   ["1.1.2001", "12:21", "040123456", "Voice", "Operator2", "Contrato", "1:20",          "1,10"],
-                ["2.1.2001", "15:22", "040123456", "Voice", "Operator2", "Contrato", "3:21",          "2,20"],
-                ["3.1.2001", "22:51", "040123456", "Voice", "Operator2", "Contrato", "5:13",          "1,40"],
-                ["4.1.2001", "12:54", "040123456", "Voice", "Operator1", "Contrato", "7:12",          "4,20"],
-              [  "5.1.2001", "17:21", "040123456", "Voice", "Operator1", "Contrato", "0:32",          "0,80"] ]
+  #              Number A      Number B    Date         Time     Type    Destination  Tariff      Minutes/KB/Pcs   Price
+  "headers" => ["Número A",   "Número B", "Fecha",     "Hora",  "Tipo",  "Destino",   "Tarifa",   "Mins/KB/Cant.", "Importe"],
+  "rows" => [   ["040654321", "040123456", "1.1.2001", "12:21", "Voice", "Operator2", "Contrato", "1:20",          "1,10"],
+                ["040654321", "040123456", "2.1.2001", "15:22", "Voice", "Operator2", "Contrato", "3:21",          "2,20"],
+                ["040654321", "040123456", "3.1.2001", "22:51", "Voice", "Operator2", "Contrato", "5:13",          "1,40"],
+                ["040654321", "040123456", "4.1.2001", "12:54", "Voice", "Operator1", "Contrato", "7:12",          "4,20"],
+                ["040654321", "040123456", "5.1.2001", "17:21", "Voice", "Operator1", "Contrato", "0:32",          "0,80"] ]
 */
 
 /* PostPaid headers */
 IF pcSearchMode = {&NORMAL} THEN DO:
    
+   add_string(pcStructId, "", from_utf8("Número A")).          /* A number */
+   add_string(pcStructId, "", from_utf8("Número B")).          /* B number */
    add_string(pcStructId, "", "Fecha").
    add_string(pcStructId, "", "Hora").
-   add_string(pcStructId, "", from_utf8("Número")).   
    add_string(pcStructId, "", "Tipo").
    add_string(pcStructId, "", "Destino").
    add_string(pcStructId, "", "Tarifa").
@@ -340,9 +341,10 @@ FUNCTION fResponseRow RETURNS LOGICAL
       IF llDataRowCDR THEN RETURN TRUE. 
       
       resp_row = add_array(resp_rows, "").
+      add_string(resp_row, "", ihCDR::CLI).     /* A number */
+      add_string(resp_row, "", ihCDR::GsmBnr).  /* B number */
       add_string(resp_row, "", STRING(ldaDateSt, "99-99-99")).
       add_string(resp_row, "", STRING(ihCDR::TimeStart, "HH:MM:SS")).
-      add_string(resp_row, "", ihCDR::GsmBnr).
       add_string(resp_row, "", lcBIName).
       add_string(resp_row, "", lcCCNName).
       add_string(resp_row, "", lcCLITypeName).

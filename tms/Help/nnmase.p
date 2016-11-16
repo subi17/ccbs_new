@@ -14,7 +14,7 @@
 {commali.i}
 DEF shared VAR siirto AS CHAR.
 
-def var liCCN       as int format "zz9"     NO-UNDO.
+def var liCCN       as int format "zzz9"     NO-UNDO.
 DEF VAR haku        LIKE CCN.CCNName        NO-UNDO.
 DEF VAR rtab        AS RECID EXTENT 11      NO-UNDO.
 DEF VAR ufkey       AS LOG init TRUE        NO-UNDO.
@@ -27,7 +27,7 @@ def var tyhja       as char format "x(80)"  NO-UNDO.
 DEF VAR tlli-ots    AS CHAR.
 
 form
-   CCN.CCN  /* column-label "Land" */
+   CCN.CCN  /* column-label "Land" */ FORMAT ">>>9"
    CCNName          column-label "Name"
 WITH
    scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
