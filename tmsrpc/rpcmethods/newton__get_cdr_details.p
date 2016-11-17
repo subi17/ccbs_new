@@ -311,8 +311,9 @@ FUNCTION fResponseRow RETURNS LOGICAL
 
          FOR EACH ttData NO-LOCK:
             resp_row = add_array(resp_rows, "").
-            add_string(resp_row, "", STRING(ldaDateSt, "99-99-99")).
             add_string(resp_row, "","").
+            add_string(resp_row, "","").
+            add_string(resp_row, "", STRING(ldaDateSt, "99-99-99")).
             add_string(resp_row, "","").
             add_string(resp_row, "", ttData.BIName).
             add_string(resp_row, "", "").
