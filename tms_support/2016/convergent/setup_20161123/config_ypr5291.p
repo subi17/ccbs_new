@@ -214,6 +214,11 @@ create_mxitem("SubsTypeTo","CONTDSL40",liSeq).
 create_mxitem("SubsTypeTo","CONTFH40_50",liSeq).
 create_mxitem("SubsTypeTo","CONTFH50_300",liSeq).
 
+/*ac13*/
+create_mxitem("PerContract","MDUB3",liSeq)./*bono25*/
+create_mxitem("PerContract","MDUB4",liSeq)./*bono35*/
+create_mxitem("PerContract","DATA7",liSeq).
+
 
 
 /*tmsparam*/
