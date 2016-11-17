@@ -1,6 +1,6 @@
 {triggers/hpdwrite_generic.i CliType CLITYPE Ordercanal CliType}
 
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
 

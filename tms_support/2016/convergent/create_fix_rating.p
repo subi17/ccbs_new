@@ -1,4 +1,4 @@
-{commpaa.i}
+{Syst/commpaa.i}
 DEF VAR ldaFrom AS DATE INIT 11/10/16.
 DEF VAR liMode AS INT INIT 1.
 DEF VAR liMode_ra AS INT INIT 1.
