@@ -1,18 +1,18 @@
-CLIType;CONTDSL45
+CLIType;CONTFH68_300
 TariffBundle;
-BaseBundle;CONTS2GB
+BaseBundle;CONT24
 MonthlyFee;
-CommercialFee;39.67
-ComparisonFee;39.67
+CommercialFee;56.20
+ComparisonFee;56.20
 ServiceClass;
-WebStatus;Inactive
+WebStatus;Active
 STCStatus;Inactive
 PaymentType;Postpaid
 UsageType;Voice
 FirstMonthFeeCalc;Relative
-LastMonthFeeCalc;Full
+LastMonthFeeCalc;Relative
 TypeOfContract;ServicePackage
-DataLimit;2048
+DataLimit;20480
 VoiceLimit;5000
 BDestinationLimit;300
 FirstMonthDataLimit;Full
@@ -26,7 +26,7 @@ DSS2Compatible;No
 DSS2PrimaryLine;No
 NativeVoIPCompatible;No
 OnlyVOICE;No
-MonthlyFeeBillCode;CONTDSL45MF
-TariffName;La Combinada 20 Naranja
+MonthlyFeeBillCode;CONTFH300MF
+TariffName;La Combinada Azul 300
 BonoSupport;YES
 BundleUpsell;DATA200_UPSELL

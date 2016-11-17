@@ -26,6 +26,7 @@ DEF VAR llISTCChecked AS LOG NO-UNDO.
 DEF VAR ldaISTCDate AS DATE NO-UNDO. 
 DEF VAR ldaCounterToDate AS DATE NO-UNDO. 
 DEF VAR llErrorFound AS LOGICAL NO-UNDO. 
+DEF VAR lcCLI AS CHAR NO-UNDO. 
 
 DEF TEMP-TABLE ttCounter NO-UNDO
    LIKE InvRowCounter.
@@ -121,7 +122,9 @@ FOR EACH ttSubs,
                ttCounter.RefPrice = ttCounter.RefPrice + MobCDR.RefPrice.
          END.
    
-         lcMatch = "".
+         ASSIGN
+            lcMatch = ""
+            lcCLI = "".
    
          FOR EACH ttCounter
          BY ttCounter.billcode
@@ -147,7 +150,8 @@ FOR EACH ttSubs,
                InvRowCounter.ReportingID = "," AND
                InvRowCounter.DCEvent     = ttCounter.DCEvent AND
                InvRowCounter.ToDate      = ttCounter.ToDate NO-LOCK NO-ERROR.
-            IF NOT AVAILABLE InvRowCounter THEN 
+            IF NOT AVAILABLE InvRowCounter THEN ASSIGN
+               lcCLI = ttCounter.CLI
                lcMatch = "No counter found: " + 
                          STRING(ttCounter.billcode) + "/" +
                          STRING(ttCounter.CCN) + "/" +
@@ -159,7 +163,8 @@ FOR EACH ttSubs,
                InvRowCounter.Quantity NE ttCounter.Quantity OR
                InvRowCounter.Duration NE ttCounter.Duration OR
                InvRowCounter.Amount NE ttCounter.Amount OR
-               InvRowCounter.DataAmt NE ttCounter.DataAmt THEN 
+               InvRowCounter.DataAmt NE ttCounter.DataAmt THEN ASSIGN
+                  lcCLI = ttCounter.CLI
                   lcMatch = "Values differ: " + 
                             STRING(ttCounter.billcode) + "/" +
                             STRING(ttCounter.CCN).
@@ -189,6 +194,7 @@ FOR EACH ttSubs,
                ttCounter.DCEvent     = InvRowCounter.DCEvent AND
                ttCounter.ToDate      = InvRowCounter.ToDate NO-LOCK NO-ERROR.
             IF NOT AVAILABLE ttCounter THEN DO:
+               lcCLI   = InvRowCounter.CLI.
                lcMatch = "Counter without CDRs: " +
                          STRING(InvRowCounter.billcode) + "/" +
                          STRING(InvRowCounter.CCN) + "/" +
@@ -225,7 +231,7 @@ FOR EACH ttSubs,
             END.
          
             PUT STREAM sLog UNFORMATTED
-               MsOwner.CLI CHR(9)
+               lcCLI CHR(9)
                MsOwner.MsSeq CHR(9)
                InvSeq.InvSeq CHR(9)
                InvSeq.ToDate CHR(9)

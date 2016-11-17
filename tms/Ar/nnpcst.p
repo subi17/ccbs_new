@@ -311,11 +311,11 @@ IF lPartial THEN DO:
             bSubInv.InvNum    = InvRow.InvNum AND
             bSubInv.SubInvNum = InvRow.SubInvNum:
 
-      lInvSeq = fNewInvseq(Invoice.AgrCust,
-                           Invoice.CustNum,
-                           bSubInv.MsSeq,
-                           InvRow.ToDate,
-                           0).
+      lInvSeq = fInvseq(Invoice.AgrCust,
+                        Invoice.CustNum,
+                        bSubInv.MsSeq,
+                        InvRow.ToDate,
+                        0).
 
       IF NOT CAN-FIND(FIRST ttReCalc WHERE ttReCalc.InvSeq = lInvSeq) THEN DO:
          CREATE ttReCalc.
@@ -407,11 +407,11 @@ ELSE DO TRANS:
 
             /* CREATE monthly based invoice sequences */
             IF AVAIL InvSeq THEN lInvSeq = InvSeq.InvSeq. 
-            ELSE lInvSeq = fNewInvseq(xInvSeq.AgrCust,
-                                      MobCDR.InvCust, 
-                                      MobCDR.MsSeq,
-                                      MobCDR.DateSt,
-                                      0).
+            ELSE lInvSeq = fInvseq(xInvSeq.AgrCust,
+                                   MobCDR.InvCust, 
+                                   MobCDR.MsSeq,
+                                   MobCDR.DateSt,
+                                   0).
 
             /* UPDATE InvSeq FOR Calls */
             IF MobCDR.InvSeq NE lInvSeq THEN DO:

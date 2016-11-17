@@ -27,8 +27,8 @@ def var exPaymFile       as c  format "x(30)" NO-UNDO.
 DEF VAR exheader     AS c                 NO-UNDO.
 DEF VAR tab          AS c                 NO-UNDO.
 
-DEF VAR ma-nro1      LIKE CCN.CCN  NO-UNDO.
-DEF VAR ma-nro2      LIKE CCN.CCN  NO-UNDO.
+DEF VAR ma-nro1      LIKE CCN.CCN FORMAT ">>>9" NO-UNDO.
+DEF VAR ma-nro2      LIKE CCN.CCN FORMAT ">>>9" NO-UNDO.
 
 DEF VAR lev          AS i                 NO-UNDO init 114.
 

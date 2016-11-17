@@ -87,7 +87,7 @@ ELSE              lcCName = "!! BLANK !!".
 form /* ADD */
    "Rate ID.....:" Tariff.TariffNum FORMAT ">>>>>9"
       help "Tarif ID number" SKIP
-   "CCN ........:" Tariff.CCN
+   "CCN ........:" Tariff.CCN FORMAT ">>>9"
       help "Call case number"
       CCN.CCNName  format "x(30)" AT 32 SKIP
    "BDestination:" Tariff.BDest

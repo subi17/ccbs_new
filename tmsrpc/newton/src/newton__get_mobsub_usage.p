@@ -651,7 +651,7 @@ DO liLoop = 1 TO 5:
             ELSE
                liVoiceBDestUsage = INT(ServiceLCounter.Amt).
          END. /* IF AVAIL ServiceLCounter THEN DO: */
-      END. /* IF (ServiceLimit.GroupCode BEGINS "CONTF" AND */
+      END.
    END. /* FOR EACH MServiceLimit WHERE */
 END. /* DO liDialType = 4 to 7 BY 3 */
 

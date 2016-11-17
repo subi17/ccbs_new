@@ -39,6 +39,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF BUFFER OrderPayment FOR OrderPayment.
    DEF BUFFER MsRequest FOR MsRequest.
    DEF BUFFER CLIType FOR CLIType.
+   DEF BUFFER OrderFusion FOR OrderFusion.
 
    ORDER_TRANS:
    DO TRANS:
@@ -67,8 +68,22 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   LOOKUP(STRING(OrderAccessory.HardBook),"1,2") > 0 THEN
                   llHardBook = TRUE.
 
+               FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE
+                          OrderFusion.Brand = gcBrand AND
+                          OrderFusion.OrderID = bfOrder.OrderID AND
+                   LOOKUP(OrderFusion.FusionStatus,SUBST("&1,&2",
+                         {&FUSION_ORDER_STATUS_NEW},
+                         {&FUSION_ORDER_STATUS_ERROR})) > 0 NO-ERROR.
+
+               IF AVAIL OrderFusion THEN DO:
+                  ASSIGN
+                     OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_CANCELLED}
+                     OrderFusion.UpdateTS = fMakeTS().
+                  RELEASE OrderFusion.
+               END.
+
                FIND FIRST FusionMessage EXCLUSIVE-LOCK WHERE
-                          FusionMessage.orderID EQ Order.OrderId AND
+                          FusionMessage.orderID EQ bfOrder.OrderId AND
                           FusionMessage.MessageType EQ {&FUSIONMESSAGE_TYPE_LOGISTICS} 
                NO-ERROR.
 

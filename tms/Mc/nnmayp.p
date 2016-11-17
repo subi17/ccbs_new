@@ -52,9 +52,9 @@ END.
 DEF shared VAR siirto AS CHAR.
 
 def var ok          as lo format "Yes/No"   NO-UNDO.
-DEF VAR haku        LIKE CCN.CCN            NO-UNDO.
+DEF VAR haku        LIKE CCN.CCN FORMAT ">>>9" NO-UNDO.
 DEF VAR haku2       LIKE CCN.CCNName        NO-UNDO.
-DEF VAR haku3       LIKE CCN.RepCCN         NO-UNDO.
+DEF VAR haku3       LIKE CCN.RepCCN FORMAT ">>>9" NO-UNDO.
 DEF VAR firstline   AS INT                  NO-UNDO.
 DEF VAR order       AS INT                  NO-UNDO.
 DEF VAR ex-order    AS INT                  NO-UNDO.
