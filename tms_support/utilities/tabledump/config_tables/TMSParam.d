@@ -1267,7 +1267,7 @@
 "XML" "InvXMLTestInvDir" "C" 0 0 "/mnt/xmlstore/test" ? "" "" "" "" "" "" "" "" "" "" "Dir for test invoices" no "1"
 "XML" "InvXMLTestTransDir" "C" 0 0 "/mnt/xmlstore/test" ? "" "" "" "" "" "" "" "" "" "" "Dir for test invoices" no "1"
 "XML" "InvXMLTransDir" "C" 0 0 "/mnt/xmlstore/#BILLRUN/#FF/#SS" ? "" "" "" "" "" "" "" "" "" "" "Transfer dir for xml invoices" no "1"
-"XML" "InvXMLVersion" "C" 0 0 "3.3" ? "" "" "" "" "" "" "" "" "" "" "Version for XML" no "1"
+"XML" "InvXMLVersion" "C" 0 0 "3.4" ? "" "" "" "" "" "" "" "" "" "" "Version for XML" no "1"
 "XML" "SplitInvXMLArc" "C" 0 0 "/store/riftp/invxml/split/processed" ? "" "" "" "" "" "" "" "" "" "" "Archive directory for split f." no "1"
 "XML" "SplitInvXMLDir" "C" 0 0 "/store/riftp/invxml/split" ? "" "" "" "" "" "" "" "" "" "" "Dir for split files" no "1"
 "XML" "SplitInvXMLPrint" "C" 0 0 "/tmp/#INVNUM.xml" ? "" "" "" "" "" "" "" "" "" "" "Invoice XML file name" no "1"
