@@ -17,6 +17,7 @@ gcBrand = "1".
 {Func/contract_end_date.i}
 {Func/fixedfee.i}
 {Func/email.i}
+{Func/fixedlinefunc.i}
 
 DEF VAR ldBeginStamp         AS DEC  NO-UNDO.
 DEF VAR ldEndStamp           AS DEC  NO-UNDO.
@@ -276,12 +277,13 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
       FOR EACH DCCLI NO-LOCK WHERE
                DCCLI.MsSeq      = MsRequest.MsSeq AND
                DCCLI.ValidTo   >= ldtActDate      AND 
-               DCCLI.ValidFrom <= ldtActDate      AND
-	       DCCLI.DCEvent BEGINS "TERM" USE-INDEX MsSeq,
+               DCCLI.ValidFrom <= ldtActDate      USE-INDEX MsSeq,
          FIRST DayCampaign NO-LOCK WHERE
                DayCampaign.Brand   = gcBrand       AND 
                DayCampaign.DCEvent = DCCLI.DCEvent AND
                DayCampaign.DCType  = ({&DCTYPE_DISCOUNT}):
+
+         IF DayCampaign.DCEvent BEGINS "STERM" THEN NEXT.
 
          /* find termination request from it */
          liTermReq = fGetTermReq(MsRequest.MsRequest,
@@ -343,6 +345,13 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
                else if llRenewal eq true then .
                else if msrequest.crestamp <= 20130905.18000 and 
                   lookup(DCCLI.dcevent,"term18,term24,term18-50,term24-50") > 0 then . 
+               else if DCCLI.dcevent begins "fterm" then do:
+                  
+                  IF not (fIsConvergenceTariff(bOrigCLIType.CLIType) AND
+                          fIsConvergenceTariff(bNewCLiType.CLIType)) THEN llError = true.
+                  else if bOrigCLIType.CompareFee > bNewCLiType.CompareFee AND
+                          msrequest.reqiparam5 ne 2 then llError = true.
+               end.
                else if (bOrigCLIType.CompareFee > bNewCLiType.CompareFee OR
                        (LOOKUP(bOrigCLIType.CLIType,"CONT7,CONTD9") > 0 AND bNewCLiType.CLIType EQ "CONT8")) AND
                        (msrequest.reqiparam5 ne 1 and msrequest.reqiparam5 ne 2) then 
@@ -358,6 +367,13 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
                       MsRequest.ActStamp >= 20150804 then llError = FALSE.
                else if llRenewal eq true AND 
                      MsRequest.ActStamp < 20150804 then llError = true.
+               else if DCCLI.dcevent begins "fterm" then do:
+                  
+                  IF fIsConvergenceTariff(bOrigCLIType.CLIType) AND
+                     fIsConvergenceTariff(bNewCLiType.CLIType) AND  
+                    (bOrigCLIType.CompareFee <= bNewCLiType.CompareFee OR
+                     msrequest.reqiparam5 EQ 2) then llError = true.
+               end.
                else if msrequest.reqiparam5 eq 1 or
                        msrequest.reqiparam5 eq 2 then llError = true. 
                else if msrequest.reqsource eq 

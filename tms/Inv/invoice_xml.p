@@ -29,7 +29,7 @@ DEFINE INPUT  PARAMETER iiUpdInterval AS INT  NO-UNDO.
 /* how many were printed */         
 DEFINE OUTPUT PARAMETER oiInvCount    AS INT  NO-UNDO. 
 
-DEF VAR lcCodeVersion AS CHAR   NO-UNDO INIT "3.3".
+DEF VAR lcCodeVersion AS CHAR   NO-UNDO INIT "3.4".
 DEF VAR lcRowText     AS CHAR   NO-UNDO.
 DEF VAR lcTMSUser     AS CHAR   NO-UNDO.
 DEF VAR lcLocalFile   AS CHAR   NO-UNDO.
@@ -712,11 +712,21 @@ PROCEDURE pSubInvoice2XML:
       
       /* subscription */
       lhXML:START-ELEMENT("ContractDetail").
-      lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
+      IF ttSub.CliEvent = "F" THEN /* convergent tariff is partially installed. No mobile */
+         lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.FixedNumber).
+      ELSE 
+         lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
       lhXML:START-ELEMENT("ContractType").
       lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName).
       lhXML:WRITE-CHARACTERS(ttSub.CLIType).
       lhXML:END-ELEMENT("ContractType").
+      IF SubInvoice.FixedNumber > "" AND 
+         ttSub.CliEvent         <> "F" THEN DO:
+         lhXML:START-ELEMENT("CustomContract").
+         lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
+         lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
+         lhXML:END-ELEMENT("CustomContract").
+      END.
 
       IF ttSub.OldCLIType > "" THEN DO:
          lhXML:START-ELEMENT("OldContractType").
@@ -756,7 +766,11 @@ PROCEDURE pSubInvoice2XML:
             lhXML:INSERT-ATTRIBUTE("Type",ttRow.RowType).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroupID",ttRow.RowGroup).
          END.
-         lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
+         IF ttRow.RowType > "" AND
+            ttRow.RowGroup EQ "46" THEN /* Convergent uses CLI Type Name */
+            lhXML:WRITE-DATA-ELEMENT("BillingItem",CAPS(ttSub.CTName)).
+         ELSE
+            lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
          lhXML:WRITE-DATA-ELEMENT("Quantity", STRING(ttRow.RowQty)).
  
          /* duration or data amount */
@@ -775,8 +789,12 @@ PROCEDURE pSubInvoice2XML:
          ELSE IF ttRow.RowGroup = "18" AND
                  ttRow.RowType = "" AND
                  INDEX(ttRow.RowBillCode,"FLAT") > 0 AND
-                 (ttSub.CLIType BEGINS "CONTF" OR
-                  ttSub.OldCLIType BEGINS "CONTF") THEN DO:
+                ((ttSub.CLIType BEGINS "CONTF" AND
+                  NOT ttSub.CLIType BEGINS "CONTFH")
+                  OR
+                  (ttSub.OldCLIType BEGINS "CONTF" AND
+                   NOT ttSub.OldCLIType BEGINS "CONTFH") 
+                  ) THEN DO:
             lhXML:WRITE-DATA-ELEMENT("DataAmount",STRING(ttRow.DataLimit)).
             lhXML:WRITE-DATA-ELEMENT("Duration",STRING(ttRow.VoiceLimit)).
          END.
@@ -898,6 +916,9 @@ PROCEDURE pSubInvoice2XML:
                                            liLanguage,
                                            Invoice.ToDate).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroup", lcBIGroupName).
+            IF ttSub.FixedNumber > "" THEN 
+               lhXML:INSERT-ATTRIBUTE("BillingItemGroupType",
+                                   TRIM(STRING(ttCall.GroupType = 1,"fixed/mobile"))).
          END.
 
          IF FIRST-OF(ttCall.DateSt) THEN DO:

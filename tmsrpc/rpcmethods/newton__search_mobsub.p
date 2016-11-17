@@ -76,12 +76,14 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    add_string(sub_struct, "subscription_type_id", mobsub.clitype).
    add_string(sub_struct, "data_bundle_id", MobSub.TariffBundle).
 
-   IF CAN-FIND(
-      FIRST MsRequest NO-LOCK WHERE
-            MsRequest.MsSeq   = mobsub.msseq AND
-            MsRequest.ReqType = {&REQTYPE_ICC_CHANGE} AND
-            LOOKUP(STRING(MsRequest.Reqstatus),"19,20") > 0) THEN
+   FIND FIRST MsRequest NO-LOCK WHERE
+              MsRequest.MsSeq   = MobSub.MsSeq AND
+              MsRequest.ReqType = {&REQTYPE_ICC_CHANGE} AND
+              LOOKUP(STRING(MsRequest.Reqstatus),"19,20") > 0 NO-ERROR.
+   IF AVAIL MsRequest THEN DO:
       add_boolean(sub_struct, "notification", TRUE).
+      add_int(sub_struct    , "notification_status", MsRequest.ReqStatus).
+   END.
 
 END FUNCTION. 
 

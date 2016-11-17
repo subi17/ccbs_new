@@ -55,12 +55,20 @@ liMeas      = get_int(param_toplevel_id, "5").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /*Check that customer exists*/
-FIND mobsub NO-LOCK
-WHERE mobsub.brand = "1" and 
-      MobSub.CLI = lcCLI NO-ERROR.
-IF NOT AVAILABLE mobsub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", lcCLI)).
-
+IF lcCli BEGINS "9" THEN DO:
+   FIND mobsub NO-LOCK
+   WHERE mobsub.brand = "1" and
+         MobSub.FixedNumber = lcCLI NO-ERROR.
+   IF NOT AVAILABLE mobsub THEN
+      RETURN appl_err(SUBST("MobSub entry &1 not found", lcCLI)).
+END.
+ELSE DO:
+   FIND mobsub NO-LOCK
+   WHERE mobsub.brand = "1" and 
+         MobSub.CLI = lcCLI NO-ERROR.
+   IF NOT AVAILABLE mobsub THEN
+      RETURN appl_err(SUBST("MobSub entry &1 not found", lcCLI)).
+END.
 ASSIGN
 lcImsi = mobsub.imsi.
 

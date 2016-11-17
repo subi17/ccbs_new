@@ -56,7 +56,7 @@ form
     VASTariff.TariffClass        FORMAT "x(4)"  column-label  "TC"
     VASTariff.TariffClassName     FORMAT "X(11)"
     VASTariff.BillCode    FORMAT "x(10)" /* column-label format */
-    VASTariff.CCN        COLUMN-LABEL "CCN"
+    VASTariff.CCN        COLUMN-LABEL "CCN" FORMAT ">>>9"
     VASTariff.priceIncVat     FORMAT "z,zz9.999" column-label "InclVat"
     VASTariff.PriceExclVat    FORMAT "z,zz9.999" column-label "ExlcVat"
     VASTariff.todate
@@ -72,7 +72,7 @@ form
    "TariffClass .....:"  VASTariff.TariffClass                         SKIP
    "TariffClass Name.:"  VASTariff.TariffClassname    /* label format */ SKIP
    "Product .........:"  VASTariff.BillCode  BillItem.BIName   AT 40     SKIP
-   "Rate ............:"  VASTariff.CCN  lcrateccn                         SKIP
+   "Rate ............:"  VASTariff.CCN FORMAT ">>>9" lcrateccn           SKIP
    "Price With VAT ..:"  VASTariff.PriceIncVAT                        SKIP         "Price WithOut VAT:"   VASTariff.PriceExclVAT                       SKIP   
    "From Date .......:"  VASTariff.FromDate                           SKIP
    "to Date .........:"  VASTariff.ToDate   

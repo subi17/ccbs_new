@@ -38,7 +38,7 @@ def var perce   as de no-undo format ">9.99999".
 DEF VAR vdate   LIKE Tariff.ValidFrom    NO-UNDO.
 DEF VAR PriceList LIKE Tariff.PriceList  NO-UNDO.
 DEF VAR CustNum     LIKE Tariff.CustNum      NO-UNDO.
-DEF VAR CCN  LIKE CCN.CCN    NO-UNDO.
+DEF VAR CCN  LIKE CCN.CCN FORMAT ">>>9"   NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
