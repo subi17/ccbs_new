@@ -5,6 +5,8 @@ USING HPD.HPDTime.
 USING HPD.HPDCommon.
 USING HPD.DumpBase.
 
+{Syst/tmsconst.i}
+
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
@@ -259,6 +261,23 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
          THEN IF ilCheckOnly
               THEN RETURN "OK".
               ELSE RETURN STRING(lhBuffer[liCurrentDB]::DataIn + lhBuffer[liCurrentDB]::DataOut).
+         WHEN "DCEvent"
+         THEN IF ilCheckOnly
+              THEN RETURN "OK".
+              ELSE DO:
+
+                IF lhBuffer[liCurrentDB]::DCEvent BEGINS "CONTDSL" OR
+                   lhBuffer[liCurrentDB]::DCEvent BEGINS "CONTFH" THEN DO:
+
+                   IF lhBuffer[liCurrentDB]::DialType EQ {&DIAL_TYPE_FIXED_VOICE} THEN
+                     RETURN lhBuffer[liCurrentDB]::DCevent + "_MIN".
+                   
+                   IF lhBuffer[liCurrentDB]::DialType EQ {&DIAL_TYPE_FIXED_VOICE_BDEST} THEN
+                     RETURN lhBuffer[liCurrentDB]::DCevent + "_QTY".
+                END.
+
+                RETURN lhBuffer[liCurrentDB]::DCevent.
+          END.
          OTHERWISE RETURN "". 
          
       END CASE.
