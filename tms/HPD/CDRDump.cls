@@ -131,14 +131,19 @@ CLASS HPD.CDRDump FINAL INHERITS DumpHandlerWithQuery:
               THEN RETURN "OK".
               ELSE DO:
 
-                IF lhMainTable::DCEvent BEGINS "CONTDSL" OR
-                   lhMainTable::DCEvent BEGINS "CONTFH" THEN DO:
+                IF lhMainTable:TABLE EQ "MobCDR" THEN DO:
 
-                   IF lhMainTable::DialType EQ {&DIAL_TYPE_FIXED_VOICE} THEN
-                     RETURN lhMainTable::DCevent + "_MIN".
-                   
-                   IF lhMainTable::DialType EQ {&DIAL_TYPE_FIXED_VOICE_BDEST} THEN
-                     RETURN lhMainTable::DCevent + "_QTY".
+                   IF lhMainTable::DCEvent BEGINS "CONTDSL" OR
+                      lhMainTable::DCEvent BEGINS "CONTFH" THEN DO:
+
+                      IF lhMainTable::DialType EQ {&DIAL_TYPE_FIXED_VOICE} THEN
+                        RETURN lhMainTable::DCevent + "_MIN".
+                      
+                      IF lhMainTable::DialType EQ {&DIAL_TYPE_FIXED_VOICE_BDEST} THEN
+                        RETURN lhMainTable::DCevent + "_QTY".
+                   END.
+
+                   RETURN lhMainTable::DCevent.
                 END.
 
                 RETURN IF lhMainTable::DCEvent > ""
