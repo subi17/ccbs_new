@@ -41,8 +41,8 @@
 "46" "Convergent Monthly fee" "" "" "" "" "" "1" 1 "," 31
 "47" "Fixed voice" "" "" "" "" "" "1" 1 "," 32
 "5" "MMS" "" "" "" "" "" "1" 0 "1002,5" 90
-"51" "Calls Fixed" "" "" "" "" "" "1" 0 "" 20
-"53" "Premium Services Fixed" "" "" "" "" "" "1" 0 "" 30
+"51" "Calls Fixed" "" "" "" "" "" "1" 1 "," 20
+"53" "Premium Services Fixed" "" "" "" "" "" "1" 1 "," 30
 "6" "Premium Services" "" "" "" "" "" "1" 0 "1002,6" 80
 "7" "Terminals" "" "" "" "" "" "1" 0 "," 120
 "8" "Fixed fees" "" "" "" "" "" "1" 0 "1001," 20
