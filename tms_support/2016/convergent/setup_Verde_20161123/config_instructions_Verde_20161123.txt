@@ -1,12 +1,10 @@
 -empty tariff creation folder /store/riftp/tariff/incoming/ 
 
--cp tariff_trans_ypr5291.txt tariff_trans.txt
+-cp tariff_trans_ypr5295.txt tariff_trans.txt
 
 -Copy text files from tms_support/2016/convergent/setup_20161123 to /store/riftp/tariff/incoming/ 
    cp tariff_trans.txt /store/riftp/tariff/incoming/ 
    cp tariffcreation*.txt /store/riftp/tariff/incoming/ 
-
--Execute new_rateplan.p for creating CONTRATOCONVC rate plan. Script also includes fixed and CONTRATO8 price lists.
 
 -Execute create_newtariff.p from ../
 (/apps/yoigo/tms_support/2016/convergent)
@@ -15,10 +13,10 @@
 
 
 Make additional fixes 
-   config_ypr5291.p (New tool: matrix, tmsparam, requestaction)
+   config_ypr5295.p (New tool: matrix, tmsparam, requestaction)
 
 -Make manual fix for service packages: 
-   F3-F2-F4-F4 CONT9 has extra service packages
+   F3-F2-F4-F4 CONT15(example CONT9) has extra service packages
       F4 SERVICE PACKAGES -> delete components under items done today and delete also the packages.
       Only old one must remain.
 ....  ...............  SERVICE PACKAGES OF CONT9 (Active) ...............   ....
@@ -40,7 +38,7 @@ Make additional fixes
 .....Group Code       ServiceLimit Servicelimit Name                       .   .
 .BON................. ............ .........................................   .
 .CON.CONT9            CONT9        Contrato 9 data                         .   .
-.CON.CONT9            CONT9_DATA   Data                                    .   .REMOVE if exists
+.CON.CONT9            CONT9_DATA   Data                                    .   .REMOVE
 .CON.CONT9            CONT9_MIN    National Calls                          .   .REMOVE
 .CON.CONT9            CONT9_DATA   Data                                    .   .REMOVE
 .CON.CONT9            CONT9_MIN    National Calls                          .   .REMOVE
@@ -76,7 +74,7 @@ Make additional fixes
 
 
 -Remove extra fees F1-F1-F2-F5
-   CONT9MF
+   CONT15MF example(CONT9MF)
    F3 (event contains) 
    Remove CONTDSLFH and CONTDSL related rows. Final result must be like CONT24 has:
    
@@ -95,12 +93,12 @@ F2 Request actions
 CLIType: CONTDSL40.. + CONTFH40_50 + CONTFH50_300 
 .. Action: 1 Create
 .. ActionType: Daycampaign
-.. ActionKey: CONTS2GB.. -> CONT9............
+.. ActionKey: CONTS2GB.. -> CONT15............
 Example:
   691       CONTFH50_300  DayCampaign        CONT9        Create      31-12-49
 
 
-F3 F1 F2 -> CONTDSL40 -> F3
+F3 F1 F2 -> CONTDSL48 -> F3
 Select TMSService
 F4 -> SHAPER_STP must exist. For example:
 
@@ -112,7 +110,7 @@ F4 -> SHAPER_STP must exist. For example:
 .C.TYPECHG      02-11-16    1 Basic  CLIType Change                          . .
 .C.                                                                          . .
 
-Make the same operations for CONTFH58_50 and CONTFH68_300.
+Make the same operations for CONTFH48_50 and CONTFH58_300.
 
 
 
