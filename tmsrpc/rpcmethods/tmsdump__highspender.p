@@ -38,6 +38,7 @@ FUNCTION process_highspender_row RETURN LOGICAL
     DEF VAR ldeBarrActTS AS DEC NO-UNDO. 
     DEF VAR lcActiveBarrings AS CHAR NO-UNDO. 
     DEF VAR i AS INT NO-UNDO. 
+    DEF VAR lcCLIType AS CHAR NO-UNDO.
     
     IF piPeriod NE liPeriod THEN RETURN TRUE.  
 
@@ -46,7 +47,7 @@ FUNCTION process_highspender_row RETURN LOGICAL
     
     FIND FIRST MobSub WHERE MobSub.CLI = phHighUsage.CLI NO-LOCK NO-ERROR.
     IF AVAIL MobSub THEN DO: 
-      
+      lcCLIType = MobSub.CliType.  
       lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).
       
       IF lcActiveBarrings > "" THEN DO:
@@ -73,7 +74,7 @@ FUNCTION process_highspender_row RETURN LOGICAL
                                 phInvCust.ZipCode + " " +
                                 phInvCust.PostOffice).
     add_string(lcStruct, "cli", phHighUsage.CLI).
-    add_string(lcStruct, "subscription_type",MobSub.CLIType). 
+    add_string(lcStruct, "subscription_type",lcCLIType). 
     add_string(lcStruct, "active_days", pcActiveDays).
     add_string(lcStruct, "reason", phHighUsage.Category).
     add_string(lcStruct, "user_age_group", SUBST("&1 - &2",
