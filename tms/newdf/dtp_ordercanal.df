@@ -1,0 +1,15 @@
+ADD FIELD "POSid" OF "Order" AS integer
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "POS ID"
+  POSITION 107
+  MAX-WIDTH 4
+  COLUMN-LABEL "POSid"
+  HELP "ID of the POS when delivery type is POS"
+  ORDER 1180
+
+.
+PSC
+cpstream=1252
+.
+0000006910
