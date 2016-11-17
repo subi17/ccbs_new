@@ -38,8 +38,8 @@
 "43" "Accessories" "" "" "" "" "" "1" 0 "," 121
 "44" "Google Premium Services" "" "" "" "" "" "1" 0 "," 85
 "45" "Google Discounts & Charges" "" "" "" "" "" "1" 0 "," 86
-"46" "Convergent Monthly fee" "" "" "" "" "" "1" 0 "" 31
-"47" "Fixed voice" "" "" "" "" "" "1" 0 "" 32
+"46" "Convergent Monthly fee" "" "" "" "" "" "1" 1 "," 31
+"47" "Fixed voice" "" "" "" "" "" "1" 1 "," 32
 "5" "MMS" "" "" "" "" "" "1" 0 "1002,5" 90
 "51" "Calls Fixed" "" "" "" "" "" "1" 0 "" 20
 "53" "Premium Services Fixed" "" "" "" "" "" "1" 0 "" 30
