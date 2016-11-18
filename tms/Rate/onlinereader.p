@@ -181,6 +181,14 @@ WHEN 2224 THEN ASSIGN
    liStream = 10
    lcReader = "MO2:Prepaid5".
 
+WHEN 2225 THEN ASSIGN
+   liStream = 16
+   lcReader = "MO6:Fixed".
+
+WHEN 2226 THEN ASSIGN
+   liStream = 17
+   lcReader = "MO6:Fixed2".
+
 WHEN 2250 THEN ASSIGN
    liStream = 30
    lcReader = "MO3:VAS-CGY".
@@ -590,7 +598,7 @@ DO TRANS:
               ttCall.spocmt = 95 THEN DO:
       END.        
 
-      IF LOOKUP(string(ttCall.spocmt,"999"),"000") > 0 THEN DO:
+      IF LOOKUP(string(ttCall.spocmt,"9999"),"0000") > 0 THEN DO:
          ASSIGN
             ttCall.errorcode = {&CDR_ERROR_NON_BILLABLE_CALL_FORWARDING} 
             ttCall.Invseq    = 0 .
