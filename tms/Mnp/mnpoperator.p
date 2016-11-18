@@ -57,7 +57,7 @@ FORM
     MNPOperator.OperName format "x(20)"
     MNPOperator.OperCode format "x(4)" column-label "RRC"
     MNPOperator.Active
-    MNPOperator.ICCPrefix format "x(10)"
+    MNPOperator.ICCPrefix format "x(15)"
 /* MNPOperator.CancelAgreement FORMAT "Yes/No"   */
     MNPOperator.NRN
     MNPOperator.OperBrand
@@ -73,7 +73,7 @@ FORM
     MNPOperator.OperName label "Name" format "x(40)"
     MNPOperator.OperBrand LABEL "Operator Brand"
 /*    MNPOperator.CancelAgreement label "Cancel Agreement" */
-    MNPOperator.ICCPrefix LABEL "ICC Prefix" format "x(10)"
+    MNPOperator.ICCPrefix LABEL "ICC Prefix" format "x(15)"
     MNPOperator.NRN LABEL "NRN"
     MNPOperator.Active LABEL "Active"
 WITH  OVERLAY ROW 4 centered 1 columns
