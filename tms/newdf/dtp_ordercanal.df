@@ -5,7 +5,7 @@ ADD FIELD "POSid" OF "Order" AS integer
   POSITION 107
   MAX-WIDTH 4
   COLUMN-LABEL "POSid"
-  HELP "ID of the POS when delivery type is POS"
+  DESCRIPTION "ID of the POS when delivery type is POS"
   ORDER 1180
 
 .

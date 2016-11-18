@@ -17,3 +17,14 @@ ASSIGN
    TMSCodes.CodeName = "Delivery to POS"
    TMSCodes.InUse = 1
    .
+
+CREATE DFField.
+ASSIGN
+   DFField.DumpID = 223
+   DFField.DFTable = "Order"
+   DFField.DFField = "POSid"
+   DFField.DFLabel = "POSid"
+   DFField.OrderNbr = 46
+   DFField.FromDate = DATE(1,1,2014)
+   DFField.ToDate = DATE(12,31,2049)
+   .
