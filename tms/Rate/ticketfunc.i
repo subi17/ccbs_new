@@ -134,6 +134,12 @@ FUNCTION fTicketCheck RETURN LOG
       
       WHEN "IMSI" THEN DO:
 
+         IF icValue EQ "" THEN DO:
+            RELEASE msowner.
+            oiValue = {&CDR_ERROR_IMSI_MISSING}.
+            RETURN FALSE.
+         END.
+
          FIND FIRST msowner WHERE
                     msowner.IMSI       =  icValue      AND
                     msowner.tsend    >= CallTimeStamp  AND
