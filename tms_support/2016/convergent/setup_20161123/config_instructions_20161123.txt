@@ -112,32 +112,13 @@ F4 -> SHAPER_STP must exist. For example:
 .C.TYPECHG      02-11-16    1 Basic  CLIType Change                          . .
 .C.                                                                          . .
 
-Make the same operations for CONTFH58_50 and CONTFH68_300.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Make the same operations for CONTFH40_50 and CONTFH50_300.
 
 
 
 ==================1===============================================================
 +matrix
-
+Select CONTDSL and check with F4
 
 |1        Convergent CONTDSL        PERCONTR         1 ALLOWED        35       |
 |Bra┌------ Xfera Moviles S.A.  ORDER FUNCTION ITEMS MENU  01-11-16 -------┐   |
@@ -153,7 +134,7 @@ Make the same operations for CONTFH58_50 and CONTFH68_300.
 |1  |  8023 Convergent  PerContract      CONTFH50                1    36   |   |
 |1  |  8023 Convergent  SubsTypeTo       CONTFH45_50             1    36   |   |
 |1  |  8023 Convergent  SubsTypeTo       CONTFH55_50             1    36   |   |
--lisää oma CONTFH58_50
+Must be also CONTFH40_50
 
 |1        Convergent CONTFH300      PERCONTR         1 ALLOWED        37       |
 |---|MX Seq Matrix Name MX Item          MX Value           MX Res MX Pr   |   |
@@ -161,8 +142,7 @@ Make the same operations for CONTFH58_50 and CONTFH68_300.
 |1  |  8024 Convergent  PerContract      CONTFH300               1    37   |   |
 |1  |  8024 Convergent  SubsTypeTo       CONTFH55_300            1    37   |   |
 |1  |  8024 Convergent  SubsTypeTo       CONTFH65_300            1    37   |   |
--lisää oma CONTFH68_300
-
+Must be also CONTFH50_300
 
 ==================================================================================
 +tmsparam
