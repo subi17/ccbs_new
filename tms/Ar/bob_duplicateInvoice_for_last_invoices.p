@@ -38,7 +38,6 @@ DEF VAR lcSpoolDir          AS CHAR NO-UNDO.
 DEF VAR lcCollectionLogFile AS CHAR NO-UNDO. 
 DEF VAR lcRequestLogFile    AS CHAR NO-UNDO. 
 DEF VAR lcDateValue         AS CHAR NO-UNDO. 
-DEF VAR ldeStartTime        AS DEC  NO-UNDO. 
 DEF VAR ldtActivationDate   AS DATE NO-UNDO.
 
 DEF STREAM sCollectLog.
@@ -102,80 +101,57 @@ FOR EACH EventLog NO-LOCK WHERE
 
 END.
 
-FOR FIRST FuncRunQueue NO-LOCK WHERE 
-          FuncRunQueue.FRQueueID = 3,  
-    FIRST FuncRunQSchedule NO-LOCK WHERE 
-          FuncRunQSchedule.FRQueueID = FuncRunQueue.FRQueueID AND 
-          FuncRunQSchedule.StartTS  >= ldStartTime, 
-    FIRST FuncRunExec NO-LOCK WHERE
-          FuncRunExec.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND
-          FuncRunExec.FRConfigID    EQ 5:             
-
-    ldeStartTime = FuncRunExec.StartTS.
-
-END.
-
 OUTPUT STREAM sCollectLog CLOSE.
 
 OUTPUT STREAM sRequestLog To VALUE(lcRequestLogFile) APPEND.
 
-IF ldeStartTime > 0 THEN DO:
+PUT STREAM sRequestLog UNFORMATTED 
+   "CustomerNumber"    ";"
+   "ExternalInvoiceID" ";"
+   "InvoiceDate"       ";"
+   "ChangeStamp"       ";"
+   "CustomerEndStamp"  ";"
+   "PrintState"        ";"
+   "DeliveryType"      SKIP.
 
-   PUT STREAM sRequestLog UNFORMATTED 
-      "CustomerNumber"    ";"
-      "ExternalInvoiceID" ";"
-      "InvoiceDate"       ";"
-      "ChangeStamp"       ";"
-      "CustomerEndStamp"  ";"
-      "PrintState"        ";"
-      "DeliveryType"      SKIP.
+FOR EACH ttCust:
    
-   FOR EACH ttCust:
-      
-      IF ttCust.EndTS < ldeStartTime THEN NEXT.
-    
-      FIND FIRST Invoice NO-LOCK WHERE
-                 Invoice.Brand     = "1"            AND
-                 Invoice.CustNum   = ttCust.CustNum AND
-                 Invoice.InvDate   = ldaStartDate   AND
-                 Invoice.InvType   = 1              AND
-                 Invoice.ChgStamp <= ttCust.EndTS   NO-ERROR.
-      IF AVAIL Invoice THEN DO:
-         IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                           MsRequest.Brand      = "1"                                        AND
-                           MsRequest.ReqType    = {&REQTYPE_DUPLICATE_INVOICE}               AND
-                           MsRequest.CustNum    = ttCust.CustNum                             AND
-                           MsRequest.ReqIParam1 = Invoice.InvNum                             AND
-                           LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0) THEN NEXT.
+   FIND FIRST Invoice NO-LOCK WHERE
+              Invoice.Brand     = "1"            AND
+              Invoice.CustNum   = ttCust.CustNum AND
+              Invoice.InvDate   = ldaStartDate   AND
+              Invoice.InvType   = 1              AND
+              Invoice.DelType  <> 1              AND 
+              Invoice.ChgStamp <= ttCust.EndTS   NO-ERROR.
+   IF AVAIL Invoice THEN DO:
+      IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                        MsRequest.Brand      = "1"                                        AND
+                        MsRequest.ReqType    = {&REQTYPE_DUPLICATE_INVOICE}               AND
+                        MsRequest.CustNum    = ttCust.CustNum                             AND
+                        MsRequest.ReqIParam1 = Invoice.InvNum                             AND
+                        LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0) THEN NEXT.
 
-         fCreateRequest({&REQTYPE_DUPLICATE_INVOICE},
-                        fMake2Dt(ldtActivationDate,0),
-                        katun,
-                        FALSE,      /* fees     */
-                        FALSE).     /* send sms */
+      fCreateRequest({&REQTYPE_DUPLICATE_INVOICE},
+                     fMake2Dt(ldtActivationDate,0),
+                     katun,
+                     FALSE,      /* fees     */
+                     FALSE).     /* send sms */
 
-         ASSIGN bCreaReq.CustNum    = Invoice.Custnum
-                bCreaReq.ReqIParam1 = Invoice.InvNum
-                bCreaReq.ReqCParam1 = Invoice.ExtInvId 
-                bCreaReq.ReqSource  = {&REQUEST_SOURCE_SCRIPT}
-                bCreaReq.Memo       = "YDR-2050".
+      ASSIGN bCreaReq.CustNum    = Invoice.Custnum
+             bCreaReq.ReqIParam1 = Invoice.InvNum
+             bCreaReq.ReqCParam1 = Invoice.ExtInvId 
+             bCreaReq.ReqSource  = {&REQUEST_SOURCE_SCRIPT}
+             bCreaReq.Memo       = "YDR-2050".
 
-         PUT STREAM sRequestLog UNFORMATTED
-             Invoice.CustNum    ";"
-             Invoice.ExtInvId   ";"
-             Invoice.InvDate    ";"
-             Invoice.ChgStamp   ";"
-             ttCust.EndTs       ";"
-             Invoice.PrintState ";"
-             Invoice.DelType    SKIP.  
-      END.
+      PUT STREAM sRequestLog UNFORMATTED
+          Invoice.CustNum    ";"
+          Invoice.ExtInvId   ";"
+          Invoice.InvDate    ";"
+          Invoice.ChgStamp   ";"
+          ttCust.EndTs       ";"
+          Invoice.PrintState ";"
+          Invoice.DelType    SKIP.  
    END.
-
-END.
-ELSE DO:
-   PUT STREAM sRequestLog UNFORMATTED 
-      "FuncRunExecution StartTime is not available".
-   LEAVE.   
 END.
 
 OUTPUT STREAM sRequestLog CLOSE.
