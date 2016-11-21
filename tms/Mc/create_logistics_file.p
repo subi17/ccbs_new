@@ -1244,8 +1244,8 @@ FUNCTION fDelivSIM RETURNS LOG
    IF Order.DeliverySecure EQ 1
    THEN DO:
       IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
-      THEN liDeliveryType = {&ORDER_DELTYPE_POS_SECURE}.
-      ELSE liDeliveryType = {&ORDER_DELTYPE_POST_SECURE}.
+      THEN liDelType = {&ORDER_DELTYPE_POS_SECURE}.
+      ELSE liDelType = {&ORDER_DELTYPE_POST_SECURE}.
    END.
    ELSE IF Order.DeliveryType EQ 0 THEN liDelType = {&ORDER_DELTYPE_COURIER}.
    ELSE liDelType = Order.DeliveryType.
@@ -1259,6 +1259,7 @@ FUNCTION fDelivSIM RETURNS LOG
           ttExtra.ResidualAmount = (IF ldeResidualAmountTotal > 0 THEN
                                     STRING(ldeResidualAmountTotal) ELSE "")
           ttExtra.DeliveryType = STRING(liDelType)
+          ttExtra.KialaCode    = STRING(Order.POSid) WHEN Order.POSid > 0
           ttExtra.ContractFileName = lcContractFileName.
 
    /* update SimStat when all skipping are checked */
