@@ -1193,7 +1193,8 @@ PROCEDURE pChangeDelType:
                 llgInvType   = FALSE. 
 
          FOR FIRST FuncRunQSchedule NO-LOCK WHERE 
-                   FuncRunQSchedule.StartTS  >= ldeStartTime, 
+                   FuncRunQSchedule.StartTS  >= ldeStartTime AND
+                   FuncRunQSchedule.RunMode   = "Production", 
              FIRST FuncRunExec NO-LOCK WHERE
                    FuncRunExec.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND
                    FuncRunExec.FRConfigID    EQ 5: 
