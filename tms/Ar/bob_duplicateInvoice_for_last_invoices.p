@@ -39,6 +39,7 @@ DEF VAR lcCollectionLogFile AS CHAR NO-UNDO.
 DEF VAR lcRequestLogFile    AS CHAR NO-UNDO. 
 DEF VAR lcDateValue         AS CHAR NO-UNDO. 
 DEF VAR ldeStartTime        AS DEC  NO-UNDO. 
+DEF VAR ldtActivationDate   AS DATE NO-UNDO.
 
 DEF STREAM sCollectLog.
 DEF STREAM sRequestLog.
@@ -50,6 +51,7 @@ ASSIGN
    ldaEndDate          = DATE(MONTH(TODAY), 3, YEAR(TODAY))
    ldStartTime         = fMake2Dt(ldaStartDate,0)
    ldEndTime           = fMake2Dt(ldaEndDate  ,86399)
+   ldtActivationDate   = DATE(MONTH(TODAY), 22, YEAR(TODAY))
    lcDateValue         = STRING(YEAR(TODAY),"9999") +
                          STRING(MONTH(TODAY),"99")  +
                          STRING(DAY(TODAY),"99") 
@@ -113,27 +115,21 @@ FOR FIRST FuncRunQueue NO-LOCK WHERE
 
 END.
 
-IF ldeStartTime <= 0 THEN DO:
-   PUT STREAM sCollectLog UNFORMATTED 
-      "FuncRunExecution StartTime is not available".
-   LEAVE.   
-END.
-
 OUTPUT STREAM sCollectLog CLOSE.
 
 OUTPUT STREAM sRequestLog To VALUE(lcRequestLogFile) APPEND.
 
-PUT STREAM sRequestLog UNFORMATTED 
-   "CustomerNumber"    ";"
-   "ExternalInvoiceID" ";"
-   "InvoiceDate"       ";"
-   "ChangeStamp"       ";"
-   "CustomerEndStamp"  ";"
-   "PrintState"        ";"
-   "DeliveryType"      SKIP.
-
 IF ldeStartTime > 0 THEN DO:
 
+   PUT STREAM sRequestLog UNFORMATTED 
+      "CustomerNumber"    ";"
+      "ExternalInvoiceID" ";"
+      "InvoiceDate"       ";"
+      "ChangeStamp"       ";"
+      "CustomerEndStamp"  ";"
+      "PrintState"        ";"
+      "DeliveryType"      SKIP.
+   
    FOR EACH ttCust:
       
       IF ttCust.EndTS < ldeStartTime THEN NEXT.
@@ -153,7 +149,7 @@ IF ldeStartTime > 0 THEN DO:
                            LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0) THEN NEXT.
 
          fCreateRequest({&REQTYPE_DUPLICATE_INVOICE},
-                        fMake2Dt(11/10/2016,0),
+                        fMake2Dt(ldtActivationDate,0),
                         katun,
                         FALSE,      /* fees     */
                         FALSE).     /* send sms */
@@ -175,6 +171,11 @@ IF ldeStartTime > 0 THEN DO:
       END.
    END.
 
+END.
+ELSE DO:
+   PUT STREAM sRequestLog UNFORMATTED 
+      "FuncRunExecution StartTime is not available".
+   LEAVE.   
 END.
 
 OUTPUT STREAM sRequestLog CLOSE.
