@@ -166,3 +166,8 @@ CONTFH48_50,CONTFH58_300,CONTDSL48
 -tmscodes
 +shaperconf.txt - NOT NEEDED because of existing base bundle.
 obillingitem.txt - NOT NEEDED
+
+-Rating settings:
+execute script create_fix_rating.p in directory setup_Verde_20161123.
+execute script create_fix_rating_Verde.p in directory setup_Verde_20161123.
+
