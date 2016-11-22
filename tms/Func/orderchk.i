@@ -233,9 +233,10 @@ FUNCTION fOngoingOrders RETURNS LOGICAL
       RETURN TRUE.
    END.
    
+   /* YTS-9316
    IF pcNumberType EQ "renewal" AND fDuplicateOrderChk(pcCLI) THEN
       RETURN TRUE.
-
+   */
    RETURN FALSE.
 
 END FUNCTION. 
