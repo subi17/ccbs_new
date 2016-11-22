@@ -1510,11 +1510,8 @@ PROCEDURE pGetPENALTYFEE:
          minimum consumption or monthly fee > lowest value */
       lcCLITypeLowMCMF =  fCParamC("CLITypeLowMCMF").
       lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
-      IF LOOKUP(Order.CLIType,lcCLITypeLowMCMF) =  0  AND
-         ldAmt > 100 THEN
+      IF LOOKUP(Order.CLIType,lcCLITypeLowMCMF) =  0  THEN
          lcList = lcList + CHR(10) + fTeksti(510,liLang).
-      ELSE
-         lcList = lcList + CHR(10) + fTeksti(509,liLang).
 
       assign lcList = REPLACE(lcList,"#xxx",TRIM(STRING(ldAmt,"->>>>>9")))
              lcList = REPLACE(lcList,"#yy",TRIM(STRING(liTermMonths))).
