@@ -1,4 +1,4 @@
-YPR-5366: change permanency texts by using script ypr5366_change_texts.p
+YPR-5366: change permanency texts by using script ypr5366_change_texts.p DO MANUALLY!!!!!!!!
 -empty tariff creation folder /store/riftp/tariff/incoming/ 
 
 
