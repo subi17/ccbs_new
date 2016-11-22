@@ -23,6 +23,8 @@
 4007 "Translated B-destination address not found" "" "" "" "" "" "" "" "" "" ""
 4101 "Non-billable WAP ticket (additional services)" "" "" "" "" "" "" "" "" "" ""
 4102 "Non-billable GPRS (mms) ticket" "" "" "" "" "" "" "" "" "" ""
+6001 "Unknown fixed number for the Billing System" "" "" "" "" "" "" "" "" "" ""
+6002 "Fixed number not active in the BS when connection was opened" "" "" "" "" "" "" "" "" "" ""
 7001 "Unknown Call Module Type" "" "" "" "" "" "" "" "" "" ""
 7002 "Invalid Date or Time field(s)" "" "" "" "" "" "" "" "" "" ""
 7003 "Invalid A-number" "" "" "" "" "" "" "" "" "" ""
