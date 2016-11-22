@@ -1332,11 +1332,7 @@ IF NOT llErrors THEN DO:
 
          IF ldAmt NE 0 AND Order.PayType = FALSE THEN DO:
 
-            /* different text for  penalty fee > 100 and
-               minimum consumption or monthly fee > lowest value */
-            lcCLITypeLowMCMF =  fCParamC("CLITypeLowMCMF").
-            IF LOOKUP(Order.CLIType,lcCLITypeLowMCMF) =  0 THEN
-               lcList = lcList + CHR(10) + fTeksti(510,liLanguage).
+            lcList = lcList + CHR(10) + fTeksti(510,liLanguage).
 
             assign lcList = REPLACE(lcList,"#xxx",TRIM(STRING(ldAmt,"->>>>>9")))
                    lcList = REPLACE(lcList,"#yy",TRIM(STRING(liTermMonths))).
