@@ -4,7 +4,8 @@
  * @input msisdn;str;mandatory;subscription msisdn
  * @output result;struct;result struct
 
- * @result custnum;int;customer number
+ * @result transaction_id;string;transaction id
+      custnum;int;customer number
       msseq;int;subscription number
       msisdn;str;
       subscription_type;str;
