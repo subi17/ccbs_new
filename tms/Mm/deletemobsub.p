@@ -171,6 +171,7 @@ PROCEDURE pTerminate:
       liSimStat      = MsRequest.ReqIParam2
       liQuarTime     = MsRequest.ReqIParam3
       lcTermReason   = MsRequest.ReqCParam3
+      llPartialTermination = LOGICAL(MsRequest.ReqIParam4)
       lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
 
    ASSIGN ldMonthEndDate = fLastDayOfMonth(ldaKillDate)
@@ -243,10 +244,18 @@ PROCEDURE pTerminate:
    EXCLUSIVE-LOCK NO-ERROR.
 
    /* TimeStamp  */
-   IF AVAIL MSOwner THEN DO:
+   IF AVAIL MSOwner AND NOT(llPartialTermination) THEN DO:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
       MSOwner.TsEnd = ldCurrTS.   
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
+   END.
+   ELSE IF AVAIL MSOwner AND llPartialTermination THEN DO:
+      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
+      ASSIGN
+         MSOwner.CLI = MobSub.fixedNumber
+         MSOwner.imsi = ""
+         MSOwner.CliEvent = "F".
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).   
    END.
 
    IF llOutport THEN DO:
@@ -856,38 +865,40 @@ PROCEDURE pTerminate:
       END.      
    END. /* IF llCloseRVTermFee THEN DO: */
 
-   FOR EACH Order NO-LOCK WHERE
-            Order.MsSeq = MobSub.MsSeq AND
-            Order.OrderType = {&ORDER_TYPE_STC} AND
-            Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
-      FIRST OrderFusion NO-LOCK WHERE
-            OrderFusion.Brand = gcBrand AND
-            OrderFusion.OrderID = Order.OrderID:
+   /* COFF fixed line stays in partial termination */
+   IF NOT(llPartialTermination) THEN DO: 
+      FOR EACH Order NO-LOCK WHERE
+               Order.MsSeq = MobSub.MsSeq AND
+               Order.OrderType = {&ORDER_TYPE_STC} AND
+               Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
+         FIRST OrderFusion NO-LOCK WHERE
+               OrderFusion.Brand = gcBrand AND
+               OrderFusion.OrderID = Order.OrderID:
 
-      IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN DO:
+         IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN DO:
 
-         fSetOrderStatus(Order.Orderid, {&ORDER_STATUS_IN_CONTROL}).
-         
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-              "Order",
-              STRING(Order.OrderID),
-              Order.CustNum,
-              "Order handling stopped",
-              "Subscription is terminated, Convergent order cannot proceed").
-      
-      END.
-      ELSE DO:
-         RUN fusion_order_cancel.p(Order.OrderID).
-         IF NOT RETURN-VALUE BEGINS "OK" THEN
+            fSetOrderStatus(Order.Orderid, {&ORDER_STATUS_IN_CONTROL}).
+            
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  "Order",
                  STRING(Order.OrderID),
                  Order.CustNum,
-                 "Convergent order closing failed",
-                 STRING(RETURN-VALUE)).
+                 "Order handling stopped",
+                 "Subscription is terminated, Convergent order cannot proceed").
+         
+         END.
+         ELSE DO:
+            RUN fusion_order_cancel.p(Order.OrderID).
+            IF NOT RETURN-VALUE BEGINS "OK" THEN
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                    "Order",
+                    STRING(Order.OrderID),
+                    Order.CustNum,
+                    "Convergent order closing failed",
+                    STRING(RETURN-VALUE)).
+         END.
       END.
    END.
-
    /* YDR-2052, Change the delivery type to paper only if the customer 
       don't have any other active subscription with delivery type EMAIL or SMS*/
    IF NOT MobSub.PayType AND 
@@ -913,10 +924,12 @@ PROCEDURE pTerminate:
 
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.
-   /* COFF fixed number in TermMobsub ? */
+   /* COFF fixed number in TermMobsub */
    IF NOT(llPartialTermination) THEN
       DELETE MobSub.
-               
+   ELSE IF TermMobsub.fixednumber > "" THEN
+      TermMobsub.fixednumber = "". /* Fixed line stays active */
+
    IF AVAIL MSISDN THEN RELEASE MSISDN.
 
    /* Find Original request */

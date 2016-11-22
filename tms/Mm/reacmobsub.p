@@ -208,9 +208,21 @@ DO TRANSACTION:
 
    END. 
 
-   CREATE Mobsub.
-   BUFFER-COPY TermMobsub TO Mobsub.
-   DELETE TermMobsub.
+   /* COFF */
+   FIND FIRST MobSub WHERE
+              Mobsub.msseq EQ MSRequest.MSSeq /* COFF Partial terminated */
+              NO-ERROR.
+   IF AVAIL Mobsub THEN DO:
+      ASSIGN 
+         MobSub.cli = TermMobsub.Cli
+         MobSub.imsi = TermMobsub.imsi
+         MobSub.icc = TermMobsub.icc.
+   END.
+   ELSE DO:
+      CREATE Mobsub.
+      BUFFER-COPY TermMobsub TO Mobsub.
+      DELETE TermMobsub.
+   END.
 
    RELEASE MSISDN.
 
