@@ -1218,6 +1218,7 @@ PROCEDURE pChangeDelType:
 
          /* Update invoice deliverytype to paper only when funcrun
             execution process "InvPrintSplit" is not started for current month */
+         /* Invoice Web display option is set to true - YTS-9820 */   
          IF NOT llgStarted AND 
                 llgInvDate AND 
                 llgInvType THEN DO: 
@@ -1227,7 +1228,8 @@ PROCEDURE pChangeDelType:
                      Invoice.InvDate    = TODAY              AND
                      Invoice.InvType    = {&INV_TYPE_NORMAL} AND 
                      Invoice.PrintState = 0:
-               Invoice.DelType = {&INV_DEL_TYPE_PAPER}.
+               ASSIGN Invoice.DelType  = {&INV_DEL_TYPE_PAPER}
+                      Invoice.WInvDisp = YES. 
             END.          
          END.
 
