@@ -598,7 +598,7 @@
 1 "" 1 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
 1 "" 2 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
 1 "" 3 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
-1 "" 5 "Internet" 0 "CONT15" "1" 01/10/49 31/12/49
+1 "" 5 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONT15DISC" "1" 01/03/15 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONT15DISC" "1" 01/03/15 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT15DISC" "1" 01/03/15 31/12/49
@@ -848,14 +848,14 @@
 1 "" 2 "Fix + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoa + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
 1 "" 5 "Landline + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
-1 "" 1 "Nacionales" 0 "CONTDSL_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 2 "Nacionals" 0 "CONTDSL_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 3 "Nazionalak" 0 "CONTDSL_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 5 "National" 0 "CONTDSL_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 1 "Nacionales" 0 "CONTDSL_QTY_IN" "1" 16/11/16 31/12/49
-1 "" 2 "Nacionals" 0 "CONTDSL_QTY_IN" "1" 16/11/16 31/12/49
-1 "" 3 "Nazionalak" 0 "CONTDSL_QTY_IN" "1" 16/11/16 31/12/49
-1 "" 5 "National" 0 "CONTDSL_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTDSL_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTDSL_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTDSL_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTDSL_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTDSL_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTDSL_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTDSL_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTDSL_QTY_IN" "1" 01/11/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
@@ -880,26 +880,26 @@
 1 "" 2 "Fix + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoa + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
 1 "" 5 "Landline + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
-1 "" 1 "Nacionales" 0 "CONTFH300_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 2 "Nacionals" 0 "CONTFH300_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 3 "Nazionalak" 0 "CONTFH300_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 5 "National" 0 "CONTFH300_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 1 "Nacionales" 0 "CONTFH300_QTY_IN" "1" 16/11/16 31/12/49
-1 "" 2 "Nacionals" 0 "CONTFH300_QTY_IN" "1" 16/11/16 31/12/49
-1 "" 3 "Nazionalak" 0 "CONTFH300_QTY_IN" "1" 16/11/16 31/12/49
-1 "" 5 "National" 0 "CONTFH300_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH300_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH300_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH300_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH300_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH300_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH300_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH300_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH300_QTY_IN" "1" 01/11/16 31/12/49
 1 "" 1 "FIJO + INTERNET" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
 1 "" 2 "Fix + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoa + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
 1 "" 5 "Landline + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
-1 "" 1 "Nacionales" 0 "CONTFH50_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 2 "Nacionals" 0 "CONTFH50_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 3 "Nazionalak" 0 "CONTFH50_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 5 "National" 0 "CONTFH50_MIN_IN" "1" 16/11/16 31/12/49
-1 "" 1 "Nacionales" 0 "CONTFH50_QTY_IN" "1" 16/11/16 31/12/49
-1 "" 2 "Nacionals" 0 "CONTFH50_QTY_IN" "1" 16/11/16 31/12/49
-1 "" 3 "Nazionalak" 0 "CONTFH50_QTY_IN" "1" 16/11/16 31/12/49
-1 "" 5 "National" 0 "CONTFH50_QTY_IN" "1" 16/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH50_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH50_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH50_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH50_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH50_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH50_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH50_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH50_QTY_IN" "1" 01/11/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
@@ -1068,30 +1068,30 @@
 1 "" 2 "Nacionals" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
 1 "" 3 "Nazionalak" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
 1 "" 5 "National" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
-1 "" 1 "Desvío de Llamadas" 0 "CONTS2GBCF_A" "1" 10/11/16 31/12/49
-1 "" 2 "Desviament de Trucades" 0 "CONTS2GBCF_A" "1" 10/11/16 31/12/49
-1 "" 3 "Dei-desbideraketa" 0 "CONTS2GBCF_A" "1" 10/11/16 31/12/49
-1 "" 5 "Call forwarding" 0 "CONTS2GBCF_A" "1" 10/11/16 31/12/49
-1 "" 1 "Desvío de Llamadas" 0 "CONTS2GBCF_B" "1" 10/11/16 31/12/49
-1 "" 2 "Desviament de Trucades" 0 "CONTS2GBCF_B" "1" 10/11/16 31/12/49
-1 "" 3 "Dei-desbideraketa" 0 "CONTS2GBCF_B" "1" 10/11/16 31/12/49
-1 "" 5 "Call forwarding" 0 "CONTS2GBCF_B" "1" 10/11/16 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONTS2GBCF_A" "1" 01/11/16 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONTS2GBCF_A" "1" 01/11/16 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONTS2GBCF_A" "1" 01/11/16 31/12/49
+1 "" 5 "Call forwarding" 0 "CONTS2GBCF_A" "1" 01/11/16 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONTS2GBCF_B" "1" 01/11/16 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONTS2GBCF_B" "1" 01/11/16 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONTS2GBCF_B" "1" 01/11/16 31/12/49
+1 "" 5 "Call forwarding" 0 "CONTS2GBCF_B" "1" 01/11/16 31/12/49
 1 "" 1 "MÓVIL" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
 1 "" 2 "Mòbil" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
 1 "" 3 "Mugikorra" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
 1 "" 5 "Mobile" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
-1 "" 1 "Nacionales" 0 "CONTS2GBVOICE_A" "1" 10/11/16 31/12/49
-1 "" 2 "Nacionals" 0 "CONTS2GBVOICE_A" "1" 10/11/16 31/12/49
-1 "" 3 "Nazionalak" 0 "CONTS2GBVOICE_A" "1" 10/11/16 31/12/49
-1 "" 5 "National" 0 "CONTS2GBVOICE_A" "1" 10/11/16 31/12/49
-1 "" 1 "Nacionales" 0 "CONTS2GBVOICE_B" "1" 10/11/16 31/12/49
-1 "" 2 "Nacionals" 0 "CONTS2GBVOICE_B" "1" 10/11/16 31/12/49
-1 "" 3 "Nazionalak" 0 "CONTS2GBVOICE_B" "1" 10/11/16 31/12/49
-1 "" 5 "National" 0 "CONTS2GBVOICE_B" "1" 10/11/16 31/12/49
-1 "" 1 "Internet" 0 "CONTS2GB_DATA" "1" 10/11/16 31/12/49
-1 "" 2 "Internet" 0 "CONTS2GB_DATA" "1" 10/11/16 31/12/49
-1 "" 3 "Internet" 0 "CONTS2GB_DATA" "1" 10/11/16 31/12/49
-1 "" 5 "Internet" 0 "CONTS2GB_DATA" "1" 10/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTS2GBVOICE_A" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTS2GBVOICE_A" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTS2GBVOICE_A" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTS2GBVOICE_A" "1" 01/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTS2GBVOICE_B" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTS2GBVOICE_B" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTS2GBVOICE_B" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTS2GBVOICE_B" "1" 01/11/16 31/12/49
+1 "" 1 "Internet" 0 "CONTS2GB_DATA" "1" 01/11/16 31/12/49
+1 "" 2 "Internet" 0 "CONTS2GB_DATA" "1" 01/11/16 31/12/49
+1 "" 3 "Internet" 0 "CONTS2GB_DATA" "1" 01/11/16 31/12/49
+1 "" 5 "Internet" 0 "CONTS2GB_DATA" "1" 01/11/16 31/12/49
 1 "" 1 "Desvío de Llamadas" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
 1 "" 2 "Desviament de Trucades" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
 1 "" 3 "Dei-desbideraketa" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
@@ -1529,34 +1529,34 @@
 1 "" 2 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
 1 "" 3 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
 1 "" 5 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
-1 "" 1 "Nacionales" 0 "F10100003" "1" 16/11/16 31/12/49
-1 "" 2 "Nacionals" 0 "F10100003" "1" 16/11/16 31/12/49
-1 "" 3 "Nazionalak" 0 "F10100003" "1" 16/11/16 31/12/49
-1 "" 5 "National" 0 "F10100003" "1" 16/11/16 31/12/49
-1 "" 1 "Al Extranjero" 0 "F10100004" "1" 16/11/16 31/12/49
-1 "" 2 "A l'estranger" 0 "F10100004" "1" 16/11/16 31/12/49
-1 "" 3 "Atzerrira" 0 "F10100004" "1" 16/11/16 31/12/49
-1 "" 5 "Abroad" 0 "F10100004" "1" 16/11/16 31/12/49
-1 "" 1 "Nacionales" 0 "F10100005" "1" 16/11/16 31/12/49
-1 "" 2 "Nacionals" 0 "F10100005" "1" 16/11/16 31/12/49
-1 "" 3 "Nazionalak" 0 "F10100005" "1" 16/11/16 31/12/49
-1 "" 5 "National" 0 "F10100005" "1" 16/11/16 31/12/49
-1 "" 1 "Llamadas Premium" 0 "F15100023" "1" 16/11/16 31/12/49
-1 "" 2 "Trucades Premium" 0 "F15100023" "1" 16/11/16 31/12/49
-1 "" 3 "Premium deiak" 0 "F15100023" "1" 16/11/16 31/12/49
-1 "" 5 "Premium Calls" 0 "F15100023" "1" 16/11/16 31/12/49
-1 "" 1 "NÃºmeros Gratuitos" 0 "F15100027" "1" 16/11/16 31/12/49
-1 "" 2 "NÃºmeros Gratuitos" 0 "F15100027" "1" 16/11/16 31/12/49
-1 "" 3 "Doako zenbakiak" 0 "F15100027" "1" 16/11/16 31/12/49
-1 "" 5 "Free Numbers" 0 "F15100027" "1" 16/11/16 31/12/49
-1 "" 1 "AtenciÃ³n al cliente" 0 "FCCYOIGO" "1" 16/11/16 31/12/49
-1 "" 2 "AtenciÃ³ al client" 0 "FCCYOIGO" "1" 16/11/16 31/12/49
-1 "" 3 "Bezeroarentzako arreta-zerbitzua" 0 "FCCYOIGO" "1" 16/11/16 31/12/49
-1 "" 5 "Customer Service" 0 "FCCYOIGO" "1" 16/11/16 31/12/49
-1 "" 1 "At. otras emp" 0 "FINFSERVICE" "1" 16/11/16 31/12/49
-1 "" 2 "A. altr. empr" 0 "FINFSERVICE" "1" 16/11/16 31/12/49
-1 "" 3 "Bes. enp. at." 0 "FINFSERVICE" "1" 16/11/16 31/12/49
-1 "" 5 "Other co att" 0 "FINFSERVICE" "1" 16/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "F10100003" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "F10100003" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "F10100003" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "F10100003" "1" 01/11/16 31/12/49
+1 "" 1 "Al Extranjero" 0 "F10100004" "1" 01/11/16 31/12/49
+1 "" 2 "A l'estranger" 0 "F10100004" "1" 01/11/16 31/12/49
+1 "" 3 "Atzerrira" 0 "F10100004" "1" 01/11/16 31/12/49
+1 "" 5 "Abroad" 0 "F10100004" "1" 01/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "F10100005" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "F10100005" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "F10100005" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "F10100005" "1" 01/11/16 31/12/49
+1 "" 1 "Llamadas Premium" 0 "F15100023" "1" 01/11/16 31/12/49
+1 "" 2 "Trucades Premium" 0 "F15100023" "1" 01/11/16 31/12/49
+1 "" 3 "Premium deiak" 0 "F15100023" "1" 01/11/16 31/12/49
+1 "" 5 "Premium Calls" 0 "F15100023" "1" 01/11/16 31/12/49
+1 "" 1 "Números Gratuitos" 0 "F15100027" "1" 01/11/16 31/12/49
+1 "" 2 "Números Gratuïts" 0 "F15100027" "1" 01/11/16 31/12/49
+1 "" 3 "Doako zenbakiak" 0 "F15100027" "1" 01/11/16 31/12/49
+1 "" 5 "Free Numbers" 0 "F15100027" "1" 01/11/16 31/12/49
+1 "" 1 "Atención al cliente" 0 "FCCYOIGO" "1" 01/11/16 31/12/49
+1 "" 2 "Atenció al client" 0 "FCCYOIGO" "1" 01/11/16 31/12/49
+1 "" 3 "Bezeroarentzako arreta-zerbitzua" 0 "FCCYOIGO" "1" 01/11/16 31/12/49
+1 "" 5 "Customer Service" 0 "FCCYOIGO" "1" 01/11/16 31/12/49
+1 "" 1 "At. otras emp" 0 "FINFSERVICE" "1" 01/11/16 31/12/49
+1 "" 2 "A. altr. empr" 0 "FINFSERVICE" "1" 01/11/16 31/12/49
+1 "" 3 "Bes. enp. at." 0 "FINFSERVICE" "1" 01/11/16 31/12/49
+1 "" 5 "Other co att" 0 "FINFSERVICE" "1" 01/11/16 31/12/49
 1 "" 1 "Desvío de Llamadas" 0 "FLATCF" "1" 01/04/12 31/12/49
 1 "" 1 "Desvio llamadas T. Plana" 0 "FLATCF" "1" 01/01/12 31/03/12
 1 "" 2 "Desviament de Trucades" 0 "FLATCF" "1" 01/04/12 31/12/49
@@ -1669,10 +1669,10 @@
 1 "" 2 "En 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
 1 "" 3 "100 minutuan" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
 1 "" 5 "ln 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
-1 "" 1 "Tipo A" 0 "FSHORTNU" "1" 16/11/16 31/12/49
-1 "" 2 "Tipus A" 0 "FSHORTNU" "1" 16/11/16 31/12/49
-1 "" 3 "A mota" 0 "FSHORTNU" "1" 16/11/16 31/12/49
-1 "" 5 "Level A" 0 "FSHORTNU" "1" 16/11/16 31/12/49
+1 "" 1 "Tipo A" 0 "FSHORTNU" "1" 01/11/16 31/12/49
+1 "" 2 "Tipus A" 0 "FSHORTNU" "1" 01/11/16 31/12/49
+1 "" 3 "A mota" 0 "FSHORTNU" "1" 01/11/16 31/12/49
+1 "" 5 "Level A" 0 "FSHORTNU" "1" 01/11/16 31/12/49
 1 "" 1 "Incumplimiento de permanencia La Combinada" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 2 "Incompliment de permanència La Combinada" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 3 "La Combinada tarifaren iraunkortasun-epea urratzea" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
@@ -5032,7 +5032,7 @@
 1 "" 1 "Samsung F480 Negro" 0 "P034F4802" "1" 15/09/08 31/12/54
 1 "" 5 "Samsung F480 Black" 0 "P034F4802" "1" 15/09/08 31/12/54
 1 "" 1 "Samsung F480 Negro" 0 "P034F4803" "1" 01/12/08 31/12/54
-1 "" 5 "Samsung F480 Negro MNP Special" 0 "P034F4803" "1" 01/12/54 31/12/54
+1 "" 5 "Samsung F480 Negro MNP Special" 0 "P034F4803" "1" 01/12/08 31/12/54
 1 "" 1 "Samsung SGH F480i Negro" 0 "P034F48N2" "1" 18/03/10 31/12/49
 1 "" 2 "Samsung F480i Negro" 0 "P034F48N2" "1" 18/03/10 31/12/49
 1 "" 3 "Samsung F480i Negro" 0 "P034F48N2" "1" 18/03/10 31/12/49
@@ -6282,6 +6282,11 @@
 1 "" 3 "Huawei G8 Gris" 0 "P043HG8G2" "1" 25/09/15 31/12/49
 1 "" 4 "Huawei G8 Gris" 0 "P043HG8G2" "1" 25/09/15 31/12/49
 1 "" 5 "Huawei GX8 Grey" 0 "P043HG8G2" "1" 25/09/15 31/12/49
+1 "" 1 "Huawei Nova Plus Oro" 0 "P043HNPD2" "1" 21/11/16 31/12/49
+1 "" 2 "Huawei Nova Plus Oro" 0 "P043HNPD2" "1" 21/11/16 31/12/49
+1 "" 3 "Huawei Nova Plus Oro" 0 "P043HNPD2" "1" 21/11/16 31/12/49
+1 "" 4 "Huawei Nova Plus Oro" 0 "P043HNPD2" "1" 21/11/16 31/12/49
+1 "" 5 "Huawei Nova Plus Gold" 0 "P043HNPD2" "1" 21/11/16 31/12/49
 1 "" 1 "Huawei Nova Plus Gris" 0 "P043HNPG2" "1" 21/09/16 31/12/49
 1 "" 2 "Huawei Nova Plus Gris" 0 "P043HNPG2" "1" 21/09/16 31/12/49
 1 "" 3 "Huawei Nova Plus Gris" 0 "P043HNPG2" "1" 21/09/16 31/12/49
@@ -8621,7 +8626,7 @@
 1 "" 5 "Discount on Final Payment" 0 "RVTERMDTEQ25" "1" 27/11/15 31/12/49
 1 "" 1 "Descuento sobre Pago Final por Renuevo." 0 "RVTERMDTRW" "1" 27/11/15 31/12/49
 1 "" 2 "Descompte sobre el Pagament Final per Renuevo." 0 "RVTERMDTRW" "1" 27/11/15 31/12/49
-1 "" 3 "Azken ordainketako deskontua Renuevogatik." 0 "RVTERMDTRW" "1" 27/11/49 31/12/49
+1 "" 3 "Azken ordainketako deskontua Renuevogatik." 0 "RVTERMDTRW" "1" 27/11/15 31/12/49
 1 "" 5 "Discount on Final Payment for Renuevo" 0 "RVTERMDTRW" "1" 27/11/15 31/12/49
 1 "" 1 "Descuento del Pago Final." 0 "RVTERMDTTD" "1" 27/11/15 31/12/49
 1 "" 2 "Descompte del Pagament Final." 0 "RVTERMDTTD" "1" 27/11/15 31/12/49
@@ -11041,10 +11046,10 @@
 9 "" 2 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
 9 "" 5 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
-9 "" 1 "La Combinada Azul 20" 0 "CONTDSL58" "1" 10/11/16 31/12/49
-9 "" 2 "La Combinada Azul 20" 0 "CONTDSL58" "1" 10/11/16 31/12/49
-9 "" 3 "La Combinada Azul 20" 0 "CONTDSL58" "1" 10/11/16 31/12/49
-9 "" 5 "La Combinada Azul 20" 0 "CONTDSL58" "1" 10/11/16 31/12/49
+9 "" 1 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
+9 "" 2 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
+9 "" 3 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
+9 "" 5 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 1 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 2 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 3 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
@@ -11108,14 +11113,14 @@
 9 "" 2 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 5 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
-9 "" 1 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 10/11/16 31/12/49
-9 "" 2 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 10/11/16 31/12/49
-9 "" 3 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 10/11/16 31/12/49
-9 "" 5 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 10/11/16 31/12/49
-9 "" 1 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 10/11/16 31/12/49
-9 "" 2 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 10/11/16 31/12/49
-9 "" 3 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 10/11/16 31/12/49
-9 "" 5 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 10/11/16 31/12/49
+9 "" 1 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 2 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 3 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 5 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 1 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
+9 "" 2 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
+9 "" 3 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
+9 "" 5 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 1 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 2 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 3 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
