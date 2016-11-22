@@ -1192,12 +1192,12 @@ PROCEDURE pChangeDelType:
                 llgInvDate   = FALSE
                 llgInvType   = FALSE. 
 
-         FOR FIRST FuncRunQSchedule NO-LOCK WHERE 
-                   FuncRunQSchedule.StartTS  >= ldeStartTime AND
-                   FuncRunQSchedule.RunMode   = "Production", 
-             FIRST FuncRunExec NO-LOCK WHERE
-                   FuncRunExec.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND
-                   FuncRunExec.FRConfigID    EQ 5: 
+         FOR EACH FuncRunQSchedule NO-LOCK WHERE 
+                  FuncRunQSchedule.StartTS  >= ldeStartTime AND
+                  FuncRunQSchedule.RunMode   = "Production", 
+             EACH FuncRunExec NO-LOCK WHERE
+                  FuncRunExec.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND
+                  FuncRunExec.FRConfigID    EQ {&INVPRINTSPLIT_CONFIG}: 
                     
              FOR EACH FuncRunQSParam NO-LOCK WHERE 
                       FuncRunQSParam.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND 
@@ -1218,7 +1218,6 @@ PROCEDURE pChangeDelType:
 
          /* Update invoice deliverytype to paper only when funcrun
             execution process "InvPrintSplit" is not started for current month */
-         /* Invoice Web display option is set to true - YTS-9820 */   
          IF NOT llgStarted AND 
                 llgInvDate AND 
                 llgInvType THEN DO: 
@@ -1228,8 +1227,7 @@ PROCEDURE pChangeDelType:
                      Invoice.InvDate    = TODAY              AND
                      Invoice.InvType    = {&INV_TYPE_NORMAL} AND 
                      Invoice.PrintState = 0:
-               ASSIGN Invoice.DelType  = {&INV_DEL_TYPE_PAPER}
-                      Invoice.WInvDisp = YES. 
+               Invoice.DelType  = {&INV_DEL_TYPE_PAPER}.
             END.          
          END.
 

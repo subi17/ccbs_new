@@ -117,12 +117,13 @@ PUT STREAM sRequestLog UNFORMATTED
 FOR EACH ttCust:
    
    FIND FIRST Invoice NO-LOCK WHERE
-              Invoice.Brand     = "1"            AND
-              Invoice.CustNum   = ttCust.CustNum AND
-              Invoice.InvDate   = ldaStartDate   AND
-              Invoice.InvType   = 1              AND
-              Invoice.DelType  <> 1              AND 
-              Invoice.ChgStamp <= ttCust.EndTS   NO-ERROR.
+              Invoice.Brand      = "1"            AND
+              Invoice.CustNum    = ttCust.CustNum AND
+              Invoice.InvDate    = ldaStartDate   AND
+              Invoice.InvType    = 1              AND
+              Invoice.DelType   <> 1              AND
+              Invoice.printstate = 1              AND 
+              Invoice.ChgStamp  <= ttCust.EndTS   NO-ERROR.
    IF AVAIL Invoice THEN DO:
       IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
                         MsRequest.Brand      = "1"                                        AND
