@@ -10,7 +10,10 @@
 
 {commali.i}
 {tmsconst.i}
+{timestamp.i}
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
+DEF VAR lcUpdateTS AS CHAR NO-UNDO.
+
 
 FIND FIRST OrderFusion NO-LOCK where
            OrderFusion.Brand eq Syst.Parameters:gcBrand AND
@@ -38,7 +41,7 @@ FORM
     "Serial Number.....:" AT 40 OrderFusion.SerialNumber FORMAT "X(18)"
     SKIP
     "Order Date........:" OrderFusion.OrderDate    
-    "Updated...........:" AT 40 OrderFusion.UpdateTS /*FORMAT "X(20)"*/
+    "Updated...........:" AT 40  lcUpdateTS FORMAT "X(18)"
     SKIP
     "Customer Type.....:" OrderFusion.CustomerType
     "MNP Time..........:" AT 40 OrderFusion.FixedMNPTime 
@@ -54,6 +57,8 @@ WITH OVERLAY ROW 1 WIDTH 80 centered
 PAUSE 0 NO-MESSAGE.
 /*VIEW FRAME fData. */
 /*CLEAR FRAME fData NO-PAUSE.*/
+   lcUpdateTS = fTS2HMS(OrderFusion.UpdateTS).
+
 
 DISP OrderFusion.OrderID
      OrderFusion.FixedOrderId
@@ -66,7 +71,7 @@ DISP OrderFusion.OrderID
      OrderFusion.Product
      OrderFusion.SerialNumber
      OrderFusion.OrderDate
-     OrderFusion.UpdateTS
+     lcUpdateTS
      OrderFusion.CustomerType
      OrderFusion.FixedMNPTime 
      WITH FRAME fData.
