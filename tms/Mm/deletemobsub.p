@@ -1204,7 +1204,11 @@ END PROCEDURE.
 PROCEDURE pChangeDelType:
    DEFINE INPUT  PARAMETER liCustNum AS INTEGER NO-UNDO.   
 
-   DEF VAR lhCustomer AS HANDLE NO-UNDO. 
+   DEF VAR lhCustomer   AS HANDLE NO-UNDO. 
+   DEF VAR ldeStartTime AS DEC    NO-UNDO. 
+   DEF VAR llgStarted   AS LOG    NO-UNDO.
+   DEF VAR llgInvDate   AS LOG    NO-UNDO.
+   DEF VAR llgInvType   AS LOG    NO-UNDO. 
 
    lhCustomer = BUFFER Customer:HANDLE.
 
@@ -1222,13 +1226,50 @@ PROCEDURE pChangeDelType:
          delivery type and delivery status for invoices generated AND but not delivered */
       IF DAY(TODAY) = 1 THEN
       DO:
-         FOR EACH Invoice EXCLUSIVE-LOCK WHERE
-                  Invoice.Brand   = gcBrand          AND
-                  Invoice.CustNum = Customer.CustNum AND
-                  Invoice.InvDate = TODAY            AND
-                  Invoice.InvType = {&INV_TYPE_NORMAL}:
-            Invoice.DelType = {&INV_DEL_TYPE_PAPER}.
-         END.          
+         ASSIGN ldeStartTime = fMake2Dt(TODAY,0)
+                llgStarted   = FALSE
+                llgInvDate   = FALSE
+                llgInvType   = FALSE. 
+
+         FOR EACH FuncRunQSchedule NO-LOCK WHERE 
+                  FuncRunQSchedule.StartTS  >= ldeStartTime AND
+                  FuncRunQSchedule.RunMode   = "Production", 
+             EACH FuncRunExec NO-LOCK WHERE
+                  FuncRunExec.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND
+                  FuncRunExec.FRConfigID    EQ {&INVPRINTSPLIT_CONFIG}: 
+                    
+             FOR EACH FuncRunQSParam NO-LOCK WHERE 
+                      FuncRunQSParam.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND 
+                      FuncRunQSParam.FRConfigID    EQ FuncRunExec.FRConfigID:      
+             
+                IF FuncRunQSParam.ParamSeq  EQ 1     AND 
+                   FuncRunQSParam.DateParam EQ TODAY THEN 
+                   llgInvDate = TRUE.
+                ELSE IF FuncRunQSParam.ParamSeq EQ 2                  AND 
+                        FuncRunQSParam.IntParam EQ {&INV_TYPE_NORMAL} THEN 
+                   llgInvType = TRUE.
+                  
+             END.   
+             
+             IF FuncRunExec.StartTS > 0 THEN 
+                llgStarted = TRUE.
+         END.
+
+         /* Update invoice deliverytype to paper only when funcrun
+            execution process "InvPrintSplit" is not started for current month */
+         IF NOT llgStarted AND 
+                llgInvDate AND 
+                llgInvType THEN DO: 
+            FOR EACH Invoice EXCLUSIVE-LOCK WHERE
+                     Invoice.Brand      = gcBrand            AND
+                     Invoice.CustNum    = Customer.CustNum   AND
+                     Invoice.InvDate    = TODAY              AND
+                     Invoice.InvType    = {&INV_TYPE_NORMAL} AND 
+                     Invoice.PrintState = 0:
+               Invoice.DelType  = {&INV_DEL_TYPE_PAPER}.
+            END.          
+         END.
+
       END.
 
       Customer.DelType = {&INV_DEL_TYPE_PAPER}.
