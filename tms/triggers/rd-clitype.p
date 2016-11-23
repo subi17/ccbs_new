@@ -1,6 +1,6 @@
 {triggers/hpddelete_generic.i CliType CLITYPE Ordercanal CliType}
 
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 IF NEW CliType
 THEN RETURN.

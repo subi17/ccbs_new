@@ -720,13 +720,6 @@ PROCEDURE pSubInvoice2XML:
       lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName).
       lhXML:WRITE-CHARACTERS(ttSub.CLIType).
       lhXML:END-ELEMENT("ContractType").
-      IF SubInvoice.FixedNumber > "" AND 
-         ttSub.CliEvent         <> "F" THEN DO:
-         lhXML:START-ELEMENT("CustomContract").
-         lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
-         lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
-         lhXML:END-ELEMENT("CustomContract").
-      END.
 
       IF ttSub.OldCLIType > "" THEN DO:
          lhXML:START-ELEMENT("OldContractType").
@@ -746,7 +739,15 @@ PROCEDURE pSubInvoice2XML:
          lhXML:WRITE-DATA-ELEMENT("CustomContent",ttSub.MessageType).
          lhXML:END-ELEMENT("CustomContract").         
       END.
-      
+      IF SubInvoice.FixedNumber > "" AND
+         ttSub.CliEvent        <> "F" THEN DO:
+         lhXML:START-ELEMENT("CustomContract").
+         lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
+         lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
+         lhXML:END-ELEMENT("CustomContract").
+      END.
+
+
       /* invoice rows */
       lhXML:START-ELEMENT("InvoiceRow").
 
