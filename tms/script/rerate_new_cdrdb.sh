@@ -5,7 +5,7 @@ PROPATH=/apps/xfera/tms
 export PROPATH
 export display_banner=no
 
-mpro -b -p Syst/create_cdrpf -db /db1/common/common -param ${new_cdr_pf}
+mpro -b -p Syst/create_cdrpf.p -db /db1/common/common -param ${new_cdr_pf}
 
 if [ -f "${new_cdr_pf}" ];
 then
