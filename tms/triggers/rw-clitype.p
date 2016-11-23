@@ -1,11 +1,46 @@
-{triggers/hpdwrite_generic.i CliType CLITYPE Ordercanal CliType}
+TRIGGER PROCEDURE FOR REPLICATION-WRITE OF CliType OLD BUFFER oldCliType.
 
-{tmsconst.i}
+{Syst/tmsconst.i}
+
+{HPD/HPDConst.i}
 
 DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
 
-IF NOT NEW(CliType) THEN
-   BUFFER-COMPARE CliType TO oldCliType SAVE RESULT IN llSameValues.
+&IF {&CLITYPE_WRITE_TRIGGER_ACTIVE} &THEN
+
+CREATE Ordercanal.RepLog.
+ASSIGN
+   Ordercanal.RepLog.RowID     = STRING(ROWID(CliType))
+   Ordercanal.RepLog.TableName = "CliType"
+   Ordercanal.RepLog.EventType = (IF NEW(CliType)
+                           THEN "CREATE"
+                           ELSE "MODIFY")
+   Ordercanal.RepLog.EventTime = NOW
+   .
+
+IF NOT NEW(CliType)
+THEN DO: 
+   BUFFER-COMPARE CliType USING
+      CliType
+   TO oldCliType SAVE RESULT IN llSameValues.
+   
+   IF NOT llSameValues
+   THEN DO:
+   CREATE Ordercanal.RepLog.
+      ASSIGN
+         Ordercanal.RepLog.TableName = "CliType"
+         Ordercanal.RepLog.EventType = "DELETE"
+         Ordercanal.RepLog.EventTime = NOW
+         Ordercanal.RepLog.KeyValue  = SUBSTITUTE("&1",oldCliType.CliType)
+         .
+   END.
+
+END.
+
+&ENDIF
+
+IF NOT NEW(CliType) 
+THEN BUFFER-COMPARE CliType TO oldCliType SAVE RESULT IN llSameValues.
 
 IF NOT llSameValues OR NEW(CliType) THEN
 DO:
@@ -25,4 +60,3 @@ DO:
    END.     
 
 END.
-
