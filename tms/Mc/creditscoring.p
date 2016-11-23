@@ -172,7 +172,7 @@ IF pcActionType EQ "ORDER" THEN DO:
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = "1" AND
               OrderCustomer.OrderId = piId AND
-              OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
    IF AVAILABLE OrderCustomer AND AVAILABLE Order THEN
    DO:
       pcFoundingDate = fDateFmt(OrderCustomer.FoundationDate, "ddmmyyyy"). /* 3 */
@@ -219,7 +219,7 @@ IF pcActionType EQ "ORDER" THEN DO:
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = "1" AND
               OrderCustomer.OrderId = piId AND
-              OrderCustomer.RowType = 4 NO-LOCK NO-ERROR.
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-LOCK NO-ERROR.
    IF AVAILABLE OrderCustomer THEN
    DO:
       ASSIGN pcDelName       = OrderCustomer.Address                   /* 11 */ 
@@ -230,7 +230,7 @@ IF pcActionType EQ "ORDER" THEN DO:
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = "1" AND
               OrderCustomer.OrderId = piId AND
-              OrderCustomer.RowType = 5 NO-LOCK NO-ERROR.
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} NO-LOCK NO-ERROR.
    IF AVAILABLE OrderCustomer THEN
    DO:
       ASSIGN pcDeln          = OrderCustomer.FirstName                 /* 13 */
@@ -408,38 +408,7 @@ EMPTY TEMP-TABLE tt_param.
 
 IF plOK THEN
 DO:
-   pcCif =  pcCif.
-   pcZip =  pcZip. 
-   pcFoundingDate =  pcFoundingDate.  
-   pcAddress  =    pcAddress.
-   pcRepId =      pcRepId.  
-   pcRepName  = pcRepName.
-   pcRepFSurName = pcRepFSurname.
-   pcRepSSurName = pcRepSSurname.
-   pcRepEmail =    pcRepEmail.
-   pcDelName  =  pcDelName.
-   pcDelZip =     pcDelZip.
-   pcDeln =       pcDeln.
-   pcDelFSurName = pcDelFSurname.
-   pcDelSSurName = pcDelSSurname.
-   pcDelTelphone = pcDelTelphone.
-   pcDelMail =     pcDelMail.
-   pcRdEntidad =   pcRdEntidad.
-   pcRdSurcursal = pcRdSurcursal.
-   pcRdDc        =  pcRdDc.
-   pcNCuenta     =  pcNCuenta .
-   lcSalesman    =  lcSalesMan.
-   lcSimOnly    =  lcSimOnly.
-   lcOfferId    =  lcOfferId.
-   lcSubsType    =  lcSubsType.
-   lcKindOfNumber =  lcKindOfNumber.
    lcOldOperator =  SUBSTRING(lcOldOperator,1,16).
-   lcOldPaymType =  lcOldPaymType.
-   lcMNPMSISDN   =  lcMNPMSISDN.
-   lcPayTerm     =  lcPayTerm.
-   lcTerm        =  lcTerm.
-   lcPaymentMethod =  lcPaymentMethod.
-   lcUPSCode     = lcUPSCode.
 
    /* Construct the parameter struct from the parameter values */
    gcParamStruct = add_struct("", ""). 

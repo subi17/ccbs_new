@@ -71,7 +71,7 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
       FIND FIRST OrderCustomer NO-LOCK WHERE
                  OrderCustomer.Brand   = gcBrand       AND
                  OrderCustomer.OrderID = Order.OrderID AND
-                 OrderCustomer.RowType = 1 NO-ERROR.
+                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
       ASSIGN
          liCustNum = Order.CustNum
@@ -112,12 +112,12 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
       FIND FIRST companycustomer WHERE
                  companycustomer.Brand   = Order.Brand AND
                  companycustomer.OrderId = Order.OrderID AND
-                 companycustomer.RowType = 5 NO-LOCK NO-ERROR.
+                 companycustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} NO-LOCK NO-ERROR.
       
       FIND FIRST DeliveryCustomer WHERE
                  DeliveryCustomer.Brand   = Order.Brand AND
                  DeliveryCustomer.OrderId = Order.OrderID AND
-                 DeliveryCustomer.RowType = 4 NO-LOCK NO-ERROR.           
+                 DeliveryCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-LOCK NO-ERROR.           
    
    END.
    IF NOT AVAIL OrderCustomer THEN
@@ -1221,10 +1221,14 @@ PROCEDURE pGetDELADDR:
    DEF VAR lcErr AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
-   IF Order.DeliverySecure EQ 1 OR
+   IF Order.DeliveryType = {&ORDER_DELTYPE_POS} OR
+      ( Order.DeliverySecure NE 1 AND
+
+
+   IF Order.DeliveryType NE {&ORDER_DELTYPE_POS} AND
+      Order.DeliverySecure EQ 1 OR
       Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR 
-      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
-      Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
+      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
       lcDelAddress = "". /* YPR-2660 */
    ELSE DO:
       /* separate delivery address */

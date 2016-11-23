@@ -1601,19 +1601,19 @@ DO:
 END.
  
 /* YBP-536 */ 
-lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, FALSE).
+lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-537 */ 
 IF pcAddressStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, 4, FALSE).
+   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_DELIVERY}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-538 */ 
 IF pcContactStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, FALSE).
+   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
