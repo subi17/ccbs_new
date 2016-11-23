@@ -161,7 +161,6 @@ DEF VAR lcError       AS CHAR  NO-UNDO.
 DEF VAR lcValue       AS CHAR NO-UNDO.
 DEF VAR lcTopUpItems  AS CHAR NO-UNDO.
 DEF VAR ldeFAT        AS DECIMAL NO-UNDO.
-DEF VAR lcCLITypeLowMCMF AS CHAR NO-UNDO.
 DEF VAR lcNotMinConList AS CHAR NO-UNDO.
 DEF VAR liNeedSpaces  AS INT  NO-UNDO.
 DEF VAR liTermMonths  AS INT  NO-UNDO.
@@ -1332,14 +1331,7 @@ IF NOT llErrors THEN DO:
 
          IF ldAmt NE 0 AND Order.PayType = FALSE THEN DO:
 
-            /* different text for  penalty fee > 100 and
-               minimum consumption or monthly fee > lowest value */
-            lcCLITypeLowMCMF =  fCParamC("CLITypeLowMCMF").
-            IF LOOKUP(Order.CLIType,lcCLITypeLowMCMF) =  0  AND
-               ldAmt > 100 THEN
-               lcList = lcList + CHR(10) + fTeksti(510,liLanguage).
-            ELSE
-               lcList = lcList + CHR(10) + fTeksti(509,liLanguage).
+            lcList = lcList + CHR(10) + fTeksti(510,liLanguage).
 
             assign lcList = REPLACE(lcList,"#xxx",TRIM(STRING(ldAmt,"->>>>>9")))
                    lcList = REPLACE(lcList,"#yy",TRIM(STRING(liTermMonths))).
