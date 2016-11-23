@@ -55,6 +55,8 @@ DEF TEMP-TABLE ttContract NO-UNDO
    FIELD CreateFee AS LOG
    FIELD ActTS     AS DEC.
 
+DEF TEMP-TABLE ttoldmsowner NO-UNDO LIKE msowner.
+
 FUNCTION fLocalMemo RETURNS LOGIC
    (icHostTable AS CHAR,
     icKey       AS CHAR,
@@ -250,12 +252,20 @@ PROCEDURE pTerminate:
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
    END.
    ELSE IF AVAIL MSOwner AND llPartialTermination THEN DO:
+      BUFFER-COPY msowner TO ttoldmsowner.      
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
+      MSOwner.TsEnd = ldCurrTS.
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).   
+      CREATE MSOwner.
+      BUFFER-COPY ttoldmsowner TO msowner.
       ASSIGN
          MSOwner.CLI = MobSub.fixedNumber
          MSOwner.imsi = ""
          MSOwner.CliEvent = "F".
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).   
+         IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
+                                            "",
+                                            katun,
+                                            "").         
    END.
 
    IF llOutport THEN DO:
