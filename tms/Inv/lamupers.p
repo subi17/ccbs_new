@@ -3636,7 +3636,8 @@ PROCEDURE pInvoiceHeader:
                    MSOwner.MsSeq   = ttRowVat.MsSeq AND
                    MSOwner.TSBegin < ldeToTS AND 
                    MsOwner.InvCust = Customer.CustNum AND
-                   MsOwner.AgrCust = ttRowVat.AgrCust:
+                   MsOwner.AgrCust = ttRowVat.AgrCust AND
+                   MsOwner.PayType = FALSE:
             ASSIGN
                lcCLI         = MsOwner.CLI
                lcFixedNumber = MsOwner.FixedNumber
