@@ -1496,7 +1496,6 @@ PROCEDURE pGetPENALTYFEE:
    DEF VAR lcList AS CHAR NO-UNDO.
    DEF VAR ldAmt AS DEC NO-UNDO.
    DEF VAR lcErr AS CHAR NO-UNDO.
-   DEF VAR lcCLITypeLowMCMF AS CHAR NO-UNDO.
    DEF VAR lcTariffType AS CHAR NO-UNDO.
    DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).  
@@ -1507,15 +1506,8 @@ PROCEDURE pGetPENALTYFEE:
 
    IF ldAmt NE 0 AND Order.PayType = FALSE THEN DO:
 
-      /* different text for  penalty fee > 100 and
-         minimum consumption or monthly fee > lowest value */
-      lcCLITypeLowMCMF =  fCParamC("CLITypeLowMCMF").
       lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
-      IF LOOKUP(Order.CLIType,lcCLITypeLowMCMF) =  0  AND
-         ldAmt > 100 THEN
-         lcList = lcList + CHR(10) + fTeksti(510,liLang).
-      ELSE
-         lcList = lcList + CHR(10) + fTeksti(509,liLang).
+      lcList = lcList + CHR(10) + fTeksti(510,liLang).
 
       assign lcList = REPLACE(lcList,"#xxx",TRIM(STRING(ldAmt,"->>>>>9")))
              lcList = REPLACE(lcList,"#yy",TRIM(STRING(liTermMonths))).
