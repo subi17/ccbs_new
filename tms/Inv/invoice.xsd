@@ -83,7 +83,7 @@
       <xs:attribute name="Document" type="xs:string"/>
       <xs:attribute name="Version" type="xs:string">
         <xs:annotation>
-          <xs:documentation>Version 3.3</xs:documentation>
+          <xs:documentation>Version 3.4</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -97,7 +97,15 @@
           </xs:annotation>
         </xs:element>
         <xs:element minOccurs="1" maxOccurs="1" name="InvoiceID" type="xs:string"/>
-        <xs:element minOccurs="1" maxOccurs="1" name="InvoiceDate" type="xs:string"/>
+        <xs:element minOccurs="1" maxOccurs="1" name="InvoiceDate">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="DateTime" type="xs:string"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
         <xs:element minOccurs="1" maxOccurs="1" name="DueDate" type="xs:string"/>
         <xs:element minOccurs="1" maxOccurs="1" name="BillingPeriod" type="PeriodType"/>
         <xs:element minOccurs="0" maxOccurs="1" name="InvoiceType" type="xs:string"/>
@@ -286,8 +294,7 @@
               </xs:element>
               <xs:element minOccurs="0" maxOccurs="1" name="Destination" type="xs:string">
                 <xs:annotation>
-                  <xs:documentation>B-destination
-</xs:documentation>
+                  <xs:documentation>B-destination</xs:documentation>
                 </xs:annotation>
               </xs:element>
               <xs:element minOccurs="0" maxOccurs="1" name="Period" type="PeriodType"/>
@@ -352,6 +359,7 @@
       <xs:attribute name="PrintToInvoice" type="xs:string"/>
       <xs:attribute name="BillingItemGroup" type="xs:string" use="required"/>
       <xs:attribute name="BillingItemGroupID" type="xs:string"/>
+      <xs:attribute name="BillingItemGroupType" type="xs:string"/>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ContractType">

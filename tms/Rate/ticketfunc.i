@@ -119,13 +119,14 @@ FUNCTION fTicketCheck RETURN LOG
                     msowner.tsbegin     LE CallTimeStamp NO-LOCK NO-ERROR.
 
          IF NOT AVAIL MSowner THEN DO:
-            oiValue = {&CDR_ERROR_MSISDN_NOT_ACTIVE}.
+            oiValue = {&CDR_ERROR_MSISDN_NOT_ACTIVE_FIXED}.
 
             FIND FIRST Msowner WHERE
                        Msowner.brand EQ gcBrand AND
                        Msowner.fixednumber = icValue NO-LOCK NO-ERROR.
 
-            IF Not Avail msowner THEN oiValue  = {&CDR_ERROR_UNKNOWN_MSISDN}.
+            IF NOT AVAIL msowner THEN 
+               oiValue = {&CDR_ERROR_UNKNOWN_MSISDN_FIXED}.
 
          END.
 
