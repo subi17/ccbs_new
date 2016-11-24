@@ -763,7 +763,7 @@ PROCEDURE pFinalize:
       lcXsdFile NE ? THEN DO:
 
       ASSIGN
-         lcSchema = "xmllint --noout --schema "
+         lcSchema = "xmllint --noout --stream --schema "
          lcSchemaValLog = fCParamC("StcContRepFolder") + "/" +
             ENTRY(NUM-ENTRIES(icFile,"/"),icFile,"/")
          lcSchemaValLog = lcSchemaValLog + "_schema.log"
