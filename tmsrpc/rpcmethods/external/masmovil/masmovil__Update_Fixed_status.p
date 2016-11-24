@@ -221,7 +221,7 @@ CASE FusionMessage.FixedStatus:
    /* installation done */
    WHEN "CERRADA" THEN DO:
        
-      ASSIGN OrderFusion.FixedInstallationTS = ldeLastDate.
+      ASSIGN OrderFusion.FixedInstallationTS = ldeLastDate
              OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED}.
       
       /* NOTE: do not change the memo text (checked in ordersender.i) */
@@ -244,7 +244,7 @@ CASE FusionMessage.FixedStatus:
    WHEN "CANCELACION EN PROCESO" THEN DO:
       
       ASSIGN 
-         OrderFusion.CancellationReason = lcAdditionalInfo.
+         OrderFusion.CancellationReason = lcAdditionalInfo
          OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_PENDING_CANCELLED}.
 
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN .
