@@ -85,7 +85,7 @@ DEF VAR liSaldotype   AS INT                    NO-UNDO.
 DEF VAR killed        AS LOG                    NO-UNDO.
 DEF VAR lcICC         LIKE SIM.ICc              NO-UNDO.
 DEF VAR lcDCEvent     AS CHAR                   NO-UNDO. 
-
+DEF VAR llMore        AS LOGICAL                NO-UNDO.
 DEF BUFFER SearchCustomer FOR Customer.
 DEF BUFFER UserCustomer   FOR Customer.
 DEF BUFFER AgrCustomer    FOR Customer.
@@ -244,27 +244,31 @@ BROWSE:
    REPEAT WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
       IF ufkey THEN DO:
-        ASSIGN
-           ufk[1]= 209
-           ufk[2]= 9018
-           ufk[3]= 2902
-           ufk[4]= 2903
-           ufk[5]= 2214
-           ufk[6]= 559
-           ufk[7]= 1740
-           ufk[8]= 8
-           ufk[9]= 1
-           ehto  = 3
-           ufkey = FALSE.
+         IF NOT llMore THEN
+            ASSIGN
+            ufk[1]= 209
+            ufk[2]= 9018
+            ufk[3]= 2902
+            ufk[4]= 2903
+            ufk[5]= 2214
+            ufk[6]= 559
+            ufk[7]= 555 /*NORE*/
+            ufk[8]= 8
+            ufk[9]= 1
+            ehto  = 3
+            ufkey = FALSE.
+         ELSE ASSIGN   
+            ufk[1] = 1740
+            ufk[2] = 1740. /*under construction*/
 
-        IF ictype  NE  "" THEN ASSIGN
-         UFK[1] =  0
-         UFK[2] =  0
-         UFK[3] =  0
-         UFK[4] =  0 
-         UFK[5] =  0
-         UFK[6] =  0
-         UFK[7] =  0.
+         IF ictype  NE  "" THEN ASSIGN
+            UFK[1] =  0
+            UFK[2] =  0
+            UFK[3] =  0
+            UFK[4] =  0 
+            UFK[5] =  0
+            UFK[6] =  0
+            UFK[7] =  0.
          
          RUN ufkey.p.
       END.
@@ -410,7 +414,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND icType = "" 
+     ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -433,7 +437,7 @@ BROWSE:
      END. /* Search-1 */
      
      /* Search BY column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND icType = "" 
+     ELSE IF LOOKUP(nap,"2,f2") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -455,7 +459,7 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND 
+     ELSE IF LOOKUP(nap,"3,f3") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -479,7 +483,7 @@ BROWSE:
        END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND 
+     ELSE IF LOOKUP(nap,"4,f4") > 0 AND NOT llMore AND 
        icType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -492,7 +496,7 @@ BROWSE:
        END.
      END. /* Search-4 */
     
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND 
+     ELSE IF LOOKUP(nap,"5,f5") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -505,7 +509,7 @@ BROWSE:
        END.
      END. /* Search-5 */
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" AND 
+     ELSE IF LOOKUP(nap,"6,f6") > 0 AND NOT llMore AND lcRight = "RW" AND 
        ictype = "" THEN DO: 
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -528,7 +532,13 @@ BROWSE:
        ENd.
      END. 
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND 
+     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:
+        llMore = TRUE.
+        ufkey = TRUE.
+        NEXT LOOP.
+     END.
+
+     old F7 -> new F1
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.

@@ -13,6 +13,9 @@
 {timestamp.i}
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 DEF VAR lcUpdateTS AS CHAR NO-UNDO.
+DEF VAR lcInstallationTime AS CHAR NO-UNDO.
+DEF VAR lcFixedTime AS CHAR NO-UNDO.
+
 
 
 FIND FIRST OrderFusion NO-LOCK where
@@ -41,11 +44,16 @@ FORM
     "Serial Number.....:" AT 40 OrderFusion.SerialNumber FORMAT "X(18)"
     SKIP
     "Order Date........:" OrderFusion.OrderDate    
-    "Updated...........:" AT 40  lcUpdateTS FORMAT "X(18)"
+    "MNP Time..........:" AT 40 OrderFusion.FixedMNPTime
     SKIP
     "Customer Type.....:" OrderFusion.CustomerType
-    "MNP Time..........:" AT 40 OrderFusion.FixedMNPTime 
-    SKIP(10)
+    SKIP
+    "Fixed Inst Time...:" lcInstallationTime 
+    SKIP
+    "Fixed status Time.:" lcFixedTime
+    SKIP
+    "Updated...........:" lcUpdateTS FORMAT "X(24)" 
+    SKIP(7)
  
 
 WITH OVERLAY ROW 1 WIDTH 80 centered
@@ -57,7 +65,10 @@ WITH OVERLAY ROW 1 WIDTH 80 centered
 PAUSE 0 NO-MESSAGE.
 /*VIEW FRAME fData. */
 /*CLEAR FRAME fData NO-PAUSE.*/
-   lcUpdateTS = fTS2HMS(OrderFusion.UpdateTS).
+   ASSIGN
+   lcUpdateTS = fTS2HMS(OrderFusion.UpdateTS)
+   lcInstallationTime = fTS2HMS(OrderFusion.FixedInstallationTS)
+   lcFixedTime = fTS2HMS(OrderFusion.FixedStatusTS).
 
 
 DISP OrderFusion.OrderID
@@ -71,9 +82,11 @@ DISP OrderFusion.OrderID
      OrderFusion.Product
      OrderFusion.SerialNumber
      OrderFusion.OrderDate
-     lcUpdateTS
+     OrderFusion.FixedMNPTime
      OrderFusion.CustomerType
-     OrderFusion.FixedMNPTime 
+     lcInstallationTime
+     lcFixedTime
+     lcUpdateTS
      WITH FRAME fData.
 
 LOOP:
