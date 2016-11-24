@@ -1017,6 +1017,7 @@ PROCEDURE pHandleFromASOL2ACON:
                           "5", /* automatic script*/
                           katun,
                           0, /* orig. request */
+                          {&TERMINATION_TYPE_PARTIAL},
                           OUTPUT ocResult). 
 
       IF liTermReqId = 0 THEN

@@ -728,6 +728,7 @@ REPEAT WITH FRAME main:
                                     "4",
                                     lcUserCode,
                                     0,
+                                    {&TERMINATION_TYPE_FULL}, /* TODO SHould there be selection for this */
                                     OUTPUT ocResult).
                                     
       IF liMsReq = 0 THEN

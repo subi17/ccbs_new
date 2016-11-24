@@ -10,6 +10,7 @@
              msisdnstat;int;optional;a new msisdn status after termination (optional)
              quartime;int;optional;quarantine time in days (optional)
              opcode;int;optional;operator code (required when orderer = 2)
+             termination_type;int;optional;full termination=0 (default) and partial=1
 
  * @output  success;boolean
  */
@@ -33,6 +34,7 @@ DEF VAR piSimStat  AS INT NO-UNDO.
 DEF VAR piMSISDNStat AS INT NO-UNDO.
 DEF VAR piQuarTime AS INT NO-UNDO.
 DEF VAR piOpCode   AS INT NO-UNDO.
+DEF VAR piTermType AS INT NO-UNDO.
 
 DEF VAR pcTermStruct AS CHAR NO-UNDO.
 DEF VAR lcTermStruct AS CHAR NO-UNDO.
@@ -50,11 +52,13 @@ DEF VAR ldaTermDate AS DATE NO-UNDO.
 /* Output parameters */
 DEF VAR result AS LOGICAL.
 
+piTermType = {&TERMINATION_TYPE_FULL}. /* Default value */
+
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 pcTermStruct = get_struct(param_toplevel_id, "0").
 
 lcTermStruct = validate_request(pcTermStruct,
-        "salesman!,msseq!,orderer!,killts!,simstat,msisdnstat,quartime,opcode").
+        "salesman!,msseq!,orderer!,killts!,simstat,msisdnstat,quartime,opcode,termination_type").
 IF lcTermStruct EQ ? THEN RETURN.
 
 /* required params */
@@ -62,6 +66,8 @@ piMsSeq     = get_pos_int(pcTermStruct, "msseq").
 katun       = "VISTA_" + get_string(pcTermStruct, "salesman").
 piOrderer   = get_pos_int(pcTermStruct, "orderer").
 pdeKillTS   = get_timestamp(pcTermStruct, "killts").
+IF LOOKUP("termination_type", pcTermStruct) GT 0 THEN
+   piTermType  = get_int(pcTermStruct, "termination_type").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(katun) EQ "VISTA_" THEN DO:
@@ -74,6 +80,11 @@ FIND MobSub WHERE
 NO-LOCK NO-ERROR.
 IF NOT AVAIL MobSub THEN DO:
    RETURN appl_err("System Error ! Mobile Subscription not available").
+END.
+
+IF piTermType EQ {&TERMINATION_TYPE_PARTIAL} AND
+   MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} THEN DO:
+   RETURN appl_err("System Error ! Partial termination not allowed").
 END.
 
 /* Yoigo MSISDN? */
@@ -176,6 +187,7 @@ liReq = fTerminationRequest(
    ({&REQUEST_SOURCE_NEWTON}),
    "",
    0,
+   piTermType,
    OUTPUT ocResult).
 
 IF liReq > 0 THEN DO:

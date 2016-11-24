@@ -232,6 +232,7 @@ REPEAT:
                                    "5",        /* source */
                                    "",         /* creator */
                                    0,          /* father request */
+                                   {&TERMINATION_TYPE_FULL},
                                    OUTPUT lcError).
     
    IF liRequest = 0 THEN DO:

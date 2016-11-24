@@ -243,6 +243,7 @@ ELSE DO:
                         {&REQUEST_SOURCE_ORDER_CANCELLATION},
                         "",
                         0,
+                        {&TERMINATION_TYPE_FULL},
                         OUTPUT lcResult).
    
          IF liReq > 0 THEN
