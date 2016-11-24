@@ -483,7 +483,7 @@ PROCEDURE pTerminate:
 
       /* COFF Partial termination */
       IF (llPartialTermination AND 
-         fIsConvergentContract(ServiceLimit.GroupCode)) THEN NEXT.
+         fIsConvergentFixedContract(ServiceLimit.groupcode)) THEN NEXT.
          
       /* DSS bundle has been handled before */
       
@@ -938,8 +938,11 @@ PROCEDURE pTerminate:
    IF NOT(llPartialTermination) THEN
       DELETE MobSub.
    ELSE IF TermMobsub.fixednumber > "" THEN
-      TermMobsub.fixednumber = "". /* Fixed line stays active */
-
+      ASSIGN
+         TermMobsub.fixednumber = "" /* Fixed line stays active */
+         Mobsub.cli = Mobsub.fixednumber
+         Mobsub.icc = ""
+         Mobsub.imsi = "".
    IF AVAIL MSISDN THEN RELEASE MSISDN.
 
    /* Find Original request */
