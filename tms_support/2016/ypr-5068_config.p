@@ -63,9 +63,9 @@ ASSIGN
 
 CREATE FATGroup.
 ASSIGN
-   FATGroup.FtGrp = "WCOMEGIFT"
+   FATGroup.FtGrp = "WELCOMEGIFT"
    FATGroup.FtgName = "Welcome gift"
-   FATGroup.BillCode = "WELCOMEFAT"
+   FATGroup.BillCode = "WCOMEFAT"
    FATGroup.Brand = "1"
    FATGroup.FATType = 2
    FATGroup.Transfer = YES
