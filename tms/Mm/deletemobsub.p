@@ -1149,6 +1149,7 @@ PROCEDURE pMultiSIMTermination:
                           {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                           katun,
                           piOrigRequest, /* orig. request */
+                          {&TERMINATION_TYPE_FULL},
                           OUTPUT lcError). 
                
       IF lcError > "" THEN 
