@@ -1,3 +1,4 @@
+DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/tmsconst.i}
@@ -289,5 +290,6 @@ add_string(lcresultStruct, "resultCode", {&RESULT_SUCCESS}).
 add_string(lcresultStruct, "resultDescription", "success").
 
 FINALLY:
+   gbAuthLog.TransactionId = "690".
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.
