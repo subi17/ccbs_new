@@ -55,6 +55,8 @@ DEF TEMP-TABLE ttContract NO-UNDO
    FIELD CreateFee AS LOG
    FIELD ActTS     AS DEC.
 
+DEF TEMP-TABLE ttoldmsowner NO-UNDO LIKE msowner.
+
 FUNCTION fLocalMemo RETURNS LOGIC
    (icHostTable AS CHAR,
     icKey       AS CHAR,
@@ -150,6 +152,8 @@ PROCEDURE pTerminate:
    DEF VAR llHardBook          AS LOG  NO-UNDO INIT FALSE.
    DEF VAR llCallProc          AS LOG  NO-UNDO.   
    
+   DEF VAR llPartialTermination AS LOG NO-UNDO.
+
    ASSIGN liArrivalStatus = MsRequest.ReqStatus
           liMsSeq = MsRequest.MsSeq.
    
@@ -169,6 +173,7 @@ PROCEDURE pTerminate:
       liSimStat      = MsRequest.ReqIParam2
       liQuarTime     = MsRequest.ReqIParam3
       lcTermReason   = MsRequest.ReqCParam3
+      llPartialTermination = LOGICAL(MsRequest.ReqIParam4)
       lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
 
    ASSIGN ldMonthEndDate = fLastDayOfMonth(ldaKillDate)
@@ -184,64 +189,83 @@ PROCEDURE pTerminate:
       RETURN.
    ENd.
 
-   FIND FIRST MSISDN WHERE
-              MSISDN.Brand = gcBrand AND
-              MSISDN.CLI   = MobSub.CLI
-   EXCLUSIVE-LOCK NO-ERROR.
+/* COFF ehto jos mobiili olemassa */
+   IF NOT(MobSub.cli BEGINS "8" OR MobSub.cli BEGINS "9") THEN DO:
+      FIND FIRST MSISDN WHERE
+                 MSISDN.Brand = gcBrand AND
+                 MSISDN.CLI   = MobSub.CLI
+      EXCLUSIVE-LOCK NO-ERROR.
 
-   FIND FIRST IMSI WHERE
-              IMSI.IMSI = MobSub.IMSI
-   EXCLUSIVE-LOCK NO-ERROR.
+      FIND FIRST IMSI WHERE
+                 IMSI.IMSI = MobSub.IMSI
+      EXCLUSIVE-LOCK NO-ERROR.
 
-   FIND FIRST SIM WHERE
-              SIM.ICC = MobSub.ICC
-   EXCLUSIVE-LOCK NO-ERROR.
+      FIND FIRST SIM WHERE
+                 SIM.ICC = MobSub.ICC
+      EXCLUSIVE-LOCK NO-ERROR.
 
-   fMakeMsidnHistory(INPUT RECID(MSISDN)).
+      fMakeMsidnHistory(INPUT RECID(MSISDN)).
 
-   IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSISDN).
-   
-   MSISDN.StatusCode = liMsisdnStat.
-   MSISDN.CustNum    = 0.
-   ASSIGN
-      MSISDN.ValidTo    = fDate2TS(TODAY + liQuarTime) + (time / 100000)
-                          WHEN liQuarTime >= 0
-      MSISDN.ValidTo    = 99999999.99999 WHEN liQuarTime = -1.
-
-   IF llOutPort THEN ASSIGN
-      MSISDN.PortingDate = ldaKillDate  /* Date ported out  */
-      MSISDN.OutOperator = lcOutOper.   /*Name of receiving op.*/
-
-   IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSISDN).
-   
-   /* SIM card is (TO be) destroyed */
-   IF AVAIL SIM THEN DO:
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSIM).
+      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSISDN).
+      
+      MSISDN.StatusCode = liMsisdnStat.
+      MSISDN.CustNum    = 0.
       ASSIGN
-         SIM.SimStat = liSimStat
-         SIM.CustNum = 0.
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSIM).
+         MSISDN.ValidTo    = fDate2TS(TODAY + liQuarTime) + (time / 100000)
+                             WHEN liQuarTime >= 0
+         MSISDN.ValidTo    = 99999999.99999 WHEN liQuarTime = -1.
+
+      IF llOutPort THEN ASSIGN
+         MSISDN.PortingDate = ldaKillDate  /* Date ported out  */
+         MSISDN.OutOperator = lcOutOper.   /*Name of receiving op.*/
+
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSISDN).
+      
+      /* SIM card is (TO be) destroyed */
+      IF AVAIL SIM THEN DO:
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSIM).
+         ASSIGN
+            SIM.SimStat = liSimStat
+            SIM.CustNum = 0.
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSIM).
+      END.
+      
+      IF AVAIL IMSI THEN DO:
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhIMSI).
+         ASSIGN
+            IMSI.CustNum = 0
+            IMSI.UserSeq = 0.
+      
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhIMSI).
+      END.
    END.
-   
-   IF AVAIL IMSI THEN DO:
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhIMSI).
-      ASSIGN
-         IMSI.CustNum = 0
-         IMSI.UserSeq = 0.
-   
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhIMSI).
-   END.
-   
+/* COFF check */
    FIND FIRST MSOwner WHERE 
-              MSOwner.CLI    = MSISDN.CLI AND
+              MSOwner.CLI    = MobSub.CLI AND
               MSOwner.TsEnd >= fHMS2TS(TODAY,STRING(time,"hh:mm:ss"))
    EXCLUSIVE-LOCK NO-ERROR.
 
    /* TimeStamp  */
-   IF AVAIL MSOwner THEN DO:
+   IF AVAIL MSOwner AND NOT(llPartialTermination) THEN DO:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
       MSOwner.TsEnd = ldCurrTS.   
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
+   END.
+   ELSE IF AVAIL MSOwner AND llPartialTermination THEN DO:
+      BUFFER-COPY msowner TO ttoldmsowner.      
+      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
+      MSOwner.TsEnd = ldCurrTS.
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).   
+      CREATE MSOwner.
+      BUFFER-COPY ttoldmsowner TO msowner.
+      ASSIGN
+         MSOwner.CLI = MobSub.fixedNumber
+         MSOwner.imsi = ""
+         MSOwner.CliEvent = "F".
+         IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
+                                            "",
+                                            katun,
+                                            "").         
    END.
 
    IF llOutport THEN DO:
@@ -429,6 +453,10 @@ PROCEDURE pTerminate:
          
       DCCLI.TermDate = ?.
 
+      /* COFF Partial termination */
+      IF (llPartialTermination AND
+         fIsConvergentContract(DCCLI.DCEvent)) THEN NEXT.
+
       FIND FIRST DayCampaign NO-LOCK WHERE
                  DayCampaign.Brand = gcBrand AND
                  DayCampaign.DcEvent = DCCLI.DcEvent NO-ERROR.
@@ -453,7 +481,12 @@ PROCEDURE pTerminate:
       FIRST ServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
             ServiceLimit.SLSeq = MServiceLimit.SLSeq:
 
+      /* COFF Partial termination */
+      IF (llPartialTermination AND 
+         fIsConvergentContract(ServiceLimit.GroupCode)) THEN NEXT.
+         
       /* DSS bundle has been handled before */
+      
       IF ServiceLimit.GroupCode BEGINS {&DSS} THEN NEXT.
 
       FIND FIRST DayCampaign WHERE 
@@ -842,38 +875,40 @@ PROCEDURE pTerminate:
       END.      
    END. /* IF llCloseRVTermFee THEN DO: */
 
-   FOR EACH Order NO-LOCK WHERE
-            Order.MsSeq = MobSub.MsSeq AND
-            Order.OrderType = {&ORDER_TYPE_STC} AND
-            Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
-      FIRST OrderFusion NO-LOCK WHERE
-            OrderFusion.Brand = gcBrand AND
-            OrderFusion.OrderID = Order.OrderID:
+   /* COFF fixed line stays in partial termination */
+   IF NOT(llPartialTermination) THEN DO: 
+      FOR EACH Order NO-LOCK WHERE
+               Order.MsSeq = MobSub.MsSeq AND
+               Order.OrderType = {&ORDER_TYPE_STC} AND
+               Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
+         FIRST OrderFusion NO-LOCK WHERE
+               OrderFusion.Brand = gcBrand AND
+               OrderFusion.OrderID = Order.OrderID:
 
-      IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN DO:
+         IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN DO:
 
-         fSetOrderStatus(Order.Orderid, {&ORDER_STATUS_IN_CONTROL}).
-         
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-              "Order",
-              STRING(Order.OrderID),
-              Order.CustNum,
-              "Order handling stopped",
-              "Subscription is terminated, Convergent order cannot proceed").
-      
-      END.
-      ELSE DO:
-         RUN fusion_order_cancel.p(Order.OrderID).
-         IF NOT RETURN-VALUE BEGINS "OK" THEN
+            fSetOrderStatus(Order.Orderid, {&ORDER_STATUS_IN_CONTROL}).
+            
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  "Order",
                  STRING(Order.OrderID),
                  Order.CustNum,
-                 "Convergent order closing failed",
-                 STRING(RETURN-VALUE)).
+                 "Order handling stopped",
+                 "Subscription is terminated, Convergent order cannot proceed").
+         
+         END.
+         ELSE DO:
+            RUN fusion_order_cancel.p(Order.OrderID).
+            IF NOT RETURN-VALUE BEGINS "OK" THEN
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                    "Order",
+                    STRING(Order.OrderID),
+                    Order.CustNum,
+                    "Convergent order closing failed",
+                    STRING(RETURN-VALUE)).
+         END.
       END.
    END.
-
    /* YDR-2052, Change the delivery type to paper only if the customer 
       don't have any other active subscription with delivery type EMAIL or SMS*/
    IF NOT MobSub.PayType AND 
@@ -899,9 +934,13 @@ PROCEDURE pTerminate:
 
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.
-   DELETE MobSub.
-               
-   RELEASE MSISDN.
+   /* COFF fixed number in TermMobsub */
+   IF NOT(llPartialTermination) THEN
+      DELETE MobSub.
+   ELSE IF TermMobsub.fixednumber > "" THEN
+      TermMobsub.fixednumber = "". /* Fixed line stays active */
+
+   IF AVAIL MSISDN THEN RELEASE MSISDN.
 
    /* Find Original request */
    FIND FIRST MSRequest WHERE

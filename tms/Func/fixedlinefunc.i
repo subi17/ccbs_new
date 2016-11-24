@@ -98,6 +98,12 @@ FUNCTION fCanTerminateConvergenceTariff RETURNS LOGICAL
 
 END.
 
-
+FUNCTION fIsConvergentContract RETURNS LOGICAL
+   (icContract AS CHAR):
+   IF icContract BEGINS "CONTDSL" OR
+      icContract BEGINS "CONTFH" THEN 
+      RETURN TRUE.
+   RETURN FALSE.
+END.   
 
 &ENDIF

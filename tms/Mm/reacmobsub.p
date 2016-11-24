@@ -32,6 +32,7 @@ DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldCurrTS            AS  DECIMAL   NO-UNDO.
 
 DEFINE BUFFER bTermMsRequest FOR MsRequest.
+DEF TEMP-TABLE ttoldmsowner NO-UNDO LIKE msowner.
 
 FIND FIRST MSRequest WHERE
            MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
@@ -182,8 +183,27 @@ DO TRANSACTION:
    END. /* IF NOT AVAILABLE Msowner THEN DO: */
    ELSE DO:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
-      MSOWner.TSEnd = 99999999.99999.
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOWNER).
+      IF MSOwner.clievent EQ "F" THEN DO: /* react of partial terminated */
+         BUFFER-COPY msowner TO ttoldmsowner.
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
+         MSOwner.TsEnd = ldCurrTS.
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOWNER).
+         CREATE MSOwner.
+         BUFFER-COPY ttoldmsowner TO msowner.
+         ASSIGN 
+            MSOwner.cli = TermMobsub.cli
+            MSowner.imsi = TermMobsub.imsi
+            MSOwner.clievent = "R".
+         IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
+                                            "",
+                                            katun,
+                                            ""). 
+      END.      
+      ELSE DO:
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
+         MSOWner.TSEnd = 99999999.99999.
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOWNER).
+      END.   
    END. /* ELSE DO: */
 
    /* YDR-2052 */
@@ -208,9 +228,21 @@ DO TRANSACTION:
 
    END. 
 
-   CREATE Mobsub.
-   BUFFER-COPY TermMobsub TO Mobsub.
-   DELETE TermMobsub.
+   /* COFF */
+   FIND FIRST MobSub WHERE
+              Mobsub.msseq EQ MSRequest.MSSeq /* COFF Partial terminated */
+              NO-ERROR.
+   IF AVAIL Mobsub THEN DO:
+      ASSIGN 
+         MobSub.cli = TermMobsub.Cli
+         MobSub.imsi = TermMobsub.imsi
+         MobSub.icc = TermMobsub.icc.
+   END.
+   ELSE DO:
+      CREATE Mobsub.
+      BUFFER-COPY TermMobsub TO Mobsub.
+      DELETE TermMobsub.
+   END.
 
    RELEASE MSISDN.
 
