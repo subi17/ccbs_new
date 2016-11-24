@@ -1221,14 +1221,10 @@ PROCEDURE pGetDELADDR:
    DEF VAR lcErr AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
-   IF Order.DeliveryType = {&ORDER_DELTYPE_POS} OR
-      ( Order.DeliverySecure NE 1 AND
-
-
-   IF Order.DeliveryType NE {&ORDER_DELTYPE_POS} AND
-      Order.DeliverySecure EQ 1 OR
-      Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR 
-      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
+   IF IF Order.DeliverySecure EQ 1 OR
+         Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
+         Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
+         Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
       lcDelAddress = "". /* YPR-2660 */
    ELSE DO:
       /* separate delivery address */
@@ -1319,7 +1315,8 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
          lcUPSHours = "<b>".
       END.
       /* Correos */
-      ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} THEN DO:
+      ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} OR
+              Order.deliverytype = {&ORDER_DELTYPE_POS} THEN DO:
          /* valid itemkey should have at least 8 entries */
          lcUseEntries = "1|7|8".
          lcUPSHours = "<b>Oficina de Correos de ".
@@ -1345,7 +1342,8 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
          IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
             lcHoursText = REPLACE(lcDailyHours, "h",":").
          END.   
-         ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} THEN DO:
+         ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} OR
+                 Order.deliverytype = {&ORDER_DELTYPE_POS} THEN DO:
             DO liTimeCount = 1 TO NUM-ENTRIES(lcDailyHours,"/"):
                lcTempHours = ENTRY(liTimeCount,lcDailyHours,"/").
                IF INDEX(lcTempHours,"-") > 0 AND INDEX(lcTempHours,"h") > 0 AND
@@ -1363,10 +1361,12 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
          lcHoursText = RIGHT-TRIM(lcHoursText).
          lcHoursText = RIGHT-TRIM(lcHoursText,"/").
          /* Correos need different day name syntax */
-         IF Order.deliverytype = {&ORDER_DELTYPE_POST} AND /* Correos */
+         IF (Order.deliverytype = {&ORDER_DELTYPE_POST} OR /* Correos */
+             Order.deliverytype = {&ORDER_DELTYPE_POS} ) AND 
             INT(ENTRY(liCount,lcUseEntries,"|")) = 7 THEN 
             lcDay = "S".
-         ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} AND
+         ELSE IF (Order.deliverytype = {&ORDER_DELTYPE_POST} OR
+                 Order.deliverytype = {&ORDER_DELTYPE_POS}) AND
             INT(ENTRY(liCount,lcUseEntries,"|")) = 8 THEN
             lcDay = "Festivos".
          ELSE   
