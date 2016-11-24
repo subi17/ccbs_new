@@ -173,7 +173,7 @@ PROCEDURE pTerminate:
       liSimStat      = MsRequest.ReqIParam2
       liQuarTime     = MsRequest.ReqIParam3
       lcTermReason   = MsRequest.ReqCParam3
-      llPartialTermination = LOGICAL(MsRequest.ReqIParam4)
+      llPartialTermination = LOGICAL(MsRequest.ReqIParam5)
       lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
 
    ASSIGN ldMonthEndDate = fLastDayOfMonth(ldaKillDate)
