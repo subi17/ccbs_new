@@ -12,6 +12,7 @@
 {fcreditvalid.i}
 {fparse.i}
 {Func/date.i}
+{Func/lib/eventlog_delete.i}
 
 FUNCTION fFullCreditNoteRequest RETURNS INTEGER
    (INPUT  iiCustNum       AS INT,  
@@ -250,7 +251,7 @@ FUNCTION fOrderPickingStarted RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fCloseGiftFATime RETURNS LOGICAL
+FUNCTION fDeleteGiftFATime RETURNS LOGICAL
    (iiOrderID AS INTEGER):
 
    DEF BUFFER FATime  FOR FATime.
@@ -278,8 +279,9 @@ FUNCTION fCloseGiftFATime RETURNS LOGICAL
          FATime.KeyValue  = lcOrderID                       AND
          FATime.FTGrp     = {&FATGROUP_FTGRP_WELCOME_GIFT}:
 
-      FATime.LastPeriod = fPrevPeriod(FATime.Period).
+      fStarEventMakeDeleteEventWithMemo(BUFFER FATime:HANDLE, "").
 
+      DELETE FATime.
    END.
 
    RETURN TRUE.
@@ -337,7 +339,7 @@ FUNCTION fCashInvoiceCreditNote RETURNS CHARACTER
 
          IF pbOrder.PayType
          THEN fCancelGiftTopUp(pbOrder.OrderID). /* PrePaid  */
-         ELSE fCloseGiftFATime(pbOrder.OrderID). /* PostPaid */
+         ELSE fDeleteGiftFATime(pbOrder.OrderID). /* PostPaid */
 
          IF fOrderPickingStarted(pbOrder.OrderId)
          THEN DO:
