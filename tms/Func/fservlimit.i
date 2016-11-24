@@ -781,13 +781,20 @@ FUNCTION fTemp2ServiceLCounter RETURNS LOGICAL:
    
       GetServiceLCounter:
       REPEAT:
-         FIND FIRST ServiceLCounter WHERE
-                    ServiceLCounter.MSSeq   = ttServiceLCounter.MSSeq   AND
-                    ServiceLCounter.Custnum = ttServiceLCounter.Custnum AND 
-                    ServiceLCounter.SLSeq   = ttServiceLCounter.SLSeq   AND
-                    ServiceLCounter.Period  = ttServiceLCounter.Period  AND
-                    ServiceLCounter.MSID    = ttServiceLCounter.MSID
-         EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+         IF ttServiceLCounter.Custnum > 0 THEN
+            FIND FIRST ServiceLCounter WHERE
+                       ServiceLCounter.Custnum = ttServiceLCounter.Custnum AND 
+                       ServiceLCounter.Period  = ttServiceLCounter.Period  AND
+                       ServiceLCounter.SLSeq   = ttServiceLCounter.SLSeq   AND
+                       ServiceLCounter.MSID    = ttServiceLCounter.MSID
+            EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+         ELSE 
+            FIND FIRST ServiceLCounter WHERE
+                       ServiceLCounter.MsSeq  = ttServiceLCounter.MsSeq AND 
+                       ServiceLCounter.Period = ttServiceLCounter.Period  AND
+                       ServiceLCounter.SLSeq  = ttServiceLCounter.SLSeq   AND
+                       ServiceLCounter.MSID   = ttServiceLCounter.MSID
+            EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
          IF LOCKED(ServiceLCounter) THEN DO:
             PAUSE 2 NO-MESSAGE.
@@ -799,14 +806,21 @@ FUNCTION fTemp2ServiceLCounter RETURNS LOGICAL:
       IF NOT AVAILABLE ServiceLCounter THEN CREATE ServiceLCounter.
       ELSE DO:
          /* remove possible double counter */
-         FIND FIRST bDblCounter WHERE
-                    bDblCounter.MSSeq   = ttServiceLCounter.MSSeq   AND
-                    bDblCounter.Custnum = ttServiceLCounter.Custnum AND 
-                    bDblCounter.SLSeq   = ttServiceLCounter.SLSeq   AND
-                    bDblCounter.Period  = ttServiceLCounter.Period AND
-                    bDblCounter.MSID    = ttServiceLCounter.MSID AND
-                    RECID(bDblCounter) NE RECID(ServiceLCounter)
-         NO-LOCK NO-ERROR.
+         IF ttServiceLCounter.Custnum > 0 THEN
+            FIND FIRST bDblCounter NO-LOCK WHERE
+                       bDblCounter.Custnum = ttServiceLCounter.Custnum AND 
+                       bDblCounter.Period  = ttServiceLCounter.Period AND
+                       bDblCounter.SLSeq   = ttServiceLCounter.SLSeq   AND
+                       bDblCounter.MSID    = ttServiceLCounter.MSID AND
+                       ROWID(bDblCounter) NE ROWID(ServiceLCounter) NO-ERROR.
+         ELSE
+            FIND FIRST bDblCounter NO-LOCK WHERE
+                       bDblCounter.MSSeq   = ttServiceLCounter.MSSeq   AND
+                       bDblCounter.Period  = ttServiceLCounter.Period AND
+                       bDblCounter.SLSeq   = ttServiceLCounter.SLSeq   AND
+                       bDblCounter.MSID    = ttServiceLCounter.MSID AND
+                       ROWID(bDblCounter) NE ROWID(ServiceLCounter) NO-ERROR.
+
          IF AVAILABLE bDblCounter THEN DO:
             FIND CURRENT bDblCounter EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
             IF AVAILABLE bDblCounter THEN DELETE bDblCounter.
