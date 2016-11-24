@@ -66,7 +66,7 @@ piMsSeq     = get_pos_int(pcTermStruct, "msseq").
 katun       = "VISTA_" + get_string(pcTermStruct, "salesman").
 piOrderer   = get_pos_int(pcTermStruct, "orderer").
 pdeKillTS   = get_timestamp(pcTermStruct, "killts").
-IF LOOKUP("termination_type", pcTermStruct) GT 0 THEN
+IF LOOKUP("termination_type", lcTermStruct) GT 0 THEN
    piTermType  = get_int(pcTermStruct, "termination_type").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
