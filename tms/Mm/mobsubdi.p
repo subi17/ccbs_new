@@ -198,8 +198,10 @@ DO WHILE TRUE:
       IF NOT fIsPermittedModule(MobSub.CliType, "simch") THEN NEXT.
        /*YPR-4777*/
       /*Operation is not allowed if fixed line provisioning is pending*/
-      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
-         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
+      IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR /*16*/ 
+          MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN
+         MESSAGE "Mobile line provisioning is not complete or " +
+                 "no active mobile line" VIEW-AS ALERT-BOX.
       ELSE     
          run simch.p(MsSeq).
    END.
@@ -208,8 +210,10 @@ DO WHILE TRUE:
       IF NOT fIsPermittedModule(MobSub.CliType, "msisdnch") THEN NEXT.
       /*YPR-4776*/
       /*Operation is not allowed if fixed line provisioning is pending*/
-      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
-         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
+      IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR /*16*/
+          MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN
+         MESSAGE "Mobile line provisioning is not complete or" +
+                 "no active mobile line" VIEW-AS ALERT-BOX.
       ELSE 
          run msisdnch.p(MsSeq).
    END.
@@ -240,8 +244,11 @@ DO WHILE TRUE:
    ELSE IF FRAME-INDEX = 8 AND NOT Killed THEN DO:
       /*YPR-4775*/
       /*Operation is not allowed if fixed line provisioning is pending*/
-      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN 
-         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
+      IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR /*16*/
+          MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN
+         MESSAGE "Mobile line provisioning is not complete or " +
+                 "no active mobile line" VIEW-AS ALERT-BOX.
+         
       ELSE RUN bundle_change_ui.p (MobSub.MsSeq).
    END.
             

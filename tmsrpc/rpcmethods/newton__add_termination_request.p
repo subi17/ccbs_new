@@ -83,7 +83,8 @@ IF NOT AVAIL MobSub THEN DO:
 END.
 
 IF piTermType EQ {&TERMINATION_TYPE_PARTIAL} AND
-   MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} THEN DO:
+   (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+    MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
    RETURN appl_err("System Error ! Partial termination not allowed").
 END.
 
