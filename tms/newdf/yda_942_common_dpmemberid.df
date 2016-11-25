@@ -1,6 +1,6 @@
 ADD FIELD "DPMemberId" OF "DPMember" AS integer 
   FORMAT ">>>>>>>>9"
-  INITIAL ?
+  INITIAL 0
   LABEL "DPMemberId"
   POSITION 9
   MAX-WIDTH 4
@@ -8,13 +8,13 @@ ADD FIELD "DPMemberId" OF "DPMember" AS integer
   HELP "Discount plan member Id"
   ORDER 80
 
-ADD INDEX "DPMemberId" ON "DPMember"
-  AREA "Sta_Index_4"
-  UNIQUE
-  INDEX-FIELD "DPMemberID" ASCENDING
+ADD SEQUENCE DPMemberID
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
 
 .
 PSC
 cpstream=1252
 .
-0000006910
