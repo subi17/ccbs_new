@@ -1221,10 +1221,10 @@ PROCEDURE pGetDELADDR:
    DEF VAR lcErr AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
-   IF IF Order.DeliverySecure EQ 1 OR
-         Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
-         Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
-         Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
+   IF Order.DeliverySecure EQ 1 OR
+      Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
+      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
+      Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
       lcDelAddress = "". /* YPR-2660 */
    ELSE DO:
       /* separate delivery address */
