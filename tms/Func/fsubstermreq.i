@@ -68,7 +68,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
       bCreaReq.ReqIParam2  = iiSIMStatus
       bCreaReq.ReqIParam3  = iiQuarantine
       bCreaReq.ReqIParam4  = iiPenaltyFee
-      bCreaReq.ReqIParam5  = iiTermType
+      bCreaReq.ReqCParam6  = STRING(iiTermType)
       bCreaReq.ReqSource   = icSource
       bCreaReq.OrigReq     = iiOrigReq
       liReqCreated         = bCreaReq.MsRequest.
@@ -136,7 +136,9 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
    END.
 
    /* Check that sim is available */ 
-   IF MobSub.MsStatus NE {&MSSTATUS_FIXED_PROV_ONG} AND
+   
+   IF (MobSub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} OR 
+       MobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
       NOT CAN-FIND(IMSI WHERE
                    IMSI.IMSI = MobSub.IMSI) THEN DO: 
       ocError = "System Error ! Mobile Subscription doesn't have any SIM card.".

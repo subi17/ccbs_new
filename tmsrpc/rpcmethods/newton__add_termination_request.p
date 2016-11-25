@@ -66,7 +66,7 @@ piMsSeq     = get_pos_int(pcTermStruct, "msseq").
 katun       = "VISTA_" + get_string(pcTermStruct, "salesman").
 piOrderer   = get_pos_int(pcTermStruct, "orderer").
 pdeKillTS   = get_timestamp(pcTermStruct, "killts").
-IF LOOKUP("termination_type", pcTermStruct) GT 0 THEN
+IF LOOKUP("termination_type", lcTermStruct) GT 0 THEN
    piTermType  = get_int(pcTermStruct, "termination_type").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -83,7 +83,8 @@ IF NOT AVAIL MobSub THEN DO:
 END.
 
 IF piTermType EQ {&TERMINATION_TYPE_PARTIAL} AND
-   MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} THEN DO:
+   (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+    MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
    RETURN appl_err("System Error ! Partial termination not allowed").
 END.
 

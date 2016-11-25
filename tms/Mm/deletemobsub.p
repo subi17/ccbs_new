@@ -173,7 +173,7 @@ PROCEDURE pTerminate:
       liSimStat      = MsRequest.ReqIParam2
       liQuarTime     = MsRequest.ReqIParam3
       lcTermReason   = MsRequest.ReqCParam3
-      llPartialTermination = LOGICAL(MsRequest.ReqIParam5)
+      llPartialTermination = LOGICAL(INT(MsRequest.ReqCParam6)) 
       lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
 
    ASSIGN ldMonthEndDate = fLastDayOfMonth(ldaKillDate)
@@ -455,7 +455,7 @@ PROCEDURE pTerminate:
 
       /* COFF Partial termination */
       IF (llPartialTermination AND
-         fIsConvergentContract(DCCLI.DCEvent)) THEN NEXT.
+         fIsConvergentFixedContract(DCCLI.DCEvent)) THEN NEXT.
 
       FIND FIRST DayCampaign NO-LOCK WHERE
                  DayCampaign.Brand = gcBrand AND
@@ -483,7 +483,7 @@ PROCEDURE pTerminate:
 
       /* COFF Partial termination */
       IF (llPartialTermination AND 
-         fIsConvergentContract(ServiceLimit.GroupCode)) THEN NEXT.
+         fIsConvergentFixedContract(ServiceLimit.groupcode)) THEN NEXT.
          
       /* DSS bundle has been handled before */
       
@@ -934,12 +934,17 @@ PROCEDURE pTerminate:
 
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.
-   /* COFF fixed number in TermMobsub */
-   IF NOT(llPartialTermination) THEN
+   
+   /* COFF Partial termination */
+   IF llPartialTermination THEN
+      ASSIGN
+         TermMobsub.fixednumber = "" /* Fixed line stays active */
+         Mobsub.cli = Mobsub.fixednumber
+         Mobsub.icc = ""
+         Mobsub.imsi = ""
+         MobSub.msStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
+   ELSE 
       DELETE MobSub.
-   ELSE IF TermMobsub.fixednumber > "" THEN
-      TermMobsub.fixednumber = "". /* Fixed line stays active */
-
    IF AVAIL MSISDN THEN RELEASE MSISDN.
 
    /* Find Original request */
