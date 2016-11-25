@@ -43,7 +43,8 @@ IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} THEN DO:
          RETURN.
       END.
    
-      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} AND
+      IF (MobSub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} OR
+          MobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
          MobSub.IMSI EQ "" THEN DO:
          fReqStatus(6,"").
          RETURN.

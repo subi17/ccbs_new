@@ -607,8 +607,10 @@ REPEAT WITH FRAME sel:
         RUN local-find-this(false).
         /*YPR-4775*/
         /*Operation is not allowed if fixed line provisioning is pending*/
-        IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN DO:
-           MESSAGE "Mobile line provisioning is not complete"
+        IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR /*16*/ 
+            MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
+           MESSAGE "Mobile line provisioning is not complete or " +
+                   "no active mobile line"
               VIEW-AS ALERT-BOX.
         END.
         ELSE DO:

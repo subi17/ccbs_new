@@ -222,7 +222,8 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    END.
 
    /* partial convergent to mobile */
-   IF mobsub.msstatus EQ {&MSSTATUS_FIXED_PROV_ONG} AND 
+   IF (mobsub.msstatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+       mobsub.msstatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND 
       piOrderID EQ 0 THEN DO:
 
       IF CAN-FIND(FIRST Order NO-LOCK WHERE

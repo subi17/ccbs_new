@@ -455,7 +455,7 @@ PROCEDURE pTerminate:
 
       /* COFF Partial termination */
       IF (llPartialTermination AND
-         fIsConvergentContract(DCCLI.DCEvent)) THEN NEXT.
+         fIsConvergentFixedContract(DCCLI.DCEvent)) THEN NEXT.
 
       FIND FIRST DayCampaign NO-LOCK WHERE
                  DayCampaign.Brand = gcBrand AND
@@ -934,15 +934,17 @@ PROCEDURE pTerminate:
 
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.
-   /* COFF fixed number in TermMobsub */
-   IF NOT(llPartialTermination) THEN
-      DELETE MobSub.
-   ELSE IF TermMobsub.fixednumber > "" THEN
+   
+   /* COFF Partial termination */
+   IF llPartialTermination THEN
       ASSIGN
          TermMobsub.fixednumber = "" /* Fixed line stays active */
          Mobsub.cli = Mobsub.fixednumber
          Mobsub.icc = ""
-         Mobsub.imsi = "".
+         Mobsub.imsi = ""
+         MobSub.msStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
+   ELSE 
+      DELETE MobSub.
    IF AVAIL MSISDN THEN RELEASE MSISDN.
 
    /* Find Original request */
