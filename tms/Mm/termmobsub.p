@@ -259,7 +259,7 @@ BROWSE:
             ufkey = FALSE.
          ELSE ASSIGN   
             ufk[1] = 1740
-            ufk[2] = 1740. /*under construction*/
+            ufk[2] = 9852. /*under construction*/
 
          IF ictype  NE  "" THEN ASSIGN
             UFK[1] =  0
@@ -538,7 +538,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     old F7 -> new F1
+     ELSE IF LOOKUP(nap,"1,f1") > 0 AND llMore AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -572,10 +572,8 @@ BROWSE:
        END.
      END. /* Search-2 */
 
- 
      
-     
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND lcRight = "RW" AND 
+     ELSE IF LOOKUP(nap,"2,f2") > 0 AND llMore AND lcRight = "RW" AND 
         ictype = "" THEN DO:
         
         RUN local-find-this (FALSE).
