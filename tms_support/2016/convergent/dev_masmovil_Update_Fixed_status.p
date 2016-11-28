@@ -18,7 +18,7 @@ gcBrand = "1".
 DEF VAR lcNotificationID AS CHAR NO-UNDO INIT "1".
 DEF VAR ldeNotificationTime AS DEC NO-UNDO.
 DEF VAR lcNotificationType AS CHAR NO-UNDO INIT "O".
-DEF VAR lcOrderId AS CHAR NO-UNDO INIT "80000348". /* <---- UPDATE CORRECT ID */
+DEF VAR lcOrderId AS CHAR NO-UNDO INIT "80000321". /* <---- UPDATE CORRECT ID */
 DEF VAR liOrderID AS INT NO-UNDO.
 DEF VAR lcNotificationStatus AS CHAR NO-UNDO. /*struct*/
 
@@ -32,6 +32,14 @@ DEF VAR ldeLastDate AS DEC NO-UNDO.
 DEF VAR lcresultStruct AS CHAR NO-UNDO.
 
 DEF BUFFER bOrderFusion FOR OrderFusion.
+
+DEF VAR lcHostname AS CHAR NO-UNDO.
+INPUT THROUGH hostname.
+IMPORT lcHostName.
+INPUT CLOSE.
+
+IF LOOKUP(lcHostName,'sadachbia') = 0 THEN LEAVE.
+
 
 ldeNotificationTime = fMakeTS().
 ldeLastDate = fMakeTS().
