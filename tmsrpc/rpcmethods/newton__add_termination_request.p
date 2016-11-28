@@ -10,7 +10,7 @@
              msisdnstat;int;optional;a new msisdn status after termination (optional)
              quartime;int;optional;quarantine time in days (optional)
              opcode;int;optional;operator code (required when orderer = 2)
-             termination_type;int;optional;full termination=0 (default) and partial=1
+             termination_type;string;optional;full (default) or partial for convergent mobile part
 
  * @output  success;boolean
  */
@@ -34,7 +34,6 @@ DEF VAR piSimStat  AS INT NO-UNDO.
 DEF VAR piMSISDNStat AS INT NO-UNDO.
 DEF VAR piQuarTime AS INT NO-UNDO.
 DEF VAR piOpCode   AS INT NO-UNDO.
-DEF VAR piTermType AS INT NO-UNDO.
 DEF VAR pcTermType AS CHAR NO-UNDO.
 
 DEF VAR pcTermStruct AS CHAR NO-UNDO.
@@ -68,14 +67,16 @@ katun       = "VISTA_" + get_string(pcTermStruct, "salesman").
 piOrderer   = get_pos_int(pcTermStruct, "orderer").
 pdeKillTS   = get_timestamp(pcTermStruct, "killts").
 IF LOOKUP("termination_type", lcTermStruct) GT 0 THEN
-   piTermType  = get_int(pcTermStruct, "termination_type").
+   pcTermType  = get_string(pcTermStruct, "termination_type").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-IF piTermType EQ 1 THEN pcTermType = {&TERMINATION_TYPE_PARTIAL}.
 
 IF TRIM(katun) EQ "VISTA_" THEN DO:
    RETURN appl_err("username is empty").
 END.
+
+IF NOT (pcTermType EQ {&TERMINATION_TYPE_PARTIAL} OR
+        pcTermType EQ {&TERMINATION_TYPE_FULL}) THEN
+      RETURN appl_err("Incorrect termination type").
 
 /* Check that mobsub is available */
 FIND MobSub WHERE
