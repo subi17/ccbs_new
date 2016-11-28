@@ -101,7 +101,9 @@ DEF VAR lhSub AS HANDLE NO-UNDO.
 PAUSE 0.
 
 
-FIND MobSub  WHERE MobSub.Msseq = msseq NO-LOCK NO-ERROR.
+FIND MobSub  WHERE MobSub.Msseq = msseq AND 
+                   Mobsub.cli NE MobSub.fixedNumber NO-LOCK NO-ERROR.
+                   /* if same partial terminated case */
 
 IF avail mobsub then do:
    FIND Customer where 
