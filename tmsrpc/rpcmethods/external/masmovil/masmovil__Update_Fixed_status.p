@@ -215,11 +215,6 @@ CASE FusionMessage.FixedStatus:
       END.
 
    END.
-   WHEN "CANCELADA" OR
-   WHEN "PENDIENTE CANCELAR" OR 
-   WHEN "CANCELACION EN PROCESO" THEN DO:
-      ASSIGN OrderFusion.CancellationReason = lcAdditionalInfo.
-   END.
    WHEN "CITADA" THEN DO:
       ASSIGN OrderFusion.AppointmentDate = lcAdditionalInfo.
    END.
@@ -248,7 +243,9 @@ CASE FusionMessage.FixedStatus:
    WHEN "PENDIENTE CANCELAR" OR
    WHEN "CANCELACION EN PROCESO" THEN DO:
       
-      OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_PENDING_CANCELLED}.
+      ASSIGN 
+         OrderFusion.CancellationReason = lcAdditionalInfo.
+         OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_PENDING_CANCELLED}.
 
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN .
       ELSE IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
@@ -260,7 +257,8 @@ CASE FusionMessage.FixedStatus:
    /* installation cancelled */ 
    WHEN "CANCELADA" THEN DO:
 
-      OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_CANCELLED}.
+      ASSIGN OrderFusion.CancellationReason = lcAdditionalInfo
+             OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_CANCELLED}.
          
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} OR
