@@ -35,6 +35,7 @@ DEF VAR piMSISDNStat AS INT NO-UNDO.
 DEF VAR piQuarTime AS INT NO-UNDO.
 DEF VAR piOpCode   AS INT NO-UNDO.
 DEF VAR piTermType AS INT NO-UNDO.
+DEF VAR pcTermType AS CHAR NO-UNDO.
 
 DEF VAR pcTermStruct AS CHAR NO-UNDO.
 DEF VAR lcTermStruct AS CHAR NO-UNDO.
@@ -52,7 +53,7 @@ DEF VAR ldaTermDate AS DATE NO-UNDO.
 /* Output parameters */
 DEF VAR result AS LOGICAL.
 
-piTermType = {&TERMINATION_TYPE_FULL}. /* Default value */
+pcTermType = {&TERMINATION_TYPE_FULL}. /* Default value */
 
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 pcTermStruct = get_struct(param_toplevel_id, "0").
@@ -70,6 +71,8 @@ IF LOOKUP("termination_type", lcTermStruct) GT 0 THEN
    piTermType  = get_int(pcTermStruct, "termination_type").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+IF piTermType EQ 1 THEN pcTermType = {&TERMINATION_TYPE_PARTIAL}.
+
 IF TRIM(katun) EQ "VISTA_" THEN DO:
    RETURN appl_err("username is empty").
 END.
@@ -82,7 +85,7 @@ IF NOT AVAIL MobSub THEN DO:
    RETURN appl_err("System Error ! Mobile Subscription not available").
 END.
 
-IF piTermType EQ {&TERMINATION_TYPE_PARTIAL} AND
+IF pcTermType EQ {&TERMINATION_TYPE_PARTIAL} AND
    (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
     MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
    RETURN appl_err("System Error ! Partial termination not allowed").
@@ -188,7 +191,7 @@ liReq = fTerminationRequest(
    ({&REQUEST_SOURCE_NEWTON}),
    "",
    0,
-   piTermType,
+   pcTermType,
    OUTPUT ocResult).
 
 IF liReq > 0 THEN DO:

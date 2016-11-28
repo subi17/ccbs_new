@@ -29,7 +29,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
     INPUT  icSource       AS CHAR,   /* source of request */
     INPUT  icCreator      AS CHAR,   /* who made the request */
     INPUT  iiOrigReq      AS INT,    /* father request */
-    INPUT  iiTermType     AS INT,    /* Termination type full, Partial */
+    INPUT  icTermType     AS CHAR,    /* Termination type full, Partial */
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
@@ -68,13 +68,13 @@ FUNCTION fTerminationRequest RETURNS INTEGER
       bCreaReq.ReqIParam2  = iiSIMStatus
       bCreaReq.ReqIParam3  = iiQuarantine
       bCreaReq.ReqIParam4  = iiPenaltyFee
-      bCreaReq.ReqCParam6  = STRING(iiTermType)
+      bCreaReq.ReqCParam6  = icTermType
       bCreaReq.ReqSource   = icSource
       bCreaReq.OrigReq     = iiOrigReq
       liReqCreated         = bCreaReq.MsRequest.
 
    IF (fHasConvergenceTariff(iiMsSeq) AND
-       iiTermType = {&TERMINATION_TYPE_FULL}) THEN DO:
+       icTermType = {&TERMINATION_TYPE_FULL}) THEN DO:
 
       /* Do not change the memo text (used by DWH) */
       IF icTermReason EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
