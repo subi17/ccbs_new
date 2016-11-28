@@ -803,7 +803,7 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.NIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIF"
       ttOneDelivery.CIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "CIF"
       ttOneDelivery.PassPort      = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "PassPort"
-      ttOneDelivery.SubsType      = lcCLIType
+      ttOneDelivery.SubsType      = IF lcCLIType BEGINS "CONTFH" THEN SUBSTRING(lcClitype,5) ELSE lcCLIType
       ttOneDelivery.ICCNum        = SUBSTR(SIM.ICC,7)
       ttOneDelivery.MSISDN        = Order.CLI
       ttOneDelivery.TmpMSISDN     = Order.TempCLI
