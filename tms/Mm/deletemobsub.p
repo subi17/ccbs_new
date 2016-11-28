@@ -152,7 +152,7 @@ PROCEDURE pTerminate:
    DEF VAR llHardBook          AS LOG  NO-UNDO INIT FALSE.
    DEF VAR llCallProc          AS LOG  NO-UNDO.   
    
-   DEF VAR llPartialTermination AS LOG NO-UNDO.
+   DEF VAR lcTerminationType AS CHAR NO-UNDO INIT {&TERMINATION_TYPE_FULL}.
 
    ASSIGN liArrivalStatus = MsRequest.ReqStatus
           liMsSeq = MsRequest.MsSeq.
@@ -173,7 +173,7 @@ PROCEDURE pTerminate:
       liSimStat      = MsRequest.ReqIParam2
       liQuarTime     = MsRequest.ReqIParam3
       lcTermReason   = MsRequest.ReqCParam3
-      llPartialTermination = LOGICAL(INT(MsRequest.ReqCParam6)) 
+      lcTerminationType = MsRequest.ReqCParam6 WHEN MsRequest.ReqCParam6 NE ""
       lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
 
    ASSIGN ldMonthEndDate = fLastDayOfMonth(ldaKillDate)
@@ -246,12 +246,13 @@ PROCEDURE pTerminate:
    EXCLUSIVE-LOCK NO-ERROR.
 
    /* TimeStamp  */
-   IF AVAIL MSOwner AND NOT(llPartialTermination) THEN DO:
+   IF AVAIL MSOwner AND lcTerminationType EQ {&TERMINATION_TYPE_FULL} THEN DO:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
       MSOwner.TsEnd = ldCurrTS.   
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
    END.
-   ELSE IF AVAIL MSOwner AND llPartialTermination THEN DO:
+   ELSE IF AVAIL MSOwner AND lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} 
+   THEN DO:
       BUFFER-COPY msowner TO ttoldmsowner.      
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
       MSOwner.TsEnd = ldCurrTS.
@@ -454,7 +455,7 @@ PROCEDURE pTerminate:
       DCCLI.TermDate = ?.
 
       /* COFF Partial termination */
-      IF (llPartialTermination AND
+      IF (lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} AND
          fIsConvergentFixedContract(DCCLI.DCEvent)) THEN NEXT.
 
       FIND FIRST DayCampaign NO-LOCK WHERE
@@ -482,7 +483,7 @@ PROCEDURE pTerminate:
             ServiceLimit.SLSeq = MServiceLimit.SLSeq:
 
       /* COFF Partial termination */
-      IF (llPartialTermination AND 
+      IF (lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} AND 
          fIsConvergentFixedContract(ServiceLimit.groupcode)) THEN NEXT.
          
       /* DSS bundle has been handled before */
@@ -876,7 +877,7 @@ PROCEDURE pTerminate:
    END. /* IF llCloseRVTermFee THEN DO: */
 
    /* COFF fixed line stays in partial termination */
-   IF NOT(llPartialTermination) THEN DO: 
+   IF lcTerminationType EQ {&TERMINATION_TYPE_FULL} THEN DO: 
       FOR EACH Order NO-LOCK WHERE
                Order.MsSeq = MobSub.MsSeq AND
                Order.OrderType = {&ORDER_TYPE_STC} AND
@@ -936,7 +937,7 @@ PROCEDURE pTerminate:
    BUFFER-COPY Mobsub TO TermMobsub.
    
    /* COFF Partial termination */
-   IF llPartialTermination THEN
+   IF lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} THEN
       ASSIGN
          TermMobsub.fixednumber = "" /* Fixed line stays active */
          Mobsub.cli = Mobsub.fixednumber

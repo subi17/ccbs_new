@@ -3,7 +3,7 @@
  * Authors: ilkkasav & kariaika.
  *
  * @input   lcCLI;char;mandatory;msisdn for the own subscriber
-            lcSecCLI;char;mandatory;other party id
+            lcSecCLI;char;mandatory;Call destination number (B number)
             lcCDRFile;char;mandatory;base file for CDR data
             ldaDateTime;datetime;mandatory;Date&time for generated data
             liCount;int;mandatory;number of CDRs
@@ -55,7 +55,8 @@ liMeas      = get_int(param_toplevel_id, "5").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /*Check that customer exists*/
-IF lcCli BEGINS "9" THEN DO:
+IF lcCli BEGINS "8" OR 
+   lcCli BEGINS "9" THEN DO:
    FIND mobsub NO-LOCK
    WHERE mobsub.brand = "1" and
          MobSub.FixedNumber = lcCLI NO-ERROR.
