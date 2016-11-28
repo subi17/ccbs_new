@@ -7,9 +7,10 @@ FOR EACH dpmember EXCLUSIVE-LOCK:
    if dpmember.dpid ne ? and
       dpmember.dpid > 0 then next.
 
+   dpmember.dpmemberid = next-value(dpmemberid).
+
    if i mod 100 eq 0 then do:
       disp i with frame a.
-      dpmember.dpmemberid = next-value(dpmemberid).
       pause 0.
    end.
 
