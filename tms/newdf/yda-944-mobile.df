@@ -1,0 +1,11 @@
+UPDATE FIELD "MsRequest" OF "MSRequest"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "Solog" OF "MSRequest"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "SoLog" OF "Solog"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "MsRequest" OF "Solog"
+  FORMAT ">>>>>>>>9"

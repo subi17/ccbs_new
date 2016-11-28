@@ -1,0 +1,17 @@
+UPDATE FIELD "InvSeq" OF "InvSeq"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "InvSeq" OF "InvASub"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "InvSeq" OF "HighUsage"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "ArAccNum" OF "CustCat"
+  FORMAT ">>>>>>>9"
+
+ADD FIELD "ARAccNum" OF "Invoice"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "Concerns" OF "SingleFee"
+  FORMAT "99999999"
