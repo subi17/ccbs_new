@@ -189,7 +189,7 @@ PROCEDURE pTerminate:
       RETURN.
    ENd.
 
-/* COFF ehto jos mobiili olemassa */
+   /* COFF if partial termination cli = fixednumber (no actions needed) */
    IF NOT(MobSub.cli BEGINS "8" OR MobSub.cli BEGINS "9") THEN DO:
       FIND FIRST MSISDN WHERE
                  MSISDN.Brand = gcBrand AND
