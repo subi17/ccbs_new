@@ -6,3 +6,12 @@ UPDATE FIELD "InvNum" OF "Order"
 
 UPDATE FIELD "TupasRM" OF "Order"
   FORMAT "x(60)"
+
+UPDATE FIELD "Clitype" OF "CLIType" 
+  FORMAT "x(13)"
+
+UPDATE FIELD "Clitype" OF "MobSub"
+  FORMAT "x(13)"
+
+ADD FIELD "CLIType" OF "Order" 
+  FORMAT "x(13)"

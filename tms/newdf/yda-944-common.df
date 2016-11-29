@@ -15,3 +15,27 @@ ADD FIELD "ARAccNum" OF "Invoice"
 
 UPDATE FIELD "Concerns" OF "SingleFee"
   FORMAT "99999999"
+
+UPDATE FIELD "InvNum" OF "Invoice"
+  FORMAT "zzzzzzzz9"
+
+UPDATE FIELD "InvNum" OF "SubInvoice" 
+  FORMAT "zzzzzzzz9"
+
+UPDATE FIELD "InvNum" OF "InvRow"
+  FORMAT "zzzzzzzz9"
+
+UPDATE FIELD "InvRowNum" OF "InvRow"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "CreditInvNum" OF "InvRow"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "CrInvNum" OF "Invoice"
+  FORMAT "zzzzzzzz9"
+
+UPDATE FIELD "CrInvNum" OF "SubInvoice" 
+  FORMAT "zzzzzzzz9"
+
+UPDATE FIELD "Clitype" OF "SLGAnalyse"
+  FORMAT "x(13)"
