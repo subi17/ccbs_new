@@ -24,7 +24,7 @@ stnames = "UNDEFINED,"                      /* 0  */  +
           "MNP - NPOC,"                     /* 13 */  +
           "MNP - REJECTED,"                 /* 14 */  +
           "SUBCRIPTION TERMINATED,"         /* 15 */  +
-          "PENDING MOBILE ACTIVATION,"      /* 16 */  + 
+          "PENDING MOBILE ACTIVATIONi,"      /* 16 */  + 
           "PARTIAL TERMINATED,,,,,,,,,,,,," /* 17 */  +
           "CLOSED DUE TO DEBT,"             /* 30 */  +
           "CLOSED BY CREDIT CONTROL,"       /* 31 */  +

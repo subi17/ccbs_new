@@ -41,7 +41,9 @@ FUNCTION freacprecheck RETURNS CHARACTER
    IF liReacDays = ? OR liReacDays = 0 THEN
       liReacDays = 30.
 
-   IF CAN-FIND(FIRST MobSub WHERE MobSub.MsSeq = iiMsSeq) THEN
+   IF CAN-FIND(FIRST MobSub WHERE 
+                     MobSub.MsSeq = iiMsSeq AND
+                     Mobsub.cli NE Mobsub.fixednumber) THEN
       RETURN "Subscription is already active".
    ELSE DO:
       FIND FIRST bTermMobSub WHERE bTermMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
@@ -51,8 +53,12 @@ FUNCTION freacprecheck RETURNS CHARACTER
    
   /*YPR-4770*/ 
   /*reactivation is not allowed for convergent tariffs.*/
-  IF fIsConvergenceTariff(bTermMobSub.CLIType) THEN 
-     RETURN "Not allowed for fixed line tariffs".
+  /*COFF Partial termination, allowing also for partial terminated 
+    If partial terminated fixed number should be "" in convergent tariffs */
+
+  IF fIsConvergenceTariff(bTermMobSub.CLIType) THEN DO:
+     IF bTermMobSub.fixednumber NE "" THEN
+        RETURN "Not allowed for fixed line tariffs".
 
    /* Check that no other reactivation requests is under work */
    FIND FIRST bMsReacReq WHERE
