@@ -188,8 +188,9 @@ DO TRANSACTION:
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
          MSOwner.TsEnd = ldCurrTS.
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOWNER).
+         RELEASE MSOwner.
          CREATE MSOwner.
-         BUFFER-COPY ttoldmsowner TO msowner.
+         BUFFER-COPY ttoldmsowner EXCEPT cli imsi clievent TO msowner.
          ASSIGN 
             MSOwner.cli = TermMobsub.cli
             MSowner.imsi = TermMobsub.imsi
@@ -238,6 +239,7 @@ DO TRANSACTION:
          MobSub.imsi = TermMobsub.imsi
          MobSub.icc = TermMobsub.icc
          MobSub.msStatus = TermMobSub.msStatus.
+      DELETE TermMobsub.
    END.
    ELSE DO:
       CREATE Mobsub.
