@@ -236,7 +236,8 @@ DO TRANSACTION:
       ASSIGN 
          MobSub.cli = TermMobsub.Cli
          MobSub.imsi = TermMobsub.imsi
-         MobSub.icc = TermMobsub.icc.
+         MobSub.icc = TermMobsub.icc
+         MobSub.msStatus = TermMobSub.msStatus.
    END.
    ELSE DO:
       CREATE Mobsub.
