@@ -67,7 +67,6 @@
                keep_installment;boolean;optional;
                multiorder;boolean;optional;
                terminal_financing_bank;string;optional;
-               pos_id;int;optional;
  * @customer_data fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -280,7 +279,6 @@ DEF VAR pcCampaignType  AS CHAR NO-UNDO.
 DEF VAR pcMemo          AS CHAR NO-UNDO.
 DEF VAR pcAuthNumber    AS CHAR NO-UNDO.
 DEF VAR pcBinNumber     AS CHAR NO-UNDO.
-DEF VAR piPOSid         AS INT  NO-UNDO.
 
 DEF VAR pcCLI           AS CHAR NO-UNDO.
 DEF VAR pcSubType       AS CHAR NO-UNDO.
@@ -576,9 +574,6 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
    IF LOOKUP('terminal_financing_bank', lcOrderStruct) GT 0 THEN
       pcTerminalFinancing = get_string(pcOrderStruct,"terminal_financing_bank").
-
-   IF LOOKUP('pos_id', lcOrderStruct) GT 0 THEN
-      piPOSid = get_int(pcOrderStruct,'pos_id').
 
    RETURN TRUE.
 END.
@@ -1027,7 +1022,6 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.UsageType = pcUsageType
       Order.DeliveryType = piDeliveryType
       Order.DeliverySecure = piDeliverySecure
-      Order.POSid = piPOSid
       Order.SendOffer = plSendOffer
       Order.ResignationPeriod  = plResignationPeriod 
       Order.RoiLevel = INT(pcRoilevel)
@@ -1261,8 +1255,7 @@ gcOrderStructFields = "billing_data," +
                       "tarj7_promo," +
                       "terminal_financing_bank," +
                       "keep_installment," +
-                      "multiorder," +
-                      "pos_id".
+                      "multiorder".
 
 gcCustomerStructFields = "birthday," +
                          "city!," +
