@@ -262,7 +262,8 @@ PROCEDURE pTerminate:
       ASSIGN
          MSOwner.CLI = MobSub.fixedNumber
          MSOwner.imsi = ""
-         MSOwner.CliEvent = "F".
+         MSOwner.CliEvent = "F"
+         MSOwner.tsbegin = ldCurrTS.
          IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                             "",
                                             katun,
