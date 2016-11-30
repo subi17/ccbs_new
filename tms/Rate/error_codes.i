@@ -69,4 +69,6 @@
 &GLOBAL-DEFINE CDR_ERROR_NON_BILLABLE_GPRS                 4102 /* Non-billable GPRS (mms) ticket */
 &GLOBAL-DEFINE CDR_ERROR_UNKNOWN_CALL_TYPE                 7005 /* Unknown Call type */
 
+&GLOBAL-DEFINE CDR_ERROR_UNKNOWN_MSISDN_FIXED              6001 /* Unknown fixed line CDR for the Billing System */
+&GLOBAL-DEFINE CDR_ERROR_MSISDN_NOT_ACTIVE_FIXED           6002 /* Fixed line number not active in the BS when connection was opened */
 &ENDIF

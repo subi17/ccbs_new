@@ -145,11 +145,11 @@ form
           HELP "End time"
        SPACE(2) end-txt NO-LABEL  SKIP
     "IMSI Number .....:" MSOwner.IMSI NO-LABEL        SKIP
-    "Cli.type.........:" MSOwner.Clitype NO-LABEL
+    "Cli.type.........:" MSOwner.Clitype FORMAT "X(14)" NO-LABEL
         CLIType.CliName AT 35 NO-LABEL
         MSOwner.TariffBundle AT 60 NO-LABEL           SKIP
     "Billing Target ..:" MSOwner.BillTarget NO-LABEL
-       BillTarg.RatePlan  AT 35 NO-LABEL  SKIP
+       BillTarg.RatePlan   FORMAT "X(14)" AT 35 NO-LABEL  SKIP
     "CliEvent ........:" MSOwner.CliEvent FORMAT "X(5)" NO-LABEL   SKIP
     "InPortOperator...:" msowner.inportOper NO-LABEL  SKIP
     "Mandate .........:" Msowner.MandateID FORMAT "x(31)" NO-LABEL

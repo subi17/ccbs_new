@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-DEF VAR ldaFrom AS DATE INIT 11/10/16.
+DEF VAR ldaFrom AS DATE INIT 11/01/16.
 DEF VAR liMode AS INT INIT 1.
 DEF VAR liMode_ra AS INT INIT 1.
 DEF VAR liModeBI AS INT INIT 1.
@@ -184,36 +184,47 @@ FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                              INPUT icDCEvent AS CHAR,
                                              INPUT idaVAlidFrom AS DATE,
                                              INPUT icclitype AS CHAR,
-                                             INPUT iiUpdateMode AS INT):
+                                             INPUT iiUpdateMode AS INT,
+                                             INPUT icBaseSLG AS CHAR,
+                                             INPUT icSLG AS CHAR):
    FIND FIRST SLGAnalyse WHERE
               SLGAnalyse.clitype EQ icclitype AND
+              SLGAnalyse.servicelimitgroup EQ icSLG AND
               SLGAnalyse.validto > TODAY NO-ERROR.
    IF AVAIL SLGAnalyse THEN RETURN TRUE.
 
-   FOR EACH bSLGAnalyse WHERE
-            bSLGAnalyse.brand EQ "1" AND
-            bSLGAnalyse.clitype EQ icBaseDCEvent AND
-            bSLGAnalyse.validto > TODAY.
+   FOR EACH SLGAnalyse WHERE
+            SLGAnalyse.brand EQ "1" AND
+            SLGAnalyse.clitype EQ icBaseDCEvent AND
+            SLGAnalyse.validto > TODAY.
 
+      /*
       IF bSLGAnalyse.servicelimitgroup BEGINS "DSS" THEN NEXT.
       ELSE IF bSLGAnalyse.servicelimitgroup EQ "MDUB3" THEN NEXT.
       ELSE IF bSLGAnalyse.servicelimitgroup EQ "MDUB4" THEN NEXT.
       ELSE IF bSLGAnalyse.servicelimitgroup EQ "DATA7" THEN NEXT.
-
-
+      */
+      IF (icSLG BEGINS "CONTDSL" OR icSLG BEGINS "CONTFH") AND
+         SLGAnalyse.servicelimitgroup NE icBaseSLG THEN NEXT.
+      IF SLGAnalyse.CCN EQ 93 AND (icSLG BEGINS "CONTDSL" OR 
+         icSLG BEGINS "CONTFH") THEN NEXT.
       CREATE ttSLGAnalyse.
-      BUFFER-COPY bSLGAnalyse TO ttSLGAnalyse.
+      BUFFER-COPY SLGAnalyse TO ttSLGAnalyse.
       ttSLGAnalyse.ValidFrom = ldaFrom.
       ttSLGAnalyse.clitype = icCliType.
-      IF  ttSLGAnalyse.servicelimitgroup EQ icBaseDCEvent THEN
-         ttSLGAnalyse.servicelimitgroup = icclitype.
+      IF  ttSLGAnalyse.servicelimitgroup EQ icBaseSLG THEN
+         ttSLGAnalyse.servicelimitgroup = icSLG.
+   END.
+   FOR EACH ttSLGAnalyse:
       IF iiUpdateMode NE 0 THEN DO:
          CREATE SLGAnalyse.
          BUFFER-COPY ttSLGAnalyse TO SLGAnalyse.
-         DELETE ttSLGAnalyse. /*ror safety reasons*/
+         DISP ttSLGAnalyse.
       END.
       ELSE DISP ttSLGAnalyse.
+      DELETE ttSLGAnalyse.
    END.
+   IF AVAIL ttSLGAnalyse THEN delete ttSLGAnalyse.
 END.
 
 FUNCTION fModifySLGAnalyse RETURNS LOGICAL ( INPUT icDCEvent AS CHAR,
@@ -239,17 +250,24 @@ END.
 
 
 
-fcreateSLGAnalyse("CONT24","CONTDSL45",ldaFrom,"CONTDSL45",liMode).
-fcreateSLGAnalyse("CONT24","CONTFH45_50",ldaFrom,"CONTFH45_50",liMode).
-fcreateSLGAnalyse("CONT24","CONTFH55_300",ldaFrom,"CONTFH55_300",liMode).
+fcreateSLGAnalyse("CONTDSL45","CONTDSL45",ldaFrom,"CONTDSL45",liMode,
+                  "CONTS2GB","CONTDSL45").
+
+fcreateSLGAnalyse("CONTFH45_50","CONTFH45_50",ldaFrom,"CONTFH45_50",liMode,
+                  "CONTS2GB","CONTFH50").
+fcreateSLGAnalyse("CONTFH55_300","CONTFH55_300",ldaFrom,"CONTFH55_300",liMode,
+                  "CONTS2GB","CONTFH300").
 
 fModifySLGAnalyse("CONTDSL45",liMode).
 fModifySLGAnalyse("CONTFH45_50",liMode).
 fModifySLGAnalyse("CONTFH55_300",liMode).
 
-fcreateSLGAnalyse("CONTDSL45","CONTDSL58",ldaFrom,"CONTDSL58",liMode).
-fcreateSLGAnalyse("CONTFH45_50","CONTFH58_50",ldaFrom,"CONTFH58_50",liMode).
-fcreateSLGAnalyse("CONTFH55_300","CONTFH68_300",ldaFrom,"CONTFH68_300",liMode).
+fcreateSLGAnalyse("CONTDSL45","CONTDSL58",ldaFrom,"CONTDSL58",liMode,
+                  "CONTS2GB","CONT24").
+fcreateSLGAnalyse("CONTFH45_50","CONTFH58_50",ldaFrom,"CONTFH58_50",liMode,
+                  "CONTS2GB","CONT24").
+fcreateSLGAnalyse("CONTFH55_300","CONTFH68_300",ldaFrom,"CONTFH68_300",liMode,
+                  "CONTS2GB","CONT24").
 
 /* CCN changes */
 
@@ -534,10 +552,16 @@ IF liModeBdest > 0 THEN DO:
       ASSIGN
          DialType.dialtype = 23
          DialType.dtName = "Fixed Voice short number (type1)".
+   END.
+   FIND FIRST DialType Where Dialtype.dialtype EQ 24 NO-ERROR.
+   IF NOT AVAIL DialType THEN DO:
       CREATE DialType.
       ASSIGN
          DialType.dialtype = 24
          DialType.dtName = "Fixed Voice short number (type2)".
+   END.   
+   FIND FIRST DialType Where Dialtype.dialtype EQ 50 NO-ERROR.
+   IF NOT AVAIL DialType THEN DO:
       CREATE DialType.
       ASSIGN
          DialType.dialtype = 50
@@ -573,3 +597,95 @@ IF NOT AVAIL RatePref THEN DO:
       RatePref.Ratepref = "".
 END.
 
+FUNCTION fCreateTrans RETURNS LOG (INPUT icCode AS CHAR,
+                                   INPUT iiLang AS INT,
+                                   INPUT icText AS CHAR):
+   FIND FIRST RepText WHERE
+              Reptext.brand EQ "1" AND
+              Reptext.texttype EQ 1 AND
+              Reptext.linkcode EQ icCode AND
+              Reptext.language EQ iiLang NO-ERROR.
+
+      IF NOT AVAIL RepText THEN DO:
+         CREATE RepText.
+         ASSIGN
+            RepText.Brand    = "1"
+            RepText.TextType = 1               /* Default value */
+            RepText.LinkCode = icCode
+            RepText.Language = iiLang
+            RepText.FromDate = TODAY
+            RepText.ToDate   = 12/31/49
+            RepText.RepText  = icText  NO-ERROR.
+       END.
+   RETURN TRUE.
+END.
+
+fcreateTrans("F10100003",1,"Nacionales").
+fcreateTrans("F10100003",2,"Nacionals").
+fcreateTrans("F10100003",3,"Nazionalak").
+fcreateTrans("F10100003",5,"National").
+
+fcreateTrans("F10100004",1,"Al Extranjero").
+fcreateTrans("F10100004",2,"A l'estranger").
+fcreateTrans("F10100004",3,"Atzerrira").
+fcreateTrans("F10100004",5,"Abroad").
+
+fcreateTrans("F10100005",1,"Nacionales").
+fcreateTrans("F10100005",2,"Nacionals").
+fcreateTrans("F10100005",3,"Nazionalak").
+fcreateTrans("F10100005",5,"National").
+
+fcreateTrans("F15100027",1,"Números Gratuitos").
+fcreateTrans("F15100027",2,"Números Gratuitos").
+fcreateTrans("F15100027",3,"Doako zenbakiak").
+fcreateTrans("F15100027",5,"Free Numbers").
+
+fcreateTrans("FINFSERVICE",1,"At. otras emp").
+fcreateTrans("FINFSERVICE",2,"A. altr. empr").
+fcreateTrans("FINFSERVICE",3,"Bes. enp. at.").
+fcreateTrans("FINFSERVICE",5,"Other co att").
+
+fcreateTrans("FSHORTNU",1,"Tipo A").
+fcreateTrans("FSHORTNU",2,"Tipus A").
+fcreateTrans("FSHORTNU",3,"A mota").
+fcreateTrans("FSHORTNU",5,"Level A").
+
+fcreateTrans("FCCYOIGO",1,"Atención al cliente").
+fcreateTrans("FCCYOIGO",2,"Atenció al client").
+fcreateTrans("FCCYOIGO",3,"Bezeroarentzako arreta-zerbitzua").
+fcreateTrans("FCCYOIGO",5,"Customer Service").
+
+fcreateTrans("F15100023",1,"Llamadas Premium").
+fcreateTrans("F15100023",2,"Trucades Premium").
+fcreateTrans("F15100023",3,"Premium deiak").
+fcreateTrans("F15100023",5,"Premium Calls").
+
+fcreateTrans("CONTDSL_QTY_IN",1,"Nacionales").
+fcreateTrans("CONTDSL_QTY_IN",2,"Nacionals").
+fcreateTrans("CONTDSL_QTY_IN",3,"Nazionalak").
+fcreateTrans("CONTDSL_QTY_IN",5,"National").
+
+fcreateTrans("CONTDSL_MIN_IN",1,"Nacionales").
+fcreateTrans("CONTDSL_MIN_IN",2,"Nacionals").
+fcreateTrans("CONTDSL_MIN_IN",3,"Nazionalak").
+fcreateTrans("CONTDSL_MIN_IN",5,"National").
+
+fcreateTrans("CONTFH50_QTY_IN",1,"Nacionales").
+fcreateTrans("CONTFH50_QTY_IN",2,"Nacionals").
+fcreateTrans("CONTFH50_QTY_IN",3,"Nazionalak").
+fcreateTrans("CONTFH50_QTY_IN",5,"National").
+
+fcreateTrans("CONTFH50_MIN_IN",1,"Nacionales").
+fcreateTrans("CONTFH50_MIN_IN",2,"Nacionals").
+fcreateTrans("CONTFH50_MIN_IN",3,"Nazionalak").
+fcreateTrans("CONTFH50_MIN_IN",5,"National").
+
+fcreateTrans("CONTFH300_QTY_IN",1,"Nacionales").
+fcreateTrans("CONTFH300_QTY_IN",2,"Nacionals").
+fcreateTrans("CONTFH300_QTY_IN",3,"Nazionalak").
+fcreateTrans("CONTFH300_QTY_IN",5,"National").
+
+fcreateTrans("CONTFH300_MIN_IN",1,"Nacionales").
+fcreateTrans("CONTFH300_MIN_IN",2,"Nacionals").
+fcreateTrans("CONTFH300_MIN_IN",3,"Nazionalak").
+fcreateTrans("CONTFH300_MIN_IN",5,"National").
