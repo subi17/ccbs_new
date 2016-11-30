@@ -66,7 +66,7 @@
                tarj7_promo;boolean;optional;
                keep_installment;boolean;optional;
                multiorder;boolean;optional;
-               terminal_financing_bank;string;optional;
+               terminal_financing_bank;string;optional
  * @customer_data fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;

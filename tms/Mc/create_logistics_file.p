@@ -177,7 +177,7 @@ DEFINE TEMP-TABLE ttExtra NO-UNDO
    FIELD OrderDate   AS CHARACTER FORMAT "X(8)"
    FIELD ResidualAmount AS CHARACTER FORMAT "X(7)"
    FIELD DeliveryType AS CHAR FORMAT "X(1)"
-   FIELD KialaCode   AS CHAR FORMAT "X(4)"
+   FIELD KialaCode   AS CHAR FORMAT "X(16)"
    FIELD ContractFileName AS CHAR FORMAT "X(14)"
    INDEX RowNum AS PRIMARY RowNum.
 
