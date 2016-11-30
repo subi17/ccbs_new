@@ -12,8 +12,57 @@
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 {tmsconst.i}
+{timestamp.i}
+{eventval.i}
+{create_eventlog.i}
+{commali.i}
+   DEF TEMP-TABLE ttOldMSOwner NO-UNDO LIKE msowner.
+   DEFINE VARIABLE lhMsOwner   AS HANDLE NO-UNDO.
 
-/*Function returns Trie if a tariff can be defined as convergent tariff.
+   IF llDoEvent THEN DO:
+      &GLOBAL-DEFINE STAR_EVENT_USER katun
+      {lib/eventlog.i}
+   END.
+
+/* Function makes new MSOwner when subscription is partially
+   terminated or mobile part order closed */
+FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
+   (icCLI AS CHAR,
+    icFixedNumber AS CHAR):
+
+   IF llDoEvent THEN DO:
+      lhMsOwner = BUFFER MsOwner:HANDLE.
+      RUN StarEventInitialize(lhMsOwner).
+   END.
+
+   FIND FIRST MSOwner WHERE 
+              MSOwner.CLI    = icCLI AND
+              MSOwner.TsEnd >= fHMS2TS(TODAY,STRING(time,"hh:mm:ss"))
+   EXCLUSIVE-LOCK NO-ERROR.
+   IF NOT AVAIL MSOwner THEN RETURN FALSE.
+
+   BUFFER-COPY MSOwner TO ttOldMSOwner.      
+   IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
+   MSOwner.TsEnd = fMakeTS().
+   IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
+   RELEASE MsOwner.
+   CREATE MSOwner.
+   BUFFER-COPY ttOldMSOwner TO MSOwner.
+   ASSIGN
+      MSOwner.CLI = icFixedNumber
+      MSOwner.imsi = ""
+      MSOwner.CliEvent = "F"
+      MSOwner.tsbegin = fMakeTS().
+      IF llDoEvent THEN 
+         fMakeCreateEvent((BUFFER MSOwner:HANDLE),
+                           "",
+                           katun,
+                           "").    
+   RETURN TRUE.
+
+END.   
+
+/*Function returns True if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */
 FUNCTION fIsConvergenceTariff RETURNS LOGICAL
    (icCliType AS CHAR):
