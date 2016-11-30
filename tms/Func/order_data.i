@@ -316,6 +316,8 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
                       OUTPUT lcDeviceName,
                       OUTPUT ldeDeviceFee).
 
+   lcDeviceName = "+" +  lcDeviceName.
+
    RUN Mc/offer_penaltyfee.p(Order.OrderID,
                         Output liPermancyLength,
                         OUTPUT ldePermanencyAmount).
@@ -363,8 +365,8 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
                                THEN " &1 E Initial payment."
                                ELSE " &1 E Pago Inicial."), ldeDeviceFee) WHEN ldeDeviceFee > 0
       lcPermanency = SUBST((IF liLang EQ 5
-                            THEN " with Permanency of &1 months because of the discount of &2 E made to the terminal"
-                            ELSE " con Permanencia de &1 meses en Contrato por el descuento de &2 E el movil"),
+                            THEN " with Permanency of &1 months because of the discount of &2 E made to the terminal."
+                            ELSE " con Permanencia de &1 meses en Contrato por el descuento de &2 E el movil."),
                            liPermancyLength,
                            ldePermanencyAmount) WHEN ldePermanencyAmount > 0.
 
@@ -378,8 +380,8 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
       lcTelesales = (If liLang EQ 5 THEN " of Yoigo is"
                      ELSE " de Yoigo es")
       lcTariffData = SUBST((IF liLang EQ 5
-                            THEN " Tariff &1 &2 E/month &3 incl.+ "
-                            ELSE " Tarifa &1 &2 E/mes &3 incl.+"),
+                            THEN " Tariff &1 &2 E/month &3 incl."
+                            ELSE " Tarifa &1 &2 E/mes &3 incl."),
                            lcTariffName,
                            ldeMFWithTax,
                            lcTaxZone).

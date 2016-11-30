@@ -571,7 +571,17 @@ DEFINE VARIABLE lcpriceplan AS CHARACTER NO-UNDO.
       END.
        
       CREATE CLIType.
-      IF LOOKUP(icCLIType, "10") > 0 THEN
+
+      IF icCLIType EQ "CONTDSL40" OR /*YPR-5291, YPR-5295*/
+         icCLIType EQ "CONTFH40_50" OR
+         icCLIType EQ "CONTFH50_300" OR
+         icCLIType EQ "CONTDSL48" OR
+         icCLIType EQ "CONTFH48_50" OR
+         icCLIType EQ "CONTFH58_300" 
+      THEN
+         lcpriceplan = "CONTRATOCONVC".
+         
+      ELSE IF LOOKUP(icCLIType, "10") > 0 THEN
          lcpriceplan = "CONTRATOCONVS".
       ELSE
          lcpriceplan = "CONTRATOCONVS".

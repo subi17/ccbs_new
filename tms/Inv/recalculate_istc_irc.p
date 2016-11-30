@@ -74,6 +74,9 @@ FOR EACH msrequest NO-LOCK WHERE
          msrequest.actstamp >= ldeFrom and
          msrequest.actstamp < ldeTo:
 
+   IF msrequest.reqcparam1 BEGINS "TARJ" AND
+      msrequest.reqcparam2 BEGINS "TARJ" THEN NEXT.
+
    fTS2Date(msrequest.actstamp, output ldaSTCDate).
    
    IF fGetISTCDate(msrequest.msseq,
