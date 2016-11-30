@@ -22,6 +22,7 @@
           orderchannel;string;
           fusion_order_status;string;
           order_date;datetime;date only
+          order_status;string;order status
  */
 
 {xmlrpc/xmlrpc_access.i}
@@ -142,6 +143,9 @@ FUNCTION fListQuery RETURNS CHAR
 
       add_date_or_time(lcResultStruct, "order_date", 
          lhOrderFusion:BUFFER-FIELD("OrderDate"):BUFFER-VALUE, 0). 
+ 
+      add_string(lcResultStruct, "order_status", 
+         lhOrder:BUFFER-FIELD("StatusCode"):BUFFER-VALUE).       
    END.
 
    /* add_int(lcResultStruct, "total_amount", liCount).  */
