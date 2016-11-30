@@ -853,7 +853,7 @@ IF NOT llErrors THEN DO:
 
       IF (Order.DeliverySecure EQ 1 OR
           Order.DeliveryType EQ {&ORDER_DELTYPE_POST}) AND
-          Order.DeriveryType NE {&ORDER_DELTYPE_POS} THEN ASSIGN
+          Order.DeliveryType NE {&ORDER_DELTYPE_POS} THEN ASSIGN
          lcTagDelAddress = fTeksti(560,liLanguage)
          lcTagDelPost = "".
       ELSE DO:
