@@ -32,7 +32,6 @@ DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldCurrTS            AS  DECIMAL   NO-UNDO.
 
 DEFINE BUFFER bTermMsRequest FOR MsRequest.
-DEFINE BUFFER bMsOwner FOR MsOwner.
 DEF TEMP-TABLE ttoldmsowner NO-UNDO LIKE msowner.
 
 FIND FIRST MSRequest WHERE
@@ -189,13 +188,14 @@ DO TRANSACTION:
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
          MSOwner.TsEnd = ldCurrTS.
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOWNER).
-         CREATE bMSOwner.
-         BUFFER-COPY ttoldmsowner EXCEPT cli imsi clievent TO bmsowner.
+         CREATE MSOwner.
+         BUFFER-COPY ttoldmsowner EXCEPT cli imsi clievent TO msowner.
          ASSIGN 
-            bMSOwner.cli = TermMobsub.cli
-            bMSowner.imsi = TermMobsub.imsi
-            bMSOwner.clievent = "R".
-         IF llDoEvent THEN fMakeCreateEvent((BUFFER bMsOwner:HANDLE),
+            MSOwner.cli = TermMobsub.cli
+            MSowner.imsi = TermMobsub.imsi
+            MSOwner.clievent = "R"
+            MSOwner.TSbegin = ldCurrTS.
+         IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                             "",
                                             katun,
                                             ""). 
