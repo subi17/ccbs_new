@@ -6,7 +6,13 @@
 				"min-procs": "1",
 				"max-procs": "5",
 				"kill-signal": "10"
-			}],			
+			}],
+         "/masmovil": [ "masmovil", {
+            "check-local": "\"disable\"",
+            "min-procs": "1",
+            "max-procs": "1",
+            "kill-signal": "10"
+         }],
 			"server.username": "\"tmsrpc\"",
 			"server.groupname": "\"tmsrpc\"",
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
