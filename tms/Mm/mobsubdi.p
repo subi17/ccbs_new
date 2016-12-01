@@ -131,12 +131,13 @@ DO WHILE TRUE:
       ufk = 0 
       ufk[8] = 8 
       ehto = 3. 
-   IF Mobsub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
+   IF AVAIL MobSub AND Mobsub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
       noMobile = TRUE.
       llPartial = TRUE.
-      IF (noMobile AND CAN-FIND (FIRST TermMobsub WHERE 
-                                 TermMobsub.Msseq = msseq)) THEN
-      llkilled = TRUE.
+      FIND TermMobsub WHERE TermMobsub.Msseq = msseq NO-LOCK NO-ERROR.
+      IF avail TermMobsub then
+         ASSIGN lhSub = BUFFER TermMobsub:HANDLE
+         llkilled = TRUE.
    END.
    RUN ufkey.
  DISPLAY
