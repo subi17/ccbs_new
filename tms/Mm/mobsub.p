@@ -1215,7 +1215,8 @@ PROCEDURE local-UPDATE-record.
       Mobsub.AgrCust
       MobSub.CLI
       MobSub.CLI + " / " + Mobsub.FixedNumber
-         WHEN Mobsub.FixedNumber NE ? @ Mobsub.CLI
+         WHEN (Mobsub.FixedNumber NE ? AND MobSub.CLI NE Mobsub.FixedNumber) 
+            @ Mobsub.CLI
       lcBillTarget
       Mobsub.Custnum
       Mobsub.InvCust
