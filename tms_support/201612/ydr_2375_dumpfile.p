@@ -11,7 +11,7 @@ CREATE DumpFile.
 ASSIGN DumpFile.Brand           = '1'
        DumpFile.Description     = 'Credit Limit Dump'
        DumpFile.DumpID          = i
-       DumpFile.FileName        = '#CAT_Billing_Items_#MODE_#DATE_#TIME.txt'
+       DumpFile.FileName        = '#CAT_CreditLimit_#MODE_#DATE_#TIME.txt'
        DumpFile.SpoolDir        = '/store/riftp/dumpfiles/dwh/spool'
        DumpFile.TransDir        = '/store/riftp/dumpfiles/dwh/outgoing'
        DumpFile.Active          = YES
