@@ -16,8 +16,8 @@
 {eventval.i}
 {create_eventlog.i}
 {commali.i}
-   DEF TEMP-TABLE ttOldMSOwner NO-UNDO LIKE msowner.
-   DEFINE VARIABLE lhMsOwner   AS HANDLE NO-UNDO.
+   DEF TEMP-TABLE ttSavedMSOwner NO-UNDO LIKE msowner.
+   DEFINE VARIABLE lhEventMsOwner AS HANDLE NO-UNDO.
 
    IF llDoEvent THEN DO:
       &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -31,8 +31,8 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
     icFixedNumber AS CHAR):
 
    IF llDoEvent THEN DO:
-      lhMsOwner = BUFFER MsOwner:HANDLE.
-      RUN StarEventInitialize(lhMsOwner).
+      lhEventMsOwner = BUFFER MsOwner:HANDLE.
+      RUN StarEventInitialize(lhEventMsOwner).
    END.
 
    FIND FIRST MSOwner WHERE 
@@ -41,13 +41,13 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAIL MSOwner THEN RETURN FALSE.
 
-   BUFFER-COPY MSOwner TO ttOldMSOwner.      
-   IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
+   BUFFER-COPY MSOwner TO ttSavedMSOwner.      
+   IF llDoEvent THEN RUN StarEventSetOldBuffer(lhEventMsOwner).
    MSOwner.TsEnd = fMakeTS().
-   IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
+   IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhEventMsOwner).
    RELEASE MsOwner.
    CREATE MSOwner.
-   BUFFER-COPY ttOldMSOwner TO MSOwner.
+   BUFFER-COPY ttSavedMSOwner TO MSOwner.
    ASSIGN
       MSOwner.CLI = icFixedNumber
       MSOwner.imsi = ""
