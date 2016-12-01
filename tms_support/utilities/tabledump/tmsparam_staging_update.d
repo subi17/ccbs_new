@@ -60,3 +60,6 @@
 "HPD.Interface" "HPD.QueueCommon.Password" "C" 0 0 "HdTkFa8-O2mMljJW!aBSEu" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
 "HPD.Interface" "HPD.QueueMobile.Password" "C" 0 0 "HdTkFa8-O2mMljJW!aBSEu" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
 "HPD.Interface" "HPD.QueueOrdercanal.Password" "C" 0 0 "HdTkFa8-O2mMljJW!aBSEu" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
+"HPD.Interface" "HPD.QueueCommon.TransactSize" "I" 5000 0 "" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
+"HPD.Interface" "HPD.QueueMobile.TransactSize" "I" 5000 0 "" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
+"HPD.Interface" "HPD.QueueOrdercanal.TransactSize" "I" 5000 0 "" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
