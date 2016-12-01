@@ -252,23 +252,8 @@ PROCEDURE pTerminate:
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
    END.
    ELSE IF AVAIL MSOwner AND lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} 
-   THEN DO:
-      BUFFER-COPY msowner TO ttoldmsowner.      
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
-      MSOwner.TsEnd = ldCurrTS.
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).   
-      CREATE MSOwner.
-      BUFFER-COPY ttoldmsowner TO msowner.
-      ASSIGN
-         MSOwner.CLI = MobSub.fixedNumber
-         MSOwner.imsi = ""
-         MSOwner.CliEvent = "F"
-         MSOwner.tsbegin = ldCurrTS.
-         IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
-                                            "",
-                                            katun,
-                                            "").         
-   END.
+      THEN 
+      fUpdatePartialMSOwner(MobSub.msseq, Mobsub.fixedNumber).
 
    IF llOutport THEN DO:
 
@@ -942,8 +927,8 @@ PROCEDURE pTerminate:
       ASSIGN
          TermMobsub.fixednumber = "" /* Fixed line stays active */
          Mobsub.cli = Mobsub.fixednumber
-         Mobsub.icc = ""
-         Mobsub.imsi = ""
+         Mobsub.icc = ?
+         Mobsub.imsi = ?
          MobSub.msStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
    ELSE 
       DELETE MobSub.

@@ -87,8 +87,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   /* Mark subscription partially terminated */
                   IF bfOrder.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
                      FIND FIRST MobSub EXCLUSIVE-LOCK WHERE
-                                MobSub.Brand = gcBrand AND
-                                MobSub.CLI = bfOrder.CLI AND
+                                MobSub.MsSeq = bfOrder.MsSeq AND
                                 MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG}.
                      IF AVAIL MobSub THEN DO:
                         ASSIGN
@@ -97,7 +96,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                            MobSub.IMSI = ""
                            MobSub.MsStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
                         /* Update MSOwner accordingly */
-                        fUpdatePartialMSOwner(bfOrder.CLI, MobSub.CLI).
+                        fUpdatePartialMSOwner(bfOrder.MsSeq, MobSub.FixedNumber).
                      END.
                   END. /* IF bfOrder.OrderType EQ */
                END. /* IF fIsConvergenceTariff  */
