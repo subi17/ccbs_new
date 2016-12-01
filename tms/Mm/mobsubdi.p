@@ -179,7 +179,7 @@ DO WHILE TRUE:
  "Z) Terminals                "             WHEN NOT noMobile  @ menuc[26] SKIP
  
  "L) Discount                             "                  @ menuc[12]
- "1) Reactivate Subscription  "             WHEN (noMobile OR
+ "1) Reactivate Subscription  "             WHEN (noMobile AND NOT llPartial OR
                                             (llPartial AND llkilled))
                                                @ menuc[27] SKIP
 
