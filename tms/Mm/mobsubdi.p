@@ -132,6 +132,7 @@ DO WHILE TRUE:
       ufk[8] = 8 
       ehto = 3. 
    IF Mobsub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
+      noMobile = TRUE.
       llPartial = TRUE.
       IF (noMobile AND CAN-FIND (FIRST TermMobsub WHERE 
                                  TermMobsub.Msseq = msseq)) THEN
