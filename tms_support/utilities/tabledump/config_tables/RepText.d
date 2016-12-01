@@ -1677,6 +1677,10 @@
 1 "" 2 "Incompliment de permanència La Combinada" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 3 "La Combinada tarifaren iraunkortasun-epea urratzea" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 5 "Non-compliance with term contract on La Combinada tariff" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 1 "Contestador" 0 "FVMS" "1" 01/11/16 31/12/49
+1 "" 2 "Contestador" 0 "FVMS" "1" 01/11/16 31/12/49
+1 "" 3 "Erantzungailua" 0 "FVMS" "1" 01/11/16 31/12/49
+1 "" 5 "Answering service" 0 "FVMS" "1" 01/11/16 31/12/49
 1 "" 1 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
 1 "" 2 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
 1 "" 3 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
@@ -11042,10 +11046,18 @@
 9 "" 2 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 3 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 5 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
+9 "" 1 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
 9 "" 1 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
 9 "" 2 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
 9 "" 5 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
 9 "" 1 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 2 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
@@ -11105,14 +11117,30 @@
 9 "" 4 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
 9 "" 5 "Fusión Plana a lo Yoigo" 0 "CONTFF" "1" 16/06/15 31/12/54
 9 "" 5 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
+9 "" 1 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
 9 "" 1 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
 9 "" 2 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
 9 "" 5 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 1 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
 9 "" 1 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 2 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 5 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
 9 "" 1 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
 9 "" 2 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
