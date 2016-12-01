@@ -21,7 +21,8 @@
 FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    (iiMsSeq AS INT,
     icFixedNumber AS CHAR):
-
+   DEF VAR ldUpdateTS AS DEC NO-UNDO.
+   ldUpdateTS = fMakeTS().
    FIND FIRST MSOwner WHERE 
               MSOwner.MsSeq  = iiMsSeq AND
               MSOwner.TsEnd >= fHMS2TS(TODAY,STRING(time,"hh:mm:ss"))
@@ -29,15 +30,15 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    IF NOT AVAIL MSOwner THEN RETURN FALSE.
 
    BUFFER-COPY MSOwner TO ttSavedMSOwner.      
-   MSOwner.TsEnd = fMakeTS().
+   MSOwner.TsEnd = ldUpdateTS.
    RELEASE MsOwner.
    CREATE MSOwner.
    BUFFER-COPY ttSavedMSOwner TO MSOwner.
    ASSIGN
       MSOwner.CLI = icFixedNumber
-      MSOwner.imsi = ""
+      MSOwner.imsi = ?
       MSOwner.CliEvent = "F"
-      MSOwner.tsbegin = fMakeTS().
+      MSOwner.tsbegin = ldUpdateTS.
    RETURN TRUE.
 
 END.   
