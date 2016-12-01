@@ -13,38 +13,23 @@
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 {tmsconst.i}
 {timestamp.i}
-{eventval.i}
-{create_eventlog.i}
 {commali.i}
    DEF TEMP-TABLE ttSavedMSOwner NO-UNDO LIKE msowner.
-   DEFINE VARIABLE lhEventMsOwner AS HANDLE NO-UNDO.
-
-   IF llDoEvent THEN DO:
-      &GLOBAL-DEFINE STAR_EVENT_USER katun
-      {lib/eventlog.i}
-   END.
 
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed */
 FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
-   (icCLI AS CHAR,
+   (iiMsSeq AS INT,
     icFixedNumber AS CHAR):
 
-   IF llDoEvent THEN DO:
-      lhEventMsOwner = BUFFER MsOwner:HANDLE.
-      RUN StarEventInitialize(lhEventMsOwner).
-   END.
-
    FIND FIRST MSOwner WHERE 
-              MSOwner.CLI    = icCLI AND
+              MSOwner.MsSeq  = iiMsSeq AND
               MSOwner.TsEnd >= fHMS2TS(TODAY,STRING(time,"hh:mm:ss"))
    EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAIL MSOwner THEN RETURN FALSE.
 
    BUFFER-COPY MSOwner TO ttSavedMSOwner.      
-   IF llDoEvent THEN RUN StarEventSetOldBuffer(lhEventMsOwner).
    MSOwner.TsEnd = fMakeTS().
-   IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhEventMsOwner).
    RELEASE MsOwner.
    CREATE MSOwner.
    BUFFER-COPY ttSavedMSOwner TO MSOwner.
@@ -53,11 +38,6 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
       MSOwner.imsi = ""
       MSOwner.CliEvent = "F"
       MSOwner.tsbegin = fMakeTS().
-      IF llDoEvent THEN 
-         fMakeCreateEvent((BUFFER MSOwner:HANDLE),
-                           "",
-                           katun,
-                           "").    
    RETURN TRUE.
 
 END.   
