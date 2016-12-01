@@ -23,6 +23,9 @@
           fusion_order_status;string;
           order_date;datetime;date only
           order_status;string;order status
+          fixed_line_order_status;string;fixed line order status
+          msstatus;int;subscription status
+
  */
 
 {xmlrpc/xmlrpc_access.i}
