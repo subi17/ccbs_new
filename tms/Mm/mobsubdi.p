@@ -239,11 +239,11 @@ DO WHILE TRUE:
          run msisdnch.p(MsSeq).
    END.
             
-   ELSE IF FRAME-INDEX = 5 AND NOT noMobile THEN  DO :
+   ELSE IF FRAME-INDEX = 5 AND (NOT noMobile OR llPartial) THEN  DO :
       run persondata(MsSeq).
    END.
             
-   ELSE IF FRAME-INDEX = 6 AND NOT noMobile THEN DO:
+   ELSE IF FRAME-INDEX = 6 AND (NOT noMobile OR llPartial) THEN DO:
       FIND FIRST Order WHERE 
                  Order.Msseq = MSSeq AND
                  Order.OrderType < 2 NO-LOCK NO-ERROR.
@@ -255,7 +255,7 @@ DO WHILE TRUE:
       VIEW-AS ALERT-BOX.
    END.         
    
-   ELSE IF FRAME-INDEX = 7 AND NOT noMobile THEN DO:
+   ELSE IF FRAME-INDEX = 7 AND (NOT noMobile OR llPartial) THEN DO:
       IF MobSub.PayType = FALSE THEN  
               RUN bitemcu.p(MobSub.CustNum,
                             STRING(MsSeq)).
@@ -273,7 +273,7 @@ DO WHILE TRUE:
       ELSE RUN bundle_change_ui.p (MobSub.MsSeq).
    END.
             
-   ELSE IF FRAME-INDEX = 9 AND NOT noMobile AND Avail mobsub 
+   ELSE IF FRAME-INDEX = 9 AND (NOT noMobile OR llPartial) AND Avail mobsub 
    THEN DO TRANSACTION:  /* KILL subscription */
 
       IF Mobsub.msstatus = 2 OR 
@@ -342,7 +342,7 @@ DO WHILE TRUE:
       run msowner.p(msseq). 
    END.
 
-   ELSE IF FRAME-INDEX = 20 AND NOT noMobile THEN DO :
+   ELSE IF FRAME-INDEX = 20 AND (NOT noMobile OR llPartial) THEN DO :
       IF NOT fIsPermittedModule(MobSub.CliType, "dccli") THEN NEXT. 
 
       lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum, INPUT fMakeTS()).
@@ -432,7 +432,8 @@ DO WHILE TRUE:
       RUN substerminal(MobSub.MsSeq,0,0).
 
    /* Reactivate the terminated Subscription */                 
-   ELSE IF FRAME-INDEX = 27 AND noMobile THEN DO:
+   ELSE IF FRAME-INDEX = 27 AND ((noMobile OR llPartial) OR 
+                                 (llPartial AND llkilled)) THEN DO:
       MESSAGE "Do You REALLY want to reactivate subscription with MSISDN: " TermMobsub.CLI 
          VIEW-AS ALERT-BOX BUTTONS YES-NO TITLE " CONFIRMATION " UPDATE ok .
          
