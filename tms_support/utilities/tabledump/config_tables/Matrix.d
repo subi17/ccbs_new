@@ -44,5 +44,7 @@
 "1" "Convergent CONTFH300" "PERCONTR" 110 1 36
 "1" "Convergent permanency" "PERCONTR" 111 1 37
 "1" "Convergent 20GB mobile" "PERCONTR" 113 1 38
+"1" "Convergent 1.2GB  mobile" "PERCONTR" 114 1 39
+"1" "Convergent 5GB  mobile" "PERCONTR" 115 1 40
 "1" "ST CHANGE" "STC-IDType" 1 0 1
 "1" "ST CHANGE" "STC-IDType" 3 0 2
