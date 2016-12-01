@@ -30,8 +30,8 @@ CREATE DFTimeTable.
 ASSIGN DFTimeTable.Brand       = "1"
        DFTimeTable.DumpID      = i
        DFTimeTable.DumpMode    = "Full"
-       DFTimeTable.FromDate    = TODAY 
-       DFTimeTable.ToDate      = TODAY
+       DFTimeTable.FromDate    = TODAY + 1
+       DFTimeTable.ToDate      = TODAY + 1
        DFTimeTable.DumpDay     = "*"
        DFTimeTable.DumpTime    = "1:45"
        .
@@ -40,7 +40,7 @@ CREATE DFTimeTable.
 ASSIGN DFTimeTable.Brand       = "1"
        DFTimeTable.DumpID      = i
        DFTimeTable.DumpMode    = "Modified"
-       DFTimeTable.FromDate    = TODAY + 1
+       DFTimeTable.FromDate    = TODAY + 2
        DFTimeTable.ToDate      = 01/01/2050 - 1
        DFTimeTable.DumpDay     = "*"
        DFTimeTable.DumpTime    = "1:45"
