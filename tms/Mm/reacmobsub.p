@@ -193,7 +193,7 @@ DO TRANSACTION:
          ASSIGN 
             MSOwner.cli = TermMobsub.cli
             MSowner.imsi = TermMobsub.imsi
-            MSOwner.clievent = "R"
+            MSOwner.clievent = "T"
             MSOwner.TSbegin = ldCurrTS.
          IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                             "",
