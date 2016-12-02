@@ -37,7 +37,7 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
       MSOwner.CLI = icFixedNumber
       MSOwner.imsi = ""
       MSOwner.CliEvent = "F"
-      MSOwner.tsbegin = ldUpdateTS.
+      MSOwner.tsbegin = fSecOffSet(ldUpdateTS,1).
    RETURN TRUE.
 
 END.   

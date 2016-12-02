@@ -194,7 +194,7 @@ DO TRANSACTION:
             MSOwner.cli = TermMobsub.cli
             MSowner.imsi = TermMobsub.imsi
             MSOwner.clievent = "T"
-            MSOwner.TSbegin = ldCurrTS.
+            MSOwner.TSbegin = fSecOffSet(ldCurrTS,1).
          IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                             "",
                                             katun,
