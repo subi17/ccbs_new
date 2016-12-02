@@ -13,7 +13,6 @@
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 {tmsconst.i}
 {timestamp.i}
-{commali.i}
    DEF TEMP-TABLE ttSavedMSOwner NO-UNDO LIKE msowner.
 
 /* Function makes new MSOwner when subscription is partially
