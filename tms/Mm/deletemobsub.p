@@ -927,8 +927,8 @@ PROCEDURE pTerminate:
       ASSIGN
          TermMobsub.fixednumber = "" /* Fixed line stays active */
          Mobsub.cli = Mobsub.fixednumber
-         Mobsub.icc = ?
-         Mobsub.imsi = ?
+         Mobsub.icc = ""
+         Mobsub.imsi = ""
          MobSub.msStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
    ELSE 
       DELETE MobSub.

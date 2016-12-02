@@ -35,7 +35,7 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    BUFFER-COPY ttSavedMSOwner TO MSOwner.
    ASSIGN
       MSOwner.CLI = icFixedNumber
-      MSOwner.imsi = ?
+      MSOwner.imsi = ""
       MSOwner.CliEvent = "F"
       MSOwner.tsbegin = ldUpdateTS.
    RETURN TRUE.
