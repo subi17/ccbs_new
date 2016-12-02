@@ -34,7 +34,7 @@ ELSE
    FOR EACH Limit NO-LOCK WHERE
             Limit.Brand      = gcBrand                 AND
             Limit.LimitType  = {&LIMIT_TYPE_RISKLIMIT} AND
-            Limit.FromDate  >= TODAY - 1               AND
+            Limit.FromDate   = TODAY - 1               AND
             Limit.ToDate    >= TODAY:
       PUT STREAM sOut UNFORMATTED
          Limit.CustNum  lcDelimiter
