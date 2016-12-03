@@ -289,9 +289,10 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
             IF Order.CliType BEGINS "TARJ7" OR
                Order.CliType BEGINS "TARJ9" THEN
                FOR EACH TopUpSchemeRow NO-LOCK WHERE
-                       (TopUpSchemeRow.BillCode         = InvRow.BillCode  OR
-                        TopUpSchemeRow.DiscountBillCode = InvRow.BillCode) AND
-                        TopUpSchemeRow.Amount           = InvRow.Amt:
+                       (TopUpSchemeRow.BillCode         = InvRow.BillCode  AND
+                        TopUpSchemeRow.Amount           = InvRow.Amt)      OR
+                       (TopUpSchemeRow.DiscountBillCode = InvRow.BillCode  AND
+                        TopUpSchemeRow.DiscountAmount   = InvRow.Amt):
                   IF TopUpSchemeRow.DisplayAmount > 0 THEN
                      ldAmt = TopUpSchemeRow.DisplayAmount.
                END.
