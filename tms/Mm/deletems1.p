@@ -563,12 +563,18 @@ REPEAT WITH FRAME main:
          END.
          
          ELSE IF FRAME-FIELD = "lcTermType" THEN DO:
-            IF lcTermType NE "Full" OR
+            IF lcTermType NE "Full" AND
                lcTermType NE "Partial" THEN DO:
                MESSAGE "Value must be Full or Partial!"
                   VIEW-AS ALERT-BOX.
                NEXT.
             END.   
+            IF MobSub.msstatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE} AND
+               lcTermType EQ "Partial" THEN DO:
+               MESSAGE "Mobile already terminated, only Full possible"
+                  VIEW-AS ALERT-BOX.
+               NEXT.
+            END.
          END.
 
          ELSE IF FRAME-FIELD = "liQuarTime" THEN DO:
