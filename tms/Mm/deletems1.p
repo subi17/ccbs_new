@@ -685,9 +685,10 @@ REPEAT WITH FRAME main:
                VIEW-AS ALERT-BOX.
          END.
       
-         liError = fDeleteMsValidation(Mobsub.MsSeq, 
-                             liOrderer, /* not yet known */
-                             OUTPUT lcError).
+         IF MobSub.msstatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
+            liError = fDeleteMsValidation(Mobsub.MsSeq, 
+                                          liOrderer, /* not yet known */
+                                          OUTPUT lcError).
          IF liError NE 0 THEN DO:
             MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
             NEXT ACTION.
