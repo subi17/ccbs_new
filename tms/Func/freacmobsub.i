@@ -56,9 +56,15 @@ FUNCTION freacprecheck RETURNS CHARACTER
   /*COFF Partial termination, allowing also for partial terminated 
     If partial terminated fixed number should be "" in convergent tariffs */
 
-  IF fIsConvergenceTariff(bTermMobSub.CLIType) AND
-     bTermMobSub.fixednumber NE "" THEN
-     RETURN "Not allowed for fixed line tariffs".
+   IF fIsConvergenceTariff(bTermMobSub.CLIType) AND
+      bTermMobSub.fixednumber NE "" THEN
+      RETURN "Not allowed for fixed line tariffs".
+   ELSE IF fIsConvergenceTariff(bTermMobSub.CLIType) AND 
+        NOT CAN-FIND(FIRST MobSub WHERE
+                           MobSub.MsSeq = iiMsSeq AND
+                           Mobsub.cli EQ Mobsub.fixednumber) THEN
+      RETURN "Not allowed when fixed line terminated".
+   
 
    /* Check that no other reactivation requests is under work */
    FIND FIRST bMsReacReq WHERE

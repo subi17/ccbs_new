@@ -13,7 +13,6 @@
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 {tmsconst.i}
 {timestamp.i}
-{commali.i}
    DEF TEMP-TABLE ttSavedMSOwner NO-UNDO LIKE msowner.
 
 /* Function makes new MSOwner when subscription is partially
@@ -36,9 +35,9 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    BUFFER-COPY ttSavedMSOwner TO MSOwner.
    ASSIGN
       MSOwner.CLI = icFixedNumber
-      MSOwner.imsi = ?
+      MSOwner.imsi = ""
       MSOwner.CliEvent = "F"
-      MSOwner.tsbegin = ldUpdateTS.
+      MSOwner.tsbegin = fSecOffSet(ldUpdateTS,1).
    RETURN TRUE.
 
 END.   

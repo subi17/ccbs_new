@@ -39,7 +39,7 @@ IF NOT AVAIL MobSub THEN RETURN.
 This is an additional checkpoint*/
 IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR /*16*/
     MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN DO:   
-   ocStatus = "Ongoing fixed line provisioning prevents setting".
+   ocStatus = "No active mobile line prevents setting".
    RETURN.
 END.
 
