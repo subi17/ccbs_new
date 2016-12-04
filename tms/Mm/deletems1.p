@@ -241,7 +241,7 @@ REPEAT WITH FRAME main:
          VALIDATE(INPUT ldtKillDate = ? OR INPUT ldtKillDate >= TODAY,
          "Date other than EMPTY must not be earlier than today !")
       KillTime
-      lcTermType
+      lcTermType     WHEN fIsConvergenceTariff(Mobsub.clitype)
       liMsisdnStat   WHEN llYoigoCLI AND liOrderer EQ 5
       liQuarTime     WHEN liOrderer EQ 5 AND liMsisdnStat EQ 4 AND
                           liQuarTime > -1
