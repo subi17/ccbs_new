@@ -144,7 +144,7 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}  OR
     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) AND
     Order.OrderType  EQ {&ORDER_TYPE_STC}            AND
-    IsMNPOutOngoing(INPUT Order.CLI) EQ TRUE THEN DO:
+    fIsMNPOutOngoing(INPUT Order.CLI) EQ TRUE THEN DO:
 
    fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_MNP_RETENTION}).
 
