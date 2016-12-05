@@ -4,6 +4,7 @@
  * @input       int;mandatory;subscription id
                 boolean;mandatory;admin user (admin has access to terminated subs older than 6 months)
  * @output      cli;string;msisdn
+                termination_type;string;"Full" or "Partial" terminated
                 activation_time;DateTime;
                 icc;string;id of the SIM card
                 subscription_type_id;string;
@@ -114,6 +115,11 @@ add_string(resp_struct, "subscription_type_id", TermMobSub.CLIType).
 add_string(resp_struct, "payment_method", 
    (IF TermMobSub.PayType THEN 'prepaid' ELSE 'postpaid')).
 add_int(resp_struct, "custnum", TermMobSub.custnum).
+
+add_string(resp_struct, "termination_type",
+   (IF CAN-FIND(FIRST Mobsub NO-LOCK WHERE
+                  Mobsub.MsSeq EQ TermMobSub.MsSeq) THEN "Partial"
+                  ELSE "Full")).
 
 FIND FIRST Segmentation NO-LOCK WHERE
            Segmentation.MsSeq = piMsSeq NO-ERROR.
