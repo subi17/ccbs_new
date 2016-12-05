@@ -1163,7 +1163,8 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
 
    DEF VAR lcFixedLineAdslLinkState AS CHAR NO-UNDO.
 
-   IF lcFixedLineCustomerType = "ADSL" AND lcFixedLineNumberType = "MNP" 
+   IF (lcFixedLineCustomerType EQ "NONE" OR lcFixedLineCustomerType EQ "ADSL")  
+      AND lcFixedLineNumberType = "MNP" 
       THEN lcFixedLineAdslLinkState = "O".
    ELSE    lcFixedLineAdslLinkState = "V".
 

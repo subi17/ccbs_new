@@ -30,6 +30,7 @@ katun = "MNP".
 {orderchk.i}
 {main_add_lines.i}
 {fgettxt.i}
+{fixedlinefunc.i}
 
 DEFINE VARIABLE liLoop       AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTime       AS CHARACTER NO-UNDO.
@@ -1078,37 +1079,39 @@ PROCEDURE pHandleFromASOL2AREC:
                  NO-LOCK NO-ERROR.
 
             lcMNPSMSText = "".
-            FIND FIRST OrderCustomer WHERE
-                       OrderCustomer.Brand   = gcBrand AND
-                       OrderCustomer.OrderId = Order.OrderId AND
-                       OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
-            IF AVAIL OrderCustomer THEN DO:
-               IF Order.OrderChannel = "retention_stc" THEN DO:
-                  lcMNPSMSText = "MNPCancelRetention".
-                  IF OrderCustomer.CustIdType EQ "CIF" THEN
-                     fSetOrderStatus(Order.OrderId,
-                                     {&ORDER_STATUS_RENEWAL_STC_COMPANY}).
-                  ELSE
-                     fSetOrderStatus(Order.OrderId,
-                                     {&ORDER_STATUS_RENEWAL_STC}).
-               END. /* IF Order.OrderChannel = "retention_stc" THEN DO: */
-               ELSE DO:
-                  IF fCheckRenewalData() THEN DO:
+            /*If NOT COFF order then send SMS*/
+            IF fIsConvergenceTariff (Order.CliType) NE TRUE THEN DO:
+               FIND FIRST OrderCustomer WHERE
+                          OrderCustomer.Brand   = gcBrand AND
+                          OrderCustomer.OrderId = Order.OrderId AND
+                          OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+               IF AVAIL OrderCustomer THEN DO:
+                  IF Order.OrderChannel = "retention_stc" THEN DO:
                      lcMNPSMSText = "MNPCancelRetention".
-                     fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_RENEWAL}).
-                  END. /* IF fCheckRenewalData() THEN DO: */
+                     IF OrderCustomer.CustIdType EQ "CIF" THEN
+                        fSetOrderStatus(Order.OrderId,
+                                        {&ORDER_STATUS_RENEWAL_STC_COMPANY}).
+                     ELSE
+                        fSetOrderStatus(Order.OrderId,
+                                        {&ORDER_STATUS_RENEWAL_STC}).
+                  END. /* IF Order.OrderChannel = "retention_stc" THEN DO: */
                   ELSE DO:
-                     lcMNPSMSText = "MNPCancelRetentionOnHold".
-                     fSetOrderStatus(Order.OrderId,
-                                     {&ORDER_STATUS_RENEWAL_HOLD}).
+                     IF fCheckRenewalData() THEN DO:
+                        lcMNPSMSText = "MNPCancelRetention".
+                        fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_RENEWAL}).
+                     END. /* IF fCheckRenewalData() THEN DO: */
+                     ELSE DO:
+                        lcMNPSMSText = "MNPCancelRetentionOnHold".
+                        fSetOrderStatus(Order.OrderId,
+                                        {&ORDER_STATUS_RENEWAL_HOLD}).
+                     END. /* ELSE DO: */
                   END. /* ELSE DO: */
-               END. /* ELSE DO: */
 
-               liLang = INT(OrderCustomer.Language) NO-ERROR.
-            END. /* IF AVAIL OrderCustomer AND */
-
-            IF lcMNPSMSText > "" THEN DO:
-               fMNPCallAlarm(lcMNPSMSText,
+                  liLang = INT(OrderCustomer.Language) NO-ERROR.
+               END. /* IF AVAIL OrderCustomer AND */
+            
+               IF lcMNPSMSText > "" THEN DO:
+                  fMNPCallAlarm(lcMNPSMSText,
                              fMakeTS(),
                              MNPProcess.FormRequest,
                              MNPSub.CLI,
@@ -1116,7 +1119,8 @@ PROCEDURE pHandleFromASOL2AREC:
                              liLang,
                              "622",
                              Order.OrderId).
-            END. /* IF lcMNPSMSText > "" THEN DO: */
+               END. /* IF lcMNPSMSText > "" THEN DO: */
+            END. /*not COFF order*/   
          END. /* IF AVAIL Order THEN DO: */
       END. /* IF AVAIL MobSub THEN DO: */
    END.
