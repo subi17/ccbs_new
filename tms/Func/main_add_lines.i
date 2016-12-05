@@ -333,7 +333,7 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
                        icSource,
                        katun,
                        iiOrigRequest, /* orig. request */
-                       {&TERMINATION_TYPE_FULL}, /* TODO Should this be partial? */
+                       {&TERMINATION_TYPE_FULL},
                        OUTPUT lvcError).
    IF lviRequest EQ 0 THEN
       DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,

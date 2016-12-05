@@ -13,7 +13,6 @@
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 {tmsconst.i}
 {timestamp.i}
-   DEF TEMP-TABLE ttSavedMSOwner NO-UNDO LIKE msowner.
 
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed */
@@ -21,23 +20,28 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    (iiMsSeq AS INT,
     icFixedNumber AS CHAR):
    DEF VAR ldUpdateTS AS DEC NO-UNDO.
+   DEF BUFFER MsOwner FOR MsOwner.
+   DEF BUFFER bOldMsowner FOR Msowner.
+
    ldUpdateTS = fMakeTS().
    FIND FIRST MSOwner WHERE 
               MSOwner.MsSeq  = iiMsSeq AND
-              MSOwner.TsEnd >= fHMS2TS(TODAY,STRING(time,"hh:mm:ss"))
+              MSOwner.TsEnd >= fMakeTS()
    EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAIL MSOwner THEN RETURN FALSE.
 
-   BUFFER-COPY MSOwner TO ttSavedMSOwner.      
+   BUFFER-COPY MSOwner TO bOldMsowner.      
    MSOwner.TsEnd = ldUpdateTS.
    RELEASE MsOwner.
    CREATE MSOwner.
-   BUFFER-COPY ttSavedMSOwner TO MSOwner.
+   BUFFER-COPY bOldMsowner TO MSOwner.
    ASSIGN
       MSOwner.CLI = icFixedNumber
       MSOwner.imsi = ""
       MSOwner.CliEvent = "F"
       MSOwner.tsbegin = fSecOffSet(ldUpdateTS,1).
+   RELEASE bOldMsowner.
+   RELEASE MSOwner.
    RETURN TRUE.
 
 END.   
