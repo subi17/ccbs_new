@@ -26,12 +26,12 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    ldUpdateTS = fMakeTS().
    FIND FIRST MSOwner WHERE 
               MSOwner.MsSeq  = iiMsSeq AND
-              MSOwner.TsEnd >= fMakeTS()
+              MSOwner.TsEnd >= ldUpdateTS
    EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAIL MSOwner THEN RETURN FALSE.
 
-   BUFFER-COPY MSOwner TO bOldMsowner.      
-   MSOwner.TsEnd = ldUpdateTS.
+   BUFFER-COPY MSOwner EXCEPT TsEnd TO bOldMsowner.      
+   MSOwner.TsEnd = ldUpdateTS. 
    RELEASE MsOwner.
    CREATE MSOwner.
    BUFFER-COPY bOldMsowner TO MSOwner.
@@ -39,7 +39,8 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
       MSOwner.CLI = icFixedNumber
       MSOwner.imsi = ""
       MSOwner.CliEvent = "F"
-      MSOwner.tsbegin = fSecOffSet(ldUpdateTS,1).
+      MSOwner.tsbegin = fSecOffSet(ldUpdateTS,1)
+      MSOwner.TsEnd = 99999999.99999.
    RELEASE bOldMsowner.
    RELEASE MSOwner.
    RETURN TRUE.
