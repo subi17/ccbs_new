@@ -47,6 +47,8 @@ FOR EACH authlog NO-LOCK where
            authlog.username EQ "masmovil") THEN NEXT.
    IF authlog.enduserid = "Monitoring" THEN NEXT.
 
+   IF authlog.methodname BEGINS "system" THEN NEXT.
+
    PUT STREAM SOUT UNFORMATTED 
       authlog.username "|"
       authlog.methodname "|"
