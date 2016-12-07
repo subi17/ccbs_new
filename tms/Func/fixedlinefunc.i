@@ -21,7 +21,7 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
     icFixedNumber AS CHAR):
    DEF VAR ldUpdateTS AS DEC NO-UNDO.
    DEF BUFFER MsOwner FOR MsOwner.
-   DEF BUFFER bOldMsowner FOR Msowner.
+   DEF BUFFER bNewMsowner FOR Msowner.
 
    ldUpdateTS = fMakeTS().
    FIND FIRST MSOwner WHERE 
@@ -30,19 +30,17 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAIL MSOwner THEN RETURN FALSE.
 
-   BUFFER-COPY MSOwner EXCEPT TsEnd TO bOldMsowner.      
-   MSOwner.TsEnd = ldUpdateTS. 
-   RELEASE MsOwner.
-   CREATE MSOwner.
-   BUFFER-COPY bOldMsowner TO MSOwner.
+   MSOwner.TsEnd = ldUpdateTS.
+   CREATE bNewMsowner.
+   BUFFER-COPY MSOwner EXCEPT TsEnd tsbegin TO bNewMsowner.
    ASSIGN
-      MSOwner.CLI = icFixedNumber
-      MSOwner.imsi = ""
-      MSOwner.CliEvent = "F"
-      MSOwner.tsbegin = fSecOffSet(ldUpdateTS,1)
-      MSOwner.TsEnd = 99999999.99999.
-   RELEASE bOldMsowner.
+      bNewMsowner.CLI = icFixedNumber
+      bNewMsowner.imsi = ""
+      bNewMsowner.CliEvent = "F"
+      bNewMsowner.tsbegin = fSecOffSet(ldUpdateTS,1)
+      bNewMsowner.TsEnd = 99999999.99999.
    RELEASE MSOwner.
+   RELEASE bNewMsowner.
    RETURN TRUE.
 
 END.   
