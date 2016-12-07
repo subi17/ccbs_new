@@ -728,7 +728,8 @@ PROCEDURE local-UPDATE-record:
       DISP 
       MSOwner.CLI
       MSOwner.CLI + " / " + MSOwner.FixedNumber WHEN
-         MSOwner.FixedNumber NE "" AND MSOwner.FixedNumber NE ? @ MSOwner.CLI
+         (MSOwner.FixedNumber NE "" AND MSOwner.FixedNumber NE ? AND 
+          MSOwner.FixedNumber NE MSOwner.Cli) @ MSOwner.CLI
       MSOwner.MsSeq
       MsOwner.AgrCust lcAgrName
       MsOwner.InvCust lcInvName
