@@ -105,6 +105,7 @@ CASE pcOperation:
          FIND CURRENT Order NO-LOCK.
 
          /*YPR-5316:release COFF retention or COFF stc if MNP out is cancelled*/
+         ilkka, lisää stc type-tarkastus
          IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} AND
             (fIsConvergenceTariff(Order.CliType) OR
              Order.OrderChannel BEGINS "retention") THEN

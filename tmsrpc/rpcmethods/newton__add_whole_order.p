@@ -1935,7 +1935,7 @@ IF llROIClose THEN .
 ELSE IF Order.statuscode NE "4" AND(
    Order.OrderChannel BEGINS "retention" OR
    /*YPR-5316*/
-   fIsConvergenceTariff(Order.Clitype) AND pcNumberType EQ "stc") 
+   (fIsConvergenceTariff(Order.Clitype) AND pcNumberType EQ "stc")) 
    AND
    fIsMNPOutOngoing(INPUT Order.CLI) 
    THEN DO:

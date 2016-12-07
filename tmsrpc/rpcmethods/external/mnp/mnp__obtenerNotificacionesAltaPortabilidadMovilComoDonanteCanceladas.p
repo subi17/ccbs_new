@@ -157,6 +157,7 @@ FOR EACH ttInput NO-LOCK:
                     bOrder.StatusCode = {&ORDER_STATUS_MNP_RETENTION}
               NO-LOCK NO-ERROR.
          IF AVAIL bOrder THEN DO:
+
             FIND FIRST OrderCustomer WHERE 
                        OrderCustomer.Brand   = gcBrand AND
                        OrderCustomer.OrderId = bOrder.OrderId AND
