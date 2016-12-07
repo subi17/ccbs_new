@@ -23,9 +23,10 @@ DEF VAR ldaTempDate       AS DATE NO-UNDO.
 DEF VAR liRunMode         AS INT NO-UNDO.
 DEF VAR liFinalMsgSendDay AS INT NO-UNDO.
 
-liRunMode = INT(SESSION:PARAMETER).  /*get crontab input parameter, if this is
-                                       logging run (0) for making log file or
-                                       actual SMS calculation/sending (1) */
+liRunMode = INT(SESSION:PARAMETER).  /* get crontab input parameter:
+                                        (0) - logging run for making log file
+                                        (1) - actual SMS calculation/sending 
+                                        (2) - Q25 Push Notification */
 
 /* each month as planned */
 ASSIGN
@@ -61,11 +62,23 @@ liFinalMsgSendDay = DAY(ldaTempDate). /* Add found day number here */
 
 Execution:
 DO:
-   IF (DAY(ldaExecuteDate) = liFinalMsgSendDay) AND 
-       fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay, 
-       OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24) THEN DO:
-      /* Generate customer logs (liRunMode = 0) or calculate cases and some 
-         internal logs (liRunMode = 1) */
+   /* Q25 Push Notification */
+   IF liRunMode = 2 AND fGetStartEndDates({&Q25_MONTH_24}, 
+                                          liStartDay, 
+                                          liEndDay, 
+                                          OUTPUT ldaStartDateMonth24, 
+                                          OUTPUT ldaEndDateMonth24) THEN DO:
+      fGenerateQ25SMSMessages(ldaStartDateMonth24, 
+                              ldaEndDateMonth24, 
+                              {&Q25_MONTH_24_FINAL_MSG}, 
+                              {&Q25_EXEC_TYPE_PUSH_SENDING},
+                              INPUT-OUTPUT liTotalCount).
+   END.
+   ELSE IF (DAY(ldaExecuteDate) = liFinalMsgSendDay) AND 
+            fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay, 
+            OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24) THEN DO:
+            /* Generate customer logs (liRunMode = 0) or calculate cases and some 
+               internal logs (liRunMode = 1) */
       liTotalCount = fGenerateQ25SMSMessages(ldaStartDateMonth24, 
                                             ldaEndDateMonth24, 
                                             {&Q25_MONTH_24_FINAL_MSG}, liRunMode, 
