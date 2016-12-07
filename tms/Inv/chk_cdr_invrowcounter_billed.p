@@ -124,7 +124,7 @@ BY Invoice.InvNum:
             RETURN "ERROR:Stopped".
       END.   
   
-      FIND FIRST InvRowCounter WHERE 
+      FOR EACH InvRowCounter NO-LOCK WHERE 
          InvRowCounter.InvCust     = ttCounter.InvCust AND
          InvRowCounter.InvSeq      = ttCounter.InvSeq AND
          InvRowCounter.BillCode    = ttCounter.BillCode AND
@@ -135,8 +135,17 @@ BY Invoice.InvNum:
          InvRowCounter.VatIncl     = ttCounter.VatIncl AND
          InvRowCounter.ReportingID = "," AND
          InvRowCounter.DCEvent     = ttCounter.DCEvent AND
-         InvRowCounter.ToDate      = ttCounter.ToDate NO-LOCK NO-ERROR.
-      IF NOT AVAILABLE InvRowCounter THEN 
+         InvRowCounter.ToDate      = ttCounter.ToDate:
+         
+         ACCUMULATE InvRowCounter.InvCust (COUNT).
+         ACCUMULATE InvRowCounter.Quantity (TOTAL).
+         ACCUMULATE InvRowCounter.DataAmt (TOTAL).
+         ACCUMULATE InvRowCounter.Duration (TOTAL).
+         ACCUMULATE InvRowCounter.Amount (TOTAL).
+
+      END.
+      
+      IF (ACCUM COUNT InvRowCounter.InvCust) EQ 0 THEN 
          lcMatch = "No counter found: " + 
                    STRING(ttCounter.BillCode) + "/" +
                    STRING(ttCounter.CCN) + "/" +
@@ -145,10 +154,10 @@ BY Invoice.InvNum:
                    TRIM(STRING(ttCounter.Amount,"->>>>>9.99999")).
        
       ELSE IF 
-         InvRowCounter.Quantity NE ttCounter.Quantity OR
-         InvRowCounter.Duration NE ttCounter.Duration OR
-         InvRowCounter.Amount NE ttCounter.Amount OR
-         InvRowCounter.DataAmt NE ttCounter.DataAmt THEN 
+         (ACCUM TOTAL InvRowCounter.Quantity) NE ttCounter.Quantity OR
+         (ACCUM TOTAL InvRowCounter.Duration) NE ttCounter.Duration OR
+         (ACCUM TOTAL InvRowCounter.Amount) NE ttCounter.Amount OR
+         (ACCUM TOTAL InvRowCounter.DataAmt) NE ttCounter.DataAmt THEN 
             lcMatch = "Values differ: " + 
                       STRING(ttCounter.BillCode) + "/" +
                       STRING(ttCounter.CCN).
