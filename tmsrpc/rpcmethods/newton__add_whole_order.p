@@ -2324,27 +2324,26 @@ END.
 IF plCustdataRetr AND 
    NOT plMultiOrder AND 
    Order.OrderType NE {&ORDER_TYPE_STC} THEN DO:
+   /*YTS-9724 Removed the validation error*/
+   IF pcIdentifiedSmsNumber NE "" THEN DO:
+      lcOrderSMSText = fGetSMSTxt("IdentifiedCustOrder",
+                                  TODAY,
+                                  (IF AVAIL Customer
+                                   THEN Customer.Language
+                                   ELSE 1),
+                                  OUTPUT ldeSMSStamp).
 
-   IF pcIdentifiedSmsNumber EQ "" THEN
-      RETURN appl_err(SUBST("Identified customer SMS number missing.")).
-   lcOrderSMSText = fGetSMSTxt(
-                     "IdentifiedCustOrder",
-                     TODAY,
-                     (IF AVAIL Customer
-                      THEN Customer.Language
-                      ELSE 1),
-                      OUTPUT ldeSMSStamp).
-
-   IF lcOrderSMSText > "" THEN DO:
-      lcOrderSMSText = REPLACE(lcOrderSMSText, "#CLI", Order.CLI). 
-      fMakeSchedSMS2(Order.CustNum,
-                     pcIdentifiedSmsNumber,
-                     {&SMSTYPE_INFO},
-                     lcOrderSMSText,
-                     ldeSMSStamp,
-                     "622",
-                     "").
-   END. 
+      IF lcOrderSMSText > "" THEN DO:
+         lcOrderSMSText = REPLACE(lcOrderSMSText, "#CLI", Order.CLI). 
+         fMakeSchedSMS2(Order.CustNum,
+                        pcIdentifiedSmsNumber,
+                        {&SMSTYPE_INFO},
+                        lcOrderSMSText,
+                        ldeSMSStamp,
+                        "622",
+                        "").
+      END. 
+   END.
 END.
 
 /* should overwrite any roi status */
