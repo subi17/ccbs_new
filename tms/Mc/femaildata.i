@@ -288,19 +288,29 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
             /* Check if TopUpScheme has DisplayAmount to show */
             IF Order.CliType BEGINS "TARJ7" OR
                Order.CliType BEGINS "TARJ9" THEN DO:
-               FOR EACH TopUpSchemeRow NO-LOCK WHERE
-                        TopUpSchemeRow.BillCode = InvRow.BillCode AND
-                        TopUpSchemeRow.Amount   = InvRow.Amt:
-                  IF TopUpSchemeRow.DisplayAmount > 0 THEN
+
+               IF InvRow.Amt >= 0 THEN
+                  FOR EACH TopUpSchemeRow NO-LOCK WHERE
+                           TopUpSchemeRow.BillCode = InvRow.BillCode AND
+                           TopUpSchemeRow.Amount   = InvRow.Amt AND
+                           TopUpSchemeRow.EndStamp >= Order.CrStamp AND
+                           TopUpSchemeRow.BeginStamp <= Order.CrStamp AND
+                           TopUpSchemeRow.DisplayAmount > 0:
                      ldAmt = TopUpSchemeRow.DisplayAmount.
-               END.
-               FOR EACH TopUpSchemeRow NO-LOCK WHERE
-                        TopUpSchemeRow.DiscountBillCode = InvRow.BillCode AND
-                        TopUpSchemeRow.DiscountAmount   = -1 * InvRow.Amt:
-                  IF TopUpSchemeRow.DisplayAmount > 0 THEN
-                     ldAmt = -1 * TopUpSchemeRow.DisplayAmount.
-               END.
+                     LEAVE.
+                  END.
+               ELSE 
+                  FOR EACH TopUpSchemeRow NO-LOCK WHERE
+                           TopUpSchemeRow.DiscountBillCode = InvRow.BillCode AND
+                           TopUpSchemeRow.DiscountAmount   = -1 * InvRow.Amt AND
+                           TopUpSchemeRow.EndStamp >= Order.CrStamp AND
+                           TopUpSchemeRow.BeginStamp <= Order.CrStamp AND
+                           TopUpSchemeRow.DisplayAmount > 0:
+                      ldAmt = -1 * TopUpSchemeRow.DisplayAmount.
+                      LEAVE.
+                  END.
             END.
+
             ASSIGN
                ldInvTot = ldInvTot + ldAmt
                odInvtot = ldInvTot
