@@ -194,50 +194,68 @@ IF llDoEvent THEN DO:
 END.
    
 IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
+   /* YPR-4984, Router delivered to customer */
+   IF liLOStatusId EQ 99998 THEN DO:
+      FIND FIRST OrderFusion WHERE
+                 OrderFusion.Brand EQ gcBrand AND
+                 OrderFusion.orderid EQ Order.OrderId NO-ERROR.
+      IF AVAIL OrderFusion THEN DO:
+         FIND FIRST FusionMessage WHERE
+                    FusionMessage.orderID EQ Order.OrderId AND
+                    FusionMessage.messagetype EQ
+                       {&FUSIONMESSAGE_TYPE_LOGISTICS} AND
+                    FusionMessage.messageStatus EQ {&FUSIONMESSAGE_STATUS_SENT}
+                    NO-ERROR.
+         OrderFusion.serialnumber = lcIMEI.
+         IF AVAIL FusionMessage THEN
+            FusionMessage.messageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
+      END.
+   END.   
+   ELSE DO:
+      FIND FIRST OrderAccessory WHERE
+         OrderAccessory.Brand = gcBrand AND
+         OrderAccessory.OrderId = Order.OrderId AND
+         OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) 
+         NO-LOCK NO-ERROR.
 
-   FIND FIRST OrderAccessory WHERE
-      OrderAccessory.Brand = gcBrand AND
-      OrderAccessory.OrderId = Order.OrderId AND
-      OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) NO-LOCK NO-ERROR.
+      IF AVAIL OrderAccessory AND OrderAccessory.IMEI NE lcIMEI THEN DO:
 
-   IF AVAIL OrderAccessory AND OrderAccessory.IMEI NE lcIMEI THEN DO:
+         FIND CURRENT OrderAccessory EXCLUSIVE-LOCK.
 
-      FIND CURRENT OrderAccessory EXCLUSIVE-LOCK.
+         IF llDoEvent THEN DO:
+            DEFINE VARIABLE lhOrderAccessory AS HANDLE NO-UNDO.
+            lhOrderAccessory = BUFFER OrderAccessory:HANDLE.
+            RUN StarEventInitialize(lhOrderAccessory).
+            RUN StarEventSetOldBuffer(lhOrderAccessory).
+         END.
 
-      IF llDoEvent THEN DO:
-         DEFINE VARIABLE lhOrderAccessory AS HANDLE NO-UNDO.
-         lhOrderAccessory = BUFFER OrderAccessory:HANDLE.
-         RUN StarEventInitialize(lhOrderAccessory).
-         RUN StarEventSetOldBuffer(lhOrderAccessory).
+         ASSIGN OrderAccessory.IMEI = lcIMEI.
+
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrderAccessory).
       END.
 
-      ASSIGN OrderAccessory.IMEI = lcIMEI.
+      FIND FIRST SubsTerminal WHERE
+         SubsTerminal.Brand = gcBrand AND
+         SubsTerminal.OrderId = Order.OrderId AND
+         SubsTerminal.TerminalType = ({&TERMINAL_TYPE_PHONE}) NO-LOCK NO-ERROR.
 
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrderAccessory).
-   END.
-
-   FIND FIRST SubsTerminal WHERE
-      SubsTerminal.Brand = gcBrand AND
-      SubsTerminal.OrderId = Order.OrderId AND
-      SubsTerminal.TerminalType = ({&TERMINAL_TYPE_PHONE}) NO-LOCK NO-ERROR.
-
-   IF AVAIL SubsTerminal AND SubsTerminal.IMEI NE lcIMEI THEN DO:
+      IF AVAIL SubsTerminal AND SubsTerminal.IMEI NE lcIMEI THEN DO:
+         
+         FIND CURRENT SubsTerminal EXCLUSIVE-LOCK.
+         
+         IF llDoEvent THEN DO:
+            DEFINE VARIABLE lhSubsTerminal AS HANDLE NO-UNDO.
+            lhSubsTerminal = BUFFER SubsTerminal:HANDLE.
+            RUN StarEventInitialize(lhSubsTerminal).
+            RUN StarEventSetOldBuffer(lhSubsTerminal).
+         END.
+         
+         ASSIGN SubsTerminal.IMEI = lcIMEI.
       
-      FIND CURRENT SubsTerminal EXCLUSIVE-LOCK.
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSubsTerminal).
       
-      IF llDoEvent THEN DO:
-         DEFINE VARIABLE lhSubsTerminal AS HANDLE NO-UNDO.
-         lhSubsTerminal = BUFFER SubsTerminal:HANDLE.
-         RUN StarEventInitialize(lhSubsTerminal).
-         RUN StarEventSetOldBuffer(lhSubsTerminal).
       END.
-      
-      ASSIGN SubsTerminal.IMEI = lcIMEI.
-   
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSubsTerminal).
-   
    END.
-
 END.
    
 IF llDoEvent THEN DO:
