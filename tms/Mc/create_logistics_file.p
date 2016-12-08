@@ -1309,6 +1309,37 @@ FUNCTION fDelivRouter RETURNS LOG
               DelivCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
    NO-LOCK NO-ERROR.
 
+   IF AVAIL DelivCustomer THEN DO:
+      /* YTS-9922: Checking additional address fields */
+      IF DelivCustomer.Block NE "" THEN
+         DelivCustomer.Address = DelivCustomer.Address + " " +
+                                 DelivCustomer.Block.
+
+      IF DelivCustomer.Door NE "" THEN
+         DelivCustomer.Address = DelivCustomer.Address + " " +
+                                 DelivCustomer.Door.
+
+      IF DelivCustomer.Letter NE "" THEN
+         DelivCustomer.Address = DelivCustomer.Address + " " +
+                                 DelivCustomer.Letter.
+
+      IF DelivCustomer.Stair NE "" THEN
+         DelivCustomer.Address = DelivCustomer.Address + " " +
+                                 DelivCustomer.Stair.
+
+      IF DelivCustomer.Floor NE "" THEN
+         DelivCustomer.Address = DelivCustomer.Address + " " +
+                                 DelivCustomer.Floor.
+
+      IF DelivCustomer.Hand NE "" THEN
+         DelivCustomer.Address = DelivCustomer.Address + " " +
+                                 DelivCustomer.Hand.
+
+      IF DelivCustomer.Km NE "" THEN
+         DelivCustomer.Address = DelivCustomer.Address + " " +
+                                 DelivCustomer.Km.
+   END.
+
    IF NOT AVAIL DelivCustomer THEN DO:
 
       FIND FIRST DelivCustomer WHERE

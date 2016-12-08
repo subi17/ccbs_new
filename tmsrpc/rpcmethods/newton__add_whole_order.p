@@ -831,35 +831,6 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             OrderCustomer.Address = OrderCustomer.Address + " " + 
                                     OrderCustomer.AddressCompl. 
 
-         /* YTS-9922: Checking additional address fields */
-         IF OrderCustomer.Block NE "" THEN
-            Ordercustomer.Address = OrderCustomer.Address + " " +
-                                    OrderCustomer.Block.
-
-         IF OrderCustomer.Door NE "" THEN
-            Ordercustomer.Address = OrderCustomer.Address + " " +
-                                    OrderCustomer.Door.
-
-         IF OrderCustomer.Letter NE "" THEN
-            Ordercustomer.Address = OrderCustomer.Address + " " +
-                                    OrderCustomer.Letter.
-
-         IF OrderCustomer.Stair NE "" THEN
-            Ordercustomer.Address = OrderCustomer.Address + " " +
-                                    OrderCustomer.Stair.
-
-         IF OrderCustomer.Floor NE "" THEN
-            Ordercustomer.Address = OrderCustomer.Address + " " +
-                                    OrderCustomer.Floor.
-
-         IF OrderCustomer.Hand NE "" THEN
-            Ordercustomer.Address = OrderCustomer.Address + " " +
-                                    OrderCustomer.Hand.
-
-         IF OrderCustomer.Km NE "" THEN
-            Ordercustomer.Address = OrderCustomer.Address + " " +
-                                    OrderCustomer.Km.
-
          IF liDelType > 0 THEN OrderCustomer.DelType = liDelType.
    
          /* replicate install person data from billing person data */
