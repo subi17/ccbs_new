@@ -146,7 +146,7 @@ BY Invoice.InvNum:
       END.
       
       IF (ACCUM COUNT InvRowCounter.InvCust) EQ 0 THEN 
-         lcMatch = "No counter found: " + 
+         lcMatch = "ERROR: No counter found: " + 
                    STRING(ttCounter.BillCode) + "/" +
                    STRING(ttCounter.CCN) + "/" +
                    STRING(ttCounter.Quantity) + "/" +
@@ -158,9 +158,13 @@ BY Invoice.InvNum:
          (ACCUM TOTAL InvRowCounter.Duration) NE ttCounter.Duration OR
          (ACCUM TOTAL InvRowCounter.Amount) NE ttCounter.Amount OR
          (ACCUM TOTAL InvRowCounter.DataAmt) NE ttCounter.DataAmt THEN 
-            lcMatch = "Values differ: " + 
+            lcMatch = "ERROR: Values differ: " + 
                       STRING(ttCounter.BillCode) + "/" +
                       STRING(ttCounter.CCN).
+      ELSE IF (ACCUM COUNT InvRowCounter.InvCust) NE 1 THEN ASSIGN
+         lcMatch = "WARNING: Multiple counters found: " + 
+                   STRING(ttCounter.billcode) + "/" +
+                   STRING(ttCounter.CCN).
        
       IF lcMatch > "" THEN LEAVE.    
   
