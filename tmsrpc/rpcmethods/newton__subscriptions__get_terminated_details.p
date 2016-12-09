@@ -182,7 +182,8 @@ ELSE DO:
 END.
 
 FIND FIRST Msowner WHERE 
-           Msowner.msseq = TermMobsub.MSseq
+           Msowner.msseq EQ TermMobsub.MSseq AND
+           Msowner.cli   EQ TermMobsub.cli
 NO-LOCK USE-INDEX MsSeq NO-ERROR.
 IF AVAIL msowner THEN DO:
    fSplitTS(msowner.tsend, OUTPUT ldaTermDate, OUTPUT liTermTime).
