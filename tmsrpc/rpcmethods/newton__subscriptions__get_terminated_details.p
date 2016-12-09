@@ -56,14 +56,16 @@ gcBrand = "1".
 DEF VAR plAdmin AS LOG NO-UNDO.
 
 FUNCTION fIsViewableTermMobsub RETURNS LOGICAL
-   (iiMsSeq AS INTEGER):
+   (iiMsSeq AS INTEGER,
+    icCli   AS CHAR):
 
    DEF VAR ldaDate AS DATE NO-UNDO. 
    DEF VAR liTime AS INT NO-UNDO. 
    DEF BUFFER MsOwner FOR MsOwner.
    
    FIND FIRST Msowner WHERE 
-              Msowner.msseq = iiMsSeq
+              Msowner.msseq EQ iiMsSeq AND
+              Msowner.cli   EQ icCli
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
    IF NOT AVAIL Msowner THEN RETURN FALSE.
    
@@ -102,7 +104,7 @@ FIND TermMobSub NO-LOCK WHERE
 IF NOT AVAILABLE TermMobSub THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
 
-IF NOT fIsViewableTermMobsub(TermMobSub.MsSeq) THEN
+IF NOT fIsViewableTermMobsub(TermMobSub.MsSeq, TermMobSub.Cli) THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
 
 resp_struct = add_struct(response_toplevel_id, "").
