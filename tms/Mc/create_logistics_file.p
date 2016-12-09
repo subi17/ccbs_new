@@ -1295,6 +1295,7 @@ FUNCTION fDelivRouter RETURNS LOG
    DEFINE VARIABLE liLoop1         AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liLoop2         AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liTempRegion    AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcAddressFields AS CHARACTER NO-UNDO.
 
    FIND FIRST AgreeCustomer WHERE
               AgreeCustomer.Brand   = Order.Brand   AND
@@ -1311,36 +1312,38 @@ FUNCTION fDelivRouter RETURNS LOG
 
    IF AVAIL DelivCustomer THEN DO:
       /* YTS-9922: Checking additional address fields */
-      IF DelivCustomer.Block NE "" THEN
-         DelivCustomer.Address = DelivCustomer.Address + " " +
-                                 DelivCustomer.Block.
+      lcAddressFields = " ". /* This is for verification */
+      IF LENGTH(TRIM(DelivCustomer.Block)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Block.
 
-      IF DelivCustomer.Door NE "" THEN
-         DelivCustomer.Address = DelivCustomer.Address + " " +
-                                 DelivCustomer.Door.
+      IF LENGTH(TRIM(DelivCustomer.Door)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Door.
 
-      IF DelivCustomer.Letter NE "" THEN
-         DelivCustomer.Address = DelivCustomer.Address + " " +
-                                 DelivCustomer.Letter.
+      IF LENGTH(TRIM(DelivCustomer.Letter)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Letter.
 
-      IF DelivCustomer.Stair NE "" THEN
-         DelivCustomer.Address = DelivCustomer.Address + " " +
-                                 DelivCustomer.Stair.
+      IF LENGTH(TRIM(DelivCustomer.Stair)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Stair.
 
-      IF DelivCustomer.Floor NE "" THEN
-         DelivCustomer.Address = DelivCustomer.Address + " " +
-                                 DelivCustomer.Floor.
+      IF LENGTH(TRIM(DelivCustomer.Floor)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Floor.
 
-      IF DelivCustomer.Hand NE "" THEN
-         DelivCustomer.Address = DelivCustomer.Address + " " +
-                                 DelivCustomer.Hand.
+      IF LENGTH(TRIM(DelivCustomer.Hand)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Hand.
 
-      IF DelivCustomer.Km NE "" THEN
-         DelivCustomer.Address = DelivCustomer.Address + " " +
-                                 DelivCustomer.Km.
+      IF LENGTH(TRIM(DelivCustomer.Km)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Km.
+      /* Verification */ 
+      IF LENGTH(TRIM(lcAddressFields)) = 0 THEN lcAddressFields = "".
    END.
-
-   IF NOT AVAIL DelivCustomer THEN DO:
+   ELSE DO: /*IF NOT AVAIL DelivCustomer THEN DO: */
 
       FIND FIRST DelivCustomer WHERE
                  DelivCustomer.Brand   = Order.Brand   AND
@@ -1414,7 +1417,7 @@ FUNCTION fDelivRouter RETURNS LOG
       ttOneDelivery.Name          = ContactCustomer.FirstName
       ttOneDelivery.SurName1      = ContactCustomer.SurName1
       ttOneDelivery.SurName2      = ContactCustomer.SurName2
-      ttOneDelivery.DelivAddr     = DelivCustomer.Address
+      ttOneDelivery.DelivAddr     = DelivCustomer.Address + lcAddressFields
       ttOneDelivery.DelivCity     = DelivCustomer.PostOffice
       ttOneDelivery.DelivZip      = DelivCustomer.ZIP
       ttOneDelivery.DelivRegi     = lcDeliRegi
