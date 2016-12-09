@@ -150,14 +150,17 @@ FOR EACH ttInput NO-LOCK:
       END.
 
       /* Now move Retention order into correct queue */
-      IF AVAIL MobSub AND AVAIL Customer THEN DO:
+      ELSE IF AVAIL MobSub AND AVAIL Customer THEN DO:
          FIND FIRST bOrder WHERE
                     bOrder.Brand = gcBrand AND
                     bOrder.MsSeq = MobSub.MsSeq AND
                     bOrder.StatusCode = {&ORDER_STATUS_MNP_RETENTION}
               NO-LOCK NO-ERROR.
-         IF AVAIL bOrder THEN DO:
-
+         IF AVAIL bOrder  AND bOrder.Ordertype NE 2 THEN DO:
+            IF fIsConvergenceTariff(bOrder.CliType) EQ TRUE THEN 
+               RUN orderinctrl.p(bOrder.OrderId, 0, TRUE).
+         END.
+         ELSE DO:
             FIND FIRST OrderCustomer WHERE 
                        OrderCustomer.Brand   = gcBrand AND
                        OrderCustomer.OrderId = bOrder.OrderId AND
