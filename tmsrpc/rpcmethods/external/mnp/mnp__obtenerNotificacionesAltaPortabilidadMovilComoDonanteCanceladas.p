@@ -150,7 +150,7 @@ FOR EACH ttInput NO-LOCK:
       END.
 
       /* Now move Retention order into correct queue */
-      ELSE IF AVAIL MobSub AND AVAIL Customer THEN DO:
+      IF AVAIL MobSub AND AVAIL Customer THEN DO:
          FIND FIRST bOrder WHERE
                     bOrder.Brand = gcBrand AND
                     bOrder.MsSeq = MobSub.MsSeq AND
