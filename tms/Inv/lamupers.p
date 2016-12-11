@@ -143,7 +143,6 @@ DEF TEMP-TABLE ttSubInv NO-UNDO LIKE SubInvoice
    FIELD Vat0Amt    AS DEC
    FIELD VatPos     AS INT
    FIELD ITGDelType AS INT
-   FIELD TotalInvRow2 AS DEC
    INDEX SubInvNum SubInvNum
    INDEX ITGroupID ITGroupID SubInvNum.
 
@@ -3589,6 +3588,7 @@ PROCEDURE pInvoiceHeader:
    DEF VAR lcFixedNumber AS CHAR NO-UNDO INIT ?. 
    DEF VAR ldeSplitTS    AS DEC NO-UNDO. 
    DEF VAR ldeToTS     AS DEC NO-UNDO. 
+   DEF VAR ldeTotalInvRow AS DEC NO-UNDO.
 
    DEF BUFFER bufseq  FOR InvSeq.
    DEF BUFFER bChkInv FOR Invoice. 
@@ -3781,9 +3781,8 @@ PROCEDURE pInvoiceHeader:
                              (1 + ttRowVat.VATPerc / 100)) -
                              ttRowVat.VatBasis),2).
          ELSE ASSIGN
-            ttSubInv.TotalInvRow2 = ttSubInv.TotalInvRow2 + 
-                                    ROUND(ttRowVat.VatBasis * (1 + ttRowVat.VatPerc / 100),2)
-            ldBasis               = ROUND(ttSubInv.TotalInvRow2 - ttSubInv.AmtExclVAT,2).
+            ldeTotalInvRow = ROUND(ttRowVat.VatBasis * (1 + ttRowVat.VatPerc / 100),2)
+            ldBasis        = ROUND(ldeTotalInvRow - ttSubInv.AmtExclVAT,2).
 
          ASSIGN
             ttSubInv.VatAmount[lloop] = ttSubInv.VatAmount[lloop] + ldBasis
