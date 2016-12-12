@@ -151,43 +151,43 @@ FOR EACH ttInput NO-LOCK:
 
       /* Now move Retention order into correct queue */
       IF AVAIL MobSub AND AVAIL Customer THEN DO:
-         FIND FIRST bOrder WHERE
+         FIND FIRST bOrder WHERE 
                     bOrder.Brand = gcBrand AND
                     bOrder.MsSeq = MobSub.MsSeq AND
                     bOrder.StatusCode = {&ORDER_STATUS_MNP_RETENTION}
               NO-LOCK NO-ERROR.
-         IF AVAIL bOrder  AND bOrder.Ordertype NE 2 THEN DO:
-            IF fIsConvergenceTariff(bOrder.CliType) EQ TRUE THEN 
+         IF AVAIL bOrder THEN DO:
+            IF fIsConvergenceTariff(bOrder.CliType) EQ TRUE AND 
+               bOrder.Ordertype NE {&ORDER_TYPE_RENEWAL} THEN
                RUN orderinctrl.p(bOrder.OrderId, 0, TRUE).
-         END.
-         ELSE DO:
-            FIND FIRST OrderCustomer WHERE 
-                       OrderCustomer.Brand   = gcBrand AND
-                       OrderCustomer.OrderId = bOrder.OrderId AND
-                       OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
-            IF AVAIL OrderCustomer THEN DO:
-               IF bOrder.OrderChannel = "retention_stc" THEN DO:
-                  lcMNPSMSText = "MNPCancelRetention".
-                  IF OrderCustomer.CustIdType EQ "CIF" THEN
-                     fSetOrderStatus(bOrder.OrderId,
-                                     {&ORDER_STATUS_RENEWAL_STC_COMPANY}).
-                  ELSE
-                     fSetOrderStatus(bOrder.OrderId,
-                                     {&ORDER_STATUS_RENEWAL_STC}).
-               END. /* IF bOrder.OrderChannel = "retention_stc" THEN DO: */
-               ELSE DO:
-                  IF fCheckRenewalData() THEN DO:
+            ELSE DO:
+               FIND FIRST OrderCustomer WHERE 
+                          OrderCustomer.Brand   = gcBrand AND
+                          OrderCustomer.OrderId = bOrder.OrderId AND
+                          OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+               IF AVAIL OrderCustomer THEN DO:
+                  IF bOrder.OrderChannel = "retention_stc" THEN DO:
                      lcMNPSMSText = "MNPCancelRetention".
-                     fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_RENEWAL}).
-                  END. /* IF fCheckRenewalData() THEN DO: */
+                     IF OrderCustomer.CustIdType EQ "CIF" THEN
+                        fSetOrderStatus(bOrder.OrderId,
+                                        {&ORDER_STATUS_RENEWAL_STC_COMPANY}).
+                     ELSE
+                        fSetOrderStatus(bOrder.OrderId,
+                                        {&ORDER_STATUS_RENEWAL_STC}).
+                  END. /* IF bOrder.OrderChannel = "retention_stc" THEN DO: */
                   ELSE DO:
-                     lcMNPSMSText = "MNPCancelRetentionOnHold".
-                     fSetOrderStatus(bOrder.OrderId,
-                                     {&ORDER_STATUS_RENEWAL_HOLD}).
+                     IF fCheckRenewalData() THEN DO:
+                        lcMNPSMSText = "MNPCancelRetention".
+                        fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_RENEWAL}).
+                     END. /* IF fCheckRenewalData() THEN DO: */
+                     ELSE DO:
+                        lcMNPSMSText = "MNPCancelRetentionOnHold".
+                        fSetOrderStatus(bOrder.OrderId,
+                                        {&ORDER_STATUS_RENEWAL_HOLD}).
+                     END. /* ELSE DO: */
                   END. /* ELSE DO: */
-               END. /* ELSE DO: */
-            END. /* IF AVAIL OrderCustomer AND */
-
+               END. /* IF AVAIL OrderCustomer AND */
+            END. /*Convergent*/
             IF lcMNPSMSText > "" THEN DO:
                   lcMNPSMSText = REPLACE(lcMNPSMSText,"#ORDER_NUMBER",STRING(bOrder.OrderId)).
                   fMNPCallAlarm(lcMNPSMSText,
@@ -198,8 +198,8 @@ FOR EACH ttInput NO-LOCK:
                                 Customer.Language,
                                 "622",
                                 bOrder.OrderId).
-            END. /* IF lcMNPSMSText > "" THEN DO: */
-         END. /* IF AVAIL bOrder THEN DO: */
+            END. /* IF lcMNPSMSText > "" THEN DO: */ 
+         END. /* IF AVAIL bOrder THEN DO: */ 
 
          /* YDR-819 - Create CONTM termination request */
          IF MobSub.MultiSIMId > 0 AND

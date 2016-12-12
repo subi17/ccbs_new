@@ -1067,8 +1067,9 @@ PROCEDURE pHandleFromASOL2AREC:
       /* YOT-2088 - Now move Retention order into correct queue */
       FIND MobSub WHERE
            MobSub.MSSeq = MNPSub.MsSeq NO-LOCK NO-ERROR.
+           
       IF AVAIL MobSub THEN DO:
-         FIND FIRST Order WHERE
+         FIND FIRST Order WHERE 
                     Order.Brand = gcBrand AND
                     Order.MsSeq = MobSub.MsSeq AND
                     Order.StatusCode = {&ORDER_STATUS_MNP_RETENTION}
@@ -1121,7 +1122,7 @@ PROCEDURE pHandleFromASOL2AREC:
                              Order.OrderId).
                END. /* IF lcMNPSMSText > "" THEN DO: */
             END. /*not COFF order*/   
-         END. /* IF AVAIL Order THEN DO: */
+         END. /* IF AVAIL Order THEN DO: */ 
       END. /* IF AVAIL MobSub THEN DO: */
    END.
    
