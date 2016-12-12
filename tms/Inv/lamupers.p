@@ -1389,6 +1389,8 @@ PROCEDURE pCreateInv:
                          "Erroneous billing counters").
                fELog(katun,"INVOICE:ERRONEOUS_COUNTERS:Customer:" + 
                            STRING(bCustomer.CustNum)).
+               /* mark invseqs back to unbilled*/ 
+               fMarkInvoiceItems(?,0,0,iiInvType).
                NEXT INVRUNLOOP.
             END.
          END.
@@ -1410,6 +1412,7 @@ PROCEDURE pCreateInv:
                       "Erroneous billing counters").
             fELog(katun,"INVOICE:ERRONEOUS_COUNTERS:Customer:" + 
                         STRING(bCustomer.CustNum)).
+            fMarkInvoiceItems(?,0,0,iiInvType).
             NEXT INVRUNLOOP.
          END.
             
@@ -1436,6 +1439,7 @@ PROCEDURE pCreateInv:
                       "",  
                       0,
                       "DBLVAT").
+            fMarkInvoiceItems(?,0,0,iiInvType).
             NEXT InvRunLoop.
          END.
 
