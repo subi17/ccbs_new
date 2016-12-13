@@ -1,4 +1,4 @@
-/**
+/** YDR-2376
  * Get Credit Limit Details of the Customer
  *
  * @input: custnum;int;mandatory;id of customer 
