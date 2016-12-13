@@ -1923,13 +1923,13 @@ FOR FIRST CLIType NO-LOCK WHERE
       OTHERWISE lcList = "".
     END.
 
-    IF LOOKUP(Order.CLIType, "CONT9,CONT15,CONT24,CONT23") > 0 THEN 
+    IF LOOKUP(Order.CLIType, "CONT9,CONT15,CONT24,CONT23,CONT25") > 0 THEN 
        FOR FIRST OfferItem WHERE
                  OfferItem.Brand       = gcBrand             AND
                  OfferItem.Offer       = Order.Offer         AND
                  OfferItem.ItemType    = "discountplan"      AND
                  LOOKUP(OfferItem.ItemKey,
-                 "TariffMarchDISC,CONT9DISC,CONT15DISC,CONT24DISC,CONT23DISC") > 0 AND
+                 "TariffMarchDISC,CONT9DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC") > 0 AND
                  OfferItem.BeginStamp <= Order.CrStamp       AND
                  OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
           FIRST DiscountPlan WHERE 
