@@ -109,15 +109,16 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
    END.
 
    /* Check that msisdn is available */
-   IF NOT CAN-FIND(FIRST MSISDN WHERE 
+   IF (NOT CAN-FIND(FIRST MSISDN WHERE 
                    MSISDN.CLI      = MobSub.CLI  AND 
-                   MSISDN.ValidTo >= fMakeTS()) THEN DO: 
+                   MSISDN.ValidTo >= fMakeTS()) AND
+      MobSub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} AND
+      MobSub.msStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO: 
+      
       ocError = "System Error ! Unknown MSISDN number : "
-         + STRING(MobSub.MsSeq) + " : " + MobSub.CLI.
+                + STRING(MobSub.MsSeq) + " : " + MobSub.CLI.
       RETURN 2.
    END.
-   ELSE IF MobSub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
-      RETURN 0. /* no active MSISDN exist, only fixed line to terminate */
    
    /* Check that no other termination requests is under work*/
    FIND FIRST bMsTermReq WHERE
@@ -139,7 +140,7 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
 
    /* Check that sim is available */ 
    
-   IF (MobSub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} OR 
+   IF (MobSub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} AND
        MobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
       NOT CAN-FIND(IMSI WHERE
                    IMSI.IMSI = MobSub.IMSI) THEN DO: 
