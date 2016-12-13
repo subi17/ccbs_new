@@ -102,8 +102,7 @@ fOR EACH fixedfee NO-LOCK where
               singlefee.keyvalue = fixedfee.keyvalue and
               singlefee.calcobj =  fixedfee.calcobj and
               singlefee.sourcekey eq string(fixedfee.ffnum) and
-             (singlefee.billcode = "PAYTERMCG1E" OR
-              singlefee.billcode = "PAYTERMCGBS") NO-ERROR.
+              lookup(singlefee.billcode,{&TF_BANK_COMMISSION_BILLCODES}) > 0 NO-ERROR.
 
    if avail singlefee and 
             singlefee.billperiod = liPeriodOld and

@@ -16,7 +16,7 @@ DEF VAR lcConURL AS CHAR NO-UNDO.
 DEF VAR liPrintXML AS INT NO-UNDO.
 
 /*For testing*/
-liPrintXML = 1.
+liPrintXML = 0.
 
 DEF STREAM sOut.
 

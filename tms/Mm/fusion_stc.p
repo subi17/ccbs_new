@@ -111,7 +111,7 @@ IF fValidateMobTypeCh(
 THEN RETURN lcError.
 
 IF fValidateNewCliType(INPUT lcNewCLIType, INPUT lcBundleID,
-                       INPUT FALSE, OUTPUT lcError) NE 0
+                       INPUT TRUE, OUTPUT lcError) NE 0
 THEN RETURN lcError.
 
 FIND FIRST NewCliType WHERE

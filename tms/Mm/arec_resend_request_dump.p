@@ -58,12 +58,10 @@ DEFINE TEMP-TABLE ttDumpData NO-UNDO
    FIELD ProcTimeStamp AS CHARACTER.
 
 FUNCTION fDumpArecRejections RETURNS LOGICAL 
-   (INPUT ldDumpDate AS DATE,
-    INPUT lcDumpTime AS CHAR):
+   (INPUT ldDumpDate AS DATE):
 
-   FOR EACH EventLog NO-LOCK WHERE 
+   FOR EACH EventLog NO-LOCK USE-INDEX EventDate WHERE 
             EventLog.EventDate  = ldDumpDate AND
-            EventLog.EventTime >= lcDumpTime AND
             EventLog.TableName  = "Order"
       ON QUIT UNDO, RETRY
       ON STOP UNDO, RETRY:
@@ -140,27 +138,18 @@ EMPTY TEMP-TABLE ttDumpData.
 IF icDumpMode EQ "Full" THEN 
    idLastDump = 20160322.0000.
 
+fSplitTS(idLastDump, 
+         OUTPUT ldaDumpDate, 
+         OUTPUT liDumpTime).
 
 REPEAT:
-   fSplitTS(idLastDump, 
-            OUTPUT ldaDumpDate, 
-            OUTPUT liDumpTime).
+   
+   IF ldaDumpDate >= TODAY THEN LEAVE.
  
-   lcDumpEventTime = STRING(liDumpTime,"HH:MM:SS").
+   fDumpArecRejections(ldaDumpDate).
 
-   fDumpArecRejections(ldaDumpDate,
-                       lcDumpEventTime).
+   ldaDumpDate = ldaDumpDate + 1.
 
-   ldaDumpDate = ldaDumpDate + 1. 
-
-   IF ldaDumpDate EQ TODAY THEN LEAVE.
-
-   IF icDumpMode EQ "Full" THEN 
-      ASSIGN 
-         ldtLastDump = ldaDumpDate + 1
-         idLastDump  = DECIMAL(STRING(YEAR(ldtLastDump),"9999") +
-                               STRING(MONTH(ldtLastDump),"99")  +
-                               STRING(DAY(ldtLastDump),"99")). 
 END.
 
 FOR EACH ttDumpData NO-LOCK:

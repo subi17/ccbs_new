@@ -18,7 +18,7 @@
 "060" "Servicio Interés Social" 9 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 9
 "061" "Seguridad Social" 9 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 10
 "062" "Guardia Civil" 9 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 11
-"065" "Servicio atención personas en" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 12
+"065" "Servicio atención personas en" 8 2 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 12
 "080" "Bomberos" 9 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 13
 "082" "Soccorro Montaña" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 14
 "083" "Información otro operador" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 15
@@ -37,6 +37,7 @@
 "1004" "Información otro operador" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 28
 "1006" "Protección Civil" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 29
 "1015" "Información otro operador" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 30
+"10201" "Fixed Voice mail calls" 1098 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/11/16 1061
 "112/911" "Emergencia" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 31
 "11810" " de Información Telefónica número 11812 (AUNA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 32
 "11811" " de NIT SAU" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 33
@@ -247,7 +248,7 @@
 "1540" "Servicio de tarjetas" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 193
 "1545" "Servicio de tarjetas" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 194
 "1550" "Servicio de tarjetas" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 195
-"1551" "Servicio de tarjetas" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 196
+"1551" "Información y atención a clientes Servic" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 196
 "1552" "Información y atención a clientes" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 197
 "1553" "Servicio Datafono" 9 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/02/12 760
 "1553" "Servicio de tarjetas" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/01/12 01/12/06 198
@@ -778,7 +779,7 @@
 "807415" "Nivel 3" 63 1 0 0 "" "" 0 no 23 no "" 0 0 "1" 31/12/49 01/03/16 1027
 "807418" "Nivel 3" 64 1 0 0 "" "" 0 no 2 no "" 0 0 "1" 31/12/49 01/12/06 552
 "807418" "Nivel 3" 63 1 0 0 "" "" 0 no 23 no "" 0 0 "1" 31/12/49 01/03/16 1028
-"807422" "Nivel 3" 63 1 0 0 "" "" 0 no 23 no "" 0 0 "1" 31/12/49 01/03/16 1029
+"807422" "Nivel 3" 63 1 0 0 "" "" 0 no 23 no "" 0 0 "1" 29/11/16 01/03/16 1029
 "807425" "Nivel 3" 63 1 0 0 "" "" 0 no 23 no "" 0 0 "1" 31/12/49 01/03/16 1030
 "807428" "Nivel 3" 63 1 0 0 "" "" 0 no 23 no "" 0 0 "1" 31/12/49 01/03/16 1031
 "807431" "Nivel 3" 63 1 0 0 "" "" 0 no 23 no "" 0 0 "1" 31/12/49 01/03/16 1032
@@ -840,6 +841,10 @@
 "91" "India" 2 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/10/11 676
 "92" "Pakistan" 2 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/12/06 595
 "995" "Georgia" 2 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/12/06 596
+"CONT15_DATA_IN" "CONT15 DATA_IN" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 23/11/16 1057
+"CONT15_DATA_OUT" "CONT15 DATA_OUT" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 23/11/16 1058
+"CONT15_VOICE_IN" "CONT15 VOICE_IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 23/11/16 1059
+"CONT15_VOICE_OUT" "CONT15 VOICE_OUT" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 23/11/16 1060
 "CONT23_DATA_IN" "CONT23_DATA_IN" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 12/08/15 996
 "CONT23_DATA_OUT" "CONT23_DATA_OUT" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 12/08/15 997
 "CONT23_VOICE_IN" "CONT23_VOICE_IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 12/08/15 998
@@ -848,6 +853,10 @@
 "CONT24_DATA_OUT" "CONT24 DATA_OUT" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 04/03/15 980
 "CONT24_VOICE_IN" "CONT24 VOICE_IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 04/03/15 981
 "CONT24_VOICE_OUT" "CONT24 VOICE_OUT" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 04/03/15 982
+"CONT9_DATA_IN" "CONT9 DATA_IN" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 23/11/16 1053
+"CONT9_DATA_OUT" "CONT9 DATA_OUT" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 23/11/16 1054
+"CONT9_VOICE_IN" "CONT9 VOICE_IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 23/11/16 1055
+"CONT9_VOICE_OUT" "CONT9 VOICE_OUT" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 23/11/16 1056
 "CONTDSL_MIN_IN" "CONTDSL MIN_IN" 81 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 27/10/16 1044
 "CONTDSL_QTY_IN" "CONTDSL QTY_IN" 81 1 0 0 "" "" 0 no 4 no "" 0 0 "1" 31/12/49 27/10/16 1043
 "CONTF11_DATA_IN" "CONTF11 DATA_IN" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 14/04/15 989
