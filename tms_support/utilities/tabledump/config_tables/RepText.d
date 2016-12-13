@@ -1393,6 +1393,10 @@
 1 "" 3 "Pago de terminal" 0 "DESCONTADO" "1" 27/11/12 31/12/49
 1 "" 4 "Pago de terminal" 0 "DESCONTADO" "1" 27/11/12 31/12/49
 1 "" 5 "Handset payment" 0 "DESCONTADO" "1" 27/11/12 31/12/49
+1 "" 1 "Descuento promoción" 0 "DISCFH300" "1" 01/11/16 31/12/54
+1 "" 2 "Descompte promoció" 0 "DISCFH300" "1" 01/11/16 31/12/54
+1 "" 3 "Promozio-deskontua" 0 "DISCFH300" "1" 01/11/16 31/12/54
+1 "" 5 "Promotional discount" 0 "DISCFH300" "1" 01/11/16 31/12/54
 1 "" 1 "Descuento promoción Fijo" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
 1 "" 2 "Descompte promoció Fix" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoaren promozioagatiko deskontua" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
@@ -1677,6 +1681,10 @@
 1 "" 2 "Incompliment de permanència La Combinada" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 3 "La Combinada tarifaren iraunkortasun-epea urratzea" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 5 "Non-compliance with term contract on La Combinada tariff" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 1 "Contestador" 0 "FVMS" "1" 01/11/16 31/12/49
+1 "" 2 "Contestador" 0 "FVMS" "1" 01/11/16 31/12/49
+1 "" 3 "Erantzungailua" 0 "FVMS" "1" 01/11/16 31/12/49
+1 "" 5 "Answering service" 0 "FVMS" "1" 01/11/16 31/12/49
 1 "" 1 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
 1 "" 2 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
 1 "" 3 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
@@ -3156,6 +3164,16 @@
 1 "" 3 "ZTE Axon 7 Mini" 0 "G0000310" "1" 28/09/16 31/12/49
 1 "" 4 "ZTE Axon 7 Mini" 0 "G0000310" "1" 28/09/16 31/12/49
 1 "" 5 "ZTE Axon 7 Mini" 0 "G0000310" "1" 28/09/16 31/12/49
+1 "" 1 "Huawei Mate 9" 0 "G0000311" "1" 24/11/16 31/12/49
+1 "" 2 "Huawei Mate 9" 0 "G0000311" "1" 24/11/16 31/12/49
+1 "" 3 "Huawei Mate 9" 0 "G0000311" "1" 24/11/16 31/12/49
+1 "" 4 "Huawei Mate 9" 0 "G0000311" "1" 24/11/16 31/12/49
+1 "" 5 "Huawei Mate 9" 0 "G0000311" "1" 24/11/16 31/12/49
+1 "" 1 "LG G5 SE" 0 "G0000312" "1" 24/11/16 31/12/49
+1 "" 2 "LG G5 SE Titan" 0 "G0000312" "1" 24/11/16 31/12/49
+1 "" 3 "LG G5 SE Titan" 0 "G0000312" "1" 24/11/16 31/12/49
+1 "" 4 "LG G5 SE Titan" 0 "G0000312" "1" 24/11/16 31/12/49
+1 "" 5 "LG G5 SE" 0 "G0000312" "1" 24/11/16 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -4353,6 +4371,16 @@
 1 "" 3 "LG Optimus GT540 Plata" 0 "P030540S2" "1" 31/08/10 31/12/49
 1 "" 4 "LG Optimus GT540 Plata" 0 "P030540S2" "1" 31/08/10 31/12/49
 1 "" 5 "LG Optimus GT540 Silver" 0 "P030540S2" "1" 31/08/10 31/12/49
+1 "" 1 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
+1 "" 2 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
+1 "" 3 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
+1 "" 4 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
+1 "" 5 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
+1 "" 1 "LG G5 SE Titán con LG Cam Plus regalo" 0 "P0305SENP" "1" 24/11/16 31/12/49
+1 "" 2 "LG G5 SE Titán con LG Cam Plus regalo" 0 "P0305SENP" "1" 24/11/16 31/12/49
+1 "" 3 "LG G5 SE Titán con LG Cam Plus regalo" 0 "P0305SENP" "1" 24/11/16 31/12/49
+1 "" 4 "LG G5 SE Titán con LG Cam Plus regalo" 0 "P0305SENP" "1" 24/11/16 31/12/49
+1 "" 5 "LG G5 SE Titan with LG Cam Plus gift" 0 "P0305SENP" "1" 24/11/16 31/12/49
 1 "" 1 "LG G2 Negro" 0 "P030802N2" "1" 25/09/13 31/12/49
 1 "" 2 "LG G2 Negro" 0 "P030802N2" "1" 25/09/13 31/12/49
 1 "" 3 "LG G2 Negro" 0 "P030802N2" "1" 25/09/13 31/12/49
@@ -5243,6 +5271,11 @@
 1 "" 3 "Samsung Galaxy S7 Negro" 0 "P034GS7N2" "1" 19/02/16 31/12/49
 1 "" 4 "Samsung Galaxy S7 Negro" 0 "P034GS7N2" "1" 19/02/16 31/12/49
 1 "" 5 "Samsung Galaxy S7 Black" 0 "P034GS7N2" "1" 19/02/16 31/12/49
+1 "" 1 "Samsung Galaxy S7 Rosa" 0 "P034GS7P2" "1" 25/11/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 Rosa" 0 "P034GS7P2" "1" 25/11/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 Rosa" 0 "P034GS7P2" "1" 25/11/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 Rosa" 0 "P034GS7P2" "1" 25/11/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 Pink" 0 "P034GS7P2" "1" 25/11/16 31/12/49
 1 "" 1 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
 1 "" 2 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
 1 "" 3 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
@@ -5911,6 +5944,11 @@
 1 "" 3 "Sony Xperia XA Blanco" 0 "P037XXAW2" "1" 30/06/16 31/12/49
 1 "" 4 "Sony Xperia XA Blanco" 0 "P037XXAW2" "1" 30/06/16 31/12/49
 1 "" 5 "Sony Xperia XA White" 0 "P037XXAW2" "1" 30/06/16 31/12/49
+1 "" 1 "Sony Xperia XZ Azul" 0 "P037XXZA2" "1" 24/11/16 31/12/49
+1 "" 2 "Sony Xperia XZ Azul" 0 "P037XXZA2" "1" 24/11/16 31/12/49
+1 "" 3 "Sony Xperia XZ Azul" 0 "P037XXZA2" "1" 24/11/16 31/12/49
+1 "" 4 "Sony Xperia XZ Azul" 0 "P037XXZA2" "1" 24/11/16 31/12/49
+1 "" 5 "Sony Xperia XZ Blue" 0 "P037XXZA2" "1" 24/11/16 31/12/49
 1 "" 1 "Sony Xperia XZ Platino" 0 "P037XXZS2" "1" 28/09/16 31/12/49
 1 "" 2 "Sony Xperia XZ Platino" 0 "P037XXZS2" "1" 28/09/16 31/12/49
 1 "" 3 "Sony Xperia XZ Platino" 0 "P037XXZS2" "1" 28/09/16 31/12/49
@@ -6342,6 +6380,11 @@
 1 "" 3 "Huawei Y6 Blanco" 0 "P043HY6W2" "1" 25/09/15 31/12/49
 1 "" 4 "Huawei Y6 Blanco" 0 "P043HY6W2" "1" 25/09/15 31/12/49
 1 "" 5 "Huawei Y6 White" 0 "P043HY6W2" "1" 25/09/15 31/12/49
+1 "" 1 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
+1 "" 2 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
+1 "" 3 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
+1 "" 4 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
+1 "" 5 "Huawei Mate 9 Grey" 0 "P043MT9G2" "1" 24/11/16 31/12/49
 1 "" 1 "Huawei P1 XL Negro" 0 "P043P1XN2" "1" 24/09/12 31/12/49
 1 "" 2 "Huawei P1 XL Negro" 0 "P043P1XN2" "1" 24/09/12 31/12/49
 1 "" 3 "Huawei P1 XL Negro" 0 "P043P1XN2" "1" 24/09/12 31/12/49
@@ -6932,6 +6975,11 @@
 1 "" 3 "ZTE Blade A460 Blanco" 0 "P075A46W2" "1" 25/09/15 31/12/49
 1 "" 4 "ZTE Blade A460 Blanco" 0 "P075A46W2" "1" 25/09/15 31/12/49
 1 "" 5 "ZTE Blade A460 White" 0 "P075A46W2" "1" 25/09/15 31/12/49
+1 "" 1 "ZTE Axon 7 Mini Oro" 0 "P075A7MD2" "1" 24/11/16 31/12/49
+1 "" 2 "ZTE Axon 7 Mini Oro" 0 "P075A7MD2" "1" 24/11/16 31/12/49
+1 "" 3 "ZTE Axon 7 Mini Oro" 0 "P075A7MD2" "1" 24/11/16 31/12/49
+1 "" 4 "ZTE Axon 7 Mini Oro" 0 "P075A7MD2" "1" 24/11/16 31/12/49
+1 "" 5 "ZTE Axon 7 Mini Gold" 0 "P075A7MD2" "1" 24/11/16 31/12/49
 1 "" 1 "ZTE Axon 7 Mini Plata" 0 "P075A7MS2" "1" 28/09/16 31/12/49
 1 "" 2 "ZTE Axon 7 Mini Plata" 0 "P075A7MS2" "1" 28/09/16 31/12/49
 1 "" 3 "ZTE Axon 7 Mini Plata" 0 "P075A7MS2" "1" 28/09/16 31/12/49
@@ -10871,14 +10919,14 @@
 6 "" 2 "Missatges multimèdia - MMS" 0 "5" "1" 01/01/06 31/12/49
 6 "" 3 "Multimedia Mezuak - MMS" 0 "5" "1" 01/01/06 31/12/49
 6 "" 5 "Multimedia messages - MMS" 0 "5" "1" 01/01/06 31/12/49
-6 "" 1 "LLAMADAS FIJO" 0 "51" "1" 27/10/16 31/12/49
-6 "" 2 "LLAMADAS FIJO" 0 "51" "1" 27/10/16 31/12/49
-6 "" 3 "LLAMADAS FIJO" 0 "51" "1" 27/10/16 31/12/49
-6 "" 5 "LLAMADAS FIJO" 0 "51" "1" 27/10/16 31/12/49
+6 "" 1 "LLAMADAS DESDE FIJO" 0 "51" "1" 27/10/16 31/12/49
+6 "" 2 "TRUCADES DES DE FIX" 0 "51" "1" 27/10/16 31/12/49
+6 "" 3 "FINKOTIK EGINDAKO DEIAK" 0 "51" "1" 27/10/16 31/12/49
+6 "" 5 "CALLS FROM LANDLINE" 0 "51" "1" 27/10/16 31/12/49
 6 "" 1 "SERVICIOS PREMIUM FIJO" 0 "53" "1" 27/10/16 31/12/49
-6 "" 2 "SERVICIOS PREMIUM FIJO" 0 "53" "1" 27/10/16 31/12/49
-6 "" 3 "SERVICIOS PREMIUM FIJO" 0 "53" "1" 27/10/16 31/12/49
-6 "" 5 "SERVICIOS PREMIUM FIJO" 0 "53" "1" 27/10/16 31/12/49
+6 "" 2 "SERVEIS PRÈMIUM FIX" 0 "53" "1" 27/10/16 31/12/49
+6 "" 3 "PREMIUM FIJO ZERBITZUAK" 0 "53" "1" 27/10/16 31/12/49
+6 "" 5 "PREMIUM LANDLINE SERVICES" 0 "53" "1" 27/10/16 31/12/49
 6 "" 1 "SERVICIOS PREMIUM" 0 "6" "1" 01/04/12 31/12/49
 6 "" 1 "Contenidos" 0 "6" "1" 01/01/06 31/03/12
 6 "" 2 "SERVEIS PREMIUM" 0 "6" "1" 01/04/12 31/12/49
@@ -11042,10 +11090,18 @@
 9 "" 2 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 3 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 5 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
+9 "" 1 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
 9 "" 1 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
 9 "" 2 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
 9 "" 5 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
 9 "" 1 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 2 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
@@ -11105,14 +11161,30 @@
 9 "" 4 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
 9 "" 5 "Fusión Plana a lo Yoigo" 0 "CONTFF" "1" 16/06/15 31/12/54
 9 "" 5 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
+9 "" 1 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
 9 "" 1 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
 9 "" 2 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
 9 "" 5 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 1 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
 9 "" 1 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 2 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 5 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
 9 "" 1 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
 9 "" 2 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49

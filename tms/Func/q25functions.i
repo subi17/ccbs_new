@@ -21,53 +21,67 @@
 {Func/fmakemsreq.i}
 {Func/coinv.i}
 
-
-DEF VAR lcTestStartDay AS CHAR NO-UNDO.
-DEF VAR lcTestEndDay AS CHAR NO-UNDO.
-DEF VAR lcExecuteDate AS CHAR NO-UNDO.
-DEF VAR ldaExecuteDate AS DATE NO-UNDO.
-DEF VAR liQ25Logging AS INT NO-UNDO.
-DEF VAR lcQ25LogDir          AS CHAR NO-UNDO.
-DEF VAR lcQ25SpoolDir        AS CHAR NO-UNDO.
-DEF VAR lcQ25LogFile         AS CHAR NO-UNDO.
-DEF VAR lcQ25DWHLogFile         AS CHAR NO-UNDO.
-DEF VAR lcQ25DWHLogDir      AS CHAR NO-UNDO.
-DEF VAR ldnewAmount AS DEC NO-UNDO.
-DEF VAR liNotSendCount    AS INT NO-UNDO.
-DEF VAR lcSendingEndTime AS CHAR NO-UNDO.
-DEF VAR lclcHRLPOutDir AS CHAR NO-UNDO.
-DEF VAR lcHRLPListInDir AS CHAR NO-UNDO.
-DEF VAR lcHrlpRemRedirDir AS CHAR NO-UNDO.
-DEF VAR lcHRLPLogDir AS CHAR NO-UNDO.
-DEF VAR lcHRLPSpoolDir AS CHAR NO-UNDO.
-DEF VAR lcHRLPInProcDir AS CHAR NO-UNDO.
-DEF VAR lcHRLPOutDir AS CHAR NO-UNDO.
-DEF VAR lcHRLPOutFile AS CHAR NO-UNDO.
-DEF VAR lcHRLPLogFile AS CHAR NO-UNDO.
-DEF VAR lcHRLPRemRedirDirDir AS CHAR NO-UNDO.
-DEF VAR lcHRLPTestMSSeq AS CHAR NO-UNDO. /*List of numbers accepted in test*/
-DEF VAR liHRLPTestLevel AS INT NO-UNDO.
-DEF VAR lcLandingPageLink AS CHAR NO-UNDO.
-DEF VAR lcPassPhrase AS CHAR NO-UNDO.
+DEF VAR lcTestStartDay        AS CHAR NO-UNDO.
+DEF VAR lcTestEndDay          AS CHAR NO-UNDO.
+DEF VAR lcExecuteDate         AS CHAR NO-UNDO.
+DEF VAR ldaExecuteDate        AS DATE NO-UNDO.
+DEF VAR liQ25Logging          AS INT  NO-UNDO.
+DEF VAR lcQ25LogDir           AS CHAR NO-UNDO.
+DEF VAR lcQ25SpoolDir         AS CHAR NO-UNDO.
+DEF VAR lcQ25LogFile          AS CHAR NO-UNDO.
+DEF VAR lcQ25DWHLogFile       AS CHAR NO-UNDO.
+DEF VAR lcQ25DWHLogDir        AS CHAR NO-UNDO.
+DEF VAR ldnewAmount           AS DEC  NO-UNDO.
+DEF VAR liNotSendCount        AS INT  NO-UNDO.
+DEF VAR lcSendingEndTime      AS CHAR NO-UNDO.
+DEF VAR lclcHRLPOutDir        AS CHAR NO-UNDO.
+DEF VAR lcHRLPListInDir       AS CHAR NO-UNDO.
+DEF VAR lcHrlpRemRedirDir     AS CHAR NO-UNDO.
+DEF VAR lcHRLPLogDir          AS CHAR NO-UNDO.
+DEF VAR lcHRLPSpoolDir        AS CHAR NO-UNDO.
+DEF VAR lcHRLPInProcDir       AS CHAR NO-UNDO.
+DEF VAR lcHRLPOutDir          AS CHAR NO-UNDO.
+DEF VAR lcHRLPOutFile         AS CHAR NO-UNDO.
+DEF VAR lcHRLPLogFile         AS CHAR NO-UNDO.
+DEF VAR lcHRLPRemRedirDirDir  AS CHAR NO-UNDO.
+DEF VAR lcHRLPTestMSSeq       AS CHAR NO-UNDO. /*List of numbers accepted in test*/
+DEF VAR liHRLPTestLevel       AS INT  NO-UNDO.
+DEF VAR lcLandingPageLink     AS CHAR NO-UNDO.
+DEF VAR lcPassPhrase          AS CHAR NO-UNDO.
+DEF VAR lcQ25PushSpoolDir     AS CHAR NO-UNDO.
+DEF VAR lcQ25PushOutDir       AS CHAR NO-UNDO.
+DEF VAR lcQ25PushFile         AS CHAR NO-UNDO.
 
 DEF STREAM Sout.
 DEF STREAM SHRLP.
+DEF STREAM Push.
 
-ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg, 
-                                                     2 = count, 3 = all */
-       lcQ25LogDir     = fCParam("Q25","Q25ReminderLogDir")
-       lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir")
-       lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir")
-       lcSendingEndTime = fCParam("Q25","Q25SendingEndTime")
-       lcPassPhrase = fCParam("Q25","Q25PassPhrase").
+ASSIGN liQ25Logging      = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg,
+                                                          2 = count, 3 = all */
+       lcQ25LogDir       = fCParam("Q25","Q25ReminderLogDir")
+       lcQ25SpoolDir     = fCParam("Q25","Q25ReminderLogSpoolDir")
+       lcQ25DWHLogDir    = fCParam("Q25","Q25DWHLogDir")
+       lcSendingEndTime  = fCParam("Q25","Q25SendingEndTime")
+       lcPassPhrase      = fCParam("Q25","Q25PassPhrase")
+       /* Q25 Push Notification */
+       lcQ25PushSpoolDir = fCParam("Q25Push","Q25PushSpoolDir")
+       lcQ25PushOutDir   = fCParam("Q25Push","Q25PushOutDir").
 
-IF lcPassPhrase = "" OR lcPassPhrase = ? THEN lcPassPhrase = {&Q25_PASSPHRASE}.
-IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
-IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
+IF lcPassPhrase      = "" OR lcPassPhrase      = ? THEN
+   lcPassPhrase      = {&Q25_PASSPHRASE}.
+IF lcQ25LogDir       = "" OR lcQ25LogDir       = ? THEN
+   lcQ25LogDir       = "/tmp/".
+IF lcQ25SpoolDir     = "" OR lcQ25SpoolDir     = ? THEN
+   lcQ25SpoolDir     = "/tmp/".
+IF lcQ25PushSpoolDir = "" OR lcQ25PushSpoolDir = ? THEN
+   lcQ25PushSpoolDir = "/tmp/".
+IF lcQ25PushOutDir   = "" OR lcQ25PushOutDir   = ? THEN
+   lcQ25PushOutDir   = "/tmp/".
 
-lcQ25DWHLogFile = lcQ25SpoolDir + "events_" +
-                  (REPLACE(STRING(fMakeTS()),".","_")) + ".csv".
-
+ASSIGN lcQ25DWHLogFile  = lcQ25SpoolDir + "events_" +
+                          (REPLACE(STRING(fMakeTS()),".","_")) + ".csv"
+       lcQ25PushFile    = lcQ25PushSpoolDir + "create_messages_" +
+                          (REPLACE(STRING(fMakeTS()),".","")) + ".csv".
 
 /* Function to check if there is available weekdays for SMS sending after
    specified day.
@@ -520,6 +534,39 @@ FUNCTION fisQ25ExtensionAllowed RETURNS LOGICAL
    RETURN TRUE.
 END.
 
+FUNCTION fQ25PushNotification RETURNS LOGICAL
+   (INPUT icCLI AS CHAR):
+
+   DEF VAR lcRequestId   AS CHAR NO-UNDO.
+   DEF VAR lcPushRequest AS CHAR NO-UNDO.
+
+   lcRequestId = "101" + SUBSTRING(BASE64-ENCODE(GENERATE-UUID), 1, 22).
+
+   IF INDEX(lcRequestId,"|") > 0 THEN 
+      lcRequestId = REPLACE(lcRequestId,"|","0").
+
+   lcPushRequest = lcRequestId            + "|" +  /* 1  request_id           */
+                   "q25"                  + "|" +  /* 2  message_category     */
+                   ""                     + "|" +  /* 3  sms_recipient        */
+                   ""                     + "|" +  /* 4  email_recipient      */
+                   icCLI                  + "|" +  /* 5  push_recipient       */
+                   "q25/month24-message1" + "|" +  /* 6  message_template_id  */
+                   ""                     + "|" +  /* 7  message_body         */
+                   ""                     + "|" +  /* 8  message_inapp_link   */
+                   ""                     + "|" +  /* 9  message_type_id      */
+                   ""                     + "|" +  /* 10 scheduling_policy    */
+                   ""                     + "|" +  /* 11 product_id           */
+                   ""                     + "|" +  /* 12 first_name           */
+                   "".                             /* 13 last_name            */
+
+    OUTPUT STREAM Push TO VALUE(lcQ25PushFile) APPEND.
+    PUT STREAM Push UNFORMATTED lcPushRequest SKIP.
+    OUTPUT STREAM Push CLOSE.
+
+    RETURN TRUE.
+
+END FUNCTION.
+
 /* SMS message generating and sending for Q25. */
 FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER 
    (INPUT idaStartDate AS DATE,
@@ -647,6 +694,9 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             END.
          END.
       END.
+      ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_PUSH_SENDING} THEN DO:
+         fQ25PushNotification(MobSub.CLI).
+      END.
       ELSE DO:
          liLogType = {&Q25_LOGGING_DETAILED}.
          /* Some logging about SMSs to be send. */
@@ -668,7 +718,12 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          fQ25LogWriting(lcLogText, liLogType, iiphase,
                         iiExecType).
       END.
+
    END.
+
+   IF iiExecType EQ {&Q25_EXEC_TYPE_PUSH_SENDING} THEN
+      fMove2TransDir(lcQ25PushFile, "", lcQ25PushOutDir).
+
    /* Logging about amount of situations for testting purposes. */
    /* If ilSendMsgs is False, logging of calculated values to be done */
    IF (iiExecType EQ {&Q25_EXEC_TYPE_CALCULATION}) THEN DO:
@@ -896,5 +951,4 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
                  "IFS").     /* creator */
    END.
    RETURN TRUE.
-END.    
-
+END.

@@ -256,7 +256,10 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
       CASE ttRatePlan.Action:
          WHEN "EXISTING" THEN DO:
             
-            RUN pCreRPData.
+            RUN pCreRPData NO-ERROR.
+
+            IF RETURN-VALUE EQ "ERROR" THEN 
+               RETURN RETURN-VALUE.
 
             FOR EACH PListConf WHERE 
                      PListConf.Brand    = gcBrand AND
@@ -414,10 +417,10 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
 END PROCEDURE.    
 
 PROCEDURE pCreRPData:
-    
+   
    FIND FIRST RatePlan WHERE
               RatePlan.Brand    = gcBrand AND
-              RatePlan.RatePlan = CLIType.PricePlan NO-LOCK NO-ERROR.
+              RatePlan.RatePlan = TRIM(CLIType.PricePlan) NO-LOCK NO-ERROR.
    IF NOT AVAILABLE RatePlan THEN DO:           
       fError("Rateplan doesn't exists").
       RETURN "ERROR".
@@ -430,7 +433,7 @@ PROCEDURE pCreRPData:
    ASSIGN bRatePlan.RatePlan = REPLACE(ttRatePlan.RPSubType,"CONT","CONTRATO") 
           bRateplan.RPName   = REPLACE(ttRatePlan.RPSubType,"CONT","Contrato ") + " (Post paid)"  
           oRatePlan          = ttRatePlan.RPSubType 
-          oPayType           = CLIType.PayType      NO-ERROR.
+          oPayType           = CLIType.PayType     NO-ERROR.
     
    IF ERROR-STATUS:ERROR THEN DO:
       fError("Error creating Rateplan").

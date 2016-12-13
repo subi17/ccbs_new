@@ -239,5 +239,6 @@ add_string(top_struct, "transaction_id", pcTransId).
 add_boolean(top_struct, "result", True).
 
 FINALLY:
+   gbAuthLog.TransactionId = pcTransId.
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.

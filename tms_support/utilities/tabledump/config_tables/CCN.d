@@ -95,6 +95,7 @@
 1074 "Fixed Premium gambling voice" 0 "1"
 1075 "Fixed Premium gambling voice n" 0 "1"
 1081 "Fixed to National" 0 "1"
+1098 "Fixed Voice mail calls" 0 "1"
 1631 "micropagos numbers -SPECSERV" 0 "1"
 160 "Somalia" 160 "2"
 208 "Italy-Vatican City" 208 "2"

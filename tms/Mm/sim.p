@@ -480,7 +480,7 @@ BROWSE:
      END. /* Search-1 */
      
      ELSE if LOOKUP(nap,"4,f4") > 0 THEN DO:
-        FIND SIM where recid(SIM) = rtab[FRAME-LINE].
+        FIND SIM where recid(SIM) = rtab[FRAME-LINE] NO-LOCK.
         ufkey = TRUE.
         FIND FIRST IMSI WHERE IMSI.ICC = SIM.ICC NO-LOCK NO-ERROR.
         IF AVAIL IMSI THEN
