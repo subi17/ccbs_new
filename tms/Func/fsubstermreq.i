@@ -116,6 +116,8 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
          + STRING(MobSub.MsSeq) + " : " + MobSub.CLI.
       RETURN 2.
    END.
+   ELSE IF MobSub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
+      RETURN 0. /* no active MSISDN exist, only fixed line to terminate */
    
    /* Check that no other termination requests is under work*/
    FIND FIRST bMsTermReq WHERE

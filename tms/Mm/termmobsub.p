@@ -968,7 +968,8 @@ PROCEDURE local-find-others.
                                        INPUT year(today) * 100 + Month(today),
                                        INPUT lcSaldofatime).
       FIND FIRST Msowner WHERE 
-                 Msowner.msseq = TermMobsub.MSseq
+                 Msowner.msseq = TermMobsub.MSseq AND
+                 Msowner.cli = TermMobsub.cli   /* needed for partial term */
       NO-LOCK NO-ERROR.
 
       IF AVAIL msowner THEN

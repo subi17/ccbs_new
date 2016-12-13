@@ -55,8 +55,6 @@ DEF TEMP-TABLE ttContract NO-UNDO
    FIELD CreateFee AS LOG
    FIELD ActTS     AS DEC.
 
-DEF TEMP-TABLE ttoldmsowner NO-UNDO LIKE msowner.
-
 FUNCTION fLocalMemo RETURNS LOGIC
    (icHostTable AS CHAR,
     icKey       AS CHAR,

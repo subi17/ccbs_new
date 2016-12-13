@@ -149,10 +149,9 @@ IF getTMSRight("CCSUPER,SYST") EQ "RW" THEN llAdmin = TRUE.
 
 FIND MobSub WHERE MobSub.MsSeq = piMsSeq NO-LOCK.
 
-IF MobSub.msstatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
-   liError = fDeleteMsValidation(piMsSeq, 
-                                 ?, /* termination reason not yet known */
-                                 OUTPUT lcError).
+liError = fDeleteMsValidation(piMsSeq, 
+                              ?, /* termination reason not yet known */
+                              OUTPUT lcError).
 IF lcError NE "" THEN DO:
    MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
    IF liError NE 0 THEN RETURN.
@@ -241,7 +240,7 @@ REPEAT WITH FRAME main:
          VALIDATE(INPUT ldtKillDate = ? OR INPUT ldtKillDate >= TODAY,
          "Date other than EMPTY must not be earlier than today !")
       KillTime
-      lcTermType
+      lcTermType     WHEN fIsConvergenceTariff(Mobsub.clitype)
       liMsisdnStat   WHEN llYoigoCLI AND liOrderer EQ 5
       liQuarTime     WHEN liOrderer EQ 5 AND liMsisdnStat EQ 4 AND
                           liQuarTime > -1
@@ -685,10 +684,9 @@ REPEAT WITH FRAME main:
                VIEW-AS ALERT-BOX.
          END.
       
-         IF MobSub.msstatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
-            liError = fDeleteMsValidation(Mobsub.MsSeq, 
-                                          liOrderer, /* not yet known */
-                                          OUTPUT lcError).
+         liError = fDeleteMsValidation(Mobsub.MsSeq, 
+                                       liOrderer, /* not yet known */
+                                       OUTPUT lcError).
          IF liError NE 0 THEN DO:
             MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
             NEXT ACTION.

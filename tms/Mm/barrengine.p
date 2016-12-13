@@ -32,13 +32,11 @@ FIND MobSub NO-LOCK WHERE
 
 IF NOT AVAIL MobSub THEN RETURN. 
 
-
 /*YPR-4774*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
 /*This should be checked before coming to barring setting. 
 This is an additional checkpoint*/
-IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR /*16*/
-    MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN DO:   
+IF MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} /*16*/ THEN DO:
    ocStatus = "No active mobile line prevents setting".
    RETURN.
 END.
