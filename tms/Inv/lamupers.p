@@ -3782,7 +3782,7 @@ PROCEDURE pInvoiceHeader:
                              ttRowVat.VatBasis),2).
          ELSE ASSIGN
             ldeTotalInvRow = ROUND(ttRowVat.VatBasis * (1 + ttRowVat.VatPerc / 100),2)
-            ldBasis        = ROUND(ldeTotalInvRow - ttSubInv.AmtExclVAT,2).
+            ldBasis        = ROUND(ldeTotalInvRow - ttRowVat.VatBasis,2).
 
          ASSIGN
             ttSubInv.VatAmount[lloop] = ttSubInv.VatAmount[lloop] + ldBasis
