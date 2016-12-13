@@ -39,3 +39,6 @@ UPDATE FIELD "CrInvNum" OF "SubInvoice"
 
 UPDATE FIELD "Clitype" OF "SLGAnalyse"
   FORMAT "x(13)"
+
+UPDATE FIELD "OrderId" OF "FixedFee"
+  FORMAT "->>>>>>>>9"
