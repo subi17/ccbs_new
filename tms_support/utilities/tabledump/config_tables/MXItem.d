@@ -246,8 +246,6 @@
 114 "SubsTypeTo" "CONTFH50_300"
 115 "PerContract" "CONT15"
 115 "PerContract" "DATA6"
-115 "PerContract" "MDUB3"
-115 "PerContract" "MDUB4"
 115 "PerContract" "DATA7"
 115 "SubsTypeTo" "CONTDSL48"
 115 "SubsTypeTo" "CONTFH48_50"

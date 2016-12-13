@@ -1023,6 +1023,7 @@
 "Order" "StatusCode" "Orders" "76" "Pending main line order" "" "" 1
 "Order" "StatusCode" "Orders" "77" "Pending fixed line order" "" "" 1
 "Order" "StatusCode" "Orders" "78" "Waiting sending to LO" "" "" 1
+"Order" "StatusCode" "Orders" "79" "Pending mobile line order" "" "" 1
 "Order" "StatusCode" "Orders" "8" "CLOSED BY YOIGO" "" "" 1
 "Order" "StatusCode" "Orders" "80" "Pending fixed line cancellation" "" "" 1
 "Order" "StatusCode" "Orders" "9" "CLOSED AFTER DEADLINE" "" "" 1
