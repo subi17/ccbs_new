@@ -441,12 +441,12 @@ PROCEDURE pDataCreValidation:
    IF lcDataLimit NE "" THEN 
       lcServList = {&DL}. 
   
-   IF lcVoiceLimit NE ""          AND
+   /* IF lcVoiceLimit NE ""          AND
       lcVoiceLimit NE "Unlimited" AND
       lcBDestLimit NE ""          THEN
       lcServList = lcServList + "," + {&VBDES}.
    
-   IF INDEX(lcServList,{&VBDES}) EQ 0 THEN DO:
+   IF INDEX(lcServList,{&VBDES}) EQ 0 THEN DO: */
       IF lcVoiceLimit NE ""          AND 
          lcVoiceLimit NE "Unlimited" THEN 
          lcServList = IF lcServList NE "" THEN 
@@ -457,7 +457,7 @@ PROCEDURE pDataCreValidation:
          lcServList = IF lcServList NE "" THEN 
                          lcServList + "," + {&BDL}
                       ELSE {&BDL}.        
-   END. 
+  /*  END. */ 
       
 END PROCEDURE.
     
