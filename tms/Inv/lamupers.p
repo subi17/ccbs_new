@@ -3638,11 +3638,15 @@ PROCEDURE pInvoiceHeader:
                    MsOwner.AgrCust = ttRowVat.AgrCust AND
                    MsOwner.PayType = FALSE:
             ASSIGN
-               lcCLI         = MsOwner.CLI
                lcFixedNumber = MsOwner.FixedNumber
-               liUserCust    = MsOwner.CustNum.
+               liUserCust    = MsOwner.CustNum
+               /* For partially terminated use billing period ttRowVat.CLI */
+               lcCLI         = MsOwner.CLI WHEN NOT 
+                   (MSOwner.CliEvent EQ "F" AND 
+                    MsOwner.CLI      EQ MsOwner.FixedNumber AND
+                    MSOwner.TSBegin  >  fMake2Dt(idaFromDate, 0)).
          END.
- 
+
          IF ttRowVat.ITGDeltype EQ {&INV_DEL_TYPE_FUSION_EMAIL} OR
             ttRowVat.ITGDeltype EQ {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} THEN
             lcFixedNumber = "".
