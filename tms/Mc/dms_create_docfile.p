@@ -123,7 +123,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
             FIND FIRST ttOrderList WHERE
                        ttOrderList.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
             IF AVAIL ttOrderList THEN NEXT.
-            FIND FIRST Order WHERE
+            FIND FIRST Order NO-LOCK WHERE
                        Order.Brand EQ gcBrand AND
                        Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
             IF NOT AVAIL Order THEN NEXT.
