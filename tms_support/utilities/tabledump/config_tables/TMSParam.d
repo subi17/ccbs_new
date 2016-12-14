@@ -1162,7 +1162,7 @@
 "TariffCreation" "IncProcDir" "C" 0 0 "/store/riftp/tariff/processed/" ? "" "" "" "" "" "" "" "" "" "" "Processed files" no "1"
 "TariffCreation" "OutDir" "C" 0 0 "/store/riftp/tariff/outgoing/" ? "" "" "" "" "" "" "" "" "" "" "Outgoing files" no "1"
 "TariffCreation" "OutSpoolDir" "C" 0 0 "/store/riftp/tariff/spool/" ? "" "" "" "" "" "" "" "" "" "" "Spool directory" no "1"
-"Tariffs" "POSTPAID_VOICE_TARIFFS" "C" 0 0 "CONT,CONT4,CONT5,CONT6,CONTF,CONT7,CONTS,CONT8,CONTM,CONTM2,CONTFF,CONTSF,CONT9,CONT15,CONT24,CONT23,CONTDSL45,CONTFH45_50,CONTFH55_300,CONTDSL58,CONTFH58_50,CONTFH68_300,CONTDSL40,CONTFH40_50,CONTFH50_300,CONTDSL48,CONTFH48_50,CONTFH58_300" ? "" "" "" "" "" "" "" "" "" "" "All postpaid voice tariffs" no "1"
+"Tariffs" "POSTPAID_VOICE_TARIFFS" "C" 0 0 "CONT,CONT4,CONT5,CONT6,CONTF,CONT7,CONTS,CONT8,CONTM,CONTM2,CONTFF,CONTSF,CONT9,CONT15,CONT24,CONT23,CONTDSL45,CONTFH45_50,CONTFH55_300,CONTDSL58,CONTFH58_50,CONTFH68_300,CONTDSL40,CONTFH40_50,CONTFH50_300,CONTDSL48,CONTFH48_50,CONTFH58_300,CONT25" ? "" "" "" "" "" "" "" "" "" "" "All postpaid voice tariffs" no "1"
 "Tariffs" "PREPAID_VOICE_TARIFFS" "C" 0 0 "TARJ,TARJ4,TARJ5,TARJ6,TARJ7,TARJ8,TARJ9" ? "" "" "" "" "" "" "" "" "" "" "All prepaid voice tariffs" no "1"
 "TermFinance" "CanInRoot" "C" 0 0 "/store/riftp/dumpfiles/terminal_finance/can_incoming/" ? "" "" "" "" "" "" "" "" "" "" "TF cancel incoming root dir" no "1"
 "TermFinance" "CanOutRoot" "C" 0 0 "/store/riftp/dumpfiles/terminal_finance/can_outgoing/" ? "" "" "" "" "" "" "" "" "" "" "TF cancel outgoing root dir" no "1"
