@@ -43,6 +43,8 @@ FIND Customer NO-LOCK WHERE
 IF NOT AVAIL Customer THEN
    RETURN appl_err("customer_not_found").
 
+top_struct = add_struct(response_toplevel_id, "").
+
 ASSIGN
    ldaDate  = DATE(MONTH(TODAY), 1, YEAR(TODAY)) - 1
    liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate).
