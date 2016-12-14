@@ -22,7 +22,6 @@ DEF VAR pcCustNum      AS INT  NO-UNDO.
 /* Output parameters */
 DEF VAR top_struct     AS CHAR NO-UNDO.
 /* Local variables */
-DEF VAR lcFields       AS CHAR NO-UNDO.
 DEF VAR ldeLimitAmt    AS DEC  NO-UNDO.
 DEF VAR ldePendingFees AS DEC  NO-UNDO.
 DEF VAR ldeWithdrawn   AS DEC  NO-UNDO.
@@ -31,18 +30,9 @@ DEF VAR ldaDate        AS DATE NO-UNDO.
 
 DEFINE BUFFER bMobSub FOR MobSub.
 
-IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "int") = ? THEN RETURN.
 
-pcstruct = get_struct(param_toplevel_id, "0").
-
-IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-lcFields = validate_request(pcstruct, "custnum").
-
-IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-ASSIGN
-   pcCustNum = get_int(pcStruct, "custnum").
+pcCustNum = get_int(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
