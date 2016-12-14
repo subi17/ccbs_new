@@ -1312,7 +1312,6 @@ FUNCTION fDelivRouter RETURNS LOG
 
    IF AVAIL DelivCustomer THEN DO:
       /* YTS-9922: Checking additional address fields */
-      lcAddressFields = " ". /* This is for verification */
       IF LENGTH(TRIM(DelivCustomer.Block)) > 0 THEN
          lcAddressFields = lcAddressFields + " " +
                            DelivCustomer.Block.
