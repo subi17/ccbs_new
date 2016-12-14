@@ -769,7 +769,6 @@ FUNCTION fRetention RETURNS LOGICAL
          END. /* IF AVAIL OrderCustomer AND */
       END. /*Convergent*/
       IF lcMNPSMSText > "" THEN DO:
-            lcMNPSMSText = REPLACE(lcMNPSMSText,"#ORDER_NUMBER",STRING(bOrder.OrderId)).
             fMNPCallAlarm(lcMNPSMSText,
                           fMakeTS(),
                           icFormRequest,
