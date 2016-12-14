@@ -3638,13 +3638,9 @@ PROCEDURE pInvoiceHeader:
                    MsOwner.AgrCust = ttRowVat.AgrCust AND
                    MsOwner.PayType = FALSE:
             ASSIGN
+               lcCLI         = MsOwner.CLI
                lcFixedNumber = MsOwner.FixedNumber
-               liUserCust    = MsOwner.CustNum
-               /* For partially terminated use billing period ttRowVat.CLI */
-               lcCLI         = MsOwner.CLI WHEN NOT 
-                   (MSOwner.CliEvent EQ "F" AND 
-                    MsOwner.CLI      EQ MsOwner.FixedNumber AND
-                    MSOwner.TSBegin  >  fMake2Dt(idaFromDate, 0)).
+               liUserCust    = MsOwner.CustNum.
          END.
 
          IF ttRowVat.ITGDeltype EQ {&INV_DEL_TYPE_FUSION_EMAIL} OR
@@ -3702,7 +3698,16 @@ PROCEDURE pInvoiceHeader:
             ttSubInv.CustNum      = liUserCust
             ttSubInv.VatPos       = 0.
       END.
-            
+
+      /* For partially terminated use billing period ttRowVat.CLI 
+         if there were events with mobile number */
+      IF AVAIL ttSubInv AND
+               ttSubInv.CLI EQ ttSubInv.FixedNumber AND
+              (ttRowVat.CLI BEGINS "6" OR
+               ttRowVat.CLI BEGINS "7") AND
+               ttRowVat.MsSeq EQ ttSubInv.MsSeq THEN
+         ASSIGN ttSubInv.CLI = ttRowVat.CLI.
+
       ASSIGN 
          ttRowVat.SubInvNum = liSubInv
          ttRowVat.ITGroupID = liITGroupID.
