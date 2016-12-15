@@ -146,6 +146,7 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD TariffActDate   AS CHAR
    FIELD MessageType     AS CHAR
    FIELD GBValue         AS DEC
+   FIELD PrintCLI        AS LOGICAL INITIAL FALSE
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
@@ -1066,6 +1067,9 @@ PROCEDURE pGetSubInvoiceHeaderData:
                ASSIGN ttSub.CLIType  = ttCLIType.CLIType
                       ttSub.CTName   = ttCLIType.CTName
                       ttSub.CliEvent = ttMSOwner.CLIEvent.
+
+            /* Mobile provisioned during month. Used for convergent */
+            IF MSOwner.CliEvent = "C" THEN ttSub.PrintCLI = TRUE.
 
             /* Immediate STC logic non-fusion to non-fusion */
             IF lliSTR                AND

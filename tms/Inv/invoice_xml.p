@@ -712,7 +712,9 @@ PROCEDURE pSubInvoice2XML:
       
       /* subscription */
       lhXML:START-ELEMENT("ContractDetail").
-      IF ttSub.CliEvent = "F" THEN /* convergent tariff is partially installed. No mobile */
+      IF SubInvoice.FixedNumber > "" AND
+         ttSub.CliEvent EQ "F" AND NOT /* Convergent partially installed. No mobile */
+         ttSub.PrintCLI THEN /* Partially terminated. Has mobile calls */
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.FixedNumber).
       ELSE 
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
@@ -740,7 +742,8 @@ PROCEDURE pSubInvoice2XML:
          lhXML:END-ELEMENT("CustomContract").         
       END.
       IF SubInvoice.FixedNumber > "" AND
-         ttSub.CliEvent        <> "F" THEN DO:
+        (ttSub.CliEvent        <> "F" OR
+         ttSub.PrintCLI) THEN DO:
          lhXML:START-ELEMENT("CustomContract").
          lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
          lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
