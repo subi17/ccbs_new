@@ -1714,8 +1714,7 @@ PROCEDURE pFinalize:
       IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} THEN
          FOR FIRST Order NO-LOCK WHERE
                    Order.MsSeq = MsRequest.MsSeq AND
-                   Order.OrderType < 2 AND
-                   Order.CLIType = "CONT15":
+                   Order.OrderType < 2:
             fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
          END.
       ELSE IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_STC} AND
