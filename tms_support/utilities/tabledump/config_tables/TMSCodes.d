@@ -839,6 +839,7 @@
 "MsRequest" "ReqSource" "Request" "29" "Fusion order" "" "" 1
 "MsRequest" "ReqSource" "Request" "3" "Subscription termination" "" "" 1
 "MsRequest" "ReqSource" "Request" "30" "Fusion Email" "" "" 1
+"MsRequest" "ReqSource" "Request" "31" "Contract activation" "" "" 1
 "MsRequest" "ReqSource" "Request" "4" "Manual event (CCBS)" "" "" 1
 "MsRequest" "ReqSource" "Request" "5" "Automatic (cron/script)" "" "" 1
 "MsRequest" "ReqSource" "Request" "6" "Manual event (WEB)" "" "" 1
