@@ -6,6 +6,7 @@
 "1" 28 "Contract Target" "List" "Percentage" 2 no "" "CONT23DISC" 12/08/15 31/12/49 "CONT23DISC" "Discount Promo La Sinfín 8GB" "" "List" 0 0 0 6
 "1" 29 "Contract Target" "List" "Percentage" 1 yes "" "CONT23DISCTELE" 01/09/15 31/12/49 "CONT23DISCTELE" "Discount Promo La Sinfín 8GB PROMO TELESALES" "" "List" 0 0 0 0
 "1" 24 "Contract Target" "List" "Percentage" 2 no "" "CONT24DISC" 01/03/15 31/12/49 "CONT24DISC" "Discount March Promo La Sinfín" "" "List" 0 0 0 6
+"1" 37 "Contract Target" "List" "Percentage" 2 no "" "CONT25DISC" 12/12/16 31/12/49 "CONT25DISC" "Discount Xmas campaign La Sinfín" "" "List" 0 0 0 6
 "1" 4 "Contract Target" "List" "Fixed" 2 no "" "CONT8DISC" 01/12/12 31/12/49 "CONT8DISC" "Discount MF La del Uno and La del Cero 1.2GB" "" "All " 0 0 0 0
 "1" 25 "Contract Target" "List" "Percentage" 2 no "" "CONT9DISC" 01/03/15 31/12/49 "CONT9DISC" "Discount MF La del Cero 1.2GB" "" "List" 0 0 0 6
 "1" 27 "Contract Target" "List" "Fixed" 2 no "" "CONT9RETDISC" 01/05/15 31/12/49 "CONT9RETDISC" "Retention Discount MF La del Cero 1.2GB" "" "List" 0 0 0 0

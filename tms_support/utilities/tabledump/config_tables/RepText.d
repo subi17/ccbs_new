@@ -659,6 +659,30 @@
 1 "" 2 "Nacionals" 0 "CONT24VOICE_B" "1" 04/03/15 31/12/49
 1 "" 3 "Nazionalak" 0 "CONT24VOICE_B" "1" 04/03/15 31/12/49
 1 "" 5 "National" 0 "CONT24VOICE_B" "1" 04/03/15 31/12/49
+1 "" 1 "Desvio de Llamadas" 0 "CONT25CF_A" "1" 12/12/16 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT25CF_A" "1" 12/12/16 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT25CF_A" "1" 12/12/16 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT25CF_A" "1" 12/12/16 31/12/49
+1 "" 1 "Desvio de Llamadas" 0 "CONT25CF_B" "1" 12/12/16 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT25CF_B" "1" 12/12/16 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT25CF_B" "1" 12/12/16 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT25CF_B" "1" 12/12/16 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONT25DISC" "1" 12/12/16 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONT25DISC" "1" 12/12/16 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONT25DISC" "1" 12/12/16 31/12/49
+1 "" 5 "Promotional discount" 0 "CONT25DISC" "1" 12/12/16 31/12/49
+1 "" 1 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 2 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 3 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 5 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONT25VOICE_A" "1" 12/12/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONT25VOICE_A" "1" 12/12/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT25VOICE_A" "1" 12/12/16 31/12/49
+1 "" 5 "National" 0 "CONT25VOICE_A" "1" 12/12/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONT25VOICE_B" "1" 12/12/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONT25VOICE_B" "1" 12/12/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT25VOICE_B" "1" 12/12/16 31/12/49
+1 "" 5 "National" 0 "CONT25VOICE_B" "1" 12/12/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONT8DISC" "1" 01/12/12 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONT8DISC" "1" 01/12/12 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT8DISC" "1" 01/12/12 31/12/49
@@ -794,6 +818,10 @@
 1 "" 2 "Internet" 0 "CONTDATA24" "1" 04/03/15 31/12/49
 1 "" 3 "Internet" 0 "CONTDATA24" "1" 04/03/15 31/12/49
 1 "" 5 "Internet" 0 "CONTDATA24" "1" 04/03/15 31/12/49
+1 "" 1 "Internet" 0 "CONTDATA25" "1" 12/12/16 31/12/49
+1 "" 2 "Internet" 0 "CONTDATA25" "1" 12/12/16 31/12/49
+1 "" 3 "Internet" 0 "CONTDATA25" "1" 12/12/16 31/12/49
+1 "" 5 "Internet" 0 "CONTDATA25" "1" 12/12/16 31/12/49
 1 "" 1 "Internet para Llevar 8" 0 "CONTDATA3" "1" 01/04/12 31/12/49
 1 "" 1 "Datos" 0 "CONTDATA3" "1" 01/01/10 31/03/12
 1 "" 2 "Internet para Llevar 8" 0 "CONTDATA3" "1" 01/04/12 31/12/49
@@ -11028,10 +11056,14 @@
 9 "" 2 "La Sinfín 8 GB" 0 "CONT23" "1" 12/08/15 31/12/49
 9 "" 3 "La Sinfín 8 GB" 0 "CONT23" "1" 12/08/15 31/12/49
 9 "" 5 "La Sinfín 8 GB" 0 "CONT23" "1" 12/08/15 31/12/49
-9 "" 1 "La Sinfín" 0 "CONT24" "1" 04/03/15 31/12/49
-9 "" 2 "La Sinfín" 0 "CONT24" "1" 04/03/15 31/12/49
-9 "" 3 "La Sinfín" 0 "CONT24" "1" 04/03/15 31/12/49
-9 "" 5 "La Sinfín" 0 "CONT24" "1" 04/03/15 31/12/49
+9 "" 1 "La Sinfín 20 GB" 0 "CONT24" "1" 04/03/15 31/12/49
+9 "" 2 "La Sinfín 20 GB" 0 "CONT24" "1" 04/03/15 31/12/49
+9 "" 3 "La Sinfín 20 GB" 0 "CONT24" "1" 04/03/15 31/12/49
+9 "" 5 "La Sinfín 20 GB" 0 "CONT24" "1" 04/03/15 31/12/49
+9 "" 1 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
+9 "" 2 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
+9 "" 3 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
+9 "" 5 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
 9 "" 1 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
 9 "" 2 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
 9 "" 3 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
@@ -11401,6 +11433,10 @@
 11 "" 3 "Contrato 2" 0 "CONTRATO2" "1" 01/09/08 31/12/54
 11 "" 4 "Contrato 2" 0 "CONTRATO2" "1" 01/09/08 31/12/54
 11 "" 5 "Contrato 2" 0 "CONTRATO2" "1" 01/09/08 31/12/54
+11 "" 1 "La Sinfín" 0 "CONTRATO25" "1" 12/12/16 31/12/49
+11 "" 2 "La Sinfín" 0 "CONTRATO25" "1" 12/12/16 31/12/49
+11 "" 3 "La Sinfín" 0 "CONTRATO25" "1" 12/12/16 31/12/49
+11 "" 5 "La Sinfín" 0 "CONTRATO25" "1" 12/12/16 31/12/49
 11 "" 1 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
 11 "" 2 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
 11 "" 3 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
