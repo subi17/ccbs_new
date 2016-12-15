@@ -576,7 +576,10 @@ Final payment: To be paid the month #XX" "1"
 558 2 "Pagament del mòbil: Yoigo gestiona el cobrament del crèdit atorgat per BanSabadell Fincom E.F.C., S.A.U., amb CIF núm. A-63574719 i domicili social al c/ Sena núm. 12, edif. CBS, pol. Can Sant Joan, 08174 - Sant Cugat del Vallès (Barcelona). Operació exempta de l'IVA. TIN: 0% i TAE: #TAE%." "1"
 558 3 "Mugikorraren ordainketa: Yoigo-k kudeatzen du ondoren aipatzen den erakundeak emandako Kreditua: BanSabadell Fincom E.F.C., S.A.U., IFZ A-63574719 eta egoitza soziala C/ Sena nº 12, edif. CBS, pol. Can Sant Joan, 08174 - Sant Cugat del Vallès (Barcelona). Eragiketa BEZatik salbuetsita dago. ITN: % 0 eta UTB: % #TAE." "1"
 558 5 "Mobile payment: Yoigo manages the payment of the credit granted by BanSabadell Fincom E.F.C., S.A.U., tax ID no. A-63574719 and registered office at C/ Sena nº 12, edif. CBS, pol. Can Sant Joan, 08174 - Sant Cugat del Vallès (Barcelona). VAT exempt transaction. NIR: 0% and APR: #TAE%." "1"
-559 1 "Pago del móvil: BANSABADELL nos ha cedido los derechos de crédito derivados de la financiación del terminal que compraste al darte de alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la cláusula 16 del contrato de préstamo." "1"
+559 1 "Pago del móvil: BANSABADELL nos ha cedido los derechos de crédito
+derivados de la financiación del terminal que compraste al darte de
+alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la
+cláusula 16 del contrato de préstamo." "1"
 559 2 "Pagament del mòbil: BANSABADELL ens ha cedit els drets de crèdit derivats del finançament del terminal que vas comprar en donar-te d'alta o fer un Renuevo, la qual cosa et comuniquem en compliment de la clàusula 16 del contracte de préstec." "1"
 559 3 "Mugikorraren ordainketa: alta ematean edo Renuevo plana onartzean erosi zenuen terminalaren finantzaketaren ondorio diren kreditu-eskubideak eman dizkigu BANSABADELL erakundeak. Mailegu-kontratuaren 16. klausulari jarraiki jakinarazten dizugu aipatutakoa." "1"
 559 5 "Handset payment: In accordance with the provisions of Clause 16 of your loan contract, BANSABADELL has passed us the credit claim related to the financing of the handset you purchased when you signed up to Yoigo or renewed your contract with Renuevo." "1"
