@@ -23,6 +23,7 @@
 "CONT15MF" "La del Cero 5 GB monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT23MF" "Contrato 23 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT24MF" "Contrato 24 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONT25MF" "Contrato 25 MonthlyFee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT7MF" "Contrato 7 Service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT8MF" "La del Uno service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT9MF" "Contrato 9 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
