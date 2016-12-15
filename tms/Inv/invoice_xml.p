@@ -735,12 +735,6 @@ PROCEDURE pSubInvoice2XML:
       lhXML:WRITE-DATA-ELEMENT("FullName",ttSub.UserName).
       lhXML:END-ELEMENT("ContractName").
 
-      IF ttSub.MessageType > "" THEN DO:
-         lhXML:START-ELEMENT("CustomContract").
-         lhXML:WRITE-DATA-ELEMENT("CustomType","Message").
-         lhXML:WRITE-DATA-ELEMENT("CustomContent",ttSub.MessageType).
-         lhXML:END-ELEMENT("CustomContract").         
-      END.
       IF SubInvoice.FixedNumber > "" AND
         (ttSub.CliEvent        <> "F" OR
          ttSub.PrintCLI) THEN DO:
@@ -749,7 +743,12 @@ PROCEDURE pSubInvoice2XML:
          lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
          lhXML:END-ELEMENT("CustomContract").
       END.
-
+      IF ttSub.MessageType > "" THEN DO:
+         lhXML:START-ELEMENT("CustomContract").
+         lhXML:WRITE-DATA-ELEMENT("CustomType","Message").
+         lhXML:WRITE-DATA-ELEMENT("CustomContent",ttSub.MessageType).
+         lhXML:END-ELEMENT("CustomContract").         
+      END.
 
       /* invoice rows */
       lhXML:START-ELEMENT("InvoiceRow").
