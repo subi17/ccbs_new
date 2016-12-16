@@ -1146,11 +1146,29 @@ PROCEDURE pGetDELIVERY_DATE:
    END.
    ELSE DO:
       IF lcRegion > "" THEN CASE lcRegion:
-         WHEN "07" THEN liDays = 5.
-         WHEN "38" OR WHEN "35" OR WHEN "51" OR WHEN "52" THEN liDays = 7.
-         OTHERWISE liDays = 3.
+         WHEN "07"
+         THEN DO:
+            IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+            THEN liDays = 4.
+            ELSE liDays = 5.
+         END.
+         WHEN "38" OR WHEN "35" OR WHEN "51" OR WHEN "52"
+         THEN DO:
+            IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+            THEN liDays = 6.
+            ELSE liDays = 7.
+         END.
+         OTHERWISE DO:
+            IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+            THEN liDays = 2.
+            ELSE liDays = 3.
+         END.
       END.
-      ELSE liDays = 3.
+      ELSE DO:
+         IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+         THEN liDays = 6.
+         ELSE liDays = 3.
+      END.
       ldaDate = TODAY.
       DO liCount = 1 TO liDays:
          ldaDate = ldaDate + 1.
