@@ -712,7 +712,8 @@ PROCEDURE pSubInvoice2XML:
       
       /* subscription */
       lhXML:START-ELEMENT("ContractDetail").
-      IF SubInvoice.FixedNumber > "" AND
+      IF SubInvoice.FixedNumber NE ? AND
+         SubInvoice.FixedNumber > "" AND
          ttSub.CliEvent EQ "F" AND NOT /* Convergent partially installed. No mobile */
          ttSub.PrintCLI THEN /* Partially terminated. Has mobile calls */
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.FixedNumber).

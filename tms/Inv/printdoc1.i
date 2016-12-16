@@ -1069,7 +1069,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
                       ttSub.CliEvent = ttMSOwner.CLIEvent.
 
             /* Mobile provisioned during month. Used for convergent */
-            IF ttMSOwner.CliEvent = "C" THEN ttSub.PrintCLI = TRUE.
+            IF ttMSOwner.CliEvent NE "F" THEN ttSub.PrintCLI = TRUE.
 
             /* Immediate STC logic non-fusion to non-fusion */
             IF lliSTR                AND
