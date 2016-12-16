@@ -534,7 +534,7 @@ BROWSE:
        ENd.
      END. 
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:
+     ELSE IF LOOKUP(nap,"7,f7") > 0 AND NOT llMore AND ufk[7] > 0 THEN DO:
         llMore = TRUE.
         ufkey = TRUE.
         NEXT LOOP.
