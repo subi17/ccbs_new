@@ -57,10 +57,14 @@ DEF VAR liPortMq      AS INTEGER   NO-UNDO.
 DEF VAR lcServerMq    AS CHARACTER NO-UNDO.
 DEF VAR liTimeOutMq   AS INTEGER   NO-UNDO.
 DEF VAR lcQueueMq     AS CHARACTER NO-UNDO.
+DEF VAR lcPushLogDir  AS CHARACTER NO-UNDO.
+DEF VAR lcPushLogFile AS CHARACTER NO-UNDO.
+DEF VAR liPushCount   AS INTEGER   NO-UNDO.
 
 DEF VAR lMsgPublisher AS CLASS Gwy.MqPublisher NO-UNDO.
 
 DEF STREAM sEmail.
+DEF STREAM sPushLog.
 
 FIND MSRequest WHERE 
      MSRequest.MSRequest = iiMSRequest
@@ -95,7 +99,8 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        liPortMq      = fCParamI("InvPushMqPort")
        lcServerMq    = fCParamC("InvPushMqServer")
        liTimeOutMq   = fCParamI("InvPushMqTimeOut")
-       lcQueueMq     = fCParamC("InvPushMqToQueue").
+       lcQueueMq     = fCParamC("InvPushMqToQueue")
+       lcPushLogDir  = fCParamC("InvPushLogDir").
 
 lMsgPublisher = NEW Gwy.MqPublisher(lcServerMq,liPortMq,
                                     liTimeOutMq,lcQueueMq,
@@ -130,6 +135,68 @@ FUNCTION fGetMessageMq RETURNS CHARACTER
 
 END FUNCTION.
 
+/* Push notification for paper invoices */
+
+lcPushLogFile = lcPushLogDir + "InvPush_" + STRING(YEAR(TODAY),"9999") +
+                                            STRING(MONTH(TODAY),"99")  +
+                                            STRING(DAY(TODAY),"99")    +
+                                            ".log".
+OUTPUT STREAM sPushLog TO VALUE(lcPushLogFile).
+
+PUSH_INVOICE_LOOP:
+FOR EACH Invoice WHERE
+         Invoice.Brand    = gcBrand AND
+         Invoice.InvType  = 1 AND
+         Invoice.InvDate >= ldaDateFrom AND
+         Invoice.InvAmt  >= 0 NO-LOCK:
+
+   IF Invoice.DelType <> {&INV_DEL_TYPE_PAPER} THEN NEXT PUSH_INVOICE_LOOP. 
+
+   IF Invoice.InvCfg[1] THEN NEXT PUSH_INVOICE_LOOP.
+
+   IF MONTH(Invoice.InvDate) NE liMonth THEN NEXT PUSH_INVOICE_LOOP.
+
+   liBillPeriod = YEAR(Invoice.ToDate) * 100 + MONTH(Invoice.ToDate).
+
+   FIND FIRST Customer WHERE
+              Customer.Custnum = Invoice.CustNum NO-LOCK NO-ERROR.
+   IF NOT AVAIL Customer THEN NEXT PUSH_INVOICE_LOOP.
+
+   PUSH_SUBINVOICE_LOOP:
+   FOR EACH SubInvoice OF Invoice NO-LOCK:
+   
+      FIND FIRST MobSub WHERE
+                 MobSub.MsSeq = SubInvoice.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub OR 
+         MobSub.CustNum NE Invoice.CustNum THEN NEXT PUSH_SUBINVOICE_LOOP.
+
+      ASSIGN lcMessageMq = fGetMessageMq(MobSub.CLI)
+             liPushCount = liPushCount + 1.
+
+      IF lcMessageMq = ? THEN lcMessageMq = "".
+
+      IF NOT lMsgPublisher:send_message(lcMessageMq) THEN DO:
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
+
+      PUT STREAM sPushLog UNFORMATTED
+         STRING(MobSub.MsSeq)     + "|" +
+         STRING(Invoice.Custnum)  + "|" +
+         STRING(Invoice.InvNum)   + "|" +
+         MsRequest.UserCode       SKIP.
+
+      IF liPushCount = 50000 THEN DO:
+         PAUSE 120.
+         liPushCount = 0.
+      END.
+
+   END. /* PUSH_SUBINVOICE_LOOP: */
+END. /* PUSH_INVOICE_LOOP: */   
+
+OUTPUT STREAM sPushLog CLOSE.
+IF VALID-OBJECT(lMsgPublisher) THEN DELETE OBJECT(lMsgPublisher).
+
 IF liTime2Pause < 0 THEN liTime2Pause = 0.
 IF liTime2Pause > 3599 THEN liTime2Pause = 3599.  /* 1 Hour */
 
@@ -149,6 +216,7 @@ ASSIGN /* 9:00-22:00 */
    lIniSeconds = 32400
    lEndSeconds = 86399.
 
+/* SMS sending loop */
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
          Invoice.Brand    = gcBrand AND
@@ -169,8 +237,7 @@ FOR EACH Invoice WHERE
    lcSep = (IF Customer.Language = 5 THEN "." ELSE ",").
 
    IF Invoice.DelType <> {&INV_DEL_TYPE_EMAIL_PENDING} AND
-      Invoice.DelType <> {&INV_DEL_TYPE_SMS} AND
-      Invoice.DelType <> {&INV_DEL_TYPE_PAPER} THEN NEXT INVOICE_LOOP.
+      Invoice.DelType <> {&INV_DEL_TYPE_SMS} THEN NEXT INVOICE_LOOP.
 
    IF liLoop = 0 THEN 
       liStartTime = TIME.
@@ -201,13 +268,11 @@ FOR EACH Invoice WHERE
         PauseFlag   = FALSE.
    END.
 
-   IF Invoice.DelType <> {&INV_DEL_TYPE_PAPER} THEN DO:
-      lcSMSTextOriginal = fGetSMSText("SMS",
-                                      "SMSInvoice",
-                                      Customer.Language).
+   lcSMSTextOriginal = fGetSMSText("SMS",
+                                   "SMSInvoice",
+                                   Customer.Language).
 
-      IF lcSMSTextOriginal = "" THEN NEXT INVOICE_LOOP.
-   END.
+   IF lcSMSTextOriginal = "" THEN NEXT INVOICE_LOOP.
 
    /* Sending SMS Invoice to customers */
    SUBINVOICE_LOOP:
@@ -217,19 +282,6 @@ FOR EACH Invoice WHERE
                  MobSub.MsSeq = SubInvoice.MsSeq NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub OR 
          MobSub.CustNum NE Invoice.CustNum THEN NEXT SUBINVOICE_LOOP.
-
-      /* Push Notification  */
-      IF Invoice.DelType = {&INV_DEL_TYPE_PAPER} THEN DO:
-
-         lcMessageMq = fGetMessageMq(MobSub.CLI).
-         IF lcMessageMq = ? THEN lcMessageMq = "".
-
-         IF NOT lMsgPublisher:send_message(lcMessageMq) THEN DO:
-            IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
-               LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
-         END.
-         NEXT SUBINVOICE_LOOP.
-      END. 
 
       lcSMSReplacedText = REPLACE(lcSMSTextOriginal,"#AMOUNT", 
          REPLACE(TRIM(STRING(Invoice.InvAmt, "->>>>>>9.99")),".", lcSep)).
@@ -298,3 +350,4 @@ IF lcContConFile > "" AND SEARCH(lcAddrConfDir) <> ? THEN DO:
 END. /* IF SEARCH(lcAddrConfDir) <> ? THEN DO: */
 
 fReqStatus(2,""). /* request handled succesfully */
+
