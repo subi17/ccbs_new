@@ -50,8 +50,8 @@ IF llDoEvent THEN DO:
 
 END.
 
-DEF VAR TermMobsub        LIKE TermMobsub.CLI           NO-UNDO.
-DEF VAR CustNum       LIKE Customer.Custnum       NO-UNDO.
+DEF VAR TermMobsub    LIKE TermMobsub.CLI       NO-UNDO.
+DEF VAR CustNum       LIKE Customer.Custnum     NO-UNDO.
 DEF VAR xrecid        AS RECID                           init ?.
 DEF VAR FIRSTrow      AS INT                    NO-UNDO  init 0.
 DEF VAR FrmRow        AS INT                    NO-UNDO  init 1.
@@ -74,7 +74,7 @@ DEF VAR llMemo        AS LOG                    NO-UNDO.
 DEF VAR lcOutport     AS CHAR                   NO-UNDO.
 DEF VAR lcCli         AS CHAR                   NO-UNDO FORMAT "X(12)" .
 DEF VAR lcFirstname   LIKE Customer.FIRSTName   NO-UNDO.
-DEF VAR lcLastName    LIKE Customer.Custname   NO-UNDO.
+DEF VAR lcLastName    LIKE Customer.Custname    NO-UNDO.
 DEF VAR liCustNum     LIKe Customer.CustNum     NO-UNDO.
 DEF VAR liAgrCustNum  LIKE Customer.CustNum     NO-UNDO.
 DEF VAR lcPersonID    LIKE Customer.Orgid       No-UNDO.
@@ -104,11 +104,11 @@ ASSIGN lcSaldoFatime = fCParamC("SaldoAgreementAccount")
 
 form
     TermMobsub.CLI         COLUMN-LABEL "MSISDN" FORMAT "X(10)"
-    TermMobsub.MsSeq           COLUMN-LABEL "SubscrID" 
+    TermMobsub.MsSeq       COLUMN-LABEL "SubscrID" 
     TermMobsub.AgrCust     COLUMN-LABEL "AgrCust" 
-    AgrCustomer.CustName   COLUMN-LABEL "Name"     FORMAT "X(20)" 
+    AgrCustomer.CustName   COLUMN-LABEL "Name"   FORMAT "X(20)" 
     AgrCustomer.orgid      COLUMN-LABEL "PerID/ComID"
-    TermMobsub.MSStatus         FORMAT ">9"    COLUMN-LABEL "St" 
+    TermMobsub.MSStatus     FORMAT ">9"   COLUMN-LABEL "St" 
     llMemo                  FORMAT "*/"   COLUMN-LABEL "M"  
     KillMS.OutOp            FORMAT "x(7)"
 
@@ -153,7 +153,8 @@ form /* Customer :n nimella hakua varten */
 form /* seek  CustNum */
    lcPersonID
    HELP "Enter Person ID"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Person ID"   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
+   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Person ID"   
+   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
 
 form /* seek  CustNum */
     liMSStatus
@@ -252,14 +253,15 @@ BROWSE:
             ufk[4]= 2903
             ufk[5]= 2214
             ufk[6]= 559
-            ufk[7]= 555 /*NORE*/
+            ufk[7]= 555 /* MORE */
             ufk[8]= 8
             ufk[9]= 1
             ehto  = 3
             ufkey = FALSE.
          ELSE ASSIGN   
             ufk[1] = 1740
-            ufk[2] = 9852. /*under construction*/
+            ufk[2] = 9852 /* under construction */
+            ufk[8] = 8.
 
          IF ictype  NE  "" THEN ASSIGN
             UFK[1] =  0
@@ -526,7 +528,7 @@ BROWSE:
              PAUSE 1 NO-MESSAGE.
              NEXT BROWSE.
           END.
-                                                                                         /* some TermMobsub/TermMobsub was found */
+          /* some TermMobsub/TermMobsub was found */
           ASSIGN order = 4 Memory = recid(TermMobsub) must-print = TRUE.
           NEXT LOOP.
        ENd.
@@ -597,7 +599,8 @@ BROWSE:
 
               IF NOT AVAIL SearchTermMobsub THEN DO:
                  MESSAGE 
-                    "Customer No." string(liCustNum)                                                 "does NOT have ANY mobile subscriptions"
+                    "Customer No." string(liCustNum) 
+                    "does NOT have ANY mobile subscriptions"
                  VIEW-AS ALERT-BOX TITLE " NO SUBSCRIPTIONS ".
               END.
            END.
