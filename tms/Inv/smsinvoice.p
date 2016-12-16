@@ -21,6 +21,7 @@
 {email.i}
 {smsnotify.i}
 {heartbeat.i}
+{log.i}
 
 &SCOPED-DEFINE MIDNIGHT-SECONDS 86400
 
@@ -60,6 +61,9 @@ DEF VAR lcQueueMq     AS CHARACTER NO-UNDO.
 DEF VAR lcPushLogDir  AS CHARACTER NO-UNDO.
 DEF VAR lcPushLogFile AS CHARACTER NO-UNDO.
 DEF VAR liPushCount   AS INTEGER   NO-UNDO.
+DEF VAR lcLogManagerFile AS CHARACTER NO-UNDO.
+DEF VAR liLogLevel    AS INTEGER   NO-UNDO.
+DEF VAR liLogTreshold AS INTEGER   NO-UNDO.
 
 DEF VAR lMsgPublisher AS CLASS Gwy.MqPublisher NO-UNDO.
 
@@ -80,31 +84,29 @@ IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 lcMonitor = fGetRequestNagiosToken(MsRequest.Reqtype).
 
 /* Email Address Conf File */
-ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
-       lcContConFile = fCParamC("SMSInvContFile")
-       liSMSCntValue = fCParamI("SMSCountValue")
+ASSIGN lcAddrConfDir    = fCParamC("RepConfDir")
+       lcContConFile    = fCParamC("SMSInvContFile")
+       liSMSCntValue    = fCParamI("SMSCountValue")
        /* ie. "32400-79200" Send between 9:00-22:00 */
-       lcSMSSchedule = fCParamC("SMSSchedule")
-       liTime2Pause  = fCParamI("Time2Pause")
-       ldaDateFrom   = MsRequest.ReqDtParam1
-       liMonth       = MONTH(ldaDateFrom)
-       liLoop        = 0
-       liStartTime   = TIME
-       liStopTime    = 0
-       liPauseTime   = 0
-       PauseFlag     = FALSE
-       llFirstInv    = FALSE
-       lcLoginMq     = fCParamC("InvPushMqLogin")
-       lcPassMq      = fCParamC("InvPushMqPassCode")
-       liPortMq      = fCParamI("InvPushMqPort")
-       lcServerMq    = fCParamC("InvPushMqServer")
-       liTimeOutMq   = fCParamI("InvPushMqTimeOut")
-       lcQueueMq     = fCParamC("InvPushMqToQueue")
-       lcPushLogDir  = fCParamC("InvPushLogDir").
-
-lMsgPublisher = NEW Gwy.MqPublisher(lcServerMq,liPortMq,
-                                    liTimeOutMq,lcQueueMq,
-                                    lcLoginMq,lcPassMq).
+       lcSMSSchedule    = fCParamC("SMSSchedule")
+       liTime2Pause     = fCParamI("Time2Pause")
+       ldaDateFrom      = MsRequest.ReqDtParam1
+       liMonth          = MONTH(ldaDateFrom)
+       liLoop           = 0
+       liStartTime      = TIME
+       liStopTime       = 0
+       liPauseTime      = 0
+       PauseFlag        = FALSE
+       llFirstInv       = FALSE
+       lcLoginMq        = fCParamC("InvPushMqLogin")
+       lcPassMq         = fCParamC("InvPushMqPassCode")
+       liPortMq         = fCParamI("InvPushMqPort")
+       lcServerMq       = fCParamC("InvPushMqServer")
+       liTimeOutMq      = fCParamI("InvPushMqTimeOut")
+       lcQueueMq        = fCParamC("InvPushMqToQueue")
+       lcPushLogDir     = fCParamC("InvPushLogDir")
+       liLogLevel       = fCParamI("InvPushLogLevel")
+       liLogTreshold    = fCParamI("InvPushLogTreshold").
 
 FUNCTION fGetMessageMq RETURNS CHARACTER
    (icCLI AS CHAR):
@@ -136,11 +138,34 @@ FUNCTION fGetMessageMq RETURNS CHARACTER
 END FUNCTION.
 
 /* Push notification for paper invoices */
+ASSIGN
+   lcPushLogFile = lcPushLogDir + "InvPush_" + STRING(YEAR(TODAY),"9999") +
+                                               STRING(MONTH(TODAY),"99")  +
+                                               STRING(DAY(TODAY),"99")    +
+                                               ".log"
+   lcLogManagerFile = lcPushLogDir + "InvPus_LogManager_" + 
+                                               STRING(YEAR(TODAY),"9999") +
+                                               STRING(MONTH(TODAY),"99")  +
+                                               STRING(DAY(TODAY),"99")    +
+                                               ".log".
+IF liLogLevel = 0 OR liLogLevel = ? THEN
+   liLogLevel = 2. /* default */
 
-lcPushLogFile = lcPushLogDir + "InvPush_" + STRING(YEAR(TODAY),"9999") +
-                                            STRING(MONTH(TODAY),"99")  +
-                                            STRING(DAY(TODAY),"99")    +
-                                            ".log".
+IF lcLogManagerFile > "" THEN DO:
+   fSetLogFileName(lcLogManagerFile).
+   fSetGlobalLoggingLevel(liLogLevel).
+   fSetLogTreshold(liLogTreshold).
+END.
+
+lMsgPublisher = NEW Gwy.MqPublisher(lcServerMq,liPortMq,
+                                    liTimeOutMq,lcQueueMq,
+                                    lcLoginMq,lcPassMq).
+
+IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
+   IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+      LOG-MANAGER:WRITE-MESSAGE("RabbitMQ Publisher handle not found","ERROR").
+END.
+
 OUTPUT STREAM sPushLog TO VALUE(lcPushLogFile).
 
 PUSH_INVOICE_LOOP:
@@ -158,10 +183,6 @@ FOR EACH Invoice WHERE
 
    liBillPeriod = YEAR(Invoice.ToDate) * 100 + MONTH(Invoice.ToDate).
 
-   FIND FIRST Customer WHERE
-              Customer.Custnum = Invoice.CustNum NO-LOCK NO-ERROR.
-   IF NOT AVAIL Customer THEN NEXT PUSH_INVOICE_LOOP.
-
    PUSH_SUBINVOICE_LOOP:
    FOR EACH SubInvoice OF Invoice NO-LOCK:
    
@@ -176,7 +197,8 @@ FOR EACH Invoice WHERE
       IF lcMessageMq = ? THEN lcMessageMq = "".
 
       IF NOT lMsgPublisher:send_message(lcMessageMq) THEN DO:
-         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+         IF LOG-MANAGER:LOGFILE-NAME <> ? AND
+            LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
             LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
       END.
 
