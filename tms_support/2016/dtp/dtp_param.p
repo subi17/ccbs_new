@@ -17,3 +17,9 @@ ASSIGN
    TMSCodes.CodeName = "Delivery to POS"
    TMSCodes.InUse = 1
    .
+
+CREATE MenuText.
+ASSIGN
+   MenuText.MenuNum  = 9846
+   MenuText.MenuText = "SECPOS  ADDRESS "
+   .
