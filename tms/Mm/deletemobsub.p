@@ -28,6 +28,7 @@
 {main_add_lines.i}
 {Func/fixedlinefunc.i}
 {Func/orderfunc.i}
+{Mc/cash_revert_order.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -896,6 +897,11 @@ PROCEDURE pTerminate:
       IF llCallProc THEN   
          RUN pChangeDelType(MobSub.CustNum).
    END. 
+
+   FIND FIRST OrderDelivery OF Order NO-LOCK NO-ERROR.
+   IF AVAILABLE OrderDelivery AND
+      OrderDelivery.LOStatusId = 12
+   THEN fCashRevertOrder(Order.OrderId).
 
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.

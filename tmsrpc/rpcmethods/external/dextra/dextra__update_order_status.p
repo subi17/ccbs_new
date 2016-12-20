@@ -179,6 +179,7 @@ gcBrand = "1".
 {dextra.i}
 {eventval.i}
 {create_eventlog.i}
+{Mc/cash_revert_order.i}
 
 FIND Order NO-LOCK WHERE
      Order.Brand = gcBrand AND
@@ -334,6 +335,10 @@ IF LOOKUP(STRING(OrderDelivery.LOStatusId),
       RUN closeorder.p(Order.OrderId,TRUE).
    ELSE RUN cancelorder.p(Order.OrderId,TRUE).
 END.
+
+IF OrderDelivery.LOStatusId = 12 AND
+   NOT CAN-FIND(FIRST MobSub NO-LOCK WHERE Mobsub.MsSeq = Order.MsSeq)
+THEN fCashRevertOrder(Order.OrderId).
 
 add_int(response_toplevel_id, "", liResult).
 
