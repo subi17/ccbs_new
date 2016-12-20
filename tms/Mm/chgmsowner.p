@@ -665,7 +665,7 @@ IF icAction NE "view" THEN DO:
       RETURN.
    END.
    
-   RUN pCheckSubscriptionForACC (iiMsSeq,0,OUTPUT lcError).
+   RUN pCheckSubscriptionForACC (iiMsSeq, 0, "",OUTPUT lcError).
    
    IF lcError > "" THEN DO:
       
