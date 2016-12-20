@@ -39,6 +39,7 @@ PROCEDURE pCheckSubscriptionForACC:
 
    DEF INPUT  PARAMETER iiMsSeq      AS INT  NO-UNDO.
    DEF INPUT  PARAMETER iiCurrentReq AS INT  NO-UNDO.
+   DEF INPUT  PARAMETER icChannel    AS CHAR NO-UNDO.
    DEF OUTPUT PARAMETER ocMessage    AS CHAR NO-UNDO.
    
    DEF BUFFER bPendingReq FOR MsRequest.
@@ -118,20 +119,21 @@ PROCEDURE pCheckSubscriptionForACC:
       ocMessage = "Current user for subscription is invalid".
       RETURN "ERROR".
    END.
+   
+   IF icChannel NE {&REQUEST_SOURCE_NEWTON} THEN
+      FOR FIRST Limit NO-LOCK WHERE
+                Limit.MsSeq     = MobSub.MsSeq AND
+                Limit.LimitType = 3            AND
+                Limit.TMRuleSeq = 0            AND
+                Limit.ToDate   >= TODAY        AND
+                Limit.FromDate <= TODAY        AND
+                Limit.Custnum   = MobSub.Custnum AND
+                Limit.LimitID   = 0            AND
+                Limit.LimitAmt > 0:
+         ocMessage = "Subscription has a billing suspension / prohibition".
+         RETURN "ERROR".
+      END.
 
-   FOR FIRST Limit NO-LOCK WHERE
-             Limit.MsSeq     = MobSub.MsSeq AND
-             Limit.LimitType = 3            AND
-             Limit.TMRuleSeq = 0            AND
-             Limit.ToDate   >= TODAY        AND
-             Limit.FromDate <= TODAY        AND
-             Limit.Custnum   = MobSub.Custnum AND
-             Limit.LimitID   = 0            AND
-             Limit.LimitAmt > 0:
-      ocMessage = "Subscription has a billing suspension / prohibition".
-      RETURN "ERROR".
-   END.
-            
    FIND FIRST MsOwner WHERE MsOwner.MsSeq = MobSub.MsSeq NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MsOwner    OR 
       MsOwner.TsEnd < 99999999 OR
