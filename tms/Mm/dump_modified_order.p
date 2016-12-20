@@ -14,6 +14,7 @@
 {tmsconst.i}
 {cparam2.i}
 {forderstamp.i}
+{fixedlinefunc.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -185,6 +186,12 @@ FOR EACH ttOrder NO-LOCK:
                IF icDumpMode = "Full" AND
                   lcValue = "0" THEN lcValue = STRING(ldCrStamp).
             END.
+            WHEN "#OrderChannel" THEN DO:
+               IF fIsConvergenceTariff(ttOrder.CLIType) THEN
+                  lcValue = REPLACE(ttOrder.orderChannel,"fusion","conv").
+               ELSE
+                  lcValue = ttOrder.orderChannel.
+            END.   
             OTHERWISE lcValue = "".
             END CASE.
         END.
