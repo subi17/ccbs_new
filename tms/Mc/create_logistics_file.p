@@ -1394,6 +1394,7 @@ FUNCTION fDelivRouter RETURNS LOG
    DEFINE VARIABLE liLoop1         AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liLoop2         AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liTempRegion    AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcAddressFields AS CHARACTER NO-UNDO.
 
    FIND FIRST AgreeCustomer WHERE
               AgreeCustomer.Brand   = Order.Brand   AND
@@ -1408,7 +1409,39 @@ FUNCTION fDelivRouter RETURNS LOG
               DelivCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
    NO-LOCK NO-ERROR.
 
-   IF NOT AVAIL DelivCustomer THEN DO:
+   IF AVAIL DelivCustomer THEN DO:
+      /* YTS-9922: Checking additional address fields */
+      IF LENGTH(TRIM(DelivCustomer.Block)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Block.
+
+      IF LENGTH(TRIM(DelivCustomer.Door)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Door.
+
+      IF LENGTH(TRIM(DelivCustomer.Letter)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Letter.
+
+      IF LENGTH(TRIM(DelivCustomer.Stair)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Stair.
+
+      IF LENGTH(TRIM(DelivCustomer.Floor)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Floor.
+
+      IF LENGTH(TRIM(DelivCustomer.Hand)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Hand.
+
+      IF LENGTH(TRIM(DelivCustomer.Km)) > 0 THEN
+         lcAddressFields = lcAddressFields + " " +
+                           DelivCustomer.Km.
+      /* Verification */ 
+      IF LENGTH(TRIM(lcAddressFields)) = 0 THEN lcAddressFields = "".
+   END.
+   ELSE DO: /*IF NOT AVAIL DelivCustomer THEN DO: */
 
       FIND FIRST DelivCustomer WHERE
                  DelivCustomer.Brand   = Order.Brand   AND
@@ -1482,7 +1515,7 @@ FUNCTION fDelivRouter RETURNS LOG
       ttOneDelivery.Name          = ContactCustomer.FirstName
       ttOneDelivery.SurName1      = ContactCustomer.SurName1
       ttOneDelivery.SurName2      = ContactCustomer.SurName2
-      ttOneDelivery.DelivAddr     = DelivCustomer.Address
+      ttOneDelivery.DelivAddr     = DelivCustomer.Address + lcAddressFields
       ttOneDelivery.DelivCity     = DelivCustomer.PostOffice
       ttOneDelivery.DelivZip      = DelivCustomer.ZIP
       ttOneDelivery.DelivRegi     = lcDeliRegi
