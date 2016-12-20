@@ -82,6 +82,7 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
       
       CREATE DPMember.
       ASSIGN 
+         DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
          DPMember.DPId      = DiscountPlan.DPId
          DPMember.HostTable = "MobSub" 
          DPMember.KeyValue  = STRING(MobSub.MsSeq) 
