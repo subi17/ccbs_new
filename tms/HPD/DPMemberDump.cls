@@ -47,7 +47,7 @@ CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
          WHEN "KeyValue"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN {HPD/keyvalue.i lbDPMember . objDumpBase:lcKeyDelimiter DPId HostTable KeyValue ValidFrom}.
+              ELSE RETURN {HPD/keyvalue.i lbDPMember . objDumpBase:lcKeyDelimiter KeyValue DPMemberId}.
          OTHERWISE RETURN "".         
       END CASE.
 
@@ -105,7 +105,10 @@ CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
 
          IF llSkip
          THEN NEXT.
-                  
+
+         IF lbDPMember.ValidFrom > lbDPMember.ValidTo
+         THEN NEXT.
+
          liEvents = liEvents + 1.
 
          objDumpFile:mWriteALine().
