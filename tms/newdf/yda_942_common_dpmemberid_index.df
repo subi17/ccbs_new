@@ -1,0 +1,5 @@
+ADD INDEX "DPMemberId" ON "DPMember"
+  AREA "Sta_Index_4"
+  UNIQUE
+  INDEX-FIELD "DPMemberID" ASCENDING
+
