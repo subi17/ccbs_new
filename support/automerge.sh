@@ -7,9 +7,9 @@ die() {
   exit 1
 }
 
-if [ `hostname` = "nunki" ]; then
+if [ `hostname` = "neshmet" ]; then
   git_dir=$(git rev-parse --git-dir) || die "Not a git repository"
-  git config user.email "nunki@jenkins.qvantel.net"
+  git config user.email "neshmet@yoigo-jenkins.qvantel.net"
   git config user.name "Jenkins"
   git fetch --prune
   #start_branch=$(git rev-parse --abbrev-ref HEAD)
