@@ -4,6 +4,7 @@
  * @input       int;mandatory;subscription id
                 boolean;mandatory;admin user (admin has access to terminated subs older than 6 months)
  * @output      cli;string;msisdn
+                fixed_number;string;
                 termination_type;string;"Full" or "Partial" terminated
                 activation_time;DateTime;
                 icc;string;id of the SIM card
@@ -109,6 +110,10 @@ IF NOT fIsViewableTermMobsub(TermMobSub.MsSeq) THEN
 resp_struct = add_struct(response_toplevel_id, "").
 
 add_string(resp_struct, "cli", TermMobSub.cli).
+IF TermMobSub.fixednumber NE ? THEN
+   add_string(resp_struct, "fixed_number", TermMobSub.fixednumber).
+ELSE
+   add_string(resp_struct, "fixed_number", "").
 add_timestamp(resp_struct, "activation_time", TermMobSub.ActivationTS).
 add_string(resp_struct, "icc", TermMobSub.ICC).
 add_string(resp_struct, "subscription_type_id", TermMobSub.CLIType).
