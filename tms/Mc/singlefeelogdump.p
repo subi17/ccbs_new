@@ -8,17 +8,13 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 /*
-1-Action Executed (String = Create/Modify/Delete)
-2-TimeStamp when it was executed (Datetime)
-3-Process that generate this action (String)
-4-User that execute the action (String= TMS user identifier)
-5-Fee Unique Identifier (in case of FFItem it is FFItemNum+FFNum, in case of SingleFee it is FMItemId)
-6-MsSeq (Integer)
-7-CustNum (Integer)
-8-BillPeriod (when it should be billed, Integer 999999)
-9-Billing Item (knows in TMS as BillCode, String )
-10-Fee Amount (float)
-11-Changes
+YTS-9314: Dump logic was changed.
+Daily we do two files:
+1. file: eventlog dump with contain eventlog table information of singlefees.
+2. file: non-billed singlefees
+
+Once in a month 2nd day:
+1. file: Non-billed singlefees and last invoiced singlefees
 */
 
 {commali.i}
@@ -36,99 +32,134 @@ DEF INPUT PARAMETER icEventFields AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
-def stream sout.
-output stream sout to value(icFile).
+DEF VAR lcsinfeeFile AS CHAR NO-UNDO.
+DEF STREAM sout.
+OUTPUT STREAM sout TO VALUE(icFile).
+DEF STREAM sinfee.
+
+ASSIGN
+   lcSinFeeFile = "singlefee_#MODE_#DATE_#TIME.txt"
+   lcSinFeeFile = REPLACE(lcSinFeeFile,"#DATE",STRING(YEAR(TODAY),"9999") +
+                                               STRING(MONTH(TODAY),"99") +
+                                               STRING(DAY(TODAY),"99"))
+    lcSinFeeFile = REPLACE(lcSinFeeFile,"#TIME",
+                     REPLACE(STRING(TIME,"hh:mm:ss"),":",""))
+    lcSinFeeFile = REPLACE(lcSinFeeFile,"#MODE",icDumpMode).
+
+OUTPUT STREAM sinfee TO VALUE(lcSinFeeFile).
+
+DEFINE VARIABLE liKey AS INTEGER NO-UNDO.
+DEFINE VARIABLE lcChanges AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liEntries AS INTEGER NO-UNDO.
+DEFINE VARIABLE i AS INTEGER NO-UNDO.
+
+/* This is needed daily and also once in a month for full dump */
+FUNCTION fNonbilledSinFee_dump RETURNS LOG:
+   /* YTS-9314: Non-billed fulldump
+       done daily modified and full dump */
+   FOR EACH SingleFee NO-LOCK WHERE
+            SingleFee.InvNum = 0:
+      PUT STREAM sinFee UNFORMATTED
+         SingleFee.FMItemID "|"
+         SingleFee.KeyValue "|"
+         SingleFee.CustNum "|"
+         SingleFee.BillPeriod "|"
+         SingleFee.BillCode "|"
+         SingleFee.Amt "|"
+         SingleFee.InvNum SKIP.
+
+      oiEvents = oiEvents + 1.
+      IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
+         PAUSE 1.
+         DISP oiEvents WITH FRAME fColl.
+      END.
+   END.
+END.
 
 FORM
     oiEvents    AT 2  LABEL "Picked " FORMAT ">>>>>>>9"
 WITH SIDE-LABELS 1 DOWN ROW 8 CENTERED OVERLAY
-    TITLE " Collecting " FRAME fColl.
+ TITLE " Collecting " FRAME fColl.
 
-DEFINE VARIABLE liKey AS INTEGER NO-UNDO. 
-DEFINE VARIABLE lcChanges AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE liEntries AS INTEGER NO-UNDO. 
-DEFINE VARIABLE i AS INTEGER NO-UNDO. 
-DEFINE VARIABLE lcKey AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE liOrderID AS INTEGER NO-UNDO. 
-DEFINE VARIABLE liMsseq AS INTEGER NO-UNDO. 
+IF icDumpMode = "Modified" THEN DO:
+   /* Eventlog search */
+   FOR EACH eventlog NO-LOCK WHERE
+            eventlog.eventdate = TODAY - 1 AND
+            eventlog.tablename = "SingleFee" USE-INDEX EventDate:
 
-FOR EACH eventlog NO-LOCK WHERE
-         eventlog.eventdate = TODAY - 1 AND
-         eventlog.tablename = "SingleFee" USE-INDEX EventDate:
+      liKey = INT(ENTRY(4,eventlog.key,CHR(255))) NO-ERROR.
+      IF ERROR-STATUS:ERROR THEN NEXT.
 
-   liKey = INT(ENTRY(4,eventlog.key,CHR(255))) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN NEXT.
-      
-   PUT STREAM sout UNFORMATTED
-      eventlog.action "|"
-      eventlog.eventdate " " eventlog.eventtime "|"
-      eventlog.memo "|"
-      eventlog.usercode "|"
-      liKey "|".
+      PUT STREAM sout UNFORMATTED
+         eventlog.action "|"
+         eventlog.eventdate " " eventlog.eventtime "|"
+         eventlog.memo "|"
+         eventlog.usercode "|"
+         liKey "|".
 
-   IF eventlog.action NE "Delete" THEN DO:
-   
-      FIND SingleFee NO-LOCK WHERE
-           SingleFee.Brand = gcBrand AND
-           SingleFee.FMItemID = liKey NO-ERROR.
+      IF eventlog.action NE "Delete" THEN DO:
 
-      /* should not happen, but just in case */
-      IF NOT AVAIL SingleFee THEN DO:
-         PUT STREAM sout UNFORMATTED  "||||||" SKIP.
-         NEXT.
-      END.
+         lcChanges = "".
 
+         IF eventlog.action EQ "Modify" THEN DO:
 
-      CASE SingleFee.HostTable:
-         WHEN "MobSub" THEN liMsSeq = INT(SingleFee.KeyValue) NO-ERROR.
-         WHEN "Order" THEN DO:
-             liOrderID = INT(SingleFee.KeyValue) NO-ERROR.
-             IF NOT ERROR-STATUS:ERROR THEN DO:
-                FIND Order NO-LOCK WHERE
-                     Order.Brand = gcBrand AND
-                     Order.OrderId = liOrderID NO-ERROR.
-                IF AVAIL Order THEN liMsSeq = Order.MsSeq.
-             END.
+            ASSIGN
+               lcChanges = ""
+               liEntries  = num-entries(Eventlog.DataValues, CHR(255)) / 3.
+
+            DO i = 0 TO liEntries  - 1 :
+               lcChanges = lcChanges + ";" +
+                  entry(3 * i + 1,Eventlog.DataValues,CHR(255)) + ":" +
+                  entry(3 * i + 2,Eventlog.DataValues,CHR(255)) + ":" +
+                  entry(3 * i + 3,Eventlog.DataValues,CHR(255)).
+            END.
+
+            IF lcChanges > "" THEN lcChanges = SUBSTRING(lcChanges,2).
          END.
-         OTHERWISE liMsSeq = INT(SingleFee.KeyValue) NO-ERROR.
+         PUT STREAM sout UNFORMATTED
+            lcChanges SKIP.
+      END. /* IF eventlog.action NE "Delete" THEN DO: */
+
+      ELSE /* IF Eventlog action = DELETE */
+         PUT STREAM sout UNFORMATTED  "liKey||||||" SKIP.
+
+      oiEvents = oiEvents + 1.
+      IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
+         PAUSE 0.
+         DISP oiEvents WITH FRAME fColl.
       END.
+   END.
+   /* Run daily Non-billed singlefee dump */
+   fNonbilledSinFee_dump().
+END.
+ELSE DO:
+   /* Non-billed singlefee counter */
+   fNonbilledSinFee_dump().
 
-      lcChanges = "".
-
-      IF eventlog.action EQ "Modify" THEN DO:
-
-         ASSIGN
-            lcChanges = ""
-            liEntries  = num-entries(Eventlog.DataValues, CHR(255)) / 3.
-
-         DO i = 0 TO liEntries  - 1 :
-            lcChanges = lcChanges + ";" +
-               entry(3 * i + 1,Eventlog.DataValues,CHR(255)) + ":" +
-               entry(3 * i + 2,Eventlog.DataValues,CHR(255)) + ":" +
-               entry(3 * i + 3,Eventlog.DataValues,CHR(255)).
-         END.
-
-         IF lcChanges > "" THEN lcChanges = SUBSTRING(lcChanges,2).
-      END.
-
-      PUT STREAM sout UNFORMATTED 
-         liMsSeq "|"
-         SingleFee.custnum "|"
-         SingleFee.billperiod "|"
+   /* YTS-9314: billed on last month */
+   FOR EACH SingleFee NO-LOCK WHERE
+            SingleFee.Invnum > 0,
+       EACH Invoice NO-LOCK WHERE
+            Invoice.Brand = "1" AND
+            Invoice.InvDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) AND
+            Invoice.InvNum = SingleFee.InvNum:
+      PUT STREAM sinFee UNFORMATTED
+         SingleFee.FMItemID "|"
+         SingleFee.KeyValue "|"
+         SingleFee.CustNum "|"
+         SingleFee.BillPeriod "|"
          SingleFee.BillCode "|"
          SingleFee.Amt "|"
-         SingleFee.Invnum "|"
-         lcChanges SKIP.
-   END.
-   ELSE PUT STREAM sout UNFORMATTED  "||||||" SKIP.
-   
-   oiEvents = oiEvents + 1.
-   IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
-      PAUSE 0.
-      DISP oiEvents WITH FRAME fColl.
-   END.
+         SingleFee.InvNum SKIP.
 
-END. 
+      oiEvents = oiEvents + 1.
+      IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
+         PAUSE 1.
+         DISP oiEvents WITH FRAME fColl.
+      END.
+   END.
+END.
 
 OUTPUT STREAM sout CLOSE.
+OUTPUT STREAM sinfee CLOSE.
 IF NOT SESSION:BATCH THEN HIDE FRAME fColl NO-PAUSE.
