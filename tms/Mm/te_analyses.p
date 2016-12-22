@@ -52,7 +52,6 @@ DEF VAR ldtLastDeleteDate AS DATE NO-UNDO.
 DEF VAR liLaunchHandlers  AS INT  NO-UNDO.
 DEF VAR lcLine            AS CHAR NO-UNDO.
 DEF VAR lcCustNum         AS INT  NO-UNDO.
-DEF VAR lcCli             AS CHAR NO-UNDO.
 
 DEFINE TEMP-TABLE ttEvent
 FIELD FieldName AS CHAR
@@ -161,7 +160,7 @@ FUNCTION fGenerateTriggerItem RETURN LOG
                        MsOwner.CLI = icCli AND
                        MsOwner.TSBegin < ldeLastSecond AND
                        MsOwner.TSEnd >= ldeFirstSecond AND
-                       MsOwner.FixedNumber > "") THEN lcCLI = "".
+                       MsOwner.FixedNumber > "") THEN icCLI = "".
   END.
 
   FIND FIRST ttTriggerItem WHERE 
@@ -199,7 +198,6 @@ FUNCTION fAnalyseTriggerEvent RETURN INT
    DEF VAR loopDate  AS DATE NO-UNDO.
    DEF VAR ldaDate   AS DATE NO-UNDO.
    DEF VAR ldaDate2  AS DATE NO-UNDO.
-   DEF VAR lcCli     AS CHAR NO-UNDO.
    DEF VAR liReqType AS INT  NO-UNDO.
    DEF VAR liLoop    AS INT  NO-UNDO.
    DEF VAR lcSpecialCli AS CHAR NO-UNDO.

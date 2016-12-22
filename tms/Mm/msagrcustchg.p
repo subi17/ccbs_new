@@ -190,6 +190,7 @@ PROCEDURE pOwnerChange:
 
    RUN pCheckSubscriptionForACC (MsRequest.MsSeq,
                                  MsRequest.MsRequest,
+                                 MsRequest.ReqSource,
                                  OUTPUT lcInfo).
    
    IF lcInfo = "" AND MsRequest.ReqIParam1 > 0 THEN
@@ -473,6 +474,8 @@ PROCEDURE pOwnerChange:
                lcChannel = "TMS".
             WHEN {&REQUEST_SOURCE_NEWTON} THEN
                lcChannel = "VISTA".
+            WHEN {&REQUEST_SOURCE_RETAIL_NEWTON} THEN
+               lcChannel = "VFR".
          END CASE.
 
          lcMemo = "ACC" + CHR(255) +
@@ -786,6 +789,7 @@ PROCEDURE pOwnerChange:
          RUN pCheckSubscriptionForACC (
             bMobSub.MsSeq,
             0,
+            MsRequest.ReqSource,
             OUTPUT lcInfo).
 
          IF NOT RETURN-VALUE BEGINS "ERROR" THEN DO:
@@ -1191,9 +1195,10 @@ PROCEDURE pMsCustMove:
             SingleFee.BillCode = "RVTERMF".
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSingleFee).
       END.
-      
+     
+      /*YDR-2360 changes*/ 
       /* billing denials */
-      FOR EACH Limit EXCLUSIVE-LOCK USE-INDEX MsSeq WHERE
+      FOR EACH Limit NO-LOCK USE-INDEX MsSeq WHERE
                Limit.MsSeq     = MsOwner.MsSeq   AND
                Limit.LimitType = 3               AND
                Limit.TMRuleSeq = 0               AND
@@ -1201,21 +1206,15 @@ PROCEDURE pMsCustMove:
                Limit.LimitID   = 0               AND
                Limit.CustNum   = MobSub.InvCust:
                
-         IF Limit.FromDate >= ldtActDate THEN       
-            Limit.CustNum = iiNewInvCust.       
+          CREATE bLimit.
+          BUFFER-COPY Limit EXCEPT FromDate TO bLimit.
+          ASSIGN
+             bLimit.FromDate = ldtActDate
+             bLimit.CustNum  = iiNewInvCust.
 
-         ELSE DO:
-            CREATE bLimit.
-            BUFFER-COPY Limit EXCEPT FromDate TO bLimit.
-            ASSIGN
-               bLimit.FromDate = ldtActDate
-               bLimit.CustNum  = iiNewInvCust
-               Limit.ToDate    = ldtActDate - 1.
-            RELEASE bLimit.   
-         END.
-         
-         RELEASE Limit.
-   END.
+          RELEASE bLimit.
+
+      END.
 
    END.
    
@@ -1877,6 +1876,7 @@ PROCEDURE pHandleAdditionalLines:
          RUN pCheckSubscriptionForACC (
             bMobSub.MsSeq,
             0,
+            MsRequest.ReqSource,
             OUTPUT lcInfo).
 
          IF NOT RETURN-VALUE BEGINS "ERROR" THEN DO:
