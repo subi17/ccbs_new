@@ -52,6 +52,7 @@ DEFINE VARIABLE liKey AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcChanges AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liEntries AS INTEGER NO-UNDO.
 DEFINE VARIABLE i AS INTEGER NO-UNDO.
+DEFINE VARIABLE ldaInvDate AS DATE NO-UNDO. 
 
 /* This is needed daily and also once in a month for full dump */
 FUNCTION fNonbilledSinFee_dump RETURNS LOG:
@@ -120,9 +121,6 @@ IF icDumpMode = "Modified" THEN DO:
             lcChanges SKIP.
       END. /* IF eventlog.action NE "Delete" THEN DO: */
 
-      ELSE /* IF Eventlog action = DELETE */
-         PUT STREAM sout UNFORMATTED  "liKey||||||" SKIP.
-
       oiEvents = oiEvents + 1.
       IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
          PAUSE 0.
@@ -135,14 +133,16 @@ END.
 ELSE DO:
    /* Non-billed singlefee counter */
    fNonbilledSinFee_dump().
-
+   ASSIGN
+      ldaInvDate = ADD-INTERVAL(TODAY, -1, "months").
+      ldainvdate = DATE(MONTH(ldaInvDate),1,YEAR(ldaInvDate)).
    /* YTS-9314: billed on last month */
    FOR EACH SingleFee NO-LOCK WHERE
             SingleFee.Invnum > 0,
-       EACH Invoice NO-LOCK WHERE
+      FIRST Invoice NO-LOCK WHERE
             Invoice.Brand = "1" AND
-            Invoice.InvDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) AND
-            Invoice.InvNum = SingleFee.InvNum:
+            Invoice.InvNum = SingleFee.InvNum AND
+            Invoice.InvDate >= ldainvdate:
       PUT STREAM sinFee UNFORMATTED
          SingleFee.FMItemID "|"
          SingleFee.KeyValue "|"
