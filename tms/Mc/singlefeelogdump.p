@@ -33,6 +33,15 @@ DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
 DEF VAR lcsinfeeFile AS CHAR NO-UNDO.
+DEF VAR lcSpoolDir AS CHAR NO-UNDO.
+DEF VAR lcTransDir AS CHAR NO-UNDO. 
+
+FIND FIRST Dumpfile NO-LOCK WHERE Dumpfile.DumpId = icDumpID NO-ERROR.
+IF AVAIL DumpFile THEN 
+   ASSIGN
+      lcSpoolDir = DumpFile.SpoolDir + "/"
+      lcTransDir = Dumpfile.TransDir.
+
 DEF STREAM sout.
 OUTPUT STREAM sout TO VALUE(icFile).
 DEF STREAM sinfee.
@@ -46,14 +55,14 @@ ASSIGN
                      REPLACE(STRING(TIME,"hh:mm:ss"),":",""))
     lcSinFeeFile = REPLACE(lcSinFeeFile,"#MODE",icDumpMode).
 
-OUTPUT STREAM sinfee TO VALUE(lcSinFeeFile).
+OUTPUT STREAM sinfee TO VALUE(lcSpoolDir + lcSinFeeFile).
 
 DEFINE VARIABLE liKey AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcChanges AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liEntries AS INTEGER NO-UNDO.
 DEFINE VARIABLE i AS INTEGER NO-UNDO.
 DEFINE VARIABLE ldaInvDate AS DATE NO-UNDO. 
-
+      
 /* This is needed daily and also once in a month for full dump */
 FUNCTION fNonbilledSinFee_dump RETURNS LOG:
    /* YTS-9314: Non-billed fulldump
@@ -162,4 +171,7 @@ END.
 
 OUTPUT STREAM sout CLOSE.
 OUTPUT STREAM sinfee CLOSE.
+
+UNIX SILENT VALUE("mv " + lcSpooldir + lcSinFeeFile + " " + lcTransDir).
+
 IF NOT SESSION:BATCH THEN HIDE FRAME fColl NO-PAUSE.
