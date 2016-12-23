@@ -930,8 +930,7 @@ PROCEDURE pTerminate:
    END.      
    ELSE DO: 
       FIND FIRST TermMobsub WHERE 
-                 TermMobsub.msseq EQ liMsSeq AND
-                 TermMobsub.cli EQ Mobsub.fixednumber NO-ERROR.
+                 TermMobsub.msseq EQ liMsSeq NO-ERROR.
       IF AVAIL TermMobsub THEN  /* Partial terminated case */
          BUFFER-COPY Mobsub EXCEPT Cli icc imsi msstatus TO TermMobsub.
       ELSE DO:
