@@ -41,9 +41,11 @@ IF AVAIL DumpFile THEN
    ASSIGN
       lcSpoolDir = DumpFile.SpoolDir + "/"
       lcTransDir = Dumpfile.TransDir.
-
-DEF STREAM sout.
-OUTPUT STREAM sout TO VALUE(icFile).
+/* Not create stream if it is not needed */
+IF icDumpMode = "Modified" THEN DO:
+   DEF STREAM sout.
+   OUTPUT STREAM sout TO VALUE(icFile).
+END.
 DEF STREAM sinfee.
 
 ASSIGN
@@ -62,6 +64,8 @@ DEFINE VARIABLE lcChanges AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liEntries AS INTEGER NO-UNDO.
 DEFINE VARIABLE i AS INTEGER NO-UNDO.
 DEFINE VARIABLE ldaInvDate AS DATE NO-UNDO. 
+DEFINE VARIABLE liBilled AS INTEGER NO-UNDO.
+DEFINE VARIABLE lisinfees AS INTEGER NO-UNDO. 
       
 /* This is needed daily and also once in a month for full dump */
 FUNCTION fNonbilledSinFee_dump RETURNS LOG:
@@ -78,18 +82,14 @@ FUNCTION fNonbilledSinFee_dump RETURNS LOG:
          SingleFee.Amt "|"
          SingleFee.InvNum SKIP.
 
-      oiEvents = oiEvents + 1.
-      IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
-         PAUSE 1.
-         DISP oiEvents WITH FRAME fColl.
+      liSinFees= lisinFees + 1.
+      IF NOT SESSION:BATCH AND liSinFees MOD 100 = 0 THEN DO:
+         PAUSE 0.
+         DISP liSinFees WITH FRAME fsinfee.
       END.
    END.
+   oiEvents = oiEvents + lisinFees.
 END.
-
-FORM
-    oiEvents    AT 2  LABEL "Picked " FORMAT ">>>>>>>9"
-WITH SIDE-LABELS 1 DOWN ROW 8 CENTERED OVERLAY
- TITLE " Collecting " FRAME fColl.
 
 IF icDumpMode = "Modified" THEN DO:
    /* Eventlog search */
@@ -146,12 +146,11 @@ ELSE DO:
       ldaInvDate = ADD-INTERVAL(TODAY, -1, "months").
       ldainvdate = DATE(MONTH(ldaInvDate),1,YEAR(ldaInvDate)).
    /* YTS-9314: billed on last month */
-   FOR EACH SingleFee NO-LOCK WHERE
-            SingleFee.Invnum > 0,
-      FIRST Invoice NO-LOCK WHERE
+   FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
             Invoice.Brand = "1" AND
-            Invoice.InvNum = SingleFee.InvNum AND
-            Invoice.InvDate >= ldainvdate:
+            Invoice.InvDate >= ldainvdate,
+       EACH SingleFee NO-LOCK WHERE
+            SingleFee.Invnum = Invoice.InvNum:
       PUT STREAM sinFee UNFORMATTED
          SingleFee.FMItemID "|"
          SingleFee.KeyValue "|"
@@ -161,15 +160,15 @@ ELSE DO:
          SingleFee.Amt "|"
          SingleFee.InvNum SKIP.
 
-      oiEvents = oiEvents + 1.
-      IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
-         PAUSE 1.
-         DISP oiEvents WITH FRAME fColl.
+      liBilled = liBilled + 1.
+      IF NOT SESSION:BATCH AND liBilled MOD 100 = 0 THEN DO:
+         PAUSE 0.
+         DISP liBilled WITH FRAME fbil.
       END.
    END.
+   oiEvents = oiEvents + libilled.
 END.
-
-OUTPUT STREAM sout CLOSE.
+IF icDumpMode = "Modified" THEN OUTPUT STREAM sout CLOSE.
 OUTPUT STREAM sinfee CLOSE.
 
 UNIX SILENT VALUE("mv " + lcSpooldir + lcSinFeeFile + " " + lcTransDir).
