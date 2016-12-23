@@ -14,6 +14,8 @@ DEF VAR gcBrand    AS CHAR NO-UNDO.
 DEF VAR katun      AS CHAR NO-UNDO.
 DEF VAR pcCliType  AS CHAR NO-UNDO.
 DEF VAR pcBundleId AS CHAR NO-UNDO.
+DEF VAR pcInputStruct AS CHAR NO-UNDO.
+DEF VAR lcInputFields AS CHAR NO-UNDO.
 
 ASSIGN katun = "Newton"
        gcBrand = "1".
@@ -22,10 +24,17 @@ ASSIGN katun = "Newton"
 {cparam2.i}
 {fixedlinefunc.i}
 
-IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
+pcInputStruct = get_struct(param_toplevel_id,"0").
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+lcInputFields = validate_request(pcInputStruct,"cli_type,bundleid").
+IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-pcCliType     = get_string(param_toplevel_id, "0").
-pcBundleId    = get_string(param_toplevel_id, "1").
+ASSIGN
+   pcCliType     = get_string(pcInputStruct, "0")
+      WHEN LOOKUP("cli_type",lcInputFields) > 0
+   pcBundleId    = get_string(pcInputStruct, "1")
+      WHEN LOOKUP("bundleid",lcInputFields) > 0.
 
 /* Output parameters */
 DEF VAR top_struct         AS CHAR NO-UNDO.
