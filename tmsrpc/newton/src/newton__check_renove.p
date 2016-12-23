@@ -389,6 +389,7 @@ FOR EACH DCCLI WHERE
          DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
          DayCampaign.TermFeeCalc > 0 NO-LOCK:
    
+   IF DayCampaign.DCEvent BEGINS "FTERM" THEN NEXT.
    /* Count possible penalty fee for contract termination */
    IF DCCLI.Amount NE ? THEN ldePrice = DCCLI.Amount.
    ELSE DO:

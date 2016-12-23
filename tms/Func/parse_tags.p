@@ -108,6 +108,8 @@ DEF VAR lcTag AS CHAR NO-UNDO.
 DEF VAR lcFuncName AS CHAR NO-UNDO.
 DEF VAR lcReplacementValue AS CHAR NO-UNDO.
 DEF VAR liNotTagCount AS INT NO-UNDO.
+DEF VAR llGotValue AS LOG NO-UNDO.
+DEF VAR llGotTag AS LOG NO-UNDO.
 
 DEF STREAM soutfile.
 OUTPUT STREAM soutfile to VALUE(icOUTPUTFile).
@@ -116,23 +118,34 @@ repeat:
    IMPORT STREAM sinfile UNFORMATTED lcLine.
    liNotTagCount = 0. /* initialize to zero. Needed for possible # marks in text
                     that actually are not tags. */
+   llGotValue = FALSE.
+   llGotTag = FALSE.
    DO WHILE (INDEX(lcLine,"#[")>0 AND liNotTagCount = 0):
       lcTag = fGetTag(lcLine).
       IF (lcTag > "") THEN DO:
+         llGotTag = TRUE. /* At leasr one tag exist in the line */
          lcFuncName = "pGet" + lcTag.
          RUN VALUE(lcFuncName)
              (INPUT iiOrdernbr, OUTPUT llErrors, OUTPUT lcReplacementValue).
-         IF (NOT llErrors AND LENGTH(lcReplacementValue)>0) THEN
+         IF (NOT llErrors AND LENGTH(lcReplacementValue)>0) THEN DO:
             lcLine = REPLACE (lcLine,"#[" + lcTag + "]",lcReplacementValue).
+            llGotValue = TRUE. /* reasonable value exist */
+         END.
          ELSE DO:
-            IF llErrors THEN fErrLine(INPUT lcReplacementValue).
-            lcLine = "". /* Clear whole line because error or no data */
+            IF llErrors THEN DO:
+               fErrLine(INPUT lcReplacementValue).
+               lcLine = "". /* Clear whole line because error */
+            END.
+            ELSE /* remove / replace tag with empty value */
+               lcLine = REPLACE (lcLine,"#[" + lcTag + "]",lcReplacementValue).
          END.   
       END.
       ELSE DO:
          liNotTagCount = liNotTagCount + 1.
       END.
    END.
+   IF llGotTag AND NOT llGotValue THEN
+      lcLine = "". /* something wrong in tag value or it not exist at all */
    IF (lcLine > "") THEN DO:
       PUT STREAM soutfile UNFORMATTED lcLine skip.
       lcEmailContent = lcEmailContent + " " + lcLine.

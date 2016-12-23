@@ -73,7 +73,7 @@ DEF VAR liSubs AS INT NO-UNDO.
 DEF VAR lcDMSInfo AS CHAR NO-UNDO.
 DEF VAR liActLimit AS INT NO-UNDO.
 DEF VAR liActs AS INT NO-UNDO.
-
+DEF VAR lcReqSource AS CHAR NO-UNDO.
 
 DEF BUFFER bOriginalCustomer FOR Customer.
 
@@ -229,10 +229,15 @@ IF pdeCharge > 0 THEN
       pdeCharge,
       pdeChargeLimit).
 
+ASSIGN lcReqSource = (IF pcChannel = "newton" THEN {&REQUEST_SOURCE_NEWTON}
+                      ELSE IF pcChannel = "retail_newton" THEN {&REQUEST_SOURCE_RETAIL_NEWTON}
+                      ELSE {&REQUEST_SOURCE_MANUAL_TMS}).
+
 IF lcError EQ "" THEN 
    RUN pCheckSubscriptionForACC (
       MobSub.MsSeq,
       0,
+      lcReqSource,
       OUTPUT lcError).
 
 IF lcError EQ "" AND AVAIL Customer THEN 
@@ -285,7 +290,7 @@ liRequest = fMSCustChangeRequest(
    pdeCharge,
    TRUE,  /* send SMS */
    "",
-   ({&REQUEST_SOURCE_NEWTON}),
+   lcReqSource,
    0, /* orig. request */
    pcContractId,
    OUTPUT lcError).

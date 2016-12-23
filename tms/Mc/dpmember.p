@@ -170,6 +170,7 @@ REPEAT WITH FRAME sel:
 
            CREATE DPMember.
            ASSIGN 
+              DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
               DPMember.DPID       = iiDPID
               DPMember.HostTable  = icHostTable
               DPMember.KeyValue   = icKeyValue

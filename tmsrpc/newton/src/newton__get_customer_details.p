@@ -28,6 +28,7 @@
        mark_post_3rd;boolean;
        mark_sms_3rd;boolean;
        mark_email_3rd;boolean;
+       mark_dont_share_personal_data;boolean;
        debit_type;int;
        company_name;string;company name if corporate customer
        company_foundationdate;date;Foundation date if corporate customer
@@ -203,6 +204,7 @@ add_boolean(top_struct, 'mark_post', Customer.DirMarkPost).
 add_boolean(top_struct, 'mark_sms_3rd', Customer.OutMarkSMS).
 add_boolean(top_struct, 'mark_email_3rd', Customer.OutMarkEmail).
 add_boolean(top_struct, 'mark_post_3rd', Customer.OutMarkPost).
+add_boolean(top_struct, 'mark_dont_share_personal_data', Customer.DontSharePersdata).
 
 FIND FIRST CustomerReport WHERE
            CustomerReport.Custnum = Customer.Custnum NO-LOCK NO-ERROR.

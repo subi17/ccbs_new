@@ -370,7 +370,8 @@ PROCEDURE pDiscountPlan:
          STRING(Order.MsSeq) + " already exist".
 
    CREATE DPMember.
-   ASSIGN DPMember.DPId      = DiscountPlan.DPId
+   ASSIGN DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
+          DPMember.DPId      = DiscountPlan.DPId
           DPMember.HostTable = "MobSub"
           DPMember.KeyValue  = STRING(Order.MsSeq)
           DPMember.ValidFrom = TODAY.
