@@ -1,6 +1,8 @@
 /**
  * A mobsub object
  *
+ * @input       cli_type;string;optional;Current cli type
+                bundle_id;string;optional;Current bundle id
  * @output      clitypes;array of structs;
  * @clitypes    cli_type;string;mandatory;
                 tariff_bundle;string;mandatory;
@@ -8,14 +10,22 @@
  */
 {xmlrpc/xmlrpc_access.i}
 
-DEF VAR gcBrand AS CHAR NO-UNDO.
-DEF VAR katun   AS CHAR NO-UNDO.
+DEF VAR gcBrand    AS CHAR NO-UNDO.
+DEF VAR katun      AS CHAR NO-UNDO.
+DEF VAR pcCliType  AS CHAR NO-UNDO.
+DEF VAR pcBundleId AS CHAR NO-UNDO.
 
 ASSIGN katun = "Newton"
        gcBrand = "1".
 
 {tmsconst.i}
 {cparam2.i}
+{fixedlinefunc.i}
+
+IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
+
+pcCliType     = get_string(param_toplevel_id, "0").
+pcBundleId    = get_string(param_toplevel_id, "1").
 
 /* Output parameters */
 DEF VAR top_struct         AS CHAR NO-UNDO.

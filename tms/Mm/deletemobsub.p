@@ -917,19 +917,30 @@ PROCEDURE pTerminate:
          RUN pChangeDelType(MobSub.CustNum).
    END. 
 
-   CREATE TermMobsub.
-   BUFFER-COPY Mobsub TO TermMobsub.
-   
    /* COFF Partial termination */
-   IF lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} THEN
+   IF lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} THEN DO:
+      CREATE TermMobsub.
+      BUFFER-COPY Mobsub TO TermMobsub.
       ASSIGN
          TermMobsub.fixednumber = "" /* Fixed line stays active */
          Mobsub.cli = Mobsub.fixednumber
          Mobsub.icc = ""
          Mobsub.imsi = ""
          MobSub.msStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
-   ELSE 
+   END.      
+   ELSE DO: 
+      FIND FIRST TermMobsub WHERE 
+                 TermMobsub.msseq EQ liMsSeq AND
+                 TermMobsub.cli EQ Mobsub.fixednumber NO-ERROR.
+      IF AVAIL TermMobsub THEN  /* Partial terminated case */
+         BUFFER-COPY Mobsub EXCEPT Cli icc imsi msstatus TO TermMobsub.
+      ELSE DO:
+         CREATE TermMobsub.
+         BUFFER-COPY Mobsub TO TermMobsub.
+      END.
       DELETE MobSub.
+
+   END.   
    IF AVAIL MSISDN THEN RELEASE MSISDN.
 
    /* Find Original request */
