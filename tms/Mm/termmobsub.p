@@ -969,7 +969,7 @@ PROCEDURE local-find-others.
                                        INPUT lcSaldofatime).
       FIND FIRST Msowner WHERE 
                  Msowner.msseq = TermMobsub.MSseq AND
-                 Msowner.tsend NE ?   /* needed for partial term */
+                 Msowner.tsend LT fmakets() /* needed for partial term */
       USE-INDEX MsSeq NO-LOCK NO-ERROR.
 
       IF AVAIL msowner THEN
