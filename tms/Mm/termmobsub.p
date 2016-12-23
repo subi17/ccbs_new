@@ -969,8 +969,8 @@ PROCEDURE local-find-others.
                                        INPUT lcSaldofatime).
       FIND FIRST Msowner WHERE 
                  Msowner.msseq = TermMobsub.MSseq AND
-                 Msowner.cli = TermMobsub.cli   /* needed for partial term */
-      NO-LOCK NO-ERROR.
+                 Msowner.tsend NE ?   /* needed for partial term */
+      USE-INDEX MsSeq NO-LOCK NO-ERROR.
 
       IF AVAIL msowner THEN
          lcTerMinated  = "TERMINATED....: " + fTS2HMS(msowner.tsend).
