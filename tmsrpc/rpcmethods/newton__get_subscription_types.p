@@ -31,9 +31,9 @@ lcInputFields = validate_request(pcInputStruct,"cli_type,bundle_id").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
-   pcCliType     = get_string(pcInputStruct, "0")
+   pcCliType     = get_string(pcInputStruct, "cli_type")
       WHEN LOOKUP("cli_type",lcInputFields) > 0
-   pcBundleId    = get_string(pcInputStruct, "1")
+   pcBundleId    = get_string(pcInputStruct, "bundle_id")
       WHEN LOOKUP("bundle_id",lcInputFields) > 0.
 
 /* Output parameters */
@@ -41,7 +41,8 @@ DEF VAR top_struct         AS CHAR NO-UNDO.
 DEF VAR result_array       AS CHAR NO-UNDO.
 DEF VAR sub_struct         AS CHAR NO-UNDO.
 DEF VAR ldaCont15PromoEnd  AS DATE NO-UNDO. 
- 
+DEF VAR lcStatusCode       AS INT  NO-UNDO.
+
 DEF BUFFER bCLIType        FOR CLIType.
 
 ldaCont15PromoEnd  = fCParamDa("CONT15PromoEndDate").
@@ -78,27 +79,20 @@ FOR EACH CLIType NO-LOCK WHERE
                bCLIType.BillTarget EQ CLIType.BillTarget AND
                bCLIType.CLIType <> CLIType.CLIType AND
                bCLIType.BundleType = CLIType.BundleType NO-LOCK:
-
+         lcStatusCode = bCLIType.StatusCode.
          fAddCLITypeStruct(CLIType.CLIType,bCLIType.CLIType,
-                           bCLIType.StatusCode).
+                           lcStatusCode).
 
       END. /* FOR EACH bCLIType WHERE */
-   ELSE
-      fAddCLITypeStruct(CLIType.CLIType,"",CLIType.StatusCode).
-
+   ELSE DO:
+      lcStatusCode = CLIType.StatusCode.
+      /* Mobile subscrition should be allowed to do STC in convergent
+         tariffs, but fixed part should remain same */
+      IF fIsConvergenceTariff(pcClitype) AND
+         fIsConvergenceTariff(CliType.Clitype) AND
+         fCheckConvergentSTCCompability(pcClitype,Clitype.clitype) THEN
+         lcStatusCode = 1.
+      fAddCLITypeStruct(CLIType.CLIType,"",lcStatusCode).
+   END.
 END. /* FOR EACH CLIType WHERE */
 
-IF fIsConvergenceTariff(pcClitype) THEN DO:
-   /* Convergent STC situation, STC web status is marked as 0
-      but for whole convergent subscription but mobile line STC is
-      possible as fixed line remains same. Find suitable subscriptions
-      by searching clitypes which have download speed specified (=convergent)*/
-   FOR EACH Clitype NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
-            CLIType.WebStatusCode = 0 AND
-            CliType.FixedLineDownload NE ? AND
-            CliType.FixedLineDownload NE "":
-      IF fCheckConvergentSTCCompability(pcClitype,Clitype.clitype) THEN
-         fAddCLITypeStruct(CLIType.CLIType,"",CLIType.StatusCode).
-   END.         
-END.
