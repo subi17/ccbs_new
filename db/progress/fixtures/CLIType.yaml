@@ -70,10 +70,25 @@ CLIType5: CLIType
   CompareFee: 23.97
   ArAccNum: 43000000
   PayType: 1
+  WebStatusCode: 2
   CommercialFee: 23.97
   BaseBundle: "CONT24"
 
 CLIType6: CLIType
+  Clitype: "CONT25"
+  CliName: "Contrato 25"
+  BillTarget: 64
+  PricePlan: "CONTRATO25"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 48
+  CompareFee: 26.45
+  ArAccNum: 43000000
+  PayType: 1
+  CommercialFee: 26.45
+  BaseBundle: "CONT25"
+
+CLIType7: CLIType
   Clitype: "CONT4"
   CliName: "Contrato Hablador"
   BillTarget: 6
@@ -91,7 +106,7 @@ CLIType6: CLIType
   WebStatusCode: 2
   CommercialFee: 6
 
-CLIType7: CLIType
+CLIType8: CLIType
   Clitype: "CONT5"
   CliName: "Contrato 5"
   BillTarget: 9
@@ -109,7 +124,7 @@ CLIType7: CLIType
   WebStatusCode: 2
   CommercialFee: 19
 
-CLIType8: CLIType
+CLIType9: CLIType
   Clitype: "CONT6"
   CliName: "Contrato 6"
   BillTarget: 11
@@ -128,7 +143,7 @@ CLIType8: CLIType
   CommercialFee: 39
   BaseBundle: "DUB"
 
-CLIType9: CLIType
+CLIType10: CLIType
   Clitype: "CONT7"
   CliName: "Contrato 7"
   BillTarget: 17
@@ -145,7 +160,7 @@ CLIType9: CLIType
   CommercialFee: 9
   BaseBundle: "DUB2"
 
-CLIType10: CLIType
+CLIType11: CLIType
   Clitype: "CONT8"
   CliName: "Contrato 8"
   BillTarget: 21
@@ -162,7 +177,7 @@ CLIType10: CLIType
   CommercialFee: 9
   BaseBundle: "DUB3"
 
-CLIType11: CLIType
+CLIType12: CLIType
   Clitype: "CONT9"
   CliName: "Contrato 9"
   BillTarget: 27
@@ -176,7 +191,7 @@ CLIType11: CLIType
   CommercialFee: 9.09
   BaseBundle: "CONT9"
 
-CLIType12: CLIType
+CLIType13: CLIType
   Clitype: "CONTD"
   CliName: "Contrato D"
   BillTarget: 18
@@ -192,7 +207,7 @@ CLIType12: CLIType
   UsageType: 2
   BundleType: TRUE 
 
-CLIType13: CLIType
+CLIType14: CLIType
   Clitype: "CONTD2"
   CliName: "Contrato Datos 2"
   BillTarget: 13
@@ -209,7 +224,7 @@ CLIType13: CLIType
   UsageType: 2
   BundleType: TRUE 
 
-CLIType14: CLIType
+CLIType15: CLIType
   Clitype: "CONTD3"
   CliName: "Contrato Datos 3"
   BillTarget: 13
@@ -226,7 +241,7 @@ CLIType14: CLIType
   UsageType: 2
   BundleType: TRUE 
 
-CLIType15: CLIType
+CLIType16: CLIType
   Clitype: "CONTD4"
   CliName: "Contrato Datos 4"
   BillTarget: 13
@@ -243,7 +258,7 @@ CLIType15: CLIType
   UsageType: 2
   BundleType: TRUE 
 
-CLIType16: CLIType
+CLIType17: CLIType
   Clitype: "CONTD9"
   CliName: "Contrato D"
   BillTarget: 18
@@ -260,7 +275,7 @@ CLIType16: CLIType
   UsageType: 2
   BundleType: TRUE 
 
-CLIType17: CLIType
+CLIType18: CLIType
   Clitype: "CONTDATA"
   CliName: "Contrato Datos"
   BillTarget: 13
@@ -277,9 +292,28 @@ CLIType17: CLIType
   UsageType: 2
   BundleType: TRUE 
 
-CLIType18: CLIType
+CLIType19: CLIType
+  Clitype: "CONTDSL40"
+  CliName: "La Combinada Naranja 20"
+  BillTarget: 58
+  PricePlan: "CONTRATOCONVC"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 58
+  CompareFee: 33.06
+  ArAccNum: 43000000
+  PayType: 1
+  StatusCode: 0
+  WebStatusCode: 3
+  CommercialFee: 33.06
+  FixedLineType: 1
+  BaseBundle: "CONT9"
+  FixedLineDownload: "20M"
+  FixedLineUpload: "20M"
+
+CLIType20: CLIType
   Clitype: "CONTDSL45"
-  CliName: "La Combinada 20 Naranja"
+  CliName: "La Combinada Morada 20"
   BillTarget: 52
   PricePlan: "CONTRATOCONVS"
   ServicePack: "11"
@@ -295,7 +329,43 @@ CLIType18: CLIType
   FixedLineDownload: "20M"
   FixedLineUpload: "20M"
 
-CLIType19: CLIType
+CLIType21: CLIType
+  Clitype: "CONTDSL48"
+  CliName: "La Combinada Verde 20"
+  BillTarget: 61
+  PricePlan: "CONTRATOCONVC"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 61
+  CompareFee: 39.67
+  ArAccNum: 43000000
+  PayType: 1
+  StatusCode: 0
+  CommercialFee: 39.67
+  FixedLineType: 1
+  BaseBundle: "CONT15"
+  FixedLineDownload: "20M"
+  FixedLineUpload: "20M"
+
+CLIType22: CLIType
+  Clitype: "CONTDSL58"
+  CliName: "La Combinada Azul 20"
+  BillTarget: 57
+  PricePlan: "CONTRATOCONVS"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 57
+  CompareFee: 47.93
+  ArAccNum: 43000000
+  PayType: 1
+  StatusCode: 0
+  CommercialFee: 47.93
+  FixedLineType: 1
+  BaseBundle: "CONT24"
+  FixedLineDownload: "20M"
+  FixedLineUpload: "20M"
+
+CLIType23: CLIType
   Clitype: "CONTF"
   CliName: "Contrato Flat"
   BillTarget: 14
@@ -309,7 +379,7 @@ CLIType19: CLIType
   StatusCode: 2
   BundleType: TRUE 
 
-CLIType20: CLIType
+CLIType24: CLIType
   Clitype: "CONTF10"
   CliName: "Contrato Flat 10"
   BillTarget: 14
@@ -325,7 +395,7 @@ CLIType20: CLIType
   CommercialFee: 10
   BundleType: TRUE 
 
-CLIType21: CLIType
+CLIType25: CLIType
   Clitype: "CONTF11"
   CliName: "Contrato Flat 11"
   BillTarget: 14
@@ -340,7 +410,7 @@ CLIType21: CLIType
   CommercialFee: 11.57
   BundleType: TRUE 
 
-CLIType22: CLIType
+CLIType26: CLIType
   Clitype: "CONTF20"
   CliName: "Contrato Flat 20"
   BillTarget: 14
@@ -356,7 +426,7 @@ CLIType22: CLIType
   CommercialFee: 20
   BundleType: TRUE 
 
-CLIType23: CLIType
+CLIType27: CLIType
   Clitype: "CONTF20D"
   CliName: "Contrato Flat 20D"
   BillTarget: 14
@@ -372,7 +442,7 @@ CLIType23: CLIType
   CommercialFee: 20
   BundleType: TRUE 
 
-CLIType24: CLIType
+CLIType28: CLIType
   Clitype: "CONTF30"
   CliName: "Contrato Flat 30"
   BillTarget: 14
@@ -388,7 +458,7 @@ CLIType24: CLIType
   CommercialFee: 30
   BundleType: TRUE 
 
-CLIType25: CLIType
+CLIType29: CLIType
   Clitype: "CONTF40"
   CliName: "Contrato Flat 40"
   BillTarget: 14
@@ -403,7 +473,7 @@ CLIType25: CLIType
   CommercialFee: 14.88
   BundleType: TRUE 
 
-CLIType26: CLIType
+CLIType30: CLIType
   Clitype: "CONTF55"
   CliName: "Contrato Flat 55"
   BillTarget: 14
@@ -418,7 +488,7 @@ CLIType26: CLIType
   CommercialFee: 9.09
   BundleType: TRUE 
 
-CLIType27: CLIType
+CLIType31: CLIType
   Clitype: "CONTF8"
   CliName: "Contrato Flat 8"
   BillTarget: 14
@@ -433,7 +503,7 @@ CLIType27: CLIType
   CommercialFee: 8.26
   BundleType: TRUE 
 
-CLIType28: CLIType
+CLIType32: CLIType
   Clitype: "CONTFF"
   CliName: "FUSIÓN PLANA A LO YOIGO"
   BillTarget: 23
@@ -451,9 +521,28 @@ CLIType28: CLIType
   FixedLineType: 1
   BaseBundle: "CONTFF2"
 
-CLIType29: CLIType
+CLIType33: CLIType
+  Clitype: "CONTFH40_50"
+  CliName: "La Combinada Naranja 50"
+  BillTarget: 59
+  PricePlan: "CONTRATOCONVC"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 59
+  CompareFee: 33.06
+  ArAccNum: 43000000
+  PayType: 1
+  StatusCode: 0
+  WebStatusCode: 3
+  CommercialFee: 33.06
+  FixedLineType: 2
+  BaseBundle: "CONT9"
+  FixedLineDownload: "50M"
+  FixedLineUpload: "5M"
+
+CLIType34: CLIType
   Clitype: "CONTFH45_50"
-  CliName: "La Combinada 50 Naranja"
+  CliName: "La Combinada Morada 50"
   BillTarget: 53
   PricePlan: "CONTRATOCONVS"
   ServicePack: "11"
@@ -469,9 +558,46 @@ CLIType29: CLIType
   FixedLineDownload: "50M"
   FixedLineUpload: "5M"
 
-CLIType30: CLIType
+CLIType35: CLIType
+  Clitype: "CONTFH48_50"
+  CliName: "La Combinada Verde 50"
+  BillTarget: 62
+  PricePlan: "CONTRATOCONVC"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 62
+  CompareFee: 39.67
+  ArAccNum: 43000000
+  PayType: 1
+  StatusCode: 0
+  CommercialFee: 39.67
+  FixedLineType: 2
+  BaseBundle: "CONT15"
+  FixedLineDownload: "50M"
+  FixedLineUpload: "5M"
+
+CLIType36: CLIType
+  Clitype: "CONTFH50_300"
+  CliName: "La Combinada Naranja 300"
+  BillTarget: 60
+  PricePlan: "CONTRATOCONVC"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 60
+  CompareFee: 41.32
+  ArAccNum: 43000000
+  PayType: 1
+  StatusCode: 0
+  WebStatusCode: 3
+  CommercialFee: 41.32
+  FixedLineType: 2
+  BaseBundle: "CONT9"
+  FixedLineDownload: "300M"
+  FixedLineUpload: "300M"
+
+CLIType37: CLIType
   Clitype: "CONTFH55_300"
-  CliName: "La Combinada 300 Naranja"
+  CliName: "La Combinada Morada 300"
   BillTarget: 54
   PricePlan: "CONTRATOCONVS"
   ServicePack: "11"
@@ -487,7 +613,61 @@ CLIType30: CLIType
   FixedLineDownload: "300M"
   FixedLineUpload: "300M"
 
-CLIType31: CLIType
+CLIType38: CLIType
+  Clitype: "CONTFH58_300"
+  CliName: "La Combinada Verde 300"
+  BillTarget: 63
+  PricePlan: "CONTRATOCONVC"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 63
+  CompareFee: 47.93
+  ArAccNum: 43000000
+  PayType: 1
+  StatusCode: 0
+  CommercialFee: 47.93
+  FixedLineType: 2
+  BaseBundle: "CONT15"
+  FixedLineDownload: "300M"
+  FixedLineUpload: "300M"
+
+CLIType39: CLIType
+  Clitype: "CONTFH58_50"
+  CliName: "La Combinada Azul 50"
+  BillTarget: 55
+  PricePlan: "CONTRATOCONVS"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 55
+  CompareFee: 47.93
+  ArAccNum: 43000000
+  PayType: 1
+  StatusCode: 0
+  CommercialFee: 47.93
+  FixedLineType: 2
+  BaseBundle: "CONT24"
+  FixedLineDownload: "50M"
+  FixedLineUpload: "5M"
+
+CLIType40: CLIType
+  Clitype: "CONTFH68_300"
+  CliName: "La Combinada Azul 300"
+  BillTarget: 56
+  PricePlan: "CONTRATOCONVS"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 56
+  CompareFee: 56.2
+  ArAccNum: 43000000
+  PayType: 1
+  StatusCode: 0
+  CommercialFee: 56.2
+  FixedLineType: 2
+  BaseBundle: "CONT24"
+  FixedLineDownload: "300M"
+  FixedLineUpload: "300M"
+
+CLIType41: CLIType
   Clitype: "CONTM"
   CliName: "Contrato M"
   BillTarget: 19
@@ -502,7 +682,7 @@ CLIType31: CLIType
   WebStatusCode: 2
   LineType: 2
 
-CLIType32: CLIType
+CLIType42: CLIType
   Clitype: "CONTM2"
   CliName: "Contrato M2"
   BillTarget: 22
@@ -519,7 +699,7 @@ CLIType32: CLIType
   CommercialFee: 2.48
   LineType: 2
 
-CLIType33: CLIType
+CLIType43: CLIType
   Clitype: "CONTRD"
   CliName: "Contrato Datos"
   BillTarget: 13
@@ -535,7 +715,7 @@ CLIType33: CLIType
   UsageType: 2
   BundleType: TRUE 
 
-CLIType34: CLIType
+CLIType44: CLIType
   Clitype: "CONTRD1"
   CliName: "Contrato Datos"
   BillTarget: 5
@@ -552,7 +732,7 @@ CLIType34: CLIType
   UsageType: 2
   BundleType: TRUE 
 
-CLIType35: CLIType
+CLIType45: CLIType
   Clitype: "CONTRD2"
   CliName: "Contrato Datos 2"
   BillTarget: 10
@@ -569,7 +749,7 @@ CLIType35: CLIType
   UsageType: 2
   BundleType: TRUE 
 
-CLIType36: CLIType
+CLIType46: CLIType
   Clitype: "CONTRD3"
   CliName: "Contrato Datos 3"
   BillTarget: 12
@@ -586,7 +766,7 @@ CLIType36: CLIType
   UsageType: 2
   BundleType: TRUE 
 
-CLIType37: CLIType
+CLIType47: CLIType
   Clitype: "CONTRD4"
   CliName: "Contrato Datos 4"
   BillTarget: 13
@@ -603,7 +783,7 @@ CLIType37: CLIType
   UsageType: 2
   BundleType: TRUE 
 
-CLIType38: CLIType
+CLIType48: CLIType
   Clitype: "CONTS"
   CliName: "Contrato S"
   BillTarget: 16
@@ -618,7 +798,7 @@ CLIType38: CLIType
   LineType: 1
   BundleType: TRUE 
 
-CLIType39: CLIType
+CLIType49: CLIType
   Clitype: "CONTS12"
   CliName: "Contrato S 12"
   BillTarget: 16
@@ -634,7 +814,7 @@ CLIType39: CLIType
   LineType: 2
   BundleType: TRUE 
 
-CLIType40: CLIType
+CLIType50: CLIType
   Clitype: "CONTS15"
   CliName: "Contrato S 15"
   BillTarget: 16
@@ -651,7 +831,7 @@ CLIType40: CLIType
   LineType: 2
   BundleType: TRUE 
 
-CLIType41: CLIType
+CLIType51: CLIType
   Clitype: "CONTS16"
   CliName: "Contrato S 16"
   BillTarget: 16
@@ -668,7 +848,7 @@ CLIType41: CLIType
   LineType: 2
   BundleType: TRUE 
 
-CLIType42: CLIType
+CLIType52: CLIType
   Clitype: "CONTS20"
   CliName: "Contrato S 20"
   BillTarget: 16
@@ -685,7 +865,7 @@ CLIType42: CLIType
   LineType: 1
   BundleType: TRUE 
 
-CLIType43: CLIType
+CLIType53: CLIType
   Clitype: "CONTS21"
   CliName: "Contrato S 21"
   BillTarget: 16
@@ -702,7 +882,7 @@ CLIType43: CLIType
   LineType: 1
   BundleType: TRUE 
 
-CLIType44: CLIType
+CLIType54: CLIType
   Clitype: "CONTS25"
   CliName: "Contrato S 25"
   BillTarget: 16
@@ -719,7 +899,7 @@ CLIType44: CLIType
   LineType: 1
   BundleType: TRUE 
 
-CLIType45: CLIType
+CLIType55: CLIType
   Clitype: "CONTS26"
   CliName: "Contrato S 26"
   BillTarget: 16
@@ -736,7 +916,7 @@ CLIType45: CLIType
   LineType: 1
   BundleType: TRUE 
 
-CLIType46: CLIType
+CLIType56: CLIType
   Clitype: "CONTS30"
   CliName: "Contrato S 30"
   BillTarget: 16
@@ -753,7 +933,7 @@ CLIType46: CLIType
   LineType: 1
   BundleType: TRUE 
 
-CLIType47: CLIType
+CLIType57: CLIType
   Clitype: "CONTS32"
   CliName: "Contrato S 32"
   BillTarget: 16
@@ -770,7 +950,7 @@ CLIType47: CLIType
   LineType: 1
   BundleType: TRUE 
 
-CLIType48: CLIType
+CLIType58: CLIType
   Clitype: "CONTS35"
   CliName: "Contrato S 35"
   BillTarget: 16
@@ -787,7 +967,7 @@ CLIType48: CLIType
   LineType: 1
   BundleType: TRUE 
 
-CLIType49: CLIType
+CLIType59: CLIType
   Clitype: "CONTS39"
   CliName: "Contrato S 39"
   BillTarget: 16
@@ -804,7 +984,7 @@ CLIType49: CLIType
   LineType: 1
   BundleType: TRUE 
 
-CLIType50: CLIType
+CLIType60: CLIType
   Clitype: "CONTSF"
   CliName: "Contrato SF"
   BillTarget: 24
@@ -821,7 +1001,7 @@ CLIType50: CLIType
   FixedLineType: 3
   BundleType: TRUE 
 
-CLIType51: CLIType
+CLIType61: CLIType
   Clitype: "CONTSF10"
   CliName: "Contrato SF 10"
   BillTarget: 24
@@ -839,7 +1019,7 @@ CLIType51: CLIType
   FixedLineType: 2
   BundleType: TRUE 
 
-CLIType52: CLIType
+CLIType62: CLIType
   Clitype: "CONTSF14"
   CliName: "Contrato SF 14"
   BillTarget: 24
@@ -857,7 +1037,7 @@ CLIType52: CLIType
   FixedLineType: 1
   BundleType: TRUE 
 
-CLIType53: CLIType
+CLIType63: CLIType
   Clitype: "TARJ"
   CliName: "Tarjeta Cero"
   BillTarget: 3
@@ -871,7 +1051,7 @@ CLIType53: CLIType
   StatusCode: 2
   WebStatusCode: 2
 
-CLIType54: CLIType
+CLIType64: CLIType
   Clitype: "TARJ2"
   CliName: "Tarjeta 2"
   BillTarget: 4
@@ -885,7 +1065,7 @@ CLIType54: CLIType
   StatusCode: 0
   WebStatusCode: 0
 
-CLIType55: CLIType
+CLIType65: CLIType
   Clitype: "TARJ3"
   CliName: "Tarjeta 3"
   BillTarget: 3
@@ -899,7 +1079,7 @@ CLIType55: CLIType
   StatusCode: 0
   WebStatusCode: 0
 
-CLIType56: CLIType
+CLIType66: CLIType
   Clitype: "TARJ4"
   CliName: "Tarjeta Hablador"
   BillTarget: 7
@@ -913,7 +1093,7 @@ CLIType56: CLIType
   StatusCode: 2
   WebStatusCode: 2
 
-CLIType57: CLIType
+CLIType67: CLIType
   Clitype: "TARJ5"
   CliName: "Tarjeta 5"
   BillTarget: 15
@@ -927,7 +1107,7 @@ CLIType57: CLIType
   StatusCode: 2
   WebStatusCode: 2
 
-CLIType58: CLIType
+CLIType68: CLIType
   Clitype: "TARJ6"
   CliName: "Tarjeta 6"
   BillTarget: 20
@@ -941,7 +1121,7 @@ CLIType58: CLIType
   StatusCode: 2
   WebStatusCode: 2
 
-CLIType59: CLIType
+CLIType69: CLIType
   Clitype: "TARJ7"
   CliName: "Tarjeta 7"
   BillTarget: 25
@@ -955,7 +1135,7 @@ CLIType59: CLIType
   PayType: 2
   CommercialFee: 6.61
 
-CLIType60: CLIType
+CLIType70: CLIType
   Clitype: "TARJ8"
   CliName: "Tarjeta 8"
   BillTarget: 26
@@ -969,7 +1149,7 @@ CLIType60: CLIType
   StatusCode: 2
   WebStatusCode: 2
 
-CLIType61: CLIType
+CLIType71: CLIType
   Clitype: "TARJ9"
   CliName: "Tarjeta 9"
   BillTarget: 50
@@ -982,7 +1162,7 @@ CLIType61: CLIType
   PayType: 2
   CommercialFee: 8.26
 
-CLIType62: CLIType
+CLIType72: CLIType
   Clitype: "TARJRD1"
   CliName: "Tarjeta Datos"
   BillTarget: 8

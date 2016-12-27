@@ -118,6 +118,21 @@ DiscountPlan8: DiscountPlan
 
 DiscountPlan9: DiscountPlan
   Brand: "1"
+  DPId: 37
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "CONT25DISC"
+  ValidFrom: 2016-12-12
+  ValidTo: 2049-12-31
+  DPRuleId: "CONT25DISC"
+  DPName: "Discount Xmas campaign La Sinfín"
+  SubjectType: "List"
+  ValidPeriods: 6
+
+DiscountPlan10: DiscountPlan
+  Brand: "1"
   DPId: 4
   Subject: "Contract Target"
   TargetType: "List"
@@ -130,7 +145,7 @@ DiscountPlan9: DiscountPlan
   DPName: "Discount MF La del Uno and La del Cero 1.2GB"
   SubjectType: "All "
 
-DiscountPlan10: DiscountPlan
+DiscountPlan11: DiscountPlan
   Brand: "1"
   DPId: 25
   Subject: "Contract Target"
@@ -145,7 +160,7 @@ DiscountPlan10: DiscountPlan
   SubjectType: "List"
   ValidPeriods: 6
 
-DiscountPlan11: DiscountPlan
+DiscountPlan12: DiscountPlan
   Brand: "1"
   DPId: 27
   Subject: "Contract Target"
@@ -159,7 +174,7 @@ DiscountPlan11: DiscountPlan
   DPName: "Retention Discount MF La del Cero 1.2GB"
   SubjectType: "List"
 
-DiscountPlan12: DiscountPlan
+DiscountPlan13: DiscountPlan
   Brand: "1"
   DPId: 30
   Subject: "Contract Target"
@@ -173,7 +188,7 @@ DiscountPlan12: DiscountPlan
   DPName: "Discount retention La Plana 1.2GB"
   SubjectType: "List"
 
-DiscountPlan13: DiscountPlan
+DiscountPlan14: DiscountPlan
   Brand: "1"
   DPId: 14
   Subject: "Contract Target"
@@ -188,7 +203,7 @@ DiscountPlan13: DiscountPlan
   SubjectType: "List"
   ValidPeriods: 24
 
-DiscountPlan14: DiscountPlan
+DiscountPlan15: DiscountPlan
   Brand: "1"
   DPId: 9
   Subject: "Contract Target"
@@ -202,7 +217,7 @@ DiscountPlan14: DiscountPlan
   DPName: "Discount Monthly Fee Infinita 20"
   SubjectType: "List"
 
-DiscountPlan15: DiscountPlan
+DiscountPlan16: DiscountPlan
   Brand: "1"
   DPId: 16
   Subject: "Contract Target"
@@ -217,7 +232,7 @@ DiscountPlan15: DiscountPlan
   SubjectType: "List"
   ValidPeriods: 6
 
-DiscountPlan16: DiscountPlan
+DiscountPlan17: DiscountPlan
   Brand: "1"
   DPId: 10
   Subject: "Contract Target"
@@ -231,7 +246,7 @@ DiscountPlan16: DiscountPlan
   DPName: "Discount Monthly Fee Infinita 25"
   SubjectType: "List"
 
-DiscountPlan17: DiscountPlan
+DiscountPlan18: DiscountPlan
   Brand: "1"
   DPId: 17
   Subject: "Contract Target"
@@ -246,7 +261,7 @@ DiscountPlan17: DiscountPlan
   SubjectType: "List"
   ValidPeriods: 4
 
-DiscountPlan18: DiscountPlan
+DiscountPlan19: DiscountPlan
   Brand: "1"
   DPId: 7
   Subject: "Contract Target"
@@ -262,7 +277,7 @@ DiscountPlan18: DiscountPlan
   MaxAmount: 5
   ValidPeriods: 180
 
-DiscountPlan19: DiscountPlan
+DiscountPlan20: DiscountPlan
   Brand: "1"
   DPId: 18
   Subject: "Contract Target"
@@ -277,7 +292,22 @@ DiscountPlan19: DiscountPlan
   SubjectType: "List"
   ValidPeriods: 4
 
-DiscountPlan20: DiscountPlan
+DiscountPlan21: DiscountPlan
+  Brand: "1"
+  DPId: 36
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 1
+  BillCode: "DISCFH300"
+  ValidFrom: 2016-11-01
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCFH300"
+  DPName: "Fixed Fiber 300 MF Discount"
+  SubjectType: "List"
+  ValidPeriods: 3
+
+DiscountPlan22: DiscountPlan
   Brand: "1"
   DPId: 8
   Subject: "Contract Target"
@@ -291,7 +321,7 @@ DiscountPlan20: DiscountPlan
   DPName: "Discount 10 percent"
   SubjectType: "All "
 
-DiscountPlan21: DiscountPlan
+DiscountPlan23: DiscountPlan
   Brand: "1"
   DPId: 21
   Subject: "Contract Target"
@@ -307,7 +337,7 @@ DiscountPlan21: DiscountPlan
   CCDisplay: 1
   ValidPeriods: 1
 
-DiscountPlan22: DiscountPlan
+DiscountPlan24: DiscountPlan
   Brand: "1"
   DPId: 19
   Subject: "Contract Target"
@@ -321,7 +351,7 @@ DiscountPlan22: DiscountPlan
   DPName: "Discount international Calls"
   SubjectType: "All "
 
-DiscountPlan23: DiscountPlan
+DiscountPlan25: DiscountPlan
   Brand: "1"
   DPId: 11
   Subject: "Contract Target"
@@ -336,7 +366,7 @@ DiscountPlan23: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 6
 
-DiscountPlan24: DiscountPlan
+DiscountPlan26: DiscountPlan
   Brand: "1"
   DPId: 5
   Subject: "Contract Target"
@@ -351,7 +381,7 @@ DiscountPlan24: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 1
 
-DiscountPlan25: DiscountPlan
+DiscountPlan27: DiscountPlan
   Brand: "1"
   DPId: 6
   Subject: "Contract Target"
@@ -366,7 +396,7 @@ DiscountPlan25: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 1
 
-DiscountPlan26: DiscountPlan
+DiscountPlan28: DiscountPlan
   Brand: "1"
   DPId: 26
   Subject: "Contract Target"
@@ -381,7 +411,7 @@ DiscountPlan26: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 1
 
-DiscountPlan27: DiscountPlan
+DiscountPlan29: DiscountPlan
   Brand: "1"
   DPId: 1
   Subject: "Contract Target"
@@ -396,7 +426,7 @@ DiscountPlan27: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 6
 
-DiscountPlan28: DiscountPlan
+DiscountPlan30: DiscountPlan
   Brand: "1"
   DPId: 12
   Subject: "Contract Target"
@@ -411,7 +441,7 @@ DiscountPlan28: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 1
 
-DiscountPlan29: DiscountPlan
+DiscountPlan31: DiscountPlan
   Brand: "1"
   DPId: 15
   Subject: "Contract Target"
@@ -426,7 +456,7 @@ DiscountPlan29: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 1
 
-DiscountPlan30: DiscountPlan
+DiscountPlan32: DiscountPlan
   Brand: "1"
   DPId: 32
   Subject: "Contract Target"
@@ -440,7 +470,7 @@ DiscountPlan30: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 1
 
-DiscountPlan31: DiscountPlan
+DiscountPlan33: DiscountPlan
   Brand: "1"
   DPId: 33
   Subject: "Contract Target"
@@ -454,7 +484,7 @@ DiscountPlan31: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 1
 
-DiscountPlan32: DiscountPlan
+DiscountPlan34: DiscountPlan
   Brand: "1"
   DPId: 34
   Subject: "Contract Target"
@@ -468,7 +498,7 @@ DiscountPlan32: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 1
 
-DiscountPlan33: DiscountPlan
+DiscountPlan35: DiscountPlan
   Brand: "1"
   DPId: 35
   Subject: "Contract Target"
@@ -482,7 +512,7 @@ DiscountPlan33: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 1
 
-DiscountPlan34: DiscountPlan
+DiscountPlan36: DiscountPlan
   Brand: "1"
   DPId: 13
   Subject: "Contract Target"
@@ -497,7 +527,7 @@ DiscountPlan34: DiscountPlan
   SubjectType: "All "
   ValidPeriods: 1
 
-DiscountPlan35: DiscountPlan
+DiscountPlan37: DiscountPlan
   Brand: "1"
   DPId: 22
   Subject: "Contract Target"

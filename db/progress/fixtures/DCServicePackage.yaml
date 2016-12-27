@@ -726,3 +726,11 @@ DCServicePackage91: DCServicePackage
   FromDate: 2016-10-27
   ToDate: 2049-12-31
 
+DCServicePackage92: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT25"
+  DCServicePackageID: 93
+  ServPac: "SHAPER"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+

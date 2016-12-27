@@ -421,3 +421,17 @@ DPTarget60: DPTarget
   TargetTable: "BillItem"
   TargetKey: "RVTERMF"
 
+DPTarget61: DPTarget
+  DPId: 36
+  ValidFrom: 2016-11-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTFH300MF"
+
+DPTarget62: DPTarget
+  DPId: 37
+  ValidFrom: 2016-12-12
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT25MF"
+

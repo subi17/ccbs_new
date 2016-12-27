@@ -24,116 +24,126 @@ RatePlan5: RatePlan
   Brand: "1"
 
 RatePlan6: RatePlan
+  RatePlan: "CONTRATO25"
+  RPName: "Contrato 25 (Post paid)"
+  Brand: "1"
+
+RatePlan7: RatePlan
   RatePlan: "CONTRATO4"
   RPName: "Contrato 4 (Post paid)"
   Brand: "1"
 
-RatePlan7: RatePlan
+RatePlan8: RatePlan
   RatePlan: "CONTRATO5"
   RPName: "Contrato 5 (Post paid)"
   Brand: "1"
 
-RatePlan8: RatePlan
+RatePlan9: RatePlan
   RatePlan: "CONTRATO6"
   RPName: "Contrato 6 (Post paid)"
   Brand: "1"
 
-RatePlan9: RatePlan
+RatePlan10: RatePlan
   RatePlan: "CONTRATO7"
   RPName: "Contrato 7 (Post paid)"
   Brand: "1"
 
-RatePlan10: RatePlan
+RatePlan11: RatePlan
   RatePlan: "CONTRATO8"
   RPName: "Contrato 8/9/15 (Post paid)"
   Brand: "1"
 
-RatePlan11: RatePlan
+RatePlan12: RatePlan
+  RatePlan: "CONTRATOCONVC"
+  RPName: "Contrato convergent (Post paid)"
+  Brand: "1"
+
+RatePlan13: RatePlan
   RatePlan: "CONTRATOCONVS"
   RPName: "Contrato convergent (Post paid)"
   Brand: "1"
 
-RatePlan12: RatePlan
+RatePlan14: RatePlan
   RatePlan: "CONTRATOD"
   RPName: "Contrato Datos (Post paid)"
   Brand: "1"
 
-RatePlan13: RatePlan
+RatePlan15: RatePlan
   RatePlan: "CONTRATOD2"
   RPName: "Contrato Datos 2 (Post paid)"
   Brand: "1"
 
-RatePlan14: RatePlan
+RatePlan16: RatePlan
   RatePlan: "CONTRATOD3"
   RPName: "Contrato Datos 3 (Post paid)"
   Brand: "1"
 
-RatePlan15: RatePlan
+RatePlan17: RatePlan
   RatePlan: "CONTRATODATA"
   RPName: "Contrato Datos (Postpaid)"
   Brand: "1"
 
-RatePlan16: RatePlan
+RatePlan18: RatePlan
   RatePlan: "CONTRATOF"
   RPName: "Contrato Flat (Post paid)"
   Brand: "1"
 
-RatePlan17: RatePlan
+RatePlan19: RatePlan
   RatePlan: "CONTRATOM"
   RPName: "Contrato M (Post paid)"
   Brand: "1"
 
-RatePlan18: RatePlan
+RatePlan20: RatePlan
   RatePlan: "CONTRATOM2"
   RPName: "Contrato M2 (Post paid)"
   Brand: "1"
 
-RatePlan19: RatePlan
+RatePlan21: RatePlan
   RatePlan: "CONTRATOS"
   RPName: "Contrato S (Post paid)"
   Brand: "1"
 
-RatePlan20: RatePlan
+RatePlan22: RatePlan
   RatePlan: "TARJETA"
   RPName: "Tarjeta (Pre paid)"
   Brand: "1"
 
-RatePlan21: RatePlan
+RatePlan23: RatePlan
   RatePlan: "TARJETA2"
   RPName: "Tarjeta 2 (Pre paid)"
   Brand: "1"
 
-RatePlan22: RatePlan
+RatePlan24: RatePlan
   RatePlan: "TARJETA4"
   RPName: "Tarjeta 4 (Pre paid)"
   Brand: "1"
 
-RatePlan23: RatePlan
+RatePlan25: RatePlan
   RatePlan: "TARJETA5"
   RPName: "Tarjeta 5 (Pre paid)"
   Brand: "1"
 
-RatePlan24: RatePlan
+RatePlan26: RatePlan
   RatePlan: "TARJETA6"
   RPName: "Tarjeta 6 (Pre paid)"
   Brand: "1"
 
-RatePlan25: RatePlan
+RatePlan27: RatePlan
   RatePlan: "TARJETA7"
   RPName: "Tarjeta 7 (Pre paid)"
   Brand: "1"
 
-RatePlan26: RatePlan
+RatePlan28: RatePlan
   RatePlan: "TARJETA8"
   RPName: "Tarjeta 8 (Pre paid)"
   Brand: "1"
 
-RatePlan27: RatePlan
+RatePlan29: RatePlan
   RatePlan: "TARJETA9"
   RPName: "Tarjeta 9 (Pre paid)"
   Brand: "1"
 
-RatePlan28: RatePlan
+RatePlan30: RatePlan
   RatePlan: "TARJETADATA"
   RPName: "Tarjeta Datos (Pre paid)"
   Brand: "1"

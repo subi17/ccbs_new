@@ -5,7 +5,7 @@ FuncRunConfig1: FuncRunConfig
   Description: "Split customers for the billing run"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_invrun_split.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_invrun_split.p tms.pf #PARAM"
   StatusInterval: 1000
   Brand: "1"
   Active: TRUE 
@@ -17,7 +17,7 @@ FuncRunConfig2: FuncRunConfig
   Description: "Billing run"
   NotifyMail: "toni.valve@qvantel.com,sergey.strizhov@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125,0034633000140"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_invrun_start.p tms.pf #PARAM
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_invrun_start.p tms.pf #PARAM
 "
   StatusInterval: 1000
   Brand: "1"
@@ -30,7 +30,7 @@ FuncRunConfig3: FuncRunConfig
   Description: "Set external invoice ids"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_invoice_extinvid.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_invoice_extinvid.p tms.pf #PARAM"
   StatusInterval: 10000
   Brand: "1"
   Active: TRUE 
@@ -42,7 +42,7 @@ FuncRunConfig4: FuncRunConfig
   Description: "Print invoices to a DOC1 file"
   NotifyMail: "toni.valve@qvantel.com"
   NotifySMS: "00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_print_invoice.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_print_invoice.p tms.pf #PARAM"
   StatusInterval: 1000
   Brand: "1"
   Active: TRUE 
@@ -54,7 +54,7 @@ FuncRunConfig5: FuncRunConfig
   Description: "Split invoices into groups for printing"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_invprint_split.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_invprint_split.p tms.pf #PARAM"
   StatusInterval: 1000
   Brand: "1"
   Active: TRUE 
@@ -66,7 +66,7 @@ FuncRunConfig6: FuncRunConfig
   Description: "Print invoices to xml files"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125,0034633000140"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_print_invoice.p tms#HOST.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_print_invoice.p tms#HOST.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -78,7 +78,7 @@ FuncRunConfig7: FuncRunConfig
   Description: "Create direct debit file CSB19 from invoices "
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125,0034633000140"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_create_ddfile.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_create_ddfile.p tms.pf #PARAM"
   StatusInterval: 1000
   Brand: "1"
   Active: TRUE 
@@ -90,7 +90,7 @@ FuncRunConfig8: FuncRunConfig
   Description: "Print a billing quality report (no details)"
   NotifyMail: "toni.valve@qvantel.com,sergey.strizhov@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_billing_quality.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_billing_quality.p tms.pf #PARAM"
   StatusInterval: 10000
   Brand: "1"
   Active: TRUE 
@@ -102,7 +102,7 @@ FuncRunConfig9: FuncRunConfig
   Description: "Print a billing quality report (with details)"
   NotifyMail: "toni.valve@qvantel.com,sergey.strizhov@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_billing_quality.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_billing_quality.p tms.pf #PARAM"
   StatusInterval: 10000
   Brand: "1"
   Active: TRUE 
@@ -114,7 +114,7 @@ FuncRunConfig10: FuncRunConfig
   Description: "Print a CC report"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_ccreport.p tms.pf #PARAM
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_ccreport.p tms.pf #PARAM
 "
   StatusInterval: 10000
   Brand: "1"
@@ -127,7 +127,7 @@ FuncRunConfig11: FuncRunConfig
   Description: "Delete test invoices before starting production run"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_delete_testinv.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_delete_testinv.p tms.pf #PARAM"
   StatusInterval: 1000
   Brand: "1"
   Active: TRUE 
@@ -139,7 +139,7 @@ FuncRunConfig12: FuncRunConfig
   Description: "Combine DOC1 files created by subprocess into one transferrable file"
   NotifyMail: "jaana.silvennoinen@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_combine_doc1.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_combine_doc1.p tms.pf #PARAM"
   Brand: "1"
   Active: TRUE 
 
@@ -150,7 +150,7 @@ FuncRunConfig13: FuncRunConfig
   Description: "Statistics of billing run performance"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_billrun_statistics.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_billrun_statistics.p tms.pf #PARAM"
   StatusInterval: 1
   Brand: "1"
   Active: TRUE 
@@ -162,7 +162,7 @@ FuncRunConfig14: FuncRunConfig
   Description: "Calculate 1. month fee for bundles"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_bundle_first_month.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_bundle_first_month.p tms.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -183,7 +183,7 @@ FuncRunConfig16: FuncRunConfig
   Description: "Generate Late Billed Calls Report"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_late_billed_calls_report.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_late_billed_calls_report.p tms.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -195,7 +195,7 @@ FuncRunConfig17: FuncRunConfig
   Description: "Generate Unbilled Calls Report"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_unbilled_calls_report.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_unbilled_calls_report.p tms.pf #PARAM"
   StatusInterval: 5000
   Brand: "1"
   Active: TRUE 
@@ -207,7 +207,7 @@ FuncRunConfig18: FuncRunConfig
   Description: "Double mobcdr check for one day (billing day)"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_mobcdr_double.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Mm/funcrun_mobcdr_double.p tms.pf #PARAM"
   StatusInterval: 1
   Brand: "1"
   Active: TRUE 
@@ -219,7 +219,7 @@ FuncRunConfig19: FuncRunConfig
   Description: "Rerate handler for triggered events"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_triggerrate.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Rate/funcrun_triggerrate.p tms.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -230,7 +230,7 @@ FuncRunConfig20: FuncRunConfig
   RunQty: 15
   Description: "Check unbilled invoice row counters against CDRs"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_chk_invrowcounter.p tms#HOST.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_chk_invrowcounter.p tms#HOST.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -240,7 +240,8 @@ FuncRunConfig21: FuncRunConfig
   FRConfigID: 21
   RunQty: 15
   Description: "Check billed invoice row counters against CDRs"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_chk_irc_billed.p tms#HOST.pf #PARAM"
+  NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_chk_irc_billed.p tms#HOST.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -261,7 +262,7 @@ FuncRunConfig23: FuncRunConfig
   Description: "Collect billing run test cases"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_brtestcase_collect.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_brtestcase_collect.p tms.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -273,7 +274,7 @@ FuncRunConfig24: FuncRunConfig
   Description: "Analyse test results"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_brtestresult_analysis.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_brtestresult_analysis.p tms.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -294,7 +295,7 @@ FuncRunConfig26: FuncRunConfig
   RunQty: 1
   Description: "Mark invoices to be sent to IFS
 "
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_invoice_deliverystate.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_invoice_deliverystate.p tms.pf #PARAM"
   StatusInterval: 1000
   Brand: "1"
   Active: TRUE 
@@ -322,7 +323,7 @@ FuncRunConfig29: FuncRunConfig
   FRConfigID: 29
   RunQty: 1
   Description: "Split subscriptions for unbilled invrowcounter check"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_invrowcounter_unbilled_split.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_invrowcounter_unbilled_split.p tms.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -334,7 +335,7 @@ FuncRunConfig30: FuncRunConfig
   Description: "Split 'no paper' invoices into groups for printing"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_invprint_split.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_invprint_split.p tms.pf #PARAM"
   StatusInterval: 1000
   Brand: "1"
   Active: TRUE 
@@ -344,7 +345,7 @@ FuncRunConfig31: FuncRunConfig
   FRConfigID: 31
   RunQty: 1
   Description: "Split invoices for billed invrowcounter check"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_invrowcounter_billed_split.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_invrowcounter_billed_split.p tms.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -356,7 +357,7 @@ FuncRunConfig32: FuncRunConfig
   Description: "Move terminal financing first month fees without answer from the bank to the future (out of the billing)"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_terminal_financing_move.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Ar/funcrun_terminal_financing_move.p tms.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -368,7 +369,7 @@ FuncRunConfig33: FuncRunConfig
   Description: "Print non-paper invoices to xml files"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   NotifySMS: "00358406487542,00358407670038,00358400591125"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_print_invoice.p tms#HOST.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_print_invoice.p tms#HOST.pf #PARAM"
   StatusInterval: 100
   Brand: "1"
   Active: TRUE 
@@ -378,7 +379,7 @@ FuncRunConfig34: FuncRunConfig
   FRConfigID: 34
   RunQty: 1
   Description: "Generates the log file regarding invoice xml tar file report"
-  RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_invoice_xml_tar_report.p tms.pf #PARAM"
+  RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_invoice_xml_tar_report.p tms.pf #PARAM"
   StatusInterval: 1000
   Brand: "1"
   Active: TRUE 

@@ -78,14 +78,22 @@ DialType20: DialType
   DTName: "Voice short number (type3)"
 
 DialType21: DialType
+  DialType: 23
+  DTName: "Fixed Voice short number (type1)"
+
+DialType22: DialType
+  DialType: 24
+  DTName: "Fixed Voice short number (type2)"
+
+DialType23: DialType
   DialType: 41
   DTName: "Roaming MO inside EU"
 
-DialType22: DialType
+DialType24: DialType
   DialType: 47
   DTName: "Roaming MT inside EU"
 
-DialType23: DialType
+DialType25: DialType
   DialType: 50
   DTName: "Fixed Voice Bdest"
 

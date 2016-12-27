@@ -6780,11 +6780,19 @@ TMSCodes842: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqSource"
   CodeGroup: "Request"
+  CodeValue: "31"
+  CodeName: "Contract activation"
+  InUse: 1
+
+TMSCodes843: TMSCodes
+  TableName: "MsRequest"
+  FieldName: "ReqSource"
+  CodeGroup: "Request"
   CodeValue: "4"
   CodeName: "Manual event (CCBS)"
   InUse: 1
 
-TMSCodes843: TMSCodes
+TMSCodes844: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqSource"
   CodeGroup: "Request"
@@ -6792,7 +6800,7 @@ TMSCodes843: TMSCodes
   CodeName: "Automatic (cron/script)"
   InUse: 1
 
-TMSCodes844: TMSCodes
+TMSCodes845: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqSource"
   CodeGroup: "Request"
@@ -6800,7 +6808,7 @@ TMSCodes844: TMSCodes
   CodeName: "Manual event (WEB)"
   InUse: 1
 
-TMSCodes845: TMSCodes
+TMSCodes846: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqSource"
   CodeGroup: "Request"
@@ -6808,7 +6816,7 @@ TMSCodes845: TMSCodes
   CodeName: "After sales order"
   InUse: 1
 
-TMSCodes846: TMSCodes
+TMSCodes847: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqSource"
   CodeGroup: "Request"
@@ -6816,7 +6824,7 @@ TMSCodes846: TMSCodes
   CodeName: "Commission"
   InUse: 1
 
-TMSCodes847: TMSCodes
+TMSCodes848: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqSource"
   CodeGroup: "Request"
@@ -6824,7 +6832,7 @@ TMSCodes847: TMSCodes
   CodeName: "IFS"
   InUse: 1
 
-TMSCodes848: TMSCodes
+TMSCodes849: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6832,7 +6840,7 @@ TMSCodes848: TMSCodes
   CodeName: "New"
   InUse: 1
 
-TMSCodes849: TMSCodes
+TMSCodes850: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6840,7 +6848,7 @@ TMSCodes849: TMSCodes
   CodeName: "Under work"
   InUse: 1
 
-TMSCodes850: TMSCodes
+TMSCodes851: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6848,7 +6856,7 @@ TMSCodes850: TMSCodes
   CodeName: "Approved for handling"
   InUse: 1
 
-TMSCodes851: TMSCodes
+TMSCodes852: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6856,7 +6864,7 @@ TMSCodes851: TMSCodes
   CodeName: "Pending file creation"
   InUse: 1
 
-TMSCodes852: TMSCodes
+TMSCodes853: TMSCodes
   TableName: "MSrequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6864,7 +6872,7 @@ TMSCodes852: TMSCodes
   CodeName: "File created"
   InUse: 1
 
-TMSCodes853: TMSCodes
+TMSCodes854: TMSCodes
   TableName: "MSRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6872,7 +6880,7 @@ TMSCodes853: TMSCodes
   CodeName: "Waiting"
   InUse: 1
 
-TMSCodes854: TMSCodes
+TMSCodes855: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6880,7 +6888,15 @@ TMSCodes854: TMSCodes
   CodeName: "Done"
   InUse: 1
 
-TMSCodes855: TMSCodes
+TMSCodes856: TMSCodes
+  TableName: "MsRequest"
+  FieldName: "ReqStatus"
+  CodeGroup: "Request"
+  CodeValue: "20"
+  CodeName: "Waiting confirmation"
+  InUse: 1
+
+TMSCodes857: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6888,7 +6904,7 @@ TMSCodes855: TMSCodes
   CodeName: "Rejected (error occurred)"
   InUse: 1
 
-TMSCodes856: TMSCodes
+TMSCodes858: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6896,7 +6912,7 @@ TMSCodes856: TMSCodes
   CodeName: "Cancelled"
   InUse: 1
 
-TMSCodes857: TMSCodes
+TMSCodes859: TMSCodes
   TableName: "MSrequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6904,7 +6920,7 @@ TMSCodes857: TMSCodes
   CodeName: "Pending HLR"
   InUse: 1
 
-TMSCodes858: TMSCodes
+TMSCodes860: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6912,7 +6928,7 @@ TMSCodes858: TMSCodes
   CodeName: "Pending - HLR DONE"
   InUse: 1
 
-TMSCodes859: TMSCodes
+TMSCodes861: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6920,7 +6936,7 @@ TMSCodes859: TMSCodes
   CodeName: "Pending Sub-request"
   InUse: 1
 
-TMSCodes860: TMSCodes
+TMSCodes862: TMSCodes
   TableName: "MsRequest"
   FieldName: "Reqstatus"
   CodeGroup: "Request"
@@ -6928,7 +6944,7 @@ TMSCodes860: TMSCodes
   CodeName: "Sub-request DONE"
   InUse: 1
 
-TMSCodes861: TMSCodes
+TMSCodes863: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6936,7 +6952,7 @@ TMSCodes861: TMSCodes
   CodeName: "Handled"
   InUse: 1
 
-TMSCodes862: TMSCodes
+TMSCodes864: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatus"
   CodeGroup: "Request"
@@ -6944,7 +6960,7 @@ TMSCodes862: TMSCodes
   CodeName: "Process error (Qvantel maintenance required)"
   InUse: 1
 
-TMSCodes863: TMSCodes
+TMSCodes865: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatusX"
   CodeGroup: "Request"
@@ -6952,7 +6968,7 @@ TMSCodes863: TMSCodes
   CodeName: "Step 1 processed"
   InUse: 1
 
-TMSCodes864: TMSCodes
+TMSCodes866: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatusX"
   CodeGroup: "Request"
@@ -6960,7 +6976,7 @@ TMSCodes864: TMSCodes
   CodeName: "Step 2 Processed"
   InUse: 1
 
-TMSCodes865: TMSCodes
+TMSCodes867: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatusX"
   CodeGroup: "Request"
@@ -6968,7 +6984,7 @@ TMSCodes865: TMSCodes
   CodeName: "Step 3 Processed"
   InUse: 1
 
-TMSCodes866: TMSCodes
+TMSCodes868: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqStatusX"
   CodeGroup: "Request"
@@ -6976,7 +6992,7 @@ TMSCodes866: TMSCodes
   CodeName: "Step 4 Processed"
   InUse: 1
 
-TMSCodes867: TMSCodes
+TMSCodes869: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -6985,7 +7001,7 @@ TMSCodes867: TMSCodes
   ConfigValue: "MsReq"
   InUse: 1
 
-TMSCodes868: TMSCodes
+TMSCodes870: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -6994,7 +7010,7 @@ TMSCodes868: TMSCodes
   ConfigValue: "ScReq"
   InUse: 1
 
-TMSCodes869: TMSCodes
+TMSCodes871: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7003,7 +7019,7 @@ TMSCodes869: TMSCodes
   ConfigValue: "OwReq"
   InUse: 1
 
-TMSCodes870: TMSCodes
+TMSCodes872: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7012,7 +7028,7 @@ TMSCodes870: TMSCodes
   ConfigValue: "PlReq"
   InUse: 1
 
-TMSCodes871: TMSCodes
+TMSCodes873: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7021,7 +7037,7 @@ TMSCodes871: TMSCodes
   ConfigValue: "MaReq"
   InUse: 1
 
-TMSCodes872: TMSCodes
+TMSCodes874: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7030,7 +7046,7 @@ TMSCodes872: TMSCodes
   ConfigValue: "CrReq"
   InUse: 1
 
-TMSCodes873: TMSCodes
+TMSCodes875: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7039,7 +7055,7 @@ TMSCodes873: TMSCodes
   ConfigValue: "ICCReq"
   InUse: 1
 
-TMSCodes874: TMSCodes
+TMSCodes876: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7048,7 +7064,7 @@ TMSCodes874: TMSCodes
   ConfigValue: "DelReq"
   InUse: 1
 
-TMSCodes875: TMSCodes
+TMSCodes877: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7057,7 +7073,7 @@ TMSCodes875: TMSCodes
   ConfigValue: "MSISDNReq"
   InUse: 1
 
-TMSCodes876: TMSCodes
+TMSCodes878: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7066,7 +7082,7 @@ TMSCodes876: TMSCodes
   ConfigValue: "SpReq"
   InUse: 1
 
-TMSCodes877: TMSCodes
+TMSCodes879: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7075,7 +7091,7 @@ TMSCodes877: TMSCodes
   ConfigValue: "ODIReq"
   InUse: 1
 
-TMSCodes878: TMSCodes
+TMSCodes880: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7083,7 +7099,7 @@ TMSCodes878: TMSCodes
   CodeName: "Credit Note"
   InUse: 1
 
-TMSCodes879: TMSCodes
+TMSCodes881: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7091,7 +7107,7 @@ TMSCodes879: TMSCodes
   CodeName: "Refund"
   InUse: 1
 
-TMSCodes880: TMSCodes
+TMSCodes882: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7099,7 +7115,7 @@ TMSCodes880: TMSCodes
   CodeName: "Bank Account number change"
   InUse: 1
 
-TMSCodes881: TMSCodes
+TMSCodes883: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7108,7 +7124,7 @@ TMSCodes881: TMSCodes
   ConfigValue: "fmprice"
   InUse: 1
 
-TMSCodes882: TMSCodes
+TMSCodes884: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7117,7 +7133,7 @@ TMSCodes882: TMSCodes
   ConfigValue: "PGRequest"
   InUse: 1
 
-TMSCodes883: TMSCodes
+TMSCodes885: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7126,7 +7142,7 @@ TMSCodes883: TMSCodes
   ConfigValue: "UcReq"
   InUse: 1
 
-TMSCodes884: TMSCodes
+TMSCodes886: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7134,7 +7150,7 @@ TMSCodes884: TMSCodes
   CodeName: "Payment"
   InUse: 1
 
-TMSCodes885: TMSCodes
+TMSCodes887: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7142,7 +7158,7 @@ TMSCodes885: TMSCodes
   CodeName: "Bank reference"
   InUse: 1
 
-TMSCodes886: TMSCodes
+TMSCodes888: TMSCodes
   TableName: "MSrequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7150,7 +7166,7 @@ TMSCodes886: TMSCodes
   CodeName: "Credit check"
   InUse: 1
 
-TMSCodes887: TMSCodes
+TMSCodes889: TMSCodes
   TableName: "MSrequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7158,7 +7174,7 @@ TMSCodes887: TMSCodes
   CodeName: "Manual payment"
   InUse: 1
 
-TMSCodes888: TMSCodes
+TMSCodes890: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7166,7 +7182,7 @@ TMSCodes888: TMSCodes
   CodeName: "Barring and suspension request"
   InUse: 1
 
-TMSCodes889: TMSCodes
+TMSCodes891: TMSCodes
   TableName: "MSrequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7174,7 +7190,7 @@ TMSCodes889: TMSCodes
   CodeName: "SMS"
   InUse: 1
 
-TMSCodes890: TMSCodes
+TMSCodes892: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7183,7 +7199,7 @@ TMSCodes890: TMSCodes
   ConfigValue: "IcReq"
   InUse: 1
 
-TMSCodes891: TMSCodes
+TMSCodes893: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7192,7 +7208,7 @@ TMSCodes891: TMSCodes
   ConfigValue: "UaReq"
   InUse: 1
 
-TMSCodes892: TMSCodes
+TMSCodes894: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7201,7 +7217,7 @@ TMSCodes892: TMSCodes
   ConfigValue: "AdReq"
   InUse: 1
 
-TMSCodes893: TMSCodes
+TMSCodes895: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7210,7 +7226,7 @@ TMSCodes893: TMSCodes
   ConfigValue: "PpReq"
   InUse: 1
 
-TMSCodes894: TMSCodes
+TMSCodes896: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7219,7 +7235,7 @@ TMSCodes894: TMSCodes
   ConfigValue: "PaReq"
   InUse: 1
 
-TMSCodes895: TMSCodes
+TMSCodes897: TMSCodes
   TableName: "MsRequest"
   FieldName: "ReqType"
   CodeGroup: "Request"
@@ -7228,7 +7244,7 @@ TMSCodes895: TMSCodes
   ConfigValue: "PtReq"
   InUse: 1
 
-TMSCodes896: TMSCodes
+TMSCodes898: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "Request"
@@ -7236,7 +7252,7 @@ TMSCodes896: TMSCodes
   CodeName: "Customer"
   InUse: 1
 
-TMSCodes897: TMSCodes
+TMSCodes899: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "Request"
@@ -7244,7 +7260,7 @@ TMSCodes897: TMSCodes
   CodeName: "Risk Fraud"
   InUse: 1
 
-TMSCodes898: TMSCodes
+TMSCodes900: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "Orders"
@@ -7252,7 +7268,7 @@ TMSCodes898: TMSCodes
   CodeName: "POS Orders Cancellation"
   InUse: 1
 
-TMSCodes899: TMSCodes
+TMSCodes901: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "Orders"
@@ -7260,7 +7276,7 @@ TMSCodes899: TMSCodes
   CodeName: "Direct Order Cancellation"
   InUse: 1
 
-TMSCodes900: TMSCodes
+TMSCodes902: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "ReqCron"
@@ -7268,7 +7284,7 @@ TMSCodes900: TMSCodes
   CodeName: "MultiSIM"
   InUse: 1
 
-TMSCodes901: TMSCodes
+TMSCodes903: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "ReqCron"
@@ -7276,7 +7292,7 @@ TMSCodes901: TMSCodes
   CodeName: "AdditionalSIM"
   InUse: 1
 
-TMSCodes902: TMSCodes
+TMSCodes904: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "Request"
@@ -7284,7 +7300,7 @@ TMSCodes902: TMSCodes
   CodeName: "MNP outporting"
   InUse: 1
 
-TMSCodes903: TMSCodes
+TMSCodes905: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "Request"
@@ -7292,7 +7308,7 @@ TMSCodes903: TMSCodes
   CodeName: "Order cancellation"
   InUse: 1
 
-TMSCodes904: TMSCodes
+TMSCodes906: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "Request"
@@ -7300,7 +7316,7 @@ TMSCodes904: TMSCodes
   CodeName: "Debt collection"
   InUse: 1
 
-TMSCodes905: TMSCodes
+TMSCodes907: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "Request"
@@ -7308,7 +7324,7 @@ TMSCodes905: TMSCodes
   CodeName: "Other reason (ADMIN users)"
   InUse: 1
 
-TMSCodes906: TMSCodes
+TMSCodes908: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "ReqCron"
@@ -7316,7 +7332,7 @@ TMSCodes906: TMSCodes
   CodeName: "Prepaid life cycle deletion"
   InUse: 1
 
-TMSCodes907: TMSCodes
+TMSCodes909: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "ReqCron"
@@ -7324,7 +7340,7 @@ TMSCodes907: TMSCodes
   CodeName: "Subscription maintenance"
   InUse: 1
 
-TMSCodes908: TMSCodes
+TMSCodes910: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "ReqCron"
@@ -7332,7 +7348,7 @@ TMSCodes908: TMSCodes
   CodeName: "Bad customer deletion"
   InUse: 1
 
-TMSCodes909: TMSCodes
+TMSCodes911: TMSCodes
   TableName: "MsRequest"
   FieldName: "TermReason"
   CodeGroup: "Request"
@@ -7340,7 +7356,7 @@ TMSCodes909: TMSCodes
   CodeName: "Risk Collection"
   InUse: 1
 
-TMSCodes910: TMSCodes
+TMSCodes912: TMSCodes
   TableName: "nnlasku"
   FieldName: "latila"
   CodeGroup: "invprint"
@@ -7348,7 +7364,7 @@ TMSCodes910: TMSCodes
   CodeName: "Uninvoiced, 'New' Invoices"
   InUse: 1
 
-TMSCodes911: TMSCodes
+TMSCodes913: TMSCodes
   TableName: "nnlasku"
   FieldName: "latila"
   CodeGroup: "invprint"
@@ -7356,7 +7372,7 @@ TMSCodes911: TMSCodes
   CodeName: "Invoiced using Print Houses"
   InUse: 1
 
-TMSCodes912: TMSCodes
+TMSCodes914: TMSCodes
   TableName: "nnlasku"
   FieldName: "latila"
   CodeGroup: "invprint"
@@ -7364,7 +7380,7 @@ TMSCodes912: TMSCodes
   CodeName: "Invoiced locally"
   InUse: 1
 
-TMSCodes913: TMSCodes
+TMSCodes915: TMSCodes
   TableName: "nnlasku"
   FieldName: "latila"
   CodeGroup: "invprint"
@@ -7372,7 +7388,7 @@ TMSCodes913: TMSCodes
   CodeName: "Invd locally Sent to Prn House"
   InUse: 1
 
-TMSCodes914: TMSCodes
+TMSCodes916: TMSCodes
   TableName: "nnlasku"
   FieldName: "latila"
   CodeGroup: "invprint"
@@ -7380,7 +7396,7 @@ TMSCodes914: TMSCodes
   CodeName: "Credited Invoices"
   InUse: 1
 
-TMSCodes915: TMSCodes
+TMSCodes917: TMSCodes
   TableName: "nnxbcn"
   FieldName: "xbamt"
   CodeGroup: "Bnum Crite"
@@ -7389,7 +7405,7 @@ TMSCodes915: TMSCodes
   Memo: "Used for displaying sort criteria for rep based on nnxbex2.p"
   InUse: 1
 
-TMSCodes916: TMSCodes
+TMSCodes918: TMSCodes
   TableName: "nnxbcn"
   FieldName: "xbamt"
   CodeGroup: "Bnum Crite"
@@ -7398,7 +7414,7 @@ TMSCodes916: TMSCodes
   Memo: "Used for displaying sort criteria for rep based on nnxbex2.p"
   InUse: 1
 
-TMSCodes917: TMSCodes
+TMSCodes919: TMSCodes
   TableName: "nnxbcn"
   FieldName: "xbamt"
   CodeGroup: "Bnum Crite"
@@ -7407,7 +7423,7 @@ TMSCodes917: TMSCodes
   Memo: "Used for displaying sort criteria for rep based on nnxbex2.p"
   InUse: 1
 
-TMSCodes918: TMSCodes
+TMSCodes920: TMSCodes
   TableName: "nnxbcn"
   FieldName: "xbamt"
   CodeGroup: "Bnum Crite"
@@ -7416,7 +7432,7 @@ TMSCodes918: TMSCodes
   Memo: "Used for displaying sort criteria for rep based on nnxbex2.p"
   InUse: 1
 
-TMSCodes919: TMSCodes
+TMSCodes921: TMSCodes
   TableName: "nnxbcn"
   FieldName: "xbamt"
   CodeGroup: "Bnum Crite"
@@ -7425,7 +7441,7 @@ TMSCodes919: TMSCodes
   Memo: "Used for displaying sort criteria for rep based on nnxbex2.p"
   InUse: 1
 
-TMSCodes920: TMSCodes
+TMSCodes922: TMSCodes
   TableName: "nnxbcn"
   FieldName: "xbamt-s"
   CodeGroup: "Bnum Crite"
@@ -7434,7 +7450,7 @@ TMSCodes920: TMSCodes
   Memo: "Used for displaying sort criteria for rep based on nnxbex2.p"
   InUse: 1
 
-TMSCodes921: TMSCodes
+TMSCodes923: TMSCodes
   TableName: "nnxbcn"
   FieldName: "xbamt-s"
   CodeGroup: "Bnum Crite"
@@ -7443,7 +7459,7 @@ TMSCodes921: TMSCodes
   Memo: "Used for displaying sort criteria for rep based on nnxbex2.p"
   InUse: 1
 
-TMSCodes922: TMSCodes
+TMSCodes924: TMSCodes
   TableName: "nnxbcn"
   FieldName: "xbamt-s"
   CodeGroup: "Bnum Crite"
@@ -7452,7 +7468,7 @@ TMSCodes922: TMSCodes
   Memo: "Used for displaying sort criteria for rep based on nnxbex2.p"
   InUse: 1
 
-TMSCodes923: TMSCodes
+TMSCodes925: TMSCodes
   TableName: "nnxbcn"
   FieldName: "xbamt-s"
   CodeGroup: "Bnum Crite"
@@ -7461,7 +7477,7 @@ TMSCodes923: TMSCodes
   Memo: "Used for displaying sort criteria for rep based on nnxbex2.p"
   InUse: 1
 
-TMSCodes924: TMSCodes
+TMSCodes926: TMSCodes
   TableName: "nnxbcn"
   FieldName: "xbamt-s"
   CodeGroup: "Bnum Crite"
@@ -7470,7 +7486,7 @@ TMSCodes924: TMSCodes
   Memo: "Used for displaying sort criteria for rep based on nnxbex2.p"
   InUse: 1
 
-TMSCodes925: TMSCodes
+TMSCodes927: TMSCodes
   TableName: "OfferCriteria"
   FieldName: "CriteriaType"
   CodeGroup: "Offer"
@@ -7478,7 +7494,7 @@ TMSCodes925: TMSCodes
   CodeName: "Subscription type"
   InUse: 1
 
-TMSCodes926: TMSCodes
+TMSCodes928: TMSCodes
   TableName: "OfferCriteria"
   FieldName: "CriteriaType"
   CodeGroup: "Offer"
@@ -7486,7 +7502,7 @@ TMSCodes926: TMSCodes
   CodeName: "Type of subscription MSISDN"
   InUse: 1
 
-TMSCodes927: TMSCodes
+TMSCodes929: TMSCodes
   TableName: "OfferCriteria"
   FieldName: "CriteriaType"
   CodeGroup: "Offer"
@@ -7494,7 +7510,7 @@ TMSCodes927: TMSCodes
   CodeName: "Old payment type of subscription"
   InUse: 1
 
-TMSCodes928: TMSCodes
+TMSCodes930: TMSCodes
   TableName: "OfferCriteria"
   FieldName: "CriteriaType"
   CodeGroup: "Offer"
@@ -7502,7 +7518,7 @@ TMSCodes928: TMSCodes
   CodeName: "Channel in which order was made"
   InUse: 1
 
-TMSCodes929: TMSCodes
+TMSCodes931: TMSCodes
   TableName: "OfferCriteria"
   FieldName: "CriteriaType"
   CodeGroup: "Offer"
@@ -7510,7 +7526,7 @@ TMSCodes929: TMSCodes
   CodeName: "Payment type of subscription"
   InUse: 1
 
-TMSCodes930: TMSCodes
+TMSCodes932: TMSCodes
   TableName: "OfferCriteria"
   FieldName: "CriteriaType"
   CodeGroup: "Offer"
@@ -7518,7 +7534,7 @@ TMSCodes930: TMSCodes
   CodeName: "Segmentation allowed in Renewal"
   InUse: 1
 
-TMSCodes931: TMSCodes
+TMSCodes933: TMSCodes
   TableName: "OfferCriteria"
   FieldName: "CriteriaType"
   CodeGroup: "Offer"
@@ -7526,7 +7542,7 @@ TMSCodes931: TMSCodes
   CodeName: "Reseller"
   InUse: 1
 
-TMSCodes932: TMSCodes
+TMSCodes934: TMSCodes
   TableName: "OfferItem"
   FieldName: "ItemType"
   CodeGroup: "Offer"
@@ -7534,7 +7550,7 @@ TMSCodes932: TMSCodes
   CodeName: "Billing item"
   InUse: 1
 
-TMSCodes933: TMSCodes
+TMSCodes935: TMSCodes
   TableName: "OfferItem"
   FieldName: "ItemType"
   CodeGroup: "Offer"
@@ -7542,7 +7558,7 @@ TMSCodes933: TMSCodes
   CodeName: "Bundle Item"
   InUse: 1
 
-TMSCodes934: TMSCodes
+TMSCodes936: TMSCodes
   TableName: "OfferItem"
   FieldName: "ItemType"
   CodeGroup: "Offer"
@@ -7550,7 +7566,7 @@ TMSCodes934: TMSCodes
   CodeName: "Discount Plan"
   InUse: 1
 
-TMSCodes935: TMSCodes
+TMSCodes937: TMSCodes
   TableName: "OfferItem"
   FieldName: "ItemType"
   CodeGroup: "Offer"
@@ -7558,7 +7574,7 @@ TMSCodes935: TMSCodes
   CodeName: "FATime group"
   InUse: 1
 
-TMSCodes936: TMSCodes
+TMSCodes938: TMSCodes
   TableName: "OfferItem"
   FieldName: "ItemType"
   CodeGroup: "Offer"
@@ -7566,7 +7582,7 @@ TMSCodes936: TMSCodes
   CodeName: "Optional Bundle Item"
   InUse: 1
 
-TMSCodes937: TMSCodes
+TMSCodes939: TMSCodes
   TableName: "OfferItem"
   FieldName: "ItemType"
   CodeGroup: "Offer"
@@ -7574,7 +7590,7 @@ TMSCodes937: TMSCodes
   CodeName: "Periodical contract"
   InUse: 1
 
-TMSCodes938: TMSCodes
+TMSCodes940: TMSCodes
   TableName: "OfferItem"
   FieldName: "ItemType"
   CodeGroup: "Offer"
@@ -7582,7 +7598,7 @@ TMSCodes938: TMSCodes
   CodeName: "Promotional bundle items"
   InUse: 1
 
-TMSCodes939: TMSCodes
+TMSCodes941: TMSCodes
   TableName: "OfferItem"
   FieldName: "ItemType"
   CodeGroup: "Offer"
@@ -7590,7 +7606,7 @@ TMSCodes939: TMSCodes
   CodeName: "Service Package"
   InUse: 1
 
-TMSCodes940: TMSCodes
+TMSCodes942: TMSCodes
   TableName: "OfferItem"
   FieldName: "ItemType"
   CodeGroup: "Offer"
@@ -7598,7 +7614,7 @@ TMSCodes940: TMSCodes
   CodeName: "Topup scheme"
   InUse: 1
 
-TMSCodes941: TMSCodes
+TMSCodes943: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7606,7 +7622,7 @@ TMSCodes941: TMSCodes
   CodeName: "Overpayment"
   InUse: 1
 
-TMSCodes942: TMSCodes
+TMSCodes944: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7614,7 +7630,7 @@ TMSCodes942: TMSCodes
   CodeName: "Advance Payment"
   InUse: 1
 
-TMSCodes943: TMSCodes
+TMSCodes945: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7622,7 +7638,7 @@ TMSCodes943: TMSCodes
   CodeName: "Deducted Adv.payment on a new invoice"
   InUse: 1
 
-TMSCodes944: TMSCodes
+TMSCodes946: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7630,7 +7646,7 @@ TMSCodes944: TMSCodes
   CodeName: "Adv.payment used as payment into an invoice"
   InUse: 1
 
-TMSCodes945: TMSCodes
+TMSCodes947: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7638,7 +7654,7 @@ TMSCodes945: TMSCodes
   CodeName: "Deposit"
   InUse: 1
 
-TMSCodes946: TMSCodes
+TMSCodes948: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7646,7 +7662,7 @@ TMSCodes946: TMSCodes
   CodeName: "Deposit used as payment into an invoice"
   InUse: 1
 
-TMSCodes947: TMSCodes
+TMSCodes949: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7654,7 +7670,7 @@ TMSCodes947: TMSCodes
   CodeName: "Deleted payment with advance payment"
   InUse: 1
 
-TMSCodes948: TMSCodes
+TMSCodes950: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7662,7 +7678,7 @@ TMSCodes948: TMSCodes
   CodeName: "Deleted payment with deposit"
   InUse: 1
 
-TMSCodes949: TMSCodes
+TMSCodes951: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7670,7 +7686,7 @@ TMSCodes949: TMSCodes
   CodeName: "Deposit transferred to subsc.customer"
   InUse: 1
 
-TMSCodes950: TMSCodes
+TMSCodes952: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7678,7 +7694,7 @@ TMSCodes950: TMSCodes
   CodeName: "Return of deposit"
   InUse: 1
 
-TMSCodes951: TMSCodes
+TMSCodes953: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7686,7 +7702,7 @@ TMSCodes951: TMSCodes
   CodeName: "Return of advance payment"
   InUse: 1
 
-TMSCodes952: TMSCodes
+TMSCodes954: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7694,7 +7710,7 @@ TMSCodes952: TMSCodes
   CodeName: "Extra payment for an already paid invoice"
   InUse: 1
 
-TMSCodes953: TMSCodes
+TMSCodes955: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7702,7 +7718,7 @@ TMSCodes953: TMSCodes
   CodeName: "Adv.payment transferred to subsc.customer"
   InUse: 1
 
-TMSCodes954: TMSCodes
+TMSCodes956: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7710,7 +7726,7 @@ TMSCodes954: TMSCodes
   CodeName: "Add subscription balance limit"
   InUse: 1
 
-TMSCodes955: TMSCodes
+TMSCodes957: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7718,7 +7734,7 @@ TMSCodes955: TMSCodes
   CodeName: "Adv.payment transferred from FAT"
   InUse: 1
 
-TMSCodes956: TMSCodes
+TMSCodes958: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7726,7 +7742,7 @@ TMSCodes956: TMSCodes
   CodeName: "TopUp balance cancelled"
   InUse: 1
 
-TMSCodes957: TMSCodes
+TMSCodes959: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7734,7 +7750,7 @@ TMSCodes957: TMSCodes
   CodeName: "MSISDN change: deposit move"
   InUse: 1
 
-TMSCodes958: TMSCodes
+TMSCodes960: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7742,7 +7758,7 @@ TMSCodes958: TMSCodes
   CodeName: "MSISDN change: overpayment move"
   InUse: 1
 
-TMSCodes959: TMSCodes
+TMSCodes961: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7750,7 +7766,7 @@ TMSCodes959: TMSCodes
   CodeName: "MSISDN change: adv.payment move"
   InUse: 1
 
-TMSCodes960: TMSCodes
+TMSCodes962: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7758,7 +7774,7 @@ TMSCodes960: TMSCodes
   CodeName: "Refund balance"
   InUse: 1
 
-TMSCodes961: TMSCodes
+TMSCodes963: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7766,7 +7782,7 @@ TMSCodes961: TMSCodes
   CodeName: "MSISDN change: refund balance move"
   InUse: 1
 
-TMSCodes962: TMSCodes
+TMSCodes964: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7774,7 +7790,7 @@ TMSCodes962: TMSCodes
   CodeName: "Deducted overpayment on a new invoice"
   InUse: 1
 
-TMSCodes963: TMSCodes
+TMSCodes965: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7782,7 +7798,7 @@ TMSCodes963: TMSCodes
   CodeName: "Credit invoice (deduction also credited)"
   InUse: 1
 
-TMSCodes964: TMSCodes
+TMSCodes966: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7790,7 +7806,7 @@ TMSCodes964: TMSCodes
   CodeName: "Overpayment used as payment into an invoice"
   InUse: 1
 
-TMSCodes965: TMSCodes
+TMSCodes967: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7798,7 +7814,7 @@ TMSCodes965: TMSCodes
   CodeName: "Return of overpayment"
   InUse: 1
 
-TMSCodes966: TMSCodes
+TMSCodes968: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7806,7 +7822,7 @@ TMSCodes966: TMSCodes
   CodeName: "Fixing the old payment"
   InUse: 1
 
-TMSCodes967: TMSCodes
+TMSCodes969: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7814,7 +7830,7 @@ TMSCodes967: TMSCodes
   CodeName: "Deleted payment with overpayment"
   InUse: 1
 
-TMSCodes968: TMSCodes
+TMSCodes970: TMSCodes
   TableName: "OPLog"
   FieldName: "EventType"
   CodeGroup: "AR"
@@ -7822,7 +7838,7 @@ TMSCodes968: TMSCodes
   CodeName: "Missing sum from a payment"
   InUse: 1
 
-TMSCodes969: TMSCodes
+TMSCodes971: TMSCodes
   TableName: "Order"
   FieldName: "DeliveryType"
   CodeGroup: "Orders"
@@ -7830,7 +7846,7 @@ TMSCodes969: TMSCodes
   CodeName: "Courier"
   InUse: 1
 
-TMSCodes970: TMSCodes
+TMSCodes972: TMSCodes
   TableName: "Order"
   FieldName: "DeliveryType"
   CodeGroup: "Orders"
@@ -7838,7 +7854,7 @@ TMSCodes970: TMSCodes
   CodeName: "Kiala"
   InUse: 1
 
-TMSCodes971: TMSCodes
+TMSCodes973: TMSCodes
   TableName: "Order"
   FieldName: "DeliveryType"
   CodeGroup: "Orders"
@@ -7846,7 +7862,7 @@ TMSCodes971: TMSCodes
   CodeName: "Post office secure"
   InUse: 1
 
-TMSCodes972: TMSCodes
+TMSCodes974: TMSCodes
   TableName: "Order"
   FieldName: "DeliveryType"
   CodeGroup: "Orders"
@@ -7854,7 +7870,7 @@ TMSCodes972: TMSCodes
   CodeName: "Post office"
   InUse: 1
 
-TMSCodes973: TMSCodes
+TMSCodes975: TMSCodes
   TableName: "order"
   FieldName: "mnpstatus"
   CodeGroup: "mnp"
@@ -7862,7 +7878,7 @@ TMSCodes973: TMSCodes
   CodeName: "new"
   InUse: 1
 
-TMSCodes974: TMSCodes
+TMSCodes976: TMSCodes
   TableName: "order"
   FieldName: "MNPStatus"
   CodeGroup: "mnp"
@@ -7870,7 +7886,7 @@ TMSCodes974: TMSCodes
   CodeName: "Done"
   InUse: 1
 
-TMSCodes975: TMSCodes
+TMSCodes977: TMSCodes
   TableName: "order"
   FieldName: "MNPStatus"
   CodeGroup: "MNP"
@@ -7878,7 +7894,7 @@ TMSCodes975: TMSCodes
   CodeName: "contract"
   InUse: 1
 
-TMSCodes976: TMSCodes
+TMSCodes978: TMSCodes
   TableName: "Order"
   FieldName: "MultiSimType"
   CodeGroup: "Order"
@@ -7886,7 +7902,7 @@ TMSCodes976: TMSCodes
   CodeName: "Primary"
   InUse: 1
 
-TMSCodes977: TMSCodes
+TMSCodes979: TMSCodes
   TableName: "Order"
   FieldName: "MultiSimType"
   CodeGroup: "Order"
@@ -7894,7 +7910,7 @@ TMSCodes977: TMSCodes
   CodeName: "Secondary"
   InUse: 1
 
-TMSCodes978: TMSCodes
+TMSCodes980: TMSCodes
   TableName: "Order"
   FieldName: "NumberType"
   CodeGroup: "Order"
@@ -7902,7 +7918,7 @@ TMSCodes978: TMSCodes
   CodeName: "Number transfer from another operator"
   InUse: 1
 
-TMSCodes979: TMSCodes
+TMSCodes981: TMSCodes
   TableName: "Order"
   FieldName: "NumberType"
   CodeGroup: "Order"
@@ -7910,7 +7926,7 @@ TMSCodes979: TMSCodes
   CodeName: "Yoigo number (New)"
   InUse: 1
 
-TMSCodes980: TMSCodes
+TMSCodes982: TMSCodes
   TableName: "Order"
   FieldName: "OldPayType"
   CodeGroup: "Order"
@@ -7918,7 +7934,7 @@ TMSCodes980: TMSCodes
   CodeName: "Postpaid"
   InUse: 1
 
-TMSCodes981: TMSCodes
+TMSCodes983: TMSCodes
   TableName: "Order"
   FieldName: "OldPayType"
   CodeGroup: "Order"
@@ -7926,7 +7942,7 @@ TMSCodes981: TMSCodes
   CodeName: "Prepaid"
   InUse: 1
 
-TMSCodes982: TMSCodes
+TMSCodes984: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -7934,7 +7950,7 @@ TMSCodes982: TMSCodes
   CodeName: "Customer care"
   InUse: 1
 
-TMSCodes983: TMSCodes
+TMSCodes985: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -7942,7 +7958,7 @@ TMSCodes983: TMSCodes
   CodeName: "Fusion POS"
   InUse: 1
 
-TMSCodes984: TMSCodes
+TMSCodes986: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -7950,7 +7966,7 @@ TMSCodes984: TMSCodes
   CodeName: "Fusion Telesales"
   InUse: 1
 
-TMSCodes985: TMSCodes
+TMSCodes987: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -7958,7 +7974,7 @@ TMSCodes985: TMSCodes
   CodeName: "Point of sales"
   InUse: 1
 
-TMSCodes986: TMSCodes
+TMSCodes988: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -7966,7 +7982,7 @@ TMSCodes986: TMSCodes
   CodeName: "Renewals"
   InUse: 1
 
-TMSCodes987: TMSCodes
+TMSCodes989: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -7974,7 +7990,7 @@ TMSCodes987: TMSCodes
   CodeName: "Renewal CTC"
   InUse: 1
 
-TMSCodes988: TMSCodes
+TMSCodes990: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -7982,7 +7998,7 @@ TMSCodes988: TMSCodes
   CodeName: "Renewal through POS"
   InUse: 1
 
-TMSCodes989: TMSCodes
+TMSCodes991: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -7990,7 +8006,7 @@ TMSCodes989: TMSCodes
   CodeName: "Renewal + STC through POS"
   InUse: 1
 
-TMSCodes990: TMSCodes
+TMSCodes992: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -7998,7 +8014,7 @@ TMSCodes990: TMSCodes
   CodeName: "Renewal through telesales"
   InUse: 1
 
-TMSCodes991: TMSCodes
+TMSCodes993: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -8006,7 +8022,7 @@ TMSCodes991: TMSCodes
   CodeName: "Retention"
   InUse: 1
 
-TMSCodes992: TMSCodes
+TMSCodes994: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -8014,7 +8030,7 @@ TMSCodes992: TMSCodes
   CodeName: "Self order"
   InUse: 1
 
-TMSCodes993: TMSCodes
+TMSCodes995: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
@@ -8022,7 +8038,7 @@ TMSCodes993: TMSCodes
   CodeName: "Telesales"
   InUse: 1
 
-TMSCodes994: TMSCodes
+TMSCodes996: TMSCodes
   TableName: "Order"
   FieldName: "OrderType"
   CodeGroup: "Order"
@@ -8030,7 +8046,7 @@ TMSCodes994: TMSCodes
   CodeName: "New subscription"
   InUse: 1
 
-TMSCodes995: TMSCodes
+TMSCodes997: TMSCodes
   TableName: "Order"
   FieldName: "OrderType"
   CodeGroup: "Order"
@@ -8038,13 +8054,13 @@ TMSCodes995: TMSCodes
   CodeName: "Renewal"
   InUse: 1
 
-TMSCodes996: TMSCodes
+TMSCodes998: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
   CodeName: "NEW"
 
-TMSCodes997: TMSCodes
+TMSCodes999: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8052,14 +8068,14 @@ TMSCodes997: TMSCodes
   CodeName: "NEW NUMBER"
   InUse: 1
 
-TMSCodes998: TMSCodes
+TMSCodes1000: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
   CodeValue: "10"
   CodeName: "CREDIT HOLD (Future use)"
 
-TMSCodes999: TMSCodes
+TMSCodes1001: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8067,7 +8083,7 @@ TMSCodes999: TMSCodes
   CodeName: "ONGOING"
   InUse: 1
 
-TMSCodes1000: TMSCodes
+TMSCodes1002: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8075,7 +8091,7 @@ TMSCodes1000: TMSCodes
   CodeName: "ERROR ORDER"
   InUse: 1
 
-TMSCodes1001: TMSCodes
+TMSCodes1003: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8083,7 +8099,7 @@ TMSCodes1001: TMSCodes
   CodeName: "COMPANY NEW ON HOLD"
   InUse: 1
 
-TMSCodes1002: TMSCodes
+TMSCodes1004: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8091,7 +8107,7 @@ TMSCodes1002: TMSCodes
   CodeName: "COMPANY EXISTS ON HOLD"
   InUse: 1
 
-TMSCodes1003: TMSCodes
+TMSCodes1005: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8099,7 +8115,7 @@ TMSCodes1003: TMSCodes
   CodeName: "MNP ON HOLD"
   InUse: 1
 
-TMSCodes1004: TMSCodes
+TMSCodes1006: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8107,7 +8123,7 @@ TMSCodes1004: TMSCodes
   CodeName: "CAMPAIGN ON HOLD"
   InUse: 1
 
-TMSCodes1005: TMSCodes
+TMSCodes1007: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8115,7 +8131,7 @@ TMSCodes1005: TMSCodes
   CodeName: "NEW MNP NUMBER"
   InUse: 1
 
-TMSCodes1006: TMSCodes
+TMSCodes1008: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8123,7 +8139,7 @@ TMSCodes1006: TMSCodes
   CodeName: "RENEWAL NEW"
   InUse: 1
 
-TMSCodes1007: TMSCodes
+TMSCodes1009: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8131,7 +8147,7 @@ TMSCodes1007: TMSCodes
   CodeName: "RENEWAL HOLD"
   InUse: 1
 
-TMSCodes1008: TMSCodes
+TMSCodes1010: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8139,7 +8155,7 @@ TMSCodes1008: TMSCodes
   CodeName: "RENEWAL STC"
   InUse: 1
 
-TMSCodes1009: TMSCodes
+TMSCodes1011: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8147,7 +8163,7 @@ TMSCodes1009: TMSCodes
   CodeName: "COMPANY RENEWAL STC"
   InUse: 1
 
-TMSCodes1010: TMSCodes
+TMSCodes1012: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8155,7 +8171,7 @@ TMSCodes1010: TMSCodes
   CodeName: "IN CONTROL"
   InUse: 1
 
-TMSCodes1011: TMSCodes
+TMSCodes1013: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8163,7 +8179,7 @@ TMSCodes1011: TMSCodes
   CodeName: "ROI RISK LEVEL 1"
   InUse: 1
 
-TMSCodes1012: TMSCodes
+TMSCodes1014: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8171,7 +8187,7 @@ TMSCodes1012: TMSCodes
   CodeName: "ROI RISK LEVEL 2"
   InUse: 1
 
-TMSCodes1013: TMSCodes
+TMSCodes1015: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8179,7 +8195,7 @@ TMSCodes1013: TMSCodes
   CodeName: "ROI RISK LEVEL 3"
   InUse: 1
 
-TMSCodes1014: TMSCodes
+TMSCodes1016: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8187,7 +8203,7 @@ TMSCodes1014: TMSCodes
   CodeName: "MORE DOCUMENTATION NEEDED"
   InUse: 1
 
-TMSCodes1015: TMSCodes
+TMSCodes1017: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8195,7 +8211,7 @@ TMSCodes1015: TMSCodes
   CodeName: "PRE-OFFERS"
   InUse: 1
 
-TMSCodes1016: TMSCodes
+TMSCodes1018: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8203,7 +8219,7 @@ TMSCodes1016: TMSCodes
   CodeName: "DELAYED ACTIVATIONS"
   InUse: 1
 
-TMSCodes1017: TMSCodes
+TMSCodes1019: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8211,7 +8227,7 @@ TMSCodes1017: TMSCodes
   CodeName: "DELIVERED"
   InUse: 1
 
-TMSCodes1018: TMSCodes
+TMSCodes1020: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8219,7 +8235,7 @@ TMSCodes1018: TMSCodes
   CodeName: "CLOSED"
   InUse: 1
 
-TMSCodes1019: TMSCodes
+TMSCodes1021: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8227,7 +8243,7 @@ TMSCodes1019: TMSCodes
   CodeName: "REJECTED MNP-ORDER"
   InUse: 1
 
-TMSCodes1020: TMSCodes
+TMSCodes1022: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8235,7 +8251,7 @@ TMSCodes1020: TMSCodes
   CodeName: "MNP Pending"
   InUse: 1
 
-TMSCodes1021: TMSCodes
+TMSCodes1023: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8243,7 +8259,7 @@ TMSCodes1021: TMSCodes
   CodeName: "MNP Retention"
   InUse: 1
 
-TMSCodes1022: TMSCodes
+TMSCodes1024: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8251,7 +8267,7 @@ TMSCodes1022: TMSCodes
   CodeName: "Pending main line order"
   InUse: 1
 
-TMSCodes1023: TMSCodes
+TMSCodes1025: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8259,7 +8275,7 @@ TMSCodes1023: TMSCodes
   CodeName: "Pending fixed line order"
   InUse: 1
 
-TMSCodes1024: TMSCodes
+TMSCodes1026: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8267,7 +8283,15 @@ TMSCodes1024: TMSCodes
   CodeName: "Waiting sending to LO"
   InUse: 1
 
-TMSCodes1025: TMSCodes
+TMSCodes1027: TMSCodes
+  TableName: "Order"
+  FieldName: "StatusCode"
+  CodeGroup: "Orders"
+  CodeValue: "79"
+  CodeName: "Pending mobile line order"
+  InUse: 1
+
+TMSCodes1028: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8275,7 +8299,7 @@ TMSCodes1025: TMSCodes
   CodeName: "CLOSED BY YOIGO"
   InUse: 1
 
-TMSCodes1026: TMSCodes
+TMSCodes1029: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8283,7 +8307,7 @@ TMSCodes1026: TMSCodes
   CodeName: "Pending fixed line cancellation"
   InUse: 1
 
-TMSCodes1027: TMSCodes
+TMSCodes1030: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8291,7 +8315,7 @@ TMSCodes1027: TMSCodes
   CodeName: "CLOSED AFTER DEADLINE"
   InUse: 1
 
-TMSCodes1028: TMSCodes
+TMSCodes1031: TMSCodes
   TableName: "Order"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8299,7 +8323,7 @@ TMSCodes1028: TMSCodes
   CodeName: "MNP SIM Only"
   InUse: 1
 
-TMSCodes1029: TMSCodes
+TMSCodes1032: TMSCodes
   TableName: "Order"
   FieldName: "Tupas"
   CodeGroup: "Orders"
@@ -8307,7 +8331,7 @@ TMSCodes1029: TMSCodes
   CodeName: "default value"
   InUse: 1
 
-TMSCodes1030: TMSCodes
+TMSCodes1033: TMSCodes
   TableName: "Order"
   FieldName: "Tupas"
   CodeGroup: "Orders"
@@ -8315,7 +8339,7 @@ TMSCodes1030: TMSCodes
   CodeName: "Unknown (Not Identified)"
   InUse: 1
 
-TMSCodes1031: TMSCodes
+TMSCodes1034: TMSCodes
   TableName: "Order"
   FieldName: "Tupas"
   CodeGroup: "Orders"
@@ -8323,7 +8347,7 @@ TMSCodes1031: TMSCodes
   CodeName: "e-tunnistus"
   InUse: 1
 
-TMSCodes1032: TMSCodes
+TMSCodes1035: TMSCodes
   TableName: "Order"
   FieldName: "Tupas"
   CodeGroup: "Orders"
@@ -8331,7 +8355,7 @@ TMSCodes1032: TMSCodes
   CodeName: "POS (Ajokortti)"
   InUse: 1
 
-TMSCodes1033: TMSCodes
+TMSCodes1036: TMSCodes
   TableName: "Order"
   FieldName: "Tupas"
   CodeGroup: "Orders"
@@ -8339,7 +8363,7 @@ TMSCodes1033: TMSCodes
   CodeName: "POS (Passi)"
   InUse: 1
 
-TMSCodes1034: TMSCodes
+TMSCodes1037: TMSCodes
   TableName: "Order"
   FieldName: "Tupas"
   CodeGroup: "Orders"
@@ -8347,7 +8371,7 @@ TMSCodes1034: TMSCodes
   CodeName: "POS (KELA-kortti)"
   InUse: 1
 
-TMSCodes1035: TMSCodes
+TMSCodes1038: TMSCodes
   TableName: "Order"
   FieldName: "Tupas"
   CodeGroup: "Orders"
@@ -8355,7 +8379,7 @@ TMSCodes1035: TMSCodes
   CodeName: "POS (Henkilöllisyystodistus)"
   InUse: 1
 
-TMSCodes1036: TMSCodes
+TMSCodes1039: TMSCodes
   TableName: "Order"
   FieldName: "Tupas"
   CodeGroup: "Orders"
@@ -8363,7 +8387,7 @@ TMSCodes1036: TMSCodes
   CodeName: "POS (Palvelusopimus vastaanotettu)"
   InUse: 1
 
-TMSCodes1037: TMSCodes
+TMSCodes1040: TMSCodes
   TableName: "OrderAccessory"
   FieldName: "TerminalType"
   CodeGroup: "Orders"
@@ -8371,7 +8395,7 @@ TMSCodes1037: TMSCodes
   CodeName: "Phone/Modem"
   InUse: 1
 
-TMSCodes1038: TMSCodes
+TMSCodes1041: TMSCodes
   TableName: "OrderAccessory"
   FieldName: "TerminalType"
   CodeGroup: "Orders"
@@ -8379,7 +8403,7 @@ TMSCodes1038: TMSCodes
   CodeName: "Laptop"
   InUse: 1
 
-TMSCodes1039: TMSCodes
+TMSCodes1042: TMSCodes
   TableName: "OrderCancel"
   FieldName: "Channel"
   CodeGroup: "Admin"
@@ -8388,7 +8412,7 @@ TMSCodes1039: TMSCodes
   ConfigValue: "newton,api"
   InUse: 1
 
-TMSCodes1040: TMSCodes
+TMSCodes1043: TMSCodes
   TableName: "OrderCancel"
   FieldName: "Channel"
   CodeGroup: "Admin"
@@ -8397,7 +8421,7 @@ TMSCodes1040: TMSCodes
   ConfigValue: "pos"
   InUse: 1
 
-TMSCodes1041: TMSCodes
+TMSCodes1044: TMSCodes
   TableName: "OrderCancel"
   FieldName: "Channel"
   CodeGroup: "Admin"
@@ -8406,7 +8430,7 @@ TMSCodes1041: TMSCodes
   ConfigValue: "pos"
   InUse: 1
 
-TMSCodes1042: TMSCodes
+TMSCodes1045: TMSCodes
   TableName: "OrderCancel"
   FieldName: "Channel"
   CodeGroup: "Admin"
@@ -8415,7 +8439,7 @@ TMSCodes1042: TMSCodes
   ConfigValue: "newton,api"
   InUse: 1
 
-TMSCodes1043: TMSCodes
+TMSCodes1046: TMSCodes
   TableName: "OrderCancel"
   FieldName: "Channel"
   CodeGroup: "Admin"
@@ -8424,7 +8448,7 @@ TMSCodes1043: TMSCodes
   ConfigValue: "newton,api"
   InUse: 1
 
-TMSCodes1044: TMSCodes
+TMSCodes1047: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "AdditionalDoc"
   CodeGroup: "Orders"
@@ -8432,7 +8456,7 @@ TMSCodes1044: TMSCodes
   CodeName: "None"
   InUse: 1
 
-TMSCodes1045: TMSCodes
+TMSCodes1048: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "AdditionalDoc"
   CodeGroup: "Orders"
@@ -8440,7 +8464,7 @@ TMSCodes1045: TMSCodes
   CodeName: "Requested"
   InUse: 1
 
-TMSCodes1046: TMSCodes
+TMSCodes1049: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "AdditionalDoc"
   CodeGroup: "Orders"
@@ -8448,7 +8472,7 @@ TMSCodes1046: TMSCodes
   CodeName: "Accepted"
   InUse: 1
 
-TMSCodes1047: TMSCodes
+TMSCodes1050: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "AdditionalDoc"
   CodeGroup: "Orders"
@@ -8456,7 +8480,7 @@ TMSCodes1047: TMSCodes
   CodeName: "Denied"
   InUse: 1
 
-TMSCodes1048: TMSCodes
+TMSCodes1051: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8465,7 +8489,7 @@ TMSCodes1048: TMSCodes
   ConfigValue: "0005,0007"
   InUse: 1
 
-TMSCodes1049: TMSCodes
+TMSCodes1052: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8474,7 +8498,7 @@ TMSCodes1049: TMSCodes
   ConfigValue: "0005,0002"
   InUse: 1
 
-TMSCodes1050: TMSCodes
+TMSCodes1053: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8483,7 +8507,7 @@ TMSCodes1050: TMSCodes
   ConfigValue: "0001,0014"
   InUse: 1
 
-TMSCodes1051: TMSCodes
+TMSCodes1054: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8492,7 +8516,7 @@ TMSCodes1051: TMSCodes
   ConfigValue: "0005,0007"
   InUse: 1
 
-TMSCodes1052: TMSCodes
+TMSCodes1055: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8501,7 +8525,7 @@ TMSCodes1052: TMSCodes
   ConfigValue: "0001,0101"
   InUse: 1
 
-TMSCodes1053: TMSCodes
+TMSCodes1056: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8510,7 +8534,7 @@ TMSCodes1053: TMSCodes
   ConfigValue: "0005,0007"
   InUse: 1
 
-TMSCodes1054: TMSCodes
+TMSCodes1057: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8519,7 +8543,7 @@ TMSCodes1054: TMSCodes
   ConfigValue: "0001,0015"
   InUse: 1
 
-TMSCodes1055: TMSCodes
+TMSCodes1058: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8528,7 +8552,7 @@ TMSCodes1055: TMSCodes
   ConfigValue: "0001,0060"
   InUse: 1
 
-TMSCodes1056: TMSCodes
+TMSCodes1059: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8537,7 +8561,7 @@ TMSCodes1056: TMSCodes
   ConfigValue: "0001,0004"
   InUse: 1
 
-TMSCodes1057: TMSCodes
+TMSCodes1060: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8546,7 +8570,7 @@ TMSCodes1057: TMSCodes
   ConfigValue: "0001,0063"
   InUse: 1
 
-TMSCodes1058: TMSCodes
+TMSCodes1061: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8555,7 +8579,7 @@ TMSCodes1058: TMSCodes
   ConfigValue: "0005,0007"
   InUse: 1
 
-TMSCodes1059: TMSCodes
+TMSCodes1062: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "Profession"
   CodeGroup: "Order"
@@ -8564,7 +8588,7 @@ TMSCodes1059: TMSCodes
   ConfigValue: "0001,0002"
   InUse: 1
 
-TMSCodes1060: TMSCodes
+TMSCodes1063: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "RowType"
   CodeGroup: "Orders"
@@ -8572,7 +8596,7 @@ TMSCodes1060: TMSCodes
   CodeName: "AgrCust"
   InUse: 1
 
-TMSCodes1061: TMSCodes
+TMSCodes1064: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "RowType"
   CodeGroup: "Orders"
@@ -8580,7 +8604,7 @@ TMSCodes1061: TMSCodes
   CodeName: "InvCust"
   InUse: 1
 
-TMSCodes1062: TMSCodes
+TMSCodes1065: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "RowType"
   CodeGroup: "Orders"
@@ -8588,7 +8612,7 @@ TMSCodes1062: TMSCodes
   CodeName: "UserCust"
   InUse: 1
 
-TMSCodes1063: TMSCodes
+TMSCodes1066: TMSCodes
   TableName: "OrderCustomer"
   FieldName: "RowType"
   CodeGroup: "Orders"
@@ -8596,7 +8620,7 @@ TMSCodes1063: TMSCodes
   CodeName: "DelivCust"
   InUse: 1
 
-TMSCodes1064: TMSCodes
+TMSCodes1067: TMSCodes
   TableName: "OrderPayment"
   FieldName: "Method"
   CodeGroup: "Orders"
@@ -8604,7 +8628,7 @@ TMSCodes1064: TMSCodes
   CodeName: "Payment on delivery"
   InUse: 1
 
-TMSCodes1065: TMSCodes
+TMSCodes1068: TMSCodes
   TableName: "OrderPayment"
   FieldName: "Method"
   CodeGroup: "Orders"
@@ -8612,7 +8636,7 @@ TMSCodes1065: TMSCodes
   CodeName: "Credit Card"
   InUse: 1
 
-TMSCodes1066: TMSCodes
+TMSCodes1069: TMSCodes
   TableName: "OrderPayment"
   FieldName: "Method"
   CodeGroup: "Orders"
@@ -8620,14 +8644,14 @@ TMSCodes1066: TMSCodes
   CodeName: "Paypal"
   InUse: 1
 
-TMSCodes1067: TMSCodes
+TMSCodes1070: TMSCodes
   TableName: "OrderSIM"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
   CodeName: "New"
   InUse: 1
 
-TMSCodes1068: TMSCodes
+TMSCodes1071: TMSCodes
   TableName: "OrderSIM"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8635,7 +8659,7 @@ TMSCodes1068: TMSCodes
   CodeName: "New"
   InUse: 1
 
-TMSCodes1069: TMSCodes
+TMSCodes1072: TMSCodes
   TableName: "OrderSIM"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8643,7 +8667,7 @@ TMSCodes1069: TMSCodes
   CodeName: "Printed"
   InUse: 1
 
-TMSCodes1070: TMSCodes
+TMSCodes1073: TMSCodes
   TableName: "OrderSIM"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8651,7 +8675,7 @@ TMSCodes1070: TMSCodes
   CodeName: "Done"
   InUse: 1
 
-TMSCodes1071: TMSCodes
+TMSCodes1074: TMSCodes
   TableName: "OrderSIM"
   FieldName: "StatusCode"
   CodeGroup: "Orders"
@@ -8659,7 +8683,7 @@ TMSCodes1071: TMSCodes
   CodeName: "Closed"
   InUse: 1
 
-TMSCodes1072: TMSCodes
+TMSCodes1075: TMSCodes
   TableName: "OrderTimeStamp"
   FieldName: "RowType"
   CodeGroup: "Orders"
@@ -8667,7 +8691,7 @@ TMSCodes1072: TMSCodes
   CodeName: "Change"
   InUse: 1
 
-TMSCodes1073: TMSCodes
+TMSCodes1076: TMSCodes
   TableName: "OrderTimeStamp"
   FieldName: "RowType"
   CodeGroup: "Orders"
@@ -8675,7 +8699,7 @@ TMSCodes1073: TMSCodes
   CodeName: "Delivery"
   InUse: 1
 
-TMSCodes1074: TMSCodes
+TMSCodes1077: TMSCodes
   TableName: "OrderTimeStamp"
   FieldName: "RowType"
   CodeGroup: "Orders"
@@ -8683,7 +8707,7 @@ TMSCodes1074: TMSCodes
   CodeName: "Close"
   InUse: 1
 
-TMSCodes1075: TMSCodes
+TMSCodes1078: TMSCodes
   TableName: "OrderTimeStamp"
   FieldName: "RowType"
   CodeGroup: "Orders"
@@ -8691,7 +8715,7 @@ TMSCodes1075: TMSCodes
   CodeName: "Confirmation printed"
   InUse: 1
 
-TMSCodes1076: TMSCodes
+TMSCodes1079: TMSCodes
   TableName: "Payment"
   FieldName: "DDError"
   CodeGroup: "AccRec"
@@ -8699,7 +8723,7 @@ TMSCodes1076: TMSCodes
   CodeName: "No funds or not current"
   InUse: 1
 
-TMSCodes1077: TMSCodes
+TMSCodes1080: TMSCodes
   TableName: "Payment"
   FieldName: "DDError"
   CodeGroup: "AccRec"
@@ -8707,7 +8731,7 @@ TMSCodes1077: TMSCodes
   CodeName: "Cancelled account or no direct debit order"
   InUse: 1
 
-TMSCodes1078: TMSCodes
+TMSCodes1081: TMSCodes
   TableName: "Payment"
   FieldName: "DDError"
   CodeGroup: "AccRec"
@@ -8715,7 +8739,7 @@ TMSCodes1078: TMSCodes
   CodeName: "Office of the direct debit order does not exist"
   InUse: 1
 
-TMSCodes1079: TMSCodes
+TMSCodes1082: TMSCodes
   TableName: "Payment"
   FieldName: "DDError"
   CodeGroup: "AccRec"
@@ -8723,7 +8747,7 @@ TMSCodes1079: TMSCodes
   CodeName: "Application of the R.D.338/90 on the NIF"
   InUse: 1
 
-TMSCodes1080: TMSCodes
+TMSCodes1083: TMSCodes
   TableName: "Payment"
   FieldName: "DDError"
   CodeGroup: "AccRec"
@@ -8731,7 +8755,7 @@ TMSCodes1080: TMSCodes
   CodeName: "On behalf of the client: error or cancellation"
   InUse: 1
 
-TMSCodes1081: TMSCodes
+TMSCodes1084: TMSCodes
   TableName: "Payment"
   FieldName: "DDError"
   CodeGroup: "AccRec"
@@ -8739,7 +8763,7 @@ TMSCodes1081: TMSCodes
   CodeName: "On behalf of the client: discontent with amount"
   InUse: 1
 
-TMSCodes1082: TMSCodes
+TMSCodes1085: TMSCodes
   TableName: "Payment"
   FieldName: "DDError"
   CodeGroup: "AccRec"
@@ -8747,7 +8771,7 @@ TMSCodes1082: TMSCodes
   CodeName: "Duplicated, wrong, mistaken or lack of data entry"
   InUse: 1
 
-TMSCodes1083: TMSCodes
+TMSCodes1086: TMSCodes
   TableName: "Payment"
   FieldName: "DDError"
   CodeGroup: "AccRec"
@@ -8755,7 +8779,7 @@ TMSCodes1083: TMSCodes
   CodeName: "Not used"
   InUse: 1
 
-TMSCodes1084: TMSCodes
+TMSCodes1087: TMSCodes
   TableName: "Payment"
   FieldName: "DDError"
   CodeGroup: "AccRec"
@@ -8763,7 +8787,7 @@ TMSCodes1084: TMSCodes
   CodeName: "Not used"
   InUse: 1
 
-TMSCodes1085: TMSCodes
+TMSCodes1088: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8771,7 +8795,7 @@ TMSCodes1085: TMSCodes
   CodeName: "Adv.payment or Deposit"
   InUse: 1
 
-TMSCodes1086: TMSCodes
+TMSCodes1089: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8779,7 +8803,7 @@ TMSCodes1086: TMSCodes
   CodeName: "AKF"
   InUse: 1
 
-TMSCodes1087: TMSCodes
+TMSCodes1090: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8787,7 +8811,7 @@ TMSCodes1087: TMSCodes
   CodeName: "Refund from advance payment"
   InUse: 1
 
-TMSCodes1088: TMSCodes
+TMSCodes1091: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8795,7 +8819,7 @@ TMSCodes1088: TMSCodes
   CodeName: "TopUp payment"
   InUse: 1
 
-TMSCodes1089: TMSCodes
+TMSCodes1092: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8803,7 +8827,7 @@ TMSCodes1089: TMSCodes
   CodeName: "Prepaid charge"
   InUse: 1
 
-TMSCodes1090: TMSCodes
+TMSCodes1093: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8811,7 +8835,7 @@ TMSCodes1090: TMSCodes
   CodeName: "Credit loss"
   InUse: 1
 
-TMSCodes1091: TMSCodes
+TMSCodes1094: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8819,7 +8843,7 @@ TMSCodes1091: TMSCodes
   CodeName: "Commission"
   InUse: 1
 
-TMSCodes1092: TMSCodes
+TMSCodes1095: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8827,7 +8851,7 @@ TMSCodes1092: TMSCodes
   CodeName: "Prepaid Compensation"
   InUse: 1
 
-TMSCodes1093: TMSCodes
+TMSCodes1096: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8835,7 +8859,7 @@ TMSCodes1093: TMSCodes
   CodeName: "Credit note"
   InUse: 1
 
-TMSCodes1094: TMSCodes
+TMSCodes1097: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8843,7 +8867,7 @@ TMSCodes1094: TMSCodes
   CodeName: "Refund from Credit note"
   InUse: 1
 
-TMSCodes1095: TMSCodes
+TMSCodes1098: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8851,7 +8875,7 @@ TMSCodes1095: TMSCodes
   CodeName: "Direct Debit"
   InUse: 1
 
-TMSCodes1096: TMSCodes
+TMSCodes1099: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8859,7 +8883,7 @@ TMSCodes1096: TMSCodes
   CodeName: "Direct Debit rejection"
   InUse: 1
 
-TMSCodes1097: TMSCodes
+TMSCodes1100: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8867,7 +8891,7 @@ TMSCodes1097: TMSCodes
   CodeName: "From file, Bank transfer"
   InUse: 1
 
-TMSCodes1098: TMSCodes
+TMSCodes1101: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8875,7 +8899,7 @@ TMSCodes1098: TMSCodes
   CodeName: "From file, Bank transfer (NOT confirmed)"
   InUse: 1
 
-TMSCodes1099: TMSCodes
+TMSCodes1102: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8883,7 +8907,7 @@ TMSCodes1099: TMSCodes
   CodeName: "From file, Credit card (confirmed)"
   InUse: 1
 
-TMSCodes1100: TMSCodes
+TMSCodes1103: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8891,7 +8915,7 @@ TMSCodes1100: TMSCodes
   CodeName: "From file, Credit card (NOT confirmed)"
   InUse: 1
 
-TMSCodes1101: TMSCodes
+TMSCodes1104: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8899,7 +8923,7 @@ TMSCodes1101: TMSCodes
   CodeName: "Intial TopUp"
   InUse: 1
 
-TMSCodes1102: TMSCodes
+TMSCodes1105: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8907,7 +8931,7 @@ TMSCodes1102: TMSCodes
   CodeName: "Minus adjustment to Campaign Top Up"
   InUse: 1
 
-TMSCodes1103: TMSCodes
+TMSCodes1106: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8915,7 +8939,7 @@ TMSCodes1103: TMSCodes
   CodeName: "Manual Minus Adjustment payment"
   InUse: 1
 
-TMSCodes1104: TMSCodes
+TMSCodes1107: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8923,7 +8947,7 @@ TMSCodes1104: TMSCodes
   CodeName: "Manual payment event creation"
   InUse: 1
 
-TMSCodes1105: TMSCodes
+TMSCodes1108: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8931,7 +8955,7 @@ TMSCodes1105: TMSCodes
   CodeName: "Minus adjustment to own usage Top up"
   InUse: 1
 
-TMSCodes1106: TMSCodes
+TMSCodes1109: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8939,7 +8963,7 @@ TMSCodes1106: TMSCodes
   CodeName: "Minus Adjustment to Price Quarantee balance"
   InUse: 1
 
-TMSCodes1107: TMSCodes
+TMSCodes1110: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8947,7 +8971,7 @@ TMSCodes1107: TMSCodes
   CodeName: "Manual payment event creation to campaign"
   InUse: 1
 
-TMSCodes1108: TMSCodes
+TMSCodes1111: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8955,7 +8979,7 @@ TMSCodes1108: TMSCodes
   CodeName: "Failed Minumum consumption charge"
   InUse: 1
 
-TMSCodes1109: TMSCodes
+TMSCodes1112: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8963,7 +8987,7 @@ TMSCodes1109: TMSCodes
   CodeName: "Pre paid minimum consumption"
   InUse: 1
 
-TMSCodes1110: TMSCodes
+TMSCodes1113: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8971,7 +8995,7 @@ TMSCodes1110: TMSCodes
   CodeName: "Manual payment"
   InUse: 1
 
-TMSCodes1111: TMSCodes
+TMSCodes1114: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8979,7 +9003,7 @@ TMSCodes1111: TMSCodes
   CodeName: "Manual Initial Top up"
   InUse: 1
 
-TMSCodes1112: TMSCodes
+TMSCodes1115: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8987,7 +9011,7 @@ TMSCodes1112: TMSCodes
   CodeName: "Manual Pre paid own usage Top up"
   InUse: 1
 
-TMSCodes1113: TMSCodes
+TMSCodes1116: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -8995,7 +9019,7 @@ TMSCodes1113: TMSCodes
   CodeName: "Manual Price quarantee recharge"
   InUse: 1
 
-TMSCodes1114: TMSCodes
+TMSCodes1117: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9003,7 +9027,7 @@ TMSCodes1114: TMSCodes
   CodeName: "No Direct Debit"
   InUse: 1
 
-TMSCodes1115: TMSCodes
+TMSCodes1118: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9011,7 +9035,7 @@ TMSCodes1115: TMSCodes
   CodeName: "Prepaid Automatic Minus Adjustment"
   InUse: 1
 
-TMSCodes1116: TMSCodes
+TMSCodes1119: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9019,7 +9043,7 @@ TMSCodes1116: TMSCodes
   CodeName: "Price quarantee"
   InUse: 1
 
-TMSCodes1117: TMSCodes
+TMSCodes1120: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9027,7 +9051,7 @@ TMSCodes1117: TMSCodes
   CodeName: "Prepaid Campaign Top Up"
   InUse: 1
 
-TMSCodes1118: TMSCodes
+TMSCodes1121: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9035,7 +9059,7 @@ TMSCodes1118: TMSCodes
   CodeName: "Pre paid own usage Top Up"
   InUse: 1
 
-TMSCodes1119: TMSCodes
+TMSCodes1122: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9043,7 +9067,7 @@ TMSCodes1119: TMSCodes
   CodeName: "Prepaid User interface Minus Adjustment"
   InUse: 1
 
-TMSCodes1120: TMSCodes
+TMSCodes1123: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9051,7 +9075,7 @@ TMSCodes1120: TMSCodes
   CodeName: "From unreg. to balance (RF)"
   InUse: 1
 
-TMSCodes1121: TMSCodes
+TMSCodes1124: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9059,7 +9083,7 @@ TMSCodes1121: TMSCodes
   CodeName: "Reference file"
   InUse: 1
 
-TMSCodes1122: TMSCodes
+TMSCodes1125: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9067,7 +9091,7 @@ TMSCodes1122: TMSCodes
   CodeName: "Refund payment"
   InUse: 1
 
-TMSCodes1123: TMSCodes
+TMSCodes1126: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9075,7 +9099,7 @@ TMSCodes1123: TMSCodes
   CodeName: "Ref. to payment plan"
   InUse: 1
 
-TMSCodes1124: TMSCodes
+TMSCodes1127: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9083,7 +9107,7 @@ TMSCodes1124: TMSCodes
   CodeName: "Refund"
   InUse: 1
 
-TMSCodes1125: TMSCodes
+TMSCodes1128: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9091,7 +9115,7 @@ TMSCodes1125: TMSCodes
   CodeName: "From unreg. to balance (TT)"
   InUse: 1
 
-TMSCodes1126: TMSCodes
+TMSCodes1129: TMSCodes
   TableName: "Payment"
   FieldName: "PaymSrc"
   CodeGroup: "AccRec"
@@ -9099,7 +9123,7 @@ TMSCodes1126: TMSCodes
   CodeName: "Bank statement (TITO)"
   InUse: 1
 
-TMSCodes1127: TMSCodes
+TMSCodes1130: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9107,7 +9131,7 @@ TMSCodes1127: TMSCodes
   CodeName: "Normal"
   InUse: 1
 
-TMSCodes1128: TMSCodes
+TMSCodes1131: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9115,7 +9139,7 @@ TMSCodes1128: TMSCodes
   CodeName: "Credit loss"
   InUse: 1
 
-TMSCodes1129: TMSCodes
+TMSCodes1132: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9123,7 +9147,7 @@ TMSCodes1129: TMSCodes
   CodeName: "Prepaid compensation"
   InUse: 1
 
-TMSCodes1130: TMSCodes
+TMSCodes1133: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9131,7 +9155,7 @@ TMSCodes1130: TMSCodes
   CodeName: "Own usage"
   InUse: 1
 
-TMSCodes1131: TMSCodes
+TMSCodes1134: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9139,7 +9163,7 @@ TMSCodes1131: TMSCodes
   CodeName: "Pre paid minimum consumption"
   InUse: 1
 
-TMSCodes1132: TMSCodes
+TMSCodes1135: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9147,7 +9171,7 @@ TMSCodes1132: TMSCodes
   CodeName: "Prepaid charge"
   InUse: 1
 
-TMSCodes1133: TMSCodes
+TMSCodes1136: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9155,7 +9179,7 @@ TMSCodes1133: TMSCodes
   CodeName: "No Direct Debit"
   InUse: 1
 
-TMSCodes1134: TMSCodes
+TMSCodes1137: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9163,7 +9187,7 @@ TMSCodes1134: TMSCodes
   CodeName: "Payment to credit loss invoice"
   InUse: 1
 
-TMSCodes1135: TMSCodes
+TMSCodes1138: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9171,7 +9195,7 @@ TMSCodes1135: TMSCodes
   CodeName: "Deposit"
   InUse: 1
 
-TMSCodes1136: TMSCodes
+TMSCodes1139: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9179,7 +9203,7 @@ TMSCodes1136: TMSCodes
   CodeName: "Advance Payment"
   InUse: 1
 
-TMSCodes1137: TMSCodes
+TMSCodes1140: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9187,7 +9211,7 @@ TMSCodes1137: TMSCodes
   CodeName: "Credit"
   InUse: 1
 
-TMSCodes1138: TMSCodes
+TMSCodes1141: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9195,7 +9219,7 @@ TMSCodes1138: TMSCodes
   CodeName: "Refund"
   InUse: 1
 
-TMSCodes1139: TMSCodes
+TMSCodes1142: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9203,7 +9227,7 @@ TMSCodes1139: TMSCodes
   CodeName: "TopUp payment"
   InUse: 1
 
-TMSCodes1140: TMSCodes
+TMSCodes1143: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9211,7 +9235,7 @@ TMSCodes1140: TMSCodes
   CodeName: "Direct Debit"
   InUse: 1
 
-TMSCodes1141: TMSCodes
+TMSCodes1144: TMSCodes
   TableName: "Payment"
   FieldName: "PaymType"
   CodeGroup: "AccRec"
@@ -9219,7 +9243,7 @@ TMSCodes1141: TMSCodes
   CodeName: "Initial TopUp"
   InUse: 1
 
-TMSCodes1142: TMSCodes
+TMSCodes1145: TMSCodes
   TableName: "Payment"
   FieldName: "VoucherType"
   CodeGroup: "AccRec"
@@ -9227,7 +9251,7 @@ TMSCodes1142: TMSCodes
   CodeName: "Normal"
   InUse: 1
 
-TMSCodes1143: TMSCodes
+TMSCodes1146: TMSCodes
   TableName: "Payment"
   FieldName: "VoucherType"
   CodeGroup: "AccRec"
@@ -9235,7 +9259,7 @@ TMSCodes1143: TMSCodes
   CodeName: "TopUp"
   InUse: 1
 
-TMSCodes1144: TMSCodes
+TMSCodes1147: TMSCodes
   TableName: "PaymPlan"
   FieldName: "PPStatus"
   CodeGroup: "AccRec"
@@ -9243,7 +9267,7 @@ TMSCodes1144: TMSCodes
   CodeName: "Created"
   InUse: 1
 
-TMSCodes1145: TMSCodes
+TMSCodes1148: TMSCodes
   TableName: "PaymPlan"
   FieldName: "PPStatus"
   CodeGroup: "AccRec"
@@ -9251,7 +9275,7 @@ TMSCodes1145: TMSCodes
   CodeName: "Sent to customer"
   InUse: 1
 
-TMSCodes1146: TMSCodes
+TMSCodes1149: TMSCodes
   TableName: "PaymPlan"
   FieldName: "PPStatus"
   CodeGroup: "AccRec"
@@ -9259,7 +9283,7 @@ TMSCodes1146: TMSCodes
   CodeName: "Accepted"
   InUse: 1
 
-TMSCodes1147: TMSCodes
+TMSCodes1150: TMSCodes
   TableName: "PaymPlan"
   FieldName: "PPStatus"
   CodeGroup: "AccRec"
@@ -9267,7 +9291,7 @@ TMSCodes1147: TMSCodes
   CodeName: "Cancelled"
   InUse: 1
 
-TMSCodes1148: TMSCodes
+TMSCodes1151: TMSCodes
   TableName: "PaymPlan"
   FieldName: "PPStatus"
   CodeGroup: "AccRec"
@@ -9275,7 +9299,7 @@ TMSCodes1148: TMSCodes
   CodeName: "Paid (Closed)"
   InUse: 1
 
-TMSCodes1149: TMSCodes
+TMSCodes1152: TMSCodes
   TableName: "PaymPlan"
   FieldName: "PPStatus"
   CodeGroup: "AccRec"
@@ -9283,7 +9307,7 @@ TMSCodes1149: TMSCodes
   CodeName: "Failed (not paid according to plan)"
   InUse: 1
 
-TMSCodes1150: TMSCodes
+TMSCodes1153: TMSCodes
   TableName: "PaymPlan"
   FieldName: "PPStatus"
   CodeGroup: "AccRec"
@@ -9291,7 +9315,7 @@ TMSCodes1150: TMSCodes
   CodeName: "Credit control"
   InUse: 1
 
-TMSCodes1151: TMSCodes
+TMSCodes1154: TMSCodes
   TableName: "PaymPlan"
   FieldName: "PPType"
   CodeGroup: "AccRec"
@@ -9299,7 +9323,7 @@ TMSCodes1151: TMSCodes
   CodeName: "Due date change"
   InUse: 1
 
-TMSCodes1152: TMSCodes
+TMSCodes1155: TMSCodes
   TableName: "PaymPlan"
   FieldName: "PPType"
   CodeGroup: "AccRec"
@@ -9307,7 +9331,7 @@ TMSCodes1152: TMSCodes
   CodeName: "Part payment (one invoice)"
   InUse: 1
 
-TMSCodes1153: TMSCodes
+TMSCodes1156: TMSCodes
   TableName: "PaymPlan"
   FieldName: "PPType"
   CodeGroup: "AccRec"
@@ -9315,7 +9339,7 @@ TMSCodes1153: TMSCodes
   CodeName: "Payment plan (multiple invoices)"
   InUse: 1
 
-TMSCodes1154: TMSCodes
+TMSCodes1157: TMSCodes
   TableName: "PIndicator"
   FieldName: "IndicatorType"
   CodeGroup: "Indicators"
@@ -9323,7 +9347,7 @@ TMSCodes1154: TMSCodes
   CodeName: "Satisfaction Value"
   InUse: 1
 
-TMSCodes1155: TMSCodes
+TMSCodes1158: TMSCodes
   TableName: "PNPGroup"
   FieldName: "GroupType"
   CodeGroup: "GroupType"
@@ -9331,7 +9355,7 @@ TMSCodes1155: TMSCodes
   CodeName: "F&F (NOT IN USE)"
   InUse: 1
 
-TMSCodes1156: TMSCodes
+TMSCodes1159: TMSCodes
   TableName: "PNPGroup"
   FieldName: "GroupType"
   CodeGroup: "GroupType"
@@ -9339,7 +9363,7 @@ TMSCodes1156: TMSCodes
   CodeName: "Community (NOT IN USE)"
   InUse: 1
 
-TMSCodes1157: TMSCodes
+TMSCodes1160: TMSCodes
   TableName: "PNPGroup"
   FieldName: "GroupType"
   CodeGroup: "GroupType"
@@ -9347,7 +9371,7 @@ TMSCodes1157: TMSCodes
   CodeName: "Mate"
   InUse: 1
 
-TMSCodes1158: TMSCodes
+TMSCodes1161: TMSCodes
   TableName: "PPBatch"
   FieldName: "PBStatus"
   CodeGroup: "AccRec"
@@ -9355,7 +9379,7 @@ TMSCodes1158: TMSCodes
   CodeName: "Unpaid"
   InUse: 1
 
-TMSCodes1159: TMSCodes
+TMSCodes1162: TMSCodes
   TableName: "PPBatch"
   FieldName: "PBStatus"
   CodeGroup: "AccRec"
@@ -9363,7 +9387,7 @@ TMSCodes1159: TMSCodes
   CodeName: "Partly paid"
   InUse: 1
 
-TMSCodes1160: TMSCodes
+TMSCodes1163: TMSCodes
   TableName: "PPBatch"
   FieldName: "PBStatus"
   CodeGroup: "AccRec"
@@ -9371,7 +9395,7 @@ TMSCodes1160: TMSCodes
   CodeName: "Paid"
   InUse: 1
 
-TMSCodes1161: TMSCodes
+TMSCodes1164: TMSCodes
   TableName: "PPBatch"
   FieldName: "PBStatus"
   CodeGroup: "AccRec"
@@ -9379,7 +9403,7 @@ TMSCodes1161: TMSCodes
   CodeName: "EPayment"
   InUse: 1
 
-TMSCodes1162: TMSCodes
+TMSCodes1165: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9387,7 +9411,7 @@ TMSCodes1162: TMSCodes
   CodeName: "Sermepa"
   InUse: 1
 
-TMSCodes1163: TMSCodes
+TMSCodes1166: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9395,7 +9419,7 @@ TMSCodes1163: TMSCodes
   CodeName: "4B"
   InUse: 1
 
-TMSCodes1164: TMSCodes
+TMSCodes1167: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9403,7 +9427,7 @@ TMSCodes1164: TMSCodes
   CodeName: "DISA"
   InUse: 1
 
-TMSCodes1165: TMSCodes
+TMSCodes1168: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9411,7 +9435,7 @@ TMSCodes1165: TMSCodes
   CodeName: "First Data"
   InUse: 1
 
-TMSCodes1166: TMSCodes
+TMSCodes1169: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9419,7 +9443,7 @@ TMSCodes1166: TMSCodes
   CodeName: "The Phone House"
   InUse: 1
 
-TMSCodes1167: TMSCodes
+TMSCodes1170: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9427,7 +9451,7 @@ TMSCodes1167: TMSCodes
   CodeName: "Alphyra"
   InUse: 1
 
-TMSCodes1168: TMSCodes
+TMSCodes1171: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9435,7 +9459,7 @@ TMSCodes1168: TMSCodes
   CodeName: "Alphyra"
   InUse: 1
 
-TMSCodes1169: TMSCodes
+TMSCodes1172: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9443,7 +9467,7 @@ TMSCodes1169: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1170: TMSCodes
+TMSCodes1173: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9451,7 +9475,7 @@ TMSCodes1170: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1171: TMSCodes
+TMSCodes1174: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9459,7 +9483,7 @@ TMSCodes1171: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1172: TMSCodes
+TMSCodes1175: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9467,7 +9491,7 @@ TMSCodes1172: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1173: TMSCodes
+TMSCodes1176: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9475,7 +9499,7 @@ TMSCodes1173: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1174: TMSCodes
+TMSCodes1177: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9483,7 +9507,7 @@ TMSCodes1174: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1175: TMSCodes
+TMSCodes1178: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9491,7 +9515,7 @@ TMSCodes1175: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1176: TMSCodes
+TMSCodes1179: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9499,7 +9523,7 @@ TMSCodes1176: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1177: TMSCodes
+TMSCodes1180: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9507,7 +9531,7 @@ TMSCodes1177: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1178: TMSCodes
+TMSCodes1181: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9515,7 +9539,7 @@ TMSCodes1178: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1179: TMSCodes
+TMSCodes1182: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9523,7 +9547,7 @@ TMSCodes1179: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1180: TMSCodes
+TMSCodes1183: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9531,7 +9555,7 @@ TMSCodes1180: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1181: TMSCodes
+TMSCodes1184: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9539,7 +9563,7 @@ TMSCodes1181: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1182: TMSCodes
+TMSCodes1185: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9547,7 +9571,7 @@ TMSCodes1182: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1183: TMSCodes
+TMSCodes1186: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9555,7 +9579,7 @@ TMSCodes1183: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1184: TMSCodes
+TMSCodes1187: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9563,7 +9587,7 @@ TMSCodes1184: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1185: TMSCodes
+TMSCodes1188: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9571,7 +9595,7 @@ TMSCodes1185: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1186: TMSCodes
+TMSCodes1189: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9579,7 +9603,7 @@ TMSCodes1186: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1187: TMSCodes
+TMSCodes1190: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9587,7 +9611,7 @@ TMSCodes1187: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1188: TMSCodes
+TMSCodes1191: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9595,7 +9619,7 @@ TMSCodes1188: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1189: TMSCodes
+TMSCodes1192: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9603,7 +9627,7 @@ TMSCodes1189: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1190: TMSCodes
+TMSCodes1193: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9611,7 +9635,7 @@ TMSCodes1190: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1191: TMSCodes
+TMSCodes1194: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9619,7 +9643,7 @@ TMSCodes1191: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1192: TMSCodes
+TMSCodes1195: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9627,7 +9651,7 @@ TMSCodes1192: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1193: TMSCodes
+TMSCodes1196: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9635,7 +9659,7 @@ TMSCodes1193: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1194: TMSCodes
+TMSCodes1197: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9643,7 +9667,7 @@ TMSCodes1194: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1195: TMSCodes
+TMSCodes1198: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9651,7 +9675,7 @@ TMSCodes1195: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1196: TMSCodes
+TMSCodes1199: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9659,7 +9683,7 @@ TMSCodes1196: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1197: TMSCodes
+TMSCodes1200: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9667,7 +9691,7 @@ TMSCodes1197: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1198: TMSCodes
+TMSCodes1201: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9675,7 +9699,7 @@ TMSCodes1198: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1199: TMSCodes
+TMSCodes1202: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9683,7 +9707,7 @@ TMSCodes1199: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1200: TMSCodes
+TMSCodes1203: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9691,7 +9715,7 @@ TMSCodes1200: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1201: TMSCodes
+TMSCodes1204: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9699,7 +9723,7 @@ TMSCodes1201: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1202: TMSCodes
+TMSCodes1205: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9707,7 +9731,7 @@ TMSCodes1202: TMSCodes
   CodeName: "Euro6000"
   InUse: 1
 
-TMSCodes1203: TMSCodes
+TMSCodes1206: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9715,7 +9739,7 @@ TMSCodes1203: TMSCodes
   CodeName: "Euronet"
   InUse: 1
 
-TMSCodes1204: TMSCodes
+TMSCodes1207: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9723,7 +9747,7 @@ TMSCodes1204: TMSCodes
   CodeName: "SOLRED"
   InUse: 1
 
-TMSCodes1205: TMSCodes
+TMSCodes1208: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9731,7 +9755,7 @@ TMSCodes1205: TMSCodes
   CodeName: "TELECOR"
   InUse: 1
 
-TMSCodes1206: TMSCodes
+TMSCodes1209: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9739,7 +9763,7 @@ TMSCodes1206: TMSCodes
   CodeName: "LA CAIXA"
   InUse: 1
 
-TMSCodes1207: TMSCodes
+TMSCodes1210: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9747,7 +9771,7 @@ TMSCodes1207: TMSCodes
   CodeName: "Trecedis"
   InUse: 1
 
-TMSCodes1208: TMSCodes
+TMSCodes1211: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Entidad"
   CodeGroup: "Prepaid"
@@ -9755,7 +9779,7 @@ TMSCodes1208: TMSCodes
   CodeName: "LOGISTA"
   InUse: 1
 
-TMSCodes1209: TMSCodes
+TMSCodes1212: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPReqPrefix"
   CodeGroup: "Prepaid"
@@ -9763,7 +9787,7 @@ TMSCodes1209: TMSCodes
   CodeName: "ATM"
   InUse: 1
 
-TMSCodes1210: TMSCodes
+TMSCodes1213: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPReqPrefix"
   CodeGroup: "Prepaid"
@@ -9771,7 +9795,7 @@ TMSCodes1210: TMSCodes
   CodeName: "MGM Commission"
   InUse: 1
 
-TMSCodes1211: TMSCodes
+TMSCodes1214: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPReqPrefix"
   CodeGroup: "Prepaid"
@@ -9779,7 +9803,7 @@ TMSCodes1211: TMSCodes
   CodeName: "Topup 30 and get 5"
   InUse: 1
 
-TMSCodes1212: TMSCodes
+TMSCodes1215: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPReqPrefix"
   CodeGroup: "Prepaid"
@@ -9787,7 +9811,7 @@ TMSCodes1212: TMSCodes
   CodeName: "Initial topup, preactivated subscription"
   InUse: 1
 
-TMSCodes1213: TMSCodes
+TMSCodes1216: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPReqPrefix"
   CodeGroup: "Prepaid"
@@ -9795,7 +9819,7 @@ TMSCodes1213: TMSCodes
   CodeName: "Initial topup, gift order"
   InUse: 1
 
-TMSCodes1214: TMSCodes
+TMSCodes1217: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPReqPrefix"
   CodeGroup: "Prepaid"
@@ -9803,7 +9827,7 @@ TMSCodes1214: TMSCodes
   CodeName: "Campaign (order)"
   InUse: 1
 
-TMSCodes1215: TMSCodes
+TMSCodes1218: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPReqPrefix"
   CodeGroup: "Prepaid"
@@ -9811,7 +9835,7 @@ TMSCodes1215: TMSCodes
   CodeName: "Manual event (script)"
   InUse: 1
 
-TMSCodes1216: TMSCodes
+TMSCodes1219: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPReqPrefix"
   CodeGroup: "Prepaid"
@@ -9819,7 +9843,7 @@ TMSCodes1216: TMSCodes
   CodeName: "Minimum consumption"
   InUse: 1
 
-TMSCodes1217: TMSCodes
+TMSCodes1220: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPReqPrefix"
   CodeGroup: "Prepaid"
@@ -9827,7 +9851,7 @@ TMSCodes1217: TMSCodes
   CodeName: "Initial topup (order)"
   InUse: 1
 
-TMSCodes1218: TMSCodes
+TMSCodes1221: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPReqPrefix"
   CodeGroup: "Prepaid"
@@ -9835,7 +9859,7 @@ TMSCodes1218: TMSCodes
   CodeName: "Manual compensation (cc)"
   InUse: 1
 
-TMSCodes1219: TMSCodes
+TMSCodes1222: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPReqPrefix"
   CodeGroup: "Prepaid"
@@ -9843,7 +9867,7 @@ TMSCodes1219: TMSCodes
   CodeName: "Minus adjustment (cc)"
   InUse: 1
 
-TMSCodes1220: TMSCodes
+TMSCodes1223: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPstatus"
   CodeGroup: "Prepaid"
@@ -9851,7 +9875,7 @@ TMSCodes1220: TMSCodes
   CodeName: "New"
   InUse: 1
 
-TMSCodes1221: TMSCodes
+TMSCodes1224: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPstatus"
   CodeGroup: "Prepaid"
@@ -9859,7 +9883,7 @@ TMSCodes1221: TMSCodes
   CodeName: "Under work"
   InUse: 1
 
-TMSCodes1222: TMSCodes
+TMSCodes1225: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPstatus"
   CodeGroup: "Prepaid"
@@ -9867,7 +9891,7 @@ TMSCodes1222: TMSCodes
   CodeName: "Done"
   InUse: 1
 
-TMSCodes1223: TMSCodes
+TMSCodes1226: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPstatus"
   CodeGroup: "Prepaid"
@@ -9875,7 +9899,7 @@ TMSCodes1223: TMSCodes
   CodeName: "Rejected (error occurred)"
   InUse: 1
 
-TMSCodes1224: TMSCodes
+TMSCodes1227: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPstatus"
   CodeGroup: "Prepaid"
@@ -9883,7 +9907,7 @@ TMSCodes1224: TMSCodes
   CodeName: "Cancelled"
   InUse: 1
 
-TMSCodes1225: TMSCodes
+TMSCodes1228: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "PPstatus"
   CodeGroup: "Prepaid"
@@ -9891,7 +9915,7 @@ TMSCodes1225: TMSCodes
   CodeName: "Handled"
   InUse: 1
 
-TMSCodes1226: TMSCodes
+TMSCodes1229: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9899,7 +9923,7 @@ TMSCodes1226: TMSCodes
   CodeName: "Accepted recharge"
   InUse: 1
 
-TMSCodes1227: TMSCodes
+TMSCodes1230: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9907,7 +9931,7 @@ TMSCodes1227: TMSCodes
   CodeName: "Application error"
   InUse: 1
 
-TMSCodes1228: TMSCodes
+TMSCodes1231: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9915,7 +9939,7 @@ TMSCodes1228: TMSCodes
   CodeName: "Application error"
   InUse: 1
 
-TMSCodes1229: TMSCodes
+TMSCodes1232: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9923,7 +9947,7 @@ TMSCodes1229: TMSCodes
   CodeName: "Incorrect MSISDN"
   InUse: 1
 
-TMSCodes1230: TMSCodes
+TMSCodes1233: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9931,7 +9955,7 @@ TMSCodes1230: TMSCodes
   CodeName: "Denied operation"
   InUse: 1
 
-TMSCodes1231: TMSCodes
+TMSCodes1234: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9939,7 +9963,7 @@ TMSCodes1231: TMSCodes
   CodeName: "Application error"
   InUse: 1
 
-TMSCodes1232: TMSCodes
+TMSCodes1235: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9947,7 +9971,7 @@ TMSCodes1232: TMSCodes
   CodeName: "Application error"
   InUse: 1
 
-TMSCodes1233: TMSCodes
+TMSCodes1236: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9955,7 +9979,7 @@ TMSCodes1233: TMSCodes
   CodeName: "Application error"
   InUse: 1
 
-TMSCodes1234: TMSCodes
+TMSCodes1237: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9963,7 +9987,7 @@ TMSCodes1234: TMSCodes
   CodeName: "Application error"
   InUse: 1
 
-TMSCodes1235: TMSCodes
+TMSCodes1238: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9971,7 +9995,7 @@ TMSCodes1235: TMSCodes
   CodeName: "Application error"
   InUse: 1
 
-TMSCodes1236: TMSCodes
+TMSCodes1239: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9979,7 +10003,7 @@ TMSCodes1236: TMSCodes
   CodeName: "Amount error"
   InUse: 1
 
-TMSCodes1237: TMSCodes
+TMSCodes1240: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9987,7 +10011,7 @@ TMSCodes1237: TMSCodes
   CodeName: "Denied operation"
   InUse: 1
 
-TMSCodes1238: TMSCodes
+TMSCodes1241: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "RespCode"
   CodeGroup: "Prepaid"
@@ -9995,7 +10019,7 @@ TMSCodes1238: TMSCodes
   CodeName: "Accepted recharge"
   InUse: 1
 
-TMSCodes1239: TMSCodes
+TMSCodes1242: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Source"
   CodeGroup: "Prepaid"
@@ -10003,7 +10027,7 @@ TMSCodes1239: TMSCodes
   CodeName: "Topup recharges"
   InUse: 1
 
-TMSCodes1240: TMSCodes
+TMSCodes1243: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Source"
   CodeGroup: "Prepaid"
@@ -10011,7 +10035,7 @@ TMSCodes1240: TMSCodes
   CodeName: "Customer care"
   InUse: 1
 
-TMSCodes1241: TMSCodes
+TMSCodes1244: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Source"
   CodeGroup: "Prepaid"
@@ -10019,7 +10043,7 @@ TMSCodes1241: TMSCodes
   CodeName: "Commission"
   InUse: 1
 
-TMSCodes1242: TMSCodes
+TMSCodes1245: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Source"
   CodeGroup: "Prepaid"
@@ -10027,7 +10051,7 @@ TMSCodes1242: TMSCodes
   CodeName: "Manual correction"
   InUse: 1
 
-TMSCodes1243: TMSCodes
+TMSCodes1246: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Source"
   CodeGroup: "Prepaid"
@@ -10035,7 +10059,7 @@ TMSCodes1243: TMSCodes
   CodeName: "Minimum consumption"
   InUse: 1
 
-TMSCodes1244: TMSCodes
+TMSCodes1247: TMSCodes
   TableName: "PrepaidRequest"
   FieldName: "Source"
   CodeGroup: "Prepaid"
@@ -10043,7 +10067,7 @@ TMSCodes1244: TMSCodes
   CodeName: "Order management"
   InUse: 1
 
-TMSCodes1245: TMSCodes
+TMSCodes1248: TMSCodes
   TableName: "PrepEDR"
   FieldName: "ErrorCode"
   CodeGroup: "EDR"
@@ -10051,7 +10075,7 @@ TMSCodes1245: TMSCodes
   CodeName: "Unknown MSISDN"
   InUse: 1
 
-TMSCodes1246: TMSCodes
+TMSCodes1249: TMSCodes
   TableName: "PrepEDR"
   FieldName: "ErrorCode"
   CodeGroup: "EDR"
@@ -10059,7 +10083,7 @@ TMSCodes1246: TMSCodes
   CodeName: "MSISDN not active"
   InUse: 1
 
-TMSCodes1247: TMSCodes
+TMSCodes1250: TMSCodes
   TableName: "PrepEDR"
   FieldName: "ErrorCode"
   CodeGroup: "EDR"
@@ -10067,7 +10091,7 @@ TMSCodes1247: TMSCodes
   CodeName: "Invalid success code value"
   InUse: 1
 
-TMSCodes1248: TMSCodes
+TMSCodes1251: TMSCodes
   TableName: "PrepEDR"
   FieldName: "ErrorCode"
   CodeGroup: "EDR"
@@ -10075,7 +10099,7 @@ TMSCodes1248: TMSCodes
   CodeName: "Invalid service class value"
   InUse: 1
 
-TMSCodes1249: TMSCodes
+TMSCodes1252: TMSCodes
   TableName: "PrepEDR"
   FieldName: "ErrorCode"
   CodeGroup: "EDR"
@@ -10083,7 +10107,7 @@ TMSCodes1249: TMSCodes
   CodeName: "Inconsistent service class value"
   InUse: 1
 
-TMSCodes1250: TMSCodes
+TMSCodes1253: TMSCodes
   TableName: "PrepEDR"
   FieldName: "ErrorCode"
   CodeGroup: "EDR"
@@ -10091,7 +10115,7 @@ TMSCodes1250: TMSCodes
   CodeName: "Incorrect subscription type"
   InUse: 1
 
-TMSCodes1251: TMSCodes
+TMSCodes1254: TMSCodes
   TableName: "PrepEDR"
   FieldName: "ErrorCode"
   CodeGroup: "EDR"
@@ -10099,7 +10123,7 @@ TMSCodes1251: TMSCodes
   CodeName: "Delayed"
   InUse: 1
 
-TMSCodes1252: TMSCodes
+TMSCodes1255: TMSCodes
   TableName: "PrepEDR"
   FieldName: "ErrorCode"
   CodeGroup: "EDR"
@@ -10107,7 +10131,7 @@ TMSCodes1252: TMSCodes
   CodeName: "Service class mismatch"
   InUse: 1
 
-TMSCodes1253: TMSCodes
+TMSCodes1256: TMSCodes
   TableName: "PrepEDR"
   FieldName: "ErrorCode"
   CodeGroup: "EDR"
@@ -10115,23 +10139,23 @@ TMSCodes1253: TMSCodes
   CodeName: "Invalid date or time"
   InUse: 1
 
-TMSCodes1254: TMSCodes
+TMSCodes1257: TMSCodes
   TableName: "Provisioning"
   CodeGroup: "UI_Maint"
   CodeValue: "Left"
   ConfigValue: "Enable/Disable solog handling"
   InUse: 1
 
-TMSCodes1255: TMSCodes
+TMSCodes1258: TMSCodes
   TableName: "Provisioning"
-  FieldName: "provmaint"
+  FieldName: "Mc/provmaint.p"
   CodeGroup: "UI_Maint"
   CodeValue: "Top"
   CodeName: "Turn on/off provisioning"
   ConfigValue: "Notify backend of this incident via e-mail"
   InUse: 1
 
-TMSCodes1256: TMSCodes
+TMSCodes1259: TMSCodes
   TableName: "ProvMaintBreak"
   FieldName: "TimeFrom"
   CodeGroup: "Maint"
@@ -10139,7 +10163,7 @@ TMSCodes1256: TMSCodes
   CodeName: "Provisioning maintenance break starting time"
   InUse: 1
 
-TMSCodes1257: TMSCodes
+TMSCodes1260: TMSCodes
   TableName: "ProvMaintBreak"
   FieldName: "TimeTo"
   CodeGroup: "Maint"
@@ -10147,7 +10171,7 @@ TMSCodes1257: TMSCodes
   CodeName: "Provisioning maintenance break ending time"
   InUse: 1
 
-TMSCodes1258: TMSCodes
+TMSCodes1261: TMSCodes
   TableName: "ReportConfRow"
   FieldName: "RowType"
   CodeGroup: "Reports"
@@ -10155,7 +10179,7 @@ TMSCodes1258: TMSCodes
   CodeName: "Error codes"
   InUse: 1
 
-TMSCodes1259: TMSCodes
+TMSCodes1262: TMSCodes
   TableName: "ReportConfRow"
   FieldName: "RowType"
   CodeGroup: "Reports"
@@ -10163,7 +10187,7 @@ TMSCodes1259: TMSCodes
   CodeName: "Item on the repor"
   InUse: 1
 
-TMSCodes1260: TMSCodes
+TMSCodes1263: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10171,7 +10195,7 @@ TMSCodes1260: TMSCodes
   CodeName: "Billing Item"
   InUse: 1
 
-TMSCodes1261: TMSCodes
+TMSCodes1264: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10179,7 +10203,7 @@ TMSCodes1261: TMSCodes
   CodeName: "TMS Codes"
   InUse: 1
 
-TMSCodes1262: TMSCodes
+TMSCodes1265: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10187,7 +10211,7 @@ TMSCodes1262: TMSCodes
   CodeName: "Rating plan"
   InUse: 1
 
-TMSCodes1263: TMSCodes
+TMSCodes1266: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10195,7 +10219,7 @@ TMSCodes1263: TMSCodes
   CodeName: "Service package"
   InUse: 1
 
-TMSCodes1264: TMSCodes
+TMSCodes1267: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10203,7 +10227,7 @@ TMSCodes1264: TMSCodes
   CodeName: "Service component"
   InUse: 1
 
-TMSCodes1265: TMSCodes
+TMSCodes1268: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10211,7 +10235,7 @@ TMSCodes1265: TMSCodes
   CodeName: "Periodical contract"
   InUse: 1
 
-TMSCodes1266: TMSCodes
+TMSCodes1269: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10219,7 +10243,7 @@ TMSCodes1266: TMSCodes
   CodeName: "Destination"
   InUse: 1
 
-TMSCodes1267: TMSCodes
+TMSCodes1270: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10227,7 +10251,7 @@ TMSCodes1267: TMSCodes
   CodeName: "Logistic operator"
   InUse: 1
 
-TMSCodes1268: TMSCodes
+TMSCodes1271: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10235,7 +10259,7 @@ TMSCodes1268: TMSCodes
   CodeName: "Logistic status"
   InUse: 1
 
-TMSCodes1269: TMSCodes
+TMSCodes1272: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10243,7 +10267,7 @@ TMSCodes1269: TMSCodes
   CodeName: "Courier"
   InUse: 1
 
-TMSCodes1270: TMSCodes
+TMSCodes1273: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10251,7 +10275,7 @@ TMSCodes1270: TMSCodes
   CodeName: "Delivery incident"
   InUse: 1
 
-TMSCodes1271: TMSCodes
+TMSCodes1274: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10259,7 +10283,7 @@ TMSCodes1271: TMSCodes
   CodeName: "Delivery incident measure"
   InUse: 1
 
-TMSCodes1272: TMSCodes
+TMSCodes1275: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10267,7 +10291,7 @@ TMSCodes1272: TMSCodes
   CodeName: "Profession"
   InUse: 1
 
-TMSCodes1273: TMSCodes
+TMSCodes1276: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10275,7 +10299,7 @@ TMSCodes1273: TMSCodes
   CodeName: "CCN"
   InUse: 1
 
-TMSCodes1274: TMSCodes
+TMSCodes1277: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10283,7 +10307,7 @@ TMSCodes1274: TMSCodes
   CodeName: "Discount plan"
   InUse: 1
 
-TMSCodes1275: TMSCodes
+TMSCodes1278: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10291,7 +10315,7 @@ TMSCodes1275: TMSCodes
   CodeName: "SMS"
   InUse: 1
 
-TMSCodes1276: TMSCodes
+TMSCodes1279: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10299,7 +10323,7 @@ TMSCodes1276: TMSCodes
   CodeName: "Nationality"
   InUse: 1
 
-TMSCodes1277: TMSCodes
+TMSCodes1280: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10307,7 +10331,7 @@ TMSCodes1277: TMSCodes
   CodeName: "Country"
   InUse: 1
 
-TMSCodes1278: TMSCodes
+TMSCodes1281: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10315,7 +10339,7 @@ TMSCodes1278: TMSCodes
   CodeName: "Billing item group"
   InUse: 1
 
-TMSCodes1279: TMSCodes
+TMSCodes1282: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10323,7 +10347,7 @@ TMSCodes1279: TMSCodes
   CodeName: "Tax zone"
   InUse: 1
 
-TMSCodes1280: TMSCodes
+TMSCodes1283: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10331,7 +10355,7 @@ TMSCodes1280: TMSCodes
   CodeName: "Invoice section"
   InUse: 1
 
-TMSCodes1281: TMSCodes
+TMSCodes1284: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
@@ -10339,15 +10363,15 @@ TMSCodes1281: TMSCodes
   CodeName: "CLI Type"
   InUse: 1
 
-TMSCodes1282: TMSCodes
+TMSCodes1285: TMSCodes
   TableName: "requem"
-  FieldName: "0,0,1,2,3,4,5,6,7,9,8"
+  FieldName: "0,0,1,2,3,4,5,6,7,9,8,19"
   CodeGroup: "SubsLMenu"
   CodeValue: "1"
   CodeName: "Subscription type change"
   InUse: 1
 
-TMSCodes1283: TMSCodes
+TMSCodes1286: TMSCodes
   TableName: "requem"
   FieldName: "0,0,1,2,3,4,5,6,9"
   CodeGroup: "SubsLMenu"
@@ -10355,7 +10379,7 @@ TMSCodes1283: TMSCodes
   CodeName: "Subscription type change"
   InUse: 1
 
-TMSCodes1284: TMSCodes
+TMSCodes1287: TMSCodes
   TableName: "requem"
   FieldName: "1,0,1,2,3,4,5,6,7,8,9"
   CodeGroup: "SubsLMenu"
@@ -10363,7 +10387,7 @@ TMSCodes1284: TMSCodes
   CodeName: "HLR service change"
   InUse: 1
 
-TMSCodes1285: TMSCodes
+TMSCodes1288: TMSCodes
   TableName: "requem"
   FieldName: "10,0,2,1,3,4,7,8,9,19"
   CodeGroup: "SubsLMenu"
@@ -10371,7 +10395,7 @@ TMSCodes1285: TMSCodes
   CodeName: "Agreement customer change"
   InUse: 1
 
-TMSCodes1286: TMSCodes
+TMSCodes1289: TMSCodes
   TableName: "requem"
   FieldName: "12,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10379,7 +10403,7 @@ TMSCodes1286: TMSCodes
   CodeName: "Customer´s marketing value update"
   InUse: 1
 
-TMSCodes1287: TMSCodes
+TMSCodes1290: TMSCodes
   TableName: "requem"
   FieldName: "13,0,1,2,3,4,5,6,9"
   CodeGroup: "SubsLMenu"
@@ -10387,7 +10411,7 @@ TMSCodes1287: TMSCodes
   CodeName: "Subscription creation"
   InUse: 1
 
-TMSCodes1288: TMSCodes
+TMSCodes1291: TMSCodes
   TableName: "requem"
   FieldName: "14,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10395,15 +10419,15 @@ TMSCodes1288: TMSCodes
   CodeName: "Fixed line creation"
   InUse: 1
 
-TMSCodes1289: TMSCodes
+TMSCodes1292: TMSCodes
   TableName: "requem"
-  FieldName: "15,0,1,2,3,4,5,6,9,15,19"
+  FieldName: "15,0,1,2,3,4,5,6,9,15,19,20"
   CodeGroup: "SubsLMenu"
   CodeValue: "1"
   CodeName: "ICC change"
   InUse: 1
 
-TMSCodes1290: TMSCodes
+TMSCodes1293: TMSCodes
   TableName: "requem"
   FieldName: "18,0,1,2,3,4,5,6,8,9,19"
   CodeGroup: "SubsLMenu"
@@ -10411,7 +10435,7 @@ TMSCodes1290: TMSCodes
   CodeName: "Subscription termination"
   InUse: 1
 
-TMSCodes1291: TMSCodes
+TMSCodes1294: TMSCodes
   TableName: "requem"
   FieldName: "19,0,1,2,3,4,5,6,9"
   CodeGroup: "SubsLMenu"
@@ -10419,7 +10443,7 @@ TMSCodes1291: TMSCodes
   CodeName: "MSISDN change"
   InUse: 1
 
-TMSCodes1292: TMSCodes
+TMSCodes1295: TMSCodes
   TableName: "requem"
   FieldName: "20,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10427,7 +10451,7 @@ TMSCodes1292: TMSCodes
   CodeName: "On-demand invoice"
   InUse: 1
 
-TMSCodes1293: TMSCodes
+TMSCodes1296: TMSCodes
   TableName: "requem"
   FieldName: "21,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10435,7 +10459,7 @@ TMSCodes1293: TMSCodes
   CodeName: "Normal invoice"
   InUse: 1
 
-TMSCodes1294: TMSCodes
+TMSCodes1297: TMSCodes
   TableName: "requem"
   FieldName: "22,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10443,7 +10467,7 @@ TMSCodes1294: TMSCodes
   CodeName: "Credit invoice"
   InUse: 1
 
-TMSCodes1295: TMSCodes
+TMSCodes1298: TMSCodes
   TableName: "requem"
   FieldName: "22,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10451,7 +10475,7 @@ TMSCodes1295: TMSCodes
   CodeName: "Credit note"
   InUse: 1
 
-TMSCodes1296: TMSCodes
+TMSCodes1299: TMSCodes
   TableName: "requem"
   FieldName: "23,0,1,2,3,4,7,9,15,16,17,19"
   CodeGroup: "SubsLMenu"
@@ -10459,7 +10483,7 @@ TMSCodes1296: TMSCodes
   CodeName: "Refunds"
   InUse: 1
 
-TMSCodes1297: TMSCodes
+TMSCodes1300: TMSCodes
   TableName: "requem"
   FieldName: "24,0,1,2,3,4,9,19,15"
   CodeGroup: "SubsLMenu"
@@ -10467,7 +10491,7 @@ TMSCodes1297: TMSCodes
   CodeName: "Bank account change"
   InUse: 1
 
-TMSCodes1298: TMSCodes
+TMSCodes1301: TMSCodes
   TableName: "requem"
   FieldName: "25,0,1,2,3,4,5,6,9"
   CodeGroup: "SubsLMenu"
@@ -10475,7 +10499,7 @@ TMSCodes1298: TMSCodes
   CodeName: "Suspend subscription"
   InUse: 1
 
-TMSCodes1299: TMSCodes
+TMSCodes1302: TMSCodes
   TableName: "requem"
   FieldName: "26,0,1,2,3,4,5,6,9"
   CodeGroup: "SubsLMenu"
@@ -10483,7 +10507,7 @@ TMSCodes1299: TMSCodes
   CodeName: "Release suspended subscription"
   InUse: 1
 
-TMSCodes1300: TMSCodes
+TMSCodes1303: TMSCodes
   TableName: "requem"
   FieldName: "27,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10491,14 +10515,14 @@ TMSCodes1300: TMSCodes
   CodeName: "Billing event price update"
   InUse: 1
 
-TMSCodes1301: TMSCodes
+TMSCodes1304: TMSCodes
   TableName: "requem"
   FieldName: "28,0,1,2,4"
   CodeGroup: "SubsLMenu"
   CodeValue: "0"
   CodeName: "Price guarantee"
 
-TMSCodes1302: TMSCodes
+TMSCodes1305: TMSCodes
   TableName: "requem"
   FieldName: "3,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10506,7 +10530,7 @@ TMSCodes1302: TMSCodes
   CodeName: "User change"
   InUse: 1
 
-TMSCodes1303: TMSCodes
+TMSCodes1306: TMSCodes
   TableName: "requem"
   FieldName: "30,0,1,2,3,4"
   CodeGroup: "SubsLMenu"
@@ -10514,7 +10538,7 @@ TMSCodes1303: TMSCodes
   CodeName: "SMS creation"
   InUse: 1
 
-TMSCodes1304: TMSCodes
+TMSCodes1307: TMSCodes
   TableName: "requem"
   FieldName: "31,0,1,2,3,4,9,15,19"
   CodeGroup: "SubsLMenu"
@@ -10522,7 +10546,7 @@ TMSCodes1304: TMSCodes
   CodeName: "Payment"
   InUse: 1
 
-TMSCodes1305: TMSCodes
+TMSCodes1308: TMSCodes
   TableName: "requem"
   FieldName: "32,0,2,4,19"
   CodeGroup: "SubsLMenu"
@@ -10530,7 +10554,7 @@ TMSCodes1305: TMSCodes
   CodeName: "Bank reference"
   InUse: 1
 
-TMSCodes1306: TMSCodes
+TMSCodes1309: TMSCodes
   TableName: "requem"
   FieldName: "33,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10538,7 +10562,7 @@ TMSCodes1306: TMSCodes
   CodeName: "Credit check"
   InUse: 1
 
-TMSCodes1307: TMSCodes
+TMSCodes1310: TMSCodes
   TableName: "requem"
   FieldName: "34,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10546,7 +10570,7 @@ TMSCodes1307: TMSCodes
   CodeName: "Manual payment"
   InUse: 1
 
-TMSCodes1308: TMSCodes
+TMSCodes1311: TMSCodes
   TableName: "requem"
   FieldName: "35,0,1,2,3,7,8,9"
   CodeGroup: "SubsLMenu"
@@ -10554,7 +10578,7 @@ TMSCodes1308: TMSCodes
   CodeName: "Barring and suspension"
   InUse: 1
 
-TMSCodes1309: TMSCodes
+TMSCodes1312: TMSCodes
   TableName: "requem"
   FieldName: "37,2"
   CodeGroup: "SubslMenu"
@@ -10562,7 +10586,7 @@ TMSCodes1309: TMSCodes
   CodeName: "Balance query"
   InUse: 1
 
-TMSCodes1310: TMSCodes
+TMSCodes1313: TMSCodes
   TableName: "requem"
   FieldName: "39,0,1,2,3,4,9,99"
   CodeGroup: "SubsLMenu"
@@ -10570,7 +10594,7 @@ TMSCodes1310: TMSCodes
   CodeName: "Contract maintenance request"
   InUse: 1
 
-TMSCodes1311: TMSCodes
+TMSCodes1314: TMSCodes
   TableName: "requem"
   FieldName: "40,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10578,7 +10602,7 @@ TMSCodes1311: TMSCodes
   CodeName: "Limit update or creation"
   InUse: 1
 
-TMSCodes1312: TMSCodes
+TMSCodes1315: TMSCodes
   TableName: "requem"
   FieldName: "46,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10586,7 +10610,7 @@ TMSCodes1312: TMSCodes
   CodeName: "After sales order"
   InUse: 1
 
-TMSCodes1313: TMSCodes
+TMSCodes1316: TMSCodes
   TableName: "requem"
   FieldName: "49,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10594,7 +10618,7 @@ TMSCodes1313: TMSCodes
   CodeName: "Revert Renewal Order"
   InUse: 1
 
-TMSCodes1314: TMSCodes
+TMSCodes1317: TMSCodes
   TableName: "requem"
   FieldName: "5,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10602,7 +10626,7 @@ TMSCodes1314: TMSCodes
   CodeName: "MiYoigo password update"
   InUse: 1
 
-TMSCodes1315: TMSCodes
+TMSCodes1318: TMSCodes
   TableName: "requem"
   FieldName: "6,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10610,7 +10634,7 @@ TMSCodes1315: TMSCodes
   CodeName: "Customer´s address change"
   InUse: 1
 
-TMSCodes1316: TMSCodes
+TMSCodes1319: TMSCodes
   TableName: "requem"
   FieldName: "65,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10618,7 +10642,7 @@ TMSCodes1316: TMSCodes
   CodeName: "Rerate"
   InUse: 1
 
-TMSCodes1317: TMSCodes
+TMSCodes1320: TMSCodes
   TableName: "requem"
   FieldName: "76,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10626,14 +10650,14 @@ TMSCodes1317: TMSCodes
   CodeName: "Postpaid charge or compensation"
   InUse: 1
 
-TMSCodes1318: TMSCodes
+TMSCodes1321: TMSCodes
   TableName: "requem"
   FieldName: "77,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
   CodeValue: "1"
   CodeName: "Duplicate Invoice"
 
-TMSCodes1319: TMSCodes
+TMSCodes1322: TMSCodes
   TableName: "requem"
   FieldName: "78,0,2,3,7"
   CodeGroup: "SubsLMenu"
@@ -10641,7 +10665,7 @@ TMSCodes1319: TMSCodes
   CodeName: "Bundle Activation/Termination"
   InUse: 1
 
-TMSCodes1320: TMSCodes
+TMSCodes1323: TMSCodes
   TableName: "requem"
   FieldName: "79,0,1,2,3,9"
   CodeGroup: "SubsLMenu"
@@ -10649,7 +10673,7 @@ TMSCodes1320: TMSCodes
   CodeName: "SMS invoice"
   InUse: 1
 
-TMSCodes1321: TMSCodes
+TMSCodes1324: TMSCodes
   TableName: "requem"
   FieldName: "8,0,1,2,3,4,7,8,9"
   CodeGroup: "SubsLMenu"
@@ -10657,7 +10681,7 @@ TMSCodes1321: TMSCodes
   CodeName: "Periodical contract creation"
   InUse: 1
 
-TMSCodes1322: TMSCodes
+TMSCodes1325: TMSCodes
   TableName: "requem"
   FieldName: "80,2"
   CodeGroup: "SubsLMenu"
@@ -10665,7 +10689,7 @@ TMSCodes1322: TMSCodes
   CodeName: "IMEI change"
   InUse: 1
 
-TMSCodes1323: TMSCodes
+TMSCodes1326: TMSCodes
   TableName: "requem"
   FieldName: "81,0,1,2,3,4,6,7,8,9"
   CodeGroup: "SubsLMenu"
@@ -10673,7 +10697,7 @@ TMSCodes1323: TMSCodes
   CodeName: "Bundle Type Change"
   InUse: 1
 
-TMSCodes1324: TMSCodes
+TMSCodes1327: TMSCodes
   TableName: "requem"
   FieldName: "82,0,1,2,3,4,5,6,7,8,9,19"
   CodeGroup: "SubsLMenu"
@@ -10681,7 +10705,7 @@ TMSCodes1324: TMSCodes
   CodeName: "Subscription Reactivation"
   InUse: 1
 
-TMSCodes1325: TMSCodes
+TMSCodes1328: TMSCodes
   TableName: "requem"
   FieldName: "83,0,1,2,3,4,5,6,7,8,9,19"
   CodeGroup: "SubsLMenu"
@@ -10689,7 +10713,7 @@ TMSCodes1325: TMSCodes
   CodeName: "Data Sharing Service"
   InUse: 1
 
-TMSCodes1326: TMSCodes
+TMSCodes1329: TMSCodes
   TableName: "requem"
   FieldName: "84,0,1,2,3,4,5,6,7,8,9,19"
   CodeGroup: "SubsLMenu"
@@ -10697,7 +10721,7 @@ TMSCodes1326: TMSCodes
   CodeName: "Activate Email Invoice"
   InUse: 1
 
-TMSCodes1327: TMSCodes
+TMSCodes1330: TMSCodes
   TableName: "requem"
   FieldName: "85,0,1,2,3,4,5,6,7,8,9"
   CodeGroup: "SubsLMenu"
@@ -10705,7 +10729,7 @@ TMSCodes1327: TMSCodes
   CodeName: "Send Email Invoice"
   InUse: 1
 
-TMSCodes1328: TMSCodes
+TMSCodes1331: TMSCodes
   TableName: "requem"
   FieldName: "86,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10713,7 +10737,7 @@ TMSCodes1328: TMSCodes
   CodeName: "Email Sending"
   InUse: 1
 
-TMSCodes1329: TMSCodes
+TMSCodes1332: TMSCodes
   TableName: "requem"
   FieldName: "87,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10721,7 +10745,7 @@ TMSCodes1329: TMSCodes
   CodeName: "Logistics"
   InUse: 1
 
-TMSCodes1330: TMSCodes
+TMSCodes1333: TMSCodes
   TableName: "requem"
   FieldName: "88,0,1,2,3,4,6,7,8,9"
   CodeGroup: "SubsLMenu"
@@ -10729,7 +10753,7 @@ TMSCodes1330: TMSCodes
   CodeName: "Installment Contract Change"
   InUse: 1
 
-TMSCodes1331: TMSCodes
+TMSCodes1334: TMSCodes
   TableName: "requem"
   FieldName: "89,0,1,2,3,4"
   CodeGroup: "SubsLMenu"
@@ -10737,7 +10761,7 @@ TMSCodes1331: TMSCodes
   CodeName: "Terminal Financing Bank File"
   InUse: 1
 
-TMSCodes1332: TMSCodes
+TMSCodes1335: TMSCodes
   TableName: "requem"
   FieldName: "9,0,1,2,3,4,7,9"
   CodeGroup: "SubsLMenu"
@@ -10745,7 +10769,7 @@ TMSCodes1332: TMSCodes
   CodeName: "Periodical contract termination"
   InUse: 1
 
-TMSCodes1333: TMSCodes
+TMSCodes1336: TMSCodes
   TableName: "requem"
   FieldName: "90,0,1,2,3,4,9"
   CodeGroup: "SubsLMenu"
@@ -10753,7 +10777,7 @@ TMSCodes1333: TMSCodes
   CodeName: "Fusion invoice email"
   InUse: 1
 
-TMSCodes1334: TMSCodes
+TMSCodes1337: TMSCodes
   TableName: "requem"
   FieldName: "91,0,1,2,3,4"
   CodeGroup: "SubsLMenu"
@@ -10761,7 +10785,7 @@ TMSCodes1334: TMSCodes
   CodeName: "Bank termination/cancellation file"
   InUse: 1
 
-TMSCodes1335: TMSCodes
+TMSCodes1338: TMSCodes
   TableName: "requem"
   FieldName: "92,0,1,2,3"
   CodeGroup: "SubsLMenu"
@@ -10769,7 +10793,7 @@ TMSCodes1335: TMSCodes
   CodeName: "Publish invoices to Newton AND HPD"
   InUse: 1
 
-TMSCodes1336: TMSCodes
+TMSCodes1339: TMSCodes
   TableName: "requem"
   FieldName: "93,0,1,2,3"
   CodeGroup: "SubsLMenu"
@@ -10777,7 +10801,7 @@ TMSCodes1336: TMSCodes
   CodeName: "Publish invoices to IFS"
   InUse: 1
 
-TMSCodes1337: TMSCodes
+TMSCodes1340: TMSCodes
   TableName: "RequestAction"
   FieldName: "Action"
   CodeGroup: "Request"
@@ -10785,7 +10809,7 @@ TMSCodes1337: TMSCodes
   CodeName: "Create"
   InUse: 1
 
-TMSCodes1338: TMSCodes
+TMSCodes1341: TMSCodes
   TableName: "RequestAction"
   FieldName: "Action"
   CodeGroup: "Request"
@@ -10793,7 +10817,7 @@ TMSCodes1338: TMSCodes
   CodeName: "Term-PenaltyFee"
   InUse: 1
 
-TMSCodes1339: TMSCodes
+TMSCodes1342: TMSCodes
   TableName: "RequestAction"
   FieldName: "Action"
   CodeGroup: "Request"
@@ -10801,7 +10825,7 @@ TMSCodes1339: TMSCodes
   CodeName: "Init-Terminate"
   InUse: 1
 
-TMSCodes1340: TMSCodes
+TMSCodes1343: TMSCodes
   TableName: "RequestAction"
   FieldName: "Action"
   CodeGroup: "Request"
@@ -10809,7 +10833,7 @@ TMSCodes1340: TMSCodes
   CodeName: "Send-SMS"
   InUse: 1
 
-TMSCodes1341: TMSCodes
+TMSCodes1344: TMSCodes
   TableName: "RequestAction"
   FieldName: "Action"
   CodeGroup: "Request"
@@ -10817,7 +10841,7 @@ TMSCodes1341: TMSCodes
   CodeName: "Terminate"
   InUse: 1
 
-TMSCodes1342: TMSCodes
+TMSCodes1345: TMSCodes
   TableName: "RequestAction"
   FieldName: "Action"
   CodeGroup: "Request"
@@ -10825,7 +10849,7 @@ TMSCodes1342: TMSCodes
   CodeName: "Recreate"
   InUse: 1
 
-TMSCodes1343: TMSCodes
+TMSCodes1346: TMSCodes
   TableName: "RequestAction"
   FieldName: "Action"
   CodeGroup: "Request"
@@ -10833,7 +10857,7 @@ TMSCodes1343: TMSCodes
   CodeName: "Precheck"
   InUse: 1
 
-TMSCodes1344: TMSCodes
+TMSCodes1347: TMSCodes
   TableName: "RequestAction"
   FieldName: "Action"
   CodeGroup: "Request"
@@ -10841,7 +10865,7 @@ TMSCodes1344: TMSCodes
   CodeName: "Leave as is"
   InUse: 1
 
-TMSCodes1345: TMSCodes
+TMSCodes1348: TMSCodes
   TableName: "RequestAction"
   FieldName: "Action"
   CodeGroup: "Request"
@@ -10849,7 +10873,7 @@ TMSCodes1345: TMSCodes
   CodeName: "Extend contract"
   InUse: 1
 
-TMSCodes1346: TMSCodes
+TMSCodes1349: TMSCodes
   TableName: "RequestAction"
   FieldName: "ActionType"
   CodeGroup: "Request"
@@ -10857,7 +10881,7 @@ TMSCodes1346: TMSCodes
   CodeName: "Barrings that prevent action"
   InUse: 1
 
-TMSCodes1347: TMSCodes
+TMSCodes1350: TMSCodes
   TableName: "RequestAction"
   FieldName: "ActionType"
   CodeGroup: "Request"
@@ -10865,7 +10889,7 @@ TMSCodes1347: TMSCodes
   CodeName: "Service package"
   InUse: 1
 
-TMSCodes1348: TMSCodes
+TMSCodes1351: TMSCodes
   TableName: "RequestAction"
   FieldName: "ActionType"
   CodeGroup: "Request"
@@ -10873,7 +10897,7 @@ TMSCodes1348: TMSCodes
   CodeName: "Periodical contract"
   InUse: 1
 
-TMSCodes1349: TMSCodes
+TMSCodes1352: TMSCodes
   TableName: "RequestAction"
   FieldName: "ActionType"
   CodeGroup: "Request"
@@ -10881,7 +10905,7 @@ TMSCodes1349: TMSCodes
   CodeName: "Periodical contract type"
   InUse: 1
 
-TMSCodes1350: TMSCodes
+TMSCodes1353: TMSCodes
   TableName: "RequestAction"
   FieldName: "ActionType"
   CodeGroup: "Request"
@@ -10889,7 +10913,7 @@ TMSCodes1350: TMSCodes
   CodeName: "Pending other request"
   InUse: 1
 
-TMSCodes1351: TMSCodes
+TMSCodes1354: TMSCodes
   TableName: "RequestAction"
   FieldName: "ActionType"
   CodeGroup: "Request"
@@ -10897,7 +10921,7 @@ TMSCodes1351: TMSCodes
   CodeName: "Requests that prevent action"
   InUse: 1
 
-TMSCodes1352: TMSCodes
+TMSCodes1355: TMSCodes
   TableName: "RequestAction"
   FieldName: "ActionType"
   CodeGroup: "Request"
@@ -10905,7 +10929,7 @@ TMSCodes1352: TMSCodes
   CodeName: "Service request"
   InUse: 1
 
-TMSCodes1353: TMSCodes
+TMSCodes1356: TMSCodes
   TableName: "RequestAction"
   FieldName: "ActionType"
   CodeGroup: "Request"
@@ -10913,7 +10937,7 @@ TMSCodes1353: TMSCodes
   CodeName: "Send SMS"
   InUse: 1
 
-TMSCodes1354: TMSCodes
+TMSCodes1357: TMSCodes
   TableName: "RoamTariff"
   FieldName: "Ratetype"
   CodeGroup: "Roaming"
@@ -10921,7 +10945,7 @@ TMSCodes1354: TMSCodes
   CodeName: "Ad-Hoc Discount"
   InUse: 1
 
-TMSCodes1355: TMSCodes
+TMSCodes1358: TMSCodes
   TableName: "RoamTariff"
   FieldName: "RateType"
   CodeGroup: "Roaming"
@@ -10929,7 +10953,7 @@ TMSCodes1355: TMSCodes
   CodeName: "MTC Pricing"
   InUse: 1
 
-TMSCodes1356: TMSCodes
+TMSCodes1359: TMSCodes
   TableName: "RoamTariff"
   FieldName: "RateType"
   CodeGroup: "Roaming"
@@ -10937,7 +10961,7 @@ TMSCodes1356: TMSCodes
   CodeName: "Connection Charge"
   InUse: 1
 
-TMSCodes1357: TMSCodes
+TMSCodes1360: TMSCodes
   TableName: "RoamTariff"
   FieldName: "RateType"
   CodeGroup: "Roaming"
@@ -10945,7 +10969,7 @@ TMSCodes1357: TMSCodes
   CodeName: "Voice Charging"
   InUse: 1
 
-TMSCodes1358: TMSCodes
+TMSCodes1361: TMSCodes
   TableName: "RoamTariff"
   FieldName: "RateType"
   CodeGroup: "Roaming"
@@ -10953,7 +10977,7 @@ TMSCodes1358: TMSCodes
   CodeName: "SMS MO/MT"
   InUse: 1
 
-TMSCodes1359: TMSCodes
+TMSCodes1362: TMSCodes
   TableName: "RoamTariff"
   FieldName: "RateType"
   CodeGroup: "Roaming"
@@ -10961,7 +10985,7 @@ TMSCodes1359: TMSCodes
   CodeName: "GPRS"
   InUse: 1
 
-TMSCodes1360: TMSCodes
+TMSCodes1363: TMSCodes
   TableName: "RoamTariff"
   FieldName: "RateType"
   CodeGroup: "Roaming"
@@ -10969,7 +10993,7 @@ TMSCodes1360: TMSCodes
   CodeName: "Value Added Numbers"
   InUse: 1
 
-TMSCodes1361: TMSCodes
+TMSCodes1364: TMSCodes
   TableName: "RoamTariff"
   FieldName: "RateType"
   CodeGroup: "Roaming"
@@ -10977,7 +11001,7 @@ TMSCodes1361: TMSCodes
   CodeName: "Zone Pricing"
   InUse: 1
 
-TMSCodes1362: TMSCodes
+TMSCodes1365: TMSCodes
   TableName: "RoamTariff"
   FieldName: "RateType"
   CodeGroup: "Roaming"
@@ -10985,28 +11009,28 @@ TMSCodes1362: TMSCodes
   CodeName: "Country Code Pricing"
   InUse: 1
 
-TMSCodes1363: TMSCodes
+TMSCodes1366: TMSCodes
   TableName: "RoamTariff"
   FieldName: "Service"
   CodeGroup: "Roaming"
   CodeValue: "GPRS"
   InUse: 1
 
-TMSCodes1364: TMSCodes
+TMSCodes1367: TMSCodes
   TableName: "RoamTariff"
   FieldName: "Service"
   CodeGroup: "Roaming"
   CodeValue: "SMS"
   InUse: 1
 
-TMSCodes1365: TMSCodes
+TMSCodes1368: TMSCodes
   TableName: "RoamTariff"
   FieldName: "Service"
   CodeGroup: "Roaming"
   CodeValue: "VOICE"
   InUse: 1
 
-TMSCodes1366: TMSCodes
+TMSCodes1369: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11015,7 +11039,7 @@ TMSCodes1366: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1367: TMSCodes
+TMSCodes1370: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11023,7 +11047,7 @@ TMSCodes1367: TMSCodes
   CodeName: "Alcampo"
   ConfigValue: "13"
 
-TMSCodes1368: TMSCodes
+TMSCodes1371: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11032,7 +11056,7 @@ TMSCodes1368: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1369: TMSCodes
+TMSCodes1372: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11041,7 +11065,7 @@ TMSCodes1369: TMSCodes
   ConfigValue: "28"
   InUse: 1
 
-TMSCodes1370: TMSCodes
+TMSCodes1373: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11049,7 +11073,7 @@ TMSCodes1370: TMSCodes
   CodeName: "Axia"
   ConfigValue: "27"
 
-TMSCodes1371: TMSCodes
+TMSCodes1374: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11058,7 +11082,7 @@ TMSCodes1371: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1372: TMSCodes
+TMSCodes1375: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11067,7 +11091,7 @@ TMSCodes1372: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1373: TMSCodes
+TMSCodes1376: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11075,7 +11099,7 @@ TMSCodes1373: TMSCodes
   CodeName: "Boulanger"
   ConfigValue: "99"
 
-TMSCodes1374: TMSCodes
+TMSCodes1377: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11083,7 +11107,7 @@ TMSCodes1374: TMSCodes
   CodeName: "Vista internal users"
   ConfigValue: "15"
 
-TMSCodes1375: TMSCodes
+TMSCodes1378: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11092,7 +11116,7 @@ TMSCodes1375: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1376: TMSCodes
+TMSCodes1379: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11101,7 +11125,7 @@ TMSCodes1376: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1377: TMSCodes
+TMSCodes1380: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11109,7 +11133,7 @@ TMSCodes1377: TMSCodes
   CodeName: "ByMovil"
   ConfigValue: "27"
 
-TMSCodes1378: TMSCodes
+TMSCodes1381: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11117,7 +11141,7 @@ TMSCodes1378: TMSCodes
   CodeName: "Carrefour"
   ConfigValue: "12"
 
-TMSCodes1379: TMSCodes
+TMSCodes1382: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11126,7 +11150,7 @@ TMSCodes1379: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1380: TMSCodes
+TMSCodes1383: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11135,7 +11159,7 @@ TMSCodes1380: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1381: TMSCodes
+TMSCodes1384: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11143,7 +11167,7 @@ TMSCodes1381: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1382: TMSCodes
+TMSCodes1385: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11152,7 +11176,7 @@ TMSCodes1382: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1383: TMSCodes
+TMSCodes1386: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11160,7 +11184,7 @@ TMSCodes1383: TMSCodes
   CodeName: "Dextra"
   ConfigValue: "27"
 
-TMSCodes1384: TMSCodes
+TMSCodes1387: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11168,7 +11192,7 @@ TMSCodes1384: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1385: TMSCodes
+TMSCodes1388: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11176,7 +11200,7 @@ TMSCodes1385: TMSCodes
   CodeName: "Emision Unisono"
   ConfigValue: "15"
 
-TMSCodes1386: TMSCodes
+TMSCodes1389: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11185,7 +11209,7 @@ TMSCodes1386: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1387: TMSCodes
+TMSCodes1390: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11194,7 +11218,7 @@ TMSCodes1387: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1388: TMSCodes
+TMSCodes1391: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11202,7 +11226,7 @@ TMSCodes1388: TMSCodes
   CodeName: "GSS"
   ConfigValue: "15"
 
-TMSCodes1389: TMSCodes
+TMSCodes1392: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11210,7 +11234,7 @@ TMSCodes1389: TMSCodes
   CodeName: "K-HABLS"
   ConfigValue: "27"
 
-TMSCodes1390: TMSCodes
+TMSCodes1393: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11218,7 +11242,7 @@ TMSCodes1390: TMSCodes
   CodeName: "Mundo Digital"
   ConfigValue: "27"
 
-TMSCodes1391: TMSCodes
+TMSCodes1394: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11226,7 +11250,7 @@ TMSCodes1391: TMSCodes
   CodeName: "MGM"
   ConfigValue: "14"
 
-TMSCodes1392: TMSCodes
+TMSCodes1395: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11234,7 +11258,7 @@ TMSCodes1392: TMSCodes
   CodeName: "Media Markt"
   ConfigValue: "18"
 
-TMSCodes1393: TMSCodes
+TMSCodes1396: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11243,7 +11267,7 @@ TMSCodes1393: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1394: TMSCodes
+TMSCodes1397: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11251,7 +11275,7 @@ TMSCodes1394: TMSCodes
   CodeName: "The Phone House"
   ConfigValue: "11"
 
-TMSCodes1395: TMSCodes
+TMSCodes1398: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11260,7 +11284,7 @@ TMSCodes1395: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1396: TMSCodes
+TMSCodes1399: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11269,7 +11293,7 @@ TMSCodes1396: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1397: TMSCodes
+TMSCodes1400: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11277,7 +11301,7 @@ TMSCodes1397: TMSCodes
   CodeName: "Recepción Bilbao"
   ConfigValue: "15"
 
-TMSCodes1398: TMSCodes
+TMSCodes1401: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11286,7 +11310,7 @@ TMSCodes1398: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1399: TMSCodes
+TMSCodes1402: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11294,7 +11318,7 @@ TMSCodes1399: TMSCodes
   CodeName: "Tal Digital"
   ConfigValue: "27"
 
-TMSCodes1400: TMSCodes
+TMSCodes1403: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11302,7 +11326,7 @@ TMSCodes1400: TMSCodes
   CodeName: "Telecor"
   ConfigValue: "25"
 
-TMSCodes1401: TMSCodes
+TMSCodes1404: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11310,7 +11334,7 @@ TMSCodes1401: TMSCodes
   CodeName: "TelAndCom"
   ConfigValue: "26"
 
-TMSCodes1402: TMSCodes
+TMSCodes1405: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11319,7 +11343,7 @@ TMSCodes1402: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1403: TMSCodes
+TMSCodes1406: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11328,7 +11352,7 @@ TMSCodes1403: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1404: TMSCodes
+TMSCodes1407: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11336,7 +11360,7 @@ TMSCodes1404: TMSCodes
   CodeName: "The Phone House exlusivo Yoigo"
   ConfigValue: "27"
 
-TMSCodes1405: TMSCodes
+TMSCodes1408: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11344,7 +11368,7 @@ TMSCodes1405: TMSCodes
   CodeName: "Tu Y Tu"
   ConfigValue: "27"
 
-TMSCodes1406: TMSCodes
+TMSCodes1409: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11353,7 +11377,7 @@ TMSCodes1406: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1407: TMSCodes
+TMSCodes1410: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11361,7 +11385,7 @@ TMSCodes1407: TMSCodes
   CodeName: "Urende"
   ConfigValue: "23"
 
-TMSCodes1408: TMSCodes
+TMSCodes1411: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11369,7 +11393,7 @@ TMSCodes1408: TMSCodes
   CodeName: "Web"
   ConfigValue: "14"
 
-TMSCodes1409: TMSCodes
+TMSCodes1412: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11378,7 +11402,7 @@ TMSCodes1409: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1410: TMSCodes
+TMSCodes1413: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
@@ -11387,7 +11411,7 @@ TMSCodes1410: TMSCodes
   ConfigValue: "15"
   InUse: 1
 
-TMSCodes1411: TMSCodes
+TMSCodes1414: TMSCodes
   TableName: "ServAttr"
   FieldName: "APN"
   CodeGroup: "B70"
@@ -11395,7 +11419,7 @@ TMSCodes1411: TMSCodes
   CodeName: "www.testi.net"
   InUse: 1
 
-TMSCodes1412: TMSCodes
+TMSCodes1415: TMSCodes
   TableName: "ServAttr"
   FieldName: "APN"
   CodeGroup: "B70"
@@ -11403,7 +11427,7 @@ TMSCodes1412: TMSCodes
   CodeName: "www.testi.org"
   InUse: 1
 
-TMSCodes1413: TMSCodes
+TMSCodes1416: TMSCodes
   TableName: "ServAttr"
   FieldName: "PDP_ID"
   CodeGroup: "B70"
@@ -11411,14 +11435,14 @@ TMSCodes1413: TMSCodes
   CodeName: "1"
   InUse: 1
 
-TMSCodes1414: TMSCodes
+TMSCodes1417: TMSCodes
   TableName: "ServAttr"
   FieldName: "PDP_ID"
   CodeGroup: "B70"
   CodeValue: "2"
   InUse: 1
 
-TMSCodes1415: TMSCodes
+TMSCodes1418: TMSCodes
   TableName: "ServCom"
   FieldName: "ActType"
   CodeGroup: "Service"
@@ -11426,7 +11450,7 @@ TMSCodes1415: TMSCodes
   CodeName: "Activated in HLR"
   InUse: 1
 
-TMSCodes1416: TMSCodes
+TMSCodes1419: TMSCodes
   TableName: "ServCom"
   FieldName: "ActType"
   CodeGroup: "Service"
@@ -11434,7 +11458,7 @@ TMSCodes1416: TMSCodes
   CodeName: "NOT Activated in HLR"
   InUse: 1
 
-TMSCodes1417: TMSCodes
+TMSCodes1420: TMSCodes
   TableName: "ServCom"
   FieldName: "ActType"
   CodeGroup: "Service"
@@ -11442,7 +11466,7 @@ TMSCodes1417: TMSCodes
   CodeName: "Other activation"
   InUse: 1
 
-TMSCodes1418: TMSCodes
+TMSCodes1421: TMSCodes
   TableName: "ServCom"
   FieldName: "Target"
   CodeGroup: "Service"
@@ -11450,7 +11474,7 @@ TMSCodes1418: TMSCodes
   CodeName: "Mobile Subscription"
   InUse: 1
 
-TMSCodes1419: TMSCodes
+TMSCodes1422: TMSCodes
   TableName: "ServCom"
   FieldName: "Target"
   CodeGroup: "Service"
@@ -11458,7 +11482,7 @@ TMSCodes1419: TMSCodes
   CodeName: "CLIType"
   InUse: 1
 
-TMSCodes1420: TMSCodes
+TMSCodes1423: TMSCodes
   TableName: "ServCom"
   FieldName: "Target"
   CodeGroup: "Service"
@@ -11466,7 +11490,7 @@ TMSCodes1420: TMSCodes
   CodeName: "Mobsub stateless"
   InUse: 1
 
-TMSCodes1421: TMSCodes
+TMSCodes1424: TMSCodes
   TableName: "ServFee"
   FieldName: "EventType"
   CodeGroup: "Service"
@@ -11474,7 +11498,7 @@ TMSCodes1421: TMSCodes
   CodeName: "Activation"
   InUse: 1
 
-TMSCodes1422: TMSCodes
+TMSCodes1425: TMSCodes
   TableName: "ServFee"
   FieldName: "EventType"
   CodeGroup: "Service"
@@ -11482,7 +11506,7 @@ TMSCodes1422: TMSCodes
   CodeName: "One time execution"
   InUse: 1
 
-TMSCodes1423: TMSCodes
+TMSCodes1426: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11490,7 +11514,7 @@ TMSCodes1423: TMSCodes
   CodeName: "Specification for one CLI"
   InUse: 1
 
-TMSCodes1424: TMSCodes
+TMSCodes1427: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11498,7 +11522,7 @@ TMSCodes1424: TMSCodes
   CodeName: "FAX"
   InUse: 1
 
-TMSCodes1425: TMSCodes
+TMSCodes1428: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11506,7 +11530,7 @@ TMSCodes1425: TMSCodes
   CodeName: "Invoice specification"
   InUse: 1
 
-TMSCodes1426: TMSCodes
+TMSCodes1429: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11514,7 +11538,7 @@ TMSCodes1426: TMSCodes
   CodeName: "MOBSUB"
   InUse: 1
 
-TMSCodes1427: TMSCodes
+TMSCodes1430: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11522,7 +11546,7 @@ TMSCodes1427: TMSCodes
   CodeName: "OPEN"
   InUse: 1
 
-TMSCodes1428: TMSCodes
+TMSCodes1431: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11530,7 +11554,7 @@ TMSCodes1428: TMSCodes
   CodeName: "OWNER"
   InUse: 1
 
-TMSCodes1429: TMSCodes
+TMSCodes1432: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11538,7 +11562,7 @@ TMSCodes1429: TMSCodes
   CodeName: "PaymPlan"
   InUse: 1
 
-TMSCodes1430: TMSCodes
+TMSCodes1433: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11546,7 +11570,7 @@ TMSCodes1430: TMSCodes
   CodeName: "PNP"
   InUse: 1
 
-TMSCodes1431: TMSCodes
+TMSCodes1434: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11554,7 +11578,7 @@ TMSCodes1431: TMSCodes
   CodeName: "PRINTS"
   InUse: 1
 
-TMSCodes1432: TMSCodes
+TMSCodes1435: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11562,7 +11586,7 @@ TMSCodes1432: TMSCodes
   CodeName: "REPORTS"
   InUse: 1
 
-TMSCodes1433: TMSCodes
+TMSCodes1436: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11570,7 +11594,7 @@ TMSCodes1433: TMSCodes
   CodeName: "SERVICE"
   InUse: 1
 
-TMSCodes1434: TMSCodes
+TMSCodes1437: TMSCodes
   TableName: "ServFee"
   FieldName: "ServType"
   CodeGroup: "Service"
@@ -11578,7 +11602,7 @@ TMSCodes1434: TMSCodes
   CodeName: "VOICEM"
   InUse: 1
 
-TMSCodes1435: TMSCodes
+TMSCodes1438: TMSCodes
   TableName: "Service"
   FieldName: "Service"
   CodeGroup: "CallBlock"
@@ -11586,7 +11610,7 @@ TMSCodes1435: TMSCodes
   CodeName: "Puheluestot 1 = Aikuisviihde"
   InUse: 1
 
-TMSCodes1436: TMSCodes
+TMSCodes1439: TMSCodes
   TableName: "ServiceLimit"
   FieldName: "InclUnit"
   CodeGroup: "ServiceLimit"
@@ -11594,7 +11618,7 @@ TMSCodes1436: TMSCodes
   CodeName: "Minute"
   InUse: 1
 
-TMSCodes1437: TMSCodes
+TMSCodes1440: TMSCodes
   TableName: "ServiceLimit"
   FieldName: "InclUnit"
   CodeGroup: "ServiceLimit"
@@ -11602,7 +11626,7 @@ TMSCodes1437: TMSCodes
   CodeName: "Second"
   InUse: 1
 
-TMSCodes1438: TMSCodes
+TMSCodes1441: TMSCodes
   TableName: "ServiceLimit"
   FieldName: "InclUnit"
   CodeGroup: "ServiceLimit"
@@ -11610,7 +11634,7 @@ TMSCodes1438: TMSCodes
   CodeName: "GigaByte"
   InUse: 1
 
-TMSCodes1439: TMSCodes
+TMSCodes1442: TMSCodes
   TableName: "ServiceLimit"
   FieldName: "InclUnit"
   CodeGroup: "ServiceLimit"
@@ -11618,7 +11642,7 @@ TMSCodes1439: TMSCodes
   CodeName: "MegaByte"
   InUse: 1
 
-TMSCodes1440: TMSCodes
+TMSCodes1443: TMSCodes
   TableName: "ServiceLimit"
   FieldName: "InclUnit"
   CodeGroup: "ServiceLimit"
@@ -11626,7 +11650,7 @@ TMSCodes1440: TMSCodes
   CodeName: "Quantity"
   InUse: 1
 
-TMSCodes1441: TMSCodes
+TMSCodes1444: TMSCodes
   TableName: "ServiceLimit"
   FieldName: "InclUnit"
   CodeGroup: "ServiceLimit"
@@ -11634,7 +11658,7 @@ TMSCodes1441: TMSCodes
   CodeName: "Amount"
   InUse: 1
 
-TMSCodes1442: TMSCodes
+TMSCodes1445: TMSCodes
   TableName: "ServiceLimit"
   FieldName: "InclUnit"
   CodeGroup: "ServiceLimit"
@@ -11642,7 +11666,7 @@ TMSCodes1442: TMSCodes
   CodeName: "BDest Quantity"
   InUse: 1
 
-TMSCodes1443: TMSCodes
+TMSCodes1446: TMSCodes
   TableName: "SIM"
   FieldName: "SIMChange"
   CodeGroup: "SIMDELTYPE"
@@ -11650,7 +11674,7 @@ TMSCodes1443: TMSCodes
   CodeName: "Customer Care"
   InUse: 1
 
-TMSCodes1444: TMSCodes
+TMSCodes1447: TMSCodes
   TableName: "SIM"
   FieldName: "SIMCHANGE"
   CodeGroup: "SIMDELTYPE"
@@ -11658,7 +11682,7 @@ TMSCodes1444: TMSCodes
   CodeName: "Retailer (POS)"
   InUse: 1
 
-TMSCodes1445: TMSCodes
+TMSCodes1448: TMSCodes
   TableName: "SIM"
   FieldName: "SimStat"
   CodeGroup: "SIM"
@@ -11666,7 +11690,7 @@ TMSCodes1445: TMSCodes
   CodeName: "LOST"
   InUse: 1
 
-TMSCodes1446: TMSCodes
+TMSCodes1449: TMSCodes
   TableName: "SIM"
   FieldName: "SimStat"
   CodeGroup: "SIM"
@@ -11674,7 +11698,7 @@ TMSCodes1446: TMSCodes
   CodeName: "RELEASED"
   InUse: 1
 
-TMSCodes1447: TMSCodes
+TMSCodes1450: TMSCodes
   TableName: "SLGAanalyse"
   FieldName: "SLGAType"
   CodeGroup: "Servicelimit"
@@ -11682,7 +11706,7 @@ TMSCodes1447: TMSCodes
   CodeName: "Service Package"
   InUse: 1
 
-TMSCodes1448: TMSCodes
+TMSCodes1451: TMSCodes
   TableName: "SLGAanalyse"
   FieldName: "SLGAType"
   CodeGroup: "Servicelimit"
@@ -11690,7 +11714,7 @@ TMSCodes1448: TMSCodes
   CodeName: "Rating limit"
   InUse: 1
 
-TMSCodes1449: TMSCodes
+TMSCodes1452: TMSCodes
   TableName: "SLGAanalyse"
   FieldName: "SLGAType"
   CodeGroup: "Servicelimit"
@@ -11698,7 +11722,7 @@ TMSCodes1449: TMSCodes
   CodeName: "Discount"
   InUse: 1
 
-TMSCodes1450: TMSCodes
+TMSCodes1453: TMSCodes
   TableName: "SLGAanalyse"
   FieldName: "SLGAType"
   CodeGroup: "Servicelimit"
@@ -11706,7 +11730,7 @@ TMSCodes1450: TMSCodes
   CodeName: "Progressive rating"
   InUse: 1
 
-TMSCodes1451: TMSCodes
+TMSCodes1454: TMSCodes
   TableName: "SLGAanalyse"
   FieldName: "SLGAType"
   CodeGroup: "ServiceLimit"
@@ -11714,7 +11738,7 @@ TMSCodes1451: TMSCodes
   CodeName: "Installment"
   InUse: 1
 
-TMSCodes1452: TMSCodes
+TMSCodes1455: TMSCodes
   TableName: "SLGAanalyse"
   FieldName: "SLGAType"
   CodeGroup: "Servicelimit"
@@ -11722,7 +11746,7 @@ TMSCodes1452: TMSCodes
   CodeName: "Rating pool"
   InUse: 1
 
-TMSCodes1453: TMSCodes
+TMSCodes1456: TMSCodes
   TableName: "SLGAanalyse"
   FieldName: "SLGAType"
   CodeGroup: "ServiceLimit"
@@ -11730,7 +11754,7 @@ TMSCodes1453: TMSCodes
   CodeName: "Cumulative rating"
   InUse: 1
 
-TMSCodes1454: TMSCodes
+TMSCodes1457: TMSCodes
   TableName: "SLGANAlyse"
   FieldName: "bdest"
   CodeGroup: "bdest"
@@ -11738,7 +11762,7 @@ TMSCodes1454: TMSCodes
   CodeName: "Using BDest"
   InUse: 1
 
-TMSCodes1455: TMSCodes
+TMSCodes1458: TMSCodes
   TableName: "SLGANAlyse"
   FieldName: "bdest"
   CodeGroup: "bdest"
@@ -11746,7 +11770,7 @@ TMSCodes1455: TMSCodes
   CodeName: "Using btype"
   InUse: 1
 
-TMSCodes1456: TMSCodes
+TMSCodes1459: TMSCodes
   TableName: "SPRule"
   FieldName: "Rule"
   CodeGroup: "Rule"
@@ -11754,7 +11778,7 @@ TMSCodes1456: TMSCodes
   CodeName: "Not Allowed"
   InUse: 1
 
-TMSCodes1457: TMSCodes
+TMSCodes1460: TMSCodes
   TableName: "SPRule"
   FieldName: "Rule"
   CodeGroup: "Rule"
@@ -11762,7 +11786,7 @@ TMSCodes1457: TMSCodes
   CodeName: "Allowed"
   InUse: 1
 
-TMSCodes1458: TMSCodes
+TMSCodes1461: TMSCodes
   TableName: "SPRule"
   FieldName: "Rule"
   CodeGroup: "Rule"
@@ -11770,7 +11794,7 @@ TMSCodes1458: TMSCodes
   CodeName: "Obligatory"
   InUse: 1
 
-TMSCodes1459: TMSCodes
+TMSCodes1462: TMSCodes
   TableName: "Tariff"
   FieldName: "DataType"
   CodeGroup: "Tariff"
@@ -11778,7 +11802,7 @@ TMSCodes1459: TMSCodes
   CodeName: "Minute"
   InUse: 1
 
-TMSCodes1460: TMSCodes
+TMSCodes1463: TMSCodes
   TableName: "Tariff"
   FieldName: "DataType"
   CodeGroup: "Tariff"
@@ -11786,7 +11810,7 @@ TMSCodes1460: TMSCodes
   CodeName: "Second"
   InUse: 1
 
-TMSCodes1461: TMSCodes
+TMSCodes1464: TMSCodes
   TableName: "Tariff"
   FieldName: "DataType"
   CodeGroup: "Tariff"
@@ -11794,7 +11818,7 @@ TMSCodes1461: TMSCodes
   CodeName: "GigaByte"
   InUse: 1
 
-TMSCodes1462: TMSCodes
+TMSCodes1465: TMSCodes
   TableName: "tariff"
   FieldName: "Datatype"
   CodeGroup: "tariff"
@@ -11802,7 +11826,7 @@ TMSCodes1462: TMSCodes
   CodeName: "MegaByte"
   InUse: 1
 
-TMSCodes1463: TMSCodes
+TMSCodes1466: TMSCodes
   TableName: "Tariff"
   FieldName: "DataType"
   CodeGroup: "Tariff"
@@ -11810,7 +11834,7 @@ TMSCodes1463: TMSCodes
   CodeName: "Quantity"
   InUse: 1
 
-TMSCodes1464: TMSCodes
+TMSCodes1467: TMSCodes
   TableName: "Tariff"
   FieldName: "DataType"
   CodeGroup: "Tariff"
@@ -11818,7 +11842,7 @@ TMSCodes1464: TMSCodes
   CodeName: "Amount"
   InUse: 1
 
-TMSCodes1465: TMSCodes
+TMSCodes1468: TMSCodes
   TableName: "Tariff"
   FieldName: "TZName"
   CodeGroup: "Maint"
@@ -11826,7 +11850,7 @@ TMSCodes1465: TMSCodes
   CodeName: "Off Peak"
   InUse: 1
 
-TMSCodes1466: TMSCodes
+TMSCodes1469: TMSCodes
   TableName: "Tariff"
   FieldName: "TZName"
   CodeGroup: "Maint"
@@ -11834,7 +11858,7 @@ TMSCodes1466: TMSCodes
   CodeName: "Peak"
   InUse: 1
 
-TMSCodes1467: TMSCodes
+TMSCodes1470: TMSCodes
   TableName: "Tariff"
   FieldName: "TZName"
   CodeGroup: "Maint"
@@ -11842,7 +11866,7 @@ TMSCodes1467: TMSCodes
   CodeName: "Off Peak"
   InUse: 1
 
-TMSCodes1468: TMSCodes
+TMSCodes1471: TMSCodes
   TableName: "TMRLimit"
   FieldName: "ValueType"
   CodeGroup: "TMR"
@@ -11850,7 +11874,7 @@ TMSCodes1468: TMSCodes
   CodeName: "Amount"
   InUse: 1
 
-TMSCodes1469: TMSCodes
+TMSCodes1472: TMSCodes
   TableName: "TMRLimit"
   FieldName: "ValueType"
   CodeGroup: "TMR"
@@ -11858,7 +11882,7 @@ TMSCodes1469: TMSCodes
   CodeName: "Percent"
   InUse: 1
 
-TMSCodes1470: TMSCodes
+TMSCodes1473: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterAmount"
   CodeGroup: "TMR"
@@ -11866,7 +11890,7 @@ TMSCodes1470: TMSCodes
   CodeName: "Minute"
   InUse: 1
 
-TMSCodes1471: TMSCodes
+TMSCodes1474: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterAmount"
   CodeGroup: "TMR"
@@ -11874,7 +11898,7 @@ TMSCodes1471: TMSCodes
   CodeName: "Second"
   InUse: 1
 
-TMSCodes1472: TMSCodes
+TMSCodes1475: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterAmount"
   CodeGroup: "TMR"
@@ -11882,7 +11906,7 @@ TMSCodes1472: TMSCodes
   CodeName: "Gigabyte"
   InUse: 1
 
-TMSCodes1473: TMSCodes
+TMSCodes1476: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterAmount"
   CodeGroup: "TMR"
@@ -11890,7 +11914,7 @@ TMSCodes1473: TMSCodes
   CodeName: "Megabyte"
   InUse: 1
 
-TMSCodes1474: TMSCodes
+TMSCodes1477: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterAmount"
   CodeGroup: "TMR"
@@ -11898,7 +11922,7 @@ TMSCodes1474: TMSCodes
   CodeName: "Quantity"
   InUse: 1
 
-TMSCodes1475: TMSCodes
+TMSCodes1478: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterAmount"
   CodeGroup: "TMR"
@@ -11906,7 +11930,7 @@ TMSCodes1475: TMSCodes
   CodeName: "Amount"
   InUse: 1
 
-TMSCodes1476: TMSCodes
+TMSCodes1479: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterAmount"
   CodeGroup: "TMR"
@@ -11914,7 +11938,7 @@ TMSCodes1476: TMSCodes
   CodeName: "BDestination Limit"
   InUse: 1
 
-TMSCodes1477: TMSCodes
+TMSCodes1480: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterPeriod"
   CodeGroup: "TMR"
@@ -11922,7 +11946,7 @@ TMSCodes1477: TMSCodes
   CodeName: "Calendar month"
   InUse: 1
 
-TMSCodes1478: TMSCodes
+TMSCodes1481: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterType"
   CodeGroup: "TMR"
@@ -11930,7 +11954,7 @@ TMSCodes1478: TMSCodes
   CodeName: "No counters"
   InUse: 1
 
-TMSCodes1479: TMSCodes
+TMSCodes1482: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterType"
   CodeGroup: "TMR"
@@ -11939,7 +11963,7 @@ TMSCodes1479: TMSCodes
   Memo: "~"
   InUse: 1
 
-TMSCodes1480: TMSCodes
+TMSCodes1483: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterType"
   CodeGroup: "TMR"
@@ -11948,7 +11972,7 @@ TMSCodes1480: TMSCodes
   Memo: "~"
   InUse: 1
 
-TMSCodes1481: TMSCodes
+TMSCodes1484: TMSCodes
   TableName: "TMRule"
   FieldName: "CounterType"
   CodeGroup: "TMR"
@@ -11956,7 +11980,7 @@ TMSCodes1481: TMSCodes
   CodeName: "One counter over periods"
   InUse: 1
 
-TMSCodes1482: TMSCodes
+TMSCodes1485: TMSCodes
   TableName: "TMRule"
   FieldName: "LimitCompare"
   CodeGroup: "TMR"
@@ -11964,7 +11988,7 @@ TMSCodes1482: TMSCodes
   CodeName: "Triggered when limit is exceeded"
   InUse: 1
 
-TMSCodes1483: TMSCodes
+TMSCodes1486: TMSCodes
   TableName: "TMRule"
   FieldName: "LimitCompare"
   CodeGroup: "TMR"
@@ -11972,7 +11996,7 @@ TMSCodes1483: TMSCodes
   CodeName: "Triggered when value drops below limit"
   InUse: 1
 
-TMSCodes1484: TMSCodes
+TMSCodes1487: TMSCodes
   TableName: "TMRule"
   FieldName: "LimitSource"
   CodeGroup: "TMR"
@@ -11980,7 +12004,7 @@ TMSCodes1484: TMSCodes
   CodeName: "Limit not used"
   InUse: 1
 
-TMSCodes1485: TMSCodes
+TMSCodes1488: TMSCodes
   TableName: "TMRule"
   FieldName: "LimitSource"
   CodeGroup: "TMR"
@@ -11988,7 +12012,7 @@ TMSCodes1485: TMSCodes
   CodeName: "Customer based"
   InUse: 1
 
-TMSCodes1486: TMSCodes
+TMSCodes1489: TMSCodes
   TableName: "TMRule"
   FieldName: "LimitSource"
   CodeGroup: "TMR"
@@ -11996,7 +12020,7 @@ TMSCodes1486: TMSCodes
   CodeName: "Subscription based"
   InUse: 1
 
-TMSCodes1487: TMSCodes
+TMSCodes1490: TMSCodes
   TableName: "TMRule"
   FieldName: "LimitSource"
   CodeGroup: "TMR"
@@ -12004,7 +12028,7 @@ TMSCodes1487: TMSCodes
   CodeName: "Default limit from rule"
   InUse: 1
 
-TMSCodes1488: TMSCodes
+TMSCodes1491: TMSCodes
   TableName: "TMRule"
   FieldName: "LimitSource"
   CodeGroup: "TMR"
@@ -12012,7 +12036,7 @@ TMSCodes1488: TMSCodes
   CodeName: "Customer based or default from rule"
   InUse: 1
 
-TMSCodes1489: TMSCodes
+TMSCodes1492: TMSCodes
   TableName: "TMRule"
   FieldName: "TicketType"
   CodeGroup: "TMR"
@@ -12020,7 +12044,7 @@ TMSCodes1489: TMSCodes
   CodeName: "Mobile CDR"
   InUse: 1
 
-TMSCodes1490: TMSCodes
+TMSCodes1493: TMSCodes
   TableName: "TMRule"
   FieldName: "TicketType"
   CodeGroup: "TMR"
@@ -12028,7 +12052,7 @@ TMSCodes1490: TMSCodes
   CodeName: "Fraud CDR"
   InUse: 1
 
-TMSCodes1491: TMSCodes
+TMSCodes1494: TMSCodes
   TableName: "TriggerConf"
   FieldName: "EventRule"
   CodeGroup: "TriggerConfType"
@@ -12036,7 +12060,7 @@ TMSCodes1491: TMSCodes
   CodeName: "No actions"
   InUse: 1
 
-TMSCodes1492: TMSCodes
+TMSCodes1495: TMSCodes
   TableName: "TriggerConf"
   FieldName: "EventRule"
   CodeGroup: "TriggerConfType"
@@ -12044,7 +12068,7 @@ TMSCodes1492: TMSCodes
   CodeName: "Only Event creation"
   InUse: 1
 
-TMSCodes1493: TMSCodes
+TMSCodes1496: TMSCodes
   TableName: "TriggerConf"
   FieldName: "EventRule"
   CodeGroup: "TriggerConfType"
@@ -12052,7 +12076,7 @@ TMSCodes1493: TMSCodes
   CodeName: "Generate request items"
   InUse: 1
 
-TMSCodes1494: TMSCodes
+TMSCodes1497: TMSCodes
   TableName: "TriggerConf"
   FieldName: "TriggerConfType"
   CodeGroup: "TriggerConfType"
@@ -12060,7 +12084,7 @@ TMSCodes1494: TMSCodes
   CodeName: "N/A"
   InUse: 1
 
-TMSCodes1495: TMSCodes
+TMSCodes1498: TMSCodes
   TableName: "TriggerEvent"
   FieldName: "StatusCode"
   CodeGroup: "StatusCode"
@@ -12068,7 +12092,7 @@ TMSCodes1495: TMSCodes
   CodeName: "New"
   InUse: 1
 
-TMSCodes1496: TMSCodes
+TMSCodes1499: TMSCodes
   TableName: "TriggerEvent"
   FieldName: "StatusCode"
   CodeGroup: "StatusCode"
@@ -12076,7 +12100,7 @@ TMSCodes1496: TMSCodes
   CodeName: "Analysed - Not Rated"
   InUse: 1
 
-TMSCodes1497: TMSCodes
+TMSCodes1500: TMSCodes
   TableName: "TriggerEvent"
   FieldName: "StatusCode"
   CodeGroup: "StatusCode"
@@ -12084,7 +12108,7 @@ TMSCodes1497: TMSCodes
   CodeName: "Event Handled (All Items are rated)"
   InUse: 1
 
-TMSCodes1498: TMSCodes
+TMSCodes1501: TMSCodes
   TableName: "TriggerEvent"
   FieldName: "StatusCode"
   CodeGroup: "StatusCode"
@@ -12092,7 +12116,7 @@ TMSCodes1498: TMSCodes
   CodeName: "No Event Action (Skipped)"
   InUse: 1
 
-TMSCodes1499: TMSCodes
+TMSCodes1502: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12101,7 +12125,7 @@ TMSCodes1499: TMSCodes
   ConfigValue: "9728"
   InUse: 1
 
-TMSCodes1500: TMSCodes
+TMSCodes1503: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12110,7 +12134,7 @@ TMSCodes1500: TMSCodes
   ConfigValue: "500"
   InUse: 1
 
-TMSCodes1501: TMSCodes
+TMSCodes1504: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12119,7 +12143,7 @@ TMSCodes1501: TMSCodes
   ConfigValue: "2560"
   InUse: 1
 
-TMSCodes1502: TMSCodes
+TMSCodes1505: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12128,7 +12152,7 @@ TMSCodes1502: TMSCodes
   ConfigValue: "9216"
   InUse: 1
 
-TMSCodes1503: TMSCodes
+TMSCodes1506: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12137,7 +12161,7 @@ TMSCodes1503: TMSCodes
   ConfigValue: "2048"
   InUse: 1
 
-TMSCodes1504: TMSCodes
+TMSCodes1507: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12146,7 +12170,7 @@ TMSCodes1504: TMSCodes
   ConfigValue: "7168"
   InUse: 1
 
-TMSCodes1505: TMSCodes
+TMSCodes1508: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12155,7 +12179,7 @@ TMSCodes1505: TMSCodes
   ConfigValue: "2048"
   InUse: 1
 
-TMSCodes1506: TMSCodes
+TMSCodes1509: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12164,7 +12188,7 @@ TMSCodes1506: TMSCodes
   ConfigValue: "9216"
   InUse: 1
 
-TMSCodes1507: TMSCodes
+TMSCodes1510: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12173,7 +12197,7 @@ TMSCodes1507: TMSCodes
   ConfigValue: "7168"
   InUse: 1
 
-TMSCodes1508: TMSCodes
+TMSCodes1511: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12182,7 +12206,7 @@ TMSCodes1508: TMSCodes
   ConfigValue: "200"
   InUse: 1
 
-TMSCodes1509: TMSCodes
+TMSCodes1512: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12191,7 +12215,7 @@ TMSCodes1509: TMSCodes
   ConfigValue: "2252"
   InUse: 1
 
-TMSCodes1510: TMSCodes
+TMSCodes1513: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12200,7 +12224,7 @@ TMSCodes1510: TMSCodes
   ConfigValue: "9420"
   InUse: 1
 
-TMSCodes1511: TMSCodes
+TMSCodes1514: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12209,7 +12233,7 @@ TMSCodes1511: TMSCodes
   ConfigValue: "200"
   InUse: 1
 
-TMSCodes1512: TMSCodes
+TMSCodes1515: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12218,7 +12242,7 @@ TMSCodes1512: TMSCodes
   ConfigValue: "500"
   InUse: 1
 
-TMSCodes1513: TMSCodes
+TMSCodes1516: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12227,7 +12251,7 @@ TMSCodes1513: TMSCodes
   ConfigValue: "2560"
   InUse: 1
 
-TMSCodes1514: TMSCodes
+TMSCodes1517: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12236,7 +12260,7 @@ TMSCodes1514: TMSCodes
   ConfigValue: "9728"
   InUse: 1
 
-TMSCodes1515: TMSCodes
+TMSCodes1518: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12245,7 +12269,7 @@ TMSCodes1515: TMSCodes
   ConfigValue: "300"
   InUse: 1
 
-TMSCodes1516: TMSCodes
+TMSCodes1519: TMSCodes
   TableName: "UpsellUpgrade"
   FieldName: "BundleLimit"
   CodeGroup: "Bundles"
@@ -12254,63 +12278,63 @@ TMSCodes1516: TMSCodes
   ConfigValue: "500"
   InUse: 1
 
-TMSCodes1517: TMSCodes
+TMSCodes1520: TMSCodes
   TableName: "UserLimit"
   FieldName: "LimitType"
   CodeValue: "1"
   CodeName: "One time charge - Postpaid"
   InUse: 1
 
-TMSCodes1518: TMSCodes
+TMSCodes1521: TMSCodes
   TableName: "UserLimit"
   FieldName: "LimitType"
   CodeValue: "2"
   CodeName: "One time compensation - Postpaid"
   InUse: 1
 
-TMSCodes1519: TMSCodes
+TMSCodes1522: TMSCodes
   TableName: "UserLimit"
   FieldName: "LimitType"
   CodeValue: "3"
   CodeName: "One time charge - Prepaid"
   InUse: 1
 
-TMSCodes1520: TMSCodes
+TMSCodes1523: TMSCodes
   TableName: "UserLimit"
   FieldName: "LimitType"
   CodeValue: "4"
   CodeName: "One time compensation - Prepaid"
   InUse: 1
 
-TMSCodes1521: TMSCodes
+TMSCodes1524: TMSCodes
   TableName: "UserLimit"
   FieldName: "LimitType"
   CodeValue: "5"
   CodeName: "Monthly charge - Postpaid"
   InUse: 1
 
-TMSCodes1522: TMSCodes
+TMSCodes1525: TMSCodes
   TableName: "UserLimit"
   FieldName: "LimitType"
   CodeValue: "6"
   CodeName: "Monthly compensation - Postpaid"
   InUse: 1
 
-TMSCodes1523: TMSCodes
+TMSCodes1526: TMSCodes
   TableName: "UserLimit"
   FieldName: "LimitType"
   CodeValue: "7"
   CodeName: "Monthly charge - Prepaid"
   InUse: 1
 
-TMSCodes1524: TMSCodes
+TMSCodes1527: TMSCodes
   TableName: "UserLimit"
   FieldName: "LimitType"
   CodeValue: "8"
   CodeName: "Monthly compensation - Prepaid"
   InUse: 1
 
-TMSCodes1525: TMSCodes
+TMSCodes1528: TMSCodes
   TableName: "UserLimit"
   FieldName: "LimitType"
   CodeValue: "9"

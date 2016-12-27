@@ -1,16 +1,16 @@
 RequestStatus1: RequestStatus
   Brand: "1"
-  Program: "ctcrequest"
+  Program: "Mm/ctcrequest.p"
 
 RequestStatus2: RequestStatus
   Brand: "1"
   ReqStatus: 6
-  Program: "stc2tms"
+  Program: "Mm/stc2tms.p"
 
 RequestStatus3: RequestStatus
   Brand: "1"
   ReqStatus: 8
-  Program: "stc2tms"
+  Program: "Mm/stc2tms.p"
   LogEntry: "4GLTrace:4"
   LogFile: "/home/ari/req0.log"
   LogThreshold: 500000
@@ -74,13 +74,13 @@ RequestStatus15: RequestStatus
 RequestStatus16: RequestStatus
   Brand: "1"
   ReqType: 13
-  Program: "createsolog"
+  Program: "Gwy/createsolog.p"
 
 RequestStatus17: RequestStatus
   Brand: "1"
   ReqType: 13
   ReqStatus: 6
-  Program: "createmobsub"
+  Program: "Mm/createmobsub.p"
   LogEntry: "4gltrace:4"
   LogFile: "/tmp/create.log"
   LogThreshold: 500000
@@ -92,47 +92,47 @@ RequestStatus18: RequestStatus
 RequestStatus19: RequestStatus
   Brand: "1"
   ReqType: 15
-  Program: "createsolog"
+  Program: "Gwy/createsolog.p"
 
 RequestStatus20: RequestStatus
   Brand: "1"
   ReqType: 15
   ReqStatus: 6
-  Program: "changesim"
+  Program: "Mm/changesim.p"
 
 RequestStatus21: RequestStatus
   Brand: "1"
   ReqType: 18
-  Program: "createsolog"
+  Program: "Gwy/createsolog.p"
 
 RequestStatus22: RequestStatus
   Brand: "1"
   ReqType: 18
   ReqStatus: 6
-  Program: "deletemobsub"
+  Program: "Mm/deletemobsub.p"
 
 RequestStatus23: RequestStatus
   Brand: "1"
   ReqType: 18
   ReqStatus: 8
-  Program: "deletemobsub"
+  Program: "Mm/deletemobsub.p"
 
 RequestStatus24: RequestStatus
   Brand: "1"
   ReqType: 19
-  Program: "createsolog"
+  Program: "Gwy/createsolog.p"
 
 RequestStatus25: RequestStatus
   Brand: "1"
   ReqType: 19
   ReqStatus: 6
-  Program: "changemsisdn"
+  Program: "Mm/changemsisdn.p"
 
 RequestStatus26: RequestStatus
   Brand: "1"
   ReqType: 19
   ReqStatus: 8
-  Program: "changemsisdn"
+  Program: "Mm/changemsisdn.p"
 
 RequestStatus27: RequestStatus
   Brand: "1"
@@ -198,13 +198,13 @@ RequestStatus39: RequestStatus
 RequestStatus40: RequestStatus
   Brand: "1"
   ReqType: 33
-  Program: "creditcheckrequest"
+  Program: "Mm/creditcheckrequest.p"
 
 RequestStatus41: RequestStatus
   Brand: "1"
   ReqType: 33
   ReqStatus: 1
-  Program: "creditcheckquery"
+  Program: "Gwy/creditcheckquery.p"
 
 RequestStatus42: RequestStatus
   Brand: "1"
@@ -284,30 +284,30 @@ RequestStatus58: RequestStatus
 RequestStatus59: RequestStatus
   Brand: "1"
   ReqType: 82
-  Program: "createsolog"
+  Program: "Gwy/createsolog.p"
 
 RequestStatus60: RequestStatus
   Brand: "1"
   ReqType: 82
   ReqStatus: 6
-  Program: "reacmobsub"
+  Program: "Mm/reacmobsub.p"
 
 RequestStatus61: RequestStatus
   Brand: "1"
   ReqType: 83
-  Program: "createsolog"
+  Program: "Gwy/createsolog.p"
 
 RequestStatus62: RequestStatus
   Brand: "1"
   ReqType: 83
   ReqStatus: 6
-  Program: "dss_request"
+  Program: "Mm/dss_request.p"
 
 RequestStatus63: RequestStatus
   Brand: "1"
   ReqType: 83
   ReqStatus: 8
-  Program: "dss_request"
+  Program: "Mm/dss_request.p"
 
 RequestStatus64: RequestStatus
   Brand: "1"
@@ -349,10 +349,10 @@ RequestStatus72: RequestStatus
 RequestStatus73: RequestStatus
   Brand: "1"
   ReqType: 92
-  Program: "publish_invoice"
+  Program: "Inv/publish_invoice.p"
 
 RequestStatus74: RequestStatus
   Brand: "1"
   ReqType: 93
-  Program: "publish_ifs"
+  Program: "Inv/publish_ifs.p"
 

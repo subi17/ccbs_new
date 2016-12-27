@@ -94,35 +94,50 @@ RatePref19: RatePref
 
 RatePref20: RatePref
   Prefix: "MOB"
-  DialType: 4
-  Brand: "2"
+  DialType: 23
+  Brand: "1"
 
 RatePref21: RatePref
   Prefix: "MOB"
-  DialType: 5
-  Brand: "2"
+  DialType: 24
+  Brand: "1"
 
 RatePref22: RatePref
   Prefix: "MOB"
-  DialType: 6
-  Brand: "2"
+  DialType: 50
+  Brand: "1"
 
 RatePref23: RatePref
   Prefix: "MOB"
-  DialType: 7
+  DialType: 4
   Brand: "2"
 
 RatePref24: RatePref
   Prefix: "MOB"
-  DialType: 8
+  DialType: 5
   Brand: "2"
 
 RatePref25: RatePref
   Prefix: "MOB"
-  DialType: 9
+  DialType: 6
   Brand: "2"
 
 RatePref26: RatePref
+  Prefix: "MOB"
+  DialType: 7
+  Brand: "2"
+
+RatePref27: RatePref
+  Prefix: "MOB"
+  DialType: 8
+  Brand: "2"
+
+RatePref28: RatePref
+  Prefix: "MOB"
+  DialType: 9
+  Brand: "2"
+
+RatePref29: RatePref
   Prefix: "MOB"
   DialType: 10
   Brand: "2"

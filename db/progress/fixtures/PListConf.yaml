@@ -127,27 +127,27 @@ PListConf16: PListConf
   Brand: "1"
 
 PListConf17: PListConf
-  dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
   Prior: 5
   PriceList: "COMMON3"
-  RatePlan: "CONTRATO4"
+  RatePlan: "CONTRATO25"
   Brand: "1"
 
 PListConf18: PListConf
-  dFrom: 2008-08-25
-  dTo: 1954-12-31
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
   Prior: 10
-  PriceList: "CONTRATO4"
-  RatePlan: "CONTRATO4"
+  PriceList: "CONTRATOS"
+  RatePlan: "CONTRATO25"
   Brand: "1"
 
 PListConf19: PListConf
-  dFrom: 2008-08-25
-  dTo: 1954-12-31
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
   Prior: 50
   PriceList: "COMMON"
-  RatePlan: "CONTRATO4"
+  RatePlan: "CONTRATO25"
   Brand: "1"
 
 PListConf20: PListConf
@@ -155,23 +155,23 @@ PListConf20: PListConf
   dTo: 1954-12-31
   Prior: 5
   PriceList: "COMMON3"
-  RatePlan: "CONTRATO5"
+  RatePlan: "CONTRATO4"
   Brand: "1"
 
 PListConf21: PListConf
-  dFrom: 2009-11-01
+  dFrom: 2008-08-25
   dTo: 1954-12-31
   Prior: 10
-  PriceList: "CONTRATO5"
-  RatePlan: "CONTRATO5"
+  PriceList: "CONTRATO4"
+  RatePlan: "CONTRATO4"
   Brand: "1"
 
 PListConf22: PListConf
-  dFrom: 2009-11-01
+  dFrom: 2008-08-25
   dTo: 1954-12-31
   Prior: 50
   PriceList: "COMMON"
-  RatePlan: "CONTRATO5"
+  RatePlan: "CONTRATO4"
   Brand: "1"
 
 PListConf23: PListConf
@@ -179,23 +179,23 @@ PListConf23: PListConf
   dTo: 1954-12-31
   Prior: 5
   PriceList: "COMMON3"
-  RatePlan: "CONTRATO6"
+  RatePlan: "CONTRATO5"
   Brand: "1"
 
 PListConf24: PListConf
-  dFrom: 2011-02-01
+  dFrom: 2009-11-01
   dTo: 1954-12-31
   Prior: 10
-  PriceList: "CONTRATO6"
-  RatePlan: "CONTRATO6"
+  PriceList: "CONTRATO5"
+  RatePlan: "CONTRATO5"
   Brand: "1"
 
 PListConf25: PListConf
-  dFrom: 2011-02-01
+  dFrom: 2009-11-01
   dTo: 1954-12-31
   Prior: 50
   PriceList: "COMMON"
-  RatePlan: "CONTRATO6"
+  RatePlan: "CONTRATO5"
   Brand: "1"
 
 PListConf26: PListConf
@@ -203,23 +203,23 @@ PListConf26: PListConf
   dTo: 1954-12-31
   Prior: 5
   PriceList: "COMMON3"
-  RatePlan: "CONTRATO7"
+  RatePlan: "CONTRATO6"
   Brand: "1"
 
 PListConf27: PListConf
-  dFrom: 2012-05-01
+  dFrom: 2011-02-01
   dTo: 1954-12-31
   Prior: 10
-  PriceList: "CONTRATO7"
-  RatePlan: "CONTRATO7"
+  PriceList: "CONTRATO6"
+  RatePlan: "CONTRATO6"
   Brand: "1"
 
 PListConf28: PListConf
-  dFrom: 2012-05-01
+  dFrom: 2011-02-01
   dTo: 1954-12-31
   Prior: 50
   PriceList: "COMMON"
-  RatePlan: "CONTRATO7"
+  RatePlan: "CONTRATO6"
   Brand: "1"
 
 PListConf29: PListConf
@@ -227,10 +227,34 @@ PListConf29: PListConf
   dTo: 1954-12-31
   Prior: 5
   PriceList: "COMMON3"
-  RatePlan: "CONTRATO8"
+  RatePlan: "CONTRATO7"
   Brand: "1"
 
 PListConf30: PListConf
+  dFrom: 2012-05-01
+  dTo: 1954-12-31
+  Prior: 10
+  PriceList: "CONTRATO7"
+  RatePlan: "CONTRATO7"
+  Brand: "1"
+
+PListConf31: PListConf
+  dFrom: 2012-05-01
+  dTo: 1954-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO7"
+  Brand: "1"
+
+PListConf32: PListConf
+  dFrom: 2014-05-01
+  dTo: 1954-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO8"
+  Brand: "1"
+
+PListConf33: PListConf
   dFrom: 2012-12-01
   dTo: 1954-12-31
   Prior: 10
@@ -238,7 +262,7 @@ PListConf30: PListConf
   RatePlan: "CONTRATO8"
   Brand: "1"
 
-PListConf31: PListConf
+PListConf34: PListConf
   dFrom: 2012-12-01
   dTo: 1954-12-31
   Prior: 50
@@ -246,7 +270,39 @@ PListConf31: PListConf
   RatePlan: "CONTRATO8"
   Brand: "1"
 
-PListConf32: PListConf
+PListConf35: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOCONVC"
+  Brand: "1"
+
+PListConf36: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 20
+  PriceList: "CONTRATO8"
+  RatePlan: "CONTRATOCONVC"
+  Brand: "1"
+
+PListConf37: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 30
+  PriceList: "CONTRATOFIXED"
+  RatePlan: "CONTRATOCONVC"
+  Brand: "1"
+
+PListConf38: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 60
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOCONVC"
+  Brand: "1"
+
+PListConf39: PListConf
   dFrom: 2016-10-27
   dTo: 2049-12-31
   Prior: 5
@@ -254,7 +310,15 @@ PListConf32: PListConf
   RatePlan: "CONTRATOCONVS"
   Brand: "1"
 
-PListConf33: PListConf
+PListConf40: PListConf
+  dFrom: 2016-10-27
+  dTo: 2049-12-31
+  Prior: 20
+  PriceList: "CONTRATOS"
+  RatePlan: "CONTRATOCONVS"
+  Brand: "1"
+
+PListConf41: PListConf
   dFrom: 2016-10-27
   dTo: 2049-12-31
   Prior: 30
@@ -262,15 +326,7 @@ PListConf33: PListConf
   RatePlan: "CONTRATOCONVS"
   Brand: "1"
 
-PListConf34: PListConf
-  dFrom: 2016-10-27
-  dTo: 2049-12-31
-  Prior: 50
-  PriceList: "CONTRATO"
-  RatePlan: "CONTRATOCONVS"
-  Brand: "1"
-
-PListConf35: PListConf
+PListConf42: PListConf
   dFrom: 2016-10-27
   dTo: 2049-12-31
   Prior: 60
@@ -278,7 +334,7 @@ PListConf35: PListConf
   RatePlan: "CONTRATOCONVS"
   Brand: "1"
 
-PListConf36: PListConf
+PListConf43: PListConf
   dFrom: 2014-05-01
   dTo: 1954-12-31
   Prior: 5
@@ -286,7 +342,7 @@ PListConf36: PListConf
   RatePlan: "CONTRATOD"
   Brand: "1"
 
-PListConf37: PListConf
+PListConf44: PListConf
   dFrom: 2008-06-01
   dTo: 2014-04-30
   Prior: 6
@@ -294,7 +350,7 @@ PListConf37: PListConf
   RatePlan: "CONTRATOD"
   Brand: "1"
 
-PListConf38: PListConf
+PListConf45: PListConf
   dFrom: 2008-06-01
   dTo: 1954-12-31
   Prior: 7
@@ -302,7 +358,7 @@ PListConf38: PListConf
   RatePlan: "CONTRATOD"
   Brand: "1"
 
-PListConf39: PListConf
+PListConf46: PListConf
   dFrom: 2008-06-01
   dTo: 1954-12-31
   Prior: 11
@@ -310,7 +366,7 @@ PListConf39: PListConf
   RatePlan: "CONTRATOD"
   Brand: "1"
 
-PListConf40: PListConf
+PListConf47: PListConf
   dFrom: 2014-05-01
   dTo: 1954-12-31
   Prior: 5
@@ -318,7 +374,7 @@ PListConf40: PListConf
   RatePlan: "CONTRATOD2"
   Brand: "1"
 
-PListConf41: PListConf
+PListConf48: PListConf
   dFrom: 2009-12-01
   dTo: 2014-04-30
   Prior: 6
@@ -326,7 +382,7 @@ PListConf41: PListConf
   RatePlan: "CONTRATOD2"
   Brand: "1"
 
-PListConf42: PListConf
+PListConf49: PListConf
   dFrom: 2009-12-01
   dTo: 1954-12-31
   Prior: 7
@@ -334,7 +390,7 @@ PListConf42: PListConf
   RatePlan: "CONTRATOD2"
   Brand: "1"
 
-PListConf43: PListConf
+PListConf50: PListConf
   dFrom: 2009-12-01
   dTo: 1954-12-31
   Prior: 11
@@ -342,7 +398,7 @@ PListConf43: PListConf
   RatePlan: "CONTRATOD2"
   Brand: "1"
 
-PListConf44: PListConf
+PListConf51: PListConf
   dFrom: 2014-05-01
   dTo: 1954-12-31
   Prior: 5
@@ -350,7 +406,7 @@ PListConf44: PListConf
   RatePlan: "CONTRATOD3"
   Brand: "1"
 
-PListConf45: PListConf
+PListConf52: PListConf
   dFrom: 2011-05-01
   dTo: 2014-04-30
   Prior: 6
@@ -358,7 +414,7 @@ PListConf45: PListConf
   RatePlan: "CONTRATOD3"
   Brand: "1"
 
-PListConf46: PListConf
+PListConf53: PListConf
   dFrom: 2011-05-01
   dTo: 1954-12-31
   Prior: 7
@@ -366,7 +422,7 @@ PListConf46: PListConf
   RatePlan: "CONTRATOD3"
   Brand: "1"
 
-PListConf47: PListConf
+PListConf54: PListConf
   dFrom: 2011-05-01
   dTo: 1954-12-31
   Prior: 11
@@ -374,7 +430,7 @@ PListConf47: PListConf
   RatePlan: "CONTRATOD3"
   Brand: "1"
 
-PListConf48: PListConf
+PListConf55: PListConf
   dFrom: 2014-05-01
   dTo: 1954-12-31
   Prior: 5
@@ -382,7 +438,7 @@ PListConf48: PListConf
   RatePlan: "CONTRATODATA"
   Brand: "1"
 
-PListConf49: PListConf
+PListConf56: PListConf
   dFrom: 2008-06-02
   dTo: 1954-12-31
   Prior: 11
@@ -390,7 +446,7 @@ PListConf49: PListConf
   RatePlan: "CONTRATODATA"
   Brand: "1"
 
-PListConf50: PListConf
+PListConf57: PListConf
   dFrom: 2008-06-01
   dTo: 2014-04-30
   Prior: 6
@@ -398,7 +454,7 @@ PListConf50: PListConf
   RatePlan: "CONTRATODATA"
   Brand: "1"
 
-PListConf51: PListConf
+PListConf58: PListConf
   dFrom: 2008-06-01
   dTo: 1954-12-31
   Prior: 7
@@ -406,7 +462,7 @@ PListConf51: PListConf
   RatePlan: "CONTRATODATA"
   Brand: "1"
 
-PListConf52: PListConf
+PListConf59: PListConf
   dFrom: 2014-05-01
   dTo: 1954-12-31
   Prior: 5
@@ -414,7 +470,7 @@ PListConf52: PListConf
   RatePlan: "CONTRATOF"
   Brand: "1"
 
-PListConf53: PListConf
+PListConf60: PListConf
   dFrom: 2011-12-01
   dTo: 1954-12-31
   Prior: 10
@@ -422,7 +478,7 @@ PListConf53: PListConf
   RatePlan: "CONTRATOF"
   Brand: "1"
 
-PListConf54: PListConf
+PListConf61: PListConf
   dFrom: 2011-12-01
   dTo: 1954-12-31
   Prior: 50
@@ -430,7 +486,7 @@ PListConf54: PListConf
   RatePlan: "CONTRATOF"
   Brand: "1"
 
-PListConf55: PListConf
+PListConf62: PListConf
   dFrom: 2014-05-01
   dTo: 1954-12-31
   Prior: 5
@@ -438,7 +494,7 @@ PListConf55: PListConf
   RatePlan: "CONTRATOM"
   Brand: "1"
 
-PListConf56: PListConf
+PListConf63: PListConf
   dFrom: 2012-12-01
   dTo: 1954-12-31
   Prior: 10
@@ -446,7 +502,7 @@ PListConf56: PListConf
   RatePlan: "CONTRATOM"
   Brand: "1"
 
-PListConf57: PListConf
+PListConf64: PListConf
   dFrom: 2012-12-01
   dTo: 1954-12-31
   Prior: 50
@@ -454,7 +510,7 @@ PListConf57: PListConf
   RatePlan: "CONTRATOM"
   Brand: "1"
 
-PListConf58: PListConf
+PListConf65: PListConf
   dFrom: 2014-05-01
   dTo: 1954-12-31
   Prior: 5
@@ -462,7 +518,7 @@ PListConf58: PListConf
   RatePlan: "CONTRATOM2"
   Brand: "1"
 
-PListConf59: PListConf
+PListConf66: PListConf
   dFrom: 2013-09-01
   dTo: 1954-12-31
   Prior: 10
@@ -470,7 +526,7 @@ PListConf59: PListConf
   RatePlan: "CONTRATOM2"
   Brand: "1"
 
-PListConf60: PListConf
+PListConf67: PListConf
   dFrom: 2013-09-01
   dTo: 1954-12-31
   Prior: 50
@@ -478,7 +534,7 @@ PListConf60: PListConf
   RatePlan: "CONTRATOM2"
   Brand: "1"
 
-PListConf61: PListConf
+PListConf68: PListConf
   dFrom: 2014-05-01
   dTo: 1954-12-31
   Prior: 5
@@ -486,7 +542,7 @@ PListConf61: PListConf
   RatePlan: "CONTRATOS"
   Brand: "1"
 
-PListConf62: PListConf
+PListConf69: PListConf
   dFrom: 2012-05-01
   dTo: 1954-12-31
   Prior: 10
@@ -494,7 +550,7 @@ PListConf62: PListConf
   RatePlan: "CONTRATOS"
   Brand: "1"
 
-PListConf63: PListConf
+PListConf70: PListConf
   dFrom: 2012-05-01
   dTo: 1954-12-31
   Prior: 50
@@ -502,7 +558,7 @@ PListConf63: PListConf
   RatePlan: "CONTRATOS"
   Brand: "1"
 
-PListConf64: PListConf
+PListConf71: PListConf
   dFrom: 2006-11-01
   dTo: 1954-12-31
   Prior: 10
@@ -510,7 +566,7 @@ PListConf64: PListConf
   RatePlan: "TARJETA"
   Brand: "1"
 
-PListConf65: PListConf
+PListConf72: PListConf
   dFrom: 2006-11-01
   dTo: 1954-12-31
   Prior: 50
@@ -518,7 +574,7 @@ PListConf65: PListConf
   RatePlan: "TARJETA"
   Brand: "1"
 
-PListConf66: PListConf
+PListConf73: PListConf
   dFrom: 2006-11-01
   dTo: 1954-12-31
   Prior: 10
@@ -526,7 +582,7 @@ PListConf66: PListConf
   RatePlan: "TARJETA2"
   Brand: "1"
 
-PListConf67: PListConf
+PListConf74: PListConf
   dFrom: 2006-11-01
   dTo: 1954-12-31
   Prior: 50
@@ -534,7 +590,7 @@ PListConf67: PListConf
   RatePlan: "TARJETA2"
   Brand: "1"
 
-PListConf68: PListConf
+PListConf75: PListConf
   dFrom: 2008-08-25
   dTo: 1954-12-31
   Prior: 10
@@ -542,7 +598,7 @@ PListConf68: PListConf
   RatePlan: "TARJETA4"
   Brand: "1"
 
-PListConf69: PListConf
+PListConf76: PListConf
   dFrom: 2008-08-25
   dTo: 1954-12-31
   Prior: 50
@@ -550,7 +606,7 @@ PListConf69: PListConf
   RatePlan: "TARJETA4"
   Brand: "1"
 
-PListConf70: PListConf
+PListConf77: PListConf
   dFrom: 2011-12-01
   dTo: 1954-12-31
   Prior: 10
@@ -558,7 +614,7 @@ PListConf70: PListConf
   RatePlan: "TARJETA5"
   Brand: "1"
 
-PListConf71: PListConf
+PListConf78: PListConf
   dFrom: 2011-12-01
   dTo: 1954-12-31
   Prior: 50
@@ -566,7 +622,7 @@ PListConf71: PListConf
   RatePlan: "TARJETA5"
   Brand: "1"
 
-PListConf72: PListConf
+PListConf79: PListConf
   dFrom: 2012-12-01
   dTo: 1954-12-31
   Prior: 10
@@ -574,7 +630,7 @@ PListConf72: PListConf
   RatePlan: "TARJETA6"
   Brand: "1"
 
-PListConf73: PListConf
+PListConf80: PListConf
   dFrom: 2012-12-01
   dTo: 1954-12-31
   Prior: 50
@@ -582,7 +638,7 @@ PListConf73: PListConf
   RatePlan: "TARJETA6"
   Brand: "1"
 
-PListConf74: PListConf
+PListConf81: PListConf
   dFrom: 2013-11-01
   dTo: 1954-12-31
   Prior: 10
@@ -590,7 +646,7 @@ PListConf74: PListConf
   RatePlan: "TARJETA7"
   Brand: "1"
 
-PListConf75: PListConf
+PListConf82: PListConf
   dFrom: 2013-11-01
   dTo: 1954-12-31
   Prior: 50
@@ -598,7 +654,7 @@ PListConf75: PListConf
   RatePlan: "TARJETA7"
   Brand: "1"
 
-PListConf76: PListConf
+PListConf83: PListConf
   dFrom: 2013-11-01
   dTo: 1954-12-31
   Prior: 10
@@ -606,7 +662,7 @@ PListConf76: PListConf
   RatePlan: "TARJETA8"
   Brand: "1"
 
-PListConf77: PListConf
+PListConf84: PListConf
   dFrom: 2013-11-01
   dTo: 1954-12-31
   Prior: 50
@@ -614,7 +670,7 @@ PListConf77: PListConf
   RatePlan: "TARJETA8"
   Brand: "1"
 
-PListConf78: PListConf
+PListConf85: PListConf
   dFrom: 2015-05-29
   dTo: 2049-12-31
   Prior: 10
@@ -622,7 +678,7 @@ PListConf78: PListConf
   RatePlan: "TARJETA9"
   Brand: "1"
 
-PListConf79: PListConf
+PListConf86: PListConf
   dFrom: 2015-05-29
   dTo: 2049-12-31
   Prior: 50
@@ -630,7 +686,7 @@ PListConf79: PListConf
   RatePlan: "TARJETA9"
   Brand: "1"
 
-PListConf80: PListConf
+PListConf87: PListConf
   dFrom: 2009-04-01
   dTo: 1954-12-31
   Prior: 10
@@ -638,7 +694,7 @@ PListConf80: PListConf
   RatePlan: "TARJETADATA"
   Brand: "1"
 
-PListConf81: PListConf
+PListConf88: PListConf
   dFrom: 2009-04-01
   dTo: 1954-12-31
   Prior: 50

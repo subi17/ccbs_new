@@ -158,7 +158,6 @@ MNPOperator19: MNPOperator
   OperName: "REPUBLICA MOVIL TPH"
   OperCode: "014"
   ICCPrefix: "893401"
-  Active: TRUE 
   OperBrand: "TPH"
   NRN: "735014"
 
@@ -175,7 +174,7 @@ MNPOperator21: MNPOperator
   OperName: "Ono"
   OperCode: "020"
   ICCPrefix: "893418"
-  Active: TRUE 
+  Active: ?
   NRN: "920000"
 
 MNPOperator22: MNPOperator
@@ -211,6 +210,14 @@ MNPOperator25: MNPOperator
 
 MNPOperator26: MNPOperator
   Brand: "1"
+  OperName: "LEMONVIL"
+  OperCode: "045"
+  ICCPrefix: "893490322160"
+  Active: TRUE 
+  NRN: "903045"
+
+MNPOperator27: MNPOperator
+  Brand: "1"
   OperName: "FONYOU"
   OperCode: "050"
   ICCPrefix: "893420"
@@ -218,7 +225,7 @@ MNPOperator26: MNPOperator
   OperBrand: "Parlem"
   NRN: "950000"
 
-MNPOperator27: MNPOperator
+MNPOperator28: MNPOperator
   Brand: "1"
   OperName: "Parlem"
   OperCode: "050"
@@ -227,7 +234,7 @@ MNPOperator27: MNPOperator
   OperBrand: "Parlem"
   NRN: "950000"
 
-MNPOperator28: MNPOperator
+MNPOperator29: MNPOperator
   Brand: "1"
   OperName: "Telecable"
   OperCode: "053"
@@ -235,7 +242,7 @@ MNPOperator28: MNPOperator
   Active: TRUE 
   NRN: "900053"
 
-MNPOperator29: MNPOperator
+MNPOperator30: MNPOperator
   Brand: "1"
   OperName: "LlamayA"
   OperCode: "054"
@@ -243,7 +250,7 @@ MNPOperator29: MNPOperator
   OperBrand: "LlamayA"
   NRN: "735054"
 
-MNPOperator30: MNPOperator
+MNPOperator31: MNPOperator
   Brand: "1"
   OperName: "LlamaYA (MOREMINUTES)"
   OperCode: "054"
@@ -252,7 +259,7 @@ MNPOperator30: MNPOperator
   OperBrand: "LlamayA"
   NRN: "735054"
 
-MNPOperator31: MNPOperator
+MNPOperator32: MNPOperator
   Brand: "1"
   OperName: "MMI"
   OperCode: "054"
@@ -261,7 +268,7 @@ MNPOperator31: MNPOperator
   OperBrand: "MMI"
   NRN: "735054"
 
-MNPOperator32: MNPOperator
+MNPOperator33: MNPOperator
   Brand: "1"
   OperName: "Mobilcat"
   OperCode: "054"
@@ -270,7 +277,7 @@ MNPOperator32: MNPOperator
   OperBrand: "LlamayA"
   NRN: "735054"
 
-MNPOperator33: MNPOperator
+MNPOperator34: MNPOperator
   Brand: "1"
   OperName: "40 Movil"
   OperCode: "064"
@@ -279,7 +286,7 @@ MNPOperator33: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator34: MNPOperator
+MNPOperator35: MNPOperator
   Brand: "1"
   OperName: "Bankinter Móvil"
   OperCode: "064"
@@ -288,7 +295,7 @@ MNPOperator34: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator35: MNPOperator
+MNPOperator36: MNPOperator
   Brand: "1"
   OperName: "Blau"
   OperCode: "064"
@@ -297,7 +304,7 @@ MNPOperator35: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator36: MNPOperator
+MNPOperator37: MNPOperator
   Brand: "1"
   OperName: "EPlus"
   OperCode: "064"
@@ -306,7 +313,7 @@ MNPOperator36: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator37: MNPOperator
+MNPOperator38: MNPOperator
   Brand: "1"
   OperName: "Euphony"
   OperCode: "064"
@@ -315,14 +322,14 @@ MNPOperator37: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator38: MNPOperator
+MNPOperator39: MNPOperator
   Brand: "1"
   OperName: "Hablafacil"
   OperCode: "064"
   Active: ?
   OperBrand: "Simyo"
 
-MNPOperator39: MNPOperator
+MNPOperator40: MNPOperator
   Brand: "1"
   OperName: "Hong Da"
   OperCode: "064"
@@ -331,7 +338,7 @@ MNPOperator39: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator40: MNPOperator
+MNPOperator41: MNPOperator
   Brand: "1"
   OperName: "Movil Directo"
   OperCode: "064"
@@ -340,7 +347,7 @@ MNPOperator40: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator41: MNPOperator
+MNPOperator42: MNPOperator
   Brand: "1"
   OperName: "MundiMóvil"
   OperCode: "064"
@@ -349,7 +356,7 @@ MNPOperator41: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator42: MNPOperator
+MNPOperator43: MNPOperator
   Brand: "1"
   OperName: "ORTEL"
   OperCode: "064"
@@ -358,7 +365,7 @@ MNPOperator42: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator43: MNPOperator
+MNPOperator44: MNPOperator
   Brand: "1"
   OperName: "Simyo"
   OperCode: "064"
@@ -367,7 +374,7 @@ MNPOperator43: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator44: MNPOperator
+MNPOperator45: MNPOperator
   Brand: "1"
   OperName: "Talkout móvil"
   OperCode: "064"
@@ -376,7 +383,7 @@ MNPOperator44: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator45: MNPOperator
+MNPOperator46: MNPOperator
   Brand: "1"
   OperName: "XL MOVIL"
   OperCode: "064"
@@ -385,7 +392,7 @@ MNPOperator45: MNPOperator
   OperBrand: "Simyo"
   NRN: "930000"
 
-MNPOperator46: MNPOperator
+MNPOperator47: MNPOperator
   Brand: "1"
   OperName: "R"
   OperCode: "073"
@@ -393,7 +400,7 @@ MNPOperator46: MNPOperator
   Active: TRUE 
   NRN: "910000"
 
-MNPOperator47: MNPOperator
+MNPOperator48: MNPOperator
   Brand: "1"
   OperName: "Jazztel"
   OperCode: "074"
@@ -401,7 +408,7 @@ MNPOperator47: MNPOperator
   Active: TRUE 
   NRN: "940074"
 
-MNPOperator48: MNPOperator
+MNPOperator49: MNPOperator
   Brand: "1"
   OperName: "DIGI.mobil"
   OperCode: "075"
@@ -409,13 +416,13 @@ MNPOperator48: MNPOperator
   Active: TRUE 
   NRN: "960000"
 
-MNPOperator49: MNPOperator
+MNPOperator50: MNPOperator
   Brand: "1"
   OperName: "Barablu"
   OperCode: "076"
   Active: ?
 
-MNPOperator50: MNPOperator
+MNPOperator51: MNPOperator
   Brand: "1"
   OperName: "Vectone Móvil(Barablu)"
   OperCode: "076"
@@ -423,7 +430,7 @@ MNPOperator50: MNPOperator
   Active: ?
   NRN: "980000"
 
-MNPOperator51: MNPOperator
+MNPOperator52: MNPOperator
   Brand: "1"
   OperName: "GT MOBILE"
   OperCode: "084"
@@ -432,7 +439,7 @@ MNPOperator51: MNPOperator
   OperBrand: "Lycamobile"
   NRN: "990000"
 
-MNPOperator52: MNPOperator
+MNPOperator53: MNPOperator
   Brand: "1"
   OperName: "Lycamobile"
   OperCode: "084"
@@ -441,7 +448,7 @@ MNPOperator52: MNPOperator
   OperBrand: "Lycamobile"
   NRN: "990000"
 
-MNPOperator53: MNPOperator
+MNPOperator54: MNPOperator
   Brand: "1"
   OperName: "YOUMOBILE (HUALONG)"
   OperCode: "094"
@@ -449,7 +456,7 @@ MNPOperator53: MNPOperator
   Active: TRUE 
   NRN: "735094"
 
-MNPOperator54: MNPOperator
+MNPOperator55: MNPOperator
   Brand: "1"
   OperName: "Sweno"
   OperCode: "101"
@@ -457,7 +464,7 @@ MNPOperator54: MNPOperator
   Active: ?
   NRN: "715101"
 
-MNPOperator55: MNPOperator
+MNPOperator56: MNPOperator
   Brand: "1"
   OperName: "Truphone"
   OperCode: "104"
@@ -465,7 +472,7 @@ MNPOperator55: MNPOperator
   Active: TRUE 
   NRN: "901104"
 
-MNPOperator56: MNPOperator
+MNPOperator57: MNPOperator
   Brand: "1"
   OperName: "RACC Movil"
   OperCode: "106"
@@ -473,7 +480,7 @@ MNPOperator56: MNPOperator
   Active: ?
   NRN: "755106"
 
-MNPOperator57: MNPOperator
+MNPOperator58: MNPOperator
   Brand: "1"
   OperName: "LEAST COST ROUTING TELECOM"
   OperCode: "114"
@@ -481,7 +488,7 @@ MNPOperator57: MNPOperator
   Active: TRUE 
   NRN: "735114"
 
-MNPOperator58: MNPOperator
+MNPOperator59: MNPOperator
   Brand: "1"
   OperName: "Sarenet"
   OperCode: "116"
@@ -489,7 +496,7 @@ MNPOperator58: MNPOperator
   Active: TRUE 
   NRN: "755206"
 
-MNPOperator59: MNPOperator
+MNPOperator60: MNPOperator
   Brand: "1"
   OperName: "ALOW"
   OperCode: "124"
@@ -498,7 +505,7 @@ MNPOperator59: MNPOperator
   OperBrand: "IOS"
   NRN: "903124"
 
-MNPOperator60: MNPOperator
+MNPOperator61: MNPOperator
   Brand: "1"
   OperName: "IOS"
   OperCode: "124"
@@ -507,7 +514,7 @@ MNPOperator60: MNPOperator
   OperBrand: "IOS"
   NRN: "903124"
 
-MNPOperator61: MNPOperator
+MNPOperator62: MNPOperator
   Brand: "1"
   OperName: "jetnet"
   OperCode: "124"
@@ -516,7 +523,7 @@ MNPOperator61: MNPOperator
   OperBrand: "IOS"
   NRN: "903124"
 
-MNPOperator62: MNPOperator
+MNPOperator63: MNPOperator
   Brand: "1"
   OperName: "KNET"
   OperCode: "124"
@@ -525,7 +532,7 @@ MNPOperator62: MNPOperator
   OperBrand: "IOS"
   NRN: "903124"
 
-MNPOperator63: MNPOperator
+MNPOperator64: MNPOperator
   Brand: "1"
   OperName: "movizelia"
   OperCode: "124"
@@ -534,7 +541,7 @@ MNPOperator63: MNPOperator
   OperBrand: "IOS"
   NRN: "903124"
 
-MNPOperator64: MNPOperator
+MNPOperator65: MNPOperator
   Brand: "1"
   OperName: "PINGER"
   OperCode: "124"
@@ -543,7 +550,7 @@ MNPOperator64: MNPOperator
   OperBrand: "IOS"
   NRN: "903124"
 
-MNPOperator65: MNPOperator
+MNPOperator66: MNPOperator
   Brand: "1"
   OperName: "SIMLY"
   OperCode: "124"
@@ -552,7 +559,7 @@ MNPOperator65: MNPOperator
   OperBrand: "IOS"
   NRN: "903124"
 
-MNPOperator66: MNPOperator
+MNPOperator67: MNPOperator
   Brand: "1"
   OperName: "SUOP"
   OperCode: "124"
@@ -561,7 +568,7 @@ MNPOperator66: MNPOperator
   OperBrand: "IOS"
   NRN: "903124"
 
-MNPOperator67: MNPOperator
+MNPOperator68: MNPOperator
   Brand: "1"
   OperName: "Vozelia"
   OperCode: "124"
@@ -570,7 +577,7 @@ MNPOperator67: MNPOperator
   OperBrand: "IOS"
   NRN: "903124"
 
-MNPOperator68: MNPOperator
+MNPOperator69: MNPOperator
   Brand: "1"
   OperName: "Yuilop"
   OperCode: "124"
@@ -579,7 +586,7 @@ MNPOperator68: MNPOperator
   OperBrand: "IOS"
   NRN: "903124"
 
-MNPOperator69: MNPOperator
+MNPOperator70: MNPOperator
   Brand: "1"
   OperName: "OPEN CABLE"
   OperCode: "126"
@@ -587,7 +594,7 @@ MNPOperator69: MNPOperator
   Active: TRUE 
   NRN: "755306"
 
-MNPOperator70: MNPOperator
+MNPOperator71: MNPOperator
   Brand: "1"
   OperName: "PROCONO (PTV Telecom)"
   OperCode: "144"
@@ -595,7 +602,7 @@ MNPOperator70: MNPOperator
   Active: TRUE 
   NRN: "903144"
 
-MNPOperator71: MNPOperator
+MNPOperator72: MNPOperator
   Brand: "1"
   OperName: "AIRE NETWORKS"
   OperCode: "154"
@@ -603,7 +610,7 @@ MNPOperator71: MNPOperator
   Active: TRUE 
   NRN: "903154"
 
-MNPOperator72: MNPOperator
+MNPOperator73: MNPOperator
   Brand: "1"
   OperName: "Ortel Mobile"
   OperCode: "164"
@@ -611,14 +618,14 @@ MNPOperator72: MNPOperator
   Active: ?
   NRN: "930164"
 
-MNPOperator73: MNPOperator
+MNPOperator74: MNPOperator
   Brand: "1"
   OperName: "BT MOVIL"
   OperCode: "165"
   ICCPrefix: "8934903"
   NRN: "903165"
 
-MNPOperator74: MNPOperator
+MNPOperator75: MNPOperator
   Brand: "1"
   OperName: "OCEANS"
   OperCode: "174"
@@ -627,7 +634,7 @@ MNPOperator74: MNPOperator
   OperBrand: "OCEANS"
   NRN: "903174"
 
-MNPOperator75: MNPOperator
+MNPOperator76: MNPOperator
   Brand: "1"
   OperName: "SPEECH WORKS"
   OperCode: "174"
@@ -636,7 +643,7 @@ MNPOperator75: MNPOperator
   OperBrand: "OCEANS"
   NRN: "903174"
 
-MNPOperator76: MNPOperator
+MNPOperator77: MNPOperator
   Brand: "1"
   OperName: "VODAFONE-ONO"
   OperCode: "183"
@@ -644,7 +651,7 @@ MNPOperator76: MNPOperator
   Active: TRUE 
   NRN: "725183"
 
-MNPOperator77: MNPOperator
+MNPOperator78: MNPOperator
   Brand: "1"
   OperName: "Voz Telecom Sistemas"
   OperCode: "184"
@@ -652,7 +659,7 @@ MNPOperator77: MNPOperator
   Active: TRUE 
   NRN: "903184"
 
-MNPOperator78: MNPOperator
+MNPOperator79: MNPOperator
   Brand: "1"
   OperName: "Fleximovil"
   OperCode: "194"
@@ -660,21 +667,22 @@ MNPOperator78: MNPOperator
   Active: TRUE 
   NRN: "903194"
 
-MNPOperator79: MNPOperator
+MNPOperator80: MNPOperator
   Brand: "1"
   OperName: "Lebara"
   OperCode: "203"
   ICCPrefix: "893456"
   Active: ?
 
-MNPOperator80: MNPOperator
+MNPOperator81: MNPOperator
   Brand: "1"
   OperName: "REPUBLICA MOVIL"
   OperCode: "204"
   ICCPrefix: "893401"
+  Active: TRUE 
   NRN: "735204"
 
-MNPOperator81: MNPOperator
+MNPOperator82: MNPOperator
   Brand: "1"
   OperName: "Lebara Movil"
   OperCode: "213"
@@ -682,7 +690,7 @@ MNPOperator81: MNPOperator
   Active: TRUE 
   NRN: "970213"
 
-MNPOperator82: MNPOperator
+MNPOperator83: MNPOperator
   Brand: "1"
   OperName: "BT"
   OperCode: "223"
@@ -690,7 +698,7 @@ MNPOperator82: MNPOperator
   Active: TRUE 
   NRN: "970223"
 
-MNPOperator83: MNPOperator
+MNPOperator84: MNPOperator
   Brand: "1"
   OperName: "Ibercom"
   OperCode: "224"
@@ -698,14 +706,14 @@ MNPOperator83: MNPOperator
   Active: TRUE 
   NRN: "904224"
 
-MNPOperator84: MNPOperator
+MNPOperator85: MNPOperator
   Brand: "1"
   OperName: "PTV TELECOM 4G"
   OperCode: "244"
   ICCPrefix: "893412"
   NRN: "902244"
 
-MNPOperator85: MNPOperator
+MNPOperator86: MNPOperator
   Brand: "1"
   OperName: "Zero movil"
   OperCode: "301"
@@ -713,7 +721,7 @@ MNPOperator85: MNPOperator
   Active: ?
   NRN: "715301"
 
-MNPOperator86: MNPOperator
+MNPOperator87: MNPOperator
   Brand: "1"
   OperName: "PepePhone"
   OperCode: "303"
@@ -721,7 +729,7 @@ MNPOperator86: MNPOperator
   Active: ?
   NRN: "725303"
 
-MNPOperator87: MNPOperator
+MNPOperator88: MNPOperator
   Brand: "1"
   OperName: "NEO SKY"
   OperCode: "400"
@@ -729,7 +737,7 @@ MNPOperator87: MNPOperator
   Active: ?
   NRN: "970400"
 
-MNPOperator88: MNPOperator
+MNPOperator89: MNPOperator
   Brand: "1"
   OperName: "Tuenti"
   OperCode: "401"
@@ -737,13 +745,13 @@ MNPOperator88: MNPOperator
   Active: ?
   NRN: "715401"
 
-MNPOperator89: MNPOperator
+MNPOperator90: MNPOperator
   Brand: "1"
   OperName: "Eroski"
   OperCode: "403"
   Active: ?
 
-MNPOperator90: MNPOperator
+MNPOperator91: MNPOperator
   Brand: "1"
   OperName: "EroskiMovil"
   OperCode: "413"
@@ -751,7 +759,7 @@ MNPOperator90: MNPOperator
   Active: TRUE 
   NRN: "970413"
 
-MNPOperator91: MNPOperator
+MNPOperator92: MNPOperator
   Brand: "1"
   OperName: "Pepephone 4G"
   OperCode: "501"
@@ -759,14 +767,14 @@ MNPOperator91: MNPOperator
   Active: TRUE 
   NRN: "715501"
 
-MNPOperator92: MNPOperator
+MNPOperator93: MNPOperator
   Brand: "1"
   OperName: "Hits Mobile"
   OperCode: "503"
   ICCPrefix: "893456"
   Active: ?
 
-MNPOperator93: MNPOperator
+MNPOperator94: MNPOperator
   Brand: "1"
   OperName: "HITS_MOBILE"
   OperCode: "513"
@@ -774,7 +782,7 @@ MNPOperator93: MNPOperator
   Active: TRUE 
   NRN: "970513"
 
-MNPOperator94: MNPOperator
+MNPOperator95: MNPOperator
   Brand: "1"
   OperName: "Lowi"
   OperCode: "813"
@@ -783,7 +791,7 @@ MNPOperator94: MNPOperator
   OperBrand: "Lowi"
   NRN: "970813"
 
-MNPOperator95: MNPOperator
+MNPOperator96: MNPOperator
   Brand: "1"
   OperName: "VIZ"
   OperCode: "813"
@@ -792,7 +800,7 @@ MNPOperator95: MNPOperator
   OperBrand: "Lowi"
   NRN: "970813"
 
-MNPOperator96: MNPOperator
+MNPOperator97: MNPOperator
   Brand: "1"
   OperName: "Vodafone Enabler"
   OperCode: "813"
@@ -800,7 +808,7 @@ MNPOperator96: MNPOperator
   OperBrand: "Lowi"
   NRN: "970813"
 
-MNPOperator97: MNPOperator
+MNPOperator98: MNPOperator
   Brand: "1"
   OperName: "Orbitel"
   OperCode: "913"

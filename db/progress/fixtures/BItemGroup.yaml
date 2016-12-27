@@ -254,37 +254,63 @@ BItemGroup41: BItemGroup
   BIGroup: "46"
   BIGName: "Convergent Monthly fee"
   Brand: "1"
+  GroupType: 1
+  ReportCode: ","
   InvoiceOrder: 31
 
 BItemGroup42: BItemGroup
+  BIGroup: "47"
+  BIGName: "Fixed voice"
+  Brand: "1"
+  GroupType: 1
+  ReportCode: ","
+  InvoiceOrder: 32
+
+BItemGroup43: BItemGroup
   BIGroup: "5"
   BIGName: "MMS"
   Brand: "1"
   ReportCode: "1002,5"
   InvoiceOrder: 90
 
-BItemGroup43: BItemGroup
+BItemGroup44: BItemGroup
+  BIGroup: "51"
+  BIGName: "Calls Fixed"
+  Brand: "1"
+  GroupType: 1
+  ReportCode: ","
+  InvoiceOrder: 20
+
+BItemGroup45: BItemGroup
+  BIGroup: "53"
+  BIGName: "Premium Services Fixed"
+  Brand: "1"
+  GroupType: 1
+  ReportCode: ","
+  InvoiceOrder: 30
+
+BItemGroup46: BItemGroup
   BIGroup: "6"
   BIGName: "Premium Services"
   Brand: "1"
   ReportCode: "1002,6"
   InvoiceOrder: 80
 
-BItemGroup44: BItemGroup
+BItemGroup47: BItemGroup
   BIGroup: "7"
   BIGName: "Terminals"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 120
 
-BItemGroup45: BItemGroup
+BItemGroup48: BItemGroup
   BIGroup: "8"
   BIGName: "Fixed fees"
   Brand: "1"
   ReportCode: "1001,"
   InvoiceOrder: 20
 
-BItemGroup46: BItemGroup
+BItemGroup49: BItemGroup
   BIGroup: "9"
   BIGName: "SIM"
   Brand: "1"

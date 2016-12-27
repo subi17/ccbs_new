@@ -130,3 +130,33 @@ DPSubject22: DPSubject
   ValidFrom: 2015-10-01
   ValidTo: 2049-12-31
 
+DPSubject23: DPSubject
+  DPId: 36
+  DPSubject: "CONTFH50_300"
+  ValidFrom: 2016-11-01
+  ValidTo: 2049-12-31
+
+DPSubject24: DPSubject
+  DPId: 36
+  DPSubject: "CONTFH55_300"
+  ValidFrom: 2016-11-01
+  ValidTo: 2049-12-31
+
+DPSubject25: DPSubject
+  DPId: 36
+  DPSubject: "CONTFH58_300"
+  ValidFrom: 2016-11-01
+  ValidTo: 2049-12-31
+
+DPSubject26: DPSubject
+  DPId: 36
+  DPSubject: "CONTFH68_300"
+  ValidFrom: 2016-11-01
+  ValidTo: 2049-12-31
+
+DPSubject27: DPSubject
+  DPId: 37
+  DPSubject: "CONT25"
+  ValidFrom: 2016-12-12
+  ValidTo: 2049-12-31
+

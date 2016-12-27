@@ -1611,3 +1611,69 @@ ServiceLimitTarget286: ServiceLimitTarget
   OutsideRate: "CONTS2GB_VOICE_OUT"
   InsideRate: "CONTS2GB_VOICE_IN"
 
+ServiceLimitTarget287: ServiceLimitTarget
+  SLSeq: 137
+  ServiceLMember: "14100001"
+  OutsideRate: "CONT25_DATA_OUT"
+  InsideRate: "CONT25_DATA_IN"
+
+ServiceLimitTarget288: ServiceLimitTarget
+  SLSeq: 138
+  ServiceLMember: "10100001"
+  OutsideRate: "CONT25_VOICE_OUT"
+  InsideRate: "CONT25_VOICE_IN"
+
+ServiceLimitTarget289: ServiceLimitTarget
+  SLSeq: 138
+  ServiceLMember: "10100003"
+  OutsideRate: "CONT25_VOICE_OUT"
+  InsideRate: "CONT25_VOICE_IN"
+
+ServiceLimitTarget290: ServiceLimitTarget
+  SLSeq: 138
+  ServiceLMember: "10100005"
+  OutsideRate: "CONT25_VOICE_OUT"
+  InsideRate: "CONT25_VOICE_IN"
+
+ServiceLimitTarget291: ServiceLimitTarget
+  SLSeq: 138
+  ServiceLMember: "CFOTHER"
+  OutsideRate: "CONT25_VOICE_OUT"
+  InsideRate: "CONT25_VOICE_IN"
+
+ServiceLimitTarget292: ServiceLimitTarget
+  SLSeq: 138
+  ServiceLMember: "CFYOIGO"
+  OutsideRate: "CONT25_VOICE_OUT"
+  InsideRate: "CONT25_VOICE_IN"
+
+ServiceLimitTarget293: ServiceLimitTarget
+  SLSeq: 139
+  ServiceLMember: "10100001"
+  OutsideRate: "CONT25_VOICE_OUT"
+  InsideRate: "CONT25_VOICE_IN"
+
+ServiceLimitTarget294: ServiceLimitTarget
+  SLSeq: 139
+  ServiceLMember: "10100003"
+  OutsideRate: "CONT25_VOICE_OUT"
+  InsideRate: "CONT25_VOICE_IN"
+
+ServiceLimitTarget295: ServiceLimitTarget
+  SLSeq: 139
+  ServiceLMember: "10100005"
+  OutsideRate: "CONT25_VOICE_OUT"
+  InsideRate: "CONT25_VOICE_IN"
+
+ServiceLimitTarget296: ServiceLimitTarget
+  SLSeq: 139
+  ServiceLMember: "CFOTHER"
+  OutsideRate: "CONT25_VOICE_OUT"
+  InsideRate: "CONT25_VOICE_IN"
+
+ServiceLimitTarget297: ServiceLimitTarget
+  SLSeq: 139
+  ServiceLMember: "CFYOIGO"
+  OutsideRate: "CONT25_VOICE_OUT"
+  InsideRate: "CONT25_VOICE_IN"
+

@@ -410,3 +410,39 @@ NatHoliday103: NatHoliday
   Holiday: 2016-12-08
   HName: "La Inmaculada Concepcion"
 
+NatHoliday104: NatHoliday
+  Holiday: 2017-01-06
+  HName: "Epifania del Señor"
+
+NatHoliday105: NatHoliday
+  Holiday: 2017-04-14
+  HName: "Viernes Santo"
+
+NatHoliday106: NatHoliday
+  Holiday: 2017-05-01
+  HName: "Fiesta del Trabajo"
+
+NatHoliday107: NatHoliday
+  Holiday: 2017-08-15
+  HName: "Asunciion de la Virgen"
+
+NatHoliday108: NatHoliday
+  Holiday: 2017-10-12
+  HName: "Fiesta Nacional de España"
+
+NatHoliday109: NatHoliday
+  Holiday: 2017-11-01
+  HName: "Dia de Todos los Santos"
+
+NatHoliday110: NatHoliday
+  Holiday: 2017-12-06
+  HName: "Dia de la Constitucion"
+
+NatHoliday111: NatHoliday
+  Holiday: 2017-12-08
+  HName: "La Inmaculada Concepcion"
+
+NatHoliday112: NatHoliday
+  Holiday: 2017-12-25
+  HName: "Epifania del Señor"
+

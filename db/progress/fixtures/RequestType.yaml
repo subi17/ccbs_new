@@ -8,7 +8,7 @@ RequestType2: RequestType
   Brand: "1"
   ReqType: 1
   ReqName: "Service Change"
-  Program: "servicereq"
+  Program: "Mm/servicereq.p"
   UserCode: "Service"
   Queue: 1
 
@@ -16,56 +16,56 @@ RequestType3: RequestType
   Brand: "1"
   ReqType: 2
   ReqName: "Saldo Payment"
-  Program: "saldopaym"
+  Program: "Mm/saldopaym.p"
   InUse: FALSE
 
 RequestType4: RequestType
   Brand: "1"
   ReqType: 3
   ReqName: "User Change"
-  Program: "mscustchg"
+  Program: "Mm/mscustchg.p"
   InUse: FALSE
 
 RequestType5: RequestType
   Brand: "1"
   ReqType: 4
   ReqName: "Invoice Customer Change"
-  Program: "mscustchg"
+  Program: "Mm/mscustchg.p"
   InUse: FALSE
 
 RequestType6: RequestType
   Brand: "1"
   ReqType: 5
   ReqName: "User Account"
-  Program: "useraccountreq"
+  Program: "Mc/useraccountreq.p"
   InUse: FALSE
 
 RequestType7: RequestType
   Brand: "1"
   ReqType: 6
   ReqName: "Address Change"
-  Program: "addressreq"
+  Program: "Mc/addressreq.p"
   Queue: 1
 
 RequestType8: RequestType
   Brand: "1"
   ReqType: 7
   ReqName: "Per. Contract PIN"
-  Program: "percontr"
+  Program: "Mm/percontr.p"
   InUse: FALSE
 
 RequestType9: RequestType
   Brand: "1"
   ReqType: 8
   ReqName: "Per. Contract Activation"
-  Program: "percontr"
+  Program: "Mm/percontr.p"
   Queue: 4
 
 RequestType10: RequestType
   Brand: "1"
   ReqType: 9
   ReqName: "Per. Contract Termination"
-  Program: "percontr"
+  Program: "Mm/percontr.p"
   UserCode: "PerCont"
   Queue: 9
 
@@ -73,21 +73,21 @@ RequestType11: RequestType
   Brand: "1"
   ReqType: 10
   ReqName: "Agreement Customer Change"
-  Program: "msagrcustchg"
+  Program: "Mm/msagrcustchg.p"
   Queue: 6
 
 RequestType12: RequestType
   Brand: "1"
   ReqType: 11
   ReqName: "Payment Plan"
-  Program: "pplanreq"
+  Program: "Ar/pplanreq.p"
   InUse: FALSE
 
 RequestType13: RequestType
   Brand: "1"
   ReqType: 12
   ReqName: "Marketing Values"
-  Program: "marketingreq"
+  Program: "Mc/marketingreq.p"
   InUse: FALSE
 
 RequestType14: RequestType
@@ -101,7 +101,7 @@ RequestType15: RequestType
   Brand: "1"
   ReqType: 14
   ReqName: "Fixed line creation"
-  Program: "createmobsub"
+  Program: "Mm/createmobsub.p"
   UserCode: "CreFixed"
   Queue: 2
 
@@ -130,14 +130,14 @@ RequestType19: RequestType
   Brand: "1"
   ReqType: 20
   ReqName: "On-demand invoice"
-  Program: "invoicereq"
+  Program: "Inv/invoicereq.p"
   InUse: FALSE
 
 RequestType20: RequestType
   Brand: "1"
   ReqType: 22
   ReqName: "Credit Note"
-  Program: "creditnote"
+  Program: "Ar/creditnote.p"
   UserCode: "credit"
   Queue: 1
 
@@ -145,7 +145,7 @@ RequestType21: RequestType
   Brand: "1"
   ReqType: 23
   ReqName: "Refunds"
-  Program: "refund"
+  Program: "Ar/refund.p"
   UserCode: "Refund"
   InUse: FALSE
   Queue: 6
@@ -154,7 +154,7 @@ RequestType22: RequestType
   Brand: "1"
   ReqType: 24
   ReqName: "Bank account change"
-  Program: "bankrequest"
+  Program: "Mm/bankrequest.p"
   UserCode: "bank"
   Queue: 3
 
@@ -162,7 +162,7 @@ RequestType23: RequestType
   Brand: "1"
   ReqType: 27
   ReqName: "Fee model price change"
-  Program: "fmitemprice"
+  Program: "Mc/fmitemprice.p"
   InUse: FALSE
   Queue: 3
 
@@ -177,14 +177,14 @@ RequestType25: RequestType
   Brand: "1"
   ReqType: 30
   ReqName: "SMS Creation"
-  Program: "smsrequest"
+  Program: "Syst/smsrequest.p"
   Queue: 2
 
 RequestType26: RequestType
   Brand: "1"
   ReqType: 31
   ReqName: "Payment"
-  Program: "paymentreq"
+  Program: "Ar/paymentreq.p"
   UserCode: "Paym"
   InUse: FALSE
   Queue: 1
@@ -193,7 +193,7 @@ RequestType27: RequestType
   Brand: "1"
   ReqType: 32
   ReqName: "Bank reference"
-  Program: "bankrequest"
+  Program: "Mm/bankrequest.p"
   UserCode: "BankRef"
   InUse: FALSE
 
@@ -208,7 +208,7 @@ RequestType29: RequestType
   Brand: "1"
   ReqType: 34
   ReqName: "Manual Payment"
-  Program: "manualpayment"
+  Program: "Ar/manualpayment.p"
   UserCode: "ManPay"
   InUse: FALSE
   Queue: 1
@@ -217,7 +217,7 @@ RequestType30: RequestType
   Brand: "1"
   ReqType: 35
   ReqName: "Barring and suspension"
-  Program: "susprequest"
+  Program: "Mm/susprequest.p"
   UserCode: "barr"
   Queue: 6
 
@@ -237,35 +237,35 @@ RequestType33: RequestType
   Brand: "1"
   ReqType: 40
   ReqName: "Limit update or creation"
-  Program: "limitrequest"
+  Program: "Mc/limitrequest.p"
   Queue: 2
 
 RequestType34: RequestType
   Brand: "1"
   ReqType: 46
   ReqName: "After Sales Order"
-  Program: "aftersalesreq"
+  Program: "Mc/aftersalesreq.p"
   Queue: 2
 
 RequestType35: RequestType
   Brand: "1"
   ReqType: 49
   ReqName: "Revert Renewal Order"
-  Program: "revert_renewal_order"
+  Program: "Mm/revert_renewal_order.p"
   Queue: 2
 
 RequestType36: RequestType
   Brand: "1"
   ReqType: 65
   ReqName: "Rerate"
-  Program: "rerate_request"
+  Program: "Rate/rerate_request.p"
   Queue: 7
 
 RequestType37: RequestType
   Brand: "1"
   ReqType: 76
   ReqName: "Charge and Compensation"
-  Program: "postpaid_chgcomp"
+  Program: "Mm/postpaid_chgcomp.p"
   Queue: 3
 
 RequestType38: RequestType
@@ -285,7 +285,7 @@ RequestType40: RequestType
   Brand: "1"
   ReqType: 79
   ReqName: "SMS invoice"
-  Program: "smsinvoice"
+  Program: "Inv/smsinvoice.p"
   UserCode: "Cron"
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype79.log"
@@ -302,7 +302,7 @@ RequestType42: RequestType
   Brand: "1"
   ReqType: 81
   ReqName: "Bundle change"
-  Program: "bundle_change_request"
+  Program: "Mm/bundle_change_request.p"
   Queue: 11
 
 RequestType43: RequestType
@@ -322,14 +322,14 @@ RequestType45: RequestType
   Brand: "1"
   ReqType: 84
   ReqName: "Activate Email Invoice"
-  Program: "activate_einvoice"
+  Program: "Inv/activate_einvoice.p"
   Queue: 10
 
 RequestType46: RequestType
   Brand: "1"
   ReqType: 85
   ReqName: "Send Email Invoice"
-  Program: "send_einvoice"
+  Program: "Inv/send_einvoice.p"
   UserCode: "Cron"
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype85.log"
@@ -341,35 +341,35 @@ RequestType47: RequestType
   Brand: "1"
   ReqType: 86
   ReqName: "Email Sending"
-  Program: "email_sending"
+  Program: "Mm/email_sending.p"
   Queue: 10
 
 RequestType48: RequestType
   Brand: "1"
   ReqType: 87
   ReqName: "Logistics"
-  Program: "logistics_request"
+  Program: "Mc/logistics_request.p"
   Queue: 8
 
 RequestType49: RequestType
   Brand: "1"
   ReqType: 88
   ReqName: "Installment Contract Change"
-  Program: "installment_contract_change"
+  Program: "Mm/installment_contract_change.p"
   Queue: 3
 
 RequestType50: RequestType
   Brand: "1"
   ReqType: 89
   ReqName: "Terminal Financing Bank File"
-  Program: "terminal_financing_send"
+  Program: "Ar/terminal_financing_send.p"
   Queue: 5
 
 RequestType51: RequestType
   Brand: "1"
   ReqType: 90
   ReqName: "Fusion invoice email"
-  Program: "fusioninvoice_send"
+  Program: "Inv/fusioninvoice_send.p"
   UserCode: "Cron"
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype90.log"
@@ -381,14 +381,14 @@ RequestType52: RequestType
   Brand: "1"
   ReqType: 91
   ReqName: "Terminal Finance CAN TER file"
-  Program: "tf_cancel_send"
+  Program: "Ar/tf_cancel_send.p"
   Queue: 5
 
 RequestType53: RequestType
   Brand: "1"
   ReqType: 92
   ReqName: "Publish Invoices"
-  Program: "publish_invoice"
+  Program: "Inv/publish_invoice.p"
   UserCode: "Cron"
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype92.log"
@@ -400,7 +400,7 @@ RequestType54: RequestType
   Brand: "1"
   ReqType: 93
   ReqName: "Publish IFS file"
-  Program: "publish_ifs"
+  Program: "Inv/publish_ifs.p"
   UserCode: "Cron"
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype93.log"

@@ -433,582 +433,647 @@ CCN86: CCN
   Brand: "1"
 
 CCN87: CCN
+  CCN: 1002
+  CCNName: "Fixed to International Call"
+  Brand: "1"
+
+CCN88: CCN
+  CCN: 1008
+  CCNName: "Fixed to Freephone Voice"
+  Brand: "1"
+
+CCN89: CCN
+  CCN: 1061
+  CCNName: "Service numbers 60-30-30"
+  Brand: "1"
+
+CCN90: CCN
+  CCN: 1063
+  CCNName: "micropagos numbers -SPECSERV"
+  Brand: "1"
+
+CCN91: CCN
+  CCN: 1064
+  CCNName: "Service numbers 20-30"
+  Brand: "1"
+
+CCN92: CCN
+  CCN: 1066
+  CCNName: "Fixed to special short numbers"
+  Brand: "1"
+
+CCN93: CCN
+  CCN: 1067
+  CCNName: "Fixed to special short numbers"
+  Brand: "1"
+
+CCN94: CCN
+  CCN: 1069
+  CCNName: "Service numbers 60-30-30"
+  Brand: "1"
+
+CCN95: CCN
+  CCN: 1074
+  CCNName: "Fixed Premium gambling voice"
+  Brand: "1"
+
+CCN96: CCN
+  CCN: 1075
+  CCNName: "Fixed Premium gambling voice n"
+  Brand: "1"
+
+CCN97: CCN
+  CCN: 1081
+  CCNName: "Fixed to National"
+  Brand: "1"
+
+CCN98: CCN
+  CCN: 1098
+  CCNName: "Fixed Voice mail calls"
+  Brand: "1"
+
+CCN99: CCN
+  CCN: 1631
+  CCNName: "micropagos numbers -SPECSERV"
+  Brand: "1"
+
+CCN100: CCN
   CCN: 160
   CCNName: "Somalia"
   RepCCN: 160
   Brand: "2"
 
-CCN88: CCN
+CCN101: CCN
   CCN: 208
   CCNName: "Italy-Vatican City"
   RepCCN: 208
   Brand: "2"
 
-CCN89: CCN
+CCN102: CCN
   CCN: 218
   CCNName: "Liechtenstein"
   RepCCN: 218
   Brand: "2"
 
-CCN90: CCN
+CCN103: CCN
   CCN: 241
   CCNName: "Cuba"
   RepCCN: 241
   Brand: "2"
 
-CCN91: CCN
+CCN104: CCN
   CCN: 263
   CCNName: "Chatham Islands"
   RepCCN: 263
   Brand: "2"
 
-CCN92: CCN
+CCN105: CCN
   CCN: 278
   CCNName: "Congo"
   RepCCN: 278
   Brand: "2"
 
-CCN93: CCN
+CCN106: CCN
   CCN: 380
   CCNName: "Serbia and Montenegro"
   RepCCN: 380
   Brand: "2"
 
-CCN94: CCN
+CCN107: CCN
   CCN: 500
   CCNName: "USA - Mobile"
   RepCCN: 500
   Brand: "2"
 
-CCN95: CCN
+CCN108: CCN
   CCN: 501
   CCNName: "Bahamas - Mobile"
   RepCCN: 501
   Brand: "2"
 
-CCN96: CCN
+CCN109: CCN
   CCN: 503
   CCNName: "Anguilla - Mobile"
   RepCCN: 503
   Brand: "2"
 
-CCN97: CCN
+CCN110: CCN
   CCN: 505
   CCNName: "Virgin Islands, British - Mobile"
   RepCCN: 505
   Brand: "2"
 
-CCN98: CCN
+CCN111: CCN
   CCN: 506
   CCNName: "Virgin Islands, United States - Mobile"
   RepCCN: 506
   Brand: "2"
 
-CCN99: CCN
+CCN112: CCN
   CCN: 508
   CCNName: "Bermuda - Mobile"
   RepCCN: 508
   Brand: "2"
 
-CCN100: CCN
+CCN113: CCN
   CCN: 512
   CCNName: "Northern Mariana Islands - Mobile"
   RepCCN: 512
   Brand: "2"
 
-CCN101: CCN
+CCN114: CCN
   CCN: 514
   CCNName: "St Lucia - Mobile"
   RepCCN: 514
   Brand: "2"
 
-CCN102: CCN
+CCN115: CCN
   CCN: 515
   CCNName: "Dominica - Mobile"
   RepCCN: 515
   Brand: "2"
 
-CCN103: CCN
+CCN116: CCN
   CCN: 516
   CCNName: "St Vincent and the Grenadines - Mobile"
   RepCCN: 516
   Brand: "2"
 
-CCN104: CCN
+CCN117: CCN
   CCN: 517
   CCNName: "Puerto Rico - Mobile"
   RepCCN: 517
   Brand: "2"
 
-CCN105: CCN
+CCN118: CCN
   CCN: 521
   CCNName: "St. Kitts and Nevis - Mobile"
   RepCCN: 521
   Brand: "2"
 
-CCN106: CCN
+CCN119: CCN
   CCN: 522
   CCNName: "Jamaica - Mobile"
   RepCCN: 522
   Brand: "2"
 
-CCN107: CCN
+CCN120: CCN
   CCN: 532
   CCNName: "Guinea - Mobile"
   RepCCN: 532
   Brand: "2"
 
-CCN108: CCN
+CCN121: CCN
   CCN: 540
   CCNName: "Sierra Leone - Mobile"
   RepCCN: 540
   Brand: "2"
 
-CCN109: CCN
+CCN122: CCN
   CCN: 543
   CCNName: "Chad - Mobile"
   RepCCN: 543
   Brand: "2"
 
-CCN110: CCN
+CCN123: CCN
   CCN: 544
   CCNName: "Central African Republic - Mobile"
   RepCCN: 544
   Brand: "2"
 
-CCN111: CCN
+CCN124: CCN
   CCN: 546
   CCNName: "Cape Verde - Mobile"
   RepCCN: 546
   Brand: "2"
 
-CCN112: CCN
+CCN125: CCN
   CCN: 548
   CCNName: "Equatorial Guinea - Mobile"
   RepCCN: 548
   Brand: "2"
 
-CCN113: CCN
+CCN126: CCN
   CCN: 550
   CCNName: "Congo - Mobile"
   RepCCN: 550
   Brand: "2"
 
-CCN114: CCN
+CCN127: CCN
   CCN: 551
   CCNName: "Congo,Democratic republic of - Mobile"
   RepCCN: 551
   Brand: "2"
 
-CCN115: CCN
+CCN128: CCN
   CCN: 553
   CCNName: "Guinea-Bissau - Mobile"
   RepCCN: 553
   Brand: "2"
 
-CCN116: CCN
+CCN129: CCN
   CCN: 554
   CCNName: "Diego Garcia - Mobile"
   RepCCN: 554
   Brand: "2"
 
-CCN117: CCN
+CCN130: CCN
   CCN: 555
   CCNName: "Ascension - Mobile"
   RepCCN: 555
   Brand: "2"
 
-CCN118: CCN
+CCN131: CCN
   CCN: 560
   CCNName: "Somalia - Mobile"
   RepCCN: 560
   Brand: "2"
 
-CCN119: CCN
+CCN132: CCN
   CCN: 567
   CCNName: "Mozambique - Mobile"
   RepCCN: 567
   Brand: "2"
 
-CCN120: CCN
+CCN133: CCN
   CCN: 569
   CCNName: "Madagaskar - Mobile"
   RepCCN: 569
   Brand: "2"
 
-CCN121: CCN
+CCN134: CCN
   CCN: 575
   CCNName: "Botswana - Mobile"
   RepCCN: 575
   Brand: "2"
 
-CCN122: CCN
+CCN135: CCN
   CCN: 579
   CCNName: "St Helena - Mobile"
   RepCCN: 579
   Brand: "2"
 
-CCN123: CCN
+CCN136: CCN
   CCN: 580
   CCNName: "Eritrea - Mobile"
   RepCCN: 580
   Brand: "2"
 
-CCN124: CCN
+CCN137: CCN
   CCN: 607
   CCNName: "San Marino - Mobile"
   RepCCN: 607
   Brand: "2"
 
-CCN125: CCN
+CCN138: CCN
   CCN: 608
   CCNName: "Italy-Vatican City - Mobile"
   RepCCN: 608
   Brand: "2"
 
-CCN126: CCN
+CCN139: CCN
   CCN: 618
   CCNName: "Liechtenstein - Mobile"
   RepCCN: 618
   Brand: "2"
 
-CCN127: CCN
+CCN140: CCN
   CCN: 629
   CCNName: "Falkland Islands - Mobile"
   RepCCN: 629
   Brand: "2"
 
-CCN128: CCN
+CCN141: CCN
   CCN: 635
   CCNName: "Costa Rica - Mobile"
   RepCCN: 635
   Brand: "2"
 
-CCN129: CCN
+CCN142: CCN
   CCN: 636
   CCNName: "Panama - Mobile"
   RepCCN: 636
   Brand: "2"
 
-CCN130: CCN
+CCN143: CCN
   CCN: 637
   CCNName: "St Pierre and Miquelon - Mobile"
   RepCCN: 637
   Brand: "2"
 
-CCN131: CCN
+CCN144: CCN
   CCN: 641
   CCNName: "Cuba - Mobile"
   RepCCN: 641
   Brand: "2"
 
-CCN132: CCN
+CCN145: CCN
   CCN: 651
   CCNName: "Ecuador - Mobile"
   RepCCN: 651
   Brand: "2"
 
-CCN133: CCN
+CCN146: CCN
   CCN: 663
   CCNName: "Chatham Islands - Mobile"
   RepCCN: 663
   Brand: "2"
 
-CCN134: CCN
+CCN147: CCN
   CCN: 673
   CCNName: "Solomon Islands - Mobile"
   RepCCN: 673
   Brand: "2"
 
-CCN135: CCN
+CCN148: CCN
   CCN: 674
   CCNName: "Vanuatu - Mobile"
   RepCCN: 674
   Brand: "2"
 
-CCN136: CCN
+CCN149: CCN
   CCN: 676
   CCNName: "Palau - Mobile"
   RepCCN: 676
   Brand: "2"
 
-CCN137: CCN
+CCN150: CCN
   CCN: 677
   CCNName: "Wallis and Futuna - Mobile"
   RepCCN: 677
   Brand: "2"
 
-CCN138: CCN
+CCN151: CCN
   CCN: 678
   CCNName: "Congo - Mobile"
   RepCCN: 678
   Brand: "2"
 
-CCN139: CCN
+CCN152: CCN
   CCN: 679
   CCNName: "Niue - Mobile"
   RepCCN: 679
   Brand: "2"
 
-CCN140: CCN
+CCN153: CCN
   CCN: 680
   CCNName: "Samoa, American - Mobile"
   RepCCN: 680
   Brand: "2"
 
-CCN141: CCN
+CCN154: CCN
   CCN: 681
   CCNName: "Samoa, Western - Mobile"
   RepCCN: 681
   Brand: "2"
 
-CCN142: CCN
+CCN155: CCN
   CCN: 682
   CCNName: "Kiribati - Mobile"
   RepCCN: 682
   Brand: "2"
 
-CCN143: CCN
+CCN156: CCN
   CCN: 684
   CCNName: "Tuvalu - Mobile"
   RepCCN: 684
   Brand: "2"
 
-CCN144: CCN
+CCN157: CCN
   CCN: 685
   CCNName: "French Polynesia - Mobile"
   RepCCN: 685
   Brand: "2"
 
-CCN145: CCN
+CCN158: CCN
   CCN: 686
   CCNName: "Tokelau - Mobile"
   RepCCN: 686
   Brand: "2"
 
-CCN146: CCN
+CCN159: CCN
   CCN: 687
   CCNName: "Micronesia - Mobile"
   RepCCN: 687
   Brand: "2"
 
-CCN147: CCN
+CCN160: CCN
   CCN: 688
   CCNName: "Marshall Islands - Mobile"
   RepCCN: 688
   Brand: "2"
 
-CCN148: CCN
+CCN161: CCN
   CCN: 689
   CCNName: "Comoros - Mobile"
   RepCCN: 689
   Brand: "2"
 
-CCN149: CCN
+CCN162: CCN
   CCN: 721
   CCNName: "Vietnam - Mobile"
   RepCCN: 721
   Brand: "2"
 
-CCN150: CCN
+CCN163: CCN
   CCN: 722
   CCNName: "Korea, PDR (North) - Mobile"
   RepCCN: 722
   Brand: "2"
 
-CCN151: CCN
+CCN164: CCN
   CCN: 725
   CCNName: "Cambodia - Mobile"
   RepCCN: 725
   Brand: "2"
 
-CCN152: CCN
+CCN165: CCN
   CCN: 727
   CCNName: "China - Mobile"
   RepCCN: 727
   Brand: "2"
 
-CCN153: CCN
+CCN166: CCN
   CCN: 728
   CCNName: "Inmarsat B, POR - Mobile"
   RepCCN: 728
   Brand: "2"
 
-CCN154: CCN
+CCN167: CCN
   CCN: 729
   CCNName: "Inmarsat B, IOR - Mobile"
   RepCCN: 729
   Brand: "2"
 
-CCN155: CCN
+CCN168: CCN
   CCN: 730
   CCNName: "Inmarsat B, AOR-W - Mobile"
   RepCCN: 730
   Brand: "2"
 
-CCN156: CCN
+CCN169: CCN
   CCN: 732
   CCNName: "Global Mobile Satellite System-Iridium - Mobile"
   RepCCN: 732
   Brand: "2"
 
-CCN157: CCN
+CCN170: CCN
   CCN: 733
   CCNName: "Global Mobile Satellite System-Iridium - Mobile"
   RepCCN: 733
   Brand: "2"
 
-CCN158: CCN
+CCN171: CCN
   CCN: 738
   CCNName: "Afghanistan - Mobile"
   RepCCN: 738
   Brand: "2"
 
-CCN159: CCN
+CCN172: CCN
   CCN: 740
   CCNName: "Myanmar (Burma) - Mobile"
   RepCCN: 740
   Brand: "2"
 
-CCN160: CCN
+CCN173: CCN
   CCN: 741
   CCNName: "Maldives - Mobile"
   RepCCN: 741
   Brand: "2"
 
-CCN161: CCN
+CCN174: CCN
   CCN: 745
   CCNName: "Iraq - Mobile"
   RepCCN: 745
   Brand: "2"
 
-CCN162: CCN
+CCN175: CCN
   CCN: 747
   CCNName: "Saudi Arabia - Mobile"
   RepCCN: 747
   Brand: "2"
 
-CCN163: CCN
+CCN176: CCN
   CCN: 749
   CCNName: "Oman - Mobile"
   RepCCN: 749
   Brand: "2"
 
-CCN164: CCN
+CCN177: CCN
   CCN: 751
   CCNName: "United Arab Emirates - Mobile"
   RepCCN: 751
   Brand: "2"
 
-CCN165: CCN
+CCN178: CCN
   CCN: 757
   CCNName: "Nepal - Mobile"
   RepCCN: 757
   Brand: "2"
 
-CCN166: CCN
+CCN179: CCN
   CCN: 765
   CCNName: "Finland - Mobile"
   RepCCN: 765
   Brand: "2"
 
-CCN167: CCN
+CCN180: CCN
   CCN: 766
   CCNName: "Inmarsat A (64k), AOR-E - Mobile"
   RepCCN: 766
   Brand: "2"
 
-CCN168: CCN
+CCN181: CCN
   CCN: 767
   CCNName: "Inmarsat B, AOR-E - Mobile"
   RepCCN: 767
   Brand: "2"
 
-CCN169: CCN
+CCN182: CCN
   CCN: 768
   CCNName: "Inmarsat M (Mini), AOR-E - Mobile"
   RepCCN: 768
   Brand: "2"
 
-CCN170: CCN
+CCN183: CCN
   CCN: 772
   CCNName: "Midway Island - Mobile"
   RepCCN: 772
   Brand: "2"
 
-CCN171: CCN
+CCN184: CCN
   CCN: 774
   CCNName: "Tristan Da Cunha - Mobile"
   RepCCN: 774
   Brand: "2"
 
-CCN172: CCN
+CCN185: CCN
   CCN: 775
   CCNName: "Wake Island - Mobile"
   RepCCN: 775
   Brand: "2"
 
-CCN173: CCN
+CCN186: CCN
   CCN: 776
   CCNName: "Venezuela-Caracas - Mobile"
   RepCCN: 776
   Brand: "2"
 
-CCN174: CCN
+CCN187: CCN
   CCN: 777
   CCNName: "Switzerland - Mobile"
   RepCCN: 777
   Brand: "2"
 
-CCN175: CCN
+CCN188: CCN
   CCN: 778
   CCNName: "Saipan - Mobile"
   RepCCN: 778
   Brand: "2"
 
-CCN176: CCN
+CCN189: CCN
   CCN: 779
   CCNName: "Cyprus, Turkey - Mobile"
   RepCCN: 779
   Brand: "2"
 
-CCN177: CCN
+CCN190: CCN
   CCN: 780
   CCNName: "Serbia and Montenegro - Mobile"
   RepCCN: 780
   Brand: "2"
 
-CCN178: CCN
+CCN191: CCN
   CCN: 782
   CCNName: "Antarctica - Mobile"
   RepCCN: 782
   Brand: "2"
 
-CCN179: CCN
+CCN192: CCN
   CCN: 783
   CCNName: "Vatican - Mobile"
   RepCCN: 783
   Brand: "2"
 
-CCN180: CCN
+CCN193: CCN
   CCN: 784
   CCNName: "Norfolk Island - Mobile"
   RepCCN: 784
   Brand: "2"
 
-CCN181: CCN
+CCN194: CCN
   CCN: 785
   CCNName: "Cocos Islands - Mobile"
   RepCCN: 785
   Brand: "2"
 
-CCN182: CCN
+CCN195: CCN
   CCN: 786
   CCNName: "Christmas Island - Mobile"
   RepCCN: 786
   Brand: "2"
 
-CCN183: CCN
+CCN196: CCN
   CCN: 787
   CCNName: "Canada - Mobile"
   RepCCN: 787

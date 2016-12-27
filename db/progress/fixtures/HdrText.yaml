@@ -2472,7 +2472,7 @@ HdrText411: HdrText
 HdrText412: HdrText
   te-nro: 510
   te-kie: 1
-  te-text: "#YY meses en esta tarifa por el descuento de #XXX euros ya incluido en el precio."
+  te-text: "#YY meses en Yoigo y en tarifa por el descuento de #XXX euros ya incluido en el precio."
   Brand: "1"
 
 HdrText413: HdrText
@@ -2785,7 +2785,7 @@ HdrText459: HdrText
 HdrText460: HdrText
   te-nro: 532
   te-kie: 1
-  te-text: "Con permanencia de 12 meses en esta tarifa por sus condiciones. Si no la cumples, la penalización máxima son 100 euros, según el tiempo que te quede."
+  te-text: "12 meses por el descuento de 100 euros en el coste de instalación, regulado en la condición particular de permanencia del las CCGGs de fijo."
   Brand: "1"
 
 HdrText461: HdrText
@@ -3225,7 +3225,10 @@ HdrText530: HdrText
 HdrText531: HdrText
   te-nro: 559
   te-kie: 1
-  te-text: "Pago del móvil: BANSABADELL nos ha cedido los derechos de crédito derivados de la financiación del terminal que compraste al darte de alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la cláusula 16 del contrato de préstamo."
+  te-text: "Pago del móvil: BANSABADELL nos ha cedido los derechos de crédito
+derivados de la financiación del terminal que compraste al darte de
+alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la
+cláusula 16 del contrato de préstamo."
   Brand: "1"
 
 HdrText532: HdrText

@@ -916,3 +916,12 @@ DCServiceComponent104: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 105
 
+DCServiceComponent105: DCServiceComponent
+  DCServicePackageID: 93
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT25#ADDBUNDLE"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  DCServiceComponentID: 106
+
