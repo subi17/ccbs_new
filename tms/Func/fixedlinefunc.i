@@ -138,4 +138,18 @@ FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
    RETURN FALSE.
 END.   
 
+FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
+   (INPUT icOldCliType AS CHAR,
+    INPUT icNewCliType AS CHAR):
+   IF (icOldCliType BEGINS "CONTDSL" AND icNewCliType BEGINS "CONTDSL") THEN
+      RETURN TRUE.
+   ELSE IF (icOldCliType BEGINS "CONTFH" AND 
+            icNewCliType BEGINS "CONTFH") AND
+            SUBSTRING(icOldClitype, INDEX(icOldClitype,"_") + 1) EQ
+            SUBSTRING(icNewClitype, INDEX(icNewClitype,"_") + 1) THEN
+      RETURN TRUE.
+   ELSE 
+      RETURN FALSE.
+END.                                         
+
 &ENDIF
