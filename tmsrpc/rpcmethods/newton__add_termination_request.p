@@ -86,9 +86,8 @@ IF NOT AVAIL MobSub THEN DO:
    RETURN appl_err("System Error ! Mobile Subscription not available").
 END.
 
-IF pcTermType EQ {&TERMINATION_TYPE_PARTIAL} AND
-   (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
-    MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
+IF pcTermType EQ {&TERMINATION_TYPE_PARTIAL} AND 
+   MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
    RETURN appl_err("System Error ! Partial termination not allowed").
 END.
 
