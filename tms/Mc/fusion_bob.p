@@ -19,6 +19,7 @@ gcBrand = "1".
 {eventval.i}
 {msreqfunc.i}
 {orderfunc.i}
+{orderfusion.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
@@ -185,6 +186,7 @@ PROCEDURE pUpdateFusionOrder:
    DEF INPUT PARAM pcReleaseMobile AS CHAR NO-UNDO.
 
    DEF VAR liRequest AS INT NO-UNDO. 
+   DEF VAR lcError AS CHAR NO-UNDO.
 
    IF pcReleaseMobile > "" AND
       pcReleaseMobile NE "Y" THEN
@@ -220,18 +222,36 @@ PROCEDURE pUpdateFusionOrder:
       IF pcReleaseMobile EQ "Y" THEN
          RETURN "ERROR:Mobile order release not allowed with CAN".
 
-      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
-         Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
+      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR 
+         OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN
+         RETURN "ERROR:CAN not allowed because fusion status ONG".
+
+      IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
          Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
          Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3} OR
          Order.StatusCode EQ {&ORDER_STATUS_IN_CONTROL} OR
          Order.StatusCode EQ {&ORDER_STATUS_MNP_REJECTED} OR
-         Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} THEN DO:
+         Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED}
+         OR
+         (Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} AND
+         (OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ERROR} OR
+          OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED} OR
+          OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_NEW})) 
+         OR
+         (Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
+          pcReleaseMobile NE "Y")
+         THEN DO:
 
          RUN closeorder.p(Order.OrderId,TRUE).
 
          IF RETURN-VALUE NE "" THEN
             RETURN "ERROR:Order closing failed: " + STRING(RETURN-VALUE).
+      END.
+      ELSE IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
+
+         IF fCreateFusionCancelOrderMessage(OrderFusion.OrderID,
+                                            OUTPUT lcError) EQ FALSE THEN
+            RETURN SUBST("ERROR:Cancel message creation failed: &1", lcError).
       END.
       ELSE IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN DO:
          
