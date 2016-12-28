@@ -399,7 +399,30 @@ FUNCTION fMNPDueMessage RETURNS INT
 
 END FUNCTION. 
 
-def buffer bufMNPCal FOR MNPCal.
+FUNCTION fMNPCalQuery RETURNS INTEGER
+   (icMessageType AS CHAR,
+    icRegion AS CHAR,
+    icOrderChannel AS CHAR,
+    icMNPProduct AS CHAR,
+    icMNPTariff AS CHAR):
+
+   DEFINE BUFFER MNPCal FOR MNPCal.
+
+   FOR FIRST MNPCal NO-LOCK WHERE
+      MNPCal.OrderChannel = icOrderChannel AND
+      MNPCal.Region       = icRegion       AND
+      MNPCal.MessageType  = icMessageType  AND
+      MNPCal.MNPProduct   = icMNPProduct   AND
+      MNPCal.MNPTariff = icMNPTariff:
+
+      RETURN MNPCal.Periods.
+
+   END.
+
+   RETURN ?.
+
+END FUNCTION.
+
 FUNCTION fFindMNPCal RETURNS INT
    (icMessageType AS CHAR,
     icRegion AS CHAR,
@@ -407,148 +430,75 @@ FUNCTION fFindMNPCal RETURNS INT
     icMNPProduct AS CHAR,
     icMNPTariff AS CHAR):
 
+   DEFINE VARIABLE liPeriods AS INTEGER NO-UNDO.
+
    icOrderChannel = REPLACE(icOrderChannel,"fusion_","").
 
    /* All */
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = icOrderChannel AND
-      bufMNPCal.Region = icRegion AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = icMNPProduct AND
-      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, icMNPProduct, icMNPTariff).
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Tariff empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = icOrderChannel AND
-      bufMNPCal.Region = icRegion AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = icMNPProduct AND
-      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, icMNPProduct, "").
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Product empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = icOrderChannel AND
-      bufMNPCal.Region = icRegion AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = "" AND
-      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, "", icMNPTariff).
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Product & Tariff empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = icOrderChannel AND
-      bufMNPCal.Region = icRegion AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = "" AND
-      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, "", "").
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = icOrderChannel AND
-      bufMNPCal.Region = "99" AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = icMNPProduct AND
-      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, icMNPProduct, icMNPTariff).
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region, Tariff empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = icOrderChannel AND
-      bufMNPCal.Region = "99" AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = icMNPProduct AND
-      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, icMNPProduct, "").
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region, Product empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = icOrderChannel AND
-      bufMNPCal.Region = "99" AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = "" AND
-      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, "", icMNPTariff).
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region, Product & Tariff empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = icOrderChannel AND
-      bufMNPCal.Region = "99" AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = "" AND
-      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, "", "").
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Channel empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = "" AND
-      bufMNPCal.Region = icRegion AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = icMNPProduct AND
-      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", icMNPProduct, icMNPTariff).
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Channel empty & Tariff empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = "" AND
-      bufMNPCal.Region = icRegion AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = icMNPProduct AND
-      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", icMNPProduct, "").
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Channel empty & Product empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = "" AND
-      bufMNPCal.Region = icRegion AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = "" AND
-      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", "", icMNPTariff).
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
-   /* Channel empty, Tariff & Product empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = "" AND
-      bufMNPCal.Region = icRegion AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = "" AND
-      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+   /* Channel empty, Product & Tariff empty */
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", "", "").
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
-   /* Channel empty, General Region */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = "" AND
-      bufMNPCal.Region = "99" AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = icMNPProduct AND
-      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+   /* General Region, Channel empty */
+   liPeriods = fMNPCalQuery(icMessageType, "99", "", icMNPProduct, icMNPTariff).
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
-   /* Channel empty, General Region, Tariff empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = "" AND
-      bufMNPCal.Region = "99" AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = icMNPProduct AND
-      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+   /* General Region, Channel empty & Tariff empty */
+   liPeriods = fMNPCalQuery(icMessageType, "99", "", icMNPProduct, "").
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
-   /* Channel empty, General Region Product empty */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = "" AND
-      bufMNPCal.Region = "99" AND
-      bufMNPCal.MessageType = icMessageType AND
-      bufMNPCal.MNPProduct = "" AND
-      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+   /* General Region, Channel empty & Product empty */
+   liPeriods = fMNPCalQuery(icMessageType, "99", "", "", icMNPTariff).
+   IF liPeriods NE ? THEN RETURN liPeriods.
 
-   /* Use default value if calendar is not found */
-   IF NOT AVAIL bufMNPCal THEN
-   FIND FIRST bufMNPCal WHERE
-      bufMNPCal.OrderChannel = "" AND
-      bufMNPCal.Region = "99" AND
-      bufMNPCal.MessageType = icMessageType NO-LOCK NO-ERROR.
+   /* General Region, Channel empty, Product & Tariff empty
+      (use a default value if calendar is not found) */
+   liPeriods = fMNPCalQuery(icMessageType, "99", "", "", "").
+
+   RETURN liPeriods.
 
 END FUNCTION.
 
@@ -578,14 +528,15 @@ FUNCTION fMNPChangeWindowDate RETURNS DATE (
    DEFINE VARIABLE ldDueDate AS DATE NO-UNDO.
    DEFINE VARIABLE liMinPeriodSum AS INT NO-UNDO.
    DEFINE VARIABLE liOrderTime AS INTEGER NO-UNDO. 
-   DEFINE VARIABLE ldaOrderDate AS DATE NO-UNDO. 
+   DEFINE VARIABLE ldaOrderDate AS DATE NO-UNDO.
+   DEFINE VARIABLE liCalPeriods AS INTEGER NO-UNDO.
+   DEFINE VARIABLE lii AS INTEGER NO-UNDO.
+   DEFINE VARIABLE lcTypes AS CHARACTER INITIAL "ASOL,ACON,APOR" NO-UNDO.
 
-   fFindMNPCal("ASOL", icRegion, icOrderChannel,icProduct,icTariff).    
-   liPeriods = liPeriods + bufMNPCal.Periods.
-   fFindMNPCal("ACON", icRegion, icOrderChannel,icProduct,icTariff).    
-   liPeriods = liPeriods + bufMNPCal.Periods.
-   fFindMNPCal("APOR", icRegion, icOrderChannel,icProduct,icTariff).    
-   liPeriods = liPeriods + bufMNPCal.Periods.
+   DO lii = 1 TO NUM-ENTRIES(lcTypes):
+      liCalPeriods = fFindMNPCal(ENTRY(lii,lcTypes), icRegion, icOrderChannel,icProduct,icTariff).
+      IF liCalPeriods NE ? THEN liPeriods = liPeriods + liCalPeriods.
+   END.
 
    liMinPeriodSum  = fGetMinMNPWindow().
 
@@ -607,12 +558,6 @@ FUNCTION fMNPChangeWindowDate RETURNS DATE (
 
 END.
 
-   DEFINE TEMP-TABLE ttRegion
-   FIELD region AS CHAR 
-   INDEX region IS PRIMARY UNIQUE region. 
-
-def buffer bMNPCal FOR MNPCal.
-
 FUNCTION fMNPTotalPeriods RETURNS INT (
    icMessageType  AS CHARACTER,
    iiPeriods      AS INTEGER,
@@ -621,58 +566,84 @@ FUNCTION fMNPTotalPeriods RETURNS INT (
    icProduct      AS CHARACTER,
    icTariff       AS CHARACTER):
 
-   DEFINE VARIABLE ldDueDate AS DATE NO-UNDO.
-   DEFINE VARIABLE lcMessages AS CHARACTER NO-UNDO INIT "ASOL,ACON,APOR".
-   DEFINE VARIABLE lcMessage AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE liMaxPeriods AS INTEGER NO-UNDO INIT 100.
-   DEFINE VARIABLE liCounter AS INTEGER NO-UNDO.
-   DEFINE VARIABLE i AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE lcAllMessages AS CHARACTER NO-UNDO INIT "ASOL,ACON,APOR".
+   DEFINE VARIABLE lcMessages    AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liMaxPeriods  AS INTEGER   NO-UNDO INIT 100.
+   DEFINE VARIABLE liCounter     AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lii           AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liCalPeriods  AS INTEGER   NO-UNDO.
 
-   IF icRegion = "99" OR 
-      icOrderChannel = "" THEN DO:
-      
-      FOR EACH bMNPCal NO-LOCK USE-INDEX Region:
-
-         liCounter = iiPeriods.
-         DO i = 1 TO NUM-ENTRIES(lcMessages):
-            lcMessage = ENTRY(i,lcMessages).
-            
-            IF lcMessage EQ icMessageType THEN NEXT.
-            
-            IF icRegion = "99" AND icOrderChannel NE "" THEN DO:
-               fFindMNPCal(lcMessage, bMNPCal.Region, icOrderChannel,
-               icProduct,icTariff).    
-            END.
-            ELSE IF icRegion NE "99" AND icOrderChannel EQ "" THEN DO: 
-               fFindMNPCal(lcMessage, icRegion, bMNPCal.OrderChannel,
-               icProduct,icTariff).
-            END.   
-            ELSE DO:
-               fFindMNPCal(lcMessage, bMNPCal.Region, bMNPCal.OrderChannel,
-               icProduct,icTariff).    
-            END.
-            liCounter= liCounter + bufMNPCal.Periods.
-         END.
-         IF liCounter < liMaxPeriods THEN
-            liMaxPeriods = liCounter.
-      
-      END.
-      
+   DO lii = 1 TO NUM-ENTRIES(lcAllMessages):
+      IF ENTRY(lii,lcAllMessages) NE icMessageType
+      THEN lcMessages = lcMessages + "," + ENTRY(lii,lcAllMessages).
    END.
+   lcMessages = SUBSTRING(lcMessages,2).
+
+   IF icRegion NE "99" AND icOrderChannel NE ""
+   THEN DO:
+      DO lii = 1 TO NUM-ENTRIES(lcMessages):
+         liCalPeriods = fFindMNPCal(ENTRY(lii,lcMessages),
+                                    icRegion,
+                                    icOrderChannel,
+                                    icProduct,
+                                    icTariff).
+         IF liCalPeriods NE ?
+         THEN iiPeriods = iiPeriods + liCalPeriods.
+      END.
+      RETURN iiPeriods.
+   END.
+
+   DEFINE BUFFER MNPCal FOR MNPCal.
+
+   DEFINE VARIABLE lhQuery AS HANDLE    NO-UNDO.
+   DEFINE VARIABLE llOK    AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE lcQuery AS CHARACTER INITIAL "FOR EACH MNPCal NO-LOCK &1" NO-UNDO.
+
+   IF icRegion = "99" AND icOrderChannel = ""
+   THEN lcQuery = SUBSTITUTE(lcQuery, "USE-INDEX Region").
+   ELSE IF icRegion EQ "99"
+   THEN lcQuery = SUBSTITUTE(lcQuery, "WHERE OrderChannel = " + QUOTER(icOrderChannel)).
+   ELSE lcQuery = SUBSTITUTE(lcQuery, "WHERE Region = " + QUOTER(icRegion)).
    
-   ELSE DO:
-      
-      DO i = 1 TO NUM-ENTRIES(lcMessages):
-         lcMessage = ENTRY(i,lcMessages).
-         IF lcMessage EQ icMessageType THEN NEXT.
-         fFindMNPCal(lcMessage, icRegion, icOrderChannel,
-               icProduct,icTariff).    
-         iiPeriods = iiPeriods + bufMNPCal.Periods.
+   CREATE QUERY lhQuery.
+
+   lhQuery:SET-BUFFERS(BUFFER MNPCal:HANDLE).
+   lhQuery:QUERY-PREPARE(lcQuery).
+   lhQuery:QUERY-OPEN().
+
+   DO WHILE TRUE:
+
+      llOK = lhQuery:GET-NEXT(NO-LOCK).
+
+      /* Query handle is invalid, no more records, or query is not open */
+      IF llOK = ? OR NOT llOK
+      THEN LEAVE.
+
+      liCounter = iiPeriods.
+      DO lii = 1 TO NUM-ENTRIES(lcMessages):
+         liCalPeriods = fFindMNPCal(ENTRY(lii,lcMessages),
+                                    MNPCal.Region,
+                                    MNPCal.OrderChannel,
+                                    icProduct,
+                                    icTariff).
+         IF liCalPeriods NE ?
+         THEN liCounter = liCounter + liCalPeriods.
       END.
-      liMaxPeriods = iiPeriods.
+
+      liMaxPeriods = MINIMUM(liMaxPeriods, liCounter).
    END.
+
+   lhQuery:QUERY-CLOSE().
 
    RETURN liMaxPeriods.
+
+   FINALLY:
+      IF VALID-HANDLE(lhQuery)
+      THEN DO:
+         lhQuery:QUERY-CLOSE().
+         DELETE OBJECT lhQuery.
+      END.
+   END FINALLY.
 
 END.
 

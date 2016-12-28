@@ -56,6 +56,7 @@ DEFINE VARIABLE i            AS INTEGER                 NO-UNDO.
 DEFINE VARIABLE ok           AS LOGICAL format "Yes/No" NO-UNDO.
 DEF BUFFER MNPCalBuf FOR MNPCal.
 DEFINE VARIABLE lcRegion     AS CHARACTER               NO-UNDO.
+DEFINE VARIABLE lcDeliveryType AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llAdmin      AS LOGICAL NO-UNDO. 
 DEFINE VARIABLE llSyst       AS LOGICAL NO-UNDO. 
 DEFINE VARIABLE liPeriodSum AS INTEGER NO-UNDO.  
@@ -71,7 +72,8 @@ FORM
     MNPCal.MNPProduct 
     MNPCal.MNPTariff
     MNPCal.MessageType FORMAT "x(10)"
-    MNPCal.Periods  
+    MNPCal.Periods
+    MNPCal.DeliveryType
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
@@ -80,19 +82,22 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     FRAME sel.
 
 FORM
-    "Channel ....:" MNPCal.OrderChannel FORMAT "x(16)" 
+    "Channel .....:" MNPCal.OrderChannel FORMAT "x(16)" 
     HELP "Order Channel (F9)" SKIP
-    "Region .....:" MNPCal.Region       FORMAT "x(2)"
+    "Region ......:" MNPCal.Region       FORMAT "x(2)"
     HELP "Region (F9)" 
     lcRegion FORMAT "x(20)" SKIP
-    "Product.....:" MNPCal.MNPProduct      FORMAT "X(1)"
+    "Product......:" MNPCal.MNPProduct   FORMAT "X(1)"
     HELP "MNP Product (F9)" SKIP
-    "Tariff......:" MNPCal.MNPTariff       FORMAT "X(8)"
+    "Tariff.......:" MNPCal.MNPTariff    FORMAT "X(8)"
     HELP "Tariff (F9)" SKIP
-    "Message Type:" MNPCal.MessageType  FORMAT "x(8)"
+    "Message Type.:" MNPCal.MessageType  FORMAT "x(8)"
     HELP "Message Type (F9)" SKIP
-    "Periods ....:" MNPCal.Periods      FORMAT ">9"
-    HELP "Maximum amount of periods before making alarm"
+    "Periods .....:" MNPCal.Periods      FORMAT ">9"
+    HELP "Maximum amount of periods before making alarm" SKIP
+    "Delivery Type:" MNPCal.DeliveryType FORMAT ">>9"
+    HELP "Delivery Type (F9)"
+    lcDeliveryType FORMAT "x(20)"
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
@@ -402,6 +407,7 @@ BROWSE:
            MNPCal.MNPTariff
            MNPCal.MessageType
            MNPCal.Periods
+           MNPCal.DeliveryType
            WITH FRAME sel.
         
         MESSAGE
@@ -421,6 +427,7 @@ BROWSE:
            MNPCal.MNPTariff 
            MNPCal.MessageType
            MNPCal.Periods
+           MNPCal.DeliveryType
            WITH FRAME sel.
        
         IF OK THEN DO:
@@ -627,6 +634,7 @@ PROCEDURE local-disp-row:
       MNPCal.MNPTariff
       MNPCal.MessageType
       MNPCal.Periods
+      MNPCal.DeliveryType
    WITH FRAME sel.
 
 END PROCEDURE.
@@ -639,18 +647,28 @@ PROCEDURE local-UPDATE-record:
    
    DEFINE INPUT PARAMETER llNew AS LOGICAL NO-UNDO.
    DEFINE VARIABLE llDefault AS LOGICAL NO-UNDO. 
-   DEFINE VARIABLE liMinWindow AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE liMinWindow AS INTEGER NO-UNDO.
 
    liMinWindow = fGetMinMNPWindow().
 
    IF MNPCal.Region = "99" AND MNPCal.OrderChannel = "" 
       THEN llDefault = TRUE. ELSE llDefault = FALSE.
-   
-   lcRegion = "".
+   ASSIGN
+      lcRegion = ""
+      lcDeliveryType = "".
+
    FIND FIRST Region NO-LOCK WHERE
       Region.Region = MNPCal.Region NO-ERROR.
    IF AVAIL Region THEN lcRegion = Region.RgName.
    IF MNPCal.Region EQ "99" THEN lcRegion = "DEFAULT".
+
+   FIND FIRST TMSCodes NO-LOCK WHERE
+      TMSCodes.TableName = "MNPCal"       AND
+      TMSCodes.FieldName = "DeliveryType" AND
+      TMSCodes.CodeValue = STRING(MNPCal.DeliveryType)
+   NO-ERROR.
+   IF AVAIL TMSCodes THEN lcDeliveryType = TMSCodes.CodeName.
+   ELSE lcDeliveryType = "DEFAULT".
    
    DISP
       MNPCal.Region lcRegion
@@ -658,7 +676,9 @@ PROCEDURE local-UPDATE-record:
       MNPCal.MNPProduct
       MNPCal.MNPTariff
       MNPCal.MessageType 
-      MNPCal.Periods WITH FRAME lis.
+      MNPCal.Periods
+      MNPCal.DeliveryType lcDeliveryType
+      WITH FRAME lis.
 
    MAIN:
    REPEAT ON ENDKEY UNDO, LEAVE:
@@ -670,6 +690,7 @@ PROCEDURE local-UPDATE-record:
       MNPCal.MNPTariff
       MNPCal.MessageType 
       MNPCal.Periods
+      MNPCal.DeliveryType
    WITH FRAME lis EDITING:
 
       READKEY.
@@ -715,6 +736,17 @@ PROCEDURE local-UPDATE-record:
                   NEXT.
                END.
             END.
+
+            WHEN "DeliveryType" THEN DO:
+            RUN h-tmscodes.p
+                  ("MNPCal","DeliveryType","MNP", OUTPUT siirto).
+               ehto = 9.
+               RUN ufkey.
+               IF siirto ne "" AND siirto NE ? THEN DO:
+                  DISP INTEGER(siirto) @ MNPCal.DeliveryType  WITH FRAME lis.
+                  NEXT.
+               END.
+            END.
          END.
       END.
 
@@ -736,7 +768,7 @@ PROCEDURE local-UPDATE-record:
             DISPLAY TMSCodes.CodeValue @ MNPCal.OrderChannel WITH FRAME lis.
          END.
          
-         IF FRAME-FIELD = "Region" THEN DO:
+         ELSE IF FRAME-FIELD = "Region" THEN DO:
             FIND FIRST Region NO-LOCK WHERE
                Region.Region = INPUT MNPCal.Region NO-ERROR.
             IF NOT AVAIL Region AND INPUT MNPCal.Region NE "99" THEN DO:
@@ -750,7 +782,27 @@ PROCEDURE local-UPDATE-record:
             ELSE lcRegion = Region.RgName.
             DISPLAY lcRegion WITH FRAME lis.
          END.
-         
+
+         ELSE IF FRAME-FIELD = "DeliveryType" THEN DO:
+
+            FIND FIRST TMSCodes NO-LOCK WHERE
+               TMSCodes.TableName = "MNPCal"       AND
+               TMSCodes.FieldName = "DeliveryType" AND
+               TMSCodes.CodeValue = STRING(INPUT MNPCal.DeliveryType)
+            NO-ERROR.
+
+            IF NOT AVAIL TMSCodes
+            THEN DO:
+               MESSAGE "Unknown delivery type" INPUT MNPCal.DeliveryType VIEW-AS ALERT-BOX.
+               lcDeliveryType = "".
+               DISPLAY lcDeliveryType WITH FRAME lis.
+               NEXT.
+            END.
+
+            lcDeliveryType = TMSCodes.CodeName.
+            DISPLAY lcDeliveryType WITH FRAME lis.
+         END.
+
          ELSE IF FRAME-FIELD = "MessageType" THEN DO:
             FIND FIRST TMSCodes WHERE
                TMSCodes.TableName = "MNPCal"   AND
@@ -839,6 +891,7 @@ PROCEDURE local-UPDATE-record:
       MNPCalBuf.MNPProduct = INPUT MNPCal.MNPProduct AND 
       MNPCalBuf.MNPTariff = INPUT MNPCal.MNPTariff AND 
       MNPCalBuf.MessageType = INPUT MNPCal.MessageType AND
+      MNPCalBuf.DeliveryType = INPUT MNPCal.DeliveryType AND
       ROWID(MNPCalBuf) NE ROWID(MNPCal) NO-LOCK NO-ERROR. 
    IF AVAIL MNPCalBuf THEN DO: 
       MESSAGE "Definition already exists!" VIEW-AS ALERT-BOX.        
@@ -865,7 +918,9 @@ PROCEDURE local-UPDATE-record:
          MNPCal.MNPProduct
          MNPCal.MNPTariff
          MNPCal.MessageType 
-         MNPCal.Periods.
+         MNPCal.Periods
+         MNPCal.DeliveryType
+         .
       
       IF NOT llNew AND llDoEvent THEN RUN StarEventMakeModifyEvent ( lhMNPCal ).
   
