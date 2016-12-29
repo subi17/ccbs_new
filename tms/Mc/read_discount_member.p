@@ -223,7 +223,9 @@ REPEAT TRANS:
          DPMember.KeyValue  = STRING(liMsSeq) 
          DPMember.ValidFrom = ldaValidFrom
          DPMember.ValidTo   = ldaValidTo          
-         DPMember.DiscValue = ldDiscount.
+         DPMember.DiscValue = ldDiscount
+         DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
+         .
    
       /* dpmember creations not logged anymore YDR-1078 */
       /*
