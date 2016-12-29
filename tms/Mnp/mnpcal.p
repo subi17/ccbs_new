@@ -866,7 +866,8 @@ PROCEDURE local-UPDATE-record:
       INPUT INPUT MNPCal.OrderChannel,
       INPUT INPUT MNPCal.Region,
       INPUT INPUT MNPCal.MNPProduct,
-      INPUT INPUT MNPCal.MNPTariff).
+      INPUT INPUT MNPCal.MNPTariff,
+      INPUT INPUT MNPCal.DeliveryType).
    
    IF liPeriodSum < liMinWindow THEN DO:
       MESSAGE "Total period sum cannot be less than minimum"

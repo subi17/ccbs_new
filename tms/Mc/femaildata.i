@@ -1154,7 +1154,8 @@ PROCEDURE pGetDELIVERY_DATE:
                              order.orderchannel,
                              ordercustomer.region,
                              lcProduct,
-                             Order.CliType).
+                             Order.CliType,
+                             Order.DeliveryType).
       ELSE ldaMNP = Order.PortingDate.
       ldaDate = ldaMNP - 1.
       ldaDate = fMNPHoliday(ldaDate,FALSE).
@@ -1236,7 +1237,8 @@ PROCEDURE pGetMNP_DATE:
                           order.orderchannel,
                           ordercustomer.region,
                           lcProduct,
-                          Order.CliType).
+                          Order.CliType,
+                          Order.DeliveryType).
    ELSE ldaMNP = Order.PortingDate.
 
    lcMonth = fTeksti(542 + MONTH(ldaMNP),(IF liLang EQ 5 THEN 5 ELSE 1)).

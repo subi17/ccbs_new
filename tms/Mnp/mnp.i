@@ -18,6 +18,33 @@
 {fgettxt.i}
 {tmsconst.i}
 
+FUNCTION fGetSpecialDelTypes RETURNS CHARACTER:
+
+   DEFINE BUFFER TMSCodes FOR TMSCodes.
+
+   DEFINE VARIABLE lcTypes AS CHARACTER NO-UNDO.
+
+   FOR EACH TMSCodes NO-LOCK WHERE
+      TMSCodes.TableName = "MNPCal"       AND
+      TMSCodes.FieldName = "DeliveryType":
+
+      IF TMSCodes.CodeValue = "0"
+      THEN NEXT.
+
+      lcTypes = lcTypes + "," + TMSCodes.CodeValue.
+
+   END.
+
+   IF lcTypes > ""
+   THEN RETURN SUBSTRING(lcTypes,2).
+
+   RETURN "".
+
+END FUNCTION.
+
+DEFINE VARIABLE gcSpecialDelTypes AS CHARACTER NO-UNDO.
+gcSpecialDelTypes = fGetSpecialDelTypes().
+
 FUNCTION fMNPCallAlarm RETURNS LOGICAL
   (INPUT pcAction  AS CHARACTER,
    INPUT pdeActTS  AS DECIMAL,
@@ -404,7 +431,8 @@ FUNCTION fMNPCalQuery RETURNS INTEGER
     icRegion AS CHAR,
     icOrderChannel AS CHAR,
     icMNPProduct AS CHAR,
-    icMNPTariff AS CHAR):
+    icMNPTariff AS CHAR,
+    iiDelType AS INT):
 
    DEFINE BUFFER MNPCal FOR MNPCal.
 
@@ -413,7 +441,8 @@ FUNCTION fMNPCalQuery RETURNS INTEGER
       MNPCal.Region       = icRegion       AND
       MNPCal.MessageType  = icMessageType  AND
       MNPCal.MNPProduct   = icMNPProduct   AND
-      MNPCal.MNPTariff = icMNPTariff:
+      MNPCal.MNPTariff    = icMNPTariff    AND
+      MNPCal.DeliveryType = iiDelType:
 
       RETURN MNPCal.Periods.
 
@@ -428,75 +457,76 @@ FUNCTION fFindMNPCal RETURNS INT
     icRegion AS CHAR,
     icOrderChannel AS CHAR,
     icMNPProduct AS CHAR,
-    icMNPTariff AS CHAR):
+    icMNPTariff AS CHAR,
+    iiDelType AS INT):
 
    DEFINE VARIABLE liPeriods AS INTEGER NO-UNDO.
 
    icOrderChannel = REPLACE(icOrderChannel,"fusion_","").
 
    /* All */
-   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, icMNPProduct, icMNPTariff).
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, icMNPProduct, icMNPTariff, iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Tariff empty */
-   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, icMNPProduct, "").
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, icMNPProduct, "", iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Product empty */
-   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, "", icMNPTariff).
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, "", icMNPTariff, iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Product & Tariff empty */
-   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, "", "").
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, icOrderChannel, "", "", iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region */
-   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, icMNPProduct, icMNPTariff).
+   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, icMNPProduct, icMNPTariff, iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region, Tariff empty */
-   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, icMNPProduct, "").
+   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, icMNPProduct, "", iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region, Product empty */
-   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, "", icMNPTariff).
+   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, "", icMNPTariff, iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region, Product & Tariff empty */
-   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, "", "").
+   liPeriods = fMNPCalQuery(icMessageType, "99", icOrderChannel, "", "", iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Channel empty */
-   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", icMNPProduct, icMNPTariff).
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", icMNPProduct, icMNPTariff, iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Channel empty & Tariff empty */
-   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", icMNPProduct, "").
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", icMNPProduct, "", iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Channel empty & Product empty */
-   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", "", icMNPTariff).
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", "", icMNPTariff, iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* Channel empty, Product & Tariff empty */
-   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", "", "").
+   liPeriods = fMNPCalQuery(icMessageType, icRegion, "", "", "", iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region, Channel empty */
-   liPeriods = fMNPCalQuery(icMessageType, "99", "", icMNPProduct, icMNPTariff).
+   liPeriods = fMNPCalQuery(icMessageType, "99", "", icMNPProduct, icMNPTariff, iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region, Channel empty & Tariff empty */
-   liPeriods = fMNPCalQuery(icMessageType, "99", "", icMNPProduct, "").
+   liPeriods = fMNPCalQuery(icMessageType, "99", "", icMNPProduct, "", iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region, Channel empty & Product empty */
-   liPeriods = fMNPCalQuery(icMessageType, "99", "", "", icMNPTariff).
+   liPeriods = fMNPCalQuery(icMessageType, "99", "", "", icMNPTariff, iiDelType).
    IF liPeriods NE ? THEN RETURN liPeriods.
 
    /* General Region, Channel empty, Product & Tariff empty
       (use a default value if calendar is not found) */
-   liPeriods = fMNPCalQuery(icMessageType, "99", "", "", "").
+   liPeriods = fMNPCalQuery(icMessageType, "99", "", "", "", iiDelType).
 
    RETURN liPeriods.
 
@@ -522,7 +552,8 @@ FUNCTION fMNPChangeWindowDate RETURNS DATE (
    icOrderChannel AS CHARACTER,
    icRegion       AS CHARACTER,
    icProduct      AS CHARACTER,
-   icTariff       AS CHARACTER):
+   icTariff       AS CHARACTER,
+   iiDelType      AS INTEGER):
 
    DEFINE VARIABLE liPeriods AS INTEGER NO-UNDO INIT 0. 
    DEFINE VARIABLE ldDueDate AS DATE NO-UNDO.
@@ -534,7 +565,12 @@ FUNCTION fMNPChangeWindowDate RETURNS DATE (
    DEFINE VARIABLE lcTypes AS CHARACTER INITIAL "ASOL,ACON,APOR" NO-UNDO.
 
    DO lii = 1 TO NUM-ENTRIES(lcTypes):
-      liCalPeriods = fFindMNPCal(ENTRY(lii,lcTypes), icRegion, icOrderChannel,icProduct,icTariff).
+      liCalPeriods = ?.
+      IF LOOKUP(STRING(iiDelType),gcSpecialDelTypes) > 0
+      THEN liCalPeriods = fFindMNPCal(ENTRY(lii,lcTypes), icRegion, icOrderChannel,icProduct,icTariff,iiDelType).
+      IF liCalPeriods EQ ?
+      THEN liCalPeriods = fFindMNPCal(ENTRY(lii,lcTypes), icRegion, icOrderChannel,icProduct,icTariff,0).
+
       IF liCalPeriods NE ? THEN liPeriods = liPeriods + liCalPeriods.
    END.
 
@@ -564,7 +600,8 @@ FUNCTION fMNPTotalPeriods RETURNS INT (
    icOrderChannel AS CHARACTER,
    icRegion       AS CHARACTER,
    icProduct      AS CHARACTER,
-   icTariff       AS CHARACTER):
+   icTariff       AS CHARACTER,
+   iiDelType      AS INTEGER):
 
    DEFINE VARIABLE lcAllMessages AS CHARACTER NO-UNDO INIT "ASOL,ACON,APOR".
    DEFINE VARIABLE lcMessages    AS CHARACTER NO-UNDO.
@@ -572,6 +609,9 @@ FUNCTION fMNPTotalPeriods RETURNS INT (
    DEFINE VARIABLE liCounter     AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lii           AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liCalPeriods  AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE llSpecialType AS LOGICAL   NO-UNDO.
+
+   llSpecialType = LOOKUP(STRING(iiDelType),gcSpecialDelTypes) > 0.
 
    DO lii = 1 TO NUM-ENTRIES(lcAllMessages):
       IF ENTRY(lii,lcAllMessages) NE icMessageType
@@ -582,11 +622,22 @@ FUNCTION fMNPTotalPeriods RETURNS INT (
    IF icRegion NE "99" AND icOrderChannel NE ""
    THEN DO:
       DO lii = 1 TO NUM-ENTRIES(lcMessages):
-         liCalPeriods = fFindMNPCal(ENTRY(lii,lcMessages),
-                                    icRegion,
-                                    icOrderChannel,
-                                    icProduct,
-                                    icTariff).
+         liCalPeriods = ?.
+         IF llSpecialType
+         THEN liCalPeriods = fFindMNPCal(ENTRY(lii,lcMessages),
+                                         icRegion,
+                                         icOrderChannel,
+                                         icProduct,
+                                         icTariff,
+                                         iiDelType).
+         IF liCalPeriods EQ ?
+         THEN liCalPeriods = fFindMNPCal(ENTRY(lii,lcMessages),
+                                         icRegion,
+                                         icOrderChannel,
+                                         icProduct,
+                                         icTariff,
+                                         0).
+
          IF liCalPeriods NE ?
          THEN iiPeriods = iiPeriods + liCalPeriods.
       END.
@@ -621,11 +672,23 @@ FUNCTION fMNPTotalPeriods RETURNS INT (
 
       liCounter = iiPeriods.
       DO lii = 1 TO NUM-ENTRIES(lcMessages):
-         liCalPeriods = fFindMNPCal(ENTRY(lii,lcMessages),
-                                    MNPCal.Region,
-                                    MNPCal.OrderChannel,
-                                    icProduct,
-                                    icTariff).
+
+         liCalPeriods = ?.
+         IF llSpecialType
+         THEN liCalPeriods = fFindMNPCal(ENTRY(lii,lcMessages),
+                                         MNPCal.Region,
+                                         MNPCal.OrderChannel,
+                                         icProduct,
+                                         icTariff,
+                                         iiDelType).
+         IF liCalPeriods EQ ?
+         THEN liCalPeriods = fFindMNPCal(ENTRY(lii,lcMessages),
+                                         MNPCal.Region,
+                                         MNPCal.OrderChannel,
+                                         icProduct,
+                                         icTariff,
+                                         0).
+
          IF liCalPeriods NE ?
          THEN liCounter = liCounter + liCalPeriods.
       END.

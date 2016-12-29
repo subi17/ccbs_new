@@ -1042,7 +1042,8 @@ IF NOT llErrors THEN DO:
                                 order.orderchannel,
                                 ordercustomer.region,
                                 lcProduct,
-                                lcTariffType).
+                                lcTariffType,
+                                Order.DeliveryType).
          ELSE ldaMNP = Order.PortingDate.
 
          lcMonth = fTeksti(542 + MONTH(ldaMNP),(IF liLanguage EQ 5 THEN 5 ELSE 1)).
