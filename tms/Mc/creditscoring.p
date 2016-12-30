@@ -224,7 +224,10 @@ IF pcActionType EQ "ORDER" THEN DO:
    DO:
       ASSIGN pcDelName       = OrderCustomer.Address                   /* 11 */ 
              pcDelZip        = OrderCustomer.ZIP                       /* 12 */
-             lcUPSCode       = OrderCustomer.KialaCode.
+             lcUPSCode       = IF Order.DeliveryType = {&ORDER_DELTYPE_POS} AND
+                                  OrderCustomer.KialaCode > ""
+                               THEN "YOI_" + OrderCustomer.KialaCode
+                               ELSE OrderCustomer.KialaCode.
    END. 
 
    FIND FIRST OrderCustomer WHERE

@@ -171,7 +171,7 @@ END FUNCTION.
 
 FUNCTION _json_datetime RETURN CHAR
       ( cval AS CHAR ):
-    RETURN '\{"json_class":"DateTime",' +
+    RETURN '~{"json_class":"DateTime",' +
              '"y":' + SUBSTRING(cval,1,4) + ',' +
              '"m":' + STRING(INT(SUBSTRING(cval,5,2))) + ',' +
              '"d":' + STRING(INT(SUBSTRING(cval,7,2))) + ',' +
@@ -198,7 +198,7 @@ FUNCTION _serialize_json RETURN CHAR
             lcResult = lcResult + "[" + _serialize_json(
                     lbResp.parent + ',' + STRING(lbResp.position)) + "]".
         END. ELSE IF lbResp.type EQ "struct" THEN DO:
-            lcResult = lcResult + "\{" + _serialize_json(
+            lcResult = lcResult + "~{" + _serialize_json(
                     lbResp.parent + ',' + STRING(lbResp.position)) + "}".
         END. ELSE IF lbResp.type EQ "string" THEN DO:
             lcResult = lcResult + '"' + REPLACE(REPLACE(lbResp.cvalue,
