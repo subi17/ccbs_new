@@ -91,8 +91,10 @@ PROCEDURE pGetCustomerSubscriptions:
    lcBundleId = fGetDSSId(iiInvCust,ldPeriodTo).
    
    FOR EACH MsOwner NO-LOCK WHERE
-            MsOwner.InvCust = iiInvCust
-   BREAK BY MsOwner.MsSeq:
+            MsOwner.InvCust = iiInvCust AND
+            MsOwner.TSEnd   >= ldPeriodFrom AND
+            MsOwner.TsBegin <= ldPeriodTo
+   BREAK BY MsOwner.MsSeq BY MsOwner.TSEnd DESC:
    
       IF FIRST-OF(MsOwner.MsSeq) THEN DO:
 
