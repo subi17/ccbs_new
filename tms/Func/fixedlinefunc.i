@@ -130,6 +130,9 @@ FUNCTION fCanTerminateConvergenceTariff RETURNS LOGICAL
 
 END.
 
+/* Check if convergent contract based by subscription name.
+   All convergent subscription name starts CONTDSL (ADSL) or 
+   CONTFH (fiber)*/
 FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
    (icContract AS CHAR):
    IF icContract BEGINS "CONTDSL" OR
@@ -138,6 +141,14 @@ FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
    RETURN FALSE.
 END.   
 
+/* Check convergent STC compability. Special handling that allows convergent
+   STC between subscription types which have same fixed line part.
+   Convergent ADSL subscription can be changed to other ADSL
+   Convergent fiber 50MB can be changed to other convergent 50MB fiber.
+   Convergent fiber 300MB can be changed to other convergent 300MB fiber.
+   Currently comparison made by using naming rules. If some new naming
+   will be introduced, maybe should be changed to use clitype.fixedlinetype
+   and clitype.FixedLineDownload fields. */
 FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
    (INPUT icOldCliType AS CHAR,
     INPUT icNewCliType AS CHAR):
