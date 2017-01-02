@@ -24,10 +24,17 @@
 &GLOBAL-DEFINE TAXCLASS   "0,1,2"   /* 0: Duty free / 1: Usage / 2: Terminals */
 
 &GLOBAL-DEFINE CT      "CLIType"  
+&GLOBAL-DEFINE TN      "TariffName"
 &GLOBAL-DEFINE TB      "TariffBundle"
 &GLOBAL-DEFINE BB      "BaseBundle"
+&GLOBAL-DEFINE FLBB    "FixedLineBaseBundle"
+&GLOBAL-DEFINE AB      "AllowedBundles"
+&GLOBAL-DEFINE STC_BT  "BundlesForTerminateOnSTC"
+&GLOBAL-DEFINE STC_SR  "ServicesForReCreateOnSTC"
 &GLOBAL-DEFINE LT      "LineType"
 &GLOBAL-DEFINE FLT     "FixedLineType"
+&GLOBAL-DEFINE FLD     "FixedLineDownload"
+&GLOBAL-DEFINE FLU     "FixedLineUpload"
 &GLOBAL-DEFINE CF      "CommercialFee"
 &GLOBAL-DEFINE CMF     "ComparisonFee"
 &GLOBAL-DEFINE SC      "ServiceClass"
@@ -35,6 +42,7 @@
 &GLOBAL-DEFINE STCS    "STCStatus"
 &GLOBAL-DEFINE PT      "PaymentType"
 &GLOBAL-DEFINE UT      "UsageType"
+&GLOBAL-DEFINE CSF     "CopyServicesFromCliType"
 &GLOBAL-DEFINE FMFC    "FirstMonthFeeCalc" 
 &GLOBAL-DEFINE LMFC    "LastMonthFeeCalc"
 &GLOBAL-DEFINE TOC     "TypeOfContract"
@@ -58,7 +66,6 @@
 &GLOBAL-DEFINE CONTL   "Contrato"
 &GLOBAL-DEFINE TARJ    "Tarjeta"
 &GLOBAL-DEFINE MOF     "MonthlyFee"
-&GLOBAL-DEFINE TN      "TariffName"
 &GLOBAL-DEFINE BS      "BonoSupport"
 /*convergence project*/
 &GLOBAL-DEFINE BUPS     "BundleUpsell"

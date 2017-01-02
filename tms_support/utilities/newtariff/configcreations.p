@@ -7,7 +7,7 @@
   CHANGED ......:
   Version ......: Yoigo
   ----------------------------------------------------------------------*/
-
+ROUTINE-LEVEL ON ERROR UNDO, THROW.
 /* ***************************  Definitions  ************************** */
 {commpaa.i}
 katun = "Cron".
@@ -17,6 +17,7 @@ gcBrand = "1".
 {ftransdir.i}
 {tariffconfig.i}
 {tariffcons.i}
+{fixedlinefunc.i}
 
 DEFINE BUFFER bCTServPac  FOR CTServPac.
 DEFINE BUFFER bCTServEl   FOR CTServEl.
@@ -71,52 +72,41 @@ DEFINE VARIABLE liCCN          AS INTEGER   NO-UNDO.
 IF icDataLimit NE "" THEN
    lcBDestList = "DATA_IN,DATA_OUT".
 
-IF icVoiceLimit NE "" OR 
-   icBDestLimit NE "" THEN 
-   lcBDestList = IF lcBDestList NE "" THEN 
-                    lcBDestList + "," + "VOICE_IN,VOICE_OUT"
-                 ELSE "VOICE_IN,VOICE_OUT". 
+IF icVoiceLimit NE "" OR icBDestLimit NE "" THEN 
+   lcBDestList = lcBDestList + (IF lcBDestList NE "" THEN "," ELSE "") + "VOICE_IN,VOICE_OUT". 
                          
-DO liBDCount = 1 TO NUM-ENTRIES(lcBDestList):
- 
-   ASSIGN lcBDestination = icTariffCode + "_" +
-                           TRIM(ENTRY(liBDCount,lcBDestList,","))
-          liCCN          = IF TRIM(ENTRY(liBDCount,lcBDestList,",")) BEGINS "DATA" 
-                           THEN 93 ELSE 81.
+DO liBDCount = 1 TO NUM-ENTRIES(lcBDestList): 
+   ASSIGN 
+      lcBDestination = icTariffCode + "_" + TRIM(ENTRY(liBDCount,lcBDestList,","))
+      liCCN          = (IF TRIM(ENTRY(liBDCount,lcBDestList,",")) BEGINS "DATA" THEN 
+                           93 
+                        ELSE 
+                           81).
     
-   FIND FIRST BDest WHERE 
-              BDest.Brand = gcBrand        AND 
-              BDest.BDest = lcBDestination NO-LOCK NO-ERROR.
- 
-   IF NOT AVAILABLE BDest THEN DO:
-    
-      FIND LAST BDest USE-INDEX 
-                BDestID NO-LOCK NO-ERROR.
-    
+   FIND FIRST BDest WHERE BDest.Brand = gcBrand AND BDest.BDest = lcBDestination NO-LOCK NO-ERROR. 
+   IF NOT AVAILABLE BDest THEN 
+   DO:    
+      FIND LAST BDest USE-INDEX BDestID NO-LOCK NO-ERROR.    
       IF AVAILABLE BDest THEN 
          liBDLValue = BDest.BDestID + 1.
-      ELSE liBDLValue = 1.
+      ELSE 
+         liBDLValue = 1.
      
       CREATE BDest. 
       ASSIGN 
          BDest.Brand    = gcBrand    
          BDest.BDestID  = liBDLValue
          BDest.BDest    = lcBDestination
-         BDest.BDName   = icTariffCode + " " + 
-                          TRIM(ENTRY(liBDCount,lcBDestList,","))
+         BDest.BDName   = icTariffCode + " " + TRIM(ENTRY(liBDCount,lcBDestList,","))
          BDest.DestType = 0 
          BDest.CCN      = liCCN
          BDest.Class    = 1
          BDest.FromDate = TODAY 
-         BDest.ToDate   = 12/31/49 NO-ERROR. 
-       
-      IF ERROR-STATUS:ERROR THEN 
-         RETURN "Creating BDest".
-               
+         BDest.ToDate   = DATE(12,31,2049).      
    END.                 
 END.
  
-RETURN "OK".
+RETURN "".
    
 END PROCEDURE.    
 
@@ -124,72 +114,75 @@ PROCEDURE pServLimitGroup:
 DEFINE INPUT PARAMETER icTariffCode AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER icTariffName AS CHARACTER NO-UNDO.
 
-   FIND FIRST ServiceLimitGroup WHERE 
-              ServiceLimitGroup.GroupCode = icTariffCode NO-LOCK NO-ERROR.
-              
-   IF AVAILABLE ServiceLimitGroup THEN
-      RETURN "ServiceLimitGroup already exists".              
+   FIND FIRST ServiceLimitGroup WHERE ServiceLimitGroup.Brand = gcBrand AND ServiceLimitGroup.GroupCode = icTariffCode NO-LOCK NO-ERROR.
+   IF NOT AVAILABLE ServiceLimitGroup THEN
+   DO:
+      CREATE ServiceLimitGroup.
+      ASSIGN 
+         ServiceLimitGroup.Brand     = gcBrand
+         ServiceLimitGroup.GroupCode = icTariffCode    
+         ServiceLimitGroup.GroupName = icTariffName    
+         ServiceLimitGroup.ValidFrom = TODAY 
+         ServiceLimitGroup.ValidTo   = DATE(12,31,2049).
+   END.  
 
-   CREATE ServiceLimitGroup.
-   ASSIGN 
-      ServiceLimitGroup.Brand     = gcBrand
-      ServiceLimitGroup.GroupCode = icTariffCode    
-      ServiceLimitGroup.GroupName = icTariffName    
-      ServiceLimitGroup.ValidFrom = TODAY 
-      ServiceLimitGroup.ValidTo   = 12/31/2049 NO-ERROR.    
-   
-   IF ERROR-STATUS:ERROR THEN 
-      RETURN "Creating ServiceLimitGroup".
-
-   RETURN "OK".
+   RETURN "".
    
 END PROCEDURE.
 
 PROCEDURE pServiceLimit:
-DEFINE INPUT  PARAMETER icTariffCode  AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icTariff      AS CHARACTER NO-UNDO.  
-DEFINE INPUT  PARAMETER icTariffName  AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icTariffAmt   AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icBDLimit     AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icFMServLimit AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icLMServLimit AS CHARACTER NO-UNDO.  
-DEFINE INPUT  PARAMETER icDialType    AS INTEGER   NO-UNDO.  
-DEFINE OUTPUT PARAMETER liSLSeq       AS INTEGER   NO-UNDO.
+   DEFINE INPUT  PARAMETER icGroupCode   AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icSLCode      AS CHARACTER NO-UNDO.  
+   DEFINE INPUT  PARAMETER icTariffName  AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icTariffAmt   AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icBDLimit     AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icFMServLimit AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icLMServLimit AS CHARACTER NO-UNDO.  
+   DEFINE INPUT  PARAMETER iiDialType    AS INTEGER   NO-UNDO.  
+   DEFINE OUTPUT PARAMETER oiSLSeq       AS INTEGER   NO-UNDO.
 
-DEFINE VARIABLE liInclUnit AS INTEGER NO-UNDO.
-
-   IF ENTRY(2,icTariff,"_") EQ "DATA" THEN 
-      liInclUnit = 4. 
-   ELSE IF ENTRY(2,icTariff,"_") EQ "QTY" THEN
-      liInclUnit = 7. 
-   ELSE liInclUnit = 1.
+   DEFINE VARIABLE liInclUnit AS INTEGER NO-UNDO.
    
-   FIND LAST ServiceLimit NO-LOCK USE-INDEX SLSeq NO-ERROR.
-               
-   IF NOT AVAILABLE ServiceLimit 
-      THEN liSLSeq = 1.
-   ELSE liSLSeq = ServiceLimit.SLSeq + 1.
+   DEFINE BUFFER bf_ServiceLimit FOR ServiceLimit.
+
+   IF ENTRY(2,icSLCode,"_") EQ "DATA" THEN 
+      liInclUnit = 4. 
+   ELSE IF ENTRY(2,icSLCode,"_") EQ "QTY" THEN
+      liInclUnit = 7. 
+   ELSE 
+      liInclUnit = 1.
+   
+   FIND FIRST ServiceLimit WHERE ServiceLimit.GroupCode = icGroupCode AND 
+                                 ServiceLimit.SLCode    = icSLCode     AND 
+                                 ServiceLimit.DialType  = iiDialType   AND 
+                                 ServiceLimit.ValidFrom <= TODAY       AND
+                                 ServiceLimit.ValidTo   >= TODAY       NO-LOCK NO-ERROR.
+   IF NOT AVAILABLE ServiceLimit THEN 
+   DO:                                  
+      FIND LAST bf_ServiceLimit NO-LOCK USE-INDEX SLSeq NO-ERROR.               
+      IF AVAILABLE bf_ServiceLimit THEN 
+         ASSIGN oiSLSeq = bf_ServiceLimit.SLSeq + 1.          
+      ELSE 
+         ASSIGN oiSLSeq = 1.
                   
-   CREATE ServiceLimit.
-   ASSIGN 
-      ServiceLimit.GroupCode      = icTariffCode
-      ServiceLimit.SLCode         = icTariff                                                    
-      ServiceLimit.SLSeq          = liSLSeq 
-      ServiceLimit.SLName         = icTariffName                             
-      ServiceLimit.DialType       = icDialType
-      ServiceLimit.InclAmt        = DECIMAL(icTariffAmt)                  
-      ServiceLimit.InclUnit       = liInclUnit
-      ServiceLimit.BDestLimit     = INTEGER(icBDLimit)
-      ServiceLimit.ValidFrom      = TODAY 
-      ServiceLimit.ValidTo        = 12/31/2049  
-      ServiceLimit.FirstMonthCalc = IF icFMServLimit EQ "Full" THEN 0 ELSE 1
-      ServiceLimit.LastMonthCalc  = IF icLMServLimit EQ "Full" THEN 0 ELSE 1
-      Servicelimit.Web            = 1  NO-ERROR.                          
-        
-   IF ERROR-STATUS:ERROR THEN 
-      RETURN "Creating ServiceLimit".
-   ELSE            
-      RETURN "OK".
+      CREATE ServiceLimit.
+      ASSIGN 
+         ServiceLimit.GroupCode      = icGroupCode
+         ServiceLimit.SLCode         = icSLCode                                                    
+         ServiceLimit.SLSeq          = oiSLSeq 
+         ServiceLimit.SLName         = icTariffName                             
+         ServiceLimit.DialType       = iiDialType
+         ServiceLimit.InclAmt        = DECIMAL(icTariffAmt)                  
+         ServiceLimit.InclUnit       = liInclUnit
+         ServiceLimit.BDestLimit     = INTEGER(icBDLimit)
+         ServiceLimit.ValidFrom      = TODAY 
+         ServiceLimit.ValidTo        = DATE(12,31,2049)
+         ServiceLimit.FirstMonthCalc = (IF icFMServLimit EQ "Full" THEN 0 ELSE 1)
+         ServiceLimit.LastMonthCalc  = (IF icLMServLimit EQ "Full" THEN 0 ELSE 1)
+         Servicelimit.Web            = 1.                          
+   END.
+   
+   RETURN "".
       
 END PROCEDURE.    
 
@@ -207,42 +200,25 @@ DEFINE VARIABLE liSTCount       AS INTEGER   NO-UNDO.
       ASSIGN
          lcFinalLimitIN  = icTariffCode + "_DATA_IN"
          lcFinalLimitOUT = icTariffCode + "_DATA_OUT"
-         lcBCList        = "14100001".
-   
-   IF icTariffLimit EQ "MIN" OR 
-      icTariffLimit EQ "QTY" THEN 
+         lcBCList        = "14100001".   
+   ELSE IF icTariffLimit EQ "MIN" OR icTariffLimit EQ "QTY" THEN 
       ASSIGN
          lcFinalLimitIN  = icTariffCode + "_VOICE_IN"
          lcFinalLimitOUT = icTariffCode + "_VOICE_OUT"
-         lcBCList        = "10100001,10100003,10100005,CFOTHER,CFYOIGO".                   
-
-   FIND FIRST BDest WHERE 
-              BDest.Brand = gcBrand AND 
-              BDest.BDest = lcFinalLimitIN NO-LOCK NO-ERROR.
-   
-   IF NOT AVAILABLE BDest THEN                 
-      RETURN "ERROR: BDest-IN doesn't exists".             
-
-   FIND FIRST BDest WHERE 
-              BDest.Brand = gcBrand AND 
-              BDest.BDest = lcFinalLimitOUT NO-LOCK NO-ERROR.
-
-   IF NOT AVAILABLE BDest THEN 
-      RETURN "ERROR: BDest-OUT doesn't exists".             
+         lcBCList        = "10100001,10100003,10100005,CFOTHER,CFYOIGO".   
 
    DO liSTCount = 1 TO NUM-ENTRIES(lcBCList):  
+
       CREATE ServiceLimitTarget. 
       ASSIGN 
          ServiceLimitTarget.Slseq          = iiSLSeq
          ServiceLimitTarget.ServiceLMember = ENTRY(liSTCount,lcBCList,",")
          ServiceLimitTarget.InsideRate     = lcFinalLimitIN    /* Need to know */
-         ServiceLimitTarget.outsideRate    = lcFinalLimitOUT NO-ERROR.
-   
-      IF ERROR-STATUS:ERROR THEN 
-         RETURN "ERROR: Creating ServiceLimitTarget".
+         ServiceLimitTarget.outsideRate    = lcFinalLimitOUT.     
+
    END.
    
-   RETURN "OK".
+   RETURN "".
                 
 END PROCEDURE.    
 
@@ -515,23 +491,25 @@ DEFINE VARIABLE liComponentID AS INTEGER NO-UNDO.
 END PROCEDURE.     
 
 PROCEDURE pCreateCLIType:
-DEFINE INPUT  PARAMETER icCLIType        AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icCLIName        AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icBaseBundle     AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icLineType       AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icFixLineType    AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icCommFee        AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icComparisonFee  AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icServClass      AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icWebStatCode    AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icStatCode       AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icPayType        AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icUsageType      AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icRateplan       AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER llgCTServPac     AS LOGICAL   NO-UNDO.
-DEFINE INPUT  PARAMETER lcMainPTariff    AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER lcTariffBundle   AS CHARACTER NO-UNDO.
-DEFINE OUTPUT PARAMETER ocCLIType        AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icCLIType           AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icCLIName           AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icBaseBundle        AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icLineType          AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icFixLineType       AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icFixedLineDownload AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icFixedLineUpload   AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icCommFee           AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icComparisonFee     AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icServClass         AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icWebStatCode       AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icStatCode          AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icPayType           AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icUsageType         AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icRateplan          AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER llgCTServPac        AS LOGICAL   NO-UNDO.
+DEFINE INPUT  PARAMETER lcMainPTariff       AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER lcTariffBundle      AS CHARACTER NO-UNDO.
+DEFINE OUTPUT PARAMETER ocCLIType           AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE liFinalBT  AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liFinalCR  AS INTEGER   NO-UNDO.
@@ -578,7 +556,9 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
                                                     icLineType))
          CLIType.FixedLineType = INTEGER(fTMSCValue("CLIType",
                                                     "FixedLineType",
-                                                    icFixLineType))
+                                                    icFixLineType))         
+         CliType.FixedLineDownload = icFixedLineDownload
+         CliType.FixedLineUpload   = icFixedLineUpload         
          CLIType.CommercialFee = DECIMAL(icCommFee)
          CLIType.CompareFee    = DECIMAL(icComparisonFee)
          ClIType.ServiceClass  = icServClass
@@ -625,6 +605,10 @@ DEFINE INPUT PARAMETER icPayType AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE liCTServEl AS INTEGER NO-UNDO.
 
+   IF fIsConvergenceTariff(icCLIType) THEN
+      FIND FIRST CLIType WHERE 
+                 CLIType.Brand   = gcBrand  AND 
+                 CLIType.CLIType = "CONTDSL45"  NO-LOCK NO-ERROR.
    IF icPayType EQ "Postpaid" THEN  
       FIND FIRST CLIType WHERE 
                  CLIType.Brand   = gcBrand  AND 
@@ -691,4 +675,258 @@ DEFINE VARIABLE liCTServEl AS INTEGER NO-UNDO.
    RETURN "OK".
                              
 END PROCEDURE.               
-  
+
+FUNCTION fGetNextMatrixPriority RETURNS INTEGER 
+   (icKey AS CHARACTER):
+
+   DEFINE BUFFER bf_Matrix FOR Matrix.
+
+   FIND LAST bf_Matrix WHERE bf_Matrix.mxkey = icKey NO-LOCK NO-ERROR.
+   IF AVAILABLE bf_Matrix THEN 
+      RETURN (bf_Matrix.Prior + 1).
+   ELSE 
+      RETURN 1.  
+
+END FUNCTION.    
+
+
+FUNCTION fGetNextRequestActionSequence RETURNS INTEGER 
+   ():
+   DEFINE BUFFER bf_RequestAction FOR RequestAction.
+
+   FIND LAST bf_RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
+   IF AVAILABLE bf_RequestAction THEN 
+      RETURN (bf_RequestAction.RequestActionID + 1).
+   ELSE 
+      RETURN 1.
+
+END FUNCTION.    
+
+FUNCTION fPrepareRequestActionParam RETURNS LOGICAL
+  (INPUT icMobileBundles            AS CHARACTER,
+   INPUT icFixedLineBundles         AS CHARACTER,
+   INPUT icBundlesForTerminateOnSTC AS CHARACTER,
+   INPUT icServicesRecreated        AS CHARACTER,
+   OUTPUT ocReqTypeList             AS CHARACTER,
+   OUTPUT ocActionList              AS CHARACTER,
+   OUTPUT ocActionKeyList           AS CHARACTER,
+   OUTPUT ocActionTypeList          AS CHARACTER):
+
+   DEFINE VARIABLE liCnt             AS INTEGER   NO-UNDO.   
+   DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO.   
+
+   IF icMobileBundles > "" THEN 
+   DO liCount = 1 TO NUM-ENTRIES(icMobileBundles):    
+
+      DO liCnt = 1 TO 2:
+        ASSIGN 
+           ocReqTypeList     = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
+                                                                                               STRING({&REQTYPE_SUBSCRIPTION_CREATE}) 
+                                                                                            ELSE 
+                                                                                               STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})) 
+           ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
+           ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icMobileBundles)
+           ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
+      END.   
+
+   END.
+
+   IF icFixedLineBundles > "" THEN 
+   DO liCount = 1 TO NUM-ENTRIES(icFixedLineBundles):    
+
+      DO liCnt = 1 TO 2: 
+         ASSIGN 
+            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
+                                                                                            STRING({&REQTYPE_FIXED_LINE_CREATE}) 
+                                                                                         ELSE 
+                                                                                            STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}))  
+            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
+            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icFixedLineBundles)
+            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
+      END.   
+   END.   
+
+   IF icBundlesForTerminateOnSTC > "" THEN 
+   DO liCount = 1 TO NUM-ENTRIES(icBundlesForTerminateOnSTC):
+      ASSIGN 
+            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})  
+            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "TERMINATE"
+            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icBundlesForTerminateOnSTC)
+            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
+   END.
+
+   IF icServicesRecreated > "" THEN 
+   DO liCount = 1 TO NUM-ENTRIES(icServicesRecreated):
+      ASSIGN 
+            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})  
+            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "RECREATE"
+            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icServicesRecreated)
+            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "CTServPac".
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
+PROCEDURE pRequestAction:
+   DEFINE INPUT PARAMETER icCLIType                  AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icMobileBundles            AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icFixedLineBundles         AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icBundlesForTerminateOnSTC AS CHARACTER NO-UNDO.   
+   DEFINE INPUT PARAMETER icServicesRecreated        AS CHARACTER NO-UNDO.
+   
+   DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO.   
+   DEFINE VARIABLE liRequestType     AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcRequestTypeList AS CHARACTER NO-UNDO.
+   
+   DEFINE VARIABLE liAction          AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcAction          AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcActionType      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcActionKey       AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcActionList      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcActionKeyList   AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcActionTypeList  AS CHARACTER NO-UNDO.
+
+   /* TODO: SMS related configuration */
+   FIND FIRST CliType WHERE ClIType.Brand = gcBrand AND CliType.ClIType = icCLIType NO-LOCK NO-ERROR.
+   IF NOT AVAIL CliType THEN 
+       RETURN "ERROR: CLIType doesn't exists for creating request actions".
+
+   /* This is to add mobile packages and fixed line packages to RequestType's subscription creation, fixedline activation & STC */    
+   fPrepareRequestActionParam(icMobileBundles,
+                              icFixedLineBundles,
+                              icBundlesForTerminateOnSTC,
+                              icServicesRecreated,
+                              OUTPUT lcRequestTypeList,
+                              OUTPUT lcActionList,
+                              OUTPUT lcActionKeyList,
+                              OUTPUT lcActionTypeList).      
+
+   IF lcActionTypeList = "" THEN
+      RETURN "ERROR: Failed to add configurations to request action".
+
+   DO liCount = 1 TO NUM-ENTRIES(lcRequestTypeList):
+
+      ASSIGN
+         lcAction      = ENTRY(liCount, lcActionList)
+         liAction      = (IF lcAction = "CREATE" THEN 
+                             1 
+                          ELSE IF lcAction = "TERMINATE" THEN 
+                             2 
+                          ELSE IF lcAction = "RECREATE" THEN 
+                             3 
+                          ELSE 
+                            1)
+         lcActionKey   = ENTRY(liCount, lcActionKeyList)
+         lcActionType  = ENTRY(liCount, lcActionTypeList)
+         liRequestType = INT(ENTRY(liCount, lcRequestTypeList)).
+
+      FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand         AND
+                                     RequestAction.ReqType    = liRequestType   AND
+                                     RequestAction.CliType    = CliType.CliType AND
+                                     RequestAction.ActionType = lcActionType    AND
+                                     RequestAction.ActionKey  = lcActionKey     AND
+                                     RequestAction.Action     = liAction        AND
+                                     RequestAction.ValidFrom <= TODAY           AND
+                                     RequestAction.ValidTo   >= TODAY           NO-LOCK NO-ERROR.
+      IF NOT AVAIL RequestAction THEN
+      DO:
+         CREATE RequestAction.
+         ASSIGN     
+            RequestAction.Brand           = gcBrand
+            RequestAction.RequestActionID = fGetNextRequestActionSequence()
+            RequestAction.ReqType         = liRequestType
+            RequestAction.CLIType         = CliType.CliType
+            RequestAction.PayType         = 0
+            RequestAction.Action          = liAction
+            RequestAction.ActionKey       = lcActionKey
+            RequestAction.ActionType      = lcActionType           
+            RequestAction.ValidFrom       = TODAY
+            RequestAction.ValidTo         = DATE(12,31,2049). 
+      END.
+   END.  
+
+   RETURN "OK".
+
+END PROCEDURE.
+
+PROCEDURE pMatrix:
+   DEFINE INPUT PARAMETER icCLIType        AS CHARACTER NO-UNDO.   
+   DEFINE INPUT PARAMETER icAllowedBundles AS CHARACTER NO-UNDO.
+
+   DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
+
+   CREATE Matrix.
+   ASSIGN
+      Matrix.Brand  = "1"
+      Matrix.MXSeq  = NEXT-VALUE(imsi)
+      Matrix.mxkey  = "PERCONTR"
+      Matrix.mxname = "Allowed bundles for '" + icCLIType + "'"
+      Matrix.prior  = fGetNextMatrixPriority("PERCONTR")
+      Matrix.mxres  = 1.
+   
+   CREATE MXItem.
+   ASSIGN
+      MXItem.MxSeq   = Matrix.MXSeq
+      MXItem.MxValue = icCLIType
+      MXItem.MxName  = "SubsTypeTo".   
+
+   DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles):
+
+      FIND FIRST MxItem WHERE MxItem.MxSeq = Matrix.MXSeq AND MxItem.MxName = "PerContract" AND MxItem.MxValue = ENTRY(liCount,icAllowedBundles) NO-LOCK NO-ERROR.
+      IF NOT AVAIL MxItem THEN 
+      DO:      
+         CREATE MXItem.
+         ASSIGN
+            MXItem.MxSeq   = Matrix.MXSeq
+            MXItem.MxValue = ENTRY(liCount,icAllowedBundles)
+            MXItem.MxName  = "PerContract".   
+      END.   
+
+   END.
+
+   RETURN "OK".
+
+END PROCEDURE.
+
+PROCEDURE pUpdateDataBundleTMSParam:
+   DEFINE INPUT PARAMETER icCLIType AS CHARACTER NO-UNDO.   
+
+   FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "DATA_BUNDLE_BASED_CLITYPES" NO-LOCK NO-ERROR.
+   IF AVAIL TMSParam THEN 
+   DO:
+      IF LOOKUP(icCliType, TMSParam.CharVal) = 0 THEN 
+      DO:
+         FIND CURRENT TMSParam EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+         IF LOCKED TMSParam THEN 
+            RETURN "ERROR: DATA_BUNDLE TMSParam failed to update.".
+
+         IF AVAIL TMSParam THEN      
+            ASSIGN TMSParam.CharVal = TMSParam.CharVal + (IF TMSParam.CharVal <> "" THEN "," ELSE "") + icCLIType. 
+      END.         
+   END.
+
+   RETURN "OK".
+
+END PROCEDURE.
+
+PROCEDURE pUpdateVoiceSusbscriptionTypeTMSParam:
+   DEFINE INPUT PARAMETER icCLIType AS CHARACTER NO-UNDO.   
+
+   FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "POSTPAID_VOICE_TARIFFS" NO-LOCK NO-ERROR.
+   IF AVAIL TMSParam THEN 
+   DO:
+      IF LOOKUP(icCliType, TMSParam.CharVal) = 0 THEN 
+      DO:
+         FIND CURRENT TMSParam EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+         IF LOCKED TMSParam THEN 
+            RETURN "ERROR: VOICE_TARIFF TMSParam failed to update.".
+
+         IF AVAIL TMSParam THEN      
+            ASSIGN TMSParam.CharVal = TMSParam.CharVal + (IF TMSParam.CharVal <> "" THEN "," ELSE "") + icCLIType. 
+      END.         
+   END.
+
+   RETURN "OK".
+
+END PROCEDURE.
