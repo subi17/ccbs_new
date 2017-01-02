@@ -85,7 +85,8 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                /* Convergent mobile part closing */
                IF fIsConvergenceTariff (bfOrder.CLIType) THEN DO:
                   /* Mark subscription partially terminated */
-                  IF bfOrder.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
+                  IF bfOrder.OrderType EQ {&ORDER_TYPE_MNP} OR
+                     bfOrder.OrderType EQ {&ORDER_TYPE_NEW} THEN DO:
                      FIND FIRST MobSub EXCLUSIVE-LOCK WHERE
                                 MobSub.MsSeq = bfOrder.MsSeq AND
                                 MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG}.

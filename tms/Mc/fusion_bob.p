@@ -20,6 +20,7 @@ gcBrand = "1".
 {msreqfunc.i}
 {orderfunc.i}
 {orderfusion.i}
+{fixedlinefunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
@@ -184,6 +185,15 @@ PROCEDURE pUpdateFusionOrder:
    DEF INPUT PARAM pcFixedSubStatus AS CHAR NO-UNDO.
    DEF INPUT PARAM pcExternalTicket AS CHAR NO-UNDO.
    DEF INPUT PARAM pcReleaseMobile AS CHAR NO-UNDO.
+   DEF VAR liTermReason AS INTEGER NO-UNDO.
+   DEF VAR ldeTS AS DECIMAL NO-UNDO.
+   DEF VAR liReq AS INTEGER NO-UNDO.
+   DEF VAR llYoigoCLi AS LOGICAL NO-UNDO.
+   DEF VAR liMsisdnStat AS INTEGER NO-UNDO.
+   DEF VAR liSimStat AS INTEGER NO-UNDO.
+   DEF VAR liQuarTime AS INTEGER NO-UNDO.
+   DEF VAR llPenaltyFee AS LOGICAL NO-UNDO.
+   DEF VAR lcResult AS CHARACTER NO-UNDO.
 
    DEF VAR liRequest AS INT NO-UNDO. 
    DEF VAR lcError AS CHAR NO-UNDO.
@@ -222,24 +232,27 @@ PROCEDURE pUpdateFusionOrder:
       IF pcReleaseMobile EQ "Y" THEN
          RETURN "ERROR:Mobile order release not allowed with CAN".
 
-      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR 
+      IF fIsConvergenceTariff(order.clitype) AND
          OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN
          RETURN "ERROR:CAN not allowed because fusion status ONG".
 
-      IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
+      IF (Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} AND
+          NOT fIsConvergenceTariff(order.clitype)) OR
+         Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
          Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
          Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3} OR
          Order.StatusCode EQ {&ORDER_STATUS_IN_CONTROL} OR
          Order.StatusCode EQ {&ORDER_STATUS_MNP_REJECTED} OR
          Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED}
          OR
-         (Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} AND
+         (fIsConvergenceTariff(order.clitype) AND
+          Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} AND
          (OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ERROR} OR
           OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED} OR
           OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_NEW})) 
          OR
-         (Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
-          pcReleaseMobile NE "Y")
+         (fIsConvergenceTariff(order.clitype) AND
+          Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL})
          THEN DO:
 
          RUN closeorder.p(Order.OrderId,TRUE).
@@ -247,7 +260,8 @@ PROCEDURE pUpdateFusionOrder:
          IF RETURN-VALUE NE "" THEN
             RETURN "ERROR:Order closing failed: " + STRING(RETURN-VALUE).
       END.
-      ELSE IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
+      ELSE IF fIsConvergenceTariff(order.clitype) AND
+              Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
 
          IF fCreateFusionCancelOrderMessage(OrderFusion.OrderID,
                                             OUTPUT lcError) EQ FALSE THEN
@@ -307,12 +321,44 @@ PROCEDURE pUpdateFusionOrder:
    END.
 
    IF pcReleaseMobile EQ "Y" THEN DO:
-      IF NOT (Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} AND
+      IF (NOT (Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} AND
              (Order.OrderType = {&ORDER_TYPE_STC} OR Order.ICC > "" OR
-              (Order.OrderChannel <> "Fusion_POS" AND Order.ICC = "")))
+              (Order.OrderChannel <> "Fusion_POS" AND Order.ICC = "")))) AND
+         (NOT (fIsConvergenceTariff(order.clitype) AND 
+              Order.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}))
          THEN RETURN "ERROR:Mobile order release not allowed".
-      RUN orderinctrl.p(Order.OrderId, 0, TRUE).
-      IF RETURN-VALUE > "" THEN RETURN "ERROR:Mobile order release failed".
+      ELSE IF fIsConvergenceTariff(order.clitype) AND
+              Order.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
+         ASSIGN
+            liTermReason = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
+            llYoigoCLI = fIsYoigoCLI(order.CLI)
+            llPenaltyFee = fIsPenalty(liTermReason,Order.MsSeq).
+         fInitialiseValues(
+            INPUT liTermReason,
+            INPUT llYoigoCLi,
+            OUTPUT liMsisdnStat,
+            OUTPUT liSimStat,
+            OUTPUT liQuarTime).
+         liReq = fTerminationRequest(
+                        Order.MsSeq,
+                        fSecOffSet(fMakeTS(),5), /* when request handled */
+                        liMsisdnStat, /* msisdn status code: available */
+                        liSimStat, /* sim status code : available */
+                        liQuarTime, /* quarantie time */
+                        INT(llPenaltyFee), /*penalty fee calcultion */
+                        "", /* opcode */
+                        STRING(liTermReason),
+                        {&REQUEST_SOURCE_ORDER_CANCELLATION},
+                        "",
+                        0,
+                        {&TERMINATION_TYPE_PARTIAL},
+                        OUTPUT lcResult).
+         fSetOrderStatus(Order.OrderID,"7"). 
+      END.
+      ELSE DO:
+         RUN orderinctrl.p(Order.OrderId, 0, TRUE).
+         IF RETURN-VALUE > "" THEN RETURN "ERROR:Mobile order release failed".
+      END.
    END.
 
    FIND CURRENT OrderFusion EXCLUSIVE-LOCK.
