@@ -18,7 +18,7 @@ else:
 
 p=s.newton.subscriptions.create_free_air_time(var1,
                                       'jannetou',
-                                      {'id':'BONO12CPACT',
+                                      {'fat_group':'BONO12CPACT',
                                       'periods':4,
                                       'sms_amount':0,
                                       'user_sms_limit':0
