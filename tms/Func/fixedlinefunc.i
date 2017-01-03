@@ -12,8 +12,40 @@
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 {tmsconst.i}
+{timestamp.i}
 
-/*Function returns Trie if a tariff can be defined as convergent tariff.
+/* Function makes new MSOwner when subscription is partially
+   terminated or mobile part order closed */
+FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
+   (iiMsSeq AS INT,
+    icFixedNumber AS CHAR):
+   DEF VAR ldUpdateTS AS DEC NO-UNDO.
+   DEF BUFFER MsOwner FOR MsOwner.
+   DEF BUFFER bNewMsowner FOR Msowner.
+
+   ldUpdateTS = fMakeTS().
+   FIND FIRST MSOwner WHERE 
+              MSOwner.MsSeq  = iiMsSeq AND
+              MSOwner.TsEnd >= ldUpdateTS
+   EXCLUSIVE-LOCK NO-ERROR.
+   IF NOT AVAIL MSOwner THEN RETURN FALSE.
+
+   MSOwner.TsEnd = ldUpdateTS.
+   CREATE bNewMsowner.
+   BUFFER-COPY MSOwner EXCEPT TsEnd tsbegin TO bNewMsowner.
+   ASSIGN
+      bNewMsowner.CLI = icFixedNumber
+      bNewMsowner.imsi = ""
+      bNewMsowner.CliEvent = "F"
+      bNewMsowner.tsbegin = fSecOffSet(ldUpdateTS,1)
+      bNewMsowner.TsEnd = 99999999.99999.
+   RELEASE MSOwner.
+   RELEASE bNewMsowner.
+   RETURN TRUE.
+
+END.   
+
+/*Function returns True if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */
 FUNCTION fIsConvergenceTariff RETURNS LOGICAL
    (icCliType AS CHAR):
@@ -98,6 +130,37 @@ FUNCTION fCanTerminateConvergenceTariff RETURNS LOGICAL
 
 END.
 
+/* Check if convergent contract based by subscription name.
+   All convergent subscription name starts CONTDSL (ADSL) or 
+   CONTFH (fiber)*/
+FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
+   (icContract AS CHAR):
+   IF icContract BEGINS "CONTDSL" OR
+      icContract BEGINS "CONTFH" THEN 
+      RETURN TRUE.
+   RETURN FALSE.
+END.   
 
+/* Check convergent STC compability. Special handling that allows convergent
+   STC between subscription types which have same fixed line part.
+   Convergent ADSL subscription can be changed to other ADSL
+   Convergent fiber 50MB can be changed to other convergent 50MB fiber.
+   Convergent fiber 300MB can be changed to other convergent 300MB fiber.
+   Currently comparison made by using naming rules. If some new naming
+   will be introduced, maybe should be changed to use clitype.fixedlinetype
+   and clitype.FixedLineDownload fields. */
+FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
+   (INPUT icOldCliType AS CHAR,
+    INPUT icNewCliType AS CHAR):
+   IF (icOldCliType BEGINS "CONTDSL" AND icNewCliType BEGINS "CONTDSL") THEN
+      RETURN TRUE.
+   ELSE IF (icOldCliType BEGINS "CONTFH" AND 
+            icNewCliType BEGINS "CONTFH") AND
+            SUBSTRING(icOldClitype, INDEX(icOldClitype,"_") + 1) EQ
+            SUBSTRING(icNewClitype, INDEX(icNewClitype,"_") + 1) THEN
+      RETURN TRUE.
+   ELSE 
+      RETURN FALSE.
+END.                                         
 
 &ENDIF

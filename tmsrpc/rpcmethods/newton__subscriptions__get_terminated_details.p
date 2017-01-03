@@ -63,7 +63,8 @@ FUNCTION fIsViewableTermMobsub RETURNS LOGICAL
    DEF BUFFER MsOwner FOR MsOwner.
    
    FIND FIRST Msowner WHERE 
-              Msowner.msseq = iiMsSeq
+              Msowner.msseq EQ iiMsSeq AND
+              Msowner.tsend LT fmakets()
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
    IF NOT AVAIL Msowner THEN RETURN FALSE.
    
@@ -180,7 +181,8 @@ ELSE DO:
 END.
 
 FIND FIRST Msowner WHERE 
-           Msowner.msseq = TermMobsub.MSseq
+           Msowner.msseq EQ TermMobsub.MSseq AND
+           Msowner.tsend LT fmakets()
 NO-LOCK USE-INDEX MsSeq NO-ERROR.
 IF AVAIL msowner THEN DO:
    fSplitTS(msowner.tsend, OUTPUT ldaTermDate, OUTPUT liTermTime).
