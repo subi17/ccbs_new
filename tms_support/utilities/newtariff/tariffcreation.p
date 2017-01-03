@@ -25,13 +25,9 @@ DEFINE INPUT  PARAMETER icSpoolDir  AS CHARACTER NO-UNDO.
 DEFINE INPUT  PARAMETER iiPayType   AS INTEGER   NO-UNDO.
 DEFINE INPUT  PARAMETER icRatePlan  AS CHARACTER NO-UNDO. /* Final CLIType list */
 
-DEFINE VARIABLE lcInputFile       AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcLine            AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcLogFile         AS CHARACTER NO-UNDO.
-DEFINE VARIABLE llgTrafficBundle  AS LOGICAL   NO-UNDO.
-DEFINE VARIABLE llgPostPaid       AS LOGICAL   NO-UNDO.
-DEFINE VARIABLE llgDataLimit      AS LOGICAL   NO-UNDO.
-DEFINE VARIABLE llgVoiceLimit     AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE lcLogFile           AS CHARACTER NO-UNDO.
+DEFINE VARIABLE llgTrafficBundle    AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE llgPostPaid         AS LOGICAL   NO-UNDO.
 
 DEFINE VARIABLE lcCliType           AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcTariffBundle      AS CHARACTER NO-UNDO.
@@ -47,9 +43,6 @@ DEFINE VARIABLE lcWebStatus         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSTCStatus         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcPaymentType       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcUsageType         AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcCopyServicesFromCliType  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcBundlesForTerminateOnSTC AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcServicesForReCreateOnSTC AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFMFeeCalc         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLMFeeCalc         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcTOC               AS CHARACTER NO-UNDO.
@@ -83,7 +76,6 @@ DEFINE VARIABLE lcFinalLMLimit      AS CHARACTER NO-UNDO INITIAL "".
 DEFINE VARIABLE liFinalDType        AS INTEGER   NO-UNDO INITIAL 0.
 DEFINE VARIABLE llgSLCreated        AS LOGICAL   NO-UNDO INITIAL NO.
 DEFINE VARIABLE ocCLIType           AS CHARACTER NO-UNDO INITIAL "".
-DEFINE VARIABLE liFirstLine         AS INTEGER   NO-UNDO INITIAL 1.
 DEFINE VARIABLE lcMFBC              AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCLIName           AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSLGName           AS CHARACTER NO-UNDO.
@@ -92,12 +84,16 @@ DEFINE VARIABLE lcDCName            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcTariffName        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcBonoSupport       AS CHARACTER NO-UNDO.
 /*convergence*/
-DEFINE VARIABLE lcBundleUpsell      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcBundleList        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcBDestSLGTariff    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcSLCode            AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liKnt               AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liBDestSLGKnt       AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcBundleUpsell             AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcBDestSLGTariff           AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcSLCode                   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liKnt                      AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liBDestSLGKnt              AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcAllowedBundles           AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFixedLineBaseBundle      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcCopyServicesFromCliType  AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcBundlesForTerminateOnSTC AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcServicesForReCreateOnSTC AS CHARACTER NO-UNDO.
 
 DEFINE TEMP-TABLE ttTariffCre NO-UNDO 
    FIELD FieldName  AS CHARACTER 
@@ -124,191 +120,137 @@ END FUNCTION.
 /* ***************************  Main Block  *************************** */
 DO ON ERROR UNDO, THROW:  
 
-   ASSIGN 
-      lcLogFile   = icSpoolDir + "tariffcreation.log" 
-      lcInputFile = icIncDir   + "tariffcreation.txt".   
+   ASSIGN lcLogFile = icSpoolDir + "tariffcreation.log".       
 
    RUN configcreations.p PERSISTENT SET h_config. 
 
    RUN pFill_TT_TariffCre.   
+   
+   RUN pFill_TT_Translation.
 
    RUN pValidateFileData.   
 
    RUN pDataCreValidation.     
 
-   IF lcDataLimit  NE "" OR lcVoiceLimit NE "" OR lcBDestLimit NE "" THEN 
-   DO liKnt = 1 TO liBDestSLGKnt
-      ON ERROR UNDO, THROW: 
-
-      IF liKnt = 1 THEN 
-         ASSIGN lcBDestSLGTariff = lcFinalTariff.
-      ELSE 
-         ASSIGN lcBDestSLGTariff = lcFixedLineBaseBundle.    
-
-      RUN pCreBDestination IN h_config(lcBDestSLGTariff,
-                                       lcDataLimit,
-                                       lcVoiceLimit,
-                                       lcBDestLimit).
-
-      RUN pServLimitGroup IN h_config(lcBDestSLGTariff, lcSLGName).
-      
-      DO lcServCount = 1 TO NUM-ENTRIES(lcServList):
-
-         ASSIGN 
-            lcFinalSLCode = lcBDestSLGTariff + (IF ENTRY(lcServCount,lcServList) EQ {&DL} THEN 
-                                              "_DATA" 
-                                           ELSE IF ENTRY(lcServCount,lcServList) EQ {&DL} THEN 
-                                              "_MIN" 
-                                           ELSE IF ENTRY(lcServCount,lcServList) EQ {&DL} THEN 
-                                              "_QTY" 
-                                           ELSE
-                                              "")
-            lcFinalSLName = (IF INDEX(lcSLCode,"DATA") > 0 THEN 
-                                "Data" 
-                             ELSE IF INDEX(lcSLCode,"MIN") > 0 THEN 
-                                "National Calls" 
-                             ELSE IF INDEX(lcSLCode,"QTY") > 0 THEN
-                                "BDest" 
-                             ELSE 
-                                "")
-            liFinalDType  = (IF INDEX(lcSLCode,"DATA") > 0 THEN 
-                                7 
-                             ELSE IF INDEX(lcSLCode,"MIN") > 0 THEN 
-                                4 
-                             ELSE IF INDEX(lcSLCode,"QTY") > 0 THEN
-                                0 
-                             ELSE 
-                                0)
-            lcFinalLimit  = (IF INDEX(lcSLCode,"DATA") > 0 THEN 
-                                lcDataLimit 
-                             ELSE IF INDEX(lcSLCode,"MIN") > 0 THEN 
-                                lcVoiceLimit 
-                             ELSE IF INDEX(lcSLCode,"QTY") > 0 THEN
-                                lcBDestLimit 
-                             ELSE 
-                                "")
-            lcFinalBDLimit = "0"
-            lcFinalFMLimit = (IF INDEX(lcSLCode,"DATA") > 0 THEN 
-                                 lcFMDataLimit 
-                              ELSE IF INDEX(lcSLCode,"MIN") > 0 THEN 
-                                 lcFMVoiceLimit 
-                              ELSE IF INDEX(lcSLCode,"QTY") > 0 THEN
-                                 lcFMBDestLimit 
-                              ELSE 
-                                 "")
-            lcFinalLMLimit = (IF INDEX(lcSLCode,"DATA") > 0 THEN 
-                                 lcLMDataLimit 
-                              ELSE IF INDEX(lcSLCode,"MIN") > 0 THEN 
-                                 lcLMVoiceLimit 
-                              ELSE IF INDEX(lcSLCode,"QTY") > 0 THEN
-                                 lcLMBDestLimit 
-                              ELSE 
-                                 "").
-
-         RUN pServiceLimit IN h_config(lcBDestSLGTariff,
-                                       lcFinalSLCode,
-                                       lcFinalSLName,
-                                       lcFinalLimit,
-                                       lcFinalBDLimit,
-                                       lcFinalFMLimit,
-                                       lcFinalLMLimit,
-                                       liFinalDType,
-                                       OUTPUT liSLSeq). 
-         IF liSLSeq > 0 THEN
-            RUN pServiceTargets IN h_config(liSLSeq, lcBDestSLGTariff, ENTRY(2,lcFinalSLCode,"_")).
-
-         ASSIGN llgSLCreated = YES.
-      END.                                       
-   END.
-   
-   IF lcPaymentType EQ "Postpaid" AND lcMFBC NE "" THEN 
+   IF lcPaymentType EQ "Postpaid" THEN 
    DO: 
-      RUN pCreateFeeModel IN h_config(lcFinalTariff,
-                                      lcFMName,    
-                                      OUTPUT lcFeeModel).
-    
-      IF RETURN-VALUE EQ "OK" THEN 
-      DO:
-         RUN pCreateFMItem IN h_config(lcFinalTariff,
-                                       lcFeeModel,
-                                       lcCommFee,
-                                       lcFMFeeCalc,
-                                       lcLMFeeCalc,
-                                       lcMFBC,
-                                       lcCliType,      /* Main parent tariff */
-                                       lcTariffBundle  /* Tariff Bundle      */).
-   
-         IF RETURN-VALUE <> "OK" THEN 
-         DO:
-            fError(RETURN-VALUE).
-            RETURN RETURN-VALUE.
-         END.    
+      IF lcMFBC NE "" THEN
+      DO: 
+         RUN pCreateFeeModel IN h_config(lcFinalTariff,
+                                         lcFMName,    
+                                         OUTPUT lcFeeModel).
+
+         IF lcFeeModel > "" THEN
+            RUN pCreateFMItem IN h_config(lcFinalTariff,
+                                          lcFeeModel,
+                                          lcCommFee,
+                                          lcFMFeeCalc,
+                                          lcLMFeeCalc,
+                                          lcMFBC,
+                                          lcCliType,       /* Main parent tariff */
+                                          lcTariffBundle). /* Tariff Bundle      */
       END.
-      ELSE 
-      DO:
-         fError(RETURN-VALUE).
-         RETURN RETURN-VALUE.
+
+      IF lcDataLimit  NE "" OR lcVoiceLimit NE "" OR lcBDestLimit NE "" THEN 
+      DO liKnt = 1 TO liBDestSLGKnt
+         ON ERROR UNDO, THROW: 
+
+         IF liKnt = 1 THEN 
+            ASSIGN lcBDestSLGTariff = lcFinalTariff.
+         ELSE 
+            ASSIGN lcBDestSLGTariff = lcFixedLineBaseBundle.    
+
+         RUN pCreBDestination IN h_config(lcBDestSLGTariff,
+                                          lcDataLimit,
+                                          lcVoiceLimit,
+                                          lcBDestLimit).
+
+         RUN pServLimitGroup IN h_config(lcBDestSLGTariff, lcSLGName).
+         
+         DO lcServCount = 1 TO NUM-ENTRIES(lcServList):
+
+            ASSIGN 
+               lcFinalSLCode = lcBDestSLGTariff + (IF ENTRY(lcServCount,lcServList) EQ {&DL} THEN 
+                                                 "_DATA" 
+                                              ELSE IF ENTRY(lcServCount,lcServList) EQ {&DL} THEN 
+                                                 "_MIN" 
+                                              ELSE IF ENTRY(lcServCount,lcServList) EQ {&DL} THEN 
+                                                 "_QTY" 
+                                              ELSE
+                                                 "")
+               lcFinalSLName = (IF INDEX(lcSLCode,"DATA") > 0 THEN 
+                                   "Data" 
+                                ELSE IF INDEX(lcSLCode,"MIN") > 0 THEN 
+                                   "National Calls" 
+                                ELSE IF INDEX(lcSLCode,"QTY") > 0 THEN
+                                   "BDest" 
+                                ELSE 
+                                   "")
+               liFinalDType  = (IF INDEX(lcSLCode,"DATA") > 0 THEN 
+                                   7 
+                                ELSE IF INDEX(lcSLCode,"MIN") > 0 THEN 
+                                   4 
+                                ELSE IF INDEX(lcSLCode,"QTY") > 0 THEN
+                                   0 
+                                ELSE 
+                                   0)
+               lcFinalLimit  = (IF INDEX(lcSLCode,"DATA") > 0 THEN 
+                                   lcDataLimit 
+                                ELSE IF INDEX(lcSLCode,"MIN") > 0 THEN 
+                                   lcVoiceLimit 
+                                ELSE IF INDEX(lcSLCode,"QTY") > 0 THEN
+                                   lcBDestLimit 
+                                ELSE 
+                                   "")
+               lcFinalBDLimit = "0"
+               lcFinalFMLimit = (IF INDEX(lcSLCode,"DATA") > 0 THEN 
+                                    lcFMDataLimit 
+                                 ELSE IF INDEX(lcSLCode,"MIN") > 0 THEN 
+                                    lcFMVoiceLimit 
+                                 ELSE IF INDEX(lcSLCode,"QTY") > 0 THEN
+                                    lcFMBDestLimit 
+                                 ELSE 
+                                    "")
+               lcFinalLMLimit = (IF INDEX(lcSLCode,"DATA") > 0 THEN 
+                                    lcLMDataLimit 
+                                 ELSE IF INDEX(lcSLCode,"MIN") > 0 THEN 
+                                    lcLMVoiceLimit 
+                                 ELSE IF INDEX(lcSLCode,"QTY") > 0 THEN
+                                    lcLMBDestLimit 
+                                 ELSE 
+                                    "").
+
+            RUN pServiceLimit IN h_config(lcBDestSLGTariff,
+                                          lcFinalSLCode,
+                                          lcFinalSLName,
+                                          lcFinalLimit,
+                                          lcFinalBDLimit,
+                                          lcFinalFMLimit,
+                                          lcFinalLMLimit,
+                                          liFinalDType,
+                                          OUTPUT liSLSeq). 
+            IF liSLSeq > 0 THEN
+               RUN pServiceTargets IN h_config(liSLSeq, lcBDestSLGTariff, ENTRY(2,lcFinalSLCode,"_")).
+
+            ASSIGN llgSLCreated = YES.
+         END.
       END.
-   END.
+   END.      
 
    RUN pDayCampaign IN h_config(lcFinalTariff,
                                 lcFeeModel,
-                                lcDCName,
-                                lcBBProfile,
-                                lcDSS2Comp,
-                                lcDSS2PL,
-                                lcNVComp,
-                                lcOnlyVoice,
+                                lcDCName,                                
                                 lcTOC,
                                 llgSLCreated,
                                 lcMFBC,
                                 lcPaymentType,
-                                lcBundleUpsell).
-
-   IF RETURN-VALUE <> "OK" THEN DO:
-      fError(RETURN-VALUE).
-      RETURN RETURN-VALUE.
-   END.
-   ELSE DO:         
-      RUN pDCServPackage IN h_config(lcFinalTariff,
-                                     llgDataLimit,
-                                     lcBonoSupport).
-
-      IF RETURN-VALUE <> "OK" THEN DO:
-         fError(RETURN-VALUE).
-         RETURN RETURN-VALUE.
-      END.
-   END.
-   
-   ASSIGN
-      lcInputFile = icIncDir + "tariff_trans.txt"
-      lcLogFile   = icSpoolDir + "tariff_trans.log".
-                     
-   INPUT STREAM TTransIn FROM VALUE(lcInputFile).
-   OUTPUT STREAM TTransLog TO VALUE(lcLogFile) APPEND.
-
-   REPEAT:
-                             
-      IMPORT STREAM TTransIn UNFORMATTED lcLine.
-                                   
-      /* Ignore the first line - (Header) */
-      IF liFirstLine = 1 THEN DO:
-         liFirstLine = liFirstLine + 1.
-         NEXT.
-      END.
-                                                                        
-      CREATE ttTrans.
-      ASSIGN 
-         ttTrans.tLangType  = TRIM(ENTRY(1,lcLine,";"))
-         ttTrans.tLangint   = TRIM(ENTRY(2,lcLine,";"))
-         ttTrans.tLangtext  = TRIM(ENTRY(3,lcLine,";"))
-         ttTrans.tLangTrans = TRIM(ENTRY(4,lcLine,";")) NO-ERROR.
-
-   END.
+                                lcBundleUpsell,                                
+                                lcBonoSupport).
 
    RUN pCreateCLIType IN h_config(lcCliType,
                                   lcCLIName,        
                                   lcBaseBundle,
+                                  lcFixedLineBaseBundle,
                                   lcLineType,
                                   lcFixLineType,
                                   lcFixedLineDownload,
@@ -320,44 +262,45 @@ DO ON ERROR UNDO, THROW:
                                   lcSTCStatus,
                                   lcPaymentType,
                                   lcUsageType,
-                                  icRatePlan,
-                                  TRUE,            /* llgCTServPac */
-                                  lcCliType,       /* Main parent tariff */ 
-                                  lcTariffBundle,  /* Tariff Bundle      */                                  
-                                  OUTPUT ocCLIType).
-    
-   IF RETURN-VALUE <> "OK" THEN DO:
-      fError(RETURN-VALUE).
-      RETURN RETURN-VALUE. 
-   END.  
+                                  icRatePlan,                                  
+                                  lcCliType,        /* Main parent tariff */ 
+                                  lcTariffBundle,   /* Tariff Bundle      */
+                                  lcAllowedBundles,
+                                  lcDataLimit,
+                                  lcCopyServicesFromCliType,
+                                  lcBundlesForTerminateOnSTC,
+                                  lcServicesForReCreateOnSTC).  
 
-   RUN pCreTranslations.
-
-   IF RETURN-VALUE <> "OK" THEN DO:
-      fError(RETURN-VALUE).
-      RETURN RETURN-VALUE.
-   END.
+   RUN pCreTranslations.  
       
-   RETURN "OK".
+   RETURN "".
    
    CATCH e AS Progress.Lang.Error:
+
       OUTPUT STREAM TariffLog TO VALUE(lcLogFile) APPEND.
       fError(RETURN-VALUE).
       OUTPUT STREAM TariffLog CLOSE.
-      UNDO, THROW NEW Progress.Lang.AppError(RETURN-VALUE, 1).      
+
+      UNDO, THROW NEW Progress.Lang.AppError(RETURN-VALUE, 1).
+
    END CATCH.
-   FINALLY:      
-      OUTPUT STREAM TTransLog CLOSE.
-      INPUT  STREAM TTransIn  CLOSE. 
+   FINALLY:
+
    END FINALLY.
 
 END.
 /* ***************************  Main End  *************************** */ 
-PROCEDURE pFill_TT_TariffCre:
+PROCEDURE pFill_TT_TariffCre:   
+
+   DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.
 
    DO ON ERROR UNDO, THROW:   
+      
+      ASSIGN lcInputFile = icIncDir + "tariffcreation.txt".
 
-      INPUT STREAM TariffIn FROM VALUE(lcInputFile).    
+      INPUT STREAM TariffIn FROM VALUE(lcInputFile).
+
       REPEAT ON ERROR UNDO, THROW:
          IMPORT STREAM TariffIn UNFORMATTED lcLine.
     
@@ -378,6 +321,46 @@ PROCEDURE pFill_TT_TariffCre:
    END.
 
    RETURN "".
+
+END PROCEDURE.
+
+PROCEDURE pFill_TT_Translation:
+   DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.   
+   DEFINE VARIABLE liFirstLine AS INTEGER   NO-UNDO INITIAL 1.
+
+   DO ON ERROR UNDO, THROW:
+      
+      ASSIGN lcInputFile = icIncDir + "tariff_trans.txt".      
+
+      INPUT STREAM TTransIn FROM VALUE(lcInputFile).
+
+      REPEAT ON ERROR UNDO, THROW:                               
+        IMPORT STREAM TTransIn UNFORMATTED lcLine.                                
+        
+        IF liFirstLine = 1 THEN 
+        DO:
+           liFirstLine = liFirstLine + 1.
+           NEXT.
+        END.
+                                                                          
+        CREATE ttTrans.
+        ASSIGN 
+           ttTrans.tLangType  = TRIM(ENTRY(1,lcLine,";"))
+           ttTrans.tLangint   = TRIM(ENTRY(2,lcLine,";"))
+           ttTrans.tLangtext  = TRIM(ENTRY(3,lcLine,";"))
+           ttTrans.tLangTrans = TRIM(ENTRY(4,lcLine,";")).
+      END.
+
+      CATCH err AS Progress.Lang.Error:
+         UNDO, THROW NEW Progress.Lang.AppError('Incorrect input translation file data' + err:GetMessage(1), 1). 
+      END CATCH.
+
+      FINALLY:
+         INPUT STREAM TTransIn CLOSE.
+      END FINALLY.
+
+   END.
 
 END PROCEDURE.
 
@@ -531,6 +514,8 @@ PROCEDURE pValidateFileData:
             DO:
                IF ttTariffCre.FieldValue = "" THEN
                   UNDO, THROW NEW Progress.Lang.AppError("Copy services from clitype is blank", 1).
+               ELSE IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = ttTariffCre.FieldValue NO-LOCK) THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Invalid 'copy services from clitype'", 1).   
                ELSE 
                   lcCopyServicesFromCliType = ttTariffCre.FieldValue.
             END.
@@ -551,16 +536,12 @@ PROCEDURE pValidateFileData:
             WHEN {&DL} THEN 
             DO:
                IF ttTariffCre.FieldValue NE "" THEN
-                  ASSIGN 
-                     llgDataLimit = YES
-                     lcDataLimit  = ttTariffCre.FieldValue.
+                  ASSIGN lcDataLimit  = ttTariffCre.FieldValue.
             END.
             WHEN {&VL} THEN 
             DO:
                IF ttTariffCre.FieldValue NE "" THEN
-                  ASSIGN 
-                     llgVoiceLimit = YES
-                     lcVoiceLimit  = ttTariffCre.FieldValue.
+                  ASSIGN lcVoiceLimit  = ttTariffCre.FieldValue.
             END.
             /*convergence*/
             WHEN {&BUPS} THEN 
@@ -702,11 +683,9 @@ PROCEDURE pValidateFileData:
 
       ASSIGN 
          llgTrafficBundle  = NO
-         llgPostPaid       = NO
-         llgDataLimit      = NO
-         llgVoiceLimit     = NO.
+         llgPostPaid       = NO.         
 
-      RETURN "OK".
+      RETURN "".
 
    END.
 

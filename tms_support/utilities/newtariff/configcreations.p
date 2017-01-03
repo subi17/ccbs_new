@@ -19,11 +19,7 @@ gcBrand = "1".
 {tariffcons.i}
 {fixedlinefunc.i}
 
-DEFINE BUFFER bCTServPac  FOR CTServPac.
-DEFINE BUFFER bCTServEl   FOR CTServEl.
-DEFINE BUFFER bCTServAttr FOR CTServAttr.
 /* ********************  Functions  ******************** */
-
 FUNCTION fTMSCodeValue RETURNS CHARACTER 
              (INPUT lcTableName AS CHARACTER,
               INPUT lcFieldName AS CHARACTER,
@@ -56,6 +52,97 @@ FUNCTION fTMSCValue RETURNS CHARACTER
 
 END FUNCTION.  
 
+FUNCTION fGetNextMatrixPriority RETURNS INTEGER 
+   (icKey AS CHARACTER):
+
+   DEFINE BUFFER bf_Matrix FOR Matrix.
+
+   FIND LAST bf_Matrix WHERE bf_Matrix.mxkey = icKey NO-LOCK NO-ERROR.
+   IF AVAILABLE bf_Matrix THEN 
+      RETURN (bf_Matrix.Prior + 1).
+   ELSE 
+      RETURN 1.  
+
+END FUNCTION.    
+
+
+FUNCTION fGetNextRequestActionSequence RETURNS INTEGER 
+   ():
+   DEFINE BUFFER bf_RequestAction FOR RequestAction.
+
+   FIND LAST bf_RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
+   IF AVAILABLE bf_RequestAction THEN 
+      RETURN (bf_RequestAction.RequestActionID + 1).
+   ELSE 
+      RETURN 1.
+
+END FUNCTION.    
+
+FUNCTION fPrepareRequestActionParam RETURNS LOGICAL
+  (INPUT icMobileBundles            AS CHARACTER,
+   INPUT icFixedLineBundles         AS CHARACTER,
+   INPUT icBundlesForTerminateOnSTC AS CHARACTER,
+   INPUT icServicesRecreated        AS CHARACTER,
+   OUTPUT ocReqTypeList             AS CHARACTER,
+   OUTPUT ocActionList              AS CHARACTER,
+   OUTPUT ocActionKeyList           AS CHARACTER,
+   OUTPUT ocActionTypeList          AS CHARACTER):
+
+   DEFINE VARIABLE liCnt             AS INTEGER   NO-UNDO.   
+   DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO.   
+
+   IF icMobileBundles > "" THEN 
+   DO liCount = 1 TO NUM-ENTRIES(icMobileBundles):    
+
+      DO liCnt = 1 TO 2:
+        ASSIGN 
+           ocReqTypeList     = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
+                                                                                               STRING({&REQTYPE_SUBSCRIPTION_CREATE}) 
+                                                                                            ELSE 
+                                                                                               STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})) 
+           ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
+           ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icMobileBundles)
+           ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
+      END.   
+
+   END.
+
+   IF icFixedLineBundles > "" THEN 
+   DO liCount = 1 TO NUM-ENTRIES(icFixedLineBundles):    
+
+      DO liCnt = 1 TO 2: 
+         ASSIGN 
+            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
+                                                                                            STRING({&REQTYPE_FIXED_LINE_CREATE}) 
+                                                                                         ELSE 
+                                                                                            STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}))  
+            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
+            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icFixedLineBundles)
+            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
+      END.   
+   END.   
+
+   IF icBundlesForTerminateOnSTC > "" THEN 
+   DO liCount = 1 TO NUM-ENTRIES(icBundlesForTerminateOnSTC):
+      ASSIGN 
+            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})  
+            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "TERMINATE"
+            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icBundlesForTerminateOnSTC)
+            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
+   END.
+
+   IF icServicesRecreated > "" THEN 
+   DO liCount = 1 TO NUM-ENTRIES(icServicesRecreated):
+      ASSIGN 
+            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})  
+            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "RECREATE"
+            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icServicesRecreated)
+            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "CTServPac".
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
 /* ***************************  Main Block  *************************** */
 PROCEDURE pCreBDestination:
 DEFINE INPUT PARAMETER icTariffCode AS CHARACTER NO-UNDO.    
@@ -223,306 +310,201 @@ DEFINE VARIABLE liSTCount       AS INTEGER   NO-UNDO.
 END PROCEDURE.    
 
 PROCEDURE pCreateFeeModel:
-DEFINE INPUT  PARAMETER icTariffCode AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icFMName     AS CHARACTER NO-UNDO.
-DEFINE OUTPUT PARAMETER lcFeeModel   AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icTariffCode AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icFMName     AS CHARACTER NO-UNDO.
+   DEFINE OUTPUT PARAMETER ocFeeModel   AS CHARACTER NO-UNDO.   
+    
+   FIND FIRST FeeModel WHERE FeeModel.Brand = gcBrand AND FeeModel.FeeModel = icTariffCode + "MF" NO-LOCK NO-ERROR.    
+   IF NOT AVAILABLE FeeModel THEN
+   DO:
+      CREATE FeeModel.
+      ASSIGN 
+         FeeModel.Brand    = gcBrand
+         FeeModel.FeeModel = icTariffCode + "MF"
+         FeeModel.FeeName  = icFMName               
+         FeeModel.FMGroup  = 0
+         ocFeeModel        = FeeModel.FeeModel.
+   END.
 
-   IF icTariffCode EQ "" THEN
-      RETURN "ERROR: Wrong FeeModel data available".
-   ELSE
-      lcFeeModel = icTariffCode + "MF".
-    
-   FIND FIRST FeeModel WHERE 
-              FeeModel.FeeModel = lcFeeModel NO-LOCK NO-ERROR.
-    
-   IF AVAILABLE FeeModel THEN
-      RETURN "ERROR: FeeModel already exists". 
-                       
-   CREATE FeeModel.
-   ASSIGN 
-      FeeModel.Brand    = gcBrand
-      FeeModel.FeeModel = lcFeeModel
-      FeeModel.FeeName  = icFMName               
-      FeeModel.FMGroup  = 0 NO-ERROR.
-  
-   IF ERROR-STATUS:ERROR THEN 
-      RETURN "ERROR: Creating Feemodel".
-   ELSE 
-      RETURN "OK".
+   RETURN "".
                  
 END PROCEDURE. 
 
 PROCEDURE pCreateFMItem:
-DEFINE INPUT PARAMETER icTariffCode    AS CHARACTER NO-UNDO.    
-DEFINE INPUT PARAMETER icFeeModel      AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icAmount        AS CHARACTER NO-UNDO.    
-DEFINE INPUT PARAMETER icFMFeeCalc     AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icLMFeeCalc     AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icMFBC          AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER lcMainPTariff   AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER lcTariffBundle  AS CHARACTER NO-UNDO.
-
-DEFINE VARIABLE liFMFeeCalc AS INTEGER NO-UNDO.
-DEFINE VARIABLE liLMFeeCalc AS INTEGER NO-UNDO.
-DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
-
-   IF icTariffCode EQ "" OR 
-      icFeeModel   EQ "" THEN 
-      RETURN "ERROR: Wrong FFItem data available".
-      
-   IF icFMFeeCalc BEGINS "F" THEN 
-      liFMFeeCalc = 1.
-   ELSE IF icFMFeeCalc BEGINS "U" THEN
-      liFMFeeCalc = 2.
-   ELSE liFMFeeCalc = 0.
-         
-   IF icLMFeeCalc BEGINS "F" THEN
-      liLMFeeCalc = 1.
-   ELSE IF icLMFeeCalc BEGINS "U" THEN
-      liLMFeeCalc = 2.
-   ELSE liLMFeeCalc = 0.
+   DEFINE INPUT PARAMETER icTariffCode    AS CHARACTER NO-UNDO.    
+   DEFINE INPUT PARAMETER icFeeModel      AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icAmount        AS CHARACTER NO-UNDO.    
+   DEFINE INPUT PARAMETER icFMFeeCalc     AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icLMFeeCalc     AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icMFBC          AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER lcMainPTariff   AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER lcTariffBundle  AS CHARACTER NO-UNDO. 
    
-   IF lcTariffBundle NE "" THEN DO:
-      FIND FIRST CLIType WHERE
-                 CLIType.Brand   = gcBrand       AND
-                 CLIType.CLIType = lcMainPTariff NO-LOCK NO-ERROR.
-
+   DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.   
+   
+   IF lcTariffBundle NE "" THEN 
+   DO:
+      FIND FIRST CLIType WHERE CLIType.Brand = gcBrand AND CLIType.CLIType = lcMainPTariff NO-LOCK NO-ERROR.
       IF AVAILABLE CLIType THEN
          ASSIGN lcRatePlan = CLIType.PricePlan.
-
    END.
    
-   FIND FIRST RatePlan WHERE 
-              RatePlan.Brand    = gcBrand AND 
-              RatePlan.RatePlan = IF lcRatePlan NE "" THEN lcRatePlan 
-                                  ELSE REPLACE(icTariffCode,"CONT","CONTRATO")
-   NO-LOCK NO-ERROR.           
-                
-   IF NOT AVAILABLE RatePlan THEN 
-      RETURN lcRateplan + " ERROR: RatePlan doesn't exists " + REPLACE(icTariffCode,"CONT","CONTRATO").
-   
-   FIND FIRST PListConf WHERE 
-              PListConf.Brand    = gcBrand           AND 
-              PListConf.RatePlan = RatePlan.RatePlan AND 
-              PListConf.PriceList BEGINS "CONTRATO"  NO-LOCK NO-ERROR.   
-   
-   IF NOT AVAILABLE PListConf THEN 
-      RETURN "ERROR: PListConf doesn't exists".
+   ASSIGN lcRatePlan = (IF lcRatePlan NE "" THEN lcRatePlan ELSE REPLACE(icTariffCode,"CONT","CONTRATO")).
+
+   FIND FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK NO-ERROR.           
+   IF AVAIL RatePlan THEN   
+      FIND FIRST PListConf WHERE PListConf.Brand = gcBrand AND PListConf.RatePlan = RatePlan.RatePlan AND PListConf.PriceList BEGINS "CONTRATO" NO-LOCK NO-ERROR.   
                              
    CREATE FMItem. 
    ASSIGN     
       FMItem.Brand             = gcBrand
-      FMItem.PriceList         = PListConf.PriceList                                               
-      FMItem.BillCode          = icMFBC            
-      FMItem.FeeModel          = icFeeModel                  
+      FMItem.FeeModel          = icFeeModel
+      FMItem.BillCode          = icMFBC
+      FMItem.PriceList         = PListConf.PriceList WHEN AVAILABLE PListConf 
       FMItem.FromDate          = TODAY       
-      FMItem.ToDate            = 12/31/49 
+      FMItem.ToDate            = DATE(12,31,2049)
       FMItem.BillType          = "MF"                  
       FMItem.Interval          = 1                   
       FMItem.BillCycle         = 2                   
       FMItem.FFItemQty         = 0 
       FMItem.FFEndDate         = ? 
       FMItem.Amount            = DECIMAL(icAmount)   
-      FMItem.FirstMonthBR      = liFMFeeCalc
-      FMItem.BrokenRental      = liLMFeeCalc
-      FMItem.ServiceLimitGroup = ""  NO-ERROR.
+      FMItem.FirstMonthBR      = (IF icFMFeeCalc BEGINS "F" THEN 1 ELSE IF icFMFeeCalc BEGINS "U" THEN 2 ELSE 0)
+      FMItem.BrokenRental      = (IF icLMFeeCalc BEGINS "F" THEN 1 ELSE IF icLMFeeCalc BEGINS "U" THEN 2 ELSE 0)
+      FMItem.ServiceLimitGroup = "".
 
-   IF ERROR-STATUS:ERROR THEN 
-      RETURN "ERROR: Creating FFItem".
-   ELSE "OK".
+   RETURN "".
    
 END PROCEDURE.    
 
 PROCEDURE pDayCampaign:
-DEFINE INPUT PARAMETER icTariffCode  AS CHARACTER NO-UNDO. 
-DEFINE INPUT PARAMETER icFeeModel    AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icDCName      AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icBBProfile   AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icDSS2Comp    AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icDSS2PL      AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icNVComp      AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icOVoip       AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icTOC         AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER ilgSLCreated  AS LOGICAL   NO-UNDO.
-DEFINE INPUT PARAMETER icMFBC        AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icPaymentType AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icBundleUpsell AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icTariffCode   AS CHARACTER NO-UNDO. 
+   DEFINE INPUT PARAMETER icFeeModel     AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icDCName       AS CHARACTER NO-UNDO.   
+   DEFINE INPUT PARAMETER icTOC          AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER ilgSLCreated   AS LOGICAL   NO-UNDO.
+   DEFINE INPUT PARAMETER icMFBC         AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icPaymentType  AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icBundleUpsell AS CHARACTER NO-UNDO.   
+   DEFINE INPUT PARAMETER icBonoSupport  AS CHARACTER NO-UNDO.
 
-DEFINE VARIABLE lcFeeModel  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liPayType   AS INTEGER   NO-UNDO.  
+   IF NOT CAN-FIND(FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = icTariffCode) THEN
+   DO:
+      CREATE DayCampaign.
+      ASSIGN 
+         DayCampaign.Brand           = gcBrand
+         DayCampaign.DCEvent         = icTariffCode 
+         DayCampaign.DCName          = icDCName
+         DayCampaign.PayType         = (IF icPaymentType EQ "Postpaid" THEN 1 ELSE IF icPaymentType EQ "Prepaid" THEN 2 ELSE 0)
+         DayCampaign.ValidFrom       = TODAY 
+         DayCampaign.ValidTo         = DATE(12,31,2049)
+         DayCampaign.StatusCode      = 1           /* Default value Active */
+         DayCampaign.DCType          = (IF icTOC EQ "ServicePackage" THEN "1" ELSE IF icTOC EQ "PackageWithCounter" THEN "4" ELSE "0")
+         DayCampaign.InstanceLimit   = 1                            
+         DayCampaign.BillCode        = icMFBC 
+         DayCampaign.CCN             = (IF icPaymentType EQ "Prepaid" THEN 93 ELSE 0)
+         DayCampaign.InclUnit        = INTEGER(fTMSCodeValue("DayCampaign","InclUnit","Unit"))
+         DayCampaign.InclStartCharge = YES                          
+         DayCampaign.MaxChargeIncl   = 0                            
+         DayCampaign.MaxChargeExcl   = 0                            
+         DayCampaign.CalcMethod      = INTEGER(fTMSCodeValue("Daycampaign","CalcMethod","DCCounter"))
+         DayCampaign.Effective       = INTEGER(fTMSCodeValue("Daycampaign","Effective","PerContr"))
+         DayCampaign.DurType         = (IF ilgSLCreated THEN 1 ELSE 4)
+         DayCampaign.DurMonth        = 0
+         DayCampaign.DurUnit         = INTEGER(fTMSCodeValue("Daycampaign","DurUnit","PerContr"))
+         DayCampaign.WeekDay         = ""
+         DayCampaign.BundleUpsell    = icBundleUpsell
+         DayCampaign.FeeModel        = icFeeModel
+         DayCampaign.ModifyFeeModel  = ""                          
+         DayCampaign.TermFeeModel    = ""                          
+         DayCampaign.TermFeeCalc     = 0.
+         
+      IF icDataLimit > "" THEN   
+         RUN pDCServPackage (icTariffCode, icBonoSupport).
+   END.
 
-   IF CAN-FIND(FIRST DayCampaign WHERE
-                     DayCampaign.Brand   = gcBrand AND
-                     DayCampaign.DCEvent = icTariffCode) THEN
-      RETURN "ERROR: DayCampaign already exists".
- 
-   IF icPaymentType EQ "Postpaid" AND
-      NOT CAN-FIND(FIRST FeeModel WHERE 
-                         FeeModel.FeeModel = icFeeModel) THEN 
-      RETURN "ERROR: FeeModel doesn't exists".                   
-                            
-   IF icTOC EQ "ServicePackage" THEN lcTOC = "1".
-   ELSE IF icTOC EQ "PackageWithCounter" THEN lcTOC = "4".
-  
-   IF icPaymentType EQ "Postpaid" THEN 
-      liPayType = 1.
-   ELSE IF icPaymentType EQ "Prepaid" THEN
-      liPayType = 2.
-   ELSE liPayType = 0.   
-
-   CREATE DayCampaign.
-   ASSIGN 
-      DayCampaign.Brand           = gcBrand
-      DayCampaign.DCEvent         = icTariffCode 
-      DayCampaign.DCName          = icDCName
-      DayCampaign.PayType         = liPayType
-      DayCampaign.ValidFrom       = TODAY 
-      DayCampaign.ValidTo         = 12/31/49
-      DayCampaign.StatusCode      = 1           /* Default value Active */
-      DayCampaign.DCType          = lcTOC
-      DayCampaign.InstanceLimit   = 1                            
-      DayCampaign.BillCode        = icMFBC 
-      DayCampaign.CCN             = IF icPaymentType EQ "Prepaid"
-                                    THEN 93
-                                    ELSE 0
-      DayCampaign.InclUnit        = INTEGER(fTMSCodeValue("DayCampaign",
-                                                          "InclUnit",
-                                                          "Unit"))
-      DayCampaign.InclStartCharge = YES                          
-      DayCampaign.MaxChargeIncl   = 0                            
-      DayCampaign.MaxChargeExcl   = 0                            
-      DayCampaign.CalcMethod      = INTEGER(fTMSCodeValue("Daycampaign",
-                                                          "CalcMethod",
-                                                          "DCCounter"))
-      DayCampaign.Effective       = INTEGER(fTMSCodeValue("Daycampaign",
-                                                          "Effective",
-                                                          "PerContr"))
-      DayCampaign.DurType         = IF ilgSLCreated THEN 1 ELSE 4
-      DayCampaign.DurMonth        = 0
-      DayCampaign.DurUnit         = INTEGER(fTMSCodeValue("Daycampaign",
-                                                          "DurUnit",
-                                                          "PerContr"))
-      DayCampaign.WeekDay         = ""
-      DayCampaign.BundleUpsell    = icBundleUpsell
-      DayCampaign.FeeModel        = icFeeModel
-      DayCampaign.ModifyFeeModel  = ""                          
-      DayCampaign.TermFeeModel    = ""                          
-      DayCampaign.TermFeeCalc     = 0                  
-/*      DayCampaign.BBProfile       = INTEGER(icBBProfile) 
-      DayCampaign.DDS2Compatible  = LOGICAL(icDSS2Comp) 
-      DayCampaign.DSS2PrimaryLine = LOGICAL(icDSS2PL) 
-      DayCampaign.NativeVoipComp  = LOGICAL(icNVComp) 
-      DayCampaign.OnlyVoice       = LOGICAL(icOVoip) */
-      NO-ERROR.     
-   
-   IF ERROR-STATUS:ERROR THEN 
-      RETURN "ERROR: Creating DayCampaign".
-   ELSE 
-      RETURN "OK".    
+   RETURN "".    
    
 END PROCEDURE.   
 
 PROCEDURE pDCServPackage:
-DEFINE INPUT PARAMETER icTariffCode  AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER ilgDataLimit  AS LOGICAL   NO-UNDO.
-DEFINE INPUT PARAMETER icBonoSupport AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icTariffCode  AS CHARACTER NO-UNDO.   
+   DEFINE INPUT PARAMETER icBonoSupport AS CHARACTER NO-UNDO.
 
-DEFINE VARIABLE liPackageID   AS INTEGER NO-UNDO.
-DEFINE VARIABLE liComponentID AS INTEGER NO-UNDO.
+   DEFINE VARIABLE liPackageID   AS INTEGER NO-UNDO.
+   DEFINE VARIABLE liComponentID AS INTEGER NO-UNDO.    
+    
+   FIND LAST DCServicePackage USE-INDEX DCServicePackageID NO-LOCK NO-ERROR.    
+   IF AVAILABLE DCServicePackage THEN 
+      ASSIGN liPackageID = DCServicePackage.DCServicePackageID + 1.
+   ELSE 
+      ASSIGN liPackageID = 1.
+   
+   FIND LAST DCServiceComponent USE-INDEX DCServiceComponentID NO-LOCK NO-ERROR.
+   IF AVAILABLE DCServiceComponent THEN 
+      liComponentID = DCServiceComponent.DCServiceComponentID + 1.
+   ELSE 
+      liComponentID = 1.    
 
-    IF NOT CAN-FIND(FIRST DayCampaign WHERE 
-                          DayCampaign.DCEvent = icTariffCode) THEN
-       RETURN "ERROR: DayCampaign doesn't exists".
-    
-    FIND LAST DCServicePackage USE-INDEX DCServicePackageID 
-              NO-LOCK NO-ERROR.
-    
-    IF AVAILABLE DCServicePackage THEN 
-       liPackageID = DCServicePackage.DCServicePackageID + 1.
-    ELSE liPackageID = 1.
-           
-    CREATE DCServicePackage.
-    ASSIGN                            
-       DCServicePackage.Brand               = gcBrand 
-       DCServicePackage.DCEvent             = icTariffCode 
-       DCServicePackage.DCServicePackageID  = liPackageID
-       DCServicePackage.ServPac             = "SHAPER"                    
-       DCServicePackage.FromDate            = TODAY 
-       DCServicePackage.ToDate              = 12/31/49 NO-ERROR.
-        
-    IF ERROR-STATUS:ERROR THEN
-       RETURN "ERROR: Creating DServicePackage".
-    
-    IF NOT CAN-FIND(FIRST DCServiceComponent WHERE
-                          DCServiceComponent.DCServicePackageID = liPackageID AND
-                          DCServiceComponent.DefParam  = icTariffCode AND  
-                          DCServiceComponent.ServCom   = "SHAPER"     AND
-                          DCServiceComponent.FromDate <= TODAY        AND
-                          DCServiceComponent.ToDate   >= 12/31/49)    AND 
-       ilgDataLimit THEN DO:
+   CREATE DCServicePackage.
+   ASSIGN                            
+      DCServicePackage.Brand              = gcBrand 
+      DCServicePackage.DCEvent            = icTariffCode 
+      DCServicePackage.DCServicePackageID = liPackageID
+      DCServicePackage.ServPac            = "SHAPER"                    
+      DCServicePackage.FromDate           = TODAY 
+      DCServicePackage.ToDate             = DATE(12,31,2049).   
+   
+   CREATE DCServiceComponent.
+   ASSIGN 
+      DCServiceComponent.DCServicePackageID   = DCServicePackage.DCServicePackageID 
+      DCServiceComponent.DCServiceComponentID = liComponentID      
+      DCServiceComponent.ServCom              = DCServicePackage.ServPac
+      DCServiceComponent.DefValue             = 1
+      DCServiceComponent.DefParam             = (IF LOGICAL(icBonoSupport) THEN icTariffCode + "#ADDBUNDLE" ELSE icTariffCode)
+      DCServiceComponent.FromDate             = TODAY 
+      DCServiceComponent.ToDate               = DATE(12,31,2049).   
        
-       FIND LAST DCServiceComponent USE-INDEX DCServiceComponentID 
-              NO-LOCK NO-ERROR.
-       IF AVAILABLE DCServiceComponent THEN 
-          liComponentID = DCServiceComponent.DCServiceComponentID + 1.
-       ELSE liComponentID = 1.    
-       
-       CREATE DCServiceComponent.
-       ASSIGN 
-          DCServiceComponent.DCServiceComponentID = liComponentID
-          DCServiceComponent.DCServicePackageID   = liPackageID 
-          DCServiceComponent.ServCom              = "SHAPER"
-          DCServiceComponent.DefValue             = 1
-          DCServiceComponent.DefParam             = IF LOGICAL(icBonoSupport) THEN 
-                                                       icTariffCode + "#ADDBUNDLE"
-                                                    ELSE icTariffCode   
-          DCServiceComponent.FromDate             = TODAY 
-          DCServiceComponent.ToDate               = 12/31/49 NO-ERROR.
-       
-       IF ERROR-STATUS:ERROR THEN  
-          RETURN "ERROR: Creating DCServicePackage".
-    END.
-/*    ELSE 
-       RETURN "DCServiceComponent already exists". */
-       
-    RETURN "OK".
+    RETURN "".
        
 END PROCEDURE.     
 
 PROCEDURE pCreateCLIType:
-DEFINE INPUT  PARAMETER icCLIType           AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icCLIName           AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icBaseBundle        AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icLineType          AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icFixLineType       AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icFixedLineDownload AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icFixedLineUpload   AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icCommFee           AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icComparisonFee     AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icServClass         AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icWebStatCode       AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icStatCode          AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icPayType           AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icUsageType         AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icRateplan          AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER llgCTServPac        AS LOGICAL   NO-UNDO.
-DEFINE INPUT  PARAMETER lcMainPTariff       AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER lcTariffBundle      AS CHARACTER NO-UNDO.
-DEFINE OUTPUT PARAMETER ocCLIType           AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icCLIType                  AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icCLIName                  AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icBaseBundle               AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icFixedLineBaseBundle      AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icLineType                 AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icFixLineType              AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icFixedLineDownload        AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icFixedLineUpload          AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icCommFee                  AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icComparisonFee            AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icServClass                AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icWebStatCode              AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icStatCode                 AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icPayType                  AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icUsageType                AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icRateplan                 AS CHARACTER NO-UNDO.   
+   DEFINE INPUT  PARAMETER lcMainPTariff              AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER lcTariffBundle             AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icDataLimit                AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icAllowedBundles           AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icCopyServicesFromCliType  AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icBundlesForTerminateOnSTC AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icServicesForReCreateOnSTC AS CHARACTER NO-UNDO.
 
-DEFINE VARIABLE liFinalBT  AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liFinalCR  AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liFinalBT  AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liFinalCR  AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
 
-   IF NOT CAN-FIND(FIRST CLIType WHERE 
-                         CLIType.Brand   = gcBrand    AND 
-                         CLIType.CLIType = icCLIType) THEN DO:
-     
-     /* Find highest value of billing target and contrtype */    
+   IF NOT CAN-FIND(FIRST CLIType WHERE CLIType.Brand = gcBrand AND CLIType.CLIType = icCLIType) THEN 
+   DO:     
+      /* Find highest value of billing target and contrtype */    
       FOR EACH CLIType NO-LOCK:
          IF CLIType.BillTarget > liFinalBT THEN 
             liFinalBT = CLIType.BillTarget.
+
          IF Clitype.ContrType > liFinalCR THEN 
             liFinalCR = CLIType.ContrType.        
       END.
@@ -530,243 +512,96 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
       /* In case of tariff bundle subscription type creation,  
          main parent tariff billing target value will be assigned directly. 
          Else, already available value has to be incremented by 1 */
-      IF lcTariffBundle NE "" THEN DO:   
-         FIND FIRST CLIType WHERE 
-                    CLIType.Brand   = gcBrand       AND 
-                    CLIType.CLIType = lcMainPTariff NO-LOCK NO-ERROR.
-                
+      IF lcTariffBundle NE "" THEN 
+      DO:   
+         FIND FIRST CLIType WHERE CLIType.Brand = gcBrand AND CLIType.CLIType = lcMainPTariff NO-LOCK NO-ERROR.                
          IF AVAILABLE CLIType THEN
             ASSIGN lcRatePlan = CLIType.PricePlan
-                   liFinalBT  = CLIType.BillTarget.
-               
+                   liFinalBT  = CLIType.BillTarget.               
       END.
        
       CREATE CLIType.
       ASSIGN 
-         CLIType.Brand         = gcBrand
-         CLIType.CLIType       = icCLIType
-         CLIType.CLIName       = icCLIName                            
-         CLIType.BaseBundle    = icBaseBundle
-         CLIType.PricePlan     = IF lcRatePlan NE "" THEN lcRatePlan ELSE 
-                                 REPLACE(icCLIType,"CONT","CONTRATO") 
-         CLIType.ServicePack   = IF icPayType EQ "Postpaid" THEN "11" 
-                                 ELSE "12"
-         CLIType.LineType      = INTEGER(fTMSCValue("CLIType",
-                                                    "LineType",
-                                                    icLineType))
-         CLIType.FixedLineType = INTEGER(fTMSCValue("CLIType",
-                                                    "FixedLineType",
-                                                    icFixLineType))         
+         CLIType.Brand             = gcBrand
+         CLIType.CLIType           = icCLIType
+         CLIType.CLIName           = icCLIName                            
+         CLIType.BaseBundle        = icBaseBundle
+         CLIType.PricePlan         = (IF lcRatePlan NE "" THEN lcRatePlan ELSE REPLACE(icCLIType,"CONT","CONTRATO")) 
+         CLIType.ServicePack       = IF icPayType EQ "Postpaid" THEN "11" ELSE "12"
+         CLIType.LineType          = INTEGER(fTMSCValue("CLIType","LineType",icLineType))
+         CLIType.FixedLineType     = INTEGER(fTMSCValue("CLIType","FixedLineType",icFixLineType))         
          CliType.FixedLineDownload = icFixedLineDownload
          CliType.FixedLineUpload   = icFixedLineUpload         
-         CLIType.CommercialFee = DECIMAL(icCommFee)
-         CLIType.CompareFee    = DECIMAL(icComparisonFee)
-         ClIType.ServiceClass  = icServClass
-         CLIType.WebStatusCode = INTEGER(fTMSCValue("CLIType",
-                                                    "WebStatusCode",
-                                                    icWebStatCode))
-         CLIType.StatusCode    = INTEGER(fTMSCValue("CLIType",
-                                                    "StatusCode",
-                                                    icStatCode))
-         CLIType.PayType       = INTEGER(fTMSCValue("CLIType",
-                                                    "PayType",
-                                                    icPayType))
-         CLIType.UsageType     = INTEGER(fTMSCValue("CLIType",
-                                                    "UsageType",
-                                                    icUsageType)) 
-         CLIType.ARAccNum      = IF CLIType.PayType = 1 THEN 43000000 
-                                 ELSE IF CLIType.PayType = 2 THEN 43001000
-                                 ELSE 0             
-         CLIType.BillTarget    = liFinalBT + 1
-         CLIType.ContrType     = IF icPayType EQ "Postpaid" THEN liFinalCR + 1 
-                                 ELSE 1
-         ocCLIType             = icCLIType           NO-ERROR.
-                                            
-      IF ERROR-STATUS:ERROR THEN 
-         RETURN "ERROR: Creating CLIType".
+         CLIType.CommercialFee     = DECIMAL(icCommFee)
+         CLIType.CompareFee        = DECIMAL(icComparisonFee)
+         ClIType.ServiceClass      = icServClass
+         CLIType.WebStatusCode     = INTEGER(fTMSCValue("CLIType","WebStatusCode",icWebStatCode))
+         CLIType.StatusCode        = INTEGER(fTMSCValue("CLIType","StatusCode",icStatCode))
+         CLIType.PayType           = INTEGER(fTMSCValue("CLIType","PayType",icPayType))
+         CLIType.UsageType         = INTEGER(fTMSCValue("CLIType","UsageType",icUsageType)) 
+         CLIType.ARAccNum          = (IF CLIType.PayType = 1 THEN 43000000 ELSE IF CLIType.PayType = 2 THEN 43001000 ELSE 0)
+         CLIType.BillTarget        = liFinalBT + 1
+         CLIType.ContrType         = (IF icPayType EQ "Postpaid" THEN liFinalCR + 1 ELSE 1).
 
+      IF icCopyServicesFromCliType > "" THEN 
+         RUN pCreateCTServPac(icCLIType, icCopyServicesFromCliType).      
       
-      IF llgCTServPac THEN 
-         RUN pCreServPack(INPUT ocCLIType,
-                          INPUT icPayType) NO-ERROR.
+      RUN pRequestAction(icCLIType, icBaseBundle, icFixedLineBaseBundle, icBundlesForTerminateOnSTC, icServicesForReCreateOnSTC).
+
+      IF icAllowedBundles > "" THEN 
+         RUN pMatrix(icCLIType, icAllowedBundles).
+
+      IF icDataLimit > "" OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "" THEN 
+         RUN pUpdateDataBundleTMSParam(icCLIType).
       
-      IF ERROR-STATUS:ERROR THEN 
-         RETURN "ERROR: Creating CLIType Servpacks". 
+      IF CLIType.PayType = 1 AND CLIType.UsageType = 1 THEN 
+         RUN pUpdatePostPaidVoiceSusbscriptionTypeTMSParam(icCLIType,"POSTPAID").
+      ELSE IF CLIType.PayType = 2 AND CLIType.UsageType = 1 THEN 
+         RUN pUpdatePostPaidVoiceSusbscriptionTypeTMSParam(icCLIType,"PREPAID").   
    END.
-   ELSE 
-      RETURN "ERROR: CLIType already exists".
      
-  RETURN "OK".                                                                                                                        
+   RETURN "".
+
 END PROCEDURE.    
 
-PROCEDURE pCreServPack:
-DEFINE INPUT PARAMETER icCLIType AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icPayType AS CHARACTER NO-UNDO.
-
-DEFINE VARIABLE liCTServEl AS INTEGER NO-UNDO.
-
-   IF fIsConvergenceTariff(icCLIType) THEN
-      FIND FIRST CLIType WHERE 
-                 CLIType.Brand   = gcBrand  AND 
-                 CLIType.CLIType = "CONTDSL45"  NO-LOCK NO-ERROR.
-   IF icPayType EQ "Postpaid" THEN  
-      FIND FIRST CLIType WHERE 
-                 CLIType.Brand   = gcBrand  AND 
-                 CLIType.CLIType = "CONTS"  NO-LOCK NO-ERROR.
-   ELSE IF icPayType EQ "Prepaid" THEN 
-      FIND FIRST CLIType WHERE 
-                 CLIType.Brand   = gcBrand  AND 
-                 CLIType.CLIType = "TARJ7"  NO-LOCK NO-ERROR.       
+PROCEDURE pCreateCTServPac:
+   DEFINE INPUT PARAMETER icCLIType                 AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icCopyServicesFromCliType AS CHARACTER NO-UNDO.   
    
-   IF AVAILABLE CLIType THEN DO:              
-      FOR EACH CTServPac WHERE 
-               CTServPac.Brand   = gcBrand         AND 
-               CTServPac.CLIType = CLIType.CLIType NO-LOCK:
-         CREATE bCTServPac.
-         BUFFER-COPY CTServPac EXCEPT CTServPac.CLIType 
-                                      CTServPac.FromDate
-                                   TO bCTServPac.
-         ASSIGN bCTServPac.CLIType  = icCLIType
-                bCTServPac.FromDate = TODAY NO-ERROR.
-                
-         IF ERROR-STATUS:ERROR THEN 
-            RETURN "ERROR: Creating CTServPac".
-            
-         FOR EACH CTServEl WHERE 
-                  CTServEl.Brand   = gcBrand           AND 
-                  CTServEl.CLIType = CTServPac.CLIType AND 
-                  CTServEl.ServPac = CTServPac.ServPac NO-LOCK:
-            CREATE bCTServEl.
-            BUFFER-COPY CTServEl EXCEPT CTServEl.CTServEl
-                                        CTServEl.CLIType
-                                        CTServEl.FromDate
-                                     TO bCTServEl.
-            ASSIGN bCTServEl.CTServEl = NEXT-VALUE(CTServEl)
-                   bCTServEl.CLIType  = icCLIType 
-                   bCTServEl.FromDate = TODAY 
-                   liCTServEl         = bCTServEl.CTServEl NO-ERROR.                                        
-         
-            IF ERROR-STATUS:ERROR THEN 
-               RETURN "ERROR: Creating CTServEl".
-               
-            FIND ServCom WHERE
-                 ServCom.Brand   = gcBrand AND
-                 ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
-            
-            IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN    
-               FOR EACH CTServAttr WHERE 
-                        CTServAttr.CTServEl = CTServEl.CTServEl NO-LOCK:
-                  CREATE bCTServAttr.
-                  BUFFER-COPY CTServAttr EXCEPT CTServAttr.CTServEl
-                                                CTServAttr.FromDate
-                                             TO bCTServAttr.
-                  ASSIGN bCTServAttr.CTServEl = liCTServEl
-                         bCTServAttr.FromDate = TODAY NO-ERROR. 
-                  
-                  IF ERROR-STATUS:ERROR THEN 
-                     RETURN "ERROR: Creating CTServAttr".                                        
-               END.            
-         END.                     
+   DEFINE BUFFER bf_CTServPac_CopyFrom  FOR CTServPac.
+   DEFINE BUFFER bf_CTServEl_CopyFrom   FOR CTServEl.
+   DEFINE BUFFER bf_CTServAttr_CopyFrom FOR CTServAttr.
+   
+   FOR EACH bf_CTServPac_CopyFrom WHERE bf_CTServPac_CopyFrom.Brand = gcBrand AND bf_CTServPac_CopyFrom.CLIType = icCopyServicesFromCliType NO-LOCK:
+
+      CREATE CTServPac.
+      BUFFER-COPY bf_CTServPac_CopyFrom EXCEPT bf_CTServPac_CopyFrom.CLIType bf_CTServPac_CopyFrom.FromDate TO CTServPac
+         ASSIGN 
+            CTServPac.CLIType  = icCLIType
+            CTServPac.FromDate = TODAY.
+          
+      FOR EACH bf_CTServEl_CopyFrom WHERE bf_CTServEl_CopyFrom.Brand = gcBrand AND bf_CTServEl_CopyFrom.CLIType = bf_CTServPac_CopyFrom.CLIType AND bf_CTServEl_CopyFrom.ServPac = bf_CTServPac_CopyFrom.ServPac NO-LOCK:
+
+         CREATE CTServEl.
+         BUFFER-COPY bf_CTServEl_CopyFrom EXCEPT bf_CTServEl_CopyFrom.CTServEl bf_CTServEl_CopyFrom.CLIType bf_CTServEl_CopyFrom.FromDate TO CTServEl
+            ASSIGN 
+               CTServEl.CTServEl = NEXT-VALUE(CTServEl)
+               CTServEl.CLIType  = icCLIType 
+               CTServEl.FromDate = TODAY.               
+          
+         FOR EACH bf_CTServAttr_CopyFrom WHERE bf_CTServAttr_CopyFrom.CTServEl = bf_CTServEl_CopyFrom.CTServEl NO-LOCK:
+            CREATE CTServAttr.
+            BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT bf_CTServAttr_CopyFrom.CTServEl bf_CTServAttr_CopyFrom.FromDate TO CTServAttr
+               ASSIGN 
+                  CTServAttr.CTServEl = bf_CTServEl_CopyFrom.CTServEl
+                  CTServAttr.FromDate = TODAY.
+          END.            
       END.
-   END.
-   ELSE 
-      RETURN "ERROR: CLIType doesn't exists for creating ctservpac".
+   END.  
       
-   RETURN "OK".
+   RETURN "".
                              
 END PROCEDURE.               
-
-FUNCTION fGetNextMatrixPriority RETURNS INTEGER 
-   (icKey AS CHARACTER):
-
-   DEFINE BUFFER bf_Matrix FOR Matrix.
-
-   FIND LAST bf_Matrix WHERE bf_Matrix.mxkey = icKey NO-LOCK NO-ERROR.
-   IF AVAILABLE bf_Matrix THEN 
-      RETURN (bf_Matrix.Prior + 1).
-   ELSE 
-      RETURN 1.  
-
-END FUNCTION.    
-
-
-FUNCTION fGetNextRequestActionSequence RETURNS INTEGER 
-   ():
-   DEFINE BUFFER bf_RequestAction FOR RequestAction.
-
-   FIND LAST bf_RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
-   IF AVAILABLE bf_RequestAction THEN 
-      RETURN (bf_RequestAction.RequestActionID + 1).
-   ELSE 
-      RETURN 1.
-
-END FUNCTION.    
-
-FUNCTION fPrepareRequestActionParam RETURNS LOGICAL
-  (INPUT icMobileBundles            AS CHARACTER,
-   INPUT icFixedLineBundles         AS CHARACTER,
-   INPUT icBundlesForTerminateOnSTC AS CHARACTER,
-   INPUT icServicesRecreated        AS CHARACTER,
-   OUTPUT ocReqTypeList             AS CHARACTER,
-   OUTPUT ocActionList              AS CHARACTER,
-   OUTPUT ocActionKeyList           AS CHARACTER,
-   OUTPUT ocActionTypeList          AS CHARACTER):
-
-   DEFINE VARIABLE liCnt             AS INTEGER   NO-UNDO.   
-   DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO.   
-
-   IF icMobileBundles > "" THEN 
-   DO liCount = 1 TO NUM-ENTRIES(icMobileBundles):    
-
-      DO liCnt = 1 TO 2:
-        ASSIGN 
-           ocReqTypeList     = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
-                                                                                               STRING({&REQTYPE_SUBSCRIPTION_CREATE}) 
-                                                                                            ELSE 
-                                                                                               STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})) 
-           ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
-           ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icMobileBundles)
-           ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
-      END.   
-
-   END.
-
-   IF icFixedLineBundles > "" THEN 
-   DO liCount = 1 TO NUM-ENTRIES(icFixedLineBundles):    
-
-      DO liCnt = 1 TO 2: 
-         ASSIGN 
-            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
-                                                                                            STRING({&REQTYPE_FIXED_LINE_CREATE}) 
-                                                                                         ELSE 
-                                                                                            STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}))  
-            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
-            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icFixedLineBundles)
-            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
-      END.   
-   END.   
-
-   IF icBundlesForTerminateOnSTC > "" THEN 
-   DO liCount = 1 TO NUM-ENTRIES(icBundlesForTerminateOnSTC):
-      ASSIGN 
-            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})  
-            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "TERMINATE"
-            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icBundlesForTerminateOnSTC)
-            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
-   END.
-
-   IF icServicesRecreated > "" THEN 
-   DO liCount = 1 TO NUM-ENTRIES(icServicesRecreated):
-      ASSIGN 
-            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})  
-            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "RECREATE"
-            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icServicesRecreated)
-            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "CTServPac".
-   END.
-
-   RETURN TRUE.
-
-END FUNCTION.
 
 PROCEDURE pRequestAction:
    DEFINE INPUT PARAMETER icCLIType                  AS CHARACTER NO-UNDO.
@@ -790,7 +625,7 @@ PROCEDURE pRequestAction:
    /* TODO: SMS related configuration */
    FIND FIRST CliType WHERE ClIType.Brand = gcBrand AND CliType.ClIType = icCLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL CliType THEN 
-       RETURN "ERROR: CLIType doesn't exists for creating request actions".
+      UNDO, THROW NEW Progress.Lang.AppError('CLIType doesn't exists for creating request actions', 1).
 
    /* This is to add mobile packages and fixed line packages to RequestType's subscription creation, fixedline activation & STC */    
    fPrepareRequestActionParam(icMobileBundles,
@@ -803,7 +638,7 @@ PROCEDURE pRequestAction:
                               OUTPUT lcActionTypeList).      
 
    IF lcActionTypeList = "" THEN
-      RETURN "ERROR: Failed to add configurations to request action".
+      UNDO, THROW NEW Progress.Lang.AppError('Failed to add configurations to request action', 1).      
 
    DO liCount = 1 TO NUM-ENTRIES(lcRequestTypeList):
 
@@ -816,7 +651,7 @@ PROCEDURE pRequestAction:
                           ELSE IF lcAction = "RECREATE" THEN 
                              3 
                           ELSE 
-                            1)
+                             1)
          lcActionKey   = ENTRY(liCount, lcActionKeyList)
          lcActionType  = ENTRY(liCount, lcActionTypeList)
          liRequestType = INT(ENTRY(liCount, lcRequestTypeList)).
@@ -846,7 +681,7 @@ PROCEDURE pRequestAction:
       END.
    END.  
 
-   RETURN "OK".
+   RETURN "".
 
 END PROCEDURE.
 
@@ -885,7 +720,7 @@ PROCEDURE pMatrix:
 
    END.
 
-   RETURN "OK".
+   RETURN "".
 
 END PROCEDURE.
 
@@ -899,34 +734,35 @@ PROCEDURE pUpdateDataBundleTMSParam:
       DO:
          FIND CURRENT TMSParam EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
          IF LOCKED TMSParam THEN 
-            RETURN "ERROR: DATA_BUNDLE TMSParam failed to update.".
+            UNDO, THROW NEW Progress.Lang.AppError('DATA_BUNDLE_BASED_CLITYPES TMSParam failed to update', 1).
 
          IF AVAIL TMSParam THEN      
             ASSIGN TMSParam.CharVal = TMSParam.CharVal + (IF TMSParam.CharVal <> "" THEN "," ELSE "") + icCLIType. 
       END.         
    END.
 
-   RETURN "OK".
+   RETURN "".
 
 END PROCEDURE.
 
 PROCEDURE pUpdateVoiceSusbscriptionTypeTMSParam:
    DEFINE INPUT PARAMETER icCLIType AS CHARACTER NO-UNDO.   
+   DEFINE INPUT PARAMETER icPayType AS CHARACTER NO-UNDO.   
 
-   FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "POSTPAID_VOICE_TARIFFS" NO-LOCK NO-ERROR.
+   FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ icPayType + "_VOICE_TARIFFS" NO-LOCK NO-ERROR.
    IF AVAIL TMSParam THEN 
    DO:
       IF LOOKUP(icCliType, TMSParam.CharVal) = 0 THEN 
       DO:
          FIND CURRENT TMSParam EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
          IF LOCKED TMSParam THEN 
-            RETURN "ERROR: VOICE_TARIFF TMSParam failed to update.".
+            UNDO, THROW NEW Progress.Lang.AppError(icPayType + '_VOICE_TARIFFS TMSParam failed to update', 1).            
 
          IF AVAIL TMSParam THEN      
             ASSIGN TMSParam.CharVal = TMSParam.CharVal + (IF TMSParam.CharVal <> "" THEN "," ELSE "") + icCLIType. 
       END.         
    END.
 
-   RETURN "OK".
+   RETURN "".
 
 END PROCEDURE.
