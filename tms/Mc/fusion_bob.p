@@ -21,6 +21,7 @@ gcBrand = "1".
 {orderfunc.i}
 {orderfusion.i}
 {fixedlinefunc.i}
+{fsubstermreq.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
@@ -329,6 +330,7 @@ PROCEDURE pUpdateFusionOrder:
          THEN RETURN "ERROR:Mobile order release not allowed".
       ELSE IF fIsConvergenceTariff(order.clitype) AND
               Order.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
+         fSetOrderStatus(Order.OrderID,"7").
          ASSIGN
             liTermReason = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
             llYoigoCLI = fIsYoigoCLI(order.CLI)
@@ -352,8 +354,7 @@ PROCEDURE pUpdateFusionOrder:
                         "",
                         0,
                         {&TERMINATION_TYPE_PARTIAL},
-                        OUTPUT lcResult).
-         fSetOrderStatus(Order.OrderID,"7"). 
+                        OUTPUT lcResult). 
       END.
       ELSE DO:
          RUN orderinctrl.p(Order.OrderId, 0, TRUE).
