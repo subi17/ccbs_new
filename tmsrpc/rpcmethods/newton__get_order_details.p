@@ -520,6 +520,7 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
       add_string(lcFusionStruct, "fixed_line_appointment_date",OrderFusion.AppointmentDate).
       add_boolean(lcFusionStruct, "allow_mobile_order_release",
          (OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING})).
+      add_string(lcFusionStruct, "cancellation_reason",OrderFusion.CancellationReason).   
 
       FIND FIRST OrderCustomer WHERE 
                  OrderCustomer.Brand = gcBrand AND 
