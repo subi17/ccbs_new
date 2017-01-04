@@ -55,13 +55,14 @@ DEFINE VARIABLE lcConfDir AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liNumOK AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liNumErr AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liNumNotUpd AS INTEGER NO-UNDO.
-
+DEFINE VARIABLE lcHpdDir AS CHAR NO-UNDO. 
 
 ASSIGN
    lcIncDir    = fCParam("Segmentation","IncomingDir") 
    lcProcDir   = fCParam("Segmentation","IncProcDir")
    lcSpoolDir = fCParam("Segmentation","OutSpoolDir")
    lcOutDir   = fCParam("Segmentation","OutDir")
+   lcHpdDir   = fCParam("HPD","DumpOutDir")
    lcConfDir = fCParamC("RepConfDir").
 
 DEF STREAM sin.
@@ -146,6 +147,7 @@ REPEAT:
        "errors: " STRING(liNumErr) SKIP.
 
    lcReportFileOut = fMove2TransDir(lcLogFile, "", lcOutDir).
+   fCopy2TargetDir(lcInputFile, "", lcHpdDir).
    lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir). 
    IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
    
