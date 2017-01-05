@@ -444,7 +444,6 @@ ELSE DO: /* Mobile-related tables ... */
  else if lookup(frame-field,"paraname") >0     then hmod = "h-pdpid".
  else if lookup(frame-field,"msstatus") > 0    then hmod = "h-mobsubstatus".
  else if index(frame-field,"servicelimit") > 0 then hmod = "h-servlimitgrp".
- else if index(frame-field,"plmn") > 0         then hmod = "h-roamoper".
  ELSE IF INDEX(FRAME-FIELD,"ReqStat") > 0      THEN hmod = "h-reqstat".
 
  if hmod ne "" AND hmod NE ? THEN DO:
