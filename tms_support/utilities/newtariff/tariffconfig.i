@@ -47,6 +47,7 @@ DEFINE TEMP-TABLE ttDayCampaign NO-UNDO
     FIELD DCEvent        AS CHARACTER
     FIELD DCName         AS CHARACTER
     FIELD DCType         AS CHARACTER
+    FIELD PayType        AS INTEGER
     FIELD BillCode       AS CHARACTER
     FIELD UpSell         AS CHARACTER
     FIELD BonoSupport    AS LOGICAL
@@ -79,12 +80,12 @@ DEFINE TEMP-TABLE ttServiceLimit NO-UNDO
     INDEX IdxGroupCode IS UNIQUE PRIMARY GroupCode SLCode.
 
 DEFINE TEMP-TABLE ttServiceLimitTarget NO-UNDO
-    FIELD GroupCode   AS CHARACTER
-    FIELD SLCode      AS CHARACTER
-    FIELD SLMember    AS CHARACTER
-    FIELD InsideRate  AS CHARACTER
-    FIELD OutSideRate AS CHARACTER
-    INDEX IdxGroupCodeMember IS UNIQUE PRIMARY GroupCode SLCode SLMember.
+    FIELD GroupCode      AS CHARACTER
+    FIELD SLCode         AS CHARACTER
+    FIELD ServiceLMember AS CHARACTER
+    FIELD InsideRate     AS CHARACTER
+    FIELD OutSideRate    AS CHARACTER
+    INDEX IdxGroupCodeMember IS UNIQUE PRIMARY GroupCode SLCode ServiceLMember.
 
 DEFINE TEMP-TABLE ttBDest NO-UNDO
     FIELD GroupCode AS CHARACTER

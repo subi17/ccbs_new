@@ -204,7 +204,7 @@ PROCEDURE pCLIType:
       DO:
          RUN pMatrix(ttCliType.CliType, ttCliType.AllowedBundles).
 
-         RUN pSLGAnalyse(ttCliType.CliType, ttCliType.BaseBundle, ttCliType.AllowedBundles).   
+         RUN pSLGAnalyse(ttCliType.CliType, ttCliType.BaseBundle, ttCliType.FixedLineBaseBundle, ttCliType.AllowedBundles).   
       END.      
 
       RUN pRequestAction(ttCliType.CliType, 
@@ -239,7 +239,8 @@ PROCEDURE pSLGAnalyse:
     DEFINE VARIABLE lcSubsTypePrefix         AS CHARACTER NO-UNDO.
     DEFINE VARIABLE lcBillCodeList           AS CHARACTER NO-UNDO.
     DEFINE VARIABLE lcConvergentBillCodeList AS CHARACTER NO-UNDO.
-
+    DEFINE VARIABLE lcMxValue                AS CHARACTER NO-UNDO.
+    
     DEFINE BUFFER bf_Matrix     FOR Matrix.
     DEFINE BUFFER bf_MxItem     FOR MxItem.
     DEFINE BUFFER bf_SLGAnalyse FOR SLGAnalyse.
@@ -261,8 +262,10 @@ PROCEDURE pSLGAnalyse:
             
             IF bf_Matrix.MXRes <> 1 THEN 
                 NEXT.                                           
-
-            FOR EACH bf_MxItem WHERE bf_MxItem.MxSeq = bf_Matrix.MxSeq AND bf_MxItem.MxName = "SubsTypeTo" AND bf_MxValue = ENTRY(liCount, lcSubsTypePrefix) NO-LOCK:
+            
+            ASSIGN lcMxValue = ENTRY(liCount,lcSubsTypePrefix).
+            
+            FOR EACH bf_MxItem WHERE bf_MxItem.MxSeq = bf_Matrix.MxSeq AND bf_MxItem.MxName = "SubsTypeTo" AND bf_MxItem.MxValue = lcMxValue NO-LOCK:
                 FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK:
 
                     FIND FIRST DayCampaign WHERE Daycampaign.Brand = gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
@@ -271,7 +274,6 @@ PROCEDURE pSLGAnalyse:
 
                 END.
             END.
-
         END.
     END.    
     
@@ -329,7 +331,7 @@ PROCEDURE pSLGAnalyse:
             IF AVAIL bf_SLGAnalyse THEN
             DO:
                 CREATE SLGAnalyse.
-                BUFFER-COPY bf_SLGAnalyse EXCEPT CliType SLGAnalyse.ServiceLimitGroup ValidFrom ValidTo TO SLGAnalyse
+                BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ServiceLimitGroup ValidFrom ValidTo TO SLGAnalyse
                     ASSIGN
                         SLGAnalyse.CliType           = icCliType 
                         SLGAnalyse.ServiceLimitGroup = "VOICE100"
@@ -366,7 +368,7 @@ PROCEDURE pSLGAnalyse:
         IF AVAIL bf_SLGAnalyse THEN
         DO:
             CREATE SLGAnalyse.
-            BUFFER-COPY bf_SLGAnalyse EXCEPT CliType SLGAnalyse.ServiceLimitGroup ValidFrom ValidTo TO SLGAnalyse
+            BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ServiceLimitGroup ValidFrom ValidTo TO SLGAnalyse
                 ASSIGN
                     SLGAnalyse.CliType           = icCliType 
                     SLGAnalyse.ServiceLimitGroup = (IF icMobileBaseBundle > "" THEN icMobileBaseBundle ELSE icCliType)
@@ -504,7 +506,7 @@ PROCEDURE pFMItem:
          ASSIGN lcRatePlan = CLIType.PricePlan.
    END.
    
-   ASSIGN lcRatePlan = (IF lcRatePlan NE "" THEN lcRatePlan ELSE REPLACE(icTariffCode,"CONT","CONTRATO")).
+   ASSIGN lcRatePlan = (IF lcRatePlan NE "" THEN lcRatePlan ELSE REPLACE(ttCliType.CliType,"CONT","CONTRATO")).
 
    FIND FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK NO-ERROR.           
    IF AVAIL RatePlan THEN   
@@ -681,7 +683,7 @@ PROCEDURE pRequestAction:
    /* TODO: SMS related configuration */
    FIND FIRST CliType WHERE ClIType.Brand = gcBrand AND CliType.ClIType = icCLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL CliType THEN 
-      UNDO, THROW NEW Progress.Lang.AppError('CLIType doesn't exists for creating request actions', 1).
+      UNDO, THROW NEW Progress.Lang.AppError("CLIType doesn't exists for creating request actions", 1).
 
    /* This is to add mobile packages and fixed line packages to RequestType's subscription creation, fixedline activation & STC */    
    fPrepareRequestActionParam(icMobileBundles,

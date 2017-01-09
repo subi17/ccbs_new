@@ -138,7 +138,7 @@ END.
 /* ***************************  Main End  *************************** */ 
 PROCEDURE pSaveTariff:
   DEFINE VARIABLE liSLSeq           AS INTEGER   NO-UNDO.
-  DEFINE VARIABLE llFeeModelCreated AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE llFeeModelCreated AS LOGICAL   NO-UNDO.
 
   FOR EACH ttCliType
       ON ERROR UNDO, THROW:
@@ -257,18 +257,18 @@ PROCEDURE pProcessTT:
               ttCliType.PayType                   = INTEGER(fTMSCValue("CLIType","PayType",lcPaymentType)) 
               ttCliType.UsageType                 = INTEGER(fTMSCValue("CLIType","UsageType",lcUsageType))  
               ttCliType.LineType                  = INTEGER(fTMSCValue("CLIType","LineType",lcLineType)) 
-              ttCliType.FixedLineType             = INTEGER(fTMSCValue("CLIType","FixedLineType",lcFixLineType))  
+              ttCliType.FixedLineType             = INTEGER(fTMSCValue("CLIType","FixedLineType",lcFixLineType))                
               ttCliType.FixedLineDownload         = ""
               ttCliType.FixedLineUpload           = ""
               ttCliType.BundleType                = True
               ttCliType.Serviceclass              = lcServiceClass
               ttCliType.CommercialFee             = DECIMAL(lcCommFee)
-              ttCliType.CompareFee                = DECIMAL(lcComparisonFee)
+              ttCliType.CompareFee                = DECIMAL(lcComparisonFee)              
               ttCliType.RatePlan                  = icRatePlan
               ttCliType.TariffBundle              = ""        
               ttCliType.ParentTariff              = ""      
               ttCliType.AllowedBundles            = ""
-              ttCliType.MobileBaseBundleDataLimit = ""
+              ttCliType.MobileBaseBundleDataLimit = 0
               ttCliType.BundlesForActivateOnSTC   = ""
               ttCliType.ServicesForReCreateOnSTC  = ""
               ttCliType.CopyServicesFromCliType   = lcCopyServicesFromCliType.
@@ -298,7 +298,7 @@ PROCEDURE pProcessTT:
       ttCliType.TariffBundle              = (IF lcTariffBundle > "" THEN lcTariffBundle ELSE "")  
       ttCliType.ParentTariff              = (IF lcTariffBundle > "" THEN lcCliType      ELSE "")  
       ttCliType.AllowedBundles            = lcAllowedBundles
-      ttCliType.MobileBaseBundleDataLimit = lcMobile_DataLimit 
+      ttCliType.MobileBaseBundleDataLimit = DECIMAL(lcMobile_DataLimit) 
       ttCliType.BundlesForActivateOnSTC   = lcBundlesForActivateOnSTC
       ttCliType.ServicesForReCreateOnSTC  = lcServicesForReCreateOnSTC
       ttCliType.CopyServicesFromCliType   = (IF lcTariffBundle > "" THEN "" ELSE lcCopyServicesFromCliType).
@@ -320,23 +320,23 @@ PROCEDURE pProcessTT:
              liBDLFirstMonthBR = (IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
              liBDLLastMonthBR  = (IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0).
 
-         RUN pBundle((ttCliType.CliType,
+         RUN pBundle(ttCliType.CliType,
                      (IF lcTariffBundle > "" THEN lcTariffBundle ELSE lcMobile_BaseBundle),
                      ttCliType.CliName,
                      lcMobile_BaseBundleType,
                      lcMobile_MonthlyFeeBillCode,
                      lcMobile_BaseBundleUpsell,
-                     LOG(lcMobile_BaseBundleBonoSupport),
-                     DEC(lcMobile_CommercialFee),
+                     LOGICAL(lcMobile_BaseBundleBonoSupport),
+                     DECIMAL(lcMobile_CommercialFee),
                      liFirstMonthBR,
                      liLastMonthBR,
-                     DEC(lcMobile_DataLimit),
+                     DECIMAL(lcMobile_DataLimit),
                      liDLFirstMonthBR,
                      liDLLastMonthBR,
-                     DEC(lcMobile_VoiceLimit),
+                     DECIMAL(lcMobile_VoiceLimit),
                      liVLFirstMonthBR,
                      liVLLastMonthBR,
-                     DEC(lcMobile_BDestLimit)
+                     DECIMAL(lcMobile_BDestLimit),
                      liBDLFirstMonthBR,
                      liBDLLastMonthBR).        
       END.
@@ -362,17 +362,17 @@ PROCEDURE pProcessTT:
                       lcFixedLine_BaseBundleType,
                       lcFixedLine_MonthlyFeeBillCode,
                       lcFixedLine_BaseBundleUpsell,
-                      LOG(lcFixedLine_BaseBundleBonoSupport),
-                      DEC(lcFixedLine_CommercialFee),
+                      LOGICAL(lcFixedLine_BaseBundleBonoSupport),
+                      DECIMAL(lcFixedLine_CommercialFee),
                       liFirstMonthBR,
                       liLastMonthBR,
                       0,
                       liDLFirstMonthBR,
                       liDLLastMonthBR,
-                      DEC(lcFixedLine_VoiceLimit),
+                      DECIMAL(lcFixedLine_VoiceLimit),
                       liVLFirstMonthBR,
                       liVLLastMonthBR,
-                      DEC(lcFixedLine_BDestLimit)
+                      DECIMAL(lcFixedLine_BDestLimit),
                       liBDLFirstMonthBR,
                       liBDLLastMonthBR).        
       END.
@@ -381,26 +381,27 @@ PROCEDURE pProcessTT:
 END PROCEDURE.
 
 PROCEDURE pBundle:
-    DEFINE INPUT PARAMETER icCliType          AS CHARACTER NO-UNDO.
-    DEFINE INPUT PARAMETER icBundle           AS CHARACTER NO-UNDO.
-    DEFINE INPUT PARAMETER icBundleName       AS CHARACTER NO-UNDO.
-    DEFINE INPUT PARAMETER icBundleType       AS CHARACTER NO-UNDO.
-    DEFINE INPUT PARAMETER icBillCode         AS CHARACTER NO-UNDO.
-    DEFINE INPUT PARAMETER icUpSell           AS CHARACTER NO-UNDO.
-    DEFINE INPUT PARAMETER ilBonoSupport      AS LOGICAL   NO-UNDO.
-    DEFINE INPUT PARAMETER ideCommercialFee   AS DECIMAL   NO-UNDO.
-    DEFINE INPUT PARAMETER iiFirstMonthBR     AS INTEGER   NO-UNDO.
-    DEFINE INPUT PARAMETER iiLastMonthBR      AS INTEGER   NO-UNDO.
-    DEFINE INPUT PARAMETER ideDataLimit       AS DECIMAL   NO-UNDO.
-    DEFINE INPUT PARAMETER iiDLFirstMonthCalc AS INTEGER   NO-UNDO.
-    DEFINE INPUT PARAMETER iiDLLastMonthCalc  AS INTEGER   NO-UNDO.
-    DEFINE INPUT PARAMETER ideVoiceLimit      AS DECIMAL   NO-UNDO.
-    DEFINE INPUT PARAMETER iiVLFirstMonthCalc AS INTEGER   NO-UNDO.
-    DEFINE INPUT PARAMETER iiVLLastMonthCalc  AS INTEGER   NO-UNDO.
-    DEFINE INPUT PARAMETER ideBDestLimit      AS DECIMAL   NO-UNDO.
+    DEFINE INPUT PARAMETER icCliType           AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icBundle            AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icBundleName        AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icBundleType        AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icBillCode          AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icUpSell            AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER ilBonoSupport       AS LOGICAL   NO-UNDO.
+    DEFINE INPUT PARAMETER ideCommercialFee    AS DECIMAL   NO-UNDO.
+    DEFINE INPUT PARAMETER iiFirstMonthBR      AS INTEGER   NO-UNDO.
+    DEFINE INPUT PARAMETER iiLastMonthBR       AS INTEGER   NO-UNDO.
+    DEFINE INPUT PARAMETER ideDataLimit        AS DECIMAL   NO-UNDO.
+    DEFINE INPUT PARAMETER iiDLFirstMonthCalc  AS INTEGER   NO-UNDO.
+    DEFINE INPUT PARAMETER iiDLLastMonthCalc   AS INTEGER   NO-UNDO.
+    DEFINE INPUT PARAMETER ideVoiceLimit       AS DECIMAL   NO-UNDO.
+    DEFINE INPUT PARAMETER iiVLFirstMonthCalc  AS INTEGER   NO-UNDO.
+    DEFINE INPUT PARAMETER iiVLLastMonthCalc   AS INTEGER   NO-UNDO.
+    DEFINE INPUT PARAMETER ideBDestLimit       AS DECIMAL   NO-UNDO.
     DEFINE INPUT PARAMETER iiBDLFirstMonthCalc AS INTEGER   NO-UNDO.
     DEFINE INPUT PARAMETER iiBDLLastMonthCalc  AS INTEGER   NO-UNDO.
 
+    DEFINE VARIABLE liCount  AS INTEGER   NO-UNDO.
     DEFINE VARIABLE lcBCList AS CHARACTER NO-UNDO.
 
     ASSIGN lcBCList = "10100001,10100003,10100005,CFOTHER,CFYOIGO".
@@ -860,7 +861,7 @@ PROCEDURE pValidateData:
       /* Validations */
       IF (iiPayType = 2 AND lcPaymentType = "Postpaid") OR (iiPayType = 1 AND lcPaymentType = "Prepaid") THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Rateplan and Tariff with different payment types", 1).
-      ELSE IF lcFixLineType <> "" AND (lcFixedLineBaseBundle = "" OR lcFixedLineDownload = "" OR lcFixedLineUpload = "") THEN 
+      ELSE IF lcFixLineType <> "" AND (lcFixedLine_BaseBundle = "" OR lcFixedLineDownload = "" OR lcFixedLineUpload = "") THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Fixed line base bundle or upload/download speed is invalid", 1).
       ELSE IF lcPaymentType = "PostPaid" AND lcServiceClass <> "" THEN  
          UNDO, THROW NEW Progress.Lang.AppError("Postpaid subscription contains Serviceclass data", 1).
