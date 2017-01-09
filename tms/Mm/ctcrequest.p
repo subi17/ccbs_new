@@ -203,7 +203,8 @@ END.
 
 /* Set new activation ts for clitype change */     
 IF MSREquest.ReqDParam1 > MSRequest.ActStamp OR
-   MSRequest.ReqSource = {&REQUEST_SOURCE_FUSION_ORDER} THEN
+   MSRequest.ReqSource = {&REQUEST_SOURCE_FUSION_ORDER} OR
+   MSRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} THEN
      ldeActStamp = MsRequest.ReqDParam1.
 ELSE ldeActStamp = MsRequest.ActStamp.
 
@@ -329,7 +330,8 @@ FIND MsRequest WHERE
 
 /* Set new activation ts for clitype change */     
 IF MSREquest.ReqDParam1 > MSRequest.ActStamp OR 
-   MSRequest.ReqSource = {&REQUEST_SOURCE_FUSION_ORDER} THEN
+   MSRequest.ReqSource = {&REQUEST_SOURCE_FUSION_ORDER} OR
+   MSRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} THEN
    MSRequest.ActStamp =   MSREquest.ReqDParam1 .  
 
 /* Check sub-requests */      

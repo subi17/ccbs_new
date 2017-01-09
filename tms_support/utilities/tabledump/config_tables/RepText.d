@@ -584,11 +584,15 @@
 1 "" 2 "Pagament Final" 0 "CNRVTERM" "1" 13/04/16 31/12/49
 1 "" 3 "Azken ordainketa" 0 "CNRVTERM" "1" 13/04/16 31/12/49
 1 "" 5 "Final Payment" 0 "CNRVTERM" "1" 13/04/16 31/12/49
-1 "" 1 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
-1 "" 2 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
-1 "" 3 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
-1 "" 4 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
-1 "" 5 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
+1 "" 1 "Compensación BBVA" 0 "COMPCF" "1" 15/12/16 31/12/49
+1 "" 1 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 14/12/16
+1 "" 2 "Compensación BBVA" 0 "COMPCF" "1" 15/12/16 31/12/49
+1 "" 2 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 14/12/16
+1 "" 3 "Compensación BBVA" 0 "COMPCF" "1" 15/12/16 31/12/49
+1 "" 3 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 14/12/16
+1 "" 4 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 14/12/16
+1 "" 5 "Compensación BBVA" 0 "COMPCF" "1" 15/12/16 31/12/49
+1 "" 5 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 14/12/16
 1 "" 1 "Compensación consumo mínimo" 0 "CONSMINFAT" "1" 01/06/11 31/12/54
 1 "" 2 "Compensació consum mínim" 0 "CONSMINFAT" "1" 01/06/11 31/12/54
 1 "" 3 "Gutxieneko kontsumoaren konpentsazioa" 0 "CONSMINFAT" "1" 01/04/12 31/12/49
@@ -647,10 +651,10 @@
 1 "" 2 "Descompte promoció" 0 "CONT24DISC" "1" 01/03/15 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT24DISC" "1" 01/03/15 31/12/49
 1 "" 5 "Promotional discount" 0 "CONT24DISC" "1" 01/03/15 31/12/49
-1 "" 1 "La Sinfín" 0 "CONT24MF" "1" 04/03/15 31/12/49
-1 "" 2 "La Sinfín" 0 "CONT24MF" "1" 04/03/15 31/12/49
-1 "" 3 "La Sinfín" 0 "CONT24MF" "1" 04/03/15 31/12/49
-1 "" 5 "La Sinfín" 0 "CONT24MF" "1" 04/03/15 31/12/49
+1 "" 1 "La Sinfín 20 GB" 0 "CONT24MF" "1" 04/03/15 31/12/49
+1 "" 2 "La Sinfín 20 GB" 0 "CONT24MF" "1" 04/03/15 31/12/49
+1 "" 3 "La Sinfín 20 GB" 0 "CONT24MF" "1" 04/03/15 31/12/49
+1 "" 5 "La Sinfín 20 GB" 0 "CONT24MF" "1" 04/03/15 31/12/49
 1 "" 1 "Nacionales" 0 "CONT24VOICE_A" "1" 04/03/15 31/12/49
 1 "" 2 "Nacionals" 0 "CONT24VOICE_A" "1" 04/03/15 31/12/49
 1 "" 3 "Nazionalak" 0 "CONT24VOICE_A" "1" 04/03/15 31/12/49
@@ -671,10 +675,10 @@
 1 "" 2 "Descompte promoció" 0 "CONT25DISC" "1" 12/12/16 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT25DISC" "1" 12/12/16 31/12/49
 1 "" 5 "Promotional discount" 0 "CONT25DISC" "1" 12/12/16 31/12/49
-1 "" 1 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
-1 "" 2 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
-1 "" 3 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
-1 "" 5 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 1 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 2 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 3 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 5 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
 1 "" 1 "Nacionales" 0 "CONT25VOICE_A" "1" 12/12/16 31/12/49
 1 "" 2 "Nacionals" 0 "CONT25VOICE_A" "1" 12/12/16 31/12/49
 1 "" 3 "Nazionalak" 0 "CONT25VOICE_A" "1" 12/12/16 31/12/49
@@ -3202,6 +3206,11 @@
 1 "" 3 "LG G5 SE Titan" 0 "G0000312" "1" 24/11/16 31/12/49
 1 "" 4 "LG G5 SE Titan" 0 "G0000312" "1" 24/11/16 31/12/49
 1 "" 5 "LG G5 SE" 0 "G0000312" "1" 24/11/16 31/12/49
+1 "" 1 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
+1 "" 2 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
+1 "" 3 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
+1 "" 4 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
+1 "" 5 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -5585,6 +5594,11 @@
 1 "" 3 "Samsung Galaxy Trend Blanco" 0 "P034S75W2" "1" 26/06/13 31/12/49
 1 "" 4 "Samsung Galaxy Trend Blanco" 0 "P034S75W2" "1" 26/06/13 31/12/49
 1 "" 5 "Samsung Galaxy Trend White" 0 "P034S75W2" "1" 26/06/13 31/12/49
+1 "" 1 "Samsung Galaxy S7 edge Azul" 0 "P034S7EA2" "1" 05/01/17 31/12/49
+1 "" 2 "Samsung Galaxy S7 edge Azul" 0 "P034S7EA2" "1" 05/01/17 31/12/49
+1 "" 3 "Samsung Galaxy S7 edge Azul" 0 "P034S7EA2" "1" 05/01/17 31/12/49
+1 "" 4 "Samsung Galaxy S7 edge Azul" 0 "P034S7EA2" "1" 05/01/17 31/12/49
+1 "" 5 "Samsung Galaxy S7 edge Blue" 0 "P034S7EA2" "1" 05/01/17 31/12/49
 1 "" 1 "Samsung Galaxy S7 edge Dorado" 0 "P034S7ED2" "1" 19/02/16 31/12/49
 1 "" 2 "Samsung Galaxy S7 edge Dorado" 0 "P034S7ED2" "1" 19/02/16 31/12/49
 1 "" 3 "Samsung Galaxy S7 edge Dorado" 0 "P034S7ED2" "1" 19/02/16 31/12/49
@@ -6973,6 +6987,16 @@
 1 "" 3 "ZTE Blade V220 Plata" 0 "P075220S2" "1" 22/04/15 31/12/49
 1 "" 4 "ZTE Blade V220 Plata" 0 "P075220S2" "1" 22/04/15 31/12/49
 1 "" 5 "ZTE Blade V220 Silver" 0 "P075220S2" "1" 22/04/15 31/12/49
+1 "" 1 "ZTE Blade A310 Gris" 0 "P075310G2" "1" 20/12/16 31/12/49
+1 "" 2 "ZTE Blade A310 Gris" 0 "P075310G2" "1" 20/12/16 31/12/49
+1 "" 3 "ZTE Blade A310 Gris" 0 "P075310G2" "1" 20/12/16 31/12/49
+1 "" 4 "ZTE Blade A310 Gris" 0 "P075310G2" "1" 20/12/16 31/12/49
+1 "" 5 "ZTE Blade A310 Grey" 0 "P075310G2" "1" 20/12/16 31/12/49
+1 "" 1 "ZTE Blade A310 Blanco" 0 "P075310W2" "1" 20/12/16 31/12/49
+1 "" 2 "ZTE Blade A310 Blanco" 0 "P075310W2" "1" 20/12/16 31/12/49
+1 "" 3 "ZTE Blade A310 Blanco" 0 "P075310W2" "1" 20/12/16 31/12/49
+1 "" 4 "ZTE Blade A310 Blanco" 0 "P075310W2" "1" 20/12/16 31/12/49
+1 "" 5 "ZTE Blade A310 White" 0 "P075310W2" "1" 20/12/16 31/12/49
 1 "" 1 "ZTE Blade A452 Oro" 0 "P075452D2" "1" 19/01/16 31/12/49
 1 "" 2 "ZTE Blade A452 Oro" 0 "P075452D2" "1" 19/01/16 31/12/49
 1 "" 3 "ZTE Blade A452 Oro" 0 "P075452D2" "1" 19/01/16 31/12/49
@@ -8114,10 +8138,14 @@
 1 "" 5 "Monthly payment on purchase of mobile or netbook" 0 "PAYTERM18" "1" 01/09/11 31/03/12
 1 "" 5 "Cost/month to buy laptop" 0 "PAYTERM18" "1" 16/03/10 31/08/11
 1 "" 5 "Laptop purchase payments outstanding" 0 "PAYTERM18" "1" 01/03/10 15/03/10
-1 "" 1 "Cuota Pago a Plazos UNO-E" 0 "PAYTERM1E" "1" 01/06/13 31/12/49
-1 "" 2 "Quota Pagament a Terminis UNO-E" 0 "PAYTERM1E" "1" 01/06/13 31/12/49
-1 "" 3 "Epekako ordainketaren kuota, UNO-E bidez" 0 "PAYTERM1E" "1" 01/03/14 31/12/49
-1 "" 5 "Installment payable to UNO-E for purchase" 0 "PAYTERM1E" "1" 01/06/13 31/12/49
+1 "" 1 "Cuota Pago a Plazos BBVA" 0 "PAYTERM1E" "1" 15/12/16 31/12/49
+1 "" 1 "Cuota Pago a Plazos UNO-E" 0 "PAYTERM1E" "1" 01/06/13 14/12/16
+1 "" 2 "Quota Pagament a Terminis BBVA" 0 "PAYTERM1E" "1" 15/12/16 31/12/49
+1 "" 2 "Quota Pagament a Terminis UNO-E" 0 "PAYTERM1E" "1" 01/06/13 14/12/16
+1 "" 3 "Epekako ordainketaren kuota, BBVA bidez" 0 "PAYTERM1E" "1" 15/12/16 31/12/49
+1 "" 3 "Epekako ordainketaren kuota, UNO-E bidez" 0 "PAYTERM1E" "1" 01/03/14 14/12/16
+1 "" 5 "Installment payable to BBVA for purchase" 0 "PAYTERM1E" "1" 15/12/16 31/12/49
+1 "" 5 "Installment payable to UNO-E for purchase" 0 "PAYTERM1E" "1" 01/06/13 14/12/16
 1 "" 1 "Cuota Pago a Plazos" 0 "PAYTERM24" "1" 01/04/12 31/12/49
 1 "" 1 "Pago mensual compra móvil o portátil" 0 "PAYTERM24" "1" 01/09/11 31/03/12
 1 "" 1 "Cuota mensual compra móvil o portátil" 0 "PAYTERM24" "1" 01/08/11 31/08/11
@@ -8139,15 +8167,19 @@
 1 "" 2 "Quota Pagament a Terminis Banco Sabadell" 0 "PAYTERMBS" "1" 01/05/14 31/12/49
 1 "" 3 "Epekako ordainketaren kuota, Banco Sabadell erakundearen bidez" 0 "PAYTERMBS" "1" 01/05/14 31/12/49
 1 "" 5 "Installment payable to Banco Sabadell for purchase" 0 "PAYTERMBS" "1" 01/05/14 31/12/49
-1 "" 1 "Comisión Gestión Aplazamiento UNO-E" 0 "PAYTERMCG1E" "1" 01/05/13 31/12/49
-1 "" 2 "Comissió Gestió Ajornament UNO-E" 0 "PAYTERMCG1E" "1" 01/05/13 31/12/49
-1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, UNO-E bidez" 0 "PAYTERMCG1E" "1" 01/03/14 31/12/49
+1 "" 1 "Comisión Gestión Aplazamiento BBVA" 0 "PAYTERMCG1E" "1" 15/12/16 31/12/49
+1 "" 1 "Comisión Gestión Aplazamiento UNO-E" 0 "PAYTERMCG1E" "1" 01/05/13 14/12/16
+1 "" 2 "Comissió Gestió Ajornament BBVA" 0 "PAYTERMCG1E" "1" 15/12/16 31/12/49
+1 "" 2 "Comissió Gestió Ajornament UNO-E" 0 "PAYTERMCG1E" "1" 01/05/13 14/12/16
+1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, BBVA bidez" 0 "PAYTERMCG1E" "1" 15/12/16 31/12/49
+1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, UNO-E bidez" 0 "PAYTERMCG1E" "1" 01/03/14 14/12/16
 1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, UNO-E erakundearen bidez" 0 "PAYTERMCG1E" "1" 01/05/13 28/02/14
-1 "" 5 "UNO-E Deferred Payment Commission" 0 "PAYTERMCG1E" "1" 01/05/13 31/12/49
+1 "" 5 "BBVA Deferred Payment Commission" 0 "PAYTERMCG1E" "1" 15/12/16 31/12/49
+1 "" 5 "UNO-E Deferred Payment Commission" 0 "PAYTERMCG1E" "1" 01/05/13 14/12/16
 1 "" 1 "Comisión Gestión Aplazamiento CETELEM" 0 "PAYTERMCGBC" "1" 01/10/16 31/12/49
-1 "" 2 "Quota Pagament a Terminis CETELEM" 0 "PAYTERMCGBC" "1" 01/10/16 31/12/49
-1 "" 3 "Epekako ordainketaren kuota, CETELEM erakundearen bidez" 0 "PAYTERMCGBC" "1" 01/10/16 31/12/49
-1 "" 5 "Installment payable to CETELEM for purchase" 0 "PAYTERMCGBC" "1" 01/10/16 31/12/49
+1 "" 2 "Comissió Gestió Ajornament CETELEM" 0 "PAYTERMCGBC" "1" 01/10/16 31/12/49
+1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, CETELEM erakundearen bidez" 0 "PAYTERMCGBC" "1" 01/10/16 31/12/49
+1 "" 5 "CETELEM Deferred Payment Commission" 0 "PAYTERMCGBC" "1" 01/10/16 31/12/49
 1 "" 1 "Comisión Gestión Aplazamiento Banco Sabadell" 0 "PAYTERMCGBS" "1" 01/05/14 31/12/49
 1 "" 2 "Comissió Gestió Ajornament Banco Sabadell" 0 "PAYTERMCGBS" "1" 01/05/14 31/12/49
 1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, Banco Sabadell erakundearen bidez" 0 "PAYTERMCGBS" "1" 01/05/14 31/12/49
@@ -8165,10 +8197,14 @@
 1 "" 5 "Instalments outstanding" 0 "PAYTERMEND" "1" 01/04/12 31/12/49
 1 "" 5 "Outstanding payments on purchase of mobile or netbook" 0 "PAYTERMEND" "1" 01/09/11 31/03/12
 1 "" 5 "Laptop purchase payments outstanding" 0 "PAYTERMEND" "1" 16/03/10 31/08/11
-1 "" 1 "Cuotas pendientes Pago a Plazos UNO-E" 0 "PAYTERMEND1E" "1" 01/06/13 31/12/49
-1 "" 2 "Quotes pendents Pagament a Terminis UNO-E" 0 "PAYTERMEND1E" "1" 01/06/13 31/12/49
-1 "" 3 "Gelditzen diren UNO-E erakundearen epekako ordainketaren kuotak" 0 "PAYTERMEND1E" "1" 01/06/13 31/12/49
-1 "" 5 "UNO-E instalments outstanding" 0 "PAYTERMEND1E" "1" 01/06/13 31/12/49
+1 "" 1 "Cuotas pendientes Pago a Plazos BBVA" 0 "PAYTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 1 "Cuotas pendientes Pago a Plazos UNO-E" 0 "PAYTERMEND1E" "1" 01/06/13 14/12/16
+1 "" 2 "Quotes pendents Pagament a Terminis BBVA" 0 "PAYTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 2 "Quotes pendents Pagament a Terminis UNO-E" 0 "PAYTERMEND1E" "1" 01/06/13 14/12/16
+1 "" 3 "Gelditzen diren BBVA erakundearen epekako ordainketaren kuotak" 0 "PAYTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 3 "Gelditzen diren UNO-E erakundearen epekako ordainketaren kuotak" 0 "PAYTERMEND1E" "1" 01/06/13 14/12/16
+1 "" 5 "BBVA instalments outstanding" 0 "PAYTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 5 "UNO-E instalments outstanding" 0 "PAYTERMEND1E" "1" 01/06/13 14/12/16
 1 "" 1 "Cuotas pendientes Pago a Plazos CETELEM" 0 "PAYTERMENDBC" "1" 01/10/16 31/12/49
 1 "" 2 "Quotes pendents Pagament a Terminis CETELEM" 0 "PAYTERMENDBC" "1" 01/10/16 31/12/49
 1 "" 3 "Gelditzen diren CETELEM erakundearen epekako ordainketaren kuotak" 0 "PAYTERMENDBC" "1" 01/10/16 31/12/49
@@ -8664,10 +8700,14 @@
 1 "" 2 "Quota Pagament a Terminis del Pagament Final" 0 "RVTERM" "1" 01/11/15 31/12/49
 1 "" 3 "Azken ordainketako epekako ordainketako kuota" 0 "RVTERM" "1" 01/11/15 31/12/49
 1 "" 5 "Monthly instalments on final cost" 0 "RVTERM" "1" 01/11/15 31/12/49
-1 "" 1 "Cuota Pago a Plazos UNO-E del Pago Final" 0 "RVTERM1E" "1" 01/11/15 31/12/49
-1 "" 2 "Quota Pagament a Terminis UNO-E del Pagament Final" 0 "RVTERM1E" "1" 01/11/15 31/12/49
-1 "" 3 "Azken ordainketako UNO-E epe. ordainketako kuota" 0 "RVTERM1E" "1" 01/11/15 31/12/49
-1 "" 5 "Monthly UNO-E instalments on final cost" 0 "RVTERM1E" "1" 01/11/15 31/12/49
+1 "" 1 "Cuota Pago a Plazos BBVA del Pago Final" 0 "RVTERM1E" "1" 15/12/16 31/12/49
+1 "" 1 "Cuota Pago a Plazos UNO-E del Pago Final" 0 "RVTERM1E" "1" 01/11/15 14/12/16
+1 "" 2 "Quota Pagament a Terminis BBVA del Pagament Final" 0 "RVTERM1E" "1" 15/12/16 31/12/49
+1 "" 2 "Quota Pagament a Terminis UNO-E del Pagament Final" 0 "RVTERM1E" "1" 01/11/15 14/12/16
+1 "" 3 "Azken ordainketako BBVA epe. ordainketako kuota" 0 "RVTERM1E" "1" 15/12/16 31/12/49
+1 "" 3 "Azken ordainketako UNO-E epe. ordainketako kuota" 0 "RVTERM1E" "1" 01/11/15 14/12/16
+1 "" 5 "Monthly BBVA instalments on final cost" 0 "RVTERM1E" "1" 15/12/16 31/12/49
+1 "" 5 "Monthly UNO-E instalments on final cost" 0 "RVTERM1E" "1" 01/11/15 14/12/16
 1 "" 1 "Pago Final" 0 "RVTERM1EF" "1" 01/02/14 31/12/49
 1 "" 2 "Pagament Final" 0 "RVTERM1EF" "1" 01/02/14 31/12/49
 1 "" 3 "Azken ordainketa" 0 "RVTERM1EF" "1" 01/02/14 31/12/49
@@ -8716,10 +8756,14 @@
 1 "" 2 "Quotes pendents Pagament a Term. de Pagament Final" 0 "RVTERMEND" "1" 01/11/15 31/12/49
 1 "" 3 "Azken ordainketako epe. ordain. kuota ordaingabeak" 0 "RVTERMEND" "1" 01/11/15 31/12/49
 1 "" 5 "Monthly instalments left on final cost" 0 "RVTERMEND" "1" 01/11/15 31/12/49
-1 "" 1 "Cuotas pdtes. Pago a Plazos UNO-E del Pago Final" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
-1 "" 2 "Quotes pendents Pagam. a Term. UNO-E de Pag. Final" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
-1 "" 3 "Az. ordainketako UNO-E epe. ordain. kuo. ordaingb" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
-1 "" 5 "Monthly UNO-E instalments left on final cost" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
+1 "" 1 "Cuotas pdtes. Pago a Plazos BBVA del Pago Final" 0 "RVTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 1 "Cuotas pdtes. Pago a Plazos UNO-E del Pago Final" 0 "RVTERMEND1E" "1" 01/11/15 14/12/16
+1 "" 2 "Quotes pendents Pagam. a Term. BBVA de Pag. Final" 0 "RVTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 2 "Quotes pendents Pagam. a Term. UNO-E de Pag. Final" 0 "RVTERMEND1E" "1" 01/11/15 14/12/16
+1 "" 3 "Az. ordainketako BBVA epe. ordain. kuo. ordaingb" 0 "RVTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 3 "Az. ordainketako UNO-E epe. ordain. kuo. ordaingb" 0 "RVTERMEND1E" "1" 01/11/15 14/12/16
+1 "" 5 "Monthly BBVA instalments left on final cost" 0 "RVTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 5 "Monthly UNO-E instalments left on final cost" 0 "RVTERMEND1E" "1" 01/11/15 14/12/16
 1 "" 1 "Cuotas pdtes. Pago a Plazos CETELEM del Pago Final" 0 "RVTERMENDBC" "1" 01/10/16 31/12/49
 1 "" 2 "Quotes pendents Pagam. a Term. CETELEM de Pag. Final" 0 "RVTERMENDBC" "1" 01/10/16 31/12/49
 1 "" 3 "Az. ordainketako CETELEM epe. ordain. kuo. ordaingb" 0 "RVTERMENDBC" "1" 01/10/16 31/12/49
