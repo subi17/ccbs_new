@@ -123,13 +123,11 @@ DO ON ERROR UNDO, THROW:
    RUN pSaveTranslation.
        
    CATCH e AS Progress.Lang.Error:
-
       OUTPUT STREAM TariffLog TO VALUE(lcLogFile) APPEND.
-      fError(RETURN-VALUE).
+      fError(e:GetMessage(1)).
       OUTPUT STREAM TariffLog CLOSE.
 
-      UNDO, THROW NEW Progress.Lang.AppError(RETURN-VALUE, 1).
-
+      UNDO, THROW e.
    END CATCH.
    FINALLY:
 
