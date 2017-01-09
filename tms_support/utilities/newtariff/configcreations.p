@@ -235,26 +235,30 @@ PROCEDURE pCTServPac:
    DEFINE BUFFER bf_CTServEl_CopyFrom   FOR CTServEl.
    DEFINE BUFFER bf_CTServAttr_CopyFrom FOR CTServAttr.
    
-   FOR EACH bf_CTServPac_CopyFrom WHERE bf_CTServPac_CopyFrom.Brand = gcBrand AND bf_CTServPac_CopyFrom.CLIType = icCopyServicesFromCliType NO-LOCK:
+   FOR EACH bf_CTServPac_CopyFrom WHERE bf_CTServPac_CopyFrom.Brand = gcBrand AND bf_CTServPac_CopyFrom.CLIType = icCopyServicesFromCliType NO-LOCK
+       ON ERROR UNDO, THROW:
 
       CREATE CTServPac.
-      BUFFER-COPY bf_CTServPac_CopyFrom EXCEPT bf_CTServPac_CopyFrom.CLIType bf_CTServPac_CopyFrom.FromDate TO CTServPac
+      BUFFER-COPY bf_CTServPac_CopyFrom EXCEPT CLIType FromDate TO CTServPac
          ASSIGN 
             CTServPac.CLIType  = icCLIType
             CTServPac.FromDate = TODAY.
           
-      FOR EACH bf_CTServEl_CopyFrom WHERE bf_CTServEl_CopyFrom.Brand = gcBrand AND bf_CTServEl_CopyFrom.CLIType = bf_CTServPac_CopyFrom.CLIType AND bf_CTServEl_CopyFrom.ServPac = bf_CTServPac_CopyFrom.ServPac NO-LOCK:
+      FOR EACH bf_CTServEl_CopyFrom WHERE bf_CTServEl_CopyFrom.Brand = gcBrand AND bf_CTServEl_CopyFrom.CLIType = bf_CTServPac_CopyFrom.CLIType AND bf_CTServEl_CopyFrom.ServPac = bf_CTServPac_CopyFrom.ServPac NO-LOCK
+          ON ERROR UNDO, THROW:
 
          CREATE CTServEl.
-         BUFFER-COPY bf_CTServEl_CopyFrom EXCEPT bf_CTServEl_CopyFrom.CTServEl bf_CTServEl_CopyFrom.CLIType bf_CTServEl_CopyFrom.FromDate TO CTServEl
+         BUFFER-COPY bf_CTServEl_CopyFrom EXCEPT CTServEl CLIType FromDate TO CTServEl
             ASSIGN 
                CTServEl.CTServEl = NEXT-VALUE(CTServEl)
                CTServEl.CLIType  = icCLIType 
-               CTServEl.FromDate = TODAY.               
-          
-         FOR EACH bf_CTServAttr_CopyFrom WHERE bf_CTServAttr_CopyFrom.CTServEl = bf_CTServEl_CopyFrom.CTServEl NO-LOCK:
+               CTServEl.FromDate = TODAY.
+
+         FOR EACH bf_CTServAttr_CopyFrom WHERE bf_CTServAttr_CopyFrom.CTServEl = bf_CTServEl_CopyFrom.CTServEl NO-LOCK
+             ON ERROR UNDO, THROW:
+
             CREATE CTServAttr.
-            BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT bf_CTServAttr_CopyFrom.CTServEl bf_CTServAttr_CopyFrom.FromDate TO CTServAttr
+            BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT CTServEl FromDate TO CTServAttr
                ASSIGN 
                   CTServAttr.CTServEl = bf_CTServEl_CopyFrom.CTServEl
                   CTServAttr.FromDate = TODAY.
@@ -296,31 +300,36 @@ PROCEDURE pSLGAnalyse:
                             ELSE "").
 
     IF lcSubsTypePrefix > "" THEN
-    DO liCount = 1 TO NUM-ENTRIES(lcSubsTypePrefix):
-        FOR EACH bf_Matrix WHERE bf_Matrix.Brand = gcBrand AND bf_Matrix.MXKey = "PERCONTR" NO-LOCK By bf_Matrix.Prior:
+    DO liCount = 1 TO NUM-ENTRIES(lcSubsTypePrefix)
+       ON ERROR UNDO, THROW:
+        FOR EACH bf_Matrix WHERE bf_Matrix.Brand = gcBrand AND bf_Matrix.MXKey = "PERCONTR" NO-LOCK By bf_Matrix.Prior
+            ON ERROR UNDO, THROW:
             
             IF bf_Matrix.MXRes <> 1 THEN 
                 NEXT.                                           
             
             ASSIGN lcMxValue = ENTRY(liCount,lcSubsTypePrefix).
             
-            FOR EACH bf_MxItem WHERE bf_MxItem.MxSeq = bf_Matrix.MxSeq AND bf_MxItem.MxName = "SubsTypeTo" AND bf_MxItem.MxValue = lcMxValue NO-LOCK:
-                FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK:
-
+            FOR EACH bf_MxItem WHERE bf_MxItem.MxSeq = bf_Matrix.MxSeq AND bf_MxItem.MxName = "SubsTypeTo" AND bf_MxItem.MxValue = lcMxValue NO-LOCK
+                ON ERROR UNDO, THROW:
+                FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK
+                    ON ERROR UNDO, THROW:
                     FIND FIRST DayCampaign WHERE Daycampaign.Brand = gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
                     IF AVAIL DayCampaign AND LOOKUP(DayCampaign.DcType, {&PERCONTRACT_RATING_PACKAGE}) > 0 THEN                 
-                        ASSIGN icAllowedBundles = icAllowedBundles + (IF icAllowedBundles <> "" THEN "," ELSE "") + DayCampaign.DCEvent.                
-
+                        ASSIGN icAllowedBundles = icAllowedBundles + (IF icAllowedBundles <> "" THEN "," ELSE "") + DayCampaign.DCEvent.
                 END.
             END.
+
         END.
     END.    
     
     IF icAllowedBundles > "" THEN 
-    DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles):
+    DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
+       ON ERROR UNDO, THROW:
 
         IF ENTRY(liCount,icAllowedBundles) = "CONTDSL" THEN
-        DO liCnt = 1 TO NUM-ENTRIES(lcConvergentBillCodeList):
+        DO liCnt = 1 TO NUM-ENTRIES(lcConvergentBillCodeList)
+           ON ERROR UNDO, THROW:
 
             FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                               AND 
                                            bf_SLGAnalyse.ServiceLimitGroup = "CONTDSL"                             AND
@@ -338,7 +347,8 @@ PROCEDURE pSLGAnalyse:
             END.
         END.          
         ELSE IF ENTRY(liCount,icAllowedBundles) BEGINS "CONTFH" THEN
-        DO liCnt = 1 TO NUM-ENTRIES(lcConvergentBillCodeList):
+        DO liCnt = 1 TO NUM-ENTRIES(lcConvergentBillCodeList)
+           ON ERROR UNDO, THROW:
 
             FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                               AND 
                                            bf_SLGAnalyse.ServiceLimitGroup BEGINS "CONTFH"                         AND
@@ -357,7 +367,8 @@ PROCEDURE pSLGAnalyse:
             END.
         END.          
         ELSE IF ENTRY(liCount,icAllowedBundles) = "VOICE100" THEN
-        DO liCnt = 1 TO NUM-ENTRIES(lcBillCodeList):
+        DO liCnt = 1 TO NUM-ENTRIES(lcBillCodeList)
+           ON ERROR UNDO, THROW:
             
             IF ENTRY(liCount,lcBillCodeList) = "14100001" THEN 
                 NEXT.
@@ -398,7 +409,8 @@ PROCEDURE pSLGAnalyse:
     END.    
 
     /* Voice national related */
-    DO liCount = 1 TO NUM-ENTRIES(lcBillCodeList):
+    DO liCount = 1 TO NUM-ENTRIES(lcBillCodeList)
+       ON ERROR UNDO, THROW:
 
         FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand    = gcBrand                       AND 
                                        bf_SLGAnalyse.BillCode = ENTRY(liCount,lcBillCodeList) AND
@@ -737,7 +749,8 @@ PROCEDURE pRequestAction:
    IF lcActionTypeList = "" THEN
       UNDO, THROW NEW Progress.Lang.AppError('Failed to add configurations to request action', 1).      
 
-   DO liCount = 1 TO NUM-ENTRIES(lcRequestTypeList):
+   DO liCount = 1 TO NUM-ENTRIES(lcRequestTypeList)
+      ON ERROR UNDO, THROW:
 
       ASSIGN
          lcAction      = ENTRY(liCount, lcActionList)
@@ -803,7 +816,8 @@ PROCEDURE pMatrix:
       MXItem.MxValue = icCLIType
       MXItem.MxName  = "SubsTypeTo".   
 
-   DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles):
+   DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
+      ON ERROR UNDO, THROW:
 
       FIND FIRST MxItem WHERE MxItem.MxSeq = Matrix.MXSeq AND MxItem.MxName = "PerContract" AND MxItem.MxValue = ENTRY(liCount,icAllowedBundles) NO-LOCK NO-ERROR.
       IF NOT AVAIL MxItem THEN 
