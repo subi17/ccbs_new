@@ -865,7 +865,7 @@ PROCEDURE pValidateData:
          UNDO, THROW NEW Progress.Lang.AppError("Postpaid subscription contains Serviceclass data", 1).
       ELSE IF lcPaymentType = "PrePaid" AND lcServiceClass = "" THEN
          UNDO, THROW NEW Progress.Lang.AppError("Prepaid subscription doesn't contain any Serviceclass data", 1).      
-      ELSE IF LOOKUP(lcMobile_BaseBundle, lcAllowedBundles) = 0 OR LOOKUP(lcFixedLine_BaseBundle, lcAllowedBundles) = 0 THEN
+      ELSE IF (lcMobile_BaseBundle <> "" AND LOOKUP(lcMobile_BaseBundle, lcAllowedBundles) = 0) OR (lcFixedLine_BaseBundle <> "" AND LOOKUP(lcFixedLine_BaseBundle, lcAllowedBundles) = 0) THEN
          UNDO, THROW NEW Progress.Lang.AppError("Base bundles (Mobile/FixedLine) are not listed in allowed bundles for this subscription type", 1).         
       ELSE
       DO:
