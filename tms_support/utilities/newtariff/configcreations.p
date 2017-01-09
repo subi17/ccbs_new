@@ -239,31 +239,28 @@ PROCEDURE pCTServPac:
        ON ERROR UNDO, THROW:
 
       CREATE CTServPac.
-      BUFFER-COPY bf_CTServPac_CopyFrom EXCEPT CLIType FromDate TO CTServPac
-         ASSIGN 
-            CTServPac.CLIType  = icCLIType
-            CTServPac.FromDate = TODAY.
+      BUFFER-COPY bf_CTServPac_CopyFrom EXCEPT CLIType TO CTServPac
+         ASSIGN CTServPac.CLIType  = icCLIType.
+            
           
       FOR EACH bf_CTServEl_CopyFrom WHERE bf_CTServEl_CopyFrom.Brand = gcBrand AND bf_CTServEl_CopyFrom.CLIType = bf_CTServPac_CopyFrom.CLIType AND bf_CTServEl_CopyFrom.ServPac = bf_CTServPac_CopyFrom.ServPac NO-LOCK
           ON ERROR UNDO, THROW:
 
          CREATE CTServEl.
-         BUFFER-COPY bf_CTServEl_CopyFrom EXCEPT CTServEl CLIType FromDate TO CTServEl
+         BUFFER-COPY bf_CTServEl_CopyFrom EXCEPT CTServEl CLIType TO CTServEl
             ASSIGN 
                CTServEl.CTServEl = NEXT-VALUE(CTServEl)
-               CTServEl.CLIType  = icCLIType 
-               CTServEl.FromDate = TODAY.
+               CTServEl.CLIType  = icCLIType.
 
          FOR EACH bf_CTServAttr_CopyFrom WHERE bf_CTServAttr_CopyFrom.CTServEl = bf_CTServEl_CopyFrom.CTServEl NO-LOCK
              ON ERROR UNDO, THROW:
 
             CREATE CTServAttr.
-            BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT CTServEl FromDate TO CTServAttr
-               ASSIGN 
-                  CTServAttr.CTServEl = bf_CTServEl_CopyFrom.CTServEl
-                  CTServAttr.FromDate = TODAY.
-          END.            
+            BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT CTServEl TO CTServAttr
+               ASSIGN CTServAttr.CTServEl = bf_CTServEl_CopyFrom.CTServEl.
+         END.            
       END.
+      
    END.  
       
    RETURN "".
