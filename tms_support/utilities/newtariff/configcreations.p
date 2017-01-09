@@ -198,7 +198,7 @@ PROCEDURE pCLIType:
          CliType.FixedLineUpload   = ttCliType.FixedLineUpload.
 
       IF ttCliType.CopyServicesFromCliType > "" THEN 
-         RUN pCreateCTServPac(ttCliType.CliType, ttCliType.CopyServicesFromCliType).      
+         RUN pCTServPac(ttCliType.CliType, ttCliType.CopyServicesFromCliType).      
       
       IF ttCliType.AllowedBundles > "" THEN 
       DO:
@@ -226,6 +226,45 @@ PROCEDURE pCLIType:
 
 END PROCEDURE.
 
+
+PROCEDURE pCTServPac:
+   DEFINE INPUT PARAMETER icCLIType                 AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icCopyServicesFromCliType AS CHARACTER NO-UNDO.   
+   
+   DEFINE BUFFER bf_CTServPac_CopyFrom  FOR CTServPac.
+   DEFINE BUFFER bf_CTServEl_CopyFrom   FOR CTServEl.
+   DEFINE BUFFER bf_CTServAttr_CopyFrom FOR CTServAttr.
+   
+   FOR EACH bf_CTServPac_CopyFrom WHERE bf_CTServPac_CopyFrom.Brand = gcBrand AND bf_CTServPac_CopyFrom.CLIType = icCopyServicesFromCliType NO-LOCK:
+
+      CREATE CTServPac.
+      BUFFER-COPY bf_CTServPac_CopyFrom EXCEPT bf_CTServPac_CopyFrom.CLIType bf_CTServPac_CopyFrom.FromDate TO CTServPac
+         ASSIGN 
+            CTServPac.CLIType  = icCLIType
+            CTServPac.FromDate = TODAY.
+          
+      FOR EACH bf_CTServEl_CopyFrom WHERE bf_CTServEl_CopyFrom.Brand = gcBrand AND bf_CTServEl_CopyFrom.CLIType = bf_CTServPac_CopyFrom.CLIType AND bf_CTServEl_CopyFrom.ServPac = bf_CTServPac_CopyFrom.ServPac NO-LOCK:
+
+         CREATE CTServEl.
+         BUFFER-COPY bf_CTServEl_CopyFrom EXCEPT bf_CTServEl_CopyFrom.CTServEl bf_CTServEl_CopyFrom.CLIType bf_CTServEl_CopyFrom.FromDate TO CTServEl
+            ASSIGN 
+               CTServEl.CTServEl = NEXT-VALUE(CTServEl)
+               CTServEl.CLIType  = icCLIType 
+               CTServEl.FromDate = TODAY.               
+          
+         FOR EACH bf_CTServAttr_CopyFrom WHERE bf_CTServAttr_CopyFrom.CTServEl = bf_CTServEl_CopyFrom.CTServEl NO-LOCK:
+            CREATE CTServAttr.
+            BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT bf_CTServAttr_CopyFrom.CTServEl bf_CTServAttr_CopyFrom.FromDate TO CTServAttr
+               ASSIGN 
+                  CTServAttr.CTServEl = bf_CTServEl_CopyFrom.CTServEl
+                  CTServAttr.FromDate = TODAY.
+          END.            
+      END.
+   END.  
+      
+   RETURN "".
+                             
+END PROCEDURE.
 
 
 PROCEDURE pSLGAnalyse:
