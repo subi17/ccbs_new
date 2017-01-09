@@ -1386,7 +1386,7 @@ PROCEDURE pCreateInv:
                fErrorLog(bCustomer.CustNum,
                          "",
                          0,
-                         "Erroneous billing counters").
+                         "Erroneous billing counters iSS").
                fELog(katun,"INVOICE:ERRONEOUS_COUNTERS:Customer:" + 
                            STRING(bCustomer.CustNum)).
                /* mark invseqs back to unbilled*/ 
