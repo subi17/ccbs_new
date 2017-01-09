@@ -145,7 +145,7 @@ FUNCTION fPrepareRequestActionParam RETURNS LOGICAL
 END FUNCTION.
 /* ***************************  Main Block  *************************** */
 PROCEDURE pCLIType:
-   DEFINE INPUT PARAMETER TABLE FOR ttCliType BIND.
+   DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.
    
    DEFINE VARIABLE liFinalBT  AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liFinalCR  AS INTEGER   NO-UNDO.
