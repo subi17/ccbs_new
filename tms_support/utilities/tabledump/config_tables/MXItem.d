@@ -254,4 +254,5 @@
 115 "SubsTypeTo" "CONTFH58_300"
 117 "PerContract" "CONT25"
 117 "PerContract" "DATA6"
+117 "PerContract" "DATA7"
 117 "SubsTypeTo" "CONT25"
