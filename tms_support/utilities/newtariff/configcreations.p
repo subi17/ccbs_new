@@ -258,7 +258,7 @@ PROCEDURE pCTServPac:
                  ON ERROR UNDO, THROW:
                 CREATE CTServAttr.
                 BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT CTServEl TO CTServAttr
-                   ASSIGN CTServAttr.CTServEl = bf_CTServEl_CopyFrom.CTServEl.
+                   ASSIGN CTServAttr.CTServEl = CTServEl.CTServEl.
              END.
          END. 
       END.
