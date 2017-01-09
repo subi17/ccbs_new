@@ -10,8 +10,8 @@
 
 /* ***************************  Definitions  ************************** */
 
-&GLOBAL-DEFINE LINETYPE   "Entry,Main,Additional,None"
-&GLOBAL-DEFINE FLINETYPE  "ADSL,FIBER" 
+&GLOBAL-DEFINE LINETYPE   "Entry,Main,Additional"
+&GLOBAL-DEFINE FLINETYPE  "ADSL,FIBER,None" 
 &GLOBAL-DEFINE WEBSTATUS  "Inactive,Active,Retired,Hidden"
 &GLOBAL-DEFINE STCSTATUS  "Inactive,Active,Retired"
 &GLOBAL-DEFINE PAYTYPE    "Postpaid,Prepaid"
