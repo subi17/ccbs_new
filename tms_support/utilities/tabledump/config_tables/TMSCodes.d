@@ -444,7 +444,7 @@
 "FixedFee" "HostTable" "Contract" "DataCLI" "Data CLI" "" "" 1
 "FixedFee" "HostTable" "Contract" "MobSub" "Mobile CLI" "" "" 1
 "FixedFee" "TFBank" "Contract" "0000" "Yoigo" "" "" 1
-"FixedFee" "TFBank" "Contract" "0049" "UNO-E" "" "" 1
+"FixedFee" "TFBank" "Contract" "0049" "BBVA" "" "" 1
 "FixedFee" "TFBank" "Contract" "0081" "Banco de Sabadell" "" "" 1
 "FixedFee" "TFBank" "Contract" "0225" "Cetelem" "" "" 1
 "FuncRunParam" "CSB19.14" "FuncRun" "BOTH" "BOTH XML and TXT CSB files created" "" "" 1
@@ -840,6 +840,7 @@
 "MsRequest" "ReqSource" "Request" "3" "Subscription termination" "" "" 1
 "MsRequest" "ReqSource" "Request" "30" "Fusion Email" "" "" 1
 "MsRequest" "ReqSource" "Request" "31" "Contract activation" "" "" 1
+"MsRequest" "ReqSource" "Request" "32" "Main line deactivation" "" "" 1
 "MsRequest" "ReqSource" "Request" "4" "Manual event (CCBS)" "" "" 1
 "MsRequest" "ReqSource" "Request" "5" "Automatic (cron/script)" "" "" 1
 "MsRequest" "ReqSource" "Request" "6" "Manual event (WEB)" "" "" 1
