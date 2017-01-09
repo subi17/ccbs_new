@@ -27,6 +27,7 @@ DEF VAR ldaISTCDate AS DATE NO-UNDO.
 DEF VAR ldaCounterToDate AS DATE NO-UNDO. 
 DEF VAR llErrorFound AS LOGICAL NO-UNDO. 
 DEF VAR lcCLI AS CHAR NO-UNDO. 
+DEF VAR liDuration AS INT64 NO-UNDO.
 
 DEF TEMP-TABLE ttCounter NO-UNDO
    LIKE InvRowCounter.
@@ -137,6 +138,8 @@ FOR EACH ttSubs,
                IF NOT fUpdateFuncRunProgress(iIFRProcessID,oiCounterQty) THEN 
                   RETURN "ERROR:Stopped".
             END.   
+
+            liDuration = 0.
       
             FOR EACH InvRowCounter NO-LOCK WHERE 
                InvRowCounter.InvCust     = ttCounter.InvCust AND
@@ -154,8 +157,9 @@ FOR EACH ttSubs,
                ACCUMULATE InvRowCounter.InvCust (COUNT).
                ACCUMULATE InvRowCounter.Quantity (TOTAL).
                ACCUMULATE InvRowCounter.DataAmt (TOTAL).
-               ACCUMULATE InvRowCounter.Duration (TOTAL).
                ACCUMULATE InvRowCounter.Amount (TOTAL).
+
+               liDuration = liDuration + InvRowCounter.Duration.
 
             END.
 
@@ -170,7 +174,7 @@ FOR EACH ttSubs,
       
             ELSE IF 
                (ACCUM TOTAL InvRowCounter.Quantity) NE ttCounter.Quantity OR
-               (ACCUM TOTAL InvRowCounter.Duration) NE ttCounter.Duration OR
+                liDuration NE ttCounter.Duration OR
                (ACCUM TOTAL InvRowCounter.Amount) NE ttCounter.Amount OR
                (ACCUM TOTAL InvRowCounter.DataAmt) NE ttCounter.DataAmt THEN ASSIGN
                   lcCLI = ttCounter.CLI

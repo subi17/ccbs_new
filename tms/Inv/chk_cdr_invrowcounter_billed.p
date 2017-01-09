@@ -21,6 +21,7 @@ DEF VAR llHeader  AS LOG  NO-UNDO INIT TRUE.
 DEF VAR lcDir     AS CHAR NO-UNDO.
 DEF VAR ldaISTCDate AS DATE NO-UNDO. 
 DEF VAR ldaISTCDateOld AS DATE NO-UNDO. 
+DEF VAR liDuration AS INT64 NO-UNDO.
 
 DEF TEMP-TABLE ttCounter NO-UNDO
    LIKE InvRowCounter.
@@ -116,7 +117,9 @@ BY Invoice.InvNum:
    BY ttCounter.BillCode
    BY ttCounter.CCN:
    
-      oiCounterQty = oiCounterQty + 1.
+      ASSIGN
+         oiCounterQty = oiCounterQty + 1
+         liDuration = 0.
       
       IF iiUpdInterval > 0 AND oiCounterQty MOD iiUpdInterval = 0 
       THEN DO:
@@ -140,8 +143,9 @@ BY Invoice.InvNum:
          ACCUMULATE InvRowCounter.InvCust (COUNT).
          ACCUMULATE InvRowCounter.Quantity (TOTAL).
          ACCUMULATE InvRowCounter.DataAmt (TOTAL).
-         ACCUMULATE InvRowCounter.Duration (TOTAL).
          ACCUMULATE InvRowCounter.Amount (TOTAL).
+
+         liDuration = liDuration + InvRowCounter.Duration.
 
       END.
       
@@ -155,7 +159,7 @@ BY Invoice.InvNum:
        
       ELSE IF 
          (ACCUM TOTAL InvRowCounter.Quantity) NE ttCounter.Quantity OR
-         (ACCUM TOTAL InvRowCounter.Duration) NE ttCounter.Duration OR
+          liDuration NE ttCounter.Duration OR
          (ACCUM TOTAL InvRowCounter.Amount) NE ttCounter.Amount OR
          (ACCUM TOTAL InvRowCounter.DataAmt) NE ttCounter.DataAmt THEN 
             lcMatch = "ERROR: Values differ: " + 
