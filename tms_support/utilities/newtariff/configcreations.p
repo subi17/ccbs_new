@@ -240,8 +240,7 @@ PROCEDURE pCTServPac:
 
       CREATE CTServPac.
       BUFFER-COPY bf_CTServPac_CopyFrom EXCEPT CLIType TO CTServPac
-         ASSIGN CTServPac.CLIType  = icCLIType.
-            
+         ASSIGN CTServPac.CLIType  = icCLIType.            
           
       FOR EACH bf_CTServEl_CopyFrom WHERE bf_CTServEl_CopyFrom.Brand = gcBrand AND bf_CTServEl_CopyFrom.CLIType = bf_CTServPac_CopyFrom.CLIType AND bf_CTServEl_CopyFrom.ServPac = bf_CTServPac_CopyFrom.ServPac NO-LOCK
           ON ERROR UNDO, THROW:
@@ -252,15 +251,17 @@ PROCEDURE pCTServPac:
                CTServEl.CTServEl = NEXT-VALUE(CTServEl)
                CTServEl.CLIType  = icCLIType.
 
-         FOR EACH bf_CTServAttr_CopyFrom WHERE bf_CTServAttr_CopyFrom.CTServEl = bf_CTServEl_CopyFrom.CTServEl NO-LOCK
-             ON ERROR UNDO, THROW:
-
-            CREATE CTServAttr.
-            BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT CTServEl TO CTServAttr
-               ASSIGN CTServAttr.CTServEl = bf_CTServEl_CopyFrom.CTServEl.
-         END.            
+         FIND ServCom WHERE ServCom.Brand = gcBrand AND ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
+         IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN
+         DO:
+             FOR EACH bf_CTServAttr_CopyFrom WHERE bf_CTServAttr_CopyFrom.CTServEl = bf_CTServEl_CopyFrom.CTServEl NO-LOCK
+                 ON ERROR UNDO, THROW:
+                CREATE CTServAttr.
+                BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT CTServEl TO CTServAttr
+                   ASSIGN CTServAttr.CTServEl = bf_CTServEl_CopyFrom.CTServEl.
+             END.
+         END. 
       END.
-      
    END.  
       
    RETURN "".
