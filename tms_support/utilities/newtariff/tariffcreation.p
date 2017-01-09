@@ -859,7 +859,7 @@ PROCEDURE pValidateData:
       /* Validations */
       IF (iiPayType = 2 AND lcPaymentType = "Postpaid") OR (iiPayType = 1 AND lcPaymentType = "Prepaid") THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Rateplan and Tariff with different payment types", 1).
-      ELSE IF lcFixLineType <> "" AND (lcFixedLine_BaseBundle = "" OR lcFixedLineDownload = "" OR lcFixedLineUpload = "") THEN 
+      ELSE IF lcFixLineType <> "" AND lcFixLineType <> "None" AND (lcFixedLine_BaseBundle = "" OR lcFixedLineDownload = "" OR lcFixedLineUpload = "") THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Fixed line base bundle or upload/download speed is invalid", 1).
       ELSE IF lcPaymentType = "PostPaid" AND lcServiceClass <> "" THEN  
          UNDO, THROW NEW Progress.Lang.AppError("Postpaid subscription contains Serviceclass data", 1).

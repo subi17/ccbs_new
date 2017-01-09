@@ -10,7 +10,7 @@
 
 /* ***************************  Definitions  ************************** */
 
-&GLOBAL-DEFINE LINETYPE   "Entry,Main,Additional"
+&GLOBAL-DEFINE LINETYPE   "Entry,Main,Additional,None"
 &GLOBAL-DEFINE FLINETYPE  "ADSL,FIBER" 
 &GLOBAL-DEFINE WEBSTATUS  "Inactive,Active,Retired,Hidden"
 &GLOBAL-DEFINE STCSTATUS  "Inactive,Active,Retired"
