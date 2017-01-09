@@ -10,8 +10,92 @@
 /* ***************************  Definitions  ************************** */
  
 DEFINE TEMP-TABLE ttTrans NO-UNDO 
-   FIELD tLangType  AS CHARACTER 
-   FIELD tLangint   AS CHARACTER 
-   FIELD tLangtext  AS CHARACTER
-   FIELD tLangTrans AS CHARACTER.
+    FIELD tLangType  AS CHARACTER 
+    FIELD tLangint   AS CHARACTER 
+    FIELD tLangtext  AS CHARACTER
+    FIELD tLangTrans AS CHARACTER.
+
+DEFINE TEMP-TABLE ttCliType NO-UNDO
+    FIELD CliType                   AS CHARACTER
+    FIELD CliName                   AS CHARACTER
+    FIELD BaseBundle                AS CHARACTER
+    FIELD FixedLineBaseBundle       AS CHARACTER
+    FIELD WebStatusCode             AS INTEGER
+    FIELD StatusCode                AS INTEGER
+    FIELD PayType                   AS INTEGER 
+    FIELD UsageType                 AS INTEGER
+    FIELD LineType                  AS INTEGER
+    FIELD FixedLineType             AS INTEGER
+    FIELD FixedLineDownload         AS CHARACTER
+    FIELD FixedLineUpload           AS CHARACTER
+    FIELD Serviceclass              AS CHARACTER
+    FIELD CommercialFee             AS DECIMAL
+    FIELD CompareFee                AS DECIMAL
+    FIELD BundleType                AS LOGICAL
+    FIELD RatePlan                  AS CHARACTER
+    FIELD ParentTariff              AS CHARACTER
+    FIELD TariffBundle              AS CHARACTER    
+    FIELD AllowedBundles            AS CHARACTER
+    FIELD MobileBaseBundleDataLimit AS DECIMAL
+    FIELD BundlesForActivateOnSTC   AS CHARACTER
+    FIELD ServicesForReCreateOnSTC  AS CHARACTER
+    FIELD CopyServicesFromCliType   AS CHARACTER 
+    INDEX IdxCliType IS UNIQUE PRIMARY CliType.  
+
+DEFINE TEMP-TABLE ttDayCampaign NO-UNDO
+    FIELD CliType        AS CHARACTER
+    FIELD DCEvent        AS CHARACTER
+    FIELD DCName         AS CHARACTER
+    FIELD DCType         AS CHARACTER
+    FIELD BillCode       AS CHARACTER
+    FIELD UpSell         AS CHARACTER
+    FIELD BonoSupport    AS LOGICAL
+    FIELD SLCreated      AS LOGICAL
+    FIELD DataLimit      AS DECIMAL
+    INDEX IdxDCEvent IS UNIQUE PRIMARY DCEvent. 
+
+DEFINE TEMP-TABLE ttFMItem NO-UNDO
+    FIELD FeeModel     AS CHARACTER
+    FIELD BillCode     AS CHARACTER        
+    FIELD PriceList    AS CHARACTER    
+    FIELD Amount       AS DECIMAL    
+    FIELD FirstMonthBR AS INTEGER
+    FIELD BrokenRental AS INTEGER
+    INDEX IdxFMItem IS UNIQUE PRIMARY FeeModel.
+
+DEFINE TEMP-TABLE ttServiceLimitGroup NO-UNDO
+    FIELD GroupCode AS CHARACTER
+    FIELD GroupName AS CHARACTER
+    INDEX IdxGroupCode IS UNIQUE PRIMARY GroupCode.
+
+DEFINE TEMP-TABLE ttServiceLimit NO-UNDO
+    FIELD GroupCode      AS CHARACTER
+    FIELD SLCode         AS CHARACTER
+    FIELD SLName         AS CHARACTER
+    FIELD DialType       AS INTEGER
+    FIELD InclAmt        AS DECIMAL
+    FIELD FirstMonthCalc AS INTEGER
+    FIELD LastMonthCalc  AS INTEGER
+    INDEX IdxGroupCode IS UNIQUE PRIMARY GroupCode SLCode.
+
+DEFINE TEMP-TABLE ttServiceLimitTarget NO-UNDO
+    FIELD GroupCode   AS CHARACTER
+    FIELD SLCode      AS CHARACTER
+    FIELD SLMember    AS CHARACTER
+    FIELD InsideRate  AS CHARACTER
+    FIELD OutSideRate AS CHARACTER
+    INDEX IdxGroupCodeMember IS UNIQUE PRIMARY GroupCode SLCode SLMember.
+
+DEFINE TEMP-TABLE ttBDest NO-UNDO
+    FIELD GroupCode AS CHARACTER
+    FIELD SLCode    AS CHARACTER
+    FIELD BDest     AS CHARACTER
+    FIELD BDName    AS CHARACTER
+    FIELD CCN       AS INTEGER
+    INDEX IdxGroupCodeBDest IS UNIQUE PRIMARY GroupCode SLCode BDest.
+
+            
+
+
+
   
