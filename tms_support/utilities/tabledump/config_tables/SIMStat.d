@@ -1,4 +1,4 @@
-1 ""
+1 "Available"
 4 "IN USE (Subscription)"
 5 "Temporally"
 7 "LOST"
@@ -11,3 +11,4 @@
 69 "New LO"
 70 "Universal SIM"
 71 "Direct SIMS"
+72 "OLD_MOVISTAR"
