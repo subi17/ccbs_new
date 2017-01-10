@@ -9,12 +9,14 @@
 ----------------------------------------------------------------------- */
 /*
 YTS-9314: Dump logic was changed.
-Daily we do two files:
+We do create two files every day:
 1. file: eventlog dump with contain eventlog table information of singlefees.
 2. file: non-billed singlefees
 
-Once in a month 2nd day:
-1. file: Non-billed singlefees and last invoiced singlefees
+Once in a month, 2nd day, the 2.file contain also last 2 billed singlefees:
+2. file: Non-billed singlefees and last 2 invoiced singlefees
+
+At TRACK side data between eventlog dump and singlefee dump is merged to be used in TRACK reports. Since all events are not logged, singlefee dump data represents latest state of actual singlefee.
 */
 
 {commali.i}
@@ -41,11 +43,11 @@ IF AVAIL DumpFile THEN
    ASSIGN
       lcSpoolDir = DumpFile.SpoolDir + "/"
       lcTransDir = Dumpfile.TransDir.
-/* Not create stream if it is not needed */
-IF icDumpMode = "Modified" THEN DO:
-   DEF STREAM sout.
-   OUTPUT STREAM sout TO VALUE(icFile).
-END.
+
+/* STREAM sout is for eventlog file */
+DEF STREAM sout.
+OUTPUT STREAM sout TO VALUE(icFile).
+/* STREAM sinfee is for singlefee file */
 DEF STREAM sinfee.
 
 ASSIGN
@@ -67,10 +69,8 @@ DEFINE VARIABLE ldaInvDate AS DATE NO-UNDO.
 DEFINE VARIABLE liBilled AS INTEGER NO-UNDO.
 DEFINE VARIABLE lisinfees AS INTEGER NO-UNDO. 
       
-/* This is needed daily and also once in a month for full dump */
 FUNCTION fNonbilledSinFee_dump RETURNS LOG:
-   /* YTS-9314: Non-billed fulldump
-       done daily modified and full dump */
+   /* YTS-9314: Non-billed singlefees */
    FOR EACH SingleFee NO-LOCK WHERE
             SingleFee.InvNum = 0:
       PUT STREAM sinFee UNFORMATTED
@@ -91,61 +91,56 @@ FUNCTION fNonbilledSinFee_dump RETURNS LOG:
    oiEvents = oiEvents + lisinFees.
 END.
 
-IF icDumpMode = "Modified" THEN DO:
-   /* Eventlog search */
-   FOR EACH eventlog NO-LOCK WHERE
-            eventlog.eventdate = TODAY - 1 AND
-            eventlog.tablename = "SingleFee" USE-INDEX EventDate:
+/* Eventlog search is done every day */
+FOR EACH eventlog NO-LOCK WHERE
+         eventlog.eventdate = TODAY - 1 AND
+         eventlog.tablename = "SingleFee" USE-INDEX EventDate:
 
-      liKey = INT(ENTRY(4,eventlog.key,CHR(255))) NO-ERROR.
-      IF ERROR-STATUS:ERROR THEN NEXT.
+   liKey = INT(ENTRY(4,eventlog.key,CHR(255))) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN NEXT.
 
-      PUT STREAM sout UNFORMATTED
-         eventlog.action "|"
-         eventlog.eventdate " " eventlog.eventtime "|"
-         eventlog.memo "|"
-         eventlog.usercode "|"
-         liKey "|".
+   PUT STREAM sout UNFORMATTED
+      eventlog.action "|"
+      eventlog.eventdate " " eventlog.eventtime "|"
+      eventlog.memo "|"
+      eventlog.usercode "|"
+      liKey "|".
 
-      IF eventlog.action NE "Delete" THEN DO:
+   IF eventlog.action NE "Delete" THEN DO:
 
-         lcChanges = "".
+      lcChanges = "".
+      IF eventlog.action EQ "Modify" THEN DO:
+         ASSIGN
+            lcChanges = ""
+            liEntries  = num-entries(Eventlog.DataValues, CHR(255)) / 3.
 
-         IF eventlog.action EQ "Modify" THEN DO:
-
-            ASSIGN
-               lcChanges = ""
-               liEntries  = num-entries(Eventlog.DataValues, CHR(255)) / 3.
-
-            DO i = 0 TO liEntries  - 1 :
-               lcChanges = lcChanges + ";" +
-                  entry(3 * i + 1,Eventlog.DataValues,CHR(255)) + ":" +
-                  entry(3 * i + 2,Eventlog.DataValues,CHR(255)) + ":" +
-                  entry(3 * i + 3,Eventlog.DataValues,CHR(255)).
-            END.
-
-            IF lcChanges > "" THEN lcChanges = SUBSTRING(lcChanges,2).
+         DO i = 0 TO liEntries  - 1 :
+            lcChanges = lcChanges + ";" +
+               entry(3 * i + 1,Eventlog.DataValues,CHR(255)) + ":" +
+               entry(3 * i + 2,Eventlog.DataValues,CHR(255)) + ":" +
+               entry(3 * i + 3,Eventlog.DataValues,CHR(255)).
          END.
-         PUT STREAM sout UNFORMATTED
-            lcChanges SKIP.
-      END. /* IF eventlog.action NE "Delete" THEN DO: */
 
-      oiEvents = oiEvents + 1.
-      IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
-         PAUSE 0.
-         DISP oiEvents WITH FRAME fColl.
+         IF lcChanges > "" THEN lcChanges = SUBSTRING(lcChanges,2).
       END.
+      PUT STREAM sout UNFORMATTED
+         lcChanges SKIP.
+   END. 
+
+   oiEvents = oiEvents + 1.
+   IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
+      PAUSE 0.
+      DISP oiEvents WITH FRAME fColl.
    END.
-   /* Run daily Non-billed singlefee dump */
-   fNonbilledSinFee_dump().
 END.
-ELSE DO:
-   /* Non-billed singlefee counter */
-   fNonbilledSinFee_dump().
+/* Run daily Non-billed singlefee dump */
+fNonbilledSinFee_dump().
+
+IF icDumpMode = "Full" THEN DO:
    ASSIGN
       ldaInvDate = ADD-INTERVAL(TODAY, -1, "months").
       ldainvdate = DATE(MONTH(ldaInvDate),1,YEAR(ldaInvDate)).
-   /* YTS-9314: billed on last month */
+   /* YTS-9314: billed singlefees from last 2 months */
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
             Invoice.Brand = "1" AND
             Invoice.InvDate >= ldainvdate,
@@ -168,7 +163,7 @@ ELSE DO:
    END.
    oiEvents = oiEvents + libilled.
 END.
-IF icDumpMode = "Modified" THEN OUTPUT STREAM sout CLOSE.
+OUTPUT STREAM sout CLOSE.
 OUTPUT STREAM sinfee CLOSE.
 
 UNIX SILENT VALUE("mv " + lcSpooldir + lcSinFeeFile + " " + lcTransDir).
