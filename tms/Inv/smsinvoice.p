@@ -174,7 +174,7 @@ FOR EACH Invoice WHERE
       
       /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
       IF llFirstInv = FALSE THEN DO:
-         fSMSNotify("First",fGetMessageMq
+         fSMSNotify("First",
                     lcSMSReplacedText,
                     lcAddrConfDir,
                     lIniSeconds,
