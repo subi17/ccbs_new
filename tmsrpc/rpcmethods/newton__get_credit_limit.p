@@ -37,9 +37,8 @@ pcCustNum = get_int(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND Customer NO-LOCK WHERE
-     Customer.Brand   = gcBrand   AND
-     Customer.Custnum = pcCustNum NO-ERROR.
+FIND FIRST Customer NO-LOCK WHERE
+           Customer.Custnum = pcCustNum NO-ERROR.
 
 IF NOT AVAIL Customer THEN
    RETURN appl_err("customer_not_found").
@@ -142,7 +141,7 @@ PROCEDURE pGetTermFee:
             IF SingleFee.Billed = TRUE AND
                CAN-FIND (FIRST Invoice NO-LOCK WHERE
                                Invoice.InvNum  = SingleFee.InvNum AND
-                               Invoice.InvType = 1) THEN NEXT.
+                               Invoice.InvType = {&INV_TYPE_NORMAL}) THEN NEXT.
                ldePendingFees = ldePendingFees + SingleFee.Amt.
          END.
       END.
