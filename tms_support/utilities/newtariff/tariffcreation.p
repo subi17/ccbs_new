@@ -121,6 +121,8 @@ DO ON ERROR UNDO, THROW:
    RUN pReadTranslation.
 
    RUN pSaveTranslation.
+   
+   RETURN "OK".
        
    CATCH e AS Progress.Lang.Error:
       OUTPUT STREAM TariffLog TO VALUE(lcLogFile) APPEND.
