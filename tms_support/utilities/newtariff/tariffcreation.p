@@ -126,7 +126,6 @@ DO ON ERROR UNDO, THROW:
       OUTPUT STREAM TariffLog TO VALUE(lcLogFile) APPEND.
       fError(e:GetMessage(1)).
       OUTPUT STREAM TariffLog CLOSE.
-
       UNDO, THROW e.
    END CATCH.
    FINALLY:
@@ -138,54 +137,60 @@ PROCEDURE pSaveTariff:
   DEFINE VARIABLE liSLSeq           AS INTEGER   NO-UNDO.
   DEFINE VARIABLE llFeeModelCreated AS LOGICAL   NO-UNDO.
 
-  FOR EACH ttCliType
-      ON ERROR UNDO, THROW:
-     
-     RUN pCliType IN h_config(BUFFER ttCliType).
+  DO ON ERROR UNDO, THROW:
 
-     FOR EACH ttDayCampaign WHERE ttDayCampaign.CliType = ttCliType.CliType 
-         ON ERROR UNDO, THROW:
+      FOR EACH ttCliType
+          ON ERROR UNDO, THROW:
+         
+         RUN pCliType IN h_config(BUFFER ttCliType).
 
-          RUN pDayCampaign IN h_config(BUFFER ttDayCampaign).
+         FOR EACH ttDayCampaign WHERE ttDayCampaign.CliType = ttCliType.CliType 
+             ON ERROR UNDO, THROW:
 
-          FOR EACH ttFMItem WHERE ttFMItem.FeeModel = ttDayCampaign.BillCode 
-              ON ERROR UNDO, THROW:
+              RUN pDayCampaign IN h_config(BUFFER ttDayCampaign).
 
-              RUN pFeeModel IN h_config(ttFMItem.FeeModel, ttCliType.CliName, OUTPUT llFeeModelCreated).
-              
-              IF llFeeModelCreated THEN   
-                  RUN pFMItem IN h_config(BUFFER ttFMItem, BUFFER ttCliType).
-
-          END. 
-
-          FOR EACH ttServiceLimitGroup WHERE ttServiceLimitGroup.GroupCode = ttDayCampaign.DCEvent
-              ON ERROR UNDO, THROW:
-               
-              RUN pServiceLimitGroup IN h_config(BUFFER ttServiceLimitGroup). 
-
-              FOR EACH ttServiceLimit WHERE ttServiceLimit.GroupCode = ttServiceLimitGroup.GroupCode
+              FOR EACH ttFMItem WHERE ttFMItem.FeeModel = ttDayCampaign.BillCode 
                   ON ERROR UNDO, THROW:
 
-                  RUN pServiceLimit IN h_config(BUFFER ttServiceLimit, OUTPUT liSLSeq).
+                  RUN pFeeModel IN h_config(ttFMItem.FeeModel, ttCliType.CliName, OUTPUT llFeeModelCreated).
+                  
+                  IF llFeeModelCreated THEN   
+                      RUN pFMItem IN h_config(BUFFER ttFMItem, BUFFER ttCliType).
 
-                  IF liSLSeq > 0 THEN 
-                  DO:
-                      FOR EACH ttServiceLimitTarget WHERE ttServiceLimitTarget.GroupCode = ttServiceLimitGroup.GroupCode AND ttServiceLimitTarget.SLCode = ttServiceLimit.SLCode
-                          ON ERROR UNDO, THROW:
+              END. 
 
-                          FOR EACH ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode AND ttBDest.SLCode = ttServiceLimitTarget.SLCode 
+              FOR EACH ttServiceLimitGroup WHERE ttServiceLimitGroup.GroupCode = ttDayCampaign.DCEvent
+                  ON ERROR UNDO, THROW:
+                   
+                  RUN pServiceLimitGroup IN h_config(BUFFER ttServiceLimitGroup). 
+
+                  FOR EACH ttServiceLimit WHERE ttServiceLimit.GroupCode = ttServiceLimitGroup.GroupCode
+                      ON ERROR UNDO, THROW:
+
+                      RUN pServiceLimit IN h_config(BUFFER ttServiceLimit, OUTPUT liSLSeq).
+
+                      IF liSLSeq > 0 THEN 
+                      DO:
+                          FOR EACH ttServiceLimitTarget WHERE ttServiceLimitTarget.GroupCode = ttServiceLimitGroup.GroupCode AND ttServiceLimitTarget.SLCode = ttServiceLimit.SLCode
                               ON ERROR UNDO, THROW:
-                              RUN pBDestination IN h_config(BUFFER ttBDest).
-                          END.
 
-                          RUN pServiceLimitTarget IN h_config(BUFFER ttServiceLimitTarget, liSLSeq).                                                  
-                      END.     
-                  END.  /* IF liSeq > 0 THEN */
-              END.  /* FOR EACH ttServiceLimit */
-          END.  /* FOR EACH ttServiceLimitGroup */
+                              FOR EACH ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode AND ttBDest.SLCode = ttServiceLimitTarget.SLCode 
+                                  ON ERROR UNDO, THROW:
+                                  RUN pBDestination IN h_config(BUFFER ttBDest).
+                              END.
 
-     END. /* FOR EACH ttDayCampaign */
-  END. /* FOR EACH ttCliType */
+                              RUN pServiceLimitTarget IN h_config(BUFFER ttServiceLimitTarget, liSLSeq).                                                  
+                          END.     
+                      END.  /* IF liSeq > 0 THEN */
+                  END.  /* FOR EACH ttServiceLimit */
+              END.  /* FOR EACH ttServiceLimitGroup */
+
+         END. /* FOR EACH ttDayCampaign */
+      END. /* FOR EACH ttCliType */
+      CATCH e AS Progress.Lang.Error:
+          UNDO, THROW e.
+      END CATCH.
+  END.
 
   RETURN "".
 

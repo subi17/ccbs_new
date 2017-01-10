@@ -217,9 +217,9 @@ PROCEDURE pCLIType:
          RUN pUpdateDataBundleTMSParam(ttCliType.CliType).
       
       IF ttCLIType.PayType = 1 AND ttCLIType.UsageType = 1 THEN 
-         RUN pUpdatePostPaidVoiceSusbscriptionTypeTMSParam(ttCliType.CliType,"POSTPAID").
+         RUN pUpdateVoiceSusbscriptionTypeTMSParam(ttCliType.CliType,"POSTPAID").
       ELSE IF ttCLIType.PayType = 2 AND ttCLIType.UsageType = 1 THEN 
-         RUN pUpdatePostPaidVoiceSusbscriptionTypeTMSParam(ttCliType.CliType,"PREPAID").
+         RUN pUpdateVoiceSusbscriptionTypeTMSParam(ttCliType.CliType,"PREPAID").
    END.
      
    RETURN "".
