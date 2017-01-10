@@ -123,9 +123,8 @@ FOR EACH eventlog NO-LOCK WHERE
 
          IF lcChanges > "" THEN lcChanges = SUBSTRING(lcChanges,2).
       END.
-      PUT STREAM sout UNFORMATTED
-         lcChanges SKIP.
    END. 
+   PUT STREAM sout UNFORMATTED lcChanges SKIP.
 
    oiEvents = oiEvents + 1.
    IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
