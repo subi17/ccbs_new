@@ -125,7 +125,7 @@ PROCEDURE pGetTermFee:
               (FFItem.BillPeriod <= liPeriod OR
                CAN-FIND(FIRST Invoice WHERE
                               Invoice.InvNum  = FFItem.InvNum AND
-                              Invoice.InvType = 1)) THEN NEXT.
+                              Invoice.InvType = {&INV_TYPE_NORMAL})) THEN NEXT.
             ldePendingFees = ldePendingFees + FFItem.Amt.
          END.
 
