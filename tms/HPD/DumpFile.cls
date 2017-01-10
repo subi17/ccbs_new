@@ -168,17 +168,9 @@ CLASS HPD.DumpFile INHERITS DumpBase:
 
 
    METHOD PUBLIC VOID mWriteALine
-      (icLine AS CHARACTER):
+      (icEventType AS CHARACTER):
 
-      PUT STREAM str UNFORMATTED icLine SKIP.
-
-   END METHOD.
-
-
-   METHOD PUBLIC VOID mWriteALine
-      (iiOrderNumToSkip AS INTEGER):
-
-      PUT STREAM str UNFORMATTED mGetData(iiOrderNumToSkip) SKIP.
+      PUT STREAM str UNFORMATTED mGetData(icEventType) SKIP.
 
    END METHOD.
 
