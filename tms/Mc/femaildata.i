@@ -1344,15 +1344,15 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
    /* Check that includes at least separator characters */
    IF INDEX(OrderAction.ItemKey,";") > 0 AND 
       NUM-ENTRIES(OrderAction.itemKey,";") = 9 THEN DO:
-      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
+      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+         Order.deliverytype = {&ORDER_DELTYPE_POS} THEN DO: /* UPS */
          DO liCount = 2 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
             lcUseEntries = lcUseEntries + STRING(liCount) + "|".
          END.
          lcUPSHours = "<b>".
       END.
       /* Correos */
-      ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} OR
-              Order.deliverytype = {&ORDER_DELTYPE_POS} THEN DO:
+      ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} THEN DO:
          /* valid itemkey should have at least 8 entries */
          lcUseEntries = "1|7|8".
          lcUPSHours = "<b>Oficina de Correos de ".
@@ -1363,7 +1363,8 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
                    DeliveryCustomer.ZipCode + " " +
                    DeliveryCustomer.postoffice + /* " " + 
                    lcDelRegionName + */ "<br /><br />" +
-                   IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN 
+                   IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+                      Order.deliverytype = {&ORDER_DELTYPE_POS} THEN 
                    "<b>Horarios:</b><br /><table border='0'>" ELSE
                    "<b>Horarios:</b><br />".
       lcUseEntries = RIGHT-TRIM(lcUseEntries,"|"). /* remove last separator */
@@ -1375,11 +1376,11 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
          /*remove possible extra ; */
          lcDailyHours = LEFT-TRIM(lcDailyHours, ";").
          /* handle several times for day */
-         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
+         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+            Order.deliverytype = {&ORDER_DELTYPE_POS} THEN DO: /* UPS */
             lcHoursText = REPLACE(lcDailyHours, "h",":").
          END.   
-         ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} OR
-                 Order.deliverytype = {&ORDER_DELTYPE_POS} THEN DO:
+         ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} THEN DO:
             DO liTimeCount = 1 TO NUM-ENTRIES(lcDailyHours,"/"):
                lcTempHours = ENTRY(liTimeCount,lcDailyHours,"/").
                IF INDEX(lcTempHours,"-") > 0 AND INDEX(lcTempHours,"h") > 0 AND
@@ -1397,24 +1398,24 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
          lcHoursText = RIGHT-TRIM(lcHoursText).
          lcHoursText = RIGHT-TRIM(lcHoursText,"/").
          /* Correos need different day name syntax */
-         IF (Order.deliverytype = {&ORDER_DELTYPE_POST} OR /* Correos */
-             Order.deliverytype = {&ORDER_DELTYPE_POS} ) AND 
+         IF Order.deliverytype = {&ORDER_DELTYPE_POST} /* Correos */ AND
             INT(ENTRY(liCount,lcUseEntries,"|")) = 7 THEN 
             lcDay = "S".
-         ELSE IF (Order.deliverytype = {&ORDER_DELTYPE_POST} OR
-                 Order.deliverytype = {&ORDER_DELTYPE_POS}) AND
+         ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} AND
             INT(ENTRY(liCount,lcUseEntries,"|")) = 8 THEN
             lcDay = "Festivos".
          ELSE   
             lcDay = ENTRY(INT(ENTRY(liCount,lcUseEntries,"|")),lcDayList,"|").
-         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN
+         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+            Order.deliverytype = {&ORDER_DELTYPE_POS} THEN
             lcUPSHours = lcUPSHours + "<tr><td><b>" + lcDay + 
                          "</b>:</td> <td>" + lcHoursText + " </td></tr> ".
          ELSE
             lcUPSHours = lcUPSHours + "<b>" + lcDay + "</b>: " + 
                          lcHoursText + "<br />".
       END.
-      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN
+      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+         Order.deliverytype = {&ORDER_DELTYPE_POS} THEN
          lcUPSHours = lcUPSHours + "</table>".
    END.
 
