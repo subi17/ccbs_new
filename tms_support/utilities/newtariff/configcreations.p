@@ -81,7 +81,7 @@ END FUNCTION.
 FUNCTION fPrepareRequestActionParam RETURNS LOGICAL
   (INPUT icMobileBundles            AS CHARACTER,
    INPUT icFixedLineBundles         AS CHARACTER,
-   INPUT icBundlesForTerminateOnSTC AS CHARACTER,
+   INPUT icBundlesForActivateOnSTC  AS CHARACTER,
    INPUT icServicesRecreated        AS CHARACTER,
    OUTPUT ocReqTypeList             AS CHARACTER,
    OUTPUT ocActionList              AS CHARACTER,
@@ -122,12 +122,12 @@ FUNCTION fPrepareRequestActionParam RETURNS LOGICAL
       END.   
    END.   
 
-   IF icBundlesForTerminateOnSTC > "" THEN 
-   DO liCount = 1 TO NUM-ENTRIES(icBundlesForTerminateOnSTC):
+   IF icBundlesForActivateOnSTC > "" THEN 
+   DO liCount = 1 TO NUM-ENTRIES(icBundlesForActivateOnSTC):
       ASSIGN 
             ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})  
-            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "TERMINATE"
-            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icBundlesForTerminateOnSTC)
+            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
+            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icBundlesForActivateOnSTC)
             ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
    END.
 
@@ -313,7 +313,7 @@ PROCEDURE pSLGAnalyse:
                 FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK
                     ON ERROR UNDO, THROW:
                     FIND FIRST DayCampaign WHERE Daycampaign.Brand = gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
-                    IF AVAIL DayCampaign AND LOOKUP(DayCampaign.DcType, {&PERCONTRACT_RATING_PACKAGE}) > 0 THEN                 
+                    IF AVAIL DayCampaign AND LOOKUP(DayCampaign.DcType, {&PERCONTRACT_RATING_PACKAGE} + ",6") > 0 AND LOOKUP(DayCampaign.DCEvent, icAllowedBundles) = 0 THEN                 
                         ASSIGN icAllowedBundles = icAllowedBundles + (IF icAllowedBundles <> "" THEN "," ELSE "") + DayCampaign.DCEvent.
                 END.
             END.
@@ -446,7 +446,7 @@ PROCEDURE pDayCampaign:
          DayCampaign.ValidFrom       = TODAY 
          DayCampaign.ValidTo         = DATE(12,31,2049)
          DayCampaign.StatusCode      = 1           /* Default value Active */
-         DayCampaign.DCType          = ttDayCampaign.DCType
+         DayCampaign.DCType          = (IF ttDayCampaign.DCType = "ServicePackage" THEN "1" ELSE IF ttDayCampaign.DCType = "PackageWithCounter" THEN "4" ELSE "7")
          DayCampaign.InstanceLimit   = 1                            
          DayCampaign.BillCode        = ttDayCampaign.BillCode 
          DayCampaign.CCN             = (IF ttDayCampaign.PayType = 2 THEN 93 ELSE 0)         
@@ -714,7 +714,7 @@ PROCEDURE pRequestAction:
    DEFINE INPUT PARAMETER icCLIType                  AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER icMobileBundles            AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER icFixedLineBundles         AS CHARACTER NO-UNDO.
-   DEFINE INPUT PARAMETER icBundlesForTerminateOnSTC AS CHARACTER NO-UNDO.   
+   DEFINE INPUT PARAMETER icBundlesForActivateOnSTC  AS CHARACTER NO-UNDO.   
    DEFINE INPUT PARAMETER icServicesRecreated        AS CHARACTER NO-UNDO.
    
    DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO.   
@@ -737,7 +737,7 @@ PROCEDURE pRequestAction:
    /* This is to add mobile packages and fixed line packages to RequestType's subscription creation, fixedline activation & STC */    
    fPrepareRequestActionParam(icMobileBundles,
                               icFixedLineBundles,
-                              icBundlesForTerminateOnSTC,
+                              icBundlesForActivateOnSTC,
                               icServicesRecreated,
                               OUTPUT lcRequestTypeList,
                               OUTPUT lcActionList,
