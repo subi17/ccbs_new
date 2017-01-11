@@ -123,7 +123,7 @@ DO ON ERROR UNDO, THROW:
    RUN pSaveTranslation.
    
    RETURN "OK".
-       
+
    CATCH e AS Progress.Lang.Error:
       OUTPUT STREAM TariffLog TO VALUE(lcLogFile) APPEND.
       fError(e:GetMessage(1)).
@@ -186,8 +186,12 @@ PROCEDURE pSaveTariff:
                       END.  /* IF liSeq > 0 THEN */
                   END.  /* FOR EACH ttServiceLimit */
               END.  /* FOR EACH ttServiceLimitGroup */
-
          END. /* FOR EACH ttDayCampaign */
+
+         FOR EACH ttTMRItemValue
+             ON ERROR UNDO, THROW:
+             RUN pTMRItemValue IN h_config(BUFFER ttTMRItemValue).
+         END.
       END. /* FOR EACH ttCliType */
       CATCH e AS Progress.Lang.Error:
           UNDO, THROW e.
@@ -197,6 +201,7 @@ PROCEDURE pSaveTariff:
   RETURN "".
 
 END PROCEDURE.
+
 
 PROCEDURE pReadTariff:   
 
@@ -385,6 +390,7 @@ PROCEDURE pProcessTT:
    
 END PROCEDURE.
 
+
 PROCEDURE pBundle:
     DEFINE INPUT PARAMETER icCliType           AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icBundle            AS CHARACTER NO-UNDO.
@@ -406,10 +412,13 @@ PROCEDURE pBundle:
     DEFINE INPUT PARAMETER iiBDLFirstMonthCalc AS INTEGER   NO-UNDO.
     DEFINE INPUT PARAMETER iiBDLLastMonthCalc  AS INTEGER   NO-UNDO.
 
-    DEFINE VARIABLE liCount  AS INTEGER   NO-UNDO.
-    DEFINE VARIABLE lcBCList AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE liCount    AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE lcBCList   AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcBONOList AS CHARACTER NO-UNDO.
 
-    ASSIGN lcBCList = "10100001,10100003,10100005,CFOTHER,CFYOIGO".
+    ASSIGN 
+        lcBCList   = "10100001,10100003,10100005,CFOTHER,CFYOIGO"
+        lcBONOList = fCParamC("BONO_CONTRACTS") .
 
     CREATE ttDayCampaign.
     ASSIGN
@@ -472,6 +481,26 @@ PROCEDURE pBundle:
              ttBDest.BDest     = ttServiceLimitTarget.OutSideRate
              ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "DATA OUT"                 
              ttBDest.CCN       = 93.
+              
+         CREATE ttTMRItemValue.
+         ASSIGN 
+             ttTMRItemValue.TMRuleSeq = 14
+             ttTMRItemValue.CliType = lcCliType    
+             ttTMRItemValue.BDest   = ttDayCampaign.DCEvent + "_DATA_IN".
+
+         IF lcBONOList > "" THEN 
+         DO liCount = 1 TO NUM-ENTRIES(lcAllowedBundles):     
+             IF LOOKUP(ENTRY(liCount,lcAllowedBundles),lcBONOList) > 0 THEN 
+             DO:
+                 CREATE ttTMRItemValue.
+                 ASSIGN 
+                     ttTMRItemValue.TMRuleSeq = 33
+                     ttTMRItemValue.CliType   = lcCliType    
+                     ttTMRItemValue.BDest     = "GPRSDATA_DATA*".
+                 LEAVE.    
+             END.     
+         END.
+
      END.
 
      IF ideVoiceLimit > 0 THEN 
@@ -512,7 +541,18 @@ PROCEDURE pBundle:
              ttBDest.BDest     = ttServiceLimitTarget.OutSideRate
              ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE OUT"                 
              ttBDest.CCN       = 81.
-               
+         
+         CREATE ttTMRItemValue.
+         ASSIGN 
+             ttTMRItemValue.TMRuleSeq = 34
+             ttTMRItemValue.CliType = lcCliType    
+             ttTMRItemValue.BDest   = ttDayCampaign.DCEvent + "_VOICE_IN".
+
+         CREATE ttTMRItemValue.
+         ASSIGN 
+             ttTMRItemValue.TMRuleSeq = 42
+             ttTMRItemValue.CliType = lcCliType    
+             ttTMRItemValue.BDest   = ttDayCampaign.DCEvent + "_VOICE_IN".      
      END.
 
      IF ideBDestLimit > 0 THEN 
@@ -564,6 +604,27 @@ PROCEDURE pBundle:
                  ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE OUT"                 
                  ttBDest.CCN       = 81.   
          END.    
+
+         FIND FIRST ttTMRItemValue WHERE ttTMRItemValue.TMRuleSeq = 34 AND ttTMRItemValue.CliType = lcCliType AND ttTMRItemValue.BDest = ttDayCampaign.DCEvent + "_VOICE_IN" NO-LOCK NO-ERROR.
+         IF NOT AVAIL ttTMRItemValue THEN 
+         DO:
+             CREATE ttTMRItemValue.
+             ASSIGN 
+                 ttTMRItemValue.TMRuleSeq = 34
+                 ttTMRItemValue.CliType = lcCliType    
+                 ttTMRItemValue.BDest   = ttDayCampaign.DCEvent + "_VOICE_IN".
+         END.
+         
+         FIND FIRST ttTMRItemValue WHERE ttTMRItemValue.TMRuleSeq = 42 AND ttTMRItemValue.CliType = lcCliType AND ttTMRItemValue.BDest = ttDayCampaign.DCEvent + "_VOICE_IN" NO-LOCK NO-ERROR.
+         IF NOT AVAIL ttTMRItemValue THEN 
+         DO:    
+             CREATE ttTMRItemValue.
+             ASSIGN 
+                 ttTMRItemValue.TMRuleSeq = 42
+                 ttTMRItemValue.CliType = lcCliType    
+                 ttTMRItemValue.BDest   = ttDayCampaign.DCEvent + "_VOICE_IN".
+         END.       
+
      END.    
     
 END PROCEDURE.    
@@ -906,7 +967,6 @@ PROCEDURE pValidateData:
 END PROCEDURE.
 
 
-
 PROCEDURE pReadTranslation:
    DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.   
@@ -950,7 +1010,6 @@ PROCEDURE pReadTranslation:
 END PROCEDURE.
 
 
-
 PROCEDURE pSaveTranslation:
 
    FOR EACH ttTrans NO-LOCK:
@@ -975,5 +1034,4 @@ PROCEDURE pSaveTranslation:
    
    RETURN "".
 
-END PROCEDURE.        
-
+END PROCEDURE.

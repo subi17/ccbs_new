@@ -200,12 +200,10 @@ PROCEDURE pCLIType:
       IF ttCliType.CopyServicesFromCliType > "" THEN 
          RUN pCTServPac(ttCliType.CliType, ttCliType.CopyServicesFromCliType).      
       
-      IF ttCliType.AllowedBundles > "" THEN 
-      DO:
+      IF ttCliType.AllowedBundles > "" THEN       
          RUN pMatrix(ttCliType.CliType, ttCliType.AllowedBundles).
 
-         RUN pSLGAnalyse(ttCliType.CliType, ttCliType.BaseBundle, ttCliType.FixedLineBaseBundle, ttCliType.AllowedBundles).   
-      END.      
+      RUN pSLGAnalyse(ttCliType.CliType, ttCliType.BaseBundle, ttCliType.FixedLineBaseBundle, ttCliType.AllowedBundles).         
 
       RUN pRequestAction(ttCliType.CliType, 
                          ttCliType.BaseBundle, 
@@ -267,7 +265,6 @@ PROCEDURE pCTServPac:
    RETURN "".
                              
 END PROCEDURE.
-
 
 PROCEDURE pSLGAnalyse:
     DEFINE INPUT PARAMETER icCliType             AS CHARACTER NO-UNDO.
@@ -431,7 +428,6 @@ PROCEDURE pSLGAnalyse:
 END PROCEDURE.
 
 
-
 PROCEDURE pDayCampaign:
    DEFINE PARAMETER BUFFER ttDayCampaign FOR ttDayCampaign.   
    
@@ -518,7 +514,6 @@ PROCEDURE pDCServicePackage:
 END PROCEDURE.
 
 
-
 PROCEDURE pFeeModel:
    DEFINE INPUT  PARAMETER icFeeModel     AS CHARACTER NO-UNDO.
    DEFINE INPUT  PARAMETER icFeeModelName AS CHARACTER NO-UNDO.   
@@ -541,7 +536,6 @@ PROCEDURE pFeeModel:
 END PROCEDURE. 
 
    
-
 PROCEDURE pFMItem:   
    DEFINE PARAMETER BUFFER ttFMItem  FOR ttFMItem.   
    DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.   
@@ -582,7 +576,6 @@ PROCEDURE pFMItem:
    RETURN "".
    
 END PROCEDURE.    
-
 
 
 PROCEDURE pServiceLimitGroup:
@@ -675,7 +668,6 @@ PROCEDURE pServiceLimitTarget:
 END PROCEDURE.
 
 
-
 PROCEDURE pBDestination:
     DEFINE PARAMETER BUFFER ttBDest FOR ttBDest.       
 
@@ -707,7 +699,6 @@ PROCEDURE pBDestination:
     RETURN "".
    
 END PROCEDURE.
-
 
 
 PROCEDURE pRequestAction:
@@ -793,6 +784,7 @@ PROCEDURE pRequestAction:
 
 END PROCEDURE.
 
+
 PROCEDURE pMatrix:
    DEFINE INPUT PARAMETER icCLIType        AS CHARACTER NO-UNDO.   
    DEFINE INPUT PARAMETER icAllowedBundles AS CHARACTER NO-UNDO.
@@ -833,6 +825,27 @@ PROCEDURE pMatrix:
 
 END PROCEDURE.
 
+PROCEDURE pTMRItemValue:
+    DEFINE PARAMETER BUFFER ttTMRItemValue FOR ttTMRItemValue.
+    
+    FIND FIRST TMRItemValue WHERE TMRItemValue.TMRuleSeq         = ttTMRItemValue.TMRuleSeq                            AND 
+                                  TMRItemValue.CounterItemValues = ttTMRItemValue.BDest + "," + ttTMRItemValue.CliType AND
+                                  TMRItemValue.ToDate           >= TODAY                                               NO-LOCK NO-ERROR.     
+    IF NOT AVAIL TMRItemValue THEN 
+    DO:                                  
+        CREATE TMRItemValue.
+        ASSIGN 
+            TMRItemValue.TMRuleSeq         = ttTMRItemValue.TMRuleSeq
+            TMRItemValue.CounterItemValues = ttTMRItemValue.BDest + "," + ttTMRItemValue.CliType
+            TMRItemValue.FromDate          = TODAY
+            TMRItemValue.ToDate            = DATE(12,31,2049).        
+    END.
+
+    RETURN "".
+
+END PROCEDURE.
+
+
 PROCEDURE pUpdateDataBundleTMSParam:
    DEFINE INPUT PARAMETER icCLIType AS CHARACTER NO-UNDO.   
 
@@ -853,6 +866,7 @@ PROCEDURE pUpdateDataBundleTMSParam:
    RETURN "".
 
 END PROCEDURE.
+
 
 PROCEDURE pUpdateVoiceSusbscriptionTypeTMSParam:
    DEFINE INPUT PARAMETER icCLIType AS CHARACTER NO-UNDO.   
