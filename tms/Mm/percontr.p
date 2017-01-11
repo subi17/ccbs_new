@@ -1263,10 +1263,15 @@ PROCEDURE pFinalize:
    DEF VAR ldaCont15PromoFrom        AS DATE NO-UNDO. 
    DEF VAR ldaCont15PromoEnd         AS DATE NO-UNDO. 
    DEF VAR ldaOrderDate AS DATE NO-UNDO. 
+   DEF VAR liTimeMsReq AS INT NO-UNDO.
+   DEF VAR ldateMsReq AS DATE NO-UNDO. 
+   DEF VAR ldeFromTS AS DEC NO-UNDO. 
+   DEF VAR ldeToTS AS DEC NO-UNDO. 
 
    DEF BUFFER bMsRequest    FOR MsRequest.
    DEF BUFFER bTerMsRequest FOR MsRequest.
    DEF BUFFER bMobSub       FOR MobSub.
+   DEF BUFFER bReacMsReq    FOR MsRequest.
 
    /* check that subrequests really are ok */
    IF fGetSubRequestState(MsRequest.MsRequest) NE 2 THEN DO:
@@ -1508,13 +1513,27 @@ PROCEDURE pFinalize:
          IF iiRequestType = 8 AND
             MsRequest.ReqSource <> {&REQUEST_SOURCE_BTC} AND
             MsRequest.ReqSource <> {&REQUEST_SOURCE_STC} THEN DO:
-            FIND CURRENT MsOwner EXCLUSIVE-LOCK NO-ERROR.
-            IF AVAIL MsOwner THEN DO:
-               IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
-               MsOwner.TariffBundle = MsRequest.ReqCparam3.
-               IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
+            /* YTS-8096: prevent wrong tariffbundle saving in case
+               there is STC for the same day than Reactivation */
+            ldeFromTS = DEC(ENTRY(1,STRING(MsRequest.ActStamp),".")).
+            fSplitTS(MsRequest.ActStamp,OUTPUT ldateMsReq,OUTPUT liTimeMsReq).
+            ASSIGN
+               ldateMsReq = ADD-INTERVAL(ldateMsReq, 1, "days")
+               ldeToTS = fHMS2TS(ldateMsReq,"00:00:00").
+            FIND FIRST bReacMsReq NO-LOCK WHERE
+                 bReacMsReq.MsSeq = MsRequest.MsSeq AND
+                 bReacMsReq.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                 bReacMsReq.Actstamp >= ldeFromTS AND
+                 bReacMsReq.ActStamp < ldeTOTS NO-ERROR.
+            IF NOT AVAIL bReacMsReq THEN DO:
+               FIND CURRENT MsOwner EXCLUSIVE-LOCK NO-ERROR.
+               IF AVAIL MsOwner THEN DO:
+                  IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
+                  MsOwner.TariffBundle = MsRequest.ReqCparam3.
+                  IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
+               END.
+               FIND CURRENT MsOwner NO-LOCK NO-ERROR.
             END.
-            FIND CURRENT MsOwner NO-LOCK NO-ERROR.
          END.
       END.
    END.
