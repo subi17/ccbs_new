@@ -374,6 +374,11 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
                                                                lhMainTable::DtlSeq), NO-LOCK) NO-ERROR.
             IF llOK
             THEN DO:
+
+               IF lhMainTable::ErrorCode > 0 AND
+                  lhBuffer[liCurrentDB]::ErrorCode > 0
+               THEN LEAVE.
+
                ASSIGN
                   liEvents = liEvents + 1
                   lcEvent  = IF lhBuffer[liCurrentDB]::ErrorCode = 0
