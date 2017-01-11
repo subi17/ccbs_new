@@ -122,6 +122,15 @@ IF lcStatus EQ "CERRADA" AND
 END.
 
 /* HANDLING */
+
+/*YTS-10051*/
+/*Update FusionStatus to initial status if MM sends updates.
+ This is done to solve situation when MM has started order handling even
+ it has returned error status in CreateOrder*/
+ IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ERROR} THEN 
+    OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_INITIALIZED}.
+ 
+
 CREATE FusionMessage.
 ASSIGN
    FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
