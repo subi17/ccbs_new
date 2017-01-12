@@ -61,14 +61,14 @@ IF AVAILABLE Limit THEN DO:
    FOR EACH bMobSub NO-LOCK WHERE
             bMobSub.Brand   = gcBrand AND
             bMobSub.CustNum = Customer.CustNum:
-      RUN pCalcTermFee(bMobSub.MsSeq).
+      RUN pGetTermFee(bMobSub.MsSeq).
    END.
 
    TERMMOBSUB_LOOP:
    FOR EACH bTermMobSub NO-LOCK WHERE
             bTermMobSub.Brand   = gcBrand AND
             bTermMobSub.CustNum = Customer.CustNum:
-      RUN pCalcTermFee(bTermMobSub.MsSeq).
+      RUN pGetTermFee(bTermMobSub.MsSeq).
    END.
 
    FOR EACH Order NO-LOCK WHERE
