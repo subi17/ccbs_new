@@ -16,4 +16,5 @@ else:
    var1 = int(sys.argv[1])
 
 p=s.newton.get_mobsub_details(var1)
-print_results(p)
+#print_results(p)
+print p
