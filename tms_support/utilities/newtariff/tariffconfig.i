@@ -10,14 +10,24 @@
 /* ***************************  Definitions  ************************** */
  
 DEFINE TEMP-TABLE ttTrans NO-UNDO 
+    FIELD tTextType  AS INTEGER
     FIELD tLangType  AS CHARACTER 
     FIELD tLangint   AS CHARACTER 
     FIELD tLangtext  AS CHARACTER
     FIELD tLangTrans AS CHARACTER.
 
+DEFINE TEMP-TABLE ttTariff NO-UNDO 
+   FIELD CCN      AS CHARACTER 
+   FIELD BDest    AS CHARACTER 
+   FIELD BillItem AS CHARACTER 
+   FIELD Price    AS CHARACTER 
+   FIELD SetupFee AS CHARACTER.
+
+
 DEFINE TEMP-TABLE ttCliType NO-UNDO
     FIELD CliType                   AS CHARACTER
     FIELD CliName                   AS CHARACTER
+    FIELD RatePlan                  As CHARACTER
     FIELD BaseBundle                AS CHARACTER
     FIELD FixedLineBaseBundle       AS CHARACTER
     FIELD WebStatusCode             AS INTEGER

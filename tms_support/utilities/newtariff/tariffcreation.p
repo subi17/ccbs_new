@@ -22,8 +22,6 @@ gcBrand = "1".
 
 DEFINE INPUT  PARAMETER icIncDir    AS CHARACTER NO-UNDO. 
 DEFINE INPUT  PARAMETER icSpoolDir  AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER iiPayType   AS INTEGER   NO-UNDO.
-DEFINE INPUT  PARAMETER icRatePlan  AS CHARACTER NO-UNDO. /* Final CLIType list */
 
 DEFINE VARIABLE lcLogFile           AS CHARACTER NO-UNDO.
 DEFINE VARIABLE h_config            AS HANDLE    NO-UNDO.
@@ -32,6 +30,9 @@ DEFINE VARIABLE h_config            AS HANDLE    NO-UNDO.
 DEFINE VARIABLE lcCliType                                AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCliName                                AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcTariffBundle                           AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcRatePlanAction                         AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcRatePlan                               AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcReferenceRatePlan                      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcWebStatus                              AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSTCStatus                              AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcPaymentType                            AS CHARACTER NO-UNDO.
@@ -110,7 +111,9 @@ DO ON ERROR UNDO, THROW:
 
    FUNCTION fTMSCValue RETURNS CHARACTER (iTableName AS CHAR, iFieldName AS CHAR,iCodeName AS CHAR) IN h_config.
 
-   RUN pReadTariff.   
+   RUN pReadTariff. 
+
+   RUN pReadCustomRatesForRateplan.  
 
    RUN pValidateData.
 
@@ -225,7 +228,7 @@ PROCEDURE pReadTariff:
       END.      
 
       CATCH err AS Progress.Lang.Error:
-         UNDO, THROW NEW Progress.Lang.AppError('Incorrect input file data' + err:GetMessage(1), 1). 
+         UNDO, THROW NEW Progress.Lang.AppError('Incorrect input file (tariffcreation.txt) data' + err:GetMessage(1), 1). 
       END CATCH.
 
       FINALLY:
@@ -237,6 +240,48 @@ PROCEDURE pReadTariff:
 
 END PROCEDURE.
 
+PROCEDURE pReadCustomRatesForRateplan:
+    DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE liFirstLine AS INTEGER   NO-UNDO INITIAL 1.
+
+    DO ON ERROR UNDO, THROW:
+        ASSIGN lcInputFile = icIncDir + "rptariff_new.txt".
+        
+        IF SEARCH(lcInputFile) > "" THEN   
+        DO:
+            INPUT  STREAM TariffIn FROM VALUE(lcInputFile).
+            REPEAT:
+               IMPORT STREAM TariffIn UNFORMATTED lcLine.
+               /* Ignore the first line - (Header) */
+               IF liFirstLine = 1 THEN 
+               DO:
+                   liFirstLine = liFirstLine + 1.
+                   NEXT.
+               END.
+                
+               CREATE ttTariff.
+               ASSIGN    
+                  ttTariff.CCN      = TRIM(ENTRY(1,lcLine,";")) 
+                  ttTariff.BDest    = TRIM(ENTRY(2,lcLine,";"))
+                  ttTariff.BillItem = TRIM(ENTRY(3,lcLine,";"))
+                  ttTariff.Price    = TRIM(ENTRY(4,lcLine,";"))
+                  ttTariff.SetupFee = TRIM(ENTRY(5,lcLine,";")).          
+            END.
+
+            CATCH err AS Progress.Lang.Error:
+               UNDO, THROW NEW Progress.Lang.AppError('Incorrect input file (rptariff_new.txt) data' + err:GetMessage(1), 1). 
+            END CATCH.
+
+            FINALLY:
+               INPUT STREAM TariffIn CLOSE.
+            END FINALLY.       
+        END.   
+    END.
+
+    RETURN "".
+
+END PROCEDURE.
 
 PROCEDURE pProcessTT:   
    DEFINE VARIABLE liFirstMonthBR    AS INTEGER NO-UNDO.
@@ -249,8 +294,14 @@ PROCEDURE pProcessTT:
    DEFINE VARIABLE liVLLastMonthBR   AS INTEGER NO-UNDO.
 
    DEFINE VARIABLE liBDLFirstMonthBR AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liBDLLastMonthBR  AS INTEGER NO-UNDO.   
+   DEFINE VARIABLE liBDLLastMonthBR  AS INTEGER NO-UNDO.  
    
+   IF lcRatePlanAction = "New" AND lcReferenceRatePlan > "" THEN    
+       RUN pRatePlan IN h_config(lcRatePlan, lcCliType, lcReferenceRatePlan).
+
+   IF CAN-FIND(FIRST ttTariff) THEN 
+       RUN pCustomRates IN h_config(lcRatePlan, BUFFER ttTariff).
+
    IF lcTariffBundle > "" THEN
    DO:
        IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = lcCliType NO-LOCK) THEN 
@@ -260,6 +311,7 @@ PROCEDURE pProcessTT:
            ASSIGN
               ttCliType.CliType                   = lcCliType
               ttCliType.CliName                   = lcCliName
+              ttCliType.RatePlan                  = lcRatePlan              
               ttCliType.BaseBundle                = ""
               ttCliType.FixedLineBaseBundle       = ""
               ttCliType.WebStatusCode             = INTEGER(fTMSCValue("CLIType","WebStatusCode",lcWebStatus)) 
@@ -290,6 +342,7 @@ PROCEDURE pProcessTT:
    ASSIGN
       ttCliType.CliType                   = (IF lcTariffBundle > "" THEN lcTariffBundle ELSE lcCliType)
       ttCliType.CliName                   = lcCliName
+      ttCliType.RatePlan                  = lcRatePlan
       ttCliType.BaseBundle                = lcMobile_BaseBundle 
       ttCliType.FixedLineBaseBundle       = lcFixedLine_BaseBundle
       ttCliType.WebStatusCode             = INTEGER(fTMSCValue("CLIType","WebStatusCode",lcWebStatus)) 
@@ -656,7 +709,7 @@ PROCEDURE pValidateData:
                   ASSIGN 
                      llgTrafficBundle = YES
                      lcTariffBundle   = ttTariffCre.FieldValue.          
-            END.
+            END.            
             WHEN {&WS} THEN 
             DO:
                IF (ttTariffCre.FieldValue EQ "") OR LOOKUP(ttTariffCre.FieldValue,{&WEBSTATUS}) = 0 THEN
@@ -745,6 +798,27 @@ PROCEDURE pValidateData:
          IF llgPostPaid THEN 
          DO:
             CASE ttTariffCre.FieldName:
+               WHEN {&RPA} THEN 
+               DO:
+                  IF ttTariffCre.FieldValue EQ "" AND LOOKUP(ttTariffCre.FieldValue,{&RP_ACTION}) EQ 0 THEN 
+                     UNDO, THROW NEW Progress.Lang.AppError("Rateplan action is invalid", 1).
+                  ELSE 
+                     ASSIGN lcRatePlanAction = ttTariffCre.FieldValue.
+               END.
+               WHEN {&RP} THEN 
+               DO:
+                  IF ttTariffCre.FieldValue EQ "" THEN 
+                     UNDO, THROW NEW Progress.Lang.AppError("Rateplan code is invalid", 1).
+                  ELSE 
+                     ASSIGN lcRatePlan = REPLACE(ttTariffCre.FieldValue,"CONT","CONTRATO").
+               END.
+               WHEN {&RRP} THEN 
+               DO:
+                  IF ttTariffCre.FieldValue EQ "" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = ttTariffCre.FieldValue NO-LOCK) THEN 
+                     UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan is invalid", 1).
+                  ELSE 
+                     ASSIGN lcReferenceRatePlan = ttTariffCre.FieldValue.
+               END.
                /* Mobile */ 
                WHEN {&M_BB} THEN 
                DO:
@@ -924,15 +998,27 @@ PROCEDURE pValidateData:
          END. /* IF llgPostPaid THEN DO */      
       END. /* FOR EACH ttSubTypeCr */      
 
-      /* Validations */
+      /* Validations */      
       IF (iiPayType = 2 AND lcPaymentType = "Postpaid") OR (iiPayType = 1 AND lcPaymentType = "Prepaid") THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Rateplan and Tariff with different payment types", 1).
+      
       ELSE IF lcFixLineType <> "" AND lcFixLineType <> "None" AND (lcFixedLine_BaseBundle = "" OR lcFixedLineDownload = "" OR lcFixedLineUpload = "") THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Fixed line base bundle or upload/download speed is invalid", 1).
+      
       ELSE IF lcPaymentType = "PostPaid" AND lcServiceClass <> "" THEN  
          UNDO, THROW NEW Progress.Lang.AppError("Postpaid subscription contains Serviceclass data", 1).
       ELSE IF lcPaymentType = "PrePaid" AND lcServiceClass = "" THEN
          UNDO, THROW NEW Progress.Lang.AppError("Prepaid subscription doesn't contain any Serviceclass data", 1).      
+
+      ELSE IF lcRatePlanAction = "New" AND lcRatePlan = lcReferenceRatePlan THEN 
+         UNDO, THROW NEW Progress.Lang.AppError("Rateplan and Reference Rateplan are same, which is contradicting to Rateplan action", 1).         
+      ELSE IF lcRatePlanAction = "New" AND CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK) THEN 
+         UNDO, THROW NEW Progress.Lang.AppError("Rateplan already exists, which is contradicting with Rateplan action", 1).         
+      ELSE IF lcRatePlanAction = "UseExisting" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcReferenceRatePlan NO-LOCK) THEN 
+         UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan doesn't exists, which is contradicting with Rateplan action", 1).            
+      ELSE IF lcRatePlanAction = "UseExisting" AND lcRatePlan <> lcReferenceRatePlan THEN 
+         UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan and Rateplan can't be different for this Rateplan action", 1).               
+      
       ELSE IF (lcMobile_BaseBundle <> "" AND LOOKUP(lcMobile_BaseBundle, lcAllowedBundles) = 0) OR (lcFixedLine_BaseBundle <> "" AND LOOKUP(lcFixedLine_BaseBundle, lcAllowedBundles) = 0) THEN
          UNDO, THROW NEW Progress.Lang.AppError("Base bundles (Mobile/FixedLine) are not listed in allowed bundles for this subscription type", 1).         
       ELSE
@@ -956,10 +1042,15 @@ PROCEDURE pValidateData:
          END CASE.         
       END.   
 
+      FOR EACH ttTariff ON ERROR UNDO, THROW:
+
+          IF ttTariff.CCN EQ "" OR ttTariff.BillItem EQ "" THEN 
+              UNDO, THROW NEW Progress.Lang.AppError("Custom rates for rateplan are missing with BillItem/CCN details", 1).         
+      END.
+
       ASSIGN 
          llgTrafficBundle  = NO
-         llgPostPaid       = NO.              
-
+         llgPostPaid       = NO.
    END.
 
    RETURN "".
@@ -988,15 +1079,16 @@ PROCEDURE pReadTranslation:
         END.
                                                                           
         CREATE ttTrans.
-        ASSIGN 
+        ASSIGN            
            ttTrans.tLangType  = TRIM(ENTRY(1,lcLine,";"))
-           ttTrans.tLangint   = TRIM(ENTRY(2,lcLine,";"))
-           ttTrans.tLangtext  = TRIM(ENTRY(3,lcLine,";"))
-           ttTrans.tLangTrans = TRIM(ENTRY(4,lcLine,";")).
+           ttTrans.tTextType  = INT(TRIM(ENTRY(2,lcLine,";")))
+           ttTrans.tLangint   = TRIM(ENTRY(3,lcLine,";"))
+           ttTrans.tLangtext  = TRIM(ENTRY(4,lcLine,";"))
+           ttTrans.tLangTrans = TRIM(ENTRY(5,lcLine,";")).
       END.
 
       CATCH err AS Progress.Lang.Error:
-         UNDO, THROW NEW Progress.Lang.AppError('Incorrect input translation file data' + err:GetMessage(1), 1). 
+         UNDO, THROW NEW Progress.Lang.AppError('Incorrect input translation file (tariff_trans.txt) data' + err:GetMessage(1), 1). 
       END CATCH.
 
       FINALLY:
@@ -1012,24 +1104,32 @@ END PROCEDURE.
 
 PROCEDURE pSaveTranslation:
 
-   FOR EACH ttTrans NO-LOCK:
-      IF CAN-FIND(FIRST CLIType WHERE CLIType.Brand = gcBrand AND CLIType.CLIType = ttTrans.tLangType) THEN 
-      DO:
-         IF CAN-FIND(FIRST RepText WHERE RepText.Brand = gcBrand AND RepText.LinkCode = ttTrans.tLangType AND RepText.Language = INTEGER(ttTrans.tLangint)) THEN 
-            NEXT. 
-                             
-         CREATE RepText.
-         ASSIGN 
-            RepText.Brand    = gcBrand    
-            RepText.TextType = 9               /* Default value */       
-            RepText.LinkCode = ttTrans.tLangType        
-            RepText.Language = INTEGER(ttTrans.tLangint)    
-            RepText.FromDate = TODAY     
-            RepText.ToDate   = DATE(12,31,2049)
-            RepText.RepText  = ttTrans.tLangTrans.        
-      END.  
-      ELSE 
-         UNDO, THROW NEW Progress.Lang.AppError('CliType missing to add related translations',1).
+   FOR EACH ttTrans NO-LOCK
+       ON ERROR UNDO, THROW:
+      
+       FIND FIRST RepText WHERE RepText.Brand    = gcBrand                   AND 
+                                RepText.TextType = ttTrans.tTextType         AND 
+                                RepText.LinkCode = ttTrans.tLangType         AND 
+                                RepText.Language = INTEGER(ttTrans.tLangint) AND 
+                                RepText.ToDate   >= TODAY                    NO-LOCK NO-ERROR.
+       IF AVAIL RepText THEN 
+       DO:
+           BUFFER RepText:FIND+CURRENT(EXCLUSIVE-LOCK,NO-WAIT).
+           IF AVAIL RepText THEN 
+               ASSIGN RepText.RepText = ttTrans.tLangTrans.
+       END.
+       ELSE 
+       DO:                           
+           CREATE RepText.
+           ASSIGN 
+              RepText.Brand    = gcBrand    
+              RepText.TextType = ttTrans.tTextType                /* Default value */       
+              RepText.LinkCode = ttTrans.tLangType        
+              RepText.Language = INTEGER(ttTrans.tLangint)    
+              RepText.FromDate = TODAY     
+              RepText.ToDate   = DATE(12,31,2049)
+              RepText.RepText  = ttTrans.tLangTrans.
+       END.   
    END.
    
    RETURN "".

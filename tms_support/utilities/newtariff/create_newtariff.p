@@ -125,11 +125,13 @@ DO TRANSACTION:
       IF INDEX(ttFiles.FName,"billingitem") > 0 THEN 
          RUN billitemcreation.p(lcIncDir,lcSpoolDir) NO-ERROR.
       ELSE IF INDEX(ttFiles.FName,"shaperconf") > 0 THEN
-         RUN shaperconfcreation.p(lcIncDir, lcSpoolDir) NO-ERROR.      
+         RUN shaperconfcreation.p(lcIncDir, lcSpoolDir) NO-ERROR.
+      /*         
       ELSE IF INDEX(ttFiles.FName,"rateplan") > 0 THEN 
-         RUN rateplan.p(lcIncDir,lcSpoolDir,OUTPUT lcPayType,OUTPUT lcRatePlan) NO-ERROR.
+         RUN rateplan.p(lcIncDir,lcSpoolDir,OUTPUT lcPayType,OUTPUT lcRatePlan) NO-ERROR. 
+      */
       ELSE IF INDEX(ttFiles.FName,"tariffcreation") > 0 THEN 
-        RUN tariffcreation.p(lcIncDir,lcSpoolDir,lcPayType,lcRatePlan) NO-ERROR.
+        RUN tariffcreation.p(lcIncDir,lcSpoolDir) NO-ERROR.
 
       IF ERROR-STATUS:ERROR   OR
          RETURN-VALUE <> "OK" THEN DO:

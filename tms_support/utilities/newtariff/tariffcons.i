@@ -12,6 +12,7 @@
 
 &GLOBAL-DEFINE LINETYPE   "Entry,Main,Additional"
 &GLOBAL-DEFINE FLINETYPE  "ADSL,FIBER,None" 
+&GLOBAL-DEFINE RP_ACTION  "New,UseExisting"
 &GLOBAL-DEFINE WEBSTATUS  "Inactive,Active,Retired,Hidden"
 &GLOBAL-DEFINE STCSTATUS  "Inactive,Active,Retired"
 &GLOBAL-DEFINE PAYTYPE    "Postpaid,Prepaid"
@@ -30,6 +31,9 @@
 &GLOBAL-DEFINE STCS    "STCStatus"
 &GLOBAL-DEFINE PT      "PaymentType"
 &GLOBAL-DEFINE UT      "UsageType"
+&GLOBAL-DEFINE RPA     "RatePlanAction"
+&GLOBAL-DEFINE RP      "RatePlan"
+&GLOBAL-DEFINE RRP     "ReferenceRatePlan"
 &GLOBAL-DEFINE LT      "LineType"
 &GLOBAL-DEFINE FLT     "FixedLineType"
 &GLOBAL-DEFINE FLD     "FixedLineDownload"

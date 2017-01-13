@@ -144,6 +144,115 @@ FUNCTION fPrepareRequestActionParam RETURNS LOGICAL
 
 END FUNCTION.
 /* ***************************  Main Block  *************************** */
+PROCEDURE pRatePlan:
+    DEFINE INPUT PARAMETER icRatePlan          AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icRPName            AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icReferenceRatePlan AS CHARACTER NO-UNDO.
+
+    DEFINE BUFFER bf_RatePlanCopyFrom  FOR RatePlan.
+    DEFINE BUFFER bf_PListConfCopyFrom FOR PListConf.
+    DEFINE BUFFER bPListConf           FOR PListConf.
+    DEFINE BUFFER bPriceList           FOR PriceList.
+    DEFINE BUFFER bTariff              FOR Tariff.
+
+    FIND FIRST bf_RatePlanCopyFrom WHERE bf_RatePlanCopyFrom.Brand = gcBrand AND bf_RatePlanCopyFrom.RatePlan = icReferenceRatePlan NO-LOCK NO-ERROR.
+    IF AVAIL bf_RatePlanCopyFrom THEN 
+    DO:
+        CREATE RatePlan.
+        BUFFER-COPY bf_RatePlanCopyFrom EXCEPT RatePlan RPName TO RatePlan
+            ASSIGN 
+                RatePlan.RatePlan = icRatePlan
+                RatePlan.RPName   = icRPName.
+
+        FOR EACH bf_PListConfCopyFrom WHERE bf_PListConfCopyFrom.Brand    = gcBrand                      AND 
+                                            bf_PListConfCopyFrom.RatePlan = bf_RatePlanCopyFrom.RatePlan AND
+                                            bf_PListConfCopyFrom.dFrom   <= TODAY                        AND
+                                            bf_PListConfCopyFrom.dTo     >= TODAY                        NO-LOCK:
+
+            IF (bf_PListConfCopyFrom.RatePlan EQ bf_PListConfCopyFrom.PriceList) OR 
+               (LOOKUP(bf_PListConfCopyFrom.RatePlan,"CONTRATO23,CONTRATO24,CONTRATO25") > 0 AND bf_PListConfCopyFrom.PriceList = "CONTRATOS") THEN 
+            DO:
+                FIND FIRST PriceList WHERE PriceList.Brand = gcBrand AND PriceList.PriceList = bf_PListConfCopyFrom.PriceList NO-LOCK NO-ERROR.
+                IF AVAIL PriceList THEN 
+                DO:
+                    CREATE bPriceList.
+                    BUFFER-COPY PriceList EXCEPT PriceList PLName TO bPriceList
+                        ASSIGN 
+                            bPriceList.PriceList = RatePlan.RatePlan
+                            bPriceList.PLName    = RatePlan.RPName.
+
+                    FOR EACH Tariff WHERE Tariff.Brand = gcBrand AND Tariff.PriceList = PriceList.PriceList NO-LOCK:                     
+                        CREATE bTariff.
+                        BUFFER-COPY Tariff EXCEPT TariffNum PriceList ValidFrom TO bTariff
+                            ASSIGN 
+                                bTariff.TariffNum = NEXT-VALUE(Tariff)
+                                bTariff.PriceList = bPriceList.PriceList
+                                bTariff.ValidFrom = TODAY.                      
+                    END.                
+
+                    CREATE bPListConf.
+                    BUFFER-COPY PListConf EXCEPT PriceList RatePlan dFrom dTo TO bPListConf
+                        ASSIGN 
+                            bPListConf.PriceList = RatePlan.RatePlan
+                            bPListConf.RatePlan  = RatePlan.RatePlan
+                            bPListConf.dFrom     = TODAY 
+                            bPListConf.dTo       = DATE(12,31,2049).
+                END.        
+            END.            
+            ELSE
+            DO:                                
+                CREATE bPListConf.
+                BUFFER-COPY bf_PListConfCopyFrom EXCEPT RatePlan TO bPListConf
+                    ASSIGN bPListConf.RatePlan = RatePlan.RatePlan.                                                  
+            END.    
+
+        END.                                      
+    END.
+
+    RETURN "".
+
+END PROCEDURE.
+
+
+PROCEDURE pCustomRates:
+    DEFINE INPUT PARAMETER icRatePlan AS CHARACTER NO-UNDO.
+
+    DEFINE PARAMETER BUFFER ttTariff FOR ttTariff.
+
+    FOR EACH ttTariff ON ERROR UNDO, THROW:
+
+        FIND FIRST Tariff WHERE Tariff.Brand = gcBrand AND Tariff.PriceList = icRatePlan AND Tariff.CCN = INT(ttTariff.CCN) AND Tariff.BDest = ttTariff.BDest AND Tariff.ValidFrom <= TODAY AND Tariff.ValidTo >= TODAY EXCLUSIVE-LOCK NO-WAIT NO-ERROR.                                    
+        IF LOCKED Tariff THEN 
+            UNDO, THROW NEW Progress.Lang.AppError('Custom Tariff failed to update as records are locked.',1).
+        ELSE IF NOT AVAIL Tariff THEN 
+        DO:
+            CREATE Tariff.
+            ASSIGN 
+                Tariff.Brand       = gcBrand
+                Tariff.TariffNum   = NEXT-VALUE(Tariff)
+                Tariff.PriceList   = icRatePlan
+                Tariff.CCN         = INT(ttTariff.CCN)
+                Tariff.BDest       = ttTariff.BDest
+                Tariff.BillCode    = ttTariff.BillItem
+                Tariff.Price       = DECIMAL(ttTariff.Price)
+                Tariff.StartCharge = DECIMAL(ttTariff.SetupFee)
+                Tariff.ValidFrom   = TODAY 
+                Tariff.Validto     = 12/31/49.
+        END.        
+        ELSE IF AVAILABLE Tariff THEN 
+        DO:
+            ASSIGN 
+                Tariff.BillCode    = ttTariff.BillItem
+                Tariff.PriceList   = icRatePlan
+                Tariff.Price       = DECIMAL(ttTariff.Price)
+                Tariff.StartCharge = DECIMAL(ttTariff.SetupFee).           
+        END.        
+    END. /* FOR EACH ttTariff */           
+
+    RETURN "".
+
+END PROCEDURE.
+
 PROCEDURE pCLIType:
    DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.
    
@@ -181,7 +290,12 @@ PROCEDURE pCLIType:
          CLIType.BaseBundle        = ttCliType.BaseBundle
          CLIType.PayType           = ttCliType.PayType
          CLIType.UsageType         = ttCliType.UsageType
-         CLIType.PricePlan         = (IF lcRatePlan NE "" THEN lcRatePlan ELSE IF ttCliType.RatePlan NE "" THEN ttCliType.RatePlan ELSE REPLACE(ttCliType.CliType,"CONT","CONTRATO")) 
+         CLIType.PricePlan         = (IF lcRatePlan NE "" THEN 
+                                          lcRatePlan 
+                                      ELSE IF ttCliType.RatePlan NE "" THEN 
+                                          ttCliType.RatePlan 
+                                      ELSE 
+                                          REPLACE(ttCliType.CliType,"CONT","CONTRATO")) 
          CLIType.ServicePack       = (IF ttCliType.PayType EQ 1 THEN "11" ELSE "12")
          ClIType.ServiceClass      = ttCliType.ServiceClass
          CLIType.BillTarget        = (liFinalBT + 1) 
@@ -211,13 +325,23 @@ PROCEDURE pCLIType:
                          ttCliType.BundlesForActivateOnSTC, 
                          ttCliType.ServicesForReCreateOnSTC).      
 
-      IF ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "" THEN 
-         RUN pUpdateDataBundleTMSParam(ttCliType.CliType).
+      IF ttCLIType.PayType = 1 THEN 
+      DO:         
+         RUN pUpdateTMSParam("ALL_POSTPAID_CONTRACTS",ttCliType.CliType).  
+         /*TODO: Parent of Tariff bundle needs to be excluded */
+         RUN pUpdateTMSParam("BB_PROFILE_1",ttCliType.CliType).  
+      END.
       
+      IF ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "" THEN 
+      DO:
+         RUN pUpdateTMSParam("DATA_BUNDLE_BASED_CLITYPES", ttCliType.CliType).
+         RUN pUpdateTMSParam("POSTPAID_DATA_CONTRACTS"   , ttCliType.CliType).
+      END.      
+
       IF ttCLIType.PayType = 1 AND ttCLIType.UsageType = 1 THEN 
-         RUN pUpdateVoiceSusbscriptionTypeTMSParam(ttCliType.CliType,"POSTPAID").
+         RUN pUpdateTMSParam("POSTPAID_VOICE_TARIFFS", ttCliType.CliType).
       ELSE IF ttCLIType.PayType = 2 AND ttCLIType.UsageType = 1 THEN 
-         RUN pUpdateVoiceSusbscriptionTypeTMSParam(ttCliType.CliType,"PREPAID").
+         RUN pUpdateTMSParam("PREPAID_VOICE_TARIFFS", ttCliType.CliType).         
    END.
      
    RETURN "".
@@ -846,40 +970,18 @@ PROCEDURE pTMRItemValue:
 END PROCEDURE.
 
 
-PROCEDURE pUpdateDataBundleTMSParam:
-   DEFINE INPUT PARAMETER icCLIType AS CHARACTER NO-UNDO.   
+PROCEDURE pUpdateTMSParam:
+   DEFINE INPUT PARAMETER icParamCode AS CHARACTER NO-UNDO.   
+   DEFINE INPUT PARAMETER icCLIType   AS CHARACTER NO-UNDO.   
 
-   FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "DATA_BUNDLE_BASED_CLITYPES" NO-LOCK NO-ERROR.
+   FIND FIRST TMSParam WHERE TMSParam.Brand = gcBrand  AND TMSParam.ParamCode EQ icParamCode NO-LOCK NO-ERROR.
    IF AVAIL TMSParam THEN 
    DO:
       IF LOOKUP(icCliType, TMSParam.CharVal) = 0 THEN 
       DO:
          FIND CURRENT TMSParam EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
          IF LOCKED TMSParam THEN 
-            UNDO, THROW NEW Progress.Lang.AppError('DATA_BUNDLE_BASED_CLITYPES TMSParam failed to update', 1).
-
-         IF AVAIL TMSParam THEN      
-            ASSIGN TMSParam.CharVal = TMSParam.CharVal + (IF TMSParam.CharVal <> "" THEN "," ELSE "") + icCLIType. 
-      END.         
-   END.
-
-   RETURN "".
-
-END PROCEDURE.
-
-
-PROCEDURE pUpdateVoiceSusbscriptionTypeTMSParam:
-   DEFINE INPUT PARAMETER icCLIType AS CHARACTER NO-UNDO.   
-   DEFINE INPUT PARAMETER icPayType AS CHARACTER NO-UNDO.   
-
-   FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ icPayType + "_VOICE_TARIFFS" NO-LOCK NO-ERROR.
-   IF AVAIL TMSParam THEN 
-   DO:
-      IF LOOKUP(icCliType, TMSParam.CharVal) = 0 THEN 
-      DO:
-         FIND CURRENT TMSParam EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-         IF LOCKED TMSParam THEN 
-            UNDO, THROW NEW Progress.Lang.AppError(icPayType + '_VOICE_TARIFFS TMSParam failed to update', 1).            
+            UNDO, THROW NEW Progress.Lang.AppError(icParamCode + ' TMSParam failed to update', 1).
 
          IF AVAIL TMSParam THEN      
             ASSIGN TMSParam.CharVal = TMSParam.CharVal + (IF TMSParam.CharVal <> "" THEN "," ELSE "") + icCLIType. 
