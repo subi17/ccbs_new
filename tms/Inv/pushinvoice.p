@@ -12,10 +12,6 @@
 {tmsconst.i}
 {fmakemsreq.i}
 {cparam2.i}
-{femailinvoice.i}
-{email.i}
-{smsnotify.i}
-{heartbeat.i}
 {log.i}
 
 DEF INPUT PARAMETER iiMSRequest AS INT  NO-UNDO.
@@ -38,7 +34,6 @@ DEF VAR liLogTreshold      AS INTEGER   NO-UNDO.
 
 DEF VAR lMsgPublisher AS CLASS Gwy.MqPublisher NO-UNDO.
 
-DEF STREAM sEmail.
 DEF STREAM sPushLog.
 
 FIND MSRequest WHERE 
@@ -100,7 +95,7 @@ ASSIGN
                                                STRING(MONTH(TODAY),"99")  +
                                                STRING(DAY(TODAY),"99")    +
                                                ".log"
-   lcLogManagerFile = lcPushLogDir + "InvPus_LogManager_" + 
+   lcLogManagerFile = lcPushLogDir + "InvPush_LogManager_" + 
                                                STRING(YEAR(TODAY),"9999") +
                                                STRING(MONTH(TODAY),"99")  +
                                                STRING(DAY(TODAY),"99")    +
