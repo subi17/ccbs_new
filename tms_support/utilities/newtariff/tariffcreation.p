@@ -1015,9 +1015,7 @@ PROCEDURE pValidateData:
       ELSE IF lcRatePlanAction = "New" AND CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK) THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Rateplan already exists, which is contradicting with Rateplan action", 1).         
       ELSE IF lcRatePlanAction = "UseExisting" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcReferenceRatePlan NO-LOCK) THEN 
-         UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan doesn't exists, which is contradicting with Rateplan action", 1).            
-      ELSE IF lcRatePlanAction = "UseExisting" AND lcRatePlan <> lcReferenceRatePlan THEN 
-         UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan and Rateplan can't be different for this Rateplan action", 1).               
+         UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan doesn't exists, which is contradicting with Rateplan action", 1).
       
       ELSE IF (lcMobile_BaseBundle <> "" AND LOOKUP(lcMobile_BaseBundle, lcAllowedBundles) = 0) OR (lcFixedLine_BaseBundle <> "" AND LOOKUP(lcFixedLine_BaseBundle, lcAllowedBundles) = 0) THEN
          UNDO, THROW NEW Progress.Lang.AppError("Base bundles (Mobile/FixedLine) are not listed in allowed bundles for this subscription type", 1).         
