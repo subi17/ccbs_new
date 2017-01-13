@@ -89,7 +89,8 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                      bfOrder.OrderType EQ {&ORDER_TYPE_NEW} THEN DO:
                      FIND FIRST MobSub EXCLUSIVE-LOCK WHERE
                                 MobSub.MsSeq = bfOrder.MsSeq AND
-                                MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG}.
+                                MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG}
+                                NO-ERROR.
                      IF AVAIL MobSub THEN DO:
                         ASSIGN
                            MobSub.CLI = MobSub.FixedNumber
