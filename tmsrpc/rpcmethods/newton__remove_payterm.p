@@ -9,7 +9,7 @@
                   payterm_contract;string;payterm contract name
                   per_contract_id;int;mandatory;TMS internal payterm contract id
                   action;string;mandatory;"remove" or "cancel"
-
+                  amortize_quantity';int;optional;Amoztize installments quantity value
 * @memo_struct    title;string;mandatory
                   content;string;mandatory
 
@@ -26,28 +26,32 @@ gcBrand = "1".
 DEF VAR pcPayTermStruct   AS CHARACTER   NO-UNDO.
 DEF VAR pcMemoStruct      AS CHARACTER   NO-UNDO.
 
-DEF VAR liMsSeq           AS INTEGER     NO-UNDO.
-DEF VAR lcCurrentPayterm  AS CHARACTER   NO-UNDO.
-DEF VAR liCreated         AS INTEGER     NO-UNDO.
-DEF VAR lcResult          AS CHARACTER   NO-UNDO.
-DEF VAR lcStruct          AS CHARACTER   NO-UNDO.
-DEF VAR lcMemoTitle       AS CHARACTER   NO-UNDO.
-DEF VAR lcMemoContent     AS CHARACTER   NO-UNDO.
-DEF VAR liPerContractId   AS INTEGER     NO-UNDO.  
-DEF VAR lcAction          AS CHAR        NO-UNDO. 
-DEF VAR liLastUnBilledPeriod AS INT NO-UNDO. 
-DEF VAR ldaLastUnBilledDate AS DATE NO-UNDO. 
-DEF VAR ldePeriodTo AS DEC NO-UNDO. 
-DEF VAR llCreateFees AS LOG NO-UNDO. 
+DEF VAR liMsSeq              AS INTEGER   NO-UNDO.
+DEF VAR lcCurrentPayterm     AS CHARACTER NO-UNDO.
+DEF VAR liCreated            AS INTEGER   NO-UNDO.
+DEF VAR lcResult             AS CHARACTER NO-UNDO.
+DEF VAR lcStruct             AS CHARACTER NO-UNDO.
+DEF VAR lcMemoTitle          AS CHARACTER NO-UNDO.
+DEF VAR lcMemoContent        AS CHARACTER NO-UNDO.
+DEF VAR liPerContractId      AS INTEGER   NO-UNDO.  
+DEF VAR lcAction             AS CHAR      NO-UNDO. 
+DEF VAR liLastUnBilledPeriod AS INT       NO-UNDO. 
+DEF VAR ldaLastUnBilledDate  AS DATE      NO-UNDO. 
+DEF VAR ldePeriodTo          AS DEC       NO-UNDO. 
+DEF VAR llCreateFees         AS LOG       NO-UNDO. 
+DEF VAR liAmortizeQuanity    AS INT       NO-UNDO.
+DEF VAR ldeActStamp          AS INT       NO-UNDO.  
 
+DEFINE BUFFER bMsRequest FOR MsRequest.
 IF validate_request(param_toplevel_id, "struct,struct") EQ ? THEN RETURN.
 
-pcPayTermStruct = get_struct(param_toplevel_id, "0").
-pcMemoStruct    = get_struct(param_toplevel_id, "1").
+ASSIGN 
+   pcPayTermStruct = get_struct(param_toplevel_id, "0")
+   pcMemoStruct    = get_struct(param_toplevel_id, "1").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_request(pcPayTermStruct,"username!,msseq!,payterm_contract!,per_contract_id!,action!").
+lcStruct = validate_request(pcPayTermStruct,"username!,msseq!,payterm_contract!,per_contract_id!,action!,amortize_quantity").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcStruct = validate_request(pcMemoStruct,"title!,content!").
@@ -55,13 +59,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* Required Params */
 ASSIGN 
-   liMsSeq  = get_pos_int(pcPayTermStruct, "msseq")
-   katun    = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
-   lcCurrentPayterm = get_nonempty_string(pcPayTermStruct, "payterm_contract")
-   liPerContractId  = get_int(pcPayTermStruct, "per_contract_id")
-   lcAction = get_nonempty_string(pcPayTermStruct, "action")
-   lcMemoTitle = get_string(pcMemoStruct, "title")
-   lcMemoContent = get_string(pcMemoStruct, "content").
+   liMsSeq           = get_pos_int(pcPayTermStruct, "msseq")
+   katun             = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
+   lcCurrentPayterm  = get_nonempty_string(pcPayTermStruct, "payterm_contract")
+   liPerContractId   = get_int(pcPayTermStruct, "per_contract_id")
+   lcAction          = get_nonempty_string(pcPayTermStruct, "action")
+   liAmortizeQuanity = get_int(pcPayTermStruct,"amortize_quantity")
+   lcMemoTitle       = get_string(pcMemoStruct, "title")
+   lcMemoContent     = get_string(pcMemoStruct, "content").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -70,13 +75,39 @@ FIND FIRST MobSub WHERE
 IF NOT AVAIL MobSub THEN
    RETURN appl_err("Subscription not found").
 
+IF lcAction         = "cancel" AND 
+   liAmortizeQuanity > 0       THEN 
+   RETURN appl_err("Amortize quantity is not allowed WITH Action cancel").
+
 CASE lcAction:
-   WHEN "remove" THEN ASSIGN
-      lcAction = "term"
-      llCreateFees = TRUE.
-   WHEN "cancel" THEN ASSIGN
-      lcAction = "canc"
-      llCreateFees = FALSE.
+   WHEN "remove" THEN DO:
+      ASSIGN
+         lcAction     = "term"
+         llCreateFees = TRUE.
+      
+      IF liAmortizeQuanity > 0 THEN DO: 
+               
+         ldeActStamp = fMakeTS().   
+
+         FIND LAST bMsRequest NO-LOCK WHERE
+                   bMsRequest.MsSeq      = liMsSeq                         AND
+                   bMsRequest.ReqType    = {&REQTYPE_CONTRACT_TERMINATION} AND
+                   bMsRequest.ReqStatus  = 2                               AND
+                   bMsRequest.ReqCParam2 = "term_amortize"                 AND
+                   bMsRequest.ReqCParam3 = lcCurrentPayterm                AND
+                   bMsRequest.ReqIParam3 = liPerContractId                 AND
+                   bMsRequest.ActStamp  <= ldeActStamp                     NO-ERROR.
+         IF AVAIL bMsRequest THEN
+            RETURN appl_err("Installment Amortization is already done for this Subscription").
+         
+         lcAction = "term_amortize".
+
+      END.
+   END.   
+   WHEN "cancel" THEN 
+      ASSIGN
+         lcAction     = "canc"
+         llCreateFees = FALSE.
       
    OTHERWISE RETURN appl_err("Incorrect action").
 END.
@@ -88,24 +119,24 @@ FIND FIRST DayCampaign NO-LOCK WHERE
 IF NOT AVAIL DayCampaign THEN
    RETURN appl_err("Installment contract type is not valid").
 
-FIND DCCLI WHERE
-     DCCLI.MsSeq         = MobSub.MsSeq     AND
+FIND DCCLI NO-LOCK WHERE
+     DCCLI.MsSeq         = MobSub.MsSeq        AND
      DCCLI.DCEvent       = DayCampaign.DCEvent AND
-     DCCLI.PerContractID = liPerContractId  AND
-     DCCLI.ValidTo      >= TODAY NO-LOCK NO-ERROR.
+     DCCLI.PerContractID = liPerContractId     AND
+     DCCLI.ValidTo      >= TODAY               NO-ERROR.
 IF NOT AVAIL DCCLI THEN
    RETURN appl_err("Active installment contract not found").
    
 IF lcAction EQ "canc" THEN DO:
    
    FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
-        FixedFee.Brand     = gcBrand   AND
-        FixedFee.CustNum   = MobSub.CustNum AND
-        FixedFee.HostTable = "MobSub"  AND
-        FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
-        FixedFee.CalcObj   = DCCLI.DCEvent AND
-        FixedFee.SourceTable = "DCCLI" AND
-        FixedFee.SourceKey = STRING(DCCLI.PerContractId) NO-ERROR.
+        FixedFee.Brand       = gcBrand                     AND
+        FixedFee.CustNum     = MobSub.CustNum              AND
+        FixedFee.HostTable   = "MobSub"                    AND
+        FixedFee.KeyValue    = STRING(MobSub.MsSeq)        AND
+        FixedFee.CalcObj     = DCCLI.DCEvent               AND
+        FixedFee.SourceTable = "DCCLI"                     AND
+        FixedFee.SourceKey   = STRING(DCCLI.PerContractId) NO-ERROR.
 
    IF NOT AVAIL FixedFee THEN 
       RETURN appl_err("Installment contract fee not found").
@@ -126,10 +157,15 @@ IF lcAction EQ "canc" THEN DO:
    IF liLastUnBilledPeriod = 0 THEN
       liLastUnBilledPeriod = FixedFee.BegPeriod.
 
-   ldaLastUnBilledDate = fPer2Date(liLastUnBilledPeriod,0) - 1.
-   ldePeriodTo = fMake2Dt(ldaLastUnBilledDate,86399).
+   ASSIGN 
+      ldaLastUnBilledDate = fPer2Date(liLastUnBilledPeriod,0) - 1
+      ldePeriodTo         = fMake2Dt(ldaLastUnBilledDate,86399).
 END.
 ELSE ldePeriodTo = fMakeTS().
+
+/* liAmortizeQuanity value is greater than 0, only in case of action is remove (term).
+   if action is cancel then liAmortizeQuanity value is considered as 0, as this
+   parameter is used for residual fee amount */
 
 liCreated = fPCActionRequest(MobSub.MsSeq,
                              DCCLI.DCEvent,
@@ -141,7 +177,7 @@ liCreated = fPCActionRequest(MobSub.MsSeq,
                              0,
                              FALSE,
                              "",
-                             0,
+                             liAmortizeQuanity,
                              DCCLI.PerContractID,
                              OUTPUT lcResult).
 IF liCreated = 0 THEN
