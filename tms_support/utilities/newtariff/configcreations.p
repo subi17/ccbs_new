@@ -148,6 +148,7 @@ PROCEDURE pRatePlan:
     DEFINE INPUT PARAMETER icRatePlan          AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icRPName            AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icReferenceRatePlan AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icRatePlanAction    AS CHARACTER NO-UNDO.
 
     DEFINE BUFFER bf_RatePlanCopyFrom  FOR RatePlan.
     DEFINE BUFFER bf_PListConfCopyFrom FOR PListConf.
@@ -169,9 +170,9 @@ PROCEDURE pRatePlan:
                                             bf_PListConfCopyFrom.dFrom   <= TODAY                        AND
                                             bf_PListConfCopyFrom.dTo     >= TODAY                        NO-LOCK:
 
-            IF (bf_PListConfCopyFrom.RatePlan EQ bf_PListConfCopyFrom.PriceList) OR 
-               (LOOKUP(bf_PListConfCopyFrom.RatePlan,"CONTRATO23,CONTRATO24,CONTRATO25") > 0 AND bf_PListConfCopyFrom.PriceList = "CONTRATOS") THEN 
+            IF icRatePlanAction = "New" AND (bf_PListConfCopyFrom.RatePlan EQ bf_PListConfCopyFrom.PriceList) OR (LOOKUP(bf_PListConfCopyFrom.RatePlan,"CONTRATO23,CONTRATO24,CONTRATO25") > 0 AND bf_PListConfCopyFrom.PriceList = "CONTRATOS") THEN 
             DO:
+                /* A copy of existing rateplan's pricelist and related tariffs is created */
                 FIND FIRST PriceList WHERE PriceList.Brand = gcBrand AND PriceList.PriceList = bf_PListConfCopyFrom.PriceList NO-LOCK NO-ERROR.
                 IF AVAIL PriceList THEN 
                 DO:
@@ -200,12 +201,12 @@ PROCEDURE pRatePlan:
                 END.        
             END.            
             ELSE
-            DO:                                
+            DO: 
+                /* Share existing rateplan's pricelist and related tariffs */                               
                 CREATE bPListConf.
                 BUFFER-COPY bf_PListConfCopyFrom EXCEPT RatePlan TO bPListConf
                     ASSIGN bPListConf.RatePlan = RatePlan.RatePlan.                                                  
-            END.    
-
+            END.
         END.                                      
     END.
 

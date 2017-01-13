@@ -296,8 +296,8 @@ PROCEDURE pProcessTT:
    DEFINE VARIABLE liBDLFirstMonthBR AS INTEGER NO-UNDO.
    DEFINE VARIABLE liBDLLastMonthBR  AS INTEGER NO-UNDO.  
    
-   IF lcRatePlanAction = "New" AND lcReferenceRatePlan > "" THEN    
-       RUN pRatePlan IN h_config(lcRatePlan, lcCliType, lcReferenceRatePlan).
+   IF lcReferenceRatePlan > "" THEN    
+       RUN pRatePlan IN h_config(lcRatePlan, lcCliType, lcReferenceRatePlan, lcRatePlanAction).
 
    IF CAN-FIND(FIRST ttTariff) THEN 
        RUN pCustomRates IN h_config(lcRatePlan, BUFFER ttTariff).
