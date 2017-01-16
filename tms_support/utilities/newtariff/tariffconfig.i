@@ -23,7 +23,12 @@ DEFINE TEMP-TABLE ttTariff NO-UNDO
    FIELD Price    AS CHARACTER 
    FIELD SetupFee AS CHARACTER.
 
-
+DEFINE TEMP-TABLE ttTMRItemValue NO-UNDO
+   FIELD TMRuleSeq AS INTEGER
+   FIELD CliType   AS CHARACTER
+   FIELD BDest     AS CHARACTER
+   INDEX IdxTMRuleSeq IS UNIQUE PRIMARY TMRuleSeq.
+   
 DEFINE TEMP-TABLE ttCliType NO-UNDO
     FIELD CliType                   AS CHARACTER
     FIELD CliName                   AS CHARACTER
@@ -42,7 +47,6 @@ DEFINE TEMP-TABLE ttCliType NO-UNDO
     FIELD CommercialFee             AS DECIMAL
     FIELD CompareFee                AS DECIMAL
     FIELD BundleType                AS LOGICAL
-    FIELD RatePlan                  AS CHARACTER
     FIELD ParentTariff              AS CHARACTER
     FIELD TariffBundle              AS CHARACTER    
     FIELD AllowedBundles            AS CHARACTER

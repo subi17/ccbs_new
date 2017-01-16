@@ -118,13 +118,13 @@ DO ON ERROR UNDO, THROW:
    RUN pValidateData.
 
    RUN pProcessTT.
-   
+
    RUN pSaveTariff.
-   
+
    RUN pReadTranslation.
 
    RUN pSaveTranslation.
-   
+
    RETURN "OK".
 
    CATCH e AS Progress.Lang.Error:
@@ -248,10 +248,14 @@ PROCEDURE pReadCustomRatesForRateplan:
     DO ON ERROR UNDO, THROW:
         ASSIGN lcInputFile = icIncDir + "rptariff_new.txt".
         
-        IF SEARCH(lcInputFile) > "" THEN   
-        DO:
-            INPUT  STREAM TariffIn FROM VALUE(lcInputFile).
-            REPEAT:
+        FILE-INFO:FILE-NAME = lcInputFile.
+
+        IF FILE-INFO:PATHNAME <> "" THEN   
+        DO ON ERROR UNDO, THROW:
+
+            INPUT STREAM TariffIn FROM VALUE(lcInputFile).
+            
+            REPEAT ON ERROR UNDO, THROW:
                IMPORT STREAM TariffIn UNFORMATTED lcLine.
                /* Ignore the first line - (Header) */
                IF liFirstLine = 1 THEN 
@@ -275,6 +279,7 @@ PROCEDURE pReadCustomRatesForRateplan:
 
             FINALLY:
                INPUT STREAM TariffIn CLOSE.
+               DELETE OBJECT FILE-INFO NO-ERROR.
             END FINALLY.       
         END.   
     END.
@@ -297,7 +302,7 @@ PROCEDURE pProcessTT:
    DEFINE VARIABLE liBDLLastMonthBR  AS INTEGER NO-UNDO.  
    
    IF lcReferenceRatePlan > "" THEN    
-       RUN pRatePlan IN h_config(lcRatePlan, lcCliType, lcReferenceRatePlan, lcRatePlanAction).
+       RUN pRatePlan IN h_config(lcRatePlan, lcCliName, lcReferenceRatePlan, lcRatePlanAction).
 
    IF CAN-FIND(FIRST ttTariff) THEN 
        RUN pCustomRates IN h_config(lcRatePlan, BUFFER ttTariff).
@@ -326,7 +331,6 @@ PROCEDURE pProcessTT:
               ttCliType.Serviceclass              = lcServiceClass
               ttCliType.CommercialFee             = DECIMAL(lcCommFee)
               ttCliType.CompareFee                = DECIMAL(lcComparisonFee)              
-              ttCliType.RatePlan                  = icRatePlan
               ttCliType.TariffBundle              = ""        
               ttCliType.ParentTariff              = ""      
               ttCliType.AllowedBundles            = ""
@@ -357,7 +361,6 @@ PROCEDURE pProcessTT:
       ttCliType.Serviceclass              = lcServiceClass
       ttCliType.CommercialFee             = DECIMAL(lcCommFee)
       ttCliType.CompareFee                = DECIMAL(lcComparisonFee)
-      ttCliType.RatePlan                  = icRatePlan    
       ttCliType.TariffBundle              = (IF lcTariffBundle > "" THEN lcTariffBundle ELSE "")  
       ttCliType.ParentTariff              = (IF lcTariffBundle > "" THEN lcCliType      ELSE "")  
       ttCliType.AllowedBundles            = lcAllowedBundles
@@ -999,10 +1002,7 @@ PROCEDURE pValidateData:
       END. /* FOR EACH ttSubTypeCr */      
 
       /* Validations */      
-      IF (iiPayType = 2 AND lcPaymentType = "Postpaid") OR (iiPayType = 1 AND lcPaymentType = "Prepaid") THEN 
-         UNDO, THROW NEW Progress.Lang.AppError("Rateplan and Tariff with different payment types", 1).
-      
-      ELSE IF lcFixLineType <> "" AND lcFixLineType <> "None" AND (lcFixedLine_BaseBundle = "" OR lcFixedLineDownload = "" OR lcFixedLineUpload = "") THEN 
+      IF lcFixLineType <> "" AND lcFixLineType <> "None" AND (lcFixedLine_BaseBundle = "" OR lcFixedLineDownload = "" OR lcFixedLineUpload = "") THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Fixed line base bundle or upload/download speed is invalid", 1).
       
       ELSE IF lcPaymentType = "PostPaid" AND lcServiceClass <> "" THEN  
@@ -1016,9 +1016,6 @@ PROCEDURE pValidateData:
          UNDO, THROW NEW Progress.Lang.AppError("Rateplan already exists, which is contradicting with Rateplan action", 1).         
       ELSE IF lcRatePlanAction = "UseExisting" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcReferenceRatePlan NO-LOCK) THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan doesn't exists, which is contradicting with Rateplan action", 1).
-      
-      ELSE IF (lcMobile_BaseBundle <> "" AND LOOKUP(lcMobile_BaseBundle, lcAllowedBundles) = 0) OR (lcFixedLine_BaseBundle <> "" AND LOOKUP(lcFixedLine_BaseBundle, lcAllowedBundles) = 0) THEN
-         UNDO, THROW NEW Progress.Lang.AppError("Base bundles (Mobile/FixedLine) are not listed in allowed bundles for this subscription type", 1).         
       ELSE
       DO:
          CASE lcMobile_BaseBundleType:
@@ -1112,7 +1109,7 @@ PROCEDURE pSaveTranslation:
                                 RepText.ToDate   >= TODAY                    NO-LOCK NO-ERROR.
        IF AVAIL RepText THEN 
        DO:
-           BUFFER RepText:FIND+CURRENT(EXCLUSIVE-LOCK,NO-WAIT).
+           BUFFER RepText:FIND-CURRENT(EXCLUSIVE-LOCK,NO-WAIT).
            IF AVAIL RepText THEN 
                ASSIGN RepText.RepText = ttTrans.tLangTrans.
        END.

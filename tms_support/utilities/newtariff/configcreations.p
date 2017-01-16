@@ -192,7 +192,7 @@ PROCEDURE pRatePlan:
                     END.                
 
                     CREATE bPListConf.
-                    BUFFER-COPY PListConf EXCEPT PriceList RatePlan dFrom dTo TO bPListConf
+                    BUFFER-COPY bf_PListConfCopyFrom EXCEPT PriceList RatePlan dFrom dTo TO bPListConf
                         ASSIGN 
                             bPListConf.PriceList = RatePlan.RatePlan
                             bPListConf.RatePlan  = RatePlan.RatePlan
@@ -222,7 +222,12 @@ PROCEDURE pCustomRates:
 
     FOR EACH ttTariff ON ERROR UNDO, THROW:
 
-        FIND FIRST Tariff WHERE Tariff.Brand = gcBrand AND Tariff.PriceList = icRatePlan AND Tariff.CCN = INT(ttTariff.CCN) AND Tariff.BDest = ttTariff.BDest AND Tariff.ValidFrom <= TODAY AND Tariff.ValidTo >= TODAY EXCLUSIVE-LOCK NO-WAIT NO-ERROR.                                    
+        FIND FIRST Tariff WHERE Tariff.Brand      = gcBrand           AND 
+                                Tariff.PriceList  = icRatePlan        AND 
+                                Tariff.CCN        = INT(ttTariff.CCN) AND 
+                                Tariff.BDest      = ttTariff.BDest    AND 
+                                Tariff.ValidFrom <= TODAY             AND 
+                                Tariff.ValidTo   >= TODAY             EXCLUSIVE-LOCK NO-WAIT NO-ERROR.                                    
         IF LOCKED Tariff THEN 
             UNDO, THROW NEW Progress.Lang.AppError('Custom Tariff failed to update as records are locked.',1).
         ELSE IF NOT AVAIL Tariff THEN 
@@ -238,7 +243,7 @@ PROCEDURE pCustomRates:
                 Tariff.Price       = DECIMAL(ttTariff.Price)
                 Tariff.StartCharge = DECIMAL(ttTariff.SetupFee)
                 Tariff.ValidFrom   = TODAY 
-                Tariff.Validto     = 12/31/49.
+                Tariff.Validto     = DATE(12,31,2049).
         END.        
         ELSE IF AVAILABLE Tariff THEN 
         DO:
