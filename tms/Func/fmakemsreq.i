@@ -805,17 +805,20 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    END.
   
    CASE icActType:
-   WHEN "act"  OR
-   WHEN "cont" OR
-   WHEN "reactivate" OR
-   WHEN "recreate" THEN liReqType = {&REQTYPE_CONTRACT_ACTIVATION}. /*8 - activate/continue/re-create service */
-   WHEN "term" OR 
-   WHEN "canc" OR
-   WHEN "iterm" THEN liReqType = {&REQTYPE_CONTRACT_TERMINATION}.     /*9 - cancel/terminate service */
-   OTHERWISE DO:
-      ocResult = "Invalid action".
-      RETURN 0.
-   END.   
+      WHEN "act"        OR
+      WHEN "cont"       OR
+      WHEN "reactivate" OR
+      WHEN "recreate"   THEN 
+         liReqType = {&REQTYPE_CONTRACT_ACTIVATION}. /*8 - activate/continue/re-create service */
+      WHEN "term"          OR
+      WHEN "term_amortize" OR
+      WHEN "canc"          OR
+      WHEN "iterm"         THEN 
+         liReqType = {&REQTYPE_CONTRACT_TERMINATION}.     /*9 - cancel/terminate service */
+      OTHERWISE DO:
+         ocResult = "Invalid action".
+         RETURN 0.
+      END.   
    END CASE. 
 
    IF iiMsSeq = 0 OR 
@@ -867,6 +870,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
     END.
    /*NOTE: rReqCparam4 is reserved in this case  for ontractid
            instead of using the commonc ReqCparam6 for that purpose*/
+   /*NOTE: payterm Residual value is used for actions "term_amortize" AND "cancel" */          
    ASSIGN bCreaReq.ReqSource   = icSource
           bCreaReq.ReqCParam2  = icActType
           bCreaReq.ReqCParam3  = icContrType

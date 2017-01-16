@@ -1759,72 +1759,77 @@ END PROCEDURE.  /* Finalize */
 /*  terminate a periodical contract */
 PROCEDURE pContractTermination:
 
-   DEF VAR lcTerminationType AS CHAR NO-UNDO.
-   DEF VAR lcDCEvent        AS CHAR NO-UNDO.
-   DEF VAR ldtCreDate       AS DATE NO-UNDO.
-   DEF VAR liEndPeriod      AS INT  NO-UNDO.
-   DEF VAR ldCoefficient    AS DECI NO-UNDO.
-   DEF VAR ldEndStamp       AS DEC  NO-UNDO.
-   DEF VAR lcTermFeeCalc    AS CHAR NO-UNDO.
-   DEF VAR ldtOrigValidFrom AS DATE NO-UNDO.
-   DEF VAR ldtOrigRenewalDate AS DATE NO-UNDO.
-   DEF VAR ldtOrigValidTo   AS DATE NO-UNDO.
-   DEF VAR ldtOrigValidToOrig AS DATE NO-UNDO INIT ?.
-   DEF VAR ldPrice          AS DEC NO-UNDO INIT ?.
-   DEF VAR llCreatePenaltyFee AS LOG NO-UNDO INIT FALSE.
-   DEF VAR llSubRequest     AS LOG  NO-UNDO.
-   DEF VAR ldNewEndStamp    AS DEC  NO-UNDO.
-   DEF VAR liSLCount        AS INT  NO-UNDO.
-   DEF VAR ldeInclAmt       AS DEC  NO-UNDO.
-   DEF VAR liCheckMsSeq     AS INT  NO-UNDO.
-   DEF VAR llRelativeLast   AS LOG  NO-UNDO.
-   DEF VAR ldaFromDate      AS DATE NO-UNDO.
-   DEF VAR ldaLastDay       AS DATE NO-UNDO. 
-   DEF VAR llPostpaidBundleTerm AS LOG NO-UNDO.
-   DEF VAR llRerate         AS LOG  NO-UNDO INIT FALSE. 
-   DEF VAR lcHandled        AS CHAR NO-UNDO. 
-   DEF VAR llKeepDSSActive  AS LOG  NO-UNDO.
-   DEF VAR lcFatGroups      AS CHAR NO-UNDO. 
-   DEF VAR i                AS INT NO-UNDO. 
-   DEF VAR ldeNextMonthStamp AS DEC  NO-UNDO.
-   DEF VAR ldeLastDayofMonthStamp AS DEC  NO-UNDO.
-   DEF VAR liCurrentServiceClass AS INT NO-UNDO. 
-   DEF VAR lcError          AS CHAR NO-UNDO. 
-   DEF VAR liRequest        AS INT NO-UNDO.  
-   DEF VAR ldContractEndDate AS DATE NO-UNDO.
+   DEF VAR lcTerminationType       AS CHAR NO-UNDO.
+   DEF VAR lcDCEvent               AS CHAR NO-UNDO.
+   DEF VAR ldtCreDate              AS DATE NO-UNDO.
+   DEF VAR liEndPeriod             AS INT  NO-UNDO.
+   DEF VAR ldCoefficient           AS DECI NO-UNDO.
+   DEF VAR ldEndStamp              AS DEC  NO-UNDO.
+   DEF VAR lcTermFeeCalc           AS CHAR NO-UNDO.
+   DEF VAR ldtOrigValidFrom        AS DATE NO-UNDO.
+   DEF VAR ldtOrigRenewalDate      AS DATE NO-UNDO.
+   DEF VAR ldtOrigValidTo          AS DATE NO-UNDO.
+   DEF VAR ldtOrigValidToOrig      AS DATE NO-UNDO INIT ?.
+   DEF VAR ldPrice                 AS DEC  NO-UNDO INIT ?.
+   DEF VAR llCreatePenaltyFee      AS LOG  NO-UNDO INIT FALSE.
+   DEF VAR llSubRequest            AS LOG  NO-UNDO.
+   DEF VAR ldNewEndStamp           AS DEC  NO-UNDO.
+   DEF VAR liSLCount               AS INT  NO-UNDO.
+   DEF VAR ldeInclAmt              AS DEC  NO-UNDO.
+   DEF VAR liCheckMsSeq            AS INT  NO-UNDO.
+   DEF VAR llRelativeLast          AS LOG  NO-UNDO.
+   DEF VAR ldaFromDate             AS DATE NO-UNDO.
+   DEF VAR ldaLastDay              AS DATE NO-UNDO. 
+   DEF VAR llPostpaidBundleTerm    AS LOG  NO-UNDO.
+   DEF VAR llRerate                AS LOG  NO-UNDO INIT FALSE. 
+   DEF VAR lcHandled               AS CHAR NO-UNDO. 
+   DEF VAR llKeepDSSActive         AS LOG  NO-UNDO.
+   DEF VAR lcFatGroups             AS CHAR NO-UNDO. 
+   DEF VAR i                       AS INT  NO-UNDO. 
+   DEF VAR ldeNextMonthStamp       AS DEC  NO-UNDO.
+   DEF VAR ldeLastDayofMonthStamp  AS DEC  NO-UNDO.
+   DEF VAR liCurrentServiceClass   AS INT  NO-UNDO. 
+   DEF VAR lcError                 AS CHAR NO-UNDO. 
+   DEF VAR liRequest               AS INT  NO-UNDO.  
+   DEF VAR ldContractEndDate       AS DATE NO-UNDO.
    DEF VAR lcIPhoneDiscountRuleIds AS CHAR NO-UNDO.
    DEF VAR lcIPhoneDiscountRuleId  AS CHAR NO-UNDO.
-   DEF VAR liContractID     AS INT NO-UNDO.
-   DEF VAR liFFNum          AS INT NO-UNDO. 
-   DEF VAR lcFeeSourceTable AS CHAR NO-UNDO. 
-   DEF VAR lcFeeSourceKey   AS CHAR NO-UNDO.
-   DEF VAR lcBundleId       AS CHAR NO-UNDO.
-   DEF VAR lcCLIType        AS CHAR NO-UNDO.
-   DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-   DEF VAR lcDSS2PrimarySubsType AS CHAR NO-UNDO. 
-   DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
-   DEF VAR ldeNextDayStamp  AS DEC NO-UNDO.
-   DEF VAR llChargeUsageBased AS LOG NO-UNDO.
-   DEF VAR liSlSeq          AS INT NO-UNDO.
-   DEF VAR ldeConsumption   AS DEC NO-UNDO.
-   DEF VAR lcAdjustConsProfile AS CHAR NO-UNDO.
-   DEF VAR liCustNum        AS INT NO-UNDO.
-   DEF VAR llgResult        AS LOG NO-UNDO.
-   DEF VAR llCancelOrder AS LOG NO-UNDO. 
-   DEF VAR llCancelInstallment AS LOG NO-UNDO. 
-   DEF VAR liOrderId AS INT NO-UNDO. 
-   DEF VAR liCnt AS INT NO-UNDO.
-   DEF VAR liEndPeriodPostpone AS INT  NO-UNDO.
-   DEF VAR ldtActDatePostpone  AS DATE NO-UNDO.
-   DEF VAR llActiveInstallment AS LOG NO-UNDO.  
+   DEF VAR liContractID            AS INT  NO-UNDO.
+   DEF VAR liFFNum                 AS INT  NO-UNDO. 
+   DEF VAR lcFeeSourceTable        AS CHAR NO-UNDO. 
+   DEF VAR lcFeeSourceKey          AS CHAR NO-UNDO.
+   DEF VAR lcBundleId              AS CHAR NO-UNDO.
+   DEF VAR lcCLIType               AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcDSS2PrimarySubsType   AS CHAR NO-UNDO. 
+   DEF VAR lcPostpaidDataBundles   AS CHAR NO-UNDO.
+   DEF VAR ldeNextDayStamp         AS DEC  NO-UNDO.
+   DEF VAR llChargeUsageBased      AS LOG  NO-UNDO.
+   DEF VAR liSlSeq                 AS INT  NO-UNDO.
+   DEF VAR ldeConsumption          AS DEC  NO-UNDO.
+   DEF VAR lcAdjustConsProfile     AS CHAR NO-UNDO.
+   DEF VAR liCustNum               AS INT  NO-UNDO.
+   DEF VAR llgResult               AS LOG  NO-UNDO.
+   DEF VAR llCancelOrder           AS LOG  NO-UNDO. 
+   DEF VAR llCancelInstallment     AS LOG  NO-UNDO. 
+   DEF VAR liOrderId               AS INT  NO-UNDO. 
+   DEF VAR liCnt                   AS INT  NO-UNDO.
+   DEF VAR liEndPeriodPostpone     AS INT  NO-UNDO.
+   DEF VAR ldtActDatePostpone      AS DATE NO-UNDO.
+   DEF VAR llActiveInstallment     AS LOG  NO-UNDO.  
+   DEF VAR llFMFee                 AS LOG  NO-UNDO. 
+   DEF VAR liDSSMsSeq              AS INT  NO-UNDO. 
+   DEF VAR ldaMonth22              AS DATE NO-UNDO.
+   DEF VAR lgAmortizeDate          AS LOG  NO-UNDO. 
+   DEF VAR idtAmortizeDate         AS DATE NO-UNDO.
+   DEF VAR liAmortizeValue         AS INT  NO-UNDO. 
+   DEF VAR ldtFeeDate              AS DATE NO-UNDO.
+   DEF VAR lcMemoText              AS CHAR NO-UNDO. 
+   DEF VAR lcFeeMemoText           AS CHAR NO-UNDO. 
 
-   DEF VAR llFMFee AS LOG  NO-UNDO. 
-   DEF VAR liDSSMsSeq AS INT NO-UNDO. 
-   DEF VAR ldaMonth22 AS DATE NO-UNDO.
-
-   DEF BUFFER bLimit        FOR MServiceLimit.
-   DEF BUFFER bMsRequest    FOR MsRequest.
-   DEF BUFFER bMsOwner      FOR MsOwner.
+   DEF BUFFER bLimit           FOR MServiceLimit.
+   DEF BUFFER bMsRequest       FOR MsRequest.
+   DEF BUFFER bMsOwner         FOR MsOwner.
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
@@ -1870,9 +1875,9 @@ PROCEDURE pContractTermination:
       liActTime  = 86399.
    
    ASSIGN
-      lcDCEvent = MsRequest.ReqCParam3
+      lcDCEvent         = MsRequest.ReqCParam3
       lcTerminationType = MsRequest.ReqCParam2
-      liCustNum = MsRequest.CustNum.
+      liCustNum         = MsRequest.CustNum.
    
    FIND FIRST DayCampaign WHERE 
               DayCampaign.Brand   = gcBrand AND
@@ -2193,6 +2198,40 @@ PROCEDURE pContractTermination:
    
    /* terminate contract (others) */
    ELSE DO:
+      
+      IF MsRequest.ReqCParam2 = "term_amortize" THEN 
+      DO:
+         FOR EACH FixedFee NO-LOCK WHERE
+                  FixedFee.Brand       = gcBrand                      AND
+                  FixedFee.HostTable   = "MobSub"                     AND
+                  FixedFee.KeyValue    = STRING(MsRequest.MsSeq)      AND
+                  FixedFee.CustNum     = MsRequest.CustNum            AND 
+                  FixedFee.CalcObj     = lcDCEvent                    AND
+                  FixedFee.SourceTable = "DCCLI"                      AND
+                  FixedFee.SourceKey   = STRING(MsRequest.ReqIParam3) AND
+                  FixedFee.InUse       = TRUE USE-INDEX HostTable,
+             LAST FFItem OF FixedFee NO-LOCK: 
+
+            ASSIGN lgAmortizeDate = fTS2Date(FFItem.Concerns[1],
+                                             OUTPUT idtAmortizeDate)
+                   liAmortizeValue = -(MsRequest.ReqDParam2).
+
+            ldtActDate = ADD-INTERVAL(idtAmortizeDate,liAmortizeValue,"months").
+
+         END.           
+
+         IF idtAmortizeDate EQ ? OR  
+            liAmortizeValue EQ 0 THEN DO:
+            fReqError("No amortize date OR amortize value is available").
+            RETURN.
+         END.    
+
+         ASSIGN
+            ldeLastDayofMonthStamp = fMake2Dt(fLastDayOfMonth(ldtActDate),86399)
+            ldeNextMonthStamp      = fMake2Dt((fLastDayOfMonth(ldtActDate) + 1),0)
+            ldeNextDayStamp        = fMake2Dt((ldtActDate + 1),0)
+            liEndPeriod            = YEAR(ldtActDate) * 100 + MONTH(ldtActDate).
+      END.
 
       /* current contract */
       FIND FIRST DCCLI WHERE
@@ -2231,7 +2270,6 @@ PROCEDURE pContractTermination:
                OUTPUT ldtCreDate,
                OUTPUT liActTime).
 
-
       /* cancellation must be done max. 14 days after activation */
       IF MsRequest.ReqCParam2 = "canc" AND 
          DayCampaign.DCType NE {&DCTYPE_INSTALLMENT} AND
@@ -2247,8 +2285,15 @@ PROCEDURE pContractTermination:
       
       FIND CURRENT DCCLI EXCLUSIVE-LOCK.
       IF lldoevent THEN RUN StarEventSetOldBuffer(lhDCCLI).
-      ASSIGN DCCLI.TermDate = ldtActDate
-             DCCLI.ValidTo  = ldtActDate. /* in cancellation termination 
+      
+      /* If Installment term amortization request is created, 
+         then contract should not be terminated */
+      IF MsRequest.ReqCParam2 EQ "term_amortize" THEN 
+         ASSIGN DCCLI.TermDate = ?
+                DCCLI.ValidTo  = ADD-INTERVAL(DCCLI.ValidTo,liAmortizeValue,"months").
+      ELSE ASSIGN 
+              DCCLI.TermDate = ldtActDate
+              DCCLI.ValidTo  = ldtActDate. /* in cancellation termination 
                                              date is not end of period */
       IF lldoevent THEN RUN StarEventMakeModifyEvent (lhDCCLI).
 
@@ -2390,23 +2435,44 @@ PROCEDURE pContractTermination:
 
       IF llCreatePenaltyFee THEN DO:
 
+         /* In case of installment amortization, penalty fee has to be 
+            created with current billing period */
+         IF MsRequest.ReqCParam2 = "term_amortize" THEN 
+         DO:
+            fSplitTS(MsRequest.ActStamp,
+                     OUTPUT ldtFeeDate,
+                     OUTPUT liActTime).
+            
+            ASSIGN lcMemoText    = DayCampaign.DCEvent + " amortized " +
+                                   STRING(ldtActDate,"99.99.9999") +
+                                   lcTermFeeCalc
+                   lcFeeMemoText = "ContractAmortization".             
+         END.            
+         ELSE ASSIGN 
+                 ldtFeeDate = ldtActDate
+                 lcMemoText = DayCampaign.DCEvent + " terminated " + 
+                              STRING(ldtActDate,"99.99.9999") +
+                              lcTermFeeCalc.
+
+         IF lcFeeMemoText EQ "" THEN DO: 
+            IF MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
+                                     (DayCampaign.DCType = {&DCTYPE_DISCOUNT} OR
+                                      DayCampaign.DCType = {&DCTYPE_INSTALLMENT})
+               THEN "ContractTermination¤Postpone".
+            ELSE "ContractTermination".
+         END.
+
          RUN creasfee.p (MsOwner.CustNum,
                          MsRequest.MsSeq,
-                         ldtActDate,
+                         ldtFeeDate,
                          "FeeModel",
                          DayCampaign.TermFeeModel,
                          9,
                          ldPrice,
-                         DayCampaign.DCEvent + " terminated " + 
-                              STRING(ldtActDate,"99.99.9999") +
-                              lcTermFeeCalc,
+                         lcMemoText,
                          FALSE,              /* no messages to screen */
                          MsRequest.UserCode,
-                         IF MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
-                            (DayCampaign.DCType = {&DCTYPE_DISCOUNT} OR
-                             DayCampaign.DCType = {&DCTYPE_INSTALLMENT})
-                         THEN "ContractTermination¤Postpone"
-                         ELSE "ContractTermination",
+                         lcFeeMemoText,
                          liOrderId, /* order id */
                          lcFeeSourceTable,
                          lcFeeSourceKey,
@@ -2495,9 +2561,11 @@ PROCEDURE pContractTermination:
                      liCheckMsSeq,
                      IF llChargeUsageBased
                         THEN lcDCEvent
-                        ELSE "", /* Data bundle id */
+                     ELSE "", /* Data bundle id */
                      MsRequest.UserCode, /* eventlog.usercode */
-                     "ContractTermination", /* eventlog.memo */
+                     IF MsRequest.ReqCParam2 = "term_amortize" THEN
+                        "ContractAmortization"
+                     ELSE "ContractTermination", /* eventlog.memo */
                      MsRequest.MsRequest,
                      llFMFee,
                      OUTPUT ldReqAmt).
@@ -2510,7 +2578,9 @@ PROCEDURE pContractTermination:
                  STRING(FixedFee.FFNum),
                  FixedFee.CustNum,
                  "Closed",
-                 "Periodical contract " + lcDCEvent + " closed").
+                 IF MsRequest.ReqCParam2 = "term_amortize" THEN
+                    "Periodical contract " + lcDCEvent + " amortized"
+                 ELSE "Periodical contract " + lcDCEvent + " closed").
    
       /* Delete commission fee if the installment contract is closed
          due to revert renewal order or order cancellation */
@@ -2579,7 +2649,8 @@ PROCEDURE pContractTermination:
             IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSingleFee).
 
             /* YDR-1584 */
-            IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} THEN
+            IF MsRequest.ReqSource  EQ {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} OR 
+               MsRequest.ReqCParam2 EQ "term_amortize"                            THEN
                ASSIGN liEndPeriodPostpone = fPer2PerAdd(liEndPeriod,1)
                       ldtActDatePostpone  = ADD-INTERVAL(ldtActDate,1,"months").
             ELSE 
@@ -3191,42 +3262,44 @@ END PROCEDURE.
 /* Reactivate a periodical contract */
 PROCEDURE pContractReactivation:
 
-   DEF VAR lcDCEvent     AS CHAR NO-UNDO.
-   DEF VAR ldtFromDate   AS DATE NO-UNDO.
-   DEF VAR ldtEndDate    AS DATE NO-UNDO.
-   DEF VAR llSubRequest  AS LOG  NO-UNDO.
-   DEF VAR lcUseCLIType  AS CHAR NO-UNDO.
-   DEF VAR ldtActDate    AS DATE NO-UNDO.
-   DEF VAR liActTime     AS INT  NO-UNDO.
-   DEF VAR ldtMSActDate  AS DATE NO-UNDO.
-   DEF VAR liMSActTime   AS INT  NO-UNDO.
-   DEF VAR ldEndDate     AS DATE NO-UNDO.
-   DEF VAR ldEndStamp    AS DEC  NO-UNDO.
-   DEF VAR ldeLimitAmt   AS DEC  NO-UNDO.
-   DEF VAR liEndPeriod   AS INT  NO-UNDO.
-   DEF VAR ldaChangedEndDate AS DATE  NO-UNDO.
-   DEF VAR ldaPeriodEndDate  AS DATE  NO-UNDO.
-   DEF VAR ddate             AS DATE  NO-UNDO.
-   DEF VAR liBegDate         AS INT   NO-UNDO.
-   DEF VAR ldInclAmt         AS DEC   NO-UNDO. 
-   DEF VAR llRerate          AS LOG   NO-UNDO INIT FALSE.
-   DEF VAR liItemEnd         AS INT  NO-UNDO. 
-   DEF VAR liFFBegPeriod     AS INT  NO-UNDO.
-   DEF VAR lcReqChar         AS CHAR NO-UNDO.
-   DEF VAR lcBundleId        AS CHAR NO-UNDO.
-   DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-   DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
-   DEF VAR liLookUp          AS INT NO-UNDO.
-   DEF VAR liPeriod          AS INT NO-UNDO.
-   DEF VAR liPeriods         AS INT NO-UNDO.
-   DEF VAR liRequest         AS INT NO-UNDO.
-   DEF VAR lcResult          AS CHAR NO-UNDO.
-   DEF VAR liReacPeriod      AS INT NO-UNDO.
-   DEF VAR ldateDccli        AS DATE  NO-UNDO.
-   DEF VAR llUpdateResidualFeeCode AS LOG NO-UNDO. 
+   DEF VAR lcDCEvent               AS CHAR NO-UNDO.
+   DEF VAR ldtFromDate             AS DATE NO-UNDO.
+   DEF VAR ldtEndDate              AS DATE NO-UNDO.
+   DEF VAR llSubRequest            AS LOG  NO-UNDO.
+   DEF VAR lcUseCLIType            AS CHAR NO-UNDO.
+   DEF VAR ldtActDate              AS DATE NO-UNDO.
+   DEF VAR liActTime               AS INT  NO-UNDO.
+   DEF VAR ldtMSActDate            AS DATE NO-UNDO.
+   DEF VAR liMSActTime             AS INT  NO-UNDO.
+   DEF VAR ldEndDate               AS DATE NO-UNDO.
+   DEF VAR ldEndStamp              AS DEC  NO-UNDO.
+   DEF VAR ldeLimitAmt             AS DEC  NO-UNDO.
+   DEF VAR liEndPeriod             AS INT  NO-UNDO.
+   DEF VAR ldaChangedEndDate       AS DATE NO-UNDO.
+   DEF VAR ldaPeriodEndDate        AS DATE NO-UNDO.
+   DEF VAR ddate                   AS DATE NO-UNDO.
+   DEF VAR liBegDate               AS INT  NO-UNDO.
+   DEF VAR ldInclAmt               AS DEC  NO-UNDO. 
+   DEF VAR llRerate                AS LOG  NO-UNDO INIT FALSE.
+   DEF VAR liItemEnd               AS INT  NO-UNDO. 
+   DEF VAR liFFBegPeriod           AS INT  NO-UNDO.
+   DEF VAR lcReqChar               AS CHAR NO-UNDO.
+   DEF VAR lcBundleId              AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcPostpaidDataBundles   AS CHAR NO-UNDO.
+   DEF VAR liLookUp                AS INT  NO-UNDO.
+   DEF VAR liPeriod                AS INT  NO-UNDO.
+   DEF VAR liPeriods               AS INT  NO-UNDO.
+   DEF VAR liRequest               AS INT  NO-UNDO.
+   DEF VAR lcResult                AS CHAR NO-UNDO.
+   DEF VAR liReacPeriod            AS INT  NO-UNDO.
+   DEF VAR ldateDccli              AS DATE NO-UNDO.
+   DEF VAR llUpdateResidualFeeCode AS LOG  NO-UNDO. 
+   DEF VAR liAmortizeMonths        AS INT  NO-UNDO.
 
-   DEF BUFFER bMsRequest FOR MsRequest.
-   
+   DEF BUFFER bMsRequest   FOR MsRequest.
+   DEF BUFFER bAmorRequest FOR MsRequest.
+
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
@@ -3349,9 +3422,25 @@ PROCEDURE pContractReactivation:
    END. /* IF LOOKUP(DayCampaign.DCType, {&PERCONTRACT_RATING_PACKAGE}) = 0 */
 
    IF ldtFromDate = ? THEN ldtFromDate = ldtActDate.
-
-   /* Call the function to calculate the contract end date */
-   ldtEndDate = fcontract_end_date (INPUT lcDCEvent, INPUT ldtFromDate).
+  
+   /* Check whether does this subscription has any amortized installment 
+     request available */ 
+   FIND LAST bAmorRequest NO-LOCK WHERE 
+             bAmorRequest.MsSeq      = MsRequest.MsSeq                 AND 
+             bAmorRequest.ReqType    = {&REQTYPE_CONTRACT_TERMINATION} AND 
+             bAmorRequest.ReqStatus  = 2                               AND
+             bAmorRequest.CustNum    = MsRequest.CustNum               AND
+             bAmorRequest.ReqCParam2 = "term_amortize"                 AND 
+             bAmorRequest.ReqCParam3 = MsRequest.ReqCParam3            AND 
+             bAmorRequest.ReqIParam3 = MsRequest.ReqIParam3            AND 
+             bAmorRequest.ActStamp  <= MsRequest.ActStamp              NO-ERROR. 
+   IF AVAIL bAmorRequest THEN 
+      ASSIGN liAmortizeMonths = INT(TRUNC(bAmorRequest.ReqDParam2,0))
+             ldtEndDate       = fcontract_end_date (INPUT lcDCEvent, 
+                                                    INPUT ldtFromDate)
+             ldtEndDate       = ADD-INTERVAL(ldtEndDate,-(liAmortizeMonths),"months").
+   ELSE /* Call the function to calculate the contract end date */
+      ldtEndDate = fcontract_end_date (INPUT lcDCEvent, INPUT ldtFromDate).
    
    /* Open the related fixed fee */
    FOR FIRST FixedFee USE-INDEX Custnum WHERE
@@ -3378,7 +3467,7 @@ PROCEDURE pContractReactivation:
          liEndPeriod = 999999.
       ELSE
          ASSIGN ldEndDate = fPer2Date(liFFBegPeriod, 
-                                      DayCampaign.durMonths)
+                                      DayCampaign.durMonths - liAmortizeMonths)
                 liEndPeriod = IF MONTH(ldEndDate) = 1 THEN
                                  ((YEAR(ldEndDate) - 1) * 100 + 12)
                               ELSE (YEAR(ldEndDate) * 100 +
