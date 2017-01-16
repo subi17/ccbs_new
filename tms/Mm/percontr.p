@@ -1271,7 +1271,7 @@ PROCEDURE pFinalize:
    DEF BUFFER bMsRequest    FOR MsRequest.
    DEF BUFFER bTerMsRequest FOR MsRequest.
    DEF BUFFER bMobSub       FOR MobSub.
-   DEF BUFFER bReacMsReq    FOR MsRequest.
+   DEF BUFFER bStcMsReq     FOR MsRequest.
 
    /* check that subrequests really are ok */
    IF fGetSubRequestState(MsRequest.MsRequest) NE 2 THEN DO:
@@ -1520,12 +1520,18 @@ PROCEDURE pFinalize:
             ASSIGN
                ldateMsReq = ADD-INTERVAL(ldateMsReq, 1, "days")
                ldeToTS = fHMS2TS(ldateMsReq,"00:00:00").
-            FIND FIRST bReacMsReq NO-LOCK WHERE
-                 bReacMsReq.MsSeq = MsRequest.MsSeq AND
-                 bReacMsReq.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                 bReacMsReq.Actstamp >= ldeFromTS AND
-                 bReacMsReq.ActStamp < ldeTOTS NO-ERROR.
-            IF NOT AVAIL bReacMsReq THEN DO:
+            /* STC check */
+            IF NOT CAN-FIND(FIRST bStcMsReq NO-LOCK WHERE
+                 bStcMsReq.MsSeq = MsRequest.MsSeq AND
+                 bStcMsReq.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                 bStcMsReq.Actstamp >= ldeFromTS AND
+                 bStcMsReq.ActStamp < ldeToTS) AND
+                 /* BTC check */
+               NOT CAN-FIND(FIRST bStcMsReq NO-LOCK WHERE
+                 bStcMsReq.MsSeq = MsRequest.MsSeq AND
+                 bStcMsReq.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
+                 bStcMsReq.Actstamp >= ldeFromTS AND
+                 bStcMsReq.ActStamp < ldeToTS) THEN DO:
                FIND CURRENT MsOwner EXCLUSIVE-LOCK NO-ERROR.
                IF AVAIL MsOwner THEN DO:
                   IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
