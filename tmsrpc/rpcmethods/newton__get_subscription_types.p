@@ -1,8 +1,6 @@
 /**
  * A mobsub object
  *
- * @input       cli_type;string;optional;Current cli type
-                bundle_id;string;optional;Current bundle id
  * @output      clitypes;array of structs;
  * @clitypes    cli_type;string;mandatory;
                 tariff_bundle;string;mandatory;
@@ -10,39 +8,21 @@
  */
 {xmlrpc/xmlrpc_access.i}
 
-DEF VAR gcBrand    AS CHAR NO-UNDO.
-DEF VAR katun      AS CHAR NO-UNDO.
-DEF VAR pcCliType  AS CHAR NO-UNDO.
-DEF VAR pcBundleId AS CHAR NO-UNDO.
-DEF VAR pcInputStruct AS CHAR NO-UNDO.
-DEF VAR lcInputFields AS CHAR NO-UNDO.
+DEF VAR gcBrand AS CHAR NO-UNDO.
+DEF VAR katun   AS CHAR NO-UNDO.
 
 ASSIGN katun = "Newton"
        gcBrand = "1".
 
 {tmsconst.i}
 {cparam2.i}
-{fixedlinefunc.i}
-
-IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
-pcInputStruct = get_struct(param_toplevel_id,"0").
-IF gi_xmlrpc_error NE 0 THEN RETURN.
-lcInputFields = validate_request(pcInputStruct,"cli_type,bundle_id").
-IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-ASSIGN
-   pcCliType     = get_string(pcInputStruct, "cli_type")
-      WHEN LOOKUP("cli_type",lcInputFields) > 0
-   pcBundleId    = get_string(pcInputStruct, "bundle_id")
-      WHEN LOOKUP("bundle_id",lcInputFields) > 0.
 
 /* Output parameters */
 DEF VAR top_struct         AS CHAR NO-UNDO.
 DEF VAR result_array       AS CHAR NO-UNDO.
 DEF VAR sub_struct         AS CHAR NO-UNDO.
 DEF VAR ldaCont15PromoEnd  AS DATE NO-UNDO. 
-DEF VAR lcStatusCode       AS INT  NO-UNDO.
-
+ 
 DEF BUFFER bCLIType        FOR CLIType.
 
 ldaCont15PromoEnd  = fCParamDa("CONT15PromoEndDate").
@@ -79,20 +59,12 @@ FOR EACH CLIType NO-LOCK WHERE
                bCLIType.BillTarget EQ CLIType.BillTarget AND
                bCLIType.CLIType <> CLIType.CLIType AND
                bCLIType.BundleType = CLIType.BundleType NO-LOCK:
-         lcStatusCode = bCLIType.StatusCode.
+
          fAddCLITypeStruct(CLIType.CLIType,bCLIType.CLIType,
-                           lcStatusCode).
+                           bCLIType.StatusCode).
 
       END. /* FOR EACH bCLIType WHERE */
-   ELSE DO:
-      lcStatusCode = CLIType.StatusCode.
-      /* Mobile subscrition should be allowed to do STC in convergent
-         tariffs, but fixed part should remain same */
-      IF fIsConvergenceTariff(pcClitype) AND
-         fIsConvergenceTariff(CliType.Clitype) AND
-         fCheckConvergentSTCCompability(pcClitype,Clitype.clitype) THEN
-         lcStatusCode = 1.
-      fAddCLITypeStruct(CLIType.CLIType,"",lcStatusCode).
-   END.
-END. /* FOR EACH CLIType WHERE */
+   ELSE
+      fAddCLITypeStruct(CLIType.CLIType,"",CLIType.StatusCode).
 
+END. /* FOR EACH CLIType WHERE */
