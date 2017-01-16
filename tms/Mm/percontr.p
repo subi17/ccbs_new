@@ -2577,9 +2577,12 @@ PROCEDURE pContractTermination:
                  "FixedFee",
                  STRING(FixedFee.FFNum),
                  FixedFee.CustNum,
-                 "Closed",
                  IF MsRequest.ReqCParam2 = "term_amortize" THEN
-                    "Periodical contract " + lcDCEvent + " amortized"
+                    "Amortize"
+                 ELSE "Closed",
+                 IF MsRequest.ReqCParam2 = "term_amortize" THEN
+                    "Periodical contract " + lcDCEvent + " amoirtized for " +
+                     STRING( MsRequest.ReqDParam2) + " months"   
                  ELSE "Periodical contract " + lcDCEvent + " closed").
    
       /* Delete commission fee if the installment contract is closed
