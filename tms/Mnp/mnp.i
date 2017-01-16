@@ -732,7 +732,6 @@ FUNCTION fRetention RETURNS LOGICAL
    DEF VAR lcMNPSMSText       AS CHAR  NO-UNDO.
 
    FIND FIRST bOrder WHERE
-              bOrder.Brand EQ gcBrand AND
               bOrder.MsSeq EQ iiMsSeq AND
               bOrder.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}
         NO-LOCK NO-ERROR.
