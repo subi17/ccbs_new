@@ -317,6 +317,11 @@ ELSE DO:
 END.
 
 /* mark as closed */
+/* Fixed fees should not be closed in case of term_amortize request */
+IF NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                      MsRequest.Brand      = gcBrand     AND
+                      MsRequest.MsRequest  = iiMSRequest AND 
+                      MsRequest.ReqCParam2 = "term_amortize") THEN
 bCloseFee.CustPP = liLongEnd.
 
 IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhFixedFee).
