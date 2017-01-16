@@ -33,45 +33,46 @@ DEF VAR lcbillcodes_to_set3   AS CHAR NO-UNDO INIT "CNRVTERM".
 DEF VAR lcbillcodes_from_set4 AS CHAR NO-UNDO INIT "RVTERMDTTR,RVTERMDTRW,RVTERMDTEQ25,RVTERMDTTD".
 DEF VAR lcbillcodes_to_set4   AS CHAR NO-UNDO INIT "CRVTERMDT".
 
-DEF VAR liCnt         AS INT    NO-UNDO.
-DEF VAR ldVATTot      AS DEC    NO-UNDO.
-DEF VAR ldVATAmt      AS DEC    NO-UNDO.
-DEF VAR ldaFrom       AS DATE   NO-UNDO.
-DEF VAR ldaDate       AS DATE   NO-UNDO.
-DEF VAR ldBalance     AS DEC    NO-UNDO.
-DEF VAR lcInvoiceTZ   AS CHAR   NO-UNDO. 
-DEF VAR lcTaxZones    AS CHAR   NO-UNDO.
-DEF VAR lcSkipSlsCode AS CHAR   NO-UNDO.
-DEF VAR lcDelimiter   AS CHAR   NO-UNDO INIT ";".
-DEF VAR liItemID      AS INT    NO-UNDO.
-DEF VAR liRowID       AS INT    NO-UNDO.
-DEF VAR lcInvoiceType AS CHAR   NO-UNDO.
-DEF VAR lcPaymMethod  AS CHAR   NO-UNDO.
-DEF VAR lcSeriesRef   AS CHAR   NO-UNDO.
-DEF VAR lcNumberRef   AS CHAR   NO-UNDO.
-DEF VAR liInvNum      AS INT    NO-UNDO.
-DEF VAR ldFromPeriod  AS DEC    NO-UNDO.
-DEF VAR ldToPeriod    AS DEC    NO-UNDO.
-DEF VAR lcPayType     AS CHAR   NO-UNDO.
-DEF VAR lcSegment     AS CHAR   NO-UNDO.
-DEF VAR lcPickType    AS CHAR   NO-UNDO.
-DEF VAR lcFusionDelType AS CHAR NO-UNDO. 
-DEF VAR liDeliveryTo  AS INT    NO-UNDO.
-DEF VAR llSalesInv    AS LOG    NO-UNDO.
-DEF VAR lcSalesProd   AS CHAR   NO-UNDO.
-DEF VAR lcSalesman    AS CHAR   NO-UNDO. 
-DEF VAR lcNCFRef      AS CHAR   NO-UNDO.
-DEF VAR lcOrderId     AS CHAR   NO-UNDO.
-DEF VAR ldOperationDate AS DATE NO-UNDO.
-DEF VAR ldOperationTime AS INT  NO-UNDO.
-DEF VAR ldeInstallmentAmt AS DEC NO-UNDO. 
-DEF VAR liInstallmentQty AS INT NO-UNDO. 
-DEF VAR ldeInstallmentVAT AS DEC NO-UNDO. 
-DEF VAR lcPayTermBillCode AS CHAR NO-UNDO.
-DEF VAR llFusion AS LOG NO-UNDO.
-DEF VAR ldeResidualAmount AS DEC NO-UNDO.
-DEF VAR ldeResidualAmountVAT AS DEC NO-UNDO.
-DEF VAR llPayPal AS LOG NO-UNDO.
+DEF VAR liCnt                AS INT  NO-UNDO.
+DEF VAR ldVATTot             AS DEC  NO-UNDO.
+DEF VAR ldVATAmt             AS DEC  NO-UNDO.
+DEF VAR ldaFrom              AS DATE NO-UNDO.
+DEF VAR ldaDate              AS DATE NO-UNDO.
+DEF VAR ldBalance            AS DEC  NO-UNDO.
+DEF VAR lcInvoiceTZ          AS CHAR NO-UNDO. 
+DEF VAR lcTaxZones           AS CHAR NO-UNDO.
+DEF VAR lcSkipSlsCode        AS CHAR NO-UNDO.
+DEF VAR lcDelimiter          AS CHAR NO-UNDO INIT ";".
+DEF VAR liItemID             AS INT  NO-UNDO.
+DEF VAR liRowID              AS INT  NO-UNDO.
+DEF VAR lcInvoiceType        AS CHAR NO-UNDO.
+DEF VAR lcPaymMethod         AS CHAR NO-UNDO.
+DEF VAR lcSeriesRef          AS CHAR NO-UNDO.
+DEF VAR lcNumberRef          AS CHAR NO-UNDO.
+DEF VAR liInvNum             AS INT  NO-UNDO.
+DEF VAR ldFromPeriod         AS DEC  NO-UNDO.
+DEF VAR ldToPeriod           AS DEC  NO-UNDO.
+DEF VAR lcPayType            AS CHAR NO-UNDO.
+DEF VAR lcSegment            AS CHAR NO-UNDO.
+DEF VAR lcPickType           AS CHAR NO-UNDO.
+DEF VAR lcFusionDelType      AS CHAR NO-UNDO. 
+DEF VAR liDeliveryTo         AS INT  NO-UNDO.
+DEF VAR llSalesInv           AS LOG  NO-UNDO.
+DEF VAR lcSalesProd          AS CHAR NO-UNDO.
+DEF VAR lcSalesman           AS CHAR NO-UNDO. 
+DEF VAR lcNCFRef             AS CHAR NO-UNDO.
+DEF VAR lcOrderId            AS CHAR NO-UNDO.
+DEF VAR ldOperationDate      AS DATE NO-UNDO.
+DEF VAR ldOperationTime      AS INT  NO-UNDO.
+DEF VAR ldeInstallmentAmt    AS DEC  NO-UNDO. 
+DEF VAR liInstallmentQty     AS INT  NO-UNDO. 
+DEF VAR ldeInstallmentVAT    AS DEC  NO-UNDO. 
+DEF VAR lcPayTermBillCode    AS CHAR NO-UNDO.
+DEF VAR llFusion             AS LOG  NO-UNDO.
+DEF VAR ldeResidualAmount    AS DEC  NO-UNDO.
+DEF VAR ldeResidualAmountVAT AS DEC  NO-UNDO.
+DEF VAR llPayPal             AS LOG  NO-UNDO.
+DEF VAR liAmortizeValue      AS INT  NO-UNDO.
 
 DEF TEMP-TABLE ttRow NO-UNDO
    LIKE InvRow
@@ -106,10 +107,10 @@ DEF TEMP-TABLE ttSub NO-UNDO
    
 DEF BUFFER bInv      FOR Invoice.
 DEF BUFFER bCredited FOR Invoice.
-DEF BUFFER bttRow FOR ttRow.
-   
-DEFINE STREAM sLog.
+DEF BUFFER bttRow    FOR ttRow.
+DEF BUFFER bInvRow   FOR InvRow. 
 
+DEFINE STREAM sLog.
 
 FUNCTION fError RETURNS LOGIC
    (icMessage AS CHAR):
@@ -816,6 +817,32 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
             LOOKUP(ttRow.BillCode,{&TF_BANK_CETELEM_PAYTERM_BILLCODES}) > 0 OR
             LOOKUP(ttRow.BillCode,{&TF_BANK_CETELEM_RVTERM_BILLCODES}) > 0 
          THEN ttRow.BankCode = {&TF_BANK_CETELEM}.
+      END.
+      
+      IF AVAIL ttRow                      AND 
+         ttRow.Qty     = 1                AND 
+         ttRow.OrderID > 0                AND
+         ttRow.MsSeq   = SubInvoice.MsSeq AND  
+         LOOKUP(ttRow.BillCode,"PAYTERMEND,PAYTERMEND1E,PAYTERMENDBS") > 0 THEN DO:
+
+         FIND FIRST bInvRow NO-LOCK WHERE 
+                    bInvRow.InvNum    = SubInvoice.InvNum               AND 
+                    bInvrow.SubInvnum = SubInvoice.SubInvNum            AND
+                    bInvRow.OrderID   = ttRow.OrderID                   AND 
+             LOOKUP(bInvRow.BillCode,"PAYTERM,PAYTERM1E,PAYTERMBS") > 0 AND
+                    bInvRow.Qty       = 1                               NO-ERROR.
+
+         IF AVAIL bInvRow THEN DO:
+            ASSIGN liAmortizeValue = ttRow.Amt / bInvRow.Amt
+                   ttRow.Quantity  = STRING(liAmortizeValue).
+                   
+            CASE ttRow.BillCode:
+               WHEN "PAYTERMEND"   THEN ttRow.BillCode = "PAYTERMENDA".
+               WHEN "PAYTERMEND1E" THEN ttRow.BillCode = "PAYTERMEND1EA".
+               WHEN "PAYTERMENDBS" THEN ttRow.BillCode = "PAYTERMENDBSA".
+            END CASE.
+         
+         END.          
       END.
 
       IF NOT llSalesInv AND AVAIL ttRow THEN DO:
