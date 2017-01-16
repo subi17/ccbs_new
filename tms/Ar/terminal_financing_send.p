@@ -571,9 +571,9 @@ PROCEDURE pPrintLine:
    DEF VAR lcRVPerc AS CHAR NO-UNDO. 
       
    ASSIGN
-      lcTotalAmount = REPLACE(REPLACE(TRIM(STRING(ideTotalAmount,"->>>>>>9.999")),",",""),".","")
-      lcRVAmt       = REPLACE(REPLACE(TRIM(STRING(ldeRVAmt,"->>>>>9.999")),",",""),".","")
-      lcRVPerc      = REPLACE(REPLACE(TRIM(STRING(ldeRVPerc,"->>>9.999")),",",""),".","").
+      lcTotalAmount = REPLACE(REPLACE(TRIM(STRING(ideTotalAmount,"->>>>>>9.99")),",",""),".","")
+      lcRVAmt       = REPLACE(REPLACE(TRIM(STRING(ldeRVAmt,"->>>>>9.99")),",",""),".","")
+      lcRVPerc      = REPLACE(REPLACE(TRIM(STRING(ldeRVPerc,"->>>9.99")),",",""),".","").
    
    PUT STREAM sout 
    /*NVENDCAPCTA*/   " " FORMAT "X(8)"
