@@ -445,16 +445,19 @@ PROCEDURE pCreateRenewalCreditNote:
          IF NOT AVAIL SingleFee OR NOT SingleFee.Billed THEN NEXT.
 
          FOR FIRST Invoice NO-LOCK WHERE
-                   Invoice.InvNum = SingleFee.InvNum AND
+                   Invoice.InvNum  = SingleFee.InvNum AND
                    Invoice.InvType = {&INV_TYPE_NORMAL},
              FIRST SubInvoice OF Invoice NO-LOCK WHERE
                    SubInvoice.MsSeq = Order.MsSeq,
-             FIRST InvRow NO-LOCK WHERE
-                   InvRow.InvNum = SubInvoice.InvNum AND
-                   InvRow.SubInvNum = SubInvoice.SubInvNum AND
-                   InvRow.BillCode = SingleFee.BillCode AND
+              EACH InvRow NO-LOCK WHERE
+                   InvRow.InvNum       = SubInvoice.InvNum    AND
+                   InvRow.SubInvNum    = SubInvoice.SubInvNum AND
+                   InvRow.BillCode     = SingleFee.BillCode   AND
                    InvRow.CreditInvNum = 0:
             
+            IF InvRow.OrderID > 0 AND
+               InvRow.OrderID NE SingleFee.OrderID THEN NEXT.
+
             ldeCreditAmt = MIN(InvRow.Amt, SingleFee.Amt).
          
             FIND FIRST ttInvoice WHERE
@@ -467,9 +470,11 @@ PROCEDURE pCreateRenewalCreditNote:
                       ttInvoice.SubInvNum  = SubInvoice.SubInvNum.
             END.
 
-            ttInvoice.InvRowDetail = ttInvoice.InvRowDetail + "," +
-                             "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
-                             "InvRowAmt=" + STRING(ldeCreditAmt).
+            ttInvoice.InvRowDetail = ttInvoice.InvRowDetail                  + "," +
+                                     "InvRow="    + STRING(InvRow.InvRowNum) + "|" +
+                                     "InvRowAmt=" + STRING(ldeCreditAmt).
+
+            LEAVE.                         
          END.
       END.
       
