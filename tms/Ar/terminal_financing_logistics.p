@@ -57,7 +57,7 @@ FUNCTION fPopulateTTDelivery RETURNS LOGICAL
       IF LOOKUP(STRING(OrderDelivery.LoStatusId), {&DEXTRA_CANCELLED_STATUSES}) > 0
       THEN RETURN FALSE.
 
-      IF LOOKUP(STRING(OrderDelivery.LoStatusId), "8,12,100,125,900,3000,3100,3350,4000,4030") = 0
+      IF LOOKUP(STRING(OrderDelivery.LoStatusId), "8,12,19,100,110,125,241,900,3000,3001,3100,3350,3351,4000,4030") = 0
       THEN NEXT.
 
       FIND ttDelivery WHERE ttDelivery.LoStatus = OrderDelivery.LoStatusId NO-ERROR.
@@ -180,7 +180,28 @@ FUNCTION fGetTFStatus RETURNS CHARACTER
       fCancelOrder(iiOrderId, TRUE).
       RETURN "".
    END.
-
+   ELSE IF fGetDStamp(19) NE ? THEN DO:
+      ldtStamp = fGetDStamp(110).
+      IF ldtStamp NE ?
+      THEN
+      CASE fNextLoStatus(INPUT ldtStamp):
+         WHEN 3001
+         THEN RETURN {&TF_STATUS_YOIGO_LOGISTICS}.
+         WHEN 3101
+         THEN DO:
+            fCancelOrder(iiOrderId, FALSE).
+            RETURN "".
+         END.
+         WHEN 3351
+         THEN RETURN lcTFStatus.
+         OTHERWISE DO:
+            /*IF ldtStamp < DATETIME(DATE(TODAY) - 20,0)*/
+            THEN RETURN {&TF_STATUS_YOIGO_LOGISTICS}.
+            RETURN "".
+         END.
+      END CASE.
+   END.
+   
    RETURN lcTFStatus.
 
 END FUNCTION.
@@ -224,7 +245,8 @@ FOR EACH Order NO-LOCK WHERE
       IF LOOKUP(STRING(OrderDelivery.LoStatusId),
          {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN NEXT ORDER_LOOP.
       
-      IF LOOKUP(STRING(OrderDelivery.LoStatusId),"8,12,100,125") = 0 THEN NEXT.
+      IF LOOKUP(STRING(OrderDelivery.LoStatusId),"8,12,19,100,125") = 0 THEN 
+         NEXT.
 
       IF (OrderDelivery.LoStatusId = 12 OR OrderDelivery.LoStatusId = 125) AND
          OrderDelivery.LoTimeStamp < DATETIME(TODAY - 20,0) THEN DO:
