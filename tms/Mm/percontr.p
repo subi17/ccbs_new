@@ -1826,6 +1826,7 @@ PROCEDURE pContractTermination:
    DEF VAR ldtFeeDate              AS DATE NO-UNDO.
    DEF VAR lcMemoText              AS CHAR NO-UNDO. 
    DEF VAR lcFeeMemoText           AS CHAR NO-UNDO. 
+   DEF VAR lcPayTermFeeModel       AS CHAR NO-UNDO. 
 
    DEF BUFFER bLimit           FOR MServiceLimit.
    DEF BUFFER bMsRequest       FOR MsRequest.
@@ -2443,16 +2444,18 @@ PROCEDURE pContractTermination:
                      OUTPUT ldtFeeDate,
                      OUTPUT liActTime).
             
-            ASSIGN lcMemoText    = DayCampaign.DCEvent + " amortized " +
-                                   STRING(ldtActDate,"99.99.9999") +
-                                   lcTermFeeCalc
-                   lcFeeMemoText = "ContractAmortization".             
+            ASSIGN lcMemoText        = DayCampaign.DCEvent + " amortized " +
+                                       STRING(ldtActDate,"99.99.9999") +
+                                       lcTermFeeCalc
+                   lcFeeMemoText     = "ContractAmortization"
+                   lcPayTermFeeModel = DayCampaign.ModifyFeeModel.             
          END.            
          ELSE ASSIGN 
-                 ldtFeeDate = ldtActDate
-                 lcMemoText = DayCampaign.DCEvent + " terminated " + 
-                              STRING(ldtActDate,"99.99.9999") +
-                              lcTermFeeCalc.
+                 ldtFeeDate        = ldtActDate
+                 lcMemoText        = DayCampaign.DCEvent + " terminated " + 
+                                     STRING(ldtActDate,"99.99.9999") +
+                                     lcTermFeeCalc
+                 lcPayTermFeeModel = DayCampaign.TermFeeModel.
 
          IF lcFeeMemoText EQ "" THEN DO: 
             IF MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
@@ -2466,7 +2469,7 @@ PROCEDURE pContractTermination:
                          MsRequest.MsSeq,
                          ldtFeeDate,
                          "FeeModel",
-                         DayCampaign.TermFeeModel,
+                         lcPayTermFeeModel,
                          9,
                          ldPrice,
                          lcMemoText,
