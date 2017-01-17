@@ -17,6 +17,8 @@ else:
 
 if var2 == "CANCELADA":
    var3 = "cancelled with script"
+else:
+   var3 = ""
 q = s.masmovil.Update_Fixed_status({
    "notificationID": "1",
    "notificationTime": datetime.datetime.now().isoformat(),
