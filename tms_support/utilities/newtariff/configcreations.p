@@ -159,18 +159,24 @@ PROCEDURE pRatePlan:
     FIND FIRST bf_RatePlanCopyFrom WHERE bf_RatePlanCopyFrom.Brand = gcBrand AND bf_RatePlanCopyFrom.RatePlan = icReferenceRatePlan NO-LOCK NO-ERROR.
     IF AVAIL bf_RatePlanCopyFrom THEN 
     DO:
-        CREATE RatePlan.
-        BUFFER-COPY bf_RatePlanCopyFrom EXCEPT RatePlan RPName TO RatePlan
-            ASSIGN 
-                RatePlan.RatePlan = icRatePlan
-                RatePlan.RPName   = icRPName.
-
+        FIND FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = icRatePlan NO-LOCK NO-ERROR.
+        IF NOT AVAIL RatePlan THEN 
+        DO:
+            CREATE RatePlan.
+            BUFFER-COPY bf_RatePlanCopyFrom EXCEPT RatePlan RPName TO RatePlan
+                ASSIGN 
+                    RatePlan.RatePlan = icRatePlan
+                    RatePlan.RPName   = icRPName.
+        END.
+                
         FOR EACH bf_PListConfCopyFrom WHERE bf_PListConfCopyFrom.Brand    = gcBrand                      AND 
                                             bf_PListConfCopyFrom.RatePlan = bf_RatePlanCopyFrom.RatePlan AND
                                             bf_PListConfCopyFrom.dFrom   <= TODAY                        AND
                                             bf_PListConfCopyFrom.dTo     >= TODAY                        NO-LOCK:
 
-            IF icRatePlanAction = "New" AND (bf_PListConfCopyFrom.RatePlan EQ bf_PListConfCopyFrom.PriceList) OR (LOOKUP(bf_PListConfCopyFrom.RatePlan,"CONTRATO23,CONTRATO24,CONTRATO25") > 0 AND bf_PListConfCopyFrom.PriceList = "CONTRATOS") THEN 
+            IF icRatePlanAction = "New" AND 
+               ((bf_PListConfCopyFrom.RatePlan EQ bf_PListConfCopyFrom.PriceList) OR 
+                (LOOKUP(bf_PListConfCopyFrom.RatePlan,"CONTRATO23,CONTRATO24,CONTRATO25") > 0 AND bf_PListConfCopyFrom.PriceList = "CONTRATOS")) THEN 
             DO:
                 /* A copy of existing rateplan's pricelist and related tariffs is created */
                 FIND FIRST PriceList WHERE PriceList.Brand = gcBrand AND PriceList.PriceList = bf_PListConfCopyFrom.PriceList NO-LOCK NO-ERROR.
