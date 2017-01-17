@@ -333,7 +333,7 @@ PROCEDURE pProcessTT:
               ttCliType.CompareFee                = DECIMAL(lcComparisonFee)              
               ttCliType.TariffBundle              = ""        
               ttCliType.ParentTariff              = ""      
-              ttCliType.AllowedBundles            = ""
+              ttCliType.AllowedBundles            = lcAllowedBundles
               ttCliType.MobileBaseBundleDataLimit = 0
               ttCliType.BundlesForActivateOnSTC   = ""
               ttCliType.ServicesForReCreateOnSTC  = ""
@@ -363,7 +363,7 @@ PROCEDURE pProcessTT:
       ttCliType.CompareFee                = DECIMAL(lcComparisonFee)
       ttCliType.TariffBundle              = (IF lcTariffBundle > "" THEN lcTariffBundle ELSE "")  
       ttCliType.ParentTariff              = (IF lcTariffBundle > "" THEN lcCliType      ELSE "")  
-      ttCliType.AllowedBundles            = lcAllowedBundles
+      ttCliType.AllowedBundles            = (IF lcTariffBundle > "" THEN ""             ELSE lcAllowedBundles)
       ttCliType.MobileBaseBundleDataLimit = DECIMAL(lcMobile_DataLimit) 
       ttCliType.BundlesForActivateOnSTC   = lcBundlesForActivateOnSTC
       ttCliType.ServicesForReCreateOnSTC  = lcServicesForReCreateOnSTC

@@ -329,13 +329,15 @@ PROCEDURE pCLIType:
       IF ttCliType.AllowedBundles > "" THEN       
          RUN pMatrix(ttCliType.CliType, ttCliType.AllowedBundles).
 
-      RUN pSLGAnalyse(ttCliType.CliType, ttCliType.BaseBundle, ttCliType.FixedLineBaseBundle, ttCliType.AllowedBundles).         
+      IF ttCliType.TariffBundle = "" THEN    
+         RUN pSLGAnalyse(ttCliType.CliType, ttCliType.BaseBundle, ttCliType.FixedLineBaseBundle, ttCliType.AllowedBundles).         
 
-      RUN pRequestAction(ttCliType.CliType, 
-                         ttCliType.BaseBundle, 
-                         ttCliType.FixedLineBaseBundle, 
-                         ttCliType.BundlesForActivateOnSTC, 
-                         ttCliType.ServicesForReCreateOnSTC).      
+      IF ttCliType.BundleType = False THEN     
+         RUN pRequestAction(ttCliType.CliType, 
+                            ttCliType.BaseBundle, 
+                            ttCliType.FixedLineBaseBundle, 
+                            ttCliType.BundlesForActivateOnSTC, 
+                            ttCliType.ServicesForReCreateOnSTC).      
 
       IF ttCLIType.PayType = 1 THEN 
       DO:         
@@ -927,21 +929,25 @@ PROCEDURE pMatrix:
 
    DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
 
-   CREATE Matrix.
-   ASSIGN
-      Matrix.Brand  = "1"
-      Matrix.MXSeq  = NEXT-VALUE(imsi)
-      Matrix.mxkey  = "PERCONTR"
-      Matrix.mxname = "Allowed bundles for '" + icCLIType + "'"
-      Matrix.prior  = fGetNextMatrixPriority("PERCONTR")
-      Matrix.mxres  = 1.
-   
-   CREATE MXItem.
-   ASSIGN
-      MXItem.MxSeq   = Matrix.MXSeq
-      MXItem.MxValue = icCLIType
-      MXItem.MxName  = "SubsTypeTo".   
-
+   FIND FIRST Matrix WHERE Matrix.Brand = gcBrand AND Matrix.MXKey = "PERCONTR" AND Matrix.MxName = "Allowed bundles for '" + icCLIType + "'" NO-LOCK NO-ERROR.
+   IF NOT AVAIL Matrix THEN 
+   DO:
+       CREATE Matrix.
+       ASSIGN
+          Matrix.Brand  = gcBrand
+          Matrix.MXSeq  = NEXT-VALUE(imsi)
+          Matrix.mxkey  = "PERCONTR"
+          Matrix.mxname = "Allowed bundles for '" + icCLIType + "'"
+          Matrix.prior  = fGetNextMatrixPriority("PERCONTR")
+          Matrix.mxres  = 1.
+       
+       CREATE MXItem.
+       ASSIGN
+          MXItem.MxSeq   = Matrix.MXSeq
+          MXItem.MxValue = icCLIType
+          MXItem.MxName  = "SubsTypeTo".   
+   END.
+      
    DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
       ON ERROR UNDO, THROW:
 
