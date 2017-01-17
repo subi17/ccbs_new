@@ -2289,7 +2289,7 @@ PROCEDURE pSingleFee:
 
       /* change PAYTERMEND and RVTERMEND billcodes if original terminated 
          contract is financed by bank */
-      IF LOOKUP(SingleFee.BillCode,"PAYTERMEND,RVTERMEND") > 0 AND
+      IF LOOKUP(SingleFee.BillCode,"PAYTERMEND,PAYTERMENDA,RVTERMEND") > 0 AND
          SingleFee.SourceTable = "FixedFee" THEN DO:
          
          ASSIGN
@@ -2302,12 +2302,25 @@ PROCEDURE pSingleFee:
                        FixedFee.FFnum = liFFNum NO-ERROR.
             IF AVAIL FixedFee AND 
                LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 THEN DO:
-               IF FixedFee.TFBank EQ {&TF_BANK_SABADELL} THEN /*0081*/
-                  SingleFee.BillCode = SingleFee.BillCode + "BS".
-               ELSE IF FixedFee.TFBank EQ {&TF_BANK_CETELEM} THEN /*0225*/
-                  Singlefee.BillCode = Singlefee.BillCode + "BC".
-               ELSE
-                  SingleFee.BillCode = SingleFee.BillCode + "1E".
+               
+               CASE FixedFee.TFBank:
+                  WHEN {&TF_BANK_SABADELL} THEN DO: /*0081*/
+                     IF SingleFee.BillCode EQ {&TF_BANK_AMORTIZE} THEN 
+                        SingleFee.BillCode = SingleFee.BillCode + "BSA".
+                     ELSE SingleFee.BillCode = SingleFee.BillCode + "BS".   
+                  END.
+                  WHEN {&TF_BANK_CETELEM} THEN DO: /*0225*/
+                     IF SingleFee.BillCode EQ {&TF_BANK_AMORTIZE} THEN 
+                        SingleFee.BillCode = SingleFee.BillCode + "BCA".
+                     ELSE SingleFee.BillCode = SingleFee.BillCode + "BC".   
+                  END.
+                  WHEN {&TF_BANK_UNOE} THEN DO:
+                     IF SingleFee.BillCode EQ {&TF_BANK_AMORTIZE} THEN 
+                        SingleFee.BillCode = SingleFee.BillCode + "1EA".
+                     ELSE SingleFee.BillCode = SingleFee.BillCode + "1E".   
+                  END.
+               END CASE.
+               
             END.
          END.
       END.
