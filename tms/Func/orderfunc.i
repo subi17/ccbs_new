@@ -52,8 +52,6 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
            bfOrder.OrderId = iOrderId
          EXCLUSIVE-LOCK NO-ERROR.
       IF AVAILABLE bfOrder THEN DO:  
-         bfOrder.StatusCode = icStatus.
-
          /* Test for order status changes */
          ASSIGN /* Test can be stopped by value 0 */
             llPrintToFile = (fCParamI("PrintOrderfunc") NE 0).
@@ -64,6 +62,8 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
             OUTPUT STREAM sout CLOSE.
          END.
          /* Test end */
+
+         bfOrder.StatusCode = icStatus.
 
          /* orders to status new should not be reported to ROI */
          IF LOOKUP(icStatus,"1,3,30") = 0 AND
