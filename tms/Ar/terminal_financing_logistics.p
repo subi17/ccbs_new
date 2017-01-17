@@ -57,7 +57,7 @@ FUNCTION fPopulateTTDelivery RETURNS LOGICAL
       IF LOOKUP(STRING(OrderDelivery.LoStatusId), {&DEXTRA_CANCELLED_STATUSES}) > 0
       THEN RETURN FALSE.
 
-      IF LOOKUP(STRING(OrderDelivery.LoStatusId), "8,12,19,100,110,125,241,900,3000,3001,3100,3350,3351,4000,4030") = 0
+      IF LOOKUP(STRING(OrderDelivery.LoStatusId), "8,12,19,100,110,125,241,900,3000,3001,3100,3101,3350,3351,4000,4030") = 0
       THEN NEXT.
 
       FIND ttDelivery WHERE ttDelivery.LoStatus = OrderDelivery.LoStatusId NO-ERROR.
