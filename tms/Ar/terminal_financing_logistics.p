@@ -185,20 +185,14 @@ FUNCTION fGetTFStatus RETURNS CHARACTER
       IF ldtStamp NE ?
       THEN
       CASE fNextLoStatus(INPUT ldtStamp):
-         WHEN 3001
-         THEN RETURN {&TF_STATUS_YOIGO_LOGISTICS}.
-         WHEN 3101
+         WHEN 3001 OR
+         WHEN 3101 OR
+         WHEN 3351 OR
+         WHEN 241
          THEN DO:
-            fCancelOrder(iiOrderId, FALSE).
+            fCancelOrder(iiOrderId, TRUE).
             RETURN "".
-         END.
-         WHEN 3351
-         THEN RETURN lcTFStatus.
-         OTHERWISE DO:
-            /*IF ldtStamp < DATETIME(DATE(TODAY) - 20,0)*/
-            THEN RETURN {&TF_STATUS_YOIGO_LOGISTICS}.
-            RETURN "".
-         END.
+         END.   
       END CASE.
    END.
    
