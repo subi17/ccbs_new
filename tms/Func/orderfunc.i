@@ -22,6 +22,9 @@
 {cparam2.i}
 {main_add_lines.i}
 
+/* Test for order status changes */
+DEFINE NEW GLOBAL SHARED STREAM sout.
+
 /* set status of order */
 FUNCTION fSetOrderStatus RETURNS LOGICAL
    (iOrderId AS INT,
@@ -35,6 +38,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF VAR lcResult   AS CHAR    NO-UNDO. 
    DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
    DEF VAR llCancelFusion AS LOGICAL NO-UNDO INIT FALSE.
+   DEF VAR llPrintToFile  AS LOGICAL NO-UNDO INIT FALSE. /* Test */
 
    DEF BUFFER OrderPayment FOR OrderPayment.
    DEF BUFFER MsRequest FOR MsRequest.
@@ -49,6 +53,17 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
          EXCLUSIVE-LOCK NO-ERROR.
       IF AVAILABLE bfOrder THEN DO:  
          bfOrder.StatusCode = icStatus.
+
+         /* Test for order status changes */
+         ASSIGN /* Test can be stopped by value 0 */
+            llPrintToFile = (fCParamI("PrintOrderfunc") NE 0).
+         IF llPrintToFile THEN DO:
+            OUTPUT STREAM sout TO VALUE( "/tmp/orderfunc_test.txt" ) APPEND.
+
+            PUT STREAM sout UNFORMATTED NOW ";" bfOrder.CLI ";" bfOrder.CLIType ";" bfOrder.CrStamp ";" bfOrder.CustNum ";" bfOrder.DeliveryType ";" bfOrder.ICC ";" bfOrder.Logistics ";" bfOrder.MNPNumber ";" bfOrder.MNPStatus ";" bfOrder.MSSeq ";" bfOrder.Offer ";" bfOrder.OldIcc ";" bfOrder.OldPayType ";" bfOrder.OrderChannel ";" bfOrder.Orderer ";" bfOrder.OrdererID ";" bfOrder.OrdererIDType ";" bfOrder.OrderId ";" bfOrder.OrderType ";" bfOrder.PayType ";" bfOrder.PortingDate ";" bfOrder.PortingTime ";" bfOrder.RoiLevel ";" bfOrder.ROIResult ";" bfOrder.Salesman ";" bfOrder.SendOffer ";" bfOrder.SendToROI ";" bfOrder.SMSType ";" bfOrder.Source ";" bfOrder.StatusCode ";" icStatus ";" PROGRAM-NAME(1) ";" PROGRAM-NAME(2)SKIP.
+            OUTPUT STREAM sout CLOSE.
+         END.
+         /* Test end */
 
          /* orders to status new should not be reported to ROI */
          IF LOOKUP(icStatus,"1,3,30") = 0 AND
