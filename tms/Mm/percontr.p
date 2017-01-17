@@ -2976,7 +2976,9 @@ PROCEDURE pMaintainContract:
    FIND DayCampaign OF DCCLI NO-LOCK. 
 
    /* fee for changing contract */
-   IF MsRequest.CreateFees AND DayCampaign.ModifyFeeModel > "" THEN DO:
+   IF MsRequest.CreateFees                         AND 
+      MsRequest.ReqCParam2      <> "term_amortize" AND
+      DayCampaign.ModifyFeeModel > ""              THEN DO:
 
       fSplitTS(MsRequest.ActStamp,
                OUTPUT ldtActDate,
