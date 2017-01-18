@@ -104,7 +104,14 @@ CASE pcOperation:
          RELEASE MNPProcess.
          FIND CURRENT Order NO-LOCK.
 
-         RUN cancelorder.p(Order.OrderId, TRUE).
+         /*YPR-5316:release COFF stc extention or COFF stc if MNP out is cancelled*/
+         IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} AND
+            Order.OrderType EQ {&ORDER_TYPE_STC} AND
+            (fIsConvergenceTariff(Order.CliType) OR
+             Order.OrderChannel BEGINS "retention") THEN
+            RUN orderinctrl.p(Order.OrderId, 0, TRUE).   
+         ELSE
+            RUN cancelorder.p(Order.OrderId, TRUE).
 
          llResponse = TRUE.
 
