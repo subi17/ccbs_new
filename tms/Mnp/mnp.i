@@ -17,6 +17,9 @@
 {timestamp.i}
 {fgettxt.i}
 {tmsconst.i}
+{fixedlinefunc.i}
+{orderfunc.i}
+{orderchk.i}
 
 FUNCTION fGetSpecialDelTypes RETURNS CHARACTER:
 
@@ -752,5 +755,67 @@ FUNCTION fIsMNPTermOngoing RETURNS LOGICAL (INPUT icCLI AS CHARACTER):
    RETURN False.
 
 END FUNCTION. /* FUNCTION fIsMNPTermOngoing RETURNS LOGICAL */
+
+FUNCTION fRetention RETURNS LOGICAL
+   (INPUT iiMsSeq AS INT,
+   INPUT iiLang AS INT,
+   INPUT iiCustNum AS INT,
+   INPUT icFormRequest AS CHAR,
+   INPUT icCLI AS CHAR):
+   DEF BUFFER bOrder FOR Order.
+   DEF VAR lcMNPSMSText       AS CHAR  NO-UNDO.
+
+   FIND FIRST bOrder WHERE
+              bOrder.MsSeq EQ iiMsSeq AND
+              bOrder.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}
+        NO-LOCK NO-ERROR.
+   IF AVAIL bOrder THEN DO:
+      IF fIsConvergenceTariff(bOrder.CliType) EQ TRUE AND
+         bOrder.Ordertype NE {&ORDER_TYPE_RENEWAL} THEN
+         RUN orderinctrl.p(bOrder.OrderId, 0, TRUE).
+      ELSE DO:
+         FIND FIRST OrderCustomer WHERE
+                    OrderCustomer.Brand   = gcBrand AND
+                    OrderCustomer.OrderId = bOrder.OrderId AND
+                    OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+         IF AVAIL OrderCustomer THEN DO:
+            IF bOrder.OrderChannel = "retention_stc" THEN DO:
+               lcMNPSMSText = "MNPCancelRetention".
+               IF OrderCustomer.CustIdType EQ "CIF" THEN
+                  fSetOrderStatus(bOrder.OrderId,
+                                  {&ORDER_STATUS_RENEWAL_STC_COMPANY}).
+               ELSE
+                  fSetOrderStatus(bOrder.OrderId,
+                                  {&ORDER_STATUS_RENEWAL_STC}).
+            END. /* IF bOrder.OrderChannel = "retention_stc" THEN DO: */
+            ELSE DO:
+               IF fCheckRenewalData() THEN DO:
+                  lcMNPSMSText = "MNPCancelRetention".
+                  fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_RENEWAL}).
+               END. /* IF fCheckRenewalData() THEN DO: */
+               ELSE DO:
+                  lcMNPSMSText = "MNPCancelRetentionOnHold".
+                  fSetOrderStatus(bOrder.OrderId,
+                                  {&ORDER_STATUS_RENEWAL_HOLD}).
+               END. /* ELSE DO: */
+            END. /* ELSE DO: */
+         END. /* IF AVAIL OrderCustomer AND */
+      END. /*Convergent*/
+      IF lcMNPSMSText > "" THEN DO:
+            fMNPCallAlarm(lcMNPSMSText,
+                          fMakeTS(),
+                          icFormRequest,
+                          icCLI,
+                          iiCustnum,
+                          iiLang,
+                          "622",
+                          bOrder.OrderId). 
+      END. /* IF lcMNPSMSText > "" THEN DO: */
+   END. /* IF AVAIL bOrder THEN DO: */
+   RETURN TRUE.
+
+
+END FUNCTION. /*fRetention*/   
+    
 
 &ENDIF
