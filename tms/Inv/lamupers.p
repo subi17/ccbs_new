@@ -2306,17 +2306,17 @@ PROCEDURE pSingleFee:
                CASE FixedFee.TFBank:
                   WHEN {&TF_BANK_SABADELL} THEN DO: /*0081*/
                      IF SingleFee.BillCode EQ {&TF_BANK_AMORTIZE} THEN 
-                        SingleFee.BillCode = SingleFee.BillCode + "BSA".
+                        SingleFee.BillCode = RIGHT-TRIM(SingleFee.BillCode,"A") + "BSA".
                      ELSE SingleFee.BillCode = SingleFee.BillCode + "BS".   
                   END.
                   WHEN {&TF_BANK_CETELEM} THEN DO: /*0225*/
                      IF SingleFee.BillCode EQ {&TF_BANK_AMORTIZE} THEN 
-                        SingleFee.BillCode = SingleFee.BillCode + "BCA".
+                        SingleFee.BillCode = RIGHT-TRIM(SingleFee.BillCode,"A") + "BCA".
                      ELSE SingleFee.BillCode = SingleFee.BillCode + "BC".   
                   END.
                   WHEN {&TF_BANK_UNOE} THEN DO:
                      IF SingleFee.BillCode EQ {&TF_BANK_AMORTIZE} THEN 
-                        SingleFee.BillCode = SingleFee.BillCode + "1EA".
+                        SingleFee.BillCode = RIGHT-TRIM(SingleFee.BillCode,"A") + "1EA".
                      ELSE SingleFee.BillCode = SingleFee.BillCode + "1E".   
                   END.
                END CASE.
