@@ -146,7 +146,7 @@ DEF VAR lcRetentionPlatformName AS CHAR EXTENT 100 NO-UNDO.
 DEF VAR lcRetentionFile AS CHAR EXTENT 100 NO-UNDO. 
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 DEF VAR lcStatusCodes AS CHAR NO-UNDO INIT "2,5". 
-DEF VAR lcSMSText AS CHAR NO-UNDO. 
+DEF VAR lcRetentionSMSText AS CHAR NO-UNDO. 
 DEF VAR liLoop AS INTEGER NO-UNDO. 
 DEF VAR lcRootDir AS CHARACTER NO-UNDO. 
 DEF VAR liOldOngoing AS INT NO-UNDO.
@@ -220,7 +220,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
          IF LOOKUP(MobSub.CLIType,"CONTRD,CONTD,TARJRD1") > 0 OR
             Segmentation.SegmentCode = "SN" THEN NEXT.
          
-         IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcSMSText) THEN NEXT.
+         IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcRetentionSMSText) THEN NEXT.
          
          FIND FIRST ttData NO-LOCK WHERE
                     ttData.custnum = MobSub.custnum AND 
@@ -233,7 +233,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
             ttData.custnum = MobSub.custnum
             ttData.MsSeq = MobSub.msseq
             ttData.mnpseq = mnpprocess.mnpseq
-            ttData.smsText = lcSMSText
+            ttData.smsText = lcRetentionSMSText
             i = i + 1.
          
          MNP_OTHER_LOOP:
@@ -385,18 +385,18 @@ PROCEDURE pFileDump:
          (IF liPeriods <= 3 THEN "Y" ELSE "")
          skip.
 
-      lcSMSText = fGetSMSTxt(ttData.SMSText,
+      lcRetentionSMSText = fGetSMSTxt(ttData.SMSText,
                              TODAY,
                              Customer.Language,
                              OUTPUT ldeSMSStamp).
 
-      IF lcSMSText > "" THEN DO:
-         lcSMSText = REPLACE(lcSMSText,"#SENDER", lcSMSSender[liPlatform]).
+      IF lcRetentionSMSText > "" THEN DO:
+         lcRetentionSMSText = REPLACE(lcRetentionSMSText,"#SENDER", lcSMSSender[liPlatform]).
 
          fMakeSchedSMS2(MobSub.CustNum,
                         MobSub.CLI,
                         {&SMSTYPE_MNP_RETENTION},
-                        lcSMSText,
+                        lcRetentionSMSText,
                         ldeSMSStamp,
                         lcSMSSender[liPlatform],
                         ""). 
