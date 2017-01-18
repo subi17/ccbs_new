@@ -161,9 +161,6 @@ DEFINE TEMP-TABLE ttOneDelivery NO-UNDO
    /* 50 */
    FIELD InvoiceTotal  AS CHARACTER FORMAT "X(7)"
    FIELD DiscountTotal AS CHARACTER FORMAT "X(7)"
-   FIELD ShipCostInvID AS CHARACTER FORMAT "X(12)"
-   FIELD ShipCostBC    AS CHARACTER FORMAT "X(12)"
-   FIELD ShipCostAmt   AS CHARACTER FORMAT "X(7)"
    .
 
 DEFINE TEMP-TABLE ttInvRow NO-UNDO
@@ -848,9 +845,6 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.TaxTerminal   = "0"
       ttOneDelivery.InvoiceTotal  = (IF AVAIL Invoice THEN STRING(Invoice.CurrAmt) ELSE "0")
       ttOneDelivery.DiscountTotal = (IF AVAIL Invoice THEN STRING(Invoice.DirDisc) ELSE "0")
-      ttOneDelivery.ShipCostInvID = lcShippingCostExtInvID
-      ttOneDelivery.ShipCostBC    = lcShippingCostBillCode
-      ttOneDelivery.ShipCostAmt   = STRING(ldeShippingCostAmt)
       .
       
    /* YDR-896: Add admin id in case of CIF order customer */
