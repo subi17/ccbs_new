@@ -175,7 +175,8 @@ FUNCTION fGetTFStatus RETURNS CHARACTER
       END CASE.
    END.
 
-   ELSE IF fGetDStamp(12) < DATETIME(TODAY - 20,0)
+   ELSE IF (fGetDStamp(12) < DATETIME(TODAY - 20,0) OR
+            fGetDStamp(125) < DATETIME(TODAY - 20,0))
    THEN DO:
       fCancelOrder(iiOrderId, TRUE).
       RETURN "".
