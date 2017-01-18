@@ -175,14 +175,15 @@ FUNCTION fCollectTerminationFees RETURNS LOGICAL (
                 FixedFee.SourceKey = STRING(iiPercontractID):
             
          FOR FIRST SingleFee USE-INDEX Custnum NO-LOCK WHERE
-                   SingleFee.Brand = gcBrand AND
-                   SingleFee.Custnum = bSubMsRequest.CustNum AND
-                   SingleFee.HostTable = "Mobsub" AND
-                   SingleFee.KeyValue = STRING(bSubMsRequest.MsSeq) AND
-                   SingleFee.BillCode BEGINS "PAYTERMEND" AND
-                   SingleFee.SourceTable = "FixedFee" AND
-                   SingleFee.SourceKey = STRING(FixedFee.FFNum) AND
-                   SingleFee.Billed = TRUE,
+                   SingleFee.Brand         = gcBrand                     AND
+                   SingleFee.Custnum       = bSubMsRequest.CustNum       AND
+                   SingleFee.HostTable     = "Mobsub"                    AND
+                   SingleFee.KeyValue      = STRING(bSubMsRequest.MsSeq) AND
+                   SingleFee.BillCode BEGINS "PAYTERMEND"                AND
+               NOT SingleFee.BillCode BEGINS "PAYTERMENDA"               AND    
+                   SingleFee.SourceTable   = "FixedFee"                  AND
+                   SingleFee.SourceKey     = STRING(FixedFee.FFNum)      AND
+                   SingleFee.Billed        = TRUE,
              FIRST Invoice NO-LOCK WHERE
                    Invoice.InvNum = SingleFee.InvNum AND
                    Invoice.InvType = 1:
