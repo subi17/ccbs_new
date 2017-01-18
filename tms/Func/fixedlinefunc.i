@@ -146,21 +146,26 @@ END.
    Convergent ADSL subscription can be changed to other ADSL
    Convergent fiber 50MB can be changed to other convergent 50MB fiber.
    Convergent fiber 300MB can be changed to other convergent 300MB fiber.
-   Currently comparison made by using naming rules. If some new naming
-   will be introduced, maybe should be changed to use clitype.fixedlinetype
-   and clitype.FixedLineDownload fields. */
+*/
 FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
    (INPUT icOldCliType AS CHAR,
     INPUT icNewCliType AS CHAR):
-   IF (icOldCliType BEGINS "CONTDSL" AND icNewCliType BEGINS "CONTDSL") THEN
-      RETURN TRUE.
-   ELSE IF (icOldCliType BEGINS "CONTFH" AND 
-            icNewCliType BEGINS "CONTFH") AND
-            SUBSTRING(icOldClitype, INDEX(icOldClitype,"_") + 1) EQ
-            SUBSTRING(icNewClitype, INDEX(icNewClitype,"_") + 1) THEN
-      RETURN TRUE.
-   ELSE 
-      RETURN FALSE.
+   DEF BUFFER bOldClitype FOR Clitype.
+
+   /* compatible if both have same download speed for fixedline */
+   FIND FIRST bOldClitype WHERE
+              bOldClitype.brand EQ Syst.Parameters:gcBrand AND
+              bOldClitype.clitype EQ icOldCliType NO-ERROR.
+   IF AVAIL bOldClitype THEN
+      IF CAN-FIND (FIRST Clitype WHERE
+                         Clitype.brand EQ Syst.Parameters:gcBrand AND
+                         Clitype.clitype EQ icNewCliType AND
+                         Clitype.FixedLineDownload EQ 
+                            bOldClitype.FixedLineDownload) THEN
+         RETURN TRUE.
+   
+   /* otherwise is not compatible */
+   RETURN FALSE.
 END.                                         
 
 &ENDIF
