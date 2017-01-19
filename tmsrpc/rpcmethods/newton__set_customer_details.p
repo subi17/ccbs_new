@@ -34,6 +34,7 @@
             mark_post_3rd;boolean;optional;
             mark_sms_3rd;boolean;optional;
             mark_email_3rd;boolean;optional;
+            mark_dont_share_personal_data;boolean;optional;
             birthday;date;optional;
             company_foundationdate;date;optional;
             new_subscription_grouping;int;optional;1=Use default invoice group,2=Use new invoice group
@@ -126,7 +127,7 @@ DEF VAR llt AS LOGICAL NO-UNDO.
 DEF VAR llCustomerChanged AS LOGICAL INITIAL FALSE NO-UNDO.
 
 DEF VAR lcCustomerData AS CHAR EXTENT 23 NO-UNDO.
-DEF VAR llMarketingData AS LOGICAL EXTENT 6 NO-UNDO.
+DEF VAR llMarketingData AS LOGICAL EXTENT 7 NO-UNDO.
 DEF VAR lcDataFields AS CHAR NO-UNDO.
 DEF VAR lcMarketingFields AS CHAR NO-UNDO.
 DEF VAR lcContactCustFields AS CHAR NO-UNDO.
@@ -187,14 +188,16 @@ ASSIGN
     llMarketingData[3] = customer.DirMarkPost
     llMarketingData[4] = customer.OutMarkSMS
     llMarketingData[5] = customer.OutMarkEmail
-    llMarketingData[6] = customer.OutMarkPost.
+    llMarketingData[6] = customer.OutMarkPost
+    llMarketingData[7] = customer.DontSharePersData.
 lcDataFields = "title,lname,lname2,fname,coname,street,zip,city,region," +
                "language,nationality,bankaccount,country," +
                "email,sms_number,phone_number,person_id,city_code,street_code,"+
                "id_type,company_id,company_name," +
                "birthday,company_foundationdate,new_subscription_grouping,payment_method". /* special list */
 lcMarketingFields = "mark_sms,mark_email,mark_post," +
-                    "mark_sms_3rd,mark_email_3rd,mark_post_3rd".
+                    "mark_sms_3rd,mark_email_3rd,mark_post_3rd," +
+                    "mark_dont_share_personal_data".
 
 lcContactCustFields = "title,fname,lname,lname2,street,zip,city,region" +
                       ",language,nationality,email,sms_number" +
@@ -455,6 +458,7 @@ IF llCustomerChanged THEN DO:
         customer.OutMarkEmail = llMarketingData[5]
         customer.OutMarkPost = llMarketingData[6]
         customer.orgid = lcCustomerData[LOOKUP("company_id", lcDataFields)] WHEN LOOKUP(customer.custidtype, "CIF,CFraud,CInternal") > 0
+        customer.DontSharePersData = llMarketingData[7]
         customer.foundationDate = ldFoundationDate 
         customer.BirthDay = ldBirthDay
         customer.InvoiceTargetRule = liInvoiceTargetRule

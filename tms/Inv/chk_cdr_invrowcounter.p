@@ -7,7 +7,7 @@
 {chk_cdr_invrowcounter.i &ttReference = "REFERENCE-ONLY"}
 
 DEF INPUT  PARAMETER TABLE FOR ttSubs.
-DEF INPUT  PARAMETER iiRun         AS INT  NO-UNDO.
+DEF INPUT  PARAMETER icRunID       AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER idaPeriodEnd  AS DATE NO-UNDO.
 DEF INPUT  PARAMETER iIFRProcessID AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiUpdInterval AS INT  NO-UNDO.
@@ -27,6 +27,7 @@ DEF VAR ldaISTCDate AS DATE NO-UNDO.
 DEF VAR ldaCounterToDate AS DATE NO-UNDO. 
 DEF VAR llErrorFound AS LOGICAL NO-UNDO. 
 DEF VAR lcCLI AS CHAR NO-UNDO. 
+DEF VAR liDuration AS INT64 NO-UNDO.
 
 DEF TEMP-TABLE ttCounter NO-UNDO
    LIKE InvRowCounter.
@@ -39,7 +40,7 @@ OUTPUT STREAM sLog TO VALUE(lcDir + "/chk_cdr_invrowcounter_" +
                             STRING(year(today),"9999") + 
                             STRING(month(today),"99") + 
                             STRING(day(today),"99") + "_" +
-                            STRING(iiRun) + ".log") APPEND.
+                            STRING(icRunID) + ".log") APPEND.
 
 ldaToDate = idaPeriodEnd.
 IF ldaToDate = ? THEN ldaToDate = fLastDayOfMonth(TODAY).
@@ -137,8 +138,10 @@ FOR EACH ttSubs,
                IF NOT fUpdateFuncRunProgress(iIFRProcessID,oiCounterQty) THEN 
                   RETURN "ERROR:Stopped".
             END.   
+
+            liDuration = 0.
       
-            FIND FIRST InvRowCounter WHERE 
+            FOR EACH InvRowCounter NO-LOCK WHERE 
                InvRowCounter.InvCust     = ttCounter.InvCust AND
                InvRowCounter.InvSeq      = ttCounter.InvSeq AND
                InvRowCounter.BillCode    = ttCounter.BillCode AND
@@ -149,10 +152,20 @@ FOR EACH ttSubs,
                InvRowCounter.VatIncl     = ttCounter.VatIncl AND
                InvRowCounter.ReportingID = "," AND
                InvRowCounter.DCEvent     = ttCounter.DCEvent AND
-               InvRowCounter.ToDate      = ttCounter.ToDate NO-LOCK NO-ERROR.
-            IF NOT AVAILABLE InvRowCounter THEN ASSIGN
+               InvRowCounter.ToDate      = ttCounter.ToDate:
+         
+               ACCUMULATE InvRowCounter.InvCust (COUNT).
+               ACCUMULATE InvRowCounter.Quantity (TOTAL).
+               ACCUMULATE InvRowCounter.DataAmt (TOTAL).
+               ACCUMULATE InvRowCounter.Amount (TOTAL).
+
+               liDuration = liDuration + InvRowCounter.Duration.
+
+            END.
+
+            IF (ACCUM COUNT InvRowCounter.InvCust) EQ 0 THEN ASSIGN
                lcCLI = ttCounter.CLI
-               lcMatch = "No counter found: " + 
+               lcMatch = "ERROR: No counter found: " + 
                          STRING(ttCounter.billcode) + "/" +
                          STRING(ttCounter.CCN) + "/" +
                          STRING(ttCounter.Quantity) + "/" +
@@ -160,14 +173,20 @@ FOR EACH ttSubs,
                          TRIM(STRING(ttCounter.Amount,"->>>>>9.99999")).
       
             ELSE IF 
-               InvRowCounter.Quantity NE ttCounter.Quantity OR
-               InvRowCounter.Duration NE ttCounter.Duration OR
-               InvRowCounter.Amount NE ttCounter.Amount OR
-               InvRowCounter.DataAmt NE ttCounter.DataAmt THEN ASSIGN
+               (ACCUM TOTAL InvRowCounter.Quantity) NE ttCounter.Quantity OR
+                liDuration NE ttCounter.Duration OR
+               (ACCUM TOTAL InvRowCounter.Amount) NE ttCounter.Amount OR
+               (ACCUM TOTAL InvRowCounter.DataAmt) NE ttCounter.DataAmt THEN ASSIGN
                   lcCLI = ttCounter.CLI
-                  lcMatch = "Values differ: " + 
+                  lcMatch = "ERROR: Values differ: " + 
                             STRING(ttCounter.billcode) + "/" +
                             STRING(ttCounter.CCN).
+            ELSE IF (ACCUM COUNT InvRowCounter.InvCust) NE 1 THEN ASSIGN
+               lcCLI = ttCounter.CLI
+               lcMatch = "WARNING: Multiple counters found: " + 
+                         STRING(ttCounter.billcode) + "/" +
+                         STRING(ttCounter.CCN).
+
             IF lcMatch > "" THEN LEAVE.    
          END.        
 

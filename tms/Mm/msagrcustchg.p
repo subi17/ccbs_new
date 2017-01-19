@@ -203,6 +203,7 @@ PROCEDURE pOwnerChange:
 
    RUN pCheckSubscriptionForACC (MsRequest.MsSeq,
                                  MsRequest.MsRequest,
+                                 MsRequest.ReqSource,
                                  OUTPUT lcInfo).
    
    IF lcInfo = "" AND MsRequest.ReqIParam1 > 0 THEN
@@ -486,6 +487,8 @@ PROCEDURE pOwnerChange:
                lcChannel = "TMS".
             WHEN {&REQUEST_SOURCE_NEWTON} THEN
                lcChannel = "VISTA".
+            WHEN {&REQUEST_SOURCE_RETAIL_NEWTON} THEN
+               lcChannel = "VFR".
          END CASE.
 
          lcMemo = "ACC" + CHR(255) +
@@ -799,6 +802,7 @@ PROCEDURE pOwnerChange:
          RUN pCheckSubscriptionForACC (
             bMobSub.MsSeq,
             0,
+            MsRequest.ReqSource,
             OUTPUT lcInfo).
 
          IF NOT RETURN-VALUE BEGINS "ERROR" THEN DO:
@@ -1245,6 +1249,26 @@ PROCEDURE pMsCustMove:
       DO:
           RUN pSetSubscription_Prohited_FromInvoicing(MobSub.InvCust, iiNewInvCust, MsOwner.MsSeq).
       END.  
+     
+      /*YDR-2360 changes*/ 
+      /* billing denials */
+      FOR EACH Limit NO-LOCK USE-INDEX MsSeq WHERE
+               Limit.MsSeq     = MsOwner.MsSeq   AND
+               Limit.LimitType = 3               AND
+               Limit.TMRuleSeq = 0               AND
+               Limit.ToDate   >= ldtActDate      AND
+               Limit.LimitID   = 0               AND
+               Limit.CustNum   = MobSub.InvCust:
+               
+          CREATE bLimit.
+          BUFFER-COPY Limit EXCEPT FromDate TO bLimit.
+          ASSIGN
+             bLimit.FromDate = ldtActDate
+             bLimit.CustNum  = iiNewInvCust.
+
+          RELEASE bLimit.
+
+      END.
    END.
    
    /* end current msowner and create a new one */
@@ -1925,6 +1949,7 @@ PROCEDURE pHandleAdditionalLines:
          RUN pCheckSubscriptionForACC (
             bMobSub.MsSeq,
             0,
+            MsRequest.ReqSource,
             OUTPUT lcInfo).
 
          IF NOT RETURN-VALUE BEGINS "ERROR" THEN DO:

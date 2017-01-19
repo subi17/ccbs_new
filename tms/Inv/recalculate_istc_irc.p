@@ -26,6 +26,7 @@ DEFINE VARIABLE liErrors AS INTEGER NO-UNDO.
 DEFINE VARIABLE liCounterCnt AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liOrder AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcActionID AS CHARACTER NO-UNDO.
+DEF VAR lcRunID AS CHAR NO-UNDO. 
    
 IF iiDate EQ ? OR DAY(iiDate) EQ 1 THEN RETURN.
 
@@ -92,13 +93,17 @@ FOR EACH msrequest NO-LOCK WHERE
       ttSubs.Order   = liOrder.
 END.
 
-IF CAN-FIND(FIRST ttSubs) THEN
+IF CAN-FIND(FIRST ttSubs) THEN DO:
+
+   lcRunID = replace(string(time,"HH:MM:SS"),":","") + "_istc".
+
    RUN chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
-                               0, /* fr run id */
+                               lcRunID,
                                ldaPeriodEnd,
                                0, /* fr process id */
                                0, /* fr update interval */
                                OUTPUT liCounterCnt).
+END.
 
 FOR EACH ttSubs:
 
