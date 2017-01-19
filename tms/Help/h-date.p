@@ -71,17 +71,7 @@ form
     with scroll 1 4 down  row 4 centered color value(cfc)
     title color value(ctc) " Dates " overlay frame sel.
 
-<<<<<<< HEAD
-form /* SEEK Code */
-    lcRoamOper
-    help "Enter Code of an Invoice Section"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
-
 cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
-=======
-cfc = "sel". run ufcolor. assign ccc = cfc.
->>>>>>> origin/master
 MAIN:
 repeat:
 
@@ -235,33 +225,6 @@ BROWSE:
            end.
         end. /* next page */
 
-<<<<<<< HEAD
-        /* Seek */
-        if lookup(nap,"1,f1") > 0 then do:  /* Paiva */
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
-           update lcRoamOper with frame hayr.
-           hide frame hayr no-pause.
-           if lcRoamOper ENTERED then do:
-              find first Paiva where 
-                         Paiva.Paiva >= paiva
-              no-lock no-error.
-               if not available Paiva then do:
-                       bell.
-                       message "None found !".    
-                       pause 1 no-message.
-                       next BROWSE.
-               end.
-              /*  Paiva was found */
-              assign
-                memory = recid(Paiva)
-                must-print = true.
-           end.
-           next LOOP.
-        end. /* Seek */
-
-=======
->>>>>>> origin/master
         /* Choose */
         else if lookup(nap,"return,enter,5,f5") > 0 then do:
            find Paiva where recid(Paiva) = rtab[frame-line] no-lock.

@@ -440,21 +440,11 @@ ELSE DO: /* Mobile-related tables ... */
  else if lookup(frame-field,"Product") > 0            then hmod = "Help/h-product".
  else if lookup(frame-field,"ProdPack") >0            then hmod = "Help/h-prodpack".
  else if lookup(frame-field,"Fatgroup,fatgrp,ftgrp") >0 or
-<<<<<<< HEAD:tms/applhelp.p
       index(frame-field,"FatGroup") > 0               then hmod = "Help/h-fatgroup".
  else if lookup(frame-field,"paraname") >0     then hmod = "Help/h-pdpid".
  else if lookup(frame-field,"msstatus") > 0    then hmod = "Help/h-mobsubstatus".
  else if index(frame-field,"servicelimit") > 0 then hmod = "Help/h-servlimitgrp".
- else if index(frame-field,"plmn") > 0         then hmod = "Help/h-roamoper".
- else if index(frame-field,"RoamGroup") > 0    then hmod = "Help/h-roamgroup".
  ELSE IF INDEX(FRAME-FIELD,"ReqStat") > 0      THEN hmod = "Help/h-reqstat".
-=======
-      index(frame-field,"FatGroup") > 0               then hmod = "h-fatgroup".
- else if lookup(frame-field,"paraname") >0     then hmod = "h-pdpid".
- else if lookup(frame-field,"msstatus") > 0    then hmod = "h-mobsubstatus".
- else if index(frame-field,"servicelimit") > 0 then hmod = "h-servlimitgrp".
- ELSE IF INDEX(FRAME-FIELD,"ReqStat") > 0      THEN hmod = "h-reqstat".
->>>>>>> origin/master:tms/Help/applhelp.p
 
  if hmod ne "" AND hmod NE ? THEN DO:
     RUN VALUE(hmod).

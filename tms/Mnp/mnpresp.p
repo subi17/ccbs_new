@@ -22,7 +22,6 @@ katun = "MNP".
 {Func/fsubstermreq.i}
 {Func/log.i}
 /* {mnptms_common.i}*/
-<<<<<<< HEAD
 {Syst/tmsconst.i}
 {Func/orderfunc.i}
 {Func/msisdn.i}
@@ -31,17 +30,7 @@ katun = "MNP".
 {Func/orderchk.i}
 {Func/main_add_lines.i}
 {Func/fgettxt.i}
-=======
-{tmsconst.i}
-{orderfunc.i}
-{msisdn.i}
-{ordercancel.i}
-{msisdn_prefix.i}
-{orderchk.i}
-{main_add_lines.i}
-{fgettxt.i}
-{fixedlinefunc.i}
->>>>>>> origin/master
+{Func/fixedlinefunc.i}
 
 DEFINE VARIABLE liLoop       AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTime       AS CHARACTER NO-UNDO.

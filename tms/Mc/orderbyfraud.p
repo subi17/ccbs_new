@@ -1,8 +1,7 @@
 /* orderbyfraud.p    
 
 */
-   
-<<<<<<< HEAD
+
 {Syst/commali.i}
 {Syst/eventval.i}
 {Func/timestamp.i}
@@ -10,16 +9,7 @@
 {Func/orderfunc.i}
 {Func/msisdn.i}
 {Func/ordercancel.i}
-=======
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{forderstamp.i}
-{orderfunc.i}
-{msisdn.i}
-{ordercancel.i}
-{msreqfunc.i}
->>>>>>> origin/master
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.

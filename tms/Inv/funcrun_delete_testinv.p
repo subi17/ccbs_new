@@ -37,15 +37,11 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    QUIT.
 END.
 
-<<<<<<< HEAD
-RUN Inv/delete_test_invoice.p("",
-=======
 /* YDA-854 */
 RUN pGetFuncRunProcessParameters(liFRProcessID).
 ASSIGN ldaInvDate  = fSetFuncRunDateParameter(1).
 
-RUN delete_test_invoice.p("",
->>>>>>> origin/master
+RUN Inv/delete_test_invoice.p("",
                           "",
                           ldaInvDate,
                           liFRProcessID,

@@ -13,20 +13,13 @@
 &THEN
 &GLOBAL-DEFINE MNP_I YES
 
-<<<<<<< HEAD
 {Syst/commali.i}
 {Func/timestamp.i}
 {Func/fgettxt.i}
 {Syst/tmsconst.i}
-=======
-{commali.i}
-{timestamp.i}
-{fgettxt.i}
-{tmsconst.i}
-{fixedlinefunc.i}
-{orderfunc.i}
-{orderchk.i}
->>>>>>> origin/master
+{Func/fixedlinefunc.i}
+{Func/orderfunc.i}
+{Func/orderchk.i}
 
 FUNCTION fMNPCallAlarm RETURNS LOGICAL
   (INPUT pcAction  AS CHARACTER,
@@ -745,7 +738,7 @@ FUNCTION fRetention RETURNS LOGICAL
    IF AVAIL bOrder THEN DO:
       IF fIsConvergenceTariff(bOrder.CliType) EQ TRUE AND
          bOrder.Ordertype NE {&ORDER_TYPE_RENEWAL} THEN
-         RUN orderinctrl.p(bOrder.OrderId, 0, TRUE).
+         RUN Mc/orderinctrl.p(bOrder.OrderId, 0, TRUE).
       ELSE DO:
          FIND FIRST OrderCustomer WHERE
                     OrderCustomer.Brand   = gcBrand AND
