@@ -16,9 +16,6 @@
 {newton/src/header_get.i}
 {Func/fcustpl.i}
 
-DEF VAR lcPenFeeStruct AS CHAR NO-UNDO. 
-DEF VAR lcPList AS CHAR NO-UNDO. 
-
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
@@ -44,23 +41,13 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
          IF DayCampaign.TermFeeCalc > 0 AND 
             DayCampaign.TermFeeModel NE '' THEN DO:
 
-               lcPenFeeStruct = add_struct(lcResultStruct,"penalty_fee"). 
-               FOR EACH CLIType WHERE
-                        CliType.Brand = gcBrand NO-LOCK:
-                        lcPList = fCliTypeFeeModelPriceList(
-                                    CLIType.CliType,
-                                    DayCampaign.TermFeeModel,
-                                    TODAY).
-                  
-                        FIND FIRST FMItem NO-LOCK  WHERE
-                                   FMItem.Brand     = gcBrand AND
-                                   FMItem.FeeModel  = DayCampaign.TermFeeModel AND
-                                   FMItem.PriceList = lcPList AND
-                                   FMItem.FromDate <= TODAY AND
-                                   FMItem.ToDate   >= TODAY NO-ERROR.
-                        IF AVAIL FMItem THEN 
-                        add_double(lcPenFeeStruct, CLIType.CLIType, FMItem.Amount).
-                END.
+            FIND FIRST FMItem NO-LOCK  WHERE
+                       FMItem.Brand     = gcBrand AND
+                       FMItem.FeeModel  = DayCampaign.TermFeeModel AND
+                       FMItem.FromDate <= TODAY AND
+                       FMItem.ToDate   >= TODAY NO-ERROR.
+            IF AVAIL FMItem THEN 
+               add_string(lcResultStruct, "penalty_fee", STRING(FMItem.Amount)).
          END.
    END.
    WHEN "5" THEN DO:

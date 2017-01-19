@@ -30,6 +30,7 @@ katun = "MNP".
 {Func/orderchk.i}
 {Func/main_add_lines.i}
 {Func/fgettxt.i}
+{Func/fixedlinefunc.i}
 
 DEFINE VARIABLE liLoop       AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTime       AS CHARACTER NO-UNDO.
@@ -1066,58 +1067,13 @@ PROCEDURE pHandleFromASOL2AREC:
       /* YOT-2088 - Now move Retention order into correct queue */
       FIND MobSub WHERE
            MobSub.MSSeq = MNPSub.MsSeq NO-LOCK NO-ERROR.
+           
       IF AVAIL MobSub THEN DO:
-         FIND FIRST Order WHERE
-                    Order.Brand = gcBrand AND
-                    Order.MsSeq = MobSub.MsSeq AND
-                    Order.StatusCode = {&ORDER_STATUS_MNP_RETENTION}
-              NO-LOCK NO-ERROR.
-         IF AVAIL Order THEN DO:
-            FIND FIRST Customer WHERE
-                       Customer.CustNum = MobSub.CustNum
-                 NO-LOCK NO-ERROR.
-
-            lcMNPSMSText = "".
-            FIND FIRST OrderCustomer WHERE
-                       OrderCustomer.Brand   = gcBrand AND
-                       OrderCustomer.OrderId = Order.OrderId AND
-                       OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
-            IF AVAIL OrderCustomer THEN DO:
-               IF Order.OrderChannel = "retention_stc" THEN DO:
-                  lcMNPSMSText = "MNPCancelRetention".
-                  IF OrderCustomer.CustIdType EQ "CIF" THEN
-                     fSetOrderStatus(Order.OrderId,
-                                     {&ORDER_STATUS_RENEWAL_STC_COMPANY}).
-                  ELSE
-                     fSetOrderStatus(Order.OrderId,
-                                     {&ORDER_STATUS_RENEWAL_STC}).
-               END. /* IF Order.OrderChannel = "retention_stc" THEN DO: */
-               ELSE DO:
-                  IF fCheckRenewalData() THEN DO:
-                     lcMNPSMSText = "MNPCancelRetention".
-                     fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_RENEWAL}).
-                  END. /* IF fCheckRenewalData() THEN DO: */
-                  ELSE DO:
-                     lcMNPSMSText = "MNPCancelRetentionOnHold".
-                     fSetOrderStatus(Order.OrderId,
-                                     {&ORDER_STATUS_RENEWAL_HOLD}).
-                  END. /* ELSE DO: */
-               END. /* ELSE DO: */
-
-               liLang = INT(OrderCustomer.Language) NO-ERROR.
-            END. /* IF AVAIL OrderCustomer AND */
-
-            IF lcMNPSMSText > "" THEN DO:
-               fMNPCallAlarm(lcMNPSMSText,
-                             fMakeTS(),
-                             MNPProcess.FormRequest,
-                             MNPSub.CLI,
-                             MobSub.Custnum,
-                             liLang,
-                             "622",
-                             Order.OrderId).
-            END. /* IF lcMNPSMSText > "" THEN DO: */
-         END. /* IF AVAIL Order THEN DO: */
+         fRetention(MobSub.MsSeq,
+                    liLang,
+                    MobSub.Custnum,
+                    MNPProcess.FormRequest,
+                    MNPSub.CLI).
       END. /* IF AVAIL MobSub THEN DO: */
    END.
    

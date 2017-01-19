@@ -24,6 +24,7 @@ DEF VAR liFRExecID    AS INT  NO-UNDO.
 DEF VAR lcRunMode     AS CHAR NO-UNDO.
 DEF VAR liUpdateInterval AS INT NO-UNDO.
 DEF VAR liAction      AS INT  NO-UNDO.
+DEF VAR ldaInvDate    AS DATE NO-UNDO. /* YDA-854 */
 
 /****** Main start ********/
 
@@ -36,8 +37,13 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    QUIT.
 END.
 
+/* YDA-854 */
+RUN pGetFuncRunProcessParameters(liFRProcessID).
+ASSIGN ldaInvDate  = fSetFuncRunDateParameter(1).
+
 RUN Inv/delete_test_invoice.p("",
                           "",
+                          ldaInvDate,
                           liFRProcessID,
                           liUpdateInterval,
                           lcRunMode,

@@ -139,6 +139,40 @@ IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO:
    END.
 END.
 
+/*YPR-5316 AC2: release from ROI Queue if there is MNP out ongoint*/
+IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
+    Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}  OR
+    Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}  OR 
+    Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
+    Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT}) AND
+    Order.OrderType  EQ {&ORDER_TYPE_STC}           AND
+    fIsMNPOutOngoing(INPUT Order.CLI) EQ TRUE THEN DO:
+
+   fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_MNP_RETENTION}).
+
+   IF llDoEvent THEN DO:
+      RUN StarEventMakeModifyEvent(lhOrder).
+      fCleanEventObjects().
+   END.
+
+   RETURN "".
+
+END.
+
+/*YPR-5316 AC3: release convergent STC order from "75 - MNP retention" status when MNP out-porting request is cancelled*/
+IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}  AND
+   Order.OrderType  EQ {&ORDER_TYPE_STC} THEN DO:
+
+   fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
+
+   IF llDoEvent THEN DO:
+      RUN StarEventMakeModifyEvent(lhOrder).
+      fCleanEventObjects().
+   END.
+   RETURN "".
+
+END.
+
 /* YTS-6045 */
 IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}  OR
@@ -382,10 +416,6 @@ END.
 IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
 
 fSetOrderStatus(Order.OrderId,lcNewStatus).
-
-fMarkOrderStamp(Order.OrderID,
-               "Change",
-                0.0).
 
 IF llDoEvent THEN DO:
    RUN StarEventMakeModifyEvent(lhOrder).
