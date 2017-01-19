@@ -29,6 +29,7 @@ DEF VAR liPeriod       AS INT  NO-UNDO.
 DEF VAR ldaDate        AS DATE NO-UNDO.
 
 DEFINE BUFFER bMobSub FOR MobSub.
+DEFINE BUFFER bTermMobSub FOR TermMobSub.
 
 IF validate_request(param_toplevel_id, "int") = ? THEN RETURN.
 
@@ -36,9 +37,8 @@ pcCustNum = get_int(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND Customer NO-LOCK WHERE
-     Customer.Brand   = gcBrand   AND
-     Customer.Custnum = pcCustNum NO-ERROR.
+FIND FIRST Customer NO-LOCK WHERE
+           Customer.Custnum = pcCustNum NO-ERROR.
 
 IF NOT AVAIL Customer THEN
    RETURN appl_err("customer_not_found").
@@ -60,49 +60,15 @@ IF AVAILABLE Limit THEN DO:
    MOBSUB_LOOP:
    FOR EACH bMobSub NO-LOCK WHERE
             bMobSub.Brand   = gcBrand AND
-            bMobSub.CustNum = Customer.CustNum,
-      EACH DCCLI NO-LOCK WHERE
-           DCCLI.MsSeq    = bMobSub.MsSeq AND
-           DCCLI.ValidTo >= ldaDate       AND
-          (DCCLI.DCEvent BEGINS "PAYTERM" OR
-           DCCLI.DCEvent BEGINS "RVTERM"):
+            bMobSub.CustNum = Customer.CustNum:
+      RUN pGetTermFee(bMobSub.MsSeq).
+   END.
 
-      FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand       = gcBrand                     AND
-                FixedFee.Custnum     = Customer.Custnum            AND
-                FixedFee.HostTable   = "MobSub"                    AND
-                FixedFee.KeyValue    = STRING(bMobSub.MsSeq)       AND
-                FixedFee.EndPeriod  >= liPeriod                    AND
-                FixedFee.SourceTable = "DCCLI"                     AND
-                FixedFee.SourceKey   = STRING(DCCLI.PerContractID) AND
-               (FixedFee.BillCode BEGINS "PAYTERM"                 OR
-                FixedFee.BillCode BEGINS "RVTERM"):
-
-         FOR EACH FFItem OF FixedFee NO-LOCK:
-            IF FFItem.Billed AND
-              (FFItem.BillPeriod <= liPeriod OR
-               CAN-FIND(FIRST Invoice WHERE
-                              Invoice.InvNum  = FFItem.InvNum AND
-                              Invoice.InvType = 1)) THEN NEXT.
-            ldePendingFees = ldePendingFees + FFItem.Amt.
-         END.
-
-         IF FixedFee.BillCode BEGINS "PAYTERM" THEN
-         FOR FIRST SingleFee NO-LOCK WHERE
-                   SingleFee.Brand       = gcBrand              AND
-                   SingleFee.Custnum     = FixedFee.CustNum     AND
-                   SingleFee.HostTable   = FixedFee.HostTable   AND
-                   SingleFee.KeyValue    = FixedFee.KeyValue    AND
-                   SingleFee.SourceTable = FixedFee.SourceTable AND
-                   SingleFee.SourceKey   = FixedFee.SourceKey   AND
-                   SingleFee.CalcObj     = "RVTERM":
-            IF SingleFee.Billed = TRUE AND
-               CAN-FIND (FIRST Invoice NO-LOCK WHERE
-                               Invoice.InvNum  = SingleFee.InvNum AND
-                               Invoice.InvType = 1) THEN NEXT.
-               ldePendingFees = ldePendingFees + SingleFee.Amt.
-         END.
-      END.
+   TERMMOBSUB_LOOP:
+   FOR EACH bTermMobSub NO-LOCK WHERE
+            bTermMobSub.Brand   = gcBrand AND
+            bTermMobSub.CustNum = Customer.CustNum:
+      RUN pGetTermFee(bTermMobSub.MsSeq).
    END.
 
    FOR EACH Order NO-LOCK WHERE
@@ -134,3 +100,51 @@ add_double(top_struct, "creditlimit"     , ldeLimitAmt).
 add_double(top_struct, "pendingbalance"  , ldePendingFees).
 add_double(top_struct, "withdrawn"       , ldeWithdrawn).
 add_double(top_struct, "availablebalance", (ldeLimitAmt - ldePendingFees - ldeWithdrawn)).
+
+PROCEDURE pGetTermFee:
+   DEFINE INPUT PARAM iiMsSeq AS INT NO-UNDO.
+   
+   FOR EACH DCCLI NO-LOCK WHERE
+            DCCLI.MsSeq    = iiMsSeq       AND
+            DCCLI.ValidTo >= ldaDate       AND
+           (DCCLI.DCEvent BEGINS "PAYTERM" OR
+            DCCLI.DCEvent BEGINS "RVTERM"):
+      FOR FIRST FixedFee NO-LOCK WHERE
+                FixedFee.Brand       = gcBrand                     AND
+                FixedFee.Custnum     = Customer.Custnum            AND
+                FixedFee.HostTable   = "MobSub"                    AND
+                FixedFee.KeyValue    = STRING(iiMsSeq)             AND
+                FixedFee.EndPeriod  >= liPeriod                    AND
+                FixedFee.SourceTable = "DCCLI"                     AND
+                FixedFee.SourceKey   = STRING(DCCLI.PerContractID) AND
+               (FixedFee.BillCode BEGINS "PAYTERM"                 OR
+                FixedFee.BillCode BEGINS "RVTERM"):
+
+         FOR EACH FFItem OF FixedFee NO-LOCK:
+            IF FFItem.Billed AND
+              (FFItem.BillPeriod <= liPeriod OR
+               CAN-FIND(FIRST Invoice WHERE
+                              Invoice.InvNum  = FFItem.InvNum AND
+                              Invoice.InvType = {&INV_TYPE_NORMAL})) THEN NEXT.
+            ldePendingFees = ldePendingFees + FFItem.Amt.
+         END.
+
+         IF FixedFee.BillCode BEGINS "PAYTERM" THEN
+         FOR FIRST SingleFee NO-LOCK WHERE
+                   SingleFee.Brand       = gcBrand              AND
+                   SingleFee.Custnum     = FixedFee.CustNum     AND
+                   SingleFee.HostTable   = FixedFee.HostTable   AND
+                   SingleFee.KeyValue    = FixedFee.KeyValue    AND
+                   SingleFee.SourceTable = FixedFee.SourceTable AND
+                   SingleFee.SourceKey   = FixedFee.SourceKey   AND
+                   SingleFee.CalcObj     = "RVTERM":
+            IF SingleFee.Billed = TRUE AND
+               CAN-FIND (FIRST Invoice NO-LOCK WHERE
+                               Invoice.InvNum  = SingleFee.InvNum AND
+                               Invoice.InvType = {&INV_TYPE_NORMAL}) THEN NEXT.
+               ldePendingFees = ldePendingFees + SingleFee.Amt.
+         END.
+      END.
+   END.
+END PROCEDURE.
+

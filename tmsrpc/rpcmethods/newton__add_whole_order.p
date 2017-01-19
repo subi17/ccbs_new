@@ -1163,7 +1163,12 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
 
    DEF VAR lcFixedLineAdslLinkState AS CHAR NO-UNDO.
 
+<<<<<<< HEAD
    IF (lcFixedLineCustomerType EQ "NONE" OR lcFixedLineCustomerType EQ "ADSL")  AND lcFixedLineNumberType = "MNP" 
+=======
+   IF (lcFixedLineCustomerType EQ "NONE" OR lcFixedLineCustomerType EQ "ADSL")  
+      AND lcFixedLineNumberType = "MNP" 
+>>>>>>> origin/master
       THEN lcFixedLineAdslLinkState = "O".
    ELSE    lcFixedLineAdslLinkState = "V".
 
@@ -1934,9 +1939,13 @@ END.
 IF llROIClose THEN .
 /* YBP-558 */
 /* MNP Retention Project */
-ELSE IF Order.statuscode NE "4" AND
-   Order.OrderChannel BEGINS "retention" AND
-   fIsMNPOutOngoing(INPUT Order.CLI) THEN DO:
+ELSE IF Order.statuscode NE "4" AND(
+   Order.OrderChannel BEGINS "retention" OR
+   /*YPR-5316*/
+   (fIsConvergenceTariff(Order.Clitype) AND pcNumberType EQ "stc")) 
+   AND
+   fIsMNPOutOngoing(INPUT Order.CLI) 
+   THEN DO:
 
    Order.StatusCode = {&ORDER_STATUS_MNP_RETENTION}.
 

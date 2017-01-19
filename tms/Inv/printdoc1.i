@@ -648,7 +648,12 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
             ldTAE = TFConf.TAE.
       END.
       
-      IF ldTAE NE ? THEN ASSIGN
+      IF ldTAE NE ? AND NOT
+      /*  YOT-4808 For Cetelem no footer text if there is also PAYTERMENDBC */
+        (FixedFee.TFBank = {&TF_BANK_CETELEM} AND
+         AVAIL bPenaltySingleFee AND
+         bPenaltySingleFee.BillCode EQ "PAYTERMENDBC")
+      THEN ASSIGN
          ttSub.TFBankFooterText[liFtrPos] = ttSub.TFBankFooterText[liFtrPos] + 
                                  (IF ttSub.TFBankFooterText[liFtrPos] > ""
                                   THEN CHR(10) ELSE "") +
