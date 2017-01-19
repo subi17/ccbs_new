@@ -34,37 +34,38 @@ FOR EACH Eventlog NO-LOCK WHERE
    
    FIND FIRST MsOwner NO-LOCK WHERE
               MsOwner.Brand = "1" AND
-              MsOwner.CLI = ENTRY(2,EventLog.Key,"ÿ") AND
-              MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,"ÿ")) NO-ERROR.
-   IF AVAIL MsOwner THEN
-   PUT STREAM sout UNFORMATTED
-      MsOwner.CLI "|" 
-      MsOwner.CustNum "|" 
-      MsOwner.BillTarget "|"
-      MsOwner.TsBegin "|" 
-      MsOwner.TsEnd "|"
-      MsOwner.MsSeq "|"
-      MsOwner.IMSI "|"
-      MsOwner.CliEvent "|"
-      MsOwner.Clitype "|"
-      MsOwner.Brand "|"
-      MsOwner.Contract "|"
-      MsOwner.RepCodes "|"
-      MsOwner.InPortOper "|"
-      MsOwner.OutPortOper "|"
-      MsOwner.AgrCust "|"
-      MsOwner.InvCust "|"
-      MsOwner.PayType "|"
-      MsOwner.MandateId "|"
-      MsOwner.MandateDate "|"
-      MsOwner.TariffBundle "|"
-      MsOwner.FixedNumber SKIP.
+              MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
+              MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,CHR(255))) NO-ERROR.
+   IF AVAIL MsOwner THEN DO:
+      PUT STREAM sout UNFORMATTED
+         MsOwner.CLI "|" 
+         MsOwner.CustNum "|" 
+         MsOwner.BillTarget "|"
+         MsOwner.TsBegin "|" 
+         MsOwner.TsEnd "|"
+         MsOwner.MsSeq "|"
+         MsOwner.IMSI "|"
+         MsOwner.CliEvent "|"
+         MsOwner.Clitype "|"
+         MsOwner.Brand "|"
+         MsOwner.Contract "|"
+         MsOwner.RepCodes "|"
+         MsOwner.InPortOper "|"
+         MsOwner.OutPortOper "|"
+         MsOwner.AgrCust "|"
+         MsOwner.InvCust "|"
+         MsOwner.PayType "|"
+         MsOwner.MandateId "|"
+         MsOwner.MandateDate "|"
+         MsOwner.TariffBundle "|"
+         MsOwner.FixedNumber SKIP.
 
-   
-   oiEvents = oiEvents + 1.
-   IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
-      DISP oiEvents WITH FRAME fColl.
-      PAUSE 0.
+      
+      oiEvents = oiEvents + 1.
+      IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
+         DISP oiEvents WITH FRAME fColl.
+         PAUSE 0.
+      END.
    END.
 END. 
 OUTPUT STREAM sout CLOSE.
