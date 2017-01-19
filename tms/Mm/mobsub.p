@@ -1211,7 +1211,6 @@ PROCEDURE local-UPDATE-record.
    DISP
       Mobsub.MSSeq 
       lcCliText 
-      Mobsub.TAriffBundle
       Mobsub.AgrCust
       MobSub.CLI
       MobSub.CLI + " / " + Mobsub.FixedNumber
