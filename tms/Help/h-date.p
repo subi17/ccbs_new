@@ -21,7 +21,6 @@ DEF INPUT PARAMETER icvalue AS CHAR NO-UNDO.
 DEF INPUT PARAMETER iiMSSeq AS INT  NO-UNDO.
 DEF INPUT PARAMETER icNewCLIType AS CHAR NO-UNDO.
 
-def var lcRoamOper  like RoamOper.PLMN          no-undo. 
 def var rtab        as recid extent 11          no-undo.
 def var ufkey       as log init true            no-undo.
 def var i           as int                      no-undo.
@@ -72,6 +71,7 @@ form
     with scroll 1 4 down  row 4 centered color value(cfc)
     title color value(ctc) " Dates " overlay frame sel.
 
+<<<<<<< HEAD
 form /* SEEK Code */
     lcRoamOper
     help "Enter Code of an Invoice Section"
@@ -79,6 +79,9 @@ form /* SEEK Code */
     color value(cfc) no-labels overlay frame hayr.
 
 cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+=======
+cfc = "sel". run ufcolor. assign ccc = cfc.
+>>>>>>> origin/master
 MAIN:
 repeat:
 
@@ -123,7 +126,7 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
+         ufk = 0 ufk[1] = 0 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
@@ -232,6 +235,7 @@ BROWSE:
            end.
         end. /* next page */
 
+<<<<<<< HEAD
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* Paiva */
            cfc = "puyr". RUN Syst/ufcolor.p.
@@ -256,6 +260,8 @@ BROWSE:
            next LOOP.
         end. /* Seek */
 
+=======
+>>>>>>> origin/master
         /* Choose */
         else if lookup(nap,"return,enter,5,f5") > 0 then do:
            find Paiva where recid(Paiva) = rtab[frame-line] no-lock.

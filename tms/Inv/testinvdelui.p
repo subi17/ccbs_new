@@ -32,6 +32,7 @@ DEFINE VARIABLE lcFloor    AS CHARACTER   NO-UNDO FORMAT "x(12)".
 DEFINE VARIABLE lcRoof     AS CHARACTER   NO-UNDO FORMAT "x(12)".
 DEFINE VARIABLE liNewCount AS INTEGER     NO-UNDO.
 DEFINE VARIABLE liRemoved  AS INTEGER     NO-UNDO.
+DEFINE VARIABLE ldtInvDate AS DATE        NO-UNDO.
 
 FORM
    SKIP(2)
@@ -122,6 +123,7 @@ PROCEDURE pDeleteTestInvoices:
    /* delete test invoices */
    RUN Inv/delete_test_invoice.p (lcFloor,
                               lcRoof,
+                              ldtInvdate,
                               0,
                               0,
                               "",

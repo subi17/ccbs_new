@@ -44,6 +44,7 @@ DEFINE VARIABLE liInvCount      AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcToday         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFuncRunQAllow AS CHARACTER NO-UNDO.
 DEFINE VARIABLE i               AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE ldtInvDate      AS DATE      NO-UNDO.
 
 /* field variables */
 DEFINE VARIABLE liCustNum AS INTEGER   NO-UNDO.
@@ -196,6 +197,7 @@ REPEAT:
                   
                   RUN Inv/delete_test_invoice.p (Invoice.ExtInvId,
                                              Invoice.ExtInvId,
+                                             ldtInvDate,
                                              0,
                                              0,
                                              "",
@@ -212,6 +214,7 @@ REPEAT:
               IF AVAILABLE Invoice THEN DO:
                   RUN Inv/delete_test_invoice.p (Invoice.ExtInvId,
                                              Invoice.ExtInvId,
+                                             ldtInvDate,
                                              0,
                                              0,
                                              "",

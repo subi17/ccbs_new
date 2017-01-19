@@ -2,6 +2,7 @@
 
 */
    
+<<<<<<< HEAD
 {Syst/commali.i}
 {Syst/eventval.i}
 {Func/timestamp.i}
@@ -9,6 +10,16 @@
 {Func/orderfunc.i}
 {Func/msisdn.i}
 {Func/ordercancel.i}
+=======
+{commali.i}
+{eventval.i}
+{timestamp.i}
+{forderstamp.i}
+{orderfunc.i}
+{msisdn.i}
+{ordercancel.i}
+{msreqfunc.i}
+>>>>>>> origin/master
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
@@ -16,6 +27,7 @@ DEF INPUT PARAMETER icOrderStatus AS CHAR NO-UNDO.
 
 DEF VAR llOk AS LOG NO-UNDO.
 DEF VAR lcMessage AS CHAR NO-UNDO.
+DEF VAR lcError   AS CHAR NO-UNDO.
 
 FIND Order WHERE 
      Order.Brand   = gcBrand AND 
@@ -80,6 +92,44 @@ FUNCTION fReleaseMSISDN RETURNS LOGICAL :
 END FUNCTION.
 
 IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).
+
+/* ongoing 'renewal pos stc' must be cancelled */
+IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
+
+   FIND FIRST MsRequest WHERE 
+              MsRequest.MsSeq = Order.Msseq AND
+              MsRequest.ReqType = 0 AND
+              LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 
+              NO-LOCK NO-ERROR.
+
+   IF AVAIL MsRequest THEN DO:
+      
+      IF NOT ilSilent THEN DO:
+         MESSAGE 
+            "This will cancel ongoing subcription type change request\n"
+            "Do you still want to continue?"
+         VIEW-AS ALERT-BOX QUESTION
+         BUTTONS YES-NO
+         TITLE " ORDER " + STRING(Order.OrderID) + " "
+         SET llOk.
+         
+         IF NOT llOk THEN RETURN "".
+      END.
+
+      IF fChkReqStatusChange(4) EQ FALSE AND
+         NOT (MsRequest.ReqStatus EQ 3 AND
+              MsRequest.Memo MATCHES "*Pending renewal order*") THEN DO:
+         lcError = "Cannot cancel STC request. Order cancellation is not possible".
+         IF NOT ilSilent THEN 
+            MESSAGE lcError 
+            VIEW-AS ALERT-BOX
+            TITLE " ORDER " + STRING(Order.OrderID) + " ".
+         RETURN lcError.
+      END.
+      ELSE fReqStatus(4,SUBST("Cancelled " + Order.OrderChannel +
+                      " order &1", Order.OrderId)).
+   END.
+END.
 
 fSetOrderStatus(Order.OrderId,icOrderStatus).
 

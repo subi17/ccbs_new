@@ -678,7 +678,8 @@ PROCEDURE pTerminate:
                     MNPRetPlatform.RetentionPlatform = MNPSub.RetentionPlatform
          NO-LOCK NO-ERROR.
 
-         IF AVAIL MNPRetPlatform THEN DO:
+         IF AVAIL MNPRetPlatform AND 
+            NOT fIsConvergenceTariff(Order.CliType) THEN DO:
 
             FIND FIRST Customer NO-LOCK WHERE
                        Customer.Custnum = MobSub.Custnum NO-ERROR.
