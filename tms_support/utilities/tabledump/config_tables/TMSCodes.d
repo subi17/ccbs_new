@@ -34,7 +34,7 @@
 "ActionLog" "ActionStatus" "Log" "2" "Ended succesfully" "" "" 1
 "ActionLog" "ActionStatus" "Log" "3" "Logged" "" "" 1
 "ActionLog" "ActionStatus" "Log" "5" "Cancelled" "" "" 1
-"AppIdPrefix" "ApplicationId" "ExternalAPI" "selfService" "Transaction Ids for particular application" "" "601,602,501,502,503,504,505,506,650,507,701,509,510" 1
+"AppIdPrefix" "ApplicationId" "ExternalAPI" "selfService" "Transaction Ids for particular application" "" "601,602,501,502,503,504,505,506,650,507,701,509,510,801" 1
 "Barring" "BarringGroup" "" "ATC" "" "" "20" 0
 "Barring" "BarringGroup" "" "Collections" "" "" "30" 0
 "Barring" "BarringGroup" "" "Customer" "" "" "10" 0
@@ -122,6 +122,7 @@
 "BRTestCriteria" "SettingDayCampaign" "BRTest" "Active" "Active Contract" "" "" 1
 "BRTestCriteria" "SettingDayCampaign" "BRTest" "Terminated" "Contract terminated" "" "" 1
 "BRTestCriteria" "SettingFixedFee" "BRTest" "TF=FinancedByBank" "TF - Financed by Bank" "" "" 1
+"BRTestCriteria" "SettingFixedFee" "BRTest" "TF=FinancedByCetelemBank" "TF - Financed by Cetelem" "" "" 1
 "BRTestCriteria" "SettingFixedFee" "BRTest" "TF=FinancedBySabaDellBank" "TF - Financed by Sabadell Bank" "" "" 1
 "BRTestCriteria" "SettingFixedFee" "BRTest" "TF=FinancedByUNOEBank" "TF - Financed by UNOE Bank" "" "" 1
 "BRTestCriteria" "SettingFixedFee" "BRTest" "TF=FinancedByYoigo" "TF - Financed by Yoigo" "" "" 1
@@ -443,8 +444,9 @@
 "FixedFee" "HostTable" "Contract" "DataCLI" "Data CLI" "" "" 1
 "FixedFee" "HostTable" "Contract" "MobSub" "Mobile CLI" "" "" 1
 "FixedFee" "TFBank" "Contract" "0000" "Yoigo" "" "" 1
-"FixedFee" "TFBank" "Contract" "0049" "UNO-E" "" "" 1
+"FixedFee" "TFBank" "Contract" "0049" "BBVA" "" "" 1
 "FixedFee" "TFBank" "Contract" "0081" "Banco de Sabadell" "" "" 1
+"FixedFee" "TFBank" "Contract" "0225" "Cetelem" "" "" 1
 "FuncRunParam" "CSB19.14" "FuncRun" "BOTH" "BOTH XML and TXT CSB files created" "" "" 1
 "FuncRunParam" "CSB19.14" "FuncRun" "TXT" "Only TXT CSB file created" "" "" 1
 "FuncRunParam" "CSB19.14" "FuncRun" "XML" "Only XML CSB file created" "" "" 1
@@ -837,6 +839,8 @@
 "MsRequest" "ReqSource" "Request" "29" "Fusion order" "" "" 1
 "MsRequest" "ReqSource" "Request" "3" "Subscription termination" "" "" 1
 "MsRequest" "ReqSource" "Request" "30" "Fusion Email" "" "" 1
+"MsRequest" "ReqSource" "Request" "31" "Contract activation" "" "" 1
+"MsRequest" "ReqSource" "Request" "32" "Main line deactivation" "" "" 1
 "MsRequest" "ReqSource" "Request" "4" "Manual event (CCBS)" "" "" 1
 "MsRequest" "ReqSource" "Request" "5" "Automatic (cron/script)" "" "" 1
 "MsRequest" "ReqSource" "Request" "6" "Manual event (WEB)" "" "" 1
@@ -850,6 +854,7 @@
 "MSrequest" "ReqStatus" "Request" "17" "File created" "" "" 1
 "MSRequest" "ReqStatus" "Request" "19" "Waiting" "" "" 1
 "MsRequest" "ReqStatus" "Request" "2" "Done" "" "" 1
+"MsRequest" "ReqStatus" "Request" "20" "Waiting confirmation" "" "" 1
 "MsRequest" "ReqStatus" "Request" "3" "Rejected (error occurred)" "" "" 1
 "MsRequest" "ReqStatus" "Request" "4" "Cancelled" "" "" 1
 "MSrequest" "ReqStatus" "Request" "5" "Pending HLR" "" "" 1
@@ -1020,7 +1025,9 @@
 "Order" "StatusCode" "Orders" "76" "Pending main line order" "" "" 1
 "Order" "StatusCode" "Orders" "77" "Pending fixed line order" "" "" 1
 "Order" "StatusCode" "Orders" "78" "Waiting sending to LO" "" "" 1
+"Order" "StatusCode" "Orders" "79" "Pending mobile line order" "" "" 1
 "Order" "StatusCode" "Orders" "8" "CLOSED BY YOIGO" "" "" 1
+"Order" "StatusCode" "Orders" "80" "Pending fixed line cancellation" "" "" 1
 "Order" "StatusCode" "Orders" "9" "CLOSED AFTER DEADLINE" "" "" 1
 "Order" "StatusCode" "Orders" "99" "MNP SIM Only" "" "" 1
 "Order" "Tupas" "Orders" "0" "default value" "" "" 1
@@ -1276,13 +1283,14 @@
 "RepText" "TextType" "Report" "7" "Tax zone" "" "" 1
 "RepText" "TextType" "Report" "8" "Invoice section" "" "" 1
 "RepText" "TextType" "Report" "9" "CLI Type" "" "" 1
-"requem" "0,0,1,2,3,4,5,6,7,9,8" "SubsLMenu" "1" "Subscription type change" "" "" 1
+"requem" "0,0,1,2,3,4,5,6,7,9,8,19" "SubsLMenu" "1" "Subscription type change" "" "" 1
 "requem" "0,0,1,2,3,4,5,6,9" "SubsLMenu" "0" "Subscription type change" "" "" 1
 "requem" "1,0,1,2,3,4,5,6,7,8,9" "SubsLMenu" "1" "HLR service change" "" "" 1
 "requem" "10,0,2,1,3,4,7,8,9,19" "SubsLMenu" "1" "Agreement customer change" "" "" 1
 "requem" "12,1,2,3,4,9" "SubsLMenu" "0" "Customer´s marketing value update" "" "" 1
 "requem" "13,0,1,2,3,4,5,6,9" "SubsLMenu" "1" "Subscription creation" "" "" 1
-"requem" "15,0,1,2,3,4,5,6,9,15,19" "SubsLMenu" "1" "ICC change" "" "" 1
+"requem" "14,0,1,2,3,4,9" "SubsLMenu" "1" "Fixed line creation" "" "" 1
+"requem" "15,0,1,2,3,4,5,6,9,15,19,20" "SubsLMenu" "1" "ICC change" "" "" 1
 "requem" "18,0,1,2,3,4,5,6,8,9,19" "SubsLMenu" "1" "Subscription termination" "" "" 1
 "requem" "19,0,1,2,3,4,5,6,9" "SubsLMenu" "1" "MSISDN change" "" "" 1
 "requem" "20,0,1,2,3,4,9" "SubsLMenu" "1" "On-demand invoice" "" "" 1

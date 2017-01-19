@@ -12,8 +12,9 @@
 {timestamp.i}
 {fsendsms.i}
 {fcpfat.i}
-{fbundle.i}
+{Mm/active_bundle.i}
 {service.i}
+
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 

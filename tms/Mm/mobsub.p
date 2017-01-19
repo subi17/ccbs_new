@@ -88,6 +88,7 @@ DEF VAR def-sp-code   AS CHAR                   NO-UNDO.
 DEF VAR liSaldotype   AS INT                    NO-UNDO.
 DEF VAR killed        AS LOG                    NO-UNDO.
 DEF VAR lcICC         LIKE SIM.ICc              NO-UNDO.
+DEF VAR lcFixedNumber LIKE MobSub.FixedNumber   NO-UNDO INIT "".
 DEF VAR lcDCEvent     AS CHAR                   NO-UNDO. 
 DEF VAR lcSurName1    AS CHAR                   NO-UNDO.
 DEF VAR lcSurName2    AS CHAR                   NO-UNDO.
@@ -231,6 +232,12 @@ form
    WITH row 4 col 2 TITLE COLOR VALUE(ctc) 
    "FIND ICC"  COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f7.
 
+form
+   lcFixedNumber
+   HELP "Enter Fixed Number" 
+   WITH row 4 col 2 TITLE COLOR VALUE(ctc) 
+   "FIND FIXED NUMBER" COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME frSearchFixed.
+
 cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
@@ -308,7 +315,7 @@ BROWSE:
         ehto = 3 ufkey = FALSE.
         
         ELSE ASSIGN
-        ufk[1]= 559  ufk[2]= 1740 ufk[3]= 0  ufk[4]= 0
+        ufk[1]= 559  ufk[2]= 1740 ufk[3]= 9852 ufk[4]= 0
         ufk[5]= 0 ufk[6]= 0
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
@@ -708,6 +715,37 @@ BROWSE:
            END.
         END.
      END. 
+     ELSE IF LOOKUP(nap,"3,f3") > 0 AND llMore AND 
+       iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       cfc = "puyr". run ufcolor.
+       ehto = 9. RUN ufkey. ufkey = TRUE.
+       CLEAR FRAME frSearchFixed.
+       SET lcFixedNumber WITH FRAME frSearchFixed.
+       HIDE FRAME frSearchFixed NO-PAUSE.
+
+       IF lcFixedNumber  > ""  THEN DO:
+          FOR FIRST SearchMobsub WHERE
+                    SearchMobsub.Brand = gcBrand AND
+                    SearchMobsub.FixedNumber = lcFixedNumber NO-LOCK.
+          END.
+
+          IF NOT AVAILABLE SearchMobsub THEN DO:
+             BELL.
+             MESSAGE "NOT FOUND !".
+             PAUSE 1 NO-MESSAGE.
+             NEXT BROWSE.
+          END.
+
+          IF Avail SearchMobsub THEN 
+          FIND FIRST Mobsub WHERE 
+               RECID(Mobsub) = RECID(SearchMobsub)
+          NO-LOCK NO-ERROR.
+
+          /* some Mobsub/mobsub was found */
+          ASSIGN order = 1 Memory = recid(mobsub) must-print = TRUE.
+          NEXT LOOP.
+       END.
+     END. 
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
 
        RUN local-find-this(FALSE).
@@ -1027,6 +1065,15 @@ PROCEDURE local-find-others.
                  BillTArget.custnum    = Mobsub.CustNum
       NO-LOCK NO-ERROR.
       
+      IF Mobsub.tariffbundle EQ "" THEN
+         lcClitext = mobsub.clitype.
+      ELSE DO:
+         lcCliText = SUBSTRING(mobsub.clitype,1,8).
+         IF LENGTH(lcCliText) < 8 THEN
+            lcCliText = lcCliText + FILL(" ", 8 - LENGTH(lcCliText)).
+         lcCliText = lcCliText + SUBSTRING(mobsub.tariffbundle,1,8).
+      END.
+
       IF AVAIL BillTarget THEN
          lcBillTarget = STRING(Mobsub.Billtarget) + " " + BillTarget.RatePlan.
       ELSE 
@@ -1163,10 +1210,11 @@ PROCEDURE local-UPDATE-record.
    PAUSE 0.
    DISP
       Mobsub.MSSeq 
-      Mobsub.CliType 
-      Mobsub.TAriffBundle
+      lcCliText 
       Mobsub.AgrCust
-      Mobsub.CLI
+      MobSub.CLI
+      MobSub.CLI + " / " + Mobsub.FixedNumber
+         WHEN Mobsub.FixedNumber NE ? @ Mobsub.CLI
       lcBillTarget
       Mobsub.Custnum
       Mobsub.InvCust

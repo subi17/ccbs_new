@@ -11,7 +11,6 @@
 {service.i}
 {tmsconst.i}
 {cparam2.i}
-{fbundle.i}
 {fbtc.i}
 
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.

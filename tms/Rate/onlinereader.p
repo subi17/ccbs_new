@@ -113,6 +113,8 @@ DEF VAR liStream  AS INT  NO-UNDO.
 DEF VAR lcReturn  AS CHAR NO-UNDO.
 DEF VAR lhttCall  AS HANDLE NO-UNDO.
 
+DEF VAR liTempDialType AS INT NO-UNDO.
+
 {tmsparam.i RepConfDir        return}. xConfDir        = tmsparam.CharVal.
 {tmsparam.i ErrCDouble        return}. errorcode       = tmsparam.IntVal.
 {tmsparam.i UnknownCustomer   RETURN}. liunkcust       = tmsparam.IntVal.
@@ -178,6 +180,14 @@ WHEN 2223 THEN ASSIGN
 WHEN 2224 THEN ASSIGN
    liStream = 10
    lcReader = "MO2:Prepaid5".
+
+WHEN 2225 THEN ASSIGN
+   liStream = 16
+   lcReader = "MO6:Fixed".
+
+WHEN 2226 THEN ASSIGN
+   liStream = 17
+   lcReader = "MO6:Fixed2".
 
 WHEN 2250 THEN ASSIGN
    liStream = 30
@@ -516,6 +526,7 @@ DO TRANS:
    WHEN "0101YC" OR
    WHEN "0102GE" THEN lcEvent = TRIM(ENTRY(9,callrec,lcSep)).
    WHEN "0102YC" OR 
+   WHEN "0101YF" OR
    WHEN "0103MM" OR
    WHEN "0104GE" OR 
    WHEN "0104MM" OR
@@ -544,6 +555,7 @@ DO TRANS:
       CASE lcSetVersion:
       WHEN "0101MM" THEN DO:  {set0101mm.i}   END.
       WHEN "0101YC" THEN DO:  {set0101yc.i}   END.
+      WHEN "0101YF" THEN DO:  {set0101yf.i}   END.
       WHEN "0102GE" THEN DO:  {set0102gen.i}  END.
       WHEN "0102YC" THEN DO:  {set0102yc.i}   END.
       WHEN "0103MM" THEN DO:  {set0103mm.i}   END.
@@ -586,7 +598,7 @@ DO TRANS:
               ttCall.spocmt = 95 THEN DO:
       END.        
 
-      IF LOOKUP(string(ttCall.spocmt,"999"),"000") > 0 THEN DO:
+      IF LOOKUP(string(ttCall.spocmt,"9999"),"0000") > 0 THEN DO:
          ASSIGN
             ttCall.errorcode = {&CDR_ERROR_NON_BILLABLE_CALL_FORWARDING} 
             ttCall.Invseq    = 0 .
@@ -654,9 +666,14 @@ DO TRANS:
             (LOOKUP(STRING(ttCall.SpoCMT),"3,7") > 0 AND 
              ttCall.MSCID = "PRE" AND ttCall.PPFlag = 1))
          THEN DO:
-            fTicketCheck(INPUT "MSOWNER", 
-                         STRING(ttCall.CLI),
-                         OUTPUT oiERrorCode).
+            IF ttCall.MSCID NE "FIXED" THEN
+               fTicketCheck(INPUT "MSOWNER", 
+                            STRING(ttCall.CLI),
+                            OUTPUT oiERrorCode).               
+            ELSE
+             fTicketCheck(INPUT "MSOWNER_FIXED",
+                            STRING(ttCall.CLI),
+                            OUTPUT oiERrorCode). 
          END.
          ELSE DO: 
             IF  LOOKUP(STRING(ttCall.Spocmt),"3,4,32") > 0 THEN 
@@ -842,9 +859,12 @@ DO TRANS:
          lidialtype = ttCall.Dialtype
          liCCN      = ttCall.RateCCN.
 
-      IF ttCall.Spocmt = 66 THEN DO:
+      IF ttCall.Spocmt = 66 OR
+         ttCall.Spocmt = 1066 THEN DO:
         
            liccn = 0.
+           IF ttCall.Spocmt = 66 THEN liTempDialType = 4.
+           ELSE liTempDialType = 1.
            FOR FIRST BDest NO-LOCK WHERE
                      BDest.Brand  = gcBrand AND
                      BDest.Bdest  = ttCall.BDest AND
@@ -854,7 +874,7 @@ DO TRANS:
                      BDest.FromDate <= ttCall.Datest,
                FIRST RateCCN NO-LOCK WHERE
                      RateCCN.BDestID  = Bdest.BDestID AND
-                     RateCCN.DialType = 4 /* ttCall.DialType */ :
+                     RateCCN.DialType = liTempDialType /* ttCall.DialType */ :
 
                ASSIGN
                liCCN      = RateCCN.CCN
@@ -870,21 +890,29 @@ DO TRANS:
       IF liCCN = 0 OR liCCN = 999 OR ttCall.BType = 2 THEN 
           liCCN = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
 
-      IF liCCN = 69 AND ttCall.BillDur > 11 THEN DO:
+      IF (liCCN = 69  OR liCCN = 1069) AND ttCall.BillDur > 11 THEN DO:
          IF CAN-FIND(FIRST ttDuration WHERE 
-                           ttDuration.CallCase = "61" AND
+                           ttDuration.CallCase = STRING(liCCN - 8) AND
+                                                 /* "61" or "1061" */
                            ttDuration.BDest    = ttCall.BDest AND
                            ttDuration.FromDate <= ttCall.DateSt) THEN 
-            liCCN = 61.
+            IF liCCN EQ 69 THEN liCCN = 61.
+            ELSE liCCN = 1061.
       END.
 
       /* YDR-1853 */
       IF ttCall.Spocmt = 63 AND ttCall.BillDur <= 20 THEN 
          ASSIGN lidialtype = 20
                 liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
-      ELSE IF ttCall.Spocmt = 63 AND ttCall.BillDur > 20 THEN 
+      ELSE IF ttCall.Spocmt = 63  AND ttCall.BillDur > 20 THEN 
          ASSIGN lidialtype = 21
-                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype). 
+                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
+      ELSE IF ttCall.Spocmt = 1063 AND ttCall.BillDur <= 20 THEN
+         ASSIGN lidialtype = 23
+                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
+      ELSE IF ttCall.Spocmt = 1063  AND ttCall.BillDur > 20 THEN
+         ASSIGN lidialtype = 24
+                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).          
 
       ASSIGN
          c_time      = ttCall.timestart

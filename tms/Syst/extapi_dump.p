@@ -42,9 +42,12 @@ FOR EACH authlog NO-LOCK where
          authlog.timestamp >= ldtFrom AND
          authlog.timestamp < ldtTo:
 
-   if not (authlog.username eq "selfservice"  or
-           authlog.username eq "dextra" ) then next.
-   if authlog.enduserid = "Monitoring" then next.
+   IF NOT (authlog.username EQ "selfservice"  OR
+           authlog.username EQ "dextra" OR
+           authlog.username EQ "masmovil") THEN NEXT.
+   IF authlog.enduserid = "Monitoring" THEN NEXT.
+
+   IF authlog.methodname BEGINS "system" THEN NEXT.
 
    PUT STREAM SOUT UNFORMATTED 
       authlog.username "|"

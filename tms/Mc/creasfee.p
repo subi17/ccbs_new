@@ -139,8 +139,7 @@ ocInfo = "ERROR:No service fee definition available".
 IF icServType = "FeeModel" AND iiEventType = 9 THEN DO:
 
    RUN pCreateFees(icServKey,
-                   idPrice,
-                   FALSE).
+                   idPrice).
 END.
 
 ELSE 
@@ -164,8 +163,8 @@ FOR FIRST ServFee NO-LOCK WHERE
    END.
       
 
-   RUN pCreateFees(ServFee.FeeModel,idPrice,
-                   FALSE /* ServFee.InterAct*/).
+   RUN pCreateFees(ServFee.FeeModel,
+                   idPrice).
 END.
             
                       
@@ -173,8 +172,6 @@ PROCEDURE pCreateFees:
 
    DEF INPUT PARAMETER icFeeModel AS CHAR NO-UNDO.
    DEF INPUT PARAMETER idPrice    AS DEC  NO-UNDO.
-   DEF INPUT PARAMETER ilInterAct AS LOG  NO-UNDO. 
-
     
    DEF VAR lcContract    AS CHAR NO-UNDO. 
    DEF VAR liCreated     AS INT  NO-UNDO. 
@@ -208,10 +205,8 @@ PROCEDURE pCreateFees:
                                 IF llPostpone
                                 THEN ldtDatePostpone
                                 ELSE idtDate,
-                                ilInterAct,
                                 idPrice,                /* price from feemodel */
                                 lcContract,       /* contract */
-                                TRUE,
                                 icUserCode,
                                 icFeeMemo,            /* active */
                                 iiOrderId,

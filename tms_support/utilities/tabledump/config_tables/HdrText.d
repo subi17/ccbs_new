@@ -418,7 +418,7 @@ If you were introduced to Yoigo by a friend and wrote in that friends phone numb
 508 5 "Bank Account:" "1"
 509 1 "#YY meses en Contrato Yoigo por el descuento de #XXX euros ya incluido en el precio." "1"
 509 5 "#YY months in Yoigo postpaid by the discount of #XXX euros already included in the price." "1"
-510 1 "#YY meses en esta tarifa por el descuento de #XXX euros ya incluido en el precio." "1"
+510 1 "#YY meses en Yoigo y en tarifa por el descuento de #XXX euros ya incluido en el precio." "1"
 510 5 "#YY months in this tariff by the discount of #XXX euros already included in the price." "1"
 511 1 "Bono 15 Internet para llevar 15 euros/mes (Impuestos no incluidos)" "1"
 511 5 "Bono Internet 15 for mobile 15 euros/month (Taxes not included)" "1"
@@ -491,17 +491,21 @@ When you call or send a message to a Premium number covered by the gaming regula
 530 5 "Promo Bono 12 free 1 month" "1"
 531 1 "Promo Internet Multilínea gratis" "1"
 531 5 "Promo Internet Multilinea free" "1"
-532 1 "Con permanencia de 18 meses en esta tarifa por sus condiciones. Si no la cumples, la penalización máxima son 100 euros, según el tiempo que te quede." "1"
-532 5 "With 18 months permanency in the tariff by its conditions. If you do not accomplish, the maximum penalty is 100 euros, according the time that rest." "1"
+532 1 "12 meses por el descuento de 100 euros en el coste de instalación, regulado en la condición particular de permanencia del las CCGGs de fijo." "1"
+532 5 "With 12 months permanency in the tariff by its conditions. If you do not accomplish, the maximum penalty is 100 euros, according the time that rest." "1"
 533 1 "Bono 9 Internet para llevar 9 euros/mes (Impuestos no incluidos)" "1"
 533 5 "Bono Internet 9 for mobile 9 euros/month (Taxes not included)" "1"
 534 1 "Promoción iPhone: Yoigo te regala la última mensualidad, salvo impago de alguna cuota anterior, baja o renuevo antes del mes 24" "1"
 535 1 "Promo Bono 8 primer mes a mitad de precio" "1"
 535 5 "Promo Bono 8 first month half price" "1"
-536 1 "Pago del móvil: Yoigo gestiona el cobro del Crédito otorgado por UNOE BANK, S.A., con CIF nº A-08024796 y domicilio social en C/ Julián Camarillo 4, 28037 - Madrid. Operación exenta del IVA. TIN: 0% y TAE: #TAE%." "1"
-536 2 "Pagament del mòbil: Yoigo gestiona el cobrament del crèdit atorgat per UNOE BANK, S.A., amb CIF núm. A-08024796 i domicili social al c/ Julián Camarillo 4, 28037 - Madrid. Operació exempta de l'IVA. TIN: 0% i TAE: #TAE%." "1"
-536 3 "Mugikorraren ordainketa: Yoigo-k kudeatzen du ondoren aipatzen den erakundeak emandako Kreditua: UNOE BANK, S.A., IFZ A-08024796 eta egoitza soziala C/ Julián Camarillo 4, 28037 - Madrid. Eragiketa BEZatik salbuetsita dago. ITN: % 0 eta UTB: % #TAE." "1"
-536 5 "Mobile payment: Yoigo manages the payment of the credit granted by UNOE BANK, S.A., with tax ID no. A-08024796 and registered office at C/ Julián Camarillo 4, 28037 - Madrid. VAT exempt transaction. NIR: 0% and APR: #TAE%." "1"
+536 1 "Pago del móvil: Yoigo gestiona el cobro del Crédito otorgado por BANCO BILBAO VIZCAYA ARGENTARIA, S.A., con CIF nº A-08024796 y domicilio social en Plaza San Nicolás 4, 48005 Bilbao. Operación exenta del IVA. TIN: 0% y TAE: #TAE%.
+El día 10/12/2016 UNOE se fusionó con BBVA, que se subroga en los derechos y obligaciones de UNOE. BBVA será el responsable del tratamiento de sus datos personales. Puede ejercer sus derechos de acceso, rectificación, cancelación y oposición en e-mail: servicioatencioncliente@grupobbva.com" "1"
+536 2 "Pagament del mòbil: Yoigo gestiona el cobrament del crèdit atorgat per BANCO BILBAO VIZCAYA ARGENTARIA, S.A., amb CIF núm. A-08024796 i domicili social al Plaza San Nicolás 4, 48005 Bilbao. Operació exempta de l'IVA. TIN: 0% i TAE: #TAE%.
+El dia 10/12/2016 UNOE es va fusionar amb BBVA, que se subroga en els drets i les obligacions d.UNOE. BBVA serà el responsable del tractament de les seves dades personals. Pot exercir els seus drets d.accés, rectificació, cancel·lació i oposició per correu electrònic: servicioatencioncliente@grupobbva.com" "1"
+536 3 "Mugikorraren ordainketa: Yoigo-k kudeatzen du ondoren aipatzen den erakundeak emandako Kreditua: BANCO BILBAO VIZCAYA ARGENTARIA, S.A., IFZ A-08024796 eta egoitza soziala Plaza San Nicolás 4, 48005 Bilbao. Eragiketa BEZatik salbuetsita dago. ITN: % 0 eta UTB: % #TAE.
+2016/12/10ean, UNOEk BBVArekin bat egingo duenez, UNOEren eskubide eta betebeharretan subrogatuko da. BBVAk zure datu pertsonalak tratatuko ditu. Datuok eskuratzeko, zuzentzeko, ezeztatzeko eta aurka egiteko eskubideak erabili nahi izanez gero, helbide honetara bidali mezua: servicioatencioncliente@grupobbva.com" "1"
+536 5 "Mobile payment: Yoigo manages the payment of the credit granted by BANCO BILBAO VIZCAYA ARGENTARIA, S.A., with tax ID no. A-08024796 and registered office at Plaza San Nicolás 4, 48005 Bilbao. VAT exempt transaction. NIR: 0% and APR: #TAE%.
+On 10/12/2016, UNOE merged with BBVA, which has been assigned the rights and obligations of UNOE. BBVA will be responsible for processing your personal data. You can exercise your right to access, rectify, cancel or oppose the data held via email to: servicioatencioncliente@grupobbva.com" "1"
 537 1 "Promo Infinita 30: 25 euros/mes para siempre" "1"
 537 5 "Promo Infinita 30: 25 euros/month for ever" "1"
 538 1 "Bono #MF Internet para llevar #MF euros/mes (Impuestos no incluidos)" "1"
@@ -568,15 +572,22 @@ Pago final: A pagar el mes #XX" "1"
 556 5 "Financed Payment
 Monthly fee: #AMOUNT E/month x #MONTHS months
 Final payment: To be paid the month #XX" "1"
-557 1 "Pago del móvil: UNOE nos ha cedido los derechos de crédito derivados de la financiación del terminal que compraste al darte de alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la cláusula 13 del contrato de crédito." "1"
-557 2 "Pagament del mòbil: UNOE ens ha cedit els drets de crèdit derivats del finançament del terminal que vas comprar en donar-te d'alta o fer un Renuevo, la qual cosa et comuniquem en compliment de la clàusula 13 del contracte de crèdit." "1"
-557 3 "Mugikorraren ordainketa: alta ematean edo Renuevo plana onartzean erosi zenuen terminalaren finantzaketaren ondorio diren kreditu-eskubideak eman dizkigu UNOE erakundeak. Kreditu-kontratuaren 13. klausulari jarraiki jakinarazten dizugu aipatutakoa." "1"
-557 5 "Handset payment: In accordance with the provisions of Clause 13 of your credit contract, UNOE has passed us the credit claim related to the financing of the handset you purchased when you signed up to Yoigo or renewed your contract with Renuevo." "1"
+557 1 "Pago del móvil: BBVA nos ha cedido los derechos de crédito derivados de la financiación del terminal que compraste al darte de alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la cláusula 13 del contrato de crédito.
+El día 10/12/2016 UNOE se fusionó con BBVA, que se subroga en los derechos y obligaciones de UNOE. BBVA será el responsable del tratamiento de sus datos personales. Puede ejercer sus derechos de acceso, rectificación, cancelación y oposición en e-mail: servicioatencioncliente@grupobbva.com" "1"
+557 2 "Pagament del mòbil: BBVA ens ha cedit els drets de crèdit derivats del finançament del terminal que vas comprar en donar-te d'alta o fer un Renuevo, la qual cosa et comuniquem en compliment de la clàusula 13 del contracte de crèdit.
+El dia 10/12/2016 UNOE es va fusionar amb BBVA, que se subroga en els drets i les obligacions d.UNOE. BBVA serà el responsable del tractament de les seves dades personals. Pot exercir els seus drets d.accés, rectificació, cancel·lació i oposició per correu electrònic: servicioatencioncliente@grupobbva.com" "1"
+557 3 "Mugikorraren ordainketa: alta ematean edo Renuevo plana onartzean erosi zenuen terminalaren finantzaketaren ondorio diren kreditu-eskubideak eman dizkigu BBVA erakundeak. Kreditu-kontratuaren 13. klausulari jarraiki jakinarazten dizugu aipatutakoa.
+2016/12/10ean, UNOEk BBVArekin bat egingo duenez, UNOEren eskubide eta betebeharretan subrogatuko da. BBVAk zure datu pertsonalak tratatuko ditu. Datuok eskuratzeko, zuzentzeko, ezeztatzeko eta aurka egiteko eskubideak erabili nahi izanez gero, helbide honetara bidali mezua: servicioatencioncliente@grupobbva.com" "1"
+557 5 "Handset payment: In accordance with the provisions of Clause 13 of your credit contract, BBVA has passed us the credit claim related to the financing of the handset you purchased when you signed up to Yoigo or renewed your contract with Renuevo.
+On 10/12/2016, UNOE merged with BBVA, which has been assigned the rights and obligations of UNOE. BBVA will be responsible for processing your personal data. You can exercise your right to access, rectify, cancel or oppose the data held via email to: servicioatencioncliente@grupobbva.com" "1"
 558 1 "Pago del móvil: Yoigo gestiona el cobro del Crédito otorgado por BanSabadell Fincom E.F.C., S.A.U., con CIF nº A-63574719 y domicilio social en C/ Sena nº 12 , Edif. CBS Pol. Can Sant Joan, 08174 - Sant Cugat del Vallés (Barcelona). Operación exenta del IVA. TIN: 0% y TAE: #TAE%." "1"
 558 2 "Pagament del mòbil: Yoigo gestiona el cobrament del crèdit atorgat per BanSabadell Fincom E.F.C., S.A.U., amb CIF núm. A-63574719 i domicili social al c/ Sena núm. 12, edif. CBS, pol. Can Sant Joan, 08174 - Sant Cugat del Vallès (Barcelona). Operació exempta de l'IVA. TIN: 0% i TAE: #TAE%." "1"
 558 3 "Mugikorraren ordainketa: Yoigo-k kudeatzen du ondoren aipatzen den erakundeak emandako Kreditua: BanSabadell Fincom E.F.C., S.A.U., IFZ A-63574719 eta egoitza soziala C/ Sena nº 12, edif. CBS, pol. Can Sant Joan, 08174 - Sant Cugat del Vallès (Barcelona). Eragiketa BEZatik salbuetsita dago. ITN: % 0 eta UTB: % #TAE." "1"
 558 5 "Mobile payment: Yoigo manages the payment of the credit granted by BanSabadell Fincom E.F.C., S.A.U., tax ID no. A-63574719 and registered office at C/ Sena nº 12, edif. CBS, pol. Can Sant Joan, 08174 - Sant Cugat del Vallès (Barcelona). VAT exempt transaction. NIR: 0% and APR: #TAE%." "1"
-559 1 "Pago del móvil: BANSABADELL nos ha cedido los derechos de crédito derivados de la financiación del terminal que compraste al darte de alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la cláusula 16 del contrato de préstamo." "1"
+559 1 "Pago del móvil: BANSABADELL nos ha cedido los derechos de crédito
+derivados de la financiación del terminal que compraste al darte de
+alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la
+cláusula 16 del contrato de préstamo." "1"
 559 2 "Pagament del mòbil: BANSABADELL ens ha cedit els drets de crèdit derivats del finançament del terminal que vas comprar en donar-te d'alta o fer un Renuevo, la qual cosa et comuniquem en compliment de la clàusula 16 del contracte de préstec." "1"
 559 3 "Mugikorraren ordainketa: alta ematean edo Renuevo plana onartzean erosi zenuen terminalaren finantzaketaren ondorio diren kreditu-eskubideak eman dizkigu BANSABADELL erakundeak. Mailegu-kontratuaren 16. klausulari jarraiki jakinarazten dizugu aipatutakoa." "1"
 559 5 "Handset payment: In accordance with the provisions of Clause 16 of your loan contract, BANSABADELL has passed us the credit claim related to the financing of the handset you purchased when you signed up to Yoigo or renewed your contract with Renuevo." "1"
@@ -594,26 +605,26 @@ Final payment: To be paid the month #XX" "1"
 565 5 "Type of monthly invoice: paper" "1"
 566 1 "Pago a plazos:
 
-Pago aplazado: #LOAN_FEE euros. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER% (#CF_FEE euros) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE euros. Operación de Financiación con UNOE BANK S.A.
+Pago aplazado: #LOAN_FEE euros. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER% (#CF_FEE euros) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE euros. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.
 
 Teniendo en cuenta las condiciones que se te han ofrecido y tus compromisos asumidos, la baja en el servicio contratado o la realización de un Renuevo, podrá traer consigo el vencimiento anticipado de los pagos que deberán ser abonados de una sola vez.
 
-En los 15 días siguientes al pago de la cuota 24 podrás acogerte a la opción ofrecida por YOIGO de sustituir el Pago Final por la entrega del móvil, siempre que se encienda y la pantalla no esté dañada, en cuyo caso YOIGO abonará por tu cuenta a Unoe Bank el importe del Pago Final." "1"
+En los 15 días siguientes al pago de la cuota 24 podrás acogerte a la opción ofrecida por YOIGO de sustituir el Pago Final por la entrega del móvil, siempre que se encienda y la pantalla no esté dañada, en cuyo caso YOIGO abonará por tu cuenta a Banco Cetelem el importe del Pago Final." "1"
 566 5 "Financed Payment:
 
-Deferred payment: #LOAN_FEE euros. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE euros) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE euros. Financing Transaction with UNOE BANK SA.
+Deferred payment: #LOAN_FEE euros. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE euros) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE euros. Financing Transaction with Banco Cetelem, S.A.U.
 
 Given the conditions you have provided and your commitments, low in the contracted service or performance of a Renuevo, you can bring the acceleration of payments which must be paid at once. 
 
-In the 15 days following payment of the fee 24 you have the option offered by YOIGO of replacing the Final Payment for the delivery of the mobile, if it turn on and the screen is not damaged, in which case YOIGO will pai for your account Unoe Bank the amount of the Final Payment." "1"
+In the 15 days following payment of the fee 24 you have the option offered by YOIGO of replacing the Final Payment for the delivery of the mobile, if it turn on and the screen is not damaged, in which case YOIGO will pai for your account Banco Cetelem the amount of the Final Payment." "1"
 567 1 "Pago a plazos:
 
-Pago aplazado: #LOAN_FEE euros. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER% (#CF_FEE euros) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE euros. Operación de Financiación con UNOE BANK S.A.
+Pago aplazado: #LOAN_FEE euros. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER% (#CF_FEE euros) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE euros. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.
 
 Teniendo en cuenta las condiciones que se te han ofrecido y tus compromisos asumidos, la baja en el servicio contratado o la realización de un Renuevo, podrá traer consigo el vencimiento anticipado de los pagos que deberán ser abonados de una sola vez." "1"
 567 5 "Financed Payment:
 
-Deferred payment: #LOAN_FEE euros. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE euros) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE euros. Financing Transaction with UNOE BANK SA.
+Deferred payment: #LOAN_FEE euros. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE euros) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE euros. Financing Transaction with Banco Cetelem, S.A.U.
 
 Given the conditions you have provided and your commitments, low in the contracted service or performance of a Renuevo, you can bring the acceleration of payments which must be paid at once." "1"
 568 1 "Doble de MB hasta el 31/01/15" "1"
@@ -652,7 +663,7 @@ You cannot pay the installments in advance. " "1"
 571 1 "<strong>Pago a plazos:</strong><br/><br/>                                              
 Pago aplazado: #LOAN_FEE &euro;. Tipo de Interés Nominal Anual (TIN):
 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER%  
-(#CF_FEE &euro;) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE &euro;. Operación de Financiación con UNOE BANK S.A.<br/>                                                            
+(#CF_FEE &euro;) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE &euro;. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.<br/>                                                            
 Teniendo en cuenta las condiciones que se te han ofrecido y tus      
 compromisos asumidos, la baja en el servicio contratado o la         
 realización de un Renuevo, podrá traer consigo el vencimiento        
@@ -661,24 +672,23 @@ anticipado de los pagos que deberán ser abonados de una sola vez.<br/>
 En los 15 días siguientes al pago de la cuota 24 podrás acogerte a la
 opción ofrecida por YOIGO de sustituir el Pago Final por la entrega  
 del móvil, siempre que se encienda y la pantalla no esté dañada, en  
-cuyo caso YOIGO abonará por tu cuenta a Unoe Bank el importe del Pago
-Final." "1"
+cuyo caso YOIGO abonará por tu cuenta a Banco Cetelem el importe del Pago Final." "1"
 571 5 "<strong>Financed Payment:</strong><br/><br/>
 
-Deferred payment: #LOAN_FEE &euro;. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE &euro;) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE &euro;. Financing Transaction with UNOE BANK SA.<br/>            
+Deferred payment: #LOAN_FEE &euro;. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE &euro;) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE &euro;. Financing Transaction with Banco Cetelem, S.A.U.<br/>
+            
 Given the conditions you have provided and your commitments, low in  
 the contracted service or performance of a Renuevo, you can bring the
 acceleration of payments which must be paid at once.<br/>       
 
 In the 15 days following payment of the fee 24 you have the option    offered by YOIGO of replacing the Final Payment for the delivery of  
 the mobile, if it turn on and the screen is not damaged, in which case
-YOIGO will pai for your account Unoe Bank the amount of the Final     Payment." "1"
+YOIGO will pai for your account Banco Cetelem the amount of the Final Payment." "1"
 572 1 "<strong>Pago a plazos:</strong><br/><br/>                          
 
 Pago aplazado: #LOAN_FEE &euro;. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER%  
 (#CF_FEE &euro;) se incluirá en la factura con el primer pago mensual.
-Total adeudado: #TOTAL_FEE &euro;. Operación de Financiación con UNOE
-BANK S.A.<br/>                                                       
+Total adeudado: #TOTAL_FEE &euro;. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.<br/>                                                        
 
 Teniendo en cuenta las condiciones que se tehan ofrecido y tus       
 compromisos asumidos, la baja en el servicio contratado o la         
@@ -686,7 +696,8 @@ realización de un Renuevo, podrá traer consigo el vencimiento
 anticipado de los pagos que deberán ser abonados de una sola vez." "1"
 572 5 "<strong>Financed Payment:</strong><br/><br/>
 
-Deferred payment: #LOAN_FEE &euro;. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE &euro;) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE &euro;. Financing Transaction with UNOE BANK SA.<br/>    
+Deferred payment: #LOAN_FEE &euro;. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE &euro;) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE &euro;. Financing Transaction with Banco Cetelem, S.A.U.<br/>
+    
 Given the conditions you have provided and your commitments, low in   
 the contracted service or performance of a Renuevo, you can bring the
 acceleration of payments which must be paid at once." "1"
@@ -696,8 +707,16 @@ acceleration of payments which must be paid at once." "1"
 573 5 "When you call a Premium number, we charge you the total for two items: the cost of a call according to your Yoigo rate, as if you were calling a Spanish landline or mobile, plus that of the company you call for the service it provides. The breakdown (Destination/Service Provider) for this call shows the name of the operator to which the number you called belongs.When you send or receive a Premium message, Yoigo charges you 10 cents (indirect taxes not included), and the rest is what the company to which you send it or which receives the message charges you, which is why there may be more than one line on your bill. The breakdown (Destination/Service Provider) shows the company's name and tax number. The name shown may not match, as this may be the company name rather than its trade or band name." "1"
 574 1 "Cuando pagas tu compra de Contenidos de Google Play a través de Yoigo no se aplican impuestos al ser compras que has realizado directamente a Google. Tienes más información sobre las compras realizadas en wallet.google.com y play.google.com/store/account utilizando tu cuenta de Google." "1"
 574 2 "Quan pagues la teva compra de continguts de Google Play a través de Yoigo no s.hi apliquen impostos ja que són compres que has fet directament a Google. Tens més informació sobre les compres fetes a wallet.google.com i play.google.com/store/account fent servir el teu compte de Google." "1"
-574 3 "Google  Play edukiak erostean Yoigo-ren bidez ordaintzen duzunean, ez da zergarik aplikatuko, Google-ri zuzenean egin dizkiozun erosketak baitira. Google kontua erabilita egindako erosketei buruzko informazio gehiago duzu eskuragarri wallet.google.com eta play.google.com/store/account helbideetan." "1"
-574 5 "When you pay for your purchase of Google Play Content through Yoigo no taxes are applied as they are purchases made directly from Google.                      You can find further information about purchases you have made at wallet.google.com and play.google.com/store/account, using your Google account." "1"
+574 3 "Google Play edukiak erostean Yoigo-ren bidez ordaintzen duzunean, ez da zergarik aplikatuko, Google-ri zuzenean egin dizkiozun erosketak baitira. Google kontua erabilita egindako erosketei buruzko informazio gehiago duzu eskuragarri wallet.google.com eta play.google.com/store/account helbideetan." "1"
+574 5 "When you pay for your purchase of Google Play Content through Yoigo no taxes are applied as they are purchases made directly from Google. You can find further information about purchases you have made at wallet.google.com and play.google.com/store/account, using your Google account." "1"
+575 1 "Pago del móvil: CETELEM nos ha cedido los derechos de crédito derivados de la financiación del terminal que compraste al darte de alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la cláusula 10 del contrato de crédito." "1"
+575 2 "Pagament del mòbil: CETELEM ens ha cedit els drets de crèdit derivats del finançament del terminal que vas comprar en donar-te d'alta o fer un Renuevo, fet que et comuniquem en compliment de la clàusula 10 del contracte de crèdit." "1"
+575 3 "Mobilaren ordainketa: alta hartzean edo Renuevo egitean erosi zenuen terminala finantzatzeagatik sortutako kreditu-eskubideak laga dizkigu CETELEMek. Izan ere, horren berri ematen dizugu, kredituaren kontratuko 10. klausulan xedatutakoa betetzeko asmoz." "1"
+575 5 "Mobile payment: In compliance with Clause 10 of your credit agreement, we inform you that CETELEM has assigned us the rights to the credit financing the purchase of a mobile device on taking out or renewing a contract under a Renuevo arrangement." "1"
+576 1 "Pago del móvil: Banco Cetelem nos ha cedido los derechos de crédito derivados de la financiación del terminal que compraste al darte de alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la cláusula 13 del contrato de crédito." "1"
+576 2 "Pagament del mòbil: Banco Cetelem ens ha cedit els drets de crèdit derivats del finançament del terminal que vas comprar en donar-te d'alta o fer un Renuevo, la qual cosa et comuniquem en compliment de la clàusula 13 del contracte de crèdit." "1"
+576 3 "Mugikorraren ordainketa: alta ematean edo Renuevo plana onartzean erosi zenuen terminalaren finantzaketaren ondorio diren kreditu-eskubideak eman dizkigu Banco Cetelem erakundeak. Kreditu-kontratuaren 13. klausulari jarraiki jakinarazten dizugu aipatutakoa." "1"
+576 5 "Handset payment: In accordance with the provisions of Clause 13 of your credit contract, Banco Cetelem has passed us the credit claim related to the financing of the handset you purchased when you signed up to Yoigo or renewed your contract with Renuevo." "1"
 1 1 "Soittaja-asiakas" "2"
 1 2 "Abonnent" "2"
 1 5 "Caller" "2"

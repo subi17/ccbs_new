@@ -52,7 +52,8 @@ FUNCTION fCheckRenewalData RETURNS LOGICAL:
    IF CAN-FIND(FIRST bOrderCustomer NO-LOCK WHERE
                      bOrderCustomer.Brand = gcBrand AND
                      bOrderCustomer.OrderId  = OrderCustomer.OrderID AND
-                     bOrderCustomer.RowType = 4) THEN RETURN FALSE.
+                     bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}) 
+                     THEN RETURN FALSE.
    
    IF 
       OrderCustomer.Firstname NE Customer.Firstname OR
@@ -101,7 +102,7 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
             OrderCustomer.Brand      EQ gcBrand AND 
             OrderCustomer.CustId     EQ pcPersonId AND
             OrderCustomer.CustIdType EQ pcIdType AND
-            OrderCustomer.RowType    EQ 1,
+            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
       EACH  Order NO-LOCK WHERE
             Order.Brand              EQ gcBrand AND
             Order.orderid            EQ OrderCustomer.Orderid AND
@@ -184,15 +185,37 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    RETURN TRUE.
 END.
 
+/*Function used to check renewal order is available in the last 6 months, then it will be a duplicate one*/
+FUNCTION fDuplicateOrderChk RETURNS LOGICAL
+(pcCli AS CHAR):
+
+   DEF BUFFER ChkOrder FOR Order.
+
+   DEF VAR ldeStartTime AS DEC  NO-UNDO.
+
+   ASSIGN ldeStartTime = fMake2Dt(ADD-INTERVAL(TODAY, -6, "months") + 1, 0).
+
+   IF CAN-FIND(FIRST ChkOrder WHERE
+                     ChkOrder.Brand      = gcBrand                    AND
+                     ChkOrder.CLI        = pcCLI                      AND
+                     ChkOrder.CrStamp   >= ldeStartTime               AND
+                     ChkOrder.OrderType  = {&ORDER_TYPE_RENEWAL}      AND
+                     ChkOrder.StatusCode = {&ORDER_STATUS_DELIVERED}) THEN
+      RETURN TRUE.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 FUNCTION fOngoingOrders RETURNS LOGICAL
 (pcCli AS CHAR,
  pcNumberType AS CHAR):
 
    DEF VAR liExcludeOrderType AS INT NO-UNDO. 
 
-   IF pcNumberType EQ "stc" THEN liExcludeOrderType = 2.
+   IF pcNumberType EQ "stc" THEN liExcludeOrderType = {&ORDER_TYPE_RENEWAL}.
    ELSE IF pcNumberType EQ "renewal" OR
-           pcNumberType EQ "retention" THEN liExcludeOrderType = 4.
+           pcNumberType EQ "retention" THEN liExcludeOrderType = {&ORDER_TYPE_STC}.
    ELSE liExcludeOrderType = -1.
 
    DEF BUFFER lbOtherOrder FOR Order.   
@@ -209,8 +232,41 @@ FUNCTION fOngoingOrders RETURNS LOGICAL
 
       RETURN TRUE.
    END.
-
+   
+   /* YTS-9316
+   IF pcNumberType EQ "renewal" AND fDuplicateOrderChk(pcCLI) THEN
+      RETURN TRUE.
+   */
    RETURN FALSE.
+
+END FUNCTION. 
+
+FUNCTION fOngoingFixedOrders RETURNS CHARACTER
+(pcFixedNumber AS CHAR,
+ pcNumberType  AS CHAR):
+
+   DEF VAR liExcludeOrderType AS INT NO-UNDO. 
+
+   IF pcNumberType EQ "stc" THEN liExcludeOrderType = {&ORDER_TYPE_RENEWAL}.
+   ELSE IF pcNumberType EQ "renewal" OR
+           pcNumberType EQ "retention" THEN liExcludeOrderType = {&ORDER_TYPE_STC}.
+   ELSE liExcludeOrderType = -1.
+
+   /* Check if same number in ongoing Fusion order */
+   DEF BUFFER lbOtherOrder  FOR Order.
+   DEF BUFFER lbOrderFusion FOR OrderFusion.
+   FOR EACH lbOrderFusion NO-LOCK WHERE
+            lbOrderFusion.FixedNumber EQ pcFixedNumber,
+      EACH  lbOtherOrder NO-LOCK WHERE
+            lbOtherOrder.brand EQ gcBrand AND
+            lbOtherOrder.OrderId EQ lbOrderFusion.OrderId AND
+            LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
+            lbOtherOrder.OrderType NE liExcludeOrderType:
+
+      RETURN "Ongoing order for number|" + pcFixedNumber.
+   END.
+
+   RETURN "".
 
 END FUNCTION. 
 

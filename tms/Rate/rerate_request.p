@@ -184,6 +184,9 @@ END PROCEDURE.
 PROCEDURE pRerate:
 
    DEF VAR liDoubles AS INT  NO-UNDO.
+   DEF VAR llCustRerate AS LOG NO-UNDO. 
+   DEF VAR ldeTo AS DEC NO-UNDO. 
+   DEF VAR ldeFrom AS DEC NO-UNDO. 
     
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -201,7 +204,9 @@ PROCEDURE pRerate:
    END.
 
    IF MsRequest.MsSeq > 0 THEN DO:
+
       FIND MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
+
       IF NOT AVAILABLE MobSub THEN DO:
          FIND FIRST MsOwner USE-INDEX MsSeq WHERE
                     MsOwner.MsSeq   = MsRequest.MsSeq AND
@@ -211,12 +216,27 @@ PROCEDURE pRerate:
             RETURN.
          END.
       END.
-   END.
-   /* Check DSS is active or not based on the last second of month */
-   ldeDSSActStamp = fMake2DT(MsRequest.ReqDtParam2,86399).
 
-   IF MsRequest.MsSeq > 0 AND
-      NOT fIsDSSActive(INPUT Customer.CustNum,INPUT ldeDSSActStamp) THEN DO:
+      ASSIGN
+         ldeFrom = fMake2DT(MsRequest.ReqDtParam1, 0)
+         ldeTo   = fMake2DT(MsRequest.ReqDtParam2 + 1, 0).
+
+      llCustRerate = CAN-FIND(FIRST MsOwner NO-LOCK WHERE
+                                    MsOwner.CLI = MsRequest.CLI AND
+                                    MsOwner.TSBegin < ldeTo AND
+                                    MsOwner.TSEnd >= ldeFrom AND
+                                    MsOwner.FixedNumber > "").
+      
+      IF NOT llCustRerate THEN DO:
+         /* Check DSS is active or not based on the last second of month */
+         ldeDSSActStamp = fMake2DT(MsRequest.ReqDtParam2,86399).
+         IF fIsDSSActive(INPUT Customer.CustNum,
+                         INPUT ldeDSSActStamp) THEN llCustRerate = TRUE.
+      END.
+   END.
+   ELSE llCustRerate = TRUE.
+
+   IF NOT llCustRerate THEN DO:
 
       /* double check first */
       IF MsRequest.ReqIParam2 = 1 THEN 

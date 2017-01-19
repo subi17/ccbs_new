@@ -50,22 +50,31 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    sub_struct = add_json_key_struct(result_array, "").
    add_int(sub_struct   , "seq"        , mobsub.msseq).
    add_string(sub_struct, "description", mobsub.cli).
+   add_string(sub_struct, "fixed_number", mobsub.fixednumber).
    add_string(sub_struct, "subscription_type_id", mobsub.clitype).
    add_int(sub_struct   , "status"     , mobsub.msstatus).
    add_string(sub_struct, "data_bundle_id", MobSub.TariffBundle).
     
-   IF CAN-FIND(
-      FIRST MsRequest NO-LOCK WHERE
-            MsRequest.MsSeq   = mobsub.msseq AND
-            MsRequest.ReqType = {&REQTYPE_ICC_CHANGE} AND
-            MsRequest.Reqstatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}) THEN
+   FIND FIRST MsRequest NO-LOCK WHERE
+              MsRequest.MsSeq   = MobSub.MsSeq AND
+              MsRequest.ReqType = {&REQTYPE_ICC_CHANGE} AND
+              LOOKUP(STRING(MsRequest.Reqstatus),"19,20") > 0 NO-ERROR.
+   IF AVAIL MsRequest THEN DO:
       add_boolean(sub_struct, "notification", TRUE).
+      add_int(sub_struct    , "notification_status", MsRequest.ReqStatus).
+   END.
 
 END FUNCTION. 
 
-FIND mobsub NO-LOCK WHERE
-     mobsub.brand = gcBrand AND
-     mobsub.cli = pcMSISDN NO-ERROR.
+IF pcMSISDN BEGINS "8" OR
+   pcMSISDN BEGINS "9" THEN   /* Fixed line number */
+   FIND mobsub NO-LOCK WHERE
+        mobsub.brand = gcBrand AND
+        mobsub.fixednumber = pcMSISDN NO-ERROR.
+ELSE 
+   FIND mobsub NO-LOCK WHERE
+        mobsub.brand = gcBrand AND
+        mobsub.cli = pcMSISDN NO-ERROR.
 
 IF NOT AVAILABLE mobsub THEN
    RETURN appl_err("Subscription not found").

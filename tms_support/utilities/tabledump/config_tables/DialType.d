@@ -18,5 +18,8 @@
 20 "Voice short number (type1)"
 21 "Voice short number (type2)"
 22 "Voice short number (type3)"
+23 "Fixed Voice short number (type1)"
+24 "Fixed Voice short number (type2)"
 41 "Roaming MO inside EU"
 47 "Roaming MT inside EU"
+50 "Fixed Voice Bdest"

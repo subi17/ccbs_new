@@ -287,13 +287,29 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
 
             /* Check if TopUpScheme has DisplayAmount to show */
             IF Order.CliType BEGINS "TARJ7" OR
-               Order.CliType BEGINS "TARJ9" THEN
-               FOR EACH TopUpSchemeRow NO-LOCK WHERE
-                        TopUpSchemeRow.BillCode = InvRow.BillCode AND
-                        TopUpSchemeRow.Amount = InvRow.Amt:
-                  IF TopUpSchemeRow.DisplayAmount > 0 THEN
+               Order.CliType BEGINS "TARJ9" THEN DO:
+
+               IF InvRow.Amt >= 0 THEN
+                  FOR EACH TopUpSchemeRow NO-LOCK WHERE
+                           TopUpSchemeRow.BillCode = InvRow.BillCode AND
+                           TopUpSchemeRow.Amount   = InvRow.Amt AND
+                           TopUpSchemeRow.EndStamp >= Order.CrStamp AND
+                           TopUpSchemeRow.BeginStamp <= Order.CrStamp AND
+                           TopUpSchemeRow.DisplayAmount > 0:
                      ldAmt = TopUpSchemeRow.DisplayAmount.
-               END.
+                     LEAVE.
+                  END.
+               ELSE 
+                  FOR EACH TopUpSchemeRow NO-LOCK WHERE
+                           TopUpSchemeRow.DiscountBillCode = InvRow.BillCode AND
+                           TopUpSchemeRow.DiscountAmount   = -1 * InvRow.Amt AND
+                           TopUpSchemeRow.EndStamp >= Order.CrStamp AND
+                           TopUpSchemeRow.BeginStamp <= Order.CrStamp AND
+                           TopUpSchemeRow.DisplayAmount > 0:
+                      ldAmt = -1 * TopUpSchemeRow.DisplayAmount.
+                      LEAVE.
+                  END.
+            END.
 
             ASSIGN
                ldInvTot = ldInvTot + ldAmt
@@ -1120,7 +1136,11 @@ PROCEDURE pGetDELIVERY_DATE:
 
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
-   IF Order.OrderType = 1 THEN DO:
+   IF fIsConvergenceTariff(Order.CLIType) THEN
+      lcResult = (IF liLang EQ 5
+                  THEN "For new number fixed line takes 9-10 days and for portability number it takes 12-17 days"
+                  ELSE "Si es nueva numeración fija, de 9-10 días y de 12-17 días si es portabilidad").
+   ELSE IF Order.OrderType = 1 THEN DO:
       IF Order.PortingDate <> ? THEN
          ldePortingTime = fMake2Dt(Order.PortingDate,0).
       IF AVAIL OrderAccessory THEN
@@ -1154,8 +1174,21 @@ PROCEDURE pGetDELIVERY_DATE:
       END.
       lcResult = fDateFmt(ldaDate,"dd/mm/yy").
    END.
-      
+
 END. /*GetDELIVERY_DATE*/
+
+PROCEDURE pGetLINETYPE:
+   
+   DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
+   DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
+   DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
+
+   IF fIsConvergenceTariff(Order.CLIType) THEN
+      lcResult = (IF liLang EQ 5 THEN " for mobile"
+                  ELSE " del móvil").
+   ELSE lcResult = "".
+
+END.
 
 PROCEDURE pGetMNP_DATE:
 
@@ -1478,7 +1511,6 @@ PROCEDURE pGetPENALTYFEE:
    DEF VAR lcList AS CHAR NO-UNDO.
    DEF VAR ldAmt AS DEC NO-UNDO.
    DEF VAR lcErr AS CHAR NO-UNDO.
-   DEF VAR lcCLITypeLowMCMF AS CHAR NO-UNDO.
    DEF VAR lcTariffType AS CHAR NO-UNDO.
    DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).  
@@ -1489,15 +1521,8 @@ PROCEDURE pGetPENALTYFEE:
 
    IF ldAmt NE 0 AND Order.PayType = FALSE THEN DO:
 
-      /* different text for  penalty fee > 100 and
-         minimum consumption or monthly fee > lowest value */
-      lcCLITypeLowMCMF =  fCParamC("CLITypeLowMCMF").
       lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
-      IF LOOKUP(Order.CLIType,lcCLITypeLowMCMF) =  0  AND
-         ldAmt > 100 THEN
-         lcList = lcList + CHR(10) + fTeksti(510,liLang).
-      ELSE
-         lcList = lcList + CHR(10) + fTeksti(509,liLang).
+      lcList = lcList + CHR(10) + fTeksti(510,liLang).
 
       assign lcList = REPLACE(lcList,"#xxx",TRIM(STRING(ldAmt,"->>>>>9")))
              lcList = REPLACE(lcList,"#yy",TRIM(STRING(liTermMonths))).
@@ -1519,8 +1544,19 @@ PROCEDURE pGetPENALTYFEE:
                         CLItype.LineType = {&CLITYPE_LINETYPE_ADDITIONAL}) THEN
          lcList = lcList + CHR(10) + fTeksti(539,liLang).
    END.
+         
+   IF fIsConvergenceTariff(Order.CLIType) AND
+     (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
+      Order.OrderType EQ {&ORDER_TYPE_MNP} OR
+     (Order.OrderType EQ {&ORDER_TYPE_STC} AND
+      AVAIL Mobsub AND
+      NOT (fIsConvergenceTariff(Mobsub.CLIType) OR
+       LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)))
+   THEN lcList = lclist + CHR(10) + fTeksti(532,liLang).
+   
    lcList = REPLACE(lcList,"euros","&euro;"). 
    lcResult = lcList.
+
 END.
 
 PROCEDURE pGetAMOUNT:
@@ -1825,13 +1861,13 @@ PROCEDURE pGetCTNAME:
          OTHERWISE lcList = "".
        END.
 
-       IF LOOKUP(Order.CLIType, "CONT9,CONT15,CONT24,CONT23") > 0 THEN
+       IF LOOKUP(Order.CLIType, "CONT9,CONT15,CONT24,CONT23,CONT25") > 0 THEN
           FOR FIRST OfferItem WHERE
                     OfferItem.Brand       = gcBrand             AND
                     OfferItem.Offer       = Order.Offer         AND
                     OfferItem.ItemType    = "discountplan"      AND
                     LOOKUP(OfferItem.ItemKey,
-                    "TariffMarchDISC,CONT9DISC,CONT15DISC,CONT24DISC,CONT23DISC") > 0 AND
+                    "TariffMarchDISC,CONT9DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC") > 0 AND
                     OfferItem.BeginStamp <= Order.CrStamp       AND
                     OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
              FIRST DiscountPlan WHERE

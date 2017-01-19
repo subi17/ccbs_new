@@ -20,7 +20,7 @@
 "DoubleCall" 18 1 "Double mobcdr check for one day (billing day)" "sergey.strizhov@qvantel.com,toni.valve@qvantel.com" "00358406487542,00358407670038" "/opt/local/bin/xfear -bg_batch funcrun_mobcdr_double.p tms.pf #PARAM" 1 "1" yes
 "TriggerRerate" 19 6 "Rerate handler for triggered events" "sergey.strizhov@qvantel.com,toni.valve@qvantel.com" "00358406487542,00358407670038" "/opt/local/bin/xfear -bg_batch funcrun_triggerrate.p tms.pf #PARAM" 100 "1" yes
 "InvrowCounterCheck" 20 15 "Check unbilled invoice row counters against CDRs" "sergey.strizhov@qvantel.com,toni.valve@qvantel.com" "" "/opt/local/bin/xfear -bg_batch funcrun_chk_invrowcounter.p tms#HOST.pf #PARAM" 100 "1" yes
-"IRCBilledCheck" 21 15 "Check billed invoice row counters against CDRs" "" "" "/opt/local/bin/xfear -bg_batch funcrun_chk_irc_billed.p tms#HOST.pf #PARAM" 100 "1" yes
+"IRCBilledCheck" 21 8 "Check billed invoice row counters against CDRs" "sergey.strizhov@qvantel.com,toni.valve@qvantel.com" "" "/opt/local/bin/xfear -bg_batch funcrun_chk_irc_billed.p tms#HOST.pf #PARAM" 100 "1" yes
 "PrintXMLTar" 22 10 "Test invoice xmls" "" "" "/opt/local/bin/xfear -bg_batch /home/ari/test/funcrun_print_invoice.p tms#HOST.pf #PARAM" 100 "1" no
 "TestCaseCollect" 23 1 "Collect billing run test cases" "sergey.strizhov@qvantel.com,toni.valve@qvantel.com" "00358406487542,00358407670038,00358400591125" "/opt/local/bin/xfear -bg_batch funcrun_brtestcase_collect.p tms.pf #PARAM" 100 "1" yes
 "TestResultAnalysis" 24 1 "Analyse test results" "sergey.strizhov@qvantel.com,toni.valve@qvantel.com" "00358406487542,00358407670038,00358400591125" "/opt/local/bin/xfear -bg_batch funcrun_brtestresult_analysis.p tms.pf #PARAM" 100 "1" yes

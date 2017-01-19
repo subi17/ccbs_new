@@ -61,6 +61,7 @@
 {fbankdata.i}
 {mnp.i}
 {tmsconst.i}
+{Func/fixedlinefunc.i}
 
 DEF TEMP-TABLE wError NO-UNDO
     FIELD Cust   AS INT
@@ -160,7 +161,6 @@ DEF VAR lcError       AS CHAR  NO-UNDO.
 DEF VAR lcValue       AS CHAR NO-UNDO.
 DEF VAR lcTopUpItems  AS CHAR NO-UNDO.
 DEF VAR ldeFAT        AS DECIMAL NO-UNDO.
-DEF VAR lcCLITypeLowMCMF AS CHAR NO-UNDO.
 DEF VAR lcNotMinConList AS CHAR NO-UNDO.
 DEF VAR liNeedSpaces  AS INT  NO-UNDO.
 DEF VAR liTermMonths  AS INT  NO-UNDO.
@@ -1315,10 +1315,15 @@ IF NOT llErrors THEN DO:
       /* terminal purchased */
       IF INDEX(lcText,"#PENALTYFEE") > 0 THEN DO:
          lcList = "".
-
-         /* New Tariff - CONTS */
-         IF Order.CLIType = "CONTS" AND Order.CrStamp < 20120901 THEN
-            lcList = CHR(10) + fTeksti(532,liLanguage).
+           
+         IF fIsConvergenceTariff(Order.CLIType) AND
+           (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
+            Order.OrderType EQ {&ORDER_TYPE_MNP} OR
+           (Order.OrderType EQ {&ORDER_TYPE_STC} AND
+            AVAIL Mobsub AND
+            NOT (fIsConvergenceTariff(Mobsub.CLIType) OR
+             LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)))
+         THEN lcList = CHR(10) + fTeksti(532,liLanguage).
 
          RUN offer_penaltyfee(Order.OrderID,
                               Output liTermMonths,
@@ -1326,14 +1331,7 @@ IF NOT llErrors THEN DO:
 
          IF ldAmt NE 0 AND Order.PayType = FALSE THEN DO:
 
-            /* different text for  penalty fee > 100 and
-               minimum consumption or monthly fee > lowest value */
-            lcCLITypeLowMCMF =  fCParamC("CLITypeLowMCMF").
-            IF LOOKUP(Order.CLIType,lcCLITypeLowMCMF) =  0  AND
-               ldAmt > 100 THEN
-               lcList = lcList + CHR(10) + fTeksti(510,liLanguage).
-            ELSE
-               lcList = lcList + CHR(10) + fTeksti(509,liLanguage).
+            lcList = lcList + CHR(10) + fTeksti(510,liLanguage).
 
             assign lcList = REPLACE(lcList,"#xxx",TRIM(STRING(ldAmt,"->>>>>9")))
                    lcList = REPLACE(lcList,"#yy",TRIM(STRING(liTermMonths))).
@@ -1924,13 +1922,13 @@ FOR FIRST CLIType NO-LOCK WHERE
       OTHERWISE lcList = "".
     END.
 
-    IF LOOKUP(Order.CLIType, "CONT9,CONT15,CONT24,CONT23") > 0 THEN 
+    IF LOOKUP(Order.CLIType, "CONT9,CONT15,CONT24,CONT23,CONT25") > 0 THEN 
        FOR FIRST OfferItem WHERE
                  OfferItem.Brand       = gcBrand             AND
                  OfferItem.Offer       = Order.Offer         AND
                  OfferItem.ItemType    = "discountplan"      AND
                  LOOKUP(OfferItem.ItemKey,
-                 "TariffMarchDISC,CONT9DISC,CONT15DISC,CONT24DISC,CONT23DISC") > 0 AND
+                 "TariffMarchDISC,CONT9DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC") > 0 AND
                  OfferItem.BeginStamp <= Order.CrStamp       AND
                  OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
           FIRST DiscountPlan WHERE 

@@ -190,7 +190,7 @@ DEF VAR lcUser       AS CHAR                   NO-UNDO.
 DEF VAR lcInvCust    AS CHAR                   NO-UNDO.
 DEF VAR lcAgrCust    AS CHAR                   NO-UNDO. 
 DEF VAR ldeSwitchTS  AS DE                     NO-UNDO.
-
+DEF VAR lcFixedNumber AS CHAR                  NO-UNDO.
 DEF VAR new-custnum  as int                    NO-UNDO.
 
 DEF VAR liChannel    AS INT FORMAT "9"         NO-UNDO INIT "2".
@@ -350,10 +350,10 @@ ASSIGN liInvType    = fCParamI("InvCreType")
 FORM
     lcStamp         LABEL "Created"
     lcCustId        COLUMN-LABEL "CustID" FORMAT "X(9)"
-    Order.CLI       COLUMN-LABEL "MSISDN"
-    Order.ContractID COLUMN-LABEL "Contract" FORMAT "X(12)" 
+    Order.CLI       COLUMN-LABEL "MSISDN" FORMAT "X(9)"
+    Order.ContractID COLUMN-LABEL "Contract" FORMAT "X(8)" 
     Order.OrderId   FORMAT ">>>>>>>9"
-    lcStatus        LABEL "Status"     FORMAT "x(6)"
+    lcStatus        LABEL "Status"     FORMAT "x(12)"
     Order.CredOk    COLUMN-LABEL "Cred"
     memoch          LABEL "M"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
@@ -377,7 +377,9 @@ FORM
 {order.i}
 
 form
-    "OrderID ......:" Order.OrderID
+    "OrderID/status:" Order.OrderID "/" Order.Statuscode FORMAT "X(2)"
+        lcStatus FORMAT "X(15)"
+
     "Orderer .:" AT 48 Order.Orderer FORMAT "X(20)" 
     SKIP
 
@@ -385,7 +387,7 @@ form
     "O. IDType:" AT 48 Order.OrdererIDType
     SKIP
 
-    "MSISDN .......:" Order.CLI        
+    "MSISDN .......:" Order.CLI FORMAT "X(30)"
     "OrdererID:" AT 48 Order.OrdererID
     SKIP
     
@@ -393,7 +395,7 @@ form
     "OrdererIP:" AT 48 Order.OrdererIP FORMAT "X(20)"
     SKIP
 
-    "CLIType ......:" Order.CLIType                      
+    "CLIType ......:" Order.CLIType FORMAT "X(12)"                     
     "Campaign :" AT 48 Order.Campaign FORMAT "X(15)"
     SKIP                     
     
@@ -505,6 +507,17 @@ form /* seek  With CustId */
         
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer ID "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
+
+
+form /* seek  With Fixed number */ 
+    "Brand Code:" lcBrand  HELP "Enter Brand"
+    VALIDATE(lcbrand = "*"  OR
+    CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
+    "Fixed number .......:" lcFixedNumber FORMAT "x(11)"
+    HELP "Fixed number" SKIP
+        
+    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer ID "
+    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME fFixed.
 
 form /* seek  PersonId */
     "Brand Code :" lcBrand  HELP "Enter Brand"
@@ -697,7 +710,7 @@ BROWSE:
             ufk[3] = 1045 
             ufk[4] = 2211
             ufk[5] = 9796
-            ufk[6] = 0
+            ufk[6] = 9852
             ufk[7] = 0
             ufk[8] = 8 ufk[9]= 1
             ehto   = 3 ufkey = FALSE.
@@ -920,6 +933,34 @@ BROWSE:
            NEXT LOOP.
         END.
      END. /* Search-3 */
+
+    ELSE IF LOOKUP(nap,"6,f6") > 0 THEN 
+     DO ON ENDKEY UNDO, NEXT LOOP:
+               lcFixedNumber = "".
+               
+        cfc = "puyr". run ufcolor.
+        ehto = 9. RUN ufkey. ufkey = TRUE.
+        CLEAR FRAME fFixed.
+        SET  lcBrand   WHEN gcAllBrand = TRUE
+             lcFixedNumber 
+             WITH FRAME fFixed.
+        HIDE FRAME fFixed NO-PAUSE.
+
+        FIND FIRST OrderFusion NO-LOCK where
+                   OrderFusion.FixedNumber EQ lcFixedNumber NO-ERROR.
+
+        IF NOT AVAILABLE OrderFusion THEN DO:
+           MESSAGE "Fixed number not found!" VIEW-AS ALERT-BOX.
+           NEXT Browse.
+        END.
+
+        RUN orderbrfixed(lcFixedNumber, OUTPUT oOrderID).
+        FIND FIRST Order WHERE
+                   Order.OrderId    = oOrderId AND
+                   Order.Brand      = lcBrand NO-LOCK NO-ERROR.
+           IF NOT fRecFound(4) THEN NEXT Browse.
+           NEXT LOOP.
+     END.
         
      /* Search BY col 4 */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN 
@@ -1254,15 +1295,16 @@ PROCEDURE pOrderView:
                  must-print = true.
            END.            
            ELSE IF toimi = 5 THEN DO:
+
+              IF liMSRequest EQ 0 THEN DO:
+                 MESSAGE "Order request not found" VIEW-AS ALERT-BOX.
+                 NEXT.
+              END.
+
               RUN local-find-this(FALSE).
-              IF Order.OrderType = 3 THEN
-                 RUN msrequest(82,?,Order.MsSeq,0,liMsRequest,"").
-              ELSE IF Order.OrderType = 4 THEN
-                 RUN msrequest(0,?,Order.MsSeq,0,liMsRequest,"").
-              ELSE IF Order.OrderType = 2 THEN
-                 RUN msrequest(46,?,Order.MsSeq,0,liMsRequest,"").
-              ELSE
-                 RUN msrequest(13,?,Order.MsSeq,0,liMsRequest,"").
+              
+              RUN msrequest(?,?,Order.MsSeq,0,liMsRequest,"").
+
            END.
            
            ELSE IF toimi = 6 THEN DO:
@@ -1526,19 +1568,23 @@ PROCEDURE local-disp-row:
 
 END PROCEDURE.
 
-PROCEDURE local-find-others-common.
-
-   ASSIGN lcStamp = fTS2HMS(Order.CrStamp).
-
-   FIND FIRST TMSCodes WHERE 
+FUNCTION fStatusText RETURNS CHAR
+   (iiStatusCode AS CHAR):
+   FIND FIRST TMSCodes WHERE
               TMSCodes.TableName = "Order" AND
               TMSCodes.FieldName = "StatusCode" AND
               TMSCodes.CodeGroup = "Orders" AND
               TMSCodes.CodeValue = Order.StatusCode
    NO-LOCK NO-ERROR.
-   IF AVAIL TMSCodes THEN lcStatus = TMSCodes.CodeName.
-   ELSE lcStatus = "".
-   
+   IF AVAIL TMSCodes THEN RETURN TMSCodes.CodeName.
+
+   RETURN "".
+END.
+
+PROCEDURE local-find-others-common.
+
+   ASSIGN lcStamp = fTS2HMS(Order.CrStamp)
+          lcStatus = fStatusText(Order.StatusCode).
    FIND FIRST OrderCustomer OF Order WHERE
               OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
    IF AVAIL OrderCustomer THEN
@@ -1556,6 +1602,10 @@ END.
 PROCEDURE local-find-others.
    
    RUN local-find-others-common.
+
+   FIND FIRST OrderFusion NO-LOCK WHERE
+              OrderFusion.Brand = gcBrand AND
+              OrderFusion.OrderID = Order.OrderID NO-ERROR.
    
    FIND FIRST OrderDelivery WHERE
       OrderDelivery.Brand   = gcBrand AND
@@ -1662,11 +1712,17 @@ PROCEDURE local-find-others.
                     MSRequest.MSSeq      = Order.MSSeq    AND 
                     MSrequest.ReqType    = 46             AND 
                     MSrequest.ReqIparam1 = Order.OrderId No-LOCK NO-ERROR.
-      ELSE
+      ELSE DO:
          FIND FIRST Msrequest WHERE 
                     MSRequest.MSSeq      = Order.MSSeq    AND 
                     MSrequest.ReqType    = 13             AND 
                     MSrequest.ReqCparam1 = "CREATE" No-LOCK NO-ERROR.
+
+         IF NOT AVAIL MSrequest THEN
+            FIND FIRST Msrequest WHERE 
+                       MSRequest.MSSeq      = Order.MSSeq    AND
+                       MSrequest.ReqType    = 14 NO-ERROR. 
+      END.
 
       IF AVAILABLE MsRequest THEN liMsRequest = MsRequest.MsRequest.
    END. /* IF Order.MSSeq > 0 THEN DO: */
@@ -1680,7 +1736,9 @@ PROCEDURE local-disp-lis:
       IF Order.FtGrp > "" THEN 
          lcFatGroup = "(" + Order.FtGrp + ")".
       ELSE lcFatGroup = "".
-         
+
+      lcStatus = fStatusText(Order.Statuscode).
+ 
       DISP
          Order.PayType
          Order.ICC 
@@ -1689,6 +1747,8 @@ PROCEDURE local-disp-lis:
          "" WHEN Order.MNPStatus = 0 @ Order.OldPayType 
          Order.Referee
          Order.OrderId
+         Order.StatusCode
+         lcStatus
          Order.ContractID
          Order.Orderer
          Order.OrdererIDType
@@ -1696,6 +1756,8 @@ PROCEDURE local-disp-lis:
          Order.OrdererIP
          Order.CLIType
          Order.CLI 
+         Order.CLI + " / " + OrderFusion.FixedNumber WHEN 
+            AVAIL OrderFusion AND OrderFusion.FixedNumber > "" @ Order.CLI
          Order.MsSeq
          Order.OrderChannel 
          ENTRY(1,Order.Campaign,";") @ Order.Campaign

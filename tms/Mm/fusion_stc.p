@@ -25,12 +25,12 @@ DEF VAR ldeSTCTS AS DEC NO-UNDO.
 DEF VAR lcNewCLIType AS CHAR NO-UNDO. 
 DEF VAR lcBundleID AS CHAR NO-UNDO. 
 DEF VAR lcBankAcc AS CHAR NO-UNDO. 
-DEF VAR lcFusionSubsType AS CHAR NO-UNDO. 
 DEF VAR llExtendContract AS LOG NO-UNDO. 
 DEF VAR iiRequestFlags     AS INTEGER NO-UNDO.
+DEF VAR ldaSTCDate AS DATE NO-UNDO. 
+DEF VAR liSTCTime AS INT NO-UNDO. 
 
 ASSIGN
-   lcFusionSubsType =  fCParamC("FUSION_SUBS_TYPE").
    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
 FIND FIRST Order NO-LOCK WHERE
@@ -47,7 +47,7 @@ IF NOT AVAIL OrderCustomer THEN RETURN "OrderCustomer not found".
 IF Order.OrderType NE {&ORDER_TYPE_STC} THEN
    RETURN "Incorrect order type".
 
-IF LOOKUP(Order.CliType,lcFusionSubsType) = 0 THEN
+IF fIsConvergenceTariff(Order.CliType) EQ FALSE THEN
    RETURN "Order subscription type is not Fusion".
 
 FIND mobsub NO-LOCK WHERE
@@ -73,11 +73,30 @@ llExtendContract =
                    OrderAction.OrderId  = Order.OrderId AND
                    OrderAction.ItemType = "ExtendTermContract").
 
-IF MobSub.PayType = FALSE AND
-   fIsiSTCAllowed(MobSub.MsSeq) THEN
-   ldeSTCTS = fDate2TS(TODAY + 1).
-ELSE
-   ldeSTCTS = fDate2TS(fLastDayOfMonth(TODAY) + 1).
+FIND FIRST OrderFusion NO-LOCK WHERE
+           OrderFusion.Brand = gcBrand AND
+           OrderFusion.OrderID = Order.OrderId NO-ERROR.
+IF NOT AVAIL OrderFusion THEN RETURN "OrderFusion not found".
+
+IF OrderFusion.FixedInstallationTS EQ ? OR
+   OrderFusion.FixedInstallationTS EQ 0 THEN
+   RETURN "Missing fixed line installation date".
+
+fSplitTS(OrderFusion.FixedInstallationTS,
+         OUTPUT ldaSTCDate,
+         OUTPUT liSTCTime).
+
+IF ldaSTCDate < TODAY THEN ASSIGN
+   ldaSTCDate = TODAY
+   liSTCTime = 0.
+
+IF fIsiSTCAllowed(MobSub.MsSeq) THEN DO:
+   IF mobsub.PayType EQ FALSE THEN
+      ldeSTCTS = fMake2Dt(ldaSTCDate, 0).
+   ELSE ldeSTCTS = fMake2Dt(ldaSTCDate, liSTCTime).
+END.
+/* TODO: how to handle properly */
+ELSE ldeSTCTS = fDate2TS(fLastDayOfMonth(TODAY) + 1).
 
 /* Various validations */
 IF fValidateMobTypeCh(
@@ -92,7 +111,7 @@ IF fValidateMobTypeCh(
 THEN RETURN lcError.
 
 IF fValidateNewCliType(INPUT lcNewCLIType, INPUT lcBundleID,
-                       INPUT FALSE, OUTPUT lcError) NE 0
+                       INPUT TRUE, OUTPUT lcError) NE 0
 THEN RETURN lcError.
 
 FIND FIRST NewCliType WHERE

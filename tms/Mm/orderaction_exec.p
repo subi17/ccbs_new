@@ -16,6 +16,7 @@
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiOrderId     AS INT  NO-UNDO.
+DEF INPUT  PARAMETER ideActStamp   AS DEC  NO-UNDO.
 DEF INPUT  PARAMETER iiOrigRequest AS INT  NO-UNDO. /* father request */
 DEF INPUT  PARAMETER icSource      AS CHAR NO-UNDO. /* MsRequest.ReqSource */
 
@@ -42,13 +43,14 @@ IF NOT AVAILABLE Order OR Order.MsSeq NE iiMsSeq THEN
    RETURN "ERROR:Unknown order".
     
 /* YOB-390 */
-ldeActStamp = Order.CrStamp.
+IF ideActStamp EQ ? THEN
+   ideActStamp = Order.CrStamp.
 
 IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
    FIND FIRST msowner where
               msowner.msseq = MobSub.msseq USE-INDEX MsSeq NO-LOCK NO-ERROR.
-   IF AVAIL msowner THEN ldeActStamp = msowner.tsbegin.
-   IF ldeActStamp <= Order.Crstamp THEN ldeActStamp = fMakeTS().
+   IF AVAIL msowner THEN ideActStamp = msowner.tsbegin.
+   IF ideActStamp <= Order.Crstamp THEN ideActStamp = fMakeTS().
 END.
 
 ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
@@ -157,10 +159,10 @@ PROCEDURE pPeriodicalContract:
 
    ldeContractActStamp = 
                  (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN fMakeTS()
-                  ELSE IF Order.OrderType NE 2 THEN MobSub.ActivationTS
+                  ELSE IF Order.OrderType NE 2 THEN ideActStamp
                   ELSE IF Order.OrderChannel BEGINS "Retention" THEN fMakeTS()
-                  ELSE IF DayCampaign.DCType = "3" THEN Order.CrStamp
-                  ELSE ldeActStamp).
+                  ELSE IF DayCampaign.DCType = {&DCTYPE_DISCOUNT} THEN Order.CrStamp
+                  ELSE ideActStamp).
 
    /* YDR-835 - Charge half price from Initial topup so have 5 min diff */
    IF OrderAction.ItemKey = {&PMDUB} AND
@@ -368,7 +370,8 @@ PROCEDURE pDiscountPlan:
          STRING(Order.MsSeq) + " already exist".
 
    CREATE DPMember.
-   ASSIGN DPMember.DPId      = DiscountPlan.DPId
+   ASSIGN DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
+          DPMember.DPId      = DiscountPlan.DPId
           DPMember.HostTable = "MobSub"
           DPMember.KeyValue  = STRING(Order.MsSeq)
           DPMember.ValidFrom = TODAY.

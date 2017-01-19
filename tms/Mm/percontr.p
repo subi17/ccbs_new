@@ -41,6 +41,7 @@
 {ordercancel.i}
 {fprepaidfee.i}
 {fcreditreq.i}
+{Func/fsendsms.i}
 
 FUNCTION fUpdateServicelCounterMSID RETURNS LOGICAL
    ( iiCustNum AS INTEGER,
@@ -944,6 +945,7 @@ PROCEDURE pContractActivation:
 
       /* link to terminal */
       IF DayCampaign.DCType = "3" AND
+         NOT DayCampaign.DCEvent BEGINS "FTERM" AND
          LOOKUP(MsRequest.ReqSource,"1,7") > 0 THEN DO:
          
          /* new subscription */
@@ -1686,8 +1688,7 @@ PROCEDURE pFinalize:
       IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} THEN
          FOR FIRST Order NO-LOCK WHERE
                    Order.MsSeq = MsRequest.MsSeq AND
-                   Order.OrderType < 2 AND
-                   Order.CLIType = "CONT15":
+                   Order.OrderType < 2:
             fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
          END.
       ELSE IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_STC} AND

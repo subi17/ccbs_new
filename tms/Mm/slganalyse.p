@@ -65,9 +65,9 @@ DEF TEMP-TABLE ttSLG LIKE slganalyse.
  
 form
    SLGAnalyse.BelongTo   COLUMN-LABEL "B" 
-   SLGAnalyse.CliType      
-   SLGAnalyse.BillCode     
-   SLGANAlyse.CCN       FORMAT ">>9"
+   SLGAnalyse.CliType   FORMAT "X(12)"
+   SLGAnalyse.BillCode  FORMAT "X(11)"   
+   SLGANAlyse.CCN       FORMAT ">>>9"
    SLGANalyse.Bdest     FORMAT "X(8)" 
    SLGAnalyse.ValidTo   
    SLGAnalyse.ServiceLimitGroup
@@ -82,11 +82,11 @@ WITH width 80 OVERLAY scroll 1 15 DOWN
 
 form          
    SLGAnalyse.BelongTo      COLON 23    SKIP                    
-   SLGAnalyse.CliType       COLON 23  
+   SLGAnalyse.CliType FORMAT "X(12)" COLON 23  
       CliType.CliName NO-LABEL          SKIP
    SLGAnalyse.BillCode      COLON 23
       BillItem.BIName NO-LABEL          SKIP
-   SLGAnalyse.CCN     LABEL "Rating CCN"      COLON 23 
+   SLGAnalyse.CCN     LABEL "Rating CCN"      COLON 23 format ">>>9" 
        CCN.CCNName AT 42    NO-LABEL 
    SLGAnalyse.ValidFrom     COLON 23 format 99-99-9999  SKIP
    SLGAnalyse.ValidTo       COLON 23 format 99-99-9999  SKIP 
@@ -103,9 +103,9 @@ WITH OVERLAY ROW 4 centered
 FORM
    SKIP
    "This program will generate a periodical contract rules for chosen criteria." SKIP(1)
-   "  Substype.....:" lcClitype     Clitype.Cliname          SKIP
+   "  Substype.....:" lcClitype FORMAT "X(12)" Clitype.Cliname          SKIP
    "  BillCode.....:" lcBillCode    BillItem.Biname          SKIP
-   "  RateCCN......:" lcCCN         CCN.CCNNAme              SKIP
+   "  RateCCN......:" lcCCN format ">>>9"  CCN.CCNNAme       SKIP
    "  Type of Bdest:" lidestType                             SKIP
    "  ValidFrom....:" ldtValidF                              SKIP
    "  ValidTo......:" ldtValidT                              SKIP

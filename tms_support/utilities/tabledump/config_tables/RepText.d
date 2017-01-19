@@ -584,11 +584,15 @@
 1 "" 2 "Pagament Final" 0 "CNRVTERM" "1" 13/04/16 31/12/49
 1 "" 3 "Azken ordainketa" 0 "CNRVTERM" "1" 13/04/16 31/12/49
 1 "" 5 "Final Payment" 0 "CNRVTERM" "1" 13/04/16 31/12/49
-1 "" 1 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
-1 "" 2 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
-1 "" 3 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
-1 "" 4 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
-1 "" 5 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
+1 "" 1 "Compensación BBVA" 0 "COMPCF" "1" 15/12/16 31/12/49
+1 "" 1 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 14/12/16
+1 "" 2 "Compensación BBVA" 0 "COMPCF" "1" 15/12/16 31/12/49
+1 "" 2 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 14/12/16
+1 "" 3 "Compensación BBVA" 0 "COMPCF" "1" 15/12/16 31/12/49
+1 "" 3 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 14/12/16
+1 "" 4 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 14/12/16
+1 "" 5 "Compensación BBVA" 0 "COMPCF" "1" 15/12/16 31/12/49
+1 "" 5 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 14/12/16
 1 "" 1 "Compensación consumo mínimo" 0 "CONSMINFAT" "1" 01/06/11 31/12/54
 1 "" 2 "Compensació consum mínim" 0 "CONSMINFAT" "1" 01/06/11 31/12/54
 1 "" 3 "Gutxieneko kontsumoaren konpentsazioa" 0 "CONSMINFAT" "1" 01/04/12 31/12/49
@@ -598,7 +602,7 @@
 1 "" 1 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
 1 "" 2 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
 1 "" 3 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
-1 "" 5 "Internet" 0 "CONT15" "1" 01/10/49 31/12/49
+1 "" 5 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONT15DISC" "1" 01/03/15 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONT15DISC" "1" 01/03/15 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT15DISC" "1" 01/03/15 31/12/49
@@ -647,10 +651,10 @@
 1 "" 2 "Descompte promoció" 0 "CONT24DISC" "1" 01/03/15 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT24DISC" "1" 01/03/15 31/12/49
 1 "" 5 "Promotional discount" 0 "CONT24DISC" "1" 01/03/15 31/12/49
-1 "" 1 "La Sinfín" 0 "CONT24MF" "1" 04/03/15 31/12/49
-1 "" 2 "La Sinfín" 0 "CONT24MF" "1" 04/03/15 31/12/49
-1 "" 3 "La Sinfín" 0 "CONT24MF" "1" 04/03/15 31/12/49
-1 "" 5 "La Sinfín" 0 "CONT24MF" "1" 04/03/15 31/12/49
+1 "" 1 "La Sinfín 20 GB" 0 "CONT24MF" "1" 04/03/15 31/12/49
+1 "" 2 "La Sinfín 20 GB" 0 "CONT24MF" "1" 04/03/15 31/12/49
+1 "" 3 "La Sinfín 20 GB" 0 "CONT24MF" "1" 04/03/15 31/12/49
+1 "" 5 "La Sinfín 20 GB" 0 "CONT24MF" "1" 04/03/15 31/12/49
 1 "" 1 "Nacionales" 0 "CONT24VOICE_A" "1" 04/03/15 31/12/49
 1 "" 2 "Nacionals" 0 "CONT24VOICE_A" "1" 04/03/15 31/12/49
 1 "" 3 "Nazionalak" 0 "CONT24VOICE_A" "1" 04/03/15 31/12/49
@@ -659,6 +663,30 @@
 1 "" 2 "Nacionals" 0 "CONT24VOICE_B" "1" 04/03/15 31/12/49
 1 "" 3 "Nazionalak" 0 "CONT24VOICE_B" "1" 04/03/15 31/12/49
 1 "" 5 "National" 0 "CONT24VOICE_B" "1" 04/03/15 31/12/49
+1 "" 1 "Desvio de Llamadas" 0 "CONT25CF_A" "1" 12/12/16 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT25CF_A" "1" 12/12/16 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT25CF_A" "1" 12/12/16 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT25CF_A" "1" 12/12/16 31/12/49
+1 "" 1 "Desvio de Llamadas" 0 "CONT25CF_B" "1" 12/12/16 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT25CF_B" "1" 12/12/16 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT25CF_B" "1" 12/12/16 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT25CF_B" "1" 12/12/16 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONT25DISC" "1" 12/12/16 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONT25DISC" "1" 12/12/16 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONT25DISC" "1" 12/12/16 31/12/49
+1 "" 5 "Promotional discount" 0 "CONT25DISC" "1" 12/12/16 31/12/49
+1 "" 1 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 2 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 3 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 5 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONT25VOICE_A" "1" 12/12/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONT25VOICE_A" "1" 12/12/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT25VOICE_A" "1" 12/12/16 31/12/49
+1 "" 5 "National" 0 "CONT25VOICE_A" "1" 12/12/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONT25VOICE_B" "1" 12/12/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONT25VOICE_B" "1" 12/12/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT25VOICE_B" "1" 12/12/16 31/12/49
+1 "" 5 "National" 0 "CONT25VOICE_B" "1" 12/12/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONT8DISC" "1" 01/12/12 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONT8DISC" "1" 01/12/12 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT8DISC" "1" 01/12/12 31/12/49
@@ -794,6 +822,10 @@
 1 "" 2 "Internet" 0 "CONTDATA24" "1" 04/03/15 31/12/49
 1 "" 3 "Internet" 0 "CONTDATA24" "1" 04/03/15 31/12/49
 1 "" 5 "Internet" 0 "CONTDATA24" "1" 04/03/15 31/12/49
+1 "" 1 "Internet" 0 "CONTDATA25" "1" 12/12/16 31/12/49
+1 "" 2 "Internet" 0 "CONTDATA25" "1" 12/12/16 31/12/49
+1 "" 3 "Internet" 0 "CONTDATA25" "1" 12/12/16 31/12/49
+1 "" 5 "Internet" 0 "CONTDATA25" "1" 12/12/16 31/12/49
 1 "" 1 "Internet para Llevar 8" 0 "CONTDATA3" "1" 01/04/12 31/12/49
 1 "" 1 "Datos" 0 "CONTDATA3" "1" 01/01/10 31/03/12
 1 "" 2 "Internet para Llevar 8" 0 "CONTDATA3" "1" 01/04/12 31/12/49
@@ -844,6 +876,18 @@
 1 "" 3 "Eguneratzea: Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/03/12 31/03/12
 1 "" 4 "Upgrade to Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/03/12 31/12/49
 1 "" 5 "Upgrade to Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/04/12 31/12/49
+1 "" 1 "FIJO + INTERNET" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
+1 "" 2 "Fix + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
+1 "" 3 "Finkoa + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
+1 "" 5 "Landline + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTDSL_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTDSL_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTDSL_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTDSL_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTDSL_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTDSL_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTDSL_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTDSL_QTY_IN" "1" 01/11/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
@@ -864,6 +908,30 @@
 1 "" 2 "Nacionals" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
 1 "" 3 "Nazionalak" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
 1 "" 5 "National" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
+1 "" 1 "FIJO + INTERNET" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
+1 "" 2 "Fix + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
+1 "" 3 "Finkoa + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
+1 "" 5 "Landline + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH300_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH300_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH300_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH300_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH300_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH300_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH300_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH300_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 1 "FIJO + INTERNET" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
+1 "" 2 "Fix + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
+1 "" 3 "Finkoa + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
+1 "" 5 "Landline + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH50_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH50_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH50_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH50_MIN_IN" "1" 01/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH50_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH50_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH50_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTFH50_QTY_IN" "1" 01/11/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
@@ -1032,6 +1100,30 @@
 1 "" 2 "Nacionals" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
 1 "" 3 "Nazionalak" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
 1 "" 5 "National" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONTS2GBCF_A" "1" 01/11/16 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONTS2GBCF_A" "1" 01/11/16 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONTS2GBCF_A" "1" 01/11/16 31/12/49
+1 "" 5 "Call forwarding" 0 "CONTS2GBCF_A" "1" 01/11/16 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONTS2GBCF_B" "1" 01/11/16 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONTS2GBCF_B" "1" 01/11/16 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONTS2GBCF_B" "1" 01/11/16 31/12/49
+1 "" 5 "Call forwarding" 0 "CONTS2GBCF_B" "1" 01/11/16 31/12/49
+1 "" 1 "MÓVIL" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
+1 "" 2 "Mòbil" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
+1 "" 3 "Mugikorra" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
+1 "" 5 "Mobile" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTS2GBVOICE_A" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTS2GBVOICE_A" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTS2GBVOICE_A" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTS2GBVOICE_A" "1" 01/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "CONTS2GBVOICE_B" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "CONTS2GBVOICE_B" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTS2GBVOICE_B" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "CONTS2GBVOICE_B" "1" 01/11/16 31/12/49
+1 "" 1 "Internet" 0 "CONTS2GB_DATA" "1" 01/11/16 31/12/49
+1 "" 2 "Internet" 0 "CONTS2GB_DATA" "1" 01/11/16 31/12/49
+1 "" 3 "Internet" 0 "CONTS2GB_DATA" "1" 01/11/16 31/12/49
+1 "" 5 "Internet" 0 "CONTS2GB_DATA" "1" 01/11/16 31/12/49
 1 "" 1 "Desvío de Llamadas" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
 1 "" 2 "Desviament de Trucades" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
 1 "" 3 "Dei-desbideraketa" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
@@ -1333,6 +1425,18 @@
 1 "" 3 "Pago de terminal" 0 "DESCONTADO" "1" 27/11/12 31/12/49
 1 "" 4 "Pago de terminal" 0 "DESCONTADO" "1" 27/11/12 31/12/49
 1 "" 5 "Handset payment" 0 "DESCONTADO" "1" 27/11/12 31/12/49
+1 "" 1 "Descuento promoción" 0 "DISCFH300" "1" 01/11/16 31/12/54
+1 "" 2 "Descompte promoció" 0 "DISCFH300" "1" 01/11/16 31/12/54
+1 "" 3 "Promozio-deskontua" 0 "DISCFH300" "1" 01/11/16 31/12/54
+1 "" 5 "Promotional discount" 0 "DISCFH300" "1" 01/11/16 31/12/54
+1 "" 1 "Descuento promoción Fijo" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
+1 "" 2 "Descompte promoció Fix" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
+1 "" 3 "Finkoaren promozioagatiko deskontua" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
+1 "" 5 "Discount on Landline promotion" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
+1 "" 1 "Descuento incumplimiento de permanencia La Combinada" 0 "DISCFTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 2 "Descompte incompliment de permanència La Combinada" 0 "DISCFTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 3 "La Combinada tarifaren iraunkortasun-epea urratzeagatiko deskontua" 0 "DISCFTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 5 "Discount on non-compliance with term contract La Combinada tariff" 0 "DISCFTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 1 "Descuento 10% trafico" 0 "DISCOUNT10" "1" 01/09/13 31/12/49
 1 "" 2 "Descuento 10% trafico" 0 "DISCOUNT10" "1" 01/09/13 31/12/49
 1 "" 3 "Descuento 10% trafico" 0 "DISCOUNT10" "1" 01/09/13 31/12/49
@@ -1461,6 +1565,34 @@
 1 "" 2 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
 1 "" 3 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
 1 "" 5 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
+1 "" 1 "Nacionales" 0 "F10100003" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "F10100003" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "F10100003" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "F10100003" "1" 01/11/16 31/12/49
+1 "" 1 "Al Extranjero" 0 "F10100004" "1" 01/11/16 31/12/49
+1 "" 2 "A l'estranger" 0 "F10100004" "1" 01/11/16 31/12/49
+1 "" 3 "Atzerrira" 0 "F10100004" "1" 01/11/16 31/12/49
+1 "" 5 "Abroad" 0 "F10100004" "1" 01/11/16 31/12/49
+1 "" 1 "Nacionales" 0 "F10100005" "1" 01/11/16 31/12/49
+1 "" 2 "Nacionals" 0 "F10100005" "1" 01/11/16 31/12/49
+1 "" 3 "Nazionalak" 0 "F10100005" "1" 01/11/16 31/12/49
+1 "" 5 "National" 0 "F10100005" "1" 01/11/16 31/12/49
+1 "" 1 "Llamadas Premium" 0 "F15100023" "1" 01/11/16 31/12/49
+1 "" 2 "Trucades Premium" 0 "F15100023" "1" 01/11/16 31/12/49
+1 "" 3 "Premium deiak" 0 "F15100023" "1" 01/11/16 31/12/49
+1 "" 5 "Premium Calls" 0 "F15100023" "1" 01/11/16 31/12/49
+1 "" 1 "Números Gratuitos" 0 "F15100027" "1" 01/11/16 31/12/49
+1 "" 2 "Números Gratuïts" 0 "F15100027" "1" 01/11/16 31/12/49
+1 "" 3 "Doako zenbakiak" 0 "F15100027" "1" 01/11/16 31/12/49
+1 "" 5 "Free Numbers" 0 "F15100027" "1" 01/11/16 31/12/49
+1 "" 1 "Atención al cliente" 0 "FCCYOIGO" "1" 01/11/16 31/12/49
+1 "" 2 "Atenció al client" 0 "FCCYOIGO" "1" 01/11/16 31/12/49
+1 "" 3 "Bezeroarentzako arreta-zerbitzua" 0 "FCCYOIGO" "1" 01/11/16 31/12/49
+1 "" 5 "Customer Service" 0 "FCCYOIGO" "1" 01/11/16 31/12/49
+1 "" 1 "At. otras emp" 0 "FINFSERVICE" "1" 01/11/16 31/12/49
+1 "" 2 "A. altr. empr" 0 "FINFSERVICE" "1" 01/11/16 31/12/49
+1 "" 3 "Bes. enp. at." 0 "FINFSERVICE" "1" 01/11/16 31/12/49
+1 "" 5 "Other co att" 0 "FINFSERVICE" "1" 01/11/16 31/12/49
 1 "" 1 "Desvío de Llamadas" 0 "FLATCF" "1" 01/04/12 31/12/49
 1 "" 1 "Desvio llamadas T. Plana" 0 "FLATCF" "1" 01/01/12 31/03/12
 1 "" 2 "Desviament de Trucades" 0 "FLATCF" "1" 01/04/12 31/12/49
@@ -1573,6 +1705,18 @@
 1 "" 2 "En 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
 1 "" 3 "100 minutuan" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
 1 "" 5 "ln 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
+1 "" 1 "Tipo A" 0 "FSHORTNU" "1" 01/11/16 31/12/49
+1 "" 2 "Tipus A" 0 "FSHORTNU" "1" 01/11/16 31/12/49
+1 "" 3 "A mota" 0 "FSHORTNU" "1" 01/11/16 31/12/49
+1 "" 5 "Level A" 0 "FSHORTNU" "1" 01/11/16 31/12/49
+1 "" 1 "Incumplimiento de permanencia La Combinada" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 2 "Incompliment de permanència La Combinada" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 3 "La Combinada tarifaren iraunkortasun-epea urratzea" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 5 "Non-compliance with term contract on La Combinada tariff" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 1 "Contestador" 0 "FVMS" "1" 01/11/16 31/12/49
+1 "" 2 "Contestador" 0 "FVMS" "1" 01/11/16 31/12/49
+1 "" 3 "Erantzungailua" 0 "FVMS" "1" 01/11/16 31/12/49
+1 "" 5 "Answering service" 0 "FVMS" "1" 01/11/16 31/12/49
 1 "" 1 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
 1 "" 2 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
 1 "" 3 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
@@ -3042,6 +3186,31 @@
 1 "" 3 "iPhone 7 Plus 256 GB" 0 "G0000308" "1" 14/09/16 31/12/49
 1 "" 4 "iPhone 7 Plus 256 GB" 0 "G0000308" "1" 14/09/16 31/12/49
 1 "" 5 "iPhone 7 Plus 256 GB" 0 "G0000308" "1" 14/09/16 31/12/49
+1 "" 1 "Sony Xperia XZ" 0 "G0000309" "1" 28/09/16 31/12/49
+1 "" 2 "Sony Xperia XZ Platino" 0 "G0000309" "1" 28/09/16 31/12/49
+1 "" 3 "Sony Xperia XZ Platino" 0 "G0000309" "1" 28/09/16 31/12/49
+1 "" 4 "Sony Xperia XZ Platino" 0 "G0000309" "1" 28/09/16 31/12/49
+1 "" 5 "Sony Xperia XZ" 0 "G0000309" "1" 28/09/16 31/12/49
+1 "" 1 "ZTE Axon 7 Mini" 0 "G0000310" "1" 28/09/16 31/12/49
+1 "" 2 "ZTE Axon 7 Mini" 0 "G0000310" "1" 28/09/16 31/12/49
+1 "" 3 "ZTE Axon 7 Mini" 0 "G0000310" "1" 28/09/16 31/12/49
+1 "" 4 "ZTE Axon 7 Mini" 0 "G0000310" "1" 28/09/16 31/12/49
+1 "" 5 "ZTE Axon 7 Mini" 0 "G0000310" "1" 28/09/16 31/12/49
+1 "" 1 "Huawei Mate 9" 0 "G0000311" "1" 24/11/16 31/12/49
+1 "" 2 "Huawei Mate 9" 0 "G0000311" "1" 24/11/16 31/12/49
+1 "" 3 "Huawei Mate 9" 0 "G0000311" "1" 24/11/16 31/12/49
+1 "" 4 "Huawei Mate 9" 0 "G0000311" "1" 24/11/16 31/12/49
+1 "" 5 "Huawei Mate 9" 0 "G0000311" "1" 24/11/16 31/12/49
+1 "" 1 "LG G5 SE" 0 "G0000312" "1" 24/11/16 31/12/49
+1 "" 2 "LG G5 SE Titan" 0 "G0000312" "1" 24/11/16 31/12/49
+1 "" 3 "LG G5 SE Titan" 0 "G0000312" "1" 24/11/16 31/12/49
+1 "" 4 "LG G5 SE Titan" 0 "G0000312" "1" 24/11/16 31/12/49
+1 "" 5 "LG G5 SE" 0 "G0000312" "1" 24/11/16 31/12/49
+1 "" 1 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
+1 "" 2 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
+1 "" 3 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
+1 "" 4 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
+1 "" 5 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -4239,6 +4408,16 @@
 1 "" 3 "LG Optimus GT540 Plata" 0 "P030540S2" "1" 31/08/10 31/12/49
 1 "" 4 "LG Optimus GT540 Plata" 0 "P030540S2" "1" 31/08/10 31/12/49
 1 "" 5 "LG Optimus GT540 Silver" 0 "P030540S2" "1" 31/08/10 31/12/49
+1 "" 1 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
+1 "" 2 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
+1 "" 3 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
+1 "" 4 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
+1 "" 5 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
+1 "" 1 "LG G5 SE Titán con LG Cam Plus regalo" 0 "P0305SENP" "1" 24/11/16 31/12/49
+1 "" 2 "LG G5 SE Titán con LG Cam Plus regalo" 0 "P0305SENP" "1" 24/11/16 31/12/49
+1 "" 3 "LG G5 SE Titán con LG Cam Plus regalo" 0 "P0305SENP" "1" 24/11/16 31/12/49
+1 "" 4 "LG G5 SE Titán con LG Cam Plus regalo" 0 "P0305SENP" "1" 24/11/16 31/12/49
+1 "" 5 "LG G5 SE Titan with LG Cam Plus gift" 0 "P0305SENP" "1" 24/11/16 31/12/49
 1 "" 1 "LG G2 Negro" 0 "P030802N2" "1" 25/09/13 31/12/49
 1 "" 2 "LG G2 Negro" 0 "P030802N2" "1" 25/09/13 31/12/49
 1 "" 3 "LG G2 Negro" 0 "P030802N2" "1" 25/09/13 31/12/49
@@ -4918,7 +5097,7 @@
 1 "" 1 "Samsung F480 Negro" 0 "P034F4802" "1" 15/09/08 31/12/54
 1 "" 5 "Samsung F480 Black" 0 "P034F4802" "1" 15/09/08 31/12/54
 1 "" 1 "Samsung F480 Negro" 0 "P034F4803" "1" 01/12/08 31/12/54
-1 "" 5 "Samsung F480 Negro MNP Special" 0 "P034F4803" "1" 01/12/54 31/12/54
+1 "" 5 "Samsung F480 Negro MNP Special" 0 "P034F4803" "1" 01/12/08 31/12/54
 1 "" 1 "Samsung SGH F480i Negro" 0 "P034F48N2" "1" 18/03/10 31/12/49
 1 "" 2 "Samsung F480i Negro" 0 "P034F48N2" "1" 18/03/10 31/12/49
 1 "" 3 "Samsung F480i Negro" 0 "P034F48N2" "1" 18/03/10 31/12/49
@@ -5129,6 +5308,11 @@
 1 "" 3 "Samsung Galaxy S7 Negro" 0 "P034GS7N2" "1" 19/02/16 31/12/49
 1 "" 4 "Samsung Galaxy S7 Negro" 0 "P034GS7N2" "1" 19/02/16 31/12/49
 1 "" 5 "Samsung Galaxy S7 Black" 0 "P034GS7N2" "1" 19/02/16 31/12/49
+1 "" 1 "Samsung Galaxy S7 Rosa" 0 "P034GS7P2" "1" 25/11/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 Rosa" 0 "P034GS7P2" "1" 25/11/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 Rosa" 0 "P034GS7P2" "1" 25/11/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 Rosa" 0 "P034GS7P2" "1" 25/11/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 Pink" 0 "P034GS7P2" "1" 25/11/16 31/12/49
 1 "" 1 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
 1 "" 2 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
 1 "" 3 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
@@ -5410,6 +5594,11 @@
 1 "" 3 "Samsung Galaxy Trend Blanco" 0 "P034S75W2" "1" 26/06/13 31/12/49
 1 "" 4 "Samsung Galaxy Trend Blanco" 0 "P034S75W2" "1" 26/06/13 31/12/49
 1 "" 5 "Samsung Galaxy Trend White" 0 "P034S75W2" "1" 26/06/13 31/12/49
+1 "" 1 "Samsung Galaxy S7 edge Azul" 0 "P034S7EA2" "1" 05/01/17 31/12/49
+1 "" 2 "Samsung Galaxy S7 edge Azul" 0 "P034S7EA2" "1" 05/01/17 31/12/49
+1 "" 3 "Samsung Galaxy S7 edge Azul" 0 "P034S7EA2" "1" 05/01/17 31/12/49
+1 "" 4 "Samsung Galaxy S7 edge Azul" 0 "P034S7EA2" "1" 05/01/17 31/12/49
+1 "" 5 "Samsung Galaxy S7 edge Blue" 0 "P034S7EA2" "1" 05/01/17 31/12/49
 1 "" 1 "Samsung Galaxy S7 edge Dorado" 0 "P034S7ED2" "1" 19/02/16 31/12/49
 1 "" 2 "Samsung Galaxy S7 edge Dorado" 0 "P034S7ED2" "1" 19/02/16 31/12/49
 1 "" 3 "Samsung Galaxy S7 edge Dorado" 0 "P034S7ED2" "1" 19/02/16 31/12/49
@@ -5797,6 +5986,16 @@
 1 "" 3 "Sony Xperia XA Blanco" 0 "P037XXAW2" "1" 30/06/16 31/12/49
 1 "" 4 "Sony Xperia XA Blanco" 0 "P037XXAW2" "1" 30/06/16 31/12/49
 1 "" 5 "Sony Xperia XA White" 0 "P037XXAW2" "1" 30/06/16 31/12/49
+1 "" 1 "Sony Xperia XZ Azul" 0 "P037XXZA2" "1" 24/11/16 31/12/49
+1 "" 2 "Sony Xperia XZ Azul" 0 "P037XXZA2" "1" 24/11/16 31/12/49
+1 "" 3 "Sony Xperia XZ Azul" 0 "P037XXZA2" "1" 24/11/16 31/12/49
+1 "" 4 "Sony Xperia XZ Azul" 0 "P037XXZA2" "1" 24/11/16 31/12/49
+1 "" 5 "Sony Xperia XZ Blue" 0 "P037XXZA2" "1" 24/11/16 31/12/49
+1 "" 1 "Sony Xperia XZ Platino" 0 "P037XXZS2" "1" 28/09/16 31/12/49
+1 "" 2 "Sony Xperia XZ Platino" 0 "P037XXZS2" "1" 28/09/16 31/12/49
+1 "" 3 "Sony Xperia XZ Platino" 0 "P037XXZS2" "1" 28/09/16 31/12/49
+1 "" 4 "Sony Xperia XZ Platino" 0 "P037XXZS2" "1" 28/09/16 31/12/49
+1 "" 5 "Sony Xperia XZ Platinum" 0 "P037XXZS2" "1" 28/09/16 31/12/49
 1 "" 1 "Sony Xperia L Negro" 0 "P037XYLN1" "1" 28/03/14 31/12/49
 1 "" 2 "Sony Xperia L Negro" 0 "P037XYLN1" "1" 28/03/14 31/12/49
 1 "" 3 "Sony Xperia L Negro" 0 "P037XYLN1" "1" 28/03/14 31/12/49
@@ -6163,16 +6362,31 @@
 1 "" 3 "Huawei G8 Gris" 0 "P043HG8G2" "1" 25/09/15 31/12/49
 1 "" 4 "Huawei G8 Gris" 0 "P043HG8G2" "1" 25/09/15 31/12/49
 1 "" 5 "Huawei GX8 Grey" 0 "P043HG8G2" "1" 25/09/15 31/12/49
+1 "" 1 "Huawei Nova Plus Oro" 0 "P043HNPD2" "1" 21/11/16 31/12/49
+1 "" 2 "Huawei Nova Plus Oro" 0 "P043HNPD2" "1" 21/11/16 31/12/49
+1 "" 3 "Huawei Nova Plus Oro" 0 "P043HNPD2" "1" 21/11/16 31/12/49
+1 "" 4 "Huawei Nova Plus Oro" 0 "P043HNPD2" "1" 21/11/16 31/12/49
+1 "" 5 "Huawei Nova Plus Gold" 0 "P043HNPD2" "1" 21/11/16 31/12/49
 1 "" 1 "Huawei Nova Plus Gris" 0 "P043HNPG2" "1" 21/09/16 31/12/49
 1 "" 2 "Huawei Nova Plus Gris" 0 "P043HNPG2" "1" 21/09/16 31/12/49
 1 "" 3 "Huawei Nova Plus Gris" 0 "P043HNPG2" "1" 21/09/16 31/12/49
 1 "" 4 "Huawei Nova Plus Gris" 0 "P043HNPG2" "1" 21/09/16 31/12/49
 1 "" 5 "Huawei Nova Plus Grey" 0 "P043HNPG2" "1" 21/09/16 31/12/49
+1 "" 1 "Huawei Nova Plus Gris con accesorios de regalo" 0 "P043HNPGP" "1" 03/10/16 31/12/49
+1 "" 2 "Huawei Nova Plus Gris con accesorios de regalo" 0 "P043HNPGP" "1" 03/10/16 31/12/49
+1 "" 3 "Huawei Nova Plus Gris con accesorios de regalo" 0 "P043HNPGP" "1" 03/10/16 31/12/49
+1 "" 4 "Huawei Nova Plus Gris con accesorios de regalo" 0 "P043HNPGP" "1" 03/10/16 31/12/49
+1 "" 5 "Huawei Nova Plus Grey with accessories gift" 0 "P043HNPGP" "1" 03/10/16 31/12/49
 1 "" 1 "Huawei Nova Plus Plata" 0 "P043HNPS2" "1" 21/09/16 31/12/49
 1 "" 2 "Huawei Nova Plus Plata" 0 "P043HNPS2" "1" 21/09/16 31/12/49
 1 "" 3 "Huawei Nova Plus Plata" 0 "P043HNPS2" "1" 21/09/16 31/12/49
 1 "" 4 "Huawei Nova Plus Plata" 0 "P043HNPS2" "1" 21/09/16 31/12/49
 1 "" 5 "Huawei Nova Plus Silver" 0 "P043HNPS2" "1" 21/09/16 31/12/49
+1 "" 1 "Huawei Nova Plus Plata con accesorios de regalo" 0 "P043HNPSP" "1" 03/10/16 31/12/49
+1 "" 2 "uawei Nova Plus Plata con accesorios de regalo" 0 "P043HNPSP" "1" 03/10/16 31/12/49
+1 "" 3 "uawei Nova Plus Plata con accesorios de regalo" 0 "P043HNPSP" "1" 03/10/16 31/12/49
+1 "" 4 "uawei Nova Plus Plata con accesorios de regalo" 0 "P043HNPSP" "1" 03/10/16 31/12/49
+1 "" 5 "Huawei Nova Plus Silver with accessories gift" 0 "P043HNPSP" "1" 03/10/16 31/12/49
 1 "" 1 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
 1 "" 2 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
 1 "" 3 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
@@ -6208,6 +6422,11 @@
 1 "" 3 "Huawei Y6 Blanco" 0 "P043HY6W2" "1" 25/09/15 31/12/49
 1 "" 4 "Huawei Y6 Blanco" 0 "P043HY6W2" "1" 25/09/15 31/12/49
 1 "" 5 "Huawei Y6 White" 0 "P043HY6W2" "1" 25/09/15 31/12/49
+1 "" 1 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
+1 "" 2 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
+1 "" 3 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
+1 "" 4 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
+1 "" 5 "Huawei Mate 9 Grey" 0 "P043MT9G2" "1" 24/11/16 31/12/49
 1 "" 1 "Huawei P1 XL Negro" 0 "P043P1XN2" "1" 24/09/12 31/12/49
 1 "" 2 "Huawei P1 XL Negro" 0 "P043P1XN2" "1" 24/09/12 31/12/49
 1 "" 3 "Huawei P1 XL Negro" 0 "P043P1XN2" "1" 24/09/12 31/12/49
@@ -6258,6 +6477,11 @@
 1 "" 3 "Huawei P9 Lite Blanco" 0 "P043P9LW2" "1" 27/04/16 31/12/49
 1 "" 4 "Huawei P9 Lite Blanco" 0 "P043P9LW2" "1" 27/04/16 31/12/49
 1 "" 5 "Huawei P9 Lite White" 0 "P043P9LW2" "1" 27/04/16 31/12/49
+1 "" 1 "Huawei P9 Plus Dorado" 0 "P043P9PD2" "1" 22/09/16 31/12/49
+1 "" 2 "Huawei P9 Plus Dorado" 0 "P043P9PD2" "1" 22/09/16 31/12/49
+1 "" 3 "Huawei P9 Plus Dorado" 0 "P043P9PD2" "1" 22/09/16 31/12/49
+1 "" 4 "Huawei P9 Plus Dorado" 0 "P043P9PD2" "1" 22/09/16 31/12/49
+1 "" 5 "Huawei P9 Plus Gold" 0 "P043P9PD2" "1" 22/09/16 31/12/49
 1 "" 1 "Huawei P9 Plus Gris" 0 "P043P9PG2" "1" 24/06/16 31/12/49
 1 "" 2 "Huawei P9 Plus Gris" 0 "P043P9PG2" "1" 24/06/16 31/12/49
 1 "" 3 "Huawei P9 Plus Gris" 0 "P043P9PG2" "1" 24/06/16 31/12/49
@@ -6372,6 +6596,11 @@
 1 "" 3 "Huawei Ascend Y530 Blanco" 0 "P043Y53W2" "1" 28/01/14 31/12/49
 1 "" 4 "Huawei Ascend Y530 Blanco" 0 "P043Y53W2" "1" 28/01/14 31/12/49
 1 "" 5 "Huawei Ascend Y530 White" 0 "P043Y53W2" "1" 28/01/14 31/12/49
+1 "" 1 "Huawei Y6 II Compact Oro" 0 "P043Y62D2" "1" 05/10/16 31/12/49
+1 "" 2 "Huawei Y6 II Compact Dorado" 0 "P043Y62D2" "1" 05/10/16 31/12/49
+1 "" 3 "Huawei Y6 II Compact Dorado" 0 "P043Y62D2" "1" 05/10/16 31/12/49
+1 "" 4 "Huawei Y6 II Compact Dorado" 0 "P043Y62D2" "1" 05/10/16 31/12/49
+1 "" 5 "Huawei Y6 II Compact Gold" 0 "P043Y62D2" "1" 05/10/16 31/12/49
 1 "" 1 "Huawei Y6 II Compact Negro" 0 "P043Y62N2" "1" 14/06/16 31/12/49
 1 "" 2 "Huawei Y6 II Compact Negro" 0 "P043Y62N2" "1" 14/06/16 31/12/49
 1 "" 3 "Huawei Y6 II Compact Negro" 0 "P043Y62N2" "1" 14/06/16 31/12/49
@@ -6743,6 +6972,11 @@
 1 "" 3 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 4 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 5 "Wolder Wiam 23 Black" 0 "P047W23N2" "1" 10/06/16 31/12/49
+1 "" 1 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
+1 "" 2 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
+1 "" 3 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
+1 "" 4 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
+1 "" 5 "Wolder Wiam 23 White" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 1 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
 1 "" 2 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
 1 "" 3 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
@@ -6753,6 +6987,16 @@
 1 "" 3 "ZTE Blade V220 Plata" 0 "P075220S2" "1" 22/04/15 31/12/49
 1 "" 4 "ZTE Blade V220 Plata" 0 "P075220S2" "1" 22/04/15 31/12/49
 1 "" 5 "ZTE Blade V220 Silver" 0 "P075220S2" "1" 22/04/15 31/12/49
+1 "" 1 "ZTE Blade A310 Gris" 0 "P075310G2" "1" 20/12/16 31/12/49
+1 "" 2 "ZTE Blade A310 Gris" 0 "P075310G2" "1" 20/12/16 31/12/49
+1 "" 3 "ZTE Blade A310 Gris" 0 "P075310G2" "1" 20/12/16 31/12/49
+1 "" 4 "ZTE Blade A310 Gris" 0 "P075310G2" "1" 20/12/16 31/12/49
+1 "" 5 "ZTE Blade A310 Grey" 0 "P075310G2" "1" 20/12/16 31/12/49
+1 "" 1 "ZTE Blade A310 Blanco" 0 "P075310W2" "1" 20/12/16 31/12/49
+1 "" 2 "ZTE Blade A310 Blanco" 0 "P075310W2" "1" 20/12/16 31/12/49
+1 "" 3 "ZTE Blade A310 Blanco" 0 "P075310W2" "1" 20/12/16 31/12/49
+1 "" 4 "ZTE Blade A310 Blanco" 0 "P075310W2" "1" 20/12/16 31/12/49
+1 "" 5 "ZTE Blade A310 White" 0 "P075310W2" "1" 20/12/16 31/12/49
 1 "" 1 "ZTE Blade A452 Oro" 0 "P075452D2" "1" 19/01/16 31/12/49
 1 "" 2 "ZTE Blade A452 Oro" 0 "P075452D2" "1" 19/01/16 31/12/49
 1 "" 3 "ZTE Blade A452 Oro" 0 "P075452D2" "1" 19/01/16 31/12/49
@@ -6783,6 +7027,16 @@
 1 "" 3 "ZTE Blade A460 Blanco" 0 "P075A46W2" "1" 25/09/15 31/12/49
 1 "" 4 "ZTE Blade A460 Blanco" 0 "P075A46W2" "1" 25/09/15 31/12/49
 1 "" 5 "ZTE Blade A460 White" 0 "P075A46W2" "1" 25/09/15 31/12/49
+1 "" 1 "ZTE Axon 7 Mini Oro" 0 "P075A7MD2" "1" 24/11/16 31/12/49
+1 "" 2 "ZTE Axon 7 Mini Oro" 0 "P075A7MD2" "1" 24/11/16 31/12/49
+1 "" 3 "ZTE Axon 7 Mini Oro" 0 "P075A7MD2" "1" 24/11/16 31/12/49
+1 "" 4 "ZTE Axon 7 Mini Oro" 0 "P075A7MD2" "1" 24/11/16 31/12/49
+1 "" 5 "ZTE Axon 7 Mini Gold" 0 "P075A7MD2" "1" 24/11/16 31/12/49
+1 "" 1 "ZTE Axon 7 Mini Plata" 0 "P075A7MS2" "1" 28/09/16 31/12/49
+1 "" 2 "ZTE Axon 7 Mini Plata" 0 "P075A7MS2" "1" 28/09/16 31/12/49
+1 "" 3 "ZTE Axon 7 Mini Plata" 0 "P075A7MS2" "1" 28/09/16 31/12/49
+1 "" 4 "ZTE Axon 7 Mini Plata" 0 "P075A7MS2" "1" 28/09/16 31/12/49
+1 "" 5 "ZTE Axon 7 Mini Silver" 0 "P075A7MS2" "1" 28/09/16 31/12/49
 1 "" 1 "ZTE Blade G Lux Blanco" 0 "P075BGLW2" "1" 28/10/14 31/12/49
 1 "" 2 "ZTE Blade G Lux Blanco" 0 "P075BGLW2" "1" 28/10/14 31/12/49
 1 "" 3 "ZTE Blade G Lux Blanco" 0 "P075BGLW2" "1" 28/10/14 31/12/49
@@ -7884,10 +8138,14 @@
 1 "" 5 "Monthly payment on purchase of mobile or netbook" 0 "PAYTERM18" "1" 01/09/11 31/03/12
 1 "" 5 "Cost/month to buy laptop" 0 "PAYTERM18" "1" 16/03/10 31/08/11
 1 "" 5 "Laptop purchase payments outstanding" 0 "PAYTERM18" "1" 01/03/10 15/03/10
-1 "" 1 "Cuota Pago a Plazos UNO-E" 0 "PAYTERM1E" "1" 01/06/13 31/12/49
-1 "" 2 "Quota Pagament a Terminis UNO-E" 0 "PAYTERM1E" "1" 01/06/13 31/12/49
-1 "" 3 "Epekako ordainketaren kuota, UNO-E bidez" 0 "PAYTERM1E" "1" 01/03/14 31/12/49
-1 "" 5 "Installment payable to UNO-E for purchase" 0 "PAYTERM1E" "1" 01/06/13 31/12/49
+1 "" 1 "Cuota Pago a Plazos BBVA" 0 "PAYTERM1E" "1" 15/12/16 31/12/49
+1 "" 1 "Cuota Pago a Plazos UNO-E" 0 "PAYTERM1E" "1" 01/06/13 14/12/16
+1 "" 2 "Quota Pagament a Terminis BBVA" 0 "PAYTERM1E" "1" 15/12/16 31/12/49
+1 "" 2 "Quota Pagament a Terminis UNO-E" 0 "PAYTERM1E" "1" 01/06/13 14/12/16
+1 "" 3 "Epekako ordainketaren kuota, BBVA bidez" 0 "PAYTERM1E" "1" 15/12/16 31/12/49
+1 "" 3 "Epekako ordainketaren kuota, UNO-E bidez" 0 "PAYTERM1E" "1" 01/03/14 14/12/16
+1 "" 5 "Installment payable to BBVA for purchase" 0 "PAYTERM1E" "1" 15/12/16 31/12/49
+1 "" 5 "Installment payable to UNO-E for purchase" 0 "PAYTERM1E" "1" 01/06/13 14/12/16
 1 "" 1 "Cuota Pago a Plazos" 0 "PAYTERM24" "1" 01/04/12 31/12/49
 1 "" 1 "Pago mensual compra móvil o portátil" 0 "PAYTERM24" "1" 01/09/11 31/03/12
 1 "" 1 "Cuota mensual compra móvil o portátil" 0 "PAYTERM24" "1" 01/08/11 31/08/11
@@ -7901,15 +8159,27 @@
 1 "" 5 "Amount of Instalments" 0 "PAYTERM24" "1" 01/04/12 31/12/49
 1 "" 5 "Monthly payment on purchase of mobile or netbook" 0 "PAYTERM24" "1" 01/09/11 31/03/12
 1 "" 5 "Cost/month to buy laptop or mobile phone" 0 "PAYTERM24" "1" 01/08/11 31/08/11
+1 "" 1 "Cuota Pago a Plazos CETELEM" 0 "PAYTERMBC" "1" 01/10/16 31/12/49
+1 "" 2 "Quota Pagament a Terminis CETELEM" 0 "PAYTERMBC" "1" 01/10/16 31/12/49
+1 "" 3 "Epekako ordainketaren kuota, CETELEM erakundearen bidez" 0 "PAYTERMBC" "1" 01/10/16 31/12/49
+1 "" 5 "Installment payable to CETELEM for purchase" 0 "PAYTERMBC" "1" 01/10/16 31/12/49
 1 "" 1 "Cuota Pago a Plazos Banco Sabadell" 0 "PAYTERMBS" "1" 01/05/14 31/12/49
 1 "" 2 "Quota Pagament a Terminis Banco Sabadell" 0 "PAYTERMBS" "1" 01/05/14 31/12/49
 1 "" 3 "Epekako ordainketaren kuota, Banco Sabadell erakundearen bidez" 0 "PAYTERMBS" "1" 01/05/14 31/12/49
 1 "" 5 "Installment payable to Banco Sabadell for purchase" 0 "PAYTERMBS" "1" 01/05/14 31/12/49
-1 "" 1 "Comisión Gestión Aplazamiento UNO-E" 0 "PAYTERMCG1E" "1" 01/05/13 31/12/49
-1 "" 2 "Comissió Gestió Ajornament UNO-E" 0 "PAYTERMCG1E" "1" 01/05/13 31/12/49
-1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, UNO-E bidez" 0 "PAYTERMCG1E" "1" 01/03/14 31/12/49
+1 "" 1 "Comisión Gestión Aplazamiento BBVA" 0 "PAYTERMCG1E" "1" 15/12/16 31/12/49
+1 "" 1 "Comisión Gestión Aplazamiento UNO-E" 0 "PAYTERMCG1E" "1" 01/05/13 14/12/16
+1 "" 2 "Comissió Gestió Ajornament BBVA" 0 "PAYTERMCG1E" "1" 15/12/16 31/12/49
+1 "" 2 "Comissió Gestió Ajornament UNO-E" 0 "PAYTERMCG1E" "1" 01/05/13 14/12/16
+1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, BBVA bidez" 0 "PAYTERMCG1E" "1" 15/12/16 31/12/49
+1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, UNO-E bidez" 0 "PAYTERMCG1E" "1" 01/03/14 14/12/16
 1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, UNO-E erakundearen bidez" 0 "PAYTERMCG1E" "1" 01/05/13 28/02/14
-1 "" 5 "UNO-E Deferred Payment Commission" 0 "PAYTERMCG1E" "1" 01/05/13 31/12/49
+1 "" 5 "BBVA Deferred Payment Commission" 0 "PAYTERMCG1E" "1" 15/12/16 31/12/49
+1 "" 5 "UNO-E Deferred Payment Commission" 0 "PAYTERMCG1E" "1" 01/05/13 14/12/16
+1 "" 1 "Comisión Gestión Aplazamiento CETELEM" 0 "PAYTERMCGBC" "1" 01/10/16 31/12/49
+1 "" 2 "Comissió Gestió Ajornament CETELEM" 0 "PAYTERMCGBC" "1" 01/10/16 31/12/49
+1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, CETELEM erakundearen bidez" 0 "PAYTERMCGBC" "1" 01/10/16 31/12/49
+1 "" 5 "CETELEM Deferred Payment Commission" 0 "PAYTERMCGBC" "1" 01/10/16 31/12/49
 1 "" 1 "Comisión Gestión Aplazamiento Banco Sabadell" 0 "PAYTERMCGBS" "1" 01/05/14 31/12/49
 1 "" 2 "Comissió Gestió Ajornament Banco Sabadell" 0 "PAYTERMCGBS" "1" 01/05/14 31/12/49
 1 "" 3 "Atzeratzea kudeatzeagatiko komisioa, Banco Sabadell erakundearen bidez" 0 "PAYTERMCGBS" "1" 01/05/14 31/12/49
@@ -7927,10 +8197,18 @@
 1 "" 5 "Instalments outstanding" 0 "PAYTERMEND" "1" 01/04/12 31/12/49
 1 "" 5 "Outstanding payments on purchase of mobile or netbook" 0 "PAYTERMEND" "1" 01/09/11 31/03/12
 1 "" 5 "Laptop purchase payments outstanding" 0 "PAYTERMEND" "1" 16/03/10 31/08/11
-1 "" 1 "Cuotas pendientes Pago a Plazos UNO-E" 0 "PAYTERMEND1E" "1" 01/06/13 31/12/49
-1 "" 2 "Quotes pendents Pagament a Terminis UNO-E" 0 "PAYTERMEND1E" "1" 01/06/13 31/12/49
-1 "" 3 "Gelditzen diren UNO-E erakundearen epekako ordainketaren kuotak" 0 "PAYTERMEND1E" "1" 01/06/13 31/12/49
-1 "" 5 "UNO-E instalments outstanding" 0 "PAYTERMEND1E" "1" 01/06/13 31/12/49
+1 "" 1 "Cuotas pendientes Pago a Plazos BBVA" 0 "PAYTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 1 "Cuotas pendientes Pago a Plazos UNO-E" 0 "PAYTERMEND1E" "1" 01/06/13 14/12/16
+1 "" 2 "Quotes pendents Pagament a Terminis BBVA" 0 "PAYTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 2 "Quotes pendents Pagament a Terminis UNO-E" 0 "PAYTERMEND1E" "1" 01/06/13 14/12/16
+1 "" 3 "Gelditzen diren BBVA erakundearen epekako ordainketaren kuotak" 0 "PAYTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 3 "Gelditzen diren UNO-E erakundearen epekako ordainketaren kuotak" 0 "PAYTERMEND1E" "1" 01/06/13 14/12/16
+1 "" 5 "BBVA instalments outstanding" 0 "PAYTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 5 "UNO-E instalments outstanding" 0 "PAYTERMEND1E" "1" 01/06/13 14/12/16
+1 "" 1 "Cuotas pendientes Pago a Plazos CETELEM" 0 "PAYTERMENDBC" "1" 01/10/16 31/12/49
+1 "" 2 "Quotes pendents Pagament a Terminis CETELEM" 0 "PAYTERMENDBC" "1" 01/10/16 31/12/49
+1 "" 3 "Gelditzen diren CETELEM erakundearen epekako ordainketaren kuotak" 0 "PAYTERMENDBC" "1" 01/10/16 31/12/49
+1 "" 5 "CETELEM instalments outstanding" 0 "PAYTERMENDBC" "1" 01/10/16 31/12/49
 1 "" 1 "Cuotas pendientes Pago a Plazos Banco Sabadell" 0 "PAYTERMENDBS" "1" 01/05/14 31/12/49
 1 "" 2 "Quotes pendents Pagament a Terminis Banco Sabadell" 0 "PAYTERMENDBS" "1" 01/05/14 31/12/49
 1 "" 3 "Gelditzen diren Banco Sabadell erakundearen epekako ordainketaren kuotak" 0 "PAYTERMENDBS" "1" 01/05/14 31/12/49
@@ -8422,10 +8700,14 @@
 1 "" 2 "Quota Pagament a Terminis del Pagament Final" 0 "RVTERM" "1" 01/11/15 31/12/49
 1 "" 3 "Azken ordainketako epekako ordainketako kuota" 0 "RVTERM" "1" 01/11/15 31/12/49
 1 "" 5 "Monthly instalments on final cost" 0 "RVTERM" "1" 01/11/15 31/12/49
-1 "" 1 "Cuota Pago a Plazos UNO-E del Pago Final" 0 "RVTERM1E" "1" 01/11/15 31/12/49
-1 "" 2 "Quota Pagament a Terminis UNO-E del Pagament Final" 0 "RVTERM1E" "1" 01/11/15 31/12/49
-1 "" 3 "Azken ordainketako UNO-E epe. ordainketako kuota" 0 "RVTERM1E" "1" 01/11/15 31/12/49
-1 "" 5 "Monthly UNO-E instalments on final cost" 0 "RVTERM1E" "1" 01/11/15 31/12/49
+1 "" 1 "Cuota Pago a Plazos BBVA del Pago Final" 0 "RVTERM1E" "1" 15/12/16 31/12/49
+1 "" 1 "Cuota Pago a Plazos UNO-E del Pago Final" 0 "RVTERM1E" "1" 01/11/15 14/12/16
+1 "" 2 "Quota Pagament a Terminis BBVA del Pagament Final" 0 "RVTERM1E" "1" 15/12/16 31/12/49
+1 "" 2 "Quota Pagament a Terminis UNO-E del Pagament Final" 0 "RVTERM1E" "1" 01/11/15 14/12/16
+1 "" 3 "Azken ordainketako BBVA epe. ordainketako kuota" 0 "RVTERM1E" "1" 15/12/16 31/12/49
+1 "" 3 "Azken ordainketako UNO-E epe. ordainketako kuota" 0 "RVTERM1E" "1" 01/11/15 14/12/16
+1 "" 5 "Monthly BBVA instalments on final cost" 0 "RVTERM1E" "1" 15/12/16 31/12/49
+1 "" 5 "Monthly UNO-E instalments on final cost" 0 "RVTERM1E" "1" 01/11/15 14/12/16
 1 "" 1 "Pago Final" 0 "RVTERM1EF" "1" 01/02/14 31/12/49
 1 "" 2 "Pagament Final" 0 "RVTERM1EF" "1" 01/02/14 31/12/49
 1 "" 3 "Azken ordainketa" 0 "RVTERM1EF" "1" 01/02/14 31/12/49
@@ -8434,6 +8716,14 @@
 1 "" 2 "Abonament Pagament Final per devolució del mòbil" 0 "RVTERM1EFD" "1" 01/02/14 31/12/49
 1 "" 3 "Azken ordainketaren itzulera mugikorra itzultzeagatik" 0 "RVTERM1EFD" "1" 01/02/14 31/12/49
 1 "" 5 "Meeting the final payment by returning the mobile" 0 "RVTERM1EFD" "1" 01/02/14 31/12/49
+1 "" 1 "Cuota Pago a Plazos CETELEM del Pago Final" 0 "RVTERMBC" "1" 01/10/16 31/12/49
+1 "" 2 "Quota Pagament a Terminis CETELEM del Pagament Final" 0 "RVTERMBC" "1" 01/10/16 31/12/49
+1 "" 3 "Azken ordainketako CETELEM epe. ordainketako kuota" 0 "RVTERMBC" "1" 01/10/16 31/12/49
+1 "" 5 "Monthly CETELEM instalments on final cost" 0 "RVTERMBC" "1" 01/10/16 31/12/49
+1 "" 1 "Pago Final" 0 "RVTERMBCF" "1" 01/10/16 31/12/49
+1 "" 2 "Pagament Final" 0 "RVTERMBCF" "1" 01/10/16 31/12/49
+1 "" 3 "Azken ordainketa" 0 "RVTERMBCF" "1" 01/10/16 31/12/49
+1 "" 5 "Final payment" 0 "RVTERMBCF" "1" 01/10/16 31/12/49
 1 "" 1 "Cuota Pago a Plazos Banco Sabadell del Pago Final" 0 "RVTERMBS" "1" 01/11/15 31/12/49
 1 "" 2 "Quota Pagament a Term. Banc Sabadell de Pag. Final" 0 "RVTERMBS" "1" 01/11/15 31/12/49
 1 "" 3 "Azken ordainketako B. Sabadell epe. ordain. kuota" 0 "RVTERMBS" "1" 01/11/15 31/12/49
@@ -8452,7 +8742,7 @@
 1 "" 5 "Discount on Final Payment" 0 "RVTERMDTEQ25" "1" 27/11/15 31/12/49
 1 "" 1 "Descuento sobre Pago Final por Renuevo." 0 "RVTERMDTRW" "1" 27/11/15 31/12/49
 1 "" 2 "Descompte sobre el Pagament Final per Renuevo." 0 "RVTERMDTRW" "1" 27/11/15 31/12/49
-1 "" 3 "Azken ordainketako deskontua Renuevogatik." 0 "RVTERMDTRW" "1" 27/11/49 31/12/49
+1 "" 3 "Azken ordainketako deskontua Renuevogatik." 0 "RVTERMDTRW" "1" 27/11/15 31/12/49
 1 "" 5 "Discount on Final Payment for Renuevo" 0 "RVTERMDTRW" "1" 27/11/15 31/12/49
 1 "" 1 "Descuento del Pago Final." 0 "RVTERMDTTD" "1" 27/11/15 31/12/49
 1 "" 2 "Descompte del Pagament Final." 0 "RVTERMDTTD" "1" 27/11/15 31/12/49
@@ -8466,10 +8756,18 @@
 1 "" 2 "Quotes pendents Pagament a Term. de Pagament Final" 0 "RVTERMEND" "1" 01/11/15 31/12/49
 1 "" 3 "Azken ordainketako epe. ordain. kuota ordaingabeak" 0 "RVTERMEND" "1" 01/11/15 31/12/49
 1 "" 5 "Monthly instalments left on final cost" 0 "RVTERMEND" "1" 01/11/15 31/12/49
-1 "" 1 "Cuotas pdtes. Pago a Plazos UNO-E del Pago Final" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
-1 "" 2 "Quotes pendents Pagam. a Term. UNO-E de Pag. Final" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
-1 "" 3 "Az. ordainketako UNO-E epe. ordain. kuo. ordaingb" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
-1 "" 5 "Monthly UNO-E instalments left on final cost" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
+1 "" 1 "Cuotas pdtes. Pago a Plazos BBVA del Pago Final" 0 "RVTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 1 "Cuotas pdtes. Pago a Plazos UNO-E del Pago Final" 0 "RVTERMEND1E" "1" 01/11/15 14/12/16
+1 "" 2 "Quotes pendents Pagam. a Term. BBVA de Pag. Final" 0 "RVTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 2 "Quotes pendents Pagam. a Term. UNO-E de Pag. Final" 0 "RVTERMEND1E" "1" 01/11/15 14/12/16
+1 "" 3 "Az. ordainketako BBVA epe. ordain. kuo. ordaingb" 0 "RVTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 3 "Az. ordainketako UNO-E epe. ordain. kuo. ordaingb" 0 "RVTERMEND1E" "1" 01/11/15 14/12/16
+1 "" 5 "Monthly BBVA instalments left on final cost" 0 "RVTERMEND1E" "1" 15/12/16 31/12/49
+1 "" 5 "Monthly UNO-E instalments left on final cost" 0 "RVTERMEND1E" "1" 01/11/15 14/12/16
+1 "" 1 "Cuotas pdtes. Pago a Plazos CETELEM del Pago Final" 0 "RVTERMENDBC" "1" 01/10/16 31/12/49
+1 "" 2 "Quotes pendents Pagam. a Term. CETELEM de Pag. Final" 0 "RVTERMENDBC" "1" 01/10/16 31/12/49
+1 "" 3 "Az. ordainketako CETELEM epe. ordain. kuo. ordaingb" 0 "RVTERMENDBC" "1" 01/10/16 31/12/49
+1 "" 5 "Monthly CETELEM instalments left on final cost" 0 "RVTERMENDBC" "1" 01/10/16 31/12/49
 1 "" 1 "Cuotas pdtes. Pago a Plazos B.Sabad. de Pago Final" 0 "RVTERMENDBS" "1" 01/11/15 31/12/49
 1 "" 2 "Quot. pend. Pag. a Term. B. Sabadell de Pag. Final" 0 "RVTERMENDBS" "1" 01/11/15 31/12/49
 1 "" 3 "Az. ordainketako B.Sabad. ep. ordain kuo. ordaingb" 0 "RVTERMENDBS" "1" 01/11/15 31/12/49
@@ -10685,10 +10983,22 @@
 6 "" 2 "DESCOMPTES i CÀRRECS no subjectes a impostos" 0 "45" "1" 01/06/16 31/12/49
 6 "" 3 "Zergen menpe ez dauden DESKONTUAK eta KARGUAK" 0 "45" "1" 01/06/16 31/12/49
 6 "" 5 "DISCOUNTS and CHARGES not subject to tax" 0 "45" "1" 01/06/16 31/12/49
+6 "" 1 "LA COMBINADA" 0 "46" "1" 27/10/16 31/12/49
+6 "" 2 "LA COMBINADA" 0 "46" "1" 27/10/16 31/12/49
+6 "" 3 "LA COMBINADA" 0 "46" "1" 27/10/16 31/12/49
+6 "" 5 "LA COMBINADA" 0 "46" "1" 27/10/16 31/12/49
 6 "" 1 "Mensajes multimedia - MMS" 0 "5" "1" 01/01/06 31/12/49
 6 "" 2 "Missatges multimèdia - MMS" 0 "5" "1" 01/01/06 31/12/49
 6 "" 3 "Multimedia Mezuak - MMS" 0 "5" "1" 01/01/06 31/12/49
 6 "" 5 "Multimedia messages - MMS" 0 "5" "1" 01/01/06 31/12/49
+6 "" 1 "LLAMADAS DESDE FIJO" 0 "51" "1" 27/10/16 31/12/49
+6 "" 2 "TRUCADES DES DE FIX" 0 "51" "1" 27/10/16 31/12/49
+6 "" 3 "FINKOTIK EGINDAKO DEIAK" 0 "51" "1" 27/10/16 31/12/49
+6 "" 5 "CALLS FROM LANDLINE" 0 "51" "1" 27/10/16 31/12/49
+6 "" 1 "SERVICIOS PREMIUM FIJO" 0 "53" "1" 27/10/16 31/12/49
+6 "" 2 "SERVEIS PRÈMIUM FIX" 0 "53" "1" 27/10/16 31/12/49
+6 "" 3 "PREMIUM FIJO ZERBITZUAK" 0 "53" "1" 27/10/16 31/12/49
+6 "" 5 "PREMIUM LANDLINE SERVICES" 0 "53" "1" 27/10/16 31/12/49
 6 "" 1 "SERVICIOS PREMIUM" 0 "6" "1" 01/04/12 31/12/49
 6 "" 1 "Contenidos" 0 "6" "1" 01/01/06 31/03/12
 6 "" 2 "SERVEIS PREMIUM" 0 "6" "1" 01/04/12 31/12/49
@@ -10790,10 +11100,14 @@
 9 "" 2 "La Sinfín 8 GB" 0 "CONT23" "1" 12/08/15 31/12/49
 9 "" 3 "La Sinfín 8 GB" 0 "CONT23" "1" 12/08/15 31/12/49
 9 "" 5 "La Sinfín 8 GB" 0 "CONT23" "1" 12/08/15 31/12/49
-9 "" 1 "La Sinfín" 0 "CONT24" "1" 04/03/15 31/12/49
-9 "" 2 "La Sinfín" 0 "CONT24" "1" 04/03/15 31/12/49
-9 "" 3 "La Sinfín" 0 "CONT24" "1" 04/03/15 31/12/49
-9 "" 5 "La Sinfín" 0 "CONT24" "1" 04/03/15 31/12/49
+9 "" 1 "La Sinfín 20 GB" 0 "CONT24" "1" 04/03/15 31/12/49
+9 "" 2 "La Sinfín 20 GB" 0 "CONT24" "1" 04/03/15 31/12/49
+9 "" 3 "La Sinfín 20 GB" 0 "CONT24" "1" 04/03/15 31/12/49
+9 "" 5 "La Sinfín 20 GB" 0 "CONT24" "1" 04/03/15 31/12/49
+9 "" 1 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
+9 "" 2 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
+9 "" 3 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
+9 "" 5 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
 9 "" 1 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
 9 "" 2 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
 9 "" 3 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
@@ -10852,6 +11166,22 @@
 9 "" 2 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 3 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 5 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
+9 "" 1 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
+9 "" 1 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
+9 "" 1 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
+9 "" 2 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
+9 "" 3 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
+9 "" 5 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 1 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 2 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 3 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
@@ -10907,6 +11237,38 @@
 9 "" 4 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
 9 "" 5 "Fusión Plana a lo Yoigo" 0 "CONTFF" "1" 16/06/15 31/12/54
 9 "" 5 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
+9 "" 1 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
+9 "" 1 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 1 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
+9 "" 1 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
+9 "" 2 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
+9 "" 3 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
+9 "" 5 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
+9 "" 1 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 2 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 3 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 5 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 1 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
+9 "" 2 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
+9 "" 3 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
+9 "" 5 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 1 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 2 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 3 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
@@ -11115,6 +11477,10 @@
 11 "" 3 "Contrato 2" 0 "CONTRATO2" "1" 01/09/08 31/12/54
 11 "" 4 "Contrato 2" 0 "CONTRATO2" "1" 01/09/08 31/12/54
 11 "" 5 "Contrato 2" 0 "CONTRATO2" "1" 01/09/08 31/12/54
+11 "" 1 "La Sinfín" 0 "CONTRATO25" "1" 12/12/16 31/12/49
+11 "" 2 "La Sinfín" 0 "CONTRATO25" "1" 12/12/16 31/12/49
+11 "" 3 "La Sinfín" 0 "CONTRATO25" "1" 12/12/16 31/12/49
+11 "" 5 "La Sinfín" 0 "CONTRATO25" "1" 12/12/16 31/12/49
 11 "" 1 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
 11 "" 2 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
 11 "" 3 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54

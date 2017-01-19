@@ -129,22 +129,40 @@ CLASS HPD.CDRDump FINAL INHERITS DumpHandlerWithQuery:
          WHEN "DCEvent"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN IF lhMainTable::DCEvent > ""
-                          THEN lhMainTable::DCEvent
-                          ELSE IF lhMainTable::BillCode = "PREMDUB"
-                          THEN "PMDUB"
-                          ELSE IF lhMainTable::CLIType = "TARJ7"  AND
-                                  lhMainTable::Charge = 0
-                          THEN "TARJ7"
-                          ELSE IF lhMainTable::CLIType = "TARJ9"  AND
-                                  lhMainTable::EventType = "CALL" AND
-                                  lhMainTable::Accumulator > 0
-                          THEN "TARJ9"
-                          ELSE IF lhMainTable::CLIType = "TARJ9"  AND
-                                  lhMainTable::Charge = 0         AND
-                                  LOOKUP(lhMainTable::GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0
-                          THEN "TARJ9"
-                          ELSE "".
+              ELSE DO:
+
+                IF lhMainTable:TABLE EQ "MobCDR" THEN DO:
+
+                   IF lhMainTable::DCEvent BEGINS "CONTDSL" OR
+                      lhMainTable::DCEvent BEGINS "CONTFH" THEN DO:
+
+                      IF lhMainTable::DialType EQ {&DIAL_TYPE_FIXED_VOICE} THEN
+                        RETURN lhMainTable::DCevent + "_MIN".
+                      
+                      IF lhMainTable::DialType EQ {&DIAL_TYPE_FIXED_VOICE_BDEST} THEN
+                        RETURN lhMainTable::DCevent + "_QTY".
+                   END.
+
+                   RETURN lhMainTable::DCevent.
+                END.
+
+                RETURN IF lhMainTable::DCEvent > ""
+                       THEN lhMainTable::DCEvent
+                       ELSE IF lhMainTable::BillCode = "PREMDUB"
+                       THEN "PMDUB"
+                       ELSE IF lhMainTable::CLIType = "TARJ7"  AND
+                               lhMainTable::Charge = 0
+                       THEN "TARJ7"
+                       ELSE IF lhMainTable::CLIType = "TARJ9"  AND
+                               lhMainTable::EventType = "CALL" AND
+                               lhMainTable::Accumulator > 0
+                       THEN "TARJ9"
+                       ELSE IF lhMainTable::CLIType = "TARJ9"  AND
+                               lhMainTable::Charge = 0         AND
+                               LOOKUP(lhMainTable::GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0
+                       THEN "TARJ9"
+                       ELSE "".
+         END.
          /*
          WHEN "DateStTimeStart"
          THEN IF ilCheckOnly

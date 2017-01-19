@@ -92,6 +92,9 @@ DEF VAR lcDSSBundleId AS CHAR                    NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType  AS CHAR           NO-UNDO.
 DEF VAR lgOngoing AS LOGICAL                     NO-UNDO.
 DEF VAR lrBarring AS ROWID                       NO-UNDO.
+DEF VAR ldeFirstSecond AS DEC NO-UNDO. 
+DEF VAR ldaDate AS DATE NO-UNDO. 
+DEF VAR ldeLastSecond AS DEC NO-UNDO. 
 
 DEF VAR lhSub AS HANDLE NO-UNDO. 
 
@@ -193,12 +196,22 @@ DO WHILE TRUE:
            
    ELSE IF FRAME-INDEX = 3 AND NOT Killed THEN DO TRANSACTION:
       IF NOT fIsPermittedModule(MobSub.CliType, "simch") THEN NEXT.
-      run simch.p(MsSeq).
+       /*YPR-4777*/
+      /*Operation is not allowed if fixed line provisioning is pending*/
+      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
+         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
+      ELSE     
+         run simch.p(MsSeq).
    END.
 
    ELSE IF FRAME-INDEX = 4 AND NOT Killed THEN DO TRANSACTION:
       IF NOT fIsPermittedModule(MobSub.CliType, "msisdnch") THEN NEXT.
-      run msisdnch.p(MsSeq).
+      /*YPR-4776*/
+      /*Operation is not allowed if fixed line provisioning is pending*/
+      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
+         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
+      ELSE 
+         run msisdnch.p(MsSeq).
    END.
             
    ELSE IF FRAME-INDEX = 5 AND NOT Killed THEN  DO :
@@ -225,7 +238,11 @@ DO WHILE TRUE:
    END.
    
    ELSE IF FRAME-INDEX = 8 AND NOT Killed THEN DO:
-      RUN bundle_change_ui.p (MobSub.MsSeq).
+      /*YPR-4775*/
+      /*Operation is not allowed if fixed line provisioning is pending*/
+      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN 
+         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
+      ELSE RUN bundle_change_ui.p (MobSub.MsSeq).
    END.
             
    ELSE IF FRAME-INDEX = 9 AND NOT Killed AND Avail mobsub 
@@ -289,6 +306,7 @@ DO WHILE TRUE:
    
    ELSE IF FRAME-INDEX  = 18 THEN DO :
       IF NOT fIsPermittedModule(lhSub::CLIType, "dccli") THEN NEXT.
+      
       RUN pclist.p("mobsub",MsSeq).
    END.
                                     
@@ -328,6 +346,29 @@ DO WHILE TRUE:
                               ELSE "RERATE SUBSCRIPTION")
       SIDE-LABELS
       FRAME rerate.
+
+      IF NOT llDSSActive THEN DO:
+        
+        ASSIGN
+           ldeFirstSecond = FromPeriod * 100 + 1
+           ldaDate = DATE(EndPeriod MOD 100, 1, INT(EndPeriod / 100)) + 32
+           ldeLastSecond = YEAR(ldaDate) * 10000 + MONTH(ldaDate) * 100 + 1.
+
+         IF CAN-FIND(FIRST msowner NO-LOCK WHERE
+                           msowner.CLI = MobSub.CLI AND
+                           msowner.tsbegin < ldeLastSecond AND
+                           msowner.tsend >= ldeFirstSecond AND
+                           msowner.FixedNumber > "") THEN DO:
+         MESSAGE "This subscription has fixed line"
+                 " active so customer will be re-rated."
+                 SKIP
+                 "Do You REALLY want to re-rate the customer: " +
+                 STRING(MobSub.CustNum) 
+         VIEW-AS ALERT-BOX BUTTONS YES-NO TITLE " CONFIRMATION " UPDATE ok.
+         IF NOT ok THEN NEXT.
+         llDSSActive = TRUE.
+         END.
+      END.
       
       IF llDSSActive THEN
          RUN rerate(INPUT "", MobSub.CustNum , INPUT Fromperiod, INPUT Endperiod).

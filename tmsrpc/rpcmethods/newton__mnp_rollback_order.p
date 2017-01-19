@@ -230,8 +230,11 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+   IF fHasConvergenceTariff(piMsSeq) THEN
+      RETURN appl_err("Not allowed for fixed line tariffs").
+
    IF pcOldOperatorPayType = "" OR pcOldOperatorPayType = ? THEN
-   RETURN appl_err("Old operator paytype is blank or unknown").
+      RETURN appl_err("Old operator paytype is blank or unknown").
 
    IF pcContractId = "" OR pcContractId = ? THEN
       RETURN appl_err("Contract Id is blank or unknown").
@@ -251,6 +254,8 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
       CAN-FIND(FIRST Order WHERE
                      Order.Brand = gcBrand AND
                      Order.CLI   = TermMobSub.CLI AND
+                     Order.OrderType NE {&ORDER_TYPE_RENEWAL} AND
+                     Order.OrderType NE {&ORDER_TYPE_STC} AND
                      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 NO-LOCK) THEN
       RETURN appl_err("MSISDN is alreay in use").
 

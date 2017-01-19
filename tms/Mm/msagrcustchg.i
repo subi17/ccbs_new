@@ -5,6 +5,7 @@
 {barrfunc.i}
 {mnpoutchk.i}
 {orderchk.i}
+{fixedlinefunc.i}
 
 &SCOPED-DEFINE ACC_OLB_BARRINGS_NOT_ALLOWED "Y_HURG"
    
@@ -38,6 +39,7 @@ PROCEDURE pCheckSubscriptionForACC:
 
    DEF INPUT  PARAMETER iiMsSeq      AS INT  NO-UNDO.
    DEF INPUT  PARAMETER iiCurrentReq AS INT  NO-UNDO.
+   DEF INPUT  PARAMETER icChannel    AS CHAR NO-UNDO.
    DEF OUTPUT PARAMETER ocMessage    AS CHAR NO-UNDO.
    
    DEF BUFFER bPendingReq FOR MsRequest.
@@ -53,6 +55,13 @@ PROCEDURE pCheckSubscriptionForACC:
       ocMessage = "Unknown subscription".
       RETURN "ERROR".
    END.
+   /*YPR-4772*/
+   /*acc is not allowed for convergent tariffs.*/
+   IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:       
+       ocMessage = "Not allowed for fixed line tariffs".
+       RETURN "ERROR".
+   END.
+
 
    IF TODAY - MobSub.ActivationDate < 30 THEN DO:
       ocMessage = "Subscription has not been active long enough".
@@ -83,7 +92,7 @@ PROCEDURE pCheckSubscriptionForACC:
       ocMessage = "Current customer is not a preactivated one".
       RETURN "ERROR".
    END.
-   
+
    IF LOOKUP(STRING(MobSub.MsStat),"4,8") = 0 THEN DO:
       ocMessage = "Subscription status is not valid for owner change".
       RETURN "ERROR".
@@ -110,20 +119,21 @@ PROCEDURE pCheckSubscriptionForACC:
       ocMessage = "Current user for subscription is invalid".
       RETURN "ERROR".
    END.
+   
+   IF icChannel NE {&REQUEST_SOURCE_NEWTON} THEN
+      FOR FIRST Limit NO-LOCK WHERE
+                Limit.MsSeq     = MobSub.MsSeq AND
+                Limit.LimitType = 3            AND
+                Limit.TMRuleSeq = 0            AND
+                Limit.ToDate   >= TODAY        AND
+                Limit.FromDate <= TODAY        AND
+                Limit.Custnum   = MobSub.Custnum AND
+                Limit.LimitID   = 0            AND
+                Limit.LimitAmt > 0:
+         ocMessage = "Subscription has a billing suspension / prohibition".
+         RETURN "ERROR".
+      END.
 
-   FOR FIRST Limit NO-LOCK WHERE
-             Limit.MsSeq     = MobSub.MsSeq AND
-             Limit.LimitType = 3            AND
-             Limit.TMRuleSeq = 0            AND
-             Limit.ToDate   >= TODAY        AND
-             Limit.FromDate <= TODAY        AND
-             Limit.Custnum   = MobSub.Custnum AND
-             Limit.LimitID   = 0            AND
-             Limit.LimitAmt > 0:
-      ocMessage = "Subscription has a billing suspension / prohibition".
-      RETURN "ERROR".
-   END.
-            
    FIND FIRST MsOwner WHERE MsOwner.MsSeq = MobSub.MsSeq NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MsOwner    OR 
       MsOwner.TsEnd < 99999999 OR
@@ -170,6 +180,14 @@ PROCEDURE pCheckTargetCustomerForACC:
          ocMessage = "Target customer has subscription with active operator or debt barring".
          RETURN "ERROR".
       END.
+      /*YPR-4772*/
+      /*acc is not allowed for convergent tariffs.*/
+      IF fIsConvergenceTariff(bACCMobSub.CLIType) THEN DO:       
+          ocMessage = "Not allowed for fixed line tariffs".
+          RETURN "ERROR".
+      END.
+
+     
    END.
 
    FIND FIRST bACCNewCust WHERE

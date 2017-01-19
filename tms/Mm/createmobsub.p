@@ -43,6 +43,8 @@
 {fbundle.i}
 {fbankdata.i}
 {create_eventlog.i}
+{Func/fixedlinefunc.i}
+{Func/msisdn_prefix.i}
 
 DEF INPUT  PARAMETER iiMSRequest AS INT  NO-UNDO.
 
@@ -76,6 +78,8 @@ DEF VAR lcInitialBarring AS CHAR NO-UNDO.
 DEF VAR ldReqActDate   AS DATE NO-UNDO.
 DEF VAR liReqActTime   AS INT  NO-UNDO.
 DEF VAR ldeActivationTS AS DEC  NO-UNDO.
+DEF VAR ldaActDate AS DATE NO-UNDO. 
+DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
 
 DEF BUFFER bInvCust    FOR Customer.
 DEF BUFFER bRefCust    FOR Customer.
@@ -87,15 +91,26 @@ DEF BUFFER lbMobSub    FOR MobSub.
 DEF BUFFER lbOrderCustomer FOR OrderCustomer.
 DEFINE BUFFER lbMobSubAD1 FOR MobSub.
 DEF BUFFER bTerMsRequest FOR MsRequest.
+DEF BUFFER bMsOwner FOR MsOwner.
 
 FIND FIRST MSRequest WHERE 
            MSRequest.MSrequest = iiMSrequest
 EXCLUSIVE-LOCK NO-ERROR.
 
-IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 13 THEN 
-   RETURN "ERROR".
+IF NOT AVAILABLE MsRequest OR
+   (MsRequest.ReqType NE {&REQTYPE_SUBSCRIPTION_CREATE} AND 
+    MsRequest.ReqType NE {&REQTYPE_FIXED_LINE_CREATE}) THEN 
+    RETURN "ERROR".
    
 liReqStatus = MsRequest.ReqStatus.
+
+IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_CREATE} AND
+   CAN-FIND(FIRST bMsRequest NO-LOCK WHERE
+                  bMsRequest.MsSeq = MsRequest.MsSeq AND
+                  bMsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE} AND
+    LOOKUP(STRING(bMsRequest.ReqStatus),
+           {&REQ_INACTIVE_STATUSES}) = 0) THEN
+   RETURN "ERROR".
 
 /* request is under work */
 IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -103,41 +118,6 @@ IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 FIND FIRST order WHERE
            Order.MSSeq = MSRequest.MSSeq
 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-
-FIND FIRST Mobsub WHERE 
-           Mobsub.MSSEq = MSRequest.Msseq
-NO-LOCK NO-ERROR.
-
-IF AVAIL mobsub THEN DO: 
-   fReqError("Subscription already exists").
-   RETURN. 
-END.           
-
-IF AVAIL Order THEN DO:
-   
-   FIND FIRST Mobsub WHERE 
-              Mobsub.CLI = Order.CLI
-   NO-LOCK NO-ERROR.
-
-   IF AVAIL mobsub THEN DO: 
-      fReqError("Subscription with the same MSISDN already exists").
-      RETURN. 
-   END.           
-END.
-
-FIND FIRST CustTemp NO-LOCK NO-ERROR.
-
-/*YDR-1824
-AC1: Request activation time is used as a beginning of a subscription timestamps if the request handling time is the same day than activation date. 
-AC2: First second of subscription handling date is used as a beginning of subscription timestamps if the request handling time is not the same day than activation date.*/
-fSplitTS(MsRequest.ActStamp,
-         ldReqActDate,
-         liReqActTime).
-
-IF ldReqActDate = TODAY THEN
-   ASSIGN ldeActivationTS = MSRequest.ActStamp.
-ELSE
-   ASSIGN ldeActivationTS = fMake2Dt(TODAY,1).
 
 RUN check-order(output lcErrorTxt).
 
@@ -154,6 +134,78 @@ IF lcErrorTxt > "" THEN DO:
    END.
 END.
 
+IF fIsConvergenceTariff(Order.CLIType) THEN DO:
+
+   FIND orderfusion NO-LOCK WHERE
+        orderfusion.Brand = gcBrand AND
+        orderfusion.orderid = order.orderid NO-ERROR.
+   IF NOT AVAIL orderfusion THEN DO:
+      fReqError("OrderFusion not found").
+      RETURN. 
+   END.
+END.
+ELSE RELEASE OrderFusion.
+   
+FIND FIRST Mobsub WHERE 
+           Mobsub.MSSEq = MSRequest.Msseq
+NO-LOCK NO-ERROR.
+
+IF AVAIL OrderFusion AND
+   MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_CREATE} THEN DO:
+
+   IF NOT AVAIL mobsub THEN DO:
+      fReqError("Subscription not found").
+      RETURN. 
+   END.           
+
+   FIND CURRENT mobsub EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+   IF LOCKED mobsub THEN RETURN.
+
+   FIND Customer NO-LOCK WHERE
+        Customer.Custnum = mobsub.Custnum.
+
+END.
+ELSE DO:
+
+   IF AVAIL mobsub THEN DO:
+      fReqError("Subscription already exists").
+      RETURN. 
+   END.           
+
+   FIND FIRST Mobsub WHERE 
+              Mobsub.CLI = Order.CLI
+   NO-LOCK NO-ERROR.
+
+   IF AVAIL mobsub THEN DO: 
+      fReqError("Subscription with the same MSISDN already exists").
+      RETURN. 
+   END.           
+   
+   IF AVAIL OrderFusion THEN DO:
+      IF CAN-FIND(
+         FIRST Mobsub WHERE 
+               Mobsub.Brand = gcBrand AND
+               Mobsub.FixedNumber = orderfusion.fixednumber) THEN DO:
+         fReqError("Subscription with the same fixed number already exists").
+         RETURN. 
+      END.
+   END.
+END.
+
+FIND FIRST CustTemp NO-LOCK NO-ERROR.
+
+/*YDR-1824
+AC1: Request activation time is used as a beginning of a subscription timestamps if the request handling time is the same day than activation date. 
+AC2: First second of subscription handling date is used as a beginning of subscription timestamps if the request handling time is not the same day than activation date.*/
+fSplitTS(MsRequest.ActStamp,
+         ldReqActDate,
+         liReqActTime).
+
+IF ldReqActDate = TODAY THEN
+   ASSIGN ldeActivationTS = MSRequest.ActStamp.
+ELSE
+   ASSIGN ldeActivationTS = fMake2Dt(TODAY,1).
+
 IF Order.CLIType EQ "TARJ5" THEN DO:
 
    RUN air_update_serviceclass.p(Order.CLI,
@@ -166,193 +218,390 @@ IF Order.CLIType EQ "TARJ5" THEN DO:
       RETURN.
    END.
 END.
-
-RUN createcustomer(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
-
-ASSIGN Msrequest.CustNum = oiCustomer.
-
-RUN createcustomer(INPUT Order.OrderId,3,FALSE,TRUE,output oicustomer).
-
-FIND FIRST CLIType WHERE
-           CLIType.CliType = Order.CLIType 
-NO-LOCK NO-ERROR.
-
-FIND FIRST imsi WHERE 
-           imsi.icc = Order.icc
-NO-LOCK NO-ERROR.
-
-CREATE MobSub. 
-
-ASSIGN
-   Mobsub.ActivationTS  = ldeActivationTS
-   MobSub.MsSeq         = Order.MSSeq .
-
-llCorporate = CAN-FIND(OrderCustomer OF Order WHERE
-                       OrderCustomer.RowType = 1 AND
-                       OrderCustomer.CustIdType = "CIF").
-
-FOR EACH OrderCustomer NO-LOCK WHERE
-         OrderCustomer.Brand   = gcBrand   AND
-         OrderCustomer.OrderID = Order.OrderID:
-
-   CASE OrderCustomer.RowType:
-   WHEN 1 THEN MobSub.AgrCust = OrderCustomer.CustNum.
-   WHEN 2 THEN MobSub.InvCust = OrderCustomer.CustNum.
-   WHEN 3 THEN MobSub.CustNum = OrderCustomer.CustNum.
-   END CASE.
    
-   /* Create contact data for corporate customers */
-   IF llCorporate AND 
-      (OrderCustomer.Rowtype = 1 OR OrderCustomer.Rowtype = 5) THEN DO:
+IF NOT AVAIL mobsub THEN DO:
+
+   FIND FIRST MSISDNNumber WHERE
+              MSISDNNumber.CLI   = Order.CLI
+   EXCLUSIVE-LOCK NO-ERROR.
+            
+   IF NOT AVAIL msisdnNumber THEN DO:
+      CREATE MSISDNNumber.
+      ASSIGN MSISDNNumber.CLI = Order.CLI.
+   END.
+
+   FIND FIRST MSISDN WHERE 
+              MSISDN.Brand    = gcBrand    AND 
+              MSISDN.CLI      = Order.CLI  AND 
+              MSISDN.ValidTo >= fMakeTS() 
+   EXCLUSIVE-LOCK NO-ERROR.
+
+   IF NOT AVAIL MSISDN THEN DO:
+
+      CREATE MSISDN.
+      ASSIGN
+         MSISDN.CLI         = order.CLI
+         MSISDN.Brand       = gcBrand
+         MSISDN.Stat        = 3.
+
+      ASSIGN 
+         MSISDN.ValidFrom   = ldeActivationTS 
+         MSISDN.ActionDate  = Today.
+   END.
+
+   ELSE DO:
       
-      RUN createcustcontact.p(
-          Order.OrderId,
-          MsRequest.Custnum,
-          OrderCustomer.RowType,
-          OUTPUT lcError).
-   
-      /* write possible error to an order memo */
-      IF lcError > "" THEN DO:
+      fMakeMsidnHistory(INPUT RECID(MSISDN)).
+
+      MSISDN.Stat        = 3.
+   END.
+
+   RUN createcustomer(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
+
+   ASSIGN Msrequest.CustNum = oiCustomer.
+
+   RUN createcustomer(INPUT Order.OrderId,3,FALSE,TRUE,output oicustomer).
+
+   FIND FIRST CLIType WHERE
+              CLIType.CliType = Order.CLIType 
+   NO-LOCK NO-ERROR.
+
+   IF Msrequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE}
+   THEN RELEASE IMSI.
+   ELSE FIND FIRST imsi NO-LOCK WHERE 
+                   imsi.icc = Order.icc NO-ERROR.
+
+   CREATE MobSub. 
+
+   ASSIGN
+      Mobsub.ActivationTS  = ldeActivationTS
+      MobSub.MsSeq         = Order.MSSeq .
+
+   llCorporate = CAN-FIND(OrderCustomer OF Order WHERE
+                          OrderCustomer.RowType = 1 AND
+                          OrderCustomer.CustIdType = "CIF").
+
+   FOR EACH OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand   = gcBrand   AND
+            OrderCustomer.OrderID = Order.OrderID:
+
+      CASE OrderCustomer.RowType:
+      WHEN 1 THEN MobSub.AgrCust = OrderCustomer.CustNum.
+      WHEN 2 THEN MobSub.InvCust = OrderCustomer.CustNum.
+      WHEN 3 THEN MobSub.CustNum = OrderCustomer.CustNum.
+      END CASE.
+      
+      /* Create contact data for corporate customers */
+      IF llCorporate AND 
+         (OrderCustomer.Rowtype = 1 OR OrderCustomer.Rowtype = 5) THEN DO:
+         
+         RUN createcustcontact.p(
+             Order.OrderId,
+             MsRequest.Custnum,
+             OrderCustomer.RowType,
+             OUTPUT lcError).
+      
+         /* write possible error to an order memo */
+         IF lcError > "" THEN DO:
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "Order",
+                             STRING(Order.OrderID),
+                             msrequest.custnum,
+                             "CUSTOMER CONTACT CREATION FAILED",
+                             lcError).
+         END.
+      END.
+      ELSE IF OrderCustomer.Rowtype = 1 AND
+              CliType.PayType = 1 AND
+              NOT CAN-FIND(FIRST lbMobSubAD1 WHERE
+                                 lbMobSubAD1.Brand     = gcBrand AND
+                                 lbMobSubAD1.MsSeq    <> MobSub.MsSeq AND
+                                 lbMobSubAD1.CustNum   = MobSub.CustNum AND
+                                 NOT lbMobSubAD1.PayType) THEN DO:
+         FIND FIRST Customer EXCLUSIVE-LOCK WHERE
+                    Customer.CustNum = MsRequest.Custnum NO-ERROR.
+         IF AVAILABLE Customer THEN DO:      
+            ASSIGN Customer.AuthCustId     = Order.OrdererID
+                   Customer.AuthCustIdType = Order.OrdererIDType.
+            RELEASE Customer.
+         END.
+      END.
+   END.
+
+   IF MobSub.InvCust = 0 THEN MobSub.InvCust = MobSub.AgrCust.
+   IF MobSub.CustNum = 0 THEN DO:
+      CASE Order.UserRole:
+      WHEN 2 THEN MobSub.CustNum = MobSub.InvCust.
+      OTHERWISE   MobSub.CustNum = MobSub.AgrCust.
+      END CASE. 
+   END.   
+
+   FIND FIRST Customer WHERE
+              Customer.Custnum = MobSub.CustNum NO-LOCK NO-ERROR.
+
+   IF Customer.DataProtected = TRUE THEN DO:
+      FIND CURRENT Customer EXCLUSIVE-LOCK NO-ERROR.
+      ASSIGN Customer.DataProtected = FALSE.
+      FIND CURRENT Customer NO-LOCK NO-ERROR.
+   END.
+
+   {cr_bscode.i}
+
+   ASSIGN
+      MobSub.CLI              = Order.CLI
+      MobSub.FixedNumber      = orderfusion.FixedNumber WHEN AVAIL orderfusion
+      Mobsub.icc              = Order.ICC WHEN MsRequest.ReqType NE 
+                                  {&REQTYPE_FIXED_LINE_CREATE}
+      Mobsub.Brand            = Order.Brand 
+      Mobsub.MsStatus         = (IF MsRequest.ReqType EQ 
+                                    {&REQTYPE_FIXED_LINE_CREATE} 
+                                 THEN {&MSSTATUS_FIXED_PROV_ONG} 
+                                 ELSE {&MSSTATUS_ACTIVE})
+      MobSub.Reseller         = Order.Reseller
+      Mobsub.Paytype          = (CLIType.PayType = 2)
+      Mobsub.salesman         = Order.salesman 
+      Mobsub.MNPChannel       = 2 
+      Mobsub.CreationDate     = TODAY
+      Mobsub.CLIType          = Order.CliType    
+      Mobsub.BillTarget       = Clitype.BillTarget
+      Mobsub.SimDelStatus     = 2
+      Mobsub.Activationdate   = TODAY
+      Mobsub.IDCode           = STRING(RANDOM(0,9999),"9999")
+      MobSub.MultiSimID       = Order.MultiSimID
+      MobSub.MultiSimType     = Order.MultiSimType
+      MobSub.TariffActDate    = TODAY
+      MobSub.TariffActTS      = ldeActivationTS.
+
+   IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
+
+   /* Initial TopUp */
+   IF MobSub.PayType = TRUE AND Order.Offer = "" THEN 
+      RUN topupcamp(MobSub.MsSeq, OUTPUT liPPRequest).
+
+   /* additional topup */
+   lcTaxZone = "".
+   FOR EACH OrderTopup OF Order NO-LOCK:
+
+      IF lcTaxZone = "" THEN DO:
+         FIND bInvCust WHERE bInvCust.CustNum = MobSub.InvCust NO-LOCK.
+         lcTaxZone = fRegionTaxZone(bInvCust.Region).
+      END.
+         
+      fCreateTopUpRequest(MobSub.MsSeq,
+                          MobSub.CLI,
+                          "RefillTRequest",
+                          "WEB Order",
+                          "RefillTRequest",
+                          "994",
+                          "Campaign",    /* reference */
+                          lcTaxZone,
+                          0,
+                          OrderTopup.Amount * 100,
+                          OrderTopup.VatAmount * 100).
+   END.
+
+   CREATE Segmentation.
+   ASSIGN
+      Segmentation.MsSeq   = Order.MsSeq
+      Segmentation.SegmentCode  = "SN"
+      Segmentation.SegmentOffer = "OFF"
+      Segmentation.SegmentDate  = TODAY
+      Segmentation.SegmentCreation = fMakeTS().
+
+   CREATE msowner.
+   ASSIGN
+      MSOwner.CLI       = Mobsub.cli
+      MSOwner.FixedNumber = Mobsub.FixedNumber
+      MSOwner.CustNum   = Mobsub.CustNum
+      MSOwner.MsSeq     = MobSub.MsSeq
+      MSOwner.TsBegin   = ldeActivationTS
+      msowner.tsend      = 99999999.99999
+      MSOwner.BillTarg   = Mobsub.BillTarg
+      MSOwner.Brand      = mobsub.Brand
+      Msowner.AgrCust    = Mobsub.AgrCust
+      Msowner.InvCust    = Mobsub.InvCust
+      MSOwner.IMSI       = MobSub.IMSI
+      MSowner.Paytype    = MObsub.Paytype
+      MSOwner.clitype    = mobsub.clitype
+      MSOWner.clievent   = (IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE}                            THEN "F" ELSE "C")
+      Msowner.InPortOper = Order.CurrOper .
+
+      IF fGetOrderMandateId(BUFFER Order,
+                            OUTPUT lcMandateId,
+                            OUTPUT ldaMandateDate)
+      THEN ASSIGN
+         MsOwner.MandateId   = lcMandateId
+         MsOwner.MandateDate = ldaMandateDate.
+              
+   IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
+                                      "",
+                                      katun,
+                                      "").
+
+   IF AVAIL orderfusion THEN
+      RUN pCopyPackage(MobSub.CLIType,
+                       "TMSService",
+                       "",
+                       MobSub.MSSeq,
+                       MobSub.ActivationDate,
+                       TRUE,    /* only those that don't already exist */
+                       FALSE,   /* create fees */
+                       FALSE,   /* solog (this is used for new mobsubs only) */
+                       0,
+                       FALSE,
+                       OUTPUT liRequest).
+
+   /* default counter limits */
+   IF MobSub.PayType = FALSE THEN DO:
+      
+      fTMRLimit2Subscription(MobSub.MsSeq).
+
+      _fCreateNewInvoiceTarget(
+         MobSub.MsSeq,
+         MobSub.Custnum,
+         MobSub.CLiType,
+         OUTPUT lcError).
+
+      IF lcError NE "" THEN 
          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Order",
-                          STRING(Order.OrderID),
-                          msrequest.custnum,
-                          "CUSTOMER CONTACT CREATION FAILED",
+                          "MobSub",
+                          STRING(MobSub.MsSeq),
+                          MobSub.CustNum,
+                          "Invoice target creation failed",
                           lcError).
-      END.
    END.
-   ELSE IF OrderCustomer.Rowtype = 1 AND
-           CliType.PayType = 1 AND
-           NOT CAN-FIND(FIRST lbMobSubAD1 WHERE
-                              lbMobSubAD1.Brand     = gcBrand AND
-                              lbMobSubAD1.MsSeq    <> MobSub.MsSeq AND
-                              lbMobSubAD1.CustNum   = MobSub.CustNum AND
-                              NOT lbMobSubAD1.PayType) THEN DO:
-      FIND FIRST Customer EXCLUSIVE-LOCK WHERE
-                 Customer.CustNum = MsRequest.Custnum NO-ERROR.
-      IF AVAILABLE Customer THEN DO:      
-         ASSIGN Customer.AuthCustId     = Order.OrdererID
-                Customer.AuthCustIdType = Order.OrdererIDType.
-         RELEASE Customer.
+
+   IF MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE} THEN
+      RUN requestaction_exec.p (MsRequest.MsRequest,
+                                MobSub.CLIType,
+                                Order.OrderID,
+                                MobSub.ActivationTS,
+                                MobSub.ActivationTS,
+                                TRUE,                   /* create fees */
+                                {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
+                                {&REQUEST_ACTIONLIST_ALL}).
+
+   /* Welcome SMS for all tariffs (Excluding Corporate) */
+   IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO:
+
+      lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
+      
+       /* TARJ7 and TARJ9 have their own Welcome SMSes */
+       IF MobSub.CliType = "TARJ7" OR
+          MobSub.CliType = "TARJ9" THEN
+          lcSMSText = fGetSMSTxt(MobSub.CliType + "Act",
+                                 TODAY,
+                                 Customer.Language,
+                                 OUTPUT ldeSMSStamp).
+       ELSE DO:
+
+         lcSMSText = fGetSMSTxt((IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE}
+                                 THEN "WelcomeConvergent"
+                                 ELSE "WelcomeSubs"),
+                                TODAY,
+                                Customer.Language,
+                                OUTPUT ldeSMSStamp).   
+
+         IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN DO:
+            lcBundleId = fGetDataBundleInOrderAction(Order.OrderId,Order.CLIType).
+            lcReplacedTxt = fConvBundleToBillItem(lcBundleId).
+            lcReplacedTxt = fGetItemName(gcBrand,
+                                         "BillItem",
+                                         lcReplacedTxt,
+                                         Customer.Language,
+                                         TODAY).
+         END.
+         ELSE 
+            lcReplacedTxt = fGetItemName(gcBrand,
+                                         "CLIType",
+                                         Order.CLIType,
+                                         Customer.Language,
+                                         TODAY).
+
+         ASSIGN lcSMSText = REPLACE(lcSMSText,"#CLITYPE",lcReplacedTxt)
+                lcSMSText = REPLACE(lcSMSText,"#CLI", MobSub.CLI)
+                lcSMSText = REPLACE(lcSMSText,"#FIXED_NUMBER",
+                              MobSub.FixedNumber) WHEN MobSub.FixedNumber NE ?.
       END.
-   END.
-END.
 
-IF MobSub.InvCust = 0 THEN MobSub.InvCust = MobSub.AgrCust.
-IF MobSub.CustNum = 0 THEN DO:
-   CASE Order.UserRole:
-   WHEN 2 THEN MobSub.CustNum = MobSub.InvCust.
-   OTHERWISE   MobSub.CustNum = MobSub.AgrCust.
-   END CASE. 
-END.   
-
-FIND FIRST Customer WHERE
-           Customer.Custnum = MobSub.CustNum NO-LOCK NO-ERROR.
-
-IF Customer.DataProtected = TRUE THEN DO:
-   FIND CURRENT Customer EXCLUSIVE-LOCK NO-ERROR.
-   ASSIGN Customer.DataProtected = FALSE.
-   FIND CURRENT Customer NO-LOCK NO-ERROR.
-END.
-
-{cr_bscode.i}
-
+      IF lcSMSText > "" THEN DO:
+         
+         IF MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE} THEN DO:
    
-ASSIGN
-   MobSub.CLI              = Order.CLI
-   Mobsub.icc              = Order.ICC
-   Mobsub.Brand            = Order.Brand 
-   Mobsub.MsStatus         = 4
-   MobSub.Reseller         = Order.Reseller
-   Mobsub.Paytype          = (CLIType.PayType = 2)
-   Mobsub.salesman         = Order.salesman 
-   Mobsub.MNPChannel       = 2 
-   Mobsub.CreationDate     = TODAY
-   Mobsub.CLIType          = Order.CliType    
-   Mobsub.BillTarget       = Clitype.BillTarget
-   Mobsub.SimDelStatus     = 2
-   Mobsub.Activationdate   = TODAY
-   Mobsub.IDCode           = STRING(RANDOM(0,9999),"9999")
-   MobSub.MultiSimID       = Order.MultiSimID
-   MobSub.MultiSimType     = Order.MultiSimType
-   MobSub.TariffActDate    = TODAY
-   MobSub.TariffActTS      = ldeActivationTS.
+            IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN
+               lcMobileNumber = MobSub.CLI.
+            ELSE DO:
+            
+               FIND OrderCustomer OF Order NO-LOCK WHERE
+                    OrderCustomer.RowType = 1.
 
+               IF fIsMobileNumber(OrderCustomer.MobileNumber) THEN
+                  lcMobileNumber = OrderCustomer.MobileNumber.
+               ELSE IF fIsMobileNumber(OrderCustomer.FixedNumber) THEN
+                  lcMobileNumber = OrderCustomer.FixedNumber.
+            END.
+         END.
+         ELSE lcMobileNumber = MobSub.CLI.
+      
+         IF lcMobileNumber > "" THEN
+            fMakeSchedSMS2(MobSub.CustNum,
+                           lcMobileNumber,
+                           {&SMSTYPE_INFO},
+                           lcSMSText,
+                           ldeSMSStamp,
+                           "22622",
+                           "").
+      END.
+   END. /* IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO: */
+
+   IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN DO:
+      fReqStatus(2,"").
+      RETURN.
+   END.
+
+END.
+ELSE DO:
+   
+   FIND FIRST imsi WHERE 
+              imsi.icc = Order.icc
+   NO-LOCK NO-ERROR.
+
+   FIND FIRST MSOwner EXCLUSIVE-LOCK WHERE
+              MSOwner.MsSeq   = Mobsub.MsSeq
+        USE-INDEX MsSeq NO-ERROR.
+
+   fTs2Date(MSOwner.TSBegin, OUTPUT ldaActDate).
+
+   IF ldaActDate NE TODAY THEN DO:
+
+      CREATE bMsOwner.
+      BUFFER-COPY MSOwner EXCEPT TSBegin TSEnd CLIEvent TO bMsOwner.
+      ASSIGN
+         MsOwner.TSend = fSecOffSet(ldeActivationTS, -1) 
+         bMsOwner.TSBegin = ldeActivationTS 
+         bMsOwner.TSEnd = 99999999.99999.
+
+      FIND MSOwner EXCLUSIVE-LOCK WHERE
+         ROWID(MSOwner) = ROWID(bMsOwner).
+   END.
+
+   ASSIGN
+      MsRequest.Custnum = Customer.Custnum
+      MsOwner.imsi = IMSI.IMSI WHEN AVAIL IMSI
+      MsOwner.CLIEvent = "C"
+      Mobsub.MsStatus = {&MSSTATUS_ACTIVE}
+      Mobsub.Icc = Order.ICC
+      Mobsub.imsi = IMSI.IMSI WHEN AVAIL IMSI.
+END.
+   
 fSetOrderStatus(Order.OrderId,"6").  
 fMarkOrderStamp(Order.OrderID,
                 "Delivery",
-                Mobsub.ActivationTS).
-
-IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
-
-/* Initial TopUp */
-IF MobSub.PayType = TRUE AND Order.Offer = "" THEN 
-   RUN topupcamp(MobSub.MsSeq, OUTPUT liPPRequest).
-
-/* additional topup */
-lcTaxZone = "".
-FOR EACH OrderTopup OF Order NO-LOCK:
-
-   IF lcTaxZone = "" THEN DO:
-      FIND bInvCust WHERE bInvCust.CustNum = MobSub.InvCust NO-LOCK.
-      lcTaxZone = fRegionTaxZone(bInvCust.Region).
-   END.
-      
-   fCreateTopUpRequest(MobSub.MsSeq,
-                       MobSub.CLI,
-                       "RefillTRequest",
-                       "WEB Order",
-                       "RefillTRequest",
-                       "994",
-                       "Campaign",    /* reference */
-                       lcTaxZone,
-                       0,
-                       OrderTopup.Amount * 100,
-                       OrderTopup.VatAmount * 100).
-END.
-
-CREATE Segmentation.
-ASSIGN
-   Segmentation.MsSeq   = Order.MsSeq
-   Segmentation.SegmentCode  = "SN"
-   Segmentation.SegmentOffer = "OFF"
-   Segmentation.SegmentDate  = TODAY
-   Segmentation.SegmentCreation = fMakeTS().
-
-CREATE msowner.
-ASSIGN
-   mSOwner.CLI       = Mobsub.cli
-   MSOwner.CustNum   = Mobsub.CustNum
-   MSOwner.MsSeq     = MobSub.MsSeq
-   MSOwner.TsBegin   = ldeActivationTS
-   msowner.tsend      = 99999999.99999
-   MSOwner.BillTarg   = Mobsub.BillTarg
-   MSOwner.Brand      = mobsub.Brand
-   Msowner.AgrCust    = Mobsub.AgrCust
-   Msowner.InvCust    = Mobsub.InvCust
-   MSOwner.IMSI       = MobSub.IMSI
-   MSowner.Paytype    = MObsub.Paytype
-   MSOwner.clitype    = mobsub.clitype
-   MSOWner.clievent   = "C" 
-   Msowner.InPortOper = Order.CurrOper .
-
-   IF fGetOrderMandateId(BUFFER Order,
-                         OUTPUT lcMandateId,
-                         OUTPUT ldaMandateDate)
-   THEN ASSIGN
-      MsOwner.MandateId   = lcMandateId
-      MsOwner.MandateDate = ldaMandateDate.
-           
-IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
-                                   "",
-                                   katun,
-                                   "").
-
-fSetOrderStatus(Order.OrderId,"6").
+                fMakeTS()).
 
 /* default services */
-RUN copysp(MobSub.MsSeq,
-           MobSub.ActivationDate,
+RUN copysp.p(MobSub.MsSeq,
+           TODAY,
            TRUE,   /* new subs */
            TRUE).  /* silent */
 
@@ -410,26 +659,6 @@ IF lcError BEGINS "Error" THEN DO:
                     lcError).
 END.
 
-/* default counter limits */
-IF MobSub.PayType = FALSE THEN DO:
-   
-   fTMRLimit2Subscription(MobSub.MsSeq).
-
-   _fCreateNewInvoiceTarget(
-      MobSub.MsSeq,
-      MobSub.Custnum,
-      MobSub.CLiType,
-      OUTPUT lcError).
-
-   IF lcError NE "" THEN 
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
-                       STRING(MobSub.MsSeq),
-                       MobSub.CustNum,
-                       "Invoice target creation failed",
-                       lcError).
-END.
-
 /* terminals, do this before periodical contract creation */
 fCreateSubsTerminal(BUFFER Order).
  
@@ -452,8 +681,7 @@ IF Order.FatAmount NE 0 OR Order.FtGrp > "" THEN DO:
                      Order.FatAmount,
                      0,
                      ?,
-                     YEAR(MobSub.ActivationDate) * 100 + 
-                     MONTH(MobSub.ActivationDate),
+                     YEAR(TODAY) * 100 + MONTH(TODAY),
                      999999,
                      OUTPUT lcError).
 
@@ -475,9 +703,12 @@ FIND FIRST OrderAction WHERE
            OrderAction.OrderId  = Order.OrderID AND
            OrderAction.ItemType = "BundleItem" AND
            OrderAction.ItemKey NE {&DSS} NO-LOCK NO-ERROR.
+
 IF NOT AVAIL OrderAction AND
-   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT15,CONT24,CONT23") = 0
-THEN DO:
+   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT15,CONT24,CONT23,CONT25") = 0 AND
+   NOT MobSub.CLIType BEGINS "CONTFH" AND
+   NOT MobSub.CLITYpe BEGINS "CONTDSL" THEN DO:
+
    RUN pCopyPackage(MobSub.CLIType,
                     "SHAPER",
                     "",
@@ -503,6 +734,7 @@ END. /* IF NOT AVAIL OfferItem AND NOT AVAIL OrderAction THEN DO: */
 IF Order.Offer > "" THEN 
    RUN offeritem_exec.p (MobSub.MsSeq,
                        Order.OrderID,
+                       ldeActivationTS,
                        MsRequest.MsRequest,
                        {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}).
 
@@ -510,8 +742,8 @@ IF Order.Offer > "" THEN
 RUN requestaction_exec.p (MsRequest.MsRequest,
                           MobSub.CLIType,
                           Order.OrderID,
-                          MobSub.ActivationTS,
-                          MobSub.ActivationTS,
+                          ldeActivationTS,
+                          ldeActivationTS,
                           TRUE,                   /* create fees */
                           {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
                           {&REQUEST_ACTIONLIST_ALL}).
@@ -519,6 +751,7 @@ RUN requestaction_exec.p (MsRequest.MsRequest,
 /* per.contract and service package created with the order */
 RUN orderaction_exec.p (MobSub.MsSeq,
                       Order.OrderID,
+                      ldeActivationTS,
                       MsRequest.MsRequest,
                       {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}).
 
@@ -690,54 +923,6 @@ IF Order.MNPStatus > 0 THEN DO:
    END.
 END.
 
-/* Welcome SMS for all tariffs (Excluding Corporate) */
-IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO:
-
-   lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
-   
-    /* TARJ7 and TARJ9 have their own Welcome SMSes */
-    IF MobSub.CliType = "TARJ7" OR
-       MobSub.CliType = "TARJ9" THEN
-       lcSMSText = fGetSMSTxt(MobSub.CliType + "Act",
-                              TODAY,
-                              Customer.Language,
-                              OUTPUT ldeSMSStamp).
-    ELSE DO:
-
-      lcSMSText = fGetSMSTxt("WelcomeSubs",
-                             TODAY,
-                             Customer.Language,
-                             OUTPUT ldeSMSStamp).   
-
-      IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN DO:
-         lcBundleId = fGetDataBundleInOrderAction(Order.OrderId,Order.CLIType).
-         lcReplacedTxt = fConvBundleToBillItem(lcBundleId).
-         lcReplacedTxt = fGetItemName(gcBrand,
-                                      "BillItem",
-                                      lcReplacedTxt,
-                                      Customer.Language,
-                                      TODAY).
-      END.
-      ELSE 
-         lcReplacedTxt = fGetItemName(gcBrand,
-                                      "CLIType",
-                                      Order.CLIType,
-                                      Customer.Language,
-                                      TODAY).
-      
-      ASSIGN lcSMSText = REPLACE(lcSMSText,"#CLITYPE",lcReplacedTxt)
-             lcSMSText = REPLACE(lcSMSText,"#CLI",Order.CLI).
-   END.
-
-   IF lcSMSText > "" THEN
-      fMakeSchedSMS2(MobSub.CustNum,
-                     MobSub.CLI,
-                     {&SMSTYPE_INFO},
-                     lcSMSText,
-                     ldeSMSStamp,
-                     "22622",
-                     "").
-END. /* IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO: */
 
 IF Order.MultiSimID > 0 THEN DO:
 
@@ -835,6 +1020,11 @@ PROCEDURE check-order:
       ocError = "INFO:Order is in use by another user !".
       RETURN.
    END.
+   
+   ELSE IF NOT AVAIL Order THEN DO:
+      ocError = "Order not found !".
+      RETURN.
+   END.
 
    ELSE DO:
       IF order.Statuscode = "7" or 
@@ -874,50 +1064,8 @@ PROCEDURE check-order:
         ocError =  "Invalid CLIType !".
       END.
 
-      FIND FIRST mobsub NO-LOCK WHERE
-                 mobsub.cli   = order.cli AND 
-                 Mobsub.MSSeq = Order.MSSeq NO-ERROR.
-
-      IF AVAIL mobsub THEN 
-      ocError =  "Subscription already exists with CLI " + order.cli .
-
       IF ocError ne "" THEN RETURN.
       
-      FIND FIRST MSISDNNumber WHERE
-                 MSISDNNumber.CLI   = Order.CLI
-      EXCLUSIVE-LOCK NO-ERROR.
-               
-      IF NOT AVAIL msisdnNumber THEN DO:
-         CREATE MSISDNNumber.
-         ASSIGN MSISDNNumber.CLI = Order.CLI.
-      END.
-      
-      FIND FIRST MSISDN WHERE 
-                 MSISDN.Brand    = gcBrand    AND 
-                 MSISDN.CLI      = Order.CLI  AND 
-                 MSISDN.ValidTo >= fMakeTS() 
-      EXCLUSIVE-LOCK NO-ERROR.
-      
-      IF NOT AVAIL MSISDN THEN DO:
-
-         CREATE MSISDN.
-         ASSIGN
-            MSISDN.CLI         = order.CLI
-            MSISDN.Brand       = gcBrand
-            MSISDN.Stat        = 3.
-
-         ASSIGN 
-            MSISDN.ValidFrom   = ldeActivationTS
-            MSISDN.ActionDate  = Today.
-      END.
-
-      ELSE DO:
-         
-         fMakeMsidnHistory(INPUT RECID(MSISDN)).
-  
-         MSISDN.Stat        = 3.
-      END.
-   
    END.
    
 END PROCEDURE.

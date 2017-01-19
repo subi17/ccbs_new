@@ -26,6 +26,8 @@
 {ordercancel.i}
 {dextra.i}
 {main_add_lines.i}
+{Func/fixedlinefunc.i}
+{Func/orderfunc.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -146,6 +148,7 @@ PROCEDURE pTerminate:
    DEF VAR ldaKillDatePostpone AS DATE NO-UNDO.
 
    DEF VAR llHardBook          AS LOG  NO-UNDO INIT FALSE.
+   DEF VAR llCallProc          AS LOG  NO-UNDO.   
    
    ASSIGN liArrivalStatus = MsRequest.ReqStatus
           liMsSeq = MsRequest.MsSeq.
@@ -675,7 +678,8 @@ PROCEDURE pTerminate:
                     MNPRetPlatform.RetentionPlatform = MNPSub.RetentionPlatform
          NO-LOCK NO-ERROR.
 
-         IF AVAIL MNPRetPlatform THEN DO:
+         IF AVAIL MNPRetPlatform AND 
+            NOT fIsConvergenceTariff(Order.CliType) THEN DO:
 
             FIND FIRST Customer NO-LOCK WHERE
                        Customer.Custnum = MobSub.Custnum NO-ERROR.
@@ -838,6 +842,61 @@ PROCEDURE pTerminate:
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSingleFee).
       END.      
    END. /* IF llCloseRVTermFee THEN DO: */
+
+   FOR EACH Order NO-LOCK WHERE
+            Order.MsSeq = MobSub.MsSeq AND
+            Order.OrderType = {&ORDER_TYPE_STC} AND
+            Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
+      FIRST OrderFusion NO-LOCK WHERE
+            OrderFusion.Brand = gcBrand AND
+            OrderFusion.OrderID = Order.OrderID:
+
+      IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN DO:
+
+         fSetOrderStatus(Order.Orderid, {&ORDER_STATUS_IN_CONTROL}).
+         
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+              "Order",
+              STRING(Order.OrderID),
+              Order.CustNum,
+              "Order handling stopped",
+              "Subscription is terminated, Convergent order cannot proceed").
+      
+      END.
+      ELSE DO:
+         RUN fusion_order_cancel.p(Order.OrderID).
+         IF NOT RETURN-VALUE BEGINS "OK" THEN
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                 "Order",
+                 STRING(Order.OrderID),
+                 Order.CustNum,
+                 "Convergent order closing failed",
+                 STRING(RETURN-VALUE)).
+      END.
+   END.
+
+   /* YDR-2052, Change the delivery type to paper only if the customer 
+      don't have any other active subscription with delivery type EMAIL or SMS*/
+   IF NOT MobSub.PayType AND 
+      CAN-FIND(FIRST Customer NO-LOCK WHERE
+                     Customer.CustNum = MobSub.CustNum        AND
+                    (Customer.DelType = {&INV_DEL_TYPE_EMAIL} OR
+                     Customer.DelTYpe = {&INV_DEL_TYPE_SMS})) THEN
+   DO:
+      llCallProc = TRUE.
+      
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobsub.Brand    = gcBrand        AND
+               bMobSub.CustNum  = MobSub.CustNum AND
+               bMobSub.MsSeq   <> liMsSeq        AND 
+               bMobSub.PayType  = NO:
+         llCallProc = NO.
+         LEAVE.
+      END.
+      
+      IF llCallProc THEN   
+         RUN pChangeDelType(MobSub.CustNum).
+   END. 
 
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.
@@ -1102,4 +1161,83 @@ PROCEDURE pMultiSIMTermination:
                        "").
    END.
    
-END PROCEDURE. 
+END PROCEDURE.
+
+PROCEDURE pChangeDelType:
+   DEFINE INPUT  PARAMETER liCustNum AS INTEGER NO-UNDO.   
+
+   DEF VAR lhCustomer   AS HANDLE NO-UNDO. 
+   DEF VAR ldeStartTime AS DEC    NO-UNDO. 
+   DEF VAR llgStarted   AS LOG    NO-UNDO.
+   DEF VAR llgInvDate   AS LOG    NO-UNDO.
+   DEF VAR llgInvType   AS LOG    NO-UNDO. 
+
+   lhCustomer = BUFFER Customer:HANDLE.
+
+   RUN StarEventInitialize(lhCustomer).
+
+   FIND FIRST Customer EXCLUSIVE-LOCK WHERE 
+              Customer.CustNum = liCustNum NO-ERROR.
+
+   IF AVAILABLE Customer THEN      
+   DO:
+
+      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
+
+      /* If subscription termination is on 1st day of month then change the 
+         delivery type and delivery status for invoices generated AND but not delivered */
+      IF DAY(TODAY) = 1 THEN
+      DO:
+         ASSIGN ldeStartTime = fMake2Dt(TODAY,0)
+                llgStarted   = FALSE
+                llgInvDate   = FALSE
+                llgInvType   = FALSE. 
+
+         FOR EACH FuncRunQSchedule NO-LOCK WHERE 
+                  FuncRunQSchedule.StartTS  >= ldeStartTime AND
+                  FuncRunQSchedule.RunMode   = "Production", 
+             EACH FuncRunExec NO-LOCK WHERE
+                  FuncRunExec.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND
+                  FuncRunExec.FRConfigID    EQ {&INVPRINTSPLIT_CONFIG}: 
+                    
+             FOR EACH FuncRunQSParam NO-LOCK WHERE 
+                      FuncRunQSParam.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND 
+                      FuncRunQSParam.FRConfigID    EQ FuncRunExec.FRConfigID:      
+             
+                IF FuncRunQSParam.ParamSeq  EQ 1     AND 
+                   FuncRunQSParam.DateParam EQ TODAY THEN 
+                   llgInvDate = TRUE.
+                ELSE IF FuncRunQSParam.ParamSeq EQ 2                  AND 
+                        FuncRunQSParam.IntParam EQ {&INV_TYPE_NORMAL} THEN 
+                   llgInvType = TRUE.
+                  
+             END.   
+             
+             IF FuncRunExec.StartTS > 0 THEN 
+                llgStarted = TRUE.
+         END.
+
+         /* Update invoice deliverytype to paper only when funcrun
+            execution process "InvPrintSplit" is not started for current month */
+         IF NOT llgStarted AND 
+                llgInvDate AND 
+                llgInvType THEN DO: 
+            FOR EACH Invoice EXCLUSIVE-LOCK WHERE
+                     Invoice.Brand      = gcBrand            AND
+                     Invoice.CustNum    = Customer.CustNum   AND
+                     Invoice.InvDate    = TODAY              AND
+                     Invoice.InvType    = {&INV_TYPE_NORMAL} AND 
+                     Invoice.PrintState = 0:
+               Invoice.DelType  = {&INV_DEL_TYPE_PAPER}.
+            END.          
+         END.
+
+      END.
+
+      Customer.DelType = {&INV_DEL_TYPE_PAPER}.
+
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+
+   END.
+
+END PROCEDURE.
