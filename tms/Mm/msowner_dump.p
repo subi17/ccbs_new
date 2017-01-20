@@ -12,21 +12,65 @@
 
 {commali.i}
 {dumpfile_run.i}
-{create_eventlog.i}
-{timestamp.i}
 
-DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
-DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
-DEF INPUT  PARAMETER icDumpMode    AS CHAR NO-UNDO.
+DEF INPUT-OUTPUT PARAMETER TABLE-HANDLE ihTempTable.
 DEF INPUT  PARAMETER idLastDump    AS DEC  NO-UNDO.
 DEF INPUT  PARAMETER icEventSource AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icEventFields AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
+DEF VAR lhTable      AS HANDLE NO-UNDO.
+DEF VAR lhCollect    AS HANDLE NO-UNDO.
+DEF VAR liPicked     AS INT    NO-UNDO.
+DEF VAR liCnt        AS INT    NO-UNDO.
+DEF VAR lcTableName  AS CHAR   NO-UNDO.
+DEF VAR lhCLIField   AS HANDLE NO-UNDO. 
+DEF VAR lhTsEndField AS HANDLE NO-UNDO. 
 
-DEF STREAM sout.
-OUTPUT STREAM sout TO VALUE(icFile).
+
+DEF TEMP-TABLE ttPicked NO-UNDO
+   FIELD CLI AS CHAR
+   FIELD TsEnd AS DEC
+   INDEX CLI CLI TsEnd.
+
+FORM
+    lcTableName AT 2  LABEL "Table  " FORMAT "X(15)"    SKIP
+    liPicked    AT 2  LABEL "Picked " FORMAT ">>>>>>>9"
+WITH SIDE-LABELS 1 DOWN ROW 8 CENTERED OVERLAY 
+    TITLE " Collecting " FRAME fColl.
+
+FUNCTION fCollect RETURNS LOGIC:
+
+   lhCLIField = lhTable:BUFFER-FIELD("CLI").
+   lhTsEndField = lhTable:BUFFER-FIELD("TsEnd").
+
+   IF CAN-FIND(FIRST ttPicked WHERE 
+                     ttPicked.CLI = lhCLIField:BUFFER-VALUE AND
+                     ttPicked.TsEnd =  lhTsEndField:BUFFER-VALUE)
+   THEN RETURN FALSE.
+ 
+   CREATE ttPicked.
+   ttPicked.CLI = lhCLIField:BUFFER-VALUE.
+   ttPicked.TsEnd = lhTsEndField:BUFFER-VALUE.  
+
+   lhCollect:BUFFER-CREATE.
+   lhCollect:BUFFER-COPY(lhTable).
+
+   liPicked = liPicked + 1.
+   IF NOT SESSION:BATCH AND liPicked MOD 100 = 0 THEN DO:
+      PAUSE 0.
+      DISP lcTableName liPicked WITH FRAME fColl.
+   END.
+
+END FUNCTION.
+
+/***** MAIN START *******/
+
+ASSIGN
+   lhCollect   = ihTempTable:DEFAULT-BUFFER-HANDLE
+   lhTable     = BUFFER OrderAccessory:HANDLE
+   lcTableName = lhTable:NAME.
 
 FOR EACH Eventlog NO-LOCK WHERE
          Eventlog.Eventdate = TODAY - 1 AND
@@ -36,37 +80,10 @@ FOR EACH Eventlog NO-LOCK WHERE
               MsOwner.Brand = "1" AND
               MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
               MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,CHR(255))) NO-ERROR.
-   IF AVAIL MsOwner THEN DO:
-      PUT STREAM sout UNFORMATTED
-         MsOwner.CLI "|" 
-         MsOwner.CustNum "|" 
-         MsOwner.BillTarget "|"
-         MsOwner.TsBegin "|" 
-         MsOwner.TsEnd "|"
-         MsOwner.MsSeq "|"
-         MsOwner.IMSI "|"
-         MsOwner.CliEvent "|"
-         MsOwner.Clitype "|"
-         MsOwner.Brand "|"
-         MsOwner.Contract "|"
-         MsOwner.RepCodes "|"
-         MsOwner.InPortOper "|"
-         MsOwner.OutPortOper "|"
-         MsOwner.AgrCust "|"
-         MsOwner.InvCust "|"
-         MsOwner.PayType "|"
-         MsOwner.MandateId "|"
-         MsOwner.MandateDate "|"
-         MsOwner.TariffBundle "|"
-         MsOwner.FixedNumber SKIP.
-
+   IF AVAIL MsOwner THEN fCollect().
       
-      oiEvents = oiEvents + 1.
-      IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
-         DISP oiEvents WITH FRAME fColl.
-         PAUSE 0.
-      END.
-   END.
 END. 
-OUTPUT STREAM sout CLOSE.
+
 IF NOT SESSION:BATCH THEN HIDE FRAME fColl NO-PAUSE.
+
+/***** MAIN END *******/
