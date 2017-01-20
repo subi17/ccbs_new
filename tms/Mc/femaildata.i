@@ -33,6 +33,7 @@ DEF VAR ldeMonthlyFee AS DEC NO-UNDO.
 DEF VAR liMonths      AS INT NO-UNDO.
 DEF VAR ldeFinalFee   AS DEC NO-UNDO.
 DEF VAR lcRegion      AS CHAR NO-UNDO.
+DEF VAR lcDelRegion   AS CHAR NO-UNDO.
 DEF VAR lcRegionName  AS CHAR NO-UNDO.
 DEF VAR lcCRegionName AS CHAR NO-UNDO.
 DEF VAR lcDelRegionName AS CHAR NO-UNDO.
@@ -76,6 +77,7 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
       ASSIGN
          liCustNum = Order.CustNum
          lcRegion = OrderCustomer.Region
+         lcDelRegion = OrderCustomer.Region   /* init to same as lcRegion */
          liLang = 1. /* INT(OrderCustomer.Language). Decision only spanish 
                         supported. YDR-1637 YTS-7046 */
          lcCustAddress = OrderCustomer.Address.
@@ -133,6 +135,8 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
       ELSE lcCRegionName = "".
    END.
    IF AVAIL DeliveryCustomer THEN DO:
+      IF DeliveryCustomer.region > "" THEN
+         lcDelRegion = DeliveryCustomer.region. /* if available fill actual */
       FIND FIRST Region WHERE
          Region.Region = DeliveryCustomer.Region NO-LOCK NO-ERROR.
 
@@ -1152,7 +1156,7 @@ PROCEDURE pGetDELIVERY_DATE:
          ldamnp = fmnpchangewindowdate(
                              fmakets(),
                              order.orderchannel,
-                             ordercustomer.region,
+                             lcDelRegion,
                              lcProduct,
                              Order.CliType,
                              Order.DeliveryType).
@@ -1162,7 +1166,7 @@ PROCEDURE pGetDELIVERY_DATE:
       lcResult = fDateFmt(ldaDate,"dd/mm/yy").
    END.
    ELSE DO:
-      IF lcRegion > "" THEN CASE lcRegion:
+      IF lcDelRegion > "" THEN CASE lcDelRegion:
          WHEN "07"
          THEN DO:
             IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
@@ -1180,7 +1184,7 @@ PROCEDURE pGetDELIVERY_DATE:
             THEN liDays = 2.
             ELSE liDays = 3.
          END.
-      END.
+      END. 
       ELSE DO:
          IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
          THEN liDays = 6.
