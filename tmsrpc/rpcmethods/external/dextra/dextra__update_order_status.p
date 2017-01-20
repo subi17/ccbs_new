@@ -65,6 +65,8 @@ DEF VAR lcCountry AS CHAR NO-UNDO.
 DEF VAR lcStreetCode AS CHAR NO-UNDO. 
 DEF VAR lcCityCode AS CHAR NO-UNDO. 
 
+DEF BUFFER bOrderCustomer FOR OrderCustomer.
+
 FUNCTION fCheckIntegrity RETURNS LOGICAL 
    (iiErrCode AS INTEGER):
    IF gi_xmlrpc_error = {&INVALID_METHOD_PARAMS} THEN DO:
@@ -297,6 +299,13 @@ IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
          OrderCustomer.Brand     = gcBrand 
          OrderCustomer.OrderId   = Order.OrderId
          OrderCustomer.RowType   = liRowType.
+      FIND FIRST bOrderCustomer NO-LOCK WHERE
+                 bOrderCustomer.Brand = gcBrand AND
+                 bOrderCustomer.OrderId = Order.OrderId AND
+                 bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
+                 NO-ERROR.      
+      IF AVAIL bOrderCustomer THEN
+         OrderCustomer.kialacode = bOrderCustomer.kialacode.
    END.
    ELSE IF llDoEvent THEN DO:
       DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
