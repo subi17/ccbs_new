@@ -15,22 +15,26 @@ gcBrand = "1".
 {provmaint.i}
 {timestamp.i}
 
-DEF VAR pcMsisdn AS CHAR NO-UNDO.
+DEF VAR pcTenant  AS CHAR NO-UNDO.
+DEF VAR pcMsisdn  AS CHAR NO-UNDO.
 DEF VAR pdBalance AS DEC NO-UNDO.
 DEF VAR pcBalType AS CHAR NO-UNDO INIT "TOP".
-DEF VAR piStatus AS INT NO-UNDO INIT 0.
-DEF VAR lcParams AS CHAR NO-UNDO.
+DEF VAR piStatus  AS INT NO-UNDO INIT 0.
+DEF VAR lcParams  AS CHAR NO-UNDO.
 
 /* validate 1st,2nd and 3rd parameter. */
-lcParams = validate_request(param_toplevel_id, "string,double,string").
+lcParams = validate_request(param_toplevel_id, "string,string,double,string").
 IF lcParams EQ ? THEN RETURN.
-pcMsisdn = get_string(param_toplevel_id, "0").
-pdBalance = get_double(param_toplevel_id, "1"). /* Returns decimal */
-IF NUM-ENTRIES(lcParams) EQ 3 THEN DO: /* If empty string then use initial value */
-   IF get_string(param_toplevel_id, "2") > "" THEN
-   pcBalType = get_string(param_toplevel_id, "2").
+pcTenant = get_string(param_toplevel_id, "0").
+pcMsisdn = get_string(param_toplevel_id, "1").
+pdBalance = get_double(param_toplevel_id, "2"). /* Returns decimal */
+IF NUM-ENTRIES(lcParams) EQ 4 THEN DO: /* If empty string then use initial value */
+   IF get_string(param_toplevel_id, "3") > "" THEN
+   pcBalType = get_string(param_toplevel_id, "3").
 END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{settenant.i pcTenant}
 
 FIND FIRST MobSub NO-LOCK WHERE
            MobSub.Brand = gcBrand AND

@@ -16,6 +16,7 @@
 {timestamp.i}
 
 /* Input parameters */
+DEF VAR pcTenant    AS CHAR NO-UNDO.
 DEF VAR pcReference AS CHAR NO-UNDO.
 DEF VAR pcType AS CHAR NO-UNDO.
 DEF VAR piCustnum AS INT NO-UNDO.
@@ -29,17 +30,21 @@ DEF VAR lcType AS CHAR NO-UNDO.
 DEF VAR result AS LOGICAL.
 
 
-IF validate_request(param_toplevel_id,
-                    "string,string,int,string,string,string,int") EQ ? THEN
+IF validate_request(param_toplevel_id,"string,string,string,int,string,string,string,int") EQ ? THEN
     RETURN.
-piPriority  = get_int(param_toplevel_id, "6").
-pcContent   = get_string(param_toplevel_id, "5").
-pcTitle     = get_string(param_toplevel_id, "4").
-pcCreator   = "VISTA_" + get_string(param_toplevel_id, "3").
-piCustnum   = get_int(param_toplevel_id, "2").
-pcType      = get_string(param_toplevel_id, "1").
-pcReference = get_string(param_toplevel_id, "0").
+    
+pcTenant    = get_string(param_toplevel_id, "0").
+pcReference = get_string(param_toplevel_id, "1").    
+pcType      = get_string(param_toplevel_id, "2").
+piCustnum   = get_int(param_toplevel_id, "3").
+pcCreator   = "VISTA_" + get_string(param_toplevel_id, "4").
+pcTitle     = get_string(param_toplevel_id, "5").
+pcContent   = get_string(param_toplevel_id, "6").
+piPriority  = get_int(param_toplevel_id, "7").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{settenant.i pcTenant}
 
 IF TRIM(pcCreator) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
