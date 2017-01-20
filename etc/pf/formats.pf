@@ -1,0 +1,7 @@
+-cpinternal 1252
+-cpstream 1252
+-cpcoll Finnish
+-cpcase Basic
+-d dmy
+-numsep 44
+-numdec 46

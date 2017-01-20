@@ -1,5 +1,3 @@
-so /usr/share/vim/vim72/syntax/progress.vim
-
 let s:path = $PWD
 while s:path != "/"
     if glob(s:path . "/tools/provim/ccbs.vim") != ""

@@ -35,8 +35,7 @@ iab proc PROCEDURE pFoo:<enter><enter>END PROCEDURE.
 iab idef <C-O>gg&IF "{&}" NE "YES" &THEN<enter>&GLOBAL-DEFINE  YES<enter>
 \<C-O>G<enter>&ENDIF
 "F5 New buffer with default progress comments
-map <F5>
-\:let tmpfile = tempname()<enter>
+map <F5> :let tmpfile = tempname()<enter>
 \:exe "e " tmpfile<enter>
 \:exe "r " ccbspath . "tools/provim/template_procedure.p"<enter>
 \:set syntax=progress<enter>
