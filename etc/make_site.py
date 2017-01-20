@@ -10,7 +10,7 @@ import os
 import sys
 import socket
 
-assert os.path.exists('../.usepike'), 'pike is disabled'
+assert os.path.exists(relpath + '/.usepike'), 'pike is disabled'
 
 assert sys.version_info[:3] >= (2,6,0), 'Python version too old. Need >= 2.6'
 
