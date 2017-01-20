@@ -172,12 +172,7 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piOrderId = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-/* Check that necessary records exist. If not throw application error */
-FIND Order WHERE Order.Brand = gcBrand AND
-     Order.OrderId = piOrderId NO-LOCK NO-ERROR.
-
-IF NOT AVAILABLE Order THEN
-  RETURN appl_err(SUBST("Order with OrderId &1 does not exist", piOrderId )).
+{findtenant.i YES ordercanal Order OrderId piOrderId}
 
 FIND FIRST DMS NO-LOCK WHERE
            DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
@@ -260,6 +255,7 @@ IF lcExtensionContracts <> "" THEN
 top_struct = add_struct(response_toplevel_id, "").
 add_int(   top_struct, "tms_id"         , piOrderId         ).
 add_int(   top_struct, "order_type"     , Order.OrderType   ).
+add_string(top_struct, "tenant"         , vcTenant          ).
 add_string(top_struct, "status"         , Order.StatusCode  ).
 add_string(top_struct, "dms_status_code" , lcDMSStatusCode).
 add_string(top_struct, "dms_status_desc" , lcDMSStatusDesc).

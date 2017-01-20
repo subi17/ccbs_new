@@ -42,17 +42,21 @@ DEF VAR gcBrand   AS CHAR NO-UNDO INIT "1".
 {tmsconst.i}
 
 /* Input parameters */
-DEF VAR pcPersonId AS CHAR NO-UNDO.
-DEF VAR pcIdType AS CHAR NO-UNDO.
-DEF VAR plSelfEmployed AS LOG NO-UNDO.
+DEF VAR pcTenant       AS CHAR NO-UNDO.
+DEF VAR pcPersonId     AS CHAR NO-UNDO.
+DEF VAR pcIdType       AS CHAR NO-UNDO.
+DEF VAR plSelfEmployed AS LOG  NO-UNDO.
 
 DEF VAR top_struct AS CHARACTER NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
-pcIdType = get_string(param_toplevel_id, "0").
-pcPersonId = get_string(param_toplevel_id, "1").
+IF validate_request(param_toplevel_id, "string,string,string") EQ ? THEN RETURN.
+pcTenant = get_string(param_toplevel_id, "0").
+pcIdType = get_string(param_toplevel_id, "1").
+pcPersonId = get_string(param_toplevel_id, "2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{settenant.i pcTenant}
 
 FIND FIRST Customer WHERE
            Customer.Brand EQ gcBrand
@@ -105,7 +109,7 @@ END.
 
 add_string(top_struct, "id_type", Customer.CustIdType).
 
-IF Customer.CustIdType = "CIF" THEN DO:
+IF LOOKUP(Customer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN DO:
    add_string(top_struct, "company_id", Customer.orgId).
    add_string(top_struct, 'company_name', Customer.CompanyName).
    add_date_or_time(top_struct, 'company_foundationdate', Customer.FoundationDate, 0).
