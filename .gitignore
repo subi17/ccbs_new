@@ -26,6 +26,7 @@ test/db/db/*
 *.pyc
 distinfo
 .initialized
+.usepike
 var/log/*.log
 var/run/*
 docs/robodoc/*
