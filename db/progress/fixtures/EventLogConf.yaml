@@ -1,0 +1,35 @@
+EventLogConf1: EventLogConf
+  TableName: "DCCLI"
+  ConfigType: "KeyFields"
+  ConfigValue: "PerContractID"
+  FromDate: 2013-05-07
+  ToDate: 2049-12-31
+
+EventLogConf2: EventLogConf
+  TableName: "DCCli"
+  ConfigType: "KeyFields"
+  ConfigValue: "PerContractID"
+  FromDate: 2013-04-04
+  ToDate: 2013-04-04
+
+EventLogConf3: EventLogConf
+  TableName: "FATime"
+  ConfigType: "KeyFields"
+  ConfigValue: "MsSeq,CustNum,FATNum"
+  FromDate: 2009-04-15
+  ToDate: 2049-12-31
+
+EventLogConf4: EventLogConf
+  TableName: "SingleFee"
+  ConfigType: "KeyFields"
+  ConfigValue: "Custnum,HostTable,KeyValue,FMItemID"
+  FromDate: 2013-07-03
+  ToDate: 2049-12-31
+
+EventLogConf5: EventLogConf
+  TableName: "SingleFee"
+  ConfigType: "KeyFields"
+  ConfigValue: "Brand,FMItemId"
+  FromDate: 2012-10-11
+  ToDate: 2013-07-02
+
