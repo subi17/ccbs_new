@@ -1239,7 +1239,7 @@ PROCEDURE pGetMNP_DATE:
       ldamnp = fmnpchangewindowdate(
                           fmakets(),
                           order.orderchannel,
-                          ordercustomer.region,
+                          lcDelRegion,
                           lcProduct,
                           Order.CliType,
                           Order.DeliveryType).
