@@ -165,7 +165,6 @@ DEF VAR lcDMSStatusDesc         AS CHARACTER NO-UNDO.
 
 DEF VAR lcTermReturnContracts   AS CHARACTER NO-UNDO.
 DEF VAR lcExtensionContracts    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liRowType       AS INTEGER NO-UNDO.
 
 DEF BUFFER bMsRequest FOR MsRequest.
 
@@ -478,14 +477,10 @@ IF AVAIL OrderCustomer THEN DO:
    add_string(gcStructDeliveryAddress, "site_name",  OrderCustomer.Company).
 END.
 
-IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
-THEN liRowType = {&ORDERCUSTOMER_ROWTYPE_SECURE_POS}.
-ELSE liRowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}.
- 
 FIND OrderCustomer WHERE 
      OrderCustomer.Brand = gcBrand AND 
      OrderCustomer.OrderId = piOrderId AND 
-     OrderCustomer.RowType = liRowType
+     OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS} 
      NO-LOCK NO-ERROR.
 
 IF AVAIL OrderCustomer THEN DO:

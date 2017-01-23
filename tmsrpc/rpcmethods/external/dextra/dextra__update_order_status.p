@@ -54,7 +54,6 @@ DEFINE VARIABLE lcIMEIFields AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liImeis AS INTEGER NO-UNDO. 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE delivery_address AS CHAR NO-UNDO. 
-DEFINE VARIABLE liRowType AS INTEGER NO-UNDO.
 
 DEF VAR lcDeliveryAddress AS CHAR NO-UNDO. 
 DEF VAR lcRegion AS CHAR NO-UNDO. 
@@ -284,28 +283,17 @@ IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhOrderDelivery).
       
 IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
 
-   IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
-   THEN liRowType = {&ORDERCUSTOMER_ROWTYPE_SECURE_POS}.
-   ELSE liRowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}.
-
    FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
               OrderCustomer.Brand = gcBrand AND
               OrderCustomer.OrderId = Order.OrderId AND
-              OrderCustomer.RowType = liRowType
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}
    NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN DO:
       CREATE OrderCustomer.
       ASSIGN
          OrderCustomer.Brand     = gcBrand 
          OrderCustomer.OrderId   = Order.OrderId
-         OrderCustomer.RowType   = liRowType.
-      FIND FIRST bOrderCustomer NO-LOCK WHERE
-                 bOrderCustomer.Brand = gcBrand AND
-                 bOrderCustomer.OrderId = Order.OrderId AND
-                 bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
-                 NO-ERROR.      
-      IF AVAIL bOrderCustomer THEN
-         OrderCustomer.kialacode = bOrderCustomer.kialacode.
+         OrderCustomer.RowType   = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}. 
    END.
    ELSE IF llDoEvent THEN DO:
       DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.

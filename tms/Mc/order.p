@@ -1149,8 +1149,6 @@ si-recid = xrecid.
 
 PROCEDURE pOrderView:
 
-   DEFINE VARIABLE liRowType AS INTEGER NO-UNDO.
-
    pause 0.
 
    ac-hdr = " ORDER ".
@@ -1160,23 +1158,14 @@ PROCEDURE pOrderView:
    ACTION: 
    repeat with frame lis:
 
-      IF CAN-FIND(FIRST OrderCustomer OF Order WHERE RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS})
-      THEN liRowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}.
-      ELSE IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
-                          RowType = {&ORDERCUSTOMER_ROWTYPE_SECURE_POS})
-      THEN liRowType = {&ORDERCUSTOMER_ROWTYPE_SECURE_POS}.
-      ELSE liRowType = 0.
-
       ASSIGN
       ufk = 0
       ufk[1] = 7             
       ufk[2] = 2246
 /*       ufk[3] = 2241 */
-      ufk[3] = (IF liRowType EQ {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}
-               THEN 9844
-               ELSE IF liRowType EQ {&ORDERCUSTOMER_ROWTYPE_SECURE_POS}
-               THEN 9846
-               ELSE 0)
+      ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE 
+                                  RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS})
+               THEN 9844 ELSE 0)
       ufk[4] = (IF Order.MultiSIMId > 0 THEN 9827 ELSE 0)
       ufk[5] = 1152
       ufk[6] = 2208 WHEN LOOKUP(Order.Statuscode,"1") > 0
@@ -1202,7 +1191,7 @@ PROCEDURE pOrderView:
 
      /* user */  
      ELSE IF Toimi = 3 THEN DO:
-        RUN local-update-customer(liRowType,FALSE).
+        RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_LOGISTICS},FALSE).
         NEXT Action.
      END.
   
@@ -1960,9 +1949,6 @@ PROCEDURE local-update-customer:
    WHEN {&ORDERCUSTOMER_ROWTYPE_LOGISTICS} THEN DO:
       lcNewHeader = " LOGISTICS".
    END.
-   WHEN {&ORDERCUSTOMER_ROWTYPE_SECURE_POS} THEN DO:
-      lcNewHeader = " SECPOS".
-   END.
    END CASE.
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
@@ -2084,7 +2070,6 @@ PROCEDURE local-update-customer:
       ufk = 0
       ufk[1] = (IF lcRight = "RW" AND 
          iiRole NE {&ORDERCUSTOMER_ROWTYPE_LOGISTICS} AND
-         iiRole NE {&ORDERCUSTOMER_ROWTYPE_SECURE_POS} AND
          LOOKUP(Order.StatusCode,"20,21,31,73") > 0 THEN 7 ELSE 0)
       ufk[5] = 0
       ufk[8] = 8
