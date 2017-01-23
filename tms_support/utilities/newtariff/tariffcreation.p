@@ -386,7 +386,8 @@ PROCEDURE pProcessTT:
              liBDLFirstMonthBR = (IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
              liBDLLastMonthBR  = (IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0).
 
-         RUN pBundle(ttCliType.CliType,
+         RUN pBundle("Mobile",
+                     ttCliType.CliType,
                      (IF lcTariffBundle > "" THEN lcTariffBundle ELSE lcMobile_BaseBundle),
                      ttCliType.CliName,
                      lcMobile_BaseBundleType,
@@ -422,7 +423,8 @@ PROCEDURE pProcessTT:
              liBDLFirstMonthBR = (IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
              liBDLLastMonthBR  = (IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0).
 
-          RUN pBundle(ttCliType.CliType,
+          RUN pBundle("FixedLine",
+                      ttCliType.CliType,
                       lcFixedLine_BaseBundle,
                       ttCliType.CliName,
                       lcFixedLine_BaseBundleType,
@@ -448,6 +450,7 @@ END PROCEDURE.
 
 
 PROCEDURE pBundle:
+    DEFINE INPUT PARAMETER icMobileFixedLine   AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icCliType           AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icBundle            AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icBundleName        AS CHARACTER NO-UNDO.
@@ -566,7 +569,7 @@ PROCEDURE pBundle:
            ttServiceLimit.GroupCode      = ttDayCampaign.DCEvent
            ttServiceLimit.SLCode         = ttDayCampaign.DCEvent + "_MIN"
            ttServiceLimit.SLName         = "National calls" 
-           ttServiceLimit.DialType       = 4
+           ttServiceLimit.DialType       = (IF icMobileFixedLine = "Mobile" THEN 4 ELSE IF icMobileFixedLine = "FixedLine" THEN 1 ELSE 0)
            ttServiceLimit.InclAmt        = ideVoiceLimit
            ttServiceLimit.FirstMonthCalc = iiVLFirstMonthCalc
            ttServiceLimit.LastMonthCalc  = iiVLLastMonthCalc.        
@@ -618,7 +621,7 @@ PROCEDURE pBundle:
            ttServiceLimit.GroupCode      = ttDayCampaign.DCEvent
            ttServiceLimit.SLCode         = ttDayCampaign.DCEvent + "_QTY"
            ttServiceLimit.SLName         = "BDest" 
-           ttServiceLimit.DialType       = 0
+           ttServiceLimit.DialType       = (IF icMobileFixedLine = "Mobile" THEN 0 ELSE IF icMobileFixedLine = "FixedLine" THEN 50 ELSE 0)
            ttServiceLimit.InclAmt        = ideBDestLimit
            ttServiceLimit.FirstMonthCalc = iiBDLFirstMonthCalc
            ttServiceLimit.LastMonthCalc  = iiBDLLastMonthCalc.
@@ -813,7 +816,7 @@ PROCEDURE pValidateData:
                   IF ttTariffCre.FieldValue EQ "" THEN 
                      UNDO, THROW NEW Progress.Lang.AppError("Rateplan code is invalid", 1).
                   ELSE 
-                     ASSIGN lcRatePlan = REPLACE(ttTariffCre.FieldValue,"CONT","CONTRATO").
+                     ASSIGN lcRatePlan = ttTariffCre.FieldValue.
                END.
                WHEN {&RRP} THEN 
                DO:

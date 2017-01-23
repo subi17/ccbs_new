@@ -326,8 +326,11 @@ PROCEDURE pCLIType:
       IF ttCliType.CopyServicesFromCliType > "" THEN 
          RUN pCTServPac(ttCliType.CliType, ttCliType.CopyServicesFromCliType).      
       
-      IF ttCliType.AllowedBundles > "" THEN       
-         RUN pMatrix(ttCliType.CliType, ttCliType.AllowedBundles).
+      IF ttCliType.AllowedBundles > "" THEN    
+          RUN pMatrix(ttCliType.CliType, 
+                      (IF ttCliType.BaseBundle          > "" THEN (ttCliType.BaseBundle          + ",") ELSE "") + 
+                      (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "") +   
+                      ttCliType.AllowedBundles)).
 
       IF ttCliType.TariffBundle = "" THEN    
          RUN pSLGAnalyse(ttCliType.CliType, ttCliType.BaseBundle, ttCliType.FixedLineBaseBundle, ttCliType.AllowedBundles).         
@@ -924,8 +927,8 @@ END PROCEDURE.
 
 
 PROCEDURE pMatrix:
-   DEFINE INPUT PARAMETER icCLIType        AS CHARACTER NO-UNDO.   
-   DEFINE INPUT PARAMETER icAllowedBundles AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icCLIType          AS CHARACTER NO-UNDO.    
+   DEFINE INPUT PARAMETER icAllowedBundles   AS CHARACTER NO-UNDO.
 
    DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
 
