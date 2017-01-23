@@ -19,4 +19,5 @@ else:
       var2 = sys.argv[2]
 
 p=s.newton.search_mobsub(var1,10,0,var2)
-print_results(p)
+#print_results(p)
+print p
