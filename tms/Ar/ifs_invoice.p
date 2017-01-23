@@ -823,26 +823,19 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          ttRow.Qty     = 1                AND 
          ttRow.OrderID > 0                AND
          ttRow.MsSeq   = SubInvoice.MsSeq AND  
-         LOOKUP(ttRow.BillCode,"PAYTERMEND,PAYTERMEND1E,PAYTERMENDBS") > 0 THEN DO:
+         LOOKUP(ttRow.BillCode,"PAYTERMENDA,PAYTERMENDA1E,PAYTERMENDABS,PAYTERMENDABC") > 0 THEN DO:
 
          FIND FIRST bInvRow NO-LOCK WHERE 
-                    bInvRow.InvNum    = SubInvoice.InvNum               AND 
-                    bInvrow.SubInvnum = SubInvoice.SubInvNum            AND
-                    bInvRow.OrderID   = ttRow.OrderID                   AND 
-             LOOKUP(bInvRow.BillCode,"PAYTERM,PAYTERM1E,PAYTERMBS") > 0 AND
-                    bInvRow.Qty       = 1                               NO-ERROR.
+                    bInvRow.InvNum    = SubInvoice.InvNum                         AND 
+                    bInvrow.SubInvnum = SubInvoice.SubInvNum                      AND
+                    bInvRow.OrderID   = ttRow.OrderID                             AND 
+             LOOKUP(bInvRow.BillCode,"PAYTERM,PAYTERM1E,PAYTERMBS,PAYTERMBC") > 0 AND
+                    bInvRow.Qty       = 1                                         NO-ERROR.
 
-         IF AVAIL bInvRow THEN DO:
+         IF AVAIL bInvRow THEN 
             ASSIGN liAmortizeValue = ttRow.Amt / bInvRow.Amt
                    ttRow.Quantity  = STRING(liAmortizeValue).
                    
-            CASE ttRow.BillCode:
-               WHEN "PAYTERMEND"   THEN ttRow.BillCode = "PAYTERMENDA".
-               WHEN "PAYTERMEND1E" THEN ttRow.BillCode = "PAYTERMEND1EA".
-               WHEN "PAYTERMENDBS" THEN ttRow.BillCode = "PAYTERMENDBSA".
-            END CASE.
-         
-         END.          
       END.
 
       IF NOT llSalesInv AND AVAIL ttRow THEN DO:
