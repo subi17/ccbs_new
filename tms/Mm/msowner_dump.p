@@ -68,7 +68,7 @@ END FUNCTION.
 
 ASSIGN
    lhCollect   = ihTempTable:DEFAULT-BUFFER-HANDLE
-   lhTable     = BUFFER OrderAccessory:HANDLE
+   lhTable     = BUFFER msowner:HANDLE
    lcTableName = lhTable:NAME.
 
 FOR EACH Eventlog NO-LOCK WHERE
