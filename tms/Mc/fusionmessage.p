@@ -25,7 +25,7 @@ FUNCTION fCollect RETURNS LOGICAL
       BUFFER-COPY FusionMessage to ttDocs.
       ttDocs.cCreatedTS =  fTS2HMS(FusionMessage.createdTS).
       ttDocs.cFixedStatusTS = fTS2HMS(FusionMessage.FixedStatusTS).
-      ttDocs.cUpdateTS = fTS2HMS(FusionMessage.UpdateTS).
+      ttDocs.cUpdateTS = fTS2HMS(FusionMessage.UpdateTS) + "Juhuu".
    END.
 
 END FUNCTION.
