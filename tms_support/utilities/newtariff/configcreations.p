@@ -333,7 +333,7 @@ PROCEDURE pCLIType:
                       ttCliType.AllowedBundles)).
 
       IF ttCliType.TariffBundle = "" THEN    
-         RUN pSLGAnalyse(ttCliType.CliType, ttCliType.BaseBundle, ttCliType.FixedLineBaseBundle, ttCliType.AllowedBundles).         
+         RUN pSLGAnalyse(ttCliType.CliType, ttCliType.CopyServicesFromCliType, ttCliType.BaseBundle, ttCliType.FixedLineBaseBundle, ttCliType.AllowedBundles).         
 
       IF ttCliType.BundleType = False THEN     
          RUN pRequestAction(ttCliType.CliType, 
@@ -409,20 +409,23 @@ END PROCEDURE.
 
 PROCEDURE pSLGAnalyse:
     DEFINE INPUT PARAMETER icCliType             AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icCliTypeCopyFrom     AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icMobileBaseBundle    AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icFixedLineBaseBundle AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icAllowedBundles      AS CHARACTER NO-UNDO.
     
-    DEFINE VARIABLE liCnt                    AS INTEGER   NO-UNDO.
-    DEFINE VARIABLE liCount                  AS INTEGER   NO-UNDO.
-    DEFINE VARIABLE lcSubsTypePrefix         AS CHARACTER NO-UNDO.
-    DEFINE VARIABLE lcBillCodeList           AS CHARACTER NO-UNDO.
-    DEFINE VARIABLE lcConvergentBillCodeList AS CHARACTER NO-UNDO.
-    DEFINE VARIABLE lcMxValue                AS CHARACTER NO-UNDO.
-    
+    DEFINE VARIABLE liCnt                         AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE liCount                       AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE lcSubsTypePrefix              AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcBillCodeList                AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcConvergentBillCodeList      AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcMxValue                     AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcBaseBundleOfCopyFromCliType AS CHARACTER NO-UNDO.
+
     DEFINE BUFFER bf_Matrix     FOR Matrix.
     DEFINE BUFFER bf_MxItem     FOR MxItem.
     DEFINE BUFFER bf_SLGAnalyse FOR SLGAnalyse.
+    DEFINE BUFFER bf_CliTypeCF  FOR CliType.
 
     ASSIGN
         lcBillCodeList           = "14100001,10100001,10100003,10100005,CFOTHER,CFYOIGO" 
@@ -435,6 +438,11 @@ PROCEDURE pSLGAnalyse:
                                 "TRAJ*" 
                             ELSE "").
 
+    FIND FIRST bf_CliTypeCF WHERE bf_CliTypeCF.Brand = gcBrand AND bf_CliTypeCF.ClIType = icCliTypeCopyFrom NO-LOCK NO-ERROR.    
+    IF AVAIL bf_CliTypeCF THEN 
+        ASSIGN lcBaseBundleOfCopyFromCliType = CliType.    
+
+    /* Get list of all allowed bundles/bonos for the subscription type */    
     IF lcSubsTypePrefix > "" THEN
     DO liCount = 1 TO NUM-ENTRIES(lcSubsTypePrefix)
        ON ERROR UNDO, THROW:
@@ -469,7 +477,7 @@ PROCEDURE pSLGAnalyse:
 
             FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                               AND 
                                            bf_SLGAnalyse.ServiceLimitGroup = "CONTDSL"                             AND
-                                           bf_SLGAnalyse.CLIType           > ""                                    AND
+                                           bf_SLGAnalyse.CLIType           = icCliTypeCopyFrom                     AND
                                            bf_SLGAnalyse.ValidTo           >= TODAY                                AND 
                                            bf_SLGAnalyse.BillCode          = ENTRY(liCnt,lcConvergentBillCodeList) NO-LOCK NO-ERROR.
             IF AVAIL bf_SLGAnalyse THEN
@@ -488,7 +496,7 @@ PROCEDURE pSLGAnalyse:
 
             FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                               AND 
                                            bf_SLGAnalyse.ServiceLimitGroup BEGINS "CONTFH"                         AND
-                                           bf_SLGAnalyse.CLIType           > ""                                    AND
+                                           bf_SLGAnalyse.CLIType           = icCliTypeCopyFrom                     AND
                                            bf_SLGAnalyse.ValidTo           >= TODAY                                AND 
                                            bf_SLGAnalyse.BillCode          = ENTRY(liCnt,lcConvergentBillCodeList) NO-LOCK NO-ERROR.
             IF AVAIL bf_SLGAnalyse THEN
@@ -510,17 +518,38 @@ PROCEDURE pSLGAnalyse:
                 NEXT.
 
             FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand            = gcBrand                       AND 
-                                           bf_SLGAnalyse.BillCode         = ENTRY(liCount,lcBillCodeList) AND
-                                           bf_SLGAnalyse.CLIType          > ""                            AND
+                                           bf_SLGAnalyse.BillCode         = ENTRY(liCnt,lcBillCodeList) AND
+                                           bf_SLGAnalyse.CLIType          = icCliTypeCopyFrom             AND
                                            bf_SLGAnalyse.ValidTo          >= TODAY                        AND 
                                            bf_SLGAnalyse.ServiceLimitGroup = "VOICE100"                   NO-LOCK NO-ERROR.
             IF AVAIL bf_SLGAnalyse THEN
             DO:
                 CREATE SLGAnalyse.
-                BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ServiceLimitGroup ValidFrom ValidTo TO SLGAnalyse
+                BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
                     ASSIGN
-                        SLGAnalyse.CliType           = icCliType 
-                        SLGAnalyse.ServiceLimitGroup = "VOICE100"
+                        SLGAnalyse.CliType           = icCliType
+                        SLGAnalyse.ValidFrom         = TODAY
+                        SLGAnalyse.ValidTo           = DATE(12,31,2049).
+            END.
+        END.
+        ELSE IF ENTRY(liCount,icAllowedBundles) = "FREE100MINUTES" THEN
+        DO liCnt = 1 TO NUM-ENTRIES(lcBillCodeList)
+           ON ERROR UNDO, THROW:
+            
+            IF ENTRY(liCount,lcBillCodeList) = "14100001" THEN 
+                NEXT.
+
+            FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand            = gcBrand                       AND 
+                                           bf_SLGAnalyse.BillCode         = ENTRY(liCnt,lcBillCodeList) AND
+                                           bf_SLGAnalyse.CLIType          = icCliTypeCopyFrom             AND
+                                           bf_SLGAnalyse.ValidTo          >= TODAY                        AND 
+                                           bf_SLGAnalyse.ServiceLimitGroup = "FREE100MINUTES"             NO-LOCK NO-ERROR.
+            IF AVAIL bf_SLGAnalyse THEN
+            DO:
+                CREATE SLGAnalyse.
+                BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
+                    ASSIGN
+                        SLGAnalyse.CliType           = icCliType
                         SLGAnalyse.ValidFrom         = TODAY
                         SLGAnalyse.ValidTo           = DATE(12,31,2049).
             END.
@@ -530,14 +559,20 @@ PROCEDURE pSLGAnalyse:
             /* Default bundles for CONT* or TRAJ* subscription types */
             FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                         AND 
                                            bf_SLGAnalyse.ServiceLimitGroup = ENTRY(liCount,icAllowedBundles) AND
+                                           bf_SLGAnalyse.CLIType           = icCliTypeCopyFrom               AND
+                                           bf_SLGAnalyse.ValidTo           >= TODAY                          NO-LOCK NO-ERROR.
+            IF NOT AVAIL bf_SLGAnalyse THEN 
+                FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand         = gcBrand                         AND 
+                                           bf_SLGAnalyse.ServiceLimitGroup = ENTRY(liCount,icAllowedBundles) AND
                                            bf_SLGAnalyse.CLIType           > ""                              AND
                                            bf_SLGAnalyse.ValidTo           >= TODAY                          NO-LOCK NO-ERROR.
+                                          
             IF AVAIL bf_SLGAnalyse THEN
             DO:
                 CREATE SLGAnalyse.
                 BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
                     ASSIGN
-                        SLGAnalyse.CliType   = icCliType
+                        SLGAnalyse.CliType   = icCliType                        
                         SLGAnalyse.ValidFrom = TODAY
                         SLGAnalyse.ValidTo   = DATE(12,31,2049).
             END.
@@ -548,10 +583,17 @@ PROCEDURE pSLGAnalyse:
     DO liCount = 1 TO NUM-ENTRIES(lcBillCodeList)
        ON ERROR UNDO, THROW:
 
-        FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand    = gcBrand                       AND 
-                                       bf_SLGAnalyse.BillCode = ENTRY(liCount,lcBillCodeList) AND
-                                       bf_SLGAnalyse.CLIType  > ""                            AND
-                                       bf_SLGAnalyse.ValidTo  >= TODAY                        NO-LOCK NO-ERROR.
+        IF (LOOKUP("FREE100MINUTES",icAllowedBundles) > 0 OR LOOKUP("VOICE100",icAllowedBundles) > 0) AND ENTRY(liCount,lcBillCodeList) <> "14100001" THEN 
+            NEXT.
+
+        FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                       AND 
+                                       bf_SLGAnalyse.BillCode          = ENTRY(liCount,lcBillCodeList) AND
+                                       bf_SLGAnalyse.CLIType           = icCliTypeCopyFrom             AND    
+                                       (IF lcBaseBundleOfCopyFromCliType > "" THEN 
+                                           bf_SLGAnalyse.ServiceLimitGroup = lcBaseBundleOfCopyFromCliType 
+                                        ELSE 
+                                           TRUE)                                                      AND                                  
+                                       bf_SLGAnalyse.ValidTo          >= TODAY                        NO-LOCK NO-ERROR.
         IF AVAIL bf_SLGAnalyse THEN
         DO:
             CREATE SLGAnalyse.
