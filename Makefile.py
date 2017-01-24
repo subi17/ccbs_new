@@ -26,6 +26,12 @@ from socket import getservbyname
 
 assert os.path.exists('.usepike'), 'pike is disabled'
 
+def versiontuple(v):
+    filled = []
+    for point in v.split("."):
+        filled.append(point.zfill(8))
+    return tuple(filled)
+
 def customize():
     print('This instance is not yet customized. Let\'s do it now!')
     print('Name of the instance: ',)
@@ -33,7 +39,7 @@ def customize():
     appversion = '0.1'
     print('Required progress version: ',)
     proversion = sys.stdin.readline().strip().lower()
-    assert proversion[:4] > '101b', 'Progress version too old. Need > 10.1b'
+    assert versiontuple(proversion) > versiontuple('10.1b'), 'Progress version too old. Need > 10.1b'
     # TODO
     fd = open('etc/config.py', 'w')
     fd.write('# Project configuration (should be under RC)\n')
