@@ -9,27 +9,35 @@
 import os
 import sys
 import socket
+from glob import glob
 
 assert sys.version_info[:3] >= (2,6,0), 'Python version too old. Need >= 2.6'
+
+def versiontuple(v):
+    filled = []
+    for point in v.split("."):
+        filled.append(point.zfill(8))
+    return tuple(filled)
 
 if not os.path.exists(relpath + '/etc/site.py'):
     fake_site = {'dlc': 'foo', 'work_dir': 'bar'}
     exec(open(relpath + '/etc/config.py').read(), globals(), fake_site)
     proversion = fake_site['proversion']
-    for dlc in [os.environ.get('DLC', '/non-exist')] + \
-               ['/opt/%s%s' % (x, y) \
-                    for x in ['progress', 'dlc'] \
-                    for y in ['/' + proversion, '/' + proversion[:4], '']]:
-        if os.path.exists(dlc + '/version'):
-            found_version = open(dlc + '/version').readline().split(' ')[2]
-            found_version = found_version.lower().replace('.', '')
-            if found_version.startswith(proversion):
-                break
-            else:
-                print('Found not matching version %s in %s' % \
-                        (found_version, dlc))
-    else:
-        raise PikeException('No progress %s installation found' % proversion)
+
+    newestversion="0"
+    versionfiles = glob('/opt/progress/*/version')
+
+    for versionfile in versionfiles:
+        with open(versionfile, 'r') as f:
+            found_version = f.readline().split(' ')[2]
+        if versiontuple(found_version) >= versiontuple(newestversion):
+            newestversion, dlc = (found_version, versionfile[:-8])
+
+    assert versiontuple(newestversion) >= versiontuple(proversion), \
+         'Cannot find Progress version >= ' + proversion
+
+    print('Using newest installed Progress version %s in directory %s' % \
+             (newestversion, dlc)
 
     a_database = '%s_%s' % (fake_site['appname'], fake_site['databases'][0])
     service_suffix = ''
