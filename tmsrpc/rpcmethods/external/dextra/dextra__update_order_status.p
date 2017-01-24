@@ -64,8 +64,6 @@ DEF VAR lcCountry AS CHAR NO-UNDO.
 DEF VAR lcStreetCode AS CHAR NO-UNDO. 
 DEF VAR lcCityCode AS CHAR NO-UNDO. 
 
-DEF BUFFER bOrderCustomer FOR OrderCustomer.
-
 FUNCTION fCheckIntegrity RETURNS LOGICAL 
    (iiErrCode AS INTEGER):
    IF gi_xmlrpc_error = {&INVALID_METHOD_PARAMS} THEN DO:
@@ -293,7 +291,7 @@ IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
       ASSIGN
          OrderCustomer.Brand     = gcBrand 
          OrderCustomer.OrderId   = Order.OrderId
-         OrderCustomer.RowType   = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}. 
+         OrderCustomer.RowType   = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}.
    END.
    ELSE IF llDoEvent THEN DO:
       DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
