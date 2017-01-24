@@ -36,8 +36,8 @@ if not os.path.exists(relpath + '/etc/site.py'):
     assert versiontuple(newestversion) >= versiontuple(proversion), \
          'Cannot find Progress version >= ' + proversion
 
-    print('Using newest installed Progress version %s in directory %s' % \
-             (newestversion, dlc)
+    print('Using the newest installed Progress version %s in directory %s' % \
+             (newestversion, dlc))
 
     a_database = '%s_%s' % (fake_site['appname'], fake_site['databases'][0])
     service_suffix = ''
