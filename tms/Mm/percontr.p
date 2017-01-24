@@ -1263,15 +1263,10 @@ PROCEDURE pFinalize:
    DEF VAR ldaCont15PromoFrom        AS DATE NO-UNDO. 
    DEF VAR ldaCont15PromoEnd         AS DATE NO-UNDO. 
    DEF VAR ldaOrderDate AS DATE NO-UNDO. 
-   DEF VAR liTimeMsReq AS INT NO-UNDO.
-   DEF VAR ldateMsReq AS DATE NO-UNDO. 
-   DEF VAR ldeFromTS AS DEC NO-UNDO. 
-   DEF VAR ldeToTS AS DEC NO-UNDO. 
 
    DEF BUFFER bMsRequest    FOR MsRequest.
    DEF BUFFER bTerMsRequest FOR MsRequest.
    DEF BUFFER bMobSub       FOR MobSub.
-   DEF BUFFER bStcMsReq     FOR MsRequest.
 
    /* check that subrequests really are ok */
    IF fGetSubRequestState(MsRequest.MsRequest) NE 2 THEN DO:
