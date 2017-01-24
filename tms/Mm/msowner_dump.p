@@ -71,12 +71,27 @@ ASSIGN
    lhTable     = BUFFER msowner:HANDLE
    lcTableName = lhTable:NAME.
 
+DEF VAR ldaEventDate AS DATE NO-UNDO. 
+DEF VAR ldeEventTime AS DEC NO-UNDO. 
+DEF VAR liEventTime AS INT NO-UNDO. 
+DEF VAR lcBrand AS CHAR NO-UNDO. 
+DEF VAR liOrderId AS INT NO-UNDO. 
+
+fSplitTS(idLastDump,
+         OUTPUT ldaEventDate,
+         OUTPUT liEventTime).
+
 FOR EACH Eventlog NO-LOCK WHERE
-         Eventlog.Eventdate = TODAY - 1 AND
+         Eventlog.Eventdate >= ldaEventDate AND
          Eventlog.tablename = "MsOwner" USE-INDEX EventDate:
    
+   ldeEventTime = fHMS2TS(EventLog.EventDate,
+                         EventLog.EventTime).
+
+   IF ldeEventTime < idLastDump THEN NEXT.
+
    FIND FIRST MsOwner NO-LOCK WHERE
-              MsOwner.Brand = "1" AND
+              MsOwner.Brand = gcBrand AND
               MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
               MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,CHR(255))) NO-ERROR.
    IF AVAIL MsOwner THEN fCollect().
