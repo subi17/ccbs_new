@@ -217,7 +217,7 @@ FUNCTION fCancelPendingSTCToAddLine RETURNS LOGICAL
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN 
          fChangeReqStatus(MsRequest.Msrequest,
                           4,
-                          "STC has to be done for CONT9").
+                          "STC has to be done for CONT9/CONT10").
    END.
    
    FOR FIRST MsRequest NO-LOCK WHERE
@@ -230,7 +230,7 @@ FUNCTION fCancelPendingSTCToAddLine RETURNS LOGICAL
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN 
          fChangeReqStatus(MsRequest.Msrequest,
                           4,
-                          "STC has to be done for CONT9").
+                          "STC has to be done for CONT9/CONT10").
    END.
    
    RETURN FALSE.
@@ -542,8 +542,9 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
                           OUTPUT ldeSMSStamp).
       
    FIND FIRST CLIType NO-LOCK WHERE 
-              CLIType.Brand   = gcBrand AND 
-              CLIType.CLIType = "CONT9" NO-ERROR.      
+              CLIType.Brand   = gcBrand AND
+             (CLIType.CLIType = "CONT9" OR 
+              CLIType.CLIType = "CONT10") NO-ERROR.      
         
    FOR EACH tt_AdditionalSIM NO-LOCK:
 
@@ -698,7 +699,8 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
 
       FIND FIRST bCLIType NO-LOCK WHERE
                  bCLIType.Brand   = gcBrand AND
-                 bCLIType.CLIType = "CONT9" NO-ERROR.
+                (bCLIType.CLIType = "CONT9" OR
+                 bCLIType.CLIType = "CONT10") NO-ERROR.
 
       IF AVAIL bCLIType AND NOT llgMainLine THEN
          fCTChangeRequest(MsRequest.MsSeq,
