@@ -12,10 +12,10 @@ define variable usr as IUser no-undo.
 DO TRANSACTION:
 
    MESSAGE "Creating tenant".
-   RUN create_tenant.p ("Masmovil", "Regular", icDBName).
+   RUN ../tms_support/utilities/multitenant/create_tenant.p ("Masmovil", "Regular", icDBName).
 
    MESSAGE 'Creating super tenant'.
-   RUN create_tenant.p ("Super", "Super", icDBName).
+   RUN ../tms_support/utilities/multitenant/create_tenant.p ("Super", "Super", icDBName).
 
    MESSAGE 'Creating default user'.
 

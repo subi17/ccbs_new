@@ -13,7 +13,7 @@ DO liDBid = 1 TO NUM-DBS with frame a.
       ON QUIT UNDO, LEAVE.
        
        /* create domain, tenants and users */
-       RUN create_tenants.p(lcDBname).
+       RUN ../tms_support/utilities/multitenant/create_tenants.p(lcDBname).
 
        lStopped = FALSE.
 
