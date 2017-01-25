@@ -10,4 +10,4 @@ class AddFieldPosId(Migration):
 
     def down(self):
         t = self.alter_table('Order')
-        self.drop_column('POSid')
+        t.drop_column('POSid')
