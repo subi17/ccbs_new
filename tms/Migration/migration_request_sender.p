@@ -17,6 +17,8 @@
 {commpaa.i}
 {cparam2.i}
 {timestamp.i}
+{ftransdir.i}
+
 
 DEF STREAM sOut.
 DEF STREAM sLog.
@@ -80,4 +82,5 @@ END.
 PUT STREAM sLog UNFORMATTED 
    "Migration file building ends " + fTS2HMS(fMakeTS()) SKIP.
 
+fMove2TransDir(lcOutFile, ".txt", lcOutDir).
 
