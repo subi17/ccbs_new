@@ -22,7 +22,6 @@ DEF INPUT  PARAMETER icModifiedFields AS CHAR NO-UNDO.
 DEF VAR lhTable      AS HANDLE NO-UNDO.
 DEF VAR lhCollect    AS HANDLE NO-UNDO.
 DEF VAR liPicked     AS INT    NO-UNDO.
-DEF VAR liCnt        AS INT    NO-UNDO.
 DEF VAR lcTableName  AS CHAR   NO-UNDO.
 DEF VAR lhCLIField   AS HANDLE NO-UNDO. 
 DEF VAR lhTsEndField AS HANDLE NO-UNDO. 
@@ -74,8 +73,6 @@ ASSIGN
 DEF VAR ldaEventDate AS DATE NO-UNDO. 
 DEF VAR ldeEventTime AS DEC NO-UNDO. 
 DEF VAR liEventTime AS INT NO-UNDO. 
-DEF VAR lcBrand AS CHAR NO-UNDO. 
-DEF VAR liOrderId AS INT NO-UNDO. 
 
 fSplitTS(idLastDump,
          OUTPUT ldaEventDate,
@@ -85,10 +82,12 @@ FOR EACH Eventlog NO-LOCK WHERE
          Eventlog.Eventdate >= ldaEventDate AND
          Eventlog.tablename = "MsOwner" USE-INDEX EventDate:
    
-   ldeEventTime = fHMS2TS(EventLog.EventDate,
-                         EventLog.EventTime).
+   IF EventLog.EventDate = ldaEventDate THEN DO:
+      ldeEventTime = fHMS2TS(EventLog.EventDate,
+                            EventLog.EventTime).
 
-   IF ldeEventTime < idLastDump THEN NEXT.
+      IF ldeEventTime < idLastDump THEN NEXT.
+   END.
 
    FIND FIRST MsOwner NO-LOCK WHERE
               MsOwner.Brand = gcBrand AND
