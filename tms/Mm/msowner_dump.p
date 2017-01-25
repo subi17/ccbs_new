@@ -71,7 +71,6 @@ ASSIGN
    lcTableName = lhTable:NAME.
 
 DEF VAR ldaEventDate AS DATE NO-UNDO. 
-DEF VAR ldeEventTime AS DEC NO-UNDO. 
 DEF VAR liEventTime AS INT NO-UNDO. 
 
 fSplitTS(idLastDump,
@@ -80,15 +79,9 @@ fSplitTS(idLastDump,
 
 FOR EACH Eventlog NO-LOCK WHERE
          Eventlog.Eventdate >= ldaEventDate AND
+         EventLog.EventDate < TODAY AND
          Eventlog.tablename = "MsOwner" USE-INDEX EventDate:
    
-   IF EventLog.EventDate = ldaEventDate THEN DO:
-      ldeEventTime = fHMS2TS(EventLog.EventDate,
-                            EventLog.EventTime).
-
-      IF ldeEventTime < idLastDump THEN NEXT.
-   END.
-
    FIND FIRST MsOwner NO-LOCK WHERE
               MsOwner.Brand = gcBrand AND
               MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
