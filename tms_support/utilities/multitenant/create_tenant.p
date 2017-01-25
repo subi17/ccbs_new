@@ -15,28 +15,34 @@ define variable usr as IUser no-undo.
 
 service = NEW DataAdminService(icDBName).
 
-tenant = service:NewTenant("T" + icTenant).  
+IF icTenantType NE "Default" THEN DO:
 
-/* Create a tenant */
-IF icTenantType EQ "Super" THEN DO:
-   tenant:IsDataEnabled = true.
-   tenant:Type = icTenantType.
-END.
-ELSE DO:
-   tenant:name = "T" + icTenant.
-   tenant:Type = icTenantType.
-   tenant:IsDataEnabled = TRUE.   /* enabled for access */
-   tenant:DefaultAllocation = "Immediate".
-   tenant:DefaultDataArea  = service:GetArea("Sta_Data_64").
-   tenant:DefaultIndexArea = service:GetArea("Sta_Index_64").
-   tenant:DefaultLobArea   = service:GetArea("Sta_Data_64").
-END.
+   tenant = service:NewTenant("T" + icTenant).  
 
-service:CreateTenant(tenant).
+   /* Create a tenant */
+   IF icTenantType EQ "Super" THEN DO:
+      tenant:IsDataEnabled = true.
+      tenant:Type = icTenantType.
+   END.
+   ELSE DO:
+      tenant:name = "T" + icTenant.
+      tenant:Type = icTenantType.
+      tenant:IsDataEnabled = TRUE.   /* enabled for access */
+      tenant:DefaultAllocation = "Immediate".
+      tenant:DefaultDataArea  = service:GetArea("Sta_Data_64").
+      tenant:DefaultIndexArea = service:GetArea("Sta_Index_64").
+      tenant:DefaultLobArea   = service:GetArea("Sta_Data_64").
+   END.
+
+   service:CreateTenant(tenant).
+END.
 
 /* Create a domain */
 domain = service:NewDomain("D" + icTenant).
-domain:Tenant = service:GetTenant("T" + icTenant).
+IF icTenantType EQ "Default" THEN
+   domain:Tenant = service:GetTenant("Default").
+ELSE 
+   domain:Tenant = service:GetTenant("T" + icTenant).
 domain:AuthenticationSystem = service:GetAuthenticationSystem("_oeusertable").
 domain:AccessCode =  "D" + icTenant.
 domain:IsEnabled = TRUE.
