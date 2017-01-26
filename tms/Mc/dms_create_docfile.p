@@ -845,11 +845,11 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    STRING(lcModel)                   + lcDelim +   
    /*ROI Risk: R11A;C--;S.;RSVODAFONE::02/11/2009::383::1;Z03011*/
    STRING(Order.RiskCode)            + lcDelim +
-   IF Order.DeliverySecure > 0
+   (IF Order.DeliverySecure > 0
    THEN IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
         THEN STRING({&ORDER_DELTYPE_POS_SECURE})
         ELSE STRING({&ORDER_DELTYPE_POST_SECURE})
-   ELSE STRING(Order.DeliveryType)   + lcDelim +
+   ELSE STRING(Order.DeliveryType))   + lcDelim +
    lcKialaCode.
    
    /*Solve tmsparam value for getting correct matrix row*/
@@ -1014,11 +1014,11 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    STRING(lcModel)   + lcDelim +
    /*Roi Risk: <Blank>*/
    STRING(Order.RiskCode) + lcDelim +
-   IF Order.DeliverySecure > 0
+   (IF Order.DeliverySecure > 0
    THEN IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
         THEN STRING({&ORDER_DELTYPE_POS_SECURE})
         ELSE STRING({&ORDER_DELTYPE_POST_SECURE})
-   ELSE STRING(Order.DeliveryType)   + lcDelim +
+   ELSE STRING(Order.DeliveryType))  + lcDelim +
    lcKialaCode.
    
    /*solve needed documents:*/
