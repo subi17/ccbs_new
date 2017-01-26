@@ -11,10 +11,12 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
+{timestamp.i}
 
 DEFINE VARIABLE lcSIMfile          AS CHARACTER NO-UNDO FORMAT "X(40)".
 DEFINE VARIABLE lcProcessedDir     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcessedSIMFile AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcTenant           AS CHARACTER NO-UNDO.
 
 form /* SIM PaymFile */
    skip(1)
@@ -45,9 +47,17 @@ DO WITH FRAME SIMfile :
    END.
 
    lcProcessedDir = fCParam("SIM","ProcessedSimFile").
+   
+   /* Find used tenant name */
+   FIND FIRST Order WHERE
+              Order.brand = "1" AND
+              Order.Statuscode EQ "6" AND
+              Order.crstamp < fmakets().
+   lcTenant = BUFFER-TENANT-NAME(order).
 
    RUN Mm/simread.p(INPUT lcSIMfile,
                INPUT lcProcessedDir,
+               INPUT lcTenant,
                OUTPUT lcProcessedSIMFile).
 
    HIDE FRAME SIMfile.
