@@ -965,7 +965,7 @@ PROCEDURE pMatrix:
 
    DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
 
-   FIND FIRST Matrix WHERE Matrix.Brand = gcBrand AND Matrix.MXKey = "PERCONTR" AND Matrix.MxName = "Allowed bundles for '" + icCLIType + "'" NO-LOCK NO-ERROR.
+   FIND FIRST Matrix WHERE Matrix.Brand = gcBrand AND Matrix.MXKey = "PERCONTR" AND Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL Matrix THEN 
    DO:
        CREATE Matrix.
@@ -973,7 +973,7 @@ PROCEDURE pMatrix:
           Matrix.Brand  = gcBrand
           Matrix.MXSeq  = NEXT-VALUE(imsi)
           Matrix.mxkey  = "PERCONTR"
-          Matrix.mxname = "Allowed bundles for '" + icCLIType + "'"
+          Matrix.mxname = icCLIType
           Matrix.prior  = fGetNextMatrixPriority("PERCONTR")
           Matrix.mxres  = 1.
        
