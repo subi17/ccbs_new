@@ -220,18 +220,16 @@ END PROCEDURE.
 
 
 PROCEDURE pCustomRates:
-    DEFINE INPUT PARAMETER icRatePlan AS CHARACTER NO-UNDO.
-
     DEFINE PARAMETER BUFFER ttTariff FOR ttTariff.
 
     FOR EACH ttTariff ON ERROR UNDO, THROW:
 
-        FIND FIRST Tariff WHERE Tariff.Brand      = gcBrand           AND 
-                                Tariff.PriceList  = icRatePlan        AND 
-                                Tariff.CCN        = INT(ttTariff.CCN) AND 
-                                Tariff.BDest      = ttTariff.BDest    AND 
-                                Tariff.ValidFrom <= TODAY             AND 
-                                Tariff.ValidTo   >= TODAY             EXCLUSIVE-LOCK NO-WAIT NO-ERROR.                                    
+        FIND FIRST Tariff WHERE Tariff.Brand      = gcBrand            AND 
+                                Tariff.PriceList  = ttTariff.PriceList AND 
+                                Tariff.CCN        = INT(ttTariff.CCN)  AND 
+                                Tariff.BDest      = ttTariff.BDest     AND 
+                                Tariff.ValidFrom <= TODAY              AND 
+                                Tariff.ValidTo   >= TODAY              EXCLUSIVE-LOCK NO-WAIT NO-ERROR.                                    
         IF LOCKED Tariff THEN 
             UNDO, THROW NEW Progress.Lang.AppError('Custom Tariff failed to update as records are locked.',1).
         ELSE IF NOT AVAIL Tariff THEN 
@@ -240,7 +238,7 @@ PROCEDURE pCustomRates:
             ASSIGN 
                 Tariff.Brand       = gcBrand
                 Tariff.TariffNum   = NEXT-VALUE(Tariff)
-                Tariff.PriceList   = icRatePlan
+                Tariff.PriceList   = ttTariff.PriceList
                 Tariff.CCN         = INT(ttTariff.CCN)
                 Tariff.BDest       = ttTariff.BDest
                 Tariff.BillCode    = ttTariff.BillItem
@@ -253,7 +251,7 @@ PROCEDURE pCustomRates:
         DO:
             ASSIGN 
                 Tariff.BillCode    = ttTariff.BillItem
-                Tariff.PriceList   = icRatePlan
+                Tariff.PriceList   = ttTariff.PriceList
                 Tariff.Price       = DECIMAL(ttTariff.Price)
                 Tariff.StartCharge = DECIMAL(ttTariff.SetupFee).           
         END.        
@@ -341,18 +339,16 @@ PROCEDURE pCLIType:
                             ttCliType.BundlesForActivateOnSTC, 
                             ttCliType.ServicesForReCreateOnSTC).      
 
-      IF ttCLIType.PayType = 1 THEN 
-      DO:         
+      IF ttCLIType.PayType = 1 AND NOT (CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN /* Non-convergent */
+      DO:
          RUN pUpdateTMSParam("ALL_POSTPAID_CONTRACTS",ttCliType.CliType).  
+         RUN pUpdateTMSParam("POSTPAID_DATA_CONTRACTS", ttCliType.CliType).
          /*TODO: Parent of Tariff bundle needs to be excluded */
-         RUN pUpdateTMSParam("BB_PROFILE_1",ttCliType.CliType).  
+         RUN pUpdateTMSParam("BB_PROFILE_1",ttCliType.CliType).
       END.
       
-      IF ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "" THEN 
-      DO:
+      IF ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "" THEN       
          RUN pUpdateTMSParam("DATA_BUNDLE_BASED_CLITYPES", ttCliType.CliType).
-         RUN pUpdateTMSParam("POSTPAID_DATA_CONTRACTS"   , ttCliType.CliType).
-      END.      
 
       IF ttCLIType.PayType = 1 AND ttCLIType.UsageType = 1 THEN 
          RUN pUpdateTMSParam("POSTPAID_VOICE_TARIFFS", ttCliType.CliType).

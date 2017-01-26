@@ -266,11 +266,12 @@ PROCEDURE pReadCustomRatesForRateplan:
                 
                CREATE ttTariff.
                ASSIGN    
-                  ttTariff.CCN      = TRIM(ENTRY(1,lcLine,";")) 
-                  ttTariff.BDest    = TRIM(ENTRY(2,lcLine,";"))
-                  ttTariff.BillItem = TRIM(ENTRY(3,lcLine,";"))
-                  ttTariff.Price    = TRIM(ENTRY(4,lcLine,";"))
-                  ttTariff.SetupFee = TRIM(ENTRY(5,lcLine,";")).          
+                  ttTariff.PriceList = TRIM(ENTRY(1,lcLine,";")) 
+                  ttTariff.CCN       = TRIM(ENTRY(2,lcLine,";")) 
+                  ttTariff.BDest     = TRIM(ENTRY(3,lcLine,";"))
+                  ttTariff.BillItem  = TRIM(ENTRY(4,lcLine,";"))
+                  ttTariff.Price     = TRIM(ENTRY(5,lcLine,";"))
+                  ttTariff.SetupFee  = TRIM(ENTRY(6,lcLine,";")).          
             END.
 
             CATCH err AS Progress.Lang.Error:
@@ -305,7 +306,7 @@ PROCEDURE pProcessTT:
        RUN pRatePlan IN h_config(lcRatePlan, lcCliName, lcReferenceRatePlan, lcRatePlanAction).
 
    IF CAN-FIND(FIRST ttTariff) THEN 
-       RUN pCustomRates IN h_config(lcRatePlan, BUFFER ttTariff).
+       RUN pCustomRates IN h_config(BUFFER ttTariff).
 
    IF lcTariffBundle > "" THEN
    DO:
