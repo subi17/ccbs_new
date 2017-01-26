@@ -1325,11 +1325,11 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    fGetSegment(Order.OrderID)     + lcDelim +
    /*Terminal type*/
    fGetTerminalFinanceType(iiOrderId) + lcDelim +
-   IF Order.DeliverySecure > 0
+   (IF Order.DeliverySecure > 0
    THEN IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
         THEN STRING({&ORDER_DELTYPE_POS_SECURE})
         ELSE STRING({&ORDER_DELTYPE_POST_SECURE})
-   ELSE STRING(Order.DeliveryType)   + lcDelim +
+   ELSE STRING(Order.DeliveryType))   + lcDelim +
    lcKialaCode.
 
    /*Document type,DocStatusCode,RevisionComment*/
