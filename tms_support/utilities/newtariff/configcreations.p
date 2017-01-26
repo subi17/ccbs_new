@@ -166,54 +166,52 @@ PROCEDURE pRatePlan:
             BUFFER-COPY bf_RatePlanCopyFrom EXCEPT RatePlan RPName TO RatePlan
                 ASSIGN 
                     RatePlan.RatePlan = icRatePlan
-                    RatePlan.RPName   = icRPName.
-        END.
+                    RatePlan.RPName   = icRPName.        
                 
-        FOR EACH bf_PListConfCopyFrom WHERE bf_PListConfCopyFrom.Brand    = gcBrand                      AND 
-                                            bf_PListConfCopyFrom.RatePlan = bf_RatePlanCopyFrom.RatePlan AND
-                                            bf_PListConfCopyFrom.dFrom   <= TODAY                        AND
-                                            bf_PListConfCopyFrom.dTo     >= TODAY                        NO-LOCK:
+            FOR EACH bf_PListConfCopyFrom WHERE bf_PListConfCopyFrom.Brand    = gcBrand                      AND 
+                                                bf_PListConfCopyFrom.RatePlan = bf_RatePlanCopyFrom.RatePlan AND
+                                                bf_PListConfCopyFrom.dFrom   <= TODAY                        AND
+                                                bf_PListConfCopyFrom.dTo     >= TODAY                        NO-LOCK:
 
-            IF icRatePlanAction = "New" AND 
-               ((bf_PListConfCopyFrom.RatePlan EQ bf_PListConfCopyFrom.PriceList) OR 
-                (LOOKUP(bf_PListConfCopyFrom.RatePlan,"CONTRATO23,CONTRATO24,CONTRATO25") > 0 AND bf_PListConfCopyFrom.PriceList = "CONTRATOS")) THEN 
-            DO:
-                /* A copy of existing rateplan's pricelist and related tariffs is created */
-                FIND FIRST PriceList WHERE PriceList.Brand = gcBrand AND PriceList.PriceList = bf_PListConfCopyFrom.PriceList NO-LOCK NO-ERROR.
-                IF AVAIL PriceList THEN 
+                IF icRatePlanAction = "New" AND (bf_PListConfCopyFrom.RatePlan EQ bf_PListConfCopyFrom.PriceList)  THEN 
                 DO:
-                    CREATE bPriceList.
-                    BUFFER-COPY PriceList EXCEPT PriceList PLName TO bPriceList
-                        ASSIGN 
-                            bPriceList.PriceList = RatePlan.RatePlan
-                            bPriceList.PLName    = RatePlan.RPName.
-
-                    FOR EACH Tariff WHERE Tariff.Brand = gcBrand AND Tariff.PriceList = PriceList.PriceList NO-LOCK:                     
-                        CREATE bTariff.
-                        BUFFER-COPY Tariff EXCEPT TariffNum PriceList ValidFrom TO bTariff
+                    /* A copy of existing rateplan's pricelist and related tariffs is created */
+                    FIND FIRST PriceList WHERE PriceList.Brand = gcBrand AND PriceList.PriceList = bf_PListConfCopyFrom.PriceList NO-LOCK NO-ERROR.
+                    IF AVAIL PriceList THEN 
+                    DO:
+                        CREATE bPriceList.
+                        BUFFER-COPY PriceList EXCEPT PriceList PLName TO bPriceList
                             ASSIGN 
-                                bTariff.TariffNum = NEXT-VALUE(Tariff)
-                                bTariff.PriceList = bPriceList.PriceList
-                                bTariff.ValidFrom = TODAY.                      
-                    END.                
+                                bPriceList.PriceList = RatePlan.RatePlan
+                                bPriceList.PLName    = RatePlan.RPName.
 
+                        FOR EACH Tariff WHERE Tariff.Brand = gcBrand AND Tariff.PriceList = PriceList.PriceList NO-LOCK:                     
+                            CREATE bTariff.
+                            BUFFER-COPY Tariff EXCEPT TariffNum PriceList ValidFrom TO bTariff
+                                ASSIGN 
+                                    bTariff.TariffNum = NEXT-VALUE(Tariff)
+                                    bTariff.PriceList = bPriceList.PriceList
+                                    bTariff.ValidFrom = TODAY.                      
+                        END.                
+
+                        CREATE bPListConf.
+                        BUFFER-COPY bf_PListConfCopyFrom EXCEPT PriceList RatePlan dFrom dTo TO bPListConf
+                            ASSIGN 
+                                bPListConf.PriceList = RatePlan.RatePlan
+                                bPListConf.RatePlan  = RatePlan.RatePlan
+                                bPListConf.dFrom     = TODAY 
+                                bPListConf.dTo       = DATE(12,31,2049).
+                    END.        
+                END.            
+                ELSE
+                DO: 
+                    /* Share existing rateplan's pricelist and related tariffs */                               
                     CREATE bPListConf.
-                    BUFFER-COPY bf_PListConfCopyFrom EXCEPT PriceList RatePlan dFrom dTo TO bPListConf
-                        ASSIGN 
-                            bPListConf.PriceList = RatePlan.RatePlan
-                            bPListConf.RatePlan  = RatePlan.RatePlan
-                            bPListConf.dFrom     = TODAY 
-                            bPListConf.dTo       = DATE(12,31,2049).
-                END.        
-            END.            
-            ELSE
-            DO: 
-                /* Share existing rateplan's pricelist and related tariffs */                               
-                CREATE bPListConf.
-                BUFFER-COPY bf_PListConfCopyFrom EXCEPT RatePlan TO bPListConf
-                    ASSIGN bPListConf.RatePlan = RatePlan.RatePlan.                                                  
-            END.
-        END.                                      
+                    BUFFER-COPY bf_PListConfCopyFrom EXCEPT RatePlan TO bPListConf
+                        ASSIGN bPListConf.RatePlan = RatePlan.RatePlan.                                                  
+                END.
+            END.                                      
+        END. /* IF NOT AVAIL RatePlan THEN */
     END.
 
     RETURN "".
@@ -326,11 +324,12 @@ PROCEDURE pCLIType:
       IF ttCliType.CopyServicesFromCliType > "" THEN 
          RUN pCTServPac(ttCliType.CliType, ttCliType.CopyServicesFromCliType).      
       
-      IF ttCliType.AllowedBundles > "" THEN    
+      IF ttCliType.AllowedBundles > "" THEN
+      DO:    
           RUN pMatrix(ttCliType.CliType, 
-                      (IF ttCliType.BaseBundle          > "" THEN (ttCliType.BaseBundle          + ",") ELSE "") + 
-                      (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "") +   
-                      ttCliType.AllowedBundles)).
+                      ((IF ttCliType.BaseBundle > "" THEN (ttCliType.BaseBundle + ",") ELSE "") + (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "") + ttCliType.AllowedBundles)).
+
+      END.
 
       IF ttCliType.TariffBundle = "" THEN    
          RUN pSLGAnalyse(ttCliType.CliType, ttCliType.CopyServicesFromCliType, ttCliType.BaseBundle, ttCliType.FixedLineBaseBundle, ttCliType.AllowedBundles).         
@@ -432,6 +431,8 @@ PROCEDURE pSLGAnalyse:
         lcConvergentBillCodeList = "F10100003,F10100005"
         lcSubsTypePrefix = (IF icCliType BEGINS "CONTDSL" THEN 
                                 "CONTDSL*,CONT*" 
+                            ELSE IF icCliType BEGINS "CONTFH" THEN 
+                                (icCliType + ",CONT*")     
                             ELSE IF icCliType BEGINS "CONT" THEN 
                                 "CONT*" 
                             ELSE IF icCliType BEGINS "TRAJ" THEN 
@@ -440,7 +441,7 @@ PROCEDURE pSLGAnalyse:
 
     FIND FIRST bf_CliTypeCF WHERE bf_CliTypeCF.Brand = gcBrand AND bf_CliTypeCF.ClIType = icCliTypeCopyFrom NO-LOCK NO-ERROR.    
     IF AVAIL bf_CliTypeCF THEN 
-        ASSIGN lcBaseBundleOfCopyFromCliType = CliType.    
+        ASSIGN lcBaseBundleOfCopyFromCliType = bf_CliTypeCF.BaseBundle.    
 
     /* Get list of all allowed bundles/bonos for the subscription type */    
     IF lcSubsTypePrefix > "" THEN
@@ -505,7 +506,7 @@ PROCEDURE pSLGAnalyse:
                 BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
                     ASSIGN
                         SLGAnalyse.CliType              = icCliType
-                        bf_SLGAnalyse.ServiceLimitGroup = icFixedLineBaseBundle 
+                        SLGAnalyse.ServiceLimitGroup    = icFixedLineBaseBundle 
                         SLGAnalyse.ValidFrom            = TODAY
                         SLGAnalyse.ValidTo              = DATE(12,31,2049).
             END.
@@ -560,13 +561,7 @@ PROCEDURE pSLGAnalyse:
             FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                         AND 
                                            bf_SLGAnalyse.ServiceLimitGroup = ENTRY(liCount,icAllowedBundles) AND
                                            bf_SLGAnalyse.CLIType           = icCliTypeCopyFrom               AND
-                                           bf_SLGAnalyse.ValidTo           >= TODAY                          NO-LOCK NO-ERROR.
-            IF NOT AVAIL bf_SLGAnalyse THEN 
-                FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand         = gcBrand                         AND 
-                                           bf_SLGAnalyse.ServiceLimitGroup = ENTRY(liCount,icAllowedBundles) AND
-                                           bf_SLGAnalyse.CLIType           > ""                              AND
-                                           bf_SLGAnalyse.ValidTo           >= TODAY                          NO-LOCK NO-ERROR.
-                                          
+                                           bf_SLGAnalyse.ValidTo           >= TODAY                          NO-LOCK NO-ERROR.            
             IF AVAIL bf_SLGAnalyse THEN
             DO:
                 CREATE SLGAnalyse.
