@@ -275,7 +275,7 @@ BROWSE:
             UFK[4] =  0 
             UFK[5] =  0
             UFK[6] =  0
-            UFK[7] =  0.
+            UFK[7] =  0
             ufk[8] =  8.
 
          IF ictype  NE  "" THEN ASSIGN
