@@ -61,7 +61,7 @@ CLASS HPD.DumpBase:
       THEN lcDelimiter = ENTRY(1,lbDumpFile.DumpDelimiter).
       ELSE lcDelimiter = {&HPDDumpDelimiter}.
 
-      liDelimiterLenght = LENGTH(lcDelimiter).
+      liDelimiterLenght = LENGTH(lcDelimiter) + 1.
 
       IF NUM-ENTRIES(lbDumpFile.DumpDelimiter) = 2
       THEN lcKeyDelimiter = ENTRY(2,lbDumpFile.DumpDelimiter).
