@@ -10,7 +10,7 @@
   APPLICATION ..: tms
   AUTHOR .......: ilsavola
   VERSION.......:
-  CREATED ......: 19.11.15
+  CREATED ......: 25.1.17
   CHANGED ......:
   ------------------------------------------------------------------------*/
 {tmsconst.i}
@@ -25,7 +25,7 @@ DEF STREAM sLog.
 
 DEF VAR lcLogFile AS CHAR NO-UNDO.
 DEF VAR lcOutFile AS CHAR NO-UNDO.
-DEF VAR liMigrationOngoing AS INT NO-UNDO.
+DEF VAR liMigrationOn AS INT NO-UNDO.
 DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF VAR lcSpoolDir AS CHAR NO-UNDO.
 DEF VAR lcOutDir AS CHAR NO-UNDO.
@@ -35,8 +35,8 @@ DEF VAR ldaReadDate AS DATETIME.
 DEF VAR lcTimePart AS CHAR. /*For generating file and log file names*/
 DEF BUFFER Order FOR Order.
 
-liMigrationOngoing = fCParamI("MigrationOn").
-IF liMigrationOngoing EQ 0 THEN QUIT.
+liMigrationOn = fCParamI("MigrationOn").
+IF liMigrationOn EQ 0 THEN QUIT.
 
 /*Set directory handling parameters*/
 lcLogDir = fCParam("MB_Migration", "MigrationLogDir").
