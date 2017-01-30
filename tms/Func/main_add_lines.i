@@ -217,7 +217,7 @@ FUNCTION fCancelPendingSTCToAddLine RETURNS LOGICAL
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN 
          fChangeReqStatus(MsRequest.Msrequest,
                           4,
-                          "STC has to be done for CONT9/CONT10").
+                          "STC has to be done for CONT9").
    END.
    
    FOR FIRST MsRequest NO-LOCK WHERE
@@ -230,7 +230,7 @@ FUNCTION fCancelPendingSTCToAddLine RETURNS LOGICAL
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN 
          fChangeReqStatus(MsRequest.Msrequest,
                           4,
-                          "STC has to be done for CONT9/CONT10").
+                          "STC has to be done for CONT9").
    END.
    
    RETURN FALSE.
