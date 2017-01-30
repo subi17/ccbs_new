@@ -236,16 +236,34 @@ PROCEDURE pCustomRates:
         DO:
             CREATE Tariff.
             ASSIGN 
-                Tariff.Brand       = gcBrand
-                Tariff.TariffNum   = NEXT-VALUE(Tariff)
-                Tariff.PriceList   = ttTariff.PriceList
-                Tariff.CCN         = INT(ttTariff.CCN)
-                Tariff.BDest       = ttTariff.BDest
-                Tariff.BillCode    = ttTariff.BillItem
-                Tariff.Price       = DECIMAL(ttTariff.Price)
-                Tariff.StartCharge = DECIMAL(ttTariff.SetupFee)
-                Tariff.ValidFrom   = TODAY 
-                Tariff.Validto     = DATE(12,31,2049).
+                Tariff.Brand          = gcBrand
+                Tariff.TariffNum      = NEXT-VALUE(Tariff)
+                Tariff.PriceList      = ttTariff.PriceList
+                Tariff.CCN            = INT(ttTariff.CCN)
+                Tariff.BDest          = ttTariff.BDest
+                Tariff.BillCode       = ttTariff.BillItem
+                Tariff.DataType       = INT(ttTariff.PriceUnit)
+                Tariff.Discount[4]    = "Fee"
+                Tariff.TZName[1]      = "Off Peak"
+                Tariff.DayType[1]     = 1
+                Tariff.TZFrom[1]      = "00:00" 
+                Tariff.TZTo[1]        = "24:00"
+                Tariff.Price[1]       = DECIMAL(ttTariff.Price)
+                Tariff.StartCharge[1] = DECIMAL(ttTariff.SetupFee)
+                Tariff.TZName[2]      = "Peak"
+                Tariff.DayType[2]     = 0
+                Tariff.TZFrom[2]      = "00:00" 
+                Tariff.TZTo[2]        = "00:00"
+                Tariff.Price[2]       = 0
+                Tariff.StartCharge[2] = 0
+                Tariff.TZName[3]      = "Off Peak"
+                Tariff.DayType[3]     = 0
+                Tariff.TZFrom[3]      = "00:00" 
+                Tariff.TZTo[3]        = "00:00"
+                Tariff.Price[3]       = 0
+                Tariff.StartCharge[3] = 0
+                Tariff.ValidFrom      = TODAY 
+                Tariff.Validto        = DATE(12,31,2049).
         END.        
         ELSE IF AVAILABLE Tariff THEN 
         DO:
@@ -621,18 +639,18 @@ PROCEDURE pDayCampaign:
          DayCampaign.ValidTo         = DATE(12,31,2049)
          DayCampaign.StatusCode      = 1           /* Default value Active */
          DayCampaign.DCType          = (IF ttDayCampaign.DCType = "ServicePackage" THEN "1" ELSE IF ttDayCampaign.DCType = "PackageWithCounter" THEN "4" ELSE "7")
-         DayCampaign.InstanceLimit   = 1                            
-         DayCampaign.BillCode        = ttDayCampaign.BillCode 
-         DayCampaign.CCN             = (IF ttDayCampaign.PayType = 2 THEN 93 ELSE 0)         
-         DayCampaign.InclUnit        = INTEGER(fTMSCodeValue("DayCampaign","InclUnit","Unit"))
+         DayCampaign.CCN             = (IF ttDayCampaign.DCType = "PackageWithCounter" THEN 93 ELSE 0)         
+         DayCampaign.InstanceLimit   = 1
+         DayCampaign.BillCode        = ttDayCampaign.BillCode          
+         DayCampaign.InclUnit        = (IF ttDayCampaign.DCType = "PackageWithCounter" THEN "4" ELSE "1") 
+         DayCampaign.CalcMethod      = (IF ttDayCampaign.DCType = "PackageWithCounter" THEN "4" ELSE "1")  
          DayCampaign.InclStartCharge = YES                          
          DayCampaign.MaxChargeIncl   = 0                            
-         DayCampaign.MaxChargeExcl   = 0                            
-         DayCampaign.CalcMethod      = INTEGER(fTMSCodeValue("Daycampaign","CalcMethod","DCCounter"))
+         DayCampaign.MaxChargeExcl   = 0
          DayCampaign.Effective       = INTEGER(fTMSCodeValue("Daycampaign","Effective","PerContr"))         
          DayCampaign.DurType         = (IF ttDayCampaign.SLCreated THEN 1 ELSE 4)
          DayCampaign.DurMonth        = 0
-         DayCampaign.DurUnit         = INTEGER(fTMSCodeValue("Daycampaign","DurUnit","PerContr"))
+         DayCampaign.DurUnit         = (IF ttDayCampaign.DCType = "PackageWithCounter" THEN "0" ELSE "1")
          DayCampaign.WeekDay         = ""
          DayCampaign.BundleUpsell    = ttDayCampaign.UpSell
          DayCampaign.FeeModel        = ttDayCampaign.BillCode
@@ -784,7 +802,7 @@ PROCEDURE pServiceLimit:
    
    DEFINE BUFFER bf_ServiceLimit FOR ServiceLimit.
 
-   IF ENTRY(2,ttServiceLimit.SLCode,"_") EQ "" OR ENTRY(2,ttServiceLimit.SLCode,"_") EQ "DATA" THEN 
+   IF NUM-ENTRIES(ttServiceLimit.SLCode,"_") = 1 OR ENTRY(2,ttServiceLimit.SLCode,"_") EQ "DATA" THEN 
       liInclUnit = 4. 
    ELSE IF ENTRY(2,ttServiceLimit.SLCode,"_") EQ "QTY" THEN
       liInclUnit = 7. 

@@ -285,8 +285,9 @@ PROCEDURE pReadCustomRatesForRateplan:
                   ttTariff.CCN       = TRIM(ENTRY(2,lcLine,";")) 
                   ttTariff.BDest     = TRIM(ENTRY(3,lcLine,";"))
                   ttTariff.BillItem  = TRIM(ENTRY(4,lcLine,";"))
-                  ttTariff.Price     = TRIM(ENTRY(5,lcLine,";"))
-                  ttTariff.SetupFee  = TRIM(ENTRY(6,lcLine,";")).          
+                  ttTariff.PriceUnit = TRIM(ENTRY(5,lcLine,";"))
+                  ttTariff.Price     = TRIM(ENTRY(6,lcLine,";"))
+                  ttTariff.SetupFee  = TRIM(ENTRY(7,lcLine,";")).          
             END.
 
             CATCH err AS Progress.Lang.Error:
@@ -615,6 +616,11 @@ PROCEDURE pCreateServiceLimit_BDest:
     DEFINE INPUT PARAMETER iiBDLLastMonthCalc  AS INTEGER   NO-UNDO.    
     DEFINE INPUT PARAMETER icMobileFixedLine   AS CHARACTER NO-UNDO.    
 
+    DEFINE VARIABLE liCount    AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE lcBCList   AS CHARACTER NO-UNDO.
+
+    ASSIGN lcBCList = "10100001,10100003,10100005,CFOTHER,CFYOIGO".
+
     CREATE ttServiceLimit.      
     ASSIGN
        ttServiceLimit.GroupCode      = icDCEvemt
@@ -696,7 +702,7 @@ END PROCEDURE.
 
 PROCEDURE pCreateProgressiveRatingLimit_Data:
     DEFINE INPUT PARAMETER icCliType          AS CHARACTER NO-UNDO.
-    DEFINE INPUT PARAMETER icDCEvemt          AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icDCEvent          AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER ideDataLimit       AS DECIMAL   NO-UNDO.
     DEFINE INPUT PARAMETER iiDLFirstMonthCalc AS INTEGER   NO-UNDO.
     DEFINE INPUT PARAMETER iiDLLastMonthCalc  AS INTEGER   NO-UNDO.    
@@ -709,8 +715,8 @@ PROCEDURE pCreateProgressiveRatingLimit_Data:
 
     CREATE ttServiceLimit.      
     ASSIGN
-       ttServiceLimit.GroupCode      = icDCEvemt
-       ttServiceLimit.SLCode         = icDCEvemt
+       ttServiceLimit.GroupCode      = icDCEvent
+       ttServiceLimit.SLCode         = icDCEvent
        ttServiceLimit.SLName         = "Data" 
        ttServiceLimit.DialType       = 7
        ttServiceLimit.InclAmt        = ideDataLimit
