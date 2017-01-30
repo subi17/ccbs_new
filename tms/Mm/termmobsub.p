@@ -610,7 +610,7 @@ BROWSE:
         IF lcFixedNumber  > ""  THEN DO:
            FOR FIRST SearchTermMobsub WHERE
                      SearchTermMobsub.Brand = gcBrand AND
-                     SearchTermMobsub.FixedNumber BEGINS lcFixedNumber NO-LOCK.
+                     SearchTermMobsub.FixedNumber EQ lcFixedNumber NO-LOCK.
            END.
 
            IF NOT AVAILABLE SearchTermMobsub THEN DO:
