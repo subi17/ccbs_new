@@ -337,7 +337,8 @@ PROCEDURE pPrintLine:
    /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)".
    
    IF FixedFeeTF.TFBank EQ {&TF_BANK_UNOE} OR /* YTS-8764 */
-      FixedFeeTF.TFBank EQ {&TF_BANK_CETELEM} THEN
+      FixedFeeTF.TFBank EQ {&TF_BANK_CETELEM} OR
+      FixedFeeTF.TFBank EQ {&TF_BANK_SABADELL} THEN /* YOT-4853 */
       PUT STREAM sout
       /*COD-FPAGO*/  lcCodFpago FORMAT "X(4)".
 
