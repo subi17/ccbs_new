@@ -13,4 +13,5 @@ rpcs           = { 'cctool': 'topup', 'dextra': 'dextra', 'masmovil': 'dextra', 
 wwwrealm       = 'yes'
 client_timezone = 'local'
 server_timezone = 'local'
+tenancies      = { 'super': { 'domain': 'dsuper', 'username': 'super', 'password': 'super', 'tenanttype': 'super' }, 'yoigo': { 'domain': 'dyoigo', 'username': 'yoigo', 'password': 'yoigo', 'tenanttype': 'default' }, 'masmovil': { 'domain': 'dmasmovil', 'username': 'masmovil', 'password': 'masmovil', 'tenanttype': 'reqular' } }
 ENV['display_banner'] = 'no'

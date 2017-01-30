@@ -18,14 +18,70 @@ nonp_source = ['script/' + x for x in os.listdir('script')]
 skip_timelog = False
 show_file = False
 
+def userandpass():
+
+    if not 'tenancies' in globals():
+        return []
+
+    if 'tenant' in globals():
+        t = tenant
+    else:
+        t = ''
+
+    if t == '':
+        for t, tdict in tenancies.items():
+            if tdict['tenanttype'] == 'super':
+                return ['-U', '{0}@{1}'.format(tdict['username'], tdict['domain']), '-P', tdict['password'] ]
+
+    if t in tenancies:
+        return ['-U', '{0}@{1}'.format(tenancies[t]['username'], tenancies[t]['domain']), '-P', tenancies[t]['password'] ]
+
+    return []
+
+def pftolist(pf):
+
+    if not 'tenancies' in globals():
+        return pf
+
+    pffile = pf[1]
+
+    uandp = userandpass()
+
+    with open(pffile, 'r') as myfile:
+        data = myfile.read().splitlines()
+
+    returndata = []
+
+    for line in data:
+        for word in line.split():
+            returndata.append(word)
+            if word.endswith('.pf'):
+                returndata.extend(uandp)
+
+        if line.startswith('-db'):
+            returndata.extend(uandp)
+
+    return returndata
+
 def active_cdr_db_pf():
     if '-S' in open('../db/progress/store/common.pf').read():
         connection_type = "tcp"
     else:
         connection_type = "local"
-    cdr_fetch = Popen(mpro + ['-pf', '../db/progress/store/common.pf',
-                              '-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type], stdout=PIPE)
-    return literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+
+    args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
+    args.extend(pftolist(['-pf', '../db/progress/store/common.pf']))
+
+    cdr_fetch = Popen(mpro + args, stdout=PIPE)
+    dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+
+    if 'tenancies' in globals():
+        uandp = userandpass()
+        for db in dict:
+            dict[db].extend(uandp)
+
+    return dict
+
 
 @target('test>test')
 def test(*a): pass
@@ -53,7 +109,7 @@ def daemon(*a):
             '-T', '../var/tmp']
     for pp in parameters[2:]:
         if pp in databases:
-            args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
+            args.extend(pftolist(['-pf', '../db/progress/store/{0}.pf'.format(pp)]))
         elif pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
@@ -62,7 +118,7 @@ def daemon(*a):
             args.append(pp)
     daemonpf = '../etc/pf/' + daemon + '.pf'
     if os.path.exists(daemonpf):
-        args.extend([ '-pf' , daemonpf ])
+        args.extend(pftolist([ '-pf' , daemonpf ]))
     file = open(pid_file, 'w')
     file.write(str(os.getpid()))
     file.close()
@@ -210,34 +266,33 @@ def clean(*a):
 def cui(*a):
     '''cui|terminal|terminalbatch'''
 
-    extraargs = []
+    args = []
 
     if a[0] == 'cui':
         terminal_module = 'Syst/tmslogin.p'
-        extraargs = ['-e', '100', '-l', '2000', '-TB', '31', '-TM', '32', '-rand', '2', '-Bt', '2500', '-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4']
-        paramstart = 0
+        args.extend(pftolist(['-pf', '../db/progress/store/all.pf']))
+        args.extend(['-e', '100', '-l', '2000', '-TB', '31', '-TM', '32', '-rand', '2', '-Bt', '2500', '-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4'])
     else:
         if len(parameters) == 0:
             raise PikeException('Expected a module to run as a parameter')
         terminal_module = parameters[0]
-        paramstart = 1
+        if a[0] == 'terminalbatch':
+            args.extend(['-b'])
 
-    if a[0] == 'terminalbatch':
-        extraargs = ['-b']
+        cdr_dict = {}
+        for pp in parameters[1:]:
+            if pp in databases:
+                args.extend(pftolist(['-pf', '../db/progress/store/{0}.pf'.format(pp)]))
+            elif pp in cdr_databases:
+                if not cdr_dict:
+                    cdr_dict = active_cdr_db_pf()
+                args.extend(cdr_dict[pp])
+            else:
+                args.append(pp)
 
-    cdr_dict = {}
-    args = ['-T', '../var/tmp', '-p', terminal_module, '-pf', '../db/progress/store/all.pf']
+    args.extend(['-T', '../var/tmp', '-p', terminal_module])
 
-    for pp in parameters[paramstart:]:
-        if pp in databases:
-            args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
-        elif pp in cdr_databases:
-            if not cdr_dict:
-                cdr_dict = active_cdr_db_pf()
-            args.extend(cdr_dict[pp])
-        else:
-            args.append(pp)
-    cmd = Popen(mpro + args + extraargs)
+    cmd = Popen(mpro + args)
     while cmd.poll() is None:
         try:
             cmd.wait()
@@ -262,7 +317,7 @@ def batch(*a):
     args = ['-T', '../var/tmp', '-b', '-p', batch_module + '.p']
     for pp in parameters[1:]:
         if pp in databases:
-            args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
+            args.extend(pftolist(['-pf', '../db/progress/store/{0}.pf'.format(pp)]))
         elif pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
@@ -310,7 +365,7 @@ def idbatch(*a):
     args = ['-T', '../var/tmp', '-b', '-p', batch_module + '.p']
     for pp in parameters[2:]:
         if pp in databases:
-            args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
+            args.extend(pftolist(['-pf', '../db/progress/store/{0}.pf'.format(pp)]))
         elif pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
@@ -342,6 +397,16 @@ def idbatch(*a):
 
 @target
 def editor(*a):
-    args = parameters or ['-pf', '../db/progress/store/all.pf']
+    '''editor||yeditor||meditor'''
+    global tenant
+
+    if a[0] == 'yeditor':
+        tenant = "yoigo"
+    if a[0] == 'meditor':
+        tenant = "masmovil"
+    else:
+        tenant = ""
+
+    args = parameters or pftolist(['-pf', '../db/progress/store/all.pf'])
     args = mpro + args + ['-T', '../var/tmp'] + ['-s', '1024'] + ['-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
     os.execlp(args[0], *args)
