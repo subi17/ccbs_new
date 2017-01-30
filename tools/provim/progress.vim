@@ -4,7 +4,7 @@ while s:path != "/"
         let ccbspath = s:path
         let s:path = "/"
         execute "source" . ccbspath . "/tools/provim/ccbs.vim"
-"        execute "source" . ccbspath . "/tools/provim/abbrev_maps.vim"
+        execute "source" . ccbspath . "/tools/provim/abbrev_maps.vim"
     endi
     let s:path = fnamemodify(s:path, ":h")
 endw
