@@ -1,12 +1,16 @@
 /* ----------------------------------------------------------------------
-  MODULE .......: migration_response_reader.p
-  TASK .........: Program reads Migration response files.
-                  It also sets corresponding order status according to
-                  returned status and notifies WEB MigrationTool about 
-                  changed status.
+  MODULE .......: migration_final_data_reader.p
+  TASK .........: Program reads Migration Finalization Data Files.
+                  It sets services, barrings, bundles, upsells and sets
+                  given data amount to network.
+                  Program procides information about success in JSON format 
+                  to Migration Tool (WEB).
+                  Format for input file:
+|MM internal ID|MSISDN|BARRINGS|SERVICES|BONO|UPSELL|USED_DATA_AMOUNT|
+|MM internal ID|MSISDN|barring_1;barring_2|service_1;service_2;service_3||upsell_1|34000| 
   APPLICATION ..: tms
   AUTHOR .......: ilsavola
-  CREATED ......: 25.1.2017
+  CREATED ......: 30.1.2017
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 {commpaa.i}
@@ -27,27 +31,9 @@ DEF VAR lcTimePart AS CHAR. /*For log file name*/
 DEF VAR lcLogFile AS CHAR NO-UNDO.
 DEF VAR lcRowStatus AS CHAR NO-UNDO.
 
-/*Temp tables are named now without tt because the data is now easy to 
-  be written into JSON in nice format.*/
-DEFINE TEMP-TABLE MigrationOK NO-UNDO
-   FIELD OrderID AS INT
-   FIELD MSISDN AS CHAR
-   FIELD StatusCode AS CHAR. /*order status in TMS*/
-
-/*Failed in NC*/
-DEFINE TEMP-TABLE MigrationFailedNC NO-UNDO
-   FIELD OrderID AS INT
-   FIELD MSISDN AS CHAR
-   FIELD StatusCode AS CHAR
-   FIELD StatusCodeNC AS CHAR /*status code from NC*/
-   FIELD StatusDescNC AS CHAR. /*description from NC*/
-
-/*Other migration failures*/
-DEFINE TEMP-TABLE MigrationFailedOther LIKE MigrationFailedNC.
-
 ASSIGN
    lcTableName = "MB_Migration"
-   lcActionID = "migration_response_reader"
+   lcActionID = "migration_final_data__reader"
    ldCurrentTimeTS = fMakeTS()
    lcLogDir = fCParam("MB_Migration", "MigrationLogDir")
    lcInDir = fCParam("MB_Migration", "MigrationInDir").
@@ -61,12 +47,12 @@ lcTimePart = STRING(YEAR(ldaReadDate)) +
              STRING(MONTH(ldaReadDate),"99") +
              STRING(DAY(ldaReadDate),"99") +
              REPLACE(STRING(TIME,"HH:MM:SS"),":","").
-lcLogFile = lcLogDir + "MM_MIGRATION_RESPONSE_" + lcTimePart + ".log".
+lcLogFile = lcLogDir + "MM_MIGRATION_FINAL_DATA__" + lcTimePart + ".log".
 
 OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
 
 PUT STREAM sLog UNFORMATTED
-   "Migration file reading starts " + fTS2HMS(fMakeTS()) SKIP.
+   "Migration filefinal data reading starts " + fTS2HMS(fMakeTS()) SKIP.
 
 /*Ensure that multiple instances of the program are not running*/
 DO TRANS:
@@ -118,23 +104,24 @@ DO TRANS:
 END.
 
 PUT STREAM sLog UNFORMATTED
-   "Migration file handling done " + fTS2HMS(fMakeTS()) SKIP.
+   "Migration finalization file handling done " + fTS2HMS(fMakeTS()) SKIP.
 OUTPUT STREAM sLog CLOSE.
 
 
-/*File handling logic*/
-/*Program separates succesful and unsuccesful rows to different lists.
-  Data is provided to Migration Tool in a single function call accoring to
-  temp tables that this procedure has collected*/
+/*File handling logic 
+  There is own field for each type of data. 
+  Types can also contain lists of entrires (barrings, services)*/
 PROCEDURE pReadFile:
    DEF VAR lcLine AS CHAR NO-UNDO.
    DEF VAR lcMSISDN AS CHAR NO-UNDO.
-   DEF VAR lcNCStatus AS CHAR NO-UNDO.
-   DEF VAR lcNCComment AS CHAR NO-UNDO.
    DEF VAR lcFileName AS CHAR NO-UNDO.
    DEF VAR liLineNumber AS INT NO-UNDO.
-   DEF VAR liOrderID AS INT NO-UNDO.
-
+   DEF VAR lcMMOrderID AS CHAR NO-UNDO. 
+   DEF VAR lcBarringList AS CHAR NO-UNDO.
+   DEF VAR lcServiceList AS CHAR NO-UNDO.
+   DEF VAR lcBono AS CHAR NO-UNDO.
+   DEF VAR lcUpsell AS CHAR NO-UNDO.
+   DEF VAR liDataAmount AS INT NO-UNDO.
    PUT STREAM sLog UNFORMATTED
       "List collection starts " + fTS2HMS(fMakeTS()) SKIP.
    FILE_LINE:
@@ -155,69 +142,22 @@ PROCEDURE pReadFile:
 
       END.
       assign
-         lcMSISDN = STRING(ENTRY(1,lcline,";"))
-         lcNCStatus = STRING(ENTRY(2,lcline,";"))
-         lcNCComment = STRING(ENTRY(3,lcline,";")) 
-         liOrderID = 0.
+         lcMMOrderID = STRING(ENTRY(1,lcline,";"))
+         lcMSISDN = STRING(ENTRY(2,lcline,";"))
+         lcBarringList = STRING(ENTRY(3,lcline,";"))
+         lcServiceList = STRING(ENTRY(4,lcline,";"))
+         lcBono = STRING(ENTRY(5,lcline,";"))
+         lcUpsell = STRING(ENTRY(6,lcline,";"))
+         liDataAmount = INT(ENTRY(7,lcline,";")).
 
-      FIND FIRST Order NO-LOCK /*EL?)*/ WHERE
-                 Order.brand EQ gcBrand AND
-                 Order.CLI EQ lcMSISDN AND
-                 Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING}.
-      IF AVAIL Order THEN DO:
-         liOrderID = Order.OrderID.
-         /*Order.StatusCode = */
-      END.
-      /*Nodo data contains a number for Order that is
-        already handled
-        in incorrect status
-        does not exist at all
-        ->TMS writes own error notification list for this*/
-      IF liOrderID EQ 0 THEN DO:
-         CREATE MigrationFailedOther.
-         ASSIGN MigrationFailedOther.OrderId = liOrderID
-                MigrationFailedOther.MSISDN = lcMSISDN
-                MigrationFailedOther.StatusCode = "Not found"
-                MigrationFailedOther.StatusDescNC = lcNCComment.
-         lcRowStatus = "TMS Error".
-      END.
-      /*NC response is OK and TMS has order for the operation*/
-      ELSE IF lcNCStatus EQ "0000 00000" THEN DO:
-         /*Succesful case handling*/
-         /*Set Order status*/
-         /*Add entry to Migration Tool response list (ok)*/
-         /*Send SMS*/
-         CREATE MigrationOK.
-         ASSIGN MigrationOK.OrderID = liOrderID
-                MigrationOK.MSISDN = lcMSISDN
-                MigrationOK.StatusCode = Order.StatusCode.
-         lcRowStatus = "OK".       
-
-      END.
-      ELSE DO:
-         /*Error case handling*/
-         /*Set Order Status*/
-         /*Add entry to Migration tool response list (failed)*/
-         CREATE MigrationFailedNC.
-         ASSIGN MigrationFailedNC.OrderID = liOrderID
-                MigrationFailedNC.MSISDN = lcMSISDN
-                MigrationFailedNC.StatusCode = Order.StatusCode
-                MigrationFailedNC.StatusCodeNC = lcNCStatus
-                MigrationFailedNC.StatusDesc = lcNCComment.
-         lcRowStatus = "NC Failure".                                      
-      END.
-       PUT STREAM sLog UNFORMATTED
-         lcLine + ";" + lcRowStatus SKIP.
-                  
    END. /* Line handling END */
 
    PUT STREAM sLog UNFORMATTED
       "Read " + STRING(liLineNumber) + " lines. " 
-      "List collection done " + fTS2HMS(fMakeTS()) SKIP.
+      "Collection done " + fTS2HMS(fMakeTS()) SKIP.
 END.
 
-/*Procedure sends results to Migration Tool and writes log of each type of
-migration results*/
+/*Procedure sends results to Migration Tool and writes logs*/
 PROCEDURE pSendResults:
 
    PUT STREAM sLog UNFORMATTED
