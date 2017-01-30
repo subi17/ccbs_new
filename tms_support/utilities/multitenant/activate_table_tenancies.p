@@ -2,7 +2,7 @@ using OpenEdge.DataAdmin.*.
 using OpenEdge.DataAdmin.Lang.Collections.*.
 
 define variable service as DataAdminService no-undo.
-input from activate_table_tenancies.input.
+input from ../tms_support/utilities/multitenant/activate_table_tenancies.input.
 
 define variable intTable as ITable no-undo.
 DEF VAR lcLine AS CHAR NO-UNDO. 

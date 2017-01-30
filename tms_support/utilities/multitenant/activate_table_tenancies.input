@@ -1,18 +1,18 @@
 ||DB||Table||Records||Tenancy||Process||
-|common|Account|108|?|AR|
+|common|Account|108|T|AR|
 |common|ActionLog|4001|T|General|
-|common|AMQMsg|4001|?|Subscription|
+|common|AMQMsg|4001|S|Subscription (Will be removed)|
 |common|AuthUser|6|S|System|
 |common|Bank|4001|S|General|
 |common|BankAccount|4|T|Billing|
-|common|BankIdCode|337|T?|Billing|
+|common|BankIdCode|337|S|Billing|
 |common|BDest|1063|T|Rating|
 |common|BDestConf|8|T|Rating|
 |common|BDestConfItem|220|T|Rating|
 |common|BDestTrans|205|T|Rating|
 |common|BillItem|1855|T|Rating|
 |common|BillTarget|4001|T|Rating|
-|common|BItemGroup|49|?|Billing|
+|common|BItemGroup|49|T|Billing|
 |common|BRAND|1|S|General|
 |common|BRTestCase|742|T|Billing|
 |common|BRTestCriteria|2818|T|Billing|
@@ -20,34 +20,32 @@
 |common|BRTestQResultRow|4001|T|Billing|
 |common|BRTestQRow|1372|T|Billing|
 |common|BRTestQueue|5|T|Billing|
-|common|CallLimit|2|T|Subscription (NIU)|
 |common|Campaign|4|T|Rating|
 |common|CampRow|8|T|Rating|
-|common|CCN|196|?|Rating|
-|common|CDRError|18|?|Rating|
-|common|CGMember|3|T|? (NIU)|
+|common|CCN|196|T|Rating|
+|common|CDRError|18|T|Rating|
+|common|CGMember|3|T|Subscription (inactive)|
 |common|ClaimHist|4001|T|AR|
 |common|Company|1|T|Billing|
-|common|Contract|4001|T|Subscription (NIU?)|
+|common|Contract|4001|T|Subscription (inactive)|
 |common|CoRule|4|T|Sales|
 |common|CoTarg|4001|T|Order|
 |common|Counter|4001|T|Subscription (FAT/Discount counter)|
-|common|Country|250|?|General|
+|common|Country|250|S|General|
 |common|CurRate|105|S|Rating|
 |common|Currency|2|S|Rating|
-|common|CustBal|4001|S|Subscription|
-|common|CustCat|10|?|General|
-|common|CustClass|1|?|NIU|
+|common|CustBal|4001|T|Subscription|
+|common|CustCat|10|T|General|
 |common|CustContact|4001|T|Subscription|
 |common|CustCount|4001|T|Subscription|
-|common|CustGroup|1|?|? (NIU?)|
-|common|CustIntEvent|3|T|Billing (NIU)|
+|common|CustGroup|1|T|Subscription (inactive)|
+|common|CustIntEvent|3|T|Billing (inactive)|
 |common|Customer|4001|T|Subscription|
 |common|CustomerReport|4001|T|Subscription|
-|common|CustTemp|1|?|Product|
+|common|CustTemp|1|T|Product|
 |common|DBConfig|76|S|System|
 |common|DFField|1466|S|General|
-|common|DFTimeTable|347|S|General|
+|common|DFTimeTable|347|T|General|
 |common|DialType|25|T|Rating|
 |common|DiscountPlan|37|T|Billing|
 |common|DiscPlan|1|T|Rating|
@@ -57,8 +55,8 @@
 |common|DPRate|38|T|Billing|
 |common|DPSubject|27|T|Billing|
 |common|DPTarget|62|T|Subscription|
-|common|DumpFile|158|?|General|
-|common|DumpLog|4001|?|General|
+|common|DumpFile|158|T|General|
+|common|DumpLog|4001|T|General|
 |common|ErrorLog|4001|T|General|
 |common|EventLogConf|5|S|System|
 |common|FATConfig|15|T|Billing|
@@ -85,29 +83,22 @@
 |common|HighUsage|292|T|Subscription|
 |common|HiUsageKat|64|T|General|
 |common|HiUsageLimit|64|T|General|
-|common|IGInvNum|400|?|Billing|
-|common|IGVoucher|698|?|Billing|
-|common|InvASub|4001|T|Subscription (NIU)|
-|common|InvAttach|4001|T|? NIU|
-|common|InvGroup|7|?|Billing|
+|common|IGInvNum|400|S|Billing|
+|common|IGVoucher|698|S|Billing|
+|common|InvGroup|7|S|Billing|
 |common|Invoice|4001|T|Subscription|
 |common|InvoiceTarget|4001|T|Subscription|
 |common|InvoiceTargetGroup|4001|T|Subscription|
 |common|InvRow|4001|T|Subscription|
-|common|InvSect|9|?|NIU?|
 |common|InvSeq|4001|T|Rating|
-|common|InvText|543|?|General|
+|common|InvText|543|T|General|
 |common|IPRange|551|T|Rating|
 |common|ITSendLog|4001|T|Subscription|
 |common|Language|5|S|General|
 |common|Limit|4001|T|General|
-|common|M2MDetail|2|T|MNP (NIU)|
-|common|M2MQueue|4|T|MNP (NIU)|
-|common|M2MReceive|4001|T|MNP (NIU)|
-|common|M2MTime|433|T|MNP (NIU)|
 |common|Matrix|51|T|General|
 |common|Memo|4001|T|Subscription|
-|common|MenuClass|S|1|System|
+|common|MenuClass|1|S|System|
 |common|MenuText|1406|S|System|
 |common|MenuTree|638|S|System|
 |common|MNPCal|38|T|MNP|
@@ -120,7 +111,6 @@
 |common|MNPRetentionRule|13|T|MNP|
 |common|MNPRetPlatform|3|T|MNP|
 |common|MNPSub|4001|T|MNP|
-|common|MNPXml|2|T|MNP (NIU)|
 |common|MServiceLimit|4001|T|Subscription|
 |common|MServiceLPool|4001|T|Subscription|
 |common|MsReqFuncItem|15|S|System|
@@ -129,29 +119,25 @@
 |common|NatHoliday|112|S|General|
 |common|Nationality|245|S|General|
 |common|OFItem|92|S|Order|
-|common|OPLog|4001|T|AR (NIU)|
 |common|OrderFunction|28|S|Order|
 |common|PaymConfig|29|T|AR|
 |common|Payment|4001|T|AR|
-|common|PaymLog|820|S|AR (NIU)|
-|common|PaymPlan|25|T|AR (NIU)|
 |common|PaymVouch|4001|T|AR|
 |common|PIndicator|4001|T|Subscription|
 |common|PListConf|88|T|Rating|
-|common|PLMN|575|?|Rating|
-|common|PNPGroup|1|T|Rating (NIU)|
+|common|PLMN|575|S|Rating|
+|common|PNPGroup|1|T|Rating (inactive)|
 |common|PostCode|4001|S|General|
 |common|ppInvseq|4001|T|Rating|
 |common|PremiumNumber|1612|T|Rating|
 |common|PriceList|36|T|Rating|
-|common|PrintCodes|28|S|System (NIU)|
 |common|PrintHouseConf|127|T|Billing|
 |common|ProgLimit|98|T|Rating|
 |common|RateCCN|3087|T|Rating|
 |common|RatePlan|30|T|Rating|
 |common|RatePref|29|T|Rating|
 |common|Region|52|S|Rating|
-|common|RepLog|4|T|System|
+|common|RepLog|4|S|System|
 |common|ReportConf|2|T|Billing|
 |common|ReportConfRow|36|T|Billing|
 |common|RepText|4001|T|Common|
@@ -181,16 +167,14 @@
 |common|TCC|16|T|Rating|
 |common|TerminalConf|791|T|Order|
 |common|TFConf|2505|T|Order|
-|common|TMSCodes|1529|?|System|
+|common|TMSCodes|1529|T|System|
 |common|TMSPass|4001|S|System|
 |common|TMSPrinter|4|S|System|
-|common|TMSRepCfg|65|S|System (NIU)|
-|common|TMSReport|51|S|System (NIU)|
-|common|TMSUser|2077|?|System|
+|common|TMSUser|2077|S|System|
 |common|Token|15|S|System|
-|common|UserGrp|9|?|System|
-|common|UserLimit|1355|?|System|
-|common|VATCode|16|?|Rating|
+|common|UserGrp|9|S|System|
+|common|UserLimit|1355|T|System|
+|common|VATCode|16|T|Rating|
 |ordercanal|Barring|4001|T|Subscription|
 |ordercanal|BarringConf|31|S|Product|
 |ordercanal|CallAlarm|4001|T|Subscription|
@@ -200,7 +184,7 @@
 |ordercanal|FusionMessage|4001|T|Order|
 |ordercanal|MobSub|4001|T|Subscription|
 |ordercanal|MSISDN|4001|T|Stock|
-|ordercanal|MSISDNNUMBER|4001|S?|Stock|
+|ordercanal|MSISDNNUMBER|4001|T|Stock|
 |ordercanal|Offer|4001|T|Sales|
 |ordercanal|OfferCriteria|4001|T|Sales|
 |ordercanal|OfferItem|4001|T|Sales|
@@ -211,21 +195,18 @@
 |ordercanal|OrderDelivery|4001|T|Order|
 |ordercanal|OrderFusion|4001|T|Order|
 |ordercanal|OrderPayment|4001|T|Order|
-|ordercanal|OrderService|2|T|Order (NIU)|
 |ordercanal|OrderTimeStamp|4001|T|Order|
 |ordercanal|OrderTopUp|4001|T|Order|
-|ordercanal|PrePaidRequest|4001|?|Subscription|
-|ordercanal|RepLog|1|?|System|
-|ordercanal|Salesman|4001|?|Sales|
+|ordercanal|PrePaidRequest|4001|T|Subscription|
+|ordercanal|RepLog|1|S|System|
+|ordercanal|Salesman|4001|T|Sales|
 |ordercanal|Segmentation|4001|T|Subscription|
 |ordercanal|SMSMessage|4001|T|Subscription|
 |ordercanal|SubsTerminal|4001|T|Subscription|
-|ordercanal|TerminalStock|10|T|Sales (NIU)|
 |ordercanal|TermReturn|4001|T|Order|
-|ordercanal|TMSParam|1720|?|System|
+|ordercanal|TMSParam|1720|T|System|
 |ordercanal|TopupScheme|15|T|Sales|
 |ordercanal|TopupSchemeRow|19|T|Sales|
-|ordercanal|UserAccount|4001|T|Subscription (NIU) => creation should be removed|
 |mobile|BillType|11|S|Billing|
 |mobile|CallScanner|4001|T|System|
 |mobile|CSVHeader|14|S|Rating|
@@ -239,27 +220,18 @@
 |mobile|DCServicePackage|92|T|Product|
 |mobile|DtlSeq|4001|S|Rating|
 |mobile|IFiSpx|16|S|Product|
-|mobile|IMEIRegister|11|T|Order (NIU?)
-|mobile|IMSI|4001|S|Subscription|
-|mobile|KillMs|4001|T|Subscription (NIU)|
+|mobile|IMSI|4001|T|Subscription|
 |mobile|MinConsumption|4001|T|Billing|
-|mobile|MobCount|1|T|Subscription (NIU)|
 |mobile|MobError|82|T|Rating|
 |mobile|MSBalance|4001|T|Subscription|
-|mobile|MSClass|2|?|Product|
+|mobile|MSClass|2|T|Product|
 |mobile|MSOwner|4001|T|Subscription|
 |mobile|MSRange|42|T|Product|
 |mobile|MsReqCounter|347|T|System|
 |mobile|MSRequest|4001|T|Subscription|
 |mobile|MSStat|31|S|Product|
-|mobile|PGRequest|6|T|Rating (NIU)|
-|mobile|RepLog|31|?|System|
+|mobile|RepLog|31|S|System|
 |mobile|RoamBDest|1|T|Rating|
-|mobile|RoamCountry|309|T|Rating (NIU)|
-|mobile|RoamGroup|2|T|Rating (NIU)|
-|mobile|RoamOper|462|T|Rating (NIU)|
-|mobile|RoamTariff|4001|T|Rating (NIU)|
-|mobile|RTItem|4001|T|Rating (NIU)|
 |mobile|ServAttr|39|T|Product|
 |mobile|ServCom|45|T|Product|
 |mobile|ServEl|101|T|Product|
@@ -267,47 +239,43 @@
 |mobile|Service|4|T|Product|
 |mobile|ServPac|48|T|Product|
 |mobile|ShaperConf|486|T|Product|
-|mobile|SIM|4001|S|Stock|
+|mobile|SIM|4001|T|Stock|
 |mobile|SimArt|4|S|Stock|
 |mobile|SimBatch|3474|S|Stock|
 |mobile|SimDeliveryHist|4001|T|Subscription|
 |mobile|SimMan|4|S|Stock|
 |mobile|SIMStat|14|S|Stock|
-|mobile|SOLog|4001|S?|Subscription|
-|mobile|StoBal|37|S|Stock|
-|mobile|Stock|12|?|Stock|
+|mobile|SOLog|4001|T|Subscription|
+|mobile|StoBal|37|T|Stock|
+|mobile|Stock|12|T|Stock|
 |mobile|SubSer|4001|T|Subscription|
 |mobile|TermMobSub|4001|T|Subscription|
 |mobile|TMCounter|4001|T|Rating|
-|mobile|TMRItemValue|265|?|Rating|
-|mobile|TMRLimit|83|?|Rating|
-|mobile|TMRule|42|?|Rating|
+|mobile|TMRItemValue|265|T|Rating|
+|mobile|TMRLimit|83|T|Rating|
+|mobile|TMRule|42|S|Rating|
 |mobile|TriggerConf|11|S|System|
 |mobile|TriggerField|22|S|System|
 |star|AuthLog|4001|S|System|
 |star|CDRStreamCounter|4001|S|System|
 |star|eventlog|4001|T|System/Subscription|
 |star|MsReqStatistic|263|T|System|
-|star|OLRefresh|1|?|System|
-|star|TopUpQueue|4001|?|Subscription|
-|star|UpdateQueue|4001|?|Subscription|
+|star|TopUpQueue|4001|T|Subscription|
+|star|UpdateQueue|4001|S|Subscription|
 |mcdr|MobCDR|4001|T|Rating|
-|mcdrdtl|MCDRDtl|0|T|Rating (NIU)|
 |mcdrdtl|McdrDtl2|4001|T|Rating|
 |prepcdr|PrepCDR|4001|T|Rating|
-|counter|ActivityCounter|1905|S?|System|
+|counter|ActivityCounter|1905|T|System|
 |counter|InvRowCounter|4001|T|Billing|
 |counter|PrepRowCounter|4001|T|Rating|
 |counter|TMQueue|4001|T|Fraud|
 |counter|TriggerEvent|4001|T|Rating|
 |counter|TriggerItem|4001|T|Rating|
-|prepedr|EDRDtl|4001|T?|Subscription|
-|prepedr|PrepEDR|4001|T?|Subscription|
+|prepedr|EDRDtl|4001|T|Subscription|
+|prepedr|PrepEDR|4001|T|Subscription|
 |reratelog|EDRHistory|4001|T|Rating|
 |reratelog|RerateLog|4001|T|Rating|
 |roamcdr|ErrorCDR|4001|T|Rating|
 |roamcdr|ErrorDtl|4001|T|Rating|
-|roamcdr|RoamCDR|0|T|Rating (NIU)|
-|roamcdr|RoamGPRS|0|T|Rating (NIU)|
 |fraudcdr|FraudCDR|4001|T|Rating|
 |fraudcdr|FraudDtl|4001|T|Rating|
