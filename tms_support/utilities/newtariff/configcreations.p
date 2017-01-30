@@ -372,6 +372,10 @@ PROCEDURE pCTServPac:
    FOR EACH bf_CTServPac_CopyFrom WHERE bf_CTServPac_CopyFrom.Brand = gcBrand AND bf_CTServPac_CopyFrom.CLIType = icCopyServicesFromCliType NO-LOCK
        ON ERROR UNDO, THROW:
 
+      IF LOOKUP(bf_CTServPac_CopyFrom.ServPac,"Y_HURP,D_HOTL") = 0 AND 
+         (bf_CTServPac_CopyFrom.ServPac BEGINS "C_" OR bf_CTServPac_CopyFrom.ServPac BEGINS "Y_" OR bf_CTServPac_CopyFrom.ServPac BEGINS "D_") THEN 
+         NEXT.
+
       CREATE CTServPac.
       BUFFER-COPY bf_CTServPac_CopyFrom EXCEPT CLIType TO CTServPac
          ASSIGN CTServPac.CLIType  = icCLIType.            
@@ -780,7 +784,7 @@ PROCEDURE pServiceLimit:
    
    DEFINE BUFFER bf_ServiceLimit FOR ServiceLimit.
 
-   IF ENTRY(2,ttServiceLimit.SLCode,"_") EQ "DATA" THEN 
+   IF ENTRY(2,ttServiceLimit.SLCode,"_") EQ "" OR ENTRY(2,ttServiceLimit.SLCode,"_") EQ "DATA" THEN 
       liInclUnit = 4. 
    ELSE IF ENTRY(2,ttServiceLimit.SLCode,"_") EQ "QTY" THEN
       liInclUnit = 7. 
@@ -835,6 +839,29 @@ PROCEDURE pServiceLimitTarget:
             ServiceLimitTarget.ServiceLMember = ttServiceLimitTarget.ServiceLMember
             ServiceLimitTarget.InsideRate     = ttServiceLimitTarget.InSideRate    
             ServiceLimitTarget.outsideRate    = ttServiceLimitTarget.OutSideRate.
+    END.
+
+    RETURN "".
+
+END PROCEDURE.
+
+
+PROCEDURE pProgLimit:
+    DEFINE PARAMETER BUFFER ttProgLimit FOR ttProgLimit.
+    DEFINE INPUT PARAMETER iiSLSeq       AS INTEGER   NO-UNDO. 
+
+    FIND FIRST ProgLimit WHERE ProgLimit.GroupCode = ttProgLimit.GroupCode AND ProgLimit.SLSeq = iiSLSeq AND ProgLimit.BDest = ttProgLimit.BDest NO-LOCK NO-ERROR.
+    IF NOT AVAIL ProgLimit THEN 
+    DO:
+        CREATE ProgLimit.
+        ASSIGN 
+            ProgLimit.GroupCode = ttProgLimit.GroupCode
+            ProgLimit.SLSeq     = iiSLSeq
+            ProgLimit.ValidFrom = TODAY
+            ProgLimit.ValidTo   = DATE(12,31,2049)
+            ProgLimit.LimitFrom = ttProgLimit.LimitFrom
+            ProgLimit.LimitTo   = ttProgLimit.LimitTo
+            ProgLimit.BDest     = ttProgLimit.BDest.
     END.
 
     RETURN "".
@@ -954,6 +981,20 @@ PROCEDURE pRequestAction:
       END.
    END.  
 
+   FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand         AND 
+                                  RequestAction.PayType    = 1               AND 
+                                  RequestAction.ReqType    = 0               AND 
+                                  RequestAction.Action     = 13              AND 
+                                  RequestAction.ActionType = "SMS"           AND 
+                                  RequestAction.ActionKey  = "STC_Requested" AND 
+                                  RequestAction.ValidTo   >= TODAY           NO-LOCK NO-ERROR.
+   IF AVAIL RequestAction THEN 
+   DO:
+       FIND FIRST RequestActionRule WHERE RequestActionRule.RequestActionID = RequestAction.RequestActionID AND RequestActionRule.ParamField = "ReqCParam2" AND RequestActionRule.ToDate >= TODAY EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+       IF AVAIL RequestActionRule AND LOOKUP(icMobileBundles, RequestActionRule.ParamValue) = 0 THEN 
+           ASSIGN RequestActionRule.ParamValue = RequestActionRule.ParamValue + (IF RequestActionRule.ParamValue <> '' THEN "," ELSE "") + icMobileBundles.
+   END.
+
    RETURN "".
 
 END PROCEDURE.
@@ -986,7 +1027,10 @@ PROCEDURE pMatrix:
       
    DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
       ON ERROR UNDO, THROW:
-
+      
+      IF LOOKUP(ENTRY(liCount,icAllowedBundles), "CONTDSL") > 0 THEN 
+          NEXT.
+      
       FIND FIRST MxItem WHERE MxItem.MxSeq = Matrix.MXSeq AND MxItem.MxName = "PerContract" AND MxItem.MxValue = ENTRY(liCount,icAllowedBundles) NO-LOCK NO-ERROR.
       IF NOT AVAIL MxItem THEN 
       DO:      
