@@ -321,8 +321,13 @@ PROCEDURE pProcessTT:
    IF lcReferenceRatePlan > "" THEN    
        RUN pRatePlan IN h_config(lcRatePlan, lcCliName, lcReferenceRatePlan, lcRatePlanAction).
 
-   IF CAN-FIND(FIRST ttTariff) THEN 
-       RUN pCustomRates IN h_config(BUFFER ttTariff).
+   IF CAN-FIND(FIRST ttTariff) THEN
+   DO: 
+       FOR EACH ttTariff 
+            ON ERROR UNDO, THROW:
+            RUN pCustomRates IN h_config(BUFFER ttTariff).            
+       END.
+   END.    
 
    IF lcTariffBundle > "" THEN
    DO:
@@ -394,14 +399,14 @@ PROCEDURE pProcessTT:
              liFirstMonthBR   = (IF lcMobile_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcMobile_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
              liLastMonthBR    = (IF lcMobile_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcMobile_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0)
 
-             liDLFirstMonthBR = (IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
-             liDLLastMonthBR  = (IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0) 
+             liDLFirstMonthBR = (IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
+             liDLLastMonthBR  = (IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0) 
 
-             liVLFirstMonthBR = (IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
-             liVLLastMonthBR  = (IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0) 
+             liVLFirstMonthBR = (IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
+             liVLLastMonthBR  = (IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0) 
 
-             liBDLFirstMonthBR = (IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
-             liBDLLastMonthBR  = (IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0).
+             liBDLFirstMonthBR = (IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
+             liBDLLastMonthBR  = (IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0).
 
          RUN pBundle("Mobile",
                      ttCliType.CliType,
@@ -434,11 +439,11 @@ PROCEDURE pProcessTT:
              liDLFirstMonthBR = 0
              liDLLastMonthBR  = 0
 
-             liVLFirstMonthBR = (IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
-             liVLLastMonthBR  = (IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0) 
+             liVLFirstMonthBR = (IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
+             liVLLastMonthBR  = (IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0) 
 
-             liBDLFirstMonthBR = (IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
-             liBDLLastMonthBR  = (IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0).
+             liBDLFirstMonthBR = (IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
+             liBDLLastMonthBR  = (IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0).
 
           RUN pBundle("FixedLine",
                       ttCliType.CliType,
@@ -761,7 +766,7 @@ PROCEDURE pCreateProgressiveRatingLimit_Data:
         ttBDest.GroupCode = ttServiceLimit.GroupCode
         ttBDest.SLCode    = ttServiceLimit.SLCode
         ttBDest.BDest     = ttProgLimit.BDest
-        ttBDest.BDName    = "GPRS DATA LOW"                 
+        ttBDest.BDName    = "GPRS DATA SLOW"                 
         ttBDest.CCN       = 93.   
 
     IF lcBONOList > "" THEN 
