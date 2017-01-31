@@ -334,13 +334,11 @@ PROCEDURE pPrintLine:
                      lcTotalAmount FORMAT "X(11)"
    /*MES-OPERAC*/    STRING(MONTH(idaBankDate),"99") FORMAT "X(2)"
    /*ANO-OPERAC*/    STRING(YEAR(idaBankDate),"9999") FORMAT "X(4)"
-   /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)".
-   
+   /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)"
+   /*COF-FPAGO*/     lcCodFpago FORMAT "X(4)"
+                     CHR(13) CHR(10).
    /* YOT-4853: Because all TF banks has COF-FPAGO field. 
-      There is no idea to validate existence of them.
-      IF FixedFeeTF.TFBank EQ TFBank rules removed */
-      PUT STREAM sout lcCodFpago FORMAT "X(4)".
+      Useless TF BANK validations removed. */
 
-   PUT STREAM sout CONTROL CHR(13) CHR(10).
    RETURN "".
 END.
