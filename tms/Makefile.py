@@ -286,7 +286,7 @@ def cui(*a):
 
     if a[0] == 'cui':
         terminal_module = 'Syst/tmslogin.p'
-        args.extend(['-pf', getpf('../db/progress/store/all']))
+        args.extend(['-pf', getpf('../db/progress/store/all')])
         args.extend(['-e', '100', '-l', '2000', '-TB', '31', '-TM', '32', '-rand', '2', '-Bt', '2500', '-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4'])
     else:
         if len(parameters) == 0:

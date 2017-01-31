@@ -190,14 +190,13 @@ def remote_database_file(match, deps, host, db_dir, db_name):
             (db_name, db_dir, host))
 
 def write_pf_file(filename, tenant='', logical_names={}):
+    if tenant:
+        tenant = '_{}'.format(tenant)
     with open(filename, 'wt') as fd:
         fd.write('-h %d\n' % len(databases))
         for db in databases:
             name_map = ' -ld %s' % logical_names[db] if db in logical_names else ''
-            tenant_part = '_{}'.format(tenant) if tenant else ''
-            fd.write('-pf {0}/{1}{2}.pf{3}\n'.format(getcwd(), db, tenant_part, name_map))
-            if tenant:
-                fd.write('-pf {0}/tenant{1}.pf\n'.format(getcwd(), tenant_part))
+            fd.write('-pf {0}/{1}{2}.pf{3}\n'.format(getcwd(), db, tenant, name_map))
 
 @target(['%s.pf' % x for x in databases] + [x for x in tenancies])
 def all_pf(match, deps):
