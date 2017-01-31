@@ -12,6 +12,10 @@ import time
 relpath = '../../..'
 exec(open(relpath + '/etc/make_site.py').read())
 
+if not 'tenancies' in globals():
+    global tenancies
+    tenancies = {}
+
 ########################## Configuration #############################
 
 # Configure database location (on different partitions/remote hosts)
@@ -185,20 +189,21 @@ def remote_database_file(match, deps, host, db_dir, db_name):
     print('Remote creation of database %s in %s on %s not implemented' % \
             (db_name, db_dir, host))
 
+def write_pf_file(filename, tenant='', logical_names={}):
+    if tenant:
+        tenant = '_{}'.format(tenant)
+    with open(filename, 'wt') as fd:
+        fd.write('-h %d\n' % len(databases))
+        for db in databases:
+            name_map = ' -ld %s' % logical_names[db] if db in logical_names else ''
+            fd.write('-pf {0}/{1}{2}.pf{3}\n'.format(getcwd(), db, tenant, name_map))
 
-def write_pf_file(filename, databases, logical_names={}):
-    fd = open(filename, 'wt')
-    fd.write('-h %d\n' % len(databases))
-    for db in databases:
-        name_map = ' -ld %s' % logical_names[db] if db in logical_names else ''
-        fd.write('-pf %s/%s.pf%s\n' % (getcwd(), db, name_map))
-    fd.close()
-
-@target(['%s.pf' % x for x in databases])
+@target(['%s.pf' % x for x in databases] + [x for x in tenancies])
 def all_pf(match, deps):
     '''all\.pf'''
-    write_pf_file(match, databases)
-
+    write_pf_file(match)
+    for tenant in tenancies:
+        write_pf_file('all_{}.pf'.format(tenant), tenant)
 
 @target(r'\1.pf')
 def startup_parameter_file(match, deps, db_name):
@@ -234,6 +239,7 @@ def startup_parameter_file(match, deps, db_name):
 def connect_parameter_file(match, deps, db_name):
     '''([_a-zA-Z0-9]+)\.pf'''
     path = db_full_path(db_name, '').split(':')
+
     fd = open(db_name + '.pf', 'wt')
     if len(path) > 1:
         fd.write('-db %s\n' % path[1].split('/')[0])
@@ -242,6 +248,17 @@ def connect_parameter_file(match, deps, db_name):
     else:
         fd.write('-db %s\n' % path[0])
     fd.close()
+    for tenant in tenancies:
+        with open('{0}_{1}.pf'.format(db_name, tenant), 'wt') as fd:
+            fd.write('-pf {}.pf\n'.format(path[0]))
+            fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
+
+@target
+@applies_to([x for x in tenancies])
+def tenantcredentials_file(match, deps):
+    with open('tenant_{}.pf'.format(match), 'wt') as fd:
+        fd.write('-U {0}@{1}\n'.format(tenancies[match]['username'], tenancies[match]['domain']))
+        fd.write('-P {}\n'.format(tenancies[match]['password']))
 
 db_running_msg = True
 

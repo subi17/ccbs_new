@@ -19,24 +19,22 @@ skip_timelog = False
 show_file = False
 
 def userandpass():
-
-    if not 'tenancies' in globals():
-        return []
-
-    if 'tenant' in globals():
-        t = tenant
+    if 'tenancies' in globals():
+        if 'tenant' in globals():
+            t = tenant
+        else:
+            t = ''
+        if t == '':
+            for t, tdict in tenancies.items():
+                if tdict['tenanttype'] == 'super':
+                    return ['-U', '{0}@{1}'.format(tdict['username'], tdict['domain']), '-P', tdict['password'] ]
+                raise ValueError('Tenant is mandatory as a super tenant is not specified')
+        elif t in tenancies:
+            return ['-U', '{0}@{1}'.format(tenancies[t]['username'], tenancies[t]['domain']), '-P', tenancies[t]['password'] ]
+        else:
+            raise ValueError('Unknown tenant')
     else:
-        t = ''
-
-    if t == '':
-        for t, tdict in tenancies.items():
-            if tdict['tenanttype'] == 'super':
-                return ['-U', '{0}@{1}'.format(tdict['username'], tdict['domain']), '-P', tdict['password'] ]
-
-    if t in tenancies:
-        return ['-U', '{0}@{1}'.format(tenancies[t]['username'], tenancies[t]['domain']), '-P', tenancies[t]['password'] ]
-
-    return []
+        return []
 
 def pftolist(pf):
 
@@ -63,6 +61,25 @@ def pftolist(pf):
 
     return returndata
 
+def getpf(pf):
+    if 'tenancies' in globals():
+        if 'tenant' in globals():
+            temptenant = tenant
+        else:
+            temptenant = ''
+
+        if temptenant == '':
+            for temptenant, tdict in tenancies.items():
+                if tdict['tenanttype'] == 'super':
+                    return '{0}_{1}.pf'.format(pf, temptenant)
+            raise ValueError('Tenant is mandatory as a super tenant is not specified')
+        elif temptenant in tenancies:
+            return '{0}_{1}.pf'.format(pf, temptenant)
+        else:
+            raise ValueError('Unknown tenant')
+    else:
+        return '{}.pf'.format(pf)
+
 def active_cdr_db_pf():
     if '-S' in open('../db/progress/store/common.pf').read():
         connection_type = "tcp"
@@ -70,7 +87,7 @@ def active_cdr_db_pf():
         connection_type = "local"
 
     args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
-    args.extend(pftolist(['-pf', '../db/progress/store/common.pf']))
+    args.extend(['-pf', getpf('../db/progress/store/common')])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
     dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
@@ -81,7 +98,6 @@ def active_cdr_db_pf():
             dict[db].extend(uandp)
 
     return dict
-
 
 @target('test>test')
 def test(*a): pass
@@ -109,7 +125,7 @@ def daemon(*a):
             '-T', '../var/tmp']
     for pp in parameters[2:]:
         if pp in databases:
-            args.extend(pftolist(['-pf', '../db/progress/store/{0}.pf'.format(pp)]))
+            args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
         elif pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
@@ -118,7 +134,7 @@ def daemon(*a):
             args.append(pp)
     daemonpf = '../etc/pf/' + daemon + '.pf'
     if os.path.exists(daemonpf):
-        args.extend(pftolist([ '-pf' , daemonpf ]))
+        args.extend(pftolist(['-pf', daemonpf]))
     file = open(pid_file, 'w')
     file.write(str(os.getpid()))
     file.close()
@@ -270,7 +286,7 @@ def cui(*a):
 
     if a[0] == 'cui':
         terminal_module = 'Syst/tmslogin.p'
-        args.extend(pftolist(['-pf', '../db/progress/store/all.pf']))
+        args.extend(['-pf', getpf('../db/progress/store/all')])
         args.extend(['-e', '100', '-l', '2000', '-TB', '31', '-TM', '32', '-rand', '2', '-Bt', '2500', '-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4'])
     else:
         if len(parameters) == 0:
@@ -282,7 +298,7 @@ def cui(*a):
         cdr_dict = {}
         for pp in parameters[1:]:
             if pp in databases:
-                args.extend(pftolist(['-pf', '../db/progress/store/{0}.pf'.format(pp)]))
+                args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
             elif pp in cdr_databases:
                 if not cdr_dict:
                     cdr_dict = active_cdr_db_pf()
@@ -317,7 +333,7 @@ def batch(*a):
     args = ['-T', '../var/tmp', '-b', '-p', batch_module + '.p']
     for pp in parameters[1:]:
         if pp in databases:
-            args.extend(pftolist(['-pf', '../db/progress/store/{0}.pf'.format(pp)]))
+            args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
         elif pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
@@ -365,7 +381,7 @@ def idbatch(*a):
     args = ['-T', '../var/tmp', '-b', '-p', batch_module + '.p']
     for pp in parameters[2:]:
         if pp in databases:
-            args.extend(pftolist(['-pf', '../db/progress/store/{0}.pf'.format(pp)]))
+            args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
         elif pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
@@ -407,6 +423,6 @@ def editor(*a):
     else:
         tenant = ""
 
-    args = parameters or pftolist(['-pf', '../db/progress/store/all.pf'])
+    args = parameters or (['-pf', getpf('../db/progress/store/all')])
     args = mpro + args + ['-T', '../var/tmp'] + ['-s', '1024'] + ['-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
     os.execlp(args[0], *args)
