@@ -660,7 +660,7 @@ REPEAT WITH FRAME main:
             END.
 
             IF llAddLineTerm THEN
-               MESSAGE "Termination will trigger STC to CONT9/CONT10 for additional line(s)"
+               MESSAGE "Termination will trigger STC to CONT9 for additional line(s)"
                VIEW-AS ALERT-BOX.
          END.
       
