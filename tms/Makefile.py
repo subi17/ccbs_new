@@ -280,33 +280,56 @@ def clean(*a):
 
 @target
 def cui(*a):
-    '''cui|terminal|terminalbatch'''
+    '''cui|vim|vimbatch'''
 
-    args = []
+    args = ['-pf', getpf('../db/progress/store/all')]
 
     if a[0] == 'cui':
-        terminal_module = 'Syst/tmslogin.p'
-        args.extend(['-pf', getpf('../db/progress/store/all')])
+        program = 'Syst/tmslogin.p'
         args.extend(['-e', '100', '-l', '2000', '-TB', '31', '-TM', '32', '-rand', '2', '-Bt', '2500', '-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4'])
-    else:
+    else: # Only vim should use this block internally...
         if len(parameters) == 0:
             raise PikeException('Expected a module to run as a parameter')
-        terminal_module = parameters[0]
-        if a[0] == 'terminalbatch':
+        if a[0] == 'vimbatch':
             args.extend(['-b'])
 
-        cdr_dict = {}
-        for pp in parameters[1:]:
-            if pp in databases:
-                args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
-            elif pp in cdr_databases:
-                if not cdr_dict:
-                    cdr_dict = active_cdr_db_pf()
-                args.extend(cdr_dict[pp])
-            else:
-                args.append(pp)
+        program = parameters[0]
 
-    args.extend(['-T', '../var/tmp', '-p', terminal_module])
+        cdr_dict = {}
+        for cdr_database in cdr_databases:
+            if not cdr_dict:
+                cdr_dict = active_cdr_db_pf()
+            args.extend(cdr_dict[pp])
+
+    args.extend(['-T', '../var/tmp', '-p', program])
+
+    cmd = Popen(mpro + args)
+    while cmd.poll() is None:
+        try:
+            cmd.wait()
+        except KeyboardInterrupt:
+            cmd.send_signal(2)
+    sys.exit(cmd.returncode)
+
+@target
+def terminal(*a):
+    args = []
+
+    if len(parameters) == 0:
+        raise PikeException('Expected a module to run as a parameter')
+
+    cdr_dict = {}
+    for pp in parameters[1:]:
+        if pp in databases:
+            args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
+        elif pp in cdr_databases:
+            if not cdr_dict:
+                cdr_dict = active_cdr_db_pf()
+            args.extend(cdr_dict[pp])
+        else:
+            args.append(pp)
+
+    args.extend(['-T', '../var/tmp', '-p', parameters[0]])
 
     cmd = Popen(mpro + args)
     while cmd.poll() is None:
@@ -414,14 +437,14 @@ def idbatch(*a):
 @target
 def editor(*a):
     '''editor||yeditor||meditor'''
-    global tenant
+    if not 'tenant' in globals():
+        global tenant
+        tenant = ''
 
     if a[0] == 'yeditor':
         tenant = "yoigo"
-    if a[0] == 'meditor':
+    elif a[0] == 'meditor':
         tenant = "masmovil"
-    else:
-        tenant = ""
 
     args = parameters or (['-pf', getpf('../db/progress/store/all')])
     args = mpro + args + ['-T', '../var/tmp'] + ['-s', '1024'] + ['-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
