@@ -157,6 +157,8 @@ def database_file(match, deps, db_dir, db_name):
                     ['\(6715\)$', '\(6718\)$', '\(451\)$',
                      '0 Percent complete.', '^$',
                      '\(6720\)$', '\(6722\)$', '\(1365\)$', '\(334\)$'])
+            if tenancies:
+                callgrep([dlc + '/bin/proutil', match, '-C', 'enablemultitenancy'], ['Multi'])
             break
     else:
         raise StandardError('No empty db template found')
