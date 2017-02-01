@@ -11,7 +11,7 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{timestamp.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE lcSIMfile          AS CHARACTER NO-UNDO FORMAT "X(40)".
 DEFINE VARIABLE lcProcessedDir     AS CHARACTER NO-UNDO.
