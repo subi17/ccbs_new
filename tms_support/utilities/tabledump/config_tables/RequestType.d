@@ -52,3 +52,4 @@
 "1" 91 "Terminal Finance CAN TER file" "tf_cancel_send" "" yes 5 "" "" 0 no no ""
 "1" 92 "Publish Invoices" "publish_invoice" "Cron" yes 0 "DB.Connects,4GLTrace:1" "/scratch/log/requester/reqtype92.log" 1048576 yes no "Batch"
 "1" 93 "Publish IFS file" "publish_ifs" "Cron" yes 0 "DB.Connects,4GLTrace:1" "/scratch/log/requester/reqtype93.log" 1048576 yes no "Batch"
+"1" 94 "Push invoice" "pushinvoice" "Cron" yes 0 "DB.Connects,4GLTrace:1" "/scratch/log/requester/reqtype94.log" 1048576 yes no "Batch"
