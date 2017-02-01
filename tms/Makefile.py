@@ -414,14 +414,14 @@ def idbatch(*a):
 @target
 def editor(*a):
     '''editor||yeditor||meditor'''
-    global tenant
+    if not 'tenant' in globals():
+        global tenant
+        tenant = ''
 
     if a[0] == 'yeditor':
         tenant = "yoigo"
-    if a[0] == 'meditor':
+    elif a[0] == 'meditor':
         tenant = "masmovil"
-    else:
-        tenant = ""
 
     args = parameters or (['-pf', getpf('../db/progress/store/all')])
     args = mpro + args + ['-T', '../var/tmp'] + ['-s', '1024'] + ['-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
