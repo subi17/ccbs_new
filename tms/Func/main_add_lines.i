@@ -543,8 +543,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
       
    FIND FIRST CLIType NO-LOCK WHERE 
               CLIType.Brand   = gcBrand AND
-             (CLIType.CLIType = "CONT9" OR 
-              CLIType.CLIType = "CONT10") NO-ERROR.      
+              CLIType.CLIType = "CONT9" NO-ERROR.
         
    FOR EACH tt_AdditionalSIM NO-LOCK:
 
@@ -699,8 +698,7 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
 
       FIND FIRST bCLIType NO-LOCK WHERE
                  bCLIType.Brand   = gcBrand AND
-                (bCLIType.CLIType = "CONT9" OR
-                 bCLIType.CLIType = "CONT10") NO-ERROR.
+                 bCLIType.CLIType = "CONT9" NO-ERROR.
 
       IF AVAIL bCLIType AND NOT llgMainLine THEN
          fCTChangeRequest(MsRequest.MsSeq,
