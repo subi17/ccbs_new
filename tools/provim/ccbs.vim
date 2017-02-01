@@ -94,7 +94,7 @@ function! Run_4gl()
     silent echo "END."
     silent echo "QUIT."
     redir END
-    execute "silent ! pike terminal " . l:pfile
+    execute "silent ! pike vim " . l:pfile
 
 endfunction
 
@@ -211,7 +211,7 @@ function! Check_syntax() range
     silent echo "COMPILE " . l:tempfile . "."
     redir END
 
-    let l:output = system("pike terminalbatch " . l:pfile)
+    let l:output = system("pike vimbatch " . l:pfile)
     let dummy = delete(l:tempfile)
     let dummy = delete(l:pfile)
 
