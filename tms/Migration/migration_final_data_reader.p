@@ -17,6 +17,7 @@
 {timestamp.i}
 {cparam2.i}
 {tmsconst.i}
+{barrfunc.i}
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
@@ -85,7 +86,7 @@ DO TRANS:
 END.
 
 /*Execution part*/
-RUN pReadFile.
+RUN pHandleInputFile. 
 RUN pSendResults.
 
 /*Release ActionLog lock*/
@@ -107,11 +108,101 @@ PUT STREAM sLog UNFORMATTED
    "Migration finalization file handling done " + fTS2HMS(fMakeTS()) SKIP.
 OUTPUT STREAM sLog CLOSE.
 
+/*Functions and procedures*/
 
-/*File handling logic 
-  There is own field for each type of data. 
-  Types can also contain lists of entrires (barrings, services)*/
-PROCEDURE pReadFile:
+/*Function generates a barring command from separated list format:
+  barring1,barring2,barring3 ->
+  barring1=1,barring2=1,barring3=1
+  The program clears list so that already active barrings are not set to
+  list to be activated again. (Idea: reduce errors by incoorect input)
+  List handling creates log for problem solving purposes.
+  The program does not make validations for barring command compability etc.
+  The checks are done when calling actual barring functions.  
+  */
+FUNCTION fMMInputToBarrCmd RETURNS CHAR
+   (iiMsSeq AS INT,
+    icInput AS CHAR,
+    icInputSeparator AS CHAR):
+   DEF VAR i AS INT NO-UNDO.
+   DEF VAR lcCommand AS CHAR NO-UNDO.
+
+   PUT STREAM sLog UNFORMATTED
+      "Generating Barring Command, input: "
+      STRING(iiMsSeq) + " " +
+      icInput "." SKIP.
+
+   IF icInput EQ "" THEN DO:
+      PUT STREAM sLog UNFORMATTED
+         "Empty barring list " SKIP.
+      RETURN icInput.
+   END.
+   DO i = 1 TO NUM-ENTRIES(icInput,icInputSeparator):
+      IF fGetBarringStatus(ENTRY(i,icInput,icInputSeparator), iiMsSeq) EQ
+         {&BARR_STATUS_ACTIVE} THEN DO:
+         PUT STREAM sLog UNFORMATTED
+            "Already active, not added to command: "
+            ENTRY(i,icInput,icInputSeparator) " " SKIP.
+      END.
+      ELSE DO:
+         lcCommand = lcCommand + ENTRY(i,icInput,icInputSeparator) + "=1".
+         IF i NE NUM-ENTRIES(icInput,icInputSeparator) THEN
+            lcCommand = lcCommand + ",".
+      END.
+   END.
+   PUT STREAM sLog UNFORMATTED
+      "Generated Barring Command: "
+       STRING(iiMsSeq) + " " +
+       lcCommand "." SKIP.
+
+   RETURN lcCommand.
+END.
+
+/*Function validates barring request.
+Codes:
+   EMPTY                                 :  The command is OK
+   Validation Error + description        :  Errorneous request
+   Ongoing network command               :  Barring command was ongoing  
+   ERROR: MobSub not found.              :  MobSub not found
+   ERROR: Mobile line provisioning is not complete : Mobsub, wrong status
+   */
+FUNCTION fValidateMMBarringCommand RETURNS CHAR
+   (iiMsSeq AS INT,
+    icInput AS CHAR): /*In processed format b1=1,B2=1...*/
+    
+   DEF VAR i AS INT NO-UNDO.
+   DEF VAR lcValStatus AS CHAR NO-UNDO.
+
+   FIND MobSub NO-LOCK WHERE Mobsub.MsSeq = iiMsSeq NO-ERROR.
+
+   IF NOT AVAIL MobSub THEN RETURN "ERROR: MobSub not found.".
+
+   IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
+      RETURN "ERROR: Mobile line provisioning is not complete".
+
+   IF icInput EQ "" THEN RETURN "".
+   lcValStatus = fValidateBarrRequest(iiMsSeq, icInput).
+   IF lcValStatus EQ "ONC" THEN RETURN "Ongoing network command".
+   ELSE IF lcValStatus NE "" THEN RETURN "Validation Error: " + lcValStatus.
+   
+   RETURN lcValStatus.
+
+END.
+
+
+
+/*File reading and data processing for each filed.  
+  MSISDN (Single value)
+  Barrings (list):
+     List of barrings will be set in a command.
+     Barring list handling filters out already active barrings and
+     makes also other validations.
+  Services (list)
+     Services are set one by one.
+  Bono (single value)     
+  Upsell (Single value)
+  Data (Single value)
+  */
+PROCEDURE pHandleInputFile:
    DEF VAR lcLine AS CHAR NO-UNDO.
    DEF VAR lcMSISDN AS CHAR NO-UNDO.
    DEF VAR lcFileName AS CHAR NO-UNDO.
