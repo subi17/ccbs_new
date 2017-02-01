@@ -81,7 +81,10 @@ FOR EACH msrequest NO-LOCK where
                     OUTPUT lcBarring,
                     OUTPUT lrBarring).
 
-   if tmcounter.amount < limit.limitamt then do:
+   /* db renewal happens on 1.2 and 1.8 => rerates are delayed */
+   if tmcounter.amount < limit.limitamt or
+      month(ldaDate) eq 2 or
+      month(ldaDate) eq 8 then do:
   
       i = i + 1.
       disp i with frame fReport.

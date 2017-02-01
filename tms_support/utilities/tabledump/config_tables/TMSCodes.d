@@ -1338,6 +1338,7 @@
 "requem" "91,0,1,2,3,4" "SubsLMenu" "1" "Bank termination/cancellation file" "" "" 1
 "requem" "92,0,1,2,3" "SubsLMenu" "1" "Publish invoices to Newton AND HPD" "" "" 1
 "requem" "93,0,1,2,3" "SubsLMenu" "1" "Publish invoices to IFS" "" "" 1
+"requem" "94,0,1,2,3,9" "SubsLMenu" "1" "Push invoice" "" "" 1
 "RequestAction" "Action" "Request" "1" "Create" "" "" 1
 "RequestAction" "Action" "Request" "11" "Term-PenaltyFee" "" "" 1
 "RequestAction" "Action" "Request" "12" "Init-Terminate" "" "" 1
@@ -1370,6 +1371,7 @@
 "Salesman" "SmPrefix" "IFS" "AF" "AMPLIFFICA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AL" "Alcampo" "" "13" 0
 "Salesman" "SmPrefix" "IFS" "AM" "AONMOBILE" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "AO" "AON CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AP" "Apple" "" "28" 1
 "Salesman" "SmPrefix" "IFS" "AX" "Axia" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "BE" "BYMOVIL EMISION" "" "15" 1

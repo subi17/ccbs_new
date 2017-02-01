@@ -116,10 +116,6 @@
                              OrderTimeStamp.OrderID = Order.OrderID AND
                              OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY})
                THEN DO:
-                  IF llDoEvent THEN DO:
-                     lh99Order = BUFFER Order:HANDLE.
-                     RUN StarEventInitialize(lh99Order).
-                  END.
                   
                   FIND FIRST OrderCustomer WHERE
                              OrderCustomer.Brand = gcBrand AND
@@ -184,7 +180,11 @@
                   IF NOT AVAILABLE Sim THEN NEXT {1}.
                   
                   /* Event logging of 99 status setups */ 
-                  IF llDoEvent THEN RUN StarEventSetOldBuffer(lh99Order).
+                  IF llDoEvent THEN DO:
+                     lh99Order = BUFFER Order:HANDLE.
+                     RUN StarEventInitialize(lh99Order).
+                     RUN StarEventSetOldBuffer(lh99Order).
+                  END.
                   
                   /* Set Order status into MNP_SIM_ONLY aka 99 */
                   llOrdStChg = fSetOrderStatus(Order.OrderId,
