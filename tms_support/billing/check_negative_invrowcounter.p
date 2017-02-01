@@ -32,7 +32,7 @@ if ldaPeriod eq ? then return.
 ASSIGN
    liPeriod = YEAR(ldaPeriod) * 100 + MONTH(ldaPeriod)
    liPeriodFrom = liPeriod * 100 + 1
-   ldaTodate = ldaPeriod + 32
+   ldaTodate = add-interval(ldaPeriod,1,"months")
    liPeriodTo = YEAR(ldaTodate) * 10000 + MONTH(ldaTodate) * 100 + 1
    ldaTodate = DATE(MONTH(ldaTodate),1,YEAR(ldaTodate)) - 1
    lcFile = "check_negative_irc_" +  STRING(liPeriod) + ".txt".
