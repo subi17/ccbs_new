@@ -72,3 +72,4 @@
 "1" 91 0 "" yes "" "" 0 no no
 "1" 92 0 "publish_invoice" yes "" "" 0 no no
 "1" 93 0 "publish_ifs" yes "" "" 0 no no
+"1" 94 0 "" yes "" "" 0 no no
