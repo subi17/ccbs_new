@@ -49,10 +49,7 @@ DO WITH FRAME SIMfile :
    lcProcessedDir = fCParam("SIM","ProcessedSimFile").
    
    /* Find used tenant name */
-   FIND FIRST Order WHERE
-              Order.brand = "1" AND
-              Order.Statuscode EQ "6" AND
-              Order.crstamp < fmakets().
+   FIND FIRST Order.
    lcTenant = BUFFER-TENANT-NAME(order).
 
    RUN Mm/simread.p(INPUT lcSIMfile,

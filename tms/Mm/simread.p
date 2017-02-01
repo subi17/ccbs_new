@@ -372,9 +372,9 @@ REPEAT WITH FRAME Main:
   
    lcICCBegin  = fCParam( "SIM", "ICC_Begin"  ).
   
-   IF pcTenant EQ "Yoigo" THEN
+   IF pcTenant EQ "Default" THEN
       lcIMSIBegin = fCParam( "SIM", "IMSI_Begin_Yoigo" ).
-   ELSE IF pcTenant EQ "MasMovil" THEN
+   ELSE IF pcTenant EQ "TMasMovil" THEN
       lcIMSIBegin = fCParam( "SIM", "IMSI_Begin_MasMovil" ).
    ELSE DO:
       MESSAGE "Abort, unknown tenant: " + pcTenant VIEW-AS ALERT-BOX.
