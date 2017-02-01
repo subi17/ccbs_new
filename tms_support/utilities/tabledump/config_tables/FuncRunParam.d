@@ -53,6 +53,7 @@
 9 "Logical" "Print US report" 8 "Yes"
 10 "Date" "Invoice Date" 1 "#RUNDATE"
 10 "Integer" "Invoice Type" 2 "1"
+11 "date" "Invoice Date" 1 ?
 12 "Date" "Invoice Date" 1 "#RUNDATE"
 13 "Date" "Invoice Date" 1 "#RUNDATE"
 13 "Integer" "Invoice Type" 2 "1"
@@ -116,7 +117,7 @@
 30 "Logical" "Check numbering gaps" 8 "True"
 31 "Date" "Invoice Date" 1 "#RUNDATE"
 31 "Integer" "Invoice Type" 2 "1"
-31 "Integer" "Qty Of Split Groups" 3 "15"
+31 "Integer" "Qty Of Split Groups" 3 "8"
 31 "Integer" "Use Replica Server" 4 "1"
 32 "Date" "Period" 1 "#PREVEND"
 33 "Date" "Invoice Date" 1 "#RUNDATE"

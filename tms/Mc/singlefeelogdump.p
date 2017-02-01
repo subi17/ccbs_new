@@ -75,7 +75,7 @@ FUNCTION fNonbilledSinFee_dump RETURNS LOG:
             SingleFee.InvNum = 0:
       PUT STREAM sinFee UNFORMATTED
          SingleFee.FMItemID "|"
-         SingleFee.KeyValue "|"
+         TRIM(SingleFee.KeyValue) "|"
          SingleFee.CustNum "|"
          SingleFee.BillPeriod "|"
          SingleFee.BillCode "|"
@@ -147,7 +147,7 @@ IF icDumpMode = "Full" THEN DO:
             SingleFee.Invnum = Invoice.InvNum:
       PUT STREAM sinFee UNFORMATTED
          SingleFee.FMItemID "|"
-         SingleFee.KeyValue "|"
+         TRIM(SingleFee.KeyValue) "|"
          SingleFee.CustNum "|"
          SingleFee.BillPeriod "|"
          SingleFee.BillCode "|"
