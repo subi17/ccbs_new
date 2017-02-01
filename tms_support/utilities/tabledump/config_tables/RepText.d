@@ -599,6 +599,14 @@
 1 "" 3 "Gutxieneko kontsumoagatiko ordaina" 0 "CONSMINFAT" "1" 01/06/11 31/03/12
 1 "" 5 "Minimum Spend Compensation" 0 "CONSMINFAT" "1" 01/04/12 31/12/49
 1 "" 5 "Minimum consumption compensation" 0 "CONSMINFAT" "1" 01/06/11 31/03/12
+1 "" 1 "Descuento promoción" 0 "CONT10DISC" "1" 01/02/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONT10DISC" "1" 01/02/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONT10DISC" "1" 01/02/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONT10DISC" "1" 01/02/17 31/12/49
+1 "" 1 "La del Cero 1,5 GB" 0 "CONT10MF" "1" 01/02/17 31/12/49
+1 "" 2 "La del Cero 1,5 GB" 0 "CONT10MF" "1" 01/02/17 31/12/49
+1 "" 3 "La del Cero 1,5 GB" 0 "CONT10MF" "1" 01/02/17 31/12/49
+1 "" 5 "La del Cero 1,5 GB" 0 "CONT10MF" "1" 01/02/17 31/12/49
 1 "" 1 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
 1 "" 2 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
 1 "" 3 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
@@ -3211,6 +3219,16 @@
 1 "" 3 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
 1 "" 4 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
 1 "" 5 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
+1 "" 1 "Samsung Galaxy A3 2017" 0 "G0000314" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A3 2017" 0 "G0000314" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A3 2017" 0 "G0000314" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A3 2017" 0 "G0000314" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A3 2017" 0 "G0000314" "1" 24/01/17 31/12/49
+1 "" 1 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -5031,6 +5049,16 @@
 1 "" 3 "Samsung Galaxy A3 2016 Blanco" 0 "P034A36W2" "1" 20/06/16 31/12/49
 1 "" 4 "Samsung Galaxy A3 2016 Blanco" 0 "P034A36W2" "1" 20/06/16 31/12/49
 1 "" 5 "Samsung Galaxy A3 2016 White" 0 "P034A36W2" "1" 20/06/16 31/12/49
+1 "" 1 "Samsung Galaxy A3 2017 Dorado" 0 "P034A37D2" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A3 2017 Dorado" 0 "P034A37D2" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A3 2017 Dorado" 0 "P034A37D2" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A3 2017 Dorado" 0 "P034A37D2" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A3 2017 Gold" 0 "P034A37D2" "1" 24/01/17 31/12/49
+1 "" 1 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A3 2017 Black" 0 "P034A37N2" "1" 24/01/17 31/12/49
 1 "" 1 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
 1 "" 2 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
 1 "" 3 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
@@ -5051,6 +5079,26 @@
 1 "" 3 "Samsung Galaxy A5 2016 Blanco" 0 "P034A56W2" "1" 20/06/16 31/12/49
 1 "" 4 "Samsung Galaxy A5 2016 Blanco" 0 "P034A56W2" "1" 20/06/16 31/12/49
 1 "" 5 "Samsung Galaxy A5 2016 White" 0 "P034A56W2" "1" 20/06/16 31/12/49
+1 "" 1 "Samsung Galaxy A5 2017 Azul" 0 "P034A57A2" "1" 01/02/17 31/12/49
+1 "" 2 "Samsung Galaxy A5 2017 Azul" 0 "P034A57A2" "1" 01/02/17 31/12/49
+1 "" 3 "Samsung Galaxy A5 2017 Azul" 0 "P034A57A2" "1" 01/02/17 31/12/49
+1 "" 4 "Samsung Galaxy A5 2017 Azul" 0 "P034A57A2" "1" 01/02/17 31/12/49
+1 "" 5 "Samsung Galaxy A5 2017 Blue" 0 "P034A57A2" "1" 01/02/17 31/12/49
+1 "" 1 "Samsung Galaxy A5 2017 Dorado" 0 "P034A57D2" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A5 2017 Dorado" 0 "P034A57D2" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A5 2017 Dorado" 0 "P034A57D2" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A5 2017 Dorado" 0 "P034A57D2" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A5 2017 Gold" 0 "P034A57D2" "1" 24/01/17 31/12/49
+1 "" 1 "Samsung Galaxy A5 2017 Negro" 0 "P034A57N2" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A5 2017 Negro" 0 "P034A57N2" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A5 2017 Negro" 0 "P034A57N2" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A5 2017 Negro" 0 "P034A57N2" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A5 2017 Black" 0 "P034A57N2" "1" 24/01/17 31/12/49
+1 "" 1 "Samsung Galaxy A5 2017 Rosa" 0 "P034A57R2" "1" 01/02/17 31/12/49
+1 "" 2 "Samsung Galaxy A5 2017 Rosa" 0 "P034A57R2" "1" 01/02/17 31/12/49
+1 "" 3 "Samsung Galaxy A5 2017 Rosa" 0 "P034A57R2" "1" 01/02/17 31/12/49
+1 "" 4 "Samsung Galaxy A5 2017 Rosa" 0 "P034A57R2" "1" 01/02/17 31/12/49
+1 "" 5 "Samsung Galaxy A5 2017 Pink" 0 "P034A57R2" "1" 01/02/17 31/12/49
 1 "" 1 "Samsung SGH B130 Blanco" 0 "P034B13G2" "1" 27/10/08 31/12/54
 1 "" 5 "Samsung SGH B130 White" 0 "P034B13G2" "1" 27/10/08 31/12/54
 1 "" 1 "Samsung SGH B130 Blanco" 0 "P034B13G3" "1" 29/10/08 31/12/54
