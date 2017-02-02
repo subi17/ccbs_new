@@ -7,7 +7,8 @@ normal zR
 
 execute "set path+=" . ccbspath . "/tms"
 set suffixes+=.r
-
+set statusline=%f\ -\ Tenant:\ %{$TENANT}
+set laststatus=2
 
 "*******************************+
 " Table description with Shift-K
@@ -94,7 +95,7 @@ function! Run_4gl()
     silent echo "END."
     silent echo "QUIT."
     redir END
-    execute "silent ! pike vim " . l:pfile
+    execute "silent ! pike vim tenant=" . $TENANT . " " . l:pfile
 
 endfunction
 
