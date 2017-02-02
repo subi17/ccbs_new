@@ -569,6 +569,7 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
          add_string(lcFixedBillingAddress, "region", OrderCustomer.Region).
          add_string(lcFixedBillingAddress, "street_number", OrderCustomer.BuildingNum).
       END.
+      add_string(lcFusionStruct, "cancellation_reason",OrderFusion.CancellationReason).
    END.
 END.
 
