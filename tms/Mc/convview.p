@@ -48,9 +48,9 @@ FORM
     SKIP
     "Customer Type.....:" OrderFusion.CustomerType
     SKIP
-    "Fixed Inst Time...:" lcInstallationTime 
+    "Fixed Inst Time...:" lcInstallationTime FORMAT "X(24)"
     SKIP
-    "Fixed status Time.:" lcFixedTime
+    "Fixed status Time.:" lcFixedTime FORMAT "X(24)" 
     SKIP
     "Updated...........:" lcUpdateTS FORMAT "X(24)" 
     SKIP(7)
