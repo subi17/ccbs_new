@@ -122,7 +122,8 @@ IF MobSub.CliType EQ "CONT15" AND
       "VOICE100") > "" THEN
    add_string(lcResultArray,"", "VOICE100|" + STRING(Mobsub.MsSeq)).
 
-IF MobSub.CliType EQ "CONT9" AND
+IF (MobSub.CliType EQ "CONT9" OR
+    MobSub.CliType EQ "CONT10") AND
    fGetCurrentSpecificBundle(
       MobSub.MsSeq,
       "FREE100MINUTES") > "" THEN
