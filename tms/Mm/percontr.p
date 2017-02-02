@@ -405,7 +405,8 @@ PROCEDURE pContractActivation:
    /* is the new contract allowed */
    IF lcDCEvent = "DATA7" THEN DO:
       IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
-              lcUseCLIType = "CONT9") THEN DO:
+              lcUseCLIType = "CONT9" OR lcUseCLIType = "CONT10" OR
+              lcUseCLIType = "CONT26") THEN DO:
          fReqError("Contract is not allowed for this subscription type").
          RETURN.
       END.
@@ -3276,7 +3277,8 @@ PROCEDURE pContractReactivation:
    /* is the contract allowed */
    IF lcDCEvent = "DATA7" THEN DO:
       IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
-              lcUseCLIType = "CONT9") THEN DO:
+              lcUseCLIType = "CONT9" OR lcUseCLIType = "CONT10" OR
+              lcUseCLIType = "CONT26") THEN DO:
          fReqError("Contract is not allowed for this subscription type").
          RETURN.
       END.
