@@ -50,8 +50,8 @@ IF llDoEvent THEN DO:
 
 END.
 
-DEF VAR TermMobsub        LIKE TermMobsub.CLI           NO-UNDO.
-DEF VAR CustNum       LIKE Customer.Custnum       NO-UNDO.
+DEF VAR TermMobsub    LIKE TermMobsub.CLI       NO-UNDO.
+DEF VAR CustNum       LIKE Customer.Custnum     NO-UNDO.
 DEF VAR xrecid        AS RECID                           init ?.
 DEF VAR FIRSTrow      AS INT                    NO-UNDO  init 0.
 DEF VAR FrmRow        AS INT                    NO-UNDO  init 1.
@@ -74,7 +74,7 @@ DEF VAR llMemo        AS LOG                    NO-UNDO.
 DEF VAR lcOutport     AS CHAR                   NO-UNDO.
 DEF VAR lcCli         AS CHAR                   NO-UNDO FORMAT "X(12)" .
 DEF VAR lcFirstname   LIKE Customer.FIRSTName   NO-UNDO.
-DEF VAR lcLastName    LIKE Customer.Custname   NO-UNDO.
+DEF VAR lcLastName    LIKE Customer.Custname    NO-UNDO.
 DEF VAR liCustNum     LIKe Customer.CustNum     NO-UNDO.
 DEF VAR liAgrCustNum  LIKE Customer.CustNum     NO-UNDO.
 DEF VAR lcPersonID    LIKE Customer.Orgid       No-UNDO.
@@ -85,6 +85,8 @@ DEF VAR liSaldotype   AS INT                    NO-UNDO.
 DEF VAR killed        AS LOG                    NO-UNDO.
 DEF VAR lcICC         LIKE SIM.ICc              NO-UNDO.
 DEF VAR lcDCEvent     AS CHAR                   NO-UNDO. 
+DEF VAR llMore        AS LOGICAL                NO-UNDO.
+DEF VAR lcFixedNumber LIKE MobSub.FixedNumber   NO-UNDO INIT "".
 
 DEF BUFFER SearchCustomer FOR Customer.
 DEF BUFFER UserCustomer   FOR Customer.
@@ -104,11 +106,11 @@ ASSIGN lcSaldoFatime = fCParamC("SaldoAgreementAccount")
 
 form
     TermMobsub.CLI         COLUMN-LABEL "MSISDN" FORMAT "X(10)"
-    TermMobsub.MsSeq           COLUMN-LABEL "SubscrID" 
+    TermMobsub.MsSeq       COLUMN-LABEL "SubscrID" 
     TermMobsub.AgrCust     COLUMN-LABEL "AgrCust" 
-    AgrCustomer.CustName   COLUMN-LABEL "Name"     FORMAT "X(20)" 
+    AgrCustomer.CustName   COLUMN-LABEL "Name"   FORMAT "X(20)" 
     AgrCustomer.orgid      COLUMN-LABEL "PerID/ComID"
-    TermMobsub.MSStatus         FORMAT ">9"    COLUMN-LABEL "St" 
+    TermMobsub.MSStatus     FORMAT ">9"   COLUMN-LABEL "St" 
     llMemo                  FORMAT "*/"   COLUMN-LABEL "M"  
     KillMS.OutOp            FORMAT "x(7)"
 
@@ -118,6 +120,14 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     "  TERMINATED MOBILE SUBSCRIPTION  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
+
+
+form
+   lcFixedNumber
+   HELP "Enter Fixed Number"
+   WITH row 4 col 2 TITLE COLOR VALUE(ctc)
+   "FIND FIXED NUMBER" COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME frSearchFixed.
+
 
 
 form /* seek  TermMobsub */
@@ -153,7 +163,8 @@ form /* Customer :n nimella hakua varten */
 form /* seek  CustNum */
    lcPersonID
    HELP "Enter Person ID"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Person ID"   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
+   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Person ID"   
+   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
 
 form /* seek  CustNum */
     liMSStatus
@@ -244,27 +255,37 @@ BROWSE:
    REPEAT WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
       IF ufkey THEN DO:
-        ASSIGN
-           ufk[1]= 209
-           ufk[2]= 9018
-           ufk[3]= 2902
-           ufk[4]= 2903
-           ufk[5]= 2214
-           ufk[6]= 559
-           ufk[7]= 1740
-           ufk[8]= 8
-           ufk[9]= 1
-           ehto  = 3
-           ufkey = FALSE.
+         IF NOT llMore THEN
+            ASSIGN
+            ufk[1]= 209
+            ufk[2]= 9018
+            ufk[3]= 2902
+            ufk[4]= 2903
+            ufk[5]= 2214
+            ufk[6]= 559
+            ufk[7]= 555 /* MORE */
+            ufk[8]= 8
+            ufk[9]= 1
+            ehto  = 3
+            ufkey = FALSE.
+         ELSE ASSIGN   
+            ufk[1] = 1740
+            ufk[2] = 9852 
+            UFK[3] =  0
+            UFK[4] =  0 
+            UFK[5] =  0
+            UFK[6] =  0
+            UFK[7] =  0
+            ufk[8] =  8.
 
-        IF ictype  NE  "" THEN ASSIGN
-         UFK[1] =  0
-         UFK[2] =  0
-         UFK[3] =  0
-         UFK[4] =  0 
-         UFK[5] =  0
-         UFK[6] =  0
-         UFK[7] =  0.
+         IF ictype  NE  "" THEN ASSIGN
+            UFK[1] =  0
+            UFK[2] =  0
+            UFK[3] =  0
+            UFK[4] =  0 
+            UFK[5] =  0
+            UFK[6] =  0
+            UFK[7] =  0.
          
          RUN ufkey.p.
       END.
@@ -410,7 +431,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND icType = "" 
+     ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -433,7 +454,7 @@ BROWSE:
      END. /* Search-1 */
      
      /* Search BY column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND icType = "" 
+     ELSE IF LOOKUP(nap,"2,f2") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -455,7 +476,7 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND 
+     ELSE IF LOOKUP(nap,"3,f3") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -479,7 +500,7 @@ BROWSE:
        END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND 
+     ELSE IF LOOKUP(nap,"4,f4") > 0 AND NOT llMore AND 
        icType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -492,7 +513,7 @@ BROWSE:
        END.
      END. /* Search-4 */
     
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND 
+     ELSE IF LOOKUP(nap,"5,f5") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -505,7 +526,7 @@ BROWSE:
        END.
      END. /* Search-5 */
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" AND 
+     ELSE IF LOOKUP(nap,"6,f6") > 0 AND NOT llMore AND lcRight = "RW" AND 
        ictype = "" THEN DO: 
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -522,13 +543,19 @@ BROWSE:
              PAUSE 1 NO-MESSAGE.
              NEXT BROWSE.
           END.
-                                                                                         /* some TermMobsub/TermMobsub was found */
+          /* some TermMobsub/TermMobsub was found */
           ASSIGN order = 4 Memory = recid(TermMobsub) must-print = TRUE.
           NEXT LOOP.
        ENd.
      END. 
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND 
+     ELSE IF LOOKUP(nap,"7,f7") > 0 AND NOT llMore AND ufk[7] > 0 THEN DO:
+        llMore = TRUE.
+        ufkey = TRUE.
+        NEXT LOOP.
+     END.
+
+     ELSE IF LOOKUP(nap,"1,f1") > 0 AND llMore AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        cfc = "puyr". run ufcolor.
        ehto = 9. RUN ufkey. ufkey = TRUE.
@@ -548,6 +575,15 @@ BROWSE:
              BELL.
              MESSAGE "NOT FOUND !".
              PAUSE 1 NO-MESSAGE.
+             ASSIGN  ufk[1] = 1740
+                     ufk[2] = 9852 
+                     ufk[3] =  0
+                     ufk[4] =  0 
+                     ufk[5] =  0
+                     ufk[6] =  0
+                     ufk[7] =  0.
+                     ufk[8] =  8.
+
              NEXT BROWSE.
           END.
 
@@ -562,47 +598,35 @@ BROWSE:
        END.
      END. /* Search-2 */
 
- 
      
-     
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND lcRight = "RW" AND 
-        ictype = "" THEN DO:
-        
-        RUN local-find-this (FALSE).
+     ELSE IF LOOKUP(nap,"2,f2") > 0 AND llMore AND lcRight = "RW" AND 
+        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        cfc = "puyr". run ufcolor.
+        ehto = 9. RUN ufkey. ufkey = TRUE.
+        CLEAR FRAME frSearchFixed.
+        SET lcFixedNumber WITH FRAME frSearchFixed.
+        HIDE FRAME frSearchFixed NO-PAUSE.
 
-        RUN local-find-others(TRUE).
-       
-        
-        RUN nnfmcu(OUTPUT liCustNum, OUTPUT liMsSeq).
-
-        IF liCustNum NE ? AND liCustNum > 0 THEN DO:
-           FIND  SearchCustomer WHERE 
-                 SearchCustomer.CustNum = liCustNum NO-LOCK.
-           IF MsSeq > 0 THEN 
-              FIND SearchTermMobsub WHERE 
-                   SearchTermMobsub.MsSeq = liMsSeq AND
-                   SearchTermMobsub.brand = gcBrand NO-LOCK NO-ERROR.
-           ELSE DO:
-              FIND FIRST SearchTermMobsub WHERE 
-                         SearchTermMobsub.Brand   = gcBrand AND
-                         SearchTermMobsub.CustNum = liCustNum NO-LOCK NO-ERROR.
-
-              IF NOT AVAIL SearchTermMobsub THEN DO:
-                 MESSAGE 
-                    "Customer No." string(liCustNum)                                                 "does NOT have ANY mobile subscriptions"
-                 VIEW-AS ALERT-BOX TITLE " NO SUBSCRIPTIONS ".
-              END.
+        IF lcFixedNumber  > ""  THEN DO:
+           FOR FIRST SearchTermMobsub WHERE
+                     SearchTermMobsub.Brand = gcBrand AND
+                     SearchTermMobsub.FixedNumber EQ lcFixedNumber NO-LOCK.
            END.
-           
-           IF AVAIL SearchTermMobsub THEN DO:
-              FIND   TermMobsub WHERE 
-               RECID(TermMobsub) = RECID(SearchTermMobsub) NO-LOCK NO-ERROR.
-               
-              ASSIGN
-                 memory = RECID(SearchTermMobsub)
-                 must-print = TRUE.
-              NEXT loop.
+
+           IF NOT AVAILABLE SearchTermMobsub THEN DO:
+              BELL.
+              MESSAGE "NOT FOUND !".
+              PAUSE 1 NO-MESSAGE.
+              NEXT BROWSE.
            END.
+
+           IF Avail SearchTermMobsub THEN
+           FIND FIRST TermMobsub WHERE
+                RECID(TermMobsub) = RECID(SearchTermMobsub) NO-LOCK NO-ERROR.
+
+           /* some Mobsub/mobsub was found */
+           ASSIGN order = 1 Memory = recid(termmobsub) must-print = TRUE.
+           NEXT LOOP.
         END.
      END. 
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
@@ -711,6 +735,8 @@ BROWSE:
         ASSIGN Memory = recid(TermMobsub) must-print = TRUE.
         NEXT LOOP.
      END.
+
+     ELSE IF LOOKUP(nap,"8,f8") > 0 AND llMore THEN llMore = FALSE.
 
      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
 
