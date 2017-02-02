@@ -1915,20 +1915,20 @@ FOR FIRST CLIType NO-LOCK WHERE
       ldeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CompareFee.
 
     CASE CLIType.CLIType:
-      WHEN "CONT9" OR WHEN "CONT15" THEN lcList = "0 cent/min".
+      WHEN "CONT9" OR WHEN "CONT10" OR WHEN "CONT15" THEN lcList = "0 cent/min".
       WHEN "TARJ7" THEN lcList = "1 cent/min".
       WHEN "TARJ8" THEN lcList = "6,05 cent/min".
       WHEN "TARJ9" THEN lcList = "1 cent/min".
       OTHERWISE lcList = "".
     END.
 
-    IF LOOKUP(Order.CLIType, "CONT9,CONT15,CONT24,CONT23,CONT25") > 0 THEN 
+    IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 THEN 
        FOR FIRST OfferItem WHERE
                  OfferItem.Brand       = gcBrand             AND
                  OfferItem.Offer       = Order.Offer         AND
                  OfferItem.ItemType    = "discountplan"      AND
                  LOOKUP(OfferItem.ItemKey,
-                 "TariffMarchDISC,CONT9DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC") > 0 AND
+                 "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC") > 0 AND
                  OfferItem.BeginStamp <= Order.CrStamp       AND
                  OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
           FIRST DiscountPlan WHERE 
