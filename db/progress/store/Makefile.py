@@ -103,7 +103,7 @@ except:
 
 initialize_dependencies = list(main_pf_files)
 if environment == 'development':
-    initialize_dependencies += ['create', 'start', 'migrate', 'createtenancies', 'fixtures']
+    initialize_dependencies += ['create', 'start', 'migrate', 'tenanciescreate', 'fixtures']
 else:
     initialize_dependencies += ['relink_migcache']
 
@@ -533,7 +533,7 @@ def fixtures(*a):
 # Tenant creation
 
 @target
-def createtenancies(*a):
+def tenanciescreate(*a):
     if tenancies:
         cdr_dict = {}
         args = ['-pf', 'all.pf', '-b', '-p', 'multitenancy/create_tenant.r']
