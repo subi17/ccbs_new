@@ -103,7 +103,7 @@ except:
 
 initialize_dependencies = list(main_pf_files)
 if environment == 'development':
-    initialize_dependencies += ['create', 'start', 'migrate', 'tenancies', 'fixtures']
+    initialize_dependencies += ['create', 'start', 'migrate', 'createtenancies', 'fixtures']
 else:
     initialize_dependencies += ['relink_migcache']
 
@@ -479,7 +479,7 @@ def active_cdr_db_pf(tenant):
 
     args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
 
-    if not tenant == ''
+    if not tenant == '':
         args.extend(['-pf', '../db/progress/store/common_{}.pf'.format(tenant)])
     else:
         args.extend(['-pf', '../db/progress/store/common.pf'])
@@ -487,7 +487,7 @@ def active_cdr_db_pf(tenant):
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
     dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
 
-    if not tenant == ''
+    if not tenant == '':
         uandp = userandpass(['-U', '{0}@{1}'.format(tenancies[tenant]['username'], tenancies[tenant]['domain']), '-P', tenancies[tenant]['password'] ])
         for db in dict:
             dict[db].extend(uandp)
@@ -498,21 +498,21 @@ def active_cdr_db_pf(tenant):
 def fixtures(*a):
     tenantdict = {}
     for tenant in tenancies:
-        tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{1}.pf'.format(tenant)}
-        if tenancies[tenant]['tenanttype'] = 'default':
-            tenantdict['default'] = {'tenant': tenant, 'pf': 'all_{1}.pf'.format(tenant)}
-    else:
+        tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{}.pf'.format(tenant)}
+        if tenancies[tenant]['tenanttype'] == 'Default':
+            tenantdict['Default'] = {'tenant': tenant, 'pf': 'all_{}.pf'.format(tenant)}
+    if tenant is None:
         tenantdict[''] = {'tenant': '', 'pf': 'all.pf' }
 
     for tenant in tenantdict:
-        if not tenant == '' and not tenant == 'default':
+        if not tenant == '' and not tenant == 'Default':
             print('Loading fixtures for tenant t{}...'.format(tenantdict[tenant]['tenant']))
             fixturedir = '{0}/db/progress/fixtures/{1}'.format(work_dir, tenantdict[tenant]['tenant'])
             try:
                 os.makedirs(fixturedir)
             except OSError:
                 if not os.path.isdir(fixturedir):
-                raise
+                    raise PikeException('Cannot use directory {}'.format(fixturedir))
         else:
             print('Loading fixtures...')
             fixturedir = '{0}/db/progress/fixtures'.format(work_dir)
@@ -533,7 +533,7 @@ def fixtures(*a):
 # Tenant creation
 
 @target
-def tenancies(*a):
+def createtenancies(*a):
     if tenancies:
         cdr_dict = {}
         args = ['-pf', 'all.pf', '-b', '-p', 'multitenancy/create_tenant.r']
@@ -552,9 +552,9 @@ def dumpfixtures(*a):
     tenantdict = {}
     for tenant in tenancies:
         tenantdict[tenant] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
-        if tenancies[tenant]['tenanttype'] = 'default':
+        if tenancies[tenant]['tenanttype'] == 'default':
             tenantdict['default'] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
-    else:
+    if tenant is None:
         tenantdict[''] = {'tenant': '', 'postfix': '.pf' }
 
     for tenant in tenantdict:
@@ -565,7 +565,7 @@ def dumpfixtures(*a):
                 os.makedirs(fixturedir)
             except OSError:
                 if not os.path.isdir(fixturedir):
-                raise
+                    raise PikeException('Cannot use directory {}'.format(fixturedir))
         else:
             print('Dumping fixtures...')
             fixturedir = '{0}/db/progress/fixtures'.format(work_dir)
