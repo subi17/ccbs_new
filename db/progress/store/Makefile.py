@@ -103,18 +103,9 @@ except:
 
 initialize_dependencies = list(main_pf_files)
 if environment == 'development':
-    initialize_dependencies += ['create', 'start', 'migrate', 'fixtures']
+    initialize_dependencies += ['create', 'start', 'migrate', 'tenancies', 'fixtures']
 else:
     initialize_dependencies += ['relink_migcache']
-
-def active_cdr_db_pf():
-    if '-S' in open('common.pf').read():
-        connection_type = "tcp"
-    else:
-        connection_type = "local"
-    cdr_fetch = Popen(mpro + ['-pf', 'common.pf',
-                              '-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type], stdout=PIPE)
-    return literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
 
 def db_full_path(db_name, suffix='.db', host=None):
     locs = {}
@@ -123,7 +114,6 @@ def db_full_path(db_name, suffix='.db', host=None):
         assert host in db_locations, 'Db locations not configured for this host'
         locs = db_locations[host]
     return '%s/%s%s' % (locs.get(db_name, getcwd()), db_name, suffix)
-
 
 @target(initialize_dependencies)
 def initialize(*a): pass
@@ -481,34 +471,113 @@ def downgrade(match, deps):
 
 # Fixture loading (initial setup-fixtures)
 
+def active_cdr_db_pf(tenant):
+    if '-S' in open('../db/progress/store/common.pf').read():
+        connection_type = "tcp"
+    else:
+        connection_type = "local"
+
+    args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
+
+    if not tenant == ''
+        args.extend(['-pf', '../db/progress/store/common_{}.pf'.format(tenant)])
+    else:
+        args.extend(['-pf', '../db/progress/store/common.pf'])
+
+    cdr_fetch = Popen(mpro + args, stdout=PIPE)
+    dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+
+    if not tenant == ''
+        uandp = userandpass(['-U', '{0}@{1}'.format(tenancies[tenant]['username'], tenancies[tenant]['domain']), '-P', tenancies[tenant]['password'] ])
+        for db in dict:
+            dict[db].extend(uandp)
+
+    return dict
+
 @target
 def fixtures(*a):
-    print('Loading fixtures...')
+    tenantdict = {}
+    for tenant in tenancies:
+        tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{1}.pf'.format(tenant)}
+        if tenancies[tenant]['tenanttype'] = 'default':
+            tenantdict['default'] = {'tenant': tenant, 'pf': 'all_{1}.pf'.format(tenant)}
+    else:
+        tenantdict[''] = {'tenant': '', 'pf': 'all.pf' }
 
-    cdr_dict = {}
-    args = ['-pf', 'all.pf', '-b', '-p', 'gearbox/fixtures/load_fixtures.r',
-            '-param', 'fix_dir=%s/db/progress/fixtures,bulk=yes' % work_dir]
+    for tenant in tenantdict:
+        if not tenant == '' and not tenant == 'default':
+            print('Loading fixtures for tenant t{}...'.format(tenantdict[tenant]['tenant']))
+            fixturedir = '{0}/db/progress/fixtures/{1}'.format(work_dir, tenantdict[tenant]['tenant'])
+            try:
+                os.makedirs(fixturedir)
+            except OSError:
+                if not os.path.isdir(fixturedir):
+                raise
+        else:
+            print('Loading fixtures...')
+            fixturedir = '{0}/db/progress/fixtures'.format(work_dir)
 
-    for pp in cdr_databases:
-        if not cdr_dict:
-            cdr_dict = active_cdr_db_pf()
-        args.extend(cdr_dict[pp])
+        args = ['-pf', tenantdict[tenant]['pf'], '-b', '-p', 'gearbox/fixtures/load_fixtures.r',
+                '-param', 'fix_dir={},bulk=yes'.format(fixturedir)]
 
-    load_fixture = Popen(mpro + args, stdout=PIPE)
-    call('/bin/cat', stdin=load_fixture.stdout)
+        cdr_dict = {}
+
+        for pp in cdr_databases:
+            if not cdr_dict:
+                cdr_dict = active_cdr_db_pf(tenantdict[tenant]['tenant'])
+            args.extend(cdr_dict[pp])
+
+        load_fixture = Popen(mpro + args, stdout=PIPE)
+        call('/bin/cat', stdin=load_fixture.stdout)
+
+# Tenant creation
+
+@target
+def tenancies(*a):
+    if tenancies:
+        cdr_dict = {}
+        args = ['-pf', 'all.pf', '-b', '-p', 'multitenancy/create_tenant.r']
+        for pp in cdr_databases:
+            if not cdr_dict:
+                cdr_dict = active_cdr_db_pf()
+            args.extend(cdr_dict[pp])
+
+        multitenancy = Popen(mpro + args, stdout=PIPE)
+        call('/bin/cat', stdin=multitenancy.stdout)
 
 @target
 def dumpfixtures(*a):
     print('Start dumping fixtures...')
 
-    pf_entries = {}
+    tenantdict = {}
+    for tenant in tenancies:
+        tenantdict[tenant] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
+        if tenancies[tenant]['tenanttype'] = 'default':
+            tenantdict['default'] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
+    else:
+        tenantdict[''] = {'tenant': '', 'postfix': '.pf' }
 
-    for pp in databases:
-        pf_entries[pp] = ['-pf', '{0}.pf'.format(pp)]
+    for tenant in tenantdict:
+        if not tenant == '' and not tenant == 'default':
+            print('Dumping fixtures for tenant t{}...'.format(tenantdict[tenant]['tenant']))
+            fixturedir = '{0}/db/progress/fixtures/{1}'.format(work_dir, tenantdict[tenant]['tenant'])
+            try:
+                os.makedirs(fixturedir)
+            except OSError:
+                if not os.path.isdir(fixturedir):
+                raise
+        else:
+            print('Dumping fixtures...')
+            fixturedir = '{0}/db/progress/fixtures'.format(work_dir)
 
-    if environment != 'development':
-        pf_entries.update(active_cdr_db_pf())
+        pf_entries = {}
 
-    for key in sorted(pf_entries):
-        dump_fixture = Popen(mpro + pf_entries[key] + ['-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '%s/db/progress/fixtures' % work_dir], stdout=PIPE)
-        call('/bin/cat', stdin=dump_fixture.stdout)
+        for pp in databases:
+            pf_entries[pp] = ['-pf', '{0}{1}'.format(pp, tenantdict[tenant]['postfix'])]
+
+        if environment != 'development':
+            pf_entries.update(active_cdr_db_pf(tenantdict[tenant]['tenant']))
+
+        for key in sorted(pf_entries):
+            dump_fixture = Popen(mpro + pf_entries[key] + ['-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '{}'.format(fixturedir)], stdout=PIPE)
+            call('/bin/cat', stdin=dump_fixture.stdout)
