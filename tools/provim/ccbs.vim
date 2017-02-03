@@ -7,7 +7,11 @@ normal zR
 
 execute "set path+=" . ccbspath . "/tms"
 set suffixes+=.r
-set statusline=%f\ -\ Tenant:\ %{$TENANT}
+if $TENANT == ""
+    set statusline=%f\ -\ Tenant:\ super
+else
+    set statusline=%f\ -\ Tenant:\ %{$TENANT}
+endif
 set laststatus=2
 
 "*******************************+
