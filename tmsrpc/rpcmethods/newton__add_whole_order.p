@@ -614,7 +614,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR ldBirthDay   AS DATE NO-UNDO. 
    DEF VAR llSelfEmployed AS LOGICAL NO-UNDO. 
    DEF VAR ldFoundationDate AS DATE NO-UNDO. 
-   DEF VAR data            AS CHAR EXTENT 39 NO-UNDO.
+   DEF VAR data            AS CHAR EXTENT 40  NO-UNDO.
    DEF VAR lcIdOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR liSubLimit AS INT NO-UNDO. 
@@ -807,7 +807,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.Km = 
             data[LOOKUP("km", gcCustomerStructStringFields)] 
          OrderCustomer.TerritoryOwner =
-            data[LOOKUP("territory_owner",gcCustomerStructStringFields)]
+            data[LOOKUP("territory_owner", gcCustomerStructStringFields)]
          OrderCustomer.SelfEmployed       = llSelfEmployed 
          OrderCustomer.FoundationDate     = ldFoundationDate
          OrderCustomer.Birthday           = ldBirthday
