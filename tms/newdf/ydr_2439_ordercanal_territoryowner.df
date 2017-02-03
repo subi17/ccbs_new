@@ -14,10 +14,3 @@ ADD FIELD "TerritoryOwner" OF "MobSub" AS CHARACTER
   HELP "Territory Owner"
   ORDER 900
 
-.
-PSC
-bufpool=yes
-cpstream=1252
-.
-0000136307
-

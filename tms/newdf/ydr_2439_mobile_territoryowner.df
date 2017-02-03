@@ -6,10 +6,3 @@ ADD FIELD "TerritoryOwner" OF "TermMobSub" AS CHARACTER
   HELP "Territory Owner"
   ORDER 910
 
-.
-PSC
-bufpool=yes
-cpstream=1252
-.
-0000136307
-
