@@ -190,7 +190,7 @@ def write_pf_file(filename, tenant='', logical_names={}):
             name_map = ' -ld %s' % logical_names[db] if db in logical_names else ''
             fd.write('-pf {0}/{1}{2}.pf{3}\n'.format(getcwd(), db, tenant, name_map))
 
-@target(['%s.pf' % x for x in databases] + [x for x in tenancies])
+@target(['{}.pf'.format(x) for x in databases] + [ 'tenant_{}'.format(x) for x in tenancies ])
 def all_pf(match, deps):
     '''all\.pf'''
     write_pf_file(match)
@@ -246,11 +246,13 @@ def connect_parameter_file(match, deps, db_name):
             fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
 
 @target
-@applies_to([x for x in tenancies])
+@applies_to(['tenant_none'] + [ 'tenant_{}'.format(x) for x in tenancies ])
 def tenantcredentials_file(match, deps):
-    with open('tenant_{}.pf'.format(match), 'wt') as fd:
-        fd.write('-U {0}@{1}\n'.format(tenancies[match]['username'], tenancies[match]['domain']))
-        fd.write('-P {}\n'.format(tenancies[match]['password']))
+    tenant = match.split('_')[1]
+    if tenant in tenancies:
+        with open('tenant_{}.pf'.format(tenant), 'wt') as fd:
+            fd.write('-U {0}@{1}\n'.format(tenancies[tenant]['username'], tenancies[tenant]['domain']))
+            fd.write('-P {}\n'.format(tenancies[tenant]['password']))
 
 db_running_msg = True
 
@@ -497,6 +499,7 @@ def active_cdr_db_pf(tenant):
 @target
 def fixtures(*a):
     tenantdict = {}
+    tenant = None
     for tenant in tenancies:
         tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{}.pf'.format(tenant)}
         if tenancies[tenant]['tenanttype'] == 'Default':
@@ -547,12 +550,11 @@ def tenanciescreate(*a):
 
 @target
 def dumpfixtures(*a):
-    print('Start dumping fixtures...')
-
     tenantdict = {}
+    tenant = None
     for tenant in tenancies:
         tenantdict[tenant] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
-        if tenancies[tenant]['tenanttype'] == 'default':
+        if tenancies[tenant]['tenanttype'] == 'Default':
             tenantdict['default'] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
     if tenant is None:
         tenantdict[''] = {'tenant': '', 'postfix': '.pf' }
