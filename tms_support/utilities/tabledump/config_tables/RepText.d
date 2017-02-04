@@ -599,6 +599,22 @@
 1 "" 3 "Gutxieneko kontsumoagatiko ordaina" 0 "CONSMINFAT" "1" 01/06/11 31/03/12
 1 "" 5 "Minimum Spend Compensation" 0 "CONSMINFAT" "1" 01/04/12 31/12/49
 1 "" 5 "Minimum consumption compensation" 0 "CONSMINFAT" "1" 01/06/11 31/03/12
+1 "" 1 "Internet" 0 "CONT10" "1" 01/02/17 31/12/49
+1 "" 2 "Internet" 0 "CONT10" "1" 01/02/17 31/12/49
+1 "" 3 "Internet" 0 "CONT10" "1" 01/02/17 31/12/49
+1 "" 5 "Internet" 0 "CONT10" "1" 01/02/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONT10DISC" "1" 01/02/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONT10DISC" "1" 01/02/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONT10DISC" "1" 01/02/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONT10DISC" "1" 01/02/17 31/12/49
+1 "" 1 "La del Cero 1,5 GB" 0 "CONT10MF" "1" 01/02/17 31/12/49
+1 "" 2 "La del Cero 1,5 GB" 0 "CONT10MF" "1" 01/02/17 31/12/49
+1 "" 3 "La del Cero 1,5 GB" 0 "CONT10MF" "1" 01/02/17 31/12/49
+1 "" 5 "La del Cero 1,5 GB" 0 "CONT10MF" "1" 01/02/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONT10RETDISC" "1" 01/02/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONT10RETDISC" "1" 01/02/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONT10RETDISC" "1" 01/02/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONT10RETDISC" "1" 01/02/17 31/12/49
 1 "" 1 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
 1 "" 2 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
 1 "" 3 "Internet" 0 "CONT15" "1" 01/10/14 31/12/49
@@ -687,6 +703,30 @@
 1 "" 2 "Nacionals" 0 "CONT25VOICE_B" "1" 12/12/16 31/12/49
 1 "" 3 "Nazionalak" 0 "CONT25VOICE_B" "1" 12/12/16 31/12/49
 1 "" 5 "National" 0 "CONT25VOICE_B" "1" 12/12/16 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONT26CF_A" "1" 01/02/17 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT26CF_A" "1" 01/02/17 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT26CF_A" "1" 01/02/17 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT26CF_A" "1" 01/02/17 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONT26CF_B" "1" 01/02/17 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT26CF_B" "1" 01/02/17 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT26CF_B" "1" 01/02/17 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT26CF_B" "1" 01/02/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONT26DISC" "1" 01/02/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONT26DISC" "1" 01/02/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONT26DISC" "1" 01/02/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONT26DISC" "1" 01/02/17 31/12/49
+1 "" 1 "La Infinita 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
+1 "" 2 "La Infinita 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
+1 "" 3 "La Infinita 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
+1 "" 5 "La Infinita 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONT26VOICE_A" "1" 01/02/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONT26VOICE_A" "1" 01/02/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT26VOICE_A" "1" 01/02/17 31/12/49
+1 "" 5 "National" 0 "CONT26VOICE_A" "1" 01/02/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONT26VOICE_B" "1" 01/02/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONT26VOICE_B" "1" 01/02/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT26VOICE_B" "1" 01/02/17 31/12/49
+1 "" 5 "National" 0 "CONT26VOICE_B" "1" 01/02/17 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONT8DISC" "1" 01/12/12 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONT8DISC" "1" 01/12/12 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT8DISC" "1" 01/12/12 31/12/49
@@ -826,6 +866,10 @@
 1 "" 2 "Internet" 0 "CONTDATA25" "1" 12/12/16 31/12/49
 1 "" 3 "Internet" 0 "CONTDATA25" "1" 12/12/16 31/12/49
 1 "" 5 "Internet" 0 "CONTDATA25" "1" 12/12/16 31/12/49
+1 "" 1 "Internet" 0 "CONTDATA26" "1" 01/02/17 31/12/49
+1 "" 2 "Internet" 0 "CONTDATA26" "1" 01/02/17 31/12/49
+1 "" 3 "Internet" 0 "CONTDATA26" "1" 01/02/17 31/12/49
+1 "" 5 "Internet" 0 "CONTDATA26" "1" 01/02/17 31/12/49
 1 "" 1 "Internet para Llevar 8" 0 "CONTDATA3" "1" 01/04/12 31/12/49
 1 "" 1 "Datos" 0 "CONTDATA3" "1" 01/01/10 31/03/12
 1 "" 2 "Internet para Llevar 8" 0 "CONTDATA3" "1" 01/04/12 31/12/49
@@ -1429,6 +1473,10 @@
 1 "" 2 "Descompte promoció" 0 "DISCFH300" "1" 01/11/16 31/12/54
 1 "" 3 "Promozio-deskontua" 0 "DISCFH300" "1" 01/11/16 31/12/54
 1 "" 5 "Promotional discount" 0 "DISCFH300" "1" 01/11/16 31/12/54
+1 "" 1 "Descuento promoción Fibra 300" 0 "DISCFH300P" "1" 01/02/17 31/12/49
+1 "" 2 "Descompte promoció Fibra 300" 0 "DISCFH300P" "1" 01/02/17 31/12/49
+1 "" 3 "Promozio-deskontua Fibra 300" 0 "DISCFH300P" "1" 01/02/17 31/12/49
+1 "" 5 "Promotional discount Fiber 300" 0 "DISCFH300P" "1" 01/02/17 31/12/49
 1 "" 1 "Descuento promoción Fijo" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
 1 "" 2 "Descompte promoció Fix" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoaren promozioagatiko deskontua" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
@@ -3211,6 +3259,16 @@
 1 "" 3 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
 1 "" 4 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
 1 "" 5 "ZTE Blade A310" 0 "G0000313" "1" 20/12/16 31/12/49
+1 "" 1 "Samsung Galaxy A3 2017" 0 "G0000314" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A3 2017" 0 "G0000314" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A3 2017" 0 "G0000314" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A3 2017" 0 "G0000314" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A3 2017" 0 "G0000314" "1" 24/01/17 31/12/49
+1 "" 1 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -5031,6 +5089,16 @@
 1 "" 3 "Samsung Galaxy A3 2016 Blanco" 0 "P034A36W2" "1" 20/06/16 31/12/49
 1 "" 4 "Samsung Galaxy A3 2016 Blanco" 0 "P034A36W2" "1" 20/06/16 31/12/49
 1 "" 5 "Samsung Galaxy A3 2016 White" 0 "P034A36W2" "1" 20/06/16 31/12/49
+1 "" 1 "Samsung Galaxy A3 2017 Dorado" 0 "P034A37D2" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A3 2017 Dorado" 0 "P034A37D2" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A3 2017 Dorado" 0 "P034A37D2" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A3 2017 Dorado" 0 "P034A37D2" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A3 2017 Gold" 0 "P034A37D2" "1" 24/01/17 31/12/49
+1 "" 1 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A3 2017 Black" 0 "P034A37N2" "1" 24/01/17 31/12/49
 1 "" 1 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
 1 "" 2 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
 1 "" 3 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
@@ -5051,6 +5119,26 @@
 1 "" 3 "Samsung Galaxy A5 2016 Blanco" 0 "P034A56W2" "1" 20/06/16 31/12/49
 1 "" 4 "Samsung Galaxy A5 2016 Blanco" 0 "P034A56W2" "1" 20/06/16 31/12/49
 1 "" 5 "Samsung Galaxy A5 2016 White" 0 "P034A56W2" "1" 20/06/16 31/12/49
+1 "" 1 "Samsung Galaxy A5 2017 Azul" 0 "P034A57A2" "1" 01/02/17 31/12/49
+1 "" 2 "Samsung Galaxy A5 2017 Azul" 0 "P034A57A2" "1" 01/02/17 31/12/49
+1 "" 3 "Samsung Galaxy A5 2017 Azul" 0 "P034A57A2" "1" 01/02/17 31/12/49
+1 "" 4 "Samsung Galaxy A5 2017 Azul" 0 "P034A57A2" "1" 01/02/17 31/12/49
+1 "" 5 "Samsung Galaxy A5 2017 Blue" 0 "P034A57A2" "1" 01/02/17 31/12/49
+1 "" 1 "Samsung Galaxy A5 2017 Dorado" 0 "P034A57D2" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A5 2017 Dorado" 0 "P034A57D2" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A5 2017 Dorado" 0 "P034A57D2" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A5 2017 Dorado" 0 "P034A57D2" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A5 2017 Gold" 0 "P034A57D2" "1" 24/01/17 31/12/49
+1 "" 1 "Samsung Galaxy A5 2017 Negro" 0 "P034A57N2" "1" 24/01/17 31/12/49
+1 "" 2 "Samsung Galaxy A5 2017 Negro" 0 "P034A57N2" "1" 24/01/17 31/12/49
+1 "" 3 "Samsung Galaxy A5 2017 Negro" 0 "P034A57N2" "1" 24/01/17 31/12/49
+1 "" 4 "Samsung Galaxy A5 2017 Negro" 0 "P034A57N2" "1" 24/01/17 31/12/49
+1 "" 5 "Samsung Galaxy A5 2017 Black" 0 "P034A57N2" "1" 24/01/17 31/12/49
+1 "" 1 "Samsung Galaxy A5 2017 Rosa" 0 "P034A57R2" "1" 01/02/17 31/12/49
+1 "" 2 "Samsung Galaxy A5 2017 Rosa" 0 "P034A57R2" "1" 01/02/17 31/12/49
+1 "" 3 "Samsung Galaxy A5 2017 Rosa" 0 "P034A57R2" "1" 01/02/17 31/12/49
+1 "" 4 "Samsung Galaxy A5 2017 Rosa" 0 "P034A57R2" "1" 01/02/17 31/12/49
+1 "" 5 "Samsung Galaxy A5 2017 Pink" 0 "P034A57R2" "1" 01/02/17 31/12/49
 1 "" 1 "Samsung SGH B130 Blanco" 0 "P034B13G2" "1" 27/10/08 31/12/54
 1 "" 5 "Samsung SGH B130 White" 0 "P034B13G2" "1" 27/10/08 31/12/54
 1 "" 1 "Samsung SGH B130 Blanco" 0 "P034B13G3" "1" 29/10/08 31/12/54
@@ -11085,6 +11173,10 @@
 9 "" 5 "LA DEL CERO ENTRE YOIGOS" 0 "CONT" "1" 01/11/13 31/12/49
 9 "" 5 "LA DEL CERO" 0 "CONT" "1" 30/09/08 31/10/13
 9 "" 5 "Contract" 0 "CONT" "1" 01/01/06 29/09/08
+9 "" 1 "La del Cero 1,5 GB" 0 "CONT10" "1" 01/02/17 31/12/49
+9 "" 2 "La del Cero 1,5 GB" 0 "CONT10" "1" 01/02/17 31/12/49
+9 "" 3 "La del Cero 1,5 GB" 0 "CONT10" "1" 01/02/17 31/12/49
+9 "" 5 "La del Cero 1,5 GB" 0 "CONT10" "1" 01/02/17 31/12/49
 9 "" 1 "La del Cero 5 GB" 0 "CONT15" "1" 01/10/14 31/12/49
 9 "" 2 "La del Cero 5 GB" 0 "CONT15" "1" 01/10/14 31/12/49
 9 "" 3 "La del Cero 5 GB" 0 "CONT15" "1" 01/10/14 31/12/49
@@ -11108,6 +11200,10 @@
 9 "" 2 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
 9 "" 3 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
 9 "" 5 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
+9 "" 1 "La Infinita 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
+9 "" 2 "La Infinita 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
+9 "" 3 "La Infinita 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
+9 "" 5 "La Infinita 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
 9 "" 1 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
 9 "" 2 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
 9 "" 3 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
@@ -11182,6 +11278,10 @@
 9 "" 2 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 5 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
+9 "" 1 "La Combinada Azul 20" 0 "CONTDSL59" "1" 01/02/17 31/12/49
+9 "" 2 "La Combinada Azul 20" 0 "CONTDSL59" "1" 01/02/17 31/12/49
+9 "" 3 "La Combinada Azul 20" 0 "CONTDSL59" "1" 01/02/17 31/12/49
+9 "" 5 "La Combinada Azul 20" 0 "CONTDSL59" "1" 01/02/17 31/12/49
 9 "" 1 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 2 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 3 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
@@ -11265,10 +11365,18 @@
 9 "" 2 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
 9 "" 5 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 1 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
+9 "" 2 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
+9 "" 3 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
+9 "" 5 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
 9 "" 1 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 2 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 5 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
+9 "" 1 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
+9 "" 2 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
+9 "" 3 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
+9 "" 5 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
 9 "" 1 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 2 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 3 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
@@ -11472,6 +11580,10 @@
 11 "" 4 "Contrato" 0 "CONTRATO" "1" 01/09/08 30/09/08
 11 "" 5 "LA DEL CERO" 0 "CONTRATO" "1" 01/10/08 31/12/54
 11 "" 5 "Contrato" 0 "CONTRATO" "1" 01/09/08 30/09/08
+11 "" 1 "La del Cero" 0 "CONTRATO10" "1" 01/02/17 31/12/49
+11 "" 2 "La del Cero" 0 "CONTRATO10" "1" 01/02/17 31/12/49
+11 "" 3 "La del Cero" 0 "CONTRATO10" "1" 01/02/17 31/12/49
+11 "" 5 "La del Cero" 0 "CONTRATO10" "1" 01/02/17 31/12/49
 11 "" 1 "Contrato 2" 0 "CONTRATO2" "1" 01/09/08 31/12/54
 11 "" 2 "Contrato 2" 0 "CONTRATO2" "1" 01/09/08 31/12/54
 11 "" 3 "Contrato 2" 0 "CONTRATO2" "1" 01/09/08 31/12/54
@@ -11481,6 +11593,10 @@
 11 "" 2 "La Sinfín" 0 "CONTRATO25" "1" 12/12/16 31/12/49
 11 "" 3 "La Sinfín" 0 "CONTRATO25" "1" 12/12/16 31/12/49
 11 "" 5 "La Sinfín" 0 "CONTRATO25" "1" 12/12/16 31/12/49
+11 "" 1 "La Infinita 5 GB" 0 "CONTRATO26" "1" 01/02/17 31/12/49
+11 "" 2 "La Infinita 5 GB" 0 "CONTRATO26" "1" 01/02/17 31/12/49
+11 "" 3 "La Infinita 5 GB" 0 "CONTRATO26" "1" 01/02/17 31/12/49
+11 "" 5 "La Infinita 5 GB" 0 "CONTRATO26" "1" 01/02/17 31/12/49
 11 "" 1 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
 11 "" 2 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
 11 "" 3 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54

@@ -60,3 +60,7 @@
 35 01/11/15 31/12/49 "BillItem" "RVTERMF" yes
 36 01/11/16 31/12/49 "BillItem" "CONTFH300MF" yes
 37 12/12/16 31/12/49 "BillItem" "CONT25MF" yes
+38 01/02/17 31/12/49 "BillItem" "CONT10MF" yes
+39 01/02/17 31/12/49 "BillItem" "CONT10MF" yes
+40 01/02/17 31/12/49 "BillItem" "CONT26MF" yes
+41 01/02/17 31/12/49 "BillItem" "CONTFH300MF" yes
