@@ -15,7 +15,7 @@ pcTenant = get_string(pcStruct, "brand").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{Syst/settenant.i pcTenant}
+{settenant.i pcTenant}
 
 lcQuery = 'FOR EACH CustCat NO-LOCK WHERE CustCat.Brand = "1"'.
 
