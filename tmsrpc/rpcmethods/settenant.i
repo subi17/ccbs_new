@@ -8,15 +8,19 @@
 ----------------------------------------------------------------------- */
 DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
 
+{Syst/tenant_sel.i}
+
+pcTenant = fn-ConvertBrandToTenant(pcTenant).
+
 IF pcTenant = "" THEN 
     RETURN appl_err("Invalid tenant information").
 
 DO liCount = 1 TO NUM-DBS
-	ON ERROR UNDO, THROW:
+    ON ERROR UNDO, THROW:
     
     SET-EFFECTIVE-TENANT(pcTenant, LDBNAME(liCount)).
     
     CATCH e AS Progress.Lang.Error:
-		RETURN appl_err("Unable to set access to specific tenant.Abort!").    	
+		    RETURN appl_err("Unable to set access to specific tenant.Abort!").    	
     END CATCH.
 END.
