@@ -8,12 +8,13 @@ normal zR
 execute "set path+=" . ccbspath . "/tms"
 set suffixes+=.r
 if $TENANT == ""
-    set statusline=%f\ -\ Tenant:\ super
-else
-    set statusline=%f\ -\ Tenant:\ %{$TENANT}
+    let $TENANT ="super"
+    "set statusline=%f\ -\ Tenant:\ super
 endif
+    
+set statusline=%f\ -\ Tenant:\ %{$TENANT}
 set laststatus=2
-
+map <C-a> :let $TENANT="
 "*******************************+
 " Table description with Shift-K
 "*******************************+

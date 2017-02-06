@@ -466,7 +466,7 @@ REPEAT WITH FRAME Main:
          DO:
             lError = TRUE.
             lcErrorMsg = lcErrorMsg + " IMSI field was incorrect at row "
-                         + STRING(iRow).
+                         + STRING(iRow) + " for tenant " + pcTenant.
             LEAVE readSIMrows.
          END.
 
@@ -501,7 +501,6 @@ REPEAT WITH FRAME Main:
                          + STRING(iRow) + ".".
             LEAVE readSIMrows.            
          END.
-         
          
          IF INDEX(PIN2, " ") > 0 THEN
          DO:   
@@ -559,7 +558,6 @@ REPEAT WITH FRAME Main:
          * any    IMSI WITH this IMSI no.     *
          *************************************/
          tot = tot + 1.
-
          FIND SIM where 
             Sim.Brand = gcBrand AND 
             SIM.ICC   = ICC
