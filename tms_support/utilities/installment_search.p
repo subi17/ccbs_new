@@ -12,21 +12,24 @@ DEF VAR lcNumInst      AS INT NO-UNDO INITIAL 1
 DEF VAR lcContrList    AS CHAR NO-UNDO VIEW-AS SELECTION-LIST 
                        MULTIPLE LIST-ITEM-PAIRS "Item1","Item2" 
                        INNER-CHARS 16 INNER-LINES 4.
-DEF VAR lcFinanceStat1 AS CHAR NO-UNDO.
-DEF VAR lcFinanceStat2 AS CHAR NO-UNDO.
-DEF VAR lcTempString   AS CHAR NO-UNDO.
-DEF VAR ldafromdate1   AS DATE NO-UNDO.
-DEF VAR ldafromdate2   AS DATE NO-UNDO.
-DEF VAR ldatodate1     AS DATE NO-UNDO.
-DEF VAR ldatodate2     AS DATE NO-UNDO.
-DEF VAR ldaTerminate1  AS DATE NO-UNDO.
-DEF VAR ldaTerminate2  AS DATE NO-UNDO.
-DEF VAR llFinalPay1    AS LOG  NO-UNDO.
-DEF VAR llFinalPay2    AS LOG  NO-UNDO.
-DEF VAR lcOutfile      AS CHAR NO-UNDO.
-DEF VAR llfinalpay     AS LOG  NO-UNDO.
-DEF VAR iCnt           AS INT  NO-UNDO. 
-DEF VAR llNext         AS LOG  NO-UNDO.
+DEF VAR lcContrFinanceStat1 AS CHAR NO-UNDO.
+DEF VAR lcContrFinanceStat2 AS CHAR NO-UNDO.
+DEF VAR lcTempString        AS CHAR NO-UNDO.
+DEF VAR ldaContrFromdate1   AS DATE NO-UNDO.
+DEF VAR ldaContrFromdate2   AS DATE NO-UNDO.
+DEF VAR ldaContrTodate1     AS DATE NO-UNDO.
+DEF VAR ldaContrTodate2     AS DATE NO-UNDO.
+DEF VAR ldaContrTerm1       AS DATE NO-UNDO.
+DEF VAR ldaContrTerm2       AS DATE NO-UNDO.
+DEF VAR llContrFinalPay1    AS LOG  NO-UNDO.
+DEF VAR llContrFinalPay2    AS LOG  NO-UNDO.
+DEF VAR lcOutfile           AS CHAR NO-UNDO.
+DEF VAR llfinalpay          AS LOG  NO-UNDO.
+DEF VAR iCnt                AS INT  NO-UNDO. 
+DEF VAR llNext              AS LOG  NO-UNDO.
+DEF VAR lcContract1         AS CHAR NO-UNDO VIEW-AS TEXT.
+DEF VAR lcContract2         AS CHAR NO-UNDO VIEW-AS TEXT.
+
 DEF button run-button  LABEL "RUN".
 DEF button quit-button LABEL "QUIT".
 
@@ -62,17 +65,19 @@ PUT STREAM sout
 
 FORM
    lcNumInst      LABEL "Num of Instalment"
-   lcContrList    LABEL "Contract list"   
-   ldafromdate1   LABEL "Period From"     HELP "From date"  FORMAT "99-99-99"
-   ldafromdate2   LABEL "Period From"     HELP "From date"  FORMAT "99-99-99"
-   ldatodate1     LABEL "Period To"       HELP "To date"    FORMAT "99-99-99"
-   ldatodate2     LABEL "Period To"       HELP "To date"    FORMAT "99-99-99"
-   ldaTerminate1  LABEL "Terminate" HELP "Termination date" FORMAT "99-99-99"
-   ldaTerminate2  LABEL "Terminate" HELP "Termination date" FORMAT "99-99-99"
-   lcFinanceStat1 LABEL "Financed Status" HELP "Financial status" FORMAT "x(8)"
-   lcFinanceStat2 LABEL "Financed Status" HELP "Financial status" FORMAT "x(8)"
-   llFinalPay1    LABEL "Final Pay"       HELP "Is final pay"   FORMAT "yes/no"
-   llFinalPay2    LABEL "Final Pay"       HELP "Is final pay"   FORMAT "yes/no"
+   lcContrList    LABEL "Contract list"  
+   lcContract1    LABEL "Contract1" FORMAT "x(14)"           
+   lcContract2    LABEL "Contract2" FORMAT "x(14)"              
+   ldaContrFromdate1   LABEL "Period From"     HELP "From date"  FORMAT "99-99-99"
+   ldaContrFromdate2   LABEL "Period From"     HELP "From date"  FORMAT "99-99-99"
+   ldaContrTodate1     LABEL "Period To"       HELP "To date"    FORMAT "99-99-99"
+   ldaContrTodate2     LABEL "Period To"       HELP "To date"    FORMAT "99-99-99"
+   ldaContrTerm1  LABEL "Terminate" HELP "Termination date" FORMAT "99-99-99"
+   ldaContrTerm2  LABEL "Terminate" HELP "Termination date" FORMAT "99-99-99"
+   lcContrFinanceStat1 LABEL "Financed Status" HELP "Financial status" FORMAT "x(8)"
+   lcContrFinanceStat2 LABEL "Financed Status" HELP "Financial status" FORMAT "x(8)"
+   llContrFinalPay1    LABEL "Final Pay"       HELP "Is final pay"   FORMAT "yes/no"
+   llContrFinalPay2    LABEL "Final Pay"       HELP "Is final pay"   FORMAT "yes/no"
    run-button     AT COLUMN 32 ROW 13
    quit-button    AT COLUMN 37 ROW 13
    WITH OVERLAY SIDE-LABELS 2 COLUMN ROW 4 
@@ -81,6 +86,7 @@ FORM
    FRAME ffind.
 
 ENABLE ALL WITH FRAME ffind.
+
 RUN p_hide_few.
 
 lcTempString = "".
@@ -107,10 +113,10 @@ DO:
       RUN p_hide_few.      
 END.
 
-ON 'leave':U of lcFinanceStat1
+ON 'leave':U of lcContrFinanceStat1
 DO:
-   IF lcFinanceStat1:SCREEN-VALUE <> "" AND 
-      LOOKUP(lcFinanceStat1:SCREEN-VALUE,lcValidFinStat) = 0 THEN
+   IF lcContrFinanceStat1:SCREEN-VALUE <> "" AND 
+      LOOKUP(lcContrFinanceStat1:SCREEN-VALUE,lcValidFinStat) = 0 THEN
    DO:   
      MESSAGE "Please enter valid financed status"
          VIEW-AS ALERT-BOX INFO BUTTONS OK.
@@ -118,10 +124,10 @@ DO:
    END.
 END.
 
-ON 'leave':U of lcFinanceStat2
+ON 'leave':U of lcContrFinanceStat2
 DO:
-   IF lcFinanceStat2:SCREEN-VALUE <> "" AND 
-      LOOKUP(lcFinanceStat2:SCREEN-VALUE,lcValidFinStat) = 0 THEN
+   IF lcContrFinanceStat2:SCREEN-VALUE <> "" AND 
+      LOOKUP(lcContrFinanceStat2:SCREEN-VALUE,lcValidFinStat) = 0 THEN
    DO:   
      MESSAGE "Please enter valid financed status"
          VIEW-AS ALERT-BOX INFO BUTTONS OK.
@@ -141,27 +147,41 @@ ON 'choose':U OF quit-button
    QUIT.
 
 ON 'leave':U OF lcContrList
-DO:
+DO:      
    IF (lcNumInst:SCREEN-VALUE = "1") THEN
    DO:
-      IF lcContrList:SCREEN-VALUE <> ? AND       
-         NUM-ENTRIES(lcContrList:SCREEN-VALUE) > 1 THEN
-      DO:         
-         MESSAGE "More than one selection not allowed"             
-         VIEW-AS ALERT-BOX INFO BUTTONS OK.
-         RETURN NO-APPLY.      
-      END.
+      IF lcContrList:SCREEN-VALUE <> ? THEN 
+      DO:
+         IF NUM-ENTRIES(lcContrList:SCREEN-VALUE) > 1 THEN
+         DO:         
+            MESSAGE "More than one selection not allowed"             
+            VIEW-AS ALERT-BOX INFO BUTTONS OK.
+            RETURN NO-APPLY.      
+         END.
+         ELSE IF NUM-ENTRIES(lcContrList:SCREEN-VALUE) = 1 THEN
+            ASSIGN lcContract1:SCREEN-VALUE = lcContrList:SCREEN-VALUE.         
+      END.      
+      ELSE
+         ASSIGN lcContract1:SCREEN-VALUE = "".
    END.
    ELSE IF (lcNumInst:SCREEN-VALUE = "2" OR lcNumInst:SCREEN-VALUE = "99") THEN
    DO:
-      IF lcContrList:SCREEN-VALUE <> ? AND 
-         NUM-ENTRIES(lcContrList:SCREEN-VALUE) > 2 THEN
+      IF lcContrList:SCREEN-VALUE <> ? THEN
       DO:      
-         MESSAGE "More than two selection not allowed"
-             VIEW-AS ALERT-BOX INFO BUTTONS OK.
-         RETURN NO-APPLY.
+         IF NUM-ENTRIES(lcContrList:SCREEN-VALUE) > 2 THEN
+         DO:      
+            MESSAGE "More than two selection not allowed"
+            VIEW-AS ALERT-BOX INFO BUTTONS OK.
+            RETURN NO-APPLY.
+         END.
+         ELSE IF NUM-ENTRIES(lcContrList:SCREEN-VALUE) = 2 THEN
+             ASSIGN lcContract1:SCREEN-VALUE = ENTRY(1,lcContrList:SCREEN-VALUE)
+                    lcContract2:SCREEN-VALUE = ENTRY(2,lcContrList:SCREEN-VALUE).      
       END.
-   END.      
+      ELSE 
+         ASSIGN lcContract1:SCREEN-VALUE = ""
+                lcContract2:SCREEN-VALUE = "".                    
+   END.    
 END.
 
 PROCEDURE p_enable_all:
@@ -170,11 +190,12 @@ END PROCEDURE.
 
 PROCEDURE p_hide_few:
    DO WITH FRAM ffind.   
-      HIDE ldafromdate2 
-           ldatodate2
-           ldaTerminate2  
-           lcFinanceStat2
-           llFinalPay2.
+      HIDE lcContract2
+           ldaContrFromdate2 
+           ldaContrTodate2
+           ldaContrTerm2  
+           lcContrFinanceStat2
+           llContrFinalPay2.
    END.
 
 END PROCEDURE.
@@ -254,20 +275,20 @@ PROCEDURE p_out_data_one_inst:
                 DCCli.DCEvent    = lcContrList:SCREEN-VALUE
                 ELSE (DCCli.DCEvent BEGINS "PAYTERM" OR
                       DCCli.DCEvent BEGINS "RVTERM" )) AND
-              (IF DATE(ldafromdate1:SCREEN-VALUE) <> ? THEN
-               DCCli.ValidFrom  >= DATE(ldafromdate1:SCREEN-VALUE)
+              (IF DATE(ldaContrFromdate1:SCREEN-VALUE) <> ? THEN
+               DCCli.ValidFrom  >= DATE(ldaContrFromdate1:SCREEN-VALUE)
                ELSE TRUE) AND
-              (IF DATE(ldaTerminate1:SCREEN-VALUE) <> ? THEN
-                  DCCli.ValidTo = DATE(ldaTerminate1:SCREEN-VALUE)                                  
-               ELSE IF DATE(ldatodate1:SCREEN-VALUE) <> ? THEN
-                  (DCCli.ValidTo <= DATE(ldatodate1:SCREEN-VALUE) AND
+              (IF DATE(ldaContrTerm1:SCREEN-VALUE) <> ? THEN
+                  DCCli.ValidTo = DATE(ldaContrTerm1:SCREEN-VALUE)                                  
+               ELSE IF DATE(ldaContrTodate1:SCREEN-VALUE) <> ? THEN
+                  (DCCli.ValidTo <= DATE(ldaContrTodate1:SCREEN-VALUE) AND
                    DCCli.ValidTo >= TODAY)
-               ELSE IF DATE(ldatodate1:SCREEN-VALUE) = ? THEN
+               ELSE IF DATE(ldaContrTodate1:SCREEN-VALUE) = ? THEN
                   DCCli.ValidTo >= TODAY
                ELSE TRUE 
               ) AND 
-              (IF DATE(ldaTerminate1:SCREEN-VALUE) <> ? THEN
-               DCCli.TermDate   = DATE(ldaTerminate1:SCREEN-VALUE)
+              (IF DATE(ldaContrTerm1:SCREEN-VALUE) <> ? THEN
+               DCCli.TermDate   = DATE(ldaContrTerm1:SCREEN-VALUE)
                ELSE DCCli.TermDate = ?) NO-LOCK:                 
 
          FIND FIRST MobSub WHERE
@@ -279,16 +300,18 @@ PROCEDURE p_out_data_one_inst:
 
          FIND FIRST FixedFee WHERE 
                     FixedFee.Brand     = DCCli.Brand AND
-                    FixedFee.Contract  = STRING(DCCli.PerContractID) AND
-                    FixedFee.CalcObj   = DCCli.DCEvent AND
+                    FixedFee.CustNum   = MobSub.CustNum AND
+                    FixedFee.HostTable = "MOBSUB" AND
+                    FixedFee.Keyvalue  = STRING(DCCli.MsSeq) AND                                        
                     FixedFee.EndPeriod >= YEAR(TODAY) * 100 + MONTH(TODAY) AND
-                   ((IF lcFinanceStat1:SCREEN-VALUE <> "" THEN
-                    FixedFee.FinancedResult = lcFinanceStat1:SCREEN-VALUE
+                    FixedFee.CalcObj   = DCCli.DCEvent AND
+                   ((IF lcContrFinanceStat1:SCREEN-VALUE <> "" THEN
+                    FixedFee.FinancedResult = lcContrFinanceStat1:SCREEN-VALUE
                     ELSE TRUE)) NO-LOCK NO-ERROR.
                     
          IF AVAIL FixedFee THEN
          DO:
-            RUN p_final_pay(llFinalPay1:SCREEN-VALUE,FixedFee.FFnum,OUTPUT llNext, OUTPUT llFinalPay).            
+            RUN p_final_pay(llContrFinalPay1:SCREEN-VALUE,FixedFee.FFnum,OUTPUT llNext, OUTPUT llFinalPay).            
             IF llNext THEN
                NEXT.
    
@@ -313,7 +336,7 @@ PROCEDURE p_out_data_one_inst:
             DO:
                /* This logic is to delete the record if there is 2 active contracts for same msseq
                   This logic doesn't applied to terminated contracts */
-               IF DATE(ldaTerminate1:SCREEN-VALUE) = ? THEN
+               IF DATE(ldaContrTerm1:SCREEN-VALUE) = ? THEN
                DO:               
                   FIND FIRST ttData WHERE 
                              ttData.custnum   = Mobsub.CustNum    AND
@@ -351,51 +374,54 @@ PROCEDURE p_out_data_two_inst:
                DCCli.DCEvent    = ENTRY(1,lcContrList:SCREEN-VALUE) 
                ELSE (DCCli.DCEvent BEGINS "PAYTERM" OR
                      DCCli.DCEvent BEGINS "RVTERM" )) AND
-              (IF DATE(ldafromdate1:SCREEN-VALUE) <> ? THEN
-               DCCli.ValidFrom >= DATE(ldafromdate1:SCREEN-VALUE)
+              (IF DATE(ldaContrFromdate1:SCREEN-VALUE) <> ? THEN
+               DCCli.ValidFrom >= DATE(ldaContrFromdate1:SCREEN-VALUE)
                ELSE TRUE) AND
-              (IF DATE(ldaTerminate1:SCREEN-VALUE) <> ? THEN
-                  DCCli.ValidTo = DATE(ldaTerminate1:SCREEN-VALUE)                                  
-               ELSE IF DATE(ldatodate1:SCREEN-VALUE) <> ? THEN
-                  (DCCli.ValidTo <= DATE(ldatodate1:SCREEN-VALUE) AND
+              (IF DATE(ldaContrTerm1:SCREEN-VALUE) <> ? THEN
+                  DCCli.ValidTo = DATE(ldaContrTerm1:SCREEN-VALUE)                                  
+               ELSE IF DATE(ldaContrTodate1:SCREEN-VALUE) <> ? THEN
+                  (DCCli.ValidTo <= DATE(ldaContrTodate1:SCREEN-VALUE) AND
                    DCCli.ValidTo >= TODAY)
-               ELSE IF DATE(ldatodate1:SCREEN-VALUE) = ? THEN
+               ELSE IF DATE(ldaContrTodate1:SCREEN-VALUE) = ? THEN
                   DCCli.ValidTo >= TODAY
                ELSE TRUE 
               ) AND 
-              (IF DATE(ldaTerminate1:SCREEN-VALUE) <> ? THEN
-               DCCli.TermDate   = DATE(ldaTerminate1:SCREEN-VALUE)
-               ELSE DCCli.TermDate = ?) NO-LOCK:         
+              (IF DATE(ldaContrTerm1:SCREEN-VALUE) <> ? THEN
+               DCCli.TermDate   = DATE(ldaContrTerm1:SCREEN-VALUE)
+               ELSE DCCli.TermDate = ?) NO-LOCK:               
          
          FIND FIRST MobSub WHERE
                     MobSub.Brand = DCCli.Brand AND
                     Mobsub.MsSeq = DCCli.MsSeq NO-LOCK NO-ERROR.
 
          IF NOT AVAIL MobSub THEN
-            NEXT.
-
+            NEXT.         
+         
          FIND FIRST FixedFee WHERE 
-                    FixedFee.Brand = DCCli.Brand AND
-                    FixedFee.Contract = STRING(DCCli.PerContractID) AND
-                    FixedFee.CalcObj  = DCCli.DCEvent AND
+                    FixedFee.Brand     = DCCli.Brand AND
+                    FixedFee.CustNum   = MobSub.CustNum AND
+                    FixedFee.HostTable = "MOBSUB" AND
+                    FixedFee.Keyvalue  = STRING(DCCli.MsSeq) AND                                        
                     FixedFee.EndPeriod >= YEAR(TODAY) * 100 + MONTH(TODAY) AND
-                   ((IF lcFinanceStat1:SCREEN-VALUE <> "" THEN
-                    FixedFee.FinancedResult = lcFinanceStat1:SCREEN-VALUE
+                    FixedFee.CalcObj   = DCCli.DCEvent AND
+                   ((IF lcContrFinanceStat1:SCREEN-VALUE <> "" THEN
+                    FixedFee.FinancedResult = lcContrFinanceStat1:SCREEN-VALUE
                     ELSE TRUE)) NO-LOCK NO-ERROR.
                     
          IF AVAIL FixedFee THEN
-         DO:
+         DO:             
             /* If customer is paying the last payment in the current month */
-            RUN p_final_pay(llFinalPay1:SCREEN-VALUE,FixedFee.FFnum,OUTPUT llNext, OUTPUT llFinalPay).
+            RUN p_final_pay(llContrFinalPay1:SCREEN-VALUE,FixedFee.FFnum,OUTPUT llNext, OUTPUT llFinalPay).
+            
             IF llNext THEN
                NEXT.
-
+            
             IF NOT CAN-FIND(FIRST ttData WHERE 
                                   ttData.custnum   = Mobsub.CustNum    AND
                                   ttData.cli       = Mobsub.Cli        AND
                                   ttData.msseq     = Mobsub.MsSeq      AND
                                   ttData.dcevent   = DCCli.DCEvent) THEN
-            DO:            
+            DO:                           
                CREATE ttData.
                ASSIGN ttData.custnum   = Mobsub.CustNum
                       ttData.cli       = Mobsub.Cli
@@ -422,20 +448,20 @@ PROCEDURE p_out_data_two_inst:
                      ELSE (DCCli.DCEvent BEGINS "PAYTERM" OR
                            DCCli.DCEvent BEGINS "RVTERM" )) AND
                      DCCLi.MsSeq = bfttData.msseq AND
-                    (IF DATE(ldafromdate2:SCREEN-VALUE) <> ? THEN
-                     DCCli.ValidFrom  >= DATE(ldafromdate2:SCREEN-VALUE)
+                    (IF DATE(ldaContrFromdate2:SCREEN-VALUE) <> ? THEN
+                     DCCli.ValidFrom  >= DATE(ldaContrFromdate2:SCREEN-VALUE)
                      ELSE TRUE) AND
-                    (IF DATE(ldaTerminate2:SCREEN-VALUE) <> ? THEN
-                        DCCli.ValidTo = DATE(ldaTerminate2:SCREEN-VALUE)                                  
-                     ELSE IF DATE(ldatodate2:SCREEN-VALUE) <> ? THEN
-                        (DCCli.ValidTo <= DATE(ldatodate2:SCREEN-VALUE) AND
+                    (IF DATE(ldaContrTerm2:SCREEN-VALUE) <> ? THEN
+                        DCCli.ValidTo = DATE(ldaContrTerm2:SCREEN-VALUE)                                  
+                     ELSE IF DATE(ldaContrTodate2:SCREEN-VALUE) <> ? THEN
+                        (DCCli.ValidTo <= DATE(ldaContrTodate2:SCREEN-VALUE) AND
                          DCCli.ValidTo >= TODAY)
-                     ELSE IF DATE(ldatodate2:SCREEN-VALUE) = ? THEN
+                     ELSE IF DATE(ldaContrTodate2:SCREEN-VALUE) = ? THEN
                         DCCli.ValidTo >= TODAY
                      ELSE TRUE 
                     ) AND 
-                    (IF DATE(ldaTerminate2:SCREEN-VALUE) <> ? THEN
-                     DCCli.TermDate   = DATE(ldaTerminate2:SCREEN-VALUE)
+                    (IF DATE(ldaContrTerm2:SCREEN-VALUE) <> ? THEN
+                     DCCli.TermDate   = DATE(ldaContrTerm2:SCREEN-VALUE)
                      ELSE DCCli.TermDate = ?) NO-LOCK:
         
                FIND FIRST MobSub WHERE
@@ -446,17 +472,19 @@ PROCEDURE p_out_data_two_inst:
                   NEXT.
         
                FIND FIRST FixedFee WHERE 
-                          FixedFee.Brand = DCCli.Brand AND
-                          FixedFee.Contract = STRING(DCCli.PerContractID) AND
-                          FixedFee.CalcObj  = DCCli.DCEvent AND
-                          FixedFee.EndPeriod >= YEAR(TODAY) * 100 + MONTH(TODAY) AND
-                         ((IF lcFinanceStat2:SCREEN-VALUE <> "" THEN
-                          FixedFee.FinancedResult = lcFinanceStat2:SCREEN-VALUE
-                          ELSE TRUE)) NO-LOCK NO-ERROR.
+                    FixedFee.Brand     = DCCli.Brand AND
+                    FixedFee.CustNum   = MobSub.CustNum AND
+                    FixedFee.HostTable = "MOBSUB" AND
+                    FixedFee.Keyvalue  = STRING(DCCli.MsSeq) AND                                        
+                    FixedFee.EndPeriod >= YEAR(TODAY) * 100 + MONTH(TODAY) AND
+                    FixedFee.CalcObj   = DCCli.DCEvent AND
+                    ((IF lcContrFinanceStat2:SCREEN-VALUE <> "" THEN
+                    FixedFee.FinancedResult = lcContrFinanceStat2:SCREEN-VALUE
+                    ELSE TRUE)) NO-LOCK NO-ERROR.
                           
                IF AVAIL FixedFee THEN
                DO:
-                  RUN p_final_pay(llFinalPay2:SCREEN-VALUE,FixedFee.FFnum,OUTPUT llNext, OUTPUT llFinalPay).
+                  RUN p_final_pay(llContrFinalPay2:SCREEN-VALUE,FixedFee.FFnum,OUTPUT llNext, OUTPUT llFinalPay).
                   IF llNext THEN
                      NEXT.
 
