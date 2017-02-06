@@ -15,7 +15,7 @@
 {Func/log.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
-{xmlrpc/xmlrpc_client.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
 
 gcBrand = "1".
 

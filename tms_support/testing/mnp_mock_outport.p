@@ -13,7 +13,7 @@ ASSIGN
    katun = "Qvantel"
       gcBrand = "1".
 {Func/cparam2.i}
-{xmlrpc/xmlrpc_client.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 

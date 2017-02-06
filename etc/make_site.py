@@ -11,8 +11,6 @@ import sys
 import socket
 from glob import glob
 
-assert os.path.exists(relpath + '/.usepike'), 'pike is disabled'
-
 assert sys.version_info[:3] >= (2,6,0), 'Python version too old. Need >= 2.6'
 
 def versiontuple(v):
@@ -53,11 +51,10 @@ if not os.path.exists(relpath + '/etc/site.py'):
             service_suffix = sys.stdin.readline().strip()
         if not service_suffix: break
 
-    environment = 'development'
-#    if os.path.exists(relpath + '/.DeployMakefile.py'):
-#        environment = 'development'
-#    else:
-#        environment = 'production'
+    if os.path.exists(relpath + '/.DeployMakefile.py'):
+        environment = 'development'
+    else:
+        environment = 'production'
 
     fd = open(relpath + '/etc/site.py', 'w')
     fd.write('# Host specific configuration (not under RC)\n')

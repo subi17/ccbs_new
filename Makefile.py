@@ -17,14 +17,13 @@ def get_distribution_name():
         return '%s-%s' % (appname, appversion)
 
 
+
 from pike import *
 import sys
 import os
 import tempfile
 import shutil
 from socket import getservbyname
-
-assert os.path.exists('.usepike'), 'pike is disabled'
 
 def versiontuple(v):
     filled = []
