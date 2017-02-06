@@ -2366,9 +2366,11 @@ IF plSendOffer AND NOT llROIClose THEN DO:
 
    lcOfferSMSText = fGetOrderOfferSMS(Order.OrderID, 
                                       TRUE).
-
-   IF lcMobileNumber NE "" AND 
-      lcOfferSMSText NE "" AND lcOfferSMSText NE ? THEN
+   
+   
+   IF Order.Orderchannel NE "migration" AND
+      (lcMobileNumber NE "" AND       
+      lcOfferSMSText NE "" AND lcOfferSMSText NE ?) THEN
       fCreateSMS(Order.CustNum,
                  lcMobileNumber,
                  Order.MsSeq, 
