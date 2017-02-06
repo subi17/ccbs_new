@@ -1,7 +1,8 @@
 /**
  * Adding a single memo.
  *
- * @input   reference;string;mandatory;key of table referenced by type
+ * @input   brand;string;mandatory;Brand to add memo
+            reference;string;mandatory;key of table referenced by type
             type;string;mandatory;type of the memo (mobsub, service, customer or invoice)
             custnum;int;mandatory;customer number if any
             creator;string;mandatory;id of logged in user
@@ -13,7 +14,7 @@
 
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1} 
 
-{timestamp.i}
+{Func/timestamp.i}
 
 /* Input parameters */
 DEF VAR pcTenant    AS CHAR NO-UNDO.

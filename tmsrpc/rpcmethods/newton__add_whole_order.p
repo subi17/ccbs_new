@@ -9,7 +9,8 @@
             contact_data;struct;optional
             fusion_data;struct;optional
             q25_data;struct;optional
- * @order_data salesman;string;optional;id of the seller
+ * @order_data brand;string;mandatory;brand to store order
+               salesman;string;optional;id of the seller
                reseller;string;mandatory;reseller id
                channel;string;mandatory;controller name
                orderer_ip;string;mandatory;IP that submits the order
@@ -219,29 +220,29 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{date.i}
-{orderchk.i}
-{order.i}
-{tmsconst.i}
-{fbundle.i}
-{mnpoutchk.i}
-{create_eventlog.i}
-{fmakemsreq.i}
-{main_add_lines.i}
-{msisdn.i}
-{forderstamp.i}
-{email.i}
-{ftransdir.i}
+{Func/date.i}
+{Func/orderchk.i}
+{Func/order.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
+{Mnp/mnpoutchk.i}
+{Func/create_eventlog.i}
+{Func/fmakemsreq.i}
+{Func/main_add_lines.i}
+{Func/msisdn.i}
+{Func/forderstamp.i}
+{Func/email.i}
+{Func/ftransdir.i}
 
-{cparam2.i}
+{Func/cparam2.i}
 /*{utumaa.i new }
 {edefine.i new}*/
-{order_data.i}
-{smsmessage.i}
-{orderfusion.i}
+{Func/order_data.i}
+{Func/smsmessage.i}
+{Mc/orderfusion.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
@@ -422,7 +423,7 @@ DEF BUFFER lbMobSub FOR MobSub.
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
    
-   pcTenant   = get_string(pcOrderStruct, "tenant").
+   pcTenant   = get_string(pcOrderStruct, "brand").
    
    IF LOOKUP("salesman", lcOrderStruct) GT 0 THEN
        pcSalesman = get_string(pcOrderStruct, "salesman").
@@ -1196,7 +1197,7 @@ END.
 
 /* Input variables for address data */
 
-gcOrderStructFields = "tenant!," +
+gcOrderStructFields = "brand!," +
                       "billing_data," +
                       "campaign_code," +
                       "channel!," +

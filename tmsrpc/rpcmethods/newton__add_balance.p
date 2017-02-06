@@ -1,19 +1,20 @@
 /**
  * Change balance according to MSISDN.
  *
- * @input  msisdn;string;mandatory;user msisdn
+ * @input  brand;string;mandatory;brand to search msisdn
+           msisdn;string;mandatory;user msisdn
            balance;double;mandatory;balance amount
            balance_type;string;mandatory;balance type (Default=TOP)
  * @output status;int;Change status (0=failure, 1=Success)
  */
 
 {xmlrpc/xmlrpc_access.i}
-{tmsparam4.i}
-{commpaa.i}
+{Func/tmsparam4.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
-{provmaint.i}
-{timestamp.i}
+{Mc/provmaint.i}
+{Func/timestamp.i}
 
 DEF VAR pcTenant  AS CHAR NO-UNDO.
 DEF VAR pcMsisdn  AS CHAR NO-UNDO.

@@ -1,7 +1,8 @@
 /**
  * Check if customer exists and return possible customer data.
  *
- * @input   person_id;string;mandatory;
+ * @input   brand;string;mandatory;brand to search for customer
+            person_id;string;mandatory;
             id_type;string;mandatory;
  *          
  * @output  false;boolean;if customer not exists
@@ -38,8 +39,8 @@
 
 {xmlrpc/xmlrpc_access.i}
 DEF VAR gcBrand   AS CHAR NO-UNDO INIT "1".
-{fcustdata.i}
-{tmsconst.i}
+{Func/fcustdata.i}
+{Syst/tmsconst.i}
 
 /* Input parameters */
 DEF VAR pcTenant       AS CHAR NO-UNDO.
