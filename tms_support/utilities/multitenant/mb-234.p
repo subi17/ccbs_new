@@ -9,10 +9,10 @@ NO-ERROR.
 IF NOT AVAIL Region THEN DO:
    for each Region  
       tenant-where buffer-tenant-name(region) = "default":
-      SET-EFFECTIVE-TENANT ("tmasmovil", "common").
       IF lgSimulate THEN
          DISP Region.
       ELSE DO:
+         SET-EFFECTIVE-TENANT ("tmasmovil", "common").
          CREATE bRegion.
          BUFFER-COPY Region to bRegion.
          bregion.taxzone = STRING(INT(bregion.taxzone) + 4).      
@@ -37,7 +37,7 @@ IF NOT AVAIL Region THEN DO:
       IF lgSimulate THEN
          DISP InvGroup.
       ELSE DO:
-         SET-EFFECTIVE-TENANT ("tmasmovil", "common").
+         /*SET-EFFECTIVE-TENANT ("tmasmovil", "common").*/
          CREATE bInvGroup.
          BUFFER-COPY InvGroup TO bInvGroup.
          bInvGroup.taxzone = STRING(INT(bInvGroup.taxzone) + 4).
