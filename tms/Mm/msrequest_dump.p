@@ -32,9 +32,15 @@ DEF VAR lhField      AS HANDLE   NO-UNDO.
 DEF VAR lcField      AS CHAR     NO-UNDO. 
 DEF VAR ldFromStamp  AS DEC      NO-UNDO.
 DEF VAR ldtLastDump  AS DATETIME NO-UNDO.
+DEF VAR llAddToTT    AS LOG      NO-UNDO.
 
 DEF TEMP-TABLE ttStatus NO-UNDO
    FIELD ReqStatus AS INT.
+
+DEF TEMP-TABLE ttReqlist NO-UNDO
+   FIELD MsRequest   AS INT
+   FIELD UpdateStamp AS DEC
+   INDEX MsRequest MsRequest.
 
 DEF STREAM sFile.
 
@@ -103,95 +109,133 @@ PROCEDURE pInitialize:
 
 END PROCEDURE.
 
+PROCEDURE pDumpToFile:
+
+   IF CAN-FIND(FIRST ttReqlist WHERE 
+                     ttReqlist.MsRequest   EQ MsRequest.MsRequest AND
+                     ttReqlist.UpdateStamp EQ MsRequest.UpdateStamp) THEN RETURN.
+
+   IF llAddToTT THEN DO:
+      CREATE ttReqlist.
+      ASSIGN
+         ttReqlist.MsRequest   = MsRequest.MsRequest
+         ttReqlist.UpdateStamp = MsRequest.UpdateStamp.
+   END.
+
+   IF icDumpMode = "modified" THEN DO:
+      IF NOT fWasRecordModified(lhTable,
+                                icEventSource,
+                                icEventFields,
+                                idLastDump,
+                                ldaModified,
+                                ldtLastDump,
+                                "")
+      THEN RETURN.
+   END.
+
+   DO liCnt = 1 TO NUM-ENTRIES(lcDumpFields):
+
+      ASSIGN
+         lcField = ENTRY(liCnt,lcDumpFields)
+         lcValue = "".
+   
+      IF lcField BEGINS "#" THEN DO:
+         CASE lcField:
+         WHEN "#Memo" THEN DO:
+            FOR EACH Memo NO-LOCK WHERE
+                     Memo.Brand = gcBrand AND
+                     Memo.HostTable = "MsRequest" AND
+                     Memo.KeyValue  = STRING(MsRequest.MsRequest)
+            BY Memo.CreStamp:
+               lcValue = lcValue + (IF lcValue > "" THEN "  " ELSE "") +
+                         Memo.MemoText.
+            END.             
+            /* YOT-2952 */
+            lcValue = REPLACE(lcValue,CHR(10)," "). 
+         END.
+         END CASE.
+      END.
+   
+      ELSE DO:
+
+         lhField = lhTable:BUFFER-FIELD(lcField).
+   
+         IF lhField:DATA-TYPE = "DECIMAL" THEN DO:
+            IF (INDEX(lhField:NAME,"stamp") > 0 OR 
+                lhField:NAME = "ReqDParam1") AND
+               lhField:BUFFER-VALUE >= 0 
+            THEN lcValue = STRING(lhField:BUFFER-VALUE,"99999999.99999").
+            ELSE lcValue = TRIM(STRING(lhField:BUFFER-VALUE,
+                                "->>>,>>>,>>9.9<")).
+         END.       
+         ELSE lcValue = lhField:BUFFER-VALUE.
+
+         /* YOT-2952 */
+         IF lhField:DATA-TYPE EQ "CHARACTER" THEN lcValue = REPLACE(lcValue,CHR(10)," ").
+      END.
+      
+      PUT STREAM sFile UNFORMATTED
+         lcValue.
+   
+      IF liCnt < NUM-ENTRIES(lcDumpFields) THEN 
+         PUT STREAM sFile UNFORMATTED
+            lcDelimiter.
+   END.
+
+   PUT STREAM sFile UNFORMATTED
+      SKIP.
+
+   oiEvents = oiEvents + 1.
+
+   IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
+      PAUSE 0. 
+      DISP oiEvents LABEL "Requests" 
+      WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
+         TITLE " Collecting " FRAME fQty.
+   END.
+    
+END PROCEDURE.
+
 PROCEDURE pDumpRequests:
 
    MsRequestLoop:
-   FOR EACH ttStatus,
-       EACH MsRequest NO-LOCK USE-INDEX ReqStatus WHERE
-            MsRequest.Brand     = gcBrand AND
-            MsRequest.ReqStatus = ttStatus.ReqStatus AND
-            MsRequest.ActStamp >= ldFromStamp
-      ON QUIT UNDO, RETRY
-      ON STOP UNDO, RETRY:
+   FOR EACH ttStatus NO-LOCK:
+      /* YOT-4874 Add to dump also old requests where new updatestamp */
+      llAddToTT = TRUE.
+      FOR EACH MsRequest NO-LOCK USE-INDEX UpdateStamp WHERE
+               MsRequest.Brand     = gcBrand AND
+               MsRequest.ReqStatus = ttStatus.ReqStatus AND
+               MsRequest.UpdateStamp >= idLastDump AND
+               MsRequest.ActStamp < ldFromStamp
+         ON QUIT UNDO, RETRY
+         ON STOP UNDO, RETRY:
 
-      IF RETRY THEN DO:
-         olInterrupted = TRUE.
-         LEAVE.
-      END.
-
-      IF icDumpMode = "modified" THEN DO:
-         IF NOT fWasRecordModified(lhTable,
-                                   icEventSource,
-                                   icEventFields,
-                                   idLastDump,
-                                   ldaModified,
-                                   ldtLastDump,
-                                   "")
-         THEN NEXT MsRequestLoop.
-      END.      
-      
-      DO liCnt = 1 TO NUM-ENTRIES(lcDumpFields):
-
-         ASSIGN
-            lcField = ENTRY(liCnt,lcDumpFields)
-            lcValue = "".
-      
-         IF lcField BEGINS "#" THEN DO:
-            CASE lcField:
-            WHEN "#Memo" THEN DO:
-               FOR EACH Memo NO-LOCK WHERE
-                        Memo.Brand = gcBrand AND
-                        Memo.HostTable = "MsRequest" AND
-                        Memo.KeyValue  = STRING(MsRequest.MsRequest)
-               BY Memo.CreStamp:
-                  lcValue = lcValue + (IF lcValue > "" THEN "  " ELSE "") +
-                            Memo.MemoText.
-               END.             
-               /* YOT-2952 */
-               lcValue = REPLACE(lcValue,CHR(10)," "). 
-            END.
-            END CASE.
-         END.
-      
-         ELSE DO:
-
-            lhField = lhTable:BUFFER-FIELD(lcField).
-      
-            IF lhField:DATA-TYPE = "DECIMAL" THEN DO:
-               IF (INDEX(lhField:NAME,"stamp") > 0 OR 
-                   lhField:NAME = "ReqDParam1") AND
-                  lhField:BUFFER-VALUE >= 0 
-               THEN lcValue = STRING(lhField:BUFFER-VALUE,"99999999.99999").
-               ELSE lcValue = TRIM(STRING(lhField:BUFFER-VALUE,
-                                   "->>>,>>>,>>9.9<")).
-            END.       
-            ELSE lcValue = lhField:BUFFER-VALUE.
-
-            /* YOT-2952 */
-            IF lhField:DATA-TYPE EQ "CHARACTER" THEN lcValue = REPLACE(lcValue,CHR(10)," ").
+         IF RETRY THEN DO:
+            olInterrupted = TRUE.
+            LEAVE.
          END.
          
-         PUT STREAM sFile UNFORMATTED
-            lcValue.
-      
-         IF liCnt < NUM-ENTRIES(lcDumpFields) THEN 
-            PUT STREAM sFile UNFORMATTED
-               lcDelimiter.
+         RUN pDumpToFile.
+       
       END.
- 
-      PUT STREAM sFile UNFORMATTED
-         SKIP.
-   
-      oiEvents = oiEvents + 1.
 
-      IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
-         PAUSE 0. 
-         DISP oiEvents LABEL "Requests" 
-         WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
-            TITLE " Collecting " FRAME fQty.
+      llAddToTT = FALSE.
+      FOR EACH MsRequest NO-LOCK USE-INDEX ReqStatus WHERE
+               MsRequest.Brand     = gcBrand AND
+               MsRequest.ReqStatus = ttStatus.ReqStatus AND
+               MsRequest.ActStamp >= ldFromStamp
+         ON QUIT UNDO, RETRY
+         ON STOP UNDO, RETRY:
+
+         IF RETRY THEN DO:
+            olInterrupted = TRUE.
+            LEAVE.
+         END.
+         
+         RUN pDumpToFile.
+       
       END.
-    
-   END.                       
+   END.
 
    IF NOT SESSION:BATCH THEN 
       HIDE FRAME fQty NO-PAUSE.
