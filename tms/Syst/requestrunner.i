@@ -2,6 +2,7 @@
 */
 
 {Syst/commali.i}
+{Func/MultiTenant.i}
 
 /* process requests */
 PROCEDURE pRunRequest:
@@ -36,13 +37,15 @@ PROCEDURE pRunRequest:
             MsRequest.ReqType   = iiReqType AND     
             MsRequest.ReqStatus = iiReqStat AND   
             MsRequest.ActStamp <= idActTime /* scheduled or immediate */
+   TENANT-WHERE buffer-tenant-name(order) = "default" or 
+                buffer-tenant-name(order) = "tmasmovil"
    BY MsRequest.ActStamp
    BY MsRequest.MsRequest:
 
       /* there is a possibility that another process has just started
          handling this same request */
       IF MsRequest.ReqStatus NE iiReqStat THEN NEXT. 
-      
+      fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(MsRequest)).      
       RUN VALUE(icProgram) (MsRequest.MsRequest).
       
       IF MsRequest.ReqType = 65 THEN DO:
@@ -71,12 +74,14 @@ PROCEDURE pRunRequest:
    /* handle single event */
    ELSE 
    FOR FIRST MsRequest NO-LOCK WHERE
-             MsRequest.MsRequest = iiRequestID:
+             MsRequest.MsRequest = iiRequestID 
+   TENANT-WHERE buffer-tenant-name(order) = "default" or
+                buffer-tenant-name(order) = "tmasmovil":
              
       IF MsRequest.ReqType NE iiReqType OR
          MsRequest.ReqStat NE iiReqStat
       THEN RETURN "ERROR: conflict in request data".
-      
+      fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(MsRequest)).   
       RUN VALUE(icProgram) (MsRequest.MsRequest).
       
       IF MsRequest.ReqStatus > 1 THEN oiHandled = oiHandled + 1.
@@ -87,4 +92,3 @@ PROCEDURE pRunRequest:
    katun = lcTMSUser.
    
 END PROCEDURE.
-
