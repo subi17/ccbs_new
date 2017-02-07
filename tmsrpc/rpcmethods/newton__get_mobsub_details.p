@@ -54,8 +54,8 @@
                 per_contract_id;int;unique contract id 
  */
 {xmlrpc/xmlrpc_access.i}
-{get_memos.i}
-{msisdn_prefix.i}
+{rpcmethods/get_memos.i}
+{Func/msisdn_prefix.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -107,16 +107,16 @@ FIND FIRST MsOwner NO-LOCK USE-INDEX MsSeq WHERE
 IF NOT AVAILABLE MsOwner THEN
    RETURN appl_err(SUBST("MsOwner entry &1 not found", piMsSeq)).
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
-{tmsconst.i}
-{flimitreq.i}
-{fcustpl.i}
-{timestamp.i}
-{fixedfee.i}
-{fctchange.i}
-{mnpoutchk.i}
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
+{Func/fcustpl.i}
+{Func/timestamp.i}
+{Func/fixedfee.i}
+{Func/fctchange.i}
+{Mnp/mnpoutchk.i}
 
 FIND FIRST Segmentation NO-LOCK WHERE
            Segmentation.MsSeq = piMsSeq NO-ERROR.

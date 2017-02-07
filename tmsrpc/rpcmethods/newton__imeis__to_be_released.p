@@ -8,7 +8,7 @@
     imei;string;
 */
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".
 
 DEFINE VARIABLE lcArray AS CHARACTER NO-UNDO. 

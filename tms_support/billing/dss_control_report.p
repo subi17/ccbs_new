@@ -7,12 +7,12 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun   = "Qvantel".
-{cparam2.i}
-{timestamp.i}
-{dss_bundle_first_month_fee.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Mm/dss_bundle_first_month_fee.i}
 
 DEF VAR ldPeriodFrom    AS DEC  NO-UNDO.
 DEF VAR ldPeriodTo      AS DEC  NO-UNDO.

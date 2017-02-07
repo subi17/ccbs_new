@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 
 /* ONLINE -> VIP */
 find msisdn where

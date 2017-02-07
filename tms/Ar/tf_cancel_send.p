@@ -8,13 +8,13 @@
                   11.12.2015 Modified program work as a part of automated process
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commali.i}
-{cparam2.i}
-{date.i}
-{tmsconst.i}
-{eventlog.i}
-{ftransdir.i}
-{msreqfunc.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Syst/eventlog.i}
+{Func/ftransdir.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 

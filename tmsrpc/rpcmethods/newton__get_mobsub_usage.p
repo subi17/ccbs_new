@@ -30,16 +30,16 @@
 
  */
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{callquery.i}
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
+{Func/callquery.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 {Mm/active_bundle.i}
-{upsellbundle.i}
-{tarj6.i}
-{istc.i}
+{Func/upsellbundle.i}
+{Func/tarj6.i}
+{Func/istc.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.

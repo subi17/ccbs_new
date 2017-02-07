@@ -6,8 +6,8 @@
   CREATED ......: 14.12.09
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{fcreatereq.i}
-{tmsconst.i}
+{Func/fcreatereq.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER bInvoiceDup FOR Invoice.
 

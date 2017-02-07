@@ -9,14 +9,14 @@
   ----------------------------------------------------------------------*/
 
 /* ***************************  Definitions  ************************** */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{cparam2.i}
-{eventlog.i}
-{ftransdir.i}
-{tariffconfig.i}
-{tariffcons.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/ftransdir.i}
+{tms_support/2016/convergent/tariffconfig.i}
+{tms_support/2016/convergent/tariffcons.i}
 
 DEFINE BUFFER bCTServPac  FOR CTServPac.
 DEFINE BUFFER bCTServEl   FOR CTServEl.

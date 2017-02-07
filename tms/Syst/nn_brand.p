@@ -5,7 +5,7 @@
   AUTHOR .......: PT / KL
   CREATED ......: 19.05.98
   MODIFIED .....: 11.08.98 pt  INFO mode
-                  19.08.98 pt  run nninfo when in info mode
+                  19.08.98 pt  RUN Syst/nninfo.p when in info mode
                   04.02.99 kl  common version
                   28.04.99 pt  user rights are checked
                   16.06.99 pt  TmsUser.StartMenu -> default start menu
@@ -19,9 +19,9 @@
   VERSION ......: M15
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsparam2.i}
-{lib/tokenlib.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Mc/lib/tokenlib.i}
 
 def new shared var siirto as char.
 def new shared var order as int.
@@ -118,7 +118,7 @@ f_level = s_level.
 
 
 pause 0.
-cfc = "sel". run ufcolor. pcolor = ctc. pclear = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. pcolor = ctc. pclear = cfc.
 view frame menu_frame.
 
 mlevel = 1.
@@ -223,7 +223,7 @@ f_code:
       pause 0.
       IF ergo-kbd THEN display f_id with frame f_code-ERGO.
                   ELSE display f_id with frame f_code.
-      ehto = 3. run ufkey.
+      ehto = 3. RUN Syst/ufkey.p.
       info = false. 
 ACTION: repeat:
          readkey. nap = keylabel(lastkey).
@@ -256,7 +256,7 @@ ACTION: repeat:
          if toimi < 8 then do:
 
             hide message no-pause.
-            run nninfo(f_id[toimi]).
+            RUN Syst/nninfo.p(f_id[toimi]).
             hide frame info  no-pause.
          end.
          info = false.
@@ -269,7 +269,7 @@ ACTION: repeat:
          assign f_code = nap firstc = true.
          pause 0 no-message.
          assign ufk = 0  ufk[1] = 35 ufk[2] = 717 ufk[8] = 8
-         ehto = 3. run ufkey.
+         ehto = 3. RUN Syst/ufkey.p.
          update f_code with frame f_code_search editing:
 
             if firstc then do:
@@ -288,7 +288,7 @@ ACTION: repeat:
             order = lookup(nap,"f1,f2").
             if order > 0 then do:
                assign siirto = input f_code.
-               run utose.p.
+               RUN Syst/utose.p.
                if siirto = "" then next.
 
                disp siirto @ f_code with frame f_code_search.

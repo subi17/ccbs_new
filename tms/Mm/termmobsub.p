@@ -7,7 +7,7 @@
   CHANGED ......: 21.05.02/tk  Event logging added
                   28.02.03 tk  tokens
                   08.02.06/aam periodical contract 
-                  12.12.06/mvi new param to run msrequest (reqstat = ?)
+                  12.12.06/mvi new param to RUN Mm/msrequest.p (reqstat = ?)
                   20.03.07 kl  yoigo version
                   18.07.07 kl  termmobsubfind
                   31.10.07 jp  new parameter for msrequest
@@ -18,40 +18,40 @@
 DEFINE INPUT PARAMETER iiCustNum AS INT  NO-UNDO.
 DEFINE INPUT PARAMETER icType   AS CHAR NO-UNDO.
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Customer'}
-{func.i}
-{timestamp.i}
-{msisdn.i}
-{errors.i}
-{fcustbal.i}
-{eventval.i}
-{cparam2.i}
-{mobsub1.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Customer'}
+{Func/func.p}
+{Func/timestamp.i}
+{Func/msisdn.i}
+{Mf/errors.i}
+{Func/fcustbal.i}
+{Syst/eventval.i}
+{Func/cparam2.i}
+{Mm/mobsub1.i}
 
-{ffeecont.i}
-{fsubser.i}
-{fctserval.i}
+{Func/ffeecont.i}
+{Func/fsubser.i}
+{Func/fctserval.i}
 
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTermMobsub AS HANDLE NO-UNDO.
    lhTermMobsub = BUFFER TermMobsub:HANDLE.
    RUN StarEventInitialize(lhTermMobsub).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhTermMobsub).
+      RUN Mc/eventview2.p(lhTermMobsub).
    END.
 
 END.
 
-DEF VAR TermMobsub    LIKE TermMobsub.CLI       NO-UNDO.
-DEF VAR CustNum       LIKE Customer.Custnum     NO-UNDO.
+DEF VAR TermMobsub        LIKE TermMobsub.CLI           NO-UNDO.
+DEF VAR CustNum       LIKE Customer.Custnum       NO-UNDO.
 DEF VAR xrecid        AS RECID                           init ?.
 DEF VAR FIRSTrow      AS INT                    NO-UNDO  init 0.
 DEF VAR FrmRow        AS INT                    NO-UNDO  init 1.
@@ -74,7 +74,7 @@ DEF VAR llMemo        AS LOG                    NO-UNDO.
 DEF VAR lcOutport     AS CHAR                   NO-UNDO.
 DEF VAR lcCli         AS CHAR                   NO-UNDO FORMAT "X(12)" .
 DEF VAR lcFirstname   LIKE Customer.FIRSTName   NO-UNDO.
-DEF VAR lcLastName    LIKE Customer.Custname    NO-UNDO.
+DEF VAR lcLastName    LIKE Customer.Custname   NO-UNDO.
 DEF VAR liCustNum     LIKe Customer.CustNum     NO-UNDO.
 DEF VAR liAgrCustNum  LIKE Customer.CustNum     NO-UNDO.
 DEF VAR lcPersonID    LIKE Customer.Orgid       No-UNDO.
@@ -85,8 +85,6 @@ DEF VAR liSaldotype   AS INT                    NO-UNDO.
 DEF VAR killed        AS LOG                    NO-UNDO.
 DEF VAR lcICC         LIKE SIM.ICc              NO-UNDO.
 DEF VAR lcDCEvent     AS CHAR                   NO-UNDO. 
-DEF VAR llMore        AS LOGICAL                NO-UNDO.
-DEF VAR lcFixedNumber LIKE MobSub.FixedNumber   NO-UNDO INIT "".
 
 DEF BUFFER SearchCustomer FOR Customer.
 DEF BUFFER UserCustomer   FOR Customer.
@@ -102,15 +100,15 @@ DEF VAR lcSaldoFatime AS C  NO-UNDO.
 ASSIGN lcSaldoFatime = fCParamC("SaldoAgreementAccount")
        lcDCEvent     = fCParamC("PerContractID").
 
-{termmobsub.frm}
+{Mm/termmobsub.frm}
 
 form
     TermMobsub.CLI         COLUMN-LABEL "MSISDN" FORMAT "X(10)"
-    TermMobsub.MsSeq       COLUMN-LABEL "SubscrID" 
+    TermMobsub.MsSeq           COLUMN-LABEL "SubscrID" 
     TermMobsub.AgrCust     COLUMN-LABEL "AgrCust" 
-    AgrCustomer.CustName   COLUMN-LABEL "Name"   FORMAT "X(20)" 
+    AgrCustomer.CustName   COLUMN-LABEL "Name"     FORMAT "X(20)" 
     AgrCustomer.orgid      COLUMN-LABEL "PerID/ComID"
-    TermMobsub.MSStatus     FORMAT ">9"   COLUMN-LABEL "St" 
+    TermMobsub.MSStatus         FORMAT ">9"    COLUMN-LABEL "St" 
     llMemo                  FORMAT "*/"   COLUMN-LABEL "M"  
     KillMS.OutOp            FORMAT "x(7)"
 
@@ -120,14 +118,6 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     "  TERMINATED MOBILE SUBSCRIPTION  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
-
-
-form
-   lcFixedNumber
-   HELP "Enter Fixed Number"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc)
-   "FIND FIXED NUMBER" COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME frSearchFixed.
-
 
 
 form /* seek  TermMobsub */
@@ -163,8 +153,7 @@ form /* Customer :n nimella hakua varten */
 form /* seek  CustNum */
    lcPersonID
    HELP "Enter Person ID"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Person ID"   
-   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
+   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Person ID"   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
 
 form /* seek  CustNum */
     liMSStatus
@@ -184,7 +173,7 @@ form /* seek Mobsub MsSeq */
     WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Subscription ID "
     COLOR VALUE(cfc) WIDTH 24  NO-LABELS OVERLAY FRAME fMsSeq.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By MSISDN  ,  By SUBS ID ,  By CUSTNUM  ,  BY STATUS  , By 4".
@@ -255,56 +244,46 @@ BROWSE:
    REPEAT WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
       IF ufkey THEN DO:
-         IF NOT llMore THEN
-            ASSIGN
-            ufk[1]= 209
-            ufk[2]= 9018
-            ufk[3]= 2902
-            ufk[4]= 2903
-            ufk[5]= 2214
-            ufk[6]= 559
-            ufk[7]= 555 /* MORE */
-            ufk[8]= 8
-            ufk[9]= 1
-            ehto  = 3
-            ufkey = FALSE.
-         ELSE ASSIGN   
-            ufk[1] = 1740
-            ufk[2] = 9852 
-            UFK[3] =  0
-            UFK[4] =  0 
-            UFK[5] =  0
-            UFK[6] =  0
-            UFK[7] =  0
-            ufk[8] =  8.
+        ASSIGN
+           ufk[1]= 209
+           ufk[2]= 9018
+           ufk[3]= 2902
+           ufk[4]= 2903
+           ufk[5]= 2214
+           ufk[6]= 559
+           ufk[7]= 1740
+           ufk[8]= 8
+           ufk[9]= 1
+           ehto  = 3
+           ufkey = FALSE.
 
-         IF ictype  NE  "" THEN ASSIGN
-            UFK[1] =  0
-            UFK[2] =  0
-            UFK[3] =  0
-            UFK[4] =  0 
-            UFK[5] =  0
-            UFK[6] =  0
-            UFK[7] =  0.
+        IF ictype  NE  "" THEN ASSIGN
+         UFK[1] =  0
+         UFK[2] =  0
+         UFK[3] =  0
+         UFK[4] =  0 
+         UFK[5] =  0
+         UFK[6] =  0
+         UFK[7] =  0.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TermMobsub.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TermMobsub.MsSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.MsSeq WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW TermMobsub.AgrCust ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.AgrCust {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.AgrCust WITH FRAME sel.
       END.
       IF order = 4 THEN DO:
-        CHOOSE ROW TermMobsub.MSStatus ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.MSStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.MSStatus WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -431,10 +410,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND icType = "" 
+     ELSE IF LOOKUP(nap,"1,f1") > 0 AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lccli WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -454,10 +433,10 @@ BROWSE:
      END. /* Search-1 */
      
      /* Search BY column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND NOT llMore AND icType = "" 
+     ELSE IF LOOKUP(nap,"2,f2") > 0 AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME fMsSeq.
        SET liMsSeq WITH FRAME fMsSeq.
        HIDE FRAME fMsSeq NO-PAUSE.
@@ -476,10 +455,10 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND NOT llMore AND 
+     ELSE IF LOOKUP(nap,"3,f3") > 0 AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        SET liCustNum WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -500,36 +479,36 @@ BROWSE:
        END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND NOT llMore AND 
+     ELSE IF LOOKUP(nap,"4,f4") > 0 AND 
        icType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f4.
        SET lcLastName lcFirstname WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
 
        IF lcFirstName  > ""  OR lcLastName   > ""  THEN DO:
-          run termmobsubfind.p("AGRNAME",lcLastname + "|" + lcFirstName).
+          RUN Mm/termmobsubfind.p("AGRNAME",lcLastname + "|" + lcFirstName).
        END.
      END. /* Search-4 */
     
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND NOT llMore AND 
+     ELSE IF LOOKUP(nap,"5,f5") > 0 AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f5.
        SET lcPersonid WITH FRAME f5.
        HIDE FRAME f5 NO-PAUSE.
 
        IF lcPersonID > "" THEN DO:
-          run termmobsubfind.p("ID",lcPersonid).
+          RUN Mm/termmobsubfind.p("ID",lcPersonid).
        END.
      END. /* Search-5 */
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND NOT llMore AND lcRight = "RW" AND 
+     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" AND 
        ictype = "" THEN DO: 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f6.
        SET liMSStatus WITH FRAME f6.
        IF  liMSStatus  ne 0  THEN DO:
@@ -543,22 +522,16 @@ BROWSE:
              PAUSE 1 NO-MESSAGE.
              NEXT BROWSE.
           END.
-          /* some TermMobsub/TermMobsub was found */
+                                                                                         /* some TermMobsub/TermMobsub was found */
           ASSIGN order = 4 Memory = recid(TermMobsub) must-print = TRUE.
           NEXT LOOP.
        ENd.
      END. 
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND NOT llMore AND ufk[7] > 0 THEN DO:
-        llMore = TRUE.
-        ufkey = TRUE.
-        NEXT LOOP.
-     END.
-
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND llMore AND 
+     ELSE IF LOOKUP(nap,"7,f7") > 0 AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f7.
        SET lcICC WITH FRAME f7.
        HIDE FRAME f7 NO-PAUSE.
@@ -575,15 +548,6 @@ BROWSE:
              BELL.
              MESSAGE "NOT FOUND !".
              PAUSE 1 NO-MESSAGE.
-             ASSIGN  ufk[1] = 1740
-                     ufk[2] = 9852 
-                     ufk[3] =  0
-                     ufk[4] =  0 
-                     ufk[5] =  0
-                     ufk[6] =  0
-                     ufk[7] =  0.
-                     ufk[8] =  8.
-
              NEXT BROWSE.
           END.
 
@@ -598,35 +562,47 @@ BROWSE:
        END.
      END. /* Search-2 */
 
+ 
      
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND llMore AND lcRight = "RW" AND 
-        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
-        CLEAR FRAME frSearchFixed.
-        SET lcFixedNumber WITH FRAME frSearchFixed.
-        HIDE FRAME frSearchFixed NO-PAUSE.
+     
+     ELSE IF LOOKUP(nap,"7,f7") > 0 AND lcRight = "RW" AND 
+        ictype = "" THEN DO:
+        
+        RUN local-find-this (FALSE).
 
-        IF lcFixedNumber  > ""  THEN DO:
-           FOR FIRST SearchTermMobsub WHERE
-                     SearchTermMobsub.Brand = gcBrand AND
-                     SearchTermMobsub.FixedNumber EQ lcFixedNumber NO-LOCK.
+        RUN local-find-others(TRUE).
+       
+        
+        RUN Mm/nnfmcu.p(OUTPUT liCustNum, OUTPUT liMsSeq).
+
+        IF liCustNum NE ? AND liCustNum > 0 THEN DO:
+           FIND  SearchCustomer WHERE 
+                 SearchCustomer.CustNum = liCustNum NO-LOCK.
+           IF MsSeq > 0 THEN 
+              FIND SearchTermMobsub WHERE 
+                   SearchTermMobsub.MsSeq = liMsSeq AND
+                   SearchTermMobsub.brand = gcBrand NO-LOCK NO-ERROR.
+           ELSE DO:
+              FIND FIRST SearchTermMobsub WHERE 
+                         SearchTermMobsub.Brand   = gcBrand AND
+                         SearchTermMobsub.CustNum = liCustNum NO-LOCK NO-ERROR.
+
+              IF NOT AVAIL SearchTermMobsub THEN DO:
+                 MESSAGE 
+                    "Customer No." string(liCustNum)                                                 "does NOT have ANY mobile subscriptions"
+                 VIEW-AS ALERT-BOX TITLE " NO SUBSCRIPTIONS ".
+              END.
            END.
-
-           IF NOT AVAILABLE SearchTermMobsub THEN DO:
-              BELL.
-              MESSAGE "NOT FOUND !".
-              PAUSE 1 NO-MESSAGE.
-              NEXT BROWSE.
+           
+           IF AVAIL SearchTermMobsub THEN DO:
+              FIND   TermMobsub WHERE 
+               RECID(TermMobsub) = RECID(SearchTermMobsub) NO-LOCK NO-ERROR.
+               
+              ASSIGN
+                 memory = RECID(SearchTermMobsub)
+                 must-print = TRUE.
+              NEXT loop.
            END.
-
-           IF Avail SearchTermMobsub THEN
-           FIND FIRST TermMobsub WHERE
-                RECID(TermMobsub) = RECID(SearchTermMobsub) NO-LOCK NO-ERROR.
-
-           /* some Mobsub/mobsub was found */
-           ASSIGN order = 1 Memory = recid(termmobsub) must-print = TRUE.
-           NEXT LOOP.
         END.
      END. 
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
@@ -651,16 +627,16 @@ BROWSE:
              ufk[7] = 249 WHEN getTMSRight("VENDOR") = "RW"
              ufk[8] = 8  .
           
-          run ufkey.   
+          RUN Syst/ufkey.p.   
           
           IF toimi = 8 THEN DO:
              HIDE FRAME lis NO-PAUSE.
              LEAVE.
           ENd.
 
-          IF toimi = 2  THEN RUN persondata(TermMobsub.msseq).
+          IF toimi = 2  THEN RUN Mm/persondata.p(TermMobsub.msseq).
           ELSE IF toimi = 3  THEN DO:
-             RUN msrequest(-1,
+             RUN Mm/msrequest.p(-1,
                            ?, /* reqstat ? for all */
                            TermMobsub.MsSeq,
                            0,
@@ -669,8 +645,8 @@ BROWSE:
              /* in case a request was run */
              RUN local-UPDATE-record(FALSE).
           END.      
-          ELSE IF toimi = 4  THEN RUN termsubser(TermMobsub.MsSeq).
-          ELSE IF Toimi = 5  THEN RUN memo(INPUT TermMobsub.CustNum,
+          ELSE IF toimi = 4  THEN RUN Mm/termsubser.p(TermMobsub.MsSeq).
+          ELSE IF Toimi = 5  THEN RUN Mc/memo.p(INPUT TermMobsub.CustNum,
                                            INPUT "TermMobsub",
                                            INPUT STRING(TermMobsub.MsSeq),
                                            INPUT "TermMobsub").
@@ -692,33 +668,33 @@ BROWSE:
                    ufk[6]= 0
                    ufk[7]= 0.
                    ufk[8]= 8.
-                run ufkey.   
+                RUN Syst/ufkey.p.   
         
                 IF toimi = 8 THEN DO:
                    LEAVE CALLBROWSE.
                 ENd.
 
-                IF       toimi = 1  THEN RUN  msisdniv(TermMobsub.MsSeq).
+                IF       toimi = 1  THEN RUN Mm/msisdniv.p(TermMobsub.MsSeq).
 
                 ELSE IF toimi = 2 AND avail TermMobsub  THEN
-                   RUN  callstat.p(INPUT 0,TermMobsub.cli,"PRODUCT").
+                   RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"PRODUCT").
        
                 ELSE IF toimi = 3 AND avail TermMobsub  THEN 
-                   RUN  callstat.p(INPUT 0,TermMobsub.cli,"DATE").
+                   RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"DATE").
        
                 ELSE IF toimi = 4 AND avail TermMobsub  THEN
-                   RUN  callstat.p(INPUT 0,TermMobsub.cli,"CCN").
+                   RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"CCN").
 
                 ELSE IF toimi = 6 THEN 
-                   RUN persondata(TermMobsub.msseq).
+                   RUN Mm/persondata.p(TermMobsub.msseq).
         
              END.
           END.
           ELSE IF toimi = 7 AND ufk[7] > 0 AND avail TermMobsub  THEN DO:
-             RUN mobsubdi.p(INPUT TermMobsub.MSSeq, OUTPUT killed).
+             RUN Mm/mobsubdi.p(INPUT TermMobsub.MSSeq, OUTPUT killed).
           END.
           ELSE IF toimi = 6 THEN 
-             RUN persondata(TermMobsub.msseq).
+             RUN Mm/persondata.p(TermMobsub.msseq).
        END.
        ASSIGN  Memory = recid(TermMobsub) must-print = TRUE.
        NEXT LOOP.
@@ -735,8 +711,6 @@ BROWSE:
         ASSIGN Memory = recid(TermMobsub) must-print = TRUE.
         NEXT LOOP.
      END.
-
-     ELSE IF LOOKUP(nap,"8,f8") > 0 AND llMore THEN llMore = FALSE.
 
      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
 
@@ -765,22 +739,22 @@ PROCEDURE local-find-FIRST:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND FIRST TermMobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN DO: {termmobfind.i FIRST } end.
+       ELSE IF order = 1  THEN DO: {Mm/termmobfind.i FIRST } end.
 
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND FIRST TermMobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 2 THEN  {termmobfind.i FIRST }
+       ELSE IF order = 2 THEN  {Mm/termmobfind.i FIRST }
 
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND FIRST TermMobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {termmobfind.i FIRST }
+       ELSE IF order = 3 THEN  {Mm/termmobfind.i FIRST }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND FIRST TermMobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {termmobfind.i FIRST }
+       ELSE IF ORDER = 4 THEN  {Mm/termmobfind.i FIRST }
        
 
 END PROCEDURE.
@@ -790,22 +764,22 @@ PROCEDURE local-find-LAST:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND LAST  TermMobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN  {termmobfind.i LAST  }
+       ELSE IF order = 1  THEN  {Mm/termmobfind.i LAST  }
        
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND LAST TermMobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 2 THEN  {termmobfind.i LAST }
+       ELSE IF order = 2 THEN  {Mm/termmobfind.i LAST }
        
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND LAST  TermMobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {termmobfind.i LAST  }
+       ELSE IF order = 3 THEN  {Mm/termmobfind.i LAST  }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND LAST  TermMobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {termmobfind.i LAST  }
+       ELSE IF ORDER = 4 THEN  {Mm/termmobfind.i LAST  }
  
 END PROCEDURE.
 
@@ -814,22 +788,22 @@ PROCEDURE local-find-NEXT:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND NEXT TermMobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN  {termmobfind.i NEXT }
+       ELSE IF order = 1  THEN  {Mm/termmobfind.i NEXT }
        
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND NEXT TermMobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 2 THEN  {termmobfind.i NEXT }
+       ELSE IF order = 2 THEN  {Mm/termmobfind.i NEXT }
        
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND NEXT TermMobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {termmobfind.i NEXT }
+       ELSE IF order = 3 THEN  {Mm/termmobfind.i NEXT }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND NEXT TermMobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {termmobfind.i NEXT }
+       ELSE IF ORDER = 4 THEN  {Mm/termmobfind.i NEXT }
  
 END PROCEDURE.
 
@@ -838,22 +812,22 @@ PROCEDURE local-find-PREV:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND PREV TermMobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN  {termmobfind.i PREV }
+       ELSE IF order = 1  THEN  {Mm/termmobfind.i PREV }
        
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND PREV TermMobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 2 THEN  {termmobfind.i PREV }
+       ELSE IF order = 2 THEN  {Mm/termmobfind.i PREV }
        
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND PREV TermMobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {termmobfind.i PREV }
+       ELSE IF order = 3 THEN  {Mm/termmobfind.i PREV }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND PREV TermMobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {termmobfind.i PREV }
+       ELSE IF ORDER = 4 THEN  {Mm/termmobfind.i PREV }
  
 
 END PROCEDURE.

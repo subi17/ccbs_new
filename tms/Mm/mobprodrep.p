@@ -7,7 +7,7 @@
   MODIFIED .....: 12.09.03 jp Brand
   VERSION ......: M15
   -------------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -66,7 +66,7 @@ form /* Ask period */
 FRAME add-new.
 
 ufkey = TRUE.
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN pvm1 = Today
        pvm2 = TODAY - 1.
@@ -77,7 +77,7 @@ WITH FRAME add-new.
 ASSIGN
 cfc      = "Lis"
 ufkey    = TRUE.
-RUN ufcolor.
+RUN Syst/ufcolor.p.
 
 ASSIGN
 ok = FALSE.
@@ -86,9 +86,9 @@ HIDE FRAME add-new.
 IF NOT ok THEN RETURN.
 
 ehto = 5.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
-RUN mobprodrep1.p(INPUT pvm1, INPUT pvm2).
+RUN Mm/mobprodrep1.p(INPUT pvm1, INPUT pvm2).
 
 FIND FIRST nnpvti NO-LOCK NO-ERROR.
 ASSIGN memory = RECID(nnpvti).
@@ -140,12 +140,12 @@ BROWSE:
          ufk[1]= 703 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 0   ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         {uright1.i '"5,6"'}
-         RUN ufkey.p.
+         {Syst/uright1.i '"5,6"'}
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
-         CHOOSE ROW nnpvti.pt-tuno ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW nnpvti.pt-tuno {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) nnpvti.pt-tuno WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -265,9 +265,9 @@ BROWSE:
 
       /* Search column 1 */
       ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". RUN ufcolor.
+         cfc = "puyr". RUN Syst/ufcolor.p.
          haku-pt-tuno = "".
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          UPDATE haku-pt-tuno WITH FRAME haku.
          HIDE FRAME haku NO-PAUSE.
          IF haku-pt-tuno <> "" THEN DO:

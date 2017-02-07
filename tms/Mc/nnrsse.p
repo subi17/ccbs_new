@@ -13,7 +13,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -71,7 +71,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 LOOP:
@@ -137,16 +137,16 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 30 ufk[3]= 885 ufk[4]= 0
         ufk[5]= 11  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW Reseller.Reseller ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Reseller.Reseller {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Reseller.Reseller WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Reseller.RsName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Reseller.RsName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Reseller.RsName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -293,9 +293,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Reseller = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Reseller WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if Reseller <> "" THEN DO:
@@ -318,9 +318,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        RsName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE RsName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if RsName <> "" THEN DO:

@@ -9,23 +9,23 @@
 
 &GLOBAL-DEFINE BrTable ActivityCounter
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CDRStreamCounter'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CDRStreamCounter'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhActivityCounter AS HANDLE NO-UNDO.
    lhActivityCounter = BUFFER ActivityCounter:HANDLE.
    RUN StarEventInitialize(lhActivityCounter).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhActivityCounter).
+      RUN Mc/eventview2.p(lhActivityCounter).
    END.
 
 END.
@@ -67,7 +67,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        "  ACTIVITY COUNTERS  "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     ActivityCounter.Brand         COLON 15
@@ -90,7 +90,7 @@ FORM
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -174,12 +174,12 @@ REPEAT WITH FRAME sel:
         ehto  = 3 
         ufkey = FALSE.
         
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ActivityCounter.ACDate ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW ActivityCounter.ACDate {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ActivityCounter.ACDate WITH FRAME sel.
       END.
@@ -309,8 +309,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -409,8 +409,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhActivityCounter).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ActivityCounter.ACDate.
 
        RUN local-UPDATE-record.                                  
@@ -448,7 +448,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -531,7 +531,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.

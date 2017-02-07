@@ -4,7 +4,7 @@
  * @output struct;array of subscription type ids
 */
 
-{flistrpc.i}
+{rpcmethods/flistrpc.i}
 
 DEF VAR lcQuery AS CHARACTER NO-UNDO.
 

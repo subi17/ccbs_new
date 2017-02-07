@@ -12,9 +12,9 @@
 
 &GLOBAL-DEFINE BrTable bnet
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'EPGroup'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'EPGroup'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -52,7 +52,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     EPGroup.EpGroup     /* LABEL FORMAT */
@@ -91,7 +91,7 @@ form
     FRAME f4.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -125,12 +125,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a EPGroup  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR EPGroup.EpGroup
@@ -219,16 +219,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW EPGroup.EpGroup ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW EPGroup.EpGroup {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) EPGroup.EpGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW EPGroup.EpName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW EPGroup.EpName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) EPGroup.EpName WITH FRAME sel.
       END.
 
@@ -357,8 +357,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
        SET  lcBrand WHEN gcAllBrand = TRUE
@@ -379,8 +379,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        Disp lcBrand With FRAME f2.
        SET  lcBrand WHEN gcAllBrand = TRUE
@@ -411,12 +411,12 @@ BROWSE:
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. 
         ufkey = TRUE.
         RUN local-find-this(TRUE).
         IF lcRight = "RW" THEN DO:
-           run ufkey.
+           RUN Syst/ufkey.p.
            UPDATE EPGroup.Memo WITH FRAME f4.
         END.
         ELSE DO:
@@ -495,13 +495,13 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. 
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY 
           EPGroup.EpGroup
           EPGroup.EPName.
 
        IF lcRight = "RW" THEN DO:
-          run ufkey.
+          RUN Syst/ufkey.p.
           RUN local-UPDATE-record.  
        END.   
        ELSE PAUSE.                                

@@ -5,7 +5,7 @@
  * @output struct;array of customer categories
 */
 
-{flistrpc.i}
+{rpcmethods/flistrpc.i}
 
 DEF VAR lcQuery  AS CHARACTER NO-UNDO. 
 DEF VAR pcTenant AS CHARACTER NO-UNDO. 

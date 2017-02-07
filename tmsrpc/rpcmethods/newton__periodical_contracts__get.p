@@ -13,8 +13,8 @@
                penalty_fee;string; dctype 3 = penalty fee ,  type 5 = monthly fee 
  */
 
-{header_get.i}
-{fcustpl.i}
+{rpcmethods/header_get.i}
+{Func/fcustpl.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    

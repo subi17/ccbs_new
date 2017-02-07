@@ -5,7 +5,7 @@
  * @output struct;array of periodical contract type ids
 */
 
-{flistrpc.i}
+{rpcmethods/flistrpc.i}
 
 lcStruct = validate_struct(pcStruct, "").
 

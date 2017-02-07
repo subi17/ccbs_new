@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{timestamp.i}
-{fmakemsreq.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
 
 DEFINE STREAM sout.
 OUTPUT STREAM sout TO "as_yts2337_2.log".

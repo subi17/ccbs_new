@@ -11,8 +11,8 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{email.i}
+{Syst/commali.i}
+{Func/email.i}
 
 DEF VAR CustNum1  LIKE Customer.CustNum   NO-UNDO.
 DEF VAR CustNum2  LIKE Customer.CustNum   NO-UNDO.
@@ -110,7 +110,7 @@ WITH FRAME crit.
 limits:
 REPEAT WITH FRAME crit:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    REPEAT WITH FRAME crit ON ENDKEY UNDO, LEAVE limits:
       UPDATE 
@@ -179,7 +179,7 @@ REPEAT WITH FRAME crit:
 
             ELSE IF FRAME-FIELD = "lCG" THEN DO: 
                IF INPUT lCG = TRUE THEN DO:
-                  RUN cgchoose.p(INPUT-OUTPUT lGroups).
+                  RUN Mc/cgchoose.p(INPUT-OUTPUT lGroups).
                   DISP lGroups.
                   IF lGroups = "" THEN DO:
                      DISP 
@@ -188,7 +188,7 @@ REPEAT WITH FRAME crit:
                   END.
                   APPLY 13.
                   ehto = 9.
-                  RUN ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT.
                END.
                ELSE DISP "ALL" @ lGroups.
@@ -288,7 +288,7 @@ REPEAT WITH FRAME crit:
    REPEAT WITH FRAME crit:
 
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  limits.
 
@@ -311,7 +311,7 @@ REPEAT WITH FRAME crit:
 
    END.
 
-   RUN custrep1.p(INPUT CustNum1,
+   RUN Mc/custrep1.p(INPUT CustNum1,
                 INPUT CustNum2,
                 INPUT ZipCode,
                 INPUT Salesman,

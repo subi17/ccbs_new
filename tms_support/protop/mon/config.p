@@ -40,11 +40,11 @@
  *
  */
 
-{lib/protop.i}
+{tms_support/protop/lib/protop.i}
 
 define variable support as character no-undo initial "Config and Startup".
 
-{lib/tt_xstat.i}
+{tms_support/protop/lib/tt_xstat.i}
 
 ratio-calc = 1.
 

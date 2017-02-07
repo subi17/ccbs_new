@@ -40,12 +40,12 @@
  *
  */
 
-{lib/protop.i}
+{tms_support/protop/lib/protop.i}
 
 define variable support as character no-undo initial "Table Details".
 
-{lib/tt_table.i}
-{lib/tt_index.i}
+{tms_support/protop/lib/tt_table.i}
+{tms_support/protop/lib/tt_index.i}
 
 /* restart
  *

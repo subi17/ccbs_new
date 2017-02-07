@@ -8,11 +8,11 @@ CHANGED ......:
 Version ......: Yoigo
 Modified......: ilkkasav & kariaika
 ----------------------------------------------------------------------- */
-{detailvalue.i}
+{Func/detailvalue.i}
 
 /*ilkkasav&kariaika: remember to change the directories before releasing*/
 /*{/apps/yoigo/tms_support/testing/cdrreader.i}*/
-{cdrreader.i}
+{tms_support/testing/cdrreader.i}
 
 
 DEF INPUT PARAM icCLI AS CHAR NO-UNDO.

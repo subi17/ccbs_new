@@ -50,13 +50,13 @@ pcUserName = "VISTA_" + get_string(pcStruct, "username").
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = pcUserName.
-{eventval.i}
-{tmsconst.i}
-{offer.i}
-{xmlrpc_names.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
+{rpcmethods/xmlrpc_names.i}
 
 FUNCTION fCheckInvalidChangeWithOldTs RETURN CHARACTER:
     /* Here list all checks that make the change not allowed *
@@ -181,7 +181,7 @@ IF NOT llEqual THEN DO:
 
    IF llDoEvent THEN DO:
       &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
       DEF VAR lhOfferItem AS HANDLE NO-UNDO.
       lhOfferItem = BUFFER OfferItem:HANDLE.
       RUN StarEventInitialize(lhOfferItem).

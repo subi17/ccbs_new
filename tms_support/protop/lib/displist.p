@@ -32,7 +32,7 @@
  *
  * October 7, 2003 */
 
-{lib/protop.i}
+{tms_support/protop/lib/protop.i}
 
 define variable s as character no-undo
   view-as selection-list multiple inner-chars 30 inner-lines 15 sort scrollbar-vertical.
@@ -72,7 +72,7 @@ procedure upd-display:
         if entry( i, sx ) = "Summary" then	/* "Summary" is special... for now	*/
           .
          else
-          run out/detail.p persistent ( entry( i, sx )).
+          RUN out/detail.p persistent ( entry( i, sx )).
       end.
 
   end.

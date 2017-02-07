@@ -11,8 +11,8 @@
  * @output success;boolean
  */
 {xmlrpc/xmlrpc_access.i}
-{mnpoutchk.i}
-{commpaa.i}
+{Mnp/mnpoutchk.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
 
@@ -75,7 +75,7 @@ lcImsi = mobsub.imsi.
 lcCDRDir = lcRootDir + "cdrfiles/".
 /*Generate CDR files*/
 /*RUN VALUE(lcRootDir + "create_test_cdrfile.p")*/
-RUN create_test_cdrfile.p (
+RUN tms_support/testing/create_test_cdrfile.p (
           lcCli,
           lcSecCLI,
           LCiMSI,

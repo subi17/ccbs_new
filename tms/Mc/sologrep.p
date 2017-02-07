@@ -3,15 +3,15 @@
             01.10.09  mk PAYTYPE= added
 */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "cron".
    
-{timestamp.i}
-{email.i}
-{cparam2.i}
-{ftransdir.i}
+{Func/timestamp.i}
+{Func/email.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
 
 DEFINE VARIABLE lcTemp            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO.

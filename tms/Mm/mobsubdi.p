@@ -20,7 +20,7 @@
                   05.02.07 kl  Q) ppreqbr
                   08.03.07/aam lock and unlock removed
                   18.04.07/aam odi request N
-                  29.05.07 kl  .p removed from run commands
+                  29.05.07 kl  .p removed from RUN tms_support/protop/lib/commands.p
                   27.06.07 vk  for testing purposes only
                   06.02.08 jt  new barring handling (HLR-action menu)
 
@@ -29,28 +29,28 @@
                   OUTPUT Kille
   -------------------------------------------------------------------------- */
 
-{commali.i} 
-{tmsconst.i}
-{func.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OrdStat'}
-{eventval.i}
-{matrix.i}
-{cparam2.i}
-{fdss.i}
-{barrfunc.i}
+{Syst/commali.i} 
+{Syst/tmsconst.i}
+{Func/func.p}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OrdStat'}
+{Syst/eventval.i}
+{Func/matrix.i}
+{Func/cparam2.i}
+{Func/fdss.i}
+{Func/barrfunc.i}
 IF llDoEvent THEN DO:
 
   &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-  {lib/eventlog.i}
+  {Func/lib/eventlog.i}
       
   DEFINE VARIABLE lhMobsub AS HANDLE NO-UNDO.
   lhMobsub = BUFFER Mobsub:HANDLE.
   RUN StarEventInitialize(lhMobsub).
                
   ON F12 ANYWHERE DO:
-     RUN eventview2(lhMobsub).
+     RUN Mc/eventview2.p(lhMobsub).
    END.
                            
 END.
@@ -124,7 +124,7 @@ ELSE                    lcUserName = "".
 
 
 DO WHILE TRUE:
-   ASSIGN Killed = (not avail mobsub) ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN Killed = (not avail mobsub) ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
  DISPLAY
  "A) Subscription active masks            " WHEN NOT Killed @ menuc[1] 
  "P) Counters and Limits          "       @ menuc[16] SKIP
@@ -186,12 +186,12 @@ DO WHILE TRUE:
          VIEW-AS ALERT-BOX.
          LEAVE.
       END.
-      RUN barrbrowser1(MsSeq).
+      RUN Mm/barrbrowser1.p(MsSeq).
    END.
 
    ELSE IF FRAME-INDEX = 2 AND NOT Killed THEN DO :
       IF NOT fIsPermittedModule(MobSub.CliType, "mobtypech") THEN NEXT.
-      run mobtypech(msseq).
+      RUN Mm/mobtypech.p(msseq).
    END.
            
    ELSE IF FRAME-INDEX = 3 AND NOT Killed THEN DO TRANSACTION:
@@ -201,7 +201,7 @@ DO WHILE TRUE:
       IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
          MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
       ELSE     
-         run simch.p(MsSeq).
+         RUN Mm/simch.p(MsSeq).
    END.
 
    ELSE IF FRAME-INDEX = 4 AND NOT Killed THEN DO TRANSACTION:
@@ -211,11 +211,11 @@ DO WHILE TRUE:
       IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
          MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
       ELSE 
-         run msisdnch.p(MsSeq).
+         RUN Mm/msisdnch.p(MsSeq).
    END.
             
    ELSE IF FRAME-INDEX = 5 AND NOT Killed THEN  DO :
-      run persondata(MsSeq).
+      RUN Mm/persondata.p(MsSeq).
    END.
             
    ELSE IF FRAME-INDEX = 6 AND NOT Killed THEN DO:
@@ -223,7 +223,7 @@ DO WHILE TRUE:
                  Order.Msseq = MSSeq AND
                  Order.OrderType < 2 NO-LOCK NO-ERROR.
                 
-      IF AVAIL order THEN run order(2,8,"",Order.OrderID).
+      IF AVAIL order THEN RUN Mc/order.p(2,8,"",Order.OrderID).
       ELSE 
       MESSAGE
       "UNKNOWN ORDER INFORMATION"
@@ -232,7 +232,7 @@ DO WHILE TRUE:
    
    ELSE IF FRAME-INDEX = 7 AND NOT Killed THEN DO:
       IF MobSub.PayType = FALSE THEN  
-              RUN bitemcu.p(MobSub.CustNum,
+              RUN Mc/bitemcu.p(MobSub.CustNum,
                             STRING(MsSeq)).
       ELSE MESSAGE "Function not allowed for Prepaid " VIEW-AS ALERT-BOX.
    END.
@@ -242,7 +242,7 @@ DO WHILE TRUE:
       /*Operation is not allowed if fixed line provisioning is pending*/
       IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN 
          MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
-      ELSE RUN bundle_change_ui.p (MobSub.MsSeq).
+      ELSE RUN Mm/bundle_change_ui.p (MobSub.MsSeq).
    END.
             
    ELSE IF FRAME-INDEX = 9 AND NOT Killed AND Avail mobsub 
@@ -256,7 +256,7 @@ DO WHILE TRUE:
          VIEW-AS ALERT-BOX.
          LEAVE.
       END.    
-      RUN deletems1.p(INPUT MsSeq).
+      RUN Mm/deletems1.p(INPUT MsSeq).
 
       /* RETURN immediately IF killed */
       IF NOT CAN-FIND(MobSub WHERE MobSub.MsSeq = MsSeq) THEN DO:
@@ -267,19 +267,19 @@ DO WHILE TRUE:
           
    ELSE IF  FRAME-INDEX = 10 AND NOT Killed AND Avail mobsub THEN DO :
       IF NOT fIsPermittedModule(MobSub.CliType, "fatime") THEN NEXT.
-      RUN fatime("", 0, mobsub.cli, MobSub.MsSeq).
+      RUN Mm/fatime.p("", 0, mobsub.cli, MobSub.MsSeq).
    END.
                                     
 
    ELSE IF FRAME-INDEX = 11 AND NOT Killed AND Avail mobsub THEN DO:
       IF NOT fIsPermittedModule(MobSub.CliType, "creafatui") THEN NEXT.
-      RUN creafatui.p (MobSub.CustNum,
+      RUN Mc/creafatui.p (MobSub.CustNum,
                      MobSub.MsSeq).
    END.
  
    ELSE IF FRAME-INDEX = 12 THEN DO:
       IF NOT fIsPermittedModule(lhsub::CliType, "dpmember") THEN NEXT.
-      RUN dpmember.p (0,
+      RUN Mc/dpmember.p (0,
                       "MobSub",
                       STRING(lhsub::MsSeq)).
    END.
@@ -288,30 +288,29 @@ DO WHILE TRUE:
       /* Postpaid cli */
 
       
-      IF lhSub::PayType = FALSE THEN RUN callmenu.p(msseq).
-                                ELSE RUN prcallcalc.p(msseq).
+      IF lhSub::PayType = FALSE THEN RUN Mm/callmenu.p(msseq).
+                                ELSE RUN Mm/prcallcalc.p(msseq).
             
    END.
                         
    /* second column */
    ELSE IF  FRAME-INDEX = 16 THEN DO :
       IF NOT fIsPermittedModule(lhSub::CliType, "countermenu") THEN NEXT.
-      RUN countermenu.p(msseq).
+      RUN Mm/countermenu.p(msseq).
    END.
 
    ELSE IF FRAME-INDEX = 17 AND NOT Killed  AND avail mobsub THEN DO:  
       IF NOT fIsPermittedModule(MobSub.CliType, "ppreqbr") THEN NEXT.
-      run ppreqbr(MobSub.MsSeq).
+      RUN Gwy/ppreqbr.p(MobSub.MsSeq).
    END.
    
    ELSE IF FRAME-INDEX  = 18 THEN DO :
       IF NOT fIsPermittedModule(lhSub::CLIType, "dccli") THEN NEXT.
-      
-      RUN pclist.p("mobsub",MsSeq).
+      RUN Mm/pclist.p("mobsub",MsSeq).
    END.
                                     
    ELSE IF FRAME-INDEX = 19 THEN DO:
-      run msowner.p(msseq). 
+      RUN Mm/msowner.p(msseq). 
    END.
 
    ELSE IF FRAME-INDEX = 20 AND NOT Killed THEN DO :
@@ -371,9 +370,9 @@ DO WHILE TRUE:
       END.
       
       IF llDSSActive THEN
-         RUN rerate(INPUT "", MobSub.CustNum , INPUT Fromperiod, INPUT Endperiod).
+         RUN Rate/rerate.p(INPUT "", MobSub.CustNum , INPUT Fromperiod, INPUT Endperiod).
       ELSE
-         RUN rerate(INPUT MobSub.CLI, 0 , INPUT Fromperiod, INPUT Endperiod).
+         RUN Rate/rerate.p(INPUT MobSub.CLI, 0 , INPUT Fromperiod, INPUT Endperiod).
       
       MESSAGE 
       "Calls re-rated"
@@ -384,24 +383,24 @@ DO WHILE TRUE:
       IF NOT fIsPermittedModule(MobSub.CliType, "mobsubsms") THEN NEXT.
       IF lcRight = "R" THEN MESSAGE "Restricted use. Not allowed!" 
                             VIEW-AS ALERT-BOX.
-      ELSE IF lcRight = "RW" THEN run mobsubsms(INPUT msseq).
+      ELSE IF lcRight = "RW" THEN RUN Mm/mobsubsms.p(INPUT msseq).
    END.
    
    /* call specification */
    ELSE IF FRAME-INDEX = 23 AND NOT Killed  THEN DO:
       IF NOT fIsPermittedModule(MobSub.CliType, "mclispec") THEN NEXT.
-      RUN mclispec(mobsub.cli).
+      RUN Mm/mclispec.p(mobsub.cli).
    END.
    
    ELSE IF FRAME-INDEX = 24 AND NOT Killed THEN DO:
-      RUN tmrulesel(MobSub.MsSeq,MobSub.CustNum).
+      RUN Mm/tmrulesel.p(MobSub.MsSeq,MobSub.CustNum).
    END.
    ELSE IF FRAME-INDEX = 25 AND NOT Killed THEN DO:
-      RUN cotarg(MobSub.MsSeq,"mobsub").
+      RUN Ar/cotarg.p(MobSub.MsSeq,"mobsub").
    END.
                   
    ELSE IF FRAME-INDEX = 26 AND NOT Killed THEN
-      RUN substerminal(MobSub.MsSeq,0,0).
+      RUN Mm/substerminal.p(MobSub.MsSeq,0,0).
 
    /* Reactivate the terminated Subscription */                 
    ELSE IF FRAME-INDEX = 27 AND Killed THEN DO:
@@ -409,18 +408,18 @@ DO WHILE TRUE:
          VIEW-AS ALERT-BOX BUTTONS YES-NO TITLE " CONFIRMATION " UPDATE ok .
          
       IF NOT ok THEN NEXT.
-      RUN reacmobsub_cui.p(INPUT TermMobsub.Msseq, INPUT katun).
+      RUN Mm/reacmobsub_cui.p(INPUT TermMobsub.Msseq, INPUT katun).
    END. /* ELSE IF FRAME-INDEX = 27 AND Killed THEN DO: */
 
    /* call specification */
    ELSE IF FRAME-INDEX = 28 THEN DO:
-      RUN alllogs.p(msseq).
+      RUN Mm/alllogs.p(msseq).
    END.
 
    ELSE IF FRAME-INDEX = 29 AND NOT Killed THEN DO:  
       IF NOT fIsPermittedModule(MobSub.CliType, "mobsubsudo") THEN NEXT.
       /* Supervisor actions here */
-      RUN mobsubsudo.p(MsSeq).
+      RUN Mm/mobsubsudo.p(MsSeq).
    END.
 
     

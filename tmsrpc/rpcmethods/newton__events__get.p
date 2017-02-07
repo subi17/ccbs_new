@@ -11,7 +11,7 @@
       event_type;string;vm,icc,stc,acc,data,imei
       change;string;old_value|new_value or new_value or service|new_value (vm)
  */
-{header_get.i}
+{rpcmethods/header_get.i}
 
 DEFINE VARIABLE lcEventType AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcChange AS CHARACTER NO-UNDO. 

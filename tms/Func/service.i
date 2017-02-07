@@ -19,12 +19,12 @@
 
 &GLOBAL-DEFINE service_i YES
 
-{commali.i}
-{ffeecont.i}
-{fctserval.i}
-{fctchange.i}
-{fmakemsreq.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/ffeecont.i}
+{Func/fctserval.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/cparam2.i}
 {Func/sharperconfid.i}
 {Mm/ongoing_bundle.i}
 
@@ -689,7 +689,7 @@ PROCEDURE pCopyPackage:
    
          IF ENTRY(liSCnt,lcFeeModel) = "" THEN NEXT.
       
-         RUN setfees.p(ENTRY(liSCnt,lcFeeModel),
+         RUN Mm/setfees.p(ENTRY(liSCnt,lcFeeModel),
                      iiMsSeq,
                      YEAR(idtDate) * 100 + MONTH(idtDate),
                      "Mobsub",
@@ -929,7 +929,7 @@ PROCEDURE pTerminatePackage:
    
          IF ENTRY(liCount,lcFeeModel) = "" THEN NEXT.
       
-         RUN setfees.p(ENTRY(liCount,lcFeeModel),
+         RUN Mm/setfees.p(ENTRY(liCount,lcFeeModel),
                      iiMsSeq,
                      YEAR(ldaEndDate) * 100 + MONTH(ldaEndDate),
                      "Mobsub",

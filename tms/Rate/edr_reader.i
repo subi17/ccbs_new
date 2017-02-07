@@ -7,13 +7,13 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{date.i}
-{tmsconst.i}
-{detailvalue.i}
-{msreqfunc.i}
-{fmakemsreq.i}
-{fbundle.i}
+{Syst/commali.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Func/detailvalue.i}
+{Func/msreqfunc.i}
+{Func/fmakemsreq.i}
+{Mm/fbundle.i}
 
 &GLOBAL-DEFINE EDR_SUCCESS_CODE_OK 1 
 &GLOBAL-DEFINE EDR_SUCCESS_CODE_ERROR 3 

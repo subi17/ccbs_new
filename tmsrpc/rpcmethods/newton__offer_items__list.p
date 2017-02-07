@@ -5,7 +5,7 @@
  * @output struct;array of offer item ids
 */
 
-{flistrpc.i}
+{rpcmethods/flistrpc.i}
 
 lcStruct = validate_struct(pcStruct, "offer_id").
 

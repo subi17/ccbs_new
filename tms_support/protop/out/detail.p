@@ -51,7 +51,7 @@
 
 define input parameter det_type as character no-undo.
 
-{lib/protop.i}
+{tms_support/protop/lib/protop.i}
 
 define variable frame-offset as integer no-undo.
 define variable frame-height as integer no-undo.

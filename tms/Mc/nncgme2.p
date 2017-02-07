@@ -11,11 +11,11 @@
   VERSIO .......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
-{fecgtask.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CGMember'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Func/fecgtask.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CGMember'}
 
 DEF INPUT PARAMETER CustNum LIKE Customer.CustNum NO-UNDO.
 
@@ -47,7 +47,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCGMember AS HANDLE NO-UNDO.
    lhCGMember = BUFFER CGMember:HANDLE.
@@ -55,7 +55,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhCGMember).
+      RUN Mc/eventview2.p(lhCGMember).
    END.
 END.
 
@@ -109,7 +109,7 @@ WITH
 
 FIND Customer where Customer.CustNum = CustNum no-lock.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST CGMember
@@ -144,7 +144,7 @@ add-group:
           ASSIGN ufkey = TRUE ufk = 0 ehto = 0
           ufk[1] = 512 ufk[2] = 514 ufk[3] = 517
           ufk[8] = 8.
-          RUN ufkey.
+          RUN Syst/ufkey.p.
 
           IF toimi = 8 THEN LEAVE add-group.
           IF toimi = 1 THEN
@@ -152,7 +152,7 @@ add-single:
           repeat WITH FRAME lis ON ENDKEY UNDO add-group,
                             NEXT add-group:
              PAUSE 0.
-             ehto = 9. RUN ufkey.
+             ehto = 9. RUN Syst/ufkey.p.
              CLEAR FRAME lis no-pause.
              PROMPT-FOR CGMember.CustGroup
              validate(input frame lis CGMember.CustGroup = "" OR
@@ -201,7 +201,7 @@ add-single:
           END. /* toimi = 1: add a single group */
 
           ELSE IF toimi = 2 THEN DO:
-             RUN nncggb(Customer.CustNum).
+             RUN Mc/nncggb.p(Customer.CustNum).
              LEAVE add-group.
           END.
 
@@ -333,16 +333,16 @@ SELAUS:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7] = 528 ufk[8] = 8  ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-        CHOOSE ROW CGMember.CustGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CGMember.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CGMember.CustGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-        CHOOSE ROW CustGroup.CGName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CustGroup.CGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -481,9 +481,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        CustGroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if CustGroup <> "" THEN DO:
@@ -505,7 +505,7 @@ SELAUS:
 
      else if lookup(nap,"4,f4") > 0 THEN DO:  /* other members */
         FIND CGMember where recid(CGMember) = rtab[FRAME-LINE] no-lock.
-        RUN nncgme1(CGMember.CustGroup).
+        RUN Mc/nncgme1.p(CGMember.CustGroup).
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -578,7 +578,7 @@ SELAUS:
         FIND CustGroup of CGMember no-lock.
         PAUSE 0.
         DISP CustGroup.Memo WITH FRAME memo.
-        ASSIGN ufk = 0 ufk[8] = 8 ehto = 0 ufkey = TRUE.  RUN ufkey.
+        ASSIGN ufk = 0 ufk[8] = 8 ehto = 0 ufkey = TRUE.  RUN Syst/ufkey.p.
         HIDE FRAME memo.
         NEXT LOOP.
      END.
@@ -589,7 +589,7 @@ SELAUS:
        FIND CGMember where recid(CGMember) = rtab[frame-line(sel)]
        exclusive-lock.
        assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCGMember).
        UPDATE CGMember.Memo.
        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCGMember).

@@ -1,4 +1,4 @@
-{ttinpmobsub.i}
+{tms_support/utilities/ttinpmobsub.i}
 DEFINE INPUT PARAMETER pcOutputDir        AS CHARACTER NO-UNDO. 
 DEFINE INPUT PARAMETER piBeginMsSeq       AS INTEGER  NO-UNDO. 
 DEFINE INPUT PARAMETER piEndMsSeq         AS INTEGER  NO-UNDO. 

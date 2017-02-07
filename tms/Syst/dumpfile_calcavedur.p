@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------- */
 
 
-{timestamp.i}
+{Func/timestamp.i}
 DEF INPUT PARAMETER iiDumpId AS INT NO-UNDO. 
 
 DEF VAR liavr AS INT NO-UNDO. 

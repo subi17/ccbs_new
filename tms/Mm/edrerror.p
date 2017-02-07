@@ -6,7 +6,7 @@
   CREATED ......: 12.2.2013
   VERSION ......: Yoigo
   ---------------------------------------------------------------------- */
-{commali.i} 
+{Syst/commali.i} 
 
 def /* new */ shared var siirto AS char.
 
@@ -98,7 +98,7 @@ form /* seek  me-name */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND NAME "
     COLOR VALUE(cfc) NO-labels overlay FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -164,16 +164,16 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 30 ufk[3]= 0  ufk[4]= 0 
         ufk[5]= 1961 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row ttEDRError.MobError ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row ttEDRError.MobError {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttEDRError.MobError WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row ttEDRError.MEName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row ttEDRError.MEName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttEDRError.MEName WITH FRAME sel.
       END.
 
@@ -302,8 +302,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET ErrorCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -325,8 +325,8 @@ BROWSE:
      /* Search by col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        SET me-name WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -348,7 +348,7 @@ BROWSE:
        
        RUN pBrowseErrors.
        ufkey = true.
-       run ufkey.p.
+       RUN Syst/ufkey.p.
 
      END. 
 
@@ -451,7 +451,7 @@ PROCEDURE pBrowseErrors:
 
     PAUSE 0.
     DISP ttEDRError.MobError WITH FRAME fLimits NO-ERROR. 
-    ehto = 9. run ufkey.
+    ehto = 9. RUN Syst/ufkey.p.
     
     UPDATE 
        ldaFromDate 
@@ -459,7 +459,7 @@ PROCEDURE pBrowseErrors:
        liMaxQty 
     WITH FRAME fLimits.
 
-   RUN edrbrowse.p(INPUT "edr,Qty:" + STRING(liMaxQty),
+   RUN Mm/edrbrowse.p(INPUT "edr,Qty:" + STRING(liMaxQty),
                  INPUT  ldaFromDate,
                  INPUT  ldaToDate,
                  INPUT  0,

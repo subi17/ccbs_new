@@ -70,7 +70,7 @@
  *
  */
 
-{lib/protop.i}
+{tms_support/protop/lib/protop.i}
 
 define variable hWin as handle.
 
@@ -86,7 +86,7 @@ procedure connect-database:
 
   RUN adecomm/_dbconn.p(INPUT-OUTPUT p_dbname, INPUT-OUTPUT p_lname, INPUT-OUTPUT p_type).
 
-  run lib/setwkdb.p ( input ldbname( p_dbname )).
+  RUN lib/setwkdb.p ( input ldbname( p_dbname )).
 
 end.
 
@@ -110,7 +110,7 @@ procedure change-database:
 
   update s go-on( "enter" ) with frame a.
 
-  run lib/setwkdb.p ( input s:screen-value ).
+  RUN lib/setwkdb.p ( input s:screen-value ).
 
   /* That's nice -- but now that we've changed the alias we have to unload & reload
    * all running PPs before they will notice the change...

@@ -11,9 +11,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{mobsub1.i}
+{Mm/mobsub1.i}
 
 DEF VAR amt1 AS i  NO-UNDO  EXTENT 50. /* all */
 DEF VAR amt2 AS i  NO-UNDO  EXTENT 50. /* alive */
@@ -73,7 +73,7 @@ END.
       DOWN WITH FRAME Qty.
    END.
 
-   ASSIGN ufk = 0 ehto = 3. RUN ufkey.
+   ASSIGN ufk = 0 ehto = 3. RUN Syst/ufkey.p.
 
    message "Press ENTER to continue !".
    PAUSE no-message.

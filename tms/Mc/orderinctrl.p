@@ -3,14 +3,14 @@
    changed:         22.11.06/aam fMarkOrderStamp, ask verification
 */
    
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{forderstamp.i}
-{orderchk.i}
-{orderfunc.i}
-{mnpoutchk.i}
-{orderfusion.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/forderstamp.i}
+{Func/orderchk.i}
+{Func/orderfunc.i}
+{Mnp/mnpoutchk.i}
+{Mc/orderfusion.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.
@@ -82,7 +82,7 @@ lcOldStatus = Order.StatusCode.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER Order:HANDLE.

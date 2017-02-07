@@ -8,20 +8,20 @@
   VERSION ......: SCRUNKO3, (23.10.96)
   ------------------------------------------------------ */
 
-{commali.i}                    
-{timestamp.i}
-{tmsconst.i}
-{lib/tokenlib.i}
+{Syst/commali.i}                    
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Mc/lib/tokenlib.i}
 
 DEF  INPUT PARAMETER  iiMSSeq    AS INT            NO-UNDO.
 DEF  INPUT PARAMETER  iiDialType AS INT            NO-UNDO.
 DEF  INPUT PARAMETER  iiSlSeq    AS INT            NO-UNDO.
 
-{eventval.i}
+{Syst/eventval.i}
 IF llDoEvent THEN DO :
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhFixedFee AS HANDLE NO-UNDO.
    DEF VAR lhMServiceLimit AS HANDLE NO-UNDO. 
@@ -144,7 +144,7 @@ END FUNCTION.
 
 IF getTMSRight("VENDOR,SYST") EQ "RW" THEN llAdmin = TRUE.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -176,12 +176,12 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* mservicelimit -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            LEAVE add-new.
         
@@ -253,18 +253,18 @@ BROWSE:
         ufk[7]= 0
         ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
       
 
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW lccli ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW lccli {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) lccli WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW mservicelimit.DialType ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW mservicelimit.DialType {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) lccli WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -436,7 +436,7 @@ BROWSE:
                    servicelimitgroup.groupcode = servicelimit.GroupCode
         NO-LOCK NO-ERROR.
 
-        RUN servicelcounter(INPUT (IF servicelimit.GroupCode BEGINS {&DSS}
+        RUN Mm/servicelcounter.p(INPUT (IF servicelimit.GroupCode BEGINS {&DSS}
                                    THEN 0 ELSE MserviceLimit.MsSeq),
                             INPUT MserviceLimit.CustNum,
                             INPUT MserviceLimit.SlSeq,
@@ -444,7 +444,7 @@ BROWSE:
                             INPUT (YEAR(Today) * 100 + MONTH(Today)),
                             INPUT MserviceLimit.MSID).
 
-        run ufkey.
+        RUN Syst/ufkey.p.
         must-print = TRUE.
         NEXT LOOP.
      
@@ -589,8 +589,8 @@ no-lock.
        FIND FIRST mservicelimit where 
             recid(mservicelimit) = rtab[frame-line(sel)] no-lock.
        assign fr-header = " VIEW " ufk = 0 ufk[8] = 8 ehto = 3.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        IF AVAIL mservicelimit THEN DO:
          RUN LOCAL-FIND-OTHER.
@@ -620,9 +620,9 @@ no-lock.
             recid(mservicelimit) = rtab[frame-line(sel)]
        no-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        
@@ -858,7 +858,7 @@ END PROCEDURE.
 
        
 PROCEDURE LOCAL-UPDATE-RECORD. 
-   run  LOCAL-FIND-OTHER.
+   run LOCAL-FIND-OTHER.
    DEF INPUT PARAMETE bNew AS LO NO-UNDO.
    
    DISP 
@@ -882,7 +882,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          mservicelimit.endTS
       WITH FRAME lis EDITING: 
          
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          
          READKEY.
          nap = KEYLABEL(LASTKEY). 
@@ -890,7 +890,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          IF nap = "F9" AND
             FRAME-FIELD = "InclUnit"
          THEN DO:
-            RUN h-tmscodes(INPUT "Tariff",    /* TableName */
+            RUN Help/h-tmscodes.p(INPUT "Tariff",    /* TableName */
                                   "DataType", /* FieldName */
                                   "Tariff",     /* GroupCode */
                                   OUTPUT lcCode).

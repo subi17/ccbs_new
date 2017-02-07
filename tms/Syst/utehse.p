@@ -7,7 +7,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER  xPrinterId LIKE TMSPrinter.PrinterId NO-UNDO.
 DEF OUTPUT PARAMETER xeff    AS c                  NO-UNDO.
@@ -42,7 +42,7 @@ form
     " PRINTER '" + xPrinterId + "' EFFECTS "
     FRAME sel.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 FIND FIRST TMSPrinter where TMSPrinter.PrinterId = xPrinterId no-lock no-error.
 FIND FIRST PrintCodes where PrintCodes.PrinterId = xPrinterId no-lock no-error.
@@ -113,11 +113,11 @@ BROWSE:
          ufk[1]= 0   ufk[2]= 0    ufk[3]= 0 ufk[4]= 0
          ufk[5]= 11  ufk[6]= 0    ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
-      CHOOSE ROW PrintCodes.EffName ;(uchoose.i;) no-error WITH FRAME sel.
+      CHOOSE ROW PrintCodes.EffName {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY normal PrintCodes.EffName WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:

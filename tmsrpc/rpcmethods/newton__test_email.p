@@ -13,8 +13,8 @@
 
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1} 
 
-{timestamp.i}
-{commpaa.i}
+{Func/timestamp.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 
 /* Input parameters */
@@ -42,6 +42,6 @@ FIND FIRST order NO-LOCK where
 IF NOT AVAIL order then return
    appl_err("Order not Found").
 
-RUN sendorderreq.p(piOrderId, "antti.savolainen@qvantel.com", OUTPUT lcErrFile).
+RUN Mc/sendorderreq.p(piOrderId, "antti.savolainen@qvantel.com", OUTPUT lcErrFile).
 
 add_boolean(response_toplevel_id, "", true).

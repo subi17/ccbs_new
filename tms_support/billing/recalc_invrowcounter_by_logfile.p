@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "Qvantel".
-{timestamp.i}
+{Func/timestamp.i}
 
 def var i as int no-undo.
 def var k as int no-undo.
@@ -78,7 +78,7 @@ for each ttInvSeq no-lock:
             invseq.MsSeq  = ttInvSeq.MsSeq and
             invseq.billed = false:
 
-      RUN conv_invrowcounter.p(InvSeq.InvSeq,
+      RUN tms_support/billing/conv_invrowcounter.p(InvSeq.InvSeq,
                                OUTPUT liCount).
       k = k + liCount.
    end.

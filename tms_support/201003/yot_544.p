@@ -1,5 +1,5 @@
 
-RUN changemsisdnstatus.p ("yot_544.input", 
+RUN tms_support/201003/changemsisdnstatus.p ("yot_544.input", 
                           "yot_544.log",
                           "VIP", 
                           1,

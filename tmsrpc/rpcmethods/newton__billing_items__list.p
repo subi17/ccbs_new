@@ -5,7 +5,7 @@
  * @output struct;array of BillItem ids
 */
 
-{flistrpc.i}
+{rpcmethods/flistrpc.i}
 
 DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR lcQuery  AS CHARACTER NO-UNDO. 

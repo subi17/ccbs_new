@@ -46,7 +46,7 @@
  *
  */
 
-{lib/protop.i}
+{tms_support/protop/lib/protop.i}
 
 define variable support as character no-undo initial "BigB".
 
@@ -119,15 +119,15 @@ procedure predict-b:
       assign
         tt_bigb.xpct = p_pct					/* % of current Big B	*/
         tt_bigb.bigb = p_buf * ( tt_bigb.xpct / 100 )		/* Modified Big B	*/
-        {lib/init-xrec.i tt_bigb.lrx  p_lrx}
-        {lib/init-xrec.i tt_bigb.osrx p_osrx}
+        {tms_support/protop/lib/init-xrec.i tt_bigb.lrx  p_lrx}
+        {tms_support/protop/lib/init-xrec.i tt_bigb.osrx p_osrx}
       .
     end.
 
   assign
 
-    {lib/upd-xrec.i tt_bigb.lrx  tt_bigb.lrx[3]}		/* Logical Reads	*/
-    {lib/upd-xrec.i tt_bigb.osrx tt_bigb.osrx[3]} 		/* OS Reads		*/
+    {tms_support/protop/lib/upd-xrec.i tt_bigb.lrx  tt_bigb.lrx[3]}		/* Logical Reads	*/
+    {tms_support/protop/lib/upd-xrec.i tt_bigb.osrx tt_bigb.osrx[3]} 		/* OS Reads		*/
 
     tt_bigb.mpct =						/* Predicted Miss %	*/
       ( if tt_bigb.bigb > p_used then 0 else				/* it all fits in -B	*/

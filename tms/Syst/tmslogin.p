@@ -12,7 +12,7 @@
                   11.01.07 mvi password expiration, stored in TMSPass
                   28.04.07 mvi fixed bug in asking passwd, error occured 
                                if user had empty password in TMSUser.
-                  02.06.07 mvi Yoigo version, removed .p from RUN commands 
+                  02.06.07 mvi Yoigo version, removed .p from RUN tms_support/protop/lib/commands.p 
                   02.06.07 mvi Usergrp.PasswordExpires checked in login
 
   TODO..........: ask first both username and password then check them
@@ -20,8 +20,8 @@
   VERSION ......: XFera 
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-{date.i}
+{Syst/commpaa.i}
+{Func/date.i}
 
 DEFINE VARIABLE liPassValidDays AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liPassNotifyDays AS INTEGER NO-UNDO. 
@@ -33,8 +33,8 @@ DEFINE VARIABLE liLoop AS INTEGER NO-UNDO.
 
 /* use brand 1 to get tmsparams, will be selected later */
 gcBrand = "1".
-{tmsparam.i PassWdValidDays} liPassValidDays = TMSParam.IntVal.
-{tmsparam.i PassWdExpireNotify} liPassNotifyDays = TMSParam.IntVal.
+{Func/tmsparam.i PassWdValidDays} liPassValidDays = TMSParam.IntVal.
+{Func/tmsparam.i PassWdExpireNotify} liPassNotifyDays = TMSParam.IntVal.
 
 form
    skip(1)
@@ -57,14 +57,14 @@ do with frame login:
    IF ergo-kbd THEN display with frame f_code-ERGO.
                ELSE display with frame f_code.
 
-   cfc = "lis". run ufcolor.
+   cfc = "lis". RUN Syst/ufcolor.p.
    pause 0 no-message.
 
-   ehto = 9. run ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    assign si-pvm = pvm.
 
    if katun = "" then do:
-      cfc = "tunnus". run ufcolor.
+      cfc = "tunnus". RUN Syst/ufcolor.p.
 
       input through value("who am i").
 
@@ -156,7 +156,7 @@ do with frame login:
                MESSAGE "Administrator has changed your password." SKIP
                   "You must specify a new password now." 
                   VIEW-AS ALERT-BOX TITLE " PASSWORD EXPIRED ".
-               RUN chpasswd(OUTPUT olPasswordChanged).
+               RUN Syst/chpasswd.p(OUTPUT olPasswordChanged).
                IF NOT olPasswordChanged THEN DO:
                   MESSAGE "Password not changed. Please log in again!"
                      VIEW-AS ALERT-BOX INFO.
@@ -171,7 +171,7 @@ do with frame login:
                fSplitTS(TMSPass.CreateTS,liTempDate,liTempTime).
                IF TODAY - liTempDate > liPassValidDays THEN DO:
                   /* force user to change password */
-                  RUN chpasswd(OUTPUT olPasswordChanged).
+                  RUN Syst/chpasswd.p(OUTPUT olPasswordChanged).
                   IF NOT olPasswordChanged THEN DO:
                      MESSAGE "Password not changed. Please log in again!"
                         VIEW-AS ALERT-BOX INFO.
@@ -190,7 +190,7 @@ do with frame login:
                      BUTTONS YES-NO UPDATE llChangePasswordNow.
                   
                   IF llChangePasswordNow THEN DO:
-                     RUN chpasswd(OUTPUT olPasswordChanged).   
+                     RUN Syst/chpasswd.p(OUTPUT olPasswordChanged).   
                      IF NOT olPasswordChanged THEN DO:
                         MESSAGE "Password not changed. Please log in again!"
                            VIEW-AS ALERT-BOX INFO.
@@ -215,7 +215,7 @@ end.
 
 /* select the brand and start TMS with appropiate databases */
 do while true:
-    run brandsel.
+    RUN Syst/brandsel.p.
     IF RETURN-VALUE = "LEAVE" THEN LEAVE.
 end.    
 

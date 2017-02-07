@@ -63,11 +63,11 @@
  * Note: Address data is updated using RPC newton__set_customer_address.p
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
-{timestamp.i}
-{fbankdata.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/fbankdata.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -282,10 +282,10 @@ END.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{flimitreq.i}
-{fcustdata.i}
-{fmakemsreq.i}
-{femailinvoice.i}
+{Func/flimitreq.i}
+{Func/fcustdata.i}
+{Func/fmakemsreq.i}
+{Func/femailinvoice.i}
 
 DEF BUFFER bCustomer FOR Customer.
 DEFINE VARIABLE lcOrgId AS CHARACTER NO-UNDO. 

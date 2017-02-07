@@ -53,7 +53,7 @@
  *
  */
 
-{lib/protop.i}
+{tms_support/protop/lib/protop.i}
 
 define variable support as character no-undo initial "Network Statistics".
 
@@ -81,20 +81,20 @@ procedure update_netstat:
       create tt_netstat.
       assign
         tt_netstat.dev = p_dev
-        {lib/init-xrec.i tt_netstat.pckt-rx     p_pckt-rx}
-        {lib/init-xrec.i tt_netstat.pckt-rx-err p_pckt-rx-err}
-        {lib/init-xrec.i tt_netstat.pckt-tx     p_pckt-tx}
-        {lib/init-xrec.i tt_netstat.pckt-tx-err p_pckt-tx-err}
+        {tms_support/protop/lib/init-xrec.i tt_netstat.pckt-rx     p_pckt-rx}
+        {tms_support/protop/lib/init-xrec.i tt_netstat.pckt-rx-err p_pckt-rx-err}
+        {tms_support/protop/lib/init-xrec.i tt_netstat.pckt-tx     p_pckt-tx}
+        {tms_support/protop/lib/init-xrec.i tt_netstat.pckt-tx-err p_pckt-tx-err}
       .
     end.
 
   assign
     tt_netstat.xvalid = yes
 /***
-    {lib/upd-xrec.i tt_netstat.pckt-rx     p_pckt-rx}
-    {lib/upd-xrec.i tt_netstat.pckt-rx-err p_pckt-rx-err}
-    {lib/upd-xrec.i tt_netstat.pckt-tx     p_pckt-tx}
-    {lib/upd-xrec.i tt_netstat.pckt-tx-err p_pckt-tx-err}
+    {tms_support/protop/lib/upd-xrec.i tt_netstat.pckt-rx     p_pckt-rx}
+    {tms_support/protop/lib/upd-xrec.i tt_netstat.pckt-rx-err p_pckt-rx-err}
+    {tms_support/protop/lib/upd-xrec.i tt_netstat.pckt-tx     p_pckt-tx}
+    {tms_support/protop/lib/upd-xrec.i tt_netstat.pckt-tx-err p_pckt-tx-err}
  ***/
     tt_netstat.pckt-rx[3] =     p_pckt-rx
     tt_netstat.pckt-rx-err[3] = p_pckt-rx-err
@@ -115,10 +115,10 @@ procedure age_netstat:
      else
       assign
         tt_netstat.xvalid = no
-        {lib/upd-xrec.i tt_netstat.pckt-rx     tt_netstat.pckt-rx[3]}
-        {lib/upd-xrec.i tt_netstat.pckt-rx-err tt_netstat.pckt-rx-err[3]}
-        {lib/upd-xrec.i tt_netstat.pckt-tx     tt_netstat.pckt-tx[3]}
-        {lib/upd-xrec.i tt_netstat.pckt-tx-err tt_netstat.pckt-tx-err[3]}
+        {tms_support/protop/lib/upd-xrec.i tt_netstat.pckt-rx     tt_netstat.pckt-rx[3]}
+        {tms_support/protop/lib/upd-xrec.i tt_netstat.pckt-rx-err tt_netstat.pckt-rx-err[3]}
+        {tms_support/protop/lib/upd-xrec.i tt_netstat.pckt-tx     tt_netstat.pckt-tx[3]}
+        {tms_support/protop/lib/upd-xrec.i tt_netstat.pckt-tx-err tt_netstat.pckt-tx-err[3]}
       .
 
   end.

@@ -10,16 +10,16 @@
 &THEN
 &GLOBAL-DEFINE ORDER_DATA_I YES
 
-{commali.i}
-{date.i}
-{cparam2.i}
-{fbundle.i}
-{transname.i}
-{ftaxdata.i}
-{tmsconst.i}
-{offer.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Mm/fbundle.i}
+{Func/transname.i}
+{Func/ftaxdata.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
 {Func/financed_terminal.i}
-{mnp.i}
+{Mnp/mnp.i}
 
 FUNCTION fGetOrderDeliveryDateEstimation RETURNS DATE
   (INPUT iiOrderId AS INT):
@@ -318,8 +318,7 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
 
    lcDeviceName = "+" +  lcDeviceName.
 
-
-   RUN offer_penaltyfee.p(Order.OrderID,
+   RUN Mc/offer_penaltyfee.p(Order.OrderID,
                         Output liPermancyLength,
                         OUTPUT ldePermanencyAmount).
 

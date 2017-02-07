@@ -8,8 +8,8 @@
  * @output success;boolean
  */
 {xmlrpc/xmlrpc_access.i}
-{mnpoutchk.i}
-{commpaa.i}
+{Mnp/mnpoutchk.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
 
@@ -32,7 +32,7 @@ lcRootdir = REPLACE (lcRootDir,"tmsrpc/","yoigo/tms_support/testing/").*/
 
 
 /*Search correct directory*/
-lcRootDir = SEARCH("donotremove_testdir.txt").
+lcRootDir = SEARCH("tms_support/testing/donotremove_testdir.txt").
 lcRootDir = REPLACE(lcrootDir, "donotremove_testdir.txt", "").
 lcRateDir = REPLACE(lcrootDir, "testing", "Rate").
 /*lcRootDir = "/apps/yoigo/tms_support/testing/".*/
@@ -57,7 +57,7 @@ lcImsi = mobsub.imsi.
 
 lcEDRDir = lcRootDir + "edrfiles/".
 /*Generate EDR files*/
-RUN "create_edrfile.p" (
+RUN "tms_support/testing/create_edrfile.p" (
       lcCli,
       ldtDateTime,
       (lcEDRDir + lcEDRFile),

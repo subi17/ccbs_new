@@ -21,11 +21,11 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
-{eventlog.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Syst/eventlog.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 assign tuni1 = "accdatll"
        tuni2 = "".
@@ -208,14 +208,14 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       READKEY.
       nap = keylabel(LASTKEY).
 
       if lookup(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          ufkey = TRUE. 
          UPDATE 
                 date1
@@ -278,11 +278,11 @@ END. /* toimi */
 /* Avataan striimi */
 IF llPaper THEN DO:
     ASSIGN tila = TRUE.
-    {tmsreport.i "return"}
+    {Syst/tmsreport.i "return"}
 END.
 
 ehto = 5.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 /* info line for log */
 lcLogLine = STRING(date1,"999999") + "-" +
@@ -304,7 +304,7 @@ ASSIGN lcExFile     = lcFileDir + "/" + lcExFile
        
 DISPLAY ldtStartDate lcStartTime WITH FRAME rajat.        
        
-RUN accdatli  (date1,
+RUN Ar/accdatli.p  (date1,
                date2,
                liCust-nr1,
                liCust-nr2,
@@ -329,7 +329,7 @@ fELog("REVENUE","Stopped:" + lcLogLine).
 
 IF llPaper THEN DO:
     ASSIGN tila = FALSE.
-    {tmsreport.i}
+    {Syst/tmsreport.i}
 END.
 
 ldEndTime = fMakeTS().

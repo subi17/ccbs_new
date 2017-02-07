@@ -1,11 +1,11 @@
 /* msagrcustchg.i   29.04.09/aam 
 */
 
-{commali.i}
-{barrfunc.i}
-{mnpoutchk.i}
-{orderchk.i}
-{fixedlinefunc.i}
+{Syst/commali.i}
+{Func/barrfunc.i}
+{Mnp/mnpoutchk.i}
+{Func/orderchk.i}
+{Func/fixedlinefunc.i}
 
 &SCOPED-DEFINE ACC_OLB_BARRINGS_NOT_ALLOWED "Y_HURG"
    

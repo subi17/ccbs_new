@@ -20,10 +20,10 @@
                  notification;boolean;optional;e.g. pending icc change
  */
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
-{json_key.i}
-{commpaa.i}
+{rpcmethods/json_key.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 /* Input parameters */
 DEF VAR pcInput AS CHAR NO-UNDO.

@@ -22,8 +22,8 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{timestamp.i}
-{dataformat.i}
+{Func/timestamp.i}
+{Func/dataformat.i}
 
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEFINE VARIABLE resp_struct AS CHARACTER NO-UNDO. 

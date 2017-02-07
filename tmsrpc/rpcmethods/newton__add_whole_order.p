@@ -238,8 +238,8 @@ katun = "NewtonRPC".
 {Func/ftransdir.i}
 
 {Func/cparam2.i}
-/*{utumaa.i new }
-{edefine.i new}*/
+/*{Syst/utumaa.i new }
+{Inv/edefine.i new}*/
 {Func/order_data.i}
 {Func/smsmessage.i}
 {Mc/orderfusion.i}

@@ -7,7 +7,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER CLI LIKE Presel.CLI NO-UNDO.
 /*
@@ -99,6 +99,6 @@ WITH
 
 
    ASSIGN
-   ufk = 0 ufk[8] = 8 ehto = 0. RUN ufkey.
+   ufk = 0 ufk[8] = 8 ehto = 0. RUN Syst/ufkey.p.
 
    HIDE FRAME Presel NO-PAUSE.

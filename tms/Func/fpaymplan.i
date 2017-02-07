@@ -4,7 +4,7 @@
 
 */
 
-{finvbal.i}
+{Func/finvbal.i}
 
 /* check that invoice is valid for payment plan */
 FUNCTION fValidForPaymPlan RETURNS INTEGER

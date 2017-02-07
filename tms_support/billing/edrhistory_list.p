@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "qvantel".
-{edrhistory_changes.i}
-{timestamp.i}
+{tms_support/billing/edrhistory_changes.i}
+{Func/timestamp.i}
 
 DEF VAR i           AS INT  NO-UNDO.
 DEF VAR ldaFromDate AS DATE NO-UNDO.

@@ -11,7 +11,7 @@ DISP "Logfiles will be saved to [ /home/jannetou ]  folder" SKIP
       "BillItemsTotalLog:    billing_item_totals_#DATE.txt" SKIP(1) 
      "please wait ... " SKIP.
 
-RUN ccreport_test_run.p
+RUN tms_support/billing/ccreport_test_run.p
          (ldtdate,
          ldtdate2,
          1,

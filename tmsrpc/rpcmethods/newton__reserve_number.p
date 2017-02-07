@@ -9,8 +9,8 @@
 DEF VAR pcCli AS CHAR NO-UNDO.
 DEF VAR pcFor AS CHAR NO-UNDO.
 DEF VAR plReserve AS LOG NO-UNDO.
-{tmsconst.i}
-{timestamp.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 IF validate_request(param_toplevel_id, "string,boolean") EQ ? THEN RETURN.
 pcCli = get_string(param_toplevel_id, "0").
