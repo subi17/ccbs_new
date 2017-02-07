@@ -3,7 +3,8 @@
   TASK .........: Program reads Migration response files.
                   It also sets corresponding order status according to
                   returned status and notifies WEB MigrationTool about 
-                  changed status.
+  
+  changed status.
   APPLICATION ..: tms
   AUTHOR .......: ilsavola
   CREATED ......: 25.1.2017
@@ -26,7 +27,8 @@ DEF VAR ldaReadDate AS DATETIME.
 DEF VAR lcTimePart AS CHAR. /*For log file name*/
 DEF VAR lcLogFile AS CHAR NO-UNDO.
 DEF VAR lcRowStatus AS CHAR NO-UNDO.
-
+DEF VAR lcInputFile AS CHAR No-UNDO.
+DEF VAR lcFileName AS CHAR NO-UNDO.
 /*Temp tables are named now without tt because the data is now easy to 
   be written into JSON in nice format.*/
 DEFINE TEMP-TABLE MigrationOK NO-UNDO
@@ -99,9 +101,14 @@ DO TRANS:
 END.
 
 /*Execution part*/
-RUN pReadFile.
-RUN pSendResults.
-
+INPUT STREAM sFile THROUGH VALUE("ls -ltr " + lcInDir).
+REPEAT:
+   IMPORT STREAM sFile UNFORMATTED lcFileName.
+   lcInputFile = lcInDir + lcFileName.
+    
+   RUN pReadFile.
+   RUN pSendResults.
+END.
 /*Release ActionLog lock*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
@@ -137,10 +144,11 @@ PROCEDURE pReadFile:
 
    PUT STREAM sLog UNFORMATTED
       "List collection starts " + fTS2HMS(fMakeTS()) SKIP.
+   
    FILE_LINE:
    REPEAT TRANS:
 
-      IMPORT STREAM sin UNFORMATTED lcLine.
+      IMPORT STREAM sIn UNFORMATTED lcLine.
       IF TRIM(lcLine) EQ "" THEN NEXT.
       liLineNumber = liLineNumber + 1.
 

@@ -18,7 +18,7 @@
 {cparam2.i}
 {timestamp.i}
 {ftransdir.i}
-
+gcBrand = "1".
 
 DEF STREAM sOut.
 DEF STREAM sLog.
@@ -57,7 +57,7 @@ lcTimePart = STRING(YEAR(ldaReadDate)) +
 lcOutFile = lcSpoolDir + "MM_MIGRATION_LIST_" + lcTimePart + ".txt".
 lcLogFile = lcLogDir + "MM_MIGRATION_LIST_" + lcTimePart + ".log".
 
-            
+message "alkaa" VIEW-AS ALERT-BOX.
 
 OUTPUT STREAM sOut TO VALUE(lcOutFile) APPEND.
 OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
@@ -68,10 +68,9 @@ PUT STREAM sLog UNFORMATTED
 /*Data collection*/
 FOR EACH Order EXCLUSIVE-LOCK WHERE
          Order.Brand EQ gcBrand AND
-         Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_PENDING}:
-   lcRow = Order.CLI + lcDelim +
-           STRING(Order.PortingDate) + " " + 
-           STRING(Order.PortingTime) + lcDelim.
+         Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_PENDING}: 
+         message "jiihaa" VIEW-AS ALERT-BOX.
+   lcRow = Order.CLI.
    PUT STREAM sLog UNFORMATTED lcRow SKIP.
    PUT STREAM sOut UNFORMATTED lcRow SKIP.
 
