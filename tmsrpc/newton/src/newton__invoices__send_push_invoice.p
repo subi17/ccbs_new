@@ -5,7 +5,7 @@
  * @output boolean;true
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEFINE VARIABLE pcUserName    AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liRequestID   AS INTEGER   NO-UNDO. 
