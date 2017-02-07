@@ -1,6 +1,6 @@
 from gearbox.migrations import Migration
 
-class AddTableDPMember(Migration):
+class AddFieldDPMember(Migration):
 
     database = "common"
 
