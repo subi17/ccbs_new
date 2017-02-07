@@ -9,7 +9,8 @@
             contact_data;struct;optional
             fusion_data;struct;optional
             q25_data;struct;optional
- * @order_data salesman;string;optional;id of the seller
+ * @order_data brand;string;mandatory;brand to store order
+               salesman;string;optional;id of the seller
                reseller;string;mandatory;reseller id
                channel;string;mandatory;controller name
                orderer_ip;string;mandatory;IP that submits the order
@@ -266,6 +267,7 @@ DEF VAR gcOrderStructFields AS CHARACTER NO-UNDO.
 DEF VAR gcCustomerStructFields AS CHARACTER NO-UNDO.
 DEF VAR gcCustomerStructStringFields AS CHARACTER NO-UNDO. 
 
+DEF VAR pcTenant        AS CHAR NO-UNDO.
 DEF VAR pcSalesman      AS CHAR INITIAL "selforder" NO-UNDO.
 DEF VAR pcReseller      AS CHAR NO-UNDO.
 DEF VAR pcChannel       AS CHAR NO-UNDO.
@@ -421,8 +423,11 @@ DEF BUFFER lbMobSub FOR MobSub.
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
    
+   pcTenant   = get_string(pcOrderStruct, "brand").
+   
    IF LOOKUP("salesman", lcOrderStruct) GT 0 THEN
        pcSalesman = get_string(pcOrderStruct, "salesman").
+      
    pcReseller = get_string(pcOrderStruct, "reseller").
    pcChannel = get_string(pcOrderStruct, "channel").
    pcChannel = REPLACE(pcChannel, "order", "").
@@ -1192,7 +1197,8 @@ END.
 
 /* Input variables for address data */
 
-gcOrderStructFields = "billing_data," +
+gcOrderStructFields = "brand!," +
+                      "billing_data," +
                       "campaign_code," +
                       "channel!," +
                       "check," +
@@ -1386,6 +1392,8 @@ lcOrderStruct = validate_request(pcOrderStruct, gcOrderStructFields).
 IF lcOrderStruct EQ ? THEN RETURN.
 fGetOrderFields().
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   

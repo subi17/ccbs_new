@@ -68,13 +68,7 @@ IF TRIM(katun) EQ "VISTA_" THEN DO:
    RETURN appl_err("username is empty").
 END.
 
-/* Check that mobsub is available */
-FIND MobSub WHERE
-     MobSub.MsSeq = piMsSeq
-NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN DO:
-   RETURN appl_err("System Error ! Mobile Subscription not available").
-END.
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 /* Yoigo MSISDN? */
 llYoigoCLI = fIsYoigoCLI(MobSub.CLI).            

@@ -1,7 +1,8 @@
 /**
  * Initial search for a subscription for renove orders
  *
- * @input: msisdn;str;mandatory;Subscription msisdn 
+ * @input: brand;string;mandatory;Tenant to check for subscription
+           msisdn;str;mandatory;Subscription msisdn 
            id_type;str;optional;Customer id type (Representative person if company_id is given) 
            person_id;str;optional;Customer id (Representative person if company_id is given)
            company_id;str;optional;Company id
@@ -112,6 +113,7 @@ END FUNCTION.
 
 /* Input parameters */
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR pcCLI AS CHAR NO-UNDO.
 DEF VAR pcIdType AS CHAR NO-UNDO INIT ?.
 DEF VAR pcPersonId AS CHAR NO-UNDO INIT ?.
@@ -165,10 +167,11 @@ pcstruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcFields = validate_request(pcstruct,
-   "msisdn!,person_id,id_type,company_id,channel!,offer_id,bypass").
+   "brand!,msisdn!,person_id,id_type,company_id,channel!,offer_id,bypass").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
+   pcTenant = get_string(pcStruct, "brand") 
    pcCLI = get_string(pcStruct, "msisdn")
    pcIdType = get_string(pcStruct, "id_type") WHEN LOOKUP ("id_type", lcFields) > 0
    pcPersonId = get_string(pcStruct, "person_id") WHEN LOOKUP ("person_id", lcFields) > 0
@@ -178,6 +181,8 @@ ASSIGN
    pcOfferId = get_string(pcStruct, "offer_id") WHEN LOOKUP("offer_id",lcFields) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant} 
 
 ASSIGN lcPostpaidVoiceTariffs = fCParamC("POSTPAID_VOICE_TARIFFS")
        lcPrepaidVoiceTariffs  = fCParamC("PREPAID_VOICE_TARIFFS").

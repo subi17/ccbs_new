@@ -74,10 +74,7 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub WHERE
-           MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN
-   RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq liMsSeq}
 
 FIND FIRST DayCampaign NO-LOCK WHERE 
            DayCampaign.Brand   = gcBrand AND
