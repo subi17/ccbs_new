@@ -32,15 +32,9 @@ DEF VAR lhField      AS HANDLE   NO-UNDO.
 DEF VAR lcField      AS CHAR     NO-UNDO. 
 DEF VAR ldFromStamp  AS DEC      NO-UNDO.
 DEF VAR ldtLastDump  AS DATETIME NO-UNDO.
-DEF VAR llAddToTT    AS LOG      NO-UNDO.
 
 DEF TEMP-TABLE ttStatus NO-UNDO
    FIELD ReqStatus AS INT.
-
-DEF TEMP-TABLE ttReqlist NO-UNDO
-   FIELD MsRequest   AS INT
-   FIELD UpdateStamp AS DEC
-   INDEX MsRequest MsRequest.
 
 DEF STREAM sFile.
 
@@ -110,17 +104,6 @@ PROCEDURE pInitialize:
 END PROCEDURE.
 
 PROCEDURE pDumpToFile:
-
-   IF CAN-FIND(FIRST ttReqlist WHERE 
-                     ttReqlist.MsRequest   EQ MsRequest.MsRequest AND
-                     ttReqlist.UpdateStamp EQ MsRequest.UpdateStamp) THEN RETURN.
-
-   IF llAddToTT THEN DO:
-      CREATE ttReqlist.
-      ASSIGN
-         ttReqlist.MsRequest   = MsRequest.MsRequest
-         ttReqlist.UpdateStamp = MsRequest.UpdateStamp.
-   END.
 
    IF icDumpMode = "modified" THEN DO:
       IF NOT fWasRecordModified(lhTable,
@@ -201,7 +184,6 @@ PROCEDURE pDumpRequests:
    MsRequestLoop:
    FOR EACH ttStatus NO-LOCK:
       /* YOT-4874 Add to dump also old requests where new updatestamp */
-      llAddToTT = TRUE.
       FOR EACH MsRequest NO-LOCK USE-INDEX UpdateStamp WHERE
                MsRequest.Brand     = gcBrand AND
                MsRequest.ReqStatus = ttStatus.ReqStatus AND
@@ -219,7 +201,6 @@ PROCEDURE pDumpRequests:
        
       END.
 
-      llAddToTT = FALSE.
       FOR EACH MsRequest NO-LOCK USE-INDEX ReqStatus WHERE
                MsRequest.Brand     = gcBrand AND
                MsRequest.ReqStatus = ttStatus.ReqStatus AND
