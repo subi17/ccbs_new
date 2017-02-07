@@ -1904,7 +1904,7 @@ IF Order.OrderChannel BEGINS "retention" THEN
             lbOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND
             ROWID(lbOrder) NE ROWID(Order):
 
-      RUN closeorder.p(lbOrder.OrderId, TRUE).
+      RUN Mc/closeorder.p(lbOrder.OrderId, TRUE).
 
       IF RETURN-VALUE > "" THEN 
          fCreateMemo("Automatic order closing failed", 
@@ -2408,13 +2408,13 @@ IF INDEX(Order.OrderChannel, "pos") EQ 0 THEN DO:
        Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}        /*51*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}  /*76*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} /*77*/ ) THEN DO:
-      RUN prinoconf.p(liOrderId).
+      RUN Mc/prinoconf.p(liOrderId).
    END.
    ELSE IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}    /*41*/  OR
            Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}    /*42*/  OR
            Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}    /*43*/   
            THEN DO: 
-      RUN sendorderreq.p(liOrderId, OrderCustomer.email, OUTPUT lcError). 
+      RUN Mc/sendorderreq.p(liOrderId, OrderCustomer.email, OUTPUT lcError). 
    END.
 END.
 

@@ -3,13 +3,16 @@
 
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
-DEF VAR pcStruct AS CHARACTER NO-UNDO. 
-DEF VAR lcStruct AS CHARACTER NO-UNDO. 
+DEF VAR pcStruct   AS CHARACTER NO-UNDO. 
+DEF VAR lcStruct   AS CHARACTER NO-UNDO. 
+DEF VAR top_struct AS CHARACTER NO-UNDO.
+
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 
-lcResultStruct = add_array(response_toplevel_id, "").
+top_struct = add_struct(response_toplevel_id, "").
+lcResultStruct = add_array(top_struct, "").
 
 FUNCTION fListQuery RETURNS CHAR 
 (icTables AS CHAR,
