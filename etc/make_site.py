@@ -64,6 +64,7 @@ if not os.path.exists(relpath + '/etc/site.py'):
     fd.write("%-14s = '%s'\n" % ('environment', environment))
     fd.write("%-14s = '%s'\n" % ('service_suffix', service_suffix))
     fd.write("ENV%-11s = '%s'\n" % ("['TERM']", 'xterm'))
+    fd.write("ENV%-11s = '%s%s'\n" % ("['DBUTIL']", dlc, '/bin/_dbutil'))
     if environment == 'development' and os.environ.get('PROCFG'):
         fd.write("ENV%-11s = '%s'\n" % ("['PROCFG']", os.environ['PROCFG']))
     fd.write("\nexec(open(work_dir + '/etc/config.py').read())\n")

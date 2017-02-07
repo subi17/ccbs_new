@@ -501,7 +501,8 @@ def fixtures(*a):
     tenantdict = {}
     tenant = None
     for tenant in tenancies:
-        tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{}.pf'.format(tenant)}
+        if tenancies[tenant]['tenanttype'] != 'Super':
+            tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{}.pf'.format(tenant)}
         if tenancies[tenant]['tenanttype'] == 'Default':
             tenantdict['Default'] = {'tenant': tenant, 'pf': 'all_{}.pf'.format(tenant)}
     if tenant is None:
@@ -553,7 +554,8 @@ def dumpfixtures(*a):
     tenantdict = {}
     tenant = None
     for tenant in tenancies:
-        tenantdict[tenant] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
+        if tenancies[tenant]['tenanttype'] != 'Super':
+            tenantdict[tenant] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
         if tenancies[tenant]['tenanttype'] == 'Default':
             tenantdict['default'] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
     if tenant is None:
