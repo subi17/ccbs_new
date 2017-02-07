@@ -19,6 +19,13 @@ if os.path.exists('src'):
 
 show_file = False
 
+def getpf(pf):
+    if 'tenancies' in globals():
+        for tenant in tenancies:
+            if tenancies[tenant].get('tenanttype', '') == 'Super':
+                return '{0}_{1}.pf'.format(pf, tenant)
+    return '{}.pf'.format(pf)
+
 @target
 def build(*a):
     if len(parameters) != 1:
@@ -109,7 +116,7 @@ def run_agent(*a):
     agent_name = parameters[0]
     
     os.environ['PROPATH'] += ',rpcmethods.pl'
-    args = ['-pf', '../../db/progress/store/all.pf', 
+    args = ['-pf', getpf('../../db/progress/store/all'), 
             '-T', '../../var/tmp',
             '-clientlog', '../../var/log/%s_agent.%d.log' % \
             	          (agent_name, os.getpid())]
