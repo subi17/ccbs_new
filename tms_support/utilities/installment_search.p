@@ -1,7 +1,4 @@
-/* Instalment search utility */
-
-
-DEF STREAM sOut.
+TREAM sOut.
 
 DEF VAR lcNumInst      AS INT NO-UNDO INITIAL 1
                        VIEW-AS RADIO-SET RADIO-BUTTONS 
@@ -44,6 +41,7 @@ DEFINE TEMP-TABLE ttData
     FIELD contract  LIKE FixedFee.Contract
     FIELD validfrom LIKE DCCli.ValidFrom
     FIELD validto   LIKE DCCli.ValidTo
+    FIELD FinStatus LIKE FixedFee.FinancedResult
     FIELD finalpay  AS LOG
     FIELD termdate  AS CHAR 
     INDEX idx1 AS PRIMARY msseq cli contract.
@@ -60,7 +58,7 @@ ASSIGN
 OUTPUT STREAM sOut TO VALUE(lcOutfile).
 
 PUT STREAM sout
-   "Cust Num|MSISDN|SubID|DCEvent|OrderId|Contract|From|To|Final Payment|Termination Date " 
+   "Cust Num|MSISDN|SubID|DCEvent|OrderId|Contract|From|To|Financial Status|Final Payment|Termination Date " 
    SKIP.
 
 FORM
@@ -329,6 +327,7 @@ PROCEDURE p_out_data_one_inst:
                       ttData.contract  = FixedFee.Contract
                       ttData.validfrom = DCCli.ValidFrom
                       ttData.validto   = DCCLi.ValidTo
+                      ttData.FinStatus = FixedFee.FinancedResult
                       ttData.finalpay  = llfinalPay
                       ttData.TermDate  = (IF DCCli.TermDate <> ? THEN STRING(DCCli.TermDate) ELSE "").
             END.
@@ -351,7 +350,7 @@ PROCEDURE p_out_data_one_inst:
    END.  
 
    FOR EACH ttData NO-LOCK:   
-      PUT STREAM sOut UNFORMATTED ttData.custnum "|" ttData.cli "|" ttData.msseq "|" ttData.dcevent "|" ttData.orderid "|" ttData.contract "|" ttData.validfrom "|" ttData.validto "|" ttData.finalpay "|" ttData.TermDate SKIP.
+      PUT STREAM sOut UNFORMATTED ttData.custnum "|" ttData.cli "|" ttData.msseq "|" ttData.dcevent "|" ttData.orderid "|" ttData.contract "|" ttData.validfrom "|" ttData.validto "|" ttData.FinStatus "|" ttData.finalpay "|" ttData.TermDate SKIP.
    END.
 
    OUTPUT STREAM sOut CLOSE.
@@ -431,6 +430,7 @@ PROCEDURE p_out_data_two_inst:
                       ttData.contract  = FixedFee.Contract
                       ttData.validfrom = DCCli.ValidFrom
                       ttData.validto   = DCCLi.ValidTo
+                      ttData.FinStatus = FixedFee.FinancedResult
                       ttData.finalpay  = llfinalPay
                       ttData.TermDate  = (IF DCCli.TermDate <> ? THEN STRING(DCCli.TermDate) ELSE "").
             END.
@@ -504,6 +504,7 @@ PROCEDURE p_out_data_two_inst:
                             ttData.validfrom = DCCli.ValidFrom
                             ttData.validto   = DCCLi.ValidTo
                             ttData.finalpay  = llfinalPay
+                            ttData.FinStatus = FixedFee.FinancedResult
                             ttData.TermDate  = (IF DCCli.TermDate <> ? THEN STRING(DCCli.TermDate) ELSE "").
                   END.
                END.
@@ -530,7 +531,7 @@ PROCEDURE p_out_data_two_inst:
    END.
    
    FOR EACH ttData NO-LOCK:   
-      PUT STREAM sOut UNFORMATTED ttData.custnum "|" ttData.cli "|" ttData.msseq "|" ttData.dcevent "|" ttData.orderid "|" ttData.contract "|" ttData.validfrom "|" ttData.validto "|" ttData.finalpay "|" ttData.TermDate SKIP.
+      PUT STREAM sOut UNFORMATTED ttData.custnum "|" ttData.cli "|" ttData.msseq "|" ttData.dcevent "|" ttData.orderid "|" ttData.contract "|" ttData.validfrom "|" ttData.validto "|" ttData.FinStatus "|" ttData.finalpay "|" ttData.TermDate SKIP.
    END.
 
    OUTPUT STREAM sOut CLOSE.
