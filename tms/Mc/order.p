@@ -947,7 +947,7 @@ BROWSE:
         HIDE FRAME fFixed NO-PAUSE.
 
         FIND FIRST OrderFusion NO-LOCK where
-                   OrderFusion.FixedNumber EQ lcFixedNumber NO-ERROR.
+                   OrderFusion.FixedNumber BEGINS lcFixedNumber NO-ERROR.
 
         IF NOT AVAILABLE OrderFusion THEN DO:
            MESSAGE "Fixed number not found!" VIEW-AS ALERT-BOX.
