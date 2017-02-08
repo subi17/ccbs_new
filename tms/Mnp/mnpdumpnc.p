@@ -86,13 +86,13 @@ FUNCTION fPrintMNPDump RETURNS LOGICAL
          ttMNPDetails.FormRequest lcDelimiter
          ttMNPDetails.DonorCode lcDelimiter
          ttMNPDetails.ReceptorCode lcDelimiter
-         STRING(ttMNPDetails.MNPSeq) lcDelimiter
-         ttMNPDetails.MsSeqLst lcDelimiter
-         ttMNPDetails.ICCLst.
+         STRING(ttMNPDetails.MNPSeq) lcDelimiter.
       IF iiType = {&MNP_TYPE_IN} THEN
          PUT STREAM sdump UNFORMATTED
          STRING(ttMNPDetails.OrderId) lcDelimiter.
-      PUT STREAM sdump UNFORMATTED SKIP.
+      PUT STREAM sdump UNFORMATTED 
+         ttMNPDetails.MsSeqLst lcDelimiter
+         ttMNPDetails.ICCLst SKIP.
    END.
 END FUNCTION.
 
