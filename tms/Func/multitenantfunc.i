@@ -48,14 +48,14 @@ FUNCTION fConvertTenantToBrand RETURNS CHARACTER
    
    CASE icTenant:
       WHEN "Default" THEN
-         ASSIGN lcTenant = "yoigo".
+         ASSIGN lcBrand = "yoigo".
       WHEN "Tmasmovil" THEN 
-         ASSIGN lcTenant = "masmovil".
+         ASSIGN lcBrand = "masmovil".
       OTHERWISE
-         ASSIGN lcTenant = "".
+         ASSIGN lcBrand = "".
    END CASE.        
    
-   RETURN lcTenant.
+   RETURN lcBrand.
        
 END FUNCTION.
 
