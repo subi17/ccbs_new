@@ -9,9 +9,12 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
+{Func/timestamp.i}
 
-
-DEF TEMP-TABLE ttDocs LIKE FusionMessage.
+DEF TEMP-TABLE ttDocs LIKE FusionMessage 
+  FIELD cCreatedTS AS CHAR
+  FIELD cFixedStatusTS AS CHAR
+  FIELD cUpdateTS AS CHAR.
 
 
 FUNCTION fCollect RETURNS LOGICAL
@@ -20,6 +23,9 @@ FUNCTION fCollect RETURNS LOGICAL
             FusionMessage.OrderID EQ  iiOrderId:
       CREATE ttDocs.
       BUFFER-COPY FusionMessage to ttDocs.
+      ttDocs.cCreatedTS =  fTS2HMS(FusionMessage.createdTS).
+      ttDocs.cFixedStatusTS = fTS2HMS(FusionMessage.FixedStatusTS).
+      ttDocs.cUpdateTS = fTS2HMS(FusionMessage.UpdateTS).
    END.
 
 END FUNCTION.
@@ -70,10 +76,13 @@ form
     "Fixed Status Desc.:" ttDocs.FixedStatusDesc FORMAT "X(45)" 
     SKIP
     "Fixed Status TS...:" ttDocs.FixedStatusTS 
+    " " ttDocs.cFixedStatusTS FORMAT "X(40)"
     SKIP
     "Created...........:" ttDocs.CreatedTS 
+    " " ttDocs.cCreatedTS FORMAT "X(40)" 
     SKIP
     "Handled...........:" ttDocs.UpdateTS 
+    " " ttDocs.cUpdateTS FORMAT "X(40)"
     SKIP
     "Response Code.....:" ttDocs.ResponseCode FORMAT "X(45)" 
     SKIP
@@ -310,9 +319,12 @@ REPEAT WITH FRAME sel:
             ttDocs.MessageStatus 
             ttDocs.FixedStatus 
             ttDocs.FixedStatusDesc 
-            ttDocs.FixedStatusTS 
+            ttDocs.FixedStatusTS
+            ttDocs.cFixedStatusTS
             ttDocs.CreatedTS 
+            ttDocs.cCreatedTS
             ttDocs.UpdateTS 
+            ttDocs.cUpdateTS
             ttDocs.ResponseCode 
             ttDocs.Source 
             ttDocs.AdditionalInfo 
