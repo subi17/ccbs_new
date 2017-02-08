@@ -20,7 +20,7 @@ slcounteritem
 subinvoice
 mnpsub
 mnpprocess
-mnpoperation
+#mnpoperation
 mnpdetails
 invseq
 invrow
