@@ -16,7 +16,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcTenant = get_string(pcStruct,"brand").
 
-add_string(top_struct, "brand", pcTenant).
+/*add_string(top_struct, "brand", pcTenant).*/
 
 {newton/src/settenant.i pcTenant}
 

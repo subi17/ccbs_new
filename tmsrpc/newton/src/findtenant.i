@@ -11,18 +11,18 @@
                   4 = FieldName 
                   5 = FieldValue
 ----------------------------------------------------------------------- */
-DEFINE VARIABLE liCnt    AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liCount  AS INTEGER   NO-UNDO.
-DEFINE VARIABLE vcTenant AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liRecordCnt AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liDBCount   AS INTEGER   NO-UNDO.
+DEFINE VARIABLE vcTenant    AS CHARACTER NO-UNDO.
 
 DO ON ERROR UNDO, THROW:
     /* This is to validate availability of multiple records with unique id passed. Ideally, only 1 record is expected, since sequences are globally unique */
     FOR EACH {3} WHERE &IF {1} &THEN {3}.Brand = gcBrand AND &ENDIF {3}.{4} = {5} TENANT-WHERE TENANT-ID() > -1 NO-LOCK
         ON ERROR UNDO, THROW:
 
-        ASSIGN liCnt = liCnt + 1.
+        ASSIGN liRecordCnt = liRecordCnt + 1.
             
-        IF liCnt > 1 THEN
+        IF liRecordCnt > 1 THEN
             UNDO, THROW NEW Progress.Lang.AppError(SUBST("Multiple {3} records identified for given &1. So, unable to set access to specific tenant!", {5}),1).                  
     END.
         
@@ -35,9 +35,9 @@ DO ON ERROR UNDO, THROW:
         UNDO, THROW NEW Progress.Lang.AppError(SUBST("{3} with {4} &1 doesn't exists!", {5}),1).                 
     
     IF vcTenant > "" THEN 
-    DO liCount = 1 TO NUM-DBS
+    DO liDBCount = 1 TO NUM-DBS
        ON ERROR UNDO, THROW:
-        SET-EFFECTIVE-TENANT(vcTenant, LDBNAME(liCount)).
+        SET-EFFECTIVE-TENANT(vcTenant, LDBNAME(liDBCount)).
     END.
 
     CATCH e AS Progress.Lang.Error:

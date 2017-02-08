@@ -6,7 +6,7 @@
   CREATED ......: 19.01.17
   Version ......: xfera  
 ----------------------------------------------------------------------- */
-DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
+DEFINE VARIABLE liDBCount AS INTEGER NO-UNDO.
 
 {Func/multitenantfunc.i}
 
@@ -15,10 +15,10 @@ pcTenant = fConvertBrandToTenant(pcTenant).
 IF pcTenant = "" THEN 
     RETURN appl_err("Invalid tenant information").
 
-DO liCount = 1 TO NUM-DBS
+DO liDBCount = 1 TO NUM-DBS
     ON ERROR UNDO, THROW:
     
-    SET-EFFECTIVE-TENANT(pcTenant, LDBNAME(liCount)).
+    SET-EFFECTIVE-TENANT(pcTenant, LDBNAME(liDBCount)).
     
     CATCH e AS Progress.Lang.Error:
 		    RETURN appl_err("Unable to set access to specific tenant.Abort!").    	
