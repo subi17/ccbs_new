@@ -136,7 +136,7 @@
 |common|RateCCN|3087|T|Rating|
 |common|RatePlan|30|T|Rating|
 |common|RatePref|29|T|Rating|
-|common|Region|52|S|Rating|
+|common|Region|52|T|Rating|
 |common|RepLog|4|S|System|
 |common|ReportConf|2|T|Billing|
 |common|ReportConfRow|36|T|Billing|
