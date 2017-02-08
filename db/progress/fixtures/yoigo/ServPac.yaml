@@ -1,0 +1,420 @@
+bulkload: ServPac
+  ServPac: "*1"
+  SPName: "PROFILE 1 Postpaid"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "*2"
+  SPName: "PROFILE 2 Prepaid"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "BB"
+  SPName: "BlackBerry"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "BPSUB"
+  SPName: "BarPremium subscription"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "C_BPAC"
+  SPName: "CLB Premium and Content"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "C_BRAIC"
+  SPName: "CLB Roaming and International calls"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "C_BRIAP"
+  SPName: "CLB Roaming and Int.calls + Premium"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "C_LOS"
+  SPName: "CLB Lost or Stolen"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "D_HOTL"
+  SPName: "DBL Hot lining"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "D_HOTLP"
+  SPName: "DBL Hot lining LP"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "D_REST"
+  SPName: "DLB Debt-Restricted"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "HSDPA"
+  SPName: "High speed data"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "LP"
+  SPName: "Debtor landing page"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "LTE"
+  SPName: "LTE (4G)"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "NEWPOSTSUB"
+  SPName: "New postpaid subscription"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "NEWPRESUB"
+  SPName: "New prepaid subscription"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "OI_SMSB20"
+  SPName: "SMS Bundle with 20 initial"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "PREP_VOICE"
+  SPName: "Prepaid Voice Service"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "SEC"
+  SPName: "SEC Secret number"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "SHAPER"
+  SPName: "Data shaper"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "TMSService"
+  SPName: "Basic Profile TMS"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNC_BPAC"
+  SPName: "Remove CLB Premium and content"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNC_BRAIC"
+  SPName: "Remove CLB Roaming and international calls"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNC_BRIAP"
+  SPName: "Remove CLB Roaming and international calls + premium"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNC_LOS"
+  SPName: "Remove CLB Lost/Stolen"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UND_HOTL"
+  SPName: "Remove DLB Hot lining"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UND_HOTLP"
+  SPName: "Remove DLB Hot lining LP"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UND_REST"
+  SPName: "Remove DLB Un-Debt-Restricted"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNSEC"
+  SPName: "UNSEC UnSecret number"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNY_DATA"
+  SPName: "Remove OLB HUR-Data"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNY_HURG"
+  SPName: "Remove OLB HUR-General"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNY_HURP"
+  SPName: "Remove OLB HUR-Premium"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNY_HURP_P"
+  SPName: "Remove P_Yoigo-HUR-Premium"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNY_HURRIC"
+  SPName: "Remove OLB HUR-Roaming and international calls"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNY_PRODINT"
+  SPName: "Remove OLB Prod-International-Roaming"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNY_REST"
+  SPName: "Remove OLB Restricted"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "UNY_SARC"
+  SPName: "Remove OLB Suspended / Risk Control"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "VOIPVIDEO"
+  SPName: "VOIP service"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "Y_DATA"
+  SPName: "OLB HUR-Data"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "Y_HURG"
+  SPName: "OLB HUR-General"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "Y_HURP"
+  SPName: "OLB HUR-Premium"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "Y_HURP_P"
+  SPName: "P_Yoigo-HUR-Premium"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "Y_HURRIC"
+  SPName: "OLB HUR-Roaming and International calls"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "Y_PRODINT"
+  SPName: "OLB Product International Roaming"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "Y_REST"
+  SPName: "OLB Restricted"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "Y_SARC"
+  SPName: "OLB Suspended by Risk Control"
+  Memo[1]: "New_package"
+  Memo[2]: "New_package"
+  Memo[3]: "New_package"
+  Memo[4]: "New_package"
+  Memo[5]: "New_package"
+  Memo[6]: "New_package"
+  Memo[7]: "New_package"
+  Memo[8]: "New_package"
+  Memo[9]: "New_package"
+  Memo[10]: "New_package"
+  Brand: "1"
+
+bulkload: ServPac
+  ServPac: "*1"
+  SPName: "Default profiili"
+  Brand: "2"
+
+bulkload: ServPac
+  ServPac: "TESTI"
+  SPName: "STARNET testipaketti"
+  Brand: "2"
+

@@ -1,0 +1,465 @@
+bulkload: DPTarget
+  DPId: 1
+  ValidFrom: 2012-10-11
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "*"
+
+bulkload: DPTarget
+  DPId: 1
+  ValidFrom: 2012-10-11
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "TERMPERIOD"
+  Included: FALSE
+
+bulkload: DPTarget
+  DPId: 2
+  ValidFrom: 2012-10-16
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "MDUBMF"
+
+bulkload: DPTarget
+  DPId: 3
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "MDUB9MF"
+
+bulkload: DPTarget
+  DPId: 4
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT8MF"
+
+bulkload: DPTarget
+  DPId: 4
+  ValidFrom: 2014-07-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT9MF"
+
+bulkload: DPTarget
+  DPId: 5
+  ValidFrom: 2013-02-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "PAYTERM"
+
+bulkload: DPTarget
+  DPId: 5
+  ValidFrom: 2013-06-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "PAYTERM1E"
+
+bulkload: DPTarget
+  DPId: 5
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "PAYTERMBC"
+
+bulkload: DPTarget
+  DPId: 5
+  ValidFrom: 2014-12-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "PAYTERMBS"
+
+bulkload: DPTarget
+  DPId: 6
+  ValidFrom: 2013-02-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "PAYTERM"
+
+bulkload: DPTarget
+  DPId: 6
+  ValidFrom: 2013-06-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "PAYTERM1E"
+
+bulkload: DPTarget
+  DPId: 6
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "PAYTERMBC"
+
+bulkload: DPTarget
+  DPId: 6
+  ValidFrom: 2014-12-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "PAYTERMBS"
+
+bulkload: DPTarget
+  DPId: 7
+  ValidFrom: 2013-06-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTS30MF"
+
+bulkload: DPTarget
+  DPId: 9
+  ValidFrom: 2013-12-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTS20MF"
+
+bulkload: DPTarget
+  DPId: 10
+  ValidFrom: 2013-12-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTS25MF"
+
+bulkload: DPTarget
+  DPId: 11
+  ValidFrom: 2014-02-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "*"
+
+bulkload: DPTarget
+  DPId: 11
+  ValidFrom: 2014-02-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "TERMPERIOD"
+  Included: FALSE
+
+bulkload: DPTarget
+  DPId: 12
+  ValidFrom: 2014-03-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERM1EF"
+
+bulkload: DPTarget
+  DPId: 13
+  ValidFrom: 2014-03-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMF"
+
+bulkload: DPTarget
+  DPId: 14
+  ValidFrom: 2014-04-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTM2MF"
+
+bulkload: DPTarget
+  DPId: 15
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMBSF"
+
+bulkload: DPTarget
+  DPId: 16
+  ValidFrom: 2014-06-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTS21MF"
+
+bulkload: DPTarget
+  DPId: 17
+  ValidFrom: 2014-06-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTS26MF"
+
+bulkload: DPTarget
+  DPId: 18
+  ValidFrom: 2014-06-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTS32MF"
+
+bulkload: DPTarget
+  DPId: 19
+  ValidFrom: 2014-07-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "10100004"
+
+bulkload: DPTarget
+  DPId: 19
+  ValidFrom: 2014-07-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "10100006"
+
+bulkload: DPTarget
+  DPId: 19
+  ValidFrom: 2014-07-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "10100052"
+
+bulkload: DPTarget
+  DPId: 20
+  ValidFrom: 2014-10-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "DATA6MF"
+
+bulkload: DPTarget
+  DPId: 21
+  ValidFrom: 2014-12-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "*"
+
+bulkload: DPTarget
+  DPId: 21
+  ValidFrom: 2014-12-01
+  ValidTo: 2049-12-31
+  TargetTable: "BItemGroup"
+  TargetKey: "33"
+  Included: FALSE
+
+bulkload: DPTarget
+  DPId: 22
+  ValidFrom: 2015-03-04
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT15MF"
+
+bulkload: DPTarget
+  DPId: 22
+  ValidFrom: 2015-03-04
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT24MF"
+
+bulkload: DPTarget
+  DPId: 22
+  ValidFrom: 2015-03-04
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT9MF"
+
+bulkload: DPTarget
+  DPId: 23
+  ValidFrom: 2015-03-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT15MF"
+
+bulkload: DPTarget
+  DPId: 24
+  ValidFrom: 2015-03-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT24MF"
+
+bulkload: DPTarget
+  DPId: 25
+  ValidFrom: 2015-03-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT9MF"
+
+bulkload: DPTarget
+  DPId: 26
+  ValidFrom: 2015-03-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "REJECTION_FEE"
+
+bulkload: DPTarget
+  DPId: 27
+  ValidFrom: 2015-05-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT9MF"
+
+bulkload: DPTarget
+  DPId: 28
+  ValidFrom: 2015-08-12
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT23MF"
+
+bulkload: DPTarget
+  DPId: 29
+  ValidFrom: 2015-09-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT23MF"
+
+bulkload: DPTarget
+  DPId: 30
+  ValidFrom: 2015-10-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "FLATMF8"
+
+bulkload: DPTarget
+  DPId: 31
+  ValidFrom: 2015-11-24
+  ValidTo: 2016-12-31
+  TargetTable: "BillItem"
+  TargetKey: "DATA6MF"
+
+bulkload: DPTarget
+  DPId: 32
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERM1EF"
+
+bulkload: DPTarget
+  DPId: 32
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMBCF"
+
+bulkload: DPTarget
+  DPId: 32
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMBSF"
+
+bulkload: DPTarget
+  DPId: 32
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMF"
+
+bulkload: DPTarget
+  DPId: 33
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERM1EF"
+
+bulkload: DPTarget
+  DPId: 33
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMBCF"
+
+bulkload: DPTarget
+  DPId: 33
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMBSF"
+
+bulkload: DPTarget
+  DPId: 33
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMF"
+
+bulkload: DPTarget
+  DPId: 34
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERM1EF"
+
+bulkload: DPTarget
+  DPId: 34
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMBCF"
+
+bulkload: DPTarget
+  DPId: 34
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMBSF"
+
+bulkload: DPTarget
+  DPId: 34
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMF"
+
+bulkload: DPTarget
+  DPId: 35
+  ValidFrom: 2015-11-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERM1EF"
+
+bulkload: DPTarget
+  DPId: 35
+  ValidFrom: 2016-10-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMBCF"
+
+bulkload: DPTarget
+  DPId: 35
+  ValidFrom: 2015-11-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMBSF"
+
+bulkload: DPTarget
+  DPId: 35
+  ValidFrom: 2015-11-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "RVTERMF"
+
+bulkload: DPTarget
+  DPId: 36
+  ValidFrom: 2016-11-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTFH300MF"
+
+bulkload: DPTarget
+  DPId: 37
+  ValidFrom: 2016-12-12
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT25MF"
+
+bulkload: DPTarget
+  DPId: 38
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT10MF"
+
+bulkload: DPTarget
+  DPId: 39
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT10MF"
+
+bulkload: DPTarget
+  DPId: 40
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT26MF"
+
+bulkload: DPTarget
+  DPId: 41
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTFH300MF"
+

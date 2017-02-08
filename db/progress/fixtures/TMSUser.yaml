@@ -1,4 +1,4 @@
-TMSUser1: TMSUser
+bulkload: TMSUser
   UserCode: "mas"
   Password: "testi"
   UserGroup: "Vendor"
@@ -12,7 +12,7 @@ TMSUser1: TMSUser
   FromDate: 2007-06-10
   AdminUser: TRUE 
 
-TMSUser2: TMSUser
+bulkload: TMSUser
   UserCode: "super"
   Password: "testi"
   UserGroup: "Vendor"
@@ -26,7 +26,7 @@ TMSUser2: TMSUser
   FromDate: 2007-06-10
   AdminUser: TRUE 
 
-TMSUser3: TMSUser
+bulkload: TMSUser
   UserCode: "yoigo"
   Password: "testi"
   UserGroup: "Vendor"
