@@ -10156,7 +10156,7 @@ bulkload: TMSCodes
 
 bulkload: TMSCodes
   TableName: "Provisioning"
-  FieldName: "provmaint"
+  FieldName: "Mc/provmaint.p"
   CodeGroup: "UI_Maint"
   CodeValue: "Top"
   CodeName: "Turn on/off provisioning"
