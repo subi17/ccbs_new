@@ -41,4 +41,22 @@ FUNCTION fConvertBrandToTenant RETURNS CHARACTER
        
 END FUNCTION.    
 
+FUNCTION fConvertTenantToBrand RETURNS CHARACTER
+   (INPUT icTenant AS CHARACTER):
+
+   DEF VAR lcBrand AS CHAR NO-UNDO.
+   
+   CASE icTenant:
+      WHEN "Default" THEN
+         ASSIGN lcTenant = "yoigo".
+      WHEN "Tmasmovil" THEN 
+         ASSIGN lcTenant = "masmovil".
+      OTHERWISE
+         ASSIGN lcTenant = "".
+   END CASE.        
+   
+   RETURN lcTenant.
+       
+END FUNCTION.
+
 &ENDIF

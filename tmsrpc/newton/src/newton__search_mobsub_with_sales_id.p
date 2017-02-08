@@ -23,9 +23,10 @@ gcBrand = "1".
 &SCOPED-DEFINE RESELLERS "PH,TC,TP"
 
 /* Input parameters */
-DEF VAR pcMSISDN AS CHAR NO-UNDO. 
-DEF VAR pcDNIType AS CHAR NO-UNDO. 
-DEF VAR pcDNI AS CHAR NO-UNDO. 
+DEF VAR pcTenant   AS CHAR NO-UNDO.
+DEF VAR pcMSISDN   AS CHAR NO-UNDO. 
+DEF VAR pcDNIType  AS CHAR NO-UNDO. 
+DEF VAR pcDNI      AS CHAR NO-UNDO. 
 DEF VAR pcReseller AS CHAR NO-UNDO. 
 
 /* Output parameters */
@@ -35,15 +36,18 @@ DEF VAR sub_struct AS CHAR NO-UNDO.
 /* Local variables */
 DEF VAR lcCallType AS CHAR NO-UNDO.
 
-lcCallType = validate_request(param_toplevel_id, "string,string,string,string").
+lcCallType = validate_request(param_toplevel_id, "string,string,string,string,string").
 IF lcCallType EQ ? THEN RETURN.
 
-pcMSISDN = get_string(param_toplevel_id, "0").
-pcDNIType = get_string(param_toplevel_id, "1").
-pcDNI = get_string(param_toplevel_id, "2").
-pcReseller = get_string(param_toplevel_id, "3"). 
+pcTenant = get_string(param_toplevel_id, "0").
+pcMSISDN = get_string(param_toplevel_id, "1").
+pcDNIType = get_string(param_toplevel_id, "2").
+pcDNI = get_string(param_toplevel_id, "3").
+pcReseller = get_string(param_toplevel_id, "4"). 
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FUNCTION fAddSubStruct RETURNS LOGICAL:
 
