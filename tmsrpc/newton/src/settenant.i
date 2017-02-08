@@ -8,9 +8,9 @@
 ----------------------------------------------------------------------- */
 DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
 
-{Syst/tenant_sel.i}
+{Func/multitenantfunc.i}
 
-pcTenant = fn-ConvertBrandToTenant(pcTenant).
+pcTenant = fConvertBrandToTenant(pcTenant).
 
 IF pcTenant = "" THEN 
     RETURN appl_err("Invalid tenant information").

@@ -22,4 +22,23 @@ FUNCTION fsetEffectiveTenantForAllDB RETURNS LOGICAL
       set-effective-tenant(icTenant,lcDBname).
    END.
 END FUNCTION.
+
+FUNCTION fConvertBrandToTenant RETURNS CHARACTER
+   (INPUT icBrand AS CHARACTER):
+
+   DEF VAR lcTenant AS CHAR NO-UNDO.
+   
+   CASE icBrand:
+      WHEN "Yoigo" THEN
+         ASSIGN lcTenant = "Default".
+      WHEN "Masmovil" THEN 
+         ASSIGN lcTenant = "Tmasmovil".
+      OTHERWISE
+         ASSIGN lcTenant = "".
+   END CASE.        
+   
+   RETURN lcTenant.
+       
+END FUNCTION.    
+
 &ENDIF
