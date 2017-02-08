@@ -22,3 +22,4 @@ FUNCTION fsetEffectiveTenantForAllDB RETURNS LOGICAL
       set-effective-tenant(icTenant,lcDBname).
    END.
 END FUNCTION.
+&ENDIF

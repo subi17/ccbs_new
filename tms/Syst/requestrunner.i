@@ -2,7 +2,7 @@
 */
 
 {Syst/commali.i}
-{Func/MultiTenant.i}
+{Func/multitenantfunc.i}
 
 /* process requests */
 PROCEDURE pRunRequest:
