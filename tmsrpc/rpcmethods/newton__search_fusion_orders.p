@@ -142,6 +142,22 @@ FUNCTION fListQuery RETURNS CHAR
 
       add_date_or_time(lcResultStruct, "order_date", 
          lhOrderFusion:BUFFER-FIELD("OrderDate"):BUFFER-VALUE, 0). 
+ 
+      /*COFF*/
+      add_string(lcResultStruct, "order_status", 
+         lhOrder:BUFFER-FIELD("StatusCode"):BUFFER-VALUE).       
+
+      add_string(lcResultStruct, "fixed_line_order_status",
+          lhOrderFusion:BUFFER-FIELD("FixedStatus"):BUFFER-VALUE).
+
+      FIND FIRST MobSub NO-LOCK WHERE
+                 MobSub.MsSeq EQ  
+                 int(lhOrder:BUFFER-FIELD("MsSeq"):BUFFER-VALUE) NO-ERROR.
+      IF AVAIL MobSub THEN DO:
+          add_int(lcResultStruct, "msstatus",MobSub.MsStatus).
+          RELEASE MobSub.
+      END.
+
    END.
 
    /* add_int(lcResultStruct, "total_amount", liCount).  */

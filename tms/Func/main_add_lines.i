@@ -542,8 +542,8 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
                           OUTPUT ldeSMSStamp).
       
    FIND FIRST CLIType NO-LOCK WHERE 
-              CLIType.Brand   = gcBrand AND 
-              CLIType.CLIType = "CONT9" NO-ERROR.      
+              CLIType.Brand   = gcBrand AND
+              CLIType.CLIType = "CONT9" NO-ERROR.
         
    FOR EACH tt_AdditionalSIM NO-LOCK:
 

@@ -62,7 +62,7 @@ WITH ROW 4 width 80 OVERLAY 8 DOWN
 
 /* Create orders for browsing */ 
 FOR EACH OrderFusion NO-LOCK WHERE
-         OrderFusion.FixedNumber  EQ icFixedNumber:
+         OrderFusion.FixedNumber  BEGINS icFixedNumber:
                            
    FIND FIRST Order WHERE
               Order.Brand EQ "1" AND
