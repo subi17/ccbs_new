@@ -152,3 +152,7 @@ IF LOOKUP("imei",lcStruct) > 0 THEN DO:
 END.
    
 add_struct(response_toplevel_id, "").
+
+FINALLY:
+   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
+END.
