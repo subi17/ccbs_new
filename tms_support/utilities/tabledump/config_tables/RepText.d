@@ -11274,10 +11274,10 @@
 9 "" 2 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
 9 "" 5 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
-9 "" 1 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
-9 "" 2 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
-9 "" 3 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
-9 "" 5 "La Combinada Azul 20" 0 "CONTDSL58" "1" 01/11/16 31/12/49
+9 "" 1 "La Combinada Azul 20 con 20 GB" 0 "CONTDSL58" "1" 01/11/16 31/12/49
+9 "" 2 "La Combinada Azul 20 con 20 GB" 0 "CONTDSL58" "1" 01/11/16 31/12/49
+9 "" 3 "La Combinada Azul 20 con 20 GB" 0 "CONTDSL58" "1" 01/11/16 31/12/49
+9 "" 5 "La Combinada Azul 20 con 20 GB" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 1 "La Combinada Azul 20" 0 "CONTDSL59" "1" 01/02/17 31/12/49
 9 "" 2 "La Combinada Azul 20" 0 "CONTDSL59" "1" 01/02/17 31/12/49
 9 "" 3 "La Combinada Azul 20" 0 "CONTDSL59" "1" 01/02/17 31/12/49
