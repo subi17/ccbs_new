@@ -214,8 +214,6 @@ CLASS HPD.HPDAckHandler:
       IF llOK = FALSE
       THEN RETURN ERROR NEW Progress.Lang.AppError("Query prepare failed for replog query", 1).
 
-      lhRepLogQuery:QUERY-OPEN().
-
       ALLTRANSACTIONS:
       DO WHILE TRUE ON ERROR UNDO, THROW:
 
@@ -223,6 +221,8 @@ CLASS HPD.HPDAckHandler:
 
          TRANSACTIONLOOP:
          DO TRANSACTION ON ERROR UNDO, THROW:
+
+            lhRepLogQuery:QUERY-OPEN().
 
             DO WHILE TRUE ON ERROR UNDO, THROW:
 
@@ -255,12 +255,12 @@ CLASS HPD.HPDAckHandler:
                lhRepLogTable::SendTime  = ?.
 
             END.
+
+            FINALLY:
+               lhRepLogQuery:QUERY-CLOSE().
+            END FINALLY.
          END.
       END.
-
-      FINALLY:
-         lhRepLogQuery:QUERY-CLOSE().
-      END FINALLY.
 
    END METHOD.
 
