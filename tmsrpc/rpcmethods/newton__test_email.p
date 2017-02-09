@@ -45,3 +45,7 @@ IF NOT AVAIL order then return
 RUN sendorderreq.p(piOrderId, "antti.savolainen@qvantel.com", OUTPUT lcErrFile).
 
 add_boolean(response_toplevel_id, "", true).
+
+FINALLY:
+   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
+END.
