@@ -66,8 +66,7 @@ FUNCTION fCollectMNPDetails RETURNS LOGICAL
          ttMNPDetails.ReceptorCode = MNPDetails.receptorcode
          ttMNPDetails.MNPSeq = MNPDetails.MNPSeq
          ttMNPDetails.MsSeqLst = lcMsSeqList
-         ttMNPDetails.ICCLst = lcICCList.
-      IF iiType = {&MNP_TYPE_IN} THEN
+         ttMNPDetails.ICCLst = lcICCList
          ttMNPDetails.OrderId = MNPProcess.OrderId.
    END.
 END FUNCTION.
