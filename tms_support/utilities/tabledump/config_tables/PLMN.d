@@ -409,6 +409,7 @@
 "MEXTL" "Telcel" "Mexico" "MX" "" "52"
 "MKDMM" "Mobimak" "Macedonia" "MK" "" "389"
 "MLTGO" "Go Mobile" "Malta" "MT" "" "356"
+"MLTMM" "Melita Mobile" "MALTA" "MT" "" "356"
 "MLTTL" "Vodafone Malta Ltd" "Malta" "MT" "" "356"
 "MNEMT" "MTEL" "Montenegro" "CS" "" "382"
 "MOZ01" "TDM" "Mozambique" "MZ" "" "258"
