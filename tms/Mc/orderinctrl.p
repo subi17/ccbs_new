@@ -273,6 +273,7 @@ END.
 /* special flow: 80 => 1/3 (fixed line creation) => 80 => 79 */
 ELSE IF lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
    LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
+   Order.OrderType NE {&ORDER_TYPE_STC} AND
    Order.ICC EQ "" AND
    NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
                       MsRequest.MsSeq = Order.MsSeq AND
