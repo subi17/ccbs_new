@@ -373,25 +373,24 @@ PROCEDURE pHandleOtherRows:
    FILE_LOOP:
    FOR EACH ttBatchInputFile WHERE ttBatchInputFile.Valid = TRUE:
 
-      lcLogFile = lcOutOngoingDir + "/" + ttBatchInputFile.FileName +
-                  "_POST_" + STRING(ldThisRun) + ".LOG".
+      lcLogFile = lcOutOngoingDir + "/" + ttBatchInputFile.FileName + "_POST_" + STRING(ldThisRun) + ".LOG".
+
       OUTPUT STREAM sOutput TO VALUE(lcLogFile) APPEND.
 
       FILE_CONTENT_LOOP:
-      FOR EACH ttInputFileContent WHERE
-               ttInputFileContent.FileName = ttBatchInputFile.FileName AND
-               ttInputFileContent.LineType <> "SUBSCRIPTION"
-               BY ttInputFileContent.LineNo:
+      FOR EACH ttInputFileContent WHERE ttInputFileContent.FileName = ttBatchInputFile.FileName AND ttInputFileContent.LineType <> "SUBSCRIPTION"
+            BY ttInputFileContent.LineNo:
 
          /* Exclude Bono activation with new subscription
             because it is added by OrderAction */
-         IF llNewSubs AND ttInputFileContent.LineType = "ACT_BONO"
-         THEN NEXT FILE_CONTENT_LOOP.
+         IF llNewSubs AND ttInputFileContent.LineType = "ACT_BONO" THEN 
+             NEXT FILE_CONTENT_LOOP.
 
          /* skip header line and no test case */
-         IF ttInputFileContent.InputLine = "" OR
-            ttInputFileContent.InputLine BEGINS "H" THEN NEXT FILE_CONTENT_LOOP.
-         ELSE IF ttInputFileContent.TestList = "" THEN DO:
+         IF ttInputFileContent.InputLine = "" OR  ttInputFileContent.InputLine BEGINS "H" THEN 
+             NEXT FILE_CONTENT_LOOP.
+         ELSE IF ttInputFileContent.TestList = "" THEN 
+         DO:
             PUT STREAM sOutput UNFORMATTED ttInputFileContent.InputLine SKIP.
             NEXT FILE_CONTENT_LOOP.
          END.
@@ -418,9 +417,7 @@ PROCEDURE pHandleOtherRows:
                    lcOutProcDir).
 
       /* Delete all handled subscriptions */
-      FOR EACH ttSubscription WHERE
-               ttSubscription.FileName = ttBatchInputFile.FileName AND
-               ttSubscription.Handled = TRUE:
+      FOR EACH ttSubscription WHERE ttSubscription.FileName = ttBatchInputFile.FileName AND ttSubscription.Handled = TRUE:
          DELETE ttSubscription.
       END. /* FOR EACH ttSubscription WHERE */
 
@@ -1046,7 +1043,7 @@ PROCEDURE pUpdateSegment:
    DEF VAR liSubCount         AS INT  NO-UNDO.
    DEF VAR liSegmentCount     AS INT  NO-UNDO.
    DEF VAR lcTenant           AS CHAR NO-UNDO.
-   
+
    DEF BUFFER bMobSub FOR MobSub.
 
    liSegmentEntries = NUM-ENTRIES(ttInputFileContent.TestList).
