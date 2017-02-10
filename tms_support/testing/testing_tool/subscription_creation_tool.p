@@ -32,7 +32,7 @@ DEFINE VARIABLE lcCustData         AS CHAR NO-UNDO.
 DEFINE VARIABLE llOwnCustomer      AS LOG  NO-UNDO. 
 DEFINE VARIABLE lcOfferId          AS CHAR NO-UNDO INIT "". 
 DEFINE VARIABLE lcEmaMsisdn        AS CHAR NO-UNDO INIT "".
-
+DEFINE VARIABLE lcTenant           AS CHAR NO-UNDO INIT "Default".
 
 ASSIGN
    lcOutOngoingDir   = fCParam("TestingTool","OutOutgoingDir")
@@ -196,7 +196,8 @@ DO WHILE TRUE
                     liQty = 0
                     lcCustData = ""
                     llOwnCustomer = FALSE
-                    lcOfferId = "".
+                    lcOfferId = ""
+                    lcTenant = "Default".
           END. /* IF FIRST-OF(ttInputFileContent.FileName) THEN DO: */
 
           PUT STREAM sOutput UNFORMATTED ttInputFileContent.InputLine SKIP.
@@ -229,7 +230,12 @@ DO WHILE TRUE
                              "Invalid input file format, should be at least 5 enties").
                    LEAVE FILE_CONTENT_LOOP.
                 END. /* IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") < 5 */
-
+                /*
+                ASSIGN lcTenant = fConvertBrandToTenant(ENTRY(8,ttInputFileContent.InputLine,"|")).
+                IF lcTenant > "" THEN  
+                */
+                    fsetEffectiveTenantForAllDB(lcTenant).
+                
                 IF R-INDEX(ENTRY(3,ttInputFileContent.InputLine,"|"),"-") > 0 THEN DO:
                    ASSIGN
                      lcCustData = ENTRY(3,ttInputFileContent.InputLine,"|").
@@ -382,12 +388,18 @@ DO WHILE TRUE
                  lcBono        = ""
                  liBonoCount   = 0
                  liBonoEntries = 0
-                 liCount       = 0.
+                 liCount       = 0
+                 lcTenant      = "Default".
 
           /* skip header line */
           IF ttInputFileContent.InputLine = "" OR
              ttInputFileContent.InputLine BEGINS "H" THEN NEXT FILE_CONTENT_LOOP.
-
+          /*    
+          ASSIGN lcTenant = ENTRY(8,ttInputFileContent.InputLine,"|").
+          IF lcTenant > "" AND LOOKUP(lcTenant,"Default,Tmasmovil") > 0 THEN  
+          */
+              fsetEffectiveTenantForAllDB(lcTenant).
+          
           /* Bono Activation is not allowed for IPL and Prepaid */
           IF NOT (LOOKUP(ttInputFileContent.TestList,lcIPLContracts) > 0) THEN DO:
                   /* ttInputFileContent.TestList BEGINS "TARJ") THEN DO: */
@@ -445,7 +457,7 @@ DO WHILE TRUE
        END. /* FOR EACH ttInputFileContent WHERE */
 
        /* Log into Report file for Analyser */
-       PUT STREAM sReport UNFORMATTED "CustIdType|CustId|OrderId|CLI|MsSeq|CLIType|EmailId" SKIP.
+       PUT STREAM sReport UNFORMATTED "CustIdType|CustId|OrderId|CLI|MsSeq|CLIType|EmailId|Brand" SKIP.
 
        FOR EACH ttSubscription WHERE
                 ttSubscription.FileName = ttBatchInputFile.FileName:
@@ -458,7 +470,8 @@ DO WHILE TRUE
               ttSubscription.CLI           lcDel
               STRING(ttSubscription.MsSeq) lcDel
               ttSubscription.CLIType       lcDel
-              ttSubscription.EmailId       SKIP.
+              ttSubscription.EmailId       lcDel
+              ttSubscription.Brand         SKIP.
        END. /* FOR EACH ttSubscription WHERE */
 
        /* Close Output log file */
@@ -486,6 +499,11 @@ DO WHILE TRUE
 
        FOR EACH ttSubscription WHERE ttSubscription.CustNum = 0:
            liCount = liCount + 1.
+           
+           ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+           IF lcTenant > "" THEN
+               fsetEffectiveTenantForAllDB(lcTenant).
+
            FIND FIRST MobSub WHERE
                       MobSub.CLI = ttSubscription.CLI NO-LOCK NO-ERROR.
            IF AVAIL MobSub THEN DO:
@@ -522,11 +540,17 @@ DO WHILE TRUE
           RUN pHandleOtherRows(INPUT FALSE,INPUT TRUE).
           PAUSE 200 NO-MESSAGE.
 
-          FOR EACH ttSubscription WHERE ttSubscription.CustNum = 0,
-              FIRST MobSub WHERE
-                    MobSub.CLI = ttSubscription.CLI NO-LOCK:
-              ASSIGN ttSubscription.CustNum = MobSub.CustNum
-                     liMobSubs = liMobSubs + 1.
+          FOR EACH ttSubscription WHERE ttSubscription.CustNum = 0:
+              
+              ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+              IF lcTenant > "" THEN
+                  fsetEffectiveTenantForAllDB(lcTenant).
+
+              FIND FIRST MobSub WHERE MobSub.CLI = ttSubscription.CLI NO-LOCK NO-ERROR.
+              IF AVAIL MobSub THEN
+                ASSIGN 
+                    ttSubscription.CustNum = MobSub.CustNum
+                    liMobSubs = liMobSubs + 1.
           END. /* FOR EACH ttSubscription NO-LOCK: */
 
           RUN pHandleOtherRows(INPUT TRUE,INPUT TRUE).

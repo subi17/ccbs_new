@@ -253,6 +253,8 @@ IF lcExtensionContracts <> "" THEN
 
 /* add values to the response if no error */
 top_struct = add_struct(response_toplevel_id, "").
+
+add_string(top_struct, "brand"          , BUFFER-TENANT-NAME(Order)).
 add_int(   top_struct, "tms_id"         , piOrderId         ).
 add_int(   top_struct, "order_type"     , Order.OrderType   ).
 add_string(top_struct, "tenant"         , vcTenant          ).

@@ -21,6 +21,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
+DEF VAR pcTenant.    AS CHAR NO-UNDO.
 DEF VAR pcInput      AS CHAR NO-UNDO.
 /* Output parameters */
 DEF VAR top_struct   AS CHAR NO-UNDO.
@@ -39,21 +40,25 @@ DEF VAR llSearchByMobsub AS LOG  NO-UNDO INIT FALSE.
 DEF VAR lii              AS INT  NO-UNDO. 
 DEF VAR pcSearchTypes    AS CHAR NO-UNDO. 
 
-lcCallType = validate_request(param_toplevel_id, "int|string,int,int,string").
+lcCallType = validate_request(param_toplevel_id, "string,int|string,int,int,string").
 IF lcCallType EQ ? THEN RETURN.
 
+pcTenant = get_string(param_toplevel_id, "0").
+
 IF ENTRY(1,lcCallType) EQ "int" THEN
-    liOwner = get_pos_int(param_toplevel_id, "0").
+    liOwner = get_pos_int(param_toplevel_id, "1").
 ELSE DO:
-    pcInput = get_string(param_toplevel_id, "0").
+    pcInput = get_string(param_toplevel_id, "1").
     liOwner = INT(pcInput) NO-ERROR.
 END.
 
-piLimit  = get_pos_int(param_toplevel_id, "1").
-piOffSet = get_int(param_toplevel_id, "2").
-pcSearchTypes = get_string(param_toplevel_id, "3").
+piLimit  = get_pos_int(param_toplevel_id, "2").
+piOffSet = get_int(param_toplevel_id, "3").
+pcSearchTypes = get_string(param_toplevel_id, "4").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FUNCTION fAddSubStruct RETURNS LOGICAL:
  

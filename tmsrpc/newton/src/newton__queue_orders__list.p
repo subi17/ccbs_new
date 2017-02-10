@@ -18,7 +18,8 @@
 
 {Syst/commpaa.i}
 gcBrand = "1".  
- 
+
+DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE piStatus AS INTEGER NO-UNDO. 
 DEFINE VARIABLE piOffset AS INTEGER NO-UNDO. 
 DEFINE VARIABLE piLimit  AS INTEGER NO-UNDO INIT 1000000. 
@@ -35,11 +36,12 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 gcParamStruct = get_struct(param_toplevel_id, "").
 
-lcParams = validate_request(gcParamStruct, "status!,offset,limit").
+lcParams = validate_request(gcParamStruct, "brand!,status!,offset,limit").
 IF lcParams EQ ? THEN RETURN.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-piStatus= get_int(gcParamStruct, "status").
+pcTenant = get_string(gcParamStruct, "brand"). 
+piStatus = get_int(gcParamStruct, "status").
 piOffset = get_int(gcParamStruct, "offset").
 
 IF LOOKUP("limit", lcParams) > 0 THEN DO:
@@ -51,6 +53,8 @@ IF LOOKUP("offset", lcParams) > 0 THEN
    piOffSet = get_int(gcParamStruct, "offset").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FUNCTION fAddOrder RETURN LOGICAL:
   

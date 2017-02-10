@@ -31,6 +31,7 @@ katun = "Newton".
 {Func/barrfunc.i}
 
 /* Input parameters */
+DEF VAR pcTenant       AS CHAR NO-UNDO.
 DEF VAR pcCliType      AS CHAR NO-UNDO.
 DEF VAR piSubsLimit    AS INT NO-UNDO.
 DEF VAR piOffset       AS INT NO-UNDO.
@@ -75,9 +76,10 @@ IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct,
-   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt").
+   "brand,subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt").
 
 ASSIGN
+   pcTenant       = get_string(pcStruct, "brand")
    pcCliType      = get_string(pcStruct, "subscription_type")
       WHEN LOOKUP("subscription_type", lcStruct) > 0
    piOffset       = get_int(param_toplevel_id, "1")
@@ -117,6 +119,8 @@ ASSIGN
       WHEN LOOKUP("debt", lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF pdtInputDate > TODAY THEN 
    pdtInputDate = ?.

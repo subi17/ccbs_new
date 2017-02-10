@@ -17,7 +17,7 @@ FUNCTION fsetEffectiveTenantForAllDB RETURNS LOGICAL
    (INPUT icTenant AS CHAR).
    DEF VAR liDBid AS INT NO-UNDO.
    DEF VAR lcDBname AS CHAR NO-UNDO.   
-   DO liDBid = 1 TO NUM-DBS with frame a.
+   DO liDBid = 1 TO NUM-DBS:
       lcDBname = LDBNAME(liDBid).
       set-effective-tenant(icTenant,lcDBname).
    END.
