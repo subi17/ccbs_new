@@ -45,7 +45,6 @@ TaxClass
 TaxZone
 TerminalStock
 TMRule
-TMSPrinter
 TMSRepCfg
 TMSReport
 TMSUser
