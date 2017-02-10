@@ -19,6 +19,8 @@ else:
        elif option == '1':
           sys.stdout.write( txt + ';MNMO NPROP;a\n')
        elif option == '2':
+          #errortxt = txt + ';MNMO NUMPO;La operación se ha realizado con éxito. \n'
+          #errortxt.encode(encoding='Latin-1')
           sys.stdout.write( txt + ';MNMO NUMPO;b\n')
        else:
           sys.stdout.write( txt + ';0000 00000;La operación se ha realizado con éxito. \n')

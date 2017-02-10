@@ -101,7 +101,7 @@ DO TRANS:
 END.
 
 /*Execution part*/
-INPUT STREAM sFile THROUGH VALUE("ls -ltr " + lcInDir).
+INPUT STREAM sFile THROUGH VALUE("ls -ltr " + lcInDir +"/" ).
 REPEAT:
    IMPORT STREAM sFile UNFORMATTED lcFileName.
    lcInputFile = lcInDir + lcFileName.
