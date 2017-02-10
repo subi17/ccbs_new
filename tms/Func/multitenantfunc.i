@@ -12,6 +12,7 @@
 &THEN
 
 &GLOBAL-DEFINE multitenant YES
+{Syst/tmsconst.i}
 
 FUNCTION fsetEffectiveTenantForAllDB RETURNS LOGICAL 
    (INPUT icTenant AS CHAR).
@@ -30,9 +31,9 @@ FUNCTION fConvertBrandToTenant RETURNS CHARACTER
    
    CASE icBrand:
       WHEN "Yoigo" THEN
-         ASSIGN lcTenant = "Default".
+         ASSIGN lcTenant = {&TENANT_YOIGO}.
       WHEN "Masmovil" THEN 
-         ASSIGN lcTenant = "Tmasmovil".
+         ASSIGN lcTenant = {&TENANT_MASMOVIL}.
       OTHERWISE
          ASSIGN lcTenant = "".
    END CASE.        

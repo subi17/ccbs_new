@@ -142,3 +142,13 @@ FIND FIRST TMSParam WHERE
            TMSParam.paramcode EQ "IMSI_Begin".
    tmsparam.charval="2140401".
 
+/* MB-156 remove SMS invoice from MasMovil tenant */
+fsetEffectiveTenantForAllDB("TMasMovil").
+FIND FIRST TMSCodes WHERE 
+           tmscodes.fieldname EQ "deltype" AND
+           tmscodes.codename EQ "SMS" NO-ERROR.
+IF AVAIL TMSCodes THEN   
+   DELETE tmscodes.
+
+
+
