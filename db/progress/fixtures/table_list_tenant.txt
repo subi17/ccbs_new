@@ -23,7 +23,6 @@ CTServEl
 CTServPac
 CustCat
 CustGroup
-CustIntEvent
 CustTemp
 DayCampaign
 DCServiceComponent
