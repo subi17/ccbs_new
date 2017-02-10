@@ -75,7 +75,7 @@ PROCEDURE pRunRequest:
    ELSE 
    FOR FIRST MsRequest NO-LOCK WHERE
              MsRequest.MsRequest = iiRequestID 
-   TENANT-WHERE buffer-tenant-name(order) = {TENANT_YOIGO} or
+   TENANT-WHERE buffer-tenant-name(order) = {&TENANT_YOIGO} or
                 buffer-tenant-name(order) = {&TENANT_MASMOVIL}:
              
       IF MsRequest.ReqType NE iiReqType OR
