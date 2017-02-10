@@ -37,8 +37,8 @@ PROCEDURE pRunRequest:
             MsRequest.ReqType   = iiReqType AND     
             MsRequest.ReqStatus = iiReqStat AND   
             MsRequest.ActStamp <= idActTime /* scheduled or immediate */
-   TENANT-WHERE buffer-tenant-name(order) = {&TENANT_YOIGO} or 
-                buffer-tenant-name(order) = {&TENANT_MASMOVIL}
+   TENANT-WHERE buffer-tenant-name(msrequest) = {&TENANT_YOIGO} or 
+                buffer-tenant-name(msrequest) = {&TENANT_MASMOVIL}
    BY MsRequest.ActStamp
    BY MsRequest.MsRequest:
 
