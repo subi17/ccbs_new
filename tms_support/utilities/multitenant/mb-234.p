@@ -10,7 +10,7 @@ DEF VAR lgsimulate AS LOG NO-UNDO INIT FALSE.
 
 fsetEffectiveTenantForAllDB("TMasMovil").
 FIND FIRST Region
-NO-ERROR.
+NO-ERROR.  /* Regions are already in fixtures? */
 IF NOT AVAIL Region THEN DO:
    for each Region  
       tenant-where buffer-tenant-name(region) = "default":
@@ -29,7 +29,7 @@ IF NOT AVAIL Region THEN DO:
       
 END.
 ELSE DO:
-   MESSAGE "MasMovil data found " Region.region VIEW-AS ALERT-BOX.
+   MESSAGE "MasMovil data for regions already found " Region.region VIEW-AS ALERT-BOX.
 
 /*
    FOR EACH Region
@@ -41,9 +41,11 @@ ELSE DO:
 */
 END.
 
+/* Check if masmovil data is already made taxzones > 6 */
 FIND FIRST InvGroup WHERE 
            INVGroup.taxzone EQ "6" NO-ERROR.
 IF NOT AVAIL InvGroup THEN DO:
+   /* tax zone 5 needed for prepaid topups ? 
    FIND FIRST InvGroup WHERE
               INVGroup.taxzone EQ "5" NO-ERROR.
    IF AVAIL InvGroup THEN
@@ -52,6 +54,8 @@ IF NOT AVAIL InvGroup THEN DO:
       ELSE DO:
          InvGroup.taxzone = "9".
       END.
+   */
+
    FOR EACH InvGroup WHERE
             INT(InvGroup.taxzone) GE 1 AND
             INT(InvGroup.taxzone) LE 4:
@@ -84,12 +88,13 @@ IF NOT AVAIL InvGroup THEN DO:
          
 
          BUFFER-COPY InvGroup EXCEPT taxzone invgroup invform TO bInvGroup.
-         bInvGroup.taxzone = STRING(INT(InvGroup.taxzone) + 4).
+         bInvGroup.taxzone = STRING(INT(InvGroup.taxzone) + 5).
         
       END.
    END.
 END.
 
+/* Check if masmovil tenant already includes template customers */
 fsetEffectiveTenantForAllDB("TMasMovil").
 FIND FIRST Customer WHERE 
            Customer.custnum EQ 300 NO-ERROR.
@@ -101,7 +106,8 @@ IF NOT AVAIL Customer THEN DO:
       IF lgSimulate THEN
          DISP Customer.
       ELSE DO:
-         MESSAGE "aa " VIEW-AS ALERT-BOX.
+         MESSAGE "Creating template customer " + STRING(Customer.custnum) 
+         VIEW-AS ALERT-BOX.
          fsetEffectiveTenantForAllDB("TMasMovil").
          CREATE bCustomer.
          BUFFER-COPY Customer TO bCustomer.
@@ -119,9 +125,9 @@ IF NOT AVAIL Customer THEN DO:
       END.
    END.
 END.
-ELSE MESSAGE "Cust found" VIEW-AS ALERT-BOX.
+ELSE MESSAGE "Customers already found" VIEW-AS ALERT-BOX.
 
-/* MB-94 set imsi ranges */
+/* MB-94 set imsi ranges for masmovil and yoigo for ICC loading check */
 fsetEffectiveTenantForAllDB("TMasMovil").
 FIND FIRST TMSParam WHERE
            TMSParam.brand EQ "1" AND
