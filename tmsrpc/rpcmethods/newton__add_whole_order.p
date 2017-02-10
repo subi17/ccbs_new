@@ -243,6 +243,8 @@ katun = "NewtonRPC".
 {smsmessage.i}
 {orderfusion.i}
 
+{Migration/migrationfunc.i}
+
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
 /* Input parameters for order */
@@ -1389,6 +1391,13 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
+
+/*MB_migration related checks*/
+IF pcChannel EQ "migration" THEN DO:
+   DEF VAR lcMErr AS CHAR NO-UNDO.
+   IF fMigrationCheckCustomer(gcBrand, lcId) NE "" THEN
+      RETURN appl_Err("Migration data validation error:" + lcMErr).
+END.
 
 /* YPB-515 */
 IF pcDiscountPlanId > "" THEN DO:
