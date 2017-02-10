@@ -133,7 +133,7 @@ FIND FIRST TMSParam WHERE
            TMSParam.brand EQ "1" AND
            TMSParam.paramgroup EQ "SIM" AND
            TMSParam.paramcode EQ "IMSI_Begin".
-   tmsparam.charval="2140120".
+   tmsparam.charval="2140420".
 
 fsetEffectiveTenantForAllDB("Default").
 FIND FIRST TMSParam WHERE
