@@ -8685,7 +8685,7 @@ bulkload: TMSParam
   ParamGroup: "SIM"
   ParamCode: "IMSI_Begin"
   ParamType: "c"
-  CharVal: "2140401"
+  CharVal: "2140"
   ParamName: "Prefix for IMSI in simread"
   Brand: "1"
 

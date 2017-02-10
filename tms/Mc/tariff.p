@@ -207,8 +207,6 @@ form /* ADD */
    Tariff.StartCharge[6] AT 60 
       FORMAT "zzz9.9999" SKIP
 
-   "First billable sec" Tariff.FirstBillableSec
-
    "OR Minimum sec:" AT 48 Tariff.MinSec
       help "Minimum charging seconds for calls"  
    SPACE(1)

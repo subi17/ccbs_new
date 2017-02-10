@@ -6,13 +6,6 @@ bulkload: InvGroup
   TaxZone: "2"
 
 bulkload: InvGroup
-  InvGroup: "IGIC2"
-  IGName: "Canary Islands 1"
-  InvForm: "IGIC2"
-  Brand: "1"
-  TaxZone: "7"
-
-bulkload: InvGroup
   InvGroup: "IPSIC1"
   IGName: "Ceuta 1"
   InvForm: "IPSIC1"
@@ -20,25 +13,11 @@ bulkload: InvGroup
   TaxZone: "3"
 
 bulkload: InvGroup
-  InvGroup: "IPSIC2"
-  IGName: "Ceuta 1"
-  InvForm: "IPSIC2"
-  Brand: "1"
-  TaxZone: "8"
-
-bulkload: InvGroup
   InvGroup: "IPSIM1"
   IGName: "Melilla 1"
   InvForm: "IPSIM1"
   Brand: "1"
   TaxZone: "4"
-
-bulkload: InvGroup
-  InvGroup: "IPSIM2"
-  IGName: "Melilla 1"
-  InvForm: "IPSIM2"
-  Brand: "1"
-  TaxZone: "9"
 
 bulkload: InvGroup
   InvGroup: "UNKNOWN"
@@ -53,13 +32,6 @@ bulkload: InvGroup
   InvForm: "VAT1"
   Brand: "1"
   TaxZone: "1"
-
-bulkload: InvGroup
-  InvGroup: "VAT2"
-  IGName: "Mainland 1"
-  InvForm: "VAT2"
-  Brand: "1"
-  TaxZone: "6"
 
 bulkload: InvGroup
   InvGroup: "VIP"
