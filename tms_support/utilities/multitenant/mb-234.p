@@ -13,14 +13,14 @@ FIND FIRST Region
 NO-ERROR.  /* Regions are already in fixtures? */
 IF NOT AVAIL Region THEN DO:
    for each Region  
-      tenant-where buffer-tenant-name(region) = "default":
+      tenant-where buffer-tenant-name(region) NE "TMasMovil":
       IF lgSimulate THEN
          DISP Region.
       ELSE DO:
          fsetEffectiveTenantForAllDB("TMasMovil").
          CREATE bRegion.
          BUFFER-COPY Region to bRegion.
-         bregion.taxzone = STRING(INT(bregion.taxzone) + 4).      
+         bregion.taxzone = STRING(INT(bregion.taxzone) + 5).      
       END.
    end.
 
@@ -29,16 +29,16 @@ IF NOT AVAIL Region THEN DO:
       
 END.
 ELSE DO:
-   MESSAGE "MasMovil data for regions already found " Region.region VIEW-AS ALERT-BOX.
+   MESSAGE "MasMovil data for regions already found, modifying taxzones" 
+   VIEW-AS ALERT-BOX.
 
-/*
-   FOR EACH Region
-      tenant-where buffer-tenant-name(Region) = "default" or 
-                   buffer-tenant-name(Region) = "tmasmovil":
-      DISP Region.
-      DISP BUFFER-TENANT-NAME(Region).
+   
+   FOR EACH Region WHERE
+            INT(Region.taxzone) < 5
+      tenant-where buffer-tenant-name(Region) NE "default":
+      region.taxzone = STRING(INT(bregion.taxzone) + 5).
    END.
-*/
+
 END.
 
 /* Check if masmovil data is already made taxzones > 6 */
