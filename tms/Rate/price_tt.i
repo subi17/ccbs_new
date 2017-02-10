@@ -193,6 +193,14 @@ FUNCTION fPrice RETURNS DECIMAL:
          ttCall.OrigRecordType NE ? THEN llStartCharge = FALSE.
    END.
 
+   IF ttTariff.FirstBillableSec > 0 THEN DO:
+
+      xTime = xTime - ttTariff.FirstBillableSec.
+
+      IF xtime < 0 THEN xtime = 0.
+
+   END.
+
    /* how many zones ? */
    CASE lPRAmt:
       /* ALL prices are zero: nothing TO calculate */
