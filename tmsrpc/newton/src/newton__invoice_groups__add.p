@@ -49,6 +49,8 @@ IF LOOKUP("active",lcStruct) > 0 THEN
 plActive =  get_bool(pcStruct,"active").
 IF NOT plActive THEN RETURN appl_err("param: active,invalid value").
 
+{newton/src/findtenant.i NO common Customer CustNum piCustNum}
+
 pcArrayInvoiceTarget = get_array(pcStruct,"subscriptions").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 DO liCount = 0 TO get_paramcount(pcArrayInvoiceTarget) - 1:

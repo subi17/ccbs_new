@@ -35,11 +35,7 @@ piLanguage      = get_int(param_toplevel_id, "2").
 IF piInvoiceNum = ? OR piInvoiceNum = 0 OR
    piSubInvoiceNum = ? OR piSubInvoiceNum = 0 THEN RETURN.
 
-FIND Invoice WHERE
-     Invoice.Brand = "1" AND
-     Invoice.InvNum = piInvoiceNum NO-LOCK NO-ERROR.
-IF NOT AVAILABLE Invoice THEN
-   RETURN appl_err("Invoice not found: " + STRING(piInvoiceNum)).
+{newton/src/findtenant.i YES common Invoice InvNum piInvoiceNum}
 
 FIND FIRST SubInvoice WHERE
            SubInvoice.InvNum    = piInvoiceNum AND

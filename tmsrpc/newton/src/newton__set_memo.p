@@ -23,12 +23,14 @@ piPriority  = get_int(param_toplevel_id, "1").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST Memo EXCLUSIVE-LOCK WHERE
-   Memo.MemoSeq = piReference NO-ERROR.
+{newton/src/findtenant.i NO common Memo MemoSeq piReference}
 
-IF NOT AVAIL Memo THEN RETURN appl_err("Memo not found").
+FIND CURRENT Memo EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+IF LOCKED Memo THEN 
+	RETURN appl_err("Record is locked!").
 
-ASSIGN
-   memo.Priority  = piPriority.
+ASSIGN memo.Priority  = piPriority.
+
+RELEASE Memo.
 
 add_boolean(response_toplevel_id, "", true).

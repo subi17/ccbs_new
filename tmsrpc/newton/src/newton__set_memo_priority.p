@@ -19,9 +19,7 @@ piPriority = get_int(param_toplevel_id, "1").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND Memo WHERE Memo.MemoSeq = piMemoSeq NO-LOCK NO-ERROR.
-
-IF NOT AVAILABLE Memo THEN RETURN appl_err("Memo not found!").
+{newton/src/findtenant.i NO common Memo MemoSeq piMemoSeq}
 
 IF Memo.Priority NE piPriority THEN DO: 
 
