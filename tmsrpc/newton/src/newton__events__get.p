@@ -24,8 +24,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    piID = INT(pcId) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN RETURN appl_err("Incorrect ID").
 
-   FIND MsRequest NO-LOCK WHERE 
-        MsRequest.MsRequest = piID NO-ERROR.
+   {newton/src/findtenant.i NO Mobile MsRequest MsRequest piID}
 
    IF NOT AVAIL MsRequest THEN RETURN appl_err("Event not found: "+ pcId).
       

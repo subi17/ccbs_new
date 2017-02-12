@@ -96,11 +96,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    liId = get_int(pcIDArray, STRING(liCounter)).
 
-   FIND MNPProcess NO-LOCK WHERE 
-        MNPProcess.MNPSeq = liId NO-ERROR.
-
-   IF NOT AVAIL MNPProcess THEN
-      RETURN appl_err("MNPProcess not found: "+ pcId).
+   {newton/src/findtenant.i NO Common MNPProcess MNPSeq liId}
    
    lcResultStruct = add_struct(resp_array, "").
       

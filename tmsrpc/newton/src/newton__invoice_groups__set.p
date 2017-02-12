@@ -78,6 +78,9 @@ plActive =  get_bool(pcStruct,"active").
 
 pcArrayInvoiceTarget = get_array(pcStruct,"subscriptions").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/findtenant.i NO Common InvoiceTargetGroup ITGroupID piITGroupId}
+
 DO liCount = 0 TO get_paramcount(pcArrayInvoiceTarget) - 1:
    piMsSeq= get_int(pcArrayInvoiceTarget,STRING(liCount)).
    IF gi_xmlrpc_error NE 0 THEN RETURN.

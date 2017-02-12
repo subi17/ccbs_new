@@ -38,6 +38,8 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i NO Common Customer CustNum piCustNum}
+
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 /* find the corresponding TMRule */

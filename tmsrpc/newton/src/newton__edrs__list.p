@@ -32,10 +32,7 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_pos_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST mobsub NO-LOCK WHERE
-           mobsub.msseq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE mobsub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 resp_array = add_array(response_toplevel_id, "").
 tthCDR = TEMP-TABLE ttCall:HANDLE.

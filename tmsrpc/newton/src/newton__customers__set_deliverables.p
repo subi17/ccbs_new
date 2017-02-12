@@ -66,10 +66,7 @@ IF LOOKUP("itemizations",lcStruct) > 0 THEN
 piCustNum = get_int(pcStruct,"customer_id").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND Customer WHERE
-     Customer.CustNum = piCustNum NO-LOCK NO-ERROR.
-IF NOT AVAIL Customer THEN 
-   RETURN appl_err("Not found customer with custnum " + STRING(piCustNum)).
+{newton/src/findtenant.i NO Common Customer CustNum piCustNum}
 
 CASE pcDeliveryChannel:
    WHEN "PAPER"   THEN liDelType = {&INV_DEL_TYPE_PAPER}.

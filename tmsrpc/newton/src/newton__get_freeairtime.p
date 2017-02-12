@@ -79,9 +79,7 @@ resp_struct = add_struct(response_toplevel_id, "").
 lcFATArray = add_array(resp_struct, "fat").
 lcDiscountArray = add_array(resp_struct, "Discount").
 
-FIND FIRST mobsub WHERE mobsub.msseq = piMsseq NO-LOCK NO-ERROR.
-IF NOT AVAILABLE mobsub THEN
-RETURN appl_err("Mobsub entry for " + STRING(piMsseq) + " not found").
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 liCustNum = MobSub.CustNum.
 

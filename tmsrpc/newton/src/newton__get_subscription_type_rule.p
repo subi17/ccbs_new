@@ -101,10 +101,7 @@ pcTariffBundle  = get_string(param_toplevel_id,"2").  /* tariff_bundle */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.MsSeq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 IF pcNewCLIType = "" OR pcNewCLIType = ? THEN
    RETURN appl_err("Invalid New CLIType").

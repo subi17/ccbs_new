@@ -89,6 +89,8 @@ DEF VAR lcQuery AS CHAR NO-UNDO.
 
 liCustNum = get_int(pcStruct,"customer_id").
 
+{newton/src/findtenant.i NO Common Customer CustNum liCustNum}
+
 lcQuery = 'FOR EACH InvoiceTargetGroup NO-LOCK WHERE ' + 
                    'InvoiceTargetGroup.CustNum = ' + STRING(liCustNum) + 
                    ' AND InvoiceTargetGroup.Brand = "1"'. 

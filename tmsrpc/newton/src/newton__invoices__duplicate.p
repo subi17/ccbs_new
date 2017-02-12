@@ -44,12 +44,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-/* check invoice */
-FIND Invoice WHERE 
-     Invoice.InvNum = piInvNum NO-LOCK NO-ERROR.
-IF NOT AVAIL Invoice THEN DO:
-   RETURN appl_err("Invalid invoice number").
-END.
+{newton/src/findtenant.i NO Common Invoice InvNum piInvNum}
 
 liRequestID = fDuplicateInvoiceRequest
    (Invoice.InvNum,

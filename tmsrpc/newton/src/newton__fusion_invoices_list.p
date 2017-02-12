@@ -31,9 +31,7 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST Mobsub NO-LOCK WHERE
-           Mobsub.MsSeq = piMsSeq NO-ERROR.
-IF NOT AVAIL Mobsub THEN RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 FIND FIRST Customer NO-LOCK WHERE
            Customer.Custnum = Mobsub.Custnum NO-ERROR.

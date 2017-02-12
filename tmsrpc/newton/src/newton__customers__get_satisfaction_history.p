@@ -27,13 +27,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcResultArray = add_array(response_toplevel_id, "").
 
-/* check Customer */
-FIND Customer WHERE 
-     Customer.Brand = gcBrand AND
-     Customer.CustNum = piCustNum  NO-LOCK NO-ERROR. 
-
-IF NOT AVAIL Customer THEN
-RETURN appl_err("Customer not found ").
+{newton/src/findtenant.i YES Common Customer CustNum piCustNum}
 
 fGetPIndicatorHistory("Customer",
                       STRING(piCustNum),
