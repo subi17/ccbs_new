@@ -108,10 +108,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUser) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-FIND Mobsub NO-LOCK
-WHERE Mobsub.MsSeq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE Mobsub THEN
-    RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 katun = pcUser.
 IF pcUserLevel EQ "Operator" THEN 

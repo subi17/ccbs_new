@@ -262,9 +262,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 pcBundleId = ENTRY(1,pcId,"|").
 piMsSeq = INT(ENTRY(2,pcId,"|")).
 
-FIND FIRST MobSub  WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("MobSub not found").
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 /*YPR-4775*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/

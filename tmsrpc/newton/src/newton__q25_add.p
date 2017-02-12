@@ -106,11 +106,7 @@ IF pcmemoStruct > "" THEN DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 
-FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.MsSeq = limsseq NO-ERROR.
-           
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq limsseq}
 
 FIND FIRST Customer NO-LOCK WHERE
            Customer.Custnum = MobSub.Custnum NO-ERROR.

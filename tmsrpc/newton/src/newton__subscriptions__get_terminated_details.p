@@ -97,10 +97,7 @@ piMsSeq = get_int(param_toplevel_id, "0").
 plAdmin = get_bool(param_toplevel_id, "1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND TermMobSub NO-LOCK WHERE
-     TermMobSub.msseq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE TermMobSub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO Mobile TermMobSub MsSeq piMsSeq}
 
 IF NOT fIsViewableTermMobsub(TermMobSub.MsSeq) THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).

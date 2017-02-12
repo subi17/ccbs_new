@@ -111,11 +111,7 @@ scUser = pcSalesman. /* Read from eventlog functions into eventlog.user */
 piCustNum = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST customer
-WHERE customer.custnum = piCustNum
-  AND customer.brand = "1" NO-ERROR.
-IF NOT AVAILABLE Customer THEN
-    RETURN appl_err(SUBST("Customer for &1 not found", piCustNum)).
+{newton/src/findtenant.i NO Common Customer CustNum piCustNum}
 
 katun = "VISTA_" + scUser.
 

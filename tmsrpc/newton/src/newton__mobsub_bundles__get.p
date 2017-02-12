@@ -175,9 +175,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    piMsSeq = INT(ENTRY(2,pcId,"|")).
    pcBundleId = ENTRY(1,pcId,"|").
 
-   FIND MobSub WHERE 
-        MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR. 
-   IF NOT AVAIL MobSub THEN RETURN  appl_err("Mobsub not found").
+   {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
   
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "id", pcBundleId + "|" + STRING(MobSub.MsSeq)).

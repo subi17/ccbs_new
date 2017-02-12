@@ -95,11 +95,7 @@ IF TRIM(katun) EQ "VISTA_" THEN
 IF pdeQ25NewAmt <= 0 THEN
    RETURN appl_err("incorrect new_amount value").
 
-FIND FIRST MobSub WHERE
-           MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR.
-           
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq limsseq}
 
 FIND FIRST DayCampaign NO-LOCK WHERE
            DayCampaign.Brand   = gcBrand AND

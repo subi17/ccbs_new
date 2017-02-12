@@ -77,12 +77,9 @@ katun = pcUserName.
 gcbrand = "1".
 {Func/fixedfee.i}
 {Func/fcounter.i}
-/* Check that mobsub is available */
-FIND MobSub WHERE
-     MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN DO:
-   RETURN appl_err("Mobile Subscription not available").
-END.
+
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
+
  /* check FATGroup */
  FIND FatGroup WHERE
       FatGroup.Brand = gcBrand AND
