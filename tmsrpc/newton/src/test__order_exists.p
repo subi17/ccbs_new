@@ -18,8 +18,6 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piOrderId = get_int(param_toplevel_id, "0").
 if gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST order NO-LOCK
-WHERE order.orderid EQ piOrderId 
-AND order.brand EQ "1" NO-ERROR.
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 add_boolean(response_toplevel_id, "", AVAILABLE order).

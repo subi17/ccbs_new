@@ -93,12 +93,7 @@ IF NUM-ENTRIES(lcMemoFields) >  0 THEN ASSIGN
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* Busines logic validations */
-
-FIND Order NO-LOCK WHERE
-     Order.Brand = gcBrand AND
-     Order.OrderId = piOrderId NO-ERROR.
-IF NOT AVAIL Order THEN 
-   RETURN appl_err(SUBST("Unknown Order id &1",STRING(piOrderId))).
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 IF TRIM(pcUserName) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 

@@ -33,6 +33,8 @@ piMaxCount = get_int(param_toplevel_id, "2").
 piLastid   = get_int(param_toplevel_id, "3").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
+
 top_struct = add_struct(response_toplevel_id, "").
 top_array = add_array(top_struct, "memos").
 

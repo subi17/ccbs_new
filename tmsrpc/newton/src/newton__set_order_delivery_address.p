@@ -66,10 +66,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 scUser = "VISTA_" + pcCreator.
 
-FIND Order WHERE
-     Order.Brand = "1" AND
-     Order.OrderId = piOrderId NO-LOCK NO-ERROR.
-IF NOT AVAIL Order THEN RETURN appl_err("Order not avaible").
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN
    RETURN appl_err("Order is delivered or closed").

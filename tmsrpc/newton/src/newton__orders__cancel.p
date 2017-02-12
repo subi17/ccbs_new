@@ -33,11 +33,7 @@ piOrderId = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* check order exist and is delivered */
-FIND Order WHERE
-     Order.Brand = gcBrand AND
-     Order.OrderId = piOrderId NO-LOCK NO-ERROR.
-IF NOT AVAIL Order THEN 
-   RETURN appl_err("Order not found").
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 ASSIGN
    katun = "VISTA_" + Order.Salesman

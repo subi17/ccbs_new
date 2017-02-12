@@ -35,6 +35,8 @@ ASSIGN
       WHEN LOOKUP("update_ts", lcTopStructFields) > 0.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
+
 {Syst/commpaa.i}
 katun = pcUserName.
 gcbrand = "1".

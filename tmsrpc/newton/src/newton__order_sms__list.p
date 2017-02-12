@@ -37,12 +37,7 @@ IF LOOKUP("offset",lcStruct) > 0 THEN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
-           Order.OrderId = liOrderId NO-ERROR.
-
-IF NOT AVAIL Order THEN
-   RETURN appl_err("Order not found").
+{newton/src/findtenant.i YES ordercanal Order OrderId liOrderId}
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 lcIdStruct = add_array(lcResultStruct, "results").

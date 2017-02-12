@@ -40,6 +40,8 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
    
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
+   {newton/src/findtenant.i YES ordercanal Order OrderId ttIMEI.OrderId}
+
    IF ttIMEI.IMEIStatus NE {&IMEI_STATUS_RELEASED} AND
       ttIMEI.IMEIStatus NE {&IMEI_STATUS_UNKNOWN} THEN
       RETURN appl_err(SUBST("Unknown IMEI status &1, ttIMEI.ImeiStatus")).
@@ -70,7 +72,9 @@ IF llDoEvent THEN DO:
 END.
 
 FOR EACH ttIMEI NO-LOCK:
-
+   
+   {newton/src/findtenant.i YES ordercanal Order OrderId ttIMEI.OrderId}
+   
    FIND OrderAccessory WHERE
         OrderAccessory.Brand = gcBrand AND
         OrderAccessory.OrderId = ttImei.OrderId AND
