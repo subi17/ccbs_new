@@ -49,8 +49,7 @@ DEF VAR liActAllowed AS INT NO-UNDO INIT 1.
 DEFINE BUFFER bMsRequest  FOR MsRequest.
 
 ASSIGN ldEndDate  = fLastDayOfMonth(TODAY)
-       ldEndStamp = fMake2Dt(ldEndDate,86399)
-       lcBONOContracts = fCParamC("BONO_CONTRACTS").
+       ldEndStamp = fMake2Dt(ldEndDate,86399).
 
 IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
 pcIDArray = get_array(param_toplevel_id, "0").
@@ -176,7 +175,9 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    pcBundleId = ENTRY(1,pcId,"|").
 
    {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
-  
+   
+   ASSIGN lcBONOContracts = fCParamC("BONO_CONTRACTS").
+
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "id", pcBundleId + "|" + STRING(MobSub.MsSeq)).
 
