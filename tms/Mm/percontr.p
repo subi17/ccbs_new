@@ -1828,6 +1828,7 @@ PROCEDURE pContractTermination:
    DEF VAR lcMemoText              AS CHAR NO-UNDO. 
    DEF VAR lcFeeMemoText           AS CHAR NO-UNDO. 
    DEF VAR lcPayTermFeeModel       AS CHAR NO-UNDO. 
+   DEF VAR liCurrentMonth          AS INT  NO-UNDO. 
 
    DEF BUFFER bLimit           FOR MServiceLimit.
    DEF BUFFER bMsRequest       FOR MsRequest.
@@ -2211,15 +2212,33 @@ PROCEDURE pContractTermination:
                   FixedFee.CalcObj     = lcDCEvent                    AND
                   FixedFee.SourceTable = "DCCLI"                      AND
                   FixedFee.SourceKey   = STRING(MsRequest.ReqIParam3) AND
-                  FixedFee.InUse       = TRUE USE-INDEX HostTable,
-             LAST FFItem OF FixedFee NO-LOCK: 
+                  FixedFee.InUse       = TRUE USE-INDEX HostTable:
 
-            ASSIGN lgAmortizeDate = fTS2Date(FFItem.Concerns[1],
-                                             OUTPUT idtAmortizeDate)
-                   liAmortizeValue = -(MsRequest.ReqDParam2).
+            /* pre-check that term amoritzation fees already exists */
+            FIND FIRST SingleFee NO-LOCK WHERE
+                       SingleFee.Brand       = gcBrand                 AND 
+                       SingleFee.CustNum     = MsRequest.CustNum       AND 
+                       SingleFee.HostTable   = "MobSub"                AND
+                       SingleFee.KeyValue    = STRING(MsRequest.MsSeq) AND
+                       SingleFee.BillCode    BEGINS "PAYTERMENDA"      AND
+                       SingleFee.SourceTable = "FixedFee"              AND 
+                       SingleFee.SourceKey   = STRING(FixedFee.FFNum)  NO-ERROR.
+     
+            IF AVAIL SingleFee THEN DO:
+               fReqStatus(3,"Term Amoritzation fees already available for this subscription").
+               RETURN.                
+            END.
+                  
+            FIND LAST FFItem OF FixedFee NO-LOCK NO-ERROR. 
 
-            ldtActDate = ADD-INTERVAL(idtAmortizeDate,liAmortizeValue,"months").
+            IF AVAIL FFItem THEN DO:
+               ASSIGN lgAmortizeDate = fTS2Date(FFItem.Concerns[1],
+                                                OUTPUT idtAmortizeDate)
+                      liAmortizeValue = -(MsRequest.ReqDParam2).
 
+               ldtActDate = ADD-INTERVAL(idtAmortizeDate,liAmortizeValue,"months").
+            END.
+            
          END.           
 
          IF idtAmortizeDate EQ ? OR  
@@ -2232,7 +2251,14 @@ PROCEDURE pContractTermination:
             ldeLastDayofMonthStamp = fMake2Dt(fLastDayOfMonth(ldtActDate),86399)
             ldeNextMonthStamp      = fMake2Dt((fLastDayOfMonth(ldtActDate) + 1),0)
             ldeNextDayStamp        = fMake2Dt((ldtActDate + 1),0)
-            liEndPeriod            = YEAR(ldtActDate) * 100 + MONTH(ldtActDate).
+            liEndPeriod            = YEAR(ldtActDate) * 100 + MONTH(ldtActDate)
+            liCurrentMonth         = YEAR(TODAY) * 100 + MONTH(TODAY).
+
+         IF liEndPeriod < liCurrentMonth THEN DO:
+            fReqError("Amoritiziation end period is less than current momnth period").
+            RETURN.
+         END.
+
       END.
 
       /* current contract */
@@ -2462,8 +2488,8 @@ PROCEDURE pContractTermination:
             IF MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
                                      (DayCampaign.DCType = {&DCTYPE_DISCOUNT} OR
                                       DayCampaign.DCType = {&DCTYPE_INSTALLMENT})
-               THEN "ContractTermination¤Postpone".
-            ELSE "ContractTermination".
+               THEN lcFeeMemoText = "ContractTermination¤Postpone".
+            ELSE lcFeeMemoText = "ContractTermination".
          END.
 
          RUN creasfee.p (MsOwner.CustNum,
@@ -3305,7 +3331,6 @@ PROCEDURE pContractReactivation:
    DEF VAR ldateDccli              AS DATE NO-UNDO.
    DEF VAR llUpdateResidualFeeCode AS LOG  NO-UNDO. 
    DEF VAR liAmortizeMonths        AS INT  NO-UNDO.
-   DEF VAR llgAmortization         AS LOG  NO-UNDO. 
 
    DEF BUFFER bMsRequest   FOR MsRequest.
    DEF BUFFER bAmorRequest FOR MsRequest.
@@ -3437,8 +3462,6 @@ PROCEDURE pContractReactivation:
    /* Check whether does this subscription has any amortized installment 
      request available */ 
 
-   llgAmortization = NO.
-
    FIND LAST bAmorRequest NO-LOCK WHERE 
              bAmorRequest.MsSeq      = MsRequest.MsSeq                 AND 
              bAmorRequest.ReqType    = {&REQTYPE_CONTRACT_TERMINATION} AND 
@@ -3449,8 +3472,7 @@ PROCEDURE pContractReactivation:
              bAmorRequest.ReqIParam3 = MsRequest.ReqIParam3            AND 
              bAmorRequest.ActStamp  <= MsRequest.ActStamp              NO-ERROR. 
    IF AVAIL bAmorRequest THEN 
-      ASSIGN llgAmortization  = YES
-             liAmortizeMonths = INT(TRUNC(bAmorRequest.ReqDParam2,0))
+      ASSIGN liAmortizeMonths = INT(TRUNC(bAmorRequest.ReqDParam2,0))
              ldtEndDate       = fcontract_end_date (INPUT lcDCEvent, 
                                                     INPUT ldtFromDate)
              ldtEndDate       = ADD-INTERVAL(ldtEndDate,-(liAmortizeMonths),"months").
@@ -3594,27 +3616,16 @@ PROCEDURE pContractReactivation:
              MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}) AND
              FixedFee.BillCode EQ "PAYTERM" THEN DO:
 
-            IF llgAmortization THEN     
-               FIND FIRST SingleFee USE-INDEX Custnum WHERE
-                          SingleFee.Brand         = gcBrand                 AND
-                          SingleFee.Custnum       = MsRequest.CustNum       AND
-                          SingleFee.HostTable     = "Mobsub"                AND
-                          SingleFee.KeyValue      = STRING(MsRequest.MsSeq) AND
-                          SingleFee.BillCode BEGINS "PAYTERMEND"            AND
-                      NOT SingleFee.BillCode BEGINS "PAYTERMENDA"           AND  
-                          SingleFee.SourceTable   = "FixedFee"              AND
-                          SingleFee.SourceKey     = STRING(FixedFee.FFNum)
-               EXCLUSIVE-LOCK NO-ERROR.
-            ELSE   
-               FIND FIRST SingleFee USE-INDEX Custnum WHERE
-                          SingleFee.Brand         = gcBrand                 AND
-                          SingleFee.Custnum       = MsRequest.CustNum       AND
-                          SingleFee.HostTable     = "Mobsub"                AND
-                          SingleFee.KeyValue      = STRING(MsRequest.MsSeq) AND
-                          SingleFee.BillCode BEGINS "PAYTERMEND"            AND
-                          SingleFee.SourceTable   = "FixedFee"              AND
-                          SingleFee.SourceKey     = STRING(FixedFee.FFNum)
-               EXCLUSIVE-LOCK NO-ERROR.
+            FIND FIRST SingleFee USE-INDEX Custnum WHERE
+                       SingleFee.Brand         = gcBrand                 AND
+                       SingleFee.Custnum       = MsRequest.CustNum       AND
+                       SingleFee.HostTable     = "Mobsub"                AND
+                       SingleFee.KeyValue      = STRING(MsRequest.MsSeq) AND
+                       SingleFee.BillCode BEGINS "PAYTERMEND"            AND
+                   NOT SingleFee.BillCode BEGINS "PAYTERMENDA"           AND  
+                       SingleFee.SourceTable   = "FixedFee"              AND
+                       SingleFee.SourceKey     = STRING(FixedFee.FFNum)
+            EXCLUSIVE-LOCK NO-ERROR.
          
             IF AVAIL SingleFee AND
                (NOT SingleFee.Billed OR

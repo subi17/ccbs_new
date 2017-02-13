@@ -64,7 +64,8 @@ ASSIGN
    lcCurrentPayterm  = get_nonempty_string(pcPayTermStruct, "payterm_contract")
    liPerContractId   = get_int(pcPayTermStruct, "per_contract_id")
    lcAction          = get_nonempty_string(pcPayTermStruct, "action")
-   liAmortizeQuanity = get_int(pcPayTermStruct,"amortize_quantity")
+   liAmortizeQuanity = get_int(pcPayTermStruct,"amortize_quantity") WHEN 
+                       LOOKUP("amortize_quantity",lcStruct) > 0 
    lcMemoTitle       = get_string(pcMemoStruct, "title")
    lcMemoContent     = get_string(pcMemoStruct, "content").
 
