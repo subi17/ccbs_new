@@ -93,6 +93,16 @@ DEFINE BUFFER lbMobSubAD1 FOR MobSub.
 DEF BUFFER bTerMsRequest FOR MsRequest.
 DEF BUFFER bMsOwner FOR MsOwner.
 
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER katun
+
+   {lib/eventlog.i}
+   DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
+   lhMsOwner = BUFFER MSOwner:HANDLE.
+   RUN StarEventInitialize(lhMsOwner).
+END.
+
+
 FIND FIRST MSRequest WHERE 
            MSRequest.MSrequest = iiMSrequest
 EXCLUSIVE-LOCK NO-ERROR.
@@ -574,12 +584,24 @@ ELSE DO:
 
    IF ldaActDate NE TODAY THEN DO:
 
+      IF llDoEvent THEN DO:
+         RUN StarEventSetOldBuffer (lhMsOwner).
+      END.
+
       CREATE bMsOwner.
       BUFFER-COPY MSOwner EXCEPT TSBegin TSEnd CLIEvent TO bMsOwner.
       ASSIGN
          MsOwner.TSend = fSecOffSet(ldeActivationTS, -1) 
          bMsOwner.TSBegin = ldeActivationTS 
          bMsOwner.TSEnd = 99999999.99999.
+
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent (lhMsOwner).
+         fMakeCreateEvent((BUFFER bMsOwner:HANDLE),
+                                         "",
+                                         katun,
+                                         "").
+      END.
 
       FIND MSOwner EXCLUSIVE-LOCK WHERE
          ROWID(MSOwner) = ROWID(bMsOwner).
