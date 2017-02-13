@@ -31,6 +31,7 @@ DEF VAR lcCurrentPayterm     AS CHARACTER NO-UNDO.
 DEF VAR liCreated            AS INTEGER   NO-UNDO.
 DEF VAR lcResult             AS CHARACTER NO-UNDO.
 DEF VAR lcStruct             AS CHARACTER NO-UNDO.
+DEF VAR lcMemoStruct         AS CHARACTER NO-UNDO. 
 DEF VAR lcMemoTitle          AS CHARACTER NO-UNDO.
 DEF VAR lcMemoContent        AS CHARACTER NO-UNDO.
 DEF VAR liPerContractId      AS INTEGER   NO-UNDO.  
@@ -54,7 +55,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 lcStruct = validate_request(pcPayTermStruct,"username!,msseq!,payterm_contract!,per_contract_id!,action!,amortize_quantity").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_request(pcMemoStruct,"title!,content!").
+lcMemoStruct = validate_request(pcMemoStruct,"title!,content!").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* Required Params */
