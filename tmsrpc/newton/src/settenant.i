@@ -6,7 +6,13 @@
   CREATED ......: 19.01.17
   Version ......: xfera  
 ----------------------------------------------------------------------- */
+&IF "{&settenant}" NE "YES" &THEN
+
+&GLOBAL-DEFINE settenant YES
+
 DEFINE VARIABLE liDBCount AS INTEGER NO-UNDO.
+
+&ENDIF
 
 {Func/multitenantfunc.i}
 

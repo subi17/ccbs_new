@@ -11,9 +11,15 @@
                   4 = FieldName 
                   5 = FieldValue
 ----------------------------------------------------------------------- */
+&IF "{&findtenant}" NE "YES" &THEN
+
+&GLOBAL-DEFINE findtenant YES
+
 DEFINE VARIABLE liRecordCnt AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liDBCount   AS INTEGER   NO-UNDO.
 DEFINE VARIABLE vcTenant    AS CHARACTER NO-UNDO.
+
+&ENDIF
 
 DO ON ERROR UNDO, THROW:
     /* This is to validate availability of multiple records with unique id passed. Ideally, only 1 record is expected, since sequences are globally unique */

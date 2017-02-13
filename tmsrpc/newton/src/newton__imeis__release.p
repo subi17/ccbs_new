@@ -9,6 +9,9 @@
  * @output boolean;true
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+gcBrand = "1".
+katun = "Newton".
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE pcArray AS CHARACTER NO-UNDO. 
@@ -58,9 +61,6 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
    
 END.
 
-{Syst/commpaa.i}
-katun = "Newton".
-gcBrand = "1".
 {Syst/eventval.i}
    
 IF llDoEvent THEN DO:

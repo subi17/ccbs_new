@@ -15,6 +15,8 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+gcbrand = "1".
 
 DEFINE VARIABLE piOrderId AS INTEGER NO-UNDO. 
 DEFINE VARIABLE pcType    AS CHARACTER NO-UNDO. 

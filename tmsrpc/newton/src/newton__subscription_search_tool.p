@@ -21,7 +21,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
-DEF VAR pcTenant.    AS CHAR NO-UNDO.
+DEF VAR pcTenant     AS CHAR NO-UNDO.
 DEF VAR pcInput      AS CHAR NO-UNDO.
 /* Output parameters */
 DEF VAR top_struct   AS CHAR NO-UNDO.
