@@ -1393,11 +1393,21 @@ IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
 
 /*MB_migration related checks*/
+
+/*Customer is not allowed to have active subscription in Yoigo system*/
 IF pcChannel EQ "migration" THEN DO:
    DEF VAR lcMErr AS CHAR NO-UNDO.
    IF fMigrationCheckCustomer(gcBrand, lcId) NE "" THEN
       RETURN appl_Err("Migration data validation error:" + lcMErr).
 END.
+
+/*If STC or MNP is not allowed during migration*/
+IF pcNumberType EQ "mnp" OR 
+   pcNumberType EQ "stc" THEN DO:
+   IF fIsNumberInMigration(pcCLI) EQ TRUE THEN 
+      RETURN appl_Err("Requested number is in migration").
+END.
+
 
 /* YPB-515 */
 IF pcDiscountPlanId > "" THEN DO:
