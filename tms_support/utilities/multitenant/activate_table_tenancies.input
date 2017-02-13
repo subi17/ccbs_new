@@ -23,7 +23,7 @@
 |common|Campaign|4|T|Rating|
 |common|CampRow|8|T|Rating|
 |common|CCN|196|T|Rating|
-|common|CDRError|18|T|Rating|
+|common|CDRError|18|S|Rating|
 |common|CGMember|3|T|Subscription (inactive)|
 |common|ClaimHist|4001|T|AR|
 |common|Company|1|T|Billing|
@@ -46,7 +46,7 @@
 |common|DBConfig|76|S|System|
 |common|DFField|1466|S|General|
 |common|DFTimeTable|347|T|General|
-|common|DialType|25|T|Rating|
+|common|DialType|25|S|Rating|
 |common|DiscountPlan|37|T|Billing|
 |common|DiscPlan|1|T|Rating|
 |common|DPBasis|1|T|Rating|
@@ -55,7 +55,7 @@
 |common|DPRate|38|T|Billing|
 |common|DPSubject|27|T|Billing|
 |common|DPTarget|62|T|Subscription|
-|common|DumpFile|158|T|General|
+|common|DumpFile|158|S|General|
 |common|DumpLog|4001|T|General|
 |common|ErrorLog|4001|T|General|
 |common|EventLogConf|5|S|System|
@@ -149,7 +149,7 @@
 |common|RequestType|54|S|System|
 |common|Reseller|46|T|Order|
 |common|ResellerTF|29|T|Order|
-|common|RoamZone|1|T|Rating|
+|common|RoamZone|1|S|Rating|
 |common|RZItem|131|T|Rating|
 |common|SaldoCounter|4001|T|Rating|
 |common|ServiceLCounter|4001|T|Rating|
@@ -174,7 +174,7 @@
 |common|Token|15|S|System|
 |common|UserGrp|9|S|System|
 |common|UserLimit|1355|T|System|
-|common|VATCode|16|T|Rating|
+|common|VATCode|16|S|Rating|
 |ordercanal|Barring|4001|T|Subscription|
 |ordercanal|BarringConf|31|S|Product|
 |ordercanal|CallAlarm|4001|T|Subscription|
@@ -259,7 +259,6 @@
 |star|AuthLog|4001|S|System|
 |star|CDRStreamCounter|4001|S|System|
 |star|eventlog|4001|T|System/Subscription|
-|star|MsReqStatistic|263|T|System|
 |star|TopUpQueue|4001|T|Subscription|
 |star|UpdateQueue|4001|S|Subscription|
 |mcdr|MobCDR|4001|T|Rating|
