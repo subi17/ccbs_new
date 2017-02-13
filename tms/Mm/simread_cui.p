@@ -16,7 +16,6 @@
 DEFINE VARIABLE lcSIMfile          AS CHARACTER NO-UNDO FORMAT "X(40)".
 DEFINE VARIABLE lcProcessedDir     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcessedSIMFile AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcTenant           AS CHARACTER NO-UNDO.
 
 form /* SIM PaymFile */
    skip(1)
@@ -48,13 +47,8 @@ DO WITH FRAME SIMfile :
 
    lcProcessedDir = fCParam("SIM","ProcessedSimFile").
    
-   /* Find used tenant name */
-   FIND FIRST Order.
-   lcTenant = BUFFER-TENANT-NAME(order).
-
    RUN Mm/simread.p(INPUT lcSIMfile,
                INPUT lcProcessedDir,
-               INPUT lcTenant,
                OUTPUT lcProcessedSIMFile).
 
    HIDE FRAME SIMfile.

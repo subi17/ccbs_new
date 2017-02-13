@@ -1,0 +1,2763 @@
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Customers"
+  DumpID: 4
+  FileName: "customer_xml.txt"
+  SpoolDir: "/tmp"
+  TransDir: "/home/ari"
+  Active: FALSE
+  DecimalPoint: ","
+  MainTable: "Customer"
+  SideTables: "CustBal"
+  LinkKey: "CustNum"
+  DumpName: "TestCustXML"
+  DumpFormat: "XML"
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Customer data file including fields which are used and defined by operator. "
+  DumpID: 5
+  FileName: "#CAT_customer_#MODE_#DATE_#TIME.dump"
+  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
+  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Customer"
+  DumpName: "CustDumpTXT"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  UseIndex: "Custnum"
+  ModFromEventLog: TRUE 
+  AveDurFull: 4
+  AveDurMod: 4
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Transfer customer data to SAP"
+  DumpID: 6
+  FileName: "SAP#RUN_BP_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/sap/outgoing/spool"
+  TransDir: "/store/riftp/sap/outgoing/outgoing"
+  Active: FALSE
+  MainTable: "Customer"
+  DumpName: "SAPBusinessPartner"
+  DumpFormat: "SAP"
+  EmptyFile: TRUE 
+  FileCategory: "SAP"
+  LogicModule: "sap_business_partner"
+  ModFromEventLog: TRUE 
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Transfer subscriptions to SAP"
+  DumpID: 7
+  FileName: "SAP#RUN_CA_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/sap/outgoing/spool"
+  TransDir: "/store/riftp/sap/outgoing/outgoing"
+  Active: FALSE
+  MainTable: "MobSub"
+  DumpName: "SAPContractAccount"
+  DumpFormat: "SAP"
+  EmptyFile: TRUE 
+  FileCategory: "SAP"
+  LogicModule: "sap_contract_account"
+  ModFromEventLog: TRUE 
+  ModFromField: "ActivationTS"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Transfer invoices to SAP"
+  DumpID: 8
+  FileName: "SAP#RUN_INV_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/sap/outgoing/spool"
+  TransDir: "/store/riftp/sap/outgoing/outgoing"
+  Active: FALSE
+  MainTable: "Invoice"
+  DumpName: "SAPInvoices"
+  DumpFormat: "SAP"
+  EmptyFile: TRUE 
+  FileCategory: "SAP"
+  LogicModule: "sap_invoices"
+  ModFromEventLog: TRUE 
+  ModFromField: "ChgStamp"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Requests"
+  DumpID: 9
+  FileName: "#CAT#RUN_Request_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "":""
+  DecimalPoint: "."
+  MainTable: "MSRequest"
+  DumpName: "RequestDumpTXT"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mm/msrequest_dump.p"
+  ModFromEventLog: TRUE 
+  ModFromField: "CreStamp,UpdateStamp"
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Subscription data file including fields which are defined and used by operator"
+  DumpID: 10
+  FileName: "#CAT_mobsub_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
+  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MobSub"
+  DumpName: "SubscriptionDumpTXT"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mm/subscription_dump.p"
+  ModFromEventLog: TRUE 
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Timestamp (MsOwner) file including fields which are defined and used by operator"
+  DumpID: 11
+  FileName: "#CAT_Timestamp_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/tmp"
+  TransDir: "/home/ari"
+  Active: FALSE
+  DumpDelimiter: "ASC(159)"
+  DecimalPoint: "."
+  MainTable: "MSOwner"
+  DumpName: "TimestampDumpTXT"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  ModFromField: "TSBegin"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Order dump used by pentaho and DWH"
+  DumpID: 12
+  FileName: "Order_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
+  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Order"
+  DumpName: "OrderDumpTXT"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  LogicModule: "Mm/dump_modified_order.p"
+  ModFromEventLog: TRUE 
+  ModFromField: "CrStamp"
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Order customer data file including fields which are defined and used by operator"
+  DumpID: 13
+  FileName: "#CAT_OrderCustomer_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
+  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
+  DumpDelimiter: "":""
+  DecimalPoint: ","
+  MainTable: "OrderCustomer"
+  DumpName: "OrderCustDumpTXT"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  ModCollModule: "Mm/ordercust_dump.p"
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Order payment data file including fields which are defined and used by operator."
+  DumpID: 14
+  FileName: "#CAT_OrderPayment_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
+  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
+  DumpDelimiter: "":""
+  DecimalPoint: ","
+  MainTable: "OrderPayment"
+  DumpName: "OrderPaymentTXT"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModCollModule: "Mm/orderpayment_dump.p"
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Order accessory data file including fields which are defined and used by operator"
+  DumpID: 15
+  FileName: "#CAT_OrderAccessory_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/tmp"
+  TransDir: "/home/ari"
+  Active: FALSE
+  DumpDelimiter: "ASC(159)"
+  DecimalPoint: ","
+  MainTable: "OrderAccessory"
+  DumpName: "OrderAccessoryTXT"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "This dump includes Logistics status information. Status updates has been registered based on data provided by Logistics operator"
+  DumpID: 16
+  FileName: "#CAT_Logistics_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: ","
+  MainTable: "OrderDelivery"
+  DumpName: "Logistics"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  ModFromField: "LOTimeStamp"
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Yoigo's invoices report. NOTE: A/R data is reported directly to SAP with deteiled General ledger information"
+  DumpID: 17
+  FileName: "#CAT_Invoices_#MODE_#DATE.txt"
+  SpoolDir: "/tmp"
+  TransDir: "/home/jarkkol"
+  Active: FALSE
+  DumpDelimiter: "":""
+  DecimalPoint: ","
+  MainTable: "Invoice"
+  DumpName: "InvoicesTXT"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  ModFromField: "ChgStamp,ClaimStamp"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Subscription billing permissions"
+  DumpID: 18
+  FileName: "#CAT_BillingPermission_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  MainTable: "Limit"
+  SideTables: "Customer"
+  DumpName: "BillingPermTXT"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  QueryClause: "FOR EACH Limit NO-LOCK WHERE Limit.TMRuleSeq = 0 AND Limit.LimitType = 3 AND Limit.ToDate >= TODAY AND Limit.LimitAmt NE 0, FIRST Customer OF Limit NO-LOCK WHERE Customer.Roles NE "inactive""
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Dump for creators and amount of credit notes and the MSISDN
+for which they relate to "
+  DumpID: 19
+  FileName: "#CAT_Credit_notes_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MsRequest"
+  SideTables: "Invoice"
+  DumpName: "CreditNotesTxt"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  QueryClause: "FOR EACH MsRequest NO-LOCK WHERE MsRequest.Brand = "1" AND
+MsRequest.ReqType = 22 AND MsRequest.ReqStatus = 2, FIRST Invoice WHERE Invoice.InvNum = MsRequest.ReqIParam3 NO-LOCK"
+  ModFromEventLog: TRUE 
+  ModFromField: "UpdateStamp"
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Free Air Times"
+  DumpID: 20
+  FileName: "#CAT#RUN_Free_Air_Time_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "FaTime"
+  DumpName: "FreeAirTimeTxt"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mm/fatime_dump.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Detailed postpaid CDR dump
+
+
+"
+  DumpID: 21
+  FileName: "#CAT#RUN_calls_detail_#DATE_#TIME.dump"
+  SpoolDir: "/store/riftp/dumpfiles/calls/spool"
+  TransDir: "/store/riftp/dumpfiles/calls/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MobCDR"
+  DumpName: "MobCDR"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  LogicModule: "Mm/mobcdr_dump_start.p"
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Roaming Tariff Items"
+  DumpID: 23
+  FileName: "#CAT#RUN_wholesale_RTItems_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "RTItem"
+  DumpName: "WholesaleRTItem"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Roaming Operators description"
+  DumpID: 24
+  FileName: "#CAT#RUN_wholesale_RoamOper_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "RoamOper"
+  DumpName: "WholesaleRoamOper"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Roaming Tariffs "
+  DumpID: 25
+  FileName: "#CAT#RUN_wholesale_RoamTariff_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "RoamTariff"
+  DumpName: "WholesaleRoamTariff"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "CCN names and codes for Calls detail dump"
+  DumpID: 26
+  FileName: "#CAT_CCN_names_#DATE.dump"
+  SpoolDir: "/tmp"
+  TransDir: "/home/jarkkol"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "CCN"
+  DumpName: "CCNTxt"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Billing Item names for calls detail dump"
+  DumpID: 27
+  FileName: "#CAT_Billing_Names_#MODE_#DATE_#TIME.dump"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "BillItem"
+  DumpName: "BillItemTxt"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Statistics of error CDRs (billing report)
+"
+  DumpID: 28
+  FileName: "#CAT_errorcdr_statistic_#DATE.txt"
+  SpoolDir: "/tmp"
+  TransDir: "/home/ari"
+  Active: FALSE
+  DecimalPoint: ","
+  MainTable: "MobCDR"
+  DumpName: "ErrorCDRStat"
+  DumpFormat: "ASCII"
+  FileCategory: "INV"
+  LogicModule: "Mm/errorcdr_stat_dump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "ACC requests"
+  DumpID: 29
+  FileName: "#CAT#RUN_ACC_Request_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "":""
+  DecimalPoint: "."
+  MainTable: "MsRequest"
+  DumpName: "ACCRequest"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mm/acc_request_dump.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 3
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Customers to IFS"
+  DumpID: 30
+  FileName: "IFS#RUN_CU_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
+  MainTable: "Customer"
+  DumpName: "IFSCustomer"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  LogicModule: "Ar/ifs_customer.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 1
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Subscriptions to IFS"
+  DumpID: 31
+  FileName: "IFS#RUN_SU_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
+  MainTable: "MobSub"
+  DumpName: "IFSSubscription"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  LogicModule: "Ar/ifs_subscription.p"
+  ModFromEventLog: TRUE 
+  ModFromField: "ActivationTS"
+  EventLogFields: "AgrCust,CLI,InvCust,MsStatus,PayType,CLIType"
+  AveDurFull: 1
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Service invoices (i.e. monthly postpaid invoices) to IFS
+"
+  DumpID: 32
+  FileName: "IFS#RUN_SE_INV_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  MainTable: "Invoice"
+  DumpName: "IFSInvoice"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  QueryClause: "1,5"
+  LogicModule: "Ar/ifs_invoice.p"
+  ModFromEventLog: TRUE 
+  ModFromField: "ChgStamp"
+  ConfigParam: "1,5"
+  AveDurFull: 2
+  AveDurMod: 2
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Charge and Compensation request data"
+  DumpID: 33
+  FileName: "#CAT#RUN_Charge_And_Compensation_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MsRequest"
+  SideTables: "PrePaidRequest,FMItem,BillCode"
+  DumpName: "ChargeCompDump"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mm/cctool_dump.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 1
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Prepaid topup requests"
+  DumpID: 34
+  FileName: "#CAT#RUN_Topup_Request_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "PrepaidRequest"
+  DumpName: "PrepaidRequest"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mm/prepaidrequest_dump.p"
+  ModFromField: "TSRequest"
+  AveDurFull: 1
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Sales invoices (i.e. cash invoices) to IFS
+"
+  DumpID: 35
+  FileName: "IFS#RUN_SA_INV_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
+  MainTable: "Invoice"
+  DumpName: "IFSInvoiceSA"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  QueryClause: "6,7,8,9"
+  LogicModule: "Ar/ifs_invoice.p"
+  ModFromEventLog: TRUE 
+  ModFromField: "ChgStamp"
+  ConfigParam: "6,7,8,9"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Detailed prepaid CDR dump (YDR-64)
+Matti Ahola - 04/03/10 13:17
+Will not be deployed as agreed by Miguel and Matti. "
+  DumpID: 36
+  FileName: "#CAT#RUN_calls_prepaid_#DATE_#TIME.dump"
+  SpoolDir: "/store/riftp/dumpfiles/calls/spool"
+  TransDir: "/store/riftp/dumpfiles/calls/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "PrepCDR"
+  DumpName: "PrepCDR"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  LogicModule: "Mm/prepcdr_dump_start.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Original full invoice table dump (Delta file check is taken in logic module)"
+  DumpID: 37
+  FileName: "#CAT_invoices_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/invoices/spool"
+  TransDir: "/store/riftp/dumpfiles/invoices/outgoing"
+  Active: FALSE
+  DumpDelimiter: "":""
+  DecimalPoint: ","
+  MainTable: "Invoice"
+  DumpName: "Invoices_ORIGINAL"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "New installment contracts daily to IFS
+"
+  DumpID: 38
+  FileName: "IFS#RUN_HIRE_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
+  DumpDelimiter: ";"
+  MainTable: "MsRequest"
+  DumpName: "IFSInstallment"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  LogicModule: "Ar/ifs_installment.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Installment cancellations monthly to IFS"
+  DumpID: 39
+  FileName: "IFS#RUN_HIRE_CANCEL_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
+  DumpDelimiter: ";"
+  MainTable: "MsRequest"
+  DumpName: "IFSCancelInstallment"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  LogicModule: "Ar/ifs_installment_cancel.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Original MsOwner dump, moved to datadump tool"
+  DumpID: 40
+  FileName: "msowner#DATE#TIME.dump"
+  SpoolDir: "/tmp"
+  TransDir: "/home/toniv"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MSOwner"
+  DumpName: "MSOwner"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromField: "TsBegin"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Original OrderAccessory dump, used both DWH and pentaho"
+  DumpID: 41
+  FileName: "OrderAccessory_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
+  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  MainTable: "OrderAccessory"
+  DumpName: "OrderAccessory_ORIG"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  ModCollModule: "Mm/dump_modified_orderaccessory.p"
+  AveDurFull: 1
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Susbcription Periodical Contracts"
+  DumpID: 42
+  FileName: "PeriodicalContract_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "DCCLI"
+  SideTables: "MServiceLimit"
+  DumpName: "PerContrDump"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  LogicModule: "Mm/percontract_dump.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 114
+  AveDurMod: 114
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Orders Periodical Contract"
+  DumpID: 43
+  FileName: "Order_PeriodicalContract_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Order"
+  DumpName: "OrderPerContrDump"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  LogicModule: "Mm/order_percontract_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Order cancellation IMEI release (YDR-69)"
+  DumpID: 44
+  FileName: "#CAT#RUN_IMEI_RELEASE_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/imei_release/spool"
+  TransDir: "/store/riftp/dumpfiles/imei_release/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "OrderAccessory"
+  SideTables: "Order"
+  DumpName: "IMEIRelease"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  QueryClause: "FOR EACH orderaccessory NO-LOCK WHERE
+         orderaccessory.brand = "1" AND
+         orderaccessory.imeistatus = 3,
+   FIRST order NO-LOCK WHERE
+         order.brand = orderaccessory.brand AND
+         order.orderid = orderaccessory.orderid"
+  ModFromEventLog: TRUE 
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Active services of subscriptions"
+  DumpID: 45
+  FileName: "ActiveService_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/services/spool"
+  TransDir: "/store/riftp/dumpfiles/services/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "SubSer"
+  DumpName: "ActiveServices"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mm/active_service_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MSISDNs"
+  DumpID: 46
+  FileName: "#CAT#RUN_MSISDN_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MSISDN"
+  DumpName: "MSISDN"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  LogicModule: "Mm/msisdn_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MServiceLPool used by Pentaho"
+  DumpID: 47
+  FileName: "MServiceLPool_#MODE_#DATE.txt"
+  SpoolDir: "/mnt/qss/spool"
+  TransDir: "/mnt/qss/mservicelpool"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MServiceLPool"
+  DumpName: "MServiceLPoolDump"
+  DumpFormat: "ASCII"
+  FileCategory: "TRACK"
+  LogicModule: "Mm/mservicelpool_dump.p"
+  ModFromEventLog: TRUE 
+  EventLogFields: "
+
+
+
+"
+  AveDurFull: 1
+  AveDurMod: 1
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Prepaid error calls (detailed). YOT-1074
+
+"
+  DumpID: 48
+  FileName: "#CAT_errcalls_prepaid_#DATE_#TIME.dump"
+  SpoolDir: "/store/riftp/dumpfiles/errcalls/spool/"
+  TransDir: "/store/riftp/dumpfiles/errcalls/outgoing/"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "PrepCDR"
+  DumpName: "PrepErrorCDR"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  LogicModule: "Mm/prepcdr_errordump_start.p"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "List of Billing Items used by Pentaho
+
+
+ "
+  DumpID: 49
+  FileName: "#CAT_Billing_Items_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/qss/spool"
+  TransDir: "/mnt/qss/billing_item_dim"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "BillItem"
+  SideTables: "BItemGroup"
+  DumpName: "BillingItems"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "TRACK"
+  QueryClause: "FOR EACH BillItem NO-LOCK WHERE BillItem.Brand = "1", FIRST BItemGroup NO-LOCK WHERE BItemGroup.Brand = "1" AND BItemGroup.BIGroup = BillItem.BIGroup"
+  ModFromEventLog: TRUE 
+  EventLogFields: "
+
+"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MNP KPI dump for Track (SER-465)"
+  DumpID: 50
+  FileName: "mnpkpi_dump_#DATE.txt"
+  SpoolDir: "/mnt/qss/spool"
+  TransDir: "/mnt/qss/mnp_process"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: ","
+  MainTable: "MNPProcess"
+  DumpName: "MNPKPI"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "TRACK"
+  LogicModule: "Mnp/mnpkpi_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Error Calls Dump. YDR-222"
+  DumpID: 51
+  FileName: "#CAT_errcalls_#DATE_#TIME.dump"
+  SpoolDir: "/store/riftp/dumpfiles/errcalls/spool"
+  TransDir: "/store/riftp/dumpfiles/errcalls/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MobCDR"
+  DumpName: "ErrorCDRDump"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mm/errorcdr_dump_start.p"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Invoice Details Report"
+  DumpID: 52
+  FileName: "invoices_detail_#YYMM.txt.gz"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: ";"
+  DecimalPoint: "."
+  MainTable: "Invoice"
+  DumpName: "InvRowDump"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mm/invrowdump.p"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Description: Cancellation attachments to DWH. YDR-233"
+  DumpID: 53
+  FileName: "#CAT_MNP_attachments_#DATE.dump.gz"
+  SpoolDir: "/store/riftp/mnp/cancel_attachment/spool"
+  TransDir: "/store/riftp/mnp/cancel_attachment/outgoing"
+  Active: FALSE
+  MainTable: "MNPProcess"
+  DumpName: "MNPAttachment"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mnp/mnp_attachment_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Payment on delivery sales invoices (cash invoices) / credit notes to IFS"
+  DumpID: 54
+  FileName: "IFS#RUN_SA_2_INV_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
+  MainTable: "Invoice"
+  DumpName: "IFSInvoiceSA2"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  LogicModule: "Ar/ifs_invoice.p"
+  ModFromEventLog: TRUE 
+  ModFromField: "ChgStamp"
+  ConfigParam: "6,8"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Credit card sales invoices (cash receipts) / credit notes to IFS
+
+"
+  DumpID: 55
+  FileName: "IFS#RUN_SA_7_INV_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
+  MainTable: "Invoice"
+  DumpName: "IFSInvoiceSA7"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  LogicModule: "Ar/ifs_invoice.p"
+  ModFromEventLog: TRUE 
+  ModFromField: "ChgStamp"
+  ConfigParam: "7,9"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Customer address validation values. YDR-180"
+  DumpID: 56
+  FileName: "#CAT_customerreport_#DATE_#TIME.dump"
+  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
+  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "CustomerReport"
+  DumpName: "CustomerReport"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Invoice Report"
+  DumpID: 57
+  FileName: "invoices_#MODE_#DATE#TIME.dump.gz"
+  SpoolDir: "/store/riftp/dumpfiles/invoices/spool"
+  TransDir: "/store/riftp/dumpfiles/invoices/outgoing"
+  Active: FALSE
+  DumpDelimiter: "":""
+  DecimalPoint: "."
+  MainTable: "Invoice"
+  DumpName: "InvoiceDump"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Inv/invoicedump.p"
+  AveDurFull: 3
+  AveDurMod: 3
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Bill Run Statistic Report for Track - YOT-1455"
+  DumpID: 58
+  FileName: "billrunstat_dump_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/billreport/spool"
+  TransDir: "/store/riftp/billreport/processed"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "FuncRunQueue"
+  DumpName: "BillRunStat"
+  DumpFormat: "ASCII"
+  FileCategory: "TMS"
+  LogicModule: "Mm/billrunstat_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Offer dump including fields which are defined and used by operator."
+  DumpID: 59
+  FileName: "#CAT_offer_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Offer"
+  DumpName: "Offer"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "OfferCriteria dump including fields which are defined and used by operator."
+  DumpID: 60
+  FileName: "#CAT_offercriteria_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "OfferCriteria"
+  DumpName: "OfferCriteria"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "OfferItem dump including fields which are defined and used by operator."
+  DumpID: 61
+  FileName: "#CAT_offeritem_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "OfferItem"
+  DumpName: "OfferItem"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Installment activations and cancellations to IFS. YDR-328
+This is executed from the ifs bank file read process."
+  DumpID: 62
+  FileName: "IFS_HIRE_OPERATION_#RUN_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
+  DumpDelimiter: ";"
+  MainTable: "MsRequest"
+  DumpName: "IFSInstallmentAction"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  LogicModule: "Ar/ifs_installment_operation.p"
+  AveDurFull: 17
+  AveDurMod: 1
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "External API log dump for Track. SER-2700"
+  DumpID: 63
+  FileName: "extapi_dump_#DATE.txt"
+  SpoolDir: "/mnt/qss/spool"
+  TransDir: "/mnt/qss/extapi"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: ","
+  MainTable: "AuthLog"
+  DumpName: "ExternalAPI"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "TRACK"
+  LogicModule: "Syst/extapi_dump.p"
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "OrderAction dump. YDR-494
+Sent to both Track and DWH"
+  DumpID: 64
+  FileName: "OrderAction_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
+  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  MainTable: "OrderAction"
+  DumpName: "OrderAction"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  ModCollModule: "Mc/orderaction_delta_dump.p"
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "IPRange table dump for DWH. YDR-474"
+  DumpID: 65
+  FileName: "#CAT_iprange_#MODE_#DATE_#TIME.dump"
+  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
+  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
+  DumpDelimiter: ";"
+  DecimalPoint: "."
+  MainTable: "IPRange"
+  DumpName: "IPRange"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Discount plan members"
+  DumpID: 66
+  FileName: "#CAT#RUN_Discount_Plan_Member_#MODE_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "DPMember"
+  DumpName: "DiscountMember"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "dpmember_dump.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "XML file with PhoneHouse MNP orders. YOT-1850"
+  DumpID: 67
+  FileName: "mnp_phonehouse_#DATE.xml"
+  SpoolDir: "/store/riftp/mnp/mnp_phonehouse/spool/"
+  TransDir: "/store/riftp/mnp/mnp_phonehouse/outgoing/"
+  Active: FALSE
+  MainTable: "MNPProcess"
+  DumpName: "MNPPhoneHouse"
+  DumpFormat: "XML"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mnp/mnpdump_phonehouse.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MNP porting in cancellations log. YDR-578"
+  DumpID: 68
+  FileName: "#CAT_mnp_cancellation_log_#DATE.dat"
+  SpoolDir: "/store/riftp/mnp/mnp_cancellation_log/spool"
+  TransDir: "/store/riftp/mnp/mnp_cancellation_log/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  MainTable: "MNPProcess"
+  DumpName: "MNPCancellationLog"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mnp/mnp_cancellation_log.p"
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Fees datasmart. YDR-455"
+  DumpID: 69
+  FileName: "singlefee_events_#DATE.txt"
+  SpoolDir: "/mnt/qss/spool"
+  TransDir: "/mnt/qss/singlefees"
+  Active: FALSE
+  MainTable: "SingleFee"
+  DumpName: "SingleFeeEvent"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "TRACK"
+  LogicModule: "Mc/singlefeelogdump.p"
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Billing permission dump for billing permission create/modify events. YOT-1635
+"
+  DumpID: 70
+  FileName: "#CAT_BillingPermissionEventLog_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  MainTable: "Limit"
+  DumpName: "BillingPermEvents"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Inv/denybilling_event_dump.p"
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Description: YOT-185 Data Protection Law: Access Logs
+"
+  DumpID: 71
+  FileName: "#CAT_DPLLog_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/callrep/spool/"
+  TransDir: "/store/riftp/dumpfiles/callrep/outgoing/"
+  Active: FALSE
+  DumpDelimiter: ";"
+  MainTable: "CallScanner"
+  DumpName: "DPLLog"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  LogicModule: "callscannerrep.p"
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Rerate log dump for TRACK. YOT-2127"
+  DumpID: 72
+  FileName: "#CAT_rerate_log_dt_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/qss/spool"
+  TransDir: "/mnt/qss/rerate_log_detailed"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "EDRHistory"
+  DumpName: "rerate_log_detailed"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "TRACK"
+  LogicModule: "Rate/edrhistory_dump_run.p"
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "IFS file about orders cancelled because ROVE. YDR-560
+"
+  DumpID: 73
+  FileName: "#CAT_ROVE_KO_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  DumpDelimiter: ";"
+  MainTable: "Order"
+  DumpName: "IFSClosedOrders"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  LogicModule: "Ar/ifs_rove_ko.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 1
+  AveDurMod: 1
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "TMS users dump file"
+  DumpID: 74
+  FileName: "tms_users_#DATE.dump"
+  SpoolDir: "/store/riftp/dumpfiles/tmsusers/spool"
+  TransDir: "/store/riftp/dumpfiles/tmsusers/outgoing"
+  Active: FALSE
+  DumpDelimiter: "ASC(009)"
+  DecimalPoint: "."
+  MainTable: "tmsuser"
+  DumpName: "TMSuser"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  AveDurFull: 17
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Dumps whole Limit table"
+  DumpID: 75
+  FileName: "Custidorderlimit_#DATE.dump"
+  SpoolDir: "/store/riftp/dumpfiles/limit/spool"
+  TransDir: "/store/riftp/dumpfiles/limit/outgoing"
+  Active: FALSE
+  DumpDelimiter: ""|""
+  DecimalPoint: "."
+  MainTable: "Limit"
+  DumpName: "CustIdOrderLimit"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "limitdump.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MNP porting IN"
+  DumpID: 76
+  FileName: "porting_in_#DATE.dat"
+  SpoolDir: "/store/riftp/mnp/report/spool"
+  TransDir: "/store/riftp/mnp/report/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MNPProcess"
+  DumpName: "MNP_IN"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "mnpdumpnc.p"
+  ModFromEventLog: TRUE 
+  ConfigParam: "1"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MNP porting OUT"
+  DumpID: 77
+  FileName: "porting_out_#DATE.dat"
+  SpoolDir: "/store/riftp/mnp/report/spool"
+  TransDir: "/store/riftp/mnp/report/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MNPProcess"
+  DumpName: "MNP_OUT"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "mnpdumpnc.p"
+  ModFromEventLog: TRUE 
+  ConfigParam: "2"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MNP Termination"
+  DumpID: 78
+  FileName: "msisdn_termination_#DATE.dat"
+  SpoolDir: "/store/riftp/mnp/report/spool"
+  TransDir: "/store/riftp/mnp/report/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MNPProcess"
+  DumpName: "MNP_Termination"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "mnpdumpnc.p"
+  ModFromEventLog: TRUE 
+  ConfigParam: "3"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Report MNP IN/OUT error messages."
+  DumpID: 79
+  FileName: "porting_errors_#DATE.dat"
+  SpoolDir: "/store/riftp/mnp/mnperrordump/spool"
+  TransDir: "/store/riftp/mnp/mnperrordump/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MNPOperation"
+  DumpName: "MNP_Error"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "mnperrordump.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "All failed MNP activations"
+  DumpID: 80
+  FileName: "activationError_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/mnprep/spool"
+  TransDir: "/store/riftp/dumpfiles/mnprep/outgoing"
+  Active: FALSE
+  DumpDelimiter: ","
+  DecimalPoint: "."
+  MainTable: "MNPProcess"
+  DumpName: "MNPActivationFails"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "mnp_acterr.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MNP OUT delayed rejections/confirmations."
+  DumpID: 81
+  FileName: "delayed_responses_#DATE.dat"
+  SpoolDir: "/store/riftp/mnp/mnpdelay/spool"
+  TransDir: "/store/riftp/mnp/mnpdelay/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MNPProcess"
+  DumpName: "MNPDelayResp"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "TMS"
+  LogicModule: "mnpdelayresp.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Dump Salesman records"
+  DumpID: 82
+  FileName: "salesman_#DATE.dump"
+  SpoolDir: "/store/riftp/dumpfiles/salesman/outgoing/spool"
+  TransDir: "/store/riftp/dumpfiles/salesman/outgoing/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Salesman"
+  DumpName: "SalesmanDump"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Dump SIM records"
+  DumpID: 83
+  FileName: "icc_info_#DATE.dump"
+  SpoolDir: "/store/riftp/dumpfiles/icc/spool"
+  TransDir: "/store/riftp/dumpfiles/icc/outgoing"
+  Active: FALSE
+  DumpDelimiter: ":"
+  DecimalPoint: "."
+  MainTable: "SIM"
+  DumpName: "ICC_Dump"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModFromEventLog: TRUE 
+  AveDurFull: 5
+  AveDurMod: 4
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "EDR data dump to TRACK and DWH"
+  DumpID: 84
+  FileName: "edr_#DATE.dat"
+  SpoolDir: "/store/riftp/dumpfiles/edr/spool"
+  TransDir: "/store/riftp/dumpfiles/edr/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  MainTable: "PrepEDR"
+  DumpName: "PrepEDR"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mm/prepedr_dump_start.p"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Terminal financing file for the bank. YDR-945"
+  DumpID: 85
+  FileName: "terminal_finance_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/terminal_finance/spool/"
+  TransDir: "/store/riftp/dumpfiles/terminal_finance/outgoing/"
+  Active: FALSE
+  MainTable: "Order"
+  DumpName: "TerminalFinancing"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "INV"
+  LogicModule: "terminal_financing"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Invoice Dump for Cassandra for HPD project."
+  DumpID: 86
+  FileName: "invoice_#MODE_#DATE#TIME.txt.gz"
+  SpoolDir: "/mnt/store/riftp/hpd_test_dumps/spool"
+  TransDir: "/mnt/store/riftp/hpd_test_dumps/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Invoice"
+  DumpName: "InvoiceDump_pupu"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "Cassandra"
+  LogicModule: "invoicedump_pupu"
+  AveDurFull: 1
+  AveDurMod: 1
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Payment Dump for Cassandra for HPD project."
+  DumpID: 87
+  FileName: "payment_#MODE_#DATE#TIME.txt.gz"
+  SpoolDir: "/store/riftp/pupu_dumps/spool"
+  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Payment"
+  DumpName: "PaymentDump_pupu"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "Cassandra"
+  LogicModule: "paymentdump_pupu"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "ServiceLCounter Dump for Cassandra for HPD project."
+  DumpID: 88
+  FileName: "servicelcounter_#MODE_#DATE#TIME.txt.gz"
+  SpoolDir: "/store/riftp/pupu_dumps/spool"
+  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "ServiceLCounter"
+  DumpName: "CounterDump_pupu"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "Cassandra"
+  LogicModule: "servicelcounter_dump_pupu"
+  ConfigParam: "DSS,DSS_UPSELL,DSS_UPSELL_UPGRADE,DSS2,DSS2_UPSELL"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "PrepEDR Dump for Cassandra for HPD project."
+  DumpID: 89
+  FileName: "prepedr_#MODE_#DATE#TIME.txt.gz"
+  SpoolDir: "/store/riftp/pupu_dumps/spool"
+  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "PrepEDR"
+  DumpName: "PrepEDR_Pupu_Dump"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "Cassandra"
+  LogicModule: "Mm/prepedr_pupu_dump_start.p"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "OrderFusion dump used for both DWH and pentaho"
+  DumpID: 90
+  FileName: "OrderFusion_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
+  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "OrderFusion"
+  DumpName: "OrderFusion"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  ModCollModule: "Mm/dump_modified_orderfusion.p"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Fusion invoices to IFS"
+  DumpID: 91
+  FileName: "IFS#RUN_SE_FU_INV_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
+  MainTable: "Invoice"
+  DumpName: "IFSInvoiceFusion"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  LogicModule: "Ar/ifs_invoice.p"
+  ModFromEventLog: TRUE 
+  ModFromField: "ChgStamp"
+  ConfigParam: "1,5;fusion"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Check whether customer BIC cannot be found from system"
+  DumpID: 92
+  FileName: "incorrect_cust_data.dump"
+  SpoolDir: "/scratch/log/bic_missing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "EventLog"
+  DumpName: "BicMissingCheck"
+  DumpFormat: "ASCII"
+  FileCategory: "INV"
+  LogicModule: "bicdump.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "TARJ7 renewal date alignment"
+  DumpID: 93
+  FileName: "tarj7_renewal_aligment_#DATE_#TIME.log"
+  SpoolDir: "/scratch/log/tarj7"
+  Active: FALSE
+  DumpDelimiter: ";"
+  MainTable: "MServiceLimit"
+  DumpName: "TARJ7RenewalAlign"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "TMS"
+  LogicModule: "Mm/tarj7_renewal_alignment.p"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "New IFS dextra order file for NTFM-Direct Channel"
+  DumpID: 94
+  FileName: "#CAT_DEXTRA_ORDER_CC_#DATE_#DSEQ.DAT"
+  SpoolDir: "/store/riftp/ifs/outgoing/spool"
+  TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
+  DumpDelimiter: ";"
+  DecimalPoint: "."
+  MainTable: "Order"
+  DumpName: "IFSDextraOrders"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "IFS"
+  LogicModule: "Ar/ifs_dextra_orders.p"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "EventLog Dump"
+  DumpID: 95
+  FileName: "cc_log_#DATE_#TIME.dump"
+  SpoolDir: "/store/riftp/dumpfiles/eventlog/spool"
+  TransDir: "/store/riftp/dumpfiles/eventlog/outgoing"
+  Active: FALSE
+  MainTable: "EventLog"
+  DumpName: "EventLogDump"
+  DumpFormat: "ASCII"
+  FileCategory: "DWH"
+  LogicModule: "Mc/eventlogdump.p"
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Customers event log information"
+  DumpID: 96
+  FileName: "#CAT_Customer_EventLog_#DATE.txt"
+  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "EventLog"
+  DumpName: "CustEventLog"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mm/cust_eventlog_dump.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 5
+  AveDurMod: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Collect rows to a dump file for DMS records"
+  DumpID: 97
+  FileName: "#CAT_DMS_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/mnt/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "DMS"
+  DumpName: "DMS"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mc/dms_delta_dump.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 26
+  AveDurMod: 1
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Collect rows to a dump file for DMSDoc records"
+  DumpID: 98
+  FileName: "#CAT_DMSDoc_#MODE_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/dumpfiles/dwh/spool"
+  TransDir: "/mnt/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "DMSDoc"
+  DumpName: "DMSDoc"
+  DumpFormat: "ASCII"
+  EmptyFile: TRUE 
+  FileCategory: "DWH"
+  LogicModule: "Mc/dmsdoc_delta_dump.p"
+  ModFromEventLog: TRUE 
+  AveDurFull: 12
+  AveDurMod: 12
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Barring dump to HPD"
+  DumpID: 200
+  FileName: "barring_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Barring"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.BarringDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_Barring"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "BarringConf dump to HPD"
+  DumpID: 201
+  FileName: "barringconf_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "BarringConf"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_BarringConf"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "BillItem dump to HPD"
+  DumpID: 202
+  FileName: "billitem_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "BillItem"
+  SideTables: "Common"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_BillItem"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "BItemGroup dump to HPD"
+  DumpID: 203
+  FileName: "bitemgroup_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "BItemGroup"
+  SideTables: "Common"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_BItemGroup"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Customer dump to HPD"
+  DumpID: 204
+  FileName: "customer_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Customer"
+  SideTables: "Common"
+  LinkKey: "HPD.CustomerDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_Customer"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MServiceLimit dump to HPD"
+  DumpID: 205
+  FileName: "mservicelimit_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MServiceLimit"
+  SideTables: "Common"
+  LinkKey: "HPD.MServiceLimitDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_MServiceLimit"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MServiceLPool dump to HPD"
+  DumpID: 206
+  FileName: "mservicelpool_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MServiceLPool"
+  SideTables: "Common"
+  LinkKey: "HPD.MServiceLPoolDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_MServiceLPool"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "DayCampaign dump to HPD"
+  DumpID: 207
+  FileName: "daycampaign_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "DayCampaign"
+  SideTables: "Mobile"
+  LinkKey: "HPD.DayCampaignDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_DayCampaign"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "DCCLI dump to HPD"
+  DumpID: 208
+  FileName: "dccli_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "DCCLI"
+  SideTables: "Mobile"
+  LinkKey: "HPD.DCCLIDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_DCCLI"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "DiscountPlan dump to HPD"
+  DumpID: 209
+  FileName: "discountplan_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "DiscountPlan"
+  SideTables: "Common"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_DiscountPlan"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "DMS dump to HPD"
+  DumpID: 210
+  FileName: "dms_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "DMS"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.DMSDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_DMS"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "DMSDoc dump to HPD"
+  DumpID: 211
+  FileName: "dmsdoc_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "DMSDoc"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.DMSDocDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_DMSDoc"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "DPMember dump to HPD"
+  DumpID: 212
+  FileName: "dpmember_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "DPMember"
+  SideTables: "Common"
+  LinkKey: "HPD.DPMemberDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_DPMember"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "DPTarget dump to HPD"
+  DumpID: 213
+  FileName: "dptarget_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "DPTarget"
+  SideTables: "Common"
+  LinkKey: "HPD.DPTargetDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_DPTarget"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "FATGroup dump to HPD"
+  DumpID: 214
+  FileName: "fatgroup_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "FATGroup"
+  SideTables: "Common"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_FATGroup"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "FATime dump to HPD"
+  DumpID: 215
+  FileName: "fatime_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "FATime"
+  SideTables: "Common"
+  LinkKey: "HPD.FATimeDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_FATime"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "FixedFee dump to HPD"
+  DumpID: 216
+  FileName: "fixedfee_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "FixedFee"
+  SideTables: "Common"
+  LinkKey: "HPD.FixedFeeDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_FixedFee"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "FMItem dump to HPD"
+  DumpID: 217
+  FileName: "fmitem_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "FMItem"
+  SideTables: "Common"
+  LinkKey: "HPD.FMItemDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_FMItem"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "IMSI dump to HPD"
+  DumpID: 218
+  FileName: "imsi_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "IMSI"
+  SideTables: "Mobile"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_IMSI"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MobCDR dump to HPD"
+  DumpID: 219
+  FileName: "mobcdr_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MobCDR"
+  SideTables: "MobCDR"
+  LinkKey: "HPD.CDRDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_MobCDR"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  ModCollModule: "14.04.2016 00:00:00"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MobSub dump to HPD"
+  DumpID: 220
+  FileName: "mobsub_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MobSub"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.MobSubDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_MobSub"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "MsRequest dump to HPD"
+  DumpID: 221
+  FileName: "msrequest_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "MsRequest"
+  SideTables: "Mobile"
+  LinkKey: "HPD.MsRequestDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_MsRequest"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  ModCollModule: "01.04.2016 00:00:00"
+  FullCollModule: "30"
+  BatchID: 2
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "NatHoliday dump to HPD"
+  DumpID: 222
+  FileName: "natholiday_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "NatHoliday"
+  SideTables: "Common"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_NatHoliday"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Order dump to HPD"
+  DumpID: 223
+  FileName: "order_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Order"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.OrderDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_Order"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "OrderAction dump to HPD"
+  DumpID: 224
+  FileName: "orderaction_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "OrderAction"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.OrderActionDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_OrderAction"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+  AveDurFull: 3
+  AveDurMod: 3
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "OrderCustomer dump to HPD"
+  DumpID: 225
+  FileName: "ordercustomer_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "OrderCustomer"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.OrderCustomerDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_OrderCustomer"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "OrderDelivery dump to HPD"
+  DumpID: 226
+  FileName: "orderdelivery_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "OrderDelivery"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.OrderDeliveryDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_OrderDelivery"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "OrderFusion dump to HPD"
+  DumpID: 227
+  FileName: "orderfusion_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "OrderFusion"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_OrderFusion"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "PrepaidRequest dump to HPD"
+  DumpID: 228
+  FileName: "prepaidrequest_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "PrepaidRequest"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.PrepaidRequestDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_PrepaidRequest"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  ModCollModule: "01.04.2016 00:00:00"
+  FullCollModule: "30"
+  BatchID: 2
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "PrepCDR dump to HPD"
+  DumpID: 229
+  FileName: "prepcdr_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "PrepCDR"
+  SideTables: "PrepCDR"
+  LinkKey: "HPD.CDRDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_PrepCDR"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  ModCollModule: "14.04.2016 00:00:00"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "PrepEDR dump to HPD"
+  DumpID: 230
+  FileName: "prepedr_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "PrepEDR"
+  SideTables: "PrepEDR"
+  LinkKey: "HPD.CDRDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_PrepEDR"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  ModCollModule: "14.04.2016 00:00:00"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "RepText dump to HPD"
+  DumpID: 231
+  FileName: "reptext_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "RepText"
+  SideTables: "Common"
+  LinkKey: "HPD.RepTextDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_RepText"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "RequestType dump to HPD"
+  DumpID: 232
+  FileName: "requesttype_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "RequestType"
+  SideTables: "Common"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_RequestType"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "ServiceLimit dump to HPD"
+  DumpID: 233
+  FileName: "servicelimit_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "ServiceLimit"
+  SideTables: "Common"
+  LinkKey: "HPD.ServiceLimitDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_ServiceLimit"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "ServPac dump to HPD"
+  DumpID: 234
+  FileName: "servpac_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "ServPac"
+  SideTables: "Mobile"
+  LinkKey: "HPD.ServPacDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_ServPac"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "SingleFee dump to HPD"
+  DumpID: 235
+  FileName: "singlefee_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "SingleFee"
+  SideTables: "Common"
+  LinkKey: "HPD.SingleFeeDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_SingleFee"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "SubSer dump to HPD"
+  DumpID: 236
+  FileName: "subser_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "SubSer"
+  SideTables: "Mobile"
+  LinkKey: "HPD.SubSerDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_SubSer"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "SubsTerminal dump to HPD"
+  DumpID: 237
+  FileName: "substerminal_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "SubsTerminal"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_SubsTerminal"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "TermReturn dump to HPD"
+  DumpID: 238
+  FileName: "termreturn_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "TermReturn"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.TermReturnDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_TermReturn"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "TopupSchemeRow dump to HPD"
+  DumpID: 239
+  FileName: "topupschemerow_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "TopupSchemeRow"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_TopupSchemeRow"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Invoice dump to HPD. InvRow and SubInvoice dumps are executed together with this dump."
+  DumpID: 240
+  FileName: "invoice_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Invoice"
+  SideTables: "Common"
+  LinkKey: "HPD.InvoiceDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_Invoice"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  ModCollModule: "01.03.2016 00:00:00"
+  FullCollModule: "60"
+  BatchID: 3
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "SubInvoice dump to HPD. Do not activate! Offline dump is done together with invoice dump."
+  DumpID: 241
+  FileName: "subinvoice_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "SubInvoice"
+  SideTables: "Common"
+  LinkKey: "HPD.SubInvoiceDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_SubInvoice"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "InvRow dump to HPD. Do not activate! Offline dump is done together with invoice dump."
+  DumpID: 242
+  FileName: "invrow_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "InvRow"
+  SideTables: "Common"
+  LinkKey: "HPD.InvRowDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_InvRow"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  FullCollModule: "1"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Rerate MobCDR dump to HPD"
+  DumpID: 243
+  FileName: "mobcdr_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "EDRHistory"
+  LinkKey: "HPD.RerateDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_EDRHistory"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  ModCollModule: "14.04.2016 00:00:00"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Payment dump to HPD"
+  DumpID: 244
+  FileName: "payment_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Payment"
+  SideTables: "Common"
+  LinkKey: "HPD.PaymentDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_Payment"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  ModCollModule: "01.03.2016 00:00:00"
+  FullCollModule: "60"
+  BatchID: 4
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "ServiceLCounter dump to HPD"
+  DumpID: 245
+  FileName: "servicelcounter_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "ServiceLCounter"
+  SideTables: "Common"
+  LinkKey: "HPD.ServiceLCounterDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_ServiceLCounter"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  ModCollModule: "01.03.2016 00:00:00"
+  ConfigParam: "DSS,DSS_UPSELL,DSS_UPSELL_UPGRADE,DSS2,DSS2_UPSELL,DSS200_UPSELL"
+  BatchID: 5
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "CustContact dump to HPD"
+  DumpID: 246
+  FileName: "custcontact_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "CustContact"
+  SideTables: "Common"
+  LinkKey: "HPD.CustContactDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_CustContact"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "Limit dump to HPD"
+  DumpID: 247
+  FileName: "limit_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Limit"
+  SideTables: "Common"
+  LinkKey: "HPD.LimitDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_Limit"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+
+bulkload: DumpFile
+  Brand: "1"
+  Description: "CLIType dump to HPD"
+  DumpID: 504
+  FileName: "clitype_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/hpd_st_dumps/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "CLIType"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_CLIType"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+

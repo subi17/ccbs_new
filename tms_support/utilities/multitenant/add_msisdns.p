@@ -1,13 +1,16 @@
+/* Script to add new MSISDN numbers
+   Change liBegin and liEnd input values to needed ones 
+   MasMovil range specified to 72260 */
 {Syst/commpaa.i}
 katun = "qvantel".
 gcbrand = "1".
 {Func/timestamp.i}
 {Func/msisdn.i}
-
+{Func/multitenantfunc.i}
 /* Create free MSISDNs starting from begin to end. */
 
-DEFINE VARIABLE liBegin AS CHAR NO-UNDO INIT 722600000.
-DEFINE VARIABLE liEnd   AS CHAR NO-UNDO INIT 722600100.
+DEFINE VARIABLE liBegin AS INT NO-UNDO INIT 722600000.
+DEFINE VARIABLE liEnd   AS INT NO-UNDO INIT 722600100.
 
 
 FUNCTION fGoldNumber RETURNS INTEGER
@@ -166,6 +169,26 @@ DEFINE VARIABLE i AS INTEGER NO-UNDO.
 DEFINE VARIABLE ld AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcMSISDN AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liGold AS INTEGER NO-UNDO.
+
+/* Check inputs */
+IF liEnd < liBegin THEN
+   MESSAGE "ERROR: " liBegin " is bigger than " liEnd VIEW-AS ALERT-BOX.
+IF liBegin LT 722600000 AND liEnd GE 722600000 THEN
+   MESSAGE "ERROR: " liBegin " and " liEnd " in different tenant areas" 
+   VIEW-AS ALERT-BOX.
+IF liBegin GE 722600000 AND liEnd GE 722610000 THEN
+   MESSAGE "ERROR: " liBegin " and " liEnd " in different tenant areas"
+   VIEW-AS ALERT-BOX.
+
+/* Set tenant based on MB-93 description */
+IF STRING(liBegin) BEGINS "72260" THEN DO:
+   fsetEffectiveTenantForAllDB("TMasMovil").
+   MESSAGE "Add MasMovil ICCs " liBegin " to " liEnd VIEW-AS ALERT-BOX.
+END.
+ELSE DO:
+   fsetEffectiveTenantForAllDB("Default").
+   MESSAGE "Add Yoigo ICCs " liBegin " to " liEnd VIEW-AS ALERT-BOX.
+END.
 
 each_loop:
 

@@ -1,0 +1,56 @@
+bulkload: CampRow
+  Campaign: "PREACT10"
+  Brand: "1"
+  CLIType: "TARJ3"
+  CRowType: 5
+  CRowItem: "TOPUPPREACT"
+
+bulkload: CampRow
+  Campaign: "TOPUP20"
+  Brand: "1"
+  CLIType: "TARJ"
+  CRowType: 5
+  CRowItem: "TOPUPCAMP20"
+
+bulkload: CampRow
+  Campaign: "TOPUP20"
+  Brand: "1"
+  CLIType: "TARJ2"
+  CRowType: 5
+  CRowItem: "TOPUPCAMP20"
+
+bulkload: CampRow
+  Campaign: "TOPUP20"
+  Brand: "1"
+  CLIType: "TARJ4"
+  CRowType: 5
+  CRowItem: "TOPUPCAMP20"
+
+bulkload: CampRow
+  Campaign: "TOPUPSIM"
+  Brand: "1"
+  CLIType: "TARJ"
+  CRowType: 5
+  CRowItem: "TOPUPSIM"
+
+bulkload: CampRow
+  Campaign: "TOPUPSIM"
+  Brand: "1"
+  CLIType: "TARJ2"
+  CRowType: 5
+  CRowItem: "TOPUPSIM"
+
+bulkload: CampRow
+  Campaign: "TOPUPSIM"
+  Brand: "1"
+  CLIType: "TARJ4"
+  CRowType: 5
+  CRowItem: "TOPUPSIM"
+
+bulkload: CampRow
+  Campaign: "XMASGIFT"
+  Brand: "1"
+  CLIType: "TARJ"
+  CRowType: 5
+  CRowItem: "TOPUPCAMPGIFT"
+

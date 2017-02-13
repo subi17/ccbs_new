@@ -14,10 +14,21 @@ endif
     
 set statusline=%f\ -\ Tenant:\ %{$TENANT}
 set laststatus=2
-map <C-a> :let $TENANT="
+let g:counter = 0
+map <C-a> :call Set_tenant()<ENTER>
 "*******************************+
 " Table description with Shift-K
 "*******************************+
+function! Set_tenant()
+    let tenants = ["super", "yoigo", "masmovil"]
+    if (g:counter + 1) >= len(tenants)
+        let g:counter=0
+    else
+        let g:counter = g:counter + 1
+    endif
+    let $TENANT=tenants[g:counter]
+endfunction
+
 function! Print_tabledesc()
     execute "! pike -C " . g:ccbspath . "/tools/docgen/tbldesc <cWORD>"
 endfunction

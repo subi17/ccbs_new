@@ -1,0 +1,2597 @@
+bulkload: DayCampaign
+  DCEvent: "BONO_VOIP"
+  ValidFrom: 2012-04-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "BONO_VOIP"
+  DCName: "Bono VoIP"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "BONO_VOIPMF"
+  Effective: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONT10"
+  ValidFrom: 2017-02-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "CONT10MF"
+  DCName: "Contrato 10"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "CONT10MF"
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+
+bulkload: DayCampaign
+  DCEvent: "CONT15"
+  ValidFrom: 2014-10-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "CONT15"
+  DCName: "La del Cero 5 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "CONT15MF"
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 53
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONT23"
+  ValidFrom: 2015-08-12
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "CONT23MF"
+  DCName: "Contrato 23"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONT23MF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONT24"
+  ValidFrom: 2015-03-04
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "CONT24MF"
+  DCName: "Contrato 24"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONT24MF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONT25"
+  ValidFrom: 2016-12-12
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "CONT25MF"
+  DCName: "Contrato 25"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONT25MF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONT26"
+  ValidFrom: 2017-02-01
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "CONT26MF"
+  DCName: "Contrato 26"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONT26MF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+
+bulkload: DayCampaign
+  DCEvent: "CONT9"
+  ValidFrom: 2014-05-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "CONT9"
+  DCName: "La del Cero 1,2 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "CONT9MF"
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 53
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTD2"
+  ValidFrom: 2009-12-01
+  InclUnit: 4
+  ValidTo: 1954-12-31
+  BillCode: "CONTDATA2"
+  DCName: "Internet para llevar 35"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "CONTD2MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 50
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTD2_UPSELL"
+  ValidFrom: 2010-11-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "CONTDATA2"
+  DCName: "IPL 35 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "CONTD2MFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTD2ACT"
+  ValidFrom: 2009-12-01
+  InclUnit: 4
+  ValidTo: 2011-05-17
+  BillCode: "CONTDATA"
+  DCName: "Contrato Datos 2 1st billing period"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 2
+  DurMonths: 1
+  TermFeeModel: "TERMCONTD2"
+  DurUnit: 3
+  Effective: 1
+  TermFeeCalc: 1
+  StatusCode: 0
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTD2END"
+  ValidFrom: 2009-12-01
+  InclUnit: 4
+  ValidTo: 2011-05-17
+  BillCode: "CONTDATA"
+  DCName: "Contrato Datos 2 1st billing period"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 2
+  DurMonths: 1
+  DurUnit: 3
+  Effective: 1
+  StatusCode: 0
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTD3"
+  ValidFrom: 2011-05-01
+  InclUnit: 4
+  ValidTo: 1954-12-31
+  BillCode: "CONTDATA3"
+  DCName: "Internet para llevar 8"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "CONTD3MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 68
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTD3_UPSELL"
+  ValidFrom: 2011-05-01
+  InclUnit: 4
+  ValidTo: 1954-12-31
+  BillCode: "CONTDATA3"
+  DCName: "IPL 8 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "CONTD3MFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTD4"
+  ValidFrom: 2011-11-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "CONTDATA4"
+  DCName: "Internet para llevar 15"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "CONTD4MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 62
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTD4_UPSELL"
+  ValidFrom: 2011-11-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "CONTDATA4"
+  DCName: "IPL 15 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "CONTD4MFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTD9"
+  ValidFrom: 2012-12-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "CONTDATA9"
+  DCName: "La del Dos"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "CONTD9MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 59
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTDATA"
+  ValidFrom: 2008-06-11
+  InclUnit: 4
+  ValidTo: 1954-12-31
+  BillCode: "CONTDATA1"
+  MaxChargeIncl: 4096
+  DCName: "Internet para llevar 25"
+  CCN: 93
+  MaxChargeExcl: 4096
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "CONTDATAMF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 56
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTDATA_UPSELL"
+  ValidFrom: 2010-11-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "CONTDATA1"
+  DCName: "IPL 25 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "CONTDATAMFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTDATAACT"
+  ValidFrom: 2008-06-11
+  InclUnit: 4
+  ValidTo: 2011-05-17
+  BillCode: "CONTDATA"
+  MaxChargeIncl: 4096
+  DCName: "Contrato Datos 1st billing period"
+  CCN: 93
+  MaxChargeExcl: 4096
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 2
+  DurMonths: 1
+  TermFeeModel: "TERMCONTDATA"
+  DurUnit: 3
+  Effective: 1
+  TermFeeCalc: 1
+  StatusCode: 0
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTDATAEND"
+  ValidFrom: 2008-06-11
+  InclUnit: 4
+  ValidTo: 2011-05-17
+  BillCode: "CONTDATA"
+  MaxChargeIncl: 4096
+  DCName: "Contrato Datos 1st billing period"
+  CCN: 93
+  MaxChargeExcl: 4096
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 2
+  DurMonths: 1
+  DurUnit: 3
+  Effective: 1
+  StatusCode: 0
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTDSL"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  BillCode: "CONTDSLMF"
+  DCName: "La Combinada 20"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTDSLMF"
+  Effective: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTF10"
+  ValidFrom: 2012-02-22
+  ValidTo: 2049-12-31
+  DCName: "La Plana 10"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTF10"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTF11"
+  ValidFrom: 2015-04-14
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "FLATMF11"
+  DCName: "La Plana 2,5 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTF11MF"
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTF20"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  DCName: "La Plana 20"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTF20"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTF20D"
+  ValidFrom: 2012-02-22
+  ValidTo: 2049-12-31
+  DCName: "La Mega Plana 20"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTF20D"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTF30"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  DCName: "La Mega Plana 30"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTF30"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTF40"
+  ValidFrom: 2012-02-22
+  ValidTo: 2049-12-31
+  DCName: "La Mega Plana 200"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTF40"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTF55"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  DCName: "La Mega Plana 100"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTF55"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTF8"
+  ValidFrom: 2015-04-14
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "FLATMF8"
+  DCName: "La Plana 1,2 GB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTF8MF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTFF2"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  DCName: "FUSIÓN PLANA A LO YOIGO"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTFF2MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTFH300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  BillCode: "CONTFH300MF"
+  DCName: "La Combinada 300"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTFH300MF"
+  Effective: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTFH50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  BillCode: "CONTFH50"
+  DCName: "La Combinada 50"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTFH50MF"
+  Effective: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTM"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  BillCode: "CONTMMF"
+  DCName: "Contrato M"
+  Brand: "1"
+  DCType: "7"
+  CalcMethod: 4
+  DurType: 4
+  FeeModel: "CONTMMF"
+  Effective: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTM2"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  BillCode: "CONTM2MF"
+  DCName: "Contrato M2"
+  Brand: "1"
+  DCType: "7"
+  CalcMethod: 4
+  DurType: 4
+  FeeModel: "CONTM2MF"
+  Effective: 1
+  StatusCode: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTRATO2"
+  ValidFrom: 2006-12-01
+  ValidTo: 2049-12-31
+  DCTarget: "1"
+  DCName: "Contrato2 service package"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTRATO2"
+  Effective: 1
+  StatusCode: 0
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTS12"
+  ValidFrom: 2015-04-14
+  ValidTo: 2049-12-31
+  DCName: "La infinita 2,5 GB adicional"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS12MF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTS15"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  DCName: "La Infinita 15"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS15MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTS16"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  DCName: "La Infinita 600 MB Adicional"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS16MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTS20"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  DCName: "La Infinita 20"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS20MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTS21"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  DCName: "La Infinita 600 MB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS21MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTS25"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  DCName: "La Infinita 25"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS25MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTS26"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  DCName: "La Infinita 2 GB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS26MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTS2GB"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  BillCode: "CONTS2GB"
+  DCName: "La Combinada 20 Naranja"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS2GBMF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+
+bulkload: DayCampaign
+  DCEvent: "CONTS30"
+  ValidFrom: 2012-05-01
+  ValidTo: 2049-12-31
+  DCName: "La Infinita 30"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS30MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTS32"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  DCName: "La Infinita 4 GB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS32MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTS35"
+  ValidFrom: 2013-09-01
+  ValidTo: 2016-03-08
+  DCName: "La Infinita 35"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS35MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTS39"
+  ValidFrom: 2012-09-01
+  ValidTo: 2016-03-08
+  DCName: "La Infinita 39"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTS39MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTSF10"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  DCName: "FUSIÓN FIBRA INFINITA A LO YOIGO"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTSF10MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTSF14"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  DCName: "FUSIÓN INFINITA A LO YOIGO"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONTSF14MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DATA200_UPSELL"
+  ValidFrom: 2015-06-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "200 MB upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "DATA200MFUPS"
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DATA5"
+  ValidFrom: 2013-09-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DATA5"
+  DCName: "Bono 5"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "DATA5MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 68
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DATA5_UPSELL"
+  ValidFrom: 2013-09-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DATA5"
+  DCName: "Data Upsell 5"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "DATA5MFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DATA6"
+  ValidFrom: 2014-05-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DATA6"
+  DCName: "Bono 1 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "DATA6MF"
+  Effective: 1
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DATA6_UPSELL"
+  ValidFrom: 2014-05-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DATA6"
+  DCName: "Ampliación 1,5 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "DATA6MFUPS"
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DATA7"
+  ValidFrom: 2015-12-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DATA7"
+  DCName: "Bono 3 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "DATA7MF"
+  Effective: 1
+  StatusCode: 3
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DATA9_UPSELL"
+  ValidFrom: 2012-12-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "Data Upsell 9"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "DATA9MFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  StatusCode: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DSS"
+  ValidFrom: 2011-11-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DSS"
+  DCName: "Data Sharing Service"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "DSSMF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DSS_UPSELL,DSS200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DSS2"
+  ValidFrom: 2013-09-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DSS2"
+  DCName: "Data Sharing Service 2"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  Effective: 1
+  BundleUpsell: "DSS2_UPSELL,DSS200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DSS200_UPSELL"
+  ValidFrom: 2015-06-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "200 MB upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "DSS200MFUPS"
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DSS2_UPSELL"
+  ValidFrom: 2013-09-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DSS2"
+  DCName: "Internet compartido - Ampliación 1,5 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "DSS2MFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DSS_UPSELL"
+  ValidFrom: 2011-11-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DSS"
+  DCName: "Internet compartido - Ampliación 1,5 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "DSSMFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DSS_UPSELL_UPGRADE"
+  ValidFrom: 2012-03-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "UPGRADEDATA"
+  DCName: "Upsell Upgrade DSS customer"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  StatusCode: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DUB"
+  ValidFrom: 2011-01-31
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DUB"
+  DCName: "Data Usage Bundle 500 MB"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DUB2"
+  ValidFrom: 2012-05-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DUB2"
+  DCName: "Data Usage Bundle 1 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "CONT7MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 59
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DUB3"
+  ValidFrom: 2012-12-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "DUB3"
+  DCName: "Data Usage Bundle 1 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "CONT8MF"
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+  DSSPriority: 59
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "FREE100MINUTES"
+  ValidFrom: 2016-06-01
+  ValidTo: 2049-12-31
+  DCName: "Promo 100 min/mes gratis"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 3
+  DurUnit: 3
+  Effective: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "FTERM12-100"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  DCName: "FTERM12 periodical contract"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 12
+  TermFeeModel: "FTERMPERIOD"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+
+bulkload: DayCampaign
+  DCEvent: "GPRS"
+  ValidFrom: 2006-12-01
+  InclUnit: 6
+  ValidTo: 1954-12-31
+  BillCode: "14100001"
+  MaxChargeIncl: 1.653
+  DCTarget: "1"
+  DCName: "GPRS maximum charge per day"
+  CCN: 93
+  MaxChargeExcl: 1.653
+  Brand: "1"
+  DCType: "2"
+  CalcMethod: 2
+  DurType: 1
+  DurUnit: 1
+  Effective: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "HSPA_ROAM_EU"
+  ValidFrom: 2012-10-10
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "14104019"
+  DCName: "HSPA Roaming EU"
+  CCN: 90
+  Brand: "1"
+  DCType: "8"
+  CalcMethod: 1
+  DurType: 2
+  DurUnit: 1
+  Effective: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB"
+  ValidFrom: 2010-03-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB"
+  DCName: "Bono 8"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "MDUBMF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 68
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB2"
+  ValidFrom: 2011-02-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB2"
+  DCName: "Bono 15"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "MDUB2MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 62
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB2_UPSELL"
+  ValidFrom: 2011-02-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB2"
+  DCName: "Bono 15 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "MDUB2MFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  StatusCode: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB3"
+  ValidFrom: 2011-11-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB3"
+  DCName: "Bono 25"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "MDUB3MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 56
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB3_UPSELL"
+  ValidFrom: 2011-11-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB3"
+  DCName: "Bono 25 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "MDUB3MFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  StatusCode: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB4"
+  ValidFrom: 2011-11-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB4"
+  DCName: "Bono 35"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "MDUB4MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 50
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB4_UPSELL"
+  ValidFrom: 2011-11-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB4"
+  DCName: "Bono 35 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "MDUB4MFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  StatusCode: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB5"
+  ValidFrom: 2012-03-22
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB5"
+  DCName: "Bono 12"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "MDUB5MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 65
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB5_UPSELL"
+  ValidFrom: 2012-03-22
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB5"
+  DCName: "Bono 12 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "MDUB5MFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  StatusCode: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB9"
+  ValidFrom: 2012-12-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB9"
+  DCName: "Bono 9"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "MDUB9MF"
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
+  DSSPriority: 59
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB_UPSELL"
+  ValidFrom: 2010-11-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB"
+  DCName: "Bono 8 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "MDUBMFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  StatusCode: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUBACT"
+  ValidFrom: 2010-03-01
+  InclUnit: 4
+  ValidTo: 2011-05-31
+  BillCode: "MDUB"
+  DCName: "Mobile Data Usage Bundle 1st period"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 2
+  DurMonths: 1
+  TermFeeModel: "TERMMDUB"
+  DurUnit: 3
+  Effective: 1
+  TermFeeCalc: 1
+  StatusCode: 0
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUBEND"
+  ValidFrom: 2010-03-01
+  InclUnit: 4
+  ValidTo: 2011-05-31
+  BillCode: "MDUB"
+  DCName: "Mobile Data Usage Bundle 1st period"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 2
+  DurMonths: 1
+  DurUnit: 3
+  Effective: 1
+  StatusCode: 0
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM18_10"
+  ValidFrom: 2010-03-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM18"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  FeeModel: "PAYTERM10"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM18_15"
+  ValidFrom: 2010-03-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM18"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  FeeModel: "PAYTERM15"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM18_20"
+  ValidFrom: 2010-03-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM18"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  FeeModel: "PAYTERM20"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM18_25"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM18"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  FeeModel: "PAYTERM25"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM18_3"
+  ValidFrom: 2011-08-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM18"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  FeeModel: "PAYTERM18_3"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM18_30"
+  ValidFrom: 2012-08-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM18"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  FeeModel: "PAYTERM18_30"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM18_5"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM18"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  FeeModel: "PAYTERM18_5"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM18_8"
+  ValidFrom: 2012-04-02
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM18"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  FeeModel: "PAYTERM18_8"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_1"
+  ValidFrom: 2014-03-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_1"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_10"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM24"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM2410"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_12"
+  ValidFrom: 2014-02-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_12"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_15"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM24"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM2415"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_18"
+  ValidFrom: 2014-02-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_18"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_2"
+  ValidFrom: 2015-09-28
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_2"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_20"
+  ValidFrom: 2012-08-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM24"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_20"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_22"
+  ValidFrom: 2014-02-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_22"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_25"
+  ValidFrom: 2012-08-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM24"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_25"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_3"
+  ValidFrom: 2011-08-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM24"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_3"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_30"
+  ValidFrom: 2012-08-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM24"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_30"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_4"
+  ValidFrom: 2014-03-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_4"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_5"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM24"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_5"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_6"
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_6"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PAYTERM24_8"
+  ValidFrom: 2012-04-02
+  ValidTo: 2049-12-31
+  BillCode: "PAYTERM24"
+  DCName: "Installment"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  FeeModel: "PAYTERM24_8"
+  TermFeeModel: "TERMPAYTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PMDUB"
+  ValidFrom: 2011-05-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "PREMDUB"
+  DCName: "Bono 8"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 1
+  FeeModel: "PMDUBFee"
+  Effective: 1
+  BundleUpsell: "PMDUB_UPSELL"
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "PMDUB_UPSELL"
+  ValidFrom: 2011-06-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "PREMDUB"
+  DCName: "Bono 8 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "UPSELL_PMDUBFee"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 10
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "POSTRENOVE"
+  ValidFrom: 2008-09-01
+  ValidTo: 2010-05-26
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal contract for current Postpaid"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  TermFeeModel: "TERMPERIOD"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "POSTRENOVEII"
+  ValidFrom: 2009-09-09
+  ValidTo: 2010-05-26
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal contract for current Postpaid"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  TermFeeModel: "TERMPERIOD2"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "PRERENOVE"
+  ValidFrom: 2008-09-01
+  ValidTo: 2011-01-26
+  DCName: "Terminal contract for current Prepaid"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  DurUnit: 2
+  Effective: 1
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "PRETERM"
+  ValidFrom: 2006-12-01
+  ValidTo: 2011-01-26
+  DCName: "Terminal discount(Prepaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  DurUnit: 2
+  Effective: 1
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "RVTERM12"
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  BillCode: "RVTERM"
+  DCName: "RVTERM12 periodical contract"
+  Brand: "1"
+  DCType: "5"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 12
+  FeeModel: "RVTERM12"
+  TermFeeModel: "TERMRVTERM"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "SMSFREE"
+  ValidFrom: 2010-04-01
+  InclUnit: 6
+  ValidTo: 2049-12-31
+  BillCode: "#OrigBillItem"
+  Weekday: "1"
+  DCName: "SMS free Sundays"
+  CCN: 51
+  Brand: "1"
+  DCType: "2"
+  CalcMethod: 2
+  DurType: 1
+  Effective: 1
+  InclStartCharge: FALSE
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "SMSFREEOCT10"
+  ValidFrom: 2010-10-01
+  InclUnit: 6
+  ValidTo: 2010-10-31
+  BillCode: "#OrigBillItem"
+  Weekday: "1"
+  DCName: "SMS free Sundays"
+  CCN: 51
+  Brand: "1"
+  DCType: "2"
+  CalcMethod: 2
+  DurType: 1
+  Effective: 1
+  InclStartCharge: FALSE
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "SPOTIFY"
+  ValidFrom: 2012-07-01
+  ValidTo: 2049-12-31
+  BillCode: "SPOTIFYMF"
+  DCName: "Bono Spotify"
+  Brand: "1"
+  DCType: "7"
+  CalcMethod: 4
+  DurType: 4
+  FeeModel: "SPOTIFYMF"
+  Effective: 1
+  StatusCode: 0
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "STERM18"
+  ValidFrom: 2012-05-01
+  ValidTo: 2049-12-31
+  BillCode: "STERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  TermFeeModel: "STERMPERIOD"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TARJ"
+  ValidFrom: 2014-05-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "Tarj Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "8"
+  CalcMethod: 1
+  DurType: 2
+  DurUnit: 1
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "TARJ_UPSELL"
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "TARJ6"
+  ValidFrom: 2013-08-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "Tarjeta 6 Bundle"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 1
+  DurType: 2
+  DurUnit: 1
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "TARJ_UPSELL"
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "TARJ7"
+  ValidFrom: 2013-11-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "La del uno 650 MB"
+  CCN: 93
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 4
+  DurType: 4
+  FeeModel: "TARJ7_BundleFee"
+  Effective: 1
+  BundleUpsell: "TARJ7_UPSELL"
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "TARJ7_UPSELL"
+  ValidFrom: 2013-11-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "Ampliación 300 MB"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 1
+  FeeModel: "TARJ7_UPSELLFee"
+  DurUnit: 2
+  Effective: 1
+  InstanceLimit: 999
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "TARJ9"
+  ValidFrom: 2015-05-29
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "La del Uno 1 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 4
+  DurType: 4
+  FeeModel: "TARJ9_BundleFee"
+  Effective: 1
+  BundleUpsell: "TARJ7_UPSELL"
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "TARJ_UPSELL"
+  ValidFrom: 2012-12-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "Tarjeta Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "8"
+  CalcMethod: 1
+  DurType: 2
+  FeeModel: "TARJ_UPSELLFee"
+  DurUnit: 1
+  Effective: 1
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "TARJD1"
+  ValidFrom: 2009-01-01
+  ValidTo: 2049-12-31
+  DCName: "Tarjeta Datos"
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 3
+  DurType: 1
+  Effective: 1
+  InclStartCharge: FALSE
+  StatusCode: 2
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "TERM18"
+  ValidFrom: 2006-11-01
+  ValidTo: 1954-12-31
+  BillCode: "TERMPERIOD"
+  DCTarget: "1"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  TermFeeModel: "TERMPERIOD"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM18-150"
+  ValidFrom: 2010-03-01
+  ValidTo: 1954-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  TermFeeModel: "TERMPERIOD15"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM18-50"
+  ValidFrom: 2012-06-13
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  TermFeeModel: "TERMPERIOD05"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM18II"
+  ValidFrom: 2009-03-01
+  ValidTo: 1954-12-31
+  BillCode: "TERMPERIOD"
+  DCTarget: "1"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  TermFeeModel: "TERMPERIOD2"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM18III"
+  ValidFrom: 2009-09-09
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  TermFeeModel: "TERMPERIOD3"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM18IV"
+  ValidFrom: 2010-02-08
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  TermFeeModel: "TERMPERIOD4"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM18V"
+  ValidFrom: 2010-12-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  TermFeeModel: "TERMPERIOD5"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM18VI"
+  ValidFrom: 2010-12-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 18
+  TermFeeModel: "TERMPERIOD6"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24"
+  ValidFrom: 2010-12-01
+  ValidTo: 1954-12-31
+  BillCode: "TERMPERIOD"
+  DCTarget: "1"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24-125"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD125"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24-150"
+  ValidFrom: 2010-12-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD15"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24-175"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD175"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24-225"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD225"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24-250"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD250"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24-275"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD275"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24-50"
+  ValidFrom: 2012-06-13
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD05"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24-75"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD75"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24II"
+  ValidFrom: 2010-12-01
+  ValidTo: 1954-12-31
+  BillCode: "TERMPERIOD"
+  DCTarget: "1"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD2"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24III"
+  ValidFrom: 2010-12-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD3"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24IV"
+  ValidFrom: 2010-12-01
+  ValidTo: 1954-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD4"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24V"
+  ValidFrom: 2010-12-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD5"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "TERM24VI"
+  ValidFrom: 2010-12-01
+  ValidTo: 2049-12-31
+  BillCode: "TERMPERIOD"
+  DCName: "Terminal discount(Postpaid)"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 24
+  TermFeeModel: "TERMPERIOD6"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "UPGRADE_UPSELL"
+  ValidFrom: 2012-03-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "UPGRADEDATA"
+  DCName: "Upsell Upgrade"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  DurUnit: 3
+  Effective: 1
+  StatusCode: 2
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "VOICE100"
+  ValidFrom: 2015-01-01
+  ValidTo: 2049-12-31
+  DCName: "Promo 100 min/mes gratis"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "VOICE3000"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  DCName: "Contrato service package"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  Effective: 1
+  StatusCode: 2
+  BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "YOIGOYOIGO"
+  ValidFrom: 2008-02-01
+  InclUnit: 2
+  ValidTo: 1954-12-31
+  BillCode: "YOIGOYOIGO"
+  MaxChargeIncl: 3600
+  DCTarget: "1"
+  DCName: "Yoigo-Yoigo national calls daily limit"
+  CCN: 80
+  MaxChargeExcl: 3600
+  Brand: "1"
+  DCType: "2"
+  CalcMethod: 1
+  DurType: 1
+  Effective: 1
+  PayType: 1
+

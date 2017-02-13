@@ -1,10 +1,10 @@
-RequestType1: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqName: "Subscription type change"
   UserCode: "STC"
   Queue: 3
 
-RequestType2: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 1
   ReqName: "Service Change"
@@ -12,56 +12,56 @@ RequestType2: RequestType
   UserCode: "Service"
   Queue: 1
 
-RequestType3: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 2
   ReqName: "Saldo Payment"
   Program: "Mm/saldopaym.p"
   InUse: FALSE
 
-RequestType4: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 3
   ReqName: "User Change"
   Program: "Mm/mscustchg.p"
   InUse: FALSE
 
-RequestType5: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 4
   ReqName: "Invoice Customer Change"
   Program: "Mm/mscustchg.p"
   InUse: FALSE
 
-RequestType6: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 5
   ReqName: "User Account"
   Program: "Mc/useraccountreq.p"
   InUse: FALSE
 
-RequestType7: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 6
   ReqName: "Address Change"
   Program: "Mc/addressreq.p"
   Queue: 1
 
-RequestType8: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 7
   ReqName: "Per. Contract PIN"
   Program: "Mm/percontr.p"
   InUse: FALSE
 
-RequestType9: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 8
   ReqName: "Per. Contract Activation"
   Program: "Mm/percontr.p"
   Queue: 4
 
-RequestType10: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 9
   ReqName: "Per. Contract Termination"
@@ -69,35 +69,35 @@ RequestType10: RequestType
   UserCode: "PerCont"
   Queue: 9
 
-RequestType11: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 10
   ReqName: "Agreement Customer Change"
   Program: "Mm/msagrcustchg.p"
   Queue: 6
 
-RequestType12: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 11
   ReqName: "Payment Plan"
   Program: "Ar/pplanreq.p"
   InUse: FALSE
 
-RequestType13: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 12
   ReqName: "Marketing Values"
   Program: "Mc/marketingreq.p"
   InUse: FALSE
 
-RequestType14: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 13
   ReqName: "Subscription creation"
   UserCode: "CreSub"
   Queue: 2
 
-RequestType15: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 14
   ReqName: "Fixed line creation"
@@ -105,35 +105,35 @@ RequestType15: RequestType
   UserCode: "CreFixed"
   Queue: 2
 
-RequestType16: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 15
   ReqName: "ICC Change"
   UserCode: "ChgICC"
   Queue: 2
 
-RequestType17: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 18
   ReqName: "Subscription termination"
   UserCode: "TermSub"
   Queue: 2
 
-RequestType18: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 19
   ReqName: "MSISDN Change"
   UserCode: "ChgCLI"
   Queue: 2
 
-RequestType19: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 20
   ReqName: "On-demand invoice"
   Program: "Inv/invoicereq.p"
   InUse: FALSE
 
-RequestType20: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 22
   ReqName: "Credit Note"
@@ -141,7 +141,7 @@ RequestType20: RequestType
   UserCode: "credit"
   Queue: 1
 
-RequestType21: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 23
   ReqName: "Refunds"
@@ -150,7 +150,7 @@ RequestType21: RequestType
   InUse: FALSE
   Queue: 6
 
-RequestType22: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 24
   ReqName: "Bank account change"
@@ -158,7 +158,7 @@ RequestType22: RequestType
   UserCode: "bank"
   Queue: 3
 
-RequestType23: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 27
   ReqName: "Fee model price change"
@@ -166,21 +166,21 @@ RequestType23: RequestType
   InUse: FALSE
   Queue: 3
 
-RequestType24: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 28
   ReqName: "Price guarantee"
   Program: "pgrequest"
   InUse: FALSE
 
-RequestType25: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 30
   ReqName: "SMS Creation"
   Program: "Syst/smsrequest.p"
   Queue: 2
 
-RequestType26: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 31
   ReqName: "Payment"
@@ -189,7 +189,7 @@ RequestType26: RequestType
   InUse: FALSE
   Queue: 1
 
-RequestType27: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 32
   ReqName: "Bank reference"
@@ -197,14 +197,14 @@ RequestType27: RequestType
   UserCode: "BankRef"
   InUse: FALSE
 
-RequestType28: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 33
   ReqName: "Credit check"
   UserCode: "Credit"
   Queue: 1
 
-RequestType29: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 34
   ReqName: "Manual Payment"
@@ -213,7 +213,7 @@ RequestType29: RequestType
   InUse: FALSE
   Queue: 1
 
-RequestType30: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 35
   ReqName: "Barring and suspension"
@@ -221,59 +221,59 @@ RequestType30: RequestType
   UserCode: "barr"
   Queue: 6
 
-RequestType31: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 37
   ReqName: "Balance query"
   InUse: FALSE
 
-RequestType32: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 39
   ReqName: "Not used"
   InUse: FALSE
 
-RequestType33: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 40
   ReqName: "Limit update or creation"
   Program: "Mc/limitrequest.p"
   Queue: 2
 
-RequestType34: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 46
   ReqName: "After Sales Order"
   Program: "Mc/aftersalesreq.p"
   Queue: 2
 
-RequestType35: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 49
   ReqName: "Revert Renewal Order"
   Program: "Mm/revert_renewal_order.p"
   Queue: 2
 
-RequestType36: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 65
   ReqName: "Rerate"
   Program: "Rate/rerate_request.p"
   Queue: 7
 
-RequestType37: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 76
   ReqName: "Charge and Compensation"
   Program: "Mm/postpaid_chgcomp.p"
   Queue: 3
 
-RequestType38: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 77
   ReqName: "Duplicate invoice"
 
-RequestType39: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 78
   ReqName: "Bundle Activation/Termination"
@@ -281,7 +281,7 @@ RequestType39: RequestType
   InUse: FALSE
   Queue: 2
 
-RequestType40: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 79
   ReqName: "SMS invoice"
@@ -293,39 +293,39 @@ RequestType40: RequestType
   LogOn: TRUE 
   Mode: "Batch"
 
-RequestType41: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 80
   ReqName: "IMEI change"
 
-RequestType42: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 81
   ReqName: "Bundle change"
   Program: "Mm/bundle_change_request.p"
   Queue: 11
 
-RequestType43: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 82
   ReqName: "Subscription Reactivation"
   UserCode: "ReacSub"
   Queue: 2
 
-RequestType44: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 83
   ReqName: "Data Sharing Service"
   Queue: 4
 
-RequestType45: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 84
   ReqName: "Activate Email Invoice"
   Program: "Inv/activate_einvoice.p"
   Queue: 10
 
-RequestType46: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 85
   ReqName: "Send Email Invoice"
@@ -337,35 +337,35 @@ RequestType46: RequestType
   LogOn: TRUE 
   Mode: "Batch"
 
-RequestType47: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 86
   ReqName: "Email Sending"
   Program: "Mm/email_sending.p"
   Queue: 10
 
-RequestType48: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 87
   ReqName: "Logistics"
   Program: "Mc/logistics_request.p"
   Queue: 8
 
-RequestType49: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 88
   ReqName: "Installment Contract Change"
   Program: "Mm/installment_contract_change.p"
   Queue: 3
 
-RequestType50: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 89
   ReqName: "Terminal Financing Bank File"
   Program: "Ar/terminal_financing_send.p"
   Queue: 5
 
-RequestType51: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 90
   ReqName: "Fusion invoice email"
@@ -377,14 +377,14 @@ RequestType51: RequestType
   LogOn: TRUE 
   Mode: "Batch"
 
-RequestType52: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 91
   ReqName: "Terminal Finance CAN TER file"
   Program: "Ar/tf_cancel_send.p"
   Queue: 5
 
-RequestType53: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 92
   ReqName: "Publish Invoices"
@@ -396,7 +396,7 @@ RequestType53: RequestType
   LogOn: TRUE 
   Mode: "Batch"
 
-RequestType54: RequestType
+bulkload: RequestType
   Brand: "1"
   ReqType: 93
   ReqName: "Publish IFS file"
@@ -406,5 +406,17 @@ RequestType54: RequestType
   LogFile: "/scratch/log/requester/reqtype93.log"
   LogThreshold: 1048576
   LogOn: TRUE 
+  Mode: "Batch"
+
+bulkload: RequestType
+  Brand: "1"
+  ReqType: 94
+  ReqName: "Push invoice"
+  Program: "pushinvoice"
+  UserCode: "Cron"
+  LogEntry: "DB.Connects,4GLTrace:1"
+  LogFile: "/scratch/log/requester/reqtype94.log"
+  LogThreshold: 1048576
+  LogOn: TRUE
   Mode: "Batch"
 

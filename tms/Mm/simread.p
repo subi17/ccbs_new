@@ -21,7 +21,6 @@
 
 DEF INPUT PARAMETER SIMfile AS CHARACTER NO-UNDO. 
 DEF INPUT PARAMETER ProcessedDir AS CHARACTER NO-UNDO. 
-DEF INPUT PARAMETER pcTenant AS CHARACTER NO-UNDO.
 DEF OUTPUT PARAMETER ProcessedSIMFile AS CHARACTER NO-UNDO.  
 
 
@@ -371,16 +370,7 @@ REPEAT WITH FRAME Main:
    END.
   
    lcICCBegin  = fCParam( "SIM", "ICC_Begin"  ).
-  
-   IF pcTenant EQ "Default" THEN
-      lcIMSIBegin = fCParam( "SIM", "IMSI_Begin_Yoigo" ).
-   ELSE IF pcTenant EQ "TMasMovil" THEN
-      lcIMSIBegin = fCParam( "SIM", "IMSI_Begin_MasMovil" ).
-   ELSE DO:
-      MESSAGE "Abort, unknown tenant: " + pcTenant VIEW-AS ALERT-BOX.
-      RETURN.
-   END.
-
+   lcIMSIBegin = fCParam( "SIM", "IMSI_Begin" ).
    lcErrorMsg = "Incoming file " + SIMfile + " is incorrect. Check file structure.".
 
    RUN HandleUniqueSIMFileName(INPUT-OUTPUT cSIMFileNamePart,
@@ -466,7 +456,7 @@ REPEAT WITH FRAME Main:
          DO:
             lError = TRUE.
             lcErrorMsg = lcErrorMsg + " IMSI field was incorrect at row "
-                         + STRING(iRow) + " for tenant " + pcTenant.
+                         + STRING(iRow) + " for current user profile".
             LEAVE readSIMrows.
          END.
 

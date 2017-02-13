@@ -1,4 +1,4 @@
-BarringConf1: BarringConf
+bulkload: BarringConf
   BarringGroup: "ATC"
   BarringCode: "ATC_International_off"
   Mask: "0000000100000"
@@ -9,7 +9,7 @@ BarringConf1: BarringConf
   UIPriority: 20
   IFSPriority: 190
 
-BarringConf2: BarringConf
+bulkload: BarringConf
   BarringGroup: "ATC"
   BarringCode: "ATC_Roaming_off"
   Mask: "1000000000000"
@@ -20,7 +20,7 @@ BarringConf2: BarringConf
   UIPriority: 10
   IFSPriority: 200
 
-BarringConf3: BarringConf
+bulkload: BarringConf
   BarringGroup: "ATC"
   BarringCode: "ATC_Service_Suspension"
   Mask: "1111111000000"
@@ -32,7 +32,7 @@ BarringConf3: BarringConf
   IFSPriority: 160
   OldCode: "Y_SARC"
 
-BarringConf4: BarringConf
+bulkload: BarringConf
   BarringGroup: "ATC"
   BarringCode: "ATC_TotalPremium_Off"
   Mask: "0001000000000"
@@ -43,7 +43,7 @@ BarringConf4: BarringConf
   UIPriority: 30
   IFSPriority: 180
 
-BarringConf5: BarringConf
+bulkload: BarringConf
   BarringGroup: "Customer"
   BarringCode: "C_BPSUB"
   Mask: "0000000010000"
@@ -55,7 +55,7 @@ BarringConf5: BarringConf
   IFSPriority: 270
   OldCode: "C_BPSUB"
 
-BarringConf6: BarringConf
+bulkload: BarringConf
   BarringGroup: "Customer"
   BarringCode: "C_BRAIC"
   Mask: "1000000100000"
@@ -68,7 +68,7 @@ BarringConf6: BarringConf
   IFSPriority: 250
   OldCode: "C_BRAIC"
 
-BarringConf7: BarringConf
+bulkload: BarringConf
   BarringGroup: "Customer"
   BarringCode: "C_BRIAP"
   Mask: "1001000100000"
@@ -81,7 +81,7 @@ BarringConf7: BarringConf
   IFSPriority: 260
   OldCode: "C_BRIAP"
 
-BarringConf8: BarringConf
+bulkload: BarringConf
   BarringGroup: "Customer"
   BarringCode: "Cust_International_off"
   Mask: "0000000100000"
@@ -93,7 +93,7 @@ BarringConf8: BarringConf
   UIPriority: 20
   IFSPriority: 230
 
-BarringConf9: BarringConf
+bulkload: BarringConf
   BarringGroup: "Customer"
   BarringCode: "Cust_LOST"
   Mask: "1011011000000"
@@ -106,7 +106,7 @@ BarringConf9: BarringConf
   IFSPriority: 210
   OldCode: "C_LOS"
 
-BarringConf10: BarringConf
+bulkload: BarringConf
   BarringGroup: "Customer"
   BarringCode: "Cust_Roaming_off"
   Mask: "1000000000000"
@@ -118,7 +118,7 @@ BarringConf10: BarringConf
   UIPriority: 10
   IFSPriority: 240
 
-BarringConf11: BarringConf
+bulkload: BarringConf
   BarringGroup: "Customer"
   BarringCode: "Cust_TotalPremium_off"
   Mask: "0001000000000"
@@ -131,7 +131,7 @@ BarringConf11: BarringConf
   IFSPriority: 220
   OldCode: "C_BPAC"
 
-BarringConf12: BarringConf
+bulkload: BarringConf
   BarringGroup: "Collections"
   BarringCode: "Debt_Hotl"
   Mask: "0001001000100"
@@ -145,7 +145,7 @@ BarringConf12: BarringConf
   IFSPriority: 20
   OldCode: "D_HOTL"
 
-BarringConf13: BarringConf
+bulkload: BarringConf
   BarringGroup: "Collections"
   BarringCode: "Debt_HOTLP"
   Mask: "0001000000001"
@@ -159,7 +159,7 @@ BarringConf13: BarringConf
   IFSPriority: 10
   OldCode: "D_HOTLP"
 
-BarringConf14: BarringConf
+bulkload: BarringConf
   BarringGroup: "Collections"
   BarringCode: "Debt_LP"
   Mask: "0000000000010"
@@ -172,7 +172,7 @@ BarringConf14: BarringConf
   IFSPriority: 40
   OldCode: "LP"
 
-BarringConf15: BarringConf
+bulkload: BarringConf
   BarringGroup: "Collections"
   BarringCode: "Debt_Restricted"
   Mask: "1011011000000"
@@ -185,7 +185,7 @@ BarringConf15: BarringConf
   IFSPriority: 30
   OldCode: "D_REST"
 
-BarringConf16: BarringConf
+bulkload: BarringConf
   BarringGroup: "Customer"
   BarringCode: "Internet"
   Mask: "0000001000000"
@@ -198,7 +198,7 @@ BarringConf16: BarringConf
   IFSPriority: 170
   OldCode: "NAM"
 
-BarringConf17: BarringConf
+bulkload: BarringConf
   BarringGroup: "Risk Limits"
   BarringCode: "Limits_International_off"
   Mask: "0000000100000"
@@ -209,7 +209,7 @@ BarringConf17: BarringConf
   UIPriority: 20
   IFSPriority: 140
 
-BarringConf18: BarringConf
+bulkload: BarringConf
   BarringGroup: "Risk Limits"
   BarringCode: "Limits_Restricted"
   Mask: "1011011000000"
@@ -221,7 +221,7 @@ BarringConf18: BarringConf
   IFSPriority: 120
   OldCode: "Y_REST"
 
-BarringConf19: BarringConf
+bulkload: BarringConf
   BarringGroup: "Risk Limits"
   BarringCode: "Limits_Roaming_off"
   Mask: "1000000000000"
@@ -232,7 +232,7 @@ BarringConf19: BarringConf
   UIPriority: 10
   IFSPriority: 150
 
-BarringConf20: BarringConf
+bulkload: BarringConf
   BarringGroup: "Risk Limits"
   BarringCode: "Limits_TotalPremium_Off"
   Mask: "0001000000000"
@@ -244,7 +244,7 @@ BarringConf20: BarringConf
   IFSPriority: 130
   OldCode: "Y_HURP"
 
-BarringConf21: BarringConf
+bulkload: BarringConf
   BarringGroup: "Product"
   BarringCode: "Prod_Int"
   Mask: "1011011000000"
@@ -256,7 +256,7 @@ BarringConf21: BarringConf
   IFSPriority: 310
   OldCode: "Y_PRODINT"
 
-BarringConf22: BarringConf
+bulkload: BarringConf
   BarringGroup: "Product"
   BarringCode: "Prod_TotalPremium_Off"
   Mask: "0001000000000"
@@ -268,7 +268,7 @@ BarringConf22: BarringConf
   IFSPriority: 280
   OldCode: "Y_HURP"
 
-BarringConf23: BarringConf
+bulkload: BarringConf
   BarringGroup: "Risk"
   BarringCode: "Risk_International_off"
   Mask: "0000000100000"
@@ -279,7 +279,7 @@ BarringConf23: BarringConf
   UIPriority: 20
   IFSPriority: 80
 
-BarringConf24: BarringConf
+bulkload: BarringConf
   BarringGroup: "Risk"
   BarringCode: "Risk_Restricted"
   Mask: "1011011000000"
@@ -292,7 +292,7 @@ BarringConf24: BarringConf
   IFSPriority: 60
   OldCode: "Y_REST"
 
-BarringConf25: BarringConf
+bulkload: BarringConf
   BarringGroup: "Risk"
   BarringCode: "Risk_Roaming_off"
   Mask: "1000000000000"
@@ -303,7 +303,7 @@ BarringConf25: BarringConf
   UIPriority: 10
   IFSPriority: 110
 
-BarringConf26: BarringConf
+bulkload: BarringConf
   BarringGroup: "Risk"
   BarringCode: "Risk_Suspension"
   Mask: "1111111000000"
@@ -316,7 +316,7 @@ BarringConf26: BarringConf
   IFSPriority: 50
   OldCode: "Y_SARC"
 
-BarringConf27: BarringConf
+bulkload: BarringConf
   BarringGroup: "Risk"
   BarringCode: "Risk_TotalPremium_Off"
   Mask: "0001000000000"
@@ -328,7 +328,7 @@ BarringConf27: BarringConf
   IFSPriority: 70
   OldCode: "Y_HURP"
 
-BarringConf28: BarringConf
+bulkload: BarringConf
   BarringGroup: "Product"
   BarringCode: "Y_BPSUB"
   Mask: "0000000010000"
@@ -340,7 +340,7 @@ BarringConf28: BarringConf
   IFSPriority: 290
   OldCode: "Y_BPSUB"
 
-BarringConf29: BarringConf
+bulkload: BarringConf
   BarringGroup: "Risk"
   BarringCode: "Y_HURG"
   Mask: "1001000100000"
@@ -352,7 +352,7 @@ BarringConf29: BarringConf
   IFSPriority: 100
   OldCode: "Y_HURG"
 
-BarringConf30: BarringConf
+bulkload: BarringConf
   BarringGroup: "Product"
   BarringCode: "Y_HURP_P"
   Mask: "0001000000000"
@@ -365,7 +365,7 @@ BarringConf30: BarringConf
   IFSPriority: 300
   OldCode: "Y_HURP_P"
 
-BarringConf31: BarringConf
+bulkload: BarringConf
   BarringGroup: "Risk"
   BarringCode: "Y_HURRIC"
   Mask: "1000000100000"
