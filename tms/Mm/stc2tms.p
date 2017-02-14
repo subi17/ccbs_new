@@ -28,6 +28,7 @@
 {fbankdata.i}
 {create_eventlog.i}
 {barrfunc.i}
+{fixedlinefunc.i}
 
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
@@ -564,6 +565,12 @@ PROCEDURE pUpdateSubscription:
                 OrderFusion.OrderID = Order.OrderID:
          lcFixedNumber = OrderFusion.FixedNumber.
       END.
+   
+   /* YTS-10293 */
+   IF fisConvergenceTariff(MsRequest.reqcparam1) AND
+      fisConvergenceTariff(MsRequest.reqcparam2) AND
+      lcFixedNumber EQ ? THEN
+      lcFixedNumber = mobsub.fixednumber.
 
    /* YOT-1407: if postpaid -> postpaid or postpaid -> prepaid then original 
       activation time can be used even if handling is delayed */
