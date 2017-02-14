@@ -703,16 +703,21 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          LOOKUP(pcNumberType,"new,mnp") > 0 AND
          NOT plUpdate AND
          piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
-         NOT fSubscriptionLimitCheck(
-         lcIdOrderCustomer,
-         lcIdTypeOrderCustomer,
-         llSelfEmployed,
-         1,
-         OUTPUT lcFError,
-         OUTPUT liSubLimit,
-         OUTPUT liSubs,
-         OUTPUT liSubLimit,
-         OUTPUT liActs) THEN .
+         (
+            (pcChannel EQ "migration") /*MMM-21*/
+            OR 
+            (NOT fSubscriptionLimitCheck(
+            lcIdOrderCustomer,
+            lcIdTypeOrderCustomer,
+            llSelfEmployed,
+            1,
+            OUTPUT lcFError,
+            OUTPUT liSubLimit,
+            OUTPUT liSubs,
+            OUTPUT liSubLimit,
+            OUTPUT liActs) )
+         )   
+         THEN .
 
       CASE lcdelivery_channel:
          WHEN "PAPER" THEN liDelType = {&INV_DEL_TYPE_PAPER}.
