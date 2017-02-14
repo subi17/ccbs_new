@@ -13,10 +13,11 @@
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 {tmsconst.i}
 {timestamp.i}
+{eventval.i}
 
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
-   commali.i and eventval.i and call fCleanEventObjects after this function */
+   commali.i, katun defined and call fCleanEventObjects after this function */
 FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    (iiMsSeq AS INT,
     icFixedNumber AS CHAR):
