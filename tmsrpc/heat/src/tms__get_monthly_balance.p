@@ -14,13 +14,17 @@
 DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".
 DEFINE VARIABLE response_array AS CHARACTER NO-UNDO. 
 
-DEF VAR pcCLI AS CHAR NO-UNDO.
-DEF VAR ldBalance AS DECIMAL NO-UNDO.
-DEF VAR liCurrentPeriod AS INT NO-UNDO. 
+DEF VAR pcTenant        AS CHAR    NO-UNDO.
+DEF VAR pcCLI           AS CHAR    NO-UNDO.
+DEF VAR ldBalance       AS DECIMAL NO-UNDO.
+DEF VAR liCurrentPeriod AS INT     NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
-pcCLI = get_string(param_toplevel_id, "0").
+IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
+pcTenant = get_string(param_toplevel_id, "0"). 
+pcCLI = get_string(param_toplevel_id, "1").
 if gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FIND FIRST mobsub WHERE
      mobsub.brand = gcBrand AND

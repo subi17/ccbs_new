@@ -14,10 +14,11 @@ katun = "Newton".
 gcBrand = "1".
 
 /*Input parameters*/
-DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcEDRFile AS CHARACTER NO-UNDO.
-DEFINE VARIABLE ldtDateTime AS DATETIME NO-UNDO.
+DEFINE VARIABLE pcStruct    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcTenant    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcCLI       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcEDRFile   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE ldtDateTime AS DATETIME  NO-UNDO.
 
 
 /*Local variables*/
@@ -37,13 +38,16 @@ lcRootDir = REPLACE(lcrootDir, "donotremove_testdir.txt", "").
 lcRateDir = REPLACE(lcrootDir, "testing", "Rate").
 /*lcRootDir = "/apps/yoigo/tms_support/testing/".*/
 
-IF validate_request(param_toplevel_id, "string,string,datetime") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,string,datetime") EQ ? THEN RETURN.
 
-lcCLI       = get_string(param_toplevel_id, "0").
-lcEDRFile   = get_string(param_toplevel_id, "1").
-ldtDateTime = get_datetime(param_toplevel_id, "2").
+pcTenant    = get_string(param_toplevel_id, "0").
+lcCLI       = get_string(param_toplevel_id, "1").
+lcEDRFile   = get_string(param_toplevel_id, "2").
+ldtDateTime = get_datetime(param_toplevel_id, "3").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 /*Check that customer exists*/
 FIND mobsub NO-LOCK

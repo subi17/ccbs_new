@@ -14,14 +14,16 @@ gcBrand = "1".
 {Mc/provmaint.i}
 {Func/timestamp.i}
 
-DEF VAR pcMsisdn AS CHAR NO-UNDO. 
+DEF VAR pcTenant       AS CHAR NO-UNDO.
+DEF VAR pcMsisdn       AS CHAR NO-UNDO. 
 DEF VAR pcSegmentation AS CHAR NO-UNDO. 
-DEF VAR piStatus AS INT NO-UNDO INIT 0. 
+DEF VAR piStatus       AS INT  NO-UNDO INIT 0. 
 
 /* validate 1st and 2nd parameter */
-IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
-pcMsisdn = get_string(param_toplevel_id, "0").
-pcSegmentation = get_string(param_toplevel_id, "1").
+IF validate_request(param_toplevel_id, "string,string,string") EQ ? THEN RETURN.
+pcTenant = get_string(param_toplevel_id, "0").
+pcMsisdn = get_string(param_toplevel_id, "1").
+pcSegmentation = get_string(param_toplevel_id, "2").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF NOT( pcSegmentation = "OFA" OR 
@@ -32,6 +34,8 @@ IF NOT( pcSegmentation = "OFA" OR
         pcSegmentation = "OFF" ) THEN DO:
    RETURN appl_err(SUBST("Incorrect segmentation value &1", pcSegmentation)).
 END.
+
+{newton/src/settenant.i pcTenant}
 
 FIND FIRST MobSub NO-LOCK WHERE
            MobSub.Brand = gcBrand AND

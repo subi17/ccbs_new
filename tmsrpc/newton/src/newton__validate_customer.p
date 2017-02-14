@@ -13,6 +13,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
+DEF VAR pcTenant   AS CHAR NO-UNDO.
 DEF VAR pcPersonId AS CHAR NO-UNDO.
 DEF VAR pcIdType   AS CHAR NO-UNDO.
 DEF VAR pcMSISDN   AS CHAR NO-UNDO.
@@ -20,11 +21,14 @@ DEF VAR pcMSISDN   AS CHAR NO-UNDO.
 DEF VAR lcBrand   AS CHAR NO-UNDO INIT "1".
 DEF VAR lcName AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string,string") EQ ? THEN RETURN.
-pcPersonId = get_string(param_toplevel_id, "0").
-pcIdType   = get_string(param_toplevel_id, "1").
-pcMSISDN   = get_string(param_toplevel_id, "2").
+IF validate_request(param_toplevel_id, "string,string,string,string") EQ ? THEN RETURN.
+pcTenant   = get_string(param_toplevel_id, "0").
+pcPersonId = get_string(param_toplevel_id, "1").
+pcIdType   = get_string(param_toplevel_id, "2").
+pcMSISDN   = get_string(param_toplevel_id, "3").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FIND FIRST Customer
 WHERE Customer.Brand           EQ lcBrand

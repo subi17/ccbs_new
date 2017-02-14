@@ -32,6 +32,7 @@ katun = "Newton".
 {Syst/tmsconst.i}
 
 /* Input parameters */
+DEF VAR pcTenant             AS CHAR NO-UNDO.
 DEF VAR pcMSISDN             AS CHAR NO-UNDO.
 DEF VAR pcSalesman           AS CHAR NO-UNDO.
 DEF VAR pcCliType            AS CHAR NO-UNDO.
@@ -73,18 +74,21 @@ IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 /* web is passing renewal_stc but we don't actually need it */
 lcstruct = validate_struct(pcStruct, 
-   "msisdn!,username!,subscription_type_id!,activation_stamp!,charge!," +
+   "brand!,msisdn!,username!,subscription_type_id!,activation_stamp!,charge!," +
    "charge_limit!,bank_account,data_bundle_id,renewal_stc,bypass," +
    "extend_term_contract,exclude_term_penalty,memo,contract_id,channel").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+pcTenant    = get_string(pcStruct, "brand").
 pcMSISDN    = get_string(pcStruct, "msisdn").
 pcSalesman  = get_string(pcStruct, "username").
 pcCliType   = get_string(pcStruct, "subscription_type_id").
 pdActivation = get_timestamp(pcStruct, "activation_stamp").
 pdeCharge = get_double(pcStruct, "charge").
 pdeChargeLimit = get_double(pcStruct, "charge_limit").
+
+{newton/src/settenant.i pcTenant}
 
 lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
