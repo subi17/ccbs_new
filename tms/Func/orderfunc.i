@@ -98,6 +98,10 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                            MobSub.IMSI = ""
                            MobSub.MsStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
                         /* Update MSOwner accordingly */
+                        &IF DEFINED(STAR_EVENT_USER) = 0 
+                        &THEN 
+                           &GLOBAL-DEFINE STAR_EVENT_USER "OrderClose"
+                        &ENDIF
                         fUpdatePartialMSOwner(bfOrder.MsSeq, MobSub.FixedNumber).
                      END.
                   END. /* IF bfOrder.OrderType EQ */
