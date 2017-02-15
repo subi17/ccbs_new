@@ -69,7 +69,6 @@ PUT STREAM sLog UNFORMATTED
 FOR EACH Order EXCLUSIVE-LOCK WHERE
          Order.Brand EQ gcBrand AND
          Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_PENDING}: 
-         message "jiihaa" VIEW-AS ALERT-BOX.
    lcRow = Order.CLI.
    PUT STREAM sLog UNFORMATTED lcRow SKIP.
    PUT STREAM sOut UNFORMATTED lcRow SKIP.

@@ -101,7 +101,7 @@ DO TRANS:
 END.
 
 /*Execution part*/
-INPUT STREAM sFile THROUGH VALUE("ls -ltr " + lcInDir +"/" ).
+INPUT STREAM sFile THROUGH VALUE("ls -ltr " + lcInDir + "/").
 REPEAT:
    IMPORT STREAM sFile UNFORMATTED lcFileName.
    lcInputFile = lcInDir + lcFileName.
@@ -174,7 +174,7 @@ PROCEDURE pReadFile:
                  Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING}.
       IF AVAIL Order THEN DO:
          liOrderID = Order.OrderID.
-         /*Order.StatusCode = */
+         /*Order.StatusCode = will be set when the actual MNP is happening.*/
       END.
       /*Nodo data contains a number for Order that is
         already handled
