@@ -17,12 +17,13 @@ katun = "Newton".
 gcBrand = "1".
 
 /*New input parameters*/
-DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcSecCLI AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcCDRFile AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcStruct    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcTenant    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcCLI       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcSecCLI    AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcCDRFile   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldtDateTime AS DATETIME NO-UNDO.
-DEFINE VARIABLE lcType AS CHAR NO-UNDO INIT "Voice".
+DEFINE VARIABLE lcType      AS CHAR NO-UNDO INIT "Voice".
 
 /*TEMP ENDS*/
 
@@ -43,16 +44,19 @@ lcRootDir = SEARCH("donotremove_testdir.txt").
 lcRootDir = REPLACE(lcrootDir, "donotremove_testdir.txt", "").
 lcRateDir = REPLACE(lcrootDir, "testing", "Rate").
 
-IF validate_request(param_toplevel_id, "string,string,string,datetime,int,int") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,string,string,datetime,int,int") EQ ? THEN RETURN.
 
-lcCLI       = get_string(param_toplevel_id, "0").
-lcSecCLI    = get_string(param_toplevel_id, "1").
-lcCDRFile   = get_string(param_toplevel_id, "2").
-ldtDateTime = get_datetime(param_toplevel_id, "3").
-liCount     = get_int(param_toplevel_id, "4").
-liMeas      = get_int(param_toplevel_id, "5").
+pcTenant    = get_string(param_toplevel_id, "0").
+lcCLI       = get_string(param_toplevel_id, "1").
+lcSecCLI    = get_string(param_toplevel_id, "2").
+lcCDRFile   = get_string(param_toplevel_id, "3").
+ldtDateTime = get_datetime(param_toplevel_id, "4").
+liCount     = get_int(param_toplevel_id, "5").
+liMeas      = get_int(param_toplevel_id, "6").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 /*Check that customer exists*/
 IF lcCli BEGINS "9" THEN DO:

@@ -33,6 +33,7 @@ DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".
 {Func/xmlfunction.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO.
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR lcFields AS CHARACTER NO-UNDO. 
 DEF VAR ldtDate AS DATETIME NO-UNDO.
 DEF VAR ldeReceived AS DEC NO-UNDO.
@@ -52,9 +53,13 @@ DEFINE TEMP-TABLE ttPrepaidRequest NO-UNDO LIKE PrepaidRequest.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 
-lcFields = validate_struct(pcStruct, "type!,received_at!,date!,entity_index!,reference!,num_oper!,local_code!,subscriber_number!,amount_with_tax,amount_without_tax,cancelled_amount_with_tax,cancelled_amount_without_tax,double_message_status,tax_zone,tax_percent,origin_entity!,postal_code!,air_result_code,netplus_result_code!").
+lcFields = validate_struct(pcStruct, "brand!,type!,received_at!,date!,entity_index!,reference!,num_oper!,local_code!,subscriber_number!,amount_with_tax,amount_without_tax,cancelled_amount_with_tax,cancelled_amount_without_tax,double_message_status,tax_zone,tax_percent,origin_entity!,postal_code!,air_result_code,netplus_result_code!").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+pcTenant = get_string(pcStruct, "brand").
+
+{newton/src/settenant.i pcTenant}
 
 PROCEDURE pDoubleCheck:
 

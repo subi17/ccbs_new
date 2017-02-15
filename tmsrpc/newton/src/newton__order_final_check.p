@@ -18,6 +18,7 @@ gcBrand = "1".
 
 /* Input parameters */
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR pcCLI AS CHAR NO-UNDO.
 DEF VAR pcFixedNumber AS CHAR NO-UNDO INIT "".
 DEF VAR pcNumberType AS CHAR NO-UNDO INIT ?.
@@ -33,10 +34,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 pcstruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_request(pcstruct,"msisdn!,fixed_number,number_type!,channel").
+lcStruct = validate_request(pcstruct,"brand!,msisdn!,fixed_number,number_type!,channel").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
+   pcTenant = get_string(pcStruct, "brand") 
    pcCLI = get_string(pcStruct, "msisdn")
    pcFixedNumber = get_string(pcStruct, "fixed_number") WHEN 
       LOOKUP("fixed_number",lcStruct) > 0
@@ -47,6 +49,8 @@ ASSIGN
 pcChannel = REPLACE(pcChannel,"order","").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN RETURN
    appl_err(SUBST("Incorrect number type|&1",pcNumberType)).

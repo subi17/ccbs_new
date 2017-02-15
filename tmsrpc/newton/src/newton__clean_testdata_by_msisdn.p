@@ -10,15 +10,19 @@
 gcBrand = "1".
 {Func/msisdn.i}
 
+DEF VAR pcTenant        AS CHAR NO-UNDO.
 DEF VAR lcMSISDN        AS CHAR NO-UNDO.
 DEF VAR MSISDN_status   AS INT  NO-UNDO FORMAT "Z9".
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 
-lcMSISDN = get_string(param_toplevel_id,"0").
+pcTenant = get_string(param_toplevel_id,"0").
+lcMSISDN = get_string(param_toplevel_id,"1").
 
 IF lcMSISDN = "" OR lcMSISDN = ? THEN
    RETURN appl_err("MSISDN is empty").
+
+{newton/src/settenant.i pcTenant}
 
 FUNCTION fDeleteOrder RETURNS LOG (INPUT icMSISDN AS CHAR):
 
