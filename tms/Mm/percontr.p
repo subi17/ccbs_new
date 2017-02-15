@@ -2217,7 +2217,6 @@ PROCEDURE pContractTermination:
             /* pre-check that term amoritzation fees already exists */
             FIND FIRST SingleFee NO-LOCK WHERE
                        SingleFee.Brand       = gcBrand                 AND 
-                       SingleFee.CustNum     = MsRequest.CustNum       AND 
                        SingleFee.HostTable   = "MobSub"                AND
                        SingleFee.KeyValue    = STRING(MsRequest.MsSeq) AND
                        SingleFee.BillCode    BEGINS "PAYTERMENDA"      AND
