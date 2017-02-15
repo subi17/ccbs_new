@@ -18,6 +18,8 @@ DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
 DEF VAR lcStruct AS CHARACTER NO-UNDO. 
+DEF VAR piMsSeq  AS INTEGER   NO-UNDO.
+
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
@@ -83,9 +85,16 @@ FUNCTION fListQueryInArray RETURNS CHAR
    RETURN "".
 
 END FUNCTION. 
+
 lcStruct = validate_struct(pcStruct, "msseq!,entity,offset,limit").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+piMsSeq = get_int(pcStruct,"msseq").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq liMsSeq}
 
 DEF VAR lcQuery AS CHARACTER NO-UNDO. 
 

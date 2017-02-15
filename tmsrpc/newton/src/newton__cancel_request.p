@@ -17,10 +17,18 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{Syst/commpaa.i}
+gcBrand = "1".
 {Syst/tmsconst.i}
-
+{Func/cparam2.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fsendsms.i}
+{Func/fsubstermreq.i}
+{Func/main_add_lines.i}
 
 /* Input parameters */
+DEF VAR pcTenant    AS CHAR NO-UNDO.
 DEF VAR piReference AS INT NO-UNDO.
 DEF VAR pcMemo AS CHAR NO-UNDO.
 DEF VAR pcReqType AS CHAR NO-UNDO.
@@ -53,16 +61,25 @@ DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
 /* Output parameters */
 DEF VAR liReqCount AS INT INITIAL 0 NO-UNDO.
 
-top_array = validate_request(param_toplevel_id, "int,string,string,[string],[boolean]").
+top_array = validate_request(param_toplevel_id, "string,int,string,string,[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
-piReference = get_int(param_toplevel_id, "0").
-pcMemo = "Newton user " + get_string(param_toplevel_id, "1") + " canceled".
-pcReqType = get_string(param_toplevel_id, "2").
+
+pcTenant = get_string(param_toplevel_id, "0")
+piReference = get_int(param_toplevel_id, "1").
+pcMemo = "Newton user " + get_string(param_toplevel_id, "2") + " canceled".
+pcReqType = get_string(param_toplevel_id, "3").
+
 IF pcReqType EQ "bundle_termination" THEN
-    pcBundleName = get_string(param_toplevel_id, "3").
+    pcBundleName = get_string(param_toplevel_id, "4").
+
 IF NUM-ENTRIES(top_array) >= 5 THEN
-   plConfirm = get_bool(param_toplevel_id, "4").
+   plConfirm = get_bool(param_toplevel_id, "5").
+
+katun   = "VISTA_" + get_string(param_toplevel_id, "2").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 CASE pcReqType:
    WHEN  "subscription_type" THEN liReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}.
@@ -76,15 +93,6 @@ CASE pcReqType:
    OTHERWISE RETURN appl_err("Unknown request type " + pcReqType).
 END.
 
-{Syst/commpaa.i}
-katun   = "VISTA_" + get_string(param_toplevel_id, "1").
-gcBrand = "1".
-{Func/cparam2.i}
-{Func/msreqfunc.i}
-{Syst/eventval.i}
-{Func/fsendsms.i}
-{Func/fsubstermreq.i}
-{Func/main_add_lines.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
