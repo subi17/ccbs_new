@@ -1,7 +1,8 @@
 /**
  * Resend Fusion invoice summary email
  *
- * @input fusion_invnum;int;mandatory;fusion invoice id
+ * @input brand;string;mandatory;tenant
+          fusion_invnum;int;mandatory;fusion invoice id
           username;string;mandatory;Newton username
  * @output boolean;mandatory;True
 */
@@ -25,16 +26,19 @@ IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-validate_struct(pcStruct,"fusion_invnum!,username!").
+validate_struct(pcStruct,"brand!,fusion_invnum!,username!").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
+   pcTenant = get_string(pcStruct, "brand"). 
    piFusionInvNum = get_int(pcStruct, "fusion_invnum")
    pcUsername = get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF pcUsername EQ "" THEN RETURN appl_err("empty username").
+
+{newton/src/settenant.i pcTenant}
 
 katun = "VISTA_" + pcUsername.
 

@@ -2,25 +2,26 @@
  * list invoices 
  *
  * @input conditions;struct;mandatory;search conditions 
- * @conditions invoice_number_external;string;
-      msisdn;string;
-      invoice_date_start;date;
-      invoice_date_end;date;
-      dni;string;
-      firstname;string;
-      surname1;string;
-      surname2;string;
-      company;string;
-      due_date_start;date;
-      due_date_end;date;
-      invoice_amount_from;double;
-      invoice_amount_to;double;
-      claim_status;string;
-      order_id;int;order id
-      customer_id;int; customer id
-      bypass;boolean;skip one year invoice date limit rule
-      offset;integer;mandatory;how many records to skip
-      limit;integer;mandatatory;how many records to fetch
+ * @conditions  brand;string
+                invoice_number_external;string;
+                msisdn;string;
+                invoice_date_start;date;
+                invoice_date_end;date;
+                dni;string;
+                firstname;string;
+                surname1;string;
+                surname2;string;
+                company;string;
+                due_date_start;date;
+                due_date_end;date;
+                invoice_amount_from;double;
+                invoice_amount_to;double;
+                claim_status;string;
+                order_id;int;order id
+                customer_id;int; customer id
+                bypass;boolean;skip one year invoice date limit rule
+                offset;integer;mandatory;how many records to skip
+                limit;integer;mandatatory;how many records to fetch
 
 *  @output struct;array of invoices ids
 
@@ -33,7 +34,7 @@
 DEF VAR gcBrand AS CHARACTER NO-UNDO INITIAL "1" .
 DEF VAR pcSearchStruct AS CHARACTER NO-UNDO. 
 DEF VAR lcSearchStruct AS CHARACTER NO-UNDO. 
-
+DEF VAR pcTenant       AS CHARACTER NO-UNDO.
 
 DEF VAR lcListInvIndexParam AS CHARACTER NO-UNDO. 
 DEF VAR lcListInvOtherParam AS CHARACTER NO-UNDO. 
@@ -353,7 +354,7 @@ END FUNCTION.
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcSearchStruct = get_struct(param_toplevel_id, "0").
 
-lcListInvIndexParam = "invoice_number_external,invoice_date_start,invoice_date_end".
+lcListInvIndexParam = "brand,invoice_number_external,invoice_date_start,invoice_date_end".
 lcListCustIndexParam = "dni,firstname,surname1,surname2,company,bank_account".
 lcListInvOtherParam = "due_date_start,due_date_end,invoice_amount_from,invoice_amount_to,claim_status,bypass".
 lcListSubInvParam = "msisdn".
@@ -363,8 +364,13 @@ lcSearchStruct = validate_struct(pcSearchStruct, lcListInvIndexParam  + "," +
                                                  lcListInvOtherParam  + "," +
                                                  lcListSubInvParam    + "," +
                                                  "credit,order_id,customer_id,offset,limit").
+IF lcSearchStruct = ? THEN RETURN.
+
+pcTenant = get_string(pcSearchStruct,"brand").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/settenant.i pcTenant} 
 
 /* direct seach */
 IF LOOKUP("customer_id",lcSearchStruct) NE 0 THEN DO:

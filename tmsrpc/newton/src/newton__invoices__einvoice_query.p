@@ -2,6 +2,7 @@
  * Validate eInvoice PDF Link
  *
  * @input      struct;mandatory;list of parameters
+               string;mandatory;brand
                int;mandatory;period
                string;mandatory;dni
                string;mandatory;msisdn
@@ -35,13 +36,16 @@ DEF VAR ldeEndStamp    AS DEC    NO-UNDO.
 
 IF validate_request(param_toplevel_id,"struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
-lcStruct = validate_request(pcStruct,"period,dni,msisdn,hash").
+lcStruct = validate_request(pcStruct,"brand,period,dni,msisdn,hash").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+pcTenant  = get_string(pcStruct, "brand").
 piPeriod  = get_int(pcStruct,"period").
 pcDNI     = get_string(pcStruct,"dni").
 pcMSISDN  = get_string(pcStruct,"msisdn").
 pcHashKey = get_string(pcStruct,"hash").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF pcHashKey = "" OR pcHashKey = ? THEN
@@ -49,6 +53,8 @@ IF pcHashKey = "" OR pcHashKey = ? THEN
 
 IF piPeriod = 0 OR piPeriod = ? THEN
    RETURN appl_err("Invalid Period").
+
+{newton/src/settenant.i pcTenant}
 
 lcSaltKey = fCParam("EI","SaltKey").
 IF lcSaltKey = "" OR lcSaltKey = ? THEN
