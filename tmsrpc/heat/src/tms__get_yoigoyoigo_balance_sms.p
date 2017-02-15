@@ -2,7 +2,8 @@
  * Fetch YOIGOYOIGO daycampaign counter value 
  * and return SMS message containing the value
  *
- * @input   MSISDN;String
+ * @input  brand;string 
+           MSISDN;String
  *
  * @output smsMessage;String
  *
