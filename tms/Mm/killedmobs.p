@@ -178,6 +178,8 @@ ADD-ROW:
            IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 THEN
            UNDO add-row, LEAVE add-row.
 
+           IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhMSOwner).
+
            ASSIGN
            memory = recid(msowner)
            xrecid = memory.
