@@ -22,6 +22,7 @@
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO.  
 DEFINE VARIABLE ocError AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcId AS CHAR NO-UNDO. 
 DEFINE VARIABLE pdAmt AS DECIMAL NO-UNDO.
 DEFINE VARIABLE pcBItem AS CHAR NO-UNDO.
@@ -33,17 +34,17 @@ DEFINE VARIABLE lcBrand  AS CHAR NO-UNDO INITIAL "1".
 DEFINE TEMP-TABLE ttFeeModel NO-UNDO LIKE FeeModel.
 DEFINE TEMP-TABLE ttFMItem NO-UNDO LIKE FMItem.
 
-IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
 
-pcStruct = get_struct(param_toplevel_id, "0").
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcStruct = validate_request(pcStruct, 
    "username!,id!,name,amount!,billing_item_id!,paytype!,valid_from!,valid_to").
  
 IF lcStruct = ? THEN RETURN.
-
-IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcId       = get_string(pcStruct,"id").
 pdAmt      = get_double(pcStruct,"amount").
@@ -75,6 +76,8 @@ IF LOOKUP("valid_to",lcStruct) > 0 THEN DO:
    RETURN appl_err("Valid To must be later than Valid From ").
 
 END.
+
+{newton/src/settenant.i pcTenant}
 
 /* check FeeModel */
 IF CAN-FIND (FIRST FeeModel WHERE

@@ -16,6 +16,7 @@ gcBrand = "1".
 {Syst/eventval.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
+DEF VAR pcTenant   AS CHAR NO-UNDO.
 DEF VAR pcCategory AS CHAR NO-UNDO.
 DEF VAR pcUsername AS CHAR NO-UNDO.
 DEF VAR piLimit AS INT NO-UNDO.
@@ -24,17 +25,20 @@ DEF VAR lcStruct AS CHAR NO-UNDO.
 DEF VAR llActLimitUpdate AS LOG NO-UNDO.
 DEF VAR llLimitUpdate    AS LOG NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,struct") EQ ? THEN RETURN.
 
-pcCategory = get_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcTenant   = get_string(param_toplevel_id, "0").
+pcCategory = get_string(param_toplevel_id, "1").
+pcStruct   = get_struct(param_toplevel_id, "2").
+
 lcstruct = validate_struct(pcStruct,"limit,username!,activationlimit").
 pcUsername = "VISTA_" + get_string(pcStruct, "username").
 katun = pcUsername.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(pcUsername) EQ "VISTA_" THEN 
+    RETURN appl_err("username is empty").
 
 IF LOOKUP("limit",lcstruct) GT 0 THEN DO:
    piLimit = get_int(pcStruct,"limit").
@@ -59,6 +63,8 @@ IF NOT llLimitUpdate AND NOT llActLimitUpdate THEN DO:
    add_struct(response_toplevel_id, "").
    RETURN.
 END. /* IF NOT llLimitUpdate AND NOT llActLimitUpdate THEN DO: */
+
+{newton/src/settenant.i pcTenant}
 
 FIND CustCat EXCLUSIVE-LOCK WHERE
      CustCat.Brand = gcBrand AND

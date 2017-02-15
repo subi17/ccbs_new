@@ -5,12 +5,9 @@
  * (=provisioning, minconsflag)
  * @output statuses;array of int;current status of setting (0=off, 1=on)
  */
-
-{newton/src/header_get.i}
 {Func/tmsparam4.i}
 {Syst/tmsconst.i}
-
-DEF VAR liMaintB AS INTEGER NO-UNDO.
+{newton/src/header_get.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
