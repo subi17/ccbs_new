@@ -43,7 +43,7 @@ END.
 
 /* Check if masmovil data is already made taxzones > 6 */
 FIND FIRST InvGroup WHERE 
-           INVGroup.taxzone EQ "6" NO-ERROR.
+           INVGroup.taxzone EQ "10" NO-ERROR.
 IF NOT AVAIL InvGroup THEN DO:
    /* tax zone 5 needed for prepaid topups ? 
    FIND FIRST InvGroup WHERE
@@ -58,7 +58,7 @@ IF NOT AVAIL InvGroup THEN DO:
 
    FOR EACH InvGroup WHERE
             INT(InvGroup.taxzone) GE 1 AND
-            INT(InvGroup.taxzone) LE 4:
+            INT(InvGroup.taxzone) LE 5:
       IF lgSimulate THEN
          DISP InvGroup.
       ELSE DO:
@@ -78,6 +78,11 @@ IF NOT AVAIL InvGroup THEN DO:
          ELSE IF InvGroup.invGroup EQ "IPSIM1" THEN DO:
             bInvGroup.invGroup = "IPSIM2".
             bInvGroup.invform = "IPSIM2".
+         END.
+         ELSE IF InvGroup.invGroup EQ "YOIGO" THEN DO:
+            bInvGroup.invGroup = "MASMOVIL".
+            bInvGroup.invform = "MASMOVIL".
+            binvgroup.IGName = REPLACE(binvgroup.IGName,"Yoigo","MasMovil").
          END.
          ELSE DO:
             /*MESSAGE "Incorrect invGroup " + bInvGroup.invGroup
@@ -132,15 +137,15 @@ fsetEffectiveTenantForAllDB("TMasMovil").
 FIND FIRST TMSParam WHERE
            TMSParam.brand EQ "1" AND
            TMSParam.paramgroup EQ "SIM" AND
-           TMSParam.paramcode EQ "IMSI_Begin".
-   tmsparam.charval="2140420".
+           TMSParam.paramcode EQ "IMSI_Begin" NO-ERROR.
+   IF AVAIL TMSParam THEN tmsparam.charval="2140420".
 
 fsetEffectiveTenantForAllDB("Default").
 FIND FIRST TMSParam WHERE
            TMSParam.brand EQ "1" AND
            TMSParam.paramgroup EQ "SIM" AND
-           TMSParam.paramcode EQ "IMSI_Begin".
-   tmsparam.charval="2140401".
+           TMSParam.paramcode EQ "IMSI_Begin" NO-ERROR.
+   IF AVAIL TMSParam THEN tmsparam.charval="2140401".
 
 /* MB-156 remove SMS invoice from MasMovil tenant */
 fsetEffectiveTenantForAllDB("TMasMovil").
