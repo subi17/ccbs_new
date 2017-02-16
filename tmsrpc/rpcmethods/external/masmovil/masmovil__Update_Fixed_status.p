@@ -123,29 +123,6 @@ END.
 
 /* HANDLING */
 
-/*YTS-10051*/
-/*Update FusionStatus to initial status if MM sends updates.
- This is done to solve situation when MM has started order handling even
- it has returned error status in CreateOrder*/
- IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ERROR} THEN DO:
-    OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_INITIALIZED}.
-    /*handle retry message from future because it is already handled*/
-    FIND FIRST FusionMessage EXCLUSIVE-LOCK where
-               FusionMessage.orderid EQ liOrderID AND
-               FusionMessage.CreatedTS > fMakeTS() AND
-               FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW} AND
-               fusionMessage.MessageType EQ {&FUSIONMESSAGE_TYPE_CREATE_ORDER} 
-    NO-ERROR.
-    IF AVAIL FusionMessage THEN DO:
-       ASSIGN FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}
-              FusionMessage.CreatedTS = fMakeTS().
-
-    END.
-    RELEASE FusionMessage.
-
- END.   
- 
-
 CREATE FusionMessage.
 ASSIGN
    FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
@@ -210,6 +187,8 @@ IF ldeNotificationTime < OrderFusion.FixedStatusTS THEN DO:
 END.
 
 ASSIGN
+   OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_INITIALIZED} /*YTS-10051*/
+      WHEN OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
    OrderFusion.FixedStatus = lcStatus
    OrderFusion.FixedStatusTS = ldeNotificationTime
    OrderFusion.UpdateTS = FusionMessage.CreatedTS.
