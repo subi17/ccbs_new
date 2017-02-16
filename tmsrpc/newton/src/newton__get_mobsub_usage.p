@@ -289,8 +289,7 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
 
             IF ttCDR.EventType EQ "GPRS" THEN DO:
                IF ttCDR.Charge EQ 0 THEN DO:
-                  ldePrepDataUsageMonthly  = ldePrepDataUsageMonthly +
-                                             ttCDR.DataIn + ttCDR.DataOut.
+                  ldePrepDataUsageMonthly  = ttCDR.Accumulator.
                END.
             END.
             ELSE IF ttCDR.EventType EQ "CALL" AND 

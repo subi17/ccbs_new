@@ -141,7 +141,8 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
            orderaction.brand = order.brand and
            orderaction.orderid = order.orderid  and
            orderaction.itemtype = "simtype" NO-ERROR.
-      IF AVAIL orderaction AND orderaction.itemkey NE sim.simart THEN DO:
+      IF AVAIL orderaction AND 
+         NOT sim.simart BEGINS orderaction.itemkey THEN DO:
          RELEASE SIM.
          RETURN appl_err("SIM type does not match").
       END.
