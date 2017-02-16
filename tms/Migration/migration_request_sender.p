@@ -59,7 +59,6 @@ lcTimePart = STRING(YEAR(ldaReadDate)) +
 lcOutFile = lcSpoolDir + "MM_MIGRATION_LIST_" + lcTimePart + ".txt".
 lcLogFile = lcLogDir + "MM_MIGRATION_LIST_" + lcTimePart + ".log".
 
-message "alkaa" VIEW-AS ALERT-BOX.
 
 OUTPUT STREAM sOut TO VALUE(lcOutFile) APPEND.
 OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.

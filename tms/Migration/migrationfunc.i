@@ -63,6 +63,29 @@ FUNCTION fIsNumberInMigration RETURNS LOGICAL
 
 END.   
 
+/*Function creates Json entry containing Nodo Central response related data*/
+FUNCTION fGenerateNCResponseInfo RETURNS CHAR
+   (iiOrderID AS INT, 
+    icMSISDN AS CHAR,
+    icStatusInfo AS CHAR):
+
+RETURN "".
+END.   
+
+/*Function creates Json entry containing Order status information*/
+FUNCTION fGenerateOrderInfo RETURNS CHAR
+   (iiOrderID AS INT):
+
+RETURN "".
+END.   
+
+/*Function creates Json entry containing Operational data  status information*/
+FUNCTION fGenerateOPDataInfo RETURNS CHAR
+   (iiOrderID AS INT):
+
+RETURN "".
+END.   
+
 
 &ENDIF
 
