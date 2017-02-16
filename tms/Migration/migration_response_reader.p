@@ -3,8 +3,12 @@
   TASK .........: Program reads Migration response files.
                   It also sets corresponding order status according to
                   returned status and notifies WEB MigrationTool about 
-  
-  changed status.
+                  changed status.
+                  Timing plan:
+                  The program runs periodically some time after TMS has
+                  sent migration request to NC.
+                  This program has locking functionality that prevents
+                  running multiple instances.
   APPLICATION ..: tms
   AUTHOR .......: ilsavola
   CREATED ......: 25.1.2017
@@ -174,7 +178,8 @@ PROCEDURE pReadFile:
                  Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING}.
       IF AVAIL Order THEN DO:
          liOrderID = Order.OrderID.
-         /*Order.StatusCode = will be set when the actual MNP is happening.*/
+         Order.StatusCode = {&ORDER_STATUS_MIGRATION_WAITING_ACTIVATION}.
+         /*Another job makes actual actiation when TS is reached*/
       END.
       /*Nodo data contains a number for Order that is
         already handled
