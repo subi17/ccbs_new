@@ -8,13 +8,15 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
+DEF VAR pcTenant         AS CHAR NO-UNDO.
 DEF VAR pcOrderChannel   AS CHAR NO-UNDO.
 DEF VAR pcCancelChannel  AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id,"string,string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id,"string,string,string") EQ ? THEN RETURN.
 
-pcOrderChannel  = get_string(param_toplevel_id,"0").
-pcCancelChannel = get_string(param_toplevel_id,"1").
+pcTenant        = get_string(param_toplevel_id,"0").
+pcOrderChannel  = get_string(param_toplevel_id,"1").
+pcCancelChannel = get_string(param_toplevel_id,"2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -23,6 +25,8 @@ IF pcOrderChannel = "" THEN
 
 IF pcCancelChannel = "" THEN
    RETURN appl_err("Order cancellation channel is missing").
+
+{newton/src/settenant.i pcTenant}
 
 FIND FIRST TMSCodes WHERE
            TMSCodes.TableName = "OrderCancel" AND

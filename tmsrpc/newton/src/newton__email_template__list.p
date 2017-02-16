@@ -16,13 +16,21 @@
 gcBrand = "1".
 
 
-DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcResultStruct AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcEmailArray AS CHARACTER NO-UNDO.
+DEFINE VARIABLE resp_array       AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcResultStruct   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcEmailArray     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLangItemStruct AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcTenant         AS CHARACTER NO-UNDO.
 
+IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "").
+
+{newton/src/settenant.i pcTenant}
 
 FOR EACH InvText NO-LOCK WHERE
          InvText.Brand     = gcBrand AND

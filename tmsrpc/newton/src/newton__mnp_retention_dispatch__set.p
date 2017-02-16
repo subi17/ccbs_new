@@ -9,31 +9,36 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+gcBrand = "1".
+{Syst/eventval.i}
 
-DEF VAR resp_array AS CHARACTER NO-UNDO.
-DEF VAR pcStruct AS CHAR NO-UNDO. 
-DEF VAR pcArray AS CHAR NO-UNDO. 
-DEF VAR liLoop AS INT NO-UNDO. 
-DEF VAR pcID AS CHAR NO-UNDO. 
-DEF VAR pdePercentage AS DEC NO-UNDO. 
-DEF VAR ldePercentageTotal AS DEC NO-UNDO. 
-DEF VAR pcUsername AS CHAR NO-UNDO. 
-DEF VAR llEqual AS LOG NO-UNDO.
+DEF VAR resp_array         AS CHARACTER NO-UNDO.
+DEF VAR pcStruct           AS CHAR      NO-UNDO. 
+DEF VAR pcArray            AS CHAR      NO-UNDO. 
+DEF VAR liLoop             AS INT       NO-UNDO. 
+DEF VAR pcID               AS CHAR      NO-UNDO. 
+DEF VAR pdePercentage      AS DEC       NO-UNDO. 
+DEF VAR ldePercentageTotal AS DEC       NO-UNDO. 
+DEF VAR pcUsername         AS CHAR      NO-UNDO. 
+DEF VAR llEqual            AS LOG       NO-UNDO.
+DEF VAR pcTenant           AS CHAR      NO-UNDO.
 
 DEFINE TEMP-TABLE ttMNPRetPlatform NO-UNDO LIKE mnpretplatform.
 
-IF validate_request(param_toplevel_id, "string,array") = ? THEN RETURN.
-pcUsername = "VISTA_" + get_string(param_toplevel_id, "0").
-pcArray = get_array(param_toplevel_id, "1").
+IF validate_request(param_toplevel_id, "string,string,array") = ? THEN RETURN.
+
+pcTenant   = get_string(param_toplevel_id, "0").
+pcUsername = "VISTA_" + get_string(param_toplevel_id, "1").
+pcArray = get_array(param_toplevel_id, "2").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{Syst/commpaa.i}
-{Syst/eventval.i}
-ASSIGN
-   katun = pcUsername
-   gcBrand = "1".
+katun = pcUsername.
+   
+{newton/src/settenant.i pcTenant}
 
 FOR EACH mnpretplatform NO-LOCK WHERE
          mnpretplatform.brand = gcBrand AND

@@ -30,6 +30,7 @@
 
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
+DEF VAR pcTenant AS CHARACTER NO-UNDO.
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
 DEF VAR lcStruct AS CHARACTER NO-UNDO. 
 DEF VAR liLimit AS INTEGER NO-UNDO INIT 10000000. 
@@ -42,9 +43,11 @@ DEF VAR lcOrderStatusCode  AS CHAR NO-UNDO.
 DEF VAR liNumEntries       AS INT  NO-UNDO.
 DEF VAR liEntryCount       AS INT  NO-UNDO.
 
-IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
-
-pcStruct = get_struct(param_toplevel_id, "0").
+DEF VAR lcQuery AS CHARACTER NO-UNDO. 
+DEF VAR lcTables AS CHARACTER NO-UNDO INIT "MNPProcess". 
+DEF VAR lcStatusCode AS CHARACTER NO-UNDO. 
+DEF VAR liStatusCode AS INTEGER NO-UNDO. 
+DEF VAR liMNPType AS INTEGER NO-UNDO. 
 
 FUNCTION fListQuery RETURNS CHAR 
 (icTables AS CHAR,
@@ -101,21 +104,6 @@ FUNCTION fListQuery RETURNS CHAR
 
 END FUNCTION. 
 
-lcStruct = validate_struct(pcStruct, "mnp_request_id,msisdn,mnp_type,status_code,creation_time_start,creation_time_end,msseq,order_id,dni,limit,offset,error_code,error_handled,porting_time_start,porting_time_end,operator_code,sort_by,sort_order,status_reason,salesman_id").
-
-IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-DEF VAR lcQuery AS CHARACTER NO-UNDO. 
-DEF VAR lcTables AS CHARACTER NO-UNDO INIT "MNPProcess". 
-DEF VAR lcStatusCode AS CHARACTER NO-UNDO. 
-DEF VAR liStatusCode AS INTEGER NO-UNDO. 
-DEF VAR liMNPType AS INTEGER NO-UNDO. 
-
-IF LOOKUP("limit",lcStruct) > 0 THEN 
-   liLimit = get_int(pcStruct,"limit").
-IF LOOKUP("offset",lcStruct) > 0 THEN 
-   liOffSet = get_int(pcStruct,"offset").
-
 FUNCTION fCreationTime RETURNS LOGICAL:
    
    IF LOOKUP("creation_time_start",lcStruct) > 0 THEN
@@ -161,8 +149,24 @@ FUNCTION fSort RETURNS LOGICAL:
    end.
 END FUNCTION. 
 
-IF LOOKUP("mnp_type",lcStruct) = 0
-   THEN RETURN appl_err("Unsupported search criteria").
+IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
+lcStruct = validate_struct(pcStruct, "mnp_request_id,msisdn,mnp_type,status_code,creation_time_start,creation_time_end,msseq,order_id,dni,limit,offset,error_code,error_handled,porting_time_start,porting_time_end,operator_code,sort_by,sort_order,status_reason,salesman_id").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
+
+IF LOOKUP("limit",lcStruct) > 0 THEN 
+   liLimit = get_int(pcStruct,"limit").
+IF LOOKUP("offset",lcStruct) > 0 THEN 
+   liOffSet = get_int(pcStruct,"offset").
+
+IF LOOKUP("mnp_type",lcStruct) = 0 THEN RETURN appl_err("Unsupported search criteria").
+
 liMNPType = get_int(pcStruct,"mnp_type").
 
 IF LOOKUP("status_code",lcStruct) > 0 THEN 
