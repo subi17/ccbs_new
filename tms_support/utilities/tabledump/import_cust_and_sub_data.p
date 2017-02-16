@@ -1,3 +1,4 @@
+/* */
 {Func/multitenantfunc.i}
 {Syst/tmsconst.i}
 DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO INIT "tyoigo" format "x(10)".

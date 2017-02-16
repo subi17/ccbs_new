@@ -6,6 +6,7 @@
 DEF BUFFER bRegion FOR Region.
 DEF BUFFER bInvGroup FOR InvGroup.
 DEF BUFFER bCustomer FOR Customer.
+DEF BUFFER bTaxzone FOR TaxZone.
 DEF VAR lgsimulate AS LOG NO-UNDO INIT FALSE.
 
 fsetEffectiveTenantForAllDB("TMasMovil").
@@ -96,6 +97,19 @@ IF NOT AVAIL InvGroup THEN DO:
          bInvGroup.taxzone = STRING(INT(InvGroup.taxzone) + 5).
         
       END.
+   END.
+END.
+
+FIND FIRST TaxZone WHERE 
+           Taxzone.taxzone EQ "10" NO-ERROR.
+IF NOT AVAIL TAXZone THEN DO:
+   FOR EACH TaxZone WHERE
+            INT(Taxzone.taxzone) < 6:
+      CREATE bTaxzone.
+      bTaxzone.taxzone = STRING(INT(Taxzone.taxzone) + 5).
+      IF Taxzone.taxzone EQ "5" THEN 
+         bTaxzone.tzname = "MasMovil (own usage)".
+      ELSE bTaxzone.tzname = Taxzone.tzname.
    END.
 END.
 
