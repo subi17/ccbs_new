@@ -1,8 +1,8 @@
-{triggers/hpddelete_generic.i CliType CLITYPE Ordercanal CliType}
+{triggers/hpddelete_generic.i CLIType CLITYPE Ordercanal CLIType}
 
 {Syst/tmsconst.i}
 
-IF NEW CliType
+IF NEW CLIType
 THEN RETURN.
 
 FIND FIRST DumpFile NO-LOCK WHERE 
