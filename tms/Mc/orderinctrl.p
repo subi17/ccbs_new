@@ -159,27 +159,15 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
 
 END.
 
-/*YPR-5316 AC3: release convergent STC order from "75 - MNP retention" status when MNP out-porting request is cancelled*/
-IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}  AND
-   Order.OrderType  EQ {&ORDER_TYPE_STC} THEN DO:
-
-   fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
-
-   IF llDoEvent THEN DO:
-      RUN StarEventMakeModifyEvent(lhOrder).
-      fCleanEventObjects().
-   END.
-   RETURN "".
-
-END.
-
 /* YTS-6045 */
-IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
-    Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}  OR
-    Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}  OR
-    Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
-    Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT}) AND
-    Order.OrderChannel BEGINS "fusion" THEN DO:
+IF ((Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} AND
+     Order.OrderType  EQ {&ORDER_TYPE_STC}) OR
+     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
+     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}  OR
+     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}  OR
+     Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
+     Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT}) AND
+     Order.OrderChannel BEGINS "fusion" THEN DO:
 
    fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
 
@@ -283,6 +271,7 @@ END.
 /* special flow: 80 => 1/3 (fixed line creation) => 80 => 79 */
 ELSE IF lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
    LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
+   Order.OrderType NE {&ORDER_TYPE_STC} AND
    Order.ICC EQ "" AND
    NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
                       MsRequest.MsSeq = Order.MsSeq AND

@@ -210,4 +210,5 @@ END.
 
 FINALLY:
    SESSION:NUMERIC-FORMAT = lcOriginalNumericFormat.
+   EMPTY TEMP-TABLE wError.
 END.
