@@ -24,15 +24,17 @@ DEFINE TEMP-TABLE ttReseller LIKE Reseller
    FIELD BankCodeFrom LIKE ResellerTF.ValidFrom.
 
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcRespStruct AS CHARACTER NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
 
-pcStruct = get_struct(param_toplevel_id, "0").
-IF gi_xmlrpc_error NE 0 THEN DO:
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
+IF gi_xmlrpc_error NE 0 THEN
    RETURN.
-END.
 
 lcStruct = validate_request(pcStruct, 
    "id!,name!,email,entity_code,commission_percentage," +
@@ -63,6 +65,7 @@ ASSIGN
                               WHEN LOOKUP("active",lcStruct) > 0.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/settenant.i pcTenant}
 
 FIND Reseller NO-LOCK WHERE
      Reseller.Brand = gcBrand AND

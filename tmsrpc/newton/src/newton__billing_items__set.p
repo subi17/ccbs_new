@@ -16,21 +16,25 @@
 */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+gcBrand = lcBrand.
+{Syst/eventval.i}
 
-
+DEFINE VARIABLE pcTenant      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcId          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcUserName    AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcStruct      AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcStruct      AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE licount      AS INTEGER NO-UNDO. 
-DEFINE VARIABLE lctitle   AS CHARACTER NO-UNDO EXTENT 5 
+DEFINE VARIABLE licount       AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE lctitle       AS CHARACTER NO-UNDO EXTENT 5 
                           INITIAL ["title_es","title_ca","title_eu","title_ga","title_en"] . 
 DEFINE VARIABLE lcBrand     AS CHARACTER NO-UNDO INITIAL "1".
 
-IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,struct") EQ ? THEN RETURN.
 
-pcID = get_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcTenant = get_string(param_toplevel_id, "0").
+pcID     = get_string(param_toplevel_id, "1").
+pcStruct = get_struct(param_toplevel_id, "2").
 
 lcStruct = validate_struct(pcStruct, "ui_order,active,username!,name," + 
                                      "title_es,title_ca,title_eu,title_ga,title_en").
@@ -41,8 +45,9 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{Syst/commpaa.i}
-gcBrand = lcBrand.
+katun = pcUserName.
+
+{newton/src/settenant.i pcTenant}
 
 FIND BillItem WHERE 
      BillItem.Brand = gcBrand AND 
@@ -57,9 +62,6 @@ DO:
       RETURN appl_err("Billing Item " + pcId + " has been deleted by other user ").
    END.
 END.
-
-katun = pcUserName.
-{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
@@ -137,8 +139,6 @@ DO licount = 1 TO 5 :
 
       IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhRepText).
    END.
-
-
 
 END.
 

@@ -15,11 +15,10 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
 
-   FIND FatGroup NO-LOCK WHERE 
-      FatGroup.Brand = gcBrand AND 
-      FatGroup.FtGrp = pcId NO-ERROR.
+   FIND FatGroup NO-LOCK WHERE FatGroup.Brand = gcBrand AND FatGroup.FtGrp = pcId NO-ERROR.
 
-   IF NOT AVAIL FatGroup THEN RETURN appl_err("FAT scheme not found: " + pcId).
+   IF NOT AVAIL FatGroup THEN 
+      RETURN appl_err("FAT scheme not found: " + pcId).
       
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "id", FatGroup.FtGrp). 

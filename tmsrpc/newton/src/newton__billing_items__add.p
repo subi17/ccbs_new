@@ -38,17 +38,17 @@ DEFINE VARIABLE licount      AS INTEGER NO-UNDO.
 DEFINE VARIABLE lctitle   AS CHARACTER NO-UNDO EXTENT 5 
        INITIAL ["title_es","title_ca","title_eu","title_ga","title_en"] . 
 
+IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
-IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
 
-pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_struct(pcStruct, "brand!,username!,id!,name!,billing_group!," + 
+lcStruct = validate_struct(pcStruct, "username!,id!,name!,billing_group!," + 
                                      "title_es,title_ca,title_eu,title_ga,title_en").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-pcTenant = get_string(pcStruct,"brand"). 
 pcId = get_string(pcStruct,"id").
 pcBIGroup = get_string(pcStruct,"billing_group").
 pcName = get_string(pcStruct,"name"). 

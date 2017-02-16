@@ -12,6 +12,7 @@
 /* Dependencies ... */
 
 /* Input parameters */
+DEF VAR pcTenant     AS CHAR  NO-UNDO.
 DEF VAR pcUsername   AS CHAR  NO-UNDO.
 DEF VAR pcFullName   AS CHAR  NO-UNDO.
 DEF VAR pcReseller   AS CHAR  NO-UNDO.
@@ -20,20 +21,21 @@ DEF VAR plActive     AS LOG   NO-UNDO.
 /* Output parameters */
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string,boolean,string") 
+IF validate_request(param_toplevel_id, "string,string,string,boolean,string") 
    EQ ? THEN RETURN.
    
 ASSIGN
-   pcUsername  = get_nonempty_string(param_toplevel_id, "0")
-   pcFullname  = get_string(param_toplevel_id, "1")
-   plActive    = get_bool(param_toplevel_id, "2")
-   pcReseller  = get_nonempty_string(param_toplevel_id, "3").
+   pcTenant    = get_string(param_toplevel_id, "0") 
+   pcUsername  = get_nonempty_string(param_toplevel_id, "1")
+   pcFullname  = get_string(param_toplevel_id, "2")
+   plActive    = get_bool(param_toplevel_id, "3")
+   pcReseller  = get_nonempty_string(param_toplevel_id, "4").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF NOT CAN-FIND(FIRST Reseller NO-LOCK WHERE
-                      Reseller.Brand = "1" AND
-                      Reseller.Reseller = pcReseller) THEN
+{newton/src/settenant.i pcTenant}
+
+IF NOT CAN-FIND(FIRST Reseller NO-LOCK WHERE Reseller.Brand = "1" AND Reseller.Reseller = pcReseller) THEN
    RETURN appl_err(SUBST("Reseller &1 not found",pcReseller)).
 
 FIND FIRST salesman WHERE
