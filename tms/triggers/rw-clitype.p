@@ -1,4 +1,4 @@
-TRIGGER PROCEDURE FOR REPLICATION-WRITE OF CliType OLD BUFFER oldCliType.
+TRIGGER PROCEDURE FOR REPLICATION-WRITE OF CLIType OLD BUFFER oldCLIType.
 
 {Syst/tmsconst.i}
 
@@ -10,28 +10,28 @@ DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
 
 CREATE Ordercanal.RepLog.
 ASSIGN
-   Ordercanal.RepLog.RowID     = STRING(ROWID(CliType))
-   Ordercanal.RepLog.TableName = "CliType"
-   Ordercanal.RepLog.EventType = (IF NEW(CliType)
+   Ordercanal.RepLog.RowID     = STRING(ROWID(CLIType))
+   Ordercanal.RepLog.TableName = "CLIType"
+   Ordercanal.RepLog.EventType = (IF NEW(CLIType)
                            THEN "CREATE"
                            ELSE "MODIFY")
    Ordercanal.RepLog.EventTime = NOW
    .
 
-IF NOT NEW(CliType)
+IF NOT NEW(CLIType)
 THEN DO: 
-   BUFFER-COMPARE CliType USING
-      CliType
-   TO oldCliType SAVE RESULT IN llSameValues.
+   BUFFER-COMPARE CLIType USING
+      CLIType
+   TO oldCLIType SAVE RESULT IN llSameValues.
    
    IF NOT llSameValues
    THEN DO:
    CREATE Ordercanal.RepLog.
       ASSIGN
-         Ordercanal.RepLog.TableName = "CliType"
+         Ordercanal.RepLog.TableName = "CLIType"
          Ordercanal.RepLog.EventType = "DELETE"
          Ordercanal.RepLog.EventTime = NOW
-         Ordercanal.RepLog.KeyValue  = SUBSTITUTE("&1",oldCliType.CliType)
+         Ordercanal.RepLog.KeyValue  = SUBSTITUTE("&1",oldCLIType.CLIType)
          .
    END.
 
@@ -39,10 +39,10 @@ END.
 
 &ENDIF
 
-IF NOT NEW(CliType) 
-THEN BUFFER-COMPARE CliType TO oldCliType SAVE RESULT IN llSameValues.
+IF NOT NEW(CLIType) 
+THEN BUFFER-COMPARE CLIType TO oldCLIType SAVE RESULT IN llSameValues.
 
-IF NOT llSameValues OR NEW(CliType) THEN
+IF NOT llSameValues OR NEW(CLIType) THEN
 DO:
    FIND FIRST DumpFile NO-LOCK WHERE
               DumpFile.Brand     EQ Syst.Parameters:gcBrand AND
