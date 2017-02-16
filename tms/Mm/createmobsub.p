@@ -598,9 +598,8 @@ ELSE DO:
       IF llDoEvent THEN DO:
          RUN StarEventMakeModifyEvent (lhMsOwner).
          fMakeCreateEvent((BUFFER bMsOwner:HANDLE),
-                                         "",
-                                         katun,
-                                         "").
+                           "",katun, "").
+         fCleanEventObjects().
       END.
 
       FIND MSOwner EXCLUSIVE-LOCK WHERE
