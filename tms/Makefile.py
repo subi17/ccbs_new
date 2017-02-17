@@ -307,7 +307,7 @@ def cui(*a):
         for cdr_database in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
-            args.extend(cdr_dict[pp])
+            args.extend(cdr_dict[cdr_database])
 
     args.extend(['-T', '../var/tmp', '-p', program])
 
