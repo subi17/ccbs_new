@@ -104,16 +104,22 @@ except:
 initialize_dependencies = list(main_pf_files)
 if environment == 'development':
     initialize_dependencies += ['create', 'start', 'migrate', 'tenanciescreate', 'fixtures']
-else:
+elif environment == 'production':
     initialize_dependencies += ['relink_migcache']
 
 def db_full_path(db_name, suffix='.db', host=None):
+
+    if environment == 'development':
+        return '{0}/{1}{2}'.format(getcwd(), db_name, suffix)
+
     locs = {}
-    if environment != 'development':
-        host = host or gethostname()
-        assert host in db_locations, 'Db locations not configured for this host'
-        locs = db_locations[host]
-    return '%s/%s%s' % (locs.get(db_name, getcwd()), db_name, suffix)
+
+    host = host or gethostname()
+    assert host in db_locations, 'Db locations not configured for this host'
+
+    locs = db_locations[host]
+
+    return '{0}{1}'.format(locs.get(db_name, '{0}/{1}'.format(getcwd(), db_name)), suffix)
 
 @target(initialize_dependencies)
 def initialize(*a): pass
@@ -134,6 +140,10 @@ def create(match, deps): pass
 @file_target([r'\1/\2.st'])
 def database_file(match, deps, db_dir, db_name):
     '''([-_/a-zA-Z0-9.]+)/([_a-zA-Z0-9]+)\.db'''
+
+    if environment != 'development':
+        raise PikeException('Currently creating database is only allowed in development mode.')
+
     print('Creating database %s...' % db_name)
     callgrep([dlc + '/bin/prostrct', 'create', match[:-3],
                                  '-blocksize', str(blocksize * 1024)],
@@ -156,6 +166,10 @@ def database_file(match, deps, db_dir, db_name):
 @file_target
 def structure_file(match, deps, db_dir, db_name):
     '''([-_/a-zA-Z0-9.]+)/([_a-zA-Z0-9]+)\.st'''
+
+    if environment != 'development':
+        raise PikeException('Currently creating a .st file is only allowed in development mode.')
+
     fd = open(match, 'w')
     if environment == 'development':
         _ = lambda x: fd.write(x % getcwd() + '\n#\n')
@@ -258,6 +272,10 @@ db_running_msg = True
 
 @target(['%s_startup.pf' % x for x in parameters or databases])
 def start(match, deps):
+
+    if environment != 'development':
+        raise PikeException('Currently starting a database via pike is only allowed in development mode.')
+
     for db in parameters or databases:
         path = db_full_path(db, '.lk')
         if path.find(':') > -1:
@@ -293,6 +311,10 @@ def start_db_processes(db):
 
 @target(['%s.pf' % x for x in parameters or databases])
 def stop(match, deps):
+
+    if environment != 'development':
+        raise PikeException('Currently stopping a database via pike is only allowed in development mode.')
+
     for db in parameters or databases:
         path = db_full_path(db, '.lk')
         if path.find(':') > -1:
@@ -309,7 +331,7 @@ def stop(match, deps):
 def clean(match, deps):
 
     if environment != 'development':
-        raise PikeException('Not going to delete anything on production. Do it yourself')
+        raise PikeException('Deleting a database via pike is only allowed in development mode.')
 
     for db in parameters or databases:
         path = os.path.dirname(db_full_path(db))
@@ -391,6 +413,10 @@ def _migrate(migration_file, direction, a2t_data):
 
 @target
 def migrate(match, deps):
+
+    if environment == 'safeproduction':
+        raise PikeException('Safe production mode. Migration features are disabled.')
+
     version = int(parameters[0]) if parameters else 99999
     done_migs = done_migrations()
 
@@ -415,6 +441,10 @@ def migrate(match, deps):
 
 @target
 def status(match, deps):
+
+    if environment == 'safeproduction':
+        raise PikeException('Safe production mode. Migration features are disabled.')
+
     done_migs = done_migrations()
     for name, number in avail_migrations:
         if name in done_migs:
@@ -427,6 +457,10 @@ def status(match, deps):
 
 @target
 def history(match, deps):
+
+    if environment == 'safeproduction':
+        raise PikeException('Safe production mode. Migration features are disabled.')
+
     data = []
     for file in os.listdir(migcache_dir):
         if file.endswith('.py.done') \
@@ -448,6 +482,10 @@ def history(match, deps):
 
 @target
 def upgrade(match, deps):
+
+    if environment == 'safeproduction':
+        raise PikeException('Safe production mode. Migration features are disabled.')
+
     global parameters
     assert len(parameters) == 1, 'which migration to upgrade?'
     mig = parameters[0]
@@ -460,6 +498,10 @@ def upgrade(match, deps):
 
 @target
 def downgrade(match, deps):
+
+    if environment == 'safeproduction':
+        raise PikeException('Safe production mode. Migration features are disabled.')
+
     global parameters
     assert len(parameters) == 1, 'which migration to downgrade?'
     mig = os.path.basename(parameters[0])
@@ -498,6 +540,10 @@ def active_cdr_db_pf(tenant):
 
 @target
 def fixtures(*a):
+
+    if environment == 'safeproduction':
+        raise PikeException('Safe production mode. Fixture loading is not allowed.')
+
     tenantdict = {}
     tenant = None
     for tenant in tenancies:
@@ -538,6 +584,10 @@ def fixtures(*a):
 
 @target
 def tenanciescreate(*a):
+
+    if environment != 'development':
+        raise PikeException('Tenancy creation is only allowed in development mode.')
+
     if tenancies:
         cdr_dict = {}
         args = ['-pf', 'all.pf', '-b', '-p', 'multitenancy/create_tenant.r']

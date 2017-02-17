@@ -51,7 +51,9 @@ if not os.path.exists(relpath + '/etc/site.py'):
             service_suffix = sys.stdin.readline().strip()
         if not service_suffix: break
 
-    if os.path.exists(relpath + '/.DeployMakefile.py'):
+    if os.path.exists(relpath + '/.safeproduction'):
+        environment = 'safeproduction'
+    elif os.path.exists(relpath + '/.DeployMakefile.py'):
         environment = 'development'
     else:
         environment = 'production'
@@ -74,20 +76,22 @@ exec(open(relpath + '/etc/site.py').read())
 os.environ['DLC'] = dlc
 os.environ['display_banner'] = 'no'
 os.environ['PROTERMCAP'] = work_dir + '/etc/protermcap'
+
+def modgen():
+    for mod in modules:
+        if environment == 'production':
+            yield '{0}/{0}.pl'.format(mod)
+        yield mod
+    yield 'tools'
+    yield 'tools/stompAdapter'
+
+os.environ['PROPATH'] = ','.join(['%s/%s' % (work_dir, x) \
+                          for x in modgen()]) + ',.'
+
 if environment == 'development':
-    os.environ['PROPATH'] = ','.join(['%s/%s' % (work_dir, x) \
-                      for x in modules + ['tools', 'tools/stompAdapter']]) + ',.'
     databases.extend(cdr_databases)
     del cdr_databases[:]
-else:
-    def modgen():
-        for mod in modules:
-            yield '{0}/{0}.pl'.format(mod)
-            yield mod
-        yield 'tools'
-        yield 'tools/stompAdapter'
-    os.environ['PROPATH'] = ','.join(['%s/%s' % (work_dir, x) \
-                              for x in modgen()]) + ',.'
+
 sys.path.insert(0, work_dir + '/tools')
 
 if not 'skip_srcpkg_check' in locals() and os.path.exists(relpath + '/srcpkg'):
