@@ -154,16 +154,12 @@ def build(*a):
     require('code.pl', [])
     shutil.move(myself + '.pl', build_dir + '/' + myself + '.pl')
 
-applhelp_dir = 'Help'
-
 @target('r')
 def code_pl(*a):
     """code.pl"""
     if os.path.exists(myself + '.pl'):
         os.unlink(myself + '.pl')
     os.chdir('r')
-    if applhelp_dir:
-        os.rename(applhelp_dir + '/applhelp.r', 'applhelp.r')
     call([dlc + '/bin/prolib', '../%s.pl' % myself, '-create'])
     for dir, _dirs, files in os.walk('.'):
         for file in files:
@@ -220,6 +216,9 @@ def classes_and_procedures(directory):
                 yield os.path.join(dir, file)
 
 def _compile_all(format, target):
+
+    require('applhelp.p', target)
+
     for source_dir in os.listdir('.'):
         if not os.path.isdir(source_dir) \
         or source_dir in ['test', 'scripts']:
@@ -245,9 +244,18 @@ def _compile_all(format, target):
 @target
 def compile_one(match, *a):
     '''(.*)\.(p|cls)'''
+    global parameters
+    if len(parameters) == 1:
+        directive = ' SAVE INTO ' + parameters[0]
+        mkdir_p(os.path.dirname(parameters[0] + '/' + match))
+    else:
+        directive = ''
+
+    format = 'COMPILE %%s%s.' % directive
+
     print('Compiling file ' + match)
     sys.stdout.flush()
-    procedure_file = make_compiler('COMPILE %s.', [match], show=None)
+    procedure_file = make_compiler(format, [match], show=None)
     comp = Popen(mpro + ['-pf', '../db/progress/store/all.pf',
                          '-b', '-p', procedure_file.name], stdout=PIPE)
     call('/bin/cat', stdin=comp.stdout)
