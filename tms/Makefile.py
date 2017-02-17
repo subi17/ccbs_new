@@ -129,7 +129,8 @@ def daemon(*a):
         elif pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
-            args.extend(cdr_dict[pp])
+            if pp in cdr_dict:
+                args.extend(cdr_dict[pp])
         else:
             args.append(pp)
     daemonpf = '../etc/pf/' + daemon + '.pf'
@@ -307,7 +308,8 @@ def cui(*a):
         for cdr_database in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
-            args.extend(cdr_dict[cdr_database])
+            if cdr_database in cdr_dict:
+                args.extend(cdr_dict[cdr_database])
 
     args.extend(['-T', '../var/tmp', '-p', program])
 
@@ -332,8 +334,9 @@ def terminal(*a):
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
         elif pp in cdr_databases:
             if not cdr_dict:
-                cdr_dict = active_cdr_db_pf()
-            args.extend(cdr_dict[pp])
+                cdr_dict = active_cdr_db_pf()            
+            if pp in cdr_dict:
+                args.extend(cdr_dict[pp])
         else:
             args.append(pp)
 
@@ -368,7 +371,8 @@ def batch(*a):
         elif pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
-            args.extend(cdr_dict[pp])
+            if pp in cdr_dict:
+                args.extend(cdr_dict[pp])
         else:
             args.append(pp)
     logfile = open('../var/log/%s.log' % module_base, 'a')
@@ -416,7 +420,8 @@ def idbatch(*a):
         elif pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
-            args.extend(cdr_dict[pp])
+            if pp in cdr_dict:
+                args.extend(cdr_dict[pp])
         else:
             args.append(pp)
     try:
