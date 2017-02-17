@@ -28,7 +28,7 @@ def userandpass():
             for t, tdict in tenancies.items():
                 if tdict['tenanttype'] == 'Super':
                     return ['-U', '{0}@{1}'.format(tdict['username'], tdict['domain']), '-P', tdict['password'] ]
-                raise ValueError('Tenant is mandatory as a super tenant is not specified')
+            raise ValueError('Tenant is mandatory as a super tenant is not specified')
         elif t in tenancies:
             return ['-U', '{0}@{1}'.format(tenancies[t]['username'], tenancies[t]['domain']), '-P', tenancies[t]['password'] ]
         else:
