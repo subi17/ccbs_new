@@ -11,6 +11,7 @@
 {Func/email.i}
 {Func/highusage.i}
 {Func/cparam2.i}
+{Func/multitenantfunc.i}
 
 DEF input parameter   ideCreateTS  AS DE    NO-UNDO FORMAT "99999999.99999".
 DEF  input parameter   iStatus       AS INT  NO-UNDO.
@@ -46,7 +47,7 @@ DEF BUFFER xxhighusage for highusage .
 
 ASSIGN 
       tiednimi    = fCParam("CRONSPOOL","highspendnew.p") + "highspender_" + 
-   
+         fConvertTenantToBrand(GET-EFFECTIVE-TENANT-NAME(LDBNAME(1))) + "_" + 
          REPLACE(STRING(YEAR(TODAY),"9999")  +
                  STRING(MONTH(TODAY),"99")   +
                  STRING(DAY(TODAY),"99")     +

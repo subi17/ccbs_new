@@ -24,6 +24,20 @@ FUNCTION fsetEffectiveTenantForAllDB RETURNS LOGICAL
    END.
 END FUNCTION.
 
+FUNCTION fsetEffectiveTenantIdForAllDB RETURNS LOGICAL
+   (INPUT iiTenant AS INT).
+   DEF VAR liDBid AS INT NO-UNDO.
+   DEF VAR lcDBname AS CHAR NO-UNDO.
+   DO liDBid = 1 TO NUM-DBS:
+      lcDBname = LDBNAME(liDBid).
+      set-effective-tenant(iiTenant,lcDBname) NO-ERROR.
+      IF ERROR-STATUS:ERROR THEN DO:
+       LEAVE.
+      
+      END.
+   END.
+END FUNCTION.
+
 FUNCTION fConvertBrandToTenant RETURNS CHARACTER
    (INPUT icBrand AS CHARACTER):
 
