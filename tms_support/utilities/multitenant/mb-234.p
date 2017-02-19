@@ -9,7 +9,46 @@ DEF BUFFER bCustomer FOR Customer.
 DEF BUFFER bTaxzone FOR TaxZone.
 DEF VAR lgsimulate AS LOG NO-UNDO INIT FALSE.
 
+fsetEffectiveTenantForAllDB("Default").
+FIND FIRST customer NO-LOCK where
+           customer.custnum = 300 no-error.
+IF NOT AVAIL customer then
+   run ../tms_support/utilities/multitenant/import_yoigo_template_customers.p.
+
 fsetEffectiveTenantForAllDB("TMasMovil").
+
+def buffer bvatcode for vatcode.
+
+DEFINE VARIABLE liCode AS INT NO-UNDO. 
+
+FIND FIRST vatcode NO-LOCK where
+           vatcode.vatcode >= 50 no-error.
+IF NOT AVAIL vatcode then
+FOR EACH vatcode NO-LOCK where
+         vatcode.todate > today:
+
+   case vatcode.vatcode:
+      when 5  then liCode = 50.
+      when 6  then liCode = 51.
+      when 12  then liCode = 60.
+      when 13  then liCode = 61.
+      when 21  then liCode = 70.
+      when 22  then liCode = 71.
+      when 30  then liCode = 80.
+      when 31  then liCode = 81.
+      when 40  then liCode = 90.
+      otherwise next.
+   end.
+
+   create bvatcode.
+   assign
+      bvatcode.vatcode = liCode
+      bvatcode.taxzone = string(int(vatcode.taxzone) + 5)
+      bvatcode.accnum = vatcode.accnum. /* change to correct */
+   buffer-copy vatcode except vatcode taxzone accnum to bvatcode.
+end.
+
+
 FIND FIRST Region
 NO-ERROR.  /* Regions are already in fixtures? */
 IF NOT AVAIL Region THEN DO:
@@ -28,18 +67,6 @@ IF NOT AVAIL Region THEN DO:
    /* Can this deleted from Yoigo table? Moved to not used taxzone 9.
       Taxzone 5 will be used by Masmovil */
       
-END.
-ELSE DO:
-   MESSAGE "MasMovil data for regions already found, modifying taxzones" 
-   VIEW-AS ALERT-BOX.
-
-   
-   FOR EACH Region WHERE
-            INT(Region.taxzone) < 5
-      tenant-where buffer-tenant-name(Region) NE "default":
-      region.taxzone = STRING(INT(bregion.taxzone) + 5).
-   END.
-
 END.
 
 /* Check if masmovil data is already made taxzones > 6 */
@@ -67,23 +94,27 @@ IF NOT AVAIL InvGroup THEN DO:
          IF InvGroup.invGroup EQ "VAT1" THEN DO:
             bInvGroup.invGroup = "VAT2".
             bInvGroup.invform = "VAT2".
+            bInvGroup.IGName = REPLACE(bInvGroup.IGName, " 1", " 2").
          END.
          ELSE IF InvGroup.invGroup EQ "IGIC1" THEN DO:
             bInvGroup.invGroup = "IGIC2".
             bInvGroup.invform = "IGIC2".
+            bInvGroup.IGName = REPLACE(bInvGroup.IGName, " 1", " 2").
          END.
          ELSE IF InvGroup.invGroup EQ "IPSIC1" THEN DO:
             bInvGroup.invGroup = "IPSIC2".
             bInvGroup.invform = "IPSIC2".
+            bInvGroup.IGName = REPLACE(bInvGroup.IGName, " 1", " 2").
          END.
          ELSE IF InvGroup.invGroup EQ "IPSIM1" THEN DO:
             bInvGroup.invGroup = "IPSIM2".
             bInvGroup.invform = "IPSIM2".
+            bInvGroup.IGName = REPLACE(bInvGroup.IGName, " 1", " 2").
          END.
          ELSE IF InvGroup.invGroup EQ "YOIGO" THEN DO:
             bInvGroup.invGroup = "MASMOVIL".
             bInvGroup.invform = "MASMOVIL".
-            binvgroup.IGName = REPLACE(binvgroup.IGName,"Yoigo","MasMovil").
+            binvgroup.IGName = REPLACE(invgroup.IGName,"Yoigo","MasMovil").
          END.
          ELSE DO:
             /*MESSAGE "Incorrect invGroup " + bInvGroup.invGroup
@@ -93,7 +124,7 @@ IF NOT AVAIL InvGroup THEN DO:
          MESSAGE "invGroup " + InvGroup.invGroup VIEW-AS ALERT-BOX.
          
 
-         BUFFER-COPY InvGroup EXCEPT taxzone invgroup invform TO bInvGroup.
+         BUFFER-COPY InvGroup EXCEPT taxzone invgroup invform IgName TO bInvGroup.
          bInvGroup.taxzone = STRING(INT(InvGroup.taxzone) + 5).
         
       END.
