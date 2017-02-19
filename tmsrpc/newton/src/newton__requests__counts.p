@@ -5,6 +5,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
+DEFINE VARIABLE pcTenant        AS CHARACTER NO-UNDO.
 /* Output parameters */
 DEFINE VARIABLE resp_reqtypes   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE resp_reqtype    AS CHARACTER NO-UNDO.

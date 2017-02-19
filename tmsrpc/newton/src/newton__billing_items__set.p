@@ -17,7 +17,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = lcBrand.
+gcBrand = "1".
 {Syst/eventval.i}
 
 DEFINE VARIABLE pcTenant      AS CHARACTER NO-UNDO.
@@ -28,7 +28,6 @@ DEFINE VARIABLE lcStruct      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE licount       AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE lctitle       AS CHARACTER NO-UNDO EXTENT 5 
                           INITIAL ["title_es","title_ca","title_eu","title_ga","title_en"] . 
-DEFINE VARIABLE lcBrand     AS CHARACTER NO-UNDO INITIAL "1".
 
 IF validate_request(param_toplevel_id, "string,string,struct") EQ ? THEN RETURN.
 
@@ -103,7 +102,7 @@ DO licount = 1 TO 5 :
    lctxt = get_string(pcStruct,lctitle[licount]).
 
    FIND RepText NO-LOCK  WHERE 
-        RepText.Brand     = lcBrand AND
+        RepText.Brand     = gcBrand AND
         RepText.TextType  = 1       AND
         RepText.LinkCode  = pcId    AND
         RepText.Language  = licount AND
@@ -129,7 +128,7 @@ DO licount = 1 TO 5 :
    END.
    ELSE DO: /*create it */        
        CREATE RepText.
-       ASSIGN   RepText.Brand     = lcBrand 
+       ASSIGN   RepText.Brand     = gcBrand 
                 RepText.TextType  = 1  
                 RepText.LinkCode  = pcId
                 RepText.Language  = licount 

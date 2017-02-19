@@ -15,8 +15,9 @@
 katun = "Newton".
 gcBrand = "1".
 
-DEF VAR lcResultStruct AS CHAR NO-UNDO. 
-DEF VAR resp_array AS CHARACTER NO-UNDO.
+DEF VAR pcTenant       AS CHAR      NO-UNDO.
+DEF VAR lcResultStruct AS CHAR      NO-UNDO. 
+DEF VAR resp_array     AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string") = ? THEN RETURN.
 

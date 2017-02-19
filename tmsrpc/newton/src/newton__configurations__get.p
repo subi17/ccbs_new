@@ -9,6 +9,8 @@
 {Syst/tmsconst.i}
 {newton/src/header_get.i}
 
+DEF VAR liMaintB AS INTEGER NO-UNDO.
+
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).

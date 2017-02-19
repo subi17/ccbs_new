@@ -9,15 +9,15 @@
                 status_code;int;mandatory;(0=Inactive,1=active,2=retired)
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/fixedlinefunc.i}
 
-DEF VAR gcBrand    AS CHAR NO-UNDO.
-DEF VAR katun      AS CHAR NO-UNDO.
-DEF VAR pcCliType  AS CHAR NO-UNDO.
-DEF VAR pcTenant   AS CHAR NO-UNDO.
-DEF VAR pcBundleId AS CHAR NO-UNDO.
+DEF VAR pcCliType     AS CHAR NO-UNDO.
+DEF VAR pcTenant      AS CHAR NO-UNDO.
+DEF VAR pcBundleId    AS CHAR NO-UNDO.
 DEF VAR pcInputStruct AS CHAR NO-UNDO.
 DEF VAR lcInputFields AS CHAR NO-UNDO.
 /* Output parameters */
@@ -29,8 +29,7 @@ DEF VAR lcStatusCode       AS INT  NO-UNDO.
 
 DEF BUFFER bCLIType        FOR CLIType.
 
-ASSIGN katun = "Newton"
-       gcBrand = "1".
+ASSIGN katun = "Newton".
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 

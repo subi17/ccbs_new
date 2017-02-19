@@ -24,7 +24,9 @@
 ASSIGN
 katun = "cron"
 gcbrand = "1".
-DEF VAR resp_array AS CHARACTER NO-UNDO.
+
+DEF VAR pcTenant    AS CHARACTER NO-UNDO.
+DEF VAR resp_array  AS CHARACTER NO-UNDO.
 DEF VAR resp_struct AS CHARACTER NO-UNDO.
 DEF VAR file_struct AS CHARACTER NO-UNDO.
 

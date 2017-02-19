@@ -94,7 +94,7 @@ piMsSeq = get_int(pcStruct,"msseq").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i NO ordercanal MobSub MsSeq liMsSeq}
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 DEF VAR lcQuery AS CHARACTER NO-UNDO. 
 

@@ -11,6 +11,7 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Inv/fusioninvoice.i}
 
+DEFINE VARIABLE pcTenant 	AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcUsername  AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liRequestID AS INTEGER   NO-UNDO. 

@@ -18,6 +18,7 @@ ASSIGN gcBrand = "1"
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 
+DEF VAR pcTenant       AS CHAR  NO-UNDO.
 DEF VAR pcStruct       AS CHAR  NO-UNDO. 
 DEF VAR lcStruct       AS CHAR  NO-UNDO.
 DEF VAR piPeriod       AS INT   NO-UNDO.
@@ -34,13 +35,15 @@ DEF VAR liInvNum       AS INT    NO-UNDO.
 DEF VAR liBillPeriod   AS INT    NO-UNDO.
 DEF VAR ldeEndStamp    AS DEC    NO-UNDO.
 
-IF validate_request(param_toplevel_id,"struct") EQ ? THEN RETURN.
-pcStruct = get_struct(param_toplevel_id, "0").
-lcStruct = validate_request(pcStruct,"brand,period,dni,msisdn,hash").
+IF validate_request(param_toplevel_id,"string,struct") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
+lcStruct = validate_request(pcStruct,"period,dni,msisdn,hash").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-pcTenant  = get_string(pcStruct, "brand").
 piPeriod  = get_int(pcStruct,"period").
 pcDNI     = get_string(pcStruct,"dni").
 pcMSISDN  = get_string(pcStruct,"msisdn").

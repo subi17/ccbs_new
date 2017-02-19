@@ -20,7 +20,9 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    pcID = get_string(pcIDArray, STRING(liCounter)).
    liId = INT(pcId) NO-ERROR.
    
-   {newton/src/findtenant.i NO Common TFConf TFConfId liId}
+   FIND TFConf NO-LOCK WHERE TFConf.TFConfId = liId NO-ERROR.
+   IF NOT AVAIL TFConf THEN
+      RETURN appl_err("Terminal financing configuation row not found: "+ pcId).
 
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "id", STRING(tfconf.tfconfid)). 

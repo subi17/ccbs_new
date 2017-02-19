@@ -64,7 +64,7 @@ DEF VAR liReqCount AS INT INITIAL 0 NO-UNDO.
 top_array = validate_request(param_toplevel_id, "string,int,string,string,[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
 
-pcTenant = get_string(param_toplevel_id, "0")
+pcTenant = get_string(param_toplevel_id, "0").
 piReference = get_int(param_toplevel_id, "1").
 pcMemo = "Newton user " + get_string(param_toplevel_id, "2") + " canceled".
 pcReqType = get_string(param_toplevel_id, "3").

@@ -30,7 +30,7 @@ DEFINE VARIABLE pcTenant     AS CHARACTER NO-UNDO.
 pcReqList = validate_request(param_toplevel_id, "string,string,string,array").
 IF pcReqList EQ ? THEN RETURN.
 
-pcTenant    = get_string(param_toplevel_id, "0")
+pcTenant    = get_string(param_toplevel_id, "0").
 pcUserName  = "VISTA_" + get_string(param_toplevel_id, "1").
 pcKeyValue  = get_string(param_toplevel_id, "2").
 pcLangItems = get_array(param_toplevel_id, "3").

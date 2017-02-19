@@ -33,15 +33,17 @@ DEF VAR llLogStatus AS LOG NO-UNDO.
 DEF VAR pcSearchRule AS CHAR NO-UNDO.
 DEF VAR pcCli AS CHAR NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
-pcStruct = get_struct(param_toplevel_id, "0").
-lcStruct = validate_request(pcStruct, "brand,username,systemid,eventtype,reasoncode,cli,invnum,accesstype").
+IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
+lcStruct = validate_request(pcStruct, "username,systemid,eventtype,reasoncode,cli,invnum,accesstype").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
-   pcTenant     = get_string(pcStruct,"brand").
-   pcUserName   = get_string(pcStruct,"username").
+   pcUserName   = get_string(pcStruct,"username")
    pcSystemId   = get_string(pcStruct, "systemid")
    pcEventType  = get_string(pcStruct, "eventtype")
    piReasonCode = get_int(pcStruct, "reasoncode")

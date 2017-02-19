@@ -18,7 +18,7 @@ IF validate_request(param_toplevel_id, "string,string,boolean") EQ ? THEN RETURN
 
 pcTenant  = get_string(param_toplevel_id, "0"). 
 pcCli     = get_string(param_toplevel_id, "1").
-plReserve = get_bool. (param_toplevel_id, "2"). /* true = really reserved, when called 1st time*/
+plReserve = get_bool  (param_toplevel_id, "2"). /* true = really reserved, when called 1st time*/
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

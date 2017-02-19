@@ -55,7 +55,9 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    piId = get_int(pcIDArray, STRING(liCounter)).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
-   {newton/src/findtenant.i NO common InvoiceTargetGroup ITGroupID piId}
+   FIND InvoiceTargetGroup WHERE InvoiceTargetGroup.ITGroupID = piId NO-LOCK NO-ERROR. 
+   IF NOT AVAIL InvoiceTargetGroup THEN 
+       RETURN appl_err("InvoiceTargetGroup not found").
    
    lcResultStruct = add_struct(resp_array, "").
    add_int(lcResultStruct, "id", InvoiceTargetGroup.ITGroupID). 
