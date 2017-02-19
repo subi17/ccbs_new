@@ -43,6 +43,8 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
+
 lcApplicationId = substring(pcTransId,1,3).
 
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN

@@ -46,18 +46,14 @@ IF NUM-ENTRIES(top_array) > 3 THEN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
+
 lcApplicationId = substring(pcTransId,1,3).
 
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
 katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
-
-FIND FIRST Order WHERE
-           Order.Brand   = gcBrand   AND
-           Order.OrderId = piOrderId NO-LOCK NO-ERROR.
-IF NOT AVAILABLE Order THEN
-   RETURN appl_err("Order does not exist").
 
 IF NOT fchkOrderCancelRule(INPUT Order.OrderChannel,
                            INPUT "api") THEN
