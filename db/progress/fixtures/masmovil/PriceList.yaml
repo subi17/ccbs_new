@@ -1,0 +1,24 @@
+bulkload: PriceList
+  PriceList: "COMMON"
+  PLName: "Common Postpaid"
+  Memo: "Common Price List for all Postpaid subscription types"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "OrderCh"
+  PLName: "Order Price list"
+  Memo: "Used for product pricing in order channels incl. tax"
+  Currency: "EUR"
+  Rounding: 4
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TopUp"
+  PLName: "TopUp Payments"
+  Memo: "Used for topup payments"
+  Currency: "EUR"
+  Brand: "1"
+
