@@ -13,7 +13,6 @@
 {Syst/tmsconst.i}
 
 /* Input parameters */
-DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR pcMSISDN AS CHAR NO-UNDO.
 
 DEF VAR lcStruct AS CHAR NO-UNDO.
@@ -21,14 +20,13 @@ DEF VAR lcCode AS CHAR NO-UNDO.
 DEF VAR ldeCreated AS DECIMAL NO-UNDO INIT 20000101.
 DEF VAR lrMNPProcess AS ROWID NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 
-pcTenant = get_string(param_toplevel_id, "0").
 pcMSISDN = get_string(param_toplevel_id, "1").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/settenant.i pcTenant}
+{newton/src/findtenant.i NO ordercanal MobSub Cli pcMSISDN}
 
 FOR EACH MNPSub WHERE MNPSub.CLI = pcMSISDN NO-LOCK:
 

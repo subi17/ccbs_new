@@ -26,15 +26,13 @@ FUNCTION fReqStat RETURNS LOGICAL
 END FUNCTION. 
 
 /* Input */
-DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR pcCLI    AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
-pcTenant = get_string(param_toplevel_id, "0"). 
-pcCLI = get_string(param_toplevel_id, "1").
+IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+pcCLI = get_string(param_toplevel_id, "0").
 if gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/settenant.i pcTenant}
+{newton/src/findtenant.i NO ordercanal MobSub Cli pcCLI}
 
 fCreateRequest(37, /* heat balance query request */
                0 , /* chgstamp */
