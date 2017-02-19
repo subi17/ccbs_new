@@ -38,8 +38,6 @@ FATGMember
 FATGroup
 FeeModel
 FMItem
-FuncRunConfig
-FuncRunParam
 FuncRunQRow
 FuncRunQueue
 HdrText
@@ -52,7 +50,6 @@ MNPCal
 MNPOperator
 MNPRetentionRule
 MNPRetPlatform
-MobError
 MSClass
 MSRange
 MXItem
@@ -68,14 +65,10 @@ PrintHouseConf
 ProgLimit
 RateCCN
 RatePlan
-RatePref
 Region
-ReportConf
-ReportConfRow
 RepText
 RequestAction
 RequestActionRule
-RequestParam
 Reseller
 ResellerTF
 ServAttr

@@ -13,6 +13,8 @@ DFField
 DialType
 DumpFile
 EventLogConf
+FuncRunConfig
+FuncRunParam
 IFiSpx
 IGInvNum
 IGVoucher
@@ -23,6 +25,7 @@ Language
 MenuClass
 MenuText
 MenuTree
+MobError
 MsReqFuncItem
 MsReqStatFunc
 MSStat
@@ -36,6 +39,10 @@ PaymLog
 PaymPlan
 PLMN
 PrintCodes
+RatePref
+ReportConf
+ReportConfRow
+RequestParam
 RequestQueue
 RequestStatus
 RequestType
