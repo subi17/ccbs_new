@@ -8851,42 +8851,6 @@ bulkload: BDest
   BdestID: 1069
 
 bulkload: BDest
-  BDest: "CONT9_DATA_IN"
-  BDName: "CONT9 DATA_IN"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2016-11-23
-  BdestID: 1053
-
-bulkload: BDest
-  BDest: "CONT9_DATA_OUT"
-  BDName: "CONT9 DATA_OUT"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2016-11-23
-  BdestID: 1054
-
-bulkload: BDest
-  BDest: "CONT9_VOICE_IN"
-  BDName: "CONT9 VOICE_IN"
-  CCN: 81
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2016-11-23
-  BdestID: 1055
-
-bulkload: BDest
-  BDest: "CONT9_VOICE_OUT"
-  BDName: "CONT9 VOICE_OUT"
-  CCN: 81
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2016-11-23
-  BdestID: 1056
-
-bulkload: BDest
   BDest: "CONTDSL_MIN_IN"
   BDName: "CONTDSL MIN_IN"
   CCN: 81

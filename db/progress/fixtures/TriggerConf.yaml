@@ -3,7 +3,7 @@ bulkload: TriggerConf
   TCName: "Re-Rate all"
   Prior: 5
   ValidFrom: 2001-01-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   EventRule: 4
 
 bulkload: TriggerConf
@@ -80,5 +80,5 @@ bulkload: TriggerConf
   TCName: "Servicelimit Analyses"
   Prior: 89
   ValidFrom: 2012-03-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
 

@@ -1,6 +1,6 @@
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTD"
@@ -8,7 +8,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTD"
   RatePlan: "CONTD"
@@ -16,7 +16,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTD"
@@ -24,7 +24,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATO"
@@ -40,7 +40,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2006-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTRATO"
   RatePlan: "CONTRATO"
@@ -48,7 +48,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2006-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTRATO"
@@ -56,7 +56,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATO10"
@@ -64,7 +64,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTRATO8"
   RatePlan: "CONTRATO10"
@@ -72,7 +72,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTRATO10"
@@ -200,7 +200,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATO4"
@@ -208,7 +208,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2008-08-25
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTRATO4"
   RatePlan: "CONTRATO4"
@@ -216,7 +216,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2008-08-25
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTRATO4"
@@ -224,7 +224,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATO5"
@@ -232,7 +232,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2009-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTRATO5"
   RatePlan: "CONTRATO5"
@@ -240,7 +240,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2009-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTRATO5"
@@ -248,7 +248,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATO6"
@@ -256,7 +256,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2011-02-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTRATO6"
   RatePlan: "CONTRATO6"
@@ -264,7 +264,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2011-02-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTRATO6"
@@ -272,7 +272,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATO7"
@@ -280,7 +280,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTRATO7"
   RatePlan: "CONTRATO7"
@@ -288,7 +288,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTRATO7"
@@ -296,7 +296,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATO8"
@@ -304,7 +304,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTRATO8"
   RatePlan: "CONTRATO8"
@@ -312,7 +312,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTRATO8"
@@ -384,7 +384,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATOD"
@@ -392,15 +392,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2008-06-01
-  dTo: 2014-04-30
-  Prior: 6
-  PriceList: "Campaigne"
-  RatePlan: "CONTRATOD"
-  Brand: "1"
-
-bulkload: PListConf
-  dFrom: 2008-06-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 7
   PriceList: "CONTRATOD"
   RatePlan: "CONTRATOD"
@@ -408,15 +400,23 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2008-06-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 11
   PriceList: "COMMON"
   RatePlan: "CONTRATOD"
   Brand: "1"
 
 bulkload: PListConf
+  dFrom: 2008-06-01
+  dTo: 2014-04-30
+  Prior: 6
+  PriceList: "Campaigne"
+  RatePlan: "CONTRATOD"
+  Brand: "1"
+
+bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATOD2"
@@ -424,15 +424,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2009-12-01
-  dTo: 2014-04-30
-  Prior: 6
-  PriceList: "Campaigne"
-  RatePlan: "CONTRATOD2"
-  Brand: "1"
-
-bulkload: PListConf
-  dFrom: 2009-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 7
   PriceList: "CONTRATOD2"
   RatePlan: "CONTRATOD2"
@@ -440,15 +432,23 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2009-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 11
   PriceList: "COMMON"
   RatePlan: "CONTRATOD2"
   Brand: "1"
 
 bulkload: PListConf
+  dFrom: 2009-12-01
+  dTo: 2014-04-30
+  Prior: 6
+  PriceList: "Campaigne"
+  RatePlan: "CONTRATOD2"
+  Brand: "1"
+
+bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATOD3"
@@ -456,15 +456,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2011-05-01
-  dTo: 2014-04-30
-  Prior: 6
-  PriceList: "Campaigne"
-  RatePlan: "CONTRATOD3"
-  Brand: "1"
-
-bulkload: PListConf
-  dFrom: 2011-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 7
   PriceList: "CONTRATOD3"
   RatePlan: "CONTRATOD3"
@@ -472,15 +464,23 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2011-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 11
   PriceList: "COMMON"
   RatePlan: "CONTRATOD3"
   Brand: "1"
 
 bulkload: PListConf
+  dFrom: 2011-05-01
+  dTo: 2014-04-30
+  Prior: 6
+  PriceList: "Campaigne"
+  RatePlan: "CONTRATOD3"
+  Brand: "1"
+
+bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATODATA"
@@ -488,9 +488,17 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2008-06-02
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 11
   PriceList: "COMMON"
+  RatePlan: "CONTRATODATA"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2008-06-01
+  dTo: 2054-12-31
+  Prior: 7
+  PriceList: "CONTRATODATA"
   RatePlan: "CONTRATODATA"
   Brand: "1"
 
@@ -503,16 +511,8 @@ bulkload: PListConf
   Brand: "1"
 
 bulkload: PListConf
-  dFrom: 2008-06-01
-  dTo: 1954-12-31
-  Prior: 7
-  PriceList: "CONTRATODATA"
-  RatePlan: "CONTRATODATA"
-  Brand: "1"
-
-bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATOF"
@@ -520,7 +520,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2011-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTRATOF"
   RatePlan: "CONTRATOF"
@@ -528,7 +528,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2011-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTRATOF"
@@ -536,7 +536,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATOM"
@@ -544,7 +544,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTRATOM"
   RatePlan: "CONTRATOM"
@@ -552,7 +552,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTRATOM"
@@ -560,7 +560,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATOM2"
@@ -568,7 +568,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2013-09-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTRATOM2"
   RatePlan: "CONTRATOM2"
@@ -576,7 +576,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2013-09-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTRATOM2"
@@ -584,7 +584,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2014-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 5
   PriceList: "COMMON3"
   RatePlan: "CONTRATOS"
@@ -592,7 +592,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "CONTRATOS"
   RatePlan: "CONTRATOS"
@@ -600,7 +600,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-05-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON"
   RatePlan: "CONTRATOS"
@@ -608,7 +608,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2006-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "TARJETA"
   RatePlan: "TARJETA"
@@ -616,7 +616,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2006-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON2"
   RatePlan: "TARJETA"
@@ -624,7 +624,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2006-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "TARJETA2"
   RatePlan: "TARJETA2"
@@ -632,7 +632,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2006-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON2"
   RatePlan: "TARJETA2"
@@ -640,7 +640,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2008-08-25
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "TARJETA4"
   RatePlan: "TARJETA4"
@@ -648,7 +648,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2008-08-25
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON2"
   RatePlan: "TARJETA4"
@@ -656,7 +656,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2011-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "TARJETA5"
   RatePlan: "TARJETA5"
@@ -664,7 +664,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2011-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON2"
   RatePlan: "TARJETA5"
@@ -672,7 +672,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "TARJETA6"
   RatePlan: "TARJETA6"
@@ -680,7 +680,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2012-12-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON2"
   RatePlan: "TARJETA6"
@@ -688,7 +688,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2013-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "TARJETA7"
   RatePlan: "TARJETA7"
@@ -696,7 +696,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2013-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON2"
   RatePlan: "TARJETA7"
@@ -704,7 +704,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2013-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "TARJETA8"
   RatePlan: "TARJETA8"
@@ -712,7 +712,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2013-11-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON2"
   RatePlan: "TARJETA8"
@@ -736,7 +736,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2009-04-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 10
   PriceList: "TARJETADATA"
   RatePlan: "TARJETADATA"
@@ -744,7 +744,7 @@ bulkload: PListConf
 
 bulkload: PListConf
   dFrom: 2009-04-01
-  dTo: 1954-12-31
+  dTo: 2054-12-31
   Prior: 50
   PriceList: "COMMON2"
   RatePlan: "TARJETADATA"

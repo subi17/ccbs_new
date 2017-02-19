@@ -1,0 +1,9 @@
+bulkload: MSClass
+  McName: "ClassName"
+  Brand: "1"
+
+bulkload: MSClass
+  McCode: 1
+  McName: "Basic Class"
+  Brand: "1"
+

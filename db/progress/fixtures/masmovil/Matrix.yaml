@@ -1,0 +1,28 @@
+bulkload: Matrix
+  MXName: "denied modules"
+  MXKey: "DENIED"
+  MXSeq: 18
+  MXRes: 0
+  Prior: 1
+
+bulkload: Matrix
+  MXName: "HSPA_ROAM_EU"
+  MXKey: "PERCONTR"
+  MXSeq: 51
+  MXRes: 1
+  Prior: 1
+
+bulkload: Matrix
+  MXName: "ST CHANGE"
+  MXKey: "STC-IDType"
+  MXSeq: 1
+  MXRes: 0
+  Prior: 1
+
+bulkload: Matrix
+  MXName: "ST CHANGE"
+  MXKey: "STC-IDType"
+  MXSeq: 3
+  MXRes: 0
+  Prior: 2
+

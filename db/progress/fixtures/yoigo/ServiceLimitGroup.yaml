@@ -59,7 +59,7 @@ bulkload: ServiceLimitGroup
   GroupCode: "CONTD2"
   GroupName: "Contrato Datos 2 continuous per"
   ValidFrom: 2009-12-01
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
 
 bulkload: ServiceLimitGroup
   Brand: "1"
@@ -73,7 +73,7 @@ bulkload: ServiceLimitGroup
   GroupCode: "CONTD2ACT"
   GroupName: "Contrato Datos 2 1st period"
   ValidFrom: 2009-12-01
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
 
 bulkload: ServiceLimitGroup
   Brand: "1"
@@ -87,14 +87,14 @@ bulkload: ServiceLimitGroup
   GroupCode: "CONTD3"
   GroupName: "Contrato Datos 3 continuous"
   ValidFrom: 2011-05-01
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
 
 bulkload: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONTD3_UPSELL"
   GroupName: "Contrato Datos 3 Upsell"
   ValidFrom: 2011-05-01
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
 
 bulkload: ServiceLimitGroup
   Brand: "1"
@@ -122,7 +122,7 @@ bulkload: ServiceLimitGroup
   GroupCode: "CONTDATA"
   GroupName: "Contrato Datos continuous per"
   ValidFrom: 2008-06-11
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
 
 bulkload: ServiceLimitGroup
   Brand: "1"
@@ -136,7 +136,7 @@ bulkload: ServiceLimitGroup
   GroupCode: "CONTDATAACT"
   GroupName: "Contrato Datos 1st period"
   ValidFrom: 2008-06-11
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
 
 bulkload: ServiceLimitGroup
   Brand: "1"
@@ -234,7 +234,7 @@ bulkload: ServiceLimitGroup
   GroupCode: "CONTRATO2"
   GroupName: "Contrato2 Flat rates"
   ValidFrom: 2007-01-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
 
 bulkload: ServiceLimitGroup
   Brand: "1"

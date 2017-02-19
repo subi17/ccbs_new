@@ -3,12 +3,15 @@ BarringConf
 BillType
 BRAND
 CallLimit
+CDRError
 Country
 CSVHeader
 CurRate
 Currency
 CustClass
 DFField
+DialType
+DumpFile
 EventLogConf
 IFiSpx
 IGInvNum
@@ -36,6 +39,8 @@ PrintCodes
 RequestQueue
 RequestStatus
 RequestType
+RoamZone
+RZItem
 SimArt
 SimBatch
 SimMan
@@ -52,3 +57,4 @@ Token
 TriggerConf
 TriggerField
 UserGrp
+VATCode

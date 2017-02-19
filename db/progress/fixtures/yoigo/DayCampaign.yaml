@@ -137,7 +137,7 @@ bulkload: DayCampaign
   DCEvent: "CONTD2"
   ValidFrom: 2009-12-01
   InclUnit: 4
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "CONTDATA2"
   DCName: "Internet para llevar 35"
   CCN: 93
@@ -213,7 +213,7 @@ bulkload: DayCampaign
   DCEvent: "CONTD3"
   ValidFrom: 2011-05-01
   InclUnit: 4
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "CONTDATA3"
   DCName: "Internet para llevar 8"
   CCN: 93
@@ -232,7 +232,7 @@ bulkload: DayCampaign
   DCEvent: "CONTD3_UPSELL"
   ValidFrom: 2011-05-01
   InclUnit: 4
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "CONTDATA3"
   DCName: "IPL 8 Upsell"
   CCN: 93
@@ -308,7 +308,7 @@ bulkload: DayCampaign
   DCEvent: "CONTDATA"
   ValidFrom: 2008-06-11
   InclUnit: 4
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "CONTDATA1"
   MaxChargeIncl: 4096
   DCName: "Internet para llevar 25"
@@ -1162,7 +1162,7 @@ bulkload: DayCampaign
   DCEvent: "GPRS"
   ValidFrom: 2006-12-01
   InclUnit: 6
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "14100001"
   MaxChargeIncl: 1.653
   DCTarget: "1"
@@ -2157,7 +2157,7 @@ bulkload: DayCampaign
 bulkload: DayCampaign
   DCEvent: "TERM18"
   ValidFrom: 2006-11-01
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "TERMPERIOD"
   DCTarget: "1"
   DCName: "Terminal discount(Postpaid)"
@@ -2175,7 +2175,7 @@ bulkload: DayCampaign
 bulkload: DayCampaign
   DCEvent: "TERM18-150"
   ValidFrom: 2010-03-01
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "TERMPERIOD"
   DCName: "Terminal discount(Postpaid)"
   Brand: "1"
@@ -2209,7 +2209,7 @@ bulkload: DayCampaign
 bulkload: DayCampaign
   DCEvent: "TERM18II"
   ValidFrom: 2009-03-01
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "TERMPERIOD"
   DCTarget: "1"
   DCName: "Terminal discount(Postpaid)"
@@ -2295,7 +2295,7 @@ bulkload: DayCampaign
 bulkload: DayCampaign
   DCEvent: "TERM24"
   ValidFrom: 2010-12-01
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "TERMPERIOD"
   DCTarget: "1"
   DCName: "Terminal discount(Postpaid)"
@@ -2449,7 +2449,7 @@ bulkload: DayCampaign
 bulkload: DayCampaign
   DCEvent: "TERM24II"
   ValidFrom: 2010-12-01
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "TERMPERIOD"
   DCTarget: "1"
   DCName: "Terminal discount(Postpaid)"
@@ -2484,7 +2484,7 @@ bulkload: DayCampaign
 bulkload: DayCampaign
   DCEvent: "TERM24IV"
   ValidFrom: 2010-12-01
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "TERMPERIOD"
   DCName: "Terminal discount(Postpaid)"
   Brand: "1"
@@ -2581,7 +2581,7 @@ bulkload: DayCampaign
   DCEvent: "YOIGOYOIGO"
   ValidFrom: 2008-02-01
   InclUnit: 2
-  ValidTo: 1954-12-31
+  ValidTo: 2054-12-31
   BillCode: "YOIGOYOIGO"
   MaxChargeIncl: 3600
   DCTarget: "1"

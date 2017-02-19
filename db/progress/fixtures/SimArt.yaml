@@ -16,14 +16,14 @@ bulkload: SimArt
   SimArt: "Plug_IN"
   ManCode: "GEMALTO"
   SAName: "Plug-IN"
-  Balance: 12297064
-  DetBal[1]: 3187100
+  Balance: 12297074
+  DetBal[1]: 3187110
   Brand: "1"
 
 bulkload: SimArt
   SimArt: "Universal"
   SAName: "Universal"
-  Balance: 1245245
-  DetBal[1]: 1245245
+  Balance: 1345245
+  DetBal[1]: 1345245
   Brand: "1"
 

@@ -26,8 +26,6 @@ bulkload: CLIType
   CompareFee: 9.92
   ArAccNum: 43000000
   PayType: 1
-  StatusCode: 0
-  WebStatusCode: 3
   CommercialFee: 9.92
   BaseBundle: "CONT10"
 
@@ -116,7 +114,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   StatusCode: 0
-  WebStatusCode: 3
   CommercialFee: 20.66
   BaseBundle: "CONT26"
 
@@ -220,6 +217,8 @@ bulkload: CLIType
   CompareFee: 9.09
   ArAccNum: 43000000
   PayType: 1
+  StatusCode: 2
+  WebStatusCode: 2
   CommercialFee: 9.09
   BaseBundle: "CONT9"
 
@@ -369,11 +368,11 @@ bulkload: CLIType
   ServicePack: "11"
   Brand: "1"
   ContrType: 61
-  CompareFee: 39.67
+  CompareFee: 38.017
   ArAccNum: 43000000
   PayType: 1
   StatusCode: 0
-  CommercialFee: 39.67
+  CommercialFee: 38.017
   FixedLineType: 1
   BaseBundle: "CONT15"
   FixedLineDownload: "20M"
@@ -391,6 +390,7 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   StatusCode: 0
+  WebStatusCode: 2
   CommercialFee: 47.93
   FixedLineType: 1
   BaseBundle: "CONT24"
@@ -409,7 +409,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   StatusCode: 0
-  WebStatusCode: 3
   CommercialFee: 48.762
   FixedLineType: 1
   BaseBundle: "CONT25"
@@ -617,11 +616,11 @@ bulkload: CLIType
   ServicePack: "11"
   Brand: "1"
   ContrType: 62
-  CompareFee: 39.67
+  CompareFee: 38.017
   ArAccNum: 43000000
   PayType: 1
   StatusCode: 0
-  CommercialFee: 39.67
+  CommercialFee: 38.017
   FixedLineType: 2
   BaseBundle: "CONT15"
   FixedLineDownload: "50M"
@@ -672,11 +671,11 @@ bulkload: CLIType
   ServicePack: "11"
   Brand: "1"
   ContrType: 63
-  CompareFee: 47.93
+  CompareFee: 46.281
   ArAccNum: 43000000
   PayType: 1
   StatusCode: 0
-  CommercialFee: 47.93
+  CommercialFee: 46.281
   FixedLineType: 2
   BaseBundle: "CONT15"
   FixedLineDownload: "300M"
@@ -694,6 +693,7 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   StatusCode: 0
+  WebStatusCode: 2
   CommercialFee: 47.93
   FixedLineType: 2
   BaseBundle: "CONT24"
@@ -712,7 +712,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   StatusCode: 0
-  WebStatusCode: 3
   CommercialFee: 48.762
   FixedLineType: 2
   BaseBundle: "CONT25"
@@ -731,6 +730,7 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   StatusCode: 0
+  WebStatusCode: 2
   CommercialFee: 56.2
   FixedLineType: 2
   BaseBundle: "CONT24"
@@ -749,7 +749,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   StatusCode: 0
-  WebStatusCode: 3
   CommercialFee: 57.028
   FixedLineType: 2
   BaseBundle: "CONT25"

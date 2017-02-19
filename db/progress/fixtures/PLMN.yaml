@@ -2649,6 +2649,13 @@ bulkload: PLMN
   CountryPrefix: "356"
 
 bulkload: PLMN
+  PLMN: "MLTMM"
+  CommName: "Melita Mobile"
+  CoName: "MALTA"
+  Country: "MT"
+  CountryPrefix: "356"
+
+bulkload: PLMN
   PLMN: "MLTTL"
   CommName: "Vodafone Malta Ltd"
   CoName: "Malta"

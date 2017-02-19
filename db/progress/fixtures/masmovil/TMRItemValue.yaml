@@ -1,0 +1,204 @@
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "1064"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "1066"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "1067"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "1069"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "64"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "65"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "66"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "67"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "68"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "69"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "71"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "72"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "78"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 3
+  FromDate: 2008-09-24
+  ToDate: 2049-12-31
+  CounterItemValues: "*"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "1002"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-13
+  ToDate: 2008-10-29
+  CounterItemValues: "2"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2049-12-31
+  CounterItemValues: "2,*"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "200,*"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-13
+  ToDate: 2008-10-29
+  CounterItemValues: "51"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2011-11-30
+  CounterItemValues: "51,252"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2011-11-30
+  CounterItemValues: "51,53"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2011-11-30
+  CounterItemValues: "51,850"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2049-12-31
+  CounterItemValues: "51,INTERNATIONAL"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-13
+  ToDate: 2008-10-29
+  CounterItemValues: "97"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2049-12-31
+  CounterItemValues: "97,*"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 7
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "*"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 8
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "A,3"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 8
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "A,4"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 9
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "B,3"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 9
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "B,4"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 10
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "C,3"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 10
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "C,4"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 36
+  FromDate: 2012-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRS"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 37
+  FromDate: 2012-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRS"
+

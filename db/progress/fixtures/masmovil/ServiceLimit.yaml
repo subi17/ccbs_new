@@ -1,0 +1,12 @@
+bulkload: ServiceLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  WebDisp: 0
+  DialType: 7
+  SLCode: "HSPA_ROAM_EU"
+  SLName: "HSPR Roaming EU"
+  InclUnit: 4
+  InclAmt: 60
+  ValidFrom: 2012-10-10
+  ValidTo: 2049-12-31
+

@@ -1,0 +1,15 @@
+bulkload: DayCampaign
+  DCEvent: "HSPA_ROAM_EU"
+  ValidFrom: 2012-10-10
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "14104019"
+  DCName: "HSPA Roaming EU"
+  CCN: 90
+  Brand: "1"
+  DCType: "8"
+  CalcMethod: 1
+  DurType: 2
+  DurUnit: 1
+  Effective: 1
+

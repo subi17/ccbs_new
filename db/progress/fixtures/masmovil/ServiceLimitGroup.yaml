@@ -1,0 +1,7 @@
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "HSPA_ROAM_EU"
+  GroupName: "HSPA Roaming EU"
+  ValidFrom: 2012-10-10
+  ValidTo: 2049-12-31
+

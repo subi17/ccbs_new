@@ -1,0 +1,16 @@
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "DEFAULT"
+  Template: "DEFAULT"
+  TariffType: "DEFAULT"
+  Tariff: "DEFAULT"
+  LimitUnshaped: ?
+  LimitShaped: ?
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "HSPA_ROAM_EU"
+  Template: "EU_DAILY_RST,QUOTA=0,GRACE=0"
+  LimitUnshaped: ?
+  LimitShaped: ?
+

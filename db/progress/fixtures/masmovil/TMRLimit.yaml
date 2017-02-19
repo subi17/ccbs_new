@@ -1,0 +1,198 @@
+bulkload: TMRLimit
+  TMRuleSeq: 1
+  FromDate: 2008-11-12
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 50
+  Action: 35
+  SMSText: "PREMIUMFRAUD1"
+  MaxValue: 1000
+  ActionParam: "Limits_TotalPremium_Off"
+
+bulkload: TMRLimit
+  TMRuleSeq: 1
+  FromDate: 2008-05-01
+  ToDate: 2008-11-11
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 70
+  Action: 35
+  SMSText: "PREMIUMFRAUD1"
+  MaxValue: 1000
+  ActionParam: "Y_HURP"
+
+bulkload: TMRLimit
+  TMRuleSeq: 1
+  FromDate: 2008-11-12
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 75
+  Action: 35
+  SMSText: "PREMIUMFRAUD2"
+  MaxValue: 5000
+  ActionParam: "Limits_Restricted"
+
+bulkload: TMRLimit
+  TMRuleSeq: 1
+  FromDate: 2008-05-01
+  ToDate: 2008-11-11
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 100
+  Action: 35
+  SMSText: "PREMIUMFRAUD2"
+  MaxValue: 1000
+  ActionParam: "Y_REST"
+
+bulkload: TMRLimit
+  TMRuleSeq: 3
+  FromDate: 2008-11-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 80
+  Action: 30
+  SMSText: "TOTALTRAFFIC1"
+  MaxValue: 5000
+
+bulkload: TMRLimit
+  TMRuleSeq: 3
+  FromDate: 2008-11-01
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 120
+  Action: 35
+  SMSText: "TOTALTRAFFIC2"
+  MaxValue: 5000
+  ActionParam: "Limits_Restricted"
+
+bulkload: TMRLimit
+  TMRuleSeq: 4
+  FromDate: 2008-10-13
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 50
+  Action: 35
+  SMSText: "INTERNATFRAUD1"
+  MaxValue: 999
+  ActionParam: "Limits_International_off"
+
+bulkload: TMRLimit
+  TMRuleSeq: 4
+  FromDate: 2008-11-12
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 75
+  Action: 35
+  SMSText: "INTERNATFRAUD2"
+  MaxValue: 1000
+  ActionParam: "Limits_Restricted"
+
+bulkload: TMRLimit
+  TMRuleSeq: 4
+  FromDate: 2008-10-13
+  ToDate: 2008-11-11
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 60
+  Action: 35
+  MaxValue: 999
+  ActionParam: "Y_SARC"
+
+bulkload: TMRLimit
+  TMRuleSeq: 7
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 80
+  Action: 30
+  SMSText: "FRONTLIMIT1"
+  MaxValue: 5000
+
+bulkload: TMRLimit
+  TMRuleSeq: 7
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 120
+  Action: 35
+  SMSText: "FRONTLIMIT2"
+  MaxValue: 5000
+  ActionParam: "Limits_Roaming_off"
+
+bulkload: TMRLimit
+  TMRuleSeq: 8
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 50
+  Action: 30
+  SMSText: "FRONTLIMIT1"
+  MaxValue: 999
+
+bulkload: TMRLimit
+  TMRuleSeq: 8
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 60
+  Action: 35
+  SMSText: "FRONTLIMIT2"
+  MaxValue: 999
+  ActionParam: "Limits_Roaming_off"
+
+bulkload: TMRLimit
+  TMRuleSeq: 9
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 25
+  Action: 30
+  SMSText: "FRONTLIMIT1"
+  MaxValue: 999
+
+bulkload: TMRLimit
+  TMRuleSeq: 9
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 35
+  Action: 35
+  SMSText: "FRONTLIMIT2"
+  MaxValue: 999
+  ActionParam: "Limits_Roaming_off"
+
+bulkload: TMRLimit
+  TMRuleSeq: 10
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 2
+  Action: 30
+  SMSText: "FRONTLIMIT1"
+  MaxValue: 999
+
+bulkload: TMRLimit
+  TMRuleSeq: 10
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 4
+  Action: 35
+  SMSText: "FRONTLIMIT2"
+  MaxValue: 999
+  ActionParam: "Limits_Roaming_off"
+

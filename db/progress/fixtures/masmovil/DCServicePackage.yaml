@@ -1,0 +1,24 @@
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTRATOx"
+  DCServicePackageID: 1
+  ServPac: "HSDPA"
+  FromDate: 2011-01-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTRATOx"
+  DCServicePackageID: 2
+  ServPac: "SHAPER"
+  FromDate: 2011-01-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "HSPA_ROAM_EU"
+  DCServicePackageID: 56
+  ServPac: "SHAPER"
+  FromDate: 2012-10-10
+  ToDate: 2049-12-31
+

@@ -1757,7 +1757,7 @@ bulkload: BillItem
   BillCode: "CONT26MF"
   BIName: "CONT26 monthly fee"
   AccNum: 70514100
-  BIGroup: "46"
+  BIGroup: "18"
   EUAccNum: 70514100
   FSAccNum: 70514100
   Brand: "1"

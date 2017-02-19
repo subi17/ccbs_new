@@ -13,7 +13,6 @@ BRTestQueue
 Campaign
 CampRow
 CCN
-CDRError
 CGMember
 CLIType
 Company
@@ -28,14 +27,12 @@ DayCampaign
 DCServiceComponent
 DCServicePackage
 DFTimeTable
-DialType
 DiscountPlan
 DiscPlan
 DPBasis
 DPConf
 DPSubject
 DPTarget
-DumpFile
 FATConfig
 FATGMember
 FATGroup
@@ -81,8 +78,6 @@ RequestActionRule
 RequestParam
 Reseller
 ResellerTF
-RoamZone
-RZItem
 ServAttr
 ServCom
 ServEl
@@ -107,4 +102,3 @@ TMSParam
 TopupScheme
 TopupSchemeRow
 UserLimit
-VATCode

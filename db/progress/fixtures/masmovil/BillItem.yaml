@@ -1,0 +1,4000 @@
+bulkload: BillItem
+  BillCode: "10100001"
+  BIName: "Voice Own Network to Xfera (Own Network)"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100002"
+  BIName: "Voice Own Network to Xfera (National Roaming)"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "003"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100003"
+  BIName: "Voice Own Network to Spanish Mobile"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "003"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100004"
+  BIName: "Voice Own Network to International Mobile"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "3"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "004"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100005"
+  BIName: "Voice Own Network to Spanish Fixed"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "005"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100006"
+  BIName: "Voice Own Network to International Fixed"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "3"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "006"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100007"
+  BIName: "Voice National Roaming to Xfera (Own Network)"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "007"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100008"
+  BIName: "Voice National Roaming to Xfera"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "008"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100009"
+  BIName: "Voice National Roaming to Spanish Mobile"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "009"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100010"
+  BIName: "Voice National Roaming to International Mobile"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "3"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "010"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100011"
+  BIName: "Voice National Roaming to Spanish Fixed"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "011"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100012"
+  BIName: "Voice National Roaming to International Fixed"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "3"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "012"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10100052"
+  BIName: "Voice IP to International Fixed"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "052"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "10104013"
+  BIName: "Voice Roaming Out Outgoing Traffic (Not Splitted)"
+  AccNum: 70510104
+  BIGroup: "1"
+  EUAccNum: 70510104
+  FSAccNum: 70510104
+  InvSect: "4"
+  Brand: "1"
+  EUConAccNum: 70510104
+  CostCentre: "SL"
+  AltAccNum: 70510104
+  TaxClass: "1"
+  SAPRid: "013"
+  VIPAccNum: 70510104
+
+bulkload: BillItem
+  BillCode: "10104020"
+  BIName: "Voice Roaming Incoming traffic (Abroad)"
+  AccNum: 70510104
+  BIGroup: "1"
+  EUAccNum: 70510104
+  FSAccNum: 70510104
+  InvSect: "4"
+  Brand: "1"
+  EUConAccNum: 70510104
+  CostCentre: "SL"
+  AltAccNum: 70510104
+  TaxClass: "1"
+  SAPRid: "020"
+  VIPAccNum: 70510104
+
+bulkload: BillItem
+  BillCode: "12100001"
+  BIName: "SMS Own Network to Xfera (Own Network)"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "12100002"
+  BIName: "SMS Own Network to Xfera (National Roaming)"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "002"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "12100003"
+  BIName: "SMS Own Network to Spanish Mobile"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "003"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "12100004"
+  BIName: "SMS Own Network to International Mobile"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "004"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "12100007"
+  BIName: "SMS National Roaming to Xfera (Own Network)"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "007"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "12100008"
+  BIName: "SMS National Roaming to Xfera (National Roaming)"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "008"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "12100009"
+  BIName: "SMS National Roaming to Spanish Mobile"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "009"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "12100010"
+  BIName: "SMS National Roaming to International Mobile"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "010"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "12104013"
+  BIName: "SMS Roaming Out Outgoing Traffic (Not Splitted)"
+  AccNum: 70512104
+  BIGroup: "4"
+  EUAccNum: 70512104
+  FSAccNum: 70512104
+  Brand: "1"
+  EUConAccNum: 70512104
+  CostCentre: "SL"
+  AltAccNum: 70512104
+  TaxClass: "1"
+  SAPRid: "013"
+  VIPAccNum: 70512104
+
+bulkload: BillItem
+  BillCode: "13100001"
+  BIName: "MMS Own Network to Xfera (Own Network)"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "13100002"
+  BIName: "MMS Own Network to Xfera (National Roaming)"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "002"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "13100003"
+  BIName: "MMS Own Network to Spanish Mobile"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "003"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "13100004"
+  BIName: "MMS Own Network to International Mobile"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "004"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "13100007"
+  BIName: "MMS National Roaming to Xfera (Own Network)"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "007"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "13100008"
+  BIName: "MMS National Roaming to Xfera (National Roaming)"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "008"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "13100009"
+  BIName: "MMS National Roaming to Spanish Mobile"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "009"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "13100010"
+  BIName: "MMS National Roaming to International Mobile"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "010"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "13100011"
+  BIName: "MMS to Email"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "13104013"
+  BIName: "MMS Roaming Out Outgoing Traffic (Not Splitted)"
+  AccNum: 70513104
+  BIGroup: "4"
+  EUAccNum: 70513104
+  FSAccNum: 70513104
+  Brand: "1"
+  EUConAccNum: 70513104
+  CostCentre: "SL"
+  AltAccNum: 70513104
+  TaxClass: "1"
+  SAPRid: "013"
+  VIPAccNum: 70513104
+
+bulkload: BillItem
+  BillCode: "13104014"
+  BIName: "MMS Roaming Out Outgoing Traffic (Not Splitte"
+  AccNum: 70513104
+  BIGroup: "4"
+  EUAccNum: 70513104
+  FSAccNum: 70513104
+  Brand: "1"
+  EUConAccNum: 70513104
+  CostCentre: "SL"
+  AltAccNum: 70513104
+  TaxClass: "1"
+  SAPRid: "013"
+  VIPAccNum: 70513104
+
+bulkload: BillItem
+  BillCode: "13104020"
+  BIName: "MMS Roaming Out Incoming Traffic (Not Splitted)"
+  AccNum: 70513104
+  BIGroup: "4"
+  EUAccNum: 70513104
+  FSAccNum: 70513104
+  Brand: "1"
+  EUConAccNum: 70513104
+  CostCentre: "SL"
+  AltAccNum: 70513104
+  TaxClass: "1"
+  SAPRid: "020"
+  VIPAccNum: 70513104
+
+bulkload: BillItem
+  BillCode: "13104021"
+  BIName: "MMS Roaming Out Incoming Traffic (Not Splitte"
+  AccNum: 70513104
+  BIGroup: "4"
+  EUAccNum: 70513104
+  FSAccNum: 70513104
+  Brand: "1"
+  EUConAccNum: 70513104
+  CostCentre: "SL"
+  AltAccNum: 70513104
+  TaxClass: "1"
+  SAPRid: "020"
+  VIPAccNum: 70513104
+
+bulkload: BillItem
+  BillCode: "14100001"
+  BIName: "GPRS Own Network to Xfera (Own Network)"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  InvSect: "6"
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "019"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "14100007"
+  BIName: "GPRS National Roaming to Xfera (Own networ"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  InvSect: "6"
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "007"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "14104019"
+  BIName: "GPRS Roaming Out Total Traffic (Not splitt"
+  AccNum: 70514104
+  BIGroup: "3"
+  EUAccNum: 70514104
+  FSAccNum: 70514104
+  InvSect: "8"
+  Brand: "1"
+  EUConAccNum: 70514104
+  CostCentre: "SL"
+  AltAccNum: 70514104
+  TaxClass: "1"
+  SAPRid: "019"
+  VIPAccNum: 70514104
+
+bulkload: BillItem
+  BillCode: "15100023"
+  BIName: "VAS Premium Voice Service"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  InvSect: "5"
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "15100026"
+  BIName: "VAS Premium WAP Service"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "026"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "15100027"
+  BIName: "VAS Freephone Service"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "031"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "905WOVAT"
+  BIName: "Gambling Law 905 no VAT"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "0"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "905WVAT"
+  BIName: "Gambling Law 905 VAT"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "A00000001"
+  BIName: "Accessory Test 1"
+  AccNum: 70020105
+  BIGroup: "43"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "A00000002"
+  BIName: "Accessory Test 2"
+  AccNum: 70020105
+  BIGroup: "43"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "ACC000003"
+  BIName: "Huawei Talkband B2"
+  AccNum: 70020105
+  BIGroup: "43"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "ACC000004"
+  BIName: "Sony Smartwatch 3"
+  AccNum: 70020105
+  BIGroup: "43"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "ACCCHARGE"
+  BIName: "Agreement Customer Change"
+  AccNum: 70518109
+  BIGroup: "31"
+  EUAccNum: 70518109
+  FSAccNum: 70518109
+  Brand: "1"
+  EUConAccNum: 70518109
+  CostCentre: "SL"
+  AltAccNum: 70518109
+  TaxClass: "1"
+  SAPRid: "046"
+  VIPAccNum: 70518109
+
+bulkload: BillItem
+  BillCode: "BALANCECHARGE"
+  BIName: "Balance query"
+  AccNum: 70518109
+  BIGroup: "31"
+  EUAccNum: 70518109
+  FSAccNum: 70518109
+  Brand: "1"
+  EUConAccNum: 70518109
+  CostCentre: "SL"
+  AltAccNum: 70518109
+  TaxClass: "1"
+  SAPRid: "046"
+  VIPAccNum: 70518109
+
+bulkload: BillItem
+  BillCode: "BBMF"
+  BIName: "Servicio de BlackBerry"
+  AccNum: 70518110
+  BIGroup: "13"
+  EUAccNum: 70518110
+  FSAccNum: 70518110
+  Brand: "1"
+  EUConAccNum: 70518110
+  CostCentre: "SL"
+  AltAccNum: 70518110
+  TaxClass: "1"
+  SAPRid: "028"
+  VIPAccNum: 70518110
+
+bulkload: BillItem
+  BillCode: "BBMFPOST"
+  BIName: "Servicio de BlackBerry Postpago"
+  AccNum: 70518110
+  BIGroup: "13"
+  EUAccNum: 70518110
+  FSAccNum: 70518110
+  Brand: "1"
+  EUConAccNum: 70518110
+  CostCentre: "SL"
+  AltAccNum: 70518110
+  TaxClass: "1"
+  SAPRid: "028"
+  VIPAccNum: 70518110
+
+bulkload: BillItem
+  BillCode: "BBMFPRE"
+  BIName: "Servicio de BlackBerry Prepago"
+  AccNum: 70518110
+  BIGroup: "13"
+  EUAccNum: 70518110
+  FSAccNum: 70518110
+  Brand: "1"
+  EUConAccNum: 70518110
+  CostCentre: "SL"
+  AltAccNum: 70518110
+  TaxClass: "1"
+  SAPRid: "028"
+  VIPAccNum: 70518110
+
+bulkload: BillItem
+  BillCode: "CCROAM"
+  BIName: "Customer care in roaming (abroad)"
+  AccNum: 70510104
+  BIGroup: "1"
+  EUAccNum: 70510104
+  FSAccNum: 70510104
+  Brand: "1"
+  EUConAccNum: 70510104
+  CostCentre: "SL"
+  AltAccNum: 70510104
+  TaxClass: "1"
+  SAPRid: "031"
+  VIPAccNum: 70510104
+
+bulkload: BillItem
+  BillCode: "CCYOIGO"
+  BIName: "Customer Care"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CFOTHER"
+  BIName: "Call Forwarding other operator"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "003"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CFYOIGO"
+  BIName: "Call Forwarding to Yoigo"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CFYOIGOYOIGO"
+  BIName: "Yoigo-Yoigo call forwarding"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CN006"
+  BIName: "Compensation discount for Postpaid (FAT)"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CN066"
+  BIName: "Compensation discount TopUp"
+  AccNum: 70510100
+  BIGroup: "10"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CNPAYTERM"
+  BIName: "Installment for IFS file"
+  AccNum: 43008889
+  BIGroup: "33"
+  EUAccNum: 43008889
+  FSAccNum: 43008889
+  Brand: "1"
+  EUConAccNum: 43008889
+  AltAccNum: 43008889
+  TaxClass: "0"
+  VIPAccNum: 43008889
+
+bulkload: BillItem
+  BillCode: "CNPREPOST"
+  BIName: "Compensation for pre post balance transfer"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CNRV"
+  BIName: "Intallment for IFS file"
+  AccNum: 79502004
+  BIGroup: "33"
+  EUAccNum: 79502004
+  FSAccNum: 79502004
+  Brand: "1"
+  EUConAccNum: 79502004
+  CostCentre: "O900002"
+  AltAccNum: 79502004
+  TaxClass: "0"
+  VIPAccNum: 79502004
+
+bulkload: BillItem
+  BillCode: "CNRVTERM"
+  BIName: "Installment for IFS file"
+  AccNum: 79502004
+  BIGroup: "33"
+  EUAccNum: 79502004
+  FSAccNum: 79502004
+  Brand: "1"
+  EUConAccNum: 79502004
+  CostCentre: "O900002"
+  AltAccNum: 79502004
+  TaxClass: "0"
+  VIPAccNum: 79502004
+
+bulkload: BillItem
+  BillCode: "COMPCF"
+  BIName: "Compensation commission fee UNO-E"
+  AccNum: 70518109
+  BIGroup: "32"
+  EUAccNum: 70518109
+  FSAccNum: 70518109
+  Brand: "1"
+  EUConAccNum: 70518109
+  AltAccNum: 70518109
+  TaxClass: "0"
+  SAPRid: "046"
+  VIPAccNum: 70518109
+
+bulkload: BillItem
+  BillCode: "CONSMINFAT"
+  BIName: "Minimum Consumption FAT"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "048"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CPDISC10"
+  BIName: "Campaign TopUp for PrePaid subscr."
+  AccNum: 48500000
+  BIGroup: "12"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  CostCentre: "SL"
+  AltAccNum: 48500000
+  TaxClass: "0"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "CPDISC11"
+  BIName: "Campaign Discount for Prepaid TopUp"
+  AccNum: 48500000
+  BIGroup: "10"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  CostCentre: "SL"
+  AltAccNum: 48500000
+  TaxClass: "0"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "CPFAT10"
+  BIName: "Campaign FAT for PostPaid subscr."
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CPFATBONO8"
+  BIName: "Campaign FAT for PostPaid subscr."
+  AccNum: 70514100
+  BIGroup: "13"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "CPSMS200"
+  BIName: "Campaign SMS FAT for PostPaid subscr."
+  AccNum: 70512100
+  BIGroup: "13"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "CRVTERMDT"
+  BIName: "Change Quota 25 discount"
+  AccNum: 79502004
+  BIGroup: "33"
+  EUAccNum: 79502004
+  FSAccNum: 79502004
+  Brand: "1"
+  EUConAccNum: 79502004
+  CostCentre: "O900001"
+  AltAccNum: 79502004
+  TaxClass: "0"
+  VIPAccNum: 79502004
+
+bulkload: BillItem
+  BillCode: "DESCONTADO"
+  BIName: "ImporteDescontado"
+  AccNum: 70510100
+  BIGroup: "31"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "DISCFH300"
+  BIName: "Fixed Fiber 300 MF Discount"
+  AccNum: 70514100
+  BIGroup: "13"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "70"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "DISCFH300P"
+  BIName: "Fixed Fiber 300 MF Discount (Percentage)"
+  AccNum: 70514100
+  BIGroup: "13"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "70"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "DISCFHDSL"
+  BIName: "Convergent fixed line quota discount"
+  AccNum: 70514100
+  BIGroup: "13"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "070"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "DISCFTERMPERIOD"
+  BIName: "Convergent permanency discount"
+  AccNum: 70518111
+  BIGroup: "13"
+  EUAccNum: 70518111
+  FSAccNum: 70518111
+  Brand: "1"
+  EUConAccNum: 70518111
+  CostCentre: "SL"
+  AltAccNum: 70518111
+  TaxClass: "0"
+  SAPRid: "076"
+  VIPAccNum: 70518111
+
+bulkload: BillItem
+  BillCode: "DISCOUNT10"
+  BIName: "Discount 10"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "DISCPAYTERMDIR"
+  BIName: "Discount Payterm Direct Channel"
+  AccNum: 70020105
+  BIGroup: "13"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  CostCentre: "SL"
+  AltAccNum: 70020105
+  TaxClass: "0"
+  SAPRid: "046"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "DISCPAYTERMINDIR"
+  BIName: "Discount Payterm Indirect Channel"
+  AccNum: 60722114
+  BIGroup: "13"
+  EUAccNum: 60722114
+  FSAccNum: 60722114
+  Brand: "1"
+  EUConAccNum: 60722114
+  CostCentre: "SL"
+  AltAccNum: 60722114
+  TaxClass: "0"
+  SAPRid: "046"
+  VIPAccNum: 60722114
+
+bulkload: BillItem
+  BillCode: "DOA"
+  BIName: "DOA_no_procede"
+  AccNum: 70518111
+  BIGroup: "31"
+  EUAccNum: 70518111
+  FSAccNum: 70518111
+  Brand: "1"
+  EUConAccNum: 70518111
+  CostCentre: "SL"
+  AltAccNum: 70518111
+  TaxClass: "1"
+  SAPRid: "046"
+  VIPAccNum: 70518111
+
+bulkload: BillItem
+  BillCode: "DSSCPFREE"
+  BIName: "Campaign FAT for La del DSS"
+  AccNum: 70514100
+  BIGroup: "13"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "F10100003"
+  BIName: "Fixed to Spanish mobile"
+  AccNum: 70510100
+  BIGroup: "51"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "071"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "F10100004"
+  BIName: "Fixed to international mobile"
+  AccNum: 70510100
+  BIGroup: "51"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "3"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "073"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "F10100005"
+  BIName: "Fixed to Spanish fixed"
+  AccNum: 70510100
+  BIGroup: "51"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "072"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "F15100023"
+  BIName: "Fixed to VAS Premium Voice Service"
+  AccNum: 70515100
+  BIGroup: "53"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "074"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "F15100027"
+  BIName: "Fixed to VAS Freephone Service"
+  AccNum: 70515100
+  BIGroup: "51"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "074"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "F905WOVAT"
+  BIName: "Fixed gambling law 905 no VAT"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "0"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "F905WVAT"
+  BIName: "Fixed to gambling law 905 VAT"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "FCCYOIGO"
+  BIName: "Fixed to Customer Care"
+  AccNum: 70510100
+  BIGroup: "51"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "075"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "FINFSERVICE"
+  BIName: "Fixed to Information Services"
+  AccNum: 70510100
+  BIGroup: "51"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "075"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "FREE100MINUTES"
+  BIName: "Free 100 minutes promotion"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "FSHORTNU"
+  BIName: "Fixed to Voice Own Network to Short Numbers"
+  AccNum: 70510100
+  BIGroup: "51"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "075"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "FTERMPERIOD"
+  BIName: "Convergent permanency"
+  AccNum: 70518111
+  BIGroup: "33"
+  EUAccNum: 70518111
+  FSAccNum: 70518111
+  Brand: "1"
+  EUConAccNum: 70518111
+  CostCentre: "SL"
+  AltAccNum: 70518111
+  TaxClass: "0"
+  SAPRid: "076"
+  VIPAccNum: 70518111
+
+bulkload: BillItem
+  BillCode: "FVMC"
+  BIName: "Fixed Voice mail calls"
+  AccNum: 70510100
+  BIGroup: "51"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "070"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "FVMS"
+  BIName: "Fixed Voice mail calls"
+  AccNum: 70510100
+  BIGroup: "51"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "070"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "GENERALCARGO"
+  BIName: "Cargo General"
+  AccNum: 70510100
+  BIGroup: "31"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "048"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "GENERALCOMP"
+  BIName: "Compensation General"
+  AccNum: 70518109
+  BIGroup: "32"
+  EUAccNum: 70518109
+  FSAccNum: 70518109
+  Brand: "1"
+  EUConAccNum: 70518109
+  CostCentre: "SL"
+  AltAccNum: 70518109
+  TaxClass: "1"
+  SAPRid: "046"
+  VIPAccNum: 70518109
+
+bulkload: BillItem
+  BillCode: "GL000001"
+  BIName: "Generic laptop"
+  AccNum: 70020105
+  BIGroup: "34"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "GL000002"
+  BIName: "Generic laptop"
+  AccNum: 70020105
+  BIGroup: "34"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "GL000003"
+  BIName: "Generic laptop"
+  AccNum: 70020105
+  BIGroup: "34"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "GOOGLEVAS"
+  BIName: "VAS Premium Google Service No VAT"
+  AccNum: 55380000
+  BIGroup: "44"
+  EUAccNum: 55380000
+  FSAccNum: 55380000
+  Brand: "1"
+  EUConAccNum: 55380000
+  AltAccNum: 55380000
+  TaxClass: "0"
+  VIPAccNum: 55380000
+
+bulkload: BillItem
+  BillCode: "GOOGLEVASFAT"
+  BIName: "VAS Premium Google Service No VAT discount"
+  AccNum: 55380000
+  BIGroup: "45"
+  EUAccNum: 55380000
+  FSAccNum: 55380000
+  Brand: "1"
+  EUConAccNum: 55380000
+  AltAccNum: 55380000
+  TaxClass: "0"
+  VIPAccNum: 55380000
+
+bulkload: BillItem
+  BillCode: "HANDSET"
+  BIName: "Terminal"
+  AccNum: 70518109
+  BIGroup: "31"
+  EUAccNum: 70518109
+  FSAccNum: 70518109
+  Brand: "1"
+  EUConAccNum: 70518109
+  CostCentre: "SL"
+  AltAccNum: 70518109
+  TaxClass: "1"
+  SAPRid: "046"
+  VIPAccNum: 70518109
+
+bulkload: BillItem
+  BillCode: "ICCCHARGE"
+  BIName: "Change of ICC"
+  AccNum: 70518109
+  BIGroup: "31"
+  EUAccNum: 70518109
+  FSAccNum: 70518109
+  Brand: "1"
+  EUConAccNum: 70518109
+  CostCentre: "SL"
+  AltAccNum: 70518109
+  TaxClass: "1"
+  SAPRid: "046"
+  VIPAccNum: 70518109
+
+bulkload: BillItem
+  BillCode: "INC_DISC"
+  BIName: "Descuento Incidencia red"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "INFSERVICE"
+  BIName: "Information Services"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "INTLCALLDISC"
+  BIName: "Discount international Calls"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "004"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "IPL8CPACT"
+  BIName: "Campaign FAT for IPL8"
+  AccNum: 70514100
+  BIGroup: "13"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "019"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "IPLCPACT"
+  BIName: "Campaign FAT for IPL"
+  AccNum: 70514100
+  BIGroup: "13"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "019"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "LRDISC"
+  BIName: "Loyalty & retention discount"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "M2MMMS"
+  BIName: "MMS M2M"
+  AccNum: 70513100
+  BIGroup: "5"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "030"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "M2MSMS"
+  BIName: "SMS M2M"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "030"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "M2MVOICE"
+  BIName: "Voice M2M"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "030"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "MCCONTR0"
+  BIName: "Zero invoice item"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "048"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "MCCONTR1"
+  BIName: "Minimum consumption for Contrato"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "048"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "MCCONTR1 fixline"
+  BIName: "fixline for Minimum consumption for Contrato"
+  AccNum: 70510100
+  BIGroup: "19"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "048"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "MCTARJE1"
+  BIName: "Minimum consumption for Tarjeta 1"
+  AccNum: 70510100
+  BIGroup: "16"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "048"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "MGMPOST"
+  BIName: "MGM for PostPaid users"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "MSISDNCHARGE"
+  BIName: "Change of MSISDN"
+  AccNum: 70518109
+  BIGroup: "31"
+  EUAccNum: 70518109
+  FSAccNum: 70518109
+  Brand: "1"
+  EUConAccNum: 70518109
+  CostCentre: "SL"
+  AltAccNum: 70518109
+  TaxClass: "1"
+  SAPRid: "046"
+  VIPAccNum: 70518109
+
+bulkload: BillItem
+  BillCode: "PAYTERM"
+  BIName: "Installment"
+  AccNum: 43008889
+  BIGroup: "33"
+  EUAccNum: 43008889
+  FSAccNum: 43008889
+  Brand: "1"
+  EUConAccNum: 43008889
+  CostCentre: "SL"
+  AltAccNum: 43008889
+  TaxClass: "0"
+  VIPAccNum: 43008889
+
+bulkload: BillItem
+  BillCode: "PAYTERM18"
+  BIName: "Installment"
+  AccNum: 43008889
+  BIGroup: "33"
+  EUAccNum: 43008889
+  FSAccNum: 43008889
+  Brand: "1"
+  EUConAccNum: 43008889
+  CostCentre: "SL"
+  AltAccNum: 43008889
+  TaxClass: "0"
+  VIPAccNum: 43008889
+
+bulkload: BillItem
+  BillCode: "PAYTERM1E"
+  BIName: "Installment UNO-E"
+  AccNum: 55321000
+  BIGroup: "33"
+  EUAccNum: 55321000
+  FSAccNum: 55321000
+  Brand: "1"
+  EUConAccNum: 55321000
+  AltAccNum: 55321000
+  TaxClass: "0"
+  VIPAccNum: 55321000
+
+bulkload: BillItem
+  BillCode: "PAYTERM24"
+  BIName: "Installment"
+  AccNum: 43008889
+  BIGroup: "33"
+  EUAccNum: 43008889
+  FSAccNum: 43008889
+  Brand: "1"
+  EUConAccNum: 43008889
+  CostCentre: "SL"
+  AltAccNum: 43008889
+  TaxClass: "0"
+  VIPAccNum: 43008889
+
+bulkload: BillItem
+  BillCode: "PAYTERMBC"
+  BIName: "Installment CETELEM"
+  AccNum: 55341000
+  BIGroup: "33"
+  EUAccNum: 55341000
+  FSAccNum: 55341000
+  Brand: "1"
+  EUConAccNum: 55341000
+  AltAccNum: 55341000
+  TaxClass: "0"
+  VIPAccNum: 55341000
+
+bulkload: BillItem
+  BillCode: "PAYTERMBS"
+  BIName: "Installment Banco Sabadell"
+  AccNum: 55331000
+  BIGroup: "33"
+  EUAccNum: 55331000
+  FSAccNum: 55331000
+  Brand: "1"
+  EUConAccNum: 55331000
+  AltAccNum: 55331000
+  TaxClass: "0"
+  VIPAccNum: 55331000
+
+bulkload: BillItem
+  BillCode: "PAYTERMCG1E"
+  BIName: "UNO-E Payment Commission"
+  AccNum: 55322000
+  BIGroup: "33"
+  EUAccNum: 55322000
+  FSAccNum: 55322000
+  Brand: "1"
+  EUConAccNum: 55322000
+  AltAccNum: 55322000
+  TaxClass: "0"
+  VIPAccNum: 55322000
+
+bulkload: BillItem
+  BillCode: "PAYTERMCGBC"
+  BIName: "CETELEM Payment Commission"
+  AccNum: 55342000
+  BIGroup: "33"
+  EUAccNum: 55342000
+  FSAccNum: 55342000
+  Brand: "1"
+  EUConAccNum: 55342000
+  AltAccNum: 55342000
+  TaxClass: "0"
+  VIPAccNum: 55342000
+
+bulkload: BillItem
+  BillCode: "PAYTERMCGBS"
+  BIName: "Banco Sabadell Payment Commission"
+  AccNum: 55332000
+  BIGroup: "33"
+  EUAccNum: 55332000
+  FSAccNum: 55332000
+  Brand: "1"
+  EUConAccNum: 55332000
+  AltAccNum: 55332000
+  TaxClass: "0"
+  VIPAccNum: 55332000
+
+bulkload: BillItem
+  BillCode: "PAYTERMEND"
+  BIName: "Installment termination"
+  AccNum: 43008889
+  BIGroup: "33"
+  EUAccNum: 43008889
+  FSAccNum: 43008889
+  Brand: "1"
+  EUConAccNum: 43008889
+  CostCentre: "SL"
+  AltAccNum: 43008889
+  TaxClass: "0"
+  VIPAccNum: 43008889
+
+bulkload: BillItem
+  BillCode: "PAYTERMEND1E"
+  BIName: "Installment termination UNO_E"
+  AccNum: 55321000
+  BIGroup: "33"
+  EUAccNum: 55321000
+  FSAccNum: 55321000
+  Brand: "1"
+  EUConAccNum: 55321000
+  AltAccNum: 55321000
+  TaxClass: "0"
+  VIPAccNum: 55321000
+
+bulkload: BillItem
+  BillCode: "PAYTERMENDBC"
+  BIName: "Installment termination CETELEM"
+  AccNum: 55341000
+  BIGroup: "33"
+  EUAccNum: 55341000
+  FSAccNum: 55341000
+  Brand: "1"
+  EUConAccNum: 55341000
+  AltAccNum: 55341000
+  TaxClass: "0"
+  VIPAccNum: 55341000
+
+bulkload: BillItem
+  BillCode: "PAYTERMENDBS"
+  BIName: "Installment termination Banco Sabadell"
+  AccNum: 55331000
+  BIGroup: "33"
+  EUAccNum: 55331000
+  FSAccNum: 55331000
+  Brand: "1"
+  EUConAccNum: 55331000
+  AltAccNum: 55331000
+  TaxClass: "0"
+  VIPAccNum: 55331000
+
+bulkload: BillItem
+  BillCode: "PD001"
+  BIName: "SMS Flat rate for Contrato2"
+  AccNum: 70512100
+  BIGroup: "18"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "PD002"
+  BIName: "Voice Flat rate for Contrato2"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "POSADCOM"
+  BIName: "Admin user compensation for Postpaid"
+  AccNum: 70510100
+  BIGroup: "13"
+  DispMPM: TRUE 
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100001"
+  BIName: "Voice Own Network to Xfera (Own Network)"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100002"
+  BIName: "Voice Own Network to Xfera (National Roaming)"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "003"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100003"
+  BIName: "Voice Own Network to Spanish Mobile"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "003"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100004"
+  BIName: "Voice Own Network to International Mobile"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "3"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "004"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100005"
+  BIName: "Voice Own Network to Spanish Fixed"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "005"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100006"
+  BIName: "Voice Own Network to International Fixed"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "3"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "006"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100007"
+  BIName: "Voice National Roaming to Xfera (Own Network)"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "007"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100008"
+  BIName: "Voice National Roaming to Xfera"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "008"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100009"
+  BIName: "Voice National Roaming to Spanish Mobile"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "009"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100010"
+  BIName: "Voice National Roaming to International Mobile"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "3"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "010"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100011"
+  BIName: "Voice National Roaming to Spanish Fixed"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "011"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100012"
+  BIName: "Voice National Roaming to International Fixed"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "3"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "012"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10100052"
+  BIName: "Voice IP to International Fixed"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "3"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "004"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRE10104013"
+  BIName: "Voice Roaming Out Outgoing Traffic (Not Splitted)"
+  AccNum: 70510104
+  BIGroup: "1"
+  EUAccNum: 70510104
+  FSAccNum: 70510104
+  InvSect: "4"
+  Brand: "1"
+  EUConAccNum: 70510104
+  CostCentre: "SL"
+  AltAccNum: 70510104
+  TaxClass: "1"
+  SAPRid: "013"
+  VIPAccNum: 70510104
+
+bulkload: BillItem
+  BillCode: "PRE10104020"
+  BIName: "Voice Roaming Incoming traffic (Abroad)"
+  AccNum: 70510104
+  BIGroup: "1"
+  EUAccNum: 70510104
+  FSAccNum: 70510104
+  InvSect: "4"
+  Brand: "1"
+  EUConAccNum: 70510104
+  CostCentre: "SL"
+  AltAccNum: 70510104
+  TaxClass: "1"
+  SAPRid: "020"
+  VIPAccNum: 70510104
+
+bulkload: BillItem
+  BillCode: "PRE12100001"
+  BIName: "SMS Own Network to Xfera (Own Network)"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "PRE12100002"
+  BIName: "SMS Own Network to Xfera (National Roaming)"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "002"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "PRE12100003"
+  BIName: "SMS Own Network to Spanish Mobile"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "003"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "PRE12100004"
+  BIName: "SMS Own Network to International Mobile"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "004"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "PRE12100007"
+  BIName: "SMS National Roaming to Xfera (Own Network)"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "007"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "PRE12100008"
+  BIName: "SMS National Roaming to Xfera (National Roaming)"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "008"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "PRE12100009"
+  BIName: "SMS National Roaming to Spanish Mobile"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "009"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "PRE12100010"
+  BIName: "SMS National Roaming to International Mobile"
+  AccNum: 70512100
+  BIGroup: "4"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "010"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "PRE12104013"
+  BIName: "SMS Roaming Out Outgoing Traffic (Not Splitted)"
+  AccNum: 70512104
+  BIGroup: "4"
+  EUAccNum: 70512104
+  FSAccNum: 70512104
+  Brand: "1"
+  EUConAccNum: 70512104
+  CostCentre: "SL"
+  AltAccNum: 70512104
+  TaxClass: "1"
+  SAPRid: "013"
+  VIPAccNum: 70512104
+
+bulkload: BillItem
+  BillCode: "PRE13100001"
+  BIName: "MMS Own Network to Xfera (Own Network)"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "PRE13100002"
+  BIName: "MMS Own Network to Xfera (National Roaming)"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "002"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "PRE13100003"
+  BIName: "MMS Own Network to Spanish Mobile"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "003"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "PRE13100004"
+  BIName: "MMS Own Network to International Mobile"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "004"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "PRE13100007"
+  BIName: "MMS National Roaming to Xfera (Own Network)"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "007"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "PRE13100008"
+  BIName: "MMS National Roaming to Xfera (National Roaming)"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "008"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "PRE13100009"
+  BIName: "MMS National Roaming to Spanish Mobile"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "009"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "PRE13100010"
+  BIName: "MMS National Roaming to International Mobile"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "010"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "PRE13100011"
+  BIName: "MMS to Email"
+  AccNum: 70513100
+  BIGroup: "4"
+  EUAccNum: 70513100
+  FSAccNum: 70513100
+  Brand: "1"
+  EUConAccNum: 70513100
+  CostCentre: "SL"
+  AltAccNum: 70513100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70513100
+
+bulkload: BillItem
+  BillCode: "PRE13104013"
+  BIName: "MMS Roaming Out Outgoing Traffic (Not Splitted)"
+  AccNum: 70513104
+  BIGroup: "4"
+  EUAccNum: 70513104
+  FSAccNum: 70513104
+  Brand: "1"
+  EUConAccNum: 70513104
+  CostCentre: "SL"
+  AltAccNum: 70513104
+  TaxClass: "1"
+  SAPRid: "013"
+  VIPAccNum: 70513104
+
+bulkload: BillItem
+  BillCode: "PRE13104020"
+  BIName: "MMS Roaming Out Incoming Traffic (Not Splitted)"
+  AccNum: 70513104
+  BIGroup: "4"
+  EUAccNum: 70513104
+  FSAccNum: 70513104
+  Brand: "1"
+  EUConAccNum: 70513104
+  CostCentre: "SL"
+  AltAccNum: 70513104
+  TaxClass: "1"
+  SAPRid: "020"
+  VIPAccNum: 70513104
+
+bulkload: BillItem
+  BillCode: "PRE14100001"
+  BIName: "GPRS Own Network to Xfera (Own Network)"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "019"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "PRE14100007"
+  BIName: "GPRS National Roaming to Xfera (Own networ"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "007"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "PRE14104019"
+  BIName: "GPRS Roaming Out Total Traffic (Not splitt"
+  AccNum: 70514104
+  BIGroup: "3"
+  EUAccNum: 70514104
+  FSAccNum: 70514104
+  Brand: "1"
+  EUConAccNum: 70514104
+  CostCentre: "SL"
+  AltAccNum: 70514104
+  TaxClass: "1"
+  SAPRid: "019"
+  VIPAccNum: 70514104
+
+bulkload: BillItem
+  BillCode: "PRE15100023"
+  BIName: "VAS Premium Voice Service"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  InvSect: "5"
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "PRE15100026"
+  BIName: "VAS Premium WAP Service"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "026"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "PRE15100027"
+  BIName: "VAS Freephone Service"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "031"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "PRECCROAM"
+  BIName: "Customer care in roaming (abroad)"
+  AccNum: 70510104
+  BIGroup: "1"
+  EUAccNum: 70510104
+  FSAccNum: 70510104
+  Brand: "1"
+  EUConAccNum: 70510104
+  CostCentre: "SL"
+  AltAccNum: 70510104
+  TaxClass: "1"
+  SAPRid: "031"
+  VIPAccNum: 70510104
+
+bulkload: BillItem
+  BillCode: "PRECCYOIGO"
+  BIName: "Customer Care"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRECFOTHER"
+  BIName: "Call Forwarding other operator"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "003"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRECFYOIGO"
+  BIName: "Call Forwarding to Yoigo"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PREGOOGLEVAS"
+  BIName: "VAS Premium Google Service No VAT Prepaid"
+  AccNum: 55380000
+  BIGroup: "44"
+  EUAccNum: 55380000
+  FSAccNum: 55380000
+  Brand: "1"
+  EUConAccNum: 55380000
+  AltAccNum: 55380000
+  TaxClass: "0"
+  VIPAccNum: 55380000
+
+bulkload: BillItem
+  BillCode: "PREOTHERS"
+  BIName: "Prepaid Analysis cannot identify CDR"
+  AccNum: 69696969
+  BIGroup: "20"
+  EUAccNum: 69696969
+  FSAccNum: 69696969
+  Brand: "1"
+  EUConAccNum: 69696969
+  CostCentre: "SL"
+  AltAccNum: 69696969
+  TaxClass: "1"
+  VIPAccNum: 69696969
+
+bulkload: BillItem
+  BillCode: "PREPD002"
+  BIName: "400 Minutes Flat rate for Contrato 2"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PRESMS500"
+  BIName: "SMS to number 500"
+  AccNum: 70512100
+  BIGroup: "6"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "031"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "PREVASMOMMS"
+  BIName: "VAS Premium MMS Service MO"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "025"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "PREVASMOSMS"
+  BIName: "VAS Premium SMS Service MO"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "024"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "PREVASMTMMS"
+  BIName: "VAS Premium MMS service MT"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "025"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "PREVASMTSMS"
+  BIName: "VAS Premium SMS Service MT"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "024"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "PREVMC"
+  BIName: "Voice mail calls"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "029"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "PREVMCROAM"
+  BIName: "Voice mail Roaming calls"
+  AccNum: 70510104
+  BIGroup: "1"
+  EUAccNum: 70510104
+  FSAccNum: 70510104
+  Brand: "1"
+  EUConAccNum: 70510104
+  CostCentre: "SL"
+  AltAccNum: 70510104
+  TaxClass: "1"
+  SAPRid: "029"
+  VIPAccNum: 70510104
+
+bulkload: BillItem
+  BillCode: "RECONNECTION"
+  BIName: "RECONNECTION_FEE"
+  AccNum: 75902002
+  BIGroup: "31"
+  EUAccNum: 75902002
+  FSAccNum: 75902002
+  Brand: "1"
+  EUConAccNum: 75902002
+  CostCentre: "F00001"
+  AltAccNum: 75902002
+  TaxClass: "1"
+  VIPAccNum: 75902002
+
+bulkload: BillItem
+  BillCode: "REJECT_FEE_DISC"
+  BIName: "Rejection fee discount"
+  AccNum: 75902003
+  BIGroup: "13"
+  EUAccNum: 75902003
+  FSAccNum: 75902003
+  Brand: "1"
+  EUConAccNum: 75902003
+  CostCentre: "F00001"
+  AltAccNum: 75902003
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 75902003
+
+bulkload: BillItem
+  BillCode: "REJECTION_FEE"
+  BIName: "Rejection fee"
+  AccNum: 75902003
+  BIGroup: "31"
+  EUAccNum: 75902003
+  FSAccNum: 75902003
+  Brand: "1"
+  EUConAccNum: 75902003
+  CostCentre: "F00001"
+  AltAccNum: 75902003
+  TaxClass: "1"
+  VIPAccNum: 75902003
+
+bulkload: BillItem
+  BillCode: "REPAIRCHARGE"
+  BIName: "Reparation Cargo"
+  AccNum: 75902002
+  BIGroup: "31"
+  EUAccNum: 75902002
+  FSAccNum: 75902002
+  Brand: "1"
+  EUConAccNum: 75902002
+  CostCentre: "F00001"
+  AltAccNum: 75902002
+  TaxClass: "1"
+  VIPAccNum: 75902002
+
+bulkload: BillItem
+  BillCode: "RETDISC"
+  BIName: "Gift Discount"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "RETFAT"
+  BIName: "Retention FAT"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "049"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "RVTERM"
+  BIName: "Q25 Financed by Yoigo"
+  AccNum: 43008889
+  BIGroup: "33"
+  EUAccNum: 43008889
+  FSAccNum: 43008889
+  Brand: "1"
+  EUConAccNum: 43008889
+  AltAccNum: 43008889
+  TaxClass: "0"
+  VIPAccNum: 43008889
+
+bulkload: BillItem
+  BillCode: "RVTERM1E"
+  BIName: "Q25 Financed by UNO-E bank"
+  AccNum: 55321000
+  BIGroup: "33"
+  EUAccNum: 55321000
+  FSAccNum: 55321000
+  Brand: "1"
+  EUConAccNum: 55321000
+  AltAccNum: 55321000
+  TaxClass: "0"
+  VIPAccNum: 55321000
+
+bulkload: BillItem
+  BillCode: "RVTERM1EF"
+  BIName: "Residual Value Uno-e"
+  AccNum: 55323000
+  BIGroup: "33"
+  EUAccNum: 55323000
+  FSAccNum: 55323000
+  Brand: "1"
+  EUConAccNum: 55323000
+  AltAccNum: 55323000
+  TaxClass: "0"
+  VIPAccNum: 55323000
+
+bulkload: BillItem
+  BillCode: "RVTERM1EFD"
+  BIName: "Residual Value Uno-e Discount"
+  AccNum: 55323000
+  BIGroup: "33"
+  EUAccNum: 55323000
+  FSAccNum: 55323000
+  Brand: "1"
+  EUConAccNum: 55323000
+  AltAccNum: 55323000
+  TaxClass: "0"
+  VIPAccNum: 55323000
+
+bulkload: BillItem
+  BillCode: "RVTERMBC"
+  BIName: "Q25 financed by CETELEM"
+  AccNum: 55341000
+  BIGroup: "33"
+  EUAccNum: 55341000
+  FSAccNum: 55341000
+  Brand: "1"
+  EUConAccNum: 55341000
+  AltAccNum: 55341000
+  TaxClass: "0"
+  VIPAccNum: 55341000
+
+bulkload: BillItem
+  BillCode: "RVTERMBCF"
+  BIName: "Residual Value CETELEM"
+  AccNum: 55343000
+  BIGroup: "33"
+  EUAccNum: 55343000
+  FSAccNum: 55343000
+  Brand: "1"
+  EUConAccNum: 55343000
+  AltAccNum: 55343000
+  TaxClass: "0"
+  VIPAccNum: 55343000
+
+bulkload: BillItem
+  BillCode: "RVTERMBS"
+  BIName: "Q25 Financed by SABADELL bank"
+  AccNum: 55331000
+  BIGroup: "33"
+  EUAccNum: 55331000
+  FSAccNum: 55331000
+  Brand: "1"
+  EUConAccNum: 55331000
+  AltAccNum: 55331000
+  TaxClass: "0"
+  VIPAccNum: 55331000
+
+bulkload: BillItem
+  BillCode: "RVTERMBSF"
+  BIName: "Residual Value Banco Sabadell"
+  AccNum: 55333000
+  BIGroup: "33"
+  EUAccNum: 55333000
+  FSAccNum: 55333000
+  Brand: "1"
+  EUConAccNum: 55333000
+  AltAccNum: 55333000
+  TaxClass: "0"
+  VIPAccNum: 55333000
+
+bulkload: BillItem
+  BillCode: "RVTERMBSFD"
+  BIName: "Residual Value Banco Sabadell Discount"
+  AccNum: 55333000
+  BIGroup: "33"
+  EUAccNum: 55333000
+  FSAccNum: 55333000
+  Brand: "1"
+  EUConAccNum: 55333000
+  AltAccNum: 55333000
+  TaxClass: "0"
+  VIPAccNum: 55333000
+
+bulkload: BillItem
+  BillCode: "RVTERMDTEQ25"
+  BIName: "Discount over Quota 25 refinance"
+  AccNum: 43002008
+  BIGroup: "33"
+  EUAccNum: 43002008
+  FSAccNum: 43002008
+  Brand: "1"
+  EUConAccNum: 43002008
+  AltAccNum: 43002008
+  TaxClass: "0"
+  VIPAccNum: 43002008
+
+bulkload: BillItem
+  BillCode: "RVTERMDTRW"
+  BIName: "Discount over Quota 25 from renewal channel"
+  AccNum: 67899999
+  BIGroup: "33"
+  EUAccNum: 67899999
+  FSAccNum: 67899999
+  Brand: "1"
+  EUConAccNum: 67899999
+  CostCentre: "O900001"
+  AltAccNum: 67899999
+  TaxClass: "0"
+  VIPAccNum: 67899999
+
+bulkload: BillItem
+  BillCode: "RVTERMDTTD"
+  BIName: "Discount over Q25 from renewal channel"
+  AccNum: 67899999
+  BIGroup: "33"
+  EUAccNum: 67899999
+  FSAccNum: 67899999
+  Brand: "1"
+  EUConAccNum: 67899999
+  CostCentre: "O900001"
+  AltAccNum: 67899999
+  TaxClass: "0"
+  VIPAccNum: 67899999
+
+bulkload: BillItem
+  BillCode: "RVTERMDTTR"
+  BIName: "Q25 - Terminal return"
+  AccNum: 67899999
+  BIGroup: "33"
+  EUAccNum: 67899999
+  FSAccNum: 67899999
+  Brand: "1"
+  EUConAccNum: 67899999
+  CostCentre: "O900001"
+  AltAccNum: 67899999
+  TaxClass: "0"
+  VIPAccNum: 67899999
+
+bulkload: BillItem
+  BillCode: "RVTERMEND"
+  BIName: "Q25 Remaining fees financed by Yoigo"
+  AccNum: 43008889
+  BIGroup: "33"
+  EUAccNum: 43008889
+  FSAccNum: 43008889
+  Brand: "1"
+  EUConAccNum: 43008889
+  AltAccNum: 43008889
+  TaxClass: "0"
+  VIPAccNum: 43008889
+
+bulkload: BillItem
+  BillCode: "RVTERMEND1E"
+  BIName: "Q25 Remaining fees financed by UNO-E bank"
+  AccNum: 55321000
+  BIGroup: "33"
+  EUAccNum: 55321000
+  FSAccNum: 55321000
+  Brand: "1"
+  EUConAccNum: 55321000
+  AltAccNum: 55321000
+  TaxClass: "0"
+  VIPAccNum: 55321000
+
+bulkload: BillItem
+  BillCode: "RVTERMENDBC"
+  BIName: "Q25 Remaining fees financed by CETELEM"
+  AccNum: 55341000
+  BIGroup: "33"
+  EUAccNum: 55341000
+  FSAccNum: 55341000
+  Brand: "1"
+  EUConAccNum: 55341000
+  AltAccNum: 55341000
+  TaxClass: "0"
+  VIPAccNum: 55341000
+
+bulkload: BillItem
+  BillCode: "RVTERMENDBS"
+  BIName: "Q25 Remaining fees financed by SABADELL bank"
+  AccNum: 55331000
+  BIGroup: "33"
+  EUAccNum: 55331000
+  FSAccNum: 55331000
+  Brand: "1"
+  EUConAccNum: 55331000
+  AltAccNum: 55331000
+  TaxClass: "0"
+  VIPAccNum: 55331000
+
+bulkload: BillItem
+  BillCode: "RVTERMF"
+  BIName: "Residual Value Yoigo"
+  AccNum: 43008889
+  BIGroup: "33"
+  EUAccNum: 43008889
+  FSAccNum: 43008889
+  Brand: "1"
+  EUConAccNum: 43008889
+  AltAccNum: 43008889
+  TaxClass: "0"
+  VIPAccNum: 43008889
+
+bulkload: BillItem
+  BillCode: "RVTERMFD"
+  BIName: "Residual Value Yoigo discount"
+  AccNum: 43008889
+  BIGroup: "33"
+  EUAccNum: 43008889
+  FSAccNum: 43008889
+  Brand: "1"
+  EUConAccNum: 43008889
+  AltAccNum: 43008889
+  TaxClass: "0"
+  VIPAccNum: 43008889
+
+bulkload: BillItem
+  BillCode: "SHORTNU"
+  BIName: "Voice Own Network to Short Numbers"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "SHORTNU_A"
+  BIName: "Voice Own Network to Short Numbers (Type A)"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "SHORTNU_B"
+  BIName: "Voice Own Network to Short Numbers (Type B)"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "SHORTNU_C"
+  BIName: "Voice Own Network to Short Numbers (Type C)"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "SHORTNU_D"
+  BIName: "Voice Own Network to Short Numbers (Type D)"
+  AccNum: 70515100
+  BIGroup: "1"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "023"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "SIMLOCK"
+  BIName: "Simlock"
+  AccNum: 70518109
+  BIGroup: "32"
+  EUAccNum: 70518109
+  FSAccNum: 70518109
+  Brand: "1"
+  EUConAccNum: 70518109
+  CostCentre: "SL"
+  AltAccNum: 70518109
+  TaxClass: "1"
+  SAPRid: "046"
+  VIPAccNum: 70518109
+
+bulkload: BillItem
+  BillCode: "SMS500"
+  BIName: "SMS to number 500"
+  AccNum: 70512100
+  BIGroup: "6"
+  EUAccNum: 70512100
+  FSAccNum: 70512100
+  Brand: "1"
+  EUConAccNum: 70512100
+  CostCentre: "SL"
+  AltAccNum: 70512100
+  TaxClass: "1"
+  SAPRid: "031"
+  VIPAccNum: 70512100
+
+bulkload: BillItem
+  BillCode: "SMSPNOVAT"
+  BIName: "Premium SMS Service No VAT"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "0"
+  SAPRid: "024"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "SPOTIFYCPACT"
+  BIName: "Campaign FAT for PostPaid subscr."
+  AccNum: 70514100
+  BIGroup: "13"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "035"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "STCCHARGE"
+  BIName: "Change of Tariff"
+  AccNum: 70518109
+  BIGroup: "31"
+  EUAccNum: 70518109
+  FSAccNum: 70518109
+  Brand: "1"
+  EUConAccNum: 70518109
+  CostCentre: "SL"
+  AltAccNum: 70518109
+  TaxClass: "1"
+  SAPRid: "046"
+  VIPAccNum: 70518109
+
+bulkload: BillItem
+  BillCode: "STERMPERIOD"
+  BIName: "Discount Penalty"
+  AccNum: 70518111
+  BIGroup: "33"
+  EUAccNum: 70518111
+  FSAccNum: 70518111
+  Brand: "1"
+  EUConAccNum: 70518111
+  CostCentre: "SL"
+  AltAccNum: 70518111
+  TaxClass: "1"
+  SAPRid: "046"
+  VIPAccNum: 70518111
+
+bulkload: BillItem
+  BillCode: "TariffMarchDISC"
+  BIName: "Tariff March DISCOUNT"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "TERMPERIOD"
+  BIName: "Discount Penalty"
+  AccNum: 70518111
+  BIGroup: "33"
+  EUAccNum: 70518111
+  FSAccNum: 70518111
+  Brand: "1"
+  EUConAccNum: 70518111
+  CostCentre: "SL"
+  AltAccNum: 70518111
+  TaxClass: "0"
+  SAPRid: "046"
+  VIPAccNum: 70518111
+
+bulkload: BillItem
+  BillCode: "TS0000001"
+  BIName: "Prepaid SIM"
+  AccNum: 48500000
+  BIGroup: "9"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "1"
+  VIPAccNum: 48500000
+  OrderChannelOrder: 44
+
+bulkload: BillItem
+  BillCode: "TS0000002"
+  BIName: "Prepaid SIM"
+  AccNum: 48500000
+  BIGroup: "9"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "1"
+  VIPAccNum: 48500000
+  OrderChannelOrder: 45
+
+bulkload: BillItem
+  BillCode: "TS0000003"
+  BIName: "Postpaid SIM"
+  AccNum: 70019105
+  BIGroup: "9"
+  EUAccNum: 70019105
+  FSAccNum: 70019105
+  Brand: "1"
+  EUConAccNum: 70019105
+  CostCentre: "SL"
+  AltAccNum: 70019105
+  TaxClass: "1"
+  SAPRid: "033"
+  VIPAccNum: 70019105
+  OrderChannelOrder: 42
+
+bulkload: BillItem
+  BillCode: "TS0000004"
+  BIName: "Postpaid SIM"
+  AccNum: 70019105
+  BIGroup: "9"
+  EUAccNum: 70019105
+  FSAccNum: 70019105
+  Brand: "1"
+  EUConAccNum: 70019105
+  CostCentre: "SL"
+  AltAccNum: 70019105
+  TaxClass: "1"
+  SAPRid: "033"
+  VIPAccNum: 70019105
+  OrderChannelOrder: 43
+
+bulkload: BillItem
+  BillCode: "TS0000010"
+  BIName: "Postpaid SIM"
+  AccNum: 70019105
+  BIGroup: "9"
+  EUAccNum: 70019105
+  FSAccNum: 70019105
+  Brand: "1"
+  EUConAccNum: 70019105
+  CostCentre: "SL"
+  AltAccNum: 70019105
+  TaxClass: "1"
+  SAPRid: "033"
+  VIPAccNum: 70019105
+  OrderChannelOrder: 33
+
+bulkload: BillItem
+  BillCode: "TS0000011"
+  BIName: "Postpaid SIM"
+  AccNum: 70019105
+  BIGroup: "9"
+  EUAccNum: 70019105
+  FSAccNum: 70019105
+  Brand: "1"
+  EUConAccNum: 70019105
+  CostCentre: "SL"
+  AltAccNum: 70019105
+  TaxClass: "1"
+  SAPRid: "033"
+  VIPAccNum: 70019105
+  OrderChannelOrder: 34
+
+bulkload: BillItem
+  BillCode: "TS0000012"
+  BIName: "IPL Prepaid SIM NEW"
+  AccNum: 48500000
+  BIGroup: "9"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "1"
+  VIPAccNum: 48500000
+  OrderChannelOrder: 38
+
+bulkload: BillItem
+  BillCode: "TS0000013"
+  BIName: "IPL Prepaid SIM MNP"
+  AccNum: 48500000
+  BIGroup: "9"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "1"
+  VIPAccNum: 48500000
+  OrderChannelOrder: 39
+
+bulkload: BillItem
+  BillCode: "TS0000050"
+  BIName: "Intial Top Up"
+  AccNum: 48500000
+  BIGroup: "12"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "0"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS0000051"
+  BIName: "Gift Top up"
+  AccNum: 48500000
+  BIGroup: "13"
+  DispMPM: TRUE 
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "0"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS0000052"
+  BIName: "Initial Top Up"
+  AccNum: 48500000
+  BIGroup: "12"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "1"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS0000054"
+  BIName: "Initial Top Up Free"
+  AccNum: 48500000
+  BIGroup: "12"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "0"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS0000060"
+  BIName: "Payment on delivery fee"
+  AccNum: 75902000
+  BIGroup: "11"
+  EUAccNum: 75902000
+  FSAccNum: 75902000
+  Brand: "1"
+  EUConAccNum: 75902000
+  CostCentre: "SL"
+  AltAccNum: 75902000
+  TaxClass: "1"
+  VIPAccNum: 75902000
+
+bulkload: BillItem
+  BillCode: "TS0000061"
+  BIName: "Payment on delivery fee"
+  AccNum: 75902000
+  BIGroup: "11"
+  EUAccNum: 75902000
+  FSAccNum: 75902000
+  Brand: "1"
+  EUConAccNum: 75902000
+  CostCentre: "SL"
+  AltAccNum: 75902000
+  TaxClass: "2"
+  VIPAccNum: 75902000
+
+bulkload: BillItem
+  BillCode: "TS0000070"
+  BIName: "Delivery fee"
+  AccNum: 75902000
+  BIGroup: "11"
+  EUAccNum: 75902000
+  FSAccNum: 75902000
+  Brand: "1"
+  EUConAccNum: 75902000
+  CostCentre: "SL"
+  AltAccNum: 75902000
+  TaxClass: "1"
+  VIPAccNum: 75902000
+
+bulkload: BillItem
+  BillCode: "TS00000M1"
+  BIName: "Prepaid Micro SIM"
+  AccNum: 48500000
+  BIGroup: "9"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "1"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS00000M3"
+  BIName: "Postpaid Micro SIM"
+  AccNum: 70019105
+  BIGroup: "9"
+  EUAccNum: 70019105
+  FSAccNum: 70019105
+  Brand: "1"
+  EUConAccNum: 70019105
+  AltAccNum: 70019105
+  TaxClass: "1"
+  SAPRid: "033"
+  VIPAccNum: 70019105
+
+bulkload: BillItem
+  BillCode: "TS00000N1"
+  BIName: "Prepaid Nano SIM"
+  AccNum: 48500000
+  BIGroup: "9"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "1"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS00000N3"
+  BIName: "Postpaid Nano SIM"
+  AccNum: 70019105
+  BIGroup: "9"
+  EUAccNum: 70019105
+  FSAccNum: 70019105
+  Brand: "1"
+  EUConAccNum: 70019105
+  AltAccNum: 70019105
+  TaxClass: "1"
+  SAPRid: "033"
+  VIPAccNum: 70019105
+
+bulkload: BillItem
+  BillCode: "TS00000R1"
+  BIName: "Prepaid SIM"
+  AccNum: 48500000
+  BIGroup: "9"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "1"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS00000R3"
+  BIName: "Postpaid SIM"
+  AccNum: 70019105
+  BIGroup: "9"
+  EUAccNum: 70019105
+  FSAccNum: 70019105
+  Brand: "1"
+  EUConAccNum: 70019105
+  AltAccNum: 70019105
+  TaxClass: "1"
+  SAPRid: "033"
+  VIPAccNum: 70019105
+
+bulkload: BillItem
+  BillCode: "TS00000U1"
+  BIName: "Prepaid Universal SIM"
+  AccNum: 48500000
+  BIGroup: "9"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "1"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS00000U3"
+  BIName: "Postpaid Universal SIM"
+  AccNum: 70019105
+  BIGroup: "9"
+  EUAccNum: 70019105
+  FSAccNum: 70019105
+  Brand: "1"
+  EUConAccNum: 70019105
+  AltAccNum: 70019105
+  TaxClass: "1"
+  SAPRid: "033"
+  VIPAccNum: 70019105
+
+bulkload: BillItem
+  BillCode: "TS00RN001"
+  BIName: "Prepaid SIM"
+  AccNum: 48500000
+  BIGroup: "9"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "0"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS0DISC50"
+  BIName: "Initial Top Up discount"
+  AccNum: 48500000
+  BIGroup: "10"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "0"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS0DISC51"
+  BIName: "Gift Top up discount"
+  AccNum: 48500000
+  BIGroup: "13"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "0"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS0DISC54"
+  BIName: "Initial Top Up Free"
+  AccNum: 48500000
+  BIGroup: "10"
+  EUAccNum: 48500000
+  FSAccNum: 48500000
+  Brand: "1"
+  EUConAccNum: 48500000
+  AltAccNum: 48500000
+  TaxClass: "0"
+  VIPAccNum: 48500000
+
+bulkload: BillItem
+  BillCode: "TS0DISC70"
+  BIName: "Delivery Promotion"
+  AccNum: 75902000
+  BIGroup: "10"
+  EUAccNum: 75902000
+  FSAccNum: 75902000
+  Brand: "1"
+  EUConAccNum: 75902000
+  CostCentre: "SL"
+  AltAccNum: 75902000
+  TaxClass: "1"
+  VIPAccNum: 75902000
+
+bulkload: BillItem
+  BillCode: "USONORAZONABLE"
+  BIName: "UsoNoRazonable"
+  AccNum: 70518109
+  BIGroup: "31"
+  EUAccNum: 70518109
+  FSAccNum: 70518109
+  Brand: "1"
+  EUConAccNum: 70518109
+  CostCentre: "SL"
+  AltAccNum: 70518109
+  TaxClass: "1"
+  SAPRid: "046"
+  VIPAccNum: 70518109
+
+bulkload: BillItem
+  BillCode: "VASMOMMS"
+  BIName: "VAS Premium MMS Service MO"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "025"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "VASMOSMS"
+  BIName: "VAS Premium SMS Service MO"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "024"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "VASMTMMS"
+  BIName: "VAS Premium MMS service MT"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "025"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "VASMTSMS"
+  BIName: "VAS Premium SMS Service MT"
+  AccNum: 70515100
+  BIGroup: "6"
+  EUAccNum: 70515100
+  FSAccNum: 70515100
+  Brand: "1"
+  EUConAccNum: 70515100
+  CostCentre: "SL"
+  AltAccNum: 70515100
+  TaxClass: "1"
+  SAPRid: "024"
+  VIPAccNum: 70515100
+
+bulkload: BillItem
+  BillCode: "VASMTSMSNOVAT"
+  BIName: "VAS Premium SMS Service MT No VAT"
+  AccNum: 52100400
+  BIGroup: "6"
+  EUAccNum: 52100400
+  FSAccNum: 52100400
+  Brand: "1"
+  EUConAccNum: 52100400
+  CostCentre: "SL"
+  AltAccNum: 52100400
+  TaxClass: "0"
+  VIPAccNum: 52100400
+
+bulkload: BillItem
+  BillCode: "VMC"
+  BIName: "Voice mail calls"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "029"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "VMCROAM"
+  BIName: "Voice mail Roaming calls"
+  AccNum: 70510104
+  BIGroup: "1"
+  EUAccNum: 70510104
+  FSAccNum: 70510104
+  Brand: "1"
+  EUConAccNum: 70510104
+  CostCentre: "SL"
+  AltAccNum: 70510104
+  TaxClass: "1"
+  SAPRid: "029"
+  VIPAccNum: 70510104
+
+bulkload: BillItem
+  BillCode: "VOICE100"
+  BIName: "Cont national voice"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "VOICE100CF"
+  BIName: "Cont national voice"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "VOICE3000"
+  BIName: "Cont national voice"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "VOICE3000CF"
+  BIName: "Cont national Voice"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "YOIGOYOIGO"
+  BIName: "Yoigo-Yoigo national voice calls"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "001"
+  VIPAccNum: 70510100
+

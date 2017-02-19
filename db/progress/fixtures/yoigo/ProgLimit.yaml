@@ -69,6 +69,23 @@ bulkload: ProgLimit
 bulkload: ProgLimit
   GroupCode: "CONTD2"
   SLSeq: 7
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitTo: 10240
+  BDest: "GPRSD2_A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2"
+  SLSeq: 7
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitFrom: 10240.000001
+  LimitTo: 999999999
+  BDest: "GPRSD2_B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2"
+  SLSeq: 7
   ValidFrom: 2009-12-01
   ValidTo: 2010-02-28
   LimitTo: 3072
@@ -93,21 +110,21 @@ bulkload: ProgLimit
   BDest: "GPRSDATA3"
 
 bulkload: ProgLimit
-  GroupCode: "CONTD2"
-  SLSeq: 7
+  GroupCode: "CONTD2ACT"
+  SLSeq: 8
   ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
-  LimitTo: 10240
-  BDest: "GPRSD2_A"
+  ValidTo: 2050-12-31
+  LimitTo: 5125
+  BDest: "GPRSDATA1A"
 
 bulkload: ProgLimit
-  GroupCode: "CONTD2"
-  SLSeq: 7
+  GroupCode: "CONTD2ACT"
+  SLSeq: 8
   ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
-  LimitFrom: 10240.000001
+  ValidTo: 2050-12-31
+  LimitFrom: 5125.000001
   LimitTo: 999999999
-  BDest: "GPRSD2_B"
+  BDest: "GPRSDATA2"
 
 bulkload: ProgLimit
   GroupCode: "CONTD2ACT"
@@ -153,18 +170,18 @@ bulkload: ProgLimit
   BDest: "GPRSDATA2"
 
 bulkload: ProgLimit
-  GroupCode: "CONTD2ACT"
-  SLSeq: 8
+  GroupCode: "CONTD2END"
+  SLSeq: 9
   ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   LimitTo: 5125
-  BDest: "GPRSDATA1A"
+  BDest: "GPRSDATA1B"
 
 bulkload: ProgLimit
-  GroupCode: "CONTD2ACT"
-  SLSeq: 8
+  GroupCode: "CONTD2END"
+  SLSeq: 9
   ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   LimitFrom: 5125.000001
   LimitTo: 999999999
   BDest: "GPRSDATA2"
@@ -194,23 +211,6 @@ bulkload: ProgLimit
   LimitFrom: 6072.000001
   LimitTo: 999999999
   BDest: "GPRSDATA3"
-
-bulkload: ProgLimit
-  GroupCode: "CONTD2END"
-  SLSeq: 9
-  ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
-  LimitTo: 5125
-  BDest: "GPRSDATA1B"
-
-bulkload: ProgLimit
-  GroupCode: "CONTD2END"
-  SLSeq: 9
-  ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
-  LimitFrom: 5125.000001
-  LimitTo: 999999999
-  BDest: "GPRSDATA2"
 
 bulkload: ProgLimit
   GroupCode: "CONTD3"
@@ -266,6 +266,23 @@ bulkload: ProgLimit
 bulkload: ProgLimit
   GroupCode: "CONTDATA"
   SLSeq: 5
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitTo: 3072
+  BDest: "GPRSD1_A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATA"
+  SLSeq: 5
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitFrom: 3072.000001
+  LimitTo: 999999999
+  BDest: "GPRSD1_B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATA"
+  SLSeq: 5
   ValidFrom: 2009-03-01
   ValidTo: 2010-02-28
   LimitTo: 3072
@@ -316,21 +333,21 @@ bulkload: ProgLimit
   BDest: "GPRSDATA3"
 
 bulkload: ProgLimit
-  GroupCode: "CONTDATA"
-  SLSeq: 5
+  GroupCode: "CONTDATAACT"
+  SLSeq: 4
   ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
-  LimitTo: 3072
-  BDest: "GPRSD1_A"
+  ValidTo: 2050-12-31
+  LimitTo: 3075
+  BDest: "GPRSDATA1A"
 
 bulkload: ProgLimit
-  GroupCode: "CONTDATA"
-  SLSeq: 5
+  GroupCode: "CONTDATAACT"
+  SLSeq: 4
   ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
-  LimitFrom: 3072.000001
+  ValidTo: 2050-12-31
+  LimitFrom: 3075.000001
   LimitTo: 999999999
-  BDest: "GPRSD1_B"
+  BDest: "GPRSDATA2"
 
 bulkload: ProgLimit
   GroupCode: "CONTDATAACT"
@@ -385,18 +402,18 @@ bulkload: ProgLimit
   BDest: "GPRSDATA3"
 
 bulkload: ProgLimit
-  GroupCode: "CONTDATAACT"
-  SLSeq: 4
+  GroupCode: "CONTDATAEND"
+  SLSeq: 6
   ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   LimitTo: 3075
-  BDest: "GPRSDATA1A"
+  BDest: "GPRSDATA1B"
 
 bulkload: ProgLimit
-  GroupCode: "CONTDATAACT"
-  SLSeq: 4
+  GroupCode: "CONTDATAEND"
+  SLSeq: 6
   ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   LimitFrom: 3075.000001
   LimitTo: 999999999
   BDest: "GPRSDATA2"
@@ -452,23 +469,6 @@ bulkload: ProgLimit
   LimitFrom: 4024.000001
   LimitTo: 999999999
   BDest: "GPRSDATA3"
-
-bulkload: ProgLimit
-  GroupCode: "CONTDATAEND"
-  SLSeq: 6
-  ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
-  LimitTo: 3075
-  BDest: "GPRSDATA1B"
-
-bulkload: ProgLimit
-  GroupCode: "CONTDATAEND"
-  SLSeq: 6
-  ValidFrom: 2010-03-01
-  ValidTo: 1950-12-31
-  LimitFrom: 3075.000001
-  LimitTo: 999999999
-  BDest: "GPRSDATA2"
 
 bulkload: ProgLimit
   GroupCode: "DATA5"

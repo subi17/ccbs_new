@@ -563,6 +563,12 @@ bulkload: RZItem
   DialType: 4
 
 bulkload: RZItem
+  PlmnCode: "MLTMM"
+  CountryPrefix: "356"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+bulkload: RZItem
   PlmnCode: "MLTTL"
   CountryPrefix: "356"
   RoamZone: "ROAM_EU"

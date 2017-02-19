@@ -417,6 +417,6 @@ bulkload: RequestType
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype94.log"
   LogThreshold: 1048576
-  LogOn: TRUE
+  LogOn: TRUE 
   Mode: "Batch"
 

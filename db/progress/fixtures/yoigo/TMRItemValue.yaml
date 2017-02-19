@@ -444,24 +444,6 @@ bulkload: TMRItemValue
 
 bulkload: TMRItemValue
   TMRuleSeq: 14
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-  CounterItemValues: "CONT9_DATA_IN,CONTDSL40"
-
-bulkload: TMRItemValue
-  TMRuleSeq: 14
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-  CounterItemValues: "CONT9_DATA_IN,CONTFH40_50"
-
-bulkload: TMRItemValue
-  TMRuleSeq: 14
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-  CounterItemValues: "CONT9_DATA_IN,CONTFH50_300"
-
-bulkload: TMRItemValue
-  TMRuleSeq: 14
   FromDate: 2015-04-14
   ToDate: 2049-12-31
   CounterItemValues: "CONTF11_DATA_IN,CONTF"

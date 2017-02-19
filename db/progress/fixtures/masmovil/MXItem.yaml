@@ -1,0 +1,160 @@
+bulkload: MXItem
+  MXSeq: 1
+  MXName: "ID"
+  MXValue: "PassPort"
+
+bulkload: MXItem
+  MXSeq: 1
+  MXName: "SubsTypeFrom"
+  MXValue: "TARJ*"
+
+bulkload: MXItem
+  MXSeq: 1
+  MXName: "SubsTypeTo"
+  MXValue: "CONT*"
+
+bulkload: MXItem
+  MXSeq: 3
+  MXName: "ID"
+  MXValue: "PassPort"
+
+bulkload: MXItem
+  MXSeq: 3
+  MXName: "SubsTypeFrom"
+  MXValue: "CONT*"
+
+bulkload: MXItem
+  MXSeq: 3
+  MXName: "SubsTypeTo"
+  MXValue: "TARJ*"
+
+bulkload: MXItem
+  MXSeq: 3
+  MXName: "SubsTypeTo"
+  MXValue: "CONT*"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mobtypech"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "simch"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mobsubsms"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "msisdnch"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "fatime"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "creafatui"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "campaign"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "addcampaign"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "msodirequest"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "countermenu"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "ppreqbr"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "dccli"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "reratesub"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mobsubsms"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "prininfo"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mclispec"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mobsubsudo"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "adminactions"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mobsub_update"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "subser"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "balances"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "SubsTypeFrom"
+  MXValue: "TARJ3"
+
+bulkload: MXItem
+  MXSeq: 51
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 51
+  MXName: "SubsTypeTo"
+  MXValue: "CONT*"
+
+bulkload: MXItem
+  MXSeq: 51
+  MXName: "SubsTypeTo"
+  MXValue: "TARJ*"
+

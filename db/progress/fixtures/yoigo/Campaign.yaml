@@ -2,7 +2,7 @@ bulkload: Campaign
   Campaign: "PREACT10"
   CaName: "Preactivated prepaid pos"
   FromDate: 2007-11-01
-  ToDate: 1954-12-31
+  ToDate: 2054-12-31
   Brand: "1"
 
 bulkload: Campaign

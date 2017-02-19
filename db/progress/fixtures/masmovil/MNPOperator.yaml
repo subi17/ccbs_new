@@ -1,0 +1,825 @@
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "MoviStar"
+  OperCode: "001"
+  ICCPrefix: "893407"
+  Active: TRUE 
+  NRN: "710000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Vodafone"
+  OperCode: "003"
+  ICCPrefix: "893456"
+  Active: TRUE 
+  NRN: "720000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Amena"
+  OperCode: "004"
+  ICCPrefix: "89340134"
+  Active: TRUE 
+  OperBrand: "Orange"
+  NRN: "730000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Orange"
+  OperCode: "004"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "Orange"
+  NRN: "730000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Yoigo"
+  OperCode: "005"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Europa"
+  OperCode: "006"
+  ICCPrefix: "893402"
+  Active: TRUE 
+  OperBrand: "Euskaltel"
+  NRN: "750000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Euskaltel"
+  OperCode: "006"
+  ICCPrefix: "893402"
+  Active: TRUE 
+  OperBrand: "Euskaltel"
+  NRN: "750000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Racc Movil"
+  OperCode: "006"
+  ICCPrefix: "893402"
+  Active: TRUE 
+  OperBrand: "Euskaltel"
+  NRN: "750000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Viva Mobile"
+  OperCode: "006"
+  ICCPrefix: "893402"
+  Active: TRUE 
+  OperBrand: "Euskaltel"
+  NRN: "750000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Tuenti Movil"
+  OperCode: "007"
+  ICCPrefix: "893403"
+  Active: TRUE 
+  NRN: "980007"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "AIRIS"
+  OperCode: "014"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "TPH"
+  NRN: "735014"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Best Móvil"
+  OperCode: "014"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "TPH"
+  NRN: "735014"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "CABLE Movil"
+  OperCode: "014"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "TPH"
+  NRN: "735014"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Happy Móvil"
+  OperCode: "014"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "TPH"
+  NRN: "735014"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "MOVIDATA"
+  OperCode: "014"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "TPH"
+  NRN: "735014"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Phone House"
+  OperCode: "014"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "TPH"
+  NRN: "735014"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "PIRATA TELECOM"
+  OperCode: "014"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "TPH"
+  NRN: "735014"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "QQ MOVIL"
+  OperCode: "014"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "TPH"
+  NRN: "735014"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "REPUBLICA MOVIL TPH"
+  OperCode: "014"
+  ICCPrefix: "893401"
+  OperBrand: "TPH"
+  NRN: "735014"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "TPH"
+  OperCode: "014"
+  ICCPrefix: "893401"
+  OperBrand: "TPH"
+  NRN: "735014"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Ono"
+  OperCode: "020"
+  ICCPrefix: "893418"
+  Active: ?
+  NRN: "920000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Carrefour Móvil"
+  OperCode: "024"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  NRN: "735024"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "KITEL"
+  OperCode: "025"
+  ICCPrefix: "893490321"
+  Active: TRUE 
+  NRN: "903025"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "BT"
+  OperCode: "033"
+  ICCPrefix: "893415"
+  Active: ?
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Dia"
+  OperCode: "034"
+  ICCPrefix: "893405"
+  Active: TRUE 
+  NRN: "735034"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Másmóvil"
+  OperCode: "044"
+  ICCPrefix: "893401"
+  NRN: "735044"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "LEMONVIL"
+  OperCode: "045"
+  ICCPrefix: "893490322160"
+  Active: TRUE 
+  NRN: "903045"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "FONYOU"
+  OperCode: "050"
+  ICCPrefix: "893420"
+  Active: ?
+  OperBrand: "Parlem"
+  NRN: "950000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Parlem"
+  OperCode: "050"
+  ICCPrefix: "893420"
+  Active: TRUE 
+  OperBrand: "Parlem"
+  NRN: "950000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Telecable"
+  OperCode: "053"
+  ICCPrefix: "893419"
+  Active: TRUE 
+  NRN: "900053"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "LlamayA"
+  OperCode: "054"
+  ICCPrefix: "893401"
+  OperBrand: "LlamayA"
+  NRN: "735054"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "LlamaYA (MOREMINUTES)"
+  OperCode: "054"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "LlamayA"
+  NRN: "735054"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "MMI"
+  OperCode: "054"
+  ICCPrefix: "893401"
+  Active: ?
+  OperBrand: "MMI"
+  NRN: "735054"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Mobilcat"
+  OperCode: "054"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "LlamayA"
+  NRN: "735054"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "40 Movil"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: ?
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Bankinter Móvil"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: TRUE 
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Blau"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: ?
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "EPlus"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: ?
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Euphony"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: ?
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Hablafacil"
+  OperCode: "064"
+  Active: ?
+  OperBrand: "Simyo"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Hong Da"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: ?
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Movil Directo"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: ?
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "MundiMóvil"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: ?
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "ORTEL"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: ?
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Simyo"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: TRUE 
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Talkout móvil"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: ?
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "XL MOVIL"
+  OperCode: "064"
+  ICCPrefix: "893419"
+  Active: ?
+  OperBrand: "Simyo"
+  NRN: "930000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "R"
+  OperCode: "073"
+  ICCPrefix: "893456"
+  Active: TRUE 
+  NRN: "910000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Jazztel"
+  OperCode: "074"
+  ICCPrefix: "893421"
+  Active: TRUE 
+  NRN: "940074"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "DIGI.mobil"
+  OperCode: "075"
+  ICCPrefix: "893422"
+  Active: TRUE 
+  NRN: "960000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Barablu"
+  OperCode: "076"
+  Active: ?
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Vectone Móvil(Barablu)"
+  OperCode: "076"
+  ICCPrefix: "893423"
+  Active: ?
+  NRN: "980000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "GT MOBILE"
+  OperCode: "084"
+  ICCPrefix: "893425"
+  Active: TRUE 
+  OperBrand: "Lycamobile"
+  NRN: "990000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Lycamobile"
+  OperCode: "084"
+  ICCPrefix: "893425"
+  Active: TRUE 
+  OperBrand: "Lycamobile"
+  NRN: "990000"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "YOUMOBILE (HUALONG)"
+  OperCode: "094"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  NRN: "735094"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Sweno"
+  OperCode: "101"
+  ICCPrefix: "893405"
+  Active: ?
+  NRN: "715101"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Truphone"
+  OperCode: "104"
+  ICCPrefix: "894450"
+  Active: TRUE 
+  NRN: "901104"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "RACC Movil"
+  OperCode: "106"
+  ICCPrefix: "893402"
+  Active: ?
+  NRN: "755106"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "LEAST COST ROUTING TELECOM"
+  OperCode: "114"
+  ICCPrefix: "89340134"
+  Active: TRUE 
+  NRN: "735114"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Sarenet"
+  OperCode: "116"
+  ICCPrefix: "893402"
+  Active: TRUE 
+  NRN: "755206"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "ALOW"
+  OperCode: "124"
+  ICCPrefix: "8934903"
+  Active: TRUE 
+  OperBrand: "IOS"
+  NRN: "903124"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "IOS"
+  OperCode: "124"
+  ICCPrefix: "8934903"
+  Active: TRUE 
+  OperBrand: "IOS"
+  NRN: "903124"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "jetnet"
+  OperCode: "124"
+  ICCPrefix: "8934903"
+  Active: TRUE 
+  OperBrand: "IOS"
+  NRN: "903124"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "KNET"
+  OperCode: "124"
+  ICCPrefix: "8934903"
+  Active: TRUE 
+  OperBrand: "IOS"
+  NRN: "903124"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "movizelia"
+  OperCode: "124"
+  ICCPrefix: "8934903"
+  Active: TRUE 
+  OperBrand: "IOS"
+  NRN: "903124"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "PINGER"
+  OperCode: "124"
+  ICCPrefix: "903124"
+  Active: TRUE 
+  OperBrand: "IOS"
+  NRN: "903124"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "SIMLY"
+  OperCode: "124"
+  ICCPrefix: "8934903"
+  Active: TRUE 
+  OperBrand: "IOS"
+  NRN: "903124"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "SUOP"
+  OperCode: "124"
+  ICCPrefix: "8934903"
+  Active: TRUE 
+  OperBrand: "IOS"
+  NRN: "903124"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Vozelia"
+  OperCode: "124"
+  ICCPrefix: "8934903"
+  Active: TRUE 
+  OperBrand: "IOS"
+  NRN: "903124"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Yuilop"
+  OperCode: "124"
+  ICCPrefix: "8934903"
+  Active: TRUE 
+  OperBrand: "IOS"
+  NRN: "903124"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "OPEN CABLE"
+  OperCode: "126"
+  ICCPrefix: "893402"
+  Active: TRUE 
+  NRN: "755306"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "PROCONO (PTV Telecom)"
+  OperCode: "144"
+  ICCPrefix: "89349030"
+  Active: TRUE 
+  NRN: "903144"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "AIRE NETWORKS"
+  OperCode: "154"
+  ICCPrefix: "89349030"
+  Active: TRUE 
+  NRN: "903154"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Ortel Mobile"
+  OperCode: "164"
+  ICCPrefix: "89341900"
+  Active: ?
+  NRN: "930164"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "BT MOVIL"
+  OperCode: "165"
+  ICCPrefix: "8934903"
+  NRN: "903165"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "OCEANS"
+  OperCode: "174"
+  ICCPrefix: "893490311"
+  Active: TRUE 
+  OperBrand: "OCEANS"
+  NRN: "903174"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "SPEECH WORKS"
+  OperCode: "174"
+  ICCPrefix: "893490311"
+  Active: TRUE 
+  OperBrand: "OCEANS"
+  NRN: "903174"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "VODAFONE-ONO"
+  OperCode: "183"
+  ICCPrefix: "89345618"
+  Active: TRUE 
+  NRN: "725183"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Voz Telecom Sistemas"
+  OperCode: "184"
+  ICCPrefix: "893490312"
+  Active: TRUE 
+  NRN: "903184"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Fleximovil"
+  OperCode: "194"
+  ICCPrefix: "893490317"
+  Active: TRUE 
+  NRN: "903194"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Lebara"
+  OperCode: "203"
+  ICCPrefix: "893456"
+  Active: ?
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "REPUBLICA MOVIL"
+  OperCode: "204"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  NRN: "735204"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Lebara Movil"
+  OperCode: "213"
+  ICCPrefix: "893457"
+  Active: TRUE 
+  NRN: "970213"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "BT"
+  OperCode: "223"
+  ICCPrefix: "893457"
+  Active: TRUE 
+  NRN: "970223"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Ibercom"
+  OperCode: "224"
+  ICCPrefix: "8934904"
+  Active: TRUE 
+  NRN: "904224"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "PTV TELECOM 4G"
+  OperCode: "244"
+  ICCPrefix: "893412"
+  NRN: "902244"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Zero movil"
+  OperCode: "301"
+  ICCPrefix: "893409"
+  Active: ?
+  NRN: "715301"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "PepePhone"
+  OperCode: "303"
+  ICCPrefix: "893456"
+  Active: ?
+  NRN: "725303"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "NEO SKY"
+  OperCode: "400"
+  ICCPrefix: "89345708"
+  Active: ?
+  NRN: "970400"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Tuenti"
+  OperCode: "401"
+  ICCPrefix: "893407"
+  Active: ?
+  NRN: "715401"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Eroski"
+  OperCode: "403"
+  Active: ?
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "EroskiMovil"
+  OperCode: "413"
+  ICCPrefix: "893457"
+  Active: TRUE 
+  NRN: "970413"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Pepephone 4G"
+  OperCode: "501"
+  ICCPrefix: "893407"
+  Active: TRUE 
+  NRN: "715501"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Hits Mobile"
+  OperCode: "503"
+  ICCPrefix: "893456"
+  Active: ?
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "HITS_MOBILE"
+  OperCode: "513"
+  ICCPrefix: "893457"
+  Active: TRUE 
+  NRN: "970513"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Lowi"
+  OperCode: "813"
+  ICCPrefix: "893457"
+  Active: TRUE 
+  OperBrand: "Lowi"
+  NRN: "970813"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "VIZ"
+  OperCode: "813"
+  ICCPrefix: "893457"
+  Active: ?
+  OperBrand: "Lowi"
+  NRN: "970813"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Vodafone Enabler"
+  OperCode: "813"
+  ICCPrefix: "893457"
+  OperBrand: "Lowi"
+  NRN: "970813"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Orbitel"
+  OperCode: "913"
+  ICCPrefix: "893457"
+  Active: ?
+  NRN: "970913"
+

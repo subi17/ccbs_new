@@ -1,0 +1,563 @@
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "*"
+  ValidFrom: 2008-09-24
+  ValidTo: 2049-12-31
+  ActionType: "BarringsNotAllowed"
+  ActionKey: "Y_REST,Y_SARC"
+  Action: 4
+  RequestActionID: 79
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "*"
+  ValidFrom: 2008-09-24
+  ValidTo: 2049-12-31
+  ActionType: "RequestsNotAllowed"
+  ActionKey: "0,1,8,9,15,18,19,35,39,40"
+  Action: 4
+  RequestActionID: 80
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "*"
+  ValidFrom: 2008-09-24
+  ValidTo: 2049-12-31
+  ActionType: "BarringsNotAllowed"
+  ActionKey: "Debt_Hotl,Debt_Restricted,Debt_HOTLP,Debt_LP,Limits_Restricted,Risk_Restricted,ATC_Service_Suspension,Risk_Suspension"
+  Action: 4
+  RequestActionID: 102
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "*"
+  ValidFrom: 2008-09-24
+  ValidTo: 2049-12-31
+  ActionType: "RequestsNotAllowed"
+  ActionKey: "0,18,19,39,40"
+  Action: 4
+  RequestActionID: 103
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  ValidFrom: 2010-05-26
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  PayType: 1
+  RequestActionID: 236
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  ValidFrom: 2010-05-26
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  PayType: 2
+  RequestActionID: 237
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-01-01
+  ValidTo: 2049-12-31
+  ActionType: "MsRequest"
+  ActionKey: "81"
+  Action: 12
+  PayType: 1
+  RequestActionID: 271
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  PayType: 2
+  RequestActionID: 329
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_DONE"
+  Action: 13
+  PayType: 1
+  RequestActionID: 346
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_DONE"
+  Action: 13
+  PayType: 2
+  RequestActionID: 347
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "BTCAct"
+  Action: 13
+  PayType: 1
+  RequestActionID: 352
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUB2DeActMan|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 353
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUBDeActMan|22642"
+  Action: 13
+  PayType: 1
+  RequestActionID: 354
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "PMDUBDeActMan|22642"
+  Action: 13
+  PayType: 2
+  RequestActionID: 355
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "5"
+  Action: 2
+  PayType: 1
+  RequestActionID: 372
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "5"
+  Action: 2
+  PayType: 2
+  RequestActionID: 373
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 83
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DSSActOtherSubs"
+  Action: 13
+  PayType: 1
+  RequestActionID: 374
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 83
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DSSAct"
+  Action: 13
+  PayType: 1
+  RequestActionID: 375
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 83
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DSSAutoDeAct"
+  Action: 13
+  PayType: 1
+  RequestActionID: 376
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 83
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DSSManDeAct"
+  Action: 13
+  PayType: 1
+  RequestActionID: 377
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUB3DeActMan|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 388
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUB4DeActMan|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 389
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  ActionType: "RequestsNotAllowed"
+  ActionKey: "10,18,19,39,40"
+  Action: 4
+  PayType: 1
+  RequestActionID: 422
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "*"
+  ValidFrom: 2012-03-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "BundleActivation|22622"
+  Action: 13
+  RequestActionID: 432
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "*"
+  ValidFrom: 2012-03-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "BundleActivation|22642"
+  Action: 13
+  RequestActionID: 433
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "*"
+  ValidFrom: 2012-03-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "BundleActivation|22644"
+  Action: 13
+  RequestActionID: 434
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2012-03-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUB5DeActMan"
+  Action: 13
+  PayType: 1
+  RequestActionID: 435
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  ValidFrom: 2012-03-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "BTCActUpgrade"
+  Action: 13
+  PayType: 1
+  RequestActionID: 436
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-04-25
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "BONO_VOIP"
+  Action: 2
+  PayType: 2
+  RequestActionID: 443
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2012-09-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "PMDUBAct|22642"
+  Action: 13
+  PayType: 2
+  RequestActionID: 471
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "*"
+  ValidFrom: 2012-10-11
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "HSPARoamEUActivation|0034633800800"
+  Action: 13
+  RequestActionID: 474
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "*"
+  ValidFrom: 2012-10-11
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "HSPARoamEURequest|0034633800800"
+  Action: 13
+  RequestActionID: 475
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2012-12-10
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUB9DeActMan"
+  Action: 13
+  PayType: 1
+  RequestActionID: 488
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "VOICE3000"
+  Action: 2
+  PayType: 2
+  RequestActionID: 504
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "VOICE3000"
+  Action: 2
+  PayType: 1
+  RequestActionID: 505
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2013-04-03
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 11
+  PayType: 2
+  RequestActionID: 517
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2013-04-03
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "5"
+  Action: 11
+  PayType: 2
+  RequestActionID: 518
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2013-04-03
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 11
+  PayType: 1
+  RequestActionID: 519
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DATA5DeActMan"
+  Action: 13
+  PayType: 1
+  RequestActionID: 529
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 6
+  PayType: 1
+  RequestActionID: 550
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2014-02-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_Requested"
+  Action: 13
+  PayType: 1
+  RequestActionID: 589
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2014-02-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_Requested"
+  Action: 13
+  PayType: 2
+  RequestActionID: 590
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DATA6DeActMan"
+  Action: 13
+  PayType: 1
+  RequestActionID: 595
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2014-08-01
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "LTE"
+  Action: 1
+  PayType: 1
+  RequestActionID: 606
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  ValidFrom: 2014-08-01
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "LTE"
+  Action: 1
+  PayType: 1
+  RequestActionID: 607
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  ValidFrom: 2014-11-01
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "LTE"
+  Action: 1
+  PayType: 2
+  RequestActionID: 617
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2014-11-01
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "LTE"
+  Action: 1
+  PayType: 2
+  RequestActionID: 618
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "*"
+  ValidFrom: 2014-11-26
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "VOIPVIDEO"
+  Action: 2
+  RequestActionID: 620
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2015-12-09
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DATA7DeActMan"
+  Action: 13
+  PayType: 1
+  RequestActionID: 639
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 11
+  PayType: 1
+  RequestActionID: 652
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 1
+  PayType: 1
+  RequestActionID: 653
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 5
+  PayType: 1
+  RequestActionID: 654
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 1
+  PayType: 1
+  RequestActionID: 655
+

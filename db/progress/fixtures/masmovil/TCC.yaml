@@ -1,0 +1,105 @@
+bulkload: TCC
+  Brand: "1"
+  TCC: 950
+  ValidFrom: 2010-11-26
+  ValidTo: 2049-12-31
+  ErrorCode: 9050
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 951
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9051
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 952
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9052
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 953
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9053
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 954
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9054
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 955
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9055
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 956
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9056
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 957
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9057
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 961
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9061
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 962
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9062
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 963
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9063
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 964
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9064
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 967
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9067
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 970
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9070
+
+bulkload: TCC
+  Brand: "1"
+  TCC: 971
+  ValidFrom: 2010-11-24
+  ValidTo: 2049-12-31
+  ErrorCode: 9071
+
