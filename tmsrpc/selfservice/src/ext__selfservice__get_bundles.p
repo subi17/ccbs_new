@@ -51,10 +51,6 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,substring(pcTransId,1,3)) THEN
    RETURN appl_err("Application Id does not match").
 
-FIND FIRST MobSub  WHERE 
-           MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
-
 IF LOOKUP(pcBundleId,lcBONOContracts) = 0 AND
    pcBundleId <> {&DSS} THEN
    RETURN appl_err("Incorrect Bundle Id").

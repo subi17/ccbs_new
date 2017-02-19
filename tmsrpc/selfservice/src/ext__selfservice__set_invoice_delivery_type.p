@@ -70,11 +70,6 @@ IF llDoEvent THEN DO:
    lhCustomer = BUFFER Customer:HANDLE.
 END.
 
-FIND FIRST MobSub WHERE 
-           MobSub.Brand = gcBrand AND
-           MobSub.cli   = pcMSISDN NO-LOCK NO-ERROR.
-IF NOT AVAILABLE MobSub THEN RETURN appl_err("Subscription not found").
-
 CASE piDelType:
    WHEN {&INV_DEL_TYPE_PAPER}       THEN .
    WHEN {&INV_DEL_TYPE_EMAIL}       THEN .

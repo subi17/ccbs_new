@@ -69,10 +69,6 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
 
 katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
-FIND FIRST MobSub  WHERE 
-           MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
-
 fSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
 
 ASSIGN pdActivation            = fMake2Dt(ldaActDate, 0)

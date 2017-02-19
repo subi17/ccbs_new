@@ -77,12 +77,6 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
 
 katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
-FIND MobSub NO-LOCK WHERE
-     MobSub.Brand = gcBrand AND
-     MobSub.CLI = pcCLI NO-ERROR.
-IF NOT AVAILABLE MobSub THEN
-  RETURN appl_err("Subscription not found").
-
 /*YPR-4774*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
 IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN

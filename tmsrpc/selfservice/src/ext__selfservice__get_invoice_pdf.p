@@ -58,11 +58,6 @@ lcMiYoigoURL = fCParam("URL","MiYoigoURL").
 IF lcMiYoigoURL = "" OR lcMiYoigoURL = ? THEN
    RETURN appl_err("Missing system configuration").
 
-FIND FIRST MobSub WHERE
-           MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err("Subscription not found").
-
 FIND FIRST Invoice WHERE
            Invoice.Brand    = gcBrand AND
            Invoice.ExtInvID = pcExtInvId NO-LOCK NO-ERROR.

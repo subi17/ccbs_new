@@ -61,14 +61,13 @@ DEFINE VARIABLE liCustNum               AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liMsSeq                 AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liOrderId               AS INTEGER   NO-UNDO.
 
-
 pcReqList = validate_request(param_toplevel_id, "string,string,string,[string]").
 IF pcReqList EQ ? THEN RETURN.
 
-ASSIGN pcTransId    = get_string(param_toplevel_id, "0")
-       pcDNIType    = get_string(param_toplevel_id, "1")
-       pcDNI        = get_string(param_toplevel_id, "2")
-       pcDelType    = get_string(param_toplevel_id, "3").
+ASSIGN pcTransId    = get_string(param_toplevel_id, "1")
+       pcDNIType    = get_string(param_toplevel_id, "2")
+       pcDNI        = get_string(param_toplevel_id, "3")
+       pcDelType    = get_string(param_toplevel_id, "4").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

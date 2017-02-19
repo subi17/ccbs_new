@@ -52,12 +52,6 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
 
 katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
-FIND FIRST Order WHERE
-           Order.Brand   = gcBrand   AND
-           Order.OrderId = piOrderId NO-LOCK NO-ERROR.
-IF NOT AVAILABLE Order THEN
-   RETURN appl_err("Order does not exist").
-
 IF Order.CLI EQ "" THEN
    RETURN appl_err("Mobile number does not exist").
 

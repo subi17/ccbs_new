@@ -42,12 +42,6 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF NOT fchkTMSCodeValues(gbAuthLog.UserName,substring(pcTransId,1,3)) THEN
    RETURN appl_err("Application Id does not match").
-   
-FIND FIRST Mobsub NO-LOCK WHERE
-           Mobsub.CLI = pcCLI NO-ERROR.
-
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err(SUBST("Subscription with msisdn &1 was not found", pcCli)).
   
 FIND FIRST customer NO-LOCK WHERE
            customer.custnum = MobSub.Custnum NO-ERROR.

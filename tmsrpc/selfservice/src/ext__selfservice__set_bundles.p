@@ -87,10 +87,6 @@ katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 ldaBonoVoipRemovalDate   = DATE(fCParamC("BonoVoipRemovalDate")).
 
-FIND FIRST MobSub  WHERE 
-           MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
-
 /*YPR-4775*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
 IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN

@@ -115,11 +115,6 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcAppId) THEN
 
 katun = lcAppId + "_" + ghAuthLog::EndUserId.
 
-FIND MobSub NO-LOCK WHERE
-     MobSub.CLI = pcCLI NO-ERROR.
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err("Subscription not found").
-
 FIND FIRST ServCom NO-LOCK WHERE
            ServCom.Brand = gcBrand AND
            ServCom.ServCom = pcServiceCode NO-ERROR.

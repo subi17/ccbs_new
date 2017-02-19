@@ -93,11 +93,6 @@ lcAppId = substring(pcTransId,1,3).
 
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcAppId) THEN
    RETURN appl_err("Application Id does not match").
-
-FIND FIRST Mobsub NO-LOCK WHERE
-           Mobsub.CLI = pcCLI NO-ERROR.
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err("Subscription not found").
   
 FIND FIRST customer NO-LOCK WHERE
            customer.custnum = MobSub.Custnum NO-ERROR.
