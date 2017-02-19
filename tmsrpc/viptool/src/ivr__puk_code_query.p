@@ -19,11 +19,7 @@ IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcCLI = get_string(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST mobsub NO-LOCK WHERE 
-           mobsub.brand = gcBrand AND
-           mobsub.cli   = pcCli NO-ERROR.
-
-IF NOT AVAILABLE mobsub THEN RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO Ordercanal MobSub CLI pcCli}
 
 FIND IMSI WHERE
      IMSI.IMSI = MobSub.IMSI NO-LOCK NO-ERROR.

@@ -37,10 +37,7 @@ pcMSISDN = get_string(param_toplevel_id,"0").
 piMaxCount = get_int(param_toplevel_id,"1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST mobsub NO-LOCK WHERE 
-           mobsub.brand = gcBrand AND
-           mobsub.cli = pcMSISDN NO-ERROR.
-IF NOT AVAILABLE mobsub THEN RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
 
 IF piMaxCount NE 1 AND piMaxCount NE 3 THEN
    RETURN appl_err("Incorrect type value").
