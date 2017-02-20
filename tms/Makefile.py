@@ -220,6 +220,15 @@ def _compile_all(format, target):
 
     require('applhelp.p', target)
 
+    args = ['-pf', getpf('../db/progress/store/all')]
+    cdr_dict = {}
+
+    for cdr_database in cdr_databases:
+        if not cdr_dict:
+            cdr_dict = active_cdr_db_pf()
+        if cdr_database in cdr_dict:
+            args.extend(cdr_dict[cdr_database])
+
     for source_dir in os.listdir('.'):
         if not os.path.isdir(source_dir) \
         or source_dir in ['test', 'scripts']:
@@ -235,8 +244,7 @@ def _compile_all(format, target):
                     mkdir_p(dir)
                     seen.append(dir)
 
-        comp = Popen(mpro + ['-pf', '../db/progress/store/all.pf', '-s', '1024',
-                             '-b', '-p', procedure_file.name], stdout=PIPE)
+        comp = Popen(mpro + args + ['-s', '1024', '-b', '-p', procedure_file.name], stdout=PIPE)
         call('/bin/cat', stdin=comp.stdout)
         if comp.wait() != 0:
             raise PikeException('Compilation failed')
@@ -254,11 +262,19 @@ def compile_one(match, *a):
 
     format = 'COMPILE %%s%s.' % directive
 
+    args = ['-pf', getpf('../db/progress/store/all')]
+    cdr_dict = {}
+
+    for cdr_database in cdr_databases:
+        if not cdr_dict:
+            cdr_dict = active_cdr_db_pf()
+        if cdr_database in cdr_dict:
+            args.extend(cdr_dict[cdr_database])
+
     print('Compiling file ' + match)
     sys.stdout.flush()
     procedure_file = make_compiler(format, [match], show=None)
-    comp = Popen(mpro + ['-pf', '../db/progress/store/all.pf',
-                         '-b', '-p', procedure_file.name], stdout=PIPE)
+    comp = Popen(mpro + args + ['-b', '-p', procedure_file.name], stdout=PIPE)
     call('/bin/cat', stdin=comp.stdout)
     if comp.wait() != 0:
         raise PikeException('Compilation failed')
