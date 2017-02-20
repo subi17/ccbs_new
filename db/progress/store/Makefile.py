@@ -532,7 +532,7 @@ def active_cdr_db_pf(tenant):
     dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
 
     if not tenant == '':
-        uandp = userandpass(['-U', '{0}@{1}'.format(tenancies[tenant]['username'], tenancies[tenant]['domain']), '-P', tenancies[tenant]['password'] ])
+        uandp = ['-U', '{0}@{1}'.format(tenancies[tenant]['username'], tenancies[tenant]['domain']), '-P', tenancies[tenant]['password']]
         for db in dict:
             dict[db].extend(uandp)
 
