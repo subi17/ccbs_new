@@ -516,7 +516,7 @@ def downgrade(match, deps):
 # Fixture loading (initial setup-fixtures)
 
 def active_cdr_db_pf(tenant):
-    if '-S' in open('../db/progress/store/common.pf').read():
+    if '-S' in open('common.pf').read():
         connection_type = "tcp"
     else:
         connection_type = "local"
@@ -524,9 +524,9 @@ def active_cdr_db_pf(tenant):
     args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
 
     if not tenant == '':
-        args.extend(['-pf', '../db/progress/store/common_{}.pf'.format(tenant)])
+        args.extend(['-pf', 'common_{}.pf'.format(tenant)])
     else:
-        args.extend(['-pf', '../db/progress/store/common.pf'])
+        args.extend(['-pf', 'common.pf'])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
     dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
