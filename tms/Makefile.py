@@ -345,15 +345,28 @@ def terminal(*a):
         raise PikeException('Expected a module to run as a parameter')
 
     cdr_dict = {}
+    all_in_parameters = False
+
+    if 'all' in parameters[1:]:
+        all_in_parameters = True
+        args.extend(['-pf', getpf('../db/progress/store/all')])
+        cdr_dict = active_cdr_db_pf()
+        for db in cdr_dict:
+            args.extend(cdr_dict[db])
+
     for pp in parameters[1:]:
         if pp in databases:
+            if all_in_parameters:
+                continue
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
         elif pp in cdr_databases:
+            if all_in_parameters:
+                continue
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()            
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
-        else:
+        elif pp != 'all':
             args.append(pp)
 
     args.extend(['-T', '../var/tmp', '-p', parameters[0]])
@@ -381,15 +394,28 @@ def batch(*a):
     fd.close()
 
     args = ['-T', '../var/tmp', '-b', '-p', batch_module + '.p']
+
+    all_in_parameters = False
+    if 'all' in parameters[1:]:
+        all_in_parameters = True
+        args.extend(['-pf', getpf('../db/progress/store/all')])
+        cdr_dict = active_cdr_db_pf()
+        for db in cdr_dict:
+            args.extend(cdr_dict[db])
+
     for pp in parameters[1:]:
         if pp in databases:
+            if all_in_parameters:
+                continue
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
         elif pp in cdr_databases:
+            if all_in_parameters:
+                continue
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
-        else:
+        elif pp != 'all':
             args.append(pp)
     logfile = open('../var/log/%s.log' % module_base, 'a')
     if not skip_timelog:
@@ -430,15 +456,28 @@ def idbatch(*a):
     fd.close()
 
     args = ['-T', '../var/tmp', '-b', '-p', batch_module + '.p']
+
+    all_in_parameters = False
+    if 'all' in parameters[1:]:
+        all_in_parameters = True
+        args.extend(['-pf', getpf('../db/progress/store/all')])
+        cdr_dict = active_cdr_db_pf()
+        for db in cdr_dict:
+            args.extend(cdr_dict[db])
+
     for pp in parameters[2:]:
         if pp in databases:
+            if all_in_parameters:
+                continue
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
         elif pp in cdr_databases:
+            if all_in_parameters:
+                continue
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
-        else:
+        elif pp != 'all':
             args.append(pp)
     try:
         idx = args.index("-param")
