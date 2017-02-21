@@ -3,13 +3,14 @@
   TASK .........: Fixed fee item dump to Track
   APPLICATION ..: TMS
   AUTHOR .......: Chanchal Sharma
-  CREATED ......: 15.02.2017
+  CREATED ......: 21.02.2017
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
 DISABLE TRIGGERS FOR DUMP OF FixedFee.
 DISABLE TRIGGERS FOR DUMP OF FFItem.
 
+{date.i}
 {commali.i}
 {cparam2.i}
 {timestamp.i}
@@ -33,17 +34,20 @@ OUTPUT STREAM sout TO VALUE(icFile).
 PUT STREAM sout UNFORMATTED
     "FIXEDFEEITEMNUM,FIXEDFEENUM,CUSTNUM,BILLPERIOD,BILLCODE,CALCMETHOD,MSSEQ,MSISDN,BILLED,FEEAMT,CREATEDATE" SKIP.
 
-DEF VAR ldaFromDate       AS DATE NO-UNDO.
-DEF VAR ldaToDate         AS DATE NO-UNDO.
-DEF VAR ldPeriodFrom      AS DEC  NO-UNDO.
-DEF VAR ldPeriodFromSTC   AS DEC  NO-UNDO.
-DEF VAR ldPeriodTo        AS DEC  NO-UNDO.
-DEF VAR lcIPLContracts    AS CHAR NO-UNDO.
-DEF VAR lcBONOContracts   AS CHAR NO-UNDO.
-DEF VAR ldeStart          AS DEC NO-UNDO. 
-DEF VAR ldeEnd            AS DEC NO-UNDO. 
-DEF VAR liPeriod          AS INT  NO-UNDO.
-DEF VAR liHandled         AS INT  NO-UNDO.      
+DEF VAR ldaFromDate          AS DATE NO-UNDO.
+DEF VAR ldaToDate            AS DATE NO-UNDO.
+DEF VAR ldaPrevToDate3       AS DATE NO-UNDO.
+DEF VAR ldPeriodFrom         AS DEC  NO-UNDO.
+DEF VAR ldPeriodFromSTC      AS DEC  NO-UNDO.
+DEF VAR ldPeriodTo           AS DEC  NO-UNDO.
+DEF VAR lcIPLContracts       AS CHAR NO-UNDO.
+DEF VAR lcBONOContracts      AS CHAR NO-UNDO.
+DEF VAR ldeStart             AS DEC NO-UNDO. 
+DEF VAR ldeEnd               AS DEC NO-UNDO. 
+DEF VAR liPeriod             AS INT  NO-UNDO.
+DEF VAR liPrevPeriod3        AS INT  NO-UNDO.
+DEF VAR liHandled            AS INT  NO-UNDO.
+DEF VAR liDayOfMonth         AS INT  NO-UNDO.
 
 DEF VAR lcAllowedDSS2SubsType         AS CHAR NO-UNDO.
 DEF VAR lcExcludeBundles              AS CHAR NO-UNDO.
@@ -51,15 +55,14 @@ DEF VAR lcFirstMonthUsageBasedBundles AS CHAR  NO-UNDO.
 
 {dss_bundle_first_month_fee.i}
 
-ASSIGN ldaFromDate = TODAY
-       ldaToDate   = ADD-INTERVAL(DATE(MONTH(TODAY),1,YEAR(TODAY)),1,"month") - 1. /* End date of current month */
+ASSIGN ldaFromDate      = DATE(MONTH(TODAY), 1, YEAR(TODAY))       
+       ldaToDate        = ADD-INTERVAL(ldaFromDate, 1, "months") - 1
+       ldaPrevToDate3   = ADD-INTERVAL(ldaToDate, -3, "months"). /* End date of past third month */
 
 DEF TEMP-TABLE ttSubscription NO-UNDO
-   FIELD MsSeq        AS INT
-   FIELD ServiceLimit AS CHAR
-   FIELD FromDate     AS DATE
-   FIELD ToDate       AS DATE
-   INDEX MsSeq MsSeq.      
+    FIELD MsSeq        AS INT
+    FIELD ServiceLimit AS CHAR   
+    INDEX MsSeq MsSeq.      
 
 DEF TEMP-TABLE ttData
     FIELD ffitemnum  LIKE FFItem.FFItemNum
@@ -77,30 +80,36 @@ DEF TEMP-TABLE ttData
 
 ASSIGN
    /* set 1 second after midnight to skip STC contract activations */
-   ldPeriodFrom    = fMake2Dt(ldaFromDate,1)
-   ldPeriodFromSTC = fMake2Dt(ldaFromDate,0)
-   ldPeriodTo      = fMake2Dt(ldaToDate,86399)
-   lcIPLContracts  = fCParamC("IPL_CONTRACTS")
-   lcBONOContracts = fCParamC("BONO_CONTRACTS")
+   ldPeriodFrom        = fMake2Dt(ldaFromDate,1)   
+   ldPeriodFromSTC     = fMake2Dt(ldaFromDate,0)   
+   ldPeriodTo          = fMake2Dt(ldaToDate,86399)     
+   lcIPLContracts      = fCParamC("IPL_CONTRACTS")
+   lcBONOContracts     = fCParamC("BONO_CONTRACTS")
    lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
    lcFirstMonthUsageBasedBundles = fCParamC("FIRST_MONTH_USAGE_BASED_BUNDLES")
-   lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES")
-   ldeStart         = fMakeTS()
-   liPeriod         = YEAR(ldaToDate) * 100 + MONTH(ldaToDate).
+   lcExcludeBundles    = fCParamC("EXCLUDE_BUNDLES")
+   ldeStart            = fMakeTS()
+   liPeriod            = YEAR(ldaToDate) * 100 + MONTH(ldaToDate)
+   liPrevPeriod3       = YEAR(ldaPrevToDate3) * 100 + MONTH(ldaPrevToDate3)
+   liDayOfMonth        = DAY(TODAY).
+   
       
 RUN p_bundle_first_month.
 
 ASSIGN
-   ldPeriodFrom    = fMake2Dt(ldaFromDate,0)
-   ldPeriodTo      = fMake2Dt(ldaToDate,86399).
+   ldPeriodFrom     = fMake2Dt(ldaFromDate,0).
        
 RUN p_dss_bundle_first_month. 
 
-/* If not first month */
+/* Remaining FFItem */
 ffitem-loop:
 FOR EACH FFItem NO-LOCK WHERE
-         FFitem.CustNum    > 0 AND
-         FFItem.BillPeriod = liPeriod AND
+         FFitem.CustNum   > 0 AND
+         (IF liDayOfMonth = 1 THEN
+             FFItem.BillPeriod >= liPrevPeriod3 AND
+             FFItem.BillPeriod <= liPeriod
+          ELSE
+             FFItem.BillPeriod = liPeriod) AND         
          FFItem.billed     = NO:
    IF CAN-FIND(FIRST ttData WHERE
                      ttData.ffitemnum = FFItem.FFItemNum) THEN
@@ -118,7 +127,7 @@ FOR EACH FFItem NO-LOCK WHERE
                              FixedFee.CustNum, 
                              FFItem.BillPeriod,
                              FFItem.BillCode,  
-                             "Full",    
+                             "FULL",    
                              FixedFee.KeyValue,
                              FixedFee.Cli,
                              FFItem.Billed,    
@@ -141,36 +150,11 @@ FOR EACH ttData NO-LOCK:
        ttData.cli        "," 
        ttData.billed     "," 
        ttData.feeamt     "," 
-       ttData.createdate "," SKIP.
+       ttData.createdate SKIP.   
 END.
 
-ASSIGN ldeEnd      = fMakeTs().
-
-IF liHandled > 0 THEN 
-DO TRANSACTION:
-   CREATE ActionLog.
-   ASSIGN 
-      ActionLog.Brand        = gcBrand   
-      ActionLog.TableName    = "FFITem"  
-      ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
-                               STRING(MONTH(TODAY),"99")  +
-                               STRING(DAY(TODAY),"99")
-      ActionLog.ActionID     = "FIXEDFEEITEM"                                    
-      ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
-                               MONTH(TODAY)
-      ActionLog.ActionDec    = liHandled
-      ActionLog.ActionChar   = "Started: " +
-                                 fts2hms(ldeStart) + CHR(10) + 
-                               "Ended: " + 
-                                 fts2hms(ldeEnd) + CHR(10) +                                                              
-                               STRING(liHandled) + 
-                               " Fixed fee items were dumped"
-      ActionLog.ActionStatus = 3
-      ActionLog.UserCode     = katun
-      ActionLog.FromDate     = ldaFromDate
-      ActionLog.ToDate       = ldaToDate.
-      ActionLog.ActionTS     = fMakeTS().
-END.
+ASSIGN oiEvents = liHandled
+       ldeEnd   = fMakeTs().
 
 OUTPUT STREAM sout CLOSE.
 
@@ -206,7 +190,7 @@ PROCEDURE pGetAllSubscriptions:
    DEF VAR liReqStatus    AS INT  NO-UNDO. 
    DEF VAR lcReqStatuses  AS CHAR NO-UNDO INIT "2,9".
    DEF VAR lcBundleId     AS CHAR NO-UNDO.
-   DEF VAR ldaMsReqDate   AS DATE No-UNDO.
+   DEF VAR ldaMsReqDate   AS DATE NO-UNDO.   
    
    DEF BUFFER bMsRequest FOR MsRequest.
    
@@ -226,7 +210,7 @@ PROCEDURE pGetAllSubscriptions:
                LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0,
          FIRST MsOwner WHERE 
                MsOwner.MsSeq    = MsRequest.MsSeq AND  
-               MsOwner.TSEnd   >= ldPeriodFrom    AND
+               MsOwner.TSEnd   >= ldPeriodFrom AND
                MsOwner.TsBegin <= ldPeriodTo NO-LOCK:
        
          fTS2Date(INPUT  MsRequest.ActStamp,
@@ -274,10 +258,7 @@ END PROCEDURE.
 PROCEDURE pCollectSubscription:
 
    DEF INPUT PARAMETER iiMsSeq   AS INT  NO-UNDO.
-   DEF INPUT PARAMETER icDCEvent AS CHAR NO-UNDO. 
-   
-   DEF VAR ldaDate       AS DATE NO-UNDO.
-   DEF VAR liTime        AS INT  NO-UNDO.
+   DEF INPUT PARAMETER icDCEvent AS CHAR NO-UNDO.    
    
    FOR EACH ServiceLimit NO-LOCK WHERE 
             ServiceLimit.GroupCode = icDCEvent,
@@ -319,17 +300,7 @@ PROCEDURE pCollectSubscription:
       CREATE ttSubscription.
       ASSIGN
          ttSubscription.MsSeq        = iiMsSeq 
-         ttSubscription.ServiceLimit = ServiceLimit.GroupCode.
-         
-      fSplitTS(MServiceLimit.FromTS,
-               OUTPUT ldaDate,
-               OUTPUT liTime).
-      ttSubscription.FromDate = ldaDate.
-      
-      fSplitTS(MServiceLimit.EndTS,
-               OUTPUT ldaDate,
-               OUTPUT liTime).
-      ttSubscription.ToDate = ldaDate.         
+         ttSubscription.ServiceLimit = ServiceLimit.GroupCode.              
       
       LEAVE.
       
@@ -366,29 +337,29 @@ PROCEDURE pCalculateFees:
                  FFItem.FFNum      = FixedFee.FFNum AND                                  
                  FFItem.BillPeriod = liPeriod NO-LOCK NO-ERROR.  
                                        
-      IF NOT AVAIL FFItem OR FFItem.Billed THEN NEXT.
-                  
-      ldFeeAmount = fCalculateFirstMonthFee(gcBrand,
-                                            ttSubscription.MsSeq,
-                                            ttSubscription.ServiceLimit,
-                                            FixedFee.Amt,
-                                            liPeriod).      
+      IF NOT AVAIL FFItem OR FFItem.Billed THEN NEXT.                        
              
       IF NOT CAN-FIND(FIRST ttData WHERE
                             ttData.FFItemNum  = FFItem.FFItemNum) THEN
       DO:           
+         ldFeeAmount = fCalculateFirstMonthFee(gcBrand,
+                                               ttSubscription.MsSeq,
+                                               ttSubscription.ServiceLimit,
+                                               FixedFee.Amt,
+                                               liPeriod).      
+
          RUN pCreateTempData(FFItem.FFItemNum, 
                              FixedFee.FFNum,   
                              FixedFee.CustNum, 
                              FFItem.BillPeriod,
                              FFItem.BillCode,  
-                             "Calculated",    
+                             "CALCULATED",    
                              FixedFee.KeyValue,
                              FixedFee.Cli,
                              FFItem.Billed,    
                              ldFeeAmount,      
                              FixedFee.BegDate
-                            ).        
+                            ).                 
       END.      
    END.      
 
@@ -621,35 +592,35 @@ PROCEDURE pGetCustomerSubscriptions:
           /* already billed */
           FIND FIRST FFItem OF FixedFee WHERE
                      FFItem.BillPeriod = liPeriod NO-LOCK NO-ERROR.
-          IF NOT AVAILABLE FFItem OR FFItem.Billed THEN NEXT.
-
-          /* % of fee, based on usage */
-          IF ldeDSSUsage > 0 THEN
-             ldFeeAmount = fCalculateProportionalFee(
-                                         (IF ldeDSSUsage < ttSub.BundleLimit
-                                          THEN ldeDSSUsage
-                                          ELSE ttSub.BundleLimit),
-                                          ttSub.InclUnit,
-                                          ttSub.BundleLimitInMB,
-                                          FixedFee.Amt).
-                        
-          ELSE ldFeeAmount = 0.
+          IF NOT AVAILABLE FFItem OR FFItem.Billed THEN NEXT.          
       
           IF NOT CAN-FIND(FIRST ttData WHERE
                                 ttData.FFItemNum  = FFItem.FFItemNum) THEN
-          DO:                          
+          DO:                        
+             /* % of fee, based on usage */
+             IF ldeDSSUsage > 0 THEN
+                ldFeeAmount = fCalculateProportionalFee(
+                                            (IF ldeDSSUsage < ttSub.BundleLimit
+                                             THEN ldeDSSUsage
+                                             ELSE ttSub.BundleLimit),
+                                             ttSub.InclUnit,
+                                             ttSub.BundleLimitInMB,
+                                             FixedFee.Amt).
+                        
+             ELSE ldFeeAmount = 0.
+
              RUN pCreateTempData(FFItem.FFItemNum, 
                                  FixedFee.FFNum,   
                                  FixedFee.CustNum, 
                                  FFItem.BillPeriod,
                                  FFItem.BillCode,  
-                                 "DSSCalculated",    
+                                 "DSSCALCULATED",    
                                  FixedFee.KeyValue,
                                  FixedFee.Cli,
                                  FFItem.Billed,    
                                  ldFeeAmount,      
                                  FixedFee.BegDate
-                                ).         
+                                ).                
           END.                                
       END. /* FOR FIRST DayCampaign NO-LOCK WHERE */
 
