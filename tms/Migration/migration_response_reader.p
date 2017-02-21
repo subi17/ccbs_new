@@ -18,6 +18,7 @@
 {timestamp.i}
 {cparam2.i}
 {tmsconst.i}
+{migrationfunc.i}
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
@@ -33,6 +34,7 @@ DEF VAR lcLogFile AS CHAR NO-UNDO.
 DEF VAR lcRowStatus AS CHAR NO-UNDO.
 DEF VAR lcInputFile AS CHAR No-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
+DEF VAR lcMQMessage AS CHAR NO-UNDO.
 /*Temp tables are named now without tt because the data is now easy to 
   be written into JSON in nice format.*/
 DEFINE TEMP-TABLE MigrationOK NO-UNDO
@@ -48,8 +50,6 @@ DEFINE TEMP-TABLE MigrationFailedNC NO-UNDO
    FIELD StatusCodeNC AS CHAR /*status code from NC*/
    FIELD StatusDescNC AS CHAR. /*description from NC*/
 
-/*Other migration failures*/
-DEFINE TEMP-TABLE MigrationFailedOther LIKE MigrationFailedNC.
 
 ASSIGN
    lcTableName = "MB_Migration"
@@ -187,11 +187,6 @@ PROCEDURE pReadFile:
         does not exist at all
         ->TMS writes own error notification list for this*/
       IF liOrderID EQ 0 THEN DO:
-         CREATE MigrationFailedOther.
-         ASSIGN MigrationFailedOther.OrderId = liOrderID
-                MigrationFailedOther.MSISDN = lcMSISDN
-                MigrationFailedOther.StatusCode = "Not found"
-                MigrationFailedOther.StatusDescNC = lcNCComment.
          lcRowStatus = "TMS Error".
       END.
       /*NC response is OK and TMS has order for the operation*/
@@ -200,10 +195,6 @@ PROCEDURE pReadFile:
          /*Set Order status*/
          /*Add entry to Migration Tool response list (ok)*/
          /*Send SMS*/
-         CREATE MigrationOK.
-         ASSIGN MigrationOK.OrderID = liOrderID
-                MigrationOK.MSISDN = lcMSISDN
-                MigrationOK.StatusCode = Order.StatusCode.
          lcRowStatus = "OK".       
 
       END.
@@ -211,15 +202,21 @@ PROCEDURE pReadFile:
          /*Error case handling*/
          /*Set Order Status*/
          /*Add entry to Migration tool response list (failed)*/
-         CREATE MigrationFailedNC.
-         ASSIGN MigrationFailedNC.OrderID = liOrderID
-                MigrationFailedNC.MSISDN = lcMSISDN
-                MigrationFailedNC.StatusCode = Order.StatusCode
-                MigrationFailedNC.StatusCodeNC = lcNCStatus
-                MigrationFailedNC.StatusDesc = lcNCComment.
          lcRowStatus = "NC Failure".                                      
       END.
-       PUT STREAM sLog UNFORMATTED
+      /*Send message to WEB*/
+      lcMQMessage = fGenerateNCResponseInfo(liOrderID,
+                                            lcMSISDN,
+                                            lcNCStatus,
+                                            lcNCCommet).
+      IF lcMQMessage EQ "" THEN 
+         lcRowStatus = lcRowStatus + ";Message creation failed". 
+      ELSE DO:
+        RUN migration_notification.p(lcMQMessage).
+
+      END.
+
+      PUT STREAM sLog UNFORMATTED
          lcLine + ";" + lcRowStatus SKIP.
                   
    END. /* Line handling END */

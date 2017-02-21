@@ -9,6 +9,15 @@
 &IF "{&migrationi}" NE "YES"
 &THEN
 &GLOBAL-DEFINE migrationi YES
+
+/*Temp table for sending NC response info to WEB.*/
+DEF TEMP-TABLE NCResponse NO-UNDO
+   FIELD Order AS CHAR
+   FIELD MSISDN AS CHAR
+   FIELD StatusCode AS CHAR
+   FIELD Comment AS CHAR.
+
+
 {commali.i}
 {Syst/tmsconst.i}
 {Func/freacmobsub.i}
@@ -65,12 +74,32 @@ END.
 
 /*Function creates Json entry containing Nodo Central response related data*/
 FUNCTION fGenerateNCResponseInfo RETURNS CHAR
-   (iiOrderID AS INT, 
+   (iiOrderID AS INT,
     icMSISDN AS CHAR,
-    icStatusInfo AS CHAR):
+    icStatusCode AS CHAR,
+    icComment AS CHAR):
+   DEF VAR lcTargetType AS CHAR NO-UNDO.
+   DEF VAR llcMessage  AS LONGCHAR NO-UNDO.
+   DEF VAR llgOK AS LOGICAL NO-UNDO.
+
+
+   CREATE NCResponse.
+   ASSIGN
+      NCResponse.Order = STRING(iiOrderID)
+      NCResponse.MSISDN = icMSISDN
+      NCResponse.Statuscode = icStatusCode
+      NCResponse.Comment = icComment.
+   llgOK = TEMP-TABLE NCResponse:WRITE-JSON("LONGCHAR", /*writing type*/
+                                             llcMessage, /*target*/
+                                             TRUE). /*formatted to readabale*/
+
+   EMPTY TEMP-TABLE NCResponse.
+   IF llgOK EQ TRUE THEN RETURN STRING( llcMessage  ).
+
 
 RETURN "".
-END.   
+END.
+
 
 /*Function creates Json entry containing Order status information*/
 FUNCTION fGenerateOrderInfo RETURNS CHAR
