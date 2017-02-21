@@ -48,19 +48,19 @@ FOR EACH vatcode NO-LOCK where
    buffer-copy vatcode except vatcode taxzone accnum to bvatcode.
 end.
 
-
-FIND FIRST Region
+fsetEffectiveTenantForAllDB("TMasMovil").
+FIND FIRST Region WHERE Region.taxzone EQ "6"
 NO-ERROR.  /* Regions are already in fixtures? */
 IF NOT AVAIL Region THEN DO:
    for each Region  
-      tenant-where buffer-tenant-name(region) NE "TMasMovil":
+      tenant-where buffer-tenant-name(region) NE "tMasMovil":
       IF lgSimulate THEN
          DISP Region.
-      ELSE DO:
+      ELSE DO: 
          fsetEffectiveTenantForAllDB("TMasMovil").
          CREATE bRegion.
          BUFFER-COPY Region to bRegion.
-         bregion.taxzone = STRING(INT(bregion.taxzone) + 5).      
+         bregion.taxzone = STRING(INT(bregion.taxzone) + 5). 
       END.
    end.
 

@@ -69,3 +69,11 @@ FIND FIRST TMSParam WHERE
 IF INDEX(TMSParam.charval,"MasMovil") EQ 0 THEN
    TMSParam.charval = REPLACE(TMSParam.charval,"icc_msisdn_rep","icc_msisdn_rep_MasMovil").
 */
+
+FOR EACH TMSParam WHERE
+         TMSParam.brand EQ "1" AND
+         TMSParam.Paramgroup EQ "CustCare" AND
+         TMSParam.ParamCode BEGINS "DefCust":
+
+   TMSParam.ParamCode = REPLACE(TMSParam.ParamCode,"1","2").
+END.
