@@ -103,14 +103,51 @@ END.
 
 /*Function creates Json entry containing Order status information*/
 FUNCTION fGenerateOrderInfo RETURNS CHAR
-   (iiOrderID AS INT):
+   (iiOrderID AS INT,
+    icMSISDN AS CHAR,
+    icStatusCode AS CHAR):
+   DEF VAR lcTargetType AS CHAR NO-UNDO.
+   DEF VAR llcMessage  AS LONGCHAR NO-UNDO.
+   DEF VAR llgOK AS LOGICAL NO-UNDO.
+
+  CREATE OrderInfo.
+   ASSIGN
+      OrderInfo.Order = STRING(iiOrderID)
+      OrderInfo.MSISDN = icMSISDN
+      OrderInfo.Statuscode = icStatusCode
+   llgOK = TEMP-TABLE OrderInfo:WRITE-JSON("LONGCHAR", /*writing type*/
+                                             llcMessage, /*target*/
+                                             TRUE). /*formatted to readabale*/
+
+   EMPTY TEMP-TABLE NCResponse.
+   IF llgOK EQ TRUE THEN RETURN STRING( llcMessage  ).
+
 
 RETURN "".
 END.   
 
 /*Function creates Json entry containing Operational data  status information*/
 FUNCTION fGenerateOPDataInfo RETURNS CHAR
-   (iiOrderID AS INT):
+   (iiOrderID AS INT,
+    icMSISDN AS CHAR,
+    icStatusCode AS CHAR):
+   DEF VAR lcTargetType AS CHAR NO-UNDO.
+   DEF VAR llcMessage  AS LONGCHAR NO-UNDO.
+   DEF VAR llgOK AS LOGICAL NO-UNDO.
+
+  CREATE NCResponse.
+   ASSIGN
+      NCResponse.Order = STRING(iiOrderID)
+      NCResponse.MSISDN = icMSISDN
+      NCResponse.Statuscode = icStatusCode
+      NCResponse.Comment = icComment.
+   llgOK = TEMP-TABLE NCResponse:WRITE-JSON("LONGCHAR", /*writing type*/
+                                             llcMessage, /*target*/
+                                             TRUE). /*formatted to readabale*/
+
+   EMPTY TEMP-TABLE NCResponse.
+   IF llgOK EQ TRUE THEN RETURN STRING( llcMessage  ).
+
 
 RETURN "".
 END.   
