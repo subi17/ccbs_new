@@ -4,5 +4,5 @@ ADD FIELD "TerritoryOwner" OF "TermMobSub" AS CHARACTER
   LABEL "TerritoryOwner"
   COLUMN-LABEL "TerritoryOwner"
   HELP "Territory Owner"
-  ORDER 910
+  ORDER 920
 
