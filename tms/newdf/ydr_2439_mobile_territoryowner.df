@@ -1,0 +1,8 @@
+ADD FIELD "TerritoryOwner" OF "TermMobSub" AS CHARACTER
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "TerritoryOwner"
+  COLUMN-LABEL "TerritoryOwner"
+  HELP "Territory Owner"
+  ORDER 920
+
