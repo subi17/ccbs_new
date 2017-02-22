@@ -289,6 +289,7 @@ IF NOT AVAIL mobsub THEN DO:
       WHEN 1 THEN MobSub.AgrCust = OrderCustomer.CustNum.
       WHEN 2 THEN MobSub.InvCust = OrderCustomer.CustNum.
       WHEN 3 THEN MobSub.CustNum = OrderCustomer.CustNum.
+      WHEN 6 THEN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
       END CASE.
       
       /* Create contact data for corporate customers */
