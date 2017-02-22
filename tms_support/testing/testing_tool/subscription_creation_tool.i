@@ -1048,7 +1048,7 @@ PROCEDURE pUpdateSegment:
 
    liSegmentEntries = NUM-ENTRIES(ttInputFileContent.TestList).
 
-   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0,
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
 
       ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
       IF lcTenant > "" THEN
