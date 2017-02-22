@@ -1587,8 +1587,7 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
         orderfusion.brand = gcBrand AND
         orderfusion.orderid = order.orderid NO-ERROR.
    IF AVAIL orderfusion AND
-      (orderfusion.fusionstatus EQ {&FUSION_ORDER_STATUS_PENDING_CANCELLED} OR
-       OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED})
+      OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED}
       THEN DO:
       ASSIGN
          FusionMessage.UpdateTS = fMakeTS()
