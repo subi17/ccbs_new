@@ -406,7 +406,8 @@ PROCEDURE pContractActivation:
    IF lcDCEvent = "DATA7" THEN DO:
       IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
               lcUseCLIType = "CONT9" OR lcUseCLIType = "CONT10" OR
-              lcUseCLIType = "CONT26") THEN DO:
+              lcUseCLIType = "CONT26") AND
+         NOT fIsConvergenceTariff(lcUseCLIType) THEN DO:
          fReqError("Contract is not allowed for this subscription type").
          RETURN.
       END.
@@ -1512,7 +1513,11 @@ PROCEDURE pFinalize:
          /* Mark current tariff bundle to MsOwner */
          IF iiRequestType = 8 AND
             MsRequest.ReqSource <> {&REQUEST_SOURCE_BTC} AND
-            MsRequest.ReqSource <> {&REQUEST_SOURCE_STC} THEN DO:
+            MsRequest.ReqSource <> {&REQUEST_SOURCE_STC} AND
+            MsRequest.ReqSource <> {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} 
+            THEN DO:
+            /* YTS-8096: prevent wrong tariffbundle saving in case
+               there is STC for the same day than Reactivation */
             FIND CURRENT MsOwner EXCLUSIVE-LOCK NO-ERROR.
             IF AVAIL MsOwner THEN DO:
                IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
@@ -3278,7 +3283,8 @@ PROCEDURE pContractReactivation:
    IF lcDCEvent = "DATA7" THEN DO:
       IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
               lcUseCLIType = "CONT9" OR lcUseCLIType = "CONT10" OR
-              lcUseCLIType = "CONT26") THEN DO:
+              lcUseCLIType = "CONT26") AND
+         NOT fIsConvergenceTariff(lcUseCLIType) THEN DO:
          fReqError("Contract is not allowed for this subscription type").
          RETURN.
       END.
