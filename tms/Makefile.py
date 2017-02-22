@@ -317,15 +317,14 @@ def cui(*a):
             raise PikeException('Expected a module to run as a parameter')
         if a[0] == 'vimbatch':
             args.extend(['-b'])
-
         program = parameters[0]
 
-        cdr_dict = {}
-        for cdr_database in cdr_databases:
-            if not cdr_dict:
-                cdr_dict = active_cdr_db_pf()
-            if cdr_database in cdr_dict:
-                args.extend(cdr_dict[cdr_database])
+    cdr_dict = {}
+    for cdr_database in cdr_databases:
+        if not cdr_dict:
+            cdr_dict = active_cdr_db_pf()
+        if cdr_database in cdr_dict:
+            args.extend(cdr_dict[cdr_database])
 
     args.extend(['-T', '../var/tmp', '-p', program])
 
