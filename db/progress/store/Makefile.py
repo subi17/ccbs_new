@@ -207,7 +207,7 @@ def write_pf_file(filename, tenant='', logical_names={}):
     if tenant:
         tenant = '_{}'.format(tenant)
     with open(filename, 'wt') as fd:
-        fd.write('-h %d\n' % len(databases))
+        fd.write('-h %d\n' % len(databases) + len(cdr_databases))
         for db in databases:
             name_map = ' -ld %s' % logical_names[db] if db in logical_names else ''
             fd.write('-pf {0}/{1}{2}.pf{3}\n'.format(getcwd(), db, tenant, name_map))
