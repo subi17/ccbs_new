@@ -9,6 +9,23 @@
 &IF "{&migrationi}" NE "YES"
 &THEN
 &GLOBAL-DEFINE migrationi YES
+{commali.i}
+{tmsconst.i}
+{cparam2.i}
+{log.i}
+/*Message queue related global variables.*/
+DEF VAR lcLoginMq          AS CHAR NO-UNDO.
+DEF VAR lcPassMq           AS CHAR NO-UNDO.
+DEF VAR liPortMq           AS INTEGER   NO-UNDO.
+DEF VAR lcServerMq         AS CHAR NO-UNDO.
+DEF VAR liTimeOutMq        AS INTEGER   NO-UNDO.
+DEF VAR lcQueueMq          AS CHAR NO-UNDO.
+DEF VAR liLogLevel         AS INT NO-UNDO.
+DEF VAR lcLogManagerFile   AS CHAR NO-UNDO.
+DEF VAR lcMigrationLogDir  AS CHAR NO-UNDO.
+DEF VAR liLogTreshold      AS IN  NO-UNDO.
+DEF VAR lMsgPublisher AS CLASS Gwy.MqPublisher NO-UNDO.
+
 
 /*Temp table for sending NC response info to WEB.*/
 DEF TEMP-TABLE NCResponse NO-UNDO
@@ -17,6 +34,10 @@ DEF TEMP-TABLE NCResponse NO-UNDO
    FIELD StatusCode AS CHAR
    FIELD Comment AS CHAR.
 
+DEF TEMP-TABLE OrderInfo NO-UNDO
+   FIELD Order AS CHAR
+   FIELD MSISDN AS CHAR
+   FIELD StatusCode AS CHAR.
 
 {commali.i}
 {Syst/tmsconst.i}
@@ -130,7 +151,8 @@ END.
 FUNCTION fGenerateOPDataInfo RETURNS CHAR
    (iiOrderID AS INT,
     icMSISDN AS CHAR,
-    icStatusCode AS CHAR):
+    icStatusCode AS CHAR, 
+    icComment AS CHAR):
    DEF VAR lcTargetType AS CHAR NO-UNDO.
    DEF VAR llcMessage  AS LONGCHAR NO-UNDO.
    DEF VAR llgOK AS LOGICAL NO-UNDO.
@@ -151,6 +173,70 @@ FUNCTION fGenerateOPDataInfo RETURNS CHAR
 
 RETURN "".
 END.   
+
+
+/*Migration message queue related functions and procedures*/
+FUNCTION fInitMigrationMQ RETURNS CHAR
+   (icLogIdentifier AS CHAR): /*migration event type: NC response,...*/
+
+ASSIGN
+   lcLoginMq        = fCParamC("MigrationMqLogin")
+   lcPassMq         = fCParamC("MigrationMqPassCode")
+   liPortMq         = fCParamI("MigrationMqPort")
+   lcServerMq       = fCParamC("MigrationMqServer")
+   liTimeOutMq      = fCParamI("MigrationMqTimeOut")
+   liLogTreshold    = fCParamI("InvPushLogTreshold")
+   lcQueueMq        = fCParamC("MigrationToQueue") 
+   lcLogManagerFile = lcMigrationLogDir + "Migration_LogManager_" +
+                                               icLogIdentifier + "_" +
+                                               STRING(YEAR(TODAY),"9999") +
+                                               STRING(MONTH(TODAY),"99")  +
+                                               STRING(DAY(TODAY),"99")    +
+                                               ".log".
+
+   IF liLogLevel = 0 OR liLogLevel = ? THEN
+      liLogLevel = 2. /* default */
+   IF lcLogManagerFile > "" THEN DO:
+      fSetLogFileName(lcLogManagerFile).
+      fSetGlobalLoggingLevel(liLogLevel).
+      fSetLogTreshold(liLogTreshold).
+   END.
+   IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+         LOG-MANAGER:WRITE-MESSAGE("RabbitMQPub handle not found","ERROR").
+      RETURN "MQ creation failed".
+   END.
+
+   RETURN "".
+END.
+
+FUNCTION fWriteToMQ RETURNS CHAR
+   (icMessage AS CHAR):
+   DEF VAR lcError AS CHAR NO-UNDO.
+
+   IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
+      lcError = "MQ Publisher handle not found".
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN 
+         LOG-MANAGER:WRITE-MESSAGE(lcError,"ERROR").
+      RETURN lcError.
+   END.
+
+   IF NOT lMsgPublisher:send_message(icMessage) THEN DO:
+      lcError = "Message sending failed".
+      IF LOG-MANAGER:LOGFILE-NAME <> ? AND
+      LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+         LOG-MANAGER:WRITE-MESSAGE(lcError,"ERROR").
+      RETURN lcError.
+   END.
+
+
+   RETURN "".
+END.   
+
+FUNCTION fFinalizeMQ RETURNS CHAR
+   ():
+   IF VALID-OBJECT(lMsgPublisher) THEN DELETE OBJECT(lMsgPublisher).
+END.
 
 
 &ENDIF
