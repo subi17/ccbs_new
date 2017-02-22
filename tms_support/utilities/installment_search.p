@@ -1,4 +1,5 @@
-TREAM sOut.
+/* Instalment search utility */
+DEF STREAM sOut.
 
 DEF VAR lcNumInst      AS INT NO-UNDO INITIAL 1
                        VIEW-AS RADIO-SET RADIO-BUTTONS 
@@ -27,8 +28,8 @@ DEF VAR llNext              AS LOG  NO-UNDO.
 DEF VAR lcContract1         AS CHAR NO-UNDO VIEW-AS TEXT.
 DEF VAR lcContract2         AS CHAR NO-UNDO VIEW-AS TEXT.
 
-DEF button run-button  LABEL "RUN".
-DEF button quit-button LABEL "QUIT".
+DEF BUTTON run-button  LABEL "RUN".
+DEF BUTTON quit-button LABEL "QUIT".
 
 DEF VAR lcValidFinStat AS CHAR NO-UNDO.
 
@@ -51,15 +52,12 @@ DEFINE BUFFER bfttdata FOR ttData.
 lcValidFinStat = "00,B00,B01,B02,B99,Y00,Y01,Y02,Y03,Y04,Y05,Y06,Y07,Y08,Y09,Y10,Y11,Y12,Y13,Y14,Y15,0049,0081,0182,2100".
 
 ASSIGN
-   lcOutfile = "/tmp/instalment_search_" + 
-               STRING(TODAY,"99999999") + 
-               "_" + REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt".
+   lcOutfile = "/tmp/instalment_search_" + STRING(TODAY,"99999999") + "_" + REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt".
 
 OUTPUT STREAM sOut TO VALUE(lcOutfile).
 
 PUT STREAM sout
-   "Cust Num|MSISDN|SubID|DCEvent|OrderId|Contract|From|To|Financial Status|Final Payment|Termination Date " 
-   SKIP.
+   "Cust Num|MSISDN|SubID|DCEvent|OrderId|Contract|From|To|Financial Status|Final Payment|Termination Date " SKIP.
 
 FORM
    lcNumInst      LABEL "Num of Instalment"
@@ -84,6 +82,61 @@ FORM
    FRAME ffind.
 
 ENABLE ALL WITH FRAME ffind.
+
+FUNCTION fAvailTempData RETURNS LOG
+   (INPUT iNumInst AS CHAR, INPUT iCustNum AS INTEGER,
+    INPUT cCli AS CHAR, INPUT iMsSeq AS INTEGER,
+    INPUT cDCEvent AS CHAR):
+
+   IF iNumInst = "1" THEN
+   DO: 
+      IF CAN-FIND(FIRST ttData WHERE 
+                        ttData.custnum   = iCustNum    AND
+                        ttData.cli       = cCli        AND
+                        ttData.msseq     = iMsSeq) THEN
+         RETURN YES.
+      ELSE
+         RETURN NO.
+   END.
+   ELSE
+   DO:
+      IF CAN-FIND(FIRST ttData WHERE 
+                        ttData.custnum   = iCustNum    AND
+                        ttData.cli       = cCli        AND
+                        ttData.msseq     = iMsSeq      AND
+                        ttData.dcevent   = DCCli.DCEvent) THEN
+         RETURN YES.
+      ELSE
+         RETURN NO.
+   END.
+END FUNCTION.
+
+FUNCTION fAvailFFitem RETURNS LOGICAL
+    (INPUT iFFNum AS INT, INPUT cMode AS CHAR):
+
+   IF cMode = "=" THEN
+   DO:   
+      IF CAN-FIND(FIRST FFItem WHERE 
+                        FFItem.FFnum      = iFFNum AND
+                        FFItem.billed     = FALSE AND
+                        FFItem.billperiod = YEAR(TODAY) * 100 + MONTH(TODAY)   
+                        NO-LOCK) THEN
+         RETURN YES.
+      ELSE
+         RETURN NO.
+   END.
+   ELSE IF cMode = ">" THEN
+   DO:   
+      IF CAN-FIND(FIRST FFItem WHERE 
+                        FFItem.FFnum      = iFFNum AND
+                        FFItem.billed     = FALSE AND
+                        FFItem.billperiod > YEAR(TODAY) * 100 + MONTH(TODAY)   
+                        NO-LOCK) THEN
+         RETURN YES.
+      ELSE
+         RETURN NO.
+   END.
+END FUNCTION.
 
 RUN p_hide_few.
 
@@ -139,6 +192,17 @@ DO:
       RUN p_out_data_one_inst.
    ELSE IF (lcNumInst:SCREEN-VALUE = "2" OR lcNumInst:SCREEN-VALUE = "99") THEN           
       RUN p_out_data_two_inst.   
+
+   FOR EACH ttData NO-LOCK:   
+      PUT STREAM sOut UNFORMATTED ttData.custnum "|" ttData.cli "|" ttData.msseq "|" ttData.dcevent "|" ttData.orderid "|" ttData.contract "|" ttData.validfrom "|" ttData.validto "|" ttData.FinStatus "|" ttData.finalpay "|" ttData.TermDate SKIP.
+   END.
+
+   OUTPUT STREAM sOut CLOSE.
+
+   MESSAGE "Searched Finished...Check the file under /tmp directory"
+       VIEW-AS ALERT-BOX INFO BUTTONS OK.
+
+   APPLY "CHOOSE" TO quit-button IN FRAME ffind.
 END.
 
 ON 'choose':U OF quit-button
@@ -206,19 +270,10 @@ PROCEDURE p_final_pay:
    DEFINE OUTPUT PARAMETER opFinalPay AS LOG  NO-UNDO.   
    
    IF ipFinalPay = "yes" THEN
-   DO:            
-      IF NOT CAN-FIND(FIRST FFItem WHERE 
-                            FFItem.FFnum      = ipFFNUm AND
-                            FFItem.billed     = FALSE AND
-                            FFItem.billperiod = YEAR(TODAY) * 100 + 
-                                                MONTH(TODAY)   
-                            NO-LOCK) THEN
+   DO:   
+      IF NOT fAvailFFitem(INPUT ipFFNUm, "=") THEN      
          ASSIGN opNext     = YES.
-      ELSE IF NOT CAN-FIND(FIRST FFItem WHERE 
-                                 FFItem.FFnum      = ipFFNUm AND
-                                 FFItem.billed     = FALSE AND
-                                 FFItem.billperiod > YEAR(TODAY) * 100 + 
-                                                     MONTH(TODAY) NO-LOCK) THEN      
+      ELSE IF NOT fAvailFFitem(INPUT ipFFNUm, ">") THEN      
          ASSIGN opFinalPay = YES.
       ELSE
          ASSIGN opNext     = YES.
@@ -226,40 +281,18 @@ PROCEDURE p_final_pay:
    END.
    ELSE IF ipFinalPay = "no" THEN
    DO:
-      IF CAN-FIND(FIRST FFItem WHERE 
-                        FFItem.FFnum  = ipFFNUm AND
-                        FFItem.billed = FALSE AND
-                        FFItem.billperiod > YEAR(TODAY) * 100 + 
-                                            MONTH(TODAY)   
-                           NO-LOCK) THEN
+      IF fAvailFFitem(INPUT ipFFNUm, ">") THEN
          ASSIGN opFinalPay = NO.         
       ELSE
-         ASSIGN opNext = YES.  
-         
+         ASSIGN opNext = YES.           
    END.            
    ELSE 
    DO:
-      IF CAN-FIND(FIRST FFItem WHERE 
-                        FFItem.FFnum  = ipFFNUm AND
-                        FFItem.billed = FALSE AND
-                        FFItem.billperiod > YEAR(TODAY) * 100 + 
-                                            MONTH(TODAY)   
-                        NO-LOCK) THEN
+      IF fAvailFFitem(INPUT ipFFNUm, ">") THEN
          ASSIGN opFinalPay = NO.
-      ELSE IF NOT CAN-FIND(FIRST FFItem WHERE 
-                                 FFItem.FFnum  = ipFFNUm AND
-                                 FFItem.billed = FALSE AND
-                                 FFItem.billperiod > YEAR(TODAY) * 100 + 
-                                                     MONTH(TODAY) 
-                                 NO-LOCK) AND
-                  CAN-FIND(FIRST FFItem WHERE 
-                                 FFItem.FFnum  = ipFFNUm AND
-                                 FFItem.billed = FALSE AND
-                                 FFItem.billperiod = YEAR(TODAY) * 100 + 
-                                                     MONTH(TODAY) 
-                                 NO-LOCK) THEN
-         ASSIGN opFinalPay = YES.
-      
+      ELSE IF NOT fAvailFFitem(INPUT ipFFNUm, ">") AND
+           fAvailFFitem(INPUT ipFFNUm, "=") THEN
+         ASSIGN opFinalPay = YES.    
    END.            
 END PROCEDURE.
 
@@ -309,29 +342,21 @@ PROCEDURE p_out_data_one_inst:
                     
          IF AVAIL FixedFee THEN
          DO:
-            RUN p_final_pay(llContrFinalPay1:SCREEN-VALUE,FixedFee.FFnum,OUTPUT llNext, OUTPUT llFinalPay).            
-            IF llNext THEN
-               NEXT.
-   
-            IF NOT CAN-FIND(FIRST ttData WHERE 
-                                  ttData.custnum   = Mobsub.CustNum    AND
-                                  ttData.cli       = Mobsub.Cli        AND
-                                  ttData.msseq     = Mobsub.MsSeq)  THEN
-            DO:            
-               CREATE ttData.
-               ASSIGN ttData.custnum   = Mobsub.CustNum
-                      ttData.cli       = Mobsub.Cli
-                      ttData.msseq     = Mobsub.MsSeq
-                      ttData.dcevent   = DCCli.DCEvent
-                      ttData.orderid   = FixedFee.OrderId
-                      ttData.contract  = FixedFee.Contract
-                      ttData.validfrom = DCCli.ValidFrom
-                      ttData.validto   = DCCLi.ValidTo
-                      ttData.FinStatus = FixedFee.FinancedResult
-                      ttData.finalpay  = llfinalPay
-                      ttData.TermDate  = (IF DCCli.TermDate <> ? THEN STRING(DCCli.TermDate) ELSE "").
+            IF NOT fAvailTempData(lcNumInst:SCREEN-VALUE,Mobsub.CustNum,
+                                  Mobsub.Cli,Mobsub.MsSeq,DCCli.DCEvent) THEN
+                
+            DO:   
+               /* If customer is paying the last payment in the current month */
+               RUN p_final_pay(llContrFinalPay1:SCREEN-VALUE, FixedFee.FFnum, OUTPUT llNext, OUTPUT llFinalPay).
+            
+               IF llNext THEN
+                  NEXT.
+
+               RUN pCreateData(Mobsub.CustNum,Mobsub.Cli,Mobsub.MsSeq,DCCli.DCEvent,FixedFee.OrderId,
+                               FixedFee.Contract,DCCli.ValidFrom,DCCli.ValidTo,FixedFee.FinancedResult,
+                               llfinalPay,IF DCCli.TermDate <> ? THEN STRING(DCCli.TermDate) ELSE "").                              
             END.
-            ELSE
+            ELSE 
             DO:
                /* This logic is to delete the record if there is 2 active contracts for same msseq
                   This logic doesn't applied to terminated contracts */
@@ -347,19 +372,7 @@ PROCEDURE p_out_data_one_inst:
             END.            
          END.
       END.      
-   END.  
-
-   FOR EACH ttData NO-LOCK:   
-      PUT STREAM sOut UNFORMATTED ttData.custnum "|" ttData.cli "|" ttData.msseq "|" ttData.dcevent "|" ttData.orderid "|" ttData.contract "|" ttData.validfrom "|" ttData.validto "|" ttData.FinStatus "|" ttData.finalpay "|" ttData.TermDate SKIP.
-   END.
-
-   OUTPUT STREAM sOut CLOSE.
-
-   MESSAGE "Searched Finished...Check the file under /tmp directory"
-       VIEW-AS ALERT-BOX INFO BUTTONS OK.
-
-   APPLY "CHOOSE" TO quit-button IN FRAME ffind.
-   
+   END.       
 END PROCEDURE.
 
 /* This procedure is to fetch the subscriptions with 2 active or inactive instalment(payterm* or rvterm12) based on search criteria */
@@ -408,32 +421,18 @@ PROCEDURE p_out_data_two_inst:
                     ELSE TRUE)) NO-LOCK NO-ERROR.
                     
          IF AVAIL FixedFee THEN
-         DO:             
+         DO:                     
             /* If customer is paying the last payment in the current month */
-            RUN p_final_pay(llContrFinalPay1:SCREEN-VALUE,FixedFee.FFnum,OUTPUT llNext, OUTPUT llFinalPay).
+            RUN p_final_pay(llContrFinalPay1:SCREEN-VALUE, FixedFee.FFnum, OUTPUT llNext, OUTPUT llFinalPay).
             
             IF llNext THEN
                NEXT.
-            
-            IF NOT CAN-FIND(FIRST ttData WHERE 
-                                  ttData.custnum   = Mobsub.CustNum    AND
-                                  ttData.cli       = Mobsub.Cli        AND
-                                  ttData.msseq     = Mobsub.MsSeq      AND
-                                  ttData.dcevent   = DCCli.DCEvent) THEN
-            DO:                           
-               CREATE ttData.
-               ASSIGN ttData.custnum   = Mobsub.CustNum
-                      ttData.cli       = Mobsub.Cli
-                      ttData.msseq     = Mobsub.MsSeq
-                      ttData.dcevent   = DCCLi.DCEvent
-                      ttData.orderid   = FixedFee.OrderId
-                      ttData.contract  = FixedFee.Contract
-                      ttData.validfrom = DCCli.ValidFrom
-                      ttData.validto   = DCCLi.ValidTo
-                      ttData.FinStatus = FixedFee.FinancedResult
-                      ttData.finalpay  = llfinalPay
-                      ttData.TermDate  = (IF DCCli.TermDate <> ? THEN STRING(DCCli.TermDate) ELSE "").
-            END.
+
+            IF NOT fAvailTempData(lcNumInst:SCREEN-VALUE,Mobsub.CustNum,Mobsub.Cli,Mobsub.MsSeq,DCCli.DCEvent) THEN
+                            
+               RUN pCreateData(Mobsub.CustNum,Mobsub.Cli,Mobsub.MsSeq,DCCli.DCEvent,FixedFee.OrderId,FixedFee.Contract,
+                               DCCli.ValidFrom,DCCli.ValidTo,FixedFee.FinancedResult,llfinalPay,
+                               IF DCCli.TermDate <> ? THEN STRING(DCCli.TermDate) ELSE "").                                          
          END.
       END.
       /* This logic run only when atleast one instalment(payterm* or rvterm12 is selected from the list) 
@@ -488,24 +487,12 @@ PROCEDURE p_out_data_two_inst:
                   IF llNext THEN
                      NEXT.
 
-                  IF NOT CAN-FIND(FIRST ttData WHERE 
-                                        ttData.custnum   = Mobsub.CustNum    AND
-                                        ttData.cli       = Mobsub.Cli        AND
-                                        ttData.msseq     = Mobsub.MsSeq      AND
-                                        ttData.dcevent   = DCCli.DCEvent) THEN
-                  DO:            
-                     CREATE ttData.
-                     ASSIGN ttData.custnum   = Mobsub.CustNum
-                            ttData.cli       = Mobsub.Cli
-                            ttData.msseq     = Mobsub.MsSeq
-                            ttData.dcevent   = DCCLi.DCEvent
-                            ttData.orderid   = FixedFee.OrderId
-                            ttData.contract  = FixedFee.Contract
-                            ttData.validfrom = DCCli.ValidFrom
-                            ttData.validto   = DCCLi.ValidTo
-                            ttData.finalpay  = llfinalPay
-                            ttData.FinStatus = FixedFee.FinancedResult
-                            ttData.TermDate  = (IF DCCli.TermDate <> ? THEN STRING(DCCli.TermDate) ELSE "").
+                  IF NOT fAvailTempData(lcNumInst:SCREEN-VALUE,Mobsub.CustNum,
+                                        Mobsub.Cli,Mobsub.MsSeq,DCCli.DCEvent) THEN
+                  DO:       
+                     RUN pCreateData(Mobsub.CustNum,Mobsub.Cli,Mobsub.MsSeq,DCCli.DCEvent,FixedFee.OrderId,FixedFee.Contract,
+                                     DCCli.ValidFrom,DCCli.ValidTo,FixedFee.FinancedResult,
+                                     llfinalPay,IF DCCli.TermDate <> ? THEN STRING(DCCli.TermDate) ELSE "").                                                   
                   END.
                END.
             END.  
@@ -514,8 +501,7 @@ PROCEDURE p_out_data_two_inst:
    END.
 
    /* This logic is just to remove the record if there is less than 2 records for one msseq 
-      There must be 2 records for each msseq 
-      This logic is not needed when "Any" is selected*/
+      There must be 2 records for each msseq. This logic is not needed when "Any" is selected*/
    IF lcNumInst:SCREEN-VALUE = "2" THEN
    DO:   
       FOR EACH ttData NO-LOCK BREAK BY ttData.msseq:
@@ -528,19 +514,34 @@ PROCEDURE p_out_data_two_inst:
             END.
          END.
       END.
-   END.
-   
-   FOR EACH ttData NO-LOCK:   
-      PUT STREAM sOut UNFORMATTED ttData.custnum "|" ttData.cli "|" ttData.msseq "|" ttData.dcevent "|" ttData.orderid "|" ttData.contract "|" ttData.validfrom "|" ttData.validto "|" ttData.FinStatus "|" ttData.finalpay "|" ttData.TermDate SKIP.
-   END.
+   END.     
+END PROCEDURE.
 
-   OUTPUT STREAM sOut CLOSE.
+PROCEDURE pCreateData:
+   DEFINE INPUT PARAMETER iCustNum    AS INTEGER   NO-UNDO.
+   DEFINE INPUT PARAMETER cCli        AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER iMsSeq      AS INTEGER   NO-UNDO.
+   DEFINE INPUT PARAMETER cDCEvent    AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER iOrderId    AS INTEGER   NO-UNDO.
+   DEFINE INPUT PARAMETER cContract   AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER dtValidFrom AS DATE      NO-UNDO.
+   DEFINE INPUT PARAMETER dtValidTo   AS DATE      NO-UNDO.
+   DEFINE INPUT PARAMETER cFinResult  AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER llFinalPay  AS LOGICAL   NO-UNDO.
+   DEFINE INPUT PARAMETER cTermDate   AS CHAR      NO-UNDO.
 
-   MESSAGE "Searched Finished...Check the file under /tmp directory"
-       VIEW-AS ALERT-BOX INFO BUTTONS OK.
-
-   APPLY "CHOOSE" TO quit-button IN FRAME ffind.
-
+    CREATE ttData.
+    ASSIGN ttData.custnum   = iCustNum   
+           ttData.cli       = cCli       
+           ttData.msseq     = iMsSeq     
+           ttData.dcevent   = cDCEvent   
+           ttData.orderid   = iOrderId   
+           ttData.contract  = cContract  
+           ttData.validfrom = dtValidFrom
+           ttData.validto   = dtValidTo  
+           ttData.FinStatus = cFinResult 
+           ttData.finalpay  = llFinalPay 
+           ttData.TermDate  = cTermDate.
 END PROCEDURE.
 
 WAIT-FOR 'choose' OF quit-button.
