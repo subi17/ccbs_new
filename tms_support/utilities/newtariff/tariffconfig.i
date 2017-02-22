@@ -63,7 +63,7 @@ DEFINE TEMP-TABLE ttDayCampaign NO-UNDO
     FIELD DCEvent        AS CHARACTER
     FIELD DCName         AS CHARACTER
     FIELD DCType         AS CHARACTER
-    FIELD PayType        AS INTEGER
+    FIELD PayType        AS CHARACTER
     FIELD BillCode       AS CHARACTER
     FIELD UpSell         AS CHARACTER
     FIELD BonoSupport    AS LOGICAL
@@ -90,6 +90,7 @@ DEFINE TEMP-TABLE ttServiceLimit NO-UNDO
     FIELD SLCode         AS CHARACTER
     FIELD SLName         AS CHARACTER
     FIELD DialType       AS INTEGER
+    FIELD InclUnit       AS INTEGER
     FIELD InclAmt        AS DECIMAL
     FIELD FirstMonthCalc AS INTEGER
     FIELD LastMonthCalc  AS INTEGER

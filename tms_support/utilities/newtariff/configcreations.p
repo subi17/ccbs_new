@@ -621,15 +621,18 @@ PROCEDURE pDayCampaign:
          DayCampaign.Brand           = gcBrand
          DayCampaign.DCEvent         = ttDayCampaign.DCEvent 
          DayCampaign.DCName          = ttDayCampaign.DCName
-         DayCampaign.PayType         = ttDayCampaign.PayType
+         DayCampaign.PayType         = INTEGER(fTMSCValue("CliType","PayType",ttDayCampaign.PayType))
          DayCampaign.ValidFrom       = TODAY 
          DayCampaign.ValidTo         = DATE(12,31,2049)
          DayCampaign.StatusCode      = 1           /* Default value Active */
-         DayCampaign.DCType          = (IF ttDayCampaign.DCType = "ServicePackage" THEN "1" ELSE IF ttDayCampaign.DCType = "PackageWithCounter" THEN "4" ELSE "7")
-         DayCampaign.CCN             = (IF ttDayCampaign.DCType = "PackageWithCounter" THEN 93 ELSE 0)         
-         DayCampaign.InstanceLimit   = 1
+         DayCampaign.DCType          = (IF ttDayCampaign.DCType = "ServicePackage" THEN "1" 
+                                        ELSE IF ttDayCampaign.DCType = "PackageWithCounter" THEN "4" 
+                                        ELSE IF ttDayCampaign.DCType = "Upsell" THEN "6" 
+                                        ELSE "7")
+         DayCampaign.CCN             = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" THEN 93 ELSE 0)         
+         DayCampaign.InstanceLimit   = (IF ttDayCampaign.DCType = "Upsell" THEN 100 ELSE 1)
          DayCampaign.BillCode        = ttDayCampaign.BillCode          
-         DayCampaign.InclUnit        = (IF ttDayCampaign.DCType = "PackageWithCounter" THEN 4 ELSE 1) 
+         DayCampaign.InclUnit        = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" THEN 4 ELSE 1) 
          DayCampaign.CalcMethod      = (IF ttDayCampaign.DCType = "PackageWithCounter" THEN 4 ELSE 1)  
          DayCampaign.InclStartCharge = YES                          
          DayCampaign.MaxChargeIncl   = 0                            
@@ -725,25 +728,32 @@ PROCEDURE pFMItem:
    
    DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.   
    
-   IF ttCliType.TariffBundle NE "" THEN 
+   IF AVAIL ttCliType THEN 
    DO:
-      FIND FIRST CLIType WHERE CLIType.Brand = gcBrand AND CLIType.CLIType = ttCliType.ParentTariff NO-LOCK NO-ERROR.
-      IF AVAILABLE CLIType THEN
-         ASSIGN lcRatePlan = CLIType.PricePlan.
-   END.
-   
-   ASSIGN lcRatePlan = (IF lcRatePlan NE "" THEN lcRatePlan ELSE REPLACE(ttCliType.CliType,"CONT","CONTRATO")).
+       IF ttCliType.TariffBundle NE "" THEN 
+       DO:
+          FIND FIRST CLIType WHERE CLIType.Brand = gcBrand AND CLIType.CLIType = ttCliType.ParentTariff NO-LOCK NO-ERROR.
+          IF AVAILABLE CLIType THEN
+             ASSIGN lcRatePlan = CLIType.PricePlan.
+       END.
+       
+       ASSIGN lcRatePlan = (IF lcRatePlan NE "" THEN lcRatePlan ELSE REPLACE(ttCliType.CliType,"CONT","CONTRATO")).
 
-   FIND FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK NO-ERROR.           
-   IF AVAIL RatePlan THEN   
-      FIND FIRST PListConf WHERE PListConf.Brand = gcBrand AND PListConf.RatePlan = RatePlan.RatePlan AND PListConf.PriceList BEGINS "CONTRATO" NO-LOCK NO-ERROR.   
-   
+       FIND FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK NO-ERROR.           
+       IF AVAIL RatePlan THEN   
+          FIND FIRST PListConf WHERE PListConf.Brand = gcBrand AND PListConf.RatePlan = RatePlan.RatePlan AND PListConf.PriceList BEGINS "CONTRATO" NO-LOCK NO-ERROR.   
+   END.
+
    CREATE FMItem. 
    ASSIGN     
       FMItem.Brand             = gcBrand
       FMItem.FeeModel          = ttFMItem.FeeModel
       FMItem.BillCode          = ttFMItem.BillCode
-      FMItem.PriceList         = PListConf.PriceList WHEN AVAILABLE PListConf 
+      FMItem.PriceList         = (IF ttFMItem.PriceList <> "" THEN 
+                                      ttFMItem.PriceList 
+                                  ELSE IF AVAIL PListConf AND PListConf.PriceList <> "" THEN 
+                                      PListConf.PriceList 
+                                  ELSE "") 
       FMItem.FromDate          = TODAY       
       FMItem.ToDate            = DATE(12,31,2049)
       FMItem.BillType          = "MF"                  
@@ -789,13 +799,6 @@ PROCEDURE pServiceLimit:
    
    DEFINE BUFFER bf_ServiceLimit FOR ServiceLimit.
 
-   IF NUM-ENTRIES(ttServiceLimit.SLCode,"_") = 1 OR ENTRY(2,ttServiceLimit.SLCode,"_") EQ "DATA" THEN 
-      liInclUnit = 4. 
-   ELSE IF ENTRY(2,ttServiceLimit.SLCode,"_") EQ "QTY" THEN
-      liInclUnit = 7. 
-   ELSE 
-      liInclUnit = 1.
-   
    FIND FIRST ServiceLimit WHERE ServiceLimit.GroupCode = ttServiceLimit.GroupCode AND 
                                  ServiceLimit.SLCode    = ttServiceLimit.SLCode    AND 
                                  ServiceLimit.DialType  = ttServiceLimit.DialType  AND 
@@ -817,13 +820,13 @@ PROCEDURE pServiceLimit:
          ServiceLimit.SLName         = ttServiceLimit.SLName                             
          ServiceLimit.DialType       = ttServiceLimit.DialType
          ServiceLimit.InclAmt        = ttServiceLimit.InclAmt                  
-         ServiceLimit.InclUnit       = liInclUnit
+         ServiceLimit.InclUnit       = ttServiceLimit.InclUnit
          ServiceLimit.BDestLimit     = 0
          ServiceLimit.ValidFrom      = TODAY 
          ServiceLimit.ValidTo        = DATE(12,31,2049)
          ServiceLimit.FirstMonthCalc = ttServiceLimit.FirstMonthCalc
          ServiceLimit.LastMonthCalc  = ttServiceLimit.LastMonthCalc
-         Servicelimit.Web            = 1.
+         Servicelimit.Web            = 0.
    END.
    
    RETURN "".

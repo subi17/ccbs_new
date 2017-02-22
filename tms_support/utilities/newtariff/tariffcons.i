@@ -19,7 +19,7 @@
 &GLOBAL-DEFINE USAGETYPE  "Voice,Data"
 &GLOBAL-DEFINE FEECALC    "Full,Relative,UsageBased"
 &GLOBAL-DEFINE LIMITVALUE "Full,Relative"
-&GLOBAL-DEFINE CONTRACT   "ServicePackage,PackageWithCounter,PackagewithoutCounter"
+&GLOBAL-DEFINE CONTRACT   "ServicePackage,PackageWithCounter,PackagewithoutCounter,Upsell"
 &GLOBAL-DEFINE BBPROFILE  "1,2"
 &GLOBAL-DEFINE LOGVALUE   "Yes,No"
 &GLOBAL-DEFINE TAXCLASS   "0,1,2"   /* 0: Duty free / 1: Usage / 2: Terminals */
@@ -48,7 +48,9 @@
 
 
 &GLOBAL-DEFINE M_BB     "MobileBaseBundle"
+&GLOBAL-DEFINE M_BBN    "MobileBaseBundleName"
 &GLOBAL-DEFINE M_BBT    "MobileBaseBundleType"
+&GLOBAL-DEFINE M_BBPT   "MobileBaseBundlePayType"
 &GLOBAL-DEFINE M_UPSL   "UpsellForMobile"
 &GLOBAL-DEFINE M_BONO   "BonoSupportForMobile"
 &GLOBAL-DEFINE M_MFBC   "MonthlyFeeBillCodeForMobile"
@@ -67,6 +69,7 @@
 
 
 &GLOBAL-DEFINE FL_BB    "FixedLineBaseBundle"
+&GLOBAL-DEFINE FL_BBN   "FixedLineBaseBundleName"
 &GLOBAL-DEFINE FL_BBT   "FixedLineBaseBundleType"
 &GLOBAL-DEFINE FL_UPSL  "UpsellForFixedLine"
 &GLOBAL-DEFINE FL_BONO  "BonoSupportForFixedLine"
