@@ -1,0 +1,16 @@
+ADD FIELD "TerritoryOwner" OF "OrderCustomer" AS CHARACTER
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "TerritoryOwner"
+  COLUMN-LABEL "TerritoryOwner"
+  HELP "Territory Owner"
+  ORDER 1130
+
+ADD FIELD "TerritoryOwner" OF "MobSub" AS CHARACTER
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "TerritoryOwner"
+  COLUMN-LABEL "TerritoryOwner"
+  HELP "Territory Owner"
+  ORDER 900
+
