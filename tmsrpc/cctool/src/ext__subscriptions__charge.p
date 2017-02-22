@@ -44,13 +44,7 @@ lcEventId = get_string(pcstruct,"charge_event_id").
 ldChargeLimit = get_double(pcstruct,"charge_limit").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND mobsub NO-LOCK
-WHERE mobsub.msseq = liMsSeq
-  AND mobsub.brand = gcBrand NO-ERROR.
-IF NOT AVAILABLE mobsub THEN DO:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   RETURN appl_err(SUBST("MobSub entry &1 not found", liMsSeq)).
-END.
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq liMsSeq}
 
 IF LOOKUP("amount", lcStruct) GT 0 THEN
   ldAmount = get_double(pcstruct,"amount").
@@ -127,6 +121,7 @@ END.
 ELSE
 add_int(response_toplevel_id, "request_id",liReqId).
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-
+FINALLY:
+    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
+END FINALLY.
 

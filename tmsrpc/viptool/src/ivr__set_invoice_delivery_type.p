@@ -50,10 +50,7 @@ IF llDoEvent THEN DO:
    lhCustomer = BUFFER Customer:HANDLE.
 END.
 
-FIND FIRST MobSub WHERE 
-           MobSub.Brand = gcBrand AND
-           MobSub.cli   = pcMSISDN NO-LOCK NO-ERROR.
-IF NOT AVAILABLE MobSub THEN RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
 
 CASE piDelType:
    WHEN {&INV_DEL_TYPE_PAPER}       THEN .

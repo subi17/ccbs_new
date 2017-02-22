@@ -55,6 +55,8 @@ ASSIGN pcTransId = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i NO ordercanal MobSub Cli pcMSISDN}
+
 lcApplicationId = substring(pcTransId,1,3).
 
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
@@ -67,11 +69,6 @@ IF llDoEvent THEN DO:
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
 END.
-
-FIND FIRST MobSub WHERE 
-           MobSub.Brand = gcBrand AND
-           MobSub.cli   = pcMSISDN NO-LOCK NO-ERROR.
-IF NOT AVAILABLE MobSub THEN RETURN appl_err("Subscription not found").
 
 CASE piDelType:
    WHEN {&INV_DEL_TYPE_PAPER}       THEN .

@@ -26,10 +26,7 @@ IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcMSISDN = get_string(param_toplevel_id,"0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST mobsub NO-LOCK WHERE 
-           mobsub.brand = gcBrand AND
-           mobsub.cli = pcMSISDN NO-ERROR.
-IF NOT AVAILABLE mobsub THEN RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
 
 ldaDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
 liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate). 

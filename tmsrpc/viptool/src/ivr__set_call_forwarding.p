@@ -66,10 +66,7 @@ liLookUp = LOOKUP(pcCFNRY,"0,VM").
 IF liLookUp = 0 THEN RETURN appl_err("Incorrect CFNRY value").
 lcSetting = lcSetting + STRING(liLookUp - 1).
 
-FIND FIRST mobsub NO-LOCK WHERE 
-           mobsub.brand = gcBrand AND
-           mobsub.cli = pcMSISDN NO-ERROR.
-IF NOT AVAILABLE mobsub THEN RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
 
 FIND FIRST SubSer NO-LOCK WHERE
            SubSer.MsSeq = Mobsub.MsSeq AND

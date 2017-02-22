@@ -555,6 +555,9 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 lcOrderStruct = validate_request(pcOrderStruct, gcOrderStructFields).
 IF lcOrderStruct EQ ? THEN RETURN.
 fGetOrderFields().
+
+{newton/src/findtenant.i YES ordercanal CliType CliType pcSubType}
+
 IF pcOfferId NE "" THEN DO:
    FIND Offer WHERE 
         Offer.Brand = gcBrand AND 
@@ -582,12 +585,6 @@ END.
 lcError = fCheckMSISDN().
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-FIND FIRST CLIType NO-LOCK WHERE
-           CLIType.Brand = gcBrand AND
-           CLIType.CliType = pcSubType NO-ERROR.
-IF NOT AVAIL CLIType THEN
-   RETURN appl_err(SUBST("Unknown CLIType &1", pcSubType)).
 
 ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcCONTDContracts = fCParamC("CONTD_CONTRACTS")

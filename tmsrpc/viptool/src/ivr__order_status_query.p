@@ -26,6 +26,8 @@ IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcCLI = get_string(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i NO Ordercanal MobSub CLI pcCLI}
+
 FIND FIRST Order NO-LOCK WHERE 
            Order.CLI = pcCli AND
            Order.Brand = gcBrand USE-INDEX CLI_s NO-ERROR.

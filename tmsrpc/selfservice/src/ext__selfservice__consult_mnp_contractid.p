@@ -58,7 +58,6 @@ DEFINE VARIABLE liCustNum               AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liMsSeq                 AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liOrderId               AS INTEGER   NO-UNDO.
 
-
 pcReqList = validate_request(param_toplevel_id, "string,string,string,[string]").
 IF pcReqList EQ ? THEN RETURN.
 
@@ -67,6 +66,8 @@ ASSIGN pcTransId    = get_string(param_toplevel_id, "0")
        pcDelType    = get_string(param_toplevel_id, "2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/findtenant.i NO ordercanal MobSub Cli pcCLI}
 
 lcApplicationId = substring(pcTransId,1,3).
 

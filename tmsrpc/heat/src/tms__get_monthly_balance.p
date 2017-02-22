@@ -14,26 +14,28 @@
 DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".
 DEFINE VARIABLE response_array AS CHARACTER NO-UNDO. 
 
-DEF VAR pcTenant        AS CHAR    NO-UNDO.
 DEF VAR pcCLI           AS CHAR    NO-UNDO.
 DEF VAR ldBalance       AS DECIMAL NO-UNDO.
 DEF VAR liCurrentPeriod AS INT     NO-UNDO. 
+DEF VAR liDBCount		AS INT     NO-UNDO.
+DEF VAR lcTenant	    AS CHAR    NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
-pcTenant = get_string(param_toplevel_id, "0"). 
-pcCLI = get_string(param_toplevel_id, "1").
+IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+pcCLI = get_string(param_toplevel_id, "0").
 if gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/settenant.i pcTenant}
+FOR FIRST MobSub WHERE MobSub.Brand = gcBrand AND MobSub.Cli = pcCLI TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+    ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).                
+END.
 
-FIND FIRST mobsub WHERE
-     mobsub.brand = gcBrand AND
-     mobsub.cli = pcCli 
-NO-LOCK NO-ERROR.
-
-IF NOT AVAILABLE mobsub THEN DO:
+IF NOT AVAIL MobSub OR lcTenant = "" THEN DO:
    add_int(response_toplevel_id, "", 1).
    RETURN.
+END.
+
+DO liDBCount = 1 TO NUM-DBS
+   ON ERROR UNDO, THROW:
+    SET-EFFECTIVE-TENANT(lcTenant, LDBNAME(liDBCount)).
 END.
 
 /* Cannot be prepaid */

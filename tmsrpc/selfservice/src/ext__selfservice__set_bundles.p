@@ -75,6 +75,8 @@ ASSIGN pcTransId = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i NO ordercanal MobSub Cli pcCLI}
+
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = ghAuthLog::EndUserId.
 
@@ -84,10 +86,6 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
 katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 ldaBonoVoipRemovalDate   = DATE(fCParamC("BonoVoipRemovalDate")).
-
-FIND FIRST MobSub  WHERE 
-           MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
 
 /*YPR-4775*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/

@@ -25,6 +25,7 @@ DEF VAR lcNotificationStatus AS CHAR NO-UNDO. /*struct*/
 
 DEF VAR lcStatusFields AS CHAR NO-UNDO. 
 
+DEF VAR pcTenant    AS CHAR NO-UNDO INIT "Masmovil".
 DEF VAR lcOrderType AS CHAR NO-UNDO. 
 DEF VAR lcStatus AS CHAR NO-UNDO. 
 DEF VAR lcStatusDescription AS CHAR NO-UNDO. 
@@ -92,6 +93,8 @@ IF ERROR-STATUS:ERROR THEN DO:
               "Incorrect orderID syntax").
    RETURN.
 END.
+
+{newton/src/settenant.i pcTenant}
 
 FIND FIRST Order NO-LOCK WHERE
            Order.Brand = gcBrand AND
