@@ -27,6 +27,7 @@
 {Func/orderfunc.i}
 {Func/freacmobsub.i}
 {Func/fixedlinefunc.i}
+{Func/multitenantfunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -79,8 +80,10 @@ IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
    LOOP:
    FOR EACH xxOrder NO-LOCK WHERE  
             xxOrder.Brand      = gcBrand     AND
-            xxOrder.StatusCode = lcStatus:
+            xxOrder.StatusCode = lcStatus
+      TENANT-WHERE BUFFER-TENANT-ID(xxOrder) GE 0:
    
+      fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(xxOrder)).
       FIND FIRST OrderCustomer OF xxOrder WHERE
                  OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
       IF AVAILABLE OrderCustomer AND 
