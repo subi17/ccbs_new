@@ -5,7 +5,7 @@ DEFINE VARIABLE lhQuery AS HANDLE NO-UNDO.
 CREATE QUERY lhQuery.
 
 def stream sout.
-output stream sout to tablecount.txt append.
+output stream sout to {1}_tablecount.txt.
 
 FOR EACH {1}._File
    WHERE _File-number > 0 AND
