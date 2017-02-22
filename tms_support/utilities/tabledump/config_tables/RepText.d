@@ -11262,6 +11262,10 @@
 9 "" 2 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 3 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 5 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
+9 "" 1 "La Combinada Naranja 20" 0 "CONTDSL39" "1" 20/02/17 31/12/49
+9 "" 2 "La Combinada Naranja 20" 0 "CONTDSL39" "1" 20/02/17 31/12/49
+9 "" 3 "La Combinada Naranja 20" 0 "CONTDSL39" "1" 20/02/17 31/12/49
+9 "" 5 "La Combinada Naranja 20" 0 "CONTDSL39" "1" 20/02/17 31/12/49
 9 "" 1 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
 9 "" 2 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
@@ -11274,6 +11278,10 @@
 9 "" 2 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
 9 "" 5 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
+9 "" 1 "La Combinada Morada 20" 0 "CONTDSL52" "1" 20/02/17 31/12/49
+9 "" 2 "La Combinada Morada 20" 0 "CONTDSL52" "1" 20/02/17 31/12/49
+9 "" 3 "La Combinada Morada 20" 0 "CONTDSL52" "1" 20/02/17 31/12/49
+9 "" 5 "La Combinada Morada 20" 0 "CONTDSL52" "1" 20/02/17 31/12/49
 9 "" 1 "La Combinada Azul 20 con 20 GB" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 2 "La Combinada Azul 20 con 20 GB" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 20 con 20 GB" 0 "CONTDSL58" "1" 01/11/16 31/12/49
@@ -11337,6 +11345,10 @@
 9 "" 4 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
 9 "" 5 "Fusión Plana a lo Yoigo" 0 "CONTFF" "1" 16/06/15 31/12/54
 9 "" 5 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
+9 "" 1 "La Combinada Naranja 50" 0 "CONTFH39_50" "1" 20/02/17 31/12/49
+9 "" 2 "La Combinada Naranja 50" 0 "CONTFH39_50" "1" 20/02/17 31/12/49
+9 "" 3 "La Combinada Naranja 50" 0 "CONTFH39_50" "1" 20/02/17 31/12/49
+9 "" 5 "La Combinada Naranja 50" 0 "CONTFH39_50" "1" 20/02/17 31/12/49
 9 "" 1 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
 9 "" 2 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
@@ -11349,10 +11361,18 @@
 9 "" 2 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
 9 "" 5 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
+9 "" 1 "La Combinada Naranja 300" 0 "CONTFH49_300" "1" 20/02/17 31/12/49
+9 "" 2 "La Combinada Naranja 300" 0 "CONTFH49_300" "1" 20/02/17 31/12/49
+9 "" 3 "La Combinada Naranja 300" 0 "CONTFH49_300" "1" 20/02/17 31/12/49
+9 "" 5 "La Combinada Naranja 300" 0 "CONTFH49_300" "1" 20/02/17 31/12/49
 9 "" 1 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
 9 "" 2 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
 9 "" 5 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
+9 "" 1 "La Combinada Morada 50" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
+9 "" 2 "La Combinada Morada 50" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
+9 "" 3 "La Combinada Morada 50" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
+9 "" 5 "La Combinada Morada 50" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
 9 "" 1 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 2 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
@@ -11369,6 +11389,10 @@
 9 "" 2 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
 9 "" 3 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
 9 "" 5 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
+9 "" 1 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
+9 "" 2 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
+9 "" 3 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
+9 "" 5 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
 9 "" 1 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 2 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
