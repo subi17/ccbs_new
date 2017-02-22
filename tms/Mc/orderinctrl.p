@@ -159,9 +159,10 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
 
 END.
 
-/* YTS-6045 */
+/*YPR-5316 AC3: release convergent STC order from "75 - MNP retention" status when MNP out-porting request is cancelled*/
 IF ((Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} AND
      Order.OrderType  EQ {&ORDER_TYPE_STC}) OR
+     /*YTS-6045*/
      Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
      Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}  OR
      Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}  OR

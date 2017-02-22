@@ -1369,8 +1369,10 @@
 "RoamTariff" "Service" "Roaming" "SMS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "VOICE" "" "" "" 1
 "Salesman" "SmPrefix" "IFS" "AF" "AMPLIFFICA" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "AK" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AL" "Alcampo" "" "13" 0
 "Salesman" "SmPrefix" "IFS" "AM" "AONMOBILE" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "AN" "ATAKAM EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AO" "AON CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AP" "Apple" "" "28" 1
 "Salesman" "SmPrefix" "IFS" "AX" "Axia" "" "27" 0
@@ -1393,6 +1395,7 @@
 "Salesman" "SmPrefix" "IFS" "GR" "GSS RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GS" "GSS" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "KH" "K-HABLS" "" "27" 0
+"Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MD" "Mundo Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "MG" "MGM" "" "14" 0
 "Salesman" "SmPrefix" "IFS" "MM" "Media Markt" "" "18" 0
