@@ -174,8 +174,52 @@ FUNCTION fGenerateOPDataInfo RETURNS CHAR
 RETURN "".
 END.   
 
+FUNCTION fCreateMigrationSub RETURNS CHAR
+   (iiOrderID AS INT,
+    ilgChangeSim AS LOGICAL):
+   DEF BUFFER Order FOR Order.
+   DEF VAR ocResult AS CHAR NO-UNDO.
+   DEF VAR ldeSwitchTS AS DECIMAL NO-UNDO.
+   DEF VAR lcCreateOption AS CHAR NO-UNDO.
 
-/*Migration message queue related functions and procedures*/
+   FIND FIRST Order NO-LOCK WHERE
+              Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING}.
+   IF NOT AVAIL Order THEN RETURN "Migration order not found " +
+                                   STRING(iiOrderID).           
+   
+
+   fSubscriptionRequest(INPUT  Order.MSSeq,
+                        INPUT  Order.Cli,
+                        INPUT  Order.CustNum,
+                        INPUT  1,
+                        INPUT  katun,
+                        INPUT  ldeSwitchTS,
+                        INPUT  "CREATE",
+                        INPUT  STRING(Order.OrderId),
+                        INPUT  "", /*for old SIM*/
+                        INPUT  "", /*for Reason info*/
+                        INPUT  "", /*for ContractID*/
+                        INPUT  FALSE,
+                        INPUT  0,
+                        INPUT  {&REQUEST_SOURCE_NEWTON},
+                        OUTPUT ocResult).   
+   IF ocResult > "" THEN DO:
+      llOrdStChg = fSetOrderStatus(Order.OrderId,"2").
+      RETURN "ERROR: Subscription creation failed, order " +
+             STRING(Order.OrderID).
+   END.
+a...
+
+   
+   
+   
+
+
+RETURN "".
+END.   
+
+
+/*Migration message queuearation related functions and procedures*/
 FUNCTION fInitMigrationMQ RETURNS CHAR
    (icLogIdentifier AS CHAR): /*migration event type: NC response,...*/
 

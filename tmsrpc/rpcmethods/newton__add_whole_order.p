@@ -2421,7 +2421,8 @@ fMarkOrderStamp(Order.OrderID,"Change",0.0).
 
 
 /*YDR_1637*/
-IF INDEX(Order.OrderChannel, "pos") EQ 0 THEN DO:
+IF INDEX(Order.OrderChannel, "pos") EQ 0  AND
+         Order.Orderchannel NE "migration" THEN DO:
    IF (Order.StatusCode EQ {&ORDER_STATUS_MNP_ON_HOLD}        /*22*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}        /*51*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}  /*76*/ OR

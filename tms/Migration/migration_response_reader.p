@@ -19,6 +19,7 @@
 {cparam2.i}
 {tmsconst.i}
 {migrationfunc.i}
+
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
@@ -35,21 +36,8 @@ DEF VAR lcRowStatus AS CHAR NO-UNDO.
 DEF VAR lcInputFile AS CHAR No-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
 DEF VAR lcMQMessage AS CHAR NO-UNDO.
-/*Temp tables are named now without tt because the data is now easy to 
-  be written into JSON in nice format.*/
-DEFINE TEMP-TABLE MigrationOK NO-UNDO
-   FIELD OrderID AS INT
-   FIELD MSISDN AS CHAR
-   FIELD StatusCode AS CHAR. /*order status in TMS*/
 
-/*Failed in NC*/
-DEFINE TEMP-TABLE MigrationFailedNC NO-UNDO
-   FIELD OrderID AS INT
-   FIELD MSISDN AS CHAR
-   FIELD StatusCode AS CHAR
-   FIELD StatusCodeNC AS CHAR /*status code from NC*/
-   FIELD StatusDescNC AS CHAR. /*description from NC*/
-
+DEF VAR lcErr AS CHAR NO-UNDO.
 
 ASSIGN
    lcTableName = "MB_Migration"
@@ -105,27 +93,36 @@ DO TRANS:
 END.
 
 /*Execution part*/
-INPUT STREAM sFile THROUGH VALUE("ls -ltr " + lcInDir + "/").
-REPEAT:
-   IMPORT STREAM sFile UNFORMATTED lcFileName.
-   lcInputFile = lcInDir + lcFileName.
-    
-   RUN pReadFile.
-   RUN pSendResults.
-END.
-/*Release ActionLog lock*/
-DO TRANS:
-   FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
-              ActionLog.ActionID  EQ  lcActionID     AND
-              ActionLog.TableName EQ  lcTableName    AND
-              ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
-   EXCLUSIVE-LOCK NO-ERROR.
+lcErr = fInitMigrationMQ("response").
+   IF lcErr NE "" THEN DO:
+   PUT STREAM sLog UNFORMATTED
+      "Migration file will be skipped, " + lcErr +
+      fTS2HMS(fMakeTS()) SKIP.
 
-   IF AVAIL ActionLog THEN DO:
-      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
+END.
+ELSE DO:
+   /*MQ ready, it is possible to handle data*/
+   INPUT STREAM sFile THROUGH VALUE("ls -ltr " + lcInDir + "/").
+   REPEAT:
+      IMPORT STREAM sFile UNFORMATTED lcFileName.
+      lcInputFile = lcInDir + lcFileName.
+    
+      RUN pReadFile.
    END.
-   RELEASE ActionLog.
+   /*Release ActionLog lock*/
+   DO TRANS:
+      FIND FIRST ActionLog WHERE
+                 ActionLog.Brand     EQ  gcBrand        AND
+                 ActionLog.ActionID  EQ  lcActionID     AND
+                 ActionLog.TableName EQ  lcTableName    AND
+                 ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
+      EXCLUSIVE-LOCK NO-ERROR.
+
+      IF AVAIL ActionLog THEN DO:
+         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
+      END.
+      RELEASE ActionLog.
+   END.
 END.
 
 PUT STREAM sLog UNFORMATTED
@@ -176,11 +173,8 @@ PROCEDURE pReadFile:
                  Order.brand EQ gcBrand AND
                  Order.CLI EQ lcMSISDN AND
                  Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING}.
-      IF AVAIL Order THEN DO:
-         liOrderID = Order.OrderID.
-         Order.StatusCode = {&ORDER_STATUS_MIGRATION_WAITING_ACTIVATION}.
-         /*Another job makes actual actiation when TS is reached*/
-      END.
+      IF AVAIL Order THEN liOrderID = Order.OrderID.
+
       /*Nodo data contains a number for Order that is
         already handled
         in incorrect status
@@ -195,7 +189,10 @@ PROCEDURE pReadFile:
          /*Set Order status*/
          /*Add entry to Migration Tool response list (ok)*/
          /*Send SMS*/
-         lcRowStatus = "OK".       
+         /*It is important to check that we do not create double requests*/
+         lcRowStatus = fCreateMigrationSub(liOrderID).
+         
+         IF lcRowStatus EQ "" THEN lcRowStatus = "OK".       
 
       END.
       ELSE DO:
@@ -208,31 +205,20 @@ PROCEDURE pReadFile:
       lcMQMessage = fGenerateNCResponseInfo(liOrderID,
                                             lcMSISDN,
                                             lcNCStatus,
-                                            lcNCCommet).
+                                            lcNCComment).
       IF lcMQMessage EQ "" THEN 
          lcRowStatus = lcRowStatus + ";Message creation failed". 
       ELSE DO:
-        RUN migration_notification.p(lcMQMessage).
-
+        lcRowStatus = ";" + fWriteToMQ(lcMQMessage).
       END.
 
       PUT STREAM sLog UNFORMATTED
          lcLine + ";" + lcRowStatus SKIP.
                   
-   END. /* Line handling END */
+   END. /* Line handling loop END */
 
    PUT STREAM sLog UNFORMATTED
       "Read " + STRING(liLineNumber) + " lines. " 
       "List collection done " + fTS2HMS(fMakeTS()) SKIP.
 END.
 
-/*Procedure sends results to Migration Tool and writes log of each type of
-migration results*/
-PROCEDURE pSendResults:
-
-   PUT STREAM sLog UNFORMATTED
-      "Result reporting starts " + fTS2HMS(fMakeTS()) SKIP.
-
-   PUT STREAM sLog UNFORMATTED
-      "Result reporting done " + fTS2HMS(fMakeTS()) SKIP.
-END.
