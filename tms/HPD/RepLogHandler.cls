@@ -20,13 +20,15 @@ CLASS HPD.RepLogHandler FINAL:
    DEFINE PRIVATE VARIABLE objMsgPublisher    AS CLASS Gwy.MqPublisher NO-UNDO.   
    DEFINE PRIVATE VARIABLE lhRepLogTable      AS HANDLE                NO-UNDO.
    DEFINE PRIVATE VARIABLE lhRepLogQuery      AS HANDLE                NO-UNDO.
-   
+   DEFINE PRIVATE VARIABLE llMultiTenancy     AS LOGICAL INITIAL FALSE NO-UNDO.
+
    DEFINE PRIVATE TEMP-TABLE ttDumpHandler NO-UNDO
       FIELD TableName     AS CHARACTER
+      FIELD TenantName    AS CHARACTER
       FIELD objHandler    AS CLASS Progress.Lang.Object /*HPD.DumpHandler*/
       FIELD VersionNumber AS CHARACTER
       FIELD QuoteKeyValue AS LOGICAL
-      INDEX TableName IS PRIMARY UNIQUE TableName
+      INDEX TableName IS PRIMARY UNIQUE TableName TenantName
       .   
 
    DEFINE PRIVATE VARIABLE lcQueueName        AS CHARACTER   NO-UNDO.
@@ -43,6 +45,7 @@ CLASS HPD.RepLogHandler FINAL:
       (icDB        AS CHARACTER,
        icQueueName AS CHARACTER):
 
+      llMultiTenancy = TENANT-NAME(icDB) > "".
       mInitialize(icDB + ".RepLog", icQueueName).
 
    END CONSTRUCTOR.
@@ -51,6 +54,7 @@ CLASS HPD.RepLogHandler FINAL:
    CONSTRUCTOR PUBLIC RepLogHandler
       (icDB AS CHARACTER):
 
+      llMultiTenancy = TENANT-NAME(icDB) > "".
       mInitialize(icDB + ".RepLog", icDB).
 
    END CONSTRUCTOR.
@@ -196,7 +200,8 @@ CLASS HPD.RepLogHandler FINAL:
    END METHOD.
 
 
-   METHOD PRIVATE LOGICAL mPopulateDumpHandlers( ):
+   METHOD PRIVATE LOGICAL mPopulateDumpHandlers
+      ( icTenant AS CHARACTER ):
       
       DEFINE VARIABLE llFoundHandler AS LOGICAL INITIAL FALSE NO-UNDO.
 
@@ -210,6 +215,7 @@ CLASS HPD.RepLogHandler FINAL:
          
          ASSIGN
             ttDumpHandler.TableName     = DumpFile.MainTable
+            ttDumpHandler.TenantName    = icTenant
             ttDumpHandler.VersionNumber = mGetVersionNumber(DumpFile.DumpID)
             ttDumpHandler.QuoteKeyValue = mQuoteKeyValue(DumpFile.DumpID)
             llFoundHandler = TRUE
@@ -219,8 +225,40 @@ CLASS HPD.RepLogHandler FINAL:
       RETURN llFoundHandler.
 
    END METHOD.     
-   
+
+
+   METHOD PRIVATE LOGICAL mPopulateDumpHandlers( ):
+
+      IF NOT llMultiTenancy
+      THEN RETURN mPopulateDumpHandlers("").
       
+      DEFINE VARIABLE llOK AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE lii AS INTEGER NO-UNDO.
+      DEFINE VARIABLE liNumConnectedDBs AS INTEGER NO-UNDO.
+
+      DO ON ERROR UNDO, THROW:
+
+         DO lii = 0 TO 100:
+
+            DO liNumConnectedDBs = 1 TO NUM-DBS:
+               SET-EFFECTIVE-TENANT(lii, LDBNAME(liNumConnectedDBs)).
+            END.
+
+            llOK = mPopulateDumpHandlers(GET-EFFECTIVE-TENANT-NAME(LDBNAME(liNumConnectedDBs - 1))).
+
+         END.
+
+         CATCH anyError AS Progress.Lang.Error:
+            LEAVE.
+         END CATCH.
+
+      END.
+
+      RETURN llOK.
+
+   END METHOD.
+
+
    METHOD PRIVATE VOID mLog
       ( iiLogLevel   AS INTEGER,
         icLogType    AS CHARACTER, /* ERROR, INFO, DEBUG, ... */
@@ -238,7 +276,14 @@ CLASS HPD.RepLogHandler FINAL:
    */
    METHOD PRIVATE INTEGER mSendRepLog2MQ():
 
-      FIND ttDumpHandler WHERE ttDumpHandler.TableName = lhRepLogTable::TableName NO-ERROR.
+      IF llMultiTenancy
+      THEN FIND ttDumpHandler WHERE
+              ttDumpHandler.TableName  = lhRepLogTable::TableName AND
+              ttDumpHandler.TenantName = lhRepLogTable::TenantName
+           NO-ERROR.
+      ELSE FIND ttDumpHandler WHERE
+              ttDumpHandler.TableName  = lhRepLogTable::TableName
+           NO-ERROR.
 
       IF NOT AVAILABLE ttDumpHandler
       THEN RETURN ERROR NEW Progress.Lang.AppError("Queue " + lcQueueName + " cannot handle table " +
