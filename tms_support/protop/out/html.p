@@ -53,7 +53,7 @@
 &scoped-define frameset_3rows <frameset rows="10%,30%,30%,30%" frameborder="0">
 &scoped-define frameset_2cols <frameset cols="50%,50%"         frameborder="0">
 
-{tms_support/protop/lib/protop.i}
+{../tms_support/protop/lib/protop.i}
 
 define variable gcPrevActive  as character  no-undo. /* detect changes in active modules */
 define variable gcPrevHtmlDir as character  no-undo. /* detect changes in html directory */

@@ -40,8 +40,8 @@
  *
  */
 
-{tms_support/protop/lib/protop.i}
-{tms_support/protop/lib/tt_servers.i}
+{../tms_support/protop/lib/protop.i}
+{../tms_support/protop/lib/tt_servers.i}
 
 define variable support as character no-undo initial "Servers".
 
