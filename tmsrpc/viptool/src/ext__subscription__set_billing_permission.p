@@ -19,10 +19,7 @@ piMsSeq = get_int(param_toplevel_id, "0").
 piBillingPermission = get_int(param_toplevel_id, "1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND mobsub NO-LOCK WHERE 
-     mobsub.msseq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE mobsub THEN
-    RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 FIND TMSCodes WHERE
      TMSCodes.TableName = "Limit" AND

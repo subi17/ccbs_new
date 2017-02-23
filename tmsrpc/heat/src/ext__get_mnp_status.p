@@ -21,12 +21,14 @@ DEF VAR ldeCreated AS DECIMAL NO-UNDO INIT 20000101.
 DEF VAR lrMNPProcess AS ROWID NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+
 pcMSISDN = get_string(param_toplevel_id, "0").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i NO ordercanal MobSub Cli pcMSISDN}
 
-FOR EACH MNPSub WHERE
-         MNPSub.CLI = pcMSISDN NO-LOCK:
+FOR EACH MNPSub WHERE MNPSub.CLI = pcMSISDN NO-LOCK:
 
    FIND MNPProcess WHERE
         MNPProcess.MNPSeq = MNPSub.MNPSeq AND

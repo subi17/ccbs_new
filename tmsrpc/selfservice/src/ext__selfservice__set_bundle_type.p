@@ -59,6 +59,8 @@ ASSIGN pcTransId    = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i NO ordercanal MobSub Cli pcCLI}
+
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = ghAuthLog::EndUserId.
 
@@ -66,10 +68,6 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
 katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
-
-FIND FIRST MobSub  WHERE 
-           MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
 
 fSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
 

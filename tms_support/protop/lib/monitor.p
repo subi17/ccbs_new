@@ -61,7 +61,7 @@
  * 
  */
 
-{tms_support/protop/lib/protop.i}
+{../tms_support/protop/lib/protop.i}
 
 /* Attributes that we're taking responsibility for.
  *
@@ -70,23 +70,23 @@
  *
  */
 
-{tms_support/protop/lib/attribute.i curr-disp      character "format 'x(20)'"  "Display:"}
-{tms_support/protop/lib/attribute.i disp-type-list character "format 'x(70)'"  "Available Display Types:"}
+{../tms_support/protop/lib/attribute.i curr-disp      character "format 'x(20)'"  "Display:"}
+{../tms_support/protop/lib/attribute.i disp-type-list character "format 'x(70)'"  "Available Display Types:"}
 
-{tms_support/protop/lib/attribute.i examine-item   integer   "format '>>>>>9'" "Examine:"       "integer"}
-{tms_support/protop/lib/attribute.i interval       integer   "initial 5"       "New interval:"  "integer" "interval = max( interval, 1 )."}
-{tms_support/protop/lib/attribute.i sort-criteria  character "initial 'i' case-sensitive" "Sort criteria"}
-{tms_support/protop/lib/attribute.i tlist          character "format 'x(70)'"  "Track:"}
-{tms_support/protop/lib/attribute.i xlist          character "format 'x(70)'"  "eXclude:"}
-{tms_support/protop/lib/attribute.i RateRaw        character "format 'x'" "(r)ate or (R)aw:"}
-{tms_support/protop/lib/attribute.i SumSample      character "format 'x'" "(s)ummary or (S)ample:"}
-{tms_support/protop/lib/attribute.i DoWeb          logical   "format 'Yes/No' initial {&html-on}" "Enable Web pages?" "logical"}
+{../tms_support/protop/lib/attribute.i examine-item   integer   "format '>>>>>9'" "Examine:"       "integer"}
+{../tms_support/protop/lib/attribute.i interval       integer   "initial 5"       "New interval:"  "integer" "interval = max( interval, 1 )."}
+{../tms_support/protop/lib/attribute.i sort-criteria  character "initial 'i' case-sensitive" "Sort criteria"}
+{../tms_support/protop/lib/attribute.i tlist          character "format 'x(70)'"  "Track:"}
+{../tms_support/protop/lib/attribute.i xlist          character "format 'x(70)'"  "eXclude:"}
+{../tms_support/protop/lib/attribute.i RateRaw        character "format 'x'" "(r)ate or (R)aw:"}
+{../tms_support/protop/lib/attribute.i SumSample      character "format 'x'" "(s)ummary or (S)ample:"}
+{../tms_support/protop/lib/attribute.i DoWeb          logical   "format 'Yes/No' initial {&html-on}" "Enable Web pages?" "logical"}
 
-{tms_support/protop/lib/attribute.i curr-page      integer   "format '>>9' initial 1"   "Set current page:" "integer"
+{../tms_support/protop/lib/attribute.i curr-page      integer   "format '>>9' initial 1"   "Set current page:" "integer"
   "if curr-page < 1 then curr-page = 1."
 }
 
-{tms_support/protop/lib/attribute.i html-dir       character "format 'x(60)'"    "HTML dir:" "string" 
+{../tms_support/protop/lib/attribute.i html-dir       character "format 'x(60)'"    "HTML dir:" "string" 
   "file-info:file-name = NewValue. 
    if file-info:full-pathname = ? then
      do: 

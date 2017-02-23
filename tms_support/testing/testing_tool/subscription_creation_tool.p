@@ -9,7 +9,7 @@
 ---------------------------------------------------------------------- */
 
 /* Include file */
-{tms_support/testing/testing_tool/subscription_creation_tool.i}
+{../tms_support/testing/testing_tool/subscription_creation_tool.i}
 
 {Func/msisdn.i}
 {Func/forderstamp.i}
@@ -110,9 +110,8 @@ PROCEDURE pReadFileAndProcess:
 
              CREATE ttBatchInputFile.
              ASSIGN
-                ttBatchInputFile.FileName = REPLACE(ENTRY(NUM-ENTRIES(lcResultFile,"/"),
-                                            lcResultFile,"/"),".RPT","")
-                 ttBatchInputFile.Valid    = TRUE
+                ttBatchInputFile.FileName     = REPLACE(ENTRY(NUM-ENTRIES(lcResultFile,"/"),lcResultFile,"/"),".RPT","")
+                ttBatchInputFile.Valid        = TRUE
                 ttBatchInputFile.MsisdnStatus = 99. /* Status code tells that this is for normal test MSISDN */.
 
              INPUT STREAM sInputFile FROM VALUE(lcResultFile).
@@ -239,7 +238,7 @@ PROCEDURE pReProcessTT:
                 ELSE 
                 DO:
                     llError = TRUE.
-                    fLogEntry(ttInputFileContent.InputLine, "Invalid 'brand' information, allowed yoigo/masmovil").
+                    fLogEntry(ttInputFileContent.InputLine, "Invalid 'brand' information").
                     LEAVE FILE_CONTENT_LOOP.
                 END.    
               
@@ -616,20 +615,6 @@ PROCEDURE pTriggerEmailAndAnalyzerReport:
           FIND FIRST ttInputFileContent WHERE ttInputFileContent.FileName = ttBatchInputFile.FileName AND ttInputFileContent.LineType = "SUBSCRIPTION" NO-ERROR.
           IF AVAIL ttInputFileContent THEN 
           DO:
-              ASSIGN lcTenant = fConvertBrandToTenant(ENTRY(12,ttInputFileContent.InputLine,"|")).
-              IF lcTenant > "" THEN
-                  fsetEffectiveTenantForAllDB(lcTenant).
-                  
-              FOR FIRST InvText NO-LOCK WHERE
-                        InvText.Brand     = gcBrand                AND
-                        InvText.Target    = "EMAIL"                AND
-                        InvText.KeyValue  = "EmailConfTestingTool" AND
-                        InvText.Language  = 5                      AND 
-                        InvText.FromDate <= TODAY                  AND
-                        InvText.ToDate   >= TODAY:
-                  lcEmailContent = InvText.InvText.
-              END. /* FOR FIRST InvText NO-LOCK WHERE */
-
               xMailAddr = ttBatchInputFile.EmailId.
               SendMaileInvoice(lcEmailContent,ttBatchInputFile.DeliverFileName,"").
           END.
@@ -680,4 +665,14 @@ PROCEDURE pInitialize:
         lcBundleCLITypes      = fCParamC("BUNDLE_BASED_CLITYPES")
         lcBONOContracts       = fCParamC("BONO_CONTRACTS").    
 
+    FOR FIRST InvText NO-LOCK WHERE
+              InvText.Brand     = gcBrand                AND
+              InvText.Target    = "EMAIL"                AND
+              InvText.KeyValue  = "EmailConfTestingTool" AND
+              InvText.Language  = 5                      AND 
+              InvText.FromDate <= TODAY                  AND
+              InvText.ToDate   >= TODAY:
+        lcEmailContent = InvText.InvText.
+    END. /* FOR FIRST InvText NO-LOCK WHERE */
+    
 END PROCEDURE.

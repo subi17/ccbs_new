@@ -56,13 +56,15 @@ DEFINE VARIABLE i AS INTEGER NO-UNDO.
 DEFINE VARIABLE delivery_address AS CHAR NO-UNDO. 
 
 DEF VAR lcDeliveryAddress AS CHAR NO-UNDO. 
-DEF VAR lcRegion AS CHAR NO-UNDO. 
-DEF VAR lcStreet AS CHAR NO-UNDO. 
-DEF VAR lcZip AS CHAR NO-UNDO. 
-DEF VAR lcCity AS CHAR NO-UNDO. 
-DEF VAR lcCountry AS CHAR NO-UNDO. 
-DEF VAR lcStreetCode AS CHAR NO-UNDO. 
-DEF VAR lcCityCode AS CHAR NO-UNDO. 
+DEF VAR lcRegion          AS CHAR NO-UNDO. 
+DEF VAR lcStreet          AS CHAR NO-UNDO. 
+DEF VAR lcZip             AS CHAR NO-UNDO. 
+DEF VAR lcCity            AS CHAR NO-UNDO. 
+DEF VAR lcCountry         AS CHAR NO-UNDO. 
+DEF VAR lcStreetCode      AS CHAR NO-UNDO. 
+DEF VAR lcCityCode        AS CHAR NO-UNDO. 
+DEF VAR liDBCount         AS INT  NO-UNDO.
+DEF VAR lcTenant          AS CHAR NO-UNDO.
 
 FUNCTION fCheckIntegrity RETURNS LOGICAL 
    (iiErrCode AS INTEGER):
@@ -180,12 +182,19 @@ gcBrand = "1".
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 
-FIND Order NO-LOCK WHERE
-     Order.Brand = gcBrand AND
-     Order.OrderId = liOrderId NO-ERROR.
-IF NOT AVAIL Order THEN DO:
+/* Set access to right tenant */
+FOR FIRST Order WHERE Order.Brand = gcBrand AND Order.OrderId = liOrderId TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+    ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).                
+END.
+
+IF NOT AVAIL Order OR lcTenant = "" THEN DO:
    add_int(response_toplevel_id, "", 20).
    RETURN.
+END.
+ 
+DO liDBCount = 1 TO NUM-DBS
+   ON ERROR UNDO, THROW:
+    SET-EFFECTIVE-TENANT(lcTenant, LDBNAME(liDBCount)).
 END.
 
 IF llDoEvent THEN DO:

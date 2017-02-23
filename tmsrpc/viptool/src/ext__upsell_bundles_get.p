@@ -39,9 +39,7 @@ piMsSeq = get_int(param_toplevel_id,"0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 ldeCurrentTS = fMakeTS().
 

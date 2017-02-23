@@ -45,19 +45,15 @@ IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
 
 ASSIGN pcTransId  = get_string(param_toplevel_id,"0")
        pcCLI      = get_string(param_toplevel_id,"1").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/findtenant.i NO ordercanal MobSub Cli pcCLI}
 
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = ghAuthLog::EndUserId.
 
 katun = lcApplicationId + "_" + ghAuthLog::EndUserId.  /* YTS-8221 fixed back */
-
-FIND FIRST MobSub NO-LOCK WHERE
-           Mobsub.brand = gcBrand AND
-           MobSub.CLI = pcCLI NO-ERROR.
-           
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err("Subscription not found").
 
 FIND FIRST Customer NO-LOCK WHERE
            Customer.Custnum = MobSub.Custnum NO-ERROR.

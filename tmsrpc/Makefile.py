@@ -39,59 +39,76 @@ fastcgi_template = Template('''    ("bin-path" => "${pike} -C ${work_dir}/tmsrpc
      "socket" => "${work_dir}/var/run/${fcgi}-${port}.socket",
 ''')
 
+def param_gen(a):
+   for item in a:
+       yield item.partition(':')
+
 def do_lighttpd_conf(a):
+    rpcdict = {}
+    for item in [param for param in param_gen(a)]:
+        if item[0] in rpcdict:
+            rpcdict[item[0]].append(item[2])
+        else:
+            rpcdict[item[0]] = [item[2]]
 
     with open(configfile, 'r') as jsonfile:
         jsondata = json.load(jsonfile)
         for rpc in jsondata:
-            if not a or rpc in a:
+            if not rpcdict or rpc in rpcdict:
                 for port in jsondata[rpc]:
+                    if not rpcdict or '' in rpcdict[rpc] or port in rpcdict[rpc]:
+                        lighttpdparams = (param for param in jsondata[rpc][port] if not param.startswith('/'))
+                        fcgis = (param for param in jsondata[rpc][port] if param.startswith('/'))
 
-                    lighttpdparams = (param for param in jsondata[rpc][port] if not param.startswith('/'))
-                    fcgis = (param for param in jsondata[rpc][port] if param.startswith('/'))
+                        with open(state_base + 'lighttpd_' + rpc + '_' + port + '.conf', 'wt') as fd:
 
-                    with open(state_base + 'lighttpd_' + rpc + '_' + port + '.conf', 'wt') as fd:
+                            fd.write('# Auto-generated lighttpd-conf\n\n')
 
-                        fd.write('# Auto-generated lighttpd-conf\n\n')
+                            for lighttpdparam in lighttpdparams:
+                                fd.write('{0} = {1}\n'.format(lighttpdparam, jsondata[rpc][port][lighttpdparam]))
 
-                        for lighttpdparam in lighttpdparams:
-                            fd.write('{0} = {1}\n'.format(lighttpdparam, jsondata[rpc][port][lighttpdparam]))
+                            fd.write(lighttpd_template.substitute(work_dir=work_dir, rpc=rpc, port=port))
 
-                        fd.write(lighttpd_template.substitute(work_dir=work_dir, rpc=rpc, port=port))
+                            fd.write("\nfastcgi.server = (\n")
 
-                        fd.write("\nfastcgi.server = (\n")
+                            fcgi_end = ''
+                            for fcgi in fcgis:
+                                fd.write(fcgi_end + '  "{0}" => (\n'.format(fcgi) )
+                                fd.write(fastcgi_template.substitute(pike=pike, work_dir=work_dir, fcgi=jsondata[rpc][port][fcgi][0], port=port))
 
-                        fcgi_end = ''
-                        for fcgi in fcgis:
-                            fd.write(fcgi_end + '  "{0}" => (\n'.format(fcgi) )
-                            fd.write(fastcgi_template.substitute(pike=pike, work_dir=work_dir, fcgi=jsondata[rpc][port][fcgi][0], port=port))
+                                fcgiparam_end = ''
+                                for fcgiparam, fcgivalue in jsondata[rpc][port][fcgi][1].items():
+                                   fd.write(fcgiparam_end + '     "{0}" => {1}'.format(fcgiparam, fcgivalue))
+                                   fcgiparam_end = ',\n'
 
-                            fcgiparam_end = ''
-                            for fcgiparam, fcgivalue in jsondata[rpc][port][fcgi][1].items():
-                               fd.write(fcgiparam_end + '     "{0}" => {1}'.format(fcgiparam, fcgivalue))
-                               fcgiparam_end = ',\n'
+                                if not fcgiparam_end == '':
+                                   fd.write('),\n')
 
-                            if not fcgiparam_end == '':
-                               fd.write('),\n')
+                                fcgi_end = '  ),\n'
 
-                            fcgi_end = '  ),\n'
+                            if not fcgi_end == '':
+                                fd.write('  )\n')
 
-                        if not fcgi_end == '':
-                            fd.write('  )\n')
+                            fd.write(')\n')
 
-                        fd.write(')\n')
-
-                        fd.close()
-        
+                            fd.close()
         jsonfile.close()
 
 def lighttpd_gen(a):
+    rpcdict = {}
+    for item in [param for param in param_gen(a)]:
+        if item[0] in rpcdict:
+            rpcdict[item[0]].append(item[2])
+        else:
+            rpcdict[item[0]] = [item[2]]
+
     with open(configfile, 'r') as jsonfile:
         jsondata = json.load(jsonfile)
         for rpc in jsondata:
-            if not a or rpc in a:
+            if not rpcdict or rpc in rpcdict:
                 for port in jsondata[rpc]:
-                    yield 'lighttpd_{0}_{1}'.format(rpc, port)
+                    if not rpcdict or '' in rpcdict[rpc] or port in rpcdict[rpc]:
+                        yield 'lighttpd_{0}_{1}'.format(rpc, port)
         jsonfile.close()
 
 @target('test>test')
@@ -139,7 +156,7 @@ def stop(*a):
             fd = open(pidfile, 'rt')
             pid = fd.read().strip()
             fd.close()
-            call(['kill', '-2', pid])
+            call(['kill', '-INT', pid])
             print('Kill signal sent to daemon ' + lighttpd + ' pid %s' % pid)
 
 @target

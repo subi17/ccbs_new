@@ -35,11 +35,7 @@ IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcExtInviId = get_string(param_toplevel_id,"0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-/* check invoice */
-FIND FIRST Invoice WHERE 
-           Invoice.Brand = gcBrand AND
-           Invoice.ExtInvId = pcExtInviId NO-LOCK NO-ERROR.
-IF NOT AVAIL Invoice THEN RETURN appl_err("Invoice not found").
+{newton/src/findtenant.i YES Common Invoice ExtInvId pcExtInviId}
 
 FOR EACH SubInvoice WHERE
          SubInvoice.InvNum = Invoice.InvNum NO-LOCK:

@@ -64,9 +64,7 @@ pcActionValue = get_string(param_toplevel_id,"2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub  WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("MobSub not found").
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 ASSIGN lcPostpaidVoiceTariffs = fCParamC("POSTPAID_VOICE_TARIFFS")
        lcPrepaidVoiceTariffs  = fCParamC("PREPAID_VOICE_TARIFFS")

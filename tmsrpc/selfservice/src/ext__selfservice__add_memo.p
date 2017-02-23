@@ -32,7 +32,7 @@ DEF VAR top_struct      AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,string,string,string,string") EQ ? THEN RETURN.
 
-ASSIGN pcTransId     = get_string(param_toplevel_id, "0")
+ASSIGN pcTransId     = get_string(param_toplevel_id,"0")
        pcSalesman    = get_string(param_toplevel_id,"1")
        pcMSISDN      = get_string(param_toplevel_id,"2")
        pcMemoTitle   = get_string(param_toplevel_id,"3")
@@ -41,27 +41,21 @@ ASSIGN pcTransId     = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i NO ordercanal MobSub Cli pcMSISDN}
+
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = ghAuthLog::EndUserId.
 
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-
-FIND FIRST mobsub NO-LOCK WHERE
-           mobsub.cli EQ pcMSISDN NO-ERROR.
-           IF NOT AVAIL mobsub THEN RETURN appl_err("Subscription not found").
-
-
 katun = fgetAppUserId(INPUT lcApplicationId,
                       INPUT lcAppEndUserId).
 
 IF pcSalesman EQ "" THEN 
-   lcUser = fgetAppDetailedUserId(INPUT lcApplicationId,
-                               INPUT Mobsub.CLI).
+   lcUser = fgetAppDetailedUserId(INPUT lcApplicationId,INPUT Mobsub.CLI).
 ELSE 
    lcUser = pcSalesman.
-
 
 DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
                  "MobSub",                             /* HostTable */
@@ -77,13 +71,12 @@ top_struct = add_struct(response_toplevel_id, "").
 add_string(top_struct, "transaction_id", pcTransId).
 add_boolean(top_struct, "result", True).
 
-
-
 FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
+   IF VALID-HANDLE(ghFunc1) THEN 
+      DELETE OBJECT ghFunc1 NO-ERROR.
 END.
 
 

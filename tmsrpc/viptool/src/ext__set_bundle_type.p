@@ -45,9 +45,7 @@ llUpgradeUpsell = get_bool(param_toplevel_id,"2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub  WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 ASSIGN lcAllowedBONOContracts  = fCParamC("ALLOWED_BONO_CONTRACTS")
        lcAllowedCONTSContracts = fCParamC("ALLOWED_CONTS_CONTRACTS").
