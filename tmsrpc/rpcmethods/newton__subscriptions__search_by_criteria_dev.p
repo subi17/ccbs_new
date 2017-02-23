@@ -344,14 +344,14 @@ END FUNCTION.
 EACH_MOBSUB:
 FOR EACH MobSub NO-LOCK WHERE
          MobSub.Brand   = gcBrand AND 
-         (IF pcCliType NE "" THEN MobSub.CLIType = pcCliType ELSE TRUE):      
+         (IF pcCliType NE "" THEN MobSub.CLIType = pcCliType ELSE TRUE):    
 
    /* If MobSub loop executes more than 30 seconds 
    then it should terminate the execution */
    IF (liLoopCount MOD 100) = 0 THEN DO:
       liLoopEndTime = TIME.
 
-      IF liLoopEndTime - liLoopBegTime >= 30 THEN NEXT EACH_MOBSUB.
+      IF liLoopEndTime - liLoopBegTime >= 30 THEN LEAVE EACH_MOBSUB.
 
    END.
 
@@ -366,14 +366,14 @@ FOR EACH MobSub NO-LOCK WHERE
       NEXT EACH_MOBSUB.
    /* YDA-895 ID of the customer */   
    IF piPersonIdType > 0 AND NOT fPersonIdCheck(INPUT piPersonIdType) THEN
-      NEXT EACH_MOBSUB.   
+      NEXT EACH_MOBSUB.
 
    IF pdtEndDate <> ? AND 
       MobSub.TariffActDate >= pdtEndDate THEN NEXT EACH_MOBSUB.
 
    /* YDA-895 To narrow down the list */
    IF pdtStartDate <> ? AND 
-      MobSub.TariffActDate < pdtStartDate THEN NEXT EACH_MOBSUB.   
+      MobSub.TariffActDate < pdtStartDate THEN NEXT EACH_MOBSUB.
 
    IF pdtEndDate <> ? OR pdtStartDate <> ? THEN DO: 
       FOR EACH Order NO-LOCK WHERE 
@@ -390,7 +390,7 @@ FOR EACH MobSub NO-LOCK WHERE
           ELSE IF pdtStartDate <> ? AND ldtOrderDate < pdtStartDate THEN
              NEXT EACH_MOBSUB. /* YDA-895 to narrow down the number of results */
       END.          
-   END.      
+   END.        
 
    IF plgOrderStatus THEN DO: 
       FOR EACH Order NO-LOCK WHERE 
@@ -578,9 +578,11 @@ FOR EACH MobSub NO-LOCK WHERE
    /*Any Barrings Exist*/
    IF plBarring AND fGetActiveBarrings(MobSub.MsSeq) EQ "" THEN NEXT EACH_MOBSUB.                
 
-   RUN pCustInDebtCheck.
-   IF RETURN-VALUE = "NO" THEN
-      NEXT EACH_MOBSUB.
+   IF plDebt THEN DO:
+      RUN pCustInDebtCheck.
+      IF RETURN-VALUE = "NO" THEN
+         NEXT EACH_MOBSUB.
+   END.   
  
       /* Count number of subscriptions */
    IF liNumberOfSubs <= piOffset AND piOffset > 0 THEN DO:
@@ -595,13 +597,11 @@ FOR EACH MobSub NO-LOCK WHERE
       liNumberLimit  = liNumberLimit  + 1.
    END.
  
-   IF liNumberLimit >= piSubsLimit THEN NEXT EACH_MOBSUB.
+   IF liNumberLimit >= piSubsLimit THEN LEAVE EACH_MOBSUB.
 END.
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.
-
-
 
 
