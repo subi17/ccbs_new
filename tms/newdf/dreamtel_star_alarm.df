@@ -1,5 +1,5 @@
 ADD TABLE "Alarm"
-  AREA "Sta_Data_128_2"
+  AREA "Sta_Data_256"
   DUMP-NAME "Alarm"
 
 ADD FIELD "AlarmID" OF "Alarm" AS int64
@@ -42,7 +42,7 @@ ADD FIELD "Parameters" OF "Alarm" AS character
   HELP "Additional information of alarm"
   ORDER 40
 
-ADD FIELD "Severity" OF "Alarm" AS integerter
+ADD FIELD "Severity" OF "Alarm" AS integer
   FORMAT ">9"
   INITIAL "0"
   LABEL "Severity"
@@ -52,7 +52,7 @@ ADD FIELD "Severity" OF "Alarm" AS integerter
   HELP "How severe alarm is"
   ORDER 50
 
-ADD FIELD "CurrentStatus" OF "Alarm" AS integerter
+ADD FIELD "CurrentStatus" OF "Alarm" AS integer
   FORMAT ">9"
   INITIAL "0"
   LABEL "Status"
@@ -121,10 +121,10 @@ ADD INDEX "AlarmId" ON "Alarm"
   PRIMARY
   INDEX-FIELD "AlarmId" ASCENDING 
   INDEX-FIELD "CurrentStatus" ASCENDING
-  INDEX-FIELD "SettingTS" DESCENDING
+  INDEX-FIELD "SettingTime" DESCENDING
 
-ADD INDEX "Status" ON "Alarm" 
+ADD INDEX "CurrentStatus" ON "Alarm" 
   AREA "Sta_Index_2"
   INDEX-FIELD "CurrentStatus" ASCENDING
-  INDEX-FIELD "SettingTS" DESCENDING
+  INDEX-FIELD "SettingTime" DESCENDING
 
