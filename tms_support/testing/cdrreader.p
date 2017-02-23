@@ -9,7 +9,7 @@ Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-{tms_support/testing/cdrreader.i}
+{../tms_support/testing/cdrreader.i}
 ASSIGN
    katun = "Qvantel"
    gcBrand = "1".

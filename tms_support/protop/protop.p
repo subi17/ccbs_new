@@ -54,7 +54,7 @@
  *
  */
 
-{tms_support/protop/lib/protop.i}
+{../tms_support/protop/lib/protop.i}
 
 define variable c as character no-undo case-sensitive.
 define variable n as integer   no-undo.

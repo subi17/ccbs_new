@@ -73,10 +73,10 @@ procedure update_xstat:
         tt_xstat.xname  = p_xname
         tt_xstat.misc1  = p_misc1
         tt_xstat.misc2  = p_misc2
-        {tms_support/protop/lib/init-xrec.i tt_xstat.stat1 p_this1}
-        {tms_support/protop/lib/init-xrec.i tt_xstat.stat2 p_this2}
-        {tms_support/protop/lib/init-xrec.i tt_xstat.stat3 p_this3}
-        {tms_support/protop/lib/init-xrec.i tt_xstat.stat4 p_this4}
+        {../tms_support/protop/lib/init-xrec.i tt_xstat.stat1 p_this1}
+        {../tms_support/protop/lib/init-xrec.i tt_xstat.stat2 p_this2}
+        {../tms_support/protop/lib/init-xrec.i tt_xstat.stat3 p_this3}
+        {../tms_support/protop/lib/init-xrec.i tt_xstat.stat4 p_this4}
       .
 
     end.
@@ -97,10 +97,10 @@ procedure update_xstat:
       if tt_xstat.stat1[3] < tt_xstat.stat1[3] then	/* detect reuse of an id (stat rolling backwards...) 	*/
         assign
           tt_xstat.xname  = p_xname
-          {tms_support/protop/lib/init-xrec.i tt_xstat.stat1 p_this1}
-          {tms_support/protop/lib/init-xrec.i tt_xstat.stat2 p_this2}
-          {tms_support/protop/lib/init-xrec.i tt_xstat.stat3 p_this3}
-          {tms_support/protop/lib/init-xrec.i tt_xstat.stat4 p_this4}
+          {../tms_support/protop/lib/init-xrec.i tt_xstat.stat1 p_this1}
+          {../tms_support/protop/lib/init-xrec.i tt_xstat.stat2 p_this2}
+          {../tms_support/protop/lib/init-xrec.i tt_xstat.stat3 p_this3}
+          {../tms_support/protop/lib/init-xrec.i tt_xstat.stat4 p_this4}
         .
 
     end.
@@ -140,10 +140,10 @@ procedure age_xstat:
       do:
         assign
           tt_xstat.xvalid = no
-          {tms_support/protop/lib/upd-xrec.i tt_xstat.stat1 tt_xstat.stat1[3]}
-          {tms_support/protop/lib/upd-xrec.i tt_xstat.stat2 tt_xstat.stat2[3]}
-          {tms_support/protop/lib/upd-xrec.i tt_xstat.stat3 tt_xstat.stat3[3]}
-          {tms_support/protop/lib/upd-xrec.i tt_xstat.stat4 tt_xstat.stat4[3]}
+          {../tms_support/protop/lib/upd-xrec.i tt_xstat.stat1 tt_xstat.stat1[3]}
+          {../tms_support/protop/lib/upd-xrec.i tt_xstat.stat2 tt_xstat.stat2[3]}
+          {../tms_support/protop/lib/upd-xrec.i tt_xstat.stat3 tt_xstat.stat3[3]}
+          {../tms_support/protop/lib/upd-xrec.i tt_xstat.stat4 tt_xstat.stat4[3]}
         .
 
         if ratio-calc = 0 then
