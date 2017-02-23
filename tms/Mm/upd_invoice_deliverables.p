@@ -18,6 +18,7 @@ gcBrand = "1".
 {Syst/eventval.i}
 {Func/fmakemsreq.i}
 {Func/femailinvoice.i}
+{Func/multitenantfunc.i}
 
 /* files and dirs */
 DEF VAR lcLine           AS CHAR NO-UNDO.
@@ -306,7 +307,12 @@ REPEAT:
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
 
-   lcLogFile = lcSpoolDir + "invoice_deliverables_" +
+   /* Set effective tenant based on file name. If not regocniced go next file
+   */   
+   IF NOT fsetEffectiveTenantForAllDB(
+         fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.
+
+   lcLogFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "invoice_deliverables_" +
                lcToday + "_" + lcTime + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile).
    fBatchLog("START", lcLogFile).

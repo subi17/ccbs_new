@@ -92,7 +92,7 @@ REPEAT:
          fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.
 
    fBatchLog("START", lcInputFile).
-   lcLogFile = lcSpoolDir + "barring_status_" + ftsformat("yyyymmdd_HHMMss", fMakeTS()) + ".log".
+   lcLogFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_barring_status_" + ftsformat("yyyymmdd_HHMMss", fMakeTS()) + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile) append.
 
    PUT STREAM sLog UNFORMATTED

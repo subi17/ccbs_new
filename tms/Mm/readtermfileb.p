@@ -19,6 +19,7 @@ ASSIGN gcBrand = "1"
 {Func/ftransdir.i}
 {Syst/eventlog.i}
 {Func/timestamp.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcTermFile AS CHAR NO-UNDO.
@@ -30,6 +31,8 @@ DEF VAR lcTransDir  AS CHAR NO-UNDO.
 DEF VAR lcReadDir   AS CHAR NO-UNDO.
 DEF VAR lcLogFile   AS CHAR NO-UNDO. 
 DEF VAR lcLogTrans  AS CHAR NO-UNDO.
+DEF VAR lcFoundTenants AS CHAR NO-UNDO.
+DEF VAR liCounter   AS INT NO-UNDO.
 
 DEF TEMP-TABLE ttFiles NO-UNDO
    FIELD TermFile AS CHAR
@@ -88,6 +91,11 @@ FOR EACH ttFiles:
    IF NUM-ENTRIES(lcPlainFile,"/") > 1 THEN
       lcPlainFile = ENTRY(NUM-ENTRIES(lcPlainFile,"/"),lcPlainFile,"/").
 
+   /* Set effective tenant based on file name. If not regocniced go next file
+   */
+   IF NOT fsetEffectiveTenantForAllDB(
+      fConvertBrandToTenant(ENTRY(1,lcPlainFile,"_"))) THEN NEXT.
+
    IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
                       ActionLog.Brand = gcBrand AND
                       ActionLog.TableName = "Cron" AND
@@ -109,10 +117,14 @@ FOR EACH ttFiles:
    END.
    
    RUN Mm/readtermfile.p (ttFiles.TermFile,
-                     lcLogFile,
+                     REPLACE(lcLogFile,"#TENANT",ENTRY(1,lcPlainFile,"_")),
                      OUTPUT liRead,
                      OUTPUT liError).
-   
+   IF lcFoundTenants EQ "" THEN
+      lcFoundTenants = ENTRY(1,lcPlainFile,"_").
+   ELSE IF INDEX(lcFoundTenants,ENTRY(1,lcPlainFile,"_")) EQ 0 THEN
+      lcFoundTenants = lcFoundTenants + "," + ENTRY(1,lcPlainFile,"_").
+     
    DO TRANS:
       ASSIGN 
          ActionLog.ActionDec    = liRead
@@ -131,9 +143,13 @@ END.
 
 fELog("READTERM","stopped,Files:" + STRING(liFiles)).
 
-/* move the log file to transfer directory */
-RUN pTransferFile(lcLogFile,
-                  lcLogTrans).
+DO liCounter = 1 TO NUM-ENTRIES(lcFoundTenants):
+
+   /* move the log file to transfer directory */
+   RUN pTransferFile(REPLACE(lcLogFile,"#TENANT",
+                             ENTRY(liCounter,lcFoundTenants)),
+                     lcLogTrans).
+END.
 
 PROCEDURE pFindFiles:
 
