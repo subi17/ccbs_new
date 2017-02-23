@@ -37,7 +37,7 @@ END.
 FUNCTION fResetAlarm RETURNS LOGICAL
    (iiAlarmNumber AS INT):
 
-   FIND FIRST Alarm NO-LOCK WHERE
+   FIND FIRST Alarm EXCLUSIVE-LOCK WHERE
               Alarm.AlarmID EQ iiAlarmNumber AND
               Alarm.CurrentStatus EQ {&ALARM_STATUS_ACTIVE} OR
               Alarm.CurrentStatus EQ {&ALARM_STATUS_CLEARED} NO-ERROR.
@@ -59,7 +59,7 @@ END.
 FUNCTION fCancelAlarm RETURNS LOGICAL
    (iiAlarmNumber AS INT):
 
-   FIND FIRST Alarm NO-LOCK WHERE
+   FIND FIRST Alarm EXCLUSIVE-LOCK WHERE
               Alarm.AlarmID EQ iiAlarmNumber AND
               Alarm.CurrentStatus EQ {&ALARM_STATUS_ACTIVE} OR
               Alarm.CurrentStatus EQ {&ALARM_STATUS_CLEARED} NO-ERROR.
@@ -80,7 +80,7 @@ END.
 FUNCTION fClearAlarm RETURNS LOGICAL
    (iiAlarmNumber AS INT):
 
-   FIND FIRST Alarm NO-LOCK WHERE
+   FIND FIRST Alarm EXCLUSIVE-LOCK WHERE
               Alarm.AlarmID EQ iiAlarmNumber AND
               Alarm.CurrentStatus EQ {&ALARM_STATUS_ACTIVE} NO-ERROR.
 
@@ -112,7 +112,8 @@ FUNCTION fSetAlarm RETURNS LOGICAL
       Alarm.ProgramBlock  = PROGRAM-NAME(2)
       Alarm.Severity      = iiAlarmNumber /* Fake */
       Alarm.CurrentStatus = {&ALARM_STATUS_ACTIVE}
-      Alarm.SettingTime   = fMakeTS().
+      Alarm.SettingTime   = fMakeTS()
+      Alarm.Parameters    = icParameters.
 
    RETURN TRUE.
 
