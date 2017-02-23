@@ -711,12 +711,9 @@ PROCEDURE pFinalize:
    DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
 
-   DEF BUFFER bSubRequest FOR MsRequest.
    DEF BUFFER DataContractReq FOR MsRequest. 
    /* now when billtarget has been updated new fees can be created */
 
-   llRerate = FALSE.
-   
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
 
    FIND FIRST MSOwner WHERE
@@ -736,15 +733,12 @@ PROCEDURE pFinalize:
       ldBegStamp = MsOwner.TSBeg
       ldEndStamp = fSecOffSet(MsOwner.TsBeg,-1)
       /* some time has already passed from subscription update */
-      llRerate   = TRUE
       ldeNow     = fMakeTS().
          
    fSplitTS(MsOwner.TsBeg,
             OUTPUT ldaNewBeginDate,
             OUTPUT liTime).
 
-   IF ldBegStamp < MsRequest.ActStamp THEN llRerate = TRUE.
-   
    /* clitype spesific fees */
    IF AVAIL CliType AND CliType.FeeModel1 > "" THEN DO:
       RUN creasfee (MobSub.CustNum,
@@ -801,14 +795,6 @@ PROCEDURE pFinalize:
                               {&REQUEST_SOURCE_STC},  /* req.source */
                               {&REQUEST_ACTIONLIST_ALL}).
 
-    /* were new contract creations launched */
-    IF NOT llRerate THEN 
-    FOR FIRST bSubRequest NO-LOCK USE-INDEX OrigRequest WHERE
-              bSubRequest.OrigRequest = MsRequest.MsRequest AND
-              bSubRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION}:
-       llRerate = TRUE.
-    END.
-    
     /* Create charge for new paytype */
     IF MsRequest.CreateFees THEN 
         RUN create_charge_comp.p(
@@ -867,9 +853,8 @@ PROCEDURE pFinalize:
     END.
 
    /* run rerate (needed especially with saldo-services) */
-   IF llReRate THEN DO:
-      
-      fReRateTriggerEvent(INPUT MsRequest.MSRequest,RECID(MSRequest)).
+   IF (bOldType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID} OR
+       CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID}) THEN DO:
       
       RUN pReRate(MobSub.MsSeq,
                   MobSub.InvCust,
