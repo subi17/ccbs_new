@@ -9,7 +9,7 @@
 ---------------------------------------------------------------------- */
 
 /* Include file */
-{tms_support/testing/testing_tool/subscription_creation_tool.i}
+{../tms_support/testing/testing_tool/subscription_creation_tool.i}
 
 {Func/msisdn.i}
 {Func/forderstamp.i}

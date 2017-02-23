@@ -12,7 +12,7 @@ Modified......: ilkkasav & kariaika
 
 /*ilkkasav&kariaika: remember to change the directories before releasing*/
 /*{/apps/yoigo/tms_support/testing/cdrreader.i}*/
-{tms_support/testing/cdrreader.i}
+{../tms_support/testing/cdrreader.i}
 
 
 DEF INPUT PARAM icCLI AS CHAR NO-UNDO.

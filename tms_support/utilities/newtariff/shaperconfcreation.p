@@ -14,8 +14,8 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
-{tms_support/utilities/newtariff/tariffconfig.i}
-{tms_support/utilities/newtariff/tariffcons.i}
+{../tms_support/utilities/newtariff/tariffconfig.i}
+{../tms_support/utilities/newtariff/tariffcons.i}
 
 DEFINE INPUT PARAMETER icIncDir   AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
