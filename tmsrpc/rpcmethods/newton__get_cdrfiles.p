@@ -27,7 +27,7 @@ IF NOT get_paramcount(param_toplevel_id) EQ 0 THEN
 
 
 /*Search correct directory*/
-cDir = SEARCH("donotremove_testdir.txt").
+cDir = SEARCH("../tms_support/testing/donotremove_testdir.txt").
 cDir = REPLACE(cDir, "donotremove_testdir.txt", "").
 
 INPUT THROUGH VALUE("ls " + cDir + "cdrfiles/*.asc" + " | xargs -n 1 basename").
