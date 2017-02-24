@@ -46,8 +46,8 @@ def listanalyse(plist):
 # Definition
 s = xmlrpclib.ServerProxy(address)
 def instruction():
-   print "Missing parameter: MSISDN"
-   print "Example: python newton_invoices__get.py 10845300"
+   print "Missing parameter: Custnum"
+   print "Example: python newton_invoices__get.py 700019751"
    sys.exit()
 
 if len(sys.argv) < 2: instruction()
