@@ -198,20 +198,21 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
                MobSub.MsSeq = MNPSub.MsSeq,
          FIRST Segmentation NO-LOCK WHERE
                Segmentation.MsSeq = MNPSub.MsSeq:
+         
+         /* Exclude Prepaid/postpaid clients from generated retention file */
+/* YDR-2470 deactivate every Rule/Filter R1 and R2  
 
          IF MobSub.PayType = TRUE THEN
             liExcludeOffset = -2160. /* Prepaid 90 days */
          ELSE
             liExcludeOffset = 0. /* -1440. Commented out YOT-4095 */ /* Postpaid 60 days */
-
+*/
          FIND FIRST ttData NO-LOCK WHERE
                     ttData.custnum = MobSub.custnum AND 
                     ttData.msseq = MobSub.msseq AND 
                     ttData.mnpseq = mnpprocess.mnpseq NO-ERROR.
          IF AVAIL ttData THEN NEXT MNP_LOOP.
 
-         /* Exclude Prepaid/postpaid clients from generated retention file */
-/* YDR-2470 deactivate every Rule/Filter R1 and R2 
          FOR EACH bMNPSub NO-LOCK WHERE
                   bMNPSub.MsSeq = MobSub.MsSeq,
             FIRST bMNPProcess NO-LOCK WHERE
@@ -221,7 +222,6 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
             IF bMNPProcess.CreatedTS > fOffSetTS(liExcludeOffset) THEN
                NEXT MNP_SUB_LOOP.
          END.
-*/
 
          /* already sent */
          IF mnpsub.RetentionPlatform > "" THEN NEXT.
