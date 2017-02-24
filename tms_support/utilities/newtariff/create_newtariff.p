@@ -15,8 +15,8 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
-{../tms_support/utilities/newtariff/tariffconfig.i}
-{../tms_support/utilities/newtariff/tariffcons.i}
+{utilities/newtariff/tariffconfig.i}
+{utilities/newtariff/tariffcons.i}
 
 DEFINE VARIABLE lcLine            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile         AS CHARACTER NO-UNDO.

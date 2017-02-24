@@ -40,7 +40,7 @@
  *
  */
 
-{../tms_support/protop/lib/protop.i}
+{protop/lib/protop.i}
 
 define variable support as character no-undo initial "Hit Ratio History".
 

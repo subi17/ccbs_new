@@ -1,7 +1,7 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 katun = "qvantel".
-{../tms_support/billing/edrhistory_changes.i}
+{billing/edrhistory_changes.i}
 {Func/timestamp.i}
 
 DEF VAR i           AS INT  NO-UNDO.
