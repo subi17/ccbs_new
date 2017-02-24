@@ -43,7 +43,7 @@ repeat:
    RUN utilities/tabledump/import_table.p lcLine lcFolder.
 end.
 
-run ./tmsparam_staging_update.p.
+run utilities/tabledump/tmsparam_staging_update.p.
 
 IF LOOKUP(lcHostName,'merga') > 0 THEN
    RUN utilities/tabledump/tmsparam_merga_update.p.
