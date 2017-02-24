@@ -46,11 +46,11 @@
  *
  */
 
-{../tms_support/protop/lib/protop.i}
+{protop/lib/protop.i}
 
 define variable support  as character no-undo initial "File IO".
 
-{../tms_support/protop/lib/tt_xstat.i}
+{protop/lib/tt_xstat.i}
 
 /* restart
  *

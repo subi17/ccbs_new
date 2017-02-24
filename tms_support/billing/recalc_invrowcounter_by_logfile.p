@@ -78,7 +78,7 @@ for each ttInvSeq no-lock:
             invseq.MsSeq  = ttInvSeq.MsSeq and
             invseq.billed = false:
 
-      RUN tms_support/billing/conv_invrowcounter.p(InvSeq.InvSeq,
+      RUN billing/conv_invrowcounter.p(InvSeq.InvSeq,
                                OUTPUT liCount).
       k = k + liCount.
    end.

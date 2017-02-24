@@ -39,9 +39,9 @@ DEF VAR lcc AS CHAR NO-UNDO.
 DEF VAR lcError AS CHARACTER NO-UNDO. 
 
 /*Search correct directory*/
-lcRootDir = SEARCH("donotremove_testdir.txt").
+lcRootDir = SEARCH("testing/donotremove_testdir.txt").
 lcRootDir = REPLACE(lcrootDir, "donotremove_testdir.txt", "").
-lcRateDir = REPLACE(lcrootDir, "testing", "Rate").
+lcRateDir = "Rate/".
 
 IF validate_request(param_toplevel_id, "string,string,string,datetime,int,int") EQ ? THEN RETURN.
 
@@ -75,7 +75,7 @@ lcImsi = mobsub.imsi.
 lcCDRDir = lcRootDir + "cdrfiles/".
 /*Generate CDR files*/
 /*RUN VALUE(lcRootDir + "create_test_cdrfile.p")*/
-RUN tms_support/testing/create_test_cdrfile.p (
+RUN testing/create_test_cdrfile.p (
           lcCli,
           lcSecCLI,
           LCiMSI,

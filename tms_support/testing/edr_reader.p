@@ -28,7 +28,7 @@ DEF VAR lcCDRDir AS CHAR NO-UNDO.
 DEF VAR lcCDRFile AS CHAR NO-UNDO. 
 
 /*Search correct directory*/
-lcRootDir = SEARCH("tms_support/testing/donotremove_testdir.txt").
+lcRootDir = SEARCH("testing/donotremove_testdir.txt").
 lcRootDir = REPLACE(lcrootDir, "donotremove_testdir.txt", "").
 
 

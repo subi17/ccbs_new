@@ -15,8 +15,8 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
-{../tms_support/2016/convergent/tariffconfig.i}
-{../tms_support/2016/convergent/tariffcons.i}
+{2016/convergent/tariffconfig.i}
+{2016/convergent/tariffcons.i}
  
 DEFINE INPUT  PARAMETER icInFile   AS CHARACTER NO-UNDO. 
 DEFINE INPUT  PARAMETER icSpoolFile AS CHARACTER NO-UNDO.

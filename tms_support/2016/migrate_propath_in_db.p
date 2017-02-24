@@ -88,7 +88,7 @@ IF AVAIL TMSParam
 THEN ASSIGN
         TMSParam.CharVal = REPLACE(TMSParam.CharVal,"Gwy/","")
         TMSParam.CharVal = REPLACE(TMSParam.CharVal,".p","")
-        TMSParam.CharVal = "Gwy/" + TMSParam.CharVal + ".p"
+        TMSParam.CharVal = "test/fake/" + TMSParam.CharVal + ".p"
         .
 
 FOR EACH TMSCodes EXCLUSIVE-LOCK WHERE
