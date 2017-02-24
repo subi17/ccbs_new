@@ -16,19 +16,18 @@ DEF VAR oiQty   AS INT    NO-UNDO.
 DEF VAR liid    AS INT    NO-UNDO.
 
 fELog("MDAILY_AMNP","HighSpenderStarted").
+/* Go through all tenants */
 DO liid = 0 to {&MAX_TENANT_ID}:
-   SET-EFFECTIVE-TENANT(liid, LDBNAME(1)) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN
+   IF NOT fsetEffectiveTenantIdForAllDB(liid) THEN
       LEAVE.
    RUN Mm/highusagerep.p(INPUT fMake2Dt(INPUT today - 90, INPUT 0),0).
 END.
 fELog("MDAILY_AMNP","HighSpenderStopped").
 fELog("MDAILY_AMNP","IccMSISDNRepStarted").
+/* Go through all tenants */
 DO liid = 0 to {&MAX_TENANT_ID}:
-   fsetEffectiveTenantIdForAllDB(liid).
-   IF ERROR-STATUS:ERROR THEN DO:
+   IF NOT fsetEffectiveTenantIdForAllDB(liid) THEN 
       LEAVE.
-   END.
    RUN Mm/icc_msisdn_rep.p.
 END.
 fELog("MDAILY_AMNP","IccMSISDNRepStopped").
