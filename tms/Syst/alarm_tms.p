@@ -5,33 +5,15 @@
   AUTHOR .......: Janne Tourunen
   CREATED ......: 23.02.2017
   ---------------------------------------------------------------------- */
-/*
-&GLOBAL-DEFINE BrTable DiscountPlan
-*/
 
+&GLOBAL-DEFINE BrTable Alarm
 {commali.i}
 {eventval.i}
 {timestamp.i}
-/*
-{brand.i}
-IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
-
-   DEFINE VARIABLE lhDiscountPlan AS HANDLE NO-UNDO.
-   lhDiscountPlan = BUFFER DiscountPlan:HANDLE.
-   RUN StarEventInitialize(lhDiscountPlan).
-
-   ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhDiscountPlan).
-   END.
-
-END.
-*/
 DEF SHARED VAR siirto AS CHAR.
 
-DEF VAR lcRuleID      AS CHAR                   NO-UNDO.
+DEF VAR liAlarmID     AS INT                    NO-UNDO.
 DEF VAR xrecid        AS RECID                           init ?.
 DEF VAR FIRSTrow      AS INT                    NO-UNDO  init 0.
 DEF VAR FrmRow        AS INT                    NO-UNDO  init 1.
@@ -48,38 +30,18 @@ DEF VAR must-add      AS LOG                    NO-UNDO.
 DEF VAR ac-hdr        AS CHAR                   NO-UNDO.
 DEF VAR rtab          AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i             AS INT                    NO-UNDO.
-DEF VAR ok            AS log format "Yes/No"    NO-UNDO.
+DEF VAR ldtDate       AS DATE                   NO-UNDO.
+DEF VAR liTime        AS INT                    NO-UNDO. 
+DEF VAR lcCancelTime  AS CHAR                   NO-UNDO.
+DEF VAR lcSetTime     AS CHAR                   NO-UNDO.
+DEF VAR lcClearTime   AS CHAR                   NO-UNDO.
+DEF VAR lcResetTime   AS CHAR                   NO-UNDO.
 
-DEF VAR lcField         AS CHAR NO-UNDO. 
-DEF VAR lcCode          AS CHAR NO-UNDO. 
-DEF VAR ldDiscValue     AS DEC  NO-UNDO.
-DEF VAR lcDPUnit        AS CHAR NO-UNDO.
-DEF VAR lcSubject       AS CHAR NO-UNDO.
-DEF VAR llSubjectType   AS LOG  NO-UNDO.
-DEF VAR llTargetType    AS LOG  NO-UNDO.
-DEF VAR llCCDisplay     AS LOG  NO-UNDO.
-/*
-Field-Name           Datatype Initial Format         Label
--------------------- -------- ------- -------------- -------------------------
-ActionLog            char             x(50)          ActionLog
-AlarmID              int64    0       ->,>>>,>>9     AlarmID
-AlarmText            char             x(50)          AlarmText
-CancelTime           dec      0       99999999.99999 CancelTS
-ClearTime            dec      0       99999999.99999 ClearTS
-CurrentStatus        int      0       >9             Status
-Parameters           char             x(50)          Parameters
-ProgramBlock         char             x(20)          Program
-ResetTime            dec      0       99999999.99999 ResetTS
-SettingTime          dec      0       99999999.99999 SettingTS
-Severity             int      0       >9             Severity
-
-*/
-/* id, text, status, severity, time set */
 FORM
     Alarm.AlarmID    FORMAT ">>>>>>>9"
     Alarm.CurrentStatus  FORMAT ">9"
     Alarm.Severity  FORMAT ">9"
-    Alarm.SettingTime 
+    Alarm.SettingTime
     Alarm.AlarmText    FORMAT "X(30)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(cfc)   
@@ -88,100 +50,28 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
        string(pvm,"99-99-99") + " "
     FRAME sel.
 
-
-/*
-FORM
-    DiscountPlan.Brand          COLON 25
-    DiscountPlan.DPId           COLON 25 FORMAT ">>>>>>>9"
-    DiscountPlan.DPRuleID       COLON 25 FORMAT "X(16)"
-    DiscountPlan.DPName         COLON 25 FORMAT "X(50)"
-    DiscountPlan.BillCode       COLON 25 FORMAT "X(16)"
-       BillItem.BIName FORMAT "X(30)" NO-LABEL SKIP
-    DiscountPlan.ValidFrom      COLON 25
-       VALIDATE(INPUT DiscountPlan.ValidFrom NE ?,
-                "Effective date is mandatory")
-       LABEL "Valid"
-       "-"
-    DiscountPlan.ValidTo  
-       NO-LABEL 
-       VALIDATE(INPUT DiscountPlan.ValidTo NE ? AND
-                INPUT DiscountPlan.ValidTo >= INPUT DiscountPlan.ValidFrom,
-                "Invalid expiration date")
-    DiscountPlan.Priority       COLON 25 
-    DiscountPlan.Subject     COLON 25
-    llSubjectType               COLON 25 FORMAT "All/List"
-       LABEL "Subject Type"
-       HELP "Subject selection, All or List"
-    llTargetType              COLON 25 FORMAT "All/List"
-       LABEL "Target Type"
-       HELP "Target selection, All or List"
-    DiscountPlan.ProcessStopper COLON 25
-    ldDiscValue                 COLON 25 FORMAT "->>>>>9.99"
-       LABEL "Default Value"
-       HELP "Default discount value"
-    DiscountPlan.DPUnit         COLON 25 FORMAT "X(12)"
-    DiscountPlan.MaxAmount      COLON 25
-    DiscountPlan.MinBaseAmount  COLON 25
-    Discountplan.ValidPeriods   COLON 25 FORMAT ">>>"
-       LABEL "Period Limit" 
-    llCCDisplay                 COLON 25 FORMAT "Yes/No" 
-       LABEL "Visible In CC" 
-       HELP "Visible in CC tools"
+form
+    Alarm.AlarmID COLON 20        
+    Alarm.AlarmText COLON 20      
+    Alarm.CancelTime COLON 20  lcCancelTime FORMAT "X(20)" NO-LABEL
+    Alarm.ClearTime COLON 20   lcClearTime  FORMAT "X(20)" NO-LABEL  
+    Alarm.CurrentStatus COLON 20  
+    Alarm.Parameters COLON 20     
+    Alarm.ProgramBlock COLON 20   
+    Alarm.ResetTime COLON 20   lcResetTime FORMAT "X(20)" NO-LABEL  
+    Alarm.SettingTime COLON 20 lcSetTime   FORMAT "X(20)" NO-LABEL
+    Alarm.Severity COLON 20
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
-
-FORM 
-    "Brand:" lcBrand skip
-    "Name :" lcRuleID FORMAT "X(20)" 
-    HELP "Enter rule ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Rule ID "
+form /* seek  Alarm */
+    "DumpID:" liAlarmID 
+    HELP "Enter AlarmID "
+    WITH row 4 col 1 TITLE COLOR VALUE(ctc) " FIND Alarm ID "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
-*/
-
-FUNCTION fBillItemName RETURNS LOGIC
-  (icBillCode AS CHAR):
-  
-   FIND FIRST BillItem WHERE
-              BillItem.Brand = gcBrand AND
-              BillItem.BillCode = icBillCode NO-LOCK NO-ERROR.
-   IF AVAILABLE BillItem THEN DISPLAY BillItem.BIName WITH FRAME lis.
-   ELSE DISPLAY "" @ BillItem.BIName WITH FRAME lis.
-  
-   RETURN (AVAILABLE BillItem).
-
-END FUNCTION.
-
-/*
-FUNCTION fSubject RETURNS LOGIC
-   (icSubject AS CHAR):
-
-   lcSubject = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "DiscountPlan",
-                                   "Subject",
-                                   icSubject).
-   DISPLAY lcSubject WITH FRAME lis.
-   
-   RETURN (lcSubject > "").
-      
-END FUNCTION.
-
-FUNCTION fDPUnit RETURNS LOGIC
-   (icDPUnit AS CHAR):
-
-   lcSubject = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "DiscountPlan",
-                                   "DPUnit",
-                                   icDPUnit).
-   DISPLAY lcDPUnit WITH FRAME lis.
-   
-   RETURN (lcDPUnit > "").
-      
-END FUNCTION.
-*/
 
 
 IF gcHelpParam > "" THEN ASSIGN
@@ -199,18 +89,13 @@ IF AVAILABLE Alarm THEN ASSIGN
    must-print   = TRUE
    must-add     = FALSE.
 ELSE DO:
-   /*
-   IF lcRight NE "RW" THEN DO:
-      MESSAGE "No rules available!" VIEW-AS ALERT-BOX.
-      RETURN.
-   END.
-   */
+   
    ASSIGN
       Memory       = ?
       must-print   = FALSE
       must-add     = FALSE.
 END.
-/*
+
 LOOP:
 REPEAT WITH FRAME sel:
 
@@ -223,20 +108,15 @@ REPEAT WITH FRAME sel:
 
       IF must-print THEN DO:
 
-        UP FRAME-LINE - 1.
-        FIND DiscountPlan WHERE recid(DiscountPlan) = Memory NO-LOCK NO-ERROR.
-
-        /* DISPLAY one page beginning the record 
-        whose RECID is saved into 'Memory'.
-        starting from ROW 'delrow' */
+        FIND Alarm WHERE recid(Alarm) = Memory NO-LOCK NO-ERROR.
 
         /* IF a ROW was recently DELETEd ... */
         IF delrow > 0 THEN DOWN delrow - 1.
 
         REPEAT WITH FRAME sel:
-           IF AVAILABLE DiscountPlan THEN DO:
+           IF AVAILABLE Alarm THEN DO:
               RUN local-disp-row.
-              rtab[FRAME-LINE] = recid(DiscountPlan).
+              rtab[FRAME-LINE] = recid(Alarm).
               RUN local-find-NEXT.
            END.
            ELSE DO:
@@ -268,8 +148,6 @@ REPEAT WITH FRAME sel:
         ASSIGN
         ufk    = 0
         ufk[1] = 816
-        ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
-        ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
         ufk[8] = 8 
         ehto   = 3 
         ufkey  = FALSE.
@@ -285,9 +163,9 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DiscountPlan.DPRuleID {uchoose.i} NO-ERROR 
+        CHOOSE ROW alarm.alarmid {uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DiscountPlan.DPRuleID WITH FRAME sel.
+        COLOR DISPLAY VALUE(ccc) alarm.alarmid WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -311,11 +189,11 @@ REPEAT WITH FRAME sel:
 
       IF order <> pr-order AND MaxOrder > 1 THEN DO:
         ASSIGN FIRSTrow = 0 Memory = rtab[FRAME-LINE].
-        FIND DiscountPlan WHERE recid(DiscountPlan) = Memory NO-LOCK.
+        FIND Alarm WHERE recid(Alarm) = Memory NO-LOCK.
         DO i = 1 TO FRAME-LINE - 1:
            RUN local-find-PREV.
-           IF AVAILABLE DiscountPlan THEN
-              ASSIGN FIRSTrow = i Memory = recid(DiscountPlan).
+           IF AVAILABLE Alarm THEN
+              ASSIGN FIRSTrow = i Memory = recid(Alarm).
            ELSE LEAVE.
         END.
         must-print = TRUE.
@@ -327,7 +205,7 @@ REPEAT WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
-           IF NOT AVAILABLE DiscountPlan THEN DO:
+           IF NOT AVAILABLE Alarm THEN DO:
               MESSAGE "YOU ARE ON THE FIRST ROW !".
               BELL. PAUSE 1 NO-MESSAGE.
               NEXT BROWSE.
@@ -340,7 +218,7 @@ REPEAT WITH FRAME sel:
                  rtab[i] = rtab[i - 1].
               END.
               ASSIGN
-                rtab[1] = recid(DiscountPlan)
+                rtab[1] = recid(Alarm)
                 Memory  = rtab[1].
            END.
         END.
@@ -353,7 +231,7 @@ REPEAT WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-NEXT.
-           IF NOT AVAILABLE DiscountPlan THEN DO:
+           IF NOT AVAILABLE Alarm THEN DO:
               MESSAGE "YOU ARE ON THE LAST ROW !".
               BELL. PAUSE 1 NO-MESSAGE.
               NEXT BROWSE.
@@ -365,7 +243,7 @@ REPEAT WITH FRAME sel:
               DO i = 1 TO FRAME-DOWN - 1:
                  rtab[i] = rtab[i + 1].
               END.
-              rtab[FRAME-DOWN] = recid(DiscountPlan).
+              rtab[FRAME-DOWN] = recid(Alarm).
               /* save RECID of uppermost ROW */
               Memory = rtab[1].
            END.
@@ -376,15 +254,15 @@ REPEAT WITH FRAME sel:
       /* PREV page */
       ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
-        FIND DiscountPlan WHERE recid(DiscountPlan) = Memory NO-LOCK NO-ERROR.
+        FIND Alarm WHERE recid(Alarm) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
-        IF AVAILABLE DiscountPlan THEN DO:
-           Memory = recid(DiscountPlan).
+        IF AVAILABLE Alarm THEN DO:
+           Memory = recid(Alarm).
 
            /* reverse 1 page */
            DO RowNo = 1 TO (FRAME-DOWN - 1):
               RUN local-find-PREV.
-              IF AVAILABLE DiscountPlan THEN Memory = recid(DiscountPlan).
+              IF AVAILABLE Alarm THEN Memory = recid(Alarm).
               ELSE RowNo = FRAME-DOWN.
            END.
            must-print = TRUE.
@@ -406,7 +284,7 @@ REPEAT WITH FRAME sel:
        END.
        ELSE DO: /* downmost ROW was NOT empty*/
            Memory = rtab[FRAME-DOWN].
-           FIND DiscountPlan WHERE recid(DiscountPlan) = Memory NO-LOCK.
+           FIND Alarm WHERE recid(Alarm) = Memory NO-LOCK.
            must-print = TRUE.
            NEXT LOOP.
        END.
@@ -419,116 +297,19 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
-       DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
-           lcRuleID WITH FRAME f1.
+       SET liAlarmID WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
-       IF lcRuleID > "" THEN DO:
-          FIND FIRST DiscountPlan WHERE 
-                     DiscountPlan.Brand = lcBrand AND
-                     DiscountPlan.DPRuleID >= lcRuleID
+       IF liAlarmID > 0 THEN DO:
+          FIND FIRST Alarm WHERE 
+                     Alarm.AlarmID >= liAlarmID
           NO-LOCK NO-ERROR.
 
-          IF NOT fRecFound(1) THEN NEXT BROWSE.
+          /* IF NOT fRecFound(1) THEN NEXT BROWSE. */
 
           NEXT LOOP.
        END.
      END. /* Search-1 */
-
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
-           xRecid = rtab[FRAME-LINE].
-           LEAVE LOOP.
-        END.
-        
-        ELSE DO:
-           must-add = TRUE.
-           NEXT LOOP.
-        END.    
-     END.
-
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0  
-     THEN DO TRANSACTION:  /* DELETE */
-       delrow = FRAME-LINE.
-       RUN local-find-this (FALSE).
-
-       IF CAN-FIND(FIRST DPMember WHERE 
-            DPMember.DPId = DiscountPlan.DPId)
-       THEN DO:
-          MESSAGE "Members exist. Delete not allowed."
-          VIEW-AS ALERT-BOX INFORMATION.
-          NEXT.
-       END.
- 
-       IF CAN-FIND(FIRST DPTarget WHERE 
-            DPTarget.DPId = DiscountPlan.DPId)
-       THEN DO:
-          MESSAGE "Targets exist. Delete not allowed."
-          VIEW-AS ALERT-BOX INFORMATION.
-          NEXT.
-       END.
- 
-       IF CAN-FIND(FIRST DPSubject WHERE 
-                         DPSubject.DPId = DiscountPlan.DPId)
-       THEN DO:
-          MESSAGE "Subjects exist. Delete not allowed."
-          VIEW-AS ALERT-BOX INFORMATION.
-          NEXT.
-       END.
-
-       /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
-       DiscountPlan.DPId DiscountPlan.DPName
-       DiscountPlan.Priority.
-        
-       RUN local-find-NEXT.
-       IF AVAILABLE DiscountPlan THEN Memory = recid(DiscountPlan).
-       ELSE DO:
-          /* read back the record that is TO be  removed */
-          RUN local-find-this (FALSE).                     
-
-          RUN local-find-PREV.
-          IF AVAILABLE DiscountPlan THEN DO:
-             ASSIGN
-             delrow = delrow - 1  /* 'cause the LAST record is DELETEd */
-             Memory = recid(DiscountPlan).
-          END.
-       END.
-
-       /* FIND back the ROW that is TO be removed */
-       RUN local-find-this(TRUE).
-
-       ASSIGN ok = FALSE.
-       MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
-       DiscountPlan.DPId DiscountPlan.DPName
-       DiscountPlan.Priority.
-       
-       IF ok THEN DO:
-
-           FOR EACH DPRate EXCLUSIVE-LOCK WHERE
-                    DPRate.DPId = DiscountPlan.DPId:
-              DELETE DPRate.
-           END.
-           
-           IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhDiscountPlan).
-
-           DELETE DiscountPlan.
-
-           /* was LAST record DELETEd ? */
-           RUN local-find-first.
-           IF NOT AVAILABLE DiscountPlan THEN DO:
-              CLEAR FRAME sel NO-PAUSE.
-              PAUSE 0 NO-MESSAGE.
-              LEAVE LOOP.
-           END.
-           must-print = TRUE.
-           NEXT LOOP.
-       END.
-       ELSE delrow = 0. /* UNDO DELETE */
-     END. /* DELETE */
-
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis /*  TRANSACTION */
      ON ENDKEY UNDO, LEAVE:
@@ -541,11 +322,9 @@ REPEAT WITH FRAME sel:
           LEAVE LOOP.
        END.
  
-       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDiscountPlan).
-
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.p.
        cfc = "lis". RUN ufcolor.p. CLEAR FRAME lis NO-PAUSE.
-       DISPLAY DiscountPlan.DPId.
+       DISPLAY Alarm.AlarmID.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -554,22 +333,20 @@ REPEAT WITH FRAME sel:
        IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
        KEYLABEL(lastkey) = "F4" THEN UNDO, LEAVE.
 
-       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDiscountPlan).
-
        RUN local-disp-row.
-       xrecid = recid(DiscountPlan).
+       xrecid = recid(Alarm).
        LEAVE.
      END.
 
      ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
-        ASSIGN Memory = recid(DiscountPlan) must-print = TRUE.
+        ASSIGN Memory = recid(Alarm) must-print = TRUE.
        NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
-        ASSIGN Memory = recid(DiscountPlan) must-print = TRUE.
+        ASSIGN Memory = recid(Alarm) must-print = TRUE.
         NEXT LOOP.
      END.
 
@@ -577,23 +354,19 @@ REPEAT WITH FRAME sel:
 
   END.  /* BROWSE */
 END.  /* LOOP */
-*/
 HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
-/*
+
 IF gcHelpParam > "" THEN DO:
    IF xRecid NE ? THEN DO:
-      FIND FIRST DiscountPlan WHERE RECID(DiscountPlan) = xRecid NO-LOCK.
-      siirto = STRING(DiscountPlan.DPRuleId).
+      FIND FIRST Alarm WHERE RECID(Alarm) = xRecid NO-LOCK.
+      siirto = STRING(Alarm.AlarmId).
    END.   
 END.
-*/   
+  
 
 ehto = 4.
 RUN ufkey.p.
-/*
-fCleanEventObjects().
-*/
 
 
 PROCEDURE local-find-this:
@@ -601,10 +374,10 @@ PROCEDURE local-find-this:
     DEF INPUT PARAMETER exlock AS lo NO-UNDO.
 
     IF exlock THEN
-      FIND DiscountPlan WHERE recid(DiscountPlan) = rtab[frame-line(sel)] 
+      FIND Alarm WHERE recid(Alarm) = rtab[frame-line(sel)] 
       EXCLUSIVE-LOCK.
     ELSE
-       FIND DiscountPlan WHERE recid(DiscountPlan) = rtab[frame-line(sel)] 
+       FIND Alarm WHERE recid(Alarm) = rtab[frame-line(sel)] 
        NO-LOCK.
 END PROCEDURE.
 
@@ -646,117 +419,57 @@ PROCEDURE local-disp-row:
 END PROCEDURE.
 
 PROCEDURE local-find-others.
-   
+
+    fSplitTS(Alarm.SettingTime,
+             OUTPUT ldtDate,
+             OUTPUT liTime).
+
 END PROCEDURE.
-/*
+
+
 PROCEDURE local-UPDATE-record:
 
-   DEF VAR lcValue AS CHAR NO-UNDO.
+   DEF VAR liInfoPos AS INT  NO-UNDO.
+   DEF VAR liLine    AS INT  NO-UNDO.
 
-   IF NEW DiscountPlan THEN toimi = -1.
-   
-   MaintMenu:
    REPEAT ON ENDKEY UNDO, LEAVE:
 
       RUN local-find-others.
 
-            ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
-            DO WITH FRAME lis:
-               PAUSE 0.
+      ASSIGN 
+         lcCancelTime = (IF Alarm.CancelTime > 0 THEN
+                           fTS2HMS(Alarm.CancelTime)
+                         ELSE "")
+         lcSetTime = (IF Alarm.SettingTime > 0 THEN
+                           fTS2HMS(Alarm.SettingTime)
+                      ELSE "")
+         lcClearTime = (IF Alarm.ClearTime > 0 THEN
+                           fTS2HMS(Alarm.ClearTime)
+                      ELSE "")
+         lcResetTime = (IF Alarm.ResetTime > 0 THEN
+                           fTS2HMS(Alarm.ResetTime)
+                      ELSE "").
+      DISP 
+        Alarm.AlarmID        
+        Alarm.AlarmText      
+        Alarm.CancelTime  lcCancelTime  
+        Alarm.ClearTime   lcClearTime   
+        Alarm.CurrentStatus  
+        Alarm.Parameters     
+        Alarm.ProgramBlock   
+        Alarm.ResetTime   lcResetTime   
+        Alarm.SettingTime lcSetTime   
+        Alarm.Severity       
+      WITH FRAME lis.
 
-               IF FRAME-FIELD = "Subject" THEN DO:
-                  IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "DiscountPlan",
-                                      "Subject",
-                                      INPUT INPUT DiscountPlan.Subject) = ""
-                  THEN DO:
-                     MESSAGE "Unknown type"
-                     VIEW-AS ALERT-BOX ERROR.
-                     NEXT.
-                  END.
-               END.
-               
-               ELSE IF FRAME-FIELD = "DPUnit" THEN DO:
-                  IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "DiscountPlan",
-                                      "DPUnit",
-                                      INPUT INPUT DiscountPlan.DPUnit) = ""
-                  THEN DO:
-                     MESSAGE "Unknown unit"
-                     VIEW-AS ALERT-BOX ERROR.
-                     NEXT.
-                  END.
-               END.
-
-               ELSE IF FRAME-FIELD = "BillCode" THEN DO:
-                  IF NOT CAN-FIND(FIRST BillItem WHERE
-                        BillItem.Brand = gcBrand AND
-                        BillItem.BillCode = INPUT DiscountPlan.BillCode)
-                  THEN DO:
-                     MESSAGE "Unknown billing item"
-                     VIEW-AS ALERT-BOX ERROR.
-                     NEXT.
-                  END.
-               END.   
-            END.
-            
-            APPLY LASTKEY.
-         END.
-   
-         /*
-         IF NEW DiscountPlan THEN DO:
-         
-            IF DiscountPlan.Subject NE "Contract Target" THEN 
-               llSubjectType = TRUE.
-               
-            ASSIGN
-               DiscountPlan.SubjectType = STRING(llSubjectType,"All/List")
-               DiscountPlan.TargetType = STRING(llTargetType,"All/List").
-               
-            FIND FIRST DPRate EXCLUSIVE-LOCK WHERE
-                       DPRate.DPId = DiscountPlan.DPId AND
-                       DPRate.ValidFrom = DiscountPlan.ValidFrom AND
-                       DPRate.ValidTo = DiscountPlan.ValidTo NO-ERROR.
-            IF NOT AVAILABLE DPRate THEN DO:
-               CREATE DPRate.
-               ASSIGN 
-                  DPRate.DPId      = DiscountPlan.DPId
-                  DPRate.ValidFrom = DiscountPlan.ValidFrom
-                  DPRate.ValidTo   = DiscountPlan.ValidTo
-                  DPRate.DiscValue = ldDiscValue.
-            END.
-         END.
-
-         DiscountPlan.CCDisplay = INT(llCCDisplay). 
-            
-         LEAVE.
-         */
-      END.
-
-      ELSE IF toimi = 2 THEN DO:
-         RUN dpsubject.p (DiscountPlan.DPId).
-      END.
+      ASSIGN 
+         ehto = 0
+         ufk  = 0
+         ufk[8] = 8.
+      RUN ufkey.
       
-      ELSE IF toimi = 3 THEN DO:
-         RUN dptarget.p (DiscountPlan.DPId).
-      END.
- 
-      ELSE IF toimi = 4 THEN DO:
-         RUN dprate.p (DiscountPlan.DPId).
-      END.
 
-      ELSE IF toimi = 6 THEN DO:
-         RUN dpmember.p (DiscountPlan.DPId,"","").
-      END.
-      
-      /* translations */
-      ELSE IF toimi = 7 THEN DO:  
-         RUN invlang.p(31,STRING(DiscountPlan.DPId)).
-      END.
-       
-      ELSE IF toimi = 8 THEN LEAVE.  
-
+      IF toimi = 8 THEN LEAVE.
    END.
-   
+
 END PROCEDURE.
-*/
