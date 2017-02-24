@@ -87,14 +87,15 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
             MNPRetentionRule.ToDate >= TODAY AND
             MNPRetentionRule.FromDate <= TODAY:
 
-      IF MNPRetentionRule.SegmentCode > "" AND 
+/*      IF MNPRetentionRule.SegmentCode > "" AND 
          Segmentation.SegmentOffer NE MNPRetentionRule.SegmentCode
-         THEN NEXT RULE_LOOP.
+         THEN NEXT RULE_LOOP. YDR-2470 deactivate every Rule/Filter R4 */ 
 
       IF MNPRetentionRule.CLIType > "" AND
          NOT MobSub.CLIType BEGINS MNPRetentionRule.CLIType THEN
          NEXT RULE_LOOP.
       
+/* YDR-2470 deactivate every Rule/Filter R5
       IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} AND
          (MNPRetentionRule.PenaltyLeft > 0 OR
           MNPRetentionRule.PenaltyMonthsLeft > 0) THEN DO:
@@ -112,6 +113,7 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
             END.
          END.
       END.
+*/
       
       IF MNPRetentionRule.ConsumptionAverage > 0 AND
          MNPRetentionRule.ConsumptionAverage > Segmentation.SegmentCons THEN
@@ -202,7 +204,14 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
          ELSE
             liExcludeOffset = 0. /* -1440. Commented out YOT-4095 */ /* Postpaid 60 days */
 
+         FIND FIRST ttData NO-LOCK WHERE
+                    ttData.custnum = MobSub.custnum AND 
+                    ttData.msseq = MobSub.msseq AND 
+                    ttData.mnpseq = mnpprocess.mnpseq NO-ERROR.
+         IF AVAIL ttData THEN NEXT MNP_LOOP.
+
          /* Exclude Prepaid/postpaid clients from generated retention file */
+/* YDR-2470 deactivate every Rule/Filter R1 and R2 
          FOR EACH bMNPSub NO-LOCK WHERE
                   bMNPSub.MsSeq = MobSub.MsSeq,
             FIRST bMNPProcess NO-LOCK WHERE
@@ -212,22 +221,17 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
             IF bMNPProcess.CreatedTS > fOffSetTS(liExcludeOffset) THEN
                NEXT MNP_SUB_LOOP.
          END.
+*/
 
          /* already sent */
          IF mnpsub.RetentionPlatform > "" THEN NEXT.
 
          /* YOT-2301 - Exclude all data subs. and segmentation code with SN */
-         IF LOOKUP(MobSub.CLIType,"CONTRD,CONTD,TARJRD1") > 0 OR
-            Segmentation.SegmentCode = "SN" THEN NEXT.
+/*         IF LOOKUP(MobSub.CLIType,"CONTRD,CONTD,TARJRD1") > 0 OR
+            Segmentation.SegmentCode = "SN" THEN NEXT. YDR-2470 deactivate every Rule/Filter R3 */ 
          
          IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcRetentionSMSText) THEN NEXT.
-         
-         FIND FIRST ttData NO-LOCK WHERE
-                    ttData.custnum = MobSub.custnum AND 
-                    ttData.msseq = MobSub.msseq AND 
-                    ttData.mnpseq = mnpprocess.mnpseq NO-ERROR.
-         IF AVAIL ttData THEN NEXT MNP_LOOP.
-         
+
          CREATE ttData.
          ASSIGN
             ttData.custnum = MobSub.custnum
