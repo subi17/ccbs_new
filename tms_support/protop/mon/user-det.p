@@ -55,8 +55,8 @@
  *
  */
 
-{../tms_support/protop/lib/protop.i}
-{../tms_support/protop/lib/tt_xstat.i}
+{protop/lib/protop.i}
+{protop/lib/tt_xstat.i}
 
 define variable support as character no-undo initial "User Details".
 

@@ -9,7 +9,7 @@ Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-{../tms_support/testing/cdrreader.i}
+{testing/cdrreader.i}
 ASSIGN
    katun = "Qvantel"
    gcBrand = "1".
@@ -38,7 +38,7 @@ lcRootDir = FILE-INFO:FULL-PATHNAME + "/". */
 /* lcRootDir = "/apps/xfera/kariaika/yoigo/tms_support/testing/". */
 
 /*Search correct directory*/
-lcRootDir = SEARCH("tms_support/testing/donotremove_testdir.txt").
+lcRootDir = SEARCH("testing/donotremove_testdir.txt").
 lcRootDir = REPLACE(lcrootDir, "donotremove_testdir.txt", "").
 
 

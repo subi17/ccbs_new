@@ -40,11 +40,11 @@
  *
  */
 
-{../tms_support/protop/lib/protop.i}
+{protop/lib/protop.i}
 
 define variable support as character no-undo initial "Table Statistics".
 
-{../tms_support/protop/lib/tt_table.i}
+{protop/lib/tt_table.i}
 
 /* restart
  *

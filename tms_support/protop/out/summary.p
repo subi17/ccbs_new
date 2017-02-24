@@ -49,7 +49,7 @@
  *
  */
 
-{../tms_support/protop/lib/protop.i}
+{protop/lib/protop.i}
 
 define variable hWin as handle no-undo.
 
@@ -82,7 +82,7 @@ skip(2)
     "Rec Reads:"  d[6] d[16] "LkHWM|OldTrx:" to 45 d[26] format "x(8)" d[36] format "x(8)"    "Other:" to 74 d[46] format "x(5)" to 80 skip
     "  Log/Rec:"  d[7] d[17]  "Old/Curr BI:" to 45 d[27] format "x(8)" d[37] format "x(8)"      "TRX:" to 74 d[47] format "x(5)" to 80 skip
     "Area Full:"  d[8] d[18]  "After Image:" to 45 d[28] format "x(8)" d[38] format "x(8)"  "Blocked:" to 74 d[48] format "x(5)" to 80 skip
-    {../tms_support/protop/local/out/summary.i}
+    {protop/local/out/summary.i}
 /***	potentially available array detail elements
     "      xxx:"  d[9] d[19]          "xxx:" to 45 d[29] format "x(8)" d[39] format "x(8)"     "xxx:" to 74 d[49] format "x(5)" to 80 skip
     d[81] d[82] d[83] d[84] d[85] d[86] d[87] d[88] d[89] skip

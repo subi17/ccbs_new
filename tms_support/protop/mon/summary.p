@@ -40,7 +40,7 @@
  *
  */
 
-{../tms_support/protop/lib/protop.i}
+{protop/lib/protop.i}
 {local/mon/summary.v}
 
 define variable support as character no-undo initial "Summary".
@@ -123,49 +123,49 @@ procedure mon-update:
       create tt_sstat.
       assign
         tt_sstat.xid   = 4
-        {../tms_support/protop/lib/init-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-LogicRds}
+        {protop/lib/init-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-LogicRds}
       .
 
       create tt_sstat.
       assign
         tt_sstat.xid   = 5
-        {../tms_support/protop/lib/init-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-OSRds}
+        {protop/lib/init-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-OSRds}
       .
 
       create tt_sstat.
       assign
         tt_sstat.xid   = 6
-        {../tms_support/protop/lib/init-xrec.i tt_sstat.sum-stat _ActSummary._Summary-RecReads}
+        {protop/lib/init-xrec.i tt_sstat.sum-stat _ActSummary._Summary-RecReads}
 /***
-        {../tms_support/protop/lib/init-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Chkpts}
+        {protop/lib/init-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Chkpts}
  ***/
       .
 
       create tt_sstat.
       assign
         tt_sstat.xid   = 7
-        {../tms_support/protop/lib/init-xrec.i tt_sstat.sum-stat "_ActBuffer._Buffer-LogicRds / _ActSummary._Summary-RecReads"}
+        {protop/lib/init-xrec.i tt_sstat.sum-stat "_ActBuffer._Buffer-LogicRds / _ActSummary._Summary-RecReads"}
 /***
-        {../tms_support/protop/lib/init-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Flushed}
+        {protop/lib/init-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Flushed}
  ***/
       .
 
       create tt_sstat.
       assign
         tt_sstat.xid   = 21
-        {../tms_support/protop/lib/init-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Commits}
+        {protop/lib/init-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Commits}
       .
 
       create tt_sstat.
       assign
         tt_sstat.xid   = 22
-        {../tms_support/protop/lib/init-xrec.i tt_sstat.sum-stat latch-tmo}
+        {protop/lib/init-xrec.i tt_sstat.sum-stat latch-tmo}
       .
 
       create tt_sstat.
       assign
         tt_sstat.xid   = 24
-        {../tms_support/protop/lib/init-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-LRUwrts}
+        {protop/lib/init-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-LRUwrts}
       .
 
     end.
@@ -173,17 +173,17 @@ procedure mon-update:
     do:
       for each tt_sstat exclusive-lock:
         case tt_sstat.xid:
-          when  4 then assign {../tms_support/protop/lib/upd-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-LogicRds}.
-          when  5 then assign {../tms_support/protop/lib/upd-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-OSRds}.
+          when  4 then assign {protop/lib/upd-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-LogicRds}.
+          when  5 then assign {protop/lib/upd-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-OSRds}.
 /***
-          when  6 then assign {../tms_support/protop/lib/upd-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Chkpts}.
-          when  7 then assign {../tms_support/protop/lib/upd-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Flushed}.
+          when  6 then assign {protop/lib/upd-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Chkpts}.
+          when  7 then assign {protop/lib/upd-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Flushed}.
  ***/
-          when  6 then assign {../tms_support/protop/lib/upd-xrec.i tt_sstat.sum-stat _ActSummary._Summary-RecReads}.
-          when  7 then assign {../tms_support/protop/lib/upd-xrec.i tt_sstat.sum-stat "_ActBuffer._Buffer-LogicRds / _ActSummary._Summary-RecReads"}.
-          when 21 then assign {../tms_support/protop/lib/upd-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Commits}.
-          when 22 then assign {../tms_support/protop/lib/upd-xrec.i tt_sstat.sum-stat latch-tmo}.
-          when 24 then assign {../tms_support/protop/lib/upd-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-LRUwrts}.
+          when  6 then assign {protop/lib/upd-xrec.i tt_sstat.sum-stat _ActSummary._Summary-RecReads}.
+          when  7 then assign {protop/lib/upd-xrec.i tt_sstat.sum-stat "_ActBuffer._Buffer-LogicRds / _ActSummary._Summary-RecReads"}.
+          when 21 then assign {protop/lib/upd-xrec.i tt_sstat.sum-stat _ActSummary._Summary-Commits}.
+          when 22 then assign {protop/lib/upd-xrec.i tt_sstat.sum-stat latch-tmo}.
+          when 24 then assign {protop/lib/upd-xrec.i tt_sstat.sum-stat _ActBuffer._Buffer-LRUwrts}.
         end.
       end.
     end.
@@ -468,7 +468,7 @@ procedure mon-update:
   release _DbStatus.
   release _BuffStatus.
 
-  {../tms_support/protop/local/mon/summary.i}
+  {protop/local/mon/summary.i}
 
   return.
 

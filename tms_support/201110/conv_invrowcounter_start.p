@@ -37,7 +37,7 @@ FOR EACH Customer NO-LOCK,
       END.
    END.
    
-   RUN tms_support/billing/conv_invrowcounter.p(InvSeq.InvSeq,
+   RUN billing/conv_invrowcounter.p(InvSeq.InvSeq,
                             OUTPUT liCount).
 
    PUT STREAM sLog UNFORMATTED
