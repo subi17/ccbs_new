@@ -92,14 +92,14 @@ define variable hWin as handle no-undo.
 
 if "{&window-system}" = "tty" then message 'Initializing ProTop release {&protop-version}.'.
 
-RUN tms_support/protop/lib/protoplib.p persistent.
-RUN tms_support/protop/lib/vstlib.p persistent.
-RUN tms_support/protop/lib/ui-lib.p persistent.
-RUN tms_support/protop/lib/monitor.p persistent.
-RUN tms_support/protop/lib/displist.p persistent.
-RUN tms_support/protop/lib/command.p persistent.
+RUN protop/lib/protoplib.p persistent.
+RUN protop/lib/vstlib.p persistent.
+RUN protop/lib/ui-lib.p persistent.
+RUN protop/lib/monitor.p persistent.
+RUN protop/lib/displist.p persistent.
+RUN protop/lib/command.p persistent.
 
-RUN tms_support/protop/out/summary.p persistent.
+RUN protop/out/summary.p persistent.
 
 if {&html-on} then
   do:

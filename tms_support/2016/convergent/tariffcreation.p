@@ -148,7 +148,7 @@ IF RETURN-VALUE <> "OK" THEN DO:
    RETURN RETURN-VALUE.
 END.
    
-RUN tms_support/2016/convergent/configcreations.p PERSISTENT SET h_config. 
+RUN 2016/convergent/configcreations.p PERSISTENT SET h_config. 
 
 RUN pDataCreValidation.
 

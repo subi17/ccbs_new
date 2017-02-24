@@ -75,7 +75,7 @@ lcImsi = mobsub.imsi.
 lcCDRDir = lcRootDir + "cdrfiles/".
 /*Generate CDR files*/
 /*RUN VALUE(lcRootDir + "create_test_cdrfile.p")*/
-RUN tms_support/testing/create_test_cdrfile.p (
+RUN testing/create_test_cdrfile.p (
           lcCli,
           lcSecCLI,
           LCiMSI,
