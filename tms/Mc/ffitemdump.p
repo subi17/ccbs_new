@@ -10,14 +10,13 @@
 DISABLE TRIGGERS FOR DUMP OF FixedFee.
 DISABLE TRIGGERS FOR DUMP OF FFItem.
 
-{date.i}
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
-{finvnum.i}
-{fbundle.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/finvnum.i}
+{Mm/fbundle.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT PARAMETER icFile        AS CHAR NO-UNDO.
