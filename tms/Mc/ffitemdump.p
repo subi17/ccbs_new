@@ -52,7 +52,7 @@ DEF VAR lcAllowedDSS2SubsType         AS CHAR NO-UNDO.
 DEF VAR lcExcludeBundles              AS CHAR NO-UNDO.
 DEF VAR lcFirstMonthUsageBasedBundles AS CHAR  NO-UNDO.
 
-{dss_bundle_first_month_fee.i}
+{Mm/dss_bundle_first_month_fee.i}
 
 ASSIGN ldaFromDate      = DATE(MONTH(TODAY), 1, YEAR(TODAY))       
        ldaToDate        = ADD-INTERVAL(ldaFromDate, 1, "months") - 1
