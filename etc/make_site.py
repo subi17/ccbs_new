@@ -82,6 +82,7 @@ def modgen():
         if environment == 'production':
             yield '{0}/{0}.pl'.format(mod)
         yield mod
+    yield 'tms_support'
     yield 'tools'
     yield 'tools/stompAdapter'
 
