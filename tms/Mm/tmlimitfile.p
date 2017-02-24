@@ -247,10 +247,10 @@ REPEAT:
  
    lcInputFile = lcIncDir + lcFileName.
    
-   IF SEARCH(lcInputFile) NE ? THEN 
+   IF SEARCH(lcInputFile) NE ? THEN
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
-   
+   MESSAGE "1" VIEW-AS ALERT-BOX. 
    /* Set effective tenant based on file name. If not regocniced go next file
    */
    IF NOT fsetEffectiveTenantForAllDB(
@@ -258,21 +258,21 @@ REPEAT:
  
    IF INDEX(lcFileName,"results") > 0 THEN DO:
       llRecovery = TRUE.
-      liDate = INT(SUBSTRING(ENTRY(3,lcFileName,"_"),1,8)) NO-ERROR.
+      liDate = INT(SUBSTRING(ENTRY(4,lcFileName,"_"),1,8)) NO-ERROR.
    END.
-   ELSE liDate = INT(SUBSTRING(ENTRY(2,lcFileName,"_"),1,8)) NO-ERROR.
+   ELSE liDate = INT(SUBSTRING(ENTRY(3,lcFileName,"_"),1,8)) NO-ERROR.
    
    IF ERROR-STATUS:ERROR THEN NEXT.
    IF INT(lcToday) < liDate THEN NEXT.
    
    lcTime = STRING(TIME,"HH:MM").
-   lcOutputFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "threshold_results_" + 
+   lcOutputFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_threshold_results_" + 
                   STRING(liDate) + ENTRY(1,lcTime,":") + ENTRY(2,lcTime,":") + 
                   ".txt".
    OUTPUT STREAM sReport TO VALUE(lcOutputFile).
    fBatchLog("START", lcOutputFile).
 
-   lcStatFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "threshold_summary_" + 
+   lcStatFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_threshold_summary_" + 
                 STRING(liDate) + ".txt".
    OUTPUT STREAM sStatistics TO VALUE(lcStatFile).
    fBatchLog("START", lcStatFile).
@@ -285,7 +285,6 @@ REPEAT:
 
    LINE_LOOP:
    REPEAT:
-      
       IMPORT STREAM sin UNFORMATTED lcLine.
    
       ASSIGN 

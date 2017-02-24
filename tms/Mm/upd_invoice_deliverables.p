@@ -126,6 +126,8 @@ FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
       END. /* WHEN "Email" THEN DO: */
 
       WHEN "SMS" THEN DO:
+         IF BUFFER-TENANT-NAME(Customer) EQ "tMasMovil" THEN
+            RETURN "SMS invoice not allowed for MasMovil".
          IF icAction = "0" THEN DO:
             IF Customer.DelType <> {&INV_DEL_TYPE_SMS} THEN
                RETURN "SMS invoice is already turned off".
@@ -312,7 +314,7 @@ REPEAT:
    IF NOT fsetEffectiveTenantForAllDB(
          fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.
 
-   lcLogFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "invoice_deliverables_" +
+   lcLogFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_invoice_deliverables_" +
                lcToday + "_" + lcTime + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile).
    fBatchLog("START", lcLogFile).
