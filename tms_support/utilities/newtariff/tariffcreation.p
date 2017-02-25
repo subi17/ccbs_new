@@ -15,8 +15,8 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
-{../tms_support/utilities/newtariff/tariffconfig.i}
-{../tms_support/utilities/newtariff/tariffcons.i}
+{utilities/newtariff/tariffconfig.i}
+{utilities/newtariff/tariffcons.i}
 
 DEFINE INPUT  PARAMETER icIncDir    AS CHARACTER NO-UNDO. 
 DEFINE INPUT  PARAMETER icSpoolDir  AS CHARACTER NO-UNDO.
@@ -148,7 +148,7 @@ IF RETURN-VALUE <> "OK" THEN DO:
    RETURN RETURN-VALUE.
 END.
    
-RUN tms_support/utilities/newtariff/configcreations.p PERSISTENT SET h_config. 
+RUN utilities/newtariff/configcreations.p PERSISTENT SET h_config. 
 
 RUN pDataCreValidation.
 

@@ -36,7 +36,7 @@ repeat:
       next.
    END.   
    
-   RUN tms_support/200711/as_yts283_tapfilecr.p(lcPlmn,ldtDate - 1,ldtDate - 1,"",FALSE,lcFileSeq).
+   RUN 200711/as_yts283_tapfilecr.p(lcPlmn,ldtDate - 1,ldtDate - 1,"",FALSE,lcFileSeq).
 
 put stream slog unformatted
        lcPlmn           chr(9)

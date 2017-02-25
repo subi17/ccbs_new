@@ -32,7 +32,7 @@
  *
  * October 7, 2003 */
 
-{../tms_support/protop/lib/protop.i}
+{protop/lib/protop.i}
 
 define variable s as character no-undo
   view-as selection-list multiple inner-chars 30 inner-lines 15 sort scrollbar-vertical.

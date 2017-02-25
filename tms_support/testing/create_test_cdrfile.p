@@ -8,7 +8,7 @@ CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 {Func/detailvalue.i}
-{../tms_support/testing/cdrreader.i}
+{testing/cdrreader.i}
 DEF INPUT PARAM icCLI AS CHAR NO-UNDO.
 DEF INPUT PARAM icSecCLI AS CHAR NO-UNDO.
 DEF INPUT PARAM icIMSI AS CHARACTER NO-UNDO. 
