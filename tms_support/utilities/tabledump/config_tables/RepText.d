@@ -1497,6 +1497,10 @@
 1 "" 2 "Promo iPhone 24a quota gratis" 0 "DISCPAYTERMINDIR" "1" 01/02/13 31/12/49
 1 "" 3 "iPhone promozioa, 24. kuota doan" 0 "DISCPAYTERMINDIR" "1" 01/02/13 31/12/49
 1 "" 5 "iPhone offer 24th payment free" 0 "DISCPAYTERMINDIR" "1" 01/02/13 31/12/49
+1 "" 1 "Descuento promoción" 0 "DISCWINBACK" "1" 22/02/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "DISCWINBACK" "1" 22/02/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "DISCWINBACK" "1" 22/02/17 31/12/49
+1 "" 5 "Promotional discount" 0 "DISCWINBACK" "1" 22/02/17 31/12/49
 1 "" 1 "DOA no procede" 0 "DOA" "1" 22/10/12 31/12/49
 1 "" 2 "DOA no procede" 0 "DOA" "1" 22/10/12 31/12/49
 1 "" 3 "DOA no procede" 0 "DOA" "1" 22/10/12 31/12/49
