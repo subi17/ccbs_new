@@ -320,7 +320,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
             
                /* there are other packages available */
                IF liSLGPacket < NUM-ENTRIES(lcSLGroupList) AND
-                  (lcOutBDest = "" OR MSOwner.CLIType BEGINS "CONTF") 
+                  (lcOutBDest = "" OR (MSOwner.CLIType BEGINS "CONTF" AND NOT MSOwner.CLIType BEGINS "CONTFH")) 
                THEN DO:
                   IF lcOutBDest = "" THEN llPackageUsed = FALSE.
                   NEXT PACKET.
