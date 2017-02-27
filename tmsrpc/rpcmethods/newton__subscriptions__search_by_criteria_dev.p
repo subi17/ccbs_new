@@ -425,11 +425,17 @@ FOR EACH MobSub NO-LOCK WHERE
    /* Subscription type */
    IF LOOKUP(pcCliType,lcBundleCLITypes) > 0 AND
       pcSubsBundleId <> MobSub.TariffBundle THEN NEXT EACH_MOBSUB.
- 
-      /* Data bundle  */
-   IF pcDataBundleId > "" THEN DO:
+
+   /* Data bundle  */
+   IF pcDataBundleId > "" THEN DO:      
       lcDataBundles = fGetCurrentSpecificBundle(MobSub.MsSeq,"BONO").
-      IF pcDataBundleId <> lcDataBundles THEN NEXT EACH_MOBSUB.
+      IF pcDataBundleId <> "None" THEN       
+      DO:      
+         IF pcDataBundleId <> lcDataBundles THEN 
+            NEXT EACH_MOBSUB.          
+      END.
+      ELSE IF lcDataBundles > "" THEN 
+         NEXT EACH_MOBSUB.     
    END. /* IF pcDataBundleId > "" THEN DO: */
    
    /* Eligible for renewal order YDA-895 */
