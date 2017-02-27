@@ -49,7 +49,7 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 {Mm/fbundle.i}
-{rpcmethods/get_memos.i}
+{get_memos.i}
 {Func/timestamp.i}
 {Func/msisdn_prefix.i}
 

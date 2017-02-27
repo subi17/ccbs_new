@@ -6,8 +6,8 @@
  * @tmscodes id;string;tmscodes codevalue and codename pair
  */
 
-{rpcmethods/xmlrpc_names.i}
-{rpcmethods/header_get.i}
+{xmlrpc_names.i}
+{header_get.i}
 
 
 FUNCTION fGetRequestTypes RETURNS LOGICAL:

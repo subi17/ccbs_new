@@ -5,7 +5,7 @@
  * @output struct;array of customer categories
 */
 
-{rpcmethods/flistrpc.i}
+{flistrpc.i}
 
 lcStruct = validate_struct(pcStruct, "").
 

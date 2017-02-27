@@ -58,7 +58,7 @@
 
 
 {xmlrpc/xmlrpc_access.i}
-{rpcmethods/json_key.i}
+{json_key.i}
 
 /* Output variables */
 DEFINE VARIABLE lcInvType AS CHARACTER NO-UNDO. 

@@ -17,7 +17,7 @@
            
 */
 
-{rpcmethods/header_get.i}
+{header_get.i}
 {Func/timestamp.i}
 {Syst/tmsconst.i}
 

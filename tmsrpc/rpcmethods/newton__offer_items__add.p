@@ -22,7 +22,7 @@
 gcBrand = "1".
 {Syst/eventval.i}
 {Mc/offer.i}
-{rpcmethods/xmlrpc_names.i}
+{xmlrpc_names.i}
 
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO. 

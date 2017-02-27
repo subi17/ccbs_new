@@ -12,7 +12,7 @@
           criteria_type;string;
  */
 
-{rpcmethods/header_get.i}
+{header_get.i}
 
 DEF VAR liId AS INT NO-UNDO. 
 

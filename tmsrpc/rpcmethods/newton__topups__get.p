@@ -19,7 +19,7 @@
   
  */
 
-{rpcmethods/header_get.i}
+{header_get.i}
 {Func/tsformat.i}
 {Func/xmlfunction.i}
 

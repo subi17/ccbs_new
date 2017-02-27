@@ -7,7 +7,7 @@
                  name;string;description
  */
 
-{rpcmethods/header_get.i}
+{header_get.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    

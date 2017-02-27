@@ -11,7 +11,7 @@
                topup_scheme_id;string;related topup scheme id
  */
 
-{rpcmethods/header_get.i}
+{header_get.i}
 
 DEF VAR liId AS INTEGER NO-UNDO. 
 

@@ -19,7 +19,7 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{rpcmethods/get_memos.i}
+{get_memos.i}
 
 /* Input parameters */
 DEF VAR piKey AS INT NO-UNDO.

@@ -12,7 +12,7 @@
             valid_to;date;
  */
 
-{rpcmethods/header_get.i}
+{header_get.i}
 DEF VAR liId AS INTEGER NO-UNDO. 
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:

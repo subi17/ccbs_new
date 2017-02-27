@@ -21,7 +21,7 @@
             send_sms;string;sms id to send customer
  */
 
-{rpcmethods/header_get.i}
+{header_get.i}
 DEFINE VARIABLE katun AS CHARACTER NO-UNDO. 
 &SCOPED-DEFINE BrandVarDefined YES
 {Func/func.p}

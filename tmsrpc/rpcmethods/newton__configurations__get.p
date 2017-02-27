@@ -6,7 +6,7 @@
  * @output statuses;array of int;current status of setting (0=off, 1=on)
  */
 
-{rpcmethods/header_get.i}
+{header_get.i}
 {Func/tmsparam4.i}
 {Syst/tmsconst.i}
 

@@ -54,7 +54,7 @@
                 per_contract_id;int;unique contract id 
  */
 {xmlrpc/xmlrpc_access.i}
-{rpcmethods/get_memos.i}
+{get_memos.i}
 {Func/msisdn_prefix.i}
 
 /* Input parameters */

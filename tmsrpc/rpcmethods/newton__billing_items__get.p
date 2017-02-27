@@ -15,7 +15,7 @@
            title_ga;string;
  */
 
-{rpcmethods/header_get.i}
+{header_get.i}
 {Func/transname.i}
 
 DEFINE VARIABLE lctitle   AS CHARACTER NO-UNDO EXTENT 5 

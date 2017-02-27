@@ -13,7 +13,7 @@
 {xmlrpc/xmlrpc_access.i}
 DEF VAR gcBrand   AS CHAR NO-UNDO INIT "1".
 {Syst/tmsconst.i}
-{rpcmethods/fpindicator.i}
+{fpindicator.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INTEGER NO-UNDO. 
