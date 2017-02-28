@@ -14,7 +14,7 @@
 {tmsconst.i}
 {timestamp.i}
 {eventval.i}
-
+{Func/create_eventlog.i}
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
    commali.i, katun defined and call fCleanEventObjects after this function */
@@ -56,7 +56,7 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
 
    IF llDoEvent THEN DO:
       lhMsOwner = BUFFER bNewMsowner:HANDLE.
-      fMakeCreateEvent (lhMsOwner).
+      fMakeCreateEvent (lhMsOwner, "", katun, "").
    END.
 
    RELEASE MSOwner.
