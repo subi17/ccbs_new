@@ -56,7 +56,7 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
 
    IF llDoEvent THEN DO:
       lhMsOwner = BUFFER bNewMsowner:HANDLE.
-      RUN fMakeCreateEvent (lhMsOwner).
+      fMakeCreateEvent (lhMsOwner).
    END.
 
    RELEASE MSOwner.
