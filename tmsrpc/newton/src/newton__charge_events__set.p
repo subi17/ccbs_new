@@ -19,11 +19,10 @@ DEFINE VARIABLE ldToDate      AS DATE      NO-UNDO.
 
 DEFINE BUFFER buffFMItem FOR FMItem.
 
-IF validate_request(param_toplevel_id, "string,string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
-pcTenant = get_string(param_toplevel_id, "0").
-pcId     = get_string(param_toplevel_id, "1").
-pcStruct = get_struct(param_toplevel_id, "2").
+pcId     = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
 
 lcStruct = validate_struct(pcStruct, "username!,name,valid_to,amount").
 pcUserName = "VISTA_" + get_string(pcStruct, "username").
@@ -31,6 +30,13 @@ pcUserName = "VISTA_" + get_string(pcStruct, "username").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUserName) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+
+IF NUM-ENTRIES(pcID,"|") > 1 THEN
+   ASSIGN
+       pcTenant = ENTRY(2, pcID, "|")
+       pcID     = ENTRY(1, pcID, "|").
+ELSE
+   RETURN appl_err("Invalid tenant information").
 
 {newton/src/settenant.i pcTenant}
 

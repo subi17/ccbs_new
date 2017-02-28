@@ -18,11 +18,10 @@ DEFINE VARIABLE pcUserName AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcStruct   AS CHAR      NO-UNDO. 
 DEFINE VARIABLE lcListFixedEvents AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
-pcTenant = get_string(param_toplevel_id, "0").
-pcId     = get_string(param_toplevel_id, "1").
-pcStruct = get_struct(param_toplevel_id, "2").
+pcId     = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -37,6 +36,13 @@ IF TRIM(pcUsername) EQ "VISTA_" THEN
     RETURN appl_err("username is empty").
 
 katun = pcUserName.
+
+IF NUM-ENTRIES(pcID,"|") > 1 THEN
+   ASSIGN
+       pcTenant = ENTRY(2, pcID, "|")
+       pcID     = ENTRY(1, pcID, "|").
+ELSE
+   RETURN appl_err("Invalid tenant information").
 
 {newton/src/settenant.i pcTenant}
 

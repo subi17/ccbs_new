@@ -18,8 +18,18 @@ DEF VAR liId AS INTEGER NO-UNDO.
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
+
+   IF NUM-ENTRIES(pcId,"|") > 1 THEN
+      ASSIGN
+          pcTenant = ENTRY(2,pcId,"|")
+          pcId     = ENTRY(1,pcId,"|").
+   ELSE
+      RETURN appl_err("Invalid tenant information").
+
    liId = INT(pcId) NO-ERROR.
    
+   {newton/src/settenant.i pcTenant}
+
    FIND TopupSchemeRow NO-LOCK WHERE 
         TopupSchemeRow.TopupSchemeRowId = liId NO-ERROR.
 
@@ -27,7 +37,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
       
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", STRING(TopupSchemeRow.TopupSchemeRowId)). 
+   add_string(lcResultStruct, "id", STRING(TopupSchemeRow.TopupSchemeRowId) + "|" + pcTenant). 
+   add_string(lcResultStruct, "brand", pcTenant). 
    IF TopupSchemeRow.DisplayAmount > 0 THEN
       add_double(lcResultStruct,"amount", TopupSchemeRow.DisplayAmount). 
    ELSE

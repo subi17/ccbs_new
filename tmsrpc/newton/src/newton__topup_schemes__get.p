@@ -16,6 +16,15 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
    
+   IF NUM-ENTRIES(pcId,"|") > 1 THEN
+      ASSIGN
+          pcTenant = ENTRY(2,pcId,"|")
+          pcId     = ENTRY(1,pcId,"|").
+   ELSE
+      RETURN appl_err("Invalid tenant information").
+
+   {newton/src/settenant.i pcTenant}
+   
    FIND TopupScheme NO-LOCK WHERE 
       TopupScheme.Brand = gcBrand AND 
       TopupScheme.TopupScheme = pcId NO-ERROR.
@@ -23,7 +32,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF NOT AVAIL TopupScheme THEN RETURN appl_err("Topup scheme not found: "+ pcId).
       
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", TopupScheme.TopupScheme). 
+   add_string(lcResultStruct, "id", TopupScheme.TopupScheme + "|" + pcTenant).
+   add_string(lcResultStruct, "brand", pcTenant).  
    add_datetime(lcResultStruct,"valid_from", TopupScheme.FromDate). 
    IF TopupScheme.ToDate < 12/31/2049 THEN
       add_datetime(lcResultStruct,"valid_to", TopupScheme.ToDate). 

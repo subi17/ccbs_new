@@ -1,5 +1,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/matrix.i}
+{Func/multitenantfunc.i}
 
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
@@ -7,10 +8,15 @@ DEF VAR pcStruct AS CHARACTER NO-UNDO.
 DEF VAR pcTenant AS CHARACTER NO-UNDO.
 DEF VAR lcStruct AS CHARACTER NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
-pcTenant = get_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcStruct = get_struct(param_toplevel_id, "0").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+lcStruct = validate_request(pcStruct, "brand").
+
+pcTenant = get_string(pcStruct,"brand").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -60,20 +66,21 @@ FUNCTION fListQuery RETURNS CHAR
       lhQuery:GET-NEXT(NO-LOCK).
       
       liCount = liCount + 1.
+
       IF liCount <= liOffSet THEN NEXT.
       
       IF lhQuery:QUERY-OFF-END OR liCount > liLimit + liOffSet THEN LEAVE.
       
       IF icidField NE ? THEN 
-        add_string(lcResultStruct, "", 
-           lhQuery:GET-BUFFER-HANDLE(1):BUFFER-FIELD(icIdField):BUFFER-VALUE). 
+         add_string(lcResultStruct, "", (lhQuery:GET-BUFFER-HANDLE(1):BUFFER-FIELD(icIdField):BUFFER-VALUE + "|" + fConvertTenantToBrand(lhTable:BUFFER-TENANT-NAME)). 
       ELSE DO:
-         add_string(lcResultStruct, "", 
-           STRING(lhQuery:GET-BUFFER-HANDLE(1):ROWID)). 
+         add_string(lcResultStruct, "", (STRING(lhQuery:GET-BUFFER-HANDLE(1):ROWID) + "|" + fConvertTenantToBrand(lhTable:BUFFER-TENANT-NAME)). 
       END.
+
    END.
 
    lhQuery:QUERY-CLOSE().
+
    DELETE WIDGET-POOL "ListQuery".
 
    RETURN "".
@@ -103,7 +110,7 @@ FUNCTION fListBundleQuery RETURNS CHAR
  DO liCount = 1 TO liNumEntries:
     lcBundle = ENTRY(liCount,lcResult).
     IF lcBundle = "" OR lcBundle = ? THEN NEXT.
-    add_string(lcResultStruct, "", lcBundle).
+    add_string(lcResultStruct, "", lcBundle + "|" + fConvertTenantToBrand(BUFFER-TENANT-NAME(CliType))).
  END. /* DO liCount = 1 TO liNumEntries: */
 
 END FUNCTION. /* FUNCTION fListBundleQuery RETURNS CHAR */

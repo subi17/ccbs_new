@@ -26,6 +26,7 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/fprepaidfee.i}
+{Func/multitenantfunc.i}
 
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
@@ -52,14 +53,11 @@ DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
 DEF VAR llVoIPCompatible   AS LOG NO-UNDO.
 DEF VAR lcPromotionBundles AS CHAR NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "string,array") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
 
-pcTenant = get_string(param_toplevel_id, "0").
-pcIDArray = get_array(param_toplevel_id, "1").
+pcIDArray = get_array(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-{newton/src/settenant.i pcTenant}
 
 resp_array = add_array(response_toplevel_id, "").
 
@@ -77,7 +75,17 @@ ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
+   
    IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+   IF NUM-ENTRIES(pcID,"|") > 1 THEN
+       ASSIGN
+           pcTenant = ENTRY(2, pcID, "|")
+           pcID     = ENTRY(1, pcID, "|").
+   ELSE
+       RETURN appl_err("Invalid tenant information").
+
+   {newton/src/settenant.i pcTenant}
 
    FIND FIRST DayCampaign NO-LOCK WHERE
               DayCampaign.Brand   = "1"  AND
@@ -95,7 +103,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       llVoIPCompatible = FALSE.
 
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", DayCampaign.DCEvent).
+   add_string(lcResultStruct, "id", DayCampaign.DCEvent + "|" + pcTenant).
+   add_string(lcResultStruct, "brand", pcTenant).
    add_string(lcResultStruct,"name", DayCampaign.DCName).
    add_int(lcResultStruct,"status", DayCampaign.StatusCode).
    

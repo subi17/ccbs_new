@@ -25,13 +25,13 @@ DEFINE TEMP-TABLE ttReseller LIKE Reseller
 
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcId     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcRespStruct AS CHARACTER NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 
-pcTenant = get_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcStruct = get_struct(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN
    RETURN.
@@ -48,10 +48,19 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
+pcId = get_string(pcStruct,"id").
+
+IF NUM-ENTRIES(pcId,"|") > 1 THEN
+  ASSIGN
+      pcTenant = ENTRY(2,pcId,"|")
+      pcId     = ENTRY(1,pcId,"|").
+ELSE
+  RETURN appl_err("Invalid tenant information").
+
 CREATE ttReseller.
 ASSIGN
    ttReseller.Brand      = gcBrand
-   ttReseller.Reseller   = get_string(pcStruct, "id")
+   ttReseller.Reseller   = pcId
    ttReseller.RsName     = get_string(pcStruct, "name")
    ttReseller.EntityCode = (IF LOOKUP("entity_code",lcStruct) > 0
                             THEN get_int(pcStruct,"entity_code") ELSE ?)

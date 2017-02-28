@@ -34,10 +34,9 @@ DEFINE VARIABLE lcBrand  AS CHAR NO-UNDO INITIAL "1".
 DEFINE TEMP-TABLE ttFeeModel NO-UNDO LIKE FeeModel.
 DEFINE TEMP-TABLE ttFMItem NO-UNDO LIKE FMItem.
 
-IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 
-pcTenant = get_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcStruct = get_struct(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -57,7 +56,6 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF pdAmt = 0 THEN 
 RETURN appl_err("Amount can not be zero").
 
-
 IF LOOKUP("valid_to",lcStruct) > 0 THEN DO:
 
    pdToDate   = get_date(pcStruct,"valid_to").
@@ -76,6 +74,13 @@ IF LOOKUP("valid_to",lcStruct) > 0 THEN DO:
    RETURN appl_err("Valid To must be later than Valid From ").
 
 END.
+
+IF NUM-ENTRIES(pcID,"|") > 1 THEN
+   ASSIGN
+       pcTenant = ENTRY(2, pcID, "|")
+       pcID     = ENTRY(1, pcID, "|").
+ELSE
+   RETURN appl_err("Invalid tenant information").
 
 {newton/src/settenant.i pcTenant}
 

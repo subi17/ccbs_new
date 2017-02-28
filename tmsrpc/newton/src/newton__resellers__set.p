@@ -32,11 +32,10 @@ DEF VAR pdaBankCodeFrom AS DATE      NO-UNDO INIT ?.
 DEF VAR llEqual         AS LOG       NO-UNDO. 
 DEF VAR lcResellerTF    AS CHAR      NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string,struct") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
 
-pcTenant   = get_string(param_toplevel_id, "0").
-pcReseller = get_nonempty_string(param_toplevel_id, "1").
-pcStruct   = get_struct(param_toplevel_id, "2").
+pcReseller = get_nonempty_string(param_toplevel_id, "0").
+pcStruct   = get_struct(param_toplevel_id, "1").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -51,6 +50,13 @@ katun = "VISTA_" + get_string(pcStruct, "username").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+
+IF NUM-ENTRIES(pcReseller,"|") > 1 THEN
+  ASSIGN
+      pcTenant   = ENTRY(2,pcReseller,"|")
+      pcReseller = ENTRY(1,pcReseller,"|").
+ELSE
+  RETURN appl_err("Invalid tenant information").
 
 {newton/src/settenant.i pcTenant}
 
