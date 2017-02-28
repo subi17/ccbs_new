@@ -39,10 +39,11 @@ DEF VAR ldCollPeriodEndTS AS DEC NO-UNDO. /*now - 1 minute*/
 DEF VAR lcResult AS CHAR NO-UNDO.
 DEF VAR lcUpsell AS CHAR NO-UNDO.
 DEF VAR lcLogDir AS CHAR NO-UNDO.
+DEF VAR llgSimulate AS LOG NO-UNDO.
 
 DEF STREAM sLogFile.
 
-lcLogDir     = fCParam("March2017Promo","March2017LogDir").
+llgSimulate = TRUE. /*TRUE-> only log writing, FALSE->make real updates*/
 lcTableName = "March2017Promo". /*For execution lock*/
 lcActionId = "UpsellForAzul". /*For execution lock*/
 ldCampaignStart = 20170301. /*Dates when order must be done */
@@ -52,6 +53,9 @@ ldCurrentTimeTS = fMakeTS().
 
 PUT STREAM sLogFile UNFORMATTED "Azul Upsell Activation starts " +  
                                  fTS2HMS(ldCurrentTimeTS) SKIP.
+
+lcLogDir     = fCParam("March2017Promo","March2017LogDir").
+IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
 
 /*Temp table for orders of activated mobsubs during the collection period*/
 DEF TEMP-TABLE ttOrderList NO-UNDO
@@ -97,7 +101,7 @@ FUNCTION fCollect RETURNS CHAR
              Order.CrStamp LT ldCampaignEnd) THEN NEXT.
 
       /*No Flex upsell is allowed*/
-         /*This is checked in activation phase*/
+         /*This is checked in activation phase in fUpsellForAzul*/
 
       /*Do not make the activation for STC*/
       IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN NEXT.
@@ -127,15 +131,16 @@ FUNCTION fUpsellForAzul RETURNS CHAR
               MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
               MsRequest.ReqCparam3 EQ lcUpsell NO-ERROR.
    IF AVAIL MsRequest THEN RETURN "Upsell already activated".
-
-   fCreateUpsellBundle(iiMsSeq,
-                        lcUpsell,
-                        {&REQUEST_SOURCE_YOIGO_TOOL},
-                        fMakeTS(),
-                        OUTPUT liRequest,
-                        OUTPUT lcError).
-   IF lcError NE "" THEN RETURN lcError.                    
-
+   
+   IF llgSimulate EQ FALSE THEN DO:
+      fCreateUpsellBundle(iiMsSeq,
+                           lcUpsell,
+                           {&REQUEST_SOURCE_YOIGO_TOOL},
+                           fMakeTS(),
+                           OUTPUT liRequest,
+                           OUTPUT lcError).
+      IF lcError NE "" THEN RETURN lcError.                    
+   END.
    RETURN "OK".
 END.
 /*Set execution lock on.*/
