@@ -10,10 +10,10 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{tmsconst.i}
-{commpaa.i}
-{timestamp.i}
-{upsellbundle.i}
+{Syst/tmsconst.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
+{Func/upsellbundle.i}
 
 /*Logic:*
    1. Make a lock that prevents multiple instances of the program. 
@@ -27,7 +27,7 @@
    4. Free lock taken in step 1.
 */
 
-/*gcBrand = "1".*/
+gcBrand = "1".
 
 DEF VAR lcTableName AS CHAR NO-UNDO.
 DEF VAR lcActionId AS CHAR NO-UNDO.
