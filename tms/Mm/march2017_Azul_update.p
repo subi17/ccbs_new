@@ -71,7 +71,8 @@ OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
 PUT STREAM sLogFile UNFORMATTED "Azul Upsell Activation starts " +
                                  fTS2HMS(ldCurrentTimeTS) SKIP.
-
+IF llgSimulate EQ TRUE THEN
+   PUT STREAM sLogFile UNFORMATTED "Simulation mode" SKIP.
 
 /*Temp table for orders of activated mobsubs during the collection period*/
 DEF TEMP-TABLE ttOrderList NO-UNDO
