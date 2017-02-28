@@ -46,7 +46,7 @@ DEF VAR lcOutROw AS CHAR NO-UNDO.
 
 DEF STREAM sLogFile.
 
-llgSimulate = TRUE. /*TRUE-> only log writing, FALSE->make real updates*/
+llgSimulate = FALSE. /*TRUE-> only log writing, FALSE->make real updates*/
 lcTableName = "March2017Promo". /*For execution lock*/
 lcActionId = "UpsellForAzul". /*For execution lock*/
 ldCampaignStart = 20170301. /*Dates when order must be done */
