@@ -38,22 +38,28 @@ DEFINE VARIABLE licount      AS INTEGER NO-UNDO.
 DEFINE VARIABLE lctitle   AS CHARACTER NO-UNDO EXTENT 5 
        INITIAL ["title_es","title_ca","title_eu","title_ga","title_en"] . 
 
-
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_struct(pcStruct, "brand!,username!,id!,name!,billing_group!," + 
+lcStruct = validate_struct(pcStruct, "username!,id!,name!,billing_group!," + 
                                      "title_es,title_ca,title_eu,title_ga,title_en").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-pcTenant = get_string(pcStruct,"brand"). 
 pcId = get_string(pcStruct,"id").
 pcBIGroup = get_string(pcStruct,"billing_group").
 pcName = get_string(pcStruct,"name"). 
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF NUM-ENTRIES(pcID,"|") > 1 THEN
+   ASSIGN
+       pcTenant = ENTRY(2, pcId, "|")
+       pcId     = ENTRY(1, pcId, "|").
+ELSE
+   RETURN appl_err("Invalid tenant information").
 
 {newton/src/settenant.i pcTenant}
 

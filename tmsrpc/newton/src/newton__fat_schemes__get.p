@@ -15,14 +15,23 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
 
-   FIND FatGroup NO-LOCK WHERE 
-      FatGroup.Brand = gcBrand AND 
-      FatGroup.FtGrp = pcId NO-ERROR.
+   IF NUM-ENTRIES(pcId,"|") > 1 THEN
+      ASSIGN
+          pcTenant = ENTRY(2,pcId,"|")
+          pcId     = ENTRY(1,pcId,"|").
+   ELSE
+      RETURN appl_err("Invalid tenant information").
 
-   IF NOT AVAIL FatGroup THEN RETURN appl_err("FAT scheme not found: " + pcId).
+   {newton/src/settenant.i pcTenant}
+
+   FIND FatGroup NO-LOCK WHERE FatGroup.Brand = gcBrand AND FatGroup.FtGrp = pcId NO-ERROR.
+
+   IF NOT AVAIL FatGroup THEN 
+      RETURN appl_err("FAT scheme not found: " + pcId).
       
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", FatGroup.FtGrp). 
+   add_string(lcResultStruct, "id", FatGroup.FtGrp + "|" + pcTenant).
+   add_string(lcResultStruct, "brand", pcTenant). 
    add_string(lcResultStruct,"name", FatGroup.FtgName). 
    add_double(lcResultStruct,"amount", FatGroup.Amount). 
    add_int(lcResultStruct,"division_periods", FatGroup.PeriodQty). 

@@ -4,6 +4,13 @@
  * @input conditions;struct;mandatory; begins'
  * @output struct;array of BillItem ids
 */
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
+
+DEF VAR gcBrand        AS CHAR      NO-UNDO INIT "1".
+DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
+DEF VAR pcStruct       AS CHARACTER NO-UNDO. 
+DEF VAR lcStruct       AS CHARACTER NO-UNDO. 
+DEF VAR pcTenant       AS CHARACTER NO-UNDO.
 
 FUNCTION fCheckServPac RETURN LOGICAL 
          ( INPUT pcServPac AS CHAR ):
@@ -49,25 +56,23 @@ FUNCTION fCheckServPac RETURN LOGICAL
   RETURN llAllowed .
 END.
 
-
-{fcgi_agent/xmlrpc/xmlrpc_access.i}
-
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
-DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
-DEF VAR pcStruct AS CHARACTER NO-UNDO. 
-DEF VAR lcStruct AS CHARACTER NO-UNDO. 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 
-lcResultStruct = add_array(response_toplevel_id, "").
+IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_struct(pcStruct, "id_begins").
+lcStruct = validate_request(pcStruct, "brand,id_begins").
+
+pcTenant = get_string(pcStruct,"brand").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FOR EACH ServPac NO-LOCK WHERE
-         ServPac.Brand = "1" :
+{newton/src/settenant.i pcTenant}
+
+lcResultStruct = add_array(response_toplevel_id, "").
+
+FOR EACH ServPac NO-LOCK WHERE ServPac.Brand = "1" :
 
     IF LOOKUP("id_begins",lcStruct) > 0 THEN 
        IF NOT ServPac.ServPac BEGINS get_string(pcStruct,"id_begins") THEN NEXT. 

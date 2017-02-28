@@ -15,6 +15,7 @@
  */
 
 {newton/src/header_get.i}
+{Func/multitenantfunc.i}
 
 DEF VAR lcArray AS CHAR NO-UNDO. 
 DEF VAR lcStruct AS CHAR NO-UNDO. 
@@ -28,6 +29,15 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
    
+   IF NUM-ENTRIES(pcId,"|") > 1 THEN
+      ASSIGN
+          pcTenant = ENTRY(2,pcId,"|")
+          pcId     = ENTRY(1,pcId,"|").
+   ELSE
+      RETURN appl_err("Invalid tenant information").
+   
+   {newton/src/settenant.i pcTenant}
+
    FIND Reseller NO-LOCK WHERE 
         Reseller.Brand = gcBrand AND
         Reseller.Reseller = pcID NO-ERROR.
@@ -35,7 +45,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF NOT AVAIL Reseller THEN RETURN appl_err("Reseller not found: "+ pcId).
       
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", Reseller.Reseller). 
+   add_string(lcResultStruct, "id", Reseller.Reseller + "|" + pcTenant). 
+   add_string(lcResultStruct, "brand", pcTenant).
    add_string(lcResultStruct,"name", Reseller.RsName). 
    add_double(lcResultStruct,"commission_percentage", Reseller.CommPerc).
    add_string(lcResultStruct,"address", Reseller.Address[1]).

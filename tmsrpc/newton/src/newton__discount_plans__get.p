@@ -12,6 +12,15 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray,STRING(liCounter)).
    
+   IF NUM-ENTRIES(pcId,"|") > 1 THEN
+      ASSIGN
+          pcTenant = ENTRY(2,pcId,"|")
+          pcId     = ENTRY(1,pcId,"|").
+   ELSE
+      RETURN appl_err("Invalid tenant information").
+
+   {newton/src/settenant.i pcTenant}
+
    FIND FIRST DiscountPlan NO-LOCK WHERE 
               DiscountPlan.Brand = gcBrand AND 
               DiscountPlan.DPRuleId = pcId NO-ERROR.
@@ -26,7 +35,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    lcResultStruct = add_struct(resp_array, "").
 
-   add_string(lcResultStruct,"id",DiscountPlan.DPRuleId).
+   add_string(lcResultStruct,"id",DiscountPlan.DPRuleId + "|" + pcTenant).
+   add_string(lcResultStruct,"brand",pcTenant).
    add_string(lcResultStruct,"name",DiscountPlan.DPName).
    add_string(lcResultStruct,"unit",DiscountPlan.DPUnit).
    add_int(lcResultStruct,"valid_periods",DiscountPlan.ValidPeriods).

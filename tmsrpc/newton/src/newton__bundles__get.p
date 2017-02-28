@@ -23,18 +23,17 @@
 
 {Syst/commpaa.i}
 gcBrand = "1".
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/fprepaidfee.i}
+{Func/multitenantfunc.i}
+
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
 DEF VAR pcIdArray AS CHAR NO-UNDO. 
+DEF VAR pcTenant  As CHAR NO-UNDO.
 DEF VAR liCounter AS INTEGER NO-UNDO. 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
-
-IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
-pcIDArray = get_array(param_toplevel_id, "0").
-
-IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-resp_array = add_array(response_toplevel_id, "").
 
 DEF VAR lcIPLContracts     AS CHAR NO-UNDO.
 DEF VAR lcCONTDContracts   AS CHAR NO-UNDO.
@@ -54,9 +53,13 @@ DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
 DEF VAR llVoIPCompatible   AS LOG NO-UNDO.
 DEF VAR lcPromotionBundles AS CHAR NO-UNDO. 
 
-{Func/cparam2.i}
-{Syst/tmsconst.i}
-{Func/fprepaidfee.i}
+IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
+
+pcIDArray = get_array(param_toplevel_id, "0").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+resp_array = add_array(response_toplevel_id, "").
 
 ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcCONTDContracts = fCParamC("CONTD_CONTRACTS")
@@ -72,7 +75,17 @@ ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
+   
    IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+   IF NUM-ENTRIES(pcID,"|") > 1 THEN
+       ASSIGN
+           pcTenant = ENTRY(2, pcID, "|")
+           pcID     = ENTRY(1, pcID, "|").
+   ELSE
+       RETURN appl_err("Invalid tenant information").
+
+   {newton/src/settenant.i pcTenant}
 
    FIND FIRST DayCampaign NO-LOCK WHERE
               DayCampaign.Brand   = "1"  AND
@@ -90,7 +103,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       llVoIPCompatible = FALSE.
 
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", DayCampaign.DCEvent).
+   add_string(lcResultStruct, "id", DayCampaign.DCEvent + "|" + pcTenant).
+   add_string(lcResultStruct, "brand", pcTenant).
    add_string(lcResultStruct,"name", DayCampaign.DCName).
    add_int(lcResultStruct,"status", DayCampaign.StatusCode).
    
