@@ -1926,7 +1926,18 @@ PROCEDURE pGetCTNAME:
                                        ELSE "<br/>1 GB/mes extra gratis durante 4 meses"). 
           END.
        END.
-    
+       /*YPR-5616: Adding promotion text for Azul orders (that do not have discount plan for the campaign)*/
+       /*Dirty and temporary solution. Can be removed after march 2017*/
+       IF (Order.CliType EQ "CONTDSL59" OR
+           Order.CliType EQ "CONTFH59_50" OR  
+           Order.CliType EQ "CONTFH69_300") 
+           AND
+          (Order.Crstamp > 20170301 AND 
+           Order.Crstamp < 20170401) THEN DO:
+          lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>25 GB/mes extra free during 6 months"
+                              ELSE "<br/>25 GB/mes extra gratis durante 6 meses").
+       END.
+
        IF ldeMFWithTax > 0 THEN
          /* YBU-4648 LENGTH check added for fitting one line */
          lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,
@@ -1982,7 +1993,7 @@ PROCEDURE pGetCTNAME:
    lcTagCTName = REPLACE(lcTagCTName,",00","").
 
    lcResult = lcTagCTName.
-END. /*Tariff name*/
+END. /*Tariff name pGetCTNAME*/
 
 
 
