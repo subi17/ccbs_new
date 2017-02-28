@@ -39,7 +39,10 @@ DEF VAR ldCollPeriodEndTS AS DEC NO-UNDO. /*now - 1 minute*/
 DEF VAR lcResult AS CHAR NO-UNDO.
 DEF VAR lcUpsell AS CHAR NO-UNDO.
 DEF VAR lcLogDir AS CHAR NO-UNDO.
+DEF VAR lcLogFile AS CHAR NO-UNDO.
+DEF VAR ldaReadDate  AS DATE NO-UNDO.
 DEF VAR llgSimulate AS LOG NO-UNDO.
+DEF VAR lcOutROw AS CHAR NO-UNDO.
 
 DEF STREAM sLogFile.
 
@@ -49,13 +52,26 @@ lcActionId = "UpsellForAzul". /*For execution lock*/
 ldCampaignStart = 20170301. /*Dates when order must be done */
 ldCampaignEnd = 20170401. /*Dates when order must be done */
 lcUpsell = "FLEX_UPSELL". /*Upsell that will be aded in the promo*/
+ldaReadDate  = TODAY.
+
 ldCurrentTimeTS = fMakeTS().
 
-PUT STREAM sLogFile UNFORMATTED "Azul Upsell Activation starts " +  
-                                 fTS2HMS(ldCurrentTimeTS) SKIP.
+
+lcLogFile    = lcLogDir + "March2017Promo_hourly_" +
+                      STRING(YEAR(ldaReadDate)) +
+                      STRING(MONTH(ldaReadDate),"99") +
+                      STRING(DAY(ldaReadDate),"99") +
+                      REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
+
 
 lcLogDir     = fCParam("March2017Promo","March2017LogDir").
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
+
+OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
+
+PUT STREAM sLogFile UNFORMATTED "Azul Upsell Activation starts " +
+                                 fTS2HMS(ldCurrentTimeTS) SKIP.
+
 
 /*Temp table for orders of activated mobsubs during the collection period*/
 DEF TEMP-TABLE ttOrderList NO-UNDO
@@ -165,7 +181,7 @@ DO TRANS:
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
          ActionLog.UserCode     = katun
-         ActionLog.ActionTS     = 20170301.
+         ActionLog.ActionTS     = ldCampaignStart.
       RELEASE ActionLog.
       RETURN. /*No reporting in first time.*/
    END.
@@ -188,10 +204,12 @@ fCollect(ldCollPeriodStartTS, ldCollPeriodEndTS). /*Select orders that need acti
 
 /*Activate upsells*/
 FOR EACH ttOrderList:
+   lcOutRow = "".
    lcResult = fUpsellForAzul(ttOrderList.MsSeq).
-   PUT STREAM sLogFile STRING(ttOrderList.OrderID) + ";" 
-                       STRING(ttOrderList.MsSeq) + ";" +
-                       lcResult SKIP.
+   lcOutRow = STRING(ttOrderList.OrderID) + "|" +
+              STRING(ttOrderList.MsSeq) + "|" +
+              lcResult.
+   PUT STREAM sLogFile UNFORMATTED lcoutRow SKIP.
 END.
 
 
@@ -213,4 +231,5 @@ END.
 
 PUT STREAM sLogFile UNFORMATTED "Azul Upsell Activation done " +
                                  fTS2HMS(fMakeTS()) SKIP.
+OUTPUT STREAM sLogFile CLOSE.
 
