@@ -1497,6 +1497,10 @@
 1 "" 2 "Promo iPhone 24a quota gratis" 0 "DISCPAYTERMINDIR" "1" 01/02/13 31/12/49
 1 "" 3 "iPhone promozioa, 24. kuota doan" 0 "DISCPAYTERMINDIR" "1" 01/02/13 31/12/49
 1 "" 5 "iPhone offer 24th payment free" 0 "DISCPAYTERMINDIR" "1" 01/02/13 31/12/49
+1 "" 1 "Descuento promoción" 0 "DISCWINBACK" "1" 22/02/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "DISCWINBACK" "1" 22/02/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "DISCWINBACK" "1" 22/02/17 31/12/49
+1 "" 5 "Promotional discount" 0 "DISCWINBACK" "1" 22/02/17 31/12/49
 1 "" 1 "DOA no procede" 0 "DOA" "1" 22/10/12 31/12/49
 1 "" 2 "DOA no procede" 0 "DOA" "1" 22/10/12 31/12/49
 1 "" 3 "DOA no procede" 0 "DOA" "1" 22/10/12 31/12/49
@@ -3269,6 +3273,31 @@
 1 "" 3 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
 1 "" 4 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
 1 "" 5 "Samsung Galaxy A5 2017" 0 "G0000315" "1" 24/01/17 31/12/49
+1 "" 1 "Wiko Sunny" 0 "G0000316" "1" 22/02/17 31/12/49
+1 "" 2 "Wiko Sunny" 0 "G0000316" "1" 22/02/17 31/12/49
+1 "" 3 "Wiko Sunny" 0 "G0000316" "1" 22/02/17 31/12/49
+1 "" 4 "Wiko Sunny" 0 "G0000316" "1" 22/02/17 31/12/49
+1 "" 5 "Wiko Sunny" 0 "G0000316" "1" 22/02/17 31/12/49
+1 "" 1 "Alcatel Pixi 4 5 3G" 0 "G0000317" "1" 22/02/17 31/12/49
+1 "" 2 "Alcatel Pixi 4 5 3G" 0 "G0000317" "1" 22/02/17 31/12/49
+1 "" 3 "Alcatel Pixi 4 5 3G" 0 "G0000317" "1" 22/02/17 31/12/49
+1 "" 4 "Alcatel Pixi 4 5 3G" 0 "G0000317" "1" 22/02/17 31/12/49
+1 "" 5 "Alcatel Pixi 4 5 3G" 0 "G0000317" "1" 22/02/17 31/12/49
+1 "" 1 "Huawei P8 Lite 2017" 0 "G0000318" "1" 22/02/17 31/12/49
+1 "" 2 "Huawei P8 Lite 2017" 0 "G0000318" "1" 22/02/17 31/12/49
+1 "" 3 "Huawei P8 Lite 2017" 0 "G0000318" "1" 22/02/17 31/12/49
+1 "" 4 "Huawei P8 Lite 2017" 0 "G0000318" "1" 22/02/17 31/12/49
+1 "" 5 "Huawei P8 Lite 2017" 0 "G0000318" "1" 22/02/17 31/12/49
+1 "" 1 "Huawei P10" 0 "G0000319" "1" 22/02/17 31/12/49
+1 "" 2 "Huawei P10" 0 "G0000319" "1" 22/02/17 31/12/49
+1 "" 3 "Huawei P10" 0 "G0000319" "1" 22/02/17 31/12/49
+1 "" 4 "Huawei P10" 0 "G0000319" "1" 22/02/17 31/12/49
+1 "" 5 "Huawei P10" 0 "G0000319" "1" 22/02/17 31/12/49
+1 "" 1 "Alcatel 2008G" 0 "G0000320" "1" 22/02/17 31/12/49
+1 "" 2 "Alcatel 2008G" 0 "G0000320" "1" 22/02/17 31/12/49
+1 "" 3 "Alcatel 2008G" 0 "G0000320" "1" 22/02/17 31/12/49
+1 "" 4 "Alcatel 2008G" 0 "G0000320" "1" 22/02/17 31/12/49
+1 "" 5 "Alcatel 2008G" 0 "G0000320" "1" 22/02/17 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -3626,6 +3655,11 @@
 1 "" 3 "Kazam Trooper 450 Blanco" 0 "P011T45W2" "1" 02/03/15 31/12/49
 1 "" 4 "Kazam Trooper 450 Blanco" 0 "P011T45W2" "1" 02/03/15 31/12/49
 1 "" 5 "Kazam Trooper 450 White" 0 "P011T45W2" "1" 02/03/15 31/12/49
+1 "" 1 "Wiko Sunny Blanco" 0 "P012WSUW2" "1" 22/02/17 31/12/49
+1 "" 2 "Wiko Sunny Blanco" 0 "P012WSUW2" "1" 22/02/17 31/12/49
+1 "" 3 "Wiko Sunny Blanco" 0 "P012WSUW2" "1" 22/02/17 31/12/49
+1 "" 4 "Wiko Sunny Blanco" 0 "P012WSUW2" "1" 22/02/17 31/12/49
+1 "" 5 "Wiko Sunny White" 0 "P012WSUW2" "1" 22/02/17 31/12/49
 1 "" 1 "Sony Ericsson C702 Negro y plata" 0 "P013C70N2" "1" 15/09/08 31/12/54
 1 "" 5 "Sony Ericsson C702 Black and silver" 0 "P013C70N2" "1" 15/09/08 31/12/54
 1 "" 1 "Sony-Ericsson C702" 0 "P013C70N3" "1" 01/12/08 31/12/54
@@ -6259,6 +6293,16 @@
 1 "" 3 "Huawei U8800 Blanco" 0 "P043880W2" "1" 30/11/11 31/12/49
 1 "" 4 "Huawei U8800 Blanco" 0 "P043880W2" "1" 30/11/11 31/12/49
 1 "" 5 "Huawei U8800 White" 0 "P043880W2" "1" 30/11/11 31/12/49
+1 "" 1 "Huawei P8 Lite 2017 Negro" 0 "P0438L7N2" "1" 22/02/17 31/12/49
+1 "" 2 "Huawei P8 Lite 2017 Negro" 0 "P0438L7N2" "1" 22/02/17 31/12/49
+1 "" 3 "Huawei P8 Lite 2017 Negro" 0 "P0438L7N2" "1" 22/02/17 31/12/49
+1 "" 4 "Huawei P8 Lite 2017 Negro" 0 "P0438L7N2" "1" 22/02/17 31/12/49
+1 "" 5 "Huawei P8 Lite 2017 Black" 0 "P0438L7N2" "1" 22/02/17 31/12/49
+1 "" 1 "Huawei P8 Lite 2017 Blanco" 0 "P0438L7W2" "1" 22/02/17 31/12/49
+1 "" 2 "Huawei P8 Lite 2017 Blanco" 0 "P0438L7W2" "1" 22/02/17 31/12/49
+1 "" 3 "Huawei P8 Lite 2017 Blanco" 0 "P0438L7W2" "1" 22/02/17 31/12/49
+1 "" 4 "Huawei P8 Lite 2017 Blanco" 0 "P0438L7W2" "1" 22/02/17 31/12/49
+1 "" 5 "Huawei P8 Lite 2017 White" 0 "P0438L7W2" "1" 22/02/17 31/12/49
 1 "" 1 "Huawei P8 Lite Negro con Talkband B2 Negro" 0 "P0438LRN2" "1" 19/11/15 31/12/49
 1 "" 2 "Huawei P8 Lite Negro con Reloj Smartband B2 Negro" 0 "P0438LRN2" "1" 19/11/15 31/12/49
 1 "" 3 "Huawei P8 Lite Negro con Reloj Smartband B2 Negro" 0 "P0438LRN2" "1" 19/11/15 31/12/49
@@ -6515,6 +6559,16 @@
 1 "" 3 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
 1 "" 4 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
 1 "" 5 "Huawei Mate 9 Grey" 0 "P043MT9G2" "1" 24/11/16 31/12/49
+1 "" 1 "Huawei P10 Negro" 0 "P043P10N2" "1" 22/02/17 31/12/49
+1 "" 2 "Huawei P10 Negro" 0 "P043P10N2" "1" 22/02/17 31/12/49
+1 "" 3 "Huawei P10 Negro" 0 "P043P10N2" "1" 22/02/17 31/12/49
+1 "" 4 "Huawei P10 Negro" 0 "P043P10N2" "1" 22/02/17 31/12/49
+1 "" 5 "Huawei P10 Black" 0 "P043P10N2" "1" 22/02/17 31/12/49
+1 "" 1 "Huawei P10 Blanco" 0 "P043P10W2" "1" 22/02/17 31/12/49
+1 "" 2 "Huawei P10 Blanco" 0 "P043P10W2" "1" 22/02/17 31/12/49
+1 "" 3 "Huawei P10 Blanco" 0 "P043P10W2" "1" 22/02/17 31/12/49
+1 "" 4 "Huawei P10 Blanco" 0 "P043P10W2" "1" 22/02/17 31/12/49
+1 "" 5 "Huawei P10 White" 0 "P043P10W2" "1" 22/02/17 31/12/49
 1 "" 1 "Huawei P1 XL Negro" 0 "P043P1XN2" "1" 24/09/12 31/12/49
 1 "" 2 "Huawei P1 XL Negro" 0 "P043P1XN2" "1" 24/09/12 31/12/49
 1 "" 3 "Huawei P1 XL Negro" 0 "P043P1XN2" "1" 24/09/12 31/12/49
@@ -6719,6 +6773,11 @@
 1 "" 3 "Honor 5x Blanco" 0 "P044HX5W2" "1" 22/02/16 31/12/49
 1 "" 4 "Honor 5x Blanco" 0 "P044HX5W2" "1" 22/02/16 31/12/49
 1 "" 5 "Honor 5x White" 0 "P044HX5W2" "1" 22/02/16 31/12/49
+1 "" 1 "Alcatel 2008G Negro" 0 "P04508GN2" "1" 22/02/17 31/12/49
+1 "" 2 "Alcatel 2008G Negro" 0 "P04508GN2" "1" 22/02/17 31/12/49
+1 "" 3 "Alcatel 2008G Negro" 0 "P04508GN2" "1" 22/02/17 31/12/49
+1 "" 4 "Alcatel 2008G Negro" 0 "P04508GN2" "1" 22/02/17 31/12/49
+1 "" 5 "Alcatel 2008G Black" 0 "P04508GN2" "1" 22/02/17 31/12/49
 1 "" 1 "ALCATEL 1030 Turquesa" 0 "P045103Q2" "1" 02/09/13 31/12/49
 1 "" 2 "Alcatel 1030 Turquesa" 0 "P045103Q2" "1" 02/09/13 31/12/49
 1 "" 3 "Alcatel 1030 Turquesa" 0 "P045103Q2" "1" 02/09/13 31/12/49
@@ -6989,6 +7048,11 @@
 1 "" 3 "Alcatel ONETOUCH POP 3 Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP 3 Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
 1 "" 5 "Alcatel POP 3 (5) Soft Silver" 0 "P045P3SP2" "1" 25/08/15 31/12/49
+1 "" 1 "Alcatel Pixi 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49
+1 "" 2 "Alcatel Pixi 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49
+1 "" 3 "Alcatel Pixi 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49
+1 "" 4 "Alcatel Pixi 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49
+1 "" 5 "Alcatel Pixi 4 5 3G White" 0 "P045P43W2" "1" 22/02/17 31/12/49
 1 "" 1 "ALCATEL PIXI 4 5 Plata metal" 0 "P045P44S2" "1" 21/09/16 31/12/49
 1 "" 2 "ALCATEL PIXI 4 5 Plata metal" 0 "P045P44S2" "1" 21/09/16 31/12/49
 1 "" 3 "ALCATEL PIXI 4 5 Plata metal" 0 "P045P44S2" "1" 21/09/16 31/12/49
@@ -11270,10 +11334,10 @@
 9 "" 2 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
 9 "" 5 "La Combinada Naranja 20" 0 "CONTDSL40" "1" 23/11/16 31/12/49
-9 "" 1 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
-9 "" 2 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
-9 "" 3 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
-9 "" 5 "La Combinada Morada 20" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Morada 20 con 2 GB" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada Morada 20 con 2 GB" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada Morada 20 con 2 GB" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada Morada 20 con 2 GB" 0 "CONTDSL45" "1" 27/10/16 31/12/49
 9 "" 1 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
 9 "" 2 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
@@ -11353,10 +11417,10 @@
 9 "" 2 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
 9 "" 5 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
-9 "" 1 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
-9 "" 2 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
-9 "" 3 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
-9 "" 5 "La Combinada Morada 50" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Morada 50 con 2 GB" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada Morada 50 con 2 GB" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada Morada 50 con 2 GB" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada Morada 50 con 2 GB" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
 9 "" 1 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
 9 "" 2 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Verde 50" 0 "CONTFH48_50" "1" 23/11/16 31/12/49
@@ -11373,18 +11437,18 @@
 9 "" 2 "La Combinada Morada 50" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
 9 "" 3 "La Combinada Morada 50" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
 9 "" 5 "La Combinada Morada 50" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
-9 "" 1 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
-9 "" 2 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
-9 "" 3 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
-9 "" 5 "La Combinada Morada 300" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada Morada 300 con 2 GB" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada Morada 300 con 2 GB" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada Morada 300 con 2 GB" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada Morada 300 con 2 GB" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 1 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
 9 "" 2 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
 9 "" 5 "La Combinada Verde 300" 0 "CONTFH58_300" "1" 23/11/16 31/12/49
-9 "" 1 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
-9 "" 2 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
-9 "" 3 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
-9 "" 5 "La Combinada Azul 50" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 1 "La Combinada Azul 50 con 20 GB" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 2 "La Combinada Azul 50 con 20 GB" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 3 "La Combinada Azul 50 con 20 GB" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
+9 "" 5 "La Combinada Azul 50 con 20 GB" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
 9 "" 1 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
 9 "" 2 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
 9 "" 3 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
@@ -11393,10 +11457,10 @@
 9 "" 2 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
 9 "" 3 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
 9 "" 5 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
-9 "" 1 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
-9 "" 2 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
-9 "" 3 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
-9 "" 5 "La Combinada Azul 300" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
+9 "" 1 "La Combinada Azul 300 con 20 GB" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
+9 "" 2 "La Combinada Azul 300 con 20 GB" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
+9 "" 3 "La Combinada Azul 300 con 20 GB" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
+9 "" 5 "La Combinada Azul 300 con 20 GB" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 1 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
 9 "" 2 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
 9 "" 3 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49

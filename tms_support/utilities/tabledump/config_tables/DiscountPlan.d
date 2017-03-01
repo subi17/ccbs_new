@@ -24,6 +24,7 @@
 "1" 36 "Contract Target" "List" "Fixed" 1 no "" "DISCFH300" 01/11/16 31/12/49 "DISCFH300" "Fixed Fiber 300 MF Discount" "" "List" 0 0 0 3
 "1" 41 "Contract Target" "List" "Percentage" 1 no "" "DISCFH300P" 01/02/17 31/12/49 "DISCFH300P" "Fixed Fiber 300 MF Discount (Percentage)" "" "List" 10 0 0 3
 "1" 8 "Contract Target" "All " "Percentage" 2 no "" "DISCOUNT10" 01/09/13 31/12/49 "DISCOUNT10" "Discount 10 percent" "" "All " 0 0 0 0
+"1" 42 "Contract Target" "List" "Percentage" 1 no "" "DISCWINBACK" 22/02/17 31/12/49 "DISCWINBACK" "Winback ADSL Discount" "" "List" 0 0 0 6
 "1" 21 "Contract Target" "List" "Percentage" 3 no "" "INC_DISC" 01/12/14 31/12/49 "INC_DISC" "Descuento Incidencia red" "" "All " 0 0 1 1
 "1" 19 "Contract Target" "List" "Percentage" 2 no "" "INTLCALLDISC" 01/07/14 31/12/49 "INTLCALLDISC" "Discount international Calls" "" "All " 0 0 0 0
 "1" 11 "Contract Target" "List" "Percentage" 2 no "" "LRDISC" 01/02/14 31/12/49 "LRDISC" "Loyalty & retention discount" "" "All " 0 0 0 6
