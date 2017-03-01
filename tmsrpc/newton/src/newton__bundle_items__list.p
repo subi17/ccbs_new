@@ -9,7 +9,7 @@
 
 DEF VAR lcCLIType    AS CHAR NO-UNDO.
 
-lcStruct = validate_request(pcStruct, "subscription_type_id!").
+lcStruct = validate_request(pcStruct, "brand!,subscription_type_id!").
 IF lcStruct EQ ? THEN RETURN.
 
 lcCLIType = get_string(pcStruct,"subscription_type_id").

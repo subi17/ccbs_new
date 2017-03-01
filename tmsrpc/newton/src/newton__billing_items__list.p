@@ -9,7 +9,7 @@
 
 DEF VAR lcQuery  AS CHARACTER NO-UNDO. 
 
-lcStruct = validate_struct(pcStruct, "billing_group").
+lcStruct = validate_struct(pcStruct, "brand,billing_group").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
