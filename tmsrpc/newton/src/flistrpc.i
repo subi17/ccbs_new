@@ -72,10 +72,9 @@ FUNCTION fListQuery RETURNS CHAR
       IF lhQuery:QUERY-OFF-END OR liCount > liLimit + liOffSet THEN LEAVE.
       
       IF icidField NE ? THEN 
-         add_string(lcResultStruct, "", (lhQuery:GET-BUFFER-HANDLE(1):BUFFER-FIELD(icIdField):BUFFER-VALUE + "|" + fConvertTenantToBrand(lhTable:BUFFER-TENANT-NAME)). 
-      ELSE DO:
-         add_string(lcResultStruct, "", (STRING(lhQuery:GET-BUFFER-HANDLE(1):ROWID) + "|" + fConvertTenantToBrand(lhTable:BUFFER-TENANT-NAME)). 
-      END.
+         add_string(lcResultStruct, "", (lhQuery:GET-BUFFER-HANDLE(1):BUFFER-FIELD(icIdField):BUFFER-VALUE + "|" + fConvertTenantToBrand(lhTable:BUFFER-TENANT-NAME))). 
+      ELSE
+         add_string(lcResultStruct, "", (STRING(lhQuery:GET-BUFFER-HANDLE(1):ROWID) + "|" + fConvertTenantToBrand(lhTable:BUFFER-TENANT-NAME))).
 
    END.
 

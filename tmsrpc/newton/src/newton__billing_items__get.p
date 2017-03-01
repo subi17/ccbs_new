@@ -23,7 +23,6 @@ DEFINE VARIABLE lctitle   AS CHARACTER NO-UNDO EXTENT 5
                           INITIAL ["title_es","title_ca","title_eu","title_ga","title_en"] . 
 DEFINE VARIABLE liLang    AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE lctrans   AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE pcTenant  As CHARACTER NO-UNDO.
 
 FUNCTION fGetTranslationName RETURN CHARACTER
   (INPUT pcCode AS CHARACTER, INPUT piLang AS INTEGER):
