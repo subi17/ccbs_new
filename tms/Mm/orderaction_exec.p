@@ -392,15 +392,19 @@ PROCEDURE pDiscountPlan:
          DPMember.DiscValue = DPRate.DiscValue.
    END.
 
-   IF DiscountPlan.dprule EQ "BONO6WEBDISC" THEN DO: 
-      /* YDR-2294 */
-      IF Order.CrStamp >= fCParamDe("SepPromotionFromDate") AND 
-         Order.CrStamp <  fCParamDe("SepPromotionToDate")   THEN 
-      ASSIGN 
-            ldate              = ADD-INTERVAL(MobSub.ActivationDate,3,"months")
-            DPMember.ValidFrom = MobSub.ActivationDate
-            DPMember.ValidTo   = fLastDayOfMonth(lDate). 
+   /* YPR-5616, March promo 2017:
+      BONO6WEBDISC 1GB 6 Months
+      BONO7DISC 3GB 6 months
+   */
+   IF DiscountPlan.dprule EQ "BONO7DISC" OR 
+      DiscountPlan.dprule EQ "BONO6WEBDISC" THEN DO: 
+      ASSIGN
+      ldate              = ADD-INTERVAL(MobSub.ActivationDate,5,"months")
+      DPMember.ValidFrom = MobSub.ActivationDate
+      DPMember.ValidTo   = fLastDayOfMonth(lDate).      
    END.
+
+
    
    RETURN "".
 
