@@ -57,15 +57,14 @@ ldaReadDate  = TODAY.
 ldCurrentTimeTS = fMakeTS().
 
 
+lcLogDir     = fCParam("March2017Promo","March2017LogDir").
+IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
+
 lcLogFile    = lcLogDir + "March2017Promo_hourly_" +
                       STRING(YEAR(ldaReadDate)) +
                       STRING(MONTH(ldaReadDate),"99") +
                       STRING(DAY(ldaReadDate),"99") +
                       REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
-
-
-lcLogDir     = fCParam("March2017Promo","March2017LogDir").
-IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
 
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
