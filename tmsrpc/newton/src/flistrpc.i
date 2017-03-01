@@ -16,6 +16,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcStruct = validate_request(pcStruct, "brand").
 
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
 pcTenant = get_string(pcStruct,"brand").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
