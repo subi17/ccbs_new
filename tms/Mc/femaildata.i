@@ -1901,6 +1901,39 @@ PROCEDURE pGetCTNAME:
                     ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
              END.
           END.
+
+       FIND FIRST DiscountPlan NO-LOCK WHERE
+                  DiscountPlan.DPRuleId = "BONO7DISC" NO-ERROR.
+
+       IF AVAIL DiscountPlan THEN DO:
+
+          llgEmailText = FALSE.
+           
+          FIND FIRST DPMember WHERE
+                     DPMember.DPId = DiscountPlan.DPId AND
+                     DPMember.hosttable = "MobSub" AND
+                     DPMember.keyValue = STRING(order.msseq)  AND
+                     DPMember.validFrom <= ldtOrderDate AND
+                     DPMember.validTo >= ldtOrderDate NO-LOCK NO-ERROR.
+          
+          IF AVAIL DPMember THEN    
+             llgEmailText = TRUE.   
+          ELSE DO:
+             FIND FIRST Orderaction NO-LOCK where
+                        Orderaction.brand = gcBrand AND
+                        orderaction.orderid = order.orderid AND
+                        orderaction.itemtype = "discount" AND
+                        orderaction.itemkey = STRING(DiscountPlan.DPID) NO-ERROR.
+              IF AVAIL orderaction THEN    
+                 llgEmailText = TRUE.
+          END.
+
+          IF llgEmailText THEN DO:
+             lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>3 GB/mes extra free during 6 months"
+                        ELSE "<br/>3 GB/mes extra gratis durante 6 meses"). 
+          
+          END.
+       END.
        
        /* YDR-2294 */
        FIND FIRST DiscountPlan NO-LOCK WHERE
@@ -1930,10 +1963,8 @@ PROCEDURE pGetCTNAME:
           END.
 
           IF llgEmailText THEN DO:
-             IF Order.CrStamp >= fCParamDe("SepPromotionFromDate") AND
-                Order.CrStamp <  fCParamDe("SepPromotionToDate")   THEN 
-                lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>1 GB/mes extra free during 4 months"
-                                       ELSE "<br/>1 GB/mes extra gratis durante 4 meses"). 
+                lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>1 GB/mes extra free during 6 months"
+                                       ELSE "<br/>1 GB/mes extra gratis durante 6 meses"). 
           END.
        END.
        /*YPR-5616: Adding promotion text for Azul orders (that do not have discount plan for the campaign)*/
@@ -1942,8 +1973,8 @@ PROCEDURE pGetCTNAME:
            Order.CliType EQ "CONTFH59_50" OR  
            Order.CliType EQ "CONTFH69_300") 
            AND
-          (Order.Crstamp > 20170301 AND 
-           Order.Crstamp < 20170401) THEN DO:
+          (Order.Crstamp > fCParamDe("March2017PromoFromDate") AND 
+           Order.Crstamp < fCParamDe("March2017PromoToDate")) THEN DO:
           lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>25 GB/mes extra free during 6 months"
                               ELSE "<br/>25 GB/mes extra gratis durante 6 meses").
        END.
