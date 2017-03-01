@@ -1881,12 +1881,55 @@ PROCEDURE pGetCTNAME:
                        TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99"))             + " &euro;/" +
                        (IF liLang EQ 5 THEN "month" ELSE "mes")          +
                        (IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
-
-             IF DiscountPlan.DPUnit EQ "Percentage" THEN
-                ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
-             ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
-                 ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
+             /*Offeritem values must be used if such is available.
+               Otherwise the value is taken from discountplan settings.*/
+             IF Offeritem.Amount > 0 THEN DO:
+                IF DiscountPlan.DPUnit EQ "Percentage" THEN
+                   ldeMFWithTax = ldeMFWithTax - ((Offeritem.amount / 100) * ldeMFWithTax).
+                ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
+                    ldeMFWithTax = ldeMFWithTax - Offeritem.amount.
+ 
+             END.
+             ELSE DO:
+                IF DiscountPlan.DPUnit EQ "Percentage" THEN
+                   ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
+                ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
+                    ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
+             END.
           END.
+
+       FIND FIRST DiscountPlan NO-LOCK WHERE
+                  DiscountPlan.DPRuleId = "BONO7DISC" NO-ERROR.
+
+       IF AVAIL DiscountPlan THEN DO:
+
+          llgEmailText = FALSE.
+           
+          FIND FIRST DPMember WHERE
+                     DPMember.DPId = DiscountPlan.DPId AND
+                     DPMember.hosttable = "MobSub" AND
+                     DPMember.keyValue = STRING(order.msseq)  AND
+                     DPMember.validFrom <= ldtOrderDate AND
+                     DPMember.validTo >= ldtOrderDate NO-LOCK NO-ERROR.
+          
+          IF AVAIL DPMember THEN    
+             llgEmailText = TRUE.   
+          ELSE DO:
+             FIND FIRST Orderaction NO-LOCK where
+                        Orderaction.brand = gcBrand AND
+                        orderaction.orderid = order.orderid AND
+                        orderaction.itemtype = "discount" AND
+                        orderaction.itemkey = STRING(DiscountPlan.DPID) NO-ERROR.
+              IF AVAIL orderaction THEN    
+                 llgEmailText = TRUE.
+          END.
+
+          IF llgEmailText THEN DO:
+             lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>3 GB/mes extra free during 6 months"
+                        ELSE "<br/>3 GB/mes extra gratis durante 6 meses"). 
+          
+          END.
+       END.
        
        /* YDR-2294 */
        FIND FIRST DiscountPlan NO-LOCK WHERE
@@ -1916,13 +1959,22 @@ PROCEDURE pGetCTNAME:
           END.
 
           IF llgEmailText THEN DO:
-             IF Order.CrStamp >= fCParamDe("SepPromotionFromDate") AND
-                Order.CrStamp <  fCParamDe("SepPromotionToDate")   THEN 
-                lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>1 GB/mes extra free during 4 months"
-                                       ELSE "<br/>1 GB/mes extra gratis durante 4 meses"). 
+                lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>1 GB/mes extra free during 6 months"
+                                       ELSE "<br/>1 GB/mes extra gratis durante 6 meses"). 
           END.
        END.
-    
+       /*YPR-5616: Adding promotion text for Azul orders (that do not have discount plan for the campaign)*/
+       /*Dirty and temporary solution. Can be removed after march 2017*/
+       IF (Order.CliType EQ "CONTDSL59" OR
+           Order.CliType EQ "CONTFH59_50" OR  
+           Order.CliType EQ "CONTFH69_300") 
+           AND
+          (Order.Crstamp > fCParamDe("March2017PromoFromDate") AND 
+           Order.Crstamp < fCParamDe("March2017PromoToDate")) THEN DO:
+          lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>25 GB/mes extra free during 6 months"
+                              ELSE "<br/>25 GB/mes extra gratis durante 6 meses").
+       END.
+
        IF ldeMFWithTax > 0 THEN
          /* YBU-4648 LENGTH check added for fitting one line */
          lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,
@@ -1978,7 +2030,7 @@ PROCEDURE pGetCTNAME:
    lcTagCTName = REPLACE(lcTagCTName,",00","").
 
    lcResult = lcTagCTName.
-END. /*Tariff name*/
+END. /*Tariff name pGetCTNAME*/
 
 
 
