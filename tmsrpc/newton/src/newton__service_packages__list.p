@@ -78,8 +78,6 @@ FOR EACH ServPac NO-LOCK WHERE ServPac.Brand = "1" :
        IF NOT ServPac.ServPac BEGINS get_string(pcStruct,"id_begins") THEN NEXT. 
 
     IF fCheckServPac(ServPac.ServPac) THEN  
-        add_string(lcResultStruct, "",ServPac.ServPac).
-  
+        add_string(lcResultStruct, "",ServPac.ServPac + "|" + pcTenant).
+
 END.
-
-
