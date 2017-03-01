@@ -1885,11 +1885,21 @@ PROCEDURE pGetCTNAME:
                        TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99"))             + " &euro;/" +
                        (IF liLang EQ 5 THEN "month" ELSE "mes")          +
                        (IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
-
-             IF DiscountPlan.DPUnit EQ "Percentage" THEN
-                ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
-             ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
-                 ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
+             /*Offeritem values must be used if such is available.
+               Otherwise the value is taken from discountplan settings.*/
+             IF Offeritem.Amount > 0 THEN DO:
+                IF DiscountPlan.DPUnit EQ "Percentage" THEN
+                   ldeMFWithTax = ldeMFWithTax - ((Offeritem.amount / 100) * ldeMFWithTax).
+                ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
+                    ldeMFWithTax = ldeMFWithTax - Offeritem.amount.
+ 
+             END.
+             ELSE DO:
+                IF DiscountPlan.DPUnit EQ "Percentage" THEN
+                   ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
+                ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
+                    ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
+             END.
           END.
        
        /* YDR-2294 */
