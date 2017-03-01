@@ -4,7 +4,7 @@ DEF VAR lcTMSRoot AS CHAR NO-UNDO.
 DEF VAR llSimulate AS LOG NO-UNDO. 
 DEF VAR lcEntry AS CHAR NO-UNDO. 
 
-lcTMSRoot = "/apps/xfera/ansavola/tms/".
+lcTMSRoot = "/apps/xfera/tms/".
 llSimulate = yes.
 
 def stream sout.

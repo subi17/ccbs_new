@@ -3,8 +3,11 @@
       if lcModule eq ? then
          lcModule = search({2} + ".p").
    end.
-   else
-      lcModule = search({1} + ".p").
+   else do:
+      if index({1},".p") > 0  then
+         lcModule = search({1}).
+      else lcModule = search({1} + ".p").
+   end.
 
    if lcModule eq ? then do:
       put stream serr unformatted
@@ -24,7 +27,9 @@
    put stream sout unformatted
       "{1}" "|"
       {1} "|"
-      lcModuleWithPath skip.
+      lcModuleWithPath "|"
+      ( if {1} eq lcModuleWithPath then "OK" ELSE "MIGRATED")
+   skip.
 
    if not llSimulate then
       {1} = lcModuleWithPath.
