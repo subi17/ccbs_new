@@ -9,7 +9,11 @@
    the priority order defined in SLGAnalyse. 
 */
 
-&GLOBAL-DEFINE BASE_BUNDLE_SUBTYPES "CONT6,CONT7,CONT8,CONTD,CONTF,CONTS,CONTFF,CONTSF,CONT9,CONT15,CONT24,CONT23,CONTS2GB,CONT25,CONT10,CONT26"
+&GLOBAL-DEFINE MOBILE_SUBTYPES                 "CONTD,CONTF,CONTS,CONTFF,CONTSF,CONT6,CONT7,CONT8,CONT9,CONT10,CONT15,CONT23,CONT24,CONT25,CONT26"
+&GLOBAL-DEFINE ADSL-CONVERGENT-SUBTYPES        "CONTDSL35,CONTDSL39,CONTDSL40,CONTDSL45,CONTDSL48,CONTDSL52,CONTDSL58,CONTDSL59"
+&GLOBAL-DEFINE FIBER-CONVERGENT-SUBTYPES-LIST1 "CONTFH35_50,CONTFH39_50,CONTFH40_50,CONTFH45_50,CONTFH48_50,CONTFH52_50,CONTFH58_50,CONTFH59_50"
+&GLOBAL-DEFINE FIBER-CONVERGENT-SUBTYPES-LIST2 "CONTFH45_300,CONTFH49_300,CONTFH50_300,CONTFH55_300,CONTFH58_300,CONTFH62_300,CONTFH68_300,CONTFH69_300"
+
 &GLOBAL-DEFINE DSS2_SUBTYPES "CONTS,CONTM2,CONTM,CONTSF,CONT15"
 
 FUNCTION fIncludedUnit RETURNS DEC
@@ -36,46 +40,51 @@ END FUNCTION.
 
 FUNCTION fPackageCalculation RETURNS LOGIC:
 
-   DEF VAR llPackageUsed  AS LOG  NO-UNDO.
-   DEF VAR lcSLGroup      AS CHAR NO-UNDO.
-   DEF VAR liSLGAType     AS INT  NO-UNDO.
-   DEF VAR lcSLGroupList  AS CHAR NO-UNDO.
-   DEF VAR lcSLGATypeList AS CHAR NO-UNDO.
-   DEF VAR llServLimit    AS LOG  NO-UNDO.
-   DEF VAR lcInBDest      AS CHAR NO-UNDO.
-   DEF VAR lcOutBDest     AS CHAR NO-UNDO.
-   DEF VAR llServiceGrp   AS LOG  NO-UNDO.
-   DEF VAR liInclUnit     AS INT  NO-UNDO.
-   DEF VAR liSLSeq        AS INT  NO-UNDO.
-   DEF VAR ldPackageAmt   AS DEC  NO-UNDO.
-   DEF VAR ldTotalPrice   AS DEC  NO-UNDO.
-   DEF VAR liSLGPacket    AS INT  NO-UNDO.
-   DEF VAR ldePCCBalance  AS DEC  NO-UNDO.
-   DEF VAR liUnitUsed     AS INT  NO-UNDO.
-   DEF VAR liSLGAUsed     AS INT  NO-UNDO. 
-   DEF VAR ldLimitTo      AS DEC  NO-UNDO.
-   DEF VAR ldAmtUsed      AS DEC  NO-UNDO.
-   DEF VAR lcNewGroupList AS CHAR NO-UNDO.
-   DEF VAR lcNewTypeList  AS CHAR NO-UNDO.
-   DEF VAR llUpsell       AS LOG NO-UNDO. 
-   DEF VAR liPrevious     AS INT  NO-UNDO.
+   DEF VAR llPackageUsed         AS LOG  NO-UNDO.
+   DEF VAR lcSLGroup             AS CHAR NO-UNDO.
+   DEF VAR liSLGAType            AS INT  NO-UNDO.
+   DEF VAR lcSLGroupList         AS CHAR NO-UNDO.
+   DEF VAR lcSLGATypeList        AS CHAR NO-UNDO.
+   DEF VAR llServLimit           AS LOG  NO-UNDO.
+   DEF VAR lcInBDest             AS CHAR NO-UNDO.
+   DEF VAR lcOutBDest            AS CHAR NO-UNDO.
+   DEF VAR llServiceGrp          AS LOG  NO-UNDO.
+   DEF VAR liInclUnit            AS INT  NO-UNDO.
+   DEF VAR liSLSeq               AS INT  NO-UNDO.
+   DEF VAR ldPackageAmt          AS DEC  NO-UNDO.
+   DEF VAR ldTotalPrice          AS DEC  NO-UNDO.
+   DEF VAR liSLGPacket           AS INT  NO-UNDO.
+   DEF VAR ldePCCBalance         AS DEC  NO-UNDO.
+   DEF VAR liUnitUsed            AS INT  NO-UNDO.
+   DEF VAR liSLGAUsed            AS INT  NO-UNDO. 
+   DEF VAR ldLimitTo             AS DEC  NO-UNDO.
+   DEF VAR ldAmtUsed             AS DEC  NO-UNDO.
+   DEF VAR lcNewGroupList        AS CHAR NO-UNDO.
+   DEF VAR lcNewTypeList         AS CHAR NO-UNDO.
+   DEF VAR llUpsell              AS LOG NO-UNDO. 
+   DEF VAR liPrevious            AS INT  NO-UNDO.
    DEF VAR llVoice_Data_subs_DSS AS LOG  NO-UNDO.
-   DEF VAR llActiveDSS    AS LOG  NO-UNDO.
-   DEF VAR llActiveDSS_UPSELL AS LOG  NO-UNDO.
-   DEF VAR lcPreviousGroup    AS CHAR NO-UNDO.
-   DEF VAR lcPreviousType     AS CHAR NO-UNDO.
-   DEF VAR lcOrigBillCode     AS CHAR NO-UNDO.
-   DEF VAR liBDestLimit AS INT NO-UNDO. 
-   DEF VAR liBDestAmt AS INT NO-UNDO. 
-   DEF VAR liMSID AS INT NO-UNDO. 
-   DEF VAR liTime AS INT NO-UNDO. 
-   DEF VAR ldtDate AS DATE NO-UNDO. 
-   DEF VAR liCallPeriod AS INT NO-UNDO. 
-   DEF VAR ldeEndTs AS DEC NO-UNDO. 
+   DEF VAR llActiveDSS           AS LOG  NO-UNDO.
+   DEF VAR llActiveDSS_UPSELL    AS LOG  NO-UNDO.
+   DEF VAR lcPreviousGroup       AS CHAR NO-UNDO.
+   DEF VAR lcPreviousType        AS CHAR NO-UNDO.
+   DEF VAR lcOrigBillCode        AS CHAR NO-UNDO.
+   DEF VAR liBDestLimit          AS INT NO-UNDO. 
+   DEF VAR liBDestAmt            AS INT NO-UNDO. 
+   DEF VAR liMSID                AS INT NO-UNDO. 
+   DEF VAR liTime                AS INT NO-UNDO. 
+   DEF VAR ldtDate               AS DATE NO-UNDO. 
+   DEF VAR liCallPeriod          AS INT NO-UNDO. 
+   DEF VAR ldeEndTs              AS DEC NO-UNDO. 
+   DEF VAR lcCliTypeList         AS CHAR NO-UNDO.
 
-   ASSIGN
+   ASSIGN	
       ttCall.BillCode = bsub-prod
       lcOrigBillCode  = bsub-prod
+      lcCliTypeList   = {&MOBILE_SUBTYPES} 				   + "," +
+      				    {&ADSL-CONVERGENT-SUBTYPES} 	   + "," +
+      				    {&FIBER-CONVERGENT-SUBTYPES-LIST1} + "," +
+      				    {&FIBER-CONVERGENT-SUBTYPES-LIST2}
       ldPackageAmt    = 0
       ldTotalPrice    = 0
       liUnitUsed      = ?
@@ -106,7 +115,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
       
    llPackageUsed = FALSE.               
 
-   IF LOOKUP(MSOwner.CLIType,{&BASE_BUNDLE_SUBTYPES}) > 0 THEN DO:
+   IF LOOKUP(MSOwner.CLIType,lcCliTypeList) > 0 THEN DO:
       FOR EACH ttServiceLimit NO-LOCK WHERE
           {dss_search.i "ttServiceLimit.GroupCode"},
           FIRST MServiceLimit NO-LOCK WHERE
@@ -126,7 +135,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
       this subscription -> try to fill the bundle that has lower priority 
       before starting to fill the next bundle */
    IF NOT llVoice_Data_subs_DSS AND
-      LOOKUP(MSOwner.CLIType,{&BASE_BUNDLE_SUBTYPES}) > 0
+      LOOKUP(MSOwner.CLIType,lcCliTypeList) > 0
       AND NUM-ENTRIES(lcSLGroupList) > 1 THEN DO:
       
       ASSIGN
@@ -320,7 +329,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
             
                /* there are other packages available */
                IF liSLGPacket < NUM-ENTRIES(lcSLGroupList) AND
-                  (lcOutBDest = "" OR MSOwner.CLIType BEGINS "CONTF") 
+                  (lcOutBDest = "" OR (MSOwner.CLIType BEGINS "CONTF" AND NOT MSOwner.CLIType BEGINS "CONTFH")) 
                THEN DO:
                   IF lcOutBDest = "" THEN llPackageUsed = FALSE.
                   NEXT PACKET.
@@ -507,7 +516,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                ldePCCBalance = ldePCCBalance / 1024 / 1024 / 1024.
 
             IF NOT llActiveDSS AND
-               LOOKUP(MSOwner.CLIType,{&BASE_BUNDLE_SUBTYPES}) > 0 AND 
+               LOOKUP(MSOwner.CLIType,lcCliTypeList) > 0 AND 
                ldePCCBalance >= MServiceLimit.InclAmt AND 
                liSLGPacket < NUM-ENTRIES(lcSLGroupList) THEN NEXT PACKET.
 
