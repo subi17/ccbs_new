@@ -45,8 +45,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF NOT AVAIL Reseller THEN RETURN appl_err("Reseller not found: "+ pcId).
       
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", Reseller.Reseller + "|" + pcTenant). 
-   add_string(lcResultStruct, "brand", pcTenant).
+   add_string(lcResultStruct, "id", Reseller.Reseller + "|" + BUFFER-TENANT-NAME(Reseller)). 
+   add_string(lcResultStruct, "brand", BUFFER-TENANT-NAME(Reseller)).
    add_string(lcResultStruct,"name", Reseller.RsName). 
    add_double(lcResultStruct,"commission_percentage", Reseller.CommPerc).
    add_string(lcResultStruct,"address", Reseller.Address[1]).

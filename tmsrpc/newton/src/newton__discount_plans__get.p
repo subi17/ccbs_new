@@ -35,8 +35,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    lcResultStruct = add_struct(resp_array, "").
 
-   add_string(lcResultStruct,"id",DiscountPlan.DPRuleId + "|" + pcTenant).
-   add_string(lcResultStruct,"brand",pcTenant).
+   add_string(lcResultStruct,"id",DiscountPlan.DPRuleId + "|" + BUFFER-TENANT-NAME(DiscountPlan)).
+   add_string(lcResultStruct,"brand",BUFFER-TENANT-NAME(DiscountPlan)).
    add_string(lcResultStruct,"name",DiscountPlan.DPName).
    add_string(lcResultStruct,"unit",DiscountPlan.DPUnit).
    add_int(lcResultStruct,"valid_periods",DiscountPlan.ValidPeriods).

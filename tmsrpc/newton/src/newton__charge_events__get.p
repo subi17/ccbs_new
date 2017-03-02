@@ -38,8 +38,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF NOT AVAIL FMItem THEN RETURN appl_err("Charge event " + pcId + " doesn't contain active billing item ").
   
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id"   , FeeModel.FeeModel + "|" + pcTenant). 
-   add_string(lcResultStruct, "brand", pcTenant).
+   add_string(lcResultStruct, "id"   , FeeModel.FeeModel + "|" + BUFFER-TENANT-NAME(FeeModel)). 
+   add_string(lcResultStruct, "brand", BUFFER-TENANT-NAME(FeeModel)).
    add_string(lcResultStruct, "name" , FeeModel.FeeName).
 
    add_double(lcResultStruct, "amount", FMItem.Amount).

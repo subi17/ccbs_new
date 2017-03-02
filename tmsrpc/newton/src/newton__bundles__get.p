@@ -103,8 +103,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       llVoIPCompatible = FALSE.
 
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", DayCampaign.DCEvent + "|" + pcTenant).
-   add_string(lcResultStruct, "brand", pcTenant).
+   add_string(lcResultStruct, "id", DayCampaign.DCEvent + "|" + BUFFER-TENANT-NAME(DayCampaign)).
+   add_string(lcResultStruct, "brand", BUFFER-TENANT-NAME(DayCampaign)).
    add_string(lcResultStruct,"name", DayCampaign.DCName).
    add_int(lcResultStruct,"status", DayCampaign.StatusCode).
    

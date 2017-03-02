@@ -13,6 +13,15 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
    
+   IF NUM-ENTRIES(pcId,"|") > 1 THEN
+      ASSIGN
+          pcTenant = ENTRY(2,pcID,"|")
+          pcID     = ENTRY(1,pcID,"|").
+   ELSE
+      RETURN appl_err("Invalid tenant information").
+
+    {newton/src/settenant.i pcTenant}
+
    FIND TMSParam NO-LOCK WHERE 
         TMSParam.Brand = gcBrand AND
         TMSParam.ParamGroup = "BundleItem" AND
@@ -21,6 +30,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF NOT AVAIL TMSParam THEN RETURN appl_err("Optional Bundle Item not found: "+ pcId).
     
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", TMSParam.ParamCode). 
-   add_string(lcResultStruct,"name", TMSParam.CharVal).
+   add_string(lcResultStruct, "id"   , TMSParam.ParamCode + "|" + BUFFER-TENANT-NAME(TMSParam)).
+   add_string(lcResultStruct, "brand", BUFFER-TENANT-NAME(TMSParam)). 
+   add_string(lcResultStruct,"name"  , TMSParam.CharVal).
 END.
