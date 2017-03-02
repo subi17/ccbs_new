@@ -72,13 +72,14 @@ DEF VAR lcDestType   AS CHAR                NO-UNDO.
 DEF VAR lcClass      AS CHAR                NO-UNDO. 
 DEF VAR copyto       LIKE BDest.BDest       NO-UNDO.
 DEF VAR lcCode       AS CHAR                NO-UNDO.
+DEF VAR lcRateBDest  AS CHAR                NO-UNDO.
 
 FORM
    BDest.Brand     FORMAT "x(2)"     column-LABEL "Br"
    BDest.BDest     FORMAT "x(15)" 
-   BDest.BDName    FORMAT "x(34)"
-   BDest.CCN       FORMAT ">>>9"      COLUMN-LABEL "CCN"
-   lcDestType      FORMAT "x(10)"    COLUMN-LABEL "DestType"
+   BDest.BDName    FORMAT "x(29)"
+   BDest.RateBDest FORMAT "X(15)"    COLUMN-LABEL "Rating B-Dest" 
+   BDest.CCN       FORMAT ">>>9"     COLUMN-LABEL "CCN"
    BDest.ToDate   
 WITH 
    width 80 ROW 1 OVERLAY scroll 1 15 DOWN
@@ -93,7 +94,9 @@ FORM
    BDest.BDest   LABEL "B-Destination" COLON 20 SKIP
    BDest.BDName  LABEL "Name/description" COLON 20 
       FORMAT "X(40)" SKIP
-   BDest.DestType  LABEL "Destination Type" COLON 20
+   BDest.RateBDest LABEL "Rating B-Dest" COLON 20
+      lcRateBDest NO-LABEL FORMAT "X(30)" SKIP 
+   BDest.DestType LABEL "Destination Type" COLON 20
       FORMAT ">>9"
       help "Destination type"   
       lcDestType NO-LABEL FORMAT "X(30)" SKIP
@@ -792,15 +795,13 @@ fCleanEventObjects().
 
 PROCEDURE local-disp-row:
 
-   lcDestType = fDestType(BDest.DestType).
-   
    DISP 
       BDest.Brand
       BDest.BDest 
       BDest.BDName 
+      BDest.RateBDest
       BDest.CCN
       BDest.ToDate
-      lcDestType 
    WITH FRAME sel.
  
 END PROCEDURE.
@@ -808,9 +809,17 @@ END PROCEDURE.
 PROCEDURE local-update-record:
 
    DEF VAR llBDestTrans AS LOG NO-UNDO. 
+   DEF BUFFER bBDest FOR BDest.
 
    llBDestTrans = CAN-FIND(FIRST BDestTrans WHERE
                                  BDestTrans.BDestId = BDest.BDestId).
+
+   lcRateBDest = "".
+   IF BDest.RateBDest > "" THEN
+   FIND FIRST bBDest WHERE
+              bBDest.Brand = gcBrand AND
+              bBDest.BDest = BDest.RateBDest NO-LOCK NO-ERROR.
+   IF AVAILABLE bBDest THEN lcRateBDest = bBdest.BDName.
 
    BDestUpdate:
    REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
@@ -822,6 +831,7 @@ PROCEDURE local-update-record:
          BDest.BDestID 
          BDest.BDest
          BDest.BDName 
+         BDest.RateBDest lcRateBDest
          BDest.CCN 
          BDest.DestType lcDestType 
          BDest.Class lcClass 
@@ -851,6 +861,7 @@ PROCEDURE local-update-record:
    
          UPDATE
             BDest.BDName WHEN NOT NEW BDest
+            BDest.RateBDest
             BDest.DestType WHEN NOT NEW BDest
             BDest.CCN 
             BDest.Class
@@ -909,6 +920,24 @@ PROCEDURE local-update-record:
                      NEXT.
                   END.
                   DISPLAY CCN.CCNName WITH FRAME lis.
+               END.
+
+               ELSE IF FRAME-FIELD = "RateBDest" THEN DO:
+
+                  lcRateBDest = "".
+                  IF INPUT BDest.RateBDest > "" THEN DO:
+                     FIND FIRST bBDest WHERE
+                                bBDest.Brand = gcBrand AND
+                                bBDest.BDest = INPUT BDest.RateBDest
+                     NO-LOCK NO-ERROR.
+                     IF NOT AVAILABLE bBDest THEN DO:
+                        MESSAGE "Unknown b-destination"
+                        VIEW-AS ALERT-BOX ERROR.
+                        NEXT.
+                     END.
+                     lcRateBdest = bBDest.BDName.
+                  END.
+                  DISPLAY lcRateBDest WITH FRAME lis.
                END.
             END.
          

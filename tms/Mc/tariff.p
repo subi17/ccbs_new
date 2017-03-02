@@ -207,6 +207,11 @@ form /* ADD */
    Tariff.StartCharge[6] AT 60 
       FORMAT "zzz9.9999" SKIP
 
+   " First Billable Sec " Tariff.FirstBillableSec  
+      VALIDATE(INPUT Tariff.FirstBillableSec EQ 0 OR 
+               (INPUT Tariff.DataType EQ 1 OR INPUT Tariff.DataType EQ 2),
+               "Incompatible price unit")
+
    "OR Minimum sec:" AT 48 Tariff.MinSec
       help "Minimum charging seconds for calls"  
    SPACE(1)
@@ -2010,6 +2015,7 @@ PROCEDURE pUpdate.
          Tariff.Price[6]
          Tariff.StartCharge[6]
 
+         Tariff.FirstBillableSec
          Tariff.MinSec
 
       WITH FRAME lis.
@@ -2078,6 +2084,7 @@ PROCEDURE pUpdate.
          Tariff.Price[6]
          Tariff.StartCharge[6]
 
+         Tariff.FirstBillableSec
          Tariff.MinSec
 
       WITH FRAME lis EDITING:
