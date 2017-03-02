@@ -57,8 +57,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       lcCLITypeTransName = CLIType.CLIName.
    
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", CLIType.CLIType + "|" + BUFFER-TENANT-NAME(CliType)).
-   add_string(lcResultStruct, "brand", BUFFER-TENANT-NAME(CliType)).
+   add_string(lcResultStruct, "id", CLIType.CLIType + "|" + fConvertTenantToBrand(pcTenant)).
+   add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)).
    add_string(lcResultStruct,"name", lcCLITypeTransName).
    add_int(lcResultStruct,"pay_type", CLIType.PayType).
    add_int(lcResultStruct,"status", (IF CLIType.CLIType EQ "CONT15" AND 

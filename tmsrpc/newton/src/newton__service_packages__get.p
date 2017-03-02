@@ -8,6 +8,7 @@
           
 */
 {newton/src/header_get.i}
+{Func/multitenantfunc.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
@@ -39,8 +40,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    
   lcResultStruct = add_struct(resp_array, "").
-  add_string(lcResultStruct, "id", ServPac.ServPac + "|" + BUFFER-TENANT-NAME(ServPac)).
-  add_string(lcResultStruct, "brand", BUFFER-TENANT-NAME(ServPac)). 
+  add_string(lcResultStruct, "id", ServPac.ServPac + "|" + fConvertTenantToBrand(pcTenant)).
+  add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)). 
   add_string(lcResultStruct, "name", ServPac.SPName).
   add_int(lcResultStruct,"amount",INT(CTServEl.DefParam)).
 

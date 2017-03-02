@@ -12,6 +12,7 @@
  */
 
 {newton/src/header_get.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liId AS INTEGER NO-UNDO. 
 
@@ -37,8 +38,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
       
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", STRING(TopupSchemeRow.TopupSchemeRowId) + "|" + BUFFER-TENANT-NAME(TopupSchemeRow)). 
-   add_string(lcResultStruct, "brand", BUFFER-TENANT-NAME(TopupSchemeRow)). 
+   add_string(lcResultStruct, "id", STRING(TopupSchemeRow.TopupSchemeRowId) + "|" + fConvertTenantToBrand(pcTenant)). 
+   add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)). 
    IF TopupSchemeRow.DisplayAmount > 0 THEN
       add_double(lcResultStruct,"amount", TopupSchemeRow.DisplayAmount). 
    ELSE

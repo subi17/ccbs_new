@@ -15,6 +15,7 @@
 
 {newton/src/header_get.i}
 {Func/fcustpl.i}
+{Func/multitenantfunc.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
@@ -36,8 +37,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF NOT AVAIL DayCampaign THEN RETURN appl_err("Periodical contract not found: "+ pcId).
       
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", DayCampaign.DCEvent + "|" + BUFFER-TENANT-NAME(DayCampaign)).
-   add_string(lcResultStruct, "brand", BUFFER-TENANT-NAME(DayCampaign)). 
+   add_string(lcResultStruct, "id", DayCampaign.DCEvent + "|" + fConvertTenantToBrand(pcTenant)).
+   add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)). 
    add_string(lcResultStruct,"name", DayCampaign.DCName). 
    add_date_or_time(lcResultStruct,"valid_from", DayCampaign.ValidFrom, 0). 
    IF DayCampaign.ValidTo < 1/19/2038 THEN

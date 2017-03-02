@@ -8,6 +8,7 @@
  */
 
 {newton/src/header_get.i}
+{Func/multitenantfunc.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
@@ -30,7 +31,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF NOT AVAIL TMSParam THEN RETURN appl_err("Optional Bundle Item not found: "+ pcId).
     
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id"   , TMSParam.ParamCode + "|" + BUFFER-TENANT-NAME(TMSParam)).
-   add_string(lcResultStruct, "brand", BUFFER-TENANT-NAME(TMSParam)). 
+   add_string(lcResultStruct, "id"   , TMSParam.ParamCode + "|" + fConvertTenantToBrand(pcTenant)).
+   add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)). 
    add_string(lcResultStruct,"name"  , TMSParam.CharVal).
 END.

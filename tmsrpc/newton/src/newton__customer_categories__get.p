@@ -28,8 +28,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF AVAIL CustCat THEN
    DO:
       lcResultStruct = add_struct(resp_array, "").
-      add_string(lcResultStruct, "id", pcId + "|" + BUFFER-TENANT-NAME(CustCat)). 
-      add_string(lcResultStruct, "brand", BUFFER-TENANT-NAME(CustCat)).
+      add_string(lcResultStruct, "id", pcId + "|" + fConvertTenantToBrand(pcTenant)). 
+      add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)).
       add_string(lcResultStruct,"name", CustCat.CatName). 
       add_int(lcResultStruct, "limit", CustCat.MobSubLimit ). 
       add_int(lcResultStruct, "activationlimit", CustCat.ActivationLimit).
