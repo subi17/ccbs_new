@@ -149,7 +149,7 @@ liLoopBegTime = TIME.
 
 PROCEDURE pCustInDebtCheck:
 
-   DEF VAR llDebt       AS CHAR   NO-UNDO. 
+   DEF VAR llDebt       AS CHAR   NO-UNDO INIT "NO". 
    DEF VAR ldtFirstDay  AS DATE   NO-UNDO.
 
    ldtFirstDay = DATE(MONTH(ADD-INTERVAL(TODAY,-12,"months") + 1),
