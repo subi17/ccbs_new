@@ -401,7 +401,8 @@ PROCEDURE pDiscountPlan:
       ASSIGN
       ldate              = ADD-INTERVAL(MobSub.ActivationDate,5,"months")
       DPMember.ValidFrom = MobSub.ActivationDate
-      DPMember.ValidTo   = fLastDayOfMonth(lDate).      
+      DPMember.ValidTo   = fLastDayOfMonth(lDate)      
+      DPMember.DiscValue = DPRate.DiscValue.
    END.
 
 
