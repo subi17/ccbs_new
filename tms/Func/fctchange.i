@@ -295,7 +295,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
 
       IF LOOKUP(NewCliType.CliType, lcFixedOnlyConvergentCliTypeList) > 0 THEN 
       DO:
-          ocError = "Fixed only convergent tariffs are restricted from doing iSTC."
+          ocError = "Fixed only convergent tariffs are restricted from doing iSTC.".
           RETURN FALSE.
       END.
 
