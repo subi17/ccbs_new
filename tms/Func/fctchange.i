@@ -189,6 +189,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    DEF VAR liMonths AS INT NO-UNDO. 
    DEF VAR ldaSTCDate AS DATE NO-UNDO. 
    DEF VAR liTime AS INT NO-UNDO. 
+   DEF VAR lcFixedOnlyConvergentCliTypeList AS CHAR NO-UNDO.
 
    DEFINE BUFFER NewCLIType  FOR CLIType.
    DEF BUFFER MNPProcess FOR MNPProcess.
@@ -211,7 +212,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    IF NOT AVAIL NewCLIType THEN DO:
       ocError = "Unknown or missing clitype!".
       RETURN FALSE.
-   END.
+   END.    
 
    IF NOT plByPassTypeCheck AND
       LOOKUP(STRING(NewCLIType.StatusCode),
@@ -288,10 +289,21 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
           icNewCLIType,
           OUTPUT ocError) THEN RETURN FALSE.
 
-   IF DAY(ldaSTCDate) <> 1 AND
-      NOT fIsiSTCAllowed(INPUT Mobsub.MsSeq) THEN DO:
-      ocError = "Multiple immediate STC is not allowed in same month due to business rules!".
-      RETURN FALSE.
+   IF DAY(ldaSTCDate) <> 1 THEN 
+   DO:
+      ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
+
+      IF LOOKUP(NewCliType.CliType, lcFixedOnlyConvergentCliTypeList) > 0 THEN 
+      DO:
+          ocError = "Fixed only convergent tariffs are restricted from doing iSTC."
+          RETURN FALSE.
+      END.
+
+      IF NOT fIsiSTCAllowed(INPUT Mobsub.MsSeq) THEN
+      DO:
+          ocError = "Multiple immediate STC is not allowed in same month due to business rules!".
+          RETURN FALSE.
+      END.
    END.
 
    RETURN TRUE.
