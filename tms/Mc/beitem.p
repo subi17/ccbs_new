@@ -79,7 +79,7 @@ DEF BUFFER bBillItem FOR BillItem.
 
 
 form
-    FMItem.PriceList      format "x(10)"
+    FMItem.PriceList      format "x(20)"
     FMItem.BillCode       format "x(12)"  column-label "ProdC"
     BillItem.BIName       format "x(15)"
     FMItem.FromDate       
