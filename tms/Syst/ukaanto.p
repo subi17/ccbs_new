@@ -18,6 +18,7 @@
 
 {Syst/country.i}
 {Func/excel.i}
+{Func/fcreatedir.i}
 
 def var line      as char format "x(78)".
 def var moduli    as char format "x(15)".
@@ -69,9 +70,9 @@ input close.
 def temp-table wmodule no-undo
     field wsname  as c   /* name without path */
     field wlname  as c
-    
-    index wsname as primary
-       wsname.
+    FIELD wdir    AS c
+    index wsname as primary wsname
+    index wdir wdir wsname.
 
 case {&country}:
    when {&FIN} then assign
@@ -95,13 +96,17 @@ view frame log.
 message "Making Module List, wait ...".
 pause 0.
 
+DEFINE VARIABLE lcTMSDirectories AS CHARACTER NO-UNDO.
+
+lcTMSDirectories = "Ar,Func,Class,Gwy,Help,HPD,Inv,Macro,Mailconf,Mc,Mc/lib,Mf,Mnp,Mm,Rate,Syst,triggers,templates".
+
 if opsys = "unix" then do:
    
    my-nl = chr(10).
    
-   do i = 1 to num-entries(propath).
+   do i = 1 to num-entries(lcTMSDirectories).
       
-      prefix = entry(i,propath) + "/".
+      prefix = "/apps/tms/" + entry(i,lcTMSDirectories) + "/".
 
       if index(prefix,"/apps/tms/") = 0 then next.
       if index(prefix,"Dev")        > 0 then next.
@@ -110,8 +115,7 @@ if opsys = "unix" then do:
       input thru value
         ("ls -1 " + prefix + "*.p" + " " +
         (if lltakei then prefix + "*.i* " else "") +
-         prefix + "*.cls" + " " + 
-         prefix + "func.i").
+         prefix + "*.cls").
 
       repeat:
          
@@ -132,7 +136,8 @@ if opsys = "unix" then do:
             create wmodule.
             assign 
                wmodule.wsname = shortname
-               wmodule.wlname = line.
+               wmodule.wlname = line
+               wmodule.wdir   = entry(i,lcTMSDirectories).
          end.
 
       end.
@@ -142,10 +147,19 @@ if opsys = "unix" then do:
 end.
 else return.
 
+create wmodule.
+assign
+   wmodule.wsname = "applhelp.p"
+   wmodule.wlname = "/apps/tms/applhelp.p"
+   wmodule.wdir   = "".
+
 assign yht = 0.
 output stream excel to value(lclogfile).
 
-for each wmodule by wsname with frame log:
+for each wmodule BREAK BY wdir BY wsname with frame log:
+
+  IF FIRST-OF(wmodule.wdir)
+  THEN fCreateDir(rpath + if wmodule.wdir > "" then "/" + wmodule.wdir ELSE "").
 
   assign
      alku   = time
@@ -160,10 +174,10 @@ for each wmodule by wsname with frame log:
   
   bOk = true.
 
-  compile value(moduli) save into value(rpath)
+  compile value((if wmodule.wdir > "" then wmodule.wdir + "/" ELSE "") + wmodule.wsname) save into value(rpath)
     listing value("/tmp/compile.tmp") no-error.
   
-  input through value("grep \"0 Procedure\" " + "/tmp/compile.tmp").
+  input through value("grep ~"0 Procedure~" " + "/tmp/compile.tmp").
   repeat:
      import unformatted row0.
   end.
