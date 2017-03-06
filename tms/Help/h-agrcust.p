@@ -8,8 +8,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/fcustdata.i}
 
 DEF INPUT PARAMETER icOrgID AS CHAR NO-UNDO.
 
@@ -74,7 +74,7 @@ form /* seek  */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND person ID "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 IF icOrgID > "" THEN ASSIGN 
@@ -157,20 +157,20 @@ REPEAT WITH FRAME sel:
            ufk[2] = 717
            ufk[3] = 812.
            
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW Customer.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Customer.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Customer.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW lcCustName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW lcCustName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) lcCustName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW Customer.OrgID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Customer.OrgID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Customer.OrgID WITH FRAME sel.
       END.
 
@@ -298,8 +298,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         liCustNum = 0.
         UPDATE liCustNum WITH FRAME f1.
@@ -330,8 +330,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         ASSIGN lcLastName   = ""
                lcFirstName = "".
@@ -400,8 +400,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f3.
         lcOrgID = "".
         UPDATE lcOrgID WITH FRAME f3.

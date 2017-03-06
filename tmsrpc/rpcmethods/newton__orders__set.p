@@ -19,7 +19,7 @@
 /* NOTE: There's Web side error translations for this RPC. YBU-3023 */
 
 {xmlrpc/xmlrpc_access.i}
-{timestamp.i}
+{Func/timestamp.i}
 
 DEF VAR lhBuff AS HANDLE NO-UNDO.
 DEF VAR piOrderId AS INTEGER NO-UNDO. 
@@ -51,12 +51,12 @@ ASSIGN
    pcMemoStruct = get_struct(param_toplevel_id,"4").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = pcUserName.
 gcbrand = "1".
-{tmsconst.i}
+{Syst/tmsconst.i}
 &GLOBAL-DEFINE STAR_EVENT_USER katun 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 
 /* validate order struct */
 lcOrderFields = validate_request(pcOrderStruct,"risk_code,imei,icc").
@@ -214,7 +214,7 @@ END.
 
 IF pcICC > "" THEN DO:
 
-   RUN orderinctrl.p(Order.OrderId, 0, TRUE).
+   RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).
 
    IF RETURN-VALUE > "" THEN 
       UNDO, RETURN appl_err("Mobile order release failed").

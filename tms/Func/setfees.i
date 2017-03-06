@@ -39,12 +39,12 @@
 
 &GLOBAL-DEFINE SETFEES_I YES
 
-{commali.i}
-{fmakeservlimit.i}
-{create_eventlog.i}
-{nncoit2.i}
-{fcustpl.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/fmakeservlimit.i}
+{Func/create_eventlog.i}
+{Func/nncoit2.i}
+{Func/fcustpl.i}
+{Syst/eventval.i}
 {Func/financed_terminal.i}
 
 FUNCTION fMakeSetfees RETURNS INTEGER

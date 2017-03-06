@@ -9,9 +9,9 @@
   VERSIO N ......: 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'unreglog'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'unreglog'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -75,7 +75,7 @@ form /* seek   BY CustNum */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUSTOMER "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Date,By Customer,By 3, By 4".
@@ -151,17 +151,17 @@ BROWSE:
         ufk[1]= 28 ufk[2]= 0 /* 702 */   ufk[3]= 0 ufk[4]= 0
         ufk[5]= 0  ufk[6]= 0   ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"5,6"'}
-        RUN ufkey.p.
+        {Syst/uright1.i '"5,6"'}
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW UnregLog.AccDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW UnregLog.AccDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) UnregLog.AccDate WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW UnregLog.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW UnregLog.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) UnregLog.CustNum WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -289,9 +289,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        AccDate = ?.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE AccDate WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF AccDate <> ? THEN DO:
@@ -312,9 +312,9 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        CustNum = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF CustNum <> 0 THEN DO:

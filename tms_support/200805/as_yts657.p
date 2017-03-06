@@ -1,5 +1,5 @@
-{testpaa.i}
-{msreqfunc.i}
+{Syst/testpaa.i}
+{Func/msreqfunc.i}
 
 def stream sout.
 output stream sout to "/apps/snet/200805/as_yts657_msrequest.bak" append.

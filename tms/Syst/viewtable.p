@@ -7,10 +7,10 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commali.i}        
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
-{eventval.i}
+{Syst/commali.i}        
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
+{Syst/eventval.i}
 
 DEFINE INPUT PARAMETER ihTable  AS HANDLE NO-UNDO. 
 
@@ -95,7 +95,7 @@ form /* seek  ttValue */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND VALUE "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -125,7 +125,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ttTableField  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       NEXT LOOP.
    END.
@@ -181,16 +181,16 @@ BROWSE:
         ufk[6]= 0
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttName WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ttTableField.ttValue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttTableField.ttValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttTableField.ttValue WITH FRAME sel.
       END.
 
@@ -319,8 +319,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET ttTableField WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -342,8 +342,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET ttValue WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -375,8 +375,8 @@ BROWSE:
        RUN local-find-this(TRUE).
 
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttName.
 
        RUN local-UPDATE-record.                                  

@@ -10,22 +10,22 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SIMStat'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SIMStat'}
 
 IF llDoEvent THEN DO:
    &GLOBAl-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSIMStat AS HANDLE NO-UNDO.
    lhSIMStat = BUFFER SIMStat:HANDLE.
    RUN StarEventInitialize(lhSIMStat).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhSIMStat).
+      RUN Mc/eventview2.p(lhSIMStat).
    END.
 END.
 
@@ -81,7 +81,7 @@ form /* seek SIM Status  BY SSName */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -113,12 +113,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a SIMStat  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            PROMPT-FOR SIMStat.SIMStat
            VALIDATE
@@ -200,16 +200,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SIMStat.SIMStat ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SIMStat.SIMStat {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SIMStat.SIMStat WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SIMStat.SSName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SIMStat.SSName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SIMStat.SSName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -337,9 +337,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        SIMStat = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SIMStat WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF SIMStat <> 0 THEN DO:
@@ -360,9 +360,9 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        SSName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SSName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF SSName <> "" THEN DO:
@@ -443,8 +443,8 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSIMStat).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". run ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY SIMStat.SIMStat.
 
        UPDATE SIMStat.SSName.

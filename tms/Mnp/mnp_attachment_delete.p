@@ -7,11 +7,11 @@ CREATED ......: 04.03.11
 Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{tmsconst.i}
-{date.i}
+{Syst/tmsconst.i}
+{Func/date.i}
 
 DEF VAR liEnd AS INT NO-UNDO.
 DEF VAR i AS INT NO-UNDO.

@@ -10,7 +10,7 @@
   Version ......: M15
 --------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 def var module as c  format "x(30)"   NO-UNDO.
 def var ok     as lo format "Yes/No" NO-UNDO.
@@ -25,7 +25,7 @@ WITH
 
 
 PAUSE 0.
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 UPDATE module WITH FRAME modu.
 if module ne "" THEN DO:
 

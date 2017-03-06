@@ -6,7 +6,7 @@
   CREATED ......: 18.01.10
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 
 FUNCTION fCreateSubsTerminal RETURNS INT
    (BUFFER ibOrder FOR Order):

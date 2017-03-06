@@ -9,8 +9,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF  shared VAR siirto AS CHAR.
 
@@ -35,7 +35,7 @@ form /* SEEK Code */
     with row 4  col 2 title color value(ctc) " FIND CODE "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 MAIN:
 repeat:
 
@@ -92,7 +92,7 @@ print-line:
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
   END. /* print-line */
 
@@ -100,7 +100,7 @@ BROWSE:
       repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW CLIType.Clitype ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW CLIType.Clitype {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) CLIType.Clitype WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
@@ -216,8 +216,8 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* ob-code */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE ob-code WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            IF ob-code ENTERED THEN DO:

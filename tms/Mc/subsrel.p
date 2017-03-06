@@ -8,9 +8,9 @@
   VERSION ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "subsrel"
        tuni2 = "".
@@ -139,7 +139,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
          ufk[9]= 1
          ehto = 3 
          ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
 
       if nap ne "first" then do:
@@ -150,7 +150,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
       else assign nap = "1". 
 
       if lookup(nap,"1,f1") > 0 then do:
-         ehto = 9. run ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          repeat with frame valinta on endkey undo, leave:
             update 
                 ldtDate1
@@ -185,16 +185,16 @@ repeat with frame valinta on endkey undo toimi, next toimi:
 end. /* toimi */
 
 ehto = 5.
-run ufkey.
+RUN Syst/ufkey.p.
 
 IF lcFile = "" THEN DO:
    assign tila = true.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 END.
 
 message "Printing in process".            
 
-run subsrep (ldtDate1, 
+RUN Mc/subsrep.p (ldtDate1, 
              ldtDate2,
              lcInvGroup[1],
              lcInvGroup[2],
@@ -208,7 +208,7 @@ run subsrep (ldtDate1,
 
 IF lcFile = "" THEN DO:
    assign tila = false.
-   {utuloste.i}
+   {Syst/utuloste.i}
 END.
 
 message "Subscription revenue report is finished."

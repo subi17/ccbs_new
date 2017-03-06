@@ -8,7 +8,7 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 def input param pcHeader  AS CHARACTER NO-UNDO.
 def input param pcOptions AS CHARACTER NO-UNDO.
 def output param ocSelected AS CHAR NO-UNDO. 
@@ -70,7 +70,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 LOOP:
@@ -126,12 +126,12 @@ BROWSE:
         ufk[5] = 11
         ufk[8]= 8
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttOptions.Name ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttOptions.Name {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttOptions.Name WITH FRAME sel.
       END.
       

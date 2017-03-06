@@ -12,7 +12,7 @@
            new_permanency;string;mandatory; new permanency amount
  * @output boolean;true
  */
-{tmsconst.i}
+{Syst/tmsconst.i}
 {xmlrpc/xmlrpc_access.i}
 
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
@@ -62,17 +62,17 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "VISTA_" + pcUserName.
 gcbrand = "1".
-{tmsconst.i}
+{Syst/tmsconst.i}
 &GLOBAL-DEFINE STAR_EVENT_USER katun 
-{eventval.i}
-{lib/eventlog.i}
-{order.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{fpcmaintreq.i}
+{Syst/eventval.i}
+{Func/lib/eventlog.i}
+{Func/order.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Func/fpcmaintreq.i}
 
 /* check order exist */
 FIND Order NO-LOCK WHERE

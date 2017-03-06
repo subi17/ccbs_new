@@ -6,14 +6,14 @@ AUTHOR .......: anttis
 CREATED ......: 06.10.09
 Version ......: xfera
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{log.i}
+{Func/log.i}
 {xmlrpc/xmlrpc_client.i}
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE lcResponseFile AS CHAR NO-UNDO. 
 DEFINE VARIABLE lcFileName AS CHARACTER NO-UNDO. 

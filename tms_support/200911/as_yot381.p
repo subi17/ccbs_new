@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
 input from as_yot381.input.
 

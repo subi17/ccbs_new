@@ -6,9 +6,9 @@
   CREATED ......: 27.02.13
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{detailvalue.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Func/detailvalue.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.

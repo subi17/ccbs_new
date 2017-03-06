@@ -8,7 +8,7 @@
            dss_limit;double
 */
 {xmlrpc/xmlrpc_access.i}
-{timestamp.i}
+{Func/timestamp.i}
 
 /* Input parameters */
 DEF VAR pcstruct            AS CHAR NO-UNDO.

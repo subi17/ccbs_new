@@ -11,7 +11,7 @@
 &THEN
 &GLOBAL-DEFINE PremiumNumber YES
 
-{commali.i}
+{Syst/commali.i}
 
 FUNCTION fGetPremiumServiceName RETURNS CHAR
    (icGsmBnr AS CHAR,

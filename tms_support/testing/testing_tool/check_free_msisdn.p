@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 
 DEF VAR lcEmaSelection  AS CHAR NO-UNDO FORMAT "X(6)".
 DEF VAR MSISDN_status   AS INT  NO-UNDO FORMAT "Z9".

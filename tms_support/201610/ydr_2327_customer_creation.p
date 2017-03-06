@@ -1,4 +1,4 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 
 DEF STREAM sOL.
@@ -51,7 +51,7 @@ REPEAT TRANSACTION:
          END.
       END.
 
-      RUN createcustomer(INPUT Order.OrderID,1,FALSE,TRUE,OUTPUT liCustomer).
+      RUN Mm/createcustomer.p(INPUT Order.OrderID,1,FALSE,TRUE,OUTPUT liCustomer).
       
       PUT STREAM sOO UNFORMATTED
           liCustomer ";"
@@ -66,7 +66,7 @@ REPEAT TRANSACTION:
                OrderCustomer.Brand   = gcBrand AND
                OrderCustomer.OrderID = Order.OrderID:
          IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN DO:
-            RUN createcustcontact.p(OrderCustomer.OrderID,
+            RUN Mm/createcustcontact.p(OrderCustomer.OrderID,
                                     liCustomer,
                                     OrderCustomer.RowType,
                                     OUTPUT lcError).

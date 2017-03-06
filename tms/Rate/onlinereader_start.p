@@ -7,8 +7,8 @@
   VERSION ......: Yoigo
   -------------------------------------------------------------------------- */
 
-{commpaa.i}
-{direct_dbconnect.i}
+{Syst/commpaa.i}
+{Func/direct_dbconnect.i}
 
 DEF VAR llDateLog       AS LOG  NO-UNDO INIT TRUE.
 DEF VAR llDispErrors    AS LOG  NO-UNDO INIT TRUE.
@@ -73,12 +73,12 @@ DO WHILE TRUE:
    IF liPortNum = 2230 THEN 
       RUN roamcdr.p (liPortNum).
    ELSE IF liPortNum = 2260 THEN  DO:
-      RUN edr_reader.p ("EDR_OnLine",
+      RUN Rate/edr_reader.p ("EDR_OnLine",
 			               liPortNum).
    END.
       
    ELSE 
-      RUN onlinereader.p(llDateLog,
+      RUN Rate/onlinereader.p(llDateLog,
                          "Mobile_OnLine",
                          llDispErrors,
                          liPortNum).

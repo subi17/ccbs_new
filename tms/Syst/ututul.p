@@ -18,11 +18,11 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{chkmail.i}
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMSReport'}
+{Func/chkmail.i}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMSReport'}
 
 DEF NEW shared VAR si-tul LIKE TMSReport.RepName NO-UNDO.
 
@@ -44,7 +44,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTMSReport AS HANDLE NO-UNDO.
    lhTMSReport = BUFFER TMSReport:HANDLE.
@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhTMSReport).
+      RUN Mc/eventview2.p(lhTMSReport).
    END.
 END.
 
@@ -90,7 +90,7 @@ form
     TITLE COLOR value(ctc) fr-header WITH side-labels
     FRAME lis.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 PAUSE 0 no-message.
 view FRAME sel.
 FIND FIRST TMSReport no-lock no-error.
@@ -116,12 +116,12 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
       cfc = "lis"
       ufkey = TRUE
       fr-header = " ADD ".
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis:
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          PROMPT-FOR TMSReport.RepName
          VALIDATE
             (RepName = "" OR
@@ -215,11 +215,11 @@ BROWSE:
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
-      CHOOSE ROW TMSReport.Memo ;(uchoose.i;) no-error WITH FRAME sel.
+      CHOOSE ROW TMSReport.Memo {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc) TMSReport.Memo WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
@@ -336,7 +336,7 @@ BROWSE:
      if lookup(nap,"1,f1") > 0 THEN DO:  /* lisAys */
         FIND TMSReport where recid(TMSReport) = rtab[FRAME-LINE] no-lock.
         ASSIGN si-tul = TMSReport.RepName.
-        RUN ututum.p.
+        RUN Syst/ututum.p.
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -396,11 +396,11 @@ BROWSE:
 
      else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis:
         /* change */
-        {uright2.i}
+        {Syst/uright2.i}
         FIND TMSReport where recid(TMSReport) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        cfc = "lis". RUN ufcolor.
+        cfc = "lis". RUN Syst/ufcolor.p.
         moremail = SUBSTRING(TMSReport.EMail,51,50).
         DISPLAY 
             TMSReport.RepName
@@ -412,7 +412,7 @@ BROWSE:
 
         IF lcRight = "RW" THEN DO :
 
-           run ufkey.
+           RUN Syst/ufkey.p.
 
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSReport).
 

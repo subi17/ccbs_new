@@ -8,8 +8,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-run eventsel ("",
+RUN Mc/eventsel.p ("",
               "").
               

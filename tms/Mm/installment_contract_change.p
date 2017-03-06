@@ -6,14 +6,14 @@
   CREATED ......: 25.03.13
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{fcreditreq.i}
-{fixedfee.i}
-{ordercancel.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Func/fcreditreq.i}
+{Func/fixedfee.i}
+{Func/ordercancel.i}
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 

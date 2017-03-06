@@ -8,11 +8,11 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{ftransdir.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PrepaidRequest'}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PrepaidRequest'}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 
@@ -59,7 +59,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN toimi = 1
                ufkey = TRUE.
@@ -67,7 +67,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -85,7 +85,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                THEN ASSIGN liCount = R-INDEX(INPUT lcFile,"/")
                            lcDir   = SUBSTRING(INPUT lcFile,1,liCount - 1).
 
-               RUN choosefile (IF lcDir NE "" 
+               RUN Mc/choosefile.p (IF lcDir NE "" 
                                THEN lcDir
                                ELSE INPUT lcFile,
                                OUTPUT lcChosen).
@@ -97,7 +97,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END. 
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
             END. 
 
             ELSE APPLY LASTKEY. 
@@ -128,7 +128,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       SET llOk.
       IF NOT llOk THEN NEXT.
       
-      RUN readtopup (lcFile,
+      RUN Mm/readtopup.p (lcFile,
                      OUTPUT liRead,
                      OUTPUT liErrors).
       

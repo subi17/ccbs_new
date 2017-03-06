@@ -2,15 +2,15 @@
    handling of VAT FOR advance payments
 */
 
-{commali.i}
-{ftaxdata.i}
+{Syst/commali.i}
+{Func/ftaxdata.i}
 
 DEF VAR liAPVatAcc     AS INT  NO-UNDO. 
 DEF VAR ldeAPVatPerc   AS DEC  NO-UNDO. 
 DEF VAR liAPVatDebtAcc AS INT  NO-UNDO. 
 
 /* definitions FOR assisting account AND vatcode */
-{tmsparam.i AdvPaymVatAcc  RETURN}. 
+{Func/tmsparam.i AdvPaymVatAcc  RETURN}. 
 IF AVAILABLE TMSParam THEN liAPVatAcc = TMSParam.IntVal.
 
 

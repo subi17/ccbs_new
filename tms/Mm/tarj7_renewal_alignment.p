@@ -6,11 +6,11 @@
   CREATED ......: 16.04.14
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{cparam2.i}
-{dumpfile_run.i}
-{date.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/dumpfile_run.i}
+{Func/date.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -77,7 +77,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
 
       DO liRetry = 1 TO 3.
       
-         RUN air_get_account_details.p(Mobsub.CLI,
+         RUN Gwy/air_get_account_details.p(Mobsub.CLI,
                                        OUTPUT liCurrentServiceClass,
                                        OUTPUT lcError).
 
@@ -137,7 +137,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
       END.
 
       DO liRetry = 1 TO 3.
-         RUN air_set_temp_sc.p(MobSub.CLI,
+         RUN Gwy/air_set_temp_sc.p(MobSub.CLI,
                                IF Mobsub.CliType = "TARJ7" THEN 303
                                                            ELSE 309, /* SC temp */
                                ldaExpDate,
