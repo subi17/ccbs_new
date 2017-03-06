@@ -30,6 +30,7 @@ DEF VAR pcId AS CHAR NO-UNDO.
 DEF VAR pcIdArray AS CHAR NO-UNDO. 
 DEF VAR liCounter AS INTEGER NO-UNDO. 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
+DEF VAR lcRegionArray  AS CHAR NO-UNDO.
 DEF VAR lcRegionStruct AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
@@ -184,11 +185,12 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
          add_double(lcResultStruct,"voip_amount", ServiceLimit.InclAmt).
    END.
 
-   lcRegionStruct = add_struct(lcResultStruct, "region").
+   lcRegionArray = add_array(lcResultStruct, "region").
    FOR EACH VATCode NO-LOCK WHERE
             VATCode.TaxClass  = "1"   AND
             VATCode.FromDate <= TODAY AND
             VATCOde.ToDate   >= TODAY:
+      lcRegionStruct = add_struct(lcRegionArray,"").
       add_string(lcRegionStruct,"taxzone", VATCode.VCName).
       add_double(lcRegionStruct,"taxinclvalue", (1 + VatCode.VatPerc / 100) * ldeFee).
    END.

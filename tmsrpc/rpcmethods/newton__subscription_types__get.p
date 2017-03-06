@@ -15,6 +15,7 @@
                       fixed_line_type;int;fixed line type (ADSL=1 or FIBER=2)
                       dss2_compatible;boolean;DSS2 compatible
                       voip_compatible;boolean;Voip Compatible
+                      region;array;struct
  * @region taxzone;string; VAT Code Name
            taxinclvalue;decimal; Monthly Cost based on including Zone Tax  
  */
@@ -28,6 +29,7 @@ DEF VAR lcCLITypeTransName     AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType  AS CHAR NO-UNDO.
 DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
 DEF VAR ldaCont15PromoEnd      AS DATE NO-UNDO.
+DEF VAR lcRegionArray          AS CHAR NO-UNDO.
 DEF VAR lcRegionStruct         AS CHAR NO-UNDO.
 
 ASSIGN lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE")
@@ -81,11 +83,12 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE
       add_string(lcResultStruct,"usage_type", "data").
 
-   lcRegionStruct = add_struct(lcResultStruct, "region").
+   lcRegionArray = add_array(lcResultStruct, "region").
    FOR EACH VATCode NO-LOCK WHERE
             VATCode.TaxClass  = "1"   AND
             VATCode.FromDate <= TODAY AND
             VATCOde.ToDate   >= TODAY:
+      lcRegionStruct = add_struct(lcRegionArray, "").
       add_string(lcRegionStruct,"taxzone", VATCode.VCName).
       add_double(lcRegionStruct,"taxinclvalue", (1 + VatCode.VatPerc / 100) * CLIType.CommercialFee).
    END.
