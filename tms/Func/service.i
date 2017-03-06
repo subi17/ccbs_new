@@ -562,6 +562,15 @@ PROCEDURE pCopyPackage:
                       MserviceLimit.InclAmt = 1228:
                lcDefParam = lcDefParam + "_PROMO".
             END.
+
+         IF LOOKUP(lcDefParam,"TARJ7,TARJ9") > 0 AND
+            CAN-FIND(FIRST Order NO-LOCK WHERE
+                           Order.MsSeq = iiMsSeq AND
+                           Order.CLIType = lcDefParam AND
+                           Order.Crstamp >= 20170301 AND
+                           Order.Crstamp < 20170401 AND
+                           Order.OrderType < 2) THEN
+             lcDefParam = lcDefParam + "_DOUBLE".
             
          /* if solog update needed then create a msrequest from change */
          IF ilSolog THEN DO:
