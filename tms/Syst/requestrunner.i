@@ -37,8 +37,7 @@ PROCEDURE pRunRequest:
             MsRequest.ReqType   = iiReqType AND     
             MsRequest.ReqStatus = iiReqStat AND   
             MsRequest.ActStamp <= idActTime /* scheduled or immediate */
-   TENANT-WHERE buffer-tenant-name(msrequest) = {&TENANT_YOIGO} or 
-                buffer-tenant-name(msrequest) = {&TENANT_MASMOVIL}
+   TENANT-WHERE buffer-tenant-id(msrequest) GE 0
    BY MsRequest.ActStamp
    BY MsRequest.MsRequest:
 
@@ -75,8 +74,7 @@ PROCEDURE pRunRequest:
    ELSE 
    FOR FIRST MsRequest NO-LOCK WHERE
              MsRequest.MsRequest = iiRequestID 
-   TENANT-WHERE buffer-tenant-name(order) = {&TENANT_YOIGO} or
-                buffer-tenant-name(order) = {&TENANT_MASMOVIL}:
+   TENANT-WHERE buffer-tenant-id(msRequest) GE 0:
              
       IF MsRequest.ReqType NE iiReqType OR
          MsRequest.ReqStat NE iiReqStat
