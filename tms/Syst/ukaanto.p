@@ -98,7 +98,7 @@ pause 0.
 
 DEFINE VARIABLE lcTMSDirectories AS CHARACTER NO-UNDO.
 
-lcTMSDirectories = "Ar,Func,Class,Gwy,Help,HPD,Inv,Macro,Mailconf,Mc,Mc/lib,Mf,Mnp,Mm,Rate,Syst,triggers,templates".
+lcTMSDirectories = "Ar,Func,Class,Gwy,Help,HPD,Inv,Macro,Mailconf,Mc,Mc/lib,Mf,Mnp,Mm,Rate,Syst,triggers,templates,xmlrpc".
 
 if opsys = "unix" then do:
    
