@@ -7,17 +7,17 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{eventlog.i}
-{cparam2.i}
-{date.i}
-{fgettxt.i}
-{smsmessage.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Func/cparam2.i}
+{Func/date.i}
+{Func/fgettxt.i}
+{Func/smsmessage.i}
 
 DEF VAR lcLine AS CHARACTER NO-UNDO.
 DEF VAR lcSep AS CHARACTER NO-UNDO INIT ",".
@@ -393,14 +393,14 @@ PROCEDURE pHandleOfferSMSResponse:
 
       WHEN "SI" THEN DO:
 
-         RUN orderinctrl.p(Order.OrderId, 0, TRUE).
+         RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).
 
          IF RETURN-VALUE BEGINS "ERROR" THEN RETURN
             "ERROR:Order releasing failed".
       END.
       WHEN "NO" THEN DO:
 
-         RUN closeorder.p(Order.OrderId, TRUE).
+         RUN Mc/closeorder.p(Order.OrderId, TRUE).
 
          IF RETURN-VALUE BEGINS "ERROR" THEN
             RETURN "ERROR:Order closing failed".

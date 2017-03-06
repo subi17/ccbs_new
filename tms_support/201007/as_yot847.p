@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
 
-{orderfunc.i}
+{Func/orderfunc.i}
 
 find mnpprocess where
      mnpprocess.portrequest = "00500111100706115509279" EXCLUSIVE-LOCK.

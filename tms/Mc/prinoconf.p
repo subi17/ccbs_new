@@ -11,14 +11,14 @@
   VERSIO .......: yoigo
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{utumaa.i new }
-{feplstart.i}
-{cparam2.i}
-{edefine.i NEW}
-{forderstamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/utumaa.i new }
+{Func/feplstart.i}
+{Func/cparam2.i}
+{Inv/edefine.i NEW}
+{Func/forderstamp.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiOrderID AS INT  NO-UNDO.
 
@@ -140,10 +140,10 @@ IF CAN-FIND(FIRST ITSendLog USE-INDEX InvNum WHERE
 THEN RETURN "INFO:Already printed".
 
 IF Order.OrderType < 2 THEN /* New or MNP */
-   RUN sendorderconf.p(Order.OrderId, OrderCustomer.email, OUTPUT lcErrFile).
+   RUN Mc/sendorderconf.p(Order.OrderId, OrderCustomer.email, OUTPUT lcErrFile).
 ELSE /* Renewal, Rollback  and STC will be changed HTML in later YDR.
         These will need own HTML templates. */
-   RUN printxt.p (iiOrderID,
+   RUN Mc/printxt.p (iiOrderID,
                   0,
                   Order.CLI,
                   1,                      /* 1=invtext */

@@ -6,16 +6,16 @@
   CREATED ......: 05.10.2009
   Version ......: yoigo
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{date.i}
-{log.i}
-{mnpcontingency.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Func/date.i}
+{Func/log.i}
+{Mnp/mnpcontingency.i}
 
 DEFINE VARIABLE lcSpoolDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcOutDir AS CHARACTER NO-UNDO. 

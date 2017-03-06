@@ -12,19 +12,19 @@
 
 &GLOBAL-DEFINE AllIncludes YES
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
-{email.i}
-{transname.i}
-{fhdrtext.i}
-{ddoutfilett.i}
-{customer_address.i}
-{funcrunprocess_update.i}
-{fbankdata.i}
-{func.i}
-{fsepa.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Func/transname.i}
+{Func/fhdrtext.i}
+{Inv/ddoutfilett.i}
+{Func/customer_address.i}
+{Syst/funcrunprocess_update.i}
+{Func/fbankdata.i}
+{Func/func.p}
+{Func/fsepa.i}
 
 /* invoices TO be printed */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.
@@ -733,7 +733,7 @@ PROCEDURE pFinalize:
    lcFinalFile = "".
    lcTransDir = "".
 
-   lcXsdFile = SEARCH("pain.008.001.02.xsd").
+   lcXsdFile = SEARCH("Inv/pain.008.001.02.xsd").
 
    IF ilCSBValidate AND
       lcXsdFile NE ? THEN DO:

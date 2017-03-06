@@ -46,7 +46,7 @@
  * @output success;boolean
  */
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -210,14 +210,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* PARSING ENDS */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "VISTA_" + pcSalesMan
    gcBrand = "1".
-{msagrcustchg.i}
-{fcustchangereq.i}
-{fcharge_comp_loaded.i}
-{orderchk.i}
+{Mm/msagrcustchg.i}
+{Func/fcustchangereq.i}
+{Func/fcharge_comp_loaded.i}
+{Func/orderchk.i}
 
 lcError = fPreCheckSubscriptionForACC(MobSub.MsSeq).
 IF lcError > "" THEN RETURN appl_err(lcError).

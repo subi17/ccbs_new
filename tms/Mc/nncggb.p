@@ -5,16 +5,16 @@
   TEKIJÄ .......: PT
   LUONTIPVM ....: 02-12-98
   MUUTOSPVM ....: 08-11-02 jr Eventlog
-                  18.03.03 tk run memo
+                  18.03.03 tk RUN Mc/memo.p
                   19.03.03 aam run tasks when changes occur (fecgtask)
                   16.09.03 aam brand
                   06.02.04 jp custnum for memo
   VERSIO .......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
-{fecgtask.i}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Func/fecgtask.i}
 
 DEF INPUT PARAMETER CustNum AS i NO-UNDO.
 
@@ -44,7 +44,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCGmember AS HANDLE NO-UNDO.
    lhCGMember = BUFFER CGMember:HANDLE.
@@ -56,7 +56,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhCGMember).
+      RUN Mc/eventview2.p(lhCGMember).
    END.
 END.
 
@@ -91,7 +91,7 @@ form /* Customer Group :n haku kentällä CGName */
 FIND Customer where Customer.CustNum = CustNum no-lock.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST CustGroup
@@ -171,16 +171,16 @@ SELAUS:
    ufk[1]= 35 ufk[2]= 30 ufk[3]= 927 ufk[4]= 510
    ufk[5]= 5  ufk[6]= 0  ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
    ehto = 3 ufkey = FALSE.
-   RUN ufkey.p.
+   RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-   CHOOSE ROW CustGroup.CustGroup ;(uchoose.i;) no-error WITH FRAME sel.
+   CHOOSE ROW CustGroup.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
    COLOR DISPLAY value(ccc) CustGroup.CustGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-   CHOOSE ROW CustGroup.CGName ;(uchoose.i;) no-error WITH FRAME sel.
+   CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
    COLOR DISPLAY value(ccc) CustGroup.CGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -323,9 +323,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        CustGroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if CustGroup <> "" THEN DO:
@@ -349,9 +349,9 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        CGName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if CGName <> "" THEN DO:
@@ -375,7 +375,7 @@ SELAUS:
 
        FIND CustGroup where recid(CustGroup) = rtab[frame-line(sel)]
        no-lock.
-       RUN memo(INPUT 0,
+       RUN Mc/memo.p(INPUT 0,
                 INPUT "CustGroup",
                 INPUT STRING(CustGroup.CustGroup),
                 INPUT "Customer group").
@@ -386,7 +386,7 @@ SELAUS:
 
      else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* poisto */
    FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
-   RUN nncgme1(CustGroup.CustGroup).
+   RUN Mc/nncgme1.p(CustGroup.CustGroup).
    ufkey = TRUE.
    NEXT LOOP.
      END.

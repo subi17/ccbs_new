@@ -8,30 +8,30 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPProcess'}
-{timestamp.i}
-{xmlfunction.i}
-{ftaxdata.i}
-{timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPProcess'}
+{Func/timestamp.i}
+{Func/xmlfunction.i}
+{Func/ftaxdata.i}
+{Func/timestamp.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 DEFINE INPUT PARAMETER piMNPSeq AS INTEGER NO-UNDO.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhmnpsub AS HANDLE NO-UNDO.
    lhmnpsub = BUFFER mnpsub:HANDLE.
    RUN StarEventInitialize(lhmnpsub).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhmnpsub).
+      RUN Mc/eventview2.p(lhmnpsub).
    END.
 
 END.
@@ -161,16 +161,16 @@ BROWSE:
         ufk[6]= 0  /* WHEN lcRight = "RW" */
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW mnpsub.cli ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW mnpsub.cli {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
 /*        COLOR DISPLAY VALUE(ccc) mnpsub.cli WITH FRAME sel.*/
       END.
 /*      IF order = 2 THEN DO:
-        CHOOSE ROW mnpsub.Ratezone ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW mnpsub.Ratezone {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) mnpsub.Ratezone WITH FRAME sel.
       END. */
       
@@ -314,8 +314,8 @@ BROWSE:
        RUN local-find-this(TRUE).
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhmnpsub). 
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        RUN local-UPDATE-record.
        HIDE FRAME lis NO-PAUSE.
 

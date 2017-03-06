@@ -9,7 +9,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR ldtDate  AS DATE NO-UNDO EXTENT 2.
 DEF VAR lcFile   AS CHAR NO-UNDO.
@@ -83,13 +83,13 @@ REPEAT WITH FRAME fDate:
        IF ldtDate[1] = ? OR ldtDate[2] = ? OR lcFile = "" 
        THEN ufk[5] = 0.
               
-       RUN ufkey.
+       RUN Syst/ufkey.p.
     END.
     
     IF TOIMI = 1 THEN DO:
     
        ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
        
        REPEAT WITH FRAME fDate ON ENDKEY UNDO, LEAVE:
        
@@ -104,7 +104,7 @@ REPEAT WITH FRAME fDate:
     END.
 
     ELSE IF toimi = 5 THEN DO:
-       RUN custnobill (ldtDate[1],  
+       RUN Inv/custnobill.p (ldtDate[1],  
                        ldtDate[2],
                        lcUser,
                        llActive,

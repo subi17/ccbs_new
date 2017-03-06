@@ -6,23 +6,23 @@
   CREATED ......: 26.04.11
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DPRate'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DPRate'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhDPRate AS HANDLE NO-UNDO.
    lhDPRate = BUFFER DPRate:HANDLE.
    RUN StarEventInitialize(lhDPRate).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhDPRate).
+      RUN Mc/eventview2.p(lhDPRate).
    END.
 
 END.
@@ -91,7 +91,7 @@ IF NOT AVAILABLE DiscountPlan THEN DO:
 END.
 lcPlan = DiscountPlan.DPRuleID.
 
-cfc = "sel". RUN ufcolor.p. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -116,7 +116,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DPRate  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.p.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -124,7 +124,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.p.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -223,12 +223,12 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DPRate.DiscValue {uchoose.i} NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DPRate.DiscValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DPRate.DiscValue WITH FRAME sel.
       END.
 
@@ -433,8 +433,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPRate).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.p.
-       cfc = "lis". RUN ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -471,7 +471,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.p.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -554,7 +554,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.
@@ -564,7 +564,7 @@ PROCEDURE local-UPDATE-record:
                 
          FIND CURRENT DPRate EXCLUSIVE-LOCK.
          ehto = 9.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          
          UPDATE
             DPRate.DiscValue WHEN NEW DPRate

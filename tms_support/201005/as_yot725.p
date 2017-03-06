@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand  = "1".
-{date.i}
-{msreqfunc.i}
+{Func/date.i}
+{Func/msreqfunc.i}
 
 input from Bono8_promotion.csv.
 
@@ -64,7 +64,7 @@ repeat:
    find current mservicelimit no-lock.
    find current bmservicelimit no-lock.
 
-   RUN cli_rate.p (Mobsub.cli,
+   RUN Rate/cli_rate.p (Mobsub.cli,
                  5/1/2010,
                  5/31/2010,
                  TRUE).

@@ -11,10 +11,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
 
 DEF VAR tdebt  AS DE  NO-UNDO EXTENT 3.
 DEF VAR debt   AS DE  NO-UNDO.
@@ -54,7 +54,7 @@ WITH
    " UNPAID INVOICES "  NO-LABELS
    OVERLAY FRAME debt.
 
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 
 UPDATE Date WITH FRAME frm.
 
@@ -76,7 +76,7 @@ message "Wait ...".
           edate = minimum(Invoice.InvDate,edate)
           ldate = maximum(Invoice.InvDate,ldate).
 
-       RUN invbal(Invoice.InvNum, OUTPUT debt).
+       RUN Ar/invbal.p(Invoice.InvNum, OUTPUT debt).
 
        IF Invoice.DueDate < Date THEN tdebt[2] = tdebt[2] + debt.
        ELSE                           tdebt[1] = tdebt[1] + debt.
@@ -85,7 +85,7 @@ message "Wait ...".
     END.
 
 
-    cfc = "lis". RUN ufcolor.
+    cfc = "lis". RUN Syst/ufcolor.p.
     DISPLAY tdebt edate ldate curr1 curr2 curr3 WITH FRAME debt.
 
 message "Press ENTER !".

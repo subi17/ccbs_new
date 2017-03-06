@@ -14,10 +14,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 /* print-linemuuttujat */
-{utumaa.i NEW }
+{Syst/utumaa.i NEW }
 
 assign tuni1 = "nnlati"
        tuni2 = "".
@@ -86,10 +86,10 @@ FIND FIRST Invoice no-lock no-error.
 IF AVAIL Invoice THEN ASSIGN date1 = Invoice.InvDate.
 date2 = date1.
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN ufkey.
+    ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
 
@@ -104,7 +104,7 @@ repeat WITH FRAME rajat:
 TOIMI:
    repeat:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT LOOP.
       IF toimi = 8 THEN LEAVE LOOP.
       IF toimi = 5 THEN LEAVE TOIMI.
@@ -113,7 +113,7 @@ TOIMI:
 
    /* Avataan striimi */
    ASSIGN tila = TRUE.
-   {tmsreport.i "return"}
+   {Syst/tmsreport.i "return"}
 
    message "Printing ...".                        
 
@@ -178,7 +178,7 @@ TOIMI:
 
       /* Tarvitaanko uusi sivu */
       IF rl >= skayt1 THEN DO:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
          ASSIGN rl = 7  sl = sl + 1.
          view STREAM tul FRAME sivuotsi.
       END.
@@ -232,7 +232,7 @@ MAA:     FOR EACH FixCDR  no-lock where
             IF maalkm < 6 THEN DO:
                /* Tarvitaanko uusi sivu */
                IF rl >= skayt1 - 2 THEN DO:
-                  {uprfeed.i rl}
+                  {Syst/uprfeed.i rl}
                   ASSIGN
                   sl = sl + 1.
                   view STREAM tul FRAME sivuotsi.  rl = 7.
@@ -260,7 +260,7 @@ MAA:     FOR EACH FixCDR  no-lock where
       IF last-of (Customer.Salesman) THEN DO:
         /* Tarvitaanko uusi sivu */
          IF rl >= skayt1 - 2 THEN DO:
-            {uprfeed.i rl}
+            {Syst/uprfeed.i rl}
             ASSIGN rl = 7  sl = sl + 1.
             view STREAM tul FRAME sivuotsi.
          END.
@@ -273,13 +273,13 @@ MAA:     FOR EACH FixCDR  no-lock where
          (accum sub-total BY Customer.Salesman Invoice.AmtExclVAT)
                   format "zz,zzz,zz9.99-" AT 45 SKIP.
          rl = rl + 2.
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       END.
    END.
 
    /* Tarvitaanko uusi sivu */
    IF rl >= skayt1 - 2 THEN DO:
-      {uprfeed.i rl}
+      {Syst/uprfeed.i rl}
       ASSIGN
         sl = sl + 1.
       view STREAM tul FRAME sivuotsi.  rl = 7.
@@ -291,7 +291,7 @@ MAA:     FOR EACH FixCDR  no-lock where
        "TOTAL" AT 11
        (accum total Invoice.AmtExclVAT) format "zz,zzz,zz9.99-" AT 45 SKIP.
    rl = rl + 2.
-   {uprfeed.i rl}.
+   {Syst/uprfeed.i rl}.
 
    MESSAGE "Report completed !" VIEW-AS ALERT-BOX.
 

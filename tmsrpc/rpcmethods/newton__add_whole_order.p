@@ -220,29 +220,29 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{date.i}
-{orderchk.i}
-{order.i}
-{tmsconst.i}
-{fbundle.i}
-{mnpoutchk.i}
-{create_eventlog.i}
-{fmakemsreq.i}
-{main_add_lines.i}
-{msisdn.i}
-{forderstamp.i}
-{email.i}
-{ftransdir.i}
+{Func/date.i}
+{Func/orderchk.i}
+{Func/order.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
+{Mnp/mnpoutchk.i}
+{Func/create_eventlog.i}
+{Func/fmakemsreq.i}
+{Func/main_add_lines.i}
+{Func/msisdn.i}
+{Func/forderstamp.i}
+{Func/email.i}
+{Func/ftransdir.i}
 
-{cparam2.i}
-/*{utumaa.i new }
-{edefine.i new}*/
-{order_data.i}
-{smsmessage.i}
-{orderfusion.i}
+{Func/cparam2.i}
+/*{Syst/utumaa.i new }
+{Inv/edefine.i new}*/
+{Func/order_data.i}
+{Func/smsmessage.i}
+{Mc/orderfusion.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
@@ -1909,7 +1909,7 @@ IF Order.OrderChannel BEGINS "retention" THEN
             lbOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND
             ROWID(lbOrder) NE ROWID(Order):
 
-      RUN closeorder.p(lbOrder.OrderId, TRUE).
+      RUN Mc/closeorder.p(lbOrder.OrderId, TRUE).
 
       IF RETURN-VALUE > "" THEN 
          fCreateMemo("Automatic order closing failed", 
@@ -2413,13 +2413,13 @@ IF INDEX(Order.OrderChannel, "pos") EQ 0 THEN DO:
        Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}        /*51*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}  /*76*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} /*77*/ ) THEN DO:
-      RUN prinoconf.p(liOrderId).
+      RUN Mc/prinoconf.p(liOrderId).
    END.
    ELSE IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}    /*41*/  OR
            Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}    /*42*/  OR
            Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}    /*43*/   
            THEN DO: 
-      RUN sendorderreq.p(liOrderId, OrderCustomer.email, OUTPUT lcError). 
+      RUN Mc/sendorderreq.p(liOrderId, OrderCustomer.email, OUTPUT lcError). 
    END.
 END.
 

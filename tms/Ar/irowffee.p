@@ -18,8 +18,8 @@
   Version ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER  iiInvNum    AS I    NO-UNDO.
 DEF INPUT PARAMETER  icBillCode  AS c    NO-UNDO.
@@ -60,7 +60,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFFItem AS HANDLE NO-UNDO.
    lhFFItem = BUFFER FFItem:HANDLE.
@@ -68,7 +68,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhFFItem).
+      RUN Mc/eventview2.p(lhFFItem).
    END.
 END.
 
@@ -165,7 +165,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 LOOP:
 repeat WITH FRAME sel:
@@ -222,12 +222,12 @@ BROWSE:
         ufk[1]= 771 ufk[2]= 0  ufk[3]= 927 ufk[4]= 0
         ufk[5]= 0   ufk[6]= 0  ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
         ehto  = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW FFItem.BillPeriod ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW FFItem.BillPeriod {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) FFItem.BillPeriod WITH FRAME sel.
       END.
 
@@ -358,9 +358,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        BillPeriod = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE BillPeriod WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF BillPeriod <> ? THEN DO:
@@ -382,7 +382,7 @@ BROWSE:
      if lookup(nap,"3,f3") > 0 THEN     /* memo */
      DO  WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
        assign ehto = 9 cfc = "lis" ufkey = TRUE.
-       RUN ufkey. RUN ufcolor.
+       RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND FFItem WHERE RECID(FFItem) = ttRow.FFItem NO-LOCK.
 
@@ -403,7 +403,7 @@ BROWSE:
      DO WITH FRAME lis TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
        /* change */
 
-       assign fr-header = " VIEW " cfc = "lis".  RUN ufcolor.
+       assign fr-header = " VIEW " cfc = "lis".  RUN Syst/ufcolor.p.
 
        FIND ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND FFItem WHERE RECID(FFItem) = ttRow.FFItem NO-LOCK.

@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{barrfunc.i}
+{Func/barrfunc.i}
 
 DEFINE VARIABLE lrOLBRec as recid no-undo.
 DEFINE VARIABLE lcB AS CHARACTER NO-UNDO. 

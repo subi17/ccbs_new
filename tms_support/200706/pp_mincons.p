@@ -1,8 +1,8 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "snet".
 
-{timestamp.i}
-{ftaxdata.i}
+{Func/timestamp.i}
+{Func/ftaxdata.i}
 
 def stream sread.
 def stream sdone.
@@ -114,7 +114,7 @@ repeat:
          
          PUT SCREEN ROW 1 COL 1 STRING(liCliAmt).
          
-         RUN balancequery(lccli).
+         RUN Gwy/balancequery.p(lccli).
          
          fMinComp(lccli,fMakeTS(),DECIMAL(RETURN-VALUE)).
 

@@ -9,7 +9,7 @@ CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "Qvantel"
    gcBrand = "1".
@@ -28,7 +28,7 @@ DEF VAR lcCDRDir AS CHAR NO-UNDO.
 DEF VAR lcCDRFile AS CHAR NO-UNDO. 
 
 /*Search correct directory*/
-lcRootDir = SEARCH("donotremove_testdir.txt").
+lcRootDir = SEARCH("testing/donotremove_testdir.txt").
 lcRootDir = REPLACE(lcrootDir, "donotremove_testdir.txt", "").
 
 
@@ -69,7 +69,7 @@ PROCEDURE pUserInput:
       WITH FRAME lis EDITING:
       
          IF ufkey THEN DO:
-            ASSIGN ehto = 9. RUN ufkey.p.
+            ASSIGN ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
@@ -79,7 +79,7 @@ PROCEDURE pUserInput:
             
          IF KEYLABEL(LASTKEY) = "F9" AND 
             FRAME-FIELD = "lcCDRFile" THEN DO:
-            RUN filebrowser.p(
+            RUN Syst/filebrowser.p(
                lcRootDir + "edrfiles/*.asc").
             lcCDRFile = RETURN-VALUE.
             DISP lcCDRFile WITH FRAME lis.

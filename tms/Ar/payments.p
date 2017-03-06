@@ -41,17 +41,17 @@
 &GLOBAL-DEFINE TMSCodeDef NO
 &GLOBAL-DEFINE BrTable Payment
 
-{commali.i} 
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'payment'}
-{eventval.i}
-{invdet.i}
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'payment'}
+{Syst/eventval.i}
+{Ar/invdet.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPayment AS HANDLE NO-UNDO.
    lhPayment = BUFFER Payment:HANDLE.
@@ -196,7 +196,7 @@ WITH OVERLAY ROW 1 centered
      COLOR VALUE(cfc) TITLE  " Details (" + STRING(Payment.Voucher) + ") "
      side-labels FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  Voucher */
     "Brand .:" lcBrand skip
@@ -292,7 +292,7 @@ ELSE IF iiInvNum > 0 THEN DO:
    FRAME sel:TITLE = " PAYMENTS OF INVOICE " + Invoice.ExtInvID + " ".
 END.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-FIRST.
@@ -372,24 +372,24 @@ BROWSE:
 
          IF iiInvNum > 0 THEN ufk[2] = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Payment.ExtVoucher ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Payment.ExtVoucher {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Payment.ExtVoucher WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Payment.ExtInvID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Payment.ExtInvID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Payment.ExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW Payment.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Payment.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Payment.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW Payment.PaymSrc  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Payment.PaymSrc  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Payment.PaymSrc WITH FRAME sel.
       END.
 
@@ -525,8 +525,8 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -556,8 +556,8 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -584,8 +584,8 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN gcAllBrand
@@ -608,8 +608,8 @@ BROWSE:
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
        UPDATE lcBrand WHEN gcAllBrand
@@ -647,7 +647,7 @@ BROWSE:
 
         RUN local-find-this(TRUE).
 
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "payment",
                  INPUT STRING(Payment.Voucher),
                  INPUT "Voucher number").
@@ -662,8 +662,8 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Payment.ExtInvID.
 
        RUN local-update-record.                                  
@@ -682,7 +682,7 @@ BROWSE:
         RUN local-find-this(TRUE).
 
         ehto = 5.
-        run ufkey.
+        RUN Syst/ufkey.p.
         RUN pInvoiceDetails(Payment.InvNum,
                             TRUE).
         ufkey = true.
@@ -701,7 +701,7 @@ BROWSE:
            ufk[8] = 8
            ehto   = 0.
         
-        RUN ufkey.
+        RUN Syst/ufkey.p.
 
         IF toimi = 2 THEN DO TRANS:
                 
@@ -744,7 +744,7 @@ BROWSE:
            RUN local-find-this(FALSE).
            
            IF AVAILABLE Payment THEN 
-           RUN eventsel ("Payment",
+           RUN Mc/eventsel.p ("Payment",
                          Payment.Brand + CHR(255) +
                          STRING(Payment.CustNum) + CHR(255) +
                          STRING(Payment.InvNum)  + CHR(255) +
@@ -752,7 +752,7 @@ BROWSE:
         END. 
 
         /* payment source info */
-        ELSE IF toimi = 5 THEN RUN h-paymsrc.
+        ELSE IF toimi = 5 THEN RUN Help/h-paymsrc.p.
         
         ELSE IF toimi = 8 THEN NEXT LOOP.
      END.
@@ -995,7 +995,7 @@ PROCEDURE local-update-record:
    ELSE lcPaymFile = Payment.PaymFile.
    
    ehto = 5.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
    
    DISP
       Payment.ExtVoucher

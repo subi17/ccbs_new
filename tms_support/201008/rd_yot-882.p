@@ -7,11 +7,11 @@ DEFINE STREAM sLog.
 
 OUTPUT STREAM sLog TO "yot-882.log".
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand  = "1".
-{timestamp.i}
-{msisdn.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
 
 def buffer msisdnbuf for msisdn.
 DEF BUFFER bmsisdn FOR msisdn.

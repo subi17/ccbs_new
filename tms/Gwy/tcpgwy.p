@@ -12,9 +12,9 @@
   VERSION ......: XFERA
 ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 gcBrand = "1".
 

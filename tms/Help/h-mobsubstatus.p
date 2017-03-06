@@ -9,8 +9,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{mobsub1.i}
+{Syst/commali.i}
+{Mm/mobsub1.i}
 
 def temp-table ttStatus
   field StatusCode like mobsub.msstat
@@ -39,7 +39,7 @@ form /* SEEK Code */
     with row 4 col 2 title color value(ctc) " FIND CODE "
     color value(cfc) no-labels overlay frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 /* fill temp-table */
 
@@ -97,7 +97,7 @@ print-line:
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -105,7 +105,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ttStatus.StatusCode ;(uchoose.i;) no-error with frame sel.
+         choose row ttStatus.StatusCode {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ttStatus.StatusCode with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
@@ -201,8 +201,8 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* StatusCode */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update StatusCode with frame hayr.
            hide frame hayr no-pause.
            if StatusCode ENTERED then do:

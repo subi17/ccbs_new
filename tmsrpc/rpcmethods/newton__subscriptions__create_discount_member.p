@@ -13,12 +13,12 @@
   * @output ret;boolean; Return value
 */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
-{dpmember.i}
-{tmsconst.i}
-{timestamp.i}
-{fcounter.i}
+{Mc/dpmember.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/fcounter.i}
 
 /* Input parameters */
 DEFINE VARIABLE piMsSeq          AS INTEGER   NO-UNDO. 

@@ -12,25 +12,25 @@
 
 &GLOBAL-DEFINE BrTable MNPMessage
 
-{commali.i} 
-{eventval.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPMessage'}
-{xmlfunction.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPMessage'}
+{Func/xmlfunction.i}
 
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPMessage AS HANDLE NO-UNDO.
    lhMNPMessage = BUFFER MNPMessage:HANDLE.
    RUN StarEventInitialize(lhMNPMessage).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMNPMessage).
+      RUN Mc/eventview2.p(lhMNPMessage).
    END.
 
 END.
@@ -78,7 +78,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     FRAME sel.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = " By CLI ,  By Name  ,By 3, By 4".
@@ -155,12 +155,12 @@ BROWSE:
         ufk[7] = 2808
         ufk[8] = 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MNPMessage.MessageType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPMessage.MessageType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPMessage.MessageType WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

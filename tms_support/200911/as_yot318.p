@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{timestamp.i}
-{barrfunc.i}
+{Func/timestamp.i}
+{Func/barrfunc.i}
 
 def buffer MsRequest2 for MsRequest.
 def stream slog.
@@ -48,7 +48,7 @@ FOR EACH mobsub where
    ELSE DO:
 
 
-       RUN barrengine (MobSub.MsSeq,
+       RUN Mm/barrengine.p (MobSub.MsSeq,
                    "Y_SARC",
                    "5",                 /* source  */
                    "YOT-317",           /* creator */

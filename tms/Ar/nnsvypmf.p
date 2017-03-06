@@ -8,6 +8,6 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-run nnsvyp (TRUE). /* true = failed ones */
+RUN Ar/nnsvyp.p (TRUE). /* true = failed ones */

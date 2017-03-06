@@ -3,15 +3,15 @@
   TASK .........: create periodical contract etc. according to orderaction definition
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fmakemsreq.i}
-{service.i}
-{tmsconst.i}
-{fdss.i}
-{dpmember.i}
-{q25functions.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
+{Func/service.i}
+{Syst/tmsconst.i}
+{Func/fdss.i}
+{Mc/dpmember.i}
+{Func/q25functions.i}
 
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.

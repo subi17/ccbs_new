@@ -8,8 +8,8 @@
 
 &GLOBAL-DEFINE FCREDITVALID_I YES
   
-{finvbal.i}
-{fparse.i}
+{Func/finvbal.i}
+{Func/fparse.i}
 
 FUNCTION fCheckCreditNoteRequest RETURNS CHARACTER 
          (INPUT iiCustNum AS INT,

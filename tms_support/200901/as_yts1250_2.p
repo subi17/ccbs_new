@@ -8,10 +8,10 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
 def stream sin.
 input stream sin from /home/anttis/virhe_solog_mod.txt.
