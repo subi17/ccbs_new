@@ -74,6 +74,20 @@ FUNCTION fgetMaxTenantId RETURNS INT ().
    RETURN liid.
 END FUNCTION.
 
+/* Function to find tenant Id by name */
+FUNCTION fgetTenantIdbyName RETURNS INT 
+   (INPUT icname AS CHAR).
+   FIND FIRST _tenant WHERE _tenant._tenant-name EQ icname.
+   IF AVAIL _tenant THEN RETURN _tenant._tenantId.
+END FUNCTION.
+
+/* Function to find tenant Id by name */
+FUNCTION fgetTenantNamebyId RETURNS CHAR
+   (INPUT iiid AS INT).
+   FIND FIRST _tenant WHERE _tenant._tenantId EQ iiid.
+   IF AVAIL _tenant THEN RETURN _tenant._tenant-name.
+END FUNCTION.
+
 FUNCTION fConvertBrandToTenant RETURNS CHARACTER
    (INPUT icBrand AS CHARACTER):
 
