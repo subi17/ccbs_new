@@ -399,8 +399,8 @@ PROCEDURE pDiscountPlan:
    IF DiscountPlan.dprule EQ "BONO7DISC" OR 
       DiscountPlan.dprule EQ "BONO6WEBDISC" THEN DO: 
       ASSIGN
-      ldate              = ADD-INTERVAL(MobSub.ActivationDate,5,"months")
-      DPMember.ValidFrom = MobSub.ActivationDate
+      ldate              = ADD-INTERVAL(MobSub.TariffActDate,5,"months")
+      DPMember.ValidFrom = MobSub.TariffActDate
       DPMember.ValidTo   = fLastDayOfMonth(lDate)      
       DPMember.DiscValue = DPRate.DiscValue.
    END.
