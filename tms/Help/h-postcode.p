@@ -8,8 +8,8 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -67,7 +67,7 @@ form /* seek  */
 /* default country */
 lcDefCountry = fCParamC("CountryCodeDef").
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -143,20 +143,20 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW PostCode.ZipCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW PostCode.ZipCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) PostCode.ZipCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW PostCode.PostOffice ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW PostCode.PostOffice {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) PostCode.PostOffice WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW PostCode.Region ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW PostCode.Region {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) PostCode.Region WITH FRAME sel.
       END.
 
@@ -283,8 +283,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         lcZipCode = "".
         UPDATE lcZipCode WITH FRAME f1.
@@ -313,8 +313,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         lcPostOffice = "".
         UPDATE lcPostOffice WITH FRAME f2.
@@ -343,8 +343,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f3.
         lcPostOffice = "".
         UPDATE lcRegion WITH FRAME f3.

@@ -9,11 +9,11 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{msisdn.i}
-{sog.i}
-{tmsparam3.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
+{Func/sog.i}
+{Func/tmsparam3.i}
 
 DEF INPUT PARAMETER   MsSeq LIKE MobSub.MsSeq NO-UNDO.
 DEF INPUT PARAMETER   isolog AS i NO-UNDO.

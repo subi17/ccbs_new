@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 DEFINE VARIABLE ts AS DECIMAL NO-UNDO. 
 ts = fMakeTS(). 
 DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO. 

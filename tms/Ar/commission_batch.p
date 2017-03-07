@@ -8,20 +8,20 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN 
    gcBrand = "1" 
    katun   = "Cron".
        
-{eventlog.i}
+{Syst/eventlog.i}
 
 DEF VAR liChecked AS INT  NO-UNDO.
 DEF VAR liDone    AS INT  NO-UNDO.
 
 fELog("COMMISSION","started").
 
-RUN commission_run (OUTPUT liChecked,
+RUN Ar/commission_run.p (OUTPUT liChecked,
                     OUTPUT liDone).
 
 fELog("COMMISSION","stopped:Activated" + STRING(liDone)).
@@ -29,7 +29,7 @@ fELog("COMMISSION","stopped:Activated" + STRING(liDone)).
 
 fELog("COMMISSION_CANCEL","started").
 
-RUN commission_cancel (OUTPUT liChecked,
+RUN Ar/commission_cancel.p (OUTPUT liChecked,
                        OUTPUT liDone).
 
 fELog("COMMISSION_CANCEL","stopped:Cancelled" + STRING(liDone)).

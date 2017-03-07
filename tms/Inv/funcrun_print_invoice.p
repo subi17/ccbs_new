@@ -7,17 +7,17 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
    
-{timestamp.i}
-{cparam2.i}
-{printdoc1tt.i}
-{email.i}
-{funcrunprocess_run.i}
-{host.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Inv/printdoc1tt.i}
+{Func/email.i}
+{Syst/funcrunprocess_run.i}
+{Syst/host.i}
 
 DEF VAR ldaInvDate       AS DATE NO-UNDO.
 DEF VAR liInvType        AS INT  NO-UNDO.
@@ -275,7 +275,7 @@ PROCEDURE pPrintInvoices:
       /* tar file is not needed for no paper invoices */
       IF LOOKUP(lcPrintHouse,"NOPAPER,DELTYPE10") > 0 THEN llTarFile = FALSE.
  
-      RUN invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
+      RUN Inv/invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
                          ldaInvDate,
                          liInvCount,
                          llSeparate,
@@ -347,7 +347,7 @@ PROCEDURE pPrintInvoices:
                 LOOKUP(bFRProcess.RunState,"Initialized,Running") > 0 AND
                 bFRProcess.FRProcessID <> liFRProcessID NO-ERROR.
       IF NOT AVAILABLE bFRProcess THEN DO:
-         RUN funcrun_invpdf_creation (INPUT liFRExecID) NO-ERROR.
+         RUN Inv/funcrun_invpdf_creation.p (INPUT liFRExecID) NO-ERROR.
          fCreateActionLog("RunMode: "      + lcRunMode             +
                           " CreatePDF: "   + STRING(llgFuncRunPDF) +
                           " FRConfigID: "  + STRING(liFRConfigID)  +

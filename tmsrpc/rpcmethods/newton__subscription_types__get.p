@@ -18,9 +18,9 @@
  */
 
 {header_get.i}
-{transname.i}
-{tmsconst.i}
-{cparam2.i}
+{Func/transname.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 DEF VAR lcCLITypeTransName     AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType  AS CHAR NO-UNDO.

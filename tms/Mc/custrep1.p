@@ -10,10 +10,10 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{fcustbal.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/fcustbal.i}
+{Syst/utumaa.i "new"}
 
 assign 
    tuni1 = "custrep"
@@ -39,7 +39,7 @@ DEF INPUT PARAMETER Category  AS CH  NO-UNDO.
 DEF VAR pre AS CH NO-UNDO.
 
 assign tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 PUT stream tul UNFORMATTED
    "CustNum"        tab
@@ -194,7 +194,7 @@ NO-LOCK:
 END.
 
 assign tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 
 

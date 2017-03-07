@@ -10,13 +10,13 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{msisdn.i}
-{msreqfunc.i}
-{eventval.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{create_eventlog.i}
+{Syst/commali.i}
+{Func/msisdn.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/create_eventlog.i}
 
 DEF INPUT  PARAMETER  iiMSrequest AS INT  NO-UNDO.
 
@@ -36,7 +36,7 @@ END.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobSub AS HANDLE NO-UNDO.
    lhMobSub = BUFFER MobSub:HANDLE.
@@ -154,7 +154,7 @@ PROCEDURE pChangeSIM:
  
    IF MsRequest.CreateFees THEN DO:
       
-      RUN create_charge_comp.p(
+      RUN Mm/create_charge_comp.p(
          {&REQUEST_SOURCE_MANUAL_TMS},
          Mobsub.MsSeq,   
          MsRequest.UserCode,

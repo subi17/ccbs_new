@@ -8,10 +8,10 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{finvnum.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/finvnum.i}
+{Syst/funcrunprocess_update.i}
 
 DEF INPUT  PARAMETER idtInvDate       AS DATE NO-UNDO.
 DEF INPUT  PARAMETER iiInvType        AS INT  NO-UNDO.

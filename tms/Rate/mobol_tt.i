@@ -8,7 +8,7 @@
 
 &GLOBAL-DEFINE MOBOL_TT_I YES
 
-{commali.i}
+{Syst/commali.i}
 
 DEFINE TEMP-TABLE ttTariff NO-UNDO LIKE Tariff.
 DEFINE TEMP-TABLE ttBDest  NO-UNDO LIKE Bdest.

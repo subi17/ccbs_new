@@ -12,10 +12,10 @@
   Version ......: M15
   ------------------------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
-{callquery.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
+{Func/callquery.i}
 
 DEF INPUT PARAMETER  iiInvSeq AS INT    NO-UNDO.
 DEF INPUT PARAMETER  CLI      AS CHAR   NO-UNDO.

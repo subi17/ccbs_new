@@ -8,10 +8,10 @@
             params;struct;Optionally additional information
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 katun    = "NewtonAd".
 gcBrand  = "1".
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.

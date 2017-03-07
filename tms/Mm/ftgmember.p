@@ -13,8 +13,8 @@
 
 &GLOBAL-DEFINE BrTable FATGMember
 
-{commali.i} 
-{eventval.i} 
+{Syst/commali.i} 
+{Syst/eventval.i} 
 
 DEF  NEW  shared VAR siirto AS CHAR.
 
@@ -46,7 +46,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFATGMember AS HANDLE NO-UNDO.
    lhFATGMember = BUFFER FATGMember:HANDLE.
@@ -54,7 +54,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhFATGMember).
+      RUN Mc/eventview2.p(lhFATGMember).
    END.
 END.
 
@@ -73,7 +73,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     TITLE COLOR VALUE(ctc) "All members "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     "FAT Group .....:" Fatgmember.ftgrp no-label skip 
@@ -105,7 +105,7 @@ form /* seek  MemberType */
     " Memo: " + FATGMember.FTGrp + "/" + FATGMember.FTGMember WITH NO-LABELS 1 columns
     FRAME f4.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Type  ,  By Member  ,By 3, By 4".
@@ -132,12 +132,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a FATGMember  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -231,13 +231,13 @@ BROWSE:
         ufk[1]= 1852  ufk[2]= 0 ufk[3]= 0  ufk[4]= 927
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
 
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FATGMember.FTGMember ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATGMember.FTGMember {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATGMember.FTGrp WITH FRAME sel.
       END.
 
@@ -366,8 +366,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
        SET lcBrand WHEN gcAllBrand = TRUE
@@ -387,11 +387,11 @@ BROWSE:
 
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        {uright2.i}.
+        {Syst/uright2.i}.
 
-        cfc = "puyr". run ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. 
-        RUN ufkey. ufkey = TRUE.
+        RUN Syst/ufkey.p. ufkey = TRUE.
         RUN local-find-this(TRUE).
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATGMember).
         UPDATE FATGMember.Memo WITH FRAME f4.
@@ -400,13 +400,13 @@ BROWSE:
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-/*       {uright2.i} */
+/*       {Syst/uright2.i} */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -457,8 +457,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
       DISPLAY FATGMember.MemberType .  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATGMember).
        RUN local-UPDATE-record.                                  
@@ -592,8 +592,8 @@ PROCEDURE local-UPDATE-record:
              IF FRAME-FIELD = "ftgmember" AND keylabel(lastkey) = "F9"
              THEN DO:
 
-                IF      fatgmember.membertype = 0 THEN RUN nnmase.
-                ELSE IF fatgmember.membertype = 1 THEN run nntuse.
+                IF      fatgmember.membertype = 0 THEN RUN Help/nnmase.p.
+                ELSE IF fatgmember.membertype = 1 THEN RUN Help/nntuse.p.
 
                 IF CAN-FIND (FIRST xxmember WHERE 
                              xxmember.Brand      = gcBrand               AND 

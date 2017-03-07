@@ -21,11 +21,11 @@ DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 DEF VAR pcMSISDN        AS CHAR NO-UNDO.
 DEF VAR liDeliveryType  AS INT  NO-UNDO. 
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "IVR_" + gbAuthLog.EndUserId. 
    gcBrand = "1".
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcMSISDN = get_string(param_toplevel_id,"0").

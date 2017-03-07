@@ -5,10 +5,10 @@
                     19.07.05/tk  fSetTSLimit
 */
 
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{fgettxt.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/fgettxt.i}
 
 &IF "{&fmakesms}" NE "YES"
 &THEN

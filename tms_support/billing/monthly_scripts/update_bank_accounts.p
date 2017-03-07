@@ -4,11 +4,11 @@
    Change input and output filenames according to ticket.
    Report error cases that were not changed after the run */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "Qvantel".
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

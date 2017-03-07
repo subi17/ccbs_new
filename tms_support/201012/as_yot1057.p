@@ -1,9 +1,9 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcbrand = "1".
 
-{date.i}
-{msisdn.i}
+{Func/date.i}
+{Func/msisdn.i}
 DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
 ldeNow = fMakeTS().
 

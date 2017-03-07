@@ -11,7 +11,7 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}                  
+{Syst/commali.i}                  
 
 DEF NEW shared STREAM excel.
 
@@ -56,7 +56,7 @@ WITH
    NO-LABELS FRAME rajat.
 
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 
 ASSIGN
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -69,7 +69,7 @@ hdr     = "ProdGroup,GroupName,Date,ProdCod,ProdName,AmtCalls," +
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE
    exdate1
    exdate2 validate(input exdate2 >= input exdate1,"Impossible order !")
@@ -79,7 +79,7 @@ repeat WITH FRAME rajat:
 toimi:
    repeat WITH fram rajat:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT rajat.
       IF toimi = 8 THEN LEAVE rajat.
@@ -96,15 +96,15 @@ toimi:
    exPaymFile = exdir + "/" + exName.
    OUTPUT STREAM excel TO value(exPaymFile).
 
-   PUT STREAM excel UNFORMATTED ynimi.  RUN uexskip(2).
+   PUT STREAM excel UNFORMATTED ynimi.  RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED 
-     "SUMMARY OF ALL Calls BY DATE/PRODUCT GROUP/PRODUCT".  RUN uexskip(2).
+     "SUMMARY OF ALL Calls BY DATE/PRODUCT GROUP/PRODUCT".  RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED
-     "Printed by" tab katun tab pvm format "99.99.9999".  RUN uexskip(2).
+     "Printed by" tab katun tab pvm format "99.99.9999".  RUN Syst/uexskip.p(2).
    DO i = 1 TO num-entries(hdr).
       PUT STREAM excel UNFORMATTED entry(i,hdr) tab.
    END.
-   RUN uexskip(2).
+   RUN Syst/uexskip.p(2).
 
    FOR EACH FixCDR no-lock where
             FixCDR.Date >= exdate1    AND
@@ -146,7 +146,7 @@ toimi:
          round(
          (accum sub-total BY FixCDR.BillCode netto), 0)              tab.
 
-         RUN uexskip(1).
+         RUN Syst/uexskip.p(1).
       END.
    END.
    OUTPUT STREAM excel CLOSE.

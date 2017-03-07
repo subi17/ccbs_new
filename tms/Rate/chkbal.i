@@ -6,10 +6,10 @@
                     17.06.03/jp  fIsPnpAllowed             
                     14.12.05/aam notifynumber from subser
 */
-{commali.i}
-{cparam2.i}       
-{finvbal.i}  
-{fclbal.i}    
+{Syst/commali.i}
+{Func/cparam2.i}       
+{Func/finvbal.i}  
+{Func/fclbal.i}    
 
 DEF TEMP-TABLE TTCallLimit NO-UNDO
    LIKE CallLimit.
@@ -22,7 +22,7 @@ DEF VAR liDefMobCust AS INT  NO-UNDO.
 ASSIGN liDefMobCust = fCParamI("DefCreditLimitMCust")
        liDefCLCust  = fCParamI("DefCreditLimitCust").
 
-{fgettxt.i}
+{Func/fgettxt.i}
 
 /* get alarm message from information texts */
 FUNCTION fAlarmMessage RETURNS LOGICAL

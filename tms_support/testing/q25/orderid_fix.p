@@ -1,4 +1,4 @@
-{date.i}
+{Func/date.i}
 
 DEF VAR lcMSISDN AS CHAR NO-UNDO.
 DEF VAR ldeFF AS DEC NO-UNDO.

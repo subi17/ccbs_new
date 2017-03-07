@@ -7,10 +7,10 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{ftransdir.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/funcrunprocess_update.i}
 
 DEF INPUT  PARAMETER idaInvDate       AS DATE NO-UNDO.
 DEF INPUT  PARAMETER iiFRProcessID    AS INT  NO-UNDO.

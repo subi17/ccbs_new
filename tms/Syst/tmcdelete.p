@@ -7,9 +7,9 @@
   MODIFIED .....: 
 ------------------------------------------------------ */
 
-{commali.i}
-{eventlog.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
 
 DEF INPUT PARAMETER idtBreakDate AS DATE NO-UNDO.
 

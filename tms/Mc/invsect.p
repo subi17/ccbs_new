@@ -16,22 +16,22 @@
 
 &GLOBAL-DEFINE BrTable InvSect
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invsect'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invsect'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvSect AS HANDLE NO-UNDO.
    lhInvSect = BUFFER InvSect:HANDLE.
    RUN StarEventInitialize(lhInvSect).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhInvSect).
+      RUN Mc/eventview2.p(lhInvSect).
    END.
 END.
 
@@ -85,7 +85,7 @@ WITH  OVERLAY ROW 4 centered
     1 columns
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek Invoice Section  BY  InvSect */
     "Brand:" lcBrand skip
@@ -101,7 +101,7 @@ form /* seek Invoice Section  BY ISName */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code of Section,By Name of Section,By 3, By 4".
@@ -135,12 +135,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a InvSect  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis
         ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW:
 
@@ -236,16 +236,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 1760 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvSect.InvSect ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSect.InvSect {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSect.InvSect WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW InvSect.ISName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSect.ISName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSect.ISName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -373,8 +373,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -395,8 +395,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -417,7 +417,7 @@ BROWSE:
      /* translations */
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
         FIND InvSect WHERE RECID(InvSect) = rtab[FRAME-LINE] NO-LOCK.
-        RUN invlang(8,InvSect.InvSect).
+        RUN Mc/invlang.p(8,InvSect.InvSect).
           
         ufkey = TRUE.
         NEXT LOOP.
@@ -496,7 +496,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
         FIND InvSect WHERE recid(InvSect) = rtab[FRAME-line(sel)] NO-LOCK.
-        RUN invotxt("InvSect", InvSect.InvSect).
+        RUN Mc/invotxt.p("InvSect", InvSect.InvSect).
         ASSIGN Memory = recid(InvSect) must-print = TRUE ufkey = TRUE.
 
      END.
@@ -509,8 +509,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhInvSect).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY InvSect.InvSect.
 
        RUN local-UPDATE-record.                                  

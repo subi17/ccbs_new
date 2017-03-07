@@ -56,7 +56,7 @@
  * 
  */
 
-{lib/protop.i}
+{protop/lib/protop.i}
 
 /*** Install self as a session super-procedure
  ***

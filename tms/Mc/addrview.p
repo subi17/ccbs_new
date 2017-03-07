@@ -8,8 +8,8 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 
 FIND FIRST OrderCustomer NO-LOCK where
@@ -75,7 +75,7 @@ REPEAT WITH FRAME fAddr ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufk[6]= 0
       ufk[8]= 8 
       ehto  = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 8 THEN LEAVE.
 

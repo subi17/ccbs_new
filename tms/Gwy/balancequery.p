@@ -1,12 +1,12 @@
-{commali.i}
-{xmlfunction.i}
-{mathfunction.i}
-{timestamp.i}
-{cparam2.i}
-{airnodes.i}
+{Syst/commali.i}
+{Func/xmlfunction.i}
+{Func/mathfunction.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Gwy/airnodes.i}
 
 DEFINE INPUT PARAMETER pcCLI AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "tcpgwy" . 
+DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "Gwy/tcpgwy.p" . 
 
 /* this used in staging to set mock tcp handler */
 FIND FIRST TMSParam where
@@ -160,7 +160,7 @@ PROCEDURE pPrePaidPlatform:
 
    /* wait only 6 seconds for response */
    RUN VALUE(lcTCPModule) (lcHTTPHeader + lcXML,lcURL,3,2,"<").
-   /* RUN tcpgwy(lcHTTPHeader + lcXML,lcURL,3,2,"<"). */
+   /* RUN Gwy/tcpgwy.p(lcHTTPHeader + lcXML,lcURL,3,2,"<"). */
    
    lcReturn = RETURN-VALUE.
 

@@ -14,8 +14,8 @@ DEF VAR bBatch AS LO NO-UNDO.
 /* Check if started using a unix script */
 bBatch = session:batch.
 
-{commpaa.i} 
-{explog.i}
+{Syst/commpaa.i} 
+{Func/explog.i}
 
 DEF VAR ok           AS LO NO-UNDO FORMAT "Yes/No".
 DEF VAR okt          AS LO NO-UNDO FORMAT "Yes/No".
@@ -27,9 +27,9 @@ DEF VAR TransLimit   AS I  NO-UNDO FORMAT "99999".
 DEF VAR PreOutFile   AS C  NO-UNDO FORMAT "X(30)".
 DEF VAR Telia-OpCode AS C  NO-UNDO.
 
-{cparam.i TransLimit  RETURN}. TransLimit   = TMSParam.IntVal.
-{cparam.i PreOutFile  RETURN}. PreOutFile   = TMSParam.CharVal.
-{cparam.i TeliaOpCode RETURN}. Telia-OpCode = TMSParam.CharVal.
+{Func/cparam.i TransLimit  RETURN}. TransLimit   = TMSParam.IntVal.
+{Func/cparam.i PreOutFile  RETURN}. PreOutFile   = TMSParam.CharVal.
+{Func/cparam.i TeliaOpCode RETURN}. Telia-OpCode = TMSParam.CharVal.
 
 IF NOT bBatch THEN DO:
 
@@ -101,7 +101,7 @@ IF NOT bBatch THEN DO:
    MAIN:
    REPEAT WITH FRAME main:
 
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.p.
 
       pause 0.
          DISPLAY
@@ -119,7 +119,7 @@ IF NOT bBatch THEN DO:
          ufk[1] = 0 
          ufk[5] = 795
          ufk[8] = 8.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
          IF toimi = 1 THEN NEXT  main.
          IF toimi = 8 THEN LEAVE main.

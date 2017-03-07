@@ -8,8 +8,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}  
-{eventval.i} 
+{Syst/commali.i}  
+{Syst/eventval.i} 
 
 def /* new */ shared var siirto AS char.
 
@@ -39,7 +39,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPreselErr AS HANDLE NO-UNDO.
    lhPreselErr = BUFFER PreselErr:HANDLE.
@@ -47,7 +47,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhPreselErr).
+      RUN Mc/eventview2.p(lhPreselErr).
    END.
 END.
 
@@ -87,7 +87,7 @@ form /* seek PreselErr  by PSEName */
 
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By BankOffice,By 3, By 4".
@@ -115,12 +115,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a PreselErr  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR PreselErr.PSError
@@ -205,25 +205,25 @@ BROWSE:
         ufk[1]= 35 ufk[2]= 30 ufk[3]= 0 ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-        {uright1.i '"4,5,6"'}
-        RUN ufkey.p.
+        {Syst/uright1.i '"4,5,6"'}
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row PreselErr.PSError ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PreselErr.PSError {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PreselErr.PSError WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row PreselErr.PSEName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PreselErr.PSEName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PreselErr.PSEName WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        choose row PreselErr.?? ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PreselErr.?? {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PreselErr.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        choose row PreselErr.??  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PreselErr.??  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PreselErr.? WITH FRAME sel.
       END.
 */
@@ -352,8 +352,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET ReturnCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -375,8 +375,8 @@ BROWSE:
      /* Search by col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        SET PSEName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -397,13 +397,13 @@ BROWSE:
 
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = true.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSAction:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 
@@ -453,11 +453,11 @@ BROWSE:
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PreselErr.PSError.
        new_preselerr = FALSE.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPreselErr).

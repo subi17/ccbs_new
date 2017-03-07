@@ -9,24 +9,24 @@
                   30.12.04/aam Secret, RepCode, SaldoLimit from services
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{fcustbal.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{fsubser.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/fcustbal.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/fsubser.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobsub AS HANDLE NO-UNDO.
    lhMobsub = BUFFER mobsub:HANDLE.
    RUN StarEventInitialize(lhMobsub).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMobsub).
+      RUN Mc/eventview2.p(lhMobsub).
    END.
 
 END.
@@ -58,12 +58,12 @@ DEF VAR lcMNP         AS CHARACTER NO-UNDO.
 
 
 
-{mobsub1.i}
+{Mm/mobsub1.i}
 
 DEF BUFFER AgrCustomer FOR Customer.
 DEF BUFFER InvCustomer FOR Customer.
 DEF BUFFER UserCustomer FOR Customer.
-{mobsub.frm}
+{Mm/mobsub.frm}
 
 form 
 SKIP(3)
@@ -79,7 +79,7 @@ loop:
 repeat:
 
    assign ufkey = true ehto = 9.
-   run ufkey.
+   RUN Syst/ufkey.p.
 
    update cli with frame askcli.
 
@@ -97,7 +97,7 @@ repeat:
       ASSIGN ufkey = TRUE ufk = 0 ehto = 1
       ufk[1] = 7
       ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       if toimi = 8 then do:
          next loop.
@@ -105,7 +105,7 @@ repeat:
 
       if toimi = 1 then do:
          assign ufkey = true ehto = 9.
-         run ufkey.
+         RUN Syst/ufkey.p.
 
          if llDoEvent THEN RUN StarEventSetOldBuffer(lhMobSub).
          update mobsub.msstat with frame lis.

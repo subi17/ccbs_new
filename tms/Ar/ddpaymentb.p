@@ -9,14 +9,14 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "ddpaym".
        
-{cparam2.i}
-{eventlog.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
 
 DEF VAR liCount    AS INT  NO-UNDO.
 DEF VAR lcError    AS CHAR NO-UNDO.
@@ -26,7 +26,7 @@ DEF STREAM sRead.
 
 fELog("DDPAYM","Started").
 
-RUN ddpaymentco ("",                   /* InvGroup  */
+RUN Ar/ddpaymentco.p ("",                   /* InvGroup  */
                  0,                    /* customers from */
                  99999999,             /* customers to   */
                  "",                   /* invoices from  */

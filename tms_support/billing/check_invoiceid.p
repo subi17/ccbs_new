@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "snet".
 
 def var ldtInvDate as date no-undo.
@@ -35,7 +35,7 @@ if liaction = 1 then do:
 end.
 
    
-RUN invoice_extinvid.p(ldtInvDate,
+RUN Inv/invoice_extinvid.p(ldtInvDate,
                        liInvType,
                        liaction,
                        0,

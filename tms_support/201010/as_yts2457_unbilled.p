@@ -1,6 +1,6 @@
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE ldeStamp AS DECIMAL NO-UNDO. 
-{date.i}
+{Func/date.i}
 
 def stream slog.
 output stream slog to as_yts2457_unbilled_october.txt.

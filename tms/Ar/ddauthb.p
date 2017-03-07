@@ -9,15 +9,15 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "ddauth".
 
-{utumaa.i "new"}
-{cparam2.i}
-{ddtrans.i}
-{eventlog.i}
+{Syst/utumaa.i "new"}
+{Func/cparam2.i}
+{Ar/ddtrans.i}
+{Syst/eventlog.i}
 
 ASSIGN tuni1 = "nnsvlu"
        tuni2 = "".
@@ -107,7 +107,7 @@ FOR EACH ttFiles:
    ASSIGN spit1  = 80
           skayt1 = 80.
 
-   RUN ddauthin (ttFiles.AuthFile, 
+   RUN Ar/ddauthin.p (ttFiles.AuthFile, 
                  FALSE,      /* show messages */
                  TRUE,       /* send mail     */
                  OUTPUT liCount).

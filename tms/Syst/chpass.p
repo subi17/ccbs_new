@@ -9,12 +9,12 @@
   Version ......: Yoigo
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEFINE VARIABLE olPasswordChanged AS LOGICAL NO-UNDO.
 
 
-RUN chpasswd(OUTPUT olPasswordChanged).
+RUN Syst/chpasswd.p(OUTPUT olPasswordChanged).
 
 IF NOT olPasswordChanged THEN 
    MESSAGE " Password not changed!" VIEW-AS ALERT-BOX INFO.

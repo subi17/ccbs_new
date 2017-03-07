@@ -14,25 +14,25 @@
                                use GroupType
   VERSION ......: M15
   ------------------------------------------------------ */
-{commali.i}
-{func.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/func.p}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPNPGroup AS HANDLE NO-UNDO.
    lhPNPGroup = BUFFER PNPGroup:HANDLE.
    RUN StarEventInitialize(lhPNPGroup).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhPNPGroup).
+      RUN Mc/eventview2.p(lhPNPGroup).
    END.
 END.
 
-{remfees.i}
+{Func/remfees.i}
 
 DEF  INPUT PARAMETER   icCLI AS CHAR NO-UNDO.
 
@@ -92,7 +92,7 @@ form /*  search WITH FIELD PNPGroup */
     with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -120,13 +120,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* PNPGroup -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
 
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         
         DO TRANSACTION:
            FIND FIRST mobsub where 
@@ -178,7 +178,7 @@ repeat WITH FRAME sel:
               IF DAY(ldtDate) NE 1 
               THEN ldtDate = DATE(MONTH(ldtDate),1,YEAR(ldtDate)).
               
-              RUN creasfee (MobSub.CustNum,
+              RUN Mc/creasfee.p (MobSub.CustNum,
                             MobSub.MsSeq,
                             ldtDate,
                             "PNP",
@@ -261,12 +261,12 @@ BROWSE:
         ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 1764
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW PNPGroup.PNPGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPGroup.PNPGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPGroup.PNPGroup WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -455,11 +455,11 @@ BROWSE:
        NO-LOCK NO-ERROR.
                         
        IF PNPGroup.GroupType = 0 THEN
-          RUN pnplist(PNPGroup.pnpSeq).
-        ELSE  run matepnplist.p(PNPGroup.pnpseq,PNPGroup.PNPGroup).
+          RUN Mc/pnplist.p(PNPGroup.pnpSeq).
+        ELSE  RUN Mc/matepnplist.p(PNPGroup.pnpseq,PNPGroup.PNPGroup).
 
        ufkey = true.
-       run ufkey.
+       RUN Syst/ufkey.p.
        PAUSE 0.
      END.
 
@@ -472,9 +472,9 @@ BROWSE:
             recid(PNPGroup) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPNPGroup).
 

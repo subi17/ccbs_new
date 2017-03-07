@@ -9,7 +9,7 @@
 
 &GLOBAL-DEFINE FSUBSER_I YES
 
-{commali.i}
+{Syst/commali.i}
 
 DEF BUFFER bSubCur     FOR SubSer.
 DEF BUFFER bSubParaCur FOR SubSerPara.

@@ -7,9 +7,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER idaInvDate AS DATE NO-UNDO.
 DEF INPUT PARAMETER iiInvType  AS INT  NO-UNDO.

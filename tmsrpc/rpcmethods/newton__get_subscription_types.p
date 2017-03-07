@@ -20,9 +20,9 @@ DEF VAR lcInputFields AS CHAR NO-UNDO.
 ASSIGN katun = "Newton"
        gcBrand = "1".
 
-{tmsconst.i}
-{cparam2.i}
-{fixedlinefunc.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/fixedlinefunc.i}
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcInputStruct = get_struct(param_toplevel_id,"0").

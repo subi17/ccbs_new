@@ -5,11 +5,11 @@
   CREATED ......: 10.03.11
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{msreqfunc.i}
-{tmsconst.i}
-{fdss.i}
-{direct_dbconnect.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Syst/tmsconst.i}
+{Func/fdss.i}
+{Func/direct_dbconnect.i}
 
 DEF INPUT  PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -99,10 +99,10 @@ ELSE DO:
    THEN RETURN "ERROR:Invalid parameters".
 END.
 
-RUN cli_ratep.p PERSISTENT SET lhSubsRerate.
+RUN Rate/cli_ratep.p PERSISTENT SET lhSubsRerate.
 RUN pInitializeRerate IN lhSubsRerate.
 
-RUN cust_ratep.p PERSISTENT SET lhCustRerate.
+RUN Rate/cust_ratep.p PERSISTENT SET lhCustRerate.
 RUN pInitializeRerate IN lhCustRerate.
 
 llReportStarted = FALSE.
@@ -277,7 +277,7 @@ PROCEDURE pRerate:
 
       /* double check first */
       IF MsRequest.ReqIParam2 = 1 THEN 
-         RUN mobcdr_double_check.p ("",
+         RUN Mm/mobcdr_double_check.p ("",
                                     MsRequest.ReqDtParam1,
                                     MsRequest.ReqDtParam2,
                                     MsRequest.CLI,

@@ -28,20 +28,20 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{tmsconst.i}
-{eventval.i}
-{timestamp.i}
-{dpmember.i}
-{coinv.i}
-{msreqfunc.i}
-{fcreditreq.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Mc/dpmember.i}
+{Func/coinv.i}
+{Func/msreqfunc.i}
+{Func/fcreditreq.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEFINE VARIABLE lhTermReturn AS HANDLE NO-UNDO.
    lhTermReturn = BUFFER TermReturn:HANDLE.
    RUN StarEventInitialize(lhTermReturn).
