@@ -4,15 +4,15 @@
   APPLICATION ..: TMS
   AUTHOR .......: JP
   --------------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "Cron".
    
-{timestamp.i}
-{cparam2.i}
-{heartbeat.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/heartbeat.i}
+{Syst/tmsconst.i}
 
 DEF VAR lhField       AS HANDLE NO-UNDO.
 DEF VAR liField       AS INT    NO-UNDO. 
@@ -144,7 +144,7 @@ FUNCTION fGenerateTriggerItem RETURN LOG
         ldeLastSecond = YEAR(ldaDate) * 10000 + MONTH(ldaDate) * 100 + 1.
 
      FOR EACH ServiceLimit NO-LOCK WHERE
-              {dss_search.i ServiceLimit.GroupCode},
+              {Func/dss_search.i ServiceLimit.GroupCode},
          FIRST MServiceLimit NO-LOCK WHERE
                MServiceLimit.CustNum = iiInvCust AND
                MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -1040,7 +1040,7 @@ PROCEDURE pLaunchHandlers:
       FuncRunQSchedule.RunMode       = "Production"
       FuncRunQSchedule.StartTS       = fSecOffSet(fMakeTS(),liDelay + 300).
       
-   RUN funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
+   RUN Syst/funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
    
    RELEASE FuncRunQSchedule.
 

@@ -8,10 +8,10 @@
   VERSION ......: TeleF
   ------------------------------------------------------------------ */
 
-{testpaa.i}
-{excel.i}
-{email.i}
-{timestamp.i}
+{Syst/testpaa.i}
+{Func/excel.i}
+{Func/email.i}
+{Func/timestamp.i}
 
 DEF VAR Reseller  LIKE Reseller.Reseller NO-UNDO.
 DEF VAR dFrom     AS DATE FORMAT "99-99-99" NO-UNDO.
@@ -46,7 +46,7 @@ ASSIGN
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       Reseller
       Salesman1
@@ -127,7 +127,7 @@ repeat with frame rajat:
       ufk[8] = 8
       ehto = 0.
 
-   run ufkey.
+   RUN Syst/ufkey.p.
    case toimi:
       when 8 then return.
       when 1 then next loop.

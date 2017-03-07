@@ -13,15 +13,15 @@
 
 &GLOBAL-DEFINE BrTable DPConf
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'dpconf'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'dpconf'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhDpConf AS HANDLE NO-UNDO.
    lhDPConf = BUFFER DPConf:HANDLE.
@@ -32,7 +32,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDPBasis).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhDPConf).
+      RUN Mc/eventview2.p(lhDPConf).
    END.
 
 END.
@@ -86,7 +86,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
     " Discounts of Discount Plan " + DiscPlan + " " 
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     "Valid from .:" DPConf.ValidFrom SKIP
@@ -163,7 +163,7 @@ FORM /* seek DPConf  by DPCName */
 
 FIND DiscPlan WHERE DiscPlan.DiscPlan = DiscPlan NO-LOCK no-error.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Eff. Date  ,By Description,By 3, By 4".
@@ -196,13 +196,13 @@ REPEAT WITH FRAME sel:
       ufkey = true 
       ac-hdr = " ADD " 
       must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         ehto = 9. 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -337,12 +337,12 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DPConf.ValidFrom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DPConf.ValidFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DPConf.ValidFrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
@@ -479,8 +479,8 @@ ASK-F1:
        REPEAT WITH FRAME f1 
        ON ENDKEY UNDO ASK-F1, LEAVE ASK-F1.
 
-         cfc = "puyr". RUN ufcolor.
-         ehto = 9. RUN ufkey. ufkey = true.
+         cfc = "puyr". RUN Syst/ufcolor.p.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = true.
          CLEAR FRAME f1.
          SET ValidFrom WITH FRAME f1.
          LEAVE.
@@ -512,8 +512,8 @@ ASK-F2:
         REPEAT WITH FRAME f2 
         ON ENDKEY UNDO ASK-F2, LEAVE ASK-F2.
 
-          cfc = "puyr". RUN ufcolor.
-          ehto = 9. RUN ufkey. ufkey = true.
+          cfc = "puyr". RUN Syst/ufcolor.p.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           CLEAR FRAME f2.
           SET DPCName WITH FRAME f2.
           LEAVE.
@@ -602,7 +602,7 @@ ASK-F2:
         /* read this DPConf record into record buffer, NO-LOCK */
         RUN local-find-this(false).
 
-        RUN dpbasis(DPConf.DPConfNum).  
+        RUN Mc/dpbasis.p(DPConf.DPConfNum).  
 
         ufkey = TRUE.
         NEXT loop.
@@ -614,10 +614,10 @@ ASK-F2:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DPConf.ValidFrom DPConf.ValidTo.
        DISPLAY DPConf.DPCName.
 

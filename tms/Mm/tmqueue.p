@@ -8,9 +8,9 @@
   Version ......: SCRUNKO4 (10.06.99)
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
-{func.i}
+{Syst/commali.i}
+{Func/msisdn.i}
+{Func/func.p}
    
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -53,8 +53,8 @@ DEF VAR Billed       AS LO                     NO-UNDO.
 DEF VAR SL_prefix    AS C                      NO-UNDO.
 DEF VAR lii          AS INT                    NO-UNDO.
 
-{tmsparam.i SL_prefix      return}.  SL_prefix = TMSParam.CharVal.
-{tmsparam.i DefCCode       return}.  def-ccode = TMSParam.CharVal.
+{Func/tmsparam.i SL_prefix      return}.  SL_prefix = TMSParam.CharVal.
+{Func/tmsparam.i DefCCode       return}.  def-ccode = TMSParam.CharVal.
 
 
 DEFINE TEMP-TABLE ttCall LIKE Mobcdr.
@@ -131,7 +131,7 @@ form /* seek Mobile Call  BY A-sub. */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND B-NUMBER "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = 
@@ -166,12 +166,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a TMQueue  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR TMQueue.DateSt
@@ -256,24 +256,24 @@ BROWSE:
         ufk[1]= 0 ufk[2]= 0 ufk[3]= 2630 ufk[4]= 265
         ufk[5]= 2421 ufk[6]= 0   ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TMQueue.DateSt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMQueue.DateSt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMQueue.DateSt WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TMQueue.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMQueue.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMQueue.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW TMQueue.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMQueue.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMQueue.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW TMQueue.MSSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMQueue.MSSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMQueue.MSSeq WITH FRAME sel.
       END.
 
@@ -402,8 +402,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET CustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -478,7 +478,7 @@ BROWSE:
            CREATE ttCall.
            BUFFER-COPY mobcdr TO ttCall.
            
-           RUN viewmbd(INPUT TABLE ttCall,
+           RUN Mm/viewmbd.p(INPUT TABLE ttCall,
                        ttCall.datest,
                        ttCall.Timest,
                        ttCall.cli,
@@ -496,8 +496,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY TMQueue.DateSt.
 
        RUN local-UPDATE-record.                                  

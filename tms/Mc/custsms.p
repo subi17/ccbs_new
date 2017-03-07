@@ -7,8 +7,8 @@
  Version .......: M15
  ============================================================================*/
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
 
@@ -63,7 +63,7 @@ lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
                
 UPDATE
@@ -78,7 +78,7 @@ WITH FRAME main EDITING:
 
                IF FRAME-FIELD = "lckeyvalue" AND  
                   LOOKUP(KEYLABEL(LASTKEY),"F9") > 0 THEN DO:
-                  run h-invotxt(INPUT "SMS","", 0).
+                  RUN Help/h-invotxt.p(INPUT "SMS","", 0).
                   If siirto ne ? THEN ASSIGN
                      
                      lcUpdText[1] = substring(siirto,  1,40)
@@ -124,7 +124,7 @@ ACTION:
       ufk[1] = 7 
       ufk[5] = 2355
       ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

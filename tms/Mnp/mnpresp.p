@@ -8,29 +8,29 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "MNP".
 
-{timestamp.i}
-{heartbeat.i}
-{mnp.i}
-{cparam2.i}
-{xmlrpc_client.i}
-{tmsconst.i}
-{msreqfunc.i}
-{fsubstermreq.i}
-{log.i}
+{Func/timestamp.i}
+{Func/heartbeat.i}
+{Mnp/mnp.i}
+{Func/cparam2.i}
+{xmlrpc/xmlrpc_client.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Func/fsubstermreq.i}
+{Func/log.i}
 /* {mnptms_common.i}*/
-{tmsconst.i}
-{orderfunc.i}
-{msisdn.i}
-{ordercancel.i}
-{msisdn_prefix.i}
-{orderchk.i}
-{main_add_lines.i}
-{fgettxt.i}
-{fixedlinefunc.i}
+{Syst/tmsconst.i}
+{Func/orderfunc.i}
+{Func/msisdn.i}
+{Func/ordercancel.i}
+{Func/msisdn_prefix.i}
+{Func/orderchk.i}
+{Func/main_add_lines.i}
+{Func/fgettxt.i}
+{Func/fixedlinefunc.i}
 
 DEFINE VARIABLE liLoop       AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTime       AS CHARACTER NO-UNDO.
@@ -920,7 +920,7 @@ PROCEDURE pHandleQueue:
 
          FIND CURRENT Order NO-LOCK.
 
-         run cancelorder.p(Order.OrderID,TRUE).
+         RUN Mc/cancelorder.p(Order.OrderID,TRUE).
 
          /* YDR-70 */
          IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN DO:

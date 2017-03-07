@@ -7,23 +7,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DCServiceAttribute'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DCServiceAttribute'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhDCServiceAttribute AS HANDLE NO-UNDO.
    lhDCServiceAttribute = BUFFER DCServiceAttribute:HANDLE.
    RUN StarEventInitialize(lhDCServiceAttribute).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhDCServiceAttribute).
+      RUN Mc/eventview2.p(lhDCServiceAttribute).
    END.
 
 END.
@@ -112,7 +112,7 @@ IF NOT AVAILABLE DCServicePackage THEN DO:
    RETURN.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN pInitTempTable.
@@ -144,7 +144,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DCServiceAttribute  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -152,7 +152,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -164,12 +164,12 @@ REPEAT WITH FRAME sel:
               IF KEYLABEL(LASTKEY) = "F9" THEN DO:
 
                  gcHelpParam = DCServiceComponent.ServCom.
-                 RUN h-service_attribute.p.
+                 RUN Help/h-service_attribute.p.
                  IF siirto > "" THEN 
                     DISPLAY siirto @ DCServiceAttribute.ServAttr 
                     WITH FRAME lis.
                  ehto = 9.
-                 RUN ufkey.
+                 RUN Syst/ufkey.p.
                  NEXT. 
               END.
                  
@@ -298,12 +298,12 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DCServiceAttribute.ServAttr ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW DCServiceAttribute.ServAttr {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DCServiceAttribute.ServAttr WITH FRAME sel.
       END.
@@ -526,8 +526,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDCServiceAttribute).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -565,7 +565,7 @@ FINALLY:
    si-recid = xrecid.
 
    ehto = 4.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    fCleanEventObjects().
 END.
@@ -712,7 +712,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
          IF toimi = 1 THEN LEAVE.
          

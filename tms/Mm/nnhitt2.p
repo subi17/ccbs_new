@@ -15,10 +15,10 @@
 */
 
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'tariff'}
-{fcustpl.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'tariff'}
+{Func/fcustpl.i}
 
 DEF INPUT PARAM iiTariffNum  AS INT NO-UNDO.
 

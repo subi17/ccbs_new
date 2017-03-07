@@ -6,9 +6,9 @@
   CREATED ......: 05.11.10
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'InvRowCounter'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'InvRowCounter'}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 
@@ -67,7 +67,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN 
       toimi = 1
@@ -76,7 +76,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -127,7 +127,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT.
       END.
       
-      RUN recalculate_invrowcounter.p(liCustNum,
+      RUN Inv/recalculate_invrowcounter.p(liCustNum,
                                       0,
                                       0,
                                       ldaFromDate,

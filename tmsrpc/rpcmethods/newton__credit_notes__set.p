@@ -13,9 +13,9 @@
 */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{fcreditreq.i}
+{Func/fcreditreq.i}
 
 DEF VAR pcStruct          AS CHAR NO-UNDO.
 DEF VAR lcStruct          AS CHAR NO-UNDO.

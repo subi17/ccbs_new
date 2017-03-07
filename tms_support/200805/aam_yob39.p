@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
-{timestamp.i}
+{Func/timestamp.i}
 
 def buffer breq    for msrequest.
 def buffer bupdreq for msrequest.
@@ -65,7 +65,7 @@ for each msrequest no-lock where
             ldCoefficient = 1 - ((liDaysPassed + 1) / 547).
             IF ldCoefficient < 0 THEN ldCoefficient = 0.
 
-            RUN creasfee (MsRequest.CustNum,
+            RUN Mc/creasfee.p (MsRequest.CustNum,
                           MsRequest.MsSeq,
                           ldtActDate,
                           "MobSub",

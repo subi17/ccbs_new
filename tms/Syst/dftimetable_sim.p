@@ -7,8 +7,8 @@
   CHANGED ......: 
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
-{dftimetable.i}
+{Syst/commali.i}
+{Syst/dftimetable.i}
 
 DEF INPUT PARAMETER irTimeTable AS RECID NO-UNDO.
 
@@ -75,7 +75,7 @@ FOR EACH ttDays,
    ttEvent.EventTime = ttTimes.DumpTime.
 END.    
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 lcDays = "Sun,Mon,Tues,Wednes,Thurs,Fri,Satur".
@@ -150,13 +150,13 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttEvent.EventDay ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttEvent.EventDay {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttEvent.EventDay WITH FRAME sel.
       END.
 

@@ -6,24 +6,24 @@
   CREATED ......: 11.11.09
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Counter'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Counter'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCounter AS HANDLE NO-UNDO.
    lhCounter = BUFFER Counter:HANDLE.
    RUN StarEventInitialize(lhCounter).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCounter).
+      RUN Mc/eventview2.p(lhCounter).
    END.
 
 END.
@@ -99,7 +99,7 @@ FUNCTION fCTName RETURNS LOGIC
 
 END FUNCTION.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -174,13 +174,13 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Counter.CounterType ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW Counter.CounterType {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Counter.CounterType WITH FRAME sel.
       END.
@@ -312,8 +312,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liCType WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -343,14 +343,14 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0  
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
      
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -412,7 +412,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCounter).
 
        ASSIGN ac-hdr = " COUNTER " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -537,7 +537,7 @@ PROCEDURE local-UPDATE-record.
    REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
       ehto = 9.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    
       DISP Counter.CounterAmt .
 

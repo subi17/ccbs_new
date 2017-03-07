@@ -8,8 +8,8 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
 
 ASSIGN tuni1 = "pbankrel"
        tuni2 = "".
@@ -87,7 +87,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
    END.
 
    IF nap NE "first" THEN DO:
@@ -99,7 +99,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    IF LOOKUP(nap,"1,f1") > 0 THEN DO:
 
-      ehto = 9. RUN ufkey.p.
+      ehto = 9. RUN Syst/ufkey.p.
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
          UPDATE InvGroup
                 ldtPaid1
@@ -157,16 +157,16 @@ END. /* toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 MESSAGE "Printing in process".            
 
-run pbankrep (InvGroup,
+RUN Ar/pbankrep.p (InvGroup,
               ldtPaid1, 
               ldtPaid2).
 
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 MESSAGE "Payments' bank account report is finished."
 VIEW-AS ALERT-BOX

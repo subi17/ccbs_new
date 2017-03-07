@@ -10,8 +10,8 @@
   Version ......: MTV3
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 def var dfrom as da no-undo.
 def var dto   as da no-undo.
@@ -76,7 +76,7 @@ dfrom = today - 30.
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
    dfrom 
    dto.
@@ -89,7 +89,7 @@ repeat with frame rajat:
       ehto = 0
       ufkey = true.
 
-   run ufkey.
+   RUN Syst/ufkey.p.
    case toimi:
       when 8 then return.
       when 1 then next loop.
@@ -147,7 +147,7 @@ for each statuscodes no-lock.
    down with frame result.
 end.
 
-ASSIGN ufk = 0 ehto = 3. RUN ufkey.
+ASSIGN ufk = 0 ehto = 3. RUN Syst/ufkey.p.
 
 message "Press ENTER to continue !".
 pause no-message.

@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
 input from /apps/snet/200905/as_yts1489.log.
 output to /apps/snet/200905/as_yts1489_2.log append.

@@ -51,24 +51,24 @@
   shared .......: InvNum (INPUT PARAMETER)
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i}
+{Syst/commali.i}
+{Syst/eventval.i}
 
-{faccper.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invrow'}
+{Func/faccper.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invrow'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvRow AS HANDLE NO-UNDO.
    lhInvRow = BUFFER InvRow:HANDLE.
    RUN StarEventInitialize(lhInvRow).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhInvRow). 
+      RUN Mc/eventview2.p(lhInvRow). 
    END.
 
 END.
@@ -168,7 +168,7 @@ BY InvRow.FromDate:
            ttRow.Order  = i.
 END.           
            
-cfc = "kory". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "kory". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST ttRow no-error.
@@ -245,11 +245,11 @@ BROWSE:
 
          IF NOT may_update THEN ASSIGN ufk[5] = 0.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
-      CHOOSE ROW InvRow.BillCode ;(uchoose.i;) no-error WITH FRAME sel.
+      CHOOSE ROW InvRow.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc) InvRow.BillCode WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
@@ -394,7 +394,7 @@ BROWSE:
         ASSIGN 
            ehto = 5
            ufkey = TRUE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
         
         PAUSE MESSAGE "Press ENTER to continue".
         HIDE FRAME fmore NO-PAUSE.      
@@ -406,7 +406,7 @@ BROWSE:
         THEN DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
 
         ASSIGN ehto = 9 ufkey = TRUE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         FIND ttRow WHERE RECID(ttRow) = rtab[FRAME-LINE(sel)].
         FIND InvRow WHERE RECID(InvRow) = ttRow.InvRow EXCLUSIVE-LOCK.
 
@@ -442,7 +442,7 @@ BROWSE:
            when 2 OR WHEN 6 THEN DO:
               ASSIGN ufkey = TRUE.
 
-           RUN  mobguard2(INPUT  FALSE,
+           RUN Mm/mobguard2.p(INPUT  FALSE,
                             OUTPUT ocReasonCode,
                             OUTPUT odtDate1,
                             OUTPUT odtDate2,
@@ -453,7 +453,7 @@ BROWSE:
             FIND FIRST SubInvoice OF Invoice WHERE 
                SubInvoice.SubInvNum = InvRow.SubInvNum NO-LOCK NO-ERROR.
             IF AVAILABLE SubInvoice THEN    
-              RUN mobcallbr(INPUT  "post",
+              RUN Mm/mobcallbr.p(INPUT  "post",
                             INPUT  InvRow.FromDate,
                             INPUT  InvRow.ToDate,
                             INPUT  Invoice.CustNum,                        
@@ -471,14 +471,14 @@ BROWSE:
 
            when 3  THEN DO:
               ASSIGN ufkey = TRUE.
-              RUN irowffee(Invoice.InvNum,
+              RUN Ar/irowffee.p(Invoice.InvNum,
                            InvRow.BillCode,
                            InvRow.CLI).
            END.
 
            when 4  THEN DO:
               ASSIGN ufkey = TRUE.
-              RUN irowsfee(Invoice.InvNum,
+              RUN Ar/irowsfee.p(Invoice.InvNum,
                            InvRow.BillCode,
                            InvRow.CLI).
 
@@ -500,7 +500,7 @@ BROWSE:
                    SubInvoice.SubInvNum = InvRow.SubInvNum NO-LOCK NO-ERROR.
         ufkey = TRUE.
         IF AVAILABLE SubInvoice AND SubInvoice.MsSeq > 0 THEN 
-           RUN invrowcounter.p(0,
+           RUN Inv/invrowcounter.p(0,
                                SubInvoice.MsSeq,
                                InvRow.InvNum,
                                InvRow.BillCode).

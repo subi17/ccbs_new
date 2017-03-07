@@ -8,8 +8,8 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
 
@@ -28,7 +28,7 @@ END.
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
 
       DISPLAY
 
@@ -45,11 +45,11 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    ELSE IF FRAME-INDEX EQ 1 THEN DO:
-      RUN custpcpin(iiCustNum).
+      RUN Mc/custpcpin.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 2 THEN DO:
-      RUN custpinlet(iiCustNum).
+      RUN Mc/custpinlet.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX = 3 OR FRAME-INDEX = 0 THEN LEAVE.

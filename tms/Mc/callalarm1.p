@@ -1,3 +1,3 @@
-{commali.i}
+{Syst/commali.i}
 
-run callalarm(input 0, "").
+RUN Mm/callalarm.p(input 0, "").

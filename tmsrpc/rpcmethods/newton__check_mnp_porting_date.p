@@ -9,10 +9,10 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{mnp.i}
+{Mnp/mnp.i}
 
 /* Input parameters */
 DEF VAR pdMNPPortingDate AS DATE NO-UNDO.

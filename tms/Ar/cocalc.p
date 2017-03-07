@@ -21,9 +21,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{fprevoper.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/fprevoper.i}
 
 DEF INPUT  PARAMETER icInvGroup   AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER iiRuleCust1  AS INT  NO-UNDO. 

@@ -4,12 +4,12 @@
   CREATED ......: 08.11.12/aam
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{funcrunprocess_update.i}
-{date.i}
-{funcrun_replica.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/funcrunprocess_update.i}
+{Func/date.i}
+{Syst/funcrun_replica.i}
 
 DEF INPUT  PARAMETER iiBatchQty      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiFRProcessID   AS INT  NO-UNDO.

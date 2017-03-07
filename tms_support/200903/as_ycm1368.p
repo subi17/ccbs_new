@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{fmakemsreq.i}
+{Func/fmakemsreq.i}
 
 DEFINE VARIABLE liRequest AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcResult AS CHARACTER NO-UNDO. 

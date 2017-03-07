@@ -8,9 +8,9 @@
  VERSION .......: 
  ============================================================================*/
          
-{commali.i} 
-{timestamp.i}
-{error_codes.i}
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Rate/error_codes.i}
 
 DEF STREAM msg.
          
@@ -59,7 +59,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
     
  DISPLAY
  cdate1 cdate2 with frame main.
@@ -87,7 +87,7 @@ WITH FRAME main  EDITING:
       ufk[1] = 7 
       ufk[5] = 795
       ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

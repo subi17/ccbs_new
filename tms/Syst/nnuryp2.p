@@ -8,8 +8,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -42,7 +42,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhUserRight AS HANDLE NO-UNDO.
    lhUserRight = BUFFER UserRight:HANDLE.
@@ -50,7 +50,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhUserRight).
+      RUN Mc/eventview2.p(lhUserRight).
    END.
 END.
 
@@ -88,7 +88,7 @@ form /* seek User Right  BY MenuClass */
     with row 4 col 2 title color value(ctc) " FIND CLASS NO. "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST UserRight
@@ -111,12 +111,12 @@ repeat WITH FRAME sel:
 
    IF lisattava THEN DO:  /* usrightn lisäys  */
       assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 ADD-ROW:
       repeat WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR
               UserRight.MenuClass
@@ -240,16 +240,16 @@ BROWSE:
         ufk[1]= 133  ufk[2]= 0   ufk[3]= 0 ufk[4]= 0
         ufk[5]= 13   ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-        CHOOSE ROW UserRight.MenuClass ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW UserRight.MenuClass {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) UserRight.MenuClass WITH FRAME sel.
       END.
       ELSE IF jarj = 1 THEN DO:
-        CHOOSE ROW UserRight.MenuClass ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW UserRight.MenuClass {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) UserRight.MenuClass WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -407,9 +407,9 @@ BROWSE:
      /* Haku sarakk. 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        MenuClass = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE MenuClass WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        IF MenuClass <> 0 THEN DO:

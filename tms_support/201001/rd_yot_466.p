@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand  = "1".
-{timestamp.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE plSimulated AS LOGICAL NO-UNDO. 

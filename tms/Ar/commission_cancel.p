@@ -7,9 +7,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{barrfunc.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/barrfunc.i}
 
 DEF OUTPUT PARAMETER oiChecked   AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiCancelled AS INT  NO-UNDO.
@@ -101,7 +101,7 @@ PROCEDURE pCancelCommission:
 
       /*check all barrings, that are they in list*/
       IF fIsInList(lcDebtBarring, lcBarring) EQ TRUE THEN DO:
-         RUN commission_term(MobSub.MsSeq,
+         RUN Ar/commission_term.p(MobSub.MsSeq,
                              "Debt",
                              OUTPUT liDone).
 

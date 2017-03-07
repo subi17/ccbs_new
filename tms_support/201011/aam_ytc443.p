@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
 DEF VAR i         AS I  NO-UNDO.
@@ -145,7 +145,7 @@ for each ttcli:
     pause 0.
     put screen row 18 "Rerate " + ttcli.cli + " qty: " + string(i).
 
-    run cli_rate.p (ttcli.cli,
+    RUN Rate/cli_rate.p (ttcli.cli,
                     11/1/10,
                     11/30/10,
                     true).

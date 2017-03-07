@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun  = "anttis".
 gcBrand = "1".
-{date.i}
+{Func/date.i}
 
 
 DEFINE VARIABLE lcBarrStatus AS CHARACTER NO-UNDO. 

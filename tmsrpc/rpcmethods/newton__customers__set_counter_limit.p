@@ -101,10 +101,10 @@ DO ic = 1 TO 2:
                        " minValue " + STRING(ldMinValue[ic]) ).
 END.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = pcUserName.
 gcBrand = lcBrand.
-{flimitreq.i}
+{Func/flimitreq.i}
 
 /* ready to create the request */
 liMsReq = fLimitRequest(

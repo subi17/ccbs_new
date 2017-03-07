@@ -8,19 +8,19 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
+{Syst/commali.i} 
 
-{eventval.i}
+{Syst/eventval.i}
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
 
     DEF VAR lhMobError AS HANDLE NO-UNDO.
     lhMobError = BUFFER MobError:HANDLE.
     RUN StarEventInitialize(lhMobError).
 
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhMobError).
+        RUN Mc/eventview2.p(lhMobError).
     END.
 END.
 
@@ -102,7 +102,7 @@ form
     frame f4.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -130,12 +130,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a MobError  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR MobError.MobError
@@ -222,16 +222,16 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 30 ufk[3]= 0  ufk[4]= 927 
         ufk[5]= 1961 ufk[6]= 1962 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row MobError.MobError ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row MobError.MobError {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobError.MobError WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row MobError.MEName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row MobError.MEName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobError.MEName WITH FRAME sel.
       END.
 
@@ -360,8 +360,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET ErrorCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -383,8 +383,8 @@ BROWSE:
      /* Search by col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        SET me-name WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -406,9 +406,9 @@ BROWSE:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS on ENDkey undo, NEXT LOOP:
 
 
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. 
-        RUN ufkey. ufkey = true.
+        RUN Syst/ufkey.p. ufkey = true.
         run local-find-this(true).
         UPDATE MobError.memo WITH FRAME f4.
         HIDE FRAME f4 NO-PAUSE.
@@ -417,7 +417,7 @@ BROWSE:
 
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO: 
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 
@@ -427,14 +427,14 @@ BROWSE:
        VIEW-AS ALERT-BOX BUTTONS YES-NO UPDATE ok.
 
        IF ok THEN 
-       run error_rate.p(INPUT MobError.MobError).
+       RUN Rate/error_rate.p(INPUT MobError.MobError).
        ufkey = true.
-       run ufkey.p.
+       RUN Syst/ufkey.p.
 
      END. 
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO : 
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
        
@@ -461,7 +461,7 @@ BROWSE:
           FRAME fLimits.
        HIDE FRAME fLimits NO-PAUSE.
 
-       RUN mobcallbr(INPUT  "post,Qty:" + STRING(liMaxQty),
+       RUN Mm/mobcallbr.p(INPUT  "post,Qty:" + STRING(liMaxQty),
                      INPUT  ldaFromDate,
                      INPUT  ldaToDate,
                      INPUT  0, 
@@ -476,7 +476,7 @@ BROWSE:
                      INPUT  0).
      
        ufkey = true.
-       run ufkey.p.
+       RUN Syst/ufkey.p.
 
      END. 
 
@@ -485,8 +485,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MobError.MobError.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobError).

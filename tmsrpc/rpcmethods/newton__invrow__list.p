@@ -13,7 +13,7 @@
            credited;boolean;
 */
 {xmlrpc/xmlrpc_access.i}
-{transname.i}
+{Func/transname.i}
 
 /* Input parameters */
 DEF VAR piInvoiceNum     AS INT  NO-UNDO.

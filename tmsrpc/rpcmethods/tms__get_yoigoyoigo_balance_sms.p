@@ -9,10 +9,10 @@
  */
 
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "XMLRPC-Heat".
 gcBrand = "1".
-{fcreatereq.i}
+{Func/fcreatereq.i}
 
 FUNCTION fReqStat RETURNS LOGICAL
 (iiStat AS INTEGER,

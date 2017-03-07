@@ -19,12 +19,12 @@ DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 DEF VAR pcMSISDN AS CHAR NO-UNDO.
 DEF VAR piMaxCount AS INT NO-UNDO. 
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "IVR_" + gbAuthLog.EndUserId.
    gcBrand = "1".
 
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEF VAR lcRespArray AS CHAR NO-UNDO. 
 DEF VAR lcRespStruct AS CHAR NO-UNDO. 

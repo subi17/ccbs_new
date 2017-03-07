@@ -9,14 +9,14 @@
   created ......: 02.12.13
   version ......: yoigo
 ---------------------------------------------------------------------- */
-{commali.i}
-{tmsconst.i}
-{date.i}
-{cparam2.i}
-{timestamp.i}
-{fcreatereq.i}
-{msreqfunc.i}
-{fgettxt.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fcreatereq.i}
+{Func/msreqfunc.i}
+{Func/fgettxt.i}
 
 &GLOBAL-DEFINE FI_MAPPING_YOIGO_AND_TF 1
 &GLOBAL-DEFINE FI_MAPPING_YOIGO 2

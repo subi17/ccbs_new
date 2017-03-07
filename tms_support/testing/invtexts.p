@@ -1,5 +1,5 @@
-{testpaa.i}
-{refcode.i}
+{Syst/testpaa.i}
+{Func/refcode.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liFlag AS INTEGER NO-UNDO. 

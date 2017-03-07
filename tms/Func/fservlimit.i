@@ -1,5 +1,5 @@
-{tmsconst.i}
-{fdss.i}
+{Syst/tmsconst.i}
+{Func/fdss.i}
 
 DEF TEMP-TABLE ttServiceLCounter NO-UNDO
    LIKE ServiceLCounter.
