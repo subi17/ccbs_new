@@ -9,9 +9,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
 
 DEFINE INPUT PARAMETER CustNum AS INT NO-UNDO .
 DEFINE VARIABLE lcCustName AS CHARACTER NO-UNDO.

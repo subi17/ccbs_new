@@ -10,10 +10,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{msreqfunc.i}
-{fmakemsreq.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msreqfunc.i}
+{Func/fmakemsreq.i}
 
 DEFINE INPUT PARAMETER iiRequest AS INTEGER   NO-UNDO.
 DEF VAR ideActStamp     AS DEC  NO-UNDO FORMAT "99999999.99999".

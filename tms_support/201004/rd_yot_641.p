@@ -1,12 +1,12 @@
 
 DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO. 
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand  = "1".
-{timestamp.i}
-{msisdn.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
+{Syst/tmsconst.i}
 
 lcCLI = "622442316".
 

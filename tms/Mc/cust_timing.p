@@ -8,11 +8,11 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{sog.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MSOwner'}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/sog.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MSOwner'}
 
 DEF BUFFER bCustomer for Customer.
 
@@ -24,19 +24,19 @@ IF lcRight NE "RW" THEN DO:
    RETURN.   
 END.
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobSub AS HANDLE NO-UNDO.
    lhMobSub = BUFFER MobSub:HANDLE.
    RUN StarEventInitialize(lhMobSub).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMobSub).
+      RUN Mc/eventview2.p(lhMobSub).
    END.
 
 END.
@@ -165,7 +165,7 @@ WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    
    CREATE ttCustomer. 
 
@@ -271,7 +271,7 @@ ACTION:
       ufk[8] = 8.
 
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

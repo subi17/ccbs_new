@@ -478,6 +478,10 @@
 1 "" 2 "Promo 1 GB/mes gratis" 0 "BONO6WEBDISC" "1" 24/11/15 31/12/49
 1 "" 3 "Promozioa: 1 GB/hilabete doan" 0 "BONO6WEBDISC" "1" 24/11/15 31/12/49
 1 "" 5 "Offer 1GB a month free" 0 "BONO6WEBDISC" "1" 24/11/15 31/12/49
+1 "" 1 "Promo 3GB/mes gratis" 0 "BONO7DISC" "1" 27/02/17 31/12/49
+1 "" 2 "Promo 3GB/mes gratis" 0 "BONO7DISC" "1" 27/02/17 31/12/49
+1 "" 3 "Promozioa: 3 GB/hilabete doan" 0 "BONO7DISC" "1" 27/02/17 31/12/49
+1 "" 5 "Offer 3GB a month free" 0 "BONO7DISC" "1" 27/02/17 31/12/49
 1 "" 1 "Promo" 0 "BONO8CPACT" "1" 01/04/12 31/12/49
 1 "" 1 "Compensación" 0 "BONO8CPACT" "1" 01/06/11 31/03/12
 1 "" 2 "Promo" 0 "BONO8CPACT" "1" 01/04/12 31/12/49
@@ -1753,6 +1757,10 @@
 1 "" 3 "Voz Tarifa Plana" 0 "FLATVOICE" "1" 01/12/11 31/03/12
 1 "" 5 "Within Flat Rate" 0 "FLATVOICE" "1" 01/04/12 31/12/49
 1 "" 5 "Voz Tarifa Plana" 0 "FLATVOICE" "1" 01/12/11 31/03/12
+1 "" 1 "Internet" 0 "FLEX_UPSELL" "1" 01/03/17 31/12/49
+1 "" 2 "Internet" 0 "FLEX_UPSELL" "1" 01/03/17 31/12/49
+1 "" 3 "Internet" 0 "FLEX_UPSELL" "1" 01/03/17 31/12/49
+1 "" 5 "Internet" 0 "FLEX_UPSELL" "1" 01/03/17 31/12/49
 1 "" 1 "En 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
 1 "" 2 "En 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
 1 "" 3 "100 minutuan" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
@@ -4500,6 +4508,11 @@
 1 "" 3 "LG Optimus GT540 Plata" 0 "P030540S2" "1" 31/08/10 31/12/49
 1 "" 4 "LG Optimus GT540 Plata" 0 "P030540S2" "1" 31/08/10 31/12/49
 1 "" 5 "LG Optimus GT540 Silver" 0 "P030540S2" "1" 31/08/10 31/12/49
+1 "" 1 "LG G5 SE Titán con LG Cam Plus y funda de regalo" 0 "P0305SECP" "1" 28/02/17 31/12/49
+1 "" 2 "LG G5 SE Titán con LG Cam Plus y funda de regalo" 0 "P0305SECP" "1" 28/02/17 31/12/49
+1 "" 3 "LG G5 SE Titán con LG Cam Plus y funda de regalo" 0 "P0305SECP" "1" 28/02/17 31/12/49
+1 "" 4 "LG G5 SE Titán con LG Cam Plus y funda de regalo" 0 "P0305SECP" "1" 28/02/17 31/12/49
+1 "" 5 "LG G5 SE Titán con LG Cam Plus y funda de regalo" 0 "P0305SECP" "1" 28/02/17 31/12/49
 1 "" 1 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
 1 "" 2 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
 1 "" 3 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
@@ -5123,6 +5136,11 @@
 1 "" 3 "Samsung Galaxy A3 2016 Blanco" 0 "P034A36W2" "1" 20/06/16 31/12/49
 1 "" 4 "Samsung Galaxy A3 2016 Blanco" 0 "P034A36W2" "1" 20/06/16 31/12/49
 1 "" 5 "Samsung Galaxy A3 2016 White" 0 "P034A36W2" "1" 20/06/16 31/12/49
+1 "" 1 "Samsung Galaxy A3 2017 Azul" 0 "P034A37A2" "1" 03/03/17 31/12/49
+1 "" 2 "Samsung Galaxy A3 2017 Azul" 0 "P034A37A2" "1" 03/03/17 31/12/49
+1 "" 3 "Samsung Galaxy A3 2017 Azul" 0 "P034A37A2" "1" 03/03/17 31/12/49
+1 "" 4 "Samsung Galaxy A3 2017 Azul" 0 "P034A37A2" "1" 03/03/17 31/12/49
+1 "" 5 "Samsung Galaxy A3 2017 Blue" 0 "P034A37A2" "1" 03/03/17 31/12/49
 1 "" 1 "Samsung Galaxy A3 2017 Dorado" 0 "P034A37D2" "1" 24/01/17 31/12/49
 1 "" 2 "Samsung Galaxy A3 2017 Dorado" 0 "P034A37D2" "1" 24/01/17 31/12/49
 1 "" 3 "Samsung Galaxy A3 2017 Dorado" 0 "P034A37D2" "1" 24/01/17 31/12/49
@@ -5133,6 +5151,11 @@
 1 "" 3 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
 1 "" 4 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
 1 "" 5 "Samsung Galaxy A3 2017 Black" 0 "P034A37N2" "1" 24/01/17 31/12/49
+1 "" 1 "Samsung Galaxy A3 2017 Rosa" 0 "P034A37P2" "1" 03/03/17 31/12/49
+1 "" 2 "Samsung Galaxy A3 2017 Rosa" 0 "P034A37P2" "1" 03/03/17 31/12/49
+1 "" 3 "Samsung Galaxy A3 2017 Rosa" 0 "P034A37P2" "1" 03/03/17 31/12/49
+1 "" 4 "Samsung Galaxy A3 2017 Rosa" 0 "P034A37P2" "1" 03/03/17 31/12/49
+1 "" 5 "Samsung Galaxy A3 2017 Pink" 0 "P034A37P2" "1" 03/03/17 31/12/49
 1 "" 1 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
 1 "" 2 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
 1 "" 3 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
@@ -7048,6 +7071,11 @@
 1 "" 3 "Alcatel ONETOUCH POP 3 Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP 3 Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
 1 "" 5 "Alcatel POP 3 (5) Soft Silver" 0 "P045P3SP2" "1" 25/08/15 31/12/49
+1 "" 1 "Alcatel Pixi 4 5 3G Negro" 0 "P045P43N2" "1" 03/03/17 31/12/49
+1 "" 2 "Alcatel Pixi 4 5 3G Negro" 0 "P045P43N2" "1" 03/03/17 31/12/49
+1 "" 3 "Alcatel Pixi 4 5 3G Negro" 0 "P045P43N2" "1" 03/03/17 31/12/49
+1 "" 4 "Alcatel Pixi 4 5 3G Negro" 0 "P045P43N2" "1" 03/03/17 31/12/49
+1 "" 5 "Alcatel Pixi 4 5 3G Black" 0 "P045P43N2" "1" 03/03/17 31/12/49
 1 "" 1 "Alcatel Pixi 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49
 1 "" 2 "Alcatel Pixi 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49
 1 "" 3 "Alcatel Pixi 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49

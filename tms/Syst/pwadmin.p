@@ -11,8 +11,8 @@
   Version ......: Yoigo 
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE lcUsercode AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOldPasswd AS CHARACTER NO-UNDO.

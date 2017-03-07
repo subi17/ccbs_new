@@ -7,8 +7,8 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{direct_dbconnect.i}
+{Syst/commali.i}
+{Func/direct_dbconnect.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -65,7 +65,7 @@ PROCEDURE pStartDump:
    IF RETURN-VALUE BEGINS "ERROR" THEN 
       RETURN RETURN-VALUE.
  
-   RUN prepedr_dump.p (icDumpID,
+   RUN Mm/prepedr_dump.p (icDumpID,
                        icFile,
                        icDumpMode,
                        idLastDump,

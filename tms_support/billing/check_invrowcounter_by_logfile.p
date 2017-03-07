@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
-{date.i}
-{chk_cdr_invrowcounter.i}
+{Func/date.i}
+{Inv/chk_cdr_invrowcounter.i}
 
 def var i as int no-undo.
 def var ldatodate as date no-undo.
@@ -75,7 +75,7 @@ END.
 
 lcRunID = REPLACE(STRING(TIME,"HH:MM:SS"),":","") + "_logfile".
    
-RUN chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
+RUN Inv/chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
                             lcRunID, /* fr run id */
                             ldatodate,
                             0, /* fr process id */

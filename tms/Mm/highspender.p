@@ -8,11 +8,11 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
+{Syst/eventlog.i}
 
 DEFINE VARIABLE lcInvGroup AS CHARACTER NO-UNDO.
 
@@ -22,7 +22,7 @@ lcInvGroup = SESSION:PARAMETER.
 
 
 fELog("HIGHSPENDER", lcInvGroup + "Started").
-run highspendnew (lcInvGroup).
+RUN Mm/highspendnew.p (lcInvGroup).
 fELog("HIGHSPENDER", lcInvGroup + "Stopped").
 
 quit.

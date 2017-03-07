@@ -18,10 +18,10 @@
 
 {roamtariff.i}
 {csvfuntion.i}
-{commali.i}
-{cparam.i2}
+{Syst/commali.i}
+{Func/cparam.i2}
 
-{timestamp.i}
+{Func/timestamp.i}
 
 gcBrand = "1".
 

@@ -10,9 +10,9 @@
 &THEN
 &GLOBAL-DEFINE PUBLISH_INVOICE_I YES
 
-{commali.i}
-{fcreatereq.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
+{Syst/tmsconst.i}
 
 function fPublishIFSValidate returns logical
    (INPUT  idaPeriod AS DATE,

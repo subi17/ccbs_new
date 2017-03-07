@@ -101,14 +101,14 @@ IF NUM-ENTRIES(top_array) >= 2 THEN DO:
 END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{fcustdata.i}
-{tmsconst.i}
-{barrfunc.i}
-{invoicetarget.i}
-{orderchk.i}
+{Func/fcustdata.i}
+{Syst/tmsconst.i}
+{Func/barrfunc.i}
+{Mc/invoicetarget.i}
+{Func/orderchk.i}
 
 IF pcCLI NE "" THEN DO:
    

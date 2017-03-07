@@ -8,12 +8,12 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{dumpfile_run.i}
-{date.i}
-{tmsconst.i}
-{cparam2.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Syst/dumpfile_run.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.

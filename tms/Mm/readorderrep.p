@@ -9,8 +9,8 @@
 ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF INPUT  PARAMETER idtDate      AS DATE NO-UNDO.
 DEF INPUT  PARAMETER icChannel    AS CHAR NO-UNDO.

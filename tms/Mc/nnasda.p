@@ -8,9 +8,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'customer'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'customer'}
 
 DEF INPUT PARAM  CustNum LIKE Customer.CustNum.
 

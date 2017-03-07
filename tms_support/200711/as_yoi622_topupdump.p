@@ -8,16 +8,16 @@
    Version ......: xfera 
    --------------------------------------------------- */               
                                                                 
-{commpaa.i} 
+{Syst/commpaa.i} 
 katun = "cron".
 gcbrand = "1".
 
-{eventlog.i}
-{date.i}
-{timestamp.i}
-{cparam.i2}
-{xmlfunction.i}
-{tsformat.i}
+{Syst/eventlog.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/cparam.i2}
+{Func/xmlfunction.i}
+{Func/tsformat.i}
 
 def input param ldaBegin AS DATE NO-UNDO.
 def input param ldaEnd   AS DATE NO-UNDO.

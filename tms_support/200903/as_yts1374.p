@@ -15,11 +15,11 @@ FIND FIRST mnpprocess where
    disp mnpprocess.mnpseq.
 */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{timestamp.i}
-{mnp.i}
+{Func/timestamp.i}
+{Mnp/mnp.i}
 
 FUNCTION fNewXML RETURNS CHAR 
 (iiOrderid AS INTEGER, lcFormRequest as char):

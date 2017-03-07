@@ -9,15 +9,15 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{ftransdir.i}
-{email.i}
-{edefine.i NEW}
-{refcode.i}
-{invotxtp.i}
-{fcustref.i}
-{fdivtxt.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Inv/edefine.i NEW}
+{Func/refcode.i}
+{Func/invotxtp.i}
+{Func/fcustref.i}
+{Func/fdivtxt.i}
 
 DEF TEMP-TABLE wError NO-UNDO
     FIELD Cust   AS INT

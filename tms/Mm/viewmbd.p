@@ -19,9 +19,9 @@
   Version ......: M15
  ---------------------------------------------------------------------- */
 
-{commali.i}
-{rate_roamzone.i}
-{mobcdr_bdest.i}
+{Syst/commali.i}
+{Rate/rate_roamzone.i}
+{Mm/mobcdr_bdest.i}
 
 DEF TEMP-TABLE  ttCall NO-UNDO LIKE Mobcdr
    FIELD CDRTable AS CHAR.  
@@ -149,7 +149,7 @@ ELSE
           lcDataAmt = STRING((ttCall.Datain + ttCall.DataOut) / 1024 / 1024).
 
 IF ttCall.PPFlag > 0 THEN 
-   RUN cdr_detail_value.p("PrepCDR",
+   RUN Mm/cdr_detail_value.p("PrepCDR",
                           ttCall.DateSt,
                           ttCall.DtlSeq,
                           "Balance after",
@@ -346,10 +346,10 @@ repeat WITH FRAME cdr:
    ufk[8] = 8 
    ehto = 0.
 
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 2 THEN DO:
-      RUN edrhistory_one_edr.p(ttCall.CLI,
+      RUN Rate/edrhistory_one_edr.p(ttCall.CLI,
                                ttCall.DateSt,
                                ttCall.TimeSt,
                                ttCall.DtlSeq).
@@ -357,7 +357,7 @@ repeat WITH FRAME cdr:
    
    ELSE IF toimi = 4 THEN DO:
        /* View rate record */
-       RUN nnhitt2(ttCall.TariffNum).
+       RUN Mm/nnhitt2.p(ttCall.TariffNum).
    END.
 
    ELSE if toimi = 7 THEN DO:
@@ -370,7 +370,7 @@ repeat WITH FRAME cdr:
                   ttCall.bpref,
                   TRUE).
 
-      RUN   local-Show-record.
+      RUN local-Show-record.
 
       IF reasonc > "0" THEN DO TRANS:
 
@@ -395,19 +395,19 @@ repeat WITH FRAME cdr:
 
         disp bsub @ ttCall.gsmbnr WITH FRAME cdr.  PAUSE 0.
         ufk[5] =  0.
-        run ufkey.p.
+        RUN Syst/ufkey.p.
       END.   
    end.
    
    ELSE IF toimi = 6 THEN DO:
-      RUN viewmcdr2.p(INPUT ttCall.Datest, ttCall.Dtlseq,
+      RUN Mm/viewmcdr2.p(INPUT ttCall.Datest, ttCall.Dtlseq,
                     IF ttCall.CDRTable > ""
                     THEN ttCall.CDRTable
                     ELSE "MobCdr").
    END.
 
    ELSE IF toimi = 5 THEN DO:
-      RUN viewtable.p((BUFFER ttcall:HANDLE)).
+      RUN Syst/viewtable.p((BUFFER ttcall:HANDLE)).
    END.
 
    ELSE IF toimi = 8 THEN LEAVE Action.
@@ -429,7 +429,7 @@ PROCEDURE local-Show-record:
              READKEY.
              IF FRAME-FIELD = "ReasonC" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN h-tmscodes(INPUT "FixCDR",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FixCDR",  /* TableName*/
                                      "ReasonCode", /* FieldName */
                                      "ReasonCode", /* GroupCode */
                                OUTPUT siirto).

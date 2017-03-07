@@ -7,8 +7,8 @@
   MODIFIED .....: 
   Version ......: xfera
   ------------------------------------------------------ */
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF INPUT PARAMETER iiCustNum  AS INT NO-UNDO.
 DEF INPUT PARAMETER iiCustType AS INT NO-UNDO.
@@ -85,7 +85,7 @@ REPEAT WITH FRAME fCustContact ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       ufk   = 0  
       ufk[8]= 8 
       ehto = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 8 THEN LEAVE.
 

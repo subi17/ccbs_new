@@ -9,10 +9,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "Qvantel".
-{timestamp.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE liNumEntries    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liCount         AS INTEGER   NO-UNDO.

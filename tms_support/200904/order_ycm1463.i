@@ -4,11 +4,11 @@
                 14.02.06/aam assign firstname
                 20.11.06/aam new db structure
 */
-{commali.i}   
-{fwebuser.i}
-{fcustdata.i}
-{ftmrlimit.i}
-{forderstamp.i}
+{Syst/commali.i}   
+{Func/fwebuser.i}
+{Func/fcustdata.i}
+{Func/ftmrlimit.i}
+{Func/forderstamp.i}
 
 DEF BUFFER bUpdOrderCustomer FOR OrderCustomer.
 

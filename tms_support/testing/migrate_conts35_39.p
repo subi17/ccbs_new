@@ -1,9 +1,9 @@
-{commpaa.i}
+{Syst/commpaa.i}
 assign gcbrand = "1"
        katun = "Qvantel2".
-{tmsconst.i}
-{cparam2.i}
-{matrix.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/matrix.i}
 
 def var lcInfo as char no-undo.
 def var liRequest as int no-undo.
@@ -16,7 +16,7 @@ def stream sout.
 
 lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
-{fbtc.i}
+{Func/fbtc.i}
 
 output stream sout to "/apps/yoigo/tms_support/testing/mig_conts35_39_to_CONTS32_20140707.log".
 

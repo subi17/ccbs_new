@@ -9,22 +9,22 @@
   --------------------------------------------------------------------------- */
 &GLOBAL-DEFINE PREMIUM_BARRING_LIMIT 40 
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "Cron".
    
-{timestamp.i}
-{cparam2.i}
-{heartbeat.i}
-{barrfunc.i}
-{fmakemsreq.i}
-{fsmsreq.i}
-{tmsconst.i}
-{fdestcountry.i}
-{fbundle.i}
-{tmqueue_analysis.i}
-{istc.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/heartbeat.i}
+{Func/barrfunc.i}
+{Func/fmakemsreq.i}
+{Func/fsmsreq.i}
+{Syst/tmsconst.i}
+{Func/fdestcountry.i}
+{Mm/fbundle.i}
+{Rate/tmqueue_analysis.i}
+{Func/istc.i}
 
 DEF VAR lhSource      AS HANDLE NO-UNDO.
 DEF VAR lhField       AS HANDLE NO-UNDO.
@@ -1387,7 +1387,7 @@ PROCEDURE pLimitAction:
                    TIME > 75300 /* 20:55 */ THEN lcSMSTxt = "".
             END.
 
-            RUN barrengine (TMCounter.MsSeq,
+            RUN Mm/barrengine.p (TMCounter.MsSeq,
                             ttLimits.ActionParam + "=1",
                             "5",                /* source  */
                             "TMQueue",          /* creator */

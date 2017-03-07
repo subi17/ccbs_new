@@ -1,9 +1,9 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
 
-{flimitreq.i}
-{tmsconst.i}
+{Func/flimitreq.i}
+{Syst/tmsconst.i}
 find termmobsub where
      termmobsub.msseq = 2096335 NO-LOCK.
 

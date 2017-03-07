@@ -27,7 +27,7 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{log.i}
+{Func/log.i}
 
 
 DEF VAR gcBrand AS CHARACTER NO-UNDO INITIAL "1" .

@@ -7,8 +7,8 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER MenuId AS c NO-UNDO.
 
@@ -19,7 +19,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMenuTree AS HANDLE NO-UNDO.
    lhMenuTree = BUFFER MenuTree:HANDLE.
@@ -27,7 +27,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhMenuTree).
+      RUN Mc/eventview2.p(lhMenuTree).
    END.
 END.
 
@@ -48,11 +48,11 @@ WITH OVERLAY ROW 2 centered
 PAUSE 0.            
 DISP MenuTree.Memo[1 FOR 15] WITH FRAME info.
 
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 IF toimi = 1 THEN DO TRANS:
    PAUSE 0.
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    FIND MenuTree where MenuTree.MenuId = MenuId exclusive-lock.
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMenuTree).
    UPDATE MenuTree.Memo[1 FOR 15] WITH FRAME info.
@@ -65,5 +65,5 @@ DO i = 1 TO 8.
    ufk[i] = xfk[i].
 END.
 ehto = 3.
-RUN ufkey.
+RUN Syst/ufkey.p.
 PAUSE 0.

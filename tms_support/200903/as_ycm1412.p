@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{fsubstermreq.i}
-{msisdn.i}
+{Func/fsubstermreq.i}
+{Func/msisdn.i}
 
 def stream sin.
 input stream sin from /apps/snet/200903/as_ycm1412.input.

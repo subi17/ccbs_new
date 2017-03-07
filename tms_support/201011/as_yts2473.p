@@ -1,9 +1,9 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
 
-{timestamp.i}
-{fmakemsreq.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcCommLine AS CHARACTER NO-UNDO. 

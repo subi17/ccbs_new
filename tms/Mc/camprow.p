@@ -8,23 +8,23 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CampRow'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CampRow'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCampRow AS HANDLE NO-UNDO.
    lhCampRow = BUFFER CampRow:HANDLE.
    RUN StarEventInitialize(lhCampRow).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCampRow).
+      RUN Mc/eventview2.p(lhCampRow).
    END.
 
 END.
@@ -152,7 +152,7 @@ DO i = 1 TO 5:
                                 "CampRow","CRowType",STRING(i)) + ",".
 END.
 
-lcHelpProg = "nnplse,h-dplan,h-fatgroup,h-bevent,h-bevent".
+lcHelpProg = "Help/nnplse.p,Help/h-dplan.p,Help/h-fatgroup.p,Help/h-bevent.p,Help/h-bevent.p".
 
 FIND Campaign WHERE 
      Campaign.Brand    = gcBrand AND
@@ -160,7 +160,7 @@ FIND Campaign WHERE
 ASSIGN lcTitle = " ROWS FOR CAMPAIGN: " +
                  STRING(Campaign.CaName) + " ".
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Row Type ,    ,   , By 4".
@@ -187,14 +187,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CampRow  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -206,7 +206,7 @@ REPEAT WITH FRAME sel:
                     
                 IF FRAME-FIELD = "CRowType" THEN DO:
                                    
-                   RUN h-tmscodes(INPUT "CampRow",     /* TableName */
+                   RUN Help/h-tmscodes.p(INPUT "CampRow",     /* TableName */
                                         "CRowType",    /* FieldName */
                                         "Campaign",    /* GroupCode */
                                  OUTPUT lcCode).
@@ -219,7 +219,7 @@ REPEAT WITH FRAME sel:
                 END.
 
                 ehto = 9.
-                RUN ufkey.
+                RUN Syst/ufkey.p.
                 NEXT.
                 
              END.   
@@ -328,12 +328,12 @@ REPEAT WITH FRAME sel:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CampRow.CRowType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CampRow.CRowType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CampRow.CRowType WITH FRAME sel.
       END.
 
@@ -461,14 +461,14 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW"
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -525,7 +525,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCampRow).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CampRow.CRowType.
 
        RUN local-UPDATE-record.                                  
@@ -653,7 +653,7 @@ PROCEDURE local-UPDATE-record:
       
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
        
          UPDATE
          CampRow.CRowItem
@@ -678,7 +678,7 @@ PROCEDURE local-UPDATE-record:
                 END.
 
                 ehto = 9.
-                RUN ufkey.
+                RUN Syst/ufkey.p.
                 NEXT.
                 
              END.   

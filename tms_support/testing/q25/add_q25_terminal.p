@@ -1,7 +1,7 @@
 /* Terminal creation for specified orders */
-{commpaa.i}
-{tmsconst.i}
-{fsubsterminal.i}
+{Syst/commpaa.i}
+{Syst/tmsconst.i}
+{Func/fsubsterminal.i}
 gcbrand = "1".
 
 DEF VAR lcOrders AS CHAR NO-UNDO.

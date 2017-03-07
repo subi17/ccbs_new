@@ -6,9 +6,9 @@
   CREATED ......: 18.10.10
 ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 DEF INPUT  PARAMETER idaFromDate AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaToDate   AS DATE NO-UNDO.

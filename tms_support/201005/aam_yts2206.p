@@ -1,5 +1,5 @@
-{testpaa.i}
-{timestamp.i}
+{Syst/testpaa.i}
+{Func/timestamp.i}
 
 
 def var i as int no-undo.
@@ -49,7 +49,7 @@ for each msrequest no-lock where
          exclusive-lock.
       blimit.fromts = 20100701.   
 
-      run cli_rate.p (msrequest.cli,
+      RUN Rate/cli_rate.p (msrequest.cli,
                       7/1/10,
                       7/31/10,
                       true).

@@ -9,14 +9,14 @@
 
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
-{finvnum.i}
-{funcrunprocess_update.i}
-{bundle_first_month_fee.i}
-{fbundle.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/finvnum.i}
+{Syst/funcrunprocess_update.i}
+{Mm/bundle_first_month_fee.i}
+{Mm/fbundle.i}
 
 DEF INPUT  PARAMETER idaFromDate      AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaToDate        AS DATE NO-UNDO.
