@@ -7,13 +7,13 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 DEF STREAM sLogFile.
 DEF STREAM sOutFile.

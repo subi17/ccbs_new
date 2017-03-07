@@ -7,14 +7,14 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN 
    gcBrand = "1" 
    katun   = "Cron".
        
-{eventlog.i}
-{timestamp.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
 
 DEF TEMP-TABLE ttStatus NO-UNDO
    FIELD RunState AS CHAR.
@@ -40,7 +40,7 @@ BY FuncRunExec.FRExecID:
 
    lcOrigState = FuncRunExec.RunState.
    
-   RUN funcrunexec_run.p (FuncRunExec.FRExecID,
+   RUN Syst/funcrunexec_run.p (FuncRunExec.FRExecID,
                           lcHost).
    
    /* nothing done or interrupted */

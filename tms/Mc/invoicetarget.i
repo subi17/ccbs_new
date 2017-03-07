@@ -11,12 +11,12 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{eventval.i}
-{femailinvoice.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/femailinvoice.i}
 
 DEFINE VARIABLE lcInvoiceTargetMode AS CHARACTER NO-UNDO.
 
@@ -24,8 +24,8 @@ IF llDoEvent THEN DO:
 
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
-   {create_eventlog.i}
+   {Func/lib/eventlog.i}
+   {Func/create_eventlog.i}
                                     
 END.
 

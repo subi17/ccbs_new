@@ -14,13 +14,13 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
-{eplspec.i}
-{feplstart.i}
-{fsubser.i}
-{timestamp.i}
+{Syst/utumaa.i "new"}
+{Inv/eplspec.i}
+{Func/feplstart.i}
+{Func/fsubser.i}
+{Func/timestamp.i}
 
 DEF INPUT PARAMETER icCLI AS CHAR NO-UNDO.
 
@@ -161,7 +161,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
       ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
       ehto = 3 ufkey = FALSE.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
    END.
 
    IF llStart THEN ASSIGN nap     = "1"
@@ -175,7 +175,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
    
       ASSIGN ehto = 9 
              ufkey = TRUE. 
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
       
@@ -202,7 +202,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
              IF FRAME-FIELD = "lcRepCodes" AND keylabel(lastkey) = "F9" 
              THEN DO:
               
-                RUN h-tmscodes(INPUT "Mobsub",   /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "Mobsub",   /* TableName*/
                                      "RepCodes", /* FieldName */
                                      "Report",   /* GroupCode */
                                OUTPUT lcCode).
@@ -211,7 +211,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                 DISPLAY lcCode @ lcRepCodes WITH FRAME rajat.
                 
                 ehto = 9.
-                RUN ufkey.
+                RUN Syst/ufkey.p.
                 
                 NEXT.
              END.
@@ -281,7 +281,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       END.
          
       ehto = 5. 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       llOk = FALSE.
       
@@ -302,7 +302,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                 tuni2    = ""
                 llCaSivu = -1.
        
-         {utuloste.i "return"}
+         {Syst/utuloste.i "return"}
 
          llOk = TRUE.
       END.
@@ -312,7 +312,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       IF llOk THEN 
       CASE lcRepCodes:
       WHEN "3" THEN 
-         RUN nnpura3 (INPUT liCustNum,
+         RUN Inv/nnpura3.p (INPUT liCustNum,
                       INPUT pvm1,
                       INPUT pvm2,
                       INPUT tilak,
@@ -327,7 +327,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                       OUTPUT liError).
                                   
       WHEN "4" THEN                
-         RUN nnpura4 (INPUT liCustNum,
+         RUN Inv/nnpura4.p (INPUT liCustNum,
                       INPUT liCustNum,
                       INPUT pvm1,
                       INPUT pvm2,
@@ -375,13 +375,13 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       
       ELSE DO:
          tila = FALSE.
-         {utuloste.i}
+         {Syst/utuloste.i}
       END.
       
       /* create usage fee */
       IF llOk AND llCreaFee THEN DO:
          
-         RUN creasfee.p(MobSub.CustNum,
+         RUN Mc/creasfee.p(MobSub.CustNum,
                        MobSub.MSSeq,
                        TODAY,
                        "CLISpec",

@@ -7,13 +7,13 @@
   CHANGED ......: 
   Version ......: 
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
-{ftopup.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/ftopup.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MSBalance'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MSBalance'}
 
 DEF INPUT PARAMETER iiMsSeq   AS INT NO-UNDO.
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
@@ -177,7 +177,7 @@ ELSE IF iiMsSeq > 0 THEN DO:
    END.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -252,13 +252,13 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MsBalance.MsSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MsBalance.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MsBalance.MsSeq WITH FRAME sel.
       END.
 
@@ -388,8 +388,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liMsSeq WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -672,7 +672,7 @@ PROCEDURE pMinusAdjustment:
          ufk[5] = 1089
          ufk[8] = 8
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
            
       IF toimi = 5 THEN DO:
             

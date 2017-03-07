@@ -1,8 +1,8 @@
 /* dumpfile_run.i    13.11.08/aam
 */
 
-{create_eventlog.i}
-{timestamp.i}
+{Func/create_eventlog.i}
+{Func/timestamp.i}
 &GLOBAL-DEFINE DUMPLOG_ERROR_NOTIFICATION -12345
 
 /* convert defined delimiter into character(s) */

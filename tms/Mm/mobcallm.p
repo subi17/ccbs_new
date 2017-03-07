@@ -15,12 +15,12 @@
                   15.02.06/aam row to eventlog
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
-{func.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobCDR'} 
-{feventlog.i}
+{Syst/commali.i}
+{Func/msisdn.i}
+{Func/func.p} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobCDR'} 
+{Func/feventlog.i}
 
 DEF INPUT  PARAMETER      CLI          AS C NO-UNDO.
 
@@ -30,7 +30,7 @@ DEF VAR odtDate2                      AS DATE NO-UNDO.
 
 DEF VAR olAccept                      AS LOG  NO-UNDO.
 
-RUN  mobguard2(INPUT  TRUE,
+RUN Mm/mobguard2.p(INPUT  TRUE,
                OUTPUT ocReasonCode,
                OUTPUT odtDate1,
                OUTPUT odtdate2,
@@ -38,7 +38,7 @@ RUN  mobguard2(INPUT  TRUE,
 
 IF olAccept = FALSE THEN LEAVE.
 
-RUN mobcallbr(INPUT "post,pre",
+RUN Mm/mobcallbr.p(INPUT "post,pre",
               INPUT  odtDate1,
               INPUT  odtDate2,
               INPUT  0,

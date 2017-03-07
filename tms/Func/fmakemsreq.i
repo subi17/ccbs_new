@@ -42,12 +42,12 @@
 
 &GLOBAL-DEFINE fmakemsreq YES
 
-{msreqfunc.i}
-{fcreatereq.i}
-{fctserval.i}
-{fcustdata.i}
-{tmsconst.i}
-{fixedlinefunc.i}
+{Func/msreqfunc.i}
+{Func/fcreatereq.i}
+{Func/fctserval.i}
+{Func/fcustdata.i}
+{Syst/tmsconst.i}
+{Func/fixedlinefunc.i}
 
 DEF BUFFER bReqOwner FOR MsOwner.
 DEF BUFFER bReqComp  FOR ServCom.
@@ -234,10 +234,10 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
    RELEASE bCreaReq.
 
    /* initial actions */
-   RUN requestaction_init.p (liReqCreated).
+   RUN Mm/requestaction_init.p (liReqCreated).
 
    /* Send right away SMS related to the CLI Type change */
-   RUN requestaction_sms.p(INPUT liReqCreated,
+   RUN Mm/requestaction_sms.p(INPUT liReqCreated,
                            INPUT icNewType,
                            INPUT icSource).
   
@@ -909,7 +909,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    IF LOOKUP(icContrType,lcBONOContracts + ",HSPA_ROAM_EU,TARJ_UPSELL") > 0 THEN DO:
       FIND FIRST bReqOwner WHERE bReqOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
       IF AVAILABLE bReqOwner THEN
-         RUN requestaction_sms.p(INPUT liReqCreated,
+         RUN Mm/requestaction_sms.p(INPUT liReqCreated,
                                  INPUT bReqOwner.CLIType,
                                  INPUT icSource).
    END. /* IF liReqType = 9 AND */

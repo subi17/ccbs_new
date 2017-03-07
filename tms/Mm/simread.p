@@ -13,11 +13,11 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{tmsconst.i}
-{date.i}
-{ftmscode.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/ftmscode.i}
 
 DEF INPUT PARAMETER SIMfile AS CHARACTER NO-UNDO. 
 DEF INPUT PARAMETER ProcessedDir AS CHARACTER NO-UNDO. 
@@ -95,9 +95,9 @@ WITH
    ROW 2 FRAME MAIN.
 
 /* set the status code FOR a NEW SIM card */
-{tmsparam.i SIMStatusNew return}. SIMStat = TMSParam.IntVal. 
+{Func/tmsparam.i SIMStatusNew return}. SIMStat = TMSParam.IntVal. 
 cSimStat = STRING(SIMStat).
-{tmsparam.i MainStock    return}. Stock = TMSParam.CharVal.
+{Func/tmsparam.i MainStock    return}. Stock = TMSParam.CharVal.
 
 DEFINE STREAM sIFile.
 FUNCTION IsInputFile RETURNS LOGICAL (INPUT pFileName AS CHARACTER):
@@ -265,7 +265,7 @@ REPEAT WITH FRAME Main:
    UPDATE_LOOP:
    REPEAT ON ENDKEY UNDO, LEAVE:
       
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.p.
       
       UPDATE 
          Stock
@@ -328,7 +328,7 @@ REPEAT WITH FRAME Main:
    REPEAT WITH FRAME Main:
       ASSIGN
       ufk =  0 ufk[1] = 7 ufk[4] = 241
-      ufk[5] = 795 ufk[8] = 8 ehto = 0.  RUN ufkey.
+      ufk[5] = 795 ufk[8] = 8 ehto = 0.  RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.
       IF toimi = 4 THEN LEAVE Action.
@@ -341,7 +341,7 @@ REPEAT WITH FRAME Main:
       END.
    END. /* Action */
 
-   ufk =  0. ehto = 3. RUN ufkey.
+   ufk =  0. ehto = 3. RUN Syst/ufkey.p.
 
    lError = FALSE.
 

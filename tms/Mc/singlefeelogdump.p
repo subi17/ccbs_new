@@ -19,11 +19,11 @@ Once in a month, 2nd day, the 2.file contain also last 2 billed singlefees:
 At TRACK side data between eventlog dump and singlefee dump is merged to be used in TRACK reports. Since all events are not logged, singlefee dump data represents latest state of actual singlefee.
 */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT PARAMETER icFile        AS CHAR NO-UNDO.

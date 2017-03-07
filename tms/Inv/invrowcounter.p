@@ -6,23 +6,23 @@
   CREATED ......: 15.11.10
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'InvRowCounter'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'InvRowCounter'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvRowCounter AS HANDLE NO-UNDO.
    lhInvRowCounter = BUFFER InvRowCounter:HANDLE.
    RUN StarEventInitialize(lhInvRowCounter).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhInvRowCounter).
+      RUN Mc/eventview2.p(lhInvRowCounter).
    END.
 
 END.
@@ -161,7 +161,7 @@ END.
 
 RUN pInitTempTable.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -244,12 +244,12 @@ REPEAT WITH FRAME sel:
         ehto  = 3 
         ufkey = FALSE.
         
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvRowCounter.BillCode ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW InvRowCounter.BillCode {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvRowCounter.BillCode WITH FRAME sel.
       END.
@@ -378,8 +378,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        SET lcBillCode WITH FRAME f1.
@@ -403,8 +403,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f2.
        SET lcCLI WITH FRAME f2.
@@ -435,8 +435,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhInvRowCounter).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -623,7 +623,7 @@ PROCEDURE local-UPDATE-record:
         ufk[8] = 8
         ehto   = 0.
          
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 8 THEN LEAVE ActionDetails.
    END.
@@ -694,7 +694,7 @@ END PROCEDURE.
 PROCEDURE pAskPeriod:
 
    ehto = 9.
-   RUN ufkey.p.
+   RUN Syst/ufkey.p.
 
    ASSIGN 
       ldaFromDate = TODAY - 90
@@ -722,7 +722,7 @@ FINALLY:
    si-recid = xrecid.
 
    ehto = 4.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    fCleanEventObjects().
 END.

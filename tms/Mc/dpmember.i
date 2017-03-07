@@ -4,14 +4,14 @@
 &THEN
 &GLOBAL-DEFINE DPMEMBER_I YES
 
-{commali.i}
-{date.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/date.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhDPMember AS HANDLE NO-UNDO.
 END.

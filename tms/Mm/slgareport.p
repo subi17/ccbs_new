@@ -1,9 +1,9 @@
-{commali.i}
-{excel.i}
-{timestamp.i}
-{email.i}
-{highusage.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/timestamp.i}
+{Func/email.i}
+{Func/highusage.i}
+{Func/cparam2.i}
 
 
 DEF VAR tiednimi AS c no-undo.

@@ -16,10 +16,10 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{cparam2.i}
-{utumaa.i "new"}
+{Func/cparam2.i}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnkaen"
        tuni2 = "".
@@ -173,9 +173,9 @@ form
    with title color value(ctc) " CRITERIA FOR PRINTOUT "  side-labels
    COLOR value(cfc) ROW 8 centered OVERLAY FRAME rajat.
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 view FRAME valinta.
-cfc = "puli". RUN ufcolor.
+cfc = "puli". RUN Syst/ufcolor.p.
 PAUSE 0 no-message.
 
 display raja pyynto "ALL" @ IGName WITH FRAME rajat.
@@ -183,10 +183,10 @@ display raja pyynto "ALL" @ IGName WITH FRAME rajat.
 toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN DO:
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          UPDATE InvGroup extcustgrp
             raja[1]
             raja[2]
@@ -237,10 +237,10 @@ toimi:
                      disp "NOT SELECTED" @ extname with frame rajat.
                   end.
                   else do:
-                     RUN gathecg(INPUT-OUTPUT table TCustGroup).
+                     RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                      /* DISPLAY Customer groups */
                      EHTO = 9.
-                     run ufkey.
+                     RUN Syst/ufkey.p.
                      FOR EACH TCustGroup.
                         dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup +
                         ",".
@@ -267,7 +267,7 @@ toimi:
       IF toimi = 5 THEN DO:
          if pyynto then pytx = "PAYMENT BEHAVIOUR NOTICED".
          else           pytx = "PAYMENT BEHAVIOUR NOT NOTICED".
-         cfc = "uusi". RUN ufcolor.   ccc = cfc.
+         cfc = "uusi". RUN Syst/ufcolor.p.   ccc = cfc.
          DO i = 1 TO 2 WITH FRAME rival:
             valik = valikko[i].
             DISPLAY valik.
@@ -279,7 +279,7 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
                MESSAGE
                "Choose printing order, press ENTER !".
                READKEY PAUSE 0.
-               CHOOSE ROW valik ;(uchoose.i;) no-error.
+               CHOOSE ROW valik {Syst/uchoose.i} no-error.
                COLOR DISPLAY value(ccc) valik WITH FRAME rival.
                i = FRAME-LINE.
                HIDE MESSAGE no-pause.
@@ -295,7 +295,7 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
    END. /* toimi */
 
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 ASSIGN
 sl = 0
@@ -356,7 +356,7 @@ by
 
        /* yhden myyntilaskun kAsittely */
 
-       RUN invbal (Invoice.InvNum, OUTPUT velka). 
+       RUN Ar/invbal.p (Invoice.InvNum, OUTPUT velka). 
 
        IF velka = 0 THEN NEXT.
 
@@ -429,7 +429,7 @@ END. /* runko */
 PUT STREAM tul skip(spit1 - rl).
 
 ASSIGN tila = FALSE.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 MESSAGE "Printing complete !" VIEW-AS ALERT-BOX.
 

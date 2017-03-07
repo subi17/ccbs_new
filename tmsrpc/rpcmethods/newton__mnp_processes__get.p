@@ -51,9 +51,9 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
-{tmsconst.i}
-{mnp.i}
+{Syst/commpaa.i}
+{Syst/tmsconst.i}
+{Mnp/mnp.i}
 
 ASSIGN
    katun = "Newton"

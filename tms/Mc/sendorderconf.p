@@ -7,13 +7,13 @@ CREATED ......: 8.5.2015
 CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 gcBrand = "1".
-{cparam2.i}
-/*{utumaa.i new }*/
-/*{edefine.i new}*/
-{tmsconst.i}
-{timestamp.i}
+{Func/cparam2.i}
+/*{Syst/utumaa.i new }*/
+/*{Inv/edefine.i new}*/
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 DEF INPUT PARAM iiOrderId AS INT NO-UNDO.
 DEF INPUT PARAM icEmailAddress AS CHAR NO-UNDO.
@@ -62,27 +62,27 @@ FIND FIRST OrderCustomer WHERE OrderCustomer.Brand = gcBrand AND
 
    IF (OrderCustomer.CustIdType EQ "CIF") AND 
       (Order.Ordertype = {&ORDER_TYPE_NEW}) THEN
-      RUN parse_tags.p (lcRootDir + "conf_email_company_new_es.html",
+      RUN Func/parse_tags.p (lcRootDir + "conf_email_company_new_es.html",
                         lcEmailFile, iiOrderId, 2, 
                         icEmailAddress, OUTPUT ocErrFile). /*2=conf mes*/
    ELSE IF (OrderCustomer.CustIdType EQ "CIF") AND 
            (Order.Ordertype = {&ORDER_TYPE_MNP}) THEN
-      RUN parse_tags.p (lcRootDir + 
+      RUN Func/parse_tags.p (lcRootDir + 
                         "conf_email_company_mnp_es.html",
                         lcEmailFile, iiOrderId, 2, 
                         icEmailAddress, OUTPUT ocErrFile). /*2=conf mes*/  
    ELSE IF Order.Ordertype = {&ORDER_TYPE_NEW} THEN
-      RUN parse_tags.p (lcRootDir + "conf_email_new_es.html",
+       RUN Func/parse_tags.p (lcRootDir + "conf_email_new_es.html",
                         lcEmailFile, iiOrderId, 2, 
                         icEmailAddress, OUTPUT ocErrFile). /* 2 = conf mes */
    ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} THEN
-      RUN parse_tags.p (lcRootDir + "conf_email_mnp_es.html",
+       RUN Func/parse_tags.p (lcRootDir + "conf_email_mnp_es.html",
                         lcEmailFile, iiOrderId, 2, 
                         icEmailAddress, OUTPUT ocErrFile). /* 2 = conf mes */
    /* fusion STC needs propably own template. TODO later
    ELSE IF (Order.Ordertype = {&ORDER_TYPE_STC} AND 
             Order.OrderChannel BEGINS "fusion") THEN  /* new fusion order */
-          RUN parse_tags.p (lcRootDir + "conf_email_new_es.html",
+          RUN Func/parse_tags.p (lcRootDir + "conf_email_new_es.html",
                            lcEmailFile, iiOrderId, 2, OUTPUT lcErrFile). /* 2 = conf mes */
    */
    ELSE ocErrFile = "Not supported type in order " + " " + 

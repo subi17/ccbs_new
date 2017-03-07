@@ -1,9 +1,9 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "Qvantel".
-{ftransdir.i}
-{timestamp.i}
-{printdoc1tt.i}
+{Func/ftransdir.i}
+{Func/timestamp.i}
+{Inv/printdoc1tt.i}
 
 def stream sInputFile.
 def stream sout.

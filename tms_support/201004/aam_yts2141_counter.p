@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "qvantel".
 
 def stream sread.
@@ -73,7 +73,7 @@ repeat:
       ldcounter format "->>>>>>>9.99"
       llbarred.
 
-   run cli_rate.p (lccli,
+   RUN Rate/cli_rate.p (lccli,
                    4/1/10,
                    4/30/10,
                    true).

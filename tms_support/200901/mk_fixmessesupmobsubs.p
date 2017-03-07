@@ -1,6 +1,6 @@
-{commpaa.i} katun = "SOG". gcbrand = "1".
-{fsubser.i}
-{timestamp.i}
+{Syst/commpaa.i} katun = "SOG". gcbrand = "1".
+{Func/fsubser.i}
+{Func/timestamp.i}
 
 def stream slog.
 output stream slog to /apps/snet/200901/as_yts1250.log.

@@ -1,7 +1,7 @@
 /* requestrunner.i     01.11.07/aam
 */
 
-{commali.i}
+{Syst/commali.i}
 
 /* process requests */
 PROCEDURE pRunRequest:
@@ -21,10 +21,8 @@ PROCEDURE pRunRequest:
    DEF VAR liReqStat     AS INT  NO-UNDO.
    DEF VAR liResult      AS INT  NO-UNDO.
 
-   IF SEARCH(icProgram + ".r") = ? THEN DO:
-      IF SEARCH(icProgram + ".p") = ? THEN
-         RETURN "ERROR:Module not found".
-   END.
+   IF SEARCH(icProgram) = ?
+   THEN RETURN "ERROR:Module not found".
    
    /* user for eventlog */ 
    ASSIGN lcTMSUser  = katun
@@ -45,7 +43,7 @@ PROCEDURE pRunRequest:
          handling this same request */
       IF MsRequest.ReqStatus NE iiReqStat THEN NEXT. 
       
-      RUN VALUE(icProgram + ".p") (MsRequest.MsRequest).
+      RUN VALUE(icProgram) (MsRequest.MsRequest).
       
       IF MsRequest.ReqType = 65 THEN DO:
          liResult = 0.
@@ -79,7 +77,7 @@ PROCEDURE pRunRequest:
          MsRequest.ReqStat NE iiReqStat
       THEN RETURN "ERROR: conflict in request data".
       
-      RUN VALUE(icProgram + ".p") (MsRequest.MsRequest).
+      RUN VALUE(icProgram) (MsRequest.MsRequest).
       
       IF MsRequest.ReqStatus > 1 THEN oiHandled = oiHandled + 1.
       

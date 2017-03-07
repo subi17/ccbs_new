@@ -2,10 +2,10 @@
   Create a dump file for prepaid cdrs
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{detailvalue.i}
-{dumpfile_run.i}
-{msisdn_prefix.i}
+{Syst/commali.i}
+{Func/detailvalue.i}
+{Syst/dumpfile_run.i}
+{Func/msisdn_prefix.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.

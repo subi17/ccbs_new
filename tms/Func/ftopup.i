@@ -10,8 +10,8 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 FUNCTION fCreateTopUpRequest RETURNS INTEGER
    (iiMsSeq      AS INT,

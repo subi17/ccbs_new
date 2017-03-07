@@ -8,9 +8,9 @@
   VERSION ......: SL 
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i}
 
 DEF INPUT PARAMETER idtAuthDate1  AS DATE  NO-UNDO.
 DEF INPUT PARAMETER idtAuthDate2  AS DATE  NO-UNDO.
@@ -91,7 +91,7 @@ FUNCTION fChkPage RETURNS LOGIC
     IF liLine + iAddLine >= skayt1 THEN DO:
 
         IF liPage > 0 THEN DO:
-           {uprfeed.i liLine}
+           {Syst/uprfeed.i liLine}
         END.
         
         liPage = liPage + 1.
@@ -153,7 +153,7 @@ END.
 /* active customers */
 FOR EACH ttCust:
 
-   RUN nnsvte (ttCust.CustNum,
+   RUN Ar/nnsvte.p (ttCust.CustNum,
                idtAuthDate2,
                OUTPUT lcBankAcc).
    
@@ -355,7 +355,7 @@ IF ilListUnsent AND CAN-FIND(FIRST ttInv) THEN DO:
          
    END.
    
-   {uprfeed.i liLine}
+   {Syst/uprfeed.i liLine}
 END.
 
 HIDE FRAME fQty NO-PAUSE. 

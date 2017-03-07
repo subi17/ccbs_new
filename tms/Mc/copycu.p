@@ -20,8 +20,8 @@
   Version ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
+{Syst/commali.i}
+{Syst/eventval.i}
 
 DEF BUFFER new-Customer FOR Customer.
 DEF BUFFER new-Target   FOR BillTarget. 
@@ -31,7 +31,7 @@ DEF BUFFER new-PnpList  FOR PNPList.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER new-Customer:HANDLE.
@@ -93,7 +93,7 @@ IF ok THEN DO:
     pause.
 
    /* get next free number */
-   RUN custser.
+   RUN Help/custser.p.
 
    i = index(siirto,"-").
    IF i > 0 THEN DO:

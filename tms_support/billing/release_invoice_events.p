@@ -1,7 +1,7 @@
-{commali.i}
-{fcustbal.i}
-{fcustcnt.i}
-{nnpcst.i}
+{Syst/commali.i}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Ar/nnpcst.i}
 
 DEF INPUT PARAMETER iiInvNum AS INT NO-UNDO.
 
@@ -14,7 +14,7 @@ FOR FIRST Invoice EXCLUSIVE-LOCK where
          Customer.CustNum  = Invoice.CustNum:
 
    /* release events */
-   RUN nnpcst.p (Invoice.InvNum,
+   RUN Ar/nnpcst.p (Invoice.InvNum,
                  0,
                  FALSE,
                  INPUT table wMarked).

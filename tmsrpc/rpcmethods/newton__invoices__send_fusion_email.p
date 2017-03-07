@@ -17,11 +17,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "VISTA_" + pcUserName.
-{tmsconst.i}
-{fusioninvoice.i}
+{Syst/tmsconst.i}
+{Inv/fusioninvoice.i}
 
 liRequestID = fFusionEmailRequest(
                 INPUT fMakeTS(),

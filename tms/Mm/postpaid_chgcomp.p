@@ -9,10 +9,10 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{timestamp.i}
-{commali.i}
-{msreqfunc.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER  iiMSrequest AS INT  NO-UNDO.
 
@@ -59,7 +59,7 @@ END.
  
 fSplitTS(MsRequest.CreStamp, OUTPUT lDateCr, OUTPUT lTimeCr).
 
-RUN creasfee.p(MobSub.CustNum,
+RUN Mc/creasfee.p(MobSub.CustNum,
               MobSub.MsSeq,
               lDateCr,
               "FeeModel",         /* FeeModel where using CHARGE */

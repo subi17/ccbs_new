@@ -12,27 +12,27 @@
 
 &GLOBAL-DEFINE BrTable MNPOperation
 
-{commali.i} 
-{eventval.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPOperation'}
-{xmlfunction.i}
-{mnpmessages.i}
-{tmsconst.i}
-{mnpoperation.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPOperation'}
+{Func/xmlfunction.i}
+{Mnp/mnpmessages.i}
+{Syst/tmsconst.i}
+{Mnp/mnpoperation.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPOperation AS HANDLE NO-UNDO.
    lhMNPOperation = BUFFER MNPOperation:HANDLE.
    RUN StarEventInitialize(lhMNPOperation).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMNPOperation).
+      RUN Mc/eventview2.p(lhMNPOperation).
    END.
 
 END.
@@ -114,7 +114,7 @@ WITH OVERLAY ROW 6 centered 1 columns
    TITLE COLOR value(ctc) " View Message " WITH side-labels
    FRAME lis.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = " By CLI ,  By Name  ,By 3, By 4".
@@ -195,12 +195,12 @@ BROWSE:
         ufk[7] = 2819
         ufk[8] = 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MNPOperation.MessageType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPOperation.MessageType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPOperation.MessageType WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -332,7 +332,7 @@ BROWSE:
         ufk[1] > 0 THEN DO:
         
         RUN local-find-this(false).
-        run mnpfunc.p(MNPOperation.mnpseq). 
+        RUN Mnp/mnpfunc.p(MNPOperation.mnpseq). 
         
         RUN local-find-first.
         must-print = true.
@@ -349,7 +349,7 @@ BROWSE:
         find mnpprocess where mnpprocess.mnpseq = MNPOperation.mnpseq NO-LOCK.
          
         ehto = 10.
-        run ufkey.p.
+        RUN Syst/ufkey.p.
 
         copy-lob MNPOperation.XMLResponse to lcLongXML.
         

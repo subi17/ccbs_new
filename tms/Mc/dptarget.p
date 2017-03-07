@@ -6,23 +6,23 @@
   CREATED ......: 26.04.11
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DPTarget'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DPTarget'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhDPTarget AS HANDLE NO-UNDO.
    lhDPTarget = BUFFER DPTarget:HANDLE.
    RUN StarEventInitialize(lhDPTarget).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhDPTarget).
+      RUN Mc/eventview2.p(lhDPTarget).
    END.
 
 END.
@@ -121,7 +121,7 @@ IF NOT AVAILABLE DiscountPlan THEN DO:
 END.
 lcPlan = DiscountPlan.DPRuleID.
 
-cfc = "sel". RUN ufcolor.p. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -146,7 +146,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DPTarget  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.p.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -154,7 +154,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.p.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -254,12 +254,12 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DPTarget.TargetTable {uchoose.i} NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DPTarget.TargetTable {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DPTarget.TargetTable WITH FRAME sel.
       END.
 
@@ -464,8 +464,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPTarget).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.p.
-       cfc = "lis". RUN ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -502,7 +502,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.p.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -590,7 +590,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.
@@ -600,7 +600,7 @@ PROCEDURE local-UPDATE-record:
                 
          FIND CURRENT DPTarget EXCLUSIVE-LOCK.
          ehto = 9.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          
          UPDATE
             DPTarget.TargetTable WHEN NEW DPTarget
@@ -616,7 +616,7 @@ PROCEDURE local-UPDATE-record:
                LOOKUP(FRAME-FIELD,"TargetTable,TargetKey") > 0 THEN DO:
 
                IF FRAME-FIELD = "TargetTable" THEN DO:
-                  RUN h-tmscodes(INPUT "DPTarget",
+                  RUN Help/h-tmscodes.p(INPUT "DPTarget",
                                        "TargetTable",     
                                        ?,     
                                  OUTPUT lcCode).
@@ -629,12 +629,12 @@ PROCEDURE local-UPDATE-record:
                
                   CASE INPUT DPTarget.TargetTable:
                   WHEN "BillItem" THEN DO:
-                     RUN nntuse.p.
+                     RUN Help/nntuse.p.
                      IF siirto NE ? THEN 
                         DISPLAY siirto @ DPTarget.TargetKey WITH FRAME lis.
                   END.
                   WHEN "BItemGroup" THEN DO:
-                     RUN nnpgse.p.
+                     RUN Help/nnpgse.p.
                      IF siirto NE ? THEN 
                         DISPLAY siirto @ DPTarget.TargetKey WITH FRAME lis.
                   END.
@@ -642,7 +642,7 @@ PROCEDURE local-UPDATE-record:
                END.
                
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
  

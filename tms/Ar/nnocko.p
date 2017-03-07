@@ -49,15 +49,15 @@
 
  ---------------------------------------------------------------------------- */
 
-{commali.i}
-{excel.i}
-{date.i} 
+{Syst/commali.i}
+{Func/excel.i}
+{Func/date.i} 
 /* temp-table */
-{paymfile.i}
-{farplog.i}
-{cparam2.i}
-{finvbal.i}
-{freadref.i}
+{Ar/paymfile.i}
+{Func/farplog.i}
+{Func/cparam2.i}
+{Func/finvbal.i}
+{Func/freadref.i}
 
 DEF INPUT  PARAMETER  ocr-file   AS c NO-UNDO.
 DEF INPUT  PARAMETER  ocr-acct   AS i NO-UNDO.

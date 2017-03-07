@@ -1,13 +1,13 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "ari".
-{timestamp.i}
-{eventval.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 

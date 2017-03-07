@@ -1,5 +1,5 @@
-{commpaa.i}
-{msisdn.i}
+{Syst/commpaa.i}
+{Func/msisdn.i}
 katun = "anttis".
 gcBrand = "1".
 

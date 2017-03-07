@@ -1,14 +1,14 @@
-{commali.i}
-{cparam2.i}
-{xmlfunction.i}
-{airnodes.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/xmlfunction.i}
+{Gwy/airnodes.i}
 
 DEFINE TEMP-TABLE ttUCIP NO-UNDO
    FIELD ttName   AS CHARACTER
    FIELD ttFormat AS CHARACTER
    FIELD ttValue  AS CHARACTER.
 
-DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "tcpgwy" . 
+DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "Gwy/tcpgwy.p" . 
 
 FIND FIRST TMSParam where
            TMSParam.Brand      = gcBrand AND 
@@ -100,7 +100,7 @@ PROCEDURE pPrePaidPlatform:
    SET-SIZE(lmXML) = 0.
 
    RUN VALUE(lcTCPModule) (lcHTTPHeader + lcXML,lcURL,3,10,"</methodResponse>").
-   /* RUN tcpgwy(lcHTTPHeader + lcXML,lcURL,3,2,"<"). */
+   /* RUN Gwy/tcpgwy.p(lcHTTPHeader + lcXML,lcURL,3,2,"<"). */
    
    lcReturn = RETURN-VALUE.
 

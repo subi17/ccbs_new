@@ -3,7 +3,7 @@
 saa:    framen nimen common-muuttujassa cfc
 antaa:  formin vArit common-muuttujassa cfc
    titlen vArit common-muuttujassa ctc */
-{commali.i}
+{Syst/commali.i}
 
 
 if opsys = "msdos" THEN DO:
