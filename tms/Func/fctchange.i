@@ -294,8 +294,8 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    DO:
       ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
        /* This is to restrict iSTC between convergent to fixed only convergent or viceversa */ 
-      IF (NOT (LOOKUP(MobSub.CliType,lcFixedOnlyConvergentCliTypeList) > 0 AND LOOKUP(NewCliType.CliType,lcFixedOnlyConvergentCliTypeList) > 0)) AND 
-             ((fIsConvergenceTariff(MobSub.CliType) AND LOOKUP(NewCliType.CliType,lcFixedOnlyConvergentCliTypeList) > 0) OR (fIsConvergenceTariff(NewCliType.CliType) AND LOOKUP(MobSub.CliType,lcFixedOnlyConvergentCliTypeList) > 0)) THEN 
+      IF ((fIsConvergenceTariff(MobSub.CliType) AND LOOKUP(NewCliType.CliType,lcFixedOnlyConvergentCliTypeList) > 0) OR
+          (fIsConvergenceTariff(NewCliType.CliType) AND LOOKUP(MobSub.CliType,lcFixedOnlyConvergentCliTypeList) > 0)) THEN 
       DO:
           ocError = "Fixed only convergent tariffs are restricted from doing iSTC.".
           RETURN FALSE.

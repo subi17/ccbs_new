@@ -2113,9 +2113,6 @@ PROCEDURE pContractTermination:
             END.
          END.
          
-         IF MsRequest.ReqCParam2 = "recreate" THEN 
-             ASSIGN ldNewEndStamp = fMake2Dt(ldtActDate, liActTime).
-             
          ASSIGN 
             MServiceLimit.EndTS = ldNewEndStamp
             liSLCount           = liSLCount + 1
