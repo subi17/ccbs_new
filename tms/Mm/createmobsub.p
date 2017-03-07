@@ -96,7 +96,7 @@ DEF BUFFER bMsOwner FOR MsOwner.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
    lhMsOwner = BUFFER MSOwner:HANDLE.
    RUN StarEventInitialize(lhMsOwner).
