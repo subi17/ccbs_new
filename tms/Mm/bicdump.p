@@ -27,19 +27,19 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
 
-{email.i}
-{cparam2.i}
-{dumpfile_run.i}
-{timestamp.i}
-{fbankdata.i}
-{fcustdata.i}
-{tmsconst.i}
-{date.i}
-{customer_address.i}
+{Func/email.i}
+{Func/cparam2.i}
+{Syst/dumpfile_run.i}
+{Func/timestamp.i}
+{Func/fbankdata.i}
+{Func/fcustdata.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/customer_address.i}
 
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.

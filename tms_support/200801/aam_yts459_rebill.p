@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
 def var lclist     as char no-undo.
@@ -48,7 +48,7 @@ repeat:
            lioldnum format ">>>>>>>>9".
            
 
-   run del_inv.p (invoice.invnum).
+   RUN Inv/del_inv.p (invoice.invnum).
    
    for each singlefee exclusive-lock where
             singlefee.brand = "1" and
@@ -68,7 +68,7 @@ repeat:
          
    end.
 
-   run /apps/snet/200801/cashfee_rebill.p 
+   RUN /apps/snet/200801/cashfee_rebill.p 
                  (order.orderid,
                   lcextinvid,
                   1,

@@ -9,8 +9,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-{excel.i}
+{Syst/commpaa.i}
+{Func/excel.i}
 
 
 DEF VAR pecode    AS C  NO-UNDO.
@@ -26,7 +26,7 @@ DEF VAR cdate2    AS DA NO-UNDO FORMAT "99-99-99".
 DEF VAR newrecs   AS LO NO-UNDO FORMAT "Yes/No".
 DEF VAR rsopers   AS LO NO-UNDO FORMAT "Yes/No".
 
-{tmsparam.i PreselRep RETURN}. prerep = TMSParam.CharVal.
+{Func/tmsparam.i PreselRep RETURN}. prerep = TMSParam.CharVal.
 
 form 
  skip(1)
@@ -71,7 +71,7 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
 UPDATE
   sdate1 sdate2 validate(input sdate2 >= input sdate1,"Invalid order !")
@@ -89,7 +89,7 @@ Action:
       ufk[1] = 7 
       ufk[5] = 795
       ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

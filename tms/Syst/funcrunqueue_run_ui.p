@@ -7,10 +7,10 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FuncRunQueue'}
-{tmsconst.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FuncRunQueue'}
+{Syst/tmsconst.i}
 
 DEF VAR liFRQueueID     AS INT  NO-UNDO.
 DEF VAR liFRQScheduleID AS INT  NO-UNDO.
@@ -84,14 +84,14 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    
    IF toimi = 1 THEN 
    REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
       ehto = 9.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
     
       UPDATE liFRQueueID liFRQScheduleID WITH FRAME fCrit 
       EDITING:
@@ -105,7 +105,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                ASSIGN
                   si-recid    = ?
                   gcHelpParam = "FRQueueID".
-               RUN funcrunqueue.p.
+               RUN Syst/funcrunqueue.p.
                gcHelpParam = "".
             
                IF si-recid NE ? THEN DO:
@@ -121,7 +121,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                ASSIGN
                   si-recid    = ?
                   gcHelpParam = "FRQScheduleID".
-               RUN funcrunqschedule.p (INPUT INPUT FRAME fCrit liFRQueueID).
+               RUN Syst/funcrunqschedule.p (INPUT INPUT FRAME fCrit liFRQueueID).
                gcHelpParam = "".
             
                IF si-recid NE ? THEN DO:
@@ -135,7 +135,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
             END.
             
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.p.
 
             NEXT. 
          END.
@@ -185,7 +185,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       SET llOk.
       IF NOT llOk THEN NEXT. 
         
-      RUN funcrunqueue_run.p(liFRQueueID,
+      RUN Syst/funcrunqueue_run.p(liFRQueueID,
                              liFRQScheduleID).
 
       MESSAGE "Queue has been launched." +

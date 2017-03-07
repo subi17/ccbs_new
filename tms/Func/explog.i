@@ -8,8 +8,8 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{errors.i}
-{timestamp.i}
+{Mf/errors.i}
+{Func/timestamp.i}
 
 /* create - update time stamp */
 function fPutExpLog returns logical

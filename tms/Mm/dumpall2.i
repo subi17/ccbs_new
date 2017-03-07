@@ -12,10 +12,10 @@
   Version ......: TeleFinland
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-{excel.i}
-{date.i}
-{cparam2.i}
+{Syst/commpaa.i}
+{Func/excel.i}
+{Func/date.i}
+{Func/cparam2.i}
 
 def var i as i no-undo.
 def var lcspooldir as ch no-undo.

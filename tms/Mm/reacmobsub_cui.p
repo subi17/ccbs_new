@@ -7,13 +7,13 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{fcreatereq.i}
-{mnp.i}
-{timestamp.i}
-{tmsconst.i}
-{freacmobsub.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fcreatereq.i}
+{Mnp/mnp.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/freacmobsub.i}
 
 DEFINE INPUT PARAMETER iiMsSeq           AS INTEGER     NO-UNDO.
 DEFINE INPUT PARAMETER icUserName        AS CHARACTER   NO-UNDO.

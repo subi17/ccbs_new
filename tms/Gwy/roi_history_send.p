@@ -9,12 +9,12 @@
   Version ......: xfera
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-{timestamp.i}
-{heartbeat.i}
-{log.i}
-{tmsconst.i}
-{cparam2.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
+{Func/heartbeat.i}
+{Func/log.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 {xmlrpc/xmlrpc_client.i}
 
 gcBrand = "1".

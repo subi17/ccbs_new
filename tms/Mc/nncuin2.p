@@ -9,12 +9,12 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{excel.i}
-{function.i}
-{commali.i}
-{date.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
+{Func/excel.i}
+{Func/function.i}
+{Syst/commali.i}
+{Func/date.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
 
 DEF TEMP-TABLE imth NO-UNDO
    FIELD imth AS i
@@ -70,7 +70,7 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       date1 date2
       InvGroup 
@@ -99,7 +99,7 @@ repeat WITH FRAME frm:
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 

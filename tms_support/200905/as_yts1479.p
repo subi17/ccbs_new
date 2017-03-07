@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 output to /apps/snet/200905/as_yts1479.log. 
 FOR EACH mnpprocess where
    mnpprocess.statuscode = 0 NO-LOCK:

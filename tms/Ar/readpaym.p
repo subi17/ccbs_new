@@ -107,25 +107,25 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}                                               
-{timestamp.i} 
-{utumaa.i}
-{bankrej.i}
-{fvoucher.i}
-{fapvat.i}
+{Syst/commali.i}
+{Func/cparam2.i}                                               
+{Func/timestamp.i} 
+{Syst/utumaa.i}
+{Ar/bankrej.i}
+{Func/fvoucher.i}
+{Func/fapvat.i}
 /* temp-table */
-{paymfile.i}
-{faccper.i}
-{fcustbal.i}
-{fclvat.i}
-{finvbal.i}
-{fpplan.i}
-{fcpfat.i}
-{email.i}
-{ftransdir.i}
-{forderstamp.i}
-{orderfunc.i}
+{Ar/paymfile.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Func/fclvat.i}
+{Func/finvbal.i}
+{Func/fpplan.i}
+{Func/fcpfat.i}
+{Func/email.i}
+{Func/ftransdir.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
 
 
 DEF INPUT  PARAMETER TABLE FOR ttPayment. 
@@ -340,7 +340,7 @@ FUNCTION fCreateOpLog RETURNS LOGICAL
      iInv  AS INT,
      iAmt  AS DEC). 
 
-    {opstamp.i}
+    {Mf/opstamp.i}
 
     /* Make an overpayment transaction */   
     CREATE OPLog.
@@ -585,7 +585,7 @@ BY ttPayment.POrder:
          fError(1,ErrorMsg).
          AddMsg   = "Invoice already credited".
       
-         RUN refundcancel(0,
+         RUN Ar/refundcancel.p(0,
                           "DD",
                           Invoice.InvNum,
                           Invoice.CustNum,
@@ -1123,7 +1123,7 @@ BY ttPayment.POrder:
          ttPayment.AmtPaid > 0
       then do:
          /* calculate interest */
-         RUN calcint(Invoice.DueDate,
+         RUN Ar/calcint.p(Invoice.DueDate,
                      ttPayment.PaymDate,
                      IntCalcMet,
                      ttPayment.AmtPaid,
@@ -1634,11 +1634,11 @@ IF icPaymFile NE "EMPTY" THEN DO:
       "********"                       at 49 skip.
    rl = rl + 1.
 
-   {uprfeed.i rl}
+   {Syst/uprfeed.i rl}
 
    IF str1 > "" THEN DO:
       ASSIGN tila = false.
-      {utuloste.i}
+      {Syst/utuloste.i}
    END.
    ELSE OUTPUT STREAM tul CLOSE.
 END.

@@ -10,9 +10,9 @@
   VERSION ......: TeleF
   ------------------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{email.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/email.i}
 
 DEF VAR lcResell LIKE Reseller.Reseller NO-UNDO.
 DEF VAR lcRSName LIKE Reseller.RSName   NO-UNDO.
@@ -52,7 +52,7 @@ ELSE lcEMail = "".
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       lcResell
       lcRSName
@@ -98,7 +98,7 @@ repeat with frame rajat:
       ufk[8] = 8
       ehto = 0.
 
-   run ufkey.
+   RUN Syst/ufkey.p.
    case toimi:
       when 8 then return.
       when 1 then next loop.

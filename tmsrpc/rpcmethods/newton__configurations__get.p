@@ -7,8 +7,8 @@
  */
 
 {header_get.i}
-{tmsparam4.i}
-{tmsconst.i}
+{Func/tmsparam4.i}
+{Syst/tmsconst.i}
 
 DEF VAR liMaintB AS INTEGER NO-UNDO.
 

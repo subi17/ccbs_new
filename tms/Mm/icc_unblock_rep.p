@@ -6,15 +6,15 @@
   CREATED ......: 05.10.2009
   Version ......: yoigo
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{date.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/date.i}
 
 DEFINE VARIABLE idaDate AS DATE NO-UNDO. 
 DEFINE VARIABLE lcParam AS CHARACTER NO-UNDO.

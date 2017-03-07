@@ -9,7 +9,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -39,7 +39,7 @@ form /* SEEK code */
     with row 4 col 2 title color value(ctc) " FIND PaymSrc "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 
 lcPaymSrc = DYNAMIC-FUNCTION("fTMSCodeList" IN ghFunc1,
                              "Payment",
@@ -105,7 +105,7 @@ repeat:
             /* not called from applhelp */    
             IF NOT gcHelpParam = "ahelp" THEN ufk[5] = 0.
             
-            RUN ufkey.p.
+            RUN Syst/ufkey.p.
          END.
      END. /* print-line */
 
@@ -113,7 +113,7 @@ repeat:
      repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW ttPaymSrc.PaymSrc ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW ttPaymSrc.PaymSrc {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) ttPaymSrc.PaymSrc WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
@@ -209,8 +209,8 @@ repeat:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* PaymSrc */
-           cfc = "puyr". RUN ufcolor.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            lcPaymSrc = "".
            set lcPaymSrc WITH FRAME hayr.
            HIDE FRAME hayr no-pause.

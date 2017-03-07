@@ -9,11 +9,11 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{coinv.i}
-{eventval.i}
-{bundle_first_month_fee.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/coinv.i}
+{Syst/eventval.i}
+{Mm/bundle_first_month_fee.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiFFNum     AS INT  NO-UNDO.
 DEF INPUT  PARAMETER idtEnd      AS DATE NO-UNDO.  /* end date */
@@ -69,7 +69,7 @@ IF NOT AVAILABLE Customer THEN RETURN "Unknown customer".
 IF llDoEvent THEN DO:
 
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFixedFee AS HANDLE NO-UNDO.
    lhFixedFee = BUFFER bCloseFee:HANDLE.
@@ -232,7 +232,7 @@ FOR EACH bCredFee NO-LOCK WHERE
          bCredFee.CustPP    = 0                   AND 
          bCredFee.InUse     = TRUE:
 
-   RUN closefee (bCredFee.FFNum,
+   RUN Mc/closefee.p (bCredFee.FFNum,
                  idtEnd,
                  FALSE,
                  FALSE,

@@ -53,29 +53,29 @@
  VERSION .......: M15
  ============================================================================*/
 
-{commali.i}
-{excel.i}
-{email.i}
-{cparam2.i}
-{func.i}
-{fcustcnt.i}
-{chkbal2.i}   
-{cdrvar.i}
-{ficora.i}
-{mobol_tt.i}
-{fmakeservice.i}
-{fservlimit.i}
-{fsubser.i}
-{rating_ttcall.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/email.i}
+{Func/cparam2.i}
+{Func/func.p}
+{Func/fcustcnt.i}
+{Rate/chkbal2.i}   
+{Mm/cdrvar.i}
+{Mm/ficora.i}
+{Rate/mobol_tt.i}
+{Func/fmakeservice.i}
+{Func/fservlimit.i}
+{Func/fsubser.i}
+{Rate/rating_ttcall.i}
 
 DEF TEMP-TABLE ttDetail LIKE Mcdrdtl.
 
-{detailseq.i}
-{daycampaign.i}
-{onlinevar.i}
+{Func/detailseq.i}
+{Rate/daycampaign.i}
+{Rate/onlinevar.i}
 
 DEF VAR CallTimeStamp      AS DE NO-UNDO.
-{ticketfunc.i}
+{Rate/ticketfunc.i}
 
 DEF INPUT PARAMETER   iiErrorCode AS INT  NO-UNDO.
 
@@ -179,33 +179,33 @@ DEF VAR llChanged AS LOG NO-UNDO.
 
 DEF VAR lcSaldoFatime AS C  NO-UNDO.
 
-{tmsparam.i SaldoAgreementAccount  return}. lcSaldoFatime = tmsparam.CharVal.
+{Func/tmsparam.i SaldoAgreementAccount  return}. lcSaldoFatime = tmsparam.CharVal.
 
-{cparam.i RepConfDir        return}.  xConfDir        = TmsParam.CharVAl.
-{cparam.i SL_prefix         return}.  SL_prefix       = TmsParam.CharVAl. /* 045 */
-{cparam.i DefIntlPref       return}.  INTL_Prefix     = TmsParam.CharVAl. /* 00  */
-{cparam.i DefPrefOwnGr      return}.  OWNGR_prefix    = TmsParam.CharVAl.
-{cparam.i DefPrefSpc        return}.  SPEC_prefix     = TmsParam.CharVAl.
-{cparam.i DefPrefSMS        return}.  SMS_prefix      = TmsParam.CharVAl.
-{cparam.i MinBillLen        return}.  MinBLen         = TmsParam.IntVal.
-{cparam.i DefPrefOSMS       return}.  ISMS_prefix     = TmsParam.CharVAl.
-{cparam.i AnalUsingInvT     return}.  Useinvtarg      = TmsParam.CharVAl.
-{cparam.i DefDataProd       return}.  data_prod       = TmsParam.CharVAl.
-{cparam.i IntCall_prefix    return}.  IC_prefix       = TmsParam.CharVAl. /*991*/
-{cparam.i IntOthCall_prefix return}.  OIC_prefix      = TmsParam.CharVAl. /*99*/
-{cparam.i ErrCDouble        return}.  errorcode       = TmsParam.IntVal.
-{cparam.i UnknownCustomer   return}.  liUnkCust       = TmsParam.IntVal.
-{cparam.i  RoamOrigPerc     RETURN}.  origperc        = TMSparam.DecVal.
-{cparam.i  RoamTermPerc     RETURN}.  termperc        = TMSParam.DecVal.
-{cparam.i DEFPrefOSMS       RETURN}.  SMS_orig        = TmsParam.CharVal.
-{cparam.i DEFPrefTSMS       RETURN}.  SMS_term        = TmsParam.CharVal.
-{cparam.i RoaMinBillLen     RETURN}.  roaminbill      = TmsParam.IntVal.
+{Func/cparam.i RepConfDir        return}.  xConfDir        = TmsParam.CharVAl.
+{Func/cparam.i SL_prefix         return}.  SL_prefix       = TmsParam.CharVAl. /* 045 */
+{Func/cparam.i DefIntlPref       return}.  INTL_Prefix     = TmsParam.CharVAl. /* 00  */
+{Func/cparam.i DefPrefOwnGr      return}.  OWNGR_prefix    = TmsParam.CharVAl.
+{Func/cparam.i DefPrefSpc        return}.  SPEC_prefix     = TmsParam.CharVAl.
+{Func/cparam.i DefPrefSMS        return}.  SMS_prefix      = TmsParam.CharVAl.
+{Func/cparam.i MinBillLen        return}.  MinBLen         = TmsParam.IntVal.
+{Func/cparam.i DefPrefOSMS       return}.  ISMS_prefix     = TmsParam.CharVAl.
+{Func/cparam.i AnalUsingInvT     return}.  Useinvtarg      = TmsParam.CharVAl.
+{Func/cparam.i DefDataProd       return}.  data_prod       = TmsParam.CharVAl.
+{Func/cparam.i IntCall_prefix    return}.  IC_prefix       = TmsParam.CharVAl. /*991*/
+{Func/cparam.i IntOthCall_prefix return}.  OIC_prefix      = TmsParam.CharVAl. /*99*/
+{Func/cparam.i ErrCDouble        return}.  errorcode       = TmsParam.IntVal.
+{Func/cparam.i UnknownCustomer   return}.  liUnkCust       = TmsParam.IntVal.
+{Func/cparam.i  RoamOrigPerc     RETURN}.  origperc        = TMSparam.DecVal.
+{Func/cparam.i  RoamTermPerc     RETURN}.  termperc        = TMSParam.DecVal.
+{Func/cparam.i DEFPrefOSMS       RETURN}.  SMS_orig        = TmsParam.CharVal.
+{Func/cparam.i DEFPrefTSMS       RETURN}.  SMS_term        = TmsParam.CharVal.
+{Func/cparam.i RoaMinBillLen     RETURN}.  roaminbill      = TmsParam.IntVal.
 
 ASSIGN liCLossCust   = fCParamI("CLossCustomer").
 
-{rate_roamzone.i}
-{mobcdr_rate.i}
-{error_codes.i}
+{Rate/rate_roamzone.i}
+{Rate/mobcdr_rate.i}
+{Rate/error_codes.i}
 
 FUNCTION fBCopy RETURNS LOGICAL.
    
@@ -250,7 +250,7 @@ xdate2 = STRING(YEAR (cdate2),"9999") +
          STRING(MONTH(cdate2),"99")   +
          STRING(DAY  (cdate2),"99").
     
-{tariff_tt.i}
+{Rate/tariff_tt.i}
 DEF VAR b_btluok           AS C  NO-UNDO.
 DEF VAR r_dest             AS C  NO-UNDO.
 
@@ -270,5 +270,5 @@ FOR FIRST inv-cust NO-LOCK.
         
        TRANSACTION WITH FRAME MobCDR: 
 
-       {prep_rate.i} 
+       {Rate/prep_rate.i} 
        

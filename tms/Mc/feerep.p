@@ -7,10 +7,10 @@
   CHANGED ......: 
   Version ......: MTV3
   ------------------------------------------------------------------ */
-{testpaa.i}
-{excel.i}
-{accdatfi.i}
-{date.i}
+{Syst/testpaa.i}
+{Func/excel.i}
+{Ar/accdatfi.i}
+{Func/date.i}
 
 DEF VAR /* INPUT PARAMETER */ feedate1  AS DA  NO-UNDO.
 DEF VAR /* INPUT PARAMETER */ feedate2  AS DA  NO-UNDO.

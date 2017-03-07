@@ -9,10 +9,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPProcess'}
-{fcustdata.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPProcess'}
+{Func/fcustdata.i}
 
 DEFINE INPUT PARAMETER piMNPType AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER piMsSeq AS INT NO-UNDO.
@@ -32,12 +32,12 @@ IF pcCLI NE "" THEN DO:
    END.
 END.
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhttMNPProcess AS HANDLE NO-UNDO.
    lhttMNPProcess = BUFFER ttMNPProcess:HANDLE.
@@ -52,7 +52,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOrderCustomer). 
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhttMNPProcess).
+      RUN Mc/eventview2.p(lhttMNPProcess).
    END.
 
 END.
@@ -111,7 +111,7 @@ WITH  OVERLAY ROW 4 centered
     TITLE COLOR VALUE(ctc) ac-hdr with no-labels side-labels
     FRAME lis.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  , By Status , By 4".
@@ -198,22 +198,22 @@ BROWSE:
            ehto   = 3
            ufkey  = FALSE.
       
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttMNPProcess.FormRequest ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttMNPProcess.FormRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttMNPProcess.FormRequest WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ttMNPProcess.PortRequest ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttMNPProcess.PortRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttMNPProcess.PortRequest WITH FRAME sel.
       END.
 
       IF order = 3 THEN DO:
-        CHOOSE ROW ttMNPProcess.StatusCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttMNPProcess.StatusCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttMNPProcess.StatusCode WITH FRAME sel.
       END.
 
@@ -344,7 +344,7 @@ BROWSE:
      else if lookup(nap,"4,f4") > 0 then do:
        run local-find-this (false).
 
-       run mnpfunc.p(mnpprocess.mnpseq).
+       RUN Mnp/mnpfunc.p(mnpprocess.mnpseq).
        ufkey = true.
        next loop.
      
@@ -355,7 +355,7 @@ BROWSE:
        run local-find-this (false).
        memory = recid(ttmnpprocess).
        
-       run mnpsub(ttMNPProcess.mnpseq).
+       RUN Mnp/mnpsub.p(ttMNPProcess.mnpseq).
        
        must-print = true.
        ufkey = true.
@@ -369,8 +369,8 @@ BROWSE:
        memory = recid(ttmnpprocess).
        
        /* choose different module for old and new mnp processes */
-       IF ttMNPProcess.MNPType EQ 0 THEN RUN mnpmessages(ttMNPProcess.MNPSeq).
-       ELSE RUN mnpoperations(ttMNPProcess.MNPSeq).
+       IF ttMNPProcess.MNPType EQ 0 THEN RUN Mm/mnpmessages.p(ttMNPProcess.MNPSeq).
+       ELSE RUN Mnp/mnpoperations.p(ttMNPProcess.MNPSeq).
        
        must-print = true.
        ufkey = true.
@@ -384,8 +384,8 @@ BROWSE:
        /* change */
        RUN local-find-this(false).
 
-       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttMNPProcess.FormRequest.
 
        RUN local-UPDATE-record.                                  

@@ -17,7 +17,7 @@
 
 
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO.  
@@ -133,9 +133,9 @@ ASSIGN
       ttFMItem.BillMethod = TRUE 
       ttFMItem.BillType  = "CC".
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = lcBrand.
-{eventval.i}
+{Syst/eventval.i}
 katun = "VISTA_" + get_string(pcStruct, "username").
 
 IF TRIM(katun) EQ "VISTA_" THEN DO:
@@ -145,7 +145,7 @@ END.
 /* create FeeModel */
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhFeeModel AS HANDLE NO-UNDO.
    lhFeeModel = BUFFER FeeModel:HANDLE.
    RUN StarEventInitialize(lhFeeModel).

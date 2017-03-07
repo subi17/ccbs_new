@@ -8,9 +8,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{camprundf.i}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/camprundf.i}
+{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiCustNum1    AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiCustNum2    AS INT  NO-UNDO.

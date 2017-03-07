@@ -1,5 +1,5 @@
 
-{testpaa.i}
+{Syst/testpaa.i}
 
 FUNCTION fChkUser RETURNS logical
   (INPUT  login AS CHAR, INPUT  comment AS CHAR,
@@ -66,7 +66,7 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       login
       comment
@@ -86,7 +86,7 @@ repeat WITH FRAME frm:
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 

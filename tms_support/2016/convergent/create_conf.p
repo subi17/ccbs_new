@@ -1,4 +1,4 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 DEF VAR ldaFrom AS DATE INIT 10/27/16.
 DEF VAR liMode AS INT INIT 1.

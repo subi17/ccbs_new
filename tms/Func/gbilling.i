@@ -8,18 +8,18 @@
   CHANGED ......: 
   ------------------------------------------------------------------------*/
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fgettxt.i}
-{date.i}
-{fduedate.i}
-{ftransdir.i}
-{tmsconst.i}
-{ftaxdata.i}
-{ftopup.i}
-{fcreditreq.i}
-{fcpfat.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fgettxt.i}
+{Func/date.i}
+{Func/fduedate.i}
+{Func/ftransdir.i}
+{Syst/tmsconst.i}
+{Func/ftaxdata.i}
+{Func/ftopup.i}
+{Func/fcreditreq.i}
+{Func/fcpfat.i}
 
 DEF VAR lcGBOutDir AS CHAR NO-UNDO.
 DEF VAR lcGBInDir AS CHAR NO-UNDO.

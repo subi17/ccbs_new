@@ -7,15 +7,15 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
    
-{cparam2.i}
-{files.i}
-{timestamp.i}
-{funcrunprocess_run.i}
+{Func/cparam2.i}
+{Func/files.i}
+{Func/timestamp.i}
+{Syst/funcrunprocess_run.i}
 
 DEF VAR lcMessage     AS CHAR NO-UNDO.
 DEF VAR liInvCnt      AS INT  NO-UNDO.
@@ -50,7 +50,7 @@ lcLogFile = REPLACE(lcLogFile,"#DATE",STRING(YEAR(TODAY),"9999") +
                                       STRING(MONTH(TODAY),"99") + 
                                       STRING(DAY(TODAY),"99")).
 
-RUN mobcdr_double_check.p ("ReadDate",
+RUN Mm/mobcdr_double_check.p ("ReadDate",
                            ldaReadDate,
                            ldaReadDate,
                            "",

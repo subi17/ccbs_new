@@ -1,11 +1,11 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "YOT-541".
-{timestamp.i}
+{Func/timestamp.i}
 
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER Customer:HANDLE.

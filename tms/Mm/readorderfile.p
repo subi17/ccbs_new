@@ -1,8 +1,8 @@
-{commali.i}
-{timestamp.i}
-{msisdn.i}
-{forderstamp.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
 
 DEF INPUT  PARAMETER icFileType  AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icFile      AS CHAR NO-UNDO.

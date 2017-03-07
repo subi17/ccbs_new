@@ -15,15 +15,15 @@
               balance_day;double;optional;Billing item daily balance (used with TARJ6)
  */
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{callquery.i}
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
-{upsellbundle.i}
-{tarj6.i}
-{fprepaidfee.i}
+{Func/callquery.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/upsellbundle.i}
+{Func/tarj6.i}
+{Func/fprepaidfee.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -90,7 +90,7 @@ DEF VAR llExtFound AS LOGICAL NO-UNDO.
 
 DEF BUFFER bMsRequest FOR MSRequest.
 
-{dss_bundle_first_month_fee.i}
+{Mm/dss_bundle_first_month_fee.i}
 
 DEF TEMP-TABLE ttCDR NO-UNDO LIKE MobCDR.
 
