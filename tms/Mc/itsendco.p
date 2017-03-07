@@ -8,7 +8,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF TEMP-TABLE ttCustGroup NO-UNDO
    FIELD CustGroup AS CHAR

@@ -8,23 +8,23 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CTServAttr'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CTServAttr'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCTServAttr AS HANDLE NO-UNDO.
    lhCTServAttr = BUFFER CTServAttr:HANDLE.
    RUN StarEventInitialize(lhCTServAttr).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCTServAttr).
+      RUN Mc/eventview2.p(lhCTServAttr).
    END.
 END.
 
@@ -93,7 +93,7 @@ form /* seek CTServAttr  BY  CTServAttr */
 FIND CTServEl WHERE CTServEl.CTServEl = iiCTServEl NO-LOCK NO-ERROR.
 IF NOT AVAILABLE CTServEl THEN RETURN. 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -119,12 +119,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CTServAttr  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -240,13 +240,13 @@ REPEAT WITH FRAME sel:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"4,5,6"'}
-        RUN ufkey.p.
+        {Syst/uright1.i '"4,5,6"'}
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CTServAttr.ServAttr ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CTServAttr.ServAttr {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CTServAttr.ServAttr WITH FRAME sel.
       END.
 
@@ -375,8 +375,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcServAttr WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -399,14 +399,14 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW"
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -462,8 +462,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCTServAttr).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CTServAttr.ServAttr.
 
        RUN local-UPDATE-record.                                  
@@ -584,7 +584,7 @@ PROCEDURE local-UPDATE-record:
       IF lcRight = "RW" THEN DO:
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       
          UPDATE
            CTServAttr.DefValue

@@ -4,8 +4,8 @@
                     15.10.02/aam currency handling
                     23.06.05/aam round total sum to 2 decimals
 */
-{fcurrency.i}
-{fapvat.i}
+{Func/fcurrency.i}
+{Func/fapvat.i}
 
 DEF TEMP-TABLE ttRowVat NO-UNDO
    FIELD VatPerc    AS DEC 

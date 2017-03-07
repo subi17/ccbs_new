@@ -3,7 +3,7 @@
    changes:          07.02.06/aam to TF
                      15.05.07/aam brand to dccli
 */
-{commali.i}
+{Syst/commali.i}
 
 DEF TEMP-TABLE ttDCCounter NO-UNDO
    LIKE DCCounter.

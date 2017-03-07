@@ -20,23 +20,23 @@
 &GLOBAL-DEFINE TMSCodeDef NO
 &GLOBAL-DEFINE BrTable ClaimHist
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'claimhist'}
-{eventval.i}
-{invdet.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'claimhist'}
+{Syst/eventval.i}
+{Ar/invdet.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhClaimHist AS HANDLE NO-UNDO.
    lhClaimHist = BUFFER ClaimHist:HANDLE.
    RUN StarEventInitialize(lhClaimHist).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhClaimHist).
+      RUN Mc/eventview2.p(lhClaimHist).
    END.
 
 END.
@@ -88,7 +88,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  invoice */
     "Brand .:" lcBrand skip
@@ -143,7 +143,7 @@ ELSE DO:
    RETURN.      
 END.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -212,20 +212,20 @@ REPEAT WITH FRAME sel:
                 ufk[1] = 0
                 ufk[2] = 0.
                 
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row lcExtInvID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row lcExtInvID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) lcExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row ClaimHist.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row ClaimHist.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ClaimHist.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        choose row ClaimHist.ClaimDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row ClaimHist.ClaimDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ClaimHist.ClaimDate WITH FRAME sel.
       END.
 
@@ -362,8 +362,8 @@ REPEAT WITH FRAME sel:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -391,8 +391,8 @@ REPEAT WITH FRAME sel:
      /* Search by column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -416,8 +416,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN gcAllBrand
@@ -460,7 +460,7 @@ REPEAT WITH FRAME sel:
 
      /* update memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS on ENDkey undo, NEXT LOOP:
-        {uright2.i}.
+        {Syst/uright2.i}.
 
         RUN local-find-this(FALSE).
         PAUSE 0.
@@ -472,12 +472,12 @@ REPEAT WITH FRAME sel:
                ehto   = 0
                ufkey = true.
         
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
         IF toimi = 1 THEN DO:
         
            ehto = 9. 
-           RUN ufkey. 
+           RUN Syst/ufkey.p. 
            run local-find-this(true).
 
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhClaimHist).
@@ -497,7 +497,7 @@ REPEAT WITH FRAME sel:
 
         IF AVAILABLE ClaimHist THEN DO:
            ehto = 5.
-           RUN ufkey.
+           RUN Syst/ufkey.p.
 
            /* show details */
            RUN pInvoiceDetails(ClaimHist.InvNum,
@@ -508,7 +508,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
      
-        {uright2.i}
+        {Syst/uright2.i}
         delrow = FRAME-LINE.
         RUN local-find-this (FALSE).
                           

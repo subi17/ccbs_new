@@ -8,17 +8,17 @@
   VERSION ......: Yoigo
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
+{Syst/eventlog.i}
 
 def var period  as int    no-undo.
 DEF VAR liQty   AS INT    NO-UNDO.
 
 fELog("DAILYDUMP","DatadumpStarted").
-run dumpall.
+RUN Mm/dumpall.p.
 fELog("DAILYDUMP","DatadumpStopped").
 
 quit.

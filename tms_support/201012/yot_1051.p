@@ -1,4 +1,4 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
 
@@ -107,7 +107,7 @@ FOR EACH order where
          next LOOPPI.
       end.
 
-      RUN creafat.p (order.CustNum,
+      RUN Mc/creafat.p (order.CustNum,
                   order.MsSeq,
                   "BONO8CP",
                   "",

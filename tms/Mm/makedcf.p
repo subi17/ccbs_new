@@ -13,10 +13,10 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
+{Syst/commali.i}
 
-{msisdn.i}
-{fctserval.i}
+{Func/msisdn.i}
+{Func/fctserval.i}
 
 DEF INPUT PARAMETER iiMsSeq LIKE MobSub.MsSeq NO-UNDO.
 DEF INPUT PARAMETER idtDate AS DATE           NO-UNDO.
@@ -31,8 +31,8 @@ DEF VAR lcmi-no      AS CHAR NO-UNDO.
 DEF VAR occli        AS CHAR No-UNDO.
 DEF VAR liValue      AS INT  NO-UNDO.
 
-{cparam.i "DefCCode"         return}.  def-ccode = TMSparam.CharVal.
-{cparam.i DCFVoiceMailPref   RETURN}.  DCFPref   = TMSparam.CharVal.
+{Func/cparam.i "DefCCode"         return}.  def-ccode = TMSparam.CharVal.
+{Func/cparam.i DCFVoiceMailPref   RETURN}.  DCFPref   = TMSparam.CharVal.
 
 
 FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK.

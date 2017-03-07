@@ -7,16 +7,16 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{fmakemsreq.i}
-{forderstamp.i}
-{orderfunc.i}
-{fsubsterminal.i}
-{tmsconst.i}
-{offer.i}
-{fcpfat.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Func/fsubsterminal.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
+{Func/fcpfat.i}
+{Syst/tmsconst.i}
 
 DEFINE INPUT PARAMETER iiMSrequest AS INT NO-UNDO.
 
@@ -91,7 +91,7 @@ THEN DO:
 END.
 
 /* Send order confirmation email */
-RUN prinoconf.p (Order.OrderID).
+RUN Mc/prinoconf.p (Order.OrderID).
 
 IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -159,7 +159,7 @@ IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO:
    IF lcFatGroup = ? OR lcFatGroup = "" THEN 
       lcError = "FATime group for campaign not defined".
       
-   ELSE RUN creafat (MobSub.CustNum,
+   ELSE RUN Mc/creafat.p (MobSub.CustNum,
                      MobSub.MsSeq,
                      lcFatGroup,
                      "",
@@ -182,7 +182,7 @@ IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO:
 END. /* IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO: */
 
 /* terminate and activate periodical contracts */
-RUN requestaction_exec.p (MsRequest.MsRequest,
+RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
                         MobSub.CLIType,
                         Order.OrderID,
                         Order.CrStamp,
@@ -193,14 +193,14 @@ RUN requestaction_exec.p (MsRequest.MsRequest,
 
 /* initial topup, fatime, per.contracts from offer */
 IF Order.Offer > "" THEN 
-   RUN offeritem_exec.p (MobSub.MsSeq,
+   RUN Mc/offeritem_exec.p (MobSub.MsSeq,
                        Order.OrderID,
                        ?,
                        MsRequest.MsRequest,
                        {&REQUEST_SOURCE_RENEWAL}).
  
 /* per.contract and service package created with the order */
-RUN orderaction_exec.p (MobSub.MsSeq,
+RUN Mm/orderaction_exec.p (MobSub.MsSeq,
                       Order.OrderID,
                       ?,
                       MsRequest.MsRequest,
@@ -217,7 +217,7 @@ IF Order.CLIType = "CONT5" THEN DO:
 END. /* IF Order.CLIType = "CONT5" THEN DO: */
 
 /* update customer data */
-RUN createcustomer.p(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
+RUN Mm/createcustomer.p(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
 
 /* update corporate customer contact data */
 IF OrderCustomer.CustID = "CIF" THEN DO:
@@ -227,7 +227,7 @@ IF OrderCustomer.CustID = "CIF" THEN DO:
             OrderCustomer.OrderID = Order.OrderID AND
             OrderCustomer.RowType = 5:
 
-      RUN createcustcontact.p(
+      RUN Mm/createcustcontact.p(
           Order.OrderId,
           MsRequest.Custnum,
           OrderCustomer.RowType,

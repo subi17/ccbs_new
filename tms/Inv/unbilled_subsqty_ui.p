@@ -8,19 +8,19 @@
 ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE TraceLog NO
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 &IF "{&TraceLog}" = "YES" 
 &THEN
-{log.i}
+{Func/log.i}
 fSetLogFileName("/tmp/unbilled_subs.log").
 fSetLogEntryTypes("4GLTrace:4").
 fClearLog().
 &ENDIF
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 
@@ -110,7 +110,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    
    ELSE ASSIGN 
@@ -120,7 +120,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -146,7 +146,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    END.
 
    ELSE IF toimi = 3 THEN 
-      RUN report_config.p ("UnbilledSubsQty").
+      RUN Syst/report_config.p ("UnbilledSubsQty").
  
    ELSE IF toimi = 5 THEN DO:
       
@@ -168,7 +168,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT.
       END.
            
-      RUN unbilled_subsqty.p (liPeriod,
+      RUN Inv/unbilled_subsqty.p (liPeriod,
                               ldaInvDate[1],
                               ldaInvDate[2],
                               lcFile,

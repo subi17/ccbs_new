@@ -17,7 +17,7 @@
  */
 
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 
 /* Input parameters */
@@ -76,20 +76,20 @@ CASE pcReqType:
    OTHERWISE RETURN appl_err("Unknown request type " + pcReqType).
 END.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun   = "VISTA_" + get_string(param_toplevel_id, "1").
 gcBrand = "1".
-{cparam2.i}
-{msreqfunc.i}
-{eventval.i}
-{fsendsms.i}
-{fsubstermreq.i}
-{main_add_lines.i}
+{Func/cparam2.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fsendsms.i}
+{Func/fsubstermreq.i}
+{Func/main_add_lines.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMsRequest AS HANDLE NO-UNDO.
    lhMsRequest = BUFFER MsRequest:HANDLE.
@@ -140,7 +140,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
                LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES} + ",12") = 0
                NO-LOCK NO-ERROR.
             IF AVAIL Order THEN DO TRANS ON ERROR UNDO:
-               RUN closeorder.p(Order.OrderId,TRUE).
+               RUN Mc/closeorder.p(Order.OrderId,TRUE).
                IF RETURN-VALUE NE "" THEN NEXT.
                IF fReqStatus(4, pcMemo) = FALSE THEN UNDO.
                ELSE liReqCount = liReqCount + 1.
@@ -222,7 +222,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
          IF MsRequest.ReqStatus = 0 OR 
             MsRequest.ReqStatus = 8 THEN DO:
             fReqStatus(4, pcMemo).
-            RUN acc_sendsms.p(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Cancelled",
                             "").

@@ -45,7 +45,7 @@ TT    Uppercase time marker string THEN  AM or PM.
 &THEN
 &GLOBAL-DEFINE tsformat YES
 
-{date.i}
+{Func/date.i}
 
 FUNCTION fTSFormatItem RETURNS CHAR
 (ldaDate AS DATE,

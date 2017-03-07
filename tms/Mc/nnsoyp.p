@@ -15,22 +15,22 @@
 
 &GLOBAL-DEFINE BrTable salesoffice
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'salesoffice'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'salesoffice'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSalesoffice AS HANDLE NO-UNDO.
    lhSalesoffice = BUFFER Salesoffice:HANDLE.
    RUN StarEventInitialize(lhSalesoffice).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhSalesoffice).
+      RUN Mc/eventview2.p(lhSalesoffice).
    END.
 
 END.
@@ -66,7 +66,7 @@ WITH width 80 OVERLAY scroll 1 15 DOWN
     " Maintain sales offices " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     Salesoffice.SalesOffice
@@ -94,7 +94,7 @@ form /*  search WITH FIELD SOName */
     with row 4 col 2 title color value(ctc) " FIND Name "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 
@@ -125,12 +125,12 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* Salesoffice -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR Salesoffice.SalesOffice
            VALIDATE
@@ -220,16 +220,16 @@ BROWSE:
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW Salesoffice.SalesOffice ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Salesoffice.SalesOffice {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Salesoffice.SalesOffice WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Salesoffice.SOName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Salesoffice.SOName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Salesoffice.SOName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -365,9 +365,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        haku-so-code = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand with frame haku-f1.
        UPDATE 
          lcBrand WHEN gcAllBrand
@@ -388,9 +388,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        haku-so-name = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand WITH frame haku-f2.
        UPDATE 
          lcBrand WHEN gcAllBrand
@@ -478,8 +478,8 @@ BROWSE:
        FIND Salesoffice where recid(Salesoffice) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           Salesoffice.SalesOffice  
           Salesoffice.SOName 

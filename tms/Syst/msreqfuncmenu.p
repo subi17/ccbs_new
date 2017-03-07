@@ -7,7 +7,7 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INTEGER NO-UNDO.
 
@@ -73,7 +73,7 @@ WITH ROW 2 OVERLAY FrmDown DOWN
     CENTERED
     FRAME sel.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 /* Empty label */
@@ -156,12 +156,12 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
       
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttMenu.Menutext ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttMenu.Menutext {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttMenu.MenuText WITH FRAME sel.
       END.
       nap = keylabel(LASTKEY).

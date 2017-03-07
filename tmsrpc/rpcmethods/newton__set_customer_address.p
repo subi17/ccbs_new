@@ -31,10 +31,10 @@
  */
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{fmakemsreq.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -48,7 +48,7 @@ DEF NEW SHARED VAR scUser AS CHAR NO-UNDO.
 scUser = "Newton".
 &GLOBAL-DEFINE STAR_EVENT_USER scUser
 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
 /* Eventlog definition end */
 

@@ -8,7 +8,7 @@
                               - ON F8 ENDKEY.
   Version ......: M15
   --------------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 
 IF NOT CAN-FIND(FIRST FixCDR where FixCDR.InvCust = 1000) THEN DO:
    MESSAGE "There are no unknown A-subscribers !" VIEW-AS ALERT-BOX.

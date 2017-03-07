@@ -7,17 +7,17 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
    
-{cparam2.i}
-{files.i}
-{timestamp.i}
-{funcrunprocess_run.i}
-{date.i}
-{chk_cdr_invrowcounter.i}
+{Func/cparam2.i}
+{Func/files.i}
+{Func/timestamp.i}
+{Syst/funcrunprocess_run.i}
+{Func/date.i}
+{Inv/chk_cdr_invrowcounter.i}
 
 DEF VAR liCounterCnt  AS INT  NO-UNDO.
 DEF VAR liFRProcessID AS INT  NO-UNDO.
@@ -51,7 +51,7 @@ ldaPeriodEnd = fLastDayOfMonth(TODAY).
 
 RUN pGetFeeds.
 
-RUN chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
+RUN Inv/chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
                             FuncRunProcess.ProcSeq,    
                             ldaPeriodEnd,
                             liFRProcessID,

@@ -9,7 +9,7 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEFINE TEMP-TABLE ttFiles NO-UNDO
    FIELD FileName AS CHARACTER FORMAT "X(78)".
@@ -45,7 +45,7 @@ FRAME sel.
 
 cfc = "sel".
 
-run ufcolor.
+RUN Syst/ufcolor.p.
 
 ccc = cfc.
 
@@ -113,14 +113,14 @@ REPEAT WITH FRAME sel:
            ehto   = 3
            ufkey  = FALSE.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
 
       IF order = 1 THEN DO:
 
-        CHOOSE ROW ttFiles.FileName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttFiles.FileName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       
         COLOR DISPLAY VALUE(ccc) ttFiles.FileName WITH FRAME sel.
 

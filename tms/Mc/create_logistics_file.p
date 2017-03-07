@@ -10,25 +10,25 @@
 
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{date.i}
-{fwebuser.i}
-{transname.i}
-{ftaxdata.i}
-{eventlog.i}
-{log.i}
-{ftransdir.i}
-{tmsparam4.i}
-{forderstamp.i}
-{orderfunc.i}
-{fbundle.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/fwebuser.i}
+{Func/transname.i}
+{Func/ftaxdata.i}
+{Syst/eventlog.i}
+{Func/log.i}
+{Func/ftransdir.i}
+{Func/tmsparam4.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Mm/fbundle.i}
 {Mm/active_bundle.i}
-{mnp.i}
-{email.i}
+{Mnp/mnp.i}
+{Func/email.i}
 {Mc/shipping_cost.i}
 {Func/ftopup.i}
 
@@ -445,7 +445,7 @@ FUNCTION fDelivSIM RETURNS LOG
       /* YDR-1034-Move the Sales invoice creation
          from order process to Dextra */
       IF Order.InvNum = 0 OR Order.InvNum = ? THEN DO:
-         RUN cashfee.p(Order.OrderID,
+         RUN Mc/cashfee.p(Order.OrderID,
                        (IF llDextraInvoice THEN 5 ELSE 1),
                        OUTPUT lcError,
                        OUTPUT ldeAmount,
@@ -1727,7 +1727,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
               Order.CustNum = 0 NO-LOCK NO-ERROR.
    IF AVAILABLE Order THEN
    DO:
-      RUN createcustomer(INPUT ttOneDelivery.OrderId,1,FALSE,TRUE,OUTPUT oiCustomer).
+      RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,1,FALSE,TRUE,OUTPUT oiCustomer).
 
       llCorporate = CAN-FIND(OrderCustomer WHERE
                              OrderCustomer.Brand      = gcBrand               AND
@@ -1740,7 +1740,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
                OrderCustomer.OrderID = ttOneDelivery.OrderID:
          IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN
          DO:
-            RUN createcustcontact.p(OrderCustomer.OrderID,
+            RUN Mm/createcustcontact.p(OrderCustomer.OrderID,
                                     oiCustomer,
                                     OrderCustomer.RowType,
                                     OUTPUT lcError).
@@ -1772,7 +1772,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
          END.
       END.
 
-      RUN createcustomer(INPUT ttOneDelivery.OrderId,3,FALSE,TRUE,OUTPUT oiCustomer).
+      RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,3,FALSE,TRUE,OUTPUT oiCustomer).
    END.
 
    DO liLoop1 = 1 TO lhTable:NUM-FIELDS:

@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "Qvantel".
-{tmsconst.i}
-{timestamp.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 DEF VAR ldeAlreadyFatAmt AS DEC  NO-UNDO.
 DEF VAR ldeBundleFromTS  AS DEC  NO-UNDO.
@@ -119,7 +119,7 @@ for each Order where
       status default STRING(icount).
 
       IF NOT llsimulate AND llFATAllowed THEN DO:
-         RUN creafat.p (Order.CustNum,
+         RUN Mc/creafat.p (Order.CustNum,
                         Order.MsSeq,
                         lcnewftgrp,
                         "",

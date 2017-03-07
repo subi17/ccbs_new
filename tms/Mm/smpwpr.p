@@ -8,9 +8,9 @@
   VERSION ......: TeleF
   ------------------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{email.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/email.i}
 
 DEF INPUT PARAMETER icResell LIKE Reseller.Reseller NO-UNDO.
 
@@ -50,7 +50,7 @@ if count = 0 then do:
    RETURN.
 end.   
 
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 UPDATE 
    lcEMail with frame rajat.
 

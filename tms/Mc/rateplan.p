@@ -13,22 +13,22 @@
 
 &GLOBAL-DEFINE BrTable RatePlan
 
-{commali.i} 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'rateplan'}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'rateplan'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhRatePlan AS HANDLE NO-UNDO.
    lhRatePlan = BUFFER RatePlan:HANDLE.
    RUN StarEventInitialize(lhRatePlan).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhRatePlan).
+      RUN Mc/eventview2.p(lhRatePlan).
    END.
 
 END.
@@ -82,7 +82,7 @@ WITH  overlay row 4 centered
     1 columns
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek RatePlan  by  RatePlan */
     "Brand:" lcBrand skip
@@ -99,7 +99,7 @@ form /* seek RatePlan  by RPName */
     COLOR VALUE(cfc) no-labels overlay FRAME f2.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -131,12 +131,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a RatePlan  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, leave ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR RatePlan.RatePlan
@@ -227,16 +227,16 @@ REPEAT WITH FRAME sel:
         ufk[7]= 814   
         ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row RatePlan.RatePlan ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row RatePlan.RatePlan {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RatePlan.RatePlan WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row RatePlan.RPName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row RatePlan.RPName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RatePlan.RPName WITH FRAME sel.
       END.
 
@@ -365,8 +365,8 @@ REPEAT WITH FRAME sel:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -388,8 +388,8 @@ REPEAT WITH FRAME sel:
      /* Search by col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -413,7 +413,7 @@ REPEAT WITH FRAME sel:
 
         run local-find-this(false).
 
-        RUN plistconf(RatePlan.RatePlan).
+        RUN Mc/plistconf.p(RatePlan.RatePlan).
 
         ASSIGN ufkey    = TRUE
                pr-order = 0.
@@ -424,7 +424,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO: 
         run local-find-this(FALSE).
 
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "RatePlan",
                  INPUT STRING(RatePlan.RatePlan),
                  INPUT "Rating Plan").
@@ -439,7 +439,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 
@@ -499,7 +499,7 @@ REPEAT WITH FRAME sel:
      /* translations */
      ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
         FIND RatePlan WHERE RECID(RatePlan) = rtab[FRAME-LINE] NO-LOCK.
-        RUN invlang(11,RatePlan.RatePlan).
+        RUN Mc/invlang.p(11,RatePlan.RatePlan).
           
         ufkey = TRUE.
         NEXT LOOP.
@@ -509,10 +509,10 @@ REPEAT WITH FRAME sel:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(FALSE).
        ASSIGN ac-hdr = " CHANGE " ufkey = true.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY 
           RatePlan.RatePlan
           RatePlan.RPName.
@@ -627,14 +627,14 @@ PROCEDURE local-update-record:
          ufk[1] = 7 WHEN lcRight = "RW"
          ufk[8] = 8
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
          
       IF toimi = 1 THEN 
       ChangeType:
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          PROMPT-FOR RatePlan.RPName WITH FRAME lis.
 

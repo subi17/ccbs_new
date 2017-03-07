@@ -1,12 +1,12 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{timestamp.i}
-{utumaa.i new }
-{feplstart.i}
-{cparam2.i}
-{edefine.i NEW}
-{forderstamp.i}
+{Func/timestamp.i}
+{Syst/utumaa.i new }
+{Func/feplstart.i}
+{Func/cparam2.i}
+{Inv/edefine.i NEW}
+{Func/forderstamp.i}
 
 DEF VAR liTextID     AS INT  NO-UNDO.
 DEF VAR ldtDate      AS DATE NO-UNDO.

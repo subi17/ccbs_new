@@ -8,11 +8,11 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{cparam2.i}
-{utumaa.i "new"}
-{edefine.i "new"}
+{Func/cparam2.i}
+{Syst/utumaa.i "new"}
+{Inv/edefine.i "new"}
 
 assign tuni1 = "nnpura7"
        tuni2 = "".
@@ -93,7 +93,7 @@ toimi:
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       IF llStart THEN ASSIGN nap     = "1"
@@ -105,7 +105,7 @@ toimi:
 
       if lookup(nap,"1,f1") > 0 THEN DO:
          ASSIGN ehto = 9 ufkey = TRUE. 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
 
          REPEAT ON ENDKEY UNDO, LEAVE:
             UPDATE 
@@ -167,9 +167,9 @@ END. /* toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
-RUN umakro (TRUE,
+RUN Syst/umakro.p (TRUE,
             lcMacros).
 
 message "Printing in progress, ESC = cancel".
@@ -184,7 +184,7 @@ RUN nnpura7 (INPUT CustNum,
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

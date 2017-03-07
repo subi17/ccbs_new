@@ -14,13 +14,13 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{camprundf.i}
-{fcustpl.i}
-{nncoit2.i}
-{timestamp.i}
-{fmakeservlimit.i}
-{setfees.i}
+{Syst/commali.i}
+{Mc/camprundf.i}
+{Func/fcustpl.i}
+{Func/nncoit2.i}
+{Func/timestamp.i}
+{Func/fmakeservlimit.i}
+{Func/setfees.i}
 
 DEF STREAM sLog.
 OUTPUT STREAM sLog TO /apps/tms/snet/camrun.log append.
@@ -158,7 +158,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
       WHEN 3 THEN DO:  /* fatime */
       
                 IF liPer > 0 THEN DO:
-                   RUN creafat (Customer.CustNum,
+                   RUN Mc/creafat.p (Customer.CustNum,
                                 MsOwner.MsSeq,
                                 ttCamp.CRowItem,
                                 "",

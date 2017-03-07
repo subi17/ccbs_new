@@ -1,6 +1,6 @@
 {roamtariff.i}
 
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
 
 def stream sread.
@@ -31,7 +31,7 @@ repeat:
       next.
    END.   
    
-   RUN tapfilecr_yoi443.p(lcPlmn,ldtDate - 1,ldtDate - 1,"",FALSE,lcFileSeq).
+   RUN 200710/tapfilecr_yoi443.p(lcPlmn,ldtDate - 1,ldtDate - 1,"",FALSE,lcFileSeq).
 
 put stream slog unformatted
        lcPlmn           chr(9)

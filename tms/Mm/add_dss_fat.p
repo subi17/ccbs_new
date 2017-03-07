@@ -8,13 +8,13 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun   = "CRON".
-{cparam2.i}
-{timestamp.i}
-{fdss.i}
-{fcpfat.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fdss.i}
+{Func/fcpfat.i}
 
 DEF VAR lcPromotionPath          AS CHAR NO-UNDO.
 DEF VAR ldaPromoFromDate         AS DATE NO-UNDO.
@@ -107,7 +107,7 @@ FOR EACH ttDSSFat NO-LOCK:
    END. /* IF fFatExists */
 
    /* Create FAT */
-   RUN creafat.p(ttDSSFat.CustNum,
+   RUN Mc/creafat.p(ttDSSFat.CustNum,
                  ttDSSFat.DSSMsSeq,
                  "DSSCPFREE",
                  "",

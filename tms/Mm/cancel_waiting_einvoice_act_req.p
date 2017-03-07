@@ -9,14 +9,14 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "Cron".
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{msreqfunc.i}
-{eventval.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
 
 DEF VAR liConfDays       AS INT  NO-UNDO.
 DEF VAR ldMsActDate      AS DATE NO-UNDO.
@@ -25,7 +25,7 @@ DEF VAR lhCustomer     AS HANDLE NO-UNDO.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
    RUN StarEventInitialize(lhCustomer).
 END. /* IF llDoEvent THEN DO: */

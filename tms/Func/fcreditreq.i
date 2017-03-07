@@ -6,11 +6,11 @@
 &THEN
 &GLOBAL-DEFINE FCREDITREQ_I YES
    
-{fcreatereq.i}
-{cparam2.i}
-{faccper.i}
-{fcreditvalid.i}
-{fparse.i}
+{Func/fcreatereq.i}
+{Func/cparam2.i}
+{Func/faccper.i}
+{Func/fcreditvalid.i}
+{Func/fparse.i}
 {Func/date.i}
 {Func/lib/eventlog_delete.i}
 

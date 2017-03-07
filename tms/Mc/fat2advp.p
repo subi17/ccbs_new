@@ -7,7 +7,7 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER iiFatNum    AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiVoucher   AS INT  NO-UNDO.
@@ -32,7 +32,7 @@ FOR FIRST FatGroup OF FATime NO-LOCK,
    /* adv.payment is posted to invoicing customer */
    FIND Customer OF FATime NO-LOCK.
    
-   RUN advpaym (Customer.InvCust,
+   RUN Ar/advpaym.p (Customer.InvCust,
                 Fatime.Amt - Fatime.Used - Fatime.TransQty,
                 TODAY,
                 Account.AccNum,

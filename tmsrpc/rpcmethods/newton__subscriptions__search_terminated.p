@@ -18,12 +18,12 @@
  */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
 {json_key.i}
-{timestamp.i}
-{fbundle.i}
+{Func/timestamp.i}
+{Mm/fbundle.i}
 
 /* Input parameters */
 DEF VAR pcInput AS CHAR NO-UNDO.

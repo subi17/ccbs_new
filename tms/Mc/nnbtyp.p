@@ -24,24 +24,24 @@
 
 &GLOBAL-DEFINE BrTable BDest
 
-{commali.i} 
-{tmsparam2.i}
-{timestamp.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'bdest'}
+{Syst/commali.i} 
+{Func/tmsparam2.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'bdest'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhBDest AS HANDLE NO-UNDO.
    lhBDest = BUFFER BDest:HANDLE.
    RUN StarEventInitialize( lhBDest ).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhBDest).
+      RUN Mc/eventview2.p(lhBDest).
    END.
 
 END.
@@ -110,7 +110,7 @@ WITH
    OVERLAY ROW 4 centered COLOR value(cfc) TITLE COLOR value(ctc)
    fr-header WITH side-LABELs FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 
 FORM 
@@ -163,7 +163,7 @@ FUNCTION fBDestClass RETURNS CHAR
 END.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST BDest where 
@@ -203,7 +203,7 @@ repeat WITH FRAME sel:
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-MESSAGE.
-         assign cfc = "lis" ehto = 9. RUN ufkey. RUN ufcolor.
+         assign cfc = "lis" ehto = 9. RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
          fr-header = " ADD ".
 
          DO TRANSAction ON ENDKEY UNDO add-new, LEAVE add-new:
@@ -336,16 +336,16 @@ repeat WITH FRAME sel:
          ufk[7]= 1162 ufk[8]= 8   ufk[9]= 1
          ehto = 3 ufkey = FALSE.
 
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
       END.
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW BDest.BDest ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW BDest.BDest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) BDest.BDest WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
-         CHOOSE ROW BDest.BDName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW BDest.BDName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) BDest.BDName WITH FRAME sel.
       END.
 
@@ -585,9 +585,9 @@ repeat WITH FRAME sel:
 
       /* Haku 1 */
       ELSE IF lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-         cfc = "puyr". RUN ufcolor.
+         cfc = "puyr". RUN Syst/ufcolor.p.
          haku = "".
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
          DISPLAY lcBrand WITH FRAME hayr.
          UPDATE lcBrand WHEN gcAllBrand
@@ -616,9 +616,9 @@ repeat WITH FRAME sel:
       END. /* Haku sar. 1 */
 
       ELSE IF lookup(nap,"2,f2") > 0 THEN DO:  /* haku nimellA */
-         cfc = "puyr". RUN ufcolor.
+         cfc = "puyr". RUN Syst/ufcolor.p.
          hakunimi = "".
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          DISPLAY lcBrand WITH FRAME hayr3.
          UPDATE lcBrand WHEN gcAllBrand
                 hakunimi WITH FRAME hayr3.
@@ -641,7 +641,7 @@ repeat WITH FRAME sel:
          FIND FIRST BDest WHERE
               RECID(BDest) = rtab[frame-line(sel)] NO-LOCK NO-ERROR.
 
-         RUN rateccn(BDest.BDestID).
+         RUN Mc/rateccn.p(BDest.BDestID).
 
          ASSIGN 
             memory = recid(BDest)
@@ -651,7 +651,7 @@ repeat WITH FRAME sel:
       /* translations */
       ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
          FIND BDest where recid(BDest) = rtab[FRAME-LINE] NO-LOCK.
-         RUN invlang(2,STRING(BDest.BDestID)).
+         RUN Mc/invlang.p(2,STRING(BDest.BDestID)).
          ufkey = TRUE.
          NEXT LOOP.
       END.
@@ -729,7 +729,7 @@ repeat WITH FRAME sel:
       END. /* removal */
 
       ELSE IF lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANS:
-         cfc = "lis". RUN ufcolor.
+         cfc = "lis". RUN Syst/ufcolor.p.
          /* change */
          fr-header = " CHANGE ".
          FIND BDest where recid(BDest) = rtab[frame-line(sel)] NO-lock.
@@ -838,7 +838,7 @@ PROCEDURE local-update-record:
             ehto   = 0
             ufkey  = TRUE.
            
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       ELSE toimi = 1.
         
@@ -847,7 +847,7 @@ PROCEDURE local-update-record:
          FIND CURRENT BDest EXCLUSIVE-LOCK.
 
          ASSIGN ufkey = TRUE ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
    
          UPDATE
             BDest.BDName WHEN NOT NEW BDest
@@ -862,7 +862,7 @@ PROCEDURE local-update-record:
                
             IF nap = "F9" AND FRAME-FIELD = "Class" THEN DO: 
 
-               RUN h-tmscodes(INPUT "BDest",  /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "BDest",  /* TableName*/
                                     "BDestClass", /* FieldName */
                                     ?, /* GroupCode */
                               OUTPUT lcCode).
@@ -871,7 +871,7 @@ PROCEDURE local-update-record:
                   DISPLAY INTEGER(lcCode) ;& BDest.Class WITH FRAME lis.
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
             
@@ -918,7 +918,7 @@ PROCEDURE local-update-record:
          IF NEW BDest THEN LEAVE BDestUpdate.
       END.
       ELSE IF toimi = 4 THEN DO:
-         RUN bdesttrans.p(Bdest.BdestId).
+         RUN Mc/bdesttrans.p(Bdest.BdestId).
       END.
 
       ELSE IF toimi = 8 THEN LEAVE.

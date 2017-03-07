@@ -1,8 +1,8 @@
 /* funcrun_replica.i    20.12.12/aam 
 */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF VAR liReplPortion AS INT  NO-UNDO.
 DEF VAR liReplVolume  AS INT  NO-UNDO.

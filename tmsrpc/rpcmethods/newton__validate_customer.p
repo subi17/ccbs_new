@@ -48,7 +48,7 @@ IF NOT AVAIL MobSub THEN DO:
     RETURN.
 END.
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = lcBrand.
 lcName =  DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
                            BUFFER Customer).

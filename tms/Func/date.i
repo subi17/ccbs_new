@@ -18,7 +18,7 @@
 &IF "{&fdate}" NE "YES"
 &THEN
 
-{timestamp.i}
+{Func/timestamp.i}
 &GLOBAL-DEFINE fdate YES
 
 /** This function converts date to Timestamp 

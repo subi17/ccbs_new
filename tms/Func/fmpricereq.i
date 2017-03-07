@@ -3,8 +3,8 @@
    create a price change request 
 */
 
-{commali.i}   
-{fcreatereq.i}
+{Syst/commali.i}   
+{Func/fcreatereq.i}
 
 FUNCTION fFeeModelPriceRequest RETURNS INTEGER
    (INPUT  icBillCode    AS CHAR,   /* billing item */

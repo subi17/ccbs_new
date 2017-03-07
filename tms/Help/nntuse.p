@@ -11,7 +11,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -57,7 +57,7 @@ form
 with row 1 centered overlay title " SEEK BillItem " FRAME alku.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
    FIND FIRST BillItem WHERE BillItem.Brand = gcBrand 
       USE-INDEX BillCode no-lock no-error.
    IF NOT AVAIL BillItem THEN DO:
@@ -79,7 +79,7 @@ repeat WITH FRAME sel:
        ASSIGN haettava = FALSE nrohaku = FALSE.
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku:
-          ehto = 9. RUN ufkey. ufkey = TRUE.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE tuhaku WITH FRAME alku EDITING:
              READKEY. nap = keylabel(LASTKEY).
 
@@ -182,16 +182,16 @@ BROWSE:
          ufk[1]= 0   ufk[2]= 0   ufk[3]= 0 ufk[4]= 0
          ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
-         CHOOSE ROW BillItem.BillCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BillItem.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BillItem.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
-         CHOOSE ROW BillItem.BIName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BillItem.BIName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BillItem.BIName WITH FRAME sel.
       END.
 

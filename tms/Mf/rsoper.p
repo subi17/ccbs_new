@@ -9,8 +9,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -36,7 +36,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhrsoper AS HANDLE NO-UNDO.
    lhrsoper = BUFFER rsoper:HANDLE.
@@ -44,7 +44,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhrsoper).
+      RUN Mc/eventview2.p(lhrsoper).
    END.
 END.
 
@@ -88,7 +88,7 @@ form /*  search WITH FIELD Operator */
 with row 4 col 2 title color value(ctc) " FIND OPERATOR CODE "
    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST rsoper no-lock no-error.
@@ -113,13 +113,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* rsoper -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR rsoper.CustNum
            VALIDATE
@@ -225,24 +225,24 @@ BROWSE:
         ufk[1] = 702 ufk[2] = 35 ufk[3] = 0 ufk[4] = 0
         ufk[5] = 5   ufk[6] = 4  ufk[7] = 0 ufk[8] = 8 ufk[9] = 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW rsoper.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW rsoper.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) rsoper.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW rsoper.Operator ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW rsoper.Operator {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) rsoper.Operator WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW rsoper.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW rsoper.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) rsoper.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW rsoper.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW rsoper.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) rsoper.? WITH FRAME sel.
       END.
 */
@@ -448,9 +448,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
       CustNum = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustNum WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF CustNum <> 0 THEN DO:
@@ -472,9 +472,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Operator = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Operator WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if Operator <> "" THEN DO:
@@ -602,8 +602,8 @@ BROWSE:
                   rscode.Reseller = rsoper.Reseller
        no-lock no-error.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           rsoper.CustNum
           rsoper.pstype

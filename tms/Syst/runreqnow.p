@@ -8,8 +8,8 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INTEGER.
 DEFINE INPUT PARAMETER iiStatNow   AS INTEGER.
@@ -48,7 +48,7 @@ ELSE MESSAGE "Run this request now ?"
      SET ok.
 
 IF ok THEN DO:
-   RUN runreqim(MsRequest.MsRequest).
+   RUN Mm/runreqim.p(MsRequest.MsRequest).
            
    IF RETURN-VALUE > "" THEN
       MESSAGE RETURN-VALUE

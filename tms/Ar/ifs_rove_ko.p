@@ -6,10 +6,10 @@
   CREATED ......: 07.11.12
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{dumpfile_run.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 {Mc/shipping_cost.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
