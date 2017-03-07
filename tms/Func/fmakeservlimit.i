@@ -234,7 +234,8 @@ FUNCTION fMakeServLimit RETURN LOGICAL
             llCreated               = True.
 
          /* Upgrade Upsell */
-         IF AVAILABLE MsRequest AND MsRequest.ReqDParam1 > 0 THEN
+         IF AVAILABLE MsRequest AND MsRequest.ReqDParam1 > 0 AND
+            ServiceLimit.DialType EQ {&DIAL_TYPE_GPRS} THEN
             MServiceLimit.InclAmt = ROUND(MsRequest.ReqDParam1 * ldFactor[liCount],2).
          ELSE
             MServiceLimit.InclAmt = ROUND(ServiceLimit.InclAmt * ldFactor[liCount],2).
