@@ -8,7 +8,7 @@ def buffer bmnp for mnpprocess.
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 
-{timestamp.i}
+{Func/timestamp.i}
 LOOPPI:
 repeat:
    import unformatted lcLine.

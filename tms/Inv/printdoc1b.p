@@ -9,17 +9,17 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "Cron".
        
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
-{printdoc1tt.i}
-{email.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Inv/printdoc1tt.i}
+{Func/email.i}
 
 DEF VAR liCnt        AS INT  NO-UNDO.
 DEF VAR liRead       AS INT  NO-UNDO. 
@@ -196,7 +196,7 @@ IF NOT lcFileType BEGINS "XML" THEN
 
 /* print */
 IF lcFileType BEGINS "XML" THEN 
-   RUN invoice_xml (INPUT-OUTPUT TABLE ttInvoice,
+   RUN Inv/invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
                     ldtNameDate,
                     liInvCount,
                     llSeparate,

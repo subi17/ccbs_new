@@ -9,14 +9,14 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhBank AS HANDLE NO-UNDO.
    lhBank = BUFFER Bank:HANDLE.

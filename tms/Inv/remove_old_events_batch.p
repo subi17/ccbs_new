@@ -5,12 +5,12 @@
   CREATED ......: 03.04.12
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun = "cron".
-{eventlog.i}
-{old_unbilled_events.i}
+{Syst/eventlog.i}
+{Inv/old_unbilled_events.i}
 
 DEF VAR liEvents     AS INT  NO-UNDO.
 DEF VAR ldaEventDate AS DATE NO-UNDO.
@@ -21,7 +21,7 @@ ldaEventDate = fOldUnbilledEventLimit(0).
 fELog("REMOVE_OLD_UNBILLED_EVENTS","Started:Limit" +
                                    STRING(ldaEventDate,"99-99-9999")).
 
-RUN remove_old_events.p(0,
+RUN Inv/remove_old_events.p(0,
                         ldaEventDate,
                         TRUE,
                         TRUE,

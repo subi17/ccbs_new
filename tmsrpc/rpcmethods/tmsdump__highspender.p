@@ -12,13 +12,13 @@ DEF VAR liPeriod AS INT NO-UNDO.
 liPeriod = INT(STRING(YEAR(TODAY)) + STRING(MONTH(TODAY),"99")).
 lcArray = add_array(response_toplevel_id, "").
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "NewtonAd".
 gcBrand = "1".
-{highusage_report.i}
-{timestamp.i}
+{Func/highusage_report.i}
+{Func/timestamp.i}
 {json_key.i}
-{barrfunc.i}
+{Func/barrfunc.i}
 
 FUNCTION process_highspender_row RETURN LOGICAL
       ( BUFFER phInvCust FOR Customer,

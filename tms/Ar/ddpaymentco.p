@@ -8,8 +8,8 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -27,7 +27,7 @@ DEF VAR liPicked    AS INT  NO-UNDO.
 DEF VAR ldtFrom     AS DATE NO-UNDO.
 DEF VAR ldtTo       AS DATE NO-UNDO.
 
-{ddpaymentt.i}
+{Ar/ddpaymentt.i}
 
 
 FUNCTION fMakeTemp RETURNS LOGICAL.
@@ -117,7 +117,7 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
 END. 
 
 
-RUN ddpayment (INPUT-OUTPUT TABLE ttInvoice,  
+RUN Ar/ddpayment.p (INPUT-OUTPUT TABLE ttInvoice,  
                idtPaymDate,
                liPicked,
                OUTPUT oiInvCount). 

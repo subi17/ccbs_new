@@ -7,8 +7,8 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{timestamp.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 &IF "{&SMSMESSAGE_I}" NE "YES"
 &THEN

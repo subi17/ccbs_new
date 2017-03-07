@@ -1,11 +1,11 @@
 &GLOBAL-DEFINE PersistentRun YES
 &GLOBAL-DEFINE CounterHandling TempTable
 
-{commali.i}
-{rerate_define.i}
-{premiumnumber.i}
-{funcrunprocess_update.i}
-{direct_dbconnect.i}
+{Syst/commali.i}
+{Rate/rerate_define.i}
+{Rate/premiumnumber.i}
+{Syst/funcrunprocess_update.i}
+{Func/direct_dbconnect.i}
 
 DEF INPUT  PARAMETER iiFRProcessID AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiUpdInterval AS INT  NO-UNDO.
@@ -480,7 +480,7 @@ PROCEDURE pRunCustRerate:
                   MobCDR.datest  <= cdate2    
          TRANSACTION WITH FRAME MobCDR: 
        
-            {man_rate2.i}           
+            {Rate/man_rate2.i}           
 
 
 PROCEDURE pRunCliRerate:
@@ -568,7 +568,7 @@ PROCEDURE pRunCliRerate:
                   MobCDR.datest  <= cdate2    
          TRANSACTION WITH FRAME MobCDR: 
        
-            {man_rate2.i}           
+            {Rate/man_rate2.i}           
 
 
 FINALLY:

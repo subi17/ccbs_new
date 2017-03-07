@@ -1,5 +1,5 @@
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE lcMenu AS CHARACTER NO-UNDO
    EXTENT 9 FORMAT "X(30)".
@@ -12,7 +12,7 @@ DO WHILE TRUE:
       ufk[8] = 8
       ehto   = 3.
 
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    on f1 bell.
    on f2 bell.
@@ -38,16 +38,16 @@ DO WHILE TRUE:
 
    CASE FRAME-INDEX:
 
-      WHEN 1 THEN RUN mnpstatus({&MNP_TYPE_OLD}).
-      WHEN 2 THEN RUN mnpstatus({&MNP_TYPE_IN}).
-      WHEN 3 THEN RUN mnpstatus({&MNP_TYPE_OUT}).
-      WHEN 4 THEN RUN mnpstatus({&MNP_TYPE_TERMINATION}).
-/*    WHEN 5 THEN RUN mnpstatus(4).
-      WHEN 6 THEN RUN mnpstatus(5).
-      WHEN 7 THEN RUN mnpstatus(6). */
+      WHEN 1 THEN RUN Mnp/mnpstatus.p({&MNP_TYPE_OLD}).
+      WHEN 2 THEN RUN Mnp/mnpstatus.p({&MNP_TYPE_IN}).
+      WHEN 3 THEN RUN Mnp/mnpstatus.p({&MNP_TYPE_OUT}).
+      WHEN 4 THEN RUN Mnp/mnpstatus.p({&MNP_TYPE_TERMINATION}).
+/*    WHEN 5 THEN RUN Mnp/mnpstatus.p(4).
+      WHEN 6 THEN RUN Mnp/mnpstatus.p(5).
+      WHEN 7 THEN RUN Mnp/mnpstatus.p(6). */
 
       WHEN 9 THEN LEAVE CHOISES.
-      OTHERWISE . /* RUN mnpstatus(FRAME-INDEX). */
+      OTHERWISE . /* RUN Mnp/mnpstatus.p(FRAME-INDEX). */
 
    END.
 

@@ -1,13 +1,13 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{flimitreq.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{fcustdata.i}
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/fcustdata.i}
 
 &SCOPED-DEFINE STAT_00 "00" /* Threshold successfully updated */
 &SCOPED-DEFINE STAT_10 "10" /* ERROR: Client doesn.t exist */

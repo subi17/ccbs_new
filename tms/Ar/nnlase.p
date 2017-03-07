@@ -6,8 +6,8 @@
   CREATED ......: 12-07-91
   CHANGED ......: 13.10.98 pt  disp "notes", english Version
                   25.05.99 jp  uright1 & uright2 added  
-                  06.04.00 pt  RUN invbal
-                  20.05.02/tk  RUN memo
+                  06.04.00 pt  RUN Ar/invbal.p
+                  20.05.02/tk  RUN Mc/memo.p
                   14.10.02/aam disp Currency
                   01.11.02/aam PaymState added
                   12.11.02 jr  "Invoice" => "invoice" in memo
@@ -18,13 +18,13 @@
                   09.02.04/aam parameters from gcHelpParam
                   14.04.04/aam index CustName replaced with CustNum 
                   18.04.06/aam use payments.p instead of nnlasu.p
-                  22.03.07 kl  new param for run payments
+                  22.03.07 kl  new param for RUN Ar/payments.p
 
   Version ......: M15
   -------------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable Invoice
 
-{commali.i}
+{Syst/commali.i}
 
 DEF NEW shared VAR order AS INT NO-UNDO.
 DEF shared VAR siirto AS CHAR.
@@ -89,9 +89,9 @@ form
     with row 4 col 2 title color value(ctc) " FIND DATE"
     COLOR value(cfc) NO-LABELS OVERLAY FRAME F4.
 
-{brand.i}
+{Func/brand.i}
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 IF gcHelpParam > "" THEN DO:
@@ -177,25 +177,25 @@ print-line:
             ufk[3] = 0
             ufk[4] = 0.
 
-         {uright1.i '"6,7"'}
-         RUN ufkey.
+         {Syst/uright1.i '"6,7"'}
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW Invoice.ExtInvID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Invoice.ExtInvID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.ExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW Invoice.InvNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Invoice.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.InvNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW Invoice.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Invoice.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-         CHOOSE ROW Invoice.InvDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Invoice.InvDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.InvDate WITH FRAME sel.
       END.
 
@@ -341,9 +341,9 @@ print-line:
      END. /* NEXT page */
 
      ELSE IF LOOKUP(nap,"1,F1") > 0 AND ufk[1] > 0 THEN DO:  
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE lcExtInvID WITH FRAME F1.
         HIDE FRAME F1 no-pause.
 
@@ -360,9 +360,9 @@ print-line:
      END. 
 
      ELSE IF LOOKUP(nap,"2,F2") > 0 AND ufk[2] > 0 THEN DO:  
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE liInvNum WITH FRAME F2.
         HIDE FRAME F2 no-pause.
 
@@ -378,9 +378,9 @@ print-line:
      END. 
 
      ELSE IF LOOKUP(nap,"3,F3") > 0 AND ufk[3] > 0  THEN DO:  
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE liCustNum WITH FRAME F3.
         HIDE FRAME F3 no-pause.
 
@@ -397,9 +397,9 @@ print-line:
      END. 
 
      ELSE IF LOOKUP(nap,"4,F4") > 0 AND ufk[4] > 0 THEN DO:
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         ldtInvDate = ?.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE ldtInvDate WITH FRAME F4.
         HIDE FRAME F4 no-pause.
 
@@ -423,7 +423,7 @@ print-line:
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANS: /* memo */
         FIND Invoice WHERE recid(Invoice) = rtab[frame-line(sel)]
            NO-LOCK NO-ERROR.
-        RUN memo(INPUT Invoice.CustNum,
+        RUN Mc/memo.p(INPUT Invoice.CustNum,
                  INPUT "invoice",
                  INPUT STRING(Invoice.InvNum),
                  INPUT "Invoice number").
@@ -434,7 +434,7 @@ print-line:
      else if lookup(nap,"f7,7") > 0 THEN DO:
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE(sel)] 
            no-lock NO-ERROR.
-        RUN payments(0,Invoice.InvNum,"").
+        RUN Ar/payments.p(0,Invoice.InvNum,"").
         ufkey = TRUE.
         NEXT.
      END.
@@ -473,7 +473,7 @@ si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 
-    RUN invbal(Invoice.InvNum, OUTPUT BalDue).
+    RUN Ar/invbal.p(Invoice.InvNum, OUTPUT BalDue).
 
     notes = CAN-FIND(FIRST memo WHERE 
                            memo.Brand     = Invoice.Brand AND

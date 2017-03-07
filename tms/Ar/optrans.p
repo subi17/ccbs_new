@@ -13,9 +13,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}  /*qupd = TRUE.*/
-{lib/tokenlib.i}
-{lib/tokenchk.i 'oplog'}
+{Syst/commali.i}  /*qupd = TRUE.*/
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'oplog'}
 
 DEF INPUT PARAMETER iiCustNum AS I NO-UNDO.
 DEF /* NEW */ shared VAR siirto AS CHAR.
@@ -102,7 +102,7 @@ FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
 
 lcCustName =  DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
                                 BUFFER Customer).
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Invoice  ,   By Date    ,   By 3    , By 4".
@@ -192,16 +192,16 @@ BROWSE:
         ufk[1]= 36  ufk[2]= 28 ufk[3]= 0 ufk[4]= 0
         ufk[5]= 0  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OPLog.InvNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OPLog.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OPLog.InvNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW OPLog.EventDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OPLog.EventDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OPLog.EventDate WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -329,8 +329,8 @@ BROWSE:
 
      /* Search BY column 1 */                          
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET InvNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -354,8 +354,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET EventDate WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -386,8 +386,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY OPLog.InvNum.
 
        RUN local-update-record.                                  
@@ -517,7 +517,7 @@ PROCEDURE local-update-record:
 
       WITH FRAME lis.
 
-      ufk = 0. ehto = 3. RUN ufkey.
+      ufk = 0. ehto = 3. RUN Syst/ufkey.p.
       message "Press ENTER !".
       PAUSE no-message.
 

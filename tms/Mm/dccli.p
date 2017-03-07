@@ -11,25 +11,25 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{cparam2.i}
-{daycampaign.i}
-{timestamp.i}
-{fctserval.i}
-{fctchange.i}
-{fmakemsreq.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/cparam2.i}
+{Rate/daycampaign.i}
+{Func/timestamp.i}
+{Func/fctserval.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
         
     DEF VAR lhDCCLI AS HANDLE NO-UNDO.
     lhDCCLI = BUFFER DCCLI:HANDLE.
     RUN StarEventInitialize(lhDCCLI).
                     
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhDCCLI).
+        RUN Mc/eventview2.p(lhDCCLI).
     END.
 END.
 
@@ -123,7 +123,7 @@ form
 
  
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By cli   ,  By Name  ,By 3, By 4".
@@ -151,12 +151,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DCCLI  */ 
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            
            CLEAR FRAME lis NO-PAUSE.
@@ -264,16 +264,16 @@ REPEAT WITH FRAME sel:
         
         IF icEvent > "" THEN ufk[2] = 0.
            
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row DCCLI.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row DCCLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DCCLI.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row DCCLI.DCEvent ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row DCCLI.DCEvent {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DCCLI.DCEvent WITH FRAME sel.
       END.
       
@@ -401,8 +401,8 @@ REPEAT WITH FRAME sel:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET lCCli WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -432,8 +432,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        SET lCEvent WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -456,13 +456,13 @@ REPEAT WITH FRAME sel:
             RECID(DCCLI) = rtab[FRAME-LINE]
        NO-LOCK NO-ERROR.
 
-       RUN dccounter (DCCLI.msseq, 
+       RUN Mm/dccounter.p (DCCLI.msseq, 
                       DCCLI.dcevent,
                       DCCLI.ValidFrom,
                       DCCLI.ValidTo).
 
        ufkey = true.
-       run ufkey.
+       RUN Syst/ufkey.p.
        PAUSE 0.
      END.
      ELSE IF LOOKUP(nap,"5,F5") > 0 THEN DO:
@@ -471,14 +471,14 @@ REPEAT WITH FRAME sel:
               RECID(DCCLI) = rtab[FRAME-LINE]
          NO-LOCK NO-ERROR.
 
-         RUN memo.p
+         RUN Mc/memo.p
               (INPUT 0,
               "mobsub",
               STRING(dccli.msseq),
               "MEMOS").
                              
          ufkey = true.
-         run ufkey.
+         RUN Syst/ufkey.p.
          PAUSE 0.
      END.
      
@@ -534,19 +534,19 @@ REPEAT WITH FRAME sel:
                  ufk[6] = 0.
            END.
            
-           RUN ufkey.   
+           RUN Syst/ufkey.p.   
         
            IF toimi = 8 THEN NEXT BROWSE.
 
            /* termination */
            IF toimi = 1 THEN DO:
-              RUN dccliterm(DCCLI.MsSeq,
+              RUN Mm/dccliterm.p(DCCLI.MsSeq,
                             DCCLI.DCEvent,
                             DCCLI.PerContractId).
            END.
 
            ELSE IF toimi = 5 THEN DO:  /* add */
-              RUN dccliadd (iiMsSeq).
+              RUN Mm/dccliadd.p (iiMsSeq).
               NEXT LOOP.
            END.
 
@@ -583,7 +583,7 @@ REPEAT WITH FRAME sel:
            
      ELSE IF LOOKUP(nap,"6,f6,7,F7") > 0 THEN DO TRANSACTION:  
 
-        {uright2.i}
+        {Syst/uright2.i}
         RUN local-find-this (false).
 
         ufkey = TRUE.
@@ -604,8 +604,8 @@ REPEAT WITH FRAME sel:
 
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        
        
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDCCLI).

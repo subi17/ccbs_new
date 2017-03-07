@@ -8,16 +8,16 @@
 ----------------------------------------------------------------------- */
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
-{commali.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{cparam2.i}
-{email.i}
-{femailinvoice.i}
-{ftransdir.i}
-{edefine.i NEW}
-{heartbeat.i}
-{refcode.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/cparam2.i}
+{Func/email.i}
+{Func/femailinvoice.i}
+{Func/ftransdir.i}
+{Inv/edefine.i NEW}
+{Func/heartbeat.i}
+{Func/refcode.i}
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 

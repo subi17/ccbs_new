@@ -13,10 +13,10 @@
   Version ......: M15  ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable Interest
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'interest'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'interest'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -48,7 +48,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInterest AS HANDLE NO-UNDO.
    lhInterest = BUFFER Interest:HANDLE.
@@ -56,7 +56,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhInterest).
+      RUN Mc/eventview2.p(lhInterest).
    END.
 END.
 
@@ -90,7 +90,7 @@ WITH  OVERLAY ROW 4 centered
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek Interest record  BY  ValidFrom */
     "Brand:" lcBrand skip
@@ -106,7 +106,7 @@ form /* seek Interest record  BY IntPerc */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND PERCENT "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By DATE,By PERC,By 3, By 4".
@@ -134,12 +134,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Interest  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         New_Int = TRUE.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -229,16 +229,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Interest.ValidFrom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Interest.ValidFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Interest.ValidFrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Interest.IntPerc ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Interest.IntPerc {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Interest.IntPerc WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -366,8 +366,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -390,8 +390,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -475,8 +475,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Interest.ValidFrom.
 
        RUN local-UPDATE-record.                                  

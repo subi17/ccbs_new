@@ -6,25 +6,25 @@
   CREATED ......: 01.09.11
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MinConsumption'}
-{luhnchecksum.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MinConsumption'}
+{Func/luhnchecksum.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMinConsumption AS HANDLE NO-UNDO.
    lhMinConsumption = BUFFER MinConsumption:HANDLE.
    RUN StarEventInitialize(lhMinConsumption).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhMinConsumption).
+      RUN Mc/eventview2.p(lhMinConsumption).
    END.
 
 END.
@@ -81,7 +81,7 @@ form
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Subscription "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -154,13 +154,13 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MinConsumption.MsSeq ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW MinConsumption.MsSeq {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MinConsumption.MsSeq WITH FRAME sel.
       END.
@@ -292,8 +292,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liMsSeq WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -320,14 +320,14 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0  
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
      
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -389,7 +389,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMinConsumption).
 
        ASSIGN ac-hdr = " TERMINAL " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -515,7 +515,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.

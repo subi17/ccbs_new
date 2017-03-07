@@ -8,9 +8,9 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}          
-{cparam2.i}            
-{ddtrans.i}
+{Syst/commali.i}          
+{Func/cparam2.i}            
+{Ar/ddtrans.i}
 
 DEF INPUT  PARAMETER icFile  AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiRead  AS INT  NO-UNDO. 

@@ -11,12 +11,12 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{email.i}
-{timestamp.i}
-{commali.i}
-{cparam2.i}
-{msisdn.i}
-{ftransdir.i}
+{Func/email.i}
+{Func/timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/msisdn.i}
+{Func/ftransdir.i}
 
 OUTPUT THROUGH cat.
 

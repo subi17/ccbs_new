@@ -13,19 +13,19 @@
  * @mobile      cdr_datastruct;struct;contains needed CDR information as specified above ruby stub implementation
  * @fixed_line  cdr_datastruct;struct;contains needed CDR information as specified above ruby stub implementation
  */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Newton RPC".
 gcBrand = "1".
 
-{timestamp.i}
-{cparam2.i}
-{fdestcountry.i}
-{callquery.i}
-{istc.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fdestcountry.i}
+{Func/callquery.i}
+{Func/istc.i}
 {xmlrpc/xmlrpc_access.i}
-{transname.i}
-{rate_roamzone.i}
-{tmsconst.i}
+{Func/transname.i}
+{Rate/rate_roamzone.i}
+{Syst/tmsconst.i}
 
 &SCOPED-DEFINE NORMAL "NORMAL" 
 &SCOPED-DEFINE DETAILED "DETAILED" 
@@ -303,7 +303,7 @@ FUNCTION fResponseRow RETURNS LOGICAL
       IF ilLastCDROfDay THEN DO:
          /* Saldo Amount for prepaid subscription */
          IF Mobsub.PayType = TRUE AND pcUserName NE "miyoigo" THEN
-            RUN cdr_detail_value.p("PrepCDR",
+            RUN Mm/cdr_detail_value.p("PrepCDR",
                                    ldaDatest,
                                    ihCDR::DtlSeq,
                                    "Balance after",
@@ -355,7 +355,7 @@ FUNCTION fResponseRow RETURNS LOGICAL
       
       IF Mobsub.PayType = TRUE AND pcUserName NE "miyoigo" THEN DO:
          
-         RUN cdr_detail_value.p("PrepCDR",
+         RUN Mm/cdr_detail_value.p("PrepCDR",
                                 ldaDatest,
                                 ihCDR::DtlSeq,
                                 "Balance after",

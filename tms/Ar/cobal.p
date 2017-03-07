@@ -11,16 +11,16 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{eventval.i}
-{fapvat.i}
-{fcpfat.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/fapvat.i}
+{Func/fcpfat.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFatime AS HANDLE NO-UNDO.
    lhFatime = BUFFER Fatime:HANDLE.

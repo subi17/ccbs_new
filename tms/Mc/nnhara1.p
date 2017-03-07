@@ -11,11 +11,11 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Func/fcustbal.i}
 
 /* print-linemuuttujat */
-{utumaa.i}
+{Syst/utumaa.i}
 
 DEF INPUT PARAMETER kund1   AS INT   NO-UNDO.
 DEF INPUT PARAMETER kund2   AS INT   NO-UNDO.

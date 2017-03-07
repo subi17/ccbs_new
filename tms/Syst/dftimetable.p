@@ -8,23 +8,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DFTimeTable'}
-{timestamp.i}
-{eventval.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DFTimeTable'}
+{Func/timestamp.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhDFTimeTable AS HANDLE NO-UNDO.
    lhDFTimeTable = BUFFER DFTimeTable:HANDLE.
    RUN StarEventInitialize(lhDFTimeTable).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhDFTimeTable).
+      RUN Mc/eventview2.p(lhDFTimeTable).
    END.
 
 END.
@@ -116,7 +116,7 @@ FUNCTION fOngoing RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
@@ -152,7 +152,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DFTimeTable  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -160,7 +160,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         DO TRANSACTION:
            DISPLAY iiDumpID @ DFTimeTable.DumpID.
@@ -286,12 +286,12 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DFTimeTable.DumpWeekDay ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DFTimeTable.DumpWeekDay {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DFTimeTable.DumpWeekDay WITH FRAME sel.
       END.
 
@@ -496,8 +496,8 @@ REPEAT WITH FRAME sel:
           LEAVE LOOP.
        END.
  
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -532,7 +532,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -638,7 +638,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       
          FIND CURRENT DFTimeTable NO-LOCK.
          IF CURRENT-CHANGED DFTimeTable THEN DO:
@@ -655,7 +655,7 @@ PROCEDURE local-UPDATE-record:
                 
             FIND CURRENT DFTimeTable NO-LOCK.
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.p.
          
             PROMPT-FOR
                DFTimeTable.DumpDay     WHEN NOT NEW DFTimeTable 
@@ -752,7 +752,7 @@ PROCEDURE local-UPDATE-record:
       END.
          
       ELSE IF toimi = 3 THEN DO:
-         RUN dftimetable_sim (RECID(DFTimeTable)).
+         RUN Syst/dftimetable_sim.p (RECID(DFTimeTable)).
       END.
       
       ELSE IF toimi = 8 THEN LEAVE.

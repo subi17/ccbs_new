@@ -3,8 +3,8 @@
    create a request for sms message 
 */
    
-{commali.i}
-{fcreatereq.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
 
 FUNCTION fSMSRequest RETURNS INTEGER
    (INPUT  iiMsSeq      AS INT,    /* subscription         */

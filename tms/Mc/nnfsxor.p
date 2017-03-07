@@ -30,9 +30,9 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}
-{country.i}
-{invsta2.frm}
+{Syst/commali.i}
+{Syst/country.i}
+{Mf/invsta2.frm}
 
 DEF VAR exdir     AS c  NO-UNDO.
 DEF VAR exname-i  AS c  NO-UNDO.
@@ -102,11 +102,11 @@ dos-skip   = chr(13) + chr(10).
 exname-i   = exdir + "/" + "xorinv-i.txt".
 exname-e   = exdir + "/" + "xorinv-e.txt".
 
-{tmsparam.i RoundAcc   return}. RoundAcc   = TMSParam.IntVal.
-{tmsparam.i OTIntAcc   return}. OTIntAcc   = TMSParam.IntVal.
-{tmsparam.i VatAcc     return}. VatAcc     = TMSParam.IntVal.
-{tmsparam.i OverPayAcc return}. OverPayAcc = TMSParam.IntVal.
-{tmsparam.i ReceivAcc  return}. ReceivAcc  = TMSParam.IntVal.
+{Func/tmsparam.i RoundAcc   return}. RoundAcc   = TMSParam.IntVal.
+{Func/tmsparam.i OTIntAcc   return}. OTIntAcc   = TMSParam.IntVal.
+{Func/tmsparam.i VatAcc     return}. VatAcc     = TMSParam.IntVal.
+{Func/tmsparam.i OverPayAcc return}. OverPayAcc = TMSParam.IntVal.
+{Func/tmsparam.i ReceivAcc  return}. ReceivAcc  = TMSParam.IntVal.
 
 form
    skip(19)
@@ -135,7 +135,7 @@ ASSIGN
    exdate2 = date(month(TODAY),1,year(TODAY)) - 1
    exdate1 = date(month(exdate2),1,year(exdate2)).
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 
 view FRAME bground.
 PAUSE 0.
@@ -143,7 +143,7 @@ view FRAME statu.
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       exname-i exname-e
       exdate1  validate(exdate1 ne ?,"Give first Date !")
@@ -174,7 +174,7 @@ task:
    repeat WITH FRAME start:
 
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 

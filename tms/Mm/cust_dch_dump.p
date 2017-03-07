@@ -8,9 +8,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/timestamp.i}
 
 DEFINE INPUT  PARAMETER icDumpID      AS INTEGER   NO-UNDO.
 DEFINE INPUT  PARAMETER icFile        AS CHARACTER NO-UNDO.

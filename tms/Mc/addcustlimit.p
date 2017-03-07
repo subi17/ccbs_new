@@ -8,18 +8,18 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{eventval.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
 
     DEF VAR lhAddCustLimit AS HANDLE NO-UNDO.
     lhAddCustLimit = BUFFER AddCustLimit:HANDLE.
     RUN StarEventInitialize(lhAddCustLimit).
 
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhAddCustLimit).
+        RUN Mc/eventview2.p(lhAddCustLimit).
     END.
 END.
 
@@ -81,7 +81,7 @@ form /* seek  CustNum */
 
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -110,12 +110,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a AddCustLimit  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -198,12 +198,12 @@ BROWSE:
         ufk[1]= 0  ufk[2]= 0 ufk[3]= 0  ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row AddCustLimit.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row AddCustLimit.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) AddCustLimit.CustNum WITH FRAME sel.
       END.
 
@@ -327,13 +327,13 @@ BROWSE:
      END. /* NEXT page */
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = true.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 
@@ -388,8 +388,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY AddCustLimit.CustNum.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhAddCustLimit).

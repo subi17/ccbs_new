@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
 def var i as int no-undo.
@@ -38,7 +38,7 @@ for each invseq no-lock where
    end.
 
    for each ttcli:
-      run cli_rate.p (ttcli.cli,
+      RUN Rate/cli_rate.p (ttcli.cli,
                       invseq.fromdate,
                       invseq.todate,
                       true).

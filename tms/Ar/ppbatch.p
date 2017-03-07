@@ -13,25 +13,25 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{finvbal.i}
-{fppbatch.i}
+{Syst/commali.i}
+{Func/finvbal.i}
+{Func/fppbatch.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PPBatch'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PPBatch'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPPBatch AS HANDLE NO-UNDO.
    lhPPBatch = BUFFER PPBatch:HANDLE.
    RUN StarEventInitialize(lhPPBatch).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhPPBatch).
+      RUN Mc/eventview2.p(lhPPBatch).
    END.
 
 END.
@@ -224,7 +224,7 @@ FOR EACH PPBatch OF PaymPlan NO-LOCK:
           llDivBatches    = FALSE.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 ASSIGN orders    = "  By Batch ,    ,   "
@@ -254,14 +254,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a PPBatch  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         liBatch = 1.
         FIND LAST PPBatch OF PaymPlan NO-LOCK NO-ERROR.
@@ -391,14 +391,14 @@ REPEAT WITH FRAME sel:
          
          IF CAN-FIND(FIRST PPBatch OF PaymPlan) THEN ufk[2] = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       
       HIDE MESSAGE NO-PAUSE.
       
       IF NOT llDivBatches THEN DO:
          IF order = 1 THEN DO:
-            CHOOSE ROW PPBatch.PPBatch ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+            CHOOSE ROW PPBatch.PPBatch {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
             COLOR DISPLAY VALUE(ccc) PPBatch.PPBatch WITH FRAME sel.
          END.
       
@@ -529,7 +529,7 @@ REPEAT WITH FRAME sel:
 
      /* create batches automatically according to chosen invoices */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         
         IF iiBatchQty = 0 THEN DO:
            /* ask nbr of batches from user */
@@ -540,7 +540,7 @@ REPEAT WITH FRAME sel:
                   ldtToDate   = ?
                   ehto        = 9
                   ufkey       = TRUE.
-           RUN ufkey.
+           RUN Syst/ufkey.p.
         
            REPEAT ON ENDKEY UNDO, LEAVE:
               UPDATE liBatch 
@@ -584,7 +584,7 @@ REPEAT WITH FRAME sel:
      
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
@@ -592,7 +592,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -658,7 +658,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPPBatch).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PPBatch.PPBatch.
 
        RUN local-UPDATE-record.                                  
@@ -803,7 +803,7 @@ PROCEDURE local-UPDATE-record:
          (PaymPlan.PPStatus < 4 OR PaymPlan.PPStatus = 7)
       THEN DO:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
        
          REPEAT:
          
@@ -818,7 +818,7 @@ PROCEDURE local-UPDATE-record:
                 FRAME-FIELD = "PBStatus" 
              THEN DO:
                
-               RUN h-tmscodes(INPUT "PPBatch",     /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "PPBatch",     /* TableName */
                                     "PBStatus",  /* FieldName */
                                     "AccRec", /* GroupCode */
                               OUTPUT lcCode).
@@ -830,7 +830,7 @@ PROCEDURE local-UPDATE-record:
                END.
                                       
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 

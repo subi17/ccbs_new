@@ -10,7 +10,7 @@
 
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 DEF VAR rtab          AS RECID EXTENT 11 NO-UNDO.
@@ -25,7 +25,7 @@ WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
 title color value(ctc) " Brands "
 OVERLAY FRAME kase.
 
-cfc = "kase". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "kase". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 runko:
 repeat:
 
@@ -34,7 +34,7 @@ repeat:
      ufk = 0 ufk[5] = 11
      ufk[6] = 0  ufk[7] = 0  ufk[8] = 8  ufk[9] = 1 siirto = ?.
 
-   ehto = 3. RUN ufkey.p.
+   ehto = 3. RUN Syst/ufkey.p.
 
    FIND FIRST brand no-lock no-error.
    IF NOT AVAILABLE brand THEN DO:
@@ -73,7 +73,7 @@ BROWSE:
       repeat WITH FRAME kase ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE.
-         CHOOSE ROW  brand.brand ;(uchoose.i;) no-error WITH FRAME kase.
+         CHOOSE ROW  brand.brand {Syst/uchoose.i} no-error WITH FRAME kase.
          COLOR DISPLAY value(ccc)  brand.brand WITH FRAME kase.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.

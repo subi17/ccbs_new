@@ -8,7 +8,7 @@ DEF VAR i         AS I  NO-UNDO.
 DO i = 1 TO NUM-dbs:
    /* set this database as ACTIVE */
    CREATE ALIAS "dictdb" FOR DATABASE VALUE(ldbname(i)).
-   RUN ufile2 (INPUT file-name, OUTPUT db-name, OUTPUT file-label).
+   RUN Syst/ufile2.p (INPUT file-name, OUTPUT db-name, OUTPUT file-label).
    IF file-label NE ? THEN LEAVE.
 END.
 

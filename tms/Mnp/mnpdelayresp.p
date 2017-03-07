@@ -7,13 +7,13 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{date.i}
-{cparam2.i}
-{ftransdir.i}
-{tmsconst.i}
-{mnp.i}
-{email.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/tmsconst.i}
+{Mnp/mnp.i}
+{Func/email.i}
 
 DEF STREAM sdump.
 
