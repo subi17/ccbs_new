@@ -1,5 +1,5 @@
 /*Add DMS documentation matrix rows to Cparam.
-The entries are shown in CUI / run cparam*/
+The entries are shown in CUI / RUN Syst/cparam.p*/
 /*YPR-2467*/
 
 /*44*/

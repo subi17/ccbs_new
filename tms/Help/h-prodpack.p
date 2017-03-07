@@ -9,7 +9,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -33,7 +33,7 @@ form /* SEEK code */
     with row 4 col 2 title color value(ctc) " FIND CODE "
     color value(cfc) no-labels overlay frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 MAIN:
 repeat:
 
@@ -80,7 +80,7 @@ print-line:
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -88,7 +88,7 @@ BROWSE:
       repeat with frame sel on endkey undo, return:
 
          hide message no-pause.
-         choose row prodpack.ProdPack ;(uchoose.i;) no-error with frame sel.
+         choose row prodpack.ProdPack {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) prodpack.ProdPack with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
@@ -184,8 +184,8 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* ProdPack */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set ProdPack with frame hayr.
            hide frame hayr no-pause.
            if ProdPack ENTERED then do:

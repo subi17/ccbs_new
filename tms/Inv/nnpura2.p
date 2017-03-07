@@ -60,18 +60,18 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{refcode.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/refcode.i}
+{Func/cparam2.i}
 /* print-linemuuttujat */
-{utumaa.i}
-{edefine.i}
-{nnpura.i}
-{fdivtxt.i}
+{Syst/utumaa.i}
+{Inv/edefine.i}
+{Inv/nnpura.i}
+{Func/fdivtxt.i}
 
 /* xml / pdf */
-{xmlpura2.i}
-{fpdfrun.i}
+{Inv/xmlpura2.i}
+{Func/fpdfrun.i}
 
 def input  parameter CustNum1  as int format "zzzzzz9"    NO-UNDO.
 def input  parameter CustNum2  as int format "zzzzzz9"    NO-UNDO.
@@ -114,9 +114,9 @@ DEF VAR lcDateHead   AS CHAR  NO-UNDO.
 DEF BUFFER bRateCust FOR Customer.
 DEF BUFFER bCust     FOR Customer. 
 
-{nnpurac.i}
-{spechead.i}
-{ereppage.i}
+{Inv/nnpurac.i}
+{Inv/spechead.i}
+{Inv/ereppage.i}
 
 DEF TEMP-TABLE ttCall NO-UNDO
    FIELD Date       AS DATE
@@ -227,7 +227,7 @@ FUNCTION fChgPage RETURNS LOGICAL
    IF rl + iiAddLine >= skayt1 THEN DO:
       
       IF sl > 0 THEN DO:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       END. 
       ELSE DO:
       END.
@@ -422,7 +422,7 @@ BREAK BY ttCall.VatIncl
                       liPrCust = MsOwner.CustNum.
             END.
             
-            RUN printxt (liPrCust,
+            RUN Mc/printxt.p (liPrCust,
                          liMsSeq, 
                          "",
                          1,                      /* 1=invtext */
@@ -441,7 +441,7 @@ BREAK BY ttCall.VatIncl
 
             ASSIGN licalask = lireppage.
             fNewPage(3).
-            {nnpura2e.i}
+            {Inv/nnpura2e.i}
             
             PUT STREAM eKirje UNFORMATTED
                " I" 
@@ -494,7 +494,7 @@ BREAK BY ttCall.VatIncl
 
          IF epltul THEN DO:
             fNewPage(5).
-            {nnpura2e.i}
+            {Inv/nnpura2e.i}
          END.
              /* Tarvitaanko uusi sivu */
          ELSE DO:
@@ -545,7 +545,7 @@ BREAK BY ttCall.VatIncl
          
          IF epltul THEN DO:
             fNewPage(6).
-            {nnpura2e.i}
+            {Inv/nnpura2e.i}
          END.
          ELSE DO:
             fChgPage(6).
@@ -585,7 +585,7 @@ BREAK BY ttCall.VatIncl
 
          IF epltul THEN DO:
             fNewPage(4).
-            {nnpura2e.i}
+            {Inv/nnpura2e.i}
          END.
          ELSE DO:
             fChgPage(4).
@@ -646,7 +646,7 @@ BREAK BY ttCall.VatIncl
       /* Tarvitaanko uusi sivu */
       IF epltul THEN DO:
             fNewPage(0).
-            {nnpura2e.i}
+            {Inv/nnpura2e.i}
       END.
       ELSE DO:
          fChgPage(0).

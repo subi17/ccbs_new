@@ -1,8 +1,8 @@
 /* funcrunprocess_update.i     22.04.10/aam 
 */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 FUNCTION fProcessErrorLog RETURNS LOGIC
    (iiFRProcessID AS INT,

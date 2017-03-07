@@ -8,10 +8,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 /* Maaritellaan print-linemuuttujat */
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnomra"
        tuni2 = "".
@@ -72,14 +72,14 @@ toimi:
     ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
     ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
     ehto = 3 ufkey = FALSE.
-    RUN ufkey.p.
+    RUN Syst/ufkey.p.
       END.
 
       READKEY.
       nap = keylabel(LASTKEY).
 
       if lookup(nap,"1,f1") > 0 THEN DO:
-    ehto = 9. RUN ufkey.p.
+    ehto = 9. RUN Syst/ufkey.p.
     UPDATE oper1
       oper2
       validate(input oper2 = "" OR INPUT oper2 >= INPUT oper1,
@@ -106,11 +106,11 @@ toimi:
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 message "Utskrivning pAgAr, avbryt = ESC".
 
-RUN nnomra1(
+RUN nnomra1.p(
    INPUT oper1,
    INPUT oper2,
    INPUT btnro1,
@@ -120,7 +120,7 @@ RUN nnomra1(
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

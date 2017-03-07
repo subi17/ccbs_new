@@ -9,7 +9,7 @@
   CREATED ......: 22.08.07
   Version ......: TMS Master
   ------------------------------------------------------ */
-{commali.i}
+{Syst/commali.i}
 
 DEFINE INPUT PARAMETER iiType  AS INTEGER   NO-UNDO.
 
@@ -59,7 +59,7 @@ END.
 
 STATS:
 DO WHILE TRUE: 
-   ASSIGN ufk = 0 ufk[4] = 6902 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN ufk = 0 ufk[4] = 6902 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
    
    DISPLAY lcStatText[1]  @ menuc[1] SKIP
            lcStatText[2]  @ menuc[2] SKIP   
@@ -115,7 +115,7 @@ DO WHILE TRUE:
       FIND ttStatMenu WHERE 
            ttStatMenu.FrameIndex = FRAME-INDEX
       NO-LOCK NO-ERROR.
-      RUN msrequest(iiType,ttStatMenu.StatVal,0,0,0,"").
+      RUN Mm/msrequest.p(iiType,ttStatMenu.StatVal,0,0,0,"").
       NEXT.
    
    END.

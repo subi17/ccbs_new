@@ -9,11 +9,11 @@
 ---------------------------------------------------------------------- */
 
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "CRON".
-{q25functions.i}
-{ftransdir.i}
+{Func/q25functions.i}
+{Func/ftransdir.i}
 
 DEF VAR liStartDay               AS INT  NO-UNDO.
 DEF VAR liEndDay                 AS INT  NO-UNDO.

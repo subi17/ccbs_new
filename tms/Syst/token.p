@@ -8,23 +8,23 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'token'}
-{fuserright.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'token'}
+{Func/fuserright.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhtoken AS HANDLE NO-UNDO.
    lhtoken = BUFFER token:HANDLE.
    RUN StarEventInitialize(lhtoken).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhtoken).
+      RUN Mc/eventview2.p(lhtoken).
    END.
 
 END.
@@ -80,7 +80,7 @@ form /* seek Token by Code */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -113,12 +113,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a token  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       DO WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR token.tokencode
@@ -209,12 +209,12 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW token.tokencode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW token.tokencode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) token.tokencode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -342,9 +342,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        tokencode = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE tokencode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF tokencode <> "" THEN DO:
@@ -364,7 +364,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN tokentab.p(token.tokencode).
+        RUN Syst/tokentab.p(token.tokencode).
         ufkey = true.
         next loop.
      END.
@@ -449,12 +449,12 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"enter,return") > 0 AND lcRight = "RW" THEN
      DO WITH FRAME lis TRANSAction:
-       {uright2.i} 
+       {Syst/uright2.i} 
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY token.tokencode.
 

@@ -7,10 +7,10 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
-{mnpmessages.i}
-{mnp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mnp/mnpmessages.i}
+{Mnp/mnp.i}
 
 DEFINE INPUT PARAMETER pcPortRequest AS CHARACTER NO-UNDO. 
 DEFINE INPUT PARAMETER TABLE FOR ttMigrationNumberRequest.

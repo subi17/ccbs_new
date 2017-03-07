@@ -15,8 +15,8 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{log.i}
-{tmsconst.i}
+{Func/log.i}
+{Syst/tmsconst.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR pcUsername AS CHAR NO-UNDO.
@@ -95,7 +95,7 @@ END.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = pcUsername.
 gcBrand = "1".
 
@@ -116,7 +116,7 @@ IF pcOperation = "cancel" AND LOOKUP("pdf",lcstruct) > 0 THEN DO:
    END.
 END.
 
-RUN mnp_operation.p(MNPProcess.MNPSeq,pcOperation,pcReason).
+RUN Mnp/mnp_operation.p(MNPProcess.MNPSeq,pcOperation,pcReason).
 
 IF RETURN-VALUE NE "OK" THEN DO:
    IF AVAIL MNPCancelProposal THEN DELETE MNPCancelProposal.

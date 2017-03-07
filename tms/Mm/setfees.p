@@ -38,20 +38,20 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{nncoit2.i}
-{fcustpl.i}
-{timestamp.i}
-{fmakeservlimit.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FixedFee'}
-{eventval.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/nncoit2.i}
+{Func/fcustpl.i}
+{Func/timestamp.i}
+{Func/fmakeservlimit.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FixedFee'}
+{Syst/eventval.i}
+{Func/fcustdata.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFixedFee AS HANDLE NO-UNDO.
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
@@ -222,7 +222,7 @@ ACTION:
    REPEAT WITH FRAME info:
 
       IF ask-data THEN DO ON ENDKEY UNDO, RETRY:
-         EHTO = 9. RUN ufkey. 
+         EHTO = 9. RUN Syst/ufkey.p. 
          UPDATE 
            FeeModel
            codate  
@@ -273,7 +273,7 @@ ACTION:
       ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
       ufk[8] = 8 ehto = 0.
       if FeeModel = "" THEN ufk[5] = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
 
       IF toimi = 1 THEN DO:
@@ -283,7 +283,7 @@ ACTION:
 
       IF toimi = 4 THEN DO:
          /* show items (contents) of this Billing Event */
-         run beitempl(FeeModel,lcPriceList).
+         RUN Mc/beitempl.p(FeeModel,lcPriceList).
          NEXT.
       END.
       ELSE IF TOIMI = 5 AND lcRight = "RW" THEN DO:

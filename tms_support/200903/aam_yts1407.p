@@ -13,15 +13,15 @@
   VERSION ......: SHARK
   ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "cron".
 gcBrand = "1".
 
-{date.i}
-{fvatfact.i}
-{excel.i}
-{coinv.i}
-{cparam.i2}
+{Func/date.i}
+{Func/fvatfact.i}
+{Func/excel.i}
+{Func/coinv.i}
+{Func/cparam.i2}
 
 /*DEFINE INPUT PARAMETER  iiper AS INTEGER NO-UNDO.*/
 DEFINE VARIABLE  iiper AS INTEGER NO-UNDO INIT 0.

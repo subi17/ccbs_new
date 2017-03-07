@@ -8,13 +8,13 @@
   VERSIO .......: 
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fcustbal.i}
-{fbankdata.i}
-{fmanualpaymreq.i}
-{fuserright.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fcustbal.i}
+{Func/fbankdata.i}
+{Func/fmanualpaymreq.i}
+{Func/fuserright.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLI     AS CHAR NO-UNDO.
@@ -124,7 +124,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       ufk[5] = 1734 
       ufk[8] = 8
       ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN 
       llUfkey = TRUE
@@ -133,7 +133,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
    IF toimi = 1 THEN DO:
    
       ASSIGN ehto = 9.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
       
@@ -182,7 +182,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       END.
       
       ehto = 5. 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
  
       /* 15 mins from now */
       ASSIGN 

@@ -7,14 +7,14 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "CRON".
-{timestamp.i}
-{cparam2.i}
-{fgettxt.i}
-{fmakesms.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fgettxt.i}
+{Func/fmakesms.i}
+{Syst/tmsconst.i}
 
 DEF VAR ldaFromdate       AS DATE NO-UNDO.
 DEF VAR liTime            AS INT  NO-UNDO.

@@ -25,12 +25,12 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
 
-{date.i}
-{fixedfee.i}
+{Func/date.i}
+{Func/fixedfee.i}
 
 /* Input parameters */
 DEF VAR piMsseq AS INT NO-UNDO.

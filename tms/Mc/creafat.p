@@ -9,10 +9,10 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{fcpfat.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fcpfat.i}
 
 DEF INPUT  PARAMETER iiCustNum     AS INT  NO-UNDO.  
 DEF INPUT  PARAMETER iiMSSeq       AS INT  NO-UNDO. 

@@ -8,9 +8,9 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 DEF VAR lcUpdateTS AS CHAR NO-UNDO.
 DEF VAR lcInstallationTime AS CHAR NO-UNDO.
@@ -99,13 +99,13 @@ REPEAT WITH FRAME fData ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufk[6]= 9854
       ufk[8]= 8 
       ehto  = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi EQ 5 THEN DO:
-     RUN fusionmessage.p(iiOrderID).
+     RUN Mc/fusionmessage.p(iiOrderID).
    END.
    IF toimi EQ 6 THEN DO:
-     RUN addrview.p(iiOrderId).
+     RUN Mc/addrview.p(iiOrderId).
    END.
    
    ELSE IF toimi = 8 THEN LEAVE.

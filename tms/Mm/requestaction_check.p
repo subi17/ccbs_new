@@ -8,10 +8,10 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{barrfunc.i}
-{requestaction_exec.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/barrfunc.i}
+{Mm/requestaction_exec.i}
 
 DEF INPUT  PARAMETER iiReqType    AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icCLIType    AS CHAR NO-UNDO.

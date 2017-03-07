@@ -9,7 +9,7 @@ output stream sout to value(icOutputFile) append.
 put stream sout unformatted 
   "TEST chk_subs_invoice.p" skip(1).
 
-{timestamp.i}
+{Func/timestamp.i}
 DEFINE VARIABLE j AS INTEGER NO-UNDO. 
 
 def var lisubs as int no-undo.

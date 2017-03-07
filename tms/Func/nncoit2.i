@@ -24,7 +24,7 @@
 &THEN
 &GLOBAL-DEFINE NNCOIT2_I YES
 
-{commali.i}
+{Syst/commali.i}
 
 FUNCTION fCheck-pl RETURNS LOGICAL
    (icFeeModel AS CHAR,

@@ -8,8 +8,8 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
+{Syst/commali.i}
+{Func/excel.i}
 
 DEF VAR line    AS c  NO-UNDO.
 def var exFile  as c  no-undo format "x(30)".
@@ -50,7 +50,7 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       date1 
       date2 validate(input date2 >= input date1,"Invalid order !")
@@ -60,7 +60,7 @@ repeat WITH FRAME frm:
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 

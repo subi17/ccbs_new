@@ -9,7 +9,7 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{date.i}
+{Func/date.i}
 
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 

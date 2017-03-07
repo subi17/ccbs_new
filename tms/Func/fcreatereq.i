@@ -12,9 +12,9 @@
 
 &GLOBAL-DEFINE fcreatereq YES
 
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER bReqSub   FOR MobSub.
 DEF BUFFER bCreaReq  FOR MsRequest.

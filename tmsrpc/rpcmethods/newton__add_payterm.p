@@ -19,12 +19,12 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{fsubsterminal.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/fsubsterminal.i}
 
 DEF VAR pcPayTermStruct   AS CHARACTER   NO-UNDO.
 DEF VAR pcMemoStruct      AS CHARACTER   NO-UNDO.

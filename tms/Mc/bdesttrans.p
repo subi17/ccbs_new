@@ -6,22 +6,22 @@
   CREATED ......: 22.04.14
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'bdesttrans'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'bdesttrans'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhbdesttrans AS HANDLE NO-UNDO.
    lhbdesttrans = BUFFER bdesttrans:HANDLE.
    RUN StarEventInitialize(lhbdesttrans).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhbdesttrans).
+      RUN Mc/eventview2.p(lhbdesttrans).
    END.
 END.
 
@@ -84,7 +84,7 @@ form /* seek bdesttrans  BY  bdesttrans */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -119,7 +119,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a bdesttrans  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -135,7 +135,7 @@ ADD-ROW:
             ufk[8] = 0
             ehto   = 3.
        
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            MESSAGE "Leave empty for exit".
@@ -225,17 +225,17 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW bdesttrans.translatenumber ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW bdesttrans.translatenumber {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) bdesttrans.translatenumber WITH FRAME sel.
       END.
       /*
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW bdesttrans.CoName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW bdesttrans.CoName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) bdesttrans.CoName WITH FRAME sel.
       END.*/
 
@@ -362,8 +362,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET bdesttrans WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -392,7 +392,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}.
+       {Syst/uright2.i}.
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -447,13 +447,13 @@ BROWSE:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(TRUE).
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhbdesttrans).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY bdesttrans.translatenumber.
 
        RUN local-UPDATE-record.                                  
@@ -571,7 +571,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       IF toimi = 1 AND lcRight = "RW" THEN DO: 
@@ -579,7 +579,7 @@ PROCEDURE local-UPDATE-record:
             FIND CURRENT bDestTrans EXCLUSIVE-LOCK.
             
             ehto = 9.
-            RUN ufkey.p.
+            RUN Syst/ufkey.p.
            
             UPDATE
                 bdesttrans.bdest

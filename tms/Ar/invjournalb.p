@@ -9,17 +9,17 @@
   ------------------------------------------------------ */
 
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "laskutus".
 
-{date.i}
-{utumaa.i "new"}
-{invjournal.i}
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
+{Func/date.i}
+{Syst/utumaa.i "new"}
+{Ar/invjournal.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
 
 DEF VAR lcFile     AS CHAR NO-UNDO.
 DEF VAR lcBaseFile AS CHAR NO-UNDO.
@@ -184,7 +184,7 @@ PROCEDURE pPrintReport:
       ttCriter.Summary     = ilSummary
       ttCriter.ToFile      = lcFile.
 
-   RUN invjournal (INPUT TABLE TCustGroup,
+   RUN Ar/invjournal.p (INPUT TABLE TCustGroup,
                    INPUT TABLE ttCriter,
                    OUTPUT liInvQty).
 

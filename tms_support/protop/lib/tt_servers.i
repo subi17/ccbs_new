@@ -64,23 +64,23 @@ procedure upd-servers:
           tt_servers.srvport  = _Servers._Server-port
           tt_servers.curr-usr = _Servers._Server-CurrUsers
           tt_servers.max-usr  = _Servers._Server-MaxUsers
-          {lib/init-xrec.i tt_servers.msg-recv _ActServer._Server-MsgRec}
-          {lib/init-xrec.i tt_servers.msg-sent _ActServer._Server-MsgSent}
-          {lib/init-xrec.i tt_servers.rec-recv _ActServer._Server-RecRec}
-          {lib/init-xrec.i tt_servers.rec-sent _ActServer._Server-RecSent}
-          {lib/init-xrec.i tt_servers.qry-recv _ActServer._Server-QryRec}
-          {lib/init-xrec.i tt_servers.tm-intr  _ActServer._Server-TimeSlice}
+          {protop/lib/init-xrec.i tt_servers.msg-recv _ActServer._Server-MsgRec}
+          {protop/lib/init-xrec.i tt_servers.msg-sent _ActServer._Server-MsgSent}
+          {protop/lib/init-xrec.i tt_servers.rec-recv _ActServer._Server-RecRec}
+          {protop/lib/init-xrec.i tt_servers.rec-sent _ActServer._Server-RecSent}
+          {protop/lib/init-xrec.i tt_servers.qry-recv _ActServer._Server-QryRec}
+          {protop/lib/init-xrec.i tt_servers.tm-intr  _ActServer._Server-TimeSlice}
         .
 
       end.
 
     assign
-      {lib/upd-xrec.i tt_servers.msg-recv _ActServer._Server-MsgRec}
-      {lib/upd-xrec.i tt_servers.msg-sent _ActServer._Server-MsgSent}
-      {lib/upd-xrec.i tt_servers.rec-recv _ActServer._Server-RecRec}
-      {lib/upd-xrec.i tt_servers.rec-sent _ActServer._Server-RecSent}
-      {lib/upd-xrec.i tt_servers.qry-recv _ActServer._Server-QryRec}
-      {lib/upd-xrec.i tt_servers.tm-intr  _ActServer._Server-TimeSlice}
+      {protop/lib/upd-xrec.i tt_servers.msg-recv _ActServer._Server-MsgRec}
+      {protop/lib/upd-xrec.i tt_servers.msg-sent _ActServer._Server-MsgSent}
+      {protop/lib/upd-xrec.i tt_servers.rec-recv _ActServer._Server-RecRec}
+      {protop/lib/upd-xrec.i tt_servers.rec-sent _ActServer._Server-RecSent}
+      {protop/lib/upd-xrec.i tt_servers.qry-recv _ActServer._Server-QryRec}
+      {protop/lib/upd-xrec.i tt_servers.tm-intr  _ActServer._Server-TimeSlice}
     .
 
   end.

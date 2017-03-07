@@ -9,7 +9,7 @@
   Version ......: TeleF
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEFINE TEMP-TABLE ttXMLSchema NO-UNDO
    FIELD LevelNum AS INTEGER
@@ -43,7 +43,7 @@ FORM
    
 cfc = "sel".
 
-run ufcolor.
+RUN Syst/ufcolor.p.
 
 ccc = cfc.
 
@@ -111,14 +111,14 @@ REPEAT WITH FRAME sel:
            ehto   = 3
            ufkey  = FALSE.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
 
       IF order = 1 THEN DO:
 
-        CHOOSE ROW ttXMLSchema.xml ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttXMLSchema.xml {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       
         COLOR DISPLAY VALUE(ccc) ttXMLSchema.xml WITH FRAME sel.
 
@@ -239,7 +239,7 @@ REPEAT WITH FRAME sel:
           ufk    = 0
           ufk[8] = 8
           ufkey  = TRUE.
-       RUN ufkey.   
+       RUN Syst/ufkey.p.   
           
        HIDE FRAME fDetail NO-PAUSE.
        NEXT loop.

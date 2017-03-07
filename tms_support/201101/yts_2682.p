@@ -3,9 +3,9 @@ DEFINE VARIABLE i AS INTEGER NO-UNDO.
 def buffer bmsrequest for msrequest.
 def stream sout.
 output stream sout to yts_2682.log.
-{date.i}
+{Func/date.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "anttis".
 
@@ -55,7 +55,7 @@ FOR EACH msrequest where
    mservicelimit.fromts = msrequest.actstamp.
    find current mservicelimit NO-LOCK.
 
-   run cli_rate.p (msrequest.cli,
+   RUN Rate/cli_rate.p (msrequest.cli,
                    2/1/11,
                    2/28/11,
                    true). 

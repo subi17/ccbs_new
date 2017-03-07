@@ -18,10 +18,10 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{eventval.i}
-{offer.i}
+{Syst/eventval.i}
+{Mc/offer.i}
 {xmlrpc_names.i}
 
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
@@ -89,7 +89,7 @@ END.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhOfferItem AS HANDLE NO-UNDO.
    lhOfferItem = BUFFER OfferItem:HANDLE.
    RUN StarEventInitialize(lhOfferItem).

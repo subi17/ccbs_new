@@ -1,10 +1,10 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "Qvantel".
-{timestamp.i}
-{date.i}
-{fdss.i}
-{barrfunc.i}
+{Func/timestamp.i}
+{Func/date.i}
+{Func/fdss.i}
+{Func/barrfunc.i}
 
 def var lltrue        as log   no-undo.
 def var ldeTime       as dec   no-undo.
@@ -50,12 +50,12 @@ for each mobsub no-lock where mobsub.paytype = false:
 
    if lltrue then do:
       IF fIsDSSActive(INPUT MobSub.CustNum, INPUT ldeStamp) THEN
-         RUN cust_rate.p(MobSub.CustNum,
+         RUN Rate/cust_rate.p(MobSub.CustNum,
                          ldaFromdate,
                          ldToDate,
                          TRUE).
       ELSE
-         RUN cli_rate.p(MobSub.CLI,
+         RUN Rate/cli_rate.p(MobSub.CLI,
                         ldaFromdate,
                         ldToDate,
                         TRUE).
@@ -65,7 +65,7 @@ for each mobsub no-lock where mobsub.paytype = false:
          FIND FIRST bMsRequest WHERE
                     ROWID(bMsRequest) = llrowid NO-LOCK NO-ERROR.
          IF AVAIL bMsRequest AND bMsRequest.SMSTEXT BEGINS "TOTAL" THEN DO:
-            RUN barrengine(
+            RUN Mm/barrengine.p(
                 MobSub.MsSeq,
                 "UNY_REST",
                 "5",
