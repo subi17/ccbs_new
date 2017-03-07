@@ -1,5 +1,5 @@
-{testpaa.i}
-{timestamp.i}
+{Syst/testpaa.i}
+{Func/timestamp.i}
 katun = "ari".
 
 def var i as int no-undo.

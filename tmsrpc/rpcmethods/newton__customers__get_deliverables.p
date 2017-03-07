@@ -13,10 +13,10 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
-{invoicetarget.i}
+{Syst/tmsconst.i}
+{Mc/invoicetarget.i}
 
 DEF VAR piCustNum       AS INT  NO-UNDO.   
 DEF VAR lcTopStruct     AS CHAR NO-UNDO.

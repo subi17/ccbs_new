@@ -2,9 +2,9 @@
 &THEN
 
 &GLOBAL-DEFINE FIXEDFEE YES
-{commali.i}
-{tmsconst.i}
-{coinv.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/coinv.i}
 
 FUNCTION fAmtUnBilledFFItem RETURNS DECIMAL 
          (INPUT iMsSeq          AS INT,

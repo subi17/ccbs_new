@@ -1,7 +1,7 @@
-{commali.i}
-{timestamp.i}
-{filltemptable.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/filltemptable.i}
+{Func/cparam2.i}
 
 DEF TEMP-TABLE ttDB NO-UNDO
    FIELD ConnName  AS CHAR

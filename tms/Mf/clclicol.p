@@ -9,8 +9,8 @@
   Version ......: Cubio
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiFromCust AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiToCust   AS INT  NO-UNDO. 

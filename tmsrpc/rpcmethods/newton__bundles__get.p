@@ -21,7 +21,7 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
@@ -54,9 +54,9 @@ DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
 DEF VAR llVoIPCompatible   AS LOG NO-UNDO.
 DEF VAR lcPromotionBundles AS CHAR NO-UNDO. 
 
-{cparam2.i}
-{tmsconst.i}
-{fprepaidfee.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/fprepaidfee.i}
 
 ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcCONTDContracts = fCParamC("CONTD_CONTRACTS")

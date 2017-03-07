@@ -9,27 +9,27 @@
                   21.05.02/tk Event logging added
                   11.11.02/jp sprule
                   10.03.03 tk tokens
-                  19.03.03/tk run memo
+                  19.03.03/tk RUN Mc/memo.p
                   05.09.03 jp brand
                   30.09.03 jp feemodel
                   07.12.04/aam icCLIType,
                                use servel.p instead of servel1.p,
                                FeeModel removed
-                  27.03.07/aam don't run ctservel from here
+                  27.03.07/aam don't RUN Mm/ctservel.p from here
   Version ......: M15
   ---------------------------------------------------------------------- */
 
 &GLOBAL-DEFINE BrTable ServPac
 
-{commali.i} 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ServPac'}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ServPac'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhServPac AS HANDLE NO-UNDO.
    lhServPac = BUFFER ServPac:HANDLE.
@@ -40,7 +40,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhServEl).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhServPac).
+      RUN Mc/eventview2.p(lhServPac).
    END.
 END.
 
@@ -83,7 +83,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i} 
+{Func/brand.i} 
 
 form
     ServPac.ServPac     /* LABEL */  FORMAT "X(12)"
@@ -113,7 +113,7 @@ form /* seek ServPack  BY SPName */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
         
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -138,12 +138,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ServPac  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR ServPac.ServPac
@@ -235,16 +235,16 @@ REPEAT WITH FRAME sel:
         ufk[7]= 814
         ufk[8]= 8
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ServPac.ServPac ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServPac.ServPac {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServPac.ServPac WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ServPac.SPName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServPac.SPName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServPac.SPName WITH FRAME sel.
       END.
 
@@ -371,8 +371,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
        SET lcBrand WHEN gcAllBrand = TRUE
@@ -391,8 +391,8 @@ REPEAT WITH FRAME sel:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        Disp lcBrand With frame f2.
        SET lcBrand WHEN gcAllBrand = TRUE
@@ -412,7 +412,7 @@ REPEAT WITH FRAME sel:
        
        /* either general elements */
        IF icCLIType = "" 
-       THEN RUN servel(ServPac.ServPac).
+       THEN RUN Mm/servel.p(ServPac.ServPac).
       
        /* or elements of a CLI type */
        ELSE DO:
@@ -427,7 +427,7 @@ REPEAT WITH FRAME sel:
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "ServPac",
                  INPUT STRING(ServPac.ServPac),
                  INPUT "Service package").
@@ -513,14 +513,14 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        RUN local-find-this((lcRight = "RW" AND icCLIType = "")).
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhServPac).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ServPac.ServPac.
 
        RUN local-UPDATE-record.                                  
@@ -540,7 +540,7 @@ REPEAT WITH FRAME sel:
      /* translations */
      ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
         FIND ServPac WHERE RECID(ServPac) = rtab[FRAME-LINE] NO-LOCK.
-        RUN invlang(12,ServPac.ServPac).
+        RUN Mc/invlang.p(12,ServPac.ServPac).
           
         ufkey = TRUE.
         NEXT LOOP.
@@ -630,7 +630,7 @@ PROCEDURE local-UPDATE-record:
       IF lcRight = "RW" AND icCLIType = "" THEN DO:
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE
             ServPac.SPName

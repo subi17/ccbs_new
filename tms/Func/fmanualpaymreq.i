@@ -3,8 +3,8 @@
    create a request for a manual payment 
 */
    
-{commali.i}
-{fcreatereq.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
 
 FUNCTION fManualPaymentRequest RETURNS INTEGER
    (INPUT  iiCustNum     AS INT,  

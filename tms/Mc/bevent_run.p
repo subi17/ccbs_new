@@ -7,7 +7,7 @@
   CHANGED ......: 04-10-99 jp urights added
                   04.11.99 pt F6 NOT allowed IF products assigned into Event
                   20.05.02/tk Event logging added
-                  05.03.03 tk run memo, tokens
+                  05.03.03 tk RUN Mc/memo,.p tokens
                   24.03.03 jp prompt-for not used 
                   05.09.03 aam brand 
                   06.02.04 jp input custnum for memo
@@ -16,22 +16,22 @@
 
 &GLOBAL-DEFINE BrTable FeeModel
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'feemodel'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'feemodel'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFeeModel AS HANDLE NO-UNDO.
    lhFeeModel = BUFFER FeeModel:HANDLE.
    RUN StarEventInitialize(lhFeeModel).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhFeeModel).
+      RUN Mc/eventview2.p(lhFeeModel).
    END.
 
 END.
@@ -84,7 +84,7 @@ WITH  OVERLAY ROW 4 centered
     1 columns
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek Billing Event  BY  FeeModel */
     "Brand:" lcBrand skip
@@ -112,7 +112,7 @@ form
     FRAME f4.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "   By Code   ,   By Name   ,By 3, By 4".
@@ -148,12 +148,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a FeeModel  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            CREATE FeeModel.
@@ -231,16 +231,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FeeModel.FeeModel ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FeeModel.FeeModel {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FeeModel.FeeModel WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FeeModel.FeeName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FeeModel.FeeName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FeeModel.FeeName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -368,8 +368,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -391,8 +391,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -424,12 +424,12 @@ BROWSE:
                            TMSParam.ParamCode = "FMGroup" AND
                            TMSParam.IntVal = iigroup NO-LOCK NO-ERROR.
        IF AVAIL TMSParam THEN 
-          RUN beitem-cc(INPUT FeeModel.FeeModel).
+          RUN Mc/beitem-cc.p(INPUT FeeModel.FeeModel).
 
        END.
       
        ELSE
-          RUN beitem(INPUT FeeModel.FeeModel).
+          RUN Mc/beitem.p(INPUT FeeModel.FeeModel).
 
         ufkey = TRUE.
         NEXT loop.
@@ -439,7 +439,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
 
         RUN local-find-this(FALSE).
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "FeeModel",
                  INPUT STRING(FeeModel.FeeModel),
                  INPUT "FeeModel").
@@ -450,7 +450,7 @@ BROWSE:
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
-        {uright2.i}.
+        {Syst/uright2.i}.
         must-add = TRUE.
         NEXT LOOP.
      END.
@@ -524,8 +524,8 @@ BROWSE:
        /* change */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY 
           FeeModel.Brand
           FeeModel.FeeModel

@@ -9,10 +9,10 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{timestamp.i}
-{fmakemsreq.i}
-{tmsconst.i}
-{ftaxdata.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
+{Syst/tmsconst.i}
+{Func/ftaxdata.i}
 
 DEF INPUT  PARAMETER  icSource   AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER  iiMsSeq    AS INT NO-UNDO.

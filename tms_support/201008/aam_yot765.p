@@ -1,11 +1,11 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "Qvantel".
-{timestamp.i}
+{Func/timestamp.i}
 
 &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 
 def var lccli as char no-undo.
 def var i as int no-undo.

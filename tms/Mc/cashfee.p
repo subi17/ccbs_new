@@ -9,16 +9,16 @@
   VERSION ......: yoigo
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{tmsconst.i}
-{eventval.i}
-{fcustpl.i}
-{ftaxdata.i}
-{transname.i}
-{timestamp.i}
-{offer.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/fcustpl.i}
+{Func/ftaxdata.i}
+{Func/transname.i}
+{Func/timestamp.i}
+{Mc/offer.i}
+{Func/orderfunc.i}
 
 DEF INPUT  PARAMETER iiOrder  AS INT  NO-UNDO. 
 DEF INPUT  PARAMETER iiAction AS INT  NO-UNDO.  
@@ -67,7 +67,7 @@ RUN pInitializeReturnValue.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER Invoice:HANDLE.
@@ -292,7 +292,7 @@ PROCEDURE pMakeCashInvoice:
 
       IF iiAction EQ 1 THEN DO:
 
-         RUN createcustomer.p(Order.OrderId, 
+         RUN Mm/createcustomer.p(Order.OrderId, 
                             1,
                             FALSE,
                             FALSE, /* do not update existing customer */
@@ -443,7 +443,7 @@ PROCEDURE pMakeCashInvoice:
             liInvType = 6.
          END.
    
-         RUN nnlamu_inc (liCashCust,
+         RUN Inv/nnlamu_inc.p (liCashCust,
                          Order.OrderID,
                          "",
                          liInvType,

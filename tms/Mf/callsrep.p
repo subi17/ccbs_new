@@ -8,7 +8,7 @@
                   12.09.03/aam brand
   VERSION ......: M15
 ------------------------------------------------------ */
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR email   AS CHAR                NO-UNDO FORMAT "x(40)".
 DEF VAR asno    LIKE Customer.CustNum  NO-UNDO.
@@ -32,7 +32,7 @@ WITH
 rajat:
 REPEAT WITH FRAME rajat:
    PAUSE 0.
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE 
    asno
@@ -94,12 +94,12 @@ REPEAT WITH FRAME rajat:
 toimi:
       REPEAT WITH FRAME toimi:
         ASSIGN ufk = 0 ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         IF toimi = 1 THEN NEXT  rajat.
         IF toimi = 8 THEN LEAVE rajat.
         IF toimi = 5 THEN 
         DO:
-            RUN callemail(asno,invno,email).
+            RUN Mf/callemail.p(asno,invno,email).
             LEAVE toimi.
         END.      
 END.

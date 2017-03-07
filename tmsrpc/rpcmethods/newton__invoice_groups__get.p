@@ -18,8 +18,8 @@
 */
 
 {header_get.i}
-{timestamp.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 DEF VAR piId AS INT NO-UNDO.
 DEF VAR lcInvoiceTargets AS CHAR NO-UNDO.

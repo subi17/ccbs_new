@@ -1,7 +1,7 @@
-{commali.i}
-{email.i}
-{tmsconst.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/email.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 FUNCTION fUpdateMaintBreak RETURNS INTEGER
    (idFrom AS DECIMAL,

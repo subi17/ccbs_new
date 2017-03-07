@@ -71,16 +71,16 @@
 
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
 gcBrand = "1".
-{tmsconst.i}
+{Syst/tmsconst.i}
 
-{date.i}
-{orderchk.i}
-{order.i}
-{create_eventlog.i}
-{fbundle.i}
+{Func/date.i}
+{Func/orderchk.i}
+{Func/order.i}
+{Func/create_eventlog.i}
+{Mm/fbundle.i}
 
 DEF VAR top_array       AS CHAR NO-UNDO.
 /* Input parameters for order */

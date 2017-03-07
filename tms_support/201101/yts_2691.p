@@ -1,4 +1,4 @@
-{date.i}
+{Func/date.i}
 DEFINE VARIABLE lcProcesses AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcess AS CHARACTER NO-UNDO. 
 

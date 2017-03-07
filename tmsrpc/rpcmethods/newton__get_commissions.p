@@ -22,7 +22,7 @@
                 period;date;period (year, month) of FAT
  */
 {xmlrpc/xmlrpc_access.i}
-{date.i}
+{Func/date.i}
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 
 /* Input parameters */

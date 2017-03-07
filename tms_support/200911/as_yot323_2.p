@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{timestamp.i}
-{msisdn.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
 
 DEFINE VARIABLE iCLi as int64 no-undo.
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 

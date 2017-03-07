@@ -34,22 +34,22 @@
 
 &GLOBAL-DEFINE BrTable BillItem
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'billitem'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'billitem'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhBillItem AS HANDLE NO-UNDO.
    lhBillItem = BUFFER BillItem:HANDLE.
    RUN StarEventInitialize(lhBillItem).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhBillItem). 
+      RUN Mc/eventview2.p(lhBillItem). 
    END.
 
 END.
@@ -167,7 +167,7 @@ form
 WITH  OVERLAY ROW 3 CENTERED COLOR value(cfc) TITLE COLOR value(ctc)
     fr-header WITH side-labels FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* produkt :n tunnuksella hakua varten */
     "Brand:" lcBrand skip
@@ -198,7 +198,7 @@ WITH
    BillItem.BillCode + " - " + BillItem.BIName OVERLAY FRAME tbacc.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -234,13 +234,13 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* BillItem -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD" must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          DO TRANSAction:
             DISPLAY lcBrand @ BillItem.Brand.
 
@@ -343,20 +343,20 @@ BROWSE:
          ufk[6]= (IF lcRIght = "RW" AND llCanDelete THEN 4 ELSE 0)
          ufk[7]= 1760 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW BillItem.BillCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BillItem.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BillItem.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW BillItem.BIName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BillItem.BIName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BillItem.BIName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW BillItem.BIGroup ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BillItem.BIGroup {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BillItem.BIGroup WITH FRAME sel.
       END.
 
@@ -503,9 +503,9 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
         UPDATE lcBrand WHEN gcAllBrand 
                haku WITH FRAME hayr.
@@ -523,9 +523,9 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
         UPDATE lcBrand WHEN gcAllBrand 
                haku2 WITH FRAME hayr2.
@@ -543,9 +543,9 @@ BROWSE:
 
      /* Haku 3 */
      if lookup(nap,"3,f3") > 0 AND icBGroup  = ? THEN DO:  /* haku sarakk. 3 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         BIGroup = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME haku3.
         UPDATE lcBrand WHEN gcAllBrand 
                BIGroup WITH FRAME haku3.
@@ -565,7 +565,7 @@ BROWSE:
      /* translations */
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
          FIND BillItem where recid(BillItem) = rtab[FRAME-LINE] NO-LOCK.
-         RUN invlang(1,BillItem.BillCode).
+         RUN Mc/invlang.p(1,BillItem.BillCode).
          
          ufkey = TRUE.
          NEXT LOOP.
@@ -645,7 +645,7 @@ BROWSE:
         PAUSE 0.
         DO TRANS:
            FIND BillItem where recid(BillItem) = rtab[FRAME-LINE] no-lock.
-           RUN invotxt("BillItem",BillItem.BillCode).
+           RUN Mc/invotxt.p("BillItem",BillItem.BillCode).
         END.
         ufkey = TRUE.
         NEXT LOOP.
@@ -711,8 +711,8 @@ BROWSE:
              TaxClass.TaxClass = BillItem.TaxClass NO-LOCK NO-ERROR.
         
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN ufkey.
-        cfc = "lis". RUN ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
 
         DISPLAY 
         BillItem.Brand

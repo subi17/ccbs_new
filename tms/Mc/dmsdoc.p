@@ -8,8 +8,8 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{dms.i}
+{Syst/commali.i}
+{Func/dms.i}
 
 DEF INPUT PARAMETER iiDMSID  AS INT NO-UNDO.
 
@@ -56,7 +56,7 @@ form
     " Comment: " WITH NO-LABELS 1 columns
     FRAME fComment.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 fCollectDocs(iiDMSID).
@@ -131,13 +131,13 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttDocs.DocTypeID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttDocs.DocTypeID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttDocs.DocTypeID WITH FRAME sel.
       END.
 

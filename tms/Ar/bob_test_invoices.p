@@ -8,16 +8,16 @@
   Version ......: Yoigo
   ----------------------------------------------------------------------*/
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{date.i}
-{billrund.i NEW}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/date.i}
+{Inv/billrund.i NEW}
 
 DEFINE VARIABLE lcLine   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSep    AS CHARACTER NO-UNDO INITIAL ";".
@@ -66,7 +66,7 @@ ASSIGN
    ldtToDate       = fLastDayOfMonth(TODAY)
    liFeePeriod     = INTEGER(STRING(YEAR(TODAY)) + STRING(MONTH(TODAY),"99")).
 
-RUN lamupers.p PERSISTENT SET lhandle.
+RUN Inv/lamupers.p PERSISTENT SET lhandle.
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -195,7 +195,7 @@ REPEAT:
               END.                       
               ELSE DO:
                   
-                  RUN delete_test_invoice.p (Invoice.ExtInvId,
+                  RUN Inv/delete_test_invoice.p (Invoice.ExtInvId,
                                              Invoice.ExtInvId,
                                              ldtInvDate,
                                              0,
@@ -212,7 +212,7 @@ REPEAT:
           WHEN "CREATE" THEN DO:
 
               IF AVAILABLE Invoice THEN DO:
-                  RUN delete_test_invoice.p (Invoice.ExtInvId,
+                  RUN Inv/delete_test_invoice.p (Invoice.ExtInvId,
                                              Invoice.ExtInvId,
                                              ldtInvDate,
                                              0,
@@ -246,7 +246,7 @@ REPEAT:
                  NEXT.
               END.
    
-              RUN bundle_first_month_fee.p(ldtFromDate,
+              RUN Mm/bundle_first_month_fee.p(ldtFromDate,
                                            ldtTodate,
                                            ttInvCust.CustNr,
                                            0,
@@ -261,7 +261,7 @@ REPEAT:
 
               /* If customer has DSS active then calculate Bundle fee */
               /* based on the DSS total consumption                   */
-              RUN dss_bundle_first_month_fee.p(ldtFromDate,
+              RUN Mm/dss_bundle_first_month_fee.p(ldtFromDate,
                                                ldtToDate,
                                                ttInvCust.CustNr,
                                                0,
@@ -307,7 +307,7 @@ REPEAT:
      
    END.
   
-   RUN invoice_xml_testbill.p (TODAY,
+   RUN Inv/invoice_xml_testbill.p (TODAY,
                                lcBillRun) NO-ERROR.
    
    PUT STREAM sLog UNFORMATTED 

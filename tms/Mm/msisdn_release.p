@@ -8,11 +8,11 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{tmsconst.i}
-{msisdn.i}
+{Syst/tmsconst.i}
+{Func/msisdn.i}
 DEFINE VARIABLE secs AS INTEGER NO-UNDO.
 DEFINE VARIABLE ldDate AS DATE NO-UNDO.
 DEFINE VARIABLE lcPath AS CHARACTER NO-UNDO.

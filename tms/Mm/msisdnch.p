@@ -11,13 +11,13 @@
   Version ......: skeleton
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MSISDN'}
-{fmakemsreq.i}
-{msisdn.i} 
-{mnpoutchk.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MSISDN'}
+{Func/fmakemsreq.i}
+{Func/msisdn.i} 
+{Mnp/mnpoutchk.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE 
@@ -67,8 +67,8 @@ WITH
    TITLE COLOR VALUE(ctc) " CHANGE MSISDN Number FOR A SUBSCRIPTION "
 FRAME main.
 
-{tmsparam.i MSStatusUse return}. ms-use = TMSParam.IntVal.
-{tmsparam.i MSStatusRes return}. ms-res = TMSParam.IntVal.
+{Func/tmsparam.i MSStatusUse return}. ms-use = TMSParam.IntVal.
+{Func/tmsparam.i MSStatusRes return}. ms-res = TMSParam.IntVal.
 
 PROCEDURE pAskPassword:
    DEF OUTPUT PARAM olOk AS LOGICAL.
@@ -155,7 +155,7 @@ WITH FRAME main.
 MAIN:
 REPEAT TRANSACTION WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       new-CLI-end 
@@ -326,7 +326,7 @@ REPEAT TRANSACTION WITH FRAME main:
          ufk[5] = 261
          ufk[8] = 8.
       
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
 
@@ -334,7 +334,7 @@ REPEAT TRANSACTION WITH FRAME main:
 
       IF TOIMI = 5 THEN DO:
          
-         RUN charge_dialog.p(
+         RUN Mc/charge_dialog.p(
             MobSub.MsSeq,
             (IF MobSub.PayType THEN "MSISDN_PREPAID" ELSE "MSISDN_POSTPAID"),
             OUTPUT ldeFee).

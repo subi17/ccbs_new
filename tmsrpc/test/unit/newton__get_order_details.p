@@ -14,7 +14,7 @@
 
 {test_xmlrpc_includes.i}
 {unit/checkutils.i}
-{xmlfunction.i}
+{Func/xmlfunction.i}
 
 gcFixtures = "order,ordercustomer,OrderAccessory,orderpayment,BillItem,mnpprocess,mnpmessage".
 

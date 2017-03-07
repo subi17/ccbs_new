@@ -7,13 +7,13 @@
   Version ......: Yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fbundle.i}
-{fbtc.i}
-{mnpoutchk.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Mm/fbundle.i}
+{Func/fbtc.i}
+{Mnp/mnpoutchk.i}
+{Func/main_add_lines.i}
 
 DEF INPUT PARAMETER iiMsSeq   AS INT NO-UNDO. 
 
@@ -127,7 +127,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          ufk[5] = 1027 
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    
    IF toimi = 1 THEN DO:
@@ -135,7 +135,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE 
             lcCurrentBundle    
@@ -148,11 +148,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
             IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "lcDCEvent"
             THEN DO:
                gcHelpParam = "DCType:1,4".
-               RUN h-daycamp.p.
+               RUN Help/h-daycamp.p.
                IF siirto NE ? THEN FRAME-VALUE = siirto.
   
                ehto = 9.
-               RUN ufkey.p.
+               RUN Syst/ufkey.p.
                NEXT.
             END.
                 

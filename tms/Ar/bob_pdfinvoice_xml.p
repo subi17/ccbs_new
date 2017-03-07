@@ -8,16 +8,16 @@
 ----------------------------------------------------------------------- */
 
 /* ***************************  Definitions  ************************** */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{cparam2.i}
-{replog_reader.i}
-{host.i}
-{ftransdir.i}
-{eventlog.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/replog_reader.i}
+{Syst/host.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
 
 DEFINE VARIABLE lcLine   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSep    AS CHARACTER NO-UNDO INITIAL ";".

@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i} 
+{Syst/commali.i} 
 
 DEF VAR exdir     AS c  NO-UNDO.
 DEF VAR exName    AS c  NO-UNDO.
@@ -72,11 +72,11 @@ WITH
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.
 exdate1 = date(month(exdate2),1,year(exdate2)).
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    DISP exName.
    UPDATE
       exName
@@ -97,7 +97,7 @@ repeat WITH FRAME start:
 task:
    repeat WITH FRAME start:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 
@@ -169,24 +169,24 @@ task:
    /* headers FIRST */
    FIND InvGroup where InvGroup.InvGroup = InvGroup no-lock no-error.
    PUT STREAM excel UNFORMATTED ynimi.
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
    put stream excel unformatted "Invoicing group: ".
    if InvGroup ne "" THEN PUT STREAM excel UNFORMATTED
       InvGroup.InvGroup + " - " + InvGroup.IGName.
    else put stream excel unformatted "ALL".
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
   "Summary of all payments in customer AccNum receivable within time Period " +
    string(exdate1,"99.99.9999") " - " string(exdate2,"99.99.9999").
-   RUN uexskip(2).
+   RUN Syst/uexskip.p(2).
 
    put stream excel unformatted "Date" tab.
    DO i = 1 TO num-entries(a-hdr) - 1.
       PUT STREAM excel UNFORMATTED entry(a-order[i],a-hdr) tab.
    END.
-   RUN uexskip(2).
+   RUN Syst/uexskip.p(2).
 
    /* daily values */
    FOR EACH wday BY wday.wdate.
@@ -203,7 +203,7 @@ task:
          END.
          PUT STREAM excel UNFORMATTED tab.
       END.
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
    END.
    OUTPUT STREAM excel CLOSE.
    PAUSE 0.

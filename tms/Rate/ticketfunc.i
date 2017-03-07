@@ -1,7 +1,7 @@
 DEF VAR oiValue AS INT NO-UNDO.
 
-{billableduration.i}
-{error_codes.i}
+{Rate/billableduration.i}
+{Rate/error_codes.i}
 
 FUNCTION fBillableDuration RETURN INT
   (INPUT icCallCase   AS CHAR,

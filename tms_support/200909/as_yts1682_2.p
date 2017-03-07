@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{msisdn.i}
+{Func/msisdn.i}
 
 DEFINE VARIABLE lcClis AS CHARACTER NO-UNDO. 
 lcclis = "622005433 622498064 622521745 622538026".

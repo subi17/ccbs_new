@@ -10,10 +10,10 @@
 &THEN
 &GLOBAL-DEFINE RATE_ERROR_CODES_I YES
 
-{commali.i}
-{date.i}
-{cparam2.i}
-{fprepaidfee.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/fprepaidfee.i}
 
 FUNCTION fGetTARJ6DataLimitAndCharges RETURNS INT
    (iiMsSeq AS INT,

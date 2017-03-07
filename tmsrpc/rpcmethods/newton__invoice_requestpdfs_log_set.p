@@ -13,10 +13,10 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{dpl_log.i}
+{Func/timestamp.i}
+{Func/dpl_log.i}
 
 DEF VAR top_array AS CHAR NO-UNDO.
 DEF VAR pcStruct AS CHAR NO-UNDO. 

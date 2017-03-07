@@ -1,5 +1,5 @@
 /* monitoring script to check mnp message errors */
-{timestamp.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE liTotal AS INTEGER NO-UNDO.
 DEFINE VARIABLE ldeFrom AS DECIMAL NO-UNDO.

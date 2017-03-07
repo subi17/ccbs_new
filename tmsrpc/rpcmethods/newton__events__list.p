@@ -11,7 +11,7 @@
 */
 
 {flistrpc.i}
-{timestamp.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE pcUsername AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcEvent AS CHARACTER NO-UNDO. 
