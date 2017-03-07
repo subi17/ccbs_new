@@ -32,23 +32,23 @@ IF NOT AVAIL OfferCriteria THEN
 pcUserName = "VISTA_" + get_string(pcStruct, "username").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{timestamp.i}
+{Func/timestamp.i}
 
 IF OfferCriteria.BeginStamp < fMakeTs() THEN 
    RETURN appl_err("Cannot delete active or history data").
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = pcUserName.
-{eventval.i}
+{Syst/eventval.i}
 
 FIND CURRENT OfferCriteria EXCLUSIVE-LOCK.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhOfferCriteria AS HANDLE NO-UNDO.
    lhOfferCriteria = BUFFER OfferCriteria:HANDLE.
    RUN StarEventInitialize(lhOfferCriteria).

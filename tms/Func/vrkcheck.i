@@ -9,7 +9,7 @@
   Version ......: SHARK
   ---------------------------------------------------------------------- */
 
-{timestamp.i}
+{Func/timestamp.i}
 
 DEF STREAM sErrLog.
 

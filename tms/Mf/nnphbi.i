@@ -1,4 +1,4 @@
-{country.i}
+{Syst/country.i}
 
 DEF VAR totrab   AS c NO-UNDO.
 DEF VAR volrab   AS c NO-UNDO.

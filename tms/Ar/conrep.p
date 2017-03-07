@@ -7,10 +7,10 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i}
+{Func/timestamp.i}
 
 DEF INPUT  PARAMETER icUserCode  AS CHAR  NO-UNDO. 
 DEF INPUT  PARAMETER idtConDate  AS DATE  NO-UNDO.
@@ -67,7 +67,7 @@ FUNCTION fCheckPage RETURNS LOGIC
     IF rl + iAddLine >= skayt1 THEN DO:
 
         IF sl > 0 THEN DO:
-           {uprfeed.i rl}
+           {Syst/uprfeed.i rl}
         END.
         
         sl = sl + 1.
@@ -168,7 +168,7 @@ IF icFile > "" THEN DO:
 END.
 
 ELSE DO:
-   {uprfeed.i rl}
+   {Syst/uprfeed.i rl}
 END.   
 
 

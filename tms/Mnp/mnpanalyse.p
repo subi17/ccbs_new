@@ -6,15 +6,15 @@
   CREATED ......: 03.11.09
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "MNPAnalyse".
 gcBrand = "1".
 
-{barrfunc.i}
-{tmsconst.i}
-{log.i}
-{timestamp.i}
-{heartbeat.i}
+{Func/barrfunc.i}
+{Syst/tmsconst.i}
+{Func/log.i}
+{Func/timestamp.i}
+{Func/heartbeat.i}
 
 DEF BUFFER bMNPProcess FOR MNPProcess.
 

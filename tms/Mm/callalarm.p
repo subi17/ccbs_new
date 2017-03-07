@@ -25,19 +25,19 @@
 DEF  INPUT PARAMETER    iiCustNum AS INT NO-UNDO.
 DEF  INPUT PARAMETER    icCli     AS CHAR No-UNDO.
 
-{commali.i}
-{eventval.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
 
     DEF VAR lhCallAlarm AS HANDLE NO-UNDO.
     lhCallAlarm = BUFFER CallAlarm:HANDLE.
     RUN StarEventInitialize(lhCallAlarm).
 
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhCallAlarm).
+        RUN Mc/eventview2.p(lhCallAlarm).
     END.
 END.
 
@@ -93,7 +93,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     "Alarm Sequence:" CallAlarm.CASeq FORMAT ">>>>>>>>>9" SKIP
@@ -150,7 +150,7 @@ form /* seek  CLI */
     COLOR VALUE(cfc) NO-labels overlay FRAME f3.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,  By Stamp  , By 4".
@@ -180,12 +180,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CallAlarm  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            CREATE CallAlarm.
@@ -274,21 +274,21 @@ BROWSE:
           ufk[5] = 0
           ufk[6] = 0.
           
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row CallAlarm.CustNO ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row CallAlarm.CustNO {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CallAlarm.CustNO WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row CallAlarm.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row CallAlarm.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CallAlarm.CLI WITH FRAME sel.
       END.
 
       ELSE IF order = 3 THEN DO:
-        choose row CallAlarm.actstamp ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row CallAlarm.actstamp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CallAlarm.actstamp WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.
@@ -417,8 +417,8 @@ BROWSE:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        IF CustNo > 0 THEN DO:
           MESSAGE
           "Customer number search is not allowed with this functionality"
@@ -451,8 +451,8 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        DISP lcBrand WITH FRAME f2.
        SET lcBrand WHEN gcAllBrand TRUE 
@@ -476,8 +476,8 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        Actdate = today.
        SET actDate ActTime WITH FRAME f3.
@@ -507,14 +507,14 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = true.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 
@@ -584,7 +584,7 @@ ACTION: repeat with frame lis:
           ufk = 0 ufk[1] = 7 ufk[2] = 0 ufk[3] = 0 ufk[4] = 0
           ufk[5] = 0 ufk[8] = 8 ehto = 0 
           ufkey = true.
-          run ufkey.
+          RUN Syst/ufkey.p.
 
           if toimi = 8 then do:
              hide frame lis.
@@ -593,8 +593,8 @@ ACTION: repeat with frame lis:
           else if toimi = 1 then do: 
 
              RUN local-find-this(true).
-             ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-             cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+             ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+             cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
              DISPLAY CallAlarm.CustNO.
 
              IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCallAlarm).
@@ -871,7 +871,7 @@ PROCEDURE local-update-record:
          READKEY.
              IF FRAME-FIELD = "delitype" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN h-tmscodes(INPUT "CallLimit",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "CallLimit",  /* TableName*/
                                      "DeliType", /* FieldName */
                                      "Delitype", /* GroupCode */
                                OUTPUT siirto).
@@ -882,7 +882,7 @@ PROCEDURE local-update-record:
 
              ELSE IF FRAME-FIELD = "credittype" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN h-tmscodes(INPUT "CallAlarm",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "CallAlarm",  /* TableName*/
                                      "CreditType", /* FieldName */
                                      "SMS", /* GroupCode */
                                OUTPUT siirto).
@@ -932,7 +932,7 @@ PROCEDURE local-update-record:
                 END.
 
                 ELSE IF FRAME-FIELD = "delitype" THEN DO:
-                   RUN v-tmscodes(INPUT "CallLimit",    /* TableName */
+                   RUN Syst/v-tmscodes.p(INPUT "CallLimit",    /* TableName */
                                         "Delitype", /* FieldName */
                                         "delitype",     /* GroupCode */
                                   INPUT INPUT delitype,
@@ -952,7 +952,7 @@ PROCEDURE local-update-record:
                 END.
 
                 ELSE IF FRAME-FIELD = "credittype" THEN DO:
-                   RUN v-tmscodes(INPUT "CallAlarm",    /* TableName */
+                   RUN Syst/v-tmscodes.p(INPUT "CallAlarm",    /* TableName */
                                         "credittype", /* FieldName */
                                         "SMS",     /* GroupCode */
                                   INPUT INPUT callalarm.credittype,

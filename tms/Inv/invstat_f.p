@@ -14,8 +14,8 @@
   VERSIO .......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{email.i}
+{Syst/commali.i}
+{Func/email.i}
 
 def var xDate1     as date no-undo.
 def var xDate2     as date no-undo. 
@@ -129,7 +129,7 @@ limits:
 REPEAT with frame valinta:
 
 
-    ehto = 9. RUN ufkey.
+    ehto = 9. RUN Syst/ufkey.p.
 
     repeat with frame valinta on endkey undo, leave:
         UPDATE 
@@ -162,7 +162,7 @@ REPEAT with frame valinta:
                IF LOOKUP(FRAME-FIELD,"liInvType1,liInvType2") > 0
                THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                        "InvType", /* FieldName */
                                        "Report", /* GroupCode */
                                  OUTPUT lcCode).
@@ -178,7 +178,7 @@ REPEAT with frame valinta:
                ELSE IF LOOKUP(FRAME-FIELD,"xState1,xState2") > 0
                THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                        "PrintState", /* FieldName */
                                        "Report", /* GroupCode */
                                  OUTPUT lcCode).
@@ -193,7 +193,7 @@ REPEAT with frame valinta:
                END.
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -220,7 +220,7 @@ REPEAT with frame valinta:
     repeat with frame valinta:
 
       assign ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      run ufkey.
+      RUN Syst/ufkey.p.
 
       if toimi = 1 then next  limits.
 
@@ -230,7 +230,7 @@ REPEAT with frame valinta:
     end.
 
 
-    run invstat (xDate1,
+    RUN Inv/invstat.p (xDate1,
                  xDate2,
                  liInvType1,
                  liInvType2,

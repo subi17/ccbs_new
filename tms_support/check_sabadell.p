@@ -1,4 +1,4 @@
-{date.i}
+{Func/date.i}
 input from check_sabadell_payterm.log.
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 

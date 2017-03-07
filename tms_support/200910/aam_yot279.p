@@ -1,7 +1,7 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 {/home/ari/work/fcreditreq_chk.i}
-{timestamp.i}
+{Func/timestamp.i}
 
 def var lcline as char no-undo.
 def var liorderid as int no-undo.

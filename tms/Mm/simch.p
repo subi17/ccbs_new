@@ -13,14 +13,14 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SIM'}
-{fmakemsreq.i}
-{msreqfunc.i}
-{mnpoutchk.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SIM'}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Mnp/mnpoutchk.i}
+{Syst/tmsconst.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE 
@@ -173,8 +173,8 @@ END.
 **************************************************************************/
 
 /* search the default "lost-string" of SIMStat */
-{tmsparam.i SIMStatusLost return} ss-code-lost = TMSParam.IntVal.
-{tmsparam.i SIMStatusAtc  return} ss-code-atc  = TMSParam.IntVal.
+{Func/tmsparam.i SIMStatusLost return} ss-code-lost = TMSParam.IntVal.
+{Func/tmsparam.i SIMStatusAtc  return} ss-code-atc  = TMSParam.IntVal.
 
 
 
@@ -222,7 +222,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
    ehto = 9. 
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    UPDATE
       liSimdeliv
@@ -278,13 +278,13 @@ ACTION:
 
       IF new-icc = "" THEN ufk[5] = 0.
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.
       IF TOIMI = 5 THEN DO:
          
-         RUN charge_dialog.p(
+         RUN Mc/charge_dialog.p(
             MobSub.MsSeq,
             (IF MobSub.PayType THEN "ICC_PREPAID" ELSE "ICC_POSTPAID"),
             OUTPUT ldeFee).

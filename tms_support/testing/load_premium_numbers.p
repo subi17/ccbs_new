@@ -7,7 +7,7 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun   = "Qvantel".
 

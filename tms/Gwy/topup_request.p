@@ -13,17 +13,17 @@
   VERSION ......: XFERA
 ------------------------------------------------------ */
 
-{commpaa.i} 
-{xmlfunction.i}
-{timestamp.i}
-{fgettxt.i}
-{fmakesms.i}
+{Syst/commpaa.i} 
+{Func/xmlfunction.i}
+{Func/timestamp.i}
+{Func/fgettxt.i}
+{Func/fmakesms.i}
 
 ASSIGN
    katun   = "Cron"
    gcBrand = "1".
 
-{heartbeat.i}
+{Func/heartbeat.i}
 
 FUNCTION fCallAlarm RETURNS LOGICAL
   (INPUT pcAction AS CHARACTER,
@@ -148,7 +148,7 @@ PROCEDURE pPPRequests:
       
       IF llNext THEN NEXT.
      
-      RUN pp_platform(gcBrand,PrePaidRequest.PPRequest).
+      RUN Gwy/pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
       
       lcXML = RETURN-VALUE.
       

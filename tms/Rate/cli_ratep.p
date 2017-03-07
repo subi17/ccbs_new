@@ -12,9 +12,9 @@
 &GLOBAL-DEFINE PersistentRun YES
 &GLOBAL-DEFINE CounterHandling TempTable
 
-{commali.i}      
-{rerate_define.i}
-{premiumnumber.i}
+{Syst/commali.i}      
+{Rate/rerate_define.i}
+{Rate/premiumnumber.i}
 
 PROCEDURE pInitializeRerate:
 
@@ -118,6 +118,6 @@ PROCEDURE pRunRerate:
                   MobCDR.datest  <= cdate2    
          TRANSACTION WITH FRAME MobCDR: 
        
-            {man_rate2.i}
+            {Rate/man_rate2.i}
        
        

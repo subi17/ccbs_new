@@ -9,7 +9,7 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR ReasonC        AS CHAR NO-UNDO.
 DEF VAR ReasonT        AS CHAR NO-UNDO FORMAT "X(60)" .
@@ -73,7 +73,7 @@ PROCEDURE local-Show-record:
              READKEY.
              IF FRAME-FIELD = "ReasonC" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN h-tmscodes(INPUT "FixCDR",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FixCDR",  /* TableName*/
                                      "ReasonCode", /* FieldName */
                                      "ReasonCode", /* GroupCode */
                                OUTPUT siirto).

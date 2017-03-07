@@ -9,11 +9,11 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{function.i}
-{excel.i}
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'cli'}
+{Func/function.i}
+{Func/excel.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'cli'}
 
 
 DEF INPUT PARAMETER CustNum AS i NO-UNDO. 
@@ -71,7 +71,7 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    DISP Customer.CustNum Customer.CustName WITH FRAME frm.
    UPDATE 
       date1 date2
@@ -81,7 +81,7 @@ repeat WITH FRAME frm:
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 

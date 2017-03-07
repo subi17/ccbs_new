@@ -8,8 +8,8 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/fcustdata.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -54,7 +54,7 @@ form /* seek  */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -129,17 +129,17 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW Nationality.Nationality ;(uchoose.i;) NO-ERROR 
+         CHOOSE ROW Nationality.Nationality {Syst/uchoose.i} NO-ERROR 
             WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Nationality.Nationality WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW Nationality.NtName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Nationality.NtName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Nationality.NtName WITH FRAME sel.
       END.
 
@@ -266,8 +266,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         lcNationality = "".
         UPDATE lcNationality WITH FRAME f1.
@@ -295,8 +295,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         lcNtName = "".
         UPDATE lcNtName WITH FRAME f2.

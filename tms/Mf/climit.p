@@ -1,6 +1,6 @@
-{commali.i}
-{tmsparam2.i}
-{function.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Func/function.i}
 
 DEF VAR cfile AS c  NO-UNDO.
 DEF VAR subj  AS c  NO-UNDO.

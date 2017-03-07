@@ -6,24 +6,24 @@
   CREATED ......: 01/2010 
   Version ......: yoigo
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{eventval.i}
-{email.i}
-{timestamp.i}
-{msisdn.i}
-{msisdn_prefix.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Syst/eventval.i}
+{Func/email.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
+{Func/msisdn_prefix.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPProcess AS HANDLE NO-UNDO.
    lhMNPProcess = BUFFER MNPProcess:HANDLE.

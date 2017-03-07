@@ -1,4 +1,4 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "Qvantel".
 
@@ -31,7 +31,7 @@ FOR FIRST DayCampaign WHERE
               ldaMobActDate = MobSub.ActivationDate
               llActive = TRUE.
 
-   RUN creasfee.p(liCustNum,
+   RUN Mc/creasfee.p(liCustNum,
                   liMsSeq,
                   ldaDate,
                   "FeeModel",

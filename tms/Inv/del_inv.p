@@ -32,13 +32,13 @@
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 DISABLE TRIGGERS FOR LOAD OF SingleFee.
 
-{commali.i}
-{invseq.i}
-{fcustbal.i}
-{fcustcnt.i}
-{eventval.i} 
-{nnpcst.i}
-{combine_invseq.i}
+{Syst/commali.i}
+{Func/invseq.i}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Syst/eventval.i} 
+{Ar/nnpcst.i}
+{Inv/combine_invseq.i}
 
 DEF INPUT PARAMETER pInvNo AS i NO-UNDO.
 
@@ -58,7 +58,7 @@ IF llDoEvent THEN DO:
 
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER Invoice:HANDLE.
@@ -99,7 +99,7 @@ FIND FIRST Customer WHERE
    FOR EACH SubInvoice OF Invoice EXCLUSIVE-LOCK:
 
       /* release events */
-      RUN nnpcst.p (Invoice.InvNum,
+      RUN Ar/nnpcst.p (Invoice.InvNum,
                     SubInvoice.SubInvNum,
                     FALSE,
                     INPUT table wMarked).
@@ -157,7 +157,7 @@ FIND FIRST Customer WHERE
    END.
 
    /* make sure that nothing is left */
-   RUN nnpcst.p (Invoice.InvNum,
+   RUN Ar/nnpcst.p (Invoice.InvNum,
                  0,
                  FALSE,
                  INPUT table wMarked).

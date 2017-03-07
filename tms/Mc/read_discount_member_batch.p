@@ -7,15 +7,15 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "Cron".
        
-{cparam2.i}
-{eventlog.i}
-{timestamp.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
 
 DEF VAR lcFile      AS CHAR NO-UNDO.
 DEF VAR liRead      AS INT  NO-UNDO. 
@@ -70,7 +70,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN read_discount_member.p (ttFiles.DPMemberFile,
+   RUN Mc/read_discount_member.p (ttFiles.DPMemberFile,
                                OUTPUT liRead,
                                OUTPUT liError).
    

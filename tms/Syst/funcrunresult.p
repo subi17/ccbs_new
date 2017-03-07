@@ -7,23 +7,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FuncRunResult'}
-{eventval.i}
-{timestamp.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FuncRunResult'}
+{Syst/eventval.i}
+{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFuncRunResult AS HANDLE NO-UNDO.
    lhFuncRunResult = BUFFER FuncRunResult:HANDLE.
    RUN StarEventInitialize(lhFuncRunResult).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhFuncRunResult).
+      RUN Mc/eventview2.p(lhFuncRunResult).
    END.
 
 END.
@@ -86,7 +86,7 @@ IF NOT AVAILABLE FuncRunProcess THEN DO:
    RETURN.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -173,12 +173,12 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FuncRunResult.FRProcessID ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW FuncRunResult.FRProcessID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FuncRunResult.FRProcessID WITH FRAME sel.
       END.
@@ -318,8 +318,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunResult).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -356,7 +356,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -436,7 +436,7 @@ PROCEDURE local-UPDATE-record:
          ufk[8] = 8
          ehto   = 0.
          
-      RUN ufkey.
+      RUN Syst/ufkey.p.
         
       IF toimi = 8 THEN LEAVE. 
    END.

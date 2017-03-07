@@ -8,24 +8,24 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OfferItem'}
-{eventval.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OfferItem'}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhOfferItem AS HANDLE NO-UNDO.
    lhOfferItem = BUFFER OfferItem:HANDLE.
    RUN StarEventInitialize(lhOfferItem).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhOfferItem).
+      RUN Mc/eventview2.p(lhOfferItem).
    END.
 
 END.
@@ -233,7 +233,7 @@ FUNCTION fTopUpAmount RETURNS DECIMAL
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST Offer WHERE 
@@ -277,7 +277,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a OfferItem  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -285,7 +285,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANS WITH FRAME lis:
 
@@ -396,12 +396,12 @@ REPEAT WITH FRAME sel:
            ufk[5] = 0
            ufk[6] = 0.
           
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OfferItem.ItemType ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW OfferItem.ItemType {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OfferItem.ItemType WITH FRAME sel.
       END.
@@ -607,8 +607,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOfferItem).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -637,7 +637,7 @@ REPEAT WITH FRAME sel:
      END.
          
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO: 
-        RUN eventsel.p("offeritem", "#BEGIN" + chr(255) + gcBrand + chr(255) + icOffer).
+        RUN Mc/eventsel.p("offeritem", "#BEGIN" + chr(255) + gcBrand + chr(255) + icOffer).
         ufkey = TRUE.
         NEXT.
      END.   
@@ -651,7 +651,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -781,10 +781,10 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       
          IF toimi = 6 THEN DO: 
-            RUN eventsel.p("offeritem", "#BEGIN" + chr(255) + OfferItem.Brand + chr(255) + OfferItem.Offer
+            RUN Mc/eventsel.p("offeritem", "#BEGIN" + chr(255) + OfferItem.Brand + chr(255) + OfferItem.Offer
                + chr(255) + STRING(OfferItem.OfferItemId)).
             LEAVE.
          END.   
@@ -797,7 +797,7 @@ PROCEDURE local-UPDATE-record:
                 
          FIND CURRENT OfferItem EXCLUSIVE-LOCK.
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE
             OfferItem.ItemType   WHEN NEW OfferItem
@@ -824,7 +824,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "ItemType" THEN DO:
-                  RUN h-tmscodes(INPUT "OfferItem", 
+                  RUN Help/h-tmscodes.p(INPUT "OfferItem", 
                                        "ItemType", 
                                        "Offer", 
                                  OUTPUT lcCode).
@@ -836,12 +836,12 @@ PROCEDURE local-UPDATE-record:
                ELSE IF LOOKUP(FRAME-FIELD,"ItemKey") > 0 THEN DO:
                   
                   CASE INPUT FRAME lis OfferItem.ItemType:
-                  WHEN "BillItem"    THEN lcHelp = "nntuse".
-                  WHEN "FATime"      THEN lcHelp = "h-fatgroup".
-                  WHEN "Topup"       THEN lcHelp = "topupscheme".
-                  WHEN "PerContract" THEN lcHelp = "h-daycamp".
-                  WHEN "ServicePackage" THEN lcHelp = "h-servpa".
-                  WHEN "DiscountPlan" THEN lcHelp = "h-discountplan".
+                  WHEN "BillItem"    THEN lcHelp = "Help/nntuse.p".
+                  WHEN "FATime"      THEN lcHelp = "Help/h-fatgroup.p".
+                  WHEN "Topup"       THEN lcHelp = "Mm/topupscheme.p".
+                  WHEN "PerContract" THEN lcHelp = "Help/h-daycamp.p".
+                  WHEN "ServicePackage" THEN lcHelp = "Help/h-servpa.p".
+                  WHEN "DiscountPlan" THEN lcHelp = "Help/h-discountplan.p".
                   OTHERWISE lcHelp = "".
                   END CASE.
                   
@@ -860,7 +860,7 @@ PROCEDURE local-UPDATE-record:
                END.
                
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 

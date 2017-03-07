@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
-{timestamp.i}
+{Func/timestamp.i}
 
 def var lcres as char no-undo.
 def var ldtactdate as date no-undo.
@@ -57,7 +57,7 @@ for each msrequest no-lock where
                output ldtactdate,
                output litime).
                
-      RUN creasfee (Msrequest.CustNum,
+      RUN Mc/creasfee.p (Msrequest.CustNum,
                     MsRequest.MsSeq,
                     ldtActDate,
                     "FeeModel",

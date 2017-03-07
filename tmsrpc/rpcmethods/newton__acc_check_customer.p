@@ -38,8 +38,8 @@
 
 {xmlrpc/xmlrpc_access.i}
 DEF VAR gcBrand   AS CHAR NO-UNDO INIT "1".
-{fcustdata.i}
-{tmsconst.i}
+{Func/fcustdata.i}
+{Syst/tmsconst.i}
 
 /* Input parameters */
 DEF VAR pcPersonId AS CHAR NO-UNDO.

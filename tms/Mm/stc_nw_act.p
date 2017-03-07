@@ -8,10 +8,10 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{date.i}
-{msreqfunc.i}
-{provision.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/msreqfunc.i}
+{Gwy/provision.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER iiFromStatus AS INTEGER NO-UNDO.

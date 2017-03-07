@@ -1,13 +1,13 @@
 /* Simulate the Air Response XML */
 
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 gcBrand = "1".
 
-{xmlfunction.i}
-{msbalance.i}
-{date.i}
+{Func/xmlfunction.i}
+{Mm/msbalance.i}
+{Func/date.i}
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.

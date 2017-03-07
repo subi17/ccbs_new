@@ -7,8 +7,8 @@
   changePVM ....:
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER msseq  AS INT .
 
@@ -37,7 +37,7 @@ IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Calls Browse                "                    @ menuc[1] SKIP
@@ -64,43 +64,43 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX EQ 1 THEN DO:
-      RUN mobcallm.p(lhSub::cli).
+      RUN Mm/mobcallm.p(lhSub::cli).
    END.   
 
    ELSE IF FRAME-INDEX = 2 THEN DO:
-      RUN msisdniv.p(Mobsub.MsSeq, FALSE).
+      RUN Mm/msisdniv.p(Mobsub.MsSeq, FALSE).
    END.
 
    ELSE IF FRAME-INDEX = 3 THEN DO:
-      RUN nncuco.p(Mobsub.InvCust,STRING(Mobsub.MsSeq)).
+      RUN Mc/nncuco.p(Mobsub.InvCust,STRING(Mobsub.MsSeq)).
    END.
    
    ELSE IF FRAME-INDEX = 4 THEN DO:
-      RUN limit.p(lhSub::InvCust, Msseq, {&LIMIT_TYPE_BILLPERM}, 0).
+      RUN Mc/limit.p(lhSub::InvCust, Msseq, {&LIMIT_TYPE_BILLPERM}, 0).
    END.
    
    ELSE IF FRAME-INDEX = 5 THEN DO:
-      RUN invoicetarget.p(0, MobSub.Msseq).
+      RUN Mc/invoicetarget.p(0, MobSub.Msseq).
    END.
 
    ELSE IF FRAME-INDEX = 6 THEN DO:
-      RUN minconsumption.p(lhSub::Msseq).
+      RUN Inv/minconsumption.p(lhSub::Msseq).
    END.
    
    ELSE IF FRAME-INDEX = 7 THEN DO:
-      RUN edrm.p(lhSub::cli).
+      RUN Mm/edrm.p(lhSub::cli).
    END.
    
    ELSE IF FRAME-INDEX = 8 THEN DO:
-      RUN fraudm.p(lhSub::cli).
+      RUN Mm/fraudm.p(lhSub::cli).
    END.
 
    ELSE IF FRAME-INDEX = 9 THEN DO:   
-      IF MobSub.FixedNumber > "" THEN RUN mobcallm.p(MobSub.fixednumber).
+      IF MobSub.FixedNumber > "" THEN RUN Mm/mobcallm.p(MobSub.fixednumber).
    END.
 
    ELSE IF FRAME-INDEX = 10 THEN DO:   
-      IF MobSub.FixedNumber > "" THEN RUN msisdniv.p(Mobsub.MsSeq, TRUE).
+      IF MobSub.FixedNumber > "" THEN RUN Mm/msisdniv.p(Mobsub.MsSeq, TRUE).
    END.
 
             

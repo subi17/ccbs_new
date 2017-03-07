@@ -1,9 +1,9 @@
 
 
 /* return the amount of charge or compensation for a mobsub */
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 FUNCTION fMonthLoaded RETURN DECIMAL 
    (icSource AS CHAR, icCLI AS CHAR, ilPayType AS LOG):
@@ -81,7 +81,7 @@ FUNCTION fCheckChargeLimits RETURNS CHAR
 
    IF ilPaytype = TRUE THEN DO:
       ldeCurrBal = 0.
-      RUN balancequery(icCLI).
+      RUN Gwy/balancequery.p(icCLI).
       ldeCurrBal = INT(RETURN-VALUE) / 100 NO-ERROR.
       IF ldeCurrBal < ideCharge THEN RETURN "Charge exceeds balance".
    END.

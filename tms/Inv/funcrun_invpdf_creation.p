@@ -6,15 +6,15 @@
   Created ......: 11.10.15
   Version ......: Yoigo
 ---------------------------------------------------------------------- */ 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
 
-{cparam2.i}
-{replog_reader.i}
-{host.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Func/replog_reader.i}
+{Syst/host.i}
+{Func/ftransdir.i}
 
 DEFINE INPUT PARAMETER liFRExecID AS INTEGER NO-UNDO. 
 

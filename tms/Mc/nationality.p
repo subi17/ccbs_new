@@ -8,22 +8,22 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Nationality'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Nationality'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhNationality AS HANDLE NO-UNDO.
    lhNationality = BUFFER Nationality:HANDLE.
    RUN StarEventInitialize(lhNationality).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhNationality).
+      RUN Mc/eventview2.p(lhNationality).
    END.
 END.
 
@@ -84,7 +84,7 @@ form /* seek Nationality  BY NtName */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -115,12 +115,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Nationality  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR Nationality.Nationality
@@ -209,17 +209,17 @@ REPEAT WITH FRAME sel:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Nationality.Nationality ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW Nationality.Nationality {Syst/uchoose.i} NO-ERROR 
             WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Nationality.Nationality WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Nationality.NtName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Nationality.NtName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Nationality.NtName WITH FRAME sel.
       END.
 
@@ -346,8 +346,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET Nationality WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -369,8 +369,8 @@ REPEAT WITH FRAME sel:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET NtName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -392,7 +392,7 @@ REPEAT WITH FRAME sel:
      THEN DO TRANS: /* memo */
         FIND Nationality where recid(Nationality) = rtab[frame-line(sel)]
         NO-LOCK NO-ERROR.
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "Nationality",
                  INPUT Nationality.Nationality,
                  INPUT "Nationality").
@@ -403,7 +403,7 @@ REPEAT WITH FRAME sel:
      /* translations */
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
          FIND Nationality WHERE RECID(Nationality) = rtab[FRAME-LINE] NO-LOCK.
-         RUN invlang(4,STRING(Nationality.Nationality)).
+         RUN Mc/invlang.p(4,STRING(Nationality.Nationality)).
          
          ufkey = TRUE.
          NEXT LOOP.
@@ -416,7 +416,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}.
+       {Syst/uright2.i}.
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -468,13 +468,13 @@ REPEAT WITH FRAME sel:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(TRUE).
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhNationality).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Nationality.Nationality.
 
        RUN local-UPDATE-record.                                  

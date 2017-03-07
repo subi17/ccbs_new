@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{tmsconst.i}
-{flimitreq.i}
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
 
 input from /apps/snet/200901/Postpone+_Terminte_Actuales_v2.txt.
 def stream slog.

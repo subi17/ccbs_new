@@ -4,10 +4,10 @@
 &THEN
 &GLOBAL-DEFINE OFFER_I YES
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
 DEFINE TEMP-TABLE ttOffer NO-UNDO LIKE Offer.
 DEFINE TEMP-TABLE ttOfferItem NO-UNDO LIKE OfferItem.
 DEFINE TEMP-TABLE ttOfferCriteria NO-UNDO LIKE OfferCriteria.

@@ -15,8 +15,8 @@
   Version ......: M15
 ----------------------------------------------------------------------- */
 
-{commali.i} 
-{utumaa.i "new"}
+{Syst/commali.i} 
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnrank"
        tuni2 = "".
@@ -197,7 +197,7 @@ DISP CGName IGName SmName RsName soname biname bigname WITH FRAME rajat.
 
 rajat:
 repeat WITH FRAME rajat.
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
    camt CustGroup InvGroup Salesman Reseller 
@@ -332,12 +332,12 @@ repeat WITH FRAME rajat.
          END.
 
          else if frame-field  = "period1" THEN DO:
-            RUN uperch(INPUT INPUT period1,output i).
+            RUN Syst/uperch.p(INPUT INPUT period1,output i).
             IF i > 0 THEN NEXT.
          END.
 
          else if frame-field  = "period2" THEN DO:
-            RUN uperch(INPUT INPUT period2,output i).
+            RUN Syst/uperch.p(INPUT INPUT period2,output i).
             IF i > 0 THEN NEXT.
             IF INPUT period2 < INPUT period1 THEN DO:
                BELL.
@@ -389,13 +389,13 @@ repeat WITH FRAME rajat.
 toimi:
    repeat WITH FRAME toimi:
       ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 847 ufk[6] = 638 ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  rajat.
       IF toimi = 5 THEN LEAVE toimi.
       IF toimi = 6 THEN 
       DO:
          ASSIGN tila = TRUE.
-         {tmsreport.i "return"}
+         {Syst/tmsreport.i "return"}
          llprint = TRUE.
          VIEW STREAM tul FRAME sivuots.
          LEAVE toimi.
@@ -417,31 +417,31 @@ toimi:
        OUTPUT STREAM excel TO value(exname).
 
        put stream excel unformatted ynimi tab "RANKING LIST OF CUSTOMERS; Billed VALUES ARE EX VATAmt AND Calls ONLY, CONTRACT FEES ARE OMITTED,".
-          RUN uexskip(1).
+          RUN Syst/uexskip.p(1).
 
        PUT STREAM excel UNFORMATTED
           "According to invoices written during " +
           string(period1) " - " string(period2).
-          RUN uexskip(2).
+          RUN Syst/uexskip.p(2).
 
        put stream excel unformatted "This File contains " camt
                                     " BEST customers of:".
-          RUN uexskip(1).
+          RUN Syst/uexskip.p(1).
 
        PUT STREAM excel UNFORMATTED
-          "External C-Group" tab CGName. RUN uexskip(1).
+          "External C-Group" tab CGName. RUN Syst/uexskip.p(1).
        PUT STREAM excel UNFORMATTED
-          "invoicing Group" tab IGName.  RUN uexskip(1).
+          "invoicing Group" tab IGName.  RUN Syst/uexskip.p(1).
        PUT STREAM excel UNFORMATTED
-          "salesman"        tab SmName.  RUN uexskip(1).
+          "salesman"        tab SmName.  RUN Syst/uexskip.p(1).
        PUT STREAM excel UNFORMATTED
-          "agent"           tab RsName.  RUN uexskip(1).
+          "agent"           tab RsName.  RUN Syst/uexskip.p(1).
        PUT STREAM excel UNFORMATTED
-           "Product"        tab BiName.  RUN uexskip(1).
+           "Product"        tab BiName.  RUN Syst/uexskip.p(1).
        PUT STREAM excel UNFORMATTED
-           "Product Group"  tab BigName. RUN uexskip(1).
+           "Product Group"  tab BigName. RUN Syst/uexskip.p(1).
        put stream excel unformatted "SORTED BY " soname.
-          RUN uexskip(2).
+          RUN Syst/uexskip.p(2).
 
 
        /* column headings on 2 rows */
@@ -459,7 +459,7 @@ toimi:
           string(periods[i]) tab
           "-------->"        tab.
        END.
-       RUN uexskip(1).
+       RUN Syst/uexskip.p(1).
 
        PUT STREAM excel UNFORMATTED
        "no."            tab
@@ -473,7 +473,7 @@ toimi:
           IF periods[i] > 0 THEN PUT STREAM excel UNFORMATTED
           "Amount" tab "# of Min" tab "# of Calls" tab.
        END.
-       RUN uexskip(1).
+       RUN Syst/uexskip.p(1).
    END.
 
    message "Calculating total Billed amounts by customer, wait ...".
@@ -688,7 +688,7 @@ CUSTOMER:
                 PUT STREAM excel UNFORMATTED tab.
          END.
       END.
-      IF NOT llprint THEN RUN uexskip(1).
+      IF NOT llprint THEN RUN Syst/uexskip.p(1).
    END.
    IF NOT llprint THEN
    OUTPUT STREAM excel CLOSE.
@@ -700,7 +700,7 @@ CUSTOMER:
       END.
 
       ASSIGN tila = FALSE.
-      {tmsreport.i}
+      {Syst/tmsreport.i}
    END.
    PAUSE 0.
    IF NOT llprint THEN 

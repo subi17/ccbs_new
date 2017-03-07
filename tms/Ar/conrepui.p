@@ -8,10 +8,10 @@
   ------------------------------------------------------ */
 
 
-{commali.i}
-{utumaa.i "new"}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'contact'}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'contact'}
 
 assign tuni1 = "conrep"
        tuni2 = "".
@@ -111,7 +111,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
          ufk[9]= 1
          ehto = 3.
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       READKEY.
       nap = KEYLABEL(LASTKEY).
@@ -123,7 +123,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    IF LOOKUP(nap,"1,f1") > 0 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
 
@@ -183,14 +183,14 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
 
       ehto = 5.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF lcFile = "" THEN DO:
          assign tila = true.
-         {utuloste.i "return"}
+         {Syst/utuloste.i "return"}
       END.
 
-      RUN conrep (icUserCode,
+      RUN Ar/conrep.p (icUserCode,
                   idtConDate,
                   liCustNum,
                   liState,
@@ -199,7 +199,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 
       IF lcFile = "" THEN DO:
          assign tila = false.
-         {utuloste.i}
+         {Syst/utuloste.i}
       END.
 
       MESSAGE liCount "events were printed on contact report." 
