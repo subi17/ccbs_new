@@ -8,14 +8,14 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "Cron".
    
-{cparam2.i}
-{eventlog.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/ftransdir.i}
 
 DEF VAR liCount       AS INT  NO-UNDO. 
 DEF VAR lcFile        AS CHAR NO-UNDO.
@@ -41,7 +41,7 @@ ASSIGN
    lcFile = REPLACE(lcFile,"#TIME",REPLACE(STRING(TIME,"hh:mm:ss"),":",""))
    lcFile = lcSpoolDir + "/" + lcFile.
 
-RUN readorderrep (TODAY,
+RUN Mm/readorderrep.p (TODAY,
                   "pre-act",
                   "yoigo",
                   lcFile,

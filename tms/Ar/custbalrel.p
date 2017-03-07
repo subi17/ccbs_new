@@ -16,8 +16,8 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "custbalrep"
        tuni2 = ""
@@ -94,7 +94,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       pause 0.
 
@@ -107,7 +107,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
       if lookup(nap,"1,f1") > 0 THEN DO:
 
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          
          repeat WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
             UPDATE 
@@ -149,16 +149,16 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
 END. /* toimi */
 
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
-RUN custbalrep (liCustNum,
+RUN Ar/custbalrep.p (liCustNum,
                 ldtFromDate).
 
 tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 IF llCreaFee THEN 
-RUN creasfee (Customer.CustNum,
+RUN Mc/creasfee.p (Customer.CustNum,
               0,
               TODAY,
               "PRINTS",

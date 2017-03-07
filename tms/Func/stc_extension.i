@@ -3,11 +3,11 @@
 
 &GLOBAL-DEFINE STC_EXTENSION_I YES
 
-{commali.i}
-{penaltyfee.i}
-{fcustpl.i}
-{tmsconst.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/penaltyfee.i}
+{Func/fcustpl.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 FUNCTION fCanExtendTerminalContract RETURNS LOGICAL
    (BUFFER Mobsub FOR MobSub,

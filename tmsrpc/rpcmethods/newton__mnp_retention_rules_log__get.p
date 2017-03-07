@@ -13,7 +13,7 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{timestamp.i}
+{Func/timestamp.i}
 
 DEF VAR resp_struct AS CHARACTER NO-UNDO. 
 DEF VAR resp_array AS CHARACTER NO-UNDO. 

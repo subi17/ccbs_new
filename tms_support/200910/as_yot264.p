@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "anttis".
-{msreqfunc.i}
+{Func/msreqfunc.i}
 find msrequest where
    msrequest.msrequest = 15583137 and
    msrequest.reqstatus = 6 NO-LOCK.

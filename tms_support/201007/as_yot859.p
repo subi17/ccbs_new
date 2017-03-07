@@ -1,14 +1,14 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "YOT-858".
 gcBrand = "1".
-{orderfunc.i}
-{msreqfunc.i}
-{eventval.i}
-{log.i}
+{Func/orderfunc.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/log.i}
 
   &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
 DEFINE VARIABLE lcCodes AS CHARACTER NO-UNDO. 
 lcCodes = "00500111100720184824405 00500111100720194426511 00500311100720114109167".

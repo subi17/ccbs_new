@@ -3,8 +3,8 @@
    create a request for refund payment 
 */
    
-{commali.i}
-{fcreatereq.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
 
 FUNCTION fRefundRequest RETURNS INTEGER
    (INPUT  iiCustNum     AS INT,  

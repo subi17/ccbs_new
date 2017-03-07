@@ -10,9 +10,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
 
 DEF VAR lcCustName AS CHAR NO-UNDO.
 DEF INPUT PARAMETER UserSeq AS INT NO-UNDO.
@@ -66,7 +66,7 @@ DO WITH FRAME subs:
 
    ASSIGN
    ufk = 0 ufk[8] = 8 ehto = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    HIDE FRAME subs NO-PAUSE.
 END.   

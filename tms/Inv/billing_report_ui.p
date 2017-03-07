@@ -7,11 +7,11 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Invoice'}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Invoice'}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 
@@ -89,7 +89,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    
    ELSE ASSIGN 
@@ -99,7 +99,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -117,7 +117,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
                IF FRAME-FIELD = "liInvType" THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice", 
+                  RUN Help/h-tmscodes.p(INPUT "Invoice", 
                                        "InvType",  
                                        "Report",   
                                  OUTPUT lcCode).
@@ -129,7 +129,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END.
                
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -146,7 +146,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    END.
 
    ELSE IF toimi = 3 THEN 
-      RUN report_config.p ("BillingReport").
+      RUN Syst/report_config.p ("BillingReport").
    
    ELSE IF toimi = 5 THEN DO:
       
@@ -156,7 +156,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT.
       END.
            
-      RUN billing_report.p (ldaInvDate,
+      RUN Inv/billing_report.p (ldaInvDate,
                             liInvType,
                             lcFile,
                             llDetails,

@@ -8,10 +8,10 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DumpFile'}
-{host.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DumpFile'}
+{Syst/host.i}
 
 DEF VAR liDumpID      AS INT  NO-UNDO.
 DEF VAR liDumped      AS INT  NO-UNDO.
@@ -85,14 +85,14 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    
    IF toimi = 1 THEN 
    REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
       ehto = 9.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
     
       UPDATE liDumpId lcDumpMode lcFileNameTag WITH FRAME fCrit 
       EDITING:
@@ -103,7 +103,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
             ASSIGN
                si-recid    = ?
                gcHelpParam = "dumpid".
-            RUN dumpfile.
+            RUN Syst/dumpfile.p.
             gcHelpParam = "".
             
             IF si-recid NE ? THEN DO:
@@ -113,7 +113,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
             END.
             
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.p.
 
             NEXT. 
          END.
@@ -167,7 +167,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       SET llOk.
       IF NOT llOk THEN NEXT. 
 
-      RUN dumpfile_run(liDumpID,
+      RUN Syst/dumpfile_run.p(liDumpID,
                        lcDumpMode,
                        lcFileNameTag,
                        fIsThisReplica(),

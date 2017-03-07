@@ -6,8 +6,8 @@
                   13.11.07/aam RequestType,RequestStatus
 */
 
-{requestrunner.i}
-{log.i}
+{Syst/requestrunner.i}
+{Func/log.i}
 
 DEF INPUT  PARAMETER iiRequest  AS INT  NO-UNDO.
 

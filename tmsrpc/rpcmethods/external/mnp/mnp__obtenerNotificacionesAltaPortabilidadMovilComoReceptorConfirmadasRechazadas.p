@@ -39,8 +39,8 @@
  */
 
 {mnp_obtener.i}
-{orderfunc.i}
-{ordercancel.i}
+{Func/orderfunc.i}
+{Func/ordercancel.i}
 
 DEF VAR lcSMS AS CHAR NO-UNDO. 
 
@@ -171,7 +171,7 @@ FOR EACH ttInput NO-LOCK:
       NO-LOCK NO-ERROR.
       IF NOT AVAIL MsRequest OR Order.OrderType EQ 3 THEN DO:
   
-         RUN ordersender(MNPProcess.OrderId,
+         RUN Gwy/ordersender.p(MNPProcess.OrderId,
                          OUTPUT liOrderQty).        
          
       END.
@@ -223,7 +223,7 @@ FOR EACH ttInput NO-LOCK:
    IF Order.StatusCode = "73" AND
       LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
       ttInput.StatusReason EQ "RECH_IDENT" THEN DO:
-      RUN closeorder.p(Order.OrderId,TRUE).
+      RUN Mc/closeorder.p(Order.OrderId,TRUE).
       IF RETURN-VALUE EQ "" THEN fReleaseIMEI(Order.Orderid).
    END.   
    

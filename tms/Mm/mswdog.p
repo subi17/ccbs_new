@@ -12,9 +12,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}                             
-{excel.i}
-{fsubser.i}
+{Syst/commali.i}                             
+{Func/excel.i}
+{Func/fsubser.i}
 
 DEF VAR xdays         AS I  NO-UNDO INIT 7.
 DEF VAR ok            AS LO NO-UNDO FORMAT "Yes/No".
@@ -36,8 +36,8 @@ DEF VAR liBalance     AS I  NO-UNDO.
 DEF VAR lcCustName    AS C  NO-UNDO.
 
 DEF STREAM fraud.
-{tmsparam.i WatchDogFile RETURN}.  outfile = TMSParam.CharVal.
-{cparam.i Fraudfile     RETURN}.  outfile2  = tmsparam.CharVal.
+{Func/tmsparam.i WatchDogFile RETURN}.  outfile = TMSParam.CharVal.
+{Func/cparam.i Fraudfile     RETURN}.  outfile2  = tmsparam.CharVal.
 
 hdr = "SubId,MSISDN,GSM No,Activated,Contract,CreditLimit,CustNo,"
     + "Customer's Name,Add'l Name,Address,PostCode,City,RatePlan,"
@@ -72,14 +72,14 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
       UPDATE xdays outfile.
 
 ACTION:
    REPEAT WITH FRAME MAIN:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 15 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 8 THEN LEAVE main.
       IF toimi = 1 THEN NEXT  main.
@@ -102,7 +102,7 @@ END.  /* bbatch */
    YEAR (TODAY) FORMAT "9999" "-"
    MONTH(TODAY) FORMAT "99"   "-"
    DAY  (TODAY) FORMAT "99".
-   RUN uexskip(2).                           
+   RUN Syst/uexskip.p(2).                           
 
    PUT STREAM fraud UNFORMATTED
    ynimi " Credit balance report of mobile subscribers, Printed out " 
@@ -120,7 +120,7 @@ END.  /* bbatch */
          ENTRY(i,hdr) 
          tab.
    END.
-   RUN uexskip(1).   
+   RUN Syst/uexskip.p(1).   
 
    FOR
    EACH MobSub NO-LOCK WHERE 
@@ -213,7 +213,7 @@ END.  /* bbatch */
             dbalance                tab     /* Unbilled Balance       */
             dlimit  .                      /* CreditInvNum Limit           */
 
-         RUN uexskip(1).
+         RUN Syst/uexskip.p(1).
 
       END.
    END.

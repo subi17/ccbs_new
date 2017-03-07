@@ -10,9 +10,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{email.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/email.i}
 
 DEF INPUT  PARAMETER idtDate1 AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idtDate2 AS DATE NO-UNDO.

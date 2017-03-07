@@ -10,8 +10,8 @@
   VERSIO .......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER Salesman AS c NO-UNDO.
 
@@ -40,7 +40,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSMGMember AS HANDLE NO-UNDO.
    lhSMGMember = BUFFER SMGMember:HANDLE.
@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhSMGroup).
+      RUN Mc/eventview2.p(lhSMGroup).
    END.
 END.
 
@@ -90,7 +90,7 @@ FIND Salesman where
      Salesman.Salesman = Salesman no-lock.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST SMGroup
@@ -168,16 +168,16 @@ SELAUS:
    ufk[1]= 35   ufk[2]= 30 ufk[3]= 927 ufk[4]= 510
    ufk[5]= 515  ufk[6]= 0  ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
    ehto = 3 ufkey = FALSE.
-   RUN ufkey.p.
+   RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-   CHOOSE ROW SMGroup.SmGroup ;(uchoose.i;) no-error WITH FRAME sel.
+   CHOOSE ROW SMGroup.SmGroup {Syst/uchoose.i} no-error WITH FRAME sel.
    COLOR DISPLAY value(ccc) SMGroup.SmGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-   CHOOSE ROW SMGroup.SGName ;(uchoose.i;) no-error WITH FRAME sel.
+   CHOOSE ROW SMGroup.SGName {Syst/uchoose.i} no-error WITH FRAME sel.
    COLOR DISPLAY value(ccc) SMGroup.SGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -320,9 +320,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        SMGroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SMGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if SMGroup <> "" THEN DO:
@@ -346,9 +346,9 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        SGName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if SGName <> "" THEN DO:
@@ -371,7 +371,7 @@ SELAUS:
      else if lookup(nap,"3,f3") > 0 THEN     /* memo */
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
        assign ehto = 9 cfc = "lis" ufkey = TRUE.
-       RUN ufkey. RUN ufcolor.
+       RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND SMGroup where recid(SMGroup) = rtab[frame-line(sel)]
        exclusive-lock.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSMGroup).
@@ -387,7 +387,7 @@ SELAUS:
 
      else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* poisto */
    FIND SMGroup where recid(SMGroup) = rtab[FRAME-LINE] no-lock.
-   RUN nnsgme1(SMGroup.SmGroup).
+   RUN Mc/nnsgme1.p(SMGroup.SmGroup).
    ufkey = TRUE.
    NEXT LOOP.
      END.

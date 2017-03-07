@@ -13,14 +13,14 @@
 {xmlrpc/xmlrpc_access.i}
 
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
-{commpaa.i}
+{Syst/commpaa.i}
 katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId. 
 gcBrand = "1".
-{date.i}
-{fbundle.i}
-{fbtc.i}
-{fmakemsreq.i}
-{fdss.i}
+{Func/date.i}
+{Mm/fbundle.i}
+{Func/fbtc.i}
+{Func/fmakemsreq.i}
+{Func/fdss.i}
 
 DEF VAR piMsSeq            AS INT  NO-UNDO. 
 DEF VAR pcNewBundle        AS CHAR NO-UNDO.

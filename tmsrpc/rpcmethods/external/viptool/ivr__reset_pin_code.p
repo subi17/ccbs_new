@@ -19,15 +19,15 @@ DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 DEF VAR pcCLI AS CHAR NO-UNDO.
 DEF VAR pcPIN AS CHAR NO-UNDO. 
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "IVR_" + gbAuthLog.EndUserId.
    gcBrand = "1".
 
-{eventval.i}
-{fsmsreq.i}
-{tmsconst.i}
-{fgettxt.i}
+{Syst/eventval.i}
+{Func/fsmsreq.i}
+{Syst/tmsconst.i}
+{Func/fgettxt.i}
 
 DEF VAR liRequest AS INT NO-UNDO. 
 DEF VAR lcSMSText AS CHAR NO-UNDO. 
@@ -37,7 +37,7 @@ DEF VAR ldeSMSStamp AS DEC NO-UNDO.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.

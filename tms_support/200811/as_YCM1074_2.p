@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{date.i}
-{msisdn.i}
+{Func/date.i}
+{Func/msisdn.i}
 
 DEFINE VARIABLE ldDate AS DATE NO-UNDO.
 DEFINE VARIABLE secs AS INTEGER NO-UNDO.

@@ -8,7 +8,7 @@ CHANGED .....: 30.06.1999 pt get OUTPUT directory from TMSParam
 VERSION .....: M15
 =============================================================== */
 
-{commali.i}  
+{Syst/commali.i}  
 
 DEF STREAM whitelist.
 
@@ -77,7 +77,7 @@ FIND LAST Customer no-lock no-error.
 ASSIGN cust-nr2 = Customer.CustNum date1 = TODAY date2 = TODAY.
 
 
-{tmsparam.i WlFileDir return}.  
+{Func/tmsparam.i WlFileDir return}.  
 
 /*
 DO FOR kayt:
@@ -95,17 +95,17 @@ DISP wlname WITH FRAME rajat.
 
 rajat:
 repeat WITH FRAME rajat.
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE wlname cust-nr1 cust-nr2 date1 date2 q.
 
 toimi:
    repeat:
       ASSIGN ufk = 0 ehto = 0 ufk[1] = 7  ufk[4] = 942 ufk[5] = 15 ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT rajat.
 
       IF toimi = 4 THEN DO WITH FRAME cust.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          PAUSE 0.
          UPDATE cust-nr[1 FOR 14] EDITING:
             READKEY.

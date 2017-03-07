@@ -17,13 +17,13 @@
 
 */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "snet".
 gcBrand = "1".
 
-{coinv.i}
-{eventval.i} 
-{fcustbal.i}
+{Func/coinv.i}
+{Syst/eventval.i} 
+{Func/fcustbal.i}
 
 def buffer bInvoice for Invoice.
 def buffer cInvoice for Invoice.
@@ -32,7 +32,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER Invoice:HANDLE.
@@ -282,7 +282,7 @@ IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhbInvoice).
 delete bInvoice.
 
 /* check the actual payment status */
-run invbal.p (Invoice.InvNum, output xbal).
+RUN Ar/invbal.p (Invoice.InvNum, output xbal).
 assign Invoice.PaidAmt = Invoice.InvAmt - xbal. 
 CASE Invoice.PaidAmt:
 WHEN 0.00           THEN Invoice.PaymState = 0.
@@ -293,7 +293,7 @@ END CASE.
 IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhInvoice).
 
 /* recalculate inv-asub and inv-ccn */
-run creprows.p (Invoice.InvNum,0). 
+RUN Mc/creprows.p (Invoice.InvNum,0). 
 
 message "Credit invoice has been deleted and debit invoice has been"
         "marked as uncredited. Events have been remarked as billed."

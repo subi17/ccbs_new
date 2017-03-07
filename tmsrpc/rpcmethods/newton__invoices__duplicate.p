@@ -12,11 +12,11 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{duplicate_invoice.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Func/duplicate_invoice.i}
+{Syst/tmsconst.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO.
 DEF VAR liRequestID AS INT  NO-UNDO.

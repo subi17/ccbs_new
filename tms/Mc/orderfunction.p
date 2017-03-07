@@ -8,22 +8,22 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}  
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
-{eventval.i}
+{Syst/commali.i}  
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhOrderFunction AS HANDLE NO-UNDO.
    lhOrderFunction = BUFFER OrderFunction:HANDLE.
    RUN StarEventInitialize(lhOrderFunction).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhOrderFunction).
+      RUN Mc/eventview2.p(lhOrderFunction).
    END.
 
 END.
@@ -77,7 +77,7 @@ WITH  OVERLAY ROW 4 centered
 
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -110,12 +110,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a OrderFunction  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
 
            CREATE OrderFunction.
@@ -197,16 +197,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OrderFunction.OFID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OrderFunction.OFID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OrderFunction.OFID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW OrderFunction.OFName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OrderFunction.OFName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OrderFunction.OFName WITH FRAME sel.
       END.
 
@@ -336,7 +336,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND lcRight = "RW" THEN DO:  /* DELETE */
         RUN local-find-this (FALSE).
         
-        run ofitem.p(input orderfunction.ofid).                
+        RUN Mc/ofitem.p(input orderfunction.ofid).                
 
      END.
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
@@ -401,8 +401,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderFunction).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY OrderFunction.OFID.
 
        RUN local-UPDATE-record.                                  

@@ -8,7 +8,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR lcCampaign1   AS CHAR NO-UNDO. 
@@ -22,7 +22,7 @@ DEF VAR liErrors      AS INT  NO-UNDO.
 DEF VAR lcErrFile     AS CHAR NO-UNDO. 
 DEF VAR llOk          AS LOG  NO-UNDO.
 
-{camprundf.i}
+{Mc/camprundf.i}
 
 FORM
    SKIP(4)
@@ -108,7 +108,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[5]= 795 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 3.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
 
          READKEY.
          nap = keylabel(LASTKEY).
@@ -120,7 +120,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
       IF LOOKUP(nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
-             ehto = 9. RUN ufkey.p.
+             ehto = 9. RUN Syst/ufkey.p.
              UPDATE 
                 lcCampaign1 
                 lcCampaign2
@@ -156,16 +156,16 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          IF NOT llOk THEN NEXT.
 
          ehto = 5.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
          /* collect customers */
-         RUN camprunco (liCustNum1,
+         RUN Mc/camprunco.p (liCustNum1,
                         liCustNum2,
                         ldtDate1,
                         ldtDate2,
                         OUTPUT TABLE ttCust).
                           
-         RUN camprun (INPUT TABLE ttCust,
+         RUN Mc/camprun.p (INPUT TABLE ttCust,
                       lcCampaign1,
                       lcCampaign2,
                       0,       /* use cli periods */

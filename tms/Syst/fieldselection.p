@@ -7,7 +7,7 @@
   CHANGED ......: 
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 
 
 DEF INPUT  PARAMETER icTable        AS CHAR NO-UNDO.
@@ -96,7 +96,7 @@ END FUNCTION.
 llDispTable = (NUM-ENTRIES(icTable) > 1).
 IF llDispTable THEN lcFieldData:LABEL IN FRAME sel = "Table".
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 DO liTable = 1 TO NUM-ENTRIES(icTable):
@@ -213,13 +213,13 @@ REPEAT WITH FRAME sel:
            ufk[3] = 1516
            ufk[5] = 1517.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttField.FieldName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttField.FieldName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttField.FieldName WITH FRAME sel.
       END.
 
@@ -349,8 +349,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE lcField WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -456,7 +456,7 @@ REPEAT WITH FRAME sel:
        END.
   
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

@@ -7,26 +7,26 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPOperator'} 
-{timestamp.i}
-{ftaxdata.i}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPOperator'} 
+{Func/timestamp.i}
+{Func/ftaxdata.i}
+{Func/timestamp.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPOperator AS HANDLE NO-UNDO.
    lhMNPOperator = BUFFER MNPOperator:HANDLE.
    RUN StarEventInitialize(lhMNPOperator).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhMNPOperator).
+      RUN Mc/eventview2.p(lhMNPOperator).
    END.
 
 END.
@@ -82,7 +82,7 @@ WITH  OVERLAY ROW 4 centered 1 columns
     NO-LABELS 
     FRAME lis.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By OperName ,  By OperCode".
@@ -112,13 +112,13 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a MNPOperator  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
 
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -205,16 +205,16 @@ BROWSE:
         ufk[6]=  (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MNPOperator.Opername ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPOperator.Opername {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPOperator.Opername WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
-        CHOOSE ROW MNPOperator.OperCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPOperator.OperCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPOperator.OperCode WITH FRAME sel.
       END.
       
@@ -416,8 +416,8 @@ BROWSE:
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMNPOperator).
 
-         ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-         cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+         ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+         cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
       
          RUN local-UPDATE-record.
          HIDE FRAME lis NO-PAUSE.

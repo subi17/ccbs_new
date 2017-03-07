@@ -3,8 +3,8 @@
    billing item's vatcode
 */
 
-{commali.i}
-{ftaxdata.i}
+{Syst/commali.i}
+{Func/ftaxdata.i}
 
 FUNCTION fVatFactor RETURNS DECIMAL
    (iiVatUsage AS INT,

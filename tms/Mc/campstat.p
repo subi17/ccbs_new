@@ -9,23 +9,23 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable CampStat
 
-{commali.i}
+{Syst/commali.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CampStat'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CampStat'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCampStat AS HANDLE NO-UNDO.
    lhCampStat = BUFFER CampStat:HANDLE.
    RUN StarEventInitialize(lhCampStat).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCampStat).
+      RUN Mc/eventview2.p(lhCampStat).
    END.
 
 END.
@@ -75,7 +75,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        " CAMPAIGN STATISTICS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     CampStat.Campaign   COLON 20   
@@ -119,7 +119,7 @@ form /* seek  CampDate */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Campaign ," +
@@ -163,7 +163,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CampStat  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ASSIGN must-print = TRUE.
 
@@ -236,24 +236,24 @@ REPEAT WITH FRAME sel:
         
         ASSIGN 
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CampStat.Campaign ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CampStat.Campaign {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CampStat.Campaign WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CampStat.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CampStat.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CampStat.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW CampStat.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CampStat.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CampStat.CLI WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW CampStat.CampDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CampStat.CampDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CampStat.CampDate WITH FRAME sel.
       END.
 
@@ -387,8 +387,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -410,8 +410,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -441,8 +441,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN gcAllBrand
@@ -472,8 +472,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
        UPDATE lcBrand WHEN gcAllBrand
@@ -509,7 +509,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCampStat).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CampStat.Campaign.
 
        RUN local-UPDATE-record.                                  

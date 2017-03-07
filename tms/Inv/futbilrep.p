@@ -12,10 +12,10 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{fcurrency.i}
-{fvatfact.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/fcurrency.i}
+{Func/fvatfact.i}
 
 DEF INPUT  PARAMETER icInvGrp1    AS CHAR  NO-UNDO. 
 DEF INPUT  PARAMETER icInvGrp2    AS CHAR  NO-UNDO. 

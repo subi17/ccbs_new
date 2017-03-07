@@ -7,23 +7,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ReportConfRow'}
-{eventval.i}
-{timestamp.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ReportConfRow'}
+{Syst/eventval.i}
+{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhReportConfRow AS HANDLE NO-UNDO.
    lhReportConfRow = BUFFER ReportConfRow:HANDLE.
    RUN StarEventInitialize(lhReportConfRow).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhReportConfRow).
+      RUN Mc/eventview2.p(lhReportConfRow).
    END.
 
 END.
@@ -104,7 +104,7 @@ FUNCTION fRowType RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST ReportConf WHERE 
@@ -142,7 +142,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ReportConfRow  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -150,7 +150,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANS WITH FRAME lis:
 
@@ -258,12 +258,12 @@ REPEAT WITH FRAME sel:
            ufk[5] = 0
            ufk[6] = 0.
           
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ReportConfRow.RowType ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW ReportConfRow.RowType {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ReportConfRow.RowType WITH FRAME sel.
       END.
@@ -469,8 +469,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhReportConfRow).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -507,7 +507,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -596,7 +596,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.
@@ -606,7 +606,7 @@ PROCEDURE local-UPDATE-record:
                 
          FIND CURRENT ReportConfRow EXCLUSIVE-LOCK.
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE
             ReportConfRow.RowType   WHEN NEW ReportConfRow
@@ -624,7 +624,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "RowType" THEN DO:
-                  RUN h-tmscodes(INPUT "ReportConfRow", 
+                  RUN Help/h-tmscodes.p(INPUT "ReportConfRow", 
                                        "RowType", 
                                        ?, 
                                  OUTPUT lcCode).
@@ -634,7 +634,7 @@ PROCEDURE local-UPDATE-record:
                END.
              
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 

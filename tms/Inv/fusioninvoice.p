@@ -6,10 +6,10 @@
   CREATED ......: 12.12.13
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FusionInvoice'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FusionInvoice'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -128,7 +128,7 @@ form /* seek FusionInvoice  BY CoName */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By FuInvNum  ,By InvDate   ,By CustomerID,By CustNum   ".
@@ -210,24 +210,24 @@ BROWSE:
         ufk[6]= 0 /* (IF lcRight = "RW" THEN 4 ELSE 0) */
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FusionInvoice.FuInvNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FusionInvoice.FuInvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FusionInvoice.FuInvNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FusionInvoice.Invdate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FusionInvoice.Invdate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FusionInvoice.Invdate WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW FusionInvoice.CustomerID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FusionInvoice.CustomerID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FusionInvoice.CustomerID WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW FusionInvoice.Custnum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FusionInvoice.Custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FusionInvoice.Custnum WITH FRAME sel.
       END.
 
@@ -354,8 +354,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET liFuInvNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -377,8 +377,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        ldaInvdate = DATE(MONTH(TODAY),1,YEAR(TODAY)).
        DISP ldaInvdate WITH FRAME f2.
@@ -401,8 +401,8 @@ BROWSE:
      /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        SET lcCustomerID WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -423,8 +423,8 @@ BROWSE:
      /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f4.
        SET liCustnum WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
@@ -446,11 +446,11 @@ BROWSE:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-/*       {uright2.i} */
+/*       {Syst/uright2.i} */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY FusionInvoice.FuInvNum.
 
        RUN local-UPDATE-record.                                  
@@ -606,7 +606,7 @@ PROCEDURE local-UPDATE-record:
      ufk[1]= 216 WHEN fusioninvoice.MsSeq > 0 
      ufk[8]= 8 ufk[9]= 1
      ehto = 3 ufkey = FALSE.
-     RUN ufkey.p.
+     RUN Syst/ufkey.p.
    END.
 
    nap = keylabel(LASTKEY).

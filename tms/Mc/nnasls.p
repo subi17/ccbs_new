@@ -20,9 +20,9 @@
   Version ......: M15
   ------------------------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i}
+{Syst/utumaa.i}
 
 DEF INPUT PARAMETER CustGroup LIKE CustGroup.CustGroup       NO-UNDO.
 DEF INPUT PARAMETER asno1   LIKE Customer.CustNum       NO-UNDO.
@@ -139,43 +139,43 @@ IF excel THEN DO:
    OUTPUT STREAM excel TO value(exPaymFile) page-size 0.
    PUT STREAM excel UNFORMATTED
    "External CustGroup:" tab (if CustGroup ne "" then CustGroup else "NONE").
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
    PUT STREAM excel UNFORMATTED
    "Customers:" tab asno1 " - " asno2.
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
    PUT STREAM excel UNFORMATTED
    "Salesman:" tab myyja1 " - " myyja2.
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
    PUT STREAM excel UNFORMATTED
    "Category:" tab kateg.
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
    PUT STREAM excel UNFORMATTED
    "Contr. begun  :" tab.
    IF fake[1] NE ? THEN PUT STREAM excel UNFORMATTED fake[1].
    put stream excel unformatted " - ".
    IF fake[2] NE ? THEN PUT STREAM excel UNFORMATTED fake[2].
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
    PUT STREAM excel UNFORMATTED
    "Contr. ended  :".
    IF fake[3] NE ? THEN PUT STREAM excel UNFORMATTED fake[3].
    put stream excel unformatted " - ".
    IF fake[4] NE ? THEN PUT STREAM excel UNFORMATTED fake[4].
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
    put stream excel unformatted "Connection:" tab.
    if ConnType = ? then put stream excel unformatted "ALL".  ELSE
    put stream excel ConnType format "Direct/Indirect".
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
    PUT STREAM excel UNFORMATTED
    "Fakt. grupp" tab InvGroup.
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
    "Reseller:" tab Reseller.
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
    callcheck.
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
    "CustNo"          tab
@@ -195,7 +195,7 @@ IF excel THEN DO:
    "Size"            tab
    "Telephone"       tab
    "Email"           .
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
 END.
 print-line:
@@ -273,7 +273,7 @@ by (if order2 = 1 then string(Customer.CustNum,"9999999")
            Customer.Phone          tab
            Customer.Email.
 
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
       NEXT print-line.
    END.
 

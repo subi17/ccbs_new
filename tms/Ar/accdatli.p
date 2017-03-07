@@ -22,14 +22,14 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 /* print-linemuuttujat */
-{utumaa.i}
+{Syst/utumaa.i}
 
 &GLOBAL-DEFINE UseEventDate NO
 &GLOBAL-DEFINE GetOnlySums NO
-{accdatfi.i}
+{Ar/accdatfi.i}
 
 DEF INPUT PARAMETER iDate1       AS Date  NO-UNDO.
 DEF INPUT PARAMETER iDate2       AS Date  NO-UNDO.
@@ -120,7 +120,7 @@ FUNCTION CheckPage RETURNS LOGIC
     IF NOT ilPaper THEN RETURN FALSE. 
 
     IF rl >= skayt1 - iAddLine THEN DO:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         ASSIGN rlx = 0
                sl = sl + 1.
         view STREAM tul FRAME sivuotsi.  
@@ -524,7 +524,7 @@ PROCEDURE PrintAccLines:
 
         IF ilPaper THEN DO:
            PUT STREAM tul 
-              {accdatli.i "BY wAccData.Category"}
+              {Ar/accdatli.i "BY wAccData.Category"}
            SKIP.
            ASSIGN rl = rl + 1.
         END. 
@@ -602,7 +602,7 @@ PROCEDURE PrintAccLines:
                   FILL("-",90) AT 1 SKIP
                   wAccData.AccNum TO 8
                   " total"  
-                  {accdatli.i "BY wAccData.AccNum"}
+                  {Ar/accdatli.i "BY wAccData.AccNum"}
                   SKIP(1).
 
                ASSIGN rl = rl + 3.
@@ -651,7 +651,7 @@ PROCEDURE PrintAccLines:
           FILL("-",90) AT 1 SKIP
           wAccData.Month AT 1
           " total"  
-          {accdatli.i "BY wAccData.Month"}
+          {Ar/accdatli.i "BY wAccData.Month"}
           SKIP(1).
 
         ASSIGN rl = rl + 3.
@@ -666,7 +666,7 @@ PROCEDURE PrintAccLines:
            PUT STREAM tul UNFORMATTED
               FILL("=",90) AT 1 SKIP
               "Total"  
-              {accdatli.i}
+              {Ar/accdatli.i}
               SKIP.
 
            ASSIGN rl = rl + 2.
@@ -694,7 +694,7 @@ PROCEDURE PrintAccLines:
   END. /* foreach */
 
   IF ilPaper THEN DO:
-     {uprfeed.i rl}
+     {Syst/uprfeed.i rl}
   END.
 
 END PROCEDURE. 

@@ -8,10 +8,10 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum2     AS INT  NO-UNDO.
@@ -73,7 +73,7 @@ ASSIGN
    lcfinfile = lclogpath + icCSBFileForm + "_" + lcoutstring.
 DEF STREAM sout.
 OUTPUT STREAM sout TO VALUE(lcfinfile).
-{ddoutfilett.i}
+{Inv/ddoutfilett.i}
 
 PUT STREAM sout UNFORMATTED
    "CSB SESSION WITH " icCSBFileForm " started:" fTS2HMS(fMakeTS()) SKIP.

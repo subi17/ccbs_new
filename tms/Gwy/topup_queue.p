@@ -8,15 +8,15 @@
   VERSION ......: XFERA
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN
    gcBrand = "1"
    katun   = "ATM".
 
-{tmsconst.i}
-{barrfunc.i}
-{cparam2.i}
+{Syst/tmsconst.i}
+{Func/barrfunc.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE ldaDate     AS DATE      NO-UNDO FORMAT "99.99.9999".
 DEFINE VARIABLE lcTime      AS CHARACTER NO-UNDO.
@@ -64,7 +64,7 @@ DO WHILE TRUE:
 
       IF NOT LOCKED(bufQueue) AND NOT ERROR-STATUS:ERROR THEN DO:
 
-         RUN topuppaym(TopUpQueue.PPRequest,
+         RUN Mm/topuppaym.p(TopUpQueue.PPRequest,
                        TopUpQueue.CLI,
                        TopUpQueue.TopUpAmt,
                        TopUpQueue.VatAmt,
@@ -148,7 +148,7 @@ PROCEDURE pUnbarrPrepaid:
    IF lcUnBarring NE "" THEN DO:
 
       /* create barring request */
-      RUN barrengine.p (MobSub.MsSeq,
+      RUN Mm/barrengine.p (MobSub.MsSeq,
                       lcUnBarring,
                       {&REQUEST_SOURCE_SCRIPT}, /* source  */
                       "", /* creator */

@@ -10,11 +10,11 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
 
-{fsubser.i}
+{Func/fsubser.i}
 
 DEF INPUT  PARAMETER CustNum     AS I  NO-UNDO .
 
@@ -22,7 +22,7 @@ DEF VAR  amt       AS I   NO-UNDO.
 DEF VAR llSecret   AS LOG NO-UNDO FORMAT "Yes/No".
 DEF VAR lcCustName AS CHAR NO-UNDO.
 ASSIGN
-   ufk = 0 ehto = 3. RUN ufkey.
+   ufk = 0 ehto = 3. RUN Syst/ufkey.p.
 
    FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK.
    lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,

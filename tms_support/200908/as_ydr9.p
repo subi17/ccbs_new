@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun  = "anttis".
-{barrfunc.i}
+{Func/barrfunc.i}
 
 input from /apps/snet/200908/barrings_from_Y_to_D_REST.txt.
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 

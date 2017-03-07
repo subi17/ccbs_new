@@ -9,12 +9,12 @@
            dss_limit;double
 */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{date.i}
-{timestamp.i}
-{tmsconst.i}
-{cparam2.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 /* Input parameters */
 DEF VAR piCustNum           AS INT  NO-UNDO.

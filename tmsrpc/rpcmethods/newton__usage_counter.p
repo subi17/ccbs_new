@@ -37,11 +37,11 @@ FIND mobsub NO-LOCK WHERE
 IF NOT AVAILABLE mobsub THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
-{dataformat.i}
-{fdss.i}
+{Func/dataformat.i}
+{Func/fdss.i}
 
 resp_struct = add_struct(response_toplevel_id, "").
 

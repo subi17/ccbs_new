@@ -7,10 +7,10 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
-{create_eventlog.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/create_eventlog.i}
+{Func/timestamp.i}
 
 DEF TEMP-TABLE ttSource NO-UNDO
    FIELD PPSource AS CHAR.

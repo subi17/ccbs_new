@@ -21,12 +21,12 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
-{direct_dbconnect.i}
+{Syst/eventlog.i}
+{Func/direct_dbconnect.i}
 
 /* weekday related processes */
 CASE WEEKDAY(TODAY):
@@ -35,7 +35,7 @@ CASE WEEKDAY(TODAY):
    WHEN 1 THEN DO:
       
       fELog("DAILY","PrePaidReportStarted").
-      RUN ppcomprep.
+      RUN Gwy/ppcomprep.p.
       fELog("DAILY","PrePaidReportStopped").
    END.
    
@@ -44,15 +44,15 @@ END.
 fELog("DAILY","CallDumpStarted").
 
 RUN pCallDump ("MobCDR",
-               "calldump.p",
+               "Mm/calldump.p",
                TODAY - 1).
 
 RUN pCallDump ("PrepCDR",
-               "calldump_prepaid.p",
+               "Mm/calldump_prepaid.p",
                TODAY - 1).
                 
 RUN pCallDump ("MobCDR,ErrorCDR",
-               "error_calldump.p",
+               "Mm/error_calldump.p",
                TODAY - 1).
  
 fELog("DAILY","CallDumpStopped").

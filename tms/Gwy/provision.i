@@ -4,8 +4,8 @@
 
 &GLOBAL-DEFINE PROVISION_I YES
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER provSolog     FOR Solog.
 DEF BUFFER provMobsub    FOR Mobsub.

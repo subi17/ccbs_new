@@ -16,7 +16,7 @@
 
   ------------------------------------------------------ */
 
-  {commali.i}
+  {Syst/commali.i}
 
   DEF INPUT  PARAMETER nro    AS INT  NO-UNDO.
   DEF INPUT  PARAMETER kieli  AS INT  NO-UNDO.
