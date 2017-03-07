@@ -193,7 +193,7 @@ IF NOT AVAIL Mobsub THEN
 
 /* TODO: Add new field to Clitype indicating fixedonly convergent and remove this TMSParam */
 IF LOOKUP(MobSub.CliType,lcFixedOnlyConvergentCliTypeList) > 0 THEN 
-    RETURN appl_err("general").
+    RETURN appl_err("renewal_not_allowed_for_fixed_only").
 
 FIND FIRST Segmentation NO-LOCK WHERE
            Segmentation.MsSeq = MobSub.MsSeq NO-ERROR.
