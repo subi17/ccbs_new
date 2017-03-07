@@ -180,14 +180,6 @@ PROCEDURE pCheckTargetCustomerForACC:
          ocMessage = "Target customer has subscription with active operator or debt barring".
          RETURN "ERROR".
       END.
-      /*YPR-4772*/
-      /*acc is not allowed for convergent tariffs.*/
-      IF fIsConvergenceTariff(bACCMobSub.CLIType) THEN DO:       
-          ocMessage = "Not allowed for fixed line tariffs".
-          RETURN "ERROR".
-      END.
-
-     
    END.
 
    FIND FIRST bACCNewCust WHERE
