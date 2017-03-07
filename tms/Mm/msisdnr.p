@@ -11,9 +11,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
-{eventval.i} 
+{Syst/commali.i}
+{Func/msisdn.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER ra-recid AS re NO-UNDO.
 
@@ -45,7 +45,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMSISDN AS HANDLE NO-UNDO.
    lhMSISDN = BUFFER MSISDN:HANDLE.
@@ -53,7 +53,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhMSISDN).
+      RUN Mc/eventview2.p(lhMSISDN).
    END.
 END.
 
@@ -97,7 +97,7 @@ form /* seek MSISDN number  BY  CLI */
 FIND MSRange WHERE recid(MSRange) = ra-recid no-lock.
 CLIFrom = MSRange.CLIFrom.  CLITo = MSRange.CLITo.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By 1,By 2,By 3, By 4".
@@ -131,12 +131,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a MSISDN  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR MSISDN.CLI
@@ -226,16 +226,16 @@ BROWSE:
         ufk[1]= 209  ufk[2]= 0 ufk[3]= 238 ufk[4]= 788
         ufk[5]= 0  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MSISDN.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSISDN.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSISDN.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MSISDN.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSISDN.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSISDN.CLI WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -363,8 +363,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP m_pref WITH FRAME f1.
        SET CLI WITH FRAME f1.
@@ -411,7 +411,7 @@ CU-DATA:
 CU-ACTION:
            repeat WITH FRAME cust:
               ASSIGN ufk = 0 ufk[8] = 8 ehto =  0.
-              RUN ufkey.
+              RUN Syst/ufkey.p.
               case toimi:
                  WHEN 8 THEN DO:
                     HIDE FRAME cust no-pause.

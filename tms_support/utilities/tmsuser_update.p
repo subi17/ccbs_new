@@ -11,13 +11,13 @@ DEFINE VARIABLE lcLine                  AS CHARACTER NO-UNDO.
 
 DEFINE BUFFER bTMSPass FOR TMSPass.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = pcUser.
-{cparam2.i}
+{Func/cparam2.i}
 gcBrand = "1".
 liPasswordHistoryLength = fCParamI("PassWdHistory").
-{log.i}
-{date.i}
+{Func/log.i}
+{Func/date.i}
 
 fSetLogFileName(pcLogFile).
 fSetLogEntryTypes(fGetValidLogEntryTypes()).

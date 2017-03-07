@@ -8,9 +8,9 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
 
 DEF INPUT  PARAMETER iiOrder  AS INT  NO-UNDO. 
 DEF INPUT  PARAMETER icClass  AS CHAR NO-UNDO.  
@@ -33,7 +33,7 @@ DEF VAR liInvType     AS INT  NO-UNDO.
 IF llDoEvent THEN DO FOR SingleFee:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
    lhSingleFee = BUFFER SingleFee:HANDLE.
@@ -153,7 +153,7 @@ DO FOR SingleFee TRANS:
 END.
 
 /* create invoice */
-RUN nnlamu5 (liDepoCust,
+RUN Inv/nnlamu5.p (liDepoCust,
              Order.OrderID,
              "",
              liInvType,

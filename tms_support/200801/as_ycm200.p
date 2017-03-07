@@ -24,10 +24,10 @@ disp j.
 
 /*PART 2*/ 
 /*
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
-{msisdn.i}
-{date.i}
+{Func/msisdn.i}
+{Func/date.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO.
@@ -63,7 +63,7 @@ disp j.
 /*
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO.
-{date.i}
+{Func/date.i}
 define stream out.
 OUTPUT STREAM out TO "/home/anttis/order_msisdn2.txt".
 
@@ -87,10 +87,10 @@ disp j.
 /*
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO.
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
-{msisdn.i}
-{date.i}
+{Func/msisdn.i}
+{Func/date.i}
 define stream out.
 OUTPUT STREAM out TO "/home/anttis/newrange_msisdn.txt".
 

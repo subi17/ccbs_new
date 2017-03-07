@@ -10,11 +10,11 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
+{Syst/eventlog.i}
 
 def var period  as int    no-undo.
 DEF VAR liQty   AS INT    NO-UNDO.
@@ -23,11 +23,11 @@ fELog("DAILYDUMP","InvoiceDumpStarted").
 
 IF WEEKDAY(TODAY) = 1 THEN DO:
    /* All invoices on Sunday */
-   RUN invoicedump(FALSE).
+   RUN Inv/invoicedump.p(FALSE).
 END.
 ELSE IF WEEKDAY(TODAY) NE 2 THEN DO:
    /* only new invoices on Tuesday-Saturday */
-   RUN invoicedump(TRUE).
+   RUN Inv/invoicedump.p(TRUE).
 END.
 
 fELog("DAILYDUMP","InvoiceDumpStopped").

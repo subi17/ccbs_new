@@ -49,12 +49,12 @@ IF NOT AVAIL OfferCriteria THEN
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = pcUserName.
-{eventval.i}
-{tmsconst.i}
-{offer.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
 
 CREATE ttOfferCriteria.
 BUFFER-COPY OfferCriteria TO ttOfferCriteria.
@@ -128,7 +128,7 @@ IF NOT llEqual THEN DO:
 
    IF llDoEvent THEN DO:
       &GLOBAL-DEFINE STAR_EVENT_USER katun 
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
       DEF VAR lhOfferCriteria AS HANDLE NO-UNDO.
       lhOfferCriteria = BUFFER OfferCriteria:HANDLE.
       RUN StarEventInitialize(lhOfferCriteria).

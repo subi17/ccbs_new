@@ -24,25 +24,25 @@
 
 &IF "{&AllIncludes}" = "YES"
 &THEN
-{commali.i}
-{cparam2.i}
-{refcode.i}
-{edefine.i NEW}
-{fotint.i}
-{feplform.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/refcode.i}
+{Inv/edefine.i NEW}
+{Func/fotint.i}
+{Func/feplform.i}
 &ENDIF
-{transname.i}
-{timestamp.i}
-{invotxtp.i}
-{ftmscode.i}
-{fcustbal.i}
-{frefnum.i}
-{fdivtxt.i}
-{ftxttag.i}
-{fconinfo.i}
-{fduedate.i}
-{fmakesms.i}
-{fgettxt.i}
+{Func/transname.i}
+{Func/timestamp.i}
+{Func/invotxtp.i}
+{Func/ftmscode.i}
+{Func/fcustbal.i}
+{Func/frefnum.i}
+{Func/fdivtxt.i}
+{Func/ftxttag.i}
+{Func/fconinfo.i}
+{Func/fduedate.i}
+{Func/fmakesms.i}
+{Func/fgettxt.i}
 
 DEF VAR lcPaymTerm   AS CHAR FORMAT "x(15)"          NO-UNDO.
 DEF VAR lcCustName   LIKE Customer.CustName          NO-UNDO.
@@ -760,7 +760,7 @@ FUNCTION fPrintSpecRep RETURNS LOGICAL
 
          case liRepNum:
          when 3 THEN 
-            run nnpura3 (Invoice.CustNum,
+            RUN Inv/nnpura3.p (Invoice.CustNum,
                          Invoice.FirstCall,
                          Invoice.ToDate,
                          1,
@@ -771,7 +771,7 @@ FUNCTION fPrintSpecRep RETURNS LOGICAL
                          OUTPUT liDumCnt).
 
          WHEN 4 THEN
-            RUN nnpura4 (Invoice.CustNum,
+            RUN Inv/nnpura4.p (Invoice.CustNum,
                          Invoice.CustNum,
                          Invoice.FirstCall,
                          Invoice.ToDate,

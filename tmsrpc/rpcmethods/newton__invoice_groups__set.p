@@ -13,9 +13,9 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{invoicetarget.i}
+{Mc/invoicetarget.i}
 
 FUNCTION fGetExcludedList RETURNS CHAR 
          (icCheckList AS CHAR,

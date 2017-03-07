@@ -8,10 +8,10 @@
   ------------------------------------------------------ */
 
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{cparam2.i}
-{email.i}
+{Func/cparam2.i}
+{Func/email.i}
 
 DEF VAR lcConfDir    AS CHAR NO-UNDO.
 DEF VAR lcFile       AS CHAR NO-UNDO.
@@ -34,7 +34,7 @@ IF NUM-ENTRIES(lcActionID) > 1 THEN ASSIGN
    lcTableName = ENTRY(2,lcActionID)
    lcActionID  = ENTRY(1,lcActionID).
    
-RUN errorlog_report(ldtEventDate,
+RUN Syst/errorlog_report.p(ldtEventDate,
                     ldtEventDate,
                     lcActionID,
                     lcTableName,

@@ -8,18 +8,18 @@
                   
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
+{Syst/eventlog.i}
 
 DEFINE VARIABLE period  AS INTEGER NO-UNDO.
 
 period = YEAR(TODAY - 5) * 100 + MONTH(TODAY - 5).
    
    fELog("MONTHLY","MonthlyCallDumpStarted").
-   run monthlycalldump(period).
+   RUN monthlycalldump(period).
    fELog("MONTHLY","MonthlyCallDumpStopped").
 
 quit.

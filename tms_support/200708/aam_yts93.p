@@ -1,5 +1,5 @@
-{testpaa.i}
-{forderstamp.i}
+{Syst/testpaa.i}
+{Func/forderstamp.i}
 
 def var llclose as log no-undo.
 

@@ -9,9 +9,9 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 ASSIGN tuni1 = "arpurel"
        tuni2 = "".
@@ -104,7 +104,7 @@ toimi:
             ufk[9] = 1
             ehto   = 3
             ufkey  = false.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       IF nap NE "first" THEN DO:
@@ -116,7 +116,7 @@ toimi:
 
       IF LOOKUP(nap,"1,f1") > 0 THEN DO:
          ehto = 9. 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          REPEAT WITH frame valinta ON ENDKEY UNDO, LEAVE:
             UPDATE 
                 ldtDate1
@@ -140,11 +140,11 @@ toimi:
 
 /* Avataan striimi */
 ASSIGN tila = true.
-{utuloste.i "RETURN"}
+{Syst/utuloste.i "RETURN"}
 
 MESSAGE "Printing in process...".   
 
-RUN arpurep.p (ldtDate1, 
+RUN Ar/arpurep.p (ldtDate1, 
                ldtDate2,
                ig-code[1],
                ig-code[2],
@@ -152,7 +152,7 @@ RUN arpurep.p (ldtDate1,
                lcCLIType[2]).
 
 ASSIGN tila = false.
-{utuloste.i}
+{Syst/utuloste.i}
 
 MESSAGE "Average revenue report is finished."
 VIEW-AS ALERT-BOX

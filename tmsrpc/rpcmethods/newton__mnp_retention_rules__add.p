@@ -33,9 +33,9 @@ IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF NUM-ENTRIES(lcStruct) <= 1 THEN RETURN appl_err("Rule condition is missing").
 
-{commpaa.i}
-{eventval.i}
-{create_eventlog.i}
+{Syst/commpaa.i}
+{Syst/eventval.i}
+{Func/create_eventlog.i}
 ASSIGN
    katun = pcUsername
    gcBrand = "1".

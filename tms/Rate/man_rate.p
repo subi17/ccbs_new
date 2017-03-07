@@ -12,9 +12,9 @@
 
 &GLOBAL-DEFINE CounterHandling TempTable
 
-{commali.i} 
-{rerate_define.i}
-{premiumnumber.i}
+{Syst/commali.i} 
+{Rate/rerate_define.i}
+{Rate/premiumnumber.i}
 
 DEF VAR bwild              AS LOG NO-UNDO.       
 DEF VAR lcInvruncode       AS C  NO-UNDO.
@@ -108,7 +108,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
     
  DISPLAY
 "ALL" @ invgroup.IGName.
@@ -207,7 +207,7 @@ WITH FRAME main  EDITING:
       ufk[1] = 7 
       ufk[5] = 795
       ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.
@@ -334,6 +334,6 @@ for each inv-cust no-lock where
         ELSE TRUE)         
        TRANSACTION WITH FRAME MobCDR: 
        
-       {man_rate2.i}
+       {Rate/man_rate2.i}
         
 fRerateLogFinish(liRerateSeq).

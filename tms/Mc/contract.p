@@ -12,24 +12,24 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable Contract
 
-{commali.i}
+{Syst/commali.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'contract'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'contract'}
 
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhContract AS HANDLE NO-UNDO.
    lhContract = BUFFER Contract:HANDLE.
    RUN StarEventInitialize(lhContract).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhContract).
+      RUN Mc/eventview2.p(lhContract).
    END.
 
 END.
@@ -135,7 +135,7 @@ WITH  OVERLAY ROW 3 centered
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  contract */
     "Brand ..:" lcBrand skip
@@ -176,7 +176,7 @@ form /* seek  date */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Contract  ," +
@@ -220,14 +220,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Contract  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -336,28 +336,28 @@ BROWSE:
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW Contract.Contract ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contract.Contract {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contract.Contract WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW Contract.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contract.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contract.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW Contract.Salesman ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contract.Salesman {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contract.Salesman WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-         CHOOSE ROW Contract.FromDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contract.FromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contract.FromDate WITH FRAME sel.
       END.
       ELSE IF order = 5 THEN DO:
-         CHOOSE ROW Contract.ToDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contract.ToDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contract.ToDate WITH FRAME sel.
       END.
 
@@ -499,12 +499,12 @@ BROWSE:
                    ufk[3] = 0
                    ufk[4] = 0.
 
-       RUN ufkey.
+       RUN Syst/ufkey.p.
 
        /* Search BY column 1 */
        IF toimi = 1 THEN DO:
-          cfc = "puyr". run ufcolor.
-          ehto = 9. RUN ufkey. ufkey = TRUE.
+          cfc = "puyr". RUN Syst/ufcolor.p.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f1.
           DISPLAY lcBrand WITH FRAME F1.
           UPDATE lcBrand WHEN gcAllBrand
@@ -525,8 +525,8 @@ BROWSE:
 
        /* Search BY column 2 */
        ELSE IF TOIMI = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-          cfc = "puyr". run ufcolor.
-          ehto = 9. RUN ufkey. ufkey = TRUE.
+          cfc = "puyr". RUN Syst/ufcolor.p.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f2.
           DISPLAY lcBrand WITH FRAME F2.
           UPDATE lcBrand WHEN gcAllBrand
@@ -556,8 +556,8 @@ BROWSE:
        /* Search BY col 3 */
        ELSE IF toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-          cfc = "puyr". run ufcolor.
-          ehto = 9. RUN ufkey. ufkey = TRUE.
+          cfc = "puyr". RUN Syst/ufcolor.p.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F3.
           DISPLAY lcBrand WITH FRAME F3.
           UPDATE lcBrand WHEN gcAllBrand
@@ -579,8 +579,8 @@ BROWSE:
        /* Search BY col 4 */
        ELSE IF toimi = 4 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-          cfc = "puyr". run ufcolor.
-          ehto = 9. RUN ufkey. ufkey = TRUE.
+          cfc = "puyr". RUN Syst/ufcolor.p.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F4.
           DISPLAY lcBrand WITH FRAME F4.
           UPDATE lcBrand WHEN gcAllBrand
@@ -610,8 +610,8 @@ BROWSE:
 
        ELSE IF toimi = 5 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-          cfc = "puyr". run ufcolor.
-          ehto = 9. RUN ufkey. ufkey = TRUE.
+          cfc = "puyr". RUN Syst/ufcolor.p.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F5.
           DISPLAY lcBrand WITH FRAME F5.
           UPDATE lcBrand WHEN gcAllBrand
@@ -637,14 +637,14 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW"
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -718,7 +718,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhContract).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Contract.CustNum.
 
        RUN local-UPDATE-record.                                  
@@ -965,7 +965,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE
          Contract.Salesman  WHEN icSalesman = ""
@@ -985,7 +985,7 @@ PROCEDURE local-UPDATE-record:
                FRAME-FIELD = "ContrType"
             THEN DO:
 
-               RUN h-tmscodes(INPUT "Contract",    /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Contract",    /* TableName */
                                     "ContrType",   /* FieldName */
                                     "Commission",  /* GroupCode */
                               OUTPUT lcCode).
@@ -999,7 +999,7 @@ PROCEDURE local-UPDATE-record:
                END.   
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 

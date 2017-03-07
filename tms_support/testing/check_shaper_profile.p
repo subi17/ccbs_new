@@ -1,10 +1,10 @@
-{commpaa.i}
+{Syst/commpaa.i}
 assign gcbrand = "1"
        katun = "Qvantel".
-{tmsconst.i}
-{date.i}
-{timestamp.i}
-{fixedfee.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/fixedfee.i}
 {Mm/active_bundle.i}
 
 DEF VAR lcbundle        AS CHAR NO-UNDO.

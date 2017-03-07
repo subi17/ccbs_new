@@ -996,6 +996,7 @@
 "GPRS_DATA5_UPSELL" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 920
 "GPRS_DATA6_UPSELL" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 953
 "GPRS_DATA9_UPSELL" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 890
+"GPRS_FLEX_UPSELL" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/03/17 1072
 "INTERNATIONAL" "International" 2 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/12/06 620
 "OTHER" "SMS sent to other operator" 52 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/01/15 991
 "PD001" "Contrato2 SMS Flat rate" 103 1 0 0 "" "" 0 no 90 no "" 0 0 "1" 30/11/11 01/12/06 621

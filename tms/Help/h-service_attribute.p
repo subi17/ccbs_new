@@ -8,7 +8,7 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -28,7 +28,7 @@ form
     title color value(ctc) " SERVICE COMPONENTS " overlay frame sel.
 
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 ASSIGN
    lcServCom = gcHelpParam
@@ -82,7 +82,7 @@ repeat:
          siirto = ? 
          ehto  = 3 
          ufkey = false.
-         run ufkey.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -90,7 +90,7 @@ repeat:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ServAttr.ServCom ;(uchoose.i;) no-error with frame sel.
+         choose row ServAttr.ServCom {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ServAttr.ServCom with frame sel.
 
          nap = keylabel(lastkey).

@@ -9,10 +9,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "anttis".
-{fcustdata.i}
+{Func/fcustdata.i}
 def stream sout.
 output stream sout to /apps/snet/200805/yob54.log.
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 

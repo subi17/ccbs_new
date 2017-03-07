@@ -12,12 +12,12 @@
 
 &GLOBAL-DEFINE dss_bundle_first_month_fee YES
 
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{fdss.i}
-{bundle_first_month_fee.i}
-{istc.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/fdss.i}
+{Mm/bundle_first_month_fee.i}
+{Func/istc.i}
 
 DEF TEMP-TABLE ttSub NO-UNDO
    FIELD MsSeq            AS INT

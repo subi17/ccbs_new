@@ -13,10 +13,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PrintCodes'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PrintCodes'}
 
 DEF  shared VAR si-kirj LIKE TMSPrinter.PrinterId NO-UNDO.
 
@@ -38,7 +38,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPrintCodes AS HANDLE NO-UNDO.
    lhPrintCodes = BUFFER PrintCodes:HANDLE.
@@ -46,7 +46,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhPrintCodes).
+      RUN Mc/eventview2.p(lhPrintCodes).
    END.
 END.
 
@@ -94,7 +94,7 @@ form
     " Effect " + PrintCodes.Effect + " INTERPRETED " side-labels centered
     FRAME nakym.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 FIND FIRST TMSPrinter where TMSPrinter.PrinterId = si-kirj no-lock no-error.
 FIND FIRST PrintCodes where PrintCodes.PrinterId = si-kirj no-lock no-error.
@@ -125,12 +125,12 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufkey = TRUE
       fr-header = " ADD A NEW RECORD ".
 
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis:
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          PROMPT-FOR PrintCodes.Effect.
          if input PrintCodes.Effect = "" THEN LEAVE add-new.
 
@@ -249,11 +249,11 @@ BROWSE:
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)   
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
-      CHOOSE ROW PrintCodes.EffName ;(uchoose.i;) no-error WITH FRAME sel.
+      CHOOSE ROW PrintCodes.EffName {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY normal PrintCodes.EffName WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
@@ -373,7 +373,7 @@ BROWSE:
      END.
 
      else if lookup(nap,"1,f1") > 0 THEN DO:  /* koeprint-line */
-          RUN nnthtu.p.
+          RUN Syst/nnthtu.p.
           ufkey = TRUE.
           NEXT LOOP.
      END.
@@ -382,14 +382,14 @@ BROWSE:
           /* PrintCode.EffOnA2A & PrintCode.EffOffA2A print-line apuframelle. */
           PAUSE 0 no-message.
           FIND PrintCodes where recid(PrintCodes) = rtab[frame-line(sel)] no-lock.
-          cfc = "lis". RUN ufcolor.
+          cfc = "lis". RUN Syst/ufcolor.p.
           DISPLAY PrintCode.EffOn[2] PrintCode.EffOff[2] WITH FRAME nakym.
           pause message "Press Entrer !".               
           HIDE FRAME nakym.
      END.
 
      else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" THEN DO:  /* removal */
-        cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+        cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
         delline = FRAME-LINE.
         FIND PrintCodes where recid(PrintCodes) = rtab[FRAME-LINE] no-lock.
 
@@ -443,8 +443,8 @@ BROWSE:
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPrintCodes).
         ASSIGN
         fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN ufkey.
-        cfc = "lis". RUN ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY 
             PrintCodes.Effect
             EffName 

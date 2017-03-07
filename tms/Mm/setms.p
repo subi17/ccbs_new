@@ -19,12 +19,12 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{cparam2.i}
-{barrgrp.i}
-{provision.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Mm/barrgrp.i}
+{Gwy/provision.i}
 {Func/sharperconfid.i}
 {Mm/active_bundle.i}
 {Mm/ongoing_bundle.i}
@@ -142,7 +142,7 @@ IF MobSub.CLIType = "TARJ5" THEN DO:
        MsRequest.ReqCParam2 = "HSPA_ROAM_EU") */)
    THEN DO:
 
-      RUN air_get_account_details.p(MobSub.CLI, 
+      RUN Gwy/air_get_account_details.p(MobSub.CLI, 
                                     OUTPUT liCurrentServiceClass,
                                     OUTPUT lcError).
       IF lcError BEGINS "ERROR" THEN DO:

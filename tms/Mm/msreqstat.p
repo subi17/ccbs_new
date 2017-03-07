@@ -9,7 +9,7 @@
   Version ......: Yoigo
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER iiReqType AS INT NO-UNDO.
 DEF INPUT PARAMETER iiMsSeq   AS INT NO-UNDO.
@@ -31,7 +31,7 @@ END CASE.
 
 DO WHILE TRUE:
 
-   RUN tmscodesbr("MsRequest",
+   RUN Syst/tmscodesbr.p("MsRequest",
                   "ReqStatus",
                   lcSkip,
                   lcReqName,
@@ -39,7 +39,7 @@ DO WHILE TRUE:
                   OUTPUT lcStatus).
 
    IF lcStatus > "" THEN 
-      RUN msrequest (iiReqType,
+      RUN Mm/msrequest.p (iiReqType,
                      INTEGER(lcStatus),
                      iiMsSeq,
                      0,

@@ -9,24 +9,24 @@
 
 &GLOBAL-DEFINE BrTable EDRHistory
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'EDRHistory'}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'EDRHistory'}
+{Func/timestamp.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhEDRHistory AS HANDLE NO-UNDO.
    lhEDRHistory = BUFFER EDRHistory:HANDLE.
    RUN StarEventInitialize(lhEDRHistory).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhEDRHistory).
+      RUN Mc/eventview2.p(lhEDRHistory).
    END.
 
 END.
@@ -102,7 +102,7 @@ WITH  OVERLAY ROW 1 centered
     FRAME lis.
 
    
-{brand.i}
+{Func/brand.i}
 
 FORM
    "Brand:" lcBrand skip
@@ -120,7 +120,7 @@ FORM
 
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -201,16 +201,16 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW EDRHistory.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW EDRHistory.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) EDRHistory.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW EDRHistory.UpdateDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW EDRHistory.UpdateDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) EDRHistory.UpdateDate WITH FRAME sel.
       END.
 
@@ -339,8 +339,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        
@@ -364,8 +364,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
@@ -394,8 +394,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhEDRHistory).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY EDRHistory.InvCust.
 
        RUN local-UPDATE-record.                                  
@@ -576,9 +576,9 @@ PROCEDURE local-UPDATE-record:
          ufk  = 0
          ufk[4] = 1925
          ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
-      IF toimi = 4 THEN RUN edrhistory_one_edr.p(EDRHistory.CLI,
+      IF toimi = 4 THEN RUN Rate/edrhistory_one_edr.p(EDRHistory.CLI,
                                                  EDRHistory.DateSt,
                                                  EDRHistory.TimeSt,
                                                  EDRHistory.DtlSeq).

@@ -8,12 +8,12 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun  = "anttis".
 gcBrand = "1".
-{tmsconst.i}
-{msreqfunc.i}
-{orderfunc.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Func/orderfunc.i}
 
 find mnpprocess where
    mnpprocess.portrequest = "00500111100512114906719" EXCLUSIVE-LOCK. 

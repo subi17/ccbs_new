@@ -7,25 +7,25 @@
   CHANGED ......: 
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OrderTopup'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OrderTopup'}
 
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhOrderTopup AS HANDLE NO-UNDO.
    lhOrderTopup = BUFFER OrderTopup:HANDLE.
    RUN StarEventInitialize(lhOrderTopup).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhOrderTopup).
+      RUN Mc/eventview2.p(lhOrderTopup).
    END.
 
 END.
@@ -69,7 +69,7 @@ WITH  OVERLAY ROW 6 CENTERED
     SIDE-LABELS 
     FRAME lis.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -92,14 +92,14 @@ REPEAT WITH FRAME sel:
     
    IF must-add THEN DO:  /* Add a OrderTopup  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -197,13 +197,13 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OrderTopup.Amount ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OrderTopup.Amount {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OrderTopup.Amount WITH FRAME sel.
       END.
 
@@ -331,14 +331,14 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0  
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
      
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -395,7 +395,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderTopup).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -511,7 +511,7 @@ PROCEDURE local-UPDATE-record:
       IF lcRight = "RW" AND FALSE 
       THEN REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
       
          UPDATE
          OrderTopup.VatAmount 
@@ -538,7 +538,7 @@ PROCEDURE local-UPDATE-record:
       
       ELSE DO:
          ehto = 5.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END.
       

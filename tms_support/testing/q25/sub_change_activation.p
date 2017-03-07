@@ -1,5 +1,5 @@
 
-{timestamp.i}
+{Func/timestamp.i}
 
 def var lcMSISDN         as char no-undo.
 def var liCount          as int  no-undo.

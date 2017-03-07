@@ -1,5 +1,5 @@
-{date.i}
-{timestamp.i}
+{Func/date.i}
+{Func/timestamp.i}
 
 def var ldastcdate as date no-undo.
 def var ldactstamp as dec no-undo.

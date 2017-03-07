@@ -9,9 +9,9 @@
  Version .......: M15
  ============================================================================*/
 
-{commali.i}
-{utumaa.i new}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/utumaa.i new}
+{Syst/eventval.i} 
 
 ASSIGN tuni1 = "*******"
        tuni2 = "".
@@ -39,7 +39,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhStoBal AS HANDLE NO-UNDO.
    lhStoBal = BUFFER StoBal:HANDLE.
@@ -51,7 +51,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhSim).
+      RUN Mc/eventview2.p(lhSim).
    END.
 END.
 
@@ -83,16 +83,16 @@ WITH
 
 
 /* get default codes */
-{tmsparam.i "MainStock"     return}. Stock1 = TMSParam.CharVal.
-{tmsparam.i "DefDelivStock" return}. Stock2 = TMSParam.CharVal.
-{tmsparam.i "SIMStatusNew"  return}. SIMStat  = TMSParam.IntVal.
+{Func/tmsparam.i "MainStock"     return}. Stock1 = TMSParam.CharVal.
+{Func/tmsparam.i "DefDelivStock" return}. Stock2 = TMSParam.CharVal.
+{Func/tmsparam.i "SIMStatusNew"  return}. SIMStat  = TMSParam.IntVal.
 
 PAUSE 0.
 
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
    Stock1 Stock2 SIMStat SimArt icc1 icc2
@@ -203,7 +203,7 @@ ACTION:
       END.   
 
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

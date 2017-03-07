@@ -18,7 +18,7 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE piOrderId                  AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE pcCreator                  AS CHARACTER NO-UNDO. 
@@ -42,7 +42,7 @@ DEF VAR scUser AS CHAR NO-UNDO.
 scUser = "Newton".
 &GLOBAL-DEFINE STAR_EVENT_USER scUser
 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
 /* Eventlog definition end */
 

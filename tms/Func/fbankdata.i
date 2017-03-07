@@ -6,10 +6,10 @@
                     16.11.06/aam fCheckBankAcc for Spain
    
 */
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{date.i}  
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/date.i}  
 
 /* convert into data form */
 FUNCTION fBankAcc2Data RETURNS CHARACTER
@@ -111,7 +111,7 @@ FUNCTION fCustBankAcc RETURNS CHARACTER.
    DEF VAR lcCustBank AS CHAR NO-UNDO.
    
    /* first check from dd-authorization */
-   RUN nnsvte (Customer.CustNum,
+   RUN Ar/nnsvte.p (Customer.CustNum,
                TODAY, 
                OUTPUT lcCustBank).
                

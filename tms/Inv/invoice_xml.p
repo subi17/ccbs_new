@@ -6,10 +6,10 @@
   CREATED ......: 08.12.08
   ---------------------------------------------------------------------- */
 
-{printdoc1.i}
-{funcrunprocess_update.i}
-{host.i}
-{tmsconst.i}
+{Inv/printdoc1.i}
+{Syst/funcrunprocess_update.i}
+{Syst/host.i}
+{Syst/tmsconst.i}
 
 /* invoices TO be printed */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.

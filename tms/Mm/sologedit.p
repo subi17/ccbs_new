@@ -6,8 +6,8 @@
  * CHANGELOG : 
  *
  *-----------------------------------------------------------------*/
-{commpaa.i}
-{timestamp.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
 
 DEF VAR sid LIKE solog.solog.
 DEF VAR sologi AS C NO-UNDO.
@@ -98,7 +98,7 @@ REPEAT:
      ufk[8] = 8. /* RETURN */
    IF num = 1 THEN ufk[5] = 0.
    IF num = amt THEN ufk[6] = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
    ASSIGN nap = keylabel(LASTKEY).
 
    IF lookup(nap,"f1,1") > 0 THEN DO:
