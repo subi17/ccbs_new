@@ -9,14 +9,14 @@
   Version ......: 
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "rfndfile".
        
-{cparam2.i}
-{eventlog.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
 
 DEF VAR liCount    AS INT  NO-UNDO.
 DEF VAR liFiles    AS INT  NO-UNDO.
@@ -30,7 +30,7 @@ IF lcFile = ? OR lcFile = "" THEN RETURN.
 
 fELog("REFUNDFILE","Started").
 
-RUN refundfileco ("",                 /* InvGroup  */
+RUN Ar/refundfileco.p ("",                 /* InvGroup  */
                   0,                  /* customers from */
                   99999999,           /* customers to   */
                   TODAY,              /* payment date */

@@ -9,9 +9,9 @@
   Version ......: Yoigo
 ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE lcTimeStamp AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName  AS CHARACTER NO-UNDO.

@@ -16,7 +16,7 @@
  */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".  
  
 DEFINE VARIABLE piStatus AS INTEGER NO-UNDO. 

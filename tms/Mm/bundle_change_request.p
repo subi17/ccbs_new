@@ -6,22 +6,22 @@
   CREATED ......: 10.11.10   
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{tmsconst.i}
-{timestamp.i}
-{fmakemsreq.i}
-{service.i}
-{msreqfunc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
+{Func/service.i}
+{Func/msreqfunc.i}
 {Mm/active_bundle.i}
-{rerate_request.i}
-{fsubstermreq.i}
-{fsendsms.i}
-{fbtc.i}
-{mnpoutchk.i}
-{main_add_lines.i}
-{invoicetarget.i}
-{dpmember.i}
+{Rate/rerate_request.i}
+{Func/fsubstermreq.i}
+{Func/fsendsms.i}
+{Func/fbtc.i}
+{Mnp/mnpoutchk.i}
+{Func/main_add_lines.i}
+{Mc/invoicetarget.i}
+{Mc/dpmember.i}
 
 DEF INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -41,7 +41,7 @@ DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
    lhMsOwner = BUFFER MsOwner:HANDLE.
@@ -223,7 +223,7 @@ PROCEDURE pFinalize:
       RUN pUpdateSubscription.
 
    /* re-activate/terminate service packages etc. */
-   RUN requestaction_exec.p(MsRequest.MsRequest,
+   RUN Mm/requestaction_exec.p(MsRequest.MsRequest,
                             MobSub.CLIType,       /* CLI Type */
                             0,                    /* order */
                             MsRequest.ActStamp,
@@ -243,7 +243,7 @@ PROCEDURE pFinalize:
    fReqStatus(2,"").
 
    /* Send SMS "STC_DONE" for IPL -> IPL and Flat Tariffs */
-   RUN requestaction_sms.p(INPUT MsRequest.MsRequest,
+   RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
                            INPUT MobSub.CLIType,
                            INPUT {&REQUEST_SOURCE_BTC}).
 

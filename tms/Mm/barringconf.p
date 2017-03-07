@@ -8,24 +8,24 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'BarringConf'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'BarringConf'}
 
 
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhBConf AS HANDLE NO-UNDO.
    lhBConf = BUFFER BarringConf:HANDLE.
    RUN StarEventInitialize(lhBConf).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhBConf).
+      RUN Mc/eventview2.p(lhBConf).
    END.
 END.
 
@@ -98,7 +98,7 @@ form /* By Name */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -131,12 +131,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR BarringConf.BarringGroup
@@ -225,16 +225,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BarringConf.BarringGroup ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW BarringConf.BarringGroup {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BarringConf.BarringGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW BarringConf.BarringCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW BarringConf.BarringCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BarringConf.BarringCode WITH FRAME sel.
       END.
 
@@ -361,8 +361,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET BarringConf WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -384,8 +384,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET CoName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -407,7 +407,7 @@ BROWSE:
      THEN DO TRANS: /* memo */
         FIND BarringConf where recid(BarringConf) = rtab[frame-line(sel)]
         NO-LOCK NO-ERROR.
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "BarringConf",
                  INPUT BarringConf.BarringGroup,
                  INPUT "BarringConf").
@@ -418,7 +418,7 @@ BROWSE:
      /* translations */
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
          FIND BarringConf WHERE RECID(BarringConf) = rtab[FRAME-LINE] NO-LOCK.
-         RUN invlang(5,STRING(BarringConf.BarringCode)).
+         RUN Mc/invlang.p(5,STRING(BarringConf.BarringCode)).
          
          ufkey = TRUE.
          NEXT LOOP.
@@ -431,7 +431,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}.
+       {Syst/uright2.i}.
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -483,13 +483,13 @@ BROWSE:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(TRUE).
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBConf).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY BarringConf.BarringGroup.
 
        RUN local-UPDATE-record.                                  

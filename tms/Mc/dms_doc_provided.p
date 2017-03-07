@@ -8,14 +8,14 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 Katun = "Cron".
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
-{dms.i}
-{date.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/dms.i}
+{Func/date.i}
 
 DEF VAR ldaReadDate       AS DATE NO-UNDO.
 DEF VAR lcLogDir          AS CHAR NO-UNDO.

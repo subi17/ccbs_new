@@ -7,9 +7,9 @@
    PaymPlan should be in buffer
 */
 
-{refcode.i}
-{frefnum.i}
-{fduedate.i}
+{Func/refcode.i}
+{Func/frefnum.i}
+{Func/fduedate.i}
 
 DEF VAR lcBatchAmt   AS CHAR                   NO-UNDO.
 DEF VAR liBatchAmt   AS INT                    NO-UNDO.

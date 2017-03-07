@@ -14,14 +14,14 @@
 
 
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
-{tmsparam2.i}
-{fcurrency.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
-{logger.i}
+{Syst/utumaa.i "new"}
+{Func/tmsparam2.i}
+{Func/fcurrency.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
+{Func/logger.i}
 
 /* INPUT PARAMETERS */
 DEF INPUT PARAM  icInvGroup   LIKE InvGroup.InvGroup NO-UNDO.
@@ -205,7 +205,7 @@ FUNCTION fChgPage RETURNS LOGICAL
 
    if rl + iAddLine >= skayt1 then do:
       if sl > 0 then do:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       end.
       assign rlx = 0 sl = sl + 1 rl = 9.
       view stream tul frame sivuots.
@@ -266,7 +266,7 @@ END FUNCTION.
 
 /* PRINT INVOICE JOURNAL LOGIC */
 assign tila = true.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 assign sl = 0 rl = skayt1.
 
@@ -563,7 +563,7 @@ END.
 if ilTikoo then do:
 
    IF NOT ilXOnlySum THEN DO:
-      {uprfeed.i rl}
+      {Syst/uprfeed.i rl}
    END.
 
    assign sl = sl + 1 rl = 7.
@@ -610,10 +610,10 @@ end. /* if tikoo */
 
 
 /* vielA viimeinen sivu kohdalleen */
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 
 assign tila = false.
-{utuloste.i}
+{Syst/utuloste.i}
 
 hide message no-pause.
 

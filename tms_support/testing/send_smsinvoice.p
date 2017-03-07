@@ -1,11 +1,11 @@
-{commpaa.i}
+{Syst/commpaa.i}
 assign gcbrand = "1"
        katun = "Qvantel".
-{fmakemsreq.i}
-{tmsconst.i}
-{cparam2.i}
-{femailinvoice.i}
-{email.i}
+{Func/fmakemsreq.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/femailinvoice.i}
+{Func/email.i}
 
 def stream sin.
 def stream sout.

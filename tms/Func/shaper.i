@@ -3,8 +3,8 @@
    add / remove subscription from 'shaper' (controls speed for data subscr.)
 */
 
-{timestamp.i}
-{fmakemsreq.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
 
 FUNCTION fTerminateShaper RETURNS LOGIC
    (INPUT  iiMsSeq       AS INT,

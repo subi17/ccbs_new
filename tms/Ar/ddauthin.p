@@ -29,18 +29,18 @@
  VERSION .......: M15
 ============================================================================*/
 
-{commali.i}
-{utumaa.i}
-{cparam2.i}
-{timestamp.i}
-{email.i}
-{ddtrans.i}
-{eventval.i}
+{Syst/commali.i}
+{Syst/utumaa.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/email.i}
+{Ar/ddtrans.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhDDAuth AS HANDLE NO-UNDO.
    lhDDAuth = BUFFER DDAuth:HANDLE.
@@ -481,7 +481,7 @@ REPEAT TRANSACTION:
                  
                  
                  /* are there still other authorizations */
-                 RUN nnsvte (Customer.CustNum,
+                 RUN Ar/nnsvte.p (Customer.CustNum,
                              TODAY,
                              OUTPUT lcBankAcc).
                  /* if not then update charge type */            
@@ -560,7 +560,7 @@ IF CAN-FIND(FIRST SvRapo) OR CAN-FIND(FIRST ttError) THEN DO:
    FOR EACH SvRapo:
       IF rl + 1 >= skayt1 THEN DO:
          /* Turn the page */
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
          ASSIGN sl = sl + 1 rl = 7.
          VIEW STREAM tul FRAME SivuOts.
       END.   
@@ -575,7 +575,7 @@ IF CAN-FIND(FIRST SvRapo) OR CAN-FIND(FIRST ttError) THEN DO:
  
    FOR EACH ttError:
       IF rl + 1 >= skayt1 THEN DO:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
          ASSIGN sl = sl + 1 rl = 7.
          VIEW STREAM tul FRAME SivuOts.
       END.   
@@ -587,11 +587,11 @@ IF CAN-FIND(FIRST SvRapo) OR CAN-FIND(FIRST ttError) THEN DO:
     
 END.      
 
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 
 /* CLOSE STREAM */
 tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 /* reset normal user */
 katun = lcCKatun.

@@ -9,23 +9,23 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'coshare'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'coshare'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCoShare AS HANDLE NO-UNDO.
    lhCoShare = BUFFER CoShare:HANDLE.
    RUN StarEventInitialize(lhCoShare).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCoShare).
+      RUN Mc/eventview2.p(lhCoShare).
    END.
 
 END.
@@ -97,7 +97,7 @@ ASSIGN lcTitle = " COMM. SHARING FOR: " +
                  CoTarg.CoTarg   + "/" +
                  STRING(CoTarg.RsLevel). 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Target Type ,    ,   , By 4".
@@ -125,14 +125,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CoShare  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -149,15 +149,15 @@ ADD-ROW:
                  siirto = ?. 
 
                  CASE INPUT CoShare.TargType:
-                 WHEN "R" THEN RUN nnrsse.
-                 WHEN "S" THEN RUN nnmyse.
-                 WHEN "C" THEN RUN nnasel.
+                 WHEN "R" THEN RUN Mc/nnrsse.p.
+                 WHEN "S" THEN RUN Help/nnmyse.p.
+                 WHEN "C" THEN RUN Mc/nnasel.p.
                  END CASE.
 
                  IF siirto NE ? THEN DISPLAY siirto ;& CoShare.CoTarg.
 
                  ehto = 9. 
-                 RUN ufkey.
+                 RUN Syst/ufkey.p.
 
               END.
 
@@ -314,20 +314,20 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CoShare.TargType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoShare.TargType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoShare.TargType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CoShare.CoTarg ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoShare.CoTarg {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoShare.CoTarg WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW CoShare.RsLevel ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoShare.RsLevel {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoShare.RsLevel WITH FRAME sel.
       END.
 
@@ -455,8 +455,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcTarg WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -480,14 +480,14 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW"
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -544,7 +544,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCoShare).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CoShare.TargType.
 
        RUN local-UPDATE-record.                                  
@@ -675,7 +675,7 @@ PROCEDURE local-UPDATE-record:
     
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
        
          UPDATE
          CoShare.CoPerc

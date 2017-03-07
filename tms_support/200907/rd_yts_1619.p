@@ -1,10 +1,10 @@
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand = "1".
 
-{timestamp.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
  DEFINE VARIABLE pcSearch AS CHARACTER NO-UNDO.
  DEFINE VARIABLE pcFor AS CHARACTER NO-UNDO. 

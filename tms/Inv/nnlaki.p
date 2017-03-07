@@ -92,18 +92,18 @@
 
 &GLOBAL-DEFINE LocalContactInfo YES
 
-{commali.i}
-{refcode.i}
-{utumaa.i "new"}
-{cparam2.i}
-{edefine.i new}
-{feplform.i}
-{fsubser.i}
-{fotint.i}
-{eventval.i} 
-{feffect.i}
-{fprintinv.i}
-{fgetclis.i}
+{Syst/commali.i}
+{Func/refcode.i}
+{Syst/utumaa.i "new"}
+{Func/cparam2.i}
+{Inv/edefine.i new}
+{Func/feplform.i}
+{Func/fsubser.i}
+{Func/fotint.i}
+{Syst/eventval.i} 
+{Func/feffect.i}
+{Func/fprintinv.i}
+{Func/fgetclis.i}
 
 ASSIGN tuni1 = "nnlaki"
        tuni2 = "".
@@ -204,7 +204,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER Invoice:HANDLE.
@@ -260,7 +260,7 @@ form
 with title color value(ctc) " INVOICE CRITERIA " side-labels
 COLOR value(cfc) ROW 3 centered OVERLAY FRAME rajat.
 
-{invsta.frm}
+{Inv/invsta.frm}
 
 
 FUNCTION fLineHead RETURNS LOGICAL.
@@ -468,7 +468,7 @@ FUNCTION fPrintInvoTxt RETURNS LOGICAL
             
       IF ttInvoTxt.ITPos = -1 THEN DO:
       
-         RUN printxt (Invoice.CustNum,
+         RUN Mc/printxt.p (Invoice.CustNum,
                       0,                      /* msseq */
                       lcTagCLI,
                       1,                      /* 1=invtext */
@@ -551,10 +551,10 @@ ASSIGN
    i-date1  = pvm
    i-date2  = pvm.
 
-cfc = "sel". RUN ufcolor. ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 ASSIGN lano1 = 000000 lano2 = 99999999
        asno1  = 0 asno2 = 99999999.
 
@@ -594,7 +594,7 @@ PAUSE 0 no-message.
 LOOP:
 repeat:
    /* KysellAAn rajaukset */
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0 no-message.
    UPDATE
       lano1    lano2
@@ -717,7 +717,7 @@ repeat:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN
       ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT LOOP.
 
@@ -761,7 +761,7 @@ repeat:
 
 
 tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 las_teh = "".
 
@@ -769,7 +769,7 @@ las_teh = "".
 IF oso = "" THEN DO: 
 
    /* copy macros TO printer */
-   RUN umakro(lcMacros).
+   RUN Syst/umakro.p(lcMacros).
 
    /* macro nbr is in it's name */
    IF lcMacros > "" THEN lcMacroEff = SUBSTRING(lcMacros,LENGTH(lcMacros),1).
@@ -913,7 +913,7 @@ repeat:
                     "",
                     "").
           
-      IF oso = "" THEN RUN ucurpos(30,0).
+      IF oso = "" THEN RUN Syst/ucurpos.p(30,0).
 
       fChgPage(999).
       
@@ -1132,7 +1132,7 @@ repeat:
          /* contracts */
          IF CAN-FIND(FIRST InvRow OF Invoice WHERE
                            LOOKUP(STRING(InvRow.RowType),"3,4,7") > 0)
-         THEN RUN nncore1 (Invoice.InvNum, FALSE).
+         THEN RUN Mc/nncore1.p (Invoice.InvNum, FALSE).
          
          fPrintSpecRep(Customer.RepCodes,
                        "",
@@ -1205,7 +1205,7 @@ repeat:
 END. /* print-line  */
 
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 IF kesk AND UpdState THEN DO:
    /* jos print-rivi keskeytettiin, nollataan tulostettujen 

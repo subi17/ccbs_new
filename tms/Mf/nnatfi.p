@@ -10,9 +10,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{tmsparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/tmsparam2.i}
 
 DEF VAR ufkey  AS LOG NO-UNDO.
 
@@ -55,7 +55,7 @@ ASSIGN
 toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF criteria THEN DO:
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          UPDATE
            order label "Order by ......." format "Customer/A-Sub"
              help   "Choose listing order:  (C/A)" SKIP
@@ -79,7 +79,7 @@ toimi:
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       READKEY. nap = keylabel(LASTKEY).

@@ -1,9 +1,9 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "cron".
 
-{eventlog.i}
-{direct_dbconnect.i}
+{Syst/eventlog.i}
+{Func/direct_dbconnect.i}
 
 DEF VAR ldaFromDate AS DATE NO-UNDO.
 DEF VAR ldaToDate   AS DATE NO-UNDO.
@@ -51,7 +51,7 @@ DO liRun = 1 TO 2:
       QUIT.
    END.
 
-   RUN errorcdr_dump.p (ldaRunFrom[liRun],
+   RUN Mm/errorcdr_dump.p (ldaRunFrom[liRun],
                         ldaRunTo[liRun],
                         ldaFromDate,
                         ldaToDate).

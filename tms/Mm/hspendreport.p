@@ -7,12 +7,12 @@
    MODIFIED .....: 
    VERSION.......: M2.0
 ------------------------------------------------------ */
-{commpaa.i}
-{eventlog.i}
-{timestamp.i}
+{Syst/commpaa.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
 
 gcbrand = "1".
 katun = "cron".
              
-run highusagerep(INPUT fMake2Dt(INPUT today - 90, INPUT 0),"",0).
+RUN Mm/highusagerep.p(INPUT fMake2Dt(INPUT today - 90, INPUT 0),"",0).
 

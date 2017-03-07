@@ -1,11 +1,11 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "Qvantel".
-{tmsconst.i}
-{fbundle.i}
-{date.i}
-{timestamp.i}
-{requestaction_exec.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Mm/requestaction_exec.i}
 
 DEF VAR lcRequestTypes            AS CHAR NO-UNDO.
 DEF VAR lcLogFile                 AS CHAR NO-UNDO.

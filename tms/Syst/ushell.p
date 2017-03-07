@@ -7,7 +7,7 @@
   Version ......: M15
   ----------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR defdir AS c NO-UNDO.
 DO FOR TMSUser:

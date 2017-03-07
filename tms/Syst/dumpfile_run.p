@@ -8,13 +8,13 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{transname.i}
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/transname.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icDumpMode    AS CHAR NO-UNDO. /* full/modified */
@@ -350,7 +350,7 @@ DO FOR DumpLog TRANS:
       DumpLog.DumpLogStatus = 5.
    ELSE DO:
       DumpLog.DumpLogStatus = 3.
-      RUN dumpfile_calcavedur.p(DumpFile.DumpId).
+      RUN Syst/dumpfile_calcavedur.p(DumpFile.DumpId).
    END.
    /* TODO - quick solution (otherwise requires a new logic module param.) */
    IF oiEventCount EQ {&DUMPLOG_ERROR_NOTIFICATION} THEN ASSIGN
