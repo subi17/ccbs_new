@@ -738,10 +738,10 @@ PROCEDURE local-UPDATE-record:
             END.
 
             WHEN "DeliveryType" THEN DO:
-            RUN h-tmscodes.p
+            RUN Help/h-tmscodes.p
                   ("MNPCal","DeliveryType","MNP", OUTPUT siirto).
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                IF siirto ne "" AND siirto NE ? THEN DO:
                   DISP INTEGER(siirto) @ MNPCal.DeliveryType  WITH FRAME lis.
                   NEXT.
