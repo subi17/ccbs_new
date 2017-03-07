@@ -15,10 +15,10 @@
 
 &GLOBAL-DEFINE BrTable fatgroup
 
-{commali.i} 
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FatGroup'}
+{Syst/commali.i} 
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FatGroup'}
 
 DEF NEW shared VAR siirto AS CHAR.
 
@@ -50,7 +50,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFATGroup AS HANDLE NO-UNDO.
    lhFATGroup = BUFFER FATGroup:HANDLE.
@@ -58,7 +58,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhFATGroup).
+      RUN Mc/eventview2.p(lhFATGroup).
    END.
 END.
 
@@ -77,7 +77,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     FATGroup.FTGrp       COLON 17 FORMAT "X(16)"
@@ -162,7 +162,7 @@ FUNCTION fDispQtyUnit RETURNS LOGICAL.
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "   By Code   ,   By Name   ,By 3, By 4".
@@ -189,12 +189,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a FATGroup  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR FATGroup.FTGrp
@@ -285,24 +285,24 @@ REPEAT WITH FRAME sel:
         ufk[7]= 1069 
         ufk[8]= 8 
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE. 
       IF order = 1 THEN DO:
-        CHOOSE ROW FATGroup.FTgrp ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATGroup.FTgrp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATGroup.FTgrp WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FATGroup.FtgName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATGroup.FtgName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATGroup.FtgName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW FATGroup.FatType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATGroup.FatType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATGroup.FatType WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW FATGroup.Priority  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATGroup.Priority  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATGroup.Priority WITH FRAME sel.
       END.
 
@@ -431,8 +431,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
         Disp lcBrand With FRAME f1.
        SET lcBrand WHEN gcAllBrand = TRUE
@@ -453,8 +453,8 @@ REPEAT WITH FRAME sel:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        Disp lcBrand With FRAME f2.
        SET lcBrand WHEN gcAllBrand = TRUE
@@ -475,7 +475,7 @@ REPEAT WITH FRAME sel:
      /* UPDATE members  */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN ftgmember1(INPUT FATGroup.FTGrp).
+        RUN Mm/ftgmember1.p(INPUT FATGroup.FTGrp).
         ufkey = TRUE.
         NEXT loop.
      END.
@@ -483,7 +483,7 @@ REPEAT WITH FRAME sel:
      /* UPDATE FATime */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN fatime (FATGroup.FTGrp,
+        RUN Mm/fatime.p (FATGroup.FTGrp,
                     0,
                     "",
                     0).
@@ -492,14 +492,14 @@ REPEAT WITH FRAME sel:
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* add */
-        {uright2.i}.
+        {Syst/uright2.i}.
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0  THEN DO TRANSACTION:
        /* DELETE */
-       {uright2.i}.
+       {Syst/uright2.i}.
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -556,21 +556,21 @@ REPEAT WITH FRAME sel:
      END. /* DELETE */
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:
-       {uright2.i}.
+       {Syst/uright2.i}.
        RUN local-find-this (FALSE).
        
        ufkey = TRUE.
-       IF AVAILABLE FatGroup THEN RUN fatconfig(FatGroup.FTGrp).
+       IF AVAILABLE FatGroup THEN RUN Mm/fatconfig.p(FatGroup.FTGrp).
      END.
 
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(FALSE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY FATGroup.FTGrp.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATGroup).
        RUN local-UPDATE-record.                                  
@@ -721,7 +721,7 @@ PROCEDURE local-UPDATE-record:
             ufk    = 0
             ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
             ufk[8] = 8.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       
       IF toimi = 1 THEN 
@@ -730,7 +730,7 @@ PROCEDURE local-UPDATE-record:
          FIND CURRENT FatGroup EXCLUSIVE-LOCK.
             
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
  
       
          UPDATE
@@ -756,7 +756,7 @@ PROCEDURE local-UPDATE-record:
                 LOOKUP(FRAME-FIELD,"FatType,FatTarget,QtyUnit") > 0 
              THEN DO:
 
-                RUN h-tmscodes(INPUT "FatGroup",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FatGroup",  /* TableName*/
                                      FRAME-FIELD, /* FieldName */
                                      "FATime", /* GroupCode */
                                OUTPUT siirto).
@@ -779,7 +779,7 @@ PROCEDURE local-UPDATE-record:
                 END.
 
                 ehto = 9. 
-                RUN ufkey.
+                RUN Syst/ufkey.p.
              END.
              
              IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:

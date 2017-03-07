@@ -10,16 +10,16 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{fsubser.i}
-{fctserval.i}
-{ffeecont.i}
-{service.i}
-{timestamp.i}
-{fctchange.i}
-{fmakemsreq.i}
-{fnumberinq.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fsubser.i}
+{Func/fctserval.i}
+{Func/ffeecont.i}
+{Func/service.i}
+{Func/timestamp.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/fnumberinq.i}
 
 DEF INPUT PARAMETER iiMsSeq AS INT NO-UNDO.
 
@@ -248,7 +248,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
       ufk[1]= 7  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
       ufk[5]= 15 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
       ehto = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    if toimi = 1 THEN DO:
    
@@ -259,7 +259,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
       END.
       
       ehto = 9.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       lUpdate:  
       REPEAT ON ENDKEY UNDO, LEAVE:

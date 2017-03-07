@@ -7,16 +7,16 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
    
-{cparam2.i}
-{files.i}
-{timestamp.i}
-{funcrunprocess_run.i}
-{funcrunprocess_update.i}
+{Func/cparam2.i}
+{Func/files.i}
+{Func/timestamp.i}
+{Syst/funcrunprocess_run.i}
+{Syst/funcrunprocess_update.i}
 
 DEF VAR liLoop            AS INT  NO-UNDO.
 DEF VAR liFRProcessID     AS INT  NO-UNDO.
@@ -100,7 +100,7 @@ DO WHILE TRUE:
          takes doesn't affect this timing */
       ldtLastRun = NOW.  
       
-      RUN billrun_statistics.p (INPUT ldaInvDate,
+      RUN Inv/billrun_statistics.p (INPUT ldaInvDate,
                                 INPUT liInvType,
                                 INPUT lcRunMode,
                                 OUTPUT liInvQty).

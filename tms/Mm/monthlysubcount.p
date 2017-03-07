@@ -1,12 +1,12 @@
 /* monthlysubcount.p    04.01.11/aam 
 */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "cron".
 gcBrand = "1".
 
-{direct_dbconnect.i}
-{eventlog.i}
+{Func/direct_dbconnect.i}
+{Syst/eventlog.i}
 
 DEF VAR ldaPrevPeriod AS DATE NO-UNDO.
 
@@ -28,7 +28,7 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    QUIT.
 END.
 
-RUN monthlysubcount_report.p (TODAY).
+RUN Mm/monthlysubcount_report.p (TODAY).
 
 fELog("MONTHLYSUBCOUNT","Finished").
 

@@ -2,8 +2,8 @@
 &THEN
 &GLOBAL-DEFINE COMMISSION_I YES
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF BUFFER bTargStatus FOR CoTarg.
 

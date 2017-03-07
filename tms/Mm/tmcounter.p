@@ -8,9 +8,9 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}.
-{dataformat.i}
-{cparam2.i}
+{Syst/commali.i}.
+{Func/dataformat.i}
+{Func/cparam2.i}
 
 DEFINE INPUT PARAM piTMRuleSeq AS INT NO-UNDO. 
 DEFINE INPUT PARAM piMsSeq     AS INT NO-UNDO. 
@@ -119,7 +119,7 @@ FORM /* seek TMCounter  BY TMCounterId and TMCounterOffice */
    COLOR VALUE(cfc)
    NO-LABELS FRAME f3.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = " By Customer    , By Subscription, By Usage       ".
@@ -195,22 +195,22 @@ BROWSE:
          ufk[6]= 0 
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttTMCounter.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttTMCounter.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttTMCounter.CustNum WITH FRAME sel.
       END.
       
       IF order = 2 THEN DO:
-         CHOOSE ROW ttTMCounter.MsSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttTMCounter.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttTMCounter.MsSeq WITH FRAME sel.
       END.
       
       IF order = 3 THEN DO:
-         CHOOSE ROW lcValue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW lcValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) lcValue WITH FRAME sel.
       END.
       
@@ -340,8 +340,8 @@ BROWSE:
       /* Search BY column 1 */
       ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". RUN ufcolor.
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         cfc = "puyr". RUN Syst/ufcolor.p.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f1.
          ASSIGN
             lcCustnum  = 0.
@@ -373,8 +373,8 @@ BROWSE:
       ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
              
-         cfc = "puyr". RUN ufcolor.
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         cfc = "puyr". RUN Syst/ufcolor.p.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f2.
          ASSIGN
                liMsSeq = 0.
@@ -415,8 +415,8 @@ BROWSE:
       ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
              
-         cfc = "puyr". RUN ufcolor.
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         cfc = "puyr". RUN Syst/ufcolor.p.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f3.
          ldeAmountPrev = ldeAmount. 
          DISP ldeAmount WITH FRAME f3.

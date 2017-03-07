@@ -7,13 +7,13 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "Cron".
        
-{cparam2.i}
-{eventlog.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcIFSFile   AS CHAR NO-UNDO.
@@ -64,7 +64,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN ifs_collection_action (ttFiles.IFSFile,
+   RUN Ar/ifs_collection_action.p (ttFiles.IFSFile,
                               OUTPUT liRead,
                               OUTPUT liError).
                         

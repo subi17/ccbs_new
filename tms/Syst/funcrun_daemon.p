@@ -6,17 +6,17 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "fr_daemon".
    
-{heartbeat.i}
-{timestamp.i}
-{log.i}
-{cparam2.i}
-{eventlog.i}
-{host.i}
+{Func/heartbeat.i}
+{Func/timestamp.i}
+{Func/log.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Syst/host.i}
 
 DEF VAR liLoop               AS INT  NO-UNDO.
 DEF VAR lcLockFile           AS CHAR NO-UNDO.
@@ -162,7 +162,7 @@ PROCEDURE pRunQueue:
    
       IF RETRY THEN LEAVE.
       
-      RUN funcrunqueue_batch.p.
+      RUN Syst/funcrunqueue_batch.p.
    END.
 
 END PROCEDURE.
@@ -173,7 +173,7 @@ PROCEDURE pRunExecution:
    
       IF RETRY THEN LEAVE.
       
-      RUN funcrunexec_batch.p.
+      RUN Syst/funcrunexec_batch.p.
    END.
 
 END PROCEDURE.

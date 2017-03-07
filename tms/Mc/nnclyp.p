@@ -14,16 +14,16 @@ DEF VAR ufkey       AS LOG NO-UNDO  init TRUE.
 DEF VAR i           AS i   NO-UNDO.
 DEF VAR new_custlet AS LOG NO-UNDO INIT FALSE.
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CustLetter'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CustLetter'}
 
 IF llDoEvent THEN 
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustLetter AS HANDLE NO-UNDO.
    lhCustLetter = BUFFER CustLetter:HANDLE.
@@ -31,7 +31,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhCustLetter).
+      RUN Mc/eventview2.p(lhCustLetter).
    END.
 END.
 
@@ -45,7 +45,7 @@ WITH
 DO TRANS WITH FRAME memo ON ENDKEY UNDO, RETURN:
 
    assign ehto = 9 cfc = "lis" ufkey = TRUE.
-   RUN ufkey. RUN ufcolor.
+   RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
    FIND FIRST CustLetter WHERE CustLetter.Brand = gcBrand
       exclusive-lock no-error.
    IF NOT AVAIL CustLetter THEN 

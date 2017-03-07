@@ -12,10 +12,10 @@
 DEFINE OUTPUT PARAMETER olPasswordChanged AS LOGICAL NO-UNDO.
 
 
-{commali.i}
-{fgettxt.i}
-{timestamp.i}
-{tmspass.i}
+{Syst/commali.i}
+{Func/fgettxt.i}
+{Func/timestamp.i}
+{Func/tmspass.i}
 
 /* ennakkoilmoitusraja        PassWdExpireNotify INT 
    salasanahistorian pituus   PassWdHistory      INT
@@ -39,7 +39,7 @@ DEFINE VARIABLE liRetries AS INTEGER NO-UNDO INIT 3.
 DEFINE VARIABLE liCurrent AS INTEGER NO-UNDO INIT 0. 
 DEFINE VARIABLE liHistoryCount AS INTEGER NO-UNDO.
 
-{tmsparam.i PassWdHistory} liPassWdHistory = TMSParam.IntVal.
+{Func/tmsparam.i PassWdHistory} liPassWdHistory = TMSParam.IntVal.
 
 lcCheckMessage[1] = fGetTxt("GENERAL","PassWdCheck1", TODAY, 5). /* english */
 lcCheckMessage[2] = fGetTxt("GENERAL","PassWdCheck2", TODAY, 5). /* english */
@@ -107,7 +107,7 @@ REPEAT:
    lcNewPass2 = "".
    lcOldPass = "".
    
-   RUN ufkey.
+   RUN Syst/ufkey.p.
    
    passLoop:
    REPEAT WITH FRAME passFrame ON ENDKEY UNDO passLoop, NEXT mainLoop:

@@ -9,8 +9,8 @@
   Version ......: M15
   ----------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF TEMP-TABLE TMarked
 FIELD CustGroup LIKE CustGroup.CustGroup
@@ -44,7 +44,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCGMember AS HANDLE NO-UNDO.
    lhCGMember = BUFFER CGMember:HANDLE.
@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhCGMember).
+      RUN Mc/eventview2.p(lhCGMember).
    END.
 END.
 
@@ -89,7 +89,7 @@ mess[1] = "This customer has:".
 mess[4] = "where starting Amount is allowed.".
 mess[5] = "This overrides all those settings.".
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc. view FRAME sel.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
 
 
 FIND FIRST CustGroup
@@ -158,12 +158,12 @@ BROWSE:
     ASSIGN
     ufk[1]= 1709 ufk[2]= 717 ufk[3]= 0 ufk[4]= 0
     ufk[5]= 515 ufk[6]= 0   ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.  RUN ufkey.
+    ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
-    CHOOSE ROW CustGroup.CustGroup ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW CustGroup.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
-    CHOOSE ROW CustGroup.CGName ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc)
       CustGroup.CustGroup CustGroup.CreUser  CustGroup.CGName
       WITH FRAME sel.
@@ -314,8 +314,8 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-   cfc = "puyr". RUN ufcolor.
-   CustGroup = "". ehto = 9. RUN ufkey. ufkey = TRUE.
+   cfc = "puyr". RUN Syst/ufcolor.p.
+   CustGroup = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustGroup WITH FRAME hayr.
    HIDE FRAME hayr no-pause.
    IF CustGroup <> "" THEN DO:
@@ -334,8 +334,8 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-   cfc = "puyr". run ufcolor. CustName = "".
-   ehto = 9. RUN ufkey. ufkey = TRUE.
+   cfc = "puyr". RUN Syst/ufcolor.p. CustName = "".
+   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustName WITH FRAME hayr3.
    HIDE FRAME hayr2 no-pause.
    if CustName <> "" THEN DO:

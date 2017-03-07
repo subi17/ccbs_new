@@ -8,19 +8,19 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
-{faccper.i}
-{fcustbal.i}
-{eventval.i} 
-{fbankday.i}
-{fhdrtext.i}
-{frefundreq.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Syst/eventval.i} 
+{Func/fbankday.i}
+{Func/fhdrtext.i}
+{Func/frefundreq.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 DEF BUFFER bSubRequest FOR MsRequest.
@@ -158,7 +158,7 @@ PROCEDURE pAdvPaym2Refund:
          ldPosting[1] = MsRequest.ReqDParam1
          ldPosting[2] = -1 * MsRequest.ReqDParam1.
    
-      RUN createpaym (MsRequest.CustNum,
+      RUN Ar/createpaym.p (MsRequest.CustNum,
                       MsRequest.ReqIParam1,      /* invoice */
                       MsRequest.ReqCParam1,      /* cli */
                       idtAccDate,                /* posting date */

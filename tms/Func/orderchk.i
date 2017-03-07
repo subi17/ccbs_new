@@ -2,9 +2,9 @@
 &THEN
 &GLOBAL-DEFINE orderchk YES
 
-{commali.i}
-{barrfunc.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/barrfunc.i}
+{Syst/tmsconst.i}
 
 /* ----------------------------------------------------------------------
   MODULE .......: orderchk.i 

@@ -1,10 +1,10 @@
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand  = "1".
-{timestamp.i}
-{msisdn.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER bMSISDN FOR MSISDN.
 DEF BUFFER bbMSISDN FOR MSISDN. 

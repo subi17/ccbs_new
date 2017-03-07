@@ -3,12 +3,12 @@
    MSISDN;Discount Plan;From;To;Discount Amount
 */
 
-{commali.i}
-{cparam2.i}
-{ftransdir.i}
-{timestamp.i}
-{eventval.i}
-{dpmember.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Mc/dpmember.i}
 
 
 DEF INPUT  PARAMETER icFile   AS CHAR NO-UNDO.

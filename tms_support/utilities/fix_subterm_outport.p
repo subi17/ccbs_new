@@ -1,9 +1,9 @@
 /* Script for fixing "Subscription deleted by error as not outporting option" 
    issues (e.g. YCM-1453 & YCM-1533) */
 
-{commali.i}
-{fsubstermreq.i}
-{msisdn.i}
+{Syst/commali.i}
+{Func/fsubstermreq.i}
+{Func/msisdn.i}
 
 DEFINE INPUT PARAMETER pcInput AS CHARACTER NO-UNDO. 
 DEFINE INPUT PARAMETER pcOutput AS CHARACTER NO-UNDO. 

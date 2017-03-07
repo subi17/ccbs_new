@@ -1,6 +1,6 @@
 /* customer_address.i    11.03.09/aam 
 */
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR lcCustName    AS CHAR NO-UNDO.
 DEF VAR lcFirstName   AS CHAR NO-UNDO.

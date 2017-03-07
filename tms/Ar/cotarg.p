@@ -12,12 +12,12 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{date.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'cotarg'}
+{Func/date.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'cotarg'}
 DEF INPUT PARAMETER iiKey AS INT NO-UNDO. 
 DEF INPUT PARAMETER icType   AS CHAR NO-UNDO. 
 
@@ -98,7 +98,7 @@ END.
 ELSE IF icType = "mobsub" THEN
    lcTitle = "COMMISSIONS FOR SUBSCRIPTION: " + STRING(iiKey).
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -168,20 +168,20 @@ REPEAT WITH FRAME sel:
         ufk[2]= 0  ufk[3]= 0  
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CoTarg.COTarg ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoTarg.COTarg {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoTarg.COTarg WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CoTarg.CoTarg ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoTarg.CoTarg {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoTarg.CoTarg WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW CoTarg.CommStatus ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoTarg.CommStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoTarg.CommStatus WITH FRAME sel.
       END.
 
@@ -308,16 +308,16 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  /* SHARING */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoTarg 
-       THEN RUN coshare.p (CoTarg.CoTargID). 
+       THEN RUN Ar/coshare.p (CoTarg.CoTargID). 
        ufkey = true. 
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 AND lcRight = "RW"
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
@@ -328,7 +328,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
       
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        /*DISPLAY CoTarg.TargType.*/
 
        RUN local-UPDATE-record.                                  
@@ -535,10 +535,10 @@ PROCEDURE local-UPDATE-record:
           ehto  = 1
           ufk[5] = 927
           ufk[8]= 8.
-      RUN ufkey.          
+      RUN Syst/ufkey.p.          
 
       IF toimi = 5 THEN DO:
-         RUN memo("0",
+         RUN Mc/memo.p("0",
                   INPUT "CoTarg",
                   INPUT STRING(CoTarg.COTargId),
                   INPUT "Commission").

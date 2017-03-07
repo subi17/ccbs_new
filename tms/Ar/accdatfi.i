@@ -41,13 +41,13 @@
 
 */
 
-{commali.i}
-{coinv.i}
-{fcustpl.i}
-{fcurrency.i}
-{fvatfact.i}
-{cparam2.i}
-{accdata.i}
+{Syst/commali.i}
+{Func/coinv.i}
+{Func/fcustpl.i}
+{Func/fcurrency.i}
+{Func/fvatfact.i}
+{Func/cparam2.i}
+{Ar/accdata.i}
 
 DEF STREAM slog.
 

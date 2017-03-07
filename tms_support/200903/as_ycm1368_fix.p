@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{fmakemsreq.i}
+{Func/fmakemsreq.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 

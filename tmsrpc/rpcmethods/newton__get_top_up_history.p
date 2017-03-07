@@ -18,7 +18,7 @@
   9 th element: Entity name (string)
  */
 {xmlrpc/xmlrpc_access.i}
-{tsformat.i}
+{Func/tsformat.i}
 /* Input parameters */
 DEFINE VARIABLE piMsSeq     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE piCount     AS INTEGER   NO-UNDO.

@@ -7,10 +7,10 @@
   CREATED ......: 24.06.14
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{dumpfile_run.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.

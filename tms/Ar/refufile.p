@@ -9,13 +9,13 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{refufile.i}
-{fbankdata.i}
-{cparam2.i}
-{ftransdir.i}
-{timestamp.i}
-{refcode.i}
+{Syst/commali.i}
+{Ar/refufile.i}
+{Func/fbankdata.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/timestamp.i}
+{Func/refcode.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE FOR ttPaym.
 
@@ -116,7 +116,7 @@ FOR EACH ttPaym:
    END. 
 
    /* customers must have a bank account; first check from dd-authorization */
-   RUN nnsvte (Customer.CustNum,
+   RUN Ar/nnsvte.p (Customer.CustNum,
                TODAY, 
                OUTPUT ttPaym.CustBank).
    IF ttPaym.CustBank = "" THEN ttPaym.CustBank = Customer.BankAcc.

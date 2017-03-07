@@ -8,10 +8,10 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'coevent'}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'coevent'}
 
 assign tuni1 = "coacrel"
        tuni2 = "".
@@ -180,7 +180,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
          ehto = 3 
          lcUfkey = FALSE.
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
    END.
 
@@ -193,7 +193,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    IF LOOKUP(nap,"1,f1") > 0 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
 
@@ -251,14 +251,14 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 END. /* toimi */
 
 ehto = 5.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 IF lcFile = "" THEN DO:
    assign tila = true.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 END.
 
-RUN coacrep   (liCORuleID,
+RUN Ar/coacrep.p   (liCORuleID,
                lcReseller[1],
                lcReseller[2],
                lcSalesman[1],
@@ -275,7 +275,7 @@ RUN coacrep   (liCORuleID,
 
 IF lcFile = "" THEN DO:
    assign tila = false.
-   {utuloste.i}
+   {Syst/utuloste.i}
 END.
 
 llMark = FALSE.
@@ -292,7 +292,7 @@ ELSE
    TITLE " Finished ".
 
 IF llMark THEN DO:
-   RUN copayrem (INPUT TABLE ttMark,
+   RUN Ar/copayrem.p (INPUT TABLE ttMark,
                  INPUT  ldtPaymDate,
                  OUTPUT liCount).
 

@@ -8,12 +8,12 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{msreqfunc.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/msreqfunc.i}
+{Syst/tmsconst.i}
 {xmlrpc/xmlrpc_client.i}
-{forderstamp.i}
+{Func/forderstamp.i}
 
 DEFINE INPUT PARAMETER iiMSrequest AS INT NO-UNDO.
 

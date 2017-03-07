@@ -8,12 +8,12 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fctserval.i}
-{fctchange.i}
-{fmakemsreq.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fctserval.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 
@@ -58,7 +58,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       ufk[5]= 1027  
       ufk[8]= 8 
       ehto = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 5 THEN DO:
 

@@ -211,7 +211,7 @@ define new global shared temp-table xconnect no-undo
   index xgen-idx xgen
 .
 
-{lib/protoplib.i}
-{lib/vstlib.i}
+{protop/lib/protoplib.i}
+{protop/lib/vstlib.i}
 
 /* end protop.i */

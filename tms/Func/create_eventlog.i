@@ -14,7 +14,7 @@
 &GLOBAL-DEFINE CreateEventLog YES
 
 
-{commali.i}
+{Syst/commali.i}
 
 FUNCTION fGetEventField RETURNS CHARACTER
    (ihField  AS HANDLE,

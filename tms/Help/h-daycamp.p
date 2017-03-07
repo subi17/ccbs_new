@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -35,7 +35,7 @@ form /* SEEK Code */
     with row 4 col 2 title color value(ctc) " FIND CONTRACT"
     color value(cfc) no-labels overlay frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 IF gcHelpParam > "" THEN DO:
    IF ENTRY(1,gcHelpParam,":") = "Restricted" AND
@@ -94,7 +94,7 @@ repeat:
          ufk[5] = 11
          ufk[6] = 0  ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -102,7 +102,7 @@ repeat:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row DayCampaign.DCEvent ;(uchoose.i;) no-error with frame sel.
+         choose row DayCampaign.DCEvent {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) DayCampaign.DCEvent with frame sel.
 
          nap = keylabel(lastkey).
@@ -210,8 +210,8 @@ repeat:
         do on ENDkey undo, NEXT LOOP:
 
            /*lcEvent*/
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set lcEvent with frame hayr.
            hide frame hayr no-pause.
            if lcEvent ENTERED then do:

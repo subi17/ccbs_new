@@ -10,8 +10,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -37,7 +37,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhNumPlan AS HANDLE NO-UNDO.
    lhNumPlan = BUFFER NumPlan:HANDLE.
@@ -45,7 +45,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhNumPlan).
+      RUN Mc/eventview2.p(lhNumPlan).
    END.
 END.
 
@@ -89,7 +89,7 @@ form /* Nummerserie search WITH FIELD Operator */
     with row 4 col 2 title color value(ctc) " FIND OPERATOR "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME h-f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST NumPlan
@@ -114,12 +114,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* NumPlan -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR NumPlan.AreaCode
            VALIDATE
@@ -222,24 +222,24 @@ BROWSE:
 
 
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW NumPlan.AreaCode ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW NumPlan.AreaCode {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) NumPlan.AreaCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW NumPlan.Operator ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW NumPlan.Operator {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) NumPlan.Operator WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW NumPlan.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW NumPlan.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) NumPlan.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW NumPlan.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW NumPlan.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) NumPlan.? WITH FRAME sel.
       END.
 */
@@ -425,9 +425,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        h-rn-rnr = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-rn-rnr WITH FRAME h-f1.
        HIDE FRAME h-f1 no-pause.
        if h-rn-rnr <> "" THEN DO:
@@ -448,9 +448,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        h-op-code = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-op-code WITH FRAME h-f2.
        HIDE FRAME h-f2 no-pause.
        if h-op-code <> "" THEN DO:
@@ -540,12 +540,12 @@ BROWSE:
      else if lookup(nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        FIND NumPlan where recid(NumPlan) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        FIND Operator where Operator.Operator = 
           NumPlan.Operator no-lock no-error.
        FIND AreaCode where AreaCode.AreaCode = 

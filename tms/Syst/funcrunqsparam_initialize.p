@@ -7,9 +7,9 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{timestamp.i}
-{funcrunqsparam_initialize.i}
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Syst/funcrunqsparam_initialize.i}
 
 DEF INPUT PARAMETER iiFRQScheduleID AS INT NO-UNDO.
    

@@ -11,8 +11,8 @@
 
 &GLOBAL-DEFINE FINANCED_TERMINAL_I YES
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
    (INPUT iiOrderId  AS INT,

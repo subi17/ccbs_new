@@ -12,9 +12,9 @@
   VERSION ......: M15
   ------------------------------------------------------------------ */
 
-{cdrconst.i}
-{TMSQueue.i}
-{fcustcnt.i}
+{Mf/cdrconst.i}
+{Mf/TMSQueue.i}
+{Func/fcustcnt.i}
 
 def var mobpref  as c  no-undo.
 def var deldbl   as i  no-undo.

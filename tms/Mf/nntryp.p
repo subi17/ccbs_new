@@ -15,22 +15,22 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'trunk'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'trunk'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTrunk AS HANDLE NO-UNDO.
    lhTrunk = BUFFER Trunk:HANDLE.
    RUN StarEventInitialize(lhTrunk).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhTrunk). 
+      RUN Mc/eventview2.p(lhTrunk). 
    END.
 
 END.
@@ -105,7 +105,7 @@ form /* Trunkgrupp search WITH FIELD /* x */ Operator */
     with row 4 col 2 title color value(ctc) " FIND OPERATOR "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME h-f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST Trunk
@@ -136,12 +136,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* Trunk -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            CREATE Trunk.
 
@@ -307,24 +307,24 @@ BROWSE:
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW Trunk.ExCode ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Trunk.ExCode {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Trunk.ExCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Trunk.OpCode ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Trunk.OpCode {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Trunk.OpCode WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW Trunk.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Trunk.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Trunk.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW Trunk.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Trunk.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Trunk.? WITH FRAME sel.
       END.
 */
@@ -521,9 +521,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        h-ex-code = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-ex-code WITH FRAME h-f1.
        HIDE FRAME h-f1 no-pause.
        if h-ex-code <> "" THEN DO:
@@ -544,9 +544,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        h-op-code = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-op-code WITH FRAME h-f2.
        HIDE FRAME h-f2 no-pause.
        if h-op-code <> "" THEN DO:
@@ -642,15 +642,15 @@ BROWSE:
      else if lookup(nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSACTION ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        FIND Trunk where recid(Trunk) = rtab[frame-line(sel)]
        exclusive-lock.
        FIND Exchange of Trunk no-lock no-error.
        FIND Operator where Operator.Operator = Trunk.OpCode no-lock no-error.
 
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        DISPLAY
          Trunk.ExCode @ h-ex-code

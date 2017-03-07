@@ -13,10 +13,10 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i}
-{fvatfact.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i}
+{Func/fvatfact.i}
 
 DEF INPUT PARAMETER idtDate1     AS DATE  NO-UNDO.
 DEF INPUT PARAMETER idtDate2     AS DATE  NO-UNDO.
@@ -140,7 +140,7 @@ FUNCTION CheckPage RETURNS LOGIC
     (iAddLine AS INT).
 
     IF rl >= skayt1 - iAddLine THEN DO:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         ASSIGN rlx = 0
                sl = sl + 1.
         VIEW STREAM tul frame sivuotsi.  
@@ -370,7 +370,7 @@ BREAK BY ttBal.SubType
 
 END. 
 
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 
 HIDE FRAME fQty NO-PAUSE.
 ASSIGN SESSION:NUMERIC-FORMAT = xSessionNum.
