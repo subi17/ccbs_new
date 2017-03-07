@@ -8,10 +8,10 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fcustbal.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT  NO-UNDO.
 
@@ -122,7 +122,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       ufk[1]= 132  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
       ufk[5]= 1734 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
       ehto = 3.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       READKEY.
       nap = keylabel(LASTKEY).
@@ -132,7 +132,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
    if lookup(nap,"1,f1") > 0 THEN DO:
    
       ASSIGN ehto = 9.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
       
@@ -199,9 +199,9 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       END.
 
       ehto = 5. 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
  
-      RUN refupaym (iiCustNum,
+      RUN Ar/refupaym.p (iiCustNum,
                     "",
                     0,
                     lcBal + "P",

@@ -10,11 +10,11 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{tmsconst.i}
-{fusioninvoice.i}
+{Syst/tmsconst.i}
+{Inv/fusioninvoice.i}
 
 DEF VAR lcHash AS CHAR NO-UNDO. 
 DEF VAR piMsSeq AS INT NO-UNDO. 

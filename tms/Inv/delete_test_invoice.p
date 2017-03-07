@@ -7,8 +7,8 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Syst/funcrunprocess_update.i}
 
 DEF INPUT  PARAMETER icFromExtInvID   AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icToExtInvID     AS CHAR NO-UNDO.
@@ -29,7 +29,7 @@ FOR EACH Invoice NO-LOCK WHERE
    IF icFromExtInvID > "" AND Invoice.ExtInvID < icFromExtInvID THEN NEXT.
    IF icToExtInvID > "" AND Invoice.ExtInvID > icToExtInvID  THEN NEXT.  
       
-   RUN del_inv.p(Invoice.InvNum).
+   RUN Inv/del_inv.p(Invoice.InvNum).
    
    IF RETURN-VALUE BEGINS "ERROR" THEN RETURN RETURN-VALUE.
    

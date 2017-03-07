@@ -36,7 +36,7 @@
 
 gcFixtures = "prepaidrequest,TMSCodes".
 
-{timestamp.i}
+{Func/timestamp.i}
 DEF VAR gcArray AS CHAR NO-UNDO.
 DEF VAR gcSubArray AS CHAR NO-UNDO.
 

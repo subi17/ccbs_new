@@ -10,7 +10,7 @@
 
 &GLOBAL-DEFINE BrTable bnet
 
-{commali.i}
+{Syst/commali.i}
 
 def /* new */ shared var siirto AS char.
 
@@ -48,7 +48,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     bnet.BnetCode     /* label format */
@@ -89,7 +89,7 @@ form
     frame f4.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -117,12 +117,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a bnet  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR bnet.BnetCode
@@ -209,16 +209,16 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 30 ufk[3]= 0  ufk[4]= 927
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row bnet.BnetCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row bnet.BnetCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) bnet.BnetCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row bnet.BnetName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row bnet.BnetName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) bnet.BnetName WITH FRAME sel.
       END.
 
@@ -346,8 +346,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
        SET   lcBrand WHEN gcAllBrand = TRUE  BnetCode WITH FRAME f1.
@@ -365,8 +365,8 @@ BROWSE:
      /* Search by col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        Disp lcBrand With FRAME f2.
 
@@ -385,24 +385,24 @@ BROWSE:
 
      /* Update Memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS on ENDkey undo, NEXT LOOP:
-        {uright2.i}.
+        {Syst/uright2.i}.
 
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. 
-        RUN ufkey. ufkey = true.
+        RUN Syst/ufkey.p. ufkey = true.
         run local-find-this(true).
         UPDATE bnet.memo WITH FRAME f4.
         HIDE FRAME f4 NO-PAUSE.
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}                           
+        {Syst/uright2.i}                           
         must-add = true.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 
@@ -453,8 +453,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY bnet.BnetCode.
 
        RUN local-update-record.                                  

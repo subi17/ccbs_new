@@ -27,10 +27,10 @@ pcIDArray = get_array(param_toplevel_id, "0").
 resp_array = add_array(response_toplevel_id, "").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{smsmessage.i}
+{Func/smsmessage.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    

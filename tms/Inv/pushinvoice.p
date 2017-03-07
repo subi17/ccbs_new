@@ -8,11 +8,11 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{cparam2.i}
-{log.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/cparam2.i}
+{Func/log.i}
 
 DEF INPUT PARAMETER iiMSRequest AS INT  NO-UNDO.
 

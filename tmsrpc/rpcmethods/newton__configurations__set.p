@@ -13,8 +13,8 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{tmsparam4.i}
-{tmsconst.i}
+{Func/tmsparam4.i}
+{Syst/tmsconst.i}
 
 DEF VAR custcat_struct AS CHAR NO-UNDO. 
 DEF VAR top_array AS CHARACTER NO-UNDO. 
@@ -97,11 +97,11 @@ ELSE DO:
    IF liMaintB = ? THEN RETURN appl_err("Missing system parameter"). 
 
    /* parameter validation ends*/
-   {commpaa.i}
+   {Syst/commpaa.i}
    katun = "Newton".
    gcBrand = "1".
-   {provmaint.i}
-   {timestamp.i}
+   {Mc/provmaint.i}
+   {Func/timestamp.i}
 
    IF liValue NE liMaintB THEN DO:
      

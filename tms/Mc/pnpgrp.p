@@ -11,22 +11,22 @@
   ------------------------------------------------------ */
 
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'custpnpgroup'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'custpnpgroup'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustPNPGroup AS HANDLE NO-UNDO.
    lhCustPNPGroup = BUFFER CustPNPGroup:HANDLE.
    RUN StarEventInitialize(lhCustPNPGroup).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCustPNPGroup).
+      RUN Mc/eventview2.p(lhCustPNPGroup).
    END.
 
 END.
@@ -77,7 +77,7 @@ WITH  OVERLAY ROW 4 centered
    fr-header WITH side-labels 1 columns
    FRAME lis.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST CustPNPGroup
@@ -104,7 +104,7 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* CustPNPGroup -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new:
@@ -187,12 +187,12 @@ BROWSE:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.        RUN ufkey.p.
+        ehto = 3 ufkey = FALSE.        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW CustPNPGroup.PnpGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CustPNPGroup.PnpGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CustPNPGroup.PnpGroup WITH FRAME sel.
       END.
 
@@ -407,8 +407,8 @@ BROWSE:
         exclusive-lock.
 
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN ufkey.
-        cfc = "lis". RUN ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustPNPGroup).
         RUN LOCAL-UPDATE.
@@ -454,9 +454,9 @@ BROWSE:
            next.
         end.
 
-       RUN pnplist.p(pnpgroup.pnpSeq). 
+       RUN Mc/pnplist.p(pnpgroup.pnpSeq). 
        ufkey = true.
-       run ufkey.
+       RUN Syst/ufkey.p.
        PAUSE 0.
      END.
 
@@ -474,7 +474,7 @@ PROCEDURE local-update:
     repeat WITH FRAME lis ON ENDKEY UNDO l-update, LEAVE l-update:
        PAUSE 0 no-message.
        CLEAR FRAME lis no-pause.
-       ehto = 9. RUN ufkey.
+       ehto = 9. RUN Syst/ufkey.p.
        DISPLAY
          CustPNPGroup.PnpGroup
          CustPNPGroup.PnPPrior

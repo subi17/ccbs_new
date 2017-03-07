@@ -1,6 +1,6 @@
 echo "TM Counters SCREENs"
 sleep 2
-screen 1 xfear -screen tmqueue_analysis tms.pf
-screen 2 xfear -screen tmqueue_analysis tms.pf
-screen 3 xfear -screen tmqueue_analysis tms.pf
-screen 4 xfear -screen tmqueue_analysis tms.pf
+screen 1 xfear -screen Rate/tmqueue_analysis tms.pf
+screen 2 xfear -screen Rate/tmqueue_analysis tms.pf
+screen 3 xfear -screen Rate/tmqueue_analysis tms.pf
+screen 4 xfear -screen Rate/tmqueue_analysis tms.pf

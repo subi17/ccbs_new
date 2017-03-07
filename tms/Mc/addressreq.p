@@ -7,10 +7,10 @@
   Changed . ....: 
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
-{commali.i}
-{msreqfunc.i}
-{eventval.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fcustdata.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -23,7 +23,7 @@ IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 6 THEN RETURN "ERROR".
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER Customer:HANDLE.

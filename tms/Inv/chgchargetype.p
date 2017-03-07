@@ -7,8 +7,8 @@
   CHANGED ......:
   Version ......: yoigo
 ----------------------------------------------------------------------- */
-{msreqfunc.i}
-{fuserright.i}
+{Func/msreqfunc.i}
+{Func/fuserright.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER iiFromStatus AS INTEGER NO-UNDO.
@@ -43,7 +43,7 @@ IF fTokenRights(katun,"CCSUPER") NE "RW" THEN DO:
 END.
 
 ehto = 9.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 liChargeType = MsRequest.ReqIParam2.
 
@@ -61,7 +61,7 @@ REPEAT ON ENDKEY UNDO, LEAVE:
          
       IF KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN h-tmscodes(INPUT "Invoice",      /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "Invoice",      /* TableName */
                               "ChargeType",   /* FieldName */
                               "AccRec",       /* GroupCode */
                         OUTPUT lcCode).
@@ -72,7 +72,7 @@ REPEAT ON ENDKEY UNDO, LEAVE:
          END.
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          NEXT. 
       END.
 

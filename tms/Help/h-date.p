@@ -10,10 +10,10 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{date.i}
-{fctchange.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/date.i}
+{Func/fctchange.i}
 
 def shared var siirto as char.
 
@@ -71,7 +71,7 @@ form
     with scroll 1 4 down  row 4 centered color value(cfc)
     title color value(ctc) " Dates " overlay frame sel.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 MAIN:
 repeat:
 
@@ -119,7 +119,7 @@ print-line:
          ufk = 0 ufk[1] = 0 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -127,7 +127,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row Paiva.Paiva ;(uchoose.i;) no-error with frame sel.
+         choose row Paiva.Paiva {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) Paiva.Paiva with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

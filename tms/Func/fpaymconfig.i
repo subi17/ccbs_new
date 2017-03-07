@@ -3,8 +3,8 @@
    payment accounting rules 
 */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 FUNCTION fGetPaymentAccounts RETURNS LOGIC
    (iiPaymType AS INT,

@@ -1,4 +1,4 @@
-{commali.i}
+{Syst/commali.i}
 
 DEFINE TEMP-TABLE ttDuration NO-UNDO 
    FIELD CallCase     AS CHARACTER

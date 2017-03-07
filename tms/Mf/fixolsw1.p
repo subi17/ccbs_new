@@ -7,14 +7,14 @@
   MODIFIED .....: 23.06.1999 kl DO NOT RETURN, QUIT
                   27.06.1999 kl smaller compiler blocks
                   02.11.1999 kl PARAMETER bDispErrors
-                  01.02.2002 lp change {commpaa.i} --> {commali.i new}
+                  01.02.2002 lp change {Syst/commpaa.i} --> {Syst/commali.i new}
                   07.03.2003 kl MASTER 1.0
 
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commpaa.i new}
-{cparam2.i}
+{Syst/commpaa.i new}
+{Func/cparam2.i}
 
 def var pvmlog        as log no-undo format "Yes/No" init TRUE.
 def var ok            as log no-undo format "Yes/No" init TRUE.
@@ -82,11 +82,11 @@ IF NOT ok THEN DO:
 END.
 
 IF ok THEN DO:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE pvmlog bDispErrors WITH FRAME loki.
 
    ufk = 0. ehto = 3. 
-   RUN ufkey. PAUSE 0.
+   RUN Syst/ufkey.p. PAUSE 0.
 
    message "Are You SURE You want to start reading CDRs into database ?"
    UPDATE ok.

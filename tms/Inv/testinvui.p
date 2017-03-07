@@ -11,7 +11,7 @@
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 DISABLE TRIGGERS FOR LOAD OF SingleFee.
 
-{log.i}
+{Func/log.i}
 fsetLogFileName("/scratch/print/testinv/testinvui_" + 
    STRING(YEAR(TODAY),"9999") + 
    STRING(MONTH(TODAY),"99") +
@@ -22,14 +22,14 @@ fSetLogEntryTypes(fGetValidLogEntryTypes()).
 fSetGlobalLoggingLevel(1).
 fClearLog().
 
-{commali.i}
-{tmsparam2.i}
-{billrund.i NEW}
-{faccper.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Invoice'}
-{finvnum.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Inv/billrund.i NEW}
+{Func/faccper.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Invoice'}
+{Func/finvnum.i}
+{Func/timestamp.i}
 IF lcRight NE "RW" THEN DO:
    MESSAGE " You cannot create invoices ! " VIEW-AS ALERT-BOX.
    RETURN.
@@ -76,7 +76,7 @@ DEF VAR lcBillRun   AS CHAR NO-UNDO.
 
 DEF STREAM sTimeLog.
 
-{tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
+{Func/tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
 
 /* default values from TMSParam */
 ASSIGN
@@ -95,7 +95,7 @@ if not avail Currency OR defcurr = ? OR defcurr = "" THEN DO:
 END.
 
 DEF VAR pHandle   AS handle NO-UNDO.
-RUN lamupers persistent set pHandle.
+RUN Inv/lamupers.p persistent set pHandle.
 
 MESSAGE "Running in Test mode" VIEW-AS ALERT-BOX.
 
@@ -158,11 +158,11 @@ WITH
    title color value (ctc) " INVOICE GROUP DATA " COLOR value(cfc)
    OVERLAY centered ROW 16 FRAME lCustNum.
 
-cfc = "sel". RUN ufcolor. ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-cfc = "lis". RUN ufcolor.
-ehto = 9. RUN ufkey.
+cfc = "lis". RUN Syst/ufcolor.p.
+ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN
 atpvm2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -219,7 +219,7 @@ toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          UPDATE
             InvGroup
             liInvCode
@@ -308,7 +308,7 @@ toimi:
                END.
 
                ELSE IF FRAME-FIELD = "ciperiod" THEN DO:
-                  RUN uperch(INPUT FRAME rajat ciperiod,output i).
+                  RUN Syst/uperch.p(INPUT FRAME rajat ciperiod,output i).
                   IF i > 0 THEN NEXT.
 
                END.
@@ -326,7 +326,7 @@ toimi:
       ASSIGN ufk = 0 ufk[1] = 132 ufk[2] = 0
                      ufk[4] = 0 ufk[5] = 795
                      ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN DO:
          kysy_rajat = TRUE.
          NEXT toimi.
@@ -466,7 +466,7 @@ PUT SCREEN ROW 23 COL 1 FILL(" ",60).
 /* calculate bundle first month fees */
 FOR EACH ttInvCust:
 
-   RUN bundle_first_month_fee.p(atpvm1,
+   RUN Mm/bundle_first_month_fee.p(atpvm1,
                                 atpvm2,
                                 ttInvCust.CustNr,
                                 0,
@@ -484,7 +484,7 @@ FOR EACH ttInvCust:
 
    /* If customer has DSS active then calculate Bundle fee */
    /* based on the DSS total consumption                   */
-   RUN dss_bundle_first_month_fee.p(atpvm1,
+   RUN Mm/dss_bundle_first_month_fee.p(atpvm1,
                                     atpvm2,
                                     ttInvCust.CustNr,
                                     0,
@@ -558,7 +558,7 @@ IF ok AND lQty > 0 THEN DO:
 
     /* create xmls for pdfs */
     IF llCreateXML THEN 
-       RUN invoice_xml_testbill(invDte,
+       RUN Inv/invoice_xml_testbill.p(invDte,
                                 lcBillRun).
 
     MESSAGE lQty 

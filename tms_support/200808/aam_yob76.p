@@ -1,8 +1,8 @@
-{testpaa.i}
+{Syst/testpaa.i}
 gcbrand = "1".
 katun = "YoigoRequest".
-{fcreditreq.i}
-{timestamp.i}
+{Func/fcreditreq.i}
+{Func/timestamp.i}
 
 def var i as int no-undo.
 def var j as int no-undo.

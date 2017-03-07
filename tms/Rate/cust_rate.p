@@ -11,9 +11,9 @@
 
 &GLOBAL-DEFINE CounterHandling TempTable
          
-{commali.i}      
-{rerate_define.i}
-{premiumnumber.i}
+{Syst/commali.i}      
+{Rate/rerate_define.i}
+{Rate/premiumnumber.i}
 
 DEF INPUT PARAMETER iiCustNum  AS INT NO-UNDO.
 DEF INPUT PARAMETER idtFrom    AS DATE NO-UNDO.
@@ -91,6 +91,6 @@ REPEAT:
                MobCDR.datest  <= cdate2    
       TRANSACTION WITH FRAME MobCDR: 
        
-         {man_rate2.i}
+         {Rate/man_rate2.i}
        
        

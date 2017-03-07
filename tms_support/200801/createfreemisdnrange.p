@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 {/apps/snet/200801/goldnumber.i}
 
 DEFINE INPUT PARAMETER cBeginCLI AS CHARACTER NO-UNDO. 

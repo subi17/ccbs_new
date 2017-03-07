@@ -1,10 +1,10 @@
 /* conv_invrowcounter.p   05.11.10/aam
 */
 
-{commali.i}
-{callquery.i}
-{date.i}
-{istc.i}
+{Syst/commali.i}
+{Func/callquery.i}
+{Func/date.i}
+{Func/istc.i}
 
 DEF INPUT  PARAMETER iiInvSeq  AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents  AS INT  NO-UNDO.

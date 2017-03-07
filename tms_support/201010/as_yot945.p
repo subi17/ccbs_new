@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{date.i}
+{Func/date.i}
 
 find daycampaign where
      daycampaign.dcevent = "SMSFREEOCT10" no-lock.
@@ -77,7 +77,7 @@ do trans:
           DCCLI.CreateFees   = ( LOOKUP(DayCampaign.DCType,"3,5") > 0 AND
                                 DayCampaign.TermFeeCalc > 0).
    
-   run cli_rate.p (mobsub.cli,
+   RUN Rate/cli_rate.p (mobsub.cli,
                    10/1/10,
                    10/31/10,
                    true). 

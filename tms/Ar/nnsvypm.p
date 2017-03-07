@@ -8,6 +8,6 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-run nnsvyp (FALSE). /* false = not failed = valid */
+RUN Ar/nnsvyp.p (FALSE). /* false = not failed = valid */

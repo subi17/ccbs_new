@@ -1,5 +1,5 @@
-{testpaa.i}
-{timestamp.i}
+{Syst/testpaa.i}
+{Func/timestamp.i}
 
 def var limsseq as int no-undo.
 def var i as int no-undo.
@@ -56,7 +56,7 @@ for each breq no-lock where
       ldreq = ldreq + prepaidrequest.topupamt / 100.      
    end.
 
-   RUN balancequery(MobSub.CLI).
+   RUN Gwy/balancequery.p(MobSub.CLI).
    ldBal = INT(RETURN-VALUE) / 100.
    
 

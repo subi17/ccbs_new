@@ -13,13 +13,13 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1".
-{eventval.i}
-{create_eventlog.i}
-{timestamp.i}
-{scheduled_dumps.i}
+{Syst/eventval.i}
+{Func/create_eventlog.i}
+{Func/timestamp.i}
+{Func/scheduled_dumps.i}
 
 
 DEF VAR ldeDumpTime AS DECIMAL NO-UNDO. 

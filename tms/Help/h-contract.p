@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 
@@ -40,7 +40,7 @@ form /* SEEK Code */
     with row 4 col 2 title color value(ctc) " FIND CONTRACT "
     color value(cfc) no-labels overlay frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 MAIN:
 repeat:
@@ -89,7 +89,7 @@ print-line:
          ufk[1] = 28 ufk[5] = 11
          ufk[6] = 0  ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -97,7 +97,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row Contract.FromDate ;(uchoose.i;) no-error with frame sel.
+         choose row Contract.FromDate {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) Contract.FromDate with frame sel.
 
          nap = keylabel(lastkey).
@@ -205,8 +205,8 @@ BROWSE:
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*ldtDate*/
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set ldtDate with frame hayr.
            hide frame hayr no-pause.
            if ldtDate ENTERED then do:

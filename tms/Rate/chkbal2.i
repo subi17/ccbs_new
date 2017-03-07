@@ -18,7 +18,7 @@ DEF VAR liDefMobCust AS INT  NO-UNDO.
 ASSIGN liDefMobCust = fCParamI("DefCreditLimitMCust")
        liDefCLCust  = fCParamI("DefCreditLimitCust").
 
-{fgettxt.i}
+{Func/fgettxt.i}
 
 /* get alarm message from information texts */
 FUNCTION fAlarmMessage RETURNS LOGICAL

@@ -7,13 +7,13 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{fcustbal.i}
-{timestamp.i}
-{fapvat.i}
-{fvoucher.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fcustbal.i}
+{Func/timestamp.i}
+{Func/fapvat.i}
+{Func/fvoucher.i}
+{Syst/eventval.i}
 
 DEF INPUT  PARAMETER iiCustNum   AS INT  NO-UNDO.
 DEF INPUT  PARAMETER idAmount    AS DEC  NO-UNDO.
@@ -25,7 +25,7 @@ DEF OUTPUT PARAMETER oiVoucher   AS INT  NO-UNDO.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPayment AS HANDLE NO-UNDO.
    lhPayment = BUFFER Payment:HANDLE.

@@ -8,25 +8,25 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{femailinvoice.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/femailinvoice.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER Customer:HANDLE.
    RUN StarEventInitialize(lhCustomer).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCustomer).
+      RUN Mc/eventview2.p(lhCustomer).
    END.
 
 END.
@@ -79,13 +79,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
                                        CustContact.CustType = 5)
       ufk[8]= 8 
       ehto = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
             
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          
          PROMPT Customer.Email
                 Customer.SMSNumber
@@ -251,7 +251,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       END.
    END.
    ELSE IF toimi = 5 AND ufk[5] > 0 THEN DO:
-      RUN custcontact.p(customer.custnum, 5).
+      RUN Mc/custcontact.p(customer.custnum, 5).
    END.
    
    ELSE IF toimi = 8 THEN LEAVE.

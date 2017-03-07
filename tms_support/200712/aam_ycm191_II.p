@@ -1,9 +1,9 @@
-{testpaa.i}
-{cparam.i2}
-{timestamp.i}
-{fvoucher.i}
-{eventval.i}
-{fcustbal.i}
+{Syst/testpaa.i}
+{Func/cparam.i2}
+{Func/timestamp.i}
+{Func/fvoucher.i}
+{Syst/eventval.i}
+{Func/fcustbal.i}
 
 DEF VAR liCount         AS INT  NO-UNDO.
 DEF VAR liVouch         AS INT  NO-UNDO.

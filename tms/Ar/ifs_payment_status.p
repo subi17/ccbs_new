@@ -8,16 +8,16 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER Invoice:HANDLE.
@@ -376,7 +376,7 @@ PROCEDURE pUpdateStatus:
 
       IF Invoice.PaidAmt NE idPaidAmt THEN DO:
 
-         RUN makepaym (BUFFER Invoice,
+         RUN Ar/makepaym.p (BUFFER Invoice,
                        idPaidAmt - Invoice.PaidAmt,
                        TODAY,
                        liBankAcc,

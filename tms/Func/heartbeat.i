@@ -1,7 +1,7 @@
-{commali.i}
-{timestamp.i}
-{date.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/date.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE lcOperator  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcServer    AS CHARACTER NO-UNDO.

@@ -171,14 +171,14 @@ END.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Dextra".
 gcBrand = "1".
-{eventval.i}
-{tmsconst.i}
-{dextra.i}
-{eventval.i}
-{create_eventlog.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/dextra.i}
+{Syst/eventval.i}
+{Func/create_eventlog.i}
 
 FIND Order NO-LOCK WHERE
      Order.Brand = gcBrand AND
@@ -190,7 +190,7 @@ END.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
    
 IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
@@ -331,8 +331,8 @@ FIND CURRENT OrderDelivery NO-LOCK.
 IF LOOKUP(STRING(OrderDelivery.LOStatusId),
    {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN DO:
    IF Order.StatusCode = {&ORDER_STATUS_RESIGNATION} THEN
-      RUN closeorder.p(Order.OrderId,TRUE).
-   ELSE RUN cancelorder.p(Order.OrderId,TRUE).
+      RUN Mc/closeorder.p(Order.OrderId,TRUE).
+   ELSE RUN Mc/cancelorder.p(Order.OrderId,TRUE).
 END.
 
 add_int(response_toplevel_id, "", liResult).

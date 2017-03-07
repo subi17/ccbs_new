@@ -16,8 +16,8 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAM lcMacros  AS C NO-UNDO.
 

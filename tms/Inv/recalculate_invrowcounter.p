@@ -6,9 +6,9 @@
    - create entries to TMQueue from cdrs
 */
 
-{commali.i}
-{callquery.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/callquery.i}
+{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiInvCust   AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiMsSeq     AS INT  NO-UNDO.

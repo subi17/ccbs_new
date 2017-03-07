@@ -1,9 +1,9 @@
     
-{commpaa.i}
-{timestamp.i}
-{xmlfunction.i}
-{heartbeat.i}
-{fgettxt.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
+{Func/xmlfunction.i}
+{Func/heartbeat.i}
+{Func/fgettxt.i}
 
 gcBrand = "1".
 
@@ -194,11 +194,11 @@ PROCEDURE pIvrProcess:
 
    DEFINE BUFFER bufPP FOR PrePaidRequest.
 
-   RUN topupcamp(piMsSeq, OUTPUT liPPRequest).
+   RUN Mm/topupcamp.p(piMsSeq, OUTPUT liPPRequest).
 
    IF liPPRequest NE 0 THEN DO:
 
-      RUN pp_platform(gcBrand,liPPRequest).
+      RUN Gwy/pp_platform.p(gcBrand,liPPRequest).
 
       lcResponse = RETURN-VALUE.
       

@@ -8,22 +8,22 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'paymvouch'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'paymvouch'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPaymVouch AS HANDLE NO-UNDO.
    lhPaymVouch = BUFFER PaymVouch:HANDLE.
    RUN StarEventInitialize(lhPaymVouch).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhPaymVouch).
+      RUN Mc/eventview2.p(lhPaymVouch).
    END.
 END.
 
@@ -124,7 +124,7 @@ FOR EACH Brand NO-LOCK WHERE
                                     ELSE 0.
 END.             
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code of Section,By Name of Section,By 3, By 4".
@@ -202,12 +202,12 @@ BROWSE:
         ufk[6]= 0
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttPaymVouch.Brand ;(uchoose.i;) NO-ERROR
+        CHOOSE ROW ttPaymVouch.Brand {Syst/uchoose.i} NO-ERROR
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttPaymVouch.Brand WITH FRAME sel.
       END.
@@ -341,8 +341,8 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttPaymVouch.Brand.
 
        liOldVoucher = ttPaymVouch.Voucher.
