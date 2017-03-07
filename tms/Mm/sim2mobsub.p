@@ -7,9 +7,9 @@
   CHANGED ......: 
   VERSION ......: TF
   ---------------------------------------------------------------------- */
-{commali.i} 
-{func.i}
-{fgettxt.i}
+{Syst/commali.i} 
+{Func/func.p}
+{Func/fgettxt.i}
 
 DEF INPUT  PARAMETER   msseq  AS INT . 
 
@@ -27,7 +27,7 @@ DEF VAR liPortingTime1      AS INT            NO-UNDO init 8.
 DEF VAR liPortingTime2      AS INT            NO-UNDO init 17.
 
 
-{tmsparam.i SimStatusContSig return}.  sim-in-cont = TMSParam.IntVal.
+{Func/tmsparam.i SimStatusContSig return}.  sim-in-cont = TMSParam.IntVal.
 
 FIND mobsub NO-LOCK  WHERE 
      mobsub.msseq = msseq NO-ERROR.
@@ -110,7 +110,7 @@ REPEAT WITH FRAME lis:
    action:
    REPEAT WITH FRAME lis:
       ASSIGN ufk = 0 ufk[1] = 0 ufk[8] = 8 ufk[5] = 1967  ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN LEAVE action.
       IF toimi = 8 THEN DO:
          LEAVE loop.
@@ -342,7 +342,7 @@ END.
 HIDE FRAME stat.
 
     
-{connect-tables.i}    
+{Mm/connect-tables.i}    
 
   
 

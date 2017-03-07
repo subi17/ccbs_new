@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{msisdn.i}
-{date.i}
+{Func/msisdn.i}
+{Func/date.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 

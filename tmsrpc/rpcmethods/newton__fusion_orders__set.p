@@ -9,7 +9,7 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{orderfusion.i}
+{Mc/orderfusion.i}
 
 DEF VAR lcTopStruct        AS CHAR NO-UNDO. 
 DEF VAR lcTopStructFields  AS CHAR NO-UNDO. 
@@ -35,10 +35,10 @@ ASSIGN
       WHEN LOOKUP("update_ts", lcTopStructFields) > 0.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = pcUserName.
 gcbrand = "1".
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 IF TRIM(pcUserName) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
@@ -49,7 +49,7 @@ IF pcUpdateTS > "" AND
    STRING(pdeUpdateTS) NE pcUpdateTS THEN RETURN
    appl_err({&MSG_RECORD_CHANGED}).
 
-RUN fusion_order_cancel.p(piOrderId).
+RUN Mc/fusion_order_cancel.p(piOrderId).
 IF NOT RETURN-VALUE BEGINS "OK:" THEN 
    RETURN appl_err(RETURN-VALUE).
 

@@ -8,13 +8,13 @@
 ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{customer_address.i}
-{funcrunprocess_update.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/customer_address.i}
+{Syst/funcrunprocess_update.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER idaInvDate       AS DATE NO-UNDO.
 DEF INPUT  PARAMETER iiInvType        AS INT  NO-UNDO.

@@ -8,7 +8,7 @@
  */
 
 {header_get.i}
-{log.i}
+{Func/log.i}
       
 DEFINE VARIABLE gcStructMnpMessage AS CHARACTER NO-UNDO. 
 

@@ -9,8 +9,8 @@ def var gcBrand AS CHARACTER NO-UNDO initial "1".
 
 def stream slog.
 
-{tmsconst.i}
-{timestamp.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 pause 0.
 update

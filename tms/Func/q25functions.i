@@ -9,17 +9,17 @@
   CHANGED ......: 
   ------------------------------------------------------------------------*/
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fgettxt.i}
-{date.i}
-{smsmessage.i}
-{aes_encrypt.i}
-{fduedate.i}
-{ftransdir.i}
-{fmakemsreq.i}
-{coinv.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fgettxt.i}
+{Func/date.i}
+{Func/smsmessage.i}
+{Func/aes_encrypt.i}
+{Func/fduedate.i}
+{Func/ftransdir.i}
+{Func/fmakemsreq.i}
+{Func/coinv.i}
 
 DEF VAR lcTestStartDay        AS CHAR NO-UNDO.
 DEF VAR lcTestEndDay          AS CHAR NO-UNDO.

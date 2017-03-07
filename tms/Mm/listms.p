@@ -12,9 +12,9 @@
   VERSION ......: M15
 ---------------------------------------------------------------------- */
 
-{commali.i} 
+{Syst/commali.i} 
 
-{utumaa.i new}
+{Syst/utumaa.i new}
 
 ASSIGN tuni1 = "listms"
        tuni2 = "".
@@ -79,7 +79,7 @@ WITH
    WIDTH 116 NO-BOX NO-LABEL FRAME hdr.
 
 tila = true.
-{utuloste.i return}
+{Syst/utuloste.i return}
 
 /* reformat the MSISDN NO. */
 
@@ -156,6 +156,6 @@ PUT STREAM tul UNFORMATTED chr(12).
 
 /* Close the printer stream */
 tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 PAUSE 0.

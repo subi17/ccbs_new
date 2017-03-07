@@ -1,6 +1,6 @@
 echo "MNP HANDLER SCREENS"
 sleep 2
-screen 1 xfear -screen mnpresp -clientlog /scratch/log/mnp/mnpresp.log
-screen 2 xfear -screen mnpanalyse -clientlog /scratch/log/mnp/mnpanalyse.log
-screen 3 xfear -screen mnperr_resend -clientlog /scratch/log/mnp/mnperr_resend.log
-screen 4 xfear -screen mnpsendnc -clientlog /scratch/log/mnp/mnpsendnc.log
+screen 1 xfear -screen Mnp/mnpresp -clientlog /scratch/log/mnp/mnpresp.log
+screen 2 xfear -screen Mnp/mnpanalyse -clientlog /scratch/log/mnp/mnpanalyse.log
+screen 3 xfear -screen Mnp/mnperr_resend -clientlog /scratch/log/mnp/mnperr_resend.log
+screen 4 xfear -screen Mnp/mnpsendnc -clientlog /scratch/log/mnp/mnpsendnc.log

@@ -10,10 +10,10 @@
 ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{transname.i}
-{cparam2.i}
-{ftransdir.i}
+{Syst/commali.i}
+{Func/transname.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
 
 DEF INPUT  PARAMETER icTaxZone   AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icCustID    AS CHAR NO-UNDO.

@@ -3,13 +3,13 @@
   TASK .........: Reads and process deny billing files from cron 
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{cparam2.i}
-{eventlog.i}
-{ftransdir.i}
-{eventval.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/ftransdir.i}
+{Syst/eventval.i}
 
 DEFINE VARIABLE lcIncDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcProcDir AS CHARACTER NO-UNDO. 
@@ -50,7 +50,7 @@ REPEAT:
    liRead = 0.
    liErrors = 0. 
 
-   RUN denybilling (lcInputFile,
+   RUN Inv/denybilling.p (lcInputFile,
                     lcLogFile,
                     OUTPUT liRead,
                     OUTPUT liErrors).

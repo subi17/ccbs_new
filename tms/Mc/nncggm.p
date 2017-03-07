@@ -16,11 +16,11 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{eventval.i}
-{fecgtask.i}
-{timestamp.i}
+{Syst/eventval.i}
+{Func/fecgtask.i}
+{Func/timestamp.i}
 
 DEF BUFFER rcust FOR Customer.
 DEF BUFFER new-cgmember FOR CGMember.
@@ -28,7 +28,7 @@ DEF BUFFER new-cgmember FOR CGMember.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCGMember AS HANDLE NO-UNDO.
    lhCGMember = BUFFER CGMember:HANDLE.
@@ -40,7 +40,7 @@ IF llDoEvent THEN DO:
 
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCGMember).
+      RUN Mc/eventview2.p(lhCGMember).
    END.
 
 END.
@@ -329,7 +329,7 @@ with frame rajat.
 
 rajat:
 repeat WITH FRAME rajat:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
 IF updatemode  THEN
    UPDATE
@@ -499,7 +499,7 @@ toimi:
       ASSIGN
       ehto = 0 ufk = 0
       ufk[1] = 7 ufk[5] = 15 ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN DO:
           updatemode = TRUE.
           NEXT rajat.

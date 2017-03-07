@@ -1,9 +1,9 @@
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 def stream sout.
 output stream sout to /apps/snet/200906/as_hlp2510.log append.
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
-{msreqfunc.i}
+{Func/msreqfunc.i}
 FOR EACH msrequest where
    msrequest.brand = "1" and
    msrequest.reqtype = 35 and

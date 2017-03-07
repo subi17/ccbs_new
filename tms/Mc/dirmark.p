@@ -9,7 +9,7 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable dmarketing
 
-{commali.i}
+{Syst/commali.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -44,7 +44,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     "Direct marketing code ..:"  DMarketing.DirMark     NO-LABEL SKIP
@@ -71,7 +71,7 @@ form /* seek Code  BY DirMarkName */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND NAME "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = " By Code , By Name , By 3 , By 4" .
@@ -98,12 +98,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DMarketing  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR DMarketing.DirMark.
@@ -178,17 +178,17 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 30 ufk[3]= 0 ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"5,6"'}
-        RUN ufkey.p.
+        {Syst/uright1.i '"5,6"'}
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DMarketing.DirMark ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DMarketing.DirMark {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DMarketing.DirMark WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW DMarketing.DirMarkName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DMarketing.DirMarkName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DMarketing.DirMarkName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -316,9 +316,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        DirMark = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f1.
        UPDATE lcBrand WHEN gcAllBrand = TRUE
               DirMark WITH FRAME f1.
@@ -338,9 +338,9 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        DirMarkName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         Disp lcBrand With FRAME f2.
        UPDATE  lcBrand WHEN gcAllBrand = TRUE
                DirMarkName WITH FRAME f2.
@@ -358,13 +358,13 @@ BROWSE:
      END. /* Search-2 */
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -412,12 +412,12 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSACTION:
-       {uright2.i} 
+       {Syst/uright2.i} 
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY DMarketing.DirMark.
        RUN local-update-record.

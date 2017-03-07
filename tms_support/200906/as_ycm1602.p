@@ -1,7 +1,7 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
 
-{barrfunc.i}
+{Func/barrfunc.i}
 
 FUNCTION fCheckStatus2 RETURNS CHARACTER
 (INPUT iiMsSeq AS INTEGER,
@@ -112,7 +112,7 @@ repeat:
    if lcUser ne "CreSub / CreSub" then next.
    
    
-   RUN barrengine (Mobsub.MsSeq,
+   RUN Mm/barrengine.p (Mobsub.MsSeq,
                     "UN" + lcstat,     /* package for unbarring */
                       "5",                /* source  */
                       katun,             /* creator */

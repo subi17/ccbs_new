@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{fmakemsreq.i}
+{Func/fmakemsreq.i}
 
 def stream sin.
 input stream sin from /apps/snet/200901/as_yts1248.log.

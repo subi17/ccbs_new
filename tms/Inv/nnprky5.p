@@ -8,10 +8,10 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i "new"}
-{edefine.i "new"}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i "new"}
+{Inv/edefine.i "new"}
 
 assign tuni1 = "nnpura5"
        tuni2 = "".
@@ -73,14 +73,14 @@ toimi:
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       READKEY.
       nap = keylabel(LASTKEY).
 
       if lookup(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          UPDATE CustNum1
              CustNum2 validate(input CustNum2 >= input CustNum1, "Invalid order !")
                 pvm1
@@ -111,9 +111,9 @@ toimi:
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
-RUN umakro (TRUE).
+RUN Syst/umakro.p (TRUE).
 
 message "Printing, ESC = break".
 
@@ -123,7 +123,7 @@ RUN nnpura5.p(INPUT CustNum1,input CustNum2,
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

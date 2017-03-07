@@ -10,8 +10,8 @@
 DEF VAR liNumbOfDeleted AS INT NO-UNDO. 
 DEF VAR ldStartTime AS DEC NO-UNDO.
 DEF VAR ldEndTime AS DEC NO-UNDO.
-{tmsconst.i}
-{timestamp.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 ldStartTime = fHMS2TS(today - 2, "00:00:00").
 ldEndTime   = fHMS2TS(today - 1, "00:00:00") .

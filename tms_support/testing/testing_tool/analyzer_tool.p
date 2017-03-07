@@ -7,15 +7,15 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "Qvantel".
-{date.i}
-{timestamp.i}
-{tmsconst.i}
-{cparam2.i}
-{ftransdir.i}
-{email.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/email.i}
 
 DEFINE VARIABLE lcOutPutDir        AS CHAR NO-UNDO.
 DEFINE VARIABLE lcDoneDir          AS CHAR NO-UNDO.

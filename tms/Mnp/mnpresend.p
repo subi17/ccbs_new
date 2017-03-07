@@ -1,6 +1,6 @@
-{commali.i}
-{eventval.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/orderfunc.i}
 DEFINE INPUT PARAMETER piOrderId AS INTEGER NO-UNDO.
 
 DEFINE VARIABLE lcStatus AS CHARACTER NO-UNDO.
@@ -32,7 +32,7 @@ FIND CURRENT Order EXCLUSIVE-LOCK.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER Order:HANDLE.

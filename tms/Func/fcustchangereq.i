@@ -7,8 +7,8 @@
 
 &GLOBAL-DEFINE FCUSTCHANGEREQ_I YES
 
-{commali.i}
-{fcreatereq.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
 
 /* changes to subscription's customer data */
 FUNCTION fMSCustChangeRequest RETURNS INTEGER

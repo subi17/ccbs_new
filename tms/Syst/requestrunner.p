@@ -7,15 +7,15 @@
   Version ......: TMS
   --------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "request".
    
-{heartbeat.i}
-{timestamp.i}
-{log.i}
-{requestrunner.i}
+{Func/heartbeat.i}
+{Func/timestamp.i}
+{Func/log.i}
+{Syst/requestrunner.i}
 
 DEF VAR lcUser     AS CHAR NO-UNDO.
 DEF VAR liErrors   AS INT  NO-UNDO.
@@ -97,7 +97,7 @@ IF liQueue = 0 THEN DO:
       gcHelpParam = "choose"
       si-recid    = 0.
       
-   RUN requestqueue.
+   RUN Syst/requestqueue.p.
    
    IF si-recid > 0 THEN DO:
       FIND RequestQueue WHERE RECID(RequestQueue) = si-recid

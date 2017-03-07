@@ -5,14 +5,14 @@
   TEKIJÄ .......: pt
   LUONTIPVM ....: 27-12-98
   MUUTOSPVM ....: 11-11-02 jr Eventlog
-                  18.03.03 tk run memo
+                  18.03.03 tk RUN Mc/memo.p
                   17.09.03/aam brand
                   06.02.04 jp custnum for memo
   VERSIO .......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER Salesman LIKE Salesman.Salesman NO-UNDO.
 
@@ -42,7 +42,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSMGMember AS HANDLE NO-UNDO.
    lhSMGMember = BUFFER SMGMember:HANDLE.
@@ -50,7 +50,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhSMGMember)).
+      RUN Mc/eventview2.p(lhSMGMember)).
    END.
 END.
 
@@ -102,7 +102,7 @@ FIND Salesman where
      Salesman.Brand    = gcBrand AND
      Salesman.Salesman = Salesman no-lock.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST SMGMember where 
@@ -131,7 +131,7 @@ add-group:
        repeat TRANS ON ENDKEY UNDO add-group, LEAVE add-group.
           ASSIGN ufkey = TRUE ufk = 0 ehto = 0
           ufk[1] = 512 ufk[2] = 514 ufk[3] = 517 ufk[8] = 8.
-          RUN ufkey.
+          RUN Syst/ufkey.p.
 
           IF toimi = 8 THEN LEAVE add-group.
           IF toimi = 1 THEN
@@ -139,7 +139,7 @@ add-single:
           repeat WITH FRAME lis ON ENDKEY UNDO add-group,
                             NEXT add-group:
              PAUSE 0.
-             ehto = 9. RUN ufkey.
+             ehto = 9. RUN Syst/ufkey.p.
              CLEAR FRAME lis no-pause.
              PROMPT-FOR SMGMember.SmGroup
              validate(input frame lis SMGMember.SmGroup = "" OR
@@ -185,7 +185,7 @@ add-single:
           END. /* toimi = 1: add a single group */
 
           ELSE IF toimi = 2 THEN DO:
-             RUN nnsggb(Salesman.Salesman).
+             RUN Mc/nnsggb.p(Salesman.Salesman).
              LEAVE add-group.
           END.
 
@@ -318,16 +318,16 @@ SELAUS:
         ufk[1]= 35 ufk[2]= 0 ufk[3]= 0 ufk[4]= 519
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 528 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-        CHOOSE ROW SMGMember.SmGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW SMGMember.SmGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) SMGMember.SmGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-        CHOOSE ROW SMGroup.SGName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW SMGroup.SGName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) SMGroup.SGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -476,9 +476,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Salesman = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Salesman WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if Salesman <> "" THEN DO:
@@ -501,7 +501,7 @@ SELAUS:
 
      else if lookup(nap,"4,f4") > 0 THEN DO:  /* other members */
         FIND SMGMember where recid(SMGMember) = rtab[FRAME-LINE] no-lock.
-        RUN nnsgme1(SMGMember.SmGroup).
+        RUN Mc/nnsgme1.p(SMGMember.SmGroup).
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -572,7 +572,7 @@ SELAUS:
      else if lookup(nap,"7,f7") > 0 THEN DO:  /* memo */
         FIND SMGMember where recid(SMGMember) = rtab[FRAME-LINE] no-lock.
         FIND SMGroup of SMGMember no-lock.
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "SMGroup",
                  INPUT STRING(SMGroup.SMGroup),
                  INPUT "Salesman group").

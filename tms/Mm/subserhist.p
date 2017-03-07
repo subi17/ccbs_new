@@ -8,18 +8,18 @@
   Version ......: M15
  ---------------------------------------------------------------------- */
 
-{commali.i}
-{sername.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SubSer'}
-{eventval.i}
-{msisdn.i}
+{Syst/commali.i}
+{Func/sername.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SubSer'}
+{Syst/eventval.i}
+{Func/msisdn.i}
 
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSubSer AS HANDLE NO-UNDO.
    lhSubSer = BUFFER SubSer:HANDLE.
@@ -30,7 +30,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhFixedFee).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhSubSer).
+      RUN Mc/eventview2.p(lhSubSer).
    END.
 
 END.
@@ -126,12 +126,12 @@ form /* seek Subscriber's Service  BY ServPac */
 
 FIND MobSub WHERE MobSub.MsSeq = MsSeq NO-LOCK.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Service,By ServPac,By 3, By 4".
 
-{tmsparam.i MobSubDefPack return}. defprof = TMSParam.CharVal.
+{Func/tmsparam.i MobSubDefPack return}. defprof = TMSParam.CharVal.
 
 
 RUN local-find-first.
@@ -208,16 +208,16 @@ REPEAT WITH FRAME sel:
         ufk[7]= 0 ufk[8]= 8 
         ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SubSer.ServCom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SubSer.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SubSer.ServCom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SubSer.ServPac ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SubSer.ServPac {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SubSer.ServPac WITH FRAME sel.
       END.
 
@@ -344,8 +344,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 2 BUT ORDER IS STILL 1 !!!! */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET ServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -368,8 +368,8 @@ REPEAT WITH FRAME sel:
      /* Search BY col 1 BUT ORDER IS 2 !!!! */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET ServPac WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -397,7 +397,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY SubSer.ServCom.
 
        RUN local-UPDATE-record.                                  

@@ -1,10 +1,10 @@
-{commpaa.i} 
+{Syst/commpaa.i} 
 katun = "anttis".
 gcBrand = "1".
-{msreqfunc.i}
-{daycampaign.i}
-{eventval.i}
-{fmakeservlimit.i}
+{Func/msreqfunc.i}
+{Rate/daycampaign.i}
+{Syst/eventval.i}
+{Func/fmakeservlimit.i}
 
 def buffer m for msrequest.
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
@@ -65,7 +65,7 @@ FOR EACH msrequest where
       ldCoefficient = 1 - ((liDaysPassed + 1) / 547).
       IF ldCoefficient < 0 THEN ldCoefficient = 0.
 
-      RUN creasfee(MsOwner.CustNum,
+      RUN Mc/creasfee.p(MsOwner.CustNum,
                     MsRequest.MsSeq,
                     ldtActDate,
                     "MobSub",

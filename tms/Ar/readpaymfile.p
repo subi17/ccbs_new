@@ -12,17 +12,17 @@ SESSION:NUMERIC-FORMAT = "EUROPEAN".
 
 &GLOBAL-DEFINE AllIncludes YES
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{finvpayment.i}
-{finvbal.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/finvpayment.i}
+{Func/finvbal.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 
@@ -194,7 +194,7 @@ REPEAT:
 
    liDone = liDone + 1.
 
-   RUN createpaym (Invoice.CustNum,
+   RUN Ar/createpaym.p (Invoice.CustNum,
                    Invoice.InvNum,
                    "",
                    ldtAccDate,

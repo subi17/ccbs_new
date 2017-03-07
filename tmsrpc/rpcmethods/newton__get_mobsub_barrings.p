@@ -15,12 +15,12 @@
             service_es;string;Spanish service name
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 katun    = "NewtonAd".
 gcBrand  = "1".
-{tmsconst.i}
-{barrfunc.i}
-{transname.i}
+{Syst/tmsconst.i}
+{Func/barrfunc.i}
+{Func/transname.i}
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
 

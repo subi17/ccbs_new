@@ -7,9 +7,9 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
+{Syst/tmsconst.i}
 {Func/upsellcount.i}
 {Mm/active_bundle.i}
 {Mm/fbundle.i}

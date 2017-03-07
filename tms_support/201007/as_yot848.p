@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
 
-{date.i}
+{Func/date.i}
 
 find mnpprocess where
      mnpprocess.portrequest = "00400511100709113207078" and

@@ -1,12 +1,12 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
-{timestamp.i}
-{eventval.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER Invoice:HANDLE.
@@ -56,7 +56,7 @@ for each order no-lock use-index stamp where
         string(order.mnpstatus > 0,"mnp/new")
         binvoice.invdate.
 
-   RUN createcustomer(Order.OrderId, 
+   RUN Mm/createcustomer.p(Order.OrderId, 
                       1,
                       FALSE,
                       OUTPUT liCashCust).

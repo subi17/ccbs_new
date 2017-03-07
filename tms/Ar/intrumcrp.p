@@ -8,9 +8,9 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i}
-{intrumcr.i}
+{Syst/commali.i}
+{Syst/utumaa.i}
+{Ar/intrumcr.i}
 
 DEF INPUT PARAMETER TABLE FOR ttError.
 
@@ -62,7 +62,7 @@ FUNCTION fChkPage RETURNS LOGIC
     IF liLine + iAddLine >= skayt1 THEN DO:
 
         IF liPage > 0 THEN DO:
-           {uprfeed.i liLine}
+           {Syst/uprfeed.i liLine}
         END.
 
         liPage = liPage + 1.

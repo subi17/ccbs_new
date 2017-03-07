@@ -10,9 +10,9 @@
   ----------------------------------------------------------------- */
 
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FixCDR'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FixCDR'}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE 
@@ -47,10 +47,10 @@ form skip(1)
 with overlay title " W A R N I N G !!! " ROW 6 centered
    NO-LABELS FRAME BeSure.
 
-{pwd.i00}
+{Syst/pwd.i00}
 
 PAUSE 0 no-message.
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 UPDATE ToDate WITH FRAME CallsTo.
 
 IF ToDate NE ? THEN DO:

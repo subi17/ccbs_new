@@ -14,7 +14,7 @@
 
 {test_xmlrpc_includes.i}
 {unit/checkutils.i}
-{timestamp.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE gcParamArray AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE gcParamStruct AS CHARACTER NO-UNDO. 

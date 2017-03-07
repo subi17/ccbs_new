@@ -9,13 +9,13 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "csb19b".
        
-{cparam2.i}
-{eventlog.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
 
 DEF VAR liCount    AS INT  NO-UNDO.
 DEF VAR liFiles    AS INT  NO-UNDO.
@@ -33,7 +33,7 @@ END.
 
 fELog("DDOUT","Started").
 
-RUN ddoutfileco ("",                   /* InvGroup  */
+RUN Inv/ddoutfileco.p ("",                   /* InvGroup  */
                  0,                    /* customers from */
                  99999999,             /* customers to   */
                  "",                   /* invoices from  */
