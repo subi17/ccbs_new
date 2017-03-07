@@ -792,6 +792,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    DEF VAR lcBONOContracts  AS CHAR NO-UNDO.
    
    DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER ServiceLimit FOR ServiceLimit.
 
    lcBONOContracts = fCParamC("BONO_CONTRACTS").
    
@@ -883,6 +884,22 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    IF liReqType EQ 8 AND icContrType EQ "TARJ7" THEN DO:
       IF fActivateTARJ7Promo(iiMsSeq, idActStamp) THEN
          bCreaReq.ReqDParam1 = 1228.
+   END.
+
+   IF liReqType EQ 8 AND 
+      LOOKUP(icContrType,"TARJ7,TARJ9") > 0 AND
+      CAN-FIND(FIRST Order NO-LOCK WHERE
+                     Order.MsSeq = iiMsSeq AND
+                     Order.CLIType = icContrType AND
+                     Order.Crstamp >= 20170301 AND
+                     Order.Crstamp < 20170401 AND
+                     Order.OrderType < 2) THEN DO:
+      
+      FIND ServiceLimit NO-LOCK where
+           ServiceLimit.groupcode = icContrType and
+           ServiceLimit.dialtype = {&DIAL_TYPE_GPRS} no-error.
+      IF AVAIL ServiceLimit THEN     
+         bCreaReq.ReqDParam1 = ServiceLimit.inclamt * 2.
    END.
    
    /* Landing Page Enhancement with Upgrade UPSELL */
