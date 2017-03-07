@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 
 THIS-PROCEDURE:PRIVATE-DATA = "Rerate_new_db".
-RUN rerate_request.p(-1).
+RUN Rate/rerate_request.p(-1).
 
 QUIT.
