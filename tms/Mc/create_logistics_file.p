@@ -498,7 +498,7 @@ FUNCTION fDelivSIM RETURNS LOG
             END.
             ELSE DO: /* PostPaid */
                /* create FAtime (welcome gift) */
-               RUN creafat.p(Order.CustNum,
+               RUN Mc/creafat.p(Order.CustNum,
                              Order.MsSeq,
                              {&FATGROUP_FTGRP_WELCOME_GIFT},
                              "Order",
