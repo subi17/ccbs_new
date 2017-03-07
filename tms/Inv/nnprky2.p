@@ -20,12 +20,12 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
-{feplstart.i}
-{eplspec.i}
-{timestamp.i}
+{Syst/utumaa.i "new"}
+{Func/feplstart.i}
+{Inv/eplspec.i}
+{Func/timestamp.i}
 
 assign tuni1 = "nnpura2"
        tuni2 = "".
@@ -192,7 +192,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3. 
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
          READKEY.
          nap = keylabel(LASTKEY).
@@ -202,7 +202,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       if lookup(nap,"1,f1") > 0 THEN DO:
          
          ehto = 9.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
 
          REPEAT ON ENDKEY UNDO, LEAVE:
          
@@ -321,7 +321,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 END. /* toimi */
 
 ehto = 5.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 ASSIGN llOk      = TRUE
        lcErrFile = "".
@@ -398,7 +398,7 @@ END.
 ELSE IF liPrintTo = 2 THEN DO:
   
    ASSIGN tila = TRUE.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 
 END.
 
@@ -406,7 +406,7 @@ END.
 IF llCover THEN llCaSivu = -1.
 
 IF llOk THEN 
-RUN nnpura2 (INPUT CustNum1,
+RUN Inv/nnpura2.p (INPUT CustNum1,
              INPUT CustNum2,
              INPUT pvm1,
              INPUT pvm2,
@@ -448,7 +448,7 @@ IF liPrintTo <= 2 THEN DO:
  
    ELSE IF liPrintTo = 2 THEN DO: 
       ASSIGN tila = FALSE.
-      {utuloste.i}
+      {Syst/utuloste.i}
    END.
    
    IF lcErrFile = "" AND liError NE -1 THEN DO:
@@ -487,7 +487,7 @@ END.
 
 /* create fee */
 IF llCreFee AND liError = 0 AND CustNum1 = CustNum2 THEN 
-RUN creasfee (CustNum1,
+RUN Mc/creasfee.p (CustNum1,
               0,
               TODAY,
               "InvSpec",

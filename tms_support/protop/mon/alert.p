@@ -54,7 +54,7 @@
  *
  */
 
-{lib/protop.i}
+{protop/lib/protop.i}
 
 define stream alert-stream.
 
@@ -125,7 +125,7 @@ procedure alert-mail:
 
   if pt_alert = "" then return.
 
-  run adecomm/_tmpfile.p ( "", "", output tmpname ).
+  RUN adecomm/_tmpfile.p ( "", "", output tmpname ).
 
   output stream alert-stream to value( tmpname ).
 
@@ -160,7 +160,7 @@ procedure alarm-mail:
 
   if pt_alarm = "" then return.
 
-  run adecomm/_tmpfile.p ( "", "", output tmpname ).
+  RUN adecomm/_tmpfile.p ( "", "", output tmpname ).
 
   output stream alert-stream to value( tmpname ).
 
@@ -195,7 +195,7 @@ procedure alert-page:
 
   if pt_pager = "" then return.
 
-  run adecomm/_tmpfile.p ( "", "", output tmpname ).
+  RUN adecomm/_tmpfile.p ( "", "", output tmpname ).
 
   output stream alert-stream to value( tmpname ).
 

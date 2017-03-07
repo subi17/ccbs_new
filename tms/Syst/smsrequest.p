@@ -8,9 +8,9 @@
   -------------------------------------------------------------------------- */
 
 
-{msreqfunc.i}
-{fgettxt.i}
-{fmakesms.i}
+{Func/msreqfunc.i}
+{Func/fgettxt.i}
+{Func/fmakesms.i}
 
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.

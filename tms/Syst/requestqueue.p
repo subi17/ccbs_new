@@ -10,23 +10,23 @@
 
 &GLOBAL-DEFINE BrTable RequestQueue
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RequestQueue'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RequestQueue'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhRequestQueue AS HANDLE NO-UNDO.
    lhRequestQueue = BUFFER RequestQueue:HANDLE.
    RUN StarEventInitialize(lhRequestQueue).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhRequestQueue).
+      RUN Mc/eventview2.p(lhRequestQueue).
    END.
 
 END.
@@ -70,7 +70,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        " REQUEST QUEUES "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     RequestQueue.Brand          COLON 15
@@ -99,7 +99,7 @@ FORM
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -129,7 +129,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a RequestQueue  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -137,7 +137,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
         KEYLABEL(lastkey) = "F4" THEN UNDO, LEAVE.
@@ -243,12 +243,12 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW RequestQueue.Queue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW RequestQueue.Queue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RequestQueue.Queue WITH FRAME sel.
       END.
 
@@ -376,8 +376,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -401,7 +401,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
        
        IF AVAILABLE RequestQueue THEN 
-          RUN requesttype(RequestQueue.Queue).
+          RUN Syst/requesttype.p(RequestQueue.Queue).
          
        ufkey = TRUE.
        NEXT browse.
@@ -486,8 +486,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRequestQueue).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY RequestQueue.Queue.
 
        RUN local-UPDATE-record.                                  
@@ -525,7 +525,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -614,7 +614,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.

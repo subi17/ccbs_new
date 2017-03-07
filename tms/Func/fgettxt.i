@@ -2,10 +2,10 @@
 &THEN
 
 &GLOBAL-DEFINE fGetTxt YES
-{commali.i}
-{timestamp.i}
-{date.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/date.i}
+{Syst/tmsconst.i}
 
 FUNCTION fGetSmsTS RETURNS DECIMAL.
 

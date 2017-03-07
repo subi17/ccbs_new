@@ -4,21 +4,21 @@
   SOVELLUTUS ...: NN
   AUTHOR .......: TT
   CREATED ......: 06.02.1997
-  changePVM ....: 22.04.1997 pt,  RUN nnasle
+  changePVM ....: 22.04.1997 pt,  RUN Mc/nnasle.p
                   04.05.1997 pt, 2 x 2 jArjestystA ym.
                   07.05.1998 kl, myyja1 & 2 from INT into CHAR
                   13.05.1998 kl, PriceList InvGroup Reseller
                   02.11.1998 pt, exdir: default BY user
-                  11.11.1998 pt, NEW FUNCTION into F7: RUN nnxorcu
+                  11.11.1998 pt, NEW FUNCTION into F7: RUN Mc/nnxorcu.p
                   09.01.1999 pt, CustGroup
                   26.09.2002/aam PriceList removed 
                   12.09.2003/aam brand
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}                        
+{Syst/commali.i}                        
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 
 DEF VAR asno1   LIKE Customer.CustNum       NO-UNDO init 0.
@@ -116,7 +116,7 @@ form
 with width 80 title color value(ctc) " CUSTOMER LISTS " side-labels
    COLOR value(cfc) OVERLAY FRAME rajat.
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 PAUSE 0 no-message.
 
 ASSIGN
@@ -134,7 +134,7 @@ WITH FRAME rajat.
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       CustGroup validate(input CustGroup = "" OR
          can-find(FIRST CustGroup where
@@ -174,7 +174,7 @@ repeat WITH FRAME rajat:
                   ELSE up 1.
                END.
                DOWN (order1 - 1).
-               CHOOSE ROW j1 {uchoose.i} no-error.
+               CHOOSE ROW j1 {Syst/uchoose.i} no-error.
                order1 = frame-line(jar1).
                HIDE FRAME jar1 no-pause.
                DISP entry(order1,jar1) @ j1 WITH FRAME rajat.
@@ -189,7 +189,7 @@ repeat WITH FRAME rajat:
                   ELSE up 1.
                END.
                DOWN (order2 - 1).
-               CHOOSE ROW j2 {uchoose.i} no-error.
+               CHOOSE ROW j2 {Syst/uchoose.i} no-error.
                order2 = frame-line(jar2).
                HIDE FRAME jar2 no-pause.
                DISP entry(order2,jar2) @ j2 WITH FRAME rajat.
@@ -206,7 +206,7 @@ toimi:
                      ufk[5] = 808 ufk[6] = 847 ufk[7] = 997 ufk[8] = 8
              ehto = 0.
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN  NEXT  RAJAT.
       IF toimi = 8 THEN  LEAVE RAJAT.
@@ -214,7 +214,7 @@ toimi:
       IF toimi = 4 OR toimi = 6 OR toimi = 7 THEN DO:
          /* Ask Name FOR Excel / XOR File */
          if toimi = 7 then exFile = exdir + "/" + "xorcod.txt".
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          UPDATE exFile WITH FRAME rajat.
          if exFile = "" THEN NEXT toimi.
       END.
@@ -241,9 +241,9 @@ toimi:
          tuni1 = "nnasll"
          tuni2 = "".
          tila =true.
-         {tmsreport.i "return"}
+         {Syst/tmsreport.i "return"}
 
-         RUN nnasll(CustGroup,
+         RUN Mc/nnasll.p(CustGroup,
                     asno1,asno2,
                     myyja1,myyja2,
                     Category,
@@ -259,7 +259,7 @@ toimi:
 
       /* Large Excel/ascii printout */
       IF toimi = 6 THEN DO:
-         RUN nnasle(CustGroup,
+         RUN Mc/nnasle.p(CustGroup,
                     asno1,asno2,
                     myyja1,myyja2,
                     Category,
@@ -282,10 +282,10 @@ toimi:
             tuni1 = "nnasls"
             tuni2 = "".
             tila =true.
-            {tmsreport.i "return"}
+            {Syst/tmsreport.i "return"}
          END.
 
-         RUN nnasls( CustGroup,
+         RUN Mc/nnasls.p( CustGroup,
                      asno1,asno2,
                      myyja1,myyja2,
                      Category,
@@ -308,7 +308,7 @@ toimi:
             PAUSE no-message.
          END.
 
-         RUN nnxorcu( CustGroup,
+         RUN Mc/nnxorcu.p( CustGroup,
                       asno1,asno2,
                       myyja1,myyja2,
                       Category,
@@ -327,7 +327,7 @@ toimi:
    /* CLOSE the printer STREAM IF a paper report was done */
    IF toimi = 3 OR toimi = 5 THEN DO:
       tila = FALSE.
-      {tmsreport.i}.
+      {Syst/tmsreport.i}.
    END.
    LEAVE rajat.
 END.

@@ -8,12 +8,12 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{tmsparam4.i}
-{commpaa.i}
+{Func/tmsparam4.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
-{provmaint.i}
-{timestamp.i}
+{Mc/provmaint.i}
+{Func/timestamp.i}
 
 DEF VAR pcMsisdn AS CHAR NO-UNDO.
 DEF VAR pdBalance AS DEC NO-UNDO.

@@ -1,7 +1,7 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
-{ftaxdata.i}
-{ftopup.i}
+{Func/ftaxdata.i}
+{Func/ftopup.i}
 
 def stream sread.
 input stream sread from /apps/snet/200910/Make_initial_topup.txt.

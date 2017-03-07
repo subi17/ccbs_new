@@ -4,7 +4,7 @@
   SOVELLUTUS ...: TMS
   AUTHOR .......: aam 
   CREATED ......: 10.02.06
-                  12.12.06 mvi new param ro run msrequest (reqstat =  ?)  
+                  12.12.06 mvi new param ro RUN Mm/msrequest.p (reqstat =  ?)  
                   03.09.07/aam Credit notes  
                   31.10.07 jp  new parameter for msrequest
                   
@@ -12,8 +12,8 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
 
@@ -32,7 +32,7 @@ END.
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
 
       DISPLAY
 
@@ -56,7 +56,7 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX EQ 1 THEN DO:
-      RUN msrequest(6,
+      RUN Mm/msrequest.p(6,
                     ?, /* reqstat ? for all */
                     0,
                     iiCustNum,
@@ -65,7 +65,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 2 THEN DO:
-      RUN msrequest(5,
+      RUN Mm/msrequest.p(5,
                     ?, /* reqstat ? for all */
                     0,
                     iiCustNum,
@@ -74,7 +74,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 3 THEN DO:
-      RUN msrequest(22,
+      RUN Mm/msrequest.p(22,
                     ?, /* reqstat ? for all */
                     0,
                     iiCustNum,
@@ -83,7 +83,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 4 THEN DO:
-      RUN msrequest(23,
+      RUN Mm/msrequest.p(23,
                     ?, /* reqstat ? for all */
                     0,
                     iiCustNum,
@@ -92,7 +92,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 5 THEN DO:
-      RUN msrequest(31,
+      RUN Mm/msrequest.p(31,
                     ?, /* reqstat ? for all */
                     0,
                     iiCustNum,
@@ -101,7 +101,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 6 THEN DO:
-      RUN msrequest(34,
+      RUN Mm/msrequest.p(34,
                     ?, /* reqstat ? for all */
                     0,
                     iiCustNum,
@@ -110,7 +110,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 7 THEN DO:
-      RUN msrequest(11,
+      RUN Mm/msrequest.p(11,
                     ?, /* reqstat ? for all */
                     0,
                     iiCustNum,
@@ -119,7 +119,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 8 THEN DO:
-      RUN msrequest(83,
+      RUN Mm/msrequest.p(83,
                     ?, /* reqstat ? for all */
                     0,
                     iiCustNum,
@@ -128,7 +128,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 9 THEN DO:
-      RUN msrequest(84,
+      RUN Mm/msrequest.p(84,
                     ?, /* reqstat ? for all */
                     0,
                     iiCustNum,

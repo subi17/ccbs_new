@@ -8,9 +8,9 @@
                   20.03.03/aam one parameter added for tariff.p
                   27.03.03 kl BDest not used anymore
                   31.03.03 tk added order by name
-                  04.04.03 kl run tariff, new parameter
-                  26.06.03 kl run tariff, new parameter
-                  04.07.03 kl run tariff, new parameter
+                  04.04.03 kl RUN Mc/tariff,.p new parameter
+                  26.06.03 kl RUN Mc/tariff,.p new parameter
+                  04.07.03 kl RUN Mc/tariff,.p new parameter
                   16.09.03 jp Brand
                   15.03.04 tk eventlog
                   13.01.05/aam create fees for new group,
@@ -22,27 +22,27 @@
   ------------------------------------------------------ */
 &GLOBAL-DEFINE BrTable PNPGroup
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PNPGroup'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PNPGroup'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPNPGroup AS HANDLE NO-UNDO.
    lhPNPGroup = BUFFER PNPGroup:HANDLE.
    RUN StarEventInitialize(lhPNPGroup).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhPNPGroup).
+      RUN Mc/eventview2.p(lhPNPGroup).
    END.
 END.
 
-{remfees.i}
+{Func/remfees.i}
 
 DEF VAR haku-PNPGroup    LIKE PNPGroup.PNPGroup FORMAT "X(11)" NO-UNDO.
 DEF VAR haku-name        LIKE PNPGroup.Name      NO-UNDO.    
@@ -87,7 +87,7 @@ WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
    + string(pvm,"99-99-99") + " "
 FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
    "Group code :" PNPGroup.PNPGroup FORMAT "X(11)"  SKIP
@@ -121,7 +121,7 @@ form /*  search WITH FIELD Name */
 with row 4 col 2 title color value(ctc) " FIND NAME "
    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -154,13 +154,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* PNPGroup -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            
@@ -188,7 +188,7 @@ repeat WITH FRAME sel:
               IF DAY(ldtDate) NE 1 
               THEN ldtDate = DATE(MONTH(ldtDate),1,YEAR(ldtDate)).
               
-              RUN creasfee (MobSub.CustNum,
+              RUN Mc/creasfee.p (MobSub.CustNum,
                             MobSub.MsSeq,
                             ldtDate,
                             "PNP",
@@ -279,20 +279,20 @@ BROWSE:
            ufk[9] = 1
            ehto   = 3
            ufkey  = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW PNPGroup.PNPGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPGroup.PNPGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPGroup.PNPGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW PNPGroup.Name ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPGroup.Name {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPGroup.Name WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW PNPGroup.CCN ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPGroup.CCN {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPGroup.PNPGroup WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -422,9 +422,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        haku-PNPGroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME haku-f1.
        UPDATE lcBrand 
               haku-PNPGroup WITH FRAME haku-f1.
@@ -444,9 +444,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        haku-Name = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME haku-f2.
 
        UPDATE  lcBrand WHEN gcAllBrand = TRUE  
@@ -548,8 +548,8 @@ BROWSE:
        NO-LOCK NO-ERROR.
 
        IF PnpGroup.GroupType = 0 THEN 
-          RUN pnplist(PNPGroup.pnpSeq).
-       ELSE  run matepnplist.p(pnpgroup.pnpseq,pnpgroup.pnpgroup). 
+          RUN Mc/pnplist.p(PNPGroup.pnpSeq).
+       ELSE  RUN Mc/matepnplist.p(pnpgroup.pnpseq,pnpgroup.pnpgroup). 
        
        ufkey = true.
        PAUSE 0.
@@ -563,7 +563,7 @@ BROWSE:
         NO-LOCK NO-ERROR.
 
         ufkey = TRUE.
-        RUN tariff(2,PNPGroup.CCN,"",0,"",0).
+        RUN Mc/tariff.p(2,PNPGroup.CCN,"",0,"",0).
 
      END.
 
@@ -573,9 +573,9 @@ BROWSE:
             recid(PNPGroup) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPNPGroup).
 
@@ -754,7 +754,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          IF FRAME-FIELD = "GroupType" AND
             keylabel(lastkey) = "F9" THEN DO:
 
-            RUN h-tmscodes(INPUT "PnpGroup",  /* TableName*/
+            RUN Help/h-tmscodes.p(INPUT "PnpGroup",  /* TableName*/
                                  "GroupType", /* FieldName */
                                  "GroupType", /* GroupCode */
                                  OUTPUT siirto).
@@ -823,7 +823,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             END.
                                                                  
             ELSE IF FRAME-FIELD = "GroupType" THEN DO:
-               RUN v-tmscodes(INPUT "PnpGroup",    /* TableName */
+               RUN Syst/v-tmscodes.p(INPUT "PnpGroup",    /* TableName */
                                     "GroupType", /* FieldName */
                                     "GroupType",     /* GroupCode */
                               INPUT INPUT PnpGroup.GroupType,

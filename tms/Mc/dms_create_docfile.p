@@ -10,12 +10,12 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
-{offer.i}
-{dms.i}
-{q25functions.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Mc/offer.i}
+{Func/dms.i}
+{Func/q25functions.i}
 
 DEF INPUT PARAMETER icCases AS CHAR. /*List of reported cases*/
 DEF INPUT PARAMETER idPeriodStart AS DEC. /*reporting period strat*/
@@ -778,7 +778,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                                               OUTPUT ldeMonthlyFee,
                                               OUTPUT liMonths,
                                               OUTPUT ldeFinalFee).
-   RUN offer_penaltyfee.p(Order.OrderID,
+   RUN Mc/offer_penaltyfee.p(Order.OrderID,
                           OUTPUT liPermancyLength,
                           OUTPUT ldePermanencyAmount).
    lcCaseFileRow =
@@ -953,7 +953,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                                               OUTPUT ldeMonthlyFee, 
                                               OUTPUT liMonths, /*24*/
                                               OUTPUT ldeFinalFee). /*residual*/
-   RUN offer_penaltyfee.p(Order.OrderID,
+   RUN Mc/offer_penaltyfee.p(Order.OrderID,
                           OUTPUT liPermancyLength,
                           OUTPUT ldePermanencyAmount).
    lcCaseFileRow =

@@ -7,11 +7,11 @@ DEFINE OUTPUT PARAMETER pcAnswerCodes AS CHARACTER NO-UNDO.
 /* output through cat. */
 
 {xmlrpc/xmlrpc_client.i}
-{commali.i}
-{timestamp.i}
-{date.i}
-{tmsconst.i}
-{fbundle.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
 
 /* Connection parameters from TMSParam */
 DEFINE VARIABLE cConnURL AS CHARACTER NO-UNDO. 
@@ -393,7 +393,7 @@ IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO:
       END. /* IF AVAIL OrderPayment THEN DO: */
 
       /* Amount paid in direct channels */
-      RUN cashfee.p(Order.OrderID,
+      RUN Mc/cashfee.p(Order.OrderID,
                     2, /* action 2=just make a list of fees, don't create */
                     OUTPUT lcCashResult,
                     OUTPUT ldePayInAdv,

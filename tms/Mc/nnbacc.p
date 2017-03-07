@@ -7,7 +7,7 @@
   CHANGED ......: 
   VERSION ......: M15
   ---------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER account AS C NO-UNDO.
 DEF OUTPUT PARAMETER rc      AS I NO-UNDO.

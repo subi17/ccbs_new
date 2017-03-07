@@ -126,13 +126,13 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{timestamp.i}
-{order.i}
-{tmsconst.i}
-{fbundle.i}
+{Func/timestamp.i}
+{Func/order.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
 
 DEF VAR piOrderId               AS INTEGER   NO-UNDO. 
 DEF VAR top_struct              AS CHARACTER NO-UNDO. 

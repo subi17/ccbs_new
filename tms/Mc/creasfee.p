@@ -13,11 +13,11 @@
                                  coeeficient
 */
 
-{commali.i}
-{timestamp.i}
-{setfees.i} 
-{eventval.i}
-{ffeecont.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/setfees.i} 
+{Syst/eventval.i}
+{Func/ffeecont.i}
 
 DEF INPUT  PARAMETER iiCustNum     AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiMSSeq       AS INT  NO-UNDO. 

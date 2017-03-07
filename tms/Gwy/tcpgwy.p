@@ -12,9 +12,10 @@
   VERSION ......: XFERA
 ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/log.i}
 
 gcBrand = "1".
 
@@ -148,8 +149,17 @@ PROCEDURE pServerResponse:
    llRC = SELF:READ(lmData,1,liDataSize,1) NO-ERROR.
 
    IF llRC = FALSE OR ERROR-STATUS:GET-MESSAGE(1) <> '' THEN DO:
-      IF NOT SESSION:BATCH THEN
-         MESSAGE llRC ERROR-STATUS:GET-MESSAGE(1) VIEW-AS ALERT-BOX.
+      IF NOT SESSION:BATCH THEN DO:
+         IF katun EQ "Service" OR
+            katun EQ "PerCont" OR
+            katun EQ "STC" OR
+            katun EQ "CreFixed" OR
+            katun EQ "CreSub" OR
+            katun EQ "request" THEN
+            fLogError(SUBST("TCPGWY: Unable to read response: &1, &2",
+                      llRC, ERROR-STATUS:GET-MESSAGE(1))).
+         ELSE MESSAGE llRC ERROR-STATUS:GET-MESSAGE(1) VIEW-AS ALERT-BOX.
+      END.
       lcResponse = 'ERR:Unable to read response'.
       RETURN.
    END.

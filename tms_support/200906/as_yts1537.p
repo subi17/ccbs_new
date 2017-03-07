@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
 ldeNow = fmakets().
 DEFINE VARIABLE lcClis AS CHARACTER NO-UNDO. 

@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 
 session:numeric-format = "european".
 

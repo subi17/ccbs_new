@@ -24,12 +24,12 @@
 {xmlrpc/xmlrpc_access.i}
 
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{date.i}
-{fbundle.i}
-{fbtc.i}
-{fexternalapi.i}
+{Func/date.i}
+{Mm/fbundle.i}
+{Func/fbtc.i}
+{Func/fexternalapi.i}
 
 DEF VAR pcCLI              AS CHAR NO-UNDO.
 DEF VAR pcTransId          AS CHAR NO-UNDO.

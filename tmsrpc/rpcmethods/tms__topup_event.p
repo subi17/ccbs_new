@@ -29,8 +29,8 @@
 
 {xmlrpc/xmlrpc_access.i}
 DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".
-{date.i}
-{xmlfunction.i}
+{Func/date.i}
+{Func/xmlfunction.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO.
 DEF VAR lcFields AS CHARACTER NO-UNDO. 

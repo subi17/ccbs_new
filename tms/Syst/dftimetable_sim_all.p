@@ -7,8 +7,8 @@
   CHANGED ......: 
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
-{scheduled_dumps.i}
+{Syst/commali.i}
+{Func/scheduled_dumps.i}
 
 DEF VAR xrecid       AS RECID                           init ?.
 DEF VAR FIRSTrow     AS INT                    NO-UNDO  init 0.
@@ -48,7 +48,7 @@ WITH ROW 1 CENTERED OVERLAY 15  DOWN
     COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "  TIMETABLES  "  FRAME sel.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -128,13 +128,13 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttEvent.EventDay ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttEvent.EventDay {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttEvent.EventDay WITH FRAME sel.
       END.
 

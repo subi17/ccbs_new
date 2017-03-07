@@ -8,32 +8,32 @@
                                only "all invoices" allowed when ilAutoMode
                   16.03.06/aam TF version             
                   18.04.06/aam use payments.p instead of nnlasu.p
-                  22.03.07 kl  new param for run payments
+                  22.03.07 kl  new param for RUN Ar/payments.p
 
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{finvbal.i}
-{fpaymplan.i}
-{fppinv.i}
+{Syst/commali.i}
+{Func/finvbal.i}
+{Func/fpaymplan.i}
+{Func/fppinv.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PPInv'}
-{invdet.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PPInv'}
+{Ar/invdet.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPPInv AS HANDLE NO-UNDO.
    lhPPInv = BUFFER PPInv:HANDLE.
    RUN StarEventInitialize(lhPPInv).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhPPInv).
+      RUN Mc/eventview2.p(lhPPInv).
    END.
 
 END.
@@ -118,7 +118,7 @@ ASSIGN lcTitle     = " INVOICES IN PLAN: " +
                      STRING(PaymPlan.PPDate,"99.99.9999") + " "
        gcHelpParam = STRING(PaymPlan.CustNum) + ",TRUE".           
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 ASSIGN orders   = "  By Invoice ,    ,   , By 4"
@@ -144,7 +144,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a PPInv  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -154,7 +154,7 @@ REPEAT WITH FRAME sel:
         
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
-           RUN hcustinv(PaymPlan.CustNum,FALSE).
+           RUN Help/hcustinv.p(PaymPlan.CustNum,FALSE).
                    
            IF siirto = ? THEN LEAVE.
            
@@ -271,12 +271,12 @@ REPEAT WITH FRAME sel:
          IF ilAutoMode THEN ASSIGN ufk[5] = 0               
                                    ufk[6] = 0.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PPInv.InvNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PPInv.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PPInv.InvNum WITH FRAME sel.
       END.
 
@@ -439,7 +439,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO:
      
         RUN local-find-this (FALSE).
-        RUN payments(0,PPInv.InvNum,"").
+        RUN Ar/payments.p(0,PPInv.InvNum,"").
         
         ufkey = TRUE.
         NEXT LOOP.
@@ -447,7 +447,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         IF CAN-FIND(FIRST PPBatch WHERE PPBatch.PPlanID = iiPlanID)
         THEN DO:
            MESSAGE "Plan has already been divided into batches"
@@ -461,7 +461,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -538,7 +538,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
 
        ehto = 5.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
        
        /* show details */
        RUN pInvoiceDetails(PPInv.InvNum,

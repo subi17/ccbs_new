@@ -7,15 +7,15 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
    
-{cparam2.i}
-{files.i}
-{timestamp.i}
-{funcrunprocess_run.i}
+{Func/cparam2.i}
+{Func/files.i}
+{Func/timestamp.i}
+{Syst/funcrunprocess_run.i}
 
 DEF VAR liBRTestQueueID  AS INT  NO-UNDO.
 DEF VAR ldaInvDate       AS DATE NO-UNDO.
@@ -50,7 +50,7 @@ IF liBRTestQueueID = 0 THEN DO:
    QUIT.
 END.   
 
-RUN brtestresult_analysis.p(liBRTestQueueID,
+RUN Inv/brtestresult_analysis.p(liBRTestQueueID,
                             ldaInvDate,
                             liInvType,
                             liFRProcessID,

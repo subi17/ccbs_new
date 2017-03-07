@@ -12,8 +12,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnmttu"
        tuni2 = "".
@@ -97,7 +97,7 @@ Month = (year(pvm) * 100) + month(pvm).
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE Month 
    InvGroup VALIDATE(CAN-FIND(invgroup WHERE
                               invgroup.invgroup = INPUT invgroup),
@@ -120,7 +120,7 @@ toimi:
       ASSIGN
       ufk = 0 ehto = 0
       ufk[1] = 7 ufk[5] = 63 ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  rajat.
       IF toimi = 8 THEN LEAVE rajat.
       IF toimi = 5 THEN LEAVE toimi.
@@ -132,7 +132,7 @@ toimi:
    if not b-exc then s-head = s-head + " with exceeded limit".
 
    tila = TRUE.
-   {tmsreport.i "leave rajat"}
+   {Syst/tmsreport.i "leave rajat"}
 
    message "Printing ...".
    FOR EACH MthCall no-lock  where
@@ -213,7 +213,7 @@ toimi:
 
    PUT STREAM tul UNFORMATTED skip(spit1 - rl).
    ASSIGN tila = FALSE.
-   {tmsreport.i}
+   {Syst/tmsreport.i}
 
    IF i = 0 THEN DO:
       BELL.

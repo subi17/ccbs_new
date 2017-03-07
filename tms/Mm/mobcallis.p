@@ -8,8 +8,8 @@
   Version ......: SCRUNKO4 (10.06.99)
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
+{Syst/commali.i}
+{Func/msisdn.i}
 
 DEF  INPUT PARAMETER  icCLI    AS C.   /* NOTE: 467018.....  */
 DEF  INPUT PARAMETER  iiInvseq AS I.
@@ -20,7 +20,7 @@ DEF VAR odtDate1                      AS DATE NO-UNDO.
 DEF VAR odtDate2                      AS DATE NO-UNDO.
 DEF VAR olAccept                      AS LOG NO-UNDO.
 
-RUN  mobguard2(INPUT  FALSE,
+RUN Mm/mobguard2.p(INPUT  FALSE,
                OUTPUT ocReasonCode,
                OUTPUT odtDate1,
                OUTPUT odtdate2,
@@ -38,7 +38,7 @@ IF NOT AVAIL INVSEQ THEN DO:
    LEAVE.        
 END.           
 
-RUN mobcallbr(INPUT  "post",
+RUN Mm/mobcallbr.p(INPUT  "post",
               INPUT  InvSeq.FromDate,
               INPUT  InvSeq.ToDate,
               INPUT  0,

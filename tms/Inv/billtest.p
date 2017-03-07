@@ -1,4 +1,4 @@
-{commali.i}
+{Syst/commali.i}
 DEFINE VARIABLE menuc      AS CHARACTER EXTENT 3 NO-UNDO.
 DEFINE VARIABLE lcOutDir   AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcOutFile  AS CHARACTER NO-UNDO.
@@ -24,7 +24,7 @@ ASSIGN
    lcOutDir = "/scratch/reports/billing_tests/".
 
 DO WHILE TRUE ON ENDKEY UNDO:
-   ASSIGN  ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN  ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
    hide frame fParam1 no-pause.       
    hide frame fParam2 no-pause.       
    DISPLAY 
@@ -46,17 +46,17 @@ DO WHILE TRUE ON ENDKEY UNDO:
       lcInfo = "ONGOING DATA CHECK".
       DISPLAY lcInfo  WITH FRAME choices.
       
-      RUN chk_customer_bankacc(lcOutFile).
-      RUN chk_customer_deltype(lcOutFile).
-      RUN chk_invseq_msseq0(lcOutFile).
-      RUN cust_address_missing(lcOutFile).
+      RUN Inv/chk_customer_bankacc.p(lcOutFile).
+      RUN Inv/chk_customer_deltype.p(lcOutFile).
+      RUN Inv/chk_invseq_msseq0.p(lcOutFile).
+      RUN Inv/cust_address_missing.p(lcOutFile).
       
       DISPLAY "DATA CHECK DONE" @ lcInfo WITH FRAME choices.
       MESSAGE "Data check results: " + lcOutFile VIEW-AS ALERT-BOX. 
    END.
 
    ELSE IF FRAME-INDEX  = 2 THEN DO:
-      ehto = 9. RUN ufkey. ufkey = TRUE.
+      ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
       update 
          ldtinv label "Invoice date" skip 
          ldtfrom format "99-99-99"
@@ -74,9 +74,9 @@ DO WHILE TRUE ON ENDKEY UNDO:
       IF SEARCH(lcOutFile) NE ? THEN UNIX SILENT VALUE("rm " + lcOutFile).
       IF KEYLABEL(lastkey) = "F4" THEN NEXT.
 
-      RUN chk_inv_cdr(lcOutFile,ldtinv).
-      RUN chk_inv_acc(lcOutFile,ldtInv).
-      RUN chk_subs_invoice(lcOutFile,ldtInv,ldtFrom,ldtTo).
+      RUN Inv/chk_inv_cdr.p(lcOutFile,ldtinv).
+      RUN Inv/chk_inv_acc.p(lcOutFile,ldtInv).
+      RUN Inv/chk_subs_invoice.p(lcOutFile,ldtInv,ldtFrom,ldtTo).
       
       DISPLAY "QUALITY CHECK DONE" @ lcInfo WITH FRAME choices.
       MESSAGE "Test results: " + lcOutFile VIEW-AS ALERT-BOX. 
@@ -86,7 +86,7 @@ DO WHILE TRUE ON ENDKEY UNDO:
       
       def var llDisp       as log no-undo.      
       
-      ehto = 9. RUN ufkey. ufkey = TRUE.
+      ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
       update 
          ldtinv label "Invoice date" 
          llDisp
@@ -103,9 +103,9 @@ DO WHILE TRUE ON ENDKEY UNDO:
       lcInfo = "ONGOING QUANTITY CHECK".
       DISPLAY lcInfo  WITH FRAME choices.
      
-      RUN yoigo_printrep(lcOutFile,ldtinv,lldisp).
-      RUN yoigo_0count(lcOutFile,ldtinv).
-      RUN yoigo_invrep(lcOutFile,ldtinv).
+      RUN Inv/yoigo_printrep.p(lcOutFile,ldtinv,lldisp).
+      RUN Inv/yoigo_0count.p(lcOutFile,ldtinv).
+      RUN Inv/yoigo_invrep.p(lcOutFile,ldtinv).
       
       DISPLAY "QUANTITY CHECK DONE" @ lcInfo WITH FRAME choices.
       MESSAGE "Quantity check results: " + lcOutFile VIEW-AS ALERT-BOX. 

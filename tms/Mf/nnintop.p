@@ -8,9 +8,9 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{date.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/date.i}
 
 DEF TEMP-TABLE Calls
    FIELD CCN        AS i
@@ -118,7 +118,7 @@ repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       date1     date2
       Operator
@@ -165,7 +165,7 @@ repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 

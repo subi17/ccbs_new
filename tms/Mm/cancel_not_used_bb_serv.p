@@ -8,14 +8,14 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "CRON".
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{ftransdir.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/ftransdir.i}
 
 DEF VAR liReq            AS INT  NO-UNDO.
 DEF VAR lcError          AS CHAR NO-UNDO.

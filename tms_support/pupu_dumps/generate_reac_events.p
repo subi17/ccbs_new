@@ -2,8 +2,8 @@ DEF VAR gcBrand AS CHAR NO-UNDO.
 
 DEF BUFFER bTermMsRequest FOR MsRequest.
 
-{matrix.i}
-{timestamp.i}
+{Func/matrix.i}
+{Func/timestamp.i}
 
 OUTPUT TO "/store/riftp/pupu_dumps/logs/generate_reac_events.txt".
 

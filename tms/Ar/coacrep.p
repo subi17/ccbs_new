@@ -8,11 +8,11 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i}
-{timestamp.i}
-{fprevoper.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i}
+{Func/timestamp.i}
+{Func/fprevoper.i}
 
 DEF TEMP-TABLE ttMark NO-UNDO
     FIELD EventID AS INT.

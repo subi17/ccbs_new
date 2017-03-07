@@ -1,4 +1,4 @@
-"" "TCPModule" "c" 0 0 "tcpgwy_fake" ? "" "" "" "" "" "" "" "" "" "" "Fake tcpgwy" yes "1"
+"" "TCPModule" "c" 0 0 "test/fake/tcpgwy_fake.p" ? "" "" "" "" "" "" "" "" "" "" "Fake tcpgwy" yes "1"
 "CDR" "OldCDRDb" "C" 0 0 "-H merak -S 5987" ? "" "" "" "" "" "" "" "" "" "" "Connect parameters to old db" no "1"
 "CreditScoring" "URL" "C" 0 0 "http://217.168.2.239:8080/credit-scoring/" ? "" "" "" "" "" "" "" "" "" "" "" yes "1"
 "DA" "EmailFromAddress" "C" 0 0 "tufactura@facturayoigo.com" ? "" "" "" "" "" "" "" "" "" "" "Email From Address" no "1"        

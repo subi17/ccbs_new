@@ -9,7 +9,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR lcUfkey     AS LOG                     NO-UNDO.
 DEF VAR lcFile      AS CHAR  FORMAT "X(40)"    NO-UNDO.
@@ -112,7 +112,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
          ehto = 3 
          lcUfkey = FALSE.
 
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
    END.
 
@@ -125,7 +125,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    IF LOOKUP(nap,"1,f1") > 0 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
 
@@ -174,9 +174,9 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 END. /* toimi */
 
 ehto = 5.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
-RUN futbilrep  (InvGroup[1],
+RUN Inv/futbilrep.p  (InvGroup[1],
                 InvGroup[2],
                 llBanned,
                 llContract,

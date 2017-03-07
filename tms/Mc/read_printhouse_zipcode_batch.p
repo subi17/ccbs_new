@@ -6,14 +6,14 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "Cron".
        
-{cparam2.i}
-{eventlog.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
 
 DEF VAR lcFile      AS CHAR NO-UNDO.
 DEF VAR liRead      AS INT  NO-UNDO. 
@@ -68,7 +68,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN read_printhouse_zipcode.p (ttFiles.ZipCodeFile,
+   RUN Mc/read_printhouse_zipcode.p (ttFiles.ZipCodeFile,
                                   OUTPUT liRead,
                                   OUTPUT liError).
    

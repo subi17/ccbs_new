@@ -7,32 +7,32 @@
   CHANGED ......: 10.03.03 tk tokens
                   20.03.03/aam one parameter added for tariff.p
                   04.03.03/tk  removed prompt-for
-                  04.04.03 kl run tariff, new parameter
-                  26.06.03 kl run tariff, new parameter
-                  04.07.03 kl run tariff, new parameter
+                  04.04.03 kl RUN Mc/tariff,.p new parameter
+                  26.06.03 kl RUN Mc/tariff,.p new parameter
+                  04.07.03 kl RUN Mc/tariff,.p new parameter
                   08.09.03/aam brand 
   Version ......: M15
   ---------------------------------------------------------------------- */
 
 &GLOBAL-DEFINE BrTable RateCCN
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RateCCN'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RateCCN'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhRateCCN AS HANDLE NO-UNDO.
    lhRateCCN = BUFFER RateCCN:HANDLE.
    RUN StarEventInitialize(lhRateCCN).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhRateCCN).
+      RUN Mc/eventview2.p(lhRateCCN).
    END.
 
 END.
@@ -102,7 +102,7 @@ WITH  OVERLAY ROW 4 centered
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form 
     "Brand:" lcBrand skip
@@ -111,7 +111,7 @@ form
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Dialling type"
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -155,14 +155,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a RateCCN  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -248,16 +248,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 0  ufk[8]= 8   ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW RateCCN.DialType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW RateCCN.DialType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RateCCN.DialType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW RateCCN.CCN ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW RateCCN.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RateCCN.CCN WITH FRAME sel.
       END.
 
@@ -384,8 +384,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE liDialType WITH FRAME f1.
@@ -407,7 +407,7 @@ BROWSE:
         RUN local-find-this(FALSE).
 
         IF AVAILABLE RateCCN THEN DO:
-           RUN tariff(0,RateCCN.CCN,"",0,RateCCN.BDest,0). 
+           RUN Mc/tariff.p(0,RateCCN.CCN,"",0,RateCCN.BDest,0). 
            UFKEY = TRUE.
         END.
      end. 
@@ -476,8 +476,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRateCCN).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY RateCCN.DialType.
 
        RUN local-UPDATE-record(FALSE).

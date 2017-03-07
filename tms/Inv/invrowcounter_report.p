@@ -8,10 +8,10 @@
 ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
 
 DEF INPUT  PARAMETER idaFromDate      AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaToDate        AS DATE NO-UNDO.

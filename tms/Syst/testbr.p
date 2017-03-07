@@ -5,12 +5,12 @@
 &GLOBAL-DEFINE BrFrame tstfram
 &GLOBAL-DEFINE GenBrowseVariables NO
 
-{commali.i}
+{Syst/commali.i}
 
 FORM 
    "" AT 2 WITH NO-LABELS FRAME tstfram.
 
-{brand.i}
+{Func/brand.i}
 
 assign lcBrand = gcBrand
        gcBrand = "".

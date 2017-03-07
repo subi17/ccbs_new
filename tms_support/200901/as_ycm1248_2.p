@@ -12,10 +12,10 @@ DEFINE VARIABLE i AS INTEGER NO-UNDO.
 def stream sout.
 output stream sout to /apps/snet/200901/as_yts1248_3.log append. 
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{fmakemsreq.i}
+{Func/fmakemsreq.i}
 DEFINE VARIABLE liReq AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcInfo AS CHAR NO-UNDO. 
 looppi:

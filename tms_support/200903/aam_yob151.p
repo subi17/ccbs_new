@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 
 for each msrequest no-lock where
          brand = "1" and

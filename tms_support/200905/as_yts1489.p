@@ -1,5 +1,5 @@
 def buffer bsolog for solog.
-{timestamp.i}
+{Func/timestamp.i}
 DEFINE VARIABLE ldeActstamp AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE x AS CHARACTER NO-UNDO. 
 

@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 
 DEF VAR liMsRequest AS INTEGER NO-UNDO.
 

@@ -31,11 +31,11 @@ FIND TMSCodes WHERE
 IF NOT AVAIL TMSCodes THEN
     RETURN appl_err(SUBST("Unknown status code: &1", piBillingPermission)).
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
 gcBrand = "1".
-{tmsconst.i}
-{flimitreq.i}
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
 
 IF gbAuthLog.UserName = "viptool" THEN DO:
 {vip_check.i}

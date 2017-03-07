@@ -7,8 +7,8 @@
   Version ......: M15
   ----------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER UserGroup LIKE UserGrp.UserGroup NO-UNDO.
 
@@ -36,7 +36,7 @@ def var memb         as lo format "*/" NO-UNDO.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhUgMember AS HANDLE NO-UNDO.
    lhUgMember = BUFFER UgMember:HANDLE.
@@ -44,7 +44,7 @@ IF llDoEvent THEN DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhUgMember).
+      RUN Mc/eventview2.p(lhUgMember).
    END.
 END.
 
@@ -78,7 +78,7 @@ form /* FIND User BY abbreviation */
     with row 4 col 2 title color value(ctc) " FIND USER NO."
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc. view FRAME sel.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
 
 
 FIND FIRST TMSUser USE-INDEX UserCode no-lock no-error.
@@ -143,14 +143,14 @@ BROWSE:
          ASSIGN
          ufk[1]= 542 ufk[2]= 543 ufk[3]= 30  ufk[4]= 0
          ufk[5]= 515 ufk[6]= 0   ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.  RUN ufkey.
+         ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
-         CHOOSE ROW TMSUser.UserCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW TMSUser.UserCode {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
-         CHOOSE ROW TMSUser.UserNum ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW TMSUser.UserNum {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 3 THEN
-         CHOOSE ROW TMSUser.UserName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW TMSUser.UserName {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc)
       TMSUser.UserCode TMSUser.UserNum TMSUser.UserName WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -286,8 +286,8 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN ufcolor.
-        UserCode = "". ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        UserCode = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserCode WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
         if UserCode <> "" THEN DO:
@@ -304,8 +304,8 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN ufcolor. UserNum = 0.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p. UserNum = 0.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserNum WITH FRAME hayr3.
         HIDE FRAME hayr3 no-pause.
         IF UserNum <> 0 THEN DO:
@@ -322,8 +322,8 @@ BROWSE:
 
      /* Haku sarakk. 3 */
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-        cfc = "puyr". run ufcolor. UserName = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p. UserName = "".
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserName WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if UserName <> "" THEN DO:

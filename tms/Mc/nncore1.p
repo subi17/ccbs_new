@@ -16,15 +16,15 @@
   VERSION ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{refcode.i}
-{transname.i}
-{coinv.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/refcode.i}
+{Func/transname.i}
+{Func/coinv.i}
+{Func/cparam2.i}
 
 /* print-linemuuttujat */
-{utumaa.i}
-{edefine.i}
+{Syst/utumaa.i}
+{Inv/edefine.i}
 
 def input parameter invno  like Invoice.InvNum no-undo.
 def input parameter epltul as log              no-undo. 
@@ -44,8 +44,8 @@ def var cper2       as int  no-undo.
 DEF VAR lcSpecDateHead AS CHAR NO-UNDO.
 DEF VAR lcCustName     AS CHAR NO-UNDO. 
 
-{nncore1.i}
-{ereppage.i}
+{Mc/nncore1.i}
+{Inv/ereppage.i}
 
 assign
 lev = IF epltul THEN 88 ELSE 91
@@ -104,7 +104,7 @@ FUNCTION fPaging RETURNS LOGICAL
     (iAddLine AS INT).
 
    if rl + iAddLine >= skayt1 then do:
-      {uprfeed.i rl}
+      {Syst/uprfeed.i rl}
       ASSIGN sl = sl + 1.
       view stream tul frame sivuotsi. rl = 4.
       view stream tul frame sarotsi.  rl = rl + 3. 
@@ -155,7 +155,7 @@ BREAK BY ttFee.Type
 
             fNewPage(IF first(ttFee.Prod) THEN 999 ELSE 3).
          
-            {nncore1e.i}
+            {Mc/nncore1e.i}
 
             if not first(ttFee.Prod) then do:
                 put stream eKirje unformatted
@@ -198,7 +198,7 @@ BREAK BY ttFee.Type
       if epltul then do:
 
         fNewPage(1).
-        {nncore1e.i}
+        {Mc/nncore1e.i}
 
         put stream eKirje unformatted
             " I" 
@@ -237,7 +237,7 @@ BREAK BY ttFee.Type
            THEN NEXT.
 
            fNewPage(0).
-           {nncore1e.i}
+           {Mc/nncore1e.i}
 
            put stream eKirje unformatted
               " I" 
@@ -283,7 +283,7 @@ BREAK BY ttFee.Type
 
          if epltul then do:
             fNewPage(1).
-            {nncore1e.i}
+            {Mc/nncore1e.i}
 
             PUT STREAM eKirje UNFORMATTED
                 " I"
@@ -304,7 +304,7 @@ BREAK BY ttFee.Type
 
          ELSE DO: 
             if rl >= skayt1 - 2 then do:
-                {uprfeed.i rl}
+                {Syst/uprfeed.i rl}
                 ASSIGN sl = sl + 1.
                 view stream tul frame sivuotsi. rl = 4.
                 view stream tul frame sarotsi.  rl = rl + 3. 
@@ -325,7 +325,7 @@ BREAK BY ttFee.Type
           
           if epltul then do:
              fNewPage(2).
-             {nncore1e.i}
+             {Mc/nncore1e.i}
 
              PUT STREAM eKirje UNFORMATTED
                  " I"
@@ -345,7 +345,7 @@ BREAK BY ttFee.Type
 
           ELSE DO: 
              if rl >= skayt1 - 3 then do:
-                 {uprfeed.i rl}
+                 {Syst/uprfeed.i rl}
                  ASSIGN sl = sl + 1.
                  view stream tul frame sivuotsi. rl = 4.
                  view stream tul frame sarotsi.  rl = rl + 3. 
@@ -359,7 +359,7 @@ BREAK BY ttFee.Type
                  SKIP.
              ASSIGN rl = rl + 3.
              
-             {uprfeed.i rl}
+             {Syst/uprfeed.i rl}
           END.
       END.
       

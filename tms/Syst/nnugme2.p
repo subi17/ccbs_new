@@ -8,8 +8,8 @@
   VERSIO .......: SCRUNKO3, (23.10.96)
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER UserCode LIKE TMSUser.UserCode NO-UNDO.
 
@@ -40,7 +40,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhUgMember AS HANDLE NO-UNDO.
    lhUgMember = BUFFER Ugmember:HANDLE.
@@ -48,7 +48,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhUgMember).
+      RUN Mc/eventview2.p(lhUgMember).
    END.
 END.
 
@@ -102,7 +102,7 @@ WITH
 
 FIND TMSUser where TMSUser.UserCode = UserCode no-lock.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST UGMember
@@ -131,7 +131,7 @@ add-group:
           ASSIGN ufkey = TRUE ufk = 0 ehto = 0
           ufk[1] = 512 ufk[2] = 514 ufk[3] = 517
           ufk[8] = 8.
-          RUN ufkey.
+          RUN Syst/ufkey.p.
 
           IF toimi = 8 THEN LEAVE add-group.
           IF toimi = 1 THEN
@@ -139,7 +139,7 @@ add-single:
           repeat WITH FRAME lis ON ENDKEY UNDO add-group,
                             NEXT add-group:
              PAUSE 0.
-             ehto = 9. RUN ufkey.
+             ehto = 9. RUN Syst/ufkey.p.
              CLEAR FRAME lis no-pause.
              PROMPT-FOR UGMember.UserGroup
              validate(input frame lis UGMember.UserGroup = "" OR
@@ -181,7 +181,7 @@ add-single:
           END. /* toimi = 1: add a single group */
 
           ELSE IF toimi = 2 THEN DO:
-             RUN nnuggb(TMSUser.UserCode).
+             RUN Syst/nnuggb.p(TMSUser.UserCode).
              LEAVE add-group.
           END.
 
@@ -300,16 +300,16 @@ SELAUS:
         ufk[1]= 35 ufk[2]= 0 ufk[3]= 0 ufk[4]= 519
         ufk[5]= 5  ufk[6]= 4 ufk[7] = 528 ufk[8] = 8  ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-        CHOOSE ROW UGMember.UserGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW UGMember.UserGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) UGMember.UserGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-        CHOOSE ROW UserGrp.UGName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW UserGrp.UGName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) UserGrp.UGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -448,9 +448,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        UserGroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if UserGroup <> "" THEN DO:
@@ -472,7 +472,7 @@ SELAUS:
 
      else if lookup(nap,"4,f4") > 0 THEN DO:  /* other members */
         FIND UGMember where recid(UGMember) = rtab[FRAME-LINE] no-lock.
-        RUN nnugme1(UGMember.UserGroup).
+        RUN Syst/nnugme1.p(UGMember.UserGroup).
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -542,7 +542,7 @@ SELAUS:
         FIND UserGrp of UGMember no-lock.
         PAUSE 0.
         DISP UserGrp.Memo WITH FRAME memo.
-        ASSIGN ufk = 0 ufk[8] = 8 ehto = 0 ufkey = TRUE.  RUN ufkey.
+        ASSIGN ufk = 0 ufk[8] = 8 ehto = 0 ufkey = TRUE.  RUN Syst/ufkey.p.
         HIDE FRAME memo.
         NEXT LOOP.
      END.
@@ -552,7 +552,7 @@ SELAUS:
        FIND UGMember where recid(UGMember) = rtab[frame-line(sel)]
        exclusive-lock.
        assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUgMember).
        UPDATE UGMember.Memo.
 

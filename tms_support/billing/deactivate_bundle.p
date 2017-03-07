@@ -1,9 +1,9 @@
-{date.i}
-{commpaa.i}
+{Func/date.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{timestamp.i}
-{fmakemsreq.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
 
 find first mobsub where mobsub.cli = "633495343" no-lock no-error.
 def var liRequest as int no-undo.

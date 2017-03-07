@@ -1,9 +1,9 @@
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "cron"
    gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 DEFINE TEMP-TABLE ttReport NO-UNDO
    FIELD name AS CHAR
