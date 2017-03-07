@@ -9,16 +9,16 @@
 
 &GLOBAL-DEFINE TraceLog NO
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{coinv.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/coinv.i}
+{Syst/funcrunprocess_update.i}
 
 &IF "{&TraceLog}" = "YES" 
 &THEN
-{log.i}
+{Func/log.i}
 &ENDIF 
 
 DEF INPUT  PARAMETER iiPeriod         AS INT  NO-UNDO.

@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
 def var i as int no-undo.
@@ -25,7 +25,7 @@ for each mobsub no-lock where
        disp servicelimit.groupcode
             servicelcounter.amt / (1024 * 1024) column-label "Counter".
 
-   run cli_rate.p (mobsub.cli,
+   RUN Rate/cli_rate.p (mobsub.cli,
                    1/1/10,
                    1/31/10,
                    true).

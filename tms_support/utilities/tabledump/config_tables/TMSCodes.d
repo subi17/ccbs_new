@@ -1368,6 +1368,7 @@
 "RoamTariff" "Service" "Roaming" "GPRS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "SMS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "VOICE" "" "" "" 1
+"Salesman" "SmPrefix" "IFS" "AB" "B12 CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AF" "AMPLIFFICA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AK" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AL" "Alcampo" "" "13" 0
@@ -1390,6 +1391,7 @@
 "Salesman" "SmPrefix" "IFS" "CT" "CASTURTEL EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "DX" "Dextra" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "EM" "" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "EO" "CELLCOM EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EU" "Emision Unisono" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "GE" "GSS EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GR" "GSS RECEPCION" "" "15" 1

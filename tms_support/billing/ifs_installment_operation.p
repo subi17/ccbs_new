@@ -8,10 +8,10 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 /*
-{commali.i}
-{dumpfile_run.i}
-{tmsconst.i}
-{date.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Syst/tmsconst.i}
+{Func/date.i}
 
 &SCOPED-DEFINE BANK_CODE "0049"
 
@@ -25,12 +25,12 @@ DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{dumpfile_run.i}
-{tmsconst.i}
-{date.i}
+{Syst/dumpfile_run.i}
+{Syst/tmsconst.i}
+{Func/date.i}
 
 &SCOPED-DEFINE BANK_CODE "0049"
 

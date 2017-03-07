@@ -40,13 +40,13 @@
 /* don't initialize rerate etc. */
 &GLOBAL-DEFINE InitPersistent NO
 
-{commali.i}
-{tmsparam2.i}
-{billrund.i NEW}
-{faccper.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Invoice'}
-{finvnum.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Inv/billrund.i NEW}
+{Func/faccper.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Invoice'}
+{Func/finvnum.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE " You cannot create invoices ! " VIEW-AS ALERT-BOX.
@@ -89,7 +89,7 @@ DEF VAR lcItem     AS CHAR NO-UNDO.
 DEF VAR liPaymTerm AS INT  NO-UNDO. 
 DEF VAR lcPrefix   AS CHAR NO-UNDO.
 
-{tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
+{Func/tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
 
 /* default values from TMSParam */
 ASSIGN
@@ -110,7 +110,7 @@ if not avail Currency OR defcurr = ? OR defcurr = "" THEN DO:
 END.
 
 DEF VAR pHandle   AS handle NO-UNDO.
-RUN lamupers persistent set pHandle.
+RUN Inv/lamupers.p persistent set pHandle.
 
 form
    skip(17)
@@ -157,11 +157,11 @@ WITH
    OVERLAY centered ROW 14 FRAME lCustNum.
 
 IF NOT ilSilent THEN DO:
-   cfc = "sel". RUN ufcolor. ccc = cfc.
+   cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
    view FRAME taka. PAUSE 0 no-message.
 
-   cfc = "lis". RUN ufcolor.
-   ehto = 9. RUN ufkey.
+   cfc = "lis". RUN Syst/ufcolor.p.
+   ehto = 9. RUN Syst/ufkey.p.
    
    liPaymTerm = 9. 
 END.
@@ -284,7 +284,7 @@ IF NOT ilSilent THEN DO:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          UPDATE
             InvGroup
             CustNum1 CustNum2   validate(INPUT CustNum2  >= INPUT CustNum1,
@@ -376,7 +376,7 @@ IF NOT ilSilent THEN DO:
       ASSIGN ufk = 0 ufk[1] = 132 ufk[2] = 0 
                      ufk[4] = 0 ufk[5] = 795
                      ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN DO:
          kysy_rajat = TRUE.
          NEXT toimi.

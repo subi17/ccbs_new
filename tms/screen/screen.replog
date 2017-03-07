@@ -1,3 +1,3 @@
 echo "-- CDF SMS HPD SENDER SCREEN --"
 sleep 2
-screen 1 xfear -screen sms_hpd_sender tms.pf
+screen 1 xfear -screen Gwy/sms_hpd_sender tms.pf

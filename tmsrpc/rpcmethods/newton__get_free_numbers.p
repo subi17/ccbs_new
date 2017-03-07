@@ -5,7 +5,7 @@
  * @output numbers;array of strings
  */
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 /* Input parameters */
 DEF VAR pcSearch AS CHAR NO-UNDO.

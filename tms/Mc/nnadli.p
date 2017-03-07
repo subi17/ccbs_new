@@ -11,12 +11,12 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}  
+{Syst/commali.i}  
 
-{utumaa.i "new"}
-{fcustbal.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'custbal'}
+{Syst/utumaa.i "new"}
+{Func/fcustbal.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'custbal'}
 
 assign tuni1 = "nnadli"
        tuni2 = "".
@@ -106,7 +106,7 @@ END FUNCTION.
 
 rajat:
 repeat WITH FRAME rajat:
-   ehto = 9.  RUN ufkey.
+   ehto = 9.  RUN Syst/ufkey.p.
 
    UPDATE
    lcInvGroup
@@ -138,7 +138,7 @@ Action:
    repeat WITH FRAME sel:
        ASSIGN
        ufk = 0 ehto = 0 ufk[1] = 91  ufk[5] = 63 ufk[8] = 8.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
 
 
        IF toimi = 1 THEN NEXT rajat.
@@ -146,7 +146,7 @@ Action:
        IF toimi = 5 THEN DO:
 
           tila = TRUE.
-          {tmsreport.i "leave rajat"}
+          {Syst/tmsreport.i "leave rajat"}
 
           LEAVE Action.
        END.
@@ -177,7 +177,7 @@ Action:
    BY   ttCust.CustNum.
 
       IF rl >= skayt1 THEN DO:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
          ASSIGN sl = sl + 1 rl = 8.
          view STREAM tul FRAME hdr-1.
       END.
@@ -200,7 +200,7 @@ Action:
       IF last(ttCust.CustNum) THEN DO:
 
          IF rl >= skayt1 - 1 THEN DO:
-            {uprfeed.i rl}
+            {Syst/uprfeed.i rl}
             ASSIGN sl = sl + 1 rl = 8.
             view STREAM tul FRAME hdr-1.
          END.
@@ -215,10 +215,10 @@ Action:
          SKIP.
          rl = rl + 2.
 
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
 
          tila = FALSE.
-         {tmsreport.i}
+         {Syst/tmsreport.i}
       END.
 
    END.

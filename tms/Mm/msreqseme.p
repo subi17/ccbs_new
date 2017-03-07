@@ -4,13 +4,13 @@
   SOVELLUTUS ...: TMS
   AUTHOR .......: aam 
   CREATED ......: 13.02.06
-  changePVM ....: 12.12.06/mvi new param to run msrequest (reqstat = ?)
+  changePVM ....: 12.12.06/mvi new param to RUN Mm/msrequest.p (reqstat = ?)
                   31.10.07 jp  new parameter for msrequest
                   
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR lcMenuc   AS CHAR  NO-UNDO EXTENT 3 FORMAT "X(35)". 
 DEF VAR liReqType AS INT   NO-UNDO EXTENT 3.
@@ -42,7 +42,7 @@ DO WHILE TRUE:
    ASSIGN ufk    = 0 
           ufk[8] = 8 
           ehto   = 3. 
-   RUN ufkey. 
+   RUN Syst/ufkey.p. 
 
    DISPLAY
       lcMenuc
@@ -57,7 +57,7 @@ DO WHILE TRUE:
 
    ELSE IF FRAME-INDEX >= 1 AND FRAME-INDEX <= liMenu - 1 
    THEN DO:
-      RUN msrequest (liReqType[FRAME-INDEX],
+      RUN Mm/msrequest.p (liReqType[FRAME-INDEX],
                      ?,
                      0,
                      0,

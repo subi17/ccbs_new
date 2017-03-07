@@ -6,14 +6,14 @@
 */
 
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 Katun = "Cron".
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
-{date.i}
-{amq.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/date.i}
+{Func/amq.i}
 
 DEF VAR lcActionID        AS CHAR NO-UNDO.
 DEF VAR lcTableName       AS CHAR NO-UNDO.

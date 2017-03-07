@@ -7,22 +7,22 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{date.i}
-{eventval.i}
-{msreqfunc.i}
-{orderfunc.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/date.i}
+{Syst/eventval.i}
+{Func/msreqfunc.i}
+{Func/orderfunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEFINE VARIABLE lhOrderFusion AS HANDLE NO-UNDO.
    lhOrderFusion = BUFFER OrderFusion:HANDLE.
    RUN StarEventInitialize(lhOrderFusion).
@@ -228,7 +228,7 @@ PROCEDURE pUpdateFusionOrder:
          Order.StatusCode EQ {&ORDER_STATUS_MNP_REJECTED} OR
          Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} THEN DO:
 
-         RUN closeorder.p(Order.OrderId,TRUE).
+         RUN Mc/closeorder.p(Order.OrderId,TRUE).
 
          IF RETURN-VALUE NE "" THEN
             RETURN "ERROR:Order closing failed: " + STRING(RETURN-VALUE).
@@ -254,7 +254,7 @@ PROCEDURE pUpdateFusionOrder:
       END.
       ELSE IF LOOKUP(Order.StatusCode,{&ORDER_STATUS_DELIVERED}) > 0 THEN DO:
 
-         RUN fusion_stc_fallback.p(Order.OrderId, OUTPUT liRequest).
+         RUN Mm/fusion_stc_fallback.p(Order.OrderId, OUTPUT liRequest).
 
          IF liRequest = 0 AND 
             RETURN-VALUE NE "Subscription type is not Fusion" AND
@@ -279,7 +279,7 @@ PROCEDURE pUpdateFusionOrder:
                (Order.OrderChannel <> "Fusion_POS" AND Order.ICC = "")) AND
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
 
-         RUN orderinctrl.p(Order.OrderId, 0, TRUE).
+         RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).
          IF RETURN-VALUE > "" THEN
             RETURN "ERROR:Mobile order release failed: " + STRING(RETURN-VALUE).
       END.
@@ -291,7 +291,7 @@ PROCEDURE pUpdateFusionOrder:
              (Order.OrderType = {&ORDER_TYPE_STC} OR Order.ICC > "" OR
               (Order.OrderChannel <> "Fusion_POS" AND Order.ICC = "")))
          THEN RETURN "ERROR:Mobile order release not allowed".
-      RUN orderinctrl.p(Order.OrderId, 0, TRUE).
+      RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).
       IF RETURN-VALUE > "" THEN RETURN "ERROR:Mobile order release failed".
    END.
 

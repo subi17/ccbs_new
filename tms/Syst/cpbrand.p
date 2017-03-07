@@ -8,7 +8,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER icSourceBrand AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icTargetBrand AS CHAR NO-UNDO.
@@ -124,7 +124,7 @@ ASSIGN olCopied   = FALSE
        
        lcSystem   = "TMSParam,HdrText,MsClass,CLIType"
        lcSystExpl = "System Parameters,Header Texts,,"
-       lcSystProg = "cparam,nnteyp,,"
+       lcSystProg = "Syst/cparam.p,Mc/nnteyp.p,,"
       
        /* tables, that are copied as a group, are joined with "¤" */ 
        lcTable    = "Account,Interest," + 
@@ -142,12 +142,12 @@ ASSIGN olCopied   = FALSE
                     "Resellers and Salesmen,Invoicing Groups," +
                     "Customer Categories,Customer Classes," +
                     "Direct Marketing Codes,Mobile Service Parameters"
-       lcProg     = "nnacyp,otint," +
-                    "nntuyp¤nnpgyp,invsect," +
-                    "bevent,nnmayp,nnbtyp¤bnet," + 
-                    "nnplyp,rccn,rateplan,discplan,pnpgroup," +
-                    "nnrsyp,nnigyp,nnkayp,custclass," +
-                    "dirmark,service¤servpac"
+       lcProg     = "Mc/nnacyp.p,Ar/otint.p," +
+                    "Mc/nntuyp.p¤Mc/nnpgyp.p,Mc/invsect.p," +
+                    "Mc/bevent.p,Mc/nnmayp.p,Mc/nnbtyp.p¤Mm/bnet.p," + 
+                    "Mc/nnplyp.p,rccn,Mc/rateplan.p,Mc/discplan.p,Mc/pnpgroup.p," +
+                    "Mc/nnrsyp.p,Mc/nnigyp.p,Mc/nnkayp.p,Mc/custclass.p," +
+                    "Mc/dirmark.p,Mm/service.p¤Mm/servpac.p"
        lcCond     = "".
 
 FIND bSource WHERE bSource.Brand = icSourceBrand NO-LOCK NO-ERROR.
@@ -217,7 +217,7 @@ REPEAT TRANSACTION:
          END.
          
          ehto = 4.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
             
       END.
       
@@ -291,7 +291,7 @@ REPEAT TRANSACTION:
             END.
             
             ehto = 4.
-            RUN ufkey.
+            RUN Syst/ufkey.p.
             
          END.
       END.

@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{msisdn.i}
+{Func/msisdn.i}
 
 find first msisdn where
    msisdn.brand = "1" and

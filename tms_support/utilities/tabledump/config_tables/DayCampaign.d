@@ -64,6 +64,7 @@
 "DUB" 31/01/11 4 31/12/49 "DUB" 0 "" "" "Data Usage Bundle 500 MB" 93 0 "1" "4" 4 1 0 0 "" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1
 "DUB2" 01/05/12 4 31/12/49 "DUB2" 0 "" "" "Data Usage Bundle 1 GB" 93 0 "1" "4" 4 1 0 0 "CONT7MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 59 1
 "DUB3" 01/12/12 4 31/12/49 "DUB3" 0 "" "" "Data Usage Bundle 1 GB" 93 0 "1" "4" 4 1 0 0 "CONT8MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 59 1
+"FLEX_UPSELL" 01/03/17 4 31/12/49 "" 0 "" "" "FLEX upsell" 93 0 "1" "6" 1 2 1 0 "FLEX_MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1
 "FREE100MINUTES" 01/06/16 0 31/12/49 "" 0 "" "" "Promo 100 min/mes gratis" 0 0 "1" "1" 1 2 3 0 "" "" "" 3 1 0 yes 1 0 0 1 "" 0 1
 "FTERM12-100" 27/10/16 0 31/12/49 "" 0 "" "" "FTERM12 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 0
 "GPRS" 01/12/06 6 31/12/54 "14100001" 1.653 "1" "" "GPRS maximum charge per day" 93 1.653 "1" "2" 2 1 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0 1

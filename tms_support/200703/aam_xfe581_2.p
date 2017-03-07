@@ -1,6 +1,6 @@
-{testpaa.i}
-{fvoucher.i}
-{timestamp.i}
+{Syst/testpaa.i}
+{Func/fvoucher.i}
+{Func/timestamp.i}
 
 def var ldtaxperc  as dec  no-undo.
 def var i          as int  no-undo.

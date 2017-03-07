@@ -7,10 +7,10 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
-{eventlog.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Syst/eventlog.i}
 
 DEF INPUT  PARAMETER iiFRQueueID     AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiFRQScheduleID AS INT  NO-UNDO.

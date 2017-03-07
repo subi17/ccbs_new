@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 
 def var lccli as char no-undo.
 

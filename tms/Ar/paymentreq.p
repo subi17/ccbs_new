@@ -8,18 +8,18 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
-{faccper.i}
-{finvpayment.i}
-{fpaymconfig.i}
-{ftaxdata.i}
-{eventval.i}
+{Func/faccper.i}
+{Func/finvpayment.i}
+{Func/fpaymconfig.i}
+{Func/ftaxdata.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 
@@ -197,7 +197,7 @@ PROCEDURE pPayment:
    /* payment source */
    IF lcPaymSrc = "" THEN lcPaymSrc = "REQ".
    
-   RUN createpaym (Customer.CustNum,
+   RUN Ar/createpaym.p (Customer.CustNum,
                    MsRequest.ReqIParam1,               /* invoice */
                    lcCLI,
                    ldtAccDate,                         /* posting date */

@@ -13,15 +13,15 @@
   VERSION ......: SHARK
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 katun = "cron".
 gcBrand = "1".
 
-{date.i}
-{fvatfact.i}
-{excel.i}
-{coinv.i}
-{cparam2.i}
+{Func/date.i}
+{Func/fvatfact.i}
+{Func/excel.i}
+{Func/coinv.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE  iiper AS INTEGER NO-UNDO INIT 0.
 

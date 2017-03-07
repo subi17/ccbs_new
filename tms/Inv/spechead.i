@@ -9,7 +9,7 @@
              
 */
 
-{transname.i}
+{Func/transname.i}
 
 FUNCTION fSpecCLIHeader RETURNS CHARACTER
    (icCLI      AS CHAR,

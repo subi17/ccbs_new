@@ -28,12 +28,12 @@
   VERSION ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i}
-{finvbal.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i}
+{Func/finvbal.i}
 
-{ageanal.i}
+{Ar/ageanal.i}
 
 DEF INPUT PARAMETER TABLE FOR TCustGroup.
 DEF INPUT PARAMETER TABLE FOR ttCriter.
@@ -155,7 +155,7 @@ FUNCTION fChgPage RETURNS LOGICAL
    if rl + iiAddLine >= skayt1 then do:
 
       if sl > 0 then do:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       end.
 
       assign
@@ -419,7 +419,7 @@ IF ttCriter.ToFile = "" THEN DO:
 
    rl = rl + 1.
 
-   {uprfeed.i rl}
+   {Syst/uprfeed.i rl}
 END.
 
 /* summary line to file only if specification was not printed */

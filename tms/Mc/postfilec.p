@@ -9,10 +9,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{ftransdir.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/timestamp.i}
 
 DEF OUTPUT PARAMETER oiDoneAdd AS INT  NO-UNDO. 
 DEF OUTPUT PARAMETER oiDoneDel AS INT  NO-UNDO. 

@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "YOT-649".
 gcBrand = "1".
-{orderfunc.i}
-{tmsconst.i}
+{Func/orderfunc.i}
+{Syst/tmsconst.i}
 
 input from as_yot650.input.
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 

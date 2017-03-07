@@ -8,7 +8,7 @@ DEFINE VARIABLE litime AS INTEGER NO-UNDO.
 
 /* Customer number, MSISDN, billing item, number of CDRs, euro amount, invoice number (if invoiced) */
 
-{date.i}
+{Func/date.i}
 
 DEFINE VARIABLE ldeAmount AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE liAmount AS INTEGER NO-UNDO. 

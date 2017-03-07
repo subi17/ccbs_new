@@ -19,24 +19,24 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 /*
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCLI AS HANDLE NO-UNDO.
    lhCLI = BUFFER CLI:HANDLE.
    RUN StarEventInitialize(lhCLI).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCLI).
+      RUN Mc/eventview2.p(lhCLI).
    END.
 
 END.

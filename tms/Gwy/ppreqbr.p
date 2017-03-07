@@ -31,36 +31,36 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PrePaidRequest'}
-{xmlfunction.i}
-{ftaxdata.i}
-{timestamp.i}
-{cparam2.i}
-{matrix.i}
-{ftaxdata.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PrePaidRequest'}
+{Func/xmlfunction.i}
+{Func/ftaxdata.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/matrix.i}
+{Func/ftaxdata.i}
 
-{tmsconst.i}
-{fuserright.i}
-{fcustpl.i}
-{dialog.i}
+{Syst/tmsconst.i}
+{Func/fuserright.i}
+{Func/fcustpl.i}
+{Func/dialog.i}
 
 DEFINE INPUT PARAMETER  iiMsSeq AS INT  NO-UNDO.
                       
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPrePaidRequest AS HANDLE NO-UNDO.
    lhPrePaidRequest = BUFFER PrePaidRequest:HANDLE.
    RUN StarEventInitialize(lhPrePaidRequest).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhPrePaidRequest).
+      RUN Mc/eventview2.p(lhPrePaidRequest).
    END.
 
 END.
@@ -324,7 +324,7 @@ END FUNCTION.
 
 lcPassword = fCParamC("AdminUser").
  
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST MobSub WHERE
@@ -366,7 +366,7 @@ REPEAT WITH FRAME sel:
             ufk[8]    = 8
             ehto      = 3.
       
-         RUN ufkey. 
+         RUN Syst/ufkey.p. 
 
           /* dialog to fetch the charge/compensation  amount using 
              FeeModel and FMItem  */
@@ -376,7 +376,7 @@ REPEAT WITH FRAME sel:
           DEFINE VARIABLE loutValueId AS CHARACTER NO-UNDO. 
 
 
-          RUN h-dialog.p (INPUT TABLE ttable BY-REFERENCE ,
+          RUN Help/h-dialog.p (INPUT TABLE ttable BY-REFERENCE ,
                           INPUT lctitle,
                           OUTPUT lrecid,
                           OUTPUT loutValueId).
@@ -474,14 +474,14 @@ REPEAT WITH FRAME sel:
          ac-hdr   = " ADD "
          must-add = FALSE.
 
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
 
         PAUSE 0 NO-MESSAGE.
         
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         
         REPEAT TRANSACTION WITH FRAME lis:
            
@@ -596,13 +596,13 @@ REPEAT WITH FRAME sel:
            ehto   = 3
            ufkey  = FALSE.
 
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PrePaidRequest.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PrePaidRequest.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PrePaidRequest.CLI WITH FRAME sel.
       END.
 
@@ -730,8 +730,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcCLI WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -769,7 +769,7 @@ REPEAT WITH FRAME sel:
            VIEW-AS ALERT-BOX.
         END.
         ELSE DO:
-           RUN payments(MobSub.CustNum,0,STRING(PrePaidRequest.PPRequest)).
+           RUN Ar/payments.p(MobSub.CustNum,0,STRING(PrePaidRequest.PPRequest)).
         END.
         
         ASSIGN
@@ -820,7 +820,7 @@ REPEAT WITH FRAME sel:
      END. /* ADD NEW */
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
-        RUN balancequery(lcMobCLI).
+        RUN Gwy/balancequery.p(lcMobCLI).
         INT(RETURN-VALUE) NO-ERROR.
         IF ERROR-STATUS:ERROR THEN
            MESSAGE RETURN-VALUE VIEW-AS ALERT-BOX ERROR.
@@ -840,8 +840,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPrePaidRequest).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PrePaidRequest.CLI.
 
        llTaxable = (PrepaidRequest.VatAmt NE 0).
@@ -1028,7 +1028,7 @@ PROCEDURE pShowXML:
    
    RUN pMessage2XMLTable(lhRoot,1,0).
    
-   RUN xmlbrowser(INPUT TABLE ttXMLSchema).
+   RUN Mc/xmlbrowser.p(INPUT TABLE ttXMLSchema).
         
    SET-SIZE(lmXML) = 0.
 
@@ -1157,7 +1157,7 @@ PROCEDURE local-UPDATE-record:
       ldMaxAmt = 1000.
       
       /* get current balance */
-      RUN balancequery(MobSub.CLI).
+      RUN Gwy/balancequery.p(MobSub.CLI).
       ldCurrBal = INT(RETURN-VALUE) / 100.
 
       /* in case of minus adjustment */
@@ -1285,14 +1285,14 @@ PROCEDURE local-UPDATE-record:
          llDirect = FALSE
          toimi    = 1.
          
-      ELSE RUN ufkey.   
+      ELSE RUN Syst/ufkey.p.   
       
       IF toimi = 1 THEN DO:
       
          FIND CURRENT PrePaidRequest EXCLUSIVE-LOCK.
          
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE. 
           
@@ -1460,7 +1460,7 @@ PROCEDURE local-UPDATE-record:
          IF lcPassword NE lcAskPasswd THEN NEXT.
          
          /* get current balance */
-         RUN balancequery(MobSub.CLI).
+         RUN Gwy/balancequery.p(MobSub.CLI).
          ldCurrBal = INT(RETURN-VALUE) / 100.
        
          IF ldCurrBal <= 0 THEN DO:
@@ -1475,7 +1475,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 3.
       
-         RUN ufkey. 
+         RUN Syst/ufkey.p. 
 
          DISPLAY
             " A) Minus adjustment           " @ lcMenu[1]  SKIP
@@ -1534,7 +1534,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 3.
       
-         RUN ufkey. 
+         RUN Syst/ufkey.p. 
 
          DISPLAY
             " A) Cancel request (set status to 4)" @ lcMenu[1]  SKIP

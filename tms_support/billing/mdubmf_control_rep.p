@@ -1,7 +1,7 @@
 
 /* MDUB Control Report */
 
-{timestamp.i}
+{Func/timestamp.i}
 
 FUNCTION fGetMobSubInfo RETURNS LOGICAL 
          (INPUT piMsSeq AS INT,

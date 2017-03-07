@@ -7,9 +7,9 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{pdfinvdf.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Inv/pdfinvdf.i}
 
 DEF INPUT  PARAMETER iiInvNum1     AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiInvNum2     AS INT  NO-UNDO.
@@ -124,7 +124,7 @@ IF NOT CAN-FIND(FIRST ttPDFInv) THEN DO:
    
 END.
 
-RUN pdfinv(INPUT-OUTPUT TABLE ttPDFInv,
+RUN Inv/pdfinv.p(INPUT-OUTPUT TABLE ttPDFInv,
            INPUT  ilPrintRep,
            INPUT  ilFormPDF,
            INPUT  iiSendMail,

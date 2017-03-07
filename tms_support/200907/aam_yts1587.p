@@ -13,19 +13,19 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "RetFile".
        
-{cparam.i2}
-{utumaa.i "new"}
+{Func/cparam.i2}
+{Syst/utumaa.i "new"}
 /* temp-table */
-{paymfile.i}
-{paymtrans.i}
-{farplog.i}
-{eventlog.i}
-{timestamp.i}
+{Ar/paymfile.i}
+{Ar/paymtrans.i}
+{Func/farplog.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
 
 DEF TEMP-TABLE ttFiles NO-UNDO
    FIELD PaymFile AS CHAR
@@ -128,10 +128,10 @@ FOR EACH ttFiles:
 
    /* type of payment file */
    CASE ttFiles.ConvMod:
-   WHEN "nnocko"     THEN liFileType = 1.
-   WHEN "nnockott"   THEN liFileType = 2.
-   WHEN "nnockointr" OR
-   WHEN "nnockoakf"  THEN liFileType = 3.
+   WHEN "Ar/nnocko.p"     THEN liFileType = 1.
+   WHEN "Ar/nnockott.p"   THEN liFileType = 2.
+   WHEN "Ar/nnockointr.p" OR
+   WHEN "Ar/nnockoakf.p"  THEN liFileType = 3.
    OTHERWISE liFileType = 0.
    END CASE. 
    

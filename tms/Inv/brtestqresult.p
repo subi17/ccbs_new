@@ -7,23 +7,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'BRTestQResult'}
-{eventval.i}
-{timestamp.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'BRTestQResult'}
+{Syst/eventval.i}
+{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhBRTestQResult AS HANDLE NO-UNDO.
    lhBRTestQResult = BUFFER BRTestQResult:HANDLE.
    RUN StarEventInitialize(lhBRTestQResult).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhBRTestQResult).
+      RUN Mc/eventview2.p(lhBRTestQResult).
    END.
 
 END.
@@ -101,7 +101,7 @@ IF NOT AVAILABLE BRTestQueue THEN DO:
 END.
 lcConfName = BRTestQueue.Description.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -189,12 +189,12 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BRTestQResult.BRTestQResultID ;(uchoose.i;) 
+        CHOOSE ROW BRTestQResult.BRTestQResultID {Syst/uchoose.i} 
            NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BRTestQResult.BRTestQResultID 
            WITH FRAME sel.
@@ -342,8 +342,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBRTestQResult).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -380,7 +380,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -464,11 +464,11 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       IF toimi = 4 THEN DO:
-         RUN brtestqresultrow.p (BRTestQResult.BRTestQResultID).
+         RUN Inv/brtestqresultrow.p (BRTestQResult.BRTestQResultID).
       END.
       
       ELSE IF toimi = 8 THEN LEAVE. 

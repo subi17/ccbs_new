@@ -1,5 +1,5 @@
 /* nagios monitoring script for dump logs */
-{date.i}
+{Func/date.i}
 
 DEFINE VARIABLE ldaStart AS DATE NO-UNDO. 
 DEFINE VARIABLE liStart AS INTEGER NO-UNDO. 

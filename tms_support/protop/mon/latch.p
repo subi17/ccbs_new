@@ -40,11 +40,11 @@
  *
  */
 
-{lib/protop.i}
+{protop/lib/protop.i}
 
 define variable support  as character no-undo initial "Latch Waits".
 
-{lib/tt_xstat.i}
+{protop/lib/tt_xstat.i}
 
 /* a prototype for a more generic approach to sort_by
  *

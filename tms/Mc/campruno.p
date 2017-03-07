@@ -9,8 +9,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{camprundf.i}
+{Syst/commali.i}
+{Mc/camprundf.i}
 
 DEF INPUT  PARAMETER iiOrder AS INT  NO-UNDO. 
 DEF OUTPUT PARAMETER ocError AS CHAR NO-UNDO. 
@@ -57,7 +57,7 @@ CREATE ttCust.
 ASSIGN ttCust.CustNum = MobSub.CustNum
        ttCust.MSSeq   = MobSub.MSSeq.
        
-RUN camprun (INPUT TABLE ttCust,
+RUN Mc/camprun.p (INPUT TABLE ttCust,
              Order.Campaign,
              Order.Campaign,
              Order.CrStamp,

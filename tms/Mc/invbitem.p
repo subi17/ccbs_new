@@ -8,7 +8,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER  InvNum     AS I  NO-UNDO.
 DEF INPUT PARAMETER  BillCode      AS C  NO-UNDO.
@@ -16,7 +16,7 @@ DEF INPUT PARAMETER  BillCode      AS C  NO-UNDO.
 DEF VAR  Qty        AS I  NO-UNDO.
 
 ASSIGN
-   ufk = 0 ehto = 3. RUN ufkey.
+   ufk = 0 ehto = 3. RUN Syst/ufkey.p.
 
    FIND FIRST SingleFee WHERE 
               SingleFee.InvNum  = InvNum AND

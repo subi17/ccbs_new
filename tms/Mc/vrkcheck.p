@@ -17,12 +17,12 @@
   Version ......: SHARK
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{forderstamp.i}
-{vrkcheck.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/forderstamp.i}
+{Func/vrkcheck.i}
+{Func/orderfunc.i}
 def input parameter iiOrderId like order.orderId.
 
 def var date1 as da no-undo.

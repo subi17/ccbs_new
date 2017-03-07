@@ -6,7 +6,7 @@
   CREATED ......: 19.05.98
   MODIFIED  ....: 08.09.95 /tt --> Saatettu F5 myOs toimimaan VALITSEN TAMAN
                   11.08.98 /pt --> DISP Level WITH FRAME sel
-                  19.98.98 /pt --> f7: RUN nninfo
+                  19.98.98 /pt --> f7: RUN Syst/nninfo.p
                   28.04.99 /pt --> show only those functions where this user
                                    has some rights
                   11.11.03/aam tokens instead of userrights                                     
@@ -16,7 +16,7 @@
                   order  : (in)  1: toimintoBROWSE 2: nimiBROWSE
   ------------------------------------------------------ */
 
-{commali.i} 
+{Syst/commali.i} 
 
 DEF shared VAR siirto AS CHAR.
 DEF shared VAR order   AS INT.
@@ -67,7 +67,7 @@ FOR FIRST TMSUser NO-LOCK WHERE
     lctokens = UserGrp.ShowTokens + "," + UserGrp.ModifyTokens.
 END.
 
-cfc = "rajat". RUN ufcolor.
+cfc = "rajat". RUN Syst/ufcolor.p.
 assign ccc = cfc mc = index(siirto,"*") > 0.
 
 view FRAME sel.
@@ -192,16 +192,16 @@ BROWSE:
          ASSIGN
          ufk = 0 ufk[1]= 35 ufk[2]= 717 ufk[6] = 983 ufk[5]= 11 ufk[8]= 8
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW MenuTree.MenuId ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW MenuTree.MenuId {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) MenuTree.MenuId WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW MenuTree.MenuTitle ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW MenuTree.MenuTitle {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) MenuTree.MenuTitle WITH FRAME sel.
       END.
 
@@ -382,9 +382,9 @@ BROWSE:
 
      /* Haku tunnuksella */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku tunnuksella */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
         if haku <> "" THEN DO:
@@ -415,9 +415,9 @@ BROWSE:
 
      /* Haku nimella */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku nimella */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:
@@ -455,7 +455,7 @@ BROWSE:
 
      else if lookup(nap,"F6,6,enter,return") > 0 THEN DO:
         FIND MenuTree where recid(MenuTree) = rtab[frame-line(sel)] no-lock.
-        RUN nninfo(MenuTree.MenuId).
+        RUN Syst/nninfo.p(MenuTree.MenuId).
         NEXT LOOP.
      END.
 
