@@ -2,7 +2,7 @@
 &THEN
 
 &GLOBAL-DEFINE PREPAIDFEE_I YES
-{commali.i}
+{Syst/commali.i}
 
 FUNCTION fgetPrepaidFeeAmount RETURNS DECIMAL 
          (INPUT icDCEvent       AS CHAR,

@@ -7,12 +7,12 @@
   Version ......: yoigo 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
-{func.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PrepEDR'} 
-{feventlog.i}
+{Syst/commali.i}
+{Func/msisdn.i}
+{Func/func.p} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PrepEDR'} 
+{Func/feventlog.i}
 
 DEF INPUT  PARAMETER  icCLI              AS C NO-UNDO.
 
@@ -22,7 +22,7 @@ DEF VAR odtDate2                      AS DATE NO-UNDO.
 
 DEF VAR olAccept                      AS LOG  NO-UNDO.
 
-RUN  mobguard2(INPUT  TRUE,
+RUN Mm/mobguard2.p(INPUT  TRUE,
                OUTPUT ocReasonCode,
                OUTPUT odtDate1,
                OUTPUT odtdate2,
@@ -30,7 +30,7 @@ RUN  mobguard2(INPUT  TRUE,
 
 IF olAccept = FALSE THEN LEAVE.
 
-RUN edrbrowse.p(INPUT "edr",
+RUN Mm/edrbrowse.p(INPUT "edr",
               INPUT  odtDate1,
               INPUT  odtDate2,
               INPUT  0,

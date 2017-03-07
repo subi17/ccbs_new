@@ -7,9 +7,9 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{requestaction_exec.i}
-{fsendsms.i}
+{Syst/commali.i}
+{Mm/requestaction_exec.i}
+{Func/fsendsms.i}
 {lib/smpp/smpp_defs.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.

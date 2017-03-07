@@ -6,20 +6,20 @@
   Created ......: 03.07.12
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "Qvantel".
 
-{timestamp.i}
-{tmsconst.i}
-{cparam2.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{service.i}
-{fdss.i}
-{fbtc.i}
-{ftransdir.i}
-{email.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Func/service.i}
+{Func/fdss.i}
+{Func/fbtc.i}
+{Func/ftransdir.i}
+{Func/email.i}
 
 
 DEFINE VARIABLE lcOutPutDir        AS CHAR NO-UNDO.

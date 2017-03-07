@@ -9,14 +9,14 @@ external_selfservice__q25_add.p
 
 {xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{fsendsms.i}
-{fexternalapi.i}
-{q25functions.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/fsendsms.i}
+{Func/fexternalapi.i}
+{Func/q25functions.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.

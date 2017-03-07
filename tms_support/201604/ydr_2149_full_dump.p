@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{host.i}
+{Syst/host.i}
 
 DEF VAR lcDumpFile AS CHAR NO-UNDO. 
 DEF VAR lcDate     AS CHAR NO-UNDO. 
@@ -25,7 +25,7 @@ FIND FIRST DumpFile NO-LOCK WHERE
 
 IF AVAIL DumpFile THEN DO:
    
-   RUN dumpfile_run(DumpFile.DumpID,  /* Dump ID */
+   RUN Syst/dumpfile_run.p(DumpFile.DumpID,  /* Dump ID */
                     "Full",
                     "",
                     fIsThisReplica(),

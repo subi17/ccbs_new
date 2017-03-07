@@ -11,22 +11,22 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'beacap'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'beacap'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhBeaCap AS HANDLE NO-UNDO.
    lhBeaCap = BUFFER BeaCap:HANDLE.
    RUN StarEventInitialize(lhBeaCap).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhBeaCap).
+      RUN Mc/eventview2.p(lhBeaCap).
    END.
 END.
 
@@ -90,11 +90,11 @@ form /* seek BeaCap  BY BcName */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Number,By Name  ,By 3, By 4".
-{brand.i}
+{Func/brand.i}
 
 FIND FIRST BeaCap
 WHERE BeaCap.Brand = lcBrand NO-LOCK NO-ERROR.
@@ -123,12 +123,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a BeaCap  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR BeaCap.BeaCap
@@ -217,16 +217,16 @@ BROWSE:
         ufk[6]= (IF lcRIght = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BeaCap.BeaCap ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW BeaCap.BeaCap {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BeaCap.BeaCap WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW BeaCap.BcName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW BeaCap.BcName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BeaCap.BcName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -354,8 +354,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET BeaCap WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -373,8 +373,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET BcName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -457,8 +457,8 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBeaCap).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". run ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY BeaCap.BeaCap.
        RUN local-UPDATE-record.

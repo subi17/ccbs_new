@@ -7,25 +7,25 @@
   CHANGED ......: 
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'IgInvNum'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'IgInvNum'}
 
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhIgInvNum AS HANDLE NO-UNDO.
    lhIgInvNum = BUFFER IgInvNum:HANDLE.
    RUN StarEventInitialize(lhIgInvNum).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhIgInvNum).
+      RUN Mc/eventview2.p(lhIgInvNum).
    END.
 
 END.
@@ -98,7 +98,7 @@ FUNCTION fTypeName RETURNS CHARACTER
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -121,14 +121,14 @@ REPEAT WITH FRAME sel:
     
    IF must-add THEN DO:  /* Add a IgInvNum  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -142,7 +142,7 @@ REPEAT WITH FRAME sel:
               IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "InvType"
               THEN DO:
 
-                 RUN h-tmscodes(INPUT "Invoice",  /* TableName */
+                 RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName */
                                       "InvType",  /* FieldName */
                                       "Report",   /* GroupCode */
                                 OUTPUT lcCode).
@@ -152,7 +152,7 @@ REPEAT WITH FRAME sel:
                  END.   
 
                  ehto = 9.
-                 RUN ufkey.
+                 RUN Syst/ufkey.p.
                  NEXT. 
               END.
 
@@ -275,13 +275,13 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW IgInvNum.InvType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW IgInvNum.InvType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) IgInvNum.InvType WITH FRAME sel.
       END.
 
@@ -411,8 +411,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liInvType WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -441,14 +441,14 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0  
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
      
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -505,7 +505,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhIgInvNum).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -627,7 +627,7 @@ PROCEDURE local-UPDATE-record:
       
       IF lcRight = "RW" THEN REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
       
          UPDATE
          IgInvNum.SeqPrefix 
@@ -657,7 +657,7 @@ PROCEDURE local-UPDATE-record:
       
       ELSE DO:
          ehto = 5.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END. 
       

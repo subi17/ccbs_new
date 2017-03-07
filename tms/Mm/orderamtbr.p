@@ -10,7 +10,7 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 
 DEF INPUT  PARAMETER /*VAR*/ icTableName AS CHAR NO-UNDO.
@@ -106,7 +106,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
 
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -189,16 +189,16 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttData.CodeValue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttData.CodeValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttData.CodeValue WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW ttData.CodeName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttData.CodeName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttData.CodeName WITH FRAME sel.
       END.
 
@@ -325,8 +325,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         liCodeValue = ?.
         UPDATE liCodeValue WITH FRAME f1.
@@ -354,8 +354,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         lcCodeName = "".
         UPDATE lcCodeName WITH FRAME f2.

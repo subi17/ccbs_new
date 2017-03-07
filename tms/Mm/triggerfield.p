@@ -9,10 +9,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Mobsub'}
-{eventval.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Mobsub'}
+{Syst/eventval.i}
 
 
 DEF INPUT PARAMETER  icTriggerConfID AS CHARACTER NO-UNDO.
@@ -20,14 +20,14 @@ DEF INPUT PARAMETER  icTriggerConfID AS CHARACTER NO-UNDO.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTriggerField AS HANDLE NO-UNDO.
    lhTriggerField = BUFFER TriggerField:HANDLE.
    RUN StarEventInitialize(lhTriggerField).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhTriggerField).
+      RUN Mc/eventview2.p(lhTriggerField).
    END.
 
 END.
@@ -84,7 +84,7 @@ form /* seek  BTName */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -116,12 +116,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a TriggerField  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
 
            CREATE TriggerField.
@@ -202,16 +202,16 @@ REPEAT WITH FRAME sel:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TriggerField.TriggerConfID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TriggerField.TriggerConfID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TriggerField.TriggerConfID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TriggerField.TableName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TriggerField.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TriggerField.TableName WITH FRAME sel.
       END.
 
@@ -398,8 +398,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTriggerField).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY TriggerField.TriggerConfID.
 
        RUN local-UPDATE-record.                                  

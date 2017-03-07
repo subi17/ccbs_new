@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
 DEFINE VARIABLE clis AS CHARACTER NO-UNDO. 
 

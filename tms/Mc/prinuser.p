@@ -8,12 +8,12 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i new}
-{cparam2.i}
-{edefine.i new}
-{finvtxt.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Syst/utumaa.i new}
+{Func/cparam2.i}
+{Inv/edefine.i new}
+{Func/finvtxt.i}
+{Func/fcustdata.i}
 
 
 DEF INPUT  PARAMETER iiCustNum AS INT  NO-UNDO.
@@ -49,7 +49,7 @@ IF liITNum = 0 THEN DO:
    RETURN.
 END.
 
-RUN printxt (Customer.CustNum,
+RUN Mc/printxt.p (Customer.CustNum,
              0, 
              "",
              1,  /* 1=invtext */

@@ -10,13 +10,13 @@
   Version ......: TF
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{timestamp.i}
-{cparam2.i}
-{fcustchangereq.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fcustchangereq.i}
+{Func/fcustdata.i}
 
 DEF INPUT PARAMETER iiMsSeq   AS INT  NO-UNDO. 
 DEF INPUT PARAMETER icChgType AS CHAR NO-UNDO.   /* user / invcust */
@@ -457,7 +457,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
          ufk[5]= 1027 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
 
    ELSE ASSIGN toimi = 1  
@@ -467,7 +467,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE ldtChgDate 
                 ldChgTime
@@ -482,7 +482,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
                IF FRAME-FIELD = "liNewCust1" THEN DO:
 
-                  RUN h-customer (Customer.AgrCust,
+                  RUN Help/h-customer.p (Customer.AgrCust,
                                   "agrcust",
                                   "all").
                    
@@ -494,7 +494,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                END. 
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT.
             END. 
  
@@ -624,7 +624,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                        
                       IF icChgType = "user" THEN DO:
                       
-                         RUN h-customer (Customer.AgrCust,
+                         RUN Help/h-customer.p (Customer.AgrCust,
                                          "agrcust",
                                          "invcust").
                       END.
@@ -641,7 +641,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                    END. 
     
                    ehto = 9.
-                   RUN ufkey.
+                   RUN Syst/ufkey.p.
                    NEXT.
                 END. 
                 
@@ -878,7 +878,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
       END.
       
       ehto = 5.   
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF ldtChgDate = ? 
       THEN ldChgStamp = fMakeTS().

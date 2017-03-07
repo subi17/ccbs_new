@@ -9,13 +9,13 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}       
-{timestamp.i}
-{finvbal.i}
-{subscription_status3.i}
-{email.i}
-{excel.i}
-{sog.i}
+{Syst/commali.i}       
+{Func/timestamp.i}
+{Func/finvbal.i}
+{Mm/subscription_status3.i}
+{Func/email.i}
+{Func/excel.i}
+{Func/sog.i}
 
 def var CustomerFrom as I no-undo FORMAT "zzzzzzzz9".
 def var CustomerTo   as I no-undo FORMAT "zzzzzzzz9" .
@@ -64,7 +64,7 @@ repeat:
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
    CustomerFrom 
    CustomerTo
@@ -79,7 +79,7 @@ repeat with frame rajat:
       ehto = 0
    ufkey = true.
 
-   run ufkey.
+   RUN Syst/ufkey.p.
    case toimi:
       when 8 then return.
       when 1 then next loop.

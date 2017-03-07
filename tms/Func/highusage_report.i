@@ -156,14 +156,14 @@ END FUNCTION.
 /**   This simplifies the current highusagerep.p to:
 
 
-{highusage_report.i}
+{Func/highusage_report.i}
 
-{commali.i}
-{excel.i}
-{timestamp.i}
-{email.i}
-{highusage.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/timestamp.i}
+{Func/email.i}
+{Func/highusage.i}
+{Func/cparam2.i}
 
 DEF input parameter   ideCreateTS  AS DE    NO-UNDO FORMAT "99999999.99999".
 DEF  input parameter   iStatus       AS INT  NO-UNDO.
@@ -175,8 +175,8 @@ DEF VAR excelfile          AS CHAR              NO-UNDO.
 DEF VAR xHighSpenderDir    AS CHAR              NO-UNDO.
 DEF VAR lcOutPath          AS CHAR              NO-UNDO.
 
-{cparam.i RepConfDir            return}.  xConfDir        = tmsparam.CharVal.
-{cparam.i HighSpenderDirectory  return}.  xhighspenderDir = tmsparam.CharVal.
+{Func/cparam.i RepConfDir            return}.  xConfDir        = tmsparam.CharVal.
+{Func/cparam.i HighSpenderDirectory  return}.  xhighspenderDir = tmsparam.CharVal.
 ASSIGN
       tiednimi    = fCParam("CRONSPOOL","highspendnew.p") + "highspender_" +
 

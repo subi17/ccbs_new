@@ -32,10 +32,10 @@ FIND FIRST Msrequest NO-LOCK WHERE
 IF NOT AVAIL MsRequest THEN RETURN 
    appl_err(SUBST("MsRequest &1 not found!",piMsRequest)).
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "Newton".
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
 FIND MsReqStatFunc NO-LOCK WHERE
      MsReqStatFunc.ReqType   = MsRequest.ReqType AND

@@ -8,16 +8,16 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftaxdata.i}
-{fcpfat.i}
-{ftopup.i}
-{fsmsreq.i}
-{create_eventlog.i}
-{barrfunc.i}
-{commission.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftaxdata.i}
+{Func/fcpfat.i}
+{Func/ftopup.i}
+{Func/fsmsreq.i}
+{Func/create_eventlog.i}
+{Func/barrfunc.i}
+{Func/commission.i}
 
 DEF OUTPUT PARAMETER oiChecked   AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiActivated AS INT  NO-UNDO.

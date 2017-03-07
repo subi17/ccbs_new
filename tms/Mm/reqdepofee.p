@@ -7,10 +7,10 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{eventval.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiRequest AS INT  NO-UNDO. 
 DEF OUTPUT PARAMETER olCreated AS LOG  NO-UNDO. 
@@ -32,7 +32,7 @@ DEF VAR liInvType     AS INT  NO-UNDO.
 IF llDoEvent THEN DO FOR SingleFee:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
    lhSingleFee = BUFFER SingleFee:HANDLE.
@@ -205,7 +205,7 @@ DO FOR SingleFee:
 END.
 
 /* create invoice */
-RUN nnlamu5 (MsRequest.ReqIParam1,
+RUN Inv/nnlamu5.p (MsRequest.ReqIParam1,
              MsRequest.MsRequest,
              "",
              liInvType,
@@ -226,7 +226,7 @@ ELSE DO:
        FIRST Invoice NO-LOCK WHERE
              Invoice.InvNum = SingleFee.InvNum:
              
-       RUN eletterinv(INPUT Invoice.InvNum,
+       RUN Inv/eletterinv.p(INPUT Invoice.InvNum,
                      INPUT Invoice.InvNum,
                      INPUT Invoice.InvDate,
                      INPUT "",
@@ -269,7 +269,7 @@ PROCEDURE pCreateCustomer:
       RETURN.
    END. 
       
-   RUN copymobcu (INPUT-OUTPUT liDefCust,
+   RUN Mm/copymobcu.p (INPUT-OUTPUT liDefCust,
                   FALSE).
       
    FIND Customer WHERE Customer.CustNum = liDefCust EXCLUSIVE-LOCK NO-ERROR.

@@ -13,19 +13,19 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "RetFile".
        
-{cparam2.i}
-{utumaa.i "new"}
+{Func/cparam2.i}
+{Syst/utumaa.i "new"}
 /* temp-table */
-{paymfile.i}
-{paymtrans.i}
-{farplog.i}
-{eventlog.i}
-{timestamp.i}
+{Ar/paymfile.i}
+{Ar/paymtrans.i}
+{Func/farplog.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
 
 DEF TEMP-TABLE ttFiles NO-UNDO
    FIELD PaymFile AS CHAR
@@ -149,7 +149,7 @@ FOR EACH ttFiles:
    ASSIGN spit1  = 80
           skayt1 = 80.
 
-   RUN readpaym (INPUT TABLE ttPayment,
+   RUN Ar/readpaym.p (INPUT TABLE ttPayment,
                  ttFiles.PaymFile,
                  liFileType,
                  FALSE,   /* show messages */
@@ -193,7 +193,7 @@ END.
 /* empty posting file for control purposes */
 IF liFiles = 0 THEN DO:
    
-   RUN readpaym (INPUT TABLE ttPayment,
+   RUN Ar/readpaym.p (INPUT TABLE ttPayment,
                  "EMPTY",
                  0,
                  FALSE,    /* show messages */

@@ -12,10 +12,10 @@
 &THEN
 &GLOBAL-DEFINE REMFEES_I YES
 
-{commali.i}
-{eventval.i}
-{fixedfee.i}
-{create_eventlog.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/fixedfee.i}
+{Func/create_eventlog.i}
 
 DEF TEMP-TABLE ttFeeHandle NO-UNDO
    FIELD BillCode AS CHAR

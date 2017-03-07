@@ -8,9 +8,9 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "opbalrel"
        tuni2 = "".
@@ -53,7 +53,7 @@ toimi:
          ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 3.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
 
          READKEY.
          nap = keylabel(LASTKEY).
@@ -64,7 +64,7 @@ toimi:
       if lookup(nap,"1,f1") > 0 THEN DO:
 
          ASSIGN ehto = 9 ufkey = TRUE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          UPDATE ldtDate
                 WITH FRAME valinta.
          ufkey = TRUE.
@@ -82,16 +82,16 @@ toimi:
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 message "Printing in process...".         
 
 
-RUN opbalrep  (ldtDate,
+RUN Ar/opbalrep.p  (ldtDate,
                OUTPUT oiCount).
 
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 MESSAGE oiCount "customers with overpayment balance were reported."
 VIEW-AS ALERT-BOX

@@ -1,12 +1,12 @@
-{commpaa.i}
-{timestamp.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
+{Syst/eventlog.i}
 
 fELog("DAILY","ServiceDumpStarted").
-run servicedump.
+RUN Mm/servicedump.p.
 fELog("DAILY","ServiceDumpStopped").
 
 quit.

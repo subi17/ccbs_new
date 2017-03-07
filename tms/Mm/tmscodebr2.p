@@ -10,14 +10,14 @@
                   27.11.06/jt Barr request id's greater than liBarr (9) or                               in list (From CC)
                   21.12.06/jt Changed liBarr usage to barring list (allowed
                               CustomerCare statuses
-                  20.03.07 kl run orderamt with MsRequest
+                  20.03.07 kl RUN Mm/orderamt.p with MsRequest
                   16.04.07/aam icSkipValue,icRunParam
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OrdStat'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OrdStat'}
 
 DEF INPUT PARAMETER /*VAR*/ icTableName  AS CHAR  NO-UNDO.
 DEF INPUT PARAMETER /*VAR*/ icFieldName  AS CHAR  NO-UNDO.
@@ -108,7 +108,7 @@ END.
                                 
 IF icTitle = "" THEN icTitle = "Requests".
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -201,16 +201,16 @@ REPEAT WITH FRAME sel:
             (icTableName EQ "MsRequest" AND icFieldName EQ "ReqStatus")  
          THEN ufk[4] = 1061.
       
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttData.CodeValue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttData.CodeValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttData.CodeValue WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW ttData.CodeName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttData.CodeName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttData.CodeName WITH FRAME sel.
       END.
 
@@ -337,8 +337,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         lcCodeValue = ?.
         UPDATE lcCodeValue WITH FRAME f1.
@@ -366,8 +366,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         lcCodeName = "".
         UPDATE lcCodeName WITH FRAME f2.
@@ -395,13 +395,13 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0  THEN DO: 
 
-         RUN orderamt(INPUT-OUTPUT llQueRights, 
+         RUN Mm/orderamt.p(INPUT-OUTPUT llQueRights, 
                       INPUT icTableName,
                       INPUT icSkipValue,
                       INPUT icRunParam).
 
          ufkey = TRUE.  
-         RUN ufkey.
+         RUN Syst/ufkey.p.
      END.    
      
      ELSE IF LOOKUP(nap,"5,f5,enter,return") > 0 THEN DO:

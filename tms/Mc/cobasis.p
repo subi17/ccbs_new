@@ -9,23 +9,23 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CoBasis'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CoBasis'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCoBasis AS HANDLE NO-UNDO.
    lhCoBasis = BUFFER CoBasis:HANDLE.
    RUN StarEventInitialize(lhCoBasis).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCoBasis).
+      RUN Mc/eventview2.p(lhCoBasis).
    END.
 
 END.
@@ -103,7 +103,7 @@ ASSIGN lcTitle = " COMM. BASIS FOR: " +
                  STRING(CoRule.CCN)    + "/" +
                  STRING(CoRule.CoFrom,"99.99.99") + " ". 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By BillCode ,    ,   , By 4".
@@ -130,14 +130,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CoBasis  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -301,12 +301,12 @@ BROWSE:
         ufk[6]= 4
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CoBasis.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoBasis.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoBasis.BillCode WITH FRAME sel.
       END.
 
@@ -435,14 +435,14 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -502,7 +502,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCoBasis).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CoBasis.BillCode.
 
        RUN local-UPDATE-record.                                  
@@ -632,7 +632,7 @@ PROCEDURE local-UPDATE-record:
       
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
        
          UPDATE
          CoBasis.SubsQty WHEN NOT NEW CoBasis

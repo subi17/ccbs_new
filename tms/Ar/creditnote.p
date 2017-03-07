@@ -8,22 +8,22 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
-{finvbal.i}
-{faccper.i}
-{fcustbal.i}
-{fcustcnt.i}
-{finvamt.i}
-{eventval.i} 
-{fbankday.i}
-{nnpcst.i}
-{finvnum.i}
-{fhdrtext.i}
-{frefundreq.i}
-{finvoiceacc.i}
-{fcreditvalid.i}
-{fparse.i}
+{Func/finvbal.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/finvamt.i}
+{Syst/eventval.i} 
+{Func/fbankday.i}
+{Ar/nnpcst.i}
+{Func/finvnum.i}
+{Func/fhdrtext.i}
+{Func/frefundreq.i}
+{Func/finvoiceacc.i}
+{Func/fcreditvalid.i}
+{Func/fparse.i}
 
 DEFINE TEMP-TABLE ttSubInvoice
        FIELD SubInvoice        AS INT
@@ -36,7 +36,7 @@ DEFINE TEMP-TABLE ttSubInvoice
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 DEF BUFFER bSubRequest FOR MsRequest.
@@ -370,7 +370,7 @@ PROCEDURE pFullCreditNote:
             WHEN 3 THEN lcReqChar = "Advance p".
             END CASE. 
             
-            RUN makepaym (BUFFER Invoice,
+            RUN Ar/makepaym.p (BUFFER Invoice,
                           -1 * ldTotRefund,
                           TODAY,
                           liAccNum,
@@ -828,7 +828,7 @@ PROCEDURE pFullCreditNote:
       END.
           
       IF NUM-ENTRIES(lcSubInvNums) = 0 THEN 
-         RUN nnpcst.p(Invoice.InvNum,
+         RUN Ar/nnpcst.p(Invoice.InvNum,
                     0,
                     TRUE,
                     INPUT TABLE wMarked).
@@ -838,7 +838,7 @@ PROCEDURE pFullCreditNote:
             
             IF LOOKUP(STRING(InvCCN.SubInvNum), lcSubInvNums) = 0 THEN NEXT.
             
-            RUN nnpcst.p(Invoice.InvNum,
+            RUN Ar/nnpcst.p(Invoice.InvNum,
                        SubInvoice.SubInvNum,
                        TRUE,
                        INPUT TABLE wMarked).

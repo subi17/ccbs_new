@@ -12,9 +12,9 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{invoicetarget.i}
+{Mc/invoicetarget.i}
 
 DEF VAR piCustNum AS INT NO-UNDO.
 DEF VAR piMsSeq AS INT NO-UNDO.

@@ -15,15 +15,15 @@
                   24.01.06 jt DYNAMIC-FUNCTION("fDispCustName"  Version ......: M15
 --------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF BUFFER new-Customer FOR Customer.
 
-{eventval.i}
+{Syst/eventval.i}
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER new-Customer:HANDLE.
