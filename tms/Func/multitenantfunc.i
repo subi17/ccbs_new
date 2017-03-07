@@ -88,6 +88,17 @@ FUNCTION fgetTenantNamebyId RETURNS CHAR
    IF AVAIL _tenant THEN RETURN _tenant._tenant-name.
 END FUNCTION.
 
+FUNCTION fgetBrandNamebyTenantId RETURNS CHAR
+   (INPUT iiid AS INT).
+   DEF VAR lcBrand AS CHAR NO-UNDO.
+   lcBrand = fgetTenantNamebyId(iiid).
+   IF lcBrand EQ "Default" THEN 
+      lcBrand = "yoigo".
+   ELSE
+      lcBrand = SUBSTRING(lcBrand,2).
+   RETURN lcBrand.
+END FUNCTION.
+
 FUNCTION fConvertBrandToTenant RETURNS CHARACTER
    (INPUT icBrand AS CHARACTER):
 

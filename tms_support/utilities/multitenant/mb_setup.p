@@ -94,3 +94,67 @@ FIND FIRST TMSParam WHERE
            TMSParam.ParamCode EQ "SubsTermLog" NO-ERROR.
 IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
    TMSParam.charval = REPLACE(TMSParam.charval,"spool/terminate","spool/#TENANT_terminate").
+
+
+
+/* MB-142 */
+FIND FIRST Dumpfile WHERE 
+           DumpFile.dumpid EQ 73 NO-ERROR.
+IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#COMPANY" THEN
+   dumpfile.filename = "#COMPANY_" + dumpfile.filename.
+RELEASE Dumpfile.
+
+FIND FIRST Dumpfile WHERE
+           DumpFile.dumpid EQ 30 NO-ERROR.
+IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#COMPANY" THEN
+   dumpfile.filename = "#COMPANY_" + dumpfile.filename.
+RELEASE Dumpfile. 
+
+FIND FIRST Dumpfile WHERE
+           DumpFile.dumpid EQ 94 NO-ERROR.
+IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#COMPANY" THEN
+   dumpfile.filename = "#COMPANY_" + dumpfile.filename.
+RELEASE Dumpfile.
+
+FIND FIRST Dumpfile WHERE
+           DumpFile.dumpid EQ 62 NO-ERROR.
+IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#COMPANY" THEN
+   dumpfile.filename = "#COMPANY_" + dumpfile.filename.
+RELEASE Dumpfile.
+
+FIND FIRST Dumpfile WHERE
+           DumpFile.dumpid EQ 32 NO-ERROR.
+IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#COMPANY" THEN
+   dumpfile.filename = "#COMPANY_" + dumpfile.filename.
+RELEASE Dumpfile.
+
+FIND FIRST Dumpfile WHERE
+           DumpFile.dumpid EQ 91 NO-ERROR.
+IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#COMPANY" THEN
+   dumpfile.filename = "#COMPANY_" + dumpfile.filename.
+RELEASE Dumpfile.
+
+FIND FIRST Dumpfile WHERE
+           DumpFile.dumpid EQ 54 NO-ERROR.
+IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#COMPANY" THEN
+   dumpfile.filename = "#COMPANY_" + dumpfile.filename.
+RELEASE Dumpfile.
+
+FIND FIRST Dumpfile WHERE
+           DumpFile.dumpid EQ 101 NO-ERROR.
+IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#COMPANY" THEN
+   dumpfile.filename = "#COMPANY_" + dumpfile.filename.
+RELEASE Dumpfile.
+
+FIND FIRST Dumpfile WHERE
+           DumpFile.dumpid EQ 55 NO-ERROR.
+IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#COMPANY" THEN
+   dumpfile.filename = "#COMPANY_" + dumpfile.filename.
+RELEASE Dumpfile.
+
+FIND FIRST Dumpfile WHERE
+           DumpFile.dumpid EQ 31 NO-ERROR.
+IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#COMPANY" THEN
+   dumpfile.filename = "#COMPANY_" + dumpfile.filename.
+RELEASE Dumpfile.
+
