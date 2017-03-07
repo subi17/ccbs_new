@@ -21,12 +21,12 @@
 *  @output         boolean;true
 ---------------------------------------------------------------------- */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{fcreatereq.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/fcreatereq.i}
 
 DEF VAR pcPayTermStruct   AS CHARACTER   NO-UNDO.
 DEF VAR pcMemoStruct      AS CHARACTER   NO-UNDO.

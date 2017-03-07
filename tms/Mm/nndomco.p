@@ -16,10 +16,10 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{email.i}
-{direct_dbconnect.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/email.i}
+{Func/direct_dbconnect.i}
 
 def var cadate1   as da no-undo.
 def var cadate2   as da no-undo. 
@@ -40,8 +40,8 @@ DEF VAR liCurrent AS INT  NO-UNDO.
 
 bbatch = session:batch.
 
-{tmsparam.i DefDoubMDir   return}.   logfile      = TMSParam.CharVal.
-{tmsparam.i RepConfDir     return}.  xConfDir     = TMSParam.CharVal. 
+{Func/tmsparam.i DefDoubMDir   return}.   logfile      = TMSParam.CharVal.
+{Func/tmsparam.i RepConfDir     return}.  xConfDir     = TMSParam.CharVal. 
 
 IF bbatch THEN DO: 
    /* get the recipients FOR EMail */
@@ -93,7 +93,7 @@ WITH
    NO-LABELS FRAME start.
 
 IF NOT bbatch THEN DO:
-    cfc = "sel". run ufcolor.
+    cfc = "sel". RUN Syst/ufcolor.p.
     ASSIGN
     cadate2 = date(month(TODAY),1,year(TODAY)) - 1
     cadate1 = date(month(cadate2),1,year(cadate2)).
@@ -106,7 +106,7 @@ CRIT:
 repeat WITH FRAME start:
 
    IF NOT bbatch THEN DO:
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.p.
 
       UPDATE
       cadate1  validate(cadate1 ne ?,"Give first Date !")
@@ -137,7 +137,7 @@ repeat WITH FRAME start:
       task:
       repeat WITH FRAME start:
          ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8 ehto = 0.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          IF toimi = 1 THEN NEXT  CRIT.
          IF toimi = 8 THEN LEAVE CRIT.
 
@@ -204,7 +204,7 @@ repeat WITH FRAME start:
       END.
    END.
 
-   RUN mobcdr_double_check.p ("",
+   RUN Mm/mobcdr_double_check.p ("",
                               cadate1,
                               cadate2,
                               lccli,

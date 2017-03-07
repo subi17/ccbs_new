@@ -1,5 +1,5 @@
-DEF VAR lcFolder AS CHAR NO-UNDO FORMAT "x(40)" init "./config_tables/".
-DEF VAR lcInputFile AS CHAR NO-UNDO init "config_tables.txt" FORMAT "x(40)".
+DEF VAR lcFolder AS CHAR NO-UNDO FORMAT "x(40)" init "utilities/tabledump/config_tables/".
+DEF VAR lcInputFile AS CHAR NO-UNDO init "utilities/tabledump/config_tables.txt" FORMAT "x(60)".
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
@@ -40,13 +40,13 @@ repeat:
    import unformatted lcLine.
    lcLine = TRIM(ENTRY(1,lcLine,":")).
    if lcLine eq "" or lcLine begins "#" then next.
-   run ./import_table.p lcLine lcFolder.
+   RUN utilities/tabledump/import_table.p lcLine lcFolder.
 end.
 
-run ./tmsparam_staging_update.p.
+run utilities/tabledump/tmsparam_staging_update.p.
 
 IF LOOKUP(lcHostName,'merga') > 0 THEN
-   run ./tmsparam_merga_update.p.
+   RUN utilities/tabledump/tmsparam_merga_update.p.
 
 MESSAGE "Import done" VIEW-AS ALERT-BOX.
 QUIT.

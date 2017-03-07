@@ -10,8 +10,8 @@
 &THEN
 &GLOBAL-DEFINE AIR_NODES YES
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 FUNCTION fGetAIRNode RETURNS CHAR:
 

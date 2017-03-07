@@ -1,7 +1,7 @@
 DEF VAR lcFolder AS CHAR NO-UNDO FORMAT "x(40)".
-DEF VAR lcInputFile AS CHAR NO-UNDO init "config_tables.txt" FORMAT "x(40)".
+DEF VAR lcInputFile AS CHAR NO-UNDO init "utilities/tabledump/config_tables.txt" FORMAT "x(40)".
 
-lcFolder = "./config_tables/".
+lcFolder = "utilities/tabledump/config_tables/".
 
 UPDATE 
     lcInputFile LABEL "Input file   " SKIP
@@ -31,5 +31,5 @@ repeat:
    import unformatted lcLine.
    lcLine = TRIM(ENTRY(1,lcLine,":")).
    if lcLine eq "" or lcLine begins "#" then next.
-   run ./export_table.p lcLine lcFolder.
+   run utilities/tabledump/export_table.p lcLine lcFolder.
 end.

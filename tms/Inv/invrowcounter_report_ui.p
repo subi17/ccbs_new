@@ -6,11 +6,11 @@
   CREATED ......: 16.11.10
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'InvRowCounter'}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'InvRowCounter'}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 
@@ -200,7 +200,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    
    ELSE ASSIGN 
@@ -210,7 +210,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -230,7 +230,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
             IF nap = "F9" AND FRAME-FIELD = "x" THEN DO:
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -352,7 +352,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          END.
       END.
            
-      RUN invrowcounter_report.p (ldaFromDate,
+      RUN Inv/invrowcounter_report.p (ldaFromDate,
                                   ldaToDate,
                                   lcExtInvID,
                                   liCustNum,

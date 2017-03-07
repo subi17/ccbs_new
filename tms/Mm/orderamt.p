@@ -18,8 +18,8 @@ DEF VAR lcValue      AS CHAR  NO-UNDO.
 DEF VAR liParam      AS INT   NO-UNDO EXTENT 3.
 DEF VAR liCount      AS INT   NO-UNDO.
 
-{commali.i}   
-{cparam2.i}
+{Syst/commali.i}   
+{Func/cparam2.i}
 
     /* If the rights to use this module have been already cheked and */
     /* accepted, there is no meaning to ask it again.                */
@@ -48,23 +48,23 @@ DEF VAR liCount      AS INT   NO-UNDO.
        
        HIDE FRAME fPassword.
        ehto = 5.
-       run ufkey.
+       RUN Syst/ufkey.p.
     
        IF lcTable = "Order" THEN DO:
    
-          RUN orderamtbr(INPUT   "Order",
+          RUN Mm/orderamtbr.p(INPUT   "Order",
                          INPUT   "StatusCode",
                          INPUT   "",
                          INPUT   "Orders",
                          OUTPUT  lcValue).
 
-          IF lcValue > "" THEN run order(1,8,lcValue,0).
+          IF lcValue > "" THEN RUN Mc/order.p(1,8,lcValue,0).
 
        END.
 
        ELSE IF lcTable = "MsRequest" THEN DO:
        
-          RUN orderamtbr(INPUT   "MsRequest",
+          RUN Mm/orderamtbr.p(INPUT   "MsRequest",
                          INPUT   "ReqStatus",
                          INPUT   icSkipValue,
                          INPUT   icRunParam,
@@ -78,7 +78,7 @@ DEF VAR liCount      AS INT   NO-UNDO.
                    NO-ERROR.
              END.
       
-             RUN msrequest(liParam[1],
+             RUN Mm/msrequest.p(liParam[1],
                            INTEGER(lcValue),
                            liParam[2],
                            liParam[3],

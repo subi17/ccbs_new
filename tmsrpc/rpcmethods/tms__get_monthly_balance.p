@@ -9,7 +9,7 @@
  */
 
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".
 DEFINE VARIABLE response_array AS CHARACTER NO-UNDO. 

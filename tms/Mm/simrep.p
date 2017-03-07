@@ -8,11 +8,11 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{function.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/function.i}
 
-{utumaa.i new}
+{Syst/utumaa.i new}
 
 ASSIGN tuni1 = ""
        tuni2 = "".
@@ -40,7 +40,7 @@ END.
 VIEW FRAME fname.
 
 tila = true.
-{utuloste.i return}
+{Syst/utuloste.i return}
 
 PUT stream tul UNFORMATTED
    "SIM card report for customer " 
@@ -73,7 +73,7 @@ PUT STREAM tul UNFORMATTED chr(12).
 
 /* Close the printer stream */
 tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 MESSAGE "Printing complete !" VIEW-AS ALERT-BOX.
 

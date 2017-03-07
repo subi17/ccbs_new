@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.

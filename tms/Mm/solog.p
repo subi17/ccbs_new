@@ -34,17 +34,17 @@
 
 &GLOBAL-DEFINE BrTable Solog
 
-{commali.i}
-{solog.i}
-{msisdn.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SOLog'}
-{sog.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/solog.i}
+{Func/msisdn.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SOLog'}
+{Func/sog.i}
+{Func/timestamp.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
-{excel.i}
+{Func/excel.i}
 DEF VAR CLI   LIKE SOLog.CLI   NO-UNDO.
 DEF VAR Solog  LIKE SOLog.SOLog  NO-UNDO FORMAT ">>>>>>>>>9".
 DEF VAR Stat LIKE SOLog.Stat NO-UNDO.
@@ -94,7 +94,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek SOLog  BY  CLI */
     "Brand Code:" lcBrand  HELP "Enter Brand  "    SKIP
@@ -122,7 +122,7 @@ FORM /* seek SOLog BY TimeSlotTMS */
     WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND ACT. DAY "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 ASSIGN
@@ -156,12 +156,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a SOLog  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR SOLog.SOLog
@@ -252,23 +252,23 @@ BROWSE:
         ufk[6]= 0
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SOLog.SOLog ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SOLog.SOLog {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SOLog.SOLog WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SOLog.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SOLog.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SOLog.CLI WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW xstat ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW xstat {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) xstat WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW SOLog.TimeSlotTMS  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SOLog.TimeSlotTMS  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SOLog.TimeSlotTMS WITH FRAME sel.
       END.
 
@@ -397,8 +397,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand with frame f1.
        SET  lcBrand WHEN gcallbrand = TRUE Solog WITH FRAME f1.
@@ -424,8 +424,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISP lcBrand With Frame f2.
        SET lcBrand WHEN gcallbrand = TRUE CLI WITH FRAME f2.
@@ -450,8 +450,8 @@ BROWSE:
      /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        SET Stat WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -475,7 +475,7 @@ BROWSE:
        /* change */      
        RUN local-find-this(FALSE ).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY SOLog.SOLog.
 
        RUN local-UPDATE-record.                                  

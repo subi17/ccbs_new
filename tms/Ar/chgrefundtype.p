@@ -7,8 +7,8 @@
   CHANGED ......:
   Version ......: yoigo
 ----------------------------------------------------------------------- */
-{msreqfunc.i}
-{fuserright.i}
+{Func/msreqfunc.i}
+{Func/fuserright.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER iiFromStatus AS INTEGER NO-UNDO.

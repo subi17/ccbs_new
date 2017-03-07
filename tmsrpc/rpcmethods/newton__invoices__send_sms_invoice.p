@@ -17,11 +17,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "VISTA_" + pcUserName.
-{tmsconst.i}
-{smsinvoice.i}
+{Syst/tmsconst.i}
+{Func/smsinvoice.i}
 
 liRequestID = fSMSInvoiceRequest
     (fMakeTS(),  /* when request should be handled */

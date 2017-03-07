@@ -9,16 +9,16 @@
 
 &GLOBAL-DEFINE TraceLog NO
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{coinv.i}
-{callquery.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/coinv.i}
+{Func/callquery.i}
 
 &IF "{&TraceLog}" = "YES" 
 &THEN
-{log.i}
+{Func/log.i}
 fSetLogFileName("/tmp/errorcdr_stat.log").
 fSetLogEntryTypes("4GLTrace:4").
 fClearLog().

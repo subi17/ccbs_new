@@ -8,22 +8,22 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ShaperConf'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ShaperConf'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhShaperConf AS HANDLE NO-UNDO.
    lhShaperConf = BUFFER ShaperConf:HANDLE.
    RUN StarEventInitialize(lhShaperConf).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhShaperConf).
+      RUN Mc/eventview2.p(lhShaperConf).
    END.
 END.
 
@@ -89,7 +89,7 @@ form  /* seek ShaperConf  BY  */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
     
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By ShaperConfID, By Template, By 4".
@@ -123,12 +123,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ShaperConf  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR ShaperConf.ShaperConfID
@@ -218,17 +218,17 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)*/
         ufk[7]= 1752 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ShaperConf.ShaperConfID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ShaperConf.ShaperConfID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ShaperConf.ShaperConfID WITH FRAME sel.
       END.
       /*
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ShaperConf.CoName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ShaperConf.CoName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ShaperConf.CoName WITH FRAME sel.
       END.
       */
@@ -357,8 +357,8 @@ BROWSE:
      /*ELSE IF LOOKUP(nap,"1,/1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:*/
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP ShaperConf WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -378,7 +378,7 @@ BROWSE:
      END. /* Search-1 */
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
-        RUN eventsel.p("shaperconf", "#BEGIN" + chr(255) 
+        RUN Mc/eventsel.p("shaperconf", "#BEGIN" + chr(255) 
            + gcBrand).
         ufkey = TRUE.
         NEXT.
@@ -388,11 +388,11 @@ BROWSE:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* details
-       {uright2.i} */
+       {Syst/uright2.i} */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " DETAILS " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " DETAILS " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ShaperConf.ShaperConfID.
 
 
@@ -520,13 +520,13 @@ PROCEDURE local-UPDATE-record:
          ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
          ufk[7] = 1752
          ufk[8] = 8.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       
       IF toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
          FIND CURRENT ShaperConf EXCLUSIVE-LOCK.
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE
             ShaperConf.TariffType
@@ -542,7 +542,7 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
      END.
      ELSE IF toimi = 7 THEN DO:
-        RUN eventsel.p("ShaperConf",gcBrand + CHR(255) + ShaperConf.ShaperConfID).
+        RUN Mc/eventsel.p("ShaperConf",gcBrand + CHR(255) + ShaperConf.ShaperConfID).
      END.
 
       CLEAR FRAME lis NO-PAUSE.

@@ -7,14 +7,14 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN 
    gcBrand = "1" 
    katun   = "Cron".
        
-{eventlog.i}
-{timestamp.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
 
 DEF TEMP-TABLE ttStatus NO-UNDO
    FIELD RunState AS CHAR.
@@ -43,7 +43,7 @@ BY FuncRunQSchedule.StartTS:
 
    lcOrigState = FuncRunQSchedule.RunState.
    
-   RUN funcrunqueue_run.p (FuncRunQSchedule.FRQueueID,
+   RUN Syst/funcrunqueue_run.p (FuncRunQSchedule.FRQueueID,
                            FuncRunQSchedule.FRQScheduleID).
    
    /* nothing done or interrupted */

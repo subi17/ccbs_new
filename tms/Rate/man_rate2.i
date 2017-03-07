@@ -14,7 +14,7 @@
                                  'roamint' and 'roamlocal' changed the other
                                  way round
 */
-{error_codes.i}
+{Rate/error_codes.i}
   
    /* Is this double call */    
    IF Mobcdr.ErrorCode = errorcode OR

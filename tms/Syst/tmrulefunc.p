@@ -7,8 +7,8 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{fuserright.i}
+{Syst/commali.i}
+{Func/fuserright.i}
 
 DEF INPUT PARAMETER iiTMRuleSeq AS INT  NO-UNDO.
 
@@ -56,7 +56,7 @@ WITH ROW FrmRow OVERLAY FrmDown DOWN
     CENTERED NO-LABELS 
     FRAME sel.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -133,12 +133,12 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
       
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttMenu.Menutext ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttMenu.Menutext {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttMenu.MenuText WITH FRAME sel.
       END.
       nap = keylabel(LASTKEY).
@@ -252,7 +252,7 @@ REPEAT WITH FRAME sel:
         IF AVAILABLE ttMenu THEN DO:
            
            ehto = 5.
-           RUN ufkey.
+           RUN Syst/ufkey.p.
            
            RUN VALUE(ttMenu.Module)(iiTMRuleSeq,
                                     ttMenu.ModParam,
@@ -349,7 +349,7 @@ PROCEDURE pInitMenu.
       a config table needed */
    IF fTokenRights(katun,"SYST") = "RW" THEN DO:
       CREATE ttMenu.
-      ASSIGN ttMenu.Module   = "tmrlimitupd"
+      ASSIGN ttMenu.Module   = "Syst/tmrlimitupd.p"
              ttMenu.ModParam = "1"
              ttMenu.MenuText = "Update changed default limits to customers"
              liFrame         = liFrame + 1.

@@ -8,8 +8,8 @@
   Version ......: Yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{invfilterkey.i}
+{Syst/commali.i}
+{Ar/invfilterkey.i}
 
 DEF INPUT  PARAMETER TABLE FOR ttFilter.
 DEF INPUT  PARAMETER iiFilterType AS INT  NO-UNDO. 
@@ -31,7 +31,7 @@ FORM
    WITH SCROLL 1 11 DOWN ROW 4 CENTERED COLOR VALUE(cfc)
         TITLE COLOR VALUE(ctc) " CHOOSE KEY " OVERLAY FRAME sel.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 ASSIGN
    ufkey      = TRUE
@@ -82,7 +82,7 @@ REPEAT with frame sel:
             ehto   = 3 
             ufkey  = false.
 
-         run ufkey.
+         RUN Syst/ufkey.p.
       end.
 
    end. /* print-line */
@@ -91,7 +91,7 @@ REPEAT with frame sel:
    REPEAT with frame sel on endkey undo, retuRN:
 
       hide message no-pause.
-      choose row lcKey ;(uchoose.i;) no-error with frame sel.
+      choose row lcKey {Syst/uchoose.i} no-error with frame sel.
       color display value(ccc) lcKey with frame sel.
 
       nap = keylabel(lastkey).

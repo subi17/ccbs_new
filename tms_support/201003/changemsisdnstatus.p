@@ -12,11 +12,11 @@ DEFINE STREAM sLog.
 OUTPUT STREAM sLog TO VALUE(pcLogFile).
 INPUT STREAM sMSISDN FROM VALUE(pcInputFile).
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand  = "1".
-{timestamp.i}
-{msisdn.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
 
 def buffer msisdnbuf for msisdn.
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO. 

@@ -9,11 +9,11 @@
   
 */
 
-{cparam2.i}
-{ftransdir.i}
-{email.i}
-{edefine.i NEW}
-{faddress.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Inv/edefine.i NEW}
+{Func/faddress.i}
 
 DEF TEMP-TABLE wError NO-UNDO
     FIELD CLI    AS CHAR

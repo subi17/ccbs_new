@@ -7,10 +7,10 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "Qvantel".
-{msisdn.i}
+{Func/msisdn.i}
 
 DEF VAR lcminMSISDN     AS CHAR NO-UNDO FORMAT "X(10)".
 DEF VAR lcmaxMSISDN     AS CHAR NO-UNDO FORMAT "X(10)".

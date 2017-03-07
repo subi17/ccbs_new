@@ -1,12 +1,12 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
 
-{eventval.i}
-{coinv.i}
-{fmakemsreq.i}
-{msisdn.i}
-{timestamp.i}
-{ftmrlimit.i}
+{Syst/eventval.i}
+{Func/coinv.i}
+{Func/fmakemsreq.i}
+{Func/msisdn.i}
+{Func/timestamp.i}
+{Func/ftmrlimit.i}
 
 def var lcline     as char no-undo.
 def var litarget   as int  no-undo.
@@ -30,7 +30,7 @@ def buffer bsourcecust for customer.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobSub AS HANDLE NO-UNDO.
    lhMobSub = BUFFER MobSub:HANDLE.
@@ -449,7 +449,7 @@ PROCEDURE pReRate:
    DEFINE INPUT PARAMETER idtFrom  AS DATE NO-UNDO.
    DEFINE INPUT PARAMETER icCLI    AS CHAR NO-UNDO.
  
-   RUN cli_rate (icCLI,
+   RUN Rate/cli_rate.p (icCLI,
                  idtFrom,
                  11/30/9,
                  TRUE).    
@@ -462,7 +462,7 @@ PROCEDURE pPrepaidRate:
    DEFINE INPUT PARAMETER idtFrom  AS DATE NO-UNDO.
    DEFINE INPUT PARAMETER icCLI    AS CHAR NO-UNDO.
 
-   RUN cli_prepaidrate (icCLI,      
+   RUN Rate/cli_prepaidrate.p (icCLI,      
                         idtFrom, 
                         11/30/9,     
                         TRUE).      /* silent = true */  

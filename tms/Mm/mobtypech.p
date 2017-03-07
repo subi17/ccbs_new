@@ -31,23 +31,23 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{cparam2.i}
-{fctchange.i}
-{fmakemsreq.i}
-{eventval.i}
-{fbankdata.i}
-{matrix.i}
-{tmsconst.i}
-{mnpoutchk.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/cparam2.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Syst/eventval.i}
+{Func/fbankdata.i}
+{Func/matrix.i}
+{Syst/tmsconst.i}
+{Mnp/mnpoutchk.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobsub AS HANDLE NO-UNDO.
    lhMobsub = BUFFER mobsub:HANDLE.
@@ -346,7 +346,7 @@ WITH FRAME main.
 MAIN:
 REPEAT  WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    IF llBarring OR 
       llMnp THEN DO:
       MESSAGE {&MSG_NOT_ALLOWED}. PAUSE NO-MESSAGE.
@@ -363,8 +363,8 @@ REPEAT  WITH FRAME main:
              READKEY.
 
              IF FRAME-FIELD = "new-type" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
-                RUN h-mobtype.
-                Ehto = 9. RUN ufkey.
+                RUN Help/h-mobtype.p.
+                Ehto = 9. RUN Syst/ufkey.p.
                 IF siirto NE ? THEN DO:
                    DISP siirto @ new-type WITH FRAME main.
                    NEXT.
@@ -374,10 +374,10 @@ REPEAT  WITH FRAME main:
              ELSE IF FRAME-FIELD = "new-ts-date" AND 
                   KEYLABEL(LASTKEY) = "F9" THEN DO:
              
-                run h-date(lcchangedate,mobsub.msseq,
+                RUN Help/h-date.p(lcchangedate,mobsub.msseq,
                            INPUT FRAME main new-type).
 
-                Ehto = 9. RUN ufkey.
+                Ehto = 9. RUN Syst/ufkey.p.
                 
                 IF siirto NE ? THEN DO:
                    DISP siirto @ new-ts-date WITH FRAME main.
@@ -392,7 +392,7 @@ REPEAT  WITH FRAME main:
                 IF FRAME-FIELD ="new-type" THEN DO:
                 
                    IF INPUT FRAME main new-type = "" THEN DO:
-                      Ehto = 9. RUN ufkey.
+                      Ehto = 9. RUN Syst/ufkey.p.
                       IF siirto NE ? THEN DO:
                          DISP siirto @ new-type WITH FRAME main.
                          NEXT.
@@ -439,9 +439,9 @@ REPEAT  WITH FRAME main:
                 ELSE IF FRAME-FIELD ="new-ts-date" THEN DO:
       
                    IF INPUT new-ts-date = ? THEN DO:
-                      run h-date(lcchangedate,mobsub.msseq,
+                      RUN Help/h-date.p(lcchangedate,mobsub.msseq,
                                  INPUT FRAME main new-type).
-                      Ehto = 9. RUN ufkey.
+                      Ehto = 9. RUN Syst/ufkey.p.
                                                  
                       IF siirto NE ? THEN DO:
                          DISP siirto @ new-ts-date WITH FRAME main.
@@ -456,10 +456,10 @@ REPEAT  WITH FRAME main:
                       NEXT.
                    END.
              
-                   run h-date(lcchangedate,mobsub.msseq,
+                   RUN Help/h-date.p(lcchangedate,mobsub.msseq,
                               INPUT FRAME main new-type).
                     
-                   Ehto = 9. RUN ufkey.
+                   Ehto = 9. RUN Syst/ufkey.p.
                                     
                    IF siirto NE ? THEN DO:
                       DISP siirto @ new-ts-date WITH FRAME main.
@@ -643,7 +643,7 @@ REPEAT  WITH FRAME main:
       ufk[1] = 7 
       ufk[5] = 795
       ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
       
@@ -651,7 +651,7 @@ REPEAT  WITH FRAME main:
       
       IF TOIMI = 5 THEN DO TRANS:
          
-         RUN charge_dialog.p(
+         RUN Mc/charge_dialog.p(
             MobSub.MsSeq,
              (IF MobSub.PayType THEN "STC_PREPAID" ELSE "STC_POSTPAID"),
             OUTPUT ldeFee).

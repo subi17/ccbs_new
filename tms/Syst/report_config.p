@@ -7,23 +7,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ReportConfRow'}
-{eventval.i}
-{timestamp.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ReportConfRow'}
+{Syst/eventval.i}
+{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhReportConfRow AS HANDLE NO-UNDO.
    lhReportConfRow = BUFFER ReportConfRow:HANDLE.
    RUN StarEventInitialize(lhReportConfRow).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhReportConfRow).
+      RUN Mc/eventview2.p(lhReportConfRow).
    END.
 
 END.
@@ -114,7 +114,7 @@ FUNCTION fRowType RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST ReportConf WHERE 
@@ -205,12 +205,12 @@ REPEAT WITH FRAME sel:
         ehto  = 3 
         ufkey = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttConfig.RowType ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW ttConfig.RowType {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttConfig.RowType WITH FRAME sel.
       END.
@@ -360,8 +360,8 @@ REPEAT WITH FRAME sel:
           LEAVE LOOP.
        END.
  
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -412,7 +412,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -488,7 +488,7 @@ PROCEDURE local-UPDATE-record:
          ufk[8] = 8
          ehto   = 0.
          
-      RUN ufkey.
+      RUN Syst/ufkey.p.
          
       IF toimi = 8 THEN LEAVE.
 
@@ -497,7 +497,7 @@ PROCEDURE local-UPDATE-record:
                 
          FIND CURRENT ttConfig EXCLUSIVE-LOCK.
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE
             ttConfig.DispDetails

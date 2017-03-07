@@ -9,8 +9,8 @@
    FUNCTIONS .....: fSetInvoiceLogs
   ------------------------------------------------ */
 
-{commali.i}   
-{timestamp.i}
+{Syst/commali.i}   
+{Func/timestamp.i}
 
 FUNCTION fCreateDPLLog RETURNS LOGICAL
   (INPUT pcUserName AS CHAR,

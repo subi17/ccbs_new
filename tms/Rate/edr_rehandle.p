@@ -6,14 +6,14 @@
   CREATED ......: 16.12.13
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
-{detailseq.i}
-{cparam2.i}
-{edr_reader.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/detailseq.i}
+{Func/cparam2.i}
+{Rate/edr_reader.i}
 
 DEF VAR lcLogFolder AS CHAR NO-UNDO. 
 

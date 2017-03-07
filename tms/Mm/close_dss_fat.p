@@ -7,12 +7,12 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun   = "CRON".
-{cparam2.i}
-{timestamp.i}
-{fcpfat.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fcpfat.i}
 {Func/date.i}
 {Mm/active_bundle.i}
 

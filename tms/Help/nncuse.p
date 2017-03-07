@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -43,7 +43,7 @@ form
 with row 4 col 2 title color value(ctc) " FIND Code  "
    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 Runko:
 repeat:
 
@@ -64,7 +64,7 @@ LOOP:
       ASSIGN
       cfc = "tlli"
       tlli-ots = " ADD ".
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME tlli:
          PAUSE 0 no-message.
@@ -124,8 +124,8 @@ print-line:
          ufk = 0 ufk[1] = 718 ufk[5] = 11
          ufk[6] = 5 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = FALSE.
-         {uright1.i '"6"'}
-         RUN ufkey.p.
+         {Syst/uright1.i '"6"'}
+         RUN Syst/ufkey.p.
       END.
   END. /* print-line */
 
@@ -133,7 +133,7 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW Currency.CurrName ;(uchoose.i;) no-error WITH FRAME tlse.
+         CHOOSE ROW Currency.CurrName {Syst/uchoose.i} no-error WITH FRAME tlse.
          COLOR DISPLAY value(ccc) Currency.CurrName WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
@@ -229,8 +229,8 @@ BROWSE:
 
         /* Currency */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* Currency */
-           cfc = "puyr". RUN ufcolor.
-           Currency = "". ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           Currency = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE Currency WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if Currency <> "" THEN DO:
@@ -260,7 +260,7 @@ BROWSE:
 
         /* Lisays */
         else if lookup(nap,"6,f6") > 0 THEN DO:
-           {uright2.i}
+           {Syst/uright2.i}
            ASSIGN must-add = TRUE.
            NEXT LOOP.
         END. /* Lisays */

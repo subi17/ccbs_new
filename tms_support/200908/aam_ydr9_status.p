@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun  = "ari".
-{barrfunc.i}
+{Func/barrfunc.i}
 
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 

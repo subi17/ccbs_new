@@ -19,15 +19,15 @@
 
 &GLOBAL-DEFINE BrTable DiscPlan
 
-{commali.i} 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DiscPlan'}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DiscPlan'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhDiscPlan AS HANDLE NO-UNDO.
    lhDiscPlan = BUFFER DiscPlan:HANDLE.
@@ -42,7 +42,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDPBasis).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhDiscPlan).
+      RUN Mc/eventview2.p(lhDiscPlan).
    END.
 
 END.
@@ -83,7 +83,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     discplan.brand
@@ -111,7 +111,7 @@ form /* seek DiscPlan  by DPName */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND NAME "
     COLOR VALUE(cfc) no-labels overlay FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -144,12 +144,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a discplan  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, leave ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis 
         ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW:
 
@@ -243,16 +243,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row discplan.DiscPlan ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row discplan.DiscPlan {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) discplan.DiscPlan WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row discplan.DPName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row discplan.DPName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) discplan.DPName WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.
@@ -380,8 +380,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME f1.
        SET lcBrand WHEN gcAllBrand
@@ -402,8 +402,8 @@ BROWSE:
      /* Search by col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        disp lcBrand with frame f2.
        SET lcBrand WHEN gcAllBrand
@@ -424,7 +424,7 @@ BROWSE:
      /* Update discounts  */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
         run local-find-this(false).
-        RUN dpconf (discplan.DiscPlan).
+        RUN Mc/dpconf.p (discplan.DiscPlan).
         ufkey = true.
         NEXT loop.
      END.
@@ -432,7 +432,7 @@ BROWSE:
      /* Update Memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
         run local-find-this(FALSE).
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "DiscPlan",
                  INPUT STRING(DiscPlan.DiscPlan),
                  INPUT "Discount Plan").
@@ -523,8 +523,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY discplan.DiscPlan.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDiscPlan).

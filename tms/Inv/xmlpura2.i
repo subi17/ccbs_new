@@ -4,7 +4,7 @@
 
 */
 
-{fxmlfile.i}
+{Func/fxmlfile.i}
 
 
 /* all fields as char so that they can be empty in xml */
@@ -107,7 +107,7 @@ ASSIGN lcCallRepFields = 'CustHeader¤X(60)'
 ASSIGN lbCallRep = BUFFER ttCallRep:HANDLE
        lbHeaders = BUFFER ttHeaders:HANDLE.
 
-{xml.i}
+{Func/xml.i}
 
 
 FUNCTION fXMLInit RETURNS LOGIC

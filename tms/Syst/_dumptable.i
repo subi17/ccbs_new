@@ -8,6 +8,6 @@ for each {1}._file no-lock where
    
    pause 0.
 
-   run _dumpall.i {1}._file._file-name.
+   RUN Syst/_dumpall.i {1}._file._file-name.
    
 end.

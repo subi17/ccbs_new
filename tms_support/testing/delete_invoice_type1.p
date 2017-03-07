@@ -1,4 +1,4 @@
-{commali.i} 
+{Syst/commali.i} 
 
 def var ldainvdate as date no-undo.
 def var i as int no-undo.
@@ -31,7 +31,7 @@ for each invoice no-lock use-index invdate where
    pause 0.
    disp i column-label "Deleted" with overlay 1 down.
    
-   run del_inv.p (invoice.invnum).
+   RUN Inv/del_inv.p (invoice.invnum).
 end.
 
 message i "invoices deleted"

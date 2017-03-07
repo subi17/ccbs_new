@@ -9,7 +9,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 
 DEF VAR xbal AS INT EXTENT 999.
@@ -53,6 +53,6 @@ FOR EACH tt NO-LOCK.
 END.   
 HIDE MESSAGE NO-PAUSE.
 
-ASSIGN ufk = 0 ufk[8] = 8 ehto = 0. RUN ufkey.
+ASSIGN ufk = 0 ufk[8] = 8 ehto = 0. RUN Syst/ufkey.p.
 HIDE FRAME LOG NO-PAUSE.
 

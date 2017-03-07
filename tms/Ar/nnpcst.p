@@ -7,18 +7,18 @@
   MODIFIED .....: 14.02.07/aam yoigo version
   ------------------------------------------------------ */
 
-{commali.i}
-{invseq.i}
-{errors.i}
-{fcustbal.i}
-{nnpcst.i}
-{tmsconst.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/invseq.i}
+{Mf/errors.i}
+{Func/fcustbal.i}
+{Ar/nnpcst.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
 
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
    lhSingleFee = BUFFER SingleFee:HANDLE.
@@ -443,7 +443,7 @@ FOR EACH ttReCalc,
       (included/excluded) may have been converted in billing run according
       to the customer's VatIncl value -> now counters need to be in their 
       original tax status again */
-   RUN recalculate_invrowcounter.p(Invoice.CustNum,
+   RUN Inv/recalculate_invrowcounter.p(Invoice.CustNum,
                                    0,
                                    xInvSeq.InvSeq,       
                                    xInvSeq.FromDate,

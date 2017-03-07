@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "harrim".
 gcBrand = "1".
-{msisdn.i}
+{Func/msisdn.i}
 
 DEFINE VARIABLE iCLi as int64 no-undo.
 

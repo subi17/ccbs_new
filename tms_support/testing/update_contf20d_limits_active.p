@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "Qvantel".
-{timestamp.i}
-{fdss.i}
+{Func/timestamp.i}
+{Func/fdss.i}
 
 def var licount as int no-undo.
 def var llAvail as log no-undo.

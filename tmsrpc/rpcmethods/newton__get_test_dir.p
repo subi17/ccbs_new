@@ -1,6 +1,6 @@
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
 katun = "cron"
 gcbrand = "1".
@@ -21,7 +21,7 @@ IF NOT get_paramcount(param_toplevel_id) EQ 0 THEN
 DEF STREAM outfile.
 OUTPUT STREAM outfile to VALUE( "/apps/yoigo/tms/templates/temp/testing2.txt").
 
-cDir = SEARCH("do_not_remove_templatefolder.txt").
+cDir = SEARCH("templates/do_not_remove_templatefolder.txt").
 
 PUT STREAM outfile UNFORMATTED
         cDir SKIP.

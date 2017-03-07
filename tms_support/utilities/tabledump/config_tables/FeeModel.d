@@ -88,6 +88,7 @@
 "DSSMF" "Data Sharing Service Bundle package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DSSMFUPS" "Data Sharing Service Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "ERROR_RECARGA" "Compensa 20euros" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"FLEX_MFUPS" "Flex upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "HANDSET" "Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_POSTPAID" "Change of ICC Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1

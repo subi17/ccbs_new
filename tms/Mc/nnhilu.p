@@ -11,12 +11,12 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{function.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/function.i}
 
 /* Maaritellaan print-linemuuttujat */
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnhilu"
        tuni2 = "".
@@ -85,7 +85,7 @@ WITH
    width 170 NO-LABEL no-box FRAME sivuots.
 
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 paper = TRUE.
 DISPLAY paper stch WITH FRAME rajat.
 PAUSE 0 no-message.
@@ -97,10 +97,10 @@ toimi:
       ASSIGN
       ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
       ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-      ehto = 0. RUN ufkey.p.
+      ehto = 0. RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN DO:
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          disp "" @ fname WITH FRAME rajat.
          UPDATE 
             paper 
@@ -120,7 +120,7 @@ toimi:
 /* Avataan striimi */
 IF paper THEN DO:
    ASSIGN tila = TRUE.
-   {tmsreport.i "return"}
+   {Syst/tmsreport.i "return"}
 END.
 ELSE OUTPUT STREAM tul TO value(fname).
 
@@ -250,7 +250,7 @@ IF paper THEN PUT STREAM tul skip(spit1 - rl).
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 HIDE MESSAGE no-pause.
 /* HIDE FRAME rajat no-pause. */
