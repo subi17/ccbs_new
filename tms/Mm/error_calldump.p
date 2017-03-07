@@ -3,11 +3,11 @@
   FUNCTION .....: daily/error call dump
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 katun = "cron".
 gcBrand = "1".
-{date.i}
-{cparam2.i}
+{Func/date.i}
+{Func/cparam2.i}
 
 
 DEFINE VARIABLE idaDate AS DATE NO-UNDO. 

@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 
 def stream sread.
 input stream sread from /apps/snet/200810/deny_billing_081028.txt.

@@ -4,12 +4,12 @@
   CREATED ......: 19.12.12/aam 
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
    
-{funcrunprocess_run.i}
+{Syst/funcrunprocess_run.i}
 
 DEF VAR ldaInvDate    AS DATE NO-UNDO.
 DEF VAR liInvType     AS INT  NO-UNDO.
@@ -47,7 +47,7 @@ END.
 IF liUseReplica = ? THEN liUseReplica = 0.
 
 
-RUN invrowcounter_billed_split.p(ldaInvDate,
+RUN Inv/invrowcounter_billed_split.p(ldaInvDate,
                                  liInvType,
                                  liRunAmt,
                                  liFRProcessID,

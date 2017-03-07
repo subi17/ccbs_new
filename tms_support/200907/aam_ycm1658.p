@@ -1,4 +1,4 @@
-{penaltyfee.i}
+{Func/penaltyfee.i}
 
 def stream slog.
 output stream slog to /apps/snet/200907/aam_ycm1658.log append.

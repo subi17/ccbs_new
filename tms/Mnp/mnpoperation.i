@@ -6,9 +6,9 @@
   CREATED ......: 28.01.10
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 DEF BUFFER bMNPOperation FOR MNPOperation.
 DEF BUFFER bMNPProcessResend FOR MNPProcess.

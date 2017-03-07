@@ -8,22 +8,22 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TerminalConf'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TerminalConf'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTerminalConf AS HANDLE NO-UNDO.
    lhTerminalConf = BUFFER TerminalConf:HANDLE.
    RUN StarEventInitialize(lhTerminalConf).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhTerminalConf).
+      RUN Mc/eventview2.p(lhTerminalConf).
    END.
 END.
 
@@ -84,7 +84,7 @@ form  /* seek TerminalConf  BY  */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
     
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By ShaperConfID, By Template, By 4".
@@ -118,12 +118,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a TerminalConf  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR TerminalConf.TerminalCode
@@ -213,17 +213,17 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)*/
         ufk[7]= 1752 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TerminalConf.TerminalCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TerminalConf.TerminalCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TerminalConf.TerminalCode WITH FRAME sel.
       END.
       /*
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TerminalConf.CoName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TerminalConf.CoName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TerminalConf.CoName WITH FRAME sel.
       END.
       */
@@ -352,8 +352,8 @@ BROWSE:
      /*ELSE IF LOOKUP(nap,"1,/1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:*/
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP TerminalConf WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -373,7 +373,7 @@ BROWSE:
      END. /* Search-1 */
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
-        RUN eventsel.p("TerminalConf", "#BEGIN" + chr(255)).
+        RUN Mc/eventsel.p("TerminalConf", "#BEGIN" + chr(255)).
         ufkey = TRUE.
         NEXT.
      END.
@@ -382,11 +382,11 @@ BROWSE:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* details
-       {uright2.i} */
+       {Syst/uright2.i} */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " DETAILS " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " DETAILS " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY TerminalConf.TerminalCode.
 
 
@@ -509,13 +509,13 @@ PROCEDURE local-UPDATE-record:
          ufk    = 0
          ufk[7] = 1752
          ufk[8] = 8.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       
       IF toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
          FIND CURRENT TerminalConf EXCLUSIVE-LOCK.
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE
             TerminalConf.TerminalCode
@@ -530,7 +530,7 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
      END.
      ELSE IF toimi = 7 THEN DO:
-        RUN eventsel.p("TerminalConf","#BEGIN" + CHR(255) + TerminalConf.TerminalCode).
+        RUN Mc/eventsel.p("TerminalConf","#BEGIN" + CHR(255) + TerminalConf.TerminalCode).
      END.
 
       CLEAR FRAME lis NO-PAUSE.

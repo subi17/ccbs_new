@@ -7,10 +7,10 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{email.i}
-{fmakesms.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/email.i}
+{Func/fmakesms.i}
 
 DEF INPUT PARAMETER iiFRExecID    AS INT  NO-UNDO.
 DEF INPUT PARAMETER icMessage     AS CHAR NO-UNDO.

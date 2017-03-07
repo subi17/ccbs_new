@@ -50,13 +50,13 @@ WHERE mobsub.msseq = liMsSeq
 IF NOT AVAILABLE mobsub THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", liMsSeq)).
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = lcUserId.
 gcBrand = "1". 
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 
-{fcharge_comp_loaded.i}
+{Func/fcharge_comp_loaded.i}
 /* check monthly limit */
 ldeLoaded = fMonthLoaded(
                (IF ldAmount > 0 THEN "CHARGE" ELSE "COMP"),
@@ -69,14 +69,14 @@ END.
 /* check balance in prepaid */
 IF Mobsub.PayType AND ldAmount > 0 THEN DO:
    ldeCurrBal = 0.
-   RUN balancequery(Mobsub.CLI).
+   RUN Gwy/balancequery.p(Mobsub.CLI).
    ldeCurrBal = INT(RETURN-VALUE) / 100 NO-ERROR.
    IF ldeCurrBal < ldAmount THEN DO:
       RETURN appl_err("Charge exceeds balance").
    END.
 END.
 
-RUN create_charge_comp.p( {&REQUEST_SOURCE_NEWTON} ,
+RUN Mm/create_charge_comp.p( {&REQUEST_SOURCE_NEWTON} ,
                        liMsSeq,
                        (IF MobSub.PayType THEN lcUserId ELSE ""), 
                        ldAmount,

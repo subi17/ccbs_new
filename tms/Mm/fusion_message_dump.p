@@ -8,10 +8,10 @@
 ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{dumpfile_run.i}
-{create_eventlog.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/create_eventlog.i}
+{Func/timestamp.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.

@@ -1,5 +1,5 @@
-{testpaa.i}
-{cparam2.i}
+{Syst/testpaa.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE lcInvoiceStatusDir     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcInvoiceStatisticsDir AS CHARACTER NO-UNDO.
@@ -73,7 +73,7 @@ REPEAT WITH FRAME Main:
           ufk[5] = 9813
           ufk[8] = 8
           ehto = 3.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
    UPDATE lcMSISDNFile GO-ON(F1 F4 F5)
    WITH FRAME MAIN EDITING:
       READKEY.
@@ -148,7 +148,7 @@ REPEAT WITH FRAME Main:
       APPLY LASTKEY.
    END. /* Action */
 
-   RUN newcopies2(
+   RUN Inv/newcopies2.p(
        lcMSISDNDir, lcInvoiceStatusDir, lcInvoiceStatisticsDir,
        lcTmpDir, lcInvoiceDir,
        lcMSISDNFile, 
@@ -182,7 +182,7 @@ PROCEDURE pDoAction:
 
       IF iCountFiles > 0 THEN
       DO:
-         RUN filebrowser(lcMSISDNDir).
+         RUN Syst/filebrowser.p(lcMSISDNDir).
          lcMSISDNFile = RETURN-VALUE.
          DISP lcMSISDNFile WITH FRAME Main.
          plNextMain = TRUE.

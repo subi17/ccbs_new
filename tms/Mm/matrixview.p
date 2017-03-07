@@ -114,22 +114,22 @@ END.
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commpaa.i} katun = "polkki". gcbrand = "1".
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
-{eventval.i}
+{Syst/commpaa.i} katun = "polkki". gcbrand = "1".
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhttMatrix AS HANDLE NO-UNDO.
    lhttMatrix = BUFFER ttMatrix:HANDLE.
    RUN StarEventInitialize(lhttMatrix).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhttMatrix).
+      RUN Mc/eventview2.p(lhttMatrix).
    END.
 
 END.
@@ -188,7 +188,7 @@ Break BY ttName.numero.
    END.    
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -214,12 +214,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ttMatrix  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            ASSIGN
            Memory = recid(ttMatrix)
@@ -288,13 +288,13 @@ REPEAT WITH FRAME sel:
         ufk[6]= 0
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttMatrix.Val[1] ;(uchoose.i;) 
+        CHOOSE ROW ttMatrix.Val[1] {Syst/uchoose.i} 
         NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttMatrix.Val WITH FRAME sel.
       END.

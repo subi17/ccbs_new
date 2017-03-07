@@ -9,9 +9,9 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{timestamp.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/funcrunprocess_update.i}
 
 DEF INPUT  PARAMETER idaInvDate       AS DATE NO-UNDO.
 DEF INPUT  PARAMETER iiInvType        AS INT  NO-UNDO.

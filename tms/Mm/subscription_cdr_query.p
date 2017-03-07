@@ -5,9 +5,9 @@
   CREATED ......: 21.06.10
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobCDR'} 
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobCDR'} 
 
 DEF VAR lcCLI        AS CHAR NO-UNDO.
 DEF VAR liErrorCode  AS INT  NO-UNDO.
@@ -36,7 +36,7 @@ VIEW FRAME fCLI.
 
 REPEAT WITH FRAME fCLI ON ENDKEY UNDO, LEAVE:
    ehto = 9.
-   RUN ufkey.p.
+   RUN Syst/ufkey.p.
 
    PAUSE 0.
    UPDATE lcCLI llErrorCodes WITH FRAME fCLI.
@@ -64,7 +64,7 @@ HIDE FRAME fCLI NO-PAUSE.
 
 IF lcCLI = "" OR KEYLABEL(LASTKEY) = "F4" THEN RETURN.
       
-RUN mobguard2.p(INPUT  TRUE,
+RUN Mm/mobguard2.p(INPUT  TRUE,
                 OUTPUT lcReasonCode,
                 OUTPUT ldaFromDate,
                 OUTPUT ldaToDate,
@@ -72,7 +72,7 @@ RUN mobguard2.p(INPUT  TRUE,
 
 IF NOT llAccept THEN RETURN.
 
-RUN mobcallbr.p(INPUT "post,pre",
+RUN Mm/mobcallbr.p(INPUT "post,pre",
                 INPUT  ldaFromDate,
                 INPUT  ldaToDate,
                 INPUT  0,

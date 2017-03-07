@@ -8,12 +8,12 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcbrand = "1".
-{timestamp.i}
-{cparam2.i}
-{email.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/email.i}
 
 DEF VAR liMsRequest AS INT NO-UNDO. 
 DEF VAR ldeFrom AS DEC NO-UNDO. 

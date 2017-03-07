@@ -7,17 +7,17 @@
   CHANGED ......: 14.01.04 jp servattr
                   01.07.04 tk subser.i moved
                   13.12.04/aam use ttSLG
-                  12.12.06/mvi new param to run msrequest (reqstat = ?)
+                  12.12.06/mvi new param to RUN Mm/msrequest.p (reqstat = ?)
                   31.10.07 jp  new parameter for msrequest
                   
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'} 
-{eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'} 
+{Syst/eventval.i}
 
 DEF  NEW  shared VAR siirto AS CHAR.
 
@@ -28,14 +28,14 @@ DEF INPUT-OUTPUT PARAMETER TABLE FOR ttSLG.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhttSLG AS HANDLE NO-UNDO.
    lhttSLG = BUFFER ttSLG:HANDLE.
    RUN StarEventInitialize(lhttSLG).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhttSLG).
+      RUN Mc/eventview2.p(lhttSLG).
    END.
 
 END.
@@ -92,7 +92,7 @@ WITH  OVERLAY ROW 4 centered
     FRAME lis.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -167,12 +167,12 @@ BROWSE:
         ufk[6]= 4 
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttSLG.CliType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttSLG.CliType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttSLG.CliType WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -359,8 +359,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhttSLG).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

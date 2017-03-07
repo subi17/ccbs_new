@@ -1,5 +1,5 @@
-{tmsconst.i}
-{timestamp.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 DEF STREAM sOut.
 

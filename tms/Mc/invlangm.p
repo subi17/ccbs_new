@@ -8,8 +8,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-run invlang (0,
+RUN Mc/invlang.p (0,
              "").
              

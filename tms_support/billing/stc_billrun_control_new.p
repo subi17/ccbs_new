@@ -7,16 +7,16 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun  = "Qvantel".
 gcBrand = "1".
-{date.i}
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
-{contract_end_date.i}
-{fixedfee.i}
-{email.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/contract_end_date.i}
+{Func/fixedfee.i}
+{Func/email.i}
 {Func/fixedlinefunc.i}
 
 DEF VAR ldBeginStamp         AS DEC  NO-UNDO.

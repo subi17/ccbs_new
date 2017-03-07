@@ -12,8 +12,8 @@
 
   Version ......: M15
 --------------------------------------------------------------*/
-{commali.i}
-{function.i}
+{Syst/commali.i}
+{Func/function.i}
 
 DEFINE INPUT    PARAMETER pOrderID  AS CHARACTER    NO-UNDO.
 DEFINE INPUT    PARAMETER pCustNr   AS INTEGER      NO-UNDO.
@@ -36,7 +36,7 @@ FIND FIRST rsoper WHERE
 NO-LOCK NO-ERROR.           
 lResponseDir = fChkPath(rsoper.rs-dir) + "response/".
 
-{tmsparam.i CLIFileSeparator RETURN}.
+{Func/tmsparam.i CLIFileSeparator RETURN}.
 CLIFileSeparator = CharVal.
 
 /* lCreateDate_time will be written TO the response PaymFile 

@@ -8,13 +8,13 @@
 ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 Katun = "Qvantel".
-{timestamp.i}
-{cparam2.i}
-{email.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/email.i}
+{Syst/tmsconst.i}
 
 DEF VAR lcAddrConfDir AS CHAR NO-UNDO.
 DEF VAR liPeriod      AS INT  NO-UNDO.

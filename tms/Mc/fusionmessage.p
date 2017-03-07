@@ -8,8 +8,8 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF TEMP-TABLE ttDocs LIKE FusionMessage 
   FIELD cCreatedTS AS CHAR
@@ -97,7 +97,7 @@ form
     " Message Contents " NO-LABELS 
     FRAME fDetails.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 fCollect(iiOrderId).
@@ -162,13 +162,13 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttDocs.CreatedTS ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttDocs.CreatedTS {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttDocs.CreatedTS WITH FRAME sel.
       END.
 

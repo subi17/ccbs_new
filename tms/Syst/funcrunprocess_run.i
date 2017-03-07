@@ -1,8 +1,8 @@
 /* funcrunprocess_run.i     22.04.10/aam 
 */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF TEMP-TABLE ttFunctionParam NO-UNDO
    FIELD ParamSeq  AS INT  
