@@ -6,9 +6,9 @@
 */
 
 
-{commali.i}
-{msreqfunc.i}
-{fhdrtext.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Func/fhdrtext.i}
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 DEF INPUT PARAMETER iiCustNum   AS INT  NO-UNDO.

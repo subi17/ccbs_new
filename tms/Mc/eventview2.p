@@ -6,11 +6,11 @@
   MODIFIED..: 20.05.2002/tk EXTENT bug fixed
               23.29.2002/jr old value to browser
 ----------------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 
 &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 
 DEFINE VAR itable  LIKE Eventlog.TableName NO-UNDO.
 DEFINE VAR ikey    LIKE Eventlog.Key       NO-UNDO.

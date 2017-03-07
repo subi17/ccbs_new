@@ -1,4 +1,4 @@
-{date.i}
+{Func/date.i}
 def stream sread.
 def stream slog.
 input stream sread from "/apps/snet/200711/preactiv_msisdn.txt".

@@ -8,9 +8,9 @@
  * @output      success;boolean;Result status of sending test SMS
 */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
-{fsendsms.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+{Func/fsendsms.i}
+{Syst/tmsconst.i}
 DEF VAR pcCLI        AS CHARACTER NO-UNDO.
 DEF VAR pcSmsContent AS CHARACTER NO-UNDO.
 DEF VAR pcSender     AS CHARACTER NO-UNDO.

@@ -1,4 +1,4 @@
-{rate_roamzone.i}
+{Rate/rate_roamzone.i}
 
 DEF VAR ldDate AS DATE NO-UNDO FORMAT "99-99-9999".
 DEF VAR liCCN  AS INT  NO-UNDO.

@@ -1,10 +1,10 @@
 /* based on 200902/as_yob150.p */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "ari".
 gcBrand = "1".
-{tmsconst.i}
-{flimitreq.i}
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liMsSeq AS INTEGER NO-UNDO. 

@@ -13,12 +13,12 @@
   VERSION ......: SHARK
   ------------------------------------------------------ */
 
-{commali.i}
-{date.i}
-{fvatfact.i}
-{excel.i}
-{coinv.i}
-{cparam.i2}
+{Syst/commali.i}
+{Func/date.i}
+{Func/fvatfact.i}
+{Func/excel.i}
+{Func/coinv.i}
+{Func/cparam.i2}
 
 DEFINE INPUT PARAMETER  iiper AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER  idaDate AS DATE NO-UNDO.

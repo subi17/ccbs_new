@@ -7,12 +7,12 @@
   Version ......: TMS
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{files.i}
-{funcrunprocess_update.i}
-{funcrun_replica.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/files.i}
+{Syst/funcrunprocess_update.i}
+{Syst/funcrun_replica.i}
 
 DEF INPUT  PARAMETER idaInvDate      AS DATE NO-UNDO.
 DEF INPUT  PARAMETER ilOnlyNew       AS LOG  NO-UNDO.
@@ -397,7 +397,7 @@ PROCEDURE pCheckNumbering:
 
          IF NOT SESSION:BATCH THEN 
             PUT SCREEN ROW 22 COL 2 "Run invoice numbering ..". 
-         RUN invoice_extinvid.p(idaInvDate,
+         RUN Inv/invoice_extinvid.p(idaInvDate,
                                 liInvType,
                                 2,   
                                 0,
@@ -409,7 +409,7 @@ PROCEDURE pCheckNumbering:
          PUT SCREEN ROW 22 COL 2 "Check invoice numbering ..". 
    
       /* check */
-      RUN invoice_extinvid.p(idaInvDate,
+      RUN Inv/invoice_extinvid.p(idaInvDate,
                              liInvType,
                              0,   
                              0,

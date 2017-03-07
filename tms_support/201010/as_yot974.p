@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
 find msrequest where
      msrequest.msrequest = 30337730 and

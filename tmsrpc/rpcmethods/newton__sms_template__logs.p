@@ -10,9 +10,9 @@
                 timestamp;string;
 */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcResultStruct AS CHAR NO-UNDO. 

@@ -13,9 +13,9 @@
   Version ......: 
   --------------------------------------------------------------------------- */
 
-{commpaa.i}
-{tmsparam4.i}
-{msreqfunc.i}
+{Syst/commpaa.i}
+{Func/tmsparam4.i}
+{Func/msreqfunc.i}
 
 gcBrand = "1".
 

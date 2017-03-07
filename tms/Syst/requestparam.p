@@ -10,23 +10,23 @@
 
 &GLOBAL-DEFINE BrTable RequestParam
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RequestParam'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RequestParam'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhRequestParam AS HANDLE NO-UNDO.
    lhRequestParam = BUFFER RequestParam:HANDLE.
    RUN StarEventInitialize(lhRequestParam).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhRequestParam).
+      RUN Mc/eventview2.p(lhRequestParam).
    END.
 
 END.
@@ -72,7 +72,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
        "  PARAMETERS OF TYPE " + STRING(iiReqType) + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     RequestParam.Brand          COLON 20
@@ -99,7 +99,7 @@ FORM
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 /* get valid fields */
@@ -154,7 +154,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a RequestParam  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -162,7 +162,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -284,12 +284,12 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW RequestParam.ParamField ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW RequestParam.ParamField {Syst/uchoose.i} NO-ERROR 
           WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RequestParam.ParamField WITH FRAME sel.
       END.
@@ -418,8 +418,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        SET lcParamField WITH FRAME f1.
@@ -515,8 +515,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRequestParam).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -553,7 +553,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -653,7 +653,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.

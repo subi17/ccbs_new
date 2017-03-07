@@ -9,11 +9,11 @@
   VERSION ......: yoigo
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam.i2}
-{eventval.i}
-{fcustpl.i}
-{ftaxdata.i}
+{Syst/commali.i}
+{Func/cparam.i2}
+{Syst/eventval.i}
+{Func/fcustpl.i}
+{Func/ftaxdata.i}
 {invlang.i2}
 
 DEF INPUT  PARAMETER iiOrder  AS INT  NO-UNDO. 
@@ -105,7 +105,7 @@ IF iiAction = 1 THEN DO:
    IF llDoEvent THEN DO:
       &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
       
       DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
       lhSingleFee = BUFFER SingleFee:HANDLE.

@@ -82,23 +82,23 @@
 VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{feplform.i}
-{ftransdir.i}
-{email.i}
-{fotint.i}
-{refcode.i}
-{edefine.i}
-{utumaa.i new}
-{finvbal.i}
-{pdfinvdf.i}
-{fbarcode.i}
-{fprintinv.i}
-{invprdf.i}
-{fgetclis.i}
-{fsubser.i}
-{eplinvatt.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/feplform.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Func/fotint.i}
+{Func/refcode.i}
+{Inv/edefine.i}
+{Syst/utumaa.i new}
+{Func/finvbal.i}
+{Inv/pdfinvdf.i}
+{Func/fbarcode.i}
+{Func/fprintinv.i}
+{Inv/invprdf.i}
+{Func/fgetclis.i}
+{Func/fsubser.i}
+{Inv/eplinvatt.i}
 
 DEF TEMP-TABLE wError NO-UNDO
     FIELD Inv    AS INT
@@ -950,7 +950,7 @@ BY wInvoice.InvNum:
        IF CAN-FIND(FIRST InvRow OF Invoice WHERE
                          /* InvRow.Qty > 1 AND */
                          LOOKUP(STRING(InvRow.RowType),"3,4,7") > 0)
-       THEN RUN nncore1 (Invoice.InvNum, TRUE). 
+       THEN RUN Mc/nncore1.p (Invoice.InvNum, TRUE). 
    END.
   
    /* call reports are always started from separate report sheet 
@@ -1217,7 +1217,7 @@ END.
 
 /* form pdf-invoices */
 IF CAN-FIND(FIRST ttPDFInv) THEN DO:
-   RUN pdfinv(INPUT-OUTPUT TABLE ttPDFInv,
+   RUN Inv/pdfinv.p(INPUT-OUTPUT TABLE ttPDFInv,
               INPUT  TRUE,      /* print specifications */
               INPUT  TRUE,      /* form pdf */
               INPUT  FALSE,     /* send pdf via email */

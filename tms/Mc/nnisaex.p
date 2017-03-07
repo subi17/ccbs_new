@@ -11,9 +11,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}                      
-{function.i}
-{utumaa.i new} 
+{Syst/commali.i}                      
+{Func/function.i}
+{Syst/utumaa.i new} 
 
 assign tuni1 = "nnisaex"
        tuni2 = "".
@@ -100,10 +100,10 @@ date1 = date(month(pvm),1,year(pvm)).
 date2 = date1 + 35.
 date2 = date(month(date2),1,year(date2)) - 1.
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN ufkey.
+    ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
     date1   
@@ -121,14 +121,14 @@ repeat WITH FRAME rajat:
 TOIMI:
    repeat:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT LOOP.
       IF toimi = 8 THEN LEAVE LOOP.
       IF toimi = 5 THEN DO:
          IF print THEN DO:
             /* ask FOR printer IF letters are wanted */
             ASSIGN tila = TRUE.
-            {tmsreport.i "next toimi"}
+            {Syst/tmsreport.i "next toimi"}
          END.
          LEAVE TOIMI.
       END.   
@@ -138,32 +138,32 @@ TOIMI:
 
    PUT STREAM excel UNFORMATTED
       ynimi  tab "Invoice summary by Salesman / agent / customer".
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
       "All amounts are from invoice rows; amounts are rounded and ex VAT".
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
       "Invoicing Group" tab.
       if InvGroup = "" then put stream excel "ALL".
       ELSE PUT STREAM excel UNFORMATTED InvGroup.
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
       "Salesmen:" tab Salesman1 " - " Salesman2.
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
       "Invoices written:" tab date1 format "99.99.9999" " - "
                               date2 format "99.99.9999".
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
       "Reseller: " tab.
        if Reseller = "" then put stream excel "ALL".
        ELSE PUT STREAM excel UNFORMATTED Reseller.
-      RUN uexskip(3).
+      RUN Syst/uexskip.p(3).
 
    PUT STREAM excel UNFORMATTED
    "SmCode"     tab
@@ -179,7 +179,7 @@ TOIMI:
    "C.based on" tab
    "Comm%"      tab
    "Commission".
-   RUN uexskip(2).
+   RUN Syst/uexskip.p(2).
 
    message "Printing ...".
 
@@ -318,7 +318,7 @@ form header
          cbase   format "->>>>>>9"         tab
          xperc                             tab
          commi.
-         RUN uexskip(1).
+         RUN Syst/uexskip.p(1).
 
          if print and Customer.Reseller ne "" THEN DO:
 
@@ -362,7 +362,7 @@ form header
          cfees  tab
          cbase  tab tab
          commi.
-         RUN uexskip(2).
+         RUN Syst/uexskip.p(2).
 
          /* make a summary record FOR further reporting */
          if Customer.Reseller ne "" THEN DO:
@@ -403,9 +403,9 @@ form header
    * resellers                         *
    ************************************/
 
-   RUN uexskip(5).
+   RUN Syst/uexskip.p(5).
 
-   put stream excel unformatted "TOTALS BY RESELLER:". RUN uexskip(2).
+   put stream excel unformatted "TOTALS BY RESELLER:". RUN Syst/uexskip.p(2).
 
    PUT STREAM excel UNFORMATTED
    "SmanCode"    tab
@@ -416,7 +416,7 @@ form header
    "C-Fees"      tab
    "CBased"      tab
    "CommKr"      .
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
    FOR EACH  w-total,
        FIRST Reseller   where Reseller.Reseller   = w-total.Reseller no-lock,
@@ -426,7 +426,7 @@ form header
    BY w-total.Salesman
    BY w-total.Reseller.
 
-      IF first-of(w-total.Salesman) THEN RUN uexskip(1).
+      IF first-of(w-total.Salesman) THEN RUN Syst/uexskip.p(1).
 
       PUT STREAM excel UNFORMATTED
       Salesman.Salesman    tab
@@ -437,14 +437,14 @@ form header
       w-total.w-cfees     tab
       w-total.w-cbase     tab
       w-total.w-commi     .
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
    END.           
 
    OUTPUT STREAM excel CLOSE.
 
    IF print THEN DO:
       ASSIGN tila = FALSE.
-      {tmsreport.i}
+      {Syst/tmsreport.i}
    END.   
 
    message "File" exfile "is ready - press ENTER !".

@@ -14,9 +14,9 @@
   Version ......: SCRUNKO4 (10.06.99)
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
-{func.i}
+{Syst/commali.i}
+{Func/msisdn.i}
+{Func/func.p}
 
 DEFINE TEMP-TABLE ttCall LIKE MobCDR.
 
@@ -51,7 +51,7 @@ DEF VAR SL_prefix    AS C                      NO-UNDO.
 DEF VAR roamview     AS i                      NO-UNDO.
 DEF VAR lcTime       AS C                      NO-UNDO.
 
-{tmsparam.i DefMSISDNPr  return} SL_prefix = TMSParam.CharVal.
+{Func/tmsparam.i DefMSISDNPr  return} SL_prefix = TMSParam.CharVal.
 
 form
     PrepCDR.DateSt  
@@ -89,7 +89,7 @@ form /* seek Mobile Call  BY  DateSt */
 
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Error Code,By A-Customer,BY MSISDN No.,By 4".
@@ -169,16 +169,16 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 0   ufk[3]= 1102 ufk[4]= 0
         ufk[5]= 265 ufk[6]= 0   ufk[7]= 0    ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PrepCDR.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PrepCDR.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PrepCDR.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW PrepCDR.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PrepCDR.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PrepCDR.CLI WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -306,8 +306,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DateSt = 12/1/2006.
        UPDATE DateSt WITH FRAME f1.
@@ -333,7 +333,7 @@ BROWSE:
         find first mobsub where
                    mobsub.cli = PrepCDR.CLI
         no-lock no-error.
-        if avail mobsub then run msowner(mobsub.msseq).
+        if avail mobsub then RUN Mm/msowner.p(mobsub.msseq).
         ufkey = TRUE.
         NEXT.
      END.   
@@ -347,7 +347,7 @@ BROWSE:
         RUN local-find-this(FALSE).
         CREATE ttCall.
         BUFFER-COPY PrepCDR TO ttCall.
-        RUN viewmbd(INPUT TABLE ttcall,
+        RUN Mm/viewmbd.p(INPUT TABLE ttcall,
                           ttcall.datest, 
                           ttcall.timest,
                           ttCall.cli,
@@ -363,8 +363,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PrepCDR.DateSt.
 
        RUN local-UPDATE-record.                                  

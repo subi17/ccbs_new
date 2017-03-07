@@ -42,9 +42,9 @@
 &GLOBAL-DEFINE InitPersistent NO
 &GLOBAL-DEFINE GetAllParams NO
 
-{commali.i}
-{cparam2.i}
-{faccper.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/faccper.i}
 
 DEF INPUT  PARAMETER  CustNum1  LIKE Customer.CustNum NO-UNDO.
 DEF INPUT  PARAMETER  iiOrderID AS INT                NO-UNDO. 
@@ -80,9 +80,9 @@ DEF VAR liPaymTerm AS INT  NO-UNDO.
 DEF VAR lcPrefix   AS CHAR NO-UNDO.
 DEF VAR ldTotal    AS DEC  NO-UNDO.
 
-{tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
+{Func/tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
 
-{lamupers.p NEW}
+{Inv/lamupers.p NEW}
 
 IF NOT ilSilent THEN DO:
 
@@ -130,11 +130,11 @@ WITH
    title color value (ctc) " INVOICE GROUP DATA " COLOR value(cfc)
    OVERLAY centered ROW 14 FRAME lCustNum.
 
-   cfc = "sel". RUN ufcolor. ccc = cfc.
+   cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
    view FRAME taka. PAUSE 0 no-message.
 
-   cfc = "lis". RUN ufcolor.
-   ehto = 9. RUN ufkey.
+   cfc = "lis". RUN Syst/ufcolor.p.
+   ehto = 9. RUN Syst/ufkey.p.
    
    liPaymTerm = 9. 
 END.
@@ -257,7 +257,7 @@ IF NOT ilSilent THEN DO:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          UPDATE
             InvGroup
             CustNum1 CustNum2   validate(INPUT CustNum2  >= INPUT CustNum1,
@@ -349,7 +349,7 @@ IF NOT ilSilent THEN DO:
       ASSIGN ufk = 0 ufk[1] = 132 ufk[2] = 0 
                      ufk[4] = 0 ufk[5] = 795
                      ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN DO:
          kysy_rajat = TRUE.
          NEXT toimi.

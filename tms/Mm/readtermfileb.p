@@ -10,15 +10,15 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "Cron".
        
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcTermFile AS CHAR NO-UNDO.
@@ -108,7 +108,7 @@ FOR EACH ttFiles:
          ActionLog.ActionTS     = fMakeTS().
    END.
    
-   RUN readtermfile.p (ttFiles.TermFile,
+   RUN Mm/readtermfile.p (ttFiles.TermFile,
                      lcLogFile,
                      OUTPUT liRead,
                      OUTPUT liError).

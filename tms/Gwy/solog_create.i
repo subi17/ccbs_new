@@ -11,8 +11,8 @@
 &THEN
 &GLOBAL-DEFINE SOLOG_CREATE_I YES
 
-{commali.i}
-{date.i}
+{Syst/commali.i}
+{Func/date.i}
 
 FUNCTION fCreateSolog RETURNS INT
    (  INPUT iiMsSeq AS INT,

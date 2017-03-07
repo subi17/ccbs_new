@@ -10,7 +10,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF  shared VAR siirto AS CHAR.
 
@@ -62,7 +62,7 @@ form
     "  - Organization CODE   (END)"   SKIP
 with row 1 centered overlay title " SEEK CUSTOMER " FRAME alku.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
    FIND FIRST Customer  USE-INDEX CustNum WHERE 
       Customer.Brand = gcBrand NO-LOCK no-error.
    IF NOT AVAIL Customer THEN DO:
@@ -84,7 +84,7 @@ repeat WITH FRAME sel:
        ASSIGN haettava = FALSE aakhaku = FALSE orghaku = FALSE.
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku ON ENDKEY UNDO, RETURN:
-          ehto = 9. RUN ufkey. ufkey = TRUE.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE ashaku WITH FRAME alku EDITING:
              READKEY. nap = keylabel(LASTKEY).
              /* onko painettu home */
@@ -211,24 +211,24 @@ BROWSE:
          ufk[1]= 0   ufk[2]= 0   ufk[3]= 0 ufk[4]= 0
          ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW Customer.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Customer.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Customer.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW Customer.SearchName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Customer.SearchName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Customer.SearchName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW Customer.CustName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Customer.CustName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Customer.CustName WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-         CHOOSE ROW Customer.OrgId ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Customer.OrgId {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Customer.OrgId WITH FRAME sel.
       END.
 

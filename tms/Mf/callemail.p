@@ -10,9 +10,9 @@
   VERSION ......: M15
 
 -------------------------------------------------------------------------- */
-{commali.i}
-{excel.i}
-{email.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/email.i}
 
 DEF INPUT PARAMETER asno  AS INT  NO-UNDO.
 DEF INPUT PARAMETER invno AS INT  NO-UNDO.
@@ -23,7 +23,7 @@ DEF VAR emailsender AS CHAR NO-UNDO.
 
 DEF TEMP-TABLE tinvseq LIKE invseq.
 
-{cparam.i DefEmailSender    RETURN}.  emailsender = TMSParam.CharVal .
+{Func/cparam.i DefEmailSender    RETURN}.  emailsender = TMSParam.CharVal .
 
 FIND customer NO-LOCK WHERE customer.custnum = asno NO-ERROR.
 

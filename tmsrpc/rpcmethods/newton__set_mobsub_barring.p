@@ -8,10 +8,10 @@
 
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
-{timestamp.i}
-{tmsconst.i}
-{barrfunc.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/barrfunc.i}
 katun    = "NewtonAd".
 gcBrand  = "1".
 
@@ -56,7 +56,7 @@ IF fIsReasonableSet(pcCommand, MobSub.MsSeq) EQ FALSE THEN
    RETURN appl_err("Barring status already active/inactive").
 
 /*Barrengine makes required validations*/
-RUN barrengine.p(MobSub.MsSeq,
+RUN Mm/barrengine.p(MobSub.MsSeq,
                  pcCommand,
                  {&REQUEST_SOURCE_NEWTON},
                  "",
