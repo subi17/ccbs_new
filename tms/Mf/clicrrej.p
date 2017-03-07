@@ -8,7 +8,7 @@
   MODIFIED .....: 
   Version ......: M15
 --------------------------------------------------------------*/
-{commali.i}
+{Syst/commali.i}
 
 DEFINE INPUT    PARAMETER pFileName     AS CHARACTER    NO-UNDO.
 DEFINE INPUT    PARAMETER pErrorCode    AS INTEGER      NO-UNDO.
@@ -26,10 +26,10 @@ DEFINE VARIABLE lCliFileDir             AS CHARACTER    NO-UNDO.
 DEFINE VARIABLE lCliFileSeparator       AS CHARACTER    NO-UNDO.
 DEFINE VARIABLE lCreateDate_Time        AS CHARACTER    NO-UNDO.
 
-{tmsparam.i CliResponseDir RETURN}.
+{Func/tmsparam.i CliResponseDir RETURN}.
 lResponseDir = TMSParam.CharVal.
 
-{tmsparam.i CliFileDir RETURN}
+{Func/tmsparam.i CliFileDir RETURN}
 lCliFileDir = TMSParam.CharVal.
 
 /* Construct a reject File Name. Same as parameter pFileName except "ERR" before the dot */ 
@@ -42,7 +42,7 @@ lFile = lResponseDir + "/" + lFile. /* Add full path TO the out File Name */
 OUTPUT STREAM   sOut    TO VALUE(lFile).
 INPUT STREAM    sIn     FROM VALUE(lCliFileDir + "/" + pFileName).
 
-{tmsparam.i CliFileSeparator RETURN}.
+{Func/tmsparam.i CliFileSeparator RETURN}.
 lCliFileSeparator = TMSParam.CharVal.
 
 lResult = "Error".
@@ -108,7 +108,7 @@ INPUT   STREAM sIn  CLOSE.
 OUTPUT  STREAM sOut CLOSE.
 
 /* Get the Name of the ftp-script from TMSParam. */
-{tmsparam.i FtpPutResponseFile RETURN}
+{Func/tmsparam.i FtpPutResponseFile RETURN}
 
 /* RUN the script that PUT the cli-file on the ftp-server. */
 OS-COMMAND SILENT VALUE (TMSParam.CharVal + " " + lFile).    

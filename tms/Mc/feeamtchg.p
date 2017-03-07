@@ -1,10 +1,10 @@
 /* feeamtchg.p          01.12.04/aam
 */
 
-{commali.i}
-{eventval.i}
-{cparam2.i}
-{nncoit2.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/cparam2.i}
+{Func/nncoit2.i}
 
 DEF VAR lcCLIType   AS CHAR NO-UNDO.
 DEF VAR ldOldAmt    AS DEC  NO-UNDO.
@@ -25,7 +25,7 @@ DEF VAR llNewFee    AS LOG  NO-UNDO.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFixedFee AS HANDLE NO-UNDO.
    lhFixedFee = BUFFER FixedFee:HANDLE.
@@ -45,7 +45,7 @@ WITH 1 DOWN OVERLAY ROW 15 CENTERED SIDE-LABELS FRAME fFeeQty.
 
  
 ehto = 9.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 REPEAT ON ENDKEY UNDO, RETURN:                            
    PAUSE 0.
@@ -108,7 +108,7 @@ REPEAT ON ENDKEY UNDO, RETURN:
 END.
 
 ehto = 5.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 OUTPUT STREAM sLog TO VALUE(lcEventDir + "/feeamtchg_" +
                             STRING(YEAR(TODAY),"9999") + 

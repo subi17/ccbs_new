@@ -7,7 +7,7 @@
   CREATED ......: 17.06.1990
   ------------------------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def new shared var siirto as char format "x(75)".
 DEF VAR i AS INT NO-UNDO.
@@ -44,7 +44,7 @@ if lookup(frame-field,"InvCust,RateCust,RepCust,PaymCust,AgrCust") > 0 OR
    index(frame-field,"custno") > 0 
 
    THEN DO:
-   RUN nnasel.
+   RUN Mc/nnasel.p.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
@@ -52,26 +52,26 @@ else if index(frame-field,"BillCode") > 0  OR
         index(frame-field,"BillItem") > 0  OR 
         index(frame-field,"ServiceLMember") > 0
 THEN DO:
-     RUN nntuse.
+     RUN Help/nntuse.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"Target") > 0 THEN 
 DO:
-   RUN targets.
+   RUN Help/targets.p.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"gcbrand,Brand") > 0 OR
      index(frame-field,"brand") > 0 
 THEN DO:
-   RUN h-brand.
+   RUN Help/h-brand.p.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"BankId") > 0 THEN
 DO:
-   RUN bankid.
+   RUN Mc/bankid.p.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
@@ -79,50 +79,50 @@ else if lookup(frame-field,"Parent") > 0 OR
         index(frame-field,"salesman") > 0 OR
         index(frame-field,"myyja") > 0 OR
         index(frame-field,"sm-code") > 0 THEN DO:
-     RUN nnmyse.
+     RUN Help/nnmyse.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"SalesOffice") > 0 THEN DO:
-     RUN nnsose.
+     RUN Help/nnsose.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"Reseller") > 0 THEN DO:
-     RUN nnrsse.
+     RUN Mc/nnrsse.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"Language,kie,CCLang") > 0 THEN DO:
-     RUN h-language.
+     RUN Help/h-language.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"AccType") > 0 THEN DO:
-     RUN h-acyp.
+     RUN Help/h-acyp.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 
 else if lookup(frame-field,"xug-code") > 0  then do:
-   run nnugse.p.
+   RUN Help/nnugse.p.
    if siirto <> ? then frame-value = siirto.
 end.
 
 
 else if lookup(frame-field,"RepCodes") > 0 THEN DO:
-     RUN h-repcode.
+     RUN Help/h-repcode.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if 
      index(frame-field,"BDest") > 0 THEN DO:
-     RUN nnbtse.
+     RUN Mc/nnbtse.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"Category") > 0 THEN DO:
-     RUN nnakse.
+     RUN Mc/nnakse.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
@@ -165,7 +165,7 @@ else if
         df = "99-99-9999".
      frame-value = string(si-pvm,df).
 
-     RUN ukale.p.
+     RUN Syst/ukale.p.
      IF si-pvm <> ? THEN DO:
         PAUSE 0 no-message.
         frame-value = string(si-pvm,df).
@@ -174,7 +174,7 @@ else if
 END.
 ELSE IF lookup(frame-field,"UserCode") 
     > 0 THEN DO:
-     RUN uktse.p.
+     RUN Syst/uktse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
@@ -185,17 +185,17 @@ else if lookup(frame-field,"UserName")
 END.
 
 else if lookup(frame-field,"MenuClass") > 0 THEN DO:
-     RUN nnpcse.p.
+     RUN Help/nnpcse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if index(frame-field,"InvNum") > 0  THEN DO:
-     RUN nnlase.p.
+     RUN Ar/nnlase.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 ELSE IF INDEX(FRAME-FIELD,"ExtInvID") > 0 THEN DO:
-   RUN nnlase. 
+   RUN Ar/nnlase.p. 
    IF siirto NE ? THEN DO:
       FIND Invoice WHERE Invoice.InvNum = INTEGER(siirto) NO-LOCK NO-ERROR.
       IF AVAILABLE Invoice THEN siirto = Invoice.ExtInvID.
@@ -204,44 +204,44 @@ ELSE IF INDEX(FRAME-FIELD,"ExtInvID") > 0 THEN DO:
 END.
 
 else if lookup(frame-field,"OpCode,Operator,h-op-code") > 0  THEN DO:
-     RUN nnopse.p.
+     RUN Help/nnopse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if index(frame-field,"ExCode") > 0   OR
         index(frame-field,"ex-code") > 0   
 THEN DO:
-     RUN nnexse.p.
+     RUN Mf/nnexse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if index(frame-field,"TrunkCode") > 0 OR
         index(frame-field,"TrunkName") > 0 THEN DO:
-     RUN nntrse.p.
+     RUN Mf/nntrse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"PriceList,xPriceList") > 0  THEN DO:
-     RUN nnplse.p.
+     RUN Help/nnplse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if index(frame-field,"InvGroup") > 0 OR
         index(frame-field,"ig-code") > 0
 THEN DO:
-     RUN nnigse.p.
+     RUN Mc/nnigse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"custgroup,xCustGroup,xcg-code") > 0  THEN DO:
-     RUN nncgse.p.
+     RUN Mc/nncgse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 
 
 else if lookup(frame-field,"SmGroup,xSmGroup,xg-code,mry1,mry2") > 0  THEN DO:
-     RUN nnsgse.p.
+     RUN Help/nnsgse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
@@ -249,7 +249,7 @@ ELSE IF INDEX(frame-field,"areacode") > 0 OR
         LOOKUP(frame-field,"neigarea") > 0
 
 THEN DO:
-     RUN nnrnse.p.
+     RUN Mf/nnrnse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
@@ -259,7 +259,7 @@ else if lookup(frame-field,"xb-code,xb-name") > 0  THEN DO:
 END.
 
 else if lookup(frame-field,"TrafficArea") > 0  THEN DO:
-     RUN nnsnse.p.
+     RUN Mf/nnsnse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
@@ -270,29 +270,29 @@ va-tno,v#10,v#11,v#12,v#15,v#16"
 */
 ) > 0 THEN DO:
    siirto = frame-value.
-   RUN umese.p.
+   RUN Syst/umese.p.
    IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"PrinterId") > 0  THEN DO:
-     RUN ukirse.p.
+     RUN Syst/ukirse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"BIGroup,lcGraph") > 0 THEN DO:
-     RUN nnpgse.
+     RUN Help/nnpgse.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 else if index(frame-field,"AccNum") > 0  OR 
      index(frame-field,"Acc") > 0   THEN DO:
-     RUN nnacse.
+     RUN Mc/nnacse.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"repccn,ccn,hakumaa") > 0 OR
      INDEX(frame-field,"ccn") > 0
 THEN DO:
-     RUN nnmase.
+     RUN Help/nnmase.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
@@ -302,12 +302,12 @@ else if lookup(frame-field,"cc-code") > 0 THEN DO:
 END.
 
 else if lookup(frame-field,"Ident") > 0 THEN DO:
-     RUN nnidse.
+     RUN Mf/nnidse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"Desttype") > 0 THEN DO:
-   RUN h-tmscodes.p(INPUT "BDest",  /* TableName*/
+   RUN Help/h-tmscodes.p(INPUT "BDest",  /* TableName*/
                           "BDestType", /* FieldName */
                           ?, /* GroupCode */
                     OUTPUT lcCode).
@@ -316,82 +316,82 @@ else if lookup(frame-field,"Desttype") > 0 THEN DO:
 END.
 
 else if lookup(frame-field,"Currency") > 0 THEN DO:
-     RUN nncuse.
+     RUN Help/nncuse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if index(frame-field,"PaymSrc") > 0 then do:
-     run h-paymsrc.p.
+     RUN Help/h-paymsrc.p.
      if siirto <> ? then frame-value = siirto.
 end.
 
 else if index(frame-field,"DialType") > 0  THEN DO:
-     RUN h-dialtype.p.
+     RUN Help/h-dialtype.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"UserGroup,UserGrp") > 0 THEN DO:
-     RUN hugroup.
+     RUN Help/hugroup.p.
      IF siirto NE ? THEN frame-value = siirto.
 
 END.
 
 else if lookup(frame-field,"tokencode") > 0 THEN DO:
-    run htoken.
+    RUN Help/htoken.p.
     if siirto ne ? then frame-value = siirto.
 END.
 
 else if index(frame-field,"contract") > 0 and
      si-recid2 > 0 and si-recid2 ne ?
 then do:
-   run h-contract(si-recid2).
+   RUN Help/h-contract.p(si-recid2).
    if siirto <> ? then frame-value = siirto.
 end.
 
 else if index(frame-field,"CostCentre") > 0 THEN DO:
-   RUN ccentre.
+   RUN Mc/ccentre.p.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"dcevent") > 0 THEN DO:
-   RUN h-daycamp.
+   RUN Help/h-daycamp.p.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"Region") > 0 THEN DO:
-   RUN h-region.
+   RUN Help/h-region.p.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"TaxZone") > 0 THEN DO:
-   RUN h-taxzone.
+   RUN Help/h-taxzone.p.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"TaxClass") > 0 THEN DO:
-   RUN h-taxclass.
+   RUN Help/h-taxclass.p.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"Nationality") > 0 THEN DO:
-   RUN h-nationality.
+   RUN Help/h-nationality.p.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"ZipCode") > 0 OR
         INDEX(FRAME-FIELD,"PostCode") > 0 
 THEN DO:
-   RUN h-postcode.
+   RUN Help/h-postcode.p.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 ELSE IF INDEX(FRAME-FIELD,"BRTestCase") > 0 THEN DO:
-   RUN brtestcase.p.
+   RUN Inv/brtestcase.p.
    IF siirto NE ? THEN FRAME-VALUE = siirto.
 END.
 
 ELSE IF INDEX(FRAME-FIELD,"DPRuleID") > 0 THEN DO:
-   RUN discountplan.p.
+   RUN Mc/discountplan.p.
    IF siirto NE ? THEN ASSIGN FRAME-VALUE = siirto.
 END.
 
@@ -399,52 +399,52 @@ ELSE DO: /* Mobile-related tables ... */
 
  hmod = ?.  /* default: unknown FIELD */
 
- if lookup(frame-field,"discplan") > 0                then hmod = "h-dplan".
+ if lookup(frame-field,"discplan") > 0                then hmod = "Help/h-dplan".
  else if lookup(frame-field,"rateplan,PNPRatePlan,priceplan") > 0 
-                                                      then hmod = "h-rplan". 
- else if lookup(frame-field,"PNPGroup") > 0           then hmod = "hpnpgrp".
- else if lookup(frame-field,"mancode") > 0            then hmod = "h-simman".
+                                                      then hmod = "Help/h-rplan". 
+ else if lookup(frame-field,"PNPGroup") > 0           then hmod = "Help/hpnpgrp".
+ else if lookup(frame-field,"mancode") > 0            then hmod = "Help/h-simman".
  else if lookup(frame-field,"simstat,new-simstat") > 0
-                                                      then hmod = "h-simstat".
+                                                      then hmod = "Help/h-simstat".
  else if lookup(frame-field,"statuscode,simstat,simstat1,simstat2") > 0  
-                                                      then hmod = "h-msstat".
- else if lookup(frame-field,"simart") > 0             then hmod = "h-simart".
- else if lookup(frame-field,"beacap") > 0             then hmod = "h-beacap".
+                                                      then hmod = "Help/h-msstat".
+ else if lookup(frame-field,"simart") > 0             then hmod = "Help/h-simart".
+ else if lookup(frame-field,"beacap") > 0             then hmod = "Help/h-beacap".
  else if lookup(frame-field,"Stock,stock1,stock2,stobal") > 0   
-                                                      then hmod = "h-stock".
- else if lookup(frame-field,"servel") > 0             then hmod = "h-servic".
+                                                      then hmod = "Help/h-stock".
+ else if lookup(frame-field,"servel") > 0             then hmod = "Help/h-servic".
  else if lookup(frame-field,"servpac,servicepack,def-sp-code") > 0 OR
-         INDEX(FRAME-FIELD,"ServPac") > 0             then hmod = "h-servpa".
- else if index(frame-field,"country") > 0            then hmod = "h-count".
+         INDEX(FRAME-FIELD,"ServPac") > 0             then hmod = "Help/h-servpa".
+ else if index(frame-field,"country") > 0            then hmod = "Help/h-count".
  else if lookup(frame-field,"mccode,mccode1,mccode2") > 0   
-                                                      then hmod = "h-msclas".
+                                                      then hmod = "Help/h-msclas".
  else if lookup(frame-field,"icc,icc1,icc2,new-icc") > 0       
-                                                      then hmod = "h-sim".
- else if index(frame-field,"servcom") > 0             then hmod = "h-servco".
+                                                      then hmod = "Help/h-sim".
+ else if index(frame-field,"servcom") > 0             then hmod = "Help/h-servco".
  else if lookup(frame-field,"bservcom") > 0   
-                                                      then hmod = "h-servcob".
+                                                      then hmod = "Help/h-servcob".
 
  else if lookup(frame-field,"cli,cli1,cli2,new-cli,new-cli-end,xcli,lowlimit,hilimit") > 0 
-                                                      then hmod = "h-msisdn".
- else if lookup(frame-field,"discgroup") > 0          then hmod = "h-discgrp".
+                                                      then hmod = "Help/h-msisdn".
+ else if lookup(frame-field,"discgroup") > 0          then hmod = "Help/h-discgrp".
  else if lookup(frame-field,"moberror,errorcode,moberror1,moberror2") > 0   
-                                                      then hmod = "h-mrerr".
+                                                      then hmod = "Help/h-mrerr".
  else if lookup(frame-field,"penaltyfee") > 0 or
-         index(frame-field,"feemodel") > 0            then hmod = "h-bevent".
- else if lookup(frame-field,"invsect") > 0            then hmod = "h-invsect".
- else if lookup(frame-field,"epgroup") > 0            then hmod = "h-epgrp".
- else if lookup(frame-field,"vatcode") > 0            then hmod = "h-vatcode".
- else if lookup(frame-field,"billtype") > 0           then hmod = "h-obity". 
- else if index (frame-field,"CLItype") > 0            then hmod = "h-mobtype". 
- else if lookup(frame-field,"templnum") > 0           then hmod = "h-custemp".
- else if lookup(frame-field,"Product") > 0            then hmod = "h-product".
- else if lookup(frame-field,"ProdPack") >0            then hmod = "h-prodpack".
+         index(frame-field,"feemodel") > 0            then hmod = "Help/h-bevent".
+ else if lookup(frame-field,"invsect") > 0            then hmod = "Help/h-invsect".
+ else if lookup(frame-field,"epgroup") > 0            then hmod = "Help/h-epgrp".
+ else if lookup(frame-field,"vatcode") > 0            then hmod = "Help/h-vatcode".
+ else if lookup(frame-field,"billtype") > 0           then hmod = "Help/h-obity". 
+ else if index (frame-field,"CLItype") > 0            then hmod = "Help/h-mobtype". 
+ else if lookup(frame-field,"templnum") > 0           then hmod = "Help/h-custemp".
+ else if lookup(frame-field,"Product") > 0            then hmod = "Help/h-product".
+ else if lookup(frame-field,"ProdPack") >0            then hmod = "Help/h-prodpack".
  else if lookup(frame-field,"Fatgroup,fatgrp,ftgrp") >0 or
-      index(frame-field,"FatGroup") > 0               then hmod = "h-fatgroup".
- else if lookup(frame-field,"paraname") >0     then hmod = "h-pdpid".
- else if lookup(frame-field,"msstatus") > 0    then hmod = "h-mobsubstatus".
- else if index(frame-field,"servicelimit") > 0 then hmod = "h-servlimitgrp".
- ELSE IF INDEX(FRAME-FIELD,"ReqStat") > 0      THEN hmod = "h-reqstat".
+      index(frame-field,"FatGroup") > 0               then hmod = "Help/h-fatgroup".
+ else if lookup(frame-field,"paraname") >0     then hmod = "Help/h-pdpid".
+ else if lookup(frame-field,"msstatus") > 0    then hmod = "Help/h-mobsubstatus".
+ else if index(frame-field,"servicelimit") > 0 then hmod = "Help/h-servlimitgrp".
+ ELSE IF INDEX(FRAME-FIELD,"ReqStat") > 0      THEN hmod = "Help/h-reqstat".
 
  if hmod ne "" AND hmod NE ? THEN DO:
     RUN VALUE(hmod).
@@ -478,7 +478,7 @@ ehto = save-ehto.
 DO i = 1 TO 9:
    ufk[i] = save-ufk[i].
 END.
-PAUSE 0.   /* KJÄH KJÄH */
-RUN ufkey.p.
+PAUSE 0.   /* KJï¿½H KJï¿½H */
+RUN Syst/ufkey.p.
 PAUSE 0.
 

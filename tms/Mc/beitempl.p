@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER FeeModel LIKE FeeModel.FeeModel NO-UNDO.
 DEF INPUT PARAMETER PriceList LIKE PriceList.PriceList  NO-UNDO.
@@ -76,7 +76,7 @@ FIND FIRST FeeModel WHERE
            FeeModel.FeeModel = FeeModel NO-LOCK.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Price List,By BillCode  ,By 3, By 4".
@@ -105,12 +105,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a FMItem  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR 
@@ -245,17 +245,17 @@ BROWSE:
         ufk[1]= 703  ufk[2]= 0   ufk[3]= 0 ufk[4]= 0
         ufk[5]= 0  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"5,6"'}.
-        RUN ufkey.p.
+        {Syst/uright1.i '"5,6"'}.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FMItem.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FMItem.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FMItem.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FMItem.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FMItem.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FMItem.BillCode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -384,8 +384,8 @@ BROWSE:
      /* Search BY col 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F1.
        SET BillCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.

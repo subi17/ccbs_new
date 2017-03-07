@@ -5,7 +5,7 @@
   AUTHOR .......: PT
   CREATED ......: 14-07-97
   changePVM ....: 03-09-97 pt
-                  26.10.97 pt f4: RUN nnaryp
+                  26.10.97 pt f4: RUN Mf/nnaryp.p
                   15.01.98 pt NEW FIELD rn-ls
                   17.05.99 jp uright1 & uright2 added  
                   11.09.02 jp hide message
@@ -14,10 +14,10 @@
   Version ......: M15
   ------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'areacode'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'areacode'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -44,7 +44,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhAreaCode AS HANDLE NO-UNDO.
    lhAreaCode = BUFFER AreaCode:HANDLE.
@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhAreaCode).
+      RUN Mc/eventview2.p(lhAreaCode).
    END.
 END.
 
@@ -103,7 +103,7 @@ form /* SamtrafiksomrAde search WITH FIELD AreaCode */
     with row 4 col 2 title color value(ctc) " FIND AREANAME "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f3.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST AreaCode
@@ -136,12 +136,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* AreaCode -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          DO TRANSACTION:
             PROMPT-FOR AreaCode.TrafficArea
             VALIDATE
@@ -252,24 +252,24 @@ BROWSE:
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW AreaCode.TrafficArea ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaCode.TrafficArea {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaCode.TrafficArea WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW AreaCode.AreaCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaCode.AreaCode {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaCode.AreaCode WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-         CHOOSE ROW AreaCode.AreaName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaCode.AreaName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaCode.AreaName WITH FRAME sel.
       END.
    /* ELSE IF order = 4 THEN DO:
-         CHOOSE ROW AreaCode.??  ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaCode.??  {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaCode.? WITH FRAME sel.
       END.
 */
@@ -439,9 +439,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku-st-nr = 0.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku-st-nr WITH FRAME haku-f1.
         HIDE FRAME haku-f1 no-pause.
         IF haku-st-nr <> 0 THEN DO:
@@ -462,9 +462,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku-rn-rnr = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku-rn-rnr WITH FRAME haku-f2.
         HIDE FRAME haku-f2 no-pause.
         if haku-rn-rnr <> "" THEN DO:
@@ -484,9 +484,9 @@ BROWSE:
 
      else if lookup(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku-AreaName = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku-AreaName WITH FRAME haku-f3.
         HIDE FRAME haku-f3 no-pause.
         if haku-AreaName <> "" THEN DO:
@@ -506,7 +506,7 @@ BROWSE:
      else if lookup(nap,"4,f4") > 0 THEN DO TRANSACTION:  /* Angr. rnr */
         delline = FRAME-LINE.
         FIND AreaCode where recid(AreaCode) = rtab[FRAME-LINE] no-lock.
-        RUN nnaryp.p (AreaCode.AreaCode).
+        RUN Mf/nnaryp.p (AreaCode.AreaCode).
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -590,8 +590,8 @@ BROWSE:
         FIND AreaCode where recid(AreaCode) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN ufkey.
-        cfc = "lis". RUN ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
         FIND AreaPlan of AreaCode no-lock no-error.
         DISPLAY 
            AreaCode.TrafficArea 

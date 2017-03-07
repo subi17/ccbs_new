@@ -20,11 +20,11 @@
   Version ......: 1.00
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "Qvantel".
-{date.i}
-{tmsconst.i}
+{Func/date.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE ldaBegin AS DATE NO-UNDO.
 DEFINE VARIABLE ldaEnd   AS DATE NO-UNDO. 

@@ -6,14 +6,14 @@
                   12.04.07/aam update old customer's bank data 
   Version ......: yoigo
 -------------------------------------------------------------------------- */
-{commali.i} 
-{timestamp.i}
-{cparam.i2}
-{eventval.i}
-/* {fwebuser.i} */ 
-{forderstamp.i}
-{order.i}
-{fcustdata.i}
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Func/cparam.i2}
+{Syst/eventval.i}
+/* {Func/fwebuser.i} */ 
+{Func/forderstamp.i}
+{Func/order.i}
+{Func/fcustdata.i}
 
 DEF INPUT  PARAMETER  iiOrderId  LIKE Order.OrderId.
 DEF INPUT  PARAMETER  iiRole     AS   INT.
@@ -71,7 +71,7 @@ ELSE IF iiRole = 1 THEN DO:
 /*
    IF OrderCustomer.CustNum > 0 THEN liOldCustNum = OrderCustomer.CustNum.
    ELSE  */
-   run searchcust (INPUT  "ORGID|" +
+   RUN Mc/searchcust.p (INPUT  "ORGID|" +
                           /* if agrcust=invcust=user then show only those
                              that are invcusts to themselves */
                           (IF Order.InvCustRole = 1 AND
@@ -94,7 +94,7 @@ ELSE IF iiRole = 2 THEN DO:
  
    IF AVAILABLE bOrderCustomer THEN DO:
 
-      run searchcust (INPUT  "INVCUST" + 
+      RUN Mc/searchcust.p (INPUT  "INVCUST" + 
                           /* if user=agrcust then show only that customer's
                              invcust */
                           (IF Order.UserRole = 1
@@ -122,7 +122,7 @@ ELSE IF iiRole = 3 THEN  DO:
    
    IF AVAILABLE bOrderCustomer THEN DO:
 
-      run searchcust (INPUT  "USERCUST",
+      RUN Mc/searchcust.p (INPUT  "USERCUST",
                       INPUT  STRING(bOrderCustomer.CustNum),
                       INPUT  ilDisp,
                       OUTPUT lioldcustnum).
@@ -139,7 +139,7 @@ IF liOldCustnum = 0 THEN DO:
    IF new-Custnum = 0 OR new-custnum = ?
    THEN new-custnum = 300. 
 
-   RUN copymobcu(INPUT-OUTPUT new-CustNum, INPUT FALSE).
+   RUN Mm/copymobcu.p(INPUT-OUTPUT new-CustNum, INPUT FALSE).
 
    llOk = fmakeCustomer(Order.OrderID,
                         iiRole,    
@@ -189,7 +189,7 @@ ELSE DO:
    IF llDoEvent THEN DO:
       &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
 
       DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
       lhCustomer = BUFFER Customer:HANDLE.

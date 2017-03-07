@@ -10,22 +10,22 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'menuclass'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'menuclass'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMenuClass AS HANDLE NO-UNDO.
    lhMenuClass = BUFFER MenuClass:HANDLE.
    RUN StarEventInitialize(lhMenuClass).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMenuClass).
+      RUN Mc/eventview2.p(lhMenuClass).
    END.
 
 END.
@@ -84,7 +84,7 @@ form /* seek Program Class  BY MCName */
     with row 4 col 2 title color value(ctc) " FIND Name "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST MenuClass
@@ -115,12 +115,12 @@ repeat WITH FRAME sel:
 
    IF lisattava THEN DO:  /* prclassn lisäys  */
       assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 ADD-ROW:
       repeat WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR MenuClass.MenuClass
            VALIDATE
@@ -210,16 +210,16 @@ BROWSE:
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-        CHOOSE ROW MenuClass.MenuClass ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MenuClass.MenuClass {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MenuClass.MenuClass WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-        CHOOSE ROW MenuClass.MCName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MenuClass.MCName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MenuClass.MCName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -364,9 +364,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        MenuClass = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE MenuClass WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF MenuClass <> 0 THEN DO:
@@ -387,9 +387,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        MCName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE MCName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if MCName <> "" THEN DO:
@@ -484,8 +484,8 @@ BROWSE:
        FIND MenuClass where recid(MenuClass) = rtab[frame-line(sel)]
        exclusive-lock.
        assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           MenuClass.MenuClass 
           MenuClass.MCName 

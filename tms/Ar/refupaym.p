@@ -6,9 +6,9 @@
                                 use createpaym.p
 */   
 
-{commali.i}
-{tmsparam2.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Func/fcustbal.i}
 
 
 DEF INPUT  PARAMETER iiCustNum AS INT  NO-UNDO.
@@ -63,7 +63,7 @@ ASSIGN
    ldPosting[1] = idAmt
    ldPosting[2] = -1 * idAmt.
    
-RUN createpaym (iiCustNum,
+RUN Ar/createpaym.p (iiCustNum,
                 iiInvNum,
                 icCLI,
                 idtDate,

@@ -11,12 +11,12 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i}
-{fcurrency.i}
-{fvatfact.i}
-{callquery.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i}
+{Func/fcurrency.i}
+{Func/fvatfact.i}
+{Func/callquery.i}
 
 DEF INPUT PARAMETER idtDate1     AS DATE  NO-UNDO.
 DEF INPUT PARAMETER idtDate2     AS DATE  NO-UNDO.
@@ -157,7 +157,7 @@ FUNCTION CheckPage RETURNS LOGIC
     IF icToFile > "" THEN RETURN FALSE.
 
     if rl + iAddLine >= skayt1 then do:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         assign rlx = 0
                sl = sl + 1.
         view stream tul frame sivuotsi.  
@@ -447,7 +447,7 @@ BREAK BY ttBal.SubType
              THEN " " + BDest.BDName
              ELSE "")   AT 7 FORMAT "X(34)".
 
-         {subsrep.i "ACCUM TOTAL BY ttBal.BDest"}
+         {Mc/subsrep.i "ACCUM TOTAL BY ttBal.BDest"}
 
          rl = rl + 1.
       END.
@@ -463,7 +463,7 @@ BREAK BY ttBal.SubType
          FILL("-",108) AT 5 SKIP
          STRING(ttBal.CCN) + " total"  AT 5.
 
-      {subsrep.i "ACCUM TOTAL BY ttBal.CCN"}
+      {Mc/subsrep.i "ACCUM TOTAL BY ttBal.CCN"}
 
       PUT STREAM tul SKIP(1).
       rl = rl + 3.
@@ -478,7 +478,7 @@ BREAK BY ttBal.SubType
          FILL("-",110) AT 3 SKIP
          ttBal.Prod + " total"  AT 3.
 
-      {subsrep.i "ACCUM TOTAL BY ttBal.Prod"}
+      {Mc/subsrep.i "ACCUM TOTAL BY ttBal.Prod"}
 
       PUT STREAM tul SKIP(1).
       rl = rl + 3.
@@ -514,7 +514,7 @@ BREAK BY ttBal.SubType
             STRING(liSubQty) + " subscr.)"
             AT 1.
 
-         {subsrep.i "ACCUM TOTAL BY ttBal.SubType"}
+         {Mc/subsrep.i "ACCUM TOTAL BY ttBal.SubType"}
 
          PUT STREAM tul SKIP(1).
          rl = rl + 3.
@@ -532,7 +532,7 @@ BREAK BY ttBal.SubType
          STRING(liSubTotQty) + " subscr.)"
          AT 1.
 
-      {subsrep.i "ACCUM TOTAL"}
+      {Mc/subsrep.i "ACCUM TOTAL"}
 
       rl = rl + 2.
 
@@ -557,7 +557,7 @@ IF icToFile > "" THEN DO:
 END.
 
 ELSE DO:
-   {uprfeed.i rl}
+   {Syst/uprfeed.i rl}
 END.
 
 HIDE FRAME fQty NO-PAUSE.

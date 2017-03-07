@@ -11,8 +11,8 @@ Customer number, MSISDN, STC date, old subs type, new subs type, billig item, nu
 
 */
 
-{timestamp.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 DEF VAR ldtInputDate AS DATE NO-UNDO. 
 DEF VAR ldBeginStamp AS DEC NO-UNDO. 

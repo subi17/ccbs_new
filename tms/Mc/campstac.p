@@ -8,8 +8,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
   
- {commali.i}
+ {Syst/commali.i}
  
- RUN campstat ("",
+ RUN Mc/campstat.p ("",
                0,
                "").

@@ -25,19 +25,19 @@
   VERSION ......: M15
   ------------------------------------------------------------------ */
 
-{errors.i}
+{Mf/errors.i}
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixcdr'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixcdr'}
 
 
 def buffer double  for FIXcdr.
 def buffer bufcdr  for FIXcdr.
 def buffer delcall for FIXcdr.
-{deldouble.i}
+{Mf/deldouble.i}
 
-{excel.i}
+{Func/excel.i}
 
 def var exdir     as c  no-undo.
 def var exname    as c  no-undo.
@@ -92,7 +92,7 @@ assign
    cadate2 = date(month(today),1,year(today)) - 1
    cadate1 = date(month(cadate2),1,year(cadate2)).
 
-cfc = "sel". run ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 
 /* all mobile prefixes into a string ... 
 for each mobpref no-lock.
@@ -103,7 +103,7 @@ assign mobpref = substr(mobpref,1,length(mobpref) - 1).
 
 CRIT:
 repeat with frame start:
-   ehto = 9. run ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    update
       cadate1  validate(cadate1 ne ?,"Give first date !")
@@ -135,7 +135,7 @@ repeat with frame start:
 task:
    repeat with frame start:
       assign ufk = 0 ufk[1] = 7 ufk[5] = 178 ufk[8] = 8 ehto = 0.
-      run ufkey.
+      RUN Syst/ufkey.p.
       if toimi = 1 then next  CRIT.
       if toimi = 8 then leave CRIT.
 
@@ -153,7 +153,7 @@ task:
       do i = 1 to num-entries(rubrik).
          put stream excel unformatted entry(i,rubrik) tab.
       end.
-      run uexskip(2).
+      RUN Syst/uexskip.p(2).
    end.
 
    i = time.

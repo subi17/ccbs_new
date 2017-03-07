@@ -92,17 +92,17 @@
   Version ......: M15
   ------------------------------------------------------------------*/
 
-{commali.i}
-{timestamp.i}
-{fvoucher.i}
-{fapvat.i}
-{faccper.i}
-{fcustbal.i}
-{eventval.i} 
-{fclvat.i}
-{fpplan.i}
-{finvbal.i}
-{fpaymact.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/fvoucher.i}
+{Func/fapvat.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Syst/eventval.i} 
+{Func/fclvat.i}
+{Func/fpplan.i}
+{Func/finvbal.i}
+{Func/fpaymact.i}
 
 DEF BUFFER bsuor     FOR Payment.
 
@@ -203,7 +203,7 @@ IF llDoEvent THEN
 DO FOR Payment:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPayment AS HANDLE NO-UNDO.
    lhPayment = BUFFER Payment:HANDLE.
@@ -388,18 +388,18 @@ END FUNCTION.
 
 
 DO:
-    {cparam.i OverPayAcc     return}. OverPayAcc  = TMSParam.IntVal.
-    {cparam.i AdvPaymAcc     return}. AdvPaymAcc  = TMSParam.IntVal.
-    {cparam.i ResDepositsAcc return}. DepositAcc  = TMSParam.IntVal.
-    {cparam.i CreditLossAcc  return}. liCLossAcc  = TMSParam.IntVal.
-    {cparam.i BankAcc        return}. BankAcc     = TMSParam.IntVal.
-    {cparam.i OTIntAcc       return}. OTIntAcc    = TMSParam.IntVal.
-    {cparam.i OverTimeInt    return}. OverTimeInt = TMSParam.DecVal.
-    {cparam.i MinIntPay      return}. MinIntPay   = TMSParam.DecVal.
-    {cparam.i ReceivAcc      return}. ReceivAcc   = TMSParam.IntVal.
-    {cparam.i DiscAcc        return}. DiscAcc     = TMSParam.IntVal.
-    {cparam.i DateLimit      return}. DateLimit   = TMSParam.DateVal.
-    {cparam.i IntCalcMet     return}. IntCalcMet  = TMSParam.IntVal.
+    {Func/cparam.i OverPayAcc     return}. OverPayAcc  = TMSParam.IntVal.
+    {Func/cparam.i AdvPaymAcc     return}. AdvPaymAcc  = TMSParam.IntVal.
+    {Func/cparam.i ResDepositsAcc return}. DepositAcc  = TMSParam.IntVal.
+    {Func/cparam.i CreditLossAcc  return}. liCLossAcc  = TMSParam.IntVal.
+    {Func/cparam.i BankAcc        return}. BankAcc     = TMSParam.IntVal.
+    {Func/cparam.i OTIntAcc       return}. OTIntAcc    = TMSParam.IntVal.
+    {Func/cparam.i OverTimeInt    return}. OverTimeInt = TMSParam.DecVal.
+    {Func/cparam.i MinIntPay      return}. MinIntPay   = TMSParam.DecVal.
+    {Func/cparam.i ReceivAcc      return}. ReceivAcc   = TMSParam.IntVal.
+    {Func/cparam.i DiscAcc        return}. DiscAcc     = TMSParam.IntVal.
+    {Func/cparam.i DateLimit      return}. DateLimit   = TMSParam.DateVal.
+    {Func/cparam.i IntCalcMet     return}. IntCalcMet  = TMSParam.IntVal.
 END.
 
 
@@ -407,7 +407,7 @@ ASSIGN muispvm    = pvm.
 
 fCurrLabels(""). 
 
-assign cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+assign cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME INV-NO.
 view FRAME payment.
 view FRAME acct.
@@ -415,7 +415,7 @@ view FRAME acct.
 LASKU:
 repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0.
    CLEAR FRAME payment.
    CLEAR FRAME acct.
@@ -555,7 +555,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
       READKEY. nap = keylabel(LASTKEY).
       /* HELP tositenumerolle */
       IF lookup(nap,"f9,!") > 0  THEN DO:
-         RUN nnsuse(INPUT  Invoice.InvNum, OUTPUT i).
+         RUN Ar/nnsuse.p(INPUT  Invoice.InvNum, OUTPUT i).
          IF i > 0 THEN disp i format "zzzzzzz9" @ pVouch WITH FRAME INV-NO.
          NEXT.
       END.
@@ -827,7 +827,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
    repeat WITH FRAME payment:
 
       IF xDontUpd = FALSE THEN DO:
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          PAUSE 0.
 
          /* old values */
@@ -968,7 +968,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             ysuoyht NE 0 AND
             Invoice.InterestPerm = TRUE 
          THEN DO:
-            RUN calcint(Invoice.DueDate,
+            RUN Ar/calcint.p(Invoice.DueDate,
                         input suopvm,
                         IntCalcMet,
                         ysuoyht,
@@ -1002,7 +1002,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
      END.  /* xdontupd = FALSE */
 
      assign muispvm  = suopvm. cfc = "sel".
-     RUN ufcolor. ASSIGN ccc = cfc.
+     RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 
      ASSIGN lAPVatAmt = 0. 
 
@@ -1292,12 +1292,12 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                                 ufk[5] = 0
                                 ufk[7] = 0.
 
-         ehto = 0. RUN ufkey.p.
+         ehto = 0. RUN Syst/ufkey.p.
 
          IF toimi  = 1 THEN NEXT PaidAmt.              /* change */
 
          ELSE IF toimi = 2 THEN DO:                        /* print memo */
-            RUN memo(INPUT Invoice.CustNum,
+            RUN Mc/memo.p(INPUT Invoice.CustNum,
                      INPUT "Invoice",
                      INPUT STRING(INPUT Invoice.InvNum),
                      INPUT "Invoice").
@@ -1317,7 +1317,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                Payment.PaymDate = suopvm.
             END.
 
-            RUN memo(INPUT Invoice.CustNum,
+            RUN Mc/memo.p(INPUT Invoice.CustNum,
                      INPUT "Payment",
                      INPUT STRING(Payment.Voucher),
                      INPUT "Payment").

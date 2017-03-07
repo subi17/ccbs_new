@@ -7,14 +7,14 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "Cron".
    
-{timestamp.i}
-{log.i}
-{cparam2.i}
+{Func/timestamp.i}
+{Func/log.i}
+{Func/cparam2.i}
 
 DEF VAR llHandled  AS LOG  NO-UNDO INIT FALSE. 
 DEF VAR lcProgram  AS CHAR NO-UNDO. 
@@ -70,14 +70,13 @@ FOR EACH RequestType NO-LOCK WHERE
          IF RequestStatus.Program > "" THEN lcProgram = RequestStatus.Program.
          ELSE lcProgram = RequestType.Program.
    
-         IF SEARCH(lcProgram + ".r") = ? THEN DO:
-            IF SEARCH(lcProgram + ".p") = ? THEN DO:
-               fLogError(SUBST("ERROR:Module &1 not found", lcProgram)).
-               LEAVE.
-            END.
+         IF SEARCH(lcProgram) = ?
+         THEN DO:
+            fLogError(SUBST("ERROR:Module &1 not found", lcProgram)).
+            LEAVE.
          END.
 
-         RUN VALUE(lcProgram + ".p")(MsRequest.MsRequest).
+         RUN VALUE(lcProgram)(MsRequest.MsRequest).
          IF RETURN-VALUE BEGINS "ERROR" THEN NEXT.
          llHandled = TRUE.
          LEAVE.

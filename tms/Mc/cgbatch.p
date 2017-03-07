@@ -8,16 +8,16 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commpaa.i}
-{eventval.i}
-{fecgtask.i}
+{Syst/commpaa.i}
+{Syst/eventval.i}
+{Func/fecgtask.i}
 
 DEF buffer new-cgmember for cgmember.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCGMember AS HANDLE NO-UNDO.
    lhCGMember = BUFFER CGMember:HANDLE.
@@ -29,7 +29,7 @@ IF llDoEvent THEN DO:
 
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCGMember).
+      RUN Mc/eventview2.p(lhCGMember).
    END.
 
 END.

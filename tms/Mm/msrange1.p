@@ -10,10 +10,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{msisdn.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
+{Func/cparam2.i}
 
 DEF INPUT  PARAMETER ms-code-res AS INTEGER                       NO-UNDO.
 DEF INPUT  PARAMETER CustNum     AS INTEGER                       NO-UNDO.
@@ -115,7 +115,7 @@ END. /* PROCEDURE chkOnlyDigits */
 rc = FALSE.
 
 /* set the status code FOR a unreserved MSISDN No. */
-{tmsparam.i MSStatusUnr return}.  
+{Func/tmsparam.i MSStatusUnr return}.  
 ms-code1 = tmsparam.intVal. 
 ms-code2 = ms-code1.
 mc-code1 = 0. 
@@ -194,7 +194,7 @@ END.
 
 MAIN:
 REPEAT WITH FRAME range.
-   ehto = 9.  RUN ufkey.
+   ehto = 9.  RUN Syst/ufkey.p.
 
    UPDATE 
       Size 
@@ -235,7 +235,7 @@ REPEAT WITH FRAME range.
       /* Rank input checking when using F9; description generated */
       IF FRAME-FIELD = "lcMSCode" AND cLastKeyLabel = "F9" THEN 
       DO:
-         RUN h-tmscodes(INPUT "MSISDNNumber",  /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "MSISDNNumber",  /* TableName */
                               "Rank",  /* FieldName */
                               "Rank",   /* GroupCode */
                        OUTPUT lcCode).
@@ -275,7 +275,7 @@ REPEAT WITH FRAME range.
       /* POS code input checking when using F9; description generated */
       IF FRAME-FIELD = "ocPosCode" AND cLastKeyLabel = "F9" THEN 
       DO:
-         RUN h-tmscodes(INPUT "MSISDN",  /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "MSISDN",  /* TableName */
                               "POS",  /* FieldName */
                               "Reservation Position",   /* GroupCode */
                        OUTPUT lcCode).
@@ -294,13 +294,13 @@ REPEAT WITH FRAME range.
 
       APPLY LASTKEY.
       ehto = 9.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END. /* EDITING */
 
 ACTION:
    REPEAT WITH FRAME range.
       ASSIGN ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] =  15 ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT main.
       IF toimi = 8 THEN LEAVE main.
       IF TOIMI = 5 THEN DO:

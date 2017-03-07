@@ -9,9 +9,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{timestamp.i}
-{eventval.i}
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Syst/eventval.i}
 
 DEF NEW shared VAR siirto AS CHAR.
 
@@ -44,7 +44,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPresel AS HANDLE NO-UNDO.
    lhPresel = BUFFER Presel:HANDLE.
@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhPresel).
+      RUN Mc/eventview2.p(lhPresel).
    END.
 END.
 
@@ -108,7 +108,7 @@ form /* seek PRESELECT  BY CLI */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLI "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 pstypes = "NATIONAL,INTERNATIONAL,NAT & INT".
@@ -137,12 +137,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Presel  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            new_presel = TRUE.
            CLEAR FRAME lis NO-PAUSE.
@@ -244,24 +244,24 @@ BROWSE:
         ufk[1]= 702  ufk[2]= 36 ufk[3]= 0 ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Presel.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Presel.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Presel.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Presel.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Presel.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Presel.CLI WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW Presel.?? ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Presel.?? {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Presel.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW Presel.??  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Presel.??  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Presel.? WITH FRAME sel.
       END.
 */
@@ -390,8 +390,8 @@ BROWSE:
 
      /* Search BY column 1 */                          
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET CustNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -413,8 +413,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET CLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -433,13 +433,13 @@ BROWSE:
      END. /* Search-2 */
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSAction:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -492,12 +492,12 @@ BROWSE:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        new_presel = FALSE.
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        RUN local-find-this(TRUE).
 
        FIND CLI where CLI.CLI = Presel.CLI NO-LOCK NO-ERROR.
-       RUN viewpres(presel.CLI).
+       RUN Mf/viewpres.p(presel.CLI).
        ufkey = TRUE.
 
        /* IF  User Wanted TO Cancel this Change TRANSACTION */
@@ -635,7 +635,7 @@ PROCEDURE local-update-record:
 
          IF FRAME-FIELD = "CLI" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
 
-            RUN h-psubno(Customer.CustNum).
+            RUN Help/h-psubno.p(Customer.CustNum).
             IF siirto NE ? THEN DO:
                ASSIGN Presel.CLI = siirto.
                DISP Presel.CLI WITH FRAME lis.

@@ -9,7 +9,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER iPeriod1 AS I  NO-UNDO FORMAT "999999".
 DEF INPUT PARAMETER iPeriod2 AS I  NO-UNDO FORMAT "999999".

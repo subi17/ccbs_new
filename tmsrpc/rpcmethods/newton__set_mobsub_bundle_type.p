@@ -16,14 +16,14 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
-{date.i}
-{fbundle.i}
-{fbtc.i}
-{fdss.i}
-{fmakemsreq.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Mm/fbundle.i}
+{Func/fbtc.i}
+{Func/fdss.i}
+{Func/fmakemsreq.i}
 
 DEF VAR pcStruct             AS CHARACTER NO-UNDO. 
 DEF VAR lcStruct             AS CHARACTER NO-UNDO.  

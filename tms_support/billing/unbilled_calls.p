@@ -7,13 +7,13 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
-{timestamp.i}
-{cparam2.i}
-{coinv.i}
-{fvatfact.i}
-{ftransdir.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/coinv.i}
+{Func/fvatfact.i}
+{Func/ftransdir.i}
 
 DEFINE VARIABLE liUnBillPeriod   AS INTEGER    NO-UNDO.
 DEFINE VARIABLE liCallPeriod     AS INTEGER    NO-UNDO.

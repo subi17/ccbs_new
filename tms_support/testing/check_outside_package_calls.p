@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 def var lltrue as log no-undo.
 def var ldeTime as dec no-undo.
 def var ldFromDate as date no-undo.

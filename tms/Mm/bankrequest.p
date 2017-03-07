@@ -8,12 +8,12 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{msreqfunc.i}
-{fmakemsreq.i}
-{tmsconst.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msreqfunc.i}
+{Func/fmakemsreq.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
 
 DEFINE INPUT PARAMETER iiReqId AS INTEGER   NO-UNDO.
 
@@ -74,7 +74,7 @@ Memo.memotext  = "RequestID" + STRING(msrequest.msrequest) +
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER AgrCust:HANDLE.
    RUN StarEventInitialize(lhCustomer).

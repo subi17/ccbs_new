@@ -1,4 +1,4 @@
-{triggerfunc.i}
+{Func/triggerfunc.i}
 
 DEF VAR liToday     AS INT NO-UNDO.
 DEF VAR liYesterDay AS INT NO-UNDO.

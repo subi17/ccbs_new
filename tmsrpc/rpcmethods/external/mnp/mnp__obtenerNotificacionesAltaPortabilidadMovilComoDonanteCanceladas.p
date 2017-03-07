@@ -35,11 +35,11 @@
  */
 
 {mnp_obtener.i} 
-{tmsconst.i}
-{orderchk.i}
-{orderfunc.i}
-{fsubstermreq.i}
-{main_add_lines.i}
+{Syst/tmsconst.i}
+{Func/orderchk.i}
+{Func/orderfunc.i}
+{Func/fsubstermreq.i}
+{Func/main_add_lines.i}
 
 DEF BUFFER bMNPProcess FOR MNPProcess.
 DEF BUFFER bMNPSub FOR MNPSub.

@@ -8,15 +8,15 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{msreqfunc.i}
-{fmakemsreq.i}
-{tmsconst.i}
-{fmakesms.i}
-{fbundle.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msreqfunc.i}
+{Func/fmakemsreq.i}
+{Syst/tmsconst.i}
+{Func/fmakesms.i}
+{Mm/fbundle.i}
 {Mm/active_bundle.i}
-{main_add_lines.i}
+{Func/main_add_lines.i}
 
 DEFINE INPUT PARAMETER iiReqId AS INTEGER   NO-UNDO.
 DEF BUFFER OldCliType FOR CliType.

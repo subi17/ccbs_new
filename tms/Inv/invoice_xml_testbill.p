@@ -7,8 +7,8 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER idaInvDate AS DATE NO-UNDO.
 DEF INPUT PARAMETER icBillRun  AS CHAR NO-UNDO.
@@ -26,7 +26,7 @@ IF lcFile = "" OR lcFile = ? THEN RETURN "ERROR:Print file not defined".
 /* print invoices to a directory named after the billing run id */
 lcFile = lcTestDir + "/" + icBillRun + "*" + lcFile.
    
-RUN printdoc1co ("",
+RUN Inv/printdoc1co.p ("",
                  0,
                  99999999,
                  "",
