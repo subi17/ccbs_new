@@ -689,16 +689,16 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
           lcIdtypeOrderCustomer = "CIF".
       END. /* data[LOOKUP("company_id", ... */
       
-      IF piRowType EQ 4 THEN
+      IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} THEN
          pcUpsHours = data[LOOKUP("ups_hours", gcCustomerStructStringFields)].
       
-      IF lcIdOrderCustomer EQ "" AND piRowType = 1 THEN
+      IF lcIdOrderCustomer EQ "" AND piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
           lcFError = "Expected either person_id or company_id".
 
       /* YTS-2453 */
       IF NOT plBypassRules AND
          lcFError = "" AND 
-         piRowType = 1 AND
+         piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
          LOOKUP(pcNumberType,"new,mnp") > 0 AND
          NOT plUpdate AND
          piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
@@ -876,7 +876,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
 
 
 
-   IF piRowType = 1 THEN
+   IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
    DO:
       lcId      = lcIdOrderCustomer.
       lcIdType  = lcIdTypeOrderCustomer.
@@ -1600,19 +1600,19 @@ DO:
 END.
  
 /* YBP-536 */ 
-lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, FALSE).
+lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-537 */ 
 IF pcAddressStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, 4, FALSE).
+   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_DELIVERY}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-538 */ 
 IF pcContactStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, FALSE).
+   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
