@@ -19,13 +19,16 @@ DEF INPUT  PARAMETER icEventSource    AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icEventFields    AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icModifiedFields AS CHAR NO-UNDO.
 
-DEF VAR lhTable      AS HANDLE NO-UNDO.
-DEF VAR lhCollect    AS HANDLE NO-UNDO.
-DEF VAR liPicked     AS INT    NO-UNDO.
-DEF VAR lcTableName  AS CHAR   NO-UNDO.
-DEF VAR lhCLIField   AS HANDLE NO-UNDO. 
-DEF VAR lhTsEndField AS HANDLE NO-UNDO. 
-
+DEF VAR lhTable         AS HANDLE NO-UNDO.
+DEF VAR lhCollect       AS HANDLE NO-UNDO.
+DEF VAR liPicked        AS INT    NO-UNDO.
+DEF VAR lcTableName     AS CHAR   NO-UNDO.
+DEF VAR lhCLIField      AS HANDLE NO-UNDO.
+DEF VAR lhCLIEventField AS HANDLE NO-UNDO.
+DEF VAR lhTsEndField    AS HANDLE NO-UNDO.
+DEF VAR lhTsBeginField  AS HANDLE NO-UNDO.
+DEF VAR ldtTsBeginDate  AS DATE   NO-UNDO.
+DEF VAR liTsBeginDate   AS INT    NO-UNDO.
 
 DEF TEMP-TABLE ttPicked NO-UNDO
    FIELD CLI AS CHAR
@@ -40,17 +43,28 @@ WITH SIDE-LABELS 1 DOWN ROW 8 CENTERED OVERLAY
 
 FUNCTION fCollect RETURNS LOGIC:
 
-   lhCLIField = lhTable:BUFFER-FIELD("CLI").
-   lhTsEndField = lhTable:BUFFER-FIELD("TsEnd").
+   ASSIGN lhCLIField      = lhTable:BUFFER-FIELD("CLI")
+          lhCLIEventField = lhTable:BUFFER-FIELD("CliEvent")
+          lhTsBeginField  = lhTable:BUFFER-FIELD("TsBegin")
+          lhTsEndField    = lhTable:BUFFER-FIELD("TsEnd").
+
+   fSplitTS(lhTsBeginField:BUFFER-VALUE,
+            ldtTsBeginDate,
+            liTsBeginDate).
+
+   /* YTS-10342 Avoid sending MsOwner records which are been delayed more than
+      one day (with row CLI_EVENT = 'C') */
+   If lhCLIEventField:BUFFER-VALUE EQ "C" AND
+      ldtTsBeginDate < (TODAY - 2)        THEN NEXT.
 
    IF CAN-FIND(FIRST ttPicked WHERE 
-                     ttPicked.CLI = lhCLIField:BUFFER-VALUE AND
-                     ttPicked.TsEnd =  lhTsEndField:BUFFER-VALUE)
+                     ttPicked.CLI   = lhCLIField:BUFFER-VALUE AND
+                     ttPicked.TsEnd = lhTsEndField:BUFFER-VALUE)
    THEN RETURN FALSE.
  
    CREATE ttPicked.
-   ttPicked.CLI = lhCLIField:BUFFER-VALUE.
-   ttPicked.TsEnd = lhTsEndField:BUFFER-VALUE.  
+          ttPicked.CLI   = lhCLIField:BUFFER-VALUE.
+          ttPicked.TsEnd = lhTsEndField:BUFFER-VALUE.  
 
    lhCollect:BUFFER-CREATE.
    lhCollect:BUFFER-COPY(lhTable).
