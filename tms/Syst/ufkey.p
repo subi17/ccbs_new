@@ -13,7 +13,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def var tyhja as char format "x(80)".
 

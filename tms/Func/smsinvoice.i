@@ -10,10 +10,10 @@
 &THEN
 &GLOBAL-DEFINE SMS_INVOICE_I YES
 
-{commali.i}
-{fcreatereq.i}
-{tmsconst.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 function fSMSInvoiceValidate returns logical
    (  input idaPeriod AS DATE,

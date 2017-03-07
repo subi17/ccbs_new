@@ -6,8 +6,8 @@
 
    mark and read order time stamps 
 */
-{timestamp.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 /* change possible descriptive type to an integer key */
 FUNCTION fOrderStampType RETURNS INTEGER

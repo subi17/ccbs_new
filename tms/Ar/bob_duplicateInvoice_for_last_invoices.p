@@ -9,15 +9,15 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{fcreatereq.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
+{Syst/tmsconst.i}
+{Func/fcreatereq.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
 
 DEF TEMP-TABLE ttCust NO-UNDO
    FIELD CustNum AS INT

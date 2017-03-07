@@ -1,12 +1,12 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
 
-{fbankdata.i}
-{fctchange.i}
-{fmakemsreq.i}
-{fcharge_comp_loaded.i}
-{tmsconst.i}
+{Func/fbankdata.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/fcharge_comp_loaded.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 

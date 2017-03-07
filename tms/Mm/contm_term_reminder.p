@@ -8,15 +8,15 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "CRON".
-{timestamp.i}
-{cparam2.i}
-{fgettxt.i}
-{fmakesms.i}
-{tmsconst.i}
-{coinv.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fgettxt.i}
+{Func/fmakesms.i}
+{Syst/tmsconst.i}
+{Func/coinv.i}
 
 DEF VAR ldFirstDayOfMonth AS DATE NO-UNDO.
 DEF VAR ldLastDayOfMonth  AS DATE NO-UNDO.

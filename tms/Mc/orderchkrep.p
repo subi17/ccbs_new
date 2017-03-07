@@ -3,9 +3,9 @@ jl
 
 */
 
-{commpaa.i}
-{date.i}
-{cparam2.i}
+{Syst/commpaa.i}
+{Func/date.i}
+{Func/cparam2.i}
 
 ASSIGN
    katun   = "cron"

@@ -12,10 +12,10 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
-{cparam2.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE lcFiles  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFile   AS CHARACTER NO-UNDO.
@@ -36,6 +36,6 @@ DO liLoop = 1 to NUM-ENTRIES(lcFiles):
       lcFile = ENTRY(liLoop,lcFiles)
       lcArea = clsTools:FindDb(lcFile).
    
-   RUN dumpall.i lcArea lcFile.
+   RUN Mm/dumpall.i lcArea lcFile.
    
 END.

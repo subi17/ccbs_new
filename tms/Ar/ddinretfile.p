@@ -8,10 +8,10 @@
   VERSION ......: Yoigo
  ---------------------------------------------------------------------------- */
 
-{commali.i}
-{paymfile.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Ar/paymfile.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 DEF INPUT  PARAMETER  icFile     AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER  iiAccNum   AS INT  NO-UNDO.

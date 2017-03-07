@@ -3,11 +3,11 @@
    changes:     16.04.07/aam new parameters to tmscodesbr
 */
    
-{commali.i}   
+{Syst/commali.i}   
 
 DEF VAR lcValue       AS CHAR NO-UNDO.
 
-run tmscodesbr.p(INPUT   "ORDER",
+RUN Syst/tmscodesbr.p(INPUT   "ORDER",
                INPUT   "StatusCode",
                INPUT   "",
                INPUT   "Order Statuses",
@@ -15,4 +15,4 @@ run tmscodesbr.p(INPUT   "ORDER",
                OUTPUT  lcValue).
 
 
-IF lcValue > "" THEN run order(1,8,lcValue,0).
+IF lcValue > "" THEN RUN Mc/order.p(1,8,lcValue,0).

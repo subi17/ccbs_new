@@ -1,15 +1,15 @@
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{forderstamp.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER Order:HANDLE.

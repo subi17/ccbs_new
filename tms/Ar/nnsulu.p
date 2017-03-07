@@ -46,11 +46,11 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i "new"}
-{fcurrency.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'payment'}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Func/fcurrency.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'payment'}
 
 assign tuni1 = "nnsulu"
        tuni2 = "".
@@ -269,7 +269,7 @@ FUNCTION fChgPage RETURNS LOGICAL
 
    IF rl + iAddLine >= skayt1 THEN DO:
       if sl > 0 then do:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       end.
       ASSIGN rlx = 0
              sl = sl + 1
@@ -280,9 +280,9 @@ FUNCTION fChgPage RETURNS LOGICAL
 END FUNCTION.
 
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 view FRAME MAIN.
-cfc = "puli". RUN ufcolor.
+cfc = "puli". RUN Syst/ufcolor.p.
 PAUSE 0 no-message.
 
 ASSIGN vapv = 0 kake = 0 ermk = 0 PrVou = 0 sutil = TRUE sukoo = TRUE
@@ -296,9 +296,9 @@ DISPLAY pvm1 pvm2 sutil sukoo xOnlySum
 toimi:
    repeat WITH FRAME MAIN ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN DO:
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          IF tosi2  = 9999999 THEN tosi2 = 0.
          repeat:
             UPDATE
@@ -328,7 +328,7 @@ toimi:
 
                   lcFrameField = FRAME-FIELD.
 
-                  RUN h-tmscodes(INPUT "Payment",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Payment",  /* TableName*/
                                        "PaymType", /* FieldName */
                                        "AccRec", /* GroupCode */
                                  OUTPUT lcCode).
@@ -341,7 +341,7 @@ toimi:
                   END.
 
                   ehto = 9.
-                  RUN ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
@@ -409,7 +409,7 @@ toimi:
 
       IF toimi = 5 THEN DO:
 
-         assign cfc = "uusi". RUN ufcolor.   ccc = cfc.
+         assign cfc = "uusi". RUN Syst/ufcolor.p.   ccc = cfc.
          DO i = 1 TO 2 WITH FRAME rival:
             valik = valikko[i].
             DISPLAY valik.
@@ -421,7 +421,7 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
                MESSAGE
                "Choose sort order, press ENTER !".
                READKEY PAUSE 0.
-               CHOOSE ROW valik ;(uchoose.i;) no-error.
+               CHOOSE ROW valik {Syst/uchoose.i} no-error.
                COLOR DISPLAY value(ccc) valik WITH FRAME rival.
                i = FRAME-LINE.
                HIDE MESSAGE no-pause.
@@ -437,7 +437,7 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
    END. /* toimi */
 
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 ASSIGN
 sl = 0
@@ -695,7 +695,7 @@ END.
 IF sukoo THEN DO:
 
    IF NOT xOnlySum THEN DO:
-       {uprfeed.i rl}
+       {Syst/uprfeed.i rl}
    END.
 
    ASSIGN
@@ -733,9 +733,9 @@ LEAVE main.
 END. /* main */
 
 /* Adjust LAST page */
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME options no-pause.

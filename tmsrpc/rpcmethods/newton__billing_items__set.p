@@ -41,7 +41,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = lcBrand.
 
 FIND BillItem WHERE 
@@ -59,11 +59,11 @@ DO:
 END.
 
 katun = pcUserName.
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhBillItem AS HANDLE NO-UNDO.
    lhBillItem = BUFFER BillItem:HANDLE.
    RUN StarEventInitialize(lhBillItem).

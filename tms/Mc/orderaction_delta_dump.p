@@ -8,10 +8,10 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
-{forderstamp.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/forderstamp.i}
+{Func/timestamp.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE-HANDLE ihTempTable.
 DEF INPUT PARAMETER idLastDump       AS DEC  NO-UNDO.

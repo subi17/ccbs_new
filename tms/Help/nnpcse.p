@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -47,7 +47,7 @@ form /* Program Class :n hakua varten */
     with row 4 col 2 title color value(ctc) " FIND Program Class "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 Runko:
 repeat:
 
@@ -67,7 +67,7 @@ LOOP:
       ASSIGN
       cfc = "tlli"
       tlli-ots = " ADD ".
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME tlli:
          PAUSE 0 no-message.
@@ -130,7 +130,7 @@ print-line:
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
   END. /* print-line */
 
@@ -138,7 +138,7 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW MenuClass.MenuClass ;(uchoose.i;) no-error WITH FRAME tlse.
+         CHOOSE ROW MenuClass.MenuClass {Syst/uchoose.i} no-error WITH FRAME tlse.
          COLOR DISPLAY value(ccc) MenuClass.MenuClass WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
@@ -234,9 +234,9 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.p.
            MenuClass = 0.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE MenuClass WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            IF MenuClass <> 0 THEN DO:

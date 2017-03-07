@@ -61,20 +61,20 @@
 
 &GLOBAL-DEFINE BrTable UnregPaym
 
-{commali.i}
-{timestamp.i}
-{eventval.i}
-{faccper.i}
-{fcustbal.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'unregpaym'}
-{finvbal.i}
-{fpaymentreq.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'unregpaym'}
+{Func/finvbal.i}
+{Func/fpaymentreq.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhUnregPaym    AS HANDLE NO-UNDO.
    DEFINE VARIABLE lhCustIntEvent AS HANDLE NO-UNDO.
@@ -159,14 +159,14 @@ DEF VAR mench AS CHARACTER FORMAT "x(26)" EXTENT 5
              "    4. To credit loss     ",
              "    5. Exit               " ].
 
-{cparam.i BankAcc       RETURN}. PayAcc        = TMSParam.IntVal.
-{cparam.i IntCalcMet    RETURN}. IntCalcMet    = TMSParam.IntVal.
-{cparam.i OTIntAcc      RETURN}. IntAcc        = TMSParam.IntVal.
-{cparam.i OverPayAcc    RETURN}. OpAcc         = TMSParam.IntVal.
-{cparam.i ClaimCostAcc  RETURN}. ColAcc        = TMSParam.IntVal.
-{cparam.i ReceivAcc     RETURN}. RecAcc        = TMSParam.IntVal.
-{cparam.i AdvPaymAcc    RETURN}. ApAcc         = TMSParam.IntVal.
-{cparam.i CreditLossAcc RETURN}. liCredLossAcc = TMSParam.IntVal.
+{Func/cparam.i BankAcc       RETURN}. PayAcc        = TMSParam.IntVal.
+{Func/cparam.i IntCalcMet    RETURN}. IntCalcMet    = TMSParam.IntVal.
+{Func/cparam.i OTIntAcc      RETURN}. IntAcc        = TMSParam.IntVal.
+{Func/cparam.i OverPayAcc    RETURN}. OpAcc         = TMSParam.IntVal.
+{Func/cparam.i ClaimCostAcc  RETURN}. ColAcc        = TMSParam.IntVal.
+{Func/cparam.i ReceivAcc     RETURN}. RecAcc        = TMSParam.IntVal.
+{Func/cparam.i AdvPaymAcc    RETURN}. ApAcc         = TMSParam.IntVal.
+{Func/cparam.i CreditLossAcc RETURN}. liCredLossAcc = TMSParam.IntVal.
 
 
 FUNCTION fDispOrder RETURNS LOGICAL.
@@ -287,7 +287,7 @@ FORM
 WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
    " ADVANCE PAYMENT FOR CUSTOMER " WITH SIDE-LABELS 1 COLUMNS FRAME AdvPaym.
 
-{brand.i}
+{Func/brand.i}
 
 FORM /* Seek a Date */
    "Brand:" lcBrand skip
@@ -325,7 +325,7 @@ FORM /* Seek a Bank AccNum */
    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME hayr5.
 
 cfc = "sel". 
-RUN ufcolor. 
+RUN Syst/ufcolor.p. 
 ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
@@ -365,7 +365,7 @@ REPEAT WITH FRAME sel:
    IF must-add THEN DO:  /* Add a UnregPaym  */
  
       ASSIGN cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -373,7 +373,7 @@ REPEAT WITH FRAME sel:
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
         UnregPaym.Memo:SCREEN-VALUE = "".
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -480,21 +480,21 @@ REPEAT WITH FRAME sel:
          IF xState = 0  THEN ASSIGN ufk[3] = 597.
          IF xState NE 2 THEN ASSIGN ufk[4] = 1630.
 
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN 
-         CHOOSE ROW UnregPaym.PaymDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW UnregPaym.PaymDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       ELSE IF order = 2 THEN
-         CHOOSE ROW UnregPaym.CustName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW UnregPaym.CustName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       ELSE IF order = 3 THEN
-         CHOOSE ROW UnregPaym.PaidAmt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW UnregPaym.PaidAmt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       ELSE IF order = 4 THEN
-         CHOOSE ROW UnregPaym.RefNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW UnregPaym.RefNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       ELSE IF order = 5 THEN
-         CHOOSE ROW UnregPaym.BankAcc ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW UnregPaym.BankAcc {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       COLOR DISPLAY VALUE(ccc) 
       UnregPaym.PaymDate UnregPaym.CustName UnregPaym.PaidAmt 
       UnregPaym.RefNum UnregPaym.BankAcc
@@ -633,12 +633,12 @@ REPEAT WITH FRAME sel:
       ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
       DO WITH FRAME lis TRANSAction:
 
-         {uright2.i}
+         {Syst/uright2.i}
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE(sel)]
          NO-LOCK.
          ASSIGN  fr-header = " SHOW MORE INFORMATION " ufkey = TRUE.
          
-         cfc = "lis". RUN ufcolor. 
+         cfc = "lis". RUN Syst/ufcolor.p. 
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUnregPaym).
          
@@ -678,14 +678,14 @@ REPEAT WITH FRAME sel:
          ufkey = TRUE ufk = 0 ehto = 1
          ufk[1] = 28  ufk[2] = 30 ufk[3] = 789 ufk[4] = 763
          ufk[5] = 813 ufk[8] = 8. 
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          IF toimi = 8 THEN NEXT BROWSE.
 
          /* Seek a Date */
          IF toimi = 1 THEN DO:
-            cfc = "puyr". RUN ufcolor.
+            cfc = "puyr". RUN Syst/ufcolor.p.
             haku1 = ?.
-            ehto = 9. RUN ufkey. ufkey = TRUE.
+            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr1.
             UPDATE lcBrand WHEN gcAllBrand
                    haku1 WITH FRAME hayr1.
@@ -717,9 +717,9 @@ REPEAT WITH FRAME sel:
 
          /* Seek a customer's name */
          IF toimi = 2 THEN DO:
-           cfc = "puyr". RUN ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.p.
             haku2 = "".
-            ehto = 9. RUN ufkey. ufkey = TRUE.
+            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr2.
             UPDATE lcBrand WHEN gcAllBrand
                    haku2 WITH FRAME hayr2.
@@ -749,9 +749,9 @@ REPEAT WITH FRAME sel:
 
          /* Seek an amount */
          IF toimi = 3 THEN DO:
-            cfc = "puyr". RUN ufcolor.
+            cfc = "puyr". RUN Syst/ufcolor.p.
             haku3 = 0.
-            ehto = 9. RUN ufkey. ufkey = TRUE.
+            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr3.
             UPDATE lcBrand WHEN gcAllBrand
                     haku3 WITH FRAME hayr3.
@@ -781,9 +781,9 @@ REPEAT WITH FRAME sel:
 
          /* Seek a reference number */
          IF toimi = 4 THEN DO:
-            cfc = "puyr". RUN ufcolor.
+            cfc = "puyr". RUN Syst/ufcolor.p.
             haku4 = "".
-            ehto = 9. RUN ufkey. ufkey = TRUE.
+            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr4.
             UPDATE lcBrand WHEN gcAllBrand
                    haku4 WITH FRAME hayr4.
@@ -813,9 +813,9 @@ REPEAT WITH FRAME sel:
 
          /* Seek a Bank AccNum */ 
          IF toimi = 5 THEN DO:
-            cfc = "puyr". RUN ufcolor.
+            cfc = "puyr". RUN Syst/ufcolor.p.
             haku5 = "".
-            ehto = 9. RUN ufkey. ufkey = TRUE.
+            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr5.
             UPDATE lcBrand WHEN gcAllBrand
                    haku5 WITH FRAME hayr5.
@@ -847,7 +847,7 @@ REPEAT WITH FRAME sel:
       ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO:
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE(sel)]
          no-lock.
-         RUN unreglog(UnregPaym.UrSeq).
+         RUN Ar/unreglog.p(UnregPaym.UrSeq).
          ufkey = true.
          NEXT.
       END.
@@ -901,7 +901,7 @@ REPEAT WITH FRAME sel:
 
       ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" AND ufk[5] > 0
       THEN DO:  /* add */
-         {uright2.i}
+         {Syst/uright2.i}
          must-add = TRUE.
          NEXT LOOP.
       END.
@@ -909,7 +909,7 @@ REPEAT WITH FRAME sel:
       /* removal */
       ELSE IF LOOKUP(nap,"6,f6") > 0 AND xState = 0 AND lcRight = "RW"
       THEN DO TRANSAction: 
-         {uright2.i}
+         {Syst/uright2.i}
          delline = FRAME-LINE.
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE] NO-LOCK.
 
@@ -983,9 +983,9 @@ REPEAT WITH FRAME sel:
          END.   
          memory = rtab[FRAME-LINE(sel)].
          ASSIGN ufkey = TRUE ufk = 0 ehto = 3.
-         RUN ufkey.   
+         RUN Syst/ufkey.p.   
          cfc = "lis".
-         RUN ufcolor. 
+         RUN Syst/ufcolor.p. 
          ON F1 BELL.
          ON F2 BELL.
          ON F4 BELL.
@@ -1005,7 +1005,7 @@ REPEAT WITH FRAME sel:
             post2inv:
             REPEAT WITH FRAME lis TRANSACTION ON ENDKEY UNDO, LEAVE:
 
-            {uright2.i}
+            {Syst/uright2.i}
             FIND UnregPaym WHERE RECID(UnregPaym) = memory EXCLUSIVE-LOCK.
 
             ASSIGN 
@@ -1014,8 +1014,8 @@ REPEAT WITH FRAME sel:
                         THEN "CREDIT LOSS " 
                         ELSE "INVOICE "
             ufkey = TRUE ehto = 9.
-            RUN ufkey.
-            cfc = "lis". RUN ufcolor.  
+            RUN Syst/ufkey.p.
+            cfc = "lis". RUN Syst/ufcolor.p.  
             on f4 endkey. /* se toimi vain jos ei kutsutaan F9 */
 
             ASSIGN   
@@ -1071,7 +1071,7 @@ REPEAT WITH FRAME sel:
 
                IF NOT llCredLoss THEN DO:
                   /* Calculate open Balance -> b-due */
-                  RUN invbal(Invoice.InvNum, OUTPUT b-due).
+                  RUN Ar/invbal.p(Invoice.InvNum, OUTPUT b-due).
                END.
 
                /* how much has been posted as credit loss */
@@ -1232,7 +1232,7 @@ REPEAT WITH FRAME sel:
 
             REPEAT WITH FRAME over TRANSAction:
 
-            {uright2.i}
+            {Syst/uright2.i}
             FIND UnregPaym WHERE RECID(UnregPaym) = memory
             EXCLUSIVE-LOCK.
 
@@ -1242,7 +1242,7 @@ REPEAT WITH FRAME sel:
             DelInt     = FALSE. 
 
             ASSIGN  ufkey = TRUE ehto = 9.
-            RUN ufkey.  
+            RUN Syst/ufkey.p.  
             FIND Customer WHERE Customer.CustName = UnregPaym.CustName 
             NO-LOCK NO-ERROR.
             IF AVAIL Customer THEN ASSIGN 
@@ -1356,7 +1356,7 @@ REPEAT WITH FRAME sel:
 
             REPEAT WITH FRAME AdvPaym TRANSAction:
 
-            {uright2.i}
+            {Syst/uright2.i}
             FIND UnregPaym WHERE RECID(UnregPaym) = memory
             EXCLUSIVE-LOCK.
 
@@ -1366,7 +1366,7 @@ REPEAT WITH FRAME sel:
             DelInt     = FALSE.
 
             ASSIGN  ufkey = TRUE ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.p.
             FIND Customer WHERE Customer.CustName = UnregPaym.CustName 
             NO-LOCK NO-ERROR.
             IF AVAIL Customer THEN
@@ -1782,12 +1782,12 @@ PROCEDURE local-UPDATE-record:
                    ufk[8] = 8
                    ehto   = 0.
                 
-            RUN ufkey.
+            RUN Syst/ufkey.p.
          END.
          
          IF toimi = 1 THEN DO:
             
-            ehto = 9. RUN ufkey.
+            ehto = 9. RUN Syst/ufkey.p.
          
             FIND CURRENT UnregPaym EXCLUSIVE-LOCK.
             
@@ -1840,7 +1840,7 @@ PROCEDURE local-UPDATE-record:
       
       ELSE DO:
          ehto = 5.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END.
       

@@ -10,13 +10,13 @@
 
 &GLOBAL-DEFINE AllIncludes YES
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
-{email.i}
-{msreqfunc.i}
-{refundfilett.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Func/msreqfunc.i}
+{Ar/refundfilett.i}
 
 /* payments */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttRequest.

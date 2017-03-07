@@ -17,10 +17,10 @@
  Version .......: M15
  ============================================================================*/
 
-{commali.i}                      
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
+{Syst/commali.i}                      
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
 
 DEF VAR ok        AS LO  NO-UNDO FORMAT "Yes/No".
 DEF VAR exPaymFile AS C   NO-UNDO FORMAT "x(50)".
@@ -104,7 +104,7 @@ DISPLAY ldMinDebt WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-    ehto = 9. RUN ufkey.
+    ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
     xCustNum1 xCustNum2
@@ -118,7 +118,7 @@ REPEAT WITH FRAME main:
       ufk[1] = 7 
       ufk[5] = (IF exPaymFile ne "" THEN 795 ELSE 0).
       ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

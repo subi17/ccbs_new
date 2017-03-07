@@ -14,22 +14,22 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable simart
 
-{commali.i}                  
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'simart'}
+{Syst/commali.i}                  
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'simart'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSimArt AS HANDLE NO-UNDO.
    lhSimArt = BUFFER SimArt:HANDLE.
    RUN StarEventInitialize(lhSimArt).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhSimArt).
+      RUN Mc/eventview2.p(lhSimArt).
    END.
 END.
 
@@ -70,7 +70,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     SimArt.SimArt     /* LABEL FORMAT */
@@ -114,7 +114,7 @@ form /* seek SIM Article  BY SAName */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -146,12 +146,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a SimArt  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR SimArt.SimArt
@@ -236,16 +236,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SimArt.SimArt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SimArt.SimArt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SimArt.SimArt WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SimArt.SAName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SimArt.SAName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SimArt.SAName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -373,9 +373,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        SimArt = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f1.
        UPDATE 
            lcBrand WHEN gcAllBrand = TRUE  SimArt WITH FRAME f1.
@@ -393,9 +393,9 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        SAName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f2.
 
        UPDATE  lcBrand WHEN gcAllBrand = TRUE
@@ -415,12 +415,12 @@ BROWSE:
        ufkey = TRUE. 
        FIND SimArt WHERE recid(SimArt) = rtab[FRAME-LINE] /* NO-LOCK. */.
 
-       run stobal3(Simart.Brand,SimArt.SimArt).
+       RUN Mm/stobal3.p(Simart.Brand,SimArt.SimArt).
        NEXT loop.
      END.  
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANSACTION:  /* DET. BAL */
-       ufkey = TRUE. ufk = 0. ehto = 3. RUN ufkey.
+       ufkey = TRUE. ufk = 0. ehto = 3. RUN Syst/ufkey.p.
        FIND SimArt WHERE recid(SimArt) = rtab[FRAME-LINE] NO-LOCK. 
        PAUSE 0.
        DISP SimArt.DetBal[1 FOR 6] WITH FRAME dbal.
@@ -498,8 +498,8 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSimArt).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". run ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY SimArt.SimArt.
        RUN local-UPDATE-record.

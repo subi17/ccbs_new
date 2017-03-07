@@ -8,16 +8,16 @@
    09.09.2015 hugo.lujan [Q25] - TMS - Cancel Renewal Order
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{fpcmaintreq.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{tmsconst.i}
-{ordercancel.i}
-{coinv.i}
-{dpmember.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/fpcmaintreq.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Syst/tmsconst.i}
+{Func/ordercancel.i}
+{Func/coinv.i}
+{Mc/dpmember.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER  NO-UNDO.
 
@@ -75,7 +75,7 @@ fSplitTS(bRenewalMsRequest.ActStamp,OUTPUT ldaRenewalDate,OUTPUT liRenewalTime).
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 FUNCTION fCollectActivationFees RETURNS LOGICAL (
@@ -596,7 +596,7 @@ PROCEDURE pCloseQ25Discount:
         
       /* Month 25 and after: Create new single fee 
          (CRVTERMDT) with corresponding amount*/
-       RUN creasfee.p(
+       RUN Mc/creasfee.p(
           SingleFee.CustNum,
           MobSub.MsSeq,
           TODAY,

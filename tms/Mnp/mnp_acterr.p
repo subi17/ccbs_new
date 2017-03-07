@@ -8,11 +8,11 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{date.i}
-{cparam2.i}
-{eventlog.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.

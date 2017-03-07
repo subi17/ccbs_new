@@ -1,5 +1,5 @@
 input from as_yot704.input.
-{date.i}
+{Func/date.i}
 
 def stream slog.
 output stream slog to as_yot704.output append.

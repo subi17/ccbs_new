@@ -14,15 +14,15 @@
 &GLOBAL-DEFINE MNP_COMMON_I YES
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "MNP-ADAPTER".
 gcBrand = "1".
-{date.i}
-{mnp.i}
-{xmlfunction.i}
-{msreqfunc.i}
-{tmsconst.i}
-{log.i}
+{Func/date.i}
+{Mnp/mnp.i}
+{Func/xmlfunction.i}
+{Func/msreqfunc.i}
+{Syst/tmsconst.i}
+{Func/log.i}
 DEFINE SHARED VARIABLE lcrequest AS LONGCHAR NO-UNDO.
 
 DEF VAR pcStruct AS CHAR NO-UNDO.

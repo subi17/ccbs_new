@@ -1,3 +1,3 @@
-{commali.i}
+{Syst/commali.i}
 
-run termmobsub(0,"").
+RUN Mm/termmobsub.p(0,"").

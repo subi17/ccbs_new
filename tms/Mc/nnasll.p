@@ -29,12 +29,12 @@
  Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i}
-{cparam2.i}
-{fcustbal.i}
-{fdivtxt.i}
+{Syst/utumaa.i}
+{Func/cparam2.i}
+{Func/fcustbal.i}
+{Func/fdivtxt.i}
 
 DEF INPUT PARAMETER CustGroup LIKE CustGroup.CustGroup       NO-UNDO.
 DEF INPUT PARAMETER asno1   LIKE Customer.CustNum       NO-UNDO.
@@ -117,7 +117,7 @@ WITH
    width 90 NO-LABEL no-box FRAME sivuots.
 
 form
-   {nnasse.f}
+   {Mc/nnasse.f}
 WITH no-box side-labels FRAME perus.
 
 ASSIGN sl = 0 rl = 0.

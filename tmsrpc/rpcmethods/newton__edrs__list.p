@@ -10,12 +10,12 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "NewtonRPC"
    gcBrand = "1".
-{date.i}
-{callquery.i}
+{Func/date.i}
+{Func/callquery.i}
 
 DEF VAR resp_array AS CHAR NO-UNDO. 
 DEF VAR edr_struct AS CHAR NO-UNDO. 

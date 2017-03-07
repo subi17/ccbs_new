@@ -23,13 +23,13 @@
 
 &GLOBAL-DEFINE TMSCodeDef NO
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ffitem'}
-{eventval.i} 
-{invdet.i}
-{finvbal.i}
-{cparam2.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ffitem'}
+{Syst/eventval.i} 
+{Ar/invdet.i}
+{Func/finvbal.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER  FFNum  AS i  NO-UNDO.
 
@@ -68,7 +68,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFFItem AS HANDLE NO-UNDO.
    lhFFItem = BUFFER FFItem:HANDLE.
@@ -76,7 +76,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhFFItem).
+      RUN Mc/eventview2.p(lhFFItem).
    END.
 END.
 
@@ -144,7 +144,7 @@ ELSE DO:
 END.
 
 ASSIGN lcRight = "".
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 LOOP:
 repeat WITH FRAME sel:
@@ -218,12 +218,12 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
         ehto  = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW FFItem.BillPeriod ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW FFItem.BillPeriod {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) FFItem.BillPeriod WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -385,9 +385,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        BillPeriod = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE BillPeriod WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF BillPeriod <> ? THEN DO:
@@ -410,7 +410,7 @@ BROWSE:
      if lookup(nap,"3,f3") > 0 THEN     /* memo */
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
        assign ehto = 9 cfc = "lis" ufkey = TRUE.
-       RUN ufkey. RUN ufcolor.
+       RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND FFItem where recid(FFItem) = rtab[frame-line(sel)]
        exclusive-lock.
 
@@ -467,7 +467,7 @@ BROWSE:
         END.  
         IF llUpdate THEN DO:
            FIND FFItem where recid(FFItem) = rtab[FRAME-LINE] EXCLUSIVE-LOCK.               ehto = 9. 
-           RUN ufkey. 
+           RUN Syst/ufkey.p. 
            ufkey = TRUE.
            UPDATE
                FFItem.BillPeriod
@@ -486,7 +486,7 @@ BROWSE:
         FIND FFItem where recid(FFItem) = rtab[FRAME-LINE] no-lock.
         IF FFItem.InvNum > 0 THEN DO:
            ehto = 5.
-           run ufkey.p.
+           RUN Syst/ufkey.p.
            RUN pInvoiceDetails(FFItem.InvNum,
                                TRUE).
            ufkey = true.
@@ -575,7 +575,7 @@ BROWSE:
      DO WITH FRAME lis TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
        /* change */
        
-       assign fr-header = " CHANGE " cfc = "lis".  RUN ufcolor.
+       assign fr-header = " CHANGE " cfc = "lis".  RUN Syst/ufcolor.p.
 
        run local-find-this(FALSE).
 
@@ -624,7 +624,7 @@ BROWSE:
        IF llUpdate THEN DO WITH FRAME lis ON ENDKEY UNDO, NEXT LOOP:
           run local-find-this(TRUE).
           ehto = 9. 
-          RUN ufkey. 
+          RUN Syst/ufkey.p. 
           ufkey = TRUE.
           UPDATE
              FFItem.BillPeriod
@@ -642,7 +642,7 @@ BROWSE:
        END. /* EDITING */
        ELSE DO:
          ehto = 9. 
-         RUN ufkey. 
+         RUN Syst/ufkey.p. 
          ufkey = TRUE.
          /* if item is the last one then allow update of end period */  
          llLast = NOT CAN-FIND(FIRST bFFItem WHERE

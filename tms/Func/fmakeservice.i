@@ -1,4 +1,4 @@
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER bPositive FOR SLGAnalyse.
 DEF BUFFER bNegative FOR SLGAnalyse.

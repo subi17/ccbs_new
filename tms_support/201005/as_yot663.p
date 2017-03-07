@@ -1,9 +1,9 @@
 input from mnp_old_ongoing.txt.
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{orderfunc.i}
-{tmsconst.i}
+{Func/orderfunc.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEF STREAM slog.

@@ -12,24 +12,24 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
-{eventval.i}
-{highusage.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
+{Syst/eventval.i}
+{Func/highusage.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhHighUsage AS HANDLE NO-UNDO.
    lhHighUsage = BUFFER HighUsage:HANDLE.
    RUN StarEventInitialize(lhHighUsage).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhHighUsage).
+      RUN Mc/eventview2.p(lhHighUsage).
    END.
 
 END.
@@ -142,7 +142,7 @@ form /* seek  CLI */
 
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -233,16 +233,16 @@ BROWSE:
         ufk[7]= 555 
         ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvSeq.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSeq.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSeq.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW HighUsage.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW HighUsage.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) HighUsage.CLI WITH FRAME sel.
       END.
 
@@ -371,8 +371,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET HighUsage lihakuperiod  WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -404,8 +404,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET CLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -447,21 +447,21 @@ BROWSE:
            ufk[6]= 0 
            ufk[7]= 2355 
            ufk[8]= 8.
-        run ufkey.   
+        RUN Syst/ufkey.p.   
         
         IF toimi = 8 THEN DO:
         PUT SCREEN ROW 22 "                                 " .
 
            NEXT BROWSE.
         ENd.
-        IF toimi = 1 AND avail mobsub  THEN RUN solog2(mobsub.msseq).
+        IF toimi = 1 AND avail mobsub  THEN RUN Mm/solog2.p(mobsub.msseq).
 
-        IF toimi = 2 AND avail mobsub  THEN RUN subser(mobsub.msseq).
+        IF toimi = 2 AND avail mobsub  THEN RUN Mm/subser.p(mobsub.msseq).
 
         IF toimi = 4 AND avail mobsub THEN RUN lockms(mobsub.msseq).         
         IF toimi = 5 AND avail mobsub THEN RUN unlockms(mobsub.msseq).
 
-        IF toimi = 7 AND avail mobsub then RUN mobsubsms(mobsub.msseq).
+        IF toimi = 7 AND avail mobsub then RUN Mm/mobsubsms.p(mobsub.msseq).
 
      END.
      
@@ -483,7 +483,7 @@ BROWSE:
            ufk[4] = 1830 
            ufk[5]= 0  
            ufk[6]= 0 ufk[7]= 0 ufk[8]= 8.
-        run ufkey.   
+        RUN Syst/ufkey.p.   
 
         IF toimi = 8 THEN DO:
            PUT SCREEN ROW 22 "                                  " .
@@ -491,11 +491,11 @@ BROWSE:
            NEXT BROWSE.
         END.   
 
-        IF  toimi = 1 THEN RUN commontt(Invseq.CustNum).
+        IF  toimi = 1 THEN RUN Mc/commontt.p(Invseq.CustNum).
 
-        IF toimi = 2 THEN RUN mobilett(Invseq.CustNum).
+        IF toimi = 2 THEN RUN Mc/mobilett.p(Invseq.CustNum).
 
-        IF toimi = 4 THEN RUN mobcallis(highusage.Cli,invseq.invseq).        
+        IF toimi = 4 THEN RUN Mm/mobcallis.p(highusage.Cli,invseq.invseq).        
 
 
      END.
@@ -509,7 +509,7 @@ BROWSE:
                   invseq.invseq = highusage.invseq no-lock no-error.
 
 
-       RUN memo(INPUT Invseq.CustNum,
+       RUN Mc/memo.p(INPUT Invseq.CustNum,
                 INPUT "HighUsage",
                 INPUT STRING(HighUsage.Invseq) + "|" + STRING(Highusage.cli),
                 INPUT "HighUsage").
@@ -541,7 +541,7 @@ BROWSE:
              READKEY.
              IF FRAME-FIELD = "newstatus" AND keylabel(lastkey) = "F9"
              THEN DO:
-                RUN h-tmscodes(INPUT "HighUsage",   /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "HighUsage",   /* TableName*/
                                      "HiUsageStatus", /* FieldName */
                                      "HighUsage",   /* GroupCode */
                                OUTPUT siirto).
@@ -566,7 +566,7 @@ BROWSE:
                 PAUSE 0.
                 IF FRAME-FIELD = "newstatus" THEN DO:
            
-                   RUN v-tmscodes(INPUT "HighUsage",   /* TableName*/
+                   RUN Syst/v-tmscodes.p(INPUT "HighUsage",   /* TableName*/
                                         "HiUsageStatus", /* FieldName */
                                         "HighUsage",   /* GroupCode */
                                   INPUT INPUT newstatus,
@@ -600,7 +600,7 @@ BROWSE:
       FIND FIRST invseq WHERE
                 invseq.invseq = highusage.invseq no-lock no-error.
        
-       RUN memo(INPUT Invseq.CustNum,
+       RUN Mc/memo.p(INPUT Invseq.CustNum,
                 INPUT "HighUsage",
                 INPUT STRING(HighUsage.Invseq) + "|" + STRING(Highusage.cli),
                 INPUT "HighUsage").
@@ -615,7 +615,7 @@ BROWSE:
 
        RUN local-find-this(FALSE).
 
-       run highusagemore.p(INPUT HighUsage.invseq, HighUsage.cli).
+       RUN Mm/highusagemore.p(INPUT HighUsage.invseq, HighUsage.cli).
 
        ufkey = TRUE. 
        NEXT LOOP.
@@ -630,8 +630,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHighUsage).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY 
        Highusage.cli     
        LiAmountOfInvoice  

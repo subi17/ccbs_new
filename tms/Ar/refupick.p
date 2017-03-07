@@ -8,10 +8,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'payment'}
-{refufile.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'payment'}
+{Ar/refufile.i}
 
 DEF NEW shared VAR siirto AS CHAR.
 
@@ -132,7 +132,7 @@ FUNCTION fDispTotal RETURNS LOGICAL.
     
 END FUNCTION.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Customer ," +
@@ -243,16 +243,16 @@ REPEAT WITH FRAME sel:
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttPaym.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttPaym.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttPaym.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW ttPaym.Amt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttPaym.Amt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttPaym.Amt WITH FRAME sel.
       END.
 
@@ -380,8 +380,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         UPDATE liCustNum WITH FRAME f1.
         HIDE FRAME f1 NO-PAUSE.
@@ -406,8 +406,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         UPDATE ldAmt WITH FRAME f2.
         HIDE FRAME f2 NO-PAUSE.
@@ -433,7 +433,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
          ASSIGN ehto = 9
                 ufkey = TRUE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          REPEAT WITH FRAME fBank ON ENDKEY UNDO, LEAVE:
             
             UPDATE lcBankAcc ldtDate WITH FRAME fBank EDITING:
@@ -443,11 +443,11 @@ REPEAT WITH FRAME sel:
                THEN DO:
                    ASSIGN gcHelpParam = "bank"
                           si-recid    = 0.
-                   RUN bankacc.
+                   RUN Mc/bankacc.p.
                    gcHelpParam = "".
                    
                    ehto = 9.
-                   RUN ufkey.
+                   RUN Syst/ufkey.p.
        
                    IF si-recid > 0 THEN DO:
                       FIND BankAcc WHERE RECID(BankAcc) = si-recid 
@@ -496,7 +496,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         RUN local-find-this (FALSE).
 
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "payment",
                  INPUT STRING(ttPaym.Voucher),
                  INPUT "Voucher number").
@@ -526,7 +526,7 @@ REPEAT WITH FRAME sel:
         
         IF NOT ok THEN NEXT LOOP.
         
-        RUN refufile (INPUT-OUTPUT TABLE ttPaym,
+        RUN Ar/refufile.p (INPUT-OUTPUT TABLE ttPaym,
                       lcBankAcc,
                       ldtDate,
                       OUTPUT i,
@@ -554,7 +554,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -610,7 +610,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

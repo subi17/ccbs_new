@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand  = "1".
-{barrfunc.i}
+{Func/barrfunc.i}
 
 DEFINE VARIABLE lrBarring AS ROWID no-UNDO.
 DEFINE VARIABLE lcBarring AS CHARACTER NO-UNDO. 

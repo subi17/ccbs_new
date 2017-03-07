@@ -3,9 +3,9 @@
 
 &GLOBAL-DEFINE flimitreq YES
 
-{commali.i}
-{fcreatereq.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
+{Syst/eventval.i}
 
 DEF BUFFER bufLimit FOR Limit.
 /* somehow have to prevent calling fCleanEventObjects */
@@ -15,7 +15,7 @@ IF llDoEvent THEN DO:
 
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhBufLimit     AS HANDLE    NO-UNDO.
    lhBufLimit = BUFFER bufLimit:HANDLE.

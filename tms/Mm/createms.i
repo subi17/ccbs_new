@@ -25,11 +25,11 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
  
-{commali.i}
-{timestamp.i}
-{sog.i}
-{fctserval.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/sog.i}
+{Func/fctserval.i}
+{Func/cparam2.i}
 
 DEF BUFFER bSubSer FOR SubSer.
 DEF BUFFER bSSPara FOR SubSerPara.
