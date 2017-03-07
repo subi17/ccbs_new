@@ -10,7 +10,7 @@
   SHARED .......:
   ------------------------------------------------------ */
 
-{country.i}
+{Syst/country.i}
 
 DEF INPUT  PARAM my-date AS DA  NO-UNDO. /* Date TO convert */
 def input  param yr-len  as log no-undo. /* if true year is "x(2)" */

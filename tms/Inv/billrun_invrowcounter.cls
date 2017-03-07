@@ -1,8 +1,8 @@
 
 CLASS Inv.billrun_invrowcounter:
 
-   {lamupers_temptable.i &ttReference = "REFERENCE-ONLY"}
-   {tmsconst.i}
+   {Inv/lamupers_temptable.i &ttReference = "REFERENCE-ONLY"}
+   {Syst/tmsconst.i}
 
    DEF PRIVATE VAR lcBrand AS CHAR NO-UNDO. 
 

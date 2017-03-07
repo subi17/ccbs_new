@@ -9,16 +9,16 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhLimit AS HANDLE NO-UNDO.
    lhLimit = BUFFER Limit:HANDLE.

@@ -20,11 +20,11 @@ FIND FIRST mobsub NO-LOCK WHERE
 IF NOT AVAILABLE mobsub THEN
    RETURN appl_err("Subscription not found").
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
 gcBrand = "1".
-{tmsconst.i}
-{flimitreq.i}
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
 
 IF gbAuthLog.UserName = "viptool" THEN DO:
 {vip_check.i}

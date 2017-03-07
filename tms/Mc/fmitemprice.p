@@ -8,14 +8,14 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
-{eventval.i} 
+{Syst/eventval.i} 
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 

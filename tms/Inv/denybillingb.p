@@ -9,15 +9,15 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "Cron".
        
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Func/timestamp.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcDenyFile  AS CHAR NO-UNDO.
@@ -80,7 +80,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN denybilling (ttFiles.DenyFile,
+   RUN Inv/denybilling.p (ttFiles.DenyFile,
                     lcLogFile,
                     OUTPUT liRead,
                     OUTPUT liExist,

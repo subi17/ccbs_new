@@ -3,18 +3,18 @@
   TASK .........: cron add topup of fatime
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{ftaxdata.i}
-{ftopup.i}
+{Func/ftaxdata.i}
+{Func/ftopup.i}
 
-{eventlog.i}
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventval.i}
-{email.i}
+{Syst/eventlog.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/email.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO.
@@ -206,7 +206,7 @@ PROCEDURE pCreateFatime :
       else 
          RETURN "ERROR:Unknown MSISDN".
       
-   run creafat (msowner.invcust,
+   RUN Mc/creafat.p (msowner.invcust,
                 msowner.msseq,
                 lcKey, /* FatGroup */
                 ldAmt,

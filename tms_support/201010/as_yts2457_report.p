@@ -3,7 +3,7 @@ input from as_yts2457.txt.
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lrRecid AS RECID NO-UNDO. 
 DEFINE VARIABLE ldeStamp AS DECIMAL NO-UNDO. 
-{date.i}
+{Func/date.i}
 
 DEFINE TEMP-TABLE ttCli
 FIELD rateccn AS int format ">>9" label "RATECCN"

@@ -7,11 +7,11 @@
 */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{tmsconst.i}
-{fmakemsreq.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR piFusionInvnum AS INT NO-UNDO. 

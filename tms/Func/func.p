@@ -560,7 +560,7 @@ FUNCTION fHdrText RETURNS CHARACTER
 END FUNCTION.
 
 
-{freplacesms.i}
+{Func/freplacesms.i}
 
 
 FUNCTION fChkSaldoAccount RETURNS DEC

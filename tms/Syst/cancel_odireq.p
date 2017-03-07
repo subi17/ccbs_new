@@ -1,13 +1,13 @@
 /* cancel_odireq.p   10.05.07/aam 
 */
 
-{commpaa.i}
-{eventval.i}
+{Syst/commpaa.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMsRequest AS HANDLE NO-UNDO.
    lhMsRequest = BUFFER MsRequest:HANDLE.

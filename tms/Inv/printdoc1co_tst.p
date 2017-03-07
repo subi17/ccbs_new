@@ -14,8 +14,8 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHARACTER NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INTEGER   NO-UNDO.
@@ -35,7 +35,7 @@ DEF VAR ldtNameDate AS DATE NO-UNDO.
 DEF VAR lcDate      AS CHAR NO-UNDO.
 DEF VAR lcCLIFile   AS CHAR NO-UNDO.
 
-{printdoc1tt.i}
+{Inv/printdoc1tt.i}
 
 
 FUNCTION fMakeTemp RETURNS LOGICAL.

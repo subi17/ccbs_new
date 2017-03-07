@@ -1,8 +1,8 @@
-{commali.i}
-{cparam2.i}
-{ftransdir.i}
-{timestamp.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/timestamp.i}
+{Syst/funcrunprocess_update.i}
 
 DEF INPUT  PARAMETER idaStart         AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaEnd           AS DATE NO-UNDO.

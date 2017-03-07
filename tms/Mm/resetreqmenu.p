@@ -21,11 +21,11 @@
 
 &GLOBAL-DEFINE BrTable MsRequest
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OrdStat'}
-{msisdn.i}
-{msreqfunc.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OrdStat'}
+{Func/msisdn.i}
+{Func/msreqfunc.i}
 
 DEF INPUT  PARAMETER iiMsRequest  AS INT  NO-UNDO.
 
@@ -54,7 +54,7 @@ DO WHILE TRUE:
       ufk    = 0 
       ufk[8] = 8 
       ehto   = 3. 
-   RUN ufkey. 
+   RUN Syst/ufkey.p. 
 
    PAUSE 0.
    DISPLAY

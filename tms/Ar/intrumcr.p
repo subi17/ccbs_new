@@ -10,9 +10,9 @@
  VERSION .......: M15
  ============================================================================*/
 
-{commali.i}          
-{cparam2.i}            
-{intrumcr.i}
+{Syst/commali.i}          
+{Func/cparam2.i}            
+{Ar/intrumcr.i}
 
 DEFINE OUTPUT PARAMETER TABLE FOR ttError.
 
@@ -122,7 +122,7 @@ REPEAT:
 
          oiFound = oiFound + 1.
 
-         RUN invbal(Invoice.InvNum, OUTPUT ldBal).
+         RUN Ar/invbal.p(Invoice.InvNum, OUTPUT ldBal).
 
          IF ldBal <= 0 THEN DO:
             IF Invoice.CrInvNum > 0 
@@ -140,7 +140,7 @@ REPEAT:
            )
          THEN DO:
 
-            RUN makepaym (BUFFER Invoice,
+            RUN Ar/makepaym.p (BUFFER Invoice,
                           MIN(ldAmount,ldBal),
                           TODAY,
                           liAccNum,

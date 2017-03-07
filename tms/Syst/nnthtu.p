@@ -10,9 +10,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 ASSIGN
 tila  = TRUE
@@ -65,7 +65,7 @@ form header
      paivays   AT 45 skip(3)
      WITH FRAME yla width 78 NO-LABELS no-box.
 
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 message "Utskriv p~åg~år !".
 ASSIGN
@@ -94,7 +94,7 @@ DO i = rl TO spit1:
     PUT STREAM tul skip(1).
 END.
 
-tila = FALSE. {tmsreport.i}
+tila = FALSE. {Syst/tmsreport.i}
 
 HIDE MESSAGE no-pause.
 

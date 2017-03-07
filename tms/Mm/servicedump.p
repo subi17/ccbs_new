@@ -11,11 +11,11 @@
    Version ......: SHARK
 ----------------------------------------------------------------- */
 
-{commpaa.i}
-{excel.i}
-{date.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commpaa.i}
+{Func/excel.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 gcbrand = "1".
 katun = "batch".

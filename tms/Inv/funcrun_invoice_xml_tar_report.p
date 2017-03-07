@@ -7,15 +7,15 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
    
-{timestamp.i}
-{cparam2.i}
-{funcrunprocess_run.i}
-{ftransdir.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/funcrunprocess_run.i}
+{Func/ftransdir.i}
 
 DEF VAR lcSep            AS CHAR NO-UNDO.
 DEF VAR lcFile           AS CHAR NO-UNDO.

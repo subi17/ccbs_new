@@ -7,7 +7,7 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF TEMP-TABLE ttMenu 
  FIELD Type       AS INT
@@ -92,7 +92,7 @@ form /* seek CodeName */
 
 IF icTitle = "" THEN icTitle = "Requests".
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -177,12 +177,12 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
       
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttMenu.Menutext ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttMenu.Menutext {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttMenu.MenuText WITH FRAME sel.
       END.
       nap = keylabel(LASTKEY).
@@ -295,7 +295,7 @@ REPEAT WITH FRAME sel:
 
         IF AVAILABLE ttMenu THEN DO:
            
-           RUN reqstatmenu.p(ttMenu.Type). 
+           RUN Mm/reqstatmenu.p(ttMenu.Type). 
            ufkey = TRUE.
            NEXT LOOP.
         END.

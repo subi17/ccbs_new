@@ -8,12 +8,12 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{fcustpl.i}
-{fuserright.i}
-{lib/tokenlib.i}
-{fcharge_comp_loaded.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fcustpl.i}
+{Func/fuserright.i}
+{Mc/lib/tokenlib.i}
+{Func/fcharge_comp_loaded.i}
 
 DEFINE INPUT PARAMETER iiMsSeq AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER icOperation AS CHARACTER NO-UNDO.
@@ -104,7 +104,7 @@ IF MobSub.PayType = TRUE AND ldeCharge > 0 THEN DO: /* charges for prepaid */
 
  /* get current balance */
    ldCurrBal = 0.
-   RUN balancequery.p(MobSub.CLI).
+   RUN Gwy/balancequery.p(MobSub.CLI).
    ldCurrBal = INT(RETURN-VALUE) / 100 NO-ERROR.
 END.
 
@@ -141,7 +141,7 @@ END.
 
 /* Change charge only for Admin users*/
 ok = false.
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 
 LOOP:
 REPEAT:

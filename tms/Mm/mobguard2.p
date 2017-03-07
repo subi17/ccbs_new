@@ -9,7 +9,7 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER   ilAskDates AS LOG  NO-UNDO.
 DEF OUTPUT PARAMETER   ReasonC    AS CHAR NO-UNDO.
@@ -68,7 +68,7 @@ PROCEDURE local-Show-record:
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    
-      ASSIGN ufk = 0 ufk[8] = 8 ehto = 10. RUN ufkey.
+      ASSIGN ufk = 0 ufk[8] = 8 ehto = 10. RUN Syst/ufkey.p.
       
       IF ilAskDates THEN ASSIGN
       ldDate1 = DATE(Month(Today),1,YEAR(Today))
@@ -91,7 +91,7 @@ PROCEDURE local-Show-record:
              
              IF FRAME-FIELD = "ReasonC" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN h-tmscodes(INPUT "FixCDR",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FixCDR",  /* TableName*/
                                      "ReasonCode", /* FieldName */
                                      "ReasonCode", /* GroupCode */
                                OUTPUT siirto).

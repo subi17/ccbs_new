@@ -13,9 +13,9 @@
 
 &GLOBAL-DEFINE CDR_RERATE_I YES
 
-{commali.i}
-{date.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/cparam2.i}
 
 DEF STREAM sRerateRep.
 
@@ -55,7 +55,7 @@ FUNCTION fRerateLogStart RETURNS INT
 
    lcReport = 
       "Re-rate report" + CHR(10) + CHR(10) + 
-      "Re-rate run details:" + CHR(10) + 
+      "Re-rate RUN details:" + CHR(10) + 
       "Re-rate run ID" + lcSep + STRING(liRerateID) + CHR(10) +
       "User ID" + lcSep + icUserCode + CHR(10) + 
       "Started" + lcSep + ENTRY(1, lcStarted, " ") + lcSep + 

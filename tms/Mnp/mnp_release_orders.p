@@ -7,11 +7,11 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{tmsconst.i}
-{orderfunc.i}
+{Syst/tmsconst.i}
+{Func/orderfunc.i}
 
 FOR EACH Order NO-LOCK WHERE
          Order.Brand = gcBrand AND

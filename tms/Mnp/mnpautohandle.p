@@ -7,16 +7,16 @@
   CREATED ......: 03.11.09
   Version ......: yoigo
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "MNP".
 gcBrand = "1".
 
-{mnp.i}
-{mnpmessages.i}
-{tmsconst.i}
-{log.i}
-{timestamp.i}
-{cparam2.i}
+{Mnp/mnp.i}
+{Mnp/mnpmessages.i}
+{Syst/tmsconst.i}
+{Func/log.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE llOk AS LOGICAL NO-UNDO. 

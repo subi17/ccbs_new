@@ -20,24 +20,24 @@
 ----------------  ------------------------------------------------------ */
 &GLOBAL-DEFINE BrTable CustIntEvent
 
-{commali.i}
-{eventval.i}
-{fcustbal.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'custintevent'}
-{cparam2.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/fcustbal.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'custintevent'}
+{Func/cparam2.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustIntEvent AS HANDLE NO-UNDO.
    lhCustIntEvent = BUFFER CustIntEvent:HANDLE.
    RUN StarEventInitialize(lhCustIntEvent).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCustIntEvent).
+      RUN Mc/eventview2.p(lhCustIntEvent).
    END.
 
 END.
@@ -117,7 +117,7 @@ form
 WITH  OVERLAY ROW 3 col 3
     COLOR value(cfc) TITLE COLOR value(ctc) ac-hdr 1 col FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form
    "Days   %%      Total"                          SKIP
@@ -166,7 +166,7 @@ ELSE ASSIGN
    liRow  = 1
    liDown = 15.
    
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 order = 1.
@@ -198,13 +198,13 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a BillType  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            IF iiCustNum = 0 THEN 
@@ -308,16 +308,16 @@ repeat WITH FRAME sel:
          IF iiCustNum > 0 THEN ASSIGN ufk[1] = 0
                                       ufk[2] = 0.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW CustIntEvent.CustNum  ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW CustIntEvent.CustNum  {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) CustIntEvent.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW CustIntEvent.InvNum ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW CustIntEvent.InvNum {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) CustIntEvent.InvNum WITH FRAME sel. 
       END.
 
@@ -459,9 +459,9 @@ repeat WITH FRAME sel:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku-asno = 0.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
         DISPLAY lcBrand WITH FRAME hayr.
         UPDATE lcBrand WHEN gcAllBrand
@@ -481,9 +481,9 @@ repeat WITH FRAME sel:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku-lanro = 0.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
         DISPLAY lcBrand WITH FRAME hayr2.
         UPDATE lcBrand WHEN gcAllBrand
@@ -504,7 +504,7 @@ repeat WITH FRAME sel:
 
      else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
-        {uright2.i}
+        {Syst/uright2.i}
         delline = FRAME-LINE.
         FIND CustIntEvent where recid(CustIntEvent) = rtab[FRAME-LINE] no-lock.
         
@@ -584,8 +584,8 @@ repeat WITH FRAME sel:
 
      else if lookup(nap,"enter,return") > 0 THEN DO:
         ac-hdr = " VIEW ".
-        cfc = "lis". RUN ufcolor.
-        ufk = 0. ehto = 3. RUN ufkey. ufkey = TRUE.
+        cfc = "lis". RUN Syst/ufcolor.p.
+        ufk = 0. ehto = 3. RUN Syst/ufkey.p. ufkey = TRUE.
 
         FIND CustIntEvent where recid(CustIntEvent) = rtab[FRAME-LINE] no-lock.
 
@@ -613,7 +613,7 @@ repeat WITH FRAME sel:
         WITH FRAME inter.
 
         ASSIGN ufk =  0 ufkey = TRUE ehto = 3.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         PAUSE 0.
         message "Press ENTER !".
         PAUSE no-message.
@@ -685,10 +685,10 @@ PROCEDURE local-update-record:
              READKEY.
              IF LOOKUP(KEYLABEL(LASTKEY),"F9") > 0 AND FRAME-FIELD = "InvNum" 
              THEN DO:
-                RUN hcustinv.p(CustIntEvent.CustNum, TRUE).
+                RUN Help/hcustinv.p(CustIntEvent.CustNum, TRUE).
                 IF siirto NE ? THEN disp siirto @ 
                                CustIntEvent.InvNum with frame lis.
-                ehto = 9.  run ufkey.
+                ehto = 9.  RUN Syst/ufkey.p.
                 next.
              END.
 
@@ -722,7 +722,7 @@ PROCEDURE local-update-record:
 
                 ELSE IF FRAME-FIELD = "PaidAmt" THEN DO:
 
-                   RUN calcint(INPUT CustIntEvent.DueDate,
+                   RUN Ar/calcint.p(INPUT CustIntEvent.DueDate,
                                INPUT INPUT CustIntEvent.PaymDate,
                                INPUT liIntCalcMet,
                                INPUT INPUT CustIntEvent.PaidAmt,

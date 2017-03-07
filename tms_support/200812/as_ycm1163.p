@@ -1,6 +1,6 @@
 output to /apps/snet/200812/as_ycm1163.txt.
 def frame a with 15 down.
-{timestamp.i}
+{Func/timestamp.i}
 FOR EACH mnpprocess where
    statuscode = 999 and  orderid > 500000 NO-LOCK:
    

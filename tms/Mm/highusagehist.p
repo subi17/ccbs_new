@@ -9,23 +9,23 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
-{eventval.i}
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhHighUsage AS HANDLE NO-UNDO.
    lhHighUsage = BUFFER HighUsage:HANDLE.
    RUN StarEventInitialize(lhHighUsage).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhHighUsage).
+      RUN Mc/eventview2.p(lhHighUsage).
    END.
 
 END.
@@ -123,7 +123,7 @@ form /* seek  CLI */
 
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "   By Customer ,   By MSISDN    ,    By amount  , By 4".
@@ -207,21 +207,21 @@ BROWSE:
         ufk[7]= 0
         ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvSeq.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSeq.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSeq.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW HighUsage.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW HighUsage.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) HighUsage.CLI WITH FRAME sel.
       END.
 
       IF order = 3 THEN DO:
-        CHOOSE ROW HighUsage.amount ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW HighUsage.amount {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) HighUsage.Amount WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -352,7 +352,7 @@ BROWSE:
 
        RUN local-find-this(FALSE).
 
-       run highusagemore.p(INPUT HighUsage.invseq, HighUsage.cli).
+       RUN Mm/highusagemore.p(INPUT HighUsage.invseq, HighUsage.cli).
 
        ufkey = TRUE. 
        NEXT LOOP.
@@ -367,8 +367,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHighUsage).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Highusage.cli   .
 
        RUN local-UPDATE-record.                                  

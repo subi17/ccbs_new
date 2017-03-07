@@ -8,23 +8,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMRItemValue'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMRItemValue'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTMRItemValue AS HANDLE NO-UNDO.
    lhTMRItemValue = BUFFER TMRItemValue:HANDLE.
    RUN StarEventInitialize(lhTMRItemValue).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhTMRItemValue).
+      RUN Mc/eventview2.p(lhTMRItemValue).
    END.
 
 END.
@@ -248,7 +248,7 @@ FUNCTION fDispItemName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST TMRule WHERE TMRule.TMRuleSeq = iiTMRuleSeq NO-LOCK NO-ERROR.
@@ -318,11 +318,11 @@ DO liCnt = 1 TO liItemQty:
    
    /* F9 help program for update screen */
    CASE lcItemField[liCnt]:
-   WHEN "RateCCN"  THEN lcItemHelp[liCnt] = "nnmase".
-   WHEN "BillCode" THEN lcItemHelp[liCnt] = "nntuse".
-   WHEN "BDest"    THEN lcItemHelp[liCnt] = "nnbtse".
+   WHEN "RateCCN"  THEN lcItemHelp[liCnt] = "Help/nnmase.p".
+   WHEN "BillCode" THEN lcItemHelp[liCnt] = "Help/nntuse.p".
+   WHEN "BDest"    THEN lcItemHelp[liCnt] = "Mc/nnbtse.p".
    WHEN "SpoCMT"   THEN lcItemHelp[liCnt] = "".
-   WHEN "CustNum"  THEN lcItemHelp[liCnt] = "nnasel".
+   WHEN "CustNum"  THEN lcItemHelp[liCnt] = "Mc/nnasel.p".
    END CASE.
    
 END.
@@ -354,7 +354,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a TMRItemValue  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -362,7 +362,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -461,12 +461,12 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TMRItemValue.FromDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMRItemValue.FromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMRItemValue.FromDate WITH FRAME sel.
       END.
 
@@ -671,8 +671,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMRItemValue).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -709,7 +709,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -812,7 +812,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.
@@ -847,7 +847,7 @@ PROCEDURE local-UPDATE-record:
             END.
                
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.p.
             NEXT. 
          END.
 

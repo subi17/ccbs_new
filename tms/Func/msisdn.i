@@ -5,8 +5,8 @@
 
 */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF VAR m_pref  AS C NO-UNDO FORMAT "x(3)".
 
@@ -15,8 +15,8 @@ DEF VAR lcGSData    AS   CHAR NO-UNDO INIT "0406".
 DEF VAR lcGSFax     AS   CHAR NO-UNDO INIT "0406".
 DEF VAR lcGSDcf     AS   CHAR NO-UNDO.
 
-{tmsparam.i DefMSISDNPr return}.  m_pref  = TMSParam.CharVal.
-{tmsparam.i DCFPrefix   return}.  lcGSDcf = TMSParam.CharVal.
+{Func/tmsparam.i DefMSISDNPr return}.  m_pref  = TMSParam.CharVal.
+{Func/tmsparam.i DCFPrefix   return}.  lcGSDcf = TMSParam.CharVal.
 
 /* This function returns true if given MSISDN belongs to EMA MSISDN range */
 FUNCTION fIsEmaMsisdn RETURNS LOG (INPUT icMSISDN AS CHAR):

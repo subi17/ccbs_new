@@ -13,10 +13,10 @@ MODIFIED .......: 01.10.1998 kl CustNum
 VERSION ........: M15
 ------------------------------------------------------------------------ */
 
-{commali.i}
-{fixedfee.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixedfee'}
+{Syst/commali.i}
+{Func/fixedfee.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixedfee'}
 
 DEF VAR idate  AS DA NO-UNDO.
 DEF VAR CustNum AS i  NO-UNDO.
@@ -45,7 +45,7 @@ WITH
    OVERLAY FRAME LOG ROW 4 12 DOWN width 80 TITLE
    " " + ynimi + "  SUMMARY OF FUTURE CONTRACT PAYMENTS ". 
 
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 PAUSE 0.
 view FRAME LOG.
 UPDATE 
@@ -58,7 +58,7 @@ UPDATE
 WITH FRAME Date.
 PAUSE 0.
 
-ufk = 0. ehto = 3. RUN ufkey.
+ufk = 0. ehto = 3. RUN Syst/ufkey.p.
 
 period = year(idate) * 100 + month(idate).
 

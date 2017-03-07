@@ -7,7 +7,7 @@ DEFINE VARIABLE ldVATAmt AS DECIMAL NO-UNDO.
 def stream sout.
 output stream sout to yob_354.txt.
 
-{date.i}
+{Func/date.i}
 
 put stream sout unformatted "MSISDN|Old clitype|New Clitype|STC timestamp|number of CDRs|CDR euro amount|ext. invoice number (if invoiced)|Invoice row amount (inc.tax)|Invoice row amount (excl.tax)" skip.
 FOR EACH msrequest where
