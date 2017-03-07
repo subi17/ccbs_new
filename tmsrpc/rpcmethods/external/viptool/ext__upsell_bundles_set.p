@@ -12,13 +12,13 @@
 {xmlrpc/xmlrpc_access.i}
 
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
-{commpaa.i}
+{Syst/commpaa.i}
 katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
 gcBrand = "1".
-{tmsconst.i}
-{upsellbundle.i}
-{fgettxt.i}
-{fprepaidfee.i}
+{Syst/tmsconst.i}
+{Func/upsellbundle.i}
+{Func/fgettxt.i}
+{Func/fprepaidfee.i}
 
 DEF VAR pcUpsellId       AS CHAR NO-UNDO.
 DEF VAR piMsSeq          AS INT  NO-UNDO. 

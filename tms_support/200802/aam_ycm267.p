@@ -1,8 +1,8 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 gcbrand = "1".
-{cparam.i2}
-{fmakemsreq.i}
+{Func/cparam.i2}
+{Func/fmakemsreq.i}
 
 def var lctermcontr as char no-undo.
 def var lirequest   as int  no-undo.

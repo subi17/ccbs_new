@@ -8,7 +8,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-run contract (0,
+RUN Mc/contract.p (0,
               "").

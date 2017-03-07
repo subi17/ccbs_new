@@ -24,16 +24,16 @@
  VERSION .......: M15
  ============================================================================*/
 
-{commali.i}
-{excel.i}
-{refcode.i}
-{cparam2.i}
-{ftransdir.i}
-{timestamp.i}
-{fbankday.i}
-{frefnum.i}
-{fmakesms.i}
-{fgettxt.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/refcode.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/timestamp.i}
+{Func/fbankday.i}
+{Func/frefnum.i}
+{Func/fmakesms.i}
+{Func/fgettxt.i}
 
 FUNCTION fYear2digit RETURNS INTEGER
    (INPUT yy AS INTEGER).
@@ -217,7 +217,7 @@ form
 with title color value(ctc) " DIRECT DEBIT INVOICE CRITERIA " side-labels
 COLOR value(cfc) ROW 7 centered OVERLAY FRAME rajat.
 
-cfc = "sel". RUN ufcolor. ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
 view FRAME taka. PAUSE 0 no-message.
 
 view FRAME rajat. view FRAME statu. PAUSE 0 no-message.
@@ -227,8 +227,8 @@ ASSIGN
    i-date1  = pvm
    i-date2  = pvm
 
-cfc = "lis". RUN ufcolor.
-ehto = 9. RUN ufkey.
+cfc = "lis". RUN Syst/ufcolor.p.
+ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN lano1 = 000000 lano2 = 99999999
        asno1 = 0      asno2 = 99999999.
@@ -245,7 +245,7 @@ LOOP:
 repeat ON ENDKEY UNDO, NEXT:
 
    /* KysellAAn rajaukset */
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0 no-message.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
@@ -272,7 +272,7 @@ repeat ON ENDKEY UNDO, NEXT:
          THEN DO:
               
                      
-            RUN h-tmscodes(INPUT "Invoice",    /* TableName*/
+            RUN Help/h-tmscodes.p(INPUT "Invoice",    /* TableName*/
                                  "PrintState", /* FieldName */
                                  "Report",     /* GroupCode */
                            OUTPUT lcCode).
@@ -286,7 +286,7 @@ repeat ON ENDKEY UNDO, NEXT:
          END.
                 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          NEXT. 
       END.
        
@@ -391,7 +391,7 @@ repeat ON ENDKEY UNDO, NEXT:
       ufk = 0 ufk[1] = 132 ufk[4] = 0  ufk[5] = 795 ufk[8] = 8 ehto = 0.
       IF lcBankAcc = "" THEN ufk[5] = 0.
       
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF TOIMI = 1 THEN NEXT loop.
 

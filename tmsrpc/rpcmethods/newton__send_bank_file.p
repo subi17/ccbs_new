@@ -22,11 +22,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "VISTA_" + pcUserName.
-{tmsconst.i}
-{terminal_financing.i}
+{Syst/tmsconst.i}
+{Func/terminal_financing.i}
 
 IF LOOKUP(pcBankCode,{&TF_BANK_CODES}) EQ 0 THEN
    RETURN appl_err(SUBST("Incorrect bank code: &1", pcBankCode)).

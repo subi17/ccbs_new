@@ -8,14 +8,14 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{coinv.i}
-{fvatfact.i}
-{ftransdir.i}
-{funcrunprocess_update.i}
-{old_unbilled_events.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/coinv.i}
+{Func/fvatfact.i}
+{Func/ftransdir.i}
+{Syst/funcrunprocess_update.i}
+{Inv/old_unbilled_events.i}
 
 DEFINE INPUT  PARAMETER iiFRProcessID      AS INT  NO-UNDO.
 DEFINE INPUT  PARAMETER iiUpdateInterval   AS INT  NO-UNDO.

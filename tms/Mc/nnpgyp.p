@@ -9,7 +9,7 @@
                   25.06.1998 kl vast => ok
                   18.05.1999 jp uright1 & uright2 added  
                   20.07.2001 kl tunimi table removed
-                  26.11.01 lp RUN memo added
+                  26.11.01 lp RUN Mc/memo.p added
                   26.04.02 tk eventlogging added
                   22.07.02 tk show full page on "end"
                   29.07.02 lp F4 is empty
@@ -23,22 +23,22 @@
 
 &GLOBAL-DEFINE BrTable BItemGroup
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'bitemgroup'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'bitemgroup'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhBItemGroup AS HANDLE NO-UNDO.
    lhBItemGroup = BUFFER BItemGroup:HANDLE.
    RUN StarEventInitialize(lhBItemGroup).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhBItemGroup). 
+      RUN Mc/eventview2.p(lhBItemGroup). 
    END.
 
 END.
@@ -112,7 +112,7 @@ form
 WITH  OVERLAY ROW 7 col 5 COLOR value(cfc) TITLE COLOR value(ctc)
     fr-header WITH side-labels FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* produkt :n tunnuksella hakua varten */
     "Brand:" lcBrand skip
@@ -164,7 +164,7 @@ FUNCTION fDispGraph RETURNS LOGIC
 END.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST BItemGroup WHERE BItemGroup.Brand = lcBrand
@@ -206,12 +206,12 @@ repeat WITH FRAME sel:
          ufkey = true 
          fr-header = " ADD" 
          must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          DO TRANSAction:
             DISPLAY lcBrand @ BItemGroup.Brand.
 
@@ -308,16 +308,16 @@ BROWSE:
          ufk[7] = 0   ufk[8] = 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW BItemGroup.BIGroup ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BItemGroup.BIGroup {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BItemGroup.BIGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW BItemGroup.BIGName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BItemGroup.BIGName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BItemGroup.BIGName WITH FRAME sel.
       END.
 
@@ -467,9 +467,9 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
         UPDATE lcBrand WHEN gcAllBrand
                haku WITH FRAME hayr.
@@ -487,9 +487,9 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
         UPDATE lcBrand WHEN gcAllBrand
                haku2 WITH FRAME hayr2.
@@ -511,7 +511,7 @@ BROWSE:
         FIND BItemGroup where recid(BItemGroup) = rtab[frame-line(sel)]
         NO-LOCK NO-ERROR.
 
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "bitemgroup",
                  INPUT STRING(BItemGroup.BIGroup),
                  INPUT "BillItem Group code").
@@ -523,7 +523,7 @@ BROWSE:
      /* translations */
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
          FIND BItemGroup where recid(BItemGroup) = rtab[FRAME-LINE] NO-LOCK.
-         RUN invlang(6,BItemGroup.BIGroup).
+         RUN Mc/invlang.p(6,BItemGroup.BIGroup).
          
          ufkey = TRUE.
          NEXT LOOP.
@@ -539,7 +539,7 @@ BROWSE:
      else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* removal */
 
-        {uright2.i}
+        {Syst/uright2.i}
 
         delline = FRAME-LINE.
         FIND BItemGroup where recid(BItemGroup) = rtab[FRAME-LINE] no-lock.
@@ -598,8 +598,8 @@ BROWSE:
         FIND BItemGroup where recid(BItemGroup) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN ufkey.
-        cfc = "lis". RUN ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
 
         RUN local-find-others.
         DISPLAY 
@@ -631,7 +631,7 @@ BROWSE:
                     FRAME-FIELD = "lcDoc1"
                  THEN DO:
 
-                    RUN h-tmscodes(INPUT "Doc1",    /* TableName */
+                    RUN Help/h-tmscodes.p(INPUT "Doc1",    /* TableName */
                                          "SummaryGroup",   /* FieldName */
                                          "Printing",  /* GroupCode */
                                    OUTPUT lcCode).
@@ -641,7 +641,7 @@ BROWSE:
                     END.   
 
                     ehto = 9.
-                    RUN ufkey.
+                    RUN Syst/ufkey.p.
                     NEXT. 
                  END.
 

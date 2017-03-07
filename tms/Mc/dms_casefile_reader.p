@@ -8,14 +8,14 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun   = "Cron"
    gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{eventlog.i}
-{dms.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Func/dms.i}
 
 DEF VAR lcIncDir        AS CHAR NO-UNDO.
 DEF VAR lcProcDir       AS CHAR NO-UNDO.
@@ -260,18 +260,18 @@ PROCEDURE pUpdateDMS:
          WHEN "E" THEN DO:
             IF ((Order.StatusCode = "20" OR Order.StatusCode = "21") AND
                  Order.PayType = True) THEN
-               RUN orderhold.p(liOrderId, "RELEASE_BATCH").
+               RUN Mc/orderhold.p(liOrderId, "RELEASE_BATCH").
             ELSE IF Order.StatusCode = "44" THEN
-               RUN orderinctrl.p(liOrderId, 0, TRUE).
+               RUN Mc/orderinctrl.p(liOrderId, 0, TRUE).
          END.
-         WHEN "J" THEN RUN closeorder.p(liOrderId, TRUE). /*status is checked in closeorder.p */
+         WHEN "J" THEN RUN Mc/closeorder.p(liOrderId, TRUE). /*status is checked in closeorder.p */
          WHEN "F" THEN DO:
             IF Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} /*44*/ OR
                Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} /*20*/ OR
                Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} /*21*/ OR
                Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} /*33*/
             THEN
-               RUN orderbyfraud.p(liOrderId, TRUE,
+               RUN Mc/orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_CLOSED_BY_FRAUD}).
             ELSE fLogLine(lcStatusCode + " Incorrect data from DMS: " +
                             Order.StatusCode + " cannot be moved to " +
@@ -284,7 +284,7 @@ PROCEDURE pUpdateDMS:
                Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} /*21*/ OR
                Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} /*33*/
             THEN
-               RUN orderbyfraud.p(liOrderId, TRUE,
+               RUN Mc/orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_AUTO_CLOSED}).
             ELSE fLogLine(lcStatusCode + " Incorrect data from DMS: " +
                             Order.StatusCode + " cannot be moved to " +

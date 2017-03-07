@@ -21,23 +21,23 @@
 
 &GLOBAL-DEFINE BrTable FMItem
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FMItem'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FMItem'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFMItem AS HANDLE NO-UNDO.
    lhFMItem = BUFFER FMItem:HANDLE.
    RUN StarEventInitialize(lhFMItem).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhFMItem).
+      RUN Mc/eventview2.p(lhFMItem).
    END.
 
 END.
@@ -174,11 +174,11 @@ FUNCTION fFirstMonth RETURNS LOGIC
    
 END FUNCTION.
 
- {brand.i} 
+ {Func/brand.i} 
 
  /*-- cui browser in a include file  -----------------------------*/
 
- {beitem.i 'general'}
+ {Mc/beitem.i 'general'}
 
 /* --------------------------------------------------------------- */
 
@@ -360,11 +360,11 @@ END PROCEDURE.
 PROCEDURE choose-row: 
 
  IF order = 1 THEN DO:
-        CHOOSE ROW FMItem.PriceList ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FMItem.PriceList {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FMItem.PriceList WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FMItem.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FMItem.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FMItem.BillCode WITH FRAME sel.
       END.
 
@@ -387,12 +387,12 @@ END PROCEDURE.
 PROCEDURE local-add-record:
 
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
       
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 

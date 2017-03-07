@@ -1,9 +1,9 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
-{fmakemsreq.i}
-{timestamp.i}
-{fsubsterminal.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/timestamp.i}
+{Func/fsubsterminal.i}
 DEF VAR lcCounter AS INT NO-UNDO.
 DEF VAR lcOrders AS CHAR NO-UNDO.
 DEF VAR liLoop AS INT NO-UNDO.

@@ -30,12 +30,12 @@ DEF VAR pcCFNRC AS CHAR NO-UNDO.
 DEF VAR pcCFNRY AS CHAR NO-UNDO. 
 DEF VAR lcSetting AS CHAR NO-UNDO. 
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "IVR_" + gbAuthLog.EndUserId.
    gcBrand = "1".
 
-{fmakemsreq.i}
+{Func/fmakemsreq.i}
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 pcMSISDN = get_string(param_toplevel_id,"0").

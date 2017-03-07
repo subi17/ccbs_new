@@ -9,9 +9,9 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i}
 
 
 DEF INPUT  PARAMETER icInvGrp    AS CHAR  NO-UNDO. 
@@ -77,7 +77,7 @@ FUNCTION fChkPage RETURNS LOGIC
     IF liLine + iAddLine >= skayt1 THEN DO:
 
         IF liPage > 0 THEN DO:
-           {uprfeed.i liLine}
+           {Syst/uprfeed.i liLine}
         END.
 
         liPage = liPage + 1.
@@ -249,6 +249,6 @@ BY ttPaid.PaymSrc:
 
 END.
 
-{uprfeed.i liLine}
+{Syst/uprfeed.i liLine}
 
 HIDE FRAME fQty NO-PAUSE. 

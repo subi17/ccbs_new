@@ -10,11 +10,11 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Func/fcustbal.i}
 
 /* print-linemuuttujat */
-{utumaa.i}
+{Syst/utumaa.i}
 
 DEF INPUT  PARAMETER idtDate     AS DATE  NO-UNDO.
 DEF OUTPUT PARAMETER oiCount     AS INT   NO-UNDO.
@@ -77,7 +77,7 @@ FUNCTION fCheckPage RETURNS LOGIC
     (iAddLine AS INT).
 
     IF rl + iAddLine >= skayt1 THEN DO:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         ASSIGN rlx = 0
                sl = sl + 1.
         view STREAM tul FRAME sivuotsi.  
@@ -173,6 +173,6 @@ FOR EACH Customer WHERE
 
 END.
 
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 
 

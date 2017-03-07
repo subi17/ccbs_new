@@ -4,13 +4,13 @@
   CREATED ......: 19.12.12/aam
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{funcrunprocess_update.i}
-{date.i}
-{tmsconst.i}
-{funcrun_replica.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/funcrunprocess_update.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Syst/funcrun_replica.i}
 
 DEF INPUT  PARAMETER idaInvDate     AS DATE NO-UNDO.
 DEF INPUT  PARAMETER iiInvType      AS INT  NO-UNDO.

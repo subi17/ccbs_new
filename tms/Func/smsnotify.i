@@ -1,4 +1,4 @@
-{fmakesms.i}
+{Func/fmakesms.i}
 
 /* get the SMS recipients */
 FUNCTION GetSMSRecipients RETURNS CHARACTER

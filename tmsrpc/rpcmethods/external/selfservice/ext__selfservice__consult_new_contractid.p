@@ -22,17 +22,17 @@
 
 {xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
        gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
-{forderstamp.i}
-{fgettxt.i}
-{fmakesms.i}
-{smsmessage.i}
-{fmakemsreq.i}
-{fexternalapi.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/forderstamp.i}
+{Func/fgettxt.i}
+{Func/fmakesms.i}
+{Func/smsmessage.i}
+{Func/fmakemsreq.i}
+{Func/fexternalapi.i}
 
 DEFINE VARIABLE pcTransId               AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcDNIType               AS CHARACTER NO-UNDO.

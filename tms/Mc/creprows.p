@@ -18,11 +18,11 @@
 26.09.05/aam   MPMRid and ServRid to InvASub (ttCLI)
 */
 
-{commali.i}
-{timestamp.i}
-{fcurrency.i}
-{cparam2.i}
-{callquery.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/fcurrency.i}
+{Func/cparam2.i}
+{Func/callquery.i}
 
 DEF INPUT PARAMETER iInvno      AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSubInvNum AS INT  NO-UNDO.

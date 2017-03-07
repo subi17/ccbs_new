@@ -11,22 +11,22 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'natholiday'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'natholiday'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhNatHoliday AS HANDLE NO-UNDO.
    lhNatHoliday = BUFFER NatHoliday:HANDLE.
    RUN StarEventInitialize(lhNatHoliday).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhNatHoliday).
+      RUN Mc/eventview2.p(lhNatHoliday).
    END.
 
 END.
@@ -84,7 +84,7 @@ form /* ArkipyhA :n nimella hakua varten */
     with row 4 col 2 title color value(ctc) " HOLIDAYNAME "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
    FIND FIRST NatHoliday no-lock no-error.
 IF AVAILABLE NatHoliday THEN ASSIGN memory = recid(NatHoliday)
@@ -110,12 +110,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* NatHoliday -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          DO TRANSAction:
             PROMPT-FOR NatHoliday.Holiday
             VALIDATE
@@ -202,16 +202,16 @@ BROWSE:
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW NatHoliday.Holiday ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW NatHoliday.Holiday {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) NatHoliday.Holiday WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW NatHoliday.HName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW NatHoliday.HName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) NatHoliday.HName WITH FRAME sel.
       END.
 
@@ -356,9 +356,9 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku = ?.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
         IF haku <> ? THEN DO:
@@ -387,9 +387,9 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:
@@ -481,12 +481,12 @@ BROWSE:
      else if lookup(nap,"enter,return") > 0 AND lcRight = "RW" THEN
      DO WITH FRAME lis TRANSAction:
         /* change */
-        {uright2.i}
+        {Syst/uright2.i}
         FIND NatHoliday where recid(NatHoliday) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN ufkey.
-        cfc = "lis". RUN ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY NatHoliday.Holiday.
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhNatHoliday).

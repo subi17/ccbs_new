@@ -7,16 +7,16 @@ CREATED ......: 21.12.09
 Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "MNPResend".
 gcBrand = "1".
 
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
-{eventval.i}
-{log.i}
-{heartbeat.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/log.i}
+{Func/heartbeat.i}
 llDoEvent = FALSE. /* could generate too logs */
 
 DEFINE VARIABLE liLoop     AS INTEGER   NO-UNDO.
@@ -34,7 +34,7 @@ DEF BUFFER bMNPOperation FOR MNPOperation.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPOperation AS HANDLE NO-UNDO.
    lhMNPOperation = BUFFER bMNPOperation:HANDLE.

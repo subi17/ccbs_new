@@ -13,10 +13,10 @@
 
 &GLOBAL-DEFINE BrTable stobal
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'StoBal'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'StoBal'}
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
 DEF VAR Stock  LIKE StoBal.StoBal  NO-UNDO.
@@ -44,7 +44,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhStoBal AS HANDLE NO-UNDO.
    lhStoBal = BUFFER StoBal:HANDLE.
@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhStoBal).
+      RUN Mc/eventview2.p(lhStoBal).
    END.
 END.
 
@@ -73,7 +73,7 @@ WITH ROW FrmRow width 80  OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 form
     StoBal.StoBal     /* LABEL FORMAT */
     StoBal.SimArt    /* LABEL FORMAT */
@@ -114,7 +114,7 @@ form /* seek Balance Record  BY SimArt */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ACODE "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -146,12 +146,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a StoBal  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            CLEAR FRAME lis no-pause.
 
@@ -264,16 +264,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW StoBal.StoBal ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW StoBal.StoBal {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) StoBal.StoBal WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW StoBal.SimArt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW StoBal.SimArt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) StoBal.SimArt WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -401,9 +401,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Stock = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand WITH FRAME f1.
        UPDATE Stock WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -426,9 +426,9 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        SimArt = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SimArt WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF SimArt <> "" THEN DO:
@@ -452,13 +452,13 @@ BROWSE:
 
        rt_param[1] = StoBal.StoBal. 
        rt_param[2] = "0". /* ALL SIM batches */
-       run simall.
+       RUN Mm/simall.p.
 
        NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANSACTION:  /* DET. BAL */
-       ufkey = TRUE. ufk = 0. ehto = 3. RUN ufkey.
+       ufkey = TRUE. ufk = 0. ehto = 3. RUN Syst/ufkey.p.
        RUN local-find-this(TRUE).                                        
        PAUSE 0.
        DISPLAY
@@ -534,8 +534,8 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". run ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           StoBal.StoBal
           StoBal.SimArt.

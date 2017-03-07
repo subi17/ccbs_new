@@ -1,15 +1,15 @@
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN
    katun   = "cron"
    gcBrand = "1".
 
-{timestamp.i}
-{cparam.i2}
-{xmlfunction.i}
-{fgettxt.i}
-{ftaxdata.i}
-{tsformat.i}
+{Func/timestamp.i}
+{Func/cparam.i2}
+{Func/xmlfunction.i}
+{Func/fgettxt.i}
+{Func/ftaxdata.i}
+{Func/tsformat.i}
 
 DEFINE VARIABLE lcXML      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldeTaxPerc AS DECIMAL   NO-UNDO.
@@ -131,7 +131,7 @@ REPEAT:
       ldAmount = ROUND(ldAmount / (1 + ldVatPerc / 100),2).
    END.
    
-   RUN balancequery(lcCLI).
+   RUN Gwy/balancequery.p(lcCLI).
    ldCurrBal = INT(RETURN-VALUE) / 100.
 
    IF ldCurrBal NE ldAmount THEN DO:
@@ -198,7 +198,7 @@ PROCEDURE pAdjustBalance:
       PrePaidRequest.TaxZone     = lcTaxZone
       PrePaidRequest.OrigRequest = liOrigReq.
    
-   RUN pp_platform(gcBrand,PrePaidRequest.PPRequest).
+   RUN Gwy/pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
    
    lcXML = RETURN-VALUE.
    

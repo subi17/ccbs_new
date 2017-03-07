@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "qvantel".
 
 
@@ -35,7 +35,7 @@ repeat:
      lcqty chr(9)
      "rerate"  skip.
 
-   run cli_rate.p (lccli,
+   RUN Rate/cli_rate.p (lccli,
                    4/1/10,
                    4/30/10,
                    true).

@@ -8,13 +8,13 @@
             username;string;mandatory;newton username
  * @output  result;struct;empty
  */
- {commpaa.i}
+ {Syst/commpaa.i}
 {xmlrpc/xmlrpc_access.i}
 
-{fmakemsreq.i}
-{msreqfunc.i}
-{fpcmaintreq.i}
-{fcreatereq.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Func/fpcmaintreq.i}
+{Func/fcreatereq.i}
 gcBrand = "1".
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
@@ -78,10 +78,10 @@ IF ( LOOKUP("sim_lock_code_viewable",lcStruct) = 0 OR
    RETURN.
 END.
 
-{eventval.i}
+{Syst/eventval.i}
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhSubsTerminal AS HANDLE NO-UNDO.
    lhSubsTerminal = BUFFER SubsTerminal:HANDLE.
    RUN StarEventInitialize(lhSubsTerminal).

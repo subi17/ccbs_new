@@ -8,10 +8,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "Qvantel".
-{timestamp.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE liTestCount     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liLastSeq       AS INTEGER   NO-UNDO.

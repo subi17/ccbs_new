@@ -20,13 +20,13 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i "new"}
 /* temp-table */
-{paymfile.i}
-{paymtrans.i}
-{farplog.i}
+{Ar/paymfile.i}
+{Ar/paymtrans.i}
+{Func/farplog.i}
 
 ASSIGN tuni1 = "nnkosu"
        tuni2 = "".
@@ -65,7 +65,7 @@ with
    " " frame main.
 
 
-cfc = "sel".  run ufcolor.
+cfc = "sel".  RUN Syst/ufcolor.p.
 view frame main.
 
 /* payment configuration file */
@@ -128,7 +128,7 @@ REPEAT:
          /* are wild-cards used */
          IF INDEX(worigin.wFile,"*") GT 0 OR
             INDEX(worigin.wFile,"?") GT 0
-         THEN RUN choosefile (wOrigin.wFile,
+         THEN RUN Mc/choosefile.p (wOrigin.wFile,
                               OUTPUT xPaymFile).
          ELSE ASSIGN xPaymFile = worigin.wfile.
 
@@ -159,7 +159,7 @@ REPEAT:
       DISPLAY xPaymFile WITH FRAME main. 
 
       ehto = 5.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       MESSAGE "Searching for new payments ...".
 
@@ -212,9 +212,9 @@ REPEAT:
                  STRING(DAY(ldtFileDate),"99")    +
                  "_" + STRING(TIME) + ".txt".
      
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 
-   RUN readpaym (INPUT TABLE ttPayment,
+   RUN Ar/readpaym.p (INPUT TABLE ttPayment,
                  xPaymFile,
                  liFileType,
                  TRUE,   /* show messages */
@@ -257,8 +257,8 @@ PROCEDURE local-set-origin:
         ELSE DOWN.
     END.
     ASSIGN ufk = 0 ufk[5] = 11 ufk[8] = 8 ehto = 3.
-    RUN ufkey.
-    CHOOSE ROW worigin.worname no-error {uchoose.i}
+    RUN Syst/ufkey.p.
+    CHOOSE ROW worigin.worname no-error {Syst/uchoose.i}
     WITH FRAME origin.   
 
     IF keylabel(lastkey) = "f8" THEN oiChosen = 0.

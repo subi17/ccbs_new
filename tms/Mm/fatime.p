@@ -30,11 +30,11 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable FATime
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Fatime'}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Fatime'}
+{Syst/tmsconst.i}
 
 DEF INPUT PARAMETER  icFatGrp    AS CHAR NO-UNDO.
 DEF INPUT PARAMETER  iiCustNum   AS INT  NO-UNDO.
@@ -89,7 +89,7 @@ DEF BUFFER xxFATime FOR FATime.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFATime AS HANDLE NO-UNDO.
    lhFATime = BUFFER FATime:HANDLE.
@@ -102,7 +102,7 @@ IF llDoEvent THEN DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhFATime).
+      RUN Mc/eventview2.p(lhFATime).
    END.
 END.
 
@@ -255,7 +255,7 @@ FUNCTION fDefaults RETURNS LOGICAL:
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "   By CustNo  ,   By MSISDN ,  By period  , By 4".
@@ -305,12 +305,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO TRANS:  /* Add a FATime  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
            CLEAR FRAME lis NO-PAUSE.
 
            CREATE FATime.
@@ -430,20 +430,20 @@ REPEAT WITH FRAME sel:
         IF icCLI     > "" THEN ASSIGN ufk[1] = 0
                                       ufk[2] = 0.
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FATime.custnum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATime.custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATime.custnum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FATime.cli ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATime.cli {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATime.cli WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW liTransPeriod ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW liTransPeriod {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) liTransPeriod WITH FRAME sel.
       END.
 
@@ -570,8 +570,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR  FRAME f1.
        SET custnum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -604,8 +604,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR  FRAME f2.
        SET CLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -642,10 +642,10 @@ REPEAT WITH FRAME sel:
 
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        {uright2.i}.
-        cfc = "puyr". run ufcolor.
+        {Syst/uright2.i}.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. 
-        RUN ufkey. ufkey = TRUE.
+        RUN Syst/ufkey.p. ufkey = TRUE.
         RUN local-find-this(TRUE).
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATime).
         UPDATE FATime.Memo WITH FRAME f4.
@@ -656,7 +656,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN 
      DO: /* MEMO */
         RUN local-find-this(false).
-        RUN memo(INPUT FATime.Custnum,
+        RUN Mc/memo.p(INPUT FATime.Custnum,
                  INPUT "FATime",
                  INPUT STRING(FATime.FatNum),
                  INPUT "FATime").
@@ -717,7 +717,7 @@ REPEAT WITH FRAME sel:
             
            /* if account for billing item is adv.payment related
               -> make an adv.payment out of unused amount */
-           RUN fat2advp (FATime.FatNum,
+           RUN Mc/fat2advp.p (FATime.FatNum,
                          OUTPUT liVoucher).
               
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhFATime).
@@ -755,7 +755,7 @@ REPEAT WITH FRAME sel:
                            FATime.CLI + CHR(255) + 
                            STRING(FATime.FATType) + CHR(255).
    
-           RUN eventsel ("FATime",lcEventKey).
+           RUN Mc/eventsel.p ("FATime",lcEventKey).
         END.
         
         ufkey = TRUE.
@@ -768,8 +768,8 @@ REPEAT WITH FRAME sel:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATime).
        RUN local-UPDATE-record.                                  
@@ -1049,7 +1049,7 @@ PROCEDURE local-UPDATE-record:
             ufk    = 0
             ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
             ufk[8] = 8.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       
       IF toimi = 1 THEN 
@@ -1058,7 +1058,7 @@ PROCEDURE local-UPDATE-record:
        /*  FIND CURRENT Fatime NO-LOCK. */
             
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
  
          PROMPT
             FATime.cli        WHEN NEW FATime AND icCLI = ""
@@ -1073,7 +1073,7 @@ PROCEDURE local-UPDATE-record:
              READKEY.
 
              IF FRAME-FIELD = "Qtyunit" AND keylabel(lastkey) = "F9" THEN DO:
-                RUN h-tmscodes(INPUT "FATime",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FATime",  /* TableName*/
                                      "qtyunit", /* FieldName */
                                      "QtyUnit", /* GroupCode */
                                OUTPUT siirto).
@@ -1081,13 +1081,13 @@ PROCEDURE local-UPDATE-record:
                 FATime.qtyunit = INPUT FATime.Qtyunit.
                 disp FATime.qtyunit with frame lis.
                 ehto = 9. 
-                RUN ufkey.p.
+                RUN Syst/ufkey.p.
              END.
 
              ELSE IF FRAME-FIELD = "FATType" AND keylabel(lastkey) = "F9" 
              THEN DO:
 
-                RUN h-tmscodes(INPUT "FATime",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FATime",  /* TableName*/
                                      "FATType", /* FieldName */
                                      "Billing", /* GroupCode */
                                OUTPUT siirto).
@@ -1097,7 +1097,7 @@ PROCEDURE local-UPDATE-record:
                 END.
 
                 ehto = 9. 
-                RUN ufkey.p.
+                RUN Syst/ufkey.p.
              END.
 
              IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
@@ -1168,7 +1168,7 @@ PROCEDURE local-UPDATE-record:
                 END.
 
                 ELSE IF FRAME-FIELD = "Period" THEN DO:
-                   RUN uperch(INPUT FRAME lis FATime.Period,OUTPUT rc).
+                   RUN Syst/uperch.p(INPUT FRAME lis FATime.Period,OUTPUT rc).
                    IF rc NE 0 THEN NEXT.
                 END.
 

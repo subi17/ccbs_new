@@ -1,8 +1,8 @@
 /* edrhistory_changes.i      03.07.12/aam
 */
 
-{commali.i}
-{callquery.i}
+{Syst/commali.i}
+{Func/callquery.i}
 
 DEF TEMP-TABLE ttHistory NO-UNDO
     LIKE EDRHistory

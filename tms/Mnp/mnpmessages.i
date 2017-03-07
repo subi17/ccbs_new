@@ -12,7 +12,7 @@
 
 &GLOBAL-DEFINE MNPMESSAGES_I YES
 
-{timestamp.i}
+{Func/timestamp.i}
 {xmlrpc/xmlrpc.i &SERIALIZE_ONLY=1}
 {xmlrpc/xmlrpc_access.i &TOGETHER=1}
 
