@@ -8,7 +8,7 @@
                   22.09.99 kl check FOR DUMMY customer TO copy values
                   25.10.99 kl functions in ASSIGN
                   02.11.99 kl pCopy, more fields TO copy
-                  02.12.99 kl RUN custser WITH NEW customers
+                  02.12.99 kl RUN Help/custser.p WITH NEW customers
                   03.12.99 kl previous tuned
                   28.12.99 kl copying Friends & Family numbers from DUMMY
                   07.01.00 kl copy VATAmt code from DUMMY
@@ -28,7 +28,7 @@
                   05.03.02 lp Customer.AdvPaym in FRAME fina
                   14.05.02 jp copycu
                   14.05.02 tk Event logging added
-                  17.05.02/tk RUN memo
+                  17.05.02/tk RUN Mc/memo.p
                   28.05.02 kl dpaym removed
                   22.07.02 tk show full page on "end"
                   06.07.02/tk PListConf
@@ -132,37 +132,37 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 
 &GLOBAL-DEFINE BrTable Customer
 
-{commali.i}
+{Syst/commali.i}
 
-{cparam2.i}
-{eventval.i}
-{timestamp.i}
-{fcustbal.i}
-{fcustcnt.i}
-{fctype.i}
-{refcode.i}
-{fcustref.i}
-{frefnum.i}
-{fbankdata.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'customer'}
-{fcustdata.i}
-{matrix.i}
-{fmakemsreq.i}
-{flimitreq.i}
-{femailinvoice.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/fctype.i}
+{Func/refcode.i}
+{Func/fcustref.i}
+{Func/frefnum.i}
+{Func/fbankdata.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'customer'}
+{Func/fcustdata.i}
+{Func/matrix.i}
+{Func/fmakemsreq.i}
+{Func/flimitreq.i}
+{Func/femailinvoice.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER Customer:HANDLE.
    RUN StarEventInitialize(lhCustomer).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCustomer).
+      RUN Mc/eventview2.p(lhCustomer).
    END.
 
 END.
@@ -391,7 +391,7 @@ WITH width 80 OVERLAY ROW liFrmRow scroll 1 liFrmDown DOWN
        string(pvm,"99-99-99") + " " FRAME sel.
 
 form 
-   {nnasse.frm}
+   {Mc/nnasse.frm}
 WITH centered OVERLAY ROW 1 WIDTH 80
      side-labels TITLE fr-header FRAME lis.
 
@@ -407,7 +407,7 @@ form
 WITH centered OVERLAY ROW 4 no-LABELs TITLE " eMail Addresses " 
      FRAME femails.
 
-{brand.i}
+{Func/brand.i}
 
 form /* Customer :n tunnuksella hakua varten */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -775,7 +775,7 @@ mess[4] = "where starting Amount is allowed.".
 mess[5] = "This overrides all those settings.".
                       
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc. view FRAME sel.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
 
 ASSIGN
    month    = (year(pvm) * 100) + month(pvm)
@@ -816,7 +816,7 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
    FIND Customer WHERE Customer.Custnum = iiCustNum no-lock no-error.
 
    fr-header = " CUSTOMER ADDRESS CHANGE ".
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    /* UPDATE Customer record */
 
@@ -874,7 +874,7 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
        lcCustRegion
        
        WITH FRAME lis
-       {nnasse.i}
+       {Mc/nnasse.i}
 
        /* cross reference checks */  
        IF Customer.CustNum > 1000 THEN DO:
@@ -945,13 +945,13 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* asiakkaa -ADD  */
       ASSIGN ufkey = TRUE must-add = FALSE must-print = TRUE
-      fr-header = " NEW CUSTOMER ". RUN ufcolor.
+      fr-header = " NEW CUSTOMER ". RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          new_custNo = 1.
-         RUN custser.
+         RUN Help/custser.p.
 
          i = index(siirto,"-").
          IF i > 0 THEN DO:
@@ -973,14 +973,14 @@ repeat WITH FRAME sel:
          ELSE DO:
             UNDO add-new, LEAVE add-new.
             /*
-            {custfind.i LAST CustNum}
+            {Mc/custfind.i LAST CustNum}
             IF AVAIL Customer THEN new_custNo = Customer.CustNum + 1. */
          END. 
 
          lcInvGroup = "".
-         CLEAR FRAME lis no-pause. ehto = 9. RUN ufkey.
+         CLEAR FRAME lis no-pause. ehto = 9. RUN Syst/ufkey.p.
 
-         RUN ufxkey(5,964).
+         RUN Syst/ufxkey.p(5,964).
 
          DO TRANS ON ENDKEY UNDO, LEAVE:
            CLEAR FRAME lis no-pause.
@@ -1150,7 +1150,7 @@ repeat WITH FRAME sel:
       HIDE FRAME lis no-pause.
       ASSIGN must-print = TRUE.
       /* any records AVAILABLE ? */
-      {custfind.i FIRST CustNum}
+      {Mc/custfind.i FIRST CustNum}
       IF NOT AVAILABLE Customer THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -1211,19 +1211,19 @@ repeat WITH FRAME sel:
             ufk    = 0    
             ufk[8] = 8.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       
       IF iiCustnum = 0 THEN DO:
          HIDE MESSAGE no-pause. 
          IF order = 1 THEN
-            CHOOSE ROW Customer.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+            CHOOSE ROW Customer.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
          ELSE IF order = 2 THEN
-            CHOOSE ROW lcCustName ;(uchoose.i;) no-error WITH FRAME sel.
+            CHOOSE ROW lcCustName {Syst/uchoose.i} no-error WITH FRAME sel.
          ELSE IF order = 3 THEN
-            CHOOSE ROW Customer.ZipCode ;(uchoose.i;) no-error WITH FRAME sel.
+            CHOOSE ROW Customer.ZipCode {Syst/uchoose.i} no-error WITH FRAME sel.
          ELSE IF order = 4 THEN
-            CHOOSE ROW Customer.OrgId ;(uchoose.i;) no-error WITH FRAME sel.
+            CHOOSE ROW Customer.OrgId {Syst/uchoose.i} no-error WITH FRAME sel.
        
          COLOR DISPLAY value(ccc) 
          Customer.CustNum Customer.ZipCode
@@ -1365,13 +1365,13 @@ repeat WITH FRAME sel:
         ufk[3] = 1050 ufk[4] = 812 
         ufk[8] = 8.
         
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         IF toimi = 8 THEN NEXT BROWSE.
 
         /* Search 1 */
         IF toimi = 1 THEN DO:  /* search WITH column 1 */
-           cfc = "puyr". RUN ufcolor.
-           CustNum = 0. ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           CustNum = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
            PAUSE 0.
            DISP lcBrand WITH FRAME search-1. 
@@ -1383,7 +1383,7 @@ repeat WITH FRAME sel:
 
               IF lcBrand = "*" THEN lcTyyppi = "".
 
-              {custfind.i FIRST CustNum "AND Customer.CustNum >= CustNum"}.
+              {Mc/custfind.i FIRST CustNum "AND Customer.CustNum >= CustNum"}.
 
               ASSIGN lcTyyppi = "brand".
 
@@ -1395,7 +1395,7 @@ repeat WITH FRAME sel:
 
         /* Search WITH column 2 */
         ELSE  IF toimi = 2 THEN DO:  /* search col. 3 */
-           cfc = "puyr". run ufcolor. 
+           cfc = "puyr". RUN Syst/ufcolor.p. 
            
            ASSIGN
               lcFirstName = ""
@@ -1403,7 +1403,7 @@ repeat WITH FRAME sel:
               lcSurName2  = ""
               lcCompany   = "".
 
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-2. 
            UPDATE
               lcBrand WHEN gcAllBrand = TRUE 
@@ -1421,63 +1421,63 @@ repeat WITH FRAME sel:
               
               /* one field defined */
               IF lcSurName1 = "" AND lcSurName2 = "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName  "AND Customer.FirstName MATCHES '*' + lcFirstName + '*'"}.
+                 {Mc/custfind.i FIRST CustName  "AND Customer.FirstName MATCHES '*' + lcFirstName + '*'"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName2 = "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.CustName >= lcSurName1"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName1 = "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.SurName2 >= lcSurName2"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName1 = "" AND lcSurName2 = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.Company MATCHES '*' + lcCompany + '*'"}.
               END.
               /* two fields defined */
               ELSE IF lcFirstName NE "" AND lcSurName1 NE "" AND lcSurName2 = "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.FirstName MATCHES '*' + lcFirstName + '*'" 
                             + "AND Customer.CustName  >= lcSurName1"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName1 NE "" AND lcSurName2 NE "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.CustName  >= lcSurName1
                               AND Customer.SurName2  >= lcSurName2"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName1 = "" AND lcSurName2 NE "" AND lcCompany NE "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.SurName2  >= lcSurName2
                               AND Customer.Company MATCHES '*' + lcCompany + '*'"}.
               END.
               /* three fields defined */
               ELSE IF lcFirstName NE "" AND lcSurName1 NE "" AND lcSurName2 NE "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.FirstName  MATCHES '*' + lcFirstName + '*'"
                               AND Customer.CustName  >= lcSurName1
                               AND Customer.SurName2  >= lcSurName2"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName1 NE "" AND lcSurName2 NE "" AND lcCompany NE "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.CustName  >= lcSurName1
                               AND Customer.SurName2  >= lcSurName2
                               AND Customer.Company   MATCHES '*' + lcCompany + '*'"}.
               END.
               ELSE IF lcFirstName NE "" AND lcSurName1 = "" AND lcSurName2 NE "" AND lcCompany NE "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.FirstName  MATCHES '*' + lcFirstName + '*'"
                               AND Customer.SurName2  >= lcSurName2
                               AND Customer.Company MATCHES '*' + lcCompany + '*'"}.
               END.
               ELSE IF lcFirstName NE "" AND lcSurName1 NE "" AND lcSurName2 = "" AND lcCompany NE "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.FirstName MATCHES '*' + lcFirstName + '*'"
                               AND Customer.CustName  >= lcSurName1
                               AND Customer.Company MATCHES '*' + lcCompany + '*'"}.
               END.
               ELSE IF lcFirstName NE "" AND lcSurName1 NE "" AND lcSurName2 NE "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.FirstName MATCHES '*' + lcFirstName + '*'"
                               AND Customer.CustName  >= lcSurName1
                               AND Customer.SurName2  >= lcSurName2"}.
@@ -1494,8 +1494,8 @@ repeat WITH FRAME sel:
 
         /* Search WITH column 3 */
         ELSE IF toimi = 3 THEN DO: 
-           cfc = "puyr". run ufcolor. lcZip = "".
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p. lcZip = "".
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-4. 
            UPDATE lcBrand WHEN gcAllBrand = TRUE 
                   lcZip WITH FRAME search-4.
@@ -1503,7 +1503,7 @@ repeat WITH FRAME sel:
 
            if lcZip <> "" THEN DO:
 
-              {custfind.i FIRST ZipCode "AND Customer.ZipCode >= lcZip"}.
+              {Mc/custfind.i FIRST ZipCode "AND Customer.ZipCode >= lcZip"}.
 
               IF NOT fRecFound(3) THEN NEXT BROWSE.
 
@@ -1513,15 +1513,15 @@ repeat WITH FRAME sel:
 
         /* Search WITH column 4 */
         ELSE IF toimi = 4 THEN DO: 
-           cfc = "puyr". run ufcolor. OrgId = "".
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p. OrgId = "".
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-6. 
            UPDATE lcBrand WHEN gcAllBrand = TRUE 
                   OrgId WITH FRAME search-6.
            HIDE FRAME search-6 no-pause.
            if OrgId <> "" THEN DO:
 
-              {custfind.i FIRST OrgId "AND Customer.OrgId >= OrgId"}.
+              {Mc/custfind.i FIRST OrgId "AND Customer.OrgId >= OrgId"}.
 
               IF NOT fRecFound(4) THEN NEXT BROWSE.
 
@@ -1536,7 +1536,7 @@ repeat WITH FRAME sel:
         FIND Customer WHERE recid(Customer) = rtab[FRAME-LINE] NO-LOCK.
         CustNum = Customer.CustNum.
 
-        RUN copycu(INPUT-OUTPUT CustNum, INPUT debug).
+        RUN Mc/copycu.p(INPUT-OUTPUT CustNum, INPUT debug).
         IF CustNum NE Customer.CustNum THEN DO:
            FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK.
            must-print = TRUE.
@@ -1684,7 +1684,7 @@ repeat WITH FRAME sel:
            PAUSE 0.
            DISPLAY llDelNote WITH FRAME lis.
            
-           RUN ufkey.
+           RUN Syst/ufkey.p.
 
            IF toimi = 8 THEN DO:
               if (Customer.CustName = "" AND Customer.CustIDType NE "CIF") OR
@@ -1705,14 +1705,14 @@ repeat WITH FRAME sel:
            /* customer info */ 
            else IF toimi = 7 THEN DO:
         
-              RUN commontt(Customer.CustNum). 
+              RUN Mc/commontt.p(Customer.CustNum). 
         
            END.
 
 
            ELSE IF toimi = 1 AND lcRight = "RW" THEN DO:    
 
-              ehto = 9. RUN ufkey.
+              ehto = 9. RUN Syst/ufkey.p.
 
               /* UPDATE Customer record */
               RUN local-update-customer.
@@ -1730,7 +1730,7 @@ repeat WITH FRAME sel:
                  NEXT.
               END.
 
-              RUN nnasse (Customer.AgrCust,
+              RUN Mc/nnasse.p (Customer.AgrCust,
                           "¤ AGR.CUSTOMER").
            END. 
             
@@ -1742,7 +1742,7 @@ repeat WITH FRAME sel:
                  NEXT.
               END.
  
-              RUN nnasse (Customer.CustNum,
+              RUN Mc/nnasse.p (Customer.CustNum,
                           "InvCust").
            END.
 
@@ -1756,7 +1756,7 @@ repeat WITH FRAME sel:
                  NEXT.
               END.
 
-              RUN nnasse (Customer.InvCust,
+              RUN Mc/nnasse.p (Customer.InvCust,
                           "¤ INV.CUSTOMER").
            END. 
            
@@ -1774,7 +1774,7 @@ repeat WITH FRAME sel:
               THEN lcTyyppi = "agrusers".
               ELSE lcTyyppi = "invusers".  
         
-              RUN nnasse (liMainCust,
+              RUN Mc/nnasse.p (liMainCust,
                           lcTyyppi).
                  
               ASSIGN liMainCust = 0
@@ -1783,7 +1783,7 @@ repeat WITH FRAME sel:
             
            /* contact data */
            ELSE IF toimi = 5 THEN DO: 
-              RUN custcont(Customer.CustNum).
+              RUN Mc/custcont.p(Customer.CustNum).
            END.
            
            ELSE IF toimi = 6 THEN DO: /* Financial Data */
@@ -1877,7 +1877,7 @@ PROCEDURE local-update-customer:
       pdMobSubActLimit
       Customer.DataProtected 
       WITH FRAME lis
-      {nnasse.i}
+      {Mc/nnasse.i}
 
 
       /* cross reference checks */  
@@ -2140,7 +2140,7 @@ PROCEDURE local-update-fin:
 
       /* bank account from direct debit authorization, 
          if no authorization */
-      RUN nnsvte (Customer.CustNum,
+      RUN Ar/nnsvte.p (Customer.CustNum,
                   TODAY, 
                   OUTPUT lcBankAcc).
       IF lcBankAcc NE "" 
@@ -2179,7 +2179,7 @@ PROCEDURE local-update-fin:
       ufk[8] = 8
       ehto = 0
       ufkey = true.
-      run ufkey.
+      RUN Syst/ufkey.p.
                                                              
       IF toimi = 8 then do:
          hide frame fina.
@@ -2191,7 +2191,7 @@ PROCEDURE local-update-fin:
       REPEAT WITH FRAME fina ON ENDKEY UNDO, LEAVE:
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          PROMPT
          lcBankAcc WHEN NOT llDDBank
@@ -2215,7 +2215,7 @@ PROCEDURE local-update-fin:
                
                IF FRAME-FIELD = "InvoiceTargetRule" THEN DO:
 
-                  RUN h-tmscodes(INPUT "Customer",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Customer",     /* TableName*/
                                        "InvoiceTargetRule", /* FieldName */
                                        "Billing",      /* GroupCode */
                                  OUTPUT lcCode).
@@ -2229,7 +2229,7 @@ PROCEDURE local-update-fin:
 
                IF FRAME-FIELD = "ChargeType" THEN DO:
 
-                  RUN h-tmscodes(INPUT "Customer",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Customer",     /* TableName*/
                                        "ChargeType",       /* FieldName */
                                        "AccRec",      /* GroupCode */
                                  OUTPUT lcCode).
@@ -2243,7 +2243,7 @@ PROCEDURE local-update-fin:
 
                ELSE IF FRAME-FIELD = "DelType" THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                                        "DelType",       /* FieldName */
                                        "Billing",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -2258,7 +2258,7 @@ PROCEDURE local-update-fin:
                
                ELSE IF FRAME-FIELD = "VATUsage" THEN DO:
               
-                  RUN h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                                        "VatUsage",       /* FieldName */
                                        "Billing",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -2271,7 +2271,7 @@ PROCEDURE local-update-fin:
                END.
      
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -2499,7 +2499,7 @@ PROCEDURE local-update-fin:
       END.   
    
       ELSE IF toimi = 2 THEN DO:
-         RUN custbal (Customer.CustNum).
+         RUN Ar/custbal.p (Customer.CustNum).
       END.
       
       ELSE IF toimi = 3 AND lcRight = "RW" THEN DO:
@@ -2507,7 +2507,7 @@ PROCEDURE local-update-fin:
          REPEAT WITH FRAME fina ON ENDKEY UNDO, LEAVE:
             
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.p.
             
             PROMPT Customer.CreditLimit.
          
@@ -2523,7 +2523,7 @@ PROCEDURE local-update-fin:
       END.
 
       ELSE IF toimi = 5 THEN DO:                 
-         RUN pclist("Customer",Customer.CustNum).
+         RUN Mm/pclist.p("Customer",Customer.CustNum).
       END.                                        
    END. 
    ELSE PAUSE.
@@ -2596,39 +2596,39 @@ PROCEDURE local-disp-row:
 END PROCEDURE.
 
 PROCEDURE pFindFirst.
-   IF      order = 1 THEN DO: {custfind.i FIRST CustNum
+   IF      order = 1 THEN DO: {Mc/custfind.i FIRST CustNum
                                           "AND Customer.CustNum > 1000"}. END.
-   ELSE IF order = 2 THEN DO: {custfind.i FIRST CustName
+   ELSE IF order = 2 THEN DO: {Mc/custfind.i FIRST CustName
                                           "AND Customer.CustNum > 1000"}. END.
-   ELSE IF order = 3 THEN DO: {custfind.i FIRST ZipCode
+   ELSE IF order = 3 THEN DO: {Mc/custfind.i FIRST ZipCode
                                           "AND Customer.CustNum > 1000"}. END.
-   ELSE IF order = 4 THEN DO: {custfind.i FIRST OrgId
+   ELSE IF order = 4 THEN DO: {Mc/custfind.i FIRST OrgId
                                           "AND Customer.CustNum > 1000"}. END.
-   ELSE IF order = 5 THEN DO: {custfind.i FIRST SearchName
+   ELSE IF order = 5 THEN DO: {Mc/custfind.i FIRST SearchName
                                           "AND Customer.CustNum > 1000"}. END.
 END PROCEDURE. 
 
 PROCEDURE pFindLast.
-   IF      order = 1 THEN DO: {custfind.i LAST CustNum}.    END.
-   ELSE IF order = 2 THEN DO: {custfind.i LAST CustName}.   END.
-   ELSE IF order = 3 THEN DO: {custfind.i LAST ZipCode}.    END.
-   ELSE IF order = 4 THEN DO: {custfind.i LAST OrgId}.      END.
-   ELSE IF order = 5 THEN DO: {custfind.i LAST SearchName}. END.
+   IF      order = 1 THEN DO: {Mc/custfind.i LAST CustNum}.    END.
+   ELSE IF order = 2 THEN DO: {Mc/custfind.i LAST CustName}.   END.
+   ELSE IF order = 3 THEN DO: {Mc/custfind.i LAST ZipCode}.    END.
+   ELSE IF order = 4 THEN DO: {Mc/custfind.i LAST OrgId}.      END.
+   ELSE IF order = 5 THEN DO: {Mc/custfind.i LAST SearchName}. END.
 END PROCEDURE.
 
 PROCEDURE pFindNext.
-   IF      order = 1 THEN DO: {custfind.i NEXT CustNum}.    END.
-   ELSE IF order = 2 THEN DO: {custfind.i NEXT CustName}.   END.
-   ELSE IF order = 3 THEN DO: {custfind.i NEXT ZipCode}.    END.
-   ELSE IF order = 4 THEN DO: {custfind.i NEXT OrgId}.      END.
-   ELSE IF order = 5 THEN DO: {custfind.i NEXT SearchName}. END.
+   IF      order = 1 THEN DO: {Mc/custfind.i NEXT CustNum}.    END.
+   ELSE IF order = 2 THEN DO: {Mc/custfind.i NEXT CustName}.   END.
+   ELSE IF order = 3 THEN DO: {Mc/custfind.i NEXT ZipCode}.    END.
+   ELSE IF order = 4 THEN DO: {Mc/custfind.i NEXT OrgId}.      END.
+   ELSE IF order = 5 THEN DO: {Mc/custfind.i NEXT SearchName}. END.
 END PROCEDURE.
 
 PROCEDURE pFindPrev.
-   IF      order = 1 THEN DO: {custfind.i PREV CustNum}.    END.
-   ELSE IF order = 2 THEN DO: {custfind.i PREV CustName}.   END.
-   ELSE IF order = 3 THEN DO: {custfind.i PREV ZipCode}.    END.
-   ELSE IF order = 4 THEN DO: {custfind.i PREV OrgId}.      END.
-   ELSE IF order = 5 THEN DO: {custfind.i PREV SearchName}. END.
+   IF      order = 1 THEN DO: {Mc/custfind.i PREV CustNum}.    END.
+   ELSE IF order = 2 THEN DO: {Mc/custfind.i PREV CustName}.   END.
+   ELSE IF order = 3 THEN DO: {Mc/custfind.i PREV ZipCode}.    END.
+   ELSE IF order = 4 THEN DO: {Mc/custfind.i PREV OrgId}.      END.
+   ELSE IF order = 5 THEN DO: {Mc/custfind.i PREV SearchName}. END.
 END PROCEDURE.
 

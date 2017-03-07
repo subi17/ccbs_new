@@ -10,10 +10,10 @@
   Version ......: SCRUNKO4 (10.06.99)
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Mobsub'}
+{Syst/commali.i} 
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Mobsub'}
 
 DEF INPUT PARAMETER iiSLSeq AS INT NO-UNDO.
 
@@ -47,7 +47,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhServiceLimitTarget AS HANDLE NO-UNDO.
    lhServiceLimitTarget = BUFFER ServiceLimitTarget:HANDLE.
@@ -55,7 +55,7 @@ DO:
                
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhServiceLimitTarget).
+      RUN Mc/eventview2.p(lhServiceLimitTarget).
    END.
 END.
 
@@ -93,7 +93,7 @@ form /* seek  MemberType */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MEMBER "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Type  ,  By Member  ,By 3, By 4".
@@ -127,12 +127,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ServiceLimitTarget  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            
@@ -231,13 +231,13 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
 
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ServiceLimitTarget.ServiceLMember ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServiceLimitTarget.ServiceLMember {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServiceLimitTarget.ServiceLMember WITH FRAME sel.
       END.
 
@@ -423,8 +423,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY 
        ServiceLimitTarget.ServiceLMemBer.
          
@@ -558,7 +558,7 @@ PROCEDURE local-UPDATE-record:
              IF FRAME-FIELD = "ServiceLMember" AND keylabel(lastkey) = "F9"
              THEN DO:
 
-                Run nntuse.
+                RUN Help/nntuse.p.
                 
                 IF CAN-FIND (FIRST xxmember WHERE 
                 xxmember.ServiceLMember = ServiceLimitTarget.ServiceLMember AND

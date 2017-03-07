@@ -26,17 +26,17 @@
 */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{penaltyfee.i}
-{timestamp.i}
-{orderchk.i}
-{fcustpl.i}
-{tmsconst.i}
-{date.i}
-{mnpoutchk.i}
-{fixedfee.i}
+{Func/penaltyfee.i}
+{Func/timestamp.i}
+{Func/orderchk.i}
+{Func/fcustpl.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Mnp/mnpoutchk.i}
+{Func/fixedfee.i}
 
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.

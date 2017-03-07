@@ -45,12 +45,12 @@ FIND Offer NO-LOCK WHERE
 IF NOT AVAIL Offer THEN 
    RETURN appl_err(SUBST("Offer &1 not found", pcId)).
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = pcUserName.
-{eventval.i}
-{tmsconst.i}
-{offer.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
 
 CREATE ttOffer.
 BUFFER-COPY Offer TO ttOffer.
@@ -130,7 +130,7 @@ IF NOT llEqual THEN DO:
 
    IF llDoEvent THEN DO:
       &GLOBAL-DEFINE STAR_EVENT_USER katun 
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
       DEF VAR lhOffer AS HANDLE NO-UNDO.
       lhOffer = BUFFER Offer:HANDLE.
       RUN StarEventInitialize(lhOffer).

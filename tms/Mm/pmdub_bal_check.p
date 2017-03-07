@@ -8,16 +8,16 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "CRON".
-{timestamp.i}
-{cparam2.i}
-{fgettxt.i}
-{fmakesms.i}
-{detailvalue.i}
-{tmsconst.i}
-{coinv.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fgettxt.i}
+{Func/fmakesms.i}
+{Func/detailvalue.i}
+{Syst/tmsconst.i}
+{Func/coinv.i}
 
 DEFINE VARIABLE ldeMinBalance    AS DECIMAL    NO-UNDO.
 DEFINE VARIABLE ldeBalance       AS DECIMAL    NO-UNDO.

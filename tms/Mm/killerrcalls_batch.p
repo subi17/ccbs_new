@@ -1,12 +1,12 @@
 /* killerrcalls_batch.p   20.01.10/aam (separated from mdaily) 
 */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
-{direct_dbconnect.i}
+{Syst/eventlog.i}
+{Func/direct_dbconnect.i}
 
 DEF VAR ldaLimitDate AS DATE NO-UNDO.
 
@@ -27,7 +27,7 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    QUIT.
 END.
 
-RUN killerrcalls(ldaLimitDate).
+RUN Mm/killerrcalls.p(ldaLimitDate).
 
 fELog("DAILY","killerrcallsRepStopped" + SESSION:PARAMETER).
 

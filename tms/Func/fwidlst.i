@@ -6,7 +6,7 @@
                     18.01.06/aam new structure for user accounts    
 */
 
-{fwebuser.i}
+{Func/fwebuser.i}
 
 DEF BUFFER bWebCustomer FOR Customer.
 

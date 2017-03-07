@@ -20,15 +20,15 @@ DEF VAR liLanguage AS INT NO-UNDO.
 
 DEF BUFFER bMNPOngoing FOR MNPProcess.
 
-{commali.i}
-{mnpmessages.i}
-{mnp.i}
-{tmsconst.i}
-{forderstamp.i}
-{orderfunc.i}
-{log.i}
-{eventval.i}
-{ordercancel.i}
+{Syst/commali.i}
+{Mnp/mnpmessages.i}
+{Mnp/mnp.i}
+{Syst/tmsconst.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Func/log.i}
+{Syst/eventval.i}
+{Func/ordercancel.i}
 
 FIND MNPProcess WHERE
      MNPProcess.MNPSeq = piMNPSeq NO-LOCK NO-ERROR.
@@ -109,9 +109,9 @@ CASE pcOperation:
             Order.OrderType EQ {&ORDER_TYPE_STC} AND
             (fIsConvergenceTariff(Order.CliType) OR
              Order.OrderChannel BEGINS "retention") THEN
-            RUN orderinctrl.p(Order.OrderId, 0, TRUE).   
+            RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).   
          ELSE
-            RUN cancelorder.p(Order.OrderId, TRUE).
+            RUN Mc/cancelorder.p(Order.OrderId, TRUE).
 
          llResponse = TRUE.
 
@@ -182,7 +182,7 @@ CASE pcOperation:
 
       IF Order.StatusCode NE "73" THEN RETURN "ERROR:Order is in wrong status".
 
-      RUN closeorder.p(Order.Orderid, TRUE).
+      RUN Mc/closeorder.p(Order.Orderid, TRUE).
       IF RETURN-VALUE NE "" THEN RETURN "ERROR:" + RETURN-VALUE.
 
       IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND

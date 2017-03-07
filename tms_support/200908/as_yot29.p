@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
-{barrfunc.i}
+{Func/barrfunc.i}
 
 def var lcline  as char no-undo.
 def var lccli   as char no-undo.
@@ -154,7 +154,7 @@ repeat:
       next.
    end.
    
-   run cli_rate (mobsub.cli,
+   RUN Rate/cli_rate.p (mobsub.cli,
                    8/1/9,
                    8/31/9,
                    true).

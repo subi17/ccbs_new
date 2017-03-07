@@ -26,9 +26,9 @@
                   10.01.06/aam Fatime added
   Version ......: M15
   --------------------------------------------------------------------------- */
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'eventlog'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'eventlog'}
 
 DEF INPUT PARAMETER xxkey LIKE Eventlog.Key NO-UNDO.
 DEF VAR xxvalues LIKE Eventlog.DataValues   NO-UNDO.
@@ -510,7 +510,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Date  ,  By User  ,  By Table ".
@@ -573,21 +573,21 @@ BROWSE:
         ufk[1]= 28  ufk[2]= 542 ufk[3]= 2121 ufk[4]= 0
         ufk[5]=265  ufk[6]=0    ufk[7]= 0    ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW temp-event.ttdate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW temp-event.ttdate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) temp-event.ttdate WITH FRAME sel.
       END.
 
       ELSE  IF order = 2 THEN DO:
-        CHOOSE ROW temp-event.ttuser ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW temp-event.ttuser {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) temp-event.ttuser WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW temp-event.tttable ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW temp-event.tttable {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) temp-event.tttable WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -715,8 +715,8 @@ BROWSE:
 
      /* Search BY column 1 */                          
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        ASSIGN
              lcevtime = "".
@@ -762,8 +762,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET UserCode 
            evdate
@@ -789,8 +789,8 @@ BROWSE:
 
      /* Search BY column 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        ASSIGN
              lcTable = ""
@@ -823,7 +823,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"5,f5,enter,return") > 0 THEN DO:
 
         RUN local-find-this (FALSE).
-        RUN eventview (temp-event.ttEventLog).
+        RUN Mc/eventview.p (temp-event.ttEventLog).
 
         ufkey = TRUE.
         NEXT LOOP.

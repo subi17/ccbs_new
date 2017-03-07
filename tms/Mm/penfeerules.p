@@ -8,10 +8,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{daycampaign.i}
-{fcustpl.i}
-{penaltyfee.i}
+{Syst/commali.i}
+{Rate/daycampaign.i}
+{Func/fcustpl.i}
+{Func/penaltyfee.i}
 
 DEF  INPUT PARAMETER iiDCCLIRecId  AS RECID NO-UNDO.
 DEF VAR liPeriod   AS INT   NO-UNDO.
@@ -87,9 +87,9 @@ WITH OVERLAY ROW 2 centered
 
 
 assign ufkey = TRUE ehto = 3.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
-cfc = "lis". RUN ufcolor.
+cfc = "lis". RUN Syst/ufcolor.p.
 
 RUN LOCAL-UPDATE-RECORD.
        

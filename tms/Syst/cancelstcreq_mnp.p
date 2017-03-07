@@ -1,11 +1,11 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "cron".
 gcBrand = "1".
-{date.i}
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
-{msreqfunc.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
 
 DEF VAR ldeTodayStamp AS DECIMAL NO-UNDO.
 DEF VAR ldtMNPDate   AS DATE    NO-UNDO.

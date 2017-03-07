@@ -10,19 +10,19 @@
 
 &GLOBAL-DEFINE BrTable TMRule
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMRule'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMRule'}
 
-{eventval.i}
-{tmsconst.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER bItemValue FOR TMRItemValue.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTMRule AS HANDLE NO-UNDO.
    lhTMRule = BUFFER TMRule:HANDLE.
@@ -37,7 +37,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhbItemValue).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhTMRule).
+      RUN Mc/eventview2.p(lhTMRule).
    END.
 
 END.
@@ -89,7 +89,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
        string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     TMRule.Brand          COLON 15
@@ -206,7 +206,7 @@ FUNCTION fTicketTypeName RETURNS LOGIC
    DISP lcTicketType WITH FRAME lis.
 END FUNCTION.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -236,7 +236,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a TMRule  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -244,7 +244,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -364,12 +364,12 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TMRule.Name ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMRule.Name {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMRule.Name WITH FRAME sel.
       END.
 
@@ -497,8 +497,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -611,8 +611,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMRule).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY TMRule.TMRuleSeq.
 
        RUN local-UPDATE-record.                                  
@@ -650,7 +650,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -795,7 +795,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       ELSE ASSIGN toimi      = 1
                   llDispMenu = TRUE.
@@ -807,7 +807,7 @@ PROCEDURE local-UPDATE-record:
       /* select items from which counter is accumulated */   
       ELSE IF toimi = 2 THEN DO TRANS:
 
-         RUN fieldselection.p ("TMQueue",
+         RUN Syst/fieldselection.p ("TMQueue",
                              "COUNTER ITEMS",
                              TMRule.CounterItems,
                              (IF TMRule.TicketType EQ {&TICKET_TYPE_FRAUD}
@@ -895,14 +895,14 @@ PROCEDURE local-UPDATE-record:
       END.
          
       /* update item values */
-      ELSE IF toimi = 5 THEN RUN tmritemvalue.p (TMRule.TMRuleSeq).
+      ELSE IF toimi = 5 THEN RUN Syst/tmritemvalue.p (TMRule.TMRuleSeq).
       
       /* update limits */
-      ELSE IF toimi = 6 THEN RUN tmrlimit.p (TMRule.TMRuleSeq).
+      ELSE IF toimi = 6 THEN RUN Syst/tmrlimit.p (TMRule.TMRuleSeq).
                          
       /* functions */
       ELSE IF toimi = 7 THEN do:
-          RUN tmrulefunc (TMRule.TMRuleSeq).
+          RUN Syst/tmrulefunc.p (TMRule.TMRuleSeq).
       end.
       
       ELSE IF toimi = 8 THEN LEAVE.
@@ -924,7 +924,7 @@ PROCEDURE pUpdate:
    llUpdateSource = (NEW TMRule OR
                      NOT CAN-FIND(FIRST TMRLimit OF TMRule)).
    ehto = 9.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    
@@ -952,12 +952,12 @@ PROCEDURE pUpdate:
             lcFrameField = FRAME-FIELD.
 
             IF FRAME-FIELD = "PayType" THEN 
-               RUN h-tmscodes(INPUT "CLIType", 
+               RUN Help/h-tmscodes.p(INPUT "CLIType", 
                                     lcFrameField, 
                                     ?, 
                                     OUTPUT lcCode).
             ELSE 
-               RUN h-tmscodes(INPUT "TMRule", 
+               RUN Help/h-tmscodes.p(INPUT "TMRule", 
                                     lcFrameField, 
                                     "TMR", 
                                     OUTPUT lcCode).
@@ -983,7 +983,7 @@ PROCEDURE pUpdate:
             END.
 
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.p.
 
             NEXT. 
          END.

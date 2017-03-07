@@ -7,23 +7,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'BRTestCriteria'}
-{eventval.i}
-{timestamp.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'BRTestCriteria'}
+{Syst/eventval.i}
+{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhBRTestCriteria AS HANDLE NO-UNDO.
    lhBRTestCriteria = BUFFER BRTestCriteria:HANDLE.
    RUN StarEventInitialize(lhBRTestCriteria).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhBRTestCriteria).
+      RUN Mc/eventview2.p(lhBRTestCriteria).
    END.
 
 END.
@@ -137,7 +137,7 @@ ELSE DO:
       lcConfName = BRTestCase.Description.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -166,7 +166,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a BRTestCriteria  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -174,7 +174,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANS WITH FRAME lis:
 
@@ -286,12 +286,12 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BRTestCriteria.BRTestCriteriaID ;(uchoose.i;) 
+        CHOOSE ROW BRTestCriteria.BRTestCriteriaID {Syst/uchoose.i} 
            NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BRTestCriteria.BRTestCriteriaID 
            WITH FRAME sel.
@@ -498,8 +498,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBRTestCriteria).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -536,7 +536,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -652,7 +652,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       ELSE toimi = 1.
       
@@ -663,7 +663,7 @@ PROCEDURE local-UPDATE-record:
                 
             FIND CURRENT BRTestCriteria EXCLUSIVE-LOCK.
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.p.
          
             UPDATE
                BRTestCriteria.Active
@@ -685,7 +685,7 @@ PROCEDURE local-UPDATE-record:
                THEN DO:
 
                   IF FRAME-FIELD = "CriteriaTable" THEN DO:
-                     RUN h-tmscodes(INPUT "BRTestCriteria", 
+                     RUN Help/h-tmscodes.p(INPUT "BRTestCriteria", 
                                           "CriteriaTable", 
                                           "BRTest",  
                                     OUTPUT lcCode).
@@ -695,7 +695,7 @@ PROCEDURE local-UPDATE-record:
                            WITH FRAME lis.   
                   END.
                   ELSE IF FRAME-FIELD = "CriteriaField" THEN DO:
-                     RUN h-tmscodes(INPUT "BRTestCriteria", 
+                     RUN Help/h-tmscodes.p(INPUT "BRTestCriteria", 
                                           "CField" + 
                                            INPUT BRTestCriteria.CriteriaTable, 
                                           "BRTest", 
@@ -706,7 +706,7 @@ PROCEDURE local-UPDATE-record:
                            WITH FRAME lis.   
                   END.
                   ELSE IF FRAME-FIELD = "Setting" THEN DO:
-                     RUN h-tmscodes(INPUT "BRTestCriteria", 
+                     RUN Help/h-tmscodes.p(INPUT "BRTestCriteria", 
                                           "Setting" + 
                                            INPUT BRTestCriteria.CriteriaTable, 
                                           "BRTest", 
@@ -717,7 +717,7 @@ PROCEDURE local-UPDATE-record:
                            WITH FRAME lis.   
                   END.
                   ELSE IF FRAME-FIELD = "ROValueIncluded" THEN DO:
-                     RUN h-tmscodes(INPUT "BRTestCase",
+                     RUN Help/h-tmscodes.p(INPUT "BRTestCase",
                                           "RelationalOperator",
                                           "BRTest",  
                                     OUTPUT lcCode).
@@ -727,7 +727,7 @@ PROCEDURE local-UPDATE-record:
                   END.
                   
                   ehto = 9.
-                  RUN ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT. 
                END.
 

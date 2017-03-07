@@ -7,12 +7,12 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "Cron".
 
-{funcrunprocess_run.i}
+{Syst/funcrunprocess_run.i}
 
 DEF VAR liFRProcessID    AS INT  NO-UNDO.
 DEF VAR liFRExecID       AS INT  NO-UNDO.
@@ -40,7 +40,7 @@ liInvType = fSetFuncRunIntParameter(1).
 ldInvDate = fSetFuncRunDateParameter(2).
 liDeliveryState = fSetFuncRunIntParameter(3).
 
-RUN invoice_deliverystate.p(INPUT ldInvDate,
+RUN Inv/invoice_deliverystate.p(INPUT ldInvDate,
                             INPUT liInvType,
                             INPUT liDeliveryState,
                             INPUT liFRProcessID,

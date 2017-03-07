@@ -11,9 +11,9 @@
   MODIFIED .....: 
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{excel.i}
-{mobsub1.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Mm/mobsub1.i}
 
 DEF VAR stname    AS  CHAR                       NO-undo.
 DEF VAR invno      AS int  FORMAT "zzzzzzz9"     NO-UNDO.
@@ -64,7 +64,7 @@ PAUSE 0.
 toimi:
    REPEAT WITH FRAME valinta on ENDkey UNDO toimi, return:
          /* We ASk the limits */
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          UPDATE
              InvGroup
              CustNum1 CustNum2 VALIDATE(input CustNum2 >= input CustNum1,
@@ -106,7 +106,7 @@ toimi:
 
       ASSIGN ufk = 0 ufk[1] = 0 ufk[2] = 0   ufk[4] = 0 ufk[5] = 795
                      ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 5 THEN do:
          leave toimi.

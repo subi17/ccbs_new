@@ -9,18 +9,18 @@
                   order and order is in status 6 
   Version ......: yoigo
 -------------------------------------------------------------------------- */
-{commali.i} 
-{timestamp.i}
-{cparam2.i}
-{eventval.i}
-{forderstamp.i}
-{tmsconst.i}
-{order.i}
-{fcustdata.i}
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Syst/tmsconst.i}
+{Func/order.i}
+{Func/fcustdata.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 DEF INPUT  PARAMETER  iiOrderId  LIKE Order.OrderId.
@@ -87,7 +87,7 @@ ELSE IF iiRole = 1 THEN DO:
      (Order.MNPStatus > 0 AND OrderCustomer.PersonId EQ "NEW") THEN
       liOldCustNum = OrderCustomer.CustNum.
    ELSE 
-   run searchcust (INPUT  "ORGID|" +
+   RUN Mc/searchcust.p (INPUT  "ORGID|" +
                           /* if agrcust=invcust=user then show only those
                              that are invcusts to themselves */
                           (IF Order.InvCustRole = 1 AND
@@ -110,7 +110,7 @@ ELSE IF iiRole = 2 THEN DO:
  
    IF AVAILABLE bOrderCustomer THEN DO:
 
-      run searchcust (INPUT  "INVCUST" + 
+      RUN Mc/searchcust.p (INPUT  "INVCUST" + 
                           /* if user=agrcust then show only that customer's
                              invcust */
                           (IF Order.UserRole = 1
@@ -138,7 +138,7 @@ ELSE IF iiRole = 3 THEN  DO:
    
    IF AVAILABLE bOrderCustomer THEN DO:
 
-      run searchcust (INPUT  "USERCUST",
+      RUN Mc/searchcust.p (INPUT  "USERCUST",
                       INPUT  STRING(bOrderCustomer.CustNum),
                       INPUT  ilDisp,
                       OUTPUT lioldcustnum).
@@ -155,7 +155,7 @@ IF liOldCustnum = 0 THEN DO:
    IF new-Custnum = 0 OR new-custnum = ?
    THEN new-custnum = 300. 
 
-   RUN copymobcu(INPUT-OUTPUT new-CustNum, INPUT FALSE).
+   RUN Mm/copymobcu.p(INPUT-OUTPUT new-CustNum, INPUT FALSE).
 
    llOk = fmakeCustomer(Order.OrderID,
                         iiRole,    

@@ -8,18 +8,18 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
-{timestamp.i}
-{mnpmessages.i}
-{mnp.i}
+{Func/timestamp.i}
+{Mnp/mnpmessages.i}
+{Mnp/mnp.i}
 
 DEFINE VARIABLE lcXML AS CHAR NO-UNDO. /* xml should be < 32000 chars */
 DEFINE VARIABLE liSeq         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcFormRequest AS CHARACTER NO-UNDO.
      
 ehto = 10.
-run ufkey.p.
+RUN Syst/ufkey.p.
 
 CREATE ttMigrationRequest.
 

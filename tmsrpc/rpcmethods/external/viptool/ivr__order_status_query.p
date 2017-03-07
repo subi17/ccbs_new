@@ -12,7 +12,7 @@
  * @Exceptions  1;Order not found
  */
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 /* Input parameters */
 DEF VAR pcCLI            AS CHAR  NO-UNDO.

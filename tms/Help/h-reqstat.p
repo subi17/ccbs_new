@@ -9,7 +9,7 @@
   Version ......: xfera
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -53,7 +53,7 @@ with
    color value(cfc) no-labels overlay
 frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 MAIN:
 repeat:
@@ -106,7 +106,7 @@ print-line:
             siirto = ?
             ehto   = 3
             ufkey = false. 
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -114,7 +114,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ttReqStat.ttReqStat ;(uchoose.i;) no-error with frame sel.
+         choose row ttReqStat.ttReqStat {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ttReqStat.ttReqStat with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
@@ -211,8 +211,8 @@ BROWSE:
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*se-code*/
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set se-code with frame hayr.
            hide frame hayr no-pause.
            if se-code ENTERED then do:

@@ -9,12 +9,12 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{files.i}
-{timestamp.i}
-{funcrunprocess_update.i}
-{old_unbilled_events.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/files.i}
+{Func/timestamp.i}
+{Syst/funcrunprocess_update.i}
+{Inv/old_unbilled_events.i}
 
 DEF INPUT  PARAMETER idaInvDate    AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaDueDate    AS DATE NO-UNDO.

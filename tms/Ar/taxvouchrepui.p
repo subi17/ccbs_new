@@ -8,11 +8,11 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Payment'}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Payment'}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 
@@ -148,7 +148,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN toimi = 1
                ufkey = TRUE.
@@ -156,7 +156,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -176,7 +176,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                LOOKUP(FRAME-FIELD,"liPaymType") > 0 THEN DO:
 
                IF FRAME-FIELD = "liPaymType" THEN DO:
-                  RUN h-tmscodes(INPUT "Payment",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Payment",  /* TableName*/
                                        "PaymType",  /* FieldName */
                                        "AccRec",   /* GroupCode */
                                  OUTPUT lcCode).
@@ -188,7 +188,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END.
                
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -245,7 +245,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT. 
       END.
       
-      RUN taxvouchrep (lcTaxZone,
+      RUN Ar/taxvouchrep.p (lcTaxZone,
                        lcCustID,
                        liPaymType,
                        ldtAccDate[1],

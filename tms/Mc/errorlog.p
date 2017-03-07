@@ -10,24 +10,24 @@
 
 &GLOBAL-DEFINE BrTable ErrorLog
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ErrorLog'}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ErrorLog'}
+{Func/timestamp.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhErrorLog AS HANDLE NO-UNDO.
    lhErrorLog = BUFFER ErrorLog:HANDLE.
    RUN StarEventInitialize(lhErrorLog).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhErrorLog).
+      RUN Mc/eventview2.p(lhErrorLog).
    END.
 
 END.
@@ -95,7 +95,7 @@ WITH  OVERLAY ROW 3 centered
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  ErrorLog */
     "Brand :" lcBrand skip
@@ -123,7 +123,7 @@ IF icTableName > "" OR icActionID > "" THEN ASSIGN
  FrmRow   = 3
  FrmDown  = 13.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -211,16 +211,16 @@ REPEAT WITH FRAME sel:
         ELSE IF icActionID > "" THEN 
            ufk[1] = 0.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ErrorLog.ActionID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ErrorLog.ActionID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ErrorLog.ActionID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ErrorLog.TableName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ErrorLog.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ErrorLog.TableName WITH FRAME sel.
       END.
 
@@ -349,8 +349,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
 
@@ -374,8 +374,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
@@ -466,8 +466,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhErrorLog).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ErrorLog.TableName.
 
        RUN local-UPDATE-record.                                  

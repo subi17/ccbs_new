@@ -1,7 +1,7 @@
 /* usearch.p  - searches a module THROUGH PROPATH */   
 
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 def var module  as c  format "x(8)".
 def var source  as c  format "x(40)".
@@ -18,7 +18,7 @@ with overlay title " CHECK PROPATH " NO-LABELS centered ROW 6 FRAME frm.
 
 PAUSE 0.
 repeat WITH FRAME frm: 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE module.
 
    if module = "" THEN LEAVE.

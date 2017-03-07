@@ -6,14 +6,14 @@
   CREATED ......: 28.11.2013
   Version ......: xfera 
   ---------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 Katun = "Qvantel".
-{timestamp.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{cparam2.i}
-{fbundle.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/cparam2.i}
+{Mm/fbundle.i}
 
 DEF INPUT PARAMETER icCLI        AS CHAR NO-UNDO.
 DEF INPUT PARAMETER idCallDate   AS DATE NO-UNDO.

@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 
 def var ldadate as date no-undo.
 def var litime as int no-undo.

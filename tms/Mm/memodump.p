@@ -9,11 +9,11 @@
    Version ......: SHARK
    ----------------------------------------------------------------- */
 
-{commali.i}
-{excel.i}
-{date.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 DEF TEMP-TABLE ttMemo
    FIELD icnum    AS integer

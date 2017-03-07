@@ -15,10 +15,10 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{ftransdir.i}
+{Syst/commali.i}
+{Func/ftransdir.i}
 
-{printdoc1tt.i}
+{Inv/printdoc1tt.i}
 
 DEFINE INPUT PARAMETER pcMSISDNDir AS CHARACTER NO-UNDO. 
 DEFINE INPUT PARAMETER pcInvoiceStatusDir AS CHARACTER NO-UNDO. 

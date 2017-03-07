@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
 
-{orderfunc.i}
+{Func/orderfunc.i}
 
 
 DEFINE VARIABLE lcMNPs AS CHARACTER NO-UNDO. 

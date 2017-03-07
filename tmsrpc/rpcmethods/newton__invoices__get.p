@@ -95,14 +95,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{timestamp.i}            
-{finvbal.i}
-{fcreditvalid.i}
-{tmsconst.i}
-{duplicate_invoice.i}
+{Func/timestamp.i}            
+{Func/finvbal.i}
+{Func/fcreditvalid.i}
+{Syst/tmsconst.i}
+{Func/duplicate_invoice.i}
 
 
 FUNCTION fAddCreditNote RETURN LOGICAL 

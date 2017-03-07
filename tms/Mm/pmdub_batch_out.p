@@ -7,16 +7,16 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{date.i}
-{ftransdir.i}
-{cparam2.i}
-{bundle_first_month_fee.i}
-{tmsconst.i}
-{matrix.i}
-{fprepaidfee.i}
+{Func/date.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Mm/bundle_first_month_fee.i}
+{Syst/tmsconst.i}
+{Func/matrix.i}
+{Func/fprepaidfee.i}
 
 DEF VAR lcRespFile AS CHAR NO-UNDO. 
 DEF VAR lcFileName AS CHAR NO-UNDO. 

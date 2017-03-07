@@ -10,21 +10,21 @@
   VERSION ......: SCRUNKO4 (10.06.99)
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{eventval.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
 
 DEF INPUT PARAMETER     RZItem-code AS CHAR NO-UNDO.
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
     
     DEF VAR lhRZItem AS HANDLE NO-UNDO.
     lhRZItem = BUFFER RZItem:HANDLE.
     RUN StarEventInitialize(lhRZItem).
     
     ON F12 ANYWHERE DO:
-        run eventview2(lhRZItem).
+        RUN Mc/eventview2.p(lhRZItem).
     END.
 END.
     
@@ -104,7 +104,7 @@ form /* seek  CountryPrefix */
 
  
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -159,12 +159,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a RZItem  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PAUSE 0.
@@ -267,16 +267,16 @@ BROWSE:
                                ufk[2]= 96.
                    ELSE ASSIGN ufk[1]= 0
                                UFK[2]= 0.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row RZItem.PLMNCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row RZItem.PLMNCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RZItem.PLMNCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row RZItem.CountryPrefix ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row RZItem.CountryPrefix {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RZItem.CountryPrefix WITH FRAME sel.
       END.
       
@@ -406,8 +406,8 @@ BROWSE:
      /* Search by column 1 */
      ELSE IF llEmpty AND
      LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET RZItem-code WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -430,8 +430,8 @@ BROWSE:
      ELSE IF llEmpty AND
      LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        SET lcCountryPrefix WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -452,13 +452,13 @@ BROWSE:
      /* Update Memo */
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = true.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 
@@ -510,8 +510,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY RZItem.PLMNCode.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRZItem).

@@ -4,12 +4,12 @@
   CREATED ......: 08.11.12/aam 
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
    
-{funcrunprocess_run.i}
+{Syst/funcrunprocess_run.i}
 
 DEF VAR liRunAmt      AS INT  NO-UNDO.
 DEF VAR liFRProcessID AS INT  NO-UNDO.
@@ -43,7 +43,7 @@ END.
 IF liUseReplica = ? THEN liUseReplica = 0.
 
 
-RUN invrowcounter_unbilled_split.p(liRunAmt,
+RUN Inv/invrowcounter_unbilled_split.p(liRunAmt,
                                    liFRProcessID,
                                    liFRExecID,
                                    liUpdateInterval,

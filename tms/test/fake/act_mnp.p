@@ -1,6 +1,6 @@
-{commali.i}
+{Syst/commali.i}
 
-{date.i}
+{Func/date.i}
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
 IMPORT lcHostName.
@@ -26,7 +26,7 @@ end.
 
 DEFINE VARIABLE liOrderQty AS INTEGER NO-UNDO.
 /* create request */
-RUN ordersender(MNPProcess.OrderId,
+RUN Gwy/ordersender.p(MNPProcess.OrderId,
                OUTPUT liOrderQty).
 FIND FIRST order EXCLUSIVE-LOCK WHERE
    order.brand = "1" and

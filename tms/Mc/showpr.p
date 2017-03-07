@@ -9,10 +9,10 @@
   Version ......: M15
 ------------------------------------------------------------------------- */
 
-{commali.i}
-{refcode.i}
-{cparam2.i}
-{frefnum.i}
+{Syst/commali.i}
+{Func/refcode.i}
+{Func/cparam2.i}
+{Func/frefnum.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 DEF INPUT PARAMETER iiInvNum  AS INT NO-UNDO.

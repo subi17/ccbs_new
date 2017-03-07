@@ -9,23 +9,23 @@
        termination/ MNP out porting, STC (postpaid to prepaid)
 */
    
-{commali.i}
-{date.i}
-{eventval.i}
-{fctserval.i}
-{fctchange.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{msisdn.i}
-{fcreditreq.i}
-{flimitreq.i}
-{fdss.i}
-{msisdn_prefix.i}
-{fsubstermreq.i}
-{mnpoutchk.i}
-{ordercancel.i}
-{dextra.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/date.i}
+{Syst/eventval.i}
+{Func/fctserval.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Func/msisdn.i}
+{Func/fcreditreq.i}
+{Func/flimitreq.i}
+{Func/fdss.i}
+{Func/msisdn_prefix.i}
+{Func/fsubstermreq.i}
+{Mnp/mnpoutchk.i}
+{Func/ordercancel.i}
+{Func/dextra.i}
+{Func/main_add_lines.i}
 {Func/fixedlinefunc.i}
 {Func/orderfunc.i}
 
@@ -90,7 +90,7 @@ IF llDoEvent THEN DO:
 
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobSub    AS HANDLE    NO-UNDO.
    DEFINE VARIABLE lhMSISDN    AS HANDLE    NO-UNDO.
@@ -638,7 +638,7 @@ PROCEDURE pTerminate:
               MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
 
    /* commission termination */
-   RUN commission_term(MobSub.MsSeq,
+   RUN Ar/commission_term.p(MobSub.MsSeq,
                        "termination",
                        OUTPUT liReqCnt).
 
@@ -671,7 +671,7 @@ PROCEDURE pTerminate:
                Order.MsSeq = MobSub.MsSeq AND
                Order.StatusCode = {&ORDER_STATUS_MNP_RETENTION}:
 
-         RUN closeorder.p(Order.OrderID, TRUE).
+         RUN Mc/closeorder.p(Order.OrderID, TRUE).
          
          FIND FIRST MNPRetPlatform WHERE
                     MNPRetPlatform.Brand = gcBrand AND
@@ -710,7 +710,7 @@ PROCEDURE pTerminate:
    IF LOOKUP(lcTermReason,"1,4,5,6,9,10") > 0 AND
       fIsYoigoCLI(MobSub.CLI) EQ FALSE THEN DO:
       
-      RUN mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
+      RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
       
       IF RETURN-VALUE BEGINS "ERROR" THEN
          fLocalMemo("TermMobsub",
@@ -864,7 +864,7 @@ PROCEDURE pTerminate:
       
       END.
       ELSE DO:
-         RUN fusion_order_cancel.p(Order.OrderID).
+         RUN Mc/fusion_order_cancel.p(Order.OrderID).
          IF NOT RETURN-VALUE BEGINS "OK" THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  "Order",

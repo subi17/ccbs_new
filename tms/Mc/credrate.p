@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def input parameter iiPersonId as char no-undo.
 
@@ -41,7 +41,7 @@ form
     with scroll 1 8 down  row 8 centered 
     title " Credit Items " overlay frame sel.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 
 find first creditrate no-lock where 
@@ -113,7 +113,7 @@ print-line:
          ufk = 0 
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -121,7 +121,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ttCredItem.CredDate ;(uchoose.i;) no-error with frame sel.
+         choose row ttCredItem.CredDate {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ttCredItem.CredDate with frame sel.
 
          nap = keylabel(lastkey).
@@ -228,8 +228,8 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* CredDate */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update CredDate with frame hayr.
            hide frame hayr no-pause.
            if CredDate ENTERED then do:

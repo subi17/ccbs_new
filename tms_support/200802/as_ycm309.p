@@ -3,9 +3,9 @@ DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO.
 katun = "cron".
 gcbrand = "1".
 
-{date.i}
-{xmlfunction.i}
-{tsformat.i}
+{Func/date.i}
+{Func/xmlfunction.i}
+{Func/tsformat.i}
 
 DEF VAR lcFilename   AS C    NO-UNDO.
 

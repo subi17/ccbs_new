@@ -14,10 +14,10 @@
  VERSION .......:
 ============================================================================*/
 
-{commali.i}
-{timestamp.i}
-{fsubser.i}
-{msopenbatch.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/fsubser.i}
+{Func/msopenbatch.i}
 
 DEF STREAM AlarmBatch.
 DEF STREAM log.
@@ -33,7 +33,7 @@ DEF VAR llDone          AS LOG NO-UNDO.
 DEF VAR liCurrPeriod    AS INT NO-UNDO.
 DEF VAR liCreditType    AS INT NO-UNDO.
 
-{cparam.i AlarmBatchDir RETURN}. AlarmBatchDir = tmsparam.charval. 
+{Func/cparam.i AlarmBatchDir RETURN}. AlarmBatchDir = tmsparam.charval. 
 
 ASSIGN
    emailfile      = AlarmBatchDir + "tmsmail.log"

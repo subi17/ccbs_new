@@ -12,7 +12,7 @@
 
 {xmlrpc/xmlrpc_access.i}
 DEF VAR gcBrand   AS CHAR NO-UNDO INIT "1".
-{tmsconst.i}
+{Syst/tmsconst.i}
 {fpindicator.i}
 
 /* Input parameters */

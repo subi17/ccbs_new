@@ -62,6 +62,7 @@
 "1" "DUB" "Data Usage Bundle 500 MB" 31/01/11 31/12/49
 "1" "DUB2" "Data Usage Bundle 1 GB" 01/05/12 31/12/49
 "1" "DUB3" "Data Usage Bundle 1 GB" 01/12/12 31/12/49
+"1" "FLEX_UPSELL" "Mobile Data Usage Flex Upsell" 01/03/17 31/12/49
 "1" "FREE100MINUTES" "Free 100 Minutes voice package" 01/06/16 31/12/49
 "1" "HSPA_ROAM_EU" "HSPA Roaming EU" 10/10/12 31/12/49
 "1" "MDUB" "Mobile Data Usage Bundle conti" 01/03/10 31/12/49

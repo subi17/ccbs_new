@@ -10,7 +10,7 @@ CHANGED .....: 08.12.1998 pt
 VERSION .....: M15
 ----------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 def var date1    as da format "99-99-99"  NO-UNDO.
 def var date2    as da format "99-99-99"  NO-UNDO.
@@ -48,7 +48,7 @@ date2 = date1.
 cdate = date(1,1,year(TODAY)).
 
 DO WITH FRAME count:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
    date1 
    date2 VALIDATE ( input date2 >= input date1,"Invalid order !")
@@ -60,7 +60,7 @@ DO WITH FRAME count:
              "Unknown Invoice Group Code!").
 
 
-   ufk = 0. ehto = 3. RUN ufkey.
+   ufk = 0. ehto = 3. RUN Syst/ufkey.p.
 
    message "Counting ...".
    FOR EACH Customer no-lock where

@@ -20,18 +20,18 @@
 
 &GLOBAL-DEFINE BrTable Memo
 
-{commali.i} 
-{timestamp.i}
-{eventval.i}
-{fuserright.i}            
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/fuserright.i}            
 
 DEF INPUT PARAMETER iCustNum  LIKE memo.CustNum    NO-UNDO.
 DEF INPUT PARAMETER HostTable LIKE memo.HostTable  NO-UNDO.
 DEF INPUT PARAMETER KeyValue  LIKE memo.KeyValue   NO-UNDO.
 DEF INPUT PARAMETER ftitle    AS  C FORMAT "x(20)" NO-UNDO.
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Memo'} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Memo'} 
 /* check for hosttable, not memo table */
 
 DEF VAR MemoTitle  LIKE memo.MemoTitle  NO-UNDO.
@@ -63,7 +63,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMemo AS HANDLE NO-UNDO.
    lhMemo = BUFFER Memo:HANDLE.
@@ -71,7 +71,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2(lhMemo).
+      RUN Mc/eventview2.p(lhMemo).
    END.
 END.
 
@@ -101,7 +101,7 @@ form
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) " memo TEXT " FRAME lis2 NO-LABELS.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek Status Code  BY  MemoTitle */
     MemoTitle
@@ -115,7 +115,7 @@ form /* seek Status Code  BY UserCode */
     WITH ROW 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 lcSystUser = fTokenRights(katun,"SYST").
@@ -153,12 +153,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a memo  */
       ASSIGN cfc = "lis" ufkey = TRUE ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis1 ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.   
+        ehto = 9. RUN Syst/ufkey.p.   
         ON F4 GO.
         REPEAT TRANSACTION WITH FRAME lis1:
            RELEASE Memo.
@@ -267,16 +267,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 991 ufk[8]= 8   ufk[9]= 1
         ehto = 3    ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW memo.MemoTitle ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW memo.MemoTitle {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) memo.MemoTitle WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW memo.CreUser ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW memo.CreUser {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) memo.CreUser WITH FRAME sel.
       END.
       nap = keylabel(LASTKEY).
@@ -403,7 +403,7 @@ BROWSE:
      /* view send log */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:  
        RUN local-find-this (FALSE).
-       RUN itsendlo(0,
+       RUN Mc/itsendlo.p(0,
                     0,
                     2,
                     Memo.MemoSeq).
@@ -496,11 +496,11 @@ BROWSE:
         FIND memo WHERE RECID(memo) = rtab[FRAME-LINE(sel)] NO-LOCK NO-ERROR.
         
         IF Memo.CustNum > 0 
-        THEN RUN prinmemo (Memo.HostTable,  
+        THEN RUN Mc/prinmemo.p (Memo.HostTable,  
                            Memo.KeyValue,
                            Memo.MemoSeq).
         
-        ELSE RUN prmem (INPUT Memo.HostTable,
+        ELSE RUN Mc/prmem.p (INPUT Memo.HostTable,
                         INPUT Memo.KeyValue,
                         INPUT Memo.MemoSeq).
         ufkey = TRUE.          
@@ -521,7 +521,7 @@ BROWSE:
          END. /* IF NOT AVAILABLE memo THEN DO: */
 
          ASSIGN ac-hdr = " Title ".
-         cfc = "lis". RUN ufcolor. 
+         cfc = "lis". RUN Syst/ufcolor.p. 
          CLEAR FRAME lis1 NO-PAUSE.
          HIDE FRAME sel NO-PAUSE.
          DISPLAY memo.MemoTitle.
@@ -538,11 +538,11 @@ BROWSE:
          /* only owner can change a memo */
          IF katun NE Memo.CreUser AND lcSystUser NE "RW" THEN ufk[1] = 0.
           
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
          IF toimi = 1 AND lcRight = "RW" THEN
          DO:
-            ufkey = TRUE. ehto = 9. RUN ufkey.
+            ufkey = TRUE. ehto = 9. RUN Syst/ufkey.p.
             RUN local-update-record.                                  
          
             /* IF  User Wanted TO Cancel this Change TRANSACTION */

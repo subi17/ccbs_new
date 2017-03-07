@@ -8,8 +8,8 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -26,7 +26,7 @@ DEF VAR lcFile      AS CHAR NO-UNDO.
 DEF VAR liPaymCount AS INT  NO-UNDO.
 DEF VAR liPicked    AS INT  NO-UNDO. 
 
-{refundfilett.i}
+{Ar/refundfilett.i}
 
 DEF TEMP-TABLE ttAccDate NO-UNDO
    FIELD AccDate AS DATE
@@ -107,7 +107,7 @@ FOR EACH ttAccDate:
                              "yyyymmdd").
    lcFile = REPLACE(lcFile,"#DATE",lcDate).
 
-   RUN refundfile (INPUT-OUTPUT TABLE ttRequest,  
+   RUN Ar/refundfile.p (INPUT-OUTPUT TABLE ttRequest,  
                    ttAccDate.AccDate,
                    liPicked,
                    lcFile,
