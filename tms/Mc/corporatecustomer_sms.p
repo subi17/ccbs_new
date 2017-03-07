@@ -7,14 +7,14 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "cron".
 gcBrand = "1".
-{fgettxt.i}
-{timestamp.i}
-{fmakesms.i}
-{transname.i}
-{fbundle.i}
+{Func/fgettxt.i}
+{Func/timestamp.i}
+{Func/fmakesms.i}
+{Func/transname.i}
+{Mm/fbundle.i}
 
 DEF VAR lcBundleCLITypes  AS CHAR NO-UNDO.
 DEF VAR lcReplacedTxt     AS CHAR NO-UNDO.

@@ -6,10 +6,10 @@
 /* check if deposit/adv.payment invoice is created from order or from
    owner change request */
 
-{commali.i}
-{msreqfunc.i}
-{forderstamp.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
 FUNCTION fBalanceInvoicePaid RETURNS LOGIC
    (INPUT iiInvNum    AS INT,
     INPUT iiPaymState AS INT):

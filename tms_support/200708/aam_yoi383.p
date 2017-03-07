@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
-{timestamp.i}
+{Func/timestamp.i}
 
 def var lireq as int no-undo.
 
@@ -29,7 +29,7 @@ for each order no-lock where
       disp prepaidrequest.pprequest format ">>>>>>>>9".
    else do:
                      
-      RUN topupcamp(MobSub.MsSeq, 
+      RUN Mm/topupcamp.p(MobSub.MsSeq, 
                     OUTPUT lireq).
  
       put stream slog unformatted 

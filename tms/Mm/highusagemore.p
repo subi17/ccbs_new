@@ -12,8 +12,8 @@
   SHARED .......: INPUT: msseq
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 DEF INPUT PARAMETER iinvseq  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icli     AS CHAR NO-UNDO.
 
@@ -36,7 +36,7 @@ PAUSE 0.
 
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Total call amount per day            "  @ menuc[1]    SKIP 
@@ -55,21 +55,21 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX EQ 1 THEN DO:
-      run callstat.p(INPUT highusage.invseq,highusage.cli,"DATE").
+      RUN Mm/callstat.p(INPUT highusage.invseq,highusage.cli,"DATE").
    END.
 
    ELSE IF FRAME-INDEX = 2 THEN DO:
-      run callstat.p(INPUT highusage.invseq,highusage.cli,"PRODUCT").
+      RUN Mm/callstat.p(INPUT highusage.invseq,highusage.cli,"PRODUCT").
 
    END.
 
    ELSE IF FRAME-INDEX = 3 THEN DO:
-      run mobcallis(highusage.cli,highusage.invseq).
+      RUN Mm/mobcallis.p(highusage.cli,highusage.invseq).
    
    END.             
 
    ELSE IF FRAME-INDEX = 4 THEN DO:
-      run highusagehist(highusage.cli).
+      RUN Mm/highusagehist.p(highusage.cli).
    END.
    
    ELSE IF FRAME-INDEX = 5 THEN DO:
@@ -85,7 +85,7 @@ DO WHILE TRUE:
       "Select Status code of High usage?"
       VIEW-AS ALERT-BOX TITLE "STATUS".
 
-      RUN h-tmscodes(INPUT "HighUsage",   /* TableName*/
+      RUN Help/h-tmscodes.p(INPUT "HighUsage",   /* TableName*/
                            "HiUsageStatus", /* FieldName */
                            "HighUsage",   /* GroupCode */
                            OUTPUT siirto).
@@ -93,7 +93,7 @@ DO WHILE TRUE:
       
       
       
-      run highusagerep(INPUT fMake2Dt(INPUT today - 90, INPUT 0),   
+      RUN Mm/highusagerep.p(INPUT fMake2Dt(INPUT today - 90, INPUT 0),   
                              lcEmail,
                              int(siirto)).
    END.

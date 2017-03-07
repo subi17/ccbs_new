@@ -7,12 +7,12 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{barrfunc.i}
-{transname.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/barrfunc.i}
+{Func/transname.i}
 
 DEF INPUT  PARAMETER icFile   AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiRead   AS INT  NO-UNDO. 
@@ -364,7 +364,7 @@ PROCEDURE pSetBarring:
    END.
      
    /* create barring request */
-   RUN barrengine.p(iiMsSeq,
+   RUN Mm/barrengine.p(iiMsSeq,
                    icBarrCommand,
                    "9",                /* source  */
                    "Collection",       /* creator */

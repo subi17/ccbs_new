@@ -8,8 +8,8 @@
   Version ......:
   ------------------------------------------------------------------ */
 
-{commali.i}  
-{cparam2.i}
+{Syst/commali.i}  
+{Func/cparam2.i}
 
 DEF VAR ldtDate  AS DATE NO-UNDO.
 DEF VAR ldtdate2 AS DATE NO-UNDO.
@@ -52,7 +52,7 @@ IF lcFile = ? OR lcTrans = ? THEN DO:
    RETURN.
 END.
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 
 CRIT:
 repeat WITH FRAME start:
@@ -62,7 +62,7 @@ repeat WITH FRAME start:
         lcFile 
         lcTrans WITH FRAME start.
    
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       ldtdate    validate(ldtdate ne ?,"First Date missing")
@@ -85,7 +85,7 @@ repeat WITH FRAME start:
            lcTrans WITH FRAME start.
       
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
@@ -97,7 +97,7 @@ repeat WITH FRAME start:
             NEXT.
          END.
          
-         RUN ccreport.p(ldtdate,
+         RUN Mm/ccreport.p(ldtdate,
                         ldtdate2,
                         1,
                         lcFile,

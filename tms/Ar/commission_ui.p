@@ -8,9 +8,9 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CoTarg'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CoTarg'}
 
 DEF VAR liChecked   AS INT  NO-UNDO.
 DEF VAR liActivated AS INT  NO-UNDO.
@@ -37,7 +37,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       ufk[5] = 795
       ufk[8] = 8 
       ehto   = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 5 THEN DO:
       
@@ -48,7 +48,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       SET llOk.
       IF NOT llOk THEN NEXT. 
         
-      RUN commission_run(OUTPUT liChecked,
+      RUN Ar/commission_run.p(OUTPUT liChecked,
                          OUTPUT liActivated).
 
       MESSAGE liChecked "rows in commission queue were checked," SKIP

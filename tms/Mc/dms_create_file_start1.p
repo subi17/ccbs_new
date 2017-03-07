@@ -9,14 +9,14 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 Katun = "Cron".
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{dms.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/dms.i}
 
 DEF VAR ldCollPeriodStartTS   AS DEC  NO-UNDO.
 DEF VAR ldCollPeriodEndTS AS DEC  NO-UNDO.
@@ -97,7 +97,7 @@ END.
 /*Execute read operation and assign new period end time to actionlog.*/
 ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60).
 /* Case type numbers:            1, 2, 3, 4, 5, 6, 9, 10 */
-RUN dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6,&7,&8",
+RUN Mc/dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6,&7,&8",
                           {&DMS_CASE_TYPE_ID_ORDER_ACT},
                           {&DMS_CASE_TYPE_ID_ORDER_RESTUDY},
                           {&DMS_CASE_TYPE_ID_COMPANY},

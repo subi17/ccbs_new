@@ -1,6 +1,6 @@
-{commpaa.i}
-{tmsconst.i}
-{timestamp.i}
+{Syst/commpaa.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
 IMPORT lcHostName.

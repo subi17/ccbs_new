@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}                        
+{Syst/commali.i}                        
 
 DEF VAR exdir     AS c  NO-UNDO.
 DEF VAR exName    AS c  NO-UNDO.
@@ -101,7 +101,7 @@ cdate2 = TODAY.
 cdate1 = 1/1/1995.       
 bills  = TRUE.                      
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 
 
 sml = "SMLX".
@@ -117,7 +117,7 @@ WITH FRAME start.
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       exName
       CustGroup
@@ -219,7 +219,7 @@ repeat WITH FRAME start:
 task:
    repeat WITH FRAME start:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 
@@ -239,7 +239,7 @@ task:
       entry(i,exhdr).
       IF i < num-entries(exhdr) THEN PUT STREAM excel UNFORMATTED tab.
    END.   
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
    /* refine the Size STRING */
    szlist = "".
@@ -281,7 +281,7 @@ task:
         Customer.Address tab 
         Customer.ZipCode tab 
         Customer.PostOffice.
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
 
    END.
    OUTPUT STREAM excel CLOSE.

@@ -9,32 +9,32 @@
   VERSION ......: YOIGO
 ------------------------------------------------------------------------ */
    
-{commali.i}
-{func.i}
-{email.i}
-{cparam2.i}
-{cdrvar.i}
-{fcustcnt.i}  
-{chkbal2.i}
-{mobol_tt.i}
-{fmakeservice.i}
-{timestamp.i}
-{fsubser.i}
-{fservlimit.i}
-{onlinevar.i}
-{daycampaign.i}
-{ficora.i}
-{heartbeat.i}
-{cdrstream_counter.i}
-{error_codes.i}
-{tmsconst.i}
-{rating_ttcall.i}
-{rate_roamzone.i}
-{onlinereader_oldcdr.i}
-{rating_double_check.i}
-{premiumnumber.i}
-{create_eventlog.i}
-{cdr_online.i}
+{Syst/commali.i}
+{Func/func.p}
+{Func/email.i}
+{Func/cparam2.i}
+{Mm/cdrvar.i}
+{Func/fcustcnt.i}  
+{Rate/chkbal2.i}
+{Rate/mobol_tt.i}
+{Func/fmakeservice.i}
+{Func/timestamp.i}
+{Func/fsubser.i}
+{Func/fservlimit.i}
+{Rate/onlinevar.i}
+{Rate/daycampaign.i}
+{Mm/ficora.i}
+{Func/heartbeat.i}
+{Rate/cdrstream_counter.i}
+{Rate/error_codes.i}
+{Syst/tmsconst.i}
+{Rate/rating_ttcall.i}
+{Rate/rate_roamzone.i}
+{Rate/onlinereader_oldcdr.i}
+{Rate/rating_double_check.i}
+{Rate/premiumnumber.i}
+{Func/create_eventlog.i}
+{Rate/cdr_online.i}
 
 def INPUT PARAMETER    pvmlog      as lo   no-undo FORMAT "Yes/No" init true.
 def INPUT PARAMETER    ticfile     as char FORMAT "x(30)" no-undo.
@@ -90,10 +90,10 @@ DEF VAR lInvSeq     AS I   NO-UNDO.
 DEF VAR lcSetVersion  AS CHAR  NO-UNDO.
 DEF VAR ldtTMSTime    AS DATETIME NO-UNDO. 
 
-{tariff_tt.i}
+{Rate/tariff_tt.i}
 
-{mobcdr_rate.i}
-{detailseq.i}
+{Rate/mobcdr_rate.i}
+{Func/detailseq.i}
  
 DEF VAR b_btluok          AS C       NO-UNDO.
 DEF VAR r_dest            AS C       NO-UNDO.
@@ -115,9 +115,9 @@ DEF VAR lhttCall  AS HANDLE NO-UNDO.
 
 DEF VAR liTempDialType AS INT NO-UNDO.
 
-{tmsparam.i RepConfDir        return}. xConfDir        = tmsparam.CharVal.
-{tmsparam.i ErrCDouble        return}. errorcode       = tmsparam.IntVal.
-{tmsparam.i UnknownCustomer   RETURN}. liunkcust       = tmsparam.IntVal.
+{Func/tmsparam.i RepConfDir        return}. xConfDir        = tmsparam.CharVal.
+{Func/tmsparam.i ErrCDouble        return}. errorcode       = tmsparam.IntVal.
+{Func/tmsparam.i UnknownCustomer   RETURN}. liunkcust       = tmsparam.IntVal.
 
 
 CASE iiPort:
@@ -400,10 +400,10 @@ else do:
 end.      
 
 
-ehto = 3. run ufkey.
+ehto = 3. RUN Syst/ufkey.p.
    
    /* QUIT menutext */
-   run ufxkey(8,3).
+   RUN Syst/ufxkey.p(8,3).
    
    If NOT bOL then
       disp
@@ -411,8 +411,8 @@ ehto = 3. run ufkey.
       with frame err.
 
    
-{ticketfunc.i}
-{rating_package.i}
+{Rate/ticketfunc.i}
+{Rate/rating_package.i}
 
 fFillTT().
 ldtRefill = Today.
@@ -551,21 +551,21 @@ DO TRANS:
                                                       
    /* it was a real CALL record, NOT a start OR END record */
    ELSE DO : 
-      {set_to_empty.i}   
+      {Rate/set_to_empty.i}   
       CASE lcSetVersion:
-      WHEN "0101MM" THEN DO:  {set0101mm.i}   END.
-      WHEN "0101YC" THEN DO:  {set0101yc.i}   END.
-      WHEN "0101YF" THEN DO:  {set0101yf.i}   END.
-      WHEN "0102GE" THEN DO:  {set0102gen.i}  END.
-      WHEN "0102YC" THEN DO:  {set0102yc.i}   END.
-      WHEN "0103MM" THEN DO:  {set0103mm.i}   END.
-      WHEN "0104GE" THEN DO:  {set0104ge.i}   END.
+      WHEN "0101MM" THEN DO:  {Rate/set0101mm.i}   END.
+      WHEN "0101YC" THEN DO:  {Rate/set0101yc.i}   END.
+      WHEN "0101YF" THEN DO:  {Rate/set0101yf.i}   END.
+      WHEN "0102GE" THEN DO:  {Rate/set0102gen.i}  END.
+      WHEN "0102YC" THEN DO:  {Rate/set0102yc.i}   END.
+      WHEN "0103MM" THEN DO:  {Rate/set0103mm.i}   END.
+      WHEN "0104GE" THEN DO:  {Rate/set0104ge.i}   END.
       WHEN "0104MM" OR WHEN
-           "0105MM" THEN DO:  {set0104mm.i}   END.
-      WHEN "0106MM" THEN DO:  {set0106mm.i}   END.
+           "0105MM" THEN DO:  {Rate/set0104mm.i}   END.
+      WHEN "0106MM" THEN DO:  {Rate/set0106mm.i}   END.
       END CASE.
 
-      {onlinesave.i}  
+      {Rate/onlinesave.i}  
 
       ASSIGN ttcall.rateccn = ttcall.spocmt.
 

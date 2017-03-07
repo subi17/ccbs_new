@@ -16,13 +16,13 @@
 
 {xmlrpc/xmlrpc_access.i} 
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{fsubstermreq.i}
-{fbundle.i}
-{msisdn_prefix.i}
-{main_add_lines.i}
+{Func/timestamp.i}
+{Func/fsubstermreq.i}
+{Mm/fbundle.i}
+{Func/msisdn_prefix.i}
+{Func/main_add_lines.i}
 
 /* Input parameters */
 DEF VAR piMsSeq    AS INT  NO-UNDO.

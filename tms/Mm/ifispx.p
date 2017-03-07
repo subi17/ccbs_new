@@ -8,18 +8,18 @@
                   05.10.99 jp urights added
                   05.11.02 jr Eventlog  
                   09.09.03 jp Brand
-                  16.03.07 kl run filebrowser
+                  16.03.07 kl RUN Syst/filebrowser.p
                   19.04.07 kl search fixed, path added to SIMFile
 
   Version ......: M15
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable ifispx
 
-{commali.i}
-{eventval.i} 
-{cparam2.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'IFISpx'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Func/cparam2.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'IFISpx'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -51,7 +51,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhIFisPX AS HANDLE NO-UNDO.
    lhIFisPX = BUFFER IFisPX:HANDLE.
@@ -59,7 +59,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhIFisPX).
+      RUN Mc/eventview2.p(lhIFisPX).
    END.
 END.
 
@@ -76,7 +76,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 form
     IFiSpx.ManCode   label "Manufacturer ..." SimMan.ManName NO-LABEL AT 38 SKIP
     IFiSpx.Version   label "Version ........"                               SKIP
@@ -126,7 +126,7 @@ form /* seek Spex  BY  Mancode */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By 1,By 2,By 3, By 4".
@@ -153,12 +153,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a IFiSpx  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
    REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
       PAUSE 0 no-MESSAGE.
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.p.
       DO TRANSACTION:
          CLEAR FRAME lis NO-PAUSE.
          PROMPT-FOR 
@@ -276,20 +276,20 @@ BROWSE:
             ufk[1]= 215  ufk[2]= 0 ufk[3]= 0   ufk[4] = 0
             ufk[5]= 5    ufk[6]= 4 ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
             ehto = 3 ufkey = FALSE.
-            {uright1.i '"5,6"'}  
+            {Syst/uright1.i '"5,6"'}  
          IF NOT llIsAdmin THEN ASSIGN  ufk[5]= 0    ufk[6]= 0. 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN 
       DO:
-         CHOOSE ROW IFiSpx.ManCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW IFiSpx.ManCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) IFiSpx.ManCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN 
       DO:
-         CHOOSE ROW IFiSpx.ManCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW IFiSpx.ManCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) IFiSpx.ManCode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -434,9 +434,9 @@ BROWSE:
       /* Search BY column 1 */
       ELSE IF LOOKUP(nap,"1,f1") > 0 THEN 
       DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". run ufcolor.
+         cfc = "puyr". RUN Syst/ufcolor.p.
          Mancode = "".
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          Disp lcBrand With FRAME f1.
          UPDATE lcBrand WHEN gcAllBrand = TRUE
             Mancode WITH FRAME f1.
@@ -455,14 +455,14 @@ BROWSE:
 
       ELSE IF LOOKUP(nap,"5,f5") > 0 AND llIsAdmin THEN 
       DO:  /* add */
-         {uright2.i}
+         {Syst/uright2.i}
          must-add = TRUE.
          NEXT LOOP.
       END.
 
       ELSE IF LOOKUP(nap,"6,f6") > 0 AND llIsAdmin THEN 
       DO TRANSACTION:  /* DELETE */
-         {uright2.i}
+         {Syst/uright2.i}
          delrow = FRAME-LINE.
          RUN local-find-this (FALSE).
 
@@ -512,14 +512,14 @@ BROWSE:
 
       ELSE IF LOOKUP(nap,"enter,return") > 0  AND llIsAdmin THEN
       REPEAT WITH FRAME lis TRANSACTION ON ENDKEY UNDO, LEAVE:
-         {uright2.i}
+         {Syst/uright2.i}
          /* change */
          RUN local-find-this(TRUE).
          RUN local-find-others.
 
          ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-         RUN ufkey.
-         cfc = "lis". run ufcolor.
+         RUN Syst/ufkey.p.
+         cfc = "lis". RUN Syst/ufcolor.p.
          CLEAR FRAME lis NO-PAUSE.
          DISPLAY IFiSpx.ManCode.
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhIFisPX).

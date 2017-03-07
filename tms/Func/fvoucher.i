@@ -5,7 +5,7 @@
                     05.01.2007/aam IgVoucher
 */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF BUFFER bCurInvGroup  FOR InvGroup.
 DEF BUFFER bSeqIGVoucher FOR IGVoucher.

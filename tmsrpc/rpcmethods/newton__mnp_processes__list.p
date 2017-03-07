@@ -26,7 +26,7 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 

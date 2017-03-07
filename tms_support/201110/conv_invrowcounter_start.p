@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "qvantel".
-{timestamp.i}
+{Func/timestamp.i}
 
 DEF VAR liCount AS INT  NO-UNDO. 
 DEF VAR i AS INT NO-UNDO.
@@ -37,7 +37,7 @@ FOR EACH Customer NO-LOCK,
       END.
    END.
    
-   RUN conv_invrowcounter.p(InvSeq.InvSeq,
+   RUN billing/conv_invrowcounter.p(InvSeq.InvSeq,
                             OUTPUT liCount).
 
    PUT STREAM sLog UNFORMATTED

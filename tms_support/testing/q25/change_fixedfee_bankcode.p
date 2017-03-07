@@ -1,6 +1,6 @@
 
-{tmsconst.i}
-{timestamp.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 def var liFFNum as int no-undo.
 def var lcTFBank as char no-undo.

@@ -8,7 +8,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -46,7 +46,7 @@ form /* Invoicing Group :n hakua varten */
     with row 4 col 2 title color value(ctc) " FIND CODE "
     color value(cfc) no-labels overlay frame hayr.
 
-cfc = "tlse". run ufcolor. assign ccc = cfc.
+cfc = "tlse". RUN Syst/ufcolor.p. assign ccc = cfc.
 Runko:
 repeat:
 
@@ -66,7 +66,7 @@ LOOP:
       assign
       cfc = "tlli"
       tlli-ots = " ADD ".
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat with frame tlli:
          pause 0 no-message.
@@ -129,7 +129,7 @@ print-line:
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          /* ufk[6] = 5  no new records here ... */
          ufk[8] = 8  ufk[9] = 1 siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -137,7 +137,7 @@ BROWSE:
       repeat with frame tlse on endkey undo, return:
 
          hide message no-pause.
-         choose row UserGrp.UserGroup ;(uchoose.i;) no-error with frame tlse.
+         choose row UserGrp.UserGroup {Syst/uchoose.i} no-error with frame tlse.
          color display value(ccc) UserGrp.UserGroup with frame tlse.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
@@ -233,9 +233,9 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 then do:  /* haku */
-           cfc = "puyr". run ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.p.
            UserGroup = "".
-           ehto = 9. run ufkey. ufkey = true.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update UserGroup with frame hayr.
            hide frame hayr no-pause.
            if UserGroup <> "" then do:

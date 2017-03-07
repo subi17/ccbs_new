@@ -11,7 +11,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -32,7 +32,7 @@ runko:
 repeat ON ENDKEY UNDO runko, NEXT runko:
    ASSIGN
    siirto = ?
-   cfc = "lis". RUN ufcolor. ASSIGN ccc = cfc.
+   cfc = "lis". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 
    FIND FIRST TMSPrinter  no-lock no-error.
    IF NOT AVAILABLE TMSPrinter THEN DO:
@@ -70,14 +70,14 @@ LOOP:
         ASSIGN
         ufk[1] = 0 
         ufk[6] = 11 ufk[7] = 0  ufk[8] = 8  ufk[9] = 1 ufkey = FALSE ehto = 3.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
      END.
 
 BROWSE:
       repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE.
-         CHOOSE ROW TMSPrinter.PrinterId ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW TMSPrinter.PrinterId {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) TMSPrinter.PrinterId WITH FRAME sel.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.

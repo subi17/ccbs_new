@@ -17,8 +17,8 @@
   -------------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable Reseller
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 def /* new */ shared var siirto as char.
 
@@ -50,7 +50,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhresell AS HANDLE NO-UNDO.
    lhresell = BUFFER Reseller:HANDLE.
@@ -58,7 +58,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhresell).
+      RUN Mc/eventview2.p(lhresell).
    END.
 END.
 
@@ -73,7 +73,7 @@ with width 80 overlay scroll 1 15 down
     + string(pvm,"99-99-99") + " "
     frame sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     Reseller.Reseller     /* label format */
@@ -113,7 +113,7 @@ form /* reseller search with field RsName */
     color value(cfc) no-labels overlay frame f2.
 
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 view frame sel.
 
 find first Reseller
@@ -138,12 +138,12 @@ repeat with frame sel:
 
    if must-add then do:  /* Reseller -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat with frame lis on endkey undo add-new, leave add-new.
         pause 0 no-message.
         clear frame lis no-pause.
-        ehto = 9. run ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         do transaction:
            prompt-for Reseller.Reseller
            validate
@@ -243,18 +243,18 @@ BROWSE:
         ufk[5]= 5  ufk[6]= 4   ufk[7]= 0 ufk[8]= 8   ufk[9]= 1
         ehto = 3 ufkey = false.
 
-        {uright1.i '"5,6"'}
+        {Syst/uright1.i '"5,6"'}
 
-        run ufkey.p.
+        RUN Syst/ufkey.p.
       end.
 
       hide message no-pause.
       if order = 1 then do:
-        choose row Reseller.Reseller ;(uchoose.i;) no-error with frame sel.
+        choose row Reseller.Reseller {Syst/uchoose.i} no-error with frame sel.
         color display value(ccc) Reseller.Reseller with frame sel.
       end.
       else if order = 2 then do:
-        choose row Reseller.RsName ;(uchoose.i;) no-error with frame sel.
+        choose row Reseller.RsName {Syst/uchoose.i} no-error with frame sel.
         color display value(ccc) Reseller.RsName with frame sel.
       end.
       if rtab[frame-line] = ? then next.
@@ -402,9 +402,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Reseller = "".
-       ehto = 9. run ufkey. ufkey = true.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        DISP lcBrand with frame f1.
        UPDATE 
           lcBrand WHEN gcAllBrand
@@ -425,9 +425,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 then do on endkey undo, next LOOP:
 
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        RsName = "".
-       ehto = 9. run ufkey. ufkey = true.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
 
        DISP lcBrand with frame f2.
        UPDATE 
@@ -452,7 +452,7 @@ BROWSE:
        delline = frame-line.
        find Reseller where recid(Reseller) = rtab[frame-line] no-lock.
        if available Reseller 
-       then run smpwpr(Reseller.Reseller).
+       then RUN Mm/smpwpr.p(Reseller.Reseller).
        ufkey = true. 
      end.
      
@@ -461,13 +461,13 @@ BROWSE:
        delline = frame-line.
        find Reseller where recid(Reseller) = rtab[frame-line] no-lock.
        if available Reseller 
-       then run nnsmyp(Reseller.Reseller).
+       then RUN Mc/nnsmyp.p(Reseller.Reseller).
        ufkey = true. 
      end.
 
      else if lookup(nap,"5,f5") > 0 then do:  /* lisays */
 
-        {uright2.i}
+        {Syst/uright2.i}
 
         must-add = true.
         next LOOP.
@@ -475,7 +475,7 @@ BROWSE:
 
      else if lookup(nap,"6,f6") > 0 then do transaction:  /* removal */
 
-       {uright2.i}
+       {Syst/uright2.i}
 
        delline = frame-line.
        find Reseller where recid(Reseller) = rtab[frame-line] no-lock.
@@ -532,14 +532,14 @@ BROWSE:
      else if lookup(nap,"enter,return") > 0 then CHANGE:
      do with frame lis transaction:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
 
        find Reseller where recid(Reseller) = rtab[frame-line(sel)]
        exclusive-lock.
 
        assign fr-header = " CHANGE " ufkey = true ehto = 9.
-       run ufkey.
-       cfc = "lis". run ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        display Reseller.Reseller .
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhresell).

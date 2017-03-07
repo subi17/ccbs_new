@@ -12,23 +12,23 @@
                   26.02.03/aam Prefix and DedicList added 
                   03.03.03/aam priority shift corrected
                   20.03.03/aam one parameter added for tariff.p
-                  04.04.03 kl run tariff, new parameter
+                  04.04.03 kl RUN Mc/tariff,.p new parameter
                   26.06.03 kl new paramter for tariff
                   15.09.03/aam brand
 
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 DEF INPUT PARAMETER  icRatePlan  AS CHAR NO-UNDO.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPListConf AS HANDLE NO-UNDO.
    lhPListConf = BUFFER PListConf:HANDLE.   
@@ -39,7 +39,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhTariff).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhPListConf).
+      RUN Mc/eventview2.p(lhPListConf).
    END.
 END.
 
@@ -111,7 +111,7 @@ form /* Price List search with field PLName */
 with row 4 col 2 title color value(ctc) " FIND NAME "
    color value(cfc) no-labels overlay frame f2.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 view frame sel.
 
 FIND FIRST RatePlan WHERE
@@ -139,12 +139,12 @@ repeat with frame sel:
 
    if must-add then do:  /* PListConf -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
       add-new:
       repeat with frame lis on endkey undo add-new, leave add-new.
          pause 0 no-message.
          clear frame lis no-pause.
-         ehto = 9. run ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          do transaction:
             create PListConf.
             assign PListConf.Brand    = RatePlan.Brand 
@@ -222,14 +222,14 @@ BROWSE:
          ufk[5] = 5 ufk[6] = 4 ufk[7] = 0 ufk[8] = 8 ufk[9]= 1
          ehto = 3 ufkey = false.
 
-         {uright1.i '"5,6"'}
+         {Syst/uright1.i '"5,6"'}
 
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
 
       hide message no-pause.
       if order = 1 then do:
-         choose row PListConf.RatePlan ;(uchoose.i;) no-error with frame sel.
+         choose row PListConf.RatePlan {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) PListConf.RatePlan with frame sel.
       end.
       if rtab[frame-line] = ? then next.
@@ -369,9 +369,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
-        cfc = "puyr". run ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         PList = "".
-        ehto = 9. run ufkey. ufkey = true.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
         update PList with frame f1.
         hide frame f1 no-pause.
         if PList <> "" then do:
@@ -395,7 +395,7 @@ BROWSE:
             no-lock no-error.
 
         IF AVAILABLE PListConf THEN DO:
-           RUN tariff(0,0,PListConf.PriceList,0,"",0). 
+           RUN Mc/tariff.p(0,0,PListConf.PriceList,0,"",0). 
            UFKEY = TRUE.
            ex-order = 0. 
            NEXT LOOP. 
@@ -404,7 +404,7 @@ BROWSE:
 
      else if lookup(nap,"5,f5") > 0 and ufk[5] > 0 then do:  /* lisays */
 
-         {uright2.i}
+         {Syst/uright2.i}
 
          must-add = true.
          next LOOP.
@@ -413,7 +413,7 @@ BROWSE:
      else if lookup(nap,"6,f6") > 0 and ufk[6] > 0
      then do transaction:  /* removal */
 
-        {uright2.i}
+        {Syst/uright2.i}
 
         delline = frame-line (sel).
         find PListConf where recid(PListConf) = rtab[frame-line] no-lock.
@@ -490,14 +490,14 @@ BROWSE:
      else if lookup(nap,"enter,return") > 0 AND qupd
      then do with frame lis transaction:
         /* change */
-        {uright2.i}
+        {Syst/uright2.i}
 
         find first PListConf where 
              recid(PListConf) = rtab[frame-line(sel)]
         exclusive-lock no-error.
         assign fr-header = " CHANGE " ufkey = true ehto = 9.
-        run ufkey.
-        cfc = "lis". run ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
         display PListConf.RatePlan .
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPListConf).

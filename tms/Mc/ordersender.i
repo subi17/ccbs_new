@@ -327,7 +327,7 @@
             IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN DO:
  
                /* YBP-596 */ 
-               RUN fusion_stc.p(Order.OrderID, OUTPUT liRequestID).
+               RUN Mm/fusion_stc.p(Order.OrderID, OUTPUT liRequestID).
                
                IF liRequestID > 0 THEN
                   /* YBP-597 */ 
@@ -518,7 +518,7 @@
                 (Order.MnpStatus = 0 OR Order.StatusCode = "3") THEN DO:  
                 
                 /* YBP-613 */
-                RUN prinoconf.p (Order.OrderID).
+                RUN Mc/prinoconf.p (Order.OrderID).
                 
                 IF RETURN-VALUE BEGINS "ERROR" THEN DO:
                    DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -539,7 +539,7 @@
                    Order.MNPStatus = 6. /* fake mnp process (ACON) */
                 ELSE DO:
                    /* YBP-621 */
-                   run mnprequestnc.p(order.orderid).
+                   RUN Mnp/mnprequestnc.p(order.orderid).
                    /* YBP-622 */
                    IF RETURN-VALUE EQ "ERROR:AREC CUPO4" THEN
                    llOrdStChg = fSetOrderStatus(Order.OrderId,

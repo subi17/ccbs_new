@@ -13,7 +13,7 @@
 ------------------------------------------------------ */
 
 
-{excel.i}
+{Func/excel.i}
 
 def var line      as char format "x(78)".
 def var source_mod    as char format "x(15)".

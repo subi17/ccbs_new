@@ -1,15 +1,15 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun  = "anttis".
 gcBrand = "1".
-{tmsconst.i}
-{msreqfunc.i}
-{orderfunc.i}
-{mnp.i}
-{eventval.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Func/orderfunc.i}
+{Mnp/mnp.i}
+{Syst/eventval.i}
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
 END.
 
 DEFINE VARIABLE llSimulate AS LOGICAL NO-UNDO.
@@ -137,7 +137,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
 
       FIND CURRENT Order NO-LOCK.
 
-    /*  run cancelorder.p(Order.OrderID). */
+    /*  RUN Mc/cancelorder.p(Order.OrderID). */
 
       /* YDR-70 */
       IF Order.OrderChannel = "pos" THEN DO:

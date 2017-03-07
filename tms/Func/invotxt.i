@@ -37,7 +37,7 @@ Expls   = "Customer,Invoicing Group,Billing Item," +
           "Invoice,General (all customers)"
           /* Product Package,Product, */.
 
-Prog    = "nnasel,nnigse,nntuse,nncgse,nnmyse,h-invsect,mobsub,,,,,nnlase,,," 
+Prog    = "Mc/nnasel.p,Mc/nnigse.p,Help/nntuse.p,Mc/nncgse.p,Help/nnmyse.p,Help/h-invsect.p,Mm/mobsub.p,,,,,Ar/nnlase.p,,," 
             /* h-prodpack,h-product, */.
 
 ppos    = "Beg of Invoice,End of Invoice,Beg of Section,End of Section," + 

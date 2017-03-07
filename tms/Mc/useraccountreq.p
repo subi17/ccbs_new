@@ -8,8 +8,8 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
-{fwebuser.i}
+{Func/msreqfunc.i}
+{Func/fwebuser.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -92,7 +92,7 @@ PROCEDURE pUserAccount:
    /* print a letter */
    IF llPrintLetter THEN DO:
 
-      RUN prinuser(MsRequest.CustNum,
+      RUN Mc/prinuser.p(MsRequest.CustNum,
                    MsRequest.ReqCParam1, 
                    OUTPUT lcReqChar).
 

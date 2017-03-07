@@ -9,10 +9,10 @@
   Version ......: TF
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{vrkcheck.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/vrkcheck.i}
 
 DEF INPUT  PARAMETER iiRequest AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER ocError   AS CHAR NO-UNDO.

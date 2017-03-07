@@ -13,25 +13,25 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PNPList'}
+{Syst/commali.i}
+{Func/excel.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PNPList'}
 
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPNPList AS HANDLE NO-UNDO.
    lhpnplist = BUFFER pnplist:HANDLE.
    RUN StarEventInitialize(lhpnplist).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhpnplist).
+      RUN Mc/eventview2.p(lhpnplist).
    END.
 
 END.
@@ -107,7 +107,7 @@ WITH
    ROW 8 OVERLAY CENTERED TITLE " Import CLI list from file " 
    NO-LABELS FRAME frmImport.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -141,12 +141,12 @@ repeat WITH FRAME sel:
       assign cfc = "lis" ufkey = true fr-header = " ADD "
       
       must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            RUN LOCAL-UPDATE-RECORD(TRUE).
@@ -226,12 +226,12 @@ print-line:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW pnplist.cli ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW pnplist.cli {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) pnplist.cli WITH FRAME sel.
       END.
       
@@ -355,9 +355,9 @@ print-line:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        haku-pnplist = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE haku-pnplist WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if haku-pnplist <> 0 THEN DO:
@@ -484,9 +484,9 @@ print-line:
             recid(pnplist) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPnpList).
 

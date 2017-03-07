@@ -1,6 +1,6 @@
-{commali.i}
-{excel.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/cparam2.i}
 
 OUTPUT TO /dev/null.
 

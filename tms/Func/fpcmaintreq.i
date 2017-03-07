@@ -7,8 +7,8 @@
 
 &GLOBAL-DEFINE FPCMAINTREQ_I YES
    
-{commali.i}
-{fcreatereq.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
 
 FUNCTION fPCMaintenanceRequest RETURNS INTEGER
    (INPUT  iiMsSeq      AS INT,    /* subscription         */

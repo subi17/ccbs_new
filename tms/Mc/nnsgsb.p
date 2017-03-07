@@ -8,8 +8,8 @@
   Version ......: M15
   ----------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER icSMGroup LIKE SMGroup.SmGroup NO-UNDO.
 
@@ -39,7 +39,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSMGMember AS HANDLE NO-UNDO.
    lhSMGMember = BUFFER SMGMember:HANDLE.
@@ -47,7 +47,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhSMGMember).
+      RUN Mc/eventview2.p(lhSMGMember).
    END.
 END.
 
@@ -79,7 +79,7 @@ form /* FIND Salesoffice */
     with row 4 col 2 title color value(ctc) " FIND OFFICE "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc. view FRAME sel.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
 
 FIND SMGroup WHERE
      SMGroup.Brand   = gcBrand AND
@@ -150,16 +150,16 @@ BROWSE:
     ASSIGN
     ufk[1]= 885 ufk[2]= 30  ufk[3]= 523 ufk[4]= 0
     ufk[5]= 515 ufk[6]= 0   ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.  RUN ufkey.
+    ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
-    CHOOSE ROW Salesman.Salesman ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Salesman.Salesman {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 3 THEN
-    CHOOSE ROW Salesman.SalesOffice ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Salesman.SalesOffice {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
-    CHOOSE ROW Salesman.SmName ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Salesman.SmName {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 4 THEN
-    CHOOSE ROW Salesman.Salesman ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Salesman.Salesman {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc)
       Salesman.Salesman Salesman.Salesman Salesman.SalesOffice Salesman.SmName
       WITH FRAME sel.
@@ -304,8 +304,8 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-   cfc = "puyr". RUN ufcolor.
-   Salesman = "". ehto = 9. RUN ufkey. ufkey = TRUE.
+   cfc = "puyr". RUN Syst/ufcolor.p.
+   Salesman = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE Salesman WITH FRAME hayr.
    HIDE FRAME hayr no-pause.
    if Salesman <> "" THEN DO:
@@ -324,8 +324,8 @@ BROWSE:
 
      /* Haku sarakk. 3 */
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-   cfc = "puyr". run ufcolor. Salesoffice = "".
-   ehto = 9. RUN ufkey. ufkey = TRUE.
+   cfc = "puyr". RUN Syst/ufcolor.p. Salesoffice = "".
+   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE Salesoffice WITH FRAME hayr3.
    HIDE FRAME hayr3 no-pause.
    if Salesoffice <> "" THEN DO:
@@ -344,8 +344,8 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-   cfc = "puyr". run ufcolor. SmName = "".
-   ehto = 9. RUN ufkey. ufkey = TRUE.
+   cfc = "puyr". RUN Syst/ufcolor.p. SmName = "".
+   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE SmName WITH FRAME hayr2.
    HIDE FRAME hayr2 no-pause.
    if SmName <> "" THEN DO:
