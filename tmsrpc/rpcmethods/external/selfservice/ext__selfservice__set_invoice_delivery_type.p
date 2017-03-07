@@ -36,16 +36,16 @@ DEF VAR lcResult       AS CHAR NO-UNDO.
 DEF VAR lhCustomer     AS HANDLE NO-UNDO.
 DEF VAR lcApplicationId AS CHAR NO-UNDO. 
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
    gcBrand = "1".
-{tmsconst.i}
-{timestamp.i}
-{eventval.i}
-{fmakemsreq.i}
-{femailinvoice.i}
-{fexternalapi.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/fmakemsreq.i}
+{Func/femailinvoice.i}
+{Func/fexternalapi.i}
 
 IF validate_request(param_toplevel_id, "string,string,int") EQ ? THEN RETURN.
 
@@ -64,7 +64,7 @@ katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun   
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
 END.
 

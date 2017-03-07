@@ -6,10 +6,10 @@
   CREATED ......: 03.04.12
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Invoice'}
-{old_unbilled_events.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Invoice'}
+{Inv/old_unbilled_events.i}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 
@@ -93,7 +93,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN 
       toimi = 1
@@ -102,7 +102,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -164,7 +164,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       SET llOk.
       IF NOT llOk THEN NEXT.
 
-      RUN remove_old_events.p(liCustNum,
+      RUN Inv/remove_old_events.p(liCustNum,
                               ldaEventDate,
                               llCDRs,
                               llFees,

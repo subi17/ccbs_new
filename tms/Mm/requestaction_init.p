@@ -7,12 +7,12 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{fmakemsreq.i}
-{service.i}
-{cparam2.i}
-{requestaction_exec.i}
-{fsendsms.i}
+{Syst/commali.i}
+{Func/fmakemsreq.i}
+{Func/service.i}
+{Func/cparam2.i}
+{Mm/requestaction_exec.i}
+{Func/fsendsms.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 

@@ -8,10 +8,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{flimitreq.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
 
 DEF INPUT PARAMETER piOrderId AS INT NO-UNDO.
 
@@ -30,7 +30,7 @@ FIND Order WHERE
      Order.Brand = gcBrand AND
      Order.OrderId = piOrderId NO-LOCK NO-ERROR.
 
-RUN creditscoring.p(
+RUN Mc/creditscoring.p(
    piOrderId,
    (IF Order.OrderType = 2 THEN "RENEWAL_STC" ELSE "ORDER"),
    OUTPUT llOk,
@@ -79,7 +79,7 @@ PROCEDURE pHandleOrder:
   
    FIND FIRST bOrder WHERE ROWID(bOrder) = ROWID(Order)
    EXCLUSIVE-LOCK NO-ERROR.
-  
+
    ASSIGN 
       bOrder.CredOK = llOk.
       bOrder.CREventQty = bOrder.CREventQty + 1. 
@@ -129,7 +129,7 @@ PROCEDURE pHandleOrder:
 
       END CASE.
       
-      RUN orderhold.p(bOrder.OrderId, "RELEASE_BATCH").
+      RUN Mc/orderhold.p(bOrder.OrderId, "RELEASE_BATCH").
    
    END.
 

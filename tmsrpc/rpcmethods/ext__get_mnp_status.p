@@ -10,7 +10,7 @@
 
  */
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 /* Input parameters */
 DEF VAR pcMSISDN AS CHAR NO-UNDO.

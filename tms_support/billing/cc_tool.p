@@ -29,20 +29,20 @@ hide frame ab.
 CASE a.
 
    WHEN "1" THEN DO:
-      run find_bnumber.p.
+      RUN billing/find_bnumber.p.
    END.
    WHEN "2" THEN DO:
-      run compare_dccounter.p("","YOIGOYOIGO",odtDate,FALSE).
+      RUN billing/compare_dccounter.p("","YOIGOYOIGO",odtDate,FALSE).
    END.
    WHEN "3" THEN DO:
-      run compare_dccounter.p("","YOIGOYOIGO",odtDate,TRUE).
+      RUN billing/compare_dccounter.p("","YOIGOYOIGO",odtDate,TRUE).
    END.
    WHEN "4" THEN DO:
-      run compare_dccounter.p("","GPRS",odtDate,FALSE).
+      RUN billing/compare_dccounter.p("","GPRS",odtDate,FALSE).
    END.
    
    WHEN "5" THEN DO:
-      run compare_dccounter.p("","GPRS",odtDate,TRUE).
+      RUN billing/compare_dccounter.p("","GPRS",odtDate,TRUE).
    END.
 END.
 

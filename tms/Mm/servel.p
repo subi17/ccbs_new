@@ -15,22 +15,22 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable ServEl
 
-{commali.i} 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ServEl'}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ServEl'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhServEl AS HANDLE NO-UNDO.
    lhServEl = BUFFER ServEl:HANDLE.
    RUN StarEventInitialize(lhServEl).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhServEl).
+      RUN Mc/eventview2.p(lhServEl).
    END.
 END.
 
@@ -75,7 +75,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     ServEl.ServPac COLON 20 FORMAT "X(12)"
@@ -112,7 +112,7 @@ form /* seek ServEl  BY ServEl */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND COMPONENT "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Package  ,By Component, By 4".
@@ -149,12 +149,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ServEl  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -317,16 +317,16 @@ REPEAT WITH FRAME sel:
            ehto = 3 ufkey = FALSE.
         
         IF icServPac > "" THEN ufk[1] = 0.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ServEl.ServPac ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServEl.ServPac {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServEl.ServPac WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ServEl.ServCom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServEl.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServEl.ServCom WITH FRAME sel.
       END.
 
@@ -454,8 +454,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP gcBrand WITH FRAME f1.
        SET  gcBrand WHEN gcAllBrand = TRUE
@@ -475,8 +475,8 @@ REPEAT WITH FRAME sel:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISP gcBrand WITH FRAME f2.
        SET gcBrand WHEN gcAllBrand = TRUE AND icServPac = ""
@@ -513,7 +513,7 @@ REPEAT WITH FRAME sel:
              ServCom.ServCom = ServEl.ServCom NO-LOCK NO-ERROR.
              
         IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN 
-        RUN servattr(ServCom.servcom).
+        RUN Mc/servattr.p(ServCom.servcom).
 
         ELSE MESSAGE 
              "Service component does not have any attributes"
@@ -581,7 +581,7 @@ REPEAT WITH FRAME sel:
      /* translations (for components) */
      ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
         FIND ServEl WHERE RECID(ServEl) = rtab[FRAME-LINE] NO-LOCK.
-        RUN invlang(13,ServEl.ServCom).
+        RUN Mc/invlang.p(13,ServEl.ServCom).
           
         ufkey = TRUE.
         NEXT LOOP.
@@ -590,14 +590,14 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"enter,return") > 0 AND lcRight = "RW" THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        RUN local-find-this((lcRight = "RW")).
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhServEl).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ServEl.ServPac.
 
        RUN local-UPDATE-record.                                  
@@ -764,7 +764,7 @@ PROCEDURE local-UPDATE-record:
       IF lcRight = "RW" THEN DO:
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
          UPDATE ServEl.SeValue
          WITH FRAME lis EDITING:

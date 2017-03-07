@@ -1,7 +1,7 @@
 /* prep_rate.i
 */
-{error_codes.i}
-{tmsconst.i}
+{Rate/error_codes.i}
+{Syst/tmsconst.i}
   
    /* Is this double call */    
    IF prepcdr.ErrorCode = errorcode OR

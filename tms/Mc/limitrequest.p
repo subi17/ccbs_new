@@ -8,16 +8,16 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{eventval.i}
-{msreqfunc.i}
-{flimitreq.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/msreqfunc.i}
+{Func/flimitreq.i}
 
 
 IF llDoEvent THEN DO:
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    
    DEFINE VARIABLE lhLimit     AS HANDLE    NO-UNDO.
    

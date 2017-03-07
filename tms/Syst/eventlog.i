@@ -8,9 +8,9 @@
 
 &GLOBAL-DEFINE eventlogDef YES
    
-{commali.i}
-{excel.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/cparam2.i}
 
 def var fpath as c no-undo.
 fpath = fCparamC("EventlogDir").

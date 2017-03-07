@@ -9,7 +9,7 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER icFilter AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER ocChosen AS CHAR NO-UNDO.
@@ -58,7 +58,7 @@ form /* seek  BY  name */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND FILE "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 
 IF INDEX(icFilter,"¤") > 0 
 THEN ASSIGN llHideDir = (ENTRY(2,icFilter,"¤") > "")
@@ -145,13 +145,13 @@ BROWSE:
         ufk[5]= 11 /* 5 */     ufk[6]= 0 /* 4 */ 
         ufk[7]= 0   ufk[8]= 8  ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"5,6"'}.
-        RUN ufkey.p.
+        {Syst/uright1.i '"5,6"'}.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttFile.FName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttFile.FName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttFile.FName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -279,8 +279,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcFileName WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -308,7 +308,7 @@ BROWSE:
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}.
+       {Syst/uright2.i}.
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 

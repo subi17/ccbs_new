@@ -14,7 +14,7 @@
 
 &GLOBAL-DEFINE roamtariff YES
 
-{timestamp.i}
+{Func/timestamp.i}
 
 FUNCTION fFindTariff RETURNS RECID
   (INPUT pdaDate    AS DATE,

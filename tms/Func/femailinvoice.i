@@ -12,15 +12,15 @@
 
 &GLOBAL-DEFINE fEMAILINVOICE YES
 
-{commali.i}
-{tmsconst.i}
-{date.i}
-{cparam2.i}
-{timestamp.i}
-{fcreatereq.i}
-{msreqfunc.i}
-{fgettxt.i}
-{q25functions.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fcreatereq.i}
+{Func/msreqfunc.i}
+{Func/fgettxt.i}
+{Func/q25functions.i}
 
 FUNCTION fPendingEmailActRequest RETURNS LOG (INPUT iiCustnum AS INT):
    

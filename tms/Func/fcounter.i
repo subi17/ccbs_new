@@ -1,6 +1,6 @@
 /* common functions to counters */
 
-{timestamp.i}
+{Func/timestamp.i}
 /* update/create the counter */
 FUNCTION fUpdateCounter RETURN LOGICAL 
          ( INPUT pcHostTable   AS CHAR,

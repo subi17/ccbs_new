@@ -20,19 +20,19 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{matrix.i}
+{Func/matrix.i}
 
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
-{commpaa.i}
+{Syst/commpaa.i}
 katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId. 
 gcBrand = "1".
-{mdub.i}
-{tmsconst.i}
-{cparam2.i}
-{msreqfunc.i}
-{fsendsms.i}
-{fdss.i}
-{fprepaidfee.i}
+{Func/mdub.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/msreqfunc.i}
+{Func/fsendsms.i}
+{Func/fdss.i}
+{Func/fprepaidfee.i}
 
 DEF VAR pcParamArray  AS CHARACTER NO-UNDO.
 DEF VAR pcParamStruct AS CHARACTER NO-UNDO.

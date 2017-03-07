@@ -13,7 +13,7 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE piOrderId              AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE top_array            AS CHARACTER NO-UNDO. 

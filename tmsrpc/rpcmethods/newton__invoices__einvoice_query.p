@@ -10,12 +10,12 @@
  */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "tmsrpc".
-{cparam2.i}
-{tmsconst.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 DEF VAR pcStruct       AS CHAR  NO-UNDO. 
 DEF VAR lcStruct       AS CHAR  NO-UNDO.

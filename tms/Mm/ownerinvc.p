@@ -8,22 +8,22 @@
   Version ......: TF
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{cparam2.i}
-{timestamp.i}
-{fctserval.i}
-{fctchange.i}
-{fmakemsreq.i}
-{fcustdata.i}
-{finvtxt.i}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fctserval.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/fcustdata.i}
+{Func/finvtxt.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMsRequest AS HANDLE NO-UNDO.
    lhMsRequest = BUFFER MsRequest:HANDLE.
@@ -254,7 +254,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
          ufk[1] = 0
          ufk[3] = 0.
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
 
    ELSE ASSIGN toimi = 1  
@@ -265,7 +265,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE liNewCust1 WHEN llUpdCustNum
          WITH FRAME fCriter EDITING:
@@ -279,7 +279,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
 
                IF FRAME-FIELD = "liNewCust1" THEN DO:
 
-                  RUN h-customer (liAgrCust,
+                  RUN Help/h-customer.p (liAgrCust,
                                   "agrcust",
                                   "all").
                    
@@ -291,7 +291,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
                END. 
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT.
             END. 
  

@@ -9,12 +9,12 @@
 
 &IF "{&TMSCodeDef}" NE "NO"
 &THEN
-{commali.i}
+{Syst/commali.i}
 &ENDIF
 
 &IF "{&TimeStampDef}" NE "NO"
 &THEN
-{timestamp.i}
+{Func/timestamp.i}
 &ENDIF
             
 DEF VAR lcCurrency   AS CHAR NO-UNDO.

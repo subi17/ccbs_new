@@ -3,9 +3,9 @@
    changes:        10.01.07/aam fInvSeq(); MsSeq based invseq 
 */
    
-{iprange.i}
-{msisdn_prefix.i}
-{invseq.i}
+{Rate/iprange.i}
+{Func/msisdn_prefix.i}
+{Func/invseq.i}
 
 FUNCTION fGetIPTariffZone RETURNS CHAR
    (INPUT pcIP AS CHAR):
@@ -116,7 +116,7 @@ FUNCTION fAnalBsub RETURNS LOGICAL
 
    IF ttCall.RoutingNumber ne "" AND Mod_bsub NE "622FF" THEN DO:
    
-      {mnpchk.i}
+      {Mm/mnpchk.i}
    
       IF lcbnet ne "" THEN mod_bsub = lcbnet.
    END.

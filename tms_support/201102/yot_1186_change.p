@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "vikasagr".
 gcbrand = "1".
-{timestamp.i}
-{msisdn.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
 
 define variable ldenow    as decimal no-undo.
 define variable llheader  as logical no-undo init true.

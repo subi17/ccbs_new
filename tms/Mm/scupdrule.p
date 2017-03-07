@@ -9,25 +9,25 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable ScUpdRule
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ScUpdRule'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ScUpdRule'}
 
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhScUpdRule AS HANDLE NO-UNDO.
    lhScUpdRule = BUFFER ScUpdRule:HANDLE.
    RUN StarEventInitialize(lhScUpdRule).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhScUpdRule).
+      RUN Mc/eventview2.p(lhScUpdRule).
    END.
 
 END.
@@ -71,7 +71,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        " Service Update Rules "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     ScUpdRule.ServCom  COLON 18
@@ -116,7 +116,7 @@ FUNCTION fServName RETURNS CHARACTER
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Updated Service ," +
@@ -144,14 +144,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ScUpdRule  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -248,17 +248,17 @@ REPEAT WITH FRAME sel:
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ScUpdRule.ServCom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ScUpdRule.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ScUpdRule.ServCom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ScUpdRule.UpdServCom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ScUpdRule.UpdServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ScUpdRule.UpdServCom WITH FRAME sel.
       END.
 
@@ -388,8 +388,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -413,8 +413,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -437,14 +437,14 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0  
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
      
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -503,7 +503,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhScUpdRule).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -640,7 +640,7 @@ PROCEDURE local-UPDATE-record:
       
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
       
          UPDATE
          ScUpdRule.OldValue    WHEN NEW ScUpdRule
@@ -691,7 +691,7 @@ PROCEDURE local-UPDATE-record:
       
       ELSE DO:
          ehto = 5.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END. 
       

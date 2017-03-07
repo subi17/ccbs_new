@@ -18,12 +18,12 @@ https://luna.starnet.fi/display/XFERA/SMSC+specifications
 
 */
 
-{commpaa.i} gcBrand = "1".
-{mathfunction.i}
-{cparam2.i}
-{charset.i}
-{timestamp.i}
-{smsc_messager.i}
+{Syst/commpaa.i} gcBrand = "1".
+{Func/mathfunction.i}
+{Func/cparam2.i}
+{Gwy/charset.i}
+{Func/timestamp.i}
+{Func/smsc_messager.i}
 
 DEFINE VARIABLE lcUser      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcPWD       AS CHARACTER NO-UNDO.

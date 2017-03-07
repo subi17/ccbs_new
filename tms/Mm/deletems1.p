@@ -29,16 +29,16 @@
 
 DEFINE INPUT PARAMETER piMsSeq LIKE MobSub.MsSeq.
 
-{commali.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{fsubstermreq.i}
-{msisdn_prefix.i}
-{tmsconst.i}
-{cparam2.i}
-{mnpoutchk.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/fsubstermreq.i}
+{Func/msisdn_prefix.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Mnp/mnpoutchk.i}
+{Func/main_add_lines.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE
@@ -228,7 +228,7 @@ WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       liOrderer 
       lcOutOper WHEN liOrderer EQ 2
@@ -253,7 +253,7 @@ REPEAT WITH FRAME main:
       
       IF FRAME-FIELD = "liOrderer" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN h-tmscodes(INPUT "MsRequest",  /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "MsRequest",  /* TableName */
                              "TermReason",  /* FieldName */
                              "Request",   /* GroupCode */
                        OUTPUT lcCode).
@@ -278,13 +278,13 @@ REPEAT WITH FRAME main:
 
          llHelp = TRUE. 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          NEXT. 
       END.
       
       IF FRAME-FIELD = "liMsisdnStat" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
          
-         RUN tmscodesel(INPUT "MSISDN",  
+         RUN Syst/tmscodesel.p(INPUT "MSISDN",  
                               "StatusCode",
                               "MSISDN",
                               "",
@@ -301,14 +301,14 @@ REPEAT WITH FRAME main:
          END.   
          
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          NEXT. 
       
       END.
 
       IF FRAME-FIELD = "liSimStat" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN tmscodesel(INPUT "SIM",  
+         RUN Syst/tmscodesel.p(INPUT "SIM",  
                               "SimStat",
                               "SIM",
                               "",
@@ -325,7 +325,7 @@ REPEAT WITH FRAME main:
          END.   
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          NEXT. 
          
       END.
@@ -581,7 +581,7 @@ REPEAT WITH FRAME main:
          ufk[5] = 795
          ufk[8] = 8.
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       IF toimi = 1 THEN NEXT  main.
       

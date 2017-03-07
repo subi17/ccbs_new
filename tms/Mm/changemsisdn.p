@@ -10,14 +10,14 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{msisdn.i}
-{fcustbal.i}
-{msreqfunc.i}
-{eventval.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{create_eventlog.i}
+{Syst/commali.i}
+{Func/msisdn.i}
+{Func/fcustbal.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/create_eventlog.i}
 
 DEF INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -42,7 +42,7 @@ END.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobSub AS HANDLE NO-UNDO.
    lhMobSub = BUFFER MobSub:HANDLE.
@@ -240,7 +240,7 @@ PROCEDURE pChangeMSISDN:
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSISDN).
    
    IF MsRequest.CreateFees THEN 
-         RUN create_charge_comp.p(
+         RUN Mm/create_charge_comp.p(
             {&REQUEST_SOURCE_MANUAL_TMS},
             Mobsub.MsSeq,   
             MsRequest.UserCode,

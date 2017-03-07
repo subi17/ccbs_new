@@ -11,9 +11,9 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i}
 
 DEF TEMP-TABLE ttMark NO-UNDO
     FIELD EventID AS INT.
@@ -224,7 +224,7 @@ FUNCTION fCheckPage RETURNS LOGIC
     IF icFile = "" AND rl + iAddLine >= skayt1 THEN DO:
                         
         IF sl > 0 THEN DO:
-           {uprfeed.i rl}
+           {Syst/uprfeed.i rl}
         END.
         
         sl = sl + 1.
@@ -486,7 +486,7 @@ BREAK BY ttEvent.Reseller
 END. 
 
 IF icFile = "" THEN DO:
-   {uprfeed.i rl}
+   {Syst/uprfeed.i rl}
 END.
 
 ELSE DO:

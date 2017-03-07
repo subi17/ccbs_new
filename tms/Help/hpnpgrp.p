@@ -10,7 +10,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -42,7 +42,7 @@ form /* SEEK code */
     with row 4 col 2 title color value(ctc) " FIND NAME "
     color value(cfc) no-labels overlay frame f2.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 MAIN:
 repeat:
 
@@ -93,7 +93,7 @@ print-line:
          ufk = 0 ufk[1] = 35 ufk[2] = 30 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -102,11 +102,11 @@ BROWSE:
 
          hide message no-pause.
          if order = 1 THEN DO:
-         choose row PNPGroup.PNPGroup ;(uchoose.i;) no-error with frame sel.
+         choose row PNPGroup.PNPGroup {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) PNPGroup.PNPGroup with frame sel.
          END.
          if order = 2 THEN DO:
-         choose row PNPGroup.Name ;(uchoose.i;) no-error with frame sel.
+         choose row PNPGroup.Name {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) PNPGroup.Name with frame sel.
          END.
 
@@ -237,8 +237,8 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* PNPGroup */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set PNPGroup with frame f1.
            hide frame f1 no-pause.
            if PNPGroup ENTERED then do:
@@ -260,8 +260,8 @@ BROWSE:
         /* Seek */
 
         if lookup(nap,"2,f2") > 0 then do:  /* PNPGroup */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set Name with frame f2.
            hide frame f2 no-pause.
            if PNPGroup ENTERED then do:

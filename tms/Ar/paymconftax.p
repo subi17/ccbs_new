@@ -8,23 +8,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PaymConfTax'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PaymConfTax'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPaymConfTax AS HANDLE NO-UNDO.
    lhPaymConfTax = BUFFER PaymConfTax:HANDLE.
    RUN StarEventInitialize(lhPaymConfTax).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhPaymConfTax).
+      RUN Mc/eventview2.p(lhPaymConfTax).
    END.
 
 END.
@@ -117,7 +117,7 @@ FUNCTION fDispTaxAccName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -147,7 +147,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a PaymConfTax  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -155,7 +155,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -247,12 +247,12 @@ REPEAT WITH FRAME sel:
         ufk[8]= 8 
         ehto  = 3 
         ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PaymConfTax.TaxZone ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PaymConfTax.TaxZone {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PaymConfTax.TaxZone WITH FRAME sel.
       END.
 
@@ -442,8 +442,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPaymConfTax).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PaymConfTax.TaxZone.
 
        RUN local-UPDATE-record.                                  
@@ -561,7 +561,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.
@@ -571,7 +571,7 @@ PROCEDURE local-UPDATE-record:
       IF toimi = 1 THEN DO:
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       
          UPDATE
             PaymConfTax.TaxZone  WHEN NEW PaymConfTax

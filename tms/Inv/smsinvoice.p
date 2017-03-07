@@ -13,14 +13,14 @@
    pressed for any customers after billing run. This will generate request 
    that will call this program to create SMS to all invoiced customers.   */
 
-{commali.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{cparam2.i}
-{femailinvoice.i}
-{email.i}
-{smsnotify.i}
-{heartbeat.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/cparam2.i}
+{Func/femailinvoice.i}
+{Func/email.i}
+{Func/smsnotify.i}
+{Func/heartbeat.i}
 
 &SCOPED-DEFINE MIDNIGHT-SECONDS 86400
 

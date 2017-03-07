@@ -13,9 +13,9 @@
   Note..........: Still in development stage
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-{date.i}
-{log.i}
+{Syst/commpaa.i}
+{Func/date.i}
+{Func/log.i}
 fSetLogFileName("/home/mikko/sonicreader.log").
 fClearLog().
 fSetLogEntryTypes(fGetValidLogEntryTypes()).
