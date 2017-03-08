@@ -8,10 +8,20 @@
           
 */
 {newton/src/header_get.i}
+{Func/multitenantfunc.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
+
+   IF NUM-ENTRIES(pcId,"|") > 1 THEN
+      ASSIGN
+          pcTenant = ENTRY(2,pcId,"|")
+          pcId     = ENTRY(1,pcId,"|").
+   ELSE
+      RETURN appl_err("Invalid tenant information").
+
+   {newton/src/settenant.i pcTenant}
 
    FIND ServPac NO-LOCK WHERE 
         ServPac.Brand = gcBrand AND 
@@ -30,7 +40,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    
   lcResultStruct = add_struct(resp_array, "").
-  add_string(lcResultStruct, "id", ServPac.ServPac). 
+  add_string(lcResultStruct, "id", ServPac.ServPac + "|" + fConvertTenantToBrand(pcTenant)).
+  add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)). 
   add_string(lcResultStruct, "name", ServPac.SPName).
   add_int(lcResultStruct,"amount",INT(CTServEl.DefParam)).
 

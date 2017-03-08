@@ -12,7 +12,7 @@
                   11.01.07 mvi password expiration, stored in TMSPass
                   28.04.07 mvi fixed bug in asking passwd, error occured 
                                if user had empty password in TMSUser.
-                  02.06.07 mvi Yoigo version, removed .p from RUN tms_support/protop/lib/commands.p 
+                  02.06.07 mvi Yoigo version, removed .p from RUN protop/lib/commands.p 
                   02.06.07 mvi Usergrp.PasswordExpires checked in login
 
   TODO..........: ask first both username and password then check them

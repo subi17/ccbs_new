@@ -10,6 +10,7 @@ gcBrand = "1".
 {Syst/eventlog.i}
 {Func/ftransdir.i}
 {Syst/eventval.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE lcIncDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcProcDir AS CHARACTER NO-UNDO. 
@@ -44,7 +45,10 @@ REPEAT:
    lcLogFile   = lcSpoolDir + lcFileName + ".log".
 
    IF SEARCH(lcInputFile) = ? THEN NEXT.
-
+   /* Set effective tenant based on file name. If not regocniced go next file
+   */
+   IF NOT fsetEffectiveTenantForAllDB(
+         fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.
    fBatchLog("START", lcInputFile).
 
    liRead = 0.

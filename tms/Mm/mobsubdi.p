@@ -20,7 +20,7 @@
                   05.02.07 kl  Q) ppreqbr
                   08.03.07/aam lock and unlock removed
                   18.04.07/aam odi request N
-                  29.05.07 kl  .p removed from RUN tms_support/protop/lib/commands.p
+                  29.05.07 kl  .p removed from RUN protop/lib/commands.p
                   27.06.07 vk  for testing purposes only
                   06.02.08 jt  new barring handling (HLR-action menu)
 

@@ -33,9 +33,9 @@ lcRootdir = REPLACE (lcRootDir,"tmsrpc/","yoigo/tms_support/testing/").*/
 
 
 /*Search correct directory*/
-lcRootDir = SEARCH("tms_support/testing/donotremove_testdir.txt").
+lcRootDir = SEARCH("testing/donotremove_testdir.txt").
 lcRootDir = REPLACE(lcrootDir, "donotremove_testdir.txt", "").
-lcRateDir = REPLACE(lcrootDir, "testing", "Rate").
+lcRateDir = "Rate/".
 /*lcRootDir = "/apps/yoigo/tms_support/testing/".*/
 
 IF validate_request(param_toplevel_id, "string,string,string,datetime") EQ ? THEN RETURN.
@@ -61,7 +61,7 @@ lcImsi = mobsub.imsi.
 
 lcEDRDir = lcRootDir + "edrfiles/".
 /*Generate EDR files*/
-RUN "tms_support/testing/create_edrfile.p" (
+RUN "testing/create_edrfile.p" (
       lcCli,
       ldtDateTime,
       (lcEDRDir + lcEDRFile),

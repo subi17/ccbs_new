@@ -4,7 +4,7 @@ DEF VAR lcTMSRoot AS CHAR NO-UNDO.
 DEF VAR llSimulate AS LOG NO-UNDO. 
 DEF VAR lcEntry AS CHAR NO-UNDO. 
 
-lcTMSRoot = "/apps/xfera/ansavola/tms/".
+lcTMSRoot = "/apps/xfera/tms/".
 llSimulate = yes.
 
 def stream sout.
@@ -88,7 +88,7 @@ IF AVAIL TMSParam
 THEN ASSIGN
         TMSParam.CharVal = REPLACE(TMSParam.CharVal,"Gwy/","")
         TMSParam.CharVal = REPLACE(TMSParam.CharVal,".p","")
-        TMSParam.CharVal = "Gwy/" + TMSParam.CharVal + ".p"
+        TMSParam.CharVal = "test/fake/" + TMSParam.CharVal + ".p"
         .
 
 FOR EACH TMSCodes EXCLUSIVE-LOCK WHERE

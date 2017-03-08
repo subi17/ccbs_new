@@ -6,6 +6,7 @@ import shutil
 import socket
 import time
 import glob
+import errno
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
@@ -155,12 +156,14 @@ def build(*a):
     require('code.pl', [])
     shutil.move(myself + '.pl', build_dir + '/' + myself + '.pl')
 
-@target('r')
+@target
 def code_pl(*a):
     """code.pl"""
     if os.path.exists(myself + '.pl'):
         os.unlink(myself + '.pl')
-    os.chdir('r')
+    compiledir = 'temp_r'
+    _compile('COMPILE %s SAVE INTO {}.'.format(compiledir), compiledir)
+    os.chdir(compiledir)
     call([dlc + '/bin/prolib', '../%s.pl' % myself, '-create'])
     for dir, _dirs, files in os.walk('.'):
         for file in files:
@@ -168,57 +171,48 @@ def code_pl(*a):
                 call([dlc + '/bin/prolib', '../%s.pl' % myself, '-add',
                       os.path.join(dir[2:], file)])
     os.chdir('..')
-    shutil.rmtree('r')
+    shutil.rmtree(compiledir)
 
 @target
-def r(*a):
-    '''r$'''
-    if os.path.exists('r'):
-        shutil.rmtree('r')
-    os.mkdir('r')
-    require('compile', ['r'])
+def compile(match, *a):
+    '''compile$|compilec$|preprocess$|xref$'''
 
-@target
-def compile(*a):
-    global parameters
-    if len(parameters) == 1:
-        target = parameters[0]
-        directive = ' SAVE INTO ' + parameters[0]
-        parameters = []
+    if match == 'compile':
+        compiledir = 'r'
+        compilecommand = 'COMPILE %s SAVE INTO {}.'
+    elif match == 'compilec':
+        compiledir = None
+        compilecommand = 'COMPILE %s.'
+    elif match == 'preprocess':
+        compiledir = 'pp'
+        compilecommand = 'COMPILE %s PREPROCESS {}/%s.'
     else:
-        target = None
-        directive = ''
-    _compile_all('COMPILE %%s%s.' % directive, target)
+        compiledir = 'xref'
+        compilecommand = 'COMPILE %s XREF {}/%s.'
 
-@target
-def preprocess(*a):
-    global parameters
-    if len(parameters) == 1:
-        target = parameters[0]
-        parameters = []
+    if 'dir' in globals():
+        compiledir = dir
+
+    _compile(compilecommand.format(compiledir), compiledir)
+
+def _compile(compilecommand, compiledir):
+    source_files = []
+
+    if 'parameters' in globals() and len(parameters) > 0:
+        source_files = [ filu for filu in parameters if re.search(r'.*\.(p|cls)$', filu) ]
     else:
-        target = 'pp'
-    _compile_all('COMPILE %%s PREPROCESS %s/%%s.' % target, target)
+        source_files.extend(['applhelp.p'])
+        for source_dir in os.listdir('.'):
+            if not os.path.isdir(source_dir) or source_dir in ['test', 'scripts', 'r', compiledir]:
+                continue
+            source_files.extend([ filu for filu in glob('{}/*'.format(source_dir)) if re.search(r'.*\.(p|cls)$', filu)] )
 
-@target
-def xref(*a):
-    global parameters
-    if len(parameters) == 1:
-        target = parameters[0]
-        parameters = []
-    else:
-        target = 'xref'
-    _compile_all('COMPILE %%s XREF %s/%%s.' % target, target)
-
-def classes_and_procedures(directory):
-    for dir, _dirs, files in os.walk(directory):
-        for file in files:
-            if file.endswith('.p') or file.endswith('.cls'):
-                yield os.path.join(dir, file)
-
-def _compile_all(format, target):
-
-    require('applhelp.p', target)
+    if compiledir:
+        seen = []
+        for dir in (os.path.dirname(compiledir +'/' + x) for x in source_files):
+            if dir not in seen:
+               mkdir_p(dir)
+               seen.append(dir)
 
     args = ['-pf', getpf('../db/progress/store/all')]
     cdr_dict = {}
@@ -229,62 +223,26 @@ def _compile_all(format, target):
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
 
-    for source_dir in os.listdir('.'):
-        if not os.path.isdir(source_dir) \
-        or source_dir in ['test', 'scripts']:
-            continue
-        source_files = list(classes_and_procedures(source_dir))
-        procedure_file = make_compiler(format, source_files,
-                                       show='name' if show_file else '.')
+    procedure_file = make_compiler(compilecommand, source_files, show='name' if show_file else '.')
 
-        if target:
-            seen = []
-            for dir in (os.path.dirname(target +'/' + x) for x in source_files):
-                if dir not in seen:
-                    mkdir_p(dir)
-                    seen.append(dir)
+    if environment == 'safeproduction':
+        os.environ['PROPATH'] = os.environ['PROPATH'].split(',', 1)[1]
 
-        comp = Popen(mpro + args + ['-s', '1024', '-b', '-p', procedure_file.name], stdout=PIPE)
-        call('/bin/cat', stdin=comp.stdout)
-        if comp.wait() != 0:
-            raise PikeException('Compilation failed')
-    print('')
-
-@target
-def compile_one(match, *a):
-    '''(.*)\.(p|cls)'''
-    global parameters
-    if len(parameters) == 1:
-        directive = ' SAVE INTO ' + parameters[0]
-        mkdir_p(os.path.dirname(parameters[0] + '/' + match))
-    else:
-        directive = ''
-
-    format = 'COMPILE %%s%s.' % directive
-
-    args = ['-pf', getpf('../db/progress/store/all')]
-    cdr_dict = {}
-
-    for cdr_database in cdr_databases:
-        if not cdr_dict:
-            cdr_dict = active_cdr_db_pf()
-        if cdr_database in cdr_dict:
-            args.extend(cdr_dict[cdr_database])
-
-    print('Compiling file ' + match)
-    sys.stdout.flush()
-    procedure_file = make_compiler(format, [match], show=None)
-    comp = Popen(mpro + args + ['-b', '-p', procedure_file.name], stdout=PIPE)
+    comp = Popen(mpro + args + ['-s', '1024', '-b', '-inp', '200000', '-tok', '20000', '-p', procedure_file.name], stdout=PIPE)
     call('/bin/cat', stdin=comp.stdout)
     if comp.wait() != 0:
         raise PikeException('Compilation failed')
 
+    print('')
+
 def mkdir_p(directory):
-    direntries = directory.split(os.path.sep)
-    for dir in [os.path.sep.join(direntries[:ii+1]) \
-                for ii in range(len(direntries))]:
-        if dir and not os.path.exists(dir):
-            os.mkdir(dir)
+    try:
+        os.makedirs(directory)
+    except OSError as exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(directory):
+            pass
+        else:
+            raise
 
 def make_compiler(cline, files, show='.'):
     compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')

@@ -258,7 +258,8 @@ FUNCTION fAnalBsub RETURNS LOGICAL
                  BDest.FromDate <= ttCall.DateSt NO-LOCK NO-ERROR.
 
       IF AVAIL Bdest THEN ASSIGN
-         b_dest     = Bdest.Bdest 
+         b_dest     = (IF BDest.RateBDest NE "" THEN Bdest.RateBDest
+                       ELSE Bdest.Bdest)
          r_dest     = Bdest.Bdest
          b_ccn      = Bdest.CCN   
          b_dg-code  = BDest.DiscGroup
@@ -416,11 +417,13 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       END.
    
       IF dest_recid NE ? THEN ASSIGN
-         b_dest     = BDest.Bdest   /* Classified B-destination         */
+         b_dest     = (IF BDest.RateBDest NE "" THEN BDest.RateBDest
+                       ELSE BDest.Bdest)   /* Classified B-destination */
          r_dest     = BDest.Bdest
          b_ccn      = BDest.CCN   /* consequtive country number       */
          b_dg-code  = BDest.DiscGroup
          b_foc      = TRUE WHEN BDest.Free = TRUE. /* free of charge ? */
+         
    END. 
 
    IF dest_recid EQ ? THEN  /* unknown destination (!)  */

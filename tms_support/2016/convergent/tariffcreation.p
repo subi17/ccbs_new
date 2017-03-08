@@ -15,8 +15,8 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
-{../tms_support/2016/convergent/tariffconfig.i}
-{../tms_support/2016/convergent/tariffcons.i}
+{2016/convergent/tariffconfig.i}
+{2016/convergent/tariffcons.i}
 
 DEFINE INPUT  PARAMETER icIncDir    AS CHARACTER NO-UNDO. 
 DEFINE INPUT  PARAMETER icSpoolDir  AS CHARACTER NO-UNDO.
@@ -148,7 +148,7 @@ IF RETURN-VALUE <> "OK" THEN DO:
    RETURN RETURN-VALUE.
 END.
    
-RUN tms_support/2016/convergent/configcreations.p PERSISTENT SET h_config. 
+RUN 2016/convergent/configcreations.p PERSISTENT SET h_config. 
 
 RUN pDataCreValidation.
 

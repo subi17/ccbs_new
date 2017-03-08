@@ -23,18 +23,20 @@ gcBrand = "1".
 
 DEFINE TEMP-TABLE ttReseller LIKE Reseller.
 
-DEF VAR pcStruct AS CHARACTER NO-UNDO. 
-DEF VAR lcStruct AS CHARACTER NO-UNDO. 
-DEF VAR pcReseller AS CHAR NO-UNDO. 
-DEF VAR pcBankCode AS CHAR NO-UNDO INIT ?.
-DEF VAR pdaBankCodeFrom AS DATE NO-UNDO INIT ?.
-DEF VAR llEqual AS LOG NO-UNDO. 
-DEF VAR lcResellerTF AS CHAR NO-UNDO.
+DEF VAR pcStruct        AS CHARACTER NO-UNDO. 
+DEF VAR lcStruct        AS CHARACTER NO-UNDO. 
+DEF VAR pcTenant        AS CHARACTER NO-UNDO.
+DEF VAR pcReseller      AS CHAR      NO-UNDO. 
+DEF VAR pcBankCode      AS CHAR      NO-UNDO INIT ?.
+DEF VAR pdaBankCodeFrom AS DATE      NO-UNDO INIT ?.
+DEF VAR llEqual         AS LOG       NO-UNDO. 
+DEF VAR lcResellerTF    AS CHAR      NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
 
 pcReseller = get_nonempty_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcStruct   = get_struct(param_toplevel_id, "1").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcStruct = validate_request(pcStruct, 
@@ -49,9 +51,16 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-FIND Reseller EXCLUSIVE-LOCK WHERE
-     Reseller.Brand = gcBrand AND
-     Reseller.Reseller = pcReseller NO-ERROR.
+IF NUM-ENTRIES(pcReseller,"|") > 1 THEN
+  ASSIGN
+      pcTenant   = ENTRY(2,pcReseller,"|")
+      pcReseller = ENTRY(1,pcReseller,"|").
+ELSE
+  RETURN appl_err("Invalid tenant information").
+
+{newton/src/settenant.i pcTenant}
+
+FIND Reseller EXCLUSIVE-LOCK WHERE Reseller.Brand = gcBrand AND Reseller.Reseller = pcReseller NO-ERROR.
 IF NOT AVAIL Reseller THEN
    RETURN appl_err(SUBST("Reseller not found: &1",pcReseller)).
 

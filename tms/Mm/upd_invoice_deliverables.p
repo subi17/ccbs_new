@@ -18,6 +18,7 @@ gcBrand = "1".
 {Syst/eventval.i}
 {Func/fmakemsreq.i}
 {Func/femailinvoice.i}
+{Func/multitenantfunc.i}
 
 /* files and dirs */
 DEF VAR lcLine           AS CHAR NO-UNDO.
@@ -125,6 +126,8 @@ FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
       END. /* WHEN "Email" THEN DO: */
 
       WHEN "SMS" THEN DO:
+         IF BUFFER-TENANT-NAME(Customer) EQ "tMasMovil" THEN
+            RETURN "SMS invoice not allowed for MasMovil".
          IF icAction = "0" THEN DO:
             IF Customer.DelType <> {&INV_DEL_TYPE_SMS} THEN
                RETURN "SMS invoice is already turned off".
@@ -306,7 +309,12 @@ REPEAT:
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
 
-   lcLogFile = lcSpoolDir + "invoice_deliverables_" +
+   /* Set effective tenant based on file name. If not regocniced go next file
+   */   
+   IF NOT fsetEffectiveTenantForAllDB(
+         fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.
+
+   lcLogFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_invoice_deliverables_" +
                lcToday + "_" + lcTime + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile).
    fBatchLog("START", lcLogFile).

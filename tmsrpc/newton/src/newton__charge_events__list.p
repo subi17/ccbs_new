@@ -8,7 +8,7 @@
 {newton/src/flistrpc.i}
 
 
-lcStruct = validate_struct(pcStruct, "paytype").
+lcStruct = validate_struct(pcStruct, "brand,paytype").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

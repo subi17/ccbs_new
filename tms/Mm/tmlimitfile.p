@@ -1,3 +1,5 @@
+/* Subscription and activation limits bob tool */
+
 {Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
@@ -8,6 +10,7 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/fcustdata.i}
+{Func/multitenantfunc.i}
 
 &SCOPED-DEFINE STAT_00 "00" /* Threshold successfully updated */
 &SCOPED-DEFINE STAT_10 "10" /* ERROR: Client doesn.t exist */
@@ -244,26 +247,33 @@ REPEAT:
  
    lcInputFile = lcIncDir + lcFileName.
    
-   IF SEARCH(lcInputFile) NE ? THEN 
+   IF SEARCH(lcInputFile) NE ? THEN
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
-   
+   MESSAGE "1" VIEW-AS ALERT-BOX. 
+   /* Set effective tenant based on file name. If not regocniced go next file
+   */
+   IF NOT fsetEffectiveTenantForAllDB(
+         fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.  
+ 
    IF INDEX(lcFileName,"results") > 0 THEN DO:
       llRecovery = TRUE.
-      liDate = INT(SUBSTRING(ENTRY(3,lcFileName,"_"),1,8)) NO-ERROR.
+      liDate = INT(SUBSTRING(ENTRY(4,lcFileName,"_"),1,8)) NO-ERROR.
    END.
-   ELSE liDate = INT(SUBSTRING(ENTRY(2,lcFileName,"_"),1,8)) NO-ERROR.
+   ELSE liDate = INT(SUBSTRING(ENTRY(3,lcFileName,"_"),1,8)) NO-ERROR.
    
    IF ERROR-STATUS:ERROR THEN NEXT.
    IF INT(lcToday) < liDate THEN NEXT.
    
    lcTime = STRING(TIME,"HH:MM").
-   lcOutputFile = lcSpoolDir + "threshold_results_" + 
-      STRING(liDate) + ENTRY(1,lcTime,":") + ENTRY(2,lcTime,":") + ".txt".
+   lcOutputFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_threshold_results_" + 
+                  STRING(liDate) + ENTRY(1,lcTime,":") + ENTRY(2,lcTime,":") + 
+                  ".txt".
    OUTPUT STREAM sReport TO VALUE(lcOutputFile).
    fBatchLog("START", lcOutputFile).
 
-   lcStatFile = lcSpoolDir + "threshold_summary_" + STRING(liDate) + ".txt".
+   lcStatFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_threshold_summary_" + 
+                STRING(liDate) + ".txt".
    OUTPUT STREAM sStatistics TO VALUE(lcStatFile).
    fBatchLog("START", lcStatFile).
    
@@ -275,7 +285,6 @@ REPEAT:
 
    LINE_LOOP:
    REPEAT:
-      
       IMPORT STREAM sin UNFORMATTED lcLine.
    
       ASSIGN 

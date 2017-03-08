@@ -1,10 +1,11 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
-DEF VAR lcResultStruct AS CHAR NO-UNDO. 
-DEF VAR pcId AS CHAR NO-UNDO. 
-DEF VAR pcIdArray AS CHAR NO-UNDO. 
-DEF VAR liCounter AS INTEGER NO-UNDO. 
+DEF VAR gcBrand            AS CHAR      NO-UNDO INIT "1".
+DEF VAR lcResultStruct     AS CHAR      NO-UNDO. 
+DEF VAR pcId               AS CHAR      NO-UNDO. 
+DEF VAR pcTenant           AS CHAR 		NO-UNDO.
+DEF VAR pcIdArray          AS CHAR      NO-UNDO. 
+DEF VAR liCounter          AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.

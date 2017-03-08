@@ -1,6 +1,7 @@
 from pike import *
 import os
 from subprocess import call, Popen, PIPE
+from ast import literal_eval
 import tempfile
 import shutil
 import socket
@@ -25,6 +26,34 @@ def getpf(pf):
             if tenancies[tenant].get('tenanttype', '') == 'Super':
                 return '{0}_{1}.pf'.format(pf, tenant)
     return '{}.pf'.format(pf)
+
+def userandpass():
+    if 'tenancies' in globals():
+        for t, tdict in tenancies.items():
+            if tdict['tenanttype'] == 'Super':
+                return ['-U', '{0}@{1}'.format(tdict['username'], tdict['domain']), '-P', tdict['password'] ]
+        raise ValueError('Cannot identify a super tenant')
+    else:
+        return []
+
+def active_cdr_db_pf():
+    if '-S' in open('../../db/progress/store/common.pf').read():
+        connection_type = "tcp"
+    else:
+        connection_type = "local"
+
+    args = ['-b', '-p', '../../tms/Syst/list_active_cdr_databases.p', '-param', connection_type]
+    args.extend(['-pf', getpf('../../db/progress/store/common')])
+
+    cdr_fetch = Popen(mpro + args, stdout=PIPE)
+    dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+
+    if 'tenancies' in globals():
+        uandp = userandpass()
+        for db in dict:
+            dict[db].extend(uandp)
+
+    return dict
 
 @target
 def build(*a):
@@ -62,8 +91,18 @@ def compile(*a):
                 source_files.append(os.path.join(source_dir, file))
     procedure_file = make_compiler(format, source_files,
                                        show='name' if show_file else '.')
-    comp = Popen(mpro + ['-pf', '../../db/progress/store/all.pf', '-s', '120',
-                         '-b', '-p', procedure_file.name], stdout=PIPE)
+
+    args = ['-pf', getpf('../../db/progress/store/all')]
+    cdr_dict = {}
+
+    for cdr_database in cdr_databases:
+        if not cdr_dict:
+            cdr_dict = active_cdr_db_pf()
+        if cdr_database in cdr_dict:
+            args.extend(cdr_dict[cdr_database])
+
+    comp = Popen(mpro + args + ['-s', '120', '-b', '-p', procedure_file.name], stdout=PIPE)
+
     call('/bin/cat', stdin=comp.stdout)
     if comp.wait() != 0:
         raise PikeException('Compilation failed')
@@ -114,11 +153,19 @@ def run_agent(*a):
         raise PikeException('Expected fcgi agent name as parameter')
 
     agent_name = parameters[0]
+
+    args = ['-pf', getpf('../../db/progress/store/all')]
+    cdr_dict = {}
+
+    for cdr_database in cdr_databases:
+        if not cdr_dict:
+            cdr_dict = active_cdr_db_pf()
+        if cdr_database in cdr_dict:
+            args.extend(cdr_dict[cdr_database])
+
     
     os.environ['PROPATH'] += ',rpcmethods.pl'
-    args = ['-pf', getpf('../../db/progress/store/all'), 
-            '-T', '../../var/tmp',
-            '-clientlog', '../../var/log/%s_agent.%d.log' % \
-            	          (agent_name, os.getpid())]
+    args.extend(['-T', '../../var/tmp', '-clientlog', '../../var/log/%s_agent.%d.log' % \
+            	          (agent_name, os.getpid())])
     args = mpro + args + extraargs + ['-b', '-p', 'fcgi_agent/nq_xmlrpc.p']
     os.execlp(args[0], *args)

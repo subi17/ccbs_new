@@ -13,10 +13,18 @@
           
 */
 {newton/src/header_get.i}
+{Func/multitenantfunc.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
+
+   IF NUM-ENTRIES(pcID,"|") > 1 THEN
+       ASSIGN
+           pcTenant = ENTRY(2, pcID, "|")
+           pcID     = ENTRY(1, pcID, "|").
+   ELSE
+       RETURN appl_err("Invalid tenant information").
 
    FIND FeeModel NO-LOCK WHERE 
         FeeModel.Brand = gcBrand AND 
@@ -30,8 +38,9 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF NOT AVAIL FMItem THEN RETURN appl_err("Charge event " + pcId + " doesn't contain active billing item ").
   
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", FeeMode.FeeModel). 
-   add_string(lcResultStruct, "name", FeeModel.FeeName).
+   add_string(lcResultStruct, "id"   , FeeModel.FeeModel + "|" + fConvertTenantToBrand(pcTenant)). 
+   add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)).
+   add_string(lcResultStruct, "name" , FeeModel.FeeName).
 
    add_double(lcResultStruct, "amount", FMItem.Amount).
    add_string(lcResultStruct, "billing_item_id", FMItem.BillCode).

@@ -17,11 +17,12 @@
 
 {newton/src/header_get.i}
 {Func/transname.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE lctitle   AS CHARACTER NO-UNDO EXTENT 5 
                           INITIAL ["title_es","title_ca","title_eu","title_ga","title_en"] . 
-DEFINE VARIABLE liLang AS INTEGER NO-UNDO. 
-DEFINE VARIABLE lctrans AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE liLang    AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE lctrans   AS CHARACTER NO-UNDO. 
 
 FUNCTION fGetTranslationName RETURN CHARACTER
   (INPUT pcCode AS CHARACTER, INPUT piLang AS INTEGER):
@@ -39,6 +40,15 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
    
+   IF NUM-ENTRIES(pcID,"|") > 1 THEN
+       ASSIGN
+           pcTenant = ENTRY(2, pcID, "|")
+           pcID     = ENTRY(1, pcID, "|").
+   ELSE
+       RETURN appl_err("Invalid tenant information").
+
+   {newton/src/settenant.i pcTenant}
+
    FIND BillItem NO-LOCK WHERE 
         BillItem.Brand = gcBrand AND 
         BillItem.BillCode = pcId NO-ERROR.
@@ -46,7 +56,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF NOT AVAIL BillItem THEN RETURN appl_err("Billing item not found: " + pcId).
       
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", BillItem.BillCode). 
+   add_string(lcResultStruct, "id", BillItem.BillCode + "|" + BUFFER-TENANT-NAME(BillItem)). 
+   add_string(lcResultStruct, "brand", pcTenant). 
    add_string(lcResultStruct,"billing_group", BillItem.BIGroup). 
    add_int(lcResultStruct, "ui_order", BillItem.OrderChannelOrder).
    add_boolean(lcResultStruct, "active", BillItem.Active).

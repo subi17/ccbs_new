@@ -78,10 +78,13 @@ os.environ['display_banner'] = 'no'
 os.environ['PROTERMCAP'] = work_dir + '/etc/protermcap'
 
 def modgen():
+    if environment == 'safeproduction':
+        yield 'tms/r'
     for mod in modules:
         if environment == 'production':
             yield '{0}/{0}.pl'.format(mod)
         yield mod
+    yield 'tms_support'
     yield 'tools'
     yield 'tools/stompAdapter'
 

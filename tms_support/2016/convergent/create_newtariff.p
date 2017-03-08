@@ -15,8 +15,8 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
-{../tms_support/2016/convergent/tariffconfig.i}
-{../tms_support/2016/convergent/tariffcons.i}
+{2016/convergent/tariffconfig.i}
+{2016/convergent/tariffcons.i}
 
 DEFINE VARIABLE lcLine            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile         AS CHARACTER NO-UNDO.
@@ -120,18 +120,18 @@ DO TRANSACTION:
          BY ttFiles.FOrder:
       
       IF INDEX(ttFiles.FName,"billingitem") > 0 THEN 
-         RUN tms_support/2016/convergent/billitemcreation.p(lcIncDir,
+         RUN 2016/convergent/billitemcreation.p(lcIncDir,
                                 lcSpoolDir) NO-ERROR.
       ELSE IF INDEX(ttFiles.FName,"shaperconf") > 0 THEN
-         RUN tms_support/2016/convergent/shaperconfcreation.p(lcIncDir,
+         RUN 2016/convergent/shaperconfcreation.p(lcIncDir,
                                   lcSpoolDir) NO-ERROR.      
       ELSE IF INDEX(ttFiles.FName,"rateplan") > 0 THEN 
-         RUN tms_support/2016/convergent/rateplan.p(lcIncDir,
+         RUN 2016/convergent/rateplan.p(lcIncDir,
                         lcSpoolDir,
                         OUTPUT lcPayType,
                         OUTPUT lcRatePlan) NO-ERROR.
       ELSE IF INDEX(ttFiles.FName,"tariffcreation") > 0 THEN 
-        RUN tms_support/2016/convergent/tariffcreation.p(lcIncDir + ttFiles.FName,
+        RUN 2016/convergent/tariffcreation.p(lcIncDir + ttFiles.FName,
                              lcSpoolDir,
                              lcPayType,
                              lcRatePlan) NO-ERROR.

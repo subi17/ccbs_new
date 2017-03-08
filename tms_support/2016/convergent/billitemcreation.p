@@ -15,8 +15,8 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
-{../tms_support/2016/convergent/tariffconfig.i}
-{../tms_support/2016/convergent/tariffcons.i}
+{2016/convergent/tariffconfig.i}
+{2016/convergent/tariffcons.i}
 
 DEFINE TEMP-TABLE ttBillItem NO-UNDO
    FIELD BillItem   AS CHARACTER 

@@ -21,6 +21,7 @@
 {Func/transname.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
+{Func/multitenantfunc.i}
 
 DEF VAR lcCLITypeTransName     AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType  AS CHAR NO-UNDO.
@@ -35,6 +36,15 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
    
+   IF NUM-ENTRIES(pcID,"|") > 1 THEN
+       ASSIGN
+           pcTenant = ENTRY(2, pcID, "|")
+           pcID     = ENTRY(1, pcID, "|").
+   ELSE
+       RETURN appl_err("Invalid tenant information").
+
+   {newton/src/settenant.i pcTenant}
+
    FIND FIRST CLIType NO-LOCK WHERE
               CLIType.Brand   = "1" AND
               CLIType.CLIType = pcID AND
@@ -47,7 +57,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       lcCLITypeTransName = CLIType.CLIName.
    
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", CLIType.CLIType).
+   add_string(lcResultStruct, "id", CLIType.CLIType + "|" + fConvertTenantToBrand(pcTenant)).
+   add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)).
    add_string(lcResultStruct,"name", lcCLITypeTransName).
    add_int(lcResultStruct,"pay_type", CLIType.PayType).
    add_int(lcResultStruct,"status", (IF CLIType.CLIType EQ "CONT15" AND 

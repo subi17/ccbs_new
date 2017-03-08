@@ -17,6 +17,7 @@ gcBrand = "1".
 {Syst/eventlog.i}
 {Func/timestamp.i}
 {Func/fcreditreq.i}
+{Func/multitenantfunc.i}
 
 /* files and dirs */
 DEF VAR lcLine AS CHAR NO-UNDO.
@@ -60,6 +61,8 @@ REPEAT:
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
 
+   IF NOT fsetEffectiveTenantForAllDB(
+         fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.
    /* extract date from filename */
    fBatchLog("START", lcInputFile).
    lcLogFile = lcSpoolDir + lcFileName + ".log".

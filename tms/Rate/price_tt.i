@@ -183,7 +183,13 @@ FUNCTION fPrice RETURNS DECIMAL:
       /* StartCharge check NOT needed */
       bFst = TRUE.
    END.
-   
+
+   IF ttTariff.FirstBillableSec > 0 THEN DO:
+
+      xTime = xTime - ttTariff.FirstBillableSec.
+      IF xtime < 0 THEN xtime = 0.
+   END.
+
    /* YDR-850 */
    IF AVAIL ttCall AND
       TRIM(ttCall.SubsType) EQ "1" AND
