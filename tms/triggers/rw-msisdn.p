@@ -1,0 +1,19 @@
+TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MSISDN OLD BUFFER oldMSISDN.
+
+IF NEW(MSISDN) THEN DO:
+   IF NOT CAN-FIND(FIRST MSISDN_new NO-LOCK WHERE
+                      MSISDN_new.Brand = MSISDN.Brand AND
+                      MSISDN_new.CLI = MSISDN.CLI AND
+                      MSISDN_new.ValidFrom = MSISDN.ValidFrom) THEN DO:
+      CREATE MSISDN_new.
+      BUFFER-COPY MSISDN TO MSISDN_new.
+   END.
+END.
+ELSE DO:
+   FIND MSISDN_new EXCLUSIVE-LOCK  WHERE
+        MSISDN_new.Brand = oldMSISDN.Brand AND
+        MSISDN_new.CLI = oldMSISDN.CLI AND
+        MSISDN_new.ValidFrom = oldMSISDN.ValidFrom  NO-ERROR.
+   IF AVAIL MSISDN_new THEN
+      BUFFER-COPY MSISDN TO MSISDN_new NO-ERROR.
+END.
