@@ -5,11 +5,11 @@
  * @output string;mandatory;HAS_ADDITIONAL_LINES, OK
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{cparam2.i}
-{tmsconst.i}
-{main_add_lines.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/main_add_lines.i}
 
 DEF VAR piMsSeq AS INT NO-UNDO. 
 DEF VAR llAdditionalLines AS LOG NO-UNDO. 

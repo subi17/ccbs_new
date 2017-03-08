@@ -1,4 +1,4 @@
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEF TEMP-TABLE ttFusion NO-UNDO
     FIELD CustNum  AS INT

@@ -7,12 +7,12 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
-{ftaxdata.i}
-{ftopup.i}
-{cparam2.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/ftaxdata.i}
+{Func/ftopup.i}
+{Func/cparam2.i}
 
 DEF INPUT  PARAMETER iiMsSeq   AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiRequest AS INT  NO-UNDO. 

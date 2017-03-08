@@ -13,10 +13,10 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'pnplist'}
+{Syst/commali.i}
+{Func/excel.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'pnplist'}
 
 DEF input PARAMETer ipCustNum AS INT NO-UNDO .
 
@@ -94,7 +94,7 @@ WITH
    ROW 8 OVERLAY CENTERED TITLE " Import CLI list from file " 
    NO-LABELS FRAME frmImport.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -129,13 +129,13 @@ repeat WITH FRAME sel:
       assign cfc = "lis" ufkey = true fr-header = " ADD "
 
       must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION: 
 
            RUN LOCAL-UPDATE-RECORD(TRUE).
@@ -214,16 +214,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW PNPList.PNPGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPList.PNPGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPList.PNPGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW PNPList.BDestFrom ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPList.BDestFrom {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPList.BDestFrom WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -354,9 +354,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        haku-PNPList = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE haku-PNPList WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if haku-PNPList <> 0 THEN DO:
@@ -472,9 +472,9 @@ BROWSE:
             recid(PNPList) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
 

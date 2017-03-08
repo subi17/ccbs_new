@@ -10,7 +10,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 DEF shared VAR siirto AS CHAR.
 
 DEF VAR opnro LIKE CustCat.Category NO-UNDO.
@@ -36,7 +36,7 @@ form /* Maa :n hakua varten */
     with row 4 col 2 title color value(ctc) " FIND CODE  "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 Runko:
 repeat:
 
@@ -77,7 +77,7 @@ print-line:
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
   END. /* print-line */
 
@@ -85,7 +85,7 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW CustCat.Category ;(uchoose.i;) no-error WITH FRAME tlse.
+         CHOOSE ROW CustCat.Category {Syst/uchoose.i} no-error WITH FRAME tlse.
          COLOR DISPLAY value(ccc) CustCat.Category WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
@@ -182,8 +182,8 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN ufcolor.
-           haku = "". ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           haku = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE haku WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if haku <> "" THEN DO:

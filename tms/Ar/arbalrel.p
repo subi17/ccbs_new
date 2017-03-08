@@ -12,9 +12,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "arbalrel"
        tuni2 = "".
@@ -64,7 +64,7 @@ toimi:
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       IF nap NE "first" THEN DO:
@@ -76,7 +76,7 @@ toimi:
 
       IF LOOKUP(nap,"1,f1") > 0 THEN DO:
          ehto = 9. 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          REPEAT WITH frame valinta ON ENDKEY UNDO, LEAVE:
             UPDATE 
                lcInvGroup[1]
@@ -99,15 +99,15 @@ toimi:
    END. /* toimi */
 
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 MESSAGE "Printing in process...".            
 
-RUN arbalrep.p(lcInvGroup[1],
+RUN Ar/arbalrep.p(lcInvGroup[1],
                lcInvGroup[2]).
 
 ASSIGN tila = FALSE.
-{tmsreport.i}        
+{Syst/tmsreport.i}        
 
 MESSAGE "Printing complete !" VIEW-AS ALERT-BOX.
 

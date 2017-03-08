@@ -1,6 +1,6 @@
 {test_xmlrpc_includes.i}
 {unit/checkutils.i}
-{timestamp.i}
+{Func/timestamp.i}
 
 
 gcFixtures = "MsReqStatistic".

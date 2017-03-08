@@ -21,7 +21,7 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER CustGroup LIKE CustGroup.CustGroup       NO-UNDO.
 DEF INPUT PARAMETER asno1   LIKE Customer.CustNum       NO-UNDO.
@@ -69,36 +69,36 @@ else             callcheck = "NO Calls SINCE " + string(cday,"99.99.99").
 
 PUT STREAM excel UNFORMATTED
    "Ext. CustGroup:" tab (if CustGroup ne "" then CustGroup else "NONE").
-RUN uexskip(1).
+RUN Syst/uexskip.p(1).
 PUT STREAM excel UNFORMATTED
    "Cust. nos. :" tab asno1 " - " asno2.
-RUN uexskip(1).
+RUN Syst/uexskip.p(1).
 PUT STREAM excel UNFORMATTED
    "Salesman:" tab myyja1 " - " myyja2.
-RUN uexskip(1).
+RUN Syst/uexskip.p(1).
 PUT STREAM excel UNFORMATTED
    "Category:" tab kateg.
-RUN uexskip(1).
+RUN Syst/uexskip.p(1).
 PUT STREAM excel UNFORMATTED
    "Contract begun:" tab.
 IF fake[1] NE ? THEN PUT STREAM excel UNFORMATTED fake[1].
 put stream excel unformatted " - ".
 IF fake[2] NE ? THEN PUT STREAM excel UNFORMATTED fake[2].
-RUN uexskip(1).
+RUN Syst/uexskip.p(1).
 PUT STREAM excel UNFORMATTED
    "Contract ended:".
 IF fake[3] NE ? THEN PUT STREAM excel UNFORMATTED fake[3].
    put stream excel unformatted " - ".
 IF fake[4] NE ? THEN PUT STREAM excel UNFORMATTED fake[4].
-RUN uexskip(1).
+RUN Syst/uexskip.p(1).
 put stream excel unformatted "Connection:" tab.
 if ConnType = ? then put stream excel "ALL".
 else put stream excel ConnType format "Direct/Indirect".
-RUN uexskip(1).
+RUN Syst/uexskip.p(1).
 put stream excel unformatted "Inv. Group:" tab InvGroup.
-RUN uexskip(1).
+RUN Syst/uexskip.p(1).
 PUT STREAM excel UNFORMATTED callcheck.
-RUN uexskip(1).
+RUN Syst/uexskip.p(1).
 
 
 FOR

@@ -7,9 +7,9 @@
   CREATED ......: 18.01.12
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{date.i}
-{air.i}
+{Syst/commali.i}
+{Func/date.i}
+{Gwy/air.i}
 
 DEFINE INPUT PARAMETER pcCLI AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER piServiceClass AS INT NO-UNDO.

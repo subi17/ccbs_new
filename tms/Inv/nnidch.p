@@ -14,10 +14,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
 
 DEF VAR lcInvGroup LIKE InvGroup.InvGroup  NO-UNDO.
 def var IGName     like InvGroup.InvGroup  no-undo format "x(20)".
@@ -35,7 +35,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER Invoice:HANDLE.
@@ -43,7 +43,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhInvoice).
+      RUN Mc/eventview2.p(lhInvoice).
    END.
 END.
 
@@ -89,7 +89,7 @@ PAUSE 0.
 
 rajat:
 repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       lcInvGroup
@@ -149,7 +149,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
              
       IF InvNum2 = 0 OR diff = 0 THEN ufk[5] = 0.
 
-      ehto = 0. RUN ufkey.
+      ehto = 0. RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT rajat.
 
       ELSE IF toimi = 3 THEN DO:

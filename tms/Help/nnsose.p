@@ -10,7 +10,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -47,7 +47,7 @@ form /* hakua varten */
     with row 4 col 2 title color value(ctc) " FIND CODE "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 Runko:
 repeat:
 
@@ -68,7 +68,7 @@ LOOP:
       ASSIGN
       cfc = "tlli"
       tlli-ots = " ADD ".
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME tlli:
          PAUSE 0 no-message.
@@ -131,8 +131,8 @@ print-line:
          ufk = 0 ufk[1] = 718 ufk[5] = 11
          ufk[6] = 5 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = FALSE.
-         {uright1.i '"6"'}
-         RUN ufkey.p.
+         {Syst/uright1.i '"6"'}
+         RUN Syst/ufkey.p.
       END.
   END. /* print-line */
 
@@ -140,7 +140,7 @@ BROWSE:
       repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW Salesoffice.SalesOffice ;(uchoose.i;) no-error 
+         CHOOSE ROW Salesoffice.SalesOffice {Syst/uchoose.i} no-error 
          WITH FRAME sel.
          COLOR DISPLAY value(ccc) Salesoffice.SalesOffice WITH FRAME sel.
 
@@ -241,8 +241,8 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN ufcolor.
-           Salesoffice = "". ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           Salesoffice = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE Salesoffice WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if Salesoffice <> "" THEN DO:
@@ -271,7 +271,7 @@ BROWSE:
 
         /* Lisays */
         else if lookup(nap,"6,f6") > 0 THEN DO:
-           {uright2.i}
+           {Syst/uright2.i}
            ASSIGN must-add = TRUE.
            NEXT LOOP.
         END. /* Lisays */

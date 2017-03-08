@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------
   MODULE .......: INVRUN_SCREEN
-  TASK .........: Run lamupers from customer split files
+  TASK .........: RUN Inv/lamupers.p from customer split files
   APPLICATION ..: TMS
   AUTHOR .......: kl
   CREATED ......: 21.01.08
@@ -10,11 +10,11 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-{cparam2.i}
-{timestamp.i}
-{billrund.i NEW}
-{ftransdir.i}
+{Syst/commpaa.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Inv/billrund.i NEW}
+{Func/ftransdir.i}
 
 DEFINE VARIABLE lcInvRunFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLine       AS CHARACTER NO-UNDO.
@@ -48,7 +48,7 @@ ASSIGN
    ldeBegTime   = fMakeTS()
    ldaDueDate   = ?.
 
-RUN lamupers PERSISTENT SET lhHandle.
+RUN Inv/lamupers.p PERSISTENT SET lhHandle.
 
 DEFINE STREAM sIn.
 

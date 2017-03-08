@@ -10,15 +10,15 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{msreqfunc.i}
-{fmakemsreq.i}
-{eventval.i}
-{tmsconst.i}
-{service.i}
-{main_add_lines.i}
-{barrfunc.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msreqfunc.i}
+{Func/fmakemsreq.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/service.i}
+{Func/main_add_lines.i}
+{Func/barrfunc.i}
 
 DEFINE INPUT PARAMETER iiRequest AS INTEGER   NO-UNDO.
 
@@ -53,7 +53,7 @@ END.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 /* mainly for test purposes when dates are manipulated .. */
@@ -510,7 +510,7 @@ PROCEDURE pDone.
       IF llRefreshBarring THEN DO:
 
          /* create barring request */
-         RUN barrengine.p(Mobsub.MsSeq,
+         RUN Mm/barrengine.p(Mobsub.MsSeq,
                          "#REFRESH",
                          "5",                /* source  */
                          katun,              /* creator */

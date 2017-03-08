@@ -7,14 +7,14 @@
 ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
-{commali.i}
-{tmsconst.i}
-{date.i}
-{timestamp.i}
-{email.i}
-{femailinvoice.i}
-{fusioninvoice.i}
-{ftransdir.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/email.i}
+{Func/femailinvoice.i}
+{Inv/fusioninvoice.i}
+{Func/ftransdir.i}
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 

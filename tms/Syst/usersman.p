@@ -11,25 +11,25 @@
 &GLOBAL-DEFINE TMSCodeDef NO
 &GLOBAL-DEFINE BrTable UserSman
 
-{commali.i}
-{finvbal.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'UserSman'}
-{fduedate.i}
-{invdet.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/finvbal.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'UserSman'}
+{Func/fduedate.i}
+{Ar/invdet.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhUserSman AS HANDLE NO-UNDO.
    lhUserSman = BUFFER UserSman:HANDLE.
    RUN StarEventInitialize(lhUserSman).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhUserSman).
+      RUN Mc/eventview2.p(lhUserSman).
    END.
 
 END.
@@ -71,7 +71,7 @@ WITH ROW FrmRow centered overlay FrmDown  down
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     UserSman.UserCode   COLON 20
@@ -103,7 +103,7 @@ ELSE DO:
    memory = ?.
 END.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Brand  ,".
@@ -120,14 +120,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a UserSman  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -240,12 +240,12 @@ REPEAT WITH FRAME sel:
          ufk[8]= 8 
          ehto = 3 ufkey = false.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row UserSman.Brand ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row UserSman.Brand {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) UserSman.Brand WITH FRAME sel.
       END.
 
@@ -383,8 +383,8 @@ REPEAT WITH FRAME sel:
      
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY UserSman.Brand.
 
        RUN local-update-record.                                  
@@ -555,7 +555,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE
          UserSman.Salesman  

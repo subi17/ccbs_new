@@ -7,12 +7,12 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'EDRHistory'}
-{timestamp.i}
-{callquery.i}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'EDRHistory'}
+{Func/timestamp.i}
+{Func/callquery.i}
+{Syst/eventval.i}
 
 DEF INPUT PARAMETER icCLI     AS CHAR NO-UNDO.
 DEF INPUT PARAMETER idaDateSt AS DATE NO-UNDO.
@@ -104,7 +104,7 @@ RUN pInitHistory.
 lcTime = STRING(iiTimeSt,"hh:mm:ss").
 PAUSE 0.
 DISP icCLI idaDateSt lcTime lcGSMBNr WITH FRAME fHead.
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -183,12 +183,12 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttHistory.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttHistory.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttHistory.BillCode WITH FRAME sel.
       END.
 
@@ -320,8 +320,8 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttHistory.InvCust.
 
        RUN local-UPDATE-record.                                  
@@ -479,7 +479,7 @@ PROCEDURE local-UPDATE-record:
          ehto = 0
          ufk  = 0
          ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       IF toimi = 8 THEN LEAVE.
    END.

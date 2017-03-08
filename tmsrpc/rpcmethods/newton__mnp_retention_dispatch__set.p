@@ -29,8 +29,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
-{eventval.i}
+{Syst/commpaa.i}
+{Syst/eventval.i}
 ASSIGN
    katun = pcUsername
    gcBrand = "1".
@@ -69,7 +69,7 @@ IF ABS(ldePercentageTotal - 100) > 0.001 THEN RETURN
          
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhMNPRetPlatform AS HANDLE NO-UNDO.
    lhMNPRetPlatform = BUFFER MNPRetPlatform:HANDLE.
 END.

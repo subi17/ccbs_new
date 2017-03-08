@@ -11,7 +11,7 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF NEW shared STREAM excel.
 
@@ -50,7 +50,7 @@ WITH
    NO-LABELS FRAME rajat.
 
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 
 ASSIGN
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -63,7 +63,7 @@ hdr     = "Sman,Name,ProdCode,ProdName,AmtCalls,AmtMinPeak," +
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE
    exdate1
    exdate2 validate(input exdate2 >= input exdate1,"Invalid order !")
@@ -72,7 +72,7 @@ repeat WITH FRAME rajat:
 toimi:
    repeat WITH fram rajat:
       ASSIGN ufk = 0 ufk[1] = 15 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT rajat.
       IF toimi = 8 THEN LEAVE rajat.
@@ -91,15 +91,15 @@ toimi:
    OUTPUT STREAM excel TO value(exPaymFile).
 
    PUT STREAM excel UNFORMATTED ynimi.
-   RUN uexskip(2).
+   RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED
     "All calls by salesman/product during "
     string(exdate1,"99.99.9999") " - " string(exdate2,"99.99.9999").
-   RUN uexskip(2).
+   RUN Syst/uexskip.p(2).
    DO i = 1 TO num-entries(hdr).
       PUT STREAM excel UNFORMATTED entry(i,hdr) tab.
    END.
-   RUN uexskip(2).
+   RUN Syst/uexskip.p(2).
    i = 0.
    FOR
 
@@ -153,7 +153,7 @@ toimi:
          round(
          (accum sub-total BY FixCDR.BillCode netto), 0)              tab.
 
-         RUN uexskip(1).
+         RUN Syst/uexskip.p(1).
 
       END. 
 

@@ -13,7 +13,7 @@
 
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1} 
 
-{timestamp.i}
+{Func/timestamp.i}
 
 /* Input parameters */
 DEF VAR pcReference AS CHAR NO-UNDO.

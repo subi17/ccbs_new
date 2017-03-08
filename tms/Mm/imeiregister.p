@@ -9,23 +9,23 @@
 
 &GLOBAL-DEFINE BrTable IMEIRegister
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'IMEIRegister'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'IMEIRegister'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhIMEIRegister AS HANDLE NO-UNDO.
    lhIMEIRegister = BUFFER IMEIRegister:HANDLE.
    RUN StarEventInitialize(lhIMEIRegister).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhIMEIRegister).
+      RUN Mc/eventview2.p(lhIMEIRegister).
    END.
 
 END.
@@ -65,7 +65,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
        string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     IMEIRegister.Brand            COLON 18
@@ -93,7 +93,7 @@ FORM
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -123,7 +123,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a IMEIRegister  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -131,7 +131,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -243,16 +243,16 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW IMEIRegister.IMEI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW IMEIRegister.IMEI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) IMEIRegister.IMEI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW IMEIRegister.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW IMEIRegister.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) IMEIRegister.BillCode WITH FRAME sel.
       END.
 
@@ -380,8 +380,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -403,8 +403,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
@@ -499,8 +499,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhIMEIRegister).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY IMEIRegister.IMEI.
 
        RUN local-UPDATE-record.                                  
@@ -538,7 +538,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -645,7 +645,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       ELSE ASSIGN toimi      = 1
                   llDispMenu = TRUE.
@@ -664,7 +664,7 @@ PROCEDURE pUpdate:
    FIND CURRENT IMEIRegister EXCLUSIVE-LOCK.
       
    ehto = 9.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    

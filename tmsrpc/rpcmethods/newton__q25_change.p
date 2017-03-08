@@ -19,12 +19,12 @@ newton__q25_change.p
 
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{fsendsms.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/fsendsms.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.

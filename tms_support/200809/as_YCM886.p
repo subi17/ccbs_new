@@ -3,14 +3,14 @@ DEFINE VARIABLE liPasswordHistoryLength AS INTEGER NO-UNDO.
 DEFINE VARIABLE llSimulate AS LOGICAL NO-UNDO.
 DEFINE BUFFER bTMSPass FOR TMSPass.
 
-{commpaa.i}
-{cparam.i2}
+{Syst/commpaa.i}
+{Func/cparam.i2}
 gcBrand = "1".
 liPasswordHistoryLength = fCParamI("PassWdHistory").
 llSimulate = FALSE. 
 
-{log.i}
-{date.i}
+{Func/log.i}
+{Func/date.i}
 katun = "anttis".
 
 fSetLogFileName("/apps/snet/200809/TMS+user+update+(20080916)_" + 

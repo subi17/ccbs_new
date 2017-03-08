@@ -170,29 +170,29 @@
             23.08.2007/aam ttIr and whole invoice as msseq based
 */
 
-{commali.i}                                                                   
-{country.i}
-{fixedfee.i}
-{cparam.i2}
-{timestamp.i}
-{fapvat.i}
-{billrund.i {1}}
-{fcustbal.i}
-{fcustcnt.i}
-{nncoit2.i}
-{fcurrency.i}
-{eventval.i}
-{fvasinv.i}
-{fduedate.i}
-{fsubser.i}
-{eventlog.i}
-{finvnum.i}
-{ftaxdata.i}
+{Syst/commali.i}                                                                   
+{Syst/country.i}
+{Func/fixedfee.i}
+{Func/cparam.i2}
+{Func/timestamp.i}
+{Func/fapvat.i}
+{Inv/billrund.i {1}}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/nncoit2.i}
+{Func/fcurrency.i}
+{Syst/eventval.i}
+{Func/fvasinv.i}
+{Func/fduedate.i}
+{Func/fsubser.i}
+{Syst/eventlog.i}
+{Func/finvnum.i}
+{Func/ftaxdata.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER Invoice:HANDLE.
@@ -212,9 +212,9 @@ FUNCTION fVolDiscFixed RETURNS LOG (BUFFER VFixCDR FOR FixCDR) IN fhVDHandle.
 FUNCTION fVolDiscMob   RETURNS LOG (BUFFER VMobCDR FOR MobCDR) IN fhVDHandle. 
 
 /* load volume discount procedures */
-RUN voldisc    PERSISTENT SET fhVDHandle. 
-RUN domcopers  PERSISTENT SET fhDCHandle.
-RUN cust_ratep PERSISTENT SET fhRRHandle.
+RUN Inv/voldisc.p    PERSISTENT SET fhVDHandle. 
+RUN Mm/domcopers.p  PERSISTENT SET fhDCHandle.
+RUN Rate/cust_ratep.p PERSISTENT SET fhRRHandle.
 &ENDIF
 
 DEF VAR lUpdacc       AS LOG  NO-UNDO.
@@ -400,22 +400,22 @@ with row 3 centered overlay
    12 DOWN FRAME LOG.
 
 
-{tmsparam.i ReceivAcc      RETURN} ReceivAcc  = TMSParam.IntVal.
-{tmsparam.i RoundAcc       RETURN} RoundAcc   = TMSParam.IntVal.
-{tmsparam.i OTIntAcc       RETURN} OTIntAcc   = TMSParam.IntVal.
-{tmsparam.i OverPayAcc     RETURN} OverPayAcc = TMSParam.IntVal.
-{tmsparam.i CreditLossAcc  RETURN} liCLossAcc = TMSParam.IntVal.
+{Func/tmsparam.i ReceivAcc      RETURN} ReceivAcc  = TMSParam.IntVal.
+{Func/tmsparam.i RoundAcc       RETURN} RoundAcc   = TMSParam.IntVal.
+{Func/tmsparam.i OTIntAcc       RETURN} OTIntAcc   = TMSParam.IntVal.
+{Func/tmsparam.i OverPayAcc     RETURN} OverPayAcc = TMSParam.IntVal.
+{Func/tmsparam.i CreditLossAcc  RETURN} liCLossAcc = TMSParam.IntVal.
 /* NOT mandatory */
-{tmsparam.i AdvPaymAcc}   IF AVAILABLE TMSParam THEN 
+{Func/tmsparam.i AdvPaymAcc}   IF AVAILABLE TMSParam THEN 
                                        AdvPaymAcc = tmsparam.intVal.
-{tmsparam.i ProdNoBill     RETURN} lNotBilled = TMSParam.CharVal.
-{tmsparam.i BillInterest}   IF AVAILABLE TMSParam THEN
+{Func/tmsparam.i ProdNoBill     RETURN} lNotBilled = TMSParam.CharVal.
+{Func/tmsparam.i BillInterest}   IF AVAILABLE TMSParam THEN
                                        llBillInt = (TMSParam.IntVal = 1). 
-{tmsparam.i BillDblVat}   IF AVAILABLE TMSParam THEN
+{Func/tmsparam.i BillDblVat}   IF AVAILABLE TMSParam THEN
                                        llAllowDbl = (TMSParam.IntVal = 1). 
-{tmsparam.i CLossCustomer  RETURN} liCLossCust = TMSParam.IntVal.
-{tmsparam.i PrefixBillItem RETURN} lcMarkPref  = TMSParam.CharVal.
-{tmsparam.i InvCustCombine}   IF AVAILABLE TMSParam THEN
+{Func/tmsparam.i CLossCustomer  RETURN} liCLossCust = TMSParam.IntVal.
+{Func/tmsparam.i PrefixBillItem RETURN} lcMarkPref  = TMSParam.CharVal.
+{Func/tmsparam.i InvCustCombine}   IF AVAILABLE TMSParam THEN
                                        llInvComb = (TMSParam.IntVal = 1). 
 ASSIGN lcOwnUse   = fCParamC("OwnUseCategory")
        liOwnUsePA = fCParamI("OwnUsePaymAcc")
@@ -1107,7 +1107,7 @@ PROCEDURE pCreateInv:
 
          lcRepCode = SUBSTRING(xCustomer.RepCodes,liCnt,1).
          
-         RUN creasfee (xCustomer.CustNum,
+         RUN Mc/creasfee.p (xCustomer.CustNum,
                        0,
                        pDate2,
                        "InvSpec",
@@ -1152,7 +1152,7 @@ PROCEDURE pCreateInv:
          
                   lcRepCode = SUBSTRING(lcMobRep,liCnt,1).
          
-                  RUN creasfee (MsOwner.CustNum,
+                  RUN Mc/creasfee.p (MsOwner.CustNum,
                                 MsOwner.MSSeq,
                                 pDate2,
                                 "CLISpec",
@@ -2176,7 +2176,7 @@ PROCEDURE pCancel:
 
    FOR EACH newinv:
 
-      RUN del_inv (newinv.InvNum). 
+      RUN Inv/del_inv.p (newinv.InvNum). 
 
       /* no need to save eventlog to db */
       FOR EACH EventLog EXCLUSIVE-LOCK WHERE
@@ -3725,7 +3725,7 @@ PROCEDURE pInvoiceHeader:
 
             /* check and mark direct debiting */
             IF Invoice.ChargeType = 2 AND Invoice.InvAmt NE 0 THEN 
-            RUN nnsvte (Invoice.CustNum,
+            RUN Ar/nnsvte.p (Invoice.CustNum,
                         TODAY,
                         OUTPUT Invoice.DDBankAcc). 
 
@@ -3942,7 +3942,7 @@ PROCEDURE pInvoiceHeader:
             THEN DO:
 
                FIND CURRENT Invoice EXCLUSIVE-LOCK. 
-               RUN makepaym (BUFFER Invoice,
+               RUN Ar/makepaym.p (BUFFER Invoice,
                              Invoice.InvAmt,
                              Invoice.InvDate,
                              liCLossAcc,
@@ -3964,7 +3964,7 @@ PROCEDURE pInvoiceHeader:
             ELSE IF Customer.Category = lcOwnUse THEN DO:
                                 
                FIND CURRENT Invoice EXCLUSIVE-LOCK.
-               RUN makepaym (BUFFER Invoice,
+               RUN Ar/makepaym.p (BUFFER Invoice,
                              Invoice.InvAmt,
                              Invoice.InvDate,
                              liOwnUsePA,

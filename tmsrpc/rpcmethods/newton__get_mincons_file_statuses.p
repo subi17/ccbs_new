@@ -9,7 +9,7 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN
 katun = "cron"

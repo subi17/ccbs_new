@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -37,7 +37,7 @@ WITH width 55 OVERLAY centered ROW 3 scroll 1 12 DOWN
    + string(pvm,"99-99-99") + " "
    FRAME tlse.
 
-cfc = "tlse". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 Runko:
 repeat:
 
@@ -85,7 +85,7 @@ print-line:
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
   END. /* print-line */
 
@@ -93,7 +93,7 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW MedSect.Type ;(uchoose.i;) no-error WITH FRAME tlse.
+         CHOOSE ROW MedSect.Type {Syst/uchoose.i} no-error WITH FRAME tlse.
          COLOR DISPLAY value(ccc) 
             MedSect.Type
             MedSect.Name
@@ -209,8 +209,8 @@ BROWSE:
 
         /* RepType */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* RepType */
-           cfc = "puyr". RUN ufcolor.
-           RepType = 0. ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           RepType = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE RepType WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            IF RepType <> 0 THEN DO:

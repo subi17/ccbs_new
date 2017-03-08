@@ -9,16 +9,16 @@
                   
   Version ......: M15
   ---------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 
  DEF INPUT PARAMETER  MsSeq LIKE MobSub.MsSeq   NO-UNDO.
  DEF OUTPUT PARAMETER rc     AS   I             NO-UNDO.
 
-{eventval.i}
+{Syst/eventval.i}
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhKillMS AS HANDLE NO-UNDO.
    lhKillMS = BUFFER KillMS:HANDLE.
@@ -26,7 +26,7 @@ IF llDoEvent THEN DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhKillMS).
+      RUN Mc/eventview2.p(lhKillMS).
    END.
 END.
 

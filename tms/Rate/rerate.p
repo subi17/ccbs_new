@@ -1,5 +1,5 @@
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF INPUT PARAMETER icCLI      AS CHAR NO-UNDO.
 DEF INPUT PARAMETER iiCustNum  AS INT  NO-UNDO.
@@ -31,11 +31,11 @@ IF ldtTo > ldtFrom THEN DO:
   MESSAGE "Re-rate calls ...".
   
    IF iccli ne "" THEN 
-   RUN cli_rate (icCLI,
+   RUN Rate/cli_rate.p (icCLI,
                  ldtFrom,
                  ldtTo,
                  TRUE).
-   ELSE RUN cust_rate(iiCustNum,
+   ELSE RUN Rate/cust_rate.p(iiCustNum,
                       ldtFrom,
                       ldtTo,
                       TRUE).

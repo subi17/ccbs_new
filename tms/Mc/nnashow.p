@@ -7,9 +7,9 @@
   MODIFIED .....: 09.10.02 lp DefClStamp instead fMakeTS()
   VERSIO .......:   
   -------------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 DEF /*NEW*/ shared VAR siirto AS CHAR.
 
@@ -77,7 +77,7 @@ WITH row 4 col 2 title color value(ctc) " FIND A-SUB. NO "
 FRAME haku-f1.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST CLI WHERE
@@ -166,12 +166,12 @@ BROWSE:
          ufk[1]= 36  ufk[2]= 0 ufk[3]= 0  ufk[4]= 0
          ufk[5]= 0 /*5*/   ufk[6]= 0 /*4*/ ufk[7]= 37 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-         CHOOSE ROW CLI.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW CLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) CLI.CLI WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -344,9 +344,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku-CLI = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku-CLI WITH FRAME haku-f1.
         HIDE FRAME haku-f1 no-pause.
         if haku-CLI <> "" THEN DO:
@@ -410,7 +410,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
         FIND CLI WHERE recid(CLI) = rtab[frame-line(sel)].
-        RUN asubhist.p(CLI.CLI).
+        RUN Mf/asubhist.p(CLI.CLI).
         must-print = true.
         ufkey = true.
         NEXT LOOP.

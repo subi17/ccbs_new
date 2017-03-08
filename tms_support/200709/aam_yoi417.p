@@ -1,5 +1,5 @@
-{timestamp.i}
-{ftaxdata.i}
+{Func/timestamp.i}
+{Func/ftaxdata.i}
 
 def var lcdir   as char no-undo.
 def var i       as int  no-undo.

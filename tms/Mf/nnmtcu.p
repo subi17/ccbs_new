@@ -9,9 +9,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mthcall'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mthcall'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -90,7 +90,7 @@ ELSE DO:
 END.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 LOOP:
@@ -157,16 +157,16 @@ BROWSE:
         ufk[1] = 0  ufk[2] = 0 ufk[3] = 0 ufk[4] = 0
         ufk[5] = 0  ufk[6] = 0 ufk[7] = 0 ufk[8] = 8 ufk[9] = 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW MthCall.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MthCall.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MthCall.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MthCall.Month ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MthCall.Month {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MthCall.Month WITH FRAME sel.
       END.
 
@@ -378,8 +378,8 @@ IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
        FIND MthCall where recid(MthCall) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        ASSIGN
           Month     = MthCall.Month
           Called  = MthCall.Called

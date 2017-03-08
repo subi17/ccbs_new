@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{date.i}
-{mdub.i}
+{Func/date.i}
+{Func/mdub.i}
 
 input from yot_1051.input.
 def stream sout.
@@ -75,7 +75,7 @@ repeat trans:
       END.
    end.
       
-   RUN creafat.p (mobsub.CustNum,
+   RUN Mc/creafat.p (mobsub.CustNum,
                mobsub.MsSeq,
                "BONO8CP",
                ?, /* amount */

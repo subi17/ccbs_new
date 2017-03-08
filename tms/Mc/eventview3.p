@@ -9,22 +9,22 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} /* qupd = TRUE. */
+{Syst/commali.i} /* qupd = TRUE. */
 
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhEventlog AS HANDLE NO-UNDO.
    lhEventlog = BUFFER Eventlog:HANDLE.
    RUN StarEventInitialize(lhEventlog).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhEventlog).
+      RUN Mc/eventview2.p(lhEventlog).
    END.
 
 END.
@@ -157,7 +157,7 @@ form /* seek Eventlog  BY UserCode */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND User "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 view frame lis2.
 
@@ -241,12 +241,12 @@ BROWSE:
           ufk[8]= 8 
           ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 2 THEN DO:
-        CHOOSE ROW temp-event.FieldName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW temp-event.FieldName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) temp-event.FieldName WITH FRAME sel.
       END.
 
@@ -413,7 +413,7 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-update-record.                       
        HIDE FRAME lis. /* NO-PAUSE.*/

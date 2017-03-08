@@ -9,8 +9,8 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF INPUT  PARAMETER idaInvDate AS DATE NO-UNDO.
 DEF INPUT  PARAMETER iiInvType  AS INT  NO-UNDO.

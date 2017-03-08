@@ -7,11 +7,11 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{flimitreq.i}
-{tmsconst.i}
+{Func/flimitreq.i}
+{Syst/tmsconst.i}
 
 
 def stream sout.

@@ -12,9 +12,9 @@
   VERSION ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 DEF /* NEW */ SHARED VAR siirto AS CHAR.
 
@@ -44,7 +44,7 @@ DEF VAR lhist        AS LO  FORMAT "*/ "       NO-UNDO.
 DEF VAR lclstamp     AS DEC                    NO-UNDO.
 
 DEF VAR pHandle      AS HANDLE                 NO-UNDO.
-RUN clipers PERSISTENT SET pHandle.
+RUN Mf/clipers.p PERSISTENT SET pHandle.
 
 DEF TEMP-TABLE ttCLI LIKE CLI.
 DEF BUFFER bufatno FOR CLI.
@@ -69,7 +69,7 @@ WITH
    COLOR VALUE(cfc) NO-LABELS OVERLAY 
 FRAME haku-f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST CLI WHERE 
@@ -150,24 +150,24 @@ BROWSE:
          ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 0   ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       hide MESSAGE NO-PAUSE.
       IF jarj = 1 THEN DO:
-         CHOOSE ROW lcfrom {uchoose.i} NO-ERROR WITH FRAME sel.
+         CHOOSE ROW lcfrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) lcfrom WITH FRAME sel.
       END.
 /*      ELSE IF jarj = 2 THEN DO:
-         CHOOSE ROW CLI.CLI {uchoose.i} NO-ERROR WITH FRAME sel.
+         CHOOSE ROW CLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) CLI.CLI WITH FRAME sel.
       END.
     IF jarj = 3 THEN DO:
-         CHOOSE ROW CLI.?? {uchoose.i} NO-ERROR WITH FRAME sel.
+         CHOOSE ROW CLI.?? {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) CLI.?? WITH FRAME sel.
       END.
       ELSE IF jarj = 4 THEN DO:
-         CHOOSE ROW CLI.??  {uchoose.i} NO-ERROR WITH FRAME sel.
+         CHOOSE ROW CLI.??  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) CLI.? WITH FRAME sel.
       END.
 */
@@ -296,9 +296,9 @@ BROWSE:
 /*
      /* Haku 1 */
      ELSE IF lookup(nap,"1,f1") > 0 THEN DO on endkey undo, NEXT LOOP:
-        cfc = "puyr". run ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku-CLI = "".
-        ehto = 9. run ufkey. ufkey = true.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
         UPDATE haku-CLI WITH FRAME haku-f1.
         HIDE FRAME haku-f1 NO-PAUSE.
         IF haku-CLI <> "" THEN DO:

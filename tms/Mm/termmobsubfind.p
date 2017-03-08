@@ -11,11 +11,11 @@
 
 /* icCriterias ID,AGRNAME,CUSTNAME */ 
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Customer'}
-{eventval.i}
-{func.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Customer'}
+{Syst/eventval.i}
+{Func/func.p}
 
 
 DEFINE INPUT PARAMETER  icCriteria AS C NO-UNDO.
@@ -24,14 +24,14 @@ DEFINE INPUT PARAMETER  icValue    AS C NO-UNDO.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER Customer:HANDLE.
    RUN StarEventInitialize(lhCustomer).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCustomer).
+      RUN Mc/eventview2.p(lhCustomer).
    END.
 
 END.
@@ -78,7 +78,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     FRAME sel.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -122,12 +122,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Customer  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR Customer.CustNum
@@ -219,18 +219,18 @@ BROWSE:
         UFK[7] = 0
         ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
 
       
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Customer.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Customer.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Customer.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Customer.CustName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Customer.CustName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Customer.CustName WITH FRAME sel.
       END.
 
@@ -361,9 +361,9 @@ BROWSE:
         RUN local-find-this (FALSE).
         IF icCriteria      = "ID" OR 
            icCriteria      = "AGRNAME" THEN 
-           RUN termmobsub(Customer.CustNum, "AGREEMENT").
+           RUN Mm/termmobsub.p(Customer.CustNum, "AGREEMENT").
         ELSE IF icCriteria = "UserName" THEN
-           RUN termmobsub(Customer.CustNum, "USER").
+           RUN Mm/termmobsub.p(Customer.CustNum, "USER").
         
         ufkey = true.
                               

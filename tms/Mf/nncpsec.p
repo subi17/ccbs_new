@@ -13,10 +13,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MedSect'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MedSect'}
 
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
@@ -43,7 +43,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMedSect AS HANDLE NO-UNDO.
    lhMedSect = BUFFER MedSect:HANDLE.
@@ -51,7 +51,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhMedSect).
+      RUN Mc/eventview2.p(lhMedSect).
    END.
 END.
 
@@ -101,7 +101,7 @@ form /*  search WITH FIELD Name */
 with row 4 col 2 title color value(ctc) " FIND NAME "
    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST MedSect
@@ -133,12 +133,12 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* MedSect -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            PROMPT-FOR MedSect.Type
            VALIDATE
@@ -242,24 +242,24 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW MedSect.Type ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedSect.Type {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedSect.Type WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MedSect.Name ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedSect.Name {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedSect.Name WITH FRAME sel.
       END.
   /*  IF order = 3 THEN DO:
-        CHOOSE ROW MedSect.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedSect.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedSect.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW MedSect.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedSect.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedSect.? WITH FRAME sel.
       END.
 */
@@ -441,9 +441,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Type = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Type WITH FRAME f1.
        HIDE FRAME f1 no-pause.
           FIND FIRST MedSect where MedSect.Type >= Type
@@ -461,9 +461,9 @@ BROWSE:
 
      /* Haku 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Type = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Name WITH FRAME f2.
        HIDE FRAME f1 no-pause.
        IF Name NE "" THEN DO:
@@ -578,8 +578,8 @@ BROWSE:
           NEXT BROWSE.
        END.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           MedSect.Type.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMedSect).

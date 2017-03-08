@@ -11,7 +11,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR i AS INT.
 def var date1 as Date format "99-99-9999" NO-UNDO.
@@ -58,7 +58,7 @@ DO WITH FRAME summary:
    PAUSE 0 no-message.
    disp "ALL" @ InvGroup.IGName.
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
    date1 
    date2 validate(input date2 >= input date1,"Invalid order !")
@@ -75,7 +75,7 @@ ok = FALSE.
 message "Are You SURE that You want to start (Y/N) ? " UPDATE ok.
 
 IF ok THEN DO:
-   ufk = 0. ehto = 4. RUN ufkey.
+   ufk = 0. ehto = 4. RUN Syst/ufkey.p.
    message "Calculating ...".    
    FOR EACH FixCDR no-lock where 
             FixCDR.Date >= date1 AND 
