@@ -397,7 +397,23 @@ PROCEDURE pHeader:
          lcSalesman = "Y300000000"
          lcSimOnly = "N"
          lcOfferId = Order.Offer.
-         
+
+      FOR FIRST Order NO-LOCK WHERE
+            Order.Brand = gcBrand                   AND
+            Order.OrderID = bOrigRequest.ReqIParam2 /*AND
+            Order.DeliveryType = {&ORDER_DELTYPE_POS} */ ,
+         FIRST OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand = "1"               AND
+            OrderCustomer.OrderId = Order.OrderID   AND
+            OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}:
+
+         ASSIGN
+            lcAddress     = OrderCustomer.Address
+            lcZipCode     = OrderCustomer.ZipCode
+            lcRegion      = OrderCustomer.Region
+            lcPostOffice  = OrderCustomer.PostOffice
+            .
+      END.
    END.      
          
    IF lcBirthDay = ? THEN lcBirthDay = "".
