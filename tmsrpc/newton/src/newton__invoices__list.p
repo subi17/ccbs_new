@@ -354,7 +354,7 @@ END FUNCTION.
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcSearchStruct = get_struct(param_toplevel_id, "0").
 
-lcListInvIndexParam = "brand,invoice_number_external,invoice_date_start,invoice_date_end".
+lcListInvIndexParam = "brand!,invoice_number_external,invoice_date_start,invoice_date_end".
 lcListCustIndexParam = "dni,firstname,surname1,surname2,company,bank_account".
 lcListInvOtherParam = "due_date_start,due_date_end,invoice_amount_from,invoice_amount_to,claim_status,bypass".
 lcListSubInvParam = "msisdn".
@@ -376,7 +376,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF LOOKUP("customer_id",lcSearchStruct) NE 0 THEN DO:
    
    lcSearchStruct = validate_struct(pcSearchStruct,
-      "customer_id!,invoice_date_start!,credit,offset,limit,bypass" + "," + lcListSubInvParam).
+      "brand!,customer_id!,invoice_date_start!,credit,offset,limit,bypass" + "," + lcListSubInvParam).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    lcQuery = fSearchCustomer(
@@ -386,7 +386,7 @@ END.
 ELSE IF LOOKUP("order_id",lcSearchStruct) NE 0 THEN DO:
    
    lcSearchStruct = validate_struct(pcSearchStruct, 
-      "order_id!,credit,offset,limit,bypass").
+      "brand!,order_id!,credit,offset,limit,bypass").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    lcQuery = fSearchOrder(OUTPUT lcError).
