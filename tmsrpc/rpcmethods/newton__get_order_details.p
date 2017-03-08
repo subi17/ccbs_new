@@ -476,11 +476,11 @@ IF AVAIL OrderCustomer THEN DO:
    add_string(gcStructDeliveryAddress, "kiala_code", OrderCustomer.KialaCode).
    add_string(gcStructDeliveryAddress, "site_name",  OrderCustomer.Company).
 END.
- 
+
 FIND OrderCustomer WHERE 
      OrderCustomer.Brand = gcBrand AND 
      OrderCustomer.OrderId = piOrderId AND 
-     OrderCustomer.RowType = 8
+     OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS} 
      NO-LOCK NO-ERROR.
 
 IF AVAIL OrderCustomer THEN DO:
