@@ -16,7 +16,7 @@ DEFINE VARIABLE liDBCount AS INTEGER NO-UNDO.
 
 {Func/multitenantfunc.i}
 
-pcTenant = fConvertBrandToTenant(pcTenant).
+pcTenant = fConvertBrandToTenant({1}).
 
 IF pcTenant = "" THEN 
     RETURN appl_err("Invalid tenant information").
