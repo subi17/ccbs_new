@@ -112,7 +112,7 @@ form
     "Usage Type....:"  AT 35 CLIType.UsageType
         HELP "1=Voice, 2=Data"
         lcUsageType NO-LABEL FORMAT "X(15)" SKIP
-    "Rate plan ....:"  CLIType.PricePlan FORMAT "X(13)" PLName   SKIP
+    "Rate plan ....:"  CLIType.PricePlan FORMAT "X(20)" PLName   SKIP
     "Disc. plan ...:"  CLIType.DiscPlan    DPName   SKIP
     
     "Service pack .:"  CliType.ServicePack FORMAT "x(2)" 
