@@ -34,6 +34,7 @@ DEF VAR ldeMonthlyFee AS DEC NO-UNDO.
 DEF VAR liMonths      AS INT NO-UNDO.
 DEF VAR ldeFinalFee   AS DEC NO-UNDO.
 DEF VAR lcRegion      AS CHAR NO-UNDO.
+DEF VAR lcDelRegion   AS CHAR NO-UNDO.
 DEF VAR lcRegionName  AS CHAR NO-UNDO.
 DEF VAR lcCRegionName AS CHAR NO-UNDO.
 DEF VAR lcDelRegionName AS CHAR NO-UNDO.
@@ -72,11 +73,12 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
       FIND FIRST OrderCustomer NO-LOCK WHERE
                  OrderCustomer.Brand   = gcBrand       AND
                  OrderCustomer.OrderID = Order.OrderID AND
-                 OrderCustomer.RowType = 1 NO-ERROR.
+                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
       ASSIGN
          liCustNum = Order.CustNum
          lcRegion = OrderCustomer.Region
+         lcDelRegion = OrderCustomer.Region   /* init to same as lcRegion */
          liLang = 1. /* INT(OrderCustomer.Language). Decision only spanish 
                         supported. YDR-1637 YTS-7046 */
          lcCustAddress = OrderCustomer.Address.
@@ -113,12 +115,12 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
       FIND FIRST companycustomer WHERE
                  companycustomer.Brand   = Order.Brand AND
                  companycustomer.OrderId = Order.OrderID AND
-                 companycustomer.RowType = 5 NO-LOCK NO-ERROR.
+                 companycustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} NO-LOCK NO-ERROR.
       
       FIND FIRST DeliveryCustomer WHERE
                  DeliveryCustomer.Brand   = Order.Brand AND
                  DeliveryCustomer.OrderId = Order.OrderID AND
-                 DeliveryCustomer.RowType = 4 NO-LOCK NO-ERROR.           
+                 DeliveryCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-LOCK NO-ERROR.           
    
    END.
    IF NOT AVAIL OrderCustomer THEN
@@ -134,6 +136,8 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
       ELSE lcCRegionName = "".
    END.
    IF AVAIL DeliveryCustomer THEN DO:
+      IF DeliveryCustomer.region > "" THEN
+         lcDelRegion = DeliveryCustomer.region. /* if available fill actual */
       FIND FIRST Region WHERE
          Region.Region = DeliveryCustomer.Region NO-LOCK NO-ERROR.
 
@@ -1153,21 +1157,40 @@ PROCEDURE pGetDELIVERY_DATE:
          ldamnp = fmnpchangewindowdate(
                              fmakets(),
                              order.orderchannel,
-                             ordercustomer.region,
+                             lcDelRegion,
                              lcProduct,
-                             Order.CliType).
+                             Order.CliType,
+                             Order.DeliveryType).
       ELSE ldaMNP = Order.PortingDate.
       ldaDate = ldaMNP - 1.
       ldaDate = fMNPHoliday(ldaDate,FALSE).
       lcResult = fDateFmt(ldaDate,"dd/mm/yy").
    END.
    ELSE DO:
-      IF lcRegion > "" THEN CASE lcRegion:
-         WHEN "07" THEN liDays = 5.
-         WHEN "38" OR WHEN "35" OR WHEN "51" OR WHEN "52" THEN liDays = 7.
-         OTHERWISE liDays = 3.
+      IF lcDelRegion > "" THEN CASE lcDelRegion:
+         WHEN "07"
+         THEN DO:
+            IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+            THEN liDays = 4.
+            ELSE liDays = 5.
+         END.
+         WHEN "38" OR WHEN "35" OR WHEN "51" OR WHEN "52"
+         THEN DO:
+            IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+            THEN liDays = 6.
+            ELSE liDays = 7.
+         END.
+         OTHERWISE DO:
+            IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+            THEN liDays = 2.
+            ELSE liDays = 3.
+         END.
+      END. 
+      ELSE DO:
+         IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+         THEN liDays = 6.
+         ELSE liDays = 3.
       END.
-      ELSE liDays = 3.
       ldaDate = TODAY.
       DO liCount = 1 TO liDays:
          ldaDate = ldaDate + 1.
@@ -1217,9 +1240,10 @@ PROCEDURE pGetMNP_DATE:
       ldamnp = fmnpchangewindowdate(
                           fmakets(),
                           order.orderchannel,
-                          ordercustomer.region,
+                          lcDelRegion,
                           lcProduct,
-                          Order.CliType).
+                          Order.CliType,
+                          Order.DeliveryType).
    ELSE ldaMNP = Order.PortingDate.
 
    lcMonth = fTeksti(542 + MONTH(ldaMNP),(IF liLang EQ 5 THEN 5 ELSE 1)).
@@ -1239,8 +1263,9 @@ PROCEDURE pGetDELADDR:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    IF Order.DeliverySecure EQ 1 OR
-      Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR 
-      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
+      Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
+      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
+      Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
       lcDelAddress = "". /* YPR-2660 */
    ELSE DO:
       /* separate delivery address */
@@ -1272,7 +1297,8 @@ PROCEDURE pGetDELPOST:
 
       IF Order.DeliverySecure EQ 1 OR
          Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
-         Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
+         Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
+         Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
          lcDelPost = "".
       ELSE DO:
          /* separate delivery address */
@@ -1323,7 +1349,8 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
    /* Check that includes at least separator characters */
    IF INDEX(OrderAction.ItemKey,";") > 0 AND 
       NUM-ENTRIES(OrderAction.itemKey,";") = 9 THEN DO:
-      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
+      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+         Order.deliverytype = {&ORDER_DELTYPE_POS} THEN DO: /* UPS */
          DO liCount = 2 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
             lcUseEntries = lcUseEntries + STRING(liCount) + "|".
          END.
@@ -1341,7 +1368,8 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
                    DeliveryCustomer.ZipCode + " " +
                    DeliveryCustomer.postoffice + /* " " + 
                    lcDelRegionName + */ "<br /><br />" +
-                   IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN 
+                   IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+                      Order.deliverytype = {&ORDER_DELTYPE_POS} THEN 
                    "<b>Horarios:</b><br /><table border='0'>" ELSE
                    "<b>Horarios:</b><br />".
       lcUseEntries = RIGHT-TRIM(lcUseEntries,"|"). /* remove last separator */
@@ -1353,7 +1381,8 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
          /*remove possible extra ; */
          lcDailyHours = LEFT-TRIM(lcDailyHours, ";").
          /* handle several times for day */
-         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
+         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+            Order.deliverytype = {&ORDER_DELTYPE_POS} THEN DO: /* UPS */
             lcHoursText = REPLACE(lcDailyHours, "h",":").
          END.   
          ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} THEN DO:
@@ -1374,7 +1403,7 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
          lcHoursText = RIGHT-TRIM(lcHoursText).
          lcHoursText = RIGHT-TRIM(lcHoursText,"/").
          /* Correos need different day name syntax */
-         IF Order.deliverytype = {&ORDER_DELTYPE_POST} AND /* Correos */
+         IF Order.deliverytype = {&ORDER_DELTYPE_POST} /* Correos */ AND
             INT(ENTRY(liCount,lcUseEntries,"|")) = 7 THEN 
             lcDay = "S".
          ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} AND
@@ -1382,14 +1411,16 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
             lcDay = "Festivos".
          ELSE   
             lcDay = ENTRY(INT(ENTRY(liCount,lcUseEntries,"|")),lcDayList,"|").
-         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN
+         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+            Order.deliverytype = {&ORDER_DELTYPE_POS} THEN
             lcUPSHours = lcUPSHours + "<tr><td><b>" + lcDay + 
                          "</b>:</td> <td>" + lcHoursText + " </td></tr> ".
          ELSE
             lcUPSHours = lcUPSHours + "<b>" + lcDay + "</b>: " + 
                          lcHoursText + "<br />".
       END.
-      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN
+      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+         Order.deliverytype = {&ORDER_DELTYPE_POS} THEN
          lcUPSHours = lcUPSHours + "</table>".
    END.
 

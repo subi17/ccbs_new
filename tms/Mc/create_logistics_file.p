@@ -182,7 +182,7 @@ DEFINE TEMP-TABLE ttExtra NO-UNDO
    FIELD OrderDate   AS CHARACTER FORMAT "X(8)"
    FIELD ResidualAmount AS CHARACTER FORMAT "X(7)"
    FIELD DeliveryType AS CHAR FORMAT "X(1)"
-   FIELD KialaCode   AS CHAR FORMAT "X(4)"
+   FIELD KialaCode   AS CHAR FORMAT "X(16)"
    FIELD ContractFileName AS CHAR FORMAT "X(14)"
    INDEX RowNum AS PRIMARY RowNum.
 
@@ -430,7 +430,7 @@ FUNCTION fDelivSIM RETURNS LOG
    FIND FIRST AgreeCustomer WHERE
               AgreeCustomer.Brand   = Order.Brand   AND
               AgreeCustomer.OrderId = Order.OrderId AND
-              AgreeCustomer.RowType = 1
+              AgreeCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
    NO-LOCK NO-ERROR.
    IF NOT AVAIL AgreeCustomer THEN RETURN FALSE.
 
@@ -618,7 +618,7 @@ FUNCTION fDelivSIM RETURNS LOG
    FIND FIRST DelivCustomer WHERE
               DelivCustomer.Brand   = Order.Brand   AND
               DelivCustomer.OrderId = Order.OrderId AND
-              DelivCustomer.RowType = 4
+              DelivCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
    NO-LOCK NO-ERROR.
    
    IF NOT AVAIL DelivCustomer THEN DO:
@@ -626,7 +626,7 @@ FUNCTION fDelivSIM RETURNS LOG
       FIND FIRST DelivCustomer WHERE
                  DelivCustomer.Brand   = Order.Brand   AND
                  DelivCustomer.OrderId = Order.OrderId AND
-                 DelivCustomer.RowType = 1
+                 DelivCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
       NO-LOCK NO-ERROR.
    
    END.
@@ -634,7 +634,7 @@ FUNCTION fDelivSIM RETURNS LOG
    FIND FIRST ContactCustomer WHERE
               ContactCustomer.Brand   = Order.Brand AND
               ContactCustomer.OrderId = Order.OrderId AND
-              ContactCustomer.Rowtype = 5
+              ContactCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
    NO-LOCK NO-ERROR.
    
    IF NOT AVAIL ContactCustomer THEN DO:
@@ -642,7 +642,7 @@ FUNCTION fDelivSIM RETURNS LOG
       FIND FIRST ContactCustomer WHERE
                  ContactCustomer.Brand   = Order.Brand AND
                  ContactCustomer.OrderId = Order.OrderId AND
-                 ContactCustomer.Rowtype = 1
+                 ContactCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
       NO-LOCK NO-ERROR.
    
    END.
@@ -1334,7 +1334,12 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.TermAmt     = STRING(ldeAccAmt + ldePayTermFee + ldeResidualAmountVATExcl,"zzz9.99").
 
 
-   IF Order.DeliverySecure EQ 1 THEN liDelType = {&ORDER_DELTYPE_SECURE}.
+   IF Order.DeliverySecure EQ 1
+   THEN DO:
+      IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+      THEN liDelType = {&ORDER_DELTYPE_POS_SECURE}.
+      ELSE liDelType = {&ORDER_DELTYPE_POST_SECURE}.
+   END.
    ELSE IF Order.DeliveryType EQ 0 THEN liDelType = {&ORDER_DELTYPE_COURIER}.
    ELSE liDelType = Order.DeliveryType.
 
@@ -1347,6 +1352,7 @@ FUNCTION fDelivSIM RETURNS LOG
           ttExtra.ResidualAmount = (IF ldeResidualAmountTotal > 0 THEN
                                     STRING(ldeResidualAmountTotal) ELSE "")
           ttExtra.DeliveryType = STRING(liDelType)
+          ttExtra.KialaCode    = DelivCustomer.KialaCode WHEN Order.DeliveryType = {&ORDER_DELTYPE_POS}
           ttExtra.ContractFileName = lcContractFileName.
 
    /* update SimStat when all skipping are checked */
