@@ -395,10 +395,10 @@ DEF VAR plResignationPeriod AS LOG NO-UNDO.
 DEF VAR plPromotion AS LOG NO-UNDO.
 DEF VAR llROIClose AS LOG NO-UNDO. 
 
-DEF VAR lcPayment AS CHAR NO-UNDO.
-DEF VAR pcPaypalPayerid AS CHAR NO-UNDO.
-DEF VAR liLanguage AS INTEGER NO-UNDO.
-
+DEF VAR lcPayment                        AS CHAR    NO-UNDO.
+DEF VAR pcPaypalPayerid                  AS CHAR    NO-UNDO.
+DEF VAR liLanguage                       AS INTEGER NO-UNDO.
+DEF VAR lcFixedOnlyConvergentCliTypeList AS CHAR    NO-UNDO.
 /* q25_data */
 DEF VAR llq25_extension   AS LOGICAL NO-UNDO. /* Quota 25 extension */
 DEF VAR ldeq25_discount   AS DECIMAL NO-UNDO. /* Discount amount over Quota 25 */
@@ -518,7 +518,9 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    IF LOOKUP('dss', lcOrderStruct) GT 0 THEN
       plDSSActivate = get_bool(pcOrderStruct,"dss").
 
-   IF LOOKUP('delivery_channel', lcOrderStruct) > 0 THEN
+   IF LOOKUP(pcSubType,lcFixedOnlyConvergentCliTypeList) > 0 THEN 
+      lcdelivery_channel = "Paper".
+   ELSE IF LOOKUP('delivery_channel', lcOrderStruct) > 0 THEN
       lcdelivery_channel = get_string(pcOrderStruct,"delivery_channel").
     
    IF LOOKUP('bono_voip', lcOrderStruct) GT 0 THEN
@@ -691,16 +693,16 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
           lcIdtypeOrderCustomer = "CIF".
       END. /* data[LOOKUP("company_id", ... */
       
-      IF piRowType EQ 4 THEN
+      IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} THEN
          pcUpsHours = data[LOOKUP("ups_hours", gcCustomerStructStringFields)].
       
-      IF lcIdOrderCustomer EQ "" AND piRowType = 1 THEN
+      IF lcIdOrderCustomer EQ "" AND piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
           lcFError = "Expected either person_id or company_id".
 
       /* YTS-2453 */
       IF NOT plBypassRules AND
          lcFError = "" AND 
-         piRowType = 1 AND
+         piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
          LOOKUP(pcNumberType,"new,mnp") > 0 AND
          NOT plUpdate AND
          piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
@@ -878,7 +880,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
 
 
 
-   IF piRowType = 1 THEN
+   IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
    DO:
       lcId      = lcIdOrderCustomer.
       lcIdType  = lcIdTypeOrderCustomer.
@@ -1391,6 +1393,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* YPB-514 */
 lcOrderStruct = validate_request(pcOrderStruct, gcOrderStructFields).
 IF lcOrderStruct EQ ? THEN RETURN.
+ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
 fGetOrderFields().
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1602,19 +1605,19 @@ DO:
 END.
  
 /* YBP-536 */ 
-lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, FALSE).
+lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-537 */ 
 IF pcAddressStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, 4, FALSE).
+   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_DELIVERY}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-538 */ 
 IF pcContactStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, FALSE).
+   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

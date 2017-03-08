@@ -1,0 +1,14 @@
+ADD FIELD "DeliveryType" OF "MNPCal" AS integer 
+  FORMAT ">>9"
+  INITIAL 0
+  LABEL "Delivery Type"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "DelType"
+  HELP "Delivery Type"
+  ORDER 70
+
+.
+PSC
+cpstream=1252
+.
