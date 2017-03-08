@@ -9,9 +9,11 @@
 &IF "{&migrationi}" NE "YES"
 &THEN
 &GLOBAL-DEFINE migrationi YES
-{commali.i}
-{tmsconst.i}
-{cparam2.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
+{Func/orderfunc.i}
 {log.i}
 /*Message queue related global variables.*/
 DEF VAR lcLoginMq          AS CHAR NO-UNDO.
@@ -39,8 +41,6 @@ DEF TEMP-TABLE OrderInfo NO-UNDO
    FIELD MSISDN AS CHAR
    FIELD StatusCode AS CHAR.
 
-{commali.i}
-{Syst/tmsconst.i}
 {Func/freacmobsub.i}
 /*Function checks that customer given:
    -does not have active subscrition
@@ -52,9 +52,10 @@ DEF TEMP-TABLE OrderInfo NO-UNDO
 FUNCTION fMigrationCheckCustomer RETURNS CHAR
    (INPUT icBrand AS CHAR,
     INPUT icCustID AS CHAR):
-   DEF BUFFER Customer for Customer.
-   DEF BUFFER MobSub for MobSub.
-   DEF BUFFER TermMobSub for TermMobSub.
+   DEF BUFFER Customer FOR Customer.
+   DEF BUFFER MobSub FOR MobSub.
+   DEF BUFFER TermMobSub FOR TermMobSub.
+   DEF BUFFER Order FOR Order.
    DEF VAR lcResult AS CHAR NO-UNDO.
   
    FOR EACH Customer NO-LOCK WHERE
@@ -63,8 +64,15 @@ FUNCTION fMigrationCheckCustomer RETURNS CHAR
       FIND FIRST MobSub NO-LOCK WHERE
                  MobSub.Brand EQ icBrand AND
                  MobSub.CustNum EQ Customer.CustNum.
-      IF AVAIL MobSub THEN RETURN "ERROR: Mobsub for the customer exists".
-
+      IF AVAIL MobSub THEN DO:         
+         /*TODO Ilkka seek order and ensure that this is not old one.*/
+         FOR EACH Order NO-LOCK WHERE 
+                  Order.MsSeq EQ MsSeq:
+            /* IF NOT fMigrationTariff THEN TODO implement function*/
+               RETURN "ERROR: Mobsub for the customer exists".
+         END.         
+         
+      END.
       FOR EACH TermMobSub NO-LOCK WHERE
                TermMobSub.Brand EQ icBrand AND
                TermMobSub.CustNum EQ Customer.Custnum:
@@ -181,7 +189,7 @@ FUNCTION fCreateMigrationSub RETURNS CHAR
    DEF VAR ocResult AS CHAR NO-UNDO.
    DEF VAR ldeSwitchTS AS DECIMAL NO-UNDO.
    DEF VAR lcCreateOption AS CHAR NO-UNDO.
-
+   DEF VAR llOrdStChg AS LOGICAL NO-UNDO.
    FIND FIRST Order NO-LOCK WHERE
               Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING}.
    IF NOT AVAIL Order THEN RETURN "Migration order not found " +
@@ -208,12 +216,8 @@ FUNCTION fCreateMigrationSub RETURNS CHAR
       RETURN "ERROR: Subscription creation failed, order " +
              STRING(Order.OrderID).
    END.
-a...
-
+/*TODO*/
    
-   
-   
-
 
 RETURN "".
 END.   

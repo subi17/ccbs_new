@@ -699,17 +699,16 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       IF lcIdOrderCustomer EQ "" AND piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
           lcFError = "Expected either person_id or company_id".
 
-      /* YTS-2453 */
-      IF NOT plBypassRules AND
-         lcFError = "" AND 
-         piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
-         LOOKUP(pcNumberType,"new,mnp") > 0 AND
-         NOT plUpdate AND
-         piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
-         (
-            (pcChannel EQ "migration") /*MMM-21*/
-            OR 
-            (NOT fSubscriptionLimitCheck(
+      IF pcChannel NE "migration" THEN DO: /*MMM-21*/
+
+         /* YTS-2453 */
+         IF NOT plBypassRules AND
+            lcFError = "" AND 
+            piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+            LOOKUP(pcNumberType,"new,mnp") > 0 AND
+            NOT plUpdate AND
+            piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
+            NOT fSubscriptionLimitCheck(
             lcIdOrderCustomer,
             lcIdTypeOrderCustomer,
             llSelfEmployed,
@@ -718,10 +717,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             OUTPUT liSubLimit,
             OUTPUT liSubs,
             OUTPUT liSubLimit,
-            OUTPUT liActs) )
-         )   
-         THEN .
-
+            OUTPUT liActs) THEN .
+      END.
       CASE lcdelivery_channel:
          WHEN "PAPER" THEN liDelType = {&INV_DEL_TYPE_PAPER}.
          WHEN "EMAIL" THEN liDelType = {&INV_DEL_TYPE_EMAIL}.
@@ -1415,11 +1412,9 @@ IF pcChannel EQ "migration" THEN DO:
 END.
 
 /*If STC or MNP is not allowed during migration*/
-IF pcNumberType EQ "mnp" OR 
-   pcNumberType EQ "stc" THEN DO:
-   IF fIsNumberInMigration(pcCLI) EQ TRUE THEN 
-      RETURN appl_Err("Requested number is in migration").
-END.
+IF (pcNumberType EQ "mnp" OR pcNumberType EQ "stc") AND
+   fIsNumberInMigration(pcCLI) THEN 
+   RETURN appl_Err("Requested number is in migration").
 
 
 /* YPB-515 */
