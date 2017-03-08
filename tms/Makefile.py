@@ -225,6 +225,9 @@ def _compile(compilecommand, compiledir):
 
     procedure_file = make_compiler(compilecommand, source_files, show='name' if show_file else '.')
 
+    if environment == 'safeproduction':
+        os.environ['PROPATH'] = os.environ['PROPATH'].split(',', 1)[1]
+
     comp = Popen(mpro + args + ['-s', '1024', '-b', '-inp', '200000', '-tok', '20000', '-p', procedure_file.name], stdout=PIPE)
     call('/bin/cat', stdin=comp.stdout)
     if comp.wait() != 0:
