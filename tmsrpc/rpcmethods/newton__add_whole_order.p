@@ -417,6 +417,8 @@ DEF VAR lcAccessoryStruct AS CHAR NO-UNDO.
 /*Financing info*/
 DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
 
+DEF VAR lcItemParam AS CHAR NO-UNDO.
+
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
 DEF BUFFER lbMobSub FOR MobSub. 
@@ -1847,12 +1849,18 @@ fSplitTS(Order.CrStamp,OUTPUT ldaOrderDate,OUTPUT liOrderTime).
 
 /* YBP-547 */
 /* Apply discount to the subscription */
-IF AVAIL DiscountPlan THEN 
+IF AVAIL DiscountPlan THEN DO:
+
+   ASSIGN lcItemParam = "amount=" + STRING(pdeDiscountPlanAmount) +
+                        "|valid_period=" + STRING(piDiscountValidPeriod)
+                        WHEN (pdeDiscountPlanAmount NE 0 AND 
+                              piDiscountValidPeriod NE 0).
+
    fCreateOrderAction(Order.Orderid,
-                      "Discount",
+                     "Discount",
                       STRING(DiscountPlan.DPId),
-                      "amount=" + STRING(pdeDiscountPlanAmount) +
-                      "|valid_period=" + STRING(piDiscountValidPeriod)).
+                      lcItemParam).
+END.
 
 /* YBP-548 */
 IF pcMemo NE "" THEN 
