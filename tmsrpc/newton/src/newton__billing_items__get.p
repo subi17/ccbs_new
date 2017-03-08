@@ -57,7 +57,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "id", BillItem.BillCode + "|" + BUFFER-TENANT-NAME(BillItem)). 
-   add_string(lcResultStruct, "brand", pcTenant). 
+   add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)). 
    add_string(lcResultStruct,"billing_group", BillItem.BIGroup). 
    add_int(lcResultStruct, "ui_order", BillItem.OrderChannelOrder).
    add_boolean(lcResultStruct, "active", BillItem.Active).

@@ -22,10 +22,11 @@
 {newton/src/get_memos.i}
 
 /* Input parameters */
-DEF VAR piKey AS INT NO-UNDO.
-DEF VAR pcType AS CHAR NO-UNDO.
-DEF VAR piLatest AS INT NO-UNDO.
-DEF VAR piMemosMax AS INT NO-UNDO.
+DEF VAR pcTenant   AS CHAR NO-UNDO.
+DEF VAR piKey      AS INT  NO-UNDO.
+DEF VAR pcType     AS CHAR NO-UNDO.
+DEF VAR piLatest   AS INT  NO-UNDO.
+DEF VAR piMemosMax AS INT  NO-UNDO.
 /* Output parameters */
 DEF VAR toptop_array AS CHAR NO-UNDO.
 DEF VAR top_array AS CHAR NO-UNDO.
@@ -56,15 +57,20 @@ FUNCTION addMemoDataToResponse RETURN LOGICAL
 
 END FUNCTION. 
 
-IF validate_request(param_toplevel_id, "int,string,int,int") EQ ? THEN RETURN.
-piKey = get_int(param_toplevel_id, "0").
-pcType = get_string(param_toplevel_id, "1").
-piLatest = get_int(param_toplevel_id, "2").
-piMemosMax = get_int(param_toplevel_id, "3").
+IF validate_request(param_toplevel_id, "string,int,string,int,int") EQ ? THEN RETURN.
+
+pcTenant   = get_string(param_toplevel_id, "0").
+piKey      = get_int(param_toplevel_id, "1").
+pcType     = get_string(param_toplevel_id, "2").
+piLatest   = get_int(param_toplevel_id, "3").
+piMemosMax = get_int(param_toplevel_id, "4").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 toptop_array = add_array(response_toplevel_id, "").
 top_array = add_array(toptop_array, "").
+
+{newton/src/settenant.i pcTenant}
 
 fMemoCount(pcType, piKey, FALSE).
 

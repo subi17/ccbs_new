@@ -22,16 +22,20 @@ DEF VAR pcStruct         AS CHAR NO-UNDO.
 DEF VAR lcStruct         AS CHAR NO-UNDO.
 DEF VAR pcProduct        AS CHAR NO-UNDO. 
 DEF VAR pcTariff         AS CHAR NO-UNDO. 
+DEF VAR pcTenant         AS CHAR NO-UNDO.
 
 DEF VAR ldMNPPortingDate AS DATE NO-UNDO.
 DEF VAR ldeCurrentTime   AS DEC  NO-UNDO.
 
-IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
-pcStruct = get_struct(param_toplevel_id, "0").
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcStruct = validate_request(pcStruct,"mnp_porting_date!,order_channel!,region!,product,tariff").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN pdMNPPortingDate = get_date(pcStruct,"mnp_porting_date")
@@ -55,6 +59,8 @@ IF pcProduct NE "T" AND pcProduct NE "S" AND pcProduct NE "" THEN
 ldeCurrentTime = fMake2DT(TODAY,28800).
 IF ldeCurrentTime < fMakeTS() THEN
    ldeCurrentTime = fMakeTS().
+
+{newton/src/settenant.i pcTenant}
 
 ldMNPPortingDate = fMNPChangeWindowDate(ldeCurrentTime,
                                         pcOrderChannel,

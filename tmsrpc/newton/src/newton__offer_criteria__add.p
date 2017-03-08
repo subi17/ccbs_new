@@ -14,17 +14,25 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+gcBrand = "1".
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
 
-DEF VAR pcStruct AS CHAR NO-UNDO. 
-DEF VAR pcUsername AS CHAR NO-UNDO.
-DEF VAR lcStruct AS CHAR NO-UNDO. 
-DEF VAR lcRespStruct AS CHAR NO-UNDO. 
-DEF VAR ocError AS CHARACTER NO-UNDO. 
-DEF VAR i AS INTEGER NO-UNDO. 
+DEF VAR pcStruct     AS CHARACTER NO-UNDO. 
+DEF VAR pcTenant     AS CHARACTER NO-UNDO.
+DEF VAR pcUsername   AS CHARACTER NO-UNDO.
+DEF VAR lcStruct     AS CHARACTER NO-UNDO. 
+DEF VAR lcRespStruct AS CHARACTER NO-UNDO. 
+DEF VAR ocError      AS CHARACTER NO-UNDO. 
+DEF VAR i            AS INTEGER   NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
-pcStruct = get_struct(param_toplevel_id, "0").
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
 lcstruct = validate_struct(pcStruct, "offer_id!,valid_from!,valid_to,included_values,excluded_values,criteria_type!,username!").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -35,12 +43,9 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{Syst/commpaa.i}
-gcBrand = "1".
 katun = pcUserName.
-{Syst/eventval.i}
-{Syst/tmsconst.i}
-{Mc/offer.i}
+
+{newton/src/settenant.i pcTenant}
 
 CREATE ttOfferCriteria.
            

@@ -10,18 +10,21 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
-DEF VAR pcIcc AS CHAR NO-UNDO.
-
+DEF VAR pcIcc      AS CHAR NO-UNDO.
+DEF VAR pcTenant   AS CHAR NO-UNDO.
 DEF VAR top_struct AS CHAR NO-UNDO.
 DEF VAR lcSimType  AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
-pcIcc = get_string(param_toplevel_id, "0").
+IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+pcIcc    = get_string(param_toplevel_id, "1").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST SIM WHERE
-           SIM.Brand = "1" AND
-           SIM.ICC   = pcIcc NO-LOCK NO-ERROR.
+{newton/src/settenant.i pcTenant}
+
+FIND FIRST SIM WHERE SIM.Brand = "1" AND SIM.ICC   = pcIcc NO-LOCK NO-ERROR.
 IF NOT AVAILABLE SIM THEN
    RETURN appl_err("SIM does not exists").
 

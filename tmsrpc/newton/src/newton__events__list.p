@@ -33,6 +33,7 @@ ASSIGN
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUserName) EQ "" THEN RETURN appl_err("username is empty").
+
 pcUserName = "VISTA_" + pcUserName.
 
 lcQuery = "FOR EACH MSRequest NO-LOCK WHERE MSRequest.Brand = "

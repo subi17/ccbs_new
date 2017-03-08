@@ -18,9 +18,16 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i} 
+{Syst/commpaa.i}
+gcBrand = "1".
 {Syst/tmsconst.i}
+{Func/orderfunc.i}
+{Func/fcustdata.i}
+{Syst/eventval.i}
+
 /* Input parameters */
-DEF VAR piOrderId     AS INT NO-UNDO.
+DEF VAR pcTenant      AS CHAR NO-UNDO.
+DEF VAR piOrderId     AS INT  NO-UNDO.
 DEF VAR pcOldOperator AS CHAR NO-UNDO.
 DEF VAR pcOldICC      AS CHAR NO-UNDO.
 DEF VAR pcIDType      AS CHAR NO-UNDO.
@@ -43,9 +50,11 @@ DEF VAR pcMemoContent AS CHARACTER NO-UNDO.
 /* Output parameters */
 DEF VAR result AS LOGICAL.
 
-IF validate_request(param_toplevel_id,"struct") = ? THEN RETURN.
+IF validate_request(param_toplevel_id,"string,struct") = ? THEN RETURN.
 
-pcStruct = get_struct(param_toplevel_id,"").
+pcTenant = get_struct(param_toplevel_id,"0").
+pcStruct = get_struct(param_toplevel_id,"1").
+
 lcstruct = validate_struct(pcStruct, "order_id!,old_operator!,old_icc!,id_type!,customer_id!,username!,company,first_name,surname1,surname2,memo!").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -59,13 +68,15 @@ pcCreator     = "VISTA_" + get_string(pcStruct,"username").
 
 IF TRIM(pcCreator) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
+katun = pcCreator.
+
 IF pcIDType = "CIF" THEN
    pcCompany     = get_string(pcStruct,"company").
-ELSE ASSIGN
-   pcFirstName   = get_string(pcStruct,"first_name")
-   pcSurname1    = get_string(pcStruct,"surname1")
-   pcSurname2    = get_string(pcStruct,"surname2") WHEN
-                   LOOKUP("surname2",lcStruct) > 0.
+ELSE 
+   ASSIGN
+       pcFirstName = get_string(pcStruct,"first_name")
+       pcSurname1  = get_string(pcStruct,"surname1")
+       pcSurname2  = get_string(pcStruct,"surname2") WHEN LOOKUP("surname2",lcStruct) > 0.
 
 pcMemoStruct = get_struct(pcStruct,"memo").
 pcMemoTitle = get_string(pcMemoStruct,"title").
@@ -73,11 +84,10 @@ pcMemoContent = get_string(pcMemoStruct,"content").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-/* validation starts */
-FIND FIRST Order WHERE
-           Order.Brand = "1" AND
-           Order.OrderId = piOrderId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+{newton/src/settenant.i pcTenant}
 
+/* validation starts */
+FIND FIRST Order WHERE Order.Brand = "1" AND Order.OrderId = piOrderId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 IF LOCKED Order THEN 
    RETURN appl_err("Order record is locked!").
 IF NOT AVAIL Order THEN 
@@ -107,13 +117,6 @@ END.
 IF Order.OldPayType AND pcOldICC EQ "" THEN DO:
    RETURN appl_err("ICC is missing").
 END.
-
-{Syst/commpaa.i}
-katun = pcCreator.
-gcBrand = "1".
-{Func/orderfunc.i}
-{Func/fcustdata.i}
-{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -227,7 +230,6 @@ END.
 
 fCleanEventObjects().
       
-
 add_boolean(response_toplevel_id, "", true).
 
 FINALLY:

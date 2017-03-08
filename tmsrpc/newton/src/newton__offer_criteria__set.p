@@ -15,46 +15,52 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+gcBrand = "1".
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
 
-DEF VAR pcStruct AS CHAR NO-UNDO. 
-DEF VAR pcUsername AS CHAR NO-UNDO.
-DEF VAR pcId AS CHAR NO-UNDO.
-DEF VAR piId AS INT NO-UNDO.
-DEF VAR lcStruct AS CHAR NO-UNDO. 
-DEF VAR lcRespStruct AS CHAR NO-UNDO. 
-DEF VAR ocError AS CHARACTER NO-UNDO. 
-DEF VAR i AS INTEGER NO-UNDO. 
-DEF VAR llEqual AS LOG NO-UNDO.
-DEF VAR ldeNowTS AS DECIMAL NO-UNDO. 
+DEF VAR pcStruct     AS CHAR      NO-UNDO. 
+DEF VAR pcTenant     AS CHAR      NO-UNDO.
+DEF VAR pcUsername   AS CHAR      NO-UNDO.
+DEF VAR pcId         AS CHAR      NO-UNDO.
+DEF VAR piId         AS INT       NO-UNDO.
+DEF VAR lcStruct     AS CHAR      NO-UNDO. 
+DEF VAR lcRespStruct AS CHAR      NO-UNDO. 
+DEF VAR ocError      AS CHARACTER NO-UNDO. 
+DEF VAR i            AS INTEGER   NO-UNDO. 
+DEF VAR llEqual      AS LOG       NO-UNDO.
+DEF VAR ldeNowTS     AS DECIMAL   NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,struct") EQ ? THEN RETURN.
 
-pcId     = get_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcTenant = get_string(param_toplevel_id, "0").
+pcId     = get_string(param_toplevel_id, "1").
+pcStruct = get_struct(param_toplevel_id, "2").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcstruct = validate_struct(pcStruct, "offer_id,valid_from,valid_to,included_values,excluded_values,criteria_type,username!").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
 pcUsername = "VISTA_" + get_string(pcStruct, "username").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF TRIM(pcUsername) EQ "VISTA_" THEN 
+    RETURN appl_err("username is empty").
+
+katun = pcUserName.
 
 piId = INTEGER(pcId) NO-ERROR.
 IF ERROR-STATUS:ERROR THEN 
    RETURN appl_err(SUBST("OfferCriteriaId &1 is not numerical", pcId)).
 
-FIND OfferCriteria NO-LOCK WHERE
-   OfferCriteria.OfferCriteriaID = piId NO-ERROR.
+{newton/src/settenant.i pcTenant}
+
+FIND OfferCriteria NO-LOCK WHERE OfferCriteria.OfferCriteriaID = piId NO-ERROR.
 IF NOT AVAIL OfferCriteria THEN 
    RETURN appl_err(SUBST("Offer criteria &1 not found", piId)).
-
-IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
-
-{Syst/commpaa.i}
-gcBrand = "1".
-katun = pcUserName.
-{Syst/eventval.i}
-{Syst/tmsconst.i}
-{Mc/offer.i}
 
 CREATE ttOfferCriteria.
 BUFFER-COPY OfferCriteria TO ttOfferCriteria.

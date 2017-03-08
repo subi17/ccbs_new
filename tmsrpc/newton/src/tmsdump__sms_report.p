@@ -1,15 +1,16 @@
 /**
  * Fetch data for sms report sender (it takes about two minutes to collect data)
  *
- * @input empty;
+ * @input  brand;string;mandatory;Tenant
  * @output data_struct;array 
  * @data_struct key;string;
                 value;string;
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-DEF VAR resp_array AS CHARACTER NO-UNDO. 
+DEF VAR resp_array  AS CHARACTER NO-UNDO. 
 DEF VAR resp_struct AS CHARACTER NO-UNDO. 
+DEF VAR pcTenant    AS CHARACTER NO-UNDO.
 
 DEFINE TEMP-TABLE ttReport NO-UNDO
 FIELD name AS CHAR
@@ -17,8 +18,13 @@ FIELD type AS CHAR
 FIELD field_value AS CHAR
 INDEX name IS PRIMARY UNIQUE name.
 
-IF NOT get_paramcount(param_toplevel_id) EQ 0 THEN
-    RETURN param_err("Unexpected parameters").
+IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0"). 
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 RUN Mc/smsreport_data.p(output table ttReport BY-REFERENCE).
 

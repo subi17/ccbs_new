@@ -5,9 +5,18 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
+DEFINE VARIABLE pcTenant        AS CHARACTER NO-UNDO.
 /* Output parameters */
 DEFINE VARIABLE resp_reqtypes   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE resp_reqtype    AS CHARACTER NO-UNDO.
+
+IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id,"0").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 resp_reqtypes = add_struct(response_toplevel_id, "").
 
