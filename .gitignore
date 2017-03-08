@@ -24,6 +24,7 @@ test/db/bi/*
 test/db/db/*
 *.r
 *.pyc
+*.orig
 distinfo
 .initialized
 var/log/*.log
