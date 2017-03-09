@@ -149,12 +149,13 @@ FUNCTION fSort RETURNS LOGICAL:
    end.
 END FUNCTION. 
 
-IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
-pcTenant = get_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcStruct = get_struct(param_toplevel_id, "0").
 
-lcStruct = validate_struct(pcStruct, "mnp_request_id,msisdn,mnp_type,status_code,creation_time_start,creation_time_end,msseq,order_id,dni,limit,offset,error_code,error_handled,porting_time_start,porting_time_end,operator_code,sort_by,sort_order,status_reason,salesman_id").
+lcStruct = validate_struct(pcStruct, "brand,mnp_request_id,msisdn,mnp_type,status_code,creation_time_start,creation_time_end,msseq,order_id,dni,limit,offset,error_code,error_handled,porting_time_start,porting_time_end,operator_code,sort_by,sort_order,status_reason,salesman_id").
+
+pcTenant = get_string(pcStruct, "brand").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

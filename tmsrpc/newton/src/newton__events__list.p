@@ -20,7 +20,7 @@ DEFINE VARIABLE pdeDateEnd AS DECIMAL NO-UNDO.
 DEFINE VARIABLE lcQuery AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcParams AS CHARACTER NO-UNDO. 
 
-lcStruct = validate_struct(pcStruct, "username!,event_type,date_start,date_end").
+lcStruct = validate_struct(pcStruct, "brand!,username!,event_type,date_start,date_end").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

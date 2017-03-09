@@ -7,7 +7,7 @@
 
 {newton/src/flistrpc.i}
 
-lcStruct = validate_struct(pcStruct, "active").
+lcStruct = validate_struct(pcStruct, "brand,active").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
