@@ -14,24 +14,30 @@ DEF VAR liDel   AS INT    NO-UNDO.
 DEF VAR lcError AS CHAR   NO-UNDO. 
 DEF VAR oiQty   AS INT    NO-UNDO.
 DEF VAR liid    AS INT    NO-UNDO.
-DEF VAR limaxtenantid AS INT NO-UNDO.
+DEF VAR lcIdList AS CHAR NO-UNDO.
 
-limaxtenantid = fgetMaxtenantid().
-fELog("MDAILY_AMNP","HighSpenderStarted").
-/* Go through all tenants */
-DO liid = 0 to limaxtenantid:
-   IF NOT fsetEffectiveTenantIdForAllDB(liid) THEN
+lcIdList = fgetTenantIds().
+/* Go through all possible tenants */
+DO liid = 1 to NUM-ENTRIES(lcIdList):
+   fELog("MDAILY_AMNP","HighSpenderStarted for " + 
+      fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))).
+   IF TENANT-ID(LDBNAME(1)) EQ -1 AND 
+      NOT fsetEffectiveTenantIdForAllDB(INT(ENTRY(liid,lcIdList))) THEN
       LEAVE.
    RUN Mm/highusagerep.p(INPUT fMake2Dt(INPUT today - 90, INPUT 0),0).
+   fELog("MDAILY_AMNP","HighSpenderStopped for " +
+         fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))).
 END.
-fELog("MDAILY_AMNP","HighSpenderStopped").
-fELog("MDAILY_AMNP","IccMSISDNRepStarted").
+DO liid = 1 to NUM-ENTRIES(lcIdList):
+fELog("MDAILY_AMNP","IccMSISDNRepStarted for " +
+      fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))).
 /* Go through all tenants */
-DO liid = 0 to limaxtenantid:
-   IF NOT fsetEffectiveTenantIdForAllDB(liid) THEN 
+   IF TENANT-ID(LDBNAME(1)) EQ -1 AND 
+      NOT fsetEffectiveTenantIdForAllDB(INT(ENTRY(liid,lcIdList))) THEN 
       LEAVE.
    RUN Mm/icc_msisdn_rep.p.
-END.
-fELog("MDAILY_AMNP","IccMSISDNRepStopped").
 
+   fELog("MDAILY_AMNP","IccMSISDNRepStopped for " +
+         fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))).
+END.
 quit.

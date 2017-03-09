@@ -14,6 +14,7 @@ ASSIGN gcBrand = "1"
        
 {Func/cparam2.i}
 {Syst/eventlog.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcIFSFile   AS CHAR NO-UNDO.
@@ -42,7 +43,10 @@ IF AVAILABLE Company THEN ynimi = Company.CompName.
 IF llControl THEN 
    lcReadDir = fCParamC("IFSPaymStatusControl").
 ELSE lcReadDir  = fCParamC("IFSPaymStatusFile").
-   
+  
+lcReadDir = REPLACE(lcReadDir,"#COMPANY", 
+            CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))))).
+ 
 IF lcReadDir = "" OR lcReadDir = ? THEN RETURN "ERROR:Definitions missing".
    
 

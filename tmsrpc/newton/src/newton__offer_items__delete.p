@@ -8,16 +8,23 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Func/timestamp.i}
+{Syst/commpaa.i}
+gcBrand = "1".
+{Syst/eventval.i}
 
-DEFINE VARIABLE pcId AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liId AS INTEGER NO-UNDO. 
+DEFINE VARIABLE pcTenant   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcId       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liId       AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE pcUserName AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE pcStruct AS CHAR NO-UNDO. 
+DEFINE VARIABLE pcStruct   AS CHAR      NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,struct") EQ ? THEN RETURN.
 
-pcId = get_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcTenant = get_string(param_toplevel_id, "0"). 
+pcId     = get_string(param_toplevel_id, "1").
+pcStruct = get_struct(param_toplevel_id, "2").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 validate_struct(pcStruct, "username!").
@@ -25,24 +32,21 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 liId = INT(pcId) NO-ERROR.
 
-FIND OfferItem WHERE OfferItem.OfferItemId = liId NO-LOCK NO-ERROR.
-IF NOT AVAIL OfferItem THEN 
-   RETURN appl_err(SUBST("OfferItem &1 not found", pcId)).
-
 pcUserName = "VISTA_" + get_string(pcStruct, "username").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{Func/timestamp.i}
+katun = pcUserName.
+
+{newton/src/settenant.i pcTenant}
+
+FIND OfferItem WHERE OfferItem.OfferItemId = liId NO-LOCK NO-ERROR.
+IF NOT AVAIL OfferItem THEN 
+   RETURN appl_err(SUBST("OfferItem &1 not found", pcId)).
 
 IF OfferItem.BeginStamp < fMakeTs() THEN 
    RETURN appl_err("Cannot delete active or history data").
-
-{Syst/commpaa.i}
-gcBrand = "1".
-katun = pcUserName.
-{Syst/eventval.i}
 
 FIND CURRENT OfferItem EXCLUSIVE-LOCK.
 

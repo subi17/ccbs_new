@@ -5,10 +5,9 @@
  * (=provisioning, minconsflag)
  * @output statuses;array of int;current status of setting (0=off, 1=on)
  */
-
-{newton/src/header_get.i}
 {Func/tmsparam4.i}
 {Syst/tmsconst.i}
+{newton/src/header_get.i}
 
 DEF VAR liMaintB AS INTEGER NO-UNDO.
 

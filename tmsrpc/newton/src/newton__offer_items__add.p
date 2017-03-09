@@ -24,6 +24,7 @@ gcBrand = "1".
 {Mc/offer.i}
 {newton/src/xmlrpc_names.i}
 
+DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcRespStruct AS CHARACTER NO-UNDO. 
@@ -31,28 +32,24 @@ DEFINE VARIABLE ocError AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liOfferItemId AS INTEGER NO-UNDO. 
 DEFINE VARIABLE deCurTime AS DECIMAL NO-UNDO.
 
-IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
 
-pcStruct = get_struct(param_toplevel_id, "0").
-IF gi_xmlrpc_error NE 0 THEN DO:
-   RETURN.
-END.
+pcTenant = get_struct(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
 
-lcStruct = validate_request(pcStruct, 
-   "offer_id!,amount,valid_from!,valid_to,display_in_ui!," +
-   "display_on_invoice!,item_id!,item_type!,vat_included!,username!,periods").
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+lcStruct = validate_request(pcStruct, "offer_id!,amount,valid_from!,valid_to,display_in_ui!,display_on_invoice!,item_id!,item_type!,vat_included!,username!,periods").
  
-IF lcStruct = ? THEN DO:
-   RETURN.
-END.
+IF lcStruct = ? THEN RETURN.
 
 katun = "VISTA_" + get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN DO:
-   RETURN appl_err("username is empty").
-END.
+IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+
+{newton/src/settenant.i pcTenant}
 
 liOfferItemId = 1. 
 FOR EACH OfferItem NO-LOCK BY OfferItem.OfferItemId DESC:

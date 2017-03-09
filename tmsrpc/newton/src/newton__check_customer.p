@@ -1,7 +1,8 @@
 /**
  * Check if customer may do an order.
  *
- * @input   person_id;string;mandatory;
+ * @input   brand;string;mandatory
+            person_id;string;mandatory;
             id_type;string;mandatory;
             self_employed;bool;mandatory;
  *          
@@ -19,6 +20,7 @@
 gcBrand = "1".
 
 /* Input parameters */
+DEF VAR pcTenant         AS CHAR NO-UNDO.
 DEF VAR pcPersonId       AS CHAR NO-UNDO.
 DEF VAR pcIdType         AS CHAR NO-UNDO.
 DEF VAR plSelfEmployed   AS LOG  NO-UNDO.
@@ -34,15 +36,18 @@ DEF VAR lcAddLineAllowed AS CHAR NO-UNDO.
 DEF VAR liActLimit       AS INT  NO-UNDO.
 DEF VAR liacts           AS INT NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string,boolean,int") EQ ?
+IF validate_request(param_toplevel_id, "string,string,string,boolean,int") EQ ?
    THEN RETURN.
 
-pcPersonId = get_string(param_toplevel_id, "0").
-pcIdType = get_string(param_toplevel_id, "1").
-plSelfEmployed = get_bool(param_toplevel_id, "2").
-piOrders = get_int(param_toplevel_id, "3").
+pcTenant   = get_string(param_toplevel_id, "0").
+pcPersonId = get_string(param_toplevel_id, "1").
+pcIdType = get_string(param_toplevel_id, "2").
+plSelfEmployed = get_bool(param_toplevel_id, "3").
+piOrders = get_int(param_toplevel_id, "4").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,

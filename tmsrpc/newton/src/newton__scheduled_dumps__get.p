@@ -32,17 +32,23 @@ DEF VAR lcWeekDays AS CHAR NO-UNDO.
 DEF VAR lcDay AS CHAR NO-UNDO.
 DEF VAR litime AS INT NO-UNDO.
 DEF VAR ldate AS DATE NO-UNDO.
-
+DEF VAR pcTenant AS CHAR NO-UNDO.
 
 lcWeekDays = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday".
-IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
-pcStruct = get_struct(param_toplevel_id, "0").
-lcStruct = validate_struct(pcStruct,
-   "dumpid").
+
+IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
+
+pcTenant = get_struct(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
+lcStruct = validate_struct(pcStruct,"dumpid").
 
 /* READ Dump id */
 liDumpId = get_int(pcStruct, "dumpid").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 resp_array = add_array(response_toplevel_id, "").
 
@@ -54,7 +60,6 @@ FOR EACH ttEvent NO-LOCK:
       ttEvent.EventTime < litime THEN NEXT.
    RUN pAddResultsArray.
 END.
-
 
 /* Struct builder */
 PROCEDURE pAddResultsArray:

@@ -28,6 +28,7 @@ gcBrand = "1".
 /* Input parameters */
 DEF VAR pcInput AS CHAR NO-UNDO.
 DEF VAR pcStruct AS CHAR NO-UNDO.
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR pcSearchType AS CHARACTER NO-UNDO. 
 DEF VAR piOffSet AS INT NO-UNDO.
 DEF VAR piLimit AS INT NO-UNDO.
@@ -51,12 +52,13 @@ INDEX Custnum IS PRIMARY UNIQUE Custnum.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
-validate_struct(pcStruct, "search_type!,search_key!,limit!,offset!,admin!").
+validate_struct(pcStruct, "brand!,search_type!,search_key!,limit!,offset!,admin!").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+pcTenant     = get_string(pcStruct, "brand").
 pcSearchType = get_string(pcStruct, "search_type").
-pcInput = get_string(pcStruct, "search_key").
-plAdmin = get_bool(pcStruct, "admin").
+pcInput      = get_string(pcStruct, "search_key").
+plAdmin      = get_bool  (pcStruct, "admin").
 
 IF pcSearchType EQ "custnum" THEN DO:
    liOwner = INT(pcInput) NO-ERROR.
@@ -68,6 +70,8 @@ piLimit  = get_pos_int(pcStruct, "limit").
 piOffSet = get_int(pcStruct, "offset").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 

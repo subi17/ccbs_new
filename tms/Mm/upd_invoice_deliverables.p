@@ -126,13 +126,13 @@ FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
       END. /* WHEN "Email" THEN DO: */
 
       WHEN "SMS" THEN DO:
-         IF BUFFER-TENANT-NAME(Customer) EQ "tMasMovil" THEN
-            RETURN "SMS invoice not allowed for MasMovil".
          IF icAction = "0" THEN DO:
             IF Customer.DelType <> {&INV_DEL_TYPE_SMS} THEN
                RETURN "SMS invoice is already turned off".
          END. /* IF icAction = "0" THEN DO: */
          ELSE IF icAction = "1" THEN DO:
+            IF BUFFER-TENANT-NAME(Customer) EQ {&TENANT_MASMOVIL} THEN
+               RETURN "SMS invoice not allowed for MasMovil".
             IF Customer.DelType = {&INV_DEL_TYPE_SMS} THEN
                RETURN "SMS invoice is already turned on".
          END. /* ELSE  IF icAction = "0" THEN DO: */

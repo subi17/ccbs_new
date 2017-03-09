@@ -8,38 +8,43 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+gcBrand = "1".
+{Syst/eventval.i}
 
-DEFINE VARIABLE pcId AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcTenant   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcId       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcUserName AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE pcStruct AS CHAR NO-UNDO. 
+DEFINE VARIABLE pcStruct   AS CHARACTER NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,struct") EQ ? THEN RETURN.
 
-pcId = get_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcTenant = get_string(param_toplevel_id, "0").
+pcId     = get_string(param_toplevel_id, "1").
+pcStruct = get_struct(param_toplevel_id, "2").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 validate_struct(pcStruct, "username!").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcUserName = "VISTA_" + get_string(pcStruct, "username").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-FIND Offer WHERE 
-     Offer.Brand = "1" AND
-     Offer.Offer = pcId NO-LOCK NO-ERROR.
+katun = pcUserName.
+
+{newton/src/settenant.i pcTenant}
+
+FIND Offer WHERE Offer.Brand = "1" AND Offer.Offer = pcId NO-LOCK NO-ERROR.
 IF NOT AVAIL Offer THEN 
    RETURN appl_err(SUBST("Offer &1 not found", pcId)).
 
 IF Offer.FromDate <= TODAY THEN 
    RETURN appl_err("Cannot delete active or history data").
-
-{Syst/commpaa.i}
-gcBrand = "1".
-katun = pcUserName.
-{Syst/eventval.i}
 
 DO TRANSACTION:
 

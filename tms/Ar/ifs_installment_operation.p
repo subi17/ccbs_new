@@ -13,6 +13,7 @@
 {Func/date.i}
 {Func/cparam2.i}
 {Func/coinv.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT PARAMETER icFile        AS CHAR NO-UNDO.
@@ -320,6 +321,7 @@ FOR EACH ttInstallment:
       ttInstallment.ResidualAmount lcDelimiter          /*  11 residual_amount */
       ttInstallment.Channel lcDelimiter                 /*  12 channel */
       ttInstallment.OrderId lcDelimiter                 /*  13 OrderId */
+      fgetCompanyId() lcDelimiter                         /*  14 CompanyId */
       SKIP.
    
    /* mark as transferred only when picking modified ones, full dump 
@@ -355,7 +357,8 @@ FOR EACH ttInstallment:
          ttInstallment.Channel lcDelimiter                 /*  12 channel */
          ttInstallment.OrderId lcDelimiter                 /*  13 OrderId */
          ttInstallment.FFNum lcDelimiter
-         ttInstallment.RowSource lcDelimiter SKIP.
+         ttInstallment.RowSource lcDelimiter 
+         fgetCompanyId() lcDelimiter SKIP.                   /* CompanyId */
       
       IF AVAIL FixedFee THEN RELEASE FixedFee.
    END.

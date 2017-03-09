@@ -37,6 +37,7 @@ tmsrpc/topup/src/version.i
 tmsrpc/viptool/src/version.i
 *.r
 *.pyc
+*.orig
 distinfo
 .usepike
 .initialized

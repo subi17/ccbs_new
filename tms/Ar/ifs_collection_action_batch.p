@@ -14,6 +14,7 @@ ASSIGN gcBrand = "1"
        
 {Func/cparam2.i}
 {Syst/eventlog.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcIFSFile   AS CHAR NO-UNDO.
@@ -38,7 +39,9 @@ IF AVAILABLE Company THEN ynimi = Company.CompName.
 lcReadDir  = fCParamC("IFSCollActionFile").
    
 IF lcReadDir = "" OR lcReadDir = ? THEN RETURN "ERROR:Definitions missing".
-   
+
+lcReadDir = REPLACE(lcReadDir,"#COMPANY",
+            CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))))).   
 
 fELog("IFS_COLLECTION_ACTION","Started").
 

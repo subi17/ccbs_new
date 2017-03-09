@@ -17,46 +17,52 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+gcBrand = "1".
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
+{newton/src/xmlrpc_names.i}
 
-DEFINE VARIABLE pcId AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liId AS INTEGER NO-UNDO. 
-DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE pcUserName AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE ocError AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE llEqual AS LOGICAL NO-UNDO. 
+DEFINE VARIABLE pcTenant     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcId         AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liId         AS INTEGER NO-UNDO. 
+DEFINE VARIABLE pcStruct     AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcStruct     AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcUserName   AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE ocError      AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE llEqual      AS LOGICAL NO-UNDO. 
 DEFINE VARIABLE lcRespStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liUpdatedOfferItemId AS INTEGER NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,struct") EQ ? THEN RETURN.
 
-pcId = get_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcTenant = get_string(param_toplevel_id, "0").
+pcId     = get_string(param_toplevel_id, "1").
+pcStruct = get_struct(param_toplevel_id, "2").
 
 lcstruct = validate_struct(pcStruct, "offer_id,amount,valid_from,valid_to,display_in_ui,display_on_invoice,item_id,item_type,vat_included,username!,periods").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+pcUserName = "VISTA_" + get_string(pcStruct, "username").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+katun = pcUserName.
+
+IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 liId = INT(pcId) NO-ERROR.
 
 IF ERROR-STATUS:ERROR THEN
    RETURN appl_err(SUBST("OfferItem id &1 is invalid ", pcId)).
 
+{newton/src/settenant.i pcTenant}
+
 FIND OfferItem WHERE OfferItem.OfferItemId = liId NO-LOCK NO-ERROR.
 IF NOT AVAIL OfferItem THEN 
    RETURN appl_err(SUBST("OfferItem &1 not found", pcId)).
-
-pcUserName = "VISTA_" + get_string(pcStruct, "username").
-
-IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
-
-{Syst/commpaa.i}
-gcBrand = "1".
-katun = pcUserName.
-{Syst/eventval.i}
-{Syst/tmsconst.i}
-{Mc/offer.i}
-{newton/src/xmlrpc_names.i}
 
 FUNCTION fCheckInvalidChangeWithOldTs RETURN CHARACTER:
     /* Here list all checks that make the change not allowed *

@@ -16,11 +16,17 @@
 katun = "Newton".
 gcBrand = "1".
 
-DEF VAR resp_array AS CHARACTER NO-UNDO.
-DEF VAR resp_struct AS CHAR NO-UNDO. 
+DEF VAR pcTenant    AS CHARACTER NO-UNDO.
+DEF VAR resp_array  AS CHARACTER NO-UNDO.
+DEF VAR resp_struct AS CHARACTER NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string") = ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 resp_array = add_array(response_toplevel_id, "").
 

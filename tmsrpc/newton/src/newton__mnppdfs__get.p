@@ -13,11 +13,16 @@ DEF VAR liCounter AS INTEGER NO-UNDO.
 DEF VAR resp_array AS CHARACTER NO-UNDO.
 DEF VAR lcTempFile AS CHARACTER NO-UNDO.
 DEF VAR lcPortRequest AS CHARACTER NO-UNDO.
+DEF VAR pcTenant AS CHARACTER NO-UNDO.
 
-IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
-pcIDArray = get_array(param_toplevel_id, "0").
+IF validate_request(param_toplevel_id, "string,array") = ? THEN RETURN.
+
+pcTenant  = get_string(param_toplevel_id, "0").
+pcIDArray = get_array(param_toplevel_id, "1").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 resp_array = add_array(response_toplevel_id, "").
 
