@@ -45,7 +45,7 @@ CLASS HPD.RepLogHandler FINAL:
       (icDB        AS CHARACTER,
        icQueueName AS CHARACTER):
 
-      llMultiTenancy = TENANT-NAME(icDB) > "".
+      llMultiTenancy = IS-DB-MULTI-TENANT(icDB).
       mInitialize(icDB + ".RepLog", icQueueName).
 
    END CONSTRUCTOR.
@@ -54,7 +54,7 @@ CLASS HPD.RepLogHandler FINAL:
    CONSTRUCTOR PUBLIC RepLogHandler
       (icDB AS CHARACTER):
 
-      llMultiTenancy = TENANT-NAME(icDB) > "".
+      llMultiTenancy = IS-DB-MULTI-TENANT(icDB).
       mInitialize(icDB + ".RepLog", icDB).
 
    END CONSTRUCTOR.
@@ -309,6 +309,15 @@ CLASS HPD.RepLogHandler FINAL:
                   &THEN
                      ISO-DATE(lhRepLogTable::EventTime).
                   &ENDIF
+
+      IF llMultiTenancy
+      THEN lcMessage = lcMessage + {&HPDDumpDelimiter} +
+      &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
+      &THEN IF ttDumpHandler.TenantName = "Default"
+            THEN "Yoigo"
+            ELSE ttDumpHandler.TenantName.
+      &ELSE ttDumpHandler.TenantName.
+      &ENDIF
 
       IF lhRepLogTable::EventType = "DELETE"
       THEN lcMessage = lcMessage + {&HPDDumpDelimiter} +
