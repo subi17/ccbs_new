@@ -82,10 +82,10 @@ CLASS HPD.DumpFile INHERITS DumpBase:
          are needed for offline dumps */
       &IF "{&HPD_ENVIRONMENT}" = "Salt"
       &THEN
-         mUpdateDumpHeader(4,"",objHPDTime:CurrUTCTime).
+         mUpdateDumpHeader(3,"",objHPDTime:CurrUTCTime).
       &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
       &THEN
-         mUpdateDumpHeader(4,"",ISO-DATE(objHPDTime:CurrLocalTZTime)).
+         mUpdateDumpHeader(3,"",ISO-DATE(objHPDTime:CurrLocalTZTime)).
       &ELSE
          RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
       &ENDIF
@@ -175,10 +175,10 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    END METHOD.
 
 
-   METHOD PUBLIC VOID mWriteALine
-      (iiOrderNumToSkip AS INTEGER):
+   METHOD PUBLIC VOID mWriteALineWithPrefix
+      (icPrefix AS CHARACTER):
 
-      PUT STREAM str UNFORMATTED mGetData(iiOrderNumToSkip) SKIP.
+      PUT STREAM str UNFORMATTED icPrefix + mGetData() SKIP.
 
    END METHOD.
 
