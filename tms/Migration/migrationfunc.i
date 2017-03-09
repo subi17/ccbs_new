@@ -14,7 +14,8 @@
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
 {Func/orderfunc.i}
-{log.i}
+{Func/freacmobsub.i}
+{Func/log.i}
 /*Message queue related global variables.*/
 DEF VAR lcLoginMq          AS CHAR NO-UNDO.
 DEF VAR lcPassMq           AS CHAR NO-UNDO.
@@ -41,7 +42,15 @@ DEF TEMP-TABLE OrderInfo NO-UNDO
    FIELD MSISDN AS CHAR
    FIELD StatusCode AS CHAR.
 
-{Func/freacmobsub.i}
+/*Function returns TRUE if given tariff is related to ongoing
+ migration.*/
+FUNCTION fMigrationTariff RETURNS LOGICAL
+   (icCLITYPE AS CHAR):
+
+   RETURN TRUE. /*In testing phase we will allow all tariffs*/
+END.
+
+
 /*Function checks that customer given:
    -does not have active subscrition
    -does not have subscription that can be reactivated
@@ -63,14 +72,12 @@ FUNCTION fMigrationCheckCustomer RETURNS CHAR
             Customer.OrgID EQ icCustID:
       FIND FIRST MobSub NO-LOCK WHERE
                  MobSub.Brand EQ icBrand AND
-                 MobSub.CustNum EQ Customer.CustNum.
+                 MobSub.CustNum EQ Customer.CustNum NO-ERROR.
       IF AVAIL MobSub THEN DO:         
-         /*TODO Ilkka seek order and ensure that this is not old one.*/
-         FOR EACH Order NO-LOCK WHERE 
-                  Order.MsSeq EQ MsSeq:
-            /* IF NOT fMigrationTariff THEN TODO implement function*/
-               RETURN "ERROR: Mobsub for the customer exists".
-         END.         
+         FIND FIRST Order NO-LOCK WHERE
+                  Order.MsSeq EQ Mobsub.MsSeq AND
+                  Order.Orderchannel NE "migration" NO-ERROR.
+         IF AVAIL Order THEN RETURN "ERROR: Mobsub for the customer exists".
          
       END.
       FOR EACH TermMobSub NO-LOCK WHERE
