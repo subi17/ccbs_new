@@ -33,6 +33,7 @@ DEF VAR lcLogFile   AS CHAR NO-UNDO.
 DEF VAR lcLogTrans  AS CHAR NO-UNDO.
 DEF VAR lcFoundTenants AS CHAR NO-UNDO.
 DEF VAR liCounter   AS INT NO-UNDO.
+DEF VAR lcTenant    AS CHAR NO-UNDO.
 
 DEF TEMP-TABLE ttFiles NO-UNDO
    FIELD TermFile AS CHAR
@@ -52,11 +53,6 @@ FUNCTION fCollTemp RETURNS LOGIC
    ASSIGN ttFiles.TermFile = icTermFile.
    
 END FUNCTION.
-
-
-FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
 
 ASSIGN
    lcReadDir  = fCParamC("SubsTermFiles")
@@ -93,8 +89,9 @@ FOR EACH ttFiles:
 
    /* Set effective tenant based on file name. If not regocniced go next file
    */
+   lcTenant  = ENTRY(1,lcPlainFile,"_").
    IF NOT fsetEffectiveTenantForAllDB(
-      fConvertBrandToTenant(ENTRY(1,lcPlainFile,"_"))) THEN NEXT.
+      fConvertBrandToTenant(lcTenant)) THEN NEXT.
 
    IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
                       ActionLog.Brand = gcBrand AND
@@ -117,13 +114,13 @@ FOR EACH ttFiles:
    END.
    
    RUN Mm/readtermfile.p (ttFiles.TermFile,
-                     REPLACE(lcLogFile,"#TENANT",ENTRY(1,lcPlainFile,"_")),
+                     REPLACE(lcLogFile,"#TENANT",lcTenant),
                      OUTPUT liRead,
                      OUTPUT liError).
    IF lcFoundTenants EQ "" THEN
-      lcFoundTenants = ENTRY(1,lcPlainFile,"_").
-   ELSE IF INDEX(lcFoundTenants,ENTRY(1,lcPlainFile,"_")) EQ 0 THEN
-      lcFoundTenants = lcFoundTenants + "," + ENTRY(1,lcPlainFile,"_").
+      lcFoundTenants = lcTenant.
+   ELSE IF INDEX(lcFoundTenants,lcTenant) EQ 0 THEN
+      lcFoundTenants = lcFoundTenants + "," + lcTenant.
      
    DO TRANS:
       ASSIGN 
