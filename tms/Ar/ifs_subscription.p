@@ -12,6 +12,7 @@
 {Syst/dumpfile_run.i}
 {Func/barrfunc.i}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -541,7 +542,8 @@ PROCEDURE pWrite2File:
       /* 20 */ STRING(END_DATE,"X(8)")
       /* 21 */ STRING(SUBS_STATUS,"X(15)")
       /* 22 */ FILL(" ",1)
-      /* 23 */ STRING(TERM_REASON,"X(50)")  
+      /* 23 */ STRING(TERM_REASON,"X(50)") 
+      /* 24 */ fgetCompanyId() 
       SKIP.
 
 END PROCEDURE.  /* pWrite2File */
