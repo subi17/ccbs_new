@@ -74,6 +74,21 @@ FUNCTION fgetMaxTenantId RETURNS INT ().
    RETURN liid.
 END FUNCTION.
 
+/* Function to return available tenant ids. If caller not super tenant or 
+   effective tenant id is set then return only current tenant id. */
+FUNCTION fgetTenantIds RETURNS CHAR ().
+   DEF VAR lcIds AS CHAR NO-UNDO.
+   IF TENANT-ID(LDBNAME(1)) NE -1 THEN  /* Not super, only one id to return */
+      RETURN STRING(TENANT-ID(LDBNAME(1))).
+   FOR EACH _tenant:
+      IF lcIds EQ "" THEN
+         lcids = STRING(_tenant._tenantId).
+      ELSE
+         lcids = lcids + "," + STRING(_tenant._tenantId).
+   END.
+   RETURN lcids.
+END FUNCTION.
+
 /* Function to find tenant Id by name */
 FUNCTION fgetTenantIdbyName RETURNS INT 
    (INPUT icname AS CHAR).

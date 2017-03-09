@@ -44,6 +44,12 @@ IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
    TMSParam.charval = REPLACE(TMSParam.charval,"spool/terminate","spool/#TENANT_terminate").
 
 
+FIND FIRST TMSParam WHERE
+           TMSParam.brand EQ "1" AND
+           TMSParam.Paramgroup EQ "IFS" AND
+           TMSParam.ParamCode EQ "IFSCollActionFile" NO-ERROR.
+IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
+   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_BAR","/#TENANT_IFS_BAR").
 
 /* ----------------------------------------------------------------------
    MASMOVIL setups start here */
@@ -95,6 +101,12 @@ FIND FIRST TMSParam WHERE
 IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
    TMSParam.charval = REPLACE(TMSParam.charval,"spool/terminate","spool/#TENANT_terminate").
 
+FIND FIRST TMSParam WHERE
+           TMSParam.brand EQ "1" AND
+           TMSParam.Paramgroup EQ "IFS" AND
+           TMSParam.ParamCode EQ "IFSCollActionFile" NO-ERROR.
+IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
+   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_BAR","/#TENANT_IFS_BAR").
 
 
 /* MB-142 */

@@ -42,7 +42,10 @@ IF AVAILABLE Company THEN ynimi = Company.CompName.
 IF llControl THEN 
    lcReadDir = fCParamC("IFSPaymStatusControl").
 ELSE lcReadDir  = fCParamC("IFSPaymStatusFile").
-   
+  
+lcReadDir = REPLACE(lcReadDir,"#COMPANY", 
+            CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))))).
+ 
 IF lcReadDir = "" OR lcReadDir = ? THEN RETURN "ERROR:Definitions missing".
    
 
