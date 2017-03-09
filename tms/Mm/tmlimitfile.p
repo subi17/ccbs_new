@@ -63,6 +63,7 @@ DEFINE VARIABLE lcTime AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liDate AS INT NO-UNDO. 
 DEFINE VARIABLE lcToday AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE llRecovery AS LOGICAL NO-UNDO. 
+DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO. 
 
 lcToday =   STRING(YEAR(TODAY),"9999") + 
             STRING(MONTH(TODAY),"99") +
@@ -250,11 +251,11 @@ REPEAT:
    IF SEARCH(lcInputFile) NE ? THEN
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
-   MESSAGE "1" VIEW-AS ALERT-BOX. 
-   /* Set effective tenant based on file name. If not regocniced go next file
-   */
+   /* Set effective tenant based on file name.
+      If not recognised go to next file */
+   lcTenant = ENTRY(1,lcFileName,"_").
    IF NOT fsetEffectiveTenantForAllDB(
-         fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.  
+      fConvertBrandToTenant(lcTenant)) THEN NEXT.  
  
    IF INDEX(lcFileName,"results") > 0 THEN DO:
       llRecovery = TRUE.
@@ -266,13 +267,13 @@ REPEAT:
    IF INT(lcToday) < liDate THEN NEXT.
    
    lcTime = STRING(TIME,"HH:MM").
-   lcOutputFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_threshold_results_" + 
+   lcOutputFile = lcSpoolDir + lcTenant + "_threshold_results_" + 
                   STRING(liDate) + ENTRY(1,lcTime,":") + ENTRY(2,lcTime,":") + 
                   ".txt".
    OUTPUT STREAM sReport TO VALUE(lcOutputFile).
    fBatchLog("START", lcOutputFile).
 
-   lcStatFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_threshold_summary_" + 
+   lcStatFile = lcSpoolDir + lcTenant + "_threshold_summary_" + 
                 STRING(liDate) + ".txt".
    OUTPUT STREAM sStatistics TO VALUE(lcStatFile).
    fBatchLog("START", lcStatFile).
