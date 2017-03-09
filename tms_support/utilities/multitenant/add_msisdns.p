@@ -182,20 +182,26 @@ IF liBegin GE 722600000 AND liEnd GE 722610000 THEN
 
 /* Set tenant based on MB-93 description */
 IF STRING(liBegin) BEGINS "72260" THEN DO:
-   fsetEffectiveTenantForAllDB("TMasMovil").
-   MESSAGE "Add MasMovil ICCs " liBegin " to " liEnd VIEW-AS ALERT-BOX.
+   IF NOT fsetEffectiveTenantForAllDB("TMasMovil") THEN DO:
+      MESSAGE "Tenant change to Masvmovil failed" VIEW-AS ALERT-BOX.
+      RETURN.
+   END.
+   MESSAGE "Add MasMovil MSISDNs " liBegin " to " liEnd VIEW-AS ALERT-BOX.
 END.
 ELSE DO:
-   fsetEffectiveTenantForAllDB("Default").
-   MESSAGE "Add Yoigo ICCs " liBegin " to " liEnd VIEW-AS ALERT-BOX.
+   IF NOT fsetEffectiveTenantForAllDB("Default") THEN DO:
+      MESSAGE "Tenant change to Default failed" VIEW-AS ALERT-BOX.
+      RETURN.
+   END.
+   MESSAGE "Add Yoigo MSISDNs " liBegin " to " liEnd VIEW-AS ALERT-BOX.
 END.
 
 each_loop:
 
 DO ld = liBegin TO liEnd TRANS:
 
-/*   i = i + 1.
-   if i <= 20 then next.
+   i = i + 1.
+/*   if i <= 20 then next.
    if i > 20 then leave.   */
 
    if i mod 100 = 0 then do:
