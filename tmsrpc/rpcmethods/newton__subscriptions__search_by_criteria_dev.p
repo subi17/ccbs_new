@@ -76,7 +76,10 @@ DEF VAR liLoopEndTime      AS INT  NO-UNDO.
 DEF VAR liLoopCount        AS INT  NO-UNDO. 
 DEF VAR plgOrderStatus     AS LOG  NO-UNDO.
 DEF VAR plgEligibleRenewal AS LOG  NO-UNDO INIT ?.
-DEF VAR llUnpaidInv        AS LOG  NO-UNDO.
+DEF VAR ldtFirstDay        AS DATE NO-UNDO.
+
+ASSIGN ldtFirstDay = DATE(MONTH(ADD-INTERVAL(TODAY,-12,"months") + 1),
+                        1,YEAR(ADD-INTERVAL(TODAY,-12,"months") + 1)).      
 
 IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
@@ -147,33 +150,6 @@ ASSIGN top_struct = add_struct(response_toplevel_id, "")
 
 liLoopBegTime = TIME.
 
-PROCEDURE pCustInDebtCheck:
-
-   DEF VAR llDebt       AS CHAR   NO-UNDO INIT "NO". 
-   DEF VAR ldtFirstDay  AS DATE   NO-UNDO.
-
-   ldtFirstDay = DATE(MONTH(ADD-INTERVAL(TODAY,-12,"months") + 1),
-                        1,
-                 YEAR(ADD-INTERVAL(TODAY,-12,"months") + 1)).      
-   INVSEARCH_LOOP:
-   FOR EACH Invoice NO-LOCK WHERE
-            Invoice.Brand    = gcBrand            AND
-            Invoice.Custnum  = MobSub.Custnum     AND
-            Invoice.InvType  = {&INV_TYPE_NORMAL} AND 
-            Invoice.InvDate <= TODAY              AND 
-            Invoice.InvDate >= ldtFirstDay        AND
-            Invoice.DueDate  < TODAY - 2:
-      IF Invoice.PaymState NE 2            AND
-         Invoice.InvAmt     > 0            THEN 
-      DO:
-         llDebt = "YES". /* unpaid invoice */
-         LEAVE INVSEARCH_LOOP.
-      END.
-      llDebt = "NO". /* invoice(s) found */
-   END.
-   RETURN llDebt.
-END PROCEDURE.
-
 FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
    
    DEF VAR llBarrings           AS LOGICAL   NO-UNDO.
@@ -233,11 +209,18 @@ FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
          IF llBarrings THEN       
             RETURN NO.
       END.   
-   END.      
-
-   RUN pCustInDebtCheck.
-   IF RETURN-VALUE = "Yes" THEN
-      RETURN NO.      
+   END.         
+   
+   IF CAN-FIND( FIRST Invoice NO-LOCK WHERE
+                      Invoice.Brand    = gcBrand            AND
+                      Invoice.Custnum  = MobSub.Custnum     AND            
+                      Invoice.InvDate >= ldtFirstDay        AND
+                      Invoice.InvType  = {&INV_TYPE_NORMAL} AND             
+                      Invoice.DueDate  < TODAY - 2          AND
+                      Invoice.PaymState NE 2                AND
+                      Invoice.InvAmt     > 0) THEN
+            
+      RETURN NO.         
 
    IF fOngoingOrders(MobSub.Cli,"renewal") THEN
       RETURN NO.
@@ -344,7 +327,7 @@ END FUNCTION.
 EACH_MOBSUB:
 FOR EACH MobSub NO-LOCK WHERE
          MobSub.Brand   = gcBrand AND 
-         (IF pcCliType NE "" THEN MobSub.CLIType = pcCliType ELSE TRUE):    
+         (IF pcCliType NE "" THEN MobSub.CLIType = pcCliType ELSE TRUE):
 
    /* If MobSub loop executes more than 30 seconds 
    then it should terminate the execution */
@@ -355,103 +338,38 @@ FOR EACH MobSub NO-LOCK WHERE
 
    END.
 
-   liLoopCount = liLoopCount + 1.
-
-   IF plPayType <> MobSub.PayType THEN NEXT EACH_MOBSUB.
-   /* YDA-895 Voice or Data  */
-   IF NOT CAN-FIND(FIRST CliType WHERE 
-                         CliType.Brand     = gcBrand AND
-                         CliType.CliType   = MobSub.CliType AND
-                         CliType.UsageType = piUsageType NO-LOCK) THEN
-      NEXT EACH_MOBSUB.
-   /* YDA-895 ID of the customer */   
-   IF piPersonIdType > 0 AND NOT fPersonIdCheck(INPUT piPersonIdType) THEN
-      NEXT EACH_MOBSUB.
-
-   IF pdtEndDate <> ? AND 
-      MobSub.TariffActDate >= pdtEndDate THEN NEXT EACH_MOBSUB.
-
-   /* YDA-895 To narrow down the list */
-   IF pdtStartDate <> ? AND 
-      MobSub.TariffActDate < pdtStartDate THEN NEXT EACH_MOBSUB.
-
-   IF pdtEndDate <> ? OR pdtStartDate <> ? THEN DO: 
-      FOR EACH Order NO-LOCK WHERE 
-               Order.MsSeq  EQ MobSub.MsSeq AND
-               LOOKUP(Order.StatusCode, {&ORDER_CLOSE_STATUSES}) = 0
-           BY Order.CrStamp DESC:
-       
-          fSplitTS(Order.CrStamp, 
-                   OUTPUT ldtOrderDate,
-                   OUTPUT liOrderTime).
-          
-          IF pdtEndDate <> ? AND ldtOrderDate >= pdtEndDate THEN 
-             NEXT EACH_MOBSUB.
-          ELSE IF pdtStartDate <> ? AND ldtOrderDate < pdtStartDate THEN
-             NEXT EACH_MOBSUB. /* YDA-895 to narrow down the number of results */
-      END.          
-   END.        
-
-   IF plgOrderStatus THEN DO: 
-      FOR EACH Order NO-LOCK WHERE 
-               Order.MsSeq  EQ MobSub.MsSeq
-           BY Order.CrStamp DESC:
-       
-         IF NOT Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN
-             NEXT EACH_MOBSUB. 
-      END.          
-   END.
-
-   IF pcOrderType > "" THEN DO:
-      CASE pcOrderType:
-         WHEN "sim" THEN DO:
-           IF CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-                             SubsTerminal.Brand = gcBrand AND
-                             SubsTerminal.MsSeq = MobSub.MsSeq AND
-                             SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
-                             THEN NEXT EACH_MOBSUB.
-         END.
-         WHEN "terminal" THEN DO:
-           IF NOT CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-                                 SubsTerminal.Brand = gcBrand AND
-                                 SubsTerminal.MsSeq = MobSub.MsSeq AND
-                                 SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
-                                 THEN NEXT EACH_MOBSUB.
-         END.
-         OTHERWISE NEXT EACH_MOBSUB.
-      END CASE.
-   END.
-
-   /* Subscription type */
-   IF LOOKUP(pcCliType,lcBundleCLITypes) > 0 AND
-      pcSubsBundleId <> MobSub.TariffBundle THEN NEXT EACH_MOBSUB.
-
-   /* Data bundle  */
-   IF pcDataBundleId > "" THEN DO:      
-      lcDataBundles = fGetCurrentSpecificBundle(MobSub.MsSeq,"BONO").
-      IF pcDataBundleId <> "None" THEN       
-      DO:      
-         IF pcDataBundleId <> lcDataBundles THEN 
-            NEXT EACH_MOBSUB.          
-      END.
-      ELSE IF lcDataBundles > "" THEN 
-         NEXT EACH_MOBSUB.     
-   END. /* IF pcDataBundleId > "" THEN DO: */
+   liLoopCount = liLoopCount + 1. 
    
-   /* Eligible for renewal order YDA-895 */
-   IF plgEligibleRenewal <> ? THEN 
-   DO:
-      IF plgEligibleRenewal <> fCheckEligibleRenewal() THEN
-         NEXT EACH_MOBSUB.      
-   END.
- 
+      /* Data bundle  */  
+   IF pcDataBundleId > "" THEN
+   DO:   
+      lcDataBundles = fGetCurrentSpecificBundle(MobSub.MsSeq,"BONO").      
+      IF pcDataBundleId = "None" THEN       
+      DO:  
+         IF lcDataBundles > "" THEN 
+            NEXT EACH_MOBSUB.         
+      END.
+      ELSE IF pcDataBundleId <> lcDataBundles THEN 
+            NEXT EACH_MOBSUB.                  
+   END. /* pcDataBundleId > "" */
+   
+   IF plDebt AND NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                                    Invoice.Brand    = gcBrand            AND
+                                    Invoice.Custnum  = MobSub.Custnum     AND            
+                                    Invoice.InvDate >= ldtFirstDay        AND
+                                    Invoice.InvType  = {&INV_TYPE_NORMAL} AND             
+                                    Invoice.DueDate  < TODAY - 2          AND
+                                    Invoice.PaymState NE 2                AND
+                                    Invoice.InvAmt     > 0) THEN
+            
+      NEXT EACH_MOBSUB.  
+
       /* Segmentation offer */
-   IF pcSegmentOffer > ""  THEN DO:
-      FIND FIRST Segmentation NO-LOCK WHERE
-                 Segmentation.MsSeq = MobSub.MsSeq NO-ERROR.
-      IF NOT AVAIL Segmentation THEN NEXT EACH_MOBSUB.
-      IF pcSegmentOffer <> Segmentation.SegmentOffer THEN NEXT EACH_MOBSUB. 
-   END.
+   IF pcSegmentOffer > "" AND
+      NOT CAN-FIND (FIRST Segmentation NO-LOCK WHERE
+                          Segmentation.MsSeq = MobSub.MsSeq AND
+                          pcSegmentOffer = Segmentation.SegmentOffer) THEN
+      NEXT EACH_MOBSUB.    
    
       /* PAYTERMX */
    IF pcPayTerm > "" THEN DO:
@@ -551,22 +469,98 @@ FOR EACH MobSub NO-LOCK WHERE
          END. /* FOR EACH DCCLI NO-LOCK WHERE */
          IF liCount = 0 THEN NEXT EACH_MOBSUB.
       END.
-   END.     
+   END. 
+
+   IF pcLanguage > "" AND
+      NOT CAN-FIND(FIRST OrderCustomer WHERE
+                         OrderCustomer.custNum EQ Mobsub.custnum AND
+                         OrderCustomer.Language EQ pcLanguage NO-LOCK) THEN
+         NEXT EACH_MOBSUB.   
  
-   IF pcLanguage > "" THEN DO:
-      FIND FIRST OrderCustomer WHERE
-                 OrderCustomer.custNum EQ Mobsub.custnum AND
-                 OrderCustomer.Language EQ pcLanguage NO-LOCK NO-ERROR.
-      IF NOT AVAIL OrderCustomer THEN NEXT EACH_MOBSUB.
+   IF pcInvGroup > "" AND
+      NOT CAN-FIND(FIRST Customer WHERE 
+                         Customer.brand EQ gcBrand AND
+                         Customer.custnum EQ MobSub.CustNum AND
+                         Customer.invGroup EQ pcInvGroup NO-LOCK) THEN
+      NEXT EACH_MOBSUB.
+
+   /* Postpaid or Prepaid */
+   IF plPayType <> MobSub.PayType THEN NEXT EACH_MOBSUB.
+
+   /* YDA-895 Voice or Data  */
+   IF NOT CAN-FIND(FIRST CliType WHERE 
+                         CliType.Brand     = gcBrand AND
+                         CliType.CliType   = MobSub.CliType AND
+                         CliType.UsageType = piUsageType NO-LOCK) THEN
+      NEXT EACH_MOBSUB.
+   /* YDA-895 ID of the customer */   
+   IF piPersonIdType > 0 AND NOT fPersonIdCheck(INPUT piPersonIdType) THEN
+      NEXT EACH_MOBSUB.   
+
+   IF pdtEndDate <> ? AND 
+      MobSub.TariffActDate >= pdtEndDate THEN NEXT EACH_MOBSUB.
+
+   /* YDA-895 To narrow down the list */
+   IF pdtStartDate <> ? AND 
+      MobSub.TariffActDate < pdtStartDate THEN NEXT EACH_MOBSUB.
+
+   IF pdtEndDate <> ? OR pdtStartDate <> ? THEN DO: 
+      FOR EACH Order NO-LOCK WHERE 
+               Order.MsSeq  EQ MobSub.MsSeq AND
+               LOOKUP(Order.StatusCode, {&ORDER_CLOSE_STATUSES}) = 0
+           BY Order.CrStamp DESC:
+       
+          fSplitTS(Order.CrStamp, 
+                   OUTPUT ldtOrderDate,
+                   OUTPUT liOrderTime).
+          
+          IF pdtEndDate <> ? AND ldtOrderDate >= pdtEndDate THEN 
+             NEXT EACH_MOBSUB.
+          ELSE IF pdtStartDate <> ? AND ldtOrderDate < pdtStartDate THEN
+             NEXT EACH_MOBSUB. /* YDA-895 to narrow down the number of results */
+      END.          
    END.
- 
-   IF pcInvGroup > "" THEN DO:
-      FIND FIRST Customer WHERE 
-                 Customer.brand EQ gcBrand AND
-                 Customer.custnum EQ MobSub.CustNum AND
-                 Customer.invGroup EQ pcInvGroup NO-LOCK NO-ERROR.
-      IF NOT AVAIL Customer THEN NEXT EACH_MOBSUB.
+
+   IF plgOrderStatus THEN DO: 
+      FOR EACH Order NO-LOCK WHERE 
+               Order.MsSeq  EQ MobSub.MsSeq
+           BY Order.CrStamp DESC:
+       
+         IF NOT Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN
+             NEXT EACH_MOBSUB. 
+      END.          
    END.
+
+   IF pcOrderType > "" THEN DO:
+      CASE pcOrderType:
+         WHEN "sim" THEN DO:
+           IF CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
+                             SubsTerminal.Brand = gcBrand AND
+                             SubsTerminal.MsSeq = MobSub.MsSeq AND
+                             SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
+                             THEN NEXT EACH_MOBSUB.
+         END.
+         WHEN "terminal" THEN DO:
+           IF NOT CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
+                                 SubsTerminal.Brand = gcBrand AND
+                                 SubsTerminal.MsSeq = MobSub.MsSeq AND
+                                 SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
+                                 THEN NEXT EACH_MOBSUB.
+         END.
+         OTHERWISE NEXT EACH_MOBSUB.
+      END CASE.
+   END.
+
+   /* Subscription type */
+   IF LOOKUP(pcCliType,lcBundleCLITypes) > 0 AND
+      pcSubsBundleId <> MobSub.TariffBundle THEN NEXT EACH_MOBSUB.   
+   
+   /* Eligible for renewal order YDA-895 */
+   IF plgEligibleRenewal <> ? THEN 
+   DO:
+      IF plgEligibleRenewal <> fCheckEligibleRenewal() THEN
+         NEXT EACH_MOBSUB.      
+   END.      
  
  /*Other bundles  */
    DO liCount = 1 TO liNumberOfBundles:
@@ -582,13 +576,7 @@ FOR EACH MobSub NO-LOCK WHERE
    END. /* DO liCount = 1 TO liNumberOfBundles: */
    
    /*Any Barrings Exist*/
-   IF plBarring AND fGetActiveBarrings(MobSub.MsSeq) EQ "" THEN NEXT EACH_MOBSUB.                
-
-   IF plDebt THEN DO:
-      RUN pCustInDebtCheck.
-      IF RETURN-VALUE = "NO" THEN
-         NEXT EACH_MOBSUB.
-   END.   
+   IF plBarring AND fGetActiveBarrings(MobSub.MsSeq) EQ "" THEN NEXT EACH_MOBSUB.               
  
       /* Count number of subscriptions */
    IF liNumberOfSubs <= piOffset AND piOffset > 0 THEN DO:
@@ -601,7 +589,7 @@ FOR EACH MobSub NO-LOCK WHERE
       add_timestamp(resp_struct, "act_stamp", MobSub.ActivationTS).
       liNumberOfSubs = liNumberOfSubs + 1.
       liNumberLimit  = liNumberLimit  + 1.
-   END.
+   END.   
  
    IF liNumberLimit >= piSubsLimit THEN LEAVE EACH_MOBSUB.
 END.
