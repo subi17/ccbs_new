@@ -71,7 +71,6 @@ FOR EACH Order EXCLUSIVE-LOCK WHERE
          Order.Brand EQ gcBrand AND
          Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_PENDING}: 
    lcRow = Order.CLI.
-   PUT STREAM sLog UNFORMATTED lcRow SKIP.
    PUT STREAM sOut UNFORMATTED lcRow SKIP.
 
    Order.StatusCode = {&ORDER_STATUS_MIGRATION_ONGOING}.

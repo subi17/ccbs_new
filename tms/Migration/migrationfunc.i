@@ -189,6 +189,7 @@ FUNCTION fGenerateOPDataInfo RETURNS CHAR
 RETURN "".
 END.   
 
+/*Ilkka TODO: Comment!*/
 FUNCTION fCreateMigrationSub RETURNS CHAR
    (iiOrderID AS INT,
     ilgChangeSim AS LOGICAL):
@@ -202,7 +203,7 @@ FUNCTION fCreateMigrationSub RETURNS CHAR
    IF NOT AVAIL Order THEN RETURN "Migration order not found " +
                                    STRING(iiOrderID).           
    
-
+   /*ldeSwitchTS = Order. porting time*/
    fSubscriptionRequest(INPUT  Order.MSSeq,
                         INPUT  Order.Cli,
                         INPUT  Order.CustNum,
@@ -223,7 +224,7 @@ FUNCTION fCreateMigrationSub RETURNS CHAR
       RETURN "ERROR: Subscription creation failed, order " +
              STRING(Order.OrderID).
    END.
-/*TODO*/
+/*TODO order to status 12 for waiting that creation req is handled.*/
    
 
 RETURN "".

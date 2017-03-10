@@ -537,7 +537,7 @@
                    LOOKUP(Order.OrderChannel,
                           "telesales,fusion_telesales,pos,fusion_pos") > 0 THEN
                    /* YBP-620 */
-                   Order.MNPStatus = {&ORDER_STATUS_DELIVERED} /*6*/ . /* fake mnp process (ACON) */
+                   Order.MNPStatus = 6. /* fake mnp process (ACON) */
                 /*MB_Migration has special MNP/Migration handler*/
                 ELSE IF Order.Orderchannel EQ "migration" THEN DO:
                    Order.StatusCode = {&ORDER_STATUS_MIGRATION_PENDING}. /*60*/
