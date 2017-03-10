@@ -750,8 +750,8 @@ ADD INDEX "ServPac" ON "CTServPac"
 ADD TABLE "DayCampaign"
   AREA "Sta_Data_256"
   DUMP-NAME "daycampa"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-daycampaign.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-daycampaign.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-daycampaign.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-daycampaign.p" CRC "?" 
 
 ADD FIELD "DCEvent" OF "DayCampaign" AS character 
   FORMAT "x(12)"
@@ -1080,8 +1080,8 @@ ADD INDEX "DCType" ON "DayCampaign"
 ADD TABLE "DCCLi"
   AREA "Sta_Data_128_2"
   DUMP-NAME "dccli-------1"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-dccli.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-dccli.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-dccli.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-dccli.p" CRC "?" 
 
 ADD FIELD "MSSeq" OF "DCCLi" AS integer 
   FORMAT ">>>>>>>9"
@@ -2321,8 +2321,8 @@ ADD TABLE "IMSI"
   DESCRIPTION "IMSI number
 "
   DUMP-NAME "imsi"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-imsi.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-imsi.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-imsi.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-imsi.p" CRC "?" 
 
 ADD FIELD "IMSI" OF "IMSI" AS character 
   FORMAT "x(18)"
@@ -3855,6 +3855,16 @@ ADD FIELD "TariffBundle" OF "MSOwner" AS character
   COLUMN-LABEL "TariffBundle"
   ORDER 350
 
+ADD FIELD "FixedNumber" OF "MSOwner" AS character 
+  FORMAT "x(11)"
+  INITIAL ?
+  LABEL "Fixed Number"
+  POSITION 22
+  MAX-WIDTH 22
+  COLUMN-LABEL "FixedNumber"
+  HELP "Fixed line number"
+  ORDER 360
+
 ADD FIELD "Brand" OF "MSOwner" AS character 
   FORMAT "x(8)"
   INITIAL ""
@@ -3977,6 +3987,12 @@ ADD INDEX "CustNum_s" ON "MSOwner"
   AREA "Sta_Index_1"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "TsEnd" DESCENDING 
+
+ADD INDEX "FixedNumber_s" ON "MSOwner" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "FixedNumber" ASCENDING 
   INDEX-FIELD "TsEnd" DESCENDING 
 
 ADD INDEX "imsi" ON "MSOwner" 
@@ -4165,8 +4181,8 @@ ADD TABLE "MSRequest"
   DESCRIPTION "MobSub related action requests
 "
   DUMP-NAME "msreques"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-msrequest.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-msrequest.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-msrequest.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-msrequest.p" CRC "?" 
 
 ADD FIELD "Brand" OF "MSRequest" AS character 
   FORMAT "x(8)"
@@ -6086,8 +6102,8 @@ ADD TABLE "ServPac"
   DESCRIPTION "
 "
   DUMP-NAME "servpac"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-servpac.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-servpac.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-servpac.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-servpac.p" CRC "?" 
 
 ADD FIELD "ServPac" OF "ServPac" AS character 
   FORMAT "x(12)"
@@ -7443,8 +7459,8 @@ ADD TABLE "SubSer"
   AREA "SubSer_Data"
   DESCRIPTION "Services of mobile subscribers"
   DUMP-NAME "subser-------1"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-subser.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-subser.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-subser.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-subser.p" CRC "?" 
 
 ADD FIELD "MsSeq" OF "SubSer" AS integer 
   FORMAT ">>>>>>>9"
@@ -8044,6 +8060,26 @@ ADD FIELD "TariffActTS" OF "TermMobSub" AS decimal
   DECIMALS 5
   ORDER 860
 
+ADD FIELD "FixedNumber" OF "TermMobSub" AS character 
+  FORMAT "x(11)"
+  INITIAL ?
+  LABEL "Fixed Number"
+  POSITION 37
+  MAX-WIDTH 22
+  COLUMN-LABEL "FixedNumber"
+  HELP "Fixed line number"
+  ORDER 910
+
+ADD FIELD "TerritoryOwner" OF "TermMobSub" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "TerritoryOwner"
+  POSITION 38
+  MAX-WIDTH 30
+  COLUMN-LABEL "TerritoryOwner"
+  HELP "Territory Owner"
+  ORDER 920
+
 ADD FIELD "CliType" OF "TermMobSub" AS character 
   FORMAT "x(8)"
   INITIAL ""
@@ -8217,6 +8253,11 @@ ADD INDEX "CustNum_u" ON "TermMobSub"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "BillTarget" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
+
+ADD INDEX "FixedNumber" ON "TermMobSub" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "FixedNumber" ASCENDING 
 
 ADD INDEX "IMSI" ON "TermMobSub" 
   AREA "Sta_Index_1"
@@ -8904,4 +8945,4 @@ PSC
 bufpool=yes
 cpstream=1252
 .
-0000180282
+0000181309
