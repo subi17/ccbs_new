@@ -1,9 +1,9 @@
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO. 
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
-{date.i}
-{msisdn.i}
+{Func/date.i}
+{Func/msisdn.i}
 define stream out.
 OUTPUT STREAM out TO "/apps/snet/200801/as_ycm209_msisdn.bak".
 DO i = 622757372 TO 622777371:

@@ -7,9 +7,9 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i} gcBrand = "1".
-{cparam2.i}
-{timestamp.i}
+{Syst/commpaa.i} gcBrand = "1".
+{Func/cparam2.i}
+{Func/timestamp.i}
 {Gwy/charset.i}
 {lib/smpp/smpp_defs.i}
 {lib/smpp/smpp_procs.i}

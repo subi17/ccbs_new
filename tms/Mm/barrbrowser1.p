@@ -11,9 +11,9 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
-{barrfunc.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/barrfunc.i}
+{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER iiMsSeq   AS INTEGER    NO-UNDO.
 
@@ -76,7 +76,7 @@ form /* Set new commands */
     "Enter Barring Command (Type #REFRESH in case of re-provisioning)"
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -193,7 +193,7 @@ REPEAT WITH FRAME frTop:
            ehto   = 3 
            ufkey  = FALSE.
       
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -235,7 +235,7 @@ REPEAT WITH FRAME frTop:
                   MESSAGE "CMD Validation Error: " + 
                           lcValStatus VIEW-AS ALERT-BOX.
                   ufkey = TRUE.
-                  RUN ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT BROWSE.                 
                END.   
                /*YPR-4774*/
@@ -248,7 +248,7 @@ REPEAT WITH FRAME frTop:
                           "no active mobile line"
                      VIEW-AS ALERT-BOX. 
                   ufkey = TRUE.
-                  RUN ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT BROWSE.
                END.
 
@@ -256,12 +256,12 @@ REPEAT WITH FRAME frTop:
                   MESSAGE "Barring status already active/inactive"
                   VIEW-AS ALERT-BOX.
                   ufkey = TRUE.
-                  RUN ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT BROWSE.                 
                END.
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                 
                PAUSE 0.
                VIEW FRAME frBarrMemo.
@@ -274,7 +274,7 @@ REPEAT WITH FRAME frTop:
                END.                 
                HIDE FRAME frBarrMemo NO-PAUSE.  
 
-               RUN barrengine.p(MobSub.MsSeq,
+               RUN Mm/barrengine.p(MobSub.MsSeq,
                   lcBCommand,
                   {&REQUEST_SOURCE_MANUAL_TMS},
                   "",
@@ -314,7 +314,7 @@ REPEAT WITH FRAME frTop:
                   VIEW-AS ALERT-BOX.
                
                ufkey = TRUE.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT BROWSE.
             END. /* llOk*/
          END. /*Command entered*/

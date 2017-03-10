@@ -7,12 +7,12 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{mnpmessages.i}
-{mnp.i}
-{tmsconst.i}
-{msisdn.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mnp/mnpmessages.i}
+{Mnp/mnp.i}
+{Syst/tmsconst.i}
+{Func/msisdn.i}
 
 DEFINE INPUT PARAMETER icCLI    AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER iiMsSeq  AS INTEGER   NO-UNDO.

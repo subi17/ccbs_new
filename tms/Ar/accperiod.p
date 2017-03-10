@@ -12,23 +12,23 @@
 
 &GLOBAL-DEFINE BrTable AccPeriod
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'accperiod'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'accperiod'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhAccPeriod AS HANDLE NO-UNDO.
    lhAccPeriod = BUFFER AccPeriod:HANDLE.
    RUN StarEventInitialize(lhAccPeriod).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhAccPeriod).
+      RUN Mc/eventview2.p(lhAccPeriod).
    END.
 
 END.
@@ -75,7 +75,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        " ACCOUNTING PERIODS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     AccPeriod.Brand     COLON 12
@@ -103,7 +103,7 @@ form /* seek  FromDate */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Period ,  By Date ,By 3, By 4".
@@ -140,14 +140,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a AccPeriod  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -306,16 +306,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW AccPeriod.Period ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW AccPeriod.Period {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) AccPeriod.Period WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW AccPeriod.FromDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW AccPeriod.FromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) AccPeriod.FromDate WITH FRAME sel.
       END.
 
@@ -443,8 +443,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -466,8 +466,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
@@ -549,8 +549,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhAccPeriod).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY AccPeriod.Period.
 
        RUN local-UPDATE-record.                                  

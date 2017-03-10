@@ -9,11 +9,11 @@
 
 &GLOBAL-DEFINE fmakeservlimit YES
 
-{commali.i}
-{date.i}
-{timestamp.i}
-{eventval.i}
-{fdss.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/fdss.i}
 
 /* somehow have to prevent calling fCleanEventObjects */
 DEF VAR llCleanServLimitEventLog AS LOGICAL NO-UNDO INIT TRUE.
@@ -31,7 +31,7 @@ IF llDoEvent THEN DO:
 
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
     DEFINE VARIABLE lhBufMSLimit     AS HANDLE    NO-UNDO.
     lhBufMSLimit = BUFFER MServiceLimit:HANDLE.
@@ -234,7 +234,8 @@ FUNCTION fMakeServLimit RETURN LOGICAL
             llCreated               = True.
 
          /* Upgrade Upsell */
-         IF AVAILABLE MsRequest AND MsRequest.ReqDParam1 > 0 THEN
+         IF AVAILABLE MsRequest AND MsRequest.ReqDParam1 > 0 AND
+            ServiceLimit.DialType EQ {&DIAL_TYPE_GPRS} THEN
             MServiceLimit.InclAmt = ROUND(MsRequest.ReqDParam1 * ldFactor[liCount],2).
          ELSE
             MServiceLimit.InclAmt = ROUND(ServiceLimit.InclAmt * ldFactor[liCount],2).

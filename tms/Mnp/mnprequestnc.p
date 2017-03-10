@@ -7,13 +7,13 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{mnp.i}
-{mnpmessages.i}
-{tmsconst.i}
-{date.i}
-{fbundle.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mnp/mnp.i}
+{Mnp/mnpmessages.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Mm/fbundle.i}
 
 DEFINE INPUT PARAMETER iiOrderId AS INTEGER NO-UNDO.
 
@@ -122,7 +122,8 @@ ldChgDate = fMNPChangeWindowDate(   /* Count min porting date */
              ELSE Order.OrderChannel),
             OrderCustomer.Region,
             lcProduct,
-            lcTariffType).
+            lcTariffType,
+            Order.DeliveryType).
 
 IF Order.PortingDate <> ? THEN
    IF ldChgDate < Order.PortingDate THEN /* Porting date in the future, use that */

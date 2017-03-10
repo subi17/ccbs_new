@@ -1,11 +1,11 @@
-{commali.i}
-{cparam2.i}
-{msreqfunc.i}
-{provision.i}
-{fmakemsreq.i}
-{tmsconst.i}
-{fdss.i}
-{fixedlinefunc.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/msreqfunc.i}
+{Gwy/provision.i}
+{Func/fmakemsreq.i}
+{Syst/tmsconst.i}
+{Func/fdss.i}
+{Func/fixedlinefunc.i}
 
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 
@@ -273,7 +273,7 @@ PROCEDURE pSolog:
          
          /* Create a memo with prepaid balance if any */
          IF bufMobSub.PayType THEN DO:
-            RUN balancequery.p(bufMobSub.CLI).
+            RUN Gwy/balancequery.p(bufMobSub.CLI).
             ldCurrBal = DEC(RETURN-VALUE) / 100 NO-ERROR.
             IF ldCurrBal > 0 THEN
                fLocalMemo("Mobsub",

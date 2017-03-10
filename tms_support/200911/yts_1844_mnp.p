@@ -1,10 +1,10 @@
 
 
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "rafaeldv".
 gcbrand = "1".
-{service.i}
+{Func/service.i}
 
 DEFINE STREAM sout.
 DEFINE VARIABLE iDispInterval AS INTEGER NO-UNDO INITIAL 1000.

@@ -9,8 +9,8 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
+{Syst/commali.i}
+{Func/msisdn.i}
 
 DEF INPUT PARAMETER  errorcode AS INT             NO-UNDO.
 def /* new */ shared var siirto AS char.
@@ -52,7 +52,7 @@ DEF VAR SL_prefix    AS C                      NO-UNDO.
 DEF VAR mi-no        AS C                      NO-UNDO.
 DEf var roamview     AS i                      NO-UNDO.
 
-{cparam.i DefMSISDNPr  return} SL_prefix = tmsparam.CharVal.
+{Func/cparam.i DefMSISDNPr  return} SL_prefix = tmsparam.CharVal.
 
 form
     PrepCDR.ErrorCode
@@ -91,7 +91,7 @@ form /* seek Mobile Call  by  DateSt */
 
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Error Code,By A-Customer,BY MSISDN No.,By 4".
@@ -122,12 +122,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a PrepCDR  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR PrepCDR.DateSt
@@ -212,20 +212,20 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 0   ufk[3]= 1102 ufk[4]= 1101
         ufk[5]= 265 ufk[6]= 0   ufk[7]= 0    ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row PrepCDR.ErrorCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PrepCDR.ErrorCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PrepCDR.ErrorCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row PrepCDR.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PrepCDR.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PrepCDR.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        choose row PrepCDR.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PrepCDR.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PrepCDR.CLI WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.
@@ -353,8 +353,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DateSt = 1/1/1999.
        UPDATE ErrorCode DateSt WITH FRAME f1.
@@ -380,7 +380,7 @@ BROWSE:
         RUN local-find-this(FALSE).
         /* build an international style MSISDN No. from National CLI */
         mi-no = PrepCDR.CLI.
-        RUN msowner2(mi-no).
+        RUN Mm/msowner2.p(mi-no).
         ufkey = TRUE.
         NEXT.
      END.   
@@ -399,7 +399,7 @@ BROWSE:
 
        CREATE ttCall.
        BUFFER-COPY PrepCDR TO ttCall.
-       RUN viewmbd.p(INPUT TABLE ttcall,
+       RUN Mm/viewmbd.p(INPUT TABLE ttcall,
                     ttcall.datest,
                     ttcall.timest,
                     ttCall.cli,
@@ -415,8 +415,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PrepCDR.DateSt.
 
        RUN local-update-record.                                  

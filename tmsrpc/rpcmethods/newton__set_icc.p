@@ -10,7 +10,7 @@
  * @output success;boolean
  */
 {xmlrpc/xmlrpc_access.i}
-{mnpoutchk.i}
+{Mnp/mnpoutchk.i}
 
 DEF VAR liReq AS INTEGER NO-UNDO.
 
@@ -78,12 +78,12 @@ IF fIsMNPOutOngoing(mobsub.cli) THEN RETURN appl_err("Ongoing MNP OUT request").
 
 IF TRIM(pcSalesman) EQ "" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun = "VISTA_" + pcSalesman.
-{fmakemsreq.i}
-{fcharge_comp_loaded.i}
+{Func/fmakemsreq.i}
+{Func/fcharge_comp_loaded.i}
 
 IF pdeCharge > 0 THEN DO:
    lcError = fCheckChargeLimits (

@@ -8,9 +8,9 @@
   VERSION ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "contrel"
        tuni2 = "".
@@ -167,7 +167,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
          ufk[9]= 1
          ehto = 3 
          ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
 
       if nap ne "first" then do:
@@ -178,7 +178,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
       else assign nap = "1". 
 
       if lookup(nap,"1,f1") > 0 then do:
-         ehto = 9. run ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
 
          repeat with frame valinta on endkey undo, leave:
 
@@ -201,7 +201,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
 
                   liField = FRAME-INDEX.
 
-                  RUN h-tmscodes(INPUT "Contract",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Contract",    /* TableName */
                                        "ContrType",   /* FieldName */
                                        "Commission",  /* GroupCode */
                                  OUTPUT lcCode).
@@ -213,7 +213,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                   END.   
 
                   ehto = 9.
-                  RUN ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
@@ -246,12 +246,12 @@ repeat with frame valinta on endkey undo toimi, next toimi:
 end. /* toimi */
 
 ehto = 5.
-run ufkey.
+RUN Syst/ufkey.p.
 
 tila = true.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
-run contrep (lcInvGroup[1],
+RUN Mc/contrep.p (lcInvGroup[1],
              lcInvGroup[2],
              liCustNum[1],
              liCustNum[2],
@@ -268,7 +268,7 @@ run contrep (lcInvGroup[1],
              liClosed).
 
 tila = false.
-{utuloste.i}
+{Syst/utuloste.i}
 
 MESSAGE "Contract report is finished."
 VIEW-AS ALERT-BOX

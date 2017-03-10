@@ -27,19 +27,19 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
 
-{email.i}
-{cparam2.i}
-{dumpfile_run.i}
-{timestamp.i}
-{fbankdata.i}
-{fcustdata.i}
-{tmsconst.i}
-{date.i}
-{customer_address.i}
+{Func/email.i}
+{Func/cparam2.i}
+{Syst/dumpfile_run.i}
+{Func/timestamp.i}
+{Func/fbankdata.i}
+{Func/fcustdata.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/customer_address.i}
 
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
@@ -149,6 +149,11 @@ FOR EACH Customer WHERE
 
    ELSE IF TRIM(Customer.Address) = "" OR TRIM(Customer.PostOffice) = "" THEN
       lcReason = "Address or City is empty.".
+
+   /* Check for Customer Bank Account YTS-10339 */
+   ELSE IF NOT CAN-FIND( FIRST BankIdCode NO-LOCK WHERE
+      BankIdCode.BankCode = SUBSTRING(Customer.BankAcct,5,4)) THEN
+      lcReason = "Bank not included in SEPA BIC bank list".
 
    IF lcReason = "" THEN 
       lcReason = fCheckAddress(Customer.CustName + Customer.SurName2 +

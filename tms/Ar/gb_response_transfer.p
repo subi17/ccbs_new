@@ -1,9 +1,9 @@
 /*Program moves google billing related logs and output files to target 
 directories.*/
-{commpaa.i}
-{gbilling.i}
-{ftransdir.i}
-{eventlog.i}
+{Syst/commpaa.i}
+{Func/gbilling.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
 DEF VAR lcInputFile AS CHAR NO-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
 DEF STREAM sFile.

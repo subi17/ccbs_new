@@ -10,14 +10,14 @@
 ----------------------------------------------------------------------- */
 
 /* ***************************  Definitions  ************************** */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{cparam2.i}
-{timestamp.i}
-{forderstamp.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/forderstamp.i}
 
 DEFINE VARIABLE lcIncDir     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFilename   AS CHARACTER NO-UNDO.

@@ -7,14 +7,14 @@
   CHANGED ......: 1.9.03 jp /TMS+
                   03.10.03/aam use fChgBrand
                   03.03.05 kl return correctly
-                  28.01.08 kl run ufkey, not .p
+                  28.01.08 kl RUN Syst/ufkey,.p not .p
 
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
 &GLOBAL-DEFINE BrTable Brand
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR xBrand     like Brand.Brand  NO-UNDO.
 DEF VAR xBRName     like Brand.BRName NO-UNDO.
@@ -45,7 +45,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
          + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     Brand.Brand     /* label format */
@@ -69,7 +69,7 @@ form /* seek Brand  by xBRName */
     WITH row 4 col 2 TITLE " FIND NAME "
     NO-labels overlay FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -107,12 +107,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Brand  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR Brand.Brand
@@ -205,16 +205,16 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 0 /* 30 */ ufk[3]= 0 ufk[4]= 0
         ufk[5]= 11  ufk[6]= 0 /* 4  */ ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row Brand.Brand ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row Brand.Brand {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Brand.Brand WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row Brand.BRName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row Brand.BRName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Brand.BRName WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.
@@ -342,8 +342,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET xBrand WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -406,7 +406,7 @@ si-recid = xrecid.
 
 /* start TMS */
 IF LOOKUP(nap,"8,f8") = 0 THEN DO:
-   RUN nn_brand.
+   RUN Syst/nn_brand.p.
    RETURN RETURN-VALUE.
 END.
 ELSE RETURN "LEAVE".

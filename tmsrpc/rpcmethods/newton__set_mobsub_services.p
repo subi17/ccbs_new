@@ -14,14 +14,14 @@
  *
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
-{fmakemsreq.i}
-{subser.i}
-{barrfunc.i}
-{fbundle.i}
-{service.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Mm/subser.i}
+{Func/barrfunc.i}
+{Mm/fbundle.i}
+{Func/service.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.

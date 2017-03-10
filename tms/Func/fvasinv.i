@@ -5,7 +5,7 @@
    logic for invoicing VASCDRs 
 */
 
-{error_codes.i}
+{Rate/error_codes.i}
 
 DEF TEMP-TABLE ttVASRow NO-UNDO
    FIELD BillItem AS CHAR

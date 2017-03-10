@@ -9,9 +9,9 @@
 
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 
-{commali.i}
-{cparam2.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/funcrunprocess_update.i}
 
 DEF INPUT  PARAMETER idaFromDate      AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaToDate        AS DATE NO-UNDO.
@@ -31,7 +31,7 @@ DEF VAR lcAllowedDSS2SubsType         AS CHAR NO-UNDO.
 DEF VAR lcExcludeBundles              AS CHAR NO-UNDO.
 DEF VAR lcFirstMonthUsageBasedBundles AS CHAR  NO-UNDO.
 
-{dss_bundle_first_month_fee.i}
+{Mm/dss_bundle_first_month_fee.i}
 
 /******** Main start ********/
 

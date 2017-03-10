@@ -1,6 +1,6 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
-{q25functions.i}
+{Func/q25functions.i}
 DEF VAR lcLogtext AS CHAR NO-UNDO.
 
 FOR EACH SingleFee USE-INDEX BillCode WHERE

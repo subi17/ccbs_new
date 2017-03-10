@@ -22,27 +22,27 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{msisdn.i}
-{forderstamp.i}
-{ftaxdata.i}
-{ftopup.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{service.i}
-{ftmrlimit.i}
-{fsmsreq.i}
-{orderfunc.i}
-{fsubsterminal.i}
-{invoicetarget.i}
-{fdss.i}
-{orderchk.i}
-{fmakesms.i}
-{transname.i}
-{fbundle.i}
-{fbankdata.i}
-{create_eventlog.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
+{Func/forderstamp.i}
+{Func/ftaxdata.i}
+{Func/ftopup.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Func/service.i}
+{Func/ftmrlimit.i}
+{Func/fsmsreq.i}
+{Func/orderfunc.i}
+{Func/fsubsterminal.i}
+{Mc/invoicetarget.i}
+{Func/fdss.i}
+{Func/orderchk.i}
+{Func/fmakesms.i}
+{Func/transname.i}
+{Mm/fbundle.i}
+{Func/fbankdata.i}
+{Func/create_eventlog.i}
 {Func/fixedlinefunc.i}
 {Func/msisdn_prefix.i}
 
@@ -92,6 +92,16 @@ DEF BUFFER lbOrderCustomer FOR OrderCustomer.
 DEFINE BUFFER lbMobSubAD1 FOR MobSub.
 DEF BUFFER bTerMsRequest FOR MsRequest.
 DEF BUFFER bMsOwner FOR MsOwner.
+
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER katun
+
+   {Func/lib/eventlog.i}
+   DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
+   lhMsOwner = BUFFER MSOwner:HANDLE.
+   RUN StarEventInitialize(lhMsOwner).
+END.
+
 
 FIND FIRST MSRequest WHERE 
            MSRequest.MSrequest = iiMSrequest
@@ -208,7 +218,7 @@ ELSE
 
 IF Order.CLIType EQ "TARJ5" THEN DO:
 
-   RUN air_update_serviceclass.p(Order.CLI,
+   RUN Gwy/air_update_serviceclass.p(Order.CLI,
                                  {&SC_TARJ5_NORMAL},
                                  {&SC_TARJ5_PROMOTIONAL},
                                  TODAY + 31,
@@ -256,11 +266,11 @@ IF NOT AVAIL mobsub THEN DO:
       MSISDN.Stat        = 3.
    END.
 
-   RUN createcustomer(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
+   RUN Mm/createcustomer.p(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
 
    ASSIGN Msrequest.CustNum = oiCustomer.
 
-   RUN createcustomer(INPUT Order.OrderId,3,FALSE,TRUE,output oicustomer).
+   RUN Mm/createcustomer.p(INPUT Order.OrderId,3,FALSE,TRUE,output oicustomer).
 
    FIND FIRST CLIType WHERE
               CLIType.CliType = Order.CLIType 
@@ -296,7 +306,7 @@ IF NOT AVAIL mobsub THEN DO:
       IF llCorporate AND 
          (OrderCustomer.Rowtype = 1 OR OrderCustomer.Rowtype = 5) THEN DO:
          
-         RUN createcustcontact.p(
+         RUN Mm/createcustcontact.p(
              Order.OrderId,
              MsRequest.Custnum,
              OrderCustomer.RowType,
@@ -346,7 +356,7 @@ IF NOT AVAIL mobsub THEN DO:
       FIND CURRENT Customer NO-LOCK NO-ERROR.
    END.
 
-   {cr_bscode.i}
+{Mm/cr_bscode.i}
 
    ASSIGN
       MobSub.CLI              = Order.CLI
@@ -377,7 +387,7 @@ IF NOT AVAIL mobsub THEN DO:
 
    /* Initial TopUp */
    IF MobSub.PayType = TRUE AND Order.Offer = "" THEN 
-      RUN topupcamp(MobSub.MsSeq, OUTPUT liPPRequest).
+      RUN Mm/topupcamp.p(MobSub.MsSeq, OUTPUT liPPRequest).
 
    /* additional topup */
    lcTaxZone = "".
@@ -473,7 +483,7 @@ IF NOT AVAIL mobsub THEN DO:
    END.
 
    IF MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE} THEN
-      RUN requestaction_exec.p (MsRequest.MsRequest,
+      RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
                                 MobSub.CLIType,
                                 Order.OrderID,
                                 MobSub.ActivationTS,
@@ -575,12 +585,23 @@ ELSE DO:
 
    IF ldaActDate NE TODAY THEN DO:
 
+      IF llDoEvent THEN DO:
+         RUN StarEventSetOldBuffer (lhMsOwner).
+      END.
+
       CREATE bMsOwner.
       BUFFER-COPY MSOwner EXCEPT TSBegin TSEnd CLIEvent TO bMsOwner.
       ASSIGN
          MsOwner.TSend = fSecOffSet(ldeActivationTS, -1) 
          bMsOwner.TSBegin = ldeActivationTS 
          bMsOwner.TSEnd = 99999999.99999.
+
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent (lhMsOwner).
+         fMakeCreateEvent((BUFFER bMsOwner:HANDLE),
+                           "",katun, "").
+         fCleanEventObjects().
+      END.
 
       FIND MSOwner EXCLUSIVE-LOCK WHERE
          ROWID(MSOwner) = ROWID(bMsOwner).
@@ -601,14 +622,14 @@ fMarkOrderStamp(Order.OrderID,
                 fMakeTS()).
 
 /* default services */
-RUN copysp.p(MobSub.MsSeq,
+RUN Mm/copysp.p(MobSub.MsSeq,
            TODAY,
            TRUE,   /* new subs */
            TRUE).  /* silent */
 
 /* clitype spesific fees */
 IF AVAIL CliType AND CliType.FeeModel1 > "" THEN DO:
-   RUN creasfee (MobSub.CustNum,
+   RUN Mc/creasfee.p (MobSub.CustNum,
                  MobSub.MsSeq,
                  Today,
                  "MobSub",
@@ -626,7 +647,7 @@ IF AVAIL CliType AND CliType.FeeModel1 > "" THEN DO:
 END.
 
 /* general fees */
-RUN creasfee (MobSub.CustNum,
+RUN Mc/creasfee.p (MobSub.CustNum,
               MobSub.MsSeq,
               Today,
               "MobSub",
@@ -644,7 +665,7 @@ RUN creasfee (MobSub.CustNum,
 
 /* add initial fees and additional cost (delivery charge) and cash invoice */
 IF Order.InvNum > 0 THEN
-   RUN cashfee (Order.OrderID,
+   RUN Mc/cashfee.p (Order.OrderID,
              1,                     /* action 1=create fees */
              OUTPUT lcCharValue,
              OUTPUT ldAmount,
@@ -676,7 +697,7 @@ IF Order.FatAmount NE 0 OR Order.FtGrp > "" THEN DO:
    IF lcFatGroup = ? OR lcFatGroup = "" THEN 
       lcError = "FATime group for campaign not defined".
       
-   ELSE RUN creafat (MobSub.CustNum,
+   ELSE RUN Mc/creafat.p (MobSub.CustNum,
                      MobSub.MsSeq,
                      lcFatGroup,
                      Order.FatAmount,
@@ -733,14 +754,14 @@ END. /* IF NOT AVAIL OfferItem AND NOT AVAIL OrderAction THEN DO: */
 
 /* initial topup, fatime, per.contracts from offer */
 IF Order.Offer > "" THEN 
-   RUN offeritem_exec.p (MobSub.MsSeq,
+   RUN Mc/offeritem_exec.p (MobSub.MsSeq,
                        Order.OrderID,
                        ldeActivationTS,
                        MsRequest.MsRequest,
                        {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}).
 
 /* activate periodical contracts, service packages etc. */
-RUN requestaction_exec.p (MsRequest.MsRequest,
+RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
                           MobSub.CLIType,
                           Order.OrderID,
                           ldeActivationTS,
@@ -750,7 +771,7 @@ RUN requestaction_exec.p (MsRequest.MsRequest,
                           {&REQUEST_ACTIONLIST_ALL}).
 
 /* per.contract and service package created with the order */
-RUN orderaction_exec.p (MobSub.MsSeq,
+RUN Mm/orderaction_exec.p (MobSub.MsSeq,
                       Order.OrderID,
                       ldeActivationTS,
                       MsRequest.MsRequest,
@@ -888,7 +909,7 @@ END.
 IF llDefBarring THEN lcInitialBarring = "Prod_TotalPremium_Off=1,Y_BPSUB=1".
 ELSE lcInitialBarring = "Y_BPSUB=1".
 
-RUN barrengine.p(MobSub.MsSeq,
+RUN Mm/barrengine.p(MobSub.MsSeq,
                 lcInitialBarring,
                 "1",                 /* source = subscr. creation  */
                 katun,               /* creator */
@@ -974,7 +995,7 @@ IF CLIType.LineType > 0 AND
             lbOrder.Brand              EQ gcBrand AND
             lbOrder.orderid            EQ lbOrderCustomer.Orderid AND
             lbOrder.statuscode         EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
-      RUN orderinctrl.p(lbOrder.OrderID, 0, TRUE).
+      RUN Mc/orderinctrl.p(lbOrder.OrderID, 0, TRUE).
    END.
 
 
@@ -1009,7 +1030,7 @@ END.
 /* request handled succesfully */
 fReqStatus(2,""). 
 
-RUN requestaction_sms.p(INPUT MsRequest.MsRequest,
+RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
                         INPUT MobSub.CliType,
                         INPUT MsRequest.ReqSource).
 

@@ -8,25 +8,25 @@
   VERSION ......: SCRUNKO3
   ------------------------------------------------------ */
 
-{commali.i}
-{tmsconst.i}
-{daycampaign.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DayCampaign'}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Rate/daycampaign.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DayCampaign'}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
         
     DEF VAR lhDayCampaign AS HANDLE NO-UNDO.
     lhDayCampaign = BUFFER DayCampaign:HANDLE.
     RUN StarEventInitialize(lhDayCampaign).
                     
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhDayCampaign).
+        RUN Mc/eventview2.p(lhDayCampaign).
     END.
 END.
 
@@ -238,7 +238,7 @@ FUNCTION fStatusName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 
@@ -263,13 +263,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* DayCampaign -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
       
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE DayCampaign.
@@ -349,16 +349,16 @@ repeat WITH FRAME sel:
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 814
         ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW DayCampaign.DCEvent ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW DayCampaign.DCEvent {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) DayCampaign.DCEvent WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW DayCampaign.DCEvent ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW DayCampaign.DCEvent {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) DayCampaign.DCEvent WITH FRAME sel.
       END.
 
@@ -482,9 +482,9 @@ repeat WITH FRAME sel:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        lcEvent = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE lcEvent WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if lcEvent <> "" THEN DO:
@@ -585,7 +585,7 @@ repeat WITH FRAME sel:
      /* translations */
      ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
         FIND DayCampaign WHERE RECID(DayCampaign) = rtab[FRAME-LINE] NO-LOCK.
-        RUN invlang(14,DayCampaign.DCEvent).
+        RUN Mc/invlang.p(14,DayCampaign.DCEvent).
           
         ufkey = TRUE.
         NEXT LOOP.
@@ -615,15 +615,15 @@ repeat WITH FRAME sel:
              VIEW-AS ALERT-BOX.
              NEXT.
           END.
-          RUN mservicelimit(INPUT  0 ,
+          RUN Mm/mservicelimit.p(INPUT  0 ,
                                    ServiceLimit.dialtype,
                                    Servicelimit.slseq ).
 
 
        END.
-       ELSE RUN dccli (input 0, daycampaign.dcevent).
+       ELSE RUN Mm/dccli.p (input 0, daycampaign.dcevent).
        ufkey = true.
-       run ufkey.
+       RUN Syst/ufkey.p.
        PAUSE 0.
      END.
 
@@ -633,9 +633,9 @@ repeat WITH FRAME sel:
             recid(DayCampaign) = rtab[frame-line(sel)]
        no-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDayCampaign).
 
@@ -825,7 +825,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          ufk[2] = 295
          ufk[4] = 253
          ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
       IF toimi = 1 THEN DO:
          RUN pUpdate(ilNew).
@@ -835,7 +835,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
 
       ELSE IF toimi = 2 THEN RUN pFeeData(FALSE).
 
-      ELSE IF toimi = 4 THEN RUN dcservicepackage.p(DayCampaign.DCEvent).  
+      ELSE IF toimi = 4 THEN RUN Mm/dcservicepackage.p(DayCampaign.DCEvent).  
       
       ELSE IF toimi = 8 THEN LEAVE MaintMenu.
    END.
@@ -862,7 +862,7 @@ PROCEDURE pUpdate:
       FIND CURRENT DayCampaign EXCLUSIVE-LOCK.
             
       ehto = 9.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
     
       UPDATE 
          DayCampaign.DCEvent WHEN ilNew
@@ -896,7 +896,7 @@ PROCEDURE pUpdate:
          THEN DO:
          
             IF FRAME-FIELD = "DCType"  THEN DO:
-               RUN h-tmscodes(INPUT "DayCampaign",    /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "DayCampaign",    /* TableName */
                                     "DCType",       /* FieldName */
                                     "PerContr",   /* GroupCode */
                                OUTPUT lcCode).
@@ -907,7 +907,7 @@ PROCEDURE pUpdate:
             END.
          
             ELSE IF FRAME-FIELD = "CalcMethod"  THEN DO:
-               RUN h-tmscodes(INPUT "Daycampaign",  /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Daycampaign",  /* TableName */
                                     "CalcMethod",   /* FieldName */
                                     "DCCounter",    /* GroupCode */
                               OUTPUT lcCode).
@@ -919,7 +919,7 @@ PROCEDURE pUpdate:
             END.
 
             ELSE IF FRAME-FIELD = "Effective"  THEN DO:
-               RUN h-tmscodes(INPUT "Daycampaign",  /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Daycampaign",  /* TableName */
                                     "Effective",      /* FieldName */
                                     "PerContr",    /* GroupCode */
                               OUTPUT lcCode).
@@ -932,7 +932,7 @@ PROCEDURE pUpdate:
             END.
  
             ELSE IF FRAME-FIELD = "DurUnit"  THEN DO:
-               RUN h-tmscodes(INPUT "Daycampaign",  /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Daycampaign",  /* TableName */
                                     "DurUnit",      /* FieldName */
                                     "PerContr",    /* GroupCode */
                               OUTPUT lcCode).
@@ -945,7 +945,7 @@ PROCEDURE pUpdate:
             END.
 
             ELSE IF FRAME-FIELD = "DurType"  THEN DO:
-               RUN h-tmscodes(INPUT "Daycampaign",  /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Daycampaign",  /* TableName */
                                     "DurType",      /* FieldName */
                                     "DCCounter",    /* GroupCode */
                               OUTPUT lcCode).
@@ -958,7 +958,7 @@ PROCEDURE pUpdate:
             END.
           
             ELSE IF FRAME-FIELD = "InclUnit" THEN DO:
-               RUN h-tmscodes(INPUT "DayCampaign",    /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "DayCampaign",    /* TableName */
                                     "InclUnit", /* FieldName */
                                     "Unit",     /* GroupCode */
                               OUTPUT lcCode).
@@ -971,7 +971,7 @@ PROCEDURE pUpdate:
             END.
          
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.p.
             NEXT.
          END.
        
@@ -1206,7 +1206,7 @@ PROCEDURE pFeeData:
             ufk    = 0
             ufk[1] = 7 WHEN gcHelpParam = ""
             ufk[8] = 8.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       
       IF toimi = 1 THEN 
@@ -1215,7 +1215,7 @@ PROCEDURE pFeeData:
          FIND CURRENT DayCampaign EXCLUSIVE-LOCK.
             
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
     
          UPDATE 
             DayCampaign.FeeModel
@@ -1230,7 +1230,7 @@ PROCEDURE pFeeData:
                LOOKUP(FRAME-FIELD,"TermFeeCalc") > 0 THEN DO:
          
                IF FRAME-FIELD = "TermFeeCalc"  THEN DO:
-                  RUN h-tmscodes(INPUT "Daycampaign",  /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Daycampaign",  /* TableName */
                                        "TermFeeCalc",  /* FieldName */
                                        "PerContr",    /* GroupCode */
                                  OUTPUT lcCode).
@@ -1243,7 +1243,7 @@ PROCEDURE pFeeData:
                END.
           
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT.
             END.
 

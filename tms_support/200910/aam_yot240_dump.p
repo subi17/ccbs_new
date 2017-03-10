@@ -7,9 +7,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{detailseq.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Func/detailseq.i}
+{Syst/dumpfile_run.i}
 
 def input parameter idadate as date no-undo.
 

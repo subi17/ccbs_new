@@ -7,23 +7,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FuncRunExec'}
-{eventval.i}
-{timestamp.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FuncRunExec'}
+{Syst/eventval.i}
+{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFuncRunExec AS HANDLE NO-UNDO.
    lhFuncRunExec = BUFFER FuncRunExec:HANDLE.
    RUN StarEventInitialize(lhFuncRunExec).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhFuncRunExec).
+      RUN Mc/eventview2.p(lhFuncRunExec).
    END.
 
 END.
@@ -137,7 +137,7 @@ IF iiFRConfigID > 0 THEN DO:
       lcTitle    = " EXECUTIONS OF " + lcConfName.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -166,7 +166,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a FuncRunExec  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -174,7 +174,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANS WITH FRAME lis:
 
@@ -294,7 +294,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -315,7 +315,7 @@ REPEAT WITH FRAME sel:
       END.
        
       IF order = 1 THEN DO:
-        CHOOSE ROW FuncRunExec.FRExecID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FuncRunExec.FRExecID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FuncRunExec.FRExecID WITH FRAME sel.
       END.
 
@@ -549,8 +549,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunExec).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        lcUpdateReturn = RETURN-VALUE.
@@ -593,7 +593,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.p.
 
 RETURN lcReturnValue.
 
@@ -751,7 +751,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       ELSE toimi = 1.
       
@@ -762,7 +762,7 @@ PROCEDURE local-UPDATE-record:
                 
             FIND CURRENT FuncRunExec EXCLUSIVE-LOCK.
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.p.
          
             UPDATE
                FuncRunExec.MinStartTime
@@ -789,13 +789,13 @@ PROCEDURE local-UPDATE-record:
       END.
 
       ELSE IF toimi = 2 THEN 
-         RUN errorlog.p ("FuncRunExec",
+         RUN Mc/errorlog.p ("FuncRunExec",
                          STRING(FuncRunExec.FRExecID),
                          "").
 
-      ELSE IF toimi = 3 THEN RUN funcrunexeclog.p(FuncRunExec.FRExecID).
+      ELSE IF toimi = 3 THEN RUN Syst/funcrunexeclog.p(FuncRunExec.FRExecID).
       
-      ELSE IF toimi = 4 THEN RUN funcrunprocess.p(FuncRunExec.FRConfigID,
+      ELSE IF toimi = 4 THEN RUN Syst/funcrunprocess.p(FuncRunExec.FRConfigID,
                                                   FuncRunExec.FRExecID).
         
       ELSE IF toimi = 8 THEN LEAVE. 

@@ -8,17 +8,17 @@
                   22.11.07/as  reqtype 18 and 19 cancel handling
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{msreqfunc.i}
-{msisdn.i}
-{fuserright.i}
-{eventval.i}
-{forderstamp.i}
-{fmakemsreq.i}
-{fmakesms.i}
-{fsendsms.i}
-{fdss.i}
-{fsubstermreq.i}
-{main_add_lines.i}
+{Func/msreqfunc.i}
+{Func/msisdn.i}
+{Func/fuserright.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Func/fmakemsreq.i}
+{Func/fmakesms.i}
+{Func/fsendsms.i}
+{Func/fdss.i}
+{Func/fsubstermreq.i}
+{Func/main_add_lines.i}
 {Func/fixedlinefunc.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
@@ -153,7 +153,7 @@ IF MsRequest.ReqType = 0 AND (iiToStatus = 4 OR iiToStatus = 9) THEN DO:
       
    IF AVAIL Order THEN DO:
       
-      RUN closeorder.p(Order.OrderId,TRUE).
+      RUN Mc/closeorder.p(Order.OrderId,TRUE).
    
       IF RETURN-VALUE NE "" THEN DO:
          MESSAGE "Error with renewal order closing:" 
@@ -439,7 +439,7 @@ CASE iiToStatus:
          SET llOk.
 
          IF llOk THEN 
-            RUN acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Cancelled",
                             lcCancelReason).
@@ -486,7 +486,7 @@ END.
 /* refund */
 IF MsRequest.ReqType = 23 AND LOOKUP(STRING(iiToStatus),"4,9") > 0 THEN DO:
  
-   RUN refundcancel(MsRequest.MsRequest,
+   RUN Ar/refundcancel.p(MsRequest.MsRequest,
                     "AP",
                     0,
                     MsRequest.CustNum,

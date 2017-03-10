@@ -8,13 +8,13 @@
 
 &GLOBAL-DEFINE FSUBSTERMREQ_I YES
    
-{commali.i}
-{fcreatereq.i}
-{flimitreq.i}
-{tmsconst.i}
-{mnpoutchk.i}
-{timestamp.i}
-{msisdn_prefix.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
+{Func/flimitreq.i}
+{Syst/tmsconst.i}
+{Mnp/mnpoutchk.i}
+{Func/timestamp.i}
+{Func/msisdn_prefix.i}
 {Func/fixedlinefunc.i}
 
 FUNCTION fTerminationRequest RETURNS INTEGER

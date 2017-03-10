@@ -11,9 +11,9 @@
 &IF "{&FIXEDLINEFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
-{tmsconst.i}
-{timestamp.i}
-{eventval.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
 {Func/create_eventlog.i}
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have

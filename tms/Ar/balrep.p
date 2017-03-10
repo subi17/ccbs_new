@@ -9,11 +9,11 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{fcustbal.i}
-{finvbal.i}
-{utumaa.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fcustbal.i}
+{Func/finvbal.i}
+{Syst/utumaa.i}
 
 DEF INPUT PARAMETER icInvGrp1   AS CHAR  NO-UNDO.
 DEF INPUT PARAMETER icInvGrp2   AS CHAR  NO-UNDO.
@@ -106,7 +106,7 @@ FUNCTION fCheckPage RETURNS LOGIC
     IF rl >= skayt1 - iAddLine THEN DO:
 
         IF sl > 0 THEN DO:
-           {uprfeed.i rl}
+           {Syst/uprfeed.i rl}
         END.
            
         sl = sl + 1.
@@ -324,7 +324,7 @@ IF icFile = "" THEN DO:
       SKIP.
    rl = rl + 2.
 
-   {uprfeed.i rl}
+   {Syst/uprfeed.i rl}
 END.
 
 ELSE OUTPUT STREAM tul CLOSE.

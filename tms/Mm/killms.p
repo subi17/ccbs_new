@@ -15,12 +15,12 @@
 
 &GLOBAL-DEFINE BrTable killms 
 
-{commali.i}                  
-{eventval.i}
+{Syst/commali.i}                  
+{Syst/eventval.i}
 
-{msisdn.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'KillMS'}
+{Func/msisdn.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'KillMS'}
 
 
 DEF /* NEW */ SHARED VAR siirto AS C.
@@ -57,7 +57,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhKillMS AS HANDLE NO-UNDO.
    lhKillMS = BUFFER KillMS:HANDLE.
@@ -65,7 +65,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhKillMS).
+      RUN Mc/eventview2.p(lhKillMS).
    END.
 END.
 
@@ -88,7 +88,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     "MSISDN .....:" KillMs.CLI                              SKIP
@@ -137,7 +137,7 @@ form /* seek KillMs  BY Stat */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND STATUS "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By KillDate,By MSISDN ,By Status, By 4".
@@ -177,12 +177,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a KillMs  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR KillMs.CLI
@@ -271,20 +271,20 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW KillMs.KillDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW KillMs.KillDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) KillMs.KillDate WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW KillMs.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW KillMs.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) KillMs.CLI WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW xstat ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW xstat {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) xstat WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -412,8 +412,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        KillDate = TODAY.
        Disp lcBrand WITH FRAME f1.
@@ -436,8 +436,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISP lcBrand WITH FRAME f2.
        SET lcBrand WHEN gcAllBrand = TRUE 
@@ -464,8 +464,8 @@ BROWSE:
      /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        DISP lcBrand WITH FRAME f3.
 
@@ -551,7 +551,7 @@ BROWSE:
        PAUSE 0.
        RUN local-find-this(FALSE ).
 
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        DISPLAY KillMs.CLI WITH FRAME lis. 
 
@@ -559,7 +559,7 @@ BROWSE:
 
        ASSIGN
           ufk = 0 ufk[8] = 8 ehto = 0 ufkey = TRUE. 
-       RUN ufkey.
+       RUN Syst/ufkey.p.
        HIDE FRAME lis NO-PAUSE.
        NEXT loop.
 

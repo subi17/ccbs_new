@@ -8,9 +8,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'contact'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'contact'}
 
 DEF TEMP-TABLE ttContact NO-UNDO
    FIELD UserCode  AS CHAR
@@ -100,7 +100,7 @@ FOR EACH Contact NO-LOCK WHERE
    
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Date , By 3, By 4".
@@ -178,12 +178,12 @@ REPEAT WITH FRAME sel:
         ufk[6]= 0
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttContact.ConDate ;(uchoose.i;) NO-ERROR
+        CHOOSE ROW ttContact.ConDate {Syst/uchoose.i} NO-ERROR
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttContact.ConDate WITH FRAME sel.
       END.
@@ -320,7 +320,7 @@ REPEAT WITH FRAME sel:
           ufkey = TRUE.
 
           /* browse list */
-          RUN conlist (ttContact.UserCode,
+          RUN Ar/conlist.p (ttContact.UserCode,
                        ttContact.ConDate,
                        0).
 

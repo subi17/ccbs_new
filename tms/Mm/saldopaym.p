@@ -9,10 +9,10 @@
   -------------------------------------------------------------------------- */
 
 
-{msreqfunc.i}
-{fsubser.i}
-{fcpfat.i}
-{msopenbatch.i}
+{Func/msreqfunc.i}
+{Func/fsubser.i}
+{Func/fcpfat.i}
+{Func/msopenbatch.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 

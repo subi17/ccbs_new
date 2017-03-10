@@ -9,12 +9,12 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 
-{tmsconst.i}
-{email.i}
-{cparam2.i}
+{Syst/tmsconst.i}
+{Func/email.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE pcUsername    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcMessage     AS CHARACTER NO-UNDO.

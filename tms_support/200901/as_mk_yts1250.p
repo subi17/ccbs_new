@@ -1,7 +1,7 @@
-{commpaa.i} katun = "SOG". gcbrand = "1".
-{fsubser.i}
-{timestamp.i}
-{msreqfunc.i}
+{Syst/commpaa.i} katun = "SOG". gcbrand = "1".
+{Func/fsubser.i}
+{Func/timestamp.i}
+{Func/msreqfunc.i}
 
 DEF BUFFER provMSREquest FOR MSRequest.
 DEF BUFFER provCliType   FOR CLIType.

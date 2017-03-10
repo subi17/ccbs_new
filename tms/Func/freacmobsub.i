@@ -214,7 +214,7 @@ FUNCTION fReactivationRequest RETURNS INTEGER
          RETURN 0.
       END.
       ELSE IF MNPProcess.StatusCode = {&MNP_ST_BNOT} THEN DO:
-         RUN mnp_operation.p(MNPProcess.MNPSeq,
+         RUN Mnp/mnp_operation.p(MNPProcess.MNPSeq,
                              "cancelarSolicitudBajaNumeracionMovil","").
          IF RETURN-VALUE NE "OK" THEN DO:
             IF RETURN-VALUE BEGINS "ERROR:" THEN

@@ -3,14 +3,14 @@
   FUNCTION .....: daily/monthly summary prepaid call dump
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 katun = "cron".
 gcBrand = "1".
 
-{date.i}
-{excel.i}
-{coinv.i}
-{cparam2.i}
+{Func/date.i}
+{Func/excel.i}
+{Func/coinv.i}
+{Func/cparam2.i}
 
 /*DEFINE INPUT PARAMETER  iiper AS INTEGER NO-UNDO.*/
 DEFINE VARIABLE  iiper AS INTEGER NO-UNDO INIT 0.

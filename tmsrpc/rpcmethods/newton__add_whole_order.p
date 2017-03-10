@@ -220,29 +220,29 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{date.i}
-{orderchk.i}
-{order.i}
-{tmsconst.i}
-{fbundle.i}
-{mnpoutchk.i}
-{create_eventlog.i}
-{fmakemsreq.i}
-{main_add_lines.i}
-{msisdn.i}
-{forderstamp.i}
-{email.i}
-{ftransdir.i}
+{Func/date.i}
+{Func/orderchk.i}
+{Func/order.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
+{Mnp/mnpoutchk.i}
+{Func/create_eventlog.i}
+{Func/fmakemsreq.i}
+{Func/main_add_lines.i}
+{Func/msisdn.i}
+{Func/forderstamp.i}
+{Func/email.i}
+{Func/ftransdir.i}
 
-{cparam2.i}
-/*{utumaa.i new }
-{edefine.i new}*/
-{order_data.i}
-{smsmessage.i}
-{orderfusion.i}
+{Func/cparam2.i}
+/*{Syst/utumaa.i new }
+{Inv/edefine.i new}*/
+{Func/order_data.i}
+{Func/smsmessage.i}
+{Mc/orderfusion.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
@@ -395,10 +395,10 @@ DEF VAR plResignationPeriod AS LOG NO-UNDO.
 DEF VAR plPromotion AS LOG NO-UNDO.
 DEF VAR llROIClose AS LOG NO-UNDO. 
 
-DEF VAR lcPayment AS CHAR NO-UNDO.
-DEF VAR pcPaypalPayerid AS CHAR NO-UNDO.
-DEF VAR liLanguage AS INTEGER NO-UNDO.
-
+DEF VAR lcPayment                        AS CHAR    NO-UNDO.
+DEF VAR pcPaypalPayerid                  AS CHAR    NO-UNDO.
+DEF VAR liLanguage                       AS INTEGER NO-UNDO.
+DEF VAR lcFixedOnlyConvergentCliTypeList AS CHAR    NO-UNDO.
 /* q25_data */
 DEF VAR llq25_extension   AS LOGICAL NO-UNDO. /* Quota 25 extension */
 DEF VAR ldeq25_discount   AS DECIMAL NO-UNDO. /* Discount amount over Quota 25 */
@@ -414,6 +414,8 @@ DEF VAR lcAccessoryStruct AS CHAR NO-UNDO.
 
 /*Financing info*/
 DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
+
+DEF VAR lcItemParam AS CHAR NO-UNDO.
 
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
@@ -516,7 +518,9 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    IF LOOKUP('dss', lcOrderStruct) GT 0 THEN
       plDSSActivate = get_bool(pcOrderStruct,"dss").
 
-   IF LOOKUP('delivery_channel', lcOrderStruct) > 0 THEN
+   IF LOOKUP(pcSubType,lcFixedOnlyConvergentCliTypeList) > 0 THEN 
+      lcdelivery_channel = "Paper".
+   ELSE IF LOOKUP('delivery_channel', lcOrderStruct) > 0 THEN
       lcdelivery_channel = get_string(pcOrderStruct,"delivery_channel").
     
    IF LOOKUP('bono_voip', lcOrderStruct) GT 0 THEN
@@ -689,16 +693,16 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
           lcIdtypeOrderCustomer = "CIF".
       END. /* data[LOOKUP("company_id", ... */
       
-      IF piRowType EQ 4 THEN
+      IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} THEN
          pcUpsHours = data[LOOKUP("ups_hours", gcCustomerStructStringFields)].
       
-      IF lcIdOrderCustomer EQ "" AND piRowType = 1 THEN
+      IF lcIdOrderCustomer EQ "" AND piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
           lcFError = "Expected either person_id or company_id".
 
       /* YTS-2453 */
       IF NOT plBypassRules AND
          lcFError = "" AND 
-         piRowType = 1 AND
+         piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
          LOOKUP(pcNumberType,"new,mnp") > 0 AND
          NOT plUpdate AND
          piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
@@ -876,7 +880,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
 
 
 
-   IF piRowType = 1 THEN
+   IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
    DO:
       lcId      = lcIdOrderCustomer.
       lcIdType  = lcIdTypeOrderCustomer.
@@ -1389,6 +1393,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* YPB-514 */
 lcOrderStruct = validate_request(pcOrderStruct, gcOrderStructFields).
 IF lcOrderStruct EQ ? THEN RETURN.
+ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
 fGetOrderFields().
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1600,19 +1605,19 @@ DO:
 END.
  
 /* YBP-536 */ 
-lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, FALSE).
+lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-537 */ 
 IF pcAddressStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, 4, FALSE).
+   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_DELIVERY}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-538 */ 
 IF pcContactStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, FALSE).
+   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1838,12 +1843,18 @@ fSplitTS(Order.CrStamp,OUTPUT ldaOrderDate,OUTPUT liOrderTime).
 
 /* YBP-547 */
 /* Apply discount to the subscription */
-IF AVAIL DiscountPlan THEN 
+IF AVAIL DiscountPlan THEN DO:
+
+   ASSIGN lcItemParam = "amount=" + STRING(pdeDiscountPlanAmount) +
+                        "|valid_period=" + STRING(piDiscountValidPeriod)
+                        WHEN (pdeDiscountPlanAmount NE 0 AND 
+                              piDiscountValidPeriod NE 0).
+
    fCreateOrderAction(Order.Orderid,
-                      "Discount",
+                     "Discount",
                       STRING(DiscountPlan.DPId),
-                      "amount=" + STRING(pdeDiscountPlanAmount) +
-                      "|valid_period=" + STRING(piDiscountValidPeriod)).
+                      lcItemParam).
+END.
 
 /* YBP-548 */
 IF pcMemo NE "" THEN 
@@ -1901,7 +1912,7 @@ IF Order.OrderChannel BEGINS "retention" THEN
             lbOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND
             ROWID(lbOrder) NE ROWID(Order):
 
-      RUN closeorder.p(lbOrder.OrderId, TRUE).
+      RUN Mc/closeorder.p(lbOrder.OrderId, TRUE).
 
       IF RETURN-VALUE > "" THEN 
          fCreateMemo("Automatic order closing failed", 
@@ -2405,13 +2416,13 @@ IF INDEX(Order.OrderChannel, "pos") EQ 0 THEN DO:
        Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}        /*51*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}  /*76*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} /*77*/ ) THEN DO:
-      RUN prinoconf.p(liOrderId).
+      RUN Mc/prinoconf.p(liOrderId).
    END.
    ELSE IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}    /*41*/  OR
            Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}    /*42*/  OR
            Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}    /*43*/   
            THEN DO: 
-      RUN sendorderreq.p(liOrderId, OrderCustomer.email, OUTPUT lcError). 
+      RUN Mc/sendorderreq.p(liOrderId, OrderCustomer.email, OUTPUT lcError). 
    END.
 END.
 

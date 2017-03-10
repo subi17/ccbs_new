@@ -15,17 +15,17 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{mdub.i}
-{tmsconst.i}
-{cparam2.i}
-{upsellbundle.i}
-{date.i}
-{msreqfunc.i}
-{fsendsms.i}
-{fdss.i}
-{fprepaidfee.i}
+{Func/mdub.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/upsellbundle.i}
+{Func/date.i}
+{Func/msreqfunc.i}
+{Func/fsendsms.i}
+{Func/fdss.i}
+{Func/fprepaidfee.i}
 
 DEF VAR liRequest              AS INT  NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.

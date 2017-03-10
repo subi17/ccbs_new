@@ -2,8 +2,8 @@
    subser validations   2008/as
 */
 
-{commali.i}
-{fmakemsreq.i}
+{Syst/commali.i}
+{Func/fmakemsreq.i}
 
 FUNCTION fSubSerSSStat RETURNS INT
 (INPUT iiMsseq AS INTEGER,

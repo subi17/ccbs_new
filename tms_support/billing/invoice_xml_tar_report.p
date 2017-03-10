@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 def var lcsep as char no-undo.
 def var lcfile as char no-undo.
 def var ldainvdate as date no-undo.

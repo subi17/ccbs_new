@@ -7,13 +7,13 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{tmsconst.i}
-{orderfunc.i}
-{mnp.i}
-{fbundle.i}
+{Syst/tmsconst.i}
+{Func/orderfunc.i}
+{Mnp/mnp.i}
+{Mm/fbundle.i}
 
 DEF VAR ldeTimeStamp        AS DEC  NO-UNDO.
 DEF VAR ldMNPPortingDate    AS DATE NO-UNDO.
@@ -77,7 +77,8 @@ FOR EACH Order WHERE
                                            Order.OrderChannel,
                                            OrderCustomer.Region,
                                            lcProduct,
-                                           lcTariffType).
+                                           lcTariffType,
+                                           Order.DeliveryType).
 
    IF Order.PortingDate > ldMNPPortingDate THEN NEXT.
 

@@ -25,14 +25,14 @@
 
 {xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
-{commpaa.i}
+{Syst/commpaa.i}
 katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
 gcBrand = "1".
-{tmsconst.i}
-{timestamp.i}
-{barrfunc.i}
-{fexternalapi.i}
-{transname.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/barrfunc.i}
+{Func/fexternalapi.i}
+{Func/transname.i}
 
 /* Input parameters */
 DEF VAR pcCLI           AS CHAR NO-UNDO.
@@ -154,7 +154,7 @@ IF LOOKUP(lcApplicationId,"501,502") > 0 AND
    END.
 END.
 
-RUN barrengine.p(MobSub.MsSeq,
+RUN Mm/barrengine.p(MobSub.MsSeq,
                  pcSetServiceId,
                  {&REQUEST_SOURCE_EXTERNAL_API},
                  (IF lcApplicationId EQ "701" THEN "Collection"

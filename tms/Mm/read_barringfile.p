@@ -7,17 +7,17 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{barrfunc.i}
-{tmsconst.i}
-{tsformat.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/barrfunc.i}
+{Syst/tmsconst.i}
+{Func/tsformat.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO.
@@ -165,7 +165,7 @@ PROCEDURE pSetBarring:
       RETURN "ERROR:No active mobile line".
 
    /* create barring request */
-   RUN barrengine.p (iiMsSeq,
+   RUN Mm/barrengine.p (iiMsSeq,
                    icBarringList,
                    {&REQUEST_SOURCE_SCRIPT}, /* source  */
                    "", /* creator */

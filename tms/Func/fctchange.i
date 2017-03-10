@@ -13,20 +13,21 @@
 &IF "{&fctchange}" NE "YES"
 &THEN
 &GLOBAL-DEFINE fctchange YES
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fctserval.i}
-{matrix.i}
-{tmsconst.i}
-{mnpoutchk.i}
-{mnp.i}
-{requestaction_exec.i}
-{fcustpl.i}
-{penaltyfee.i}
-{stc_extension.i}
-{istc.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fctserval.i}
+{Func/matrix.i}
+{Syst/tmsconst.i}
+{Mnp/mnpoutchk.i}
+{Mnp/mnp.i}
+{Mm/requestaction_exec.i}
+{Func/fcustpl.i}
+{Func/penaltyfee.i}
+{Func/stc_extension.i}
+{Func/istc.i}
+{Func/main_add_lines.i}
+{Func/fixedlinefunc.i}
 
 /* ount number of requests */
 FUNCTION fCountRequest RETURNS INTEGER
@@ -189,6 +190,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    DEF VAR liMonths AS INT NO-UNDO. 
    DEF VAR ldaSTCDate AS DATE NO-UNDO. 
    DEF VAR liTime AS INT NO-UNDO. 
+   DEF VAR lcFixedOnlyConvergentCliTypeList AS CHAR NO-UNDO.
 
    DEFINE BUFFER NewCLIType  FOR CLIType.
    DEF BUFFER MNPProcess FOR MNPProcess.
@@ -211,7 +213,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    IF NOT AVAIL NewCLIType THEN DO:
       ocError = "Unknown or missing clitype!".
       RETURN FALSE.
-   END.
+   END.    
 
    IF NOT plByPassTypeCheck AND
       LOOKUP(STRING(NewCLIType.StatusCode),
@@ -246,7 +248,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
                         OUTPUT ocError) THEN RETURN FALSE.
 
    /* 3 */
-   RUN requestaction_check.p(0,MobSub.CLIType,Mobsub.MsSeq,
+   RUN Mm/requestaction_check.p(0,MobSub.CLIType,Mobsub.MsSeq,
                              icReqSource, OUTPUT ocError).
    IF ocError NE "" THEN RETURN FALSE.
    
@@ -289,10 +291,22 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
           icNewCLIType,
           OUTPUT ocError) THEN RETURN FALSE.
 
-   IF DAY(ldaSTCDate) <> 1 AND
-      NOT fIsiSTCAllowed(INPUT Mobsub.MsSeq) THEN DO:
-      ocError = "Multiple immediate STC is not allowed in same month due to business rules!".
-      RETURN FALSE.
+   IF DAY(ldaSTCDate) <> 1 THEN 
+   DO:
+      ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
+       /* This is to restrict iSTC between convergent to fixed only convergent or viceversa */ 
+      IF ((fIsConvergenceTariff(MobSub.CliType) AND LOOKUP(NewCliType.CliType,lcFixedOnlyConvergentCliTypeList) > 0) OR
+          (fIsConvergenceTariff(NewCliType.CliType) AND LOOKUP(MobSub.CliType,lcFixedOnlyConvergentCliTypeList) > 0)) THEN 
+      DO:
+          ocError = "Fixed only convergent tariffs are restricted from doing iSTC.".
+          RETURN FALSE.
+      END.
+
+      IF NOT fIsiSTCAllowed(INPUT Mobsub.MsSeq) THEN
+      DO:
+          ocError = "Multiple immediate STC is not allowed in same month due to business rules!".
+          RETURN FALSE.
+      END.
    END.
 
    RETURN TRUE.

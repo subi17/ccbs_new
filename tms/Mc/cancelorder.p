@@ -7,12 +7,12 @@ hell MODULE .......: cancelorder.p
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{fsubstermreq.i}
-{ordercancel.i}
-{fmakemsreq.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fsubstermreq.i}
+{Func/ordercancel.i}
+{Func/fmakemsreq.i}
+{Func/main_add_lines.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilCheckLOStatus AS LOG NO-UNDO.

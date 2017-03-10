@@ -6,11 +6,11 @@
   CREATED ......: 27.09.13
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{fctchange.i}
-{fmakemsreq.i}
-{cparam2.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
 
 DEF INPUT PARAM piOrderID AS INT NO-UNDO. 
 DEF OUTPUT PARAM oiRequest AS INT NO-UNDO. 

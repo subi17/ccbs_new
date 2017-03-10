@@ -92,18 +92,20 @@ FUNCTION fCollect RETURNS CHAR
    (idStartTS AS DEC,
     idEndTS AS DEC):
    DEF BUFFER Order FOR Order.
+   DEF BUFFER Mobsub FOR Mobsub.
+   DEF VAR lcErr AS CHAR NO-UNDO.
    DEF BUFFER ORdertimestamp FOR Ordertimestamp.
    FOR EACH Ordertimestamp NO-LOCK WHERE
             Ordertimestamp.Brand EQ gcBrand AND
             OrderTimestamp.RowType EQ {&ORDERTIMESTAMP_DELIVERY} AND
             Ordertimestamp.TimeStamp < idEndTS AND
             Ordertimestamp.TimeStamp >= idStartTS:
-      
+      lcErr = "".
       FIND FIRST ttOrderList WHERE
                  ttOrderList.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
       IF AVAIL ttOrderList THEN NEXT. /*Skip duplicates*/
       
-      FIND FIRST Order WHERE
+      FIND FIRST Order NO-LOCK WHERE
                  Order.Brand EQ gcBrand AND
                  Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
       IF NOT AVAIL Order THEN NEXT. /*This should not happen*/
@@ -119,11 +121,26 @@ FUNCTION fCollect RETURNS CHAR
       /*No Flex upsell is allowed*/
          /*This is checked in activation phase in fUpsellForAzul*/
 
-      /*Do not make the activation for STC*/
-      IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN NEXT.
+      IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
+         Order.OrderType NE {&ORDER_TYPE_MNP} AND
+         Order.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
 
-      /*Do not make the activation for reactivation orders. TODO Prio2*/
-
+      FIND FIRST Mobsub NO-LOCK WHERE
+                 Mobsub.MsSeq EQ Order.MsSeq.
+      IF NOT AVAIL Mobsub THEN DO:
+         lcErr = "No active mobsub " + STRING(Order.MsSeq).
+         PUT STREAM sLogFile UNFORMATTED lcErr SKIP.
+         NEXT.
+       END.  
+      IF Mobsub.CliType NE Order.Clitype THEN DO:
+         lcErr = "Clitypes do not match " + 
+                 STRING(Order.Orderid) + "|" +
+                 STRING(Order.clitype) + "|" +
+                 STRING(Mobsub.clitype).
+         PUT STREAM sLogFile UNFORMATTED lcErr SKIP.
+         NEXT.
+      END.
+     
 
       /*After all validations: this order needs upsell*/
       CREATE ttOrderList.

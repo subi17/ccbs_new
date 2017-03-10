@@ -8,11 +8,11 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{email.i}
-{host.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/email.i}
+{Syst/host.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INT NO-UNDO.
 
@@ -67,7 +67,7 @@ DEFINE STREAM strout.
    END.
 
    /* Publish invoices to Newton */
-   RUN invoice_webdisp(ldaDateFrom,
+   RUN Inv/invoice_webdisp.p(ldaDateFrom,
                        1,     /* inv.type */
                        "",
                        0,
@@ -98,7 +98,7 @@ DEFINE STREAM strout.
               DumpFile.DumpName EQ {&DUMP_INVOICE_PUPU} NO-ERROR.
  
    IF AVAIL DumpFile THEN DO:
-      RUN dumpfile_run(DumpFile.DumpID,  /* Dump ID */
+      RUN Syst/dumpfile_run.p(DumpFile.DumpID,  /* Dump ID */
                        "Full",
                        "",
                        fIsThisReplica(),

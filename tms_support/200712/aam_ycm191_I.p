@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 {/home/ari/test/fcreditreq.i}
 
 def var i         as int  no-undo.

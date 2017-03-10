@@ -13,14 +13,14 @@
 &THEN
 
 &GLOBAL-DEFINE orderfunc YES
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{eventval.i}
-{forderstamp.i}
-{dextra.i}
-{cparam2.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Func/dextra.i}
+{Func/cparam2.i}
+{Func/main_add_lines.i}
 
 /* set status of order */
 FUNCTION fSetOrderStatus RETURNS LOGICAL
@@ -191,7 +191,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                             bfOrder2.MultiSimID = bfOrder.MultiSimID AND
                             bfOrder2.MultiSimType =
                               {&MULTISIMTYPE_SECONDARY}:
-                     RUN closeorder.p(bfOrder2.OrderId,TRUE).
+                     RUN Mc/closeorder.p(bfOrder2.OrderId,TRUE).
                   END.
 
                END.
@@ -242,7 +242,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                                              CLIType.Brand = gcBrand AND
                                              CLIType.CLIType = OrderAction.ItemKey AND
                                              CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})) THEN NEXT.
-                     RUN closeorder.p(bfOrder2.OrderId,TRUE).
+                     RUN Mc/closeorder.p(bfOrder2.OrderId,TRUE).
                   END.
                END.
 

@@ -11,17 +11,17 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{date.i}
-{email.i}
-{orderfusion.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/date.i}
+{Func/email.i}
+{Mc/orderfusion.i}
 
 DEF VAR lcLine AS CHARACTER NO-UNDO.
 DEF VAR lcSep AS CHARACTER NO-UNDO INIT ";".
@@ -220,24 +220,24 @@ PROCEDURE pUpdateOrderStatus:
    IF icOldStatus EQ "76" OR icOldStatus EQ "22" OR 
       icOldStatus EQ "73" OR icOldStatus EQ "78" THEN DO:
       CASE icNewStatus:
-         WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
       END.
    END.
    ELSE IF LOOKUP(icOldStatus,"20,21,51") > 0 THEN DO:
       CASE icNewStatus:
-         WHEN "6" THEN RUN orderhold.p(Order.OrderId, "RELEASE_BATCH").
-         WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
+         WHEN "6" THEN RUN Mc/orderhold.p(Order.OrderId, "RELEASE_BATCH").
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
       END.
    END.
    ELSE IF icOldStatus EQ "50" THEN DO:
       CASE icNewStatus:
          WHEN "6" THEN DO: 
-            RUN orderinctrl.p(Order.OrderId, iiSecure, TRUE).
-            /* RUN sendorderreq.p(Order.OrderId). not needed here? confirmation sent */
+            RUN Mc/orderinctrl.p(Order.OrderId, iiSecure, TRUE).
+            /* RUN Mc/sendorderreq.p(Order.OrderId). not needed here? confirmation sent */
          END.
-         WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
       END.
    END.
@@ -255,32 +255,32 @@ PROCEDURE pUpdateOrderStatus:
    END.
    ELSE IF icOldStatus EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
      CASE icNewStatus:
-         WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
-         WHEN "8" THEN RUN orderbyfraud.p(Order.OrderId, TRUE,
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         WHEN "8" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
                                           {&ORDER_STATUS_CLOSED_BY_FRAUD}).
-         WHEN "9" THEN RUN orderbyfraud.p(Order.OrderId, TRUE,
+         WHEN "9" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
                                           {&ORDER_STATUS_AUTO_CLOSED}).
       END.
    END.
    ELSE IF icOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN DO:
      CASE icNewStatus:
-         WHEN "6" THEN RUN orderinctrl.p(Order.OrderId, iiSecure, TRUE).
-         WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
-         WHEN "8" THEN RUN orderbyfraud.p(Order.OrderId, TRUE,
+         WHEN "6" THEN RUN Mc/orderinctrl.p(Order.OrderId, iiSecure, TRUE).
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         WHEN "8" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
                                           {&ORDER_STATUS_CLOSED_BY_FRAUD}).
-         WHEN "9" THEN RUN orderbyfraud.p(Order.OrderId, TRUE,
+         WHEN "9" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
                                           {&ORDER_STATUS_AUTO_CLOSED}).
       END.
    END.
    ELSE DO:
       CASE icNewStatus:
-         WHEN "6" THEN RUN orderinctrl.p(Order.OrderId, iiSecure, TRUE).
-         WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
-         WHEN "8" THEN RUN orderbyfraud.p(Order.OrderId, TRUE,
+         WHEN "6" THEN RUN Mc/orderinctrl.p(Order.OrderId, iiSecure, TRUE).
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         WHEN "8" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
                                           {&ORDER_STATUS_CLOSED_BY_FRAUD}).
-         WHEN "9" THEN RUN orderbyfraud.p(Order.OrderId, TRUE,
+         WHEN "9" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
                                           {&ORDER_STATUS_AUTO_CLOSED}).
-         WHEN "44" THEN RUN orderneeddoc.p(Order.OrderId, TRUE).
+         WHEN "44" THEN RUN Mc/orderneeddoc.p(Order.OrderId, TRUE).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
       END.
    END.

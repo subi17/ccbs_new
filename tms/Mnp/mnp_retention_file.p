@@ -7,19 +7,19 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{date.i}
-{cparam2.i}
-{ftransdir.i}
-{tmsconst.i}
-{fcustpl.i}
-{penaltyfee.i}
-{fgettxt.i}
-{fmakesms.i}
-{mnp.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/tmsconst.i}
+{Func/fcustpl.i}
+{Func/penaltyfee.i}
+{Func/fgettxt.i}
+{Func/fmakesms.i}
+{Mnp/mnp.i}
 
 FUNCTION fGetPenalty RETURN DECIMAL
    (OUTPUT odaEndDate AS DATE):
@@ -198,7 +198,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
                Segmentation.MsSeq = MNPSub.MsSeq:
 
          IF MobSub.PayType = TRUE THEN
-            liExcludeOffset = -2160. /* Prepaid 90 days */
+            liExcludeOffset = -720. /* Prepaid 30 days (YOT-4929) */
          ELSE
             liExcludeOffset = 0. /* -1440. Commented out YOT-4095 */ /* Postpaid 60 days */
 
@@ -218,8 +218,10 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
 
          /* YOT-2301 - Exclude all data subs. and segmentation code with SN */
          IF LOOKUP(MobSub.CLIType,"CONTRD,CONTD,TARJRD1") > 0 OR
-            Segmentation.SegmentCode = "SN" THEN NEXT.
-         
+            Segmentation.SegmentCode = "SN" AND
+            MobSub.ActivationTS > fOffSetTS(liExcludeOffSet) THEN NEXT.
+            /* YOT-4929, If customer created less than 1 month ago */
+          
          IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcRetentionSMSText) THEN NEXT.
          
          FIND FIRST ttData NO-LOCK WHERE

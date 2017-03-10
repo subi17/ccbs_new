@@ -6,16 +6,16 @@
 
 */
    
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{forderstamp.i}
-{msreqfunc.i}
-{orderfunc.i}
-{tmsconst.i}
-{fcreditreq.i}
-{ordercancel.i}
-{msisdn.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/forderstamp.i}
+{Func/msreqfunc.i}
+{Func/orderfunc.i}
+{Syst/tmsconst.i}
+{Func/fcreditreq.i}
+{Func/ordercancel.i}
+{Func/msisdn.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
@@ -158,7 +158,7 @@ END.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER Order:HANDLE.
@@ -260,7 +260,7 @@ fMarkOrderStamp(Order.OrderID,
 
 IF llDoEvent THEN fCleanEventObjects().
 
-RUN cancelorder.p(Order.OrderId,TRUE).
+RUN Mc/cancelorder.p(Order.OrderId,TRUE).
 
 RETURN "".
 

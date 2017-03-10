@@ -10,23 +10,23 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{function.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobpref'}
+{Syst/commali.i}
+{Func/function.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobpref'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobPref AS HANDLE NO-UNDO.
    lhMobPref = BUFFER MobPref:HANDLE.
    RUN StarEventInitialize(lhMobPref).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMobPref).
+      RUN Mc/eventview2.p(lhMobPref).
    END.
 
 END.
@@ -79,7 +79,7 @@ form /* Nat prefix search WITH FIELD Prefix */
     with row 4 col 2 title color value(ctc) " FIND PREFIX "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST MobPref
@@ -109,12 +109,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* MobPref -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            CREATE MobPref.
            UPDATE 
@@ -237,24 +237,24 @@ BROWSE:
         ufk[7] = 0 ufk[8] = 8 ufk[9] = 1
         ehto = 3 ufkey = FALSE.
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW MobPref.Prefix ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MobPref.Prefix {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MobPref.Prefix MobPref.Memo WITH FRAME sel.
       END.
  /*     ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MobPref.Prefix ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MobPref.Prefix {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MobPref.Prefix WITH FRAME sel.
       END.
      IF order = 3 THEN DO:
-        CHOOSE ROW MobPref.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MobPref.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MobPref.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW MobPref.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MobPref.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MobPref.? WITH FRAME sel.
       END.
 */
@@ -434,9 +434,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Prefix = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Prefix WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if Prefix <> "" THEN DO:
@@ -457,9 +457,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Prefix = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Prefix WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if Prefix <> "" THEN DO:
@@ -553,8 +553,8 @@ BROWSE:
        FIND MobPref where recid(MobPref) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           MobPref.Prefix
           MobPref.Operator
