@@ -150,6 +150,11 @@ FOR EACH Customer WHERE
    ELSE IF TRIM(Customer.Address) = "" OR TRIM(Customer.PostOffice) = "" THEN
       lcReason = "Address or City is empty.".
 
+   /* Check for Customer Bank Account YTS-10339 */
+   ELSE IF NOT CAN-FIND( FIRST BankIdCode NO-LOCK WHERE
+      BankIdCode.BankCode = SUBSTRING(Customer.BankAcct,5,4)) THEN
+      lcReason = "Bank not included in SEPA BIC bank list".
+
    IF lcReason = "" THEN 
       lcReason = fCheckAddress(Customer.CustName + Customer.SurName2 +
                                   Customer.CompanyName,
