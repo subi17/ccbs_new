@@ -315,7 +315,7 @@ CLASS HPD.RepLogHandler FINAL:
       &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
       &THEN IF ttDumpHandler.TenantName = "Default"
             THEN "Yoigo"
-            ELSE ttDumpHandler.TenantName.
+            ELSE SUBSTRING(ttDumpHandler.TenantName,2).
       &ELSE ttDumpHandler.TenantName.
       &ENDIF
 

@@ -26,6 +26,7 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    DEFINE PRIVATE VARIABLE lcFile                  AS CHARACTER     NO-UNDO.
    DEFINE PRIVATE VARIABLE llAllowEmptyFile        AS LOGICAL       NO-UNDO.
    DEFINE PRIVATE VARIABLE llAllowMove             AS LOGICAL INITIAL TRUE NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcTenant                AS CHARACTER     NO-UNDO.
 
    DEFINE PUBLIC PROPERTY FullDumpLimit AS INTEGER NO-UNDO
       GET:         
@@ -69,6 +70,8 @@ CLASS HPD.DumpFile INHERITS DumpBase:
       IF LOCKED lbDumpFile
       THEN RETURN ERROR NEW Progress.Lang.AppError("Dumpfile (DumpID=" + STRING(iiDumpID) + ") is locked.", 1).      
       
+      lcTenant = mGetTenant(lbDumpFile.MainTable).
+
       ASSIGN
          objHPDTime = NEW HPDTime()
          objHPDTime:CurrLocalTZTime = NOW
@@ -90,12 +93,15 @@ CLASS HPD.DumpFile INHERITS DumpBase:
          RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
       &ENDIF
 
+      IF lcTenant > ""
+      THEN mUpdateDumpHeader(4,"",lcTenant).
+
       IF icFile <> ""
       THEN ASSIGN
               llAllowMove = FALSE
               lcFile      = icFile
               .
-      ELSE lcFile = lbDumpFile.SpoolDir + "/" +
+      ELSE lcFile = lbDumpFile.SpoolDir + "/" + IF lcTenant > "" THEN lcTenant ELSE "" +
                     REPLACE(lbDumpFile.FileName,"#DATE_#TIME",objHPDTime:FileTime).
               
       IF lbDumpFile.DumpCharSet > ""
@@ -141,6 +147,33 @@ CLASS HPD.DumpFile INHERITS DumpBase:
                                    "rm -f " + lcFile).
 
    END DESTRUCTOR.
+
+
+   METHOD PRIVATE CHARACTER mGetTenant
+      ( icTableName AS CHARACTER ):
+
+      DEFINE VARIABLE lhBuffer      AS HANDLE    NO-UNDO.
+      DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
+
+      CREATE BUFFER lhBuffer FOR TABLE icTableName.
+
+      lcReturnValue = TENANT-NAME(lhBuffer:DBNAME).
+
+      &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
+      &THEN
+         IF lcReturnValue = "Default"
+         THEN lcReturnValue = "yoigo".
+         ELSE lcReturnValue = SUBSTRING(lcReturnValue,2).
+      &ENDIF
+
+      RETURN lcReturnValue.
+
+      FINALLY:
+         IF VALID-HANDLE(lhBuffer)
+         THEN DELETE OBJECT lhBuffer.
+      END FINALLY.
+
+   END METHOD.
 
 
    METHOD PUBLIC VOID mInactivateDump
