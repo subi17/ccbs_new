@@ -32,6 +32,7 @@ katun = "MNP".
 {Func/main_add_lines.i}
 {Func/fgettxt.i}
 {Func/fixedlinefunc.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE liLoop       AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTime       AS CHARACTER NO-UNDO.
@@ -225,7 +226,7 @@ PROCEDURE pHandleQueue:
          fLogError(lcResponseDesc + ":" + MNPProcess.FormRequest). 
          LEAVE.
       END.
-      
+
       FIND OrderCustomer OF Order WHERE OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
       IF NOT AVAIL OrderCustomer THEN 
       DO:

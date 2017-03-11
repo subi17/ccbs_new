@@ -6,6 +6,8 @@
   CREATED ......: 03.11.09
   Version ......: xfera
 ----------------------------------------------------------------------- */
+ROUTINE-LEVEL ON ERROR UNDO, THROW.
+
 {Syst/commpaa.i}
 katun = "MNPAnalyse".
 gcBrand = "1".
@@ -15,6 +17,7 @@ gcBrand = "1".
 {Func/log.i}
 {Func/timestamp.i}
 {Func/heartbeat.i}
+{Func/multitenantfunc.i}
 
 DEF BUFFER bMNPProcess FOR MNPProcess.
 
@@ -39,7 +42,8 @@ DISP
 WITH FRAME frmMain.
 PAUSE 0.
 
-DO WHILE TRUE:
+DO WHILE TRUE
+    ON ERROR UNDO, THROW:
 
    liLoop = liLoop + 1.
 
@@ -91,23 +95,23 @@ PROCEDURE pMNPAnalyse:
       MNPProcess.MNPType = {&MNP_TYPE_OUT} AND
       MNPProcess.StatusCode = {&MNP_ST_ASOL} AND
       MNPProcess.StateFlag = {&MNP_STATEFLAG_NOT_ANALYSED} AND
-      MNPProcess.CreatedTS < ldeCreated EXCLUSIVE-LOCK:
+      MNPProcess.CreatedTS < ldeCreated EXCLUSIVE-LOCK TENANT-WHERE TENANT-ID() >= 0
+      ON ERROR UNDO, THROW:
+
+      IF NOT fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(MNPProcess)) THEN
+          UNDO, THROW NEW Progress.Lang.AppError("Unable to change tenant. Abort!",1). 
 
       lcRejectReason = "".
 
       SUBS_LOOP:
-      FOR EACH MNPSub WHERE
-         MNPSub.MNPSeq = MNPProcess.MNPSeq EXCLUSIVE-LOCK:
+      FOR EACH MNPSub WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq EXCLUSIVE-LOCK:
       
          liCustnum = -1.
 
-         FIND MobSub WHERE
-            Mobsub.MsSeq = MNPSub.MsSeq AND 
-            Mobsub.cli = MNPSub.CLI NO-LOCK NO-ERROR.
-         
+         FIND MobSub WHERE Mobsub.MsSeq = MNPSub.MsSeq AND Mobsub.cli = MNPSub.CLI NO-LOCK NO-ERROR.
          /* number termination process check is missing */
-         IF AVAIL MobSub THEN DO:
-            
+         IF AVAIL MobSub THEN 
+         DO:   
             /* check icc for prepaids */
             IF Mobsub.PayType = True AND MobSub.ICC NE MNPSub.ICC THEN DO:
                lcRejectReason = "RECH_ICCID".
@@ -127,16 +131,12 @@ PROCEDURE pMNPAnalyse:
             ASSIGN
                liCustnum = MobSub.Custnum
                llIsPrepaid = MobSub.PayType. 
-
-         ENd.
-         ELSE DO:
-            
-            FIND FIRST Msisdn WHERE
-               Msisdn.Brand = gcBrand AND
-               Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
-
-            IF AVAIL Msisdn AND
-                     Msisdn.StatusCode = {&MSISDN_ST_RETURNED} THEN DO:
+         END.
+         ELSE 
+         DO:      
+            FIND FIRST Msisdn WHERE Msisdn.Brand = gcBrand AND Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
+            IF AVAIL Msisdn AND Msisdn.StatusCode = {&MSISDN_ST_RETURNED} THEN 
+            DO:
                lcRejectReason = "RECH_BNUME".
                LEAVE SUBS_LOOP.
             END.
@@ -149,10 +149,8 @@ PROCEDURE pMNPAnalyse:
             END.
 
             RELEASE TermMobsub.
-            FOR FIRST bTermMobsub WHERE
-                bTermMobsub.CLI = MnpSub.CLI NO-LOCK BY bTermMobsub.ActivationDate DESC:
-               FIND TermMobsub WHERE
-                  ROWID(TermMobsub) = ROWID(bTermMobsub) NO-LOCK.
+            FOR FIRST bTermMobsub WHERE bTermMobsub.CLI = MnpSub.CLI NO-LOCK BY bTermMobsub.ActivationDate DESC:
+               FIND TermMobsub WHERE ROWID(TermMobsub) = ROWID(bTermMobsub) NO-LOCK.
             END.
            
             /* should not happen that TermMobsub is not found */
@@ -164,8 +162,8 @@ PROCEDURE pMNPAnalyse:
 
             IF MNPSub.MsSeq = ? OR MNPSub.MsSeq = 0 THEN MNPSub.MsSeq = TermMobsub.MsSeq.
          
-            IF TermMobsub.PayType = True AND
-               TermMobSub.ICC NE MNPSub.ICC THEN DO:
+            IF TermMobsub.PayType = True AND TermMobSub.ICC NE MNPSub.ICC THEN 
+            DO:
                lcRejectReason = "RECH_ICCID".
                LEAVE SUBS_LOOP.
             END.
@@ -175,18 +173,17 @@ PROCEDURE pMNPAnalyse:
                llIsPrepaid = (TermMobSub.clitype begins "tarj"). 
          END.
            
-         FIND Customer WHERE
-              Customer.Custnum = liCustnum NO-LOCK NO-ERROR.
-         
-         IF NOT AVAIL Customer THEN DO:
+         FIND Customer WHERE Customer.Custnum = liCustnum NO-LOCK NO-ERROR.
+         IF NOT AVAIL Customer THEN 
+         DO:
             fLogError("Customer not found: " + MNPProcess.PortRequest).
             lcRejectReason = "RECH_IDENT".
             LEAVE SUBS_LOOP.
          END.
 
-         FIND MNPDetails WHERE
-            MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-LOCK NO-ERROR.
-         IF NOT AVAIL MNPDetails THEN DO:
+         FIND MNPDetails WHERE MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-LOCK NO-ERROR.
+         IF NOT AVAIL MNPDetails THEN 
+         DO:
             fLogError("MNPDetails not found: " + MNPProcess.PortRequest).
             NEXT MNPPROCESS_LOOP.
          END.
@@ -203,31 +200,24 @@ PROCEDURE pMNPAnalyse:
       /* Set possible number termination processes on hold */
       IF lcRejectReason = "" THEN DO:
       
-         FOR EACH MNPSub WHERE
-            MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:
+         FOR EACH MNPSub WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:
          
             /* put possible number termination on hold */
-            FIND FIRST Msisdn WHERE
-               Msisdn.Brand = gcBrand AND
-               Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
-            
-            IF AVAIL Msisdn AND
-                     Msisdn.StatusCode = {&MSISDN_ST_RETURN_NOTICE_SENT} THEN DO:
-
-               FIND FIRST bMNPProcess WHERE
-                  bMNPProcess.MNPSeq = MNPSub.MNPSeq AND
-                  bMNPProcess.MNPType = {&MNP_TYPE_TERMINATION} AND
-                  bMNPProcess.StatusCode = {&MNP_ST_BNOT}
-               EXCLUSIVE-LOCK NO-ERROR.
-         
-               IF AVAIL bMNPProcess THEN DO:
+            FIND FIRST Msisdn WHERE Msisdn.Brand = gcBrand AND Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
+            IF AVAIL Msisdn AND Msisdn.StatusCode = {&MSISDN_ST_RETURN_NOTICE_SENT} THEN 
+            DO:
+               FIND FIRST bMNPProcess WHERE bMNPProcess.MNPSeq     = MNPSub.MNPSeq           AND 
+               								bMNPProcess.MNPType    = {&MNP_TYPE_TERMINATION} AND 
+               								bMNPProcess.StatusCode = {&MNP_ST_BNOT}          EXCLUSIVE-LOCK NO-ERROR.
+               IF AVAIL bMNPProcess THEN 
+               DO:
                   ASSIGN
                      bMNPProcess.UpdateTS = fMakeTS()
                      bMNPProcess.StatusCode = {&MNP_ST_BDET}.
                   RELEASE bMNPProcess.
                END.
-
             END.
+
          END.
       END.
       
