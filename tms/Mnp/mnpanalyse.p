@@ -90,13 +90,13 @@ PROCEDURE pMNPAnalyse:
    ldeCreated = fSecOffSet(fMakeTS(),-10).
 
    MNPPROCESS_LOOP:
-   FOR EACH MNPProcess WHERE
-      MNPProcess.Brand = gcBrand AND
-      MNPProcess.MNPType = {&MNP_TYPE_OUT} AND
-      MNPProcess.StatusCode = {&MNP_ST_ASOL} AND
-      MNPProcess.StateFlag = {&MNP_STATEFLAG_NOT_ANALYSED} AND
-      MNPProcess.CreatedTS < ldeCreated EXCLUSIVE-LOCK TENANT-WHERE TENANT-ID() >= 0
-      ON ERROR UNDO, THROW:
+   FOR EACH MNPProcess EXCLUSIVE-LOCK WHERE MNPProcess.Brand      = gcBrand                       AND
+                                            MNPProcess.MNPType    = {&MNP_TYPE_OUT}               AND
+                                            MNPProcess.StatusCode = {&MNP_ST_ASOL}                AND
+                                            MNPProcess.StateFlag  = {&MNP_STATEFLAG_NOT_ANALYSED} AND
+                                            MNPProcess.CreatedTS  < ldeCreated                     
+                                            TENANT-WHERE TENANT-ID() >= 0
+       ON ERROR UNDO, THROW:
 
       IF NOT fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(MNPProcess)) THEN
           UNDO, THROW NEW Progress.Lang.AppError("Unable to change tenant. Abort!",1). 
