@@ -14,17 +14,20 @@
 {Syst/tmsconst.i}
 {Func/date.i}
 {Mm/fbundle.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT PARAMETER iiOrderId AS INTEGER NO-UNDO.
 
-DEFINE VARIABLE lcXML AS CHAR NO-UNDO.
+DEFINE VARIABLE lcXML         AS CHAR      NO-UNDO.
 DEFINE VARIABLE liSeq         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcFormRequest AS CHARACTER NO-UNDO.
-DEFINE VARIABLE ldChgDate AS DATE NO-UNDO. 
-DEFINE VARIABLE ldeToday AS DEC NO-UNDO. 
-DEFINE VARIABLE ldeChgStamp AS DECIMAL NO-UNDO.
-DEFINE VARIABLE lcProduct AS CHAR NO-UNDO. 
-DEFINE VARIABLE lcTariffType AS CHAR NO-UNDO. 
+DEFINE VARIABLE ldChgDate     AS DATE      NO-UNDO. 
+DEFINE VARIABLE ldeToday      AS DEC       NO-UNDO. 
+DEFINE VARIABLE ldeChgStamp   AS DECIMAL   NO-UNDO.
+DEFINE VARIABLE lcProduct     AS CHAR      NO-UNDO. 
+DEFINE VARIABLE lcTariffType  AS CHAR      NO-UNDO. 
+DEFINE VARIABLE lcTenant      AS CHAR      NO-UNDO.
+DEFINE VARIABLE lcAllTenants  AS CHAR      NO-UNDO.
 
 &SCOPED-DEFINE COMPANY_NAME_LIMIT 64   /* Name length limitation send to Nodo Central */
 
@@ -38,6 +41,13 @@ FIND OrderCustomer OF Order WHERE
    OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL OrderCustomer THEN RETURN ("ERROR: OrderCustomer not found " + STRING(iiOrderId)).
+
+ASSIGN 
+    lcAllTenants = fgetTenantNames()
+    lcTenant     = BUFFER-TENANT-NAME(Order).
+
+IF LOOKUP(lcTenant,lcAllTenants) = 0 THEN
+    RETURN ("ERROR: Invalid tenant for order " + STRING(iiOrderId)).
 
 FIND FIRST MNPOperator WHERE 
            MNPOperator.Brand = gcBrand AND
@@ -145,18 +155,18 @@ ASSIGN
 
 CREATE MNPDetails.
 ASSIGN
-   MNPDetails.MNPSeq = MNPProcess.MNPSeq
-   MNPDetails.CustId = OrderCustomer.CustId
-   MNPDetails.CustIdType = OrderCustomer.CustIdType
-   MNPDetails.FirstName = OrderCustomer.FirstName
-   MNPDetails.Surname1 = OrderCustomer.SurName1
-   MNPDetails.Surname2 = OrderCustomer.SurName2
-   MNPDetails.CompanyName = OrderCustomer.Company 
-   MNPDetails.RequestedTS = Order.CrStamp 
-   MNPDetails.ReceptorCode = "005"
-   MNPDetails.ReceptorNRN = "741111" 
-   MNPDetails.DonorCode = MNPOperator.OperCode WHEN AVAIL MNPOperator
-   MNPDetails.Nationality = OrderCustomer.Nationality.
+   MNPDetails.MNPSeq       = MNPProcess.MNPSeq
+   MNPDetails.CustId       = OrderCustomer.CustId
+   MNPDetails.CustIdType   = OrderCustomer.CustIdType
+   MNPDetails.FirstName    = OrderCustomer.FirstName
+   MNPDetails.Surname1     = OrderCustomer.SurName1
+   MNPDetails.Surname2     = OrderCustomer.SurName2
+   MNPDetails.CompanyName  = OrderCustomer.Company 
+   MNPDetails.RequestedTS  = Order.CrStamp 
+   MNPDetails.ReceptorCode = (IF lcTenant = "Default" THEN "005"    ELSE IF lcTenant = "Tmasmovil" THEN "044"    ELSE "")
+   MNPDetails.ReceptorNRN  = (IF lcTenant = "Default" THEN "741111" ELSE IF lcTenant = "Tmasmovil" THEN "735044" ELSE "")  
+   MNPDetails.DonorCode    = MNPOperator.OperCode WHEN AVAIL MNPOperator
+   MNPDetails.Nationality  = OrderCustomer.Nationality.
 
 CREATE MNPSub.
 ASSIGN
@@ -196,14 +206,15 @@ PROCEDURE pCreatePortabilityMessageXML:
    lcReqStruct = add_struct(param_toplevel_id, "").
    add_timestamp(lcReqStruct, "fechaSolicitudPorAbonado", Order.CrStamp).
    add_string(lcReqStruct, "codigoOperadorDonante", lcOper).
-   add_string(lcReqStruct, "codigoOperadorReceptor", "005").
-
+   add_string(lcReqStruct, "codigoOperadorReceptor", (IF lcTenant = "Default" THEN 
+                                                          "005" 
+                                                      ELSE IF lcTenant = "Tmasmovil" THEN 
+                                                          "044" 
+                                                      ELSE "")).
    lcAbonado = add_struct(lcReqStruct,"abonado").
 
    lcDocumentoIdentification = add_struct(lcAbonado, "documentoIdentificacion").
-   add_string(lcDocumentoIdentification, "tipo", 
-      (IF OrderCustomer.CustIdType = "PassPort" THEN "PAS"
-       ELSE OrderCustomer.CustIdType)).
+   add_string(lcDocumentoIdentification, "tipo", (IF OrderCustomer.CustIdType = "PassPort" THEN "PAS" ELSE OrderCustomer.CustIdType)).
    add_string(lcDocumentoIdentification, "documento", CAPS(OrderCustomer.CustId)).
 
    lcDatosPersonales = add_struct(lcAbonado, "datosPersonales").
@@ -224,7 +235,11 @@ PROCEDURE pCreatePortabilityMessageXML:
    END.
 
    add_string(lcReqStruct, "codigoContrato", MNPProcess.FormRequest).
-   add_string(lcReqStruct, "NRNReceptor", "741111").
+   add_string(lcReqStruct, "NRNReceptor", (IF lcTenant = "Default" THEN 
+                                              "741111" 
+                                           ELSE IF lcTenant = "Tmasmovil" THEN 
+                                              "735044" 
+                                           ELSE "")).
    add_timestamp(lcReqStruct, "fechaVentanaCambio", MNPProcess.PortingTime).
   
    IF LENGTH(Order.OldICC) > 6 THEN
