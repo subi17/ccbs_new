@@ -58,7 +58,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
          IF llPrintToFile THEN DO:
             OUTPUT STREAM sout TO VALUE( "/tmp/orderfunc_test.txt" ) APPEND.
 
-            PUT STREAM sout UNFORMATTED NOW ";" bfOrder.CLI ";" bfOrder.CLIType ";" bfOrder.CrStamp ";" bfOrder.CustNum ";" bfOrder.DeliveryType ";" bfOrder.ICC ";" bfOrder.Logistics ";" bfOrder.MNPNumber ";" bfOrder.MNPStatus ";" bfOrder.MSSeq ";" bfOrder.Offer ";" bfOrder.OldIcc ";" bfOrder.OldPayType ";" bfOrder.OrderChannel ";" bfOrder.Orderer ";" bfOrder.OrdererID ";" bfOrder.OrdererIDType ";" bfOrder.OrderId ";" bfOrder.OrderType ";" bfOrder.PayType ";" bfOrder.PortingDate ";" bfOrder.PortingTime ";" bfOrder.RoiLevel ";" bfOrder.ROIResult ";" bfOrder.Salesman ";" bfOrder.SendOffer ";" bfOrder.SendToROI ";" bfOrder.SMSType ";" bfOrder.Source ";" bfOrder.StatusCode ";" icStatus ";" PROGRAM-NAME(1) ";" PROGRAM-NAME(2)SKIP.
+            PUT STREAM sout UNFORMATTED NOW ";" bfOrder.CLI ";" bfOrder.CLIType ";" bfOrder.CrStamp ";" bfOrder.CustNum ";" bfOrder.DeliveryType ";" bfOrder.ICC ";" bfOrder.Logistics ";" bfOrder.MNPStatus ";" bfOrder.MSSeq ";" bfOrder.Offer ";" bfOrder.OrderChannel ";" bfOrder.OrderId ";" bfOrder.OrderType ";" bfOrder.PayType ";" bfOrder.PortingDate ";" bfOrder.PortingTime ";" bfOrder.RoiLevel ";" bfOrder.ROIResult ";" bfOrder.SendOffer ";" bfOrder.SendToROI ";"  bfOrder.Source ";" PROGRAM-NAME(2)  ";" bfOrder.StatusCode ";" icStatus SKIP.
             OUTPUT STREAM sout CLOSE.
          END.
          /* Test end */
