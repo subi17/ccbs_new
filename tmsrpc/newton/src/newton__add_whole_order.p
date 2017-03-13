@@ -245,6 +245,8 @@ katun = "NewtonRPC".
 {Func/smsmessage.i}
 {Mc/orderfusion.i}
 
+{Migration/migrationfunc.i}
+
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
 /* Input parameters for order */
@@ -704,24 +706,26 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       IF lcIdOrderCustomer EQ "" AND piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
           lcFError = "Expected either person_id or company_id".
 
-      /* YTS-2453 */
-      IF NOT plBypassRules AND
-         lcFError = "" AND 
-         piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
-         LOOKUP(pcNumberType,"new,mnp") > 0 AND
-         NOT plUpdate AND
-         piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
-         NOT fSubscriptionLimitCheck(
-         lcIdOrderCustomer,
-         lcIdTypeOrderCustomer,
-         llSelfEmployed,
-         1,
-         OUTPUT lcFError,
-         OUTPUT liSubLimit,
-         OUTPUT liSubs,
-         OUTPUT liSubLimit,
-         OUTPUT liActs) THEN .
+      IF pcChannel NE "migration" THEN DO: /*MMM-21*/
 
+         /* YTS-2453 */
+         IF NOT plBypassRules AND
+            lcFError = "" AND 
+            piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+            LOOKUP(pcNumberType,"new,mnp") > 0 AND
+            NOT plUpdate AND
+            piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
+            NOT fSubscriptionLimitCheck(
+            lcIdOrderCustomer,
+            lcIdTypeOrderCustomer,
+            llSelfEmployed,
+            1,
+            OUTPUT lcFError,
+            OUTPUT liSubLimit,
+            OUTPUT liSubs,
+            OUTPUT liSubLimit,
+            OUTPUT liActs) THEN .
+      END.
       CASE lcdelivery_channel:
          WHEN "PAPER" THEN liDelType = {&INV_DEL_TYPE_PAPER}.
          WHEN "EMAIL" THEN liDelType = {&INV_DEL_TYPE_EMAIL}.
@@ -1407,6 +1411,21 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
+
+/*MB_migration related checks*/
+
+/*Customer is not allowed to have active subscription in Yoigo system*/
+IF pcChannel EQ "migration" THEN DO:
+   DEF VAR lcMErr AS CHAR NO-UNDO.
+   IF fMigrationCheckCustomer(gcBrand, lcId) NE "" THEN
+      RETURN appl_Err("Migration data validation error:" + lcMErr).
+END.
+
+/*If STC or MNP is not allowed during migration*/
+IF (pcNumberType EQ "mnp" OR pcNumberType EQ "stc") AND
+   fIsNumberInMigration(pcCLI) THEN 
+   RETURN appl_Err("Requested number is in migration").
+
 
 /* YPB-515 */
 IF pcDiscountPlanId > "" THEN DO:
@@ -2390,9 +2409,11 @@ IF plSendOffer AND NOT llROIClose THEN DO:
 
    lcOfferSMSText = fGetOrderOfferSMS(Order.OrderID, 
                                       TRUE).
-
-   IF lcMobileNumber NE "" AND 
-      lcOfferSMSText NE "" AND lcOfferSMSText NE ? THEN
+   
+   
+   IF Order.Orderchannel NE "migration" AND
+      (lcMobileNumber NE "" AND       
+      lcOfferSMSText NE "" AND lcOfferSMSText NE ?) THEN
       fCreateSMS(Order.CustNum,
                  lcMobileNumber,
                  Order.MsSeq, 
@@ -2419,7 +2440,8 @@ fMarkOrderStamp(Order.OrderID,"Change",0.0).
 
 
 /*YDR_1637*/
-IF INDEX(Order.OrderChannel, "pos") EQ 0 THEN DO:
+IF INDEX(Order.OrderChannel, "pos") EQ 0  AND
+         Order.Orderchannel NE "migration" THEN DO:
    IF (Order.StatusCode EQ {&ORDER_STATUS_MNP_ON_HOLD}        /*22*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}        /*51*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}  /*76*/ OR

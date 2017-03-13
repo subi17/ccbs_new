@@ -1485,6 +1485,9 @@ FOR EACH Stock NO-LOCK,
    /* handle only NEW or MNP orders */
    IF Order.Ordertype NE 0 AND
       Order.Ordertype NE 1 THEN NEXT.
+   
+   /* Do not create LO file in migration */
+   IF Order.Orderchannel EQ "migration" THEN NEXT.
 
    /* YOT-867 */
    IF Order.MNPStatus = 0 AND liNewDelay NE ? AND

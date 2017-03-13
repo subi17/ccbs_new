@@ -553,7 +553,7 @@ PROCEDURE pHandleQueue:
          IF MNPProcess.StatusCode NE {&MNP_ST_ASOL} THEN DO:
 
             liLang = INT(OrderCustomer.Language) NO-ERROR.
-            
+
             fMNPCallAlarm("MNPConfTime",
                       ldActTS,
                       MNPProcess.FormRequest,
