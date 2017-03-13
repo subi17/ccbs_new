@@ -41,13 +41,19 @@ ADD SEQUENCE "DMS"
   CYCLE-ON-LIMIT no
   MIN-VAL 1
 
+ADD SEQUENCE "FusionMessageSeq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
 ADD TABLE "Barring"
   AREA "Sta_Data_128"
   LABEL "Barring"
   DESCRIPTION "Barring information"
   DUMP-NAME "barring"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-barring.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-barring.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-barring.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-barring.p" CRC "?" 
 
 ADD FIELD "MsSeq" OF "Barring" AS integer 
   FORMAT "zzzzzzz9"
@@ -126,8 +132,8 @@ ADD TABLE "BarringConf"
   LABEL "Barring Configuration"
   DESCRIPTION "Barring Configuration"
   DUMP-NAME "barringconf"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-barringconf.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-barringconf.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-barringconf.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-barringconf.p" CRC "?" 
 
 ADD FIELD "BarringGroup" OF "BarringConf" AS character 
   FORMAT "X(25)"
@@ -469,6 +475,8 @@ ADD TABLE "CLIType"
 
 "
   DUMP-NAME "mobtype"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-clitype.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-clitype.p" CRC "?" 
 
 ADD FIELD "Clitype" OF "CLIType" AS character 
   FORMAT "x(8)"
@@ -767,6 +775,26 @@ ADD FIELD "BaseBundle" OF "CLIType" AS character
   HELP "Base voice/data bundle"
   ORDER 300
 
+ADD FIELD "FixedLineDownload" OF "CLIType" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Fixed Line Download"
+  POSITION 33
+  MAX-WIDTH 16
+  COLUMN-LABEL "FixedLineDownload"
+  HELP "Fixed line download speed"
+  ORDER 310
+
+ADD FIELD "FixedLineUpload" OF "CLIType" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Fixed Line Upload"
+  POSITION 34
+  MAX-WIDTH 16
+  COLUMN-LABEL "FixedLineUpload"
+  HELP "Fixed line upload speed"
+  ORDER 320
+
 ADD INDEX "Clitype" ON "CLIType" 
   AREA "Sta_Index_2"
   UNIQUE
@@ -783,8 +811,8 @@ ADD TABLE "DMS"
   LABEL "Document mgmt case"
   DESCRIPTION "Document management case"
   DUMP-NAME "dms"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-dms.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-dms.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-dms.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-dms.p" CRC "?" 
 
 ADD FIELD "HostID" OF "DMS" AS integer 
   FORMAT "zzzzzzz9"
@@ -913,8 +941,8 @@ ADD TABLE "DMSDOC"
   LABEL "Document"
   DESCRIPTION "DMS Document"
   DUMP-NAME "dmsdoc"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-dmsdoc.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-dmsdoc.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-dmsdoc.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-dmsdoc.p" CRC "?" 
 
 ADD FIELD "DMSID" OF "DMSDOC" AS integer 
   FORMAT "zzzzzzz9"
@@ -1053,13 +1081,183 @@ ADD INDEX "bank" ON "FinBank"
   INDEX-FIELD "interface" ASCENDING 
   INDEX-FIELD "paramname" ASCENDING 
 
+ADD TABLE "FusionMessage"
+  AREA "Sta_Data_64"
+  LABEL "Fusion Message"
+  DESCRIPTION "Contains messages between TMS and MasMovil"
+  DUMP-NAME "fusionmessage"
+
+ADD FIELD "MessageSeq" OF "FusionMessage" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MessageSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "MessageSeq"
+  ORDER 10
+
+ADD FIELD "MessageID" OF "FusionMessage" AS character 
+  DESCRIPTION "Auto-generated UUID"
+  FORMAT "x(37)"
+  INITIAL ""
+  LABEL "MessageId"
+  POSITION 3
+  MAX-WIDTH 74
+  COLUMN-LABEL "MessageID"
+  ORDER 20
+
+ADD FIELD "OrderId" OF "FusionMessage" AS integer 
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  ORDER 30
+
+ADD FIELD "MSSeq" OF "FusionMessage" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subs.ID"
+  HELP "Subscription ID"
+  ORDER 40
+
+ADD FIELD "MessageType" OF "FusionMessage" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Message Type"
+  POSITION 6
+  MAX-WIDTH 32
+  COLUMN-LABEL "MessageType"
+  ORDER 50
+
+ADD FIELD "Source" OF "FusionMessage" AS character 
+  DESCRIPTION "Messsage source (TMS/Masmovil)"
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Message Source"
+  POSITION 7
+  MAX-WIDTH 16
+  COLUMN-LABEL "Source"
+  ORDER 60
+
+ADD FIELD "CreatedTS" OF "FusionMessage" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "CreatedTS"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "CreatedTS"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "UpdateTS" OF "FusionMessage" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "UpdateTS"
+  POSITION 9
+  MAX-WIDTH 20
+  COLUMN-LABEL "UpdateTS"
+  DECIMALS 5
+  ORDER 80
+
+ADD FIELD "MessageStatus" OF "FusionMessage" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Message Status"
+  POSITION 10
+  MAX-WIDTH 16
+  COLUMN-LABEL "MessageStatus"
+  ORDER 90
+
+ADD FIELD "OrderType" OF "FusionMessage" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Order Type"
+  POSITION 11
+  MAX-WIDTH 60
+  COLUMN-LABEL "OrderType"
+  ORDER 100
+
+ADD FIELD "FixedStatus" OF "FusionMessage" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Fixed Status"
+  POSITION 12
+  MAX-WIDTH 30
+  COLUMN-LABEL "FixedStatus"
+  ORDER 110
+
+ADD FIELD "FixedStatusTS" OF "FusionMessage" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Fixed Status Timestamp"
+  POSITION 13
+  MAX-WIDTH 20
+  COLUMN-LABEL "FixedStatusTS"
+  DECIMALS 5
+  ORDER 120
+
+ADD FIELD "FixedStatusDesc" OF "FusionMessage" AS character 
+  FORMAT "x(45)"
+  INITIAL ""
+  LABEL "Fixed Status Desc"
+  POSITION 14
+  MAX-WIDTH 90
+  COLUMN-LABEL "FixedStatusDesc"
+  ORDER 130
+
+ADD FIELD "AdditionalInfo" OF "FusionMessage" AS character 
+  DESCRIPTION "Additional status info"
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Additional Info"
+  POSITION 15
+  MAX-WIDTH 80
+  COLUMN-LABEL "AdditionalInfo"
+  ORDER 140
+
+ADD FIELD "ResponseCode" OF "FusionMessage" AS character 
+  DESCRIPTION "Response code from Adapter/Masmovil"
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Response Code"
+  POSITION 16
+  MAX-WIDTH 20
+  COLUMN-LABEL "ResponseCode"
+  ORDER 150
+
+ADD INDEX "MessageSeq" ON "FusionMessage" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MessageSeq" ASCENDING 
+
+ADD INDEX "MessageStatus" ON "FusionMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "Source" ASCENDING 
+  INDEX-FIELD "MessageStatus" ASCENDING 
+
+ADD INDEX "OrderId" ON "FusionMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "OrderId" ASCENDING 
+  INDEX-FIELD "CreatedTS" DESCENDING 
+
+ADD INDEX "UpdateTS" ON "FusionMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdateTS" DESCENDING 
+
 ADD TABLE "MobSub"
   AREA "Sta_Data_32"
   LABEL "Mobile Subscriber"
   DESCRIPTION "Mobile Subscription"
   DUMP-NAME "mobsub-1"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-mobsub.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-mobsub.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-mobsub.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-mobsub.p" CRC "?" 
 
 ADD FIELD "MsSeq" OF "MobSub" AS integer 
   FORMAT ">>>>>>>9"
@@ -1276,7 +1474,28 @@ ADD FIELD "TariffActTS" OF "MobSub" AS decimal
   POSITION 36
   MAX-WIDTH 15
   COLUMN-LABEL "TariffActTS"
+  DECIMALS 5
   ORDER 890
+
+ADD FIELD "FixedNumber" OF "MobSub" AS character 
+  FORMAT "x(11)"
+  INITIAL ?
+  LABEL "Fixed Number"
+  POSITION 37
+  MAX-WIDTH 22
+  COLUMN-LABEL "FixedNumber"
+  HELP "Fixed line number"
+  ORDER 895
+
+ADD FIELD "TerritoryOwner" OF "MobSub" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "TerritoryOwner"
+  POSITION 38
+  MAX-WIDTH 30
+  COLUMN-LABEL "TerritoryOwner"
+  HELP "Territory Owner"
+  ORDER 900
 
 ADD FIELD "CliType" OF "MobSub" AS character 
   FORMAT "x(8)"
@@ -1459,6 +1678,12 @@ ADD INDEX "CustNum_u" ON "MobSub"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "BillTarget" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
+
+ADD INDEX "FixedNumber" ON "MobSub" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "FixedNumber" ASCENDING 
 
 ADD INDEX "IMSI" ON "MobSub" 
   AREA "Sta_Index_1"
@@ -2191,7 +2416,8 @@ ADD INDEX "OfferItemID" ON "OfferItem"
 ADD TABLE "Order"
   AREA "Sta_Data_32"
   DUMP-NAME "order"
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-order.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-order.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-order.p" CRC "?" 
 
 ADD FIELD "OrderId" OF "Order" AS integer 
   DESCRIPTION "Order sequence number"
@@ -2969,7 +3195,8 @@ ADD INDEX "StOrderID" ON "Order"
 ADD TABLE "OrderAccessory"
   AREA "Sta_Data_32"
   DUMP-NAME "orderacc"
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-orderaccessory.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderaccessory.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-orderaccessory.p" CRC "?" 
 
 ADD FIELD "OrderId" OF "OrderAccessory" AS integer 
   DESCRIPTION "Order sequence number"
@@ -3145,7 +3372,8 @@ ADD TABLE "OrderAction"
   LABEL "Order Action"
   DESCRIPTION "Order action"
   DUMP-NAME "orderaction"
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-orderaction.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderaction.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-orderaction.p" CRC "?" 
 
 ADD FIELD "Brand" OF "OrderAction" AS character 
   FORMAT "x(8)"
@@ -3206,7 +3434,8 @@ ADD INDEX "OrderId" ON "OrderAction"
 ADD TABLE "OrderCustomer"
   AREA "Sta_Data_32"
   DUMP-NAME "ordercus"
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-ordercustomer.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-ordercustomer.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-ordercustomer.p" CRC "?" 
 
 ADD FIELD "RowType" OF "OrderCustomer" AS integer 
   FORMAT ">>9"
@@ -3773,6 +4002,116 @@ ADD FIELD "MSISDNForIdent" OF "OrderCustomer" AS character
   COLUMN-LABEL "MSISDNForIdent"
   ORDER 1020
 
+ADD FIELD "Block" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Block"
+  POSITION 64
+  MAX-WIDTH 24
+  COLUMN-LABEL "Block"
+  HELP "Address block (from coverage check)"
+  ORDER 1060
+
+ADD FIELD "Door" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Door"
+  POSITION 65
+  MAX-WIDTH 24
+  COLUMN-LABEL "Door"
+  HELP "Address door"
+  ORDER 1070
+
+ADD FIELD "Letter" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Letter"
+  POSITION 66
+  MAX-WIDTH 24
+  COLUMN-LABEL "Letter"
+  HELP "Address letter (from coverage check)"
+  ORDER 1080
+
+ADD FIELD "Stair" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Stair"
+  POSITION 67
+  MAX-WIDTH 24
+  COLUMN-LABEL "Stair"
+  HELP "Address stair (from coverage check)"
+  ORDER 1090
+
+ADD FIELD "Hand" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Hand"
+  POSITION 68
+  MAX-WIDTH 24
+  COLUMN-LABEL "Hand"
+  HELP "Address hand (from coverage check)"
+  ORDER 1100
+
+ADD FIELD "Km" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Km"
+  POSITION 69
+  MAX-WIDTH 24
+  COLUMN-LABEL "Km"
+  HELP "Address km (from coverage check)"
+  ORDER 1110
+
+ADD FIELD "Floor" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Floor"
+  POSITION 70
+  MAX-WIDTH 24
+  COLUMN-LABEL "Floor"
+  HELP "Address floor (from coverage check)"
+  ORDER 1120
+
+ADD FIELD "Gescal" OF "OrderCustomer" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Gescal Number"
+  POSITION 71
+  MAX-WIDTH 80
+  COLUMN-LABEL "Gescal"
+  HELP "Address gescal number (from coverage check)"
+  ORDER 1030
+
+ADD FIELD "StreetType" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Street Type"
+  POSITION 72
+  MAX-WIDTH 24
+  COLUMN-LABEL "StreetType"
+  HELP "Address street type (from coverage check)"
+  ORDER 1040
+
+ADD FIELD "BisDuplicate" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Bis"
+  POSITION 73
+  MAX-WIDTH 24
+  COLUMN-LABEL "BisDuplicate"
+  HELP "Address Bis/duplicate"
+  ORDER 1050
+
+ADD FIELD "TerritoryOwner" OF "OrderCustomer" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "TerritoryOwner"
+  POSITION 74
+  MAX-WIDTH 30
+  COLUMN-LABEL "TerritoryOwner"
+  HELP "Territory Owner"
+  ORDER 1130
+
 ADD INDEX "OrderId" ON "OrderCustomer" 
   AREA "Sta_Index_1"
   PRIMARY
@@ -3795,7 +4134,8 @@ ADD INDEX "CustNum" ON "OrderCustomer"
 ADD TABLE "OrderDelivery"
   AREA "Sta_Data_32"
   DUMP-NAME "orderdelivery"
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-orderdelivery.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderdelivery.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-orderdelivery.p" CRC "?" 
 
 ADD FIELD "OrderId" OF "OrderDelivery" AS integer 
   DESCRIPTION "Order sequence number"
@@ -3902,7 +4242,8 @@ ADD TABLE "OrderFusion"
   LABEL "Order Fusion"
   DESCRIPTION "Order Fusion"
   DUMP-NAME "orderfusion"
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-orderfusion.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderfusion.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-orderfusion.p" CRC "?" 
 
 ADD FIELD "Brand" OF "OrderFusion" AS character 
   FORMAT "x(8)"
@@ -4076,6 +4417,78 @@ ADD FIELD "UpdateTS" OF "OrderFusion" AS decimal
   DECIMALS 5
   ORDER 180
 
+ADD FIELD "FixedCurrOperCode" OF "OrderFusion" AS character 
+  FORMAT "x(7)"
+  INITIAL ""
+  LABEL "FixedCurrOperCode"
+  POSITION 20
+  MAX-WIDTH 14
+  ORDER 190
+
+ADD FIELD "SerialNumber" OF "OrderFusion" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "SerialNumber"
+  POSITION 21
+  MAX-WIDTH 30
+  ORDER 200
+
+ADD FIELD "AppointmentDate" OF "OrderFusion" AS character 
+  DESCRIPTION "Installation appointment info"
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Appointment Date"
+  POSITION 22
+  MAX-WIDTH 80
+  COLUMN-LABEL "AppointmentDate"
+  ORDER 210
+
+ADD FIELD "CancellationReason" OF "OrderFusion" AS character 
+  DESCRIPTION "Installation cancellation reason"
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Cancellation Reason"
+  POSITION 23
+  MAX-WIDTH 80
+  COLUMN-LABEL "CancellationReason"
+  ORDER 220
+
+ADD FIELD "FixedInstallationTS" OF "OrderFusion" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "FixedInstallationTS"
+  POSITION 24
+  MAX-WIDTH 20
+  DECIMALS 5
+  ORDER 230
+
+ADD FIELD "ADSLLinkState" OF "OrderFusion" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "ADSL Link State"
+  POSITION 25
+  MAX-WIDTH 10
+  COLUMN-LABEL "ADSLLinkState"
+  ORDER 250
+
+ADD FIELD "FixedStatusTS" OF "OrderFusion" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "FixedStatusTS"
+  POSITION 26
+  MAX-WIDTH 20
+  DECIMALS 5
+  ORDER 260
+
+ADD FIELD "FusionStatusDesc" OF "OrderFusion" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Fusion Status Desc"
+  POSITION 27
+  MAX-WIDTH 60
+  COLUMN-LABEL "FusionStatusDesc"
+  ORDER 270
+
 ADD INDEX "OrderId" ON "OrderFusion" 
   AREA "Dyn_Index_1"
   PRIMARY
@@ -4107,6 +4520,8 @@ ADD INDEX "UpdateTS" ON "OrderFusion"
 ADD TABLE "OrderPayment"
   AREA "Sta_Data_32"
   DUMP-NAME "orderpay"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderpayment.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-orderpayment.p" CRC "?" 
 
 ADD FIELD "OrderId" OF "OrderPayment" AS integer 
   DESCRIPTION "Order sequence number"
@@ -4371,8 +4786,8 @@ ADD INDEX "OrderId" ON "OrderTopUp"
 ADD TABLE "PrePaidRequest"
   AREA "Sta_Data_32"
   DUMP-NAME "prepaidr"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-prepaidrequest.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-prepaidrequest.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-prepaidrequest.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-prepaidrequest.p" CRC "?" 
 
 ADD FIELD "PPRequest" OF "PrePaidRequest" AS integer 
   FORMAT ">>>>>>>9"
@@ -4642,74 +5057,78 @@ ADD INDEX "Source" ON "PrePaidRequest"
 
 ADD TABLE "RepLog"
   AREA "CDF_Data"
-  LABEL "Replication Log"
   DESCRIPTION "This is the replication log table for replicating the record"
   DUMP-NAME "replog"
 
-ADD FIELD "RecordId" OF "RepLog" AS recid 
-  FORMAT ">>>>>>>>>9"
-  INITIAL ?
-  LABEL "Record Id"
+ADD FIELD "RowID" OF "RepLog" AS character 
+  DESCRIPTION "RowID in character format"
+  FORMAT "x(18)"
+  INITIAL ""
+  LABEL "RowID"
   POSITION 2
-  MAX-WIDTH 8
-  COLUMN-LABEL "RecordId"
+  MAX-WIDTH 36
+  COLUMN-LABEL "RowID"
   ORDER 10
-  MANDATORY
+
+ADD FIELD "KeyValue" OF "RepLog" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "KeyValue"
+  POSITION 3
+  MAX-WIDTH 60
+  COLUMN-LABEL "KeyValue"
+  ORDER 20
 
 ADD FIELD "TableName" OF "RepLog" AS character 
   FORMAT "x(15)"
   INITIAL ""
-  LABEL "TableName"
-  POSITION 3
-  MAX-WIDTH 30
-  COLUMN-LABEL "TableName"
-  ORDER 20
-
-ADD FIELD "KeyValue" OF "RepLog" AS character 
-  FORMAT "x(15)"
-  INITIAL ""
-  LABEL "KeyValue"
+  LABEL "Table name"
   POSITION 4
   MAX-WIDTH 30
-  COLUMN-LABEL "KeyValue"
+  COLUMN-LABEL "TableName"
   ORDER 30
 
 ADD FIELD "EventType" OF "RepLog" AS character 
-  FORMAT "x(15)"
+  FORMAT "x(6)"
   INITIAL ""
-  LABEL "EventType"
+  LABEL "Event type"
   POSITION 5
-  MAX-WIDTH 30
+  MAX-WIDTH 12
   COLUMN-LABEL "EventType"
   ORDER 40
 
-ADD FIELD "CreatedTS" OF "RepLog" AS decimal 
-  FORMAT "99999999.99999"
-  INITIAL "0"
-  LABEL "CreatedTS"
+ADD FIELD "EventTime" OF "RepLog" AS datetime-tz 
+  FORMAT "99-99-9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL "?"
+  LABEL "Event time"
   POSITION 6
-  MAX-WIDTH 20
-  COLUMN-LABEL "CreatedTS"
-  DECIMALS 5
+  MAX-WIDTH 12
+  COLUMN-LABEL "EventTime"
   ORDER 50
 
-ADD FIELD "EventTS" OF "RepLog" AS datetime 
-  FORMAT "99-99-9999 HH:MM:SS.SSS"
-  INITIAL ?
-  LABEL "EventTS"
+ADD FIELD "SendTime" OF "RepLog" AS datetime-tz 
+  FORMAT "99-99-9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL "?"
+  LABEL "Send time"
   POSITION 7
-  MAX-WIDTH 8
-  COLUMN-LABEL "EventTS"
+  MAX-WIDTH 12
+  COLUMN-LABEL "SendTime"
   ORDER 60
 
-ADD INDEX "CreatedTS" ON "RepLog" 
+ADD FIELD "SendCount" OF "RepLog" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Send count"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "SendCount"
+  ORDER 70
+
+ADD INDEX "SendTime" ON "RepLog" 
   AREA "CDF_Index"
   PRIMARY
-  INDEX-FIELD "CreatedTS" ASCENDING 
-
-ADD INDEX "EventTS" ON "RepLog" 
-  AREA "CDF_Index"
-  INDEX-FIELD "EventTS" ASCENDING 
+  INDEX-FIELD "SendTime" ASCENDING 
+  INDEX-FIELD "EventTime" ASCENDING 
 
 ADD TABLE "Salesman"
   AREA "Sta_Data_256"
@@ -5110,8 +5529,8 @@ ADD TABLE "SubsTerminal"
   LABEL "Subscription Terminal"
   DESCRIPTION "Terminal of a subscription"
   DUMP-NAME "substerminal"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-substerminal.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-substerminal.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-substerminal.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-substerminal.p" CRC "?" 
 
 ADD FIELD "Brand" OF "SubsTerminal" AS character 
   FORMAT "x(8)"
@@ -5319,8 +5738,8 @@ ADD TABLE "TermReturn"
   AREA "Sta_Data_32"
   LABEL "Returned terminals"
   DUMP-NAME "TermReturn"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-termreturn.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-termreturn.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-termreturn.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-termreturn.p" CRC "?" 
 
 ADD FIELD "IMEI" OF "TermReturn" AS character 
   FORMAT "X(12)"
@@ -5692,8 +6111,8 @@ ADD TABLE "TopupSchemeRow"
   LABEL "Topup Scheme Row"
   DESCRIPTION "Topup scheme row"
   DUMP-NAME "topupschemerow"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-topupschemerow.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-topupschemerow.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-topupschemerow.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-topupschemerow.p" CRC "?" 
 
 ADD FIELD "Amount" OF "TopupSchemeRow" AS decimal 
   FORMAT "->>>>>>9.99"
@@ -6077,4 +6496,4 @@ PSC
 bufpool=yes
 cpstream=1252
 .
-0000125198
+0000135040
