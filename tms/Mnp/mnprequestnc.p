@@ -132,7 +132,8 @@ ldChgDate = fMNPChangeWindowDate(   /* Count min porting date */
              ELSE Order.OrderChannel),
             OrderCustomer.Region,
             lcProduct,
-            lcTariffType).
+            lcTariffType,
+            Order.DeliveryType).
 
 IF Order.PortingDate <> ? THEN
    IF ldChgDate < Order.PortingDate THEN /* Porting date in the future, use that */

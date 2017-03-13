@@ -77,7 +77,8 @@ FOR EACH Order WHERE
                                            Order.OrderChannel,
                                            OrderCustomer.Region,
                                            lcProduct,
-                                           lcTariffType).
+                                           lcTariffType,
+                                           Order.DeliveryType).
 
    IF Order.PortingDate > ldMNPPortingDate THEN NEXT.
 
