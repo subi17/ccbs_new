@@ -86,6 +86,7 @@ DEF VAR lcPostpaidDataBundles  AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR liFeePeriod       AS INT  NO-UNDO.
 DEF VAR liOrderId AS INT NO-UNDO. 
+DEF VAR lcFixedOnlyConvergentCliTypeList AS CHAR NO-UNDO.
 
 /* q25refinance_remaining Quota 25 refinance remaining amount */
 DEF VAR ldeQ25RefiRemain AS DECIMAL NO-UNDO.
@@ -134,6 +135,12 @@ ASSIGN
    ldeEndTS       = fMake2DT(fLastDayOfMonth(TODAY),86399).
 
 lliSTCAllowed = fIsiSTCAllowed(INPUT Mobsub.MsSeq).
+
+ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
+IF ((fIsConvergenceTariff(MobSub.CliType) AND LOOKUP(pcNewCliType,lcFixedOnlyConvergentCliTypeList) > 0) OR
+    (fIsConvergenceTariff(pcNewCliType) AND LOOKUP(MobSub.CliType,lcFixedOnlyConvergentCliTypeList) > 0)) THEN 
+  lliSTCAllowed = FALSE.
+
 
 IF MobSub.PayType = FALSE THEN DO:
    ASSIGN
@@ -184,9 +191,9 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
        NOT(MobSub.PayType = TRUE  OR CLIType.PayType = 2)) AND
           ldaSTCDates[1] <> ldaSTCDates[2]                 AND
           lliSTCAllowed                                    THEN
-      liCount = 1.
+      liCount = 1.  /* collect both STC dates (iSTC and normal) */
    ELSE
-      liCount = 2. 
+      liCount = 2.  /* collect the 2nd STC date only (normal) */
 
    sub_struct = add_struct(response_toplevel_id, "").
    penalty_array = add_array(sub_struct,"penalties").
