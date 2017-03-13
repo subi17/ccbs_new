@@ -203,7 +203,7 @@
                         SIM.SimStat = 20
                         SIM.MsSeq = Order.MsSeq.
                   NEXT {1}.
-            END./*MNP SIM ONLY Orders*/
+            END. /*MNP SIM ONLY Orders*/
 
                
             /* Renove handling */ 
