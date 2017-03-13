@@ -13,11 +13,11 @@
   CREATED ......: 30.1.2017
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{barrfunc.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
+{Syst/cparam2.i}
+{Syst/tmsconst.i}
+{Func/barrfunc.i}
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.

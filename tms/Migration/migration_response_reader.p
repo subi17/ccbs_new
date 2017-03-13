@@ -14,10 +14,10 @@
   CREATED ......: 25.1.2017
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
 {migrationfunc.i}
 
 DEF STREAM sin.

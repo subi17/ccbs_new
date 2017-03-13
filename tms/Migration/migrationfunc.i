@@ -191,8 +191,7 @@ END.
 
 /*Ilkka TODO: Comment!*/
 FUNCTION fCreateMigrationSub RETURNS CHAR
-   (iiOrderID AS INT,
-    ilgChangeSim AS LOGICAL):
+   (iiOrderID AS INT):
    DEF BUFFER Order FOR Order.
    DEF VAR ocResult AS CHAR NO-UNDO.
    DEF VAR ldeSwitchTS AS DECIMAL NO-UNDO.

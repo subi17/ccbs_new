@@ -13,11 +13,11 @@
   CREATED ......: 16.2.17
   CHANGED ......:
   ------------------------------------------------------------------------*/
-{tmsconst.i}
-{commpaa.i}
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
+{Syst/tmsconst.i}
+{Syst/commpaa.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
 gcBrand = "1".
 
 DEF STREAM sOut.
