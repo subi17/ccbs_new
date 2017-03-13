@@ -28,22 +28,14 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    DEFINE PRIVATE VARIABLE llAllowMove             AS LOGICAL INITIAL TRUE NO-UNDO.
    DEFINE PRIVATE VARIABLE lcTenant                AS CHARACTER     NO-UNDO.
 
+   DEFINE PROTECTED BUFFER lbDumpHPD FOR DumpHPD.
+
    DEFINE PUBLIC PROPERTY FullDumpLimit AS INTEGER NO-UNDO
-      GET:         
-         DEFINE VARIABLE liNumber AS INTEGER NO-UNDO.
-         
-         liNumber = INTEGER(lbDumpFile.UseIndex) NO-ERROR.
-         
-         IF ERROR-STATUS:ERROR
-         THEN ASSIGN
-                 ERROR-STATUS:ERROR = FALSE
-                 liNumber           = 0
-                 .
-         
-         IF liNumber <= 0 OR liNumber = ?
+      GET:
+         IF lbDumpHPD.MaxRecordsPerFile <= 0 OR lbDumpHPD.MaxRecordsPerFile = ?
          THEN RETURN 0.
          
-         RETURN liNumber.
+         RETURN lbDumpHPD.MaxRecordsPerFile.
 
       END GET.
       
@@ -66,10 +58,21 @@ CLASS HPD.DumpFile INHERITS DumpBase:
            
       SUPER(iiDumpID, iobjHandler).           
       
-      FIND CURRENT lbDumpFile EXCLUSIVE-LOCK NO-WAIT NO-ERROR.      
-      IF LOCKED lbDumpFile
-      THEN RETURN ERROR NEW Progress.Lang.AppError("Dumpfile (DumpID=" + STRING(iiDumpID) + ") is locked.", 1).      
-      
+      FIND lbDumpHPD NO-LOCK WHERE
+         lbDumpHPD.DumpID = lbDumpFile.DumpID
+      NO-ERROR.
+
+      IF NOT AVAILABLE lbDumpHPD
+      THEN RETURN ERROR NEW Progress.Lang.AppError("DumpHPD record for DumpID " + STRING(lbDumpFile.DumpID) + " doesn't exist.", 1).
+
+      IF lbDumpHPD.Active = NO
+      THEN RETURN ERROR NEW Progress.Lang.AppError("DumpHPD record for DumpID " + STRING(lbDumpFile.DumpID) + " is not active.", 1).
+
+      FIND CURRENT lbDumpHPD EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+
+      IF LOCKED lbDumpHPD
+      THEN RETURN ERROR NEW Progress.Lang.AppError("DumpHPD record for DumpID " + STRING(lbDumpFile.DumpID) + " is locked.", 1).
+
       lcTenant = mGetTenant(lbDumpFile.MainTable).
 
       ASSIGN
@@ -116,11 +119,11 @@ CLASS HPD.DumpFile INHERITS DumpBase:
       IF VALID-OBJECT(objHPDTime)
       THEN DELETE OBJECT objHPDTime.      
       
-      IF AVAILABLE lbDumpFile
+      IF AVAILABLE lbDumpHPD
       THEN DO:
          mInactivateDump(NO).
 
-         FIND CURRENT lbDumpFile NO-LOCK.
+         FIND CURRENT lbDumpHPD NO-LOCK.
       END.
       
       DEFINE VARIABLE llEmptyFile AS LOGICAL NO-UNDO.
@@ -179,15 +182,15 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    METHOD PUBLIC VOID mInactivateDump
       ( ilForce AS LOGICAL ):
 
-      IF AVAILABLE lbDumpFile AND lbDumpFile.Active = YES
+      IF AVAILABLE lbDumpHPD AND lbDumpHPD.Active = YES
       THEN DO:
          IF ilForce
          THEN ASSIGN
-                 lbDumpFile.ModFromEventLog = NO
-                 lbDumpFile.Active          = NO
+                 lbDumpHPD.Continuous = NO
+                 lbDumpHPD.Active     = NO
                  .
-         ELSE IF lbDumpFile.ModFromEventLog = NO
-         THEN lbDumpFile.Active = NO.
+         ELSE IF lbDumpFile.Continuous = NO
+         THEN lbDumpHPD.Active = NO.
       END.
 
    END METHOD.
