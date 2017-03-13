@@ -13,7 +13,7 @@ gcBrand = "1".
 {Func/fexternalapi.i}
 {Mc/orderfusion.i}
 {Func/orderfunc.i}
-{timestamp.i}
+{Func/timestamp.i}
 
 DEF VAR lcNotificationID AS CHAR NO-UNDO INIT "1".
 DEF VAR ldeNotificationTime AS DEC NO-UNDO.
@@ -196,7 +196,7 @@ CASE FusionMessage.FixedStatus:
 
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN DO:
-         RUN orderinctrl.p(Order.OrderId, 0, TRUE).
+         RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).
       END.
       ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
    END.
@@ -222,7 +222,7 @@ CASE FusionMessage.FixedStatus:
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} OR
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN DO:
 
-         RUN closeorder.p(Order.OrderID, TRUE).
+         RUN Mc/closeorder.p(Order.OrderID, TRUE).
 
          IF RETURN-VALUE NE "" THEN DO:
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
