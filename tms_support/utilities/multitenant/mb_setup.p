@@ -47,9 +47,16 @@ IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
 FIND FIRST TMSParam WHERE
            TMSParam.brand EQ "1" AND
            TMSParam.Paramgroup EQ "IFS" AND
+           TMSParam.ParamCode EQ "IFSPaymStatusFile" NO-ERROR.
+IF INDEX(TMSParam.charval,"#COMPANY") EQ 0 THEN
+   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_PAY","/#COMPANY_IFS_PAY").
+
+FIND FIRST TMSParam WHERE
+           TMSParam.brand EQ "1" AND
+           TMSParam.Paramgroup EQ "IFS" AND
            TMSParam.ParamCode EQ "IFSCollActionFile" NO-ERROR.
-IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_BAR","/#TENANT_IFS_BAR").
+IF INDEX(TMSParam.charval,"#COMPANY") EQ 0 THEN
+   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_BAR","/#COMPANY_IFS_BAR").
 
 /* ----------------------------------------------------------------------
    MASMOVIL setups start here */
@@ -104,10 +111,16 @@ IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
 FIND FIRST TMSParam WHERE
            TMSParam.brand EQ "1" AND
            TMSParam.Paramgroup EQ "IFS" AND
-           TMSParam.ParamCode EQ "IFSCollActionFile" NO-ERROR.
-IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_BAR","/#TENANT_IFS_BAR").
+           TMSParam.ParamCode EQ "IFSPaymStatusFile" NO-ERROR.
+IF INDEX(TMSParam.charval,"#COMPANY") EQ 0 THEN
+   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_PAY","/#COMPANY_IFS_PAY").
 
+FIND FIRST TMSParam WHERE
+           TMSParam.brand EQ "1" AND
+           TMSParam.Paramgroup EQ "IFS" AND
+           TMSParam.ParamCode EQ "IFSCollActionFile" NO-ERROR.
+IF INDEX(TMSParam.charval,"#COMPANY") EQ 0 THEN
+   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_BAR","/#COMPANY_IFS_BAR").
 
 /* MB-142 */
 FIND FIRST Dumpfile WHERE 

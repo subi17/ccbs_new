@@ -37,7 +37,7 @@ PROCEDURE pRunRequest:
             MsRequest.ReqType   = iiReqType AND     
             MsRequest.ReqStatus = iiReqStat AND   
             MsRequest.ActStamp <= idActTime /* scheduled or immediate */
-   TENANT-WHERE buffer-tenant-id(msrequest) GE 0
+   (TENANT-WHERE buffer-tenant-id(msrequest) GE 0) WHEN (TENANT-ID(LDBNAME(1)) EQ -1)
    BY MsRequest.ActStamp
    BY MsRequest.MsRequest:
 
