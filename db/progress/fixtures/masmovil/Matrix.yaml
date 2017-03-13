@@ -13,6 +13,13 @@ bulkload: Matrix
   Prior: 1
 
 bulkload: Matrix
+  MXName: "MM_CERO"
+  MXKey: "PERCONTR"
+  MXSeq: 837
+  MXRes: 1
+  Prior: 2
+
+bulkload: Matrix
   MXName: "ST CHANGE"
   MXKey: "STC-IDType"
   MXSeq: 1

@@ -21617,13 +21617,6 @@ bulkload: RateCCN
   BdestID: 598
 
 bulkload: RateCCN
-  BDest: "GPRS_DATA9_UPSELL"
-  CCN: 93
-  DialType: 7
-  Brand: "1"
-  BdestID: 890
-
-bulkload: RateCCN
   BDest: "GPRSD1_A"
   CCN: 93
   DialType: 7
@@ -21820,6 +21813,13 @@ bulkload: RateCCN
   BdestID: 619
 
 bulkload: RateCCN
+  BDest: "GPRS_DATA9_UPSELL"
+  CCN: 93
+  DialType: 7
+  Brand: "1"
+  BdestID: 890
+
+bulkload: RateCCN
   BDest: "INTERNATIONAL"
   CCN: 2
   DialType: 4
@@ -21858,38 +21858,6 @@ bulkload: RateCCN
   Brand: "1"
   DestType: 4
   BdestID: 622
-
-bulkload: RateCCN
-  BDest: "ROAM_EU"
-  CCN: 4
-  DialType: 4
-  Brand: "1"
-  DestType: 1
-  BdestID: 627
-
-bulkload: RateCCN
-  BDest: "ROAM_EU"
-  CCN: 7
-  DialType: 9
-  Brand: "1"
-  DestType: 1
-  BdestID: 627
-
-bulkload: RateCCN
-  BDest: "ROAM_EUINT"
-  CCN: 3
-  DialType: 4
-  Brand: "1"
-  DestType: 1
-  BdestID: 628
-
-bulkload: RateCCN
-  BDest: "ROAM_INTEU"
-  CCN: 3
-  DialType: 4
-  Brand: "1"
-  DestType: 1
-  BdestID: 629
 
 bulkload: RateCCN
   BDest: "ROAMGPRS"
@@ -21972,6 +21940,38 @@ bulkload: RateCCN
   DialType: 5
   Brand: "1"
   BdestID: 625
+
+bulkload: RateCCN
+  BDest: "ROAM_EU"
+  CCN: 4
+  DialType: 4
+  Brand: "1"
+  DestType: 1
+  BdestID: 627
+
+bulkload: RateCCN
+  BDest: "ROAM_EU"
+  CCN: 7
+  DialType: 9
+  Brand: "1"
+  DestType: 1
+  BdestID: 627
+
+bulkload: RateCCN
+  BDest: "ROAM_EUINT"
+  CCN: 3
+  DialType: 4
+  Brand: "1"
+  DestType: 1
+  BdestID: 628
+
+bulkload: RateCCN
+  BDest: "ROAM_INTEU"
+  CCN: 3
+  DialType: 4
+  Brand: "1"
+  DestType: 1
+  BdestID: 629
 
 bulkload: RateCCN
   BDest: "ROGPRS"

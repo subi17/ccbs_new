@@ -1,0 +1,736 @@
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "BAIC"
+  FromDate: 2017-02-22
+  CTServEl: 8397
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "BAOC"
+  FromDate: 2017-02-22
+  CTServEl: 8398
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "BOIC"
+  FromDate: 2017-02-22
+  CTServEl: 8399
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "CALLSPEC"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8400
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "CAMPAIGN"
+  FromDate: 2017-02-22
+  ChgAllowed: FALSE
+  CTServEl: 8401
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "CCGW"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8402
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "CF"
+  FromDate: 2017-02-22
+  CTServEl: 8403
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "CLIP"
+  FromDate: 2017-02-22
+  CTServEl: 8404
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "CLIR"
+  FromDate: 2017-02-22
+  CTServEl: 8405
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "GPRS"
+  FromDate: 2017-02-22
+  CTServEl: 8406
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "IRDCUTOFF"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8407
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "IVR"
+  FromDate: 2017-02-22
+  CTServEl: 8408
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "KEEP"
+  FromDate: 2017-02-22
+  CTServEl: 8409
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "LANG"
+  FromDate: 2017-02-22
+  CTServEl: 8410
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "MMS"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8411
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "NAM"
+  FromDate: 2017-02-22
+  CTServEl: 8412
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "NTFNBR"
+  FromDate: 2017-02-22
+  CTServEl: 8413
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "NUMBERINQ"
+  FromDate: 2017-02-22
+  CTServEl: 8414
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "OBA"
+  FromDate: 2017-02-22
+  CTServEl: 8415
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "OBI"
+  FromDate: 2017-02-22
+  CTServEl: 8416
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "OBO"
+  FromDate: 2017-02-22
+  CTServEl: 8417
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "OBOPRE"
+  FromDate: 2017-02-22
+  CTServEl: 8418
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "OBOPRI"
+  FromDate: 2017-02-22
+  CTServEl: 8419
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "OBR"
+  FromDate: 2017-02-22
+  CTServEl: 8420
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "TS21"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8421
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "TS22"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8422
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "TYPECHG"
+  FromDate: 2017-02-22
+  ChgAllowed: FALSE
+  CTServEl: 8423
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  ServCom: "VMS"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8424
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "BB"
+  ServCom: "BB"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8425
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "BPSUB"
+  ServCom: "BPSUB"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8426
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8427
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "LP"
+  ServCom: "LP"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8428
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "LTE"
+  ServCom: "LTE"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8429
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "NEWPOSTSUB"
+  ServCom: "LANG"
+  FromDate: 2017-02-22
+  CTServEl: 8430
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "SEC"
+  ServCom: "SOCLIR"
+  FromDate: 2017-02-22
+  CTServEl: 8431
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "SHAPER"
+  ServCom: "SHAPER"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8432
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "TMSService"
+  ServCom: "CALLSPEC"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8433
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "TMSService"
+  ServCom: "SHAPER_STP"
+  FromDate: 2017-02-22
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 8434
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "TMSService"
+  ServCom: "SMSINVOICE"
+  FromDate: 2017-02-22
+  CTServEl: 8435
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "TMSService"
+  ServCom: "TYPECHG"
+  FromDate: 2017-02-22
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 8436
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "UNSEC"
+  ServCom: "SOCLIR"
+  FromDate: 2017-02-22
+  CTServEl: 8437
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "VOIPVIDEO"
+  ServCom: "VOIPVIDEO"
+  FromDate: 2017-02-22
+  CTServEl: 8438
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "BAIC"
+  FromDate: 2017-02-22
+  CTServEl: 8439
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "BAOC"
+  FromDate: 2017-02-22
+  CTServEl: 8440
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "BOIC"
+  FromDate: 2017-02-22
+  CTServEl: 8441
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "CALLSPEC"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8442
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "CAMPAIGN"
+  FromDate: 2017-02-22
+  ChgAllowed: FALSE
+  CTServEl: 8443
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "CCGW"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8444
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "CF"
+  FromDate: 2017-02-22
+  CTServEl: 8445
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "CLIP"
+  FromDate: 2017-02-22
+  CTServEl: 8446
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "CLIR"
+  FromDate: 2017-02-22
+  CTServEl: 8447
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "GPRS"
+  FromDate: 2017-02-22
+  CTServEl: 8448
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "IRDCUTOFF"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8449
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "IVR"
+  FromDate: 2017-02-22
+  CTServEl: 8450
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "KEEP"
+  FromDate: 2017-02-22
+  CTServEl: 8451
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "LANG"
+  FromDate: 2017-02-22
+  CTServEl: 8452
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "MMS"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8453
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "NAM"
+  FromDate: 2017-02-22
+  CTServEl: 8454
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "NTFNBR"
+  FromDate: 2017-02-22
+  CTServEl: 8455
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "NUMBERINQ"
+  FromDate: 2017-02-22
+  CTServEl: 8456
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "OBA"
+  FromDate: 2017-02-22
+  CTServEl: 8457
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "OBI"
+  FromDate: 2017-02-22
+  CTServEl: 8458
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "OBO"
+  FromDate: 2017-02-22
+  CTServEl: 8459
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "OBOPRE"
+  FromDate: 2017-02-22
+  CTServEl: 8460
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "OBOPRI"
+  FromDate: 2017-02-22
+  CTServEl: 8461
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "OBR"
+  FromDate: 2017-02-22
+  CTServEl: 8462
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "TS21"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8463
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "TS22"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8464
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "TYPECHG"
+  FromDate: 2017-02-22
+  ChgAllowed: FALSE
+  CTServEl: 8465
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  ServCom: "VMS"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8466
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "BB"
+  ServCom: "BB"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8467
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "BPSUB"
+  ServCom: "BPSUB"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8468
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8469
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "LP"
+  ServCom: "LP"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8470
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "LTE"
+  ServCom: "LTE"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8471
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "NEWPOSTSUB"
+  ServCom: "LANG"
+  FromDate: 2017-02-22
+  CTServEl: 8472
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "SEC"
+  ServCom: "SOCLIR"
+  FromDate: 2017-02-22
+  CTServEl: 8473
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "SHAPER"
+  ServCom: "SHAPER"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8474
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "TMSService"
+  ServCom: "CALLSPEC"
+  FromDate: 2017-02-22
+  DefValue: 1
+  CTServEl: 8475
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "TMSService"
+  ServCom: "SHAPER_STP"
+  FromDate: 2017-02-22
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 8476
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "TMSService"
+  ServCom: "SMSINVOICE"
+  FromDate: 2017-02-22
+  CTServEl: 8477
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "TMSService"
+  ServCom: "TYPECHG"
+  FromDate: 2017-02-22
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 8478
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "UNSEC"
+  ServCom: "SOCLIR"
+  FromDate: 2017-02-22
+  CTServEl: 8479
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "VOIPVIDEO"
+  ServCom: "VOIPVIDEO"
+  FromDate: 2017-02-22
+  CTServEl: 8480
+

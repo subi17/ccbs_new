@@ -1,0 +1,28 @@
+bulkload: CLIType
+  Clitype: "MASMOVIL"
+  CliName: "Masmovil Template CliType"
+  BillTarget: 1
+  PricePlan: "MASMOVIL"
+  ServicePack: "11"
+  Brand: "1"
+  ArAccNum: 43000000
+  PayType: 1
+  StatusCode: 0
+  WebStatusCode: 0
+  BaseBundle: "MASMOVIL"
+
+bulkload: CLIType
+  Clitype: "MM_CERO"
+  CliName: "Tarifa Cero"
+  BillTarget: 2
+  PricePlan: "MM_CERO"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 2
+  CompareFee: 3
+  ArAccNum: 43000000
+  PayType: 1
+  CommercialFee: 3
+  LineType: 0
+  BaseBundle: "MM_CERO"
+

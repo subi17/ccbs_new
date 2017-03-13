@@ -8,6 +8,15 @@ bulkload: PriceList
   Brand: "1"
 
 bulkload: PriceList
+  PriceList: "CONTRATOFIXED"
+  PLName: "Contrato fixed"
+  Memo: "Contrato fixed pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
   PriceList: "OrderCh"
   PLName: "Order Price list"
   Memo: "Used for product pricing in order channels incl. tax"

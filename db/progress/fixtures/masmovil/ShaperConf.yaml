@@ -14,3 +14,84 @@ bulkload: ShaperConf
   LimitUnshaped: ?
   LimitShaped: ?
 
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "MM_CERO"
+  Template: "HSPA_MONTHLY"
+  TariffType: "MM_PLANA_HI"
+  Tariff: "MM_CERO"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "MM_CERO_1G"
+  Template: "HSPA_MONTHLY"
+  TariffType: "MM_PLANA_HI"
+  Tariff: "MM_CERO_1G"
+  LimitUnshaped: 1677721600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "MM_CERO_1GwBRELAX"
+  Template: "HSPA_MONTHLY"
+  TariffType: "MM_PLANA_HI"
+  Tariff: "MM_CERO_1GwBRELAX"
+  LimitUnshaped: 1258291200
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "MM_CERO_2G"
+  Template: "HSPA_MONTHLY"
+  TariffType: "MM_PLANA_HI"
+  Tariff: "MM_CERO_2G"
+  LimitUnshaped: 2726297600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "MM_CERO_2GwBRELAX"
+  Template: "HSPA_MONTHLY"
+  TariffType: "MM_PLANA_HI"
+  Tariff: "MM_CERO_2GwBRELAX"
+  LimitUnshaped: 2306867200
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "MM_CERO_4G"
+  Template: "HSPA_MONTHLY"
+  TariffType: "MM_PLANA_HI"
+  Tariff: "MM_CERO_4G"
+  LimitUnshaped: 4823449600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "MM_CERO_4GwBRELAX"
+  Template: "HSPA_MONTHLY"
+  TariffType: "MM_PLANA_HI"
+  Tariff: "MM_CERO_4GwBRELAX"
+  LimitUnshaped: 4404019200
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "MM_CERO_500"
+  Template: "HSPA_MONTHLY"
+  TariffType: "MM_PLANA_HI"
+  Tariff: "MM_CERO_500"
+  LimitUnshaped: 1153433600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "MM_CERO_500wBRELAX"
+  Template: "HSPA_MONTHLY"
+  TariffType: "MM_PLANA_HI"
+  Tariff: "MM_CERO_500wBRELAX"
+  LimitUnshaped: 734003200
+  LimitShaped: 20971520
+

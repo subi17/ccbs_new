@@ -1,0 +1,153 @@
+bulkload: FMItem
+  FeeModel: "MM_1000_UPSELLMF"
+  PriceList: "COMMON"
+  BillCode: "MM_1000_UPSELLMF"
+  Interval: 1
+  Amount: 7.02
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_200_UPSELLMF"
+  PriceList: "COMMON"
+  BillCode: "MM_200_UPSELLMF"
+  Interval: 1
+  Amount: 1.65
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_500_UPSELLMF"
+  PriceList: "COMMON"
+  BillCode: "MM_500_UPSELLMF"
+  Interval: 1
+  Amount: 4.13
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_CEROMF"
+  BillCode: "MM_CEROMF"
+  Interval: 1
+  Amount: 3
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_DATA1000MF"
+  PriceList: "COMMON"
+  BillCode: "MM_DATA1000MF"
+  Interval: 1
+  Amount: 1.13
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_DATA2000MF"
+  PriceList: "COMMON"
+  BillCode: "MM_DATA2000MF"
+  Interval: 1
+  Amount: 5.18
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_DATA4000MF"
+  PriceList: "COMMON"
+  BillCode: "MM_DATA4000MF"
+  Interval: 1
+  Amount: 9.31
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_DATA500MF"
+  PriceList: "COMMON"
+  BillCode: "MM_DATA500MF"
+  Interval: 1
+  Amount: .06
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_VOICE100MF"
+  PriceList: "COMMON"
+  BillCode: "MM_VOICE100MF"
+  Interval: 1
+  Amount: 3.3
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_VOICE250MF"
+  PriceList: "COMMON"
+  BillCode: "MM_VOICE250MF"
+  Interval: 1
+  Amount: 6.61
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_VOICE40MF"
+  PriceList: "COMMON"
+  BillCode: "MM_VOICE40MF"
+  Interval: 1
+  Amount: 1.9
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+

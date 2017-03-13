@@ -5,3 +5,80 @@ bulkload: ServiceLimitGroup
   ValidFrom: 2012-10-10
   ValidTo: 2049-12-31
 
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_1000_UPSELL"
+  GroupName: "1GB Upsell"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_200_UPSELL"
+  GroupName: "200 MB Upsell"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_500_UPSELL"
+  GroupName: "500 MB Upsell"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_CERO"
+  GroupName: "Tarifa Cero"
+  ValidFrom: 2017-02-23
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_DATA1000"
+  GroupName: "Data Usage Bundle 1GB"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_DATA2000"
+  GroupName: "Data Usage Bundle 2GB"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_DATA4000"
+  GroupName: "Data Usage Bundle 4GB"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_DATA500"
+  GroupName: "Data Usage Bundle 500MB"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_VOICE100"
+  GroupName: "Voice 100 Min. Package"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_VOICE250"
+  GroupName: "Voice 250 Min. Package"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_VOICE40"
+  GroupName: "Voice 40 Min. Package"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+

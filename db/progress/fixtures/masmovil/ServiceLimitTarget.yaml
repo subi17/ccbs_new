@@ -1,0 +1,123 @@
+bulkload: ServiceLimitTarget
+  SLSeq: 58
+  ServiceLMember: "14100001"
+  OutsideRate: "MM_VOICE100_DATA_OUT"
+  InsideRate: "MM_VOICE100_DATA_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 59
+  ServiceLMember: "10100001"
+  OutsideRate: "MM_VOICE100_VOICE_OUT"
+  InsideRate: "MM_VOICE100_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 59
+  ServiceLMember: "10100003"
+  OutsideRate: "MM_VOICE100_VOICE_OUT"
+  InsideRate: "MM_VOICE100_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 59
+  ServiceLMember: "10100005"
+  OutsideRate: "MM_VOICE100_VOICE_OUT"
+  InsideRate: "MM_VOICE100_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 59
+  ServiceLMember: "CFOTHER"
+  OutsideRate: "MM_VOICE100_VOICE_OUT"
+  InsideRate: "MM_VOICE100_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 59
+  ServiceLMember: "CFYOIGO"
+  OutsideRate: "MM_VOICE100_VOICE_OUT"
+  InsideRate: "MM_VOICE100_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 62
+  ServiceLMember: "14100001"
+  InsideRate: "GPRS_MM_1000_UPSELL"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 64
+  ServiceLMember: "14100001"
+  InsideRate: "GPRS_MM_500_UPSELL"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 65
+  ServiceLMember: "14100001"
+  OutsideRate: "MM_VOICE40_DATA_OUT"
+  InsideRate: "MM_VOICE40_DATA_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 66
+  ServiceLMember: "10100001"
+  OutsideRate: "MM_VOICE40_VOICE_OUT"
+  InsideRate: "MM_VOICE40_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 66
+  ServiceLMember: "10100003"
+  OutsideRate: "MM_VOICE40_VOICE_OUT"
+  InsideRate: "MM_VOICE40_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 66
+  ServiceLMember: "10100005"
+  OutsideRate: "MM_VOICE40_VOICE_OUT"
+  InsideRate: "MM_VOICE40_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 66
+  ServiceLMember: "CFOTHER"
+  OutsideRate: "MM_VOICE40_VOICE_OUT"
+  InsideRate: "MM_VOICE40_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 66
+  ServiceLMember: "CFYOIGO"
+  OutsideRate: "MM_VOICE40_VOICE_OUT"
+  InsideRate: "MM_VOICE40_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 67
+  ServiceLMember: "14100001"
+  OutsideRate: "MM_VOICE250_DATA_OUT"
+  InsideRate: "MM_VOICE250_DATA_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 68
+  ServiceLMember: "10100001"
+  OutsideRate: "MM_VOICE250_VOICE_OUT"
+  InsideRate: "MM_VOICE250_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 68
+  ServiceLMember: "10100003"
+  OutsideRate: "MM_VOICE250_VOICE_OUT"
+  InsideRate: "MM_VOICE250_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 68
+  ServiceLMember: "10100005"
+  OutsideRate: "MM_VOICE250_VOICE_OUT"
+  InsideRate: "MM_VOICE250_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 68
+  ServiceLMember: "CFOTHER"
+  OutsideRate: "MM_VOICE250_VOICE_OUT"
+  InsideRate: "MM_VOICE250_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 68
+  ServiceLMember: "CFYOIGO"
+  OutsideRate: "MM_VOICE250_VOICE_OUT"
+  InsideRate: "MM_VOICE250_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 69
+  ServiceLMember: "14100001"
+  InsideRate: "GPRS_MM_200_UPSELL"
+

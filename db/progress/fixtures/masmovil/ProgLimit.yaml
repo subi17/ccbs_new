@@ -1,0 +1,68 @@
+bulkload: ProgLimit
+  GroupCode: "MM_DATA1000"
+  SLSeq: 57
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  LimitTo: 1024
+  BDest: "GPRSDATA_MM_DATA1000"
+
+bulkload: ProgLimit
+  GroupCode: "MM_DATA1000"
+  SLSeq: 57
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  LimitFrom: 1024.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_MM_DATA1000"
+
+bulkload: ProgLimit
+  GroupCode: "MM_DATA2000"
+  SLSeq: 63
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  LimitTo: 2048
+  BDest: "GPRSDATA_MM_DATA2000"
+
+bulkload: ProgLimit
+  GroupCode: "MM_DATA2000"
+  SLSeq: 63
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  LimitFrom: 2048.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_MM_DATA2000"
+
+bulkload: ProgLimit
+  GroupCode: "MM_DATA4000"
+  SLSeq: 60
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  LimitTo: 4096
+  BDest: "GPRSDATA_MM_DATA4000"
+
+bulkload: ProgLimit
+  GroupCode: "MM_DATA4000"
+  SLSeq: 60
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  LimitFrom: 4096.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_MM_DATA4000"
+
+bulkload: ProgLimit
+  GroupCode: "MM_DATA500"
+  SLSeq: 61
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  LimitTo: 512
+  BDest: "GPRSDATA_MM_DATA500"
+
+bulkload: ProgLimit
+  GroupCode: "MM_DATA500"
+  SLSeq: 61
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  LimitFrom: 512.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_MM_DATA500"
+

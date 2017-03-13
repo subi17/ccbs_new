@@ -22,3 +22,83 @@ bulkload: DCServicePackage
   FromDate: 2012-10-10
   ToDate: 2049-12-31
 
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_DATA1000"
+  DCServicePackageID: 57
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_VOICE100"
+  DCServicePackageID: 58
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_DATA4000"
+  DCServicePackageID: 59
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_DATA500"
+  DCServicePackageID: 60
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_1000_UPSELL"
+  DCServicePackageID: 61
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_DATA2000"
+  DCServicePackageID: 62
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_500_UPSELL"
+  DCServicePackageID: 63
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_VOICE40"
+  DCServicePackageID: 64
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_VOICE250"
+  DCServicePackageID: 65
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_200_UPSELL"
+  DCServicePackageID: 66
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+

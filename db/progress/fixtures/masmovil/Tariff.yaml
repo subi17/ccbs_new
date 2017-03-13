@@ -8445,76 +8445,6 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
-  BDest: "GPRS_DATA200_UPSELL"
-  Discount[4]: yes
-  PriceList: "COMMON"
-  TariffNum: 4620
-  ValidFrom: 2015-05-01
-  ValidTo: 2052-12-31
-  TZName[1]: "Off Peak"
-  TZName[2]: "Peak"
-  TZName[3]: "Off Peak"
-  CCN: 93
-  BillCode: "DATA200UPSELL"
-  TariffType: 0
-  DataType: 4
-  Brand: "1"
-
-bulkload: Tariff
-  BDest: "GPRS_DATA5_UPSELL"
-  TZTo[1]: "2400"
-  Discount[4]: yes
-  PriceList: "COMMON"
-  TariffNum: 4313
-  ValidFrom: 2013-09-01
-  DayType[1]: 1
-  ValidTo: 2052-12-31
-  TZName[1]: "Off Peak"
-  TZName[2]: "Peak"
-  TZName[3]: "Off Peak"
-  CCN: 93
-  BillCode: "DATA5UPSELL"
-  TariffType: 0
-  DataType: 4
-  Brand: "1"
-
-bulkload: Tariff
-  BDest: "GPRS_DATA6_UPSELL"
-  TZTo[1]: "2400"
-  Discount[4]: yes
-  PriceList: "COMMON"
-  TariffNum: 4426
-  ValidFrom: 2014-05-01
-  DayType[1]: 1
-  ValidTo: 2052-12-31
-  TZName[1]: "Off Peak"
-  TZName[2]: "Peak"
-  TZName[3]: "Off Peak"
-  CCN: 93
-  BillCode: "DATA6UPSELL"
-  TariffType: 0
-  DataType: 4
-  Brand: "1"
-
-bulkload: Tariff
-  BDest: "GPRS_DATA9_UPSELL"
-  TZTo[1]: "2400"
-  Discount[4]: yes
-  PriceList: "COMMON"
-  TariffNum: 4072
-  ValidFrom: 2012-12-01
-  DayType[1]: 1
-  ValidTo: 2052-12-31
-  TZName[1]: "Off Peak"
-  TZName[2]: "Peak"
-  TZName[3]: "Off Peak"
-  CCN: 93
-  BillCode: "DATA9UPSELL"
-  TariffType: 0
-  DataType: 4
-  Brand: "1"
-
-bulkload: Tariff
   BDest: "GPRSDATA2_DATA5"
   TZTo[1]: "2400"
   Discount[4]: yes
@@ -8796,6 +8726,76 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 93
   BillCode: "DSS200UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA200_UPSELL"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 4620
+  ValidFrom: 2015-05-01
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "DATA200UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA5_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 4313
+  ValidFrom: 2013-09-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "DATA5UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA6_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 4426
+  ValidFrom: 2014-05-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "DATA6UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA9_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 4072
+  ValidFrom: 2012-12-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "DATA9UPSELL"
   TariffType: 0
   DataType: 4
   Brand: "1"
@@ -12151,6 +12151,6523 @@ bulkload: Tariff
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
   CCN: 903
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  TZTo[1]: "2400"
+  Price[1]: .3
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .15
+  TariffNum: 4790
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1002
+  BillCode: "F10100004"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "252"
+  TZTo[1]: "2400"
+  Price[1]: 1.1983
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .15
+  TariffNum: 4791
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1002
+  BillCode: "F10100004"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "53"
+  TZTo[1]: "2400"
+  Price[1]: 1.1983
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .15
+  TariffNum: 4792
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1002
+  BillCode: "F10100004"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "850"
+  TZTo[1]: "2400"
+  Price[1]: 1.1983
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .15
+  TariffNum: 4793
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1002
+  BillCode: "F10100004"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 4794
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1008
+  BillCode: "F15100027"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "082"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5086
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1008
+  BillCode: "F15100027"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "083"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5087
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1008
+  BillCode: "F15100027"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "085"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5088
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1008
+  BillCode: "F15100027"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "088"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5089
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1008
+  BillCode: "F15100027"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "70"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5085
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1008
+  BillCode: "F15100027"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "800"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 4795
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1008
+  BillCode: "F15100027"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "900"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 4796
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1008
+  BillCode: "F15100027"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9051"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .75
+  TariffNum: 4797
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1061
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9052"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.05
+  TariffNum: 4798
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1061
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9054"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.65
+  TariffNum: 4799
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1061
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9055"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.65
+  TariffNum: 4800
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1061
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4801
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1063
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 4802
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "800"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 4803
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8030"
+  TZTo[1]: "2400"
+  Price[1]: .35
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4804
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8031"
+  TZTo[1]: "2400"
+  Price[1]: .35
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4805
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8032"
+  TZTo[1]: "2400"
+  Price[1]: .75
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4806
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8033"
+  TZTo[1]: "2400"
+  Price[1]: .75
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4807
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8034"
+  TZTo[1]: "2400"
+  Price[1]: 1
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4808
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8035"
+  TZTo[1]: "2400"
+  Price[1]: 1
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4809
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8036"
+  TZTo[1]: "2400"
+  Price[1]: 1.65
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4810
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8037"
+  TZTo[1]: "2400"
+  Price[1]: 1.65
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4811
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8038"
+  TZTo[1]: "2400"
+  Price[1]: 3.15
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4812
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8039"
+  TZTo[1]: "2400"
+  Price[1]: 5
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4813
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8060"
+  TZTo[1]: "2400"
+  Price[1]: .35
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4814
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8061"
+  TZTo[1]: "2400"
+  Price[1]: .35
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4815
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8062"
+  TZTo[1]: "2400"
+  Price[1]: .75
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4816
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8063"
+  TZTo[1]: "2400"
+  Price[1]: .75
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4817
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8064"
+  TZTo[1]: "2400"
+  Price[1]: 1
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4818
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8065"
+  TZTo[1]: "2400"
+  Price[1]: 1
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4819
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8066"
+  TZTo[1]: "2400"
+  Price[1]: 1.65
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4820
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8067"
+  TZTo[1]: "2400"
+  Price[1]: 1.65
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4821
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8068"
+  TZTo[1]: "2400"
+  Price[1]: 3.15
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4822
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8069"
+  TZTo[1]: "2400"
+  Price[1]: 5
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4823
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8070"
+  TZTo[1]: "2400"
+  Price[1]: .35
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4824
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8071"
+  TZTo[1]: "2400"
+  Price[1]: .35
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4825
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8072"
+  TZTo[1]: "2400"
+  Price[1]: .75
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4826
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8073"
+  TZTo[1]: "2400"
+  Price[1]: .75
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4827
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8074"
+  TZTo[1]: "2400"
+  Price[1]: 1
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4828
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8075"
+  TZTo[1]: "2400"
+  Price[1]: 1
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4829
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8076"
+  TZTo[1]: "2400"
+  Price[1]: 1.65
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4830
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8077"
+  TZTo[1]: "2400"
+  Price[1]: 1.65
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4831
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8078"
+  TZTo[1]: "2400"
+  Price[1]: 3.15
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4832
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8079"
+  TZTo[1]: "2400"
+  Price[1]: 5
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 4833
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1064
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "10201"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5130
+  ValidFrom: 2017-01-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "FVMC"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "10201"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5098
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2016-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "FVMS"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11810"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4835
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11811"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4836
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11812"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4837
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11813"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4838
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11814"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4839
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11815"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4840
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11816"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4841
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11817"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4842
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11818"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4843
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11819"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4844
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11820"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4845
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11821"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4846
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11822"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4847
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11823"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4848
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11824"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4849
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11825"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4850
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11826"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4851
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11827"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4852
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11828"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4853
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11829"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4854
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11830"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4855
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11831"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4856
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11832"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4857
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11833"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4858
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11834"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4859
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11835"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4860
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11836"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4861
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11837"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4862
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11838"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4863
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11839"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4864
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11840"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4865
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11841"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4866
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11842"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4867
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11843"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4868
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11844"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4869
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11845"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4870
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11846"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4871
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11847"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4872
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11848"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4873
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11849"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4874
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11850"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4875
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11851"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4876
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11852"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4877
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11853"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4878
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11854"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4879
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11855"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4880
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11856"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4881
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11857"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4882
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11858"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4883
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11859"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4884
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11860"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4885
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11861"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4886
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11862"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4887
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11863"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4888
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11864"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4889
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11865"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4890
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11866"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4891
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11867"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4892
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11868"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4893
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11869"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4894
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11870"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4895
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11871"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4896
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11872"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4897
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11873"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4898
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11874"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4899
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11875"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4900
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11876"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4901
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11877"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4902
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11878"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4903
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11879"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4904
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11880"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4905
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11881"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4906
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11882"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4907
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11883"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4908
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11884"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4909
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11885"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4910
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11886"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4911
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11887"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4912
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11888"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4913
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11889"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4914
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11890"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4915
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11891"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4916
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11892"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4917
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11894"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4918
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11895"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4919
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11897"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4920
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11898"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4921
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11899"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  StartCharge[2]: .17
+  StartCharge[3]: .17
+  StartCharge[4]: .17
+  StartCharge[5]: .17
+  StartCharge[6]: .17
+  TariffNum: 4922
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1066
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11810"
+  TZTo[1]: "2400"
+  Price[1]: .0149
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.903
+  TariffNum: 4923
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11811"
+  TZTo[1]: "2400"
+  Price[1]: 2.11
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .45
+  TariffNum: 4924
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11812"
+  TZTo[1]: "2400"
+  Price[1]: 1.92
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .83
+  TariffNum: 4925
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11813"
+  TZTo[1]: "2400"
+  Price[1]: .0067
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.328
+  TariffNum: 4926
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11814"
+  TZTo[1]: "2400"
+  Price[1]: 2.13
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 2.33
+  TariffNum: 4927
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11815"
+  TZTo[1]: "2400"
+  Price[1]: 1.92
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.38
+  TariffNum: 4928
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11816"
+  TZTo[1]: "2400"
+  Price[1]: 5.0333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.778
+  TariffNum: 4929
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11817"
+  TZTo[1]: "2400"
+  Price[1]: 1.4333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.972
+  TariffNum: 4930
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11818"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 4931
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11819"
+  TZTo[1]: "2400"
+  Price[1]: 1.93
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.38
+  TariffNum: 4932
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11820"
+  TZTo[1]: "2400"
+  Price[1]: 4.32
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.33
+  TariffNum: 4933
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11821"
+  TZTo[1]: "2400"
+  Price[1]: 1.33
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.92
+  TariffNum: 4934
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11822"
+  TZTo[1]: "2400"
+  Price[1]: 1.68
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .47
+  TariffNum: 4935
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11823"
+  TZTo[1]: "2400"
+  Price[1]: 2.18
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 5.28
+  TariffNum: 4936
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11824"
+  TZTo[1]: "2400"
+  Price[1]: 1.43
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .79
+  TariffNum: 4937
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11825"
+  TZTo[1]: "2400"
+  Price[1]: 2.69
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .77
+  TariffNum: 4938
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11826"
+  TZTo[1]: "2400"
+  Price[1]: 2.3933
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 2.478
+  TariffNum: 4939
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11827"
+  TZTo[1]: "2400"
+  Price[1]: 1.7933
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 2.9955
+  TariffNum: 4940
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11828"
+  TZTo[1]: "2400"
+  Price[1]: .51
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .92
+  TariffNum: 4941
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11829"
+  TZTo[1]: "2400"
+  Price[1]: 3.72
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.33
+  TariffNum: 4942
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11830"
+  TZTo[1]: "2400"
+  Price[1]: 1.62
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.83
+  TariffNum: 4943
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11831"
+  TZTo[1]: "2400"
+  Price[1]: 1.62
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.33
+  TariffNum: 4944
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11832"
+  TZTo[1]: "2400"
+  Price[1]: 4.33
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.33
+  TariffNum: 4945
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11833"
+  TZTo[1]: "2400"
+  Price[1]: .8933
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .9255
+  TariffNum: 4946
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11834"
+  TZTo[1]: "2400"
+  Price[1]: 1.93
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 2.08
+  TariffNum: 4947
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11835"
+  TZTo[1]: "2400"
+  Price[1]: 1.7333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 2.0295
+  TariffNum: 4948
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11836"
+  TZTo[1]: "2400"
+  Price[1]: 2.62
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.38
+  TariffNum: 4949
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11837"
+  TZTo[1]: "2400"
+  Price[1]: 1.7933
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.903
+  TariffNum: 4950
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11838"
+  TZTo[1]: "2400"
+  Price[1]: 1.4333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.903
+  TariffNum: 4951
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11839"
+  TZTo[1]: "2400"
+  Price[1]: 3.8333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.548
+  TariffNum: 4952
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11840"
+  TZTo[1]: "2400"
+  Price[1]: .73
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .93
+  TariffNum: 4953
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11841"
+  TZTo[1]: "2400"
+  Price[1]: 2.32
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.33
+  TariffNum: 4954
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11842"
+  TZTo[1]: "2400"
+  Price[1]: 4.32
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.33
+  TariffNum: 4955
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11843"
+  TZTo[1]: "2400"
+  Price[1]: 2.6
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .45
+  TariffNum: 4956
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11844"
+  TZTo[1]: "2400"
+  Price[1]: .5693
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .5805
+  TariffNum: 4957
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11845"
+  TZTo[1]: "2400"
+  Price[1]: 2.9933
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.328
+  TariffNum: 4958
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11846"
+  TZTo[1]: "2400"
+  Price[1]: 4.32
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.33
+  TariffNum: 4959
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11847"
+  TZTo[1]: "2400"
+  Price[1]: 2.1
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.56
+  TariffNum: 4960
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11848"
+  TZTo[1]: "2400"
+  Price[1]: 1.4333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.558
+  TariffNum: 4961
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11849"
+  TZTo[1]: "2400"
+  Price[1]: 1.27
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.52
+  TariffNum: 4962
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11850"
+  TZTo[1]: "2400"
+  Price[1]: 2.11
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .45
+  TariffNum: 4963
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11851"
+  TZTo[1]: "2400"
+  Price[1]: .82
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .33
+  TariffNum: 4964
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11852"
+  TZTo[1]: "2400"
+  Price[1]: .7133
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.098
+  TariffNum: 4965
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11853"
+  TZTo[1]: "2400"
+  Price[1]: .8333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .983
+  TariffNum: 4966
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11854"
+  TZTo[1]: "2400"
+  Price[1]: 1.5533
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.318
+  TariffNum: 4967
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11855"
+  TZTo[1]: "2400"
+  Price[1]: .95
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.07
+  TariffNum: 4968
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11856"
+  TZTo[1]: "2400"
+  Price[1]: 1.4333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.558
+  TariffNum: 4969
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11857"
+  TZTo[1]: "2400"
+  Price[1]: 1.32
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.53
+  TariffNum: 4970
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11858"
+  TZTo[1]: "2400"
+  Price[1]: 1.4333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.558
+  TariffNum: 4971
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11859"
+  TZTo[1]: "2400"
+  Price[1]: 1.3493
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3275
+  TariffNum: 4972
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11860"
+  TZTo[1]: "2400"
+  Price[1]: 3.1
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .45
+  TariffNum: 4973
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11861"
+  TZTo[1]: "2400"
+  Price[1]: 1.37
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.48
+  TariffNum: 4974
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11862"
+  TZTo[1]: "2400"
+  Price[1]: 1.91
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.67
+  TariffNum: 4975
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11863"
+  TZTo[1]: "2400"
+  Price[1]: 2.53
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 2.53
+  TariffNum: 4976
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11864"
+  TZTo[1]: "2400"
+  Price[1]: 1.5533
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.318
+  TariffNum: 4977
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11865"
+  TZTo[1]: "2400"
+  Price[1]: 3.12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.38
+  TariffNum: 4978
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11866"
+  TZTo[1]: "2400"
+  Price[1]: 2.62
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.38
+  TariffNum: 4979
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11867"
+  TZTo[1]: "2400"
+  Price[1]: 1.33
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.75
+  TariffNum: 4980
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11868"
+  TZTo[1]: "2400"
+  Price[1]: 1.4333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.7305
+  TariffNum: 4981
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11869"
+  TZTo[1]: "2400"
+  Price[1]: 1.4333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.7305
+  TariffNum: 4982
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11870"
+  TZTo[1]: "2400"
+  Price[1]: 1.03
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .53
+  TariffNum: 4983
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11871"
+  TZTo[1]: "2400"
+  Price[1]: .0293
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.318
+  TariffNum: 4984
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11872"
+  TZTo[1]: "2400"
+  Price[1]: 1.4333
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.558
+  TariffNum: 4985
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11873"
+  TZTo[1]: "2400"
+  Price[1]: .85
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .16
+  TariffNum: 4986
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11874"
+  TZTo[1]: "2400"
+  Price[1]: 1.7933
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.903
+  TariffNum: 4987
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11875"
+  TZTo[1]: "2400"
+  Price[1]: 1.84
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .19
+  TariffNum: 4988
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11876"
+  TZTo[1]: "2400"
+  Price[1]: 3.3492
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .2272
+  TariffNum: 4989
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11877"
+  TZTo[1]: "2400"
+  Price[1]: 2.62
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.38
+  TariffNum: 4990
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11878"
+  TZTo[1]: "2400"
+  Price[1]: 1.33
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.68
+  TariffNum: 4991
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11879"
+  TZTo[1]: "2400"
+  Price[1]: 4.32
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.33
+  TariffNum: 4992
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11880"
+  TZTo[1]: "2400"
+  Price[1]: 3.1
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .45
+  TariffNum: 4993
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11881"
+  TZTo[1]: "2400"
+  Price[1]: 1.15
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .76
+  TariffNum: 4994
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11882"
+  TZTo[1]: "2400"
+  Price[1]: 1.32
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.13
+  TariffNum: 4995
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11883"
+  TZTo[1]: "2400"
+  Price[1]: .82
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.03
+  TariffNum: 4996
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11884"
+  TZTo[1]: "2400"
+  Price[1]: 1.62
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.08
+  TariffNum: 4997
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11885"
+  TZTo[1]: "2400"
+  Price[1]: 4.92
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.73
+  TariffNum: 4998
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11886"
+  TZTo[1]: "2400"
+  Price[1]: 1.92
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .83
+  TariffNum: 4999
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11887"
+  TZTo[1]: "2400"
+  Price[1]: 2.62
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.33
+  TariffNum: 5000
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11888"
+  TZTo[1]: "2400"
+  Price[1]: 1.46
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .57
+  TariffNum: 5001
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11889"
+  TZTo[1]: "2400"
+  Price[1]: .7133
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.5515
+  TariffNum: 5002
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11890"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5003
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11891"
+  TZTo[1]: "2400"
+  Price[1]: 2.63
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.33
+  TariffNum: 5004
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11892"
+  TZTo[1]: "2400"
+  Price[1]: 1.62
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.33
+  TariffNum: 5005
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11894"
+  TZTo[1]: "2400"
+  Price[1]: 2.53
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 4.68
+  TariffNum: 5006
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11895"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5007
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11897"
+  TZTo[1]: "2400"
+  Price[1]: 1.21
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .16
+  TariffNum: 5009
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11898"
+  TZTo[1]: "2400"
+  Price[1]: 1.21
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .16
+  TariffNum: 5010
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11899"
+  TZTo[1]: "2400"
+  Price[1]: 1.33
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 2.23
+  TariffNum: 5011
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "70"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .15
+  TariffNum: 5012
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "901"
+  TZTo[1]: "2400"
+  Price[1]: .06
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .085
+  TariffNum: 5013
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "FINFSERVICE"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "902"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5014
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "FINFSERVICE"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9051"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5015
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "905105"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5016
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "905110"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5017
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "905111"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5018
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "905120"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5019
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "905121"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5020
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "905123"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5021
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "905131"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5022
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "905151"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5023
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "905189"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5024
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9052"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5025
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9054"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5026
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9055"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5027
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9057"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .6
+  TariffNum: 5028
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9058"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.2
+  TariffNum: 5029
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1069
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9055"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .75
+  TariffNum: 5096
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1074
+  BillCode: "F905WVAT"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9055"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .9
+  TariffNum: 5097
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1075
+  BillCode: "F905WOVAT"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5030
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100003"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "010"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5031
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "011"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5099
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "060"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5032
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "061"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5100
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "062"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5101
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "065"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5111
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F15100027"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "080"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5102
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "090"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5033
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "091"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5103
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "092"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5104
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "093"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1
+  TariffNum: 5034
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "095"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1
+  TariffNum: 5035
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "096"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1
+  TariffNum: 5036
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "097"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1
+  TariffNum: 5037
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "098"
+  TZTo[1]: "2400"
+  Price[1]: .5
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1
+  TariffNum: 5038
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1404"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5039
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1406"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5040
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1415"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5041
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1420"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5042
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1421"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5043
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1423"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5044
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1430"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5045
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1431"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5046
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1432"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5047
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1502"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5048
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1503"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5049
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1553"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5050
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1554"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5051
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1624"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5052
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1626"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5053
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1703"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5054
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1714"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5055
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1715"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5056
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1720"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5057
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1721"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5058
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1722"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5059
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "1723"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5060
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FSHORTNU"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "511"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5061
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100005"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "512"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5062
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100005"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "513"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5063
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100005"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "514"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5064
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100005"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "515"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5065
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100005"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "516"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5066
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100005"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "517"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5067
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100005"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "518"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5068
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100005"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "519"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5069
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100005"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "556"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5070
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FVMC"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "59"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .15
+  TariffNum: 5071
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FM2MVOICE"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "622"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5072
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FCCYOIGO"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "622622622"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5073
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FCCYOIGO"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "622FF"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5074
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FCCYOIGO"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "632"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .12
+  TariffNum: 5075
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FVMC"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "633"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5076
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FVMC"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "633633556"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5077
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FVMC"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "633633632"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .12
+  TariffNum: 5078
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FVMC"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "633633633"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5079
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FVMC"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "633800800"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5080
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FCCYOIGO"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "8"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5081
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100005"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5082
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100005"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTFH300_MIN_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5095
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2016-11-30
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "CONTDSL_MIN_IN"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTFH300_QTY_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5094
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2016-11-30
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "CONTDSL_QTY_IN"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTFH50_MIN_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5093
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2016-11-30
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "CONTDSL_MIN_IN"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTFH50_QTY_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5092
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2016-11-30
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "CONTDSL_QTY_IN"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "YOIGO"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .1653
+  TariffNum: 5083
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "F10100003"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1
+  TariffNum: 5084
+  ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1631
+  BillCode: "F15100023"
   TariffType: 0
   DataType: 1
   Brand: "1"

@@ -1,0 +1,10 @@
+bulkload: RatePlan
+  RatePlan: "MASMOVIL"
+  RPName: "Masmovil Template Rateplan"
+  Brand: "1"
+
+bulkload: RatePlan
+  RatePlan: "MM_CERO"
+  RPName: "Tarifa Cero"
+  Brand: "1"
+

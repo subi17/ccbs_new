@@ -1809,6 +1809,171 @@ bulkload: BillItem
   VIPAccNum: 70510100
 
 bulkload: BillItem
+  BillCode: "MM_1000_UPSELLMF"
+  BIName: "Data 1000 Upsell Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_200_UPSELLMF"
+  BIName: "Data 200 Upsell Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_500_UPSELLMF"
+  BIName: "Data 500 Upsell Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_CEROMF"
+  BIName: "Tarifa Cero Monthly Fee"
+  AccNum: 70510100
+  BIGroup: "18"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "MM_DATA1000MF"
+  BIName: "Data 1000 Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_DATA2000MF"
+  BIName: "Data 2000 Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_DATA4000MF"
+  BIName: "Data 4000 Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_DATA500MF"
+  BIName: "Data 500 Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_VOICE100MF"
+  BIName: "Voice 100 Monthly Fee"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "MM_VOICE250MF"
+  BIName: "Voice 250 Monthly Fee"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "MM_VOICE40MF"
+  BIName: "Voice 40 Monthly Fee"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
   BillCode: "MSISDNCHARGE"
   BIName: "Change of MSISDN"
   AccNum: 70518109
@@ -2897,6 +3062,20 @@ bulkload: BillItem
   VIPAccNum: 75902002
 
 bulkload: BillItem
+  BillCode: "REJECTION_FEE"
+  BIName: "Rejection fee"
+  AccNum: 75902003
+  BIGroup: "31"
+  EUAccNum: 75902003
+  FSAccNum: 75902003
+  Brand: "1"
+  EUConAccNum: 75902003
+  CostCentre: "F00001"
+  AltAccNum: 75902003
+  TaxClass: "1"
+  VIPAccNum: 75902003
+
+bulkload: BillItem
   BillCode: "REJECT_FEE_DISC"
   BIName: "Rejection fee discount"
   AccNum: 75902003
@@ -2909,20 +3088,6 @@ bulkload: BillItem
   AltAccNum: 75902003
   TaxClass: "1"
   SAPRid: "022"
-  VIPAccNum: 75902003
-
-bulkload: BillItem
-  BillCode: "REJECTION_FEE"
-  BIName: "Rejection fee"
-  AccNum: 75902003
-  BIGroup: "31"
-  EUAccNum: 75902003
-  FSAccNum: 75902003
-  Brand: "1"
-  EUConAccNum: 75902003
-  CostCentre: "F00001"
-  AltAccNum: 75902003
-  TaxClass: "1"
   VIPAccNum: 75902003
 
 bulkload: BillItem

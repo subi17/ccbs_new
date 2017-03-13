@@ -158,3 +158,58 @@ bulkload: MXItem
   MXName: "SubsTypeTo"
   MXValue: "TARJ*"
 
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_CERO"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_DATA500"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_DATA1000"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_DATA2000"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_DATA4000"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_VOICE40"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_VOICE250"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "SubsTypeTo"
+  MXValue: "MM_CERO"
+

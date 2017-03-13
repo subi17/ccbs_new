@@ -4638,35 +4638,9 @@ bulkload: TMSCodes
   TableName: "Invoice"
   FieldName: "DelType"
   CodeGroup: "Billing"
-  CodeValue: "13"
-  CodeName: "Fusion Email - Waiting"
-  InUse: 1
-
-bulkload: TMSCodes
-  TableName: "Invoice"
-  FieldName: "DelType"
-  CodeGroup: "Billing"
   CodeValue: "2"
   CodeName: "Email"
   Memo: "1,2,3,5,6"
-  InUse: 1
-
-bulkload: TMSCodes
-  TableName: "Invoice"
-  FieldName: "DelType"
-  CodeGroup: "Billing"
-  CodeValue: "3"
-  CodeName: "Fusion Email"
-  Memo: "1,5,6"
-  InUse: 1
-
-bulkload: TMSCodes
-  TableName: "Invoice"
-  FieldName: "DelType"
-  CodeGroup: "Billing"
-  CodeValue: "4"
-  CodeName: "SMS"
-  Memo: "1,2,3,4,5,6"
   InUse: 1
 
 bulkload: TMSCodes

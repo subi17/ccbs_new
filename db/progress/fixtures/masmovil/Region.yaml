@@ -36,7 +36,7 @@ bulkload: Region
 bulkload: Region
   Region: "08"
   RgName: "Barcelona"
-  TaxZone: "6"
+  TaxZone: "1"
 
 bulkload: Region
   Region: "09"

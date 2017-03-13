@@ -8700,6 +8700,105 @@ bulkload: BDest
   BdestID: 598
 
 bulkload: BDest
+  BDest: "GPRSDATA2_MM_DATA1000"
+  BDName: "GPRS DATA SLOW"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1068
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MM_DATA2000"
+  BDName: "GPRS DATA SLOW"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1070
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MM_DATA4000"
+  BDName: "GPRS DATA SLOW"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1064
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MM_DATA500"
+  BDName: "GPRS DATA SLOW"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1066
+
+bulkload: BDest
+  BDest: "GPRSDATA_MM_DATA1000"
+  BDName: "GPRS DATA HIGH"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1069
+
+bulkload: BDest
+  BDest: "GPRSDATA_MM_DATA2000"
+  BDName: "GPRS DATA HIGH"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1071
+
+bulkload: BDest
+  BDest: "GPRSDATA_MM_DATA4000"
+  BDName: "GPRS DATA HIGH"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1065
+
+bulkload: BDest
+  BDest: "GPRSDATA_MM_DATA500"
+  BDName: "GPRS DATA HIGH"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1067
+
+bulkload: BDest
+  BDest: "GPRS_MM_1000_UPSELL"
+  BDName: "MM_1000_UPSELL GPRS DATA"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1084
+
+bulkload: BDest
+  BDest: "GPRS_MM_200_UPSELL"
+  BDName: "MM_200_UPSELL GPRS DATA"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1092
+
+bulkload: BDest
+  BDest: "GPRS_MM_500_UPSELL"
+  BDName: "MM_500_UPSELL GPRS DATA"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1085
+
+bulkload: BDest
   BDest: "INTERNATIONAL"
   BDName: "International"
   CCN: 2
@@ -8710,6 +8809,60 @@ bulkload: BDest
   BdestID: 620
 
 bulkload: BDest
+  BDest: "MM_VOICE100_VOICE_IN"
+  BDName: "MM_VOICE100 VOICE IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1082
+
+bulkload: BDest
+  BDest: "MM_VOICE100_VOICE_OUT"
+  BDName: "MM_VOICE100 VOICE OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1083
+
+bulkload: BDest
+  BDest: "MM_VOICE250_VOICE_IN"
+  BDName: "MM_VOICE250 VOICE IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1090
+
+bulkload: BDest
+  BDest: "MM_VOICE250_VOICE_OUT"
+  BDName: "MM_VOICE250 VOICE OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1091
+
+bulkload: BDest
+  BDest: "MM_VOICE40_VOICE_IN"
+  BDName: "MM_VOICE40 VOICE IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1062
+
+bulkload: BDest
+  BDest: "MM_VOICE40_VOICE_OUT"
+  BDName: "MM_VOICE40 VOICE OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-22
+  BdestID: 1063
+
+bulkload: BDest
   BDest: "OTHER"
   BDName: "SMS sent to other operator"
   CCN: 52
@@ -8718,36 +8871,6 @@ bulkload: BDest
   ToDate: 2049-12-31
   FromDate: 2015-01-01
   BdestID: 991
-
-bulkload: BDest
-  BDest: "ROAM_EU"
-  BDName: "Roaming EU"
-  CCN: 5
-  DestType: 1
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2006-12-01
-  BdestID: 627
-
-bulkload: BDest
-  BDest: "ROAM_EUINT"
-  BDName: "Roaming international destin"
-  CCN: 801
-  DestType: 1
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2006-12-01
-  BdestID: 628
-
-bulkload: BDest
-  BDest: "ROAM_INTEU"
-  BDName: "Roaming international destin"
-  CCN: 802
-  DestType: 1
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2006-12-01
-  BdestID: 629
 
 bulkload: BDest
   BDest: "ROAMGPRS"
@@ -8871,6 +8994,36 @@ bulkload: BDest
   ToDate: 2049-12-31
   FromDate: 2012-05-01
   BdestID: 855
+
+bulkload: BDest
+  BDest: "ROAM_EU"
+  BDName: "Roaming EU"
+  CCN: 5
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 627
+
+bulkload: BDest
+  BDest: "ROAM_EUINT"
+  BDName: "Roaming international destin"
+  CCN: 801
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 628
+
+bulkload: BDest
+  BDest: "ROAM_INTEU"
+  BDName: "Roaming international destin"
+  CCN: 802
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 629
 
 bulkload: BDest
   BDest: "ROGPRS"
