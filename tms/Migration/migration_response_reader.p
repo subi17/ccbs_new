@@ -18,7 +18,7 @@
 {Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
-{migrationfunc.i}
+{Migration/migrationfunc.i}
 
 DEF STREAM sin.
 DEF STREAM sFile.
