@@ -95,8 +95,11 @@ PROCEDURE pInitialize:
       IF ERROR-STATUS:ERROR THEN DELETE ttStatus.
    END.
 
-   IF icDumpMode = "Full" THEN 
+   IF icDumpMode = "Full" THEN DO:
       ldFromStamp = fMake2Dt(TODAY - 65,0).
+      IF idLastDump = 0 THEN
+         idLastdump = fMake2Dt(TODAY - 65,0).
+   END.
    ELSE ldFromStamp = fMake2Dt(TODAY - 30,0).
    
    OUTPUT STREAM sFile TO VALUE(icFile).

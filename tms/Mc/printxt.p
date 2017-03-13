@@ -851,8 +851,9 @@ IF NOT llErrors THEN DO:
                                       BUFFER OrderCustomer).
       END.
 
-      IF Order.DeliverySecure EQ 1 OR
-         Order.DeliveryType EQ {&ORDER_DELTYPE_POST} THEN ASSIGN
+      IF (Order.DeliverySecure EQ 1 OR
+          Order.DeliveryType EQ {&ORDER_DELTYPE_POST}) AND
+          Order.DeliveryType NE {&ORDER_DELTYPE_POS} THEN ASSIGN
          lcTagDelAddress = fTeksti(560,liLanguage)
          lcTagDelPost = "".
       ELSE DO:
@@ -1041,7 +1042,8 @@ IF NOT llErrors THEN DO:
                                 order.orderchannel,
                                 ordercustomer.region,
                                 lcProduct,
-                                lcTariffType).
+                                lcTariffType,
+                                Order.DeliveryType).
          ELSE ldaMNP = Order.PortingDate.
 
          lcMonth = fTeksti(542 + MONTH(ldaMNP),(IF liLanguage EQ 5 THEN 5 ELSE 1)).

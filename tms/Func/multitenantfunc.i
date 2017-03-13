@@ -159,4 +159,28 @@ FUNCTION fConvertTenantToBrand RETURNS CHARACTER
        
 END FUNCTION.
 
+/*
+   Function returns the brand name of a given table name.
+   A caller must take care that the table name exists.
+   If the table is shared then the function returns ""
+*/
+FUNCTION fGetTableBrand RETURNS CHARACTER
+   ( icTableName AS CHARACTER ):
+
+   DEFINE VARIABLE lhBuffer      AS HANDLE    NO-UNDO.
+   DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
+
+   CREATE BUFFER lhBuffer FOR TABLE icTableName.
+
+   lcReturnValue = TENANT-NAME(lhBuffer:DBNAME).
+
+   RETURN fConvertTenantToBrand(lcReturnValue).
+
+   FINALLY:
+      IF VALID-HANDLE(lhBuffer)
+      THEN DELETE OBJECT lhBuffer.
+   END FINALLY.
+
+END FUNCTION.
+
 &ENDIF

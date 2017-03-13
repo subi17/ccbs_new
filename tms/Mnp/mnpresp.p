@@ -7,6 +7,7 @@
   CHANGED ......: 
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
+ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/commpaa.i}
 gcBrand = "1".
@@ -31,6 +32,7 @@ katun = "MNP".
 {Func/main_add_lines.i}
 {Func/fgettxt.i}
 {Func/fixedlinefunc.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE liLoop       AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTime       AS CHARACTER NO-UNDO.
@@ -64,7 +66,8 @@ PAUSE 0.
 
 xmlrpc_initialize(FALSE).
 
-DO WHILE TRUE:
+DO WHILE TRUE
+   ON ERROR UNDO, THROW:
 
    liLoop = liLoop + 1.
 
@@ -79,12 +82,13 @@ DO WHILE TRUE:
    PUT SCREEN ROW 22 COL 1
       "Processing messages ...                                       ".
    
-   FOR EACH MNPOperation NO-LOCK WHERE
-            MNPOperation.Sender     = 1 AND
-            MNPOperation.StatusCode = 5 
-            liNumMsgs = 1 to 1000:
+   FOR EACH MNPOperation NO-LOCK WHERE MNPOperation.Sender = 1 AND MNPOperation.StatusCode = 5 TENANT-WHERE TENANT-ID() >= 0 
+       liNumMsgs = 1 to 1000 ON ERROR UNDO, THROW:
 
       PUT SCREEN ROW 2 COL 2 STRING(RECID(MNPOperation)).
+
+      IF NOT fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(MNPOperation)) THEN
+          UNDO, THROW NEW Progress.Lang.AppError("Unable to change tenant. Abort!",1). 
 
       RUN pHandleQueue(RECID(MNPOperation)).
       
@@ -200,32 +204,32 @@ PROCEDURE pHandleQueue:
    DEFINE VARIABLE llgMNPOperName  AS LOG NO-UNDO. 
    DEFINE VARIABLE llgMNPOperBrand AS LOG NO-UNDO. 
 
-   FIND MessageBuf WHERE
-        RECID(MessageBuf) = pRecId
-   EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-   IF ERROR-STATUS:ERROR OR LOCKED(MessageBuf) THEN RETURN.
+   FIND MessageBuf WHERE RECID(MessageBuf) = pRecId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+   IF ERROR-STATUS:ERROR OR LOCKED(MessageBuf) THEN 
+      RETURN.
 
-   FIND MNPProcess WHERE 
-        MNPProcess.MNPSeq = MessageBuf.MNPSeq
-   EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-   IF ERROR-STATUS:ERROR OR LOCKED MNPProcess THEN RETURN.
+   FIND MNPProcess WHERE MNPProcess.MNPSeq = MessageBuf.MNPSeq EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+   IF ERROR-STATUS:ERROR OR LOCKED MNPProcess THEN 
+      RETURN.
    
    /* order should always exist with MNP IN processes */
-   IF MNPProcess.MNPType = {&MNP_TYPE_IN} THEN DO:
-      FIND Order WHERE
-           Order.Brand = gcBrand AND
-           Order.Orderid = MNPProcess.OrderID EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-      IF LOCKED Order THEN RETURN.
-      IF NOT AVAIL Order THEN DO:
+   IF MNPProcess.MNPType = {&MNP_TYPE_IN} THEN 
+   DO:
+      FIND Order WHERE Order.Brand = gcBrand AND Order.Orderid = MNPProcess.OrderID EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+      IF LOCKED Order THEN 
+         RETURN.
+
+      IF NOT AVAIL Order THEN 
+      DO:
          lcResponseDesc = "Order was not found".
          fErrorHandle(lcResponseDesc).
          fLogError(lcResponseDesc + ":" + MNPProcess.FormRequest). 
          LEAVE.
       END.
-      FIND OrderCustomer OF Order WHERE
-           OrderCustomer.RowType = 1
-      NO-LOCK NO-ERROR.
-      IF NOT AVAIL OrderCustomer THEN DO:
+
+      FIND OrderCustomer OF Order WHERE OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+      IF NOT AVAIL OrderCustomer THEN 
+      DO:
          lcResponseDesc = "Order customer was not found".
          fErrorHandle(lcResponseDesc).
          fLogError(lcResponseDesc + ":" + MNPProcess.FormRequest). 

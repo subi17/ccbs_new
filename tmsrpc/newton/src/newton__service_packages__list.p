@@ -5,6 +5,7 @@
  * @output struct;array of BillItem ids
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Func/multitenantfunc.i}
 
 DEF VAR gcBrand        AS CHAR      NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
@@ -78,6 +79,6 @@ FOR EACH ServPac NO-LOCK WHERE ServPac.Brand = "1" :
        IF NOT ServPac.ServPac BEGINS get_string(pcStruct,"id_begins") THEN NEXT. 
 
     IF fCheckServPac(ServPac.ServPac) THEN  
-        add_string(lcResultStruct, "",ServPac.ServPac + "|" + pcTenant).
+        add_string(lcResultStruct, "",ServPac.ServPac + "|" + fConvertTenantToBrand(pcTenant)).
 
 END.
