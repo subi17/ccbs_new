@@ -10,7 +10,7 @@ gcbrand = "1".
 /* Create free MSISDNs starting from begin to end. */
 
 DEFINE VARIABLE liBegin AS INT NO-UNDO INIT 722600000.
-DEFINE VARIABLE liEnd   AS INT NO-UNDO INIT 722600100.
+DEFINE VARIABLE liEnd   AS INT NO-UNDO INIT 722609999.
 
 
 FUNCTION fGoldNumber RETURNS INTEGER
@@ -171,14 +171,20 @@ DEFINE VARIABLE lcMSISDN AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liGold AS INTEGER NO-UNDO.
 
 /* Check inputs */
-IF liEnd < liBegin THEN
+IF liEnd < liBegin THEN DO:
    MESSAGE "ERROR: " liBegin " is bigger than " liEnd VIEW-AS ALERT-BOX.
-IF liBegin LT 722600000 AND liEnd GE 722600000 THEN
+   RETURN.
+END.
+IF liBegin LT 722600000 AND liEnd GE 722600000 THEN DO:
    MESSAGE "ERROR: " liBegin " and " liEnd " in different tenant areas" 
    VIEW-AS ALERT-BOX.
-IF liBegin GE 722600000 AND liEnd GE 722610000 THEN
+   RETURN.
+END.
+IF liBegin GE 722600000 AND liEnd GE 722610000 THEN DO:
    MESSAGE "ERROR: " liBegin " and " liEnd " in different tenant areas"
    VIEW-AS ALERT-BOX.
+   RETURN.
+END.
 
 /* Set tenant based on MB-93 description */
 IF STRING(liBegin) BEGINS "72260" THEN DO:
