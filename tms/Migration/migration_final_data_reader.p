@@ -15,7 +15,7 @@
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
 {Func/timestamp.i}
-{Syst/cparam2.i}
+{Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
 DEF STREAM sin.
