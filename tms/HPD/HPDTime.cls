@@ -39,17 +39,6 @@ CLASS HPD.HPDTime FINAL:
       END SET.
 
 
-   METHOD PUBLIC STATIC DECIMAL mMake2DT
-      (INPUT idtDateTime AS DATETIME):
-
-      IF idtDateTime = ?
-      THEN RETURN ?.
-
-      RETURN mMakeDT(DATE(idtDateTime), MTIME(idtDateTime)).
-
-   END METHOD.
-
-
    METHOD PUBLIC STATIC DECIMAL mMake2DT 
       (INPUT ldaTSDate AS DATE,
        INPUT liTSTime  AS INTEGER):
@@ -72,7 +61,18 @@ CLASS HPD.HPDTime FINAL:
    END METHOD.
 
 
-   METHOD PUBLIC STATIC mTS2DateTime
+   METHOD PUBLIC STATIC DECIMAL mMake2DT
+      (INPUT idtDateTime AS DATETIME):
+
+      IF idtDateTime = ?
+      THEN RETURN ?.
+
+      RETURN mMake2DT(DATE(idtDateTime), MTIME(idtDateTime)).
+
+   END METHOD.
+
+
+   METHOD PUBLIC STATIC DATETIME mTS2DateTime
       ( ideTS AS DECIMAL ):
 
       DEFINE VARIABLE liYY    AS INTEGER  NO-UNDO.
