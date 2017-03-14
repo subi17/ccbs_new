@@ -118,6 +118,8 @@ RUN pCollectRequestActions(iiMsSeq,
                            "4").
 RUN pRequestActions.
 
+EMPTY TEMP-TABLE ttAction NO-ERROR.
+
 /******* Main end ******/
 
 
