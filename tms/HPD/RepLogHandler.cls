@@ -232,25 +232,33 @@ CLASS HPD.RepLogHandler FINAL:
       IF NOT llMultiTenancy
       THEN RETURN mPopulateDumpHandlers("").
       
-      DEFINE VARIABLE llOK AS LOGICAL INITIAL FALSE NO-UNDO.
-      DEFINE VARIABLE lii AS INTEGER NO-UNDO.
-      DEFINE VARIABLE liNumConnectedDBs AS INTEGER NO-UNDO.
+      DEFINE VARIABLE llOK              AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE lii               AS INTEGER               NO-UNDO.
+      DEFINE VARIABLE liNumConnectedDBs AS INTEGER               NO-UNDO.
+      DEFINE VARIABLE lcTenant          AS CHARACTER             NO-UNDO.
 
       DO ON ERROR UNDO, THROW:
-
-         DO lii = 0 TO 100:
+         TENANTLOOP:
+         DO lii = 0 TO 100 ON ERROR UNDO, THROW:
 
             DO liNumConnectedDBs = 1 TO NUM-DBS:
-               SET-EFFECTIVE-TENANT(lii, LDBNAME(liNumConnectedDBs)).
+               SET-EFFECTIVE-TENANT(lii, LDBNAME(liNumConnectedDBs)) NO-ERROR.
+               IF ERROR-STATUS:ERROR
+               THEN LEAVE TENANTLOOP.
             END.
 
-            llOK = mPopulateDumpHandlers(GET-EFFECTIVE-TENANT-NAME(LDBNAME(liNumConnectedDBs - 1))).
+            lcTenant = GET-EFFECTIVE-TENANT-NAME(LDBNAME(1)).
+
+            &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
+            &THEN
+            IF lcTenant = "Default"
+            THEN lcTenant = "yoigo".
+            ELSE lcTenant = SUBSTRING(lcTenant,2).
+            &ENDIF
+
+            llOK = mPopulateDumpHandlers(lcTenant).
 
          END.
-
-         CATCH anyError AS Progress.Lang.Error:
-            LEAVE.
-         END CATCH.
 
       END.
 
@@ -311,13 +319,7 @@ CLASS HPD.RepLogHandler FINAL:
                   &ENDIF
 
       IF llMultiTenancy
-      THEN lcMessage = lcMessage + {&HPDDumpDelimiter} +
-      &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
-      &THEN IF ttDumpHandler.TenantName = "Default"
-            THEN "Yoigo"
-            ELSE SUBSTRING(ttDumpHandler.TenantName,2).
-      &ELSE ttDumpHandler.TenantName.
-      &ENDIF
+      THEN lcMessage = lcMessage + {&HPDDumpDelimiter} + ttDumpHandler.TenantName.
 
       IF lhRepLogTable::EventType = "DELETE"
       THEN lcMessage = lcMessage + {&HPDDumpDelimiter} +
@@ -341,7 +343,9 @@ CLASS HPD.RepLogHandler FINAL:
             RETURN 3.
          END.
       END.
-
+/*
+      LOG-MANAGER:WRITE-MESSAGE(SUBSTITUTE("Sending message: &1", SUBSTRING(lcMessage,1,30000)), "DEBUG").
+*/
       IF NOT objMsgPublisher:send_message(lcMessage)
       THEN DO:
          mLog(2, "INFO", "Failed to send message: " + lcMessage).
