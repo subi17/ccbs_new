@@ -13,12 +13,15 @@ THEN RETURN.
 IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Mobile.RepLog.
 ASSIGN
-   Mobile.RepLog.TableName = "SubSer"
-   Mobile.RepLog.EventType = "DELETE"
-   Mobile.RepLog.EventTime = NOW
-   Mobile.RepLog.KeyValue  = {HPD/keyvalue.i SubSer . {&HPDKeyDelimiter} MsSeq ServCom SSDate}
+   Mobile.RepLog.TableName  = "SubSer"
+   Mobile.RepLog.EventType  = "DELETE"
+   Mobile.RepLog.EventTime  = NOW
+   Mobile.RepLog.TenantName = fRepLogTenantName(BUFFER SubSer:HANDLE)
+   Mobile.RepLog.KeyValue   = {HPD/keyvalue.i SubSer . {&HPDKeyDelimiter} MsSeq ServCom SSDate}
    .
 
 &ENDIF

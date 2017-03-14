@@ -19,6 +19,8 @@ END.
 IF NOT llInvoiceInHPD
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.RowID     = STRING(ROWID(InvRow))
@@ -27,6 +29,7 @@ ASSIGN
                               THEN "CREATE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER InvRow:HANDLE)
    .
 
 IF NOT NEW(InvRow)
@@ -46,6 +49,7 @@ THEN DO:
          Common.RepLog.TableName = "InvRow"
          Common.RepLog.EventType = "DELETE"
          Common.RepLog.EventTime = NOW
+         Common.RepLog.TenantName = fRepLogTenantName(BUFFER oldInvRow:HANDLE)
          Common.RepLog.KeyValue  = {HPD/keyvalue.i oldInvRow . {&HPDKeyDelimiter} InvNum SubInvNum InvRowNum}
          .
    END.

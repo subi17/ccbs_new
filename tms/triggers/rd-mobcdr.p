@@ -11,11 +11,14 @@ THEN RETURN.
 IF MobCDR.ErrorCode > 0
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE mcdr.RepLog.
 ASSIGN
-   mcdr.RepLog.TableName = "MobCDR"
-   mcdr.RepLog.EventType = "DELETE"
-   mcdr.RepLog.EventTime = NOW
+   mcdr.RepLog.TableName  = "MobCDR"
+   mcdr.RepLog.EventType  = "DELETE"
+   mcdr.RepLog.EventTime  = NOW
+   mcdr.RepLog.TenantName = fRepLogTenantName(BUFFER MobCDR:HANDLE)
    mcdr.RepLog.KeyValue  = {HPD/keyvalue.i MobCDR . {&HPDKeyDelimiter} MsSeq DtlSeq DateSt} 
    .
 

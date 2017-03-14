@@ -12,14 +12,17 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF {1} OLD BUFFER old{1}.
 
 &IF {&{2}_WRITE_TRIGGER_ACTIVE} &THEN
 
+{triggers/replog_tenantname.i}
+
 CREATE {3}.RepLog.
 ASSIGN
-   {3}.RepLog.RowID     = STRING(ROWID({1}))
-   {3}.RepLog.TableName = "{1}"
-   {3}.RepLog.EventType = (IF NEW({1})
-                           THEN "CREATE"
-                           ELSE "MODIFY")
-   {3}.RepLog.EventTime = NOW
+   {3}.RepLog.RowID      = STRING(ROWID({1}))
+   {3}.RepLog.TableName  = "{1}"
+   {3}.RepLog.EventType  = (IF NEW({1})
+                            THEN "CREATE"
+                            ELSE "MODIFY")
+   {3}.RepLog.EventTime  = NOW
+   {3}.RepLog.TenantName = fRepLogTenantName(BUFFER {1}:HANDLE)
    .
 
 IF NOT NEW({1})
@@ -34,9 +37,10 @@ THEN DO:
    THEN DO:
    CREATE {3}.RepLog.
       ASSIGN
-         {3}.RepLog.TableName = "{1}"
-         {3}.RepLog.EventType = "DELETE"
-         {3}.RepLog.EventTime = NOW
+         {3}.RepLog.TableName  = "{1}"
+         {3}.RepLog.EventType  = "DELETE"
+         {3}.RepLog.EventTime  = NOW
+         {3}.RepLog.TenantName = fRepLogTenantName(BUFFER old{1}:HANDLE)
          {3}.RepLog.KeyValue  = &IF '{4}' NE ''
                                 &THEN
                                 SUBSTITUTE("&1",old{1}.{4})

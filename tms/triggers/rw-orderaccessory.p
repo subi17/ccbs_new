@@ -31,6 +31,8 @@ TO oldOrderAccessory SAVE RESULT IN llSameValues.
 IF llSameValues
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 IF oldOrderAccessory.OrderID <> OrderAccessory.OrderID
 THEN
 FOR Order FIELDS (Brand OrderID) NO-LOCK WHERE
@@ -43,6 +45,7 @@ FOR Order FIELDS (Brand OrderID) NO-LOCK WHERE
       Ordercanal.RepLog.TableName = "Order"
       Ordercanal.RepLog.EventType = "MODIFY"
       Ordercanal.RepLog.EventTime = NOW
+      Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER Order:HANDLE)
       .
 END.
 
@@ -56,6 +59,7 @@ FOR Order FIELDS (Brand OrderID) NO-LOCK WHERE
       Ordercanal.RepLog.TableName = "Order"
       Ordercanal.RepLog.EventType = "MODIFY"
       Ordercanal.RepLog.EventTime = NOW
+      Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER Order:HANDLE)
       .
 END.
 

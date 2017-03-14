@@ -11,11 +11,14 @@ THEN RETURN.
 IF PrepEDR.ErrorCode > 0
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE mcdr.RepLog.
 ASSIGN
    mcdr.RepLog.TableName = "PrepEDR"
    mcdr.RepLog.EventType = "DELETE"
    mcdr.RepLog.EventTime = NOW
+   mcdr.RepLog.TenantName = fRepLogTenantName(BUFFER PrepEDR:HANDLE)
    mcdr.RepLog.KeyValue  = {HPD/keyvalue.i PrepEDR . {&HPDKeyDelimiter} MsSeq DtlSeq DateSt}
    .
 

@@ -11,11 +11,14 @@ THEN RETURN.
 IF Invoice.InvCfg[1] OR Invoice.InvType NE 1
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
-   Common.RepLog.TableName = "Invoice"
-   Common.RepLog.EventType = "DELETE"
-   Common.RepLog.EventTime = NOW
+   Common.RepLog.TableName  = "Invoice"
+   Common.RepLog.EventType  = "DELETE"
+   Common.RepLog.EventTime  = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER Invoice:HANDLE)
    Common.RepLog.KeyValue  = STRING(Invoice.InvNum)
    .
 
