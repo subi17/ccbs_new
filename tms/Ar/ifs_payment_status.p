@@ -52,6 +52,7 @@ DEF VAR llFound            AS LOG   NO-UNDO.
 DEF VAR lcClaimStatus      AS CHAR  NO-UNDO.
 DEF VAR liBankAcc          AS INT   NO-UNDO.
 DEF VAR lrActionID         AS RECID NO-UNDO.
+DEF VAR lcCompanyID        AS CHAR  NO-UNDO.
 
 DEF STREAM sRead.
 DEF STREAM sLog.
@@ -230,6 +231,7 @@ PROCEDURE pReadEvents:
          lcPaidAmount   = SUBSTRING(lcReadLine,55,16)            
          lcUnpaidAmount = SUBSTRING(lcReadLine,71,16)            
          lcClaimStatus  = TRIM(SUBSTRING(lcReadLine,87,6))
+         lcCompanyID    = SUBSTRING(lcReadLine,93,4)
          NO-ERROR.
       
       IF ERROR-STATUS:ERROR THEN DO:
