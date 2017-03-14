@@ -539,7 +539,7 @@
                    /* YBP-620 */
                    Order.MNPStatus = 6. /* fake mnp process (ACON) */
                 /*MB_Migration has special MNP/Migration handler*/
-                ELSE IF Order.Orderchannel EQ "migration" THEN DO:
+                ELSE IF Order.Orderchannel BEGINS "migration" THEN DO:
                    Order.StatusCode = {&ORDER_STATUS_MIGRATION_PENDING}. /*60*/
                    NEXT {1}.
                 END.

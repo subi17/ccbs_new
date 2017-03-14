@@ -706,7 +706,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       IF lcIdOrderCustomer EQ "" AND piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
           lcFError = "Expected either person_id or company_id".
 
-      IF pcChannel NE "migration" THEN DO: /*MMM-21*/
+      IF NOT pcChannel BEGINS "migration" THEN DO: /*MMM-21*/
 
          /* YTS-2453 */
          IF NOT plBypassRules AND
@@ -1415,7 +1415,7 @@ IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
 /*MB_migration related checks*/
 
 /*Customer is not allowed to have active subscription in Yoigo system*/
-IF pcChannel EQ "migration" THEN DO:
+IF pcChannel BEGINS "migration" THEN DO:
    DEF VAR lcMErr AS CHAR NO-UNDO.
    IF fMigrationCheckCustomer(gcBrand, lcId) NE "" THEN
       RETURN appl_Err("Migration data validation error:" + lcMErr).
@@ -2411,7 +2411,7 @@ IF plSendOffer AND NOT llROIClose THEN DO:
                                       TRUE).
    
    
-   IF Order.Orderchannel NE "migration" AND
+   IF NOT Order.Orderchannel BEGINS "migration" AND
       (lcMobileNumber NE "" AND       
       lcOfferSMSText NE "" AND lcOfferSMSText NE ?) THEN
       fCreateSMS(Order.CustNum,
@@ -2441,7 +2441,7 @@ fMarkOrderStamp(Order.OrderID,"Change",0.0).
 
 /*YDR_1637*/
 IF INDEX(Order.OrderChannel, "pos") EQ 0  AND
-         Order.Orderchannel NE "migration" THEN DO:
+         NOT Order.Orderchannel BEGINS "migration" THEN DO:
    IF (Order.StatusCode EQ {&ORDER_STATUS_MNP_ON_HOLD}        /*22*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}        /*51*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}  /*76*/ OR
