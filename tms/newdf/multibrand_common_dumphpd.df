@@ -77,13 +77,13 @@ ADD FIELD "MaxRecordsPerFile" OF "DumpHPD" AS integer
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "Max records per file"
-  POSITION 2
+  POSITION 9
   MAX-WIDTH 4
   COLUMN-LABEL "MaxRecords"
   HELP "Maximum amount of record per a file (0=unlimited)"
-  ORDER 10
+  ORDER 80
 
-ADD INDEX "DumpID" ON "DumpFile" 
+ADD INDEX "DumpID" ON "DumpHPD"
   AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
