@@ -122,6 +122,7 @@ def daemon(*a):
     print("Starting " + daemon + instance + "... ")
     args = mpro + ['-b', '-p', 'gearbox/daemons/run_daemon.p',
             '-clientlog', '../var/log/d-' + daemon + instance + '.log',
+            '-logthreshold', '209715200', '-numlogfiles', '0',
             '-param', daemon + ',' + instance + ',../var/run',
             '-T', '../var/tmp']
     for pp in parameters[2:]:

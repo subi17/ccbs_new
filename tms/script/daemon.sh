@@ -13,20 +13,13 @@ if test -z "$INSTANCE"; then
   INSTANCE=?
 fi
 
-if test -z "$DATABASES"
-then
-  DATABASES="common,ordercanal,mobile,star,counter,reratelog"
-else
-  DATABASES=${DATABASES//' '/,}
+if test -z "$DATABASES"; then
+  DATABASES="common ordercanal mobile star counter reratelog"
 fi
 
-if test -n "$LOGLEVEL"
-then
-  LOGGINGLEVEL=$LOGLEVEL
-else
-  LOGGINGLEVEL=1    
+if test -n "$LOGLEVEL"; then
+  LOGGINGLEVEL="-logginglevel $LOGLEVEL"
 fi
-
 
 umask 002
 
@@ -45,8 +38,7 @@ case "$1" in
       echo "$DAEMONNAME is already running with pid $pid" >&2
       exit 2
     else
-      ./script/start_daemon.sh $DAEMON $INSTANCE $LOGGINGLEVEL $DATABASES
-#      nohup pike daemon $DAEMON $INSTANCE -- $DATABASES $LOGGINGLEVEL $EXTRAPARAM &>/dev/null &
+      nohup pike daemon $DAEMON $INSTANCE -- $DATABASES $LOGGINGLEVEL $EXTRAPARAM &>/dev/null &
       sleep 1
       if ! test -f $PIDFILE; then
         echo "Failed" >&2
