@@ -76,7 +76,7 @@ FUNCTION fMigrationCheckCustomer RETURNS CHAR
       IF AVAIL MobSub THEN DO:         
          FIND FIRST Order NO-LOCK WHERE
                   Order.MsSeq EQ Mobsub.MsSeq AND
-                  Order.Orderchannel NE "migration" NO-ERROR.
+                  NOT Order.Orderchannel BEGINS "migration" NO-ERROR.
          IF AVAIL Order THEN RETURN "ERROR: Mobsub for the customer exists".
          
       END.
