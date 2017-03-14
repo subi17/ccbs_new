@@ -56,6 +56,8 @@ lcRespArray = add_array(lcRespStruct, "codigoReferencia").
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
    
+   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
+
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerSolicitudesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar").
    

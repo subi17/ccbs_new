@@ -58,7 +58,9 @@ DEF VAR liMSISDNStat       AS INT   NO-UNDO.
 
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
-  
+   
+   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest} 
+
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonanteCanceladas").
    
    FIND MNPProcess WHERE

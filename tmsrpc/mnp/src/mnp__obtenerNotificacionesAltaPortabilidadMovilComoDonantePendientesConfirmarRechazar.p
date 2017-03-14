@@ -49,6 +49,8 @@ END.
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
    
+   {newton/src/findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
+
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar").
    
