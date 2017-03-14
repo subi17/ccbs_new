@@ -47,6 +47,8 @@ DEF VAR lcSMS AS CHAR NO-UNDO.
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
    
+   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
+
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoReceptorConfirmadasRechazadas").
 

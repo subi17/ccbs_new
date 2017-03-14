@@ -1477,6 +1477,10 @@
 1 "" 2 "Descompte promoció" 0 "DISCFH300" "1" 01/11/16 31/12/54
 1 "" 3 "Promozio-deskontua" 0 "DISCFH300" "1" 01/11/16 31/12/54
 1 "" 5 "Promotional discount" 0 "DISCFH300" "1" 01/11/16 31/12/54
+1 "" 1 "Descuento promoción Fibra 300" 0 "DISCFH3002P" "1" 01/02/17 31/12/49
+1 "" 2 "Descompte promoció Fibra 300" 0 "DISCFH3002P" "1" 01/02/17 31/12/49
+1 "" 3 "Promozio-deskontua Fibra 300" 0 "DISCFH3002P" "1" 01/02/17 31/12/49
+1 "" 5 "Promotional discount Fiber 300" 0 "DISCFH3002P" "1" 01/02/17 31/12/49
 1 "" 1 "Descuento promoción Fibra 300" 0 "DISCFH300P" "1" 01/02/17 31/12/49
 1 "" 2 "Descompte promoció Fibra 300" 0 "DISCFH300P" "1" 01/02/17 31/12/49
 1 "" 3 "Promozio-deskontua Fibra 300" 0 "DISCFH300P" "1" 01/02/17 31/12/49

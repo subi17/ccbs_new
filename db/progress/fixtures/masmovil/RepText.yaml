@@ -4536,6 +4536,42 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
+  RepText: "Promo Bono Voz IP"
+  LinkCode: "BONOVOIPCPACT"
+  Brand: "1"
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Promo Bono Voz IP"
+  LinkCode: "BONOVOIPCPACT"
+  Brand: "1"
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Bono Voz IP Promozioa"
+  LinkCode: "BONOVOIPCPACT"
+  Brand: "1"
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Bono Voz IP Promo"
+  LinkCode: "BONOVOIPCPACT"
+  Brand: "1"
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
   RepText: "Bono Voz IP"
   LinkCode: "BONO_VOIP"
   Brand: "1"
@@ -4637,42 +4673,6 @@ bulkload: RepText
   Language: 5
   RepText: "Buy 100 MB Voz IP"
   LinkCode: "BONO_VOIPMFUPS"
-  Brand: "1"
-  FromDate: 2012-04-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
-  RepText: "Promo Bono Voz IP"
-  LinkCode: "BONOVOIPCPACT"
-  Brand: "1"
-  FromDate: 2012-04-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Promo Bono Voz IP"
-  LinkCode: "BONOVOIPCPACT"
-  Brand: "1"
-  FromDate: 2012-04-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Bono Voz IP Promozioa"
-  LinkCode: "BONOVOIPCPACT"
-  Brand: "1"
-  FromDate: 2012-04-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "Bono Voz IP Promo"
-  LinkCode: "BONOVOIPCPACT"
   Brand: "1"
   FromDate: 2012-04-01
   ToDate: 2049-12-31
@@ -8298,78 +8298,6 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
-  RepText: "Nacionales"
-  LinkCode: "CONTDSL_MIN_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Nacionals"
-  LinkCode: "CONTDSL_MIN_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Nazionalak"
-  LinkCode: "CONTDSL_MIN_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "National"
-  LinkCode: "CONTDSL_MIN_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
-  RepText: "Nacionales"
-  LinkCode: "CONTDSL_QTY_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Nacionals"
-  LinkCode: "CONTDSL_QTY_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Nazionalak"
-  LinkCode: "CONTDSL_QTY_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "National"
-  LinkCode: "CONTDSL_QTY_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
   RepText: "FIJO + INTERNET"
   LinkCode: "CONTDSLMF"
   Brand: "1"
@@ -8401,6 +8329,78 @@ bulkload: RepText
   LinkCode: "CONTDSLMF"
   Brand: "1"
   FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Nacionales"
+  LinkCode: "CONTDSL_MIN_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Nacionals"
+  LinkCode: "CONTDSL_MIN_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Nazionalak"
+  LinkCode: "CONTDSL_MIN_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "National"
+  LinkCode: "CONTDSL_MIN_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Nacionales"
+  LinkCode: "CONTDSL_QTY_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Nacionals"
+  LinkCode: "CONTDSL_QTY_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Nazionalak"
+  LinkCode: "CONTDSL_QTY_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "National"
+  LinkCode: "CONTDSL_QTY_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -8586,6 +8586,42 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
+  RepText: "FIJO + INTERNET"
+  LinkCode: "CONTFH300MF"
+  Brand: "1"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Fix + Internet"
+  LinkCode: "CONTFH300MF"
+  Brand: "1"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Finkoa + Internet"
+  LinkCode: "CONTFH300MF"
+  Brand: "1"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Landline + Internet"
+  LinkCode: "CONTFH300MF"
+  Brand: "1"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
   RepText: "Nacionales"
   LinkCode: "CONTFH300_MIN_IN"
   Brand: "1"
@@ -8659,7 +8695,7 @@ bulkload: RepText
   TextType: 1
   Language: 1
   RepText: "FIJO + INTERNET"
-  LinkCode: "CONTFH300MF"
+  LinkCode: "CONTFH50MF"
   Brand: "1"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
@@ -8668,7 +8704,7 @@ bulkload: RepText
   TextType: 1
   Language: 2
   RepText: "Fix + Internet"
-  LinkCode: "CONTFH300MF"
+  LinkCode: "CONTFH50MF"
   Brand: "1"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
@@ -8677,7 +8713,7 @@ bulkload: RepText
   TextType: 1
   Language: 3
   RepText: "Finkoa + Internet"
-  LinkCode: "CONTFH300MF"
+  LinkCode: "CONTFH50MF"
   Brand: "1"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
@@ -8686,7 +8722,7 @@ bulkload: RepText
   TextType: 1
   Language: 5
   RepText: "Landline + Internet"
-  LinkCode: "CONTFH300MF"
+  LinkCode: "CONTFH50MF"
   Brand: "1"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
@@ -8761,42 +8797,6 @@ bulkload: RepText
   LinkCode: "CONTFH50_QTY_IN"
   Brand: "1"
   FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
-  RepText: "FIJO + INTERNET"
-  LinkCode: "CONTFH50MF"
-  Brand: "1"
-  FromDate: 2016-10-27
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Fix + Internet"
-  LinkCode: "CONTFH50MF"
-  Brand: "1"
-  FromDate: 2016-10-27
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Finkoa + Internet"
-  LinkCode: "CONTFH50MF"
-  Brand: "1"
-  FromDate: 2016-10-27
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "Landline + Internet"
-  LinkCode: "CONTFH50MF"
-  Brand: "1"
-  FromDate: 2016-10-27
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -10309,42 +10309,6 @@ bulkload: RepText
   LinkCode: "CONTS26VOICE_B"
   Brand: "1"
   FromDate: 2014-05-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
-  RepText: "Internet"
-  LinkCode: "CONTS2GB_DATA"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Internet"
-  LinkCode: "CONTS2GB_DATA"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Internet"
-  LinkCode: "CONTS2GB_DATA"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "Internet"
-  LinkCode: "CONTS2GB_DATA"
-  Brand: "1"
-  FromDate: 2016-11-01
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -10523,6 +10487,42 @@ bulkload: RepText
   Language: 5
   RepText: "National"
   LinkCode: "CONTS2GBVOICE_B"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Internet"
+  LinkCode: "CONTS2GB_DATA"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Internet"
+  LinkCode: "CONTS2GB_DATA"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Internet"
+  LinkCode: "CONTS2GB_DATA"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Internet"
+  LinkCode: "CONTS2GB_DATA"
   Brand: "1"
   FromDate: 2016-11-01
   ToDate: 2049-12-31
@@ -32558,6 +32558,15 @@ bulkload: RepText
   Brand: "1"
   FromDate: 2009-02-27
   ToDate: 2054-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "TARIFA 0 PRIMEROS 5 MIN A 0 EUROS Y RESTO A 0"
+  LinkCode: "MM_CEROMF"
+  Brand: "1"
+  FromDate: 2017-02-23
+  ToDate: 2049-12-31
 
 bulkload: RepText
   TextType: 1
@@ -78844,42 +78853,6 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
-  RepText: "Descuento Comisión por impago"
-  LinkCode: "REJECT_FEE_DISC"
-  Brand: "1"
-  FromDate: 2015-03-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Descompte comissió de gestió per impagament"
-  LinkCode: "REJECT_FEE_DISC"
-  Brand: "1"
-  FromDate: 2015-03-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Ez ordaintzeagatiko kudeaketa-komisioaren deskontua"
-  LinkCode: "REJECT_FEE_DISC"
-  Brand: "1"
-  FromDate: 2015-03-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "Non-payment handling charge discount"
-  LinkCode: "REJECT_FEE_DISC"
-  Brand: "1"
-  FromDate: 2015-03-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
   RepText: "Comisión por impago"
   LinkCode: "REJECTION_FEE"
   Brand: "1"
@@ -78909,6 +78882,42 @@ bulkload: RepText
   Language: 5
   RepText: "Non-payment handling charge"
   LinkCode: "REJECTION_FEE"
+  Brand: "1"
+  FromDate: 2015-03-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Descuento Comisión por impago"
+  LinkCode: "REJECT_FEE_DISC"
+  Brand: "1"
+  FromDate: 2015-03-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Descompte comissió de gestió per impagament"
+  LinkCode: "REJECT_FEE_DISC"
+  Brand: "1"
+  FromDate: 2015-03-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Ez ordaintzeagatiko kudeaketa-komisioaren deskontua"
+  LinkCode: "REJECT_FEE_DISC"
+  Brand: "1"
+  FromDate: 2015-03-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Non-payment handling charge discount"
+  LinkCode: "REJECT_FEE_DISC"
   Brand: "1"
   FromDate: 2015-03-01
   ToDate: 2049-12-31
@@ -105246,6 +105255,87 @@ bulkload: RepText
   ToDate: 2054-12-31
 
 bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "UPSELL DE DATOS"
+  LinkCode: "MM_1000_UPSELL"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "UPSELL DE DATOS"
+  LinkCode: "MM_200_UPSELL"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "UPSELL DE DATOS"
+  LinkCode: "MM_500_UPSELL"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "BONO DE DATOS A COMBINAR CON LA TARIFA 0"
+  LinkCode: "MM_DATA1000"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "BONO DE DATOS A COMBINAR CON LA TARIFA 0"
+  LinkCode: "MM_DATA2000"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "BONO DE DATOS A COMBINAR CON LA TARIFA 0"
+  LinkCode: "MM_DATA4000"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "BONO DE DATOS A COMBINAR CON LA TARIFA 0"
+  LinkCode: "MM_DATA500"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "BONO DE VOZ A COMBINAR CON LA TARIFA 0"
+  LinkCode: "MM_VOICE100"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "BONO DE VOZ A COMBINAR CON LA TARIFA 0"
+  LinkCode: "MM_VOICE40"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
   TextType: 20
   Language: 5
   RepText: "Dextra"
@@ -106346,60 +106436,6 @@ bulkload: RepText
 bulkload: RepText
   TextType: 26
   Language: 1
-  RepText: "Cliente_Suscripción Premium"
-  LinkCode: "C_BPSUB"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 5
-  RepText: "Customer_Premium Subscription"
-  LinkCode: "C_BPSUB"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 1
-  RepText: "Cliente_Roaming+Internacional"
-  LinkCode: "C_BRAIC"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 5
-  RepText: "Customer_Roaming+International"
-  LinkCode: "C_BRAIC"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 1
-  RepText: "Cliente_Roaming+Internacional+Premium total"
-  LinkCode: "C_BRIAP"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 5
-  RepText: "Customer_Roaming+International+Total Premium"
-  LinkCode: "C_BRIAP"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 1
   RepText: "Cliente_Internacional"
   LinkCode: "Cust_International_off"
   Brand: "1"
@@ -106465,6 +106501,60 @@ bulkload: RepText
   Language: 5
   RepText: "Customer_Total Premium"
   LinkCode: "Cust_TotalPremium_off"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 1
+  RepText: "Cliente_Suscripción Premium"
+  LinkCode: "C_BPSUB"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 5
+  RepText: "Customer_Premium Subscription"
+  LinkCode: "C_BPSUB"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 1
+  RepText: "Cliente_Roaming+Internacional"
+  LinkCode: "C_BRAIC"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 5
+  RepText: "Customer_Roaming+International"
+  LinkCode: "C_BRAIC"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 1
+  RepText: "Cliente_Roaming+Internacional+Premium total"
+  LinkCode: "C_BRIAP"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 5
+  RepText: "Customer_Roaming+International+Total Premium"
+  LinkCode: "C_BRIAP"
   Brand: "1"
   FromDate: 2015-07-08
   ToDate: 2049-12-31

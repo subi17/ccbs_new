@@ -16,3 +16,93 @@ bulkload: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 69
 
+bulkload: DCServiceComponent
+  DCServicePackageID: 57
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_DATA1000#ADDBUNDLE"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 70
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 58
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_VOICE100"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 71
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 59
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_DATA4000#ADDBUNDLE"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 72
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 60
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_DATA500#ADDBUNDLE"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 73
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 61
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_1000_UPSELL#ADDBUNDLE"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 74
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 62
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_DATA2000#ADDBUNDLE"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 75
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 63
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_500_UPSELL#ADDBUNDLE"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 76
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 64
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_VOICE40"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 77
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 65
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_VOICE250"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 78
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 66
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_200_UPSELL#ADDBUNDLE"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 79
+

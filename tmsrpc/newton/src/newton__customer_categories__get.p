@@ -23,6 +23,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE
       RETURN appl_err("Invalid tenant information").
 
+   {newton/src/settenant.i pcTenant}
+      
    FIND CustCat WHERE CustCat.Brand = gcBrand AND 
                       CustCat.Category = pcId NO-LOCK NO-ERROR.
    IF AVAIL CustCat THEN

@@ -198,7 +198,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
                Segmentation.MsSeq = MNPSub.MsSeq:
 
          IF MobSub.PayType = TRUE THEN
-            liExcludeOffset = -2160. /* Prepaid 90 days */
+            liExcludeOffset = -720. /* Prepaid 30 days (YOT-4929) */
          ELSE
             liExcludeOffset = 0. /* -1440. Commented out YOT-4095 */ /* Postpaid 60 days */
 
@@ -218,8 +218,10 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
 
          /* YOT-2301 - Exclude all data subs. and segmentation code with SN */
          IF LOOKUP(MobSub.CLIType,"CONTRD,CONTD,TARJRD1") > 0 OR
-            Segmentation.SegmentCode = "SN" THEN NEXT.
-         
+            Segmentation.SegmentCode = "SN" AND
+            MobSub.ActivationTS > fOffSetTS(liExcludeOffSet) THEN NEXT.
+            /* YOT-4929, If customer created less than 1 month ago */
+          
          IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcRetentionSMSText) THEN NEXT.
          
          FIND FIRST ttData NO-LOCK WHERE

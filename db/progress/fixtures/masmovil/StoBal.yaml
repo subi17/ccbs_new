@@ -1,0 +1,7 @@
+bulkload: StoBal
+  Stobal: "TESTING"
+  SimArt: "Universal"
+  DetBal[1]: 2699
+  Balance: 2699
+  Brand: "1"
+

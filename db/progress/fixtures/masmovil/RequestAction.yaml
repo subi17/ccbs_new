@@ -561,3 +561,24 @@ bulkload: RequestAction
   PayType: 1
   RequestActionID: 655
 
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "MM_CERO"
+  ValidFrom: 2017-02-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_CERO"
+  Action: 1
+  RequestActionID: 656
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ValidFrom: 2017-02-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_CERO"
+  Action: 1
+  RequestActionID: 657
+

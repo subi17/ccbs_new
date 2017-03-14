@@ -1265,19 +1265,19 @@ bulkload: TMSParam
   Brand: "1"
 
 bulkload: TMSParam
-  ParamGroup: "BILLING"
-  ParamCode: "PNP_Prod"
-  ParamType: "C"
-  CharVal: "F&F"
-  ParamName: "F&F Default product"
-  Brand: "1"
-
-bulkload: TMSParam
   ParamGroup: "Billing"
   ParamCode: "PNPBClass"
   ParamType: "I"
   IntVal: 5
   ParamName: "PNP (Friends&Fam.) BSUB class"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "BILLING"
+  ParamCode: "PNP_Prod"
+  ParamType: "C"
+  CharVal: "F&F"
+  ParamName: "F&F Default product"
   Brand: "1"
 
 bulkload: TMSParam
@@ -1628,14 +1628,6 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "Bundles"
-  ParamCode: "ALL_POSTPAID_CONTRACTS"
-  ParamType: "C"
-  CharVal: "CONTDATA,CONTD2,CONTD3,CONTD4,DUB,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,DUB2,CONTS30,CONTS39,MDUB9,CONTD9,DUB3,DATA5,CONTS15,CONTS20,CONTS25,CONTS35,CONTFF2,CONTSF10,CONTSF14,CONTS16,CONTS21,CONTS26,CONTS32,CONT9,DATA6,CONT15,BONO_VOIP,CONT24,CONTS12,CONTF8,CONTF11,CONT23,DATA7,CONTS2GB,CONT25,CONT26,CONT10"
-  ParamName: "All postpaid bundle contracts"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "Bundles"
   ParamCode: "ALLOWED_BONO_CONTRACTS"
   ParamType: "C"
   CharVal: "PMDUB,DATA6,DATA7"
@@ -1683,9 +1675,17 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "Bundles"
+  ParamCode: "ALL_POSTPAID_CONTRACTS"
+  ParamType: "C"
+  CharVal: "CONTDATA,CONTD2,CONTD3,CONTD4,DUB,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,DUB2,CONTS30,CONTS39,MDUB9,CONTD9,DUB3,DATA5,CONTS15,CONTS20,CONTS25,CONTS35,CONTFF2,CONTSF10,CONTSF14,CONTS16,CONTS21,CONTS26,CONTS32,CONT9,DATA6,CONT15,BONO_VOIP,CONT24,CONTS12,CONTF8,CONTF11,CONT23,DATA7,CONTS2GB,CONT25,CONT26,CONT10,MM_CERO"
+  ParamName: "All postpaid bundle contracts"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "Bundles"
   ParamCode: "BB_PROFILE_1"
   ParamType: "C"
-  CharVal: "PMDUB,MDUB,CONTD3,DUB,CONTF30,CONTF55,CONTF20D,CONTF40,MDUB5,DUB2,CONTS30,CONTS39,MDUB9,CONTD9,DUB3,DATA5,CONTS20,CONTS25,CONTS35,CONTFF2,CONTSF10,CONTSF14,TARJ7,CONTS16,CONTS21,CONTS26,CONTS32,CONT9,DATA6,CONT15,CONT24,CONTS12,CONTF8,CONTF11,TARJ9,CONT23,DATA7,CONTS2GB,CONT25,CONT26,CONT10"
+  CharVal: "PMDUB,MDUB,CONTD3,DUB,CONTF30,CONTF55,CONTF20D,CONTF40,MDUB5,DUB2,CONTS30,CONTS39,MDUB9,CONTD9,DUB3,DATA5,CONTS20,CONTS25,CONTS35,CONTFF2,CONTSF10,CONTSF14,TARJ7,CONTS16,CONTS21,CONTS26,CONTS32,CONT9,DATA6,CONT15,CONT24,CONTS12,CONTF8,CONTF11,TARJ9,CONT23,DATA7,CONTS2GB,CONT25,CONT26,CONT10,MM_CERO"
   ParamName: "Black Berry Profile 1 bundles"
   Brand: "1"
 
@@ -1695,6 +1695,14 @@ bulkload: TMSParam
   ParamType: "C"
   CharVal: "MDUB2,MDUB3,MDUB4,CONTDATA,CONTD2,CONTD4"
   ParamName: "Black Berry profile 2 bundles"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "Bundles"
+  ParamCode: "BonoVoipRemovalDate"
+  ParamType: "C"
+  CharVal: "29/02/16"
+  ParamName: "Bono Voip Removal date"
   Brand: "1"
 
 bulkload: TMSParam
@@ -1715,26 +1723,10 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "Bundles"
-  ParamCode: "BonoVoipRemovalDate"
-  ParamType: "C"
-  CharVal: "29/02/16"
-  ParamName: "Bono Voip Removal date"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "Bundles"
   ParamCode: "BUNDLE_BASED_CLITYPES"
   ParamType: "C"
   CharVal: "CONTF,CONTRD,CONTS,CONTD,CONTSF"
   ParamName: "Bundle based CLITypes"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "Bundles"
-  ParamCode: "CONTD_CONTRACTS"
-  ParamType: "C"
-  CharVal: "CONTD9"
-  ParamName: "CONTD bundles"
   Brand: "1"
 
 bulkload: TMSParam
@@ -1747,10 +1739,10 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "Bundles"
-  ParamCode: "CONTS_CONTRACTS"
+  ParamCode: "CONTD_CONTRACTS"
   ParamType: "C"
-  CharVal: "CONTS30,CONTS39,CONTS15,CONTS20,CONTS25,CONTS35,CONTS16,CONTS21,CONTS26,CONTS32,CONTS12"
-  ParamName: "CONTS Contracts"
+  CharVal: "CONTD9"
+  ParamName: "CONTD bundles"
   Brand: "1"
 
 bulkload: TMSParam
@@ -1763,6 +1755,14 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "Bundles"
+  ParamCode: "CONTSFBUNDLE_MFBILLCODES"
+  ParamType: "C"
+  CharVal: "CONTSF10MF,CONTSF14MF"
+  ParamName: "CONTSF bundles MF billcodes"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "Bundles"
   ParamCode: "CONTSF_CONTRACTS"
   ParamType: "C"
   CharVal: "CONTSF10,CONTSF14"
@@ -1771,10 +1771,10 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "Bundles"
-  ParamCode: "CONTSFBUNDLE_MFBILLCODES"
+  ParamCode: "CONTS_CONTRACTS"
   ParamType: "C"
-  CharVal: "CONTSF10MF,CONTSF14MF"
-  ParamName: "CONTSF bundles MF billcodes"
+  CharVal: "CONTS30,CONTS39,CONTS15,CONTS20,CONTS25,CONTS35,CONTS16,CONTS21,CONTS26,CONTS32,CONTS12"
+  ParamName: "CONTS Contracts"
   Brand: "1"
 
 bulkload: TMSParam
@@ -1819,18 +1819,18 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "Bundles"
-  ParamCode: "FLAT_CONTRACTS"
-  ParamType: "C"
-  CharVal: "CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,CONTF8,CONTF11"
-  ParamName: "FLAT Contracts"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "Bundles"
   ParamCode: "FLATBUNDLE_MFBILLCODES"
   ParamType: "C"
   CharVal: "FLATMF20,FLATMF30,FLATMF55,FLATMF10,FLATMF20D,FLATMF40,FLATMF8,FLATMF11"
   ParamName: "Flat bundles MF billcodes"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "Bundles"
+  ParamCode: "FLAT_CONTRACTS"
+  ParamType: "C"
+  CharVal: "CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,CONTF8,CONTF11"
+  ParamName: "FLAT Contracts"
   Brand: "1"
 
 bulkload: TMSParam
@@ -1843,18 +1843,18 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "Bundles"
-  ParamCode: "IPL_CONTRACTS"
-  ParamType: "C"
-  CharVal: "CONTDATA,CONTD2,CONTD3,CONTD4"
-  ParamName: "IPL Contracts"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "Bundles"
   ParamCode: "IPLBUNDLE_MFBILLCODES"
   ParamType: "C"
   CharVal: "CONTDATAMF,CONTD2MF,CONTD3MF,CONTD4MF"
   ParamName: "IPL bundles MF billcodes"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "Bundles"
+  ParamCode: "IPL_CONTRACTS"
+  ParamType: "C"
+  CharVal: "CONTDATA,CONTD2,CONTD3,CONTD4"
+  ParamName: "IPL Contracts"
   Brand: "1"
 
 bulkload: TMSParam
@@ -1901,7 +1901,7 @@ bulkload: TMSParam
   ParamGroup: "Bundles"
   ParamCode: "POSTPAID_DATA_CONTRACTS"
   ParamType: "C"
-  CharVal: "CONTDATA,CONTD2,CONTD3,CONTD4,DUB,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,CONTF30,CONTF55,CONTF20D,CONTF40,DUB2,CONTS30,CONTS39,MDUB9,CONTD9,DUB3,DATA5,CONTS20,CONTS25,CONTS35,CONTFF2,CONTSF10,CONTSF14,CONT9,CONTS16,CONTS21,CONTS26,CONTS32,DATA6,CONT15,BONO_VOIP,CONT24,CONTS12,CONTF8,CONTF11,CONT23,DATA7,CONTS2GB,CONT25,CONT26,CONT10"
+  CharVal: "CONTDATA,CONTD2,CONTD3,CONTD4,DUB,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,CONTF30,CONTF55,CONTF20D,CONTF40,DUB2,CONTS30,CONTS39,MDUB9,CONTD9,DUB3,DATA5,CONTS20,CONTS25,CONTS35,CONTFF2,CONTSF10,CONTSF14,CONT9,CONTS16,CONTS21,CONTS26,CONTS32,DATA6,CONT15,BONO_VOIP,CONT24,CONTS12,CONTF8,CONTF11,CONT23,DATA7,CONTS2GB,CONT25,CONT26,CONT10,MM_CERO"
   ParamName: "All postpaid data bundle contracts"
   Brand: "1"
 
@@ -2646,7 +2646,7 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "CustCare"
-  ParamCode: "DefCustIGIC1"
+  ParamCode: "DefCustIGIC2"
   ParamType: "I"
   IntVal: 301
   ParamName: "Default customer"
@@ -2654,7 +2654,7 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "CustCare"
-  ParamCode: "DefCustIPSIC1"
+  ParamCode: "DefCustIPSIC2"
   ParamType: "I"
   IntVal: 302
   ParamName: "Default customer"
@@ -2662,7 +2662,7 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "CustCare"
-  ParamCode: "DefCustIPSIM1"
+  ParamCode: "DefCustIPSIM2"
   ParamType: "I"
   IntVal: 303
   ParamName: "Default customer"
@@ -2678,7 +2678,7 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "CustCare"
-  ParamCode: "DefCustVAT1"
+  ParamCode: "DefCustVAT2"
   ParamType: "I"
   IntVal: 300
   ParamName: "Default customer"
@@ -2941,6 +2941,126 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_20"
+  ParamType: "C"
+  CharVal: "1"
+  ParamName: "DMS notification sending for status 20"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_21"
+  ParamType: "C"
+  CharVal: "1"
+  ParamName: "DMS notification sending for status 21"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_44"
+  ParamType: "C"
+  CharVal: "1"
+  ParamName: "DMS notification sending for status 44"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_A"
+  ParamType: "C"
+  CharVal: "2"
+  ParamName: "DMS notification sending for status A"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_A0_by_batch"
+  ParamType: "C"
+  CharVal: "7"
+  ParamName: "DMS notification sending for status A0_by_batch"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_B"
+  ParamType: "C"
+  CharVal: "5"
+  ParamName: "DMS notification sending for status B"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_B1"
+  ParamType: "C"
+  CharVal: "6"
+  ParamName: "DMS notification sending for status B1"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_C"
+  ParamType: "C"
+  CharVal: "3"
+  ParamName: "DMS notification sending for status C"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_C_by_batch"
+  ParamType: "C"
+  CharVal: "7"
+  ParamName: "DMS notification sending for status C_by_batch"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_F"
+  ParamType: "C"
+  CharVal: "9"
+  ParamName: "DMS notification sending for status F"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_F1"
+  ParamType: "C"
+  CharVal: "11"
+  ParamName: "DMS notification sending for status F1"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_G"
+  ParamType: "C"
+  CharVal: "8"
+  ParamName: "DMS notification sending for status G"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_J"
+  ParamType: "C"
+  CharVal: "10"
+  ParamName: "DMS notification sending for status J"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSMsgID_N"
+  ParamType: "C"
+  CharVal: "8"
+  ParamName: "DMS notification sending for status N"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
+  ParamCode: "DMSOnOff"
+  ParamType: "I"
+  IntVal: 1
+  ParamName: "DMS document handling on / off"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DMS"
   ParamCode: "DMS_doc_no_provided_statuses"
   ParamType: "C"
   CharVal: "A0,C"
@@ -3089,126 +3209,6 @@ bulkload: TMSParam
   ParamType: "C"
   CharVal: "4,9"
   ParamName: "DMS Matrix Stat 44 / Row 4"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_20"
-  ParamType: "C"
-  CharVal: "1"
-  ParamName: "DMS notification sending for status 20"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_21"
-  ParamType: "C"
-  CharVal: "1"
-  ParamName: "DMS notification sending for status 21"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_44"
-  ParamType: "C"
-  CharVal: "1"
-  ParamName: "DMS notification sending for status 44"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_A"
-  ParamType: "C"
-  CharVal: "2"
-  ParamName: "DMS notification sending for status A"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_A0_by_batch"
-  ParamType: "C"
-  CharVal: "7"
-  ParamName: "DMS notification sending for status A0_by_batch"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_B"
-  ParamType: "C"
-  CharVal: "5"
-  ParamName: "DMS notification sending for status B"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_B1"
-  ParamType: "C"
-  CharVal: "6"
-  ParamName: "DMS notification sending for status B1"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_C"
-  ParamType: "C"
-  CharVal: "3"
-  ParamName: "DMS notification sending for status C"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_C_by_batch"
-  ParamType: "C"
-  CharVal: "7"
-  ParamName: "DMS notification sending for status C_by_batch"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_F"
-  ParamType: "C"
-  CharVal: "9"
-  ParamName: "DMS notification sending for status F"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_F1"
-  ParamType: "C"
-  CharVal: "11"
-  ParamName: "DMS notification sending for status F1"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_G"
-  ParamType: "C"
-  CharVal: "8"
-  ParamName: "DMS notification sending for status G"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_J"
-  ParamType: "C"
-  CharVal: "10"
-  ParamName: "DMS notification sending for status J"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSMsgID_N"
-  ParamType: "C"
-  CharVal: "8"
-  ParamName: "DMS notification sending for status N"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "DMS"
-  ParamCode: "DMSOnOff"
-  ParamType: "I"
-  IntVal: 1
-  ParamName: "DMS document handling on / off"
   Brand: "1"
 
 bulkload: TMSParam
@@ -5074,7 +5074,7 @@ bulkload: TMSParam
   ParamGroup: "IFS"
   ParamCode: "IFSCollActionFile"
   ParamType: "C"
-  CharVal: "/store/riftp/ifs/incoming/incoming/IFS_BAR*"
+  CharVal: "/store/riftp/ifs/incoming/incoming/#TENANT_IFS_BAR*"
   ParamName: "Collection action file"
   Brand: "1"
 
@@ -7186,14 +7186,6 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "PrepaidBundle"
-  ParamCode: "PMDUB_PROMO_START_DATE"
-  ParamType: "DA"
-  DateVal: 2013-03-01
-  ParamName: "PMDUB promotion start date"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "PrepaidBundle"
   ParamCode: "PMDUBFee"
   ParamType: "DE"
   DecVal: 8
@@ -7221,6 +7213,14 @@ bulkload: TMSParam
   ParamType: "DE"
   DecVal: 8
   ParamName: "MDUB Min Balance"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "PrepaidBundle"
+  ParamCode: "PMDUB_PROMO_START_DATE"
+  ParamType: "DA"
+  DateVal: 2013-03-01
+  ParamName: "PMDUB promotion start date"
   Brand: "1"
 
 bulkload: TMSParam
@@ -7874,7 +7874,7 @@ bulkload: TMSParam
   ParamGroup: "Report"
   ParamCode: "ErrorFile"
   ParamType: "C"
-  CharVal: "/scratch/nagios/tms/errorcodes/icc_msisdn_rep_errorfile.txt"
+  CharVal: "/scratch/nagios/tms/errorcodes/icc_msisdn_rep_errorfile_MasMovil.txt"
   ParamName: "iccmsisdnrep error file"
   Brand: "1"
 
@@ -7890,7 +7890,7 @@ bulkload: TMSParam
   ParamGroup: "Report"
   ParamCode: "MSISDNStatistics"
   ParamType: "C"
-  CharVal: "/scratch/nagios/tms/msisdnstock/MSISDNStatistics.txt"
+  CharVal: "/scratch/nagios/tms/msisdnstock/MSISDNStatistics_MasMovil.txt"
   ParamName: "iccmsisdnrep MSISDN statistics file"
   Brand: "1"
 
@@ -7898,7 +7898,7 @@ bulkload: TMSParam
   ParamGroup: "Report"
   ParamCode: "SIMStatistics"
   ParamType: "C"
-  CharVal: "/scratch/nagios/tms/simstock/SIMStatistics.txt"
+  CharVal: "/scratch/nagios/tms/simstock/SIMStatistics_MasMovil.txt"
   ParamName: "iccmsisdnrep SIM statistics file"
   Brand: "1"
 
@@ -8396,7 +8396,7 @@ bulkload: TMSParam
   ParamGroup: "SIM"
   ParamCode: "IMSI_Begin"
   ParamType: "c"
-  CharVal: "2140"
+  CharVal: "2140420"
   ParamName: "Prefix for IMSI in simread"
   Brand: "1"
 
@@ -9043,7 +9043,7 @@ bulkload: TMSParam
   ParamGroup: "Tariffs"
   ParamCode: "POSTPAID_VOICE_TARIFFS"
   ParamType: "C"
-  CharVal: "CONT,CONT4,CONT5,CONT6,CONTF,CONT7,CONTS,CONT8,CONTM,CONTM2,CONTFF,CONTSF,CONT9,CONT15,CONT24,CONT23,CONTDSL45,CONTFH45_50,CONTFH55_300,CONTDSL58,CONTFH58_50,CONTFH68_300,CONTDSL40,CONTFH40_50,CONTFH50_300,CONTDSL48,CONTFH48_50,CONTFH58_300,CONT25,CONT26,CONT10,CONTDSL59,CONTFH59_50,CONTFH69_300"
+  CharVal: "CONT,CONT4,CONT5,CONT6,CONTF,CONT7,CONTS,CONT8,CONTM,CONTM2,CONTFF,CONTSF,CONT9,CONT15,CONT24,CONT23,CONTDSL45,CONTFH45_50,CONTFH55_300,CONTDSL58,CONTFH58_50,CONTFH68_300,CONTDSL40,CONTFH40_50,CONTFH50_300,CONTDSL48,CONTFH48_50,CONTFH58_300,CONT25,CONT26,CONT10,CONTDSL59,CONTFH59_50,CONTFH69_300,MM_CERO"
   ParamName: "All postpaid voice tariffs"
   Brand: "1"
 
@@ -9155,7 +9155,7 @@ bulkload: TMSParam
   ParamGroup: "Terminate"
   ParamCode: "SubsTermLog"
   ParamType: "C"
-  CharVal: "/store/riftp/dumpfiles/terminate/outgoing/spool/terminate_#DATE_#TIME.log"
+  CharVal: "/store/riftp/dumpfiles/terminate/outgoing/spool/#TENANT_terminate_#DATE_#TIME.log"
   ParamName: "Log file for termin. handling"
   Brand: "1"
 
@@ -9719,14 +9719,6 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "web"
-  ParamCode: "web_services"
-  ParamType: "C"
-  CharVal: "T62=Fax|B16=Data"
-  ParamName: "web_services"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamGroup: "web"
   ParamCode: "webMSISDNlow"
   ParamType: "c"
   CharVal: "622000000"
@@ -9746,6 +9738,14 @@ bulkload: TMSParam
   ParamCode: "WebServiceMsg"
   ParamType: "C"
   ParamName: "Message shown for pos & teles"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "web"
+  ParamCode: "web_services"
+  ParamType: "C"
+  CharVal: "T62=Fax|B16=Data"
+  ParamName: "web_services"
   Brand: "1"
 
 bulkload: TMSParam
@@ -10848,19 +10848,19 @@ bulkload: TMSParam
   Brand: "2"
 
 bulkload: TMSParam
-  ParamGroup: "BILLING"
-  ParamCode: "PNP_Prod"
-  ParamType: "C"
-  CharVal: "F&F"
-  ParamName: "F&F Default product"
-  Brand: "2"
-
-bulkload: TMSParam
   ParamGroup: "Billing"
   ParamCode: "PNPBClass"
   ParamType: "I"
   IntVal: 5
   ParamName: "PNP (Friends&Fam.) BSUB class"
+  Brand: "2"
+
+bulkload: TMSParam
+  ParamGroup: "BILLING"
+  ParamCode: "PNP_Prod"
+  ParamType: "C"
+  CharVal: "F&F"
+  ParamName: "F&F Default product"
   Brand: "2"
 
 bulkload: TMSParam
@@ -13277,14 +13277,6 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "web"
-  ParamCode: "web_services"
-  ParamType: "C"
-  CharVal: "T62=Fax|B16=Data"
-  ParamName: "web_services"
-  Brand: "2"
-
-bulkload: TMSParam
-  ParamGroup: "web"
   ParamCode: "webMSISDNlow"
   ParamType: "c"
   CharVal: "0468399800"
@@ -13297,6 +13289,14 @@ bulkload: TMSParam
   ParamType: "c"
   CharVal: "0468399999"
   ParamName: "webMSISDNup"
+  Brand: "2"
+
+bulkload: TMSParam
+  ParamGroup: "web"
+  ParamCode: "web_services"
+  ParamType: "C"
+  CharVal: "T62=Fax|B16=Data"
+  ParamName: "web_services"
   Brand: "2"
 
 bulkload: TMSParam

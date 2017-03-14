@@ -32,7 +32,7 @@ DEF VAR ocError AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
-pcTenant = get_struct(param_toplevel_id, "0").
+pcTenant = get_string(param_toplevel_id, "0").
 pcStruct = get_struct(param_toplevel_id, "1").
 
 lcstruct = validate_struct(pcStruct, "id!,description!,display_item_amounts,valid_from!,valid_to,amount,priority!,vat_included,active!,username!").

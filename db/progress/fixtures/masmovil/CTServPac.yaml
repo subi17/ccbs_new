@@ -1,0 +1,192 @@
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "*1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "BB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "BPSUB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "HSDPA"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "LP"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "LTE"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "SEC"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "TMSService"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "UNSEC"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "*1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "BB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "BPSUB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "HSDPA"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "LP"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "LTE"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "SEC"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "SHAPER"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "TMSService"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "UNSEC"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+

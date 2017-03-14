@@ -98,7 +98,7 @@
                                   {&ORDER_STATUS_MNP_ON_HOLD}).
                   NEXT {1}.
                END.
-            END.
+            END. /* fIsConvergenceTariff AND ...*/
 
             ASSIGN llOrdStChg = no.
             /* YDR-1825 MNP SIM ONLY Orders
@@ -203,7 +203,8 @@
                         SIM.SimStat = 20
                         SIM.MsSeq = Order.MsSeq.
                   NEXT {1}.
-            END.
+            END. /*MNP SIM ONLY Orders*/
+
                
             /* Renove handling */ 
             IF Order.OrderType = 2 THEN DO:
@@ -322,7 +323,7 @@
                  
                RELEASE Order.
                NEXT {1}.
-            END. /* IF Order.OrderType = 2 THEN DO: */
+            END. /* renewal / IF Order.OrderType = 2 THEN DO: */
 
             IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN DO:
  
@@ -351,7 +352,7 @@
              IF Order.OrderType <> 3 AND
                 CAN-FIND(FIRST MsRequest WHERE
                                MsRequest.MsSeq   = Order.MSSeq  AND
-                               MsRequest.ReqType = 13)
+                               MsRequest.ReqType = 13) /*REQTYPE_SUBSCRIPTION_CREATE*/
              THEN DO: 
                 NEXT.
              END.
@@ -530,13 +531,18 @@
                 END.
              END.
   
-             IF Order.StatusCode = "3" THEN DO:
+             IF Order.StatusCode EQ {&ORDER_STATUS_MNP} /*3*/ THEN DO:
                 
                 IF Order.SalesMan EQ "order_correction_mnp" AND
                    LOOKUP(Order.OrderChannel,
                           "telesales,fusion_telesales,pos,fusion_pos") > 0 THEN
                    /* YBP-620 */
                    Order.MNPStatus = 6. /* fake mnp process (ACON) */
+                /*MB_Migration has special MNP/Migration handler*/
+                ELSE IF Order.Orderchannel BEGINS "migration" THEN DO:
+                   Order.StatusCode = {&ORDER_STATUS_MIGRATION_PENDING}. /*60*/
+                   NEXT {1}.
+                END.
                 ELSE DO:
                    /* YBP-621 */
                    RUN Mnp/mnprequestnc.p(order.orderid).

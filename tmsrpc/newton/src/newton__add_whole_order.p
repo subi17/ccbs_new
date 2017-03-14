@@ -245,6 +245,8 @@ katun = "NewtonRPC".
 {Func/smsmessage.i}
 {Mc/orderfusion.i}
 
+{Migration/migrationfunc.i}
+
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
 /* Input parameters for order */
@@ -397,10 +399,10 @@ DEF VAR plResignationPeriod AS LOG NO-UNDO.
 DEF VAR plPromotion AS LOG NO-UNDO.
 DEF VAR llROIClose AS LOG NO-UNDO. 
 
-DEF VAR lcPayment AS CHAR NO-UNDO.
-DEF VAR pcPaypalPayerid AS CHAR NO-UNDO.
-DEF VAR liLanguage AS INTEGER NO-UNDO.
-
+DEF VAR lcPayment                        AS CHAR    NO-UNDO.
+DEF VAR pcPaypalPayerid                  AS CHAR    NO-UNDO.
+DEF VAR liLanguage                       AS INTEGER NO-UNDO.
+DEF VAR lcFixedOnlyConvergentCliTypeList AS CHAR    NO-UNDO.
 /* q25_data */
 DEF VAR llq25_extension   AS LOGICAL NO-UNDO. /* Quota 25 extension */
 DEF VAR ldeq25_discount   AS DECIMAL NO-UNDO. /* Discount amount over Quota 25 */
@@ -416,6 +418,8 @@ DEF VAR lcAccessoryStruct AS CHAR NO-UNDO.
 
 /*Financing info*/
 DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
+
+DEF VAR lcItemParam AS CHAR NO-UNDO.
 
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
@@ -521,7 +525,9 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    IF LOOKUP('dss', lcOrderStruct) GT 0 THEN
       plDSSActivate = get_bool(pcOrderStruct,"dss").
 
-   IF LOOKUP('delivery_channel', lcOrderStruct) > 0 THEN
+   IF LOOKUP(pcSubType,lcFixedOnlyConvergentCliTypeList) > 0 THEN 
+      lcdelivery_channel = "Paper".
+   ELSE IF LOOKUP('delivery_channel', lcOrderStruct) > 0 THEN
       lcdelivery_channel = get_string(pcOrderStruct,"delivery_channel").
     
    IF LOOKUP('bono_voip', lcOrderStruct) GT 0 THEN
@@ -694,30 +700,32 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
           lcIdtypeOrderCustomer = "CIF".
       END. /* data[LOOKUP("company_id", ... */
       
-      IF piRowType EQ 4 THEN
+      IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} THEN
          pcUpsHours = data[LOOKUP("ups_hours", gcCustomerStructStringFields)].
       
-      IF lcIdOrderCustomer EQ "" AND piRowType = 1 THEN
+      IF lcIdOrderCustomer EQ "" AND piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
           lcFError = "Expected either person_id or company_id".
 
-      /* YTS-2453 */
-      IF NOT plBypassRules AND
-         lcFError = "" AND 
-         piRowType = 1 AND
-         LOOKUP(pcNumberType,"new,mnp") > 0 AND
-         NOT plUpdate AND
-         piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
-         NOT fSubscriptionLimitCheck(
-         lcIdOrderCustomer,
-         lcIdTypeOrderCustomer,
-         llSelfEmployed,
-         1,
-         OUTPUT lcFError,
-         OUTPUT liSubLimit,
-         OUTPUT liSubs,
-         OUTPUT liSubLimit,
-         OUTPUT liActs) THEN .
+      IF NOT pcChannel BEGINS "migration" THEN DO: /*MMM-21*/
 
+         /* YTS-2453 */
+         IF NOT plBypassRules AND
+            lcFError = "" AND 
+            piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+            LOOKUP(pcNumberType,"new,mnp") > 0 AND
+            NOT plUpdate AND
+            piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
+            NOT fSubscriptionLimitCheck(
+            lcIdOrderCustomer,
+            lcIdTypeOrderCustomer,
+            llSelfEmployed,
+            1,
+            OUTPUT lcFError,
+            OUTPUT liSubLimit,
+            OUTPUT liSubs,
+            OUTPUT liSubLimit,
+            OUTPUT liActs) THEN .
+      END.
       CASE lcdelivery_channel:
          WHEN "PAPER" THEN liDelType = {&INV_DEL_TYPE_PAPER}.
          WHEN "EMAIL" THEN liDelType = {&INV_DEL_TYPE_EMAIL}.
@@ -881,7 +889,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
 
 
 
-   IF piRowType = 1 THEN
+   IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
    DO:
       lcId      = lcIdOrderCustomer.
       lcIdType  = lcIdTypeOrderCustomer.
@@ -1395,6 +1403,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* YPB-514 */
 lcOrderStruct = validate_request(pcOrderStruct, gcOrderStructFields).
 IF lcOrderStruct EQ ? THEN RETURN.
+ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
 fGetOrderFields().
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1402,6 +1411,21 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
+
+/*MB_migration related checks*/
+
+/*Customer is not allowed to have active subscription in Yoigo system*/
+IF pcChannel BEGINS "migration" THEN DO:
+   DEF VAR lcMErr AS CHAR NO-UNDO.
+   IF fMigrationCheckCustomer(gcBrand, lcId) NE "" THEN
+      RETURN appl_Err("Migration data validation error:" + lcMErr).
+END.
+
+/*If STC or MNP is not allowed during migration*/
+IF (pcNumberType EQ "mnp" OR pcNumberType EQ "stc") AND
+   fIsNumberInMigration(pcCLI) THEN 
+   RETURN appl_Err("Requested number is in migration").
+
 
 /* YPB-515 */
 IF pcDiscountPlanId > "" THEN DO:
@@ -1608,19 +1632,19 @@ DO:
 END.
  
 /* YBP-536 */ 
-lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, FALSE).
+lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-537 */ 
 IF pcAddressStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, 4, FALSE).
+   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_DELIVERY}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-538 */ 
 IF pcContactStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, FALSE).
+   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1846,12 +1870,18 @@ fSplitTS(Order.CrStamp,OUTPUT ldaOrderDate,OUTPUT liOrderTime).
 
 /* YBP-547 */
 /* Apply discount to the subscription */
-IF AVAIL DiscountPlan THEN 
+IF AVAIL DiscountPlan THEN DO:
+
+   ASSIGN lcItemParam = "amount=" + STRING(pdeDiscountPlanAmount) +
+                        "|valid_period=" + STRING(piDiscountValidPeriod)
+                        WHEN (pdeDiscountPlanAmount NE 0 AND 
+                              piDiscountValidPeriod NE 0).
+
    fCreateOrderAction(Order.Orderid,
-                      "Discount",
+                     "Discount",
                       STRING(DiscountPlan.DPId),
-                      "amount=" + STRING(pdeDiscountPlanAmount) +
-                      "|valid_period=" + STRING(piDiscountValidPeriod)).
+                      lcItemParam).
+END.
 
 /* YBP-548 */
 IF pcMemo NE "" THEN 
@@ -2379,9 +2409,11 @@ IF plSendOffer AND NOT llROIClose THEN DO:
 
    lcOfferSMSText = fGetOrderOfferSMS(Order.OrderID, 
                                       TRUE).
-
-   IF lcMobileNumber NE "" AND 
-      lcOfferSMSText NE "" AND lcOfferSMSText NE ? THEN
+   
+   
+   IF NOT Order.Orderchannel BEGINS "migration" AND
+      (lcMobileNumber NE "" AND       
+      lcOfferSMSText NE "" AND lcOfferSMSText NE ?) THEN
       fCreateSMS(Order.CustNum,
                  lcMobileNumber,
                  Order.MsSeq, 
@@ -2408,7 +2440,8 @@ fMarkOrderStamp(Order.OrderID,"Change",0.0).
 
 
 /*YDR_1637*/
-IF INDEX(Order.OrderChannel, "pos") EQ 0 THEN DO:
+IF INDEX(Order.OrderChannel, "pos") EQ 0  AND
+         NOT Order.Orderchannel BEGINS "migration" THEN DO:
    IF (Order.StatusCode EQ {&ORDER_STATUS_MNP_ON_HOLD}        /*22*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}        /*51*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}  /*76*/ OR
