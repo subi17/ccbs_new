@@ -1,0 +1,15 @@
+ADD FIELD "TenantName" OF "Replog" AS character
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Tenant name"
+  POSITION 9
+  MAX-WIDTH 30
+  COLUMN-LABEL "TenantName"
+  HELP "Tenant name"
+  ORDER 80
+
+.
+PSC
+cpstream=1252
+.
+0000001560
