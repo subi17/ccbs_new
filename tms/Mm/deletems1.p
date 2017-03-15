@@ -83,6 +83,7 @@ DEFINE VARIABLE llHelp        AS LOG   NO-UNDO INIT TRUE.
 DEFINE VARIABLE lcError       AS CHAR  NO-UNDO.
 DEFINE VARIABLE liError       AS INT   NO-UNDO.
 DEFINE VARIABLE llBillPer     AS LOGICAL NO-UNDO.
+DEFINE VARIABLE lcTermType    AS CHAR  NO-UNDO INIT "Full".
 
 DEFINE VARIABLE llAddLineTerm   AS LOG  NO-UNDO.
 
@@ -124,6 +125,9 @@ FORM
    " Deactivation Time :" KillTime                                       
       HELP "Exact time when a SCHEDULED kill shall be performed"       SKIP
 
+   " Termination type :" lcTermType
+      HELP "Termination type Full / Partial"                           SKIP
+   
    " MSISDN status ....:" liMsisdnStat FORMAT ">9"
       HELP "MSISDN status after termination (F9)"
       lcMsisdnStat FORMAT "x(32)"
@@ -143,15 +147,15 @@ FRAME main.
 
 IF getTMSRight("CCSUPER,SYST") EQ "RW" THEN llAdmin = TRUE.
 
+FIND MobSub WHERE MobSub.MsSeq = piMsSeq NO-LOCK.
+
 liError = fDeleteMsValidation(piMsSeq, 
-                          ?, /* termination reason not yet known */
-                          OUTPUT lcError).
+                              ?, /* termination reason not yet known */
+                              OUTPUT lcError).
 IF lcError NE "" THEN DO:
    MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
    IF liError NE 0 THEN RETURN.
 END.
-
-FIND MobSub WHERE MobSub.MsSeq = piMsSeq NO-LOCK.
 
 ASSIGN
    lcUserCode = katun
@@ -236,6 +240,7 @@ REPEAT WITH FRAME main:
          VALIDATE(INPUT ldtKillDate = ? OR INPUT ldtKillDate >= TODAY,
          "Date other than EMPTY must not be earlier than today !")
       KillTime
+      lcTermType     WHEN fIsConvergenceTariff(Mobsub.clitype)
       liMsisdnStat   WHEN llYoigoCLI AND liOrderer EQ 5
       liQuarTime     WHEN liOrderer EQ 5 AND liMsisdnStat EQ 4 AND
                           liQuarTime > -1
@@ -555,6 +560,21 @@ REPEAT WITH FRAME main:
             END.
 
          END.
+         
+         ELSE IF FRAME-FIELD = "lcTermType" THEN DO:
+            IF lcTermType NE "Full" AND
+               lcTermType NE "Partial" THEN DO:
+               MESSAGE "Value must be Full or Partial!"
+                  VIEW-AS ALERT-BOX.
+               NEXT.
+            END.   
+            IF MobSub.msstatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE} AND
+               lcTermType EQ "Partial" THEN DO:
+               MESSAGE "Mobile already terminated, only Full possible"
+                  VIEW-AS ALERT-BOX.
+               NEXT.
+            END.
+         END.
 
          ELSE IF FRAME-FIELD = "liQuarTime" THEN DO:
             IF INPUT liQuarTime < 1 OR INPUT liQuarTime > 90 THEN DO:
@@ -665,8 +685,8 @@ REPEAT WITH FRAME main:
          END.
       
          liError = fDeleteMsValidation(Mobsub.MsSeq, 
-                             liOrderer, /* not yet known */
-                             OUTPUT lcError).
+                                       liOrderer, /* not yet known */
+                                       OUTPUT lcError).
          IF liError NE 0 THEN DO:
             MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
             NEXT ACTION.
@@ -728,6 +748,7 @@ REPEAT WITH FRAME main:
                                     "4",
                                     lcUserCode,
                                     0,
+                                    lcTermType,
                                     OUTPUT ocResult).
                                     
       IF liMsReq = 0 THEN
