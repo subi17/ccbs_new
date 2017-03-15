@@ -16,7 +16,7 @@
 {xmlrpc/xmlrpc.i &SERIALIZE_ONLY=1}
 {xmlrpc/xmlrpc_access.i &TOGETHER=1}
 
-DEFINE TEMP-TABLE ttPortabilityQuery
+DEFINE TEMP-TABLE ttPortabilityQuery NO-UNDO
    FIELD ResultsPerPage AS INT INIT 10
    FIELD MsgCreatedStart AS DEC FORMAT "99999999.99999"
    FIELD MsgCreatedEnd AS DEC  FORMAT "99999999.99999"
@@ -42,7 +42,7 @@ DEFINE TEMP-TABLE ttPortabilityQuery
    FIELD IsSinglePorting AS LOGICAL INIT ?
    FIELD IsOperatorOnline AS LOGICAL INIT ?.
 
-DEFINE TEMP-TABLE ttNumberTermQuery
+DEFINE TEMP-TABLE ttNumberTermQuery NO-UNDO
    FIELD ResultsPerPage AS INT INIT 10
    FIELD MsgCreatedStart AS DEC FORMAT "99999999.99999"
    FIELD MsgCreatedEnd AS DEC  FORMAT "99999999.99999"
@@ -55,13 +55,13 @@ DEFINE TEMP-TABLE ttNumberTermQuery
    FIELD DonorOperatorCode AS CHAR
    FIELD ReceptorOperatorCode AS CHAR.
 
-DEFINE TEMP-TABLE ttPageQuery
+DEFINE TEMP-TABLE ttPageQuery NO-UNDO
    FIELD Operation AS CHAR format "x(50)"
    FIELD PageCode AS CHAR  format "x(50)"
    FIELD PageNumber AS INT init 1 
    FIELD Cases AS INT.
 
-DEFINE TEMP-TABLE ttMigrationRequest
+DEFINE TEMP-TABLE ttMigrationRequest NO-UNDO
    FIELD StartDate AS DATE FORMAT "99-99-9999" INIT TODAY
    FIELD NumbersTotal AS INTEGER INIT 1
    FIELD ServiceOperatorsFrom AS CHAR FORMAT "x(40)"
@@ -69,7 +69,7 @@ DEFINE TEMP-TABLE ttMigrationRequest
    FIELD OperatorTo AS CHAR INIT "005"
    FIELD Scenario AS CHAR FORMAT "x(40)".
 
-DEFINE TEMP-TABLE ttMigrationNumberRequest
+DEFINE TEMP-TABLE ttMigrationNumberRequest NO-UNDO
    FIELD PortReq AS CHAR FORMAT "x(23)"
    FIELD ServiceOperatorFrom AS CHAR FORMAT "x(3)"
    FIELD NetworkOperatorFrom AS CHAR FORMAT "x(3)"
@@ -78,7 +78,7 @@ DEFINE TEMP-TABLE ttMigrationNumberRequest
    FIELD NRN AS CHAR FORMAT "X(6)" INIT "005"
    FIELD MSISDN AS CHAR FORMAT "x(9)".
 
-DEFINE TEMP-TABLE ttNumberRangesQuery
+DEFINE TEMP-TABLE ttNumberRangesQuery NO-UNDO
    FIELD ResultsPerPage AS INT INIT 10
    FIELD MsgCreatedStart AS DEC FORMAT "99999999.99999"
    FIELD MsgCreatedEnd AS DEC FORMAT "99999999.99999"

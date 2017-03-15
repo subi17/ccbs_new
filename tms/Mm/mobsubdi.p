@@ -76,7 +76,7 @@ FUNCTION fIsPermittedModule RETURNS LOGICAL
 END FUNCTION. 
 
 DEF  INPUT  PARAMETER  msseq  AS INT . 
-DEF  OUTPUT PARAMETER   killed AS lo .
+DEF  OUTPUT PARAMETER   noMobile AS lo .
 
 DEF NEW SHARED variable siirto as c .
 DEF VAR menuc      AS C  EXTENT 30               NO-UNDO.
@@ -95,6 +95,8 @@ DEF VAR lrBarring AS ROWID                       NO-UNDO.
 DEF VAR ldeFirstSecond AS DEC NO-UNDO. 
 DEF VAR ldaDate AS DATE NO-UNDO. 
 DEF VAR ldeLastSecond AS DEC NO-UNDO. 
+DEF VAR llPartial AS LOG NO-UNDO.
+DEF VAR llkilled AS LOG NO-UNDO.
 
 DEF VAR lhSub AS HANDLE NO-UNDO. 
 
@@ -124,52 +126,72 @@ ELSE                    lcUserName = "".
 
 
 DO WHILE TRUE:
-   ASSIGN Killed = (not avail mobsub) ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
+   ASSIGN 
+      noMobile = (not avail mobsub) 
+      ufk = 0 
+      ufk[8] = 8 
+      ehto = 3. 
+   IF AVAIL MobSub AND Mobsub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
+      noMobile = TRUE.
+      llPartial = TRUE.
+      FIND TermMobsub WHERE TermMobsub.Msseq = msseq NO-LOCK NO-ERROR.
+      IF avail TermMobsub then
+         ASSIGN lhSub = BUFFER TermMobsub:HANDLE
+         llkilled = TRUE.
+   END.
+   RUN Syst/ufkey.p.
  DISPLAY
- "A) Subscription active masks            " WHEN NOT Killed @ menuc[1] 
+ "A) Subscription active masks            " WHEN NOT noMobile @ menuc[1] 
  "P) Counters and Limits          "       @ menuc[16] SKIP
 
- "B) Change subscription type             " WHEN NOT Killed  @ menuc[2] 
- "Q) Prepaid functions            "       WHEN NOT Killed  @ menuc[17] SKIP
+ "B) Change subscription type             " WHEN NOT noMobile  @ menuc[2] 
+ "Q) Prepaid functions            "       WHEN NOT noMobile  @ menuc[17] SKIP
 
- "C) Change SIM/ICC                       " WHEN NOT Killed  @ menuc[3]
+ "C) Change SIM/ICC                       " WHEN NOT noMobile  @ menuc[3]
  "R) Periodical Contracts         "          @ menuc[18] SKIP
 
- "D) Change MSISDN                        "  WHEN NOT Killed @ menuc[4]
+ "D) Change MSISDN                        "  WHEN NOT noMobile @ menuc[4]
  "S) Timestamp History            "          @ menuc[19] SKIP
 
- "E) Customer Data                        " WHEN NOT Killed  @ menuc[5]
- "T) Re-Rate Subscription       "        WHEN NOT Killed @ menuc[20] SKIP
+ "E) Customer Data                        " WHEN (NOT noMobile OR llPartial) 
+                                               @ menuc[5]
+ "T) Re-Rate Subscription       "        WHEN (NOT noMobile OR llPartial)
+                                            @ menuc[20] SKIP
 
- "F) Order View                           " WHEN NOT Killed @ menuc[6]
- "U) Send SMS                  "         WHEN NOT Killed  @ menuc[21] SKIP
+ "F) Order View                           " WHEN (NOT noMobile OR llPartial)
+                                               @ menuc[6]
+ "U) Send SMS                  "         WHEN NOT noMobile  @ menuc[21] SKIP
 
- "G) Single Fee                           " WHEN NOT Killed  @ menuc[7]
- "V)                            "          WHEN NOT Killed   @ menuc[22] SKIP
+ "G) Single Fee                           " WHEN (NOT noMobile OR llPartial)
+                                               @ menuc[7]
+ "V)                            "          WHEN NOT noMobile   @ menuc[22] SKIP
 
- "H) Change Data Bundle                   " WHEN NOT Killed  @ menuc[8]
- "W) Print Itemized List of Calls"          WHEN NOT Killed  @ menuc[23] SKIP
+ "H) Change Data Bundle                   " WHEN NOT noMobile  @ menuc[8]
+ "W) Print Itemized List of Calls"          WHEN NOT noMobile  @ menuc[23] SKIP
 
- "I) Terminate Subscription               " WHEN NOT Killed  @ menuc[ 9]    
- "X) TMT (Ticket Management Tool)"          WHEN NOT Killed  @ menuc[24] SKIP
+ "I) Terminate Subscription               " WHEN (NOT noMobile OR llpartial)
+                                               @ menuc[ 9]    
+ "X) TMT (Ticket Management Tool)"          WHEN NOT noMobile  @ menuc[24] SKIP
 
- "J) FAT (Free Air Time)                  " WHEN NOT Killed  @ menuc[10]   
- "Y) Commissions              "             WHEN NOT Killed  @ menuc[25] SKIP
+ "J) FAT (Free Air Time)                  " WHEN NOT noMobile  @ menuc[10]   
+ "Y) Commissions              "             WHEN NOT noMobile  @ menuc[25] SKIP
  
- "K) Create FAT                           " WHEN NOT Killed  @ menuc[11]
- "Z) Terminals                "             WHEN NOT Killed  @ menuc[26] SKIP
+ "K) Create FAT                           " WHEN NOT noMobile  @ menuc[11]
+ "Z) Terminals                "             WHEN NOT noMobile  @ menuc[26] SKIP
  
  "L) Discount                             "                  @ menuc[12]
- "1) Reactivate Subscription  "             WHEN Killed      @ menuc[27] SKIP
+ "1) Reactivate Subscription  "             WHEN (noMobile AND NOT llPartial OR
+                                            (llPartial AND llkilled))
+                                               @ menuc[27] SKIP
 
- "M)                                      " WHEN NOT Killed  @ menuc[13]
+ "M)                                      " WHEN NOT noMobile  @ menuc[13]
  "2) All Logs                 "                              @ menuc[28] SKIP
  
- "N)                                      " WHEN NOT Killed  @ menuc[14]
- "3) Supervisor Actions       "             WHEN NOT Killed  @ menuc[29] SKIP
+ "N)                                      " WHEN NOT noMobile  @ menuc[14]
+ "3) Supervisor Actions       "             WHEN NOT noMobile  @ menuc[29] SKIP
  
  "O) Billing                              "                  @ menuc[15]
- "4) Admin Actions "                        WHEN NOT Killed  @ menuc[30] SKIP
+ "4) Admin Actions "                        WHEN NOT noMobile  @ menuc[30] SKIP
 
    WITH OVERLAY WIDTH 78 FRAME choices NO-LABELS.
    CHOOSE FIELD menuc AUTO-RETURN go-on (F8) WITH FRAME choices
@@ -179,7 +201,7 @@ DO WHILE TRUE:
 
    IF LOOKUP(KEYLABEL(LASTKEY),"F8") > 0  THEN LEAVE.
 
-   IF FRAME-INDEX EQ 1 AND NOT Killed THEN DO:
+   IF FRAME-INDEX EQ 1 AND NOT noMobile THEN DO:
       lgOngoing = fCheckBarrStatus(MsSeq, OUTPUT lcCmdList, OUTPUT lrBarring). 
       IF lgOngoing EQ TRUE THEN DO:
          MESSAGE "This subscription has unfinished barring commands in HLR!"
@@ -189,36 +211,40 @@ DO WHILE TRUE:
       RUN Mm/barrbrowser1.p(MsSeq).
    END.
 
-   ELSE IF FRAME-INDEX = 2 AND NOT Killed THEN DO :
+   ELSE IF FRAME-INDEX = 2 AND NOT noMobile THEN DO :
       IF NOT fIsPermittedModule(MobSub.CliType, "mobtypech") THEN NEXT.
       RUN Mm/mobtypech.p(msseq).
    END.
            
-   ELSE IF FRAME-INDEX = 3 AND NOT Killed THEN DO TRANSACTION:
+   ELSE IF FRAME-INDEX = 3 AND NOT noMobile THEN DO TRANSACTION:
       IF NOT fIsPermittedModule(MobSub.CliType, "simch") THEN NEXT.
        /*YPR-4777*/
       /*Operation is not allowed if fixed line provisioning is pending*/
-      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
-         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
+      IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR /*16*/ 
+          MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN
+         MESSAGE "Mobile line provisioning is not complete or " +
+                 "no active mobile line" VIEW-AS ALERT-BOX.
       ELSE     
          RUN Mm/simch.p(MsSeq).
    END.
 
-   ELSE IF FRAME-INDEX = 4 AND NOT Killed THEN DO TRANSACTION:
+   ELSE IF FRAME-INDEX = 4 AND NOT noMobile THEN DO TRANSACTION:
       IF NOT fIsPermittedModule(MobSub.CliType, "msisdnch") THEN NEXT.
       /*YPR-4776*/
       /*Operation is not allowed if fixed line provisioning is pending*/
-      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
-         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
+      IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR /*16*/
+          MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN
+         MESSAGE "Mobile line provisioning is not complete or" +
+                 "no active mobile line" VIEW-AS ALERT-BOX.
       ELSE 
          RUN Mm/msisdnch.p(MsSeq).
    END.
             
-   ELSE IF FRAME-INDEX = 5 AND NOT Killed THEN  DO :
+   ELSE IF FRAME-INDEX = 5 AND (NOT noMobile OR llPartial) THEN  DO :
       RUN Mm/persondata.p(MsSeq).
    END.
             
-   ELSE IF FRAME-INDEX = 6 AND NOT Killed THEN DO:
+   ELSE IF FRAME-INDEX = 6 AND (NOT noMobile OR llPartial) THEN DO:
       FIND FIRST Order WHERE 
                  Order.Msseq = MSSeq AND
                  Order.OrderType < 2 NO-LOCK NO-ERROR.
@@ -230,22 +256,25 @@ DO WHILE TRUE:
       VIEW-AS ALERT-BOX.
    END.         
    
-   ELSE IF FRAME-INDEX = 7 AND NOT Killed THEN DO:
+   ELSE IF FRAME-INDEX = 7 AND (NOT noMobile OR llPartial) THEN DO:
       IF MobSub.PayType = FALSE THEN  
               RUN Mc/bitemcu.p(MobSub.CustNum,
                             STRING(MsSeq)).
       ELSE MESSAGE "Function not allowed for Prepaid " VIEW-AS ALERT-BOX.
    END.
    
-   ELSE IF FRAME-INDEX = 8 AND NOT Killed THEN DO:
+   ELSE IF FRAME-INDEX = 8 AND NOT noMobile THEN DO:
       /*YPR-4775*/
       /*Operation is not allowed if fixed line provisioning is pending*/
-      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN 
-         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
+      IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR /*16*/
+          MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN
+         MESSAGE "Mobile line provisioning is not complete or " +
+                 "no active mobile line" VIEW-AS ALERT-BOX.
+         
       ELSE RUN Mm/bundle_change_ui.p (MobSub.MsSeq).
    END.
             
-   ELSE IF FRAME-INDEX = 9 AND NOT Killed AND Avail mobsub 
+   ELSE IF FRAME-INDEX = 9 AND (NOT noMobile OR llPartial) AND Avail mobsub 
    THEN DO TRANSACTION:  /* KILL subscription */
 
       IF Mobsub.msstatus = 2 OR 
@@ -258,20 +287,20 @@ DO WHILE TRUE:
       END.    
       RUN Mm/deletems1.p(INPUT MsSeq).
 
-      /* RETURN immediately IF killed */
+      /* RETURN immediately IF noMobile */
       IF NOT CAN-FIND(MobSub WHERE MobSub.MsSeq = MsSeq) THEN DO:
-         KILLED = TRUE.
+         noMobile = TRUE.
          LEAVE.
       END.
    END.
           
-   ELSE IF  FRAME-INDEX = 10 AND NOT Killed AND Avail mobsub THEN DO :
+   ELSE IF  FRAME-INDEX = 10 AND NOT noMobile AND Avail mobsub THEN DO :
       IF NOT fIsPermittedModule(MobSub.CliType, "fatime") THEN NEXT.
       RUN Mm/fatime.p("", 0, mobsub.cli, MobSub.MsSeq).
    END.
                                     
 
-   ELSE IF FRAME-INDEX = 11 AND NOT Killed AND Avail mobsub THEN DO:
+   ELSE IF FRAME-INDEX = 11 AND NOT noMobile AND Avail mobsub THEN DO:
       IF NOT fIsPermittedModule(MobSub.CliType, "creafatui") THEN NEXT.
       RUN Mc/creafatui.p (MobSub.CustNum,
                      MobSub.MsSeq).
@@ -299,7 +328,7 @@ DO WHILE TRUE:
       RUN Mm/countermenu.p(msseq).
    END.
 
-   ELSE IF FRAME-INDEX = 17 AND NOT Killed  AND avail mobsub THEN DO:  
+   ELSE IF FRAME-INDEX = 17 AND NOT noMobile  AND avail mobsub THEN DO:  
       IF NOT fIsPermittedModule(MobSub.CliType, "ppreqbr") THEN NEXT.
       RUN Gwy/ppreqbr.p(MobSub.MsSeq).
    END.
@@ -313,7 +342,7 @@ DO WHILE TRUE:
       RUN Mm/msowner.p(msseq). 
    END.
 
-   ELSE IF FRAME-INDEX = 20 AND NOT Killed THEN DO :
+   ELSE IF FRAME-INDEX = 20 AND (NOT noMobile OR llPartial) THEN DO :
       IF NOT fIsPermittedModule(MobSub.CliType, "dccli") THEN NEXT. 
 
       lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum, INPUT fMakeTS()).
@@ -379,7 +408,7 @@ DO WHILE TRUE:
       VIEW-AS ALERT-BOX INFORMATION.
    END.
 
-   ELSE IF FRAME-INDEX =  21 AND NOT Killed  THEN DO:
+   ELSE IF FRAME-INDEX =  21 AND NOT noMobile  THEN DO:
       IF NOT fIsPermittedModule(MobSub.CliType, "mobsubsms") THEN NEXT.
       IF lcRight = "R" THEN MESSAGE "Restricted use. Not allowed!" 
                             VIEW-AS ALERT-BOX.
@@ -387,43 +416,44 @@ DO WHILE TRUE:
    END.
    
    /* call specification */
-   ELSE IF FRAME-INDEX = 23 AND NOT Killed  THEN DO:
+   ELSE IF FRAME-INDEX = 23 AND NOT noMobile  THEN DO:
       IF NOT fIsPermittedModule(MobSub.CliType, "mclispec") THEN NEXT.
       RUN Mm/mclispec.p(mobsub.cli).
    END.
    
-   ELSE IF FRAME-INDEX = 24 AND NOT Killed THEN DO:
+   ELSE IF FRAME-INDEX = 24 AND NOT noMobile THEN DO:
       RUN Mm/tmrulesel.p(MobSub.MsSeq,MobSub.CustNum).
    END.
-   ELSE IF FRAME-INDEX = 25 AND NOT Killed THEN DO:
+   ELSE IF FRAME-INDEX = 25 AND NOT noMobile THEN DO:
       RUN Ar/cotarg.p(MobSub.MsSeq,"mobsub").
    END.
                   
-   ELSE IF FRAME-INDEX = 26 AND NOT Killed THEN
+   ELSE IF FRAME-INDEX = 26 AND NOT noMobile THEN
       RUN Mm/substerminal.p(MobSub.MsSeq,0,0).
 
    /* Reactivate the terminated Subscription */                 
-   ELSE IF FRAME-INDEX = 27 AND Killed THEN DO:
+   ELSE IF FRAME-INDEX = 27 AND ((noMobile OR llPartial) OR 
+                                 (llPartial AND llkilled)) THEN DO:
       MESSAGE "Do You REALLY want to reactivate subscription with MSISDN: " TermMobsub.CLI 
          VIEW-AS ALERT-BOX BUTTONS YES-NO TITLE " CONFIRMATION " UPDATE ok .
          
       IF NOT ok THEN NEXT.
       RUN Mm/reacmobsub_cui.p(INPUT TermMobsub.Msseq, INPUT katun).
-   END. /* ELSE IF FRAME-INDEX = 27 AND Killed THEN DO: */
+   END. /* ELSE IF FRAME-INDEX = 27 AND noMobile THEN DO: */
 
    /* call specification */
    ELSE IF FRAME-INDEX = 28 THEN DO:
       RUN Mm/alllogs.p(msseq).
    END.
 
-   ELSE IF FRAME-INDEX = 29 AND NOT Killed THEN DO:  
+   ELSE IF FRAME-INDEX = 29 AND NOT noMobile THEN DO:  
       IF NOT fIsPermittedModule(MobSub.CliType, "mobsubsudo") THEN NEXT.
       /* Supervisor actions here */
       RUN Mm/mobsubsudo.p(MsSeq).
    END.
 
     
-   ELSE IF FRAME-INDEX = 30 AND NOT Killed THEN DO: 
+   ELSE IF FRAME-INDEX = 30 AND NOT noMobile THEN DO: 
       IF NOT fIsPermittedModule(MobSub.CliType, "adminactions") THEN NEXT.
       MESSAGE 
       "Not in Use"
