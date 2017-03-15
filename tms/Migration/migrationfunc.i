@@ -76,7 +76,7 @@ FUNCTION fMigrationCheckCustomer RETURNS CHAR
       IF AVAIL MobSub THEN DO:         
          FIND FIRST Order NO-LOCK WHERE
                   Order.MsSeq EQ Mobsub.MsSeq AND
-                  Order.Orderchannel NE "migration" NO-ERROR.
+                  NOT Order.Orderchannel BEGINS "migration" NO-ERROR.
          IF AVAIL Order THEN RETURN "ERROR: Mobsub for the customer exists".
          
       END.
@@ -189,7 +189,9 @@ FUNCTION fGenerateOPDataInfo RETURNS CHAR
 RETURN "".
 END.   
 
-/*Ilkka TODO: Comment!*/
+/*Function creates subscription creation request for requested subscription
+  in requested time. 
+  If creation fails the order is cancelled.*/
 FUNCTION fCreateMigrationSub RETURNS CHAR
    (iiOrderID AS INT):
    DEF BUFFER Order FOR Order.
@@ -219,11 +221,15 @@ FUNCTION fCreateMigrationSub RETURNS CHAR
                         INPUT  {&REQUEST_SOURCE_NEWTON},
                         OUTPUT ocResult).   
    IF ocResult > "" THEN DO:
-      llOrdStChg = fSetOrderStatus(Order.OrderId,"2").
+      llOrdStChg = fSetOrderStatus(Order.OrderId,"7").
       RETURN "ERROR: Subscription creation failed, order " +
              STRING(Order.OrderID).
    END.
-/*TODO order to status 12 for waiting that creation req is handled.*/
+
+   llOrdStChg = fSetOrderStatus(Order.OrderId,"12").
+
+   /* Mark timestamp as change */
+   if llOrdStChg then fMarkOrderStamp(Order.OrderID,"Change",0.0).
    
 
 RETURN "".
@@ -235,13 +241,19 @@ FUNCTION fInitMigrationMQ RETURNS CHAR
    (icLogIdentifier AS CHAR): /*migration event type: NC response,...*/
 
 ASSIGN
-   lcLoginMq        = fCParamC("MigrationMqLogin")
-   lcPassMq         = fCParamC("MigrationMqPassCode")
-   liPortMq         = fCParamI("MigrationMqPort")
-   lcServerMq       = fCParamC("MigrationMqServer")
-   liTimeOutMq      = fCParamI("MigrationMqTimeOut")
+   /*These are borrowed from PushInvoice feature because the general setup is
+     identical*/
+   lcLoginMq        = fCParamC("InvPushMqLogin")
+   lcPassMq         = fCParamC("InvPushMqPassCode")
+   liPortMq         = fCParamI("InvPushMqPort")
+   lcServerMq       = fCParamC("InvPushMqServer")
+   liTimeOutMq      = fCParamI("InvPushMqTimeOut")
+   liLogLevel       = fCParamI("InvPushLogLevel")
    liLogTreshold    = fCParamI("InvPushLogTreshold")
-   lcQueueMq        = fCParamC("MigrationToQueue") 
+   /*Own migration related settings: */
+   lcMigrationLogDir = fCParamC("MigrationLogDir")
+   lcQueueMq        = fCParamC("MigrationToQueue")
+
    lcLogManagerFile = lcMigrationLogDir + "Migration_LogManager_" +
                                                icLogIdentifier + "_" +
                                                STRING(YEAR(TODAY),"9999") +
@@ -256,6 +268,10 @@ ASSIGN
       fSetGlobalLoggingLevel(liLogLevel).
       fSetLogTreshold(liLogTreshold).
    END.
+   lMsgPublisher = NEW Gwy.MqPublisher(lcServerMq,liPortMq,
+                                       liTimeOutMq,lcQueueMq,
+                                       lcLoginMq,lcPassMq).
+                                       
    IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
          LOG-MANAGER:WRITE-MESSAGE("RabbitMQPub handle not found","ERROR").

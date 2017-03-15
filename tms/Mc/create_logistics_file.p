@@ -1487,7 +1487,7 @@ FOR EACH Stock NO-LOCK,
       Order.Ordertype NE 1 THEN NEXT.
    
    /* Do not create LO file in migration */
-   IF Order.Orderchannel EQ "migration" THEN NEXT.
+   IF Order.Orderchannel BEGINS "migration" THEN NEXT.
 
    /* YOT-867 */
    IF Order.MNPStatus = 0 AND liNewDelay NE ? AND
