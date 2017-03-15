@@ -13,9 +13,11 @@
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 {Syst/tmsconst.i}
 {Func/timestamp.i}
-
+{Syst/eventval.i}
+{Func/create_eventlog.i}
 /* Function makes new MSOwner when subscription is partially
-   terminated or mobile part order closed */
+   terminated or mobile part order closed. Calling program must have
+   commali.i, katun defined and call fCleanEventObjects after this function */
 FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    (iiMsSeq AS INT,
     icFixedNumber AS CHAR):
@@ -30,7 +32,19 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAIL MSOwner THEN RETURN FALSE.
 
+   IF llDoEvent THEN DO:
+      DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
+      lhMsOwner = BUFFER MSOwner:HANDLE.
+      RUN StarEventInitialize(lhMsOwner).
+      RUN StarEventSetOldBuffer (lhMsOwner).
+   END.
+
    MSOwner.TsEnd = ldUpdateTS.
+
+   IF llDoEvent THEN DO:
+      RUN StarEventMakeModifyEvent (lhMsOwner).
+   END.
+
    CREATE bNewMsowner.
    BUFFER-COPY MSOwner EXCEPT TsEnd tsbegin TO bNewMsowner.
    ASSIGN
@@ -39,6 +53,12 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
       bNewMsowner.CliEvent = "F"
       bNewMsowner.tsbegin = fSecOffSet(ldUpdateTS,1)
       bNewMsowner.TsEnd = 99999999.99999.
+
+   IF llDoEvent THEN DO:
+      lhMsOwner = BUFFER bNewMsowner:HANDLE.
+      fMakeCreateEvent (lhMsOwner, "", "", "").
+   END.
+
    RELEASE MSOwner.
    RELEASE bNewMsowner.
    RETURN TRUE.
