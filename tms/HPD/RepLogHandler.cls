@@ -17,10 +17,11 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.RepLogHandler FINAL:
    
-   DEFINE PRIVATE VARIABLE objMsgPublisher    AS CLASS Gwy.MqPublisher NO-UNDO.   
+   DEFINE PRIVATE VARIABLE objMsgPublisher    AS CLASS Gwy.MqPublisher NO-UNDO.
    DEFINE PRIVATE VARIABLE lhRepLogTable      AS HANDLE                NO-UNDO.
    DEFINE PRIVATE VARIABLE lhRepLogQuery      AS HANDLE                NO-UNDO.
    DEFINE PRIVATE VARIABLE llMultiTenancy     AS LOGICAL INITIAL FALSE NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcTenant           AS CHARACTER             NO-UNDO.
 
    DEFINE PRIVATE TEMP-TABLE ttDumpHandler NO-UNDO
       FIELD TableName     AS CHARACTER
@@ -110,6 +111,7 @@ CLASS HPD.RepLogHandler FINAL:
       IF NOT mPopulateDumpHandlers()
       THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for database " + lcQueueName, 1).
 
+
       objMsgPublisher = NEW Gwy.MqPublisher("HPD.Queue" +
                                             IF llUseSeparateQueue
                                             THEN lcQueueName
@@ -120,7 +122,7 @@ CLASS HPD.RepLogHandler FINAL:
 
       IF llUseAck
       THEN lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK WHERE SendTime = ? USE-INDEX SendTime MAX-ROWS &2",lcRepLogTable, STRING(liTransactionSize))).
-      
+
       &IF "{&HPD_ENVIRONMENT}" = "Salt"
       &THEN
       ELSE lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK USE-INDEX UTCTime MAX-ROWS &2",lcRepLogTable, STRING(liTransactionSize))).
@@ -262,6 +264,16 @@ CLASS HPD.RepLogHandler FINAL:
 
       END.
 
+/*
+      FOR EACH ttDumpHandler:
+         LOG-MANAGER:WRITE-MESSAGE("Tablename: " + ttDumpHandler.TableName, "DEBUG").
+         LOG-MANAGER:WRITE-MESSAGE("TenantName: " + ttDumpHandler.TenantName, "DEBUG").
+         LOG-MANAGER:WRITE-MESSAGE("VersionNumber: " + ttDumpHandler.VersionNumber, "DEBUG").
+         LOG-MANAGER:WRITE-MESSAGE("QuoteKeyValue: " + STRING(ttDumpHandler.QuoteKeyValue), "DEBUG").
+         LOG-MANAGER:WRITE-MESSAGE("Object: " + STRING(ttDumpHandler.objHandler), "DEBUG").
+         LOG-MANAGER:WRITE-MESSAGE("lhMainTable: " + STRING(CAST(ttDumpHandler.objHandler, DumpHandler):lhMainTable), "DEBUG").
+      END.
+*/
       RETURN llOK.
 
    END METHOD.
@@ -359,6 +371,24 @@ CLASS HPD.RepLogHandler FINAL:
    END METHOD.
 
 
+   METHOD PRIVATE VOID mSetEffectiveTenant
+      (icTenantname AS CHARACTER):
+
+      DEFINE VARIABLE liNumConnectedDBs AS INTEGER NO-UNDO.
+
+      IF icTenantname = "yoigo"
+      THEN icTenantname = "Default".
+      ELSE icTenantname = "t" + icTenantName.
+
+      DO liNumConnectedDBs = 1 TO NUM-DBS:
+         SET-EFFECTIVE-TENANT(icTenantName, LDBNAME(liNumConnectedDBs)).
+      END.
+
+      lcTenant = icTenantname.
+
+   END METHOD.
+
+
    METHOD PUBLIC VOID mProcess():
 
       DEFINE VARIABLE liCount     AS INTEGER NO-UNDO.
@@ -383,6 +413,9 @@ CLASS HPD.RepLogHandler FINAL:
             /* If for some reason RepLog table is locked then we must skip it */
             IF lhRepLogTable:LOCKED
             THEN NEXT.
+
+            IF lcTenant NE lhRepLogTable::TenantName
+            THEN mSetEffectiveTenant(lhRepLogTable::TenantName).
 
             CASE mSendRepLog2MQ():
 
