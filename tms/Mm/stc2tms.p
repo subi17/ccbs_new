@@ -658,7 +658,7 @@ PROCEDURE pUpdateSubscription:
           MobSub.TariffActTS   = ldeNewBeginTs
           MobSub.FixedNumber = lcFixedNumber
           MobSub.MsStatus = {&MSSTATUS_ACTIVE} WHEN
-                            MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG}.
+                            MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
    

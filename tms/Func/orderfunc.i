@@ -83,6 +83,31 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   RELEASE OrderFusion.
                END.
 
+               /* Convergent mobile part closing */
+               IF fIsConvergenceTariff (bfOrder.CLIType) THEN DO:
+                  /* Mark subscription partially terminated */
+                  IF bfOrder.OrderType EQ {&ORDER_TYPE_MNP} OR
+                     bfOrder.OrderType EQ {&ORDER_TYPE_NEW} THEN DO:
+                     FIND FIRST MobSub EXCLUSIVE-LOCK WHERE
+                                MobSub.MsSeq = bfOrder.MsSeq AND
+                                MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG}
+                                NO-ERROR.
+                     IF AVAIL MobSub THEN DO:
+                        ASSIGN
+                           MobSub.CLI = MobSub.FixedNumber
+                           MobSub.ICC = ""
+                           MobSub.IMSI = ""
+                           MobSub.MsStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
+                        /* Update MSOwner accordingly */
+                        &IF DEFINED(STAR_EVENT_USER) = 0 
+                        &THEN 
+                           &GLOBAL-DEFINE STAR_EVENT_USER "OrderClose"
+                        &ENDIF
+                        fUpdatePartialMSOwner(bfOrder.MsSeq, MobSub.FixedNumber).
+                     END.
+                  END. /* IF bfOrder.OrderType EQ */
+               END. /* IF fIsConvergenceTariff  */
+
                FIND FIRST FusionMessage EXCLUSIVE-LOCK WHERE
                           FusionMessage.orderID EQ bfOrder.OrderId AND
                           FusionMessage.MessageType EQ {&FUSIONMESSAGE_TYPE_LOGISTICS} 
