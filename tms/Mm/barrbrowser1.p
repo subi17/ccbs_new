@@ -239,10 +239,13 @@ REPEAT WITH FRAME frTop:
                   NEXT BROWSE.                 
                END.   
                /*YPR-4774*/
-               /*(De)Activation is not allowed if fixed line provisioning 
+               /*(De)Activation is not allowed if Mobile line provisioning 
                 is pending*/
-               IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN DO:
-                  MESSAGE "Mobile line provisioning is not complete" 
+               IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR /*16*/ 
+                   MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/
+               THEN DO:
+                  MESSAGE "Mobile line provisioning is not complete or " + 
+                          "no active mobile line"
                      VIEW-AS ALERT-BOX. 
                   ufkey = TRUE.
                   RUN Syst/ufkey.p.
