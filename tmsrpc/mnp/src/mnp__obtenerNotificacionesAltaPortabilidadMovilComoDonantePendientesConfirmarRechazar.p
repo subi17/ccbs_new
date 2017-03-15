@@ -54,10 +54,6 @@ FOR EACH ttInput NO-LOCK:
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar").
    
-   /* check in case of duplicate messages */
-   FIND FIRST MNPProcess NO-LOCK WHERE
-              MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
-   
    IF NOT AVAIL MNPProcess THEN DO:   
       
       CREATE MNPProcess.

@@ -63,8 +63,7 @@ FOR EACH ttInput NO-LOCK:
 
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonanteCanceladas").
    
-   FIND MNPProcess WHERE
-        MNPProcess.PortRequest = ttInput.PortRequest EXCLUSIVE-LOCK NO-ERROR.
+   FIND CURRENT MNPProcess EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAIL MNPProcess THEN DO:
       lcError = {&MNP_ERROR_UNKNOWN_PROCESS} + " " + ttInput.PortRequest.
       MNPOperation.MNPSeq = {&MNP_PROCESS_DUMMY_OUT}.
