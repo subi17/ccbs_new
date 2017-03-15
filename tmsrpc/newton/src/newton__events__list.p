@@ -19,18 +19,22 @@ DEFINE VARIABLE pdeDateStart AS DECIMAL NO-UNDO.
 DEFINE VARIABLE pdeDateEnd AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE lcQuery AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcParams AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
 
 lcStruct = validate_struct(pcStruct, "brand!,username!,event_type,date_start,date_end").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
-   pcUsername = get_string(pcStruct,"username")
+   pcTenant     = get_string(pcStruct,"brand")
+   pcUsername   = get_string(pcStruct,"username")
    pdeDateStart = get_timestamp(pcStruct,"date_start") WHEN LOOKUP("date_start", lcStruct) > 0
-   pdeDateEnd = get_timestamp(pcStruct,"date_end") WHEN LOOKUP("date_end", lcStruct) > 0
-   pcEvent = get_string(pcStruct,"event_type") WHEN LOOKUP("event_type", lcStruct) > 0.
+   pdeDateEnd   = get_timestamp(pcStruct,"date_end") WHEN LOOKUP("date_end", lcStruct) > 0
+   pcEvent      = get_string(pcStruct,"event_type") WHEN LOOKUP("event_type", lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF TRIM(pcUserName) EQ "" THEN RETURN appl_err("username is empty").
 

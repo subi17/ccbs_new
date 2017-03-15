@@ -7,12 +7,15 @@
 
 {newton/src/flistrpc.i}
 
-DEF VAR lcCLIType    AS CHAR NO-UNDO.
+DEF VAR pcTenant  AS CHARACTER NO-UNDO.
+DEF VAR lcCLIType AS CHARACTER NO-UNDO.
 
 lcStruct = validate_request(pcStruct, "brand!,subscription_type_id!").
 IF lcStruct EQ ? THEN RETURN.
 
+pcTenant  = get_string(pcStruct,"brand").
 lcCLIType = get_string(pcStruct,"subscription_type_id").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF NUM-ENTRIES(lcCLIType,"|") > 1 THEN
