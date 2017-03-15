@@ -317,7 +317,8 @@ PROCEDURE pSetBarring:
    FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MobSub THEN 
       RETURN "ERROR:Subscription not found".
-  
+   ELSE IF MobSub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
+      RETURN "ERROR:Not allowed for fixed only".
    ASSIGN
       /* check current barring (or pending) */
       llOngoing  = fCheckBarrStatus(iiMsSeq, OUTPUT lcResult, OUTPUT lrIdle )

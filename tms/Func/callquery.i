@@ -11,11 +11,7 @@ DEF TEMP-TABLE ttDB NO-UNDO
    FIELD DBOrder   AS INT
    INDEX ConnName ConnName TableName.
 
-DEF TEMP-TABLE ttInvCust
-   FIELD CustNum LIKE Customer.InvCust
-   INDEX CustNum CustNum.
-
-DEF TEMP-TABLE ttCLI
+DEF TEMP-TABLE ttCLI NO-UNDO
    FIELD ttCli AS CHAR FORMAT "X(18)" 
    INDEX ttCli ttCli.
 
