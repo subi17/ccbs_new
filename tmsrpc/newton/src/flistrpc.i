@@ -5,7 +5,6 @@
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
-DEF VAR pcTenant AS CHARACTER NO-UNDO.
 DEF VAR lcStruct AS CHARACTER NO-UNDO. 
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
@@ -13,14 +12,6 @@ IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-lcStruct = validate_request(pcStruct, "brand").
-
-pcTenant = get_string(pcStruct,"brand").
-
-IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-{newton/src/settenant.i pcTenant}
 
 lcResultStruct = add_array(response_toplevel_id, "").
 
