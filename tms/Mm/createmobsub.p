@@ -366,7 +366,7 @@ IF NOT AVAIL mobsub THEN DO:
       Mobsub.Brand            = Order.Brand 
       Mobsub.MsStatus         = (IF MsRequest.ReqType EQ 
                                     {&REQTYPE_FIXED_LINE_CREATE} 
-                                 THEN {&MSSTATUS_FIXED_PROV_ONG} 
+                                 THEN {&MSSTATUS_MOBILE_PROV_ONG} 
                                  ELSE {&MSSTATUS_ACTIVE})
       MobSub.Reseller         = Order.Reseller
       Mobsub.Paytype          = (CLIType.PayType = 2)
