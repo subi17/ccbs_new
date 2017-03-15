@@ -2117,7 +2117,7 @@ ELSE IF Order.statuscode NE "4" THEN DO:
    ELSE DO:
       IF pcNumberType EQ "mnp" THEN 
          Order.statuscode = {&ORDER_STATUS_MNP}.
-      ELSE pcNumberType EQ "migration" THEN 
+      ELSE IF pcNumberType EQ "migration" THEN 
          Order.statuscode = {&ORDER_STATUS_MNP}.
       ELSE Order.statuscode = {&ORDER_STATUS_NEW}.
  

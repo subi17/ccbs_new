@@ -349,7 +349,7 @@
             END.
              
              /* YBP-594 */ 
-             IF Order.OrderType NE {&ORDER_STATUS_MNP} AND
+             IF Order.OrderType NE {&ORDER_TYPE_ROLLBACK} AND
                 CAN-FIND(FIRST MsRequest WHERE
                                MsRequest.MsSeq   = Order.MSSeq  AND
                                MsRequest.ReqType = 13) /*REQTYPE_SUBSCRIPTION_CREATE*/
