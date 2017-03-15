@@ -5,7 +5,7 @@ class AddTableDumpHPD(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('DumpHPD', area="Sta_Data_128", multitenant="yes", label="Dump Range", dump_name="DumpHPD", desc="Dump range")
+        t = self.table('DumpHPD', area="Sta_Data_128", multitenant="yes", label="Dump Range", dump_name="DumpHPD", desc="Dump HPD")
         t.column('DumpID', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Dump ID", column_label="ID", position=2, order=10, help="Dump ID")
         t.column('Active', 'logical', format="Yes/No", initial="yes", max_width=1, label="Active", position=3, order=20, help="Is dump range active")
         t.column('Continuous', 'logical', format="Yes/No", initial="yes", max_width=1, label="Continuous", position=4, order=30, help="Is the dump range continuous")

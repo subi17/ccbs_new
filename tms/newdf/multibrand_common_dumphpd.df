@@ -1,7 +1,7 @@
 ADD TABLE "DumpHPD"
   AREA "Sta_Data_128"
   LABEL "Dump Range"
-  DESCRIPTION "Dump range"
+  DESCRIPTION "Dump HPD"
   DUMP-NAME "DumpHPD"
   MULTITENANT yes
 

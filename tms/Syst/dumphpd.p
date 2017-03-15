@@ -39,14 +39,14 @@ DEFINE SHARED VARIABLE siirto AS CHARACTER.
 DEFINE VARIABLE ufkey  AS LOGICAL NO-UNDO INITIAL TRUE.
 
 FORM
-    DumpHPD.DumpID            COLON 20 
-    DumpHPD.Active            COLON 20
-    DumpHPD.Continuous        COLON 20
-    DumpHPD.StartTime         COLON 20
-    DumpHPD.FinalTime         COLON 20
-    DumpHPD.UnitsToDump       COLON 20 
-    DumpHPD.UnitType          COLON 20 
-    DumpHPD.MaxRecordsPerFile COLON 20 
+    DumpHPD.DumpID            COLON 22
+    DumpHPD.Active            COLON 22
+    DumpHPD.Continuous        COLON 22
+    DumpHPD.StartTime         COLON 22
+    DumpHPD.FinalTime         COLON 22
+    DumpHPD.UnitsToDump       COLON 22
+    DumpHPD.UnitType          COLON 22
+    DumpHPD.MaxRecordsPerFile COLON 22
 WITH  OVERLAY ROW 2 centered COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) " HPD RELATED SETTINGS " SIDE-LABELS FRAME fHPD.
 
@@ -71,6 +71,7 @@ FIND DumpHPD NO-LOCK WHERE DumpHPD.DumpID = iiDumpID NO-ERROR.
 IF NOT AVAILABLE DumpHPD
 THEN DO TRANSACTION:
    CREATE DumpHPD.
+   DumpHPD.DumpID = iiDumpID.
    FIND CURRENT DumpHPD NO-LOCK.
 END.
 
@@ -96,8 +97,8 @@ REPEAT WITH FRAME fHPD:
          
    RUN Syst/ufkey.p.
 
-   IF toimi = 1 THEN 
-   REPEAT WITH FRAME fHPD ON ENDKEY UNDO, LEAVE:
+   IF toimi = 1
+   THEN REPEAT WITH FRAME fHPD ON ENDKEY UNDO, LEAVE:
 
       FIND CURRENT DumpHPD EXCLUSIVE-LOCK.
 
@@ -114,34 +115,36 @@ REPEAT WITH FRAME fHPD:
          DumpHPD.MaxRecordsPerFile       
       WITH FRAME fHPD EDITING:
  
-      READKEY.
+         READKEY.
 
-      IF KEYLABEL(LASTKEY) = "F9" AND 
-         FRAME-FIELD = "UnitType"
-      THEN DO:
-         liField = FRAME-INDEX.
-          
-         RUN Help/h-tmscodes.p("DumpHPD",  /* TableName*/
-                               "UnitType", /* FieldName */
-                               "DumpHPD",  /* GroupCode */
-                               OUTPUT siirto).
+         IF KEYLABEL(LASTKEY) = "F9" AND
+            FRAME-FIELD = "UnitType"
+         THEN DO:
+            RUN Help/h-tmscodes.p("DumpHPD",  /* TableName*/
+                                  "UnitType", /* FieldName */
+                                  "DumpHPD",  /* GroupCode */
+                                  OUTPUT siirto).
 
-         DumpHPD.UnitType = siirto.
-         DISPLAY DumpHPD.UnitType WITH FRAME fHPD.
+            DumpHPD.UnitType = siirto.
+            DISPLAY DumpHPD.UnitType WITH FRAME fHPD.
 
-         ehto = 9.
-         RUN Syst/ufkey.p.
+            ehto = 9.
+            RUN Syst/ufkey.p.
 
-         NEXT. 
+            NEXT.
+         END.
+
+         ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN
+         DO WITH FRAME fHPD:
+            PAUSE 0.
+         END.
+
+         APPLY LASTKEY.
       END.
 
-      ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
-      DO WITH FRAME fHPD:
-         PAUSE 0.
-      END.
-   
-      APPLY LASTKEY.
+      LEAVE.
    END.
    
-   LEAVE.
+   ELSE IF toimi = 8 THEN LEAVE.
+
 END.
