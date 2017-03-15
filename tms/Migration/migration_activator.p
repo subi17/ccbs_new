@@ -7,6 +7,10 @@
                   Timing plan:
                   Orders will have timestamp 02:00 for activation.
                   This program is run once/day after this timestamp.
+
+CURRENT PLAN -> THIS WILL NOT BE USED. The sub activation requestss are done in 
+NC response phase.
+
   APPLICATION ..: tms
   AUTHOR .......: ilsavola
   VERSION.......:
