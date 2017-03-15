@@ -19,6 +19,15 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
 
+   IF NUM-ENTRIES(pcID,"|") > 1 THEN
+       ASSIGN
+           pcTenant = ENTRY(2, pcID, "|")
+           pcID     = ENTRY(1, pcID, "|").
+   ELSE
+       RETURN appl_err("Invalid tenant information").
+
+   {newton/src/settenant.i pcTenant}
+       
    FIND Offer NO-LOCK WHERE 
       Offer.Brand = gcBrand AND 
       Offer.Offer = pcId NO-ERROR.
