@@ -698,7 +698,8 @@ REPEAT WITH FRAME sel:
            END.
 
            /*YPR-4773*/
-           IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN DO:
+           IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR /*16*/ 
+               MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
               MESSAGE "Mobile line provisioning is not complete" 
                  VIEW-AS ALERT-BOX.
               UNDO, LEAVE.
