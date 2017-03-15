@@ -29,6 +29,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
     INPUT  icSource       AS CHAR,   /* source of request */
     INPUT  icCreator      AS CHAR,   /* who made the request */
     INPUT  iiOrigReq      AS INT,    /* father request */
+    INPUT  icTermType     AS CHAR,    /* Termination type full, Partial */
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
@@ -67,11 +68,13 @@ FUNCTION fTerminationRequest RETURNS INTEGER
       bCreaReq.ReqIParam2  = iiSIMStatus
       bCreaReq.ReqIParam3  = iiQuarantine
       bCreaReq.ReqIParam4  = iiPenaltyFee
+      bCreaReq.ReqCParam6  = icTermType
       bCreaReq.ReqSource   = icSource
       bCreaReq.OrigReq     = iiOrigReq
       liReqCreated         = bCreaReq.MsRequest.
 
-   IF fHasConvergenceTariff(iiMsSeq) THEN DO:
+   IF (fHasConvergenceTariff(iiMsSeq) AND
+       icTermType = {&TERMINATION_TYPE_FULL}) THEN DO:
 
       /* Do not change the memo text (used by DWH) */
       IF icTermReason EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
@@ -106,11 +109,14 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
    END.
 
    /* Check that msisdn is available */
-   IF NOT CAN-FIND(FIRST MSISDN WHERE 
+   IF (NOT CAN-FIND(FIRST MSISDN WHERE 
                    MSISDN.CLI      = MobSub.CLI  AND 
-                   MSISDN.ValidTo >= fMakeTS()) THEN DO: 
+                   MSISDN.ValidTo >= fMakeTS()) AND
+      MobSub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} AND
+      MobSub.msStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO: 
+      
       ocError = "System Error ! Unknown MSISDN number : "
-         + STRING(MobSub.MsSeq) + " : " + MobSub.CLI.
+                + STRING(MobSub.MsSeq) + " : " + MobSub.CLI.
       RETURN 2.
    END.
    
@@ -133,7 +139,9 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
    END.
 
    /* Check that sim is available */ 
-   IF MobSub.MsStatus NE {&MSSTATUS_FIXED_PROV_ONG} AND
+   
+   IF (MobSub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} AND
+       MobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
       NOT CAN-FIND(IMSI WHERE
                    IMSI.IMSI = MobSub.IMSI) THEN DO: 
       ocError = "System Error ! Mobile Subscription doesn't have any SIM card.".
