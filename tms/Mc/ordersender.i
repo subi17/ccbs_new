@@ -203,7 +203,7 @@
                         SIM.SimStat = 20
                         SIM.MsSeq = Order.MsSeq.
                   NEXT {1}.
-            END. /*MNP SIM ONLY Orders*/
+            END. /*MNP SIM ONLY Orders from direct channel*/
 
                
             /* Renove handling */ 
@@ -349,7 +349,7 @@
             END.
              
              /* YBP-594 */ 
-             IF Order.OrderType <> 3 AND
+             IF Order.OrderType NE {&ORDER_STATUS_MNP} AND
                 CAN-FIND(FIRST MsRequest WHERE
                                MsRequest.MsSeq   = Order.MSSeq  AND
                                MsRequest.ReqType = 13) /*REQTYPE_SUBSCRIPTION_CREATE*/
@@ -513,7 +513,7 @@
              /* print order confirmation, this is done also for mnp orders
                 but not for gift or preactivated or vip orders
              */  
-             IF LOOKUP(Order.OrderChannel,"Yoigo,Pre-act,vip") = 0 AND
+             IF LOOKUP(Order.OrderChannel,"Yoigo,Pre-act,vip,migration,migration_ore") = 0 AND
                 OrderCustomer.Email NE "" AND
                 Order.OrderType <> 3 AND Order.OrderType <> 4 AND
                 (Order.MnpStatus = 0 OR Order.StatusCode = "3") THEN DO:  
@@ -541,7 +541,6 @@
                 /*MB_Migration has special MNP/Migration handler*/
                 ELSE IF Order.Orderchannel BEGINS "migration" THEN DO:
                    Order.StatusCode = {&ORDER_STATUS_MIGRATION_PENDING}. /*60*/
-                   NEXT {1}.
                 END.
                 ELSE DO:
                    /* YBP-621 */
@@ -640,7 +639,11 @@
                    MSISDN.MSSeq      = Order.MSSeq
                    MSISDN.Brand      = gcBrand.
              END.          
-      
+
+             /*MM Migration: Subscription creation will be done after NC
+               response. */
+             IF Order.Orderchannel BEGINS "migration" THEN NEXT {1}.
+
              IF NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
                         OrderTimeStamp.Brand   = gcBrand   AND
                         OrderTimeStamp.OrderID = Order.OrderID AND
@@ -697,6 +700,7 @@
                 END.
              END.
              ELSE ldeSwitchTS = fMakeTS().
+
              
              IF Order.OrderType = 3 THEN
                 fReactivationRequest(INPUT Order.MsSeq,
