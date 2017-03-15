@@ -166,7 +166,7 @@ DEF TEMP-TABLE ttRowVat NO-UNDO
 DEF BUFFER bttIR  FOR ttIR.
 DEF BUFFER bttCLI FOR ttCLI.
 
-DEF TEMP-TABLE ttInvoiceItem
+DEF TEMP-TABLE ttInvoiceItem NO-UNDO
    FIELD tType  AS INT
    FIELD MsSeq  AS INT
    FIELD tRecId AS RECID
@@ -3646,7 +3646,7 @@ PROCEDURE pInvoiceHeader:
                lcFixedNumber = MsOwner.FixedNumber
                liUserCust    = MsOwner.CustNum.
          END.
- 
+
          IF ttRowVat.ITGDeltype EQ {&INV_DEL_TYPE_FUSION_EMAIL} OR
             ttRowVat.ITGDeltype EQ {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} THEN
             lcFixedNumber = "".
@@ -3702,7 +3702,16 @@ PROCEDURE pInvoiceHeader:
             ttSubInv.CustNum      = liUserCust
             ttSubInv.VatPos       = 0.
       END.
-            
+
+      /* For partially terminated use billing period ttRowVat.CLI 
+         if there were events with mobile number */
+      IF AVAIL ttSubInv AND
+               ttSubInv.CLI EQ ttSubInv.FixedNumber AND
+              (ttRowVat.CLI BEGINS "6" OR
+               ttRowVat.CLI BEGINS "7") AND
+               ttRowVat.MsSeq EQ ttSubInv.MsSeq THEN
+         ASSIGN ttSubInv.CLI = ttRowVat.CLI.
+
       ASSIGN 
          ttRowVat.SubInvNum = liSubInv
          ttRowVat.ITGroupID = liITGroupID.

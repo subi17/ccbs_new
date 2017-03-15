@@ -21,6 +21,7 @@ gcBrand = "1".
 {Syst/eventlog.i}
 {Func/date.i}
 {Func/email.i}
+{Mc/orderfusion.i}
 
 DEF VAR lcLine AS CHARACTER NO-UNDO.
 DEF VAR lcSep AS CHARACTER NO-UNDO INIT ";".
@@ -177,6 +178,8 @@ PROCEDURE pUpdateOrderStatus:
    DEF INPUT PARAMETER icMemoTitle AS CHAR NO-UNDO.
    DEF INPUT PARAMETER icMemoText AS CHAR NO-UNDO.
 
+   DEF VAR lcError AS CHAR NO-UNDO.
+
    /* find order */   
    FIND Order WHERE 
         Order.Brand = gcBrand AND
@@ -187,7 +190,7 @@ PROCEDURE pUpdateOrderStatus:
    IF Order.CLI NE icMSISDN THEN
       RETURN "ERROR:MSISDN does not match with order".
 
-   IF LOOKUP(icOldStatus,"20,21,22,41,42,43,44,50,51,73,76,78,99") = 0 THEN
+   IF LOOKUP(icOldStatus,"20,21,22,41,42,43,44,50,51,73,76,77,78,79,80,99") = 0 THEN
       RETURN "ERROR:Unsupported current order status value".
 
    IF Order.StatusCode NE icOldStatus THEN
@@ -235,6 +238,45 @@ PROCEDURE pUpdateOrderStatus:
             /* RUN Mc/sendorderreq.p(Order.OrderId). not needed here? confirmation sent */
          END.
          WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         OTHERWISE RETURN "ERROR:Unsupported new order status value".
+      END.
+   END.
+   ELSE IF icOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE} /* 77 */ THEN DO:
+      CASE icNewStatus:
+         WHEN "7" THEN DO:
+            FIND OrderFusion NO-LOCK WHERE
+                 OrderFusion.Brand = gcBrand AND
+                 OrderFusion.OrderID = Order.OrderID NO-ERROR.
+            IF NOT AVAILABLE OrderFusion THEN
+               RETURN "ERROR:Order type is not Fusion".
+            IF OrderFusion.fusionstatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN
+               RETURN "ERROR:Not allowed because fusion status ONG".
+            IF fCreateFusionCancelOrderMessage(OrderFusion.OrderID,
+                                               OUTPUT lcError) EQ FALSE THEN
+               RETURN SUBST("ERROR:Cancel message creation failed: &1", lcError).
+        END.
+        OTHERWISE RETURN "ERROR:Unsupported new order status value".
+     END.
+   END.
+   ELSE IF icOldStatus EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} /* 79 */ THEN DO:
+     CASE icNewStatus:
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         WHEN "8" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
+                                          {&ORDER_STATUS_CLOSED_BY_FRAUD}).
+         WHEN "9" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
+                                          {&ORDER_STATUS_AUTO_CLOSED}).
+         OTHERWISE RETURN "ERROR:Unsupported new order status value".
+      END.
+   END.
+   ELSE IF icOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} /* 80 */
+   THEN DO:
+      CASE icNewStatus:
+         WHEN "6" THEN RUN Mc/orderinctrl.p(Order.OrderId, iiSecure, TRUE).
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         WHEN "8" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
+                                          {&ORDER_STATUS_CLOSED_BY_FRAUD}).
+         WHEN "9" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
+                                          {&ORDER_STATUS_AUTO_CLOSED}).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
       END.
    END.
