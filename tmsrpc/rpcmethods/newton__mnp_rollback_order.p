@@ -230,19 +230,25 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-   IF fHasConvergenceTariff(piMsSeq) THEN
+   FIND FIRST TermMobSub WHERE
+              TermMobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
+   IF NOT AVAIL TermMobSub THEN
+      RETURN appl_err("Invalid Subscription Id").
+
+   IF fHasConvergenceTariff(piMsSeq) AND
+      TermMobsub.fixednumber NE "" THEN
       RETURN appl_err("Not allowed for fixed line tariffs").
+   ELSE IF fHasConvergenceTariff(piMsSeq) AND
+        NOT CAN-FIND(FIRST MobSub WHERE
+                           MobSub.MsSeq = piMsSeq AND
+                           Mobsub.cli EQ Mobsub.fixednumber) THEN
+      RETURN "Not allowed when fixed line terminated".   
 
    IF pcOldOperatorPayType = "" OR pcOldOperatorPayType = ? THEN
       RETURN appl_err("Old operator paytype is blank or unknown").
 
    IF pcContractId = "" OR pcContractId = ? THEN
       RETURN appl_err("Contract Id is blank or unknown").
-
-   FIND FIRST TermMobSub WHERE
-              TermMobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-   IF NOT AVAIL TermMobSub THEN
-      RETURN appl_err("Invalid Subscription Id").
 
    IF CAN-FIND(FIRST MobSub WHERE
                      MobSub.MsSeq = piMsSeq NO-LOCK) THEN
