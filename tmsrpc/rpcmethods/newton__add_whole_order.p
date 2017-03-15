@@ -1713,7 +1713,9 @@ IF LOOKUP(pcNumberType,"new,mnp") > 0 AND
    CLIType.LineType > 0 AND
    NOT CAN-FIND(FIRST CLIType WHERE
                       CLIType.Brand = gcBrand AND
-                      CLIType.CLIType = pcMobsubBundleType AND
+                      CLIType.CLIType = (IF pcMobsubBundleType > "" THEN
+                                            pcMobsubBundleType
+                                         ELSE Order.CLIType) AND
                       CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
    IF NOT fIsMainLineSubActive(

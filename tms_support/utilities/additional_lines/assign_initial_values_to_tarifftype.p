@@ -7,7 +7,7 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "ADDITIONAL_LINES".
 gcBrand = "1".
 
