@@ -41,6 +41,7 @@ CLASS HPD.DumpFile INHERITS DumpBase:
                  .
 
          IF liNumber <= 0 OR liNumber = ?
+         THEN RETURN 0.
 
          RETURN liNumber.
       END GET.
