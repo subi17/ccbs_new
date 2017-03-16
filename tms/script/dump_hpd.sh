@@ -18,7 +18,7 @@ fi
 echo "Using tenant $tenant"
 cd "${0%/*}"
 cd ../
-pike batch -- HPD/hpd_filedump_batch common ordercanal mobile counter star reratelog -clientlog ../var/log/hpd_filedump_${1}_${tenant}.log -param ${1}
+pike batch -- HPD/hpd_filedump_batch common ordercanal mobile counter star reratelog -clientlog ../var/log/hpd_filedump_${1}_${tenant}.log -param ${1} tenant=${tenant}
 
 echo "Please check log file hpd_filedump_${1}_${tenant}.log"
 
