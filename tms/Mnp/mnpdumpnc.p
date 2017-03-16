@@ -31,11 +31,11 @@ DEFINE TEMP-TABLE ttMnpDetails
    FIELD FormRequest AS CHAR
    FIELD DonorCode AS CHAR
    FIELD ReceptorCode AS CHAR
-   FIELD MNPSeq AS INT
+   FIELD CreatedTS AS DEC
    FIELD OrderId AS INT
    FIELD MsSeqLst AS CHAR
    FIELD ICCLst AS CHAR
-   INDEX MNPSeq IS PRIMARY UNIQUE MNPSeq.
+   INDEX OrderId IS PRIMARY UNIQUE OrderId.
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 IF AVAILABLE DumpFile THEN DO:
@@ -50,8 +50,9 @@ FUNCTION fCollectMNPDetails RETURNS LOGICAL
    FIND MNPDetails WHERE
         MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-LOCK.
 
-   IF NOT CAN-FIND( FIRST ttMnpDetails NO-LOCK WHERE
-         ttMnpDetails.MNPSeq = MNPDetails.MNPSeq) THEN DO:
+   IF CAN-FIND( FIRST ttMnpDetails NO-LOCK WHERE
+         ttMnpDetails.OrderId = MNPProcess.OrderId) THEN NEXT.
+   ELSE DO:
       CREATE ttMNPDetails.
       ASSIGN
          ttMNPDetails.PortRequest = mnpprocess.portrequest
@@ -64,7 +65,7 @@ FUNCTION fCollectMNPDetails RETURNS LOGICAL
          ttMNPDetails.FormRequest = mnpprocess.formrequest
          ttMNPDetails.DonorCode = MNPDetails.donorcode
          ttMNPDetails.ReceptorCode = MNPDetails.receptorcode
-         ttMNPDetails.MNPSeq = MNPDetails.MNPSeq
+         ttMNPDetails.CreatedTS = MNPProcess.CreatedTS
          ttMNPDetails.MsSeqLst = lcMsSeqList
          ttMNPDetails.ICCLst = lcICCList
          ttMNPDetails.OrderId = MNPProcess.OrderId.
@@ -72,6 +73,9 @@ FUNCTION fCollectMNPDetails RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fPrintMNPDump RETURNS LOGICAL:
+   /*
+   Write here loop where clean duplicates from temp-table.
+   */
    FOR EACH ttMNPDetails NO-LOCK:
       PUT STREAM sdump UNFORMATTED
          ttMNPDetails.PortRequest lcDelimiter
@@ -83,8 +87,7 @@ FUNCTION fPrintMNPDump RETURNS LOGICAL:
          ttMNPDetails.ReceptorNrn lcDelimiter
          ttMNPDetails.FormRequest lcDelimiter
          ttMNPDetails.DonorCode lcDelimiter
-         ttMNPDetails.ReceptorCode lcDelimiter
-         STRING(ttMNPDetails.MNPSeq) lcDelimiter.
+         ttMNPDetails.ReceptorCode lcDelimiter.
       IF iiMNPType = {&MNP_TYPE_IN} THEN
          PUT STREAM sdump UNFORMATTED
          STRING(ttMNPDetails.OrderId) lcDelimiter.
@@ -109,9 +112,9 @@ FUNCTION fCreateMNPDump RETURNS LOGICAL:
    
    OUTPUT STREAM sdump TO value (icFile).
    
-   FOR EACH MNPProcess WHERE
+   FOR EACH MNPProcess NO-LOCK USE-INDEX UpdateTS WHERE
             MNPProcess.Brand = gcBrand AND
-            MNPProcess.MNPType = iiMNPType NO-LOCK:
+            MNPProcess.MNPType = iiMNPType:
       
       ASSIGN
          lcmsisdns = ""
