@@ -39,14 +39,13 @@ DEFINE SHARED VARIABLE siirto AS CHARACTER.
 DEFINE VARIABLE ufkey  AS LOGICAL NO-UNDO INITIAL TRUE.
 
 FORM
-    DumpHPD.DumpID            COLON 22
-    DumpHPD.Active            COLON 22
-    DumpHPD.Continuous        COLON 22
-    DumpHPD.StartTime         COLON 22
-    DumpHPD.FinalTime         COLON 22
-    DumpHPD.UnitsToDump       COLON 22
-    DumpHPD.UnitType          COLON 22
-    DumpHPD.MaxRecordsPerFile COLON 22
+    DumpHPD.DumpID            COLON 20
+    DumpHPD.Active            COLON 20
+    DumpHPD.Continuous        COLON 20
+    DumpHPD.StartTime         COLON 20
+    DumpHPD.FinalTime         COLON 20
+    DumpHPD.UnitsToDump       COLON 20
+    DumpHPD.UnitType          COLON 20
 WITH  OVERLAY ROW 2 centered COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) " HPD RELATED SETTINGS " SIDE-LABELS FRAME fHPD.
 
@@ -86,7 +85,6 @@ REPEAT WITH FRAME fHPD:
        DumpHPD.FinalTime
        DumpHPD.UnitsToDump 
        DumpHPD.UnitType 
-       DumpHPD.MaxRecordsPerFile 
    WITH FRAME fHPD.
    
    ASSIGN 
@@ -112,7 +110,6 @@ REPEAT WITH FRAME fHPD:
          DumpHPD.FinalTime
          DumpHPD.UnitsToDump 
          DumpHPD.UnitType 
-         DumpHPD.MaxRecordsPerFile       
       WITH FRAME fHPD EDITING:
  
          READKEY.

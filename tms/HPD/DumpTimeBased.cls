@@ -21,6 +21,8 @@ CLASS HPD.DumpTimeBased INHERITS DumpFile:
    DEFINE PUBLIC  VARIABLE ldeToTS         AS DECIMAL  NO-UNDO.
    DEFINE PRIVATE VARIABLE ldeNewStartTS   AS DECIMAL  NO-UNDO.
 
+   DEFINE PRIVATE BUFFER lbDumpHPD FOR DumpHPD.
+
    CONSTRUCTOR PUBLIC DumpTimeBased
       ( iiDumpID AS INTEGER,
         iobjHandler AS CLASS DumpHandler ):
@@ -34,6 +36,21 @@ CLASS HPD.DumpTimeBased INHERITS DumpFile:
         iobjHandler AS CLASS DumpHandler ):
       
       SUPER(iiDumpID, icFile, iobjHandler).
+
+      FIND lbDumpHPD NO-LOCK WHERE
+         lbDumpHPD.DumpID = lbDumpFile.DumpID
+      NO-ERROR.
+
+      IF NOT AVAILABLE lbDumpHPD
+      THEN RETURN ERROR NEW Progress.Lang.AppError("DumpHPD record for DumpID " + STRING(lbDumpFile.DumpID) + " doesn't exist.", 1).
+
+      IF lbDumpHPD.Active = NO
+      THEN RETURN ERROR NEW Progress.Lang.AppError("DumpHPD record for DumpID " + STRING(lbDumpFile.DumpID) + " is not active.", 1).
+
+      FIND CURRENT lbDumpHPD EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+
+      IF LOCKED lbDumpHPD
+      THEN RETURN ERROR NEW Progress.Lang.AppError("DumpHPD record for DumpID " + STRING(lbDumpFile.DumpID) + " is locked.", 1).
       
       ldeFromTS = HPDTime:mDateHMS2TS(lbDumpHPD.StartTime).
 
@@ -68,11 +85,32 @@ CLASS HPD.DumpTimeBased INHERITS DumpFile:
       
       IF AVAILABLE lbDumpHPD
       THEN DO:
+         mInactivateDump(NO).
+
          IF objHandler:llAllOK
          THEN lbDumpHPD.StartTime = HPDTime:mTS2DateHMS(ldeToTS).
+
+         FIND CURRENT lbDumpHPD NO-LOCK.
       END.
 
    END DESTRUCTOR.
+
+
+   METHOD PUBLIC VOID mInactivateDump
+      ( ilForce AS LOGICAL ):
+
+      IF AVAILABLE lbDumpHPD AND lbDumpHPD.Active = YES
+      THEN DO:
+         IF ilForce
+         THEN ASSIGN
+                 lbDumpHPD.Continuous = NO
+                 lbDumpHPD.Active     = NO
+                 .
+         ELSE IF lbDumpHPD.Continuous = NO
+         THEN lbDumpHPD.Active = NO.
+      END.
+
+   END METHOD.
 
 
    METHOD PRIVATE VOID mAdjustToTS():

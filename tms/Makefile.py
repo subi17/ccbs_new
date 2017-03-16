@@ -125,16 +125,24 @@ def daemon(*a):
             '-logthreshold', '209715200', '-numlogfiles', '0',
             '-param', daemon + ',' + instance + ',../var/run',
             '-T', '../var/tmp']
+
+    dbcount = 0
     for pp in parameters[2:]:
         if pp in databases:
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
+            dbcount += 1
         elif pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
+                dbcount += 1
         else:
             args.append(pp)
+
+    if dbcount != 0:
+        args.extend(['-h', str(dbcount + 4)])
+
     daemonpf = '../etc/pf/' + daemon + '.pf'
     if os.path.exists(daemonpf):
         args.extend(pftolist(['-pf', daemonpf]))
@@ -229,7 +237,7 @@ def _compile(compilecommand, compiledir):
     if environment == 'safeproduction':
         os.environ['PROPATH'] = os.environ['PROPATH'].split(',', 1)[1]
 
-    comp = Popen(mpro + args + ['-s', '1024', '-b', '-inp', '200000', '-tok', '20000', '-p', procedure_file.name], stdout=PIPE)
+    comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', procedure_file.name], stdout=PIPE)
     call('/bin/cat', stdin=comp.stdout)
     if comp.wait() != 0:
         raise PikeException('Compilation failed')
@@ -270,7 +278,7 @@ def cui(*a):
 
     if a[0] == 'cui':
         program = 'Syst/tmslogin.p'
-        args.extend(['-e', '100', '-l', '2000', '-TB', '31', '-TM', '32', '-rand', '2', '-Bt', '2500', '-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4'])
+        args.extend(['-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4'])
     else: # Only vim should use this block internally...
         if len(parameters) == 0:
             raise PikeException('Expected a module to run as a parameter')
@@ -312,11 +320,13 @@ def terminal(*a):
         for db in cdr_dict:
             args.extend(cdr_dict[db])
 
+    dbcount = 0
     for pp in parameters[1:]:
         if pp in databases:
             if all_in_parameters:
                 continue
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
+            dbcount += 1
         elif pp in cdr_databases:
             if all_in_parameters:
                 continue
@@ -324,10 +334,14 @@ def terminal(*a):
                 cdr_dict = active_cdr_db_pf()            
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
+                dbcount += 1
         elif pp != 'all':
             args.append(pp)
 
     args.extend(['-T', '../var/tmp', '-p', parameters[0]])
+
+    if dbcount != 0:
+        args.extend(['-h', str(dbcount + 4)])
 
     cmd = Popen(mpro + args)
     while cmd.poll() is None:
@@ -361,11 +375,13 @@ def batch(*a):
         for db in cdr_dict:
             args.extend(cdr_dict[db])
 
+    dbcount = 0
     for pp in parameters[1:]:
         if pp in databases:
             if all_in_parameters:
                 continue
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
+            dbcount += 1
         elif pp in cdr_databases:
             if all_in_parameters:
                 continue
@@ -373,8 +389,13 @@ def batch(*a):
                 cdr_dict = active_cdr_db_pf()
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
+                dbcount += 1
         elif pp != 'all':
             args.append(pp)
+
+    if dbcount != 0:
+        args.extend(['-h', str(dbcount + 4)])
+
     logfile = open('../var/log/%s.log' % module_base, 'a')
     if not skip_timelog:
         logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
@@ -423,11 +444,13 @@ def idbatch(*a):
         for db in cdr_dict:
             args.extend(cdr_dict[db])
 
+    dbcount = 0
     for pp in parameters[2:]:
         if pp in databases:
             if all_in_parameters:
                 continue
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
+            dbcount += 1
         elif pp in cdr_databases:
             if all_in_parameters:
                 continue
@@ -435,6 +458,7 @@ def idbatch(*a):
                 cdr_dict = active_cdr_db_pf()
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
+                dbcount += 1
         elif pp != 'all':
             args.append(pp)
     try:
@@ -446,6 +470,9 @@ def idbatch(*a):
             args[idx + 1] = 'batchid=%s,%s' % (batchid, args[idx + 1])
         except IndexError:
             args.append('batchid=%s' % batchid)
+
+    if dbcount != 0:
+        args.extend(['-h', str(dbcount + 4)])
 
     logfile = open('../var/log/%s_%s.log' % (module_base, batchid), 'a')
     if not skip_timelog:
@@ -473,5 +500,5 @@ def editor(*a):
         tenant = "masmovil"
 
     args = parameters or (['-pf', getpf('../db/progress/store/all')])
-    args = mpro + args + ['-T', '../var/tmp'] + ['-s', '1024'] + ['-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
+    args = mpro + args + ['-T', '../var/tmp', '-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
     os.execlp(args[0], *args)
