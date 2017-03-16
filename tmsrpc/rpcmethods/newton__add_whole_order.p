@@ -1715,7 +1715,7 @@ IF LOOKUP(pcNumberType,"new,mnp") > 0 AND
                       CLIType.Brand = gcBrand AND
                       CLIType.CLIType = (IF pcMobsubBundleType > "" THEN
                                             pcMobsubBundleType
-                                         ELSE Order.CLIType) AND
+                                         ELSE pcSubType)           AND
                       CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
    IF NOT fIsMainLineSubActive(
