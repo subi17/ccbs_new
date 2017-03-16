@@ -943,7 +943,8 @@ FUNCTION fCheckMSISDN RETURNS CHARACTER:
          lcError = SUBST("Cli &1 not found or not free", pcCLI).
    END.
    /* YDR-491 */
-   ELSE IF pcNumberType EQ "MNP" THEN DO:
+   ELSE IF pcNumberType EQ "MNP" OR 
+           pcNumberType EQ "migration" THEN DO:
       FIND FIRST MobSub WHERE
                  MobSub.Brand = gcBrand AND
                  MobSub.CLI = pcCLI NO-LOCK NO-ERROR. 
@@ -977,7 +978,8 @@ FUNCTION fCheckSIM RETURNS CHARACTER:
       IF lcSimType > "" AND LOOKUP(lcSimType,"Plug_IN,Micro,Nano,Universal") = 0 THEN
          RETURN "Invalid SIM Type specified".
 
-      IF LOOKUP(pcNumberType,"new,mnp") > 0 AND lcSimType = "" THEN
+      IF LOOKUP(pcNumberType,"new,mnp,migration") > 0 AND
+         lcSimType = "" THEN
          RETURN "sim_type is missing".
    END. /* ELSE DO: */
 
@@ -1042,7 +1044,8 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.ResignationPeriod  = plResignationPeriod 
       Order.RoiLevel = INT(pcRoilevel)
       Order.MultiSimType = piMultiSimType
-      Order.MsSeq = (IF LOOKUP(pcNumberType,"new,mnp") > 0 
+      Order.MsSeq = (IF 
+                     LOOKUP(pcNumberType,"new,mnp,migration") > 0 
                      THEN NEXT-VALUE(MobSub)
                      ELSE MobSub.MsSeq).
       Order.Multiorder = plMultiOrder.               
@@ -1409,7 +1412,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {newton/src/settenant.i pcTenant}
 
-IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
+IF LOOKUP(pcNumberType,"new,mnp,renewal,stc,migration") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
 
 /*MB_migration related checks*/
@@ -1736,7 +1739,7 @@ END.
 IF piMultiSimType NE 0 AND piMultiSimId <= 0 THEN 
    RETURN appl_err("Multi SIM type passed but Multi SIM ID is missing").
 
-IF LOOKUP(pcNumberType,"new,mnp") > 0 AND
+IF LOOKUP(pcNumberType,"new,mnp,migration") > 0 AND
    CLIType.LineType > 0 AND
    NOT CAN-FIND(FIRST CLIType WHERE
                       CLIType.Brand = gcBrand AND
@@ -1850,7 +1853,7 @@ END.
  Creation and Update begins (All the validations should be done before)
 **********************************************************************/
 
-IF LOOKUP(pcNumberType,"new,mnp") > 0 THEN
+IF LOOKUP(pcNumberType,"new,mnp,migration") > 0 THEN
    fUpdateSIM().
 
 liOrderId = NEXT-VALUE(OrderId).
@@ -2112,7 +2115,11 @@ ELSE IF Order.statuscode NE "4" THEN DO:
       Order.statuscode = {&ORDER_STATUS_PENDING_FIXED_LINE}.
    END.
    ELSE DO:
-      Order.statuscode = STRING(INT(pcNumberType EQ "mnp") * 2 + 1).
+      IF pcNumberType EQ "mnp" THEN 
+         Order.statuscode = {&ORDER_STATUS_MNP}.
+      ELSE IF pcNumberType EQ "migration" THEN 
+         Order.statuscode = {&ORDER_STATUS_MNP}.
+      ELSE Order.statuscode = {&ORDER_STATUS_NEW}.
  
       /* YBP-566 */
       /* note: cif newspaper campaigns are handled normally */
@@ -2146,6 +2153,7 @@ CASE pcNumberType:
    WHEN "mnp" THEN Order.OrderType = {&ORDER_TYPE_MNP}.
    WHEN "renewal" THEN Order.OrderType = {&ORDER_TYPE_RENEWAL}.
    WHEN "stc" THEN Order.OrderType = {&ORDER_TYPE_STC}.
+   WHEN "migration" THEN Order.OrderType = {&ORDER_TYPE_MNP}.
 END.
 
 /* YBP-570 */ 

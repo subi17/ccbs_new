@@ -96,7 +96,7 @@ END.
 lcErr = fInitMigrationMQ("response").
    IF lcErr NE "" THEN DO:
    PUT STREAM sLog UNFORMATTED
-      "Migration file will be skipped, " + lcErr +
+      "MQ error. Migration file will be skipped: " + lcErr +
       fTS2HMS(fMakeTS()) SKIP.
 
 END.

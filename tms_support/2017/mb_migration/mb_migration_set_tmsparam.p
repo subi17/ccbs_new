@@ -70,22 +70,32 @@ fSetTMSParamI(lcgHandledBrand, /*Brand*/
 fSetTMSParamC(lcgHandledBrand, /*Brand*/
               "MigrationLogDir", /*Code*/ 
               "Multibrand Migration log dir", /*Name*/
-              "/mnt/store/riftp/migration/log/"). /* Value 0 == OFF*/
+              "/mnt/store/riftp/migration/log/"). /* Value */
 
 fSetTMSParamC(lcgHandledBrand, /*Brand*/
               "MigrationInDir", /*Code*/ 
               "Multibrand Migration incoming dir", /*Name*/
-              "/mnt/store/riftp/migration/incoming/"). /* Value 0 == OFF*/
+              "/mnt/store/riftp/migration/incoming/"). /* Value */
 
 fSetTMSParamC(lcgHandledBrand, /*Brand*/
               "MigrationSpoolDir", /*Code*/ 
               "Multibrand Migration spool dir", /*Name*/
-              "/mnt/store/riftp/migration/spool/"). /* Value 0 == OFF*/
+              "/mnt/store/riftp/migration/spool/"). /* Value */
 
 fSetTMSParamC(lcgHandledBrand, /*Brand*/
               "MigrationOutDir", /*Code*/ 
               "Multibrand Migration outgoing dir", /*Name*/
-              "/mnt/store/riftp/migration/outgoing/"). /* Value 0 == OFF*/
+              "/mnt/store/riftp/migration/outgoing/"). /* Value */
+
+
+/*Publisher settings*/
+/*Message queue*/
+fSetTMSParamC(lcgHandledBrand, /*Brand*/
+              "MigrationToQueue", /*Code*/ 
+              "Message queue for migration", /*Name*/
+              "MMM_MQ"). /* Value */
+
+
 
 
 

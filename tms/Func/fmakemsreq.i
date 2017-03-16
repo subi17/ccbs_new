@@ -1132,8 +1132,8 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
     INPUT  iiTrafficType AS INT,
     INPUT  icCreator     AS CHAR,
     INPUT  idActStamp    AS DEC,    /* when request should be handled */
-    INPUT  icReqParam    AS CHAR,
-    INPUT  icReqParam2   AS CHAR,  /*New SIM or ISDN*/
+    INPUT  icReqParam    AS CHAR,  /*Type of operation*/ 
+    INPUT  icReqParam2   AS CHAR,  /*Order / New SIM or ISDN*/
     INPUT  icReqParam3   AS CHAR,  /*DMS usage, old SIM*/
     INPUT  icReqParam4   AS CHAR,  /*DMS usage, reason*/
     INPUT  icReqParam6   AS CHAR,  /*DMS usage, contract_id*/
