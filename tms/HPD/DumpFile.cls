@@ -96,8 +96,10 @@ CLASS HPD.DumpFile INHERITS DumpBase:
               llAllowMove = FALSE
               lcFile      = icFile
               .
-      ELSE lcFile = lbDumpFile.SpoolDir + "/" + (IF lcTenant > "" THEN lcTenant + "_" ELSE "") +
-                    REPLACE(lbDumpFile.FileName,"#DATE_#TIME",objHPDTime:FileTime).
+      ELSE ASSIGN
+              lcFile = REPLACE(lbDumpFile.FileName,"#DATE_#TIME",objHPDTime:FileTime)
+              lcFile = REPLACE(lcFile,"#COMPANY",lcTenant) WHEN lcTenant > ""
+              lcFile = lbDumpFile.SpoolDir + "/" + lcFile.
               
       IF lbDumpFile.DumpCharSet > ""
       THEN OUTPUT STREAM str TO VALUE(lcFile) CONVERT TARGET lbDumpFile.DumpCharSet.
