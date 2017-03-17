@@ -67,7 +67,7 @@ CLASS HPD.HPDTime FINAL:
       IF idtDateTime = ?
       THEN RETURN ?.
 
-      RETURN mMake2DT(DATE(idtDateTime), MTIME(idtDateTime)).
+      RETURN mMake2DT(DATE(idtDateTime), INTEGER(MTIME(idtDateTime) / 1000)).
 
    END METHOD.
 

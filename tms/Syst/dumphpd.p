@@ -133,6 +133,32 @@ REPEAT WITH FRAME fHPD:
 
          ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN
          DO WITH FRAME fHPD:
+
+            IF FRAME-FIELD = "UnitType" THEN DO:
+               FIND FIRST TMSCodes NO-LOCK WHERE
+                  TMSCodes.TableName = "DumpHPD" AND
+                  TMSCodes.FieldName = "UnitType" AND
+                  TMSCodes.CodeGroup   = "DumpHPD" AND
+                  TMSCodes.CodeValue = INPUT DumpHPD.UnitType
+               NO-ERROR.
+
+               IF NOT AVAILABLE TMSCodes
+               THEN DO:
+                   BELL.
+                   MESSAGE "Unknown unit type" VIEW-AS ALERT-BOX.
+                   NEXT-PROMPT UnitType. NEXT.
+               END.
+            END.
+
+            IF FRAME-FIELD = "UnitsToDump" THEN DO:
+               IF INPUT DumpHPD.UnitsToDump < 0 OR
+                  INPUT DumpHPD.UnitsToDump = ?
+               THEN DO:                   BELL.
+                   MESSAGE "Units to dump cannot be less than zero" VIEW-AS ALERT-BOX.
+                   NEXT-PROMPT UnitsToDump. NEXT.
+               END.
+            END.
+
             PAUSE 0.
          END.
 
@@ -145,3 +171,7 @@ REPEAT WITH FRAME fHPD:
    ELSE IF toimi = 8 THEN LEAVE.
 
 END.
+
+FINALLY:
+   fCleanEventObjects().
+END FINALLY.

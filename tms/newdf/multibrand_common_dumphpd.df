@@ -56,11 +56,11 @@ ADD FIELD "FinalTime" OF "DumpHPD" AS character
 ADD FIELD "UnitsToDump" OF "DumpHPD" AS integer
   FORMAT ">>>>>>>9"
   INITIAL "0"
-  LABEL "Units to dumps"
+  LABEL "Units to dump"
   POSITION 7
   MAX-WIDTH 4
   COLUMN-LABEL "UnitsToDump"
-  HELP "How many unit to dump. Zero value means no restriction."
+  HELP "How many units to dump. Zero value means no restriction."
   ORDER 60
 
 ADD FIELD "UnitType" OF "DumpHPD" AS character
