@@ -353,6 +353,11 @@ def terminal(*a):
 
 @target
 def batch(*a):
+
+    if os.path.exists('../var/run/servicebreak'):
+        print('Service break ongoing - aborting!')
+        sys.exit(5)
+
     assert len(parameters) > 0, 'Which module to run?'
     batch_module = parameters[0] 
     module_base = os.path.basename(batch_module)
@@ -411,6 +416,10 @@ def batch(*a):
 
 @target
 def idbatch(*a):
+    if os.path.exists('../var/run/servicebreak'):
+        print('Service break ongoing - aborting!')
+        sys.exit(5)
+
     assert len(parameters) > 0, 'Which module to run?'
     batch_module = parameters[0]
     module_base = os.path.basename(batch_module)
