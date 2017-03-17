@@ -175,7 +175,7 @@ FUNCTION fValidateMMBarringCommand RETURNS CHAR
 
    IF NOT AVAIL MobSub THEN RETURN "ERROR: MobSub not found.".
 
-   IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
+   IF MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} /*16*/ THEN
       RETURN "ERROR: Mobile line provisioning is not complete".
 
    IF icInput EQ "" THEN RETURN "".
