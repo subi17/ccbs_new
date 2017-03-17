@@ -220,5 +220,36 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fIsConvergentOROngoing RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR):
+
+   DEF VAR llgAvailable AS LOG NO-UNDO.  
+
+   FOR FIRST Customer WHERE
+             Customer.Brand      = Syst.Parameters:gcBrand AND
+             Customer.OrgId      = icCustID                AND
+             Customer.CustidType = icCustIDType            AND
+             Customer.Roles NE "inactive"                  NO-LOCK,
+       EACH  MobSub NO-LOCK WHERE
+             MobSub.Brand   = Syst.Parameters:gcBrand AND
+             MobSub.InvCust = Customer.CustNum        AND
+             MobSub.PayType = FALSE,
+       FIRST CLIType NO-LOCK WHERE
+             CLIType.Brand      = Syst.Parameters:gcBrand  AND
+             CLIType.CLIType    = MobSub.CLIType           AND
+             CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN} AND
+             CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}:
+      
+       llgAvailable = TRUE.
+
+   END.   
+
+   IF NOT llgAvailable THEN 
+      llgAvailable = fCheckOngoingConvergentOrder(icCustIDType,icCustID).
+
+   RETURN llgAvailable.
+
+END FUNCTION.
 
 &ENDIF
