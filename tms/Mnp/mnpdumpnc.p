@@ -50,9 +50,8 @@ FUNCTION fCollectMNPDetails RETURNS LOGICAL
               MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
    IF NOT AVAIL MNPDetails THEN NEXT.
 
-   IF CAN-FIND( FIRST ttMnpDetails NO-LOCK WHERE
-         ttMnpDetails.OrderId = MNPProcess.OrderId) THEN NEXT.
-   ELSE DO:
+   IF NOT CAN-FIND( FIRST ttMnpDetails NO-LOCK WHERE
+         ttMnpDetails.OrderId = MNPProcess.OrderId) THEN DO:
       CREATE ttMNPDetails.
       ASSIGN
          ttMNPDetails.PortRequest = mnpprocess.portrequest
