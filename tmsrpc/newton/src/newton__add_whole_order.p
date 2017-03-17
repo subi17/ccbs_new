@@ -732,7 +732,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          WHEN "SMS"   THEN liDelType = {&INV_DEL_TYPE_SMS}.
          WHEN "No delivery" THEN liDelType = {&INV_DEL_TYPE_NO_DELIVERY}.
          WHEN "" THEN .
-         OTHERWISE lcFError = "Invalid Invoice Delivery Type".
+         OTHERWISE lcFError = "Invalid Invoice Delivery Type " + 
+                               lcdelivery_channel.
       END CASE. /* CASE lcdelivery_channel: */
 
    END. /* lcFError = "" */
