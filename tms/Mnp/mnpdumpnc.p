@@ -31,7 +31,6 @@ DEFINE TEMP-TABLE ttMnpDetails
    FIELD FormRequest AS CHAR
    FIELD DonorCode AS CHAR
    FIELD ReceptorCode AS CHAR
-   FIELD CreatedTS AS DEC
    FIELD OrderId AS INT
    FIELD MsSeqLst AS CHAR
    FIELD ICCLst AS CHAR
@@ -47,8 +46,9 @@ FUNCTION fCollectMNPDetails RETURNS LOGICAL
 (lccode AS CHAR, lcmsisdns AS CHAR,
  lcMsSeqList AS CHAR, lcICCList AS CHAR):
 
-   FIND MNPDetails WHERE
-        MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-LOCK.
+   FIND FIRST MNPDetails NO-LOCK WHERE
+              MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
+   IF NOT AVAIL MNPDetails THEN NEXT.
 
    IF CAN-FIND( FIRST ttMnpDetails NO-LOCK WHERE
          ttMnpDetails.OrderId = MNPProcess.OrderId) THEN NEXT.
@@ -65,7 +65,6 @@ FUNCTION fCollectMNPDetails RETURNS LOGICAL
          ttMNPDetails.FormRequest = mnpprocess.formrequest
          ttMNPDetails.DonorCode = MNPDetails.donorcode
          ttMNPDetails.ReceptorCode = MNPDetails.receptorcode
-         ttMNPDetails.CreatedTS = MNPProcess.CreatedTS
          ttMNPDetails.MsSeqLst = lcMsSeqList
          ttMNPDetails.ICCLst = lcICCList
          ttMNPDetails.OrderId = MNPProcess.OrderId.
@@ -73,9 +72,6 @@ FUNCTION fCollectMNPDetails RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fPrintMNPDump RETURNS LOGICAL:
-   /*
-   Write here loop where clean duplicates from temp-table.
-   */
    FOR EACH ttMNPDetails NO-LOCK:
       PUT STREAM sdump UNFORMATTED
          ttMNPDetails.PortRequest lcDelimiter
