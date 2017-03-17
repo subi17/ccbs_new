@@ -188,4 +188,37 @@ FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
    RETURN FALSE.
 END.                                         
 
+FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR): 
+ 
+   FOR EACH OrderCustomer NO-LOCK WHERE   
+            OrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
+            OrderCustomer.CustId     EQ icCustID                AND
+            OrderCustomer.CustIdType EQ icCustIDType            AND
+            OrderCustomer.RowType    EQ 1,
+       EACH Order NO-LOCK WHERE
+            Order.Brand              EQ Syst.Parameters:gcBrand AND
+            Order.orderid            EQ OrderCustomer.Orderid   AND
+            Order.OrderType          NE {&ORDER_TYPE_RENEWAL}   AND 
+            Order.OrderType          NE {&ORDER_TYPE_STC}       AND 
+            LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0, 
+      FIRST OrderFusion NO-LOCK WHERE
+            OrderFusion.Brand   = Syst.Parameters:gcBrand AND
+            OrderFusion.OrderID = Order.OrderID:
+
+      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                        CLIType.Brand      = Syst.Parameters:gcBrand          AND
+                        CLIType.CLIType    = Order.CLIType                    AND
+                        CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN})        AND 
+                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
+      RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+
 &ENDIF

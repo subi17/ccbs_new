@@ -109,14 +109,17 @@ IF lcAddLineAllowed NE "OK" THEN DO:
             OrderAction.ItemType = "BundleItem":
 
          IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                           CLIType.Brand      = gcBrand                          AND
-                           CLIType.CLIType    = OrderAction.ItemKey              AND
-                           CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN})        AND 
-                           CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN DO:
+                           CLIType.Brand      = gcBrand                   AND
+                           CLIType.CLIType    = OrderAction.ItemKey       AND
+                           CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
          lcAddLineAllowed = "OK".
          LEAVE.
       END.
    END.
+
+   IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId) THEN 
+      lcAddLineAllowed = "OK".
+
 END.
 
 IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
