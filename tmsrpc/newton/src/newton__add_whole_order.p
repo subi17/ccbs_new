@@ -731,6 +731,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          WHEN "EMAIL" THEN liDelType = {&INV_DEL_TYPE_EMAIL}.
          WHEN "SMS"   THEN liDelType = {&INV_DEL_TYPE_SMS}.
          WHEN "No delivery" THEN liDelType = {&INV_DEL_TYPE_NO_DELIVERY}.
+         WHEN "no_delivery" THEN liDelType = {&INV_DEL_TYPE_NO_DELIVERY}.
          WHEN "" THEN .
          OTHERWISE lcFError = "Invalid Invoice Delivery Type " + 
                                lcdelivery_channel.
