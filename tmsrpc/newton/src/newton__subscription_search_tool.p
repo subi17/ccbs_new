@@ -77,7 +77,6 @@ END FUNCTION.
 
 lcTmp = CAPS(SUBSTRING(pcInput, 9, 1)).
 IF LENGTH(pcInput) EQ 9 AND 
-   (pcInput BEGINS "6" OR pcInput BEGINS "7") AND
    NOT (ASC(lcTmp) >= 65 AND
    ASC(lcTmp) <= 90) AND
    LOOKUP("msisdn", pcSearchTypes) > 0 THEN DO:
