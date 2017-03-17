@@ -38,7 +38,7 @@ ASSIGN
    lcTableName = "MB_Migration"
    lcActionID = "migration_oper_data_status"
    ldCurrentTimeTS = fMakeTS()
-   lcLogDir = fCParam("MB_Migration", "MigrationLogDir")
+   lcLogDir = fCParam("MB_Migration", "MigrationLogDir").
 
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
 
