@@ -8,6 +8,15 @@ ADD FIELD "TenantName" OF "Replog" AS character
   HELP "Tenant name"
   ORDER 80
 
+DROP INDEX "SendTime" ON "RepLog"
+
+ADD INDEX "SendTime" ON "RepLog"
+  AREA "CDF_Index"
+  PRIMARY
+  INDEX-FIELD "SendTime" ASCENDING
+  INDEX-FIELD "TenantName" ASCENDING
+  INDEX-FIELD "EventTime" ASCENDING
+
 .
 PSC
 cpstream=1252
