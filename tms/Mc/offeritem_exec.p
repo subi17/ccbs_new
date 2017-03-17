@@ -430,6 +430,7 @@ PROCEDURE pDiscountPlanMember:
 
    DEF VAR lcErrorReason AS CHAR NO-UNDO.
    DEF VAR lcDiscPlan    AS CHAR NO-UNDO.
+   DEF VAR lcAddLineDiscPlan AS CHAR NO-UNDO.
 
    IF LOOKUP(OfferItem.ItemKey,lcIPhoneDiscountRuleIds) > 0 THEN RETURN "".
 
@@ -450,6 +451,20 @@ PROCEDURE pDiscountPlanMember:
          WHEN "CONT23" THEN lcDiscPlan = "CONT23DISC".
       END CASE.
    END.
+   
+   CASE Order.CLIType:
+      WHEN "CONT10" THEN lcAddLineDiscPlan = "DISCCONT10".
+      WHEN "CONT15" THEN lcAddLineDiscPlan = "DISCCONT15".
+      WHEN "CONT25" THEN lcAddLineDiscPlan = "DISCCONT25".
+      WHEN "CONT26" THEN lcAddLineDiscPlan = "DISCCONT26".
+   END CASE.
+
+   /* If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
+   FIND FIRST OrderAction WHERE
+              OrderAction.Brand    = gcBrand           AND
+              OrderAction.OrderId  = Order.OrderId     AND
+              OrderAction.ItemType = lcAddLineDiscPlan NO-LOCK NO-ERROR.
+   IF AVAIL OrderAction THEN RETURN "".
 
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
                                       lcDiscPlan, /* OfferItem.ItemKey */
