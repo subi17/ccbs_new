@@ -110,7 +110,7 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
                PUT STREAM sExclude UNFORMATTED
                   MobSub.CLI ";R5"
                   SKIP.
-               NEXT RULE_LOOP.
+               LEAVE RULE_LOOP.
             END.
             
             IF MNPRetentionRule.PenaltyMonthsLeft > 0 THEN DO:
@@ -130,7 +130,7 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
             PUT STREAM sExclude UNFORMATTED
                MobSub.CLI ";F2"
                SKIP.
-         NEXT RULE_LOOP.
+         LEAVE RULE_LOOP.
       END.
 
       ocSMSText = MNPRetentionRule.SMSText.
