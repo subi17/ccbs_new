@@ -712,7 +712,10 @@ PROCEDURE pSubInvoice2XML:
       
       /* subscription */
       lhXML:START-ELEMENT("ContractDetail").
-      IF ttSub.CliEvent = "F" THEN /* convergent tariff is partially installed. No mobile */
+      IF SubInvoice.FixedNumber NE ? AND
+         SubInvoice.FixedNumber > "" AND
+         ttSub.CliEvent EQ "F" AND NOT /* Conv partially installed. No mobile */
+         ttSub.PrintCLI THEN /* Mobile active during period. */
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.FixedNumber).
       ELSE 
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
@@ -733,20 +736,21 @@ PROCEDURE pSubInvoice2XML:
       lhXML:WRITE-DATA-ELEMENT("FullName",ttSub.UserName).
       lhXML:END-ELEMENT("ContractName").
 
+      IF SubInvoice.FixedNumber > "" AND
+         SubInvoice.FixedNumber <> SubInvoice.CLI AND
+        (ttSub.CliEvent         <> "F" OR
+         ttSub.PrintCLI) THEN DO:
+         lhXML:START-ELEMENT("CustomContract").
+         lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
+         lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
+         lhXML:END-ELEMENT("CustomContract").
+      END.
       IF ttSub.MessageType > "" THEN DO:
          lhXML:START-ELEMENT("CustomContract").
          lhXML:WRITE-DATA-ELEMENT("CustomType","Message").
          lhXML:WRITE-DATA-ELEMENT("CustomContent",ttSub.MessageType).
          lhXML:END-ELEMENT("CustomContract").         
       END.
-      IF SubInvoice.FixedNumber > "" AND
-         ttSub.CliEvent        <> "F" THEN DO:
-         lhXML:START-ELEMENT("CustomContract").
-         lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
-         lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
-         lhXML:END-ELEMENT("CustomContract").
-      END.
-
 
       /* invoice rows */
       lhXML:START-ELEMENT("InvoiceRow").

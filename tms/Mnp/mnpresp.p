@@ -988,6 +988,7 @@ PROCEDURE pHandleFromASOL2ACON:
       DEFINE VARIABLE liQuarTime AS INTEGER NO-UNDO.
       DEFINE VARIABLE llPenalty AS LOGICAL NO-UNDO. 
       DEFINE VARIABLE ocResult AS CHARACTER NO-UNDO. 
+      DEFINE VARIABLE lcTermType AS CHARACTER NO-UNDO.
       DEF VAR ldaMNPDate AS DATE NO-UNDO. 
 
       fInitialiseValues(2, 
@@ -1007,6 +1008,10 @@ PROCEDURE pHandleFromASOL2ACON:
       IF AVAIL MsRequest THEN
          fReqStatus(4,"Cancelled MNP Process due to MNP OUT").
 
+      IF fIsConvergenceTariff(MobSub.CLIType) 
+         THEN lcTermType = {&TERMINATION_TYPE_PARTIAL}.
+      ELSE lcTermType = {&TERMINATION_TYPE_FULL}.
+
       liTermReqId = fTerminationRequest(MnpSub.MSSeq,
                           MNPSub.PortingTime,
                           liMsisdnStat,
@@ -1018,6 +1023,7 @@ PROCEDURE pHandleFromASOL2ACON:
                           "5", /* automatic script*/
                           katun,
                           0, /* orig. request */
+                          lcTermType,
                           OUTPUT ocResult). 
 
       IF liTermReqId = 0 THEN
