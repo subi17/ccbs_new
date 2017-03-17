@@ -460,11 +460,18 @@ PROCEDURE pDiscountPlanMember:
    END CASE.
 
    /* If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
-   FIND FIRST OrderAction WHERE
-              OrderAction.Brand    = gcBrand           AND
-              OrderAction.OrderId  = Order.OrderId     AND
-              OrderAction.ItemType = lcAddLineDiscPlan NO-LOCK NO-ERROR.
-   IF AVAIL OrderAction THEN RETURN "".
+   FIND FIRST DiscountPlan NO-LOCK WHERE
+              DiscountPlan.Brand      = gcBrand           AND
+              DiscountPlan.DPRuleID   = lcAddLineDiscPlan AND
+              DiscountPlan.ValidFrom <= TODAY             AND
+              DiscountPlan.ValidTo   >= TODAY NO-ERROR.
+   IF AVAILABLE DiscountPlan THEN DO:
+      IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                        OrderAction.Brand    = gcBrand           AND
+                        OrderAction.OrderId  = Order.OrderId     AND
+                        OrderAction.ItemType = "Discount"        AND
+                        OrderAction.ItemKey  = STRING(DiscountPlan.DPID)) THEN RETURN "".
+   END.
 
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
                                       lcDiscPlan, /* OfferItem.ItemKey */
