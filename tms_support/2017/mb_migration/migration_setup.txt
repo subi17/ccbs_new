@@ -1,0 +1,17 @@
+Setup instructions for MB migration.
+1. Set order channel to TMS by using CUI.
+   pike cui tenant=yoigo, pike cui tenant=masmovil
+   run Syst/tmscodes
+   Make following settings for Migration and Migration_ota:
+
+   x      Table Name: Order           
+   x      Field Name: OrderChannel                                                
+   x           Group: Order     
+   x           Value: Migration  
+   x     Description: Migration                                                   
+   x   Configuration:       
+   x          In Use: Yes                                                         
+
+2. Make parameter setup by running mb_migration_set_tmsparam.p
+
+3. Ensure that message queue for Migration is activated.

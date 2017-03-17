@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------
-  MODULE .......: migration_final_data_reader.p
+  MODULE .......: migration_oper_data_reader.p
   TASK .........: Program reads Migration Finalization Data Files.
                   It sets services, barrings, bundles, upsells and sets
                   given data amount to network.
@@ -34,7 +34,7 @@ DEF VAR lcRowStatus AS CHAR NO-UNDO.
 
 ASSIGN
    lcTableName = "MB_Migration"
-   lcActionID = "migration_final_data__reader"
+   lcActionID = "migration_oper_data_reader"
    ldCurrentTimeTS = fMakeTS()
    lcLogDir = fCParam("MB_Migration", "MigrationLogDir")
    lcInDir = fCParam("MB_Migration", "MigrationInDir").
@@ -87,7 +87,6 @@ END.
 
 /*Execution part*/
 RUN pHandleInputFile. 
-RUN pSendResults.
 
 /*Release ActionLog lock*/
 DO TRANS:
@@ -246,14 +245,4 @@ PROCEDURE pHandleInputFile:
    PUT STREAM sLog UNFORMATTED
       "Read " + STRING(liLineNumber) + " lines. " 
       "Collection done " + fTS2HMS(fMakeTS()) SKIP.
-END.
-
-/*Procedure sends results to Migration Tool and writes logs*/
-PROCEDURE pSendResults:
-
-   PUT STREAM sLog UNFORMATTED
-      "Result reporting starts " + fTS2HMS(fMakeTS()) SKIP.
-
-   PUT STREAM sLog UNFORMATTED
-      "Result reporting done " + fTS2HMS(fMakeTS()) SKIP.
 END.
