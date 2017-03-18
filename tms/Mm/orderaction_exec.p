@@ -346,6 +346,9 @@ END PROCEDURE.
 PROCEDURE pDiscountPlan:
 
    DEFINE VARIABLE ldate AS DATE NO-UNDO.
+   DEFINE VARIABLE lcAddLineDiscPlans AS CHAR NO-UNDO.
+
+   lcAddLineDiscPlans = "DISCCONT10,DISCCONT15,DISCCONT25,DISCCONT26".
 
    FIND FIRST DiscountPlan NO-LOCK WHERE
               DiscountPlan.DPId = INT(OrderAction.ItemKey) NO-ERROR.
@@ -405,7 +408,10 @@ PROCEDURE pDiscountPlan:
       DPMember.DiscValue = DPRate.DiscValue.
    END.
 
-
+   /* ADDLINE-20 Additional Line */
+   IF LOOKUP(DiscountPlan.DPRuleID, lcAddLineDiscPlans) > 0 AND
+      DPMember.ValidTo = ? THEN
+      DPMember.ValidTo = 12/31/49.
    
    RETURN "".
 
