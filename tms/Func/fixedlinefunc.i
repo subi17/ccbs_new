@@ -202,11 +202,11 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
             bOrderCustomer.CustIdType EQ icCustIDType            AND
             bOrderCustomer.RowType    EQ 1,
        EACH bOrder NO-LOCK WHERE
-            bOrder.Brand              EQ Syst.Parameters:gcBrand AND
-            bOrder.orderid            EQ bOrderCustomer.Orderid  AND
-            bOrder.OrderType          NE {&ORDER_TYPE_RENEWAL}   AND 
-            bOrder.OrderType          NE {&ORDER_TYPE_STC}       AND 
-            LOOKUP(STRING(bOrder.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0, 
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.orderid    EQ bOrderCustomer.Orderid  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND 
+            bOrder.OrderType  NE {&ORDER_TYPE_STC}       AND 
+            bOrder.statuscode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID:
@@ -224,15 +224,13 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fIsConvergentOROngoing RETURNS LOGICAL
+FUNCTION fCheckExistingConvergent RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR):
 
    DEFINE BUFFER bCustomer FOR Customer.
    DEFINE BUFFER bMobSub   FOR MobSub.
    DEFINE BUFFER bCLIType  FOR CLIType.
-
-   DEF VAR llgAvailable AS LOG NO-UNDO.  
 
    FOR FIRST bCustomer WHERE
              bCustomer.Brand      = Syst.Parameters:gcBrand AND
@@ -249,14 +247,11 @@ FUNCTION fIsConvergentOROngoing RETURNS LOGICAL
              bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN} AND
              bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}:
       
-       llgAvailable = TRUE.
+       RETURN TRUE.
 
    END.   
 
-   IF NOT llgAvailable THEN 
-      llgAvailable = fCheckOngoingConvergentOrder(icCustIDType,icCustID).
-
-   RETURN llgAvailable.
+   RETURN FALSE.
 
 END FUNCTION.
 

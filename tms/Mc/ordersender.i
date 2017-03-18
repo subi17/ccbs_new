@@ -116,11 +116,16 @@
                           OrderCustomer.OrderId = Order.OrderId AND
                           OrderCustomer.RowType = 1             NO-ERROR.
                
-               IF fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
-                                               OrderCustomer.CustId) THEN DO:
-                  fSetOrderStatus(Order.OrderID,
-                                  {&ORDER_STATUS_PENDING_MAIN_LINE}).
-                  NEXT {1}.
+               IF NOT fCheckExistingConvergent(OrderCustomer.CustIDType,
+                                               OrderCustomer.CustID) THEN DO:
+                  
+                  IF fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
+                                                  OrderCustomer.CustId) THEN DO:
+                     fSetOrderStatus(Order.OrderID,
+                                     {&ORDER_STATUS_PENDING_MAIN_LINE}).
+                     NEXT {1}.
+                  END.
+               
                END.
 
             END.    
