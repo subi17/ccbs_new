@@ -191,25 +191,29 @@ END.
 FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR): 
- 
-   FOR EACH OrderCustomer NO-LOCK WHERE   
-            OrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
-            OrderCustomer.CustId     EQ icCustID                AND
-            OrderCustomer.CustIdType EQ icCustIDType            AND
-            OrderCustomer.RowType    EQ 1,
-       EACH Order NO-LOCK WHERE
-            Order.Brand              EQ Syst.Parameters:gcBrand AND
-            Order.orderid            EQ OrderCustomer.Orderid   AND
-            Order.OrderType          NE {&ORDER_TYPE_RENEWAL}   AND 
-            Order.OrderType          NE {&ORDER_TYPE_STC}       AND 
-            LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0, 
-      FIRST OrderFusion NO-LOCK WHERE
-            OrderFusion.Brand   = Syst.Parameters:gcBrand AND
-            OrderFusion.OrderID = Order.OrderID:
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+
+   FOR EACH bOrderCustomer NO-LOCK WHERE   
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ 1,
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand              EQ Syst.Parameters:gcBrand AND
+            bOrder.orderid            EQ bOrderCustomer.Orderid  AND
+            bOrder.OrderType          NE {&ORDER_TYPE_RENEWAL}   AND 
+            bOrder.OrderType          NE {&ORDER_TYPE_STC}       AND 
+            LOOKUP(STRING(bOrder.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0, 
+      FIRST bOrderFusion NO-LOCK WHERE
+            bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
+            bOrderFusion.OrderID = bOrder.OrderID:
 
       IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
                         CLIType.Brand      = Syst.Parameters:gcBrand          AND
-                        CLIType.CLIType    = Order.CLIType                    AND
+                        CLIType.CLIType    = bOrder.CLIType                   AND
                         CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN})        AND 
                         CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
       RETURN TRUE.
@@ -224,22 +228,26 @@ FUNCTION fIsConvergentOROngoing RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR):
 
+   DEFINE BUFFER bCustomer FOR Customer.
+   DEFINE BUFFER bMobSub   FOR MobSub.
+   DEFINE BUFFER bCLIType  FOR CLIType.
+
    DEF VAR llgAvailable AS LOG NO-UNDO.  
 
-   FOR FIRST Customer WHERE
-             Customer.Brand      = Syst.Parameters:gcBrand AND
-             Customer.OrgId      = icCustID                AND
-             Customer.CustidType = icCustIDType            AND
-             Customer.Roles NE "inactive"                  NO-LOCK,
-       EACH  MobSub NO-LOCK WHERE
-             MobSub.Brand   = Syst.Parameters:gcBrand AND
-             MobSub.InvCust = Customer.CustNum        AND
-             MobSub.PayType = FALSE,
-       FIRST CLIType NO-LOCK WHERE
-             CLIType.Brand      = Syst.Parameters:gcBrand  AND
-             CLIType.CLIType    = MobSub.CLIType           AND
-             CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN} AND
-             CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}:
+   FOR FIRST bCustomer WHERE
+             bCustomer.Brand      = Syst.Parameters:gcBrand AND
+             bCustomer.OrgId      = icCustID                AND
+             bCustomer.CustidType = icCustIDType            AND
+             bCustomer.Roles NE "inactive"                  NO-LOCK,
+       EACH  bMobSub NO-LOCK WHERE
+             bMobSub.Brand   = Syst.Parameters:gcBrand AND
+             bMobSub.InvCust = bCustomer.CustNum       AND
+             bMobSub.PayType = FALSE,
+       FIRST bCLIType NO-LOCK WHERE
+             bCLIType.Brand      = Syst.Parameters:gcBrand  AND
+             bCLIType.CLIType    = bMobSub.CLIType          AND
+             bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN} AND
+             bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}:
       
        llgAvailable = TRUE.
 
