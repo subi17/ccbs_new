@@ -212,10 +212,10 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
             bOrderFusion.OrderID = bOrder.OrderID:
 
       IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand      = Syst.Parameters:gcBrand          AND
-                        CLIType.CLIType    = bOrder.CLIType                   AND
-                        CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN})        AND 
-                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
+                        CLIType.Brand      = Syst.Parameters:gcBrand           AND
+                        CLIType.CLIType    = bOrder.CLIType                    AND
+                        CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
+                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) THEN 
       RETURN TRUE.
 
    END.
