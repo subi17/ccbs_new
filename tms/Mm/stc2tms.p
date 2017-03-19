@@ -290,6 +290,9 @@ PROCEDURE pFeesAndServices:
    DEF VAR liTimeLimit        AS INT  NO-UNDO. 
    DEF VAR ldaPrevMonth       AS DATE NO-UNDO. 
    DEF VAR liPrevPeriod       AS INT NO-UNDO. 
+   DEF VAR lcNewAddLineDisc   AS CHAR NO-UNDO.
+   DEF VAR liRequest          AS INT NO-UNDO.
+   DEF VAR lcResult           AS CHAR NO-UNDO.
 
    DEF BUFFER bMember FOR DPMember.
    
@@ -450,7 +453,59 @@ PROCEDURE pFeesAndServices:
 
       END.   
    END.
-   
+  
+   /* ADDLINE-20 Additional Line Discounts 
+      CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type
+      CLOSE : If New CLIType Not Matches, Then Close the Discount */
+   IF LOOKUP(CLIType.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+      FOR EACH DiscountPlan NO-LOCK WHERE
+               DiscountPlan.Brand    = gcBrand                         AND
+               LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
+               DiscountPlan.ValidTo >= ldtActDate,
+          EACH DPMember NO-LOCK WHERE
+               DPMember.DPID       = DiscountPlan.DPID       AND
+               DPMember.HostTable  = "MobSub"                AND
+               DPMember.KeyValue   = STRING(MsRequest.MsSeq) AND
+               DPMember.ValidTo   >= ldtActDate:
+         IF llDoEvent THEN DO:
+            lhDPMember = BUFFER DPMember:HANDLE.
+            RUN StarEventInitialize(lhDPMember).
+            RUN StarEventSetOldBuffer(lhDPMember).
+         END.
+         FIND FIRST bMember WHERE RECID(bMember) = RECID(DPMember) EXCLUSIVE-LOCK.
+         bMember.ValidTo = ldtActDate - 1.
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
+      END.
+
+      IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
+         
+         lcNewAddLineDisc = ENTRY(LOOKUP(CLIType.CliType, {&ADDLINE_CLITYPES}),
+                                  {&ADDLINE_DISCOUNTS}).
+
+         FOR FIRST DiscountPlan NO-LOCK WHERE
+                   DiscountPlan.Brand    = gcBrand          AND
+                   DiscountPlan.DPRuleID = lcNewAddLineDisc AND
+                   DiscountPlan.ValidTo >= ldtActDate,
+             FIRST DPRate NO-LOCK WHERE
+                   DPRate.DPId       = DiscountPlan.DPId AND 
+                   DPRate.ValidFrom <= ldtActDate        AND
+                   DPRate.ValidTo   >= ldtActDate:
+
+            liRequest = fAddDiscountPlanMember(MsRequest.MsSeq,
+                                               DiscountPlan.DPRuleID,
+                                               DPRate.DiscValue,
+                                               ldtActDate,
+                                               DiscountPlan.ValidPeriods,
+                                               0,
+                                               OUTPUT lcResult).
+
+            IF liRequest NE 0 THEN
+               RETURN "ERROR:Discount not created; " + lcResult.
+         END.
+
+      END.
+   END.
+
 END PROCEDURE.
 
 PROCEDURE pUpdateSubscription:
