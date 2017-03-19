@@ -413,8 +413,8 @@ fSetOrderStatus(Order.OrderId,lcNewStatus).
 /* Release pending additional lines orders, in case of pending convergent 
    mail line order is released */
 IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR 
-    Order.OrderType EQ {&ORDER_TYPE_MNP})                 AND 
-   lcOldStatus      EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
+    Order.OrderType EQ {&ORDER_TYPE_MNP})                  AND 
+   lcOldStatus      EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
 
    IF NOT fCheckExistingConvergent(OrderCustomer.CustID,
                                    OrderCustomer.CustIdType) THEN DO: 
