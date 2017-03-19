@@ -12,19 +12,21 @@
 {Mnp/mnpoutchk.i}
 {Mc/orderfusion.i}
 
-DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
+DEF INPUT PARAMETER iiOrder        AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.
-DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
+DEF INPUT PARAMETER ilSilent       AS LOG NO-UNDO.
 
-DEF VAR llOk AS LOG NO-UNDO.
-DEF VAR lcCampaignType AS CHARACTER NO-UNDO.
+DEF VAR llOk            AS LOG  NO-UNDO.
+DEF VAR lcCampaignType  AS CHAR NO-UNDO.
 DEF VAR lcRenoveSMSText AS CHAR NO-UNDO. 
-DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
-DEF VAR lcOldStatus AS CHAR NO-UNDO. 
-DEF VAR lcNewStatus AS CHAR NO-UNDO. 
-DEF VAR lcError AS CHAR NO-UNDO. 
+DEF VAR ldeSMSStamp     AS DEC  NO-UNDO. 
+DEF VAR lcOldStatus     AS CHAR NO-UNDO. 
+DEF VAR lcNewStatus     AS CHAR NO-UNDO. 
+DEF VAR lcError         AS CHAR NO-UNDO.
 
-DEF BUFFER lbOrder FOR Order.
+DEF BUFFER lbOrder          FOR Order.
+DEF BUFFER labOrder         FOR Order.
+DEF BUFFER labOrderCustomer FOR OrderCustomer.
 
 FIND FIRST Order WHERE 
            Order.Brand   = gcBrand AND 
@@ -407,6 +409,41 @@ END.
 IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
 
 fSetOrderStatus(Order.OrderId,lcNewStatus).
+
+/* Release pending additional lines orders, in case of pending convergent 
+   mail line order is released */
+IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR 
+    Order.OrderType EQ {&ORDER_TYPE_MNP})                 AND 
+   lcOldStatus      EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
+
+   IF NOT fCheckExistingConvergent(OrderCustomer.CustID,
+                                   OrderCustomer.CustIdType) THEN DO: 
+
+      FOR EACH labOrderCustomer NO-LOCK WHERE
+               labOrderCustomer.Brand      EQ Syst.Parameters:gcBrand  AND
+               labOrderCustomer.CustId     EQ OrderCustomer.CustID     AND
+               labOrderCustomer.CustIdType EQ OrderCustomer.CustIdType AND
+               labOrderCustomer.RowType    EQ 1,
+          EACH labOrder NO-LOCK WHERE
+               labOrder.Brand      EQ Syst.Parameters:gcBrand  AND
+               labOrder.orderid    EQ labOrderCustomer.Orderid AND
+               labOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}    AND
+               labOrder.OrderType  NE {&ORDER_TYPE_STC}        AND
+               labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
+
+         IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                           CLIType.Brand      = Syst.Parameters:gcBrand           AND
+                           CLIType.CLIType    = labOrder.CLIType                  AND
+                           CLIType.LineType   = {&CLITYPE_LINETYPE_NONMAIN}       AND
+                           CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN
+         
+            fSetOrderStatus(labOrder.OrderId,lcNewStatus).
+
+      END.   
+
+   END.
+
+END.   
 
 IF llDoEvent THEN DO:
    RUN StarEventMakeModifyEvent(lhOrder).
