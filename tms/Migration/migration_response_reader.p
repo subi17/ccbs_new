@@ -51,7 +51,7 @@ IF lcInDir EQ "" OR lcInDir EQ ? THEN DO:
    lcLogDir = "/tmp/".
 END.
 ELSE DO:
-   lcLogDir = lcInDir + "/tmp/".
+   lcLogDir = lcInDir + "/logs/".
    lcInDir = lcInDir + "/incoming/".
 END.   
 
