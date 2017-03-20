@@ -110,7 +110,7 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
                PUT STREAM sExclude UNFORMATTED
                   MobSub.CLI ";R5"
                   SKIP.
-               NEXT RULE_LOOP.
+               LEAVE RULE_LOOP.
             END.
             
             IF MNPRetentionRule.PenaltyMonthsLeft > 0 THEN DO:
@@ -130,7 +130,7 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
             PUT STREAM sExclude UNFORMATTED
                MobSub.CLI ";F2"
                SKIP.
-         NEXT RULE_LOOP.
+         LEAVE RULE_LOOP.
       END.
 
       ocSMSText = MNPRetentionRule.SMSText.
@@ -256,6 +256,18 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
             /* YOT-4929, If customer created less than 1 month ago */
 
             IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcRetentionSMSText) THEN NEXT.
+
+            /* YOT-4956 R6: If suscriber has not any invoices paid, subscription is excluded from Retention file */
+            IF NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                                  Invoice.Brand   = gcBrand            AND
+                                  Invoice.CustNum = MobSub.CustNum     AND
+                                  Invoice.InvType = {&INV_TYPE_NORMAL} AND
+                                  Invoice.PaymState = 2) THEN DO:
+               PUT STREAM sExclude UNFORMATTED
+                  MobSub.CLI ";R6"
+                  SKIP.
+               NEXT.
+            END.
 
             FIND FIRST ttData NO-LOCK WHERE
                        ttData.custnum = MobSub.custnum AND 
