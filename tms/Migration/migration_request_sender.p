@@ -41,14 +41,18 @@ liMigrationOn = fCParamI("MigrationOn").
 IF liMigrationOn EQ 0 THEN QUIT.
 
 /*Set directory handling parameters*/
-lcLogDir = fCParam("MB_Migration", "MigrationLogDir").
-IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
-
 lcSpoolDir = fCParam("MB_Migration", "MigrationSpoolDir").
 IF lcSpoolDir EQ "" OR lcSpoolDir EQ ? THEN lcSpoolDir = "/tmp/".
 
 lcOutDir = fCParam("MB_Migration", "MigrationOutDir").
-IF lcOutDir EQ "" OR lcOutDir EQ ? THEN lcOutDir = "/tmp/".
+IF lcOutDir EQ "" OR lcOutDir EQ ? THEN DO:
+   lcOutDir = "/tmp/".
+   lcLogDir = "/tmp/".
+END.
+ELSE DO: 
+   lcLogDir = lcOutDir + "/tmp/".
+   lcOutDir = lcOutDir + "/outgoing/".
+END.   
 
 /*Set output and log files*/
 ldaReadDate = TODAY.

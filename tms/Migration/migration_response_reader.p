@@ -43,11 +43,18 @@ ASSIGN
    lcTableName = "MB_Migration"
    lcActionID = "migration_response_reader"
    ldCurrentTimeTS = fMakeTS()
-   lcLogDir = fCParam("MB_Migration", "MigrationLogDir")
    lcInDir = fCParam("MB_Migration", "MigrationInDir").
 
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
-IF lcInDir EQ "" OR lcInDir EQ ? THEN lcInDir = "/tmp/".
+IF lcInDir EQ "" OR lcInDir EQ ? THEN DO:
+   lcInDir = "/tmp/".
+   lcLogDir = "/tmp/".
+END.
+ELSE DO:
+   lcLogDir = lcInDir + "/tmp/".
+   lcInDir = lcInDir + "/incoming/".
+END.   
+
 
 /*Set output and log files*/
 ldaReadDate = TODAY.
