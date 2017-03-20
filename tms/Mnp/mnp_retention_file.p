@@ -21,6 +21,8 @@ gcBrand = "1".
 {Func/fmakesms.i}
 {Mnp/mnp.i}
 
+DEF STREAM sExclude.
+
 FUNCTION fGetPenalty RETURN DECIMAL
    (OUTPUT odaEndDate AS DATE):
 
@@ -104,7 +106,12 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
          IF ldePenalty NE 0 THEN DO:
 
             IF MNPRetentionRule.PenaltyLeft > 0 AND
-               ldePenalty > MNPRetentionRule.PenaltyLeft THEN NEXT RULE_LOOP.
+               ldePenalty > MNPRetentionRule.PenaltyLeft THEN DO:
+               PUT STREAM sExclude UNFORMATTED
+                  MobSub.CLI ";R5"
+                  SKIP.
+               NEXT RULE_LOOP.
+            END.
             
             IF MNPRetentionRule.PenaltyMonthsLeft > 0 THEN DO:
                IF ((ldaEndDate - TODAY) / 30) > 
@@ -114,8 +121,17 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
       END.
       
       IF MNPRetentionRule.ConsumptionAverage > 0 AND
-         MNPRetentionRule.ConsumptionAverage > Segmentation.SegmentCons THEN
+         MNPRetentionRule.ConsumptionAverage > Segmentation.SegmentCons THEN DO:
+         IF MNPRetentionRule.CLIType BEGINS "CONT" THEN
+            PUT STREAM sExclude UNFORMATTED
+               MobSub.CLI ";F1"
+               SKIP.
+         ELSE
+            PUT STREAM sExclude UNFORMATTED
+               MobSub.CLI ";F2"
+               SKIP.
          NEXT RULE_LOOP.
+      END.
 
       ocSMSText = MNPRetentionRule.SMSText.
       RETURN TRUE.
@@ -151,6 +167,7 @@ DEF VAR liLoop AS INTEGER NO-UNDO.
 DEF VAR lcRootDir AS CHARACTER NO-UNDO. 
 DEF VAR liOldOngoing AS INT NO-UNDO.
 DEF VAR liExcludeOffset AS INT NO-UNDO.
+DEF VAR lcRetExcludeFile AS CHAR NO-UNDO.
 
 lcRootDir = fCParam("MNP","MNPRetention").
 IF lcRootDir = ? OR lcRootDir EQ "" THEN DO:
@@ -171,6 +188,12 @@ DEF BUFFER bMNPDetails FOR MNPDetails.
 DEF BUFFER bMNPProcess FOR MNPProcess.
 DEF BUFFER bMNPSub FOR MNPSub.
 
+lcRetExcludeFile = lcRootDir + "/spool/" + "mnp_retention_exclude_" +
+                   STRING(YEAR(TODAY),"9999") + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99") +
+                   "_" + STRING(TIME) + ".txt".
+
+OUTPUT STREAM sExclude TO VALUE(lcRetExcludeFile).
+
 DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
 
    MNP_LOOP:
@@ -188,86 +211,100 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
       IF MNPProcess.StatusCode EQ {&MNP_ST_ASOL} AND NOT 
          (MNPProcess.StateFlag = {&MNP_STATEFLAG_CONFIRM_PROPOSAL} OR 
           MNPProcess.StateFlag = {&MNP_STATEFLAG_CONFIRM}) THEN NEXT.
-      
+
       MNP_SUB_LOOP:
       FOR EACH mnpsub NO-LOCK WHERE
                mnpsub.mnpseq = mnpprocess.mnpseq,
          FIRST MobSub NO-LOCK WHERE
-               MobSub.MsSeq = MNPSub.MsSeq,
-         FIRST Segmentation NO-LOCK WHERE
-               Segmentation.MsSeq = MNPSub.MsSeq:
+               MobSub.MsSeq = MNPSub.MsSeq:
+         FIND FIRST Segmentation NO-LOCK WHERE
+                    Segmentation.MsSeq = MNPSub.MsSeq NO-ERROR.
+         IF AVAILABLE Segmentation THEN DO:
 
-         IF MobSub.PayType = TRUE THEN
-            liExcludeOffset = -720. /* Prepaid 30 days (YOT-4929) */
-         ELSE
-            liExcludeOffset = 0. /* -1440. Commented out YOT-4095 */ /* Postpaid 60 days */
+            IF MobSub.PayType = TRUE THEN
+               liExcludeOffset = -720. /* Prepaid 30 days (YOT-4929) */
+            ELSE
+               liExcludeOffset = 0. /* -1440. Commented out YOT-4095 */ /* Postpaid 60 days */
 
-         /* Exclude Prepaid/postpaid clients from generated retention file */
-         FOR EACH bMNPSub NO-LOCK WHERE
-                  bMNPSub.MsSeq = MobSub.MsSeq,
-            FIRST bMNPProcess NO-LOCK WHERE
-                  bMNPProcess.MNPSeq = bMNPSub.MNPSeq AND
-                  bMNPProcess.MNPType = {&MNP_TYPE_OUT} AND
-                  bMNPProcess.MNPSeq NE MNPProcess.MNPSeq.
-            IF bMNPProcess.CreatedTS > fOffSetTS(liExcludeOffset) THEN
-               NEXT MNP_SUB_LOOP.
-         END.
+            /* Exclude Prepaid/postpaid clients from generated retention file */
+            FOR EACH bMNPSub NO-LOCK WHERE
+                     bMNPSub.MsSeq = MobSub.MsSeq,
+               FIRST bMNPProcess NO-LOCK WHERE
+                     bMNPProcess.MNPSeq = bMNPSub.MNPSeq AND
+                     bMNPProcess.MNPType = {&MNP_TYPE_OUT} AND
+                     bMNPProcess.MNPSeq NE MNPProcess.MNPSeq.
+               IF bMNPProcess.CreatedTS > fOffSetTS(liExcludeOffset) THEN DO:
+                  PUT STREAM sExclude UNFORMATTED
+                     MobSub.CLI ";R1"
+                     SKIP.
+                  NEXT MNP_SUB_LOOP.
+               END.
+            END.
 
-         /* already sent */
-         IF mnpsub.RetentionPlatform > "" THEN NEXT.
+            /* already sent */
+            IF mnpsub.RetentionPlatform > "" THEN NEXT.
 
-         /* YOT-2301 - Exclude all data subs. and segmentation code with SN */
-         IF LOOKUP(MobSub.CLIType,"CONTRD,CONTD,TARJRD1") > 0 OR
-            Segmentation.SegmentCode = "SN" AND
-            MobSub.ActivationTS > fOffSetTS(liExcludeOffSet) THEN NEXT.
+            /* YOT-2301 - Exclude all data subs. and segmentation code with SN */
+            IF LOOKUP(MobSub.CLIType,"CONTRD,CONTD,TARJRD1") > 0 OR
+               Segmentation.SegmentCode = "SN" AND
+               MobSub.ActivationTS > fOffSetTS(liExcludeOffSet) THEN DO:
+               PUT STREAM sExclude UNFORMATTED
+                  MobSub.CLI ";R3"
+                  SKIP.
+               NEXT.
+            END.
             /* YOT-4929, If customer created less than 1 month ago */
-          
-         IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcRetentionSMSText) THEN NEXT.
-         
-         FIND FIRST ttData NO-LOCK WHERE
-                    ttData.custnum = MobSub.custnum AND 
-                    ttData.msseq = MobSub.msseq AND 
-                    ttData.mnpseq = mnpprocess.mnpseq NO-ERROR.
-         IF AVAIL ttData THEN NEXT MNP_LOOP.
-         
-         CREATE ttData.
-         ASSIGN
-            ttData.custnum = MobSub.custnum
-            ttData.MsSeq = MobSub.msseq
-            ttData.mnpseq = mnpprocess.mnpseq
-            ttData.smsText = lcRetentionSMSText
-            i = i + 1.
-         
-         MNP_OTHER_LOOP:
-         FOR EACH bMNPDetails NO-LOCK WHERE
-                  bMNPDetails.CustId = MNPDetails.CustId AND
-                  bMNPDetails.DonorCode = "005" AND
-                  bMNPDetails.MNPSeq NE MNPDetails.MNPSeq USE-INDEX CustId,
-            FIRST bMNPProcess NO-LOCK WHERE
-                  bMNPProcess.MNPSeq = bMNPDetails.MNPSeq AND
-                  bMNPProcess.MNPType = {&MNP_TYPE_OUT} AND
-                  LOOKUP(STRING(bMNPProcess.StatusCode),"2,5") > 0 USE-INDEX MNPSeq,
-            EACH bMNPSub NO-LOCK WHERE
-                 bMNPSub.MNPSeq = bMNPProcess.MNPSeq AND
-                 bMNPSub.RetentionPlatform > "":
-            IF NOT CAN-FIND(FIRST MNPRetPlatForm NO-LOCK WHERE
-                                  MNPRetPlatForm.Brand = gcBrand AND
-                                  MNPRetPlatForm.RetentionPlatform = 
-                                    bMNPSub.RetentionPlatform AND
-                                  MNPRetPlatForm.Percentage > 0 AND
-                                  MNPRetPlatForm.Todate >= TODAY AND
-                                  MNPRetPlatForm.FromDate <= TODAY) THEN NEXT.
-            ttData.RetentionPlatform = bMNPSub.RetentionPlatform.
-            liOldOngoing = liOldOngoing + 1.
-            LEAVE MNP_OTHER_LOOP.
-         END.
 
-         IF NOT SESSION:BATCH THEN DO:
-            IF i mod 10 = 0 then do:
-               disp i.
-               pause 0.
-            end.  
+            IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcRetentionSMSText) THEN NEXT.
+
+            FIND FIRST ttData NO-LOCK WHERE
+                       ttData.custnum = MobSub.custnum AND 
+                       ttData.msseq = MobSub.msseq AND 
+                       ttData.mnpseq = mnpprocess.mnpseq NO-ERROR.
+            IF AVAIL ttData THEN NEXT MNP_LOOP.
+
+            CREATE ttData.
+            ASSIGN
+               ttData.custnum = MobSub.custnum
+               ttData.MsSeq = MobSub.msseq
+               ttData.mnpseq = mnpprocess.mnpseq
+               ttData.smsText = lcRetentionSMSText
+               i = i + 1.
+
+            MNP_OTHER_LOOP:
+            FOR EACH bMNPDetails NO-LOCK WHERE
+                     bMNPDetails.CustId = MNPDetails.CustId AND
+                     bMNPDetails.DonorCode = "005" AND
+                     bMNPDetails.MNPSeq NE MNPDetails.MNPSeq USE-INDEX CustId,
+               FIRST bMNPProcess NO-LOCK WHERE
+                     bMNPProcess.MNPSeq = bMNPDetails.MNPSeq AND
+                     bMNPProcess.MNPType = {&MNP_TYPE_OUT} AND
+                     LOOKUP(STRING(bMNPProcess.StatusCode),"2,5") > 0 USE-INDEX MNPSeq,
+                EACH bMNPSub NO-LOCK WHERE
+                     bMNPSub.MNPSeq = bMNPProcess.MNPSeq AND
+                     bMNPSub.RetentionPlatform > "":
+               IF NOT CAN-FIND(FIRST MNPRetPlatForm NO-LOCK WHERE
+                                     MNPRetPlatForm.Brand = gcBrand AND
+                                     MNPRetPlatForm.RetentionPlatform = bMNPSub.RetentionPlatform AND
+                                     MNPRetPlatForm.Percentage > 0 AND
+                                     MNPRetPlatForm.Todate >= TODAY AND
+                                     MNPRetPlatForm.FromDate <= TODAY) THEN NEXT.
+               ttData.RetentionPlatform = bMNPSub.RetentionPlatform.
+               liOldOngoing = liOldOngoing + 1.
+               LEAVE MNP_OTHER_LOOP.
+            END.
+
+            IF NOT SESSION:BATCH THEN DO:
+               IF i mod 10 = 0 then do:
+                  disp i.
+                  pause 0.
+               end.  
+            END.
          END.
+         ELSE
+            PUT STREAM sExclude UNFORMATTED
+               MobSub.CLI ";R4"
+               SKIP.
       END.
    END.
 END.
@@ -297,6 +334,10 @@ DO liPlatform = 1 TO liPlatforms:
       fMove2TransDir(lcRetentionFile[liPlatform], "", lcRootDir + "/outgoing/").
 END.
 
+OUTPUT STREAM sExclude CLOSE.
+
+IF lcRetExcludeFile > "" THEN
+      fMove2TransDir(lcRetExcludeFile, "", lcRootDir + "/outgoing/").
 
 PROCEDURE pFileDump:
 
@@ -431,5 +472,6 @@ PROCEDURE pFileDump:
    OUTPUT STREAM sout close.
 
 END PROCEDURE. 
+
 
 
