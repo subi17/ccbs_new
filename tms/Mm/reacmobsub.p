@@ -26,6 +26,7 @@
 {Func/fsubstermreq.i}
 {Func/fbankdata.i}
 {Func/fbtc.i}
+{Mc/dpmember.i}
 
 DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 
@@ -104,6 +105,7 @@ DEFINE VARIABLE lcAllowedDSS2SubsType  AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBundleId             AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBankAccount          AS CHAR    NO-UNDO.
 DEFINE VARIABLE llCallProc             AS LOGICAL NO-UNDO.
+DEFINE VARIABLE lcNewAddLineDisc       AS CHAR    NO-UNDO.
 
 DEFINE BUFFER bSubMsRequest  FOR MsRequest.
 DEFINE BUFFER bOrder         FOR Order.
@@ -736,7 +738,48 @@ DO TRANSACTION:
    END.
 
    fReqStatus(2,"").
-         
+   
+
+   /* ADDLINE-20 Additional Line 
+      IF the Customer reactivates the below additional line tariff's then,
+      checking if convergent active OR not, based on that closing the old one AND creating the new discount */
+   IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+      FIND FIRST Customer NO-LOCK WHERE
+                 Customer.Custnum = MobSub.Custnum NO-ERROR.
+
+      IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
+
+         lcNewAddLineDisc = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}),
+                                  {&ADDLINE_DISCOUNTS}).
+
+         FOR FIRST DiscountPlan NO-LOCK WHERE
+                   DiscountPlan.Brand    = gcBrand          AND
+                   DiscountPlan.DPRuleID = lcNewAddLineDisc AND
+                   DiscountPlan.ValidTo >= TODAY,
+             FIRST DPRate NO-LOCK WHERE
+                   DPRate.DPId       = DiscountPlan.DPId AND 
+                   DPRate.ValidFrom <= TODAY             AND
+                   DPRate.ValidTo   >= TODAY:
+            
+            fCloseDiscount(DiscountPlan.DPRuleID,
+                           MobSub.MsSeq,
+                           TODAY - 1,
+                           FALSE).
+
+            liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
+                                               DiscountPlan.DPRuleID,
+                                               DPRate.DiscValue,
+                                               TODAY,
+                                               DiscountPlan.ValidPeriods,
+                                               0,
+                                               OUTPUT lcResult).
+
+            IF liRequest NE 0 THEN
+               RETURN "ERROR:Discount not created; " + lcResult.
+         END.
+      END.
+   END.
+
    /* YDR-2037 */
    RUN pRecoverSTC IN THIS-PROCEDURE (BUFFER MobSub, BUFFER MsRequest).
 
