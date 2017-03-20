@@ -49,7 +49,7 @@ END.
 ELSE DO: 
    ASSIGN
       lcSpoolDir = lcOutDir + "/spool/"
-      lcLogDir = lcOutDir + "/tmp/"
+      lcLogDir = lcOutDir + "/logs/"
       lcOutDir = lcOutDir + "/outgoing/".
 END.   
 
