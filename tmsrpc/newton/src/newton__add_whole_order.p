@@ -1855,7 +1855,7 @@ END.
  Creation and Update begins (All the validations should be done before)
 **********************************************************************/
 
-IF LOOKUP(pcNumberType,"new,mnp,migration") > 0 THEN
+IF LOOKUP(pcNumberType,"new,mnp") > 0 THEN
    fUpdateSIM().
 
 liOrderId = NEXT-VALUE(OrderId).
