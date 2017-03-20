@@ -768,6 +768,9 @@ FUNCTION fRetention RETURNS LOGICAL
    FOR EACH bOrder NO-LOCK WHERE
             bOrder.MsSeq EQ iiMsSeq AND
             bOrder.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}:
+
+      lcMNPSMSText = "".
+
       IF fIsConvergenceTariff(bOrder.CliType) EQ TRUE AND
          bOrder.Ordertype NE {&ORDER_TYPE_RENEWAL} THEN
          RUN Mc/orderinctrl.p(bOrder.OrderId, 0, TRUE).
