@@ -48,9 +48,9 @@ IF lcOutDir EQ "" OR lcOutDir EQ ? THEN DO:
 END.
 ELSE DO: 
    ASSIGN
+      lcSpoolDir = lcOutDir + "/spool/"
       lcLogDir = lcOutDir + "/tmp/"
-      lcOutDir = lcOutDir + "/outgoing/"
-      lcSpoolDir = lcOutDir + "/spool/".
+      lcOutDir = lcOutDir + "/outgoing/".
 END.   
 
 /*Set output and log files*/
