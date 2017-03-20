@@ -41,8 +41,12 @@ IF NOT ilSilent THEN DO:
    
    llOk = FALSE.
 
-   MESSAGE "Do You want to release order " + 
-      (IF iiSecureOption EQ 1 THEN "(with secure)" ELSE "") + "?"
+   MESSAGE "Do You want to release order" +
+      (IF iiSecureOption EQ 1
+       THEN " (with secure Correos)"
+       ELSE IF iiSecureOption EQ 2
+       THEN " (with secure POS)"
+       ELSE "") + "?"
    VIEW-AS ALERT-BOX QUESTION
    BUTTONS YES-NO
    TITLE " ORDER " + STRING(Order.OrderID) + " "
