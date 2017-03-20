@@ -214,7 +214,7 @@ PROCEDURE pUpdateOrderStatus:
       IF icNewStatus NE "6" THEN
          RETURN "ERROR:Secure option and new order status are not compatible".
 
-      IF iiSecure EQ 2 AND Order.DeliveryType NE {&ORDER_DELTYPE_POS}
+      IF iiSecure EQ 2 AND Order.DeliveryType NE {&ORDER_DELTYPE_POS} THEN
          RETURN "ERROR:Secure to POS in allowed only for POS delivery type".
    END.
    
