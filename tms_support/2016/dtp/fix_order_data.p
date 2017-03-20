@@ -12,7 +12,6 @@ IF llDoEvent THEN DO:
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER Order:HANDLE.
    RUN StarEventInitialize(lhOrder).
-   RUN StarEventSetOldBuffer(lhOrder).
 END.
 
 
