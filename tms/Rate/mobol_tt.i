@@ -21,6 +21,9 @@ DEFINE TEMP-TABLE ttTCC NO-UNDO LIKE TCC
 DEFINE TEMP-TABLE ttCDRError  NO-UNDO LIKE CDRError.
 DEFINE TEMP-TABLE ttServiceLimit NO-UNDO LIKE ServiceLimit.
 DEFINE TEMP-TABLE ttIPRange NO-UNDO LIKE IPRange.
+DEFINE TEMP-TABLE ttCliType NO-UNDO LIKE CliType.
+DEFINE TEMP-TABLE ttMatrix  NO-UNDO LIKE Matrix.
+DEFINE TEMP-TABLE ttMxItem  NO-UNDO LIKE MxItem.
 
 FUNCTION fFillTariff RETURNS LOGICAL:
 
@@ -149,6 +152,38 @@ FUNCTION fFillIPRange RETURNS LOGICAL:
    
 END FUNCTION.
 
+FUNCTION fFillCliType RETURNS LOGICAL:
+
+   EMPTY TEMP-TABLE ttCliType.
+   
+   FOR EACH CliType NO-LOCK:
+      CREATE ttCliType.
+      BUFFER-COPY CliType TO ttCliType.
+   END.
+   
+END FUNCTION.
+
+FUNCTION fFillMatrix RETURNS LOGICAL:
+
+   EMPTY TEMP-TABLE ttMatrix.
+   
+   FOR EACH Matrix NO-LOCK:
+      CREATE ttMatrix.
+      BUFFER-COPY Matrix TO ttMatrix.
+   END.
+   
+END FUNCTION.
+
+FUNCTION fFillMxItem RETURNS LOGICAL:
+
+   EMPTY TEMP-TABLE ttMxItem.
+   
+   FOR EACH MxItem NO-LOCK:
+      CREATE ttMxItem.
+      BUFFER-COPY MxItem TO ttMxItem.
+   END.
+   
+END FUNCTION.
 
 /* TEMP-TABLES filled */
 FUNCTION fFillTT RETURNS LOGICAL:
@@ -163,7 +198,10 @@ FUNCTION fFillTT RETURNS LOGICAL:
    fFillCDRError().
    fFillServiceLimit().
    fFillIPRange().
-          
+   fFillCliType().
+   fFillMatrix().
+   fFillMxItem().
+
 END.
 
 &ENDIF

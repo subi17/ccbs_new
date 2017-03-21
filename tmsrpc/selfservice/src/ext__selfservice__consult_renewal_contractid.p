@@ -80,6 +80,7 @@ katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 IF LOOKUP(pcDelType,"SMS") = 0 THEN
    RETURN appl_err("Invalid Delivery Type").
 
+/* Renewal should be allowed only for mobile subscriptions */ 
 IF LENGTH(pcCLI) <> 9 OR
    NOT (pcCLI BEGINS "6" OR pcCLI BEGINS "7") THEN
    /*Incorrect format*/

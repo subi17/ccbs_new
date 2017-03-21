@@ -26,7 +26,6 @@ DEF VAR pcUsername   AS CHARACTER NO-UNDO.
 DEF VAR lcStruct     AS CHARACTER NO-UNDO. 
 DEF VAR lcRespStruct AS CHARACTER NO-UNDO. 
 DEF VAR ocError      AS CHARACTER NO-UNDO. 
-DEF VAR i            AS INTEGER   NO-UNDO. 
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
@@ -48,33 +47,17 @@ katun = pcUserName.
 {newton/src/settenant.i pcTenant}
 
 CREATE ttOfferCriteria.
-           
-i = 1. 
-FOR EACH OfferCriteria NO-LOCK 
-BY OfferCriteria.OfferCriteriaId DESC:
-  i = OfferCriteria.OfferCriteriaID + 1.
-  LEAVE.
-END.
+ASSIGN 
+    ttOfferCriteria.offercriteriaid = NEXT-VALUE(OfferCriteriaSeq)
+    ttOfferCriteria.brand           = gcBrand
+    ttOfferCriteria.offer           = get_string(pcStruct,"offer_id")
+    ttOfferCriteria.criteriatype    = get_string(pcStruct, "criteria_type")    
+    ttOfferCriteria.BeginStamp      = get_timestamp(pcStruct,"valid_from")
+    ttOfferCriteria.EndStamp        = (IF LOOKUP("valid_to", lcStruct) > 0 THEN get_timestamp(pcStruct,"valid_to") ELSE 20491231.86399)
+    ttOfferCriteria.includedvalue   = get_string(pcStruct, "included_values") WHEN LOOKUP("included_values", lcStruct) > 0
+    ttOfferCriteria.excludedvalue   = get_string(pcStruct, "excluded_values") WHEN LOOKUP("excluded_values", lcStruct) > 0.
 
-ttOfferCriteria.offercriteriaid = i.
-ttOfferCriteria.brand           = gcBrand.
-ttOfferCriteria.offer           = get_string(pcStruct,"offer_id").
-ttOfferCriteria.BeginStamp      = get_timestamp(pcStruct,"valid_from").
-ttOfferCriteria.EndStamp = (
-   IF LOOKUP("valid_to", lcStruct) > 0 THEN get_timestamp(pcStruct,"valid_to")
-   ELSE 20491231.86399 ).
-
-ASSIGN
-   ttOfferCriteria.includedvalue = get_string(pcStruct, "included_values")
-      WHEN LOOKUP("included_values", lcStruct) > 0
-   ttOfferCriteria.excludedvalue = get_string(pcStruct, "excluded_values")
-      WHEN LOOKUP("excluded_values", lcStruct) > 0.
-
-ttOfferCriteria.criteriatype = get_string(pcStruct, "criteria_type").
-
-IF gi_xmlrpc_error NE 0 THEN DO:
-   RETURN.
-END.
+IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF fValidateOfferCriteria(TABLE ttOfferCriteria, TRUE, OUTPUT ocError) > 0 THEN DO:
    RETURN appl_err(ocError).

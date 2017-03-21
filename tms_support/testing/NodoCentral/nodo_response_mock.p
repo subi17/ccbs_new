@@ -36,6 +36,10 @@ ASSIGN
 
 
 IF lcDir EQ "" OR lcDir EQ ? THEN lcDir = "/tmp/".
+ELSE DO:
+   lcDir = lcDir + "/outgoing/".
+   lcResponseDir = lcREsponsedir + "/incoming/".
+END.
 
 INPUT STREAM sFile THROUGH VALUE("ls -ltr " + lcDir + "/MM_MIGRATION_LIST_*.txt").
 REPEAT:

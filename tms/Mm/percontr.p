@@ -311,6 +311,7 @@ PROCEDURE pContractActivation:
    DEF VAR liCurrentServiceClass AS INT NO-UNDO. 
    DEF VAR llRerate      AS LOG  NO-UNDO.
    DEF VAR i             AS INT NO-UNDO. 
+   DEF VAR liCount       AS INT NO-UNDO.
    def buffer bOrigMsRequest FOR MsRequest.
    DEF VAR ldeBundleFee      AS DEC  NO-UNDO.
    DEF VAR ldaPromoStartDate AS DATE NO-UNDO.
@@ -322,7 +323,8 @@ PROCEDURE pContractActivation:
    DEF VAR lcBundleId        AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
    DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
-   DEF VAR lcBONOContracts   AS CHAR NO-UNDO.
+   DEF VAR lcDataBONOContracts  AS CHAR NO-UNDO.
+   DEF VAR lcVoiceBONOContracts AS CHAR NO-UNDO.
    DEF VAR ldtPrepActDate    AS DATE NO-UNDO.
    DEF VAR liPrepActTime     AS INT  NO-UNDO.
    DEF VAR liRequest         AS INT  NO-UNDO.
@@ -338,9 +340,10 @@ PROCEDURE pContractActivation:
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
    
-   DEF BUFFER bOrigReq   FOR MsRequest.
-   DEF BUFFER bQ25SingleFee FOR SingleFee.
-   
+   DEF BUFFER bOrigReq       FOR MsRequest.
+   DEF BUFFER bQ25SingleFee  FOR SingleFee.
+   DEF BUFFER bf_DayCampaign FOR DayCampaign.
+
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
     
@@ -402,6 +405,7 @@ PROCEDURE pContractActivation:
          lcUseCLIType = bOrigRequest.ReqCParam2. 
    END.
 
+   /* TODO: Not sure, why this is controlled at program level. Check, make changes to matrix and avoid below code */
    /* is the new contract allowed */
    IF lcDCEvent = "DATA7" THEN DO:
       IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
@@ -420,26 +424,68 @@ PROCEDURE pContractActivation:
       fReqError("Contract is not allowed for this subscription type").
       RETURN.
    END.
-
+   
    IF DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
-      lcBONOContracts = fCParamC("BONO_CONTRACTS").
+      ASSIGN 
+          lcDataBONOContracts  = fCParamC("BONO_CONTRACTS")
+          lcVoiceBONOContracts = fCParamC("VOICE_BONO_CONTRACTS").
    ELSE IF DayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN
-      lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
+      ASSIGN  
+          lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
 
-   /* Make sure subscription should not have active multiple
-      bundles at the same time */
-   IF LOOKUP(lcDCEvent,lcBONOContracts) > 0 THEN
-      FOR EACH ServiceLimit NO-LOCK WHERE
-               LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0,
+   /* Only 1 BONO per type is allowed for activation for a subscription, so make sure subscription should not have active bonos */
+   IF LOOKUP(lcDCEvent,lcDataBONOContracts) > 0 THEN
+   DO:
+      FOR EACH ServiceLimit NO-LOCK WHERE LOOKUP(ServiceLimit.GroupCode,lcDataBONOContracts) > 0,
           FIRST MServiceLimit WHERE
-                MServiceLimit.MsSeq = MsOwner.MsSeq      AND
+                MServiceLimit.MsSeq    = MsOwner.MsSeq         AND
                 MServiceLimit.DialType = ServiceLimit.DialType AND
-                MServiceLimit.SlSeq = ServiceLimit.SlSeq AND
-                MServiceLimit.EndTS >= MsRequest.ActStamp NO-LOCK:
-         fReqStatus(3,"Subscription already has active BONO bundle").
+                MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
+                MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK:
+         fReqStatus(3,"Subscription already has active data BONO bundle").
          RETURN.
       END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
+   END.
+   ELSE IF LOOKUP(lcDCEvent,lcVoiceBONOContracts) > 0 THEN 
+   DO liCount = 1 TO NUM-ENTRIES(lcVoiceBONOContracts):
+      
+      FIND FIRST ServiceLimit WHERE ServiceLimit.GroupCode = ENTRY(liCount,lcVoiceBONOContracts) NO-LOCK NO-ERROR.
+      IF NOT AVAIL ServiceLimit THEN
+          NEXT.
 
+      FIND FIRST MServiceLimit WHERE MServiceLimit.MsSeq    = MsOwner.MsSeq         AND
+                                     MServiceLimit.DialType = ServiceLimit.DialType AND
+                                     MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
+                                     MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK NO-ERROR.
+      IF NOT AVAIL MServiceLimit THEN
+          NEXT.
+
+      fReqStatus(3,"Subscription already has active voice BONO bundle").
+      
+      RETURN.
+   END.
+
+   /* Add IsBono flag to DayCampaign, develop a program to set initial value for yoigo's tenant daycampaign. 
+      And enable this code to avoid TMS Param 'BONO_CONTRACTS' & 'VOICE_BONO_CONTRACTS' usage.
+   IF DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
+   DO:
+       FOR EACH mServiceLimit WHERE mServiceLimit.MsSeq = MsOwner.MsSeq AND mServiceLimit.EndTs >= MsRequest.ActStamp NO-LOCK,
+           FIRST ServiceLimit WHERE ServiceLimit.SLSeq = mServiceLimit.SLSeq NO-LOCK:
+
+           FIND FIRST bf_DayCampaign WHERE bf_DayCampaign.Brand = gcBrand AND bf_DayCampaign.DCEvent = ServiceLimit.GroupCode NO-LOCK NO-ERROR.
+           IF AVAIL bf_DayCampaign                         AND 
+              bf_DayCampaign.DCType  = {&DCTYPE_BUNDLE}    AND 
+              bf_DayCampaign.PayType = DayCampaign.PayType AND 
+              bf_DayCampaign.IsBono  = TRUE                AND 
+              bf_DayCampaign.CCN     = DayCampaign.CCN     THEN /* Voice Bono's should have CCN as 81, data Bono's as 93 and others 0 */
+           DO:
+               fReqStatus(3,"Subscription already has active voice BONO bundle").
+               RETURN.
+           END.
+       END.                              
+   END.
+   */
+   
    /* Fetch TARJ7 and TARJ9 contract start date */
    IF lcDCEvent = "TARJ7_UPSELL" THEN
       FOR FIRST ServiceLimit WHERE

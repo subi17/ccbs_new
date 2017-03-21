@@ -219,7 +219,7 @@ ELSE DO:
 
    IF llSearchByMobsub AND piOffSet > 0 THEN liSubCount = liSubCount + 1.
 
-   /* TODO fixednumber search option */
+   /* Add same customers other subscriptions */
    FOR EACH mobsub NO-LOCK
    WHERE mobsub.brand = gcBrand
      AND mobsub.agrCust = liOwner

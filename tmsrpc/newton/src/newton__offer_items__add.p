@@ -24,13 +24,12 @@ gcBrand = "1".
 {Mc/offer.i}
 {newton/src/xmlrpc_names.i}
 
-DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
-DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcTenant     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcStruct     AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcStruct     AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcRespStruct AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE ocError AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE liOfferItemId AS INTEGER NO-UNDO. 
-DEFINE VARIABLE deCurTime AS DECIMAL NO-UNDO.
+DEFINE VARIABLE ocError      AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE deCurTime    AS DECIMAL   NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
 
@@ -51,27 +50,20 @@ IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {newton/src/settenant.i pcTenant}
 
-liOfferItemId = 1. 
-FOR EACH OfferItem NO-LOCK BY OfferItem.OfferItemId DESC:
-  liOfferItemId = OfferItem.OfferItemID + 1.
-  LEAVE.
-END.
-
 CREATE ttOfferItem.
-ttOfferItem.OfferItemId = liOfferItemId.
-ttOfferItem.Brand = gcBrand.
-ttOfferItem.Offer = get_string( pcStruct, "offer_id").
-ttOfferItem.VatIncl = get_bool(   pcStruct, "vat_included").
-ttOfferItem.Amount = ( IF LOOKUP("amount", lcStruct) > 0 THEN 
-                      get_double( pcStruct, "amount") ELSE 0).
-ttOfferItem.BeginStamp = get_timestamp( pcStruct, "valid_from").
-ttOfferItem.EndStamp = (IF LOOKUP("valid_to", lcStruct) > 0 THEN 
-                        get_timestamp(pcStruct,"valid_to") ELSE 20491231.86399).
-ttOfferItem.DispInUI = get_bool(   pcStruct, "display_in_ui").
-ttOfferItem.DispOnInvoice = get_bool(   pcStruct, "display_on_invoice").
-ttOfferItem.ItemKey = get_string( pcStruct, "item_id").
-ttOfferItem.ItemType = fConvertToTMSName(get_string( pcStruct, "item_type")).
-ttOfferItem.VatIncl = get_bool(   pcStruct, "vat_included").
+ASSIGN
+    ttOfferItem.OfferItemId   = NEXT-VALUE(OfferItemSeq)
+    ttOfferItem.Brand         = gcBrand
+    ttOfferItem.Offer         = get_string(pcStruct, "offer_id")
+    ttOfferItem.VatIncl       = get_bool(pcStruct, "vat_included")
+    ttOfferItem.Amount        = (IF LOOKUP("amount", lcStruct) > 0 THEN get_double( pcStruct, "amount") ELSE 0)
+    ttOfferItem.BeginStamp    = get_timestamp( pcStruct, "valid_from")
+    ttOfferItem.EndStamp      = (IF LOOKUP("valid_to", lcStruct) > 0 THEN get_timestamp(pcStruct,"valid_to") ELSE 20491231.86399)
+    ttOfferItem.DispInUI      = get_bool(pcStruct, "display_in_ui")
+    ttOfferItem.DispOnInvoice = get_bool(pcStruct, "display_on_invoice")
+    ttOfferItem.ItemKey       = get_string(pcStruct, "item_id")
+    ttOfferItem.ItemType      = fConvertToTMSName(get_string( pcStruct, "item_type"))
+    ttOfferItem.VatIncl       = get_bool(pcStruct, "vat_included").
 
 IF LOOKUP("periods", lcStruct) > 0 THEN
    ttOfferItem.Periods = get_int(pcStruct, "periods").
@@ -91,9 +83,6 @@ IF llDoEvent THEN DO:
    lhOfferItem = BUFFER OfferItem:HANDLE.
    RUN StarEventInitialize(lhOfferItem).
 END.
-
-lcRespStruct = add_struct(response_toplevel_id, "").
-add_string(lcRespStruct, "id", STRING(liOfferItemId)). 
 
 IF ttOfferItem.ItemType = "Topup" THEN DO:
    
@@ -132,6 +121,9 @@ IF llDoEvent THEN DO:
    RUN StarEventMakeCreateEvent (lhOfferItem).
    fCleanEventObjects().
 END.
+
+lcRespStruct = add_struct(response_toplevel_id, "").
+add_string(lcRespStruct, "id", STRING(OfferItem.OfferItemId)). 
 
 FINALLY:
    EMPTY TEMP-TABLE ttNamePairs.

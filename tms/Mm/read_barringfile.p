@@ -167,6 +167,9 @@ PROCEDURE pSetBarring:
    IF MobSub.PayType THEN
       RETURN "ERROR:Subscription is prepaid".
 
+   IF MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} /*17*/ THEN
+      RETURN "ERROR:No active mobile line".
+
    /* create barring request */
    RUN Mm/barrengine.p (iiMsSeq,
                    icBarringList,

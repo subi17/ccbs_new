@@ -41,14 +41,17 @@ liMigrationOn = fCParamI("MigrationOn").
 IF liMigrationOn EQ 0 THEN QUIT.
 
 /*Set directory handling parameters*/
-lcLogDir = fCParam("MB_Migration", "MigrationLogDir").
-IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
-
-lcSpoolDir = fCParam("MB_Migration", "MigrationSpoolDir").
-IF lcSpoolDir EQ "" OR lcSpoolDir EQ ? THEN lcSpoolDir = "/tmp/".
-
 lcOutDir = fCParam("MB_Migration", "MigrationOutDir").
-IF lcOutDir EQ "" OR lcOutDir EQ ? THEN lcOutDir = "/tmp/".
+IF lcOutDir EQ "" OR lcOutDir EQ ? THEN DO:
+   ASSIGN lcOutDir = "/tmp/"
+          lcLogDir = "/tmp/".
+END.
+ELSE DO: 
+   ASSIGN
+      lcSpoolDir = lcOutDir + "/spool/"
+      lcLogDir = lcOutDir + "/logs/"
+      lcOutDir = lcOutDir + "/outgoing/".
+END.   
 
 /*Set output and log files*/
 ldaReadDate = TODAY.
@@ -56,8 +59,8 @@ lcTimePart = STRING(YEAR(ldaReadDate)) +
              STRING(MONTH(ldaReadDate),"99") +
              STRING(DAY(ldaReadDate),"99") +
              REPLACE(STRING(TIME,"HH:MM:SS"),":","").
-lcOutFile = lcSpoolDir + "MM_MIGRATION_LIST_" + lcTimePart + ".txt".
-lcLogFile = lcLogDir + "MM_MIGRATION_LIST_" + lcTimePart + ".log".
+lcOutFile = lcSpoolDir + "/MM_MIGRATION_LIST_" + lcTimePart + ".txt".
+lcLogFile = lcLogDir + "/MM_MIGRATION_LIST_" + lcTimePart + ".log".
 
 
 OUTPUT STREAM sOut TO VALUE(lcOutFile) APPEND.

@@ -19,11 +19,13 @@
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Migration/migrationfunc.i}
+{Func/ftransdir.i}
 
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
 DEF VAR lcSpoolDir AS CHAR NO-UNDO.
+DEF VAR lcProcDir AS CHAR NO-UNDO.
 DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF VAR lcTableName AS CHAR NO-UNDO.
 DEF VAR lcActionID AS CHAR NO-UNDO.
@@ -43,11 +45,22 @@ ASSIGN
    lcTableName = "MB_Migration"
    lcActionID = "migration_response_reader"
    ldCurrentTimeTS = fMakeTS()
-   lcLogDir = fCParam("MB_Migration", "MigrationLogDir")
    lcInDir = fCParam("MB_Migration", "MigrationInDir").
 
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
-IF lcInDir EQ "" OR lcInDir EQ ? THEN lcInDir = "/tmp/".
+IF lcInDir EQ "" OR lcInDir EQ ? THEN DO:
+   ASSIGN
+      lcInDir = "/tmp/"
+      lcLogDir = "/tmp/"
+      lcProcDir = "/tmp/".
+END.
+ELSE DO:
+   ASSIGN
+      lcProcDir = lcInDir + "/processed/"
+      lcLogDir = lcInDir + "/logs/"
+      lcInDir = lcInDir + "/incoming/".
+END.   
+
 
 /*Set output and log files*/
 ldaReadDate = TODAY.
@@ -108,6 +121,7 @@ ELSE DO:
       lcInputFile = lcInDir + lcFileName.
     
       RUN pReadFile.
+      fMove2TransDir(lcInputFile,"",lcProcDir).
    END.
    /*Release ActionLog lock*/
    DO TRANS:
@@ -192,14 +206,16 @@ PROCEDURE pReadFile:
          /*It is important to check that we do not create double requests*/
          lcRowStatus = fCreateMigrationSub(liOrderID).
          
-         IF lcRowStatus EQ "" THEN lcRowStatus = "OK".       
+         IF lcRowStatus EQ "" THEN lcRowStatus = "OK".
+         ELSE DO:
+            lcNcStatus = "CreSub failed in TMS".
+         END.
 
       END.
       ELSE DO:
          /*Error case handling*/
          /*Set Order Status*/
-         /*Add entry to Migration tool response list (failed)*/
-         lcRowStatus = "NC Failure".                                      
+         lcRowStatus = "NC Failure".         
       END.
       /*Send message to WEB*/
       lcMQMessage = fGenerateNCResponseInfo(liOrderID,
@@ -214,6 +230,8 @@ PROCEDURE pReadFile:
 
       PUT STREAM sLog UNFORMATTED
          lcLine + ";" + lcRowStatus SKIP.
+      /*at least in testing phase we write message to log */
+      PUT STREAM sLog UNFORMATTED lcMQMessage SKIP.
                   
    END. /* Line handling loop END */
 
