@@ -6,6 +6,7 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 
 DEF BUFFER provSolog     FOR Solog.
 DEF BUFFER provMobsub    FOR Mobsub.
@@ -92,7 +93,9 @@ function fMakeCommLine returns CHAR
                              ELSE STRING(Order.PayType,"PREPAID/POSTPAID"))
                 lcProfile = (IF AVAILABLE CLIType 
                              THEN CLIType.ServicePack
-                             ELSE STRING(Order.PayType,"12/11")).
+                             ELSE IF fConvertTenantToBrand(BUFFER-TENANT-NAME(Order)) = "masmovil"
+                             THEN STRING(Order.PayType,"52/51")
+                             ELSE STRING(Order.PayType,"42/41")).
 
       END. /* ELSE IF Avail Order THEN DO: */
 
@@ -130,6 +133,8 @@ function fMakeCommLine returns CHAR
          IF CLIType.CLIType EQ "CONTM2" THEN
             lcAdkey = lcAdkey + "BARRING=0110000,".
       END.
+
+      lcAdkey = lcAdKey + "SERVICE_OPERATOR=" + CAPS(fConvertTenantToBrand(BUFFER-TENANT-NAME(provSolog))) + ",".
 
    END.
 

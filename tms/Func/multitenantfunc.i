@@ -8,10 +8,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-&IF "{&multitenant}" NE "YES"
+&IF "{&multitenantfunc_i}" NE "YES"
 &THEN
 
-&GLOBAL-DEFINE multitenant YES
+&GLOBAL-DEFINE multitenantfunc_i YES
 {Syst/tmsconst.i}
 
 /* Function to set effective tenant based by tenant name 
