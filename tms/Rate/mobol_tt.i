@@ -23,6 +23,7 @@ DEFINE TEMP-TABLE ttServiceLimit NO-UNDO LIKE ServiceLimit.
 DEFINE TEMP-TABLE ttIPRange NO-UNDO LIKE IPRange.
 DEFINE TEMP-TABLE ttCliType NO-UNDO LIKE CliType.
 DEFINE TEMP-TABLE ttMatrix  NO-UNDO LIKE Matrix.
+DEFINE TEMP-TABLE ttMxItem  NO-UNDO LIKE MxItem.
 
 FUNCTION fFillTariff RETURNS LOGICAL:
 
@@ -200,7 +201,7 @@ FUNCTION fFillTT RETURNS LOGICAL:
    fFillCliType().
    fFillMatrix().
    fFillMxItem().
-   
+
 END.
 
 &ENDIF
