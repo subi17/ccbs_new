@@ -116,10 +116,12 @@ lcErr = fInitMigrationMQ("response").
 END.
 ELSE DO:
    /*MQ ready, it is possible to handle data*/
-   INPUT STREAM sFile THROUGH VALUE("ls -ltr " + lcInDir + "/").
+   INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcInDir ).
    REPEAT:
       IMPORT STREAM sFile UNFORMATTED lcFileName.
       lcInputFile = lcInDir + lcFileName.
+      IF SEARCH(lcInputFile) NE ? THEN INPUT STREAM sIn FROM VALUE(lcInputFile).
+      ELSE NEXT.
     
       RUN pReadFile.
       fMove2TransDir(lcInputFile,"",lcProcDir).
