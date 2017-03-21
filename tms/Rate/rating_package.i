@@ -143,7 +143,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    ASSIGN	
       ttCall.BillCode   = bsub-prod
       lcOrigBillCode    = bsub-prod
-      lcCliTypeList     = fMobileSubscriptionTypeList()	+ "," + fFamilySubscriptionTypeList + "," + fConvergentSubscriptionTypeList()
+      lcCliTypeList     = fMobileSubscriptionTypeList()	+ "," + fFamilySubscriptionTypeList() + "," + fConvergentSubscriptionTypeList()
       lcDSS2CliTypeList = fSubscriptionTypeList('DSS2') 
       ldPackageAmt      = 0
       ldTotalPrice      = 0
