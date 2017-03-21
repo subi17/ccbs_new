@@ -174,7 +174,7 @@ PROCEDURE pReadFile:
          disp "Reading data: " lcFilename liLineNumber with frame a.
          pause 0.
       END.
-      IF NUM-ENTRIES (lcLine) NE 3 THEN DO:
+      IF NUM-ENTRIES (lcLine,";") NE 3 THEN DO:
          PUT STREAM sLog UNFORMATTED
          lcLine + ";" + "ERROR:Incorrect input format"  SKIP.
          NEXT.

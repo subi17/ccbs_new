@@ -204,6 +204,7 @@ FUNCTION fCreateMigrationSub RETURNS CHAR
    IF NOT AVAIL Order THEN RETURN "Migration order not found " +
                                    STRING(iiOrderID).           
    
+   /*msrequest for creation*/
    /*ldeSwitchTS = Order. porting time*/
    fSubscriptionRequest(INPUT  Order.MSSeq,
                         INPUT  Order.Cli,
