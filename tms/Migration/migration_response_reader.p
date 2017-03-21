@@ -20,6 +20,7 @@
 {Syst/tmsconst.i}
 {Migration/migrationfunc.i}
 {Func/ftransdir.i}
+gcBrand = "1".
 
 DEF STREAM sin.
 DEF STREAM sFile.
