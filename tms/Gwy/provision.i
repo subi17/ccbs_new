@@ -93,7 +93,7 @@ function fMakeCommLine returns CHAR
                              ELSE STRING(Order.PayType,"PREPAID/POSTPAID"))
                 lcProfile = (IF AVAILABLE CLIType 
                              THEN CLIType.ServicePack
-                             ELSE IF fGetTableBrand("CLIType") = "masmovil"
+                             ELSE IF fConvertTenantToBrand(BUFFER-TENANT-NAME(Order)) = "masmovil"
                              THEN STRING(Order.PayType,"52/51")
                              ELSE STRING(Order.PayType,"42/41")).
 
@@ -134,7 +134,7 @@ function fMakeCommLine returns CHAR
             lcAdkey = lcAdkey + "BARRING=0110000,".
       END.
 
-      lcAdkey = lcAdKey + "SERVICE_OPERATOR=" + CAPS(fGetTableBrand("SOLog")) + ",".
+      lcAdkey = lcAdKey + "SERVICE_OPERATOR=" + CAPS(fConvertTenantToBrand(BUFFER-TENANT-NAME(provSolog))) + ",".
 
    END.
 

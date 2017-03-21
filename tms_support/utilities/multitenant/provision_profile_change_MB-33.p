@@ -1,6 +1,6 @@
 /* Run using super tenant! */
 
-FOR EACH CliType NO-LOCK WHERE CliType.ServicePack = "12"
+FOR EACH CliType EXCLUSIVE-LOCK WHERE CliType.ServicePack = "12"
    TENANT-WHERE TENANT-ID() >= 0:
    
    IF BUFFER-TENANT-NAME(CliType) = "Default"
@@ -9,7 +9,7 @@ FOR EACH CliType NO-LOCK WHERE CliType.ServicePack = "12"
    
 END.
 
-FOR EACH CliType NO-LOCK WHERE CliType.ServicePack = "11"
+FOR EACH CliType EXCLUSIVE-LOCK WHERE CliType.ServicePack = "11"
    TENANT-WHERE TENANT-ID() >= 0:
    
    IF BUFFER-TENANT-NAME(CliType) = "Default"
