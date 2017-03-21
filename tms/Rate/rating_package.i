@@ -8,14 +8,6 @@
    One subscription may have several overlapping packages which are used in 
    the priority order defined in SLGAnalyse. 
 */
-
-&GLOBAL-DEFINE MOBILE_SUBTYPES                 "CONTD,CONTF,CONTS,CONTFF,CONTSF,CONT6,CONT7,CONT8,CONT9,CONT10,CONT15,CONT23,CONT24,CONT25,CONT26"
-&GLOBAL-DEFINE ADSL-CONVERGENT-SUBTYPES        "CONTDSL35,CONTDSL39,CONTDSL40,CONTDSL45,CONTDSL48,CONTDSL52,CONTDSL58,CONTDSL59"
-&GLOBAL-DEFINE FIBER-CONVERGENT-SUBTYPES-LIST1 "CONTFH35_50,CONTFH39_50,CONTFH40_50,CONTFH45_50,CONTFH48_50,CONTFH52_50,CONTFH58_50,CONTFH59_50"
-&GLOBAL-DEFINE FIBER-CONVERGENT-SUBTYPES-LIST2 "CONTFH45_300,CONTFH49_300,CONTFH50_300,CONTFH55_300,CONTFH58_300,CONTFH62_300,CONTFH68_300,CONTFH69_300"
-
-&GLOBAL-DEFINE DSS2_SUBTYPES "CONTS,CONTM2,CONTM,CONTSF,CONT15"
-
 FUNCTION fIncludedUnit RETURNS DEC
    (iiInclUnit AS INT):
  
@@ -36,6 +28,76 @@ FUNCTION fIncludedUnit RETURNS DEC
    OTHERWISE RETURN c_dur.
    END CASE.
     
+END FUNCTION.
+
+FUNCTION fSubscriptionTypeList RETURNS CHARACTER
+  (INPUT icDCEvent AS CHARACTER):
+
+  DEFINE VARIABLE lcSubsTypeList AS CHARACTER NO-UNDO.
+
+  DEFINE BUFFER bf_ttMxItem FOR ttMxItem.
+
+  FOR EACH ttMatrix WHERE ttMatrix.Brand = gcBrand AND ttMatrix.MXKey = "PERCONTR" NO-LOCK By ttMatrix.Prior:
+      
+      IF ttMatrix.MXRes <> 1 THEN 
+          NEXT.                                           
+      
+      FOR EACH ttMxItem WHERE ttMxItem.MxSeq = ttMatrix.MxSeq AND ttMxItem.MxName = "PerContract" AND ttMxItem.MxValue = icDCEvent NO-LOCK:
+          FOR EACH bf_ttMxItem WHERE bf_ttMxItem.MxSeq = ttMatrix.MxSeq AND bf_ttMxItem.MXName = "SubsTypeTo" NO-LOCK:               
+              ASSIGN lcSubsTypeList = lcSubsTypeList + (IF lcSubsTypeList <> "" THEN "," ELSE "") + bf_ttMxItem.MxValue.
+          END.
+      END.
+
+  END.
+
+  RETURN lcSubsTypeList.
+
+END FUNCTION.  
+
+FUNCTION fMobileSubscriptionTypeList RETURNS CHARACTER
+    ():
+
+    DEFINE VARIABLE lcSubsTypeList AS CHARACTER NO-UNDO.
+
+    FOR EACH ttCliType WHERE ttCliType.Brand = gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = False AND ttCliType.PayType = 1:
+        
+        IF ttCliType.FixedLineDownload NE ? AND ttCliType.FixedLineDownload NE "" THEN
+            NEXT.
+        
+        ASSIGN lcSubsTypeList = lcSubsTypeList + (IF lcSubsTypeList <> "" THEN "," ELSE "") + ttCliType.CliType.
+    END. 
+
+    RETURN lcSubsTypeList.
+
+END FUNCTION.
+
+FUNCTION fConvergentSubscriptionTypeList RETURNS CHARACTER
+    ():
+
+    DEFINE VARIABLE lcSubsTypeList AS CHARACTER NO-UNDO.
+
+    FOR EACH ttCliType WHERE ttCliType.Brand = gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = False AND ttCliType.PayType = 1:
+        
+        IF ttCliType.FixedLineDownload NE ? AND ttCliType.FixedLineDownload NE "" THEN
+            ASSIGN lcSubsTypeList = lcSubsTypeList + (IF lcSubsTypeList <> "" THEN "," ELSE "") + ttCliType.CliType.
+
+    END. 
+
+    RETURN lcSubsTypeList.
+
+END FUNCTION.
+
+FUNCTION fFamilySubscriptionTypeList RETURNS CHARACTER
+    ():
+
+    DEFINE VARIABLE lcSubsTypeList AS CHARACTER NO-UNDO.
+
+    FOR EACH ttCliType WHERE ttCliType.Brand = gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = True AND ttCliType.PayType = 1:        
+        ASSIGN lcSubsTypeList = lcSubsTypeList + (IF lcSubsTypeList <> "" THEN "," ELSE "") + ttCliType.CliType.    
+    END. 
+
+    RETURN lcSubsTypeList.
+
 END FUNCTION.
 
 FUNCTION fPackageCalculation RETURNS LOGIC:
@@ -77,18 +139,16 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    DEF VAR liCallPeriod          AS INT NO-UNDO. 
    DEF VAR ldeEndTs              AS DEC NO-UNDO. 
    DEF VAR lcCliTypeList         AS CHAR NO-UNDO.
-
+   DEF VAR lcDSS2CliTypeList     AS CHAR NO-UNDO.
    ASSIGN	
-      ttCall.BillCode = bsub-prod
-      lcOrigBillCode  = bsub-prod
-      lcCliTypeList   = {&MOBILE_SUBTYPES} 				   + "," +
-      				    {&ADSL-CONVERGENT-SUBTYPES} 	   + "," +
-      				    {&FIBER-CONVERGENT-SUBTYPES-LIST1} + "," +
-      				    {&FIBER-CONVERGENT-SUBTYPES-LIST2}
-      ldPackageAmt    = 0
-      ldTotalPrice    = 0
-      liUnitUsed      = ?
-      liSLGAUsed      = ?.
+      ttCall.BillCode   = bsub-prod
+      lcOrigBillCode    = bsub-prod
+      lcCliTypeList     = fMobileSubscriptionTypeList()	+ "," + fFamilySubscriptionTypeList + "," + fConvergentSubscriptionTypeList()
+      lcDSS2CliTypeList = fSubscriptionTypeList('DSS2') 
+      ldPackageAmt      = 0
+      ldTotalPrice      = 0
+      liUnitUsed        = ?
+      liSLGAUsed        = ?.
    
    IF ttCall.MSCID = "NRTRDE" THEN DO:
       ttCall.ErrorCode = 0.
@@ -126,7 +186,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
 
          IF ttServiceLimit.GroupCode = {&DSS} OR
             (ttServiceLimit.GroupCode = "DSS2" AND
-             LOOKUP(MSOwner.CLIType,{&DSS2_SUBTYPES}) > 0) THEN
+             LOOKUP(MSOwner.CLIType,lcDSS2CliTypeList) > 0) THEN
             llVoice_Data_subs_DSS = TRUE.
       END. /* FOR FIRST ttServiceLimit NO-LOCK WHERE */
    END. /* IF MSOwner.CLIType = "CONT6" THEN DO: */
