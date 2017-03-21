@@ -203,6 +203,9 @@ PROCEDURE pUpdateOrderStatus:
    IF iiSecure < 0 OR iiSecure > 2 THEN
       RETURN "ERROR:Unsupported secure option value".
 
+   IF iiSecure = 0 AND Order.DeliverySecure > 0 THEN
+      RETURN "ERROR:It is not allowed to change secure delivery type to non secure type.".
+
    IF iiSecure > 0 THEN DO:
       IF INDEX(Order.OrderChannel,"pos") > 0 OR
                Order.OrderType > 2 THEN 
