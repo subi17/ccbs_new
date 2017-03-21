@@ -7,6 +7,7 @@
 {Syst/commali.i}
 {Func/date.i}
 {Syst/eventval.i}
+{Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -131,6 +132,46 @@ FUNCTION fCloseDiscount RETURNS LOGICAL
       fCleanEventObjects().
 
    RETURN TRUE.
+
+END FUNCTION.
+
+FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
+   (iiMsSeq    AS INT,
+    icCLIType  AS CHAR,
+    idtDate    AS DATE):
+
+   DEF VAR lcNewAddLineDisc AS CHAR NO-UNDO.
+   DEF VAR liRequest        AS INT  NO-UNDO.
+   DEF VAR lcResult         AS CHAR NO-UNDO.
+
+   lcNewAddLineDisc = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}),
+                            {&ADDLINE_DISCOUNTS}).
+
+   FOR FIRST DiscountPlan NO-LOCK WHERE
+             DiscountPlan.Brand    = gcBrand          AND
+             DiscountPlan.DPRuleID = lcNewAddLineDisc AND
+             DiscountPlan.ValidTo >= idtDate,
+       FIRST DPRate NO-LOCK WHERE
+             DPRate.DPId       = DiscountPlan.DPId AND
+             DPRate.ValidFrom <= idtDate           AND
+             DPRate.ValidTo   >= idtDate:
+
+      fCloseDiscount(DiscountPlan.DPRuleID,
+                     iiMsSeq,
+                     idtDate - 1,
+                     FALSE).
+
+      liRequest = fAddDiscountPlanMember(iiMsSeq,
+                                         DiscountPlan.DPRuleID,
+                                         DPRate.DiscValue,
+                                         idtDate,
+                                         DiscountPlan.ValidPeriods,
+                                         0,
+                                         OUTPUT lcResult).
+
+      IF liRequest NE 0 THEN
+         RETURN "ERROR:Additional Line Discount not created; " + lcResult.
+   END.
 
 END FUNCTION.
 

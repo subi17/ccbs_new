@@ -462,7 +462,7 @@ PROCEDURE pFeesAndServices:
                DiscountPlan.Brand    = gcBrand                         AND
                LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
                DiscountPlan.ValidTo >= ldtActDate,
-          EACH DPMember NO-LOCK WHERE
+          EACH DPMember EXCLUSIVE-LOCK WHERE
                DPMember.DPID       = DiscountPlan.DPID       AND
                DPMember.HostTable  = "MobSub"                AND
                DPMember.KeyValue   = STRING(MsRequest.MsSeq) AND
@@ -472,37 +472,16 @@ PROCEDURE pFeesAndServices:
             RUN StarEventInitialize(lhDPMember).
             RUN StarEventSetOldBuffer(lhDPMember).
          END.
-         FIND FIRST bMember WHERE RECID(bMember) = RECID(DPMember) EXCLUSIVE-LOCK.
-         bMember.ValidTo = ldtActDate - 1.
+         DPMember.ValidTo = ldtActDate - 1.
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
       END.
 
       IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
-         
-         lcNewAddLineDisc = ENTRY(LOOKUP(CLIType.CliType, {&ADDLINE_CLITYPES}),
-                                  {&ADDLINE_DISCOUNTS}).
-
-         FOR FIRST DiscountPlan NO-LOCK WHERE
-                   DiscountPlan.Brand    = gcBrand          AND
-                   DiscountPlan.DPRuleID = lcNewAddLineDisc AND
-                   DiscountPlan.ValidTo >= ldtActDate,
-             FIRST DPRate NO-LOCK WHERE
-                   DPRate.DPId       = DiscountPlan.DPId AND 
-                   DPRate.ValidFrom <= ldtActDate        AND
-                   DPRate.ValidTo   >= ldtActDate:
-
-            liRequest = fAddDiscountPlanMember(MsRequest.MsSeq,
-                                               DiscountPlan.DPRuleID,
-                                               DPRate.DiscValue,
-                                               ldtActDate,
-                                               DiscountPlan.ValidPeriods,
-                                               0,
-                                               OUTPUT lcResult).
-
-            IF liRequest NE 0 THEN
-               RETURN "ERROR:Discount not created; " + lcResult.
-         END.
-
+         fCreateAddLineDiscount(MsRequest.MsSeq,
+                                CLIType.CLIType,
+                                ldtActDate).
+         IF RETURN-VALUE BEGINS "ERROR" THEN
+            RETURN RETURN-VALUE.
       END.
    END.
 

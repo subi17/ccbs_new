@@ -748,35 +748,11 @@ DO TRANSACTION:
                  Customer.Custnum = MobSub.Custnum NO-ERROR.
 
       IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
-
-         lcNewAddLineDisc = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}),
-                                  {&ADDLINE_DISCOUNTS}).
-
-         FOR FIRST DiscountPlan NO-LOCK WHERE
-                   DiscountPlan.Brand    = gcBrand          AND
-                   DiscountPlan.DPRuleID = lcNewAddLineDisc AND
-                   DiscountPlan.ValidTo >= TODAY,
-             FIRST DPRate NO-LOCK WHERE
-                   DPRate.DPId       = DiscountPlan.DPId AND 
-                   DPRate.ValidFrom <= TODAY             AND
-                   DPRate.ValidTo   >= TODAY:
-            
-            fCloseDiscount(DiscountPlan.DPRuleID,
-                           MobSub.MsSeq,
-                           TODAY - 1,
-                           FALSE).
-
-            liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
-                                               DiscountPlan.DPRuleID,
-                                               DPRate.DiscValue,
-                                               TODAY,
-                                               DiscountPlan.ValidPeriods,
-                                               0,
-                                               OUTPUT lcResult).
-
-            IF liRequest NE 0 THEN
-               RETURN "ERROR:Discount not created; " + lcResult.
-         END.
+         fCreateAddLineDiscount(MobSub.MsSeq,
+                                MobSub.CLIType,
+                                TODAY).
+         IF RETURN-VALUE BEGINS "ERROR" THEN
+            RETURN RETURN-VALUE.
       END.
    END.
 
