@@ -205,7 +205,6 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
             bOrder.Brand      EQ Syst.Parameters:gcBrand AND
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
             bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND 
-            bOrder.OrderType  NE {&ORDER_TYPE_STC}       AND 
             bOrder.statuscode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
@@ -240,13 +239,14 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
        EACH  bMobSub NO-LOCK WHERE
              bMobSub.Brand   = Syst.Parameters:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
-             bMobSub.PayType = FALSE,
+             bMobSub.PayType = FALSE                   AND 
+             bMobSub.CLI     <> bMobSub.FixedNumber,
        FIRST bCLIType NO-LOCK WHERE
              bCLIType.Brand      = Syst.Parameters:gcBrand  AND
              bCLIType.CLIType    = bMobSub.CLIType          AND
              bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN} AND
              bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}:
-      
+    
        RETURN TRUE.
 
    END.   
