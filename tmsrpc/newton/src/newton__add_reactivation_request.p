@@ -69,7 +69,7 @@ IF LOOKUP("ActStamp", pcReacStruct) GT 0 THEN
 IF ldActStamp = 0 OR ldActStamp = ? THEN
    ldActStamp = fMakeTS().
 
-{newton/src/findtenant.i NO ordercanal MobSub MsSeq liMsSeq}
+{newton/src/findtenant.i NO ordercanal TermMobSub MsSeq liMsSeq}
 
 lcResult = freacprecheck(INPUT liMsSeq, INPUT katun, INPUT FALSE).
 IF lcResult > "" THEN DO:
