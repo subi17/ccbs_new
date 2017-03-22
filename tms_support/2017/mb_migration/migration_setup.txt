@@ -15,3 +15,9 @@ Setup instructions for MB migration.
 2. Make parameter setup by running mb_migration_set_tmsparam.p
 
 3. Ensure that message queue for Migration is activated.
+
+4. Ensure that directories referred in step 2. exist with sufficient file
+   permissions. Also create subdirectories
+   Under InDir:  incoming, logs, processed 
+   Under OutDir: outgoing, logs, spool
+
