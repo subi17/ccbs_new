@@ -2,10 +2,10 @@
 {Func/fdss.i}
 
 DEF TEMP-TABLE ttServiceLCounter NO-UNDO
-   LIKE ServiceLCounter.
+   LIKE ServiceLCounter USE-INDEX msseq USE-INDEX Custnum.
 
 DEF TEMP-TABLE ttSLCounterItem NO-UNDO
-   LIKE SLCounterItem
+   LIKE SLCounterItem USE-INDEX msseq
    FIELD Picked AS INT.
    
 FUNCTION fConvertAmountUnit RETURNS DECIMAL

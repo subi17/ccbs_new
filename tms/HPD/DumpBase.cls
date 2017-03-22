@@ -21,21 +21,22 @@ CLASS HPD.DumpBase:
 	 Purpose:
 	 Notes:
 	------------------------------------------------------------------------------*/
-   
+
+   DEFINE PRIVATE VARIABLE liDelimiterLenght       AS INTEGER       NO-UNDO.
+
    DEFINE PUBLIC  VARIABLE lcDelimiter             AS CHARACTER     NO-UNDO.
    DEFINE PUBLIC  VARIABLE lcKeyDelimiter          AS CHARACTER     NO-UNDO.
-   
+
    DEFINE PUBLIC  VARIABLE objHandler              AS CLASS DumpHandler NO-UNDO.
-        
+
    DEFINE PROTECTED BUFFER lbDumpFile FOR DumpFile.
-   
+
    DEFINE PRIVATE TEMP-TABLE ttDumpElement NO-UNDO
       FIELD OrderNum    AS INTEGER
       FIELD TableName   AS CHARACTER
       FIELD FieldName   AS CHARACTER
       FIELD ElemValue   AS CHARACTER
       FIELD ElemFormat  AS CHARACTER
-      FIELD Delim       AS CHARACTER
       FIELD FieldHandle AS HANDLE
       FIELD ExtentPos   AS INTEGER
       FIELD DoQuote     AS LOGICAL INITIAL NO
@@ -59,6 +60,9 @@ CLASS HPD.DumpBase:
       IF lbDumpFile.DumpDelimiter <> ""
       THEN lcDelimiter = ENTRY(1,lbDumpFile.DumpDelimiter).
       ELSE lcDelimiter = {&HPDDumpDelimiter}.
+
+      liDelimiterLenght = LENGTH(lcDelimiter) + 1.
+
       IF NUM-ENTRIES(lbDumpFile.DumpDelimiter) = 2
       THEN lcKeyDelimiter = ENTRY(2,lbDumpFile.DumpDelimiter).
       ELSE lcKeyDelimiter = {&HPDKeyDelimiter}.
@@ -142,14 +146,13 @@ CLASS HPD.DumpBase:
 
          CREATE ttDumpElement.
          ASSIGN
-            ttDumpElement.OrderNum   = DFField.OrderNbr + 10
+            ttDumpElement.OrderNum   = DFField.OrderNbr + {&HPDHeaderFieldCount}
             ttDumpElement.TableName  = DFField.DFTable WHEN ((NOT lcDFField BEGINS "@") AND
                                                              (NOT lcDFField BEGINS "#"))
             ttDumpElement.FieldName  = IF lcDFField BEGINS "@"
                                        THEN ""
                                        ELSE DFField.DFLabel
             ttDumpElement.ElemValue  = DFField.DFLabel WHEN lcDFField BEGINS "@"
-            ttDumpElement.Delim      = lcDelimiter
             ttDumpElement.DoQuote    = llQuote
             .
 
@@ -183,10 +186,6 @@ CLASS HPD.DumpBase:
 
          END.                     
       END.
-
-      FIND LAST ttDumpElement NO-ERROR.
-      IF AVAILABLE ttDumpElement
-      THEN ttDumpElement.Delim = "".
 
    END METHOD.
 
@@ -248,8 +247,20 @@ CLASS HPD.DumpBase:
          ttDumpElement.OrderNum   = iiOrderNbr
          ttDumpElement.FieldName  = icFieldName
          ttDumpElement.ElemValue  = icElemValue
-         ttDumpElement.Delim      = lcDelimiter
          .
+
+   END METHOD.
+
+
+   METHOD PUBLIC VOID mDeleteDumpHeader
+      (iiOrderNbr  AS INTEGER):
+
+      FIND FIRST ttDumpElement WHERE
+         ttDumpElement.OrderNum = iiOrderNbr
+      NO-ERROR.
+
+      IF AVAILABLE ttDumpElement
+      THEN DELETE ttDumpElement.
 
    END METHOD.
 
@@ -390,71 +401,12 @@ CLASS HPD.DumpBase:
          IF ttDumpElement.DoQuote AND lcValue NE ""
          THEN lcValue = QUOTER(lcValue).
 
-         lcReturnValue =  lcReturnValue + (IF lcValue = ? THEN "" ELSE lcValue) + ttDumpElement.Delim.
-   
+         lcReturnValue =  lcReturnValue + lcDelimiter + (IF lcValue = ? THEN "" ELSE lcValue).
+
       END.
-   
-      RETURN lcReturnValue.
+
+      RETURN SUBSTRING(lcReturnValue, liDelimiterLenght).
 
    END METHOD.
 
-
-   METHOD PUBLIC CHARACTER mGetData
-      ( iiOrderNumToSkip AS INTEGER ):
-
-      DEFINE VARIABLE lcValue       AS CHARACTER NO-UNDO.
-      DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.         
-
-      FOR EACH ttDumpElement:
-         
-         IF ttDumpElement.OrderNum = iiOrderNumToSkip
-         THEN NEXT.
-         
-         IF ttDumpElement.FieldName = ""
-         THEN lcValue = ttDumpElement.ElemValue.
-         
-         ELSE IF ttDumpElement.TableName = ""
-         THEN lcValue = objHandler:mSpecialHandling(ttDumpElement.FieldName, NO).
-         
-         ELSE DO:
-   
-            /* There is specific format that we need to use */
-            IF ttDumpElement.ElemFormat <> ""
-            THEN lcValue = TRIM(STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos), ttDumpElement.ElemFormat)) NO-ERROR.
-            
-            /* We are using default formats */
-            ELSE CASE ttDumpElement.FieldHandle:DATA-TYPE:
-                  
-                  WHEN "CHARACTER"
-                  THEN lcValue = ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos) NO-ERROR.
-                  WHEN "DECIMAL"
-                  THEN lcValue = TRIM(STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos),"->>>>>>>>>>>>>>>>>>>>>>9.9<<<<<<<<<")) NO-ERROR.
-                  WHEN "INTEGER" OR WHEN "INT64"
-                  THEN lcValue = TRIM(STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos),"->>>>>>>>>>>>>>>>>>>>>>9")) NO-ERROR.
-                  &IF DEFINED(DO_NOT_USE_ISODATE_DATE_FORMAT) &THEN
-                  WHEN "DATE"
-                  THEN lcValue = STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos)) NO-ERROR.
-                  &ELSE
-                  WHEN "DATE" OR
-                  &ENDIF
-                  WHEN "DATETIME" OR WHEN "DATETIME-TZ"
-                  THEN lcValue = ISO-DATE(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos)) NO-ERROR.
-                  WHEN "LOGICAL"
-                  THEN lcValue = IF ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos) THEN "yes" ELSE "no" NO-ERROR.
-                  OTHERWISE lcValue = STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos)) NO-ERROR.
-                  
-            END CASE.
-         END.
-
-         IF ttDumpElement.DoQuote AND lcValue NE ""
-         THEN lcValue = QUOTER(lcValue).
-
-         lcReturnValue =  lcReturnValue + (IF lcValue = ? THEN "" ELSE lcValue) + ttDumpElement.Delim.
-   
-      END.
-   
-      RETURN lcReturnValue.
-
-   END METHOD.
-   
 END CLASS.
