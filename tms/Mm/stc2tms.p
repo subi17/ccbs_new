@@ -289,10 +289,11 @@ PROCEDURE pFeesAndServices:
    DEF VAR liCredQty          AS INT  NO-UNDO. 
    DEF VAR liTimeLimit        AS INT  NO-UNDO. 
    DEF VAR ldaPrevMonth       AS DATE NO-UNDO. 
-   DEF VAR liPrevPeriod       AS INT NO-UNDO. 
+   DEF VAR liPrevPeriod       AS INT  NO-UNDO. 
    DEF VAR lcNewAddLineDisc   AS CHAR NO-UNDO.
-   DEF VAR liRequest          AS INT NO-UNDO.
+   DEF VAR liRequest          AS INT  NO-UNDO.
    DEF VAR lcResult           AS CHAR NO-UNDO.
+   DEF VAR llAddLineDisc      AS LOG  NO-UNDO.
 
    DEF BUFFER bMember FOR DPMember.
    
@@ -457,12 +458,13 @@ PROCEDURE pFeesAndServices:
    /* ADDLINE-20 Additional Line Discounts 
       CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type
       CLOSE : If New CLIType Not Matches, Then Close the Discount */
-   IF LOOKUP(CLIType.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+   IF LOOKUP(CLIType.CliType , {&ADDLINE_CLITYPES}) > 0 AND
+      LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
       FOR EACH DiscountPlan NO-LOCK WHERE
                DiscountPlan.Brand    = gcBrand                         AND
                LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
                DiscountPlan.ValidTo >= ldtActDate,
-          EACH DPMember EXCLUSIVE-LOCK WHERE
+         FIRST DPMember EXCLUSIVE-LOCK WHERE
                DPMember.DPID       = DiscountPlan.DPID       AND
                DPMember.HostTable  = "MobSub"                AND
                DPMember.KeyValue   = STRING(MsRequest.MsSeq) AND
@@ -473,10 +475,11 @@ PROCEDURE pFeesAndServices:
             RUN StarEventSetOldBuffer(lhDPMember).
          END.
          DPMember.ValidTo = ldtActDate - 1.
+         llAddLineDisc = TRUE.
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
       END.
 
-      IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
+      IF llAddLineDisc AND fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
          fCreateAddLineDiscount(MsRequest.MsSeq,
                                 CLIType.CLIType,
                                 ldtActDate).
