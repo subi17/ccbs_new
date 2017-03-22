@@ -14,8 +14,9 @@ FUNCTION fGetShaperConfId RETURN CHAR
     INPUT idtDate AS DATE,
     INPUT icCliType AS CHAR):
 
-   DEFINE VARIABLE lcDefParam AS CHARACTER NO-UNDO format "x(40)".
-   DEFINE VARIABLE lcTagValue AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcDefParam    AS CHARACTER NO-UNDO format "x(40)".
+   DEFINE VARIABLE lcTagValue    AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcOrgTagValue AS CHARACTER NO-UNDO.
 
    DEF BUFFER bDCPackage FOR DCServicePackage.
    DEF BUFFER bDCComponent FOR DCServiceComponent.
@@ -39,7 +40,6 @@ FUNCTION fGetShaperConfId RETURN CHAR
 
    FIND bContSub WHERE bContSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    
-
    IF icShaperBase EQ "" THEN
       FOR FIRST bDCPackage NO-LOCK WHERE
                 bDCPackage.Brand     = gcBrand AND
@@ -119,10 +119,48 @@ FUNCTION fGetShaperConfId RETURN CHAR
                 CTServel.ServCom = "SHAPER_STP" AND
                 CTServel.CLIType = icCLIType AND
                 CTServel.FromDate <= idtDate:
-         lcTagValue = CTServel.DefParam.
+         ASSIGN 
+             lcTagValue = CTServel.DefParam
+             lcOrgTagValue = lcTagValue.
       END.
 
       IF lcTagValue > "" THEN lcTagValue = lcTagValue + "w".
+
+      IF INDEX(icDCevent,"RELAX") > 0 AND BUFFER-TENANT-NAME(bContSub) = "TMasmovil" THEN
+      DO:
+          FOR EACH bBundleAct NO-LOCK WHERE bBundleAct.MsSeq    = iiMsSeq           AND
+                                            bBundleAct.DialType = {&DIAL_TYPE_GPRS} AND
+                                            bBundleAct.EndTS    > ldeEndTime,
+              FIRST bBundleLimit NO-LOCK WHERE bBundleLimit.SlSeq     = bBundleAct.SlSeq AND
+                                               bBundleLimit.GroupCode NE icDCEvent       AND
+                                               bBundleLimit.GroupCode NE "MM_DATA600",
+              FIRST bContract NO-LOCK WHERE bContract.Brand   = gcBrand                AND
+                                            bContract.DCEvent = bBundleLimit.GroupCode AND
+                                            LOOKUP(bContract.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0,
+              FIRST bDCPackage NO-LOCK WHERE bDCPackage.Brand     = gcBrand           AND
+                                             bDCPackage.DCEvent   = bContract.DCEvent AND
+                                             bDCPackage.ServPac   = "SHAPER"          AND
+                                             bDCPackage.ToDate   >= idtDate           AND
+                                             bDCPackage.FromDate <= idtDate,
+              FIRST bDCComponent NO-LOCK WHERE bDCComponent.DCServicePackageID = bDCPackage.DCServicePackageID AND
+                                               bDCComponent.ServCom = "SHAPER"  AND
+                                               bDCComponent.ToDate   >= idtDate AND
+                                               bDCComponent.FromDate <= idtDate:
+
+              IF bDCComponent.DefParam = ""                   OR 
+                 INDEX(bDCComponent.DefParam,"#CLITYPE#") = 0 OR 
+                 CAN-FIND(FIRST MsRequest NO-LOCK WHERE MsRequest.MsSeq      = bBundleAct.MsSeq                          AND 
+                                                        MsRequest.ReqType    = {&REQTYPE_CONTRACT_TERMINATION}           AND 
+                                                        MsRequest.ReqCParam3 = bContract.DCEvent                         AND
+                                                        LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
+                                                         MsRequest.ActStamp   < ldeActTime) THEN
+                  NEXT.
+
+              ASSIGN lcTagValue = lcTagValue + REPLACE(bDCComponent.DefParam,"#CLITYPE#",lcOrgTagValue + "w"). 
+              LEAVE.                                
+          END.                                     
+      END.
+
       lcDefParam = REPLACE(lcDefParam,"#CLITYPE#",lcTagValue).
    END.
 
