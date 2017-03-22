@@ -126,7 +126,7 @@ FUNCTION fGetShaperConfId RETURN CHAR
 
       IF lcTagValue > "" THEN lcTagValue = lcTagValue + "w".
 
-      IF INDEX(icDCevent,"RELAX") > 0 AND BUFFER-TENANT-NAME(bContSub) = "TMasmovil" THEN
+      IF lcTagValue > "" AND INDEX(icDCevent,"RELAX") > 0 AND BUFFER-TENANT-NAME(bContSub) = "TMasmovil" THEN
       DO:
           FOR EACH bBundleAct NO-LOCK WHERE bBundleAct.MsSeq    = iiMsSeq           AND
                                             bBundleAct.DialType = {&DIAL_TYPE_GPRS} AND
@@ -156,7 +156,7 @@ FUNCTION fGetShaperConfId RETURN CHAR
                                                          MsRequest.ActStamp   < ldeActTime) THEN
                   NEXT.
 
-              ASSIGN lcTagValue = lcTagValue + REPLACE(bDCComponent.DefParam,"#CLITYPE#",lcOrgTagValue + "w"). 
+              ASSIGN lcTagValue = lcTagValue + REPLACE(bDCComponent.DefParam,"#CLITYPE#","") + "w". 
               LEAVE.                                
           END.                                     
       END.
