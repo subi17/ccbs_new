@@ -765,11 +765,12 @@ FUNCTION fRetention RETURNS LOGICAL
    DEF BUFFER bOrder FOR Order.
    DEF VAR lcMNPSMSText       AS CHAR  NO-UNDO.
 
-   FIND FIRST bOrder WHERE
-              bOrder.MsSeq EQ iiMsSeq AND
-              bOrder.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}
-        NO-LOCK NO-ERROR.
-   IF AVAIL bOrder THEN DO:
+   FOR EACH bOrder NO-LOCK WHERE
+            bOrder.MsSeq EQ iiMsSeq AND
+            bOrder.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}:
+
+      lcMNPSMSText = "".
+
       IF fIsConvergenceTariff(bOrder.CliType) EQ TRUE AND
          bOrder.Ordertype NE {&ORDER_TYPE_RENEWAL} THEN
          RUN Mc/orderinctrl.p(bOrder.OrderId, 0, TRUE).
@@ -811,7 +812,7 @@ FUNCTION fRetention RETURNS LOGICAL
                           "622",
                           bOrder.OrderId). 
       END. /* IF lcMNPSMSText > "" THEN DO: */
-   END. /* IF AVAIL bOrder THEN DO: */
+   END. /* FOR EACH bOrder NO-LOCK WHERE: */
    RETURN TRUE.
 
 
