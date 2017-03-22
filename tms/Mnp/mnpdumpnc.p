@@ -16,31 +16,100 @@ DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
 DEF STREAM sdump.
 
-DEFINE VARIABLE lcPickType AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE iiMNPType AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcDelimiter AS CHARACTER NO-UNDO. 
+
+
+DEFINE TEMP-TABLE ttMnpDetails
+   FIELD PortRequest AS CHAR
+   FIELD CCode AS CHAR
+   FIELD UpdateTS AS DEC
+   FIELD StatusReason AS CHAR
+   FIELD Portingtime AS DEC
+   FIELD Msisdns AS CHAR
+   FIELD ReceptorNrn AS CHAR
+   FIELD FormRequest AS CHAR
+   FIELD DonorCode AS CHAR
+   FIELD ReceptorCode AS CHAR
+   FIELD OrderId AS INT
+   FIELD MsSeqLst AS CHAR
+   FIELD ICCLst AS CHAR
+   INDEX OrderId IS PRIMARY UNIQUE OrderId.
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 IF AVAILABLE DumpFile THEN DO:
-   lcPickType = DumpFile.ConfigParam.
+   iiMNPType = INT(DumpFile.ConfigParam).
    lcDelimiter = DumpFile.DumpDelimiter.
 END.
 
-FUNCTION fCreateMNPDump RETURNS LOGICAL
-(iiType AS INTEGER):
+FUNCTION fCollectMNPDetails RETURNS LOGICAL
+(lccode AS CHAR, lcmsisdns AS CHAR,
+ lcMsSeqList AS CHAR, lcICCList AS CHAR):
 
-   DEFINE VARIABLE ldDumpFile AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcCode AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcmsisdns AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcMSSeqs AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcICCs AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcDumpfile AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcDumpfileOut AS CHARACTER NO-UNDO. 
+   FIND FIRST MNPDetails NO-LOCK WHERE
+              MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
+   IF NOT AVAIL MNPDetails THEN NEXT.
+
+   IF NOT CAN-FIND( FIRST ttMnpDetails NO-LOCK WHERE
+         ttMnpDetails.OrderId = MNPProcess.OrderId) THEN DO:
+      CREATE ttMNPDetails.
+      ASSIGN
+         ttMNPDetails.PortRequest = mnpprocess.portrequest
+         ttMNPDetails.CCode = lccode
+         ttMNPDetails.UpdateTS = mnpprocess.updatets
+         ttMNPDetails.StatusReason = mnpprocess.statusreason
+         ttMNPDetails.Portingtime = mnpprocess.portingtime
+         ttMNPDetails.Msisdns = SUBSTRING(lcmsisdns,1,LENGTH(lcmsisdns) - 1)
+         ttMNPDetails.ReceptorNrn = MNPDetails.receptornrn
+         ttMNPDetails.FormRequest = mnpprocess.formrequest
+         ttMNPDetails.DonorCode = MNPDetails.donorcode
+         ttMNPDetails.ReceptorCode = MNPDetails.receptorcode
+         ttMNPDetails.MsSeqLst = lcMsSeqList
+         ttMNPDetails.ICCLst = lcICCList
+         ttMNPDetails.OrderId = MNPProcess.OrderId.
+   END.
+END FUNCTION.
+
+FUNCTION fPrintMNPDump RETURNS LOGICAL:
+   FOR EACH ttMNPDetails NO-LOCK:
+      PUT STREAM sdump UNFORMATTED
+         ttMNPDetails.PortRequest lcDelimiter
+         ttMNPDetails.CCode lcDelimiter
+         fts2hms(ttMNPDetails.UpdateTS) lcDelimiter
+         ttMNPDetails.StatusReason lcDelimiter
+         fts2hms(ttMNPDetails.Portingtime) lcDelimiter
+         ttMNPDetails.Msisdns lcDelimiter
+         ttMNPDetails.ReceptorNrn lcDelimiter
+         ttMNPDetails.FormRequest lcDelimiter
+         ttMNPDetails.DonorCode lcDelimiter
+         ttMNPDetails.ReceptorCode lcDelimiter.
+      IF iiMNPType = {&MNP_TYPE_IN} THEN
+         PUT STREAM sdump UNFORMATTED
+         STRING(ttMNPDetails.OrderId) lcDelimiter.
+      PUT STREAM sdump UNFORMATTED 
+         ttMNPDetails.MsSeqLst lcDelimiter
+         ttMNPDetails.ICCLst SKIP.
+   END.
+END FUNCTION.
+
+
+FUNCTION fCreateMNPDump RETURNS LOGICAL:
+
+   DEF VAR ldDumpFile AS CHARACTER NO-UNDO.
+   DEF VAR lcCode AS CHARACTER NO-UNDO.
+   DEF VAR lcmsisdns AS CHARACTER NO-UNDO.
+   DEF VAR lcMSSeqs AS CHARACTER NO-UNDO.
+   DEF VAR lcICCs AS CHARACTER NO-UNDO.
+   DEF VAR lcDumpfile AS CHARACTER NO-UNDO.
+   DEF VAR lcDumpfileOut AS CHARACTER NO-UNDO.
+   DEF VAR lcMsSeqList AS CHAR NO-UNDO.
+   DEF VAR lcICCList AS CHAR NO-UNDO.
    
    OUTPUT STREAM sdump TO value (icFile).
    
-   FOR EACH MNPProcess WHERE
+   FOR EACH MNPProcess NO-LOCK USE-INDEX UpdateTS WHERE
             MNPProcess.Brand = gcBrand AND
-            MNPProcess.MNPType = iiType NO-LOCK:
+            MNPProcess.MNPType = iiMNPType:
       
       ASSIGN
          lcmsisdns = ""
@@ -53,7 +122,8 @@ FUNCTION fCreateMNPDump RETURNS LOGICAL
       FOR EACH mnpsub where
                mnpsub.mnpseq = mnpprocess.mnpseq NO-LOCK:
          lcmsisdns = lcmsisdns + mnpsub.cli + ",".
-         IF iiType = {&MNP_TYPE_IN} OR iiType = {&MNP_TYPE_OUT} THEN ASSIGN
+         IF iiMNPType = {&MNP_TYPE_IN} OR 
+            iiMNPType = {&MNP_TYPE_OUT} THEN ASSIGN
             lcMsSeqs = lcMsSeqs + string(mnpsub.msseq) + ","
             lcICCs = lcICCs + mnpsub.icc + ",".
       END.
@@ -69,45 +139,32 @@ FUNCTION fCreateMNPDump RETURNS LOGICAL
                    ELSE TMSCodes.CodeName).
       ELSE lcCode = STRING(MNPProcess.StatusCode).
       
-      IF iiType = {&MNP_TYPE_IN} OR iiType = {&MNP_TYPE_OUT} THEN DO:
-      
-         FIND MNPDetails WHERE
-              MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-LOCK.
-         
-         put stream sdump unformatted 
-            mnpprocess.portrequest lcDelimiter
-            lccode lcDelimiter
-            fts2hms(mnpprocess.updatets) lcDelimiter
-            mnpprocess.statusreason lcDelimiter
-            fts2hms(mnpprocess.portingtime) lcDelimiter
-            SUBSTRING(lcmsisdns,1,LENGTH(lcmsisdns) - 1) lcDelimiter
-            MNPDetails.receptornrn lcDelimiter
-            mnpprocess.formrequest lcDelimiter
-            MNPDetails.donorcode lcDelimiter
-            MNPDetails.receptorcode lcDelimiter.
-
-         IF iiType EQ {&MNP_TYPE_IN} THEN 
-            put stream sdump unformatted MNPProces.OrderId lcDelimiter.
-        
-         put stream sdump unformatted
-            SUBSTRING(lcMsSeqs,1,LENGTH(lcMsSeqs) - 1) lcDelimiter
-            SUBSTRING(lcICCs,1,LENGTH(lcICCs) - 1) skip.
+      IF iiMNPType = {&MNP_TYPE_IN} OR 
+         iiMNPType = {&MNP_TYPE_OUT} THEN DO:
+         ASSIGN
+            lcMsSeqList = SUBSTRING(lcMsSeqs,1,LENGTH(lcMsSeqs) - 1)
+            lcICCList = SUBSTRING(lcICCs,1,LENGTH(lcICCs) - 1).
+         fCollectMNPDetails(lcCode, lcmsisdns, lcMsSeqList, lcICCList).
       END.
-      ELSE IF iiType = 3 THEN DO:
-         
+      ELSE IF iiMNPType = {&MNP_TYPE_TERMINATION} THEN DO:
          put stream sdump unformatted 
             mnpprocess.portrequest lcDelimiter
             lccode lcDelimiter
             fts2hms(mnpprocess.createdts) lcDelimiter
             fts2hms(mnpprocess.updatets) lcDelimiter
             SUBSTRING(lcmsisdns,1,LENGTH(lcmsisdns) - 1) lcDelimiter
-            mnpprocess.mnpseq skip.
+            mnpprocess.mnpseq SKIP.
       END.
       oiEvents = oiEvents + 1.
    END.
+   IF iiMNPType = {&MNP_TYPE_IN} OR iiMNPType = {&MNP_TYPE_OUT} THEN
+      fPrintMNPDump().
 
    OUTPUT STREAM sdump close.
    
 END FUNCTION. 
 
-fCreateMNPDump(INT(lcPickType)).
+/* MAIN PROGRAM START */
+fCreateMNPDump().
+
+/* MAIN PROGRAM ENDS */
