@@ -1036,6 +1036,10 @@ RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
                         INPUT MobSub.CliType,
                         INPUT MsRequest.ReqSource).
 
+FINALLY:
+   IF llDoEvent THEN fCleanEventObjects().
+END.
+
 PROCEDURE check-order:
 
    DEF OUTPUT PARAMETER ocError AS CHAR NO-UNDO.

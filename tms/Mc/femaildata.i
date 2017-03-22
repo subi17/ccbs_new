@@ -1877,13 +1877,9 @@ PROCEDURE pGetCTNAME:
       llgOrderDate = fSplitTS(Order.CrStamp,
                               OUTPUT ldtOrderDate,
                               OUTPUT ldiOrderDate).
-
-      IF CLIType.CLIType EQ "TARJ7" THEN
-         ldeMFWithTax = (1 + ldeTaxPerc / 100) * 6.61. /* 8.00 IVA incl */
-      ELSE IF CLIType.CLIType EQ "TARJ9" THEN
-         ldeMFWithTax = (1 + ldeTaxPerc / 100) * 8.265. /* 10.00 IVA incl */
-      ELSE IF CLiType.CommercialFee > 0 THEN
-         ldeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CommercialFee.
+      
+      /*YDR-2347 removed the hard coded values AND now fetching the values from Commercial Fee itself*/
+      ldeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CommercialFee.
 
        CASE CLIType.CLIType:
          WHEN "CONT9" OR WHEN "CONT10" OR WHEN "CONT15" THEN lcList = "0 cent/min".
