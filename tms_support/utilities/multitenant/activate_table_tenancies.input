@@ -13,7 +13,7 @@
 |common|BillItem|1855|T|Rating|
 |common|BillTarget|4001|T|Rating|
 |common|BItemGroup|49|T|Billing|
-|common|BRAND|1|S|General|
+|common|BRAND|1|T|General|
 |common|BRTestCase|742|T|Billing|
 |common|BRTestCriteria|2818|T|Billing|
 |common|BRTestQResult|129|T|Billing|
@@ -168,9 +168,9 @@
 |common|TerminalConf|791|T|Order|
 |common|TFConf|2505|T|Order|
 |common|TMSCodes|1529|T|System|
-|common|TMSPass|4001|S|System|
+|common|TMSPass|4001|T|System|
 |common|TMSPrinter|4|S|System|
-|common|TMSUser|2077|S|System|
+|common|TMSUser|2077|T|System|
 |common|Token|15|S|System|
 |common|UserGrp|9|S|System|
 |common|UserLimit|1355|T|System|
