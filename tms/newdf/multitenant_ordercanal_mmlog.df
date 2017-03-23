@@ -1,0 +1,114 @@
+ADD TABLE "MMLog"
+  AREA "Sta_Data_64"
+  DUMP-NAME "mmlog"
+
+ADD FIELD "BrandName" OF "MMLog" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Brand name"
+  POSITION 2
+  MAX-WIDTH 30
+  COLUMN-LABEL "BrandName"
+  HELP "Brand name"
+  ORDER 10
+
+ADD FIELD "RequestId" OF "MMLog" AS character 
+  FORMAT "x(39)"
+  INITIAL ""
+  LABEL "RequestId"
+  POSITION 3
+  MAX-WIDTH 78
+  COLUMN-LABEL "RequestId"
+  HELP "First three digits to identify sender + Unique identifier of the message in UUID format"
+  ORDER 20
+
+ADD FIELD "Originator" OF "MMLog" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Originator"
+  POSITION 4
+  MAX-WIDTH 60
+  COLUMN-LABEL "Originator"
+  HELP "Name of a calling process / function (optional)"
+  ORDER 30
+
+ADD FIELD "SMSRecipient" OF "MMLog" AS character 
+  FORMAT "x(11)"
+  INITIAL ""
+  LABEL "SMSRecipient"
+  POSITION 5
+  MAX-WIDTH 22
+  COLUMN-LABEL "SMSRecipient"
+  HELP "The subscriber msisdn where the message will be sent (if present)"
+  ORDER 40
+
+ADD FIELD "EmailRecipient" OF "MMLog" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "EmailRecipient"
+  POSITION 6
+  MAX-WIDTH 120
+  COLUMN-LABEL "EmailRecipient"
+  HELP "The subscriber email where the message will be sent (if present)"
+  ORDER 50
+
+ADD FIELD "TemplateId" OF "MMLog" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "TemplateId"
+  POSITION 7
+  MAX-WIDTH 40
+  COLUMN-LABEL "TemplateId"
+  HELP "Identifier of the message template to be used. (if present)"
+  ORDER 60
+
+ADD FIELD "Language" OF "MMLog" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "Language"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Language"
+  HELP "ISO 639-1 code for language of the message to be sent. (if present)"
+  ORDER 70
+
+ADD FIELD "JsonParam" OF "MMLog" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "JsonParam"
+  POSITION 9
+  MAX-WIDTH 120
+  COLUMN-LABEL "JsonParam"
+  HELP "Parameters to be used in template substitution. (if present)"
+  ORDER 80
+
+ADD FIELD "MessageBody" OF "MMLog" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "MessageBody"
+  POSITION 10
+  MAX-WIDTH 120
+  COLUMN-LABEL "MessageBody"
+  HELP "Message body to be sent. (if present)"
+  ORDER 90
+
+ADD FIELD "RequestTime" OF "MMLog" AS datetime-tz 
+  FORMAT "99-99-9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL "?"
+  LABEL "RequestTime"
+  POSITION 11
+  MAX-WIDTH 12
+  COLUMN-LABEL "RequestTime"
+  HELP "Time stamp when the message was created"
+  ORDER 100
+
+ADD INDEX "RequestTime" ON "MMLog" 
+  AREA "Sta_Index_64"
+  PRIMARY
+  INDEX-FIELD "RequestTime" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000002516
