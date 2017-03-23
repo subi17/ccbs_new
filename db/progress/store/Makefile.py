@@ -159,7 +159,7 @@ def database_file(match, deps, db_dir, db_name):
              'size +area name +path name', '^$',
              '/(bi|db|ix)/%s(_\d+)?\.[dba]\d+ 00:00:00' % db_name])
     for emptydb in ['%s/prolang/%s/empty%d.db' % (dlc, x, blocksize) \
-                    for x in ('utf', 'eng')]:
+                    for x in ('eng', 'utf')]:
         if os.path.exists(emptydb):
             callgrep([dlc + '/bin/procopy', '-s', emptydb, match],
                     ['\(6715\)$', '\(6718\)$', '\(451\)$',
