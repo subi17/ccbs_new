@@ -70,22 +70,17 @@ fSetTMSParamI(lcgHandledBrand, /*Brand*/
 fSetTMSParamC(lcgHandledBrand, /*Brand*/
               "MigrationLogDir", /*Code*/ 
               "Multibrand Migration log dir", /*Name*/
-              "/to_nc_files/log/"). /* Value */
+              "/store/riftp/migration/logs/"). /* Value */
 
 fSetTMSParamC(lcgHandledBrand, /*Brand*/
               "MigrationInDir", /*Code*/ 
               "Multibrand Migration incoming dir", /*Name*/
-              "/from_nc_files/"). /* Value */
-
-fSetTMSParamC(lcgHandledBrand, /*Brand*/
-              "MigrationSpoolDir", /*Code*/ 
-              "Multibrand Migration spool dir", /*Name*/
-              "/nc_files_spool/"). /* Value */
+              "/store/riftp/migration/incoming/"). /* Value */
 
 fSetTMSParamC(lcgHandledBrand, /*Brand*/
               "MigrationOutDir", /*Code*/ 
               "Multibrand Migration outgoing dir", /*Name*/
-              "/to_nc_files/"). /* Value */
+              "/store/riftp/migration/outgoing/"). /* Value */
 
 
 /*Publisher settings*/

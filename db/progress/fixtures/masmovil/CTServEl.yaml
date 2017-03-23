@@ -677,6 +677,7 @@ bulkload: CTServEl
   DefValue: 1
   CTServEl: 8474
   ServType: 1
+  DefParam: "DEFAULT"
 
 bulkload: CTServEl
   Brand: "1"
@@ -698,6 +699,7 @@ bulkload: CTServEl
   ChgAllowed: FALSE
   CTServEl: 8476
   ServType: 1
+  DefParam: "MM_CERO"
 
 bulkload: CTServEl
   Brand: "1"

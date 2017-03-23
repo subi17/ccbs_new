@@ -20,6 +20,7 @@
 {Syst/tmsconst.i}
 {Migration/migrationfunc.i}
 {Func/ftransdir.i}
+gcBrand = "1".
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -115,10 +116,12 @@ lcErr = fInitMigrationMQ("response").
 END.
 ELSE DO:
    /*MQ ready, it is possible to handle data*/
-   INPUT STREAM sFile THROUGH VALUE("ls -ltr " + lcInDir + "/").
+   INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcInDir ).
    REPEAT:
       IMPORT STREAM sFile UNFORMATTED lcFileName.
       lcInputFile = lcInDir + lcFileName.
+      IF SEARCH(lcInputFile) NE ? THEN INPUT STREAM sIn FROM VALUE(lcInputFile).
+      ELSE NEXT.
     
       RUN pReadFile.
       fMove2TransDir(lcInputFile,"",lcProcDir).
@@ -171,7 +174,7 @@ PROCEDURE pReadFile:
          disp "Reading data: " lcFilename liLineNumber with frame a.
          pause 0.
       END.
-      IF NUM-ENTRIES (lcLine) NE 3 THEN DO:
+      IF NUM-ENTRIES (lcLine,";") NE 3 THEN DO:
          PUT STREAM sLog UNFORMATTED
          lcLine + ";" + "ERROR:Incorrect input format"  SKIP.
          NEXT.

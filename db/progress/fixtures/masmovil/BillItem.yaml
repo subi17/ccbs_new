@@ -1809,8 +1809,8 @@ bulkload: BillItem
   VIPAccNum: 70510100
 
 bulkload: BillItem
-  BillCode: "MM_1000_UPSELLMF"
-  BIName: "Data 1000 Upsell Monthly Fee"
+  BillCode: "MM_1024_UPSELLMF"
+  BIName: "Data 1GB Upsell Monthly Fee"
   AccNum: 70514100
   BIGroup: "3"
   EUAccNum: 70514100
@@ -1839,8 +1839,23 @@ bulkload: BillItem
   VIPAccNum: 70514100
 
 bulkload: BillItem
-  BillCode: "MM_500_UPSELLMF"
-  BIName: "Data 500 Upsell Monthly Fee"
+  BillCode: "MM_512_UPSELLMF"
+  BIName: "Data 512 MB Upsell Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_BONO_RELAXMF"
+  BIName: "Bono Relax Monthly Fee"
   AccNum: 70514100
   BIGroup: "3"
   EUAccNum: 70514100
@@ -1869,8 +1884,8 @@ bulkload: BillItem
   VIPAccNum: 70510100
 
 bulkload: BillItem
-  BillCode: "MM_DATA1000MF"
-  BIName: "Data 1000 Monthly Fee"
+  BillCode: "MM_DATA1024MF"
+  BIName: "Data 1 GB Monthly Fee"
   AccNum: 70514100
   BIGroup: "3"
   EUAccNum: 70514100
@@ -1884,8 +1899,8 @@ bulkload: BillItem
   VIPAccNum: 70514100
 
 bulkload: BillItem
-  BillCode: "MM_DATA2000MF"
-  BIName: "Data 2000 Monthly Fee"
+  BillCode: "MM_DATA2048MF"
+  BIName: "Data 2 GB Monthly Fee"
   AccNum: 70514100
   BIGroup: "3"
   EUAccNum: 70514100
@@ -1899,8 +1914,8 @@ bulkload: BillItem
   VIPAccNum: 70514100
 
 bulkload: BillItem
-  BillCode: "MM_DATA4000MF"
-  BIName: "Data 4000 Monthly Fee"
+  BillCode: "MM_DATA4096MF"
+  BIName: "Data 4 GB Monthly Fee"
   AccNum: 70514100
   BIGroup: "3"
   EUAccNum: 70514100
@@ -1914,8 +1929,23 @@ bulkload: BillItem
   VIPAccNum: 70514100
 
 bulkload: BillItem
-  BillCode: "MM_DATA500MF"
-  BIName: "Data 500 Monthly Fee"
+  BillCode: "MM_DATA512MF"
+  BIName: "Data 512 MB Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_DATA600MF"
+  BIName: "Default hispeed data 600MB"
   AccNum: 70514100
   BIGroup: "3"
   EUAccNum: 70514100

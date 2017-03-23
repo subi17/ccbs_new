@@ -104022,6 +104022,348 @@ bulkload: RepText
   ToDate: 2054-12-31
 
 bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Consumos en roaming"
+  LinkCode: "BarringConf|ServiceMask|1"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Roaming services"
+  LinkCode: "BarringConf|ServiceMask|1"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Control de Consumo de Datos en Roaming Internacional"
+  LinkCode: "BarringConf|ServiceMask|10"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Data usage control in roaming abroad"
+  LinkCode: "BarringConf|ServiceMask|10"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Emisiòn de llamadas (redirección a cobros)"
+  LinkCode: "BarringConf|ServiceMask|11"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Outgoing calls (collection redirect)"
+  LinkCode: "BarringConf|ServiceMask|11"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Landing page de cobros"
+  LinkCode: "BarringConf|ServiceMask|12"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Collections landing page"
+  LinkCode: "BarringConf|ServiceMask|12"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Emisión de llamadas y landing page de cobros v2"
+  LinkCode: "BarringConf|ServiceMask|13"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Hotline and collections landing page v2"
+  LinkCode: "BarringConf|ServiceMask|13"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Recepción de llamdadas"
+  LinkCode: "BarringConf|ServiceMask|2"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Incoming voice calls"
+  LinkCode: "BarringConf|ServiceMask|2"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Emisión de llamadas"
+  LinkCode: "BarringConf|ServiceMask|3"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Outgoing voice calls"
+  LinkCode: "BarringConf|ServiceMask|3"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Llamadas, subscripciones y SMS premium"
+  LinkCode: "BarringConf|ServiceMask|4"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Premium SMS, calls and subscriptions"
+  LinkCode: "BarringConf|ServiceMask|4"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "recepción de SMS"
+  LinkCode: "BarringConf|ServiceMask|5"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Incoming SMS"
+  LinkCode: "BarringConf|ServiceMask|5"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Envío de SMS"
+  LinkCode: "BarringConf|ServiceMask|6"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Outgoing SMS"
+  LinkCode: "BarringConf|ServiceMask|6"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Internet"
+  LinkCode: "BarringConf|ServiceMask|7"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Internet"
+  LinkCode: "BarringConf|ServiceMask|7"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Llamadas Internacionales"
+  LinkCode: "BarringConf|ServiceMask|8"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "International calls"
+  LinkCode: "BarringConf|ServiceMask|8"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Subscripciones Premium"
+  LinkCode: "BarringConf|ServiceMask|9"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Premium subscriptions"
+  LinkCode: "BarringConf|ServiceMask|9"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "ATC"
+  LinkCode: "Barring|BarringGroup|ATC"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "ATC"
+  LinkCode: "Barring|BarringGroup|ATC"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Deuda"
+  LinkCode: "Barring|BarringGroup|Collections"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Collections"
+  LinkCode: "Barring|BarringGroup|Collections"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Cliente"
+  LinkCode: "Barring|BarringGroup|Customer"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Customer"
+  LinkCode: "Barring|BarringGroup|Customer"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Producto"
+  LinkCode: "Barring|BarringGroup|Product"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Product"
+  LinkCode: "Barring|BarringGroup|Product"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Riesgo"
+  LinkCode: "Barring|BarringGroup|Risk"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Risk"
+  LinkCode: "Barring|BarringGroup|Risk"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 1
+  RepText: "Límites de riesgo"
+  LinkCode: "Barring|BarringGroup|Risk Limits"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 10
+  Language: 5
+  RepText: "Risk Limits"
+  LinkCode: "Barring|BarringGroup|Risk Limits"
+  Brand: "1"
+  FromDate: 2015-07-11
+  ToDate: 2049-12-31
+
+bulkload: RepText
   TextType: 11
   Language: 1
   RepText: "Contrato Data"
@@ -105294,9 +105636,27 @@ bulkload: RepText
   TextType: 14
   Language: 1
   RepText: "BONO DE DATOS A COMBINAR CON LA TARIFA 0"
+  LinkCode: "MM_DATA1024"
+  Brand: "1"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "BONO DE DATOS A COMBINAR CON LA TARIFA 0"
   LinkCode: "MM_DATA2000"
   Brand: "1"
   FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "BONO DE DATOS A COMBINAR CON LA TARIFA 0"
+  LinkCode: "MM_DATA2048"
+  Brand: "1"
+  FromDate: 2017-03-16
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -105312,9 +105672,27 @@ bulkload: RepText
   TextType: 14
   Language: 1
   RepText: "BONO DE DATOS A COMBINAR CON LA TARIFA 0"
+  LinkCode: "MM_DATA4096"
+  Brand: "1"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "BONO DE DATOS A COMBINAR CON LA TARIFA 0"
   LinkCode: "MM_DATA500"
   Brand: "1"
   FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 14
+  Language: 1
+  RepText: "BONO DE DATOS A COMBINAR CON LA TARIFA 0"
+  LinkCode: "MM_DATA512"
+  Brand: "1"
+  FromDate: 2017-03-16
   ToDate: 2049-12-31
 
 bulkload: RepText
