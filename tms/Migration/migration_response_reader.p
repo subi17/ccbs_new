@@ -189,7 +189,8 @@ PROCEDURE pReadFile:
       FIND FIRST Order NO-LOCK /*EL?)*/ WHERE
                  Order.brand EQ gcBrand AND
                  Order.CLI EQ lcMSISDN AND
-                 Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING}.
+                 Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING} 
+                 NO-ERROR.
       IF AVAIL Order THEN liOrderID = Order.OrderID.
 
       /*Nodo data contains a number for Order that is

@@ -1,7 +1,6 @@
 BankIdCode
 BarringConf
 BillType
-BRAND
 CallLimit
 CDRError
 Country
@@ -38,6 +37,7 @@ OrderService
 PaymLog
 PaymPlan
 PLMN
+PostCode
 PrintCodes
 RatePref
 ReportConf
@@ -59,7 +59,6 @@ TerminalStock
 TMRule
 TMSRepCfg
 TMSReport
-TMSUser
 Token
 TriggerConf
 TriggerField
