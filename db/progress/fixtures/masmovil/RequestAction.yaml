@@ -582,3 +582,24 @@ bulkload: RequestAction
   Action: 1
   RequestActionID: 657
 
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  ValidFrom: 2017-03-22
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_DATA600"
+  Action: 1
+  PayType: 1
+  RequestActionID: 658
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2017-01-22
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_DATA600"
+  Action: 1
+  PayType: 1
+  RequestActionID: 659
+

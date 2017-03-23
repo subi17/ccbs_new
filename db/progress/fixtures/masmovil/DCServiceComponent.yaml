@@ -26,15 +26,6 @@ bulkload: DCServiceComponent
   DCServiceComponentID: 70
 
 bulkload: DCServiceComponent
-  DCServicePackageID: 58
-  ServCom: "SHAPER"
-  DefValue: 1
-  DefParam: "MM_VOICE100"
-  FromDate: 2017-02-22
-  ToDate: 2049-12-31
-  DCServiceComponentID: 71
-
-bulkload: DCServiceComponent
   DCServicePackageID: 59
   ServCom: "SHAPER"
   DefValue: 1
@@ -80,29 +71,83 @@ bulkload: DCServiceComponent
   DCServiceComponentID: 76
 
 bulkload: DCServiceComponent
-  DCServicePackageID: 64
-  ServCom: "SHAPER"
-  DefValue: 1
-  DefParam: "MM_VOICE40"
-  FromDate: 2017-02-22
-  ToDate: 2049-12-31
-  DCServiceComponentID: 77
-
-bulkload: DCServiceComponent
-  DCServicePackageID: 65
-  ServCom: "SHAPER"
-  DefValue: 1
-  DefParam: "MM_VOICE250"
-  FromDate: 2017-02-22
-  ToDate: 2049-12-31
-  DCServiceComponentID: 78
-
-bulkload: DCServiceComponent
   DCServicePackageID: 66
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "MM_200_UPSELL#ADDBUNDLE"
+  DefParam: "209715200#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
   DCServiceComponentID: 79
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 67
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#MM_DATA512"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  DCServiceComponentID: 80
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 68
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#MM_DATA1024"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  DCServiceComponentID: 81
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 69
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "536870912#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  DCServiceComponentID: 82
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 70
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  DCServiceComponentID: 83
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 71
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#MM_DATA4096"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  DCServiceComponentID: 84
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 72
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#MM_DATA2048"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  DCServiceComponentID: 85
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 74
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#MM_BONO_RELAX"
+  FromDate: 2017-03-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 87
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 75
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#MM_DATA600"
+  FromDate: 2017-03-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 88
 
