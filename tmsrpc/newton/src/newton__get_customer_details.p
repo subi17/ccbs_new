@@ -101,6 +101,8 @@ IF NUM-ENTRIES(top_array) >= 2 THEN DO:
 END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i NO Common Customer CustNum piCustnum}
+
 {Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
