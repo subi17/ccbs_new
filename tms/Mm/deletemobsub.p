@@ -946,18 +946,6 @@ PROCEDURE pTerminate:
             END.
          END.
       END.
-      ELSE DO:
-         FOR EACH bMobSub NO-LOCK WHERE
-                  bMobSub.Brand   = gcBrand        AND
-                  bMobSub.AgrCust = MobSub.CustNum AND
-                  bMobSub.MsSeq  <> MobSub.MsSeq   AND
-                  LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
-            fCloseAddLineDiscount(bMobSub.CustNum,
-                                  bMobSub.MsSeq,
-                                  bMobSub.CLIType,
-                                  fLastDayOfMonth(TODAY)).
-         END.
-      END.
    END.
    ELSE IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
       fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
@@ -990,6 +978,20 @@ PROCEDURE pTerminate:
 
    END.   
    IF AVAIL MSISDN THEN RELEASE MSISDN.
+
+   /* ADDLine-20 Additional Line */
+   IF fIsConvergenceTariff(TermMobSub.CLIType) THEN DO:
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobSub.Brand   = gcBrand        AND
+               bMobSub.AgrCust = TermMobSub.CustNum AND
+               bMobSub.MsSeq  <> TermMobSub.MsSeq   AND
+               LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               fLastDayOfMonth(TODAY)).
+      END.
+   END.
 
    /* Find Original request */
    FIND FIRST MSRequest WHERE

@@ -163,6 +163,28 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    add_string(pcStruct,"order_status",Order.StatusCode).
    add_string(pcStruct,"risk_code",Order.RiskCode).  
 
+   /* ADDLINE-22 Additional Line */
+   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                     CLIType.CLIType    = Order.CLIType               AND
+                     CLIType.PayType    = {&CLITYPE_PAYTYPE_POSTPAID} AND
+                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:
+      IF LOOKUP(Order.CLIType, {&ADDLINE_CLITYPES}) > 0 THEN DO: 
+         FOR EACH DiscountPlan NO-LOCK WHERE
+                  DiscountPlan.Brand    = gcBrand                                                                 AND
+                  DiscountPlan.DPRuleID = ENTRY(LOOKUP(Order.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}) AND
+                  DiscountPlan.ValidTo >= TODAY:
+            IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                              OrderAction.Brand    = gcBrand       AND
+                              OrderAction.OrderID  = Order.OrderID AND
+                              OrderAction.ItemType = "Discount"    AND
+                              OrderAction.ItemKey  = STRING(DiscountPlan.DPID)) THEN
+            add_string(pcStruct,"C_ADDITIONAL_LINE","1").
+         END.
+      END.
+      ELSE
+         add_string(pcStruct,"C_ADDITIONAL_LINE","0").
+   END.
+
    RETURN TRUE.
 END.
 
