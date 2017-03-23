@@ -19,6 +19,14 @@ bulkload: TMSParam
   Brand: "1"
 
 bulkload: TMSParam
+  ParamCode: "TCPModule"
+  ParamType: "C"
+  CharVal: "test/fake/tcpgwy_fake.p"
+  ParamName: "fake tcpgwy"
+  Online: TRUE 
+  Brand: "1"
+
+bulkload: TMSParam
   ParamGroup: "AccRec"
   ParamCode: "AdvPaymAcc"
   ParamType: "I"
@@ -1709,8 +1717,8 @@ bulkload: TMSParam
   ParamGroup: "Bundles"
   ParamCode: "BONO_CONTRACTS"
   ParamType: "C"
-  CharVal: "MDUB9,PMDUB,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,DATA5,DATA6,DATA7"
-  ParamName: "ALL BONO Contracts"
+  CharVal: "MM_BONO_RELAX"
+  ParamName: "ALL Data Bono Contracts"
   Brand: "1"
 
 bulkload: TMSParam
@@ -1901,7 +1909,7 @@ bulkload: TMSParam
   ParamGroup: "Bundles"
   ParamCode: "POSTPAID_DATA_CONTRACTS"
   ParamType: "C"
-  CharVal: "CONTDATA,CONTD2,CONTD3,CONTD4,DUB,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,CONTF30,CONTF55,CONTF20D,CONTF40,DUB2,CONTS30,CONTS39,MDUB9,CONTD9,DUB3,DATA5,CONTS20,CONTS25,CONTS35,CONTFF2,CONTSF10,CONTSF14,CONT9,CONTS16,CONTS21,CONTS26,CONTS32,DATA6,CONT15,BONO_VOIP,CONT24,CONTS12,CONTF8,CONTF11,CONT23,DATA7,CONTS2GB,CONT25,CONT26,CONT10,MM_CERO"
+  CharVal: "MM_CERO"
   ParamName: "All postpaid data bundle contracts"
   Brand: "1"
 
@@ -1909,7 +1917,7 @@ bulkload: TMSParam
   ParamGroup: "Bundles"
   ParamCode: "POSTPAID_DATA_UPSELLS"
   ParamType: "C"
-  CharVal: "DATA9_UPSELL,UPGRADE_UPSELL,CONTDATA_UPSELL,CONTD2_UPSELL,CONTD3_UPSELL,CONTD4_UPSELL,MDUB_UPSELL,MDUB2_UPSELL,MDUB3_UPSELL,MDUB4_UPSELL,MDUB5_UPSELL,DATA5_UPSELL,DATA6_UPSELL,DATA200_UPSELL"
+  CharVal: "MM_200_UPSELL,MM_512_UPSELL,MM_1024_UPSELL"
   ParamName: "All postpaid data upsells"
   Brand: "1"
 
@@ -1927,6 +1935,13 @@ bulkload: TMSParam
   ParamType: "C"
   CharVal: "FREE100MINUTES"
   ParamName: "Promotion Bundles"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "Bundles"
+  ParamCode: "VOICE_BONO_CONTRACTS"
+  ParamType: "C"
+  ParamName: "List of Voice Bono contracts"
   Brand: "1"
 
 bulkload: TMSParam
@@ -5523,6 +5538,54 @@ bulkload: TMSParam
   ParamType: "C"
   CharVal: "/store/riftp/logistics/masmovil/"
   ParamName: "Root directory for MasMovil files"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationInDir"
+  ParamType: "C"
+  CharVal: "/mnt/store/riftp/migration/incoming/"
+  ParamName: "Multibrand Migration incoming dir"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationLogDir"
+  ParamType: "C"
+  CharVal: "/mnt/store/riftp/migration/log/"
+  ParamName: "Multibrand Migration log dir"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationOn"
+  ParamType: "I"
+  IntVal: 1
+  ParamName: "Multibrand Migration on/off"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationOutDir"
+  ParamType: "C"
+  CharVal: "/mnt/store/riftp/migration/outgoing/"
+  ParamName: "Multibrand Migration outgoing dir"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationSpoolDir"
+  ParamType: "C"
+  CharVal: "/mnt/store/riftp/migration/spool/"
+  ParamName: "Multibrand Migration spool dir"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationToQueue"
+  ParamType: "C"
+  CharVal: "MMM_MQ"
+  ParamName: "Message queue for migration"
   Brand: "1"
 
 bulkload: TMSParam
@@ -9665,7 +9728,7 @@ bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "urlCreditCheck"
   ParamType: "C"
-  CharVal: "-H 217.168.2.194 -S 8080"
+  CharVal: "creditcheck"
   ParamName: "Credit Scoring URL"
   Brand: "1"
 
@@ -11634,6 +11697,54 @@ bulkload: TMSParam
   ParamCode: "LaserPPPInv"
   ParamType: "C"
   ParamName: "Macro of PartPaymPlan's Inv."
+  Brand: "2"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationInDir"
+  ParamType: "C"
+  CharVal: "/mnt/store/riftp/migration/incoming/"
+  ParamName: "Multibrand Migration incoming dir"
+  Brand: "2"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationLogDir"
+  ParamType: "C"
+  CharVal: "/mnt/store/riftp/migration/log/"
+  ParamName: "Multibrand Migration log dir"
+  Brand: "2"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationOn"
+  ParamType: "I"
+  IntVal: 1
+  ParamName: "Multibrand Migration on/off"
+  Brand: "2"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationOutDir"
+  ParamType: "C"
+  CharVal: "/mnt/store/riftp/migration/outgoing/"
+  ParamName: "Multibrand Migration outgoing dir"
+  Brand: "2"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationSpoolDir"
+  ParamType: "C"
+  CharVal: "/mnt/store/riftp/migration/spool/"
+  ParamName: "Multibrand Migration spool dir"
+  Brand: "2"
+
+bulkload: TMSParam
+  ParamGroup: "MB_Migration"
+  ParamCode: "MigrationToQueue"
+  ParamType: "C"
+  CharVal: "MMM_MQ"
+  ParamName: "Message queue for migration"
   Brand: "2"
 
 bulkload: TMSParam

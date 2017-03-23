@@ -166,22 +166,22 @@ bulkload: MXItem
 bulkload: MXItem
   MXSeq: 837
   MXName: "PerContract"
-  MXValue: "MM_DATA500"
+  MXValue: "MM_DATA512"
 
 bulkload: MXItem
   MXSeq: 837
   MXName: "PerContract"
-  MXValue: "MM_DATA1000"
+  MXValue: "MM_DATA1024"
 
 bulkload: MXItem
   MXSeq: 837
   MXName: "PerContract"
-  MXValue: "MM_DATA2000"
+  MXValue: "MM_DATA2048"
 
 bulkload: MXItem
   MXSeq: 837
   MXName: "PerContract"
-  MXValue: "MM_DATA4000"
+  MXValue: "MM_DATA4096"
 
 bulkload: MXItem
   MXSeq: 837
@@ -207,6 +207,26 @@ bulkload: MXItem
   MXSeq: 837
   MXName: "PerContract"
   MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_512_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
 
 bulkload: MXItem
   MXSeq: 837

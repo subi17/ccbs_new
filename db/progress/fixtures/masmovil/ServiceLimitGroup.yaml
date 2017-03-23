@@ -7,9 +7,9 @@ bulkload: ServiceLimitGroup
 
 bulkload: ServiceLimitGroup
   Brand: "1"
-  GroupCode: "MM_1000_UPSELL"
+  GroupCode: "MM_1024_UPSELL"
   GroupName: "1GB Upsell"
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup
@@ -21,9 +21,16 @@ bulkload: ServiceLimitGroup
 
 bulkload: ServiceLimitGroup
   Brand: "1"
-  GroupCode: "MM_500_UPSELL"
-  GroupName: "500 MB Upsell"
-  ValidFrom: 2017-02-22
+  GroupCode: "MM_512_UPSELL"
+  GroupName: "Data 512 Upsell"
+  ValidFrom: 2017-03-16
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_BONO_RELAX"
+  GroupName: "Relax Bono"
+  ValidFrom: 2017-03-22
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup
@@ -35,37 +42,44 @@ bulkload: ServiceLimitGroup
 
 bulkload: ServiceLimitGroup
   Brand: "1"
-  GroupCode: "MM_DATA1000"
+  GroupCode: "MM_DATA1024"
   GroupName: "Data Usage Bundle 1GB"
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup
   Brand: "1"
-  GroupCode: "MM_DATA2000"
+  GroupCode: "MM_DATA2048"
   GroupName: "Data Usage Bundle 2GB"
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup
   Brand: "1"
-  GroupCode: "MM_DATA4000"
+  GroupCode: "MM_DATA4096"
   GroupName: "Data Usage Bundle 4GB"
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup
   Brand: "1"
-  GroupCode: "MM_DATA500"
+  GroupCode: "MM_DATA512"
   GroupName: "Data Usage Bundle 500MB"
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_DATA600"
+  GroupName: "Default Data 600MB"
+  ValidFrom: 2017-03-22
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup
   Brand: "1"
   GroupCode: "MM_VOICE100"
   GroupName: "Voice 100 Min. Package"
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup
