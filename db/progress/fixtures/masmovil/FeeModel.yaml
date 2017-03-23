@@ -1,5 +1,5 @@
 bulkload: FeeModel
-  FeeModel: "MM_1000_UPSELLMF"
+  FeeModel: "MM_1024_UPSELLMF"
   FeeName: "1GB Upsell"
   Brand: "1"
 
@@ -9,8 +9,13 @@ bulkload: FeeModel
   Brand: "1"
 
 bulkload: FeeModel
-  FeeModel: "MM_500_UPSELLMF"
-  FeeName: "Data 500 Upsell"
+  FeeModel: "MM_512_UPSELLMF"
+  FeeName: "Data 512 Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_BONO_RELAXMF"
+  FeeName: "Relax Bono"
   Brand: "1"
 
 bulkload: FeeModel
@@ -19,22 +24,22 @@ bulkload: FeeModel
   Brand: "1"
 
 bulkload: FeeModel
-  FeeModel: "MM_DATA1000MF"
+  FeeModel: "MM_DATA1024MF"
   FeeName: "Data Usage Bundle 1GB"
   Brand: "1"
 
 bulkload: FeeModel
-  FeeModel: "MM_DATA2000MF"
+  FeeModel: "MM_DATA2048MF"
   FeeName: "Data Usage Bundle 2GB"
   Brand: "1"
 
 bulkload: FeeModel
-  FeeModel: "MM_DATA4000MF"
+  FeeModel: "MM_DATA4096MF"
   FeeName: "Data Usage Bundle 4GB"
   Brand: "1"
 
 bulkload: FeeModel
-  FeeModel: "MM_DATA500MF"
+  FeeModel: "MM_DATA512MF"
   FeeName: "Data Usage Bundle 500MB"
   Brand: "1"
 

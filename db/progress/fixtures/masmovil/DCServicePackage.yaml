@@ -32,14 +32,6 @@ bulkload: DCServicePackage
 
 bulkload: DCServicePackage
   Brand: "1"
-  DCEvent: "MM_VOICE100"
-  DCServicePackageID: 58
-  ServPac: "SHAPER"
-  FromDate: 2017-02-22
-  ToDate: 2049-12-31
-
-bulkload: DCServicePackage
-  Brand: "1"
   DCEvent: "MM_DATA4000"
   DCServicePackageID: 59
   ServPac: "SHAPER"
@@ -80,25 +72,73 @@ bulkload: DCServicePackage
 
 bulkload: DCServicePackage
   Brand: "1"
-  DCEvent: "MM_VOICE40"
-  DCServicePackageID: 64
-  ServPac: "SHAPER"
-  FromDate: 2017-02-22
-  ToDate: 2049-12-31
-
-bulkload: DCServicePackage
-  Brand: "1"
-  DCEvent: "MM_VOICE250"
-  DCServicePackageID: 65
-  ServPac: "SHAPER"
-  FromDate: 2017-02-22
-  ToDate: 2049-12-31
-
-bulkload: DCServicePackage
-  Brand: "1"
   DCEvent: "MM_200_UPSELL"
   DCServicePackageID: 66
   ServPac: "SHAPER"
   FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_DATA512"
+  DCServicePackageID: 67
+  ServPac: "SHAPER"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_DATA1024"
+  DCServicePackageID: 68
+  ServPac: "SHAPER"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_512_UPSELL"
+  DCServicePackageID: 69
+  ServPac: "SHAPER"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_1024_UPSELL"
+  DCServicePackageID: 70
+  ServPac: "SHAPER"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_DATA4096"
+  DCServicePackageID: 71
+  ServPac: "SHAPER"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_DATA2048"
+  DCServicePackageID: 72
+  ServPac: "SHAPER"
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_BONO_RELAX"
+  DCServicePackageID: 74
+  ServPac: "SHAPER"
+  FromDate: 2017-03-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_DATA600"
+  DCServicePackageID: 75
+  ServPac: "SHAPER"
+  FromDate: 2017-03-22
   ToDate: 2049-12-31
 

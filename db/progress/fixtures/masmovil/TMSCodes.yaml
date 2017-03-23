@@ -7952,6 +7952,22 @@ bulkload: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
+  CodeValue: "Migration"
+  CodeName: "Migration"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Order"
+  FieldName: "OrderChannel"
+  CodeGroup: "Order"
+  CodeValue: "Migration_ota"
+  CodeName: "Migration_ota"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Order"
+  FieldName: "OrderChannel"
+  CodeGroup: "Order"
   CodeValue: "POS"
   CodeName: "Point of sales"
   InUse: 1

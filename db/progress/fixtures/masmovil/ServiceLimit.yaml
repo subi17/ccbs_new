@@ -11,15 +11,15 @@ bulkload: ServiceLimit
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
-  GroupCode: "MM_1000_UPSELL"
-  SLSeq: 62
+  GroupCode: "MM_1024_UPSELL"
+  SLSeq: 73
   WebDisp: 0
   DialType: 7
-  SLCode: "MM_1000_UPSELL"
+  SLCode: "MM_1024_UPSELL"
   SLName: "Upsell"
   InclUnit: 4
   InclAmt: 1024
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
@@ -35,75 +35,99 @@ bulkload: ServiceLimit
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
-  GroupCode: "MM_500_UPSELL"
-  SLSeq: 64
+  GroupCode: "MM_512_UPSELL"
+  SLSeq: 72
   WebDisp: 0
   DialType: 7
-  SLCode: "MM_500_UPSELL"
+  SLCode: "MM_512_UPSELL"
   SLName: "Upsell"
   InclUnit: 4
   InclAmt: 512
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
-  GroupCode: "MM_DATA1000"
-  SLSeq: 57
+  GroupCode: "MM_BONO_RELAX"
+  SLSeq: 77
   WebDisp: 0
   DialType: 7
-  SLCode: "MM_DATA1000"
+  SLCode: "MM_BONO_RELAX"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 200
+  ValidFrom: 2017-03-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_DATA1024"
+  SLSeq: 71
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_DATA1024"
   SLName: "Data"
   InclUnit: 4
   InclAmt: 1024
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
-  GroupCode: "MM_DATA2000"
-  SLSeq: 63
+  GroupCode: "MM_DATA2048"
+  SLSeq: 76
   WebDisp: 0
   DialType: 7
-  SLCode: "MM_DATA2000"
+  SLCode: "MM_DATA2048"
   SLName: "Data"
   InclUnit: 4
   InclAmt: 2048
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
-  GroupCode: "MM_DATA4000"
-  SLSeq: 60
+  GroupCode: "MM_DATA4096"
+  SLSeq: 75
   WebDisp: 0
   DialType: 7
-  SLCode: "MM_DATA4000"
+  SLCode: "MM_DATA4096"
   SLName: "Data"
   InclUnit: 4
   InclAmt: 4096
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
-  GroupCode: "MM_DATA500"
-  SLSeq: 61
+  GroupCode: "MM_DATA512"
+  SLSeq: 70
   WebDisp: 0
   DialType: 7
-  SLCode: "MM_DATA500"
+  SLCode: "MM_DATA512"
   SLName: "Data"
   InclUnit: 4
   InclAmt: 512
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_DATA600"
+  SLSeq: 78
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_DATA600"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 600
+  ValidFrom: 2017-03-22
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
   GroupCode: "MM_VOICE100"
-  SLSeq: 59
+  SLSeq: 74
   WebDisp: 0
   DialType: 4
   SLCode: "MM_VOICE100_MIN"
   SLName: "National calls"
   InclUnit: 1
   InclAmt: 100
-  ValidFrom: 2017-02-22
+  ValidFrom: 2017-03-16
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
