@@ -20,6 +20,7 @@
 {Syst/tmsconst.i}
 {Migration/migrationfunc.i}
 {Func/ftransdir.i}
+{Func/orderfunc.i}
 gcBrand = "1".
 
 DEF STREAM sin.
@@ -199,7 +200,7 @@ PROCEDURE pReadFile:
         does not exist at all
         ->TMS writes own error notification list for this*/
       IF liOrderID EQ 0 THEN DO:
-         lcRowStatus = "TMS Error".
+         lcRowStatus = "TMS Error, order not found".
       END.
       /*NC response is OK and TMS has order for the operation*/
       ELSE IF lcNCStatus EQ "0000 00000" THEN DO:
@@ -219,7 +220,9 @@ PROCEDURE pReadFile:
       ELSE DO:
          /*Error case handling*/
          /*Set Order Status*/
-         lcRowStatus = "NC Failure".         
+         lcRowStatus = "NC Failure".
+         IF liOrderID NE 0 THEN fSetOrderStatus(liOrderID,"7").
+
       END.
       /*Send message to WEB*/
       lcMQMessage = fGenerateNCResponseInfo(liOrderID,
