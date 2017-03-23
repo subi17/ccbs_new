@@ -1888,7 +1888,7 @@ PROCEDURE pGetCTNAME:
          OTHERWISE lcList = "".
        END.
 
-       IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 THEN
+       IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 THEN DO:
           FOR FIRST OfferItem WHERE
                     OfferItem.Brand       = gcBrand             AND
                     OfferItem.Offer       = Order.Offer         AND
@@ -1928,6 +1928,30 @@ PROCEDURE pGetCTNAME:
                     ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
              END.
           END.
+
+          /* Additional line discount information in emails */
+          FOR FIRST OrderAction NO-LOCK WHERE
+                    OrderAction.Brand    = gcBrand       AND
+                    OrderAction.OrderID  = Order.OrderID AND
+                    OrderAction.ItemType = "discount":    
+                    
+             FOR FIRST DiscountPlan NO-LOCK WHERE 
+                       DiscountPlan.DPID = INT(OrderAction.ItemKey),
+                 FIRST DPRate WHERE
+                       DPRate.DPId       = DiscountPlan.DPId AND
+                       DPRate.ValidFrom <= ldtOrderDate      AND
+                       DPRate.ValidTo   >= ldtOrderDate      NO-LOCK:
+
+                 IF DiscountPlan.DPUnit EQ "Percentage" THEN
+                    ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
+                 ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN 
+                    ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
+
+             END.  
+
+          END. /* ADDITIONAL-LINE */         
+
+       END.
 
        FIND FIRST DiscountPlan NO-LOCK WHERE
                   DiscountPlan.DPRuleId = "BONO7DISC" NO-ERROR.
