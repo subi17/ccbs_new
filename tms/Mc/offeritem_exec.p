@@ -452,21 +452,29 @@ PROCEDURE pDiscountPlanMember:
       END CASE.
    END.
    
-   IF LOOKUP(Order.CLIType,{&ADDLINE_CLITYPES}) > 0 THEN
+   IF LOOKUP(Order.CLIType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
       lcAddLineDiscPlan = ENTRY(LOOKUP(Order.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}).
-
-   /* If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
-   FIND FIRST DiscountPlan NO-LOCK WHERE
-              DiscountPlan.Brand      = gcBrand           AND
-              DiscountPlan.DPRuleID   = lcAddLineDiscPlan AND
-              DiscountPlan.ValidFrom <= TODAY             AND
-              DiscountPlan.ValidTo   >= TODAY NO-ERROR.
-   IF AVAILABLE DiscountPlan THEN DO:
-      IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                        OrderAction.Brand    = gcBrand           AND
-                        OrderAction.OrderId  = Order.OrderId     AND
-                        OrderAction.ItemType = "Discount"        AND
-                        OrderAction.ItemKey  = STRING(DiscountPlan.DPID)) THEN RETURN "".
+      FIND FIRST OrderCustomer WHERE
+                 OrderCustomer.Brand   = gcBrand       AND
+                 OrderCustomer.OrderID = Order.OrderID AND
+                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+      IF AVAILABLE OrderCustomer THEN DO:
+         IF fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID) THEN DO:
+            /* If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
+            FIND FIRST DiscountPlan NO-LOCK WHERE
+                       DiscountPlan.Brand      = gcBrand           AND
+                       DiscountPlan.DPRuleID   = lcAddLineDiscPlan AND
+                       DiscountPlan.ValidFrom <= TODAY             AND
+                       DiscountPlan.ValidTo   >= TODAY NO-ERROR.
+            IF AVAILABLE DiscountPlan THEN DO:
+               IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                                 OrderAction.Brand    = gcBrand           AND
+                                 OrderAction.OrderId  = Order.OrderId     AND
+                                 OrderAction.ItemType = "Discount"        AND
+                                 OrderAction.ItemKey  = STRING(DiscountPlan.DPID)) THEN RETURN "".
+            END.
+         END.
+      END.
    END.
 
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
