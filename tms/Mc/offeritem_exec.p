@@ -459,7 +459,8 @@ PROCEDURE pDiscountPlanMember:
                  OrderCustomer.OrderID = Order.OrderID AND
                  OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
       IF AVAILABLE OrderCustomer THEN DO:
-         IF fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID) THEN DO:
+         IF fCheckExistingConvergent(OrderCustomer.CustIDType,OrderCustomer.CustID) OR
+            fCheckOngoingConvergentOrder(OrderCustomer.CustIDType,OrderCustomer.CustID) THEN DO:
             /* If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
             FIND FIRST DiscountPlan NO-LOCK WHERE
                        DiscountPlan.Brand      = gcBrand           AND
