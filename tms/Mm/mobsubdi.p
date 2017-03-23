@@ -317,7 +317,7 @@ DO WHILE TRUE:
       /* Postpaid cli */
 
       
-      IF lhSub::PayType = FALSE THEN RUN Mm/callmenu.p(msseq).
+      IF lhSub::PayType = FALSE THEN RUN Mm/callmenu.p(msseq, llKilled).
                                 ELSE RUN Mm/prcallcalc.p(msseq).
             
    END.

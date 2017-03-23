@@ -11,6 +11,7 @@
 {Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER msseq  AS INT .
+DEF INPUT  PARAMETER llKilled AS LOG.
 
 DEF VAR menuc      AS CHAR EXTENT 10 NO-UNDO.
 DEF VAR lcUserName AS CHAR NO-UNDO FORMAT "X(30)".
@@ -21,7 +22,7 @@ PAUSE 0.
 FIND MobSub  WHERE 
      MobSub.Msseq = msseq NO-LOCK NO-ERROR.
 
-IF AVAIL MobSub THEN lhSub = BUFFER MobSub:HANDLE.
+IF AVAIL MobSub AND NOT llKilled THEN lhSub = BUFFER MobSub:HANDLE.
 ELSE DO: 
    FIND TermMobSub WHERE 
         TermMobSub.Msseq = msseq NO-LOCK NO-ERROR.
