@@ -8,6 +8,7 @@
 {Func/date.i}
 {Syst/eventval.i}
 {Syst/tmsconst.i}
+{Func/fixedlinefunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -172,6 +173,26 @@ FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
       IF liRequest NE 0 THEN
          RETURN "ERROR:Additional Line Discount not created; " + lcResult.
    END.
+
+END FUNCTION.
+
+FUNCTION fCloseAddLineDiscount RETURNS LOGICAL
+   (iiCustNum AS INT,
+    iiMsSeq   AS INT,
+    icCLIType AS CHAR,
+    idtDate   AS DATE):
+   
+   FIND FIRST Customer NO-LOCK WHERE
+              Customer.CustNum = iiCustNum NO-ERROR.
+
+   IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID) THEN DO:
+      fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
+                     iiMsSeq,
+                     idtDate,
+                     FALSE).
+   END.
+
+   RETURN TRUE.
 
 END FUNCTION.
 

@@ -452,12 +452,8 @@ PROCEDURE pDiscountPlanMember:
       END CASE.
    END.
    
-   CASE Order.CLIType:
-      WHEN "CONT10" THEN lcAddLineDiscPlan = "DISCCONT10".
-      WHEN "CONT15" THEN lcAddLineDiscPlan = "DISCCONT15".
-      WHEN "CONT25" THEN lcAddLineDiscPlan = "DISCCONT25".
-      WHEN "CONT26" THEN lcAddLineDiscPlan = "DISCCONT26".
-   END CASE.
+   IF LOOKUP(Order.CLIType,{&ADDLINE_CLITYPES}) > 0 THEN
+      lcAddLineDiscPlan = ENTRY(LOOKUP(Order.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}).
 
    /* If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
    FIND FIRST DiscountPlan NO-LOCK WHERE

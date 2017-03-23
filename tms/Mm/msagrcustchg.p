@@ -1290,14 +1290,10 @@ PROCEDURE pMsCustMove:
 
    /* ADDLINE-20 Additional Line */
    IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
-      FIND FIRST Customer NO-LOCK WHERE
-                 Customer.CustNum = MobSub.AgrCust NO-ERROR.
-      IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID) THEN DO:
-         fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
-                        MobSub.MsSeq,
-                        TODAY - 1,
-                        FALSE).
-      END.
+      fCloseAddLineDiscount(MobSub.AgrCust,
+                            MobSub.MsSeq,
+                            MobSub.CLIType,
+                            TODAY - 1).
    END.
    ELSE IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:
       FOR EACH bOMobSub NO-LOCK WHERE
@@ -1305,14 +1301,10 @@ PROCEDURE pMsCustMove:
                bOMobSub.AgrCust = liOldAgrCust AND
                bOMobSub.MsSeq  <> MobSub.MsSeq AND
                LOOKUP(bOMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
-         FIND FIRST Customer NO-LOCK WHERE
-                    Customer.CustNum = bOMobSub.AgrCust NO-ERROR.
-         IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID) THEN DO:
-            fCloseDiscount(ENTRY(LOOKUP(bOMobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
-                           bOMobSub.MsSeq,
-                           TODAY - 1,
-                           FALSE).
-         END.
+            fCloseAddLineDiscount(bOMobSub.AgrCust,
+                                  bOMobSub.MsSeq,
+                                  bOMobSub.CLIType,
+                                  TODAY - 1).
       END.
    END.
 

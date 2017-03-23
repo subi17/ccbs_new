@@ -28,6 +28,7 @@
 {Func/main_add_lines.i}
 {Func/fixedlinefunc.i}
 {Func/orderfunc.i}
+{Mc/dpmember.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -917,6 +918,53 @@ PROCEDURE pTerminate:
       IF llCallProc THEN   
          RUN pChangeDelType(MobSub.CustNum).
    END. 
+
+   /* ADDLINE-20 Additional Line */
+   IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:
+      IF MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG} THEN DO:
+         FIND FIRST Customer NO-LOCK WHERE
+                    Customer.CustNum = MobSub.CustNum NO-ERROR.
+         FOR EACH OrderCustomer NO-LOCK WHERE
+                  OrderCustomer.Brand      = gcBrand             AND
+                  OrderCustomer.CustIDType = Customer.CustIDType AND
+                  OrderCustomer.CustID     = Customer.OrgID,
+            FIRST Order NO-LOCK WHERE
+                  Order.OrderID    = OrderCustomer.OrderID             AND
+                  Order.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+                  LOOKUP(Order.CLIType, {&ADDLINE_CLITYPES}) > 0:
+            FOR EACH DiscountPlan NO-LOCK WHERE
+                     DiscountPlan.Brand    = gcBrand                                                                 AND
+                     DiscountPlan.DPRuleID = ENTRY(LOOKUP(Order.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}) AND
+                     DiscountPlan.ValidTo >= TODAY:
+               FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
+                          OrderAction.Brand    = gcBrand       AND
+                          OrderAction.OrderID  = Order.OrderID AND
+                          OrderAction.ItemType = "Discount"    AND
+                          OrderAction.ItemKey  = STRING(DiscountPlan.DPID) NO-ERROR.
+               IF AVAILABLE OrderAction THEN
+                  DELETE OrderAction.
+            END.
+         END.
+      END.
+      ELSE DO:
+         FOR EACH bMobSub NO-LOCK WHERE
+                  bMobSub.Brand   = gcBrand        AND
+                  bMobSub.AgrCust = MobSub.CustNum AND
+                  bMobSub.MsSeq  <> MobSub.MsSeq   AND
+                  LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+            fCloseAddLineDiscount(bMobSub.CustNum,
+                                  bMobSub.MsSeq,
+                                  bMobSub.CLIType,
+                                  fLastDayOfMonth(TODAY)).
+         END.
+      END.
+   END.
+   ELSE IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+      fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
+                     MobSub.MsSeq,
+                     TODAY - 1,
+                     FALSE).
+   END.
 
    /* COFF Partial termination */
    IF lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} THEN DO:
