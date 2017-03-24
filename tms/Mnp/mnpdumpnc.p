@@ -34,7 +34,7 @@ DEFINE TEMP-TABLE ttMnpDetails
    FIELD OrderId AS INT
    FIELD MsSeqLst AS CHAR
    FIELD ICCLst AS CHAR
-   INDEX OrderId IS PRIMARY UNIQUE OrderId.
+   INDEX OrderId OrderId.
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 IF AVAILABLE DumpFile THEN DO:
@@ -50,24 +50,26 @@ FUNCTION fCollectMNPDetails RETURNS LOGICAL
               MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
    IF NOT AVAIL MNPDetails THEN NEXT.
 
-   IF NOT CAN-FIND( FIRST ttMnpDetails NO-LOCK WHERE
-         ttMnpDetails.OrderId = MNPProcess.OrderId) THEN DO:
-      CREATE ttMNPDetails.
-      ASSIGN
-         ttMNPDetails.PortRequest = mnpprocess.portrequest
-         ttMNPDetails.CCode = lccode
-         ttMNPDetails.UpdateTS = mnpprocess.updatets
-         ttMNPDetails.StatusReason = mnpprocess.statusreason
-         ttMNPDetails.Portingtime = mnpprocess.portingtime
-         ttMNPDetails.Msisdns = SUBSTRING(lcmsisdns,1,LENGTH(lcmsisdns) - 1)
-         ttMNPDetails.ReceptorNrn = MNPDetails.receptornrn
-         ttMNPDetails.FormRequest = mnpprocess.formrequest
-         ttMNPDetails.DonorCode = MNPDetails.donorcode
-         ttMNPDetails.ReceptorCode = MNPDetails.receptorcode
-         ttMNPDetails.MsSeqLst = lcMsSeqList
-         ttMNPDetails.ICCLst = lcICCList
-         ttMNPDetails.OrderId = MNPProcess.OrderId.
-   END.
+   IF iiMNPType = {&MNP_TYPE_IN} AND
+      CAN-FIND(FIRST ttMnpDetails NO-LOCK WHERE
+                     ttMnpDetails.OrderId = MNPProcess.OrderId) THEN NEXT.
+
+   CREATE ttMNPDetails.
+   ASSIGN
+      ttMNPDetails.PortRequest = mnpprocess.portrequest
+      ttMNPDetails.CCode = lccode
+      ttMNPDetails.UpdateTS = mnpprocess.updatets
+      ttMNPDetails.StatusReason = mnpprocess.statusreason
+      ttMNPDetails.Portingtime = mnpprocess.portingtime
+      ttMNPDetails.Msisdns = SUBSTRING(lcmsisdns,1,LENGTH(lcmsisdns) - 1)
+      ttMNPDetails.ReceptorNrn = MNPDetails.receptornrn
+      ttMNPDetails.FormRequest = mnpprocess.formrequest
+      ttMNPDetails.DonorCode = MNPDetails.donorcode
+      ttMNPDetails.ReceptorCode = MNPDetails.receptorcode
+      ttMNPDetails.MsSeqLst = lcMsSeqList
+      ttMNPDetails.ICCLst = lcICCList
+      ttMNPDetails.OrderId = MNPProcess.OrderId.
+
 END FUNCTION.
 
 FUNCTION fPrintMNPDump RETURNS LOGICAL:
