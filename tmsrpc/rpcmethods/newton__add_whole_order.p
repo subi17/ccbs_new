@@ -619,7 +619,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR ldBirthDay   AS DATE NO-UNDO. 
    DEF VAR llSelfEmployed AS LOGICAL NO-UNDO. 
    DEF VAR ldFoundationDate AS DATE NO-UNDO. 
-   DEF VAR data            AS CHAR EXTENT 40  NO-UNDO.
+   DEF VAR data            AS CHAR EXTENT 41  NO-UNDO.
    DEF VAR lcIdOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR liSubLimit AS INT NO-UNDO. 
@@ -1364,7 +1364,7 @@ gcCustomerStructStringFields = "city," +
                                "hand," + 
                                "km," +
                                "territory_owner," +
-                               "coverage_token".   /* EXTENT value count 39 */
+                               "coverage_token".   /* EXTENT value count 41 */
 
 /* common validation */
 /* YBP-513 */
