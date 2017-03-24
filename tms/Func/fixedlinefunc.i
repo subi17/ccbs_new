@@ -205,7 +205,8 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
             bOrder.Brand      EQ Syst.Parameters:gcBrand AND
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
             bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND 
-            bOrder.statuscode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
+           (bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
+            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}),
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID:
