@@ -1881,8 +1881,8 @@ END.
 /* ADDLINE-20 Additional Line */
 IF AVAIL AddLineDiscountPlan THEN DO:
    fCreateOrderAction(Order.Orderid,
-                      "Discount",
-                      STRING(AddLineDiscountPlan.DPId),
+                      "AddLineDiscount",
+                      AddLineDiscountPlan.DPRuleId,
                       "").
 END.
 

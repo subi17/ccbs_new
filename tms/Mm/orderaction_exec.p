@@ -84,7 +84,8 @@ FOR EACH OrderAction NO-LOCK WHERE
          RUN pPeriodicalContract.
       END.
       WHEN "Service" THEN RUN pService.
-      WHEN "Discount" THEN RUN pDiscountPlan.
+      WHEN "Discount" THEN RUN pDiscountPlan. 
+      WHEN "AddLineDiscount" THEN RUN pAddLineDiscountPlan.
       WHEN "Q25Discount" THEN RUN pQ25Discount.
       WHEN "Q25Extension" THEN RUN pQ25Extension.
       OTHERWISE NEXT ORDERACTION_LOOP.
@@ -619,5 +620,20 @@ PROCEDURE pQ25Discount:
                          SingleFee.OrderId, /* Q25 OrderId */
                          OUTPUT lcResult).
    RETURN lcResult.
+
+END PROCEDURE.
+
+PROCEDURE pAddLineDiscountPlan:
+
+   FIND FIRST DiscountPlan NO-LOCK WHERE
+              DiscountPlan.DPRuleID = OrderAction.ItemKey NO-ERROR.
+   IF NOT AVAIL DiscountPlan THEN 
+      RETURN "ERROR:Additional Line DiscountPlan ID: " + OrderAction.ItemKey + " not found".
+
+   fCreateAddLineDiscount(MobSub.MsSeq,
+                          MobSub.CLIType,
+                          TODAY).
+   IF RETURN-VALUE BEGINS "ERROR" THEN
+      RETURN RETURN-VALUE.
 
 END PROCEDURE.

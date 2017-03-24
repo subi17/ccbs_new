@@ -430,7 +430,6 @@ PROCEDURE pDiscountPlanMember:
 
    DEF VAR lcErrorReason AS CHAR NO-UNDO.
    DEF VAR lcDiscPlan    AS CHAR NO-UNDO.
-   DEF VAR lcAddLineDiscPlan AS CHAR NO-UNDO.
 
    IF LOOKUP(OfferItem.ItemKey,lcIPhoneDiscountRuleIds) > 0 THEN RETURN "".
 
@@ -451,9 +450,9 @@ PROCEDURE pDiscountPlanMember:
          WHEN "CONT23" THEN lcDiscPlan = "CONT23DISC".
       END CASE.
    END.
-   
+  
+  /* ADDLINE-20 If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
    IF LOOKUP(Order.CLIType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
-      lcAddLineDiscPlan = ENTRY(LOOKUP(Order.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}).
       FIND FIRST OrderCustomer WHERE
                  OrderCustomer.Brand   = gcBrand       AND
                  OrderCustomer.OrderID = Order.OrderID AND
@@ -461,19 +460,11 @@ PROCEDURE pDiscountPlanMember:
       IF AVAILABLE OrderCustomer THEN DO:
          IF fCheckExistingConvergent(OrderCustomer.CustIDType,OrderCustomer.CustID) OR
             fCheckOngoingConvergentOrder(OrderCustomer.CustIDType,OrderCustomer.CustID) THEN DO:
-            /* If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
-            FIND FIRST DiscountPlan NO-LOCK WHERE
-                       DiscountPlan.Brand      = gcBrand           AND
-                       DiscountPlan.DPRuleID   = lcAddLineDiscPlan AND
-                       DiscountPlan.ValidFrom <= TODAY             AND
-                       DiscountPlan.ValidTo   >= TODAY NO-ERROR.
-            IF AVAILABLE DiscountPlan THEN DO:
-               IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                                 OrderAction.Brand    = gcBrand           AND
-                                 OrderAction.OrderId  = Order.OrderId     AND
-                                 OrderAction.ItemType = "Discount"        AND
-                                 OrderAction.ItemKey  = STRING(DiscountPlan.DPID)) THEN RETURN "".
-            END.
+            IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                              OrderAction.Brand    = gcBrand           AND
+                              OrderAction.OrderID  = Order.OrderID     AND
+                              OrderAction.ItemType = "AddLineDiscount" AND
+                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) THEN RETURN "".
          END.
       END.
    END.
