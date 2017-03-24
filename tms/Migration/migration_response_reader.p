@@ -109,7 +109,7 @@ END.
 
 /*Execution part*/
 lcErr = fInitMigrationMQ("response").
-   IF lcErr NE "" THEN DO:
+IF lcErr NE "" THEN DO:
    PUT STREAM sLog UNFORMATTED
       "MQ error. Migration file will be skipped: " + lcErr +
       fTS2HMS(fMakeTS()) SKIP.
@@ -127,21 +127,22 @@ ELSE DO:
       RUN pReadFile.
       fMove2TransDir(lcInputFile,"",lcProcDir).
    END.
-   /*Release ActionLog lock*/
-   DO TRANS:
-      FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     EQ  gcBrand        AND
-                 ActionLog.ActionID  EQ  lcActionID     AND
-                 ActionLog.TableName EQ  lcTableName    AND
-                 ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
-      EXCLUSIVE-LOCK NO-ERROR.
+END.   
+/*Release ActionLog lock*/
+DO TRANS:
+   FIND FIRST ActionLog WHERE
+              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.ActionID  EQ  lcActionID     AND
+              ActionLog.TableName EQ  lcTableName    AND
+              ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
+   EXCLUSIVE-LOCK NO-ERROR.
 
-      IF AVAIL ActionLog THEN DO:
-         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
-      END.
-      RELEASE ActionLog.
+   IF AVAIL ActionLog THEN DO:
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
    END.
+   RELEASE ActionLog.
 END.
+
 
 PUT STREAM sLog UNFORMATTED
    "Migration file handling done " + fTS2HMS(fMakeTS()) SKIP.

@@ -18,6 +18,7 @@
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
+{Migration/migrationfunc.i}
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
@@ -31,6 +32,7 @@ DEF VAR ldaReadDate AS DATETIME.
 DEF VAR lcTimePart AS CHAR. /*For log file name*/
 DEF VAR lcLogFile AS CHAR NO-UNDO.
 DEF VAR lcRowStatus AS CHAR NO-UNDO.
+DEF VAR lcErr AS CHAR NO-UNDO.
 
 ASSIGN
    lcTableName = "MB_Migration"
@@ -84,10 +86,18 @@ DO TRANS:
       QUIT. /*No reporting in first time.*/
    END.
 END.
-
 /*Execution part*/
-RUN pHandleInputFile. 
+lcErr = fInitMigrationMQ("response").
+IF lcErr NE "" THEN DO:
+   PUT STREAM sLog UNFORMATTED
+   "MQ error. Operational data file will be skipped: " + lcErr +
+      fTS2HMS(fMakeTS()) SKIP.
 
+END.
+ELSE DO:
+   /*Execution part*/
+   RUN pHandleInputFile. 
+END.
 /*Release ActionLog lock*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
@@ -118,6 +128,7 @@ OUTPUT STREAM sLog CLOSE.
   The program does not make validations for barring command compability etc.
   The checks are done when calling actual barring functions.  
   */
+ /*TODO: changes this when incoming data format is clear*/
 FUNCTION fMMInputToBarrCmd RETURNS CHAR
    (iiMsSeq AS INT,
     icInput AS CHAR,
@@ -174,6 +185,11 @@ FUNCTION fValidateMMBarringCommand RETURNS CHAR
    FIND MobSub NO-LOCK WHERE Mobsub.MsSeq = iiMsSeq NO-ERROR.
 
    IF NOT AVAIL MobSub THEN RETURN "ERROR: MobSub not found.".
+   IF icInput EQ "" THEN RETURN "". /*It is notmandatory to update*/
+
+   IF fIsReasonableSet(icInput, MobSub.MsSeq) EQ FALSE THEN 
+      RETURN "Barring already in given status:" + icInput. 
+
 
    IF MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} /*16*/ THEN
       RETURN "ERROR: Mobile line provisioning is not complete".
@@ -184,6 +200,204 @@ FUNCTION fValidateMMBarringCommand RETURNS CHAR
    ELSE IF lcValStatus NE "" THEN RETURN "Validation Error: " + lcValStatus.
    
    RETURN lcValStatus.
+
+
+END.
+
+/*Function sets given barring set to given MobSub.
+ -Validate command
+ -Execute command
+ Error handling:
+ "" - OK
+ Other code -> Barring setting failed*/
+FUNCTION fSetMigrationBarring RETURNS CHAR
+   (iiMsSeq AS INT,
+    icCommand AS CHAR):
+   DEF VAR lcStat AS CHAR NO-UNDO.
+   DEF VAR liReq AS INT NO-UNDO.
+   
+   lcStat = fValidateMMBarringCommand(iiMsSeq, icCommand).
+   IF lcStat NE "" THEN RETURN lcStat.
+   IF icCommand EQ "" THEN RETURN "".
+   RUN Mm/barrengine.p(iiMsSeq,
+                       icCommand,
+                       {&REQUEST_SOURCE_MANUAL_TMS},
+                       "",
+                       fMakeTS(),
+                       "",
+                       OUTPUT lcStat).
+
+   liReq = INT(lcStat) NO-ERROR.
+   IF liReq EQ 0 THEN RETURN lcStat.
+   RETURN "".
+END.    
+
+FUNCTION fSetMigrationServices RETURNS CHAR
+   (iiMsSeq AS INT,
+    icCommand AS CHAR):
+    DEF VAR lcStat AS CHAR NO-UNDO.
+   RETURN "".
+END.
+
+FUNCTION fSetMigrationFees RETURNS CHAR
+   (iiMsSeq AS INT,
+    icCommand AS CHAR):
+    DEF VAR lcStat AS CHAR NO-UNDO.
+   RETURN "".
+END.
+
+FUNCTION fSetMigrationUpsells RETURNS CHAR
+   (iiMsSeq AS INT,
+    icCommand AS CHAR):
+    DEF VAR lcStat AS CHAR NO-UNDO.
+   RETURN "".
+END.
+
+FUNCTION fSetMigrationTerminals RETURNS CHAR
+   (iiMsSeq AS INT,
+    icCommand AS CHAR):
+    DEF VAR lcStat AS CHAR NO-UNDO.
+   RETURN "".
+END.
+
+FUNCTION fSetMigrationUsedData RETURNS CHAR
+   (iiMsSeq AS INT,
+    iiCommand AS INT):
+    DEF VAR lcStat AS CHAR NO-UNDO.
+   RETURN "".
+END.
+
+FUNCTION fSetMigrationDiscounts RETURNS CHAR
+   (iiMsSeq AS INT,
+    icCommand AS CHAR):
+    DEF VAR lcStat AS CHAR NO-UNDO.
+   RETURN "".
+END.
+
+FUNCTION fSetMigrationBonos RETURNS CHAR
+   (iiMsSeq AS INT,
+    icCommand AS CHAR):
+    DEF VAR lcStat AS CHAR NO-UNDO.
+   RETURN "".
+END.
+
+FUNCTION fSetMigrationFAT RETURNS CHAR
+   (iiMsSeq AS INT,
+    idCommand AS DECIMAL):
+    DEF VAR lcStat AS CHAR NO-UNDO.
+   RETURN "".
+END.
+
+
+
+/*Function makes setting for each op data entry.
+  If some of the settings fail already in setting phase
+  notification to WEB is sent immediately.
+  Program tries to set all settings even some setting fails.
+  If all requests are created sccessfully the notification is sent
+  after requests are done (by different program).
+*/
+FUNCTION fSetOperData RETURNS CHAR
+   (iiMsSeq AS INT,
+    icBarrings AS CHAR,     /*   Barr1=1,Barr2=1,...*/
+    icServices AS CHAR,    /*    Ser1=1,Ser2=1,...*/
+    icSingleFees AS CHAR, /*     Fee1=30,Fee2=22,...*/
+    icUpsells AS CHAR,   /*      Upsell1,Upsell2,...*/
+    iiUsedData AS INT,  /*       used data amount*/
+    icTerminals AS CHAR,     /*  imei1,imai2*/
+    icDiscounts AS CHAR,    /*TODO define*/
+    icBonos AS CHAR,       /*    bono1,bpono2*/
+    icPrepaidSaldo AS DECIMAL, /*24,5*/
+    idFat AS DECIMAL):            /* 33*/
+   DEF VAR lcStat AS CHAR NO-UNDO.
+   DEF VAR lcRet AS CHAR NO-UNDO.
+   DEF VAR lcCommands AS CHAR NO-UNDO. /*For logging*/
+
+   lcStat =  fSetMigrationBarring(iiMsSeq, icBarrings). 
+   lcCommands = lcCommands + icBarrings + "|".
+   IF lcStat NE "" THEN DO:
+      lcRet = "Barring error: " + lcStat + "|".
+      lcStat = "".
+   END.
+
+   lcStat = lcStat + fSetMigrationServices(iiMsSeq, icServices).
+   lcCommands = lcCommands + icServices + "|".
+   IF lcStat NE "" THEN DO:
+      lcRet = lcRet + "Service error: " + lcStat + "|".
+      lcStat = "".
+   END.
+
+   lcStat = lcStat + fSetMigrationFees(iiMsSeq, icSinglefees).
+   lcCommands = lcCommands + icSingleFees + "|".
+   IF lcStat NE "" THEN DO:
+      lcRet = lcRet + "Fee setting error: " + lcStat + "|".
+      lcStat = "".
+   END.
+
+   lcStat = lcStat + fSetMigrationUpsells(iiMsSeq, icUpsells).
+   lcCommands = lcCommands + icUpsells + "|".
+   IF lcStat NE "" THEN DO:
+      lcRet = lcRet + "Upsell setting error: " + lcStat + "|".
+      lcStat = "".
+   END.
+
+   lcStat = lcStat + fSetMigrationUsedData(iiMsSeq,iiUsedData).
+   lcCommands = lcCommands + STRING(iiUsedData) + "|".
+   IF lcStat NE "" THEN DO:
+      lcRet = lcRet + "Data update error: " + lcStat + "|".
+      lcStat = "".
+   END.
+
+   lcStat = lcStat + fSetMigrationTerminals(iiMsSeq,icTerminals).
+   lcCommands = lcCommands + icTerminals + "|".
+   IF lcStat NE "" THEN DO:
+      lcRet = lcRet + "Terminal setting error: " + lcStat + "|".
+      lcStat = "".
+   END.
+
+   lcStat = lcStat + fSetMigrationDiscounts(iiMsSeq,icDiscounts).
+   lcCommands = lcCommands + icDiscounts + "|".
+   IF lcStat NE "" THEN DO:
+      lcRet = lcRet + "Discount setting error " + lcStat + "|".
+      lcStat = "".
+   END.
+
+   lcStat = lcStat + fSetMigrationBonos(iiMsSeq,icBonos).
+   lcCommands = lcCommands + icBonos + "|".
+   IF lcStat NE "" THEN DO:
+      lcRet = lcRet + "Bundle setting error " + lcStat + "|".
+      lcStat = "".
+   END.
+/* To be added when prepaid support is implemented
+   lcCommands = lcCommands + xxx + "|".
+   lcStat = lcStat + fSetPrepaidSaldo(iiMsSeq,).
+   IF lcStat NE "" THEN DO:
+      lcRet = lcRet + "Prepaid setting error " + lcStat + "|".
+      lcStat = "".
+   END.
+*/
+   lcStat = lcStat + fSetMigrationFat(iiMsSeq,idFat).
+   lcCommands = lcCommands + STRING(idFat) + "|".
+   IF lcStat NE "" THEN DO:
+      lcRet = lcRet + "Bundle setting error " + lcStat + "|".
+      lcStat = "".
+   END.
+
+   PUT STREAM sLog UNFORMATTED lcCommands + lcStat SKIP.
+   
+   /*In failure cases WEB must know status as soon as possible*/
+   /*IF lcStat NE "" THEN DO:
+      lcMQMessage = fGenerateNCResponseInfo(liOrderID,
+                                            lcMSISDN,
+                                            lcNCStatus,
+                                            lcNCComment).
+   Under construction.
+      END.
+     */ 
+
+   
+
+   RETURN "".
 
 END.
 
