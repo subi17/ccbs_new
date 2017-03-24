@@ -59,9 +59,9 @@ form
     ldaFromDate              FORMAT 99-99-9999 Column-label "From"
     ldaEndDate               FORMAT 99-99-9999 Column-label "To"
     lcEventName              FORMAT "X(15)" Column-label "ServiceLimit" 
-    lcInclUnit               FORMAT "X(12)" column-label "Unit"
-    lcLimit                  FORMAT "x(8)" column-label "Limit"
-    lcUsage                  FORMAT "x(8)" column-label "Usage"           
+    lcInclUnit               FORMAT "X(10)" column-label "Unit"
+    lcLimit                  FORMAT "x(9)" column-label "Limit"
+    lcUsage                  FORMAT "x(9)" column-label "Usage"           
     lcBDestLimit             FORMAT "x(4)" column-label "BDestAmt"
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(cfc)   
@@ -633,8 +633,8 @@ PROCEDURE local-find-others.
     
       CASE ServiceLimit.InclUnit:
          WHEN 1 THEN DO:
-            lcUsage = fSec2C(ServiceLCounter.Amt,8).
-            lcLimit = fSec2C(ldeLimit * 60,8).
+            lcUsage = fSec2C(ServiceLCounter.Amt,9).
+            lcLimit = fSec2C(ldeLimit * 60,9).
          END.
          WHEN 2 THEN DO:
             lcUsage = fSec2C(ServiceLCounter.Amt,8).
