@@ -140,7 +140,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    DEF VAR ldeEndTs              AS DEC NO-UNDO. 
    DEF VAR lcCliTypeList         AS CHAR NO-UNDO.
    DEF VAR lcDSS2CliTypeList     AS CHAR NO-UNDO.
-   DEF VAR llAvailRelaxPackage   AS CHAR NO-UNDO.
+   DEF VAR llAvailRelaxPackage   AS LOG NO-UNDO.
 
    ASSIGN	
       ttCall.BillCode   = bsub-prod
