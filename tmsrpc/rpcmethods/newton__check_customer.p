@@ -118,7 +118,7 @@ IF lcAddLineAllowed NE "OK" THEN DO:
       END.
    END.
 
-   IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId) OR fCheckExistingConvergent(pcIdType,pcPersonId) THEN 
+   IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId) THEN 
       lcAddLineAllowed = "OK".
 
 END.
