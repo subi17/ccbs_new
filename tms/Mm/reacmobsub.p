@@ -105,7 +105,6 @@ DEFINE VARIABLE lcAllowedDSS2SubsType  AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBundleId             AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBankAccount          AS CHAR    NO-UNDO.
 DEFINE VARIABLE llCallProc             AS LOGICAL NO-UNDO.
-DEFINE VARIABLE lcNewAddLineDisc       AS CHAR    NO-UNDO.
 
 DEFINE BUFFER bSubMsRequest  FOR MsRequest.
 DEFINE BUFFER bOrder         FOR Order.
