@@ -159,6 +159,10 @@ FUNCTION fConvertTenantToBrand RETURNS CHARACTER
        
 END FUNCTION.
 
+FUNCTION fGetCurrentBrand RETURNS CHAR ():
+   RETURN fConvertTenantToBrand(TENANT-NAME(LDBNAME("common"))).
+END FUNCTION.
+
 /*
    Function returns the brand name of a given table name.
    A caller must take care that the table name exists.
