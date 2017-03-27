@@ -188,6 +188,7 @@ FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
    RETURN FALSE.
 END.                                         
 
+/* Function checks for ongoing 3P OR 2P convergent for a customer */
 FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR): 
@@ -215,7 +216,8 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
                         CLIType.Brand      = Syst.Parameters:gcBrand           AND
                         CLIType.CLIType    = bOrder.CLIType                    AND
                         CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
-                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) THEN 
+                       (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
+                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN 
       RETURN TRUE.
 
    END.
@@ -224,6 +226,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
 END FUNCTION.
 
+/* Function checks for existing 3P OR 2P convergent for a customer */
 FUNCTION fCheckExistingConvergent RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR):
@@ -240,13 +243,13 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
        EACH  bMobSub NO-LOCK WHERE
              bMobSub.Brand   = Syst.Parameters:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
-             bMobSub.PayType = FALSE                   AND 
-             bMobSub.CLI     <> bMobSub.FixedNumber,
+             bMobSub.PayType = FALSE,
        FIRST bCLIType NO-LOCK WHERE
              bCLIType.Brand      = Syst.Parameters:gcBrand  AND
              bCLIType.CLIType    = bMobSub.CLIType          AND
              bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN} AND
-             bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}:
+            (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} OR 
+             bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}):
     
        RETURN TRUE.
 

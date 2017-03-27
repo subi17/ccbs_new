@@ -76,7 +76,8 @@ FOR FIRST Customer WHERE
       CLIType.webdisp = TRUE THEN NEXT.
 
    IF CLIType.LineType   EQ {&CLITYPE_LINETYPE_MAIN}         AND 
-      CLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN DO:
+     (CLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT} OR 
+      CLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY}) THEN DO:
       lcAddLineAllowed = "OK".
       LEAVE.
    END.
@@ -109,9 +110,9 @@ IF lcAddLineAllowed NE "OK" THEN DO:
             OrderAction.ItemType = "BundleItem":
 
          IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                           CLIType.Brand      = gcBrand                   AND
-                           CLIType.CLIType    = OrderAction.ItemKey       AND
-                           CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
+                           CLIType.Brand    = gcBrand                   AND
+                           CLIType.CLIType  = OrderAction.ItemKey       AND
+                           CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
          lcAddLineAllowed = "OK".
          LEAVE.
       END.

@@ -29,7 +29,8 @@ FOR EACH CLIType EXCLUSIVE-LOCK WHERE
       ASSIGN CLIType.TariffType = 1
              CLIType.LineType   = 1.
    ELSE IF LOOKUP(CLIType.CLIType,lcFixedOnly) > 0 THEN 
-      CLIType.TariffType = 2.
+      ASSIGN CLIType.TariffType = 2
+             CLIType.LineType   = 1.
    ELSE IF LOOKUP(CLIType.CLIType,lcFusion) > 0 THEN 
       CLIType.TariffType = 3.
    ELSE 
