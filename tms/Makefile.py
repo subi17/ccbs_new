@@ -339,8 +339,12 @@ def terminal(*a):
 @target
 def batch(*a):
     assert len(parameters) > 0, 'Which module to run?'
-    batch_module = parameters[0] 
+    batch_module = parameters[0]
+    
     module_base = os.path.basename(batch_module)
+    if 'tenant' in globals():
+        module_base = '{}_{}'.format(module_base,tenant)
+
     cdr_dict = {}
 
     if os.path.exists('../var/run/%s.pid' % module_base):
@@ -392,6 +396,9 @@ def idbatch(*a):
     assert len(parameters) > 0, 'Which module to run?'
     batch_module = parameters[0]
     module_base = os.path.basename(batch_module)
+    if 'tenant' in globals():
+        module_base = '{}_{}'.format(module_base,tenant)
+
     cdr_dict = {}
 
     try:
