@@ -290,7 +290,6 @@ PROCEDURE pFeesAndServices:
    DEF VAR liTimeLimit        AS INT  NO-UNDO. 
    DEF VAR ldaPrevMonth       AS DATE NO-UNDO. 
    DEF VAR liPrevPeriod       AS INT  NO-UNDO. 
-   DEF VAR lcNewAddLineDisc   AS CHAR NO-UNDO.
    DEF VAR liRequest          AS INT  NO-UNDO.
    DEF VAR lcResult           AS CHAR NO-UNDO.
 
