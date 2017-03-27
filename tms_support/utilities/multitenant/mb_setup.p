@@ -2,6 +2,34 @@
    Yoigo vs Masmovil */
 
 {Func/multitenantfunc.i}
+DEF STREAM sin.
+DEF STREAM sFile.
+DEF VAR lcLine AS CHAR NO-UNDO.
+
+FUNCTION fAddTenant2Filename RETURNS LOGICAL (INPUT icdumpName AS CHAR):
+   DEF VAR lcFilename AS CHAR NO-UNDO.
+   FIND FIRST Dumpfile WHERE
+              Dumpfile.brand EQ "1" AND
+              Dumpfile.dumpname EQ icdumpname NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN DO:
+      MESSAGE "No dumpfile: " + icDumpname VIEW-AS ALERT-BOX.
+      NEXT.
+   END.
+   IF AVAIL DumpFile THEN DO:
+      IF INDEX(dumpfile.filename, "#TENANT") > 0 THEN NEXT.
+      IF dumpfile.filename BEGINS "#CAT" THEN
+         lcFileName = REPLACE(dumpfile.filename,"#CAT","#CAT_#TENANT").
+      ELSE IF dumpfile.filename BEGINS "DWH" THEN
+         lcFileName = REPLACE(dumpfile.filename,"DWH","DWH_#TENANT").
+      ELSE
+         lcFilename = "#TENANT_" + dumpfile.filename.
+      /*Dumpfile.filename = lcFilename.*/
+      MESSAGE lcFileName VIEW-AS ALERT-BOX.
+   END.
+END FUNCTION.
+
+
+
 
 /* YOIGO setups */
 
@@ -122,6 +150,10 @@ FIND FIRST TMSParam WHERE
 IF INDEX(TMSParam.charval,"#COMPANY") EQ 0 THEN
    TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_BAR","/#COMPANY_IFS_BAR").
 
+
+/* Common tables */
+
+
 /* MB-142 */
 FIND FIRST Dumpfile WHERE 
            DumpFile.dumpid EQ 73 NO-ERROR.
@@ -182,4 +214,13 @@ FIND FIRST Dumpfile WHERE
 IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#COMPANY" THEN
    dumpfile.filename = "#COMPANY_" + dumpfile.filename.
 RELEASE Dumpfile.
+
+/* MB-631 */
+INPUT STREAM sin FROM VALUE("../tms_support/utilities/multitenant/dumpfiles_phase1.txt").
+
+REPEAT:
+   IMPORT STREAM sin UNFORMATTED lcLine.
+   IF TRIM(lcLine) EQ "" THEN NEXT.
+   fAddTenant2Filename(lcLine).
+END.
 
