@@ -4,6 +4,7 @@ CLASS Syst.Parameters FINAL:
 
    DEFINE STATIC BUFFER lbTMSParam FOR TMSParam.
    DEFINE PUBLIC STATIC VARIABLE gcBrand AS CHARACTER NO-UNDO INITIAL "1".
+   DEFINE PUBLIC STATIC VARIABLE Tenant AS CHARACTER.
 
    METHOD PUBLIC STATIC CHARACTER getc
       ( icCode AS CHARACTER ):
@@ -11,7 +12,22 @@ CLASS Syst.Parameters FINAL:
       RETURN getc(icCode, ?).
    
    END METHOD.
+   
+   CONSTRUCTOR STATIC Parameters ():
 
+      DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO. 
+
+      lcTenant = TENANT-NAME(LDBNAME("common")).
+
+      CASE lcTenant:
+         WHEN "Default" THEN
+            ASSIGN Tenant = "yoigo".
+         WHEN "Tmasmovil" THEN 
+            ASSIGN Tenant = "masmovil".
+         OTHERWISE
+            ASSIGN Tenant = "".
+      END CASE.        
+   END CONSTRUCTOR.
 
    METHOD PUBLIC STATIC CHARACTER getc
       ( icCode  AS CHARACTER,
