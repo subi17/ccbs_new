@@ -161,6 +161,25 @@ FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
    RETURN FALSE.
 END.   
 
+/* Check if Convergent tariff OR FixedOnly tariff */ 
+FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
+   (icCLIType AS CHARACTER):
+
+   DEFINE BUFFER bCLIType FOR CLIType.
+   
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = icCLIType                         AND
+                     bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
+                    (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN 
+      RETURN TRUE.
+
+   RETURN FALSE.
+
+END.   
+
+
 /* Check convergent STC compability. Special handling that allows convergent
    STC between subscription types which have same fixed line part.
    Convergent ADSL subscription can be changed to other ADSL
@@ -212,13 +231,8 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID:
 
-      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand      = Syst.Parameters:gcBrand           AND
-                        CLIType.CLIType    = bOrder.CLIType                    AND
-                        CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
-                       (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
-                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN 
-      RETURN TRUE.
+      IF fIsConvergentORFixedOnly(bOrder.CLIType) THEN 
+         RETURN TRUE.
 
    END.
 
@@ -233,25 +247,19 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
 
    DEFINE BUFFER bCustomer FOR Customer.
    DEFINE BUFFER bMobSub   FOR MobSub.
-   DEFINE BUFFER bCLIType  FOR CLIType.
 
    FOR FIRST bCustomer WHERE
              bCustomer.Brand      = Syst.Parameters:gcBrand AND
              bCustomer.OrgId      = icCustID                AND
              bCustomer.CustidType = icCustIDType            AND
-             bCustomer.Roles NE "inactive"                  NO-LOCK,
+             bCustomer.Roles     NE "inactive"              NO-LOCK,
        EACH  bMobSub NO-LOCK WHERE
              bMobSub.Brand   = Syst.Parameters:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
-             bMobSub.PayType = FALSE,
-       FIRST bCLIType NO-LOCK WHERE
-             bCLIType.Brand      = Syst.Parameters:gcBrand  AND
-             bCLIType.CLIType    = bMobSub.CLIType          AND
-             bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN} AND
-            (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} OR 
-             bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}):
+             bMobSub.PayType = FALSE:
     
-       RETURN TRUE.
+      IF fIsConvergentORFixedOnly(bMobSub.CLIType) THEN 
+         RETURN TRUE.
 
    END.   
 
