@@ -11,6 +11,7 @@
 {Syst/commali.i}
 {Func/excel.i}
 {Func/cparam2.i}
+{Func/multitenantfunc.i}
 
 def var fpath as c no-undo.
 fpath = fCparamC("EventlogDir").
@@ -36,6 +37,7 @@ FUNCTION fELog RETURN LOG
 
    PUT STREAM excel UNFORMATTED 
       cUser "," 
+      fGetCurrentBrand() ","
       STRING(YEAR(TODAY),"9999")
       STRING(MONTH(TODAY),"99")
       STRING(DAY(TODAY),"99") ","

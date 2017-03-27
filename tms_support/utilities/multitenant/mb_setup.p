@@ -31,95 +31,88 @@ END FUNCTION.
 
 
 
-/* YOIGO setups */
+/* YOIGO and MasMovil setups */
 
-fsetEffectiveTenantForAllDB("Default").
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "Report" AND
-           TMSParam.ParamCode EQ "SIMStatistics" NO-ERROR.
-IF INDEX(TMSParam.charval,"Yoigo") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"SIMStatistics","SIMStatistics_Yoigo").
-   
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "Report" AND
-           TMSParam.ParamCode EQ "ErrorFile" NO-ERROR.
-IF INDEX(TMSParam.charval,"Yoigo") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"errorfile","errorfile_Yoigo").
+DEFINE VARIABLE lcBrand AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "Report" AND
-           TMSParam.ParamCode EQ "MSISDNStatistics" NO-ERROR.
-IF INDEX(TMSParam.charval,"Yoigo") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"MSISDNStatistics","MSISDNStatistics_Yoigo").
+do i = 1 to 2:
 
-/*
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "Report" AND
-           TMSParam.ParamCode EQ "AddressFile" NO-ERROR.
-IF INDEX(TMSParam.charval,"Yoigo") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"icc_msisdn_rep","icc_msisdn_rep_Yoigo").
-*/
+   if i eq 1 then do:
+      fsetEffectiveTenantForAllDB("Default").
+      lcBrand = "Yoigo".
+   end.
+   else do:
+      fsetEffectiveTenantForAllDB("tMasmovil").
+      lcBrand = "MasMovil".
+   end.
 
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "Terminate" AND
-           TMSParam.ParamCode EQ "SubsTermLog" NO-ERROR.
-IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"spool/terminate","spool/#TENANT_terminate").
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "Report" AND
+              TMSParam.ParamCode EQ "SIMStatistics" NO-ERROR.
+   IF INDEX(TMSParam.charval,lcBrand) EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"SIMStatistics","SIMStatistics_" + lcBrand).
+      
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "Report" AND
+              TMSParam.ParamCode EQ "ErrorFile" NO-ERROR.
+   IF INDEX(TMSParam.charval,lcBrand) EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"errorfile","errorfile_" + lcBrand).
+
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "Report" AND
+              TMSParam.ParamCode EQ "MSISDNStatistics" NO-ERROR.
+   IF INDEX(TMSParam.charval,lcBrand) EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"MSISDNStatistics","MSISDNStatistics_" + lcBrand).
+
+   /*
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "Report" AND
+              TMSParam.ParamCode EQ "AddressFile" NO-ERROR.
+   IF INDEX(TMSParam.charval,"Yoigo") EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"icc_msisdn_rep","icc_msisdn_rep_Yoigo").
+   */
+
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "Terminate" AND
+              TMSParam.ParamCode EQ "SubsTermLog" NO-ERROR.
+   IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"spool/terminate","spool/#TENANT_terminate").
 
 
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "IFS" AND
-           TMSParam.ParamCode EQ "IFSPaymStatusFile" NO-ERROR.
-IF INDEX(TMSParam.charval,"#COMPANY") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_PAY","/#COMPANY_IFS_PAY").
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "IFS" AND
+              TMSParam.ParamCode EQ "IFSPaymStatusFile" NO-ERROR.
+   IF INDEX(TMSParam.charval,"#COMPANY") EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_PAY","/#COMPANY_IFS_PAY").
 
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "IFS" AND
-           TMSParam.ParamCode EQ "IFSCollActionFile" NO-ERROR.
-IF INDEX(TMSParam.charval,"#COMPANY") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_BAR","/#COMPANY_IFS_BAR").
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "IFS" AND
+              TMSParam.ParamCode EQ "IFSCollActionFile" NO-ERROR.
+   IF INDEX(TMSParam.charval,"#COMPANY") EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_BAR","/#COMPANY_IFS_BAR").
+
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "FuncRun" AND
+              TMSParam.ParamCode EQ "FRDaemonLockFile" NO-ERROR.
+   IF INDEX(TMSParam.charval,lcBrand) EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"daemon.lock","daemon." + lower(lcBrand) + ".lock").
+
+END.
 
 /* ----------------------------------------------------------------------
    MASMOVIL setups start here */
 
 fsetEffectiveTenantForAllDB("tMasmovil").
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "Report" AND
-           TMSParam.ParamCode EQ "SIMStatistics" NO-ERROR.
-IF INDEX(TMSParam.charval,"MasMovil") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"SIMStatistics","SIMStatistics_MasMovil").
 
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "Report" AND
-           TMSParam.ParamCode EQ "ErrorFile" NO-ERROR.
-IF INDEX(TMSParam.charval,"MasMovil") EQ 0 
-THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"errorfile","errorfile_MasMovil").
-
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "Report" AND
-           TMSParam.ParamCode EQ "MSISDNStatistics" NO-ERROR.
-IF INDEX(TMSParam.charval,"MasMovil") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"MSISDNStatistics","MSISDNStatistics_MasMovil").
-
-/*
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "Report" AND
-           TMSParam.ParamCode EQ "AddressFile" NO-ERROR.
-IF INDEX(TMSParam.charval,"MasMovil") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"icc_msisdn_rep","icc_msisdn_rep_MasMovil").
-*/
 
 FOR EACH TMSParam WHERE
          TMSParam.brand EQ "1" AND
@@ -128,28 +121,6 @@ FOR EACH TMSParam WHERE
 
    TMSParam.ParamCode = REPLACE(TMSParam.ParamCode,"1","2").
 END.
-
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "Terminate" AND
-           TMSParam.ParamCode EQ "SubsTermLog" NO-ERROR.
-IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"spool/terminate","spool/#TENANT_terminate").
-
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "IFS" AND
-           TMSParam.ParamCode EQ "IFSPaymStatusFile" NO-ERROR.
-IF INDEX(TMSParam.charval,"#COMPANY") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_PAY","/#COMPANY_IFS_PAY").
-
-FIND FIRST TMSParam WHERE
-           TMSParam.brand EQ "1" AND
-           TMSParam.Paramgroup EQ "IFS" AND
-           TMSParam.ParamCode EQ "IFSCollActionFile" NO-ERROR.
-IF INDEX(TMSParam.charval,"#COMPANY") EQ 0 THEN
-   TMSParam.charval = REPLACE(TMSParam.charval,"/IFS_BAR","/#COMPANY_IFS_BAR").
-
 
 /* Common tables */
 

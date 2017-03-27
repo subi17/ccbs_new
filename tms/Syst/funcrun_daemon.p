@@ -17,6 +17,7 @@ ASSIGN
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Syst/host.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liLoop               AS INT  NO-UNDO.
 DEF VAR lcLockFile           AS CHAR NO-UNDO.
@@ -29,6 +30,7 @@ DEF VAR ldtLastMonitoring    AS DATETIME NO-UNDO.
 DEF VAR ldaLastLoggingDay    AS DATE NO-UNDO.
 DEF VAR lcHost               AS CHAR NO-UNDO.
 DEF VAR llReplica            AS LOG  NO-UNDO INIT FALSE.
+DEF VAR lcTenant             AS CHARACTER NO-UNDO. 
 
 /******** Main start *********/
 
@@ -41,10 +43,11 @@ ASSIGN
                                        "minutes")
    ldtLastMonitoring    = NOW                                    
    ldaLastLoggingDay    = TODAY
-   ldtStarted           = NOW.
+   ldtStarted           = NOW
+   lcTenant             = fGetCurrentBrand().
 
 IF lcLockFile = ? OR lcLockFile = "" THEN
-   lcLockFile = "/tmp/funcrun_daemon.lock".
+   lcLockFile = SUBST("/tmp/funcrun_daemon_&1.lock",lcTenant).
    
 UNIX SILENT VALUE("touch " + lcLockFile).   
 
@@ -90,7 +93,7 @@ DO WHILE TRUE
 
    /* monitoring */   
    IF INTERVAL(NOW,ldtLastMonitoring,"minutes") > 10 THEN DO:
-      fKeepAlive("FUNCRUN:Daemon").
+      fKeepAlive(SUBST("FUNCRUN:Daemon &1", lcTenant)).
       ldtLastMonitoring = NOW.
    END.
    
