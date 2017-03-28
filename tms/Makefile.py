@@ -338,6 +338,7 @@ def terminal(*a):
 
 @target
 def batch(*a):
+    '''batch|mbatch'''
     assert len(parameters) > 0, 'Which module to run?'
     batch_module = parameters[0]
     
@@ -347,12 +348,13 @@ def batch(*a):
 
     cdr_dict = {}
 
-    if os.path.exists('../var/run/%s.pid' % module_base):
-        print('Lockfile %s.pid exists - aborting!' % module_base)
-        sys.exit(5)
-    fd = open('../var/run/%s.pid' % module_base, 'w')
-    fd.write(str(os.getpid()))
-    fd.close()
+    if a[0] == 'batch':
+       if os.path.exists('../var/run/%s.pid' % module_base):
+           print('Lockfile %s.pid exists - aborting!' % module_base)
+           sys.exit(5)
+       fd = open('../var/run/%s.pid' % module_base, 'w')
+       fd.write(str(os.getpid()))
+       fd.close()
 
     args = ['-T', '../var/tmp', '-b', '-p', batch_module + '.p']
 
@@ -388,7 +390,8 @@ def batch(*a):
             cmd.wait()
         except KeyboardInterrupt:
             cmd.send_signal(2)
-    os.unlink('../var/run/%s.pid' % module_base)
+    if a[0] == 'batch':
+      os.unlink('../var/run/%s.pid' % module_base)
     sys.exit(cmd.returncode)
 
 @target
