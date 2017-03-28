@@ -56,4 +56,5 @@ else:
 
 #p=s.newton.invoices.get([var1,var2,var3,...])
 p=s.newton.invoices.get([var1])
-print_results(p)
+#print_results(p)
+print p
