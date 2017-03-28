@@ -31,6 +31,7 @@ gcBrand = "1".
 
 DEF VAR lcTableName           AS CHAR NO-UNDO.
 DEF VAR lcActionId            AS CHAR NO-UNDO.
+DEF VAR ldCampaignStartApril  AS DEC  NO-UNDO.
 DEF VAR ldCampaignStart       AS DEC  NO-UNDO.
 DEF VAR ldCampaignEnd         AS DEC  NO-UNDO.
 DEF VAR ldCurrentTimeTS       AS DEC  NO-UNDO.
@@ -50,6 +51,7 @@ ASSIGN
    llgSimulate       = FALSE              /*TRUE-> only log writing, FALSE->make real updates*/
    lcTableName       = "March2017Promo"   /*For execution lock*/
    lcActionId        = "UpsellForAzul"    /*For execution lock*/
+   ldCampaignStartApril   = fCParamDe("March2017AprilFromDate")
    ldCampaignStart   = fCParamDe("March2017PromoFromDate") /*Dates when order must be done */
    ldCampaignEnd     = fCParamDe("March2017PromoToDate")   /*Dates when order must be done */
    lcUpsell          = "FLEX_UPSELL"      /*Upsell that will be aded in the promo*/
@@ -121,8 +123,8 @@ FUNCTION fCollect RETURNS CHAR
       /* April promotion */
       IF Order.CliType = "CONT25" AND
          Order.OrderType = {&ORDER_TYPE_MNP} THEN DO:
-         IF NOT (Order.CrStamp GE 20170327 AND /* 20170403 */
-                 Order.CrStamp LT ldCampaignEnd) THEN NEXT.
+         IF NOT (Order.CrStamp >= ldCampaignStartApril AND /* 20170403 */
+                 Order.CrStamp < ldCampaignEnd) THEN NEXT.
       END.
       ELSE DO:
          /*Order must be created in March*/

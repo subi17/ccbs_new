@@ -2005,6 +2005,12 @@ PROCEDURE pGetCTNAME:
           lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>25 GB/mes extra free during 6 months"
                               ELSE "<br/>25 GB/mes extra gratis durante 6 meses").
        END.
+       ELSE IF Order.CliType EQ "CONT25" AND /* April promotion */
+              (Order.Crstamp >= fCParamDe("March2017AprilFromDate") AND /* 20170403 */
+               Order.Crstamp < fCParamDe("March2017PromoToDate")) THEN DO:
+          lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>25 GB/mes extra free during 6 months"
+                              ELSE "<br/>25 GB/mes extra gratis durante 6 meses").
+       END.
 
        IF ldeMFWithTax > 0 THEN
          /* YBU-4648 LENGTH check added for fitting one line */
