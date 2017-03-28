@@ -920,29 +920,7 @@ PROCEDURE pTerminate:
    END. 
 
    /* ADDLINE-20 Additional Line */
-   IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:
-      IF MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG} THEN DO:
-         FIND FIRST Customer NO-LOCK WHERE
-                    Customer.CustNum = MobSub.CustNum NO-ERROR.
-         FOR EACH OrderCustomer NO-LOCK WHERE
-                  OrderCustomer.Brand      = gcBrand             AND
-                  OrderCustomer.CustIDType = Customer.CustIDType AND
-                  OrderCustomer.CustID     = Customer.OrgID,
-            FIRST Order NO-LOCK WHERE
-                  Order.OrderID    = OrderCustomer.OrderID             AND
-                  Order.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} AND
-                  LOOKUP(Order.CLIType, {&ADDLINE_CLITYPES}) > 0:
-            FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
-                       OrderAction.Brand    = gcBrand           AND
-                       OrderAction.OrderID  = Order.OrderID     AND
-                       OrderAction.ItemType = "AddLineDiscount" AND
-                       LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0 NO-ERROR.
-            IF AVAILABLE OrderAction THEN
-               DELETE OrderAction.
-         END.
-      END.
-   END.
-   ELSE IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+   IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
       fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
                      MobSub.MsSeq,
                      fLastDayOfMonth(TODAY),
@@ -975,7 +953,7 @@ PROCEDURE pTerminate:
    IF AVAIL MSISDN THEN RELEASE MSISDN.
 
    /* ADDLine-20 Additional Line */
-   IF fIsConvergenceTariff(TermMobSub.CLIType) THEN DO:
+   IF fIsConvergentORFixedOnly(TermMobSub.CLIType) THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = gcBrand        AND
                bMobSub.AgrCust = TermMobSub.CustNum AND
