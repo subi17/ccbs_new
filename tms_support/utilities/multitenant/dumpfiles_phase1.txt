@@ -32,16 +32,15 @@ MNP_Termination
 MobCDR
 MSISDN
 MSOwner
-MobSub
-Order dump
+SubscriptionDumpTXT
+OrderDumpTXT
 OrderCustDumpTXT
 OrderAction
-OrderAccessory
-OrderPayment
+OrderAccessory_ORIG
+OrderPaymentTXT
 OrderPerContrDump
 PerContrDump
 RequestDumpTXT
 SalesmanDump
 SingleFixFeeCollect
 TMSuser
-

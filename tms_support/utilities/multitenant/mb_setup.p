@@ -23,8 +23,8 @@ FUNCTION fAddTenant2Filename RETURNS LOGICAL (INPUT icdumpName AS CHAR):
          lcFileName = REPLACE(dumpfile.filename,"DWH","DWH_#TENANT").
       ELSE
          lcFilename = "#TENANT_" + dumpfile.filename.
-      /*Dumpfile.filename = lcFilename.*/
-      MESSAGE lcFileName VIEW-AS ALERT-BOX.
+      Dumpfile.filename = lcFilename.
+      /*MESSAGE lcFileName VIEW-AS ALERT-BOX.*/
    END.
 END FUNCTION.
 
