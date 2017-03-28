@@ -17,6 +17,8 @@
                    voip_amount;double;bono voip data amount (MB)
                    dss2_compatible;boolean;DSS2 compatible
                    voip_compatible;boolean;Voip Compatible
+ * @region taxzone;string; VAT Code Name
+           taxinclvalue;decimal; Monthly Cost based on including Zone Tax
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -34,6 +36,8 @@ DEF VAR pcIdArray AS CHAR NO-UNDO.
 DEF VAR pcTenant  As CHAR NO-UNDO.
 DEF VAR liCounter AS INTEGER NO-UNDO. 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
+DEF VAR lcRegionArray  AS CHAR NO-UNDO.
+DEF VAR lcRegionStruct AS CHAR NO-UNDO.
 
 DEF VAR lcIPLContracts     AS CHAR NO-UNDO.
 DEF VAR lcCONTDContracts   AS CHAR NO-UNDO.
@@ -193,6 +197,16 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
                  ServiceLimit.GroupCode = "BONO_VOIP" NO-LOCK NO-ERROR.
       IF AVAIL ServiceLimit THEN
          add_double(lcResultStruct,"voip_amount", ServiceLimit.InclAmt).
+   END.
+
+   lcRegionArray = add_array(lcResultStruct, "region").
+   FOR EACH VATCode NO-LOCK WHERE
+            VATCode.TaxClass  = "1"   AND
+            VATCode.FromDate <= TODAY AND
+            VATCOde.ToDate   >= TODAY:
+      lcRegionStruct = add_struct(lcRegionArray,"").
+      add_string(lcRegionStruct,"taxzone", VATCode.VCName).
+      add_double(lcRegionStruct,"taxinclvalue", (1 + VatCode.VatPerc / 100) * ldeFee).
    END.
 END.
 
