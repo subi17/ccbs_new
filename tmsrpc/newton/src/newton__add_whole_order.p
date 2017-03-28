@@ -332,14 +332,16 @@ DEF VAR lcPayType AS CHAR NO-UNDO.
 DEF VAR lcOldPayType AS CHAR NO-UNDO. 
 DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
-DEF VAR pcDataBundleType AS CHAR NO-UNDO. 
-DEF VAR pcMobsubBundleType AS CHAR NO-UNDO. 
-DEF VAR plDSSActivate    AS LOG NO-UNDO. 
-DEF VAR plBonoVoipActivate AS LOG NO-UNDO.
-DEF VAR plByPassRules AS LOG NO-UNDO.
-DEF VAR lcdelivery_channel AS CHAR NO-UNDO.
-DEF VAR pcUsageType AS CHAR NO-UNDO. 
+DEF VAR pcDataBundleType      AS CHAR NO-UNDO. 
+DEF VAR pcDataBundleTypeArray AS CHAR NO-UNDO.
+DEF VAR pcMobsubBundleType    AS CHAR NO-UNDO. 
+DEF VAR plDSSActivate         AS LOG NO-UNDO. 
+DEF VAR plBonoVoipActivate    AS LOG NO-UNDO.
+DEF VAR plByPassRules         AS LOG NO-UNDO.
+DEF VAR lcdelivery_channel    AS CHAR NO-UNDO.
+DEF VAR pcUsageType           AS CHAR NO-UNDO. 
 
+DEF VAR liCount                AS INT  NO-UNDO.
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
@@ -517,8 +519,16 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
       pcROIriskcode = get_string(pcOrderStruct, "order_inspection_risk_code").
 
    IF LOOKUP("additional_bundle",lcOrderStruct) > 0 THEN
-      pcDataBundleType = get_string(pcOrderStruct,"additional_bundle").
+   DO:
+      pcDataBundleTypeArray = get_array(pcOrderStruct,"additional_bundle").
    
+      DO liCount = 0 TO get_paramcount(pcDataBundleTypeArray) - 1:
+          ASSIGN pcDataBundleType = pcDataBundleType + 
+                                    (IF pcDataBundleType <> "" THEN "," ELSE "") + 
+                                    get_string(pcDataBundleTypeArray, STRING(liCount)).
+      END.
+   END.
+
    IF LOOKUP("subscription_bundle",lcOrderStruct) > 0 THEN
       pcMobsubBundleType = get_string(pcOrderStruct,"subscription_bundle").
 
@@ -1473,15 +1483,19 @@ ELSE IF LOOKUP(pcSubType,lcBundleCLITypes) > 0 AND
    pcNumberType <> "renewal" THEN
    RETURN appl_err("Subscription based data bundle is missing").
 
-IF pcDataBundleType > "" THEN DO:
-   lcBONOContracts = fCParamC("BONO_CONTRACTS").
-   IF LOOKUP(pcDataBundleType,lcBONOContracts) = 0 THEN RETURN
-      appl_err(SUBST("Incorrect data bundle type: &1", pcDataBundleType)).   
+IF pcDataBundleType > "" THEN 
+DO:
+   IF pcTenant = "Tyoigo" THEN
+   DO:  
+       lcBONOContracts = fCParamC("BONO_CONTRACTS").
+       IF LOOKUP(pcDataBundleType,lcBONOContracts) = 0 THEN RETURN
+          appl_err(SUBST("Incorrect data bundle type: &1", pcDataBundleType)).   
+   END.   
 
-   IF NOT fIsBundleAllowed
-      (pcSubType,
-       pcDataBundleType,
-       OUTPUT lcError) THEN RETURN appl_err(lcError).
+   DO liCount = 1 TO NUM-ENTRIES(pcDataBundleType):
+       IF NOT fIsBundleAllowed(pcSubType, ENTRY(liCount,pcDataBundleType),OUTPUT lcError) THEN 
+           RETURN appl_err(lcError).
+   END.    
 END.
 
 FIND CLIType NO-LOCK WHERE
@@ -2231,7 +2245,10 @@ END.
 /* YBP-574 */ 
 /* add databundle */
 IF pcDataBundleType > "" THEN
-   fCreateOrderAction(Order.Orderid,"BundleItem",pcDataBundleType,"").
+DO liCount = 1 TO NUM-ENTRIES(pcDataBundleType):
+   fCreateOrderAction(Order.Orderid,"BundleItem", ENTRY(liCount, pcDataBundleType),"").
+END.
+
 IF pcMobSubBundleType > "" THEN DO:
    lcOnlyVoiceContracts = fCParamC("ONLY_VOICE_CONTRACTS").
    fCreateOrderAction(Order.Orderid,"BundleItem",pcMobSubBundleType,"").
