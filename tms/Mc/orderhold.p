@@ -127,11 +127,11 @@ ELSE IF Order.MultiSIMId > 0 AND
 END.
 ELSE IF Order.Ordertype < 2 AND
    CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand       = gcBrand                           AND
-                  CLIType.CLIType     = Order.CLIType                     AND
-                  CLIType.LineType    > 0                                 AND 
-                 (CLIType.TariffType NE {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
-                  CLIType.TariffType NE {&CLITYPE_TARIFFTYPE_FIXEDONLY})) AND
+                  CLIType.Brand       = gcBrand                          AND
+                  CLIType.CLIType     = Order.CLIType                    AND
+                  CLIType.LineType    > 0                                AND 
+                  CLIType.TariffType NE {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
+                  CLIType.TariffType NE {&CLITYPE_TARIFFTYPE_FIXEDONLY}) AND
    NOT CAN-FIND(FIRST OrderAction WHERE
                      OrderAction.Brand = gcBrand AND
                      OrderAction.OrderId = Order.OrderID AND
