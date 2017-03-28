@@ -11,6 +11,7 @@
 {Func/cparam2.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Invoice'}
+{Func/multitenantfunc.i}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 
@@ -42,6 +43,9 @@ WITH ROW 1 SIDE-LABELS WIDTH 80
 ASSIGN 
    ufkey  = FALSE
    lcFile = fCParamC("IFSCollActionFile").
+
+lcFile = REPLACE(lcFile,"#TENANT",
+         CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))))).
 
 CritLoop:
 REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
