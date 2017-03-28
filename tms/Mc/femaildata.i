@@ -1872,6 +1872,7 @@ PROCEDURE pGetCTNAME:
       DEFINE VARIABLE llgOrderDate AS LOG  NO-UNDO.
       DEFINE VARIABLE lcMFText     AS CHAR No-UNDO.
       DEFINE VARIABLE llgEmailText AS LOG  NO-UNDO. 
+      DEFINE VARIABLE llAddLineDiscount AS LOG NO-UNDO.
 
       llgOrderDate = fSplitTS(Order.CrStamp,
                               OUTPUT ldtOrderDate,
@@ -1889,68 +1890,71 @@ PROCEDURE pGetCTNAME:
        END.
 
        IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 THEN DO:
-          FOR FIRST OfferItem WHERE
-                    OfferItem.Brand       = gcBrand             AND
-                    OfferItem.Offer       = Order.Offer         AND
-                    OfferItem.ItemType    = "discountplan"      AND
-                    LOOKUP(OfferItem.ItemKey,
-                    "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC") > 0 AND
-                    OfferItem.BeginStamp <= Order.CrStamp       AND
-                    OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
-             FIRST DiscountPlan WHERE
-                   DiscountPlan.Brand    = gcBrand AND
-                   DiscountPlan.DPRuleId = OfferItem.ItemKey NO-LOCK,
-             FIRST DPRate WHERE
-                   DPRate.DPId = DiscountPlan.DPId AND
-                   DPRate.ValidFrom <= ldtOrderDate AND
-                   DPRate.ValidTo   >= ldtOrderDate NO-LOCK:
 
-             lcMFText = STRING(DiscountPlan.ValidPeriods)                    +
-                       (IF liLang EQ 5 THEN " months. " ELSE " meses. ") +
-                       "<br/>" +
-                       (IF liLang EQ 5 THEN "After " ELSE "Después ")    +
-                       TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99"))             + " &euro;/" +
-                       (IF liLang EQ 5 THEN "month" ELSE "mes")          +
-                       (IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
-             /*Offeritem values must be used if such is available.
-               Otherwise the value is taken from discountplan settings.*/
-             IF Offeritem.Amount > 0 THEN DO:
-                IF DiscountPlan.DPUnit EQ "Percentage" THEN
-                   ldeMFWithTax = ldeMFWithTax - ((Offeritem.amount / 100) * ldeMFWithTax).
-                ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
-                    ldeMFWithTax = ldeMFWithTax - Offeritem.amount.
- 
-             END.
-             ELSE DO:
-                IF DiscountPlan.DPUnit EQ "Percentage" THEN
-                   ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
-                ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
-                    ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
-             END.
-          END.
+          llAddLineDiscount = FALSE.
 
           /* Additional line discount information in emails */
           FOR FIRST OrderAction NO-LOCK WHERE
                     OrderAction.Brand    = gcBrand       AND
                     OrderAction.OrderID  = Order.OrderID AND
-                    OrderAction.ItemType = "discount":    
-                    
-             FOR FIRST DiscountPlan NO-LOCK WHERE 
-                       DiscountPlan.DPID = INT(OrderAction.ItemKey),
+                    OrderAction.ItemType = "AddLineDiscount":
+
+             FOR FIRST DiscountPlan NO-LOCK WHERE
+                       DiscountPlan.DPRuleID = OrderAction.ItemKey,
                  FIRST DPRate WHERE
                        DPRate.DPId       = DiscountPlan.DPId AND
                        DPRate.ValidFrom <= ldtOrderDate      AND
                        DPRate.ValidTo   >= ldtOrderDate      NO-LOCK:
-
+                 llAddLineDiscount = TRUE.
                  IF DiscountPlan.DPUnit EQ "Percentage" THEN
                     ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
-                 ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN 
+                 ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
                     ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
 
-             END.  
+             END.
 
-          END. /* ADDITIONAL-LINE */         
+          END. /* ADDITIONAL-LINE */
 
+          IF NOT llAddLineDiscount THEN
+             FOR FIRST OfferItem WHERE
+                       OfferItem.Brand       = gcBrand             AND
+                       OfferItem.Offer       = Order.Offer         AND
+                       OfferItem.ItemType    = "discountplan"      AND
+                       LOOKUP(OfferItem.ItemKey,
+                       "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC") > 0 AND
+                       OfferItem.BeginStamp <= Order.CrStamp       AND
+                       OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
+                 FIRST DiscountPlan WHERE
+                       DiscountPlan.Brand    = gcBrand AND
+                       DiscountPlan.DPRuleId = OfferItem.ItemKey NO-LOCK,
+                 FIRST DPRate WHERE
+                       DPRate.DPId = DiscountPlan.DPId AND
+                       DPRate.ValidFrom <= ldtOrderDate AND
+                       DPRate.ValidTo   >= ldtOrderDate NO-LOCK:
+
+                lcMFText = STRING(DiscountPlan.ValidPeriods)                    +
+                           (IF liLang EQ 5 THEN " months. " ELSE " meses. ") +
+                           "<br/>" +
+                           (IF liLang EQ 5 THEN "After " ELSE "Después ")    +
+                           TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99"))             + " &euro;/" +
+                           (IF liLang EQ 5 THEN "month" ELSE "mes")          +
+                           (IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
+                /*Offeritem values must be used if such is available.
+                  Otherwise the value is taken from discountplan settings.*/
+                IF Offeritem.Amount > 0 THEN DO:
+                   IF DiscountPlan.DPUnit EQ "Percentage" THEN
+                      ldeMFWithTax = ldeMFWithTax - ((Offeritem.amount / 100) * ldeMFWithTax).
+                   ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
+                      ldeMFWithTax = ldeMFWithTax - Offeritem.amount.
+ 
+                END.
+                ELSE DO:
+                   IF DiscountPlan.DPUnit EQ "Percentage" THEN
+                      ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
+                   ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
+                      ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
+                END.
+             END.
        END.
 
        FIND FIRST DiscountPlan NO-LOCK WHERE
