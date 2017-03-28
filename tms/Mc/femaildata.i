@@ -1906,6 +1906,11 @@ PROCEDURE pGetCTNAME:
                        DPRate.ValidFrom <= ldtOrderDate      AND
                        DPRate.ValidTo   >= ldtOrderDate      NO-LOCK:
                  llAddLineDiscount = TRUE.
+                 lcMFText = STRING(DiscountPlan.ValidPeriods)              +
+                            (IF liLang EQ 5 THEN "After " ELSE "Después ") +
+                            TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99"))      + " &euro;/" +
+                            (IF liLang EQ 5 THEN "month" ELSE "mes")          +
+                            (IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
                  IF DiscountPlan.DPUnit EQ "Percentage" THEN
                     ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
                  ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
