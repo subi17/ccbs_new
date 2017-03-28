@@ -1912,13 +1912,6 @@ PROCEDURE pGetCTNAME:
                     ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
                  ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
                     ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
-                 
-                 lcMFText = STRING(DiscountPlan.ValidPeriods)              +
-                            (IF liLang EQ 5 THEN "After " ELSE "Después ") +
-                            TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99"))      + " &euro;/" +
-                            (IF liLang EQ 5 THEN "month" ELSE "mes")          +
-                            (IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
-
              END.
 
           END. /* ADDITIONAL-LINE */
