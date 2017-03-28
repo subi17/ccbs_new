@@ -232,13 +232,6 @@ FUNCTION fSetMigrationBarring RETURNS CHAR
    RETURN "".
 END.    
 
-FUNCTION fSetMigrationServices RETURNS CHAR
-   (iiMsSeq AS INT,
-    icCommand AS CHAR):
-    DEF VAR lcStat AS CHAR NO-UNDO.
-   RETURN "".
-END.
-
 FUNCTION fSetMigrationFees RETURNS CHAR
    (iiMsSeq AS INT,
     icCommand AS CHAR):
@@ -298,9 +291,9 @@ END.
   after requests are done (by different program).
 */
 FUNCTION fSetOperData RETURNS CHAR
-   (iiMsSeq AS INT,
+   (icMSISDN AS CHAR,
+    iiMsSeq AS INT,
     icBarrings AS CHAR,     /*   Barr1=1,Barr2=1,...*/
-    icServices AS CHAR,    /*    Ser1=1,Ser2=1,...*/
     icSingleFees AS CHAR, /*     Fee1=30,Fee2=22,...*/
     icUpsells AS CHAR,   /*      Upsell1,Upsell2,...*/
     iiUsedData AS INT,  /*       used data amount*/
@@ -312,18 +305,13 @@ FUNCTION fSetOperData RETURNS CHAR
    DEF VAR lcStat AS CHAR NO-UNDO.
    DEF VAR lcRet AS CHAR NO-UNDO.
    DEF VAR lcCommands AS CHAR NO-UNDO. /*For logging*/
+   DEF VAR liOrderID AS INT NO-UNDO.
+   DEF VAR lcMQMessage AS CHAR NO-UNDO. /*Message to WEB in error cases*/
 
    lcStat =  fSetMigrationBarring(iiMsSeq, icBarrings). 
    lcCommands = lcCommands + icBarrings + "|".
    IF lcStat NE "" THEN DO:
       lcRet = "Barring error: " + lcStat + "|".
-      lcStat = "".
-   END.
-
-   lcStat = lcStat + fSetMigrationServices(iiMsSeq, icServices).
-   lcCommands = lcCommands + icServices + "|".
-   IF lcStat NE "" THEN DO:
-      lcRet = lcRet + "Service error: " + lcStat + "|".
       lcStat = "".
    END.
 
@@ -386,16 +374,26 @@ FUNCTION fSetOperData RETURNS CHAR
    PUT STREAM sLog UNFORMATTED lcCommands + lcStat SKIP.
    
    /*In failure cases WEB must know status as soon as possible*/
-   /*IF lcStat NE "" THEN DO:
-      lcMQMessage = fGenerateNCResponseInfo(liOrderID,
-                                            lcMSISDN,
-                                            lcNCStatus,
-                                            lcNCComment).
-   Under construction.
-      END.
-     */ 
+   IF lcStat NE "" THEN DO:
+      FIND FIRST Order NO-LOCK WHERE
+                 Order.CLI EQ icMSISDN AND
+                 Order.Orderchannel BEGINS "migration"
+                 NO-ERROR.
+      IF AVAIL Order THEN liOrderID = Order.Orderid.
+      ELSE liOrderID = 0.
 
-   
+      lcMQMessage = fGenerateOrderInfo(liOrderID,
+                                       icMSISDN,
+                                       lcStat).
+      IF lcMQMessage EQ "" THEN
+         lcCommands = lcCommands + ";Message creation failed".
+      ELSE DO:
+         lcCommands = ";" + fWriteToMQ(lcMQMessage).
+      END.
+
+      PUT STREAM sLog UNFORMATTED lcMQMessage SKIP.
+
+   END.
 
    RETURN "".
 
