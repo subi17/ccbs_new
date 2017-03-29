@@ -1874,6 +1874,7 @@ PROCEDURE pGetCTNAME:
       DEFINE VARIABLE lcMFText     AS CHAR No-UNDO.
       DEFINE VARIABLE llgEmailText AS LOG  NO-UNDO. 
       DEFINE VARIABLE llAddLineDiscount AS LOG NO-UNDO.
+      DEFINE VARIABLE ldDiscValue  AS DEC  NO-UNDO.
 
       llgOrderDate = fSplitTS(Order.CrStamp,
                               OUTPUT ldtOrderDate,
@@ -1909,11 +1910,9 @@ PROCEDURE pGetCTNAME:
              
                  llAddLineDiscount = TRUE.
                  ldeMFNoDisc       = ldeMFWithTax.
+                 ldDiscValue       = DPRate.DiscValue.
+                 ldeMFWithTax      = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
 
-                 IF DiscountPlan.DPUnit EQ "Percentage" THEN
-                    ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
-                 ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
-                    ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
              END.
 
           END. /* ADDITIONAL-LINE */
@@ -2041,11 +2040,11 @@ PROCEDURE pGetCTNAME:
           IF llAddLineDiscount THEN
              lcList = lcList + (IF LENGTH(lcList + "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
                                           TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
-                                          (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>10% DTO. para siempre") > 36
+                                          (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>" + TRIM(STRING(ldDiscValue,"99"))+ "% DTO. para siempre") > 36
                                 THEN ",<br/>" ELSE " ") +
                       "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
                       TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
-                      (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>10% DTO. para siempre".
+                      (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>" + TRIM(STRING(ldDiscValue,"99"))+ "% DTO. para siempre".
           ELSE
              /* YBU-4648 LENGTH check added for fitting one line */
              lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,
