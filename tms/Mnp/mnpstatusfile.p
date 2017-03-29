@@ -155,13 +155,13 @@ REPEAT:
          NEXT.
       END.
 
-      /* not yoigos case */
-      IF lcDonor NE "005" AND lcRecipient NE "005" THEN DO:
+      /* not yoigos or masmovil's case */
+      IF (lcDonor NE "005" AND lcRecipient NE "005") OR (lcDonor NE "200" AND lcRecipient NE "200") THEN DO:
          liSkipped = liSkipped + 1.
          NEXT.
       END.
       
-      IF lcRecipient EQ "005" AND LOOKUP(lcNCStatus,"BNOT,BDEF,BDET,BFIN,BCAN") > 0 
+      IF (lcRecipient EQ "005" OR lcRecipient EQ "200") AND LOOKUP(lcNCStatus,"BNOT,BDEF,BDET,BFIN,BCAN") > 0 
          THEN DO:
          liSkipped = liSkipped + 1.
          NEXT.
