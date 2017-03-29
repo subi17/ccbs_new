@@ -80,7 +80,7 @@ END.
 
 ASSIGN
    liSeq         = NEXT-VALUE(M2MSeq)
-   lcFormRequest = "005" + STRING(liSeq,"99999999").
+   lcFormRequest = (IF lcTenant = "Default" THEN "005" ELSE IF lcTenant = "Tmasmovil" THEN "200" ELSE "") + STRING(liSeq,"99999999").
 
 /* mark old rejected processes as closed */
 FOR EACH MNPProcess WHERE
@@ -164,8 +164,8 @@ ASSIGN
    MNPDetails.Surname2     = OrderCustomer.SurName2
    MNPDetails.CompanyName  = OrderCustomer.Company 
    MNPDetails.RequestedTS  = Order.CrStamp 
-   MNPDetails.ReceptorCode = (IF lcTenant = "Default" THEN "005"    ELSE IF lcTenant = "Tmasmovil" THEN "044"    ELSE "")
-   MNPDetails.ReceptorNRN  = (IF lcTenant = "Default" THEN "741111" ELSE IF lcTenant = "Tmasmovil" THEN "735044" ELSE "")  
+   MNPDetails.ReceptorCode = (IF lcTenant = "Default" THEN "005"    ELSE IF lcTenant = "Tmasmovil" THEN "200"    ELSE "")
+   MNPDetails.ReceptorNRN  = (IF lcTenant = "Default" THEN "741111" ELSE IF lcTenant = "Tmasmovil" THEN "745200" ELSE "")  
    MNPDetails.DonorCode    = MNPOperator.OperCode WHEN AVAIL MNPOperator
    MNPDetails.Nationality  = OrderCustomer.Nationality.
 
@@ -210,7 +210,7 @@ PROCEDURE pCreatePortabilityMessageXML:
    add_string(lcReqStruct, "codigoOperadorReceptor", (IF lcTenant = "Default" THEN 
                                                           "005" 
                                                       ELSE IF lcTenant = "Tmasmovil" THEN 
-                                                          "044" 
+                                                          "200" 
                                                       ELSE "")).
    lcAbonado = add_struct(lcReqStruct,"abonado").
 
@@ -239,7 +239,7 @@ PROCEDURE pCreatePortabilityMessageXML:
    add_string(lcReqStruct, "NRNReceptor", (IF lcTenant = "Default" THEN 
                                               "741111" 
                                            ELSE IF lcTenant = "Tmasmovil" THEN 
-                                              "735044" 
+                                              "745200" 
                                            ELSE "")).
    add_timestamp(lcReqStruct, "fechaVentanaCambio", MNPProcess.PortingTime).
   
