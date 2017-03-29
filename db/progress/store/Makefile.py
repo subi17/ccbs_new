@@ -31,6 +31,14 @@ db_locations = {
                   'prepedr': '/db1/prepedr/prepedr',
                   'fraudcdr': '/db1/fraudcdr/fraudcdr',
                   'reratelog': '/db1/reratelog/reratelog'},
+    'yanai': {'common': '/db1/common/common',
+              'ordercanal': '/db1/ordercanal/ordercanal',
+              'mobile': '/db1/mobile/mobile',
+              'counter': '/db1/counter/counter',
+              'star': '/db1/star/star',
+              'prepedr': '/db1/prepedr/prepedr',
+              'fraudcdr': '/db1/fraudcdr/fraudcdr',
+              'reratelog': '/db1/reratelog/reratelog'},
     'arneb': {'common': '/db1/common/common',
               'ordercanal': '/db1/ordercanal/ordercanal',
               'mobile': '/db1/mobile/mobile',
@@ -151,7 +159,7 @@ def database_file(match, deps, db_dir, db_name):
              'size +area name +path name', '^$',
              '/(bi|db|ix)/%s(_\d+)?\.[dba]\d+ 00:00:00' % db_name])
     for emptydb in ['%s/prolang/%s/empty%d.db' % (dlc, x, blocksize) \
-                    for x in ('utf', 'eng')]:
+                    for x in ('eng', 'utf')]:
         if os.path.exists(emptydb):
             callgrep([dlc + '/bin/procopy', '-s', emptydb, match],
                     ['\(6715\)$', '\(6718\)$', '\(451\)$',

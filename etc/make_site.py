@@ -104,7 +104,7 @@ if not 'skip_srcpkg_check' in locals() and os.path.exists(relpath + '/srcpkg'):
         name, version = src[:-4].split('-', 1)
         version_file = relpath + '/tools/%s/.version' % name
         if not os.path.exists(version_file) \
-        or open(version_file).read().strip() != version:
+        or open(version_file).read().strip() < version:
             srcpkg_need_update.append(name)
     if srcpkg_need_update:
         print('WARNING: Tools %s need updating. Run `pike -C srcpkg`!' % \
