@@ -2038,22 +2038,23 @@ PROCEDURE pGetCTNAME:
        END.
 
        IF ldeMFWithTax > 0 THEN DO:
-         IF llAddLineDiscount THEN
-            lcList = lcList + (IF LENGTH(lcList + "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
-                                         TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
-                                         (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>10% DTO. para siempre") > 36
-                               THEN ",<br/>" ELSE " ") +
-                     "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
-                     TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
-                     (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>10% DTO. para siempre".
-         ELSE
-            /* YBU-4648 LENGTH check added for fitting one line */
-            lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,
-                                  "->>>>>>>9.99")) + " &euro;/" + (IF liLang 
-                                  EQ 5 THEN "month" ELSE "mes")) > 36 THEN 
-                                  ",<br/>" ELSE " ") +
-                     TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
-                     (IF liLang EQ 5 THEN "month" ELSE "mes").
+          IF llAddLineDiscount THEN
+             lcList = lcList + (IF LENGTH(lcList + "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
+                                          TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
+                                          (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>10% DTO. para siempre") > 36
+                                THEN ",<br/>" ELSE " ") +
+                      "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
+                      TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
+                      (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>10% DTO. para siempre".
+          ELSE
+             /* YBU-4648 LENGTH check added for fitting one line */
+             lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,
+                                   "->>>>>>>9.99")) + " &euro;/" + (IF liLang 
+                                   EQ 5 THEN "month" ELSE "mes")) > 36 THEN 
+                                   ",<br/>" ELSE " ") +
+                      TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
+                      (IF liLang EQ 5 THEN "month" ELSE "mes").
+       END.
 
        IF lcList > "" THEN DO:
          IF llAddLineDiscount THEN
