@@ -25,8 +25,6 @@ DEF VAR lcNewStatus     AS CHAR NO-UNDO.
 DEF VAR lcError         AS CHAR NO-UNDO.
 
 DEF BUFFER lbOrder          FOR Order.
-DEF BUFFER labOrder         FOR Order.
-DEF BUFFER labOrderCustomer FOR OrderCustomer.
 
 FIND FIRST Order WHERE 
            Order.Brand   = gcBrand AND 
@@ -418,27 +416,10 @@ IF (Order.OrderType EQ {&ORDER_TYPE_NEW}                   OR
    (lcOldStatus     EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
     lcOldStatus     EQ {&ORDER_STATUS_PENDING_FIXED_LINE}  OR
     lcOldStatus     EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) THEN DO:
-   
-   FOR EACH labOrderCustomer NO-LOCK WHERE
-            labOrderCustomer.Brand      EQ Syst.Parameters:gcBrand  AND
-            labOrderCustomer.CustId     EQ OrderCustomer.CustID     AND
-            labOrderCustomer.CustIdType EQ OrderCustomer.CustIdType AND
-            labOrderCustomer.RowType    EQ 1,
-       EACH labOrder NO-LOCK WHERE
-            labOrder.Brand      EQ Syst.Parameters:gcBrand  AND
-            labOrder.orderid    EQ labOrderCustomer.Orderid AND
-            labOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}    AND
-            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
-
-      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand      = Syst.Parameters:gcBrand           AND
-                        CLIType.CLIType    = labOrder.CLIType                  AND
-                        CLIType.LineType   = {&CLITYPE_LINETYPE_NONMAIN}       AND
-                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN
-         fSetOrderStatus(labOrder.OrderId,lcNewStatus).
-
-   END.   
-
+    
+    fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
+                                    OrderCustomer.CustID,
+                                    lcNewStatus) . 
 END.   
 
 IF llDoEvent THEN DO:

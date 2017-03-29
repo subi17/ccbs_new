@@ -20,10 +20,13 @@
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
 
-DEF VAR llOk AS LOG NO-UNDO.
-DEF VAR lcError AS CHARACTER NO-UNDO.
-DEF VAR lcQuestion AS CHARACTER NO-UNDO. 
-DEF VAR lcCreditReason AS CHARACTER NO-UNDO. 
+DEF VAR llOk             AS LOG       NO-UNDO.
+DEF VAR lcError          AS CHARACTER NO-UNDO.
+DEF VAR lcQuestion       AS CHARACTER NO-UNDO. 
+DEF VAR lcCreditReason   AS CHARACTER NO-UNDO. 
+DEF VAR lcOldOrderStatus AS CHARACTER NO-UNDO. 
+
+DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
 
 FIND Order WHERE 
      Order.Brand   = gcBrand AND 
@@ -34,6 +37,8 @@ IF not avail order THEN DO:
    IF NOT ilSilent THEN MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
    RETURN lcError.
 END.
+
+lcOldOrderStatus = Order.StatusCode.
 
 IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES} + ",12") > 0 THEN DO:
    lcError = SUBST("Cannot close order with status &1",Order.StatusCode).
@@ -200,6 +205,25 @@ fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_CLOSED}).
 
 IF llDoEvent THEN
    RUN StarEventMakeModifyEvent(lhOrder).
+
+IF lcOldOrderStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_1}               OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_2}               OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_3}               OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_IN_CONTROL}                OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_MNP_REJECTED}              OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED}           OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN
+DO:
+   FIND FIRST lbOrderCustomer NO-LOCK WHERE
+              lbOrderCustomer.Brand   = gcBrand       AND
+              lbOrderCustomer.OrderId = Order.OrderId AND
+              lbOrderCustomer.RowType = 1             NO-ERROR.
+
+    fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
+                                   lbOrderCustomer.CustID,
+                                   {&ORDER_STATUS_NEW}).
+END. 
 
 FOR EACH MNPProcess WHERE
    MNPProcess.OrderID = Order.OrderId AND
