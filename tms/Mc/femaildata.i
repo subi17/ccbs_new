@@ -2038,11 +2038,7 @@ PROCEDURE pGetCTNAME:
 
        IF ldeMFWithTax > 0 THEN DO:
           IF llAddLineDiscount THEN
-             lcList = lcList + (IF LENGTH(lcList + "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
-                                          TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
-                                          (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>" + TRIM(STRING(ldDiscValue,"99"))+ "% DTO. para siempre") > 36
-                                THEN ",<br/>" ELSE " ") +
-                      "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
+             lcList = lcList + "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
                       TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
                       (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>" + TRIM(STRING(ldDiscValue,"99"))+ "% DTO. para siempre".
           ELSE
