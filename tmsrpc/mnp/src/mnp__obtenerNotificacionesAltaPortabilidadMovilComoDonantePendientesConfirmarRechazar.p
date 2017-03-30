@@ -46,14 +46,21 @@ FOR EACH ttInput NO-LOCK:
          ttInput.statusCode).
 END.
 
+FIND FIRST ttInput NO-ERROR.
+IF AVAIL ttInput THEN 
+DO:    
+   ASSIGN lcTenant = (IF ttInput.DonorCode = "005" THEN {&TENANT_YOIGO} ELSE IF ttInput.DonorCode = "200" THEN {&TENANT_MASMOVIL} ELSE ""). 
+
+   {mnp/src/mnp_settenant.i lcTenant}
+END.
+
 MESSAGE_LOOP:
-FOR EACH ttInput NO-LOCK:   
-   
-   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
+FOR EACH ttInput NO-LOCK:
 
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar").
    
+   FIND FIRST MNPProcess NO-LOCK WHERE MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
    IF NOT AVAIL MNPProcess THEN DO:   
       
       CREATE MNPProcess.
