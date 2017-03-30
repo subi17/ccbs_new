@@ -160,7 +160,12 @@ FUNCTION fConvertTenantToBrand RETURNS CHARACTER
 END FUNCTION.
 
 FUNCTION fGetCurrentBrand RETURNS CHAR ():
-   RETURN fConvertTenantToBrand(TENANT-NAME(LDBNAME("common"))).
+   DEF BUFFER Company FOR Company.
+   FIND FIRST Company NO-LOCK WHERE
+              Company.Brand = "1" NO-ERROR.
+   IF AVAIL Company THEN 
+      RETURN fConvertTenantToBrand(BUFFER-TENANT-NAME(Company)).
+   ELSE RETURN fConvertTenantToBrand(TENANT-NAME(LDBNAME("common"))).
 END FUNCTION.
 
 /*
