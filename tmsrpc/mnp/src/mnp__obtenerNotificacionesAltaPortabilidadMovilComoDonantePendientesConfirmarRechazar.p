@@ -40,6 +40,8 @@
 
 {mnp/src/mnp_obtener.i}
 
+DEF VAR lcTenant           AS CHAR  NO-UNDO.
+
 FOR EACH ttInput NO-LOCK:
    IF ttInput.statusCode NE "ASOL" THEN 
       RETURN appl_err("Incorrect statuscode (should be AENV): " +
