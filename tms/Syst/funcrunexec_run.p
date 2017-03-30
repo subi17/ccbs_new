@@ -9,6 +9,7 @@
 
 {Syst/commali.i}
 {Func/timestamp.i}
+{Func/log.i}
 {Syst/eventlog.i}
 {Func/multitenantfunc.i}
 
@@ -208,7 +209,7 @@ PROCEDURE pLaunchProcesses:
          FuncRunProcess.RunCommand  = REPLACE(FuncRunConfig.RunCommand,
                                             "#PARAM",
                                             STRING(liProcID))
-         FuncRunProcess.RunCommand  = REPLACE(FuncRunConfig.RunCommand,
+         FuncRunProcess.RunCommand  = REPLACE(FuncRunProcess.RunCommand,
                                             "#TENANT",
                                              STRING(lcTenant))
          FuncRunProcess.StartTS     = fMakeTS().
