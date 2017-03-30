@@ -174,7 +174,8 @@ FORM
    oiDone         COLON 20 FORMAT ">>>>>>>>>>>9"  LABEL "Items Handled"
 
 WITH CENTERED ROW 10 SIDE-LABELS 
-     TITLE " TRIGGERITEM RATING " FRAME fQty.
+     TITLE SUBST(" TRIGGERITEM RATING (&1) ", Syst.Parameters:Tenant)
+     FRAME fQty.
 
 ASSIGN 
    lcStarted = fTS2HMS(fMakeTS())
