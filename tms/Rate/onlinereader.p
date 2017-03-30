@@ -210,37 +210,38 @@ WHEN 2311 THEN ASSIGN
    liStream = 54
    lcReader = "MOM:Postpaid2".
 
-WHEN 2320 THEN ASSIGN
+WHEN 2315 THEN ASSIGN
    liStream = 56
    lcReader = "MOM:Postpaid-Data".
 
-WHEN 2321 THEN ASSIGN
-   liStream = 56
+WHEN 2316 THEN ASSIGN
+   liStream = 58
    lcReader = "MOM:Postpaid-Data2".
 
-WHEN 2330 THEN ASSIGN
-   liStream = 58
+WHEN 2320 THEN ASSIGN
+   liStream = 60
    lcReader = "MOM2:Prepaid".
 
-WHEN 2331 THEN ASSIGN
-   liStream = 60
+WHEN 2321 THEN ASSIGN
+   liStream = 62
    lcReader = "MOM2:Prepaid2".
 
+WHEN 2325 THEN ASSIGN
+   liStream = 64
+   lcReader = "MOM6:Fixed".
+
 WHEN 2340 THEN ASSIGN
-   liStream = 62
+   liStream = 66
    lcReader = "MOM4:TAP3".
 
 WHEN 2350 THEN ASSIGN
-   liStream = 64
+   liStream = 68
    lcReader = "MOM3:VAS-CGY".
 
-WHEN 2360 THEN ASSIGN
-   liStream = 66
+WHEN 2370 THEN ASSIGN
+   liStream = 70
    lcReader = "MOM5:RoamFraud".
 
-WHEN 2370 THEN ASSIGN
-   liStream = 68
-   lcReader = "MOM6:Fixed".
 
 OTHERWISE DO:
    
