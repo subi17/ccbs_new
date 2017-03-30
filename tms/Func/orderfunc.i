@@ -103,6 +103,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                            &GLOBAL-DEFINE STAR_EVENT_USER "OrderClose"
                         &ENDIF
                         fUpdatePartialMSOwner(bfOrder.MsSeq, MobSub.FixedNumber).
+                        RELEASE MobSub.
                      END.
                   END. /* IF bfOrder.OrderType EQ */
                END. /* IF fIsConvergenceTariff  */
