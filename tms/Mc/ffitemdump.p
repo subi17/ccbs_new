@@ -3,7 +3,7 @@
   TASK .........: Fixed fee item dump to Track
   APPLICATION ..: TMS
   AUTHOR .......: Chanchal Sharma
-  CREATED ......: 21.02.2017
+  CREATED ......: 31.03.2017
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
@@ -150,28 +150,29 @@ DO:
       for-blk:
       FOR EACH FFItem NO-LOCK WHERE
                FFItem.Invnum = Invoice.InvNum:
-      IF CAN-FIND(FIRST ttData WHERE
-                        ttData.ffitemnum = FFItem.FFItemNum) THEN
-         NEXT for-blk.
-      ELSE
-      DO: 
-         FIND FIRST FixedFee WHERE 
-                    FixedFee.FFnum = FFItem.FFNum NO-LOCK NO-ERROR.
+         IF CAN-FIND(FIRST ttData WHERE
+                           ttData.ffitemnum = FFItem.FFItemNum) THEN
+            NEXT for-blk.
+         ELSE
+         DO: 
+            FIND FIRST FixedFee WHERE 
+                       FixedFee.FFnum = FFItem.FFNum NO-LOCK NO-ERROR.
 
-         IF AVAIL FixedFee THEN
-         DO:           
-            RUN pCreateTempData(FFItem.FFItemNum, 
-                                FixedFee.FFNum,   
-                                FFItem.CustNum, 
-                                FFItem.BillPeriod,
-                                FFItem.BillCode,  
-                                "FULL",    
-                                FixedFee.KeyValue,
-                                FixedFee.Cli,
-                                FFItem.Billed,    
-                                FFItem.amt,      
-                                FixedFee.BegDate
-                               ).
+            IF AVAIL FixedFee THEN
+            DO:           
+               RUN pCreateTempData(FFItem.FFItemNum, 
+                                   FixedFee.FFNum,   
+                                   FFItem.CustNum, 
+                                   FFItem.BillPeriod,
+                                   FFItem.BillCode,  
+                                   "FULL",    
+                                   FixedFee.KeyValue,
+                                   FixedFee.Cli,
+                                   FFItem.Billed,    
+                                   FFItem.amt,      
+                                   FixedFee.BegDate
+                                   ).
+            END.
          END.
       END.
    END.
@@ -733,4 +734,7 @@ PROCEDURE pCreateTempData:
           oiEvents            = oiEvents + 1.
 
 END PROCEDURE.
+
+
+
 
