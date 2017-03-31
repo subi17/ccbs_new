@@ -468,7 +468,8 @@ PROCEDURE pUpdateSubscription:
    DEF VAR ldeOrigTsEnd AS DEC NO-UNDO. 
    DEF VAR liLoop AS INT NO-UNDO. 
    DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
-
+   DEF VAR liSecs AS INT NO-UNDO. 
+   
    DEF BUFFER bOwner FOR MsOwner.
 
    /* make sure that customer has a billtarget with correct rateplan */
@@ -596,14 +597,24 @@ PROCEDURE pUpdateSubscription:
          
       IF liLoop EQ 1 THEN DO:
 
+         /* YOB-1145 */
+         liSecs = -1.
+         DO WHILE TRUE:
+            IF NOT CAN-FIND(FIRST bOwner WHERE
+                       bOwner.CLI = MSOwner.CLI AND
+                       bOwner.TSEnd = fSecOffSet(ldeNewBeginTs, liSecs))
+               THEN LEAVE.
+            liSecs = liSecs - 1.
+         END.
+         
          ASSIGN
             ldeOrigTsEnd = MSOwner.TsEnd
-            MSOwner.TsEnd = fSecOffSet(ldeNewBeginTs, -1).
+            MSOwner.TsEnd = fSecOffSet(ldeNewBeginTs, liSecs).
          
          CREATE bOwner.
          BUFFER-COPY MsOwner EXCEPT TsBegin TsEnd CLIEvent TO bOwner.
          ASSIGN bOwner.CLIType    = MsRequest.ReqCParam2
-                bOwner.TsBegin    = fSecOffSet(MsOwner.TsEnd,1)
+                bOwner.TsBegin    = ldeNewBeginTs
                 bOwner.TsEnd      = ldeOrigTsEnd
                 bOwner.BillTarget = liBillTarg
                 bOwner.Paytype    = (CLIType.PayType = 2)
