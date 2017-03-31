@@ -18,45 +18,35 @@ DISABLE TRIGGERS FOR DUMP OF FFItem.
 {Mm/fbundle.i}
 {Syst/dumpfile_run.i}
 
-DEF INPUT PARAMETER icDumpID      AS INT  NO-UNDO.
-DEF INPUT PARAMETER icFile        AS CHAR NO-UNDO.
-DEF INPUT PARAMETER icDumpMode    AS CHAR NO-UNDO.
-DEF INPUT PARAMETER idLastDump    AS DEC  NO-UNDO.
-DEF INPUT PARAMETER icEventSource AS CHAR NO-UNDO.
-DEF INPUT PARAMETER icEventFields AS CHAR NO-UNDO.
+DEF INPUT PARAMETER icDumpID       AS INT  NO-UNDO.
+DEF INPUT PARAMETER icFile         AS CHAR NO-UNDO.
+DEF INPUT PARAMETER icDumpMode     AS CHAR NO-UNDO.
+DEF INPUT PARAMETER idLastDump     AS DEC  NO-UNDO.
+DEF INPUT PARAMETER icEventSource  AS CHAR NO-UNDO.
+DEF INPUT PARAMETER icEventFields  AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
-DEF STREAM sout.
-OUTPUT STREAM sout TO VALUE(icFile).
-
-PUT STREAM sout UNFORMATTED
-    "FIXEDFEEITEMNUM,FIXEDFEENUM,CUSTNUM,BILLPERIOD,BILLCODE,CALCMETHOD,MSSEQ,MSISDN,BILLED,FEEAMT,CREATEDATE" SKIP.
-
-DEF VAR ldaFromDate          AS DATE NO-UNDO.
-DEF VAR ldaToDate            AS DATE NO-UNDO.
-DEF VAR ldaPrevToDate3       AS DATE NO-UNDO.
-DEF VAR ldPeriodFrom         AS DEC  NO-UNDO.
-DEF VAR ldPeriodFromSTC      AS DEC  NO-UNDO.
-DEF VAR ldPeriodTo           AS DEC  NO-UNDO.
-DEF VAR lcIPLContracts       AS CHAR NO-UNDO.
-DEF VAR lcBONOContracts      AS CHAR NO-UNDO.
-DEF VAR ldeStart             AS DEC NO-UNDO. 
-DEF VAR ldeEnd               AS DEC NO-UNDO. 
-DEF VAR liPeriod             AS INT  NO-UNDO.
-DEF VAR liPrevPeriod3        AS INT  NO-UNDO.
-DEF VAR liHandled            AS INT  NO-UNDO.
-DEF VAR liDayOfMonth         AS INT  NO-UNDO.
+DEF VAR lcFixfeeItemFile   AS CHAR NO-UNDO.
+DEF VAR lcSpoolDir         AS CHAR NO-UNDO.
+DEF VAR lcTransDir         AS CHAR NO-UNDO. 
+DEF VAR ldaFromDate        AS DATE NO-UNDO.
+DEF VAR ldaToDate          AS DATE NO-UNDO.
+DEF VAR ldaPrevFromDate     AS DATE NO-UNDO.
+DEF VAR ldPeriodFrom       AS DEC  NO-UNDO.
+DEF VAR ldPeriodFromSTC    AS DEC  NO-UNDO.
+DEF VAR ldPeriodTo         AS DEC  NO-UNDO.
+DEF VAR lcIPLContracts     AS CHAR NO-UNDO.
+DEF VAR lcBONOContracts    AS CHAR NO-UNDO.
+DEF VAR ldeStart           AS DEC NO-UNDO. 
+DEF VAR ldeEnd             AS DEC NO-UNDO. 
+DEF VAR liPeriod           AS INT  NO-UNDO.
+DEF VAR liPrevPeriod      AS INT  NO-UNDO.
+DEF VAR liDayOfMonth       AS INT  NO-UNDO.
 
 DEF VAR lcAllowedDSS2SubsType         AS CHAR NO-UNDO.
 DEF VAR lcExcludeBundles              AS CHAR NO-UNDO.
 DEF VAR lcFirstMonthUsageBasedBundles AS CHAR  NO-UNDO.
-
-{Mm/dss_bundle_first_month_fee.i}
-
-ASSIGN ldaFromDate      = DATE(MONTH(TODAY), 1, YEAR(TODAY))       
-       ldaToDate        = ADD-INTERVAL(ldaFromDate, 1, "months") - 1
-       ldaPrevToDate3   = ADD-INTERVAL(ldaToDate, -3, "months"). /* End date of past third month */
 
 DEF TEMP-TABLE ttSubscription NO-UNDO
     FIELD MsSeq        AS INT
@@ -66,7 +56,7 @@ DEF TEMP-TABLE ttSubscription NO-UNDO
 DEF TEMP-TABLE ttData
     FIELD ffitemnum  LIKE FFItem.FFItemNum
     FIELD ffnum      LIKE FixedFee.FFNum
-    FIELD custnum    LIKE FixedFee.CustNum
+    FIELD custnum    LIKE FFItem.CustNum
     FIELD billper    LIKE FFItem.BillPeriod
     FIELD billcode   LIKE FFItem.BillCode
     FIELD calcmethod AS CHAR
@@ -76,6 +66,56 @@ DEF TEMP-TABLE ttData
     FIELD feeamt     LIKE FFItem.Amt
     FIELD createdate LIKE FixedFee.BegDate
     INDEX idx1 IS PRIMARY ffitemnum.
+
+FIND FIRST Dumpfile NO-LOCK WHERE Dumpfile.DumpId = icDumpID NO-ERROR.
+IF AVAIL DumpFile THEN 
+   ASSIGN
+      lcSpoolDir = DumpFile.SpoolDir + "/"
+      lcTransDir = Dumpfile.TransDir.
+
+/* STREAM sout is for eventlog file */
+DEF STREAM sout.
+OUTPUT STREAM sout TO VALUE(icFile).
+/* STREAM fixfeeitem is for ffitem file */
+DEF STREAM fixfeeitem.
+
+ASSIGN
+   lcFixfeeItemFile = "fixfeeitem_#MODE_#DATE_#TIME.csv"
+   lcFixfeeItemFile = REPLACE(lcFixfeeItemFile,"#DATE",STRING(YEAR(TODAY),"9999") +
+                                               STRING(MONTH(TODAY),"99") +
+                                               STRING(DAY(TODAY),"99"))
+   lcFixfeeItemFile = REPLACE(lcFixfeeItemFile,"#TIME",
+                  REPLACE(STRING(TIME,"hh:mm:ss"),":",""))
+   lcFixfeeItemFile = REPLACE(lcFixfeeItemFile,"#MODE",icDumpMode).
+
+OUTPUT STREAM fixfeeitem TO VALUE(lcSpoolDir + lcFixfeeItemFile).
+
+/* Eventlog search is done every day */
+FOR EACH eventlog NO-LOCK WHERE
+         eventlog.eventdate = TODAY - 1 AND
+         eventlog.tablename = "FFItem" USE-INDEX EventDate:
+
+   liKey = INT(ENTRY(3,eventlog.key,CHR(255))) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN NEXT.
+
+   PUT STREAM sout UNFORMATTED
+      eventlog.action "|"
+      eventlog.eventdate " " eventlog.eventtime "|"
+      eventlog.memo "|"
+      eventlog.usercode "|"
+      liKey "|".   
+
+   oiEvents = oiEvents + 1.   
+END.
+
+PUT STREAM fixfeeitem UNFORMATTED
+    "FIXEDFEEITEMNUM,FIXEDFEENUM,CUSTNUM,BILLPERIOD,BILLCODE,CALCMETHOD,MSSEQ,MSISDN,BILLED,FEEAMT,CREATEDATE" SKIP.
+
+{Mm/dss_bundle_first_month_fee.i}
+
+ASSIGN ldaFromDate     = DATE(MONTH(TODAY), 1, YEAR(TODAY))       
+       ldaToDate       = ADD-INTERVAL(ldaFromDate, 1, "months") - 1
+       ldaPrevFromDate = ADD-INTERVAL(ldaFromDate, -1, "months"). /* First day of previous month */
 
 ASSIGN
    /* set 1 second after midnight to skip STC contract activations */
@@ -89,7 +129,7 @@ ASSIGN
    lcExcludeBundles    = fCParamC("EXCLUDE_BUNDLES")
    ldeStart            = fMakeTS()
    liPeriod            = YEAR(ldaToDate) * 100 + MONTH(ldaToDate)
-   liPrevPeriod3       = YEAR(ldaPrevToDate3) * 100 + MONTH(ldaPrevToDate3)
+   liPrevPeriod        = YEAR(ldaPrevFromDate) * 100 + MONTH(ldaPrevFromDate)
    liDayOfMonth        = DAY(TODAY).
    
       
@@ -100,39 +140,38 @@ ASSIGN
        
 RUN p_dss_bundle_first_month. 
 
-/* Remaining FFItem */
-ffitem-loop:
-FOR EACH FFItem NO-LOCK WHERE
-         FFitem.CustNum   > 0 AND
-         (IF liDayOfMonth = 1 THEN
-             FFItem.BillPeriod >= liPrevPeriod3 AND
-             FFItem.BillPeriod <= liPeriod
-          ELSE
-             FFItem.BillPeriod = liPeriod) AND         
-         FFItem.billed     = NO:
-   IF CAN-FIND(FIRST ttData WHERE
-                     ttData.ffitemnum = FFItem.FFItemNum) THEN
-      NEXT ffitem-loop.
-   ELSE
-   DO: 
-      FIND FIRST FixedFee WHERE 
-                 FixedFee.FFnum = FFItem.FFNum NO-LOCK NO-ERROR.
+/* Billed FFItem */
+IF (liDayOfMonth = 1 OR liDayOfMonth = 2) THEN
+DO:
+   FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
+            Invoice.Brand = "1" AND
+            Invoice.InvDate >= ldaPrevFromDate:
+      for-blk:
+      FOR EACH FFItem NO-LOCK WHERE
+               FFItem.Invnum = Invoice.InvNum:
+      IF CAN-FIND(FIRST ttData WHERE
+                        ttData.ffitemnum = FFItem.FFItemNum) THEN
+         NEXT for-blk.
+      ELSE
+      DO: 
+         FIND FIRST FixedFee WHERE 
+                    FixedFee.FFnum = FFItem.FFNum NO-LOCK NO-ERROR.
 
-      IF AVAIL FixedFee THEN
-      DO:  
-         ASSIGN liHandled = liHandled + 1.
-         RUN pCreateTempData(FFItem.FFItemNum, 
-                             FixedFee.FFNum,   
-                             FixedFee.CustNum, 
-                             FFItem.BillPeriod,
-                             FFItem.BillCode,  
-                             "FULL",    
-                             FixedFee.KeyValue,
-                             FixedFee.Cli,
-                             FFItem.Billed,    
-                             FFItem.amt,      
-                             FixedFee.BegDate
-                             ).
+         IF AVAIL FixedFee THEN
+         DO:           
+            RUN pCreateTempData(FFItem.FFItemNum, 
+                                FixedFee.FFNum,   
+                                FFItem.CustNum, 
+                                FFItem.BillPeriod,
+                                FFItem.BillCode,  
+                                "FULL",    
+                                FixedFee.KeyValue,
+                                FixedFee.Cli,
+                                FFItem.Billed,    
+                                FFItem.amt,      
+                                FixedFee.BegDate
+                               ).
+         END.
       END.
    END.
 END.
@@ -152,8 +191,7 @@ FOR EACH ttData NO-LOCK:
        ttData.createdate SKIP.   
 END.
 
-ASSIGN oiEvents = liHandled
-       ldeEnd   = fMakeTs().
+ASSIGN ldeEnd   = fMakeTs().
 
 OUTPUT STREAM sout CLOSE.
 
@@ -172,7 +210,41 @@ PROCEDURE p_dss_bundle_first_month:
    FOR EACH Customer NO-LOCK:
 
       RUN pGetCustomerSubscriptions(INPUT Customer.Custnum).
+      /* Unbilled FFItems */
+      ffitem-loop:
+      FOR EACH FFItem NO-LOCK WHERE
+         FFitem.CustNum   = Customer.Custnum AND
+         (IF liDayOfMonth = 1 OR liDayOfMonth = 2 THEN
+             FFItem.BillPeriod >= liPrevPeriod AND
+             FFItem.BillPeriod <= liPeriod
+          ELSE
+             FFItem.BillPeriod = liPeriod) AND         
+         FFItem.billed     = NO:
+         IF CAN-FIND(FIRST ttData WHERE
+                           ttData.ffitemnum = FFItem.FFItemNum) THEN
+            NEXT ffitem-loop.
+         ELSE
+         DO: 
+            FIND FIRST FixedFee WHERE 
+                       FixedFee.FFnum = FFItem.FFNum NO-LOCK NO-ERROR.
 
+            IF AVAIL FixedFee THEN
+            DO:              
+               RUN pCreateTempData(FFItem.FFItemNum, 
+                                   FixedFee.FFNum,   
+                                   FFItem.CustNum, 
+                                   FFItem.BillPeriod,
+                                   FFItem.BillCode,  
+                                   "FULL",    
+                                   FixedFee.KeyValue,
+                                   FixedFee.Cli,
+                                   FFItem.Billed,    
+                                   FFItem.amt,      
+                                   FixedFee.BegDate
+                                   ).
+            END.
+         END.
+      END.
    END. /* FOR EACH Customer NO-LOCK: */
 
    RETURN "".
@@ -349,7 +421,7 @@ PROCEDURE pCalculateFees:
 
          RUN pCreateTempData(FFItem.FFItemNum, 
                              FixedFee.FFNum,   
-                             FixedFee.CustNum, 
+                             FFItem.CustNum, 
                              FFItem.BillPeriod,
                              FFItem.BillCode,  
                              "CALCULATED",    
@@ -657,8 +729,7 @@ PROCEDURE pCreateTempData:
           ttData.billed       = lBilled
           ttData.feeamt       = dFeeAmt
           ttData.createdate   = dtBegDate
-          liHandled = liHandled + 1.
+          oiEvents            = oiEvents + 1.
 
 END PROCEDURE.
-
 
