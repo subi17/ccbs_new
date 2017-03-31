@@ -31,6 +31,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF BUFFER bfOrder2 FOR Order.
    DEF BUFFER bfOrderCustomer FOR OrderCustomer.
    DEF BUFFER bfOrderCustomer2 FOR OrderCustomer.
+   DEF BUFFER MobSub FOR MobSub.
 
    DEF VAR lcResult   AS CHAR    NO-UNDO. 
    DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
