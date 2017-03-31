@@ -468,7 +468,10 @@ PROCEDURE pCheckSubscription:
                          ihSub::CLI,
                          RequestAction.ActionKey).
 
-      IF ihSub::MSStatus EQ {&MSSTATUS_FIXED_PROV_ONG} THEN NEXT.
+      IF ihSub::MSStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN NEXT.
+
+      /* TODO: missing partial convergent termination support */
+      IF ihSub::MSStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN NEXT.
    END.
 
    IF ihSub::TariffBundle EQ "" AND
