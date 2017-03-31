@@ -34,6 +34,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF BUFFER bfOrder2 FOR Order.
    DEF BUFFER bfOrderCustomer FOR OrderCustomer.
    DEF BUFFER bfOrderCustomer2 FOR OrderCustomer.
+   DEF BUFFER MobSub FOR MobSub.
 
    DEF VAR lcResult   AS CHAR    NO-UNDO. 
    DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
@@ -118,6 +119,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                            &GLOBAL-DEFINE STAR_EVENT_USER "OrderClose"
                         &ENDIF
                         fUpdatePartialMSOwner(bfOrder.MsSeq, MobSub.FixedNumber).
+                        RELEASE MobSub.
                      END.
                   END. /* IF bfOrder.OrderType EQ */
                END. /* IF fIsConvergenceTariff  */
