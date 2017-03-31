@@ -32,7 +32,7 @@ DEF VAR lcSpoolDir         AS CHAR NO-UNDO.
 DEF VAR lcTransDir         AS CHAR NO-UNDO. 
 DEF VAR ldaFromDate        AS DATE NO-UNDO.
 DEF VAR ldaToDate          AS DATE NO-UNDO.
-DEF VAR ldaPrevFromDate     AS DATE NO-UNDO.
+DEF VAR ldaPrevFromDate    AS DATE NO-UNDO.
 DEF VAR ldPeriodFrom       AS DEC  NO-UNDO.
 DEF VAR ldPeriodFromSTC    AS DEC  NO-UNDO.
 DEF VAR ldPeriodTo         AS DEC  NO-UNDO.
@@ -41,8 +41,9 @@ DEF VAR lcBONOContracts    AS CHAR NO-UNDO.
 DEF VAR ldeStart           AS DEC NO-UNDO. 
 DEF VAR ldeEnd             AS DEC NO-UNDO. 
 DEF VAR liPeriod           AS INT  NO-UNDO.
-DEF VAR liPrevPeriod      AS INT  NO-UNDO.
+DEF VAR liPrevPeriod       AS INT  NO-UNDO.
 DEF VAR liDayOfMonth       AS INT  NO-UNDO.
+DEF VAR liKey              AS INTEGER NO-UNDO.
 
 DEF VAR lcAllowedDSS2SubsType         AS CHAR NO-UNDO.
 DEF VAR lcExcludeBundles              AS CHAR NO-UNDO.
