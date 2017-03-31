@@ -163,6 +163,7 @@ RETURN "".
 END.   
 
 /*Function creates Json entry containing Operational data  status information*/
+/*Todo this is copy - implement new data handling*/
 FUNCTION fGenerateOPDataInfo RETURNS CHAR
    (iiOrderID AS INT,
     icMSISDN AS CHAR,

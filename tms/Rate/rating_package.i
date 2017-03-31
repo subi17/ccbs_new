@@ -140,6 +140,8 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    DEF VAR ldeEndTs              AS DEC NO-UNDO. 
    DEF VAR lcCliTypeList         AS CHAR NO-UNDO.
    DEF VAR lcDSS2CliTypeList     AS CHAR NO-UNDO.
+   DEF VAR llAvailRelaxPackage   AS LOG NO-UNDO.
+
    ASSIGN	
       ttCall.BillCode   = bsub-prod
       lcOrigBillCode    = bsub-prod
@@ -203,6 +205,41 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
          lcNewTypeList  = ""
          llUpsell = FALSE.
 
+      IF BUFFER-TENANT-NAME(MsOwner) = "TMasmovil" THEN
+      DO:
+          /* Check availability of RELAX packages on subscription */
+          FOR EACH  ttServiceLimit NO-LOCK WHERE ttServiceLimit.GroupCode = "BONO_RELAX",
+              FIRST MServiceLimit NO-LOCK WHERE MServiceLimit.MsSeq    = MSOwner.MsSeq        AND
+                                                MServiceLimit.DialType = liDialType           AND
+                                                MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND
+                                                MServiceLimit.FromTS  <= CallTimeStamp        AND
+                                                MServiceLimit.EndTS   >= CallTimeStamp:
+              ASSIGN llAvailRelaxPackage = TRUE.                                        
+          END.                                      
+      END.
+      
+      IF llAvailRelaxPackage THEN 
+      DO liSLGPacket = 1 TO NUM-ENTRIES(lcSLGroupList):       
+         /* Since the list will be already sorted by priority configured on SLGAnalyse. 
+            Also, allowing only service package and bono's, will cause newlist to be with 
+            only base bundle and relax bono, since Masmovil doesnt have any bono's other 
+            than relax bono's */
+         IF LOOKUP(ENTRY(liSLGPacket,lcSLGATypeList),"1,4") = 0 THEN 
+             NEXT.
+
+         FOR EACH  ttServiceLimit NO-LOCK WHERE ttServiceLimit.GroupCode = ENTRY(liSLGPacket,lcSLGroupList),
+             FIRST MServiceLimit NO-LOCK WHERE MServiceLimit.MsSeq    = MSOwner.MsSeq        AND
+                                               MServiceLimit.DialType = liDialType           AND
+                                               MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND
+                                               MServiceLimit.FromTS  <= CallTimeStamp        AND
+                                               MServiceLimit.EndTS   >= CallTimeStamp:
+             ASSIGN 
+                 llUpsell       = FALSE
+                 lcNewGroupList = lcNewGroupList + (IF lcNewGroupList > "" THEN "," ELSE "") + ttServiceLimit.GroupCode 
+                 lcNewTypeList  = lcNewTypeList  + (IF lcNewTypeList  > "" THEN "," ELSE "") + ENTRY(liSLGPacket,lcSLGATypeList).                                           
+         END.          
+      END.
+      ELSE
       DO liSLGPacket = 1 TO NUM-ENTRIES(lcSLGroupList):
       
          IF LOOKUP(ENTRY(liSLGPacket,lcSLGATypeList),"1,4,6") = 0 THEN NEXT.

@@ -165,13 +165,13 @@ FUNCTION fArecExistCheck RETURNS LOGICAL
    liTextPos = index(icResponseDesc, "contrato ").
    IF liTextPos = 0 THEN RETURN FALSE.
    lcContrato = substring(icResponseDesc, liTextPos + 9, 11).
-   IF NOT lcContrato BEGINS "005" THEN RETURN FALSE.
+   IF NOT lcContrato BEGINS "005" OR NOT lcContrato BEGINS "200" THEN RETURN FALSE.
    IF ibMNPProcess.FormRequest NE lcContrato THEN RETURN FALSE.
    
    liTextPos = index(icResponseDesc, "referencia ").
    IF liTextPos = 0 THEN RETURN FALSE. 
    lcRefCode = substring(icResponseDesc, liTextPos + 11, 23).
-   IF NOT lcRefCode BEGINS "005" THEN RETURN FALSE.
+   IF NOT lcRefCode BEGINS "005" OR NOT lcRefCode BEGINS "200" THEN RETURN FALSE.
    IF ibMNPProcess.PortRequest NE lcRefCode AND
       CAN-FIND(FIRST MNPProcess WHERE
                      MNPProcess.PortRequest = lcRefCode) THEN RETURN FALSE.

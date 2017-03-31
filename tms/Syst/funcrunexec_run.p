@@ -9,13 +9,15 @@
 
 {Syst/commali.i}
 {Func/timestamp.i}
+{Func/log.i}
 {Syst/eventlog.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT PARAMETER iiFRExecID AS INT  NO-UNDO.
 DEF INPUT PARAMETER icHost     AS CHAR NO-UNDO.
 
 DEF VAR llNewRun AS LOG  NO-UNDO.
-
+DEF VAR lcTenant AS CHARACTER NO-UNDO. 
 
 FUNCTION fRunTime RETURNS INTEGER
    (icTime AS CHAR):
@@ -90,6 +92,13 @@ PROCEDURE pInitialize:
    DEF BUFFER bFuncExec FOR FuncRunExec.
 
    olNewRun = FALSE.
+   
+   lcTenant = fGetCurrentBrand().
+   IF lcTenant EQ "" THEN DO:
+      lcError = "Unknown or super tenant".
+      fErrorLog(iiFRExecID,lcError).
+      RETURN "ERROR:" + lcError.
+   END.
    
    FIND FIRST FuncRunExec WHERE FuncRunExec.FRExecID = iiFRExecID 
       NO-LOCK NO-ERROR.
@@ -200,6 +209,9 @@ PROCEDURE pLaunchProcesses:
          FuncRunProcess.RunCommand  = REPLACE(FuncRunConfig.RunCommand,
                                             "#PARAM",
                                             STRING(liProcID))
+         FuncRunProcess.RunCommand  = REPLACE(FuncRunProcess.RunCommand,
+                                            "#TENANT",
+                                             STRING(lcTenant))
          FuncRunProcess.StartTS     = fMakeTS().
                        
       /* run here or in another host */

@@ -27,7 +27,6 @@ DEFINE VARIABLE ldeChgStamp   AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE lcProduct     AS CHAR      NO-UNDO. 
 DEFINE VARIABLE lcTariffType  AS CHAR      NO-UNDO. 
 DEFINE VARIABLE lcTenant      AS CHAR      NO-UNDO.
-DEFINE VARIABLE lcAllTenants  AS CHAR      NO-UNDO.
 
 &SCOPED-DEFINE COMPANY_NAME_LIMIT 64   /* Name length limitation send to Nodo Central */
 
@@ -42,12 +41,7 @@ FIND OrderCustomer OF Order WHERE
 
 IF NOT AVAIL OrderCustomer THEN RETURN ("ERROR: OrderCustomer not found " + STRING(iiOrderId)).
 
-ASSIGN 
-    lcAllTenants = fgetTenantNames()
-    lcTenant     = BUFFER-TENANT-NAME(Order).
-
-IF LOOKUP(lcTenant,lcAllTenants) = 0 THEN
-    RETURN ("ERROR: Invalid tenant for order " + STRING(iiOrderId)).
+ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).
 
 FIND FIRST MNPOperator WHERE 
            MNPOperator.Brand = gcBrand AND
@@ -80,7 +74,11 @@ END.
 
 ASSIGN
    liSeq         = NEXT-VALUE(M2MSeq)
-   lcFormRequest = "005" + STRING(liSeq,"99999999").
+   lcFormRequest = (IF lcTenant = {&TENANT_YOIGO} THEN 
+                      "005" 
+                    ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN 
+                      "200" 
+                    ELSE "") + STRING(liSeq,"99999999").
 
 /* mark old rejected processes as closed */
 FOR EACH MNPProcess WHERE
@@ -164,8 +162,8 @@ ASSIGN
    MNPDetails.Surname2     = OrderCustomer.SurName2
    MNPDetails.CompanyName  = OrderCustomer.Company 
    MNPDetails.RequestedTS  = Order.CrStamp 
-   MNPDetails.ReceptorCode = (IF lcTenant = "Default" THEN "005"    ELSE IF lcTenant = "Tmasmovil" THEN "044"    ELSE "")
-   MNPDetails.ReceptorNRN  = (IF lcTenant = "Default" THEN "741111" ELSE IF lcTenant = "Tmasmovil" THEN "735044" ELSE "")  
+   MNPDetails.ReceptorCode = (IF lcTenant = {&TENANT_YOIGO} THEN "005"    ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN "200"    ELSE "")
+   MNPDetails.ReceptorNRN  = (IF lcTenant = {&TENANT_YOIGO} THEN "741111" ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN "745200" ELSE "")  
    MNPDetails.DonorCode    = MNPOperator.OperCode WHEN AVAIL MNPOperator
    MNPDetails.Nationality  = OrderCustomer.Nationality.
 
@@ -207,10 +205,10 @@ PROCEDURE pCreatePortabilityMessageXML:
    lcReqStruct = add_struct(param_toplevel_id, "").
    add_timestamp(lcReqStruct, "fechaSolicitudPorAbonado", Order.CrStamp).
    add_string(lcReqStruct, "codigoOperadorDonante", lcOper).
-   add_string(lcReqStruct, "codigoOperadorReceptor", (IF lcTenant = "Default" THEN 
+   add_string(lcReqStruct, "codigoOperadorReceptor", (IF lcTenant = {&TENANT_YOIGO} THEN 
                                                           "005" 
-                                                      ELSE IF lcTenant = "Tmasmovil" THEN 
-                                                          "044" 
+                                                      ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN 
+                                                          "200" 
                                                       ELSE "")).
    lcAbonado = add_struct(lcReqStruct,"abonado").
 
@@ -236,10 +234,10 @@ PROCEDURE pCreatePortabilityMessageXML:
    END.
 
    add_string(lcReqStruct, "codigoContrato", MNPProcess.FormRequest).
-   add_string(lcReqStruct, "NRNReceptor", (IF lcTenant = "Default" THEN 
+   add_string(lcReqStruct, "NRNReceptor", (IF lcTenant = {&TENANT_YOIGO} THEN 
                                               "741111" 
-                                           ELSE IF lcTenant = "Tmasmovil" THEN 
-                                              "735044" 
+                                           ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN 
+                                              "745200" 
                                            ELSE "")).
    add_timestamp(lcReqStruct, "fechaVentanaCambio", MNPProcess.PortingTime).
   

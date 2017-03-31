@@ -286,7 +286,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
             MNP_OTHER_LOOP:
             FOR EACH bMNPDetails NO-LOCK WHERE
                      bMNPDetails.CustId = MNPDetails.CustId AND
-                     bMNPDetails.DonorCode = "005" AND
+                     (bMNPDetails.DonorCode = "005" OR bMNPDetails.DonorCode = "200") AND
                      bMNPDetails.MNPSeq NE MNPDetails.MNPSeq USE-INDEX CustId,
                FIRST bMNPProcess NO-LOCK WHERE
                      bMNPProcess.MNPSeq = bMNPDetails.MNPSeq AND

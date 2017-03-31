@@ -6,6 +6,7 @@ BDestConfItem
 BDestTrans
 BillItem
 BItemGroup
+BRAND
 BRTestCase
 BRTestCriteria
 BRTestQRow
@@ -92,6 +93,8 @@ TMRItemValue
 TMRLimit
 TMSCodes
 TMSParam
+TMSPass
+TMSUser
 TopupScheme
 TopupSchemeRow
 UserLimit

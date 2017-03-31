@@ -29,6 +29,11 @@ DEFINE VARIABLE llNCTime    AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE liSent      AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE lierrors    AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE lcLogDir    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcURL       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcHost      AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcAddress   AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE liTenant    AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcTenant    AS CHARACTER NO-UNDO.
 
 FORM
    SKIP(1)
@@ -59,13 +64,26 @@ DO WHILE TRUE
    llNCTime = fIsNCSendTime().
 
    IF llNCTime THEN 
-   DO:
+   DO liTenant = 0 TO 1
+      ON ERROR UNDO, THROW:
+
+      ASSIGN lcTenant = (IF liTenant = 0 THEN {&TENANT_YOIGO} ELSE IF liTenant = 1 THEN {&TENANT_MASMOVIL} ELSE "").
+
+      IF lcTenant = "" OR (NOT fsetEffectiveTenantForAllDB(lcTenant)) THEN
+          UNDO, THROW NEW Progress.Lang.AppError("Unable to change tenant. Abort!",1). 
+
+      lcUrl     = fCParam("MNP","MNPSendHost").
+      lcAddress = fCParam("MNP","MNPSendURL").
+      lcHost    = ENTRY(2,lcUrl," ") + ":" + ENTRY(4, lcUrl, " ").
+
+      IF NOT (lcUrl > "" AND lcAddress > "") THEN DO:
+         MESSAGE "Missing MNPSendHost or MNPSendURL TMSParam on tenant '" + lcTenant + "'" VIEW-AS ALERT-BOX.
+         UNDO, THROW NEW Progress.Lang.AppError("Missing MNPSendHost or MNPSendURL TMSParam on tenant '" + lcTenant + "'",1).
+      END.
+
       /* new requests */
-      FOR EACH MNPOperation NO-LOCK WHERE MNPOperation.Sender = 1 AND MNPOperation.StatusCode = {&MNP_MSG_WAITING_SEND} TENANT-WHERE TENANT-ID() >= 0 
+      FOR EACH MNPOperation NO-LOCK WHERE MNPOperation.Sender = 1 AND MNPOperation.StatusCode = {&MNP_MSG_WAITING_SEND} 
          liLoops = 1 TO 60 ON ERROR UNDO, THROW:
-         
-         IF NOT fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(MNPOperation)) THEN
-             UNDO, THROW NEW Progress.Lang.AppError("Unable to change tenant. Abort!",1). 
 
          RUN pSendXML(RECID(MNPOperation)).
          
@@ -109,22 +127,10 @@ PROCEDURE pSendXML:
    DEFINE VARIABLE lcError         AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcResponseBody  AS LONGCHAR  NO-UNDO.
    DEFINE VARIABLE lcRespCode      AS CHAR      NO-UNDO.
-   DEFINE VARIABLE lcURL           AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcHost          AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcAddress       AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE liContentLength AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcHttpHead      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE llcPdfData      AS LONGCHAR.
    DEFINE VARIABLE lmpContents     AS MEMPTR    NO-UNDO. 
-
-   lcUrl     = fCParam("MNP","MNPSendHost").
-   lcAddress = fCParam("MNP","MNPSendURL").
-   lcHost    = ENTRY(2,lcUrl," ") + ":" + ENTRY(4, lcUrl, " ").
-
-   IF NOT (lcUrl > "" AND lcAddress > "") THEN DO:
-      MESSAGE "Missing MNPSendHost or MNPSendURL TMSParam" VIEW-AS ALERT-BOX.
-      UNDO, THROW NEW Progress.Lang.AppError('Missing MNPSendHost or MNPSendURL TMSParam',1).
-   END.
 
    FIND MNPOperation WHERE RECID(MNPOperation) = piRecId EXCLUSIVE-LOCK NO-ERROR.
    

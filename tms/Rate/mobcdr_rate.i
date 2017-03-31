@@ -123,7 +123,10 @@ FUNCTION fAnalBsub RETURNS LOGICAL
 
    CASE ttCall.SpoCMT:
    
-      WHEN 2  THEN mod_bsub  = "INTERNATIONAL".
+      WHEN 2 THEN DO:
+         IF TENANT-NAME("common") EQ {&TENANT_YOIGO} THEN
+            mod_bsub  = "INTERNATIONAL".
+      END. 
       WHEN 1002 THEN mod_bsub  = "INTERNATIONAL".
       WHEN 3  THEN ASSIGN Mod_bsub  = "ROAMINT"   b_type = 0.
       WHEN 4  THEN ASSIGN Mod_bsub  = "ROAMLOCAL" b_type = 1.
