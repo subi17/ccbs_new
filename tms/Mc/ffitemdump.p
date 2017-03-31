@@ -196,6 +196,7 @@ END.
 ASSIGN ldeEnd   = fMakeTs().
 
 OUTPUT STREAM sout CLOSE.
+OUTPUT STREAM fixfeeitem CLOSE.
 
 PROCEDURE p_bundle_first_month:          
 
