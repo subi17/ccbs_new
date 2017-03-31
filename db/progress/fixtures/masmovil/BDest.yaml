@@ -166887,51 +166887,6 @@ bulkload: BDest
   BdestID: 1105
 
 bulkload: BDest
-  BDest: "GPRSDATA2_MM_DATA1024"
-  BDName: "GPRS DATA SLOW"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2017-03-16
-  BdestID: 1095
-
-bulkload: BDest
-  BDest: "GPRSDATA2_MM_DATA2048"
-  BDName: "GPRS DATA SLOW"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2017-03-16
-  BdestID: 1103
-
-bulkload: BDest
-  BDest: "GPRSDATA2_MM_DATA4096"
-  BDName: "GPRS DATA SLOW"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2017-03-16
-  BdestID: 1101
-
-bulkload: BDest
-  BDest: "GPRSDATA2_MM_DATA512"
-  BDName: "GPRS DATA SLOW"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2017-03-16
-  BdestID: 1093
-
-bulkload: BDest
-  BDest: "GPRSDATA2_MM_DATA600"
-  BDName: "GPRS DATA SLOW"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2017-03-22
-  BdestID: 1107
-
-bulkload: BDest
   BDest: "GPRSDATA_MM_BONO_RELAX"
   BDName: "GPRS DATA HIGH"
   CCN: 93
@@ -166939,51 +166894,6 @@ bulkload: BDest
   ToDate: 2049-12-31
   FromDate: 2017-03-22
   BdestID: 1106
-
-bulkload: BDest
-  BDest: "GPRSDATA_MM_DATA1024"
-  BDName: "GPRS DATA HIGH"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2017-03-16
-  BdestID: 1096
-
-bulkload: BDest
-  BDest: "GPRSDATA_MM_DATA2048"
-  BDName: "GPRS DATA HIGH"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2017-03-16
-  BdestID: 1104
-
-bulkload: BDest
-  BDest: "GPRSDATA_MM_DATA4096"
-  BDName: "GPRS DATA HIGH"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2017-03-16
-  BdestID: 1102
-
-bulkload: BDest
-  BDest: "GPRSDATA_MM_DATA512"
-  BDName: "GPRS DATA HIGH"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2017-03-16
-  BdestID: 1094
-
-bulkload: BDest
-  BDest: "GPRSDATA_MM_DATA600"
-  BDName: "GPRS DATA HIGH"
-  CCN: 93
-  Brand: "1"
-  ToDate: 2049-12-31
-  FromDate: 2017-03-22
-  BdestID: 1108
 
 bulkload: BDest
   BDest: "GPRS_MM_1024_UPSELL"
@@ -167021,6 +166931,312 @@ bulkload: BDest
   ToDate: 2049-12-31
   FromDate: 2006-12-01
   BdestID: 620
+
+bulkload: BDest
+  BDest: "MM_CERO_5GB_DATA_IN"
+  BDName: "MM_CERO_5GB DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+  BdestID: 15771
+
+bulkload: BDest
+  BDest: "MM_CERO_5GB_DATA_OUT"
+  BDName: "MM_CERO_5GB DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+  BdestID: 15772
+
+bulkload: BDest
+  BDest: "MM_DATA1024_DATA_IN"
+  BDName: "MM_DATA1024 DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-16
+  BdestID: 15787
+
+bulkload: BDest
+  BDest: "MM_DATA1024_DATA_OUT"
+  BDName: "MM_DATA1024 DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-16
+  BdestID: 15788
+
+bulkload: BDest
+  BDest: "MM_DATA2048_DATA_IN"
+  BDName: "MM_DATA2048 DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-16
+  BdestID: 15789
+
+bulkload: BDest
+  BDest: "MM_DATA2048_DATA_OUT"
+  BDName: "MM_DATA2048 DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-16
+  BdestID: 15790
+
+bulkload: BDest
+  BDest: "MM_DATA4096_DATA_IN"
+  BDName: "MM_DATA4096 DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-16
+  BdestID: 15791
+
+bulkload: BDest
+  BDest: "MM_DATA4096_DATA_OUT"
+  BDName: "MM_DATA4096 DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-16
+  BdestID: 15792
+
+bulkload: BDest
+  BDest: "MM_DATA512_DATA_IN"
+  BDName: "MM_DATA512 DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+  BdestID: 15785
+
+bulkload: BDest
+  BDest: "MM_DATA512_DATA_OUT"
+  BDName: "MM_DATA512 DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-16
+  BdestID: 15786
+
+bulkload: BDest
+  BDest: "MM_DATA600_DATA_IN"
+  BDName: "MM_DATA600 DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-16
+  BdestID: 15793
+
+bulkload: BDest
+  BDest: "MM_DATA600_DATA_OUT"
+  BDName: "MM_DATA600 DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-16
+  BdestID: 15794
+
+bulkload: BDest
+  BDest: "MM_INTVOICE100_VOICE_IN"
+  BDName: "MM_INTVOICE100 VOICE IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-27
+  BdestID: 15795
+
+bulkload: BDest
+  BDest: "MM_INTVOICE100_VOICE_OUT"
+  BDName: "MM_INTVOICE100 VOICE OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-27
+  BdestID: 15796
+
+bulkload: BDest
+  BDest: "MM_MAS_1GB_DATA_IN"
+  BDName: "MM_MAS_1GB DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15773
+
+bulkload: BDest
+  BDest: "MM_MAS_1GB_DATA_OUT"
+  BDName: "MM_MAS_1GB DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15774
+
+bulkload: BDest
+  BDest: "MM_MAS_1GB_VOICE_IN"
+  BDName: "MM_MAS_1GB VOICE IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15775
+
+bulkload: BDest
+  BDest: "MM_MAS_1GB_VOICE_OUT"
+  BDName: "MM_MAS_1GB VOICE OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15776
+
+bulkload: BDest
+  BDest: "MM_MAS_3GB_DATA_IN"
+  BDName: "MM_MAS_3GB DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15777
+
+bulkload: BDest
+  BDest: "MM_MAS_3GB_DATA_OUT"
+  BDName: "MM_MAS_3GB DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15778
+
+bulkload: BDest
+  BDest: "MM_MAS_3GB_VOICE_IN"
+  BDName: "MM_MAS_3GB VOICE IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15779
+
+bulkload: BDest
+  BDest: "MM_MAS_3GB_VOICE_OUT"
+  BDName: "MM_MAS_3GB VOICE OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15780
+
+bulkload: BDest
+  BDest: "MM_MAS_8GB_DATA_IN"
+  BDName: "MM_MAS_8GB DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15781
+
+bulkload: BDest
+  BDest: "MM_MAS_8GB_DATA_OUT"
+  BDName: "MM_MAS_8GB DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15782
+
+bulkload: BDest
+  BDest: "MM_MAS_8GB_VOICE_IN"
+  BDName: "MM_MAS_8GB VOICE IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15783
+
+bulkload: BDest
+  BDest: "MM_MAS_8GB_VOICE_OUT"
+  BDName: "MM_MAS_8GB VOICE OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+  BdestID: 15784
+
+bulkload: BDest
+  BDest: "MM_NET_10GB_DATA_IN"
+  BDName: "MM_NET_10GB DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+  BdestID: 15765
+
+bulkload: BDest
+  BDest: "MM_NET_10GB_DATA_OUT"
+  BDName: "MM_NET_10GB DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+  BdestID: 15766
+
+bulkload: BDest
+  BDest: "MM_NET_20GB_DATA_IN"
+  BDName: "MM_NET_20GB DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+  BdestID: 15767
+
+bulkload: BDest
+  BDest: "MM_NET_20GB_DATA_OUT"
+  BDName: "MM_NET_20GB DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+  BdestID: 15768
+
+bulkload: BDest
+  BDest: "MM_NET_50GB_DATA_IN"
+  BDName: "MM_NET_50GB DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+  BdestID: 15769
+
+bulkload: BDest
+  BDest: "MM_NET_50GB_DATA_OUT"
+  BDName: "MM_NET_50GB DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+  BdestID: 15770
+
+bulkload: BDest
+  BDest: "MM_NET_5GB_DATA_IN"
+  BDName: "MM_NET_5GB DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+  BdestID: 15763
+
+bulkload: BDest
+  BDest: "MM_NET_5GB_DATA_OUT"
+  BDName: "MM_NET_5GB DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+  BdestID: 15764
 
 bulkload: BDest
   BDest: "MM_VOICE100_VOICE_IN"

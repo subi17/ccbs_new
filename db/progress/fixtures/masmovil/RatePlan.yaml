@@ -8,3 +8,18 @@ bulkload: RatePlan
   RPName: "Tarifa Cero"
   Brand: "1"
 
+bulkload: RatePlan
+  RatePlan: "MM_CERO_MAS"
+  RPName: "Tarifa Mas 0 + 5 GB"
+  Brand: "1"
+
+bulkload: RatePlan
+  RatePlan: "MM_MAS"
+  RPName: "Tarifa Mas 1 GB"
+  Brand: "1"
+
+bulkload: RatePlan
+  RatePlan: "MM_NET"
+  RPName: "Tarifa Internet Total 5 GB"
+  Brand: "1"
+

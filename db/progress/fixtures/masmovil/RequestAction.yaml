@@ -603,3 +603,171 @@ bulkload: RequestAction
   PayType: 1
   RequestActionID: 659
 
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "MM_NET_5GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_NET_5GB"
+  Action: 1
+  RequestActionID: 660
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "MM_NET_5GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_NET_5GB"
+  Action: 1
+  RequestActionID: 661
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "MM_NET_10GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_NET_10GB"
+  Action: 1
+  RequestActionID: 662
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "MM_NET_10GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_NET_10GB"
+  Action: 1
+  RequestActionID: 663
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "MM_NET_20GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_NET_20GB"
+  Action: 1
+  RequestActionID: 664
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "MM_NET_20GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_NET_20GB"
+  Action: 1
+  RequestActionID: 665
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "MM_NET_50GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_NET_50GB"
+  Action: 1
+  RequestActionID: 666
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "MM_NET_50GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_NET_50GB"
+  Action: 1
+  RequestActionID: 667
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "MM_CERO_5GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_CERO_5GB"
+  Action: 1
+  RequestActionID: 668
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "MM_CERO_5GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_CERO_5GB"
+  Action: 1
+  RequestActionID: 669
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "MM_MAS_1GB"
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_MAS_1GB"
+  Action: 1
+  RequestActionID: 670
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "MM_MAS_1GB"
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_MAS_1GB"
+  Action: 1
+  RequestActionID: 671
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "MM_MAS_3GB"
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_MAS_3GB"
+  Action: 1
+  RequestActionID: 672
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "MM_MAS_3GB"
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_MAS_3GB"
+  Action: 1
+  RequestActionID: 673
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "MM_MAS_8GB"
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_MAS_8GB"
+  Action: 1
+  RequestActionID: 674
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "MM_MAS_8GB"
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "MM_MAS_8GB"
+  Action: 1
+  RequestActionID: 675
+

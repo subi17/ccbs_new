@@ -143,11 +143,83 @@ bulkload: DCServiceComponent
   DCServiceComponentID: 87
 
 bulkload: DCServiceComponent
-  DCServicePackageID: 75
+  DCServicePackageID: 76
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "#CLITYPE#MM_DATA600"
-  FromDate: 2017-03-22
+  DefParam: "MM_CERO#ADDBUNDLE"
+  FromDate: 2017-03-23
   ToDate: 2049-12-31
-  DCServiceComponentID: 88
+  DCServiceComponentID: 89
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 77
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_NET_10GB#ADDBUNDLE"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 90
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 78
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_NET_5GB#ADDBUNDLE"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 91
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 79
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_NET_20GB#ADDBUNDLE"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 92
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 80
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_NET_50GB#ADDBUNDLE"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 93
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 81
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_CERO_5GB#ADDBUNDLE"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 94
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 82
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_MAS_1GB#ADDBUNDLE"
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  DCServiceComponentID: 95
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 83
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_MAS_3GB#ADDBUNDLE"
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  DCServiceComponentID: 96
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 84
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_MAS_8GB#ADDBUNDLE"
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  DCServiceComponentID: 97
 

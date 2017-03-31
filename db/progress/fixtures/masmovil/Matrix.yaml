@@ -20,6 +20,62 @@ bulkload: Matrix
   Prior: 2
 
 bulkload: Matrix
+  MXName: "MM_NET_5GB"
+  MXKey: "PERCONTR"
+  MXSeq: 839
+  MXRes: 1
+  Prior: 3
+
+bulkload: Matrix
+  MXName: "MM_NET_10GB"
+  MXKey: "PERCONTR"
+  MXSeq: 840
+  MXRes: 1
+  Prior: 4
+
+bulkload: Matrix
+  MXName: "MM_NET_20GB"
+  MXKey: "PERCONTR"
+  MXSeq: 841
+  MXRes: 1
+  Prior: 5
+
+bulkload: Matrix
+  MXName: "MM_NET_50GB"
+  MXKey: "PERCONTR"
+  MXSeq: 842
+  MXRes: 1
+  Prior: 6
+
+bulkload: Matrix
+  MXName: "MM_CERO_5GB"
+  MXKey: "PERCONTR"
+  MXSeq: 843
+  MXRes: 1
+  Prior: 7
+
+bulkload: Matrix
+  MXName: "MM_MAS_1GB"
+  MXKey: "PERCONTR"
+  MXSeq: 844
+  MXRes: 1
+  Prior: 8
+
+bulkload: Matrix
+  MXName: "MM_MAS_3GB"
+  MXKey: "PERCONTR"
+  MXSeq: 845
+  MXRes: 1
+  Prior: 9
+
+bulkload: Matrix
+  MXName: "MM_MAS_8GB"
+  MXKey: "PERCONTR"
+  MXSeq: 846
+  MXRes: 1
+  Prior: 10
+
+bulkload: Matrix
   MXName: "ST CHANGE"
   MXKey: "STC-IDType"
   MXSeq: 1

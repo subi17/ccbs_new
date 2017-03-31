@@ -26,3 +26,131 @@ bulkload: CLIType
   LineType: 0
   BaseBundle: "MM_CERO"
 
+bulkload: CLIType
+  Clitype: "MM_CERO_5GB"
+  CliName: "Tarifa Mas 0 + 5 GB"
+  BillTarget: 7
+  PricePlan: "MM_CERO_MAS"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 7
+  CompareFee: 13.967
+  ArAccNum: 43000000
+  PayType: 1
+  CommercialFee: 13.967
+  LineType: 0
+  UsageType: 2
+  BaseBundle: "MM_CERO_5GB"
+
+bulkload: CLIType
+  Clitype: "MM_MAS_1GB"
+  CliName: "Tarifa Mas 1 GB"
+  BillTarget: 8
+  PricePlan: "MM_MAS"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 8
+  CompareFee: 13.967
+  ArAccNum: 43000000
+  PayType: 1
+  CommercialFee: 13.967
+  LineType: 0
+  UsageType: 2
+  BaseBundle: "MM_MAS_1GB"
+
+bulkload: CLIType
+  Clitype: "MM_MAS_3GB"
+  CliName: "Tarifa Mas 3 GB"
+  BillTarget: 9
+  PricePlan: "MM_MAS"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 9
+  CompareFee: 16.446
+  ArAccNum: 43000000
+  PayType: 1
+  CommercialFee: 16.446
+  LineType: 0
+  UsageType: 2
+  BaseBundle: "MM_MAS_3GB"
+
+bulkload: CLIType
+  Clitype: "MM_MAS_8GB"
+  CliName: "Tarifa Mas 8 GB"
+  BillTarget: 10
+  PricePlan: "MM_MAS"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 10
+  CompareFee: 22.231
+  ArAccNum: 43000000
+  PayType: 1
+  CommercialFee: 22.231
+  LineType: 0
+  UsageType: 2
+  BaseBundle: "MM_MAS_8GB"
+
+bulkload: CLIType
+  Clitype: "MM_NET_10GB"
+  CliName: "Tarifa Internet Total 10 GB"
+  BillTarget: 4
+  PricePlan: "MM_NET"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 4
+  CompareFee: 24.711
+  ArAccNum: 43000000
+  PayType: 1
+  CommercialFee: 24.711
+  LineType: 0
+  UsageType: 2
+  BaseBundle: "MM_NET_10GB"
+
+bulkload: CLIType
+  Clitype: "MM_NET_20GB"
+  CliName: "Tarifa Internet Total 20 GB"
+  BillTarget: 5
+  PricePlan: "MM_NET"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 5
+  CompareFee: 32.975
+  ArAccNum: 43000000
+  PayType: 1
+  CommercialFee: 32.975
+  LineType: 0
+  UsageType: 2
+  BaseBundle: "MM_NET_20GB"
+
+bulkload: CLIType
+  Clitype: "MM_NET_50GB"
+  CliName: "Tarifa Internet Total 50 GB"
+  BillTarget: 6
+  PricePlan: "MM_NET"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 6
+  CompareFee: 74.298
+  ArAccNum: 43000000
+  PayType: 1
+  CommercialFee: 74.298
+  LineType: 0
+  UsageType: 2
+  BaseBundle: "MM_NET_50GB"
+
+bulkload: CLIType
+  Clitype: "MM_NET_5GB"
+  CliName: "Tarifa Internet Total 5 GB"
+  BillTarget: 3
+  PricePlan: "MM_NET"
+  ServicePack: "11"
+  Brand: "1"
+  ContrType: 3
+  CompareFee: 16.446
+  ArAccNum: 43000000
+  PayType: 1
+  CommercialFee: 16.446
+  LineType: 0
+  UsageType: 2
+  BaseBundle: "MM_NET_5GB"
+

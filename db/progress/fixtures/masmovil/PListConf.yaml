@@ -14,3 +14,27 @@ bulkload: PListConf
   RatePlan: "MM_CERO"
   Brand: "1"
 
+bulkload: PListConf
+  dFrom: 2017-02-22
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "MM_CERO_MAS"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2017-02-22
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "MM_MAS"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2017-02-22
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "MM_NET"
+  Brand: "1"
+

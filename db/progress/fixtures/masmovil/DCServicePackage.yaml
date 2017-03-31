@@ -136,9 +136,73 @@ bulkload: DCServicePackage
 
 bulkload: DCServicePackage
   Brand: "1"
-  DCEvent: "MM_DATA600"
-  DCServicePackageID: 75
+  DCEvent: "MM_CERO"
+  DCServicePackageID: 76
   ServPac: "SHAPER"
-  FromDate: 2017-03-22
+  FromDate: 2017-02-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_NET_10GB"
+  DCServicePackageID: 77
+  ServPac: "SHAPER"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_NET_5GB"
+  DCServicePackageID: 78
+  ServPac: "SHAPER"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_NET_20GB"
+  DCServicePackageID: 79
+  ServPac: "SHAPER"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_NET_50GB"
+  DCServicePackageID: 80
+  ServPac: "SHAPER"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_CERO_5GB"
+  DCServicePackageID: 81
+  ServPac: "SHAPER"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_MAS_1GB"
+  DCServicePackageID: 82
+  ServPac: "SHAPER"
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_MAS_3GB"
+  DCServicePackageID: 83
+  ServPac: "SHAPER"
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MM_MAS_8GB"
+  DCServicePackageID: 84
+  ServPac: "SHAPER"
+  FromDate: 2017-03-24
   ToDate: 2049-12-31
 

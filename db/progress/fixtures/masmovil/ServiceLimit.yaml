@@ -59,15 +59,27 @@ bulkload: ServiceLimit
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
-  GroupCode: "MM_DATA1024"
-  SLSeq: 71
+  GroupCode: "MM_CERO_5GB"
+  SLSeq: 83
   WebDisp: 0
   DialType: 7
-  SLCode: "MM_DATA1024"
+  SLCode: "MM_CERO_5GB_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 5120
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_DATA1024"
+  SLSeq: 91
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_DATA1024_DATA"
   SLName: "Data"
   InclUnit: 4
   InclAmt: 1024
-  ValidFrom: 2017-03-16
+  ValidFrom: 2017-03-23
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
@@ -84,26 +96,26 @@ bulkload: ServiceLimit
 
 bulkload: ServiceLimit
   GroupCode: "MM_DATA4096"
-  SLSeq: 75
+  SLSeq: 92
   WebDisp: 0
   DialType: 7
-  SLCode: "MM_DATA4096"
+  SLCode: "MM_DATA4096_DATA"
   SLName: "Data"
   InclUnit: 4
   InclAmt: 4096
   ValidFrom: 2017-03-16
-  ValidTo: 2049-12-31
+  ValidTo: 2020-12-31
 
 bulkload: ServiceLimit
   GroupCode: "MM_DATA512"
-  SLSeq: 70
+  SLSeq: 90
   WebDisp: 0
   DialType: 7
-  SLCode: "MM_DATA512"
+  SLCode: "MM_DATA512_DATA"
   SLName: "Data"
   InclUnit: 4
   InclAmt: 512
-  ValidFrom: 2017-03-16
+  ValidFrom: 2017-03-23
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
@@ -116,6 +128,135 @@ bulkload: ServiceLimit
   InclUnit: 4
   InclAmt: 600
   ValidFrom: 2017-03-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_INTVOICE100"
+  SLSeq: 93
+  WebDisp: 0
+  DialType: 4
+  SLCode: "MM_INTVOICE100_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 100
+  ValidFrom: 2017-03-27
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_MAS_1GB"
+  SLSeq: 84
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_MAS_1GB_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 1024
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_MAS_1GB"
+  SLSeq: 85
+  WebDisp: 0
+  SLCode: "MM_MAS_1GB_QTY"
+  SLName: "BDest"
+  InclUnit: 7
+  InclAmt: 300
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_MAS_3GB"
+  SLSeq: 86
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_MAS_3GB_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 3072
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_MAS_3GB"
+  SLSeq: 87
+  WebDisp: 0
+  SLCode: "MM_MAS_3GB_QTY"
+  SLName: "BDest"
+  InclUnit: 7
+  InclAmt: 300
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_MAS_8GB"
+  SLSeq: 88
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_MAS_8GB_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 8192
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_MAS_8GB"
+  SLSeq: 89
+  WebDisp: 0
+  SLCode: "MM_MAS_8GB_QTY"
+  SLName: "BDest"
+  InclUnit: 7
+  InclAmt: 300
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_NET_10GB"
+  SLSeq: 80
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_NET_10GB_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 10240
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_NET_20GB"
+  SLSeq: 81
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_NET_20GB_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 20480
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_NET_50GB"
+  SLSeq: 82
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_NET_50GB_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 51200
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_NET_5GB"
+  SLSeq: 79
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_NET_5GB_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 5120
+  ValidFrom: 2017-03-23
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit

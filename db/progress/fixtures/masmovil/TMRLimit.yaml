@@ -12,18 +12,6 @@ bulkload: TMRLimit
 
 bulkload: TMRLimit
   TMRuleSeq: 1
-  FromDate: 2008-05-01
-  ToDate: 2008-11-11
-  LimitID: 1
-  ValueType: 1
-  LimitAmt: 70
-  Action: 35
-  SMSText: "PREMIUMFRAUD1"
-  MaxValue: 1000
-  ActionParam: "Y_HURP"
-
-bulkload: TMRLimit
-  TMRuleSeq: 1
   FromDate: 2008-11-12
   ToDate: 2049-12-31
   LimitID: 2
@@ -33,18 +21,6 @@ bulkload: TMRLimit
   SMSText: "PREMIUMFRAUD2"
   MaxValue: 5000
   ActionParam: "Limits_Restricted"
-
-bulkload: TMRLimit
-  TMRuleSeq: 1
-  FromDate: 2008-05-01
-  ToDate: 2008-11-11
-  LimitID: 2
-  ValueType: 1
-  LimitAmt: 100
-  Action: 35
-  SMSText: "PREMIUMFRAUD2"
-  MaxValue: 1000
-  ActionParam: "Y_REST"
 
 bulkload: TMRLimit
   TMRuleSeq: 3
@@ -92,17 +68,6 @@ bulkload: TMRLimit
   SMSText: "INTERNATFRAUD2"
   MaxValue: 1000
   ActionParam: "Limits_Restricted"
-
-bulkload: TMRLimit
-  TMRuleSeq: 4
-  FromDate: 2008-10-13
-  ToDate: 2008-11-11
-  LimitID: 2
-  ValueType: 1
-  LimitAmt: 60
-  Action: 35
-  MaxValue: 999
-  ActionParam: "Y_SARC"
 
 bulkload: TMRLimit
   TMRuleSeq: 7
