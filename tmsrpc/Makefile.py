@@ -6,17 +6,12 @@ from subprocess import call, Popen, PIPE
 from socket import gethostname
 from string import Template
 
-def pikecheck():
-    output = Popen(['which', 'pike'], stdout=PIPE, stderr=PIPE).communicate()
-    pike = output[0].strip()
-    if not pike:
-        raise PikeException(output[1])
-    return pike
-
-pike = pikecheck()
-
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
+
+pike = which('pike')
+if pike == None:
+    raise PikeException("Cannot figure out pike location")
 
 if environment == 'development':
     configfile = 'development_config.json'
@@ -129,7 +124,7 @@ def start(*a):
         if os.path.exists(pidfile):
             print('No need to start already running daemon ' + lighttpd)
         else:
-            call(['lighttpd', '-f', state_base + lighttpd + '.conf'])
+            call([lighttpd_location, '-f', state_base + lighttpd + '.conf'])
             if not os.path.exists(pidfile):
                 raise PikeException('Failed, no pidfile ' + pidfile + ' found')
             print('STARTED daemon ' + lighttpd)
