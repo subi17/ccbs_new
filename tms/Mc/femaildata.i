@@ -2036,6 +2036,7 @@ PROCEDURE pGetCTNAME:
                               ELSE "<br/>25 GB/mes extra gratis durante 6 meses").
        END.
        ELSE IF Order.CliType EQ "CONT25" AND /* April promotion */
+               NOT llAddLineDiscount     AND
               (Order.Crstamp >= fCParamDe("March2017AprilFromDate") AND /* 20170403 */
                Order.Crstamp < fCParamDe("March2017PromoToDate")) THEN DO:
           lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>25 GB/mes extra free during 6 months"
@@ -2044,7 +2045,7 @@ PROCEDURE pGetCTNAME:
 
        IF ldeMFWithTax > 0 THEN DO:
           IF llAddLineDiscount THEN
-             lcList = lcList + "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
+             lcList = lcList + (IF lcList > "" THEN ",<br/>" ELSE "") + "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
                       TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
                       (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>" + TRIM(STRING(ldDiscValue,"99"))+ "% DTO. para siempre".
           ELSE
