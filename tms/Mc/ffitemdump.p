@@ -179,7 +179,7 @@ DO:
 END.
 
 FOR EACH ttData NO-LOCK:
-   PUT STREAM sout UNFORMATTED 
+   PUT STREAM fixfeeitem UNFORMATTED 
        ttData.FFItemNum  "," 
        ttData.FFNum      "," 
        ttData.custnum    "," 
