@@ -231,7 +231,7 @@ DO TRANS:
 END.
 
 /*Actual execution:*/
-ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute*/
+ldCollPeriodEndTS = fSecOffSet(ldCampaignStart, -60). /*Now - 1 minute*/
 fCollect(ldCampaignStart, (ldCampaignEnd + 15)). /*Select orders that need activation, 
                                                   additional 15 days is done to be sure
                                                   that also delayed activations are found*/
