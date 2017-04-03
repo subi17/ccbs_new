@@ -250,13 +250,9 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
    IF pcContractId = "" OR pcContractId = ? THEN
       RETURN appl_err("Contract Id is blank or unknown").
 
-   IF fHasConvergenceTariff(piMsSeq) AND
-       CAN-FIND(FIRST MobSub WHERE
-                      MobSub.MsSeq EQ piMsSeq AND
-                      Mobsub.cli   NE Mobsub.fixednumber NO-LOCK) THEN
-       RETURN appl_err("Active MSISDN in convergent tarif").
-   ELSE IF CAN-FIND(FIRST MobSub WHERE
-                          MobSub.MsSeq = piMsSeq NO-LOCK) THEN
+   IF NOT fHasConvergenceTariff(piMsSeq) AND
+      CAN-FIND(FIRST MobSub WHERE
+                     MobSub.MsSeq = piMsSeq NO-LOCK) THEN
       RETURN appl_err("Subscription is alreay active").
 
    IF CAN-FIND(FIRST MobSub WHERE
