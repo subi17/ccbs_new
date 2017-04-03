@@ -48,7 +48,7 @@ DEF STREAM sLogFile.
 
 llgSimulate = FALSE. /*TRUE-> only log writing, FALSE->make real updates*/
 lcTableName = "March2017Promo". /*For execution lock*/
-lcActionId = "UpsellForAzul". /*For execution lock*/
+lcActionId = "UpsellForAzulMonthly". /*For execution lock*/
 ldCampaignStart = 20170301. /*Dates when order must be done */
 ldCampaignEnd = 20170401. /*Dates when order must be done */
 lcUpsell = "FLEX_UPSELL". /*Upsell that will be aded in the promo*/
