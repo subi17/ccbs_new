@@ -10,6 +10,7 @@
                    subscription_limit;int;mandatory;
                    reason;string;optional;possible fail reason, returned if order_allowed = false
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
+                   dss_allowed;string;mandatory;OK;DSS_NOT_ALLOWED
  */
 
 {xmlrpc/xmlrpc_access.i}
@@ -17,6 +18,7 @@
 {Syst/commpaa.i}
 {Func/orderchk.i}
 gcBrand = "1".
+{Func/fdss.i}
 
 /* Input parameters */
 DEF VAR pcPersonId       AS CHAR NO-UNDO.
@@ -25,14 +27,19 @@ DEF VAR plSelfEmployed   AS LOG  NO-UNDO.
 DEF VAR piOrders         AS INT  NO-UNDO. 
 
 /* Local variable */
-DEF VAR llOrderAllowed   AS LOG  NO-UNDO.
-DEF VAR lcReason         AS CHAR NO-UNDO.
-DEF VAR lcReturnStruct   AS CHAR NO-UNDO.
-DEF VAR liSubLimit       AS INT  NO-UNDO.
-DEF VAR lisubs           AS INT NO-UNDO. 
-DEF VAR lcAddLineAllowed AS CHAR NO-UNDO. 
-DEF VAR liActLimit       AS INT  NO-UNDO.
-DEF VAR liacts           AS INT NO-UNDO.
+DEF VAR llOrderAllowed     AS LOG  NO-UNDO.
+DEF VAR lcReason           AS CHAR NO-UNDO.
+DEF VAR lcReturnStruct     AS CHAR NO-UNDO.
+DEF VAR liSubLimit         AS INT  NO-UNDO.
+DEF VAR lisubs             AS INT  NO-UNDO. 
+DEF VAR lcAddLineAllowed   AS CHAR NO-UNDO. 
+DEF VAR liActLimit         AS INT  NO-UNDO.
+DEF VAR liacts             AS INT  NO-UNDO.
+DEF VAR lcDSSAllowed       AS CHAR NO-UNDO.
+DEF VAR ldeCurrMonthLimit  AS DEC  NO-UNDO.
+DEF VAR ldeConsumedData    AS DEC  NO-UNDO.
+DEF VAR ldeOtherMonthLimit AS DEC  NO-UNDO.
+DEF VAR lcResult           AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,boolean,int") EQ ?
    THEN RETURN.
@@ -100,6 +107,30 @@ END.
 
 IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
 
+/* ADDLINE-23 Additional Line DSS Check */
+FIND FIRST Customer NO-LOCK WHERE
+           Customer.Brand      = gcBrand    AND
+           Customer.OrgID      = pcPersonId AND
+           Customer.CustIDType = pcIdType   AND
+           Customer.Roles     NE "inactive" NO-ERROR.
+IF AVAILABLE Customer THEN DO:
+
+   IF fIsDSSAllowed(INPUT  Customer.CustNum,
+                    INPUT  0,
+                    INPUT  fMakeTS(),
+                    INPUT  {&DSS},
+                    INPUT  "",
+                    OUTPUT ldeCurrMonthLimit,
+                    OUTPUT ldeConsumedData,
+                    OUTPUT ldeOtherMonthLimit,
+                    OUTPUT lcResult) THEN
+      lcDSSAllowed = "OK".
+   ELSE
+      lcDSSAllowed = lcResult.
+END.
+
+IF lcDSSAllowed = "" THEN lcDSSAllowed = "DSS_NOT_ALLOWED".
+
 lcReturnStruct = add_struct(response_toplevel_id, "").
 add_boolean(lcReturnStruct, 'order_allowed', llOrderAllowed).
 add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
@@ -115,6 +146,7 @@ IF liActs >= liActLimit THEN
 ELSE
    add_boolean(lcReturnStruct,"activation_limit_reached",FALSE).
 
+add_string(lcReturnStruct, 'dss_allowed', lcDSSAllowed).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
