@@ -1,59 +1,6 @@
 bulkload: ServEl
-  ServPac: ""
-  ServCom: ""
-  SeValue: 0
-  Brand: ""
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "BAIC"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "BAOC"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "BOIC"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "CALLSPEC"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "CAMPAIGN"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "CCGW"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
   ServPac: "*1"
   ServCom: "CF"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "CLIP"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "CLIR"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "GPRS"
   Brand: "1"
 
 bulkload: ServEl
@@ -64,111 +11,7 @@ bulkload: ServEl
 
 bulkload: ServEl
   ServPac: "*1"
-  ServCom: "IVR"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "KEEP"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "LANG"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "MMS"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "NAM"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "NTFNBR"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "NUMBERINQ"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "OBA"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "OBI"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "OBO"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "OBOPRE"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "OBOPRI"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "OBR"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "TS21"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "TS22"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
-  ServCom: "TYPECHG"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*1"
   ServCom: "VMS"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "BAIC"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "BAOC"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "BOIC"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "CCGW"
   SeValue: 1
   Brand: "1"
 
@@ -179,83 +22,31 @@ bulkload: ServEl
 
 bulkload: ServEl
   ServPac: "*2"
-  ServCom: "CLIP"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "CLIR"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "GPRS"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
   ServCom: "IRDCUTOFF"
   SeValue: 1
   Brand: "1"
 
 bulkload: ServEl
   ServPac: "*2"
-  ServCom: "LANG"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "MMS"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "NAM"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "OBA"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "OBOPRE"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "OBOPRI"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "OBR"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "TS21"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "TS22"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
-  ServCom: "TYPECHG"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "*2"
   ServCom: "VMS"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "BARRING"
+  ServCom: "BARRING"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "BARRING"
+  ServCom: "BPSUB"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "BARRING"
+  ServCom: "HOTLINE"
   SeValue: 1
   Brand: "1"
 
@@ -263,17 +54,6 @@ bulkload: ServEl
   ServPac: "BB"
   ServCom: "BB"
   SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "BPSUB"
-  ServCom: "BPSUB"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "HSDPA"
-  ServCom: "HSDPA"
   Brand: "1"
 
 bulkload: ServEl
@@ -299,23 +79,6 @@ bulkload: ServEl
   Brand: "1"
 
 bulkload: ServEl
-  ServPac: "OI_SMSB20"
-  ServCom: "SMSBUNDLE"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "PREP_VOICE"
-  ServCom: "TEMPLATE"
-  SeValue: 1
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "SEC"
-  ServCom: "SOCLIR"
-  Brand: "1"
-
-bulkload: ServEl
   ServPac: "SHAPER"
   ServCom: "SHAPER"
   SeValue: 1
@@ -335,39 +98,7 @@ bulkload: ServEl
 
 bulkload: ServEl
   ServPac: "TMSSERVICE"
-  ServCom: "SMSINVOICE"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "TMSSERVICE"
   ServCom: "TYPECHG"
   SeValue: 1
   Brand: "1"
-
-bulkload: ServEl
-  ServPac: "UNSEC"
-  ServCom: "SOCLIR"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "VOIPVIDEO"
-  ServCom: "VOIPVIDEO"
-  Brand: "1"
-
-bulkload: ServEl
-  ServPac: "TESTI"
-  ServCom: "HES"
-  SeValue: 1
-  Brand: "2"
-
-bulkload: ServEl
-  ServPac: "TESTI"
-  ServCom: "KLU"
-  SeValue: 1
-  Brand: "2"
-
-bulkload: ServEl
-  ServPac: "TESTI"
-  ServCom: "VES"
-  Brand: "2"
 

@@ -9,18 +9,13 @@ bulkload: ServPac
   Brand: "1"
 
 bulkload: ServPac
+  ServPac: "BARRING"
+  SPName: "Barring components"
+  Brand: "1"
+
+bulkload: ServPac
   ServPac: "BB"
   SPName: "BlackBerry"
-  Brand: "1"
-
-bulkload: ServPac
-  ServPac: "BPSUB"
-  SPName: "BarPremium subscription"
-  Brand: "1"
-
-bulkload: ServPac
-  ServPac: "HSDPA"
-  SPName: "High speed data"
   Brand: "1"
 
 bulkload: ServPac
@@ -44,21 +39,6 @@ bulkload: ServPac
   Brand: "1"
 
 bulkload: ServPac
-  ServPac: "OI_SMSB20"
-  SPName: "SMS Bundle with 20 initial"
-  Brand: "1"
-
-bulkload: ServPac
-  ServPac: "PREP_VOICE"
-  SPName: "Prepaid Voice Service"
-  Brand: "1"
-
-bulkload: ServPac
-  ServPac: "SEC"
-  SPName: "SEC Secret number"
-  Brand: "1"
-
-bulkload: ServPac
   ServPac: "SHAPER"
   SPName: "Data shaper"
   Brand: "1"
@@ -67,24 +47,4 @@ bulkload: ServPac
   ServPac: "TMSService"
   SPName: "Basic Profile TMS"
   Brand: "1"
-
-bulkload: ServPac
-  ServPac: "UNSEC"
-  SPName: "UNSEC UnSecret number"
-  Brand: "1"
-
-bulkload: ServPac
-  ServPac: "VOIPVIDEO"
-  SPName: "VOIP service"
-  Brand: "1"
-
-bulkload: ServPac
-  ServPac: "*1"
-  SPName: "Default profiili"
-  Brand: "2"
-
-bulkload: ServPac
-  ServPac: "TESTI"
-  SPName: "STARNET testipaketti"
-  Brand: "2"
 
