@@ -633,22 +633,46 @@ FUNCTION fIsDSSAllowed RETURNS LOG
     OUTPUT odeConsumedData      AS DEC,
     OUTPUT odeOtherMonthLimit   AS DEC,
     OUTPUT ocResult             AS CHAR):
-   
-   FIND FIRST MobSub WHERE
-              MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
-   IF NOT AVAILABLE MobSub THEN DO:
-      ocResult = "MobSub not found".
-      RETURN FALSE.
-   END. /* IF NOT AVAILABLE MobSub THEN DO: */
 
-   IF fMatrixAnalyse(gcBrand,
-                     "PERCONTR",
-                     "PerContract;SubsTypeTo",
-                     icBundleId + ";" + MobSub.CLIType,
-                     OUTPUT ocResult) NE 1 THEN DO:
-      ocResult = "ERROR:Contract is not allowed for this subscription type".
-      RETURN FALSE.
-   END. /* IF fMatrixAnalyse(gcBrand */
+   DEF VAR liSubCount AS INT NO-UNDO.
+
+   DEFINE BUFFER lbMobSub FOR MobSub.
+
+   IF iiMsSeq > 0 THEN DO:
+      FIND FIRST MobSub WHERE
+                 MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAILABLE MobSub THEN DO:
+         ocResult = "MobSub not found".
+         RETURN FALSE.
+      END. /* IF NOT AVAILABLE MobSub THEN DO: */
+
+      IF fMatrixAnalyse(gcBrand,
+                        "PERCONTR",
+                        "PerContract;SubsTypeTo",
+                        icBundleId + ";" + MobSub.CLIType,
+                        OUTPUT ocResult) NE 1 THEN DO:
+         ocResult = "ERROR:Contract is not allowed for this subscription type".
+         RETURN FALSE.
+      END. /* IF fMatrixAnalyse(gcBrand */
+   END.
+
+   FIND FIRST Customer NO-LOCK WHERE
+              Customer.CustNum = iiCustNum NO-ERROR.
+   IF AVAILABLE Customer THEN DO:
+
+      FOR EACH lbMobSub NO-LOCK WHERE
+               lbMobSub.Brand     = gcBrand          AND
+               lbMobSub.CustNum   = Customer.CustNum AND
+               lbMobSub.PayType   = FALSE            AND
+               lbMobSub.SalesMan NE "GIFT":
+         liSubCount = liSubCount + 1.
+      END.
+
+      IF NOT fCheckExistConvergentOR2P(Customer.CustIDType, Customer.OrgID) AND
+         liSubCount < 2 THEN
+         RETURN FALSE.
+         
+   END.
 
    RETURN fIsDSSAllowedForCustomer(INPUT iiCustnum,
                                    INPUT ideActStamp,

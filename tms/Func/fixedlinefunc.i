@@ -267,4 +267,33 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
 
 END FUNCTION.
 
+
+FUNCTION fCheckExistConvergentOR2P RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR):
+
+   DEFINE BUFFER bCustomer FOR Customer.
+   DEFINE BUFFER bMobSub   FOR MobSub.
+
+   FOR FIRST bCustomer WHERE
+             bCustomer.Brand      = Syst.Parameters:gcBrand AND
+             bCustomer.OrgId      = icCustID                AND
+             bCustomer.CustidType = icCustIDType            AND
+             bCustomer.Roles     NE "inactive"              NO-LOCK,
+       EACH  bMobSub NO-LOCK WHERE
+             bMobSub.Brand    = Syst.Parameters:gcBrand AND
+             bMobSub.InvCust  = bCustomer.CustNum       AND
+             bMobSub.PayType  = FALSE                   AND
+            (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}      OR
+             bMobSub.MsStatus = {&MSSTATUS_BARRED}):
+    
+      IF fIsConvergentORFixedOnly(bMobSub.CLIType) THEN 
+         RETURN TRUE.
+
+   END.   
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 &ENDIF
