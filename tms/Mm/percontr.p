@@ -2444,25 +2444,25 @@ PROCEDURE pContractTermination:
             FMItem.FromDate <= FixedFee.BegDate AND
             FMItem.ToDate   >= FixedFee.BegDate:
       
-      IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
-         FixedFee.SourceKey NE STRING(DCCLI.PerContractID) THEN NEXT.   
+      IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND FixedFee.SourceKey NE STRING(DCCLI.PerContractID) THEN 
+          NEXT.   
 
       /* If last month is usage based and bundle termination is   */
       /* not full month then fee will be calculated based on usage */
       /* Subscription is not part of DSS */
-      IF MsRequest.ActStamp < ldeLastDayofMonthStamp AND
-         llPostpaidBundleTerm = FALSE AND
-         LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 THEN DO:
-         IF FMItem.BrokenRental = 0 THEN llChargeUsageBased = FALSE.
-         ELSE IF FMItem.BrokenRental = 2 THEN llChargeUsageBased = TRUE.
-         ELSE IF MsRequest.OrigRequest > 0 THEN DO:
-            FIND FIRST bMsRequest WHERE
-                       bMsRequest.MsRequest = MsRequest.OrigRequest
-                 NO-LOCK NO-ERROR.
-            IF AVAIL bMsRequest AND
-               (bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
-                bMsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}) THEN
-               llChargeUsageBased = TRUE.
+      IF MsRequest.ActStamp   < ldeLastDayofMonthStamp AND 
+         llPostpaidBundleTerm = FALSE                  AND 
+         (LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 OR LOOKUP(lcDCEvent,"CONTDSL,CONTFH50,CONTFH300") > 0) THEN 
+      DO:
+         IF FMItem.BrokenRental = 0 THEN 
+             llChargeUsageBased = FALSE.
+         ELSE IF FMItem.BrokenRental = 2 THEN 
+             llChargeUsageBased = TRUE.
+         ELSE IF MsRequest.OrigRequest > 0 THEN 
+         DO:
+             FIND FIRST bMsRequest WHERE bMsRequest.MsRequest = MsRequest.OrigRequest NO-LOCK NO-ERROR.
+             IF AVAIL bMsRequest AND (bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR bMsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}) THEN
+                 llChargeUsageBased = TRUE.
          END.
       END.
 
@@ -2621,10 +2621,8 @@ PROCEDURE pContractTermination:
    /* is being terminated along with subscription because prodigy will    */
    /* send a command to EMA to de-provision the SHAPER automatically when */
    /* prodigy receives 'DELETE' HLR command from TMS.                     */
-   IF MsRequest.ReqSource <> {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
-      LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
-      NOT lcDCEvent BEGINS {&DSS} THEN DO:
-
+   IF MsRequest.ReqSource <> {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 AND NOT lcDCEvent BEGINS {&DSS} THEN 
+   DO:
       RUN pTerminateServicePackage(lcDCEvent,
                                    MsOwner.MsSeq,
                                    MsOwner.CLIType,
@@ -2649,17 +2647,11 @@ PROCEDURE pContractTermination:
       END.
           
       /* iSTC - Reduce bundle consumption to network for non-DSS */
-      IF LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 AND
-         MsRequest.ActStamp < ldeLastDayofMonthStamp AND
-         llPostpaidBundleTerm = FALSE AND
-         MsRequest.OrigRequest > 0 THEN DO:
-         FIND FIRST bMsRequest NO-LOCK WHERE
-                    bMsRequest.MsRequest = MsRequest.OrigRequest NO-ERROR.
-         IF AVAIL bMsRequest AND
-            bMsRequest.ActStamp < ldeNextMonthStamp AND
-            (bMsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
-             bMsRequest.ReqType EQ {&REQTYPE_BUNDLE_CHANGE}) THEN DO:
-
+      IF LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 AND MsRequest.ActStamp < ldeLastDayofMonthStamp AND llPostpaidBundleTerm = FALSE AND MsRequest.OrigRequest > 0 THEN 
+      DO:
+         FIND FIRST bMsRequest NO-LOCK WHERE bMsRequest.MsRequest = MsRequest.OrigRequest NO-ERROR.
+         IF AVAIL bMsRequest AND bMsRequest.ActStamp < ldeNextMonthStamp AND (bMsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR bMsRequest.ReqType EQ {&REQTYPE_BUNDLE_CHANGE}) THEN 
+         DO:
             FIND FIRST bServiceLCounter NO-LOCK WHERE
                        bServiceLCounter.MsSeq  = MsRequest.MsSeq AND
                        bServiceLCounter.Period = liEndPeriod AND
