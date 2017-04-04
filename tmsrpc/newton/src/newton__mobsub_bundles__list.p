@@ -35,6 +35,7 @@ DEF VAR lcVoiceBundles           AS CHAR NO-UNDO.
 DEF VAR liVoiceCount             AS CHAR NO-UNDO.
 
 DEFINE BUFFER bf_MxItem FOR MxItem.
+DEFINE BUFFER bf_Matrix FOR Matrix.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
@@ -118,15 +119,21 @@ DO:
 END.
 ELSE 
 DO:
-    FOR EACH bf_MxItem WHERE bf_MxItem.MxSeq = bf_Matrix.MxSeq AND bf_MxItem.MxName = "SubsTypeTo" AND bf_MxItem.MxValue = MobSub.CliType NO-LOCK:             
-        FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK:
-            
-            FIND FIRST DayCampaign WHERE Daycampaign.Brand = gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
-            IF AVAIL DayCampaign AND DayCampaign.DcType = 1 AND DayCampaign.CCN <> 93 AND LOOKUP(DayCampaign.DCEvent, icAllowedBundles) = 0 THEN
-                ASSIGN lcVoiceBundles = lcVoiceBundles + (IF lcVoiceBundles <> "" THEN "," ELSE "") + DayCampaign.DCEvent.
+    FOR EACH bf_Matrix WHERE bf_Matrix.Brand = gcBrand AND bf_Matrix.MXKey = "PERCONTR" NO-LOCK By bf_Matrix.Prior:
+
+        IF bf_Matrix.MXRes <> 1 THEN
+            NEXT.
+
+        FOR EACH bf_MxItem WHERE bf_MxItem.MsSeq = bf_Matrix.MxSeq AND bf_MxItem.MxName = "SubsTypeTo" AND bf_MxItem.MxValue = MobSub.CliType NO-LOCK:             
+            FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK:
+                
+                FIND FIRST DayCampaign WHERE Daycampaign.Brand = gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
+                IF AVAIL DayCampaign AND DayCampaign.DcType = 1 AND DayCampaign.CCN <> 93 AND LOOKUP(DayCampaign.DCEvent, icAllowedBundles) = 0 THEN
+                    ASSIGN lcVoiceBundles = lcVoiceBundles + (IF lcVoiceBundles <> "" THEN "," ELSE "") + DayCampaign.DCEvent.
+            END.
         END.
     END.
-
+        
     DO liVoiceCount = 1 TO NUM-ENTRIES(lcVoiceBundles):
         IF fGetCurrentSpecificBundle(MobSub.MsSeq, ENTRY(liVoiceCount,lcVoiceBundles)) > "" THEN
             add_string(lcResultArray,"", ENTRY(liVoiceCount,lcVoiceBundles) + "|" + STRING(Mobsub.MsSeq)).
