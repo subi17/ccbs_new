@@ -103,12 +103,6 @@ main_pf_files = ['all.pf']
 
 ########################## Implementation #############################
 
-try:
-    getservbyname('%s%s' % (databases[0], service_suffix), 'tcp')
-    db_by_unix_socket = False
-except:
-    db_by_unix_socket = True
-
 initialize_dependencies = list(main_pf_files)
 if environment == 'development':
     initialize_dependencies += ['create', 'start', 'migrate', 'tenanciescreate', 'fixtures']
@@ -231,22 +225,23 @@ def startup_parameter_file(match, deps, db_name):
     path = path[0]
     fd = open(match, 'wt')
     fd.write('-pf %s/etc/pf/formats.pf\n' % work_dir)
-    if environment == 'production':
-        fd.write('-db %s\n' % path)
-        if not db_by_unix_socket:
+    fd.write('-db %s\n' % path)
+    if environment == 'production' or environment == 'safeproduction':
+        try:
+            getservbyname(db_name, 'tcp')
             fd.write('-H %s\n' % gethostname())
-            fd.write('-S %s%s\n' % (db_name, service_suffix))
+            fd.write('-S %s\n' % (db_name))
+        except:
+            pass
         for option in db_startup_options.get(db_name, []):
             fd.write(option + '\n')
-    else:
-        fd.write('-db %s\n' % path)
     fd.close()
     if environment == 'production' and db_name in sql_startup_options:
         fd = open(db_name + '_sql_startup.pf', 'wt')
         fd.write('-pf %s/etc/pf/formats.pf\n' % work_dir)
         fd.write('-db %s\n' % path)
         fd.write('-H %s\n' % gethostname())
-        fd.write('-S %s_sql%s\n' % (db_name, service_suffix))
+        fd.write('-S %s_sql\n' % (db_name))
         fd.write('-ServerType SQL\n')
         for option in sql_startup_options.get(db_name, []):
             fd.write(option + '\n')
@@ -261,7 +256,7 @@ def connect_parameter_file(match, deps, db_name):
     if len(path) > 1:
         fd.write('-db %s\n' % path[1].split('/')[0])
         fd.write('-H %s\n' % path[0])
-        fd.write('-S %s%s\n' % (db_name, service_suffix))
+        fd.write('-S %s%s\n' % (db_name))
     else:
         fd.write('-db %s\n' % path[0])
     fd.close()
@@ -399,7 +394,7 @@ def _migrate(migration_file, direction, a2t_data):
     df_file, database = mig2df(migration_file, direction,
                                a2t_data, a2t_from_database, environment)
 
-    pfile = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
+    pfile = tempfile.NamedTemporaryFile(suffix='.p', mode='rt+')
     pfile.write('SESSION:SUPPRESS-WARNINGS = TRUE.\n')
     pfile.write('SESSION:NUMERIC-FORMAT = "American".\n')
     pfile.write('RUN prodict/load_df("{0},,").\n'.format(df_file.name))
