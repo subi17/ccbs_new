@@ -524,7 +524,7 @@ FUNCTION fSetOperData RETURNS CHAR
       ELSE DO:
          lcCommands = ";" + fWriteToMQ(lcMQMessage).
       END.
-
+      PUT STREAM sLog UNFORMATTED lcCommands SKIP.
       PUT STREAM sLog UNFORMATTED lcMQMessage SKIP.
 
    END.
