@@ -13,8 +13,6 @@ USING HPD.DumpHandler.
 USING HPD.HPDTime.
 USING HPD.DumpSomeWhere.
 
-{HPD/HPDEnvironment.i}
-
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.DumpMQ INHERITS DumpSomeWhere: 
@@ -72,7 +70,7 @@ CLASS HPD.DumpMQ INHERITS DumpSomeWhere:
       THEN DELETE OBJECT objMsgPublisher.
 
       IF objHandler:llAllOK = FALSE
-      THEN LOG-MANAGER:WRITE-MESSAGE("The dump was interrupped or something else went wrong!.", "ERROR").
+      THEN LOG-MANAGER:WRITE-MESSAGE("The dump was interrupped or something else went wrong!", "ERROR").
 
    END DESTRUCTOR.
 
@@ -101,7 +99,7 @@ CLASS HPD.DumpMQ INHERITS DumpSomeWhere:
                RETURN ERROR NEW Progress.Lang.AppError("Failed to reconnect", 1).
             END.
             ELSE DO:
-               LOG-MANAGER:WRITE-MESSAGE("Was able to reconnect will send the message again.", "INFO").
+               LOG-MANAGER:WRITE-MESSAGE("Was able to reconnect and will send the message again.", "INFO").
                NEXT.
             END.
          END.

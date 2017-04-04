@@ -13,8 +13,6 @@ USING HPD.DumpHandler.
 USING HPD.HPDTime.
 USING HPD.DumpSomeWhere.
 
-{HPD/HPDEnvironment.i}
-
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.DumpFile INHERITS DumpSomeWhere:
