@@ -102,12 +102,12 @@ form
   with overlay centered row 9 frame f_code_search.
 
 
-find first Company no-lock WHERE
-           Company.Brand = gcBrand NO-ERROR.
+find first Brand no-lock WHERE
+           Brand.Brand = gcBrand NO-ERROR.
 ASSIGN
    empty = fill(" ",78)
    pvm   = TODAY
-   ynimi = IF AVAILABLE Company THEN Company.CompName ELSE "Unknown"
+   ynimi = IF AVAILABLE Brand THEN Brand.BrName ELSE "Unknown"
    yvari = FALSE.
 
 

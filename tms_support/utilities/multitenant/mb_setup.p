@@ -5,6 +5,8 @@
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF VAR lcLine AS CHAR NO-UNDO.
+DEF VAR lcDFIdList AS CHAR NO-UNDO.
+DEF VAR liId AS INT NO-UNDO.
 
 FUNCTION fAddTenant2Filename RETURNS LOGICAL (INPUT icdumpName AS CHAR):
    DEF VAR lcFilename AS CHAR NO-UNDO.
@@ -25,6 +27,8 @@ FUNCTION fAddTenant2Filename RETURNS LOGICAL (INPUT icdumpName AS CHAR):
          lcFilename = "#TENANT_" + dumpfile.filename.
       Dumpfile.filename = lcFilename.
       /*MESSAGE lcFileName VIEW-AS ALERT-BOX.*/
+      IF lcDFIdList EQ "" THEN lcDFIdList = STRING(dumpfile.dumpID).
+      ELSE  lcDFIdList = lcDFIdList + "," + STRING(dumpfile.dumpID).
    END.
 END FUNCTION.
 
@@ -186,7 +190,96 @@ IF AVAIL dumpfile AND NOT dumpfile.filename BEGINS "#TENANT" THEN
    dumpfile.filename = "#TENANT_" + dumpfile.filename.
 RELEASE Dumpfile.
 
-/* MB-631 */
+/* MB-631 DWH dumps and MB-675 Track dumps */
+FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "Barrings" NO-ERROR.
+IF NOT AVAIL DumpFile THEN DO:
+   FIND LAST DumpFile USE-INDEX DumpID NO-LOCK NO-ERROR.
+   IF AVAILABLE DumpFile
+   THEN liid = DumpFile.DumpID + 1.
+   ELSE liid = 1.
+   FIND FIRST DumpFile WHERE Dumpfile.dumpid EQ 101 NO-ERROR.
+   IF NOT AVAIL DumpFile THEN liid = 101. /* Same as in prod */
+   CREATE DumpFile .
+   ASSIGN
+      dumpfile.Active          = TRUE
+      dumpfile.AllowReplica    = NO
+      dumpfile.AveDurFull      = 1770
+      dumpfile.AveDurMod       = 2
+      dumpfile.BatchID         = 1
+      dumpfile.Brand           = "1"
+      dumpfile.ConfigParam     = ""
+      dumpfile.DecimalPoint    = "."
+      dumpfile.Description     = "Subscription barrings"
+      dumpfile.DumpCharSet     = ""
+      dumpfile.DumpDelimiter   = "|"
+      dumpfile.DumpFormat      = "ASCII"
+      dumpfile.DumpID          = liid
+      dumpfile.DumpLineFeed    = ""
+      dumpfile.DumpName        = "Barrings"
+      dumpfile.EmptyFile       = TRUE
+      dumpfile.EventLogFields  = ""
+      dumpfile.FileCategory    = "DWH"
+      dumpfile.FileName        = "DWH_barrings_#MODE_#DATE_#TIME.txt"
+      dumpfile.FullCollModule  = ""
+      dumpfile.LinkKey         = ""
+      dumpfile.LogFile         = ""
+      dumpfile.LogicModule     = "Mm/barring_dump.p"
+      dumpfile.MainTable       = "Barring"
+      dumpfile.ModCollModule   = ""
+      dumpfile.ModFromEventLog = TRUE
+      dumpfile.ModFromField    = "EventTS"
+      dumpfile.QueryClause     = ""
+      dumpfile.SideTables      = ""
+      dumpfile.SpoolDir        = "/store/riftp/dumpfiles/dwh/spool"
+      dumpfile.TransDir        = "/store/riftp/dumpfiles/dwh/outgoing"
+      dumpfile.UseIndex        = "".
+END.
+
+FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "SingleFixFeeCollect" NO-ERROR.
+IF NOT AVAIL DumpFile THEN DO:
+   FIND LAST DumpFile USE-INDEX DumpID NO-LOCK NO-ERROR.
+   IF AVAILABLE DumpFile
+   THEN liid = DumpFile.DumpID + 1.
+   ELSE liid = 1.
+   FIND FIRST DumpFile WHERE Dumpfile.dumpid EQ 97 NO-ERROR.   
+   IF NOT AVAIL DumpFile THEN liid = 97. /* same as in prod */
+   CREATE DumpFile .
+   ASSIGN
+      dumpfile.Active          = TRUE
+      dumpfile.AllowReplica    = NO
+      dumpfile.AveDurFull      = 13
+      dumpfile.AveDurMod       = 5
+      dumpfile.BatchID         = 1
+      dumpfile.Brand           = "1"
+      dumpfile.ConfigParam     = ""
+      dumpfile.DecimalPoint    = "."
+      dumpfile.Description     = "Dump for collecting info about Single Fees and Fixed Fees"
+      dumpfile.DumpCharSet     = ""
+      dumpfile.DumpDelimiter   = "|"
+      dumpfile.DumpFormat      = "ASCII"
+      dumpfile.DumpID          = liid
+      dumpfile.DumpLineFeed    = ""
+      dumpfile.DumpName        = "SingleFixFeeCollect"
+      dumpfile.EmptyFile       = NO
+      dumpfile.EventLogFields  = ""
+      dumpfile.FileCategory    = "DWH"
+      dumpfile.FileName        = "DWH_Modified_Single_Fix_Fees_#DATE.txt"
+      dumpfile.FullCollModule  = ""
+      dumpfile.LinkKey         = ""
+      dumpfile.LogFile         = ""
+      dumpfile.LogicModule     = "Mm/fixedsinglefee_collecdump.p"
+      dumpfile.MainTable       = "FixedFee"
+      dumpfile.ModCollModule   = ""
+      dumpfile.ModFromEventLog = TRUE
+      dumpfile.ModFromField    = ""
+      dumpfile.QueryClause     = ""
+      dumpfile.SideTables      = "SingleFee"
+      dumpfile.SpoolDir        = "/store/riftp/dumpfiles/dwh/spool"
+      dumpfile.TransDir        = "/store/riftp/dumpfiles/dwh/outgoing"
+      dumpfile.UseIndex        = "".
+END.
+
+
 INPUT STREAM sin FROM VALUE("../tms_support/utilities/multitenant/dumpfiles_phase1.txt").
 
 REPEAT:
@@ -195,3 +288,11 @@ REPEAT:
    fAddTenant2Filename(lcLine).
 END.
 
+/* Remove extra dumps from DFTimeTable that are not suported in phase 1 */
+
+FOR EACH DFTimeTable WHERE
+         lookup(STRING(DFTimeTable.dumpid),lcDFIdList) EQ 0:
+   /*MESSAGE DFTimeTable.dumpid VIEW-AS ALERT-BOX.*/
+   /*DELETE DFTimeTable */
+
+END.

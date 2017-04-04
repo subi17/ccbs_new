@@ -18,7 +18,10 @@
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
+{Func/upsellbundle.i}
+{Mc/dpmember.i}
 {Migration/migrationfunc.i}
+
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
@@ -204,6 +207,27 @@ FUNCTION fValidateMMBarringCommand RETURNS CHAR
 
 END.
 
+/*Function checks if that is a setting allowed for specific clitype.*/
+/*RETURNs emptyy if OK, text in error cases.*/
+FUNCTION fIsPermittedModule RETURNS CHAR 
+ ( icCliType AS CHAR,
+   icModule AS CHAR):
+
+   DEFINE VARIABLE ocResult AS CHARACTER NO-UNDO.
+
+   IF fMatrixAnalyse("1",
+                     "DENIED",
+                     "SubsTypeFrom;Module",
+                     icCliType + ";" + icModule,
+                     OUTPUT ocResult) = ? THEN DO:
+      RETURN "".
+   END.
+
+   RETURN "Operation not allowed " + icCliType.
+
+END FUNCTION.
+
+
 /*Function sets given barring set to given MobSub.
  -Validate command
  -Execute command
@@ -221,7 +245,7 @@ FUNCTION fSetMigrationBarring RETURNS CHAR
    IF icCommand EQ "" THEN RETURN "".
    RUN Mm/barrengine.p(iiMsSeq,
                        icCommand,
-                       {&REQUEST_SOURCE_MANUAL_TMS},
+                       {&REQUEST_SOURCE_MIGRATION},
                        "",
                        fMakeTS(),
                        "",
@@ -239,17 +263,57 @@ FUNCTION fSetMigrationFees RETURNS CHAR
    RETURN "".
 END.
 
+/*Function sets migration related upsells*/
+/*Note: current version suppots only postpaid upsells*/
 FUNCTION fSetMigrationUpsells RETURNS CHAR
    (iiMsSeq AS INT,
     icCommand AS CHAR):
     DEF VAR lcStat AS CHAR NO-UNDO.
-   RETURN "".
+    DEF VAR i AS INT NO-UNDO.
+    DEF VAR lcUpsell AS CHAR NO-UNDO.
+    DEF VAR lcError AS CHAR NO-UNDO.
+    DEF VAR lcReturn AS CHAR NO-UNDO.
+    DEF VAR liReq AS INT NO-UNDO.
+
+    DO i = 1 TO NUM-ENTRIES(icCommand,icCommand):
+       lcUpsell = ENTRY(i, icCommand).
+       IF lcUpsell MATCHES "*_UPSELL*" THEN DO:
+
+          fCreateUpsellBundle(iiMsSeq,
+                              lcUpsell,
+                              {&REQUEST_SOURCE_MIGRATION},
+                              fMakeTS(),
+                              OUTPUT liReq,
+                              OUTPUT lcError).
+          IF lcError NE "" THEN DO:
+             lcReturn = lcReturn + "|" + lcError.
+          END.
+       END.
+       ELSE lcReturn = lcReturn + "|" + "Not valid upsell: " + lcUpsell.
+   END.
+
+   RETURN lcReturn.
 END.
 
+/*Functionality adds terminal, */
 FUNCTION fSetMigrationTerminals RETURNS CHAR
    (iiMsSeq AS INT,
-    icCommand AS CHAR):
-    DEF VAR lcStat AS CHAR NO-UNDO.
+    iiOrderID AS INT,
+    icTerminals AS CHAR):
+   DEF VAR lcStat AS CHAR NO-UNDO.
+   DEF VAR lcTerminal AS CHAR NO-UNDO.
+   DEF VAR i AS INT NO-UNDO.
+
+    
+   DO i = 1 TO NUM-ENTRIES(icTerminals):
+      lcTerminal =  STRING(ENTRY(i,icTerminals)).
+      CREATE SubsTerminal.
+      ASSIGN SubsTerminal.brand = gcBrand
+             SubsTerminal.OrderID = iiOrderid
+             SubsTerminal.imei = lcTerminal.
+
+   END.
+
    RETURN "".
 END.
 
@@ -262,16 +326,82 @@ END.
 
 FUNCTION fSetMigrationDiscounts RETURNS CHAR
    (iiMsSeq AS INT,
-    icCommand AS CHAR):
-    DEF VAR lcStat AS CHAR NO-UNDO.
+   icCommand AS CHAR):
+   DEF VAR lcStat AS CHAR NO-UNDO.
+   DEF BUFFER mobsub for mobsub.
+
+   IF icCommand EQ "" THEN RETURN "".
+   FIND FIRST MobSub NO-LOCK where
+              MobSub.MsSeq EQ iiMsSeq NO-ERROR.
+   IF NOT AVAIL MobSub THEN RETURN "Mobsub not found".           
+   
+   /*Checkint that is discount allowed*/
+   lcStat = fIsPermittedModule(MobSub.CliType, "dpmember").
+   IF lcStat NE "" THEN
+      RETURN "Discount setting failed" + lcStat.
+
+
+   CREATE DPMember.
+   ASSIGN
+      DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
+      DPMember.DPID       = 0 /*TODO define*/
+      DPMember.HostTable  = "MobSub"
+      DPMember.KeyValue   = STRING(iiMsSeq)
+      DPMember.ValidFrom  = TODAY
+      DPMember.ValidTo    = 12/31/2049.
+
+   IF DPMember.DPID > 0 THEN DO:
+      FOR FIRST DPRate NO-LOCK WHERE
+                DPRate.DPId EQ DPMember.DPID AND
+                DPRate.ValidTo >= TODAY AND
+                DPRate.ValidFrom <= TODAY:
+        DpMember.DiscValue = DPRate.DiscValue.
+      END.
+
+      FIND FIRST DiscountPlan WHERE DiscountPlan.DPID EQ DPMember.DPID NO-LOCK.
+      IF DiscountPlan.ValidPeriods > 0 THEN
+          DPMember.ValidTo = fCalcDPMemberValidTo(DPMember.ValidFrom,
+                                                  DiscountPlan.ValidPeriods). 
+   END.
+
    RETURN "".
 END.
 
+/*Function sets bono that is defined.*/
 FUNCTION fSetMigrationBonos RETURNS CHAR
    (iiMsSeq AS INT,
     icCommand AS CHAR):
     DEF VAR lcStat AS CHAR NO-UNDO.
-   RETURN "".
+    DEF VAR i AS INT NO-UNDO.
+    DEF VAR lc AS CHAR NO-UNDO.
+    DEF VAR lcError AS CHAR NO-UNDO.
+    DEF VAR liRequest AS INT NO-UNDO.
+    DEF VAR lcReturn AS CHAR NO-UNDO.
+
+    IF icCommand EQ "" THEN RETURN "".
+
+    IF icCommand MATCHES "*BONO*" THEN DO:
+
+       liRequest = fPCActionRequest(iiMsSeq,
+                                icCommand,
+                                "act",
+                                fMakeTS(),
+                                TRUE,    /* fees */
+                                {&REQUEST_SOURCE_MIGRATION},
+                                "",   /* creator */
+                                0,    /* no father request */
+                                FALSE,
+                                "",
+                                0,
+                                0,
+                                OUTPUT lcError).
+       IF liRequest EQ 0 THEN DO:
+          lcReturn = lcReturn + "|" + "Bono request creation failed " + lcError.
+       END.
+       ELSE lcReturn = lcReturn + "|" + "Not valid bono: " + icCommand.
+   END.
+
+   RETURN lcReturn.
 END.
 
 FUNCTION fSetMigrationFAT RETURNS CHAR
@@ -308,73 +438,77 @@ FUNCTION fSetOperData RETURNS CHAR
    DEF VAR liOrderID AS INT NO-UNDO.
    DEF VAR lcMQMessage AS CHAR NO-UNDO. /*Message to WEB in error cases*/
 
+   lcCommands = STRING(iiMsSeq) + "|" + icMSISDN + "|".
+
    lcStat =  fSetMigrationBarring(iiMsSeq, icBarrings). 
    lcCommands = lcCommands + icBarrings + "|".
    IF lcStat NE "" THEN DO:
-      lcRet = "Barring error: " + lcStat + "|".
+      lcRet = "Barring error: " + lcStat + "/".
       lcStat = "".
    END.
 
    lcStat = lcStat + fSetMigrationFees(iiMsSeq, icSinglefees).
    lcCommands = lcCommands + icSingleFees + "|".
    IF lcStat NE "" THEN DO:
-      lcRet = lcRet + "Fee setting error: " + lcStat + "|".
+      lcRet = lcRet + "Fee setting error: " + lcStat + "/".
       lcStat = "".
    END.
 
    lcStat = lcStat + fSetMigrationUpsells(iiMsSeq, icUpsells).
    lcCommands = lcCommands + icUpsells + "|".
    IF lcStat NE "" THEN DO:
-      lcRet = lcRet + "Upsell setting error: " + lcStat + "|".
+      lcRet = lcRet + "Upsell setting error: " + lcStat + "/".
       lcStat = "".
    END.
 
    lcStat = lcStat + fSetMigrationUsedData(iiMsSeq,iiUsedData).
    lcCommands = lcCommands + STRING(iiUsedData) + "|".
    IF lcStat NE "" THEN DO:
-      lcRet = lcRet + "Data update error: " + lcStat + "|".
+      lcRet = lcRet + "Data update error: " + lcStat + "/".
       lcStat = "".
    END.
 
-   lcStat = lcStat + fSetMigrationTerminals(iiMsSeq,icTerminals).
+   lcStat = lcStat + fSetMigrationTerminals(iiMsSeq,
+                                            liOrderID,
+                                            icTerminals).
    lcCommands = lcCommands + icTerminals + "|".
    IF lcStat NE "" THEN DO:
-      lcRet = lcRet + "Terminal setting error: " + lcStat + "|".
+      lcRet = lcRet + "Terminal setting error: " + lcStat + "/".
       lcStat = "".
    END.
 
    lcStat = lcStat + fSetMigrationDiscounts(iiMsSeq,icDiscounts).
    lcCommands = lcCommands + icDiscounts + "|".
    IF lcStat NE "" THEN DO:
-      lcRet = lcRet + "Discount setting error " + lcStat + "|".
+      lcRet = lcRet + "Discount setting error " + lcStat + "/".
       lcStat = "".
    END.
 
    lcStat = lcStat + fSetMigrationBonos(iiMsSeq,icBonos).
    lcCommands = lcCommands + icBonos + "|".
    IF lcStat NE "" THEN DO:
-      lcRet = lcRet + "Bundle setting error " + lcStat + "|".
+      lcRet = lcRet + "Bundle setting error " + lcStat + "/".
       lcStat = "".
    END.
 /* To be added when prepaid support is implemented
    lcCommands = lcCommands + xxx + "|".
    lcStat = lcStat + fSetPrepaidSaldo(iiMsSeq,).
    IF lcStat NE "" THEN DO:
-      lcRet = lcRet + "Prepaid setting error " + lcStat + "|".
+      lcRet = lcRet + "Prepaid setting error " + lcStat + "/".
       lcStat = "".
    END.
 */
    lcStat = lcStat + fSetMigrationFat(iiMsSeq,idFat).
    lcCommands = lcCommands + STRING(idFat) + "|".
    IF lcStat NE "" THEN DO:
-      lcRet = lcRet + "Bundle setting error " + lcStat + "|".
+      lcRet = lcRet + "FAT setting error " + lcStat + "/".
       lcStat = "".
    END.
 
-   PUT STREAM sLog UNFORMATTED lcCommands + lcStat SKIP.
+   PUT STREAM sLog UNFORMATTED lcCommands + lcRet SKIP.
    
    /*In failure cases WEB must know status as soon as possible*/
-   IF lcStat NE "" THEN DO:
+   IF lcRet NE "" THEN DO:
       FIND FIRST Order NO-LOCK WHERE
                  Order.CLI EQ icMSISDN AND
                  Order.Orderchannel BEGINS "migration"

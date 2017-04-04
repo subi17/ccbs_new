@@ -1,4 +1,4 @@
-TMSPass1: TMSPass
+bulkload: TMSPass
   UserCode: "mas"
   Password: "mas"
   CreateTS: 20400101
