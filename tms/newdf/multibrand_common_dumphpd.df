@@ -74,7 +74,7 @@ ADD FIELD "UnitType" OF "DumpHPD" AS character
   ORDER 70
 
 ADD INDEX "DumpID" ON "DumpHPD"
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   UNIQUE
   PRIMARY
   INDEX-FIELD "DumpID" ASCENDING
