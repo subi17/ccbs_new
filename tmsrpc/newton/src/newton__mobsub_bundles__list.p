@@ -32,6 +32,9 @@ DEF VAR lcIPLContracts           AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType    AS CHAR NO-UNDO.
 DEF VAR lcDayCampBundleUpsells   AS CHAR NO-UNDO. 
 DEF VAR lcVoiceBundles           AS CHAR NO-UNDO. 
+DEF VAR liVoiceCount             AS CHAR NO-UNDO.
+
+DEFINE BUFFER bf_MxItem FOR MxItem.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
