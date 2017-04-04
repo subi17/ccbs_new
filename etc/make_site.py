@@ -8,7 +8,6 @@
 ###############################################################################
 import os
 import sys
-import socket
 from glob import glob
 
 assert sys.version_info[:3] >= (2,6,0), 'Python version too old. Need >= 2.6'
@@ -57,18 +56,6 @@ if not os.path.exists(relpath + '/etc/site.py'):
     print('Using the newest installed Progress version %s in directory %s' % \
              (newestversion, dlc))
 
-    a_database = '%s_%s' % (fake_site['appname'], fake_site['databases'][0])
-    service_suffix = ''
-    while True:
-        try:
-            socket.getservbyname(a_database + service_suffix, 'tcp')
-            break
-        except:
-            print('Ports for databases not found in /etc/services.')
-            print('Add them or use unix sockets or provide a suffix: ',)
-            service_suffix = sys.stdin.readline().strip()
-        if not service_suffix: break
-
     if os.path.exists(relpath + '/.safeproduction'):
         environment = 'safeproduction'
     elif os.path.exists(relpath + '/.DeployMakefile.py'):
@@ -88,7 +75,6 @@ if not os.path.exists(relpath + '/etc/site.py'):
     fd.write("%-14s = '%s'\n" % ('dlc', dlc))
     fd.write("%-14s = '%s'\n" % ('work_dir', os.path.abspath(relpath)))
     fd.write("%-14s = '%s'\n" % ('environment', environment))
-    fd.write("%-14s = '%s'\n" % ('service_suffix', service_suffix))
     fd.write("%-14s = '%s'\n" % ('lighttpd_location', lighttpd_location))
     fd.write("ENV%-11s = '%s'\n" % ("['TERM']", 'xterm'))
     fd.write("ENV%-11s = '%s%s'\n" % ("['DBUTIL']", dlc, '/bin/_dbutil'))

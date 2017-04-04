@@ -725,7 +725,7 @@ DO TRANS:
             (LOOKUP(STRING(ttCall.SpoCMT),"3,7") > 0 AND 
              ttCall.MSCID = "PRE" AND ttCall.PPFlag = 1))
          THEN DO:
-            IF ttCall.MSCID NE "FIXED" THEN
+            IF NOT ttCall.MSCID BEGINS "FIX" THEN
                fTicketCheck(INPUT "MSOWNER", 
                             STRING(ttCall.CLI),
                             OUTPUT oiERrorCode).               
