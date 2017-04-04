@@ -128,7 +128,7 @@ DO:
             FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK:
                 
                 FIND FIRST DayCampaign WHERE Daycampaign.Brand = gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
-                IF AVAIL DayCampaign AND DayCampaign.DcType = 1 AND DayCampaign.CCN <> 93 AND LOOKUP(DayCampaign.DCEvent, icAllowedBundles) = 0 THEN
+                IF AVAIL DayCampaign AND DayCampaign.DcType = "1" AND DayCampaign.CCN <> 93 AND LOOKUP(DayCampaign.DCEvent, icAllowedBundles) = 0 THEN
                     ASSIGN lcVoiceBundles = lcVoiceBundles + (IF lcVoiceBundles <> "" THEN "," ELSE "") + DayCampaign.DCEvent.
             END.
         END.
