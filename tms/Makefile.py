@@ -3,7 +3,6 @@ from subprocess import call, Popen, PIPE
 from ast import literal_eval
 import tempfile
 import shutil
-import socket
 import time
 import glob
 import errno
@@ -254,7 +253,7 @@ def mkdir_p(directory):
             raise
 
 def make_compiler(cline, files, show='.'):
-    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
+    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='rt+')
     compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n')
     for ff in files:
         if show == '.':
@@ -285,6 +284,9 @@ def cui(*a):
         if a[0] == 'vimbatch':
             args.extend(['-b'])
         program = parameters[0]
+
+    if 'current_dir' in globals():
+        os.environ['PROPATH'] = current_dir + ',' + os.environ['PROPATH']
 
     cdr_dict = {}
     for cdr_database in cdr_databases:

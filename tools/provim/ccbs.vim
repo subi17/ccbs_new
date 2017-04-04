@@ -95,7 +95,7 @@ set efm=%Z**\ %f\ Could\ not\ understand\ line\ %l.\ (%.%#),
        \%-ACompiling\ %.%#,
        \%EThere\ is\ %m.\ (1423)
 
-execute "set makeprg=pike\\ -C\\ " . g:ccbspath . "/tms\\ %:p:s?" . g:ccbspath . "/tms/??"
+execute "set makeprg=pike\\ -C\\ " . g:ccbspath . "/tms\\ compilec\\ %:p:s?" . "??"
 
 nmap <F2> :make<enter><enter>
 
@@ -111,7 +111,7 @@ function! Run_4gl()
     silent echo "END."
     silent echo "QUIT."
     redir END
-    execute "silent ! pike vim tenant=" . $TENANT . " " . l:pfile
+    execute "silent ! pike -C " . g:ccbspath . "/tms vim " . l:pfile . " current_dir=" . getcwd() . " tenant=" . $TENANT
 
 endfunction
 
@@ -228,7 +228,7 @@ function! Check_syntax() range
     silent echo "COMPILE " . l:tempfile . "."
     redir END
 
-    let l:output = system("pike vimbatch " . l:pfile)
+    let l:output = system("pike -C " . g:ccbspath . "/tms vimbatch " . l:pfile . " current_dir=" . getcwd())
     let dummy = delete(l:tempfile)
     let dummy = delete(l:pfile)
 

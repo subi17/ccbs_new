@@ -34,6 +34,155 @@ DEF VAR lcMQMessage AS CHAR NO-UNDO.
 
 DEF VAR lcErr AS CHAR NO-UNDO.
 
+
+
+DEF TEMP-TABLE ttNotifyList
+   FIELD msseq as INT
+   INDEX msseq msseq.
+
+FUNCTION fStatusComment RETURNS CHAR
+   (iiIn AS INT):
+   IF      iiIN EQ 2 THEN RETURN "Completed".
+   ELSE IF iiIn EQ 3 THEN RETURN "Failed".
+
+   RETURN "Not completed".
+
+END.
+
+/*Function provides total situation of mentioned subscription for request based
+  settings.
+  Options that can ve used:
+  -Providing status of all Migration requests to output value (usage: reporting
+   status in failure case)
+  -Providing information if all requests are handled already successfully
+   to parameter plgOK (usage: ensuring that that migration is ready)
+  */
+FUNCTION fTotalSituation RETURNS CHAR
+   (iiMsSeq AS INT,
+    OUTPUT olgOK AS LOGICAL):
+   DEF VAR lcCheckTypes AS CHAR NO-UNDO. /*req types to be checked*/
+   DEF VAR i AS INT NO-UNDO.
+   DEF VAR lcSummary AS CHAR NO-UNDO.
+
+   lcCheckTypes = "8,35".
+   olgOK = TRUE.
+   DO i = 1 TO NUM-ENTRIES(lcCheckTypes):
+      FOR EACH msrequest NO-LOCK where
+               msrequest.msseq EQ iiMsSeq AND
+               msrequest.reqtype EQ INT(ENTRY(i,lcChecktypes)) AND
+               msrequest.reqsource EQ {&REQUEST_SOURCE_MIGRATION}:
+         IF msrequest.reqtype EQ {&REQTYPE_BARRING_REQUEST} THEN DO:
+         IF NOT (msrequest.reqstatus EQ 2 OR
+                 msrequest.reqstatus EQ 9) THEN olgOK = FALSE.
+
+            lcSummary = "Barring: " + msrequest.reqcparam1 + " status " +
+                        fStatusComment(msrequest.reqstatus).
+         END.
+
+         ELSE IF msrequest.reqtype EQ {&REQTYPE_CONTRACT_ACTIVATION} THEN DO:
+           IF NOT (msrequest.reqstatus EQ 2 OR
+                   msrequest.reqstatus EQ 9) THEN olgOK = FALSE.
+ 
+            lcSummary = "Contract: " + msrequest.reqcparam3 + " status " +
+                        fStatusComment(msrequest.reqstatus).
+         END.
+
+      END. /*for each*/
+   END. /*type loop*/
+END.
+
+/**/
+FUNCTION fFailedOperDataSettings RETURNS CHAR
+   (idStartTime AS DECIMAL,
+    idEndTime AS DECIMAL):
+   DEF VAR llgAllOK AS LOGICAL NO-UNDO. /*Not used here*/
+
+   FOR EACH msrequest NO-LOCK where
+            msrequest.brand eq "1" and
+            msrequest.reqstatus eq 3 and
+            msrequest.updatestamp > idStartTime AND
+            msrequest.updatestamp <= idEndTime AND
+            msrequest.reqsource EQ "35": /*migration*/
+
+      /*if found, report total situation including pending and ok cases to
+        help persons to start solving the problems.*/
+      FIND FIRST ttNotifyList WHERE
+                 ttNotifylist.msseq eq msrequest.msseq NO-ERROR.
+      IF NOT AVAIL ttNotifyList THEN DO:
+         CREATE ttNotifyList.
+         ttNotifyList.msseq = msrequest.msseq.
+      END.
+   END.
+END.
+
+
+FUNCTION fOKOperDataSettings RETURNS CHAR
+   (idStartTime AS DECIMAL,
+    idEndTime AS DECIMAL):
+   DEF VAR llgAllOK AS LOGICAL NO-UNDO.
+
+   FOR EACH msrequest NO-LOCK where
+            msrequest.brand eq "1" and
+            msrequest.reqstatus eq 2 and
+            msrequest.updatestamp > idStartTime AND
+            msrequest.updatestamp <= idEndTime AND
+            msrequest.reqsource EQ {&REQUEST_SOURCE_MIGRATION} :
+      FIND FIRST ttNotifyList WHERE
+                 ttNotifylist.msseq eq msrequest.msseq NO-ERROR.
+      IF NOT AVAIL ttNotifyList THEN DO:
+         fTotalSituation(msrequest.msseq, llgAllOK).
+         IF llgAllOK EQ TRUE THEN DO:
+            CREATE ttNotifyList.
+            ttNotifyList.msseq = msrequest.msseq.
+         END.
+      END.
+   END.
+END.
+
+
+/*Function sends notifications for operational data updates that have been
+  done during collection period.
+  Program uses temp table for avoiding multiple messages to a single entry*/
+FUNCTION fNotifyWEB RETURNS CHAR
+   (iiMsSeq AS INT):
+   DEF VAR liOrderID AS INT NO-UNDO.
+   DEF VAR lcStatusCode AS CHAR NO-UNDO.
+   DEF VAR lcMSISDN AS CHAR NO-UNDO.
+   DEF VAR llgOK AS LOGICAL NO-UNDO.
+
+   FOR EACH ttNotifyList:
+      ASSIGN 
+         liOrderID = 0
+         lcMSISDN = ""
+         lcStatusCode = "".
+      FIND FIRST Order NO-LOCK WHERE
+                 Order.MsSeq EQ iiMsSeq AND
+                 Order.Orderchannel BEGINS "migration" NO-ERROR.
+      IF AVAIL Order THEN liOrderID = Order.Orderid.
+
+      lcStatusCode = fTotalSituation(iiMsSeq, llgOK).
+      IF llgOK EQ TRUE THEN lcStatusCode = "OK".
+
+      lcMQMessage = fGenerateOrderInfo(liOrderID,
+                                       lcMSISDN,
+                                       lcStatusCode).
+
+      IF lcMQMessage EQ "" THEN
+         lcStatusCode = lcStatusCode + ";Message creation failed".
+      ELSE DO:
+         lcStatusCode = ";" + fWriteToMQ(lcMQMessage).
+      END.
+      PUT STREAM sLog UNFORMATTED lcStatusCode SKIP.
+      PUT STREAM sLog UNFORMATTED lcMQMessage SKIP.
+
+   END.   
+
+   RETURN "".
+END.
+
+
+
+
 ASSIGN
    lcTableName = "MB_Migration"
    lcActionID = "migration_oper_data_status"
@@ -82,7 +231,7 @@ DO TRANS:
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       /*store previous starting time before setting new value to db*/
-      ldCollPeriodStartTS = 20170317. /*fixed TS for the 1st run*/
+      ldCollPeriodStartTS = INT(fMakeTS()). 
 
       QUIT. /*No reporting in first time.*/
    END.

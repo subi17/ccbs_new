@@ -120,7 +120,7 @@ def compile(*a):
 
 
 def make_compiler(cline, files, show='.'):
-    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
+    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='rt+')
     compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n')
     for ff in files:
         if show == '.':
