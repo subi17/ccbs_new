@@ -32,7 +32,7 @@ DEF VAR lcIPLContracts           AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType    AS CHAR NO-UNDO.
 DEF VAR lcDayCampBundleUpsells   AS CHAR NO-UNDO. 
 DEF VAR lcVoiceBundles           AS CHAR NO-UNDO. 
-DEF VAR liVoiceCount             AS CHAR NO-UNDO.
+DEF VAR liVoiceCount             AS INTE NO-UNDO.
 
 DEFINE BUFFER bf_MxItem FOR MxItem.
 DEFINE BUFFER bf_Matrix FOR Matrix.
@@ -136,7 +136,7 @@ DO:
         
     DO liVoiceCount = 1 TO NUM-ENTRIES(lcVoiceBundles):
         IF fGetCurrentSpecificBundle(MobSub.MsSeq, ENTRY(liVoiceCount,lcVoiceBundles)) > "" THEN
-            add_string(lcResultArray,"", ENTRY(liVoiceCount,lcVoiceBundles) + "|" + STRING(Mobsub.MsSeq)).
+            add_string(lcResultArray,"", (ENTRY(liVoiceCount,lcVoiceBundles) + "|" + STRING(Mobsub.MsSeq))).
     END.
 END.
 
