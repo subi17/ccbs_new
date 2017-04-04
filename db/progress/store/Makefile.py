@@ -228,7 +228,7 @@ def startup_parameter_file(match, deps, db_name):
     fd.write('-db %s\n' % path)
     if environment == 'production' or environment == 'safeproduction':
         try:
--           getservbyname(db_name, 'tcp')
+            getservbyname(db_name, 'tcp')
             fd.write('-H %s\n' % gethostname())
             fd.write('-S %s\n' % (db_name))
         except:
