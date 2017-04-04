@@ -42,16 +42,9 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
 
          RETURN liNumber.
       END GET.
-      
+
    DEFINE PUBLIC VARIABLE objHPDTime            AS CLASS HPDTime NO-UNDO.
-/*   
-   CONSTRUCTOR PUBLIC DumpSomeWhere
-      ( iiDumpID AS INTEGER,
-        iobjHandler AS CLASS DumpHandler ):      
-      THIS-OBJECT(iiDumpID, "", iobjHandler).
-   END CONSTRUCTOR.   
-*/
-	
+
    CONSTRUCTOR PUBLIC DumpSomeWhere
       ( iiDumpID    AS INTEGER,
         iobjHandler AS CLASS DumpHandler ):
