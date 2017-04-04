@@ -32,6 +32,7 @@ DEF VAR lcIPLContracts           AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType    AS CHAR NO-UNDO.
 DEF VAR lcDayCampBundleUpsells   AS CHAR NO-UNDO. 
 DEF VAR lcVoiceBundles           AS CHAR NO-UNDO. 
+DEF VAR lcUpsellBundles          AS CHAR NO-UNDO.
 DEF VAR liVoiceCount             AS INTE NO-UNDO.
 
 DEFINE BUFFER bf_MxItem FOR MxItem.
@@ -87,9 +88,15 @@ DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles):
        NEXT.
 
    DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
-      add_string(lcResultArray,"",ENTRY(liUpsellCount,DayCampaign.BundleUpsell) + "|" + STRING(Mobsub.MsSeq)).
-   END.
+      IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell), lcUpsellBundles) = 0 THEN 
+          ASSIGN lcUpsellBundles = lcUpsellBundles + (IF lcUpsellBundles <> "" THEN "," ELSE "") + ENTRY(liUpsellCount,DayCampaign.BundleUpsell).
+   END.    
+   
 END. /* DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles): */
+
+DO liUpsellCount = 1 TO NUM-ENTRIES(lcUpsellBundles):
+    add_string(lcResultArray,"",ENTRY(liUpsellCount,lcUpsellBundles) + "|" + STRING(Mobsub.MsSeq)).
+END.
 
 /* For postpaid, return DSS bundle and upsell if DSS is active */
 IF NOT MobSub.PayType THEN
