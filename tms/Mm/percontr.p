@@ -311,7 +311,6 @@ PROCEDURE pContractActivation:
    DEF VAR liCurrentServiceClass AS INT NO-UNDO. 
    DEF VAR llRerate      AS LOG  NO-UNDO.
    DEF VAR i             AS INT NO-UNDO. 
-   DEF VAR liCount       AS INT NO-UNDO.
    def buffer bOrigMsRequest FOR MsRequest.
    DEF VAR ldeBundleFee      AS DEC  NO-UNDO.
    DEF VAR ldaPromoStartDate AS DATE NO-UNDO.
@@ -323,8 +322,7 @@ PROCEDURE pContractActivation:
    DEF VAR lcBundleId        AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
    DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
-   DEF VAR lcDataBONOContracts  AS CHAR NO-UNDO.
-   DEF VAR lcVoiceBONOContracts AS CHAR NO-UNDO.
+   DEF VAR lcBONOContracts   AS CHAR NO-UNDO.
    DEF VAR ldtPrepActDate    AS DATE NO-UNDO.
    DEF VAR liPrepActTime     AS INT  NO-UNDO.
    DEF VAR liRequest         AS INT  NO-UNDO.
@@ -340,10 +338,9 @@ PROCEDURE pContractActivation:
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
    
-   DEF BUFFER bOrigReq       FOR MsRequest.
-   DEF BUFFER bQ25SingleFee  FOR SingleFee.
-   DEF BUFFER bf_DayCampaign FOR DayCampaign.
-
+   DEF BUFFER bOrigReq   FOR MsRequest.
+   DEF BUFFER bQ25SingleFee FOR SingleFee.
+   
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
     
@@ -405,18 +402,7 @@ PROCEDURE pContractActivation:
          lcUseCLIType = bOrigRequest.ReqCParam2. 
    END.
 
-   /* TODO: Not sure, why this is controlled at program level. Check, make changes to matrix and avoid below code */
-   /* is the new contract allowed */
-   IF lcDCEvent = "DATA7" THEN DO:
-      IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
-              lcUseCLIType = "CONT9" OR lcUseCLIType = "CONT10" OR
-              lcUseCLIType = "CONT26") AND
-         NOT fIsConvergenceTariff(lcUseCLIType) THEN DO:
-         fReqError("Contract is not allowed for this subscription type").
-         RETURN.
-      END.
-   END.   
-   ELSE IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
@@ -424,25 +410,25 @@ PROCEDURE pContractActivation:
       fReqError("Contract is not allowed for this subscription type").
       RETURN.
    END.
-   
-   IF DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
-      ASSIGN lcDataBONOContracts  = fCParamC("BONO_CONTRACTS").     
-   ELSE IF DayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN
-      ASSIGN lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
 
-   /* Only 1 BONO per type is allowed for activation for a subscription, so make sure subscription should not have active bonos */
-   IF LOOKUP(lcDCEvent,lcDataBONOContracts) > 0 THEN
-   DO:
-      FOR EACH ServiceLimit NO-LOCK WHERE LOOKUP(ServiceLimit.GroupCode,lcDataBONOContracts) > 0,
+   IF DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
+      lcBONOContracts = fCParamC("BONO_CONTRACTS").
+   ELSE IF DayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN
+      lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
+
+   /* Make sure subscription should not have active multiple
+      bundles at the same time */
+   IF LOOKUP(lcDCEvent,lcBONOContracts) > 0 THEN
+      FOR EACH ServiceLimit NO-LOCK WHERE
+               LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0,
           FIRST MServiceLimit WHERE
-                MServiceLimit.MsSeq    = MsOwner.MsSeq         AND
+                MServiceLimit.MsSeq = MsOwner.MsSeq      AND
                 MServiceLimit.DialType = ServiceLimit.DialType AND
-                MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
-                MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK:
-         fReqStatus(3,"Subscription already has active data BONO bundle").
+                MServiceLimit.SlSeq = ServiceLimit.SlSeq AND
+                MServiceLimit.EndTS >= MsRequest.ActStamp NO-LOCK:
+         fReqStatus(3,"Subscription already has active BONO bundle").
          RETURN.
       END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
-   END.
 
    /* Fetch TARJ7 and TARJ9 contract start date */
    IF lcDCEvent = "TARJ7_UPSELL" THEN
@@ -3279,17 +3265,7 @@ PROCEDURE pContractReactivation:
       RETURN.
    END. /* IF NOT AVAILABLE DayCampaign OR */
 
-   /* is the contract allowed */
-   IF lcDCEvent = "DATA7" THEN DO:
-      IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
-              lcUseCLIType = "CONT9" OR lcUseCLIType = "CONT10" OR
-              lcUseCLIType = "CONT26") AND
-         NOT fIsConvergenceTariff(lcUseCLIType) THEN DO:
-         fReqError("Contract is not allowed for this subscription type").
-         RETURN.
-      END.
-   END.
-   ELSE IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
