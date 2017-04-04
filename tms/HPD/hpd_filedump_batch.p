@@ -1,4 +1,7 @@
-DEFINE VARIABLE gcSessionParam AS CHARACTER NO-UNDO.
+{HPD/HPDConst.i}
+
+DEFINE VARIABLE gcSessionParam   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE gcTimeBasedDumps AS CHARACTER NO-UNDO.
 
 gcSessionParam = SESSION:PARAMETER.
 
@@ -6,6 +9,18 @@ IF NUM-ENTRIES(gcSessionParam) NE 1
 THEN DO:
    LOG-MANAGER:WRITE-MESSAGE("Incorrect Session parameter", "ERROR").
    RETURN.
+END.
+
+DO ON ERROR UNDO, THROW:
+
+   gcTimeBasedDumps = Syst.Parameters:getc("HPD.TimeBasedDumps", "HPD.Interface").
+
+   /* Handler code for any error condition. */
+   CATCH anyErrorObject AS Progress.Lang.Error:
+      gcTimeBasedDumps = "HPD_EDRHistory,HPD_MobCDR,HPD_PrepCDR,HPD_PrepEDR,HPD_Order,HPD_Invoice,HPD_MsRequest,HPD_Payment,HPD_PrepaidRequest,HPD_ServiceLCounter".
+      Syst.Parameters:setc("HPD.TimeBasedDumps", "HPD.Interface", gcTimeBasedDumps).
+   END CATCH.
+
 END.
 
 RUN pStart.
@@ -55,7 +70,9 @@ PROCEDURE pStart:
    
    LOG-MANAGER:WRITE-MESSAGE("Start processing dump " + DumpFile.DumpName, "INFO").
 
-   HandlerObj = DYNAMIC-NEW lcClassName(liDumpID, "").
+   IF LOOKUP(DumpFile.DumpName, gcTimeBasedDumps) > 0
+   THEN HandlerObj = DYNAMIC-NEW lcClassName(liDumpID, "").
+   ELSE HandlerObj = DYNAMIC-NEW lcClassName(liDumpID, "{&FileIDForMQ}").
 
    IF HandlerObj:llInterrupted
    THEN DO:

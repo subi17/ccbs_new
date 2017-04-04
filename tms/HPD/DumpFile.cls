@@ -11,13 +11,13 @@
 USING Progress.Lang.*.
 USING HPD.DumpHandler.
 USING HPD.HPDTime.
-USING HPD.DumpBase.
+USING HPD.DumpSomeWhere.
 
 {HPD/HPDEnvironment.i}
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-CLASS HPD.DumpFile INHERITS DumpBase: 
+CLASS HPD.DumpFile INHERITS DumpSomeWhere:
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -26,31 +26,9 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    DEFINE PRIVATE VARIABLE lcFile                  AS CHARACTER     NO-UNDO.
    DEFINE PRIVATE VARIABLE llAllowEmptyFile        AS LOGICAL       NO-UNDO.
    DEFINE PRIVATE VARIABLE llAllowMove             AS LOGICAL INITIAL TRUE NO-UNDO.
-   DEFINE PRIVATE VARIABLE lcTenant                AS CHARACTER     NO-UNDO.
-
-   DEFINE PUBLIC PROPERTY FullDumpLimit AS INTEGER NO-UNDO
-      GET:
-         DEFINE VARIABLE liNumber AS INTEGER NO-UNDO.
-
-         liNumber = INTEGER(lbDumpFile.UseIndex) NO-ERROR.
-
-         IF ERROR-STATUS:ERROR
-         THEN ASSIGN
-                 ERROR-STATUS:ERROR = FALSE
-                 liNumber           = 0
-                 .
-
-         IF liNumber <= 0 OR liNumber = ?
-         THEN RETURN 0.
-
-         RETURN liNumber.
-      END GET.
-      
-   DEFINE PUBLIC VARIABLE objHPDTime            AS CLASS HPDTime NO-UNDO.
 
    DEFINE PRIVATE STREAM str.
 
-   
    CONSTRUCTOR PUBLIC DumpFile
       ( iiDumpID AS INTEGER,
         iobjHandler AS CLASS DumpHandler ):      
@@ -65,31 +43,7 @@ CLASS HPD.DumpFile INHERITS DumpBase:
            
       SUPER(iiDumpID, iobjHandler).
 
-      lcTenant = mGetTenant(lbDumpFile.MainTable).
-
-      ASSIGN
-         objHPDTime = NEW HPDTime()
-         objHPDTime:CurrLocalTZTime = NOW
-         llAllowEmptyFile = lbDumpFile.EmptyFile
-         .
-
-      mUpdateDumpHeader(1,"",lbDumpFile.MainTable).
-      mUpdateDumpHeader(2,"","CREATE").
-
-      /* Lets populate the header elements that
-         are needed for offline dumps */
-      &IF "{&HPD_ENVIRONMENT}" = "Salt"
-      &THEN
-         mUpdateDumpHeader(3,"",objHPDTime:CurrUTCTime).
-      &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
-      &THEN
-         mUpdateDumpHeader(3,"",ISO-DATE(objHPDTime:CurrLocalTZTime)).
-      &ELSE
-         RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
-      &ENDIF
-
-      IF lcTenant > ""
-      THEN mUpdateDumpHeader(4,"",lcTenant).
+      llAllowEmptyFile = lbDumpFile.EmptyFile.
 
       IF icFile <> ""
       THEN ASSIGN
@@ -110,9 +64,6 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    
    DESTRUCTOR PUBLIC DumpFile( ):
 
-      IF VALID-OBJECT(objHPDTime)
-      THEN DELETE OBJECT objHPDTime.
-      
       DEFINE VARIABLE llEmptyFile AS LOGICAL NO-UNDO.
                
       llEmptyFile = ( SEEK(str) = 0 ).
@@ -139,41 +90,14 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    END DESTRUCTOR.
 
 
-   METHOD PRIVATE CHARACTER mGetTenant
-      ( icTableName AS CHARACTER ):
-
-      DEFINE VARIABLE lhBuffer      AS HANDLE    NO-UNDO.
-      DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
-
-      CREATE BUFFER lhBuffer FOR TABLE icTableName.
-
-      lcReturnValue = TENANT-NAME(lhBuffer:DBNAME).
-
-      &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
-      &THEN
-         IF lcReturnValue = "Default"
-         THEN lcReturnValue = "yoigo".
-         ELSE lcReturnValue = SUBSTRING(lcReturnValue,2).
-      &ENDIF
-
-      RETURN lcReturnValue.
-
-      FINALLY:
-         IF VALID-HANDLE(lhBuffer)
-         THEN DELETE OBJECT lhBuffer.
-      END FINALLY.
-
-   END METHOD.
-
-
-   METHOD PUBLIC VOID mWriteALine(): 
+   METHOD PUBLIC OVERRIDE VOID mWriteALine():
 
       PUT STREAM str UNFORMATTED mGetData() SKIP.
 
    END METHOD.
 
 
-   METHOD PUBLIC VOID mWriteALine
+   METHOD PUBLIC OVERRIDE VOID mWriteALine
       (icLine AS CHARACTER):
 
       PUT STREAM str UNFORMATTED icLine SKIP.
@@ -181,7 +105,7 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    END METHOD.
 
 
-   METHOD PUBLIC VOID mWriteALineWithPrefix
+   METHOD PUBLIC OVERRIDE VOID mWriteALineWithPrefix
       (icPrefix AS CHARACTER):
 
       PUT STREAM str UNFORMATTED icPrefix + mGetData() SKIP.
