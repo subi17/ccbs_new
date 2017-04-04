@@ -124,7 +124,7 @@ DO:
         IF bf_Matrix.MXRes <> 1 THEN
             NEXT.
 
-        FOR EACH bf_MxItem WHERE bf_MxItem.MsSeq = bf_Matrix.MxSeq AND bf_MxItem.MxName = "SubsTypeTo" AND bf_MxItem.MxValue = MobSub.CliType NO-LOCK:             
+        FOR EACH bf_MxItem WHERE bf_MxItem.MxSeq = bf_Matrix.MxSeq AND bf_MxItem.MxName = "SubsTypeTo" AND bf_MxItem.MxValue = MobSub.CliType NO-LOCK:             
             FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK:
                 
                 FIND FIRST DayCampaign WHERE Daycampaign.Brand = gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
