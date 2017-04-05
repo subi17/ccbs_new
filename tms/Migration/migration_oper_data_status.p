@@ -43,6 +43,7 @@ DEF TEMP-TABLE ttNotifyList
 FUNCTION fStatusComment RETURNS CHAR
    (iiIn AS INT):
    IF      iiIN EQ 2 THEN RETURN "Completed".
+   ELSE IF iiIn EQ 9 THEN RETURN "Completed".
    ELSE IF iiIn EQ 3 THEN RETURN "Failed".
 
    RETURN "Not completed".
@@ -248,10 +249,21 @@ END.
 ELSE DO: /*Initialization OK, ready to send data to Migration tool*/
    /*Actual processing*/
    ldCollPeriodStartTS = ActionLog.ActionTS.
+   ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*now - 1 minute */
 
-   /*TODO logic for sending the notifications*/
+   PUT STREAM sLog UNFORMATTED
+      "Failed case collection starts " + fTS2HMS(fMakeTS()) SKIP.
+   fFailedOperDataSettings(ldCollPeriodStartTS, ldCollPeriodEndTS).
+   
+   PUT STREAM sLog UNFORMATTED
+      "Completed case collection starts" + fTS2HMS(fMakeTS()) SKIP.
+   fOKOperDataSettings(ldCollPeriodStartTS, ldCollPeriodEndTS).
 
-
+   PUT STREAM sLog UNFORMATTED
+      "Reporting part starts" + fTS2HMS(fMakeTS()) SKIP.
+   FOR EACH ttNotifyList:
+      fNotifyWEB(ttNotifyList.msseq).
+   END.
 
 END.
 
