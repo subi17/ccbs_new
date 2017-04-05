@@ -268,7 +268,7 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
 END FUNCTION.
 
 
-FUNCTION fCheckExistConvergentOR2P RETURNS LOGICAL
+FUNCTION fExistFullConvergentOR2P RETURNS INTEGER
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR):
 
@@ -288,11 +288,11 @@ FUNCTION fCheckExistConvergentOR2P RETURNS LOGICAL
              bMobSub.MsStatus = {&MSSTATUS_BARRED}):
     
       IF fIsConvergentORFixedOnly(bMobSub.CLIType) THEN 
-         RETURN TRUE.
+         RETURN bMobSub.MsSeq.
 
    END.   
 
-   RETURN FALSE.
+   RETURN 0.
 
 END FUNCTION.
 

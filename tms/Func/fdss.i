@@ -668,7 +668,7 @@ FUNCTION fIsDSSAllowed RETURNS LOG
          liSubCount = liSubCount + 1.
       END.
 
-      IF NOT fCheckExistConvergentOR2P(Customer.CustIDType, Customer.OrgID) OR
+      IF fExistFullConvergentOR2P(Customer.CustIDType, Customer.OrgID) > 0 OR
          liSubCount < 2 THEN DO:
          ocResult = "ERROR:DSS is not allowed for this Customer".
          RETURN FALSE.
