@@ -28,6 +28,7 @@
 {Func/main_add_lines.i}
 {Func/fixedlinefunc.i}
 {Func/orderfunc.i}
+{Mc/dpmember.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -918,6 +919,14 @@ PROCEDURE pTerminate:
          RUN pChangeDelType(MobSub.CustNum).
    END. 
 
+   /* ADDLINE-20 Additional Line */
+   IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+      fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
+                     MobSub.MsSeq,
+                     fLastDayOfMonth(TODAY),
+                     FALSE).
+   END.
+
    /* COFF Partial termination */
    IF lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} THEN DO:
       CREATE TermMobsub.
@@ -942,6 +951,20 @@ PROCEDURE pTerminate:
 
    END.   
    IF AVAIL MSISDN THEN RELEASE MSISDN.
+
+   /* ADDLine-20 Additional Line */
+   IF fIsConvergentORFixedOnly(TermMobSub.CLIType) THEN DO:
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobSub.Brand   = gcBrand        AND
+               bMobSub.AgrCust = TermMobSub.CustNum AND
+               bMobSub.MsSeq  <> TermMobSub.MsSeq   AND
+               LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               fLastDayOfMonth(TODAY)).
+      END.
+   END.
 
    /* Find Original request */
    FIND FIRST MSRequest WHERE
