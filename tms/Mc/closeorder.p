@@ -232,6 +232,7 @@ DO:
                    OrderCustomer.CustIDType = lbOrderCustomer.CustIDType AND
                    OrderCustomer.CustID     = lbOrderCustomer.CustID,
              FIRST lbOrder NO-LOCK WHERE
+                   lbOrder.Brand = gcBrand AND
                    lbOrder.OrderID    = OrderCustomer.OrderID             AND
                    lbOrder.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} AND
                    LOOKUP(lbOrder.CLIType, {&ADDLINE_CLITYPES}) > 0:
