@@ -851,9 +851,8 @@ IF NOT llErrors THEN DO:
                                       BUFFER OrderCustomer).
       END.
 
-      IF (Order.DeliverySecure EQ 1 OR
-          Order.DeliveryType EQ {&ORDER_DELTYPE_POST}) AND
-          Order.DeliveryType NE {&ORDER_DELTYPE_POS} THEN ASSIGN
+      IF Order.DeliverySecure EQ 1 OR
+         Order.DeliveryType EQ {&ORDER_DELTYPE_POST} THEN ASSIGN
          lcTagDelAddress = fTeksti(560,liLanguage)
          lcTagDelPost = "".
       ELSE DO:
