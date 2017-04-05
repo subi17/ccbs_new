@@ -339,6 +339,39 @@ FUNCTION fSearchStock RETURNS CHARACTER
 
 END FUNCTION.
 
+/* Function releases OR CLOSE Additional lines */
+FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
+   (INPUT icCustIDType  AS CHAR,
+    INPUT icCustID      AS CHAR,
+    INPUT icOrderStatus AS CHAR):
+
+   DEF BUFFER labOrder         FOR Order.
+   DEF BUFFER labOrderCustomer FOR OrderCustomer.
+   
+   FOR EACH labOrderCustomer NO-LOCK WHERE
+            labOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            labOrderCustomer.CustId     EQ icCustID                AND
+            labOrderCustomer.CustIdType EQ icCustIDType            AND
+            labOrderCustomer.RowType    EQ 1,
+       EACH labOrder NO-LOCK WHERE
+            labOrder.Brand      EQ Syst.Parameters:gcBrand  AND
+            labOrder.orderid    EQ labOrderCustomer.Orderid AND
+            labOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}    AND
+            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
+
+      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                        CLIType.Brand      = Syst.Parameters:gcBrand           AND
+                        CLIType.CLIType    = labOrder.CLIType                  AND
+                        CLIType.LineType   = {&CLITYPE_LINETYPE_NONMAIN}       AND
+                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN 
+         fSetOrderStatus(labOrder.OrderId,icOrderStatus).
+
+   END.   
+   
+   RETURN TRUE.
+
+END FUNCTION.   
+
 &ENDIF.
 
 
