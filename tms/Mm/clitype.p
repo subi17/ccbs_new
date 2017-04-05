@@ -83,6 +83,7 @@ DEF VAR lcUsageType  AS CHAR NO-UNDO.
 DEF VAR lcBundleType AS CHAR NO-UNDO.
 DEF VAR lcLineType   AS CHAR NO-UNDO.
 DEF VAR lcFixedLineType  AS CHAR NO-UNDO.
+DEF VAR lcTariffType     AS CHAR NO-UNDO. 
 
 form
     CliType.Brand      FORMAT "X(2)" COLUMN-LABEL "Br"
@@ -116,9 +117,8 @@ form
     "Disc. plan ...:"  CLIType.DiscPlan    DPName   SKIP
     
     "Service pack .:"  CliType.ServicePack FORMAT "x(2)" 
-      SPName FORMAT "x(10)" SKIP
-    "Service Class :"  CliType.ServiceClass     SKIP
-    
+      SPName FORMAT "x(10)" 
+    "Service Class :"  AT 35 CliType.ServiceClass     SKIP
     
     "BillingTarget :"  Clitype.BillTarget           SKIP
     "DOC1 Code ....:"  Clitype.ContrType 
@@ -152,7 +152,10 @@ form
     "Fixed LineType:"  AT 35 CLIType.FixedLineType
         HELP "1=ADSL, 2=FIBER"
         lcFixedLineType NO-LABEL FORMAT "X(15)" SKIP
-    
+    "Tariff Type...:" CLIType.TariffType  
+        HELP "0=MobileOnly, 1=Convergent, 2=FixedOnly, 3=Fusion"
+        lcTariffType NO-LABEL FORMAT "X(15)" 
+
 WITH OVERLAY ROW 2 centered
    COLOR value(cfc)
    TITLE COLOR value(ctc)
@@ -226,6 +229,15 @@ FUNCTION fFixedLineType RETURNS LOGIC
                                       "FixedLineType",
                                       STRING(iiFixedLineType)).
 END FUNCTION.
+
+FUNCTION fTariffType RETURNS LOGIC
+   (iiTariffType AS INT):
+
+   lcTariffType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
+                                   "CLIType",
+                                   "TariffType",
+                                    STRING(iiTariffType)).
+END FUNCTION.   
 
 FUNCTION fUsageType RETURNS LOGIC
    (iiUsageType AS INT):
@@ -708,6 +720,8 @@ PROCEDURE local-find-others.
 
    fFixedLineType(CLIType.FixedLineType).
 
+   fTariffType(CLIType.TariffType).
+   
    fUsageType(CLIType.UsageType).
    
 END PROCEDURE.
@@ -766,6 +780,7 @@ PROCEDURE local-UPDATE-record:
           CLIType.StatusCode lcStatus
           CLIType.LineType lcLineType
           CLIType.FixedLineType lcFixedLineType
+          CLIType.TariffType  lcTariffType
       WITH FRAME lis.
 
       ASSIGN lcAccName = fAccName(CLIType.ARAccNum)
@@ -809,6 +824,7 @@ PROCEDURE local-UPDATE-record:
             CLIType.StatusCode
             CLIType.LineType
             CLIType.FixedLineType
+            CLIType.TariffType
          WITH FRAME lis EDITING:
          
             READKEY.
@@ -967,6 +983,17 @@ PROCEDURE local-UPDATE-record:
                   END.    
                END.
 
+               ELSE IF FRAME-FIELD = "TariffType" THEN DO:
+                  fTariffType(INPUT INPUT CLIType.TariffType).
+                  DISP lcTariffType WITH FRAME lis.
+
+                  IF lcTariffType = "" THEN DO:
+                     MESSAGE "Unknown Tariff type"
+                     VIEW-AS ALERT-BOX ERROR.
+                     NEXT.
+                  END.    
+               END.
+
             END.
             APPLY LASTKEY.
          END.
@@ -1007,7 +1034,8 @@ PROCEDURE local-UPDATE-record:
                CLIType.WebStatusCode
                CLIType.StatusCode
                CLIType.LineType
-               CLIType.FixedLineType.
+               CLIType.FixedLineType
+               CLIType.TariffType.
 
             IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCLIType).
             
