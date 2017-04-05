@@ -11,8 +11,8 @@
 
 FUNCTION fCheckFileNameChars RETURNS LOGICAL
    (icFileName AS CHAR):
-   IF INDEX(icFileName,"&") > 0 THEN RETURN FALSE.
-   IF INDEX(icFileName," ") > 0 THEN RETURN FALSE.
+   IF INDEX(icFileName,'"') > 0 THEN RETURN FALSE.
+   IF INDEX(icFileName,'&') > 0 THEN RETURN FALSE.
    RETURN TRUE.
 END.
 
@@ -88,7 +88,7 @@ FUNCTION fMove2TransDir RETURNS CHARACTER
                                icExt).
 
     /* move the file */
-    UNIX SILENT VALUE("mv " + icFile + " " + lcTarget + " >/dev/null 2>&1").
+    UNIX SILENT VALUE("mv " + QUOTER(icFile) + " " + QUOTER(lcTarget) + " >/dev/null 2>&1").
 
     FILE-INFO:FILE-NAME = lcTarget.
     IF FILE-INFO:FILE-TYPE BEGINS "F" THEN RETURN lcTarget.
@@ -116,7 +116,7 @@ FUNCTION fCopy2TargetDir RETURNS CHARACTER
                                icExt).
 
     /* copy the file */
-    UNIX SILENT VALUE("cp " + icFile + " " + lcTarget + " >/dev/null 2>&1").
+    UNIX SILENT VALUE("cp " + QUOTER(icFile) + " " + QUOTER(lcTarget) + " >/dev/null 2>&1").
 
     FILE-INFO:FILE-NAME = lcTarget.
     IF FILE-INFO:FILE-TYPE BEGINS "F" THEN RETURN lcTarget.
@@ -148,7 +148,7 @@ FUNCTION fMove2TransDirOverwrite RETURNS LOGICAL
     lcTarget = icToDir + "/" + lcTarget.
 
     /* move the file */
-    UNIX SILENT VALUE("mv " + icFile + " " + lcTarget + " >/dev/null 2>&1").
+    UNIX SILENT VALUE("mv " + QUOTER(icFile) + " " + QUOTER(lcTarget) + " >/dev/null 2>&1").
 
     FILE-INFO:FILE-NAME = lcTarget.
     RETURN (FILE-INFO:FILE-TYPE BEGINS "F").
