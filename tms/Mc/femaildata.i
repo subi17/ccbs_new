@@ -1262,6 +1262,7 @@ PROCEDURE pGetDELADDR:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    IF Order.DeliverySecure EQ 1 OR
+      Order.DeliverySecure EQ 2 OR
       Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
       Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
       Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
@@ -1295,6 +1296,7 @@ PROCEDURE pGetDELPOST:
       lcErr = fGetOrderData (INPUT iiOrderNBR).
 
       IF Order.DeliverySecure EQ 1 OR
+         Order.DeliverySecure EQ 2 OR
          Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
          Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
          Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
