@@ -1262,6 +1262,7 @@ PROCEDURE pGetDELADDR:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    IF Order.DeliverySecure EQ 1 OR
+      Order.DeliverySecure EQ 2 OR
       Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
       Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
       Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
@@ -1295,6 +1296,7 @@ PROCEDURE pGetDELPOST:
       lcErr = fGetOrderData (INPUT iiOrderNBR).
 
       IF Order.DeliverySecure EQ 1 OR
+         Order.DeliverySecure EQ 2 OR
          Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
          Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
          Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
@@ -1891,7 +1893,7 @@ PROCEDURE pGetCTNAME:
          OTHERWISE lcList = "".
        END.
 
-       IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 THEN DO:
+       IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 OR fIsConvergenceTariff(Order.CLIType) THEN DO:
 
           llAddLineDiscount = FALSE.
 
@@ -1923,7 +1925,7 @@ PROCEDURE pGetCTNAME:
                        OfferItem.Offer       = Order.Offer         AND
                        OfferItem.ItemType    = "discountplan"      AND
                        LOOKUP(OfferItem.ItemKey,
-                       "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC") > 0 AND
+                       "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC,CONVDISC") > 0 AND
                        OfferItem.BeginStamp <= Order.CrStamp       AND
                        OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
                  FIRST DiscountPlan WHERE
@@ -2037,6 +2039,7 @@ PROCEDURE pGetCTNAME:
        END.
        ELSE IF Order.CliType EQ "CONT25" AND /* April promotion */
                NOT llAddLineDiscount     AND
+               Order.Ordertype = {&ORDER_TYPE_MNP} AND
               (Order.Crstamp >= fCParamDe("March2017AprilFromDate") AND /* 20170403 */
                Order.Crstamp < fCParamDe("March2017PromoToDate")) THEN DO:
           lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>25 GB/mes extra free during 6 months"
