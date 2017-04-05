@@ -67,6 +67,7 @@
                keep_installment;boolean;optional;
                multiorder;boolean;optional;
                terminal_financing_bank;string;optional
+               additional_line_discount;string;optional
  * @customer_data fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -416,6 +417,10 @@ DEF VAR lcAccessoryStruct AS CHAR NO-UNDO.
 /*Financing info*/
 DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
 
+/* ADDLINE-20 Additional Line */
+DEF VAR pcAdditionaLineDiscount AS CHAR NO-UNDO.
+DEF BUFFER AddLineDiscountPlan FOR DiscountPlan.
+
 DEF VAR lcItemParam AS CHAR NO-UNDO.
 
 /* Prevent duplicate orders YTS-2166 */
@@ -580,6 +585,9 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
    IF LOOKUP('terminal_financing_bank', lcOrderStruct) GT 0 THEN
       pcTerminalFinancing = get_string(pcOrderStruct,"terminal_financing_bank").
+
+   IF LOOKUP('additional_line_discount', lcOrderStruct) GT 0 THEN
+      pcAdditionaLineDiscount = get_string(pcOrderStruct,"additional_line_discount").
 
    RETURN TRUE.
 END.
@@ -1266,7 +1274,8 @@ gcOrderStructFields = "billing_data," +
                       "tarj7_promo," +
                       "terminal_financing_bank," +
                       "keep_installment," +
-                      "multiorder".
+                      "multiorder," +
+                      "additional_line_discount".
 
 gcCustomerStructFields = "birthday," +
                          "city!," +
@@ -1414,6 +1423,17 @@ IF pcDiscountPlanId > "" THEN DO:
               DiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL DiscountPlan THEN
       RETURN appl_Err(SUBST("Incorrect discount plan id: &1", pcDiscountPlanId)).
+END.
+
+/* ADDLINE-20 Additional Line */
+IF pcAdditionaLineDiscount > "" THEN DO:
+   FIND FIRST AddLineDiscountPlan WHERE
+              AddLineDiscountPlan.Brand      = gcBrand                 AND
+              AddLineDiscountPlan.DPRuleID   = pcAdditionaLineDiscount AND
+              AddLineDiscountPlan.ValidFrom <= TODAY                   AND
+              AddLineDiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+   IF NOT AVAIL AddLineDiscountPlan THEN
+      RETURN appl_Err(SUBST("Incorrect Additional Line Discount Plan ID: &1", pcAdditionaLineDiscount)).
 END.
 
 /* YBP-516 */
@@ -1718,7 +1738,9 @@ IF LOOKUP(pcNumberType,"new,mnp") > 0 AND
    CLIType.LineType > 0 AND
    NOT CAN-FIND(FIRST CLIType WHERE
                       CLIType.Brand = gcBrand AND
-                      CLIType.CLIType = pcMobsubBundleType AND
+                      CLIType.CLIType = (IF pcMobsubBundleType > "" THEN
+                                            pcMobsubBundleType
+                                         ELSE pcSubType)           AND
                       CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
    IF NOT fIsMainLineSubActive(
@@ -1859,6 +1881,14 @@ IF AVAIL DiscountPlan THEN DO:
                      "Discount",
                       STRING(DiscountPlan.DPId),
                       lcItemParam).
+END.
+
+/* ADDLINE-20 Additional Line */
+IF AVAIL AddLineDiscountPlan THEN DO:
+   fCreateOrderAction(Order.Orderid,
+                      "AddLineDiscount",
+                      AddLineDiscountPlan.DPRuleId,
+                      "").
 END.
 
 /* YBP-548 */

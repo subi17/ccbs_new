@@ -257,8 +257,9 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
 
             IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcRetentionSMSText) THEN NEXT.
 
-            /* YOT-4956 R6: If suscriber has not any invoices paid, subscription is excluded from Retention file */
-            IF NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
+            /* YOT-4956 R6: If suscriber has not any invoices paid, subscription is excluded from Retention file changed to only Postpaid subscriptions */
+            IF MobSub.PayType = FALSE AND
+               NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                                   Invoice.Brand   = gcBrand            AND
                                   Invoice.CustNum = MobSub.CustNum     AND
                                   Invoice.InvType = {&INV_TYPE_NORMAL} AND
