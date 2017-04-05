@@ -73,8 +73,7 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
          RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
       &ENDIF
 
-      IF lcTenant > ""
-      THEN mUpdateDumpHeader(6,"",lcTenant).
+      mUpdateDumpHeader(6,"",lcTenant).
                   
    END CONSTRUCTOR.
    
