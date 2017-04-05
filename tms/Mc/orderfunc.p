@@ -46,12 +46,18 @@ DO i = 1 TO 2:
       FIRST OrderFunction NO-LOCK WHERE 
             OrderFunction.OFID = OFItem.OFID:
 
+      IF AVAILABLE Order AND
+         OrderFunction.OfModule EQ "Mc/orderinctrl.p,iiOrderId,2" AND
+         (Order.DeliveryType NE {&ORDER_DELTYPE_POS} OR
+          INDEX(Order.OrderChannel,"pos") > 0 OR
+          Order.OrderType > 2) THEN NEXT.
+
       IF AVAIL Order AND
                OrderFunction.OfModule EQ "Mc/orderinctrl.p,iiOrderId,1" AND
                (INDEX(Order.OrderChannel,"pos") > 0 OR
                 Order.OrderType > 2) THEN NEXT.
 
-      IF AVAIL Order AND Order.DeliverySecure EQ 1 AND
+      IF AVAIL Order AND Order.DeliverySecure > 0 AND
                OrderFunction.OfModule EQ "Mc/orderinctrl.p,iiOrderId,0" THEN NEXT.
       
       CREATE ttBrowser.     
@@ -377,11 +383,13 @@ REPEAT WITH FRAME sel:
            END. 
            
            ELSE IF lcModule = "Mc/orderinctrl.p" THEN DO:
-              IF TRIM(ENTRY(3,ttbrowser.ofmodule,",")) EQ "1"
-              THEN RUN VALUE(lcModule) (iiOrderid, 1, FALSE).
-              ELSE RUN VALUE(lcModule) (iiOrderid, 0, FALSE).
+              CASE TRIM(ENTRY(3,ttbrowser.ofmodule,",")):
+                 WHEN "1" THEN RUN VALUE(lcModule) (iiOrderid, 1, FALSE).
+                 WHEN "2" THEN RUN VALUE(lcModule) (iiOrderid, 2, FALSE).
+                 OTHERWISE RUN VALUE(lcModule) (iiOrderid, 0, FALSE).
+              END CASE.
            END.
-           
+
            ELSE IF lookup(lcModule,"Mc/closeorder.p,Mc/orderneeddoc.p") > 0 THEN DO:
               RUN VALUE(lcModule) (iiOrderid,FALSE).
            END. 
