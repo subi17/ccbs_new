@@ -31,6 +31,7 @@
 {Func/main_add_lines.i}
 {Func/fbankdata.i}
 {Mm/fbundle.i}
+{Mc/dpmember.i}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
@@ -884,6 +885,7 @@ PROCEDURE pMsCustMove:
    DEF VAR ldaDate      AS DATE NO-UNDO. 
    DEF VAR liManTime    AS INT  NO-UNDO. 
    DEF VAR lcDate       AS CHAR NO-UNDO. 
+   DEF VAR liOldAgrCust AS INT  NO-UNDO.
 
    DEF BUFFER bBillTarget FOR BillTarget.
    DEF BUFFER bOwner      FOR MSOwner.
@@ -1277,6 +1279,7 @@ PROCEDURE pMsCustMove:
    FIND CURRENT MobSub EXCLUSIVE-LOCK.
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobSub).
+   liOldAgrCust = MobSub.AgrCust.
    ASSIGN MobSub.CustNum = iiNewUser    WHEN iiNewUser > 0
           MobSub.InvCust = iiNewInvCust WHEN iiNewInvCust > 0
           MobSub.AgrCust = iiNewOwner.
@@ -1284,6 +1287,26 @@ PROCEDURE pMsCustMove:
    IF MsRequest.ReqIParam3 = 1 THEN DO: 
       Mobsub.Salesman = ENTRY(11,MsRequest.ReqCParam1,";").
    END.   
+
+   /* ADDLINE-20 Additional Line */
+   IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+      fCloseAddLineDiscount(MobSub.AgrCust,
+                            MobSub.MsSeq,
+                            MobSub.CLIType,
+                            TODAY - 1).
+   END.
+   ELSE IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:
+      FOR EACH bOMobSub NO-LOCK WHERE
+               bOMobSub.Brand   = gcBrand      AND
+               bOMobSub.AgrCust = liOldAgrCust AND
+               bOMobSub.MsSeq  <> MobSub.MsSeq AND
+               LOOKUP(bOMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+            fCloseAddLineDiscount(bOMobSub.AgrCust,
+                                  bOMobSub.MsSeq,
+                                  bOMobSub.CLIType,
+                                  TODAY - 1).
+      END.
+   END.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobSub).
    
