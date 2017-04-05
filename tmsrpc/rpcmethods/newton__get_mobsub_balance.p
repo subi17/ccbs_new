@@ -207,7 +207,8 @@ fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
                INPUT-OUTPUT liErrorCodeOut,
                INPUT-OUTPUT tthCDR).
 
-IF liErrorCodeOut = 0 AND MobSub.FixedNumber > "" THEN 
+IF liErrorCodeOut = 0 AND MobSub.FixedNumber > "" AND
+   MobSub.CLI <> MobSub.FixedNumber THEN /* Partial terminated */
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
                INPUT gcBrand,
                INPUT "rpc",
