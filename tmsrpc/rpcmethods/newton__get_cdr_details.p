@@ -504,8 +504,10 @@ fMakeHeader(resp_row).
 resp_rows = add_array(resp_struct, "rows").
 fCollectCdrs(MobSub.Cli).
 
-/* If there is fixed line number also then put that data into fixed_line struct */
-IF MobSub.FixedNumber <> ? THEN DO:
+/* If there is fixed line number also then put that data into fixed_line struct 
+   when convergent is not partial terminated. */
+IF MobSub.FixedNumber <> ? AND
+   MobSub.FixedNumber <> MobSub.Cli THEN DO:
    fCollectCdrs(MobSub.FixedNumber).
 END.
 
