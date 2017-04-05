@@ -656,6 +656,7 @@ FUNCTION fIsDSSAllowed RETURNS LOG
       END. /* IF fMatrixAnalyse(gcBrand */
    END.
 
+   /* ADDLINE-23 Additional Line DSS Check */
    FIND FIRST Customer NO-LOCK WHERE
               Customer.CustNum = iiCustNum NO-ERROR.
    IF AVAILABLE Customer THEN DO:
@@ -668,8 +669,8 @@ FUNCTION fIsDSSAllowed RETURNS LOG
          liSubCount = liSubCount + 1.
       END.
 
-      IF fExistFullConvergentOR2P(Customer.CustIDType, Customer.OrgID) > 0 OR
-         liSubCount < 2 THEN DO:
+      IF liSubCount < 2 OR
+         fExistFullConvergentOR2P(Customer.CustIDType, Customer.OrgID) > 0 THEN DO:
          ocResult = "ERROR:DSS is not allowed for this Customer".
          RETURN FALSE.
       END.

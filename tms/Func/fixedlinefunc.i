@@ -267,7 +267,7 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
 
 END FUNCTION.
 
-
+/* Function Return First Fully Convergent OR 2P Line MsSeq Aactive on the customer */
 FUNCTION fExistFullConvergentOR2P RETURNS INTEGER
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR):
