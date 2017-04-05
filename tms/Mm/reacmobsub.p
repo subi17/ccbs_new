@@ -26,6 +26,7 @@
 {Func/fsubstermreq.i}
 {Func/fbankdata.i}
 {Func/fbtc.i}
+{Mc/dpmember.i}
 
 DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 
@@ -736,7 +737,32 @@ DO TRANSACTION:
    END.
 
    fReqStatus(2,"").
-         
+   
+
+   /* ADDLINE-20 Additional Line 
+      IF the Customer reactivates the below additional line tariff's then,
+      checking if convergent active OR not, based on that closing the old one AND creating the new discount */
+   IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+      FIND FIRST Customer NO-LOCK WHERE
+                 Customer.Custnum = MobSub.Custnum NO-ERROR.
+      FOR EACH DiscountPlan NO-LOCK WHERE
+               DiscountPlan.Brand    = gcBrand                         AND
+               LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
+               DiscountPlan.ValidTo >= TODAY,
+         FIRST DPMember NO-LOCK WHERE
+               DPMember.DPID       = DiscountPlan.DPID    AND
+               DPMember.HostTable  = "MobSub"             AND
+               DPMember.KeyValue   = STRING(MobSub.MsSeq):
+         IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
+            fCreateAddLineDiscount(MobSub.MsSeq,
+                                   MobSub.CLIType,
+                                   TODAY).
+            IF RETURN-VALUE BEGINS "ERROR" THEN
+               RETURN RETURN-VALUE.
+         END.
+      END.
+   END.
+
    /* YDR-2037 */
    RUN pRecoverSTC IN THIS-PROCEDURE (BUFFER MobSub, BUFFER MsRequest).
 
