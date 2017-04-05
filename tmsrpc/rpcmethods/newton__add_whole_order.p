@@ -420,6 +420,9 @@ DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
 DEF VAR pcAdditionaLineDiscount AS CHAR NO-UNDO.
 DEF BUFFER AddLineDiscountPlan FOR DiscountPlan.
 
+/* April promotion CONVDISC */
+DEF BUFFER ConvDiscountPlan FOR DiscountPlan.
+
 DEF VAR lcItemParam AS CHAR NO-UNDO.
 
 /* Prevent duplicate orders YTS-2166 */
@@ -1420,6 +1423,17 @@ IF pcDiscountPlanId > "" THEN DO:
       RETURN appl_Err(SUBST("Incorrect discount plan id: &1", pcDiscountPlanId)).
 END.
 
+/* Apply CONVDISC discount to convergent tariff with STC order - April promo */
+IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
+   FIND FIRST ConvDiscountPlan WHERE
+              ConvDiscountPlan.Brand = gcBrand AND
+              ConvDiscountPlan.DPRuleID = "CONVDISC" AND
+              ConvDiscountPlan.ValidFrom <= TODAY AND
+              ConvDiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+   IF NOT AVAIL ConvDiscountPlan THEN
+      RETURN appl_Err("Incorrect discount plan CONVDISC").
+END.
+
 /* ADDLINE-20 Additional Line */
 IF pcAdditionaLineDiscount > "" THEN DO:
    FIND FIRST AddLineDiscountPlan WHERE
@@ -1876,6 +1890,14 @@ IF AVAIL DiscountPlan THEN DO:
                      "Discount",
                       STRING(DiscountPlan.DPId),
                       lcItemParam).
+END.
+
+/* April promotion */
+IF AVAIL ConvDiscountPlan THEN DO:
+   fCreateOrderAction(Order.Orderid,
+                      "Discount",
+                      STRING(ConvDiscountPlan.DPId),
+                      "").
 END.
 
 /* ADDLINE-20 Additional Line */
