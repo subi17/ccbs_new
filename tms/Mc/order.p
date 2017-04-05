@@ -1687,11 +1687,9 @@ PROCEDURE local-find-others.
    END.
       
    IF Order.DeliverySecure EQ 1
-   THEN DO:
-      IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
-      THEN liDeliveryType = {&ORDER_DELTYPE_POS_SECURE}.
-      ELSE liDeliveryType = {&ORDER_DELTYPE_POST_SECURE}.
-   END.
+   THEN liDeliveryType = {&ORDER_DELTYPE_POST_SECURE}.
+   ELSE IF Order.DeliverySecure EQ 2
+   THEN liDeliveryType = {&ORDER_DELTYPE_POS_SECURE}.
    ELSE liDeliveryType = Order.DeliveryType.
 
    lcDeliveryType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
