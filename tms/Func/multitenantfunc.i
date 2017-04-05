@@ -178,10 +178,16 @@ FUNCTION fGetTableBrand RETURNS CHARACTER
 
    DEFINE VARIABLE lhBuffer      AS HANDLE    NO-UNDO.
    DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llFound       AS LOGICAL   NO-UNDO.
 
    CREATE BUFFER lhBuffer FOR TABLE icTableName.
 
-   lcReturnValue = TENANT-NAME(lhBuffer:DBNAME).
+   llFound = lhBuffer:FIND-FIRST("", NO-LOCK) NO-ERROR.
+
+   IF NOT llFound
+   THEN RETURN "".
+
+   lcReturnValue = lhBuffer:BUFFER-TENANT-NAME.
 
    RETURN fConvertTenantToBrand(lcReturnValue).
 
