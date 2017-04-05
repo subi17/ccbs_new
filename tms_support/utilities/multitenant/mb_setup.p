@@ -126,6 +126,15 @@ FOR EACH TMSParam WHERE
    TMSParam.ParamCode = REPLACE(TMSParam.ParamCode,"1","2").
 END.
 
+DDebitFileName
+
+FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "DirDebit" AND
+              TMSParam.ParamCode EQ "DDebitFileName" NO-ERROR.
+   IF INDEX(TMSParam.charval,"MASMOVIL") EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"YOIGO","MASMOVIL").
+
 /* Common tables */
 
 
