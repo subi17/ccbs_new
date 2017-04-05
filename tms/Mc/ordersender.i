@@ -101,6 +101,35 @@
             END.
 
             ASSIGN llOrdStChg = no.
+            
+            /* Move Mobile only tariff order to 76 queue, if customer 
+               has ongoing convergent order */
+            IF (Order.OrderType EQ {&ORDER_TYPE_NEW}  OR
+                Order.OrderType EQ {&ORDER_TYPE_MNP}) AND 
+               CAN-FIND(FIRST CLIType NO-LOCK WHERE 
+                              CLIType.Brand      = gcBrand       AND 
+                              CLIType.CLIType    = Order.CLIType AND 
+                              CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
+ 
+               FIND FIRST OrderCustomer NO-LOCK WHERE
+                          OrderCustomer.Brand   = gcBrand       AND
+                          OrderCustomer.OrderId = Order.OrderId AND
+                          OrderCustomer.RowType = 1             NO-ERROR.
+               
+               IF NOT fCheckExistingConvergent(OrderCustomer.CustIDType,
+                                               OrderCustomer.CustID) THEN DO:
+                  
+                  IF fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
+                                                  OrderCustomer.CustId) THEN DO:
+                     fSetOrderStatus(Order.OrderID,
+                                     {&ORDER_STATUS_PENDING_MAIN_LINE}).
+                     NEXT {1}.
+                  END.
+               
+               END.
+
+            END.    
+            
             /* YDR-1825 MNP SIM ONLY Orders
               Additional ordertimestamp is to prevent infinitive loop */
             IF lcSIMonlyMNP EQ "true" AND
