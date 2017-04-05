@@ -55,35 +55,12 @@ llOrderAllowed = fSubscriptionLimitCheck(
    OUTPUT liActLimit,
    OUTPUT liActs).
 
-FOR FIRST Customer WHERE
-          Customer.Brand = gcBrand AND
-          Customer.OrgId = pcPersonId AND
-          Customer.CustidType = pcIdType AND
-          Customer.Roles NE "inactive" NO-LOCK,
-    EACH  MobSub NO-LOCK WHERE
-          MobSub.Brand   = gcBrand AND
-          MobSub.InvCust = Customer.CustNum AND
-          MobSub.PayType = FALSE,
-    FIRST CLIType NO-LOCK WHERE
-          CLIType.Brand = gcBrand AND
-          CLIType.CLIType = (IF MobSub.TariffBundle > ""
-                             THEN MobSub.TariffBundle
-                             ELSE MobSub.CLIType) AND
-          CLIType.LineType > 0:
-   
-   /* To exclude CONTS/CONTSF base type */
-   IF CLIType.bundletype = TRUE and
-      CLIType.webdisp = TRUE THEN NEXT.
+/* Removed legacy main-additional line code, as it is not 
+   required any more to support it */ 
 
-   IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN DO:
-      lcAddLineAllowed = "OK".
-      LEAVE.
-   END.
-   
-   IF lcAddLineAllowed EQ "" THEN 
-      lcAddLineAllowed = "NO_MAIN_LINE".
-END.
-   
+IF fCheckExistingConvergent(pcIdType,pcPersonId) THEN
+   lcAddLineAllowed = "OK".
+
 IF lcAddLineAllowed NE "OK" THEN DO:
       
    FOR EACH OrderCustomer NO-LOCK WHERE   
@@ -108,13 +85,17 @@ IF lcAddLineAllowed NE "OK" THEN DO:
             OrderAction.ItemType = "BundleItem":
 
          IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                           CLIType.Brand = gcBrand AND
-                           CLIType.CLIType = OrderAction.ItemKey AND
+                           CLIType.Brand    = gcBrand                   AND
+                           CLIType.CLIType  = OrderAction.ItemKey       AND
                            CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
          lcAddLineAllowed = "OK".
          LEAVE.
       END.
    END.
+
+   IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId) THEN 
+      lcAddLineAllowed = "OK".
+
 END.
 
 IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
