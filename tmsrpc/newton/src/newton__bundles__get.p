@@ -148,6 +148,13 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       ELSE      
          lcBundleType = "bundle".
    END.   
+   ELSE IF (pcTenant = {&TENANT_MASMOVIL} AND DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE}) THEN
+   DO:
+      IF INDEX(DayCampaign.DCEvent,"VOICE") > 0 THEN   
+         lcBundleType = "voicebundle".
+      ELSE      
+         lcBundleType = "service".  
+   END.
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcIPLContracts) > 0 THEN
       ASSIGN lcBundleType = "subscription"
              lcCLIType = "CONTRD".
@@ -166,8 +173,9 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE IF LOOKUP(DayCampaign.DCType,"6,8") > 0 THEN
       lcBundleType = "upsell".
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcPromotionBundles) > 0 THEN 
-      lcBundleType = "promotional".
-   ELSE lcBundleType = "service".
+      lcBundleType = "promotional".   
+   ELSE 
+      lcBundleType = "service".
    
    IF lcCLIType > "" THEN DO:
       FIND FIRST CLIType WHERE
