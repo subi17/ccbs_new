@@ -50,38 +50,4 @@ THEN DO:
    END.
 END.
 
-DEFINE VARIABLE ldaDate AS DATE NO-UNDO.
-DEFINE VARIABLE lii AS INTEGER INITIAL 0 NO-UNDO.
-DEFINE BUFFER lbLimit FOR Limit.
-FOR EACH Limit WHERE Limit.LimitType = 6 NO-LOCK
- BREAK
-BY Limit.CustNum
-BY Limit.MsSeq
-BY Limit.LimitType
-BY Limit.FromDate:
-
-IF FIRST-OF(Limit.FromDate)
-THEN ASSIGN
-ldaDate = Limit.FromDate
-lii = 0
-.
-
-lii = lii + 1.
-
-IF LAST-OF(Limit.FromDate) AND ldaDate = Limit.FromDate AND lii > 1
-THEN DO:
- FOR EACH lbLimit NO-LOCK WHERE
- lbLimit.CustNum = Limit.CustNum AND
- lbLimit.MsSeq = Limit.MsSeq AND
- lbLimit.LimitType = 6 AND
- lbLimit.FromDate = Limit.FromDate AND
- lbLimit.ToDate >= TODAY:
-
- DISPLAY lbLimit.
-
- END.
-END.
-
-END.
-
 &ENDIF
