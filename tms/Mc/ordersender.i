@@ -119,7 +119,11 @@
                IF NOT fCheckExistingConvergent(OrderCustomer.CustIDType,
                                                OrderCustomer.CustID) THEN DO:
                   
-                  IF fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
+                  IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                                    OrderAction.Brand    = gcBrand           AND
+                                    OrderAction.OrderID  = Order.OrderId     AND
+                                    OrderAction.ItemType = "AddLineDiscount" AND                                                                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) AND
+                     fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
                                                   OrderCustomer.CustId) THEN DO:
                      fSetOrderStatus(Order.OrderID,
                                      {&ORDER_STATUS_PENDING_MAIN_LINE}).
