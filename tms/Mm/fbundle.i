@@ -109,7 +109,8 @@ END FUNCTION.
 
 FUNCTION fGetAllowedBundlesForSubscriptionType RETURNS CHAR
   (icCliType AS CHAR):
-
+  
+  DEF VAR liCount             AS INT  NO-UNDO.
   DEF VAR lcCliType           AS CHAR NO-UNDO.
   DEF VAR lcSubsTypePrefix    AS CHAR NO-UNDO.
   DEF VAR lcAllowedBundleList AS CHAR NO-UNDO.
