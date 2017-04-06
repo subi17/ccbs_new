@@ -126,8 +126,6 @@ FOR EACH TMSParam WHERE
    TMSParam.ParamCode = REPLACE(TMSParam.ParamCode,"1","2").
 END.
 
-DDebitFileName
-
 FIND FIRST TMSParam WHERE
               TMSParam.brand EQ "1" AND
               TMSParam.Paramgroup EQ "DirDebit" AND
@@ -135,8 +133,24 @@ FIND FIRST TMSParam WHERE
    IF INDEX(TMSParam.charval,"MASMOVIL") EQ 0 THEN
       TMSParam.charval = REPLACE(TMSParam.charval,"YOIGO","MASMOVIL").
 
-/* Common tables */
+FOR EACH BankAccount:
+   IF BankAccount.bankoffice EQ "BBVA" THEN DO:
+      ASSIGN
+         bankaccount.bankaccount = "ES0701824572400201566648"
+         bankaccount.bankdata = "ES0701824572400201566648"
+         bankaccount.bic = "BBVAESMMXXX"
+         bankaccount.creditorid = "ES22000A84633643".
+   END.
+   ELSE 
+      DELETE BankAccount.
 
+END.
+
+FIND FIRST Company.
+Company.compname = "MASMOVIL TELECOM 3.0, SAU".
+
+
+/* Common tables */
 
 /* MB-142 */
 FIND FIRST Dumpfile WHERE 
