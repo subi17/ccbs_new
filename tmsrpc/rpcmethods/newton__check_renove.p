@@ -190,7 +190,7 @@ IF NOT AVAIL Mobsub THEN
    RETURN appl_err("number_not_valid").
 
 FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = MobSub.CliType NO-LOCK NO-ERROR.
-IF AVAIL CliType AND CliType.TariffType = 2 THEN  
+IF AVAIL CliType AND CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN  
     RETURN appl_err("renewal_not_allowed_for_fixed_only").
 
 FIND FIRST Segmentation NO-LOCK WHERE

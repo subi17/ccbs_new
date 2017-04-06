@@ -1407,7 +1407,7 @@ IF NOT AVAIL CLIType THEN
    RETURN appl_err(SUBST("Unknown CLIType &1", pcSubType)).   
 
 /* Fixed only convergent subscription types */
-IF CliType.TariffType = 2 THEN
+IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN
    ASSIGN lcdelivery_channel = "Paper".   
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN

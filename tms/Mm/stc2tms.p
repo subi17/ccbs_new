@@ -1218,7 +1218,8 @@ PROCEDURE pCloseContracts:
    ELSE 
        liPeriod = YEAR(idaActDate - 1) * 100 + MONTH(idaActDate - 1).
    
-   IF ((CLIType.TariffType = 2 AND bOldType.TariffType = 1) OR (CLIType.TariffType = 1 AND bOldType.TariffType = 2)) THEN
+   IF ((CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  AND bOldType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) OR 
+       (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND bOldType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN
        ASSIGN llIsSTCBetweenFixedOnlyAndConvergent = TRUE.
 
    FOR EACH DCCLI NO-LOCK WHERE
@@ -1286,7 +1287,7 @@ PROCEDURE pCloseContracts:
          OR
          /* Since, convergent base bundles CONTDSL/CONTFH50/CONTFH300 are reused in fixed only convergent also with different prices.
             Above matrix condition will fail and convergent base bundles are not terminated for prices to change. So, below is introduced. */
-         (llIsSTCBetweenFixedOnlyAndConvergent AND LOOKUP(lcContract,"CONTDSL,CONTFH50,CONTFH300") > 0) 
+         (llIsSTCBetweenFixedOnlyAndConvergent AND LOOKUP(lcContract,{&CONVERGENT_BASE_BUNDLES_LIST}) > 0) 
          OR
          (LOOKUP(lcContract,lcBonoContracts) > 0 AND LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN 
       DO:
