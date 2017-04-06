@@ -23,7 +23,8 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
 	 Notes:
 	------------------------------------------------------------------------------*/
    
-   DEFINE PROTECTED VARIABLE lcTenant                AS CHARACTER     NO-UNDO.
+   DEFINE PROTECTED VARIABLE lcTenant      AS CHARACTER               NO-UNDO.
+   DEFINE PRIVATE   VARIABLE llMultiTenant AS LOGICAL   INITIAL FALSE NO-UNDO.
 
    DEFINE PUBLIC PROPERTY FullDumpLimit AS INTEGER NO-UNDO
       GET:
@@ -73,7 +74,7 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
          RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
       &ENDIF
 
-      IF lcTenant > ""
+      IF llMultiTenant
       THEN mUpdateDumpHeader(6,"",lcTenant).
                   
    END CONSTRUCTOR.
@@ -92,16 +93,25 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
 
       DEFINE VARIABLE lhBuffer      AS HANDLE    NO-UNDO.
       DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE llFound       AS LOGICAL   NO-UNDO.
 
       CREATE BUFFER lhBuffer FOR TABLE icTableName.
 
-      lcReturnValue = TENANT-NAME(lhBuffer:DBNAME).
+      llFound = lhBuffer:FIND-FIRST("", NO-LOCK) NO-ERROR.
+
+      IF NOT llFound
+      THEN RETURN "".
+
+      ASSIGN
+         llMultiTenant = IS-DB-MULTI-TENANT(lhBuffer:DBNAME)
+         lcReturnValue = lhBuffer:BUFFER-TENANT-NAME.
 
       &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
       &THEN
          IF lcReturnValue = "Default"
          THEN lcReturnValue = "yoigo".
-         ELSE lcReturnValue = SUBSTRING(lcReturnValue,2).
+         ELSE IF lcReturnValue > ""
+         THEN lcReturnValue = SUBSTRING(lcReturnValue,2).
       &ENDIF
 
       RETURN lcReturnValue.
