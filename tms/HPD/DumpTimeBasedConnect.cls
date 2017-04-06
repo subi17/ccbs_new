@@ -184,7 +184,8 @@ CLASS HPD.DumpTimeBasedConnect INHERITS DumpTimeBased:
          CONNECT VALUE(lcDBPath + " -ld " + lcDBLogicalName) NO-ERROR.
          &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
          &THEN
-         CONNECT VALUE(lcDBPath + "/" + lcDBLogicalName) NO-ERROR.
+         CONNECT VALUE(lcDBPath + "/" + lcDBLogicalName +
+                       multitenancy.TenantInformation:mGetAuthConnectionParams()) NO-ERROR.
          &ELSE
          RETURN ERROR NEW Progress.Lang.AppError("Unknown HPD environment", 1).
          &ENDIF

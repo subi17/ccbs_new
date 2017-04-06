@@ -182,7 +182,8 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
       IF CONNECTED(icDBName)
       THEN DISCONNECT VALUE(icDBName).
 
-      CONNECT VALUE(icDBPath + "/" + icDBName) NO-ERROR.
+      CONNECT VALUE(icDBPath + "/" + icDBName +
+                    multitenancy.TenantInformation:mGetAuthConnectionParams()) NO-ERROR.
 
       IF ERROR-STATUS:ERROR = TRUE
       THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot connect to database " + icDBName + " located on directory " + icDBPath, 1).
