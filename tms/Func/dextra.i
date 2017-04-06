@@ -44,7 +44,7 @@ FUNCTION fSendDextraSMS RETURNS LOGICAL
 
    CASE iiLOStatusId:
       WHEN 6 THEN DO: 
-         IF Order.DeliverySecure EQ 1 THEN
+         IF Order.DeliverySecure EQ 1 OR Order.DeliverySecure EQ 2 THEN
             lcSMSToken = "LogisticDelivery_SECUR".
          ELSE lcSMSToken = "LogisticDelivery_ALL".
       END.   
