@@ -106,11 +106,13 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
       objDumpBase:mUseTable(lhMainTable).
       objDumpBase:mUseTable(lhBuffer[1]).
 
-      /* DumpFile.cls will initially populate tablename and
-         event type to field positions 1 and 2. We
+      /* DumpSomeWhere.cls will initially populate tablename and
+         event type to field positions 3 and 4. We
          need to remove them because we are using lcHeader instead */
-      objDumpBase:mDeleteDumpHeader(1).
-      objDumpBase:mDeleteDumpHeader(2).
+      objDumpBase:mDeleteDumpHeader(3).
+      objDumpBase:mDeleteDumpHeader(4).
+
+      objDumpBase:mSetBrandValueToHeader().
 
       objDumpBase:mVerifyDumpFileData().
 
@@ -121,16 +123,19 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
          objDumpBase2:mUseTable(lhMainTable).
          objDumpBase2:mUseTable(lhBuffer[2]).
 
-         /* DumpFile.cls will initially populate tablename and
+         /* DumpSomeWhere.cls will initially populate tablename and
             event type to field positions 1 and 2. We
             need to remove them because we are using lcHeader instead */
-         objDumpBase2:mDeleteDumpHeader(1).
-         objDumpBase2:mDeleteDumpHeader(2).
+         objDumpBase2:mDeleteDumpHeader(3).
+         objDumpBase2:mDeleteDumpHeader(4).
 
          /* Lets use the same timestamp value for the second buffer also */
-         objDumpBase2:mUpdateDumpHeader(3,"", ISO-DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)).
+         objDumpBase2:mUpdateDumpHeader(5,"", ISO-DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)).
+
+         objDumpBase2:mSetBrandValueToHeader().
 
          objDumpBase2:mVerifyDumpFileData().
+
       END.
 
       objDTB = CAST(objDumpBase, DumpTimeBased).
