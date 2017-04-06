@@ -2452,7 +2452,7 @@ PROCEDURE pContractTermination:
       /* Subscription is not part of DSS */
       IF MsRequest.ActStamp   < ldeLastDayofMonthStamp AND 
          llPostpaidBundleTerm = FALSE                  AND 
-         (LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 OR LOOKUP(lcDCEvent,"CONTDSL,CONTFH50,CONTFH300") > 0) THEN 
+         LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 THEN 
       DO:
          IF FMItem.BrokenRental = 0 THEN 
              llChargeUsageBased = FALSE.
