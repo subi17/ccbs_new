@@ -107,6 +107,53 @@ FUNCTION fIsBundleAllowed RETURNS LOGIC
 
 END FUNCTION.
 
+FUNCTION fGetAllowedBundlesForSubscriptionType RETURNS CHAR
+  (icCliType AS CHAR):
+
+  DEF VAR lcCliType           AS CHAR NO-UNDO.
+  DEF VAR lcSubsTypePrefix    AS CHAR NO-UNDO.
+  DEF VAR lcAllowedBundleList AS CHAR NO-UNDO.
+
+  DEFINE BUFFER bf_MxItem FOR MxItem.
+  DEFINE BUFFER bf_Matrix FOR Matrix.
+
+  ASSIGN 
+    lcSubsTypePrefix = (IF icCliType BEGINS "CONTDSL" THEN
+                            "CONTDSL*,CONT*"
+                        ELSE IF icCliType BEGINS "CONTFH" THEN
+                            "CONT*"
+                        ELSE IF icCliType BEGINS "CONT" THEN
+                            "CONT*"
+                        ELSE IF icCliType BEGINS "TRAJ" THEN
+                            "TRAJ*"
+                        ELSE "")
+    lcSubsTypePrefix = (IF lcSubsTypePrefix <> "" THEN "," ELSE "") + icCliType.
+
+  IF lcSubsTypePrefix > "" THEN
+  DO liCount = 1 TO NUM-ENTRIES(lcSubsTypePrefix):
+      FOR EACH bf_Matrix WHERE bf_Matrix.Brand = gcBrand AND bf_Matrix.MXKey = "PERCONTR" NO-LOCK By bf_Matrix.Prior:
+
+          IF bf_Matrix.MXRes <> 1 THEN
+              NEXT.
+
+          ASSIGN lcCliType = ENTRY(liCount,lcSubsTypePrefix).
+
+          FOR EACH bf_MxItem WHERE bf_MxItem.MxSeq = bf_Matrix.MxSeq AND bf_MxItem.MxName = "SubsTypeTo" AND bf_MxItem.MxValue = lcCliType NO-LOCK:             
+              FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK:
+
+                  FIND FIRST DayCampaign WHERE Daycampaign.Brand = gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
+                  IF AVAIL DayCampaign AND LOOKUP(DayCampaign.DcType, {&PERCONTRACT_RATING_PACKAGE} + ",6") > 0 AND LOOKUP(DayCampaign.DCEvent, lcAllowedBundleList) = 0 THEN
+                      ASSIGN lcAllowedBundleList = lcAllowedBundleList + (IF lcAllowedBundleList <> "" THEN "," ELSE "") + DayCampaign.DCEvent.
+
+              END.
+          END.
+      END.
+  END.
+
+  RETURN lcAllowedBundleList.
+
+END FUNCTION.  
+
 FUNCTION fGetActiveDataBundle RETURNS CHAR
    (iiMsSeq      AS INT,
     idActiveTime AS DEC):
