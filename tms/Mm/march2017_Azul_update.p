@@ -121,10 +121,13 @@ FUNCTION fCollect RETURNS CHAR
       IF NOT fIsAzul(Order.CliType) THEN NEXT.
 
       /* April promotion */
-      IF Order.CliType = "CONT25" AND
-         Order.OrderType = {&ORDER_TYPE_MNP} THEN DO:
-         IF NOT (Order.CrStamp >= ldCampaignStartApril AND /* 20170403 */
-                 Order.CrStamp < ldCampaignEnd) THEN NEXT.
+      /* Only MNP orders to CONT25 get the promotion */
+      IF Order.CliType EQ "CONT25" THEN DO:
+         IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
+            IF NOT (Order.CrStamp >= ldCampaignStartApril AND /* 20170403 */
+                    Order.CrStamp < ldCampaignEnd) THEN NEXT.
+         END.
+         ELSE NEXT. /*CONT25 non-MNP orders do net get the activation*/
       END.
       ELSE DO:
          /*Order must be created in March*/
