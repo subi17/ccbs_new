@@ -47,7 +47,7 @@ FORM
 
    lcExtInvID COLON 20
       LABEL "Invoice"
-      FORMAT "X(12)"
+      FORMAT "X(14)"
       HELP "Invoice ID, empty=all"
       SKIP
       
