@@ -23,7 +23,8 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
 	 Notes:
 	------------------------------------------------------------------------------*/
    
-   DEFINE PROTECTED VARIABLE lcTenant                AS CHARACTER     NO-UNDO.
+   DEFINE PROTECTED VARIABLE lcTenant      AS CHARACTER               NO-UNDO.
+   DEFINE PRIVATE   VARIABLE llMultiTenant AS LOGICAL   INITIAL FALSE NO-UNDO.
 
    DEFINE PUBLIC PROPERTY FullDumpLimit AS INTEGER NO-UNDO
       GET:
@@ -73,7 +74,8 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
          RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
       &ENDIF
 
-      mUpdateDumpHeader(6,"",lcTenant).
+      IF llMultiTenant
+      THEN mUpdateDumpHeader(6,"",lcTenant).
                   
    END CONSTRUCTOR.
    
@@ -100,7 +102,9 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
       IF NOT llFound
       THEN RETURN "".
 
-      lcReturnValue = lhBuffer:BUFFER-TENANT-NAME.
+      ASSIGN
+         llMultiTenant = IS-DB-MULTI-TENANT(lhBuffer:DBNAME)
+         lcReturnValue = lhBuffer:BUFFER-TENANT-NAME.
 
       &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
       &THEN
