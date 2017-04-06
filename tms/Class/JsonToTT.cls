@@ -82,11 +82,9 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Class.JsonToTT: 
 
-   DEFINE PRIVATE VARIABLE objJsonConstruct   AS CLASS JsonConstruct    NO-UNDO.
-   DEFINE PRIVATE VARIABLE objJsonArray       AS CLASS JsonArray        NO-UNDO.   
+   DEFINE PRIVATE VARIABLE objJsonObject      AS CLASS JsonObject       NO-UNDO.
    DEFINE PRIVATE VARIABLE llDeleteJsonObject AS LOGICAL INITIAL TRUE   NO-UNDO.
    DEFINE PRIVATE VARIABLE lcMainLevelFields  AS CHARACTER              NO-UNDO.
-   DEFINE PRIVATE VARIABLE liArrayLength      AS INTEGER                NO-UNDO.
 
    DEFINE PRIVATE TEMP-TABLE ttJsonTempTable NO-UNDO
       FIELD jsonentry     AS CHARACTER
@@ -115,38 +113,18 @@ CLASS Class.JsonToTT:
    END DESTRUCTOR.
 
 
-   METHOD PUBLIC LOGICAL mGetNext():
-      
-      
-   
-   END METHOD.
+   METHOD PUBLIC VOID mParseJsonFile
+      (icJsonFile AS CHARACTER):
 
-
-   METHOD PRIVATE VOID mParseToJsonArray
-      ( icData AS LONGCHAR,
-        icType AS CHARACTER ):
-
+      llDeleteJsonObject = TRUE.
       mClearData().
 
       DEFINE VARIABLE objOMParser AS CLASS ObjectModelParser NO-UNDO.
+   
+      objOMParser   = NEW ObjectModelParser().      
+      objJsonObject = CAST(objOMParser:ParseFile(icJsonFile), JsonObject).
 
-      objOMParser = NEW ObjectModelParser().
-
-      CASE icType:
-         WHEN "FILE" THEN objJsonConstruct = objOMParser:ParseFile(STRING(icData)).
-         WHEN "DATA" THEN objJsonConstruct = objOMParser:Parse(icData).
-      END CASE.
-
-      IF objJsonConstruct:getClass():TypeName = "Progress.Json.ObjectModel.JsonArray"
-      THEN ASSIGN
-              objJsonArray  = CAST(objJsonConstruct, JsonArray)
-              liArrayLength = objJsonArray:Length.
-      ELSE DO:
-         ASSIGN
-              objJsonArray  = NEW JsonArray()
-              liArrayLength = 1.
-              objJsonArray:Add(CAST(objJsonConstruct, JsonObject)).
-      END.
+      mParse().
 
       FINALLY:
          IF VALID-OBJECT(objOMParser)
@@ -156,18 +134,23 @@ CLASS Class.JsonToTT:
    END METHOD.
 
 
-   METHOD PUBLIC VOID mParseJsonFile
-      (icJsonFile AS CHARACTER):
-
-      mParseToJsonArray(icJsonFile, "FILE").
-
-   END METHOD.
-
-
    METHOD PUBLIC VOID mParseJsonData
       (icJsonData AS LONGCHAR):
 
-      mParseToJsonArray(icJsonData, "DATA").
+      llDeleteJsonObject = TRUE.
+      mClearData().
+
+      DEFINE VARIABLE objOMParser AS CLASS ObjectModelParser NO-UNDO.
+   
+      objOMParser   = NEW ObjectModelParser().      
+      objJsonObject = CAST(objOMParser:Parse(icJsonData), JsonObject).
+      
+      mParse().
+      
+      FINALLY:
+         IF VALID-OBJECT(objOMParser)
+         THEN DELETE OBJECT objOMParser.
+      END FINALLY.
 
    END METHOD.
 
@@ -175,29 +158,21 @@ CLASS Class.JsonToTT:
    METHOD PUBLIC VOID mParseJsonObject
       (iobjJsonObject AS CLASS JsonObject):
 
-      mClearData().
-
       ASSIGN
-         objJsonArray  = NEW JsonArray()
-         liArrayLength = 1.
-         
-      objJsonArray:Add(iobjJsonObject).
+         llDeleteJsonObject = FALSE
+         objJsonObject = iobjJsonObject.
+
+      mClearData().
+      mParse().
 
    END METHOD.
 
 
-   METHOD PRIVATE VOID mClearData():
+   METHOD PUBLIC VOID mClearData():
 
-      IF VALID-OBJECT(objJsonConstruct)
-      THEN DELETE OBJECT objJsonConstruct.
-      
-      IF VALID-OBJECT(objJsonArray)
-      THEN DELETE OBJECT objJsonArray.
-      
-/*
       IF llDeleteJsonObject AND VALID-OBJECT(objJsonObject)
       THEN DELETE OBJECT objJsonObject.
-*/
+
       FOR EACH ttJsonTempTable:
          IF VALID-HANDLE(ttJsonTempTable.temptableHandle)
          THEN ttJsonTempTable.temptableHandle:EMPTY-TEMP-TABLE().
