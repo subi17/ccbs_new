@@ -13,8 +13,9 @@ gcBrand = "1".
 /*
 {Func/upsellcount.i}
 {Mm/active_bundle.i}
-{Mm/fbundle.i}
 */
+{Mm/fbundle.i}
+
 DEF VAR lcResultArray       AS CHAR NO-UNDO. 
 DEF VAR pcStruct            AS CHAR NO-UNDO. 
 DEF VAR lcStruct            AS CHAR NO-UNDO.
