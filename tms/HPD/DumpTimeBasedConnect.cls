@@ -191,6 +191,8 @@ CLASS HPD.DumpTimeBasedConnect INHERITS DumpTimeBased:
          IF ERROR-STATUS:ERROR = TRUE
          THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot connect to " + lcDBLogicalName + " database located in " + lcDBPath, 1).
 
+         mSetBrandValueToHeader().
+
          RETURN TRUE.
 
       END.
