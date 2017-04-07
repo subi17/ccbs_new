@@ -1,5 +1,6 @@
 /* Script for generating phase1 dumps */
-
+{Syst/commpaa.i}
+gcbrand = "1".
 {Func/multitenantfunc.i}
 DEF STREAM sin.
 DEF STREAM sFile.
