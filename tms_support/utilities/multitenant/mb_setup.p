@@ -7,6 +7,19 @@ DEF STREAM sFile.
 DEF VAR lcLine AS CHAR NO-UNDO.
 DEF VAR lcDFIdList AS CHAR NO-UNDO.
 DEF VAR liId AS INT NO-UNDO.
+DEF BUFFER MMInvText FOR InvText.
+
+/* Copy Invtext to MM */
+/*
+fsetEffectiveTenantForAllDB("tMasMovil").
+FIND FIRST InvText NO-ERROR.
+IF NOT AVAIL InvText THEN DO:
+   FOR EACH InvText TENANT-WHERE BUFFER-TENANT-ID(InvText) EQ 0:
+      CREATE MMInvText.
+      BUFFER-COPY InvText TO MMInvtext.
+   END.
+END.
+*/
 
 FUNCTION fAddTenant2Filename RETURNS LOGICAL (INPUT icdumpName AS CHAR):
    DEF VAR lcFilename AS CHAR NO-UNDO.
@@ -140,6 +153,7 @@ FOR EACH BankAccount:
          bankaccount.bankdata = "ES0701824572400201566648"
          bankaccount.bic = "BBVAESMMXXX"
          bankaccount.creditorid = "ES22000A84633643".
+         bankaccount.ddallocation = 100.0.
    END.
    ELSE 
       DELETE BankAccount.
