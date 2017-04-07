@@ -23,9 +23,6 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
 	 Notes:
 	------------------------------------------------------------------------------*/
    
-   DEFINE PROTECTED VARIABLE lcTenant      AS CHARACTER               NO-UNDO.
-   DEFINE PRIVATE   VARIABLE llMultiTenant AS LOGICAL   INITIAL FALSE NO-UNDO.
-
    DEFINE PUBLIC PROPERTY FullDumpLimit AS INTEGER NO-UNDO
       GET:
          DEFINE VARIABLE liNumber AS INTEGER NO-UNDO.
@@ -52,8 +49,6 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
            
       SUPER(iiDumpID, iobjHandler).
 
-      lcTenant = mGetTenant(lbDumpFile.MainTable).
-
       ASSIGN
          objHPDTime = NEW HPDTime()
          objHPDTime:CurrLocalTZTime = NOW
@@ -74,9 +69,13 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
          RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
       &ENDIF
 
-      IF llMultiTenant
-      THEN mUpdateDumpHeader(6,"",lcTenant).
-                  
+      /*
+         If there is not yet database connection for the table
+         we need to set the brand name to header later on when the
+         connection is available
+      */
+      mSetBrandValueToHeader().
+
    END CONSTRUCTOR.
    
    
@@ -86,42 +85,6 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
       THEN DELETE OBJECT objHPDTime.
 
    END DESTRUCTOR.
-
-
-   METHOD PRIVATE CHARACTER mGetTenant
-      ( icTableName AS CHARACTER ):
-
-      DEFINE VARIABLE lhBuffer      AS HANDLE    NO-UNDO.
-      DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
-      DEFINE VARIABLE llFound       AS LOGICAL   NO-UNDO.
-
-      CREATE BUFFER lhBuffer FOR TABLE icTableName.
-
-      llFound = lhBuffer:FIND-FIRST("", NO-LOCK) NO-ERROR.
-
-      IF NOT llFound
-      THEN RETURN "".
-
-      ASSIGN
-         llMultiTenant = IS-DB-MULTI-TENANT(lhBuffer:DBNAME)
-         lcReturnValue = lhBuffer:BUFFER-TENANT-NAME.
-
-      &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
-      &THEN
-         IF lcReturnValue = "Default"
-         THEN lcReturnValue = "yoigo".
-         ELSE IF lcReturnValue > ""
-         THEN lcReturnValue = SUBSTRING(lcReturnValue,2).
-      &ENDIF
-
-      RETURN lcReturnValue.
-
-      FINALLY:
-         IF VALID-HANDLE(lhBuffer)
-         THEN DELETE OBJECT lhBuffer.
-      END FINALLY.
-
-   END METHOD.
 
 
    METHOD PUBLIC ABSTRACT VOID mWriteALine(). 

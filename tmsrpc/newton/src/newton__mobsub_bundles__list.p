@@ -10,18 +10,23 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/tmsconst.i}
+/*
 {Func/upsellcount.i}
 {Mm/active_bundle.i}
+*/
 {Mm/fbundle.i}
 
 DEF VAR lcResultArray       AS CHAR NO-UNDO. 
 DEF VAR pcStruct            AS CHAR NO-UNDO. 
 DEF VAR lcStruct            AS CHAR NO-UNDO.
 DEF VAR piMsSeq             AS INT  NO-UNDO.
+DEF VAR liCount             AS INT  NO-UNDO.
+DEF VAR lcBundle            AS CHAR NO-UNDO.
+DEF VAR lcAllowedBundles    AS CHAR NO-UNDO.
+/*
 DEF VAR lcActiveBundle      AS CHAR NO-UNDO. 
 DEF VAR lcActiveBundles     AS CHAR NO-UNDO. 
-DEF VAR lcError             AS CHAR NO-UNDO. 
-DEF VAR liCount             AS INT  NO-UNDO. 
+DEF VAR lcError             AS CHAR NO-UNDO.  
 DEF VAR liUpsellCount       AS INT  NO-UNDO.
 DEF VAR ldeCurrTS           AS DEC  NO-UNDO.
 DEF VAR lcDSSBundleId       AS CHAR NO-UNDO.
@@ -34,9 +39,7 @@ DEF VAR lcDayCampBundleUpsells   AS CHAR NO-UNDO.
 DEF VAR lcVoiceBundles           AS CHAR NO-UNDO. 
 DEF VAR lcUpsellBundles          AS CHAR NO-UNDO.
 DEF VAR liVoiceCount             AS INTE NO-UNDO.
-
-DEFINE BUFFER bf_MxItem FOR MxItem.
-DEFINE BUFFER bf_Matrix FOR Matrix.
+*/
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
@@ -53,6 +56,20 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcResultArray = add_array(response_toplevel_id, "").
 
+lcAllowedBundles = fGetAllowedBundlesForSubscriptionType(MobSub.CliType).
+
+IF lcAllowedBundles > "" THEN
+DO liCount = 1 TO NUM-ENTRIES(lcAllowedBundles):
+    
+    ASSIGN lcBundle = ENTRY(liCount,lcAllowedBundles).
+    
+    IF lcBundle = "" OR lcBundle = MobSub.CliType OR LOOKUP(lcBundle,"MM_DATA600") > 0 THEN  /* Except Base and internal bundle(s) */
+        NEXT.
+             
+    add_string(lcResultArray,"", ENTRY(liCount,lcAllowedBundles) + "|" + STRING(Mobsub.MsSeq)).
+END.
+
+/*
 ASSIGN ldeCurrTS = fMakeTS()
        lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS")
        lcBONOContracts        = fCParamC("BONO_CONTRACTS")
@@ -177,7 +194,7 @@ IF MobSub.CliType = "TARJ6" THEN
    add_string(lcResultArray,"", "TARJ_UPSELL|" + STRING(Mobsub.MsSeq)).
    
 add_string(lcResultArray,"", "HSPA_ROAM_EU|" + STRING(Mobsub.MsSeq)).
-
+*/
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.

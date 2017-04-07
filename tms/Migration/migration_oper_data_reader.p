@@ -120,6 +120,47 @@ PUT STREAM sLog UNFORMATTED
    "Migration finalization file handling done " + fTS2HMS(fMakeTS()) SKIP.
 OUTPUT STREAM sLog CLOSE.
 
+/*Precheck functions. Function returns text in case of error.*/
+FUNCTION fBarringExists RETURNS CHAR
+   (icBarringCode AS CHAR):
+   DEF BUFFER BarringConf FOR BarringConf.
+   FIND FIRST BarringConf NO-LOCK WHERE 
+              BarringConf.BarringCode EQ icBarringCode 
+              NO-ERROR.
+   IF NOT AVAIL BarringConf THEN RETURN "Barring not found " + icBarringCode.
+
+   RETURN "".
+END.   
+
+/*Precheck functions. Function returns text in case of error.*/
+FUNCTION fUpsellExists RETURNS CHAR
+   (icUPS AS CHAR):
+   DEF BUFFER DayCampaign for DayCampaign.
+   FIND FIRST DayCampaign WHERE
+              DayCampaign.Brand EQ "1" AND
+              DayCampaign.DCEvent EQ icUps NO-ERROR.
+   IF NOT AVAIL DayCampaign THEN RETURN "Item not found " + icUPS.
+
+   RETURN "".
+END.
+
+/*Precheck functions. Function returns text in case of error.*/
+FUNCTION fBonoExists RETURNS CHAR
+   (icBono AS CHAR):
+   DEF VAR lcAllowedBonos AS CHAR NO-UNDO.
+   DEF VAR i AS INT NO-UNDO.
+   /*lcAllowedBonos = "BONO_RELAX".*/
+   lcAllowedBonos = fCParamC("BONO_CONTRACTS").
+   IF NUM-ENTRIES(lcAllowedBonos) EQ 0 THEN RETURN "Incorrec bono list".
+   DO i=1 TO NUM-ENTRIES(lcAllowedBonos):
+      IF ENTRY(i, lcAllowedBonos) EQ icBono THEN RETURN "".
+
+   END.
+   RETURN "Bono not found " + icBono.
+
+END.
+
+
 /*Functions and procedures*/
 
 /*Function generates a barring command from separated list format:
@@ -408,6 +449,20 @@ FUNCTION fSetMigrationFAT RETURNS CHAR
    (iiMsSeq AS INT,
     idCommand AS DECIMAL):
     DEF VAR lcStat AS CHAR NO-UNDO.
+/*
+     ocErrInfo =  fCreateFatRow(
+                             "GOOGLEVASFAT",
+                             bMobSub.CustNum,
+                             bMobSub.MsSeq,
+                             icMSISDN,
+                             "", /*host table*/
+                             "", /*key value*/
+                             ideAmount,
+                             0, /* percentage  */
+                             ?, /* VAT included */
+                             INT(lcPeriod), /*from period*/
+                             999999, /*to period*/
+                             lcMemoText).*/
    RETURN "".
 END.
 

@@ -127,12 +127,12 @@ ASSIGN defcurr   = fCParamC("DefCurrency")
        liDueDate = fCParamI("DueDateTrans").
 
 form
-    Invoice.ExtInvID     FORMAT "X(12)" 
+    Invoice.ExtInvID     FORMAT "X(14)" 
     notes                 column-label "M"                 
     Invoice.InvDate      /* column-label "Inv. date"     */   format "99-99-99"
     Invoice.CustNum     /* column-label "Cust.nr"       */
     lcCustName          column-label "Customer name"    format "x(13)"
-    Invoice.InvAmt   /* column-label "To pay"        */ format "->,>>>,>>9.99"
+    Invoice.InvAmt   /* column-label "To pay"        */ format "->>>,>>9.99"
     Invoice.Currency       column-label "CUR"        format "x(3)"     
     Invoice.DueDate     /* column-label "Exp. day"      */ format "99-99-99"
     Invoice.PaymState     column-label "P"    format "9" 
@@ -159,7 +159,7 @@ WITH
 
 form /* Invoicen numerohakua varten */
     "Brand .:" lcBrand skip
-    "Invoice:" lcExtInvID  FORMAT "X(12)" 
+    "Invoice:" lcExtInvID  FORMAT "X(14)" 
     help "Give Invoice No."    
     with row 4 col 2 title color value(ctc) " FIND INVOICE No."
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.

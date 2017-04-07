@@ -140,8 +140,21 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    END. /* IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO: */
    
    IF LOOKUP(DayCampaign.DCEvent,lcBONOContracts) > 0 OR
-      DayCampaign.DCEvent = "HSPA_ROAM_EU" THEN
-      lcBundleType = "bundle".
+      DayCampaign.DCEvent = "HSPA_ROAM_EU"            OR 
+      (pcTenant = {&TENANT_MASMOVIL} AND DayCampaign.DCType = {&DCTYPE_BUNDLE}) THEN
+   DO:
+      IF INDEX(DayCampaign.DCEvent,"RELAX") > 0 THEN   
+         lcBundleType = "supplement_bundle".
+      ELSE      
+         lcBundleType = "bundle".
+   END.   
+   ELSE IF (pcTenant = {&TENANT_MASMOVIL} AND DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE}) THEN
+   DO:
+      IF INDEX(DayCampaign.DCEvent,"VOICE") > 0 THEN   
+         lcBundleType = "voicebundle".
+      ELSE      
+         lcBundleType = "service".  
+   END.
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcIPLContracts) > 0 THEN
       ASSIGN lcBundleType = "subscription"
              lcCLIType = "CONTRD".
@@ -160,9 +173,10 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE IF LOOKUP(DayCampaign.DCType,"6,8") > 0 THEN
       lcBundleType = "upsell".
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcPromotionBundles) > 0 THEN 
-      lcBundleType = "promotional".
-   ELSE lcBundleType = "service".
-
+      lcBundleType = "promotional".   
+   ELSE 
+      lcBundleType = "service".
+   
    IF lcCLIType > "" THEN DO:
       FIND FIRST CLIType WHERE
                  CLIType.Brand   = "1" AND
