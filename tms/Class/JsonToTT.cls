@@ -55,16 +55,19 @@ objJsonToTT:mStoreTT("upsells", BUFFER ttUpsells:HANDLE).
 objJsonToTT:mStoreTT("discounts", BUFFER ttDiscounts:HANDLE).
 
 objJsonToTT:mParseJsonFile("/tmp/jsondata.json").
+DO WHILE objJsonToTT:mGetNext():
 
-FOR EACH ttRootLevel: DISP ttRootLevel. END.
-FOR EACH ttBarrings: DISP ttBarrings. END.
-FOR EACH ttServices: DISP ttServices. END.
-FOR EACH ttSinglefees: DISP ttSinglefees. END.
-FOR EACH ttUpsells: DISP ttUpsells. END.
-FOR EACH ttDiscounts: DISP ttDiscounts. END.
+   FOR EACH ttRootLevel: DISP ttRootLevel. END.
+   FOR EACH ttBarrings: DISP ttBarrings. END.
+   FOR EACH ttServices: DISP ttServices. END.
+   FOR EACH ttSinglefees: DISP ttSinglefees. END.
+   FOR EACH ttUpsells: DISP ttUpsells. END.
+   FOR EACH ttDiscounts: DISP ttDiscounts. END.
 
-MESSAGE objJsonToTT:mListJsonArrayNames() VIEW-AS ALERT-BOX TITLE "Arrays".
-MESSAGE objJsonToTT:mListJsonObjectNames() VIEW-AS ALERT-BOX TITLE "Objects".
+   MESSAGE objJsonToTT:mListJsonArrayNames() VIEW-AS ALERT-BOX TITLE "Arrays".
+   MESSAGE objJsonToTT:mListJsonObjectNames() VIEW-AS ALERT-BOX TITLE "Objects".
+
+END.
 
 FINALLY:
    IF VALID-OBJECT(objJsonToTT)
