@@ -32,7 +32,7 @@ FUNCTION fMakeDump RETURNS LOGICAL (INPUT icdumpName AS CHAR):
                        OUTPUT liDumped).
    PUT STREAM Outfile UNFORMATTED
       STRING(dumpfile.dumpid) + ";" + Dumpfile.dumpname + ";" + 
-      DumpFile.transdir + "; NBR of Rows: " + STRING(liDumped).
+      DumpFile.transdir + "; NBR of Rows: " + STRING(liDumped) SKIP.
 
 
 END.
