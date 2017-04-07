@@ -140,6 +140,7 @@ FOR EACH BankAccount:
          bankaccount.bankdata = "ES0701824572400201566648"
          bankaccount.bic = "BBVAESMMXXX"
          bankaccount.creditorid = "ES22000A84633643".
+         bankaccount.ddallocation = 100.0.
    END.
    ELSE 
       DELETE BankAccount.
