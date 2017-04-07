@@ -421,8 +421,7 @@ IF  Order.OrderType NE {&ORDER_TYPE_RENEWAL}               AND
     lcOldStatus     EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) THEN DO:
     
     fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
-                                    OrderCustomer.CustID,
-                                    lcNewStatus) . 
+                                    OrderCustomer.CustID) . 
 END.   
 
 IF llDoEvent THEN DO:
