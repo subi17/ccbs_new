@@ -342,12 +342,13 @@ END FUNCTION.
 /* Function releases OR CLOSE Additional lines */
 FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
    (INPUT icCustIDType  AS CHAR,
-    INPUT icCustID      AS CHAR,
-    INPUT icOrderStatus AS CHAR):
+    INPUT icCustID      AS CHAR):
 
    DEF BUFFER labOrder         FOR Order.
    DEF BUFFER labOrderCustomer FOR OrderCustomer.
-   
+
+   DEF VAR lcNewOrderStatus AS CHAR NO-UNDO.
+
    FOR EACH labOrderCustomer NO-LOCK WHERE
             labOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
             labOrderCustomer.CustId     EQ icCustID                AND
@@ -363,9 +364,16 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
                         CLIType.Brand      = Syst.Parameters:gcBrand           AND
                         CLIType.CLIType    = labOrder.CLIType                  AND
                         CLIType.LineType   = {&CLITYPE_LINETYPE_NONMAIN}       AND
-                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN 
-         fSetOrderStatus(labOrder.OrderId,icOrderStatus).
+                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
+         
+         IF labOrder.OrderType = {&ORDER_TYPE_NEW} THEN
+             lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+         ELSE IF labOrder.OrderType = {&ORDER_TYPE_MNP} THEN
+             lcNewOrderStatus = {&ORDER_STATUS_MNP}.
 
+         IF lcNewOrderStatus > "" THEN 
+            fSetOrderStatus(labOrder.OrderId,lcNewOrderStatus).
+      END.
    END.   
    
    RETURN TRUE.
