@@ -124,7 +124,7 @@ FUNCTION fCollect RETURNS CHAR
       /* Only MNP orders to CONT25 get the promotion */
       IF Order.CliType EQ "CONT25" THEN DO:
          IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
-            IF NOT (Order.CrStamp >= ldCampaignStartApril AND /* 20170403 */
+            IF NOT (Order.CrStamp >= ldCampaignStartApril AND
                     Order.CrStamp < ldCampaignEnd) THEN NEXT.
          END.
          ELSE NEXT. /*CONT25 non-MNP orders do net get the activation*/
