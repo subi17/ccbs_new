@@ -247,8 +247,7 @@ DO:
           END.
 
           fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
-                                         lbOrderCustomer.CustID,
-                                         {&ORDER_STATUS_NEW}).
+                                         lbOrderCustomer.CustID).
       END.
    END.
 END. 
