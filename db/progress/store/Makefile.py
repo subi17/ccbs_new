@@ -66,7 +66,15 @@ db_locations = {
              'mobile': 'pallas.int.asp.qvantel.net:mobile',
              'counter': 'pallas.int.asp.qvantel.net:counter',
              'star': 'pallas.int.asp.qvantel.net:star',
-             'prepedr': 'pallas.int.asp.qvantel.net:prepedr'}
+             'prepedr': 'pallas.int.asp.qvantel.net:prepedr'},
+    'yanney': {'common': 'yanai.int.asp.qvantel.net:common',
+               'ordercanal': 'yanai.int.asp.qvantel.net:ordercanal',
+               'mobile': 'yanai.int.asp.qvantel.net:mobile',
+               'counter': 'yanai.int.asp.qvantel.net:counter',
+               'star': 'yanai.int.asp.qvantel.net:star',
+               'prepedr': 'yanai.int.asp.qvantel.net:prepedr',
+               'fraudcdr': 'yanai.int.asp.qvantel.net:fraudcdr',
+               'reratelog': 'yanai.int.asp.qvantel.net:reratelog'}
 }
 
 db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
