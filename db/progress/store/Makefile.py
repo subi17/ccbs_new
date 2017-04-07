@@ -202,7 +202,7 @@ def write_pf_file(filename, tenant='', logical_names={}):
         tenant = '_{}'.format(tenant)
     with open(filename, 'wt') as fd:
         if cdr_databases:
-             fd.write('-h %d\n' % len(databases) + len(cdr_databases))
+             fd.write('-h %d\n' % (len(databases) + len(cdr_databases)))
         else:
              fd.write('-h %d\n' % len(databases))
         for db in databases:
@@ -256,13 +256,13 @@ def connect_parameter_file(match, deps, db_name):
     if len(path) > 1:
         fd.write('-db %s\n' % path[1].split('/')[0])
         fd.write('-H %s\n' % path[0])
-        fd.write('-S %s%s\n' % (db_name))
+        fd.write('-S %s\n' % (db_name))
     else:
         fd.write('-db %s\n' % path[0])
     fd.close()
     for tenant in tenancies:
         with open('{0}_{1}.pf'.format(db_name, tenant), 'wt') as fd:
-            fd.write('-pf {}.pf\n'.format(path[0]))
+            fd.write('-pf {0}/{1}.pf\n'.format(getcwd(), db_name))
             fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
 
 @target
