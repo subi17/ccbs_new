@@ -13,8 +13,6 @@ USING HPD.DumpHandler.
 USING HPD.HPDTime.
 USING HPD.DumpBase.
 
-{HPD/HPDEnvironment.i}
-
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase: 
@@ -56,18 +54,6 @@ CLASS HPD.DumpSomeWhere ABSTRACT INHERITS DumpBase:
 
       mUpdateDumpHeader(3,"",lbDumpFile.MainTable).
       mUpdateDumpHeader(4,"","CREATE").
-
-      /* Lets populate the header elements that
-         are needed for offline dumps */
-      &IF "{&HPD_ENVIRONMENT}" = "Salt"
-      &THEN
-         mUpdateDumpHeader(5,"",objHPDTime:CurrUTCTime).
-      &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
-      &THEN
-         mUpdateDumpHeader(5,"",ISO-DATE(objHPDTime:CurrLocalTZTime)).
-      &ELSE
-         RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
-      &ENDIF
 
       /*
          If there is not yet database connection for the table

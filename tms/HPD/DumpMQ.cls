@@ -15,6 +15,8 @@ USING HPD.DumpSomeWhere.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
+{HPD/HPDEnvironment.i}
+
 CLASS HPD.DumpMQ INHERITS DumpSomeWhere: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
@@ -55,6 +57,7 @@ CLASS HPD.DumpMQ INHERITS DumpSomeWhere:
 
       mUpdateDumpHeader(1,"","").
       mUpdateDumpHeader(2,"","").
+      mUpdateDumpHeader(5,"",CHR(1)).
 
       objMsgPublisher = NEW Gwy.MqPublisher("HPD.Queue" +
                                             IF llUseSeparateQueue
@@ -87,8 +90,17 @@ CLASS HPD.DumpMQ INHERITS DumpSomeWhere:
 
       DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 
+      &IF "{&HPD_ENVIRONMENT}" = "Salt"
+      &THEN
+      icData = REPLACE(icData,CHR(1),HPDTime:NowTimeUTC).
+      &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
+      &THEN
+      icData = REPLACE(icData,CHR(1),HPDTime:NowTime).
+      &ELSE
+      RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
+      &ENDIF
+
       DO lii = 1 TO 2:
-         
          IF NOT objMsgPublisher:send_message(icData)
          THEN DO:
             LOG-MANAGER:WRITE-MESSAGE("Failed to send message. Try to send again after a reconnect", "INFO").
