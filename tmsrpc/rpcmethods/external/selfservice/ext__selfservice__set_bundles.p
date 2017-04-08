@@ -65,6 +65,9 @@ DEF VAR lcAppEndUserId         AS CHAR NO-UNDO.
 DEF VAR lcOnOff                AS CHAR NO-UNDO.
 DEF VAR secondsFromPrevious    AS INT  NO-UNDO.
 DEF VAR ldaBonoVoipRemovalDate AS DATE NO-UNDO.
+DEF VAR ldeCurrMonthLimit      AS DEC  NO-UNDO.
+DEF VAR ldeConsumedData        AS DEC  NO-UNDO.
+DEF VAR ldeOtherMonthLimit     AS DEC  NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,string,string") EQ ? THEN RETURN.
 
@@ -211,8 +214,19 @@ CASE pcActionValue :
          RETURN appl_err("Bundle activation is not allowed").
       END.
       ELSE DO:
-         IF pcBundleId = {&DSS} THEN
-            RETURN appl_err("DSS activation is not allowed").
+         /* ADDLINE-139 Additional Line DSS Check */
+         IF pcBundleId = {&DSS} THEN DO:
+            IF NOT fIsDSSAllowed(INPUT  MobSub.CustNum,
+                                 INPUT  0,
+                                 INPUT  fMakeTS(),
+                                 INPUT  pcBundleId,
+                                 INPUT  "",
+                                 OUTPUT ldeCurrMonthLimit,
+                                 OUTPUT ldeConsumedData,
+                                 OUTPUT ldeOtherMonthLimit,
+                                 OUTPUT lcResult) THEN
+            RETURN appl_err(lcResult).
+         END.
 
          IF fIsDSSActive(Mobsub.Custnum,ldeActStamp) THEN
             RETURN appl_err("Bundle already active").
@@ -253,6 +267,19 @@ IF pcBundleId = {&DSS} THEN DO:
                            Mobsub.Custnum,
                            "DELETE",
                            "DSS-ACCOUNT=" + STRING(Mobsub.Custnum),
+                           pcBundleId,
+                           ldeActStamp,
+                           {&REQUEST_SOURCE_EXTERNAL_API},
+                           "",
+                           TRUE, /* Fees */
+                           0,
+                           FALSE,
+                           OUTPUT lcResult).
+   ELSE
+      liRequest = fDSSRequest(MobSub.MsSeq,
+                           Mobsub.Custnum,
+                           "CREATE",
+                           "",
                            pcBundleId,
                            ldeActStamp,
                            {&REQUEST_SOURCE_EXTERNAL_API},
