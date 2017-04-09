@@ -150,7 +150,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    END.   
    ELSE IF (pcTenant = {&TENANT_MASMOVIL} AND DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE}) THEN
    DO:
-      IF INDEX(DayCampaign.DCEvent,"VOICE") > 0 THEN   
+      IF INDEX(DayCampaign.DCEvent,"DATA") > 0 OR INDEX(DayCampaign.DCEvent,"VOICE") > 0 THEN   
          lcBundleType = "bundle".
       ELSE      
          lcBundleType = "service".  
