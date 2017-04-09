@@ -191,11 +191,15 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       LOOKUP(pcBundleId,{&DSS_BUNDLES}) > 0 OR 
       (MobSub.CLIType = "CONT15" AND pcBundleId = "VOICE100") OR
       (MobSub.CLIType = "CONT9" AND pcBundleId = "FREE100MINUTES") OR
-      (MobSub.CLIType = "CONT10" AND pcBundleId = "FREE100MINUTES") THEN DO:
+      (MobSub.CLIType = "CONT10" AND pcBundleId = "FREE100MINUTES") OR 
+      pcTenant = {&TENANT_MASMOVIL} THEN 
+   DO:
        liStatus = fGetMDUBStatus(pcBundleId, OUTPUT ldeActivationTS).
+       
        add_int(lcResultStruct,"value",liStatus).
        add_string(lcResultStruct, "pending_bundle", pcBTCBundleId).
        add_boolean(lcResultStruct, "upgrade_upsell", llUpgradeUpsell).
+
        IF ldeActivationTS > 0 THEN
           add_timestamp(lcResultStruct, "activation_stamp", ldeActivationTS).
 
@@ -203,19 +207,10 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
        add_boolean(lcOptionsStruct, "upcoming_data_bundle", llUpComingDataBundle).
    END.
    /* pass number of activations in case of UPSELL */
-   ELSE IF pcBundleId = "HSPA_ROAM_EU" OR
-      pcBundleId MATCHES("*_UPSELL") THEN DO:
-      liActivations = fGetUpSellCount(pcBundleId,
-                                      piMsSeq,
-                                      MobSub.Custnum,
-                                      OUTPUT lcError).
+   ELSE IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId MATCHES("*_UPSELL") THEN 
+   DO:
+       liActivations = fGetUpSellCount(pcBundleId,piMsSeq,MobSub.Custnum,OUTPUT lcError).
        add_int(lcResultStruct, "activations",liActivations).
-       /* ydr_1905 addition for web visibility
-       IF pcBundleId MATCHES("*_UPSELL") AND
-          fGetCurrentSpecificBundle(Mobsub.MsSeq,pcBundle) EQ "" THEN
-          liActAllowed = 0.
-       add_int(lcResultStruct, "activation_allowed",liActAllowed).
-       */
    END.
    ELSE lcError = "Invalid Bundle Id: " + pcBundleId .
 END.
