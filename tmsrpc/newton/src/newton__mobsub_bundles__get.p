@@ -186,13 +186,19 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
               DayCampaign.DCEvent = pcBundleId NO-LOCK NO-ERROR. 
    IF AVAIL DayCampaign THEN add_string(lcResultStruct, "name", DayCampaign.DCName).
 
+   /* pass number of activations in case of UPSELL */
+   IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId MATCHES("*_UPSELL") THEN 
+   DO:
+       liActivations = fGetUpSellCount(pcBundleId,piMsSeq,MobSub.Custnum,OUTPUT lcError).
+       add_int(lcResultStruct, "activations",liActivations).
+   END.
    /* check BONO contracts and customer level bundle status */
    IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") > 0 OR
       LOOKUP(pcBundleId,{&DSS_BUNDLES}) > 0 OR 
       (MobSub.CLIType = "CONT15" AND pcBundleId = "VOICE100") OR
       (MobSub.CLIType = "CONT9" AND pcBundleId = "FREE100MINUTES") OR
       (MobSub.CLIType = "CONT10" AND pcBundleId = "FREE100MINUTES") OR 
-      pcTenant = {&TENANT_MASMOVIL} THEN 
+      vcTenant = {&TENANT_MASMOVIL} THEN 
    DO:
        liStatus = fGetMDUBStatus(pcBundleId, OUTPUT ldeActivationTS).
        
@@ -205,12 +211,6 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
        lcOptionsStruct = add_struct(lcResultStruct,"options").
        add_boolean(lcOptionsStruct, "upcoming_data_bundle", llUpComingDataBundle).
-   END.
-   /* pass number of activations in case of UPSELL */
-   ELSE IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId MATCHES("*_UPSELL") THEN 
-   DO:
-       liActivations = fGetUpSellCount(pcBundleId,piMsSeq,MobSub.Custnum,OUTPUT lcError).
-       add_int(lcResultStruct, "activations",liActivations).
    END.
    ELSE lcError = "Invalid Bundle Id: " + pcBundleId .
 END.
