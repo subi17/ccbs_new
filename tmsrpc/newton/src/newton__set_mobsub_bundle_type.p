@@ -64,9 +64,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN
    piMsSeq = get_int(pcStruct,"msseq")
    pcOldBundle = get_string(pcStruct,"old_bundle")
-   pcOldBundle = ENTRY(1,pcOldBundle,"|") WHEN NUM-ENTRIES(pcOldBundle,"|") > 1
    pcNewBundle = get_string(pcStruct,"new_bundle")
-   pcNewBundle = ENTRY(1,pcNewBundle,"|") WHEN NUM-ENTRIES(pcNewBundle,"|") > 1
    pdaActDate = get_date(pcStruct,"date")
    katun = "VISTA_" + get_string(pcStruct,"username")
    llUpgradeUpsell = get_bool(pcStruct,"upgrade_upsell")
@@ -79,6 +77,10 @@ ASSIGN
       WHEN LOOKUP("channel", lcstruct) > 0
    plExcludeTermPenalty = get_bool(pcStruct,"exclude_term_penalty")
       WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0.
+
+ASSIGN
+    pcOldBundle = ENTRY(1,pcOldBundle,"|")  
+    pcNewBundle = ENTRY(1,pcNewBundle,"|").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
