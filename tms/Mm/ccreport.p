@@ -1,8 +1,10 @@
+/* ccreport.p */
 {Syst/commali.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/timestamp.i}
 {Syst/funcrunprocess_update.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER idaStart         AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaEnd           AS DATE NO-UNDO.
@@ -174,6 +176,8 @@ lcInvGrainFile = REPLACE(lcInvGrainFile,
                            "#DATE",STRING(YEAR(ldaPeriodEnd),"9999") +
                            STRING(MONTH(ldaPeriodEnd),"99") +
                            STRING(DAY(ldaPeriodEnd),"99")).
+lcInvGrainFile = REPLACE(lcInvGrainFile,"#TENANT",
+                         CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))))).
 
 IF icFileName = "" THEN icFileName = fCParamC("CCNReportFile").
 IF icFileName = "" OR icFileName = ? THEN
@@ -181,7 +185,8 @@ IF icFileName = "" OR icFileName = ? THEN
 icFileName = REPLACE(icFileName,"#DATE",STRING(YEAR(ldaPeriodEnd),"9999") +
                                         STRING(MONTH(ldaPeriodEnd),"99") +
                                         STRING(DAY(ldaPeriodEnd),"99")).
-
+icFileName = REPLACE(icFileName,"#TENANT",
+                     CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))))).
 IF NOT SESSION:BATCH THEN DO:
    PAUSE 0.
    DISP oiInvCount LABEL "Invoices" FORMAT ">>>>>>>>>9" 

@@ -64,8 +64,8 @@ HPD_EDRHistory
 HPD_MobCDR
 OrderAction
 OrderDumpTXT
-OrderFusion 
-OfferItem
+
+
 OrderAccessory_ORIG 
 MServiceLPoolDump
 PerContrDump
