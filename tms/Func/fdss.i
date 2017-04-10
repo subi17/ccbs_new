@@ -634,10 +634,6 @@ FUNCTION fIsDSSAllowed RETURNS LOG
     OUTPUT odeOtherMonthLimit   AS DEC,
     OUTPUT ocResult             AS CHAR):
 
-   DEF VAR liSubCount AS INT NO-UNDO.
-
-   DEFINE BUFFER lbMobSub FOR MobSub.
-
    IF iiMsSeq > 0 THEN DO:
       FIND FIRST MobSub WHERE
                  MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
@@ -654,27 +650,6 @@ FUNCTION fIsDSSAllowed RETURNS LOG
          ocResult = "ERROR:Contract is not allowed for this subscription type".
          RETURN FALSE.
       END. /* IF fMatrixAnalyse(gcBrand */
-   END.
-
-   /* ADDLINE-23 Additional Line DSS Check */
-   FIND FIRST Customer NO-LOCK WHERE
-              Customer.CustNum = iiCustNum NO-ERROR.
-   IF AVAILABLE Customer THEN DO:
-
-      FOR EACH lbMobSub NO-LOCK WHERE
-               lbMobSub.Brand     = gcBrand          AND
-               lbMobSub.CustNum   = Customer.CustNum AND
-               lbMobSub.PayType   = FALSE            AND
-               lbMobSub.SalesMan NE "GIFT":
-         liSubCount = liSubCount + 1.
-      END.
-
-      IF liSubCount < 2 OR
-         fExistFullConvergentOR2P(Customer.CustIDType, Customer.OrgID) = 0 THEN DO:
-         ocResult = "ERROR:DSS is not allowed for this Customer".
-         RETURN FALSE.
-      END.
-         
    END.
 
    RETURN fIsDSSAllowedForCustomer(INPUT iiCustnum,
@@ -1306,6 +1281,54 @@ FUNCTION fMakeDSSCommLine RETURNS CHAR
 
 END. /* FUNCTION fMakeDSSCommLine RETURNS CHAR */
 
+/* ADDLINE-23 Additional Line Phase 2 */
+FUNCTION fDSSCustCheck RETURNS LOG
+   (INPUT iiCustNum AS INT,
+    INPUT icCLIType AS CHAR):
+
+   DEF VAR liSubCount         AS INT  NO-UNDO.
+   DEF VAR ldeCurrMonthLimit  AS DEC  NO-UNDO.
+   DEF VAR ldeConsumedData    AS DEC  NO-UNDO.
+   DEF VAR ldeOtherMonthLimit AS DEC  NO-UNDO.
+   DEF VAR lcResult           AS CHAR NO-UNDO.
+
+   DEFINE BUFFER lbMobSub FOR MobSub.
+
+   FIND FIRST Customer NO-LOCK WHERE
+              Customer.CustNum = iiCustNum NO-ERROR.
+   IF AVAILABLE Customer THEN DO:
+
+      FOR EACH lbMobSub NO-LOCK WHERE
+               lbMobSub.Brand     = gcBrand          AND
+               lbMobSub.CustNum   = Customer.CustNum AND
+               lbMobSub.PayType   = FALSE            AND
+               lbMobSub.SalesMan NE "GIFT":
+         liSubCount = liSubCount + 1.
+      END.
+
+      IF  liSubCount < 1                                                    OR
+         (liSubCount >= 1                                                   AND
+          NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                             CLIType.Brand   = gcBrand   AND
+                             CLIType.CLIType = icCLIType AND
+                             CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) AND
+          NOT fIsConvergentORFixedOnly(icCLIType)                           AND
+          fExistFullConvergentOR2P(Customer.CustIDType, Customer.OrgID) = 0) THEN DO:
+         RETURN FALSE.
+      END.
+
+      RETURN fIsDSSAllowed(INPUT  Customer.CustNum,
+                           INPUT  0,
+                           INPUT  fMakeTS(),
+                           INPUT  {&DSS},
+                           INPUT  "",
+                           OUTPUT ldeCurrMonthLimit,
+                           OUTPUT ldeConsumedData,
+                           OUTPUT ldeOtherMonthLimit,
+                           OUTPUT lcResult).
+   END.
+
+END FUNCTION.
 
 PROCEDURE pUpdateDSSLimit:
 

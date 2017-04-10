@@ -4,13 +4,14 @@
  * @input   person_id;string;mandatory;
             id_type;string;mandatory;
             self_employed;bool;mandatory;
+            dss_clitype;string;mandatory;
  *          
  * @output   check_customer;struct;mandatory; response structure
  * @check_customer order_allowed;boolean;mandatory;
                    subscription_limit;int;mandatory;
                    reason;string;optional;possible fail reason, returned if order_allowed = false
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
-                   dss_allowed;string;mandatory;OK;DSS_NOT_ALLOWED
+                   dss_allowed;string;mandatory;OK,DSS_NOT_ALLOWED
  */
 
 {xmlrpc/xmlrpc_access.i}
@@ -25,6 +26,7 @@ DEF VAR pcPersonId       AS CHAR NO-UNDO.
 DEF VAR pcIdType         AS CHAR NO-UNDO.
 DEF VAR plSelfEmployed   AS LOG  NO-UNDO.
 DEF VAR piOrders         AS INT  NO-UNDO. 
+DEF VAR pcCLIType        AS CHAR NO-UNDO.
 
 /* Local variable */
 DEF VAR llOrderAllowed     AS LOG  NO-UNDO.
@@ -36,10 +38,6 @@ DEF VAR lcAddLineAllowed   AS CHAR NO-UNDO.
 DEF VAR liActLimit         AS INT  NO-UNDO.
 DEF VAR liacts             AS INT  NO-UNDO.
 DEF VAR lcDSSAllowed       AS CHAR NO-UNDO.
-DEF VAR ldeCurrMonthLimit  AS DEC  NO-UNDO.
-DEF VAR ldeConsumedData    AS DEC  NO-UNDO.
-DEF VAR ldeOtherMonthLimit AS DEC  NO-UNDO.
-DEF VAR lcResult           AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,boolean,int") EQ ?
    THEN RETURN.
@@ -48,6 +46,7 @@ pcPersonId = get_string(param_toplevel_id, "0").
 pcIdType = get_string(param_toplevel_id, "1").
 plSelfEmployed = get_bool(param_toplevel_id, "2").
 piOrders = get_int(param_toplevel_id, "3").
+pcCLIType = get_string(param_toplevel_id, "4").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -114,19 +113,9 @@ FIND FIRST Customer NO-LOCK WHERE
            Customer.CustIDType = pcIdType   AND
            Customer.Roles     NE "inactive" NO-ERROR.
 IF AVAILABLE Customer THEN DO:
-
-   IF fIsDSSAllowed(INPUT  Customer.CustNum,
-                    INPUT  0,
-                    INPUT  fMakeTS(),
-                    INPUT  {&DSS},
-                    INPUT  "",
-                    OUTPUT ldeCurrMonthLimit,
-                    OUTPUT ldeConsumedData,
-                    OUTPUT ldeOtherMonthLimit,
-                    OUTPUT lcResult) THEN
+   IF fDSSCustCheck(Customer.CustNum,
+                    pcCLIType) THEN
       lcDSSAllowed = "OK".
-   ELSE
-      lcDSSAllowed = lcResult.
 END.
 
 IF lcDSSAllowed = "" THEN lcDSSAllowed = "DSS_NOT_ALLOWED".
