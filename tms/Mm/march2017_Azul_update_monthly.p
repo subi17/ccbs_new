@@ -1,12 +1,12 @@
 /*--------------------------------------------------------------------
   MODULE .......: march2017_Azul_update.p
-  TASK .........: This is temporary program that is run hourly 
-                  1.3.2017 - 15.4.2017 for Activating 25MB upsell for
-                  Azul subscriptions done in March. (March 2017 Promo)
+  TASK .........: This is temporary program that is run monthly  
+                  to Activating 25MB upsell for Azul subscriptions done 
+                  in March. (March 2017 Promo)
                   25MB Upsell == Flecx Upsell.
   APPLICATION ..: tms
   AUTHOR .......: Ilkka Savolainen
-  CREATED ......: 27.2.2017
+  CREATED ......: 15.3.2017
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
@@ -17,7 +17,7 @@
 
 /*Logic:*
    1. Make a lock that prevents multiple instances of the program. 
-   2. Collect all orders that have been activated during the coll.period. with
+   2. Collect all orders that have been activated during March 2017
       criteria:
       -Order Date is in March
       -Clitype is Azul
@@ -29,43 +29,42 @@
 
 gcBrand = "1".
 
-DEF VAR lcTableName           AS CHAR NO-UNDO.
-DEF VAR lcActionId            AS CHAR NO-UNDO.
-DEF VAR ldCampaignStartApril  AS DEC  NO-UNDO.
-DEF VAR ldCampaignStart       AS DEC  NO-UNDO.
-DEF VAR ldCampaignEnd         AS DEC  NO-UNDO.
-DEF VAR ldCurrentTimeTS       AS DEC  NO-UNDO.
-DEF VAR ldCollPeriodStartTS   AS DEC  NO-UNDO.
-DEF VAR ldCollPeriodEndTS     AS DEC  NO-UNDO. /*now - 1 minute*/
-DEF VAR lcResult              AS CHAR NO-UNDO.
-DEF VAR lcUpsell              AS CHAR NO-UNDO.
-DEF VAR lcLogDir              AS CHAR NO-UNDO.
-DEF VAR lcLogFile             AS CHAR NO-UNDO.
-DEF VAR ldaReadDate           AS DATE NO-UNDO.
-DEF VAR llgSimulate           AS LOG  NO-UNDO.
-DEF VAR lcOutROw              AS CHAR NO-UNDO.
+DEF VAR lcTableName AS CHAR NO-UNDO.
+DEF VAR lcActionId AS CHAR NO-UNDO.
+DEF VAR ldCampaignStart AS DEC NO-UNDO.
+DEF VAR ldCampaignEnd AS DEC NO-UNDO.
+DEF VAR ldCurrentTimeTS AS DEC  NO-UNDO.
+DEF VAR ldCollPeriodStartTS AS DEC NO-UNDO.
+DEF VAR ldCollPeriodEndTS AS DEC NO-UNDO. /*now - 1 minute*/
+DEF VAR lcResult AS CHAR NO-UNDO.
+DEF VAR lcUpsell AS CHAR NO-UNDO.
+DEF VAR lcLogDir AS CHAR NO-UNDO.
+DEF VAR lcLogFile AS CHAR NO-UNDO.
+DEF VAR ldaReadDate  AS DATE NO-UNDO.
+DEF VAR llgSimulate AS LOG NO-UNDO.
+DEF VAR lcOutROw AS CHAR NO-UNDO.
 
 DEF STREAM sLogFile.
 
-ASSIGN
-   llgSimulate       = FALSE              /*TRUE-> only log writing, FALSE->make real updates*/
-   lcTableName       = "March2017Promo"   /*For execution lock*/
-   lcActionId        = "UpsellForAzul"    /*For execution lock*/
-   ldCampaignStartApril   = fCParamDe("March2017AprilFromDate")
-   ldCampaignStart   = fCParamDe("March2017PromoFromDate") /*Dates when order must be done */
-   ldCampaignEnd     = fCParamDe("March2017PromoToDate")   /*Dates when order must be done */
-   lcUpsell          = "FLEX_UPSELL"      /*Upsell that will be aded in the promo*/
-   ldaReadDate       = TODAY
-   ldCurrentTimeTS   = fMakeTS()
-   lcLogDir          = fCParam("March2017Promo","March2017LogDir").
+llgSimulate = FALSE. /*TRUE-> only log writing, FALSE->make real updates*/
+lcTableName = "March2017Promo". /*For execution lock*/
+lcActionId = "UpsellForAzulMonthly". /*For execution lock*/
+ldCampaignStart = 20170301. /*Dates when order must be done */
+ldCampaignEnd = 20170401. /*Dates when order must be done */
+lcUpsell = "FLEX_UPSELL". /*Upsell that will be aded in the promo*/
+ldaReadDate  = TODAY.
 
+ldCurrentTimeTS = fMakeTS().
+
+
+lcLogDir     = fCParam("March2017Promo","March2017LogDir").
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
 
-lcLogFile = lcLogDir + "March2017Promo_hourly_" +
-            STRING(YEAR(ldaReadDate)) +
-            STRING(MONTH(ldaReadDate),"99") +
-            STRING(DAY(ldaReadDate),"99") +
-            REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
+lcLogFile    = lcLogDir + "March2017Promo_monthly_" +
+                      STRING(YEAR(ldaReadDate)) +
+                      STRING(MONTH(ldaReadDate),"99") +
+                      STRING(DAY(ldaReadDate),"99") +
+                      REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
 
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
@@ -83,8 +82,7 @@ FUNCTION fIsAzul RETURNS LOG
    (icCliType AS CHAR):
    IF icCliType EQ "CONTDSL59" OR
       icCliType EQ "CONTFH59_50" OR
-      icCliType EQ "CONTFH69_300" OR
-      icCliType EQ "CONT25" THEN
+      icCliType EQ "CONTFH69_300" THEN
       RETURN TRUE.
  
    RETURN FALSE.
@@ -93,21 +91,16 @@ END.
 FUNCTION fCollect RETURNS CHAR
    (idStartTS AS DEC,
     idEndTS AS DEC):
-
    DEF BUFFER Order FOR Order.
    DEF BUFFER Mobsub FOR Mobsub.
-   DEF BUFFER OrderTimestamp FOR OrderTimestamp.
-
    DEF VAR lcErr AS CHAR NO-UNDO.
-   
-   FOR EACH OrderTimestamp NO-LOCK WHERE
-            OrderTimestamp.Brand EQ gcBrand AND
+   DEF BUFFER ORdertimestamp FOR Ordertimestamp.
+   FOR EACH Ordertimestamp NO-LOCK WHERE
+            Ordertimestamp.Brand EQ gcBrand AND
             OrderTimestamp.RowType EQ {&ORDERTIMESTAMP_DELIVERY} AND
-            OrderTimestamp.TimeStamp < idEndTS AND
-            OrderTimestamp.TimeStamp >= idStartTS:
-
+            Ordertimestamp.TimeStamp < idEndTS AND
+            Ordertimestamp.TimeStamp >= idStartTS:
       lcErr = "".
-
       FIND FIRST ttOrderList WHERE
                  ttOrderList.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
       IF AVAIL ttOrderList THEN NEXT. /*Skip duplicates*/
@@ -117,23 +110,14 @@ FUNCTION fCollect RETURNS CHAR
                  Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
       IF NOT AVAIL Order THEN NEXT. /*This should not happen*/
 
-      /*Order must be for Azul or CONT25 (april promo) */
+      /*Order must be for Azul*/
       IF NOT fIsAzul(Order.CliType) THEN NEXT.
 
-      /* April promotion */
-      /* Only MNP orders to CONT25 get the promotion */
-      IF Order.CliType EQ "CONT25" THEN DO:
-         IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
-            IF NOT (Order.CrStamp >= ldCampaignStartApril AND
-                    Order.CrStamp < ldCampaignEnd) THEN NEXT.
-         END.
-         ELSE NEXT. /*CONT25 non-MNP orders do net get the activation*/
-      END.
-      ELSE DO:
-         /*Order must be created in March*/
-         IF NOT(Order.CrStamp GE ldCampaignStart AND
-                Order.CrStamp LT ldCampaignEnd) THEN NEXT.
-      END.
+      /*Order must be created in March*/
+      IF Order.Brand EQ gcBrand AND 
+         NOT(Order.CrStamp GE ldCampaignStart AND
+             Order.CrStamp LT ldCampaignEnd) THEN NEXT.
+
       /*No Flex upsell is allowed*/
          /*This is checked in activation phase in fUpsellForAzul*/
 
@@ -156,15 +140,30 @@ FUNCTION fCollect RETURNS CHAR
          PUT STREAM sLogFile UNFORMATTED lcErr SKIP.
          NEXT.
       END.
+     
 
       /*After all validations: this order needs upsell*/
       CREATE ttOrderList.
       ASSIGN
          ttOrderList.OrderID = Order.Orderid
          ttOrderList.MsSeq = Order.MsSeq.
+      
 
    END.
 END.
+
+/*Function returns start moment of given month, example
+  20170322.15 -> 20170301*/
+FUNCTION fMonthStart RETURNS DECIMAL
+   (idIn AS DECIMAL):
+   DEF VAR liOut AS INT NO-UNDO.
+   liOut = idIn / 100 .
+   liOut = liOut * 100 + 1.
+
+   RETURN DECIMAL(liOut).
+
+END.
+
 
 /*Function activates upsell for subscription that is related to given order*/
 FUNCTION fUpsellForAzul RETURNS CHAR
@@ -176,7 +175,9 @@ FUNCTION fUpsellForAzul RETURNS CHAR
    FIND FIRST MsRequest NO-LOCK where
               MsRequest.MsSeq EQ iiMsSeq AND
               MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-              MsRequest.ReqCparam3 EQ lcUpsell NO-ERROR.
+              MsRequest.ReqCparam3 EQ lcUpsell AND 
+              MsRequest.crestamp > fMonthStart(fmakets()) /*do not care itmes done in eariler months */
+              NO-ERROR.
    IF AVAIL MsRequest THEN RETURN "Upsell already activated".
    
    IF llgSimulate EQ FALSE THEN DO:
@@ -230,8 +231,10 @@ DO TRANS:
 END.
 
 /*Actual execution:*/
-ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute*/
-fCollect(ldCollPeriodStartTS, ldCollPeriodEndTS). /*Select orders that need activation*/
+ldCollPeriodEndTS = fSecOffSet(ldCampaignStart, -60). /*Now - 1 minute*/
+fCollect(ldCampaignStart, (ldCampaignEnd + 15)). /*Select orders that need activation, 
+                                                  additional 15 days is done to be sure
+                                                  that also delayed activations are found*/
 
 /*Activate upsells*/
 FOR EACH ttOrderList:

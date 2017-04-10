@@ -305,8 +305,10 @@ REPEAT:
    IMPORT STREAM sFile UNFORMATTED lcFileName. 
    lcInputFile = lcIncDir + lcFileName.
 
-   IF SEARCH(lcInputFile) NE ? THEN 
+   IF SEARCH(lcInputFile) NE ? THEN DO:
+      IF fCheckFileNameChars(lcFileName) EQ FALSE THEN NEXT.
       INPUT STREAM sin FROM VALUE(lcInputFile).
+   END.
    ELSE NEXT.
 
    /* Set effective tenant based on file name. If not regocniced go next file
