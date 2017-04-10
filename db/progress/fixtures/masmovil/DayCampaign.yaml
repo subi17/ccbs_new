@@ -100,6 +100,22 @@ bulkload: DayCampaign
   BundleUpsell: "MM_200_UPSELL,MM_512_UPSELL,MM_1024_UPSELL"
 
 bulkload: DayCampaign
+  DCEvent: "MM_CERO_5GB"
+  ValidFrom: 2017-03-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MM_CERO_5GBMF"
+  DCName: "Tarifa Mas 0 + 5 GB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "MM_CERO_5GBMF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "MM_200_UPSELL,MM_512_UPSELL,MM_1024_UPSELL"
+
+bulkload: DayCampaign
   DCEvent: "MM_DATA1024"
   ValidFrom: 2017-03-16
   InclUnit: 4
@@ -108,7 +124,7 @@ bulkload: DayCampaign
   DCName: "Data Usage Bundle 1GB"
   CCN: 93
   Brand: "1"
-  DCType: "4"
+  DCType: "1"
   CalcMethod: 4
   DurType: 1
   FeeModel: "MM_DATA1024MF"
@@ -125,7 +141,7 @@ bulkload: DayCampaign
   DCName: "Data Usage Bundle 2GB"
   CCN: 93
   Brand: "1"
-  DCType: "4"
+  DCType: "1"
   CalcMethod: 4
   DurType: 1
   FeeModel: "MM_DATA2048MF"
@@ -142,7 +158,7 @@ bulkload: DayCampaign
   DCName: "Data Usage Bundle 4GB"
   CCN: 93
   Brand: "1"
-  DCType: "4"
+  DCType: "1"
   CalcMethod: 4
   DurType: 1
   FeeModel: "MM_DATA4096MF"
@@ -159,7 +175,7 @@ bulkload: DayCampaign
   DCName: "Data Usage Bundle 500MB"
   CCN: 93
   Brand: "1"
-  DCType: "4"
+  DCType: "1"
   CalcMethod: 4
   DurType: 1
   FeeModel: "MM_DATA512MF"
@@ -176,13 +192,141 @@ bulkload: DayCampaign
   DCName: "Default Data 600MB"
   CCN: 93
   Brand: "1"
-  DCType: "4"
+  DCType: "1"
   CalcMethod: 4
   DurType: 1
   FeeModel: "MM_DATA600MF"
   Effective: 1
   BundleUpsell: "MM_200_UPSELL,MM_512_UPSELL,MM_1024_UPSELL"
   PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MM_INTVOICE100"
+  ValidFrom: 2017-03-27
+  InclUnit: 6
+  ValidTo: 2049-12-31
+  BillCode: "MM_INTVOICE100MF"
+  DCName: "International Voice bundle"
+  CCN: 2
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "MM_INTVOICE100MF"
+  DurUnit: 1
+  Effective: 1
+
+bulkload: DayCampaign
+  DCEvent: "MM_MAS_1GB"
+  ValidFrom: 2017-03-24
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "MM_MAS_1GBMF"
+  DCName: "Tarifa Mas 1 GB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "MM_MAS_1GBMF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "MM_200_UPSELL,MM_512_UPSELL,MM_1024_UPSELL"
+
+bulkload: DayCampaign
+  DCEvent: "MM_MAS_3GB"
+  ValidFrom: 2017-03-24
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "MM_MAS_3GBMF"
+  DCName: "Tarifa Mas 3 GB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "MM_MAS_3GBMF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "MM_200_UPSELL,MM_512_UPSELL,MM_1024_UPSELL"
+
+bulkload: DayCampaign
+  DCEvent: "MM_MAS_8GB"
+  ValidFrom: 2017-03-24
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "MM_MAS_8GBMF"
+  DCName: "Tarifa Mas 8 GB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "MM_MAS_8GBMF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "MM_200_UPSELL,MM_512_UPSELL,MM_1024_UPSELL"
+
+bulkload: DayCampaign
+  DCEvent: "MM_NET_10GB"
+  ValidFrom: 2017-03-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MM_NET_10GBMF"
+  DCName: "Tarifa Internet Total 10 GB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "MM_NET_10GBMF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "MM_200_UPSELL,MM_512_UPSELL,MM_1024_UPSELL"
+
+bulkload: DayCampaign
+  DCEvent: "MM_NET_20GB"
+  ValidFrom: 2017-03-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MM_NET_20GBMF"
+  DCName: "Tarifa Internet Total 20 GB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "MM_NET_20GBMF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "MM_200_UPSELL,MM_512_UPSELL,MM_1024_UPSELL"
+
+bulkload: DayCampaign
+  DCEvent: "MM_NET_50GB"
+  ValidFrom: 2017-03-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MM_NET_50GBMF"
+  DCName: "Tarifa Internet Total 50 GB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "MM_NET_50GBMF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "MM_200_UPSELL,MM_512_UPSELL,MM_1024_UPSELL"
+
+bulkload: DayCampaign
+  DCEvent: "MM_NET_5GB"
+  ValidFrom: 2017-03-23
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MM_NET_5GBMF"
+  DCName: "Tarifa Internet Total 5 GB"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "MM_NET_5GBMF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "MM_200_UPSELL,MM_512_UPSELL,MM_1024_UPSELL"
 
 bulkload: DayCampaign
   DCEvent: "MM_VOICE100"
@@ -203,6 +347,7 @@ bulkload: DayCampaign
 bulkload: DayCampaign
   DCEvent: "MM_VOICE250"
   ValidFrom: 2017-02-22
+  InclUnit: 6
   ValidTo: 2049-12-31
   BillCode: "MM_VOICE250MF"
   DCName: "Voice 250 Min. Package"
@@ -218,6 +363,7 @@ bulkload: DayCampaign
 bulkload: DayCampaign
   DCEvent: "MM_VOICE40"
   ValidFrom: 2017-02-22
+  InclUnit: 6
   ValidTo: 2049-12-31
   BillCode: "MM_VOICE40MF"
   DCName: "Voice 40 Min. Package"

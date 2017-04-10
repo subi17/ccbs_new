@@ -17,11 +17,14 @@ IF ( MsRequest.ReqSource > "" AND LOOKUP(MsRequest.ReqSource,{&REQUEST_SOURCES_H
    LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + "," + {&REQ_ONGOING_STATUSES}) = 0
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Mobile.RepLog.
 ASSIGN
-   Mobile.RepLog.TableName = "MsRequest"
-   Mobile.RepLog.EventType = "DELETE"
-   Mobile.RepLog.EventTime = NOW
+   Mobile.RepLog.TableName  = "MsRequest"
+   Mobile.RepLog.EventType  = "DELETE"
+   Mobile.RepLog.EventTime  = NOW
+   Mobile.RepLog.TenantName = fRepLogTenantName(BUFFER MsRequest:HANDLE)
    Mobile.RepLog.KeyValue  = STRING(MsRequest.MsRequest)
    .
 

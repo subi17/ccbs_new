@@ -17,6 +17,8 @@
                    voip_amount;double;bono voip data amount (MB)
                    dss2_compatible;boolean;DSS2 compatible
                    voip_compatible;boolean;Voip Compatible
+ * @region taxzone;string; VAT Code Name
+           taxinclvalue;decimal; Monthly Cost based on including Zone Tax
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -34,6 +36,8 @@ DEF VAR pcIdArray AS CHAR NO-UNDO.
 DEF VAR pcTenant  As CHAR NO-UNDO.
 DEF VAR liCounter AS INTEGER NO-UNDO. 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
+DEF VAR lcRegionArray  AS CHAR NO-UNDO.
+DEF VAR lcRegionStruct AS CHAR NO-UNDO.
 
 DEF VAR lcIPLContracts     AS CHAR NO-UNDO.
 DEF VAR lcCONTDContracts   AS CHAR NO-UNDO.
@@ -136,8 +140,21 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    END. /* IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO: */
    
    IF LOOKUP(DayCampaign.DCEvent,lcBONOContracts) > 0 OR
-      DayCampaign.DCEvent = "HSPA_ROAM_EU" THEN
-      lcBundleType = "bundle".
+      DayCampaign.DCEvent = "HSPA_ROAM_EU"            OR 
+      (pcTenant = {&TENANT_MASMOVIL} AND DayCampaign.DCType = {&DCTYPE_BUNDLE}) THEN
+   DO:
+      IF INDEX(DayCampaign.DCEvent,"RELAX") > 0 THEN   
+         lcBundleType = "supplement_bundle".
+      ELSE      
+         lcBundleType = "bundle".
+   END.   
+   ELSE IF (pcTenant = {&TENANT_MASMOVIL} AND DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE}) THEN
+   DO:
+      IF INDEX(DayCampaign.DCEvent,"DATA") > 0 OR INDEX(DayCampaign.DCEvent,"VOICE") > 0 THEN   
+         lcBundleType = "bundle".
+      ELSE      
+         lcBundleType = "service".  
+   END.
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcIPLContracts) > 0 THEN
       ASSIGN lcBundleType = "subscription"
              lcCLIType = "CONTRD".
@@ -156,9 +173,10 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE IF LOOKUP(DayCampaign.DCType,"6,8") > 0 THEN
       lcBundleType = "upsell".
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcPromotionBundles) > 0 THEN 
-      lcBundleType = "promotional".
-   ELSE lcBundleType = "service".
-
+      lcBundleType = "promotional".   
+   ELSE 
+      lcBundleType = "service".
+   
    IF lcCLIType > "" THEN DO:
       FIND FIRST CLIType WHERE
                  CLIType.Brand   = "1" AND
@@ -193,6 +211,16 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
                  ServiceLimit.GroupCode = "BONO_VOIP" NO-LOCK NO-ERROR.
       IF AVAIL ServiceLimit THEN
          add_double(lcResultStruct,"voip_amount", ServiceLimit.InclAmt).
+   END.
+
+   lcRegionArray = add_array(lcResultStruct, "region").
+   FOR EACH VATCode NO-LOCK WHERE
+            VATCode.TaxClass  = "1"   AND
+            VATCode.FromDate <= TODAY AND
+            VATCOde.ToDate   >= TODAY:
+      lcRegionStruct = add_struct(lcRegionArray,"").
+      add_string(lcRegionStruct,"taxzone", VATCode.VCName).
+      add_double(lcRegionStruct,"taxinclvalue", (1 + VatCode.VatPerc / 100) * ldeFee).
    END.
 END.
 

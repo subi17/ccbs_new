@@ -55,16 +55,24 @@ DEF VAR liRequest          AS INT   NO-UNDO.
 DEF VAR liQuarTime         AS INT   NO-UNDO.
 DEF VAR liSimStat          AS INT   NO-UNDO.
 DEF VAR liMSISDNStat       AS INT   NO-UNDO.
+DEF VAR lcTenant           AS CHAR  NO-UNDO.
+
+FIND FIRST ttInput NO-ERROR.
+IF AVAIL ttInput THEN 
+DO:    
+   ASSIGN lcTenant = (IF ttInput.receptorCode = "005" THEN {&TENANT_YOIGO} ELSE IF ttInput.receptorCode = "200" THEN {&TENANT_MASMOVIL} ELSE ""). 
+
+   {mnp/src/mnp_settenant.i lcTenant}
+END.
 
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
    
-   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest} 
-
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonanteCanceladas").
-   
-   FIND CURRENT MNPProcess EXCLUSIVE-LOCK NO-ERROR.
-   IF NOT AVAIL MNPProcess THEN DO:
+
+   FIND MNPProcess WHERE MNPProcess.PortRequest = ttInput.PortRequest EXCLUSIVE-LOCK NO-ERROR.
+   IF NOT AVAIL MNPProcess THEN 
+   DO:
       lcError = {&MNP_ERROR_UNKNOWN_PROCESS} + " " + ttInput.PortRequest.
       MNPOperation.MNPSeq = {&MNP_PROCESS_DUMMY_OUT}.
       fErrorHandle(lcError).

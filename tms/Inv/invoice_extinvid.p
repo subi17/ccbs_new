@@ -260,6 +260,8 @@ PROCEDURE pCheckNumbering:
    DEF INPUT  PARAMETER idtInvDate   AS DATE NO-UNDO.
    DEF INPUT  PARAMETER iiInvType    AS INT  NO-UNDO.
 
+   DEF VAR liPrefixLength AS INTEGER NO-UNDO. 
+
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
             Invoice.Brand   = gcBrand    AND
             Invoice.InvDate = idtInvDate AND
@@ -283,7 +285,11 @@ PROCEDURE pCheckNumbering:
          NEXT.
       END.
    
-      liInvID = INTEGER(SUBSTRING(Invoice.ExtInvID,5)) NO-ERROR.
+      IF LENGTH(Invoice.ExtInvID) EQ 14 THEN liPrefixLength = 6.
+      ELSE liPrefixLength = 4.
+      
+      liInvID = INTEGER(SUBSTRING(Invoice.ExtInvID,liPrefixLength + 1)) NO-ERROR.
+   
       IF ERROR-STATUS:ERROR OR liInvID = 0 THEN DO:
          fError("Invalid ID " + Invoice.ExtInvID).
          NEXT.
@@ -292,14 +298,15 @@ PROCEDURE pCheckNumbering:
       IF liInvID NE liPrevious + 1 THEN DO:
    
          /* gap in this batch */
-         IF liPrevious > 0 AND lcPrevious = SUBSTRING(Invoice.ExtInvID,1,4)
+         IF liPrevious > 0 AND
+            lcPrevious = SUBSTRING(Invoice.ExtInvID,1,liPrefixLength)
          THEN DO:
             fError("Gap before " + Invoice.ExtInvID).
          END.
 
          /* 1st with this prefix in this batch, previous one should be found 
             in the system also */
-         ELSE IF lcPrevious NE SUBSTRING(Invoice.ExtInvID,1,4) AND 
+         ELSE IF lcPrevious NE SUBSTRING(Invoice.ExtInvID,1,liPrefixLength) AND 
             liInvId > 1 
          THEN DO:
 
@@ -309,7 +316,7 @@ PROCEDURE pCheckNumbering:
                it is probably intentional */
             DO liOtherID = liInvID - 1 TO liInvID - 10 BY -1:
 
-               lcOtherID = SUBSTRING(Invoice.ExtInvID,1,4) +
+               lcOtherID = SUBSTRING(Invoice.ExtInvID,1,liPrefixLength) +
                            STRING(liOtherID,"99999999").
             
                IF CAN-FIND(FIRST Invoice WHERE 
@@ -330,7 +337,7 @@ PROCEDURE pCheckNumbering:
    
       ASSIGN
          liPrevious = liInvID
-         lcPrevious = SUBSTRING(Invoice.ExtInvID,1,4).
+         lcPrevious = SUBSTRING(Invoice.ExtInvID,1,liPrefixLength).
     
       IF NOT CAN-FIND(FIRST IgInvNum WHERE
                             IgInvNum.Brand   = gcBrand AND
@@ -358,7 +365,7 @@ PROCEDURE pRenumber:
    DEF VAR liNumber   AS INT  NO-UNDO.
    DEF VAR lcExtInvID AS CHAR NO-UNDO.
    DEF VAR liCnt      AS INT  NO-UNDO.
-
+   DEF VAR liPrefixLength AS INT  NO-UNDO.
 
    /* current sequences */
    FOR EACH InvGroup NO-LOCK WHERE
@@ -389,10 +396,14 @@ PROCEDURE pRenumber:
                Customer.CustNum = Invoice.CustNum:
 
          IF Invoice.ExtInvID = "" THEN NEXT.
+         
+         IF LENGTH(Invoice.ExtInvID) EQ 14 THEN liPrefixLength = 6.
+         ELSE liPrefixLength = 4.
       
          ASSIGN 
-            lcPrefix = SUBSTRING(Invoice.ExtInvID,1,4)
-            liNumber = INTEGER(SUBSTRING(Invoice.ExtInvId,5)) NO-ERROR.
+            lcPrefix = SUBSTRING(Invoice.ExtInvID,1,liPrefixLength)
+            liNumber = INTEGER(SUBSTRING(Invoice.ExtInvId,liPrefixLength + 1))
+         NO-ERROR.
 
          IF NOT ERROR-STATUS:ERROR THEN DO:
             FIND FIRST ttGroup WHERE

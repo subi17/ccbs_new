@@ -66,7 +66,15 @@ db_locations = {
              'mobile': 'pallas.int.asp.qvantel.net:mobile',
              'counter': 'pallas.int.asp.qvantel.net:counter',
              'star': 'pallas.int.asp.qvantel.net:star',
-             'prepedr': 'pallas.int.asp.qvantel.net:prepedr'}
+             'prepedr': 'pallas.int.asp.qvantel.net:prepedr'},
+    'yanney': {'common': 'yanai.int.asp.qvantel.net:common',
+               'ordercanal': 'yanai.int.asp.qvantel.net:ordercanal',
+               'mobile': 'yanai.int.asp.qvantel.net:mobile',
+               'counter': 'yanai.int.asp.qvantel.net:counter',
+               'star': 'yanai.int.asp.qvantel.net:star',
+               'prepedr': 'yanai.int.asp.qvantel.net:prepedr',
+               'fraudcdr': 'yanai.int.asp.qvantel.net:fraudcdr',
+               'reratelog': 'yanai.int.asp.qvantel.net:reratelog'}
 }
 
 db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
@@ -102,12 +110,6 @@ sql_startup_options = {
 main_pf_files = ['all.pf']
 
 ########################## Implementation #############################
-
-try:
-    getservbyname('%s%s' % (databases[0], service_suffix), 'tcp')
-    db_by_unix_socket = False
-except:
-    db_by_unix_socket = True
 
 initialize_dependencies = list(main_pf_files)
 if environment == 'development':
@@ -159,7 +161,7 @@ def database_file(match, deps, db_dir, db_name):
              'size +area name +path name', '^$',
              '/(bi|db|ix)/%s(_\d+)?\.[dba]\d+ 00:00:00' % db_name])
     for emptydb in ['%s/prolang/%s/empty%d.db' % (dlc, x, blocksize) \
-                    for x in ('utf', 'eng')]:
+                    for x in ('eng', 'utf')]:
         if os.path.exists(emptydb):
             callgrep([dlc + '/bin/procopy', '-s', emptydb, match],
                     ['\(6715\)$', '\(6718\)$', '\(451\)$',
@@ -208,7 +210,7 @@ def write_pf_file(filename, tenant='', logical_names={}):
         tenant = '_{}'.format(tenant)
     with open(filename, 'wt') as fd:
         if cdr_databases:
-             fd.write('-h %d\n' % len(databases) + len(cdr_databases))
+             fd.write('-h %d\n' % (len(databases) + len(cdr_databases)))
         else:
              fd.write('-h %d\n' % len(databases))
         for db in databases:
@@ -231,22 +233,23 @@ def startup_parameter_file(match, deps, db_name):
     path = path[0]
     fd = open(match, 'wt')
     fd.write('-pf %s/etc/pf/formats.pf\n' % work_dir)
-    if environment == 'production':
-        fd.write('-db %s\n' % path)
-        if not db_by_unix_socket:
+    fd.write('-db %s\n' % path)
+    if environment == 'production' or environment == 'safeproduction':
+        try:
+            getservbyname(db_name, 'tcp')
             fd.write('-H %s\n' % gethostname())
-            fd.write('-S %s%s\n' % (db_name, service_suffix))
+            fd.write('-S %s\n' % (db_name))
+        except:
+            pass
         for option in db_startup_options.get(db_name, []):
             fd.write(option + '\n')
-    else:
-        fd.write('-db %s\n' % path)
     fd.close()
     if environment == 'production' and db_name in sql_startup_options:
         fd = open(db_name + '_sql_startup.pf', 'wt')
         fd.write('-pf %s/etc/pf/formats.pf\n' % work_dir)
         fd.write('-db %s\n' % path)
         fd.write('-H %s\n' % gethostname())
-        fd.write('-S %s_sql%s\n' % (db_name, service_suffix))
+        fd.write('-S %s_sql\n' % (db_name))
         fd.write('-ServerType SQL\n')
         for option in sql_startup_options.get(db_name, []):
             fd.write(option + '\n')
@@ -261,13 +264,13 @@ def connect_parameter_file(match, deps, db_name):
     if len(path) > 1:
         fd.write('-db %s\n' % path[1].split('/')[0])
         fd.write('-H %s\n' % path[0])
-        fd.write('-S %s%s\n' % (db_name, service_suffix))
+        fd.write('-S %s\n' % (db_name))
     else:
         fd.write('-db %s\n' % path[0])
     fd.close()
     for tenant in tenancies:
         with open('{0}_{1}.pf'.format(db_name, tenant), 'wt') as fd:
-            fd.write('-pf {}.pf\n'.format(path[0]))
+            fd.write('-pf {0}/{1}.pf\n'.format(getcwd(), db_name))
             fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
 
 @target
@@ -399,7 +402,7 @@ def _migrate(migration_file, direction, a2t_data):
     df_file, database = mig2df(migration_file, direction,
                                a2t_data, a2t_from_database, environment)
 
-    pfile = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
+    pfile = tempfile.NamedTemporaryFile(suffix='.p', mode='rt+')
     pfile.write('SESSION:SUPPRESS-WARNINGS = TRUE.\n')
     pfile.write('SESSION:NUMERIC-FORMAT = "American".\n')
     pfile.write('RUN prodict/load_df("{0},,").\n'.format(df_file.name))

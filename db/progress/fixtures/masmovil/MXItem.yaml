@@ -233,3 +233,203 @@ bulkload: MXItem
   MXName: "SubsTypeTo"
   MXValue: "MM_CERO"
 
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_NET_5GB"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "SubsTypeTo"
+  MXValue: "MM_NET_5GB"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_NET_10GB"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "SubsTypeTo"
+  MXValue: "MM_NET_10GB"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_NET_20GB"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "SubsTypeTo"
+  MXValue: "MM_NET_20GB"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_NET_50GB"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "SubsTypeTo"
+  MXValue: "MM_NET_50GB"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_CERO_5GB"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "SubsTypeTo"
+  MXValue: "MM_CERO_5GB"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_MAS_1GB"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "SubsTypeTo"
+  MXValue: "MM_MAS_1GB"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_MAS_3GB"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "SubsTypeTo"
+  MXValue: "MM_MAS_3GB"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_MAS_8GB"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "SubsTypeTo"
+  MXValue: "MM_MAS_8GB"
+

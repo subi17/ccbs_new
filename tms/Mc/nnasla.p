@@ -191,7 +191,7 @@ DEF VAR liUseClass   AS INT                 NO-UNDO.
 DEF VAR lcCredited   AS CHAR                NO-UNDO.
 DEF VAR menuc        AS CHAR EXTENT 2       NO-UNDO.
 DEF VAR liClaimCancel AS INT                NO-UNDO.
-DEF VAR lcExtInvId   AS CHARACTER           NO-UNDO FORMAT "X(12)".
+DEF VAR lcExtInvId   AS CHARACTER           NO-UNDO FORMAT "X(14)".
 DEF VAR lcSelHeader  AS CHAR                NO-UNDO.
 DEF VAR lcFilter     AS CHAR                NO-UNDO.
 DEF VAR liFilter     AS INT                 NO-UNDO.
@@ -260,14 +260,14 @@ with
     frame cusdata.
 
 form
-    Invoice.ExtInvID   column-label "Invoice Nbr"
+    Invoice.ExtInvID FORMAT "x(14)" column-label "Invoice Nbr"
        help "Invoice nbr    (ENTER: DETAILS   '?': HELP FOR COLUMN CODES)"
     Invoice.InvDate    column-label "Date"  
     Invoice.DueDate    column-label "Due Date"  
     Invoice.InvAmt     column-label "Amount"       
-       format "->>>>>>9.99"
+       format "->>>>>9.99"
     era                column-label "Unpaid"   
-       format "->>>>>>9.99"
+       format "->>>>>9.99"
     due                column-label "DUE"        format "xxx"
     Invoice.Claimstatus column-label "CS"         format "x(5)"
     Invoice.ClaimPerm  column-label "CD"         format "/CD"

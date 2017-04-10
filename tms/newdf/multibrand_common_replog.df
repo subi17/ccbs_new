@@ -1,0 +1,27 @@
+ADD FIELD "TenantName" OF "RepLog" AS character
+  FORMAT "X(15)"
+  POSITION 9
+  INITIAL "yoigo"
+  HELP "Tenant name"
+  LABEL "Tenant name"
+  COLUMN-LABEL "TenantName"
+  ORDER 80
+  MAX-WIDTH 30
+
+RENAME INDEX "SendTime" TO "temp-30828" ON "RepLog"
+
+ADD INDEX "SendTime" ON "RepLog"
+  AREA "CDF_Index"
+  INDEX-FIELD "SendTime" ASCENDING
+  INDEX-FIELD "TenantName" ASCENDING
+  INDEX-FIELD "EventTime" ASCENDING
+
+UPDATE PRIMARY INDEX "SendTime" ON "RepLog"
+
+DROP INDEX "temp-30828" ON "RepLog"
+
+.
+PSC
+cpstream=1252
+.
+0000001560

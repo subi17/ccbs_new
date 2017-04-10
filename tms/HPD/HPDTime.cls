@@ -37,8 +37,17 @@ CLASS HPD.HPDTime FINAL:
                               ,":","")
             .
       END SET.
-      
-      
+
+   DEFINE PUBLIC STATIC PROPERTY NowTime AS CHARACTER NO-UNDO
+      GET:
+         RETURN ISO-DATE(DATETIME-TZ(NOW)).
+      END GET.
+
+   DEFINE PUBLIC STATIC PROPERTY NowTimeUTC AS CHARACTER NO-UNDO
+      GET:
+         RETURN ISO-DATE(DATETIME-TZ(NOW,0)).
+      END GET.
+
    METHOD PUBLIC STATIC DECIMAL mMake2DT 
       (INPUT ldaTSDate AS DATE,
        INPUT liTSTime  AS INTEGER):
@@ -59,17 +68,28 @@ CLASS HPD.HPDTime FINAL:
       RETURN ldeRet.
       
    END METHOD.
-   
-   
-   METHOD PUBLIC STATIC CHARACTER mTS2DateTimeTZ
+
+
+   METHOD PUBLIC STATIC DECIMAL mMake2DT
+      (INPUT idtDateTime AS DATETIME):
+
+      IF idtDateTime = ?
+      THEN RETURN ?.
+
+      RETURN mMake2DT(DATE(idtDateTime), INTEGER(MTIME(idtDateTime) / 1000)).
+
+   END METHOD.
+
+
+   METHOD PUBLIC STATIC DATETIME mTS2DateTime
       ( ideTS AS DECIMAL ):
-      
+
       DEFINE VARIABLE liYY    AS INTEGER  NO-UNDO.
       DEFINE VARIABLE liMM    AS INTEGER  NO-UNDO.
       DEFINE VARIABLE liDD    AS INTEGER  NO-UNDO.
       DEFINE VARIABLE ldaDate AS DATE     NO-UNDO.
       DEFINE VARIABLE liTime  AS INTEGER  NO-UNDO.
-      
+
       ASSIGN
          liYY    = TRUNCATE(ideTS,0)
          liTime  = (ideTS - liYY) * 100000000
@@ -79,15 +99,30 @@ CLASS HPD.HPDTime FINAL:
          liMM    = (liMM - liDD) / 100 
          ldaDate = DATE(liMM,liDD,liYY)
       NO-ERROR.
-   
+
       IF ERROR-STATUS:ERROR
       THEN RETURN ?.
-      
-      RETURN ISO-DATE(DATETIME-TZ(ldaDate, liTime)).
-   
+
+      RETURN DATETIME(ldaDate, liTime).
+
    END METHOD.
-   
-   
+
+
+   METHOD PUBLIC STATIC CHARACTER mTS2DateTimeTZ
+      ( ideTS AS DECIMAL ):
+
+      DEFINE VARIABLE ldtDateTime AS DATETIME NO-UNDO.
+
+      ldtDateTime = mTS2DateTime(ideTS).
+
+      IF ldtDateTime = ?
+      THEN RETURN ?.
+
+      RETURN ISO-DATE(DATETIME-TZ(ldtDateTime)).
+
+   END METHOD.
+
+
    METHOD PUBLIC STATIC INTEGER mNextPeriod
       (iiPeriod AS INTEGER):
       

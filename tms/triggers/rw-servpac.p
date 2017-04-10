@@ -10,6 +10,8 @@ THEN RETURN.
 IF NOT NEW(ServPac) AND oldServPac.Brand NE "1" AND ServPac.Brand NE "1"
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 /* If this is an old cdr which is changed to error status
    will will send it as delete type */
 CREATE mobile.RepLog.
@@ -21,6 +23,7 @@ ASSIGN
                             THEN "DELETE"
                             ELSE "MODIFY") 
    mobile.RepLog.EventTime = NOW
+   mobile.RepLog.TenantName = fRepLogTenantName(BUFFER ServPac:HANDLE)
    .
 
 IF mobile.RepLog.EventType = "DELETE"
@@ -42,6 +45,7 @@ THEN DO:
          mobile.RepLog.TableName = "ServPac"
          mobile.RepLog.EventType = "DELETE"
          mobile.RepLog.EventTime = NOW
+         mobile.RepLog.TenantName = fRepLogTenantName(BUFFER oldServPac:HANDLE)
          mobile.RepLog.KeyValue  = {HPD/keyvalue.i oldServPac . {&HPDKeyDelimiter} ServPac}
          .
    END.

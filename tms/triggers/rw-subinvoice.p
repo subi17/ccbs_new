@@ -19,6 +19,8 @@ END.
 IF NOT llInvoiceInHPD
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.TableName = "SubInvoice"
@@ -26,6 +28,7 @@ ASSIGN
                                THEN "CREATE"
                                ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER SubInvoice:HANDLE)
    .
 
 IF Common.RepLog.EventType = "DELETE" 
@@ -49,6 +52,7 @@ THEN DO:
          Common.RepLog.TableName = "SubInvoice"
          Common.RepLog.EventType = "DELETE"
          Common.RepLog.EventTime = NOW
+         Common.RepLog.TenantName = fRepLogTenantName(BUFFER oldSubInvoice:HANDLE)
          Common.RepLog.KeyValue  = {HPD/keyvalue.i oldSubInvoice . {&HPDKeyDelimiter} InvNum SubInvNum}
          .
    END.

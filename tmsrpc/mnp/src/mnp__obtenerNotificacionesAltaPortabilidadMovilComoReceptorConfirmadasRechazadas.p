@@ -42,17 +42,24 @@
 {Func/orderfunc.i}
 {Func/ordercancel.i}
 
-DEF VAR lcSMS AS CHAR NO-UNDO. 
+DEF VAR lcSMS    AS CHAR NO-UNDO. 
+DEF VAR lcTenant AS CHAR NO-UNDO.
+
+FIND FIRST ttInput NO-ERROR.
+IF AVAIL ttInput THEN 
+DO:    
+   ASSIGN lcTenant = (IF ttInput.receptorCode = "005" THEN {&TENANT_YOIGO} ELSE IF ttInput.receptorCode = "200" THEN {&TENANT_MASMOVIL} ELSE ""). 
+
+   {mnp/src/mnp_settenant.i lcTenant}
+END.
 
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
-   
-   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
 
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoReceptorConfirmadasRechazadas").
 
-   FIND CURRENT MNPProcess EXCLUSIVE-LOCK NO-ERROR.
+   FIND MNPProcess WHERE MNPProcess.PortRequest = ttInput.PortRequest EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAIL MNPProcess THEN DO:
       lcError = {&MNP_ERROR_UNKNOWN_PROCESS} + ":" + ttInput.PortRequest.
       MNPOperation.MNPSeq = {&MNP_PROCESS_DUMMY_IN}.

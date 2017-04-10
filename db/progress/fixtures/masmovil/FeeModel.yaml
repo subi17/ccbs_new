@@ -24,6 +24,11 @@ bulkload: FeeModel
   Brand: "1"
 
 bulkload: FeeModel
+  FeeModel: "MM_CERO_5GBMF"
+  FeeName: "Tarifa Mas 0 + 5 GB"
+  Brand: "1"
+
+bulkload: FeeModel
   FeeModel: "MM_DATA1024MF"
   FeeName: "Data Usage Bundle 1GB"
   Brand: "1"
@@ -41,6 +46,46 @@ bulkload: FeeModel
 bulkload: FeeModel
   FeeModel: "MM_DATA512MF"
   FeeName: "Data Usage Bundle 500MB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_INTVOICE100MF"
+  FeeName: "International Voice bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_MAS_1GBMF"
+  FeeName: "Tarifa Mas 1 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_MAS_3GBMF"
+  FeeName: "Tarifa Mas 3 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_MAS_8GBMF"
+  FeeName: "Tarifa Mas 8 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_NET_10GBMF"
+  FeeName: "Tarifa Internet Total 10 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_NET_20GBMF"
+  FeeName: "Tarifa Internet Total 20 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_NET_50GBMF"
+  FeeName: "Tarifa Internet Total 50 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_NET_5GBMF"
+  FeeName: "Tarifa Internet Total 5 GB"
   Brand: "1"
 
 bulkload: FeeModel

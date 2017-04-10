@@ -42,6 +42,13 @@ bulkload: ServiceLimitGroup
 
 bulkload: ServiceLimitGroup
   Brand: "1"
+  GroupCode: "MM_CERO_5GB"
+  GroupName: "Tarifa Mas 0 + 5 GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
   GroupCode: "MM_DATA1024"
   GroupName: "Data Usage Bundle 1GB"
   ValidFrom: 2017-03-16
@@ -73,6 +80,62 @@ bulkload: ServiceLimitGroup
   GroupCode: "MM_DATA600"
   GroupName: "Default Data 600MB"
   ValidFrom: 2017-03-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_INTVOICE100"
+  GroupName: "International Voice bundle"
+  ValidFrom: 2017-03-27
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_MAS_1GB"
+  GroupName: "Tarifa Mas 1 GB"
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_MAS_3GB"
+  GroupName: "Tarifa Mas 3 GB"
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_MAS_8GB"
+  GroupName: "Tarifa Mas 8 GB"
+  ValidFrom: 2017-03-24
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_NET_10GB"
+  GroupName: "Tarifa Internet Total 10 GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_NET_20GB"
+  GroupName: "Tarifa Internet Total 20 GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_NET_50GB"
+  GroupName: "Tarifa Internet Total 50 GB"
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_NET_5GB"
+  GroupName: "Tarifa Internet Total 5 GB"
+  ValidFrom: 2017-03-23
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup

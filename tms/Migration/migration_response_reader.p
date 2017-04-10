@@ -20,6 +20,7 @@
 {Syst/tmsconst.i}
 {Migration/migrationfunc.i}
 {Func/ftransdir.i}
+{Func/orderfunc.i}
 gcBrand = "1".
 
 DEF STREAM sin.
@@ -108,7 +109,7 @@ END.
 
 /*Execution part*/
 lcErr = fInitMigrationMQ("response").
-   IF lcErr NE "" THEN DO:
+IF lcErr NE "" THEN DO:
    PUT STREAM sLog UNFORMATTED
       "MQ error. Migration file will be skipped: " + lcErr +
       fTS2HMS(fMakeTS()) SKIP.
@@ -126,21 +127,22 @@ ELSE DO:
       RUN pReadFile.
       fMove2TransDir(lcInputFile,"",lcProcDir).
    END.
-   /*Release ActionLog lock*/
-   DO TRANS:
-      FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     EQ  gcBrand        AND
-                 ActionLog.ActionID  EQ  lcActionID     AND
-                 ActionLog.TableName EQ  lcTableName    AND
-                 ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
-      EXCLUSIVE-LOCK NO-ERROR.
+END.   
+/*Release ActionLog lock*/
+DO TRANS:
+   FIND FIRST ActionLog WHERE
+              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.ActionID  EQ  lcActionID     AND
+              ActionLog.TableName EQ  lcTableName    AND
+              ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
+   EXCLUSIVE-LOCK NO-ERROR.
 
-      IF AVAIL ActionLog THEN DO:
-         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
-      END.
-      RELEASE ActionLog.
+   IF AVAIL ActionLog THEN DO:
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
    END.
+   RELEASE ActionLog.
 END.
+
 
 PUT STREAM sLog UNFORMATTED
    "Migration file handling done " + fTS2HMS(fMakeTS()) SKIP.
@@ -189,7 +191,8 @@ PROCEDURE pReadFile:
       FIND FIRST Order NO-LOCK /*EL?)*/ WHERE
                  Order.brand EQ gcBrand AND
                  Order.CLI EQ lcMSISDN AND
-                 Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING}.
+                 Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING} 
+                 NO-ERROR.
       IF AVAIL Order THEN liOrderID = Order.OrderID.
 
       /*Nodo data contains a number for Order that is
@@ -198,7 +201,7 @@ PROCEDURE pReadFile:
         does not exist at all
         ->TMS writes own error notification list for this*/
       IF liOrderID EQ 0 THEN DO:
-         lcRowStatus = "TMS Error".
+         lcRowStatus = "TMS Error, order not found".
       END.
       /*NC response is OK and TMS has order for the operation*/
       ELSE IF lcNCStatus EQ "0000 00000" THEN DO:
@@ -218,7 +221,9 @@ PROCEDURE pReadFile:
       ELSE DO:
          /*Error case handling*/
          /*Set Order Status*/
-         lcRowStatus = "NC Failure".         
+         lcRowStatus = "NC Failure".
+         IF liOrderID NE 0 THEN fSetOrderStatus(liOrderID,"7").
+
       END.
       /*Send message to WEB*/
       lcMQMessage = fGenerateNCResponseInfo(liOrderID,

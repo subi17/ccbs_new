@@ -11,13 +11,13 @@
 USING Progress.Lang.*.
 USING HPD.DumpHandler.
 USING HPD.HPDTime.
-USING HPD.DumpBase.
-
-{HPD/HPDEnvironment.i}
+USING HPD.DumpSomeWhere.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-CLASS HPD.DumpFile INHERITS DumpBase: 
+{HPD/HPDEnvironment.i}
+
+CLASS HPD.DumpFile INHERITS DumpSomeWhere:
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -27,30 +27,8 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    DEFINE PRIVATE VARIABLE llAllowEmptyFile        AS LOGICAL       NO-UNDO.
    DEFINE PRIVATE VARIABLE llAllowMove             AS LOGICAL INITIAL TRUE NO-UNDO.
 
-   DEFINE PUBLIC PROPERTY FullDumpLimit AS INTEGER NO-UNDO
-      GET:         
-         DEFINE VARIABLE liNumber AS INTEGER NO-UNDO.
-         
-         liNumber = INTEGER(lbDumpFile.UseIndex) NO-ERROR.
-         
-         IF ERROR-STATUS:ERROR
-         THEN ASSIGN
-                 ERROR-STATUS:ERROR = FALSE
-                 liNumber           = 0
-                 .
-         
-         IF liNumber <= 0 OR liNumber = ?
-         THEN RETURN 0.
-         
-         RETURN liNumber.
-
-      END GET.
-      
-   DEFINE PUBLIC VARIABLE objHPDTime            AS CLASS HPDTime NO-UNDO.
-
    DEFINE PRIVATE STREAM str.
 
-   
    CONSTRUCTOR PUBLIC DumpFile
       ( iiDumpID AS INTEGER,
         iobjHandler AS CLASS DumpHandler ):      
@@ -63,40 +41,34 @@ CLASS HPD.DumpFile INHERITS DumpBase:
         icFile      AS CHARACTER,
         iobjHandler AS CLASS DumpHandler ):
            
-      SUPER(iiDumpID, iobjHandler).           
-      
-      FIND CURRENT lbDumpFile EXCLUSIVE-LOCK NO-WAIT NO-ERROR.      
-      IF LOCKED lbDumpFile
-      THEN RETURN ERROR NEW Progress.Lang.AppError("Dumpfile (DumpID=" + STRING(iiDumpID) + ") is locked.", 1).      
-      
-      ASSIGN
-         objHPDTime = NEW HPDTime()
-         objHPDTime:CurrLocalTZTime = NOW
-         llAllowEmptyFile = lbDumpFile.EmptyFile
-         .
+      SUPER(iiDumpID, iobjHandler).
 
-      mUpdateDumpHeader(1,"",lbDumpFile.MainTable).
-      mUpdateDumpHeader(2,"","CREATE").
-
-      /* Lets populate the header elements that
-         are needed for offline dumps */
+      /* Header time is same for every file dump line */
       &IF "{&HPD_ENVIRONMENT}" = "Salt"
       &THEN
-         mUpdateDumpHeader(4,"",objHPDTime:CurrUTCTime).
+         mUpdateDumpHeader(5,"",objHPDTime:CurrUTCTime).
       &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
       &THEN
-         mUpdateDumpHeader(4,"",ISO-DATE(objHPDTime:CurrLocalTZTime)).
+         mUpdateDumpHeader(5,"",ISO-DATE(objHPDTime:CurrLocalTZTime)).
       &ELSE
          RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
       &ENDIF
+
+      llAllowEmptyFile = lbDumpFile.EmptyFile.
+
+      DEFINE VARIABLE lcBrandName AS CHARACTER NO-UNDO.
+
+      lcBrandName = multitenancy.TenantInformation:mFirstBrandName().
 
       IF icFile <> ""
       THEN ASSIGN
               llAllowMove = FALSE
               lcFile      = icFile
               .
-      ELSE lcFile = lbDumpFile.SpoolDir + "/" +
-                    REPLACE(lbDumpFile.FileName,"#DATE_#TIME",objHPDTime:FileTime).
+      ELSE ASSIGN
+              lcFile = REPLACE(lbDumpFile.FileName,"#DATE_#TIME",objHPDTime:FileTime)
+              lcFile = REPLACE(lcFile,"#TENANT",lcBrandName) WHEN lcBrandName > ""
+              lcFile = lbDumpFile.SpoolDir + "/" + lcFile.
               
       IF lbDumpFile.DumpCharSet > ""
       THEN OUTPUT STREAM str TO VALUE(lcFile) CONVERT TARGET lbDumpFile.DumpCharSet.
@@ -107,16 +79,6 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    
    DESTRUCTOR PUBLIC DumpFile( ):
 
-      IF VALID-OBJECT(objHPDTime)
-      THEN DELETE OBJECT objHPDTime.      
-      
-      IF AVAILABLE lbDumpFile
-      THEN DO:
-         mInactivateDump(NO).
-
-         FIND CURRENT lbDumpFile NO-LOCK.
-      END.
-      
       DEFINE VARIABLE llEmptyFile AS LOGICAL NO-UNDO.
                
       llEmptyFile = ( SEEK(str) = 0 ).
@@ -143,31 +105,14 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    END DESTRUCTOR.
 
 
-   METHOD PUBLIC VOID mInactivateDump
-      ( ilForce AS LOGICAL ):
-
-      IF AVAILABLE lbDumpFile AND lbDumpFile.Active = YES
-      THEN DO:
-         IF ilForce
-         THEN ASSIGN
-                 lbDumpFile.ModFromEventLog = NO
-                 lbDumpFile.Active          = NO
-                 .
-         ELSE IF lbDumpFile.ModFromEventLog = NO
-         THEN lbDumpFile.Active = NO.
-      END.
-
-   END METHOD.
-
-
-   METHOD PUBLIC VOID mWriteALine(): 
+   METHOD PUBLIC OVERRIDE VOID mWriteALine():
 
       PUT STREAM str UNFORMATTED mGetData() SKIP.
 
    END METHOD.
 
 
-   METHOD PUBLIC VOID mWriteALine
+   METHOD PUBLIC OVERRIDE VOID mWriteALine
       (icLine AS CHARACTER):
 
       PUT STREAM str UNFORMATTED icLine SKIP.
@@ -175,10 +120,10 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    END METHOD.
 
 
-   METHOD PUBLIC VOID mWriteALine
-      (iiOrderNumToSkip AS INTEGER):
+   METHOD PUBLIC OVERRIDE VOID mWriteALineWithPrefix
+      (icPrefix AS CHARACTER):
 
-      PUT STREAM str UNFORMATTED mGetData(iiOrderNumToSkip) SKIP.
+      PUT STREAM str UNFORMATTED icPrefix + mGetData() SKIP.
 
    END METHOD.
 

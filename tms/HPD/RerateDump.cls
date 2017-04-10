@@ -64,6 +64,7 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
    DEFINE PRIVATE VARIABLE lhBuffer      AS HANDLE    EXTENT 2  NO-UNDO.
    DEFINE PRIVATE VARIABLE objDumpBase2  AS CLASS DumpBase      NO-UNDO.
    DEFINE PRIVATE VARIABLE lcMobCDRTable AS CHARACTER           NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcHeader      AS CHARACTER           NO-UNDO.
    DEFINE PRIVATE VARIABLE liCurrentDB   AS INTEGER             NO-UNDO.
    DEFINE PRIVATE VARIABLE liBufferCount AS INTEGER             NO-UNDO.
    DEFINE PRIVATE VARIABLE objDTB        AS CLASS DumpTimeBased NO-UNDO.
@@ -98,12 +99,20 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
       liBufferCount = liBufferCount + 1.
 
       objDumpBase = NEW DumpTimeBased(iiDumpID, icFile, THIS-OBJECT).
+
+      lcHeader = lcMobCDRTable + objDumpBase:lcDelimiter +
+                 "&1" + objDumpBase:lcDelimiter.
+
       objDumpBase:mUseTable(lhMainTable).
       objDumpBase:mUseTable(lhBuffer[1]).
 
-      objDumpBase:mUpdateDumpHeader(1,"",lcMobCDRTable).
-      objDumpBase:mUpdateDumpHeader(2,"","MODIFY").
-      objDumpBase:mUpdateDumpHeader(3,"","DELETE").
+      /* DumpSomeWhere.cls will initially populate tablename and
+         event type to field positions 3 and 4. We
+         need to remove them because we are using lcHeader instead */
+      objDumpBase:mDeleteDumpHeader(3).
+      objDumpBase:mDeleteDumpHeader(4).
+
+      objDumpBase:mSetBrandValueToHeader().
 
       objDumpBase:mVerifyDumpFileData().
 
@@ -114,12 +123,19 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
          objDumpBase2:mUseTable(lhMainTable).
          objDumpBase2:mUseTable(lhBuffer[2]).
 
-         objDumpBase2:mUpdateDumpHeader(1,"",lcMobCDRTable).
-         objDumpBase2:mUpdateDumpHeader(2,"","MODIFY").
-         objDumpBase2:mUpdateDumpHeader(3,"","DELETE").
-         objDumpBase2:mUpdateDumpHeader(4,"", ISO-DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)).
+         /* DumpSomeWhere.cls will initially populate tablename and
+            event type to field positions 1 and 2. We
+            need to remove them because we are using lcHeader instead */
+         objDumpBase2:mDeleteDumpHeader(3).
+         objDumpBase2:mDeleteDumpHeader(4).
+
+         /* Lets use the same timestamp value for the second buffer also */
+         objDumpBase2:mUpdateDumpHeader(5,"", ISO-DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)).
+
+         objDumpBase2:mSetBrandValueToHeader().
 
          objDumpBase2:mVerifyDumpFileData().
+
       END.
 
       objDTB = CAST(objDumpBase, DumpTimeBased).
@@ -166,7 +182,8 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
       IF CONNECTED(icDBName)
       THEN DISCONNECT VALUE(icDBName).
 
-      CONNECT VALUE(icDBPath + "/" + icDBName) NO-ERROR.
+      CONNECT VALUE(icDBPath + "/" + icDBName +
+                    multitenancy.TenantInformation:mGetAuthConnectionParams()) NO-ERROR.
 
       IF ERROR-STATUS:ERROR = TRUE
       THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot connect to database " + icDBName + " located on directory " + icDBPath, 1).
@@ -325,7 +342,8 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
    METHOD PRIVATE VOID mProcessQuery
       (INPUT icQuery AS CHARACTER):
 
-      DEFINE VARIABLE llOK AS LOGICAL NO-UNDO.
+      DEFINE VARIABLE llOK    AS LOGICAL   NO-UNDO.
+      DEFINE VARIABLE lcEvent AS CHARACTER NO-UNDO.
 
       lhQuery:QUERY-PREPARE(icQuery).
 
@@ -362,12 +380,23 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
                                                                lhMainTable::DtlSeq), NO-LOCK) NO-ERROR.
             IF llOK
             THEN DO:
-               liEvents = liEvents + 1.
+
+               IF lhMainTable::ErrorCode > 0 AND
+                  lhBuffer[liCurrentDB]::ErrorCode > 0
+               THEN LEAVE.
+
+               ASSIGN
+                  liEvents = liEvents + 1
+                  lcEvent  = IF lhBuffer[liCurrentDB]::ErrorCode = 0
+                             THEN IF lhMainTable::ErrorCode > 0
+                                  THEN "CREATE"
+                                  ELSE "MODIFY"
+                             ELSE "DELETE".
 
                IF liCurrentDB = 1
-               THEN objDTB:mWriteALine(IF lhBuffer[liCurrentDB]::ErrorCode = 0 THEN 3 ELSE 2).
-               ELSE objDTB:mWriteALine(objDumpBase2:mGetData(IF lhBuffer[liCurrentDB]::ErrorCode = 0 THEN 3 ELSE 2)).
-               
+               THEN objDTB:mWriteALineWithPrefix(SUBSTITUTE(lcHeader,lcEvent)).
+               ELSE objDTB:mWriteALine(SUBSTITUTE(lcHeader,lcEvent) + objDumpBase2:mGetData()).
+
                LEAVE.
             END.
          END.

@@ -101,7 +101,8 @@ FUNCTION fIsNumberInMigration RETURNS LOGICAL
    FIND FIRST Order NO-LOCK WHERE
               Order.CLI EQ icCLI AND
               (Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_PENDING} OR /*60*/
-               Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING}).  /*61*/
+               Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING})
+   NO-ERROR.  /*61*/
    IF AVAIL Order THEN RETURN TRUE.
 
    RETURN FALSE.
@@ -163,6 +164,7 @@ RETURN "".
 END.   
 
 /*Function creates Json entry containing Operational data  status information*/
+/*Todo this is copy - implement new data handling*/
 FUNCTION fGenerateOPDataInfo RETURNS CHAR
    (iiOrderID AS INT,
     icMSISDN AS CHAR,

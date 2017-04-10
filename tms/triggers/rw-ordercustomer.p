@@ -4,6 +4,8 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF OrderCustomer OLD BUFFER oldOrderCust
 
 &IF {&ORDERCUSTOMER_WRITE_TRIGGER_ACTIVE} &THEN
 
+{triggers/replog_tenantname.i}
+
 CREATE Ordercanal.RepLog.
 ASSIGN
    Ordercanal.RepLog.RowID     = STRING(ROWID(OrderCustomer))
@@ -12,6 +14,7 @@ ASSIGN
                                   THEN "CREATE"
                                   ELSE "MODIFY")
    Ordercanal.RepLog.EventTime = NOW
+   Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER OrderCustomer:HANDLE)
    .
 
 IF NOT NEW(OrderCustomer)
@@ -30,6 +33,7 @@ THEN DO:
          Ordercanal.RepLog.TableName = "OrderCustomer"
          Ordercanal.RepLog.EventType = "DELETE"
          Ordercanal.RepLog.EventTime = NOW
+         Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER oldOrderCustomer:HANDLE)
          Ordercanal.RepLog.KeyValue  = {HPD/keyvalue.i oldOrderCustomer . {&HPDKeyDelimiter} OrderId RowType}
          .
    END.
@@ -60,6 +64,7 @@ THEN DO:
          Ordercanal.RepLog.TableName = "Order"
          Ordercanal.RepLog.EventType = "MODIFY"
          Ordercanal.RepLog.EventTime = NOW
+         Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER Order:HANDLE)
          .
    END.
 
@@ -73,6 +78,7 @@ THEN DO:
          Ordercanal.RepLog.TableName = "Order"
          Ordercanal.RepLog.EventType = "MODIFY"
          Ordercanal.RepLog.EventTime = NOW
+         Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER Order:HANDLE)
          .
    END.
 END.

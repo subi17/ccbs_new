@@ -1,193 +1,4 @@
 bulkload: CTServAttr
-  CTServEl: 8400
-  ServAttr: "Invoice Attach"
-  DefValue: "0"
-  ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8400
-  ServAttr: "ReportCode"
-  DefValue: "4"
-  ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8401
-  ServAttr: "Not allowed"
-  ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8411
-  ServAttr: "MMSLanguage"
-  DefValue: "2"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8414
-  ServAttr: "ADDRESS"
-  DefValue: "F"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8414
-  ServAttr: "CD"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8414
-  ServAttr: "DA"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8414
-  ServAttr: "ED"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8414
-  ServAttr: "PR"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8414
-  ServAttr: "SEX"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "BankAccount"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "ChgMonthFee"
-  DefValue: "0"
-  ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "CIF"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "CreditCheck"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "FailedRequest"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "FreePerYear"
-  DefValue: "4"
-  ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "MobsubInDays"
-  DefValue: "30"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "NIE"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "NIF"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "OngoingMNP"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "OnLastDay"
-  DefValue: "0"
-  ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "OperatorBarr"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "PassPort"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "PerMonth"
-  DefValue: "1"
-  ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "SchedDate"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "SchedTime"
-  DefValue: "00.00"
-  ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8423
-  ServAttr: "TiePeriod"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8433
-  ServAttr: "Invoice Attach"
-  DefValue: "0"
-  ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8433
-  ServAttr: "ReportCode"
-  DefValue: "4"
-  ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8436
-  ServAttr: "BankAccount"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
   CTServEl: 8436
   ServAttr: "ChgMonthFee"
   DefValue: "0"
@@ -196,19 +7,7 @@ bulkload: CTServAttr
 
 bulkload: CTServAttr
   CTServEl: 8436
-  ServAttr: "CIF"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8436
   ServAttr: "CreditCheck"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8436
-  ServAttr: "FailedRequest"
   DefValue: "1"
   FromDate: 2017-02-22
 
@@ -221,30 +20,6 @@ bulkload: CTServAttr
 
 bulkload: CTServAttr
   CTServEl: 8436
-  ServAttr: "MobsubInDays"
-  DefValue: "30"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8436
-  ServAttr: "NIE"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8436
-  ServAttr: "NIF"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8436
-  ServAttr: "OngoingMNP"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8436
   ServAttr: "OnLastDay"
   DefValue: "0"
   ChgAllowed: FALSE
@@ -252,27 +27,9 @@ bulkload: CTServAttr
 
 bulkload: CTServAttr
   CTServEl: 8436
-  ServAttr: "OperatorBarr"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8436
-  ServAttr: "PassPort"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8436
   ServAttr: "PerMonth"
   DefValue: "1"
   ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8436
-  ServAttr: "SchedDate"
-  DefValue: "1"
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
@@ -289,257 +46,424 @@ bulkload: CTServAttr
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8443
-  ServAttr: "Not allowed"
-  ChgAllowed: FALSE
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8456
-  ServAttr: "ADDRESS"
-  DefValue: "F"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8456
-  ServAttr: "CD"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8456
-  ServAttr: "DA"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8456
-  ServAttr: "ED"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8456
-  ServAttr: "PR"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8456
-  ServAttr: "SEX"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8465
-  ServAttr: "BankAccount"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8465
+  CTServEl: 8478
   ServAttr: "ChgMonthFee"
   DefValue: "0"
   ChgAllowed: FALSE
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8465
-  ServAttr: "CIF"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8465
+  CTServEl: 8478
   ServAttr: "CreditCheck"
   DefValue: "1"
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8465
-  ServAttr: "FailedRequest"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8465
+  CTServEl: 8478
   ServAttr: "FreePerYear"
   DefValue: "4"
   ChgAllowed: FALSE
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8465
-  ServAttr: "MobsubInDays"
-  DefValue: "30"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8465
-  ServAttr: "NIE"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8465
-  ServAttr: "NIF"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8465
-  ServAttr: "OngoingMNP"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8465
+  CTServEl: 8478
   ServAttr: "OnLastDay"
   DefValue: "0"
   ChgAllowed: FALSE
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8465
-  ServAttr: "OperatorBarr"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8465
-  ServAttr: "PassPort"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8465
+  CTServEl: 8478
   ServAttr: "PerMonth"
   DefValue: "1"
   ChgAllowed: FALSE
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8465
-  ServAttr: "SchedDate"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8465
+  CTServEl: 8478
   ServAttr: "SchedTime"
   DefValue: "00.00"
   ChgAllowed: FALSE
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8465
+  CTServEl: 8478
   ServAttr: "TiePeriod"
   DefValue: "1"
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8478
-  ServAttr: "BankAccount"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8478
+  CTServEl: 8562
   ServAttr: "ChgMonthFee"
   DefValue: "0"
   ChgAllowed: FALSE
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8478
-  ServAttr: "CIF"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8478
+  CTServEl: 8562
   ServAttr: "CreditCheck"
   DefValue: "1"
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8478
-  ServAttr: "FailedRequest"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8478
+  CTServEl: 8562
   ServAttr: "FreePerYear"
   DefValue: "4"
   ChgAllowed: FALSE
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8478
-  ServAttr: "MobsubInDays"
-  DefValue: "30"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8478
-  ServAttr: "NIE"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8478
-  ServAttr: "NIF"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8478
-  ServAttr: "OngoingMNP"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8478
+  CTServEl: 8562
   ServAttr: "OnLastDay"
   DefValue: "0"
   ChgAllowed: FALSE
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8478
-  ServAttr: "OperatorBarr"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8478
-  ServAttr: "PassPort"
-  DefValue: "0"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8478
+  CTServEl: 8562
   ServAttr: "PerMonth"
   DefValue: "1"
   ChgAllowed: FALSE
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8478
-  ServAttr: "SchedDate"
-  DefValue: "1"
-  FromDate: 2017-02-22
-
-bulkload: CTServAttr
-  CTServEl: 8478
+  CTServEl: 8562
   ServAttr: "SchedTime"
   DefValue: "00.00"
   ChgAllowed: FALSE
   FromDate: 2017-02-22
 
 bulkload: CTServAttr
-  CTServEl: 8478
+  CTServEl: 8562
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8604
+  ServAttr: "ChgMonthFee"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8604
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8604
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8604
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8604
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8604
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8604
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8646
+  ServAttr: "ChgMonthFee"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8646
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8646
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8646
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8646
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8646
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8646
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8688
+  ServAttr: "ChgMonthFee"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8688
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8688
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8688
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8688
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8688
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8688
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8730
+  ServAttr: "ChgMonthFee"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8730
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8730
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8730
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8730
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8730
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8730
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8772
+  ServAttr: "ChgMonthFee"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8772
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8772
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8772
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8772
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8772
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8772
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8814
+  ServAttr: "ChgMonthFee"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8814
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8814
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8814
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8814
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8814
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8814
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8856
+  ServAttr: "ChgMonthFee"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8856
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8856
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8856
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8856
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8856
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2017-02-22
+
+bulkload: CTServAttr
+  CTServEl: 8856
   ServAttr: "TiePeriod"
   DefValue: "1"
   FromDate: 2017-02-22

@@ -68,6 +68,7 @@
                keep_installment;boolean;optional;
                multiorder;boolean;optional;
                terminal_financing_bank;string;optional
+               additional_line_discount;string;optional
  * @customer_data fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -332,14 +333,16 @@ DEF VAR lcPayType AS CHAR NO-UNDO.
 DEF VAR lcOldPayType AS CHAR NO-UNDO. 
 DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
-DEF VAR pcDataBundleType AS CHAR NO-UNDO. 
-DEF VAR pcMobsubBundleType AS CHAR NO-UNDO. 
-DEF VAR plDSSActivate    AS LOG NO-UNDO. 
-DEF VAR plBonoVoipActivate AS LOG NO-UNDO.
-DEF VAR plByPassRules AS LOG NO-UNDO.
-DEF VAR lcdelivery_channel AS CHAR NO-UNDO.
-DEF VAR pcUsageType AS CHAR NO-UNDO. 
+DEF VAR pcDataBundleType      AS CHAR NO-UNDO. 
+DEF VAR pcDataBundleTypeArray AS CHAR NO-UNDO.
+DEF VAR pcMobsubBundleType    AS CHAR NO-UNDO. 
+DEF VAR plDSSActivate         AS LOG NO-UNDO. 
+DEF VAR plBonoVoipActivate    AS LOG NO-UNDO.
+DEF VAR plByPassRules         AS LOG NO-UNDO.
+DEF VAR lcdelivery_channel    AS CHAR NO-UNDO.
+DEF VAR pcUsageType           AS CHAR NO-UNDO. 
 
+DEF VAR liCount                AS INT  NO-UNDO.
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
@@ -418,6 +421,10 @@ DEF VAR lcAccessoryStruct AS CHAR NO-UNDO.
 
 /*Financing info*/
 DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
+
+/* ADDLINE-20 Additional Line */
+DEF VAR pcAdditionaLineDiscount AS CHAR NO-UNDO.
+DEF BUFFER AddLineDiscountPlan FOR DiscountPlan.
 
 DEF VAR lcItemParam AS CHAR NO-UNDO.
 
@@ -517,17 +524,23 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
       pcROIriskcode = get_string(pcOrderStruct, "order_inspection_risk_code").
 
    IF LOOKUP("additional_bundle",lcOrderStruct) > 0 THEN
-      pcDataBundleType = get_string(pcOrderStruct,"additional_bundle").
+   DO:
+      pcDataBundleTypeArray = get_array(pcOrderStruct,"additional_bundle").
    
+      DO liCount = 0 TO get_paramcount(pcDataBundleTypeArray) - 1:
+          ASSIGN pcDataBundleType = pcDataBundleType + 
+                                    (IF pcDataBundleType <> "" THEN "," ELSE "") + 
+                                    get_string(pcDataBundleTypeArray, STRING(liCount)).
+      END.
+   END.
+
    IF LOOKUP("subscription_bundle",lcOrderStruct) > 0 THEN
       pcMobsubBundleType = get_string(pcOrderStruct,"subscription_bundle").
 
    IF LOOKUP('dss', lcOrderStruct) GT 0 THEN
       plDSSActivate = get_bool(pcOrderStruct,"dss").
 
-   IF LOOKUP(pcSubType,lcFixedOnlyConvergentCliTypeList) > 0 THEN 
-      lcdelivery_channel = "Paper".
-   ELSE IF LOOKUP('delivery_channel', lcOrderStruct) > 0 THEN
+   IF LOOKUP('delivery_channel', lcOrderStruct) > 0 THEN
       lcdelivery_channel = get_string(pcOrderStruct,"delivery_channel").
     
    IF LOOKUP('bono_voip', lcOrderStruct) GT 0 THEN
@@ -586,6 +599,9 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
    IF LOOKUP('terminal_financing_bank', lcOrderStruct) GT 0 THEN
       pcTerminalFinancing = get_string(pcOrderStruct,"terminal_financing_bank").
+
+   IF LOOKUP('additional_line_discount', lcOrderStruct) GT 0 THEN
+      pcAdditionaLineDiscount = get_string(pcOrderStruct,"additional_line_discount").
 
    RETURN TRUE.
 END.
@@ -1278,7 +1294,8 @@ gcOrderStructFields = "brand!," +
                       "tarj7_promo," +
                       "terminal_financing_bank," +
                       "keep_installment," +
-                      "multiorder".
+                      "multiorder," +
+                      "additional_line_discount".
 
 gcCustomerStructFields = "birthday," +
                          "city!," +
@@ -1408,11 +1425,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* YPB-514 */
 lcOrderStruct = validate_request(pcOrderStruct, gcOrderStructFields).
 IF lcOrderStruct EQ ? THEN RETURN.
-ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
 fGetOrderFields().
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {newton/src/settenant.i pcTenant}
+
+ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
+IF LOOKUP(pcSubType,lcFixedOnlyConvergentCliTypeList) > 0 THEN 
+      lcdelivery_channel = "Paper".
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc,migration") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
@@ -1441,6 +1461,17 @@ IF pcDiscountPlanId > "" THEN DO:
               DiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL DiscountPlan THEN
       RETURN appl_Err(SUBST("Incorrect discount plan id: &1", pcDiscountPlanId)).
+END.
+
+/* ADDLINE-20 Additional Line */
+IF pcAdditionaLineDiscount > "" THEN DO:
+   FIND FIRST AddLineDiscountPlan WHERE
+              AddLineDiscountPlan.Brand      = gcBrand                 AND
+              AddLineDiscountPlan.DPRuleID   = pcAdditionaLineDiscount AND
+              AddLineDiscountPlan.ValidFrom <= TODAY                   AND
+              AddLineDiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+   IF NOT AVAIL AddLineDiscountPlan THEN
+      RETURN appl_Err(SUBST("Incorrect Additional Line Discount Plan ID: &1", pcAdditionaLineDiscount)).
 END.
 
 /* YBP-516 */
@@ -1473,15 +1504,19 @@ ELSE IF LOOKUP(pcSubType,lcBundleCLITypes) > 0 AND
    pcNumberType <> "renewal" THEN
    RETURN appl_err("Subscription based data bundle is missing").
 
-IF pcDataBundleType > "" THEN DO:
-   lcBONOContracts = fCParamC("BONO_CONTRACTS").
-   IF LOOKUP(pcDataBundleType,lcBONOContracts) = 0 THEN RETURN
-      appl_err(SUBST("Incorrect data bundle type: &1", pcDataBundleType)).   
+IF pcDataBundleType > "" THEN 
+DO:
+   IF pcTenant = {&TENANT_YOIGO} THEN
+   DO:  
+       lcBONOContracts = fCParamC("BONO_CONTRACTS").
+       IF LOOKUP(pcDataBundleType,lcBONOContracts) = 0 THEN RETURN
+          appl_err(SUBST("Incorrect data bundle type: &1", pcDataBundleType)).   
+   END.   
 
-   IF NOT fIsBundleAllowed
-      (pcSubType,
-       pcDataBundleType,
-       OUTPUT lcError) THEN RETURN appl_err(lcError).
+   DO liCount = 1 TO NUM-ENTRIES(pcDataBundleType):
+       IF NOT fIsBundleAllowed(pcSubType, ENTRY(liCount,pcDataBundleType),OUTPUT lcError) THEN 
+           RETURN appl_err(lcError).
+   END.    
 END.
 
 FIND CLIType NO-LOCK WHERE
@@ -1745,7 +1780,9 @@ IF LOOKUP(pcNumberType,"new,mnp,migration") > 0 AND
    CLIType.LineType > 0 AND
    NOT CAN-FIND(FIRST CLIType WHERE
                       CLIType.Brand = gcBrand AND
-                      CLIType.CLIType = pcMobsubBundleType AND
+                      CLIType.CLIType = (IF pcMobsubBundleType > "" THEN
+                                            pcMobsubBundleType
+                                         ELSE pcSubType)           AND
                       CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
    IF NOT fIsMainLineSubActive(
@@ -1886,6 +1923,14 @@ IF AVAIL DiscountPlan THEN DO:
                      "Discount",
                       STRING(DiscountPlan.DPId),
                       lcItemParam).
+END.
+
+/* ADDLINE-20 Additional Line */
+IF AVAIL AddLineDiscountPlan THEN DO:
+   fCreateOrderAction(Order.Orderid,
+                      "AddLineDiscount",
+                      AddLineDiscountPlan.DPRuleId,
+                      "").
 END.
 
 /* YBP-548 */
@@ -2231,7 +2276,10 @@ END.
 /* YBP-574 */ 
 /* add databundle */
 IF pcDataBundleType > "" THEN
-   fCreateOrderAction(Order.Orderid,"BundleItem",pcDataBundleType,"").
+DO liCount = 1 TO NUM-ENTRIES(pcDataBundleType):
+   fCreateOrderAction(Order.Orderid,"BundleItem", ENTRY(liCount, pcDataBundleType),"").
+END.
+
 IF pcMobSubBundleType > "" THEN DO:
    lcOnlyVoiceContracts = fCParamC("ONLY_VOICE_CONTRACTS").
    fCreateOrderAction(Order.Orderid,"BundleItem",pcMobSubBundleType,"").

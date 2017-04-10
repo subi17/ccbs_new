@@ -1884,6 +1884,21 @@ bulkload: BillItem
   VIPAccNum: 70510100
 
 bulkload: BillItem
+  BillCode: "MM_CERO_5GBMF"
+  BIName: "Tarifa Mas 0 + 5 GB Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "18"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
   BillCode: "MM_DATA1024MF"
   BIName: "Data 1 GB Monthly Fee"
   AccNum: 70514100
@@ -1956,6 +1971,126 @@ bulkload: BillItem
   AltAccNum: 70514100
   TaxClass: "1"
   SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_INTVOICE100MF"
+  BIName: "Voice International Monthly Fee"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "MM_MAS_1GBMF"
+  BIName: "Tarifa Mas 1 GB Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "18"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_MAS_3GBMF"
+  BIName: "Tarifa Mas 3 GB Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "18"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_MAS_8GBMF"
+  BIName: "Tarifa Mas 8 GB Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "18"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_NET_10GBMF"
+  BIName: "Tarifa Internet Total 10 GB Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "18"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "034"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_NET_20GBMF"
+  BIName: "Tarifa Internet Total 20 GB Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "18"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "034"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_NET_50GBMF"
+  BIName: "Tarifa Internet Total 50 GB Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "18"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "034"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "MM_NET_5GBMF"
+  BIName: "Tarifa Internet Total 5 GB Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "18"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "034"
   VIPAccNum: 70514100
 
 bulkload: BillItem

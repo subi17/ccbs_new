@@ -189,6 +189,10 @@ WHEN 2226 THEN ASSIGN
    liStream = 17
    lcReader = "MO6:Fixed2".
 
+WHEN 2240 THEN ASSIGN
+   liStream = 99
+   lcreader = "MO4:TAP3".
+
 WHEN 2250 THEN ASSIGN
    liStream = 30
    lcReader = "MO3:VAS-CGY".
@@ -197,9 +201,58 @@ WHEN 2270 THEN ASSIGN
    liStream = 40
    lcReader = "MO5:RoamFraud".
 
-OTHERWISE ASSIGN 
-   liStream = 99
-   lcreader = "MO4:Temporarily_online".
+/* MM-streams */
+WHEN 2310 THEN ASSIGN
+   liStream = 52
+   lcReader = "MOM:Postpaid".
+
+WHEN 2311 THEN ASSIGN
+   liStream = 54
+   lcReader = "MOM:Postpaid2".
+
+WHEN 2315 THEN ASSIGN
+   liStream = 56
+   lcReader = "MOM:Postpaid-Data".
+
+WHEN 2316 THEN ASSIGN
+   liStream = 58
+   lcReader = "MOM:Postpaid-Data2".
+
+WHEN 2320 THEN ASSIGN
+   liStream = 60
+   lcReader = "MOM2:Prepaid".
+
+WHEN 2321 THEN ASSIGN
+   liStream = 62
+   lcReader = "MOM2:Prepaid2".
+
+WHEN 2325 THEN ASSIGN
+   liStream = 64
+   lcReader = "MOM6:Fixed".
+
+WHEN 2340 THEN ASSIGN
+   liStream = 66
+   lcReader = "MOM4:TAP3".
+
+WHEN 2350 THEN ASSIGN
+   liStream = 68
+   lcReader = "MOM3:VAS-CGY".
+
+WHEN 2370 THEN ASSIGN
+   liStream = 70
+   lcReader = "MOM5:RoamFraud".
+
+
+OTHERWISE DO:
+   
+   IF TENANT-NAME(LDBNAME("common")) EQ {&TENANT_MASMOVIL} THEN
+      ASSIGN 
+         liStream = 110 
+         lcreader = "MOM7:Temporarily_online".
+   ELSE ASSIGN 
+      liStream = 100 
+      lcreader = "MO7:Temporarily_online".
+END.
 END CASE.
 
 form
@@ -499,10 +552,8 @@ DO WHILE TRUE  WITH FRAME CLOG:
       end. /* bDispErrors */
    end.
 
-   IF LOOKUP(TRIM(Entry(1,callrec,lcSep)),'"ESPXF') = 0 AND 
-      LOOKUP(TRIM(Entry(1,callrec,lcSep)),'ESPXF') = 0 
-   THEN DO:
-
+   lcCustomerName = REPLACE(TRIM(ENTRY(1,callrec,lcSep)),'"',"").
+   IF LOOKUP(lcCustomerName,"ESPXF,ESPMM") EQ 0 THEN DO:
       /** fNagios(lcreader). **/
        
       DISP
@@ -632,6 +683,14 @@ DO TRANS:
       ttCall.dtlseq = fStreamSequence(INPUT ttCall.datest, liStream).
 
       oiErrorCode = fRawTicketCheck().
+      
+      IF oiErrorCode = 0 THEN DO:
+         IF (TENANT-NAME(LDBNAME(1)) EQ {&TENANT_MASMOVIL} AND
+             lcCustomerName NE "ESPMM") OR
+            (TENANT-NAME(LDBNAME(1)) EQ {&TENANT_YOIGO} AND
+             lcCustomerName NE "ESPXF") THEN 
+         oiErrorCode = {&CDR_ERROR_INCORRECT_BRAND}.
+      END.
 
       IF oiErrorCode = 0 THEN 
          oiErrorCode = fCallCaseCheck(ttCall.SpoCMT,ttCall.DateSt).
@@ -666,7 +725,7 @@ DO TRANS:
             (LOOKUP(STRING(ttCall.SpoCMT),"3,7") > 0 AND 
              ttCall.MSCID = "PRE" AND ttCall.PPFlag = 1))
          THEN DO:
-            IF ttCall.MSCID NE "FIXED" THEN
+            IF NOT ttCall.MSCID BEGINS "FIX" THEN
                fTicketCheck(INPUT "MSOWNER", 
                             STRING(ttCall.CLI),
                             OUTPUT oiERrorCode).               

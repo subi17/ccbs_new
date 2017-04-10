@@ -73,7 +73,7 @@ form
     IgInvNum.InvType   COLON 22
        lcInvType FORMAT "X(30)" NO-LABEL 
     IgInvNum.FromDate  COLON 22 
-    IgInvNum.SeqPrefix COLON 22 FORMAT "X(4)"
+    IgInvNum.SeqPrefix COLON 22 FORMAT "X(6)"
     IgInvNum.InvNum    COLON 22 
 WITH  OVERLAY ROW 6 CENTERED
     COLOR VALUE(cfc)

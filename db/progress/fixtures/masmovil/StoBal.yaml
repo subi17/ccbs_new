@@ -1,8 +1,15 @@
 bulkload: StoBal
+  Stobal: "CC"
+  SimArt: "Universal"
+  DetBal[1]: 501
+  Balance: 501
+  Brand: "1"
+
+bulkload: StoBal
   Stobal: "RETAILER"
   SimArt: "Universal"
-  DetBal[1]: 1898
-  Balance: 1898
+  DetBal[1]: 1896
+  Balance: 1896
   Brand: "1"
 
 bulkload: StoBal

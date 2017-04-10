@@ -12,6 +12,7 @@
 {Func/cparam2.i}
 {Func/timestamp.i}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -86,9 +87,12 @@ FUNCTION fParseDDFileName RETURNS LOGICAL (
 
    DEF VAR lcDueDate AS CHAR NO-UNDO. 
    DEF VAR ldeDueDate AS DEC NO-UNDO. 
+   DEF VAR lcTempName AS CHAR NO-UNDO.
 
+   lcTempname = REPLACE("#TENANT_SDD001_","#TENANT",
+                        CAPS(fgetBrandNamebyTenantId(TENANT-ID("common")))).
    IF NUM-ENTRIES(icFileName, "_") < 4 THEN RETURN FALSE.
-   IF NOT icFileName BEGINS "YOIGO_SDD001_" THEN RETURN FALSE.
+   IF NOT icFileName BEGINS lcTempname THEN RETURN FALSE.
 
    ASSIGN
       ocBankCode = ENTRY(3,icFileName,"_")

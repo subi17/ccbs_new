@@ -27,7 +27,8 @@ function fPublishInvoiceValidate returns logical
                      ActionLog.Brand        = gcBrand    AND
                      ActionLog.TableName    = "Invoice"  AND
                      ActionLog.ActionID     = "WebDisp"  AND 
-                     ActionLog.ActionPeriod = YEAR(idaPeriod) * 100 + MONTH(idaPeriod)
+                     ActionLog.ActionPeriod = YEAR(idaPeriod) * 100 + MONTH(idaPeriod) AND
+                     ActionLog.ActionStatus NE {&ACTIONLOG_STATUS_CANCELLED}
                      NO-LOCK) THEN DO:
       ocResult = "Invoices are already Published for current month".
    END.

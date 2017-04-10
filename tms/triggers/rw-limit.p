@@ -11,6 +11,8 @@ THEN RETURN.
 IF NOT NEW(Limit) AND Limit.LimitType NE {&LIMIT_TYPE_Q25_DISCOUNT} AND oldLimit.LimitType NE {&LIMIT_TYPE_Q25_DISCOUNT}
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.TableName = "Limit"
@@ -20,6 +22,7 @@ ASSIGN
                                THEN "DELETE"
                                ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER Limit:HANDLE)
    .
 
 IF Common.RepLog.EventType = "DELETE" 
@@ -38,9 +41,10 @@ THEN DO:
    THEN DO:
       CREATE Common.RepLog.
       ASSIGN
-         Common.RepLog.TableName = "Limit"
-         Common.RepLog.EventType = "DELETE"
-         Common.RepLog.EventTime = NOW
+         Common.RepLog.TableName  = "Limit"
+         Common.RepLog.EventType  = "DELETE"
+         Common.RepLog.EventTime  = NOW
+         Common.RepLog.TenantName = fRepLogTenantName(BUFFER oldLimit:HANDLE)
          Common.RepLog.KeyValue  = {HPD/keyvalue.i oldLimit . {&HPDKeyDelimiter} CustNum MsSeq LimitType FromDate}
          .
    END.

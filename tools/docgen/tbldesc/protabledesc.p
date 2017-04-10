@@ -6,7 +6,9 @@ DEF VAR lcName AS CHAR NO-UNDO.
 
 lcName = SESSION:PARAMETER.
 
+IF NUM-ENTRIES(lcName, ".") > 1 THEN lcName = ENTRY(1, lcName, ".").
 
+/*
 FIND dictdb._sequence
 WHERE dictdb._sequence._seq-name EQ lcName NO-ERROR.
 IF AVAILABLE dictdb._sequence THEN DO:
@@ -30,6 +32,7 @@ IF AVAILABLE dictdb._sequence THEN DO:
             liCurVal FORMAT ">>>>>>>>>>>>9" LABEL "Current".
     PUT UNFORMATTED "~n".
 END.
+*/
 
 FIND dictdb._file
 WHERE dictdb._file._file-name EQ lcName NO-ERROR.

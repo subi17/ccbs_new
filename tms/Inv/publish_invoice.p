@@ -13,6 +13,7 @@
 {Func/fmakemsreq.i}
 {Func/email.i}
 {Syst/host.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INT NO-UNDO.
 
@@ -25,6 +26,7 @@ DEF VAR lcContent      AS CHAR NO-UNDO.
 DEF VAR llgError       AS LOG  NO-UNDO.
 DEF VAR lcLogFile      AS CHAR NO-UNDO. 
 DEF VAR lcContLogDir   AS CHAR NO-UNDO. 
+DEF VAR lcTenant       AS CHAR NO-UNDO.
 
 DEFINE STREAM strout.
 
@@ -48,13 +50,15 @@ DEFINE STREAM strout.
           lcAddrConfDir  = ""
           lcContLogDir   = ""
           lcToday        = ""
+          lcTenant       = fConvertTenantToBrand(BUFFER-TENANT-NAME(MsRequest))
           ldaDateFrom    = DATE(MONTH(TODAY),1,YEAR(TODAY))
           lcAddrConfDir  = fCParamC("RepConfDir")
           lcContLogDir   = fCParam("PublishInvoice","ContentLogDir")
           lcToday        = STRING(YEAR(TODAY),"9999") + 
                            STRING(MONTH(TODAY),"99")  +
                            STRING(DAY(TODAY),"99") 
-          lcLogFile      = lcContLogDir + "PIWebDisplay_" + lcToday + STRING(TIME) + ".log".
+          lcLogFile      = lcContLogDir + lcTenant +
+                           "_PIWebDisplay_" + lcToday + STRING(TIME) + ".log".
 
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
 
@@ -84,12 +88,14 @@ DEFINE STREAM strout.
 
    /* Mail recipients */
    GetRecipients(lcAddrConfDir).
+   xMailSubj = lcTenant + " " +  xMailSubj.
    /* Send via mail */
    SendMail(lcLogFile,"").
 
    IF llgError THEN LEAVE.
 
-   lcLogFile = lcContLogDir + "PIHPDdump_" + lcToday + STRING(TIME) + ".log".
+   lcLogFile = lcContLogDir + lcTenant + 
+               "_PIHPDdump_" + lcToday + STRING(TIME) + ".log".
 
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
 
@@ -116,6 +122,7 @@ DEFINE STREAM strout.
    
    /* Mail recipients */
    GetRecipients(lcAddrConfDir).
+   xMailSubj = lcTenant + " " +  xMailSubj.
    /* Send via mail */
    SendMail(lcLogFile,"").
 

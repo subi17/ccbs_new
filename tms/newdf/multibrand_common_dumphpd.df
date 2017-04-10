@@ -1,0 +1,86 @@
+ADD TABLE "DumpHPD"
+  AREA "Sta_Data_128"
+  LABEL "Dump Range"
+  DESCRIPTION "Dump HPD"
+  DUMP-NAME "DumpHPD"
+  MULTITENANT yes
+
+ADD FIELD "DumpID" OF "DumpHPD" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Dump ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Dump ID"
+  ORDER 10
+
+ADD FIELD "Active" OF "DumpHPD" AS logical
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Active"
+  POSITION 3
+  MAX-WIDTH 1
+  HELP "Is dump range active"
+  ORDER 20
+
+ADD FIELD "Continuous" OF "DumpHPD" AS logical
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Continuous"
+  POSITION 4
+  MAX-WIDTH 1
+  HELP "Is the dump range continuous"
+  ORDER 30
+
+ADD FIELD "StartTime" OF "DumpHPD" AS character
+  FORMAT "x(19)"
+  INITIAL ""
+  LABEL "Start Time"
+  POSITION 5
+  MAX-WIDTH 38
+  COLUMN-LABEL "StartTime"
+  HELP "Start time of a dump DD.MM.YYYY HH:MM:SS"
+  ORDER 40
+  
+ADD FIELD "FinalTime" OF "DumpHPD" AS character
+  FORMAT "x(19)"
+  INITIAL ""
+  LABEL "Final Time"
+  POSITION 6
+  MAX-WIDTH 38
+  COLUMN-LABEL "FinalTime"
+  HELP "Final time of a dump DD.MM.YYYY HH:MM:SS"
+  ORDER 50
+
+ADD FIELD "UnitsToDump" OF "DumpHPD" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Units to dump"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "UnitsToDump"
+  HELP "How many units to dump. Zero value means no restriction."
+  ORDER 60
+
+ADD FIELD "UnitType" OF "DumpHPD" AS character
+  FORMAT "x(12)"
+  INITIAL "days"
+  LABEL "Unit type"
+  POSITION 8
+  MAX-WIDTH 24
+  COLUMN-LABEL "UnitType"
+  HELP "The type of the unit (years, months, weeks, days, hours, minutes, seconds)"
+  ORDER 70
+
+ADD INDEX "DumpID" ON "DumpHPD"
+  AREA "Sta_Index_4"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "DumpID" ASCENDING
+
+.
+PSC
+cpstream=1252
+.
+0000001560

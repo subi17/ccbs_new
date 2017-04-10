@@ -159,6 +159,15 @@ FUNCTION fConvertTenantToBrand RETURNS CHARACTER
        
 END FUNCTION.
 
+FUNCTION fGetCurrentBrand RETURNS CHAR ():
+   DEF BUFFER Company FOR Company.
+   FIND FIRST Company NO-LOCK WHERE
+              Company.Brand = "1" NO-ERROR.
+   IF AVAIL Company THEN 
+      RETURN fConvertTenantToBrand(BUFFER-TENANT-NAME(Company)).
+   ELSE RETURN fConvertTenantToBrand(TENANT-NAME(LDBNAME("common"))).
+END FUNCTION.
+
 /*
    Function returns the brand name of a given table name.
    A caller must take care that the table name exists.
@@ -169,10 +178,16 @@ FUNCTION fGetTableBrand RETURNS CHARACTER
 
    DEFINE VARIABLE lhBuffer      AS HANDLE    NO-UNDO.
    DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llFound       AS LOGICAL   NO-UNDO.
 
    CREATE BUFFER lhBuffer FOR TABLE icTableName.
 
-   lcReturnValue = TENANT-NAME(lhBuffer:DBNAME).
+   llFound = lhBuffer:FIND-FIRST("", NO-LOCK) NO-ERROR.
+
+   IF NOT llFound
+   THEN RETURN "".
+
+   lcReturnValue = lhBuffer:BUFFER-TENANT-NAME.
 
    RETURN fConvertTenantToBrand(lcReturnValue).
 

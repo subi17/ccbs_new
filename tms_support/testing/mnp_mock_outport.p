@@ -155,6 +155,7 @@ PROCEDURE pAddRequestStructElement:
    DEF VAR lcMSISDNRangeStruct AS CHAR NO-UNDO.
    DEF VAR lcMSISDNICC         AS CHAR NO-UNDO.
    DEF VAR i                   AS INT  NO-UNDO.
+   DEF VAR lcTenant            AS CHAR NO-UNDO.
 
    ASSIGN 
       liSeq     = NEXT-VALUE(M2MSeq)
@@ -193,6 +194,8 @@ PROCEDURE pAddRequestStructElement:
       MESSAGE "No actibe customer found" VIEW-AS ALERT-BOX ERROR.
       RETURN.
    END.
+
+   ASSIGN lcTenant = BUFFER-TENANT-NAME(Customer).
 
    initialize(lcConURL, 5).
 
@@ -242,7 +245,7 @@ PROCEDURE pAddRequestStructElement:
    add_boolean(lcRequestStruct, "fechaVentanaCambioPorAbonado",FALSE ).
    add_string(lcRequestStruct, "NRNReceptor", "004").
    add_string(lcRequestStruct, "codigoOperadorReceptor", "004").
-   add_string(lcRequestStruct, "codigoOperadorDonante", "005").
+   add_string(lcRequestStruct, "codigoOperadorDonante", (IF lcTenant = "TMasmovil" THEN "200" ELSE "005")).
    add_timestamp(lcRequestStruct, "fechaSolicitudPorAbonado", fMakeTS()).
    add_timestamp(lcRequestStruct, "fechaLimiteCambioEstado",
                  fHMS2TS(ldaNowDay - 1,"14:00:00")).

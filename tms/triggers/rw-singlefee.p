@@ -14,6 +14,7 @@ IF NOT NEW(SingleFee) AND
 THEN RETURN.
 
 {triggers/check_mobsub.i SingleFee KeyValue}
+{triggers/replog_tenantname.i}
 
 CREATE Common.RepLog.
 ASSIGN
@@ -27,6 +28,7 @@ ASSIGN
                               THEN "DELETE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER SingleFee:HANDLE)
    .
 
 IF Common.RepLog.EventType = "DELETE" 
@@ -48,6 +50,7 @@ THEN DO:
          Common.RepLog.TableName = "SingleFee"
          Common.RepLog.EventType = "DELETE"
          Common.RepLog.EventTime = NOW
+         Common.RepLog.TenantName = fRepLogTenantName(BUFFER oldSingleFee:HANDLE)
          Common.RepLog.KeyValue  = {HPD/keyvalue.i oldSingleFee . {&HPDKeyDelimiter} FMItemId}
          .
    END.

@@ -55,16 +55,19 @@ objJsonToTT:mStoreTT("upsells", BUFFER ttUpsells:HANDLE).
 objJsonToTT:mStoreTT("discounts", BUFFER ttDiscounts:HANDLE).
 
 objJsonToTT:mParseJsonFile("/tmp/jsondata.json").
+DO WHILE objJsonToTT:mGetNext():
 
-FOR EACH ttRootLevel: DISP ttRootLevel. END.
-FOR EACH ttBarrings: DISP ttBarrings. END.
-FOR EACH ttServices: DISP ttServices. END.
-FOR EACH ttSinglefees: DISP ttSinglefees. END.
-FOR EACH ttUpsells: DISP ttUpsells. END.
-FOR EACH ttDiscounts: DISP ttDiscounts. END.
+   FOR EACH ttRootLevel: DISP ttRootLevel. END.
+   FOR EACH ttBarrings: DISP ttBarrings. END.
+   FOR EACH ttServices: DISP ttServices. END.
+   FOR EACH ttSinglefees: DISP ttSinglefees. END.
+   FOR EACH ttUpsells: DISP ttUpsells. END.
+   FOR EACH ttDiscounts: DISP ttDiscounts. END.
 
-MESSAGE objJsonToTT:mListJsonArrayNames() VIEW-AS ALERT-BOX TITLE "Arrays".
-MESSAGE objJsonToTT:mListJsonObjectNames() VIEW-AS ALERT-BOX TITLE "Objects".
+   MESSAGE objJsonToTT:mListJsonArrayNames() VIEW-AS ALERT-BOX TITLE "Arrays".
+   MESSAGE objJsonToTT:mListJsonObjectNames() VIEW-AS ALERT-BOX TITLE "Objects".
+
+END.
 
 FINALLY:
    IF VALID-OBJECT(objJsonToTT)
@@ -82,9 +85,11 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Class.JsonToTT: 
 
-   DEFINE PRIVATE VARIABLE objJsonObject      AS CLASS JsonObject       NO-UNDO.
-   DEFINE PRIVATE VARIABLE llDeleteJsonObject AS LOGICAL INITIAL TRUE   NO-UNDO.
+   DEFINE PRIVATE VARIABLE objJsonConstruct   AS CLASS JsonConstruct    NO-UNDO.
+   DEFINE PRIVATE VARIABLE objJsonArray       AS CLASS JsonArray        NO-UNDO.
    DEFINE PRIVATE VARIABLE lcMainLevelFields  AS CHARACTER              NO-UNDO.
+   DEFINE PRIVATE VARIABLE liArrayLength      AS INTEGER                NO-UNDO.
+   DEFINE PRIVATE VARIABLE liCurrentItem      AS INTEGER INITIAL 1      NO-UNDO.
 
    DEFINE PRIVATE TEMP-TABLE ttJsonTempTable NO-UNDO
       FIELD jsonentry     AS CHARACTER
@@ -106,30 +111,65 @@ CLASS Class.JsonToTT:
 
    DESTRUCTOR JsonToTT():
 
-      mClearData().      
+      mEmptyArray().
 
-      EMPTY TEMP-TABLE ttJsonTempTable.      
+      EMPTY TEMP-TABLE ttJsonTempTable.
 
    END DESTRUCTOR.
 
 
-   METHOD PUBLIC VOID mParseJsonFile
-      (icJsonFile AS CHARACTER):
+   METHOD PUBLIC LOGICAL mGetNext():
 
-      llDeleteJsonObject = TRUE.
-      mClearData().
+      mEmptyCurrentData().
+
+      IF liCurrentItem > liArrayLength
+      THEN RETURN FALSE.
+
+      mParse(liCurrentItem).
+
+      liCurrentItem = liCurrentItem + 1.
+
+      RETURN TRUE.
+
+   END METHOD.
+
+
+   METHOD PRIVATE VOID mParseToJsonArray
+      ( icData AS LONGCHAR,
+        icType AS CHARACTER ):
+
+      mEmptyArray().
 
       DEFINE VARIABLE objOMParser AS CLASS ObjectModelParser NO-UNDO.
-   
-      objOMParser   = NEW ObjectModelParser().      
-      objJsonObject = CAST(objOMParser:ParseFile(icJsonFile), JsonObject).
 
-      mParse().
+      objOMParser = NEW ObjectModelParser().
+
+      CASE icType:
+         WHEN "FILE" THEN objJsonConstruct = objOMParser:ParseFile(STRING(icData)).
+         WHEN "DATA" THEN objJsonConstruct = objOMParser:Parse(icData).
+      END CASE.
+
+      IF objJsonConstruct:getClass():TypeName = "Progress.Json.ObjectModel.JsonArray"
+      THEN ASSIGN
+              objJsonArray  = CAST(objJsonConstruct, JsonArray)
+              liArrayLength = objJsonArray:Length.
+      ELSE DO:
+         objJsonArray  = NEW JsonArray().
+         objJsonArray:Add(CAST(objJsonConstruct, JsonObject)).
+      END.
 
       FINALLY:
          IF VALID-OBJECT(objOMParser)
          THEN DELETE OBJECT objOMParser.
       END FINALLY.
+
+   END METHOD.
+
+
+   METHOD PUBLIC VOID mParseJsonFile
+      (icJsonFile AS CHARACTER):
+
+      mParseToJsonArray(icJsonFile, "FILE").
 
    END METHOD.
 
@@ -137,20 +177,7 @@ CLASS Class.JsonToTT:
    METHOD PUBLIC VOID mParseJsonData
       (icJsonData AS LONGCHAR):
 
-      llDeleteJsonObject = TRUE.
-      mClearData().
-
-      DEFINE VARIABLE objOMParser AS CLASS ObjectModelParser NO-UNDO.
-   
-      objOMParser   = NEW ObjectModelParser().      
-      objJsonObject = CAST(objOMParser:Parse(icJsonData), JsonObject).
-      
-      mParse().
-      
-      FINALLY:
-         IF VALID-OBJECT(objOMParser)
-         THEN DELETE OBJECT objOMParser.
-      END FINALLY.
+      mParseToJsonArray(icJsonData, "DATA").
 
    END METHOD.
 
@@ -158,20 +185,32 @@ CLASS Class.JsonToTT:
    METHOD PUBLIC VOID mParseJsonObject
       (iobjJsonObject AS CLASS JsonObject):
 
-      ASSIGN
-         llDeleteJsonObject = FALSE
-         objJsonObject = iobjJsonObject.
+      mEmptyArray().
 
-      mClearData().
-      mParse().
+      objJsonArray  = NEW JsonArray().
+      objJsonArray:Add(iobjJsonObject).
 
    END METHOD.
 
 
-   METHOD PUBLIC VOID mClearData():
+   METHOD PRIVATE VOID mEmptyArray():
 
-      IF llDeleteJsonObject AND VALID-OBJECT(objJsonObject)
-      THEN DELETE OBJECT objJsonObject.
+      mEmptyCurrentData().
+
+      ASSIGN
+         liArrayLength = 1
+         liCurrentItem = 1.
+
+      IF VALID-OBJECT(objJsonConstruct)
+      THEN DELETE OBJECT objJsonConstruct.
+
+      IF VALID-OBJECT(objJsonArray)
+      THEN DELETE OBJECT objJsonArray.
+
+   END METHOD.
+
+
+   METHOD PRIVATE VOID mEmptyCurrentData():
 
       FOR EACH ttJsonTempTable:
          IF VALID-HANDLE(ttJsonTempTable.temptableHandle)
@@ -182,6 +221,7 @@ CLASS Class.JsonToTT:
       EMPTY TEMP-TABLE ttJsonObject.
       
    END METHOD.
+
 
 
    METHOD PUBLIC VOID mStoreTT
@@ -310,12 +350,16 @@ CLASS Class.JsonToTT:
    END METHOD.
 
 
-   METHOD PRIVATE VOID mParse():
+   METHOD PRIVATE VOID mParse
+      ( iiItem AS INTEGER ):
 
       DEFINE VARIABLE lcField       AS CHARACTER EXTENT  NO-UNDO.
       DEFINE VARIABLE lii           AS INTEGER           NO-UNDO.
+      DEFINE VARIABLE objJsonObject AS CLASS JsonObject  NO-UNDO.
 
-      lcField = objJsonObject:getNames().
+      ASSIGN
+         objJsonObject = objJsonArray:GetJsonObject(iiItem)
+         lcField       = objJsonObject:getNames().
 
       /* 
          First we will go through the fields in json data 

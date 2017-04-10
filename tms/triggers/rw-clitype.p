@@ -8,6 +8,8 @@ DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
 
 &IF {&CLITYPE_WRITE_TRIGGER_ACTIVE} &THEN
 
+{triggers/replog_tenantname.i}
+
 CREATE Ordercanal.RepLog.
 ASSIGN
    Ordercanal.RepLog.RowID     = STRING(ROWID(CLIType))
@@ -16,6 +18,7 @@ ASSIGN
                            THEN "CREATE"
                            ELSE "MODIFY")
    Ordercanal.RepLog.EventTime = NOW
+   Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER CLIType:HANDLE)
    .
 
 IF NOT NEW(CLIType)
@@ -31,6 +34,7 @@ THEN DO:
          Ordercanal.RepLog.TableName = "CLIType"
          Ordercanal.RepLog.EventType = "DELETE"
          Ordercanal.RepLog.EventTime = NOW
+         Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER oldCLIType:HANDLE)
          Ordercanal.RepLog.KeyValue  = SUBSTITUTE("&1",oldCLIType.CLIType)
          .
    END.

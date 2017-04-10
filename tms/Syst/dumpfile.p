@@ -716,6 +716,7 @@ PROCEDURE local-UPDATE-record:
             ufk[3] = 1982
             ufk[4] = 1983
             ufk[5] = 9829
+            ufk[6] = 9847 WHEN DumpFile.DumpName BEGINS "HPD_"
             ufk[8] = 8
             ehto   = 0.
          
@@ -1032,6 +1033,9 @@ PROCEDURE local-UPDATE-record:
       ELSE IF toimi = 5 THEN DO:
          RUN Syst/dumplog.p (DumpFile.DumpID).
       END.
+
+      ELSE IF toimi = 6 AND ufk[6] > 0
+      THEN RUN Syst/dumphpd.p (DumpFile.DumpID).
 
       ELSE IF toimi = 8 THEN LEAVE.  
 

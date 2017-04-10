@@ -31,6 +31,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF BUFFER bfOrder2 FOR Order.
    DEF BUFFER bfOrderCustomer FOR OrderCustomer.
    DEF BUFFER bfOrderCustomer2 FOR OrderCustomer.
+   DEF BUFFER MobSub FOR MobSub.
 
    DEF VAR lcResult   AS CHAR    NO-UNDO. 
    DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
@@ -103,6 +104,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                            &GLOBAL-DEFINE STAR_EVENT_USER "OrderClose"
                         &ENDIF
                         fUpdatePartialMSOwner(bfOrder.MsSeq, MobSub.FixedNumber).
+                        RELEASE MobSub.
                      END.
                   END. /* IF bfOrder.OrderType EQ */
                END. /* IF fIsConvergenceTariff  */
@@ -336,6 +338,47 @@ FUNCTION fSearchStock RETURNS CHARACTER
    RETURN icStock.
 
 END FUNCTION.
+
+/* Function releases OR CLOSE Additional lines */
+FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
+   (INPUT icCustIDType  AS CHAR,
+    INPUT icCustID      AS CHAR):
+
+   DEF BUFFER labOrder         FOR Order.
+   DEF BUFFER labOrderCustomer FOR OrderCustomer.
+
+   DEF VAR lcNewOrderStatus AS CHAR NO-UNDO.
+
+   FOR EACH labOrderCustomer NO-LOCK WHERE
+            labOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            labOrderCustomer.CustId     EQ icCustID                AND
+            labOrderCustomer.CustIdType EQ icCustIDType            AND
+            labOrderCustomer.RowType    EQ 1,
+       EACH labOrder NO-LOCK WHERE
+            labOrder.Brand      EQ Syst.Parameters:gcBrand  AND
+            labOrder.orderid    EQ labOrderCustomer.Orderid AND
+            labOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}    AND
+            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
+
+      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                        CLIType.Brand      = Syst.Parameters:gcBrand           AND
+                        CLIType.CLIType    = labOrder.CLIType                  AND
+                        CLIType.LineType   = {&CLITYPE_LINETYPE_NONMAIN}       AND
+                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
+         
+         IF labOrder.OrderType = {&ORDER_TYPE_NEW} THEN
+             lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+         ELSE IF labOrder.OrderType = {&ORDER_TYPE_MNP} THEN
+             lcNewOrderStatus = {&ORDER_STATUS_MNP}.
+
+         IF lcNewOrderStatus > "" THEN 
+            fSetOrderStatus(labOrder.OrderId,lcNewOrderStatus).
+      END.
+   END.   
+   
+   RETURN TRUE.
+
+END FUNCTION.   
 
 &ENDIF.
 

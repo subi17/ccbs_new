@@ -2,6 +2,10 @@ USING Progress.Lang.*.
 USING HPD.DumpHandler.
 USING HPD.DumpBase.
 USING HPD.DumpFile.
+USING HPD.DumpMQ.
+USING HPD.DumpSomeWhere.
+
+{HPD/HPDConst.i}
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
@@ -23,11 +27,14 @@ CLASS HPD.FixedFeeDump FINAL INHERITS DumpHandler:
       (iiDumpID    AS INTEGER,
        icFile      AS CHARACTER):
 
-      objDumpBase = NEW DumpFile(iiDumpID, icFile, THIS-OBJECT).
+      IF icFile = "{&FileIDForMQ}"
+      THEN objDumpBase = NEW DumpMQ(iiDumpID, THIS-OBJECT).
+      ELSE objDumpBase = NEW DumpFile(iiDumpID, icFile, THIS-OBJECT).
+
       objDumpBase:mUseTable(BUFFER lbFixedFee:HANDLE).
       objDumpBase:mVerifyDumpFileData().
 
-      mProcessFullDump(INPUT CAST(objDumpBase, DumpFile)).
+      mProcessFullDump(INPUT CAST(objDumpBase, DumpSomeWhere)).
       
       /* If there has been problems we won't be here... */
       IF llInterrupted = FALSE
@@ -62,7 +69,7 @@ CLASS HPD.FixedFeeDump FINAL INHERITS DumpHandler:
 
 
    METHOD PRIVATE VOID mProcessFullDump
-      (INPUT objDumpFile AS CLASS DumpFile):
+      (INPUT objDumpSomeWhere AS CLASS DumpSomeWhere):
 
       DEFINE VARIABLE ldaDate  AS DATE    NO-UNDO.
       DEFINE VARIABLE liPeriod AS INTEGER NO-UNDO.
@@ -90,7 +97,7 @@ CLASS HPD.FixedFeeDump FINAL INHERITS DumpHandler:
 
          liEvents = liEvents + 1.
 
-         objDumpFile:mWriteALine().
+         objDumpSomeWhere:mWriteALine().
 
          IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN
          DO:

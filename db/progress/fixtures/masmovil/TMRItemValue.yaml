@@ -191,6 +191,120 @@ bulkload: TMRItemValue
   CounterItemValues: "C,4"
 
 bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_CERO_5GB_DATA_IN,MM_CERO_5GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_MAS_1GB_DATA_IN,MM_MAS_1GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_MAS_3GB_DATA_IN,MM_MAS_3GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_MAS_8GB_DATA_IN,MM_MAS_8GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_NET_10GB_DATA_IN,MM_NET_10GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_NET_20GB_DATA_IN,MM_NET_20GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_NET_50GB_DATA_IN,MM_NET_50GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_NET_5GB_DATA_IN,MM_NET_5GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,MM_CERO_5GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,MM_MAS_1GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,MM_MAS_3GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,MM_MAS_8GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,MM_NET_10GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,MM_NET_20GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,MM_NET_50GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,MM_NET_5GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_MAS_1GB_VOICE_IN,MM_MAS_1GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_MAS_3GB_VOICE_IN,MM_MAS_3GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_MAS_8GB_VOICE_IN,MM_MAS_8GB"
+
+bulkload: TMRItemValue
   TMRuleSeq: 36
   FromDate: 2012-11-01
   ToDate: 2049-12-31
@@ -201,4 +315,22 @@ bulkload: TMRItemValue
   FromDate: 2012-11-01
   ToDate: 2049-12-31
   CounterItemValues: "GPRS"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_MAS_1GB_VOICE_IN,MM_MAS_1GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_MAS_3GB_VOICE_IN,MM_MAS_3GB"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  CounterItemValues: "MM_MAS_8GB_VOICE_IN,MM_MAS_8GB"
 

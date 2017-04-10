@@ -32571,6 +32571,87 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
+  RepText: "TARIFA 0 PERO CON ESTABLECIMIENTO DE LLAMADA 0.165 + 5GB A 13.97"
+  LinkCode: "MM_CERO_5GBMF"
+  Brand: "1"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "COMERCIAL PARA TODAS LLAMADAS A INTERNACIONAL A PAISES"
+  LinkCode: "MM_INTVOICE100MF"
+  Brand: "1"
+  FromDate: 2017-03-27
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "DATOS 1GB MF 13.97 Y VOZ INFINITA"
+  LinkCode: "MM_MAS_1GBMF"
+  Brand: "1"
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "DATOS 3GB MF 16.45 Y VOZ INFINITA"
+  LinkCode: "MM_MAS_3GBMF"
+  Brand: "1"
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "DATOS 8GB MF 22.23 Y VOZ INFINITA"
+  LinkCode: "MM_MAS_8GBMF"
+  Brand: "1"
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "VOZ A 0"
+  LinkCode: "MM_NET_10GBMF"
+  Brand: "1"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "VOZ A 0.083 CENTIMOS MINUTO Y DATOS 20GB"
+  LinkCode: "MM_NET_20GBMF"
+  Brand: "1"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "VOZ A 0"
+  LinkCode: "MM_NET_50GBMF"
+  Brand: "1"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "VOZ A 0"
+  LinkCode: "MM_NET_5GBMF"
+  Brand: "1"
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
   RepText: "Kazam Trooper 450 Negro"
   LinkCode: "P011T45N2"
   Brand: "1"

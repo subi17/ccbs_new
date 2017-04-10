@@ -46,6 +46,8 @@ THEN llIsOnHPD = LOOKUP(oldMsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) > 0 AND
 IF llIsOnHPD = FALSE AND llShouldBeOnHPD = FALSE
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Mobile.RepLog.
 ASSIGN
    Mobile.RepLog.TableName = "MsRequest"
@@ -56,6 +58,7 @@ ASSIGN
                               THEN "DELETE"
                               ELSE "MODIFY")
    Mobile.RepLog.EventTime = NOW
+   Mobile.RepLog.TenantName = fRepLogTenantName(BUFFER MsRequest:HANDLE)
    .
 
 IF Mobile.RepLog.EventType = "DELETE" 
@@ -76,6 +79,7 @@ THEN DO:
          Mobile.RepLog.TableName = "MsRequest"
          Mobile.RepLog.EventType = "DELETE"
          Mobile.RepLog.EventTime = NOW
+         Mobile.RepLog.TenantName = fRepLogTenantName(BUFFER oldMsRequest:HANDLE)
          Mobile.RepLog.KeyValue  = STRING(oldMsRequest.MsRequest)
          .
    END.

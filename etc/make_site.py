@@ -8,7 +8,6 @@
 ###############################################################################
 import os
 import sys
-import socket
 from glob import glob
 
 assert sys.version_info[:3] >= (2,6,0), 'Python version too old. Need >= 2.6'
@@ -18,6 +17,24 @@ def versiontuple(v):
     for point in v.split("."):
         filled.append(point.zfill(8))
     return tuple(filled)
+
+def which(program):
+    import os
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+    fpath, fname = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            path = path.strip('"')
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+
+    return None
 
 if not os.path.exists(relpath + '/etc/site.py'):
     fake_site = {'dlc': 'foo', 'work_dir': 'bar'}
@@ -39,18 +56,6 @@ if not os.path.exists(relpath + '/etc/site.py'):
     print('Using the newest installed Progress version %s in directory %s' % \
              (newestversion, dlc))
 
-    a_database = '%s_%s' % (fake_site['appname'], fake_site['databases'][0])
-    service_suffix = ''
-    while True:
-        try:
-            socket.getservbyname(a_database + service_suffix, 'tcp')
-            break
-        except:
-            print('Ports for databases not found in /etc/services.')
-            print('Add them or use unix sockets or provide a suffix: ',)
-            service_suffix = sys.stdin.readline().strip()
-        if not service_suffix: break
-
     if os.path.exists(relpath + '/.safeproduction'):
         environment = 'safeproduction'
     elif os.path.exists(relpath + '/.DeployMakefile.py'):
@@ -58,13 +63,19 @@ if not os.path.exists(relpath + '/etc/site.py'):
     else:
         environment = 'production'
 
+    lighttpd_location = which('lighttpd')
+
+    # Assume location of the lighttpd if not in path
+    if lighttpd_location == None:
+        lighttpd_location = '/usr/lighttpd/1.4/sbin/lighttpd'
+
     fd = open(relpath + '/etc/site.py', 'w')
     fd.write('# Host specific configuration (not under RC)\n')
     fd.write('from os import environ as ENV\n')
     fd.write("%-14s = '%s'\n" % ('dlc', dlc))
     fd.write("%-14s = '%s'\n" % ('work_dir', os.path.abspath(relpath)))
     fd.write("%-14s = '%s'\n" % ('environment', environment))
-    fd.write("%-14s = '%s'\n" % ('service_suffix', service_suffix))
+    fd.write("%-14s = '%s'\n" % ('lighttpd_location', lighttpd_location))
     fd.write("ENV%-11s = '%s'\n" % ("['TERM']", 'xterm'))
     fd.write("ENV%-11s = '%s%s'\n" % ("['DBUTIL']", dlc, '/bin/_dbutil'))
     if environment == 'development' and os.environ.get('PROCFG'):

@@ -92,8 +92,10 @@ FIND FIRST DiscountPlan WHERE
            DiscountPlan.DPRuleID = lcDPRuleID NO-LOCK NO-ERROR.
 IF NOT AVAILABLE DiscountPlan THEN
    RETURN appl_err("Unknown Discount Plan").
-
-ldaValidTo = fCalcDPMemberValidTo(ldaValidFrom, liValidPeriods).
+IF liValidPeriods = 999 THEN
+   ldaValidTo = 12/31/2049.
+ELSE
+   ldaValidTo = fCalcDPMemberValidTo(ldaValidFrom, liValidPeriods).
 
 FIND FIRST DPMember WHERE
            DPMember.DPId = DiscountPlan.DPId AND

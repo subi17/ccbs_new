@@ -12,6 +12,7 @@
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/email.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INT NO-UNDO.
 
@@ -25,6 +26,7 @@ DEF VAR lcAddrConfDir  AS CHAR NO-UNDO.
 DEF VAR llInterrupt    AS LOG  NO-UNDO. 
 DEF VAR lcContLogDir   AS CHAR NO-UNDO. 
 DEF VAR lcLogFile      AS CHAR NO-UNDO. 
+DEF VAR lcTenant       AS CHAR NO-UNDO. 
 
 DEFINE STREAM strout.
    
@@ -50,12 +52,14 @@ DEFINE STREAM strout.
           lcToday        = ""
           lcLogFile      = ""
           ldaInvDate     = DATE(MONTH(TODAY),1,YEAR(TODAY)) 
+          lcTenant       = fConvertTenantToBrand(BUFFER-TENANT-NAME(MsRequest))
           lcAddrConfDir  = fCParamC("RepConfDir")
           lcContLogDir   = fCParam("PublishInvoice","ContentLogDir")
           lcToday        = STRING(YEAR(TODAY),"9999") +
                            STRING(MONTH(TODAY),"99")  +
                            STRING(DAY(TODAY),"99")
-          lcLogFile      = lcContLogDir + "delstate_" + lcToday + STRING(TIME) + ".log".
+          lcLogFile      = lcContLogDir + lcTenant + 
+                           "_delstate_" + lcToday + STRING(TIME) + ".log".
  
    OUTPUT STREAM strout to VALUE(lcLogFile) APPEND.
 
@@ -90,13 +94,15 @@ DEFINE STREAM strout.
    OUTPUT STREAM strout CLOSE.
 
    /* Mail recipients */
-      GetRecipients(lcAddrConfDir).
+   GetRecipients(lcAddrConfDir).
+   xMailSubj = lcTenant + " " + xMailSubj.
    /* Send via mail */
-      SendMail(lcLogFile,"").
+   SendMail(lcLogFile,"").
    
    IF llgError THEN LEAVE.
   
-   lcLogFile = lcContLogDir + "publishifs_" + lcToday + STRING(TIME) + ".log".
+   lcLogFile = lcContLogDir + lcTenant + 
+               "_publishifs_" + lcToday + STRING(TIME) + ".log".
  
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
  
@@ -124,9 +130,10 @@ DEFINE STREAM strout.
    OUTPUT STREAM strout CLOSE.
 
    /* Mail recipients */
-      GetRecipients(lcAddrConfDir).
+   GetRecipients(lcAddrConfDir).
+   xMailSubj = lcTenant + " " +  xMailSubj.
    /* Send via mail */
-      SendMail(lcLogFile,"").
+   SendMail(lcLogFile,"").
 
    IF llgError THEN LEAVE.
 

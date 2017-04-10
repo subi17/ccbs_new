@@ -7,12 +7,15 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF OrderCustomer.
 IF NEW OrderCustomer
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Ordercanal.RepLog.
 ASSIGN
-   Ordercanal.RepLog.TableName = "OrderCustomer"
-   Ordercanal.RepLog.EventType = "DELETE"
-   Ordercanal.RepLog.EventTime = NOW
-   Ordercanal.RepLog.KeyValue  = {HPD/keyvalue.i OrderCustomer . {&HPDKeyDelimiter} OrderId RowType}
+   Ordercanal.RepLog.TableName  = "OrderCustomer"
+   Ordercanal.RepLog.EventType  = "DELETE"
+   Ordercanal.RepLog.EventTime  = NOW
+   Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER OrderCustomer:HANDLE)
+   Ordercanal.RepLog.KeyValue   = {HPD/keyvalue.i OrderCustomer . {&HPDKeyDelimiter} OrderId RowType}
    .
 
 /* Only require for rowtype 1 */
@@ -25,10 +28,11 @@ FOR Order FIELDS (Brand OrderID) NO-LOCK WHERE
 
    CREATE Ordercanal.RepLog.
    ASSIGN
-      Ordercanal.RepLog.RowID     = STRING(ROWID(Order))
-      Ordercanal.RepLog.TableName = "Order"
-      Ordercanal.RepLog.EventType = "MODIFY"
-      Ordercanal.RepLog.EventTime = NOW
+      Ordercanal.RepLog.RowID      = STRING(ROWID(Order))
+      Ordercanal.RepLog.TableName  = "Order"
+      Ordercanal.RepLog.EventType  = "MODIFY"
+      Ordercanal.RepLog.EventTime  = NOW
+      Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER Order:HANDLE)
       .
 END.
 

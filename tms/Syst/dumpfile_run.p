@@ -403,7 +403,7 @@ PROCEDURE pInitialize:
       lcFile = REPLACE(lcFile,"#MODE",icDumpMode)
       lcFile = REPLACE(lcFile,"#CAT",DumpFile.FileCategory)
       lcFile = REPLACE(lcFile,"#RUN",icRunNameTag)
-      lcFile = REPLACE(lcFile,"#COMPANY",
+      lcFile = REPLACE(lcFile,"#TENANT",
                        CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))))).
    
    /* sequential nbr for the same day */

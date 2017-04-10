@@ -69,6 +69,20 @@ bulkload: FMItem
   FirstMonthBR: 2
 
 bulkload: FMItem
+  FeeModel: "MM_CERO_5GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_CERO_5GBMF"
+  Interval: 1
+  Amount: 13.97
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
   FeeModel: "MM_DATA1024MF"
   PriceList: "COMMON"
   BillCode: "MM_DATA1024MF"
@@ -122,6 +136,118 @@ bulkload: FMItem
   ToDate: 2049-12-31
   Brand: "1"
   BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_INTVOICE100MF"
+  PriceList: "COMMON"
+  BillCode: "MM_INTVOICE100MF"
+  Interval: 1
+  Amount: 4.13
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-27
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_MAS_1GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_MAS_1GBMF"
+  Interval: 1
+  Amount: 13.97
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_MAS_3GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_MAS_3GBMF"
+  Interval: 1
+  Amount: 16.45
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_MAS_8GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_MAS_8GBMF"
+  Interval: 1
+  Amount: 22.23
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_NET_10GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_NET_10GBMF"
+  Interval: 1
+  Amount: 24.71
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_NET_20GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_NET_20GBMF"
+  Interval: 1
+  Amount: 32.98
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_NET_50GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_NET_50GBMF"
+  Interval: 1
+  Amount: 74.3
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_NET_5GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_NET_5GBMF"
+  Interval: 1
+  Amount: 16.45
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
   FirstMonthBR: 2
 
 bulkload: FMItem
