@@ -12,19 +12,19 @@
 {Mnp/mnpoutchk.i}
 {Mc/orderfusion.i}
 
-DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
+DEF INPUT PARAMETER iiOrder        AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.
-DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
+DEF INPUT PARAMETER ilSilent       AS LOG NO-UNDO.
 
-DEF VAR llOk AS LOG NO-UNDO.
-DEF VAR lcCampaignType AS CHARACTER NO-UNDO.
+DEF VAR llOk            AS LOG  NO-UNDO.
+DEF VAR lcCampaignType  AS CHAR NO-UNDO.
 DEF VAR lcRenoveSMSText AS CHAR NO-UNDO. 
-DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
-DEF VAR lcOldStatus AS CHAR NO-UNDO. 
-DEF VAR lcNewStatus AS CHAR NO-UNDO. 
-DEF VAR lcError AS CHAR NO-UNDO. 
+DEF VAR ldeSMSStamp     AS DEC  NO-UNDO. 
+DEF VAR lcOldStatus     AS CHAR NO-UNDO. 
+DEF VAR lcNewStatus     AS CHAR NO-UNDO. 
+DEF VAR lcError         AS CHAR NO-UNDO.
 
-DEF BUFFER lbOrder FOR Order.
+DEF BUFFER lbOrder          FOR Order.
 
 FIND FIRST Order WHERE 
            Order.Brand   = gcBrand AND 
@@ -41,8 +41,12 @@ IF NOT ilSilent THEN DO:
    
    llOk = FALSE.
 
-   MESSAGE "Do You want to release order " + 
-      (IF iiSecureOption EQ 1 THEN "(with secure)" ELSE "") + "?"
+   MESSAGE "Do You want to release order" +
+      (IF iiSecureOption EQ 1
+       THEN " (with secure Correos)"
+       ELSE IF iiSecureOption EQ 2
+       THEN " (with secure POS)"
+       ELSE "") + "?"
    VIEW-AS ALERT-BOX QUESTION
    BUTTONS YES-NO
    TITLE " ORDER " + STRING(Order.OrderID) + " "
@@ -251,9 +255,11 @@ ELSE IF Order.Ordertype < 2 AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
    
    CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand = gcBrand AND
-                  CLIType.CLIType = Order.CLIType AND
-                  CLIType.LineType > 0) AND
+                  CLIType.Brand       = gcBrand                          AND
+                  CLIType.CLIType     = Order.CLIType                    AND
+                  CLIType.LineType    > 0                                AND 
+                  CLIType.TariffType NE {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
+                  CLIType.TariffType NE {&CLITYPE_TARIFFTYPE_FIXEDONLY}) AND
    NOT CAN-FIND(FIRST OrderAction WHERE
                      OrderAction.Brand = gcBrand AND
                      OrderAction.OrderId = Order.OrderID AND
@@ -406,6 +412,17 @@ END.
 IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
 
 fSetOrderStatus(Order.OrderId,lcNewStatus).
+
+/* Release pending additional lines orders, in case of pending convergent 
+   mail line order is released */
+IF  Order.OrderType NE {&ORDER_TYPE_RENEWAL}               AND 
+   (lcOldStatus     EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
+    lcOldStatus     EQ {&ORDER_STATUS_PENDING_FIXED_LINE}  OR
+    lcOldStatus     EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) THEN DO:
+    
+    fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
+                                    OrderCustomer.CustID) . 
+END.   
 
 IF llDoEvent THEN DO:
    RUN StarEventMakeModifyEvent(lhOrder).

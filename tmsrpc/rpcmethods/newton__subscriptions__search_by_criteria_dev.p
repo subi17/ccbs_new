@@ -23,7 +23,7 @@
           offset                    integer - mandatory
           limit_of_subscriptions    integer - mandatory
   */
-{fcgi_agent/xmlrpc/xmlrpc_access.i}
+{xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
 katun = "Newton".
@@ -597,4 +597,5 @@ END.
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.
+
 

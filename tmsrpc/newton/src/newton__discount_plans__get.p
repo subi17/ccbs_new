@@ -26,6 +26,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    lcResultStruct = add_struct(resp_array, "").
 
+   add_int(lcResultStruct,"plan_id",DiscountPlan.DPID).
    add_string(lcResultStruct,"id",DiscountPlan.DPRuleId).
    add_string(lcResultStruct,"name",DiscountPlan.DPName).
    add_string(lcResultStruct,"unit",DiscountPlan.DPUnit).

@@ -85,7 +85,7 @@ FORM
     BRTestQResultRow.MsSeq            COLON 25
        lcCLI NO-LABEL FORMAT "X(15)" SKIP
     BRTestQResultRow.ExtInvID         COLON 25
-    BRTestQResultRow.InvNum           COLON 25 SKIP(1)
+    BRTestQResultRow.InvNum FORMAT ">>>>>>>>9" COLON 25 SKIP(1)
     BRTestQResultRow.ResultValue      COLON 25 
     BRTestQResultRow.TestResult       COLON 25 
 WITH  OVERLAY ROW liUpdateRow centered

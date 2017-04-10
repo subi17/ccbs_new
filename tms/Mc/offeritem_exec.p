@@ -450,6 +450,24 @@ PROCEDURE pDiscountPlanMember:
          WHEN "CONT23" THEN lcDiscPlan = "CONT23DISC".
       END CASE.
    END.
+  
+  /* ADDLINE-20 If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
+   IF LOOKUP(Order.CLIType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
+      FIND FIRST OrderCustomer WHERE
+                 OrderCustomer.Brand   = gcBrand       AND
+                 OrderCustomer.OrderID = Order.OrderID AND
+                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+      IF AVAILABLE OrderCustomer THEN DO:
+         IF fCheckExistingConvergent(OrderCustomer.CustIDType,OrderCustomer.CustID) OR
+            fCheckOngoingConvergentOrder(OrderCustomer.CustIDType,OrderCustomer.CustID) THEN DO:
+            IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                              OrderAction.Brand    = gcBrand           AND
+                              OrderAction.OrderID  = Order.OrderID     AND
+                              OrderAction.ItemType = "AddLineDiscount" AND
+                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) THEN RETURN "".
+         END.
+      END.
+   END.
 
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
                                       lcDiscPlan, /* OfferItem.ItemKey */
