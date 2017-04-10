@@ -118,6 +118,13 @@ do i = 1 to 2:
 
    FIND FIRST TMSParam WHERE
               TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "BillReport" AND
+              TMSParam.ParamCode EQ "CCNReportFile" NO-ERROR.
+   IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"/billing","/#TENANT_billing").
+   
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
               TMSParam.Paramgroup EQ "FuncRun" AND
               TMSParam.ParamCode EQ "FRDaemonLockFile" NO-ERROR.
    IF INDEX(TMSParam.charval,lcBrand) EQ 0 THEN
