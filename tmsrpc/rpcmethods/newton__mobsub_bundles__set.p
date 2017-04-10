@@ -51,6 +51,9 @@ FUNCTION fSetMDUB RETURNS INT
    DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
    DEF VAR ldeBundleFee           AS DEC  NO-UNDO.
+   DEF VAR ldeCurrMonthLimit      AS DEC  NO-UNDO.
+   DEF VAR ldeConsumedData        AS DEC  NO-UNDO.
+   DEF VAR ldeOtherMonthLimit     AS DEC  NO-UNDO.
 
    ASSIGN lcPostpaidVoiceTariffs = fCParamC("POSTPAID_VOICE_TARIFFS")
           lcPrepaidVoiceTariffs  = fCParamC("PREPAID_VOICE_TARIFFS")
@@ -117,11 +120,25 @@ FUNCTION fSetMDUB RETURNS INT
          ELSE IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId = {&TARJ_UPSELL} THEN .
          /* Customer level - As of now DSS only */
          ELSE DO:
-            IF pcBundleId = {&DSS} OR
-               fIsDSSActive(Mobsub.Custnum,ldeActStamp) OR
-               fOngoingDSSAct(Mobsub.Custnum) THEN
+            
+            /* ADDLINE-139 Additional Line DSS Check */
+            IF pcBundleId = {&DSS} THEN DO:
+               IF NOT fDSSCustCheck(INPUT MobSub.CustNum,
+                                    INPUT MobSub.CLIType,
+                                    OUTPUT ldeCurrMonthLimit,
+                                    OUTPUT ldeConsumedData,
+                                    OUTPUT ldeOtherMonthLimit,
+                                    OUTPUT lcResult) THEN
                ocError = pcBundleId + " activation is not allowed".
-            ELSE liReturnValue = 3. /* Ongoing Activation */
+            END.
+
+            IF ocError = "" THEN DO:
+               IF fIsDSSActive(Mobsub.Custnum,ldeActStamp) OR
+                  fOngoingDSSAct(Mobsub.Custnum) THEN
+                  ocError = pcBundleId + " activation is not allowed".
+               ELSE liReturnValue = 3. /* Ongoing Activation */
+            END.
+
          END. /* ELSE DO: */
       END.
       OTHERWISE DO: 
@@ -162,6 +179,19 @@ FUNCTION fSetMDUB RETURNS INT
                               0,
                               FALSE,
                               OUTPUT lcResult).
+      ELSE
+         liRequest = fDSSRequest(MobSub.MsSeq,
+                                 Mobsub.Custnum,
+                                 "CREATE",
+                                 "",
+                                 pcBundleId,
+                                 ldeActStamp,
+                                 {&REQUEST_SOURCE_EXTERNAL_API},
+                                 "",
+                                 TRUE, /* Fees */
+                                 0,
+                                 FALSE,
+                                 OUTPUT lcResult).
    END.
    ELSE DO:
 

@@ -216,16 +216,13 @@ CASE pcActionValue :
       ELSE DO:
          /* ADDLINE-139 Additional Line DSS Check */
          IF pcBundleId = {&DSS} THEN DO:
-            IF NOT fIsDSSAllowed(INPUT  MobSub.CustNum,
-                                 INPUT  0,
-                                 INPUT  fMakeTS(),
-                                 INPUT  pcBundleId,
-                                 INPUT  "",
+            IF NOT fDSSCustCheck(INPUT MobSub.CustNum,
+                                 INPUT MobSub.CLIType,
                                  OUTPUT ldeCurrMonthLimit,
                                  OUTPUT ldeConsumedData,
                                  OUTPUT ldeOtherMonthLimit,
                                  OUTPUT lcResult) THEN
-            RETURN appl_err(lcResult).
+               RETURN appl_err(lcResult).
          END.
 
          IF fIsDSSActive(Mobsub.Custnum,ldeActStamp) THEN

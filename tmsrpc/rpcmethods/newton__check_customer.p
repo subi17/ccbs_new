@@ -38,8 +38,12 @@ DEF VAR lcAddLineAllowed   AS CHAR NO-UNDO.
 DEF VAR liActLimit         AS INT  NO-UNDO.
 DEF VAR liacts             AS INT  NO-UNDO.
 DEF VAR lcDSSAllowed       AS CHAR NO-UNDO.
+DEF VAR ldeCurrMonthLimit  AS DEC  NO-UNDO.
+DEF VAR ldeConsumedData    AS DEC  NO-UNDO.
+DEF VAR ldeOtherMonthLimit AS DEC  NO-UNDO.
+DEF VAR lcResult           AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string,boolean,int") EQ ?
+IF validate_request(param_toplevel_id, "string,string,boolean,int,string") EQ ?
    THEN RETURN.
 
 pcPersonId = get_string(param_toplevel_id, "0").
@@ -113,9 +117,15 @@ FIND FIRST Customer NO-LOCK WHERE
            Customer.CustIDType = pcIdType   AND
            Customer.Roles     NE "inactive" NO-ERROR.
 IF AVAILABLE Customer THEN DO:
-   IF fDSSCustCheck(Customer.CustNum,
-                    pcCLIType) THEN
+   IF fDSSCustCheck(INPUT  Customer.CustNum,
+                    INPUT  pcCLIType,
+                    OUTPUT ldeCurrMonthLimit,
+                    OUTPUT ldeConsumedData,
+                    OUTPUT ldeOtherMonthLimit,
+                    OUTPUT lcResult) THEN
       lcDSSAllowed = "OK".
+   ELSE
+      lcDSSAllowed = lcResult.
 END.
 
 IF lcDSSAllowed = "" THEN lcDSSAllowed = "DSS_NOT_ALLOWED".

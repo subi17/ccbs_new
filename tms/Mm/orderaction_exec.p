@@ -178,15 +178,16 @@ PROCEDURE pPeriodicalContract:
    IF OrderAction.ItemKey = {&DSS} THEN DO:
       IF fOngoingDSSAct(INPUT MobSub.CustNum) THEN
          RETURN "ERROR:DSS activation request is ongoing.".
-      ELSE IF NOT fIsDSSAllowed(INPUT  MobSub.CustNum,
-                                INPUT  MobSub.MsSeq,
-                                INPUT  fMakeTS(),
-                                INPUT  OrderAction.ItemKey,
-                                INPUT  "",
+      ELSE IF NOT fDSSCustCheck(INPUT  MobSub.CustNum, /* ADDLINE-140 Additional Line DSS Changes */
+                                INPUT  MobSub.CLIType,
                                 OUTPUT ldeCurrMonthLimit,
                                 OUTPUT ldeConsumedData,
                                 OUTPUT ldeOtherMonthLimit,
                                 OUTPUT lcResult) THEN DO:
+
+         IF lcResult = "DSS_NOT_ALLOWED" THEN
+            RETURN "ERROR:" + lcResult.
+
          /* order might include data bundle, YBU-1312 */
          IF lcResult = "dss_no_data_bundle" THEN DO:
             FIND FIRST MsRequest NO-LOCK WHERE

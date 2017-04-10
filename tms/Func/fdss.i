@@ -43,6 +43,7 @@ FUNCTION fDSSRequest RETURNS INTEGER
    DEF VAR liReqCreated     AS INT  NO-UNDO.
    DEF VAR lcCLI            AS CHAR NO-UNDO.
    DEF VAR lcCLIType        AS CHAR NO-UNDO.
+   DEF VAR liConvOR2PMsSeq  AS INT  NO-UNDO.
 
    DEF BUFFER bMobSub       FOR MobSub.
    DEF BUFFER bTermMobSub   FOR TermMobSub.
@@ -59,8 +60,24 @@ FUNCTION fDSSRequest RETURNS INTEGER
       ASSIGN lcCLI = bTermMobSub.CLI
              lcCLIType = bTermMobSub.CLIType.
    END. /* IF NOT AVAIL bMobSub THEN DO: */
-   ELSE ASSIGN lcCLI = bMobSub.CLI
-               lcCLIType = bMobSub.CLIType.
+   ELSE DO:
+      ASSIGN lcCLI     = bMobSub.CLI
+             lcCLIType = bMobSub.CLIType.
+      /* ADDLINE-140 Additional Line DSS Changes */
+      FIND FIRST Customer NO-LOCK WHERE
+                 Customer.CustNum = iiCustNum NO-ERROR.
+      IF AVAILABLE Customer THEN DO:
+         liConvOR2PMsSeq = fExistFullConvergentOR2P(Customer.CustIDType,Customer.OrgID).
+         IF liConvOR2PMsSeq > 0 THEN DO:
+            FIND FIRST MobSub NO-LOCK WHERE
+                       MobSub.MsSeq = liConvOR2PMsSeq NO-ERROR.
+            IF AVAILABLE MobSub THEN
+               ASSIGN lcCLI     = MobSub.CLI
+                      lcCLIType = MobSub.CLIType
+                      iiMsSeq   = liConvOR2PMsSeq.
+         END.
+      END.
+   END.
 
    ocResult = fChkRequest(iiCustNum,
                           {&REQTYPE_DSS},
@@ -953,7 +970,7 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
             bMobSub.Brand   = gcBrand      AND
             bMobSub.InvCust = iiCustnum    AND
             NOT bMobSub.PayType NO-LOCK BY ActivationDate:
-
+      
       IF bMobSub.CLI = icCurrentCLI OR
          (icBundleId = "DSS2" AND
           LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0) THEN NEXT.
@@ -998,9 +1015,11 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
                       ASSIGN oiDSSTransToMsSeq = bMobSub.MsSeq
                              llFirstActBundle  = FALSE.
                 END.
-                ELSE
-                   ASSIGN oiDSSTransToMsSeq = bMobSub.MsSeq
-                          llFirstActBundle  = FALSE.
+                ELSE DO:
+                   IF fIsConvergentORFixedOnly(bMobSub.CLIType) THEN
+                      ASSIGN oiDSSTransToMsSeq = bMobSub.MsSeq
+                             llFirstActBundle  = FALSE.
+                END.
              END. /* IF llFirstActBundle THEN DO: */
 
              llActOtherBundle = TRUE.
@@ -1008,7 +1027,7 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
       END. /* FOR EACH bMServiceLimit WHERE */
    END. /* FOR EACH bMobSub WHERE */
 
-   IF icBundleId = "DSS2" AND oiDSSTransToMsSeq = 0 THEN DO:
+   IF oiDSSTransToMsSeq = 0 THEN DO:
       ocError = "Customer does not have any active primary subscription".
       RETURN FALSE.
    END.
@@ -1283,14 +1302,15 @@ END. /* FUNCTION fMakeDSSCommLine RETURNS CHAR */
 
 /* ADDLINE-23 Additional Line Phase 2 */
 FUNCTION fDSSCustCheck RETURNS LOG
-   (INPUT iiCustNum AS INT,
-    INPUT icCLIType AS CHAR):
+   (INPUT  iiCustNum          AS INT,
+    INPUT  icCLIType          AS CHAR,
+    OUTPUT odeCurrMonthLimit  AS DEC,
+    OUTPUT odeConsumedData    AS DEC,
+    OUTPUT odeOtherMonthLimit AS DEC,
+    OUTPUT ocResult AS CHAR):
 
-   DEF VAR liSubCount         AS INT  NO-UNDO.
-   DEF VAR ldeCurrMonthLimit  AS DEC  NO-UNDO.
-   DEF VAR ldeConsumedData    AS DEC  NO-UNDO.
-   DEF VAR ldeOtherMonthLimit AS DEC  NO-UNDO.
-   DEF VAR lcResult           AS CHAR NO-UNDO.
+   DEF VAR liSubCount AS INT  NO-UNDO.
+   DEF VAR liMsSeq    AS INT  NO-UNDO.
 
    DEFINE BUFFER lbMobSub FOR MobSub.
 
@@ -1305,6 +1325,8 @@ FUNCTION fDSSCustCheck RETURNS LOG
                lbMobSub.SalesMan NE "GIFT":
          liSubCount = liSubCount + 1.
       END.
+      
+      liMsSeq = fExistFullConvergentOR2P(Customer.CustIDType, Customer.OrgID).
 
       IF  liSubCount < 1                                                    OR
          (liSubCount >= 1                                                   AND
@@ -1313,19 +1335,20 @@ FUNCTION fDSSCustCheck RETURNS LOG
                              CLIType.CLIType = icCLIType AND
                              CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) AND
           NOT fIsConvergentORFixedOnly(icCLIType)                           AND
-          fExistFullConvergentOR2P(Customer.CustIDType, Customer.OrgID) = 0) THEN DO:
+          liMsSeq = 0) THEN DO:
+         ocResult = "DSS_NOT_ALLOWED".
          RETURN FALSE.
       END.
 
       RETURN fIsDSSAllowed(INPUT  Customer.CustNum,
-                           INPUT  0,
+                           INPUT  liMsSeq,
                            INPUT  fMakeTS(),
                            INPUT  {&DSS},
                            INPUT  "",
-                           OUTPUT ldeCurrMonthLimit,
-                           OUTPUT ldeConsumedData,
-                           OUTPUT ldeOtherMonthLimit,
-                           OUTPUT lcResult).
+                           OUTPUT odeCurrMonthLimit,
+                           OUTPUT odeConsumedData,
+                           OUTPUT odeOtherMonthLimit,
+                           OUTPUT ocResult).
    END.
 
 END FUNCTION.
