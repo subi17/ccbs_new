@@ -25,7 +25,6 @@ ASSIGN
 {Mm/fbundle.i}
 {Rate/tmqueue_analysis.i}
 {Func/istc.i}
-{Func/multitenantfunc.i}
 
 DEF VAR lhSource      AS HANDLE NO-UNDO.
 DEF VAR lhField       AS HANDLE NO-UNDO.
@@ -111,7 +110,8 @@ FORM
    ldCounter     COLON 20 FORMAT ">>>>>>>>>>>9"  LABEL "Events To Counters"
    liActions     COLON 20 FORMAT ">>>>>>>>>>>9"  LABEL "Limit Actions"
 WITH CENTERED ROW 5 SIDE-LABELS 
-     TITLE SUBST(" TMQUEUE FOR COUNTERS (&1)", fGetCurrentBrand()) FRAME fQty.
+     TITLE SUBST(" TMQUEUE FOR COUNTERS (&1) ", Syst.Parameters:Tenant) 
+     FRAME fQty.
 
 FUNCTION fErrorLog RETURNS LOGIC
   (iiCustNum AS INT,

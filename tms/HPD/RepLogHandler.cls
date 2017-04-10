@@ -26,6 +26,7 @@ CLASS HPD.RepLogHandler FINAL:
    DEFINE PRIVATE TEMP-TABLE ttDumpHandler NO-UNDO
       FIELD TableName     AS CHARACTER
       FIELD TenantName    AS CHARACTER
+      FIELD BrandName     AS CHARACTER
       FIELD objHandler    AS CLASS Progress.Lang.Object /*HPD.DumpHandler*/
       FIELD VersionNumber AS CHARACTER
       FIELD QuoteKeyValue AS LOGICAL
@@ -214,10 +215,11 @@ CLASS HPD.RepLogHandler FINAL:
             
          CREATE ttDumpHandler.
          ttDumpHandler.objHandler = DYNAMIC-NEW DumpFile.LinkKey(DumpFile.DumpID).
-         
+
          ASSIGN
             ttDumpHandler.TableName     = DumpFile.MainTable
             ttDumpHandler.TenantName    = icTenant
+            ttDumpHandler.BrandName     = multitenancy.TenantInformation:mGetBrandForTable(DumpFile.MainTable)
             ttDumpHandler.VersionNumber = mGetVersionNumber(DumpFile.DumpID)
             ttDumpHandler.QuoteKeyValue = mQuoteKeyValue(DumpFile.DumpID)
             llFoundHandler = TRUE
@@ -331,7 +333,7 @@ CLASS HPD.RepLogHandler FINAL:
                   &ENDIF
 
       IF llMultiTenancy
-      THEN lcMessage = lcMessage + {&HPDDumpDelimiter} + ttDumpHandler.TenantName.
+      THEN lcMessage = lcMessage + {&HPDDumpDelimiter} + ttDumpHandler.BrandName.
 
       IF lhRepLogTable::EventType = "DELETE"
       THEN lcMessage = lcMessage + {&HPDDumpDelimiter} +

@@ -15,6 +15,8 @@ USING HPD.DumpSomeWhere.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
+{HPD/HPDEnvironment.i}
+
 CLASS HPD.DumpFile INHERITS DumpSomeWhere:
 	/*------------------------------------------------------------------------------
 	 Purpose:
@@ -40,6 +42,17 @@ CLASS HPD.DumpFile INHERITS DumpSomeWhere:
         iobjHandler AS CLASS DumpHandler ):
            
       SUPER(iiDumpID, iobjHandler).
+
+      /* Header time is same for every file dump line */
+      &IF "{&HPD_ENVIRONMENT}" = "Salt"
+      &THEN
+         mUpdateDumpHeader(5,"",objHPDTime:CurrUTCTime).
+      &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
+      &THEN
+         mUpdateDumpHeader(5,"",ISO-DATE(objHPDTime:CurrLocalTZTime)).
+      &ELSE
+         RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
+      &ENDIF
 
       llAllowEmptyFile = lbDumpFile.EmptyFile.
 

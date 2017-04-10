@@ -37,6 +37,31 @@ DEF VAR lcLogFile AS CHAR NO-UNDO.
 DEF VAR lcRowStatus AS CHAR NO-UNDO.
 DEF VAR lcErr AS CHAR NO-UNDO.
 
+
+DEFINE TEMP-TABLE ttBarrings NO-UNDO SERIALIZE-NAME ""
+   FIELD barring_id AS CHARACTER
+   FIELD barring_value AS CHARACTER SERIALIZE-NAME "value".
+
+DEFINE TEMP-TABLE ttSingleFees NO-UNDO SERIALIZE-NAME ""
+   FIELD single_fee_id AS CHARACTER
+   FIELD amount AS DECIMAL.
+
+DEFINE TEMP-TABLE ttUpsells NO-UNDO SERIALIZE-NAME ""
+   FIELD upsell_id AS CHARACTER
+   FIELD amount AS INTEGER.
+
+DEFINE TEMP-TABLE ttDiscounts NO-UNDO SERIALIZE-NAME ""
+   FIELD discount_id AS CHARACTER
+   FIELD begin_date AS DATE.
+
+DEFINE TEMP-TABLE ttRootlevel NO-UNDO SERIALIZE-NAME ""
+   FIELD msisdn           AS CHARACTER
+   FIELD used_data_amount AS INTEGER
+   FIELD saldo            AS INTEGER
+   FIELD fat              AS INTEGER.
+
+
+
 ASSIGN
    lcTableName = "MB_Migration"
    lcActionID = "migration_oper_data_reader"
@@ -99,7 +124,7 @@ IF lcErr NE "" THEN DO:
 END.
 ELSE DO:
    /*Execution part*/
-   RUN pHandleInputFile. 
+   RUN pHandleInputJson. 
 END.
 /*Release ActionLog lock*/
 DO TRANS:
@@ -647,3 +672,49 @@ PROCEDURE pHandleInputFile:
       "Read " + STRING(liLineNumber) + " lines. " 
       "Collection done " + fTS2HMS(fMakeTS()) SKIP.
 END.
+
+PROCEDURE pReadInputJSON:
+   DEF VAR lcMSISDN AS CHAR NO-UNDO.
+   DEF VAR lcFileName AS CHAR NO-UNDO.
+   DEF VAR lcMMOrderID AS CHAR NO-UNDO. 
+   DEF VAR lcBarringList AS CHAR NO-UNDO.
+   DEF VAR lcServiceList AS CHAR NO-UNDO.
+   DEF VAR lcBono AS CHAR NO-UNDO.
+   DEF VAR lcUpsell AS CHAR NO-UNDO.
+   DEF VAR liDataAmount AS INT NO-UNDO.
+   DEF VAR objJsonToTT AS CLASS Class.JsonToTT.
+
+   PUT STREAM sLog UNFORMATTED
+      "List collection starts " + fTS2HMS(fMakeTS()) SKIP.
+
+
+   objJsonToTT = NEW Class.JsonToTT().
+
+   objJsonToTT:mStoreTT(BUFFER ttRootLevel:HANDLE).
+
+   objJsonToTT:mStoreTT("barrings", BUFFER ttBarrings:HANDLE).
+   objJsonToTT:mStoreTT("single_fees", BUFFER ttSingleFees:HANDLE).
+   objJsonToTT:mStoreTT("upsells", BUFFER ttUpsells:HANDLE).
+   objJsonToTT:mStoreTT("discounts", BUFFER ttDiscounts:HANDLE).
+
+   objJsonToTT:mParseJsonFile("/tmp/ilkka.json").
+   DO WHILE objJsonToTT:mGetNext():
+      FOR EACH ttRootLevel: DISP ttRootLevel. END.
+      FOR EACH ttBarrings: DISP ttBarrings. END.
+      FOR EACH ttSinglefees: DISP ttSinglefees. END.
+      FOR EACH ttUpsells: DISP ttUpsells. END.
+      FOR EACH ttDiscounts: DISP ttDiscounts. END.
+
+      MESSAGE objJsonToTT:mListJsonArrayNames() 
+         VIEW-AS ALERT-BOX TITLE "Arrays".
+      MESSAGE objJsonToTT:mListJsonObjectNames() 
+         VIEW-AS ALERT-BOX TITLE "Objects".
+   END.
+
+
+
+   PUT STREAM sLog UNFORMATTED
+      "Collection done " + fTS2HMS(fMakeTS()) SKIP.
+END.
+
+
