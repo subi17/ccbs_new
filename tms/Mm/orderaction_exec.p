@@ -179,7 +179,7 @@ PROCEDURE pPeriodicalContract:
       IF fOngoingDSSAct(INPUT MobSub.CustNum) THEN
          RETURN "ERROR:DSS activation request is ongoing.".
       ELSE IF NOT fDSSCustCheck(INPUT  MobSub.CustNum, /* ADDLINE-140 Additional Line DSS Changes */
-                                INPUT  MobSub.CLIType,
+                                INPUT  "",
                                 OUTPUT ldeCurrMonthLimit,
                                 OUTPUT ldeConsumedData,
                                 OUTPUT ldeOtherMonthLimit,

@@ -1328,16 +1328,25 @@ FUNCTION fDSSCustCheck RETURNS LOG
       
       liMsSeq = fExistFullConvergentOR2P(Customer.CustIDType, Customer.OrgID).
 
-      IF  liSubCount < 1                                                    OR
-         (liSubCount >= 1                                                   AND
-          NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                             CLIType.Brand   = gcBrand   AND
-                             CLIType.CLIType = icCLIType AND
-                             CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) AND
-          NOT fIsConvergentORFixedOnly(icCLIType)                           AND
-          liMsSeq = 0) THEN DO:
-         ocResult = "DSS_NOT_ALLOWED".
-         RETURN FALSE.
+      IF icCLIType > "" THEN DO:
+         IF  liSubCount <  1                           OR
+            (liSubCount >= 1                           AND
+             (liMsSeq    = 0                           AND 
+              NOT fIsConvergentORFixedOnly(icCLIType)) AND
+             (liMsSeq    > 0                           AND
+             NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                                CLIType.Brand   = gcBrand   AND
+                                CLIType.CLIType = icCLIType AND
+                                CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}))) THEN DO:
+            ocResult = "DSS_NOT_ALLOWED".
+            RETURN FALSE.
+         END.
+      END.
+      ELSE DO:
+         IF liSubCount < 2 OR liMsSeq = 0 THEN DO:
+            ocResult = "DSS_NOT_ALLOWED".
+            RETURN FALSE.
+         END.
       END.
 
       RETURN fIsDSSAllowed(INPUT  Customer.CustNum,

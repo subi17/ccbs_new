@@ -124,7 +124,7 @@ FUNCTION fSetMDUB RETURNS INT
             /* ADDLINE-139 Additional Line DSS Check */
             IF pcBundleId = {&DSS} THEN DO:
                IF NOT fDSSCustCheck(INPUT MobSub.CustNum,
-                                    INPUT MobSub.CLIType,
+                                    INPUT "",
                                     OUTPUT ldeCurrMonthLimit,
                                     OUTPUT ldeConsumedData,
                                     OUTPUT ldeOtherMonthLimit,

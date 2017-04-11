@@ -4,7 +4,7 @@
  * @input   person_id;string;mandatory;
             id_type;string;mandatory;
             self_employed;bool;mandatory;
-            dss_clitype;string;mandatory;
+            dss_clitype;string;optional;
  *          
  * @output   check_customer;struct;mandatory; response structure
  * @check_customer order_allowed;boolean;mandatory;
@@ -29,6 +29,7 @@ DEF VAR piOrders         AS INT  NO-UNDO.
 DEF VAR pcCLIType        AS CHAR NO-UNDO.
 
 /* Local variable */
+DEF VAR top_array          AS CHAR NO-UNDO.
 DEF VAR llOrderAllowed     AS LOG  NO-UNDO.
 DEF VAR lcReason           AS CHAR NO-UNDO.
 DEF VAR lcReturnStruct     AS CHAR NO-UNDO.
@@ -43,14 +44,17 @@ DEF VAR ldeConsumedData    AS DEC  NO-UNDO.
 DEF VAR ldeOtherMonthLimit AS DEC  NO-UNDO.
 DEF VAR lcResult           AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string,boolean,int,string") EQ ?
-   THEN RETURN.
+top_array = validate_request(param_toplevel_id, "string,string,boolean,int,string").
 
-pcPersonId = get_string(param_toplevel_id, "0").
-pcIdType = get_string(param_toplevel_id, "1").
+IF top_array EQ ? THEN RETURN.
+
+pcPersonId     = get_string(param_toplevel_id, "0").
+pcIdType       = get_string(param_toplevel_id, "1").
 plSelfEmployed = get_bool(param_toplevel_id, "2").
-piOrders = get_int(param_toplevel_id, "3").
-pcCLIType = get_string(param_toplevel_id, "4").
+piOrders       = get_int(param_toplevel_id, "3").
+
+IF NUM-ENTRIES(top_array) >= 5 THEN
+   pcCLIType = get_string(param_toplevel_id, "4").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
