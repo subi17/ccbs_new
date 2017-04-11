@@ -44,7 +44,7 @@ DEF VAR ldeConsumedData    AS DEC  NO-UNDO.
 DEF VAR ldeOtherMonthLimit AS DEC  NO-UNDO.
 DEF VAR lcResult           AS CHAR NO-UNDO.
 
-top_array = validate_request(param_toplevel_id, "string,string,boolean,int,string").
+top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string]").
 
 IF top_array EQ ? THEN RETURN.
 
