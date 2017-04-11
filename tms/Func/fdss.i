@@ -1332,7 +1332,7 @@ FUNCTION fDSSCustCheck RETURNS LOG
          IF  liSubCount <  1                           OR
             (liSubCount >= 1                           AND
              (liMsSeq    = 0                           AND 
-              NOT fIsConvergentORFixedOnly(icCLIType)) AND
+              NOT fIsConvergentORFixedOnly(icCLIType)) OR
              (liMsSeq    > 0                           AND
              NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE
                                 CLIType.Brand   = gcBrand   AND
