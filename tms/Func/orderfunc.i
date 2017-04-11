@@ -22,6 +22,14 @@
 {Func/cparam2.i}
 {Func/main_add_lines.i}
 
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER katun
+
+   {Func/lib/eventlog.i}
+
+   DEFINE VARIABLE lhOrderStatusChange AS HANDLE NO-UNDO.
+END.
+
 /* set status of order */
 FUNCTION fSetOrderStatus RETURNS LOGICAL
    (iOrderId AS INT,
@@ -371,8 +379,20 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
          ELSE IF labOrder.OrderType = {&ORDER_TYPE_MNP} THEN
              lcNewOrderStatus = {&ORDER_STATUS_MNP}.
 
-         IF lcNewOrderStatus > "" THEN 
+         IF lcNewOrderStatus > "" THEN DO:
+            IF llDoEvent THEN DO:
+               lhOrderStatusChange = BUFFER labOrder:HANDLE.
+               RUN StarEventInitialize(lhOrderStatusChange).
+               RUN StarEventSetOldBuffer(lhOrderStatusChange).
+            END.
+
             fSetOrderStatus(labOrder.OrderId,lcNewOrderStatus).
+
+            IF llDoEvent THEN DO:
+               RUN StarEventMakeModifyEvent(lhOrderStatusChange).
+               fCleanEventObjects().
+            END.
+         END.
       END.
    END.   
    

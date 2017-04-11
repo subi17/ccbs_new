@@ -12,6 +12,7 @@
                 define variable llOrdStChg   as logical   no-undo.
                 DEF VAR llReserveSimAndMsisdn AS LOG NO-UNDO. 
                 DEFINE VARIABLE lh99Order AS HANDLE NO-UNDO.
+                DEFINE VARIABLE lh76Order AS HANDLE NO-UNDO.
 
             &ENDIF
                 
@@ -122,11 +123,24 @@
                   IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                                     OrderAction.Brand    = gcBrand           AND
                                     OrderAction.OrderID  = Order.OrderId     AND
-                                    OrderAction.ItemType = "AddLineDiscount" AND                                                                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) AND
+                                    OrderAction.ItemType = "AddLineDiscount" AND
+                             LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) AND
                      fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
                                                   OrderCustomer.CustId) THEN DO:
+                     IF llDoEvent THEN DO:
+                        lh76Order = BUFFER Order:HANDLE.
+                        RUN StarEventInitialize(lh76Order).
+                        RUN StarEventSetOldBuffer(lh76Order).
+                     END.
+
                      fSetOrderStatus(Order.OrderID,
                                      {&ORDER_STATUS_PENDING_MAIN_LINE}).
+
+                     IF llDoEvent THEN DO:
+                        RUN StarEventMakeModifyEvent(lh76Order).
+                        fCleanEventObjects().
+                     END.
+
                      NEXT {1}.
                   END.
                
