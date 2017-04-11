@@ -123,6 +123,7 @@
                   29.01.07 kl  search-2 modified a lot
                   18.04.07/aam CreditLimit, used for od invoices
                   25.10.07/vk  F5-add new and F6-delete buttons deactivated
+                  11.04.17/CS  Modify for customer history dump.
 
   Version ......: M15
   --------------------------------------------------------------------------- */
@@ -314,6 +315,7 @@ DEF VAR llMSActLimitIsDefault AS LOG NO-UNDO.
 DEF VAR lcInvTargetRule AS CHAR NO-UNDO. 
 DEF VAR llAddressValidated AS LOG NO-UNDO. 
 DEF VAR lcProfession  AS CHAR  NO-UNDO.
+DEF VAR lc255         AS CHAR  NO-UNDO. /* List separator */
 
 DEF VAR lcCustCOname  LIKE Customer.COName  NO-UNDO.
 DEF VAR lcCustAddress LIKE Customer.Address  NO-UNDO.
@@ -372,7 +374,8 @@ ASSIGN
    lcPassword    = fCParamC("MsAddressChg")
    lcLimitExtGrp = fCParamC("CustCredLimitExternalGrp")
    lcDefCountry  = fCParamC("CountryCodeDef")
-   lcCutLine     = FILL("-",78).
+   lcCutLine     = FILL("-",78)
+   lc255         = CHR(255) .
 
 IF lcPassword = ? THEN lcPassword = "".
  
@@ -813,7 +816,7 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
    DEFINE VARIABLE liReq AS INTEGER NO-UNDO. 
    DEFINE VARIABLE ocResult AS CHARACTER NO-UNDO.
 
-   FIND Customer WHERE Customer.Custnum = iiCustNum no-lock no-error.
+   FIND Customer WHERE Customer.Custnum = iiCustNum NO-LOCK NO-ERROR.
 
    fr-header = " CUSTOMER ADDRESS CHANGE ".
    ehto = 9. RUN Syst/ufkey.p.
@@ -895,6 +898,8 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
          VIEW-AS ALERT-BOX BUTTONS YES-NO TITLE " CONFIRMATION " UPDATE ok .
          
          IF NOT ok THEN NEXT ADDRESS_UPDATE.
+            
+            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).                         
 
             liReq = fAddressRequest(
                Customer.Custnum,
@@ -920,6 +925,9 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
             MESSAGE
                "Request ID for address change is:" liReq
             VIEW-AS ALERT-BOX TITLE " REQUEST ADDED ".
+
+            /* Creating eventlog for address change */
+            IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "TMS").
         
          LEAVE.
       END.   
@@ -1998,7 +2006,8 @@ PROCEDURE local-update-customer:
                Customer.Category
                Customer.DataProtected.
             
-            IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhCustomer ).
+            /* Customer info */
+            IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "TMS").
         
          END.
 
@@ -2489,7 +2498,8 @@ PROCEDURE local-update-fin:
 
 
             END.
-            IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhCustomer ).
+            /* Billing data */
+            IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "TMS").
         
          END.
          
@@ -2514,7 +2524,8 @@ PROCEDURE local-update-fin:
             FIND CURRENT Customer EXCLUSIVE-LOCK.
             IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer). 
             ASSIGN Customer.CreditLimit.
-            IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhCustomer ).
+            /* Billing data */
+            IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "TMS").
             FIND CURRENT Customer NO-LOCK.
 
             LEAVE.
@@ -2631,4 +2642,6 @@ PROCEDURE pFindPrev.
    ELSE IF order = 4 THEN DO: {Mc/custfind.i PREV OrgId}.      END.
    ELSE IF order = 5 THEN DO: {Mc/custfind.i PREV SearchName}. END.
 END PROCEDURE.
+
+
 

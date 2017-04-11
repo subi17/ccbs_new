@@ -50,6 +50,9 @@ scUser = "Newton".
 
 {Func/lib/eventlog.i}
 DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
+
+lhCustomer = BUFFER Customer:HANDLE.
+RUN StarEventInitialize(lhCustomer).
 /* Eventlog definition end */
 
 DEFINE VARIABLE liRegion  AS INTEGER NO-UNDO.
@@ -90,19 +93,20 @@ DEF VAR liMsSeq AS INT NO-UNDO.
 
 DEF VAR liReq AS INT NO-UNDO.
 DEF VAR ocResult AS CHAR NO-UNDO.
+DEF VAR lc255    AS CHAR  NO-UNDO. /* List separator */
 
 ASSIGN
 
 lcHandleDataFields = "coname,street,zip,city,region," +
-               "country,city_code,street_code,municipality_code".
-
+               "country,city_code,street_code,municipality_code"
 /* must have same interface as newton__set_customer_details */
 lcDataFields = "title,lname,lname2,fname,coname,street,zip,city,region," +
                "language,nationality,bankaccount,country," +
                "email,sms_number,phone_number,person_id," +
-               "city_code,street_code,municipality_code".
+               "city_code,street_code,municipality_code"
 lcMarketingFields = "mark_sms,mark_email,mark_post," +
-                    "mark_sms_3rd,mark_email_3rd,mark_post_3rd".
+                    "mark_sms_3rd,mark_email_3rd,mark_post_3rd"
+lc255 = CHR(255).
 
 ASSIGN
     lcCustomerData[1] = customer.coname
@@ -135,8 +139,8 @@ DO lii = 1 TO NUM-ENTRIES(lcHandleDataFields):
   END.
 END.
 
-IF llCustomerChanged THEN DO:
-    
+IF llCustomerChanged THEN DO:   
+   RUN StarEventSetOldBuffer(lhCustomer). 
    liReq = fAddressRequest(
       piCustnum,
       0,
@@ -156,10 +160,16 @@ IF llCustomerChanged THEN DO:
    IF ocResult NE "" THEN 
       RETURN appl_err(ocResult).
 
+   RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "VISTA-VFR").
+
 END.
+
+fCleanEventObjects().
 
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.
+
+
