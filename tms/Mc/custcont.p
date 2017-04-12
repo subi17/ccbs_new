@@ -35,9 +35,9 @@ DEF VAR llOk  AS LOG  NO-UNDO.
 DEF VAR lcResult AS CHAR NO-UNDO. 
 DEF VAR liRequest AS INT NO-UNDO. 
 DEF VAR lcEmailAddress AS CHAR NO-UNDO.
-DEF VAR lc255          AS CHAR  NO-UNDO. /* List separator */
+DEF VAR lcMemo    AS CHAR  NO-UNDO. 
 
-ASSIGN lc255 = CHR(255).
+ASSIGN lcMemo = "Agent" + CHR(255) + "TMS".
 
 FORM
    SKIP(1)
@@ -245,7 +245,10 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
                Customer.SMSNumber
                Customer.Phone.
             
-            IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "TMS").
+            IF llDoEvent THEN 
+               RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                                    {&STAR_EVENT_USER}, 
+                                                    lcMemo).
          
             RELEASE Customer.
          END.
