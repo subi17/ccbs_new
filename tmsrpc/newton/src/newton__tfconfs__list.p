@@ -16,7 +16,7 @@ lcStruct = validate_struct(pcStruct, "brand!,rv_percentage").
 
 ASSIGN 
 	pcTenant     = get_string(pcStruct,"brand")
-	lcPercentage = get_string(pcStruct,"rv_percentage").
+	lcRVPercentage = get_string(pcStruct,"rv_percentage").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
