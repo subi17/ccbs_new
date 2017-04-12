@@ -42,6 +42,8 @@
 {Func/fprepaidfee.i}
 {Func/fcreditreq.i}
 {Func/fsendsms.i}
+{Func/fbtc.i}
+
 
 FUNCTION fUpdateServicelCounterMSID RETURNS LOGICAL
    ( iiCustNum AS INTEGER,
@@ -337,8 +339,13 @@ PROCEDURE pContractActivation:
                     
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
+
+   /* April promotion */
+   DEF VAR lDate  AS DATE NO-UNDO.
+   DEF VAR lcInfo AS CHAR NO-UNDO.
    
-   DEF BUFFER bOrigReq   FOR MsRequest.
+   DEF BUFFER bOrigReq      FOR MsRequest.
+   DEF BUFFER bBonoRequest  FOR MsRequest.
    DEF BUFFER bQ25SingleFee FOR SingleFee.
    
    /* request is under work */
@@ -426,8 +433,81 @@ PROCEDURE pContractActivation:
                 MServiceLimit.DialType = ServiceLimit.DialType AND
                 MServiceLimit.SlSeq = ServiceLimit.SlSeq AND
                 MServiceLimit.EndTS >= MsRequest.ActStamp NO-LOCK:
-         fReqStatus(3,"Subscription already has active BONO bundle").
-         RETURN.
+         /* April promotion temp solution */
+         IF lcDCEvent = "DATA6" AND ServiceLimit.GroupCode = "DATA7" AND
+            NOT CAN-FIND(FIRST bBonoRequest NO-LOCK WHERE
+                               bBonoRequest.msseq = MsOwner.MsSeq AND
+                               bBonoRequest.reqtype = 9 AND
+                               bBonoRequest.reqcparam3 = "DATA7" AND
+                               bBonoRequest.reqstatus = 0) AND
+            fIsConvergenceTariff(MsOwner.CliType) THEN DO:
+
+            liRequest = fBundleChangeRequest(MsOwner.MsSeq,
+                                             "DATA7",
+                                             "DATA6",
+                                             20170501,
+                                             {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                             katun,
+                                             TRUE,
+                                             0,
+                                             FALSE,
+                                             FALSE,
+                                             0, /* extend terminal contract */
+                                             "",
+                                             OUTPUT lcInfo).
+            IF liRequest NE 0 THEN DO:
+               FIND FIRST DPMember EXCLUSIVE-LOCK WHERE
+                          DPMember.DPId      = 31 AND /* BONO6WEBDISC */
+                          DPMember.HostTable = "Mobsub" AND
+                          DPMember.KeyValue  = STRING(MsOwner.MsSeq) AND
+                          DPMember.ValidTo  >= TODAY NO-ERROR.
+               IF AVAILABLE DPMember THEN DO:
+                  ASSIGN lDate = ADD-INTERVAL(05/01/2017,5,"months")
+                         DPMember.ValidFrom = 05/01/2017
+                         DPMember.ValidTo   = fLastDayOfMonth(lDate).
+                  RELEASE DPMember.
+               END.
+            END.
+         END.
+         IF lcDCEvent = "DATA7" AND ServiceLimit.GroupCode = "DATA6" AND
+            NOT CAN-FIND(FIRST bBonoRequest NO-LOCK WHERE
+                               bBonoRequest.msseq = MsOwner.MsSeq AND
+                               bBonoRequest.reqtype = 9 AND
+                               bBonoRequest.reqcparam3 = "DATA6" AND
+                               bBonoRequest.reqstatus = 0) AND
+            fIsConvergenceTariff(MsOwner.CliType) THEN DO:
+
+            liRequest = fBundleChangeRequest(MsOwner.MsSeq,
+                                             "DATA6",
+                                             "DATA7",
+                                             20170501,
+                                             {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                             katun,
+                                             TRUE,
+                                             0,
+                                             FALSE,
+                                             FALSE,
+                                             0, /* extend terminal contract */
+                                             "",
+                                             OUTPUT lcInfo).
+            IF liRequest NE 0 THEN DO:
+               FIND FIRST DPMember EXCLUSIVE-LOCK WHERE
+                          DPMember.DPId      = 43 AND /* BONO7DISC */
+                          DPMember.HostTable = "Mobsub" AND
+                          DPMember.KeyValue  = STRING(MsOwner.MsSeq) AND
+                          DPMember.ValidTo  >= TODAY NO-ERROR.
+               IF AVAILABLE DPMember THEN DO:
+                  ASSIGN lDate = ADD-INTERVAL(05/01/2017,5,"months")
+                         DPMember.ValidFrom = 05/01/2017
+                         DPMember.ValidTo   = fLastDayOfMonth(lDate).
+                  RELEASE DPMember.
+               END.
+            END.
+         END. /* End april promotion temp solution */
+         ELSE DO:
+            fReqStatus(3,"Subscription already has active BONO bundle").
+            RETURN.
+         END.
       END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
 
    /* Fetch TARJ7 and TARJ9 contract start date */
