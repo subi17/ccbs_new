@@ -145,8 +145,8 @@ DEF VAR liDelType AS INT NO-UNDO.
 DEF VAR lcError AS CHAR NO-UNDO. 
 DEF VAR lcMemoHostTable AS CHAR NO-UNDO INIT "Customer".
 DEF VAR liChargeType AS INT NO-UNDO.
-DEF VAR lc255    AS CHAR  NO-UNDO. /* List separator */
-lc255 = CHR(255).
+DEF VAR lcMemo    AS CHAR  NO-UNDO.
+lcMemo = "Agent" + CHR(255) + "VISTA".
 
 ASSIGN
     lcCustomerData[1] = customer.HonTitle
@@ -345,7 +345,9 @@ IF Customer.CustIdType = "CIF" THEN DO:
          WHEN LOOKUP("id_type", lcStruct) > 0 
          Customer.AuthCustId = get_string(pcStruct, "person_id")
          WHEN LOOKUP("person_id", lcStruct) > 0.
-      RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "VISTA-VFR").
+      RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                           {&STAR_EVENT_USER}, 
+                                           lcMemo).
    END.
    FIND CURRENT Customer NO-LOCK.
   
@@ -562,7 +564,9 @@ IF llCustomerChanged THEN DO:
     END. /* IF customer.email */
 
     FIND CURRENT Customer NO-LOCK.
-    RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "VISTA-VFR").
+    RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                         {&STAR_EVENT_USER}, 
+                                         lcMemo).
 END.
    
 fCleanEventObjects().

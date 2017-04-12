@@ -315,7 +315,7 @@ DEF VAR llMSActLimitIsDefault AS LOG NO-UNDO.
 DEF VAR lcInvTargetRule AS CHAR NO-UNDO. 
 DEF VAR llAddressValidated AS LOG NO-UNDO. 
 DEF VAR lcProfession  AS CHAR  NO-UNDO.
-DEF VAR lc255         AS CHAR  NO-UNDO. /* List separator */
+DEF VAR lcMemo        AS CHAR  NO-UNDO.
 
 DEF VAR lcCustCOname  LIKE Customer.COName  NO-UNDO.
 DEF VAR lcCustAddress LIKE Customer.Address  NO-UNDO.
@@ -374,8 +374,8 @@ ASSIGN
    lcPassword    = fCParamC("MsAddressChg")
    lcLimitExtGrp = fCParamC("CustCredLimitExternalGrp")
    lcDefCountry  = fCParamC("CountryCodeDef")
-   lcCutLine     = FILL("-",78)
-   lc255         = CHR(255) .
+   lcCutLine     = FILL("-",78)   
+   lcMemo        = "Agent" + CHR(255) + "TMS".
 
 IF lcPassword = ? THEN lcPassword = "".
  
@@ -897,9 +897,7 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
             "Do You really want to create address change request?"
          VIEW-AS ALERT-BOX BUTTONS YES-NO TITLE " CONFIRMATION " UPDATE ok .
          
-         IF NOT ok THEN NEXT ADDRESS_UPDATE.
-            
-            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).                         
+         IF NOT ok THEN NEXT ADDRESS_UPDATE.                        
 
             liReq = fAddressRequest(
                Customer.Custnum,
@@ -924,10 +922,7 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
 
             MESSAGE
                "Request ID for address change is:" liReq
-            VIEW-AS ALERT-BOX TITLE " REQUEST ADDED ".
-
-            /* Creating eventlog for address change */
-            IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "TMS").
+            VIEW-AS ALERT-BOX TITLE " REQUEST ADDED ".            
         
          LEAVE.
       END.   
@@ -2007,7 +2002,10 @@ PROCEDURE local-update-customer:
                Customer.DataProtected.
             
             /* Customer info */
-            IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "TMS").
+            IF llDoEvent THEN 
+               RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                                    {&STAR_EVENT_USER}, 
+                                                    lcMemo).
         
          END.
 
@@ -2499,7 +2497,10 @@ PROCEDURE local-update-fin:
 
             END.
             /* Billing data */
-            IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "TMS").
+            IF llDoEvent THEN 
+               RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                                    {&STAR_EVENT_USER}, 
+                                                    lcMemo).
         
          END.
          
@@ -2525,7 +2526,10 @@ PROCEDURE local-update-fin:
             IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer). 
             ASSIGN Customer.CreditLimit.
             /* Billing data */
-            IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(lhCustomer, {&STAR_EVENT_USER}, "Agent" + lc255 + "TMS").
+            IF llDoEvent THEN 
+               RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                                    {&STAR_EVENT_USER}, 
+                                                    lcMemo).
             FIND CURRENT Customer NO-LOCK.
 
             LEAVE.
