@@ -231,19 +231,23 @@ FUNCTION fSetMDUB RETURNS INT
 END FUNCTION.
 
 
-DEF VAR pcStruct AS CHARACTER NO-UNDO. 
-DEF VAR lcStruct AS CHARACTER NO-UNDO.  
-DEF VAR pcReason AS CHARACTER NO-UNDO. 
-DEF VAR piMsSeq AS INTEGER NO-UNDO. 
-DEF VAR pcId AS CHARACTER NO-UNDO. 
-DEF VAR pcBundleId AS CHARACTER NO-UNDO. 
-DEF VAR piBundleAction AS INTEGER NO-UNDO.  
-DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
-DEF VAR liReturnValue AS INTEGER NO-UNDO. 
-DEF VAR lcReturnValue AS CHAR NO-UNDO. 
-DEF VAR lcError AS CHAR NO-UNDO. 
+DEF VAR pcStruct       AS CHAR NO-UNDO. 
+DEF VAR lcStruct       AS CHAR NO-UNDO.  
+DEF VAR pcReason       AS CHAR NO-UNDO. 
+DEF VAR piMsSeq        AS INTE NO-UNDO. 
+DEF VAR pcId           AS CHAR NO-UNDO. 
+DEF VAR pcBundleId     AS CHAR NO-UNDO. 
+DEF VAR piBundleAction AS INTE NO-UNDO.  
+DEF VAR lcResultStruct AS CHAR NO-UNDO. 
+DEF VAR liReturnValue  AS INTE NO-UNDO. 
+DEF VAR lcReturnValue  AS CHAR NO-UNDO. 
+DEF VAR lcError        AS CHAR NO-UNDO. 
 DEF VAR lcCounterError AS CHAR NO-UNDO. 
-DEF VAR lcOnOff AS CHAR NO-UNDO.
+DEF VAR lcOnOff        AS CHAR NO-UNDO.
+DEF VAR lcDataBundles  AS CHAR NO-UNDO.
+DEF VAR lcVoiceBundles AS CHAR NO-UNDO.
+
+DEFINE BUFFER bf_DayCampaign FOR DayCampaign.
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 pcId = get_string(param_toplevel_id,"0").
@@ -287,6 +291,25 @@ IF NOT AVAIL DayCampaign THEN
 
 ASSIGN lcMemoTitle = DayCampaign.DcName
        lcBONOContracts = fCParamC("BONO_CONTRACTS").
+
+IF vcTenant = {&TENANT_MASMOVIL} THEN 
+DO:
+    FOR EACH bf_DayCampaign WHERE bf_DayCampaign.Brand = gcBrand AND bf_DayCampaign.DCType = {&DCTYPE_BUNDLE} NO-LOCK:
+        IF bf_DayCampaign.StatusCode = 1 AND LOOKUP(bf_DayCampaign.DCEvent,lcBONOContracts) = 0 THEN 
+            ASSIGN lcDataBundles = lcDataBundles + (IF lcDataBundles <> "" THEN "," ELSE "") + bf_DayCampaign.DCEvent.
+    END.
+
+    FOR EACH bf_DayCampaign WHERE bf_DayCampaign.Brand = gcBrand AND bf_DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} NO-LOCK:
+
+        IF bf_DayCampaign.StatusCode = 1                     AND 
+           LOOKUP(bf_DayCampaign.DCEvent,lcVoiceBundles) = 0 AND 
+           NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = bf_DayCampaign.DCEvent NO-LOCK) THEN 
+            ASSIGN lcVoiceBundles = lcVoiceBundles + (IF lcVoiceBundles <> "" THEN "," ELSE "") + bf_DayCampaign.DCEvent.
+    END.
+    ASSIGN 
+        lcBONOContracts = lcBONOContracts + (IF lcBONOContracts <> "" THEN "," ELSE "") + lcDataBundles.
+        lcBONOContracts = lcBONOContracts + (IF lcBONOContracts <> "" THEN "," ELSE "") + lcVoiceBundles.
+END.
 
 IF LOOKUP(pcBundleId,lcBONOContracts + ",HSPA_ROAM_EU,BONO_VOIP") > 0 OR
    pcBundleId = {&DSS} OR pcBundleId = {&TARJ_UPSELL} THEN DO:
