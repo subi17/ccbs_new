@@ -52,6 +52,7 @@ END FUNCTION.
 
 DEFINE VARIABLE lcBrand AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
+DEFINE VARIABLE lcTempID AS CHAR NO-UNDO.
 
 do i = 1 to 2:
 
@@ -130,6 +131,14 @@ do i = 1 to 2:
    IF INDEX(TMSParam.charval,lcBrand) EQ 0 THEN
       TMSParam.charval = REPLACE(TMSParam.charval,"daemon.lock","daemon." + lower(lcBrand) + ".lock").
 
+   FOR EACH BankAccount.
+      IF i eq 1 THEN
+         ASSIGN
+            bankaccount.presenterID = bankAccount.creditorid
+            lctempId = bankAccount.creditorid.
+      ELSE
+         bankaccount.presenterID = lctempId.
+   END.
 END.
 
 /* ----------------------------------------------------------------------
