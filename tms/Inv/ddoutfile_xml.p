@@ -343,7 +343,7 @@ PROCEDURE pCustHeader:
       lhXML:START-ELEMENT("Id").
        lhXML:START-ELEMENT("OrgId").
         lhXML:START-ELEMENT("Othr").
-         lhXML:WRITE-DATA-ELEMENT("Id",BankAccount.CreditorId).
+         lhXML:WRITE-DATA-ELEMENT("Id",BankAccount.PresenterId).
         lhXML:END-ELEMENT("Othr").
        lhXML:END-ELEMENT("OrgId").
       lhXML:END-ELEMENT("Id").
