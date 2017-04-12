@@ -2,19 +2,19 @@
     File        : MManHandler
     Purpose     : 
     Syntax      : 
-    Description : 
-    Author(s)   : tlamminmaki
-    Created     : Wed Oct 29 15:19:10 EET 2014
-    Notes       : 
+    Description : Go through MMLog records and send them to MQ using
+                  Stomp protocol. Will delete the MMLog record
+                  after is has successfully send.
   ----------------------------------------------------------------------*/
 USING Progress.Lang.*.
 USING PROGRESS.Json.ObjectModel.*.
-USING QStomp.*.
+USING qstomp.*.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Mm.MManHandler FINAL:
 
+   DEFINE PRIVATE VARIABLE objOMParser     AS CLASS ObjectModelParser   NO-UNDO.
    DEFINE PRIVATE VARIABLE objProducer     AS CLASS Producer            NO-UNDO.
    DEFINE PRIVATE VARIABLE lcMMLogTable    AS CHARACTER INITIAL "MMLog" NO-UNDO.
    DEFINE PRIVATE VARIABLE lhMMLogTable    AS HANDLE                    NO-UNDO.
@@ -51,7 +51,6 @@ CLASS Mm.MManHandler FINAL:
          lcQueue    = Syst.Parameters:getc("MMan.Queue.Queue", "MMan.Interface")
          .
          
-      DEFINE VARIABLE objOMParser AS CLASS ObjectModelParser NO-UNDO.
       objOMParser = NEW ObjectModelParser().
 
       CREATE BUFFER lhMMLogTable FOR TABLE lcMMLogTable.
@@ -142,9 +141,10 @@ CLASS Mm.MManHandler FINAL:
          IF lcElemName = ""
          THEN NEXT.
          
-         IF lcElemName = "params"
+         IF lcElemName NE "params"
+         THEN objJsonObject:Add(mConvertName(lhField:NAME), lhField:BUFFER-VALUE()).
+         ELSE IF lhField:BUFFER-VALUE() NE ""
          THEN objJOParam = CAST(objOMParser:Parse(lhField:BUFFER-VALUE()),JsonObject).
-         ELSE objJsonObject:Add(mConvertName(lhField:NAME), lhField:BUFFER-VALUE()).
 
       END.
 
@@ -189,7 +189,7 @@ CLASS Mm.MManHandler FINAL:
             IF lhMMLogTable:LOCKED
             THEN NEXT.
 
-            objProducer:mSend(mGiveJsonData(lhMMLogTable)).
+            objProducer:mSend(mGiveJsonData(lhMMLogTable),lhMMLogTable::SchedulingPriority).
 
             lhMMLogTable:BUFFER-DELETE().
 
