@@ -29,6 +29,7 @@ gcBrand = "1".
 
 DEF VAR liRequest              AS INT  NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
+DEF VAR lcAllowedBONOContracts AS CHAR NO-UNDO.
 DEF VAR lcMemoText             AS CHAR NO-UNDO.
 DEF VAR lcMemoTitle            AS CHAR NO-UNDO.
 
@@ -47,14 +48,12 @@ FUNCTION fSetMDUB RETURNS INT
 
    DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
    DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
-   DEF VAR lcAllowedBONOContracts AS CHAR NO-UNDO.
    DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
    DEF VAR ldeBundleFee           AS DEC  NO-UNDO.
 
    ASSIGN lcPostpaidVoiceTariffs = fCParamC("POSTPAID_VOICE_TARIFFS")
           lcPrepaidVoiceTariffs  = fCParamC("PREPAID_VOICE_TARIFFS")
-          lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS")
           lcOnlyVoiceContracts   = fCParamC("ONLY_VOICE_CONTRACTS")
           lcDataBundleCLITypes   = fCParamC("DATA_BUNDLE_BASED_CLITYPES")
           ldeActStamp            = fMakeTS().
@@ -100,26 +99,24 @@ FUNCTION fSetMDUB RETURNS INT
          IF LOOKUP(pcBundleId, "DATA200_UPSELL,DSS200_UPSELL") > 0 THEN 
             ocError = pcBundleId + " activation is not allowed".         
          /* Subscription level */
-         ELSE IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO:
-            IF LOOKUP(pcBundleId,lcAllowedBONOContracts) = 0 OR
-               NOT fAllowMDUBActivation() THEN
+         ELSE IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN 
+         DO:
+            IF LOOKUP(pcBundleId,lcAllowedBONOContracts) = 0 OR NOT fAllowMDUBActivation() THEN
                ocError = pcBundleId + " activation is not allowed".
-            ELSE liReturnValue = 3. /* Ongoing Activation */
+            ELSE 
+               liReturnValue = 3. /* Ongoing Activation */
          END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
          ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
             IF NOT fIsBonoVoIPAllowed(Mobsub.MsSeq, ldeActStamp) THEN DO:
                ocError = pcBundleId + " activation is not allowed".
                RETURN 0.
             END.
-
             liReturnValue = 3. /* Ongoing Activation */
          END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
          ELSE IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId = {&TARJ_UPSELL} THEN .
          /* Customer level - As of now DSS only */
          ELSE DO:
-            IF pcBundleId = {&DSS} OR
-               fIsDSSActive(Mobsub.Custnum,ldeActStamp) OR
-               fOngoingDSSAct(Mobsub.Custnum) THEN
+            IF pcBundleId = {&DSS} OR fIsDSSActive(Mobsub.Custnum,ldeActStamp) OR fOngoingDSSAct(Mobsub.Custnum) THEN
                ocError = pcBundleId + " activation is not allowed".
             ELSE liReturnValue = 3. /* Ongoing Activation */
          END. /* ELSE DO: */
@@ -289,8 +286,9 @@ FIND DayCampaign NO-LOCK WHERE
 IF NOT AVAIL DayCampaign THEN
    RETURN appl_err(SUBST("Invalid Bundle Id: &1", pcBundleId)).
 
-ASSIGN lcMemoTitle = DayCampaign.DcName
-       lcBONOContracts = fCParamC("BONO_CONTRACTS").
+ASSIGN lcMemoTitle            = DayCampaign.DcName
+       lcBONOContracts        = fCParamC("BONO_CONTRACTS")
+       lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS").
 
 IF vcTenant = {&TENANT_MASMOVIL} THEN 
 DO:
@@ -307,8 +305,10 @@ DO:
             ASSIGN lcVoiceBundles = lcVoiceBundles + (IF lcVoiceBundles <> "" THEN "," ELSE "") + bf_DayCampaign.DCEvent.
     END.
     ASSIGN 
-        lcBONOContracts = lcBONOContracts + (IF lcBONOContracts <> "" THEN "," ELSE "") + lcDataBundles.
-        lcBONOContracts = lcBONOContracts + (IF lcBONOContracts <> "" THEN "," ELSE "") + lcVoiceBundles.
+        lcBONOContracts        = lcBONOContracts        + (IF lcBONOContracts        <> "" THEN "," ELSE "") + lcDataBundles
+        lcBONOContracts        = lcBONOContracts        + (IF lcBONOContracts        <> "" THEN "," ELSE "") + lcVoiceBundles
+        lcAllowedBONOContracts = lcAllowedBONOContracts + (IF lcAllowedBONOContracts <> "" THEN "," ELSE "") + lcDataBundles
+        lcAllowedBONOContracts = lcAllowedBONOContracts + (IF lcAllowedBONOContracts <> "" THEN "," ELSE "") + lcDataBundles.
 END.
 
 IF LOOKUP(pcBundleId,lcBONOContracts + ",HSPA_ROAM_EU,BONO_VOIP") > 0 OR
