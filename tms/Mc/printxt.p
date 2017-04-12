@@ -1085,6 +1085,29 @@ IF NOT llErrors THEN DO:
          lcText = REPLACE(lcText, "#CUSTCOMPANY", lcList).
       END.
 
+      /* ADDLINE-144 Additional Line Renewal Confirmation*/
+      IF INDEX(lcText,"#ADDLINEDISCOUNT") > 0 THEN DO:
+         lcList = "".
+         IF AVAIL Order THEN DO:
+            FOR FIRST OrderAction NO-LOCK WHERE
+                      OrderAction.Brand    = gcBrand       AND
+                      OrderAction.OrderID  = Order.OrderID AND
+                      OrderAction.ItemType = "AddLineDiscount",
+                FIRST DiscountPlan NO-LOCK WHERE
+                      DiscountPlan.DPRuleID = OrderAction.ItemKey,
+                FIRST DPRate NO-LOCK WHERE
+                      DPRate.DPID       = DiscountPlan.DPID AND
+                      DPRate.ValidFrom <= TODAY             AND
+                      DPRate.ValidTo   >= TODAY:
+               IF liLanguage = 5 THEN
+                  lcList = TRIM(STRING(DPRate.DiscValue,"99")) + "% DTO. Forever".
+               ELSE
+                  lcList = TRIM(STRING(DPRate.DiscValue,"99")) + "% DTO. para siempre".
+            END.
+         END.
+         lcText = REPLACE(lcText, "#ADDLINEDISCOUNT", lcList).
+      END.
+
       IF INDEX(lcText,"#OFEES") > 0 THEN DO:
 
          ASSIGN
