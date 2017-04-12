@@ -469,7 +469,7 @@ PROCEDURE pContractActivation:
                END.
             END.
          END.
-         IF lcDCEvent = "DATA7" AND ServiceLimit.GroupCode = "DATA6" AND
+         ELSE IF lcDCEvent = "DATA7" AND ServiceLimit.GroupCode = "DATA6" AND
             NOT CAN-FIND(FIRST bBonoRequest NO-LOCK WHERE
                                bBonoRequest.msseq = MsOwner.MsSeq AND
                                bBonoRequest.reqtype = 9 AND
