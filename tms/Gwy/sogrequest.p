@@ -186,7 +186,9 @@ FUNCTION fCheckStagingMSISDN RETURNS LOGICAL
    liCLi = INT(icCLI) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN NEXT.
    IF NOT ((liCLi >= 633993700 AND liCLi <= 633993750) OR
-           (liCLi >= 633993500 AND liCLi <= 633993620)) THEN RETURN FALSE.
+           (liCLi >= 633993500 AND liCLi <= 633993620) OR
+           (liCli >= 722600000 AND liCli <= 722600009)) THEN RETURN FALSE.
+ 
    
    /* Check DSS command MSISDNS list */
    IF index(iccommline,"DSS-ACCOUNT") > 0 and
@@ -200,7 +202,8 @@ FUNCTION fCheckStagingMSISDN RETURNS LOGICAL
          liCLi = INT(lcCLi) NO-ERROR.
          IF ERROR-STATUS:ERROR THEN RETURN FALSE.
          IF NOT ((liCLi >= 633993700 AND liCLi <= 633993750) OR
-                 (liCLi >= 633993500 AND liCLi <= 633993620))
+                 (liCLi >= 633993500 AND liCLi <= 633993620) OR
+                 (liCli >= 722600000 AND liCli <= 722600009))
          THEN RETURN FALSE.
       END.
    END.
