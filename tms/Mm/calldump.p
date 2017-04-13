@@ -22,6 +22,7 @@ gcBrand = "1".
 {Func/excel.i}
 {Func/coinv.i}
 {Func/cparam2.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE  iiper AS INTEGER NO-UNDO INIT 0.
 

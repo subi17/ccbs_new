@@ -16,6 +16,7 @@
 {Func/ftransdir.i}
 {Syst/funcrunprocess_update.i}
 {Inv/old_unbilled_events.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT  PARAMETER iiFRProcessID      AS INT  NO-UNDO.
 DEFINE INPUT  PARAMETER iiUpdateInterval   AS INT  NO-UNDO.

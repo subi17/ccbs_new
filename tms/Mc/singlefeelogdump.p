@@ -24,6 +24,7 @@ At TRACK side data between eventlog dump and singlefee dump is merged to be used
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Syst/dumpfile_run.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT PARAMETER icFile        AS CHAR NO-UNDO.

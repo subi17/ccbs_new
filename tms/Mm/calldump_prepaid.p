@@ -11,6 +11,7 @@ gcBrand = "1".
 {Func/excel.i}
 {Func/coinv.i}
 {Func/cparam2.i}
+{Func/multitenantfunc.i}
 
 /*DEFINE INPUT PARAMETER  iiper AS INTEGER NO-UNDO.*/
 DEFINE VARIABLE  iiper AS INTEGER NO-UNDO INIT 0.
