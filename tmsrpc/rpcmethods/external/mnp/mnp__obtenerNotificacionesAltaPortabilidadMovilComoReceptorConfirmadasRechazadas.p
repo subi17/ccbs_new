@@ -41,6 +41,7 @@
 {mnp_obtener.i}
 {Func/orderfunc.i}
 {Func/ordercancel.i}
+{Func/fixedlinefunc.i}
 
 DEF VAR lcSMS AS CHAR NO-UNDO. 
 
@@ -219,10 +220,12 @@ FOR EACH ttInput NO-LOCK:
       MNPProcess.UpdateTS = {&nowts}
       MNPProcess.MNPUpdateTS = ttInput.statusTS.
       
-   /* YOT-924 - AREC IDENT automatic cancellation */
+   /* YOT-924 - AREC IDENT automatic cancellation 
+      YDR-2506 - no automatic cancellation for convergent tarifs */
    IF Order.StatusCode = "73" AND
       LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
-      ttInput.StatusReason EQ "RECH_IDENT" THEN DO:
+      ttInput.StatusReason EQ "RECH_IDENT" AND
+      NOT fIsConvergenceTariff(Order.CliType) THEN DO:
       RUN Mc/closeorder.p(Order.OrderId,TRUE).
       IF RETURN-VALUE EQ "" THEN fReleaseIMEI(Order.Orderid).
    END.   
