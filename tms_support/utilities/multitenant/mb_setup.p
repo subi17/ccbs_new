@@ -339,6 +339,49 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.UseIndex        = "".
 END.
 
+FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "ClitypeDump" NO-ERROR.
+IF NOT AVAIL DumpFile THEN DO:
+   FIND LAST DumpFile USE-INDEX DumpID NO-LOCK NO-ERROR.
+   IF AVAILABLE DumpFile
+   THEN liid = DumpFile.DumpID + 1.
+   ELSE liid = 1.
+   FIND FIRST DumpFile WHERE Dumpfile.dumpid EQ 503 NO-ERROR.
+   IF NOT AVAIL DumpFile THEN liid = 503. /* same as in prod */
+   CREATE DumpFile .
+   ASSIGN
+      dumpfile.Active          = TRUE
+      dumpfile.AllowReplica    = NO
+      dumpfile.AveDurFull      = 1
+      dumpfile.AveDurMod       = 1
+      dumpfile.BatchID         = 1
+      dumpfile.Brand           = "1"
+      dumpfile.ConfigParam     = ""
+      dumpfile.DecimalPoint    = "."
+      dumpfile.Description     = "Tariff dump for Track"
+      dumpfile.DumpCharSet     = ""
+      dumpfile.DumpDelimiter   = "|"
+      dumpfile.DumpFormat      = "ASCII"
+      dumpfile.DumpID          = liid
+      dumpfile.DumpLineFeed    = ""
+      dumpfile.DumpName        = "CliTypeDump"
+      dumpfile.EmptyFile       = NO
+      dumpfile.EventLogFields  = ""
+      dumpfile.FileCategory    = "TRACK"
+      dumpfile.FileName        = "#TENANT_tariff_dump_#DATE_#TIME.csv"
+      dumpfile.FullCollModule  = ""
+      dumpfile.LinkKey         = ""
+      dumpfile.LogFile         = ""
+      dumpfile.LogicModule     = ""
+      dumpfile.MainTable       = "CliType"
+      dumpfile.ModCollModule   = ""
+      dumpfile.ModFromEventLog = NO
+      dumpfile.ModFromField    = ""
+      dumpfile.QueryClause     = ""
+      dumpfile.SideTables      = ""
+      dumpfile.SpoolDir        = "/mnt/qss/spool"
+      dumpfile.TransDir        = "/mnt/qss/subscription_types"
+      dumpfile.UseIndex        = "".
+END.
 
 INPUT STREAM sin FROM VALUE("../tms_support/utilities/multitenant/dumpfiles_phase1.txt").
 

@@ -5,6 +5,7 @@ BicMissingCheck
 BillingPermEvents
 BillingPermTXT
 ChargeCompDump
+ClitypeDump
 CreditNotesTxt
 CustContact
 CustDumpTXT
