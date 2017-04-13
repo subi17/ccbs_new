@@ -117,7 +117,7 @@ IF lcErr NE "" THEN DO:
 END.
 ELSE DO:
    /*MQ ready, it is possible to handle data*/
-   INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcInDir ).
+   INPUT STREAM sFile THROUGH VALUE("ls -1tr MIGRATION_RESPONSE*" + lcInDir ).
    REPEAT:
       IMPORT STREAM sFile UNFORMATTED lcFileName.
       lcInputFile = lcInDir + lcFileName.

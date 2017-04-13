@@ -238,7 +238,10 @@ FUNCTION fChkRequest RETURNS CHARACTER
             RETURN "".
          END.
       END.
-      
+      /*TODO MMM Migration: : if in migration should be support for
+        multiple upsells here we must return "" even there are ongoing 
+        requests. Now implementation is not done because migration
+        project is on hold. */  
       RETURN (IF LOOKUP(STRING(iiReqType),{&REQ_CUST_REQUESTS}) > 0
               THEN "Customer" 
               ELSE "Subscription") + " already has an active request".
