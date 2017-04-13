@@ -1194,12 +1194,12 @@ PROCEDURE pCloseContracts:
    DEF VAR lcOnlyVoiceContracts      AS CHAR    NO-UNDO.
    DEF VAR lcBONOContracts           AS CHAR    NO-UNDO.
    DEF VAR lcAllVoIPNativeBundles    AS CHAR    NO-UNDO.
-   DEF VAR llCreateFees       AS LOG  NO-UNDO.
+   DEF VAR llCreateFees                         AS LOG NO-UNDO.
+   DEF VAR llIsSTCBetweenFixedOnlyAndConvergent AS LOG NO-UNDO.
 
    EMPTY TEMP-TABLE ttContract.
 
-   FIND FIRST bOrigRequest WHERE
-              bOrigRequest.MsRequest = iiMainRequest NO-LOCK NO-ERROR.
+   FIND FIRST bOrigRequest WHERE bOrigRequest.MsRequest = iiMainRequest NO-LOCK NO-ERROR.
 
    /* end old bundles to the end of previous month */
    IF DAY(idaActDate) = 1 AND llOldPayType = FALSE THEN
@@ -1213,11 +1213,15 @@ PROCEDURE pCloseContracts:
    IF icNewType = "CONTF" THEN
       lcOnlyVoiceContracts = fCParamC("ONLY_VOICE_CONTRACTS").
 
-   IF NOT (CLIType.PayType  = {&CLITYPE_PAYTYPE_PREPAID} AND
-           bOldType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN
-      llCloseRVTermFee = FALSE.
-   ELSE liPeriod = YEAR(idaActDate - 1) * 100 + MONTH(idaActDate - 1).
-      
+   IF NOT (CLIType.PayType  = {&CLITYPE_PAYTYPE_PREPAID} AND bOldType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN
+       llCloseRVTermFee = FALSE.
+   ELSE 
+       liPeriod = YEAR(idaActDate - 1) * 100 + MONTH(idaActDate - 1).
+   
+   IF ((CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  AND bOldType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) OR 
+       (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND bOldType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN
+       ASSIGN llIsSTCBetweenFixedOnlyAndConvergent = TRUE.
+
    FOR EACH DCCLI NO-LOCK WHERE
             DCCLI.MsSeq   = iiMsSeq  AND
             DCCLI.ValidTo >= idaActDate,
@@ -1255,7 +1259,7 @@ PROCEDURE pCloseContracts:
    lcContractList = lcContractList + 
                     (IF lcContractList > "" THEN "," ELSE "") + 
                     fGetActiveBundle(iiMsSeq,ldeActStamp).
-  
+          
    /* this rule is 'allowed' type, so result should be 1 (if no rule for
       contract id found then allowed) */
    DO liCount = 1 TO NUM-ENTRIES(lcContractList):
@@ -1279,24 +1283,25 @@ PROCEDURE pCloseContracts:
                         "PerContract;SubsTypeTo",
                          lcContract + ";" + icNewType,
                         OUTPUT lcReqChar) NE 1 AND
-          ENTRY(1,lcReqChar,";") NE "?") OR
-         (LOOKUP(lcContract,lcBonoContracts) > 0 AND
-          LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN DO:
-
+          ENTRY(1,lcReqChar,";") NE "?") 
+         OR
+         /* Since, convergent base bundles CONTDSL/CONTFH50/CONTFH300 are reused in fixed only convergent also with different prices.
+            Above matrix condition will fail and convergent base bundles are not terminated for prices to change. So, below is introduced. */
+         (llIsSTCBetweenFixedOnlyAndConvergent AND LOOKUP(lcContract,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) 
+         OR
+         (LOOKUP(lcContract,lcBonoContracts) > 0 AND LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN 
+      DO:
          /* YDR-2038 (stc/btc to prepaid)
             ReqIParam5
             (0=no extend_term_contract
              1=extend_term_contract
              2=exclude_term_penalty)
           */
-         IF AVAILABLE(bOrigRequest) AND
-            bOrigRequest.ReqIParam5 EQ 2 AND
-            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
-                           DayCampaign.Brand   EQ gcBrand AND
-                           DayCampaign.DCEvent EQ lcContract AND
-                           DayCampaign.DCType EQ {&DCTYPE_DISCOUNT})
-            THEN llCreateFees = FALSE.
-         ELSE llCreateFees = TRUE. 
+         IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqIParam5 EQ 2 AND
+            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand EQ gcBrand AND DayCampaign.DCEvent EQ lcContract AND DayCampaign.DCType EQ {&DCTYPE_DISCOUNT}) THEN 
+             llCreateFees = FALSE.
+         ELSE 
+             llCreateFees = TRUE. 
 
          /* terminate periodical contract */
          liTerminate = fPCActionRequest(iiMsSeq,
@@ -1308,13 +1313,9 @@ PROCEDURE pCloseContracts:
                                         "",
                                         iiMainRequest,
                                         TRUE,   /* mandatory subreq. */
-                                        (IF lcContract EQ "PMDUB" THEN
-                                         "PMDUBDeActSTC" ELSE ""), 
-                                           /* SMS for PMDUB STC Deactivation */
+                                        (IF lcContract EQ "PMDUB" THEN "PMDUBDeActSTC" ELSE ""), /* SMS for PMDUB STC Deactivation */
                                         0,
-                                        (IF AVAIL DayCampaign AND
-                                                  DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} 
-                                        THEN liContractID ELSE 0),
+                                        (IF AVAIL DayCampaign AND DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN liContractID ELSE 0),
                                         OUTPUT lcError).
          IF liTerminate = 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,

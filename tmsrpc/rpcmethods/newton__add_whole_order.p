@@ -399,7 +399,6 @@ DEF VAR llROIClose AS LOG NO-UNDO.
 DEF VAR lcPayment                        AS CHAR    NO-UNDO.
 DEF VAR pcPaypalPayerid                  AS CHAR    NO-UNDO.
 DEF VAR liLanguage                       AS INTEGER NO-UNDO.
-DEF VAR lcFixedOnlyConvergentCliTypeList AS CHAR    NO-UNDO.
 /* q25_data */
 DEF VAR llq25_extension   AS LOGICAL NO-UNDO. /* Quota 25 extension */
 DEF VAR ldeq25_discount   AS DECIMAL NO-UNDO. /* Discount amount over Quota 25 */
@@ -526,9 +525,7 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    IF LOOKUP('dss', lcOrderStruct) GT 0 THEN
       plDSSActivate = get_bool(pcOrderStruct,"dss").
 
-   IF LOOKUP(pcSubType,lcFixedOnlyConvergentCliTypeList) > 0 THEN 
-      lcdelivery_channel = "Paper".
-   ELSE IF LOOKUP('delivery_channel', lcOrderStruct) > 0 THEN
+   IF LOOKUP('delivery_channel', lcOrderStruct) > 0 THEN
       lcdelivery_channel = get_string(pcOrderStruct,"delivery_channel").
     
    IF LOOKUP('bono_voip', lcOrderStruct) GT 0 THEN
@@ -1405,9 +1402,16 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* YPB-514 */
 lcOrderStruct = validate_request(pcOrderStruct, gcOrderStructFields).
 IF lcOrderStruct EQ ? THEN RETURN.
-ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
 fGetOrderFields().
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+FIND CLIType NO-LOCK WHERE CLIType.Brand = gcBrand AND CLIType.CliType = pcSubType NO-ERROR.
+IF NOT AVAIL CLIType THEN
+   RETURN appl_err(SUBST("Unknown CLIType &1", pcSubType)).   
+
+/* Fixed only convergent subscription types */
+IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN
+   ASSIGN lcdelivery_channel = "Paper".   
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
@@ -1473,13 +1477,6 @@ IF pcDataBundleType > "" THEN DO:
       (pcSubType,
        pcDataBundleType,
        OUTPUT lcError) THEN RETURN appl_err(lcError).
-END.
-
-FIND CLIType NO-LOCK WHERE
-     CLIType.Brand = gcBrand AND
-     CLIType.CliType = pcSubType NO-ERROR.
-IF NOT AVAIL CLIType THEN DO:
-   RETURN appl_err(SUBST("Unknown CLIType &1", pcSubType)).   
 END.
 
 /* YBP-518 */
