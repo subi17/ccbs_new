@@ -105,9 +105,7 @@
             
             /* Move Mobile only tariff order to 76 queue, if customer 
                has ongoing convergent order */
-            IF (Order.OrderType EQ {&ORDER_TYPE_NEW}  OR
-                Order.OrderType EQ {&ORDER_TYPE_MNP}) AND 
-               CAN-FIND(FIRST CLIType NO-LOCK WHERE 
+            IF CAN-FIND(FIRST CLIType NO-LOCK WHERE 
                               CLIType.Brand      = gcBrand       AND 
                               CLIType.CLIType    = Order.CLIType AND 
                               CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
@@ -115,7 +113,7 @@
                FIND FIRST OrderCustomer NO-LOCK WHERE
                           OrderCustomer.Brand   = gcBrand       AND
                           OrderCustomer.OrderId = Order.OrderId AND
-                          OrderCustomer.RowType = 1             NO-ERROR.
+                          OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
                
                IF NOT fCheckExistingConvergent(OrderCustomer.CustIDType,
                                                OrderCustomer.CustID) THEN DO:

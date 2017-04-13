@@ -1084,30 +1084,7 @@ IF NOT llErrors THEN DO:
          END.
          lcText = REPLACE(lcText, "#CUSTCOMPANY", lcList).
       END.
-
-      /* ADDLINE-144 Additional Line Renewal Confirmation*/
-      IF INDEX(lcText,"#ADDLINEDISCOUNT") > 0 THEN DO:
-         lcList = "".
-         IF AVAIL Order THEN DO:
-            FOR FIRST OrderAction NO-LOCK WHERE
-                      OrderAction.Brand    = gcBrand       AND
-                      OrderAction.OrderID  = Order.OrderID AND
-                      OrderAction.ItemType = "AddLineDiscount",
-                FIRST DiscountPlan NO-LOCK WHERE
-                      DiscountPlan.DPRuleID = OrderAction.ItemKey,
-                FIRST DPRate NO-LOCK WHERE
-                      DPRate.DPID       = DiscountPlan.DPID AND
-                      DPRate.ValidFrom <= TODAY             AND
-                      DPRate.ValidTo   >= TODAY:
-               IF liLanguage = 5 THEN
-                  lcList = TRIM(STRING(DPRate.DiscValue,"99")) + "% DTO. Forever".
-               ELSE
-                  lcList = TRIM(STRING(DPRate.DiscValue,"99")) + "% DTO. para siempre".
-            END.
-         END.
-         lcText = REPLACE(lcText, "#ADDLINEDISCOUNT", lcList).
-      END.
-
+      
       IF INDEX(lcText,"#OFEES") > 0 THEN DO:
 
          ASSIGN
@@ -1921,22 +1898,20 @@ FOR FIRST CLIType NO-LOCK WHERE
 
    DEF VAR ldeCallPrice AS DEC NO-UNDO.
    DEF VAR ldeMFWithTax AS DEC NO-UNDO.
+   DEF VAR ldeMFNoDisc  AS DEC NO-UNDO.
 
    DEFINE VARIABLE ldtOrderDate AS DATE NO-UNDO.
    DEFINE VARIABLE ldiOrderDate AS INT  NO-UNDO.
    DEFINE VARIABLE llgOrderDate AS LOG  NO-UNDO.
    DEFINE VARIABLE lcMFText     AS CHAR No-UNDO.
+   DEFINE VARIABLE llAddLineDiscount AS LOG NO-UNDO.
+   DEFINE VARIABLE ldDiscValue  AS DEC  NO-UNDO.
    
    llgOrderDate = fSplitTS(Order.CrStamp,
                            OUTPUT ldtOrderDate,
                            OUTPUT ldiOrderDate).
 
-   IF CLIType.CLIType EQ "TARJ7" THEN 
-      ldeMFWithTax = (1 + ldeTaxPerc / 100) * 6.61.  /* 8.00 IVA incl */
-   ELSE IF CLIType.CLIType EQ "TARJ9" THEN
-      ldeMFWithTax = (1 + ldeTaxPerc / 100) * 8.265. /* 10.00 IVA incl */
-   ELSE IF CLiType.CompareFee > 0 THEN
-      ldeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CompareFee.
+   ldeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CompareFee.
 
     CASE CLIType.CLIType:
       WHEN "CONT9" OR WHEN "CONT10" OR WHEN "CONT15" THEN lcList = "0 cent/min".
@@ -1946,45 +1921,80 @@ FOR FIRST CLIType NO-LOCK WHERE
       OTHERWISE lcList = "".
     END.
 
-    IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 THEN 
-       FOR FIRST OfferItem WHERE
-                 OfferItem.Brand       = gcBrand             AND
-                 OfferItem.Offer       = Order.Offer         AND
-                 OfferItem.ItemType    = "discountplan"      AND
-                 LOOKUP(OfferItem.ItemKey,
-                 "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC") > 0 AND
-                 OfferItem.BeginStamp <= Order.CrStamp       AND
-                 OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
-          FIRST DiscountPlan WHERE 
-                DiscountPlan.Brand    = gcBrand AND
-                DiscountPlan.DPRuleId = OfferItem.ItemKey NO-LOCK,
-          FIRST DPRate WHERE 
-                DPRate.DPId = DiscountPlan.DPId AND
-                DPRate.ValidFrom <= ldtOrderDate AND
-                DPRate.ValidTo   >= ldtOrderDate NO-LOCK:
+    IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 THEN DO:
+       /* ADDLINE-144 Additional Line Renewal Email Changes */
+       llAddLineDiscount = FALSE.
 
-          lcMFText = STRING(DiscountPlan.ValidPeriods)                    + 
-                    (IF liLanguage EQ 5 THEN " months. " ELSE " meses. ") + 
-                    (IF liLanguage EQ 5 THEN "After " ELSE "Después ")    + 
-                    TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99"))             + " E/" +
-                    (IF liLanguage EQ 5 THEN "month" ELSE "mes")          + 
-                    (IF liLanguage EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
-           
-          IF DiscountPlan.DPUnit EQ "Percentage" THEN 
-             ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
-          ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN    
-              ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
-       END. 
-    
-    IF ldeMFWithTax > 0 THEN
-      lcList = lcList + (IF lcList > "" THEN ", " ELSE "") +
-      TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " E/" +
-      (IF liLanguage EQ 5 THEN "month" ELSE "mes").
+       /* Additional line discount information in emails */
+       FOR FIRST OrderAction NO-LOCK WHERE
+                 OrderAction.Brand    = gcBrand       AND
+                 OrderAction.OrderID  = Order.OrderID AND
+                 OrderAction.ItemType = "AddLineDiscount":
 
-    IF lcList > "" THEN
-      lcTagCTName = lcTagCTName + ", " + lcList + 
-       (IF liLanguage EQ 5 THEN " VAT. incl"
-        ELSE " imp. incl.").
+          FOR FIRST DiscountPlan NO-LOCK WHERE
+                    DiscountPlan.DPRuleID = OrderAction.ItemKey,
+              FIRST DPRate WHERE
+                    DPRate.DPId       = DiscountPlan.DPId AND
+                    DPRate.ValidFrom <= ldtOrderDate      AND
+                    DPRate.ValidTo   >= ldtOrderDate      NO-LOCK:
+          
+              llAddLineDiscount = TRUE.
+              ldeMFNoDisc       = ldeMFWithTax.
+              ldDiscValue       = DPRate.DiscValue.
+              ldeMFWithTax      = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
+
+          END.
+
+       END. /* ADDITIONAL-LINE */
+
+       IF NOT llAddLineDiscount THEN
+          FOR FIRST OfferItem WHERE
+                    OfferItem.Brand       = gcBrand             AND
+                    OfferItem.Offer       = Order.Offer         AND
+                    OfferItem.ItemType    = "discountplan"      AND
+                    LOOKUP(OfferItem.ItemKey,
+                    "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC") > 0 AND
+                    OfferItem.BeginStamp <= Order.CrStamp       AND
+                    OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
+             FIRST DiscountPlan WHERE 
+                   DiscountPlan.Brand    = gcBrand AND
+                   DiscountPlan.DPRuleId = OfferItem.ItemKey NO-LOCK,
+             FIRST DPRate WHERE 
+                   DPRate.DPId = DiscountPlan.DPId AND
+                   DPRate.ValidFrom <= ldtOrderDate AND
+                   DPRate.ValidTo   >= ldtOrderDate NO-LOCK:
+
+             lcMFText = STRING(DiscountPlan.ValidPeriods)                    + 
+                       (IF liLanguage EQ 5 THEN " months. " ELSE " meses. ") + 
+                       (IF liLanguage EQ 5 THEN "After " ELSE "Después ")    + 
+                       TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99"))             + " E/" +
+                       (IF liLanguage EQ 5 THEN "month" ELSE "mes")          + 
+                       (IF liLanguage EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
+              
+             IF DiscountPlan.DPUnit EQ "Percentage" THEN 
+                ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
+             ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN    
+                 ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
+          END.
+    END.
+
+    IF ldeMFWithTax > 0 THEN DO:
+       IF llAddLineDiscount THEN
+          lcList = lcList + (IF lcList > "" THEN "," ELSE "") + " " + "\strike" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " E/\strike0" + " " +
+                   TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " E/" +
+                   (IF liLanguage EQ 5 THEN "month" ELSE "mes") + " IVA incl.\line" + TRIM(STRING(ldDiscValue,"99"))+ "%" + (IF liLanguage EQ 5 THEN " DTO. Forever" ELSE " DTO. para siempre") + "\line".
+       ELSE
+          lcList = lcList + (IF lcList > "" THEN ", " ELSE "") +
+                   TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " E/" +
+                   (IF liLanguage EQ 5 THEN "month" ELSE "mes").
+    END.
+
+    IF lcList > "" THEN DO:
+      IF NOT llAddLineDiscount THEN
+         lcTagCTName = lcTagCTName + ", " + lcList + 
+                       (IF liLanguage EQ 5 THEN " VAT. incl"
+                        ELSE " imp. incl.").
+    END.
 
      IF lcMFText NE ""  THEN 
         lcTagCTName = lcTagCTName + " " + lcMFText.

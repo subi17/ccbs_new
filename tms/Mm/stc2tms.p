@@ -454,10 +454,10 @@ PROCEDURE pFeesAndServices:
    END.
   
    /* ADDLINE-20 Additional Line Discounts 
-      CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type
-      CLOSE : If New CLIType Not Matches, Then Close the Discount */
+      CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type */
    IF LOOKUP(CLIType.CliType , {&ADDLINE_CLITYPES}) > 0 AND
-      LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+     (LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}) > 0 OR
+      (AVAIL Order AND Order.OrderType = {&ORDER_TYPE_RENEWAL})) THEN DO:
       IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
          fCreateAddLineDiscount(MsRequest.MsSeq,
                                 CLIType.CLIType,
