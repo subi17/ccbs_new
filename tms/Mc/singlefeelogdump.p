@@ -51,7 +51,8 @@ OUTPUT STREAM sout TO VALUE(icFile).
 DEF STREAM sinfee.
 
 ASSIGN
-   lcSinFeeFile = "singlefee_#MODE_#DATE_#TIME.txt"
+   lcSinFeeFile = CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                  "_singlefee_#MODE_#DATE_#TIME.txt"
    lcSinFeeFile = REPLACE(lcSinFeeFile,"#DATE",STRING(YEAR(TODAY),"9999") +
                                                STRING(MONTH(TODAY),"99") +
                                                STRING(DAY(TODAY),"99"))

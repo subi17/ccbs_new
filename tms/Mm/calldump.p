@@ -74,7 +74,8 @@ assign
    lcOdir     =  fCparam("dumpoutgoing","calldump.p")
    lcSdir     =  fCParam("dumpspool","calldump.p")
    ldate1     = idaDate
-   filename   = "calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
+   filename   = CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                "_calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
                 REPLACE(STRING(TIME,"hh:mm:ss"),":","") + ".dump"
    ldate1     = idaDate - 1
    ldate2     = ldate1

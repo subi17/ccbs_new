@@ -41,7 +41,8 @@ ASSIGN
    lcOdir     =  fCparamC("PentahoErrorCalls")
    lcSdir     =  fCParamC("PentahoSpool")
    ldate1     = idaDate
-   lcFileName   = "error_calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
+   lcFileName   = CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))))
+                  "_error_calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
                 REPLACE(STRING(TIME,"hh:mm:ss"),":","") + ".dump"
    ldate1     = idaDate - 1
    ldate2     = ldate1
