@@ -322,19 +322,22 @@ PROCEDURE pContractActivation:
    DEF VAR lcBundleId        AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
    DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
-   DEF VAR lcBONOContracts   AS CHAR NO-UNDO.
-   DEF VAR ldtPrepActDate    AS DATE NO-UNDO.
-   DEF VAR liPrepActTime     AS INT  NO-UNDO.
-   DEF VAR liRequest         AS INT  NO-UNDO.
-   DEF VAR liConCount        AS INT  NO-UNDO.
-   DEF VAR ldeFeeAmount AS DEC NO-UNDO INIT ?.
-   DEF VAR ldeResidualFeeDisc AS DEC NO-UNDO. 
-   DEF VAR ldaResidualFee AS DATE NO-UNDO.
-   DEF VAR llQ25CreditNote AS LOG NO-UNDO. 
-   DEF VAR lcSubInvNums    AS CHAR NO-UNDO.
-   DEF VAR lcInvRowDetails AS CHAR NO-UNDO.
-   DEF VAR ldeTotalRowAmt  AS DEC NO-UNDO.
-                    
+   DEF VAR lcBONOContracts            AS CHAR NO-UNDO.
+   DEF VAR ldtPrepActDate             AS DATE NO-UNDO.
+   DEF VAR liPrepActTime              AS INT  NO-UNDO.
+   DEF VAR liRequest                  AS INT  NO-UNDO.
+   DEF VAR liConCount                 AS INT  NO-UNDO.
+   DEF VAR ldeFeeAmount               AS DEC  NO-UNDO INIT ?.
+   DEF VAR ldeResidualFeeDisc         AS DEC  NO-UNDO. 
+   DEF VAR ldaResidualFee             AS DATE NO-UNDO.
+   DEF VAR llQ25CreditNote            AS LOG  NO-UNDO. 
+   DEF VAR lcSubInvNums               AS CHAR NO-UNDO.
+   DEF VAR lcInvRowDetails            AS CHAR NO-UNDO.
+   DEF VAR ldeTotalRowAmt             AS DEC  NO-UNDO.
+   DEF VAR liCount                    AS CHAR NO-UNDO.
+   DEF VAR lcVoiceBundles             AS CHAR NO-UNDO.
+   DEF VAR lcSupplementBundles        AS CHAR NO-UNDO.
+
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
    
@@ -411,25 +414,50 @@ PROCEDURE pContractActivation:
       RETURN.
    END.
 
+   ASSIGN 
+       lcVoiceBundles      = fCParamC("VOICE_BONO_CONTRACTS")
+       lcSupplementBundles = fCParamC("SUPPLEMENTARY_BUNDLES").
+
    IF DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
       lcBONOContracts = fCParamC("BONO_CONTRACTS").
    ELSE IF DayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN
       lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
 
-   /* Make sure subscription should not have active multiple
-      bundles at the same time */
+   /* Make sure subscription should not have active multiple bundles at the same time */
    IF LOOKUP(lcDCEvent,lcBONOContracts) > 0 THEN
-      FOR EACH ServiceLimit NO-LOCK WHERE
-               LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0,
+   DO:
+      FOR EACH ServiceLimit NO-LOCK WHERE LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0,
           FIRST MServiceLimit WHERE
-                MServiceLimit.MsSeq = MsOwner.MsSeq      AND
+                MServiceLimit.MsSeq    = MsOwner.MsSeq         AND
                 MServiceLimit.DialType = ServiceLimit.DialType AND
-                MServiceLimit.SlSeq = ServiceLimit.SlSeq AND
-                MServiceLimit.EndTS >= MsRequest.ActStamp NO-LOCK:
-         fReqStatus(3,"Subscription already has active BONO bundle").
+                MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
+                MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK:
+
+         IF LOOKUP(ServiceLimit.GroupCode, lcSupplementBundles) > 0 THEN 
+            NEXT.
+
+         fReqStatus(3,"Subscription already has active Data bundle").
+
          RETURN.
       END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
+   END.
+   ELSE IF LOOKUP(lcDCEvent,lcVoiceBundles) > 0 THEN 
+   DO:
+      FOR EACH ServiceLimit NO-LOCK WHERE LOOKUP(ServiceLimit.GroupCode,lcVoiceBundles) > 0,
+          FIRST MServiceLimit WHERE
+                MServiceLimit.MsSeq    = MsOwner.MsSeq         AND
+                MServiceLimit.DialType = ServiceLimit.DialType AND
+                MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
+                MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK:
 
+         IF LOOKUP(ServiceLimit.GroupCode, lcSupplementBundles) > 0 THEN 
+            NEXT.
+
+         fReqStatus(3,"Subscription already has active Voice bundle").
+         
+         RETURN.
+      END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
+   END.   
    /* Fetch TARJ7 and TARJ9 contract start date */
    IF lcDCEvent = "TARJ7_UPSELL" THEN
       FOR FIRST ServiceLimit WHERE

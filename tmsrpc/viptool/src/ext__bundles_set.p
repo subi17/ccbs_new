@@ -95,11 +95,11 @@ CASE pcActionValue :
       /* Subscription level */
       IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO:
          /* should exist MDUB valid to the future */   
-         IF (fGetActiveMDUB(INPUT ldNextMonthActStamp) NE pcBundleId) THEN
+         IF (fGetActiveMDUB(INPUT "",INPUT ldNextMonthActStamp) NE pcBundleId) THEN
             RETURN appl_err("Bundle termination is not allowed").
 
          /* should not exist any pending request for MDUB */
-         IF fPendingMDUBTermReq() THEN
+         IF fPendingMDUBTermReq("") THEN
             RETURN appl_err("Bundle already cancelled").
 
          /* Ongoing BTC with upgrade upsell */
@@ -131,12 +131,12 @@ CASE pcActionValue :
       /* Subscription level */
       IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO:
          /* should not exist any MDUB valid to the future */
-         IF fGetActiveMDUB(INPUT ldeActStamp) > "" THEN
+         IF fGetActiveMDUB(INPUT "", INPUT ldeActStamp) > "" THEN
             RETURN appl_err("Bundle already active").
 
          /* should not exist any pending request for MDUB */
          IF LOOKUP(pcBundleId,lcAllowedBONOContracts) = 0 OR
-            fPendingMDUBActReq() THEN
+            fPendingMDUBActReq("") THEN
             RETURN appl_err("Bundle activation is not allowed").
 
          /* check service package definition exist for SHAPER and HSDPA */

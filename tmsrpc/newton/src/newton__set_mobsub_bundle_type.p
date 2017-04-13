@@ -46,6 +46,7 @@ DEF VAR llUpgradeUpsell AS LOG     NO-UNDO INIT FALSE.
 DEF VAR lcUpgradeUpsell AS CHAR    NO-UNDO.
 DEF VAR liUpsellCreated AS INT     NO-UNDO.
 DEF VAR lcBONOContracts AS CHAR    NO-UNDO.
+DEF VAR lcVoiceBundles  AS CHAR    NO-UNDO.
 DEF VAR lcMemoType      AS CHAR    NO-UNDO.
 
 DEF VAR pcContractID     AS CHAR NO-UNDO.
@@ -105,7 +106,9 @@ IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
 IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-lcBONOContracts = fCParamC("BONO_CONTRACTS").
+ASSIGN
+    lcBONOContracts = fCParamC("BONO_CONTRACTS")
+    lcVoiceBundles  = fCParamC("VOICE_BONO_CONTRACTS").
 
 IF NOT fValidateBTC
    (MobSub.MsSeq,
@@ -202,7 +205,7 @@ IF llUpgradeUpsell THEN DO:
    END. /* ELSE DO: */
 END. /* IF ilUpgradeUpsell THEN DO: */
 
-IF LOOKUP(pcNewBundle,lcBONOContracts) > 0 THEN
+IF LOOKUP(pcNewBundle,lcBONOContracts) > 0 OR LOOKUP(pcNewBundle,lcVoiceBundles) > 0 THEN
    lcMemoType  = "Service".
 ELSE
    lcMemoType  = "MobSub".

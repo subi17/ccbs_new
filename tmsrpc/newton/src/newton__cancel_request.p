@@ -49,6 +49,7 @@ DEF VAR ldaSecSIMTermDate  AS DATE  NO-UNDO.
 DEF VAR liSecSIMTermTime   AS INT   NO-UNDO.
 DEF VAR ldeSecSIMTermStamp AS DEC   NO-UNDO.
 DEF VAR lcBONOContracts    AS CHAR  NO-UNDO.
+DEF VAR lcVoiceBundles     AS CHAR  NO-UNDO.
 DEF VAR lcIPLContracts     AS CHAR  NO-UNDO.
 
 DEF BUFFER lbMobSub        FOR Mobsub.
@@ -245,12 +246,16 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
          IF LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
          THEN DO:
             ASSIGN lcIPLContracts  = fCParamC("IPL_CONTRACTS")
-                   lcBONOContracts = fCParamC("BONO_CONTRACTS").
+                   lcBONOContracts = fCParamC("BONO_CONTRACTS")
+                   lcVoiceBundles  = fCParamC("VOICE_BONO_CONTRACTS").
 
             /* BTC with Upgrade Upsell cancellation is not allowed */
-            IF MsRequest.ReqCparam5 > "" THEN DO:
+            IF MsRequest.ReqCparam5 > "" THEN 
+            DO:
                IF LOOKUP(MsRequest.ReqCParam1,lcBONOContracts) > 0 THEN
                   RETURN appl_err("BONO Upgrade BTC Cancellation is not allowed").
+               ELSE IF LOOKUP(MsRequest.ReqCParam1,lcVoiceBundles) > 0 THEN   
+                  RETURN appl_err("Voice Bundle Upgrade BTC Cancellation is not allowed").
                ELSE IF LOOKUP(MsRequest.ReqCParam1,lcIPLContracts) > 0 THEN
                   RETURN appl_err("IPL Upgrade BTC Cancellation is not allowed").
             END. /* IF MsRequest.ReqCparam5 > "" THEN DO: */
@@ -258,11 +263,14 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
             fReqStatus(4,pcMemo).
             liReqCount = liReqCount + 1.
             /* Send a SMS only for Voice BTC Cancellation */
-            IF LOOKUP(MsRequest.ReqCParam1,lcBONOContracts) > 0 AND
-               LOOKUP(MsRequest.ReqCParam2,lcBONOContracts) > 0 THEN
-               RUN pSendSMS(INPUT MsRequest.MsSeq, INPUT MsRequest.MsRequest,
-                            INPUT "BTCDeAct", INPUT 10,
-                            INPUT {&UPSELL_SMS_SENDER}, INPUT "").
+            IF (LOOKUP(MsRequest.ReqCParam1,lcBONOContracts) > 0 AND LOOKUP(MsRequest.ReqCParam2,lcBONOContracts) > 0) OR 
+               (LOOKUP(MsRequest.ReqCParam1,lcVoiceBundles ) > 0 AND LOOKUP(MsRequest.ReqCParam2,lcVoiceBundles ) > 0) THEN
+               RUN pSendSMS(INPUT MsRequest.MsSeq, 
+                            INPUT MsRequest.MsRequest,
+                            INPUT "BTCDeAct", 
+                            INPUT 10,
+                            INPUT {&UPSELL_SMS_SENDER}, 
+                            INPUT "").
 
             /* if additional line to non-additional line pending BTC is cancelled 
                and it doesn't contain any main line then STC request has to be created

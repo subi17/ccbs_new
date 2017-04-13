@@ -19,14 +19,16 @@ DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
 ASSIGN ldaNextMonthActDate = (fLastDayOfMonth(TODAY) + 1)
        ldNextMonthActStamp = fMake2Dt(ldaNextMonthActDate,0).
 
-FUNCTION fGetActiveMDUB RETURNS CHAR (INPUT ideActStamp  AS DEC):
+FUNCTION fGetActiveMDUB RETURNS CHAR 
+   (INPUT icType       AS CHAR,
+    INPUT ideActStamp  AS DEC):
     
    DEF VAR lcBundle         AS CHAR NO-UNDO. 
    DEF VAR i                AS INT  NO-UNDO.
    DEF VAR liNumEntries     AS INT  NO-UNDO.
    DEF VAR lcBONOContracts  AS CHAR NO-UNDO.
 
-   ASSIGN lcBONOContracts = fCParamC("BONO_CONTRACTS")
+   ASSIGN lcBONOContracts = fCParamC(icType + "BONO_CONTRACTS")
           liNumEntries    = NUM-ENTRIES(lcBONOContracts).
 
    IF ideActStamp = 0 OR ideActStamp = ? THEN
@@ -51,17 +53,20 @@ FUNCTION fGetActiveMDUB RETURNS CHAR (INPUT ideActStamp  AS DEC):
           RETURN ServiceLimit.GroupCode.  
       END.
    END.
+
    RETURN "".
+
 END FUNCTION.
 
-FUNCTION fPendingMDUBActReq RETURNS LOGICAL :
+FUNCTION fPendingMDUBActReq RETURNS LOGICAL 
+   (INPUT icType AS CHAR):
    
    DEF VAR lcBundle         AS CHAR NO-UNDO. 
    DEF VAR i                AS INT  NO-UNDO.
    DEF VAR liNumEntries     AS INT  NO-UNDO.
    DEF VAR lcBONOContracts  AS CHAR NO-UNDO.
 
-   ASSIGN lcBONOContracts = fCParamC("BONO_CONTRACTS")
+   ASSIGN lcBONOContracts = fCParamC(icType + "BONO_CONTRACTS")
           liNumEntries    = NUM-ENTRIES(lcBONOContracts).
 
    DO i = 1 TO liNumEntries:
@@ -75,8 +80,10 @@ FUNCTION fPendingMDUBActReq RETURNS LOGICAL :
       THEN RETURN TRUE.
 
    END.
+
    IF fPendingRequest(MobSub.MsSeq,10) THEN RETURN TRUE.
-  RETURN FALSE.
+
+   RETURN FALSE.
 END FUNCTION.
 
 FUNCTION fServPackagesActive RETURNS LOGICAL :
@@ -98,22 +105,24 @@ FUNCTION fServPackagesActive RETURNS LOGICAL :
    RETURN TRUE.
 END FUNCTION.
 
-FUNCTION fAllowMDUBActivation RETURNS LOGICAL :
+FUNCTION fAllowMDUBActivation RETURNS LOGICAL
+   (INPUT icType AS CHAR):
 
    DEF VAR lcBONOContracts  AS CHAR NO-UNDO.
 
-   lcBONOContracts = fCParamC("BONO_CONTRACTS").
+   lcBONOContracts = fCParamC(icType + "BONO_CONTRACTS").
 
    /* should not exist any MDUB valid to the future */
-   IF fGetActiveMDUB(INPUT fMakeTS()) > "" THEN RETURN FALSE.
+   IF fGetActiveMDUB(icType, INPUT fMakeTS()) > "" THEN RETURN FALSE.
    /* should not exist any pending request for MDUB */
-   IF fPendingMDUBActReq() THEN RETURN FALSE.
+   IF fPendingMDUBActReq(icType) THEN RETURN FALSE.
    /* check service package definition exist for SHAPER and HSDPA */
    IF NOT fServPackagesActive() THEN RETURN FALSE. 
    /* Check ongoing BONO BTC */
    IF fOngoingBTC(MobSub.MsSeq,lcBONOContracts,FALSE) THEN RETURN FALSE.
 
    RETURN TRUE.
+
 END FUNCTION. 
 
 FUNCTION fActivateMDUBService RETURN LOGICAL
@@ -168,14 +177,15 @@ FUNCTION fActivateMDUBPerContract RETURNS LOGICAL
    RETURN TRUE.
 END FUNCTION.
 
-FUNCTION fPendingMDUBTermReq RETURNS LOGICAL :
+FUNCTION fPendingMDUBTermReq RETURNS LOGICAL 
+   (INPUT icType AS CHAR):
    
    DEF VAR lcBundle         AS CHAR NO-UNDO. 
    DEF VAR i                AS INT  NO-UNDO.
    DEF VAR liNumEntries     AS INT  NO-UNDO.
    DEF VAR lcBONOContracts  AS CHAR NO-UNDO.
 
-   ASSIGN lcBONOContracts = fCParamC("BONO_CONTRACTS")
+   ASSIGN lcBONOContracts = fCParamC(icType + "BONO_CONTRACTS")
           liNumEntries    = NUM-ENTRIES(lcBONOContracts).
 
    DO i = 1 TO liNumEntries:
@@ -188,17 +198,20 @@ FUNCTION fPendingMDUBTermReq RETURNS LOGICAL :
                   LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0)
       THEN RETURN TRUE.
    END.
+
    RETURN FALSE.
+
 END FUNCTION.
 
 
-FUNCTION fAllowMDUBTermination RETURNS LOGICAL :
+FUNCTION fAllowMDUBTermination RETURNS LOGICAL
+   (INPUT icType AS CHAR):
    
    /* should exist any data bundle contract valid to the future */   
-   IF fGetActiveMDUB(INPUT ldNextMonthActStamp) EQ "" THEN RETURN FALSE.
+   IF fGetActiveMDUB(INPUT icType, INPUT ldNextMonthActStamp) EQ "" THEN RETURN FALSE.
 
    /* should not exist any pending request for MDUB */
-   IF fPendingMDUBTermReq() THEN RETURN FALSE.
+   IF fPendingMDUBTermReq(icType) THEN RETURN FALSE.
 
    RETURN TRUE.
 END FUNCTION.

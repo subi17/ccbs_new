@@ -1509,13 +1509,13 @@ DO:
    IF pcTenant = {&TENANT_YOIGO} THEN
    DO:  
        lcBONOContracts = fCParamC("BONO_CONTRACTS").
-       IF LOOKUP(pcDataBundleType,lcBONOContracts) = 0 THEN RETURN
-          appl_err(SUBST("Incorrect data bundle type: &1", pcDataBundleType)).   
+       IF LOOKUP(pcDataBundleType,lcBONOContracts) = 0 THEN 
+          RETURN appl_err(SUBST("Incorrect data bundle type: &1", pcDataBundleType)).   
    END.   
 
    DO liCount = 1 TO NUM-ENTRIES(pcDataBundleType):
-       IF NOT fIsBundleAllowed(pcSubType, ENTRY(liCount,pcDataBundleType),OUTPUT lcError) THEN 
-           RETURN appl_err(lcError).
+       IF NOT fIsBundleAllowed(pcSubType,ENTRY(liCount,pcDataBundleType),OUTPUT lcError) THEN 
+          RETURN appl_err(lcError).
    END.    
 END.
 
