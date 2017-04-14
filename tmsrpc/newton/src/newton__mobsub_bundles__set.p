@@ -231,14 +231,21 @@ FUNCTION fSetMDUB RETURNS INT
    
    IF liRequest = 0 THEN 
       ocError = "ERROR:Bundle request not created; " + lcResult.
-   ELSE IF piAction <> 1 AND LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN 
+   ELSE IF piAction <> 1 AND 
+          (LOOKUP(pcBundleId,lcBONOContracts)             > 0 OR 
+           LOOKUP(pcBundleId,lcVoiceBONOContracts)        > 0 OR 
+           LOOKUP(pcBundleId,lcSupplementaryDataBundles)  > 0 OR 
+           LOOKUP(pcBundleId,lcSupplementaryVoiceBundles) > 0) THEN 
    DO:
       /* Cancel Ongoing BTC request */
       FOR FIRST MsRequest NO-LOCK WHERE 
                 MsRequest.MsSeq   = MobSub.MsSeq                                 AND
                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                     AND
                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
-                LOOKUP(MsRequest.ReqCparam1,lcBONOContracts) > 0
+                (LOOKUP(MsRequest.ReqCparam1,lcBONOContracts)            > 0 OR 
+                 LOOKUP(MsRequest.ReqCparam1,lcVoiceBONOContracts)       > 0 OR 
+                 LOOKUP(MsRequest.ReqCparam1,lcSupplementaryDataBundles) > 0 OR 
+                 LOOKUP(MsRequest.ReqCparam1,lcSupplementaryVoiceBundles) > 0)        
           USE-INDEX MsSeq:
           fReqStatus(4,"Bundle Type Change can not be performed since " +
                        "subscriber has requested to cancel the bundle.").
@@ -251,24 +258,6 @@ FUNCTION fSetMDUB RETURNS INT
                        INPUT "").
       END. /* FOR FIRST MsRequest NO-LOCK WHERE */
    END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
-   ELSE IF piAction <> 1 AND LOOKUP(pcBundleId,lcVoiceBONOContracts) > 0 THEN 
-   DO:
-      /* Cancel Ongoing BTC request */
-      FOR FIRST MsRequest NO-LOCK WHERE MsRequest.MsSeq   = MobSub.MsSeq                                 AND
-                                        MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                     AND
-                                        LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
-                                        LOOKUP(MsRequest.ReqCparam1,lcBONOContracts) > 0                 USE-INDEX MsSeq:
-
-          fReqStatus(4,"Bundle Type Change can not be performed since subscriber has requested to cancel the bundle.").
-          /* Send a SMS */
-          RUN pSendSMS(INPUT MobSub.MsSeq, 
-                       INPUT MsRequest.MsRequest,
-                       INPUT "BTCBundelDeAct", 
-                       INPUT 10,
-                       INPUT {&UPSELL_SMS_SENDER}, 
-                       INPUT "").
-      END. /* FOR FIRST MsRequest NO-LOCK WHERE */     
-   END.
       
    /* Black Berry Project */
    FIND FIRST SubSer WHERE SubSer.ServCom = "BB"         AND
