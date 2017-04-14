@@ -336,8 +336,9 @@ PROCEDURE pContractActivation:
    DEF VAR ldeTotalRowAmt             AS DEC  NO-UNDO.
    DEF VAR liCount                    AS CHAR NO-UNDO.
    DEF VAR lcVoiceBundles             AS CHAR NO-UNDO.
-   DEF VAR lcSupplementBundles        AS CHAR NO-UNDO.
-
+   DEF VAR lcSupplementDataBundles    AS CHAR NO-UNDO.
+   DEF VAR lcSupplementVoiceBundles   AS CHAR NO-UNDO.
+   
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
    
@@ -415,8 +416,9 @@ PROCEDURE pContractActivation:
    END.
 
    ASSIGN 
-       lcVoiceBundles      = fCParamC("VOICE_BONO_CONTRACTS")
-       lcSupplementBundles = fCParamC("SUPPLEMENTARY_BUNDLES").
+       lcVoiceBundles           = fCParamC("VOICE_BONO_CONTRACTS")
+       lcSupplementDataBundles  = fCParamC("SUPPLEMENT_DATA_BONO_CONTRACTS")
+       lcSupplementVoiceBundles = fCParamC("SUPPLEMENT_VOICE_BONO_CONTRACTS").
 
    IF DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
       lcBONOContracts = fCParamC("BONO_CONTRACTS").
@@ -433,7 +435,7 @@ PROCEDURE pContractActivation:
                 MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
                 MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK:
 
-         IF LOOKUP(ServiceLimit.GroupCode, lcSupplementBundles) > 0 THEN 
+         IF LOOKUP(ServiceLimit.GroupCode, lcSupplementDataBundles) > 0 THEN 
             NEXT.
 
          fReqStatus(3,"Subscription already has active Data bundle").
@@ -450,11 +452,11 @@ PROCEDURE pContractActivation:
                 MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
                 MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK:
 
-         IF LOOKUP(ServiceLimit.GroupCode, lcSupplementBundles) > 0 THEN 
+         IF LOOKUP(ServiceLimit.GroupCode, lcSupplementVoiceBundles) > 0 THEN 
             NEXT.
 
          fReqStatus(3,"Subscription already has active Voice bundle").
-         
+
          RETURN.
       END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
    END.   

@@ -27,26 +27,28 @@ gcBrand = "1".
 {Func/fdss.i}
 {Func/fprepaidfee.i}
 
-DEF VAR liRequest              AS INT  NO-UNDO.
-DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
-DEF VAR lcVoiceBONOContracts   AS CHAR NO-UNDO.
-DEF VAR lcAllowedBONOContracts AS CHAR NO-UNDO.
-DEF VAR lcMemoText             AS CHAR NO-UNDO.
-DEF VAR lcMemoTitle            AS CHAR NO-UNDO.
-DEF VAR pcStruct               AS CHAR NO-UNDO. 
-DEF VAR lcStruct               AS CHAR NO-UNDO.  
-DEF VAR pcReason               AS CHAR NO-UNDO. 
-DEF VAR piMsSeq                AS INTE NO-UNDO. 
-DEF VAR pcId                   AS CHAR NO-UNDO. 
-DEF VAR pcBundleId             AS CHAR NO-UNDO. 
-DEF VAR piBundleAction         AS INTE NO-UNDO.  
-DEF VAR lcResultStruct         AS CHAR NO-UNDO. 
-DEF VAR liReturnValue          AS INTE NO-UNDO. 
-DEF VAR lcReturnValue          AS CHAR NO-UNDO. 
-DEF VAR lcError                AS CHAR NO-UNDO. 
-DEF VAR lcCounterError         AS CHAR NO-UNDO. 
-DEF VAR lcOnOff                AS CHAR NO-UNDO.
-DEF VAR lcBundleList           AS CHAR NO-UNDO.
+DEF VAR liRequest                   AS INT  NO-UNDO.
+DEF VAR lcBONOContracts             AS CHAR NO-UNDO.
+DEF VAR lcVoiceBONOContracts        AS CHAR NO-UNDO.
+DEF VAR lcAllowedBONOContracts      AS CHAR NO-UNDO.
+DEF VAR lcMemoText                  AS CHAR NO-UNDO.
+DEF VAR lcMemoTitle                 AS CHAR NO-UNDO.
+DEF VAR pcStruct                    AS CHAR NO-UNDO. 
+DEF VAR lcStruct                    AS CHAR NO-UNDO.  
+DEF VAR pcReason                    AS CHAR NO-UNDO. 
+DEF VAR piMsSeq                     AS INTE NO-UNDO. 
+DEF VAR pcId                        AS CHAR NO-UNDO. 
+DEF VAR pcBundleId                  AS CHAR NO-UNDO. 
+DEF VAR piBundleAction              AS INTE NO-UNDO.  
+DEF VAR lcResultStruct              AS CHAR NO-UNDO. 
+DEF VAR liReturnValue               AS INTE NO-UNDO. 
+DEF VAR lcReturnValue               AS CHAR NO-UNDO. 
+DEF VAR lcError                     AS CHAR NO-UNDO. 
+DEF VAR lcCounterError              AS CHAR NO-UNDO. 
+DEF VAR lcOnOff                     AS CHAR NO-UNDO.
+DEF VAR lcBundleList                AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryDataBundles  AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryVoiceBundles AS CHAR NO-UNDO.
 
 DEFINE BUFFER bf_DayCampaign FOR DayCampaign.
 
@@ -137,6 +139,20 @@ FUNCTION fSetMDUB RETURNS INT
          ELSE IF LOOKUP(pcBundleId,lcVoiceBONOContracts) > 0 THEN 
          DO:
             IF LOOKUP(pcBundleId,lcAllowedBONOContracts) = 0 OR NOT fAllowMDUBActivation("VOICE_") THEN
+               ocError = pcBundleId + " activation is not allowed".
+            ELSE 
+               liReturnValue = 3. /* Ongoing Activation */
+         END. 
+         ELSE IF LOOKUP(pcBundleId,lcSupplementaryDataBundles) > 0 THEN 
+         DO:
+            IF LOOKUP(pcBundleId,lcAllowedBONOContracts) = 0 OR NOT fAllowMDUBActivation("SUPPLEMENT_DATA_") THEN
+               ocError = pcBundleId + " activation is not allowed".
+            ELSE 
+               liReturnValue = 3. /* Ongoing Activation */
+         END. 
+         ELSE IF LOOKUP(pcBundleId,lcSupplementaryVoiceBundles) > 0 THEN 
+         DO:
+            IF LOOKUP(pcBundleId,lcAllowedBONOContracts) = 0 OR NOT fAllowMDUBActivation("SUPPLEMENT_VOICE_") THEN
                ocError = pcBundleId + " activation is not allowed".
             ELSE 
                liReturnValue = 3. /* Ongoing Activation */
@@ -332,11 +348,17 @@ FIND DayCampaign NO-LOCK WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEve
 IF NOT AVAIL DayCampaign THEN
    RETURN appl_err(SUBST("Invalid Bundle Id: &1", pcBundleId)).
 
-ASSIGN lcMemoTitle            = DayCampaign.DcName
-       lcBONOContracts        = fCParamC("BONO_CONTRACTS")
-       lcVoiceBONOContracts   = fCParamC("VOICE_BONO_CONTRACTS") 
-       lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS")
-       lcBundleList           = TRIM(lcBONOContracts + "," + lcVoiceBONOContracts + "," + "HSPA_ROAM_EU,BONO_VOIP",",").
+ASSIGN lcMemoTitle                 = DayCampaign.DcName
+       lcBONOContracts             = fCParamC("BONO_CONTRACTS")
+       lcVoiceBONOContracts        = fCParamC("VOICE_BONO_CONTRACTS") 
+       lcAllowedBONOContracts      = fCParamC("ALLOWED_BONO_CONTRACTS")
+       lcSupplementaryDataBundles  = fCParamC("SUPPLEMENT_DATA_BONO_CONTRACTS")
+       lcSupplementaryVoiceBundles = fCParamC("SUPPLEMENT_VOICE_BONO_CONTRACTS")
+       lcBundleList                = TRIM(lcBONOContracts             + "," + 
+                                          lcSupplementaryDataBundles  + "," + 
+                                          lcVoiceBONOContracts        + "," + 
+                                          lcSupplementaryVoiceBundles + "," + 
+                                          "HSPA_ROAM_EU,BONO_VOIP",",").
 
 IF LOOKUP(pcBundleId, lcBundleList) > 0 OR 
    pcBundleId = {&DSS}                  OR 
