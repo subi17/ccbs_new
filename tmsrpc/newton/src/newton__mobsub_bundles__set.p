@@ -89,12 +89,10 @@ FUNCTION fSetMDUB RETURNS INT
             IF NOT fAllowMDUBTermination("") THEN
                ocError = pcBundleId + " termination is not allowed".
             /* Ongoing BTC with upgrade upsell */
-            ELSE IF fOngoingBTC(INPUT MobSub.MsSeq,
-                                INPUT pcBundleId,
-                                INPUT TRUE) THEN
-               ocError = "Bundle termination is not allowed since " +
-                         "subscription has ongoing BTC with upgrade upsell".
-            ELSE liReturnValue = 2. /* Ongoing Termination */
+            ELSE IF fOngoingBTC(INPUT MobSub.MsSeq,INPUT pcBundleId,INPUT TRUE) THEN
+               ocError = "Bundle termination is not allowed since subscription has ongoing BTC with upgrade upsell".
+            ELSE 
+               liReturnValue = 2. /* Ongoing Termination */
          END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
          ELSE IF LOOKUP(pcBundleId,lcVoiceBONOContracts) > 0 THEN 
          DO:
@@ -102,7 +100,26 @@ FUNCTION fSetMDUB RETURNS INT
                ocError = pcBundleId + " termination is not allowed".
             ELSE IF fOngoingBTC(INPUT MobSub.MsSeq,INPUT pcBundleId,INPUT TRUE) THEN
                ocError = "Bundle termination is not allowed since subscription has ongoing BTC with upgrade upsell".
-            ELSE liReturnValue = 2. /* Ongoing Termination */
+            ELSE 
+               liReturnValue = 2. /* Ongoing Termination */
+         END. 
+         ELSE IF LOOKUP(pcBundleId,lcSupplementaryVoiceBundles) > 0 THEN 
+         DO:
+            IF NOT fAllowMDUBTermination("SUPPLEMENT_VOICE_") THEN
+               ocError = pcBundleId + " termination is not allowed".
+            ELSE IF fOngoingBTC(INPUT MobSub.MsSeq,INPUT pcBundleId,INPUT TRUE) THEN
+               ocError = "Bundle termination is not allowed since subscription has ongoing BTC with upgrade upsell".
+            ELSE 
+               liReturnValue = 2. /* Ongoing Termination */
+         END. 
+         ELSE IF LOOKUP(pcBundleId,lcSupplementaryDataBundles) > 0 THEN 
+         DO:
+            IF NOT fAllowMDUBTermination("SUPPLEMENT_DATA_") THEN
+               ocError = pcBundleId + " termination is not allowed".
+            ELSE IF fOngoingBTC(INPUT MobSub.MsSeq,INPUT pcBundleId,INPUT TRUE) THEN
+               ocError = "Bundle termination is not allowed since subscription has ongoing BTC with upgrade upsell".
+            ELSE 
+               liReturnValue = 2. /* Ongoing Termination */
          END. 
          ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
             IF fGetActiveSpecificBundle(Mobsub.MsSeq,
