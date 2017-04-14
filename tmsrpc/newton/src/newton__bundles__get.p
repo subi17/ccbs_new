@@ -147,10 +147,10 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       END. /* FOR EACH ServiceLimit WHERE */
    END. /* IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO: */
    
-   IF LOOKUP(DayCampaign.DCEvent,lcBONOContracts.   ) > 0 OR
-      LOOKUP(DayCampaign.DCEvent,lcVoiceBundles     ) > 0 OR 
-      LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 OR 
-      DayCampaign.DCEvent = "HSPA_ROAM_EU"            THEN
+   IF (LOOKUP(DayCampaign.DCEvent,lcBONOContracts.   ) > 0 OR
+       LOOKUP(DayCampaign.DCEvent,lcVoiceBundles     ) > 0 OR 
+       LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 OR 
+       DayCampaign.DCEvent = "HSPA_ROAM_EU")               THEN
    DO:
       IF INDEX(DayCampaign.DCEvent,lcSupplementBundles) > 0 THEN   
          lcBundleType = "supplement_bundle".
