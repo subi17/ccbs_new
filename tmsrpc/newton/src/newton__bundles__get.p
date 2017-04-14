@@ -57,7 +57,9 @@ DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
 DEF VAR llVoIPCompatible       AS LOG NO-UNDO.
 DEF VAR lcPromotionBundles     AS CHAR NO-UNDO. 
 DEF VAR lcVoiceBundles         AS CHAR NO-UNDO.
-DEF VAR lcSupplementBundles    AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryVoiceBundles AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryDataBundles  AS CHAR NO-UNDO.
+DEF VAR lcSupplementBundles         AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
 
@@ -67,18 +69,20 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "").
 
-ASSIGN lcIPLContracts         = fCParamC("IPL_CONTRACTS")
-       lcCONTDContracts       = fCParamC("CONTD_CONTRACTS")
-       lcFLATContracts        = fCParamC("FLAT_CONTRACTS")
-       lcBONOContracts        = fCParamC("BONO_CONTRACTS")
-       lcCONTSContracts       = fCParamC("CONTS_CONTRACTS")
-       lcCONTSFContracts      = fCParamC("CONTSF_CONTRACTS")
-       lcVoIPBaseContracts    = fCParamC("BONO_VOIP_BASE_BUNDLES")
-       lcAllVoIPNativeBundles = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
-       lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE")
-       lcPromotionBundles     = fCParamC("PROMOTION_BUNDLES")
-       lcVoiceBundles         = fCParamC("VOICE_BONO_CONTRACTS")
-       lcSupplementBundles    = fCParamC("SUPPLEMENTARY_BUNDLES").
+ASSIGN lcIPLContracts              = fCParamC("IPL_CONTRACTS")
+       lcCONTDContracts            = fCParamC("CONTD_CONTRACTS")
+       lcFLATContracts             = fCParamC("FLAT_CONTRACTS")
+       lcBONOContracts             = fCParamC("BONO_CONTRACTS")
+       lcCONTSContracts            = fCParamC("CONTS_CONTRACTS")
+       lcCONTSFContracts           = fCParamC("CONTSF_CONTRACTS")
+       lcVoIPBaseContracts         = fCParamC("BONO_VOIP_BASE_BUNDLES")
+       lcAllVoIPNativeBundles      = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
+       lcAllowedDSS2SubsType       = fCParamC("DSS2_SUBS_TYPE")
+       lcPromotionBundles          = fCParamC("PROMOTION_BUNDLES")
+       lcVoiceBundles              = fCParamC("VOICE_BONO_CONTRACTS")
+       lcSupplementaryVoiceBundles = fCParamC("SUPPLEMENT_VOICE_BONO_CONTRACTS")
+       lcSupplementaryDataBundles  = fCParamC("SUPPLEMENT_DATA_BONO_CONTRACTS") 
+       lcSupplementBundles         = TRIM(lcSupplementaryVoiceBundles + "," + lcSupplementaryDataBundles, ",").
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
@@ -143,8 +147,9 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       END. /* FOR EACH ServiceLimit WHERE */
    END. /* IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO: */
    
-   IF LOOKUP(DayCampaign.DCEvent,lcBONOContracts) > 0 OR
-      LOOKUP(DayCampaign.DCEvent,lcVoiceBundles ) > 0 OR 
+   IF LOOKUP(DayCampaign.DCEvent,lcBONOContracts.   ) > 0 OR
+      LOOKUP(DayCampaign.DCEvent,lcVoiceBundles     ) > 0 OR 
+      LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 OR 
       DayCampaign.DCEvent = "HSPA_ROAM_EU"            THEN
    DO:
       IF INDEX(DayCampaign.DCEvent,lcSupplementBundles) > 0 THEN   
