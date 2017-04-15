@@ -288,7 +288,7 @@ END.
 
 /********* Main end ********/
 PROCEDURE pIsBundleActivationAllowed:
-   DEF INPUT PARAMETER iiMsSeq   AS CHAR NO-UNDO.
+   DEF INPUT PARAMETER iiMsSeq   AS INTE NO-UNDO.
    DEF INPUT PARAMETER icDCEvent AS CHAR NO-UNDO.
 
    DEF VAR lcBONOContracts          AS CHAR NO-UNDO.
@@ -483,7 +483,7 @@ PROCEDURE pContractActivation:
       RETURN.
    END.
 
-   RUN pIsBundleActivationAllowed NO-ERROR.
+   RUN pIsBundleActivationAllowed(MsOwner.MsSeq,lcDCEvent) NO-ERROR.
    IF ERROR-STATUS:ERROR AND RETURN-VALUE <> "" THEN
    DO: 
        fReqStatus(3, RETURN-VALUE).
