@@ -182,7 +182,40 @@ FUNCTION fGetMDUBStatus RETURNS INT (
             llUpgradeUpsell = TRUE.
       END. /* IF AVAILABLE MsRequest THEN DO: */
    END. /* ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO: */
-
+   ELSE IF LOOKUP(pcBundle,lcSupplementaryDataBundles) > 0 THEN 
+   DO:
+      FIND FIRST MsRequest WHERE
+                 MsRequest.MsSeq   = MobSub.MsSeq                                        AND
+                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                            AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                 LOOKUP(MsRequest.ReqCparam1,lcSupplementaryDataBundles) > 0             NO-LOCK NO-ERROR.
+      IF AVAILABLE MsRequest THEN 
+      DO:
+         ASSIGN 
+            liStat = 4
+            pcBTCBundleId = MsRequest.ReqCparam2.
+            
+         IF MsRequest.ReqCparam5 > "" THEN 
+            llUpgradeUpsell = TRUE.
+      END. /* IF AVAILABLE MsRequest THEN DO: */
+   END. /* ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO: */
+   ELSE IF LOOKUP(pcBundle,lcSupplementaryVoiceBundles) > 0 THEN 
+   DO:
+      FIND FIRST MsRequest WHERE
+                 MsRequest.MsSeq   = MobSub.MsSeq                                        AND
+                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                            AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                 LOOKUP(MsRequest.ReqCparam1,lcSupplementaryVoiceBundles) > 0            NO-LOCK NO-ERROR.
+      IF AVAILABLE MsRequest THEN 
+      DO:
+         ASSIGN 
+            liStat = 4
+            pcBTCBundleId = MsRequest.ReqCparam2.
+            
+         IF MsRequest.ReqCparam5 > "" THEN 
+            llUpgradeUpsell = TRUE.
+      END. /* IF AVAILABLE MsRequest THEN DO: */
+   END. /* ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO: */
    RETURN liStat. 
 
 END FUNCTION.
