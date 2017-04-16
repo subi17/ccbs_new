@@ -355,6 +355,7 @@ PROCEDURE pCopyPackage:
    DEF BUFFER bDCAttribute       FOR DCServiceAttribute.
    DEF BUFFER bMsRequest         FOR MsRequest.
    DEF BUFFER bf_ServiceLimit    FOR ServiceLimit.
+   DEF BUFFER bf_mServiceLimit   FOR mServiceLimit.
    DEF BUFFER bf_ServiceLCounter FOR ServiceLCounter. 
 
    ASSIGN
