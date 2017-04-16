@@ -346,7 +346,6 @@ PROCEDURE pCopyPackage:
    DEF VAR lcServSkipList      AS CHAR  NO-UNDO.
    DEF VAR liPeriod            AS INTE  NO-UNDO.
    DEF VAR liRequest           AS INTE  NO-UNDO.
-   DEF VAR lcResult            AS CHAR  NO-UNDO.
    DEF VAR ldeConsumption      AS DECI  NO-UNDO.
    DEF VAR lcAdjustConsProfile AS CHAR  NO-UNDO.  
 
@@ -621,12 +620,15 @@ PROCEDURE pCopyPackage:
                                                     ilMandatory, /* mandatory for father request */
                                                     OUTPUT lcResult).
                         IF liRequest = 0 THEN
+                        DO:
                           DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                                            "MobSub",
                                            STRING(iiMSSeq),
                                            bContSub.CustNum,
                                            "Consumption adjustment failed;",
                                            lcResult).
+                          ASSIGN lcResult = "".
+                        END.  
                     END. /* IF bf_ServiceLCounter.Amt > 0 */
                 END.
             END.
