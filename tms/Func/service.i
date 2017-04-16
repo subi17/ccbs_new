@@ -345,7 +345,7 @@ PROCEDURE pCopyPackage:
    DEF VAR lcBONOContracts     AS CHAR  NO-UNDO.
    DEF VAR lcServSkipList      AS CHAR  NO-UNDO.
    DEF VAR liPeriod            AS INTE  NO-UNDO.
-   DEF VAR liRequest           AS INTE  NO-UNDO
+   DEF VAR liRequest           AS INTE  NO-UNDO.
    DEF VAR lcResult            AS CHAR  NO-UNDO.
    DEF VAR ldeConsumption      AS DECI  NO-UNDO.
    DEF VAR lcAdjustConsProfile AS CHAR  NO-UNDO.  
