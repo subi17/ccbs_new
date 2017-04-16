@@ -323,34 +323,41 @@ PROCEDURE pCopyPackage:
    DEF INPUT  PARAMETER ilMandatory   AS LOG  NO-UNDO.
    DEF OUTPUT PARAMETER oiCopied      AS INT  NO-UNDO.
 
-   DEF VAR lcFeeModel AS CHAR NO-UNDO.
-   DEF VAR liSCnt     AS INT  NO-UNDO.
-   DEF VAR lcContract AS CHAR NO-UNDO. 
-   DEF VAR llCompCopy AS LOG  NO-UNDO. 
-   DEF VAR lcResult   AS CHAR NO-UNDO.
-   DEF VAR liReq      AS INT  NO-UNDO.
-   DEF VAR ldeActTime AS DEC  NO-UNDO FORMAT "99999999.99999".
-   DEF VAR ldeEndTime AS DEC  NO-UNDO FORMAT "99999999.99999".
-   DEF VAR llForce    AS LOG  NO-UNDO INIT FALSE.
-   DEF VAR liDefValue AS INT  NO-UNDO.
-   DEF VAR lcDefParam AS CHAR NO-UNDO.
-   DEF VAR liDCPackageID AS INT  NO-UNDO.
-   DEF VAR liDCComponentID AS INT  NO-UNDO.
-   DEF VAR llFound    AS LOG  NO-UNDO.
-   DEF VAR lcServPac  AS CHAR NO-UNDO.
-   DEF VAR liUpsellQuota AS INT64  NO-UNDO.
-   DEF VAR liGraceQuota  AS INT64  NO-UNDO.
-   DEF VAR ldeUpgradeLimit AS DEC  NO-UNDO.
-   DEF VAR lcTemplate      AS CHAR NO-UNDO.
-   DEF VAR lcBONOContracts AS CHAR NO-UNDO.
-   DEF VAR lcServSkipList  AS CHAR NO-UNDO.
-   
-   DEF BUFFER bContSub FOR MobSub.
-   DEF BUFFER bDCPackage FOR DCServicePackage.
-   DEF BUFFER bDCComponent FOR DCServiceComponent.
-   DEF BUFFER bDCAttribute FOR DCServiceAttribute.
-   DEF BUFFER bMsRequest FOR MsRequest.
-    
+   DEF VAR lcFeeModel          AS CHAR  NO-UNDO.
+   DEF VAR liSCnt              AS INT   NO-UNDO.
+   DEF VAR lcContract          AS CHAR  NO-UNDO. 
+   DEF VAR llCompCopy          AS LOG   NO-UNDO. 
+   DEF VAR lcResult            AS CHAR  NO-UNDO.
+   DEF VAR liReq               AS INT   NO-UNDO.
+   DEF VAR ldeActTime          AS DEC   NO-UNDO FORMAT "99999999.99999".
+   DEF VAR ldeEndTime          AS DEC   NO-UNDO FORMAT "99999999.99999".
+   DEF VAR llForce             AS LOG   NO-UNDO INIT FALSE.
+   DEF VAR liDefValue          AS INT   NO-UNDO.
+   DEF VAR lcDefParam          AS CHAR  NO-UNDO.
+   DEF VAR liDCPackageID       AS INT   NO-UNDO.
+   DEF VAR liDCComponentID     AS INT   NO-UNDO.
+   DEF VAR llFound             AS LOG   NO-UNDO.
+   DEF VAR lcServPac           AS CHAR  NO-UNDO.
+   DEF VAR liUpsellQuota       AS INT64 NO-UNDO.
+   DEF VAR liGraceQuota        AS INT64 NO-UNDO.
+   DEF VAR ldeUpgradeLimit     AS DEC   NO-UNDO.
+   DEF VAR lcTemplate          AS CHAR  NO-UNDO.
+   DEF VAR lcBONOContracts     AS CHAR  NO-UNDO.
+   DEF VAR lcServSkipList      AS CHAR  NO-UNDO.
+   DEF VAR liPeriod            AS INTE  NO-UNDO.
+   DEF VAR liRequest           AS INTE  NO-UNDO
+   DEF VAR lcResult            AS CHAR  NO-UNDO.
+   DEF VAR ldeConsumption      AS DECI  NO-UNDO.
+   DEF VAR lcAdjustConsProfile AS CHAR  NO-UNDO.  
+
+   DEF BUFFER bContSub           FOR MobSub.
+   DEF BUFFER bDCPackage         FOR DCServicePackage.
+   DEF BUFFER bDCComponent       FOR DCServiceComponent.
+   DEF BUFFER bDCAttribute       FOR DCServiceAttribute.
+   DEF BUFFER bMsRequest         FOR MsRequest.
+   DEF BUFFER bf_ServiceLimit    FOR ServiceLimit.
+   DEF BUFFER bf_ServiceLCounter FOR ServiceLCounter. 
+
    ASSIGN
       oiCopied = 0
       llFound  = FALSE.
@@ -573,7 +580,57 @@ PROCEDURE pCopyPackage:
              lcDefParam = lcDefParam + "_DOUBLE".
             
          /* if solog update needed then create a msrequest from change */
-         IF ilSolog THEN DO:
+         IF ilSolog THEN 
+         DO:
+            /* RELAX BONOs */
+            IF INDEX(lcDefParam,"RELAX") > 0 THEN
+            DO:
+                ASSIGN liPeriod = INT(SUBSTRING(STRING(ldeActTime),1,6)).
+
+                FOR EACH bf_ServiceLimit WHERE bf_ServiceLimit.GroupCode = "MM_DATA600" AND bf_ServiceLimit.ValidTo >= TODAY NO-LOCK,
+                    FIRST bf_mServiceLimit WHERE bf_mServiceLimit.MsSeq    = iiMSSeq                  AND 
+                                                 bf_mServiceLimit.DialType = bf_ServiceLimit.DialType AND
+                                                 bf_mServiceLimit.SLSeq    = bf_ServiceLimit.SLSeq    AND
+                                                 bf_mServiceLimit.EndTS   >= ldeActTime               NO-LOCK,
+                    FIRST bf_ServiceLCounter WHERE bf_ServiceLCounter.MsSeq  = iiMSSeq                AND
+                                                   bf_ServiceLCounter.Period = liPeriod               AND
+                                                   bf_ServiceLCounter.SlSeq  = bf_mServiceLimit.SLSeq AND 
+                                                   bf_ServiceLCounter.MSID   = bf_mServiceLimit.MSID  NO-LOCK:
+                    IF bf_ServiceLCounter.Amt > 0 THEN 
+                    DO:
+                        ASSIGN ldeConsumption = (bf_ServiceLCounter.Amt / 1024 / 1024).
+
+                        IF ldeConsumption > bf_ServiceLimit.InclAmt THEN
+                           ldeConsumption = (bf_ServiceLimit.InclAmt * 1024 * 1024).
+                        ELSE
+                           ldeConsumption = bf_ServiceLCounter.Amt.
+
+                        ASSIGN lcAdjustConsProfile = STRING(-1 * ldeConsumption) + ",GRACE=0" + ",TEMPLATE=HSPA".
+
+                        liRequest = fServiceRequest(iiMSSeq,
+                                                    ttServCom.ServCom,
+                                                    1, /* on */
+                                                    lcAdjustConsProfile,
+                                                    ldeActTime,
+                                                    "", /* salesman */
+                                                    FALSE, /* fees */
+                                                    FALSE, /* sms */
+                                                    "", /* creator */
+                                                    "",
+                                                    iiOrigRequest, /* father request */
+                                                    ilMandatory, /* mandatory for father request */
+                                                    OUTPUT lcResult).
+                        IF liRequest = 0 THEN
+                          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                           "MobSub",
+                                           STRING(iiMSSeq),
+                                           bContSub.CustNum,
+                                           "Consumption adjustment failed;",
+                                           lcResult).
+                    END. /* IF bf_ServiceLCounter.Amt > 0 */
+                END.
+            END.
+
             liReq = fServiceRequest (iiMsSeq ,     
                                      ttServCom.ServCom,
                                      liDefValue,
