@@ -510,7 +510,7 @@ IF NOT AVAIL ttInvCust THEN DO:
 END.
 
 FIND FIRST Customer where Customer.CustNum = ttInvCust.CustNr NO-LOCK NO-ERROR.
-IF AVAIL Customer AND BUFFER-TENANT-NAME = {&TENANT_MASMOVIL} THEN 
+IF AVAIL Customer AND BUFFER-TENANT-NAME(Customer) = {&TENANT_MASMOVIL} THEN 
     ASSIGN lcBillRun = "TEST-MM".
 
 RUN pCreateTestInv in pHandle("",
