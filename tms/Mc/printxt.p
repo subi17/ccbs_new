@@ -1990,7 +1990,9 @@ FOR FIRST CLIType NO-LOCK WHERE
     END.
 
     IF lcList > "" THEN DO:
-      IF NOT llAddLineDiscount THEN
+      IF llAddLineDiscount THEN
+         lcTagCTName = lcTagCTName + ", " + lcList.
+      ELSE
          lcTagCTName = lcTagCTName + ", " + lcList + 
                        (IF liLanguage EQ 5 THEN " VAT. incl"
                         ELSE " imp. incl.").
