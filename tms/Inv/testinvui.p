@@ -10,7 +10,7 @@
   -------------------------------------------------------------------------- */
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 DISABLE TRIGGERS FOR LOAD OF SingleFee.
-
+{Syst/tmsconst.i}
 {Func/log.i}
 fsetLogFileName("/scratch/print/testinv/testinvui_" + 
    STRING(YEAR(TODAY),"9999") + 
