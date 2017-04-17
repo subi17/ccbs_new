@@ -1980,9 +1980,9 @@ FOR FIRST CLIType NO-LOCK WHERE
 
     IF ldeMFWithTax > 0 THEN DO:
        IF llAddLineDiscount THEN
-          lcList = lcList + (IF lcList > "" THEN "," ELSE "") + " " + "\strike" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " E/\strike0" + " " +
-                   TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " E/" +
-                   (IF liLanguage EQ 5 THEN "month" ELSE "mes") + " IVA incl.\line" + TRIM(STRING(ldDiscValue,"99"))+ "%" + (IF liLanguage EQ 5 THEN " DTO. Forever" ELSE " DTO. para siempre") + "\line".
+          lcList = lcList + (IF lcList > "" THEN "," ELSE "") + " " + TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " E/" +
+                   (IF liLanguage EQ 5 THEN "month" ELSE "mes") + " IVA incl.~n" +
+                   TRIM(STRING(ldDiscValue,"99"))+ "%" + (IF liLanguage EQ 5 THEN " DTO. Forever" ELSE " DTO. para siempre").
        ELSE
           lcList = lcList + (IF lcList > "" THEN ", " ELSE "") +
                    TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " E/" +
