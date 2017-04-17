@@ -455,15 +455,26 @@ PROCEDURE pFeesAndServices:
   
    /* ADDLINE-20 Additional Line Discounts 
       CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type */
-   IF LOOKUP(CLIType.CliType , {&ADDLINE_CLITYPES}) > 0 AND
-     (LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}) > 0 OR
-      (AVAIL Order AND Order.OrderType = {&ORDER_TYPE_RENEWAL})) THEN DO:
-      IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
-         fCreateAddLineDiscount(MsRequest.MsSeq,
-                                CLIType.CLIType,
-                                ldtActDate).
-         IF RETURN-VALUE BEGINS "ERROR" THEN
-            RETURN RETURN-VALUE.
+
+   IF LOOKUP(CLIType.CliType , {&ADDLINE_CLITYPES}) > 0 THEN DO:
+     FIND FIRST Order NO-LOCK WHERE
+                Order.Brand     = gcBrand               AND
+                Order.OrderID   = MsRequest.ReqIParam2  AND
+                Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
+         LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 NO-ERROR.
+     IF LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}) > 0 OR
+        (AVAIL Order AND
+         CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                        OrderAction.Brand    = gcBrand           AND
+                        OrderAction.OrderID  = Order.OrderId     AND
+                        OrderAction.ItemType = "AddLineDiscount")) THEN DO:
+         IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
+            fCreateAddLineDiscount(MsRequest.MsSeq,
+                                   CLIType.CLIType,
+                                   ldtActDate).
+            IF RETURN-VALUE BEGINS "ERROR" THEN
+               RETURN RETURN-VALUE.
+         END.
       END.
    END.
 
