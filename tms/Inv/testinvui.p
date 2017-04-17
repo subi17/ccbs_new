@@ -508,6 +508,11 @@ IF NOT AVAIL ttInvCust THEN DO:
    VIEW-AS ALERT-BOX MESSAGE.
    RETURN.
 END.
+
+FIND FIRST Customer where Customer.CustNum = ttInvCust.CustNum NO-LOCK NO-ERROR.
+IF AVAIL Customer AND BUFFER-TENANT-NAME = {&TENANT_MASMOVIL} THEN 
+    ASSIGN lcBillRun = "TEST-MM".
+
 RUN pCreateTestInv in pHandle("",
                               invDte,
                               ?,
@@ -518,7 +523,7 @@ RUN pCreateTestInv in pHandle("",
                               llRerate,
                               llDouble,
                               liCustQty,
-                              "").
+                              lcBillRun).
 
 
 HIDE MESSAGE NO-PAUSE.
