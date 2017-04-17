@@ -509,7 +509,7 @@ IF NOT AVAIL ttInvCust THEN DO:
    RETURN.
 END.
 
-FIND FIRST Customer where Customer.CustNum = ttInvCust.CustNum NO-LOCK NO-ERROR.
+FIND FIRST Customer where Customer.CustNum = ttInvCust.CustNr NO-LOCK NO-ERROR.
 IF AVAIL Customer AND BUFFER-TENANT-NAME = {&TENANT_MASMOVIL} THEN 
     ASSIGN lcBillRun = "TEST-MM".
 
