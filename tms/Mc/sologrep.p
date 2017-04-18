@@ -12,6 +12,7 @@ ASSIGN
 {Func/email.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE lcTemp            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO.
