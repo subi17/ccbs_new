@@ -23,6 +23,7 @@
 {Migration/migrationfunc.i}
 {Func/ftransdir.i}
 
+gcBrand = "1".
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -141,10 +142,11 @@ IF lcErr NE "" THEN DO:
 END.
 ELSE DO:
    /*Execution part*/
-   INPUT STREAM sFile THROUGH VALUE("ls -1tr OPER_DATA*" + lcInDir ).
+   INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcindir + "/OPER_DATA*" ).
    REPEAT:
       IMPORT STREAM sFile UNFORMATTED lcFileName.
-      lcInputFile = lcInDir + lcFileName.
+      message lcinputfile VIEW-AS ALERT-BOX.
+      lcInputFile =  lcFileName.
       IF SEARCH(lcInputFile) NE ? THEN INPUT STREAM sIn FROM VALUE(lcInputFile).
       ELSE NEXT.
       /*OPER_DATA_SET -> setting
@@ -751,12 +753,11 @@ PROCEDURE pReadInputJSON:
 
       END.
 
-   RETURN "".
-
    END.
 
    PUT STREAM sLog UNFORMATTED
       "Collection done " + fTS2HMS(fMakeTS()) SKIP.
+   RETURN "".   
 END.
 
 
