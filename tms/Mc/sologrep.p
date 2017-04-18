@@ -44,13 +44,14 @@ DEFINE VARIABLE ldActivDate       AS DATE      NO-UNDO.
 DEFINE VARIABLE liActivTime       AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE lcPentahoSpool    AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcPentahoRep      AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcTenant          AS CHARACTER NO-UNDO.
 
 ASSIGN
    lcMailDir = fCParamC("RepConfDir")
    lcRepDir = fCParamC("SologRepDir")
    lcPentahoSpool = fCParamC("PentahoSpool")
-   lcPentahoRep = fCParamC("PentahoSolog").
-   
+   lcPentahoRep = fCParamC("PentahoSolog")
+   lcTenant = CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))).
 lcAddressListFile = lcMailDir + "/sologrep.email".
 
 GetRecipients(lcAddressListFile).
@@ -87,19 +88,22 @@ ldFrom =  fHMS2TS(TODAY - 1,STRING(25119,"HH:MM:SS")).
 ldTo =  fHMS2TS(TODAY ,STRING(25119,"HH:MM:SS")).
 
 
-lcAmtFile = lcRepDir + "/Solog_report_" + STRING(DAY(TODAY))   +
+lcAmtFile = lcRepDir + "/" + lctenant + "_Solog_report_" + 
+                                          STRING(DAY(TODAY))   +
                                           STRING(MONTH(TODAY)) +
                                           STRING(YEAR(TODAY))  +
             ".txt".
 
-lcRepFile = lcRepDir + "/Failed_Sologs_" + STRING(DAY(TODAY))   + 
-                                           STRING(MONTH(TODAY)) +
-                                           STRING(YEAR(TODAY))  +
+lcRepFile = lcRepDir + "/" + lctenant + "_Failed_Sologs_" + 
+                                          STRING(DAY(TODAY))   + 
+                                          STRING(MONTH(TODAY)) +
+                                          STRING(YEAR(TODAY))  +
             ".txt". 
 
-lcPentahoFile = lcPentahoSpool + "/Pentaho_Sologs_" + STRING(DAY(TODAY))   + 
-                                         STRING(MONTH(TODAY)) +
-                                         STRING(YEAR(TODAY))  +
+lcPentahoFile = lcPentahoSpool + "/" + lctenant + "_Pentaho_Sologs_" + 
+                                                    STRING(DAY(TODAY))   + 
+                                                    STRING(MONTH(TODAY)) +
+                                                    STRING(YEAR(TODAY))  +
             ".txt". 
 
 DEFINE STREAM osDumpAmount.

@@ -138,6 +138,13 @@ do i = 1 to 2:
    IF INDEX(TMSParam.charval,lcBrand) EQ 0 THEN
       TMSParam.charval = REPLACE(TMSParam.charval,"daemon.lock","daemon." + lower(lcBrand) + ".lock").
 
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "Reports" AND
+              TMSParam.ParamCode EQ "ErrorLogRepFile" NO-ERROR.
+   IF INDEX(TMSParam.charval,lcbrand) EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"log/errorlog","log/" + CAPS(lcbrand) + "_errorlog").   
+
    FOR EACH BankAccount.
       IF i eq 1 THEN
          ASSIGN
