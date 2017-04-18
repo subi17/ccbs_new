@@ -2035,7 +2035,11 @@ IF Order.CLIType = "TARJ7" AND
                   ELSE "".
 END.
 
-lcText = replace(lcText, "#CTNAME", lcTagCTName).
+/* ADDLINE-144 Additional Line Changes */
+IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN
+   lcText = replace(lcText, "#CTNAME", lcTagCTName).
+ELSE
+   lcText = replace(lcText, "#CTNAME", "").
 
 IF INDEX(lcText, "#COMPANY_CONTACT") > 0 THEN DO:
    lcList = fGetLocalContactInfo().
