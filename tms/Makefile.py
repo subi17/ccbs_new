@@ -186,7 +186,10 @@ def compile(match, *a):
     '''compile$|compilec$|preprocess$|xref$'''
 
     if match == 'compile':
-        compiledir = 'r'
+        if environment == 'safeproduction':
+            compiledir = '/tmsapps'
+        else:
+            compiledir = 'r'
         compilecommand = 'COMPILE %s SAVE INTO {}.'
     elif match == 'compilec':
         compiledir = None
