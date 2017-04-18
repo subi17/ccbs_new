@@ -2084,9 +2084,22 @@ ELSE IF Order.statuscode NE "4" THEN DO:
             EXCLUSIVE-LOCK NO-ERROR.
 
             IF AVAIL MsRequest THEN DO:
-               Order.StatusCode = (IF OrderCustomer.CustIdType EQ "CIF" 
-                                   THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
-                                   ELSE {&ORDER_STATUS_RENEWAL_STC}).
+               IF NOT fCheckExistingConvergent(OrderCustomer.CustIDType,
+                                               OrderCustomer.CustID) THEN DO:
+                  IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                                    OrderAction.Brand    = gcBrand           AND
+                                    OrderAction.OrderID  = Order.OrderId     AND
+                                    OrderAction.ItemType = "AddLineDiscount" AND
+                             LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) AND
+                     fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
+                                                  OrderCustomer.CustId) THEN DO:
+                     fSetOrderStatus(Order.OrderID, {&ORDER_STATUS_PENDING_MAIN_LINE}).
+                  END.
+               END.
+               ELSE
+                  Order.StatusCode = (IF OrderCustomer.CustIdType EQ "CIF" 
+                                      THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
+                                      ELSE {&ORDER_STATUS_RENEWAL_STC}).
                MsRequest.ReqIParam2 = Order.OrderId.
             END.
             ELSE DO:

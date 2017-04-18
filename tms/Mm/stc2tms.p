@@ -104,7 +104,8 @@ IF liOrigStatus = 8 AND MsRequest.ReqIParam2 > 0 THEN DO:
       RETURN.
    END.
    ELSE IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
-      IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} THEN DO:
+      IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}     OR
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} THEN DO: /* ADDLINE-19 Additional Line Renewal case handling */
          ASSIGN ldaNextMonthActDate  = (fLastDayOfMonth(ldtActDate) + 1)
                 ldNextMonthActStamp  = fMake2Dt(ldaNextMonthActDate,0).
          FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
@@ -454,8 +455,8 @@ PROCEDURE pFeesAndServices:
    END.
   
    /* ADDLINE-20 Additional Line Discounts 
-      CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type
-      CLOSE : If New CLIType Not Matches, Then Close the Discount */
+      CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type */
+
    IF LOOKUP(CLIType.CliType , {&ADDLINE_CLITYPES}) > 0 AND
       LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
       IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
