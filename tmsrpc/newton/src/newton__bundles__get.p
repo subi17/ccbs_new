@@ -153,7 +153,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
        DayCampaign.DCEvent = "HSPA_ROAM_EU")               THEN
    DO:
       IF LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 THEN   
-         lcBundleType = "supplement_bundle".
+         lcBundleType = "supplemental_bundle".
       ELSE      
          lcBundleType = "bundle".
    END.
