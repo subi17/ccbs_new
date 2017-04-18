@@ -145,7 +145,6 @@ ELSE DO:
    INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcindir + "/OPER_DATA*" ).
    REPEAT:
       IMPORT STREAM sFile UNFORMATTED lcFileName.
-      message lcinputfile VIEW-AS ALERT-BOX.
       lcInputFile =  lcFileName.
       IF SEARCH(lcInputFile) NE ? THEN INPUT STREAM sIn FROM VALUE(lcInputFile).
       ELSE NEXT.
@@ -197,7 +196,7 @@ FUNCTION fUpsellExists RETURNS CHAR
    (icUPS AS CHAR):
    DEF BUFFER DayCampaign for DayCampaign.
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand EQ "1" AND
+              DayCampaign.Brand EQ gcBrand AND
               DayCampaign.DCEvent EQ icUps NO-ERROR.
    IF NOT AVAIL DayCampaign THEN RETURN "Item not found " + icUPS.
 
@@ -688,7 +687,7 @@ PROCEDURE pReadInputJSON:
          lcMSISDN = ttRootLevel.msisdn. 
          limsseq = 0.
          FIND FIRST mobsub NO-LOCK WHERE
-                    mobsub.brand = "1" AND
+                    mobsub.brand = gcBrand AND
                     mobsub.cli = lcMSISDN NO-ERROR.
          IF AVAIL mobsub then do:
             liMsSeq = mobsub.msseq.
@@ -699,7 +698,6 @@ PROCEDURE pReadInputJSON:
       FOR EACH ttBarrings: 
         if lcBCommand NE "" THEN lcBCommand = lcBCommand + ",".
                lcBCommand = lcBCommand + barring_id + "=1".
-         DISP ttBarrings. 
       END.
       lcStat =  fSetMigrationBarring(liMsSeq, lcBCommand, ilgSimulate).
       lcCommands = lcCommands + lcBCommand + "|".
@@ -720,7 +718,6 @@ PROCEDURE pReadInputJSON:
              lcStat = "".
          END.
          lcCommands = lcCommands + "|".
-         DISP ttUpsells. 
       END.
       FOR EACH ttDiscounts: 
          /*DISP ttDiscounts. */
