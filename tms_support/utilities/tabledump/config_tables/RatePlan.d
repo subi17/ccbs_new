@@ -18,6 +18,7 @@
 "CONTRATOD3" "Contrato Datos 3 (Post paid)" "" "" "1"
 "CONTRATODATA" "Contrato Datos (Postpaid)" "" "" "1"
 "CONTRATOF" "Contrato Flat (Post paid)" "" "" "1"
+"CONTRATOFIXEDC" "La De Casa 20" "" "" "1"
 "CONTRATOM" "Contrato M (Post paid)" "" "" "1"
 "CONTRATOM2" "Contrato M2 (Post paid)" "" "" "1"
 "CONTRATOS" "Contrato S (Post paid)" "" "" "1"
