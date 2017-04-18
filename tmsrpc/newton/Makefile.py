@@ -1,6 +1,7 @@
 from pike import *
 import os
 from subprocess import call, Popen, PIPE
+from ast import literal_eval
 import tempfile
 import shutil
 import socket
