@@ -314,7 +314,6 @@ END.
 FUNCTION fSetMigrationFees RETURNS CHAR
    (iiMsSeq AS INT,
     icCommand AS CHAR):
-    DEF VAR lcStat AS CHAR NO-UNDO.
    RETURN "".
 END.
 /*Function sets migration related upsells*/
@@ -324,7 +323,6 @@ FUNCTION fSetMigrationUpsell RETURNS CHAR
     icCommand AS CHAR,
     iiAmount AS INT,
     ilgSimulate AS LOGICAL):
-    DEF VAR lcStat AS CHAR NO-UNDO.
     DEF VAR i AS INT NO-UNDO.
     DEF VAR lcError AS CHAR NO-UNDO.
     DEF VAR lcReturn AS CHAR NO-UNDO.
@@ -355,7 +353,6 @@ END.
 FUNCTION fSetMigrationUpsells RETURNS CHAR
    (iiMsSeq AS INT,
     icCommand AS CHAR):
-    DEF VAR lcStat AS CHAR NO-UNDO.
     DEF VAR i AS INT NO-UNDO.
     DEF VAR lcUpsell AS CHAR NO-UNDO.
     DEF VAR lcError AS CHAR NO-UNDO.
@@ -387,7 +384,6 @@ FUNCTION fSetMigrationTerminals RETURNS CHAR
    (iiMsSeq AS INT,
     iiOrderID AS INT,
     icTerminals AS CHAR):
-   DEF VAR lcStat AS CHAR NO-UNDO.
    DEF VAR lcTerminal AS CHAR NO-UNDO.
    DEF VAR i AS INT NO-UNDO.
 
@@ -407,7 +403,6 @@ END.
 FUNCTION fSetMigrationUsedData RETURNS CHAR
    (iiMsSeq AS INT,
     iiCommand AS INT):
-    DEF VAR lcStat AS CHAR NO-UNDO.
    RETURN "".
 END.
 
@@ -458,7 +453,6 @@ END.
 FUNCTION fSetMigrationBonos RETURNS CHAR
    (iiMsSeq AS INT,
     icCommand AS CHAR):
-    DEF VAR lcStat AS CHAR NO-UNDO.
     DEF VAR i AS INT NO-UNDO.
     DEF VAR lc AS CHAR NO-UNDO.
     DEF VAR lcError AS CHAR NO-UNDO.
@@ -494,7 +488,6 @@ END.
 FUNCTION fSetMigrationFAT RETURNS CHAR
    (iiMsSeq AS INT,
     idCommand AS DECIMAL):
-    DEF VAR lcStat AS CHAR NO-UNDO.
 /*
      ocErrInfo =  fCreateFatRow(
                              "GOOGLEVASFAT",
@@ -683,6 +676,7 @@ PROCEDURE pReadInputJSON:
 
    objJsonToTT:mParseJsonFile(icFile).
    DO WHILE objJsonToTT:mGetNext():
+      lcRet = "".
       FOR EACH ttRootLevel: 
          lcMSISDN = ttRootLevel.msisdn. 
          limsseq = 0.
@@ -702,7 +696,7 @@ PROCEDURE pReadInputJSON:
       lcStat =  fSetMigrationBarring(liMsSeq, lcBCommand, ilgSimulate).
       lcCommands = lcCommands + lcBCommand + "|".
       IF lcStat NE "" THEN DO:
-         lcRet = "Barring error: " + lcStat + "/".
+         lcRet = lcRet + "Barring error: " + lcStat + "/".
          lcStat = "".
       END.
 
@@ -714,7 +708,7 @@ PROCEDURE pReadInputJSON:
 
           lcCommands = lcCommands + " " + ttUpsells.upsell_id.                            
           IF lcStat NE "" THEN DO:
-             lcRet = "Upsell error: " + lcStat + "/".
+             lcRet = lcRet + "Upsell error: " + lcStat + "/".
              lcStat = "".
          END.
          lcCommands = lcCommands + "|".
@@ -739,7 +733,7 @@ PROCEDURE pReadInputJSON:
 
          lcMQMessage = fGenerateOrderInfo(liOrderID,
                                        lcMSISDN,
-                                       lcStat).
+                                       lcRet).
          IF lcMQMessage EQ "" THEN
             lcCommands = lcCommands + ";Message creation failed".
          ELSE DO:
