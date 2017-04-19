@@ -45,6 +45,12 @@ PROCEDURE pAddressChange:
    DEF VAR lcStreetCode AS CHAR NO-UNDO. 
    DEF VAR lcCityCode AS CHAR NO-UNDO. 
    DEF VAR lcTownCode AS CHAR NO-UNDO. 
+   DEF VAR lcMemo     AS CHAR NO-UNDO.
+
+   IF MsRequest.ReqSource = "4" THEN
+      lcMemo = "Agent" + CHR(255) + "TMS".
+   ELSE IF MsRequest.ReqSource = "6" THEN
+      lcMemo = "Agent" + CHR(255) + "VISTA".
    
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -89,7 +95,10 @@ PROCEDURE pAddressChange:
           Customer.Region     = lcRegion
           Customer.InvGroup    = fDefInvGroup(lcRegion).
    
-   IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+   IF llDoEvent THEN 
+      RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                           {&STAR_EVENT_USER}, 
+                                           lcMemo).
 
    ASSIGN
        lcStreetCode = (IF MsRequest.ReqIParam3 NE 0 THEN 
@@ -122,4 +131,6 @@ PROCEDURE pAddressChange:
    fReqStatus(2,""). 
  
 END PROCEDURE.
+
+
 
