@@ -46,7 +46,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcAllowedBundles):
     
     ASSIGN lcBundle = ENTRY(liCount,lcAllowedBundles).
     
-    IF lcBundle = "" OR lcBundle = MobSub.CliType OR LOOKUP(lcBundle,"CONTDSL,CONTFH50,CONTFH300") > 0 THEN  /* Except mobile & fixedline base bundle */
+    IF lcBundle = "" OR lcBundle = MobSub.CliType OR LOOKUP(lcBundle,"CONTDSL,CONTFH50,CONTFH300") > 0 OR LOOKUP(lcBundle,"MM_DATA600") > 0 THEN  /* Except mobile & fixedline base bundle. Temporaryly blocking MM_DATA600 */
         NEXT.
              
     add_string(lcResultArray,"", ENTRY(liCount,lcAllowedBundles) + "|" + STRING(Mobsub.MsSeq)).
