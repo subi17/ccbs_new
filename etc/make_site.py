@@ -92,7 +92,7 @@ def modgen():
     if environment == 'safeproduction':
         yield '/tmsapps'
     for mod in modules:
-        if environment != 'development':
+        if environment == 'production':
             yield '{0}/{0}.pl'.format(mod)
         yield mod
     yield 'tms_support'
