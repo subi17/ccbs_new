@@ -291,12 +291,14 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
             ttCDR.TimeStart >= liPrepRenewal THEN DO:
 
             IF ttCDR.EventType EQ "GPRS" THEN DO:
-               IF ttCDR.Charge EQ 0 THEN DO:
+               IF ttCDR.Charge EQ 0 AND
+                  ttCDR.Accumulator > 0 THEN DO:
                   ldePrepDataUsageMonthly  = ttCDR.Accumulator.
                END.
             END.
             ELSE IF ttCDR.EventType EQ "CALL" AND 
-                    ttCDR.CLIType EQ "TARJ9" THEN DO:  
+                    ttCDR.CLIType EQ "TARJ9" AND
+                    ttCDR.Accumulator > 0 THEN DO:  
                ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
             END.
          END.
