@@ -383,6 +383,21 @@ bulkload: DiscountPlan
 
 bulkload: DiscountPlan
   Brand: "1"
+  DPId: 42
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCWINBACK"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCWINBACK"
+  DPName: "Winback ADSL Discount"
+  SubjectType: "List"
+  ValidPeriods: 6
+
+bulkload: DiscountPlan
+  Brand: "1"
   DPId: 21
   Subject: "Contract Target"
   TargetType: "List"

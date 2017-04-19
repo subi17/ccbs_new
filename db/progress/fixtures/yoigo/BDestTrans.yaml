@@ -113,6 +113,14 @@ bulkload: BDestTrans
 bulkload: BDestTrans
   BDest: "010"
   RatingZone: "A"
+  TranslateNumber: "902357640"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-02-27
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
   TranslateNumber: "902540193"
   BdestID: 1
   ToDate: 2049-12-31

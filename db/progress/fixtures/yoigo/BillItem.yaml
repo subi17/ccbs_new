@@ -1066,6 +1066,21 @@ bulkload: BillItem
   VIPAccNum: 70514100
 
 bulkload: BillItem
+  BillCode: "BONOVOIPCPACT"
+  BIName: "FAT Bono VOIP"
+  AccNum: 70514100
+  BIGroup: "13"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "053"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
   BillCode: "BONO_VOIP"
   BIName: "Bono VoIP"
   AccNum: 70514100
@@ -1100,21 +1115,6 @@ bulkload: BillItem
   BIName: "Bono VOIP Upselling"
   AccNum: 70514100
   BIGroup: "3"
-  EUAccNum: 70514100
-  FSAccNum: 70514100
-  Brand: "1"
-  EUConAccNum: 70514100
-  CostCentre: "SL"
-  AltAccNum: 70514100
-  TaxClass: "1"
-  SAPRid: "053"
-  VIPAccNum: 70514100
-
-bulkload: BillItem
-  BillCode: "BONOVOIPCPACT"
-  BIName: "FAT Bono VOIP"
-  AccNum: 70514100
-  BIGroup: "13"
   EUAccNum: 70514100
   FSAccNum: 70514100
   Brand: "1"
@@ -1799,6 +1799,96 @@ bulkload: BillItem
   VIPAccNum: 70510100
 
 bulkload: BillItem
+  BillCode: "CONT27CF_A"
+  BIName: "Flat rate call forwarding"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CONT27CF_B"
+  BIName: "Flat rate call forwarding"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CONT27DISC"
+  BIName: "La Infinita 2GB DTO. discount"
+  AccNum: 70510100
+  BIGroup: "13"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CONT27MF"
+  BIName: "CONT27 monthly fee"
+  AccNum: 70514100
+  BIGroup: "18"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
+  BillCode: "CONT27VOICE_A"
+  BIName: "Flat rate national Voice"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CONT27VOICE_B"
+  BIName: "Flat rate national Voice"
+  AccNum: 70510100
+  BIGroup: "1"
+  EUAccNum: 70510100
+  FSAccNum: 70510100
+  Brand: "1"
+  EUConAccNum: 70510100
+  CostCentre: "SL"
+  AltAccNum: 70510100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70510100
+
+bulkload: BillItem
   BillCode: "CONT8DISC"
   BIName: "CONT8 monthly fee discount"
   AccNum: 70514100
@@ -2176,6 +2266,21 @@ bulkload: BillItem
   VIPAccNum: 70514100
 
 bulkload: BillItem
+  BillCode: "CONTDATA27"
+  BIName: "CONT27 national GPRS"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
   BillCode: "CONTDATA3"
   BIName: "IPL8 national GPRS"
   AccNum: 70514100
@@ -2267,6 +2372,21 @@ bulkload: BillItem
   VIPAccNum: 70514100
 
 bulkload: BillItem
+  BillCode: "CONTDSLMF"
+  BIName: "Convergent ADSL monthly fee"
+  AccNum: 70514100
+  BIGroup: "46"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "070"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
   BillCode: "CONTDSL_MIN_IN"
   BIName: "Convergent flat rate national fixed to mobil"
   AccNum: 70510100
@@ -2279,7 +2399,7 @@ bulkload: BillItem
   CostCentre: "SL"
   AltAccNum: 70510100
   TaxClass: "1"
-  SAPRid: "072"
+  SAPRid: "077"
   VIPAccNum: 70510100
 
 bulkload: BillItem
@@ -2295,23 +2415,8 @@ bulkload: BillItem
   CostCentre: "SL"
   AltAccNum: 70510100
   TaxClass: "1"
-  SAPRid: "071"
-  VIPAccNum: 70510100
-
-bulkload: BillItem
-  BillCode: "CONTDSLMF"
-  BIName: "Convergent ADSL monthly fee"
-  AccNum: 70514100
-  BIGroup: "46"
-  EUAccNum: 70514100
-  FSAccNum: 70514100
-  Brand: "1"
-  EUConAccNum: 70514100
-  CostCentre: "SL"
-  AltAccNum: 70514100
-  TaxClass: "1"
   SAPRid: "070"
-  VIPAccNum: 70514100
+  VIPAccNum: 70510100
 
 bulkload: BillItem
   BillCode: "CONTF8RETDISC"
@@ -2390,6 +2495,21 @@ bulkload: BillItem
   VIPAccNum: 70510100
 
 bulkload: BillItem
+  BillCode: "CONTFH300MF"
+  BIName: "Convergent FIBER 300MB monthly fee"
+  AccNum: 70514100
+  BIGroup: "46"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "070"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
   BillCode: "CONTFH300_MIN_IN"
   BIName: "Convergent flat rate national fixed to mobile"
   AccNum: 70510100
@@ -2402,7 +2522,7 @@ bulkload: BillItem
   CostCentre: "SL"
   AltAccNum: 70510100
   TaxClass: "1"
-  SAPRid: "072"
+  SAPRid: "077"
   VIPAccNum: 70510100
 
 bulkload: BillItem
@@ -2418,12 +2538,12 @@ bulkload: BillItem
   CostCentre: "SL"
   AltAccNum: 70510100
   TaxClass: "1"
-  SAPRid: "071"
+  SAPRid: "070"
   VIPAccNum: 70510100
 
 bulkload: BillItem
-  BillCode: "CONTFH300MF"
-  BIName: "Convergent FIBER 300MB monthly fee"
+  BillCode: "CONTFH50MF"
+  BIName: "Convergent FIBER 50MB monthly fee"
   AccNum: 70514100
   BIGroup: "46"
   EUAccNum: 70514100
@@ -2449,7 +2569,7 @@ bulkload: BillItem
   CostCentre: "SL"
   AltAccNum: 70510100
   TaxClass: "1"
-  SAPRid: "072"
+  SAPRid: "077"
   VIPAccNum: 70510100
 
 bulkload: BillItem
@@ -2465,23 +2585,8 @@ bulkload: BillItem
   CostCentre: "SL"
   AltAccNum: 70510100
   TaxClass: "1"
-  SAPRid: "071"
-  VIPAccNum: 70510100
-
-bulkload: BillItem
-  BillCode: "CONTFH50MF"
-  BIName: "Convergent FIBER 50MB monthly fee"
-  AccNum: 70514100
-  BIGroup: "46"
-  EUAccNum: 70514100
-  FSAccNum: 70514100
-  Brand: "1"
-  EUConAccNum: 70514100
-  CostCentre: "SL"
-  AltAccNum: 70514100
-  TaxClass: "1"
   SAPRid: "070"
-  VIPAccNum: 70514100
+  VIPAccNum: 70510100
 
 bulkload: BillItem
   BillCode: "CONTM2DISC"
@@ -3114,22 +3219,6 @@ bulkload: BillItem
   VIPAccNum: 70510100
 
 bulkload: BillItem
-  BillCode: "CONTS2GB_DATA"
-  BIName: "Cont S national GPRS"
-  AccNum: 70514100
-  BIGroup: "3"
-  EUAccNum: 70514100
-  FSAccNum: 70514100
-  InvSect: "1"
-  Brand: "1"
-  EUConAccNum: 70514100
-  CostCentre: "SL"
-  AltAccNum: 70514100
-  TaxClass: "1"
-  SAPRid: "022"
-  VIPAccNum: 70514100
-
-bulkload: BillItem
   BillCode: "CONTS2GBCF_A"
   BIName: "Flat rate call forwarding"
   AccNum: 70510100
@@ -3207,6 +3296,22 @@ bulkload: BillItem
   TaxClass: "1"
   SAPRid: "022"
   VIPAccNum: 70510100
+
+bulkload: BillItem
+  BillCode: "CONTS2GB_DATA"
+  BIName: "Cont S national GPRS"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  InvSect: "1"
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "022"
+  VIPAccNum: 70514100
 
 bulkload: BillItem
   BillCode: "CONTS30CF_A"
@@ -4316,6 +4421,21 @@ bulkload: BillItem
   VIPAccNum: 60722114
 
 bulkload: BillItem
+  BillCode: "DISCWINBACK"
+  BIName: "Discount MF for Winback ADSL"
+  AccNum: 70514100
+  BIGroup: "13"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "070"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
   BillCode: "DOA"
   BIName: "DOA_no_procede"
   AccNum: 70518111
@@ -4553,7 +4673,7 @@ bulkload: BillItem
   CostCentre: "SL"
   AltAccNum: 70510100
   TaxClass: "1"
-  SAPRid: "071"
+  SAPRid: "072"
   VIPAccNum: 70510100
 
 bulkload: BillItem
@@ -4585,7 +4705,7 @@ bulkload: BillItem
   CostCentre: "SL"
   AltAccNum: 70510100
   TaxClass: "1"
-  SAPRid: "072"
+  SAPRid: "071"
   VIPAccNum: 70510100
 
 bulkload: BillItem
@@ -9432,6 +9552,76 @@ bulkload: BillItem
   VIPAccNum: 70020105
 
 bulkload: BillItem
+  BillCode: "G0000316"
+  BIName: "Wiko Sunny"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "G0000317"
+  BIName: "Alcatel Pixi 4 5 3G"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "G0000318"
+  BIName: "Huawei P8 Lite 2017"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "G0000319"
+  BIName: "Huawei P10"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "G0000320"
+  BIName: "Alcatel 2008G"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
   BillCode: "G9999999"
   BIName: "PTE Galaxy Note 3 Neo"
   AccNum: 70020105
@@ -10326,6 +10516,20 @@ bulkload: BillItem
 bulkload: BillItem
   BillCode: "P011T45W2"
   BIName: "Kazam Trooper 450 White"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "P012WSUW2"
+  BIName: "Wiko Sunny White"
   AccNum: 70020105
   BIGroup: "7"
   EUAccNum: 70020105
@@ -19181,6 +19385,34 @@ bulkload: BillItem
   Active: FALSE
 
 bulkload: BillItem
+  BillCode: "P0438L7N2"
+  BIName: "Huawei P8 Lite 2017 Black"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "P0438L7W2"
+  BIName: "Huawei P8 Lite 2017 White"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
   BillCode: "P0438LRN2"
   BIName: "Huawei P8 Lite Black with Talkband B2 Black"
   AccNum: 70020105
@@ -19915,6 +20147,34 @@ bulkload: BillItem
   VIPAccNum: 70020105
 
 bulkload: BillItem
+  BillCode: "P043P10N2"
+  BIName: "Huawei P10 Black"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "P043P10W2"
+  BIName: "Huawei P10 White"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
   BillCode: "P043P1XN2"
   BIName: "Huawei P1 XL Black"
   AccNum: 70020105
@@ -20510,6 +20770,20 @@ bulkload: BillItem
 bulkload: BillItem
   BillCode: "P044HX5W2"
   BIName: "Honor 5x White"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "P04508GN2"
+  BIName: "Alcatel 2008G Black"
   AccNum: 70020105
   BIGroup: "7"
   EUAccNum: 70020105
@@ -21276,6 +21550,20 @@ bulkload: BillItem
 bulkload: BillItem
   BillCode: "P045P3SP2"
   BIName: "Alcatel POP 3 (5) Soft Silver"
+  AccNum: 70020105
+  BIGroup: "7"
+  EUAccNum: 70020105
+  FSAccNum: 70020105
+  Brand: "1"
+  EUConAccNum: 70020105
+  AltAccNum: 70020105
+  TaxClass: "2"
+  SAPRid: "032"
+  VIPAccNum: 70020105
+
+bulkload: BillItem
+  BillCode: "P045P43W2"
+  BIName: "Alcatel Pixi 4 5 3G White"
   AccNum: 70020105
   BIGroup: "7"
   EUAccNum: 70020105
@@ -26058,6 +26346,20 @@ bulkload: BillItem
   VIPAccNum: 75902002
 
 bulkload: BillItem
+  BillCode: "REJECTION_FEE"
+  BIName: "Rejection fee"
+  AccNum: 75902003
+  BIGroup: "31"
+  EUAccNum: 75902003
+  FSAccNum: 75902003
+  Brand: "1"
+  EUConAccNum: 75902003
+  CostCentre: "F00001"
+  AltAccNum: 75902003
+  TaxClass: "1"
+  VIPAccNum: 75902003
+
+bulkload: BillItem
   BillCode: "REJECT_FEE_DISC"
   BIName: "Rejection fee discount"
   AccNum: 75902003
@@ -26070,20 +26372,6 @@ bulkload: BillItem
   AltAccNum: 75902003
   TaxClass: "1"
   SAPRid: "022"
-  VIPAccNum: 75902003
-
-bulkload: BillItem
-  BillCode: "REJECTION_FEE"
-  BIName: "Rejection fee"
-  AccNum: 75902003
-  BIGroup: "31"
-  EUAccNum: 75902003
-  FSAccNum: 75902003
-  Brand: "1"
-  EUConAccNum: 75902003
-  CostCentre: "F00001"
-  AltAccNum: 75902003
-  TaxClass: "1"
   VIPAccNum: 75902003
 
 bulkload: BillItem

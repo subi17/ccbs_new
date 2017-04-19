@@ -86,6 +86,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "10100001"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT27"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONT8"
   BillCode: "10100001"
   CCN: 81
@@ -126,6 +137,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2016-12-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "VOICE100"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "10100001"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
   SLGAType: 1
   Brand: "1"
 
@@ -273,6 +295,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "10100001"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTFH55_300"
   BillCode: "10100001"
   CCN: 81
@@ -313,6 +346,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONT25"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "10100001"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
   SLGAType: 1
   Brand: "1"
 
@@ -590,6 +634,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "10100003"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT27"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONT8"
   BillCode: "10100003"
   CCN: 81
@@ -634,6 +689,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "10100003"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTDSL58"
   BillCode: "10100003"
   CCN: 81
@@ -652,50 +718,6 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONT25"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "10100003"
-  CCN: 81
-  BDest: "*"
-  ValidFrom: 2012-02-22
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "CONTF40"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "10100003"
-  CCN: 81
-  BDest: "*"
-  ValidFrom: 2012-02-22
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "CONTF10"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "10100003"
-  CCN: 81
-  BDest: "*"
-  ValidFrom: 2015-04-14
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "CONTF8"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "10100003"
-  CCN: 81
-  BDest: "*"
-  ValidFrom: 2015-04-14
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "CONTF11"
   SLGAType: 1
   Brand: "1"
 
@@ -740,6 +762,50 @@ bulkload: SLGAnalyse
   ValidFrom: 2012-02-22
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONTF20D"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "10100003"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2012-02-22
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTF40"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "10100003"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2012-02-22
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTF10"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "10100003"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2015-04-14
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTF8"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "10100003"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2015-04-14
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTF11"
   SLGAType: 1
   Brand: "1"
 
@@ -2793,6 +2859,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "10100003"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTFH55_300"
   BillCode: "10100003"
   CCN: 81
@@ -2833,6 +2910,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONT25"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "10100003"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
   SLGAType: 1
   Brand: "1"
 
@@ -3089,6 +3177,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT27"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONT8"
   BillCode: "10100005"
   CCN: 81
@@ -3129,6 +3228,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2016-12-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "VOICE100"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
   SLGAType: 1
   Brand: "1"
 
@@ -3247,6 +3357,186 @@ bulkload: SLGAnalyse
   Clitype: "CONTF"
   BillCode: "10100005"
   CCN: 81
+  BDest: "011"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF40"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "012"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF40"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "093"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF40"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "095"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF40"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "096"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF40"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "097"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF40"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "098"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF40"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "010"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF10"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "011"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF10"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "012"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF10"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "093"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF10"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "095"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF10"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "096"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF10"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "097"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF10"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "098"
+  ValidFrom: 2012-02-22
+  ValidTo: 2012-03-06
+  ServiceLimitGroup: "CONTF10"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  BelongTo: FALSE
+  Clitype: "CONTF"
+  BillCode: "10100005"
+  CCN: 81
   BDest: "010"
   ValidFrom: 2011-12-01
   ValidTo: 2012-03-06
@@ -3635,186 +3925,6 @@ bulkload: SLGAnalyse
   ValidFrom: 2012-02-22
   ValidTo: 2012-03-06
   ServiceLimitGroup: "CONTF40"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "011"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "012"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "093"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "095"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "096"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "097"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "098"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF40"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "010"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "011"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "012"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "093"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "095"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "096"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "097"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  BelongTo: FALSE
-  Clitype: "CONTF"
-  BillCode: "10100005"
-  CCN: 81
-  BDest: "098"
-  ValidFrom: 2012-02-22
-  ValidTo: 2012-03-06
-  ServiceLimitGroup: "CONTF10"
   SLGAType: 1
   Brand: "1"
 
@@ -3848,6 +3958,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2016-12-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "VOICE100"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
   SLGAType: 1
   Brand: "1"
 
@@ -3892,6 +4013,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONT25"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "10100005"
+  CCN: 81
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
   SLGAType: 1
   Brand: "1"
 
@@ -4977,6 +5109,18 @@ bulkload: SLGAnalyse
   BillCode: "14100001"
   CCN: 93
   BDest: "GPRS"
+  ValidFrom: 2016-02-24
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONT24"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
   ValidFrom: 2015-03-04
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONT24"
@@ -5078,18 +5222,6 @@ bulkload: SLGAnalyse
   ServiceLimitGroup: "DATA7"
   Prior: 11
   SLGAType: 4
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONT24"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2016-02-24
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "DATA6_UPSELL"
-  Prior: 40
-  SLGAType: 6
   Brand: "1"
 
 bulkload: SLGAnalyse
@@ -5304,6 +5436,90 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONT26"
+  Prior: 10
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6"
+  Prior: 11
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA7"
+  Prior: 11
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DSS"
+  Prior: 9
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA200_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DSS200_UPSELL"
+  Prior: 8
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT27"
   Prior: 10
   SLGAType: 1
   Brand: "1"
@@ -7037,6 +7253,54 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTDSL39"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6"
+  Prior: 11
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTDSL39"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTDSL39"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA200_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTDSL39"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT10"
+  Prior: 10
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTDSL40"
   BillCode: "14100001"
   CCN: 93
@@ -7181,6 +7445,54 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6"
+  Prior: 11
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA200_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
+  Prior: 10
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTDSL58"
   BillCode: "14100001"
   CCN: 93
@@ -7274,150 +7586,6 @@ bulkload: SLGAnalyse
   ServiceLimitGroup: "CONT25"
   Prior: 10
   SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2012-03-26
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "UPGRADE_UPSELL"
-  Prior: 45
-  SLGAType: 6
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2012-11-01
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "MDUB9"
-  Prior: 35
-  SLGAType: 4
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2012-11-01
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "DATA9_UPSELL"
-  Prior: 40
-  SLGAType: 6
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2013-09-01
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "DATA5"
-  Prior: 35
-  SLGAType: 4
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2013-09-01
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "DATA5_UPSELL"
-  Prior: 40
-  SLGAType: 6
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2014-05-01
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "DATA6"
-  Prior: 35
-  SLGAType: 4
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2014-05-01
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "DATA6_UPSELL"
-  Prior: 40
-  SLGAType: 6
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2015-04-14
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "CONTF8"
-  Prior: 25
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2015-04-14
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "CONTF11"
-  Prior: 25
-  SLGAType: 1
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2015-06-04
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "DATA200_UPSELL"
-  Prior: 40
-  SLGAType: 6
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2015-06-04
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "DSS200_UPSELL"
-  Prior: 7
-  SLGAType: 6
-  Brand: "1"
-
-bulkload: SLGAnalyse
-  Clitype: "CONTF"
-  BillCode: "14100001"
-  CCN: 93
-  BDest: "GPRS"
-  ValidFrom: 2015-12-01
-  ValidTo: 2049-12-31
-  ServiceLimitGroup: "DATA7"
-  Prior: 35
-  SLGAType: 4
   Brand: "1"
 
 bulkload: SLGAnalyse
@@ -7637,6 +7805,150 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2012-03-26
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "UPGRADE_UPSELL"
+  Prior: 45
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2012-11-01
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "MDUB9"
+  Prior: 35
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2012-11-01
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA9_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA5"
+  Prior: 35
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA5_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6"
+  Prior: 35
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2015-04-14
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTF8"
+  Prior: 25
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2015-04-14
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTF11"
+  Prior: 25
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2015-06-04
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA200_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2015-06-04
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DSS200_UPSELL"
+  Prior: 7
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTF"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2015-12-01
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA7"
+  Prior: 35
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTFF"
   BillCode: "14100001"
   CCN: 93
@@ -7793,6 +8105,54 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTFH39_50"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6"
+  Prior: 11
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH39_50"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH39_50"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA200_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH39_50"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT10"
+  Prior: 10
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTFH40_50"
   BillCode: "14100001"
   CCN: 93
@@ -7937,6 +8297,54 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTFH49_300"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6"
+  Prior: 11
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH49_300"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH49_300"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA200_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH49_300"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT10"
+  Prior: 10
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTFH50_300"
   BillCode: "14100001"
   CCN: 93
@@ -7982,6 +8390,54 @@ bulkload: SLGAnalyse
   ServiceLimitGroup: "DATA6_UPSELL"
   Prior: 40
   SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6"
+  Prior: 11
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA200_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
+  Prior: 10
+  SLGAType: 1
   Brand: "1"
 
 bulkload: SLGAnalyse
@@ -8172,6 +8628,54 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONT25"
+  Prior: 10
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6"
+  Prior: 11
+  SLGAType: 4
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA6_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "DATA200_UPSELL"
+  Prior: 40
+  SLGAType: 6
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "14100001"
+  CCN: 93
+  BDest: "GPRS"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
   Prior: 10
   SLGAType: 1
   Brand: "1"
@@ -9669,6 +10173,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "14104019"
+  CCN: 90
+  BDest: "ROAMGPRS_EU"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "HSPA_ROAM_EU"
+  SLGAType: 8
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONT4"
   BillCode: "14104019"
   CCN: 90
@@ -9746,6 +10261,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTDSL39"
+  BillCode: "14104019"
+  CCN: 90
+  BDest: "ROAMGPRS_EU"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "HSPA_ROAM_EU"
+  SLGAType: 8
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTDSL40"
   BillCode: "14104019"
   CCN: 90
@@ -9773,6 +10299,17 @@ bulkload: SLGAnalyse
   CCN: 90
   BDest: "ROAMGPRS_EU"
   ValidFrom: 2016-11-01
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "HSPA_ROAM_EU"
+  SLGAType: 8
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "14104019"
+  CCN: 90
+  BDest: "ROAMGPRS_EU"
+  ValidFrom: 2017-02-20
   ValidTo: 2049-12-31
   ServiceLimitGroup: "HSPA_ROAM_EU"
   SLGAType: 8
@@ -9823,6 +10360,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTFH39_50"
+  BillCode: "14104019"
+  CCN: 90
+  BDest: "ROAMGPRS_EU"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "HSPA_ROAM_EU"
+  SLGAType: 8
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTFH40_50"
   BillCode: "14104019"
   CCN: 90
@@ -9856,11 +10404,33 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTFH49_300"
+  BillCode: "14104019"
+  CCN: 90
+  BDest: "ROAMGPRS_EU"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "HSPA_ROAM_EU"
+  SLGAType: 8
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTFH50_300"
   BillCode: "14104019"
   CCN: 90
   BDest: "ROAMGPRS_EU"
   ValidFrom: 2016-11-01
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "HSPA_ROAM_EU"
+  SLGAType: 8
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "14104019"
+  CCN: 90
+  BDest: "ROAMGPRS_EU"
+  ValidFrom: 2017-02-20
   ValidTo: 2049-12-31
   ServiceLimitGroup: "HSPA_ROAM_EU"
   SLGAType: 8
@@ -9905,6 +10475,17 @@ bulkload: SLGAnalyse
   CCN: 90
   BDest: "ROAMGPRS_EU"
   ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "HSPA_ROAM_EU"
+  SLGAType: 8
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "14104019"
+  CCN: 90
+  BDest: "ROAMGPRS_EU"
+  ValidFrom: 2017-02-20
   ValidTo: 2049-12-31
   ServiceLimitGroup: "HSPA_ROAM_EU"
   SLGAType: 8
@@ -10054,6 +10635,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "CFOTHER"
+  CCN: 30
+  BDest: "*"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT27"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONT8"
   BillCode: "CFOTHER"
   CCN: 30
@@ -10094,6 +10686,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2016-12-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "VOICE100"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "CFOTHER"
+  CCN: 30
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
   SLGAType: 1
   Brand: "1"
 
@@ -10241,6 +10844,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "CFOTHER"
+  CCN: 30
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTFH55_300"
   BillCode: "CFOTHER"
   CCN: 30
@@ -10281,6 +10895,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONT25"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "CFOTHER"
+  CCN: 30
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
   SLGAType: 1
   Brand: "1"
 
@@ -10528,6 +11153,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONT27"
+  BillCode: "CFYOIGO"
+  CCN: 30
+  BDest: "*"
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT27"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONT8"
   BillCode: "CFYOIGO"
   CCN: 30
@@ -10568,6 +11204,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2016-12-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "VOICE100"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "CFYOIGO"
+  CCN: 30
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
   SLGAType: 1
   Brand: "1"
 
@@ -10715,6 +11362,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "CFYOIGO"
+  CCN: 30
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTFH55_300"
   BillCode: "CFYOIGO"
   CCN: 30
@@ -10755,6 +11413,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONT25"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "CFYOIGO"
+  CCN: 30
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONT26"
   SLGAType: 1
   Brand: "1"
 
@@ -10924,6 +11593,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTDSL39"
+  BillCode: "F10100003"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTDSL"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTDSL40"
   BillCode: "F10100003"
   CCN: 1081
@@ -10957,6 +11637,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "F10100003"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTDSL"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTDSL58"
   BillCode: "F10100003"
   CCN: 1081
@@ -10975,6 +11666,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONTDSL"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH39_50"
+  BillCode: "F10100003"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTFH50"
   SLGAType: 1
   Brand: "1"
 
@@ -11012,6 +11714,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTFH49_300"
+  BillCode: "F10100003"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTFH300"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTFH50_300"
   BillCode: "F10100003"
   CCN: 1081
@@ -11019,6 +11732,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2016-11-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONTFH300"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "F10100003"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTFH50"
   SLGAType: 1
   Brand: "1"
 
@@ -11063,6 +11787,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONTFH50"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "F10100003"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTFH300"
   SLGAType: 1
   Brand: "1"
 
@@ -11089,6 +11824,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTDSL39"
+  BillCode: "F10100005"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTDSL"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTDSL40"
   BillCode: "F10100005"
   CCN: 1081
@@ -11122,6 +11868,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTDSL52"
+  BillCode: "F10100005"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTDSL"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTDSL58"
   BillCode: "F10100005"
   CCN: 1081
@@ -11140,6 +11897,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONTDSL"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH39_50"
+  BillCode: "F10100005"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTFH50"
   SLGAType: 1
   Brand: "1"
 
@@ -11177,6 +11945,17 @@ bulkload: SLGAnalyse
   Brand: "1"
 
 bulkload: SLGAnalyse
+  Clitype: "CONTFH49_300"
+  BillCode: "F10100005"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTFH300"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
   Clitype: "CONTFH50_300"
   BillCode: "F10100005"
   CCN: 1081
@@ -11184,6 +11963,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2016-11-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONTFH300"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH52_50"
+  BillCode: "F10100005"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTFH50"
   SLGAType: 1
   Brand: "1"
 
@@ -11228,6 +12018,17 @@ bulkload: SLGAnalyse
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
   ServiceLimitGroup: "CONTFH50"
+  SLGAType: 1
+  Brand: "1"
+
+bulkload: SLGAnalyse
+  Clitype: "CONTFH62_300"
+  BillCode: "F10100005"
+  CCN: 1081
+  BDest: "*"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ServiceLimitGroup: "CONTFH300"
   SLGAType: 1
   Brand: "1"
 

@@ -444,6 +444,30 @@ bulkload: TMRItemValue
 
 bulkload: TMRItemValue
   TMRuleSeq: 14
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT26_DATA_IN,CONTDSL52"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT26_DATA_IN,CONTFH52_50"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT26_DATA_IN,CONTFH62_300"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT27_DATA_IN,CONT27"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
   FromDate: 2015-04-14
   ToDate: 2049-12-31
   CounterItemValues: "CONTF11_DATA_IN,CONTF"
@@ -585,6 +609,24 @@ bulkload: TMRItemValue
   FromDate: 2017-02-01
   ToDate: 2049-12-31
   CounterItemValues: "GPRSDATA_CONT10,CONT10"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_CONT10,CONTDSL39"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_CONT10,CONTFH39_50"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_CONT10,CONTFH49_300"
 
 bulkload: TMRItemValue
   TMRuleSeq: 14
@@ -1002,6 +1044,12 @@ bulkload: TMRItemValue
 
 bulkload: TMRItemValue
   TMRuleSeq: 33
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT27"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
   FromDate: 2013-09-01
   ToDate: 2049-12-31
   CounterItemValues: "GPRSDATA_DATA*,CONT4"
@@ -1044,9 +1092,21 @@ bulkload: TMRItemValue
 
 bulkload: TMRItemValue
   TMRuleSeq: 33
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTDSL39"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
   FromDate: 2016-11-01
   ToDate: 2049-12-31
   CounterItemValues: "GPRSDATA_DATA*,CONTDSL45"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTDSL52"
 
 bulkload: TMRItemValue
   TMRuleSeq: 33
@@ -1074,9 +1134,27 @@ bulkload: TMRItemValue
 
 bulkload: TMRItemValue
   TMRuleSeq: 33
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTFH39_50"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
   FromDate: 2016-11-01
   ToDate: 2049-12-31
   CounterItemValues: "GPRSDATA_DATA*,CONTFH45_50"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTFH49_300"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTFH52_50"
 
 bulkload: TMRItemValue
   TMRuleSeq: 33
@@ -1095,6 +1173,12 @@ bulkload: TMRItemValue
   FromDate: 2017-02-01
   ToDate: 2049-12-31
   CounterItemValues: "GPRSDATA_DATA*,CONTFH59_50"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTFH62_300"
 
 bulkload: TMRItemValue
   TMRuleSeq: 33
@@ -1335,6 +1419,30 @@ bulkload: TMRItemValue
   FromDate: 2017-02-01
   ToDate: 2049-12-31
   CounterItemValues: "CONT26_VOICE_IN,CONT26"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT26_VOICE_IN,CONTDSL52"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT26_VOICE_IN,CONTFH52_50"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT26_VOICE_IN,CONTFH62_300"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT27_VOICE_IN,CONT27"
 
 bulkload: TMRItemValue
   TMRuleSeq: 34
@@ -1599,6 +1707,30 @@ bulkload: TMRItemValue
   FromDate: 2017-02-01
   ToDate: 2049-12-31
   CounterItemValues: "CONT26_VOICE_IN,CONT26"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT26_VOICE_IN,CONTDSL52"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT26_VOICE_IN,CONTFH52_50"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT26_VOICE_IN,CONTFH62_300"
+
+bulkload: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT27_VOICE_IN,CONT27"
 
 bulkload: TMRItemValue
   TMRuleSeq: 42

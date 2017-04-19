@@ -4635,6 +4635,382 @@ bulkload: CTServEl
 
 bulkload: CTServEl
   Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "BAIC"
+  FromDate: 2016-12-12
+  CTServEl: 8862
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "BAOC"
+  FromDate: 2016-12-12
+  CTServEl: 8863
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "BOIC"
+  FromDate: 2016-12-12
+  CTServEl: 8864
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8865
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "CAMPAIGN"
+  FromDate: 2016-12-12
+  ChgAllowed: FALSE
+  CTServEl: 8866
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "CCGW"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8867
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "CF"
+  FromDate: 2016-12-12
+  CTServEl: 8868
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "CLIP"
+  FromDate: 2016-12-12
+  CTServEl: 8869
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "CLIR"
+  FromDate: 2016-12-12
+  CTServEl: 8870
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "GPRS"
+  FromDate: 2016-12-12
+  CTServEl: 8871
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "IRDCUTOFF"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8872
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "IVR"
+  FromDate: 2016-12-12
+  CTServEl: 8873
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "KEEP"
+  FromDate: 2016-12-12
+  CTServEl: 8874
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "LANG"
+  FromDate: 2016-12-12
+  CTServEl: 8875
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "MMS"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8876
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "NAM"
+  FromDate: 2016-12-12
+  CTServEl: 8877
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "NTFNBR"
+  FromDate: 2016-12-12
+  CTServEl: 8878
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "NUMBERINQ"
+  FromDate: 2016-12-12
+  CTServEl: 8879
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "OBA"
+  FromDate: 2016-12-12
+  CTServEl: 8880
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "OBI"
+  FromDate: 2016-12-12
+  CTServEl: 8881
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "OBO"
+  FromDate: 2016-12-12
+  CTServEl: 8882
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "OBOPRE"
+  FromDate: 2016-12-12
+  CTServEl: 8883
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "OBOPRI"
+  FromDate: 2016-12-12
+  CTServEl: 8884
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "OBR"
+  FromDate: 2016-12-12
+  CTServEl: 8885
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "TS21"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8886
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "TS22"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8887
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  ServCom: "VMS"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8888
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "BB"
+  ServCom: "BB"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8889
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "BPSUB"
+  ServCom: "BPSUB"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8890
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "D_HOTL"
+  ServCom: "HOTLINE"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8891
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8892
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "LP"
+  ServCom: "LP"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8893
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "LTE"
+  ServCom: "LTE"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8894
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "NEWPOSTSUB"
+  ServCom: "LANG"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8895
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "SEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-12-12
+  CTServEl: 8896
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "SHAPER"
+  ServCom: "SHAPER"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8897
+  ServType: 1
+  DefParam: "DEFAULT"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "TMSService"
+  ServCom: "SHAPER_STP"
+  FromDate: 2016-12-12
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 8898
+  ServType: 1
+  DefParam: "CONT27"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "TMSService"
+  ServCom: "SMSINVOICE"
+  FromDate: 2016-12-12
+  CTServEl: 8899
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "TMSService"
+  ServCom: "TYPECHG"
+  FromDate: 2016-12-12
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 8900
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "UNSEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-12-12
+  DefValue: 2
+  CTServEl: 8901
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "VOIPVIDEO"
+  ServCom: "VOIPVIDEO"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8902
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "Y_HURP"
+  ServCom: "BARRING"
+  FromDate: 2016-12-12
+  DefValue: 1
+  CTServEl: 8903
+  ServType: 1
+  DefParam: "0001000"
+
+bulkload: CTServEl
+  Brand: "1"
   CLIType: "CONT4"
   ServPac: "*1"
   ServCom: "BAIC"
@@ -9250,6 +9626,392 @@ bulkload: CTServEl
 
 bulkload: CTServEl
   Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "BAIC"
+  FromDate: 2016-11-10
+  CTServEl: 5941
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "BAOC"
+  FromDate: 2016-11-10
+  CTServEl: 5942
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "BOIC"
+  FromDate: 2016-11-10
+  CTServEl: 5943
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5944
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "CAMPAIGN"
+  FromDate: 2016-11-10
+  ChgAllowed: FALSE
+  CTServEl: 5945
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "CCGW"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5946
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "CF"
+  FromDate: 2016-11-10
+  CTServEl: 5947
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "CLIP"
+  FromDate: 2016-11-10
+  CTServEl: 5948
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "CLIR"
+  FromDate: 2016-11-10
+  CTServEl: 5949
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "GPRS"
+  FromDate: 2016-11-10
+  CTServEl: 5950
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "IRDCUTOFF"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5951
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "IVR"
+  FromDate: 2016-11-10
+  CTServEl: 5952
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "KEEP"
+  FromDate: 2016-11-10
+  CTServEl: 5953
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  CTServEl: 5954
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "MMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5955
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "NAM"
+  FromDate: 2016-11-10
+  CTServEl: 5956
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "NTFNBR"
+  FromDate: 2016-11-10
+  CTServEl: 5957
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "NUMBERINQ"
+  FromDate: 2016-11-10
+  CTServEl: 5958
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "OBA"
+  FromDate: 2016-11-10
+  CTServEl: 5959
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "OBI"
+  FromDate: 2016-11-10
+  CTServEl: 5960
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "OBO"
+  FromDate: 2016-11-10
+  CTServEl: 5961
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "OBOPRE"
+  FromDate: 2016-11-10
+  CTServEl: 5962
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "OBOPRI"
+  FromDate: 2016-11-10
+  CTServEl: 5963
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "OBR"
+  FromDate: 2016-11-10
+  CTServEl: 5964
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "TS21"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5965
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "TS22"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5966
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  ServCom: "VMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5967
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "BB"
+  ServCom: "BB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5968
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "BPSUB"
+  ServCom: "BPSUB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5969
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "D_HOTL"
+  ServCom: "HOTLINE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5970
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5971
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "LP"
+  ServCom: "LP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5972
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "LTE"
+  ServCom: "LTE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5973
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "NEWPOSTSUB"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5974
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "SEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  CTServEl: 5975
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "SHAPER"
+  ServCom: "SHAPER"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5976
+  ServType: 1
+  DefParam: "DEFAULT"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "TMSService"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5977
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "TMSService"
+  ServCom: "SHAPER_STP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 5978
+  ServType: 1
+  DefParam: "CONT10"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "TMSService"
+  ServCom: "SMSINVOICE"
+  FromDate: 2016-11-10
+  CTServEl: 5979
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "TMSService"
+  ServCom: "TYPECHG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 5980
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "UNSEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  DefValue: 2
+  CTServEl: 5981
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "VOIPVIDEO"
+  ServCom: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5982
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "Y_HURP"
+  ServCom: "BARRING"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5983
+  ServType: 1
+  DefParam: "0001000"
+
+bulkload: CTServEl
+  Brand: "1"
   CLIType: "CONTDSL40"
   ServPac: "*1"
   ServCom: "BAIC"
@@ -10408,6 +11170,392 @@ bulkload: CTServEl
 
 bulkload: CTServEl
   Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "BAIC"
+  FromDate: 2016-11-10
+  CTServEl: 5984
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "BAOC"
+  FromDate: 2016-11-10
+  CTServEl: 5985
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "BOIC"
+  FromDate: 2016-11-10
+  CTServEl: 5986
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5987
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "CAMPAIGN"
+  FromDate: 2016-11-10
+  ChgAllowed: FALSE
+  CTServEl: 5988
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "CCGW"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5989
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "CF"
+  FromDate: 2016-11-10
+  CTServEl: 5990
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "CLIP"
+  FromDate: 2016-11-10
+  CTServEl: 5991
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "CLIR"
+  FromDate: 2016-11-10
+  CTServEl: 5992
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "GPRS"
+  FromDate: 2016-11-10
+  CTServEl: 5993
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "IRDCUTOFF"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5994
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "IVR"
+  FromDate: 2016-11-10
+  CTServEl: 5995
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "KEEP"
+  FromDate: 2016-11-10
+  CTServEl: 5996
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  CTServEl: 5997
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "MMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 5998
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "NAM"
+  FromDate: 2016-11-10
+  CTServEl: 5999
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "NTFNBR"
+  FromDate: 2016-11-10
+  CTServEl: 6000
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "NUMBERINQ"
+  FromDate: 2016-11-10
+  CTServEl: 6001
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "OBA"
+  FromDate: 2016-11-10
+  CTServEl: 6002
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "OBI"
+  FromDate: 2016-11-10
+  CTServEl: 6003
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "OBO"
+  FromDate: 2016-11-10
+  CTServEl: 6004
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "OBOPRE"
+  FromDate: 2016-11-10
+  CTServEl: 6005
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "OBOPRI"
+  FromDate: 2016-11-10
+  CTServEl: 6006
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "OBR"
+  FromDate: 2016-11-10
+  CTServEl: 6007
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "TS21"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6008
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "TS22"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6009
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  ServCom: "VMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6010
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "BB"
+  ServCom: "BB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6011
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "BPSUB"
+  ServCom: "BPSUB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6012
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "D_HOTL"
+  ServCom: "HOTLINE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6013
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6014
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "LP"
+  ServCom: "LP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6015
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "LTE"
+  ServCom: "LTE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6016
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "NEWPOSTSUB"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6017
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "SEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  CTServEl: 6018
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "SHAPER"
+  ServCom: "SHAPER"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6019
+  ServType: 1
+  DefParam: "DEFAULT"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "TMSService"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6020
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "TMSService"
+  ServCom: "SHAPER_STP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 6021
+  ServType: 1
+  DefParam: "CONT26"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "TMSService"
+  ServCom: "SMSINVOICE"
+  FromDate: 2016-11-10
+  CTServEl: 6022
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "TMSService"
+  ServCom: "TYPECHG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 6023
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "UNSEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  DefValue: 2
+  CTServEl: 6024
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "VOIPVIDEO"
+  ServCom: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6025
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "Y_HURP"
+  ServCom: "BARRING"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6026
+  ServType: 1
+  DefParam: "0001000"
+
+bulkload: CTServEl
+  Brand: "1"
   CLIType: "CONTDSL58"
   ServPac: "*1"
   ServCom: "BAIC"
@@ -11127,7 +12275,7 @@ bulkload: CTServEl
   ChgAllowed: FALSE
   CTServEl: 5849
   ServType: 1
-  DefParam: "CONT24"
+  DefParam: "CONT25"
 
 bulkload: CTServEl
   Brand: "1"
@@ -12458,6 +13606,392 @@ bulkload: CTServEl
 
 bulkload: CTServEl
   Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "BAIC"
+  FromDate: 2016-11-10
+  CTServEl: 6027
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "BAOC"
+  FromDate: 2016-11-10
+  CTServEl: 6028
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "BOIC"
+  FromDate: 2016-11-10
+  CTServEl: 6029
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6030
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "CAMPAIGN"
+  FromDate: 2016-11-10
+  ChgAllowed: FALSE
+  CTServEl: 6031
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "CCGW"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6032
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "CF"
+  FromDate: 2016-11-10
+  CTServEl: 6033
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "CLIP"
+  FromDate: 2016-11-10
+  CTServEl: 6034
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "CLIR"
+  FromDate: 2016-11-10
+  CTServEl: 6035
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "GPRS"
+  FromDate: 2016-11-10
+  CTServEl: 6036
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "IRDCUTOFF"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6037
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "IVR"
+  FromDate: 2016-11-10
+  CTServEl: 6038
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "KEEP"
+  FromDate: 2016-11-10
+  CTServEl: 6039
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  CTServEl: 6040
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "MMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6041
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "NAM"
+  FromDate: 2016-11-10
+  CTServEl: 6042
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "NTFNBR"
+  FromDate: 2016-11-10
+  CTServEl: 6043
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "NUMBERINQ"
+  FromDate: 2016-11-10
+  CTServEl: 6044
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "OBA"
+  FromDate: 2016-11-10
+  CTServEl: 6045
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "OBI"
+  FromDate: 2016-11-10
+  CTServEl: 6046
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "OBO"
+  FromDate: 2016-11-10
+  CTServEl: 6047
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "OBOPRE"
+  FromDate: 2016-11-10
+  CTServEl: 6048
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "OBOPRI"
+  FromDate: 2016-11-10
+  CTServEl: 6049
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "OBR"
+  FromDate: 2016-11-10
+  CTServEl: 6050
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "TS21"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6051
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "TS22"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6052
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  ServCom: "VMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6053
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "BB"
+  ServCom: "BB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6054
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "BPSUB"
+  ServCom: "BPSUB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6055
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "D_HOTL"
+  ServCom: "HOTLINE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6056
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6057
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "LP"
+  ServCom: "LP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6058
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "LTE"
+  ServCom: "LTE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6059
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "NEWPOSTSUB"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6060
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "SEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  CTServEl: 6061
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "SHAPER"
+  ServCom: "SHAPER"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6062
+  ServType: 1
+  DefParam: "DEFAULT"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "TMSService"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6063
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "TMSService"
+  ServCom: "SHAPER_STP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 6064
+  ServType: 1
+  DefParam: "CONT10"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "TMSService"
+  ServCom: "SMSINVOICE"
+  FromDate: 2016-11-10
+  CTServEl: 6065
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "TMSService"
+  ServCom: "TYPECHG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 6066
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "UNSEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  DefValue: 2
+  CTServEl: 6067
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "VOIPVIDEO"
+  ServCom: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6068
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "Y_HURP"
+  ServCom: "BARRING"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6069
+  ServType: 1
+  DefParam: "0001000"
+
+bulkload: CTServEl
+  Brand: "1"
   CLIType: "CONTFH40_50"
   ServPac: "*1"
   ServCom: "BAIC"
@@ -13616,6 +15150,392 @@ bulkload: CTServEl
 
 bulkload: CTServEl
   Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "BAIC"
+  FromDate: 2016-11-10
+  CTServEl: 6070
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "BAOC"
+  FromDate: 2016-11-10
+  CTServEl: 6071
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "BOIC"
+  FromDate: 2016-11-10
+  CTServEl: 6072
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6073
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "CAMPAIGN"
+  FromDate: 2016-11-10
+  ChgAllowed: FALSE
+  CTServEl: 6074
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "CCGW"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6075
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "CF"
+  FromDate: 2016-11-10
+  CTServEl: 6076
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "CLIP"
+  FromDate: 2016-11-10
+  CTServEl: 6077
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "CLIR"
+  FromDate: 2016-11-10
+  CTServEl: 6078
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "GPRS"
+  FromDate: 2016-11-10
+  CTServEl: 6079
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "IRDCUTOFF"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6080
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "IVR"
+  FromDate: 2016-11-10
+  CTServEl: 6081
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "KEEP"
+  FromDate: 2016-11-10
+  CTServEl: 6082
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  CTServEl: 6083
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "MMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6084
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "NAM"
+  FromDate: 2016-11-10
+  CTServEl: 6085
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "NTFNBR"
+  FromDate: 2016-11-10
+  CTServEl: 6086
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "NUMBERINQ"
+  FromDate: 2016-11-10
+  CTServEl: 6087
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "OBA"
+  FromDate: 2016-11-10
+  CTServEl: 6088
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "OBI"
+  FromDate: 2016-11-10
+  CTServEl: 6089
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "OBO"
+  FromDate: 2016-11-10
+  CTServEl: 6090
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "OBOPRE"
+  FromDate: 2016-11-10
+  CTServEl: 6091
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "OBOPRI"
+  FromDate: 2016-11-10
+  CTServEl: 6092
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "OBR"
+  FromDate: 2016-11-10
+  CTServEl: 6093
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "TS21"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6094
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "TS22"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6095
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  ServCom: "VMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6096
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "BB"
+  ServCom: "BB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6097
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "BPSUB"
+  ServCom: "BPSUB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6098
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "D_HOTL"
+  ServCom: "HOTLINE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6099
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6100
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "LP"
+  ServCom: "LP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6101
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "LTE"
+  ServCom: "LTE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6102
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "NEWPOSTSUB"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6103
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "SEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  CTServEl: 6104
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "SHAPER"
+  ServCom: "SHAPER"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6105
+  ServType: 1
+  DefParam: "DEFAULT"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "TMSService"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6106
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "TMSService"
+  ServCom: "SHAPER_STP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 6107
+  ServType: 1
+  DefParam: "CONT10"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "TMSService"
+  ServCom: "SMSINVOICE"
+  FromDate: 2016-11-10
+  CTServEl: 6108
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "TMSService"
+  ServCom: "TYPECHG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 6109
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "UNSEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  DefValue: 2
+  CTServEl: 6110
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "VOIPVIDEO"
+  ServCom: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6111
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "Y_HURP"
+  ServCom: "BARRING"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6112
+  ServType: 1
+  DefParam: "0001000"
+
+bulkload: CTServEl
+  Brand: "1"
   CLIType: "CONTFH50_300"
   ServPac: "*1"
   ServCom: "BAIC"
@@ -13997,6 +15917,392 @@ bulkload: CTServEl
   FromDate: 2016-11-23
   DefValue: 1
   CTServEl: 5412
+  ServType: 1
+  DefParam: "0001000"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "BAIC"
+  FromDate: 2016-11-10
+  CTServEl: 6113
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "BAOC"
+  FromDate: 2016-11-10
+  CTServEl: 6114
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "BOIC"
+  FromDate: 2016-11-10
+  CTServEl: 6115
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6116
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "CAMPAIGN"
+  FromDate: 2016-11-10
+  ChgAllowed: FALSE
+  CTServEl: 6117
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "CCGW"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6118
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "CF"
+  FromDate: 2016-11-10
+  CTServEl: 6119
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "CLIP"
+  FromDate: 2016-11-10
+  CTServEl: 6120
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "CLIR"
+  FromDate: 2016-11-10
+  CTServEl: 6121
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "GPRS"
+  FromDate: 2016-11-10
+  CTServEl: 6122
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "IRDCUTOFF"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6123
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "IVR"
+  FromDate: 2016-11-10
+  CTServEl: 6124
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "KEEP"
+  FromDate: 2016-11-10
+  CTServEl: 6125
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  CTServEl: 6126
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "MMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6127
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "NAM"
+  FromDate: 2016-11-10
+  CTServEl: 6128
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "NTFNBR"
+  FromDate: 2016-11-10
+  CTServEl: 6129
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "NUMBERINQ"
+  FromDate: 2016-11-10
+  CTServEl: 6130
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "OBA"
+  FromDate: 2016-11-10
+  CTServEl: 6131
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "OBI"
+  FromDate: 2016-11-10
+  CTServEl: 6132
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "OBO"
+  FromDate: 2016-11-10
+  CTServEl: 6133
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "OBOPRE"
+  FromDate: 2016-11-10
+  CTServEl: 6134
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "OBOPRI"
+  FromDate: 2016-11-10
+  CTServEl: 6135
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "OBR"
+  FromDate: 2016-11-10
+  CTServEl: 6136
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "TS21"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6137
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "TS22"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6138
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  ServCom: "VMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6139
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "BB"
+  ServCom: "BB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6140
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "BPSUB"
+  ServCom: "BPSUB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6141
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "D_HOTL"
+  ServCom: "HOTLINE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6142
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6143
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "LP"
+  ServCom: "LP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6144
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "LTE"
+  ServCom: "LTE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6145
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "NEWPOSTSUB"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6146
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "SEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  CTServEl: 6147
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "SHAPER"
+  ServCom: "SHAPER"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6148
+  ServType: 1
+  DefParam: "DEFAULT"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "TMSService"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6149
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "TMSService"
+  ServCom: "SHAPER_STP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 6150
+  ServType: 1
+  DefParam: "CONT26"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "TMSService"
+  ServCom: "SMSINVOICE"
+  FromDate: 2016-11-10
+  CTServEl: 6151
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "TMSService"
+  ServCom: "TYPECHG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 6152
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "UNSEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  DefValue: 2
+  CTServEl: 6153
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "VOIPVIDEO"
+  ServCom: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6154
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "Y_HURP"
+  ServCom: "BARRING"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6155
   ServType: 1
   DefParam: "0001000"
 
@@ -15493,7 +17799,7 @@ bulkload: CTServEl
   ChgAllowed: FALSE
   CTServEl: 5892
   ServType: 1
-  DefParam: "CONT24"
+  DefParam: "CONT25"
 
 bulkload: CTServEl
   Brand: "1"
@@ -15541,6 +17847,392 @@ bulkload: CTServEl
   FromDate: 2016-11-10
   DefValue: 1
   CTServEl: 5897
+  ServType: 1
+  DefParam: "0001000"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "BAIC"
+  FromDate: 2016-11-10
+  CTServEl: 6156
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "BAOC"
+  FromDate: 2016-11-10
+  CTServEl: 6157
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "BOIC"
+  FromDate: 2016-11-10
+  CTServEl: 6158
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6159
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "CAMPAIGN"
+  FromDate: 2016-11-10
+  ChgAllowed: FALSE
+  CTServEl: 6160
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "CCGW"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6161
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "CF"
+  FromDate: 2016-11-10
+  CTServEl: 6162
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "CLIP"
+  FromDate: 2016-11-10
+  CTServEl: 6163
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "CLIR"
+  FromDate: 2016-11-10
+  CTServEl: 6164
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "GPRS"
+  FromDate: 2016-11-10
+  CTServEl: 6165
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "IRDCUTOFF"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6166
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "IVR"
+  FromDate: 2016-11-10
+  CTServEl: 6167
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "KEEP"
+  FromDate: 2016-11-10
+  CTServEl: 6168
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  CTServEl: 6169
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "MMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6170
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "NAM"
+  FromDate: 2016-11-10
+  CTServEl: 6171
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "NTFNBR"
+  FromDate: 2016-11-10
+  CTServEl: 6172
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "NUMBERINQ"
+  FromDate: 2016-11-10
+  CTServEl: 6173
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "OBA"
+  FromDate: 2016-11-10
+  CTServEl: 6174
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "OBI"
+  FromDate: 2016-11-10
+  CTServEl: 6175
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "OBO"
+  FromDate: 2016-11-10
+  CTServEl: 6176
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "OBOPRE"
+  FromDate: 2016-11-10
+  CTServEl: 6177
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "OBOPRI"
+  FromDate: 2016-11-10
+  CTServEl: 6178
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "OBR"
+  FromDate: 2016-11-10
+  CTServEl: 6179
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "TS21"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6180
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "TS22"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6181
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  ServCom: "VMS"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6182
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "BB"
+  ServCom: "BB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6183
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "BPSUB"
+  ServCom: "BPSUB"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6184
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "D_HOTL"
+  ServCom: "HOTLINE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6185
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6186
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "LP"
+  ServCom: "LP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6187
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "LTE"
+  ServCom: "LTE"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6188
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "NEWPOSTSUB"
+  ServCom: "LANG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6189
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "SEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  CTServEl: 6190
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "SHAPER"
+  ServCom: "SHAPER"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6191
+  ServType: 1
+  DefParam: "DEFAULT"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "TMSService"
+  ServCom: "CALLSPEC"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6192
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "TMSService"
+  ServCom: "SHAPER_STP"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 6193
+  ServType: 1
+  DefParam: "CONT26"
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "TMSService"
+  ServCom: "SMSINVOICE"
+  FromDate: 2016-11-10
+  CTServEl: 6194
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "TMSService"
+  ServCom: "TYPECHG"
+  FromDate: 2016-11-10
+  DefValue: 1
+  ChgAllowed: FALSE
+  CTServEl: 6195
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "UNSEC"
+  ServCom: "SOCLIR"
+  FromDate: 2016-11-10
+  DefValue: 2
+  CTServEl: 6196
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "VOIPVIDEO"
+  ServCom: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6197
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "Y_HURP"
+  ServCom: "BARRING"
+  FromDate: 2016-11-10
+  DefValue: 1
+  CTServEl: 6198
   ServType: 1
   DefParam: "0001000"
 
@@ -16265,7 +18957,7 @@ bulkload: CTServEl
   ChgAllowed: FALSE
   CTServEl: 5935
   ServType: 1
-  DefParam: "CONT24"
+  DefParam: "CONT25"
 
 bulkload: CTServEl
   Brand: "1"

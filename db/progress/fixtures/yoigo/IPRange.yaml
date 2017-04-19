@@ -538,6 +538,34 @@ bulkload: IPRange
   PLMN: "ISLPS"
 
 bulkload: IPRange
+  NetworkAddress: "157.157.144.104"
+  Netmask: 29
+  FirstIP: 2644349032
+  LastIP: 2644349039
+  PLMN: "ISLPS"
+
+bulkload: IPRange
+  NetworkAddress: "157.157.144.128"
+  Netmask: 29
+  FirstIP: 2644349056
+  LastIP: 2644349063
+  PLMN: "ISLPS"
+
+bulkload: IPRange
+  NetworkAddress: "157.157.144.64"
+  Netmask: 27
+  FirstIP: 2644348992
+  LastIP: 2644349023
+  PLMN: "ISLPS"
+
+bulkload: IPRange
+  NetworkAddress: "157.157.144.96"
+  Netmask: 29
+  FirstIP: 2644349024
+  LastIP: 2644349031
+  PLMN: "ISLPS"
+
+bulkload: IPRange
   NetworkAddress: "158.230.224.0"
   Netmask: 19
   FirstIP: 2665930752
@@ -741,6 +769,27 @@ bulkload: IPRange
   PLMN: "BELKO"
 
 bulkload: IPRange
+  NetworkAddress: "185.39.52.24"
+  Netmask: 29
+  FirstIP: 3106354200
+  LastIP: 3106354207
+  PLMN: "SWEMI"
+
+bulkload: IPRange
+  NetworkAddress: "185.39.53.48"
+  Netmask: 28
+  FirstIP: 3106354480
+  LastIP: 3106354495
+  PLMN: "SWEMI"
+
+bulkload: IPRange
+  NetworkAddress: "185.39.53.64"
+  Netmask: 28
+  FirstIP: 3106354496
+  LastIP: 3106354511
+  PLMN: "SWEMI"
+
+bulkload: IPRange
   NetworkAddress: "185.39.53.8"
   Netmask: 29
   FirstIP: 3106354440
@@ -781,6 +830,27 @@ bulkload: IPRange
   FirstIP: 3106354524
   LastIP: 3106354524
   PLMN: "SWEHU"
+
+bulkload: IPRange
+  NetworkAddress: "185.39.54.24"
+  Netmask: 29
+  FirstIP: 3106354712
+  LastIP: 3106354719
+  PLMN: "SWEMI"
+
+bulkload: IPRange
+  NetworkAddress: "185.39.55.48"
+  Netmask: 28
+  FirstIP: 3106354992
+  LastIP: 3106355007
+  PLMN: "SWEMI"
+
+bulkload: IPRange
+  NetworkAddress: "185.39.55.64"
+  Netmask: 28
+  FirstIP: 3106355008
+  LastIP: 3106355023
+  PLMN: "SWEMI"
 
 bulkload: IPRange
   NetworkAddress: "185.39.55.8"
@@ -895,6 +965,20 @@ bulkload: IPRange
   PLMN: "NLDPT"
 
 bulkload: IPRange
+  NetworkAddress: "192.234.88.102"
+  Netmask: 29
+  FirstIP: 3236583526
+  LastIP: 3236583533
+  PLMN: "SWEMI"
+
+bulkload: IPRange
+  NetworkAddress: "192.234.88.40"
+  Netmask: 29
+  FirstIP: 3236583464
+  LastIP: 3236583471
+  PLMN: "SWEMI"
+
+bulkload: IPRange
   NetworkAddress: "193.109.210.0"
   Netmask: 24
   FirstIP: 3245199872
@@ -950,6 +1034,20 @@ bulkload: IPRange
   FirstIP: 3253744464
   LastIP: 3253744471
   PLMN: "GBRHU"
+
+bulkload: IPRange
+  NetworkAddress: "193.240.51.81"
+  Netmask: 32
+  FirstIP: 3253744465
+  LastIP: 3253744465
+  PLMN: "SWEMI"
+
+bulkload: IPRange
+  NetworkAddress: "193.240.51.82"
+  Netmask: 32
+  FirstIP: 3253744466
+  LastIP: 3253744466
+  PLMN: "SWEMI"
 
 bulkload: IPRange
   NetworkAddress: "193.254.136.0"
@@ -1292,6 +1390,13 @@ bulkload: IPRange
   Netmask: 28
   FirstIP: 3273497648
   LastIP: 3273497663
+  PLMN: "HRVCN"
+
+bulkload: IPRange
+  NetworkAddress: "195.29.156.8"
+  Netmask: 29
+  FirstIP: 3273497608
+  LastIP: 3273497615
   PLMN: "HRVCN"
 
 bulkload: IPRange
@@ -2743,6 +2848,13 @@ bulkload: IPRange
   PLMN: "HUNH1"
 
 bulkload: IPRange
+  NetworkAddress: "4.15.38.105"
+  Netmask: 32
+  FirstIP: 68101737
+  LastIP: 68101737
+  PLMN: "SWEMI"
+
+bulkload: IPRange
   NetworkAddress: "4.15.38.106"
   Netmask: 32
   FirstIP: 68101738
@@ -3636,6 +3748,13 @@ bulkload: IPRange
   Netmask: 28
   FirstIP: 1476172992
   LastIP: 1476173007
+  PLMN: "HRVCN"
+
+bulkload: IPRange
+  NetworkAddress: "87.252.156.64"
+  Netmask: 28
+  FirstIP: 1476172864
+  LastIP: 1476172879
   PLMN: "HRVCN"
 
 bulkload: IPRange

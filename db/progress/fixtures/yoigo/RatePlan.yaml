@@ -39,6 +39,11 @@ bulkload: RatePlan
   Brand: "1"
 
 bulkload: RatePlan
+  RatePlan: "CONTRATO27"
+  RPName: "LA INFINITA 2 GB DTO."
+  Brand: "1"
+
+bulkload: RatePlan
   RatePlan: "CONTRATO4"
   RPName: "Contrato 4 (Post paid)"
   Brand: "1"

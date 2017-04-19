@@ -73,6 +73,14 @@ bulkload: Stock
   Brand: "1"
 
 bulkload: Stock
+  Stock: "TESTING"
+  StoName: "Testing Stock Name"
+  StoFile1: "/tmp/iccfilename.txt"
+  StoFile2: "/tmp/subsdatafile.txt"
+  StoFile3: "/tmp/simdisrfile.txt"
+  Brand: "1"
+
+bulkload: Stock
   Stock: "VIP"
   StoName: "VIP"
   Brand: "1"

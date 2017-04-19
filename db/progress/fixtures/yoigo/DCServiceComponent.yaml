@@ -943,3 +943,12 @@ bulkload: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 108
 
+bulkload: DCServiceComponent
+  DCServicePackageID: 96
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT27#ADDBUNDLE"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+  DCServiceComponentID: 109
+

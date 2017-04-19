@@ -183,6 +183,17 @@ bulkload: InvText
   Brand: "1"
 
 bulkload: InvText
+  ITNum: 520
+  FromDate: 2016-02-24
+  ToDate: 2016-05-31
+  Target: "EMAIL"
+  KeyValue: "EMailInvoiceQ25Prior"
+  TxtTitle: "=?iso-8859-1?Q?Esta es tu factura electr=F3nica?="
+  InvText: "<br/><br/>Dentro de poco se cumplen los 24 meses desde que compraste tu móvil a plazos. Así que tienes hasta el día #DD/#MM para decidir qué quieres hacer con el Pago Final de tu móvil.  Tienes toda la información y tus opciones <a href="#Q25LINK">aquí</a>."
+  Language: 1
+  Brand: "1"
+
+bulkload: InvText
   ITNum: 521
   FromDate: 2016-02-24
   ToDate: 2016-05-31
@@ -213,17 +224,6 @@ bulkload: InvText
   TxtTitle: "This is your electronic invoice"
   InvText: "<br/><br/>It&#39ll soon be 24 months since you bought your mobile on installments. So you have until #DD/#MM to decide what you want to do about the Final Payment for your mobile.  You can find all the information and your options  <a href="#Q25LINK">here</a>."
   Language: 5
-  Brand: "1"
-
-bulkload: InvText
-  ITNum: 520
-  FromDate: 2016-02-24
-  ToDate: 2016-05-31
-  Target: "EMAIL"
-  KeyValue: "EMailInvoiceQ25Prior"
-  TxtTitle: "=?iso-8859-1?Q?Esta es tu factura electr=F3nica?="
-  InvText: "<br/><br/>Dentro de poco se cumplen los 24 meses desde que compraste tu móvil a plazos. Así que tienes hasta el día #DD/#MM para decidir qué quieres hacer con el Pago Final de tu móvil.  Tienes toda la información y tus opciones <a href="#Q25LINK">aquí</a>."
-  Language: 1
   Brand: "1"
 
 bulkload: InvText
@@ -637,73 +637,6 @@ Signature                              Date
   MainTitle: "YOUR ORDER IN YOIGO.COM"
 
 bulkload: InvText
-  ITNum: 162
-  FromDate: 2010-06-02
-  ToDate: 2010-08-31
-  Target: "OrderConf"
-  KeyValue: "EmailConf"
-  TxtTitle: "Thanks for your order, #FIRSTNAME!"
-  InvText: "We will send you a text message to inform you when we have your order ready to be delivered. If you have made an order with number portability, it will take a few more days as we need to wait for the confirmation from your current operator.
-
-For your security, the person delivering your order will ask you to show your personal identity document so that we can properly confirm your identity. If you have chosen to pay on delivery, please be sure to have the total amount of the order in cash at the time of delivery.
-
-If you have any questions about your order, please write an email to entregapedidos@yoigo.com with your name, personal identity number and telephone number. Alternatively you can call us on 1707 (free number).
-#MGMTIENDA
-Welcome to Yoigo
-
-Order number: #OCONTRID                  
-Your phone number: #MSISDN
-Name: #CUSTNAME                     
-#CIDTYPE: #CUSTID
-Address:
-#CUSTADDR
-#CUSTPOST
-Phone Numbers: #CONTACTNBR1  #CONTACTNBR2
-Delivery Address:
-#DELADDR
-#DELPOST
-#MGMREFEREE
-
-#CAMPAIGN
-#FATIME
-Your Product
--------------
-Subscription type: #CTNAME
-#CAMPMINCON
-#OFEES
-#PENALTYFEE
-#OMNPDATA
-#OPMETHOD
-#MDUB
-#OBANKDATA
-
-You can access to the applicable conditions of the services you have hired in the section of our web site that contains all the legal information http://www.yoigo.com/preguntas/cat12.php.
-
-Thanks again for shopping with us.
-
-www.yoigo.com
-Free number for sales information: 1707
-Customer Service: call free to 622 from a Yoigo number. Call 622 622 622 from any other mobile or fixed operator (prices of the call will depend on the operator). 
-E-mail address for delivery status questions:entregapedidos@yoigo.com
-
-
---------------------------------------------------------------------------
-FORM TO ASK RETURN
-
-We inform you have the right to desist of this contract as previewed in the Law de Ordenación del Comercio Minorista y en las Condiciones de Venta de Yoigo. To communicate your right you can print this email and send it by to the fax number 91 156 77 69.
-
-I desist of the contract above
-
-
---------------------------------       -----------------------------------
-Signature                              Date
-"
-  Language: 5
-  Report: 2
-  Brand: "1"
-  MainTitle: "YOUR ORDER IN YOIGO.COM"
-
-bulkload: InvText
   ITNum: 160
   FromDate: 2010-06-02
   ToDate: 2010-08-31
@@ -770,6 +703,73 @@ Tu firma                               Fecha
   Report: 2
   Brand: "1"
   MainTitle: "CONFIRMACIÓN DEL PEDIDO"
+
+bulkload: InvText
+  ITNum: 162
+  FromDate: 2010-06-02
+  ToDate: 2010-08-31
+  Target: "OrderConf"
+  KeyValue: "EmailConf"
+  TxtTitle: "Thanks for your order, #FIRSTNAME!"
+  InvText: "We will send you a text message to inform you when we have your order ready to be delivered. If you have made an order with number portability, it will take a few more days as we need to wait for the confirmation from your current operator.
+
+For your security, the person delivering your order will ask you to show your personal identity document so that we can properly confirm your identity. If you have chosen to pay on delivery, please be sure to have the total amount of the order in cash at the time of delivery.
+
+If you have any questions about your order, please write an email to entregapedidos@yoigo.com with your name, personal identity number and telephone number. Alternatively you can call us on 1707 (free number).
+#MGMTIENDA
+Welcome to Yoigo
+
+Order number: #OCONTRID                  
+Your phone number: #MSISDN
+Name: #CUSTNAME                     
+#CIDTYPE: #CUSTID
+Address:
+#CUSTADDR
+#CUSTPOST
+Phone Numbers: #CONTACTNBR1  #CONTACTNBR2
+Delivery Address:
+#DELADDR
+#DELPOST
+#MGMREFEREE
+
+#CAMPAIGN
+#FATIME
+Your Product
+-------------
+Subscription type: #CTNAME
+#CAMPMINCON
+#OFEES
+#PENALTYFEE
+#OMNPDATA
+#OPMETHOD
+#MDUB
+#OBANKDATA
+
+You can access to the applicable conditions of the services you have hired in the section of our web site that contains all the legal information http://www.yoigo.com/preguntas/cat12.php.
+
+Thanks again for shopping with us.
+
+www.yoigo.com
+Free number for sales information: 1707
+Customer Service: call free to 622 from a Yoigo number. Call 622 622 622 from any other mobile or fixed operator (prices of the call will depend on the operator). 
+E-mail address for delivery status questions:entregapedidos@yoigo.com
+
+
+--------------------------------------------------------------------------
+FORM TO ASK RETURN
+
+We inform you have the right to desist of this contract as previewed in the Law de Ordenación del Comercio Minorista y en las Condiciones de Venta de Yoigo. To communicate your right you can print this email and send it by to the fax number 91 156 77 69.
+
+I desist of the contract above
+
+
+--------------------------------       -----------------------------------
+Signature                              Date
+"
+  Language: 5
+  Report: 2
+  Brand: "1"
+  MainTitle: "YOUR ORDER IN YOIGO.COM"
 
 bulkload: InvText
   ITNum: 161
@@ -1064,6 +1064,75 @@ www.yoigo.com"
   MainTitle: "CONFIRMACIÓN DEL PEDIDO"
 
 bulkload: InvText
+  ITNum: 5004
+  FromDate: 2008-05-19
+  ToDate: 2049-12-31
+  Target: "OrderConf"
+  KeyValue: "EmailConfCIFMNP"
+  TxtTitle: "Hola #FIRSTNAME,"
+  InvText: "
+Ya hemos tramitado tu pedido y pronto lo recibirás en la dirección que nos indicaste.
+
+Si tienes alguna duda o pregunta, llámanos al Departamento de Gestión Comercial al teléfono gratuito 800 622 801.
+
+Puedes acceder a las diferentes Condiciones aplicables en función de los productos y servicios que has contratado en el apartado de nuestra web que tiene toda la información Legal http://www.yoigo.com/preguntas/informacion_legal.php
+
+www.yoigo.com
+
+Teléfono gratuito de información comercial: 800 622 801
+Dirección de correo para información sobre pedidos: info@empresas.yoigo.com
+Puedes ver cómo va tu pedido en
+https://miyoigo.yoigo.com/miyoigo-static/miyoigo/#consulta-pedido
+
+--------------------------------------------------------------------------
+
+Pedido num.: #OCONTRID
+Tu número de teléfono: #MSISDN
+Fecha de pedido: #ORDER_DATE
+Fecha de inicio del proceso de portabilidad: #MNP_DATE
+
+Datos de la empresa:
+
+Denominación social: #COMPANYNAME
+CIF: #COMPANYCIF     Fecha de constitución: #COMPANYFOUNDDATE
+Dirección social: #CUSTADDR #CUSTPOST #CUSTREGION
+
+Datos de la persona autorizada:
+
+Nombre: #FIRSTNAME #LASTNAME #LASTNAME2
+Documento de identidad: #CIDTYPE #CUSTID
+Teléfono de contacto: #CONTACTNBR1 #CONTACTNBR2
+e-mail: #EMAIL
+Dirección: #CUSTADDR #CUSTPOST #CUSTREGION
+
+Datos de la persona de contacto:
+
+#CONTACTDATA
+
+Datos de envío:
+
+Persona de contacto en la entrega: #FIRSTNAME #LASTNAME #LASTNAME2
+Documento de identidad: #CIDTYPE #CUSTID
+Teléfono de contacto: #CONTACTNBR1 #CONTACTNBR2
+e-mail: #EMAIL
+Dirección: #CUSTADDR #CUSTPOST #CUSTREGION
+Fecha estimada de entrega: #DELIVERY_DATE
+     
+DERECHO DE DESISTIMIENTO
+ 
+Si te arrepientes de esta compra, puedes cancelarla en el plazo de 14 días desde la entrega, como te indicamos en las Condiciones de Venta de Yoigo (http://www.yoigo.com/pdf/condiciones_venta.pdf). Puedes utilizar el "Modelo de desistimiento" (www.yoigo.com/pdf/desistimiento.pdf) y enviarlo a devuelvomipedido@yoigo.com . O llamarnos gratis desde un número Yoigo al teléfono 622 o desde cualquier otro operador al 622 622 622, diciéndonos que quieres desistir del pedido
+
+#COMPANY_CONTACT
+
+Teléfono gratuito de información comercial: 800 622 801
+Teléfono de Atención al Cliente 336 gratuito desde un Teléfono Yoigo, 633 633 336 desde cualquier teléfono (precios según operador).
+www.yoigo.com"
+  Language: 1
+  Report: 2
+  Brand: "1"
+  MainTitle: "CONFIRMACIÓN DEL PEDIDO"
+
+bulkload: InvText
   ITNum: 5003
   FromDate: 2008-05-19
   ToDate: 2049-12-31
@@ -1132,75 +1201,6 @@ www.yoigo.com"
   Report: 2
   Brand: "1"
   MainTitle: "PURCHASE CONFIRMATION"
-
-bulkload: InvText
-  ITNum: 5004
-  FromDate: 2008-05-19
-  ToDate: 2049-12-31
-  Target: "OrderConf"
-  KeyValue: "EmailConfCIFMNP"
-  TxtTitle: "Hola #FIRSTNAME,"
-  InvText: "
-Ya hemos tramitado tu pedido y pronto lo recibirás en la dirección que nos indicaste.
-
-Si tienes alguna duda o pregunta, llámanos al Departamento de Gestión Comercial al teléfono gratuito 800 622 801.
-
-Puedes acceder a las diferentes Condiciones aplicables en función de los productos y servicios que has contratado en el apartado de nuestra web que tiene toda la información Legal http://www.yoigo.com/preguntas/informacion_legal.php
-
-www.yoigo.com
-
-Teléfono gratuito de información comercial: 800 622 801
-Dirección de correo para información sobre pedidos: info@empresas.yoigo.com
-Puedes ver cómo va tu pedido en
-https://miyoigo.yoigo.com/miyoigo-static/miyoigo/#consulta-pedido
-
---------------------------------------------------------------------------
-
-Pedido num.: #OCONTRID
-Tu número de teléfono: #MSISDN
-Fecha de pedido: #ORDER_DATE
-Fecha de inicio del proceso de portabilidad: #MNP_DATE
-
-Datos de la empresa:
-
-Denominación social: #COMPANYNAME
-CIF: #COMPANYCIF     Fecha de constitución: #COMPANYFOUNDDATE
-Dirección social: #CUSTADDR #CUSTPOST #CUSTREGION
-
-Datos de la persona autorizada:
-
-Nombre: #FIRSTNAME #LASTNAME #LASTNAME2
-Documento de identidad: #CIDTYPE #CUSTID
-Teléfono de contacto: #CONTACTNBR1 #CONTACTNBR2
-e-mail: #EMAIL
-Dirección: #CUSTADDR #CUSTPOST #CUSTREGION
-
-Datos de la persona de contacto:
-
-#CONTACTDATA
-
-Datos de envío:
-
-Persona de contacto en la entrega: #FIRSTNAME #LASTNAME #LASTNAME2
-Documento de identidad: #CIDTYPE #CUSTID
-Teléfono de contacto: #CONTACTNBR1 #CONTACTNBR2
-e-mail: #EMAIL
-Dirección: #CUSTADDR #CUSTPOST #CUSTREGION
-Fecha estimada de entrega: #DELIVERY_DATE
-     
-DERECHO DE DESISTIMIENTO
- 
-Si te arrepientes de esta compra, puedes cancelarla en el plazo de 14 días desde la entrega, como te indicamos en las Condiciones de Venta de Yoigo (http://www.yoigo.com/pdf/condiciones_venta.pdf). Puedes utilizar el "Modelo de desistimiento" (www.yoigo.com/pdf/desistimiento.pdf) y enviarlo a devuelvomipedido@yoigo.com . O llamarnos gratis desde un número Yoigo al teléfono 622 o desde cualquier otro operador al 622 622 622, diciéndonos que quieres desistir del pedido
-
-#COMPANY_CONTACT
-
-Teléfono gratuito de información comercial: 800 622 801
-Teléfono de Atención al Cliente 336 gratuito desde un Teléfono Yoigo, 633 633 336 desde cualquier teléfono (precios según operador).
-www.yoigo.com"
-  Language: 1
-  Report: 2
-  Brand: "1"
-  MainTitle: "CONFIRMACIÓN DEL PEDIDO"
 
 bulkload: InvText
   ITNum: 5001
@@ -1615,6 +1615,73 @@ Signature                              Date
   MainTitle: "YOUR ORDER IN YOIGO.COM"
 
 bulkload: InvText
+  ITNum: 108
+  FromDate: 2008-08-13
+  ToDate: 2009-06-09
+  Target: "OrderConf"
+  KeyValue: "RenewalConf"
+  TxtTitle: "Hi #FIRSTNAME #LASTNAME"
+  InvText: "
+The best part of shopping is to choose among lots of offers and buy what you like most. The worst thing is to go around carrying the bags. Therefore, in about 5 days we will call you to agree a date to deliver your order. So, in this way, you will only get the best.
+
+Have your identity document at hand (or similar) when the courier service arrives.
+For security reasons, you will be requested to show it so we can guarantee that it is you who pick up the order. 
+If your payment method is payment on delivery, remember to have the money prepared.
+
+For any other issue related to your order, you can call us to our free commercial information phone number 800 622 800 or send us an email to entregapedidos@yoigo.com, writing in the reference "Order status", and adding in the message your complete name, NIF and Yoigo phone nº.
+
+Yoigo
+
+Order Nº.: #OCONTRID
+Your Phone Nº: #MSISDN
+
+Your personal information
+-----------
+Name: #CUSTNAME
+Document: #CIDTYPE: #CUSTID
+Address:
+#CUSTADDR
+#CUSTPOST
+Delivery address:
+#DELADDR
+#DELPOST
+Phone Nº: #CONTACTNBR1 #CONTACTNBR2
+
+#CAMPAIGN
+#FATIME
+
+Your products
+---------------
+#OFEES
+#POSTDISC
+#OPMETHOD
+#OBANKDATA
+
+
+You can access the different Applicable Conditions regarding the contracted products and services on our web, in legal information http://www.yoigo.com/preguntas/cat12.php
+
+www.yoigo.com
+Commercial information free contact phone nº: 800 622 800
+Email address for information related to orders: entregapedidos@yoigo.com
+
+--------------------------------------------------------------------------
+NOTICE OF DISCONTINUANCE 
+
+You are entitled to discontinue this purchase as specified in the Ley de Ordenación del Comercio Minorista (Retailer Commerce Planning Act) and Yoigo's Sales Conditions. You can communicate your discontinuance by printing this complete email, signing and sending it to us by fax to the following number 91 156 77 69.
+
+
+I wish to desist from the aforementioned purchase
+
+
+--------------------------------       -----------------------------------
+Your signature                               Date
+
+
+"
+  Language: 5
+  Brand: "1"
+
+bulkload: InvText
   ITNum: 109
   FromDate: 2008-08-13
   ToDate: 2009-06-09
@@ -1688,73 +1755,6 @@ Tu firma                               Fecha
 
 "
   Language: 1
-  Brand: "1"
-
-bulkload: InvText
-  ITNum: 108
-  FromDate: 2008-08-13
-  ToDate: 2009-06-09
-  Target: "OrderConf"
-  KeyValue: "RenewalConf"
-  TxtTitle: "Hi #FIRSTNAME #LASTNAME"
-  InvText: "
-The best part of shopping is to choose among lots of offers and buy what you like most. The worst thing is to go around carrying the bags. Therefore, in about 5 days we will call you to agree a date to deliver your order. So, in this way, you will only get the best.
-
-Have your identity document at hand (or similar) when the courier service arrives.
-For security reasons, you will be requested to show it so we can guarantee that it is you who pick up the order. 
-If your payment method is payment on delivery, remember to have the money prepared.
-
-For any other issue related to your order, you can call us to our free commercial information phone number 800 622 800 or send us an email to entregapedidos@yoigo.com, writing in the reference "Order status", and adding in the message your complete name, NIF and Yoigo phone nº.
-
-Yoigo
-
-Order Nº.: #OCONTRID
-Your Phone Nº: #MSISDN
-
-Your personal information
------------
-Name: #CUSTNAME
-Document: #CIDTYPE: #CUSTID
-Address:
-#CUSTADDR
-#CUSTPOST
-Delivery address:
-#DELADDR
-#DELPOST
-Phone Nº: #CONTACTNBR1 #CONTACTNBR2
-
-#CAMPAIGN
-#FATIME
-
-Your products
----------------
-#OFEES
-#POSTDISC
-#OPMETHOD
-#OBANKDATA
-
-
-You can access the different Applicable Conditions regarding the contracted products and services on our web, in legal information http://www.yoigo.com/preguntas/cat12.php
-
-www.yoigo.com
-Commercial information free contact phone nº: 800 622 800
-Email address for information related to orders: entregapedidos@yoigo.com
-
---------------------------------------------------------------------------
-NOTICE OF DISCONTINUANCE 
-
-You are entitled to discontinue this purchase as specified in the Ley de Ordenación del Comercio Minorista (Retailer Commerce Planning Act) and Yoigo's Sales Conditions. You can communicate your discontinuance by printing this complete email, signing and sending it to us by fax to the following number 91 156 77 69.
-
-
-I wish to desist from the aforementioned purchase
-
-
---------------------------------       -----------------------------------
-Your signature                               Date
-
-
-"
-  Language: 5
   Brand: "1"
 
 bulkload: InvText
@@ -2829,20 +2829,6 @@ bulkload: InvText
   Category: "BTC"
 
 bulkload: InvText
-  ITNum: 239
-  FromDate: 2011-08-10
-  ToDate: 2012-11-20
-  Target: "SMS"
-  KeyValue: "BTCBundelDeAct"
-  TxtTitle: "BTC Bundle Deactivation"
-  InvText: "Yoigo info: Your #OLD_BUNDLE Internet de Contrato will be deactivated at the end of the month. Your change from #OLD_BUNDLE Internet de Contrato to #NEW_BUNDLE Internet de Contrato has been cancelled."
-  Language: 5
-  Report: 5
-  Brand: "1"
-  SendRule: "R2"
-  Category: "BTC"
-
-bulkload: InvText
   ITNum: 238
   FromDate: 2011-08-10
   ToDate: 2049-12-31
@@ -2851,6 +2837,20 @@ bulkload: InvText
   TxtTitle: "BTC Bundle Deactivation"
   InvText: "Tu #OLD_BUNDLE Internet de Contrato se desactiva a fin de mes. Tu cambio de #OLD_BUNDLE Internet de Contrato a #NEW_BUNDLE Internet de Contrato se ha cancelado."
   Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "BTC"
+
+bulkload: InvText
+  ITNum: 239
+  FromDate: 2011-08-10
+  ToDate: 2012-11-20
+  Target: "SMS"
+  KeyValue: "BTCBundelDeAct"
+  TxtTitle: "BTC Bundle Deactivation"
+  InvText: "Yoigo info: Your #OLD_BUNDLE Internet de Contrato will be deactivated at the end of the month. Your change from #OLD_BUNDLE Internet de Contrato to #NEW_BUNDLE Internet de Contrato has been cancelled."
+  Language: 5
   Report: 5
   Brand: "1"
   SendRule: "R2"
@@ -3726,20 +3726,6 @@ bulkload: InvText
   Category: "HSPA_ROAM_EU"
 
 bulkload: InvText
-  ITNum: 380
-  FromDate: 2012-10-10
-  ToDate: 2012-11-20
-  Target: "SMS"
-  KeyValue: "HSPARoamEURequest"
-  TxtTitle: "Roaming upsell request received to TMS"
-  InvText: "Yoigo Info: We are currently activating Internet for the European Union or associated countries.  You could use it very soon."
-  Language: 5
-  Report: 5
-  Brand: "1"
-  SendRule: "R1"
-  Category: "HSPA_ROAM_EU"
-
-bulkload: InvText
   ITNum: 379
   FromDate: 2012-10-10
   ToDate: 2049-12-31
@@ -3748,6 +3734,20 @@ bulkload: InvText
   TxtTitle: "Roaming upsell request received to TMS"
   InvText: "Yoigo Info: En este momento te estamos activando Internet para que lo puedas usar en la Union Europea o pais asociado. En breve podras utilizarlo."
   Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R1"
+  Category: "HSPA_ROAM_EU"
+
+bulkload: InvText
+  ITNum: 380
+  FromDate: 2012-10-10
+  ToDate: 2012-11-20
+  Target: "SMS"
+  KeyValue: "HSPARoamEURequest"
+  TxtTitle: "Roaming upsell request received to TMS"
+  InvText: "Yoigo Info: We are currently activating Internet for the European Union or associated countries.  You could use it very soon."
+  Language: 5
   Report: 5
   Brand: "1"
   SendRule: "R1"
@@ -6197,20 +6197,6 @@ bulkload: InvText
   SendRule: "R2"
 
 bulkload: InvText
-  ITNum: 310
-  FromDate: 2012-02-22
-  ToDate: 2012-11-20
-  Target: "SMS"
-  KeyValue: "RenoveOnHold"
-  TxtTitle: "Renewal On Hold SMS"
-  InvText: "Yoigo info: We will send your new telephone very soon. Call us on 622 as soon as possible to confirm your details. This call is free."
-  Language: 5
-  Report: 5
-  Brand: "1"
-  SendRule: "R1"
-  Category: "Renove"
-
-bulkload: InvText
   ITNum: 309
   FromDate: 2012-02-22
   ToDate: 2013-04-23
@@ -6219,6 +6205,20 @@ bulkload: InvText
   TxtTitle: "Renewal On Hold SMS"
   InvText: "Yoigo info: Tu pedido esta listo para enviar. Por favor llama urgente al 622 (llamada gratuita) para confirmar direccion de entrega."
   Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R1"
+  Category: "Renove"
+
+bulkload: InvText
+  ITNum: 310
+  FromDate: 2012-02-22
+  ToDate: 2012-11-20
+  Target: "SMS"
+  KeyValue: "RenoveOnHold"
+  TxtTitle: "Renewal On Hold SMS"
+  InvText: "Yoigo info: We will send your new telephone very soon. Call us on 622 as soon as possible to confirm your details. This call is free."
+  Language: 5
   Report: 5
   Brand: "1"
   SendRule: "R1"
@@ -6526,93 +6526,6 @@ bulkload: InvText
   Brand: "1"
   SendRule: "R2"
   Category: "Spotify"
-
-bulkload: InvText
-  ITNum: 412
-  FromDate: 2013-03-01
-  ToDate: 2014-02-04
-  Target: "SMS"
-  KeyValue: "STC_Cancelled"
-  TxtTitle: "STC cancelled"
-  InvText: "Yoigo Info: Hemos cancelado el cambio de tarifa, si quieres informacion envia un mensaje de texto al 622."
-  Language: 1
-  Report: 5
-  InfoType: "I"
-  Brand: "1"
-  AddrTarget: 4
-  SendRule: "R2"
-  Category: "STC"
-
-bulkload: InvText
-  ITNum: 472
-  FromDate: 2014-02-05
-  ToDate: 2049-12-31
-  Target: "SMS"
-  KeyValue: "STC_Cancelled"
-  TxtTitle: "STC cancelled"
-  InvText: "Ya hemos cancelado el cambio de tarifa como nos pediste. Tienes toda la informacion sobre nuestras tarifas en www.yoigo.com"
-  Language: 1
-  Report: 5
-  InfoType: "I"
-  Brand: "1"
-  SendRule: "R2"
-
-bulkload: InvText
-  ITNum: 113
-  FromDate: 2008-09-29
-  ToDate: 2012-11-20
-  Target: "SMS"
-  KeyValue: "STC_DONE"
-  TxtTitle: "STC Done"
-  InvText: "Your subscription change has been done. You now have #CLITYPE. More information in yoigo.com or call 622"
-  Language: 5
-  Report: 5
-  InfoType: "I"
-  Brand: "1"
-  SendRule: "R2"
-  Category: "STC"
-
-bulkload: InvText
-  ITNum: 114
-  FromDate: 2008-09-29
-  ToDate: 2014-02-04
-  Target: "SMS"
-  KeyValue: "STC_DONE"
-  TxtTitle: "STC Done"
-  InvText: "Ya esta hecho el cambio de suscripcion que pediste, tienes #CLITYPE. Mas info sobre tu tarifa en www.yoigo.com o llamando al 622."
-  Language: 1
-  Report: 5
-  InfoType: "I"
-  Brand: "1"
-  SendRule: "R2"
-  Category: "STC"
-
-bulkload: InvText
-  ITNum: 473
-  FromDate: 2014-02-05
-  ToDate: 2049-12-31
-  Target: "SMS"
-  KeyValue: "STC_DONE"
-  TxtTitle: "STC Done"
-  InvText: "Ya esta hecho el cambio de tarifa que pediste, ahora tienes #CLITYPE. Tienes toda la info sobre tu tarifa en www.yoigo.com"
-  Language: 1
-  Report: 5
-  InfoType: "I"
-  Brand: "1"
-  SendRule: "R2"
-
-bulkload: InvText
-  ITNum: 474
-  FromDate: 2014-02-05
-  ToDate: 2049-12-31
-  Target: "SMS"
-  KeyValue: "STC_Requested"
-  TxtTitle: "STC Requested SMS"
-  InvText: "Tu cambio a la tarifa #CLITYPE se hara el #DATE. Si no lo pediste llama al 622. +info en www.yoigo.com"
-  Language: 1
-  Report: 5
-  Brand: "1"
-  SendRule: "R1"
 
 bulkload: InvText
   ITNum: 250
@@ -7060,20 +6973,6 @@ bulkload: InvText
   Category: "STC"
 
 bulkload: InvText
-  ITNum: 531
-  FromDate: 2016-10-27
-  ToDate: 2049-12-31
-  Target: "SMS"
-  KeyValue: "STCORDER_CONVERGENT"
-  TxtTitle: "STC order SMS for Convergent"
-  InvText: "Ya hemos recibido tu peticion de cambio a #CLITYPE. Cuando este todo listo te avisamos. Mientras sigues con tu tarifa."
-  Language: 1
-  Report: 5
-  Brand: "1"
-  SendRule: "R1"
-  Category: "STC"
-
-bulkload: InvText
   ITNum: 452
   FromDate: 2013-10-01
   ToDate: 2049-12-31
@@ -7109,6 +7008,20 @@ bulkload: InvText
   KeyValue: "STCORDERCONTSF14"
   TxtTitle: "STC order SMS for CONTSF14"
   InvText: "Ya hemos recibido tu peticion de cambio a Fusion Infinita a lo Yoigo. Cuando este todo listo te avisamos. Mientras sigues con tu tarifa."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R1"
+  Category: "STC"
+
+bulkload: InvText
+  ITNum: 531
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "STCORDER_CONVERGENT"
+  TxtTitle: "STC order SMS for Convergent"
+  InvText: "Ya hemos recibido tu peticion de cambio a #CLITYPE. Cuando este todo listo te avisamos. Mientras sigues con tu tarifa."
   Language: 1
   Report: 5
   Brand: "1"
@@ -7212,6 +7125,93 @@ bulkload: InvText
   Brand: "1"
   SendRule: "R1"
   Category: "STC"
+
+bulkload: InvText
+  ITNum: 412
+  FromDate: 2013-03-01
+  ToDate: 2014-02-04
+  Target: "SMS"
+  KeyValue: "STC_Cancelled"
+  TxtTitle: "STC cancelled"
+  InvText: "Yoigo Info: Hemos cancelado el cambio de tarifa, si quieres informacion envia un mensaje de texto al 622."
+  Language: 1
+  Report: 5
+  InfoType: "I"
+  Brand: "1"
+  AddrTarget: 4
+  SendRule: "R2"
+  Category: "STC"
+
+bulkload: InvText
+  ITNum: 472
+  FromDate: 2014-02-05
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "STC_Cancelled"
+  TxtTitle: "STC cancelled"
+  InvText: "Ya hemos cancelado el cambio de tarifa como nos pediste. Tienes toda la informacion sobre nuestras tarifas en www.yoigo.com"
+  Language: 1
+  Report: 5
+  InfoType: "I"
+  Brand: "1"
+  SendRule: "R2"
+
+bulkload: InvText
+  ITNum: 113
+  FromDate: 2008-09-29
+  ToDate: 2012-11-20
+  Target: "SMS"
+  KeyValue: "STC_DONE"
+  TxtTitle: "STC Done"
+  InvText: "Your subscription change has been done. You now have #CLITYPE. More information in yoigo.com or call 622"
+  Language: 5
+  Report: 5
+  InfoType: "I"
+  Brand: "1"
+  SendRule: "R2"
+  Category: "STC"
+
+bulkload: InvText
+  ITNum: 114
+  FromDate: 2008-09-29
+  ToDate: 2014-02-04
+  Target: "SMS"
+  KeyValue: "STC_DONE"
+  TxtTitle: "STC Done"
+  InvText: "Ya esta hecho el cambio de suscripcion que pediste, tienes #CLITYPE. Mas info sobre tu tarifa en www.yoigo.com o llamando al 622."
+  Language: 1
+  Report: 5
+  InfoType: "I"
+  Brand: "1"
+  SendRule: "R2"
+  Category: "STC"
+
+bulkload: InvText
+  ITNum: 473
+  FromDate: 2014-02-05
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "STC_DONE"
+  TxtTitle: "STC Done"
+  InvText: "Ya esta hecho el cambio de tarifa que pediste, ahora tienes #CLITYPE. Tienes toda la info sobre tu tarifa en www.yoigo.com"
+  Language: 1
+  Report: 5
+  InfoType: "I"
+  Brand: "1"
+  SendRule: "R2"
+
+bulkload: InvText
+  ITNum: 474
+  FromDate: 2014-02-05
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "STC_Requested"
+  TxtTitle: "STC Requested SMS"
+  InvText: "Tu cambio a la tarifa #CLITYPE se hara el #DATE. Si no lo pediste llama al 622. +info en www.yoigo.com"
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R1"
 
 bulkload: InvText
   ITNum: 69
@@ -7500,19 +7500,6 @@ bulkload: InvText
   Brand: "1"
 
 bulkload: InvText
-  ITNum: 66
-  FromDate: 2008-01-01
-  ToDate: 2011-10-19
-  Target: "SMS"
-  KeyValue: "TARJ_CONT2"
-  TxtTitle: "Change of subscription type SMS"
-  InvText: "Ya esta hecho el cambio que pediste de Tarjeta a Contrato 2, así somos. Olvidate de recargar. El saldo que tenías, lo descontaremos de tu factura."
-  Language: 1
-  Report: 5
-  InfoType: "I"
-  Brand: "1"
-
-bulkload: InvText
   ITNum: 65
   FromDate: 2008-01-01
   ToDate: 2011-10-19
@@ -7521,6 +7508,19 @@ bulkload: InvText
   TxtTitle: "Change of subscription type SMS"
   InvText: "It is already done the change from Tarjeta to Contrato 2, thus we are. Forget to make top up. The balance that you have will be discounted from you invoice."
   Language: 5
+  Report: 5
+  InfoType: "I"
+  Brand: "1"
+
+bulkload: InvText
+  ITNum: 66
+  FromDate: 2008-01-01
+  ToDate: 2011-10-19
+  Target: "SMS"
+  KeyValue: "TARJ_CONT2"
+  TxtTitle: "Change of subscription type SMS"
+  InvText: "Ya esta hecho el cambio que pediste de Tarjeta a Contrato 2, así somos. Olvidate de recargar. El saldo que tenías, lo descontaremos de tu factura."
+  Language: 1
   Report: 5
   InfoType: "I"
   Brand: "1"
@@ -8025,18 +8025,6 @@ bulkload: InvText
   Brand: "1"
 
 bulkload: InvText
-  ITNum: 249
-  FromDate: 2011-10-01
-  ToDate: 2012-04-30
-  Target: "SMS"
-  KeyValue: "UpsellIPL8_WEB"
-  TxtTitle: "IPL8 Upsell Activation for Newton/VFR/MiYoigo"
-  InvText: "Yoigo info: Este mes has contratado 300 MB extra para Internet para Llevar 8 de Contrato por 5E, sin impuestos. Si no los has pedido llama 622. +info yoigo.com"
-  Language: 1
-  Report: 5
-  Brand: "1"
-
-bulkload: InvText
   ITNum: 245
   FromDate: 2011-09-01
   ToDate: 2012-04-30
@@ -8081,6 +8069,18 @@ bulkload: InvText
   TxtTitle: "IPL8 Upsell exceeded (1st SMS)"
   InvText: "Yoigo info: If you want to increase your Internet HSDPA monthly quota in 300 MB for only 5 euros just click in http://m.yoigo.com:8080/adaptation/b8/"
   Language: 5
+  Report: 5
+  Brand: "1"
+
+bulkload: InvText
+  ITNum: 249
+  FromDate: 2011-10-01
+  ToDate: 2012-04-30
+  Target: "SMS"
+  KeyValue: "UpsellIPL8_WEB"
+  TxtTitle: "IPL8 Upsell Activation for Newton/VFR/MiYoigo"
+  InvText: "Yoigo info: Este mes has contratado 300 MB extra para Internet para Llevar 8 de Contrato por 5E, sin impuestos. Si no los has pedido llama 622. +info yoigo.com"
+  Language: 1
   Report: 5
   Brand: "1"
 
@@ -8205,18 +8205,6 @@ bulkload: InvText
   Brand: "1"
 
 bulkload: InvText
-  ITNum: 262
-  FromDate: 2011-10-01
-  ToDate: 2012-04-30
-  Target: "SMS"
-  KeyValue: "UpsellMDUB2_WEB"
-  TxtTitle: "MDUB2 Upsell Activation for Newton/VFR/MiYoigo"
-  InvText: "Yoigo info: Este mes has contratado 1 GB extra para tu Bono 15 Internet de Contrato por 10E, sin impuestos. Si no los has pedido llama 622. +info yoigo.com"
-  Language: 1
-  Report: 5
-  Brand: "1"
-
-bulkload: InvText
   ITNum: 205
   FromDate: 2011-02-23
   ToDate: 2012-04-30
@@ -8236,6 +8224,18 @@ bulkload: InvText
   KeyValue: "UpsellMDUB2Limit"
   TxtTitle: "MDUB2 upsell limit exceeded"
   InvText: "Yoigo info: Si quieres este mes un GB adicional de alta velocidad HSDPA por 10 euros, haz clic en http://m.yoigo.com:8080/adaptation/b8/"
+  Language: 1
+  Report: 5
+  Brand: "1"
+
+bulkload: InvText
+  ITNum: 262
+  FromDate: 2011-10-01
+  ToDate: 2012-04-30
+  Target: "SMS"
+  KeyValue: "UpsellMDUB2_WEB"
+  TxtTitle: "MDUB2 Upsell Activation for Newton/VFR/MiYoigo"
+  InvText: "Yoigo info: Este mes has contratado 1 GB extra para tu Bono 15 Internet de Contrato por 10E, sin impuestos. Si no los has pedido llama 622. +info yoigo.com"
   Language: 1
   Report: 5
   Brand: "1"
@@ -8313,18 +8313,6 @@ bulkload: InvText
   Brand: "1"
 
 bulkload: InvText
-  ITNum: 263
-  FromDate: 2011-10-01
-  ToDate: 2012-04-30
-  Target: "SMS"
-  KeyValue: "UpsellMDUB_WEB"
-  TxtTitle: "MDUB Upsell Activation for Newton/VFR/MiYoigo"
-  InvText: "Yoigo info: Este mes has contratado 300 MB extra para tu Bono 8 Internet de Contrato por 5E, sin impuestos. Si no los has pedido llama 622. +info yoigo.com"
-  Language: 1
-  Report: 5
-  Brand: "1"
-
-bulkload: InvText
   ITNum: 189
   FromDate: 2010-12-03
   ToDate: 2012-04-30
@@ -8369,6 +8357,18 @@ bulkload: InvText
   TxtTitle: "MDUB upsell limit exceeded"
   InvText: "Yoigo info: If you want to increase your Internet HSDPA monthly quota in 300 MB for only 5 euros just click in http://m.yoigo.com:8080/adaptation/b8/"
   Language: 5
+  Report: 5
+  Brand: "1"
+
+bulkload: InvText
+  ITNum: 263
+  FromDate: 2011-10-01
+  ToDate: 2012-04-30
+  Target: "SMS"
+  KeyValue: "UpsellMDUB_WEB"
+  TxtTitle: "MDUB Upsell Activation for Newton/VFR/MiYoigo"
+  InvText: "Yoigo info: Este mes has contratado 300 MB extra para tu Bono 8 Internet de Contrato por 5E, sin impuestos. Si no los has pedido llama 622. +info yoigo.com"
+  Language: 1
   Report: 5
   Brand: "1"
 

@@ -63,18 +63,6 @@ bulkload: FeeModel
   FMGroup: 1
 
 bulkload: FeeModel
-  FeeModel: "COMP_POSTPAID"
-  FeeName: "Compensation General Postpaid"
-  Brand: "1"
-  FMGroup: 1
-
-bulkload: FeeModel
-  FeeModel: "COMP_PREPAID"
-  FeeName: "Compensation General Prepaid"
-  Brand: "1"
-  FMGroup: 1
-
-bulkload: FeeModel
   FeeModel: "Compensa 10"
   FeeName: "Compensa 10euros"
   Brand: "1"
@@ -129,6 +117,18 @@ bulkload: FeeModel
   FMGroup: 1
 
 bulkload: FeeModel
+  FeeModel: "COMP_POSTPAID"
+  FeeName: "Compensation General Postpaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "COMP_PREPAID"
+  FeeName: "Compensation General Prepaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
   FeeModel: "CONT10MF"
   FeeName: "Contrato 10"
   Brand: "1"
@@ -156,6 +156,11 @@ bulkload: FeeModel
 bulkload: FeeModel
   FeeModel: "CONT26MF"
   FeeName: "Contrato 26"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONT27MF"
+  FeeName: "LA INFINITA 2 GB DTO."
   Brand: "1"
 
 bulkload: FeeModel
@@ -769,6 +774,12 @@ bulkload: FeeModel
   FeeModel: "PMDUBFee"
   FeeName: "Prepaid BONO8 Fee"
   Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "Pos123"
+  FeeName: "TestCharge"
+  Brand: "1"
+  FMGroup: 1
 
 bulkload: FeeModel
   FeeModel: "POSMNP10"
@@ -3300,6 +3311,12 @@ bulkload: FeeModel
   FeeModel: "TERMRVTERM"
   FeeName: "Q25 extension termination"
   Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TESTSK"
+  FeeName: "TestSK"
+  Brand: "1"
+  FMGroup: 1
 
 bulkload: FeeModel
   FeeModel: "TOPUPCAMP20"

@@ -135,20 +135,20 @@ bulkload: ShaperConf
 
 bulkload: ShaperConf
   Brand: "1"
-  ShaperConfID: "BONO8_PRE"
-  Template: "HSPA_MONTHLY"
-  TariffType: "BONO_PRE"
-  Tariff: "BONO8_PRE"
-  LimitUnshaped: 524288000
-  LimitShaped: 20971520
-
-bulkload: ShaperConf
-  Brand: "1"
   ShaperConfID: "BONO8wVOIP"
   Template: "HSPA_MONTHLY"
   TariffType: "BONO_LO"
   Tariff: "BONO8"
   LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO8_PRE"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_PRE"
+  Tariff: "BONO8_PRE"
+  LimitUnshaped: 524288000
   LimitShaped: 20971520
 
 bulkload: ShaperConf
@@ -455,6 +455,33 @@ bulkload: ShaperConf
   TariffType: "PLANA_HI"
   Tariff: "PLANA_FwBONO25"
   LimitUnshaped: 8589934592
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT27"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_G"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT27wBONO6"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_GwBONO6_1"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT27wBONO7"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_GwBONO25"
+  LimitUnshaped: 5368709120
   LimitShaped: 20971520
 
 bulkload: ShaperConf
@@ -4007,20 +4034,20 @@ bulkload: ShaperConf
 
 bulkload: ShaperConf
   Brand: "1"
-  ShaperConfID: "IPL8_PRE"
-  Template: "HSPA_DAILY"
-  TariffType: "IPL_PRE"
-  Tariff: "IPL8_PRE"
-  LimitUnshaped: 104857600
-  LimitShaped: 20971520
-
-bulkload: ShaperConf
-  Brand: "1"
   ShaperConfID: "IPL8wVOIP"
   Template: "HSPA_MONTHLY_ADD"
   TariffType: "IPL_LO"
   Tariff: "IPL8"
   LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "IPL8_PRE"
+  Template: "HSPA_DAILY"
+  TariffType: "IPL_PRE"
+  Tariff: "IPL8_PRE"
+  LimitUnshaped: 104857600
   LimitShaped: 20971520
 
 bulkload: ShaperConf

@@ -2016,6 +2016,118 @@ bulkload: CTServPac
 
 bulkload: CTServPac
   Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "*1"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "BB"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "BPSUB"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "D_HOTL"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "HSDPA"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "LP"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "LTE"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "SEC"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-01
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "SHAPER"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "TMSService"
+  FromDate: 2016-12-12
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "UNSEC"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT27"
+  ServPac: "Y_HURP"
+  FromDate: 2016-12-12
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
   CLIType: "CONT4"
   ServPac: "*1"
   FromDate: 2008-09-01
@@ -4240,6 +4352,118 @@ bulkload: CTServPac
 
 bulkload: CTServPac
   Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "*1"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "BB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "BPSUB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "D_HOTL"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "HSDPA"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "LP"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "LTE"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "SEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-01
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "SHAPER"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "TMSService"
+  FromDate: 2016-11-10
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "UNSEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ServPac: "Y_HURP"
+  FromDate: 2016-11-10
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
   CLIType: "CONTDSL40"
   ServPac: "*1"
   FromDate: 2016-11-23
@@ -4571,6 +4795,118 @@ bulkload: CTServPac
   CLIType: "CONTDSL48"
   ServPac: "Y_HURP"
   FromDate: 2016-11-23
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "*1"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "BB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "BPSUB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "D_HOTL"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "HSDPA"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "LP"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "LTE"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "SEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-01
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "SHAPER"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "TMSService"
+  FromDate: 2016-11-10
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "UNSEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ServPac: "Y_HURP"
+  FromDate: 2016-11-10
   ToDate: 2051-12-31
   ServType: 8
 
@@ -5424,6 +5760,118 @@ bulkload: CTServPac
 
 bulkload: CTServPac
   Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "*1"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "BB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "BPSUB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "D_HOTL"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "HSDPA"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "LP"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "LTE"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "SEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-01
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "SHAPER"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "TMSService"
+  FromDate: 2016-11-10
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "UNSEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ServPac: "Y_HURP"
+  FromDate: 2016-11-10
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
   CLIType: "CONTFH40_50"
   ServPac: "*1"
   FromDate: 2016-11-23
@@ -5760,6 +6208,118 @@ bulkload: CTServPac
 
 bulkload: CTServPac
   Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "*1"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "BB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "BPSUB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "D_HOTL"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "HSDPA"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "LP"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "LTE"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "SEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-01
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "SHAPER"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "TMSService"
+  FromDate: 2016-11-10
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "UNSEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ServPac: "Y_HURP"
+  FromDate: 2016-11-10
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
   CLIType: "CONTFH50_300"
   ServPac: "*1"
   FromDate: 2016-11-23
@@ -5867,6 +6427,118 @@ bulkload: CTServPac
   CLIType: "CONTFH50_300"
   ServPac: "Y_HURP"
   FromDate: 2016-11-23
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "*1"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "BB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "BPSUB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "D_HOTL"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "HSDPA"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "LP"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "LTE"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "SEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-01
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "SHAPER"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "TMSService"
+  FromDate: 2016-11-10
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "UNSEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ServPac: "Y_HURP"
+  FromDate: 2016-11-10
   ToDate: 2051-12-31
   ServType: 8
 
@@ -6313,6 +6985,118 @@ bulkload: CTServPac
 bulkload: CTServPac
   Brand: "1"
   CLIType: "CONTFH59_50"
+  ServPac: "Y_HURP"
+  FromDate: 2016-11-10
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "*1"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "BB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "BPSUB"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "D_HOTL"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "HSDPA"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "LP"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "LTE"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "SEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-01
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "SHAPER"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "TMSService"
+  FromDate: 2016-11-10
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "UNSEC"
+  FromDate: 2016-11-10
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH62_300"
   ServPac: "Y_HURP"
   FromDate: 2016-11-10
   ToDate: 2051-12-31

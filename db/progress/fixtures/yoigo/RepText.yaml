@@ -4536,6 +4536,42 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
+  RepText: "Promo Bono Voz IP"
+  LinkCode: "BONOVOIPCPACT"
+  Brand: "1"
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Promo Bono Voz IP"
+  LinkCode: "BONOVOIPCPACT"
+  Brand: "1"
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Bono Voz IP Promozioa"
+  LinkCode: "BONOVOIPCPACT"
+  Brand: "1"
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Bono Voz IP Promo"
+  LinkCode: "BONOVOIPCPACT"
+  Brand: "1"
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
   RepText: "Bono Voz IP"
   LinkCode: "BONO_VOIP"
   Brand: "1"
@@ -4637,42 +4673,6 @@ bulkload: RepText
   Language: 5
   RepText: "Buy 100 MB Voz IP"
   LinkCode: "BONO_VOIPMFUPS"
-  Brand: "1"
-  FromDate: 2012-04-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
-  RepText: "Promo Bono Voz IP"
-  LinkCode: "BONOVOIPCPACT"
-  Brand: "1"
-  FromDate: 2012-04-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Promo Bono Voz IP"
-  LinkCode: "BONOVOIPCPACT"
-  Brand: "1"
-  FromDate: 2012-04-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Bono Voz IP Promozioa"
-  LinkCode: "BONOVOIPCPACT"
-  Brand: "1"
-  FromDate: 2012-04-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "Bono Voz IP Promo"
-  LinkCode: "BONOVOIPCPACT"
   Brand: "1"
   FromDate: 2012-04-01
   ToDate: 2049-12-31
@@ -6561,6 +6561,222 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
+  RepText: "DesvÃ­o de Llamadas"
+  LinkCode: "CONT27CF_A"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Desviament de Trucades"
+  LinkCode: "CONT27CF_A"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Dei-desbideraketa"
+  LinkCode: "CONT27CF_A"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Call forwarding"
+  LinkCode: "CONT27CF_A"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "DesvÃ­o de Llamadas"
+  LinkCode: "CONT27CF_B"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Desviament de Trucades"
+  LinkCode: "CONT27CF_B"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Dei-desbideraketa"
+  LinkCode: "CONT27CF_B"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Call forwarding"
+  LinkCode: "CONT27CF_B"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Descuento promocin"
+  LinkCode: "CONT27DISC"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Descompte promoci"
+  LinkCode: "CONT27DISC"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Promozio-deskontua"
+  LinkCode: "CONT27DISC"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Promotional discount"
+  LinkCode: "CONT27DISC"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "La Infinita 2 GB DTO."
+  LinkCode: "CONT27MF"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "La Infinita 2 GB DTO."
+  LinkCode: "CONT27MF"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "La Infinita 2 GB DTO."
+  LinkCode: "CONT27MF"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "La Infinita 2 GB DTO."
+  LinkCode: "CONT27MF"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Nacionales"
+  LinkCode: "CONT27VOICE_A"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Nacionals"
+  LinkCode: "CONT27VOICE_A"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Nazionalak"
+  LinkCode: "CONT27VOICE_A"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "National"
+  LinkCode: "CONT27VOICE_A"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Nacionales"
+  LinkCode: "CONT27VOICE_B"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Nacionals"
+  LinkCode: "CONT27VOICE_B"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Nazionalak"
+  LinkCode: "CONT27VOICE_B"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "National"
+  LinkCode: "CONT27VOICE_B"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
   RepText: "Descuento promoción"
   LinkCode: "CONT8DISC"
   Brand: "1"
@@ -7848,6 +8064,42 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
+  RepText: "Internet"
+  LinkCode: "CONTDATA27"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Internet"
+  LinkCode: "CONTDATA27"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Internet"
+  LinkCode: "CONTDATA27"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Internet"
+  LinkCode: "CONTDATA27"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
   RepText: "Internet para Llevar 8"
   LinkCode: "CONTDATA3"
   Brand: "1"
@@ -8298,78 +8550,6 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
-  RepText: "Nacionales"
-  LinkCode: "CONTDSL_MIN_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Nacionals"
-  LinkCode: "CONTDSL_MIN_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Nazionalak"
-  LinkCode: "CONTDSL_MIN_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "National"
-  LinkCode: "CONTDSL_MIN_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
-  RepText: "Nacionales"
-  LinkCode: "CONTDSL_QTY_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Nacionals"
-  LinkCode: "CONTDSL_QTY_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Nazionalak"
-  LinkCode: "CONTDSL_QTY_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "National"
-  LinkCode: "CONTDSL_QTY_IN"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
   RepText: "FIJO + INTERNET"
   LinkCode: "CONTDSLMF"
   Brand: "1"
@@ -8401,6 +8581,78 @@ bulkload: RepText
   LinkCode: "CONTDSLMF"
   Brand: "1"
   FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Nacionales"
+  LinkCode: "CONTDSL_MIN_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Nacionals"
+  LinkCode: "CONTDSL_MIN_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Nazionalak"
+  LinkCode: "CONTDSL_MIN_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "National"
+  LinkCode: "CONTDSL_MIN_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Nacionales"
+  LinkCode: "CONTDSL_QTY_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Nacionals"
+  LinkCode: "CONTDSL_QTY_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Nazionalak"
+  LinkCode: "CONTDSL_QTY_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "National"
+  LinkCode: "CONTDSL_QTY_IN"
+  Brand: "1"
+  FromDate: 2016-11-01
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -8586,6 +8838,42 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
+  RepText: "FIJO + INTERNET"
+  LinkCode: "CONTFH300MF"
+  Brand: "1"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Fix + Internet"
+  LinkCode: "CONTFH300MF"
+  Brand: "1"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Finkoa + Internet"
+  LinkCode: "CONTFH300MF"
+  Brand: "1"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Landline + Internet"
+  LinkCode: "CONTFH300MF"
+  Brand: "1"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
   RepText: "Nacionales"
   LinkCode: "CONTFH300_MIN_IN"
   Brand: "1"
@@ -8659,7 +8947,7 @@ bulkload: RepText
   TextType: 1
   Language: 1
   RepText: "FIJO + INTERNET"
-  LinkCode: "CONTFH300MF"
+  LinkCode: "CONTFH50MF"
   Brand: "1"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
@@ -8668,7 +8956,7 @@ bulkload: RepText
   TextType: 1
   Language: 2
   RepText: "Fix + Internet"
-  LinkCode: "CONTFH300MF"
+  LinkCode: "CONTFH50MF"
   Brand: "1"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
@@ -8677,7 +8965,7 @@ bulkload: RepText
   TextType: 1
   Language: 3
   RepText: "Finkoa + Internet"
-  LinkCode: "CONTFH300MF"
+  LinkCode: "CONTFH50MF"
   Brand: "1"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
@@ -8686,7 +8974,7 @@ bulkload: RepText
   TextType: 1
   Language: 5
   RepText: "Landline + Internet"
-  LinkCode: "CONTFH300MF"
+  LinkCode: "CONTFH50MF"
   Brand: "1"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
@@ -8761,42 +9049,6 @@ bulkload: RepText
   LinkCode: "CONTFH50_QTY_IN"
   Brand: "1"
   FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
-  RepText: "FIJO + INTERNET"
-  LinkCode: "CONTFH50MF"
-  Brand: "1"
-  FromDate: 2016-10-27
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Fix + Internet"
-  LinkCode: "CONTFH50MF"
-  Brand: "1"
-  FromDate: 2016-10-27
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Finkoa + Internet"
-  LinkCode: "CONTFH50MF"
-  Brand: "1"
-  FromDate: 2016-10-27
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "Landline + Internet"
-  LinkCode: "CONTFH50MF"
-  Brand: "1"
-  FromDate: 2016-10-27
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -10309,42 +10561,6 @@ bulkload: RepText
   LinkCode: "CONTS26VOICE_B"
   Brand: "1"
   FromDate: 2014-05-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
-  RepText: "Internet"
-  LinkCode: "CONTS2GB_DATA"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Internet"
-  LinkCode: "CONTS2GB_DATA"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Internet"
-  LinkCode: "CONTS2GB_DATA"
-  Brand: "1"
-  FromDate: 2016-11-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "Internet"
-  LinkCode: "CONTS2GB_DATA"
-  Brand: "1"
-  FromDate: 2016-11-01
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -10523,6 +10739,42 @@ bulkload: RepText
   Language: 5
   RepText: "National"
   LinkCode: "CONTS2GBVOICE_B"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Internet"
+  LinkCode: "CONTS2GB_DATA"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Internet"
+  LinkCode: "CONTS2GB_DATA"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Internet"
+  LinkCode: "CONTS2GB_DATA"
+  Brand: "1"
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Internet"
+  LinkCode: "CONTS2GB_DATA"
   Brand: "1"
   FromDate: 2016-11-01
   ToDate: 2049-12-31
@@ -13486,6 +13738,42 @@ bulkload: RepText
   LinkCode: "DISCPAYTERMINDIR"
   Brand: "1"
   FromDate: 2013-02-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Descuento promoción"
+  LinkCode: "DISCWINBACK"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Descompte promoció"
+  LinkCode: "DISCWINBACK"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Promozio-deskontua"
+  LinkCode: "DISCWINBACK"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Promotional discount"
+  LinkCode: "DISCWINBACK"
+  Brand: "1"
+  FromDate: 2017-02-22
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -29439,6 +29727,231 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
+  RepText: "Wiko Sunny"
+  LinkCode: "G0000316"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Wiko Sunny"
+  LinkCode: "G0000316"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Wiko Sunny"
+  LinkCode: "G0000316"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Wiko Sunny"
+  LinkCode: "G0000316"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Wiko Sunny"
+  LinkCode: "G0000316"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Alcatel Pixi 4 5 3G"
+  LinkCode: "G0000317"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Alcatel Pixi 4 5 3G"
+  LinkCode: "G0000317"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Alcatel Pixi 4 5 3G"
+  LinkCode: "G0000317"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Alcatel Pixi 4 5 3G"
+  LinkCode: "G0000317"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Alcatel Pixi 4 5 3G"
+  LinkCode: "G0000317"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Huawei P8 Lite 2017"
+  LinkCode: "G0000318"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Huawei P8 Lite 2017"
+  LinkCode: "G0000318"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Huawei P8 Lite 2017"
+  LinkCode: "G0000318"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Huawei P8 Lite 2017"
+  LinkCode: "G0000318"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Huawei P8 Lite 2017"
+  LinkCode: "G0000318"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Huawei P10"
+  LinkCode: "G0000319"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Huawei P10"
+  LinkCode: "G0000319"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Huawei P10"
+  LinkCode: "G0000319"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Huawei P10"
+  LinkCode: "G0000319"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Huawei P10"
+  LinkCode: "G0000319"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Alcatel 2008G"
+  LinkCode: "G0000320"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Alcatel 2008G"
+  LinkCode: "G0000320"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Alcatel 2008G"
+  LinkCode: "G0000320"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Alcatel 2008G"
+  LinkCode: "G0000320"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Alcatel 2008G"
+  LinkCode: "G0000320"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
   RepText: "PTE Galaxy Note 3 Neo"
   LinkCode: "G9999999"
   Brand: "1"
@@ -32647,6 +33160,51 @@ bulkload: RepText
   LinkCode: "P011T45W2"
   Brand: "1"
   FromDate: 2015-03-02
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Wiko Sunny Blanco"
+  LinkCode: "P012WSUW2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Wiko Sunny Blanco"
+  LinkCode: "P012WSUW2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Wiko Sunny Blanco"
+  LinkCode: "P012WSUW2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Wiko Sunny Blanco"
+  LinkCode: "P012WSUW2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Wiko Sunny White"
+  LinkCode: "P012WSUW2"
+  Brand: "1"
+  FromDate: 2017-02-22
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -56341,6 +56899,96 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
+  RepText: "Huawei P8 Lite 2017 Negro"
+  LinkCode: "P0438L7N2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Huawei P8 Lite 2017 Negro"
+  LinkCode: "P0438L7N2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Huawei P8 Lite 2017 Negro"
+  LinkCode: "P0438L7N2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Huawei P8 Lite 2017 Negro"
+  LinkCode: "P0438L7N2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Huawei P8 Lite 2017 Black"
+  LinkCode: "P0438L7N2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Huawei P8 Lite 2017 Blanco"
+  LinkCode: "P0438L7W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Huawei P8 Lite 2017 Blanco"
+  LinkCode: "P0438L7W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Huawei P8 Lite 2017 Blanco"
+  LinkCode: "P0438L7W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Huawei P8 Lite 2017 Blanco"
+  LinkCode: "P0438L7W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Huawei P8 Lite 2017 White"
+  LinkCode: "P0438L7W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
   RepText: "Huawei P8 Lite Negro con Talkband B2 Negro"
   LinkCode: "P0438LRN2"
   Brand: "1"
@@ -58645,6 +59293,96 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
+  RepText: "Huawei P10 Negro"
+  LinkCode: "P043P10N2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Huawei P10 Negro"
+  LinkCode: "P043P10N2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Huawei P10 Negro"
+  LinkCode: "P043P10N2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Huawei P10 Negro"
+  LinkCode: "P043P10N2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Huawei P10 Black"
+  LinkCode: "P043P10N2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Huawei P10 Blanco"
+  LinkCode: "P043P10W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Huawei P10 Blanco"
+  LinkCode: "P043P10W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Huawei P10 Blanco"
+  LinkCode: "P043P10W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Huawei P10 Blanco"
+  LinkCode: "P043P10W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Huawei P10 White"
+  LinkCode: "P043P10W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
   RepText: "Huawei P1 XL Negro"
   LinkCode: "P043P1XN2"
   Brand: "1"
@@ -60472,6 +61210,51 @@ bulkload: RepText
   LinkCode: "P044HX5W2"
   Brand: "1"
   FromDate: 2016-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Alcatel 2008G Negro"
+  LinkCode: "P04508GN2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Alcatel 2008G Negro"
+  LinkCode: "P04508GN2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Alcatel 2008G Negro"
+  LinkCode: "P04508GN2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Alcatel 2008G Negro"
+  LinkCode: "P04508GN2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Alcatel 2008G Black"
+  LinkCode: "P04508GN2"
+  Brand: "1"
+  FromDate: 2017-02-22
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -62902,6 +63685,51 @@ bulkload: RepText
   LinkCode: "P045P3SP2"
   Brand: "1"
   FromDate: 2015-08-25
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Alcatel Pixi 4 5 3G Blanco"
+  LinkCode: "P045P43W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Alcatel Pixi 4 5 3G Blanco"
+  LinkCode: "P045P43W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Alcatel Pixi 4 5 3G Blanco"
+  LinkCode: "P045P43W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 4
+  RepText: "Alcatel Pixi 4 5 3G Blanco"
+  LinkCode: "P045P43W2"
+  Brand: "1"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Alcatel Pixi 4 5 3G White"
+  LinkCode: "P045P43W2"
+  Brand: "1"
+  FromDate: 2017-02-22
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -78844,42 +79672,6 @@ bulkload: RepText
 bulkload: RepText
   TextType: 1
   Language: 1
-  RepText: "Descuento Comisión por impago"
-  LinkCode: "REJECT_FEE_DISC"
-  Brand: "1"
-  FromDate: 2015-03-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 2
-  RepText: "Descompte comissió de gestió per impagament"
-  LinkCode: "REJECT_FEE_DISC"
-  Brand: "1"
-  FromDate: 2015-03-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 3
-  RepText: "Ez ordaintzeagatiko kudeaketa-komisioaren deskontua"
-  LinkCode: "REJECT_FEE_DISC"
-  Brand: "1"
-  FromDate: 2015-03-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 5
-  RepText: "Non-payment handling charge discount"
-  LinkCode: "REJECT_FEE_DISC"
-  Brand: "1"
-  FromDate: 2015-03-01
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 1
-  Language: 1
   RepText: "Comisión por impago"
   LinkCode: "REJECTION_FEE"
   Brand: "1"
@@ -78909,6 +79701,42 @@ bulkload: RepText
   Language: 5
   RepText: "Non-payment handling charge"
   LinkCode: "REJECTION_FEE"
+  Brand: "1"
+  FromDate: 2015-03-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 1
+  RepText: "Descuento Comisión por impago"
+  LinkCode: "REJECT_FEE_DISC"
+  Brand: "1"
+  FromDate: 2015-03-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 2
+  RepText: "Descompte comissió de gestió per impagament"
+  LinkCode: "REJECT_FEE_DISC"
+  Brand: "1"
+  FromDate: 2015-03-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 3
+  RepText: "Ez ordaintzeagatiko kudeaketa-komisioaren deskontua"
+  LinkCode: "REJECT_FEE_DISC"
+  Brand: "1"
+  FromDate: 2015-03-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 1
+  Language: 5
+  RepText: "Non-payment handling charge discount"
+  LinkCode: "REJECT_FEE_DISC"
   Brand: "1"
   FromDate: 2015-03-01
   ToDate: 2049-12-31
@@ -101108,6 +101936,42 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 1
+  RepText: "LA INFINITA 2 GB DTO."
+  LinkCode: "CONT27"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 2
+  RepText: "LA INFINITA 2 GB DTO."
+  LinkCode: "CONT27"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 3
+  RepText: "LA INFINITA 2 GB DTO."
+  LinkCode: "CONT27"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 5
+  RepText: "LA INFINITA 2 GB DTO."
+  LinkCode: "CONT27"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 1
   RepText: "LA DEL OCHO"
   LinkCode: "CONT4"
   Brand: "1"
@@ -101631,6 +102495,42 @@ bulkload: RepText
   TextType: 9
   Language: 1
   RepText: "La Combinada Naranja 20"
+  LinkCode: "CONTDSL39"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 2
+  RepText: "La Combinada Naranja 20"
+  LinkCode: "CONTDSL39"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 3
+  RepText: "La Combinada Naranja 20"
+  LinkCode: "CONTDSL39"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 5
+  RepText: "La Combinada Naranja 20"
+  LinkCode: "CONTDSL39"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 1
+  RepText: "La Combinada Naranja 20"
   LinkCode: "CONTDSL40"
   Brand: "1"
   FromDate: 2016-11-23
@@ -101666,7 +102566,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 1
-  RepText: "La Combinada Morada 20"
+  RepText: "La Combinada Morada 20 con 2 GB"
   LinkCode: "CONTDSL45"
   Brand: "1"
   FromDate: 2016-10-27
@@ -101675,7 +102575,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 2
-  RepText: "La Combinada Morada 20"
+  RepText: "La Combinada Morada 20 con 2 GB"
   LinkCode: "CONTDSL45"
   Brand: "1"
   FromDate: 2016-10-27
@@ -101684,7 +102584,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 3
-  RepText: "La Combinada Morada 20"
+  RepText: "La Combinada Morada 20 con 2 GB"
   LinkCode: "CONTDSL45"
   Brand: "1"
   FromDate: 2016-10-27
@@ -101693,7 +102593,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 5
-  RepText: "La Combinada Morada 20"
+  RepText: "La Combinada Morada 20 con 2 GB"
   LinkCode: "CONTDSL45"
   Brand: "1"
   FromDate: 2016-10-27
@@ -101733,6 +102633,42 @@ bulkload: RepText
   LinkCode: "CONTDSL48"
   Brand: "1"
   FromDate: 2016-11-23
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 1
+  RepText: "La Combinada Morada 20"
+  LinkCode: "CONTDSL52"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 2
+  RepText: "La Combinada Morada 20"
+  LinkCode: "CONTDSL52"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 3
+  RepText: "La Combinada Morada 20"
+  LinkCode: "CONTDSL52"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 5
+  RepText: "La Combinada Morada 20"
+  LinkCode: "CONTDSL52"
+  Brand: "1"
+  FromDate: 2017-02-20
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -102306,6 +103242,42 @@ bulkload: RepText
   TextType: 9
   Language: 1
   RepText: "La Combinada Naranja 50"
+  LinkCode: "CONTFH39_50"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 2
+  RepText: "La Combinada Naranja 50"
+  LinkCode: "CONTFH39_50"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 3
+  RepText: "La Combinada Naranja 50"
+  LinkCode: "CONTFH39_50"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 5
+  RepText: "La Combinada Naranja 50"
+  LinkCode: "CONTFH39_50"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 1
+  RepText: "La Combinada Naranja 50"
   LinkCode: "CONTFH40_50"
   Brand: "1"
   FromDate: 2016-11-23
@@ -102341,7 +103313,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 1
-  RepText: "La Combinada Morada 50"
+  RepText: "La Combinada Morada 50 con 2 GB"
   LinkCode: "CONTFH45_50"
   Brand: "1"
   FromDate: 2016-10-27
@@ -102350,7 +103322,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 2
-  RepText: "La Combinada Morada 50"
+  RepText: "La Combinada Morada 50 con 2 GB"
   LinkCode: "CONTFH45_50"
   Brand: "1"
   FromDate: 2016-10-27
@@ -102359,7 +103331,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 3
-  RepText: "La Combinada Morada 50"
+  RepText: "La Combinada Morada 50 con 2 GB"
   LinkCode: "CONTFH45_50"
   Brand: "1"
   FromDate: 2016-10-27
@@ -102368,7 +103340,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 5
-  RepText: "La Combinada Morada 50"
+  RepText: "La Combinada Morada 50 con 2 GB"
   LinkCode: "CONTFH45_50"
   Brand: "1"
   FromDate: 2016-10-27
@@ -102414,6 +103386,42 @@ bulkload: RepText
   TextType: 9
   Language: 1
   RepText: "La Combinada Naranja 300"
+  LinkCode: "CONTFH49_300"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 2
+  RepText: "La Combinada Naranja 300"
+  LinkCode: "CONTFH49_300"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 3
+  RepText: "La Combinada Naranja 300"
+  LinkCode: "CONTFH49_300"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 5
+  RepText: "La Combinada Naranja 300"
+  LinkCode: "CONTFH49_300"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 1
+  RepText: "La Combinada Naranja 300"
   LinkCode: "CONTFH50_300"
   Brand: "1"
   FromDate: 2016-11-23
@@ -102449,7 +103457,43 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 1
-  RepText: "La Combinada Morada 300"
+  RepText: "La Combinada Morada 50"
+  LinkCode: "CONTFH52_50"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 2
+  RepText: "La Combinada Morada 50"
+  LinkCode: "CONTFH52_50"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 3
+  RepText: "La Combinada Morada 50"
+  LinkCode: "CONTFH52_50"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 5
+  RepText: "La Combinada Morada 50"
+  LinkCode: "CONTFH52_50"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 1
+  RepText: "La Combinada Morada 300 con 2 GB"
   LinkCode: "CONTFH55_300"
   Brand: "1"
   FromDate: 2016-10-27
@@ -102458,7 +103502,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 2
-  RepText: "La Combinada Morada 300"
+  RepText: "La Combinada Morada 300 con 2 GB"
   LinkCode: "CONTFH55_300"
   Brand: "1"
   FromDate: 2016-10-27
@@ -102467,7 +103511,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 3
-  RepText: "La Combinada Morada 300"
+  RepText: "La Combinada Morada 300 con 2 GB"
   LinkCode: "CONTFH55_300"
   Brand: "1"
   FromDate: 2016-10-27
@@ -102476,7 +103520,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 5
-  RepText: "La Combinada Morada 300"
+  RepText: "La Combinada Morada 300 con 2 GB"
   LinkCode: "CONTFH55_300"
   Brand: "1"
   FromDate: 2016-10-27
@@ -102521,7 +103565,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 1
-  RepText: "La Combinada Azul 50"
+  RepText: "La Combinada Azul 50 con 20 GB"
   LinkCode: "CONTFH58_50"
   Brand: "1"
   FromDate: 2016-11-01
@@ -102530,7 +103574,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 2
-  RepText: "La Combinada Azul 50"
+  RepText: "La Combinada Azul 50 con 20 GB"
   LinkCode: "CONTFH58_50"
   Brand: "1"
   FromDate: 2016-11-01
@@ -102539,7 +103583,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 3
-  RepText: "La Combinada Azul 50"
+  RepText: "La Combinada Azul 50 con 20 GB"
   LinkCode: "CONTFH58_50"
   Brand: "1"
   FromDate: 2016-11-01
@@ -102548,7 +103592,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 5
-  RepText: "La Combinada Azul 50"
+  RepText: "La Combinada Azul 50 con 20 GB"
   LinkCode: "CONTFH58_50"
   Brand: "1"
   FromDate: 2016-11-01
@@ -102593,7 +103637,43 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 1
-  RepText: "La Combinada Azul 300"
+  RepText: "La Combinada Morada 300"
+  LinkCode: "CONTFH62_300"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 2
+  RepText: "La Combinada Morada 300"
+  LinkCode: "CONTFH62_300"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 3
+  RepText: "La Combinada Morada 300"
+  LinkCode: "CONTFH62_300"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 5
+  RepText: "La Combinada Morada 300"
+  LinkCode: "CONTFH62_300"
+  Brand: "1"
+  FromDate: 2017-02-20
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 9
+  Language: 1
+  RepText: "La Combinada Azul 300 con 20 GB"
   LinkCode: "CONTFH68_300"
   Brand: "1"
   FromDate: 2016-11-01
@@ -102602,7 +103682,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 2
-  RepText: "La Combinada Azul 300"
+  RepText: "La Combinada Azul 300 con 20 GB"
   LinkCode: "CONTFH68_300"
   Brand: "1"
   FromDate: 2016-11-01
@@ -102611,7 +103691,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 3
-  RepText: "La Combinada Azul 300"
+  RepText: "La Combinada Azul 300 con 20 GB"
   LinkCode: "CONTFH68_300"
   Brand: "1"
   FromDate: 2016-11-01
@@ -102620,7 +103700,7 @@ bulkload: RepText
 bulkload: RepText
   TextType: 9
   Language: 5
-  RepText: "La Combinada Azul 300"
+  RepText: "La Combinada Azul 300 con 20 GB"
   LinkCode: "CONTFH68_300"
   Brand: "1"
   FromDate: 2016-11-01
@@ -104640,6 +105720,42 @@ bulkload: RepText
   LinkCode: "CONTRATO26"
   Brand: "1"
   FromDate: 2017-02-01
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 11
+  Language: 1
+  RepText: "LA INFINITA 2 GB DTO."
+  LinkCode: "CONTRATO27"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 11
+  Language: 2
+  RepText: "LA INFINITA 2 GB DTO."
+  LinkCode: "CONTRATO27"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 11
+  Language: 3
+  RepText: "LA INFINITA 2 GB DTO."
+  LinkCode: "CONTRATO27"
+  Brand: "1"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 11
+  Language: 5
+  RepText: "LA INFINITA 2 GB DTO."
+  LinkCode: "CONTRATO27"
+  Brand: "1"
+  FromDate: 2017-04-13
   ToDate: 2049-12-31
 
 bulkload: RepText
@@ -107048,60 +108164,6 @@ bulkload: RepText
 bulkload: RepText
   TextType: 26
   Language: 1
-  RepText: "Cliente_Suscripción Premium"
-  LinkCode: "C_BPSUB"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 5
-  RepText: "Customer_Premium Subscription"
-  LinkCode: "C_BPSUB"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 1
-  RepText: "Cliente_Roaming+Internacional"
-  LinkCode: "C_BRAIC"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 5
-  RepText: "Customer_Roaming+International"
-  LinkCode: "C_BRAIC"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 1
-  RepText: "Cliente_Roaming+Internacional+Premium total"
-  LinkCode: "C_BRIAP"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 5
-  RepText: "Customer_Roaming+International+Total Premium"
-  LinkCode: "C_BRIAP"
-  Brand: "1"
-  FromDate: 2015-07-08
-  ToDate: 2049-12-31
-
-bulkload: RepText
-  TextType: 26
-  Language: 1
   RepText: "Cliente_Internacional"
   LinkCode: "Cust_International_off"
   Brand: "1"
@@ -107167,6 +108229,60 @@ bulkload: RepText
   Language: 5
   RepText: "Customer_Total Premium"
   LinkCode: "Cust_TotalPremium_off"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 1
+  RepText: "Cliente_Suscripción Premium"
+  LinkCode: "C_BPSUB"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 5
+  RepText: "Customer_Premium Subscription"
+  LinkCode: "C_BPSUB"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 1
+  RepText: "Cliente_Roaming+Internacional"
+  LinkCode: "C_BRAIC"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 5
+  RepText: "Customer_Roaming+International"
+  LinkCode: "C_BRAIC"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 1
+  RepText: "Cliente_Roaming+Internacional+Premium total"
+  LinkCode: "C_BRIAP"
+  Brand: "1"
+  FromDate: 2015-07-08
+  ToDate: 2049-12-31
+
+bulkload: RepText
+  TextType: 26
+  Language: 5
+  RepText: "Customer_Roaming+International+Total Premium"
+  LinkCode: "C_BRIAP"
   Brand: "1"
   FromDate: 2015-07-08
   ToDate: 2049-12-31
