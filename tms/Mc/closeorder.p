@@ -232,18 +232,26 @@ DO:
                    OrderCustomer.CustIDType = lbOrderCustomer.CustIDType AND
                    OrderCustomer.CustID     = lbOrderCustomer.CustID,
              FIRST lbOrder NO-LOCK WHERE
-                   lbOrder.Brand = gcBrand AND
+                   lbOrder.Brand      = gcBrand                           AND
                    lbOrder.OrderID    = OrderCustomer.OrderID             AND
                    lbOrder.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} AND
                    LOOKUP(lbOrder.CLIType, {&ADDLINE_CLITYPES}) > 0:
 
              FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
                         OrderAction.Brand    = gcBrand           AND
-                        OrderAction.OrderID  = lbOrder.OrderID     AND
+                        OrderAction.OrderID  = lbOrder.OrderID   AND
                         OrderAction.ItemType = "AddLineDiscount" AND
                         LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0 NO-ERROR.
-             IF AVAILABLE OrderAction THEN
+             IF AVAILABLE OrderAction THEN DO:
                 DELETE OrderAction.
+
+                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                 "Order",
+                                 STRING(lbOrder.OrderID),
+                                 0,
+                                 "ADDLINE DISCOUNT ORDERACTION REMOVED",
+                                 "Removed AddLineDiscount Item from OrderAction").
+             END.
           END.
 
           fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
