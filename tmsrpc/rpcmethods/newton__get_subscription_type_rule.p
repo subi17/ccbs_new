@@ -86,7 +86,6 @@ DEF VAR lcPostpaidDataBundles  AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR liFeePeriod       AS INT  NO-UNDO.
 DEF VAR liOrderId AS INT NO-UNDO. 
-DEF VAR lcFixedOnlyConvergentCliTypeList AS CHAR NO-UNDO.
 
 /* q25refinance_remaining Quota 25 refinance remaining amount */
 DEF VAR ldeQ25RefiRemain AS DECIMAL NO-UNDO.
@@ -135,12 +134,6 @@ ASSIGN
    ldeEndTS       = fMake2DT(fLastDayOfMonth(TODAY),86399).
 
 lliSTCAllowed = fIsiSTCAllowed(INPUT Mobsub.MsSeq).
-
-ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
-IF ((fIsConvergenceTariff(MobSub.CliType) AND LOOKUP(pcNewCliType,lcFixedOnlyConvergentCliTypeList) > 0) OR
-    (fIsConvergenceTariff(pcNewCliType) AND LOOKUP(MobSub.CliType,lcFixedOnlyConvergentCliTypeList) > 0)) THEN 
-  lliSTCAllowed = FALSE.
-
 
 IF MobSub.PayType = FALSE THEN DO:
    ASSIGN
