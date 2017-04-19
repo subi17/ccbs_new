@@ -51,6 +51,20 @@ def customize():
     fd.write("ENV%s = '%s'\n" % ("['display_banner']", 'no'))
     fd.close()
 
+def relink_var():
+    if not os.path.exists('../var'):
+        print('Creating var directory in %s.' % os.path.abspath('..'),
+              'Please check permissions!')
+    for subdir in ['', '/log', '/log/eventlog', '/log/usagelog',
+                               '/log/errorlog',
+                       '/run', '/tmp']:
+        if not os.path.exists('../var' + subdir):
+            os.mkdir('../var' + subdir)
+    if not os.path.islink('var'):
+        if os.path.isdir('var'):
+            shutil.rmtree('var')
+        os.symlink('../var', 'var')
+
 if not os.path.exists('etc/config.py'):
     customize()
 skip_srcpkg_check = True
@@ -62,6 +76,8 @@ exec(open(relpath + '/etc/make_site.py', 'rb').read())
 def initialized(*a):
     '''.initialized'''
     open(a[0], 'w').close()
+    if environment == 'safeproduction':
+        relink_var()
     print('Initialization successful')
 
 @target(['.initialized'])
@@ -115,6 +131,11 @@ def dist(*a):
     for mod in modules:
         require('%s>build' % mod, [os.path.join(dist_dir, mod)])
     shutil.copyfile('.DeployMakefile.py', dist_dir + '/Makefile.py')
+
+    if environment == 'safeproduction':
+        open('.safeproduction', 'a').close()
+        shutil.copyfile('.safeproduction', dist_dir + '/.safeproduction')
+
     print('Archiving...')
     subprocess.call(['tar', '-cf', dist_basename + '.tar',
                             '-C', build_dir, dist_basename])
