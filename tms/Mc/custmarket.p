@@ -13,6 +13,9 @@
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 
+DEF VAR lcMemo AS CHAR  NO-UNDO. 
+ASSIGN lcMemo = "Agent" + CHR(255) + "TMS".
+
 IF llDoEvent THEN DO FOR Customer:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
@@ -89,7 +92,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
            Customer.OutMarkSMS
            Customer.OutMarkEMail
            Customer.OutMarkPost
-            Customer.OutMarkBank
+           Customer.OutMarkBank
            Customer.RobinsonsLimit.
 
    ASSIGN
@@ -118,7 +121,10 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
                 Customer.OutMarkPost
                 Customer.OutMarkBank.
 
-         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+         IF llDoEvent THEN 
+            RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                                 {&STAR_EVENT_USER}, 
+                                                  lcMemo).
           
          RELEASE Customer.
          
@@ -132,4 +138,6 @@ END. /* lCustMark */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCriter NO-PAUSE.    
+
+
 
