@@ -24,7 +24,7 @@ def getpf(pf):
         for tenant in tenancies:
             if tenancies[tenant].get('tenanttype', '') == 'Super':
                 return '{0}_{1}.pf'.format(pf, tenant)
-    return '{}.pf'.format(pf)
+    return '{0}.pf'.format(pf)
 
 @target
 def build(*a):

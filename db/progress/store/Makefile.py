@@ -207,7 +207,7 @@ def remote_database_file(match, deps, host, db_dir, db_name):
 
 def write_pf_file(filename, tenant='', logical_names={}):
     if tenant:
-        tenant = '_{}'.format(tenant)
+        tenant = '_{0}'.format(tenant)
     with open(filename, 'wt') as fd:
         if cdr_databases:
              fd.write('-h %d\n' % (len(databases) + len(cdr_databases)))
@@ -217,12 +217,12 @@ def write_pf_file(filename, tenant='', logical_names={}):
             name_map = ' -ld %s' % logical_names[db] if db in logical_names else ''
             fd.write('-pf {0}/{1}{2}.pf{3}\n'.format(getcwd(), db, tenant, name_map))
 
-@target(['{}.pf'.format(x) for x in databases] + [ 'tenant_{}'.format(x) for x in tenancies ])
+@target(['{0}.pf'.format(x) for x in databases] + [ 'tenant_{0}'.format(x) for x in tenancies ])
 def all_pf(match, deps):
     '''all\.pf'''
     write_pf_file(match)
     for tenant in tenancies:
-        write_pf_file('all_{}.pf'.format(tenant), tenant)
+        write_pf_file('all_{0}.pf'.format(tenant), tenant)
 
 @target(r'\1.pf')
 def startup_parameter_file(match, deps, db_name):
@@ -274,13 +274,13 @@ def connect_parameter_file(match, deps, db_name):
             fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
 
 @target
-@applies_to(['tenant_none'] + [ 'tenant_{}'.format(x) for x in tenancies ])
+@applies_to(['tenant_none'] + [ 'tenant_{0}'.format(x) for x in tenancies ])
 def tenantcredentials_file(match, deps):
     tenant = match.split('_')[1]
     if tenant in tenancies:
-        with open('tenant_{}.pf'.format(tenant), 'wt') as fd:
+        with open('tenant_{0}.pf'.format(tenant), 'wt') as fd:
             fd.write('-U {0}@{1}\n'.format(tenancies[tenant]['username'], tenancies[tenant]['domain']))
-            fd.write('-P {}\n'.format(tenancies[tenant]['password']))
+            fd.write('-P {0}\n'.format(tenancies[tenant]['password']))
 
 db_running_msg = True
 
@@ -538,7 +538,7 @@ def active_cdr_db_pf(tenant):
     args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
 
     if not tenant == '':
-        args.extend(['-pf', 'common_{}.pf'.format(tenant)])
+        args.extend(['-pf', 'common_{0}.pf'.format(tenant)])
     else:
         args.extend(['-pf', 'common.pf'])
 
@@ -562,27 +562,27 @@ def fixtures(*a):
     tenant = None
     for tenant in tenancies:
         if tenancies[tenant]['tenanttype'] != 'Super':
-            tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{}.pf'.format(tenant)}
+            tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{0}.pf'.format(tenant)}
         if tenancies[tenant]['tenanttype'] == 'Default':
-            tenantdict['Default'] = {'tenant': tenant, 'pf': 'all_{}.pf'.format(tenant)}
+            tenantdict['Default'] = {'tenant': tenant, 'pf': 'all_{0}.pf'.format(tenant)}
     if tenant is None:
         tenantdict[''] = {'tenant': '', 'pf': 'all.pf' }
 
     for tenant in tenantdict:
         if not tenant == '' and not tenant == 'Default':
-            print('Loading fixtures for tenant t{}...'.format(tenantdict[tenant]['tenant']))
+            print('Loading fixtures for tenant t{0}...'.format(tenantdict[tenant]['tenant']))
             fixturedir = '{0}/db/progress/fixtures/{1}'.format(work_dir, tenantdict[tenant]['tenant'])
             try:
                 os.makedirs(fixturedir)
             except OSError:
                 if not os.path.isdir(fixturedir):
-                    raise PikeException('Cannot use directory {}'.format(fixturedir))
+                    raise PikeException('Cannot use directory {0}'.format(fixturedir))
         else:
             print('Loading fixtures...')
             fixturedir = '{0}/db/progress/fixtures'.format(work_dir)
 
         args = ['-pf', tenantdict[tenant]['pf'], '-b', '-p', 'gearbox/fixtures/load_fixtures.r',
-                '-param', 'fix_dir={},bulk=yes'.format(fixturedir)]
+                '-param', 'fix_dir={0},bulk=yes'.format(fixturedir)]
 
         cdr_dict = {}
 
@@ -619,21 +619,21 @@ def dumpfixtures(*a):
     tenant = None
     for tenant in tenancies:
         if tenancies[tenant]['tenanttype'] != 'Super':
-            tenantdict[tenant] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
+            tenantdict[tenant] = {'tenant': tenant, 'postfix': '_{0}.pf'.format(tenant)}
         if tenancies[tenant]['tenanttype'] == 'Default':
-            tenantdict['default'] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
+            tenantdict['default'] = {'tenant': tenant, 'postfix': '_{0}.pf'.format(tenant)}
     if tenant is None:
         tenantdict[''] = {'tenant': '', 'postfix': '.pf' }
 
     for tenant in tenantdict:
         if not tenant == '' and not tenant == 'default':
-            print('Dumping fixtures for tenant t{}...'.format(tenantdict[tenant]['tenant']))
+            print('Dumping fixtures for tenant t{0}...'.format(tenantdict[tenant]['tenant']))
             fixturedir = '{0}/db/progress/fixtures/{1}'.format(work_dir, tenantdict[tenant]['tenant'])
             try:
                 os.makedirs(fixturedir)
             except OSError:
                 if not os.path.isdir(fixturedir):
-                    raise PikeException('Cannot use directory {}'.format(fixturedir))
+                    raise PikeException('Cannot use directory {0}'.format(fixturedir))
         else:
             print('Dumping fixtures...')
             fixturedir = '{0}/db/progress/fixtures'.format(work_dir)
@@ -647,5 +647,5 @@ def dumpfixtures(*a):
             pf_entries.update(active_cdr_db_pf(tenantdict[tenant]['tenant']))
 
         for key in sorted(pf_entries):
-            dump_fixture = Popen(mpro + pf_entries[key] + ['-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '{}'.format(fixturedir)], stdout=PIPE)
+            dump_fixture = Popen(mpro + pf_entries[key] + ['-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '{0}'.format(fixturedir)], stdout=PIPE)
             call('/bin/cat', stdin=dump_fixture.stdout)
