@@ -52,7 +52,7 @@ def do_lighttpd_conf(a):
             if not rpcdict or rpc in rpcdict:
                 for port in jsondata[rpc]:
                     if not rpcdict or '' in rpcdict[rpc] or port in rpcdict[rpc]:
-                        lighttpdparams = (param for param in jsondata[rpc][port] if not param.startswith('/'))
+                        lighttpdparams = (param for param in jsondata[rpc][port] if not param.startswith('/') if param != "conditional_param")
                         fcgis = (param for param in jsondata[rpc][port] if param.startswith('/'))
 
                         with open(state_base + 'lighttpd_' + rpc + '_' + port + '.conf', 'wt') as fd:
@@ -85,6 +85,15 @@ def do_lighttpd_conf(a):
                                 fd.write('  )\n')
 
                             fd.write(')\n')
+
+                            conditional_param = jsondata[rpc][port].get('conditional_param')
+
+                            if conditional_param:
+                                for condvalue, condparamlist in conditional_param.items():
+                                    fd.write('\n{0} {{\n'.format(condvalue))
+                                    for condparam in condparamlist:
+                                        fd.write('    {0} = {1}\n'.format(condparam['param'],condparam['value']))
+                                    fd.write('}\n')
 
                             fd.close()
         jsonfile.close()
