@@ -166887,6 +166887,60 @@ bulkload: BDest
   BdestID: 1105
 
 bulkload: BDest
+  BDest: "GPRSDATA2_MM_DATA1024"
+  BDName: "GPRS DATA SLOW"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 15800
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MM_DATA2048"
+  BDName: "GPRS DATA SLOW"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 15804
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MM_DATA4096"
+  BDName: "GPRS DATA SLOW"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 15806
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MM_DATA500"
+  BDName: "GPRS DATA SLOW"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-04-15
+  BdestID: 15809
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MM_DATA512"
+  BDName: "GPRS DATA SLOW"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 15802
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MM_DATA600"
+  BDName: "GPRS DATA SLOW"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 15798
+
+bulkload: BDest
   BDest: "GPRSDATA_MM_BONO_RELAX"
   BDName: "GPRS DATA HIGH"
   CCN: 93
@@ -166894,6 +166948,60 @@ bulkload: BDest
   ToDate: 2049-12-31
   FromDate: 2017-03-22
   BdestID: 1106
+
+bulkload: BDest
+  BDest: "GPRSDATA_MM_DATA1024"
+  BDName: "GPRS DATA HIGH"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 15799
+
+bulkload: BDest
+  BDest: "GPRSDATA_MM_DATA2048"
+  BDName: "GPRS DATA HIGH"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 15803
+
+bulkload: BDest
+  BDest: "GPRSDATA_MM_DATA4096"
+  BDName: "GPRS DATA HIGH"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 15807
+
+bulkload: BDest
+  BDest: "GPRSDATA_MM_DATA500"
+  BDName: "GPRS DATA HIGH"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-04-15
+  BdestID: 15810
+
+bulkload: BDest
+  BDest: "GPRSDATA_MM_DATA512"
+  BDName: "GPRS DATA HIGH"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 15801
+
+bulkload: BDest
+  BDest: "GPRSDATA_MM_DATA600"
+  BDName: "GPRS DATA HIGH"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 15797
 
 bulkload: BDest
   BDest: "GPRS_MM_1024_UPSELL"
@@ -166912,6 +167020,15 @@ bulkload: BDest
   ToDate: 2049-12-31
   FromDate: 2017-02-22
   BdestID: 1092
+
+bulkload: BDest
+  BDest: "GPRS_MM_500_UPSELL"
+  BDName: "MM_500_UPSELL GPRS DATA"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-04-15
+  BdestID: 15808
 
 bulkload: BDest
   BDest: "GPRS_MM_512_UPSELL"

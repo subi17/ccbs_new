@@ -1,4 +1,16 @@
 bulkload: FeeModel
+  FeeModel: "Compensa 5"
+  FeeName: "Compensa_5eurosMM"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Handset"
+  FeeName: "Cargo_5eurosMM"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
   FeeModel: "MM_1024_UPSELLMF"
   FeeName: "1GB Upsell"
   Brand: "1"
@@ -6,6 +18,11 @@ bulkload: FeeModel
 bulkload: FeeModel
   FeeModel: "MM_200_UPSELLMF"
   FeeName: "200 MB Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_500_UPSELLMF"
+  FeeName: "Data 500 Upsell"
   Brand: "1"
 
 bulkload: FeeModel
@@ -41,6 +58,11 @@ bulkload: FeeModel
 bulkload: FeeModel
   FeeModel: "MM_DATA4096MF"
   FeeName: "Data Usage Bundle 4GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_DATA500MF"
+  FeeName: "Data Usage Bundle 500MB"
   Brand: "1"
 
 bulkload: FeeModel
@@ -102,4 +124,10 @@ bulkload: FeeModel
   FeeModel: "MM_VOICE40MF"
   FeeName: "Voice 40 Min. Package"
   Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "single_fee_charge"
+  FeeName: "Single fee charge"
+  Brand: "1"
+  FMGroup: 1
 

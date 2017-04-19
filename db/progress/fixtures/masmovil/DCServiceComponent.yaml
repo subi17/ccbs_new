@@ -223,3 +223,21 @@ bulkload: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 97
 
+bulkload: DCServiceComponent
+  DCServicePackageID: 85
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_500_UPSELL#ADDBUNDLE"
+  FromDate: 2017-04-15
+  ToDate: 2049-12-31
+  DCServiceComponentID: 98
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 86
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "MM_DATA500#ADDBUNDLE"
+  FromDate: 2017-04-15
+  ToDate: 2049-12-31
+  DCServiceComponentID: 99
+

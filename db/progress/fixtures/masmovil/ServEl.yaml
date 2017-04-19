@@ -57,6 +57,11 @@ bulkload: ServEl
   Brand: "1"
 
 bulkload: ServEl
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  Brand: "1"
+
+bulkload: ServEl
   ServPac: "LP"
   ServCom: "LP"
   SeValue: 1

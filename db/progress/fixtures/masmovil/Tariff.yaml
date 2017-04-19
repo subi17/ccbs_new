@@ -17,13 +17,14 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "ZONE_1_FIX"
   TZTo[1]: "2400"
-  Price[1]: .3
+  Price[1]: .04
   Discount[4]: yes
   PriceList: "COMMON"
-  StartCharge[1]: .15
-  TariffNum: 987
-  ValidFrom: 2009-05-07
+  StartCharge[1]: .36
+  TariffNum: 80618
+  ValidFrom: 2017-04-01
   DayType[1]: 1
   ValidTo: 2052-12-31
   TZName[1]: "Off Peak"
@@ -36,14 +37,14 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
-  BDest: "252"
+  BDest: "ZONE_1_MOB"
   TZTo[1]: "2400"
-  Price[1]: 1.2
+  Price[1]: .14
   Discount[4]: yes
   PriceList: "COMMON"
-  StartCharge[1]: .15
-  TariffNum: 988
-  ValidFrom: 2009-05-07
+  StartCharge[1]: .36
+  TariffNum: 80619
+  ValidFrom: 2017-04-01
   DayType[1]: 1
   ValidTo: 2052-12-31
   TZName[1]: "Off Peak"
@@ -56,14 +57,14 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
-  BDest: "53"
+  BDest: "ZONE_2_FIX"
   TZTo[1]: "2400"
-  Price[1]: 1.2
+  Price[1]: .08
   Discount[4]: yes
   PriceList: "COMMON"
-  StartCharge[1]: .15
-  TariffNum: 989
-  ValidFrom: 2009-05-07
+  StartCharge[1]: .36
+  TariffNum: 80621
+  ValidFrom: 2017-04-01
   DayType[1]: 1
   ValidTo: 2052-12-31
   TZName[1]: "Off Peak"
@@ -76,14 +77,54 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
-  BDest: "850"
+  BDest: "ZONE_2_MOB"
   TZTo[1]: "2400"
-  Price[1]: 1.2
+  Price[1]: .2
   Discount[4]: yes
   PriceList: "COMMON"
-  StartCharge[1]: .15
-  TariffNum: 990
-  ValidFrom: 2009-05-07
+  StartCharge[1]: .36
+  TariffNum: 80622
+  ValidFrom: 2017-04-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 2
+  BillCode: "10100004"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ZONE_3_FIX"
+  TZTo[1]: "2400"
+  Price[1]: .8
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: .36
+  TariffNum: 80623
+  ValidFrom: 2017-04-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 2
+  BillCode: "10100004"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ZONE_3_MOB"
+  TZTo[1]: "2400"
+  Price[1]: .8
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: .36
+  TariffNum: 80624
+  ValidFrom: 2017-04-01
   DayType[1]: 1
   ValidTo: 2052-12-31
   TZName[1]: "Off Peak"

@@ -122,18 +122,6 @@ bulkload: ServiceLimitTarget
   InsideRate: "MM_VOICE100_VOICE_IN"
 
 bulkload: ServiceLimitTarget
-  SLSeq: 76
-  ServiceLMember: "14100001"
-  OutsideRate: "MM_DATA2048_DATA_OUT"
-  InsideRate: "MM_DATA2048_DATA_IN"
-
-bulkload: ServiceLimitTarget
-  SLSeq: 78
-  ServiceLMember: "14100001"
-  OutsideRate: "MM_DATA600_DATA_OUT"
-  InsideRate: "MM_DATA600_DATA_IN"
-
-bulkload: ServiceLimitTarget
   SLSeq: 79
   ServiceLMember: "14100001"
   OutsideRate: "MM_NET_5GB_DATA_OUT"
@@ -272,24 +260,6 @@ bulkload: ServiceLimitTarget
   InsideRate: "MM_MAS_8GB_VOICE_IN"
 
 bulkload: ServiceLimitTarget
-  SLSeq: 90
-  ServiceLMember: "14100001"
-  OutsideRate: "MM_DATA512_DATA_OUT"
-  InsideRate: "MM_DATA512_DATA_IN"
-
-bulkload: ServiceLimitTarget
-  SLSeq: 91
-  ServiceLMember: "14100001"
-  OutsideRate: "MM_DATA1024_DATA_OUT"
-  InsideRate: "MM_DATA1024_DATA_IN"
-
-bulkload: ServiceLimitTarget
-  SLSeq: 92
-  ServiceLMember: "14100001"
-  OutsideRate: "MM_DATA4096_DATA_OUT"
-  InsideRate: "MM_DATA4096_DATA_IN"
-
-bulkload: ServiceLimitTarget
   SLSeq: 93
   ServiceLMember: "10100001"
   OutsideRate: "MM_INTVOICE100_VOICE_OUT"
@@ -318,4 +288,9 @@ bulkload: ServiceLimitTarget
   ServiceLMember: "CFYOIGO"
   OutsideRate: "MM_INTVOICE100_VOICE_OUT"
   InsideRate: "MM_INTVOICE100_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 94
+  ServiceLMember: "14100001"
+  InsideRate: "GPRS_MM_500_UPSELL"
 

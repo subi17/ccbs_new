@@ -11,18 +11,10 @@ bulkload: TMSParam
   ParamName: "Spool directory for user_list.p"
 
 bulkload: TMSParam
-  ParamCode: "DataSer"
-  Brand: "1"
-
-bulkload: TMSParam
-  ParamCode: "OutDir"
-  Brand: "1"
-
-bulkload: TMSParam
   ParamCode: "TCPModule"
-  ParamType: "C"
+  ParamType: "c"
   CharVal: "test/fake/tcpgwy_fake.p"
-  ParamName: "fake tcpgwy"
+  ParamName: "Fake tcpgwy"
   Online: TRUE 
   Brand: "1"
 
@@ -1516,7 +1508,7 @@ bulkload: TMSParam
   ParamGroup: "BillReport"
   ParamCode: "BillQualityFileName"
   ParamType: "C"
-  CharVal: "/store/riftp/billreport/spool/billing_report_#INVDATE_#MODE.txt"
+  CharVal: "/store/riftp/billreport/spool/#TENANT_billing_report_#INVDATE_#MODE.txt"
   ParamName: "File name for quality report"
   Brand: "1"
 
@@ -1547,7 +1539,7 @@ bulkload: TMSParam
   ParamGroup: "BillReport"
   ParamCode: "CCNReportFile"
   ParamType: "C"
-  CharVal: "/scratch/log/billrep/spool/billing_item_totals_#DATE.txt"
+  CharVal: "/scratch/log/billrep/spool/#TENANT_billing_item_totals_#DATE.txt"
   ParamName: "File name for ccn report"
   Brand: "1"
 
@@ -1638,7 +1630,7 @@ bulkload: TMSParam
   ParamGroup: "Bundles"
   ParamCode: "ALLOWED_BONO_CONTRACTS"
   ParamType: "C"
-  CharVal: "PMDUB,DATA6,DATA7"
+  CharVal: "MM_DATA512,MM_DATA1024,MM_DATA2048,MM_DATA4096,MM_INTVOICE100,MM_VOICE40,MM_VOICE100,MM_VOICE250,MM_BONO_RELAX"
   ParamName: "Allowed BONO Contracts"
   Brand: "1"
 
@@ -1717,7 +1709,7 @@ bulkload: TMSParam
   ParamGroup: "Bundles"
   ParamCode: "BONO_CONTRACTS"
   ParamType: "C"
-  CharVal: "MM_BONO_RELAX"
+  CharVal: "MM_DATA500,MM_DATA1024,MM_DATA2048,MM_DATA4096"
   ParamName: "ALL Data Bono Contracts"
   Brand: "1"
 
@@ -1789,7 +1781,7 @@ bulkload: TMSParam
   ParamGroup: "Bundles"
   ParamCode: "DATA_BUNDLE_BASED_CLITYPES"
   ParamType: "C"
-  CharVal: "CONT6,CONT7,CONT8,CONT9,CONT15,CONT24,CONT23,CONTDSL45,CONTFH45_50,CONTFH55_300,CONTDSL58,CONTFH58_50,CONTFH68_300,CONTDSL40,CONTFH40_50,CONTFH50_300,CONTDSL48,CONTFH48_50,CONTFH58_300,CONT25,CONT26,CONT10,CONTDSL59,CONTFH59_50,CONTFH69_300,MM_NET_5GB,MM_NET_10GB,MM_NET_20GB,MM_NET_50GB,MM_CERO_5GB,MM_MAS_1GB,MM_MAS_3GB,MM_MAS_8GB"
+  CharVal: "MM_NET_5GB,MM_NET_10GB,MM_NET_20GB,MM_NET_50GB,MM_CERO_5GB,MM_MAS_1GB,MM_MAS_3GB,MM_MAS_8GB,MM_CERO"
   ParamName: "Data bundle based CLI Types"
   Brand: "1"
 
@@ -1909,7 +1901,7 @@ bulkload: TMSParam
   ParamGroup: "Bundles"
   ParamCode: "POSTPAID_DATA_CONTRACTS"
   ParamType: "C"
-  CharVal: "MM_CERO,MM_NET_5GB,MM_NET_10GB,MM_NET_20GB,MM_NET_50GB,MM_CERO_5GB,MM_MAS_1GB,MM_MAS_3GB,MM_MAS_8GB"
+  CharVal: "MM_DATA512,MM_DATA1024,MM_DATA2048,MM_DATA4096,MM_BONO_RELAX"
   ParamName: "All postpaid data bundle contracts"
   Brand: "1"
 
@@ -1939,9 +1931,26 @@ bulkload: TMSParam
 
 bulkload: TMSParam
   ParamGroup: "Bundles"
+  ParamCode: "SUPPLEMENT_DATA_BONO_CONTRACTS"
+  ParamType: "C"
+  CharVal: "MM_BONO_RELAX"
+  ParamName: "Supplementary Voice Bono's"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "Bundles"
+  ParamCode: "SUPPLEMENT_VOICE_BONO_CONTRACTS"
+  ParamType: "C"
+  CharVal: "MM_INTVOICE100"
+  ParamName: "Supplementary Voice Bono's"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "Bundles"
   ParamCode: "VOICE_BONO_CONTRACTS"
   ParamType: "C"
-  ParamName: "List of Voice Bono contracts"
+  CharVal: "MM_VOICE40,MM_VOICE100,MM_VOICE250"
+  ParamName: "Voice Bono contracts"
   Brand: "1"
 
 bulkload: TMSParam
@@ -2163,7 +2172,7 @@ bulkload: TMSParam
   ParamGroup: "CDR"
   ParamCode: "OldCDRDb"
   ParamType: "C"
-  CharVal: "-H rigel.int.asp.starnet.fi -S 5003"
+  CharVal: "-H merak -S 5987"
   ParamName: "Connect parameters to old db"
   Brand: "1"
 
@@ -2624,7 +2633,8 @@ bulkload: TMSParam
   ParamGroup: "CreditScoring"
   ParamCode: "URL"
   ParamType: "C"
-  CharVal: "http://217.168.2.159:7001/com-yoigo-roi-webapp/xmlrpc"
+  CharVal: "http://217.168.2.239:8080/credit-scoring/"
+  Online: TRUE 
   Brand: "1"
 
 bulkload: TMSParam
@@ -2746,6 +2756,38 @@ bulkload: TMSParam
   ParamType: "C"
   CharVal: "/store/riftp/customer_sms/outgoing/spool/"
   ParamName: "Ouput spool direcotry"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DA"
+  ParamCode: "EmailFromAddress"
+  ParamType: "C"
+  CharVal: "tufactura@facturayoigo.com"
+  ParamName: "Email From Address"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DA"
+  ParamCode: "EmailSubject"
+  ParamType: "C"
+  CharVal: "Discount Analyzer Report"
+  ParamName: "Email Subject"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DA"
+  ParamCode: "processed"
+  ParamType: "C"
+  CharVal: "/store/riftp/discount_analyzer/processed"
+  ParamName: "Processed Directory"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "DA"
+  ParamCode: "spool"
+  ParamType: "C"
+  CharVal: "/store/riftp/discount_analyzer/spool"
+  ParamName: "Spool Directory"
   Brand: "1"
 
 bulkload: TMSParam
@@ -2871,7 +2913,7 @@ bulkload: TMSParam
   ParamGroup: "DirDebit"
   ParamCode: "DDebitFileName"
   ParamType: "C"
-  CharVal: "/store/riftp/bank/outgoing/spool/YOIGO_SDD001_#BANK_#DDATE.xml"
+  CharVal: "/store/riftp/bank/outgoing/spool/MASMOVIL_SDD001_#BANK_#DDATE.xml"
   ParamName: "Direct debit file name"
   Brand: "1"
 
@@ -4081,7 +4123,7 @@ bulkload: TMSParam
   ParamGroup: "EI"
   ParamCode: "WebServerEmailLink"
   ParamType: "C"
-  CharVal: "https://www.facturayoigo.com/activate_email"
+  CharVal: "https://miyoigo.staging.qvantel.net/activate_email"
   ParamName: "Web server Email activation link"
   Brand: "1"
 
@@ -4089,7 +4131,7 @@ bulkload: TMSParam
   ParamGroup: "EI"
   ParamCode: "WebServerPDFLink"
   ParamType: "C"
-  CharVal: "https://www.facturayoigo.com/download"
+  CharVal: "https://miyoigo.staging.qvantel.net/download"
   ParamName: "Web Server eInvoice PDF Link"
   Brand: "1"
 
@@ -4145,7 +4187,7 @@ bulkload: TMSParam
   ParamGroup: "EIF"
   ParamCode: "WebServerLink"
   ParamType: "C"
-  CharVal: "https://renuevo.yoigo.com/fusion_billing/resumen_factura/"
+  CharVal: "https://ysita-tienda.staging.qvantel.net/fusion_billing/resumen_factura/"
   ParamName: "Fusion invoice server link"
   Brand: "1"
 
@@ -4730,7 +4772,7 @@ bulkload: TMSParam
   ParamGroup: "HPD.Interface"
   ParamCode: "HPD.Ack.HostName"
   ParamType: "C"
-  CharVal: "activemq"
+  CharVal: "mqueue1"
   Brand: "1"
 
 bulkload: TMSParam
@@ -4812,7 +4854,7 @@ bulkload: TMSParam
   ParamGroup: "HPD.Interface"
   ParamCode: "HPD.QueueCommon.ip"
   ParamType: "C"
-  CharVal: "activemq"
+  CharVal: "mqueue1"
   Brand: "1"
 
 bulkload: TMSParam
@@ -4826,7 +4868,7 @@ bulkload: TMSParam
   ParamGroup: "HPD.Interface"
   ParamCode: "HPD.QueueCommon.Password"
   ParamType: "C"
-  CharVal: "g6i!ZEUFGAOpVDgSWFT-6L"
+  CharVal: "HdTkFa8-O2mMljJW!aBSEu"
   Brand: "1"
 
 bulkload: TMSParam
@@ -4854,7 +4896,7 @@ bulkload: TMSParam
   ParamGroup: "HPD.Interface"
   ParamCode: "HPD.QueueCommon.TransactSize"
   ParamType: "I"
-  IntVal: 10000
+  IntVal: 5000
   Brand: "1"
 
 bulkload: TMSParam
@@ -4875,7 +4917,7 @@ bulkload: TMSParam
   ParamGroup: "HPD.Interface"
   ParamCode: "HPD.QueueMobile.ip"
   ParamType: "C"
-  CharVal: "activemq"
+  CharVal: "mqueue1"
   Brand: "1"
 
 bulkload: TMSParam
@@ -4889,7 +4931,7 @@ bulkload: TMSParam
   ParamGroup: "HPD.Interface"
   ParamCode: "HPD.QueueMobile.Password"
   ParamType: "C"
-  CharVal: "g6i!ZEUFGAOpVDgSWFT-6L"
+  CharVal: "HdTkFa8-O2mMljJW!aBSEu"
   Brand: "1"
 
 bulkload: TMSParam
@@ -4917,7 +4959,7 @@ bulkload: TMSParam
   ParamGroup: "HPD.Interface"
   ParamCode: "HPD.QueueMobile.TransactSize"
   ParamType: "I"
-  IntVal: 10000
+  IntVal: 5000
   Brand: "1"
 
 bulkload: TMSParam
@@ -4938,7 +4980,7 @@ bulkload: TMSParam
   ParamGroup: "HPD.Interface"
   ParamCode: "HPD.QueueOrdercanal.ip"
   ParamType: "C"
-  CharVal: "activemq"
+  CharVal: "mqueue1"
   Brand: "1"
 
 bulkload: TMSParam
@@ -4952,7 +4994,7 @@ bulkload: TMSParam
   ParamGroup: "HPD.Interface"
   ParamCode: "HPD.QueueOrdercanal.Password"
   ParamType: "C"
-  CharVal: "g6i!ZEUFGAOpVDgSWFT-6L"
+  CharVal: "HdTkFa8-O2mMljJW!aBSEu"
   Brand: "1"
 
 bulkload: TMSParam
@@ -4980,7 +5022,7 @@ bulkload: TMSParam
   ParamGroup: "HPD.Interface"
   ParamCode: "HPD.QueueOrdercanal.TransactSize"
   ParamType: "I"
-  IntVal: 10000
+  IntVal: 5000
   Brand: "1"
 
 bulkload: TMSParam
@@ -4988,6 +5030,13 @@ bulkload: TMSParam
   ParamCode: "HPD.QueueOrdercanal.UserName"
   ParamType: "C"
   CharVal: "tms"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.TimeBasedDumps"
+  ParamType: "C"
+  CharVal: "HPD_EDRHistory,HPD_MobCDR,HPD_PrepCDR,HPD_PrepEDR,HPD_Order,HPD_Invoice,HPD_MsRequest,HPD_Payment,HPD_PrepaidRequest,HPD_ServiceLCounter"
   Brand: "1"
 
 bulkload: TMSParam
@@ -5650,6 +5699,14 @@ bulkload: TMSParam
   ParamType: "C"
   CharVal: "/masmovil-mnp/"
   ParamName: "MNPSend connection URL"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "MNP"
+  ParamCode: "MNPTMSUrl"
+  ParamType: "C"
+  CharVal: "http://localhost:8082/mnp/"
+  ParamName: "MNP TMS Buzon RPC-Server"
   Brand: "1"
 
 bulkload: TMSParam
@@ -6601,7 +6658,7 @@ bulkload: TMSParam
   ParamGroup: "NAGIOS"
   ParamCode: "URL"
   ParamType: "C"
-  CharVal: "-H 145.247.16.93 -S 5501"
+  CharVal: "staging"
   ParamName: "URL for Nagios FTP"
   Brand: "1"
 
@@ -7062,10 +7119,9 @@ bulkload: TMSParam
 bulkload: TMSParam
   ParamGroup: "Pentaho"
   ParamCode: "InvGrainFile"
-  ParamType: "C"
+  ParamType: "c"
   CharVal: "/tmp/invoice_row_dump_#DATE.txt"
   ParamName: "Invoice grain dump filename"
-  Online: TRUE 
   Brand: "1"
 
 bulkload: TMSParam
@@ -7586,6 +7642,30 @@ bulkload: TMSParam
   Brand: "1"
 
 bulkload: TMSParam
+  ParamGroup: "PromotionAnalyzer"
+  ParamCode: "IncomingDir"
+  ParamType: "C"
+  CharVal: "/scratch/log/promotion_analyzer/incoming"
+  ParamName: "Incoiming directory for test file"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "PromotionAnalyzer"
+  ParamCode: "LogDir"
+  ParamType: "C"
+  CharVal: "/scratch/log/promotion_analyzer/log"
+  ParamName: "Log file directory"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "PromotionAnalyzer"
+  ParamCode: "ProcessedDir"
+  ParamType: "C"
+  CharVal: "/scratch/log/promotion_analyzer/processed"
+  ParamName: "Peocessed directory for test file"
+  Brand: "1"
+
+bulkload: TMSParam
   ParamGroup: "Promotions"
   ParamCode: "CONT15PromoEndDate"
   ParamType: "DA"
@@ -7985,7 +8065,7 @@ bulkload: TMSParam
   ParamGroup: "Reports"
   ParamCode: "ErrorLogRepFile"
   ParamType: "C"
-  CharVal: "/scratch/reports/errorlog/errorlog_#ACTION_#DATE.txt"
+  CharVal: "/scratch/reports/errorlog/MASMOVIL_errorlog_#ACTION_#DATE.txt"
   ParamName: "File name for ErrorLog report"
   Brand: "1"
 
@@ -8282,7 +8362,7 @@ bulkload: TMSParam
   ParamGroup: "SelfService"
   ParamCode: "EmailFromAddress"
   ParamType: "C"
-  CharVal: "entregapedidos@yoigo.com"
+  CharVal: "tufactura@facturayoigo.com"
   ParamName: "Email From Address"
   Brand: "1"
 
@@ -8795,7 +8875,7 @@ bulkload: TMSParam
   ParamGroup: "SOG"
   ParamCode: "URL_Post"
   ParamType: "C"
-  CharVal: "-H prodigy -S 14400"
+  CharVal: "-H rotanev.int.asp.qvantel.net -S 14400"
   ParamName: "Sog Post URL"
   Brand: "1"
 
@@ -8803,7 +8883,7 @@ bulkload: TMSParam
   ParamGroup: "SOG"
   ParamCode: "URL_Read"
   ParamType: "C"
-  CharVal: "-H prodigy -S 14401"
+  CharVal: "-H rotanev.int.asp.qvantel.net -S 14401"
   ParamName: "Sog Read URL"
   Brand: "1"
 
@@ -9011,7 +9091,7 @@ bulkload: TMSParam
   ParamGroup: "system"
   ParamCode: "EventlogDir"
   ParamType: "c"
-  CharVal: "/var/log/tms/daily/"
+  CharVal: "/tmp/"
   ParamName: "Eventlog directroy"
   Brand: "1"
 
@@ -9246,6 +9326,118 @@ bulkload: TMSParam
   Brand: "1"
 
 bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "AnalyzerDaemonLockFile"
+  ParamType: "C"
+  CharVal: "/tmp/test_analyzer_daemon.lock"
+  ParamName: "Analyzer Daemon LockFile"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "AnalyzerEmailSubject"
+  ParamType: "C"
+  CharVal: "Analyzer Testing Tool Report"
+  ParamName: "Analyzer Email Subject"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "AnalyzerInDir"
+  ParamType: "C"
+  CharVal: "/apps/yoigo/tms_support/testing/testing_tool/analyzer/incoming"
+  ParamName: "Analyzer Incoming Directory"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "AnalyzerProcDir"
+  ParamType: "C"
+  CharVal: "/apps/yoigo/tms_support/testing/testing_tool/analyzer/processed"
+  ParamName: "Analyzer Processed Directory"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "AnalyzerSpoolDir"
+  ParamType: "C"
+  CharVal: "/apps/yoigo/tms_support/testing/testing_tool/analyzer/spool"
+  ParamName: "Analyzer Spool Directory"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "DaemonLockFile"
+  ParamType: "C"
+  CharVal: "/tmp/test_subs_creation_daemon.lock"
+  ParamName: "Daemon Lock File"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "EmailFromAddress"
+  ParamType: "C"
+  CharVal: "tufactura@facturayoigo.com"
+  ParamName: "Email From Address"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "EmailSubject"
+  ParamType: "C"
+  CharVal: "Subscription Creation Testing Tool Report"
+  ParamName: "Email Subject"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "InIncomingDir"
+  ParamType: "C"
+  CharVal: "/apps/yoigo/tms_support/testing/testing_tool/incoming/incoming"
+  ParamName: "Incoming directory"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "InMasterDir"
+  ParamType: "C"
+  CharVal: "/apps/yoigo/tms_support/testing/testing_tool/masterdata"
+  ParamName: "Master Data"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "InProcDir"
+  ParamType: "C"
+  CharVal: "/apps/yoigo/tms_support/testing/testing_tool/incoming/processed"
+  ParamName: "Processed Directory"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "InSpoolDir"
+  ParamType: "C"
+  CharVal: "/apps/yoigo/tms_support/testing/testing_tool/incoming/spool"
+  ParamName: "Incoming Spool Directory"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "OutOutgoingDir"
+  ParamType: "C"
+  CharVal: "/apps/yoigo/tms_support/testing/testing_tool/outgoing/outgoing"
+  ParamName: "Outgoing Directory"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "TestingTool"
+  ParamCode: "OutProcDir"
+  ParamType: "C"
+  CharVal: "/apps/yoigo/tms_support/testing/testing_tool/outgoing/processed"
+  ParamName: "Outgoing Processed Directory"
+  Brand: "1"
+
+bulkload: TMSParam
   ParamGroup: "TestInvoices"
   ParamCode: "FuncRunConfigList"
   ParamType: "C"
@@ -9353,6 +9545,7 @@ bulkload: TMSParam
   ParamGroup: "TMQueue"
   ParamCode: "TMQueueDeleteLog"
   ParamType: "C"
+  CharVal: "/scratch/log/tmqueue/deleted_queue.log"
   ParamName: "File for deleted queue rows"
   Brand: "1"
 
@@ -9696,7 +9889,7 @@ bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "MiYoigoURL"
   ParamType: "C"
-  CharVal: "https://127.0.0.1:10443"
+  CharVal: "https://172.20.48.7"
   ParamName: "URL to MiYoigo"
   Brand: "1"
 
@@ -9704,15 +9897,15 @@ bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "urlATMa"
   ParamType: "C"
-  CharVal: "-H 217.168.3.235 -S 10010"
-  ParamName: "ATM URL"
+  CharVal: "atm"
+  ParamName: "ATM URL a"
   Brand: "1"
 
 bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "urlATMb"
   ParamType: "C"
-  CharVal: "-H 217.168.3.234 -S 10010"
+  CharVal: "atm"
   ParamName: "ATM URL b"
   Brand: "1"
 
@@ -9720,7 +9913,7 @@ bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "urlATMc"
   ParamType: "C"
-  CharVal: "-H 46.6.112.1 -S 10010"
+  CharVal: "atm"
   ParamName: "ATM URL c"
   Brand: "1"
 
@@ -9730,6 +9923,7 @@ bulkload: TMSParam
   ParamType: "C"
   CharVal: "creditcheck"
   ParamName: "Credit Scoring URL"
+  Online: TRUE 
   Brand: "1"
 
 bulkload: TMSParam
@@ -9744,7 +9938,7 @@ bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "urlDextra"
   ParamType: "C"
-  CharVal: "http://217.168.2.194:8080/order-status/xmlrpc"
+  CharVal: "http://217.168.2.239:8080/order-status/xmlrpc"
   ParamName: "Dextra online interface"
   Brand: "1"
 
@@ -9752,7 +9946,7 @@ bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "urlMasmovil"
   ParamType: "C"
-  CharVal: "http://217.168.2.194:8080/masmovil/xmlrpc"
+  CharVal: "http://217.168.2.239:8080/masmovil/xmlrpc"
   ParamName: "Masmovil Adapter"
   Brand: "1"
 
@@ -9760,15 +9954,23 @@ bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "urlMNP"
   ParamType: "C"
-  CharVal: "-H 217.168.2.194 -S 8080"
+  CharVal: "mnpsend"
   ParamName: "MNP send URL"
+  Brand: "1"
+
+bulkload: TMSParam
+  ParamGroup: "URL"
+  ParamCode: "UrlMnpMock"
+  ParamType: "C"
+  CharVal: "http://127.0.0.1:3050/mnp"
+  ParamName: "Staging MNP Mock Address"
   Brand: "1"
 
 bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "urlROI"
   ParamType: "C"
-  CharVal: "http://217.168.2.159:7001/com-yoigo-roi-webapp/xmlrpc"
+  CharVal: "http://217.168.2.239:7001/com-yoigo-roi-webapp/xmlrpc"
   ParamName: "ROI History URL"
   Brand: "1"
 
@@ -9879,7 +10081,7 @@ bulkload: TMSParam
   ParamGroup: "XML"
   ParamCode: "InvXMLFile"
   ParamType: "C"
-  CharVal: "/store/print/xmlspool/#INVNUM.xml"
+  CharVal: "/mnt/xmlstore/spool/#INVNUM.xml"
   ParamName: "File name"
   Brand: "1"
 
@@ -9887,6 +10089,7 @@ bulkload: TMSParam
   ParamGroup: "XML"
   ParamCode: "InvXMLFormatted"
   ParamType: "I"
+  IntVal: 1
   ParamName: "1=formatted, 0=not formatted"
   Brand: "1"
 
@@ -9902,7 +10105,7 @@ bulkload: TMSParam
   ParamGroup: "XML"
   ParamCode: "InvXMLScreenCommand"
   ParamType: "C"
-  CharVal: "screen #NAME -T xterm xfear -screen printdoc1b xml.pf -param #PARAM"
+  CharVal: "screen #NAME -T xterm xfear -screen printdoc1b tms.pf -param #PARAM"
   ParamName: "Screen start command"
   Brand: "1"
 
@@ -9958,8 +10161,8 @@ bulkload: TMSParam
   ParamGroup: "XML"
   ParamCode: "InvXMLTestTransDir"
   ParamType: "C"
-  CharVal: "/mnt/xmlstore/test"
-  ParamName: "Dir for test invoices"
+  CharVal: "/mnt/xmlstore/mantest"
+  ParamName: "Transfer dir for test inv."
   Brand: "1"
 
 bulkload: TMSParam
@@ -9982,7 +10185,7 @@ bulkload: TMSParam
   ParamGroup: "XML"
   ParamCode: "SplitInvXMLArc"
   ParamType: "C"
-  CharVal: "/store/riftp/invxml/split/processed"
+  CharVal: "/data/store/invxml/split/processed"
   ParamName: "Archive directory for split f."
   Brand: "1"
 
@@ -9990,7 +10193,7 @@ bulkload: TMSParam
   ParamGroup: "XML"
   ParamCode: "SplitInvXMLDir"
   ParamType: "C"
-  CharVal: "/store/riftp/invxml/split"
+  CharVal: "/data/store/invxml/split"
   ParamName: "Dir for split files"
   Brand: "1"
 
@@ -9998,7 +10201,7 @@ bulkload: TMSParam
   ParamGroup: "XML"
   ParamCode: "SplitInvXMLPrint"
   ParamType: "C"
-  CharVal: "/tmp/#INVNUM.xml"
+  CharVal: "/data/store/invxml/spool/#INVNUM.xml"
   ParamName: "Invoice XML file name"
   Brand: "1"
 

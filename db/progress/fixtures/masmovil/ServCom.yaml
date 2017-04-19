@@ -53,6 +53,15 @@ bulkload: ServCom
 
 bulkload: ServCom
   Service: "1"
+  ServCom: "HSDPA"
+  ScName: "High speed data"
+  ScLocalName: "High speed data"
+  ScValueRange[2]: 1
+  Brand: "1"
+  ServType: 1
+
+bulkload: ServCom
+  Service: "1"
   ServCom: "IRDCUTOFF"
   ScName: "International Roaiming Data Cut Off"
   ScValueRange[2]: 1

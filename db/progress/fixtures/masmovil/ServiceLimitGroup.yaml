@@ -21,6 +21,13 @@ bulkload: ServiceLimitGroup
 
 bulkload: ServiceLimitGroup
   Brand: "1"
+  GroupCode: "MM_500_UPSELL"
+  GroupName: "Data 500 Upsell"
+  ValidFrom: 2017-04-15
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
   GroupCode: "MM_512_UPSELL"
   GroupName: "Data 512 Upsell"
   ValidFrom: 2017-03-16
@@ -66,6 +73,13 @@ bulkload: ServiceLimitGroup
   GroupCode: "MM_DATA4096"
   GroupName: "Data Usage Bundle 4GB"
   ValidFrom: 2017-03-16
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "MM_DATA500"
+  GroupName: "Data Usage Bundle 500MB"
+  ValidFrom: 2017-04-15
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup
