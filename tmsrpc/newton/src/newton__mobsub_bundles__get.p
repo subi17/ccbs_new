@@ -231,12 +231,15 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
    
-   ASSIGN 
-      lcBONOContracts             = fCParamC("BONO_CONTRACTS")
-      lcVoiceBundles              = fCParamC("VOICE_BONO_CONTRACTS")
-      lcSupplementaryDataBundles  = fCParamC("SUPPLEMENT_DATA_BONO_CONTRACTS")
-      lcSupplementaryVoiceBundles = fCParamC("SUPPLEMENT_VOICE_BONO_CONTRACTS").
-
+   IF lcBONOContracts <> "" THEN 
+   DO:
+       ASSIGN 
+          lcBONOContracts             = fCParamC("BONO_CONTRACTS")
+          lcVoiceBundles              = fCParamC("VOICE_BONO_CONTRACTS")
+          lcSupplementaryDataBundles  = fCParamC("SUPPLEMENT_DATA_BONO_CONTRACTS")
+          lcSupplementaryVoiceBundles = fCParamC("SUPPLEMENT_VOICE_BONO_CONTRACTS").
+   END.
+      
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "id", pcBundleId + "|" + STRING(MobSub.MsSeq)).
 
@@ -251,14 +254,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
        liActivations = fGetUpSellCount(pcBundleId,piMsSeq,MobSub.Custnum,OUTPUT lcError).
        add_int(lcResultStruct, "activations",liActivations).
    END.
-   /* check BONO contracts and customer level bundle status */
-   IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") > 0                         OR
-      LOOKUP(pcBundleId,lcVoiceBundles) > 0                                         OR
-      LOOKUP(pcBundleId,lcSupplementaryDataBundles) > 0                             OR
-      LOOKUP(pcBundleId,lcSupplementaryVoiceBundles) > 0                            OR
-      LOOKUP(pcBundleId,{&DSS_BUNDLES}) > 0                                         OR 
-      (pcBundleId = "VOICE100"       AND LOOKUP(MobSub.CliType,"CONT15"      ) > 0) OR
-      (pcBundleId = "FREE100MINUTES" AND LOOKUP(MobSub.CliType,"CONT9,CONT10") > 0) THEN 
+   ELSE
    DO:
        liStatus = fGetMDUBStatus(pcBundleId, OUTPUT ldeActivationTS).
        
@@ -272,8 +268,6 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
        lcOptionsStruct = add_struct(lcResultStruct,"options").
        add_boolean(lcOptionsStruct, "upcoming_data_bundle", llUpComingDataBundle).
    END.
-   ELSE 
-      lcError = "Invalid Bundle Id: " + pcBundleId .
 END.
 
 FINALLY:
