@@ -415,10 +415,10 @@ fSetOrderStatus(Order.OrderId,lcNewStatus).
 
 /* Release pending additional lines orders, in case of pending convergent 
    mail line order is released */
-IF  Order.OrderType NE {&ORDER_TYPE_RENEWAL}               AND 
-   (lcOldStatus     EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
-    lcOldStatus     EQ {&ORDER_STATUS_PENDING_FIXED_LINE}  OR
-    lcOldStatus     EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) THEN DO:
+IF lcOldStatus EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}       OR
+   lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
+   lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} OR
+   lcOldStatus EQ {&ORDER_STATUS_OFFER_SENT}                THEN DO:
     
     fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
                                     OrderCustomer.CustID) . 
