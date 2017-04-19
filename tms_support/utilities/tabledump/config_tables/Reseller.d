@@ -7,7 +7,7 @@
 "AO" "AON CROSS-SELLING" "" 0 "" "" "" "lisandro.racedo@masmovil.com" "1" 99 yes "" ""
 "AP" "Apple" "" 0 "" "" "" "dragutin.vukotic@yoigo.com" "1" 99 yes "332040484" "332296854"
 "AX" "AXIA" "" 0 "" "" "" "Ignacio.Larragan.Silva@yoigo.com" "1" 44 yes "323841452" "332296599"
-"BC" "BackOffice Fusion" "" 0 "" "" "" "Sonia.Borrega.Bahon@yoigo.com" "1" 99 yes "" ""
+"BC" "BackOffice Fusion" "" 0 "" "" "" "Sonia.Borrega.Bahon@yoigo.com" "1" 99 no "" ""
 "BE" "BYMOVIL EMISION" "" 0 "" "" "" "maria.barreiro.sanisidro@yoigo.com" "1" 99 yes "" ""
 "BF" "Backoffice Fusion" "" 0 "" "" "" "anaisabel.serrano@yoigo.com" "1" 27 no "" ""
 "BG" "BOULANGER" "" 0 "" "" "" "ignacio.larragan.silva@yoigo.com" "1" 99 no "" ""
