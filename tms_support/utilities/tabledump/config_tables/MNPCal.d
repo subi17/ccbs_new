@@ -1,38 +1,76 @@
-"07" "APOR" 12 "cc" "" ""
-"07" "APOR" 12 "self" "" ""
-"07" "APOR" 12 "telesales" "" ""
-"07" "APOR" 10 "cc" "S" ""
-"07" "APOR" 10 "self" "S" ""
-"07" "APOR" 10 "telesales" "S" ""
-"35" "APOR" 10 "cc" "" ""
-"35" "APOR" 10 "self" "" ""
-"35" "APOR" 10 "telesales" "" ""
-"35" "APOR" 8 "cc" "S" ""
-"35" "APOR" 8 "self" "S" ""
-"35" "APOR" 8 "telesales" "S" ""
-"38" "APOR" 10 "cc" "" ""
-"38" "APOR" 10 "self" "" ""
-"38" "APOR" 10 "telesales" "" ""
-"38" "APOR" 8 "cc" "S" ""
-"38" "APOR" 8 "self" "S" ""
-"38" "APOR" 8 "telesales" "S" ""
-"51" "APOR" 12 "cc" "" ""
-"51" "APOR" 12 "self" "" ""
-"51" "APOR" 12 "telesales" "" ""
-"51" "APOR" 10 "cc" "S" ""
-"51" "APOR" 10 "self" "S" ""
-"51" "APOR" 10 "telesales" "S" ""
-"52" "APOR" 12 "cc" "" ""
-"52" "APOR" 12 "self" "" ""
-"52" "APOR" 12 "telesales" "" ""
-"52" "APOR" 10 "cc" "S" ""
-"52" "APOR" 10 "self" "S" ""
-"52" "APOR" 10 "telesales" "S" ""
-"99" "ACON" 0 "" "" ""
-"99" "APOR" 8 "" "" ""
-"99" "APOR" 4 "pos" "" ""
-"99" "APOR" 4 "inversa" "" ""
-"99" "APOR" 4 "cc" "S" ""
-"99" "APOR" 4 "self" "S" ""
-"99" "APOR" 4 "telesales" "S" ""
-"99" "ASOL" 0 "" "" ""
+"07" "APOR" 12 "cc" "" "" 0
+"07" "APOR" 12 "self" "" "" 0
+"07" "APOR" 12 "telesales" "" "" 0
+"07" "APOR" 10 "cc" "S" "" 0
+"07" "APOR" 10 "self" "S" "" 0
+"07" "APOR" 10 "telesales" "S" "" 0
+"07" "APOR" 12 "cc" "" "" 6
+"07" "APOR" 12 "self" "" "" 6
+"07" "APOR" 12 "telesales" "" "" 6
+"07" "APOR" 10 "cc" "S" "" 6
+"07" "APOR" 10 "self" "S" "" 6
+"07" "APOR" 10 "telesales" "S" "" 6
+"35" "APOR" 10 "cc" "" "" 0
+"35" "APOR" 10 "self" "" "" 0
+"35" "APOR" 10 "telesales" "" "" 0
+"35" "APOR" 8 "cc" "S" "" 0
+"35" "APOR" 8 "self" "S" "" 0
+"35" "APOR" 8 "telesales" "S" "" 0
+"35" "APOR" 10 "cc" "" "" 6
+"35" "APOR" 10 "self" "" "" 6
+"35" "APOR" 10 "telesales" "" "" 6
+"35" "APOR" 8 "cc" "S" "" 6
+"35" "APOR" 8 "self" "S" "" 6
+"35" "APOR" 8 "telesales" "S" "" 6
+"38" "APOR" 10 "cc" "" "" 0
+"38" "APOR" 10 "self" "" "" 0
+"38" "APOR" 10 "telesales" "" "" 0
+"38" "APOR" 8 "cc" "S" "" 0
+"38" "APOR" 8 "self" "S" "" 0
+"38" "APOR" 8 "telesales" "S" "" 0
+"38" "APOR" 10 "cc" "" "" 6
+"38" "APOR" 10 "self" "" "" 6
+"38" "APOR" 10 "telesales" "" "" 6
+"38" "APOR" 8 "cc" "S" "" 6
+"38" "APOR" 8 "self" "S" "" 6
+"38" "APOR" 8 "telesales" "S" "" 6
+"51" "APOR" 12 "cc" "" "" 0
+"51" "APOR" 12 "self" "" "" 0
+"51" "APOR" 12 "telesales" "" "" 0
+"51" "APOR" 10 "cc" "S" "" 0
+"51" "APOR" 10 "self" "S" "" 0
+"51" "APOR" 10 "telesales" "S" "" 0
+"51" "APOR" 12 "cc" "" "" 6
+"51" "APOR" 12 "self" "" "" 6
+"51" "APOR" 12 "telesales" "" "" 6
+"51" "APOR" 10 "cc" "S" "" 6
+"51" "APOR" 10 "self" "S" "" 6
+"51" "APOR" 10 "telesales" "S" "" 6
+"52" "APOR" 12 "cc" "" "" 0
+"52" "APOR" 12 "self" "" "" 0
+"52" "APOR" 12 "telesales" "" "" 0
+"52" "APOR" 10 "cc" "S" "" 0
+"52" "APOR" 10 "self" "S" "" 0
+"52" "APOR" 10 "telesales" "S" "" 0
+"52" "APOR" 12 "cc" "" "" 6
+"52" "APOR" 12 "self" "" "" 6
+"52" "APOR" 12 "telesales" "" "" 6
+"52" "APOR" 10 "cc" "S" "" 6
+"52" "APOR" 10 "self" "S" "" 6
+"52" "APOR" 10 "telesales" "S" "" 6
+"99" "ACON" 0 "" "" "" 0
+"99" "ACON" 0 "" "" "" 6
+"99" "APOR" 8 "" "" "" 0
+"99" "APOR" 4 "pos" "" "" 0
+"99" "APOR" 4 "inversa" "" "" 0
+"99" "APOR" 4 "cc" "S" "" 0
+"99" "APOR" 4 "self" "S" "" 0
+"99" "APOR" 4 "telesales" "S" "" 0
+"99" "APOR" 8 "" "" "" 6
+"99" "APOR" 4 "pos" "" "" 6
+"99" "APOR" 4 "inversa" "" "" 6
+"99" "APOR" 4 "cc" "S" "" 6
+"99" "APOR" 4 "self" "S" "" 6
+"99" "APOR" 4 "telesales" "S" "" 6
+"99" "ASOL" 0 "" "" "" 0
+"99" "ASOL" 0 "" "" "" 6
