@@ -78,7 +78,7 @@ def getpf(pf):
         else:
             raise ValueError('Unknown tenant')
     else:
-        return '{}.pf'.format(pf)
+        return '{0}.pf'.format(pf)
 
 def active_cdr_db_pf():
     if '-S' in open('../db/progress/store/common.pf').read():
@@ -170,7 +170,7 @@ def code_pl(*a):
     if os.path.exists(myself + '.pl'):
         os.unlink(myself + '.pl')
     compiledir = 'temp_r'
-    _compile('COMPILE %s SAVE INTO {}.'.format(compiledir), compiledir)
+    _compile('COMPILE %s SAVE INTO {0}.'.format(compiledir), compiledir)
     os.chdir(compiledir)
     call([dlc + '/bin/prolib', '../%s.pl' % myself, '-create'])
     for dir, _dirs, files in os.walk('.'):
@@ -216,7 +216,7 @@ def _compile(compilecommand, compiledir):
         for source_dir in os.listdir('.'):
             if not os.path.isdir(source_dir) or source_dir in ['test', 'scripts', 'r', compiledir, 'pp', 'xref']:
                 continue
-            source_files.extend([ filu for filu in glob('{}/*'.format(source_dir)) if re.search(r'.*\.(p|cls)$', filu)] )
+            source_files.extend([ filu for filu in glob('{0}/*'.format(source_dir)) if re.search(r'.*\.(p|cls)$', filu)] )
 
     if compiledir:
         seen = []
@@ -369,7 +369,7 @@ def batch(*a):
     
     module_base = os.path.basename(batch_module)
     if 'tenant' in globals():
-        module_base = '{}_{}'.format(module_base,tenant)
+        module_base = '{0}_{1}'.format(module_base,tenant)
 
     cdr_dict = {}
 
@@ -436,7 +436,7 @@ def idbatch(*a):
     batch_module = parameters[0]
     module_base = os.path.basename(batch_module)
     if 'tenant' in globals():
-        module_base = '{}_{}'.format(module_base,tenant)
+        module_base = '{0}_{1}'.format(module_base,tenant)
 
     cdr_dict = {}
 
