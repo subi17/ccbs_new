@@ -316,7 +316,7 @@ PROCEDURE pMNPStatusCheck:
 
             IF AVAIL msisdn THEN DO:
             
-               liMSISDNStatus = (IF fIsYoigoCLI(msisdn.CLI) THEN 
+               liMSISDNStatus = (IF (fIsYoigoCLI(msisdn.CLI) OR fIsMasmovilCLI(msisdn.CLI)) THEN 
                      {&MSISDN_ST_MNP_OUT_YOIGO} ELSE
                      {&MSISDN_ST_MNP_OUT_OTHER}).
       
@@ -356,7 +356,7 @@ PROCEDURE pMNPStatusCheck:
 
             fMakeMsidnHistory(recid(msisdn)).
 
-            liMSISDNStatus = (IF fIsYoigoCLI(MNPSub.CLI) THEN 
+            liMSISDNStatus = (IF (fIsYoigoCLI(MNPSub.CLI) OR fIsMasmovilCLI(MNPSub.CLI)) THEN 
                   {&MSISDN_ST_MNP_OUT_YOIGO} ELSE
                   {&MSISDN_ST_MNP_OUT_OTHER}).
          

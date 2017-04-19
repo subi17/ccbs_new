@@ -210,7 +210,7 @@ ELSE DO:
                                     OUTPUT lcResult).
       IF liError EQ 0 THEN DO:
          lcResult = "".
-         llYoigoCLI = fIsYoigoCLI(MobSub.CLI).
+         llYoigoCLI = (fIsYoigoCLI(MobSub.CLI) OR fIsMasmovilCLI(MobSub.CLI)).
          llPenaltyFee = fIsPenalty(liTermReason,Order.MsSeq).
          fCheckOrderer(liTermReason, llYoigoCLI, OUTPUT lcResult).
       END.

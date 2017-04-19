@@ -333,7 +333,7 @@ PROCEDURE pUpdateFusionOrder:
          fSetOrderStatus(Order.OrderID,"7").
          ASSIGN
             liTermReason = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
-            llYoigoCLI = fIsYoigoCLI(order.CLI)
+            llYoigoCLI = (fIsYoigoCLI(order.CLI) OR fIsMasmovilCLI(order.CLI))
             llPenaltyFee = fIsPenalty(liTermReason,Order.MsSeq).
          fInitialiseValues(
             INPUT liTermReason,

@@ -726,8 +726,10 @@ PROCEDURE pTerminate:
    END.
 
    /* YNC-61 + YDR-193 */
-   IF LOOKUP(lcTermReason,"1,4,5,6,9,10") > 0 AND
-      fIsYoigoCLI(MobSub.CLI) EQ FALSE THEN DO:
+   IF LOOKUP(lcTermReason,"1,4,5,6,9,10") > 0      AND 
+      fIsYoigoCLI(MobSub.CLI)             EQ FALSE AND 
+      fIsMasmovilCLI(MobSub.CLI)          EQ FALSE THEN 
+   DO:
       
       RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
       
@@ -1156,7 +1158,7 @@ PROCEDURE pMultiSIMTermination:
 
       fInitialiseValues(
          {&SUBSCRIPTION_TERM_REASON_MULTISIM},
-         fIsYoigoCLI(lbMobSub.CLI),
+         (fIsYoigoCLI(lbMobSub.CLI) OR fIsMasmovilCLI(lbMobSub.CLI)),
          OUTPUT liMsisdnStat,
          OUTPUT liSimStat,
          OUTPUT liQuarTime).

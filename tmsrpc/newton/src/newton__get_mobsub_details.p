@@ -269,7 +269,7 @@ IF liMNPStatus NE ? THEN
       STRING(liMNPStatus EQ 0, "new/mnp")).
 ELSE  
    add_string(resp_struct, "number_type",
-      STRING(fISYoigoCLI(MobSub.CLI), "new/mnp")).
+      STRING((fISYoigoCLI(MobSub.CLI) OR fIsMasmovilCLI(MobSub.CLI)), "new/mnp")).
 
 /* subscription terminals  */
 term_array = add_array(resp_struct,"sub_terminals").
