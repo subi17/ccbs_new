@@ -331,7 +331,8 @@ FUNCTION fSetMigrationUpsell RETURNS CHAR
        RETURN "Not valid upsell " + icCommand.
        
     IF ilgSimulate EQ TRUE THEN RETURN "".
-
+    /* TODO mobsub cgheck */
+               
     DO i = 1 TO iiAmount:
        fCreateUpsellBundle(iiMsSeq,
                            icCommand,
