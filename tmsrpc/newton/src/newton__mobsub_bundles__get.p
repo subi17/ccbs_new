@@ -231,7 +231,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
    
-   IF lcBONOContracts <> "" THEN 
+   IF lcBONOContracts = "" THEN 
    DO:
        ASSIGN 
           lcBONOContracts             = fCParamC("BONO_CONTRACTS")
