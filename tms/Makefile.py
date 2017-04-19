@@ -190,16 +190,16 @@ def compile(match, *a):
             compiledir = '/tmsapps'
         else:
             compiledir = 'r'
-        compilecommand = 'COMPILE %s SAVE INTO {}.'
+        compilecommand = 'COMPILE %s SAVE INTO {0}.'
     elif match == 'compilec':
         compiledir = None
         compilecommand = 'COMPILE %s.'
     elif match == 'preprocess':
         compiledir = 'pp'
-        compilecommand = 'COMPILE %s PREPROCESS {}/%s.'
+        compilecommand = 'COMPILE %s PREPROCESS {0}/%s.'
     else:
         compiledir = 'xref'
-        compilecommand = 'COMPILE %s XREF {}/%s.'
+        compilecommand = 'COMPILE %s XREF {0}/%s.'
 
     if 'dir' in globals():
         compiledir = dir

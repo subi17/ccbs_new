@@ -90,7 +90,7 @@ os.environ['PROTERMCAP'] = work_dir + '/etc/protermcap'
 
 def modgen():
     for mod in modules:
-        if environment == 'production':
+        if environment != 'development':
             yield '{0}/{0}.pl'.format(mod)
         yield mod
     yield 'tms_support'

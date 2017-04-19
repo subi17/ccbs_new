@@ -144,8 +144,8 @@ def clean(*a):
         os.unlink(file)
 
 
-logging_level = '1'
-extraargs = ['-logginglevel', logging_level, '-logthreshold', '500000']
+logging_level = '3'
+extraargs = ['-logginglevel', logging_level, '-logthreshold', '1500000']
 
 @target
 def run_agent(*a):
