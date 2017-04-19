@@ -714,6 +714,8 @@
 "MFCodeToCLIType" "CLIType" "Bundles" "FLATMF30" "MFBillCode To CLIType Conversion" "" "CONTF30" 1
 "MFCodeToCLIType" "CLIType" "Bundles" "FLATMF40" "MFBillCode To CLIType Conversion" "" "CONTF40" 1
 "MFCodeToCLIType" "CLIType" "Bundles" "FLATMF55" "MFBillCode To CLIType Conversion" "" "CONTF55" 1
+"MNPCal" "DeliveryType" "MNP" "0" "DEFAULT" "" "" 1
+"MNPCal" "DeliveryType" "MNP" "6" "Delivery to POS" "" "" 1
 "MNPCal" "MessageType" "MNP" "ACON" "" "" "" 1
 "MNPCal" "MessageType" "MNP" "AENV" "" "" "" 1
 "MNPCal" "MessageType" "MNP" "APOR" "" "" "" 1
@@ -973,6 +975,7 @@
 "Order" "DeliveryType" "Orders" "2" "Kiala" "" "" 1
 "Order" "DeliveryType" "Orders" "3" "Post office secure" "" "" 1
 "Order" "DeliveryType" "Orders" "4" "Post office" "" "" 1
+"Order" "DeliveryType" "Orders" "5" "Delivery to POS secure" "" "" 1
 "order" "mnpstatus" "mnp" "1" "new" "" "" 1
 "order" "MNPStatus" "mnp" "10" "Done" "" "" 1
 "order" "MNPStatus" "MNP" "5" "contract" "" "" 1
@@ -1400,6 +1403,7 @@
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MD" "Mundo Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "MG" "MGM" "" "14" 0
+"Salesman" "SmPrefix" "IFS" "MK" "MARKTEL CROSS-SELL" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MM" "Media Markt" "" "18" 0
 "Salesman" "SmPrefix" "IFS" "PE" "Phone House Televenta Emision" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PH" "The Phone House" "" "11" 0
