@@ -430,6 +430,7 @@
 "1" 18 "ReqCParam3" "Termination Reason" 0 "TMSCodes,MsRequest,TermReason" yes ""
 "1" 18 "ReqCParam4" "" 0 "" yes ""
 "1" 18 "ReqCParam5" "" 0 "" yes ""
+"1" 18 "ReqCParam6" "Termination Type" 0 "" yes ""
 "1" 18 "ReqDParam1" "" 0 "" yes ""
 "1" 18 "ReqDParam2" "" 0 "" yes ""
 "1" 18 "ReqDtParam1" "" 0 "" yes ""
