@@ -51,19 +51,25 @@ def customize():
     fd.write("ENV%s = '%s'\n" % ("['display_banner']", 'no'))
     fd.close()
 
-def relink_var():
-    if not os.path.exists('../var'):
+def relink_var(dosymlink):
+    if dosymlink:
+        vardir = '..var'
+    else:
+        vardir = 'var'
+
+    if not os.path.exists(vardir) and dosymlink:
         print('Creating var directory in %s.' % os.path.abspath('..'),
               'Please check permissions!')
     for subdir in ['', '/log', '/log/eventlog', '/log/usagelog',
                                '/log/errorlog',
                        '/run', '/tmp']:
-        if not os.path.exists('../var' + subdir):
-            os.mkdir('../var' + subdir)
-    if not os.path.islink('var'):
-        if os.path.isdir('var'):
-            shutil.rmtree('var')
-        os.symlink('../var', 'var')
+        if not os.path.exists(vardir + subdir):
+            os.mkdir(vardir + subdir)
+    if dosymlink:
+        if not os.path.islink('var'):
+            if os.path.isdir('var'):
+                shutil.rmtree('var')
+            os.symlink('../var', 'var')
 
 if not os.path.exists('etc/config.py'):
     customize()
@@ -77,7 +83,9 @@ def initialized(*a):
     '''.initialized'''
     open(a[0], 'w').close()
     if environment == 'safeproduction':
-        relink_var()
+        relink_var(True)
+    elif environment == 'development':
+        relink_var(False)
     print('Initialization successful')
 
 @target(['.initialized'])

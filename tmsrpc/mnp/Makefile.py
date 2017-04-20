@@ -105,7 +105,7 @@ def clean(*a):
         os.unlink(file)
 
 
-logging_level = '1'
+logging_level = '3'
 extraargs = ['-logginglevel', logging_level, '-logthreshold', '500000']
 
 @target

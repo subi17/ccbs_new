@@ -31,6 +31,14 @@ db_locations = {
                   'prepedr': '/db1/prepedr/prepedr',
                   'fraudcdr': '/db1/fraudcdr/fraudcdr',
                   'reratelog': '/db1/reratelog/reratelog'},
+    'spica': {'common': 'alpheratz.int.asp.qvantel.net:common',
+             'ordercanal': 'alpheratz.int.asp.qvantel.net:ordercanal',
+             'mobile': 'alpheratz.int.asp.qvantel.net:mobile',
+             'counter': 'alpheratz.int.asp.qvantel.net:counter',
+             'star': 'alpheratz.int.asp.qvantel.net:star',
+             'prepedr': 'alpheratz.int.asp.qvantel.net:prepedr',
+             'fraudcdr': 'alpheratz.int.asp.qvantel.net:fraudcdr',
+             'reratelog': 'alpheratz.int.asp.qvantel.net:reratelog'},
     'yanai': {'common': '/db1/common/common',
               'ordercanal': '/db1/ordercanal/ordercanal',
               'mobile': '/db1/mobile/mobile',
@@ -39,6 +47,14 @@ db_locations = {
               'prepedr': '/db1/prepedr/prepedr',
               'fraudcdr': '/db1/fraudcdr/fraudcdr',
               'reratelog': '/db1/reratelog/reratelog'},
+    'yanney': {'common': 'yanai.int.asp.qvantel.net:common',
+               'ordercanal': 'yanai.int.asp.qvantel.net:ordercanal',
+               'mobile': 'yanai.int.asp.qvantel.net:mobile',
+               'counter': 'yanai.int.asp.qvantel.net:counter',
+               'star': 'yanai.int.asp.qvantel.net:star',
+               'prepedr': 'yanai.int.asp.qvantel.net:prepedr',
+               'fraudcdr': 'yanai.int.asp.qvantel.net:fraudcdr',
+               'reratelog': 'yanai.int.asp.qvantel.net:reratelog'},
     'arneb': {'common': '/db1/common/common',
               'ordercanal': '/db1/ordercanal/ordercanal',
               'mobile': '/db1/mobile/mobile',
@@ -55,26 +71,30 @@ db_locations = {
                'prepedr': '/db1/prepedr/prepedr',
                'fraudcdr': '/db1/fraudcdr10/fraudcdr10',
                'reratelog': '/db1/reratelog/reratelog'},
+    'sinistra': {'common': 'pallas.int.asp.qvantel.net:common',
+                 'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
+                 'mobile': 'pallas.int.asp.qvantel.net:mobile',
+                 'counter': 'pallas.int.asp.qvantel.net:counter',
+                 'star': 'pallas.int.asp.qvantel.net:star',
+                 'prepedr': 'pallas.int.asp.qvantel.net:prepedr',
+                 'fraudcdr': 'pallas.int.asp.qvantel.net:fraudcdr10',
+                 'reratelog': 'pallas.int.asp.qvantel.net:reratelog'},
     'leto': {'common': 'pallas.int.asp.qvantel.net:common',
              'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
              'mobile': 'pallas.int.asp.qvantel.net:mobile',
              'counter': 'pallas.int.asp.qvantel.net:counter',
              'star': 'pallas.int.asp.qvantel.net:star',
-             'prepedr': 'pallas.int.asp.qvantel.net:prepedr'},
+             'prepedr': 'pallas.int.asp.qvantel.net:prepedr',
+             'fraudcdr': 'pallas.int.asp.qvantel.net:fraudcdr10',
+             'reratelog': 'pallas.int.asp.qvantel.net:reratelog'},
     'maja': {'common': 'pallas.int.asp.qvantel.net:common',
              'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
              'mobile': 'pallas.int.asp.qvantel.net:mobile',
              'counter': 'pallas.int.asp.qvantel.net:counter',
              'star': 'pallas.int.asp.qvantel.net:star',
-             'prepedr': 'pallas.int.asp.qvantel.net:prepedr'},
-    'yanney': {'common': 'yanai.int.asp.qvantel.net:common',
-               'ordercanal': 'yanai.int.asp.qvantel.net:ordercanal',
-               'mobile': 'yanai.int.asp.qvantel.net:mobile',
-               'counter': 'yanai.int.asp.qvantel.net:counter',
-               'star': 'yanai.int.asp.qvantel.net:star',
-               'prepedr': 'yanai.int.asp.qvantel.net:prepedr',
-               'fraudcdr': 'yanai.int.asp.qvantel.net:fraudcdr',
-               'reratelog': 'yanai.int.asp.qvantel.net:reratelog'}
+             'prepedr': 'pallas.int.asp.qvantel.net:prepedr',
+             'fraudcdr': 'pallas.int.asp.qvantel.net:fraudcdr10',
+             'reratelog': 'pallas.int.asp.qvantel.net:reratelog'}
 }
 
 db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
@@ -200,10 +220,10 @@ def structure_file(match, deps, db_dir, db_name):
         
 
 @target
-def remote_database_file(match, deps, host, db_dir, db_name):
-    '''([a-zA-Z]+):([-_/a-zA-Z0-9]+)/([_a-zA-Z0-9]+).db'''
-    print('Remote creation of database %s in %s on %s not implemented' % \
-            (db_name, db_dir, host))
+def remote_database_file(match, deps, host, db_name):
+    '''([a-zA-Z0-9.]+):([_a-zA-Z0-9]+).db'''
+    print('Remote creation of database %s on %s not implemented' % \
+            (db_name, host))
 
 def write_pf_file(filename, tenant='', logical_names={}):
     if tenant:
@@ -227,6 +247,10 @@ def all_pf(match, deps):
 @target(r'\1.pf')
 def startup_parameter_file(match, deps, db_name):
     '''([_a-zA-Z0-9]+)_startup\.pf'''
+
+    if environment != 'development':
+        raise PikeException('Currently creating startup pf file is only allowed in development mode.')
+
     path = db_full_path(db_name, '').split(':')
     if len(path) > 1:
         return False
@@ -262,11 +286,12 @@ def connect_parameter_file(match, deps, db_name):
 
     fd = open(db_name + '.pf', 'wt')
     if len(path) > 1:
-        fd.write('-db %s\n' % path[1].split('/')[0])
+        fd.write('-db %s\n' % path[1])
         fd.write('-H %s\n' % path[0])
-        fd.write('-S %s\n' % (db_name))
+        fd.write('-S %s\n' % path[1])
     else:
         fd.write('-db %s\n' % path[0])
+    fd.write('-ld %s\n' % db_name)
     fd.close()
     for tenant in tenancies:
         with open('{0}_{1}.pf'.format(db_name, tenant), 'wt') as fd:

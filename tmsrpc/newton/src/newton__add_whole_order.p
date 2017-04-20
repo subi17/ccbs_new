@@ -405,7 +405,6 @@ DEF VAR llROIClose AS LOG NO-UNDO.
 DEF VAR lcPayment                        AS CHAR    NO-UNDO.
 DEF VAR pcPaypalPayerid                  AS CHAR    NO-UNDO.
 DEF VAR liLanguage                       AS INTEGER NO-UNDO.
-DEF VAR lcFixedOnlyConvergentCliTypeList AS CHAR    NO-UNDO.
 /* q25_data */
 DEF VAR llq25_extension   AS LOGICAL NO-UNDO. /* Quota 25 extension */
 DEF VAR ldeq25_discount   AS DECIMAL NO-UNDO. /* Discount amount over Quota 25 */
@@ -425,6 +424,9 @@ DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
 /* ADDLINE-20 Additional Line */
 DEF VAR pcAdditionaLineDiscount AS CHAR NO-UNDO.
 DEF BUFFER AddLineDiscountPlan FOR DiscountPlan.
+
+/* April promotion CONVDISC */
+DEF BUFFER ConvDiscountPlan FOR DiscountPlan.
 
 DEF VAR lcItemParam AS CHAR NO-UNDO.
 
@@ -1430,11 +1432,15 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {newton/src/settenant.i pcTenant}
 
-ASSIGN lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
-IF LOOKUP(pcSubType,lcFixedOnlyConvergentCliTypeList) > 0 THEN 
-      lcdelivery_channel = "Paper".
+FIND CLIType NO-LOCK WHERE CLIType.Brand = gcBrand AND CLIType.CliType = pcSubType NO-ERROR.
+IF NOT AVAIL CLIType THEN
+   RETURN appl_err(SUBST("Unknown CLIType &1", pcSubType)).   
 
-IF LOOKUP(pcNumberType,"new,mnp,renewal,stc,migration") = 0 THEN
+/* Fixed only convergent subscription types */
+IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN
+   ASSIGN lcdelivery_channel = "Paper".   
+
+IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
 
 /*MB_migration related checks*/
@@ -1517,13 +1523,6 @@ DO:
        IF NOT fIsBundleAllowed(pcSubType,ENTRY(liCount,pcDataBundleType),OUTPUT lcError) THEN 
           RETURN appl_err(lcError).
    END.    
-END.
-
-FIND CLIType NO-LOCK WHERE
-     CLIType.Brand = gcBrand AND
-     CLIType.CliType = pcSubType NO-ERROR.
-IF NOT AVAIL CLIType THEN DO:
-   RETURN appl_err(SUBST("Unknown CLIType &1", pcSubType)).   
 END.
 
 /* YBP-518 */
@@ -1925,6 +1924,20 @@ IF AVAIL DiscountPlan THEN DO:
                       lcItemParam).
 END.
 
+/* Apply CONVDISC discount to convergent tariff with STC order - April promo */
+IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
+   FIND FIRST ConvDiscountPlan WHERE
+              ConvDiscountPlan.Brand = gcBrand AND
+              ConvDiscountPlan.DPRuleID = "CONVDISC" AND
+              ConvDiscountPlan.ValidFrom <= TODAY AND
+              ConvDiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+   IF AVAIL ConvDiscountPlan THEN
+      fCreateOrderAction(Order.Orderid,
+                         "Discount",
+                         STRING(ConvDiscountPlan.DPId),
+                         "").
+END.
+
 /* ADDLINE-20 Additional Line */
 IF AVAIL AddLineDiscountPlan THEN DO:
    fCreateOrderAction(Order.Orderid,
@@ -2117,9 +2130,22 @@ ELSE IF Order.statuscode NE "4" THEN DO:
             EXCLUSIVE-LOCK NO-ERROR.
 
             IF AVAIL MsRequest THEN DO:
-               Order.StatusCode = (IF OrderCustomer.CustIdType EQ "CIF" 
-                                   THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
-                                   ELSE {&ORDER_STATUS_RENEWAL_STC}).
+               IF NOT fCheckExistingConvergent(OrderCustomer.CustIDType,
+                                               OrderCustomer.CustID) THEN DO:
+                  IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                                    OrderAction.Brand    = gcBrand           AND
+                                    OrderAction.OrderID  = Order.OrderId     AND
+                                    OrderAction.ItemType = "AddLineDiscount" AND
+                             LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) AND
+                     fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
+                                                  OrderCustomer.CustId) THEN DO:
+                     fSetOrderStatus(Order.OrderID, {&ORDER_STATUS_PENDING_MAIN_LINE}).
+                  END.
+               END.
+               ELSE
+                  Order.StatusCode = (IF OrderCustomer.CustIdType EQ "CIF" 
+                                      THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
+                                      ELSE {&ORDER_STATUS_RENEWAL_STC}).
                MsRequest.ReqIParam2 = Order.OrderId.
             END.
             ELSE DO:

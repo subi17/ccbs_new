@@ -24,7 +24,7 @@ def getpf(pf):
         for tenant in tenancies:
             if tenancies[tenant].get('tenanttype', '') == 'Super':
                 return '{0}_{1}.pf'.format(pf, tenant)
-    return '{}.pf'.format(pf)
+    return '{0}.pf'.format(pf)
 
 @target
 def build(*a):
@@ -81,7 +81,7 @@ def compile(*a):
 
 
 def make_compiler(cline, files, show='.'):
-    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
+    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='rt+')
     compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n')
     for ff in files:
         if show == '.':
@@ -105,7 +105,7 @@ def clean(*a):
         os.unlink(file)
 
 
-logging_level = '1'
+logging_level = '3'
 extraargs = ['-logginglevel', logging_level, '-logthreshold', '500000']
 
 @target
