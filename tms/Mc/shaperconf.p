@@ -50,7 +50,7 @@ DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 
 form
-    ShaperConf.ShaperConfID FORMAT "X(35)"
+    ShaperConf.ShaperConfID FORMAT "X(30)"
     ShaperConf.Template FORMAT "X(18)"
     ShaperConf.TariffType FORMAT "X(12)"
     ShaperConf.Tariff FORMAT "X(15)"
