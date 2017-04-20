@@ -72,7 +72,7 @@ RUN Mm/mobguard2.p(INPUT  TRUE,
 
 IF NOT llAccept THEN RETURN.
 
-RUN Mm/mobcallbr.p(INPUT "post,pre",
+RUN Mm/mobcallbr.p(INPUT "post,pre,error",
                 INPUT  ldaFromDate,
                 INPUT  ldaToDate,
                 INPUT  0,
