@@ -50,10 +50,10 @@ DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 
 form
-    ShaperConf.ShaperConfID FORMAT "X(18)"
-    ShaperConf.Template FORMAT "X(20)"
+    ShaperConf.ShaperConfID FORMAT "X(35)"
+    ShaperConf.Template FORMAT "X(18)"
     ShaperConf.TariffType FORMAT "X(12)"
-    ShaperConf.Tariff FORMAT "X(18)"
+    ShaperConf.Tariff FORMAT "X(15)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) " " + ynimi +
@@ -63,7 +63,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 
 form
     ShaperConf.Brand SKIP
-    ShaperConf.ShaperConfID SKIP
+    ShaperConf.ShaperConfID FORMAT "X(35)" SKIP
     ShaperConf.Template SKIP
     ShaperConf.tariffType SKIP
     ShaperConf.tariff SKIP
