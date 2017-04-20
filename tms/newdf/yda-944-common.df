@@ -48,3 +48,21 @@ UPDATE FIELD "AccNum" OF "Account"
 
 UPDATE FIELD "DDAllocation" OF "BankAccount"
   FORMAT "ZZ9.99"
+
+UPDATE FIELD "DDAllocation" OF "BankAccount"
+  FORMAT "ZZ9.99"
+
+UPDATE FIELD "AccNum" OF "BillItem"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "EUAccNum" OF "BillItem"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "EUConAccNum" OF "BillItem"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "FSAccNum" OF "BillItem"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "AltAccNum" OF "BillItem"
+  FORMAT ">>>>>>>9"
