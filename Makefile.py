@@ -151,7 +151,7 @@ def dist(*a):
     if parameters and parameters[0] in ['bz2', 'gz']:
         print('Compressing...')
         if parameters[0] == 'gz':
-            subprocess.call('gzip', dist_basename + '.tar')
+            subprocess.call(['gzip', dist_basename + '.tar'])
         else:
-            subprocess.call('bzip2', dist_basename + '.tar')
+            subprocess.call(['bzip2', dist_basename + '.tar'])
 
