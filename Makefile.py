@@ -155,3 +155,38 @@ def dist(*a):
         else:
             subprocess.call(['bzip2', dist_basename + '.tar'])
 
+@target
+def extapi(*a):
+    rdbmesses = [x for x in os.listdir('db') if os.path.isdir('db/' + x)]
+    build_dir = tempfile.mkdtemp()
+    dist_basename = '{0}-extapi'.format(get_distribution_name())
+    dist_dir = os.path.join(build_dir, dist_basename)
+    os.mkdir(dist_dir)
+    print('Building into %s...' % build_dir)
+    for directory in ['tools', 'db'] + \
+                     ['db/%s/store' % x for x in rdbmesses]:
+        for dir in (os.path.join(dist_dir, *directory.split('/')[:ii + 1]) \
+                            for ii in range(directory.count('/') + 1)):
+            if not os.path.exists(dir):
+                os.mkdir(dir)
+        if os.path.exists(directory + '/Makefile.py'):
+            shutil.copyfile(directory + '/Makefile.py',
+                            os.path.join(dist_dir, directory) + '/Makefile.py')
+    for directory in ['etc', 'srcpkg']:
+        shutil.copytree(directory, os.path.join(dist_dir, directory))
+    os.unlink(dist_dir + '/etc/site.py')
+    for mod in modules:
+        require('%s>buildextapi' % mod, [os.path.join(dist_dir, mod)])
+    shutil.copyfile('.DeployMakefile.py', dist_dir + '/Makefile.py')
+
+    if environment == 'safeproduction':
+        open('.safeproduction', 'a').close()
+        shutil.copyfile('.safeproduction', dist_dir + '/.safeproduction')
+
+    print('Archiving...')
+    subprocess.call(['tar', '-cf', dist_basename + '.tar',
+                            '-C', build_dir, dist_basename])
+    shutil.rmtree(build_dir)
+
+    print('Compressing...')
+    subprocess.call(['bzip2', dist_basename + '.tar'])

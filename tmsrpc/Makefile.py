@@ -165,6 +165,7 @@ def stop(*a):
 
 @target
 def build(*a):
+    '''build|buildextapi'''
     if len(parameters) != 1:
         raise PikeException('Expected build_dir as parameter')
     build_dir = parameters[0]

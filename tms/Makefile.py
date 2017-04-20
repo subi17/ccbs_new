@@ -154,13 +154,17 @@ def daemon(*a):
 def rundaemons(*a): pass
 
 @target
-def build(*a):
+def build(match, *a):
+    '''build|buildextapi'''
     if len(parameters) != 1:
         raise PikeException('Expected build_dir as parameter')
     build_dir = parameters[0]
-    for file in nonp_source + ['Makefile.py']:
-        mkdir_p(os.path.dirname(os.path.join(build_dir, file)))
-        shutil.copy2(file, os.path.join(build_dir, file))
+    mkdir_p(build_dir)
+
+    if match == 'build':
+        for file in nonp_source + ['Makefile.py']:
+            mkdir_p(os.path.dirname(os.path.join(build_dir, file)))
+            shutil.copy2(file, os.path.join(build_dir, file))
     require('code.pl', [])
     shutil.move(myself + '.pl', build_dir + '/' + myself + '.pl')
 

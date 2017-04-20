@@ -129,6 +129,11 @@ sql_startup_options = {
 # producing target functions below for each added file. Check all_pf!
 main_pf_files = ['all.pf']
 
+# Global variables to migrations
+migrations_dir = os.path.join(work_dir, 'db', 'progress', 'migrations')
+migcache_dir   = 'migrations'
+if os.path.exists(migrations_dir) and not os.path.exists(migcache_dir): os.mkdir(migcache_dir)
+
 ########################## Implementation #############################
 
 initialize_dependencies = list(main_pf_files)
@@ -396,12 +401,6 @@ def clean(match, deps):
 
 # Migrations
 
-migrations_dir = os.path.join(work_dir, 'db', 'progress', 'migrations')
-migcache_dir   = 'migrations'
-if not os.path.exists(migcache_dir): os.mkdir(migcache_dir)
-avail_migrations = sorted((x.group(1), int(x.group(2))) \
-                     for x in [re.match(r'^((\d+)_.*)\.py$', y) \
-                               for y in os.listdir(migrations_dir)] if x)
 def done_migrations():
     return sorted(x[:-3] for x in os.listdir(migcache_dir) if x.endswith('.py'))
 
@@ -456,6 +455,10 @@ def migrate(match, deps):
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
 
+    avail_migrations = sorted((x.group(1), int(x.group(2))) \
+                       for x in [re.match(r'^((\d+)_.*)\.py$', y) \
+                       for y in os.listdir(migrations_dir)] if x)
+
     version = int(parameters[0]) if parameters else 99999
     done_migs = done_migrations()
 
@@ -483,6 +486,10 @@ def status(match, deps):
 
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
+
+    avail_migrations = sorted((x.group(1), int(x.group(2))) \
+                       for x in [re.match(r'^((\d+)_.*)\.py$', y) \
+                       for y in os.listdir(migrations_dir)] if x)
 
     done_migs = done_migrations()
     for name, number in avail_migrations:
