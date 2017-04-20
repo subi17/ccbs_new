@@ -42,3 +42,6 @@ UPDATE FIELD "Clitype" OF "SLGAnalyse"
 
 UPDATE FIELD "OrderId" OF "FixedFee"
   FORMAT "->>>>>>>>9"
+
+UPDATE FIELD "AccNum" OF "Account"
+  FORMAT ">>>>>>>9"
