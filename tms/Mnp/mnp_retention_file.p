@@ -82,6 +82,7 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
 
    DEF VAR ldePenalty AS DEC NO-UNDO. 
    DEF VAR ldaEndDate AS DATE NO-UNDO. 
+   DEF VAR liPayType AS INT NO-UNDO. 
       
    RULE_LOOP:
    FOR EACH MNPRetentionRule NO-LOCK WHERE
@@ -93,9 +94,21 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
          Segmentation.SegmentOffer NE MNPRetentionRule.SegmentCode
          THEN NEXT RULE_LOOP.
 
-      IF MNPRetentionRule.CLIType > "" AND
-         NOT MobSub.CLIType BEGINS MNPRetentionRule.CLIType THEN
-         NEXT RULE_LOOP.
+      IF MNPRetentionRule.CLIType > "" THEN DO:
+         
+         CASE MNPRetentionRule.CLIType:
+            WHEN "CONT" THEN
+              liPayType = {&CLITYPE_PAYTYPE_POSTPAID}.
+            WHEN "TARJ" THEN
+              liPayType = {&CLITYPE_PAYTYPE_PREPAID}.
+            OTHERWISE liPayType = 0.
+         END.
+         
+         IF NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                               CLIType.CLIType = MobSub.CLIType AND
+                               CLIType.PayType = liPayType) THEN
+            NEXT RULE_LOOP.
+      END.
       
       IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} AND
          (MNPRetentionRule.PenaltyLeft > 0 OR
@@ -122,7 +135,7 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
       
       IF MNPRetentionRule.ConsumptionAverage > 0 AND
          MNPRetentionRule.ConsumptionAverage > Segmentation.SegmentCons THEN DO:
-         IF MNPRetentionRule.CLIType BEGINS "CONT" THEN
+         IF MNPRetentionRule.CLIType EQ "CONT" THEN
             PUT STREAM sExclude UNFORMATTED
                MobSub.CLI ";F1"
                SKIP.

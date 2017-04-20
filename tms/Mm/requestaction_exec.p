@@ -352,7 +352,10 @@ PROCEDURE pPeriodicalContract:
            Don't charge penalty when:
            STC is requested on the same day of the renewal order AND
            New type is POSTPAID */
-         IF bOrigRequest.reqcparam2 BEGINS "CONT" /* POSTPAID */ THEN DO:
+         IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                           CLIType.CLIType EQ bOrigRequest.reqcparam2 AND
+                           CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) 
+            THEN DO:
             ORDER_LOOP:
             FOR EACH bOrder NO-LOCK WHERE
                bOrder.MSSeq EQ bOrigRequest.MsSeq AND

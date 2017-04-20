@@ -812,6 +812,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
    DEF BUFFER bMobSub          FOR MobSub.
    DEF BUFFER bDayCampaign     FOR DayCampaign.
+   DEF BUFFER MsRequest        FOR MsRequest.
 
    lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES").
 
@@ -819,6 +820,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
       ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
              lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
 
+   MOBSUB_LOOP:
    FOR EACH bMobSub WHERE
             bMobSub.Brand   = gcBrand   AND
             bMobSub.InvCust = iiCustnum AND
@@ -848,14 +850,20 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
                    LOOKUP(MsRequest.ReqCParam2,lcAllowedDSS2SubsType) = 0)
       THEN NEXT.
 
-      IF icBundleId = "DSS" AND
-         CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                   MsRequest.MsSeq   = bMobSub.MsSeq AND
-                   MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                   MsRequest.ActStamp <= ideActStamp AND
-                   LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
-                   MsRequest.ReqCParam2 BEGINS "TARJ") THEN NEXT.
+      IF icBundleId = "DSS" THEN DO:
+         FOR EACH MsRequest NO-LOCK WHERE
+                  MsRequest.MsSeq   = bMobSub.MsSeq AND
+                  MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                  MsRequest.ActStamp <= ideActStamp AND
+                  LOOKUP(STRING(MsRequest.ReqStatus),
+                         {&REQ_INACTIVE_STATUSES} + ",3") = 0:
+
+             IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                               CLIType.CLIType = MsRequest.ReqCparam2 AND
+                               CLIType.PayType = {&CLITYPE_PAYTYPE_PREPAID})
+               THEN NEXT MOBSUB_LOOP.
+         END.
+      END.
 
       /* Exclude subs. if ACC request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE

@@ -978,9 +978,13 @@ PROCEDURE pRecoverSTC PRIVATE:
    /* Calculate new STC/BTC activation time */
    IF bMSRequestSTC.ActStamp > fMakeTS() THEN
       ldeSTCStamp = bMSRequestSTC.ActStamp.
-   ELSE IF (bMSRequestSTC.ReqCparam1 BEGINS "CONT" AND
-      bMSRequestSTC.ReqCparam2 BEGINS "CONT") OR
-      DAY(TODAY) EQ 1 THEN DO:
+   ELSE IF (CAN-FIND(FIRST CLIType WHERE   
+                          CLIType.CLIType EQ bMSRequestSTC.ReqCparam1 AND
+                          CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID})
+       AND CAN-FIND(FIRST CLIType WHERE   
+                          CLIType.CLIType EQ bMSRequestSTC.ReqCparam2 AND
+                          CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID}))
+      OR DAY(TODAY) EQ 1 THEN DO:
       ldeSTCStamp = fMake2Dt(TODAY,0).
    END.
    ELSE ldeSTCStamp = fMake2Dt(fLastDayOfMonth(TODAY) + 1,0).

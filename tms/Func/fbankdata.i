@@ -307,7 +307,7 @@ FUNCTION fGetOrderMandateId RETURN LOGICAL
 
    DEF BUFFER OrderAction FOR OrderAction.
 
-   IF NOT AVAIL Order OR Order.CliType BEGINS "TARJ" THEN
+   IF NOT AVAIL Order OR Order.PayType EQ {&MOBSUB_PAYTYPE_PREPAID} THEN
       RETURN FALSE.
 
    FIND FIRST OrderAction NO-LOCK WHERE
@@ -394,15 +394,22 @@ FUNCTION fChkBankAccChange RETURNS LOGICAL
                          msOwner.paytype = FALSE NO-LOCK) THEN
          RETURN FALSE.
    END.
+
    /* is STC from postpaid done during last 40 days */
-   IF CAN-FIND (FIRST MsRequest WHERE MsRequest.Brand = gcBrand AND
-                                      MsRequest.Reqtype = 0 AND
-                                      MsRequest.CustNum = iiCustNum AND
-                                      MsRequest.ActStamp > ldeDate AND
-                                      MsRequest.ReqStatus = 2 AND
-                                      MsRequest.ReqCParam1 BEGINS "CONT"
-                                      NO-LOCK) THEN
-      RETURN FALSE.
+   FOR EACH MsRequest NO-LOCK WHERE
+            MsRequest.Brand = gcBrand AND
+            MsRequest.Reqtype = 0 AND
+            MsRequest.CustNum = iiCustNum AND
+            MsRequest.ActStamp > ldeDate AND
+            MsRequest.ReqStatus = 2:
+
+      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                        CLIType.Brand = gcBrand AND
+                        CLIType.CLIType = MsRequest.ReqCParam1 AND
+                        CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID})
+         THEN RETURN FALSE.
+   END.
+
    /* otherwise account can be changed empty */
    RETURN TRUE.
 END FUNCTION.

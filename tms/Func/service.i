@@ -929,8 +929,12 @@ PROCEDURE pTerminatePackage:
 
          IF ttServCom.ServCom = "SHAPER"   AND 
             icNewCLIType NE icOldCLIType   AND
-            icNewCLIType BEGINS "TARJ"     AND
-            icOldCLIType BEGINS "TARJ"     AND    
+            CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                           CLIType.CLIType EQ icNewCLIType AND
+                           CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID}) AND
+            CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                           CLIType.CLIType EQ icOldCLIType AND
+                           CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID}) AND
             AVAILABLE SubSer               AND 
             icNewCLIType EQ SubSer.SSParam THEN 
             NEXT TERMINATECOMPONENT.
