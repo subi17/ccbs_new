@@ -24,7 +24,7 @@
 "PrintXMLTar" 22 10 "Test invoice xmls" "" "" "/opt/local/bin/xfear -bg_batch /home/ari/test/funcrun_print_invoice.p tms#HOST.pf #PARAM" 100 "1" no
 "TestCaseCollect" 23 1 "Collect billing run test cases" "sergey.strizhov@qvantel.com,toni.valve@qvantel.com" "00358406487542,00358407670038,00358400591125" "/opt/local/bin/xfear -bg_batch Inv/funcrun_brtestcase_collect.p tms.pf #PARAM" 100 "1" yes
 "TestResultAnalysis" 24 1 "Analyse test results" "sergey.strizhov@qvantel.com,toni.valve@qvantel.com" "00358406487542,00358407670038,00358400591125" "/opt/local/bin/xfear -bg_batch Inv/funcrun_brtestresult_analysis.p tms.pf #PARAM" 100 "1" yes
-"InvoiceSentToIFS" 25 1 "Send Invoices to IFS" "" "" "/opt/local/bin/xfear -bg_batch funcrun_ifs_invoice.p tms.pf #PARAM" 1000 "1" yes
+"InvoiceSentToIFS" 25 1 "Send Invoices to IFS" "" "" "/opt/local/bin/xfear -bg_batch funcrun_ifs_invoice.p tms.pf #PARAM" 1000 "1" no
 "InvoicesReadyForIFS" 26 1 "Mark invoices to be sent to IFS
 " "" "" "/opt/local/bin/xfear -bg_batch Inv/funcrun_invoice_deliverystate.p tms.pf #PARAM" 1000 "1" yes
 "InvPrintSplitTest" 27 1 "Test invoice print split" "" "" "/opt/local/bin/xfear -bg_batch /home/ari/test/funcrun_invprint_split.p tms.pf #PARAM" 100 "1" no
