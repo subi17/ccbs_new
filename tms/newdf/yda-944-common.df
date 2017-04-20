@@ -45,3 +45,6 @@ UPDATE FIELD "OrderId" OF "FixedFee"
 
 UPDATE FIELD "AccNum" OF "Account"
   FORMAT ">>>>>>>9"
+
+UPDATE FIELD "DDAllocation" OF "BankAccount"
+  FORMAT "ZZ9.99"
