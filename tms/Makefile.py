@@ -214,7 +214,7 @@ def _compile(compilecommand, compiledir):
     else:
         source_files.extend(['applhelp.p'])
         for source_dir in os.listdir('.'):
-            if not os.path.isdir(source_dir) or source_dir in ['test', 'scripts', 'r', compiledir, 'pp', 'xref']:
+            if not os.path.isdir(source_dir) or source_dir in ['test', 'scripts', 'r', 'newdf', compiledir, 'pp', 'xref']:
                 continue
             source_files.extend([ filu for filu in glob('{0}/*'.format(source_dir)) if re.search(r'.*\.(p|cls)$', filu)] )
 
