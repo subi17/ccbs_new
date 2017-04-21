@@ -331,6 +331,11 @@ FUNCTION fSetMigrationUpsell RETURNS CHAR
        RETURN "Not valid upsell " + icCommand.
        
     IF ilgSimulate EQ TRUE THEN RETURN "".
+
+    FIND FIRST MobSub NO-LOCK where 
+               MobSub.MsSeq EQ iiMsSeq NO-ERROR.
+    IF NOT AVAIL MobSub THEN RETURN "Upsell setting failed, no mobsub " +
+                             STRING(iiMsSeq).
     /* TODO mobsub cgheck */
                
     DO i = 1 TO iiAmount:
