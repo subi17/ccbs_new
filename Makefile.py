@@ -151,9 +151,9 @@ def dist(*a):
     if parameters and parameters[0] in ['bz2', 'gz']:
         print('Compressing...')
         if parameters[0] == 'gz':
-            subprocess.call(['gzip', dist_basename + '.tar'])
+            subprocess.call(['gzip', '-f', dist_basename + '.tar'])
         else:
-            subprocess.call(['bzip2', dist_basename + '.tar'])
+            subprocess.call(['bzip2', '-f', dist_basename + '.tar'])
 
 @target
 def extapi(*a):
@@ -189,4 +189,4 @@ def extapi(*a):
     shutil.rmtree(build_dir)
 
     print('Compressing...')
-    subprocess.call(['bzip2', dist_basename + '.tar'])
+    subprocess.call(['bzip2', '-f', dist_basename + '.tar'])

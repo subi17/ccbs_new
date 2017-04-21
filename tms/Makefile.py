@@ -165,24 +165,35 @@ def build(match, *a):
         for file in nonp_source + ['Makefile.py']:
             mkdir_p(os.path.dirname(os.path.join(build_dir, file)))
             shutil.copy2(file, os.path.join(build_dir, file))
-    require('code.pl', [])
+        require('compile.and.do.pl', [])
+    else:
+        print('Using /tmsapps r-files. Please make sure that you have compiled them!')
+        do_pl('/tmsapps')
+
     shutil.move(myself + '.pl', build_dir + '/' + myself + '.pl')
 
-@target
-def code_pl(*a):
-    """code.pl"""
-    if os.path.exists(myself + '.pl'):
-        os.unlink(myself + '.pl')
-    compiledir = 'temp_r'
-    _compile('COMPILE %s SAVE INTO {0}.'.format(compiledir), compiledir)
-    os.chdir(compiledir)
-    call([dlc + '/bin/prolib', '../%s.pl' % myself, '-create'])
+def do_pl(rdir):
+    currdir = os.getcwd()
+    plfile = '{0}/{1}.pl'.format(currdir, myself)
+
+    if os.path.exists(plfile):
+        os.unlink(plfile)
+
+    os.chdir(rdir)
+    call([dlc + '/bin/prolib', plfile, '-create'])
     for dir, _dirs, files in os.walk('.'):
         for file in files:
             if file.endswith('.r'):
-                call([dlc + '/bin/prolib', '../%s.pl' % myself, '-add',
+                call([dlc + '/bin/prolib', plfile, '-add',
                       os.path.join(dir[2:], file)])
-    os.chdir('..')
+    os.chdir(currdir)
+
+@target
+def compile_and_do_pl(*a):
+    '''compile.and.do.pl'''
+    compiledir = 'temp_r'
+    _compile('COMPILE %s SAVE INTO {0}.'.format(compiledir), compiledir)
+    do_pl(compiledir)
     shutil.rmtree(compiledir)
 
 @target
