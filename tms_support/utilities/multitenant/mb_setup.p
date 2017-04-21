@@ -145,6 +145,14 @@ do i = 1 to 2:
    IF INDEX(TMSParam.charval,lcbrand) EQ 0 THEN
       TMSParam.charval = REPLACE(TMSParam.charval,"log/errorlog","log/" + CAPS(lcbrand) + "_errorlog").   
 
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "CDR" AND
+              TMSParam.ParamCode EQ "DoubleCallLog" NO-ERROR.
+   IF INDEX(TMSParam.charval,lcbrand) EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"mobcdr",CAPS(lcbrand) + "_mobcdr").
+
+
    FOR EACH BankAccount.
       IF i eq 1 THEN
          ASSIGN
