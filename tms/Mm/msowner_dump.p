@@ -84,8 +84,13 @@ ASSIGN
    lhTable     = BUFFER msowner:HANDLE
    lcTableName = lhTable:NAME.
 
-DEF VAR ldaEventDate AS DATE NO-UNDO. 
-DEF VAR liEventTime AS INT NO-UNDO. 
+DEF VAR ldaEventDate  AS DATE NO-UNDO. 
+DEF VAR liEventTime   AS INT  NO-UNDO. 
+DEF VAR ldeTodayStamp AS DEC  NO-UNDO.
+
+ASSIGN ldeTodayStamp = YEAR(TODAY) * 10000 +
+                       MONTH(TODAY) * 100  +
+                       DAY(TODAY).
 
 fSplitTS(idLastDump,
          OUTPUT ldaEventDate,
@@ -93,13 +98,14 @@ fSplitTS(idLastDump,
 
 FOR EACH Eventlog NO-LOCK WHERE
          Eventlog.Eventdate >= ldaEventDate AND
-         EventLog.EventDate < TODAY AND
+         EventLog.EventDate < TODAY         AND
          Eventlog.tablename = "MsOwner" USE-INDEX EventDate:
    
    FIND FIRST MsOwner NO-LOCK WHERE
-              MsOwner.Brand = gcBrand AND
-              MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
-              MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,CHR(255))) NO-ERROR.
+              MsOwner.Brand = gcBrand                              AND
+              MsOwner.CLI   = ENTRY(2,EventLog.Key,CHR(255))       AND
+              MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,CHR(255))) AND
+              MsOwner.TsBeg < ldeTodayStamp NO-ERROR.
    IF AVAIL MsOwner THEN fCollect().
       
 END. 
