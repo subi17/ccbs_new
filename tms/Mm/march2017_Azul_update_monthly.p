@@ -31,6 +31,7 @@ gcBrand = "1".
 
 DEF VAR lcTableName AS CHAR NO-UNDO.
 DEF VAR lcActionId AS CHAR NO-UNDO.
+DEF VAR ldCampaignStartApril  AS DEC  NO-UNDO.
 DEF VAR ldCampaignStart AS DEC NO-UNDO.
 DEF VAR ldCampaignEnd AS DEC NO-UNDO.
 DEF VAR ldCurrentTimeTS AS DEC  NO-UNDO.
@@ -49,8 +50,9 @@ DEF STREAM sLogFile.
 llgSimulate = FALSE. /*TRUE-> only log writing, FALSE->make real updates*/
 lcTableName = "March2017Promo". /*For execution lock*/
 lcActionId = "UpsellForAzulMonthly". /*For execution lock*/
-ldCampaignStart = 20170301. /*Dates when order must be done */
-ldCampaignEnd = 20170401. /*Dates when order must be done */
+ldCampaignStartApril   = fCParamDe("March2017AprilFromDate").
+ldCampaignStart   = fCParamDe("March2017PromoFromDate"). /*Dates when order must be done */
+ldCampaignEnd = fCParamDe("March2017PromoToDate"). /*Dates when order must be done */
 lcUpsell = "FLEX_UPSELL". /*Upsell that will be aded in the promo*/
 ldaReadDate  = TODAY.
 
@@ -65,6 +67,8 @@ lcLogFile    = lcLogDir + "March2017Promo_monthly_" +
                       STRING(MONTH(ldaReadDate),"99") +
                       STRING(DAY(ldaReadDate),"99") +
                       REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
+
+
 
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
@@ -82,7 +86,8 @@ FUNCTION fIsAzul RETURNS LOG
    (icCliType AS CHAR):
    IF icCliType EQ "CONTDSL59" OR
       icCliType EQ "CONTFH59_50" OR
-      icCliType EQ "CONTFH69_300" THEN
+      icCliType EQ "CONTFH69_300" OR
+      icCliType EQ "CONT25" THEN
       RETURN TRUE.
  
    RETURN FALSE.
@@ -110,13 +115,24 @@ FUNCTION fCollect RETURNS CHAR
                  Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
       IF NOT AVAIL Order THEN NEXT. /*This should not happen*/
 
-      /*Order must be for Azul*/
+      /*Order must be for Azul or CONT25 (april promo) */
       IF NOT fIsAzul(Order.CliType) THEN NEXT.
 
-      /*Order must be created in March*/
-      IF Order.Brand EQ gcBrand AND 
-         NOT(Order.CrStamp GE ldCampaignStart AND
-             Order.CrStamp LT ldCampaignEnd) THEN NEXT.
+      /* April promotion */
+      /* Only MNP orders to CONT25 get the promotion */
+      IF Order.CliType EQ "CONT25" THEN DO:
+         IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
+            IF NOT (Order.CrStamp >= ldCampaignStartApril AND
+                    Order.CrStamp < ldCampaignEnd) THEN NEXT.
+         END.
+         ELSE NEXT. /*CONT25 non-MNP orders do net get the activation*/
+      END.
+      ELSE DO:
+         /*Order must be created in March*/
+         IF NOT(Order.CrStamp GE ldCampaignStart AND
+                Order.CrStamp LT ldCampaignEnd) THEN NEXT.
+      END.
+
 
       /*No Flex upsell is allowed*/
          /*This is checked in activation phase in fUpsellForAzul*/
