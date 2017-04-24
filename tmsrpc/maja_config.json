@@ -4,7 +4,7 @@
 			"/tmsrpc_xfera": [ "dextra", {
 				"check-local": "\"disable\"",
 				"min-procs": "1",
-				"max-procs": "5",
+				"max-procs": "2",
 				"kill-signal": "10"
 			}],
          "/masmovil": [ "masmovil", {
@@ -18,7 +18,8 @@
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
 			"server.max-keep-alive-idle": "2",
 			"server.max-keep-alive-requests": "0",
-			"accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
+			"accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\"",
+            "conditional_param": { "$HTTP[\"remoteip\"] == \"127.0.0.1\"": [ { "param": "status.status-url", "value": "\"/server-status\"" } ] }
 		}
 	},
 	"heat": {
@@ -34,7 +35,8 @@
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
 			"server.max-keep-alive-idle": "2",
 			"server.max-keep-alive-requests": "0",
-                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
+            "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\"",
+            "conditional_param": { "$HTTP[\"remoteip\"] == \"127.0.0.1\"": [ { "param": "status.status-url", "value": "\"/server-status\"" } ] }
 		}
 	},
 	"topup": {
@@ -62,7 +64,8 @@
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
 			"server.max-keep-alive-idle": "2",
 			"server.max-keep-alive-requests": "0",
-                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
+            "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\"",
+            "conditional_param": { "$HTTP[\"remoteip\"] == \"127.0.0.1\"": [ { "param": "status.status-url", "value": "\"/server-status\"" } ] }
 		}
 	},
 	"mnp": {
@@ -76,9 +79,8 @@
 			"server.username": "\"tmsrpc\"",
 			"server.groupname": "\"tmsrpc\"",
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
-			"server.max-keep-alive-idle": "2",
-			"server.max-keep-alive-requests": "0",
-                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
+            "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\"",
+            "conditional_param": { "$HTTP[\"remoteip\"] == \"127.0.0.1\"": [ { "param": "status.status-url", "value": "\"/server-status\"" } ] }
 		}
 	},
 	"selfservice": {
@@ -94,7 +96,8 @@
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
 			"server.max-keep-alive-idle": "2",
 			"server.max-keep-alive-requests": "0",
-                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
+            "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\"",
+            "conditional_param": { "$HTTP[\"remoteip\"] == \"127.0.0.1\"": [ { "param": "status.status-url", "value": "\"/server-status\"" } ] }
 		}
 	}
 }

@@ -67,8 +67,7 @@ def activated(*a):
 
     if environment != 'safeproduction':
         require('db>migrate')
-
-    require('rundaemons')
+        require('rundaemons')
 
     os.symlink(os.path.basename(os.getcwd()), symlink)
     open('.activated', 'w').close()
