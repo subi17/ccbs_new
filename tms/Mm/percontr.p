@@ -1694,10 +1694,31 @@ PROCEDURE pFinalize:
             
    END.
    
-   IF lcDCEvent EQ "CONT15" AND
-      MsRequest.ReqType EQ 8 AND
-      MsRequest.ReqCParam2 EQ "act" THEN DO:
-   
+   /* When STCed between CONT15 and CONTDSL48 */
+   PROMO-ACTIVATION:
+   IF (lcDCEvent EQ "CONT15" OR LOOKUP(lcDCEvent,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) AND 
+      MsRequest.ReqType    EQ 8     AND
+      MsRequest.ReqCParam2 EQ "act" THEN 
+   DO:
+      IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand      = gcBrand         AND 
+                                          CliType.CliType    = MsOwner.CliType AND 
+                                          CliType.BaseBundle = "CONT15"        NO-LOCK) THEN
+          LEAVE PROMO-ACTIVATION.
+      ELSE IF CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq      = MsOwner.MsSeq                             AND
+                                             MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION}            AND
+                                             LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND 
+                                             MsRequest.ReqCParam3 = "VOICE100" USE-INDEX MsSeq NO-LOCK)       THEN      
+          LEAVE PROMO-ACTIVATION.
+      ELSE 
+      DO:
+          FIND FIRST ServiceLimit WHERE ServiceLimit.Brand = gcBrand AND ServiceLimit.GroupCode = "VOICE100" NO-LOCK NO-ERROR.
+          IF AVAIL ServiceLimit AND CAN-FIND(FIRST MServiceLimit WHERE MServiceLimit.MsSeq    = MsOwner.MsSeq         AND 
+                                                                       MServiceLimit.DialType = ServiceLimit.Dialtype AND 
+                                                                       MServiceLimit.SLSeq    = ServiceLimit.SLSeq    AND 
+                                                                       MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK) THEN 
+              LEAVE PROMO-ACTIVATION.
+      END. 
+
       ASSIGN
          ldaCont15PromoFrom = fCParamDa("CONT15PromoFromDate")
          ldaCont15PromoEnd  = fCParamDa("CONT15PromoEndDate")
@@ -1724,18 +1745,18 @@ PROCEDURE pFinalize:
          ldaOrderDate <= ldaCont15PromoEnd THEN DO:
 
          liRequest = fPCActionRequest(MsRequest.MsSeq,
-                                  "VOICE100",
-                                  "act",
-                                  MsRequest.ActStamp,
-                                  TRUE, /* fees */
-                                  {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
-                                  "",
-                                  MsRequest.MsRequest,
-                                  FALSE,
-                                  "",
-                                  0,
-                                  0,
-                                  OUTPUT lcError).
+                                      "VOICE100",
+                                      "act",
+                                      MsRequest.ActStamp,
+                                      TRUE, /* fees */
+                                      {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                      "",
+                                      MsRequest.MsRequest,
+                                      FALSE,
+                                      "",
+                                      0,
+                                      0,
+                                      OUTPUT lcError).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
