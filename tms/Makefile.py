@@ -271,7 +271,7 @@ def mkdir_p(directory):
             raise
 
 def make_compiler(cline, files, show='.'):
-    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='rt+')
+    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
     compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n')
     for ff in files:
         if show == '.':
