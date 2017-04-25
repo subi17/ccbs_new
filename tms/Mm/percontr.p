@@ -1699,7 +1699,7 @@ PROCEDURE pFinalize:
       MsRequest.ReqType    EQ 8     AND
       MsRequest.ReqCParam2 EQ "act" THEN 
    DO:
-      IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand      = gcBrand         AND 
+      IF NOT CAN-FIND(FIRST CliType WHERE CLIType.Brand      = gcBrand         AND 
                                           CliType.CliType    = MsOwner.CliType AND 
                                           CliType.BaseBundle = "CONT15"        NO-LOCK) THEN
           LEAVE.
@@ -1710,7 +1710,7 @@ PROCEDURE pFinalize:
           LEAVE.
       ELSE 
       DO:
-          FIND FIRST ServiceLimit WHERE ServiceLimit.Brand = gcBrand AND ServiceLimit.GroupCode = "VOICE100" NO-LOCK NO-ERROR.
+          FIND FIRST ServiceLimit WHERE ServiceLimit.GroupCode = "VOICE100" NO-LOCK NO-ERROR.
           IF AVAIL ServiceLimit AND CAN-FIND(FIRST MServiceLimit WHERE MServiceLimit.MsSeq    = MsOwner.MsSeq         AND 
                                                                        MServiceLimit.DialType = ServiceLimit.Dialtype AND 
                                                                        MServiceLimit.SLSeq    = ServiceLimit.SLSeq    AND 
