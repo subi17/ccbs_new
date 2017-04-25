@@ -2095,6 +2095,10 @@ ELSE IF Order.statuscode NE "4" THEN DO:
                                                   OrderCustomer.CustId) THEN DO:
                      fSetOrderStatus(Order.OrderID, {&ORDER_STATUS_PENDING_MAIN_LINE}).
                   END.
+                  ELSE
+                     Order.StatusCode = (IF OrderCustomer.CustIdType EQ "CIF"
+                                         THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
+                                         ELSE {&ORDER_STATUS_RENEWAL_STC}).
                END.
                ELSE
                   Order.StatusCode = (IF OrderCustomer.CustIdType EQ "CIF" 
