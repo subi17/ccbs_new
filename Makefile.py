@@ -53,7 +53,7 @@ def customize():
 
 def relink_var(dosymlink):
     if dosymlink:
-        vardir = '..var'
+        vardir = '../var'
     else:
         vardir = 'var'
 
