@@ -54,3 +54,4 @@
 -s 160
 -q
 -Mm 8192
+-noinactiveidx
