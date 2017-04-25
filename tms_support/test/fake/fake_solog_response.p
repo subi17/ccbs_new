@@ -13,7 +13,7 @@ INPUT THROUGH hostname.
 IMPORT lcHostName.
 INPUT CLOSE.
 
-IF LOOKUP(lcHostName,'angetenar,alpheratz,sadachbia,yanai') = 0 THEN DO:
+IF LOOKUP(lcHostName,'angetenar,alpheratz,sadachbia,yanai,yoigodev') = 0 THEN DO:
    MESSAGE 'This script is not allowed to run in'
    lcHostName VIEW-AS ALERT-BOX.
    RETURN.
@@ -98,7 +98,8 @@ FOR EACH MsRequest NO-LOCK WHERE
      liCli = INT(MsRequest.cli) NO-ERROR.
      IF ERROR-STATUS:ERROR THEN NEXT.
      IF ((licli >= 633993700 AND licli <= 633993750) OR
-         (licli >= 633993500 AND licli <= 633993620)) THEN NEXT.
+         (licli >= 633993500 AND licli <= 633993620) OR 
+         (liCli >= 722600000 AND liCli <= 722600009)) THEN NEXT.
 
       FIND SoLog WHERE
            Solog.Brand = gcBrand AND
