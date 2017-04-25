@@ -42,7 +42,7 @@ def active_cdr_db_pf():
     else:
         connection_type = "local"
 
-    args = ['-b', '-p', '../../tms/Syst/list_active_cdr_databases.p', '-param', connection_type]
+    args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
     args.extend(['-pf', getpf('../../db/progress/store/common')])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
