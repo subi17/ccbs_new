@@ -1695,7 +1695,6 @@ PROCEDURE pFinalize:
    END.
    
    /* When STCed between CONT15 and CONTDSL48 */
-   PROMO-ACTIVATION:
    IF (lcDCEvent EQ "CONT15" OR LOOKUP(lcDCEvent,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) AND 
       MsRequest.ReqType    EQ 8     AND
       MsRequest.ReqCParam2 EQ "act" THEN 
@@ -1703,12 +1702,12 @@ PROCEDURE pFinalize:
       IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand      = gcBrand         AND 
                                           CliType.CliType    = MsOwner.CliType AND 
                                           CliType.BaseBundle = "CONT15"        NO-LOCK) THEN
-          LEAVE PROMO-ACTIVATION.
+          LEAVE.
       ELSE IF CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq      = MsOwner.MsSeq                             AND
                                              MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION}            AND
                                              LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND 
                                              MsRequest.ReqCParam3 = "VOICE100" USE-INDEX MsSeq NO-LOCK)       THEN      
-          LEAVE PROMO-ACTIVATION.
+          LEAVE.
       ELSE 
       DO:
           FIND FIRST ServiceLimit WHERE ServiceLimit.Brand = gcBrand AND ServiceLimit.GroupCode = "VOICE100" NO-LOCK NO-ERROR.
@@ -1716,8 +1715,8 @@ PROCEDURE pFinalize:
                                                                        MServiceLimit.DialType = ServiceLimit.Dialtype AND 
                                                                        MServiceLimit.SLSeq    = ServiceLimit.SLSeq    AND 
                                                                        MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK) THEN 
-              LEAVE PROMO-ACTIVATION.
-      END. 
+              LEAVE.
+      END.
 
       ASSIGN
          ldaCont15PromoFrom = fCParamDa("CONT15PromoFromDate")
