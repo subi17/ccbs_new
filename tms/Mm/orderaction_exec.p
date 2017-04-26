@@ -258,7 +258,6 @@ PROCEDURE pPeriodicalContract:
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
          (icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} OR
           icSource =  {&REQUEST_SOURCE_STC} ) THEN DO:
-
          
          FOR EACH bBundleRequest NO-LOCK USE-INDEX OrigRequest WHERE
                   bBundleRequest.OrigRequest = iiOrigRequest AND
@@ -270,6 +269,8 @@ PROCEDURE pPeriodicalContract:
                   bBundleContract.DCEvent = bBundleRequest.ReqCParam3 AND
                   LOOKUP(bBundleContract.DCType,
                          {&PERCONTRACT_RATING_PACKAGE}) > 0:
+
+            IF fIsConvergentFixedContract(bBundleRequest.ReqCParam3) THEN NEXT.
             lcWaitFor = ":wait" + STRING(bBundleRequest.MsRequest).
          END.     
       END.
