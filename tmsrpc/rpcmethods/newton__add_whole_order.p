@@ -210,6 +210,7 @@
                     hand;string;optional;hand
                     km;string;optional;km
                     territory_owner;string;optional;territory owner
+                    coverage_token;string;mandatory;
  * @q25_data   q25_extension;boolean;optional;Extension of the Quota 25
                q25_discount;double;optional;Discount amount over the Quota 25
                per_contract_id;int;mandatory;installment contract id (related to q25)
@@ -626,7 +627,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR ldBirthDay   AS DATE NO-UNDO. 
    DEF VAR llSelfEmployed AS LOGICAL NO-UNDO. 
    DEF VAR ldFoundationDate AS DATE NO-UNDO. 
-   DEF VAR data            AS CHAR EXTENT 40  NO-UNDO.
+   DEF VAR data            AS CHAR EXTENT 41  NO-UNDO.
    DEF VAR lcIdOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR liSubLimit AS INT NO-UNDO. 
@@ -820,6 +821,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             data[LOOKUP("km", gcCustomerStructStringFields)] 
          OrderCustomer.TerritoryOwner =
             data[LOOKUP("territory_owner", gcCustomerStructStringFields)]
+         OrderCustomer.CoverageToken =
+            data[LOOKUP("coverage_token", gcCustomerStructStringFields)]
          OrderCustomer.SelfEmployed       = llSelfEmployed 
          OrderCustomer.FoundationDate     = ldFoundationDate
          OrderCustomer.Birthday           = ldBirthday
@@ -1326,7 +1329,8 @@ gcCustomerStructFields = "birthday," +
                          "stair," + 
                          "hand," + 
                          "km," +
-                         "territory_owner".
+                         "territory_owner," +
+                         "coverage_token".
 
 /* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
@@ -1368,7 +1372,8 @@ gcCustomerStructStringFields = "city," +
                                "stair," + 
                                "hand," + 
                                "km," +
-                               "territory_owner".   /* EXTENT value count 39 */
+                               "territory_owner," +
+                               "coverage_token".   /* EXTENT value count 41 */
 
 /* common validation */
 /* YBP-513 */
@@ -2095,6 +2100,10 @@ ELSE IF Order.statuscode NE "4" THEN DO:
                                                   OrderCustomer.CustId) THEN DO:
                      fSetOrderStatus(Order.OrderID, {&ORDER_STATUS_PENDING_MAIN_LINE}).
                   END.
+                  ELSE
+                     Order.StatusCode = (IF OrderCustomer.CustIdType EQ "CIF"
+                                         THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
+                                         ELSE {&ORDER_STATUS_RENEWAL_STC}).
                END.
                ELSE
                   Order.StatusCode = (IF OrderCustomer.CustIdType EQ "CIF" 
