@@ -2,7 +2,8 @@
 from os import environ as ENV
 
 mpro           = ['%s/bin/mpro' % dlc,
-                  '-pf', '%s/etc/pf/formats.pf' % (work_dir)]
+                  '-pf', '%s/etc/pf/formats.pf' % (work_dir),
+                  '-T', '%s/var/tmp' % (work_dir)]
 appname        = 'yoigo'
 appversion     = '0.1'
 proversion     = '11.2'
@@ -13,5 +14,6 @@ rpcs           = { 'cctool': 'topup', 'dextra': 'dextra', 'masmovil': 'dextra', 
 wwwrealm       = 'yes'
 client_timezone = 'local'
 server_timezone = 'local'
+rpcversion_filename = 'version.txt'
 tenancies      = { 'super': { 'domain': 'dsuper', 'username': 'super', 'password': 'super', 'tenanttype': 'Super' }, 'yoigo': { 'domain': 'dyoigo', 'username': 'yoigo', 'password': 'yoigo', 'tenanttype': 'Default' }, 'masmovil': { 'domain': 'dmasmovil', 'username': 'masmovil', 'password': 'masmovil', 'tenanttype': 'Regular' } }
 ENV['display_banner'] = 'no'

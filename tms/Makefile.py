@@ -9,8 +9,6 @@ import errno
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
-if environment == 'development':
-    open('Mc/version.i', 'wt').write(appversion)
 
 myself = os.path.basename(os.getcwd())
 
@@ -122,8 +120,7 @@ def daemon(*a):
     args = mpro + ['-b', '-p', 'gearbox/daemons/run_daemon.p',
             '-clientlog', '../var/log/d-' + daemon + instance + '.log',
             '-logthreshold', '209715200', '-numlogfiles', '0',
-            '-param', daemon + ',' + instance + ',../var/run',
-            '-T', '../var/tmp']
+            '-param', daemon + ',' + instance + ',../var/run']
 
     dbcount = 0
     for pp in parameters[2:]:
@@ -313,7 +310,7 @@ def cui(*a):
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
 
-    args.extend(['-T', '../var/tmp', '-p', program])
+    args.extend(['-p', program])
 
     cmd = Popen(mpro + args)
     while cmd.poll() is None:
@@ -358,7 +355,7 @@ def terminal(*a):
         elif pp != 'all':
             args.append(pp)
 
-    args.extend(['-T', '../var/tmp', '-p', parameters[0]])
+    args.extend(['-p', parameters[0]])
 
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
@@ -396,7 +393,7 @@ def batch(*a):
        fd.write(str(os.getpid()))
        fd.close()
 
-    args = ['-T', '../var/tmp', '-b', '-p', batch_module + '.p']
+    args = ['-b', '-p', batch_module + '.p']
 
     all_in_parameters = False
     if 'all' in parameters[1:]:
@@ -473,7 +470,7 @@ def idbatch(*a):
     fd.write(str(os.getpid()))
     fd.close()
 
-    args = ['-T', '../var/tmp', '-b', '-p', batch_module + '.p']
+    args = ['-b', '-p', batch_module + '.p']
 
     all_in_parameters = False
     if 'all' in parameters[1:]:
@@ -539,5 +536,5 @@ def editor(*a):
         tenant = "masmovil"
 
     args = parameters or (['-pf', getpf('../db/progress/store/all')])
-    args = mpro + args + ['-T', '../var/tmp', '-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
+    args = mpro + args + ['-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
     os.execlp(args[0], *args)

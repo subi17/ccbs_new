@@ -10,13 +10,6 @@ import glob
 relpath = '../..'
 exec(open(relpath + '/etc/make_site.py').read())
 
-def write_version():
-    fd = open('src/version.i', mode='wt')
-    fd.write(appversion)
-    fd.close()
-if os.path.exists('src'):
-    write_version()
-
 show_file = False
 
 def getpf(pf):
@@ -117,7 +110,6 @@ def run_agent(*a):
     
     os.environ['PROPATH'] += ',rpcmethods.pl'
     args = ['-pf', getpf('../../db/progress/store/all'), 
-            '-T', '../../var/tmp',
             '-clientlog', '../../var/log/%s_agent.%d.log' % \
             	          (agent_name, os.getpid())]
     args = mpro + args + extraargs + ['-b', '-p', 'fcgi_agent/nq_xmlrpc.p', '-param', ",YES"]
