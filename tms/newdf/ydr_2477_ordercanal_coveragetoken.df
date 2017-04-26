@@ -1,0 +1,7 @@
+ADD FIELD "CoverageToken" OF "OrderCustomer" AS CHARACTER
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "CoverageToken"
+  COLUMN-LABEL "CoverageToken"
+  HELP "Coverage Token"
+  ORDER 1140
