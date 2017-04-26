@@ -79,7 +79,7 @@ def relink_var(*a):
     else:
         return
 
-    if not os.path.exists(vardir) and dosymlink:
+    if not os.path.exists(vardir) and environment == 'safeproduction':
         print('Creating var directory in %s.' % os.path.abspath('..'),
               'Please check permissions!')
     for subdir in ['', '/log', '/log/eventlog', '/log/usagelog',
