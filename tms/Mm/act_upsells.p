@@ -174,7 +174,7 @@ PROCEDURE pBobCheckUpsell:
    ASSIGN
       lcCLI          = TRIM(ENTRY(1,pcLine,lcSep))
       lcUpsell       = TRIM(ENTRY(2,pcLine,lcSep))
-      lcUpSellList   = "DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL".
+      lcUpSellList   = "DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL".
 
    IF lcUpsell = ? OR 
       LOOKUP(lcUpsell,lcUpSellList) = 0 THEN
@@ -195,13 +195,13 @@ PROCEDURE pBobCheckUpsell:
       lcUpsell BEGINS "DSS" THEN 
    RETURN "ERROR: DSS is not active for this subscription".
 
-   IF lcDssId EQ "DSS" THEN DO:
-      IF lcUpsell EQ "DATA6_UPSELL" THEN
+   IF lcDssId EQ "DSS" THEN 
+   DO:
+      IF lcUpsell EQ "DATA6_UPSELL" OR lcUpsell EQ "FLEX_UPSELL" THEN
          lcUpsell = "DSS_UPSELL".
       ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
          lcUpsell = "DSS200_UPSELL".
-      ELSE IF lcUpsell NE "DSS_UPSELL"    AND 
-              lcUpsell NE "DSS200_UPSELL" THEN
+      ELSE IF lcUpsell NE "DSS_UPSELL" AND lcUpsell NE "DSS200_UPSELL" THEN
          RETURN "ERROR:Upsell is not DSS compatible".
    END.
    ELSE IF lcDssId EQ "DSS2" THEN DO:
@@ -211,16 +211,18 @@ PROCEDURE pBobCheckUpsell:
       IF lcUpsell NE "DSS2_UPSELL"    AND
          lcUpsell NE "DATA6_UPSELL"   AND 
          lcUpsell NE "DSS200_UPSELL"  AND
-         lcUpsell NE "DATA200_UPSELL" THEN
+         lcUpsell NE "DATA200_UPSELL" AND 
+         lcUpsell NE "FLEX_UPSELL"    THEN
         RETURN "ERROR:Upsell is not DSS2 compatible".
       
       IF LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 THEN DO:
-         IF lcUpsell EQ "DATA6_UPSELL" THEN
+         IF lcUpsell EQ "DATA6_UPSELL" OR lcUpsell EQ "FLEX_UPSELL" THEN
             lcUpsell = "DSS2_UPSELL".
          ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
             lcUpsell = "DSS200_UPSELL".
       END.
       ELSE IF lcUpsell NE "DATA6_UPSELL"   AND 
+              lcUpsell NE "FLEX_UPSELL"    AND 
               lcUpsell NE "DATA200_UPSELL" THEN 
          RETURN "ERROR:Subscription is not DSS2 compatible".
    END.
@@ -249,6 +251,8 @@ PROCEDURE pBobCheckUpsell:
          lcMemoTitle = "Ampliación 1,5 GB".
       WHEN "DATA200_UPSELL" THEN 
          lcMemoTitle = "DATA 200 MB upsell". 
+      WHEN "FLEX_UPSELL" THEN 
+         lcMemoTitle = "FLEX upsell".    
    END CASE.
       
    lcMemoText = "Ampliación " +  lcUpsell + " - Activar".
