@@ -11,13 +11,6 @@ import glob
 relpath = '../..'
 exec(open(relpath + '/etc/make_site.py').read())
 
-def write_version():
-    fd = open('src/version.i', mode='wt')
-    fd.write(appversion)
-    fd.close()
-if os.path.exists('src'):
-    write_version()
-
 show_file = False
 
 def getpf(pf):

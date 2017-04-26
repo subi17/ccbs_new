@@ -9,8 +9,6 @@ import errno
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
-if environment == 'development':
-    open('Mc/version.i', 'wt').write(appversion)
 
 myself = os.path.basename(os.getcwd())
 

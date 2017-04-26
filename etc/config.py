@@ -14,4 +14,5 @@ rpcs           = { 'cctool': 'topup', 'dextra': 'dextra', 'masmovil': 'dextra', 
 wwwrealm       = 'yes'
 client_timezone = 'local'
 server_timezone = 'local'
+rpcversion_filename = 'version.txt'
 ENV['display_banner'] = 'no'
