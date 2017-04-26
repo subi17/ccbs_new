@@ -165,7 +165,7 @@ def run_agent(*a):
 
     
     os.environ['PROPATH'] += ',rpcmethods.pl'
-    args.extend(['-T', '../../var/tmp', '-clientlog', '../../var/log/%s_agent.%d.log' % \
+    args.extend(['-clientlog', '../../var/log/%s_agent.%d.log' % \
             	          (agent_name, os.getpid())])
     args = mpro + args + extraargs + ['-b', '-p', 'fcgi_agent/nq_xmlrpc.p']
     os.execlp(args[0], *args)

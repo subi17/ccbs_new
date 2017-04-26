@@ -49,7 +49,7 @@ def expand_database_params(parameters, db_dir):
 def run_script(script, title, params, log):
     print('Running {0}{1}...'.format(script, title))
     outfile = open(log, 'wb')
-    args = ['-T', '../var/tmp', '-b', '-p', script]
+    args = ['-b', '-p', script]
     args.extend(expand_database_params(params, '../db/progress/store'))
     pp = Popen(mpro + args, stdout=PIPE)
     for line in pp.stdout:

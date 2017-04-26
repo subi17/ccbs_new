@@ -43,7 +43,9 @@ def customize():
     fd = open('etc/config.py', 'w')
     fd.write('# Project configuration (should be under RC)\n')
     fd.write('from os import environ as ENV\n\n')
-    fd.write('%-14s = [%s]\n' % ('mpro', "'%s/bin/mpro' % dlc,\n                  '-pf', '%s/etc/pf/formats.pf' % (work_dir)"))
+    fd.write('%-14s = [%s\n' % ('mpro', "'%s/bin/mpro' % dlc,"))
+    fd.write('                  %s\n' % ("'-pf', '%s/etc/pf/formats.pf' % (work_dir),"))
+    fd.write('                  %s]\n' % ("'-T', '%s/var/tmp' % (work_dir)"))
     fd.write("%-14s = '%s'\n" % ('appname', appname))
     fd.write("%-14s = '%s'\n" % ('appversion', appversion))
     fd.write("%-14s = '%s'\n" % ('proversion', proversion))
@@ -51,11 +53,31 @@ def customize():
     fd.write("ENV%s = '%s'\n" % ("['display_banner']", 'no'))
     fd.close()
 
-def relink_var(dosymlink):
-    if dosymlink:
+if not os.path.exists('etc/config.py'):
+    customize()
+skip_srcpkg_check = True
+relpath = '.'
+exec(open(relpath + '/etc/make_site.py', 'rb').read())
+
+@file_target(['relink_var', 'srcpkg>initialize', 'db>initialize'])
+def initialized(*a):
+    '''.initialized'''
+    open(a[0], 'w').close()
+    print('Initialization successful')
+
+@target(['.initialized'])
+def initialize(*a):
+    '''default|initialize|init'''
+    pass
+
+@target
+def relink_var(*a):
+    if environment == 'safeproduction':
         vardir = '../var'
-    else:
+    elif environment == 'development':
         vardir = 'var'
+    else:
+        return
 
     if not os.path.exists(vardir) and dosymlink:
         print('Creating var directory in %s.' % os.path.abspath('..'),
@@ -65,34 +87,11 @@ def relink_var(dosymlink):
                        '/run', '/tmp']:
         if not os.path.exists(vardir + subdir):
             os.mkdir(vardir + subdir)
-    if dosymlink:
+    if environment == 'safeproduction':
         if not os.path.islink('var'):
             if os.path.isdir('var'):
                 shutil.rmtree('var')
             os.symlink('../var', 'var')
-
-if not os.path.exists('etc/config.py'):
-    customize()
-skip_srcpkg_check = True
-relpath = '.'
-exec(open(relpath + '/etc/make_site.py', 'rb').read())
-
-
-@file_target(['srcpkg>initialize', 'db>initialize'])
-def initialized(*a):
-    '''.initialized'''
-    open(a[0], 'w').close()
-    if environment == 'safeproduction':
-        relink_var(True)
-    elif environment == 'development':
-        relink_var(False)
-    print('Initialization successful')
-
-@target(['.initialized'])
-def initialize(*a):
-    '''default|initialize|init'''
-    pass
-
 
 @target(['.initialized', 'db>start'] + \
         ['%s>compile' % x for x in modules] + \
