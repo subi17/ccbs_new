@@ -33,7 +33,9 @@ IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/scratch/log/bb_cancel/".
 
 IF liConfDays = 0 OR liConfDays = ? THEN liConfDays = 90.
 
-lcLogFile = lcLogDir + "cancel_susp_bb_serv_" +
+lcLogFile = lcLogDir + 
+            CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+            "_cancel_susp_bb_serv_" +
             STRING(YEAR(TODAY))       +
             STRING(MONTH(TODAY),"99") +
             STRING(DAY(TODAY),"99") + ".txt".

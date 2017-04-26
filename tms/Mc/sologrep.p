@@ -56,7 +56,7 @@ ASSIGN
 lcAddressListFile = lcMailDir + "/sologrep.email".
 
 GetRecipients(lcAddressListFile).
-xMailSubj = "Solog_report_" + STRING(DAY(TODAY))   + 
+xMailSubj = lcTenant + "_Solog_report_" + STRING(DAY(TODAY))   + 
                               STRING(MONTH(TODAY)) +
                               STRING(YEAR(TODAY)).
 

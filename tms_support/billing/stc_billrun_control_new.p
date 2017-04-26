@@ -18,6 +18,7 @@ gcBrand = "1".
 {Func/fixedfee.i}
 {Func/email.i}
 {Func/fixedlinefunc.i}
+{Func/multitenantfunc.i}
 
 DEF VAR ldBeginStamp         AS DEC  NO-UNDO.
 DEF VAR ldEndStamp           AS DEC  NO-UNDO.
@@ -83,10 +84,21 @@ ASSIGN lcIPLContracts    = fCParamC("IPL_CONTRACTS")
        lcLogFolder       = fCParamC("StcContRepFolder").
 
 ASSIGN
-       lcSumFile    = lcLogFolder + "/STC_ControlReport_Summary_" + "#USER_" + "#DATE" + ".txt"
-       lcDetFile    = lcLogFolder + "/STC_ControlReport_Details_" + "#USER_" + "#DATE" + ".txt"
-       lcErrors     = lcLogFolder + "/STC_ControlReport_Errors_"  + "#USER_" + "#DATE" + ".txt"
-       lcMail       = lcLogFolder + "/Mail_"                      + "#USER_" + "#DATE" + ".txt"
+       lcSumFile    = lcLogFolder + "/" +
+                      CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) + 
+                      "_STC_ControlReport_Summary_" + "#USER_" + "#DATE" + 
+                      ".txt"
+       lcDetFile    = lcLogFolder + "/" +
+                      CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                      "STC_ControlReport_Details_" + "#USER_" + "#DATE" + 
+                      ".txt"
+       lcErrors     = lcLogFolder + "/" +
+                      CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                      "STC_ControlReport_Errors_"  + "#USER_" + "#DATE" + 
+                      ".txt"
+       lcMail       = lcLogFolder + "/" +
+                      CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                      "Mail_" + "#USER_" + "#DATE" + ".txt"
        ldtInputDate = TODAY.
 
 FUNCTION fGetOrigCLIType RETURNS CHARACTER
