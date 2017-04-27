@@ -53,8 +53,6 @@
 				"max-procs": "1",
 				"kill-signal": "10"
 			}],				
-			"server.username": "\"tmsrpc\"",
-			"server.groupname": "\"tmsrpc\"",
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
 			"server.max-keep-alive-idle": "2",
 			"server.max-keep-alive-requests": "0",
