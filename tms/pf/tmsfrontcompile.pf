@@ -1,49 +1,49 @@
 -db common
--H hebe.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S common
 
 -db ordercanal
--H hebe.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S ordercanal
 
 -db mobile
--H hebe.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S mobile
 
--db mcdr15q1
--H hebe.int.asp.qvantel.net
--S mcdr15q1
+-db mcdr17q1
+-H pallas.int.asp.qvantel.net
+-S mcdr17q1
 -ld mcdr
 
 -db star
--H hebe.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S star
 
--db mcdrdtl15q1
--H hebe.int.asp.qvantel.net
--S mcdrdtl15q1
+-db mcdrdtl17q1
+-H pallas.int.asp.qvantel.net
+-S mcdrdtl17q1
 -ld mcdrdtl
 
--db roamcdr15q1
--H hebe.int.asp.qvantel.net
--S roamcdr15q1
+-db roamcdr17q1
+-H pallas.int.asp.qvantel.net
+-S roamcdr17q1
 -ld roamcdr
 
--db prepcdr15q1
--H hebe.int.asp.qvantel.net
--S prepcdr15q1
+-db prepcdr17q1
+-H pallas.int.asp.qvantel.net
+-S prepcdr17q1
 -ld prepcdr
 
 -db counter
--H hebe.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S counter
 
 -db prepedr
--H hebe.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S prepedr
 
 -db reratelog
--H hebe.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S reratelog
 
 -h 13
