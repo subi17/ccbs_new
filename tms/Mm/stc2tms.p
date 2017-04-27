@@ -1202,6 +1202,7 @@ PROCEDURE pCloseContracts:
    DEF VAR lcBONOContracts           AS CHAR    NO-UNDO.
    DEF VAR lcAllVoIPNativeBundles    AS CHAR    NO-UNDO.
    DEF VAR llCreateFees                         AS LOG NO-UNDO.
+   DEF VAR llIsSTCBetweenConvergent             AS LOG NO-UNDO.
    DEF VAR llIsSTCBetweenFixedOnlyAndConvergent AS LOG NO-UNDO.
 
    EMPTY TEMP-TABLE ttContract.
@@ -1228,6 +1229,8 @@ PROCEDURE pCloseContracts:
    IF ((CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  AND bOldType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) OR 
        (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND bOldType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN
        ASSIGN llIsSTCBetweenFixedOnlyAndConvergent = TRUE.
+   ELSE IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND bOldType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+       ASSIGN llIsSTCBetweenConvergent = TRUE.
 
    FOR EACH DCCLI NO-LOCK WHERE
             DCCLI.MsSeq   = iiMsSeq  AND
@@ -1294,7 +1297,7 @@ PROCEDURE pCloseContracts:
          OR
          /* Since, convergent base bundles CONTDSL/CONTFH50/CONTFH300 are reused in fixed only convergent also with different prices.
             Above matrix condition will fail and convergent base bundles are not terminated for prices to change. So, below is introduced. */
-         (llIsSTCBetweenFixedOnlyAndConvergent AND LOOKUP(lcContract,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) 
+         ((llIsSTCBetweenFixedOnlyAndConvergent OR llIsSTCBetweenConvergent) AND LOOKUP(lcContract,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) 
          OR
          (LOOKUP(lcContract,lcBonoContracts) > 0 AND LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN 
       DO:
@@ -1305,7 +1308,9 @@ PROCEDURE pCloseContracts:
              2=exclude_term_penalty)
           */
          IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqIParam5 EQ 2 AND
-            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand EQ gcBrand AND DayCampaign.DCEvent EQ lcContract AND DayCampaign.DCType EQ {&DCTYPE_DISCOUNT}) THEN 
+            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   EQ gcBrand             AND 
+                                                     DayCampaign.DCEvent EQ lcContract          AND 
+                                                     DayCampaign.DCType  EQ {&DCTYPE_DISCOUNT}) THEN 
              llCreateFees = FALSE.
          ELSE 
              llCreateFees = TRUE. 
