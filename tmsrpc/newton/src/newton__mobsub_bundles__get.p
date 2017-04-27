@@ -142,7 +142,7 @@ FUNCTION fGetMDUBStatus RETURNS INT (
                      MsRequest.MsSeq      = MobSub.MsSeq  AND
                      MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
                      MsRequest.ReqCParam3 = pcBundle AND
-                     LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
+                     LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0
                      USE-INDEX MsSeq) THEN
                      liStat = 3. /* activation ongoing */
 
