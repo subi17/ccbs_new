@@ -234,6 +234,11 @@ PROCEDURE pReadEvents:
          lcCompanyID    = SUBSTRING(lcReadLine,93,4)
          NO-ERROR.
       
+       /* MasMovil tenant External ID is 14 characters long and can
+          start with 0 value. That is why overwritten here. */
+       IF TENANT-ID(LDBNAME(1)) > 0 THEN
+         lcInvID        = SUBSTRING(lcReadLine,25,14).
+ 
       IF ERROR-STATUS:ERROR THEN DO:
          fError("Invalid format").
          NEXT.
