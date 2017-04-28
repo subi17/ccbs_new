@@ -293,6 +293,7 @@ PROCEDURE pFeesAndServices:
    DEF VAR liPrevPeriod       AS INT  NO-UNDO. 
    DEF VAR liRequest          AS INT  NO-UNDO.
    DEF VAR lcResult           AS CHAR NO-UNDO.
+   DEF VAR llAddLineDisc      AS LOG  NO-UNDO.
 
    DEF BUFFER bMember FOR DPMember.
    
@@ -449,6 +450,11 @@ PROCEDURE pFeesAndServices:
          FIND FIRST bMember WHERE RECID(bMember) = RECID(DPMember) 
             EXCLUSIVE-LOCK.
          bMember.ValidTo = ldtActDate - 1. 
+
+         IF llAddLineDisc = FALSE AND
+            LOOKUP(DiscountPlan.DPRuleID,{&ADDLINE_DISCOUNTS}) > 0
+            THEN llAddLineDisc = TRUE.
+         
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
 
       END.   
@@ -459,7 +465,8 @@ PROCEDURE pFeesAndServices:
 
    IF LOOKUP(CLIType.CliType , {&ADDLINE_CLITYPES}) > 0 AND
       LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
-      IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
+      IF llAddLineDisc AND
+         fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
          fCreateAddLineDiscount(MsRequest.MsSeq,
                                 CLIType.CLIType,
                                 ldtActDate).
