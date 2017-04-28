@@ -142,7 +142,7 @@ FUNCTION fCollect RETURNS CHAR
          Order.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
 
       FIND FIRST Mobsub NO-LOCK WHERE
-                 Mobsub.MsSeq EQ Order.MsSeq.
+                 Mobsub.MsSeq EQ Order.MsSeq NO-ERROR.
       IF NOT AVAIL Mobsub THEN DO:
          lcErr = "No active mobsub " + STRING(Order.MsSeq).
          PUT STREAM sLogFile UNFORMATTED lcErr SKIP.
