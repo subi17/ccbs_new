@@ -70,21 +70,21 @@ do i = 1 to 2:
               TMSParam.Paramgroup EQ "Report" AND
               TMSParam.ParamCode EQ "SIMStatistics" NO-ERROR.
    IF INDEX(TMSParam.charval,lcBrand) EQ 0 THEN
-      TMSParam.charval = REPLACE(TMSParam.charval,"SIMStatistics","SIMStatistics_" + lcBrand).
+      TMSParam.charval = REPLACE(TMSParam.charval,"SIMStatistics",lcBrand + "_SIMStatistics_").
       
    FIND FIRST TMSParam WHERE
               TMSParam.brand EQ "1" AND
               TMSParam.Paramgroup EQ "Report" AND
               TMSParam.ParamCode EQ "ErrorFile" NO-ERROR.
    IF INDEX(TMSParam.charval,lcBrand) EQ 0 THEN
-      TMSParam.charval = REPLACE(TMSParam.charval,"errorfile","errorfile_" + lcBrand).
+      TMSParam.charval = REPLACE(TMSParam.charval,"icc_msisdn",lcBrand + "_icc_msisdn").
 
    FIND FIRST TMSParam WHERE
               TMSParam.brand EQ "1" AND
               TMSParam.Paramgroup EQ "Report" AND
               TMSParam.ParamCode EQ "MSISDNStatistics" NO-ERROR.
    IF INDEX(TMSParam.charval,lcBrand) EQ 0 THEN
-      TMSParam.charval = REPLACE(TMSParam.charval,"MSISDNStatistics","MSISDNStatistics_" + lcBrand).
+      TMSParam.charval = REPLACE(TMSParam.charval,"MSISDNStatistics",lcBrand + "_MSISDNStatistics").
 
    /*
    FIND FIRST TMSParam WHERE
@@ -314,6 +314,61 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.SpoolDir        = "/store/riftp/dumpfiles/dwh/spool"
       dumpfile.TransDir        = "/store/riftp/dumpfiles/dwh/outgoing"
       dumpfile.UseIndex        = "".
+
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "MsSeq"
+      DFField.DFLabel = "SubSeq"
+      DFField.DFTable = "Barring"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 1
+      DFField.ToDate = 12/31/49.
+
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "BarringCode"
+      DFField.DFLabel = "Barring"
+      DFField.DFTable = "Barring"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 2
+      DFField.ToDate = 12/31/49.
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "BarringStatus"
+      DFField.DFLabel = "Barring Status"
+      DFField.DFTable = "Barring"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 3
+      DFField.ToDate = 12/31/49.
+
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "UserCode"
+      DFField.DFLabel = "User ID"
+      DFField.DFTable = "Barring"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 4
+      DFField.ToDate = 12/31/49.
+
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "EventTS"
+      DFField.DFLabel = "Time Stamp"
+      DFField.DFTable = "Barring"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 5
+      DFField.ToDate = 12/31/49.
+
 END.
 
 FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "SingleFixFeeCollect" NO-ERROR.
@@ -402,7 +457,141 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.SpoolDir        = "/mnt/qss/spool"
       dumpfile.TransDir        = "/mnt/qss/subscription_types"
       dumpfile.UseIndex        = "".
+
+   CREATE DFField.
+   ASSIGN 
+      DFField.brand = "1"
+      DFField.DFField = "Clitype"
+      DFField.DFLabel = "CLI Type"
+      DFField.DFTable = "CLIType"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 1
+      DFField.ToDate = 12/31/49.
+
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "Paytype"
+      DFField.DFLabel = "Payment Type"
+      DFField.DFTable = "CLIType"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 2
+      DFField.ToDate = 12/31/49.
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "Bundletype"
+      DFField.DFLabel = "Bundle Based Type"
+      DFField.DFTable = "CLIType"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 3
+      DFField.ToDate = 12/31/49.
+
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "BaseBundle"
+      DFField.DFLabel = "BaseBundle"
+      DFField.DFTable = "CLIType"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 4
+      DFField.ToDate = 12/31/49.
+
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "MiniAmt"
+      DFField.DFLabel = "MinimPrice"
+      DFField.DFTable = "CLIType"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 5
+      DFField.ToDate = 12/31/49.
+
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "CommercialFee"
+      DFField.DFLabel = "Commercial Fee"
+      DFField.DFTable = "CLIType"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 6
+      DFField.ToDate = 12/31/49.
+
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "CompareFee"
+      DFField.DFLabel = "Comparison Fee"
+      DFField.DFTable = "CLIType"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 7
+      DFField.ToDate = 12/31/49.
+
+   CREATE DFField.
+   ASSIGN
+      DFField.brand = "1"
+      DFField.DFField = "UsageType"
+      DFField.DFLabel = "Usage Type"
+      DFField.DFTable = "CLIType"
+      DFField.DumpId = dumpfile.dumpid
+      DFField.fromdate = TODAY
+      DFField.OrderNbr = 8
+      DFField.ToDate = 12/31/49.
+
+
 END.
+
+/* MB-631 DWH dumps and MB-675 Track dumps */
+FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "PrepaidCompReport" NO-ERROR.
+IF NOT AVAIL DumpFile THEN DO:
+   FIND LAST DumpFile USE-INDEX DumpID NO-LOCK NO-ERROR.
+   IF AVAILABLE DumpFile
+   THEN liid = DumpFile.DumpID + 1.
+   ELSE liid = 1.
+   CREATE DumpFile .
+   ASSIGN
+      dumpfile.Active          = TRUE
+      dumpfile.AllowReplica    = NO
+      dumpfile.AveDurFull      = 1770
+      dumpfile.AveDurMod       = 2
+      dumpfile.BatchID         = 1
+      dumpfile.Brand           = "1"
+      dumpfile.ConfigParam     = ""
+      dumpfile.DecimalPoint    = "."
+      dumpfile.Description     = ""
+      dumpfile.DumpCharSet     = ""
+      dumpfile.DumpDelimiter   = "|"
+      dumpfile.DumpFormat      = "ASCII"
+      dumpfile.DumpID          = liid
+      dumpfile.DumpLineFeed    = ""
+      dumpfile.DumpName        = "PrepaidCompReport"
+      dumpfile.EmptyFile       = TRUE
+      dumpfile.EventLogFields  = ""
+      dumpfile.FileCategory    = "DWH"
+      dumpfile.FileName        = "#TENANT_cc_prepaid_comp_#DATE_#TIME.txt"
+      dumpfile.FullCollModule  = ""
+      dumpfile.LinkKey         = ""
+      dumpfile.LogFile         = ""
+      dumpfile.LogicModule     = "Gwy/ppcomprep_dump.p"
+      dumpfile.MainTable       = "PrepaidRequest"
+      dumpfile.ModCollModule   = ""
+      dumpfile.ModFromEventLog = TRUE
+      dumpfile.ModFromField    = "EventTS"
+      dumpfile.QueryClause     = ""
+      dumpfile.SideTables      = ""
+      dumpfile.SpoolDir        = "/store/riftp/dumpfiles/prepaidcomp/spool/"
+      dumpfile.TransDir        = "/store/riftp/dumpfiles/prepaidcomp/outgoing/"
+      dumpfile.UseIndex        = "".
+END.
+
+
 
 INPUT STREAM sin FROM VALUE("../tms_support/utilities/multitenant/dumpfiles_phase1.txt").
 

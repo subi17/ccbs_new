@@ -46,8 +46,9 @@ DEF BUFFER xxhighusage for highusage .
 {Func/cparam.i HighSpenderDirectory  return}.  xhighspenderDir = tmsparam.CharVal.
 
 ASSIGN 
-      tiednimi    = fCParam("CRONSPOOL","highspendnew.p") + "highspender_" + 
-         fConvertTenantToBrand(GET-EFFECTIVE-TENANT-NAME(LDBNAME(1))) + "_" + 
+      tiednimi    = fCParam("CRONSPOOL","highspendnew.p") +
+         CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+         "_highspender_" +
          REPLACE(STRING(YEAR(TODAY),"9999")  +
                  STRING(MONTH(TODAY),"99")   +
                  STRING(DAY(TODAY),"99")     +
