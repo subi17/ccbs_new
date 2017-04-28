@@ -167,7 +167,7 @@ PROCEDURE pInitialize:
       RUN StarEventInitialize(lhInvoice).
       RUN StarEventInitialize(lhPayment).
    END.
-
+ 
    ASSIGN
       lcLogFile  = fCParamC("IFSPaymStatusLog")
       lcTransDir = fCParamC("IFSPaymStatusLogTrans")
@@ -234,15 +234,15 @@ PROCEDURE pReadEvents:
          lcCompanyID    = SUBSTRING(lcReadLine,93,4)
          NO-ERROR.
       
-       /* MasMovil tenant External ID is 14 characters long and can
-          start with 0 value. That is why overwritten here. */
-       IF TENANT-ID(LDBNAME(1)) > 0 THEN
-         lcInvID        = SUBSTRING(lcReadLine,25,14).
- 
       IF ERROR-STATUS:ERROR THEN DO:
          fError("Invalid format").
          NEXT.
       END.
+
+       /* MasMovil tenant External ID is 14 characters long and can
+          start with 0 value. That is why overwritten here. */
+       IF TENANT-ID(LDBNAME(1)) > 0 THEN
+         lcInvID        = SUBSTRING(lcReadLine,25,14).
 
       FIND FIRST Customer WHERE Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Customer THEN DO:

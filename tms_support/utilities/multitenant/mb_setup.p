@@ -152,6 +152,12 @@ do i = 1 to 2:
    IF INDEX(TMSParam.charval,lcbrand) EQ 0 THEN
       TMSParam.charval = REPLACE(TMSParam.charval,"mobcdr",CAPS(lcbrand) + "_mobcdr").
 
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "IFS" AND
+              TMSParam.ParamCode EQ "IFSPaymStatusLog" NO-ERROR.
+   IF INDEX(TMSParam.charval,lcbrand) EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"spool/IFS","spool/" + CAPS(lcbrand) + "_IFS").
 
    FOR EACH BankAccount.
       IF i eq 1 THEN
