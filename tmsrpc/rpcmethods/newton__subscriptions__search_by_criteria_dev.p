@@ -78,6 +78,8 @@ DEF VAR plgOrderStatus     AS LOG  NO-UNDO.
 DEF VAR plgEligibleRenewal AS LOG  NO-UNDO INIT ?.
 DEF VAR ldtFirstDay        AS DATE NO-UNDO.
 
+DEF BUFFER bfMobSub FOR MobSub.
+
 ASSIGN ldtFirstDay = DATE(MONTH(ADD-INTERVAL(TODAY,-12,"months") + 1),
                         1,YEAR(ADD-INTERVAL(TODAY,-12,"months") + 1)).      
 
@@ -576,7 +578,22 @@ FOR EACH MobSub NO-LOCK WHERE
    END. /* DO liCount = 1 TO liNumberOfBundles: */
    
    /*Any Barrings Exist*/
-   IF plBarring AND fGetActiveBarrings(MobSub.MsSeq) EQ "" THEN NEXT EACH_MOBSUB.               
+   IF plBarring AND fGetActiveBarrings(MobSub.MsSeq) EQ "" THEN 
+      NEXT EACH_MOBSUB.
+
+   IF CAN-FIND(FIRST Order WHERE Order.MsSeq = MobSub.MsSeq AND
+                                 Order.OrderChannel = "VIP") THEN
+      NEXT EACH_MOBSUB.
+
+   FOR EACH bfMobSub WHERE bfMobSub.Brand = "1" AND
+                           bfMobsub.CustNum = MobSub.CustNum NO-LOCK:
+      IF CAN-FIND(FIRST CLIType WHERE CLIType.Brand = MobSub.Brand AND 
+                                      CLIType.CliType = bfMobSub.CliTYpe AND
+                                      (CLIType.WebStatusCode = 0 OR
+                                       CLIType.StatusCode = 0)) THEN
+         NEXT EACH_MOBSUB.                              
+                           
+   END.                        
  
       /* Count number of subscriptions */
    IF liNumberOfSubs <= piOffset AND piOffset > 0 THEN DO:
