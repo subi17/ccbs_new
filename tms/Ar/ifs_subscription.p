@@ -543,7 +543,7 @@ PROCEDURE pWrite2File:
       /* 21 */ STRING(SUBS_STATUS,"X(15)")
       /* 22 */ FILL(" ",1)
       /* 23 */ STRING(TERM_REASON,"X(50)") 
-      /* 24 */ fgetCompanyId() 
+      /* 24 */ STRING(fgetCompanyId(),"X(4)")
       SKIP.
 
 END PROCEDURE.  /* pWrite2File */
