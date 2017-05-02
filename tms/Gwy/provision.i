@@ -4,8 +4,8 @@
 
 &GLOBAL-DEFINE PROVISION_I YES
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER provSolog     FOR Solog.
 DEF BUFFER provMobsub    FOR Mobsub.
@@ -44,7 +44,7 @@ function fMakeCommLine returns CHAR
       lhMobSub = BUFFER provMobsub:HANDLE.
       FIND FIRST provMobsub NO-LOCK WHERE
                  provMobsub.MSSeq = ProvSolog.MSSeq AND
-                 provMobsub.MsStatus NE {&MSSTATUS_FIXED_PROV_ONG} NO-ERROR.
+                 provMobsub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} NO-ERROR.
    END. /* ELSE DO: */
 
    IF lhMobSub:AVAILABLE THEN
@@ -221,7 +221,7 @@ function fMakeCommLine2 returns CHAR
 
    FIND FIRST provMobsub NO-LOCK WHERE
               provMobsub.MSSeq = ProvSolog.MSSeq AND
-              provMobsub.MsStatus NE {&MSSTATUS_FIXED_PROV_ONG} NO-ERROR.
+              provMobsub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} NO-ERROR.
    IF AVAILABLE provMobsub THEN
       lhMobSub = BUFFER provMobsub:HANDLE.
    ELSE DO:

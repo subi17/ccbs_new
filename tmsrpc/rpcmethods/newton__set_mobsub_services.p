@@ -14,14 +14,14 @@
  *
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
-{fmakemsreq.i}
-{subser.i}
-{barrfunc.i}
-{fbundle.i}
-{service.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Mm/subser.i}
+{Func/barrfunc.i}
+{Mm/fbundle.i}
+{Func/service.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -120,7 +120,8 @@ ELSE
    cCheckMsBarringKatun = "NewtonCC". 
 /*YPR-4773*/
 /*Activation is not allowed if fixed line provisioning is pending*/
-IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN  
+IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR 
+    MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN  
    RETURN appl_err("Mobile line provisioning is not complete").
 
 

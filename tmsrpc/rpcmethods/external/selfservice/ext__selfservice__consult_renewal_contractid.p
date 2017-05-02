@@ -22,17 +22,17 @@
 
 {xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
        gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
-{forderstamp.i}
-{fgettxt.i}
-{fmakesms.i}
-{smsmessage.i}
-{fmakemsreq.i}
-{fexternalapi.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/forderstamp.i}
+{Func/fgettxt.i}
+{Func/fmakesms.i}
+{Func/smsmessage.i}
+{Func/fmakemsreq.i}
+{Func/fexternalapi.i}
 
 DEFINE VARIABLE pcTransId               AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcCLI                   AS CHARACTER NO-UNDO.
@@ -78,6 +78,7 @@ katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 IF LOOKUP(pcDelType,"SMS") = 0 THEN
    RETURN appl_err("Invalid Delivery Type").
 
+/* Renewal should be allowed only for mobile subscriptions */ 
 IF LENGTH(pcCLI) <> 9 OR
    NOT (pcCLI BEGINS "6" OR pcCLI BEGINS "7") THEN
    /*Incorrect format*/

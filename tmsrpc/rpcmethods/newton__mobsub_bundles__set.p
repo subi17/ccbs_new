@@ -15,17 +15,17 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{mdub.i}
-{tmsconst.i}
-{cparam2.i}
-{upsellbundle.i}
-{date.i}
-{msreqfunc.i}
-{fsendsms.i}
-{fdss.i}
-{fprepaidfee.i}
+{Func/mdub.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/upsellbundle.i}
+{Func/date.i}
+{Func/msreqfunc.i}
+{Func/fsendsms.i}
+{Func/fdss.i}
+{Func/fprepaidfee.i}
 
 DEF VAR liRequest              AS INT  NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
@@ -268,7 +268,8 @@ IF NOT AVAIL MobSub THEN RETURN appl_err("MobSub not found").
 
 /*YPR-4775*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
-IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
+IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR
+    MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN
    RETURN appl_err("Mobile line provisioning is not complete").
 
 

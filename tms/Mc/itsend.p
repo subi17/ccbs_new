@@ -9,10 +9,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{email.i}
-{tmsparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/email.i}
+{Func/tmsparam2.i}
+{Func/timestamp.i}
 
 DEF TEMP-TABLE ttCust NO-UNDO
    FIELD CustNum AS INT. 

@@ -11,9 +11,9 @@
   Version ......: M15
   ----------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
-{fecgtask.i}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Func/fecgtask.i}
 
 DEF INPUT PARAMETER CustGroup LIKE CustGroup.CustGroup NO-UNDO.
 
@@ -44,7 +44,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCGMember AS HANDLE NO-UNDO.
    lhCGMember = BUFFER CGMember:HANDLE.
@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhCGMember).
+      RUN Mc/eventview2.p(lhCGMember).
    END.
 END.
 
@@ -94,7 +94,7 @@ mess[1] = "This customer has:".
 mess[4] = "where starting Amount is allowed.".
 mess[5] = "This overrides all those settings.".
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc. view FRAME sel.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
 
 
 FIND FIRST Customer  USE-INDEX CustNum  WHERE Customer.Brand = gcBrand 
@@ -160,15 +160,15 @@ print-line:
     ASSIGN
     ufk[1]= 707 ufk[2]= 708 ufk[3]= 30 ufk[4]= 0
     ufk[5]= 515 ufk[6]= 0   ufk[7]= 726 ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.  RUN ufkey.
+    ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause. IF order = 1 THEN
-    CHOOSE ROW Customer.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Customer.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
-    CHOOSE ROW Customer.SearchName ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Customer.SearchName {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 3 THEN
-    CHOOSE ROW Customer.CustName ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Customer.CustName {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc)
       Customer.CustNum Customer.SearchName Customer.CustName
       WITH FRAME sel.
@@ -303,8 +303,8 @@ print-line:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-   cfc = "puyr". RUN ufcolor.
-   CustNum = 0. ehto = 9. RUN ufkey. ufkey = TRUE.
+   cfc = "puyr". RUN Syst/ufcolor.p.
+   CustNum = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustNum WITH FRAME hayr.
    HIDE FRAME hayr no-pause.
    IF CustNum <> 0 THEN DO:
@@ -323,8 +323,8 @@ print-line:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-   cfc = "puyr". run ufcolor. SearchName = "".
-   ehto = 9. RUN ufkey. ufkey = TRUE.
+   cfc = "puyr". RUN Syst/ufcolor.p. SearchName = "".
+   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE SearchName WITH FRAME hayr3.
    HIDE FRAME hayr3 no-pause.
    if SearchName <> "" THEN DO:
@@ -343,8 +343,8 @@ print-line:
 
      /* Haku sarakk. 3 */
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-   cfc = "puyr". run ufcolor. CustName = "".
-   ehto = 9. RUN ufkey. ufkey = TRUE.
+   cfc = "puyr". RUN Syst/ufcolor.p. CustName = "".
+   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustName WITH FRAME hayr2.
    HIDE FRAME hayr2 no-pause.
    if CustName <> "" THEN DO:
@@ -370,13 +370,13 @@ print-line:
            ehto  = 1
            ufk[1] = 1883 ufk[2] = 1888 
            ufk[4] = 0 ufk[5]= 0 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8.
-        run ufkey.   
+        RUN Syst/ufkey.p.   
 
         IF toimi = 8 THEN NEXT BROWSE.
 
-        IF toimi = 1 THEN RUN commontt(Customer.CustNum).
+        IF toimi = 1 THEN RUN Mc/commontt.p(Customer.CustNum).
 
-        IF toimi = 2 THEN RUN mobilett(Customer.CustNum).
+        IF toimi = 2 THEN RUN Mc/mobilett.p(Customer.CustNum).
 
      END.
 

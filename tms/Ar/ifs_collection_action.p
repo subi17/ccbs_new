@@ -7,12 +7,12 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{barrfunc.i}
-{transname.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/barrfunc.i}
+{Func/transname.i}
 
 DEF INPUT  PARAMETER icFile   AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiRead   AS INT  NO-UNDO. 
@@ -317,7 +317,8 @@ PROCEDURE pSetBarring:
    FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MobSub THEN 
       RETURN "ERROR:Subscription not found".
-  
+   ELSE IF MobSub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
+      RETURN "ERROR:Not allowed for fixed only".
    ASSIGN
       /* check current barring (or pending) */
       llOngoing  = fCheckBarrStatus(iiMsSeq, OUTPUT lcResult, OUTPUT lrIdle )
@@ -364,7 +365,7 @@ PROCEDURE pSetBarring:
    END.
      
    /* create barring request */
-   RUN barrengine.p(iiMsSeq,
+   RUN Mm/barrengine.p(iiMsSeq,
                    icBarrCommand,
                    "9",                /* source  */
                    "Collection",       /* creator */

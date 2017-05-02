@@ -8,8 +8,8 @@
   --------------------------------------------------------------------------- */
 
 
-{commpaa.i}     gcBrand = "1" . katun = "Order".
-{heartbeat.i}
+{Syst/commpaa.i}     gcBrand = "1" . katun = "Order".
+{Func/heartbeat.i}
 
 DEFINE VARIABLE liLoop     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldToday    AS DATE      NO-UNDO.
@@ -47,7 +47,7 @@ DO WHILE TRUE :
    WITH FRAME frmLog.
    PAUSE 0.
 
-   RUN ordersender(0,
+   RUN Gwy/ordersender.p(0,
                    OUTPUT liAmount).
 
    liOrders = liOrders + liAmount.

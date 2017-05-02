@@ -8,9 +8,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/timestamp.i}
 
 DEFINE INPUT  PARAMETER icDumpID      AS INTEGER   NO-UNDO.
 DEFINE INPUT  PARAMETER icFile        AS CHARACTER NO-UNDO.
@@ -65,6 +65,10 @@ FUNCTION fCollectEvent RETURNS LOGICAL
       liEntries   = NUM-ENTRIES(EventLog.Memo,lc255).
 
    CASE liEntries:
+
+      WHEN 2 THEN ASSIGN
+         lcAction   = ENTRY(1,EventLog.Memo,lc255) 
+         lcChannel  = ENTRY(2,EventLog.Memo,lc255).          
       WHEN 4 THEN ASSIGN
          lcAction   = ENTRY(1,EventLog.Memo,lc255)
          lcOrderId  = ENTRY(3,EventLog.Memo,lc255)
@@ -140,7 +144,8 @@ IF icDumpMode = "Full" THEN DO:
          WHEN "Customer" THEN DO:
             IF NOT (EventLog.Memo BEGINS "Order" OR
                     EventLog.Memo BEGINS "ACC"   OR
-                    EventLog.Memo BEGINS "STC") THEN NEXT.
+                    EventLog.Memo BEGINS "STC"   OR 
+                    EventLog.Memo BEGINS "Agent") THEN NEXT.
             lcCustNum = EventLog.Key. 
             IF lcCustNum NE "" THEN fCollectEvent(lcCustNum,"Customer").
          END.
@@ -165,7 +170,8 @@ ELSE DO: /* Modified */
          WHEN "Customer" THEN DO:
             IF NOT (EventLog.Memo BEGINS "Order" OR
                     EventLog.Memo BEGINS "ACC"   OR
-                    EventLog.Memo BEGINS "STC") THEN NEXT.
+                    EventLog.Memo BEGINS "STC"   OR 
+                    EventLog.Memo BEGINS "Agent") THEN NEXT.
             lcCustNum = EventLog.Key. 
             IF lcCustNum NE "" THEN fCollectEvent(lcCustNum,"Customer").
          END.
@@ -183,3 +189,5 @@ IF NOT SESSION:BATCH THEN
  
 OUTPUT STREAM sFile CLOSE.
 SESSION:NUMERIC-FORMAT = lcNumeric.
+
+

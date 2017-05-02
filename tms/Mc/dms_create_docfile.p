@@ -10,12 +10,12 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
-{offer.i}
-{dms.i}
-{q25functions.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Mc/offer.i}
+{Func/dms.i}
+{Func/q25functions.i}
 
 DEF INPUT PARAMETER icCases AS CHAR. /*List of reported cases*/
 DEF INPUT PARAMETER idPeriodStart AS DEC. /*reporting period strat*/
@@ -123,7 +123,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
             FIND FIRST ttOrderList WHERE
                        ttOrderList.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
             IF AVAIL ttOrderList THEN NEXT.
-            FIND FIRST Order WHERE
+            FIND FIRST Order NO-LOCK WHERE
                        Order.Brand EQ gcBrand AND
                        Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
             IF NOT AVAIL Order THEN NEXT.
@@ -731,6 +731,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    DEF VAR liPermancyLength AS INT NO-UNDO.
    DEF VAR lcErr AS CHAR NO-UNDO.
    DEF VAR lcMsg AS CHAR NO-UNDO.
+   DEFINE VARIABLE lcKialaCode AS CHARACTER NO-UNDO.
 
    DEF BUFFER DeliveryCustomer FOR OrderCustomer.
 
@@ -754,12 +755,14 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    FIND FIRST DeliveryCustomer NO-LOCK  WHERE
               DeliveryCustomer.Brand EQ gcBrand AND
               DeliveryCustomer.OrderID EQ iiOrderID AND
-              DeliveryCustomer.RowType EQ 4 NO-ERROR.
+              DeliveryCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-ERROR.
    IF AVAIL DeliveryCustomer THEN DO:
       ASSIGN
          lcDeliveryAddress = DeliveryCustomer.Address
          lcDeliveryZIP = DeliveryCustomer.ZipCode
-         lcDeliveryPost = DeliveryCustomer.PostOffice.
+         lcDeliveryPost = DeliveryCustomer.PostOffice
+         lcKialaCode    = DeliveryCustomer.KialaCode WHEN Order.DeliveryType = {&ORDER_DELTYPE_POS}
+         .
    END.
    ELSE DO:
       ASSIGN
@@ -775,7 +778,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                                               OUTPUT ldeMonthlyFee,
                                               OUTPUT liMonths,
                                               OUTPUT ldeFinalFee).
-   RUN offer_penaltyfee.p(Order.OrderID,
+   RUN Mc/offer_penaltyfee.p(Order.OrderID,
                           OUTPUT liPermancyLength,
                           OUTPUT ldePermanencyAmount).
    lcCaseFileRow =
@@ -841,7 +844,13 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    /*Model Type: Sony Xperia Z3 Blanco*/
    STRING(lcModel)                   + lcDelim +   
    /*ROI Risk: R11A;C--;S.;RSVODAFONE::02/11/2009::383::1;Z03011*/
-   STRING(Order.RiskCode).
+   STRING(Order.RiskCode)            + lcDelim +
+   ( IF Order.DeliverySecure EQ 1
+     THEN STRING({&ORDER_DELTYPE_POST_SECURE})
+     ELSE IF Order.DeliverySecure EQ 2
+     THEN STRING({&ORDER_DELTYPE_POS_SECURE})
+     ELSE STRING(Order.DeliveryType) ) + lcDelim +
+   lcKialaCode.
    
    /*Solve tmsparam value for getting correct matrix row*/
    lcRequiredDocs = fNeededDocs(BUFFER Order).
@@ -903,6 +912,9 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    DEF VAR liPermancyLength AS INT.
    DEF VAR lcErr AS CHAR NO-UNDO.
    DEF VAR lcMsg AS CHAR NO-UNDO.
+   DEFINE VARIABLE lcKialaCode AS CHARACTER NO-UNDO.
+
+   DEF BUFFER DeliveryCustomer FOR OrderCustomer.
 
    ASSIGN
       lcCaseTypeId      = "3".
@@ -915,9 +927,20 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    FIND FIRST OrderCustomer NO-LOCK  WHERE
               OrderCustomer.Brand EQ gcBrand  AND  
               OrderCustomer.OrderID EQ iiOrderID AND
-              OrderCustomer.RowType = 1 NO-ERROR.
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN 
       RETURN "3:Ordercustomer not available" + STRING(iiOrderId).
+
+   IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+   THEN DO:
+      /*Get delivery address if it is available*/
+      FIND FIRST DeliveryCustomer NO-LOCK  WHERE
+                 DeliveryCustomer.Brand EQ gcBrand AND
+                 DeliveryCustomer.OrderID EQ iiOrderID AND
+                 DeliveryCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-ERROR.
+      IF AVAIL DeliveryCustomer
+      THEN lcKialaCode = DeliveryCustomer.KialaCode.
+   END.
 
    lcModel = fGetTerminalData(Order.OrderId).
 
@@ -930,7 +953,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                                               OUTPUT ldeMonthlyFee, 
                                               OUTPUT liMonths, /*24*/
                                               OUTPUT ldeFinalFee). /*residual*/
-   RUN offer_penaltyfee.p(Order.OrderID,
+   RUN Mc/offer_penaltyfee.p(Order.OrderID,
                           OUTPUT liPermancyLength,
                           OUTPUT ldePermanencyAmount).
    lcCaseFileRow =
@@ -990,7 +1013,13 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    /*Model Type: Samsung Galaxy S6 Edge Negro*/
    STRING(lcModel)   + lcDelim +
    /*Roi Risk: <Blank>*/
-   STRING(Order.RiskCode).
+   STRING(Order.RiskCode) + lcDelim +
+   ( IF Order.DeliverySecure EQ 1
+     THEN STRING({&ORDER_DELTYPE_POST_SECURE})
+     ELSE IF Order.DeliverySecure EQ 2
+     THEN STRING({&ORDER_DELTYPE_POS_SECURE})
+     ELSE STRING(Order.DeliveryType) ) + lcDelim +
+   lcKialaCode.
    
    /*solve needed documents:*/
    lcRequiredDocs =  fNeededDocs(BUFFER Order).
@@ -1004,7 +1033,6 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
       IF liCount NE NUM-ENTRIES(lcRequiredDocs)
          THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
    END.
-
 
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
@@ -1029,7 +1057,6 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                                    "create_cf",
                                    lcMsg).
    fLogMsg("Msg,3 : " + lcMsg + " #Status: " + lcErr).
-
 
    RETURN "".
 
@@ -1253,6 +1280,9 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    DEF VAR lcStatusDesc    AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
+   DEFINE VARIABLE lcKialaCode AS CHARACTER NO-UNDO.
+
+   DEF BUFFER DeliveryCustomer FOR OrderCustomer.
 
    lcCaseTypeId    = "5".
 
@@ -1261,6 +1291,17 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
               Order.OrderID EQ iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN 
       RETURN "5:Order not available" + STRING(iiOrderId).
+
+   IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+   THEN DO:
+      /*Get delivery address if it is available*/
+      FIND FIRST DeliveryCustomer NO-LOCK  WHERE
+                 DeliveryCustomer.Brand EQ gcBrand AND
+                 DeliveryCustomer.OrderID EQ iiOrderID AND
+                 DeliveryCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-ERROR.
+      IF AVAIL DeliveryCustomer
+      THEN lcKialaCode = DeliveryCustomer.KialaCode.
+   END.
 
    lcCaseFileRow =
    lcCaseTypeID                    + lcDelim +
@@ -1283,7 +1324,14 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    /*Segment*/
    fGetSegment(Order.OrderID)     + lcDelim +
    /*Terminal type*/
-   fGetTerminalFinanceType(iiOrderId).
+   fGetTerminalFinanceType(iiOrderId) + lcDelim +
+   ( IF Order.DeliverySecure EQ 1
+     THEN STRING({&ORDER_DELTYPE_POST_SECURE})
+     ELSE IF Order.DeliverySecure EQ 2
+     THEN STRING({&ORDER_DELTYPE_POS_SECURE})
+     ELSE STRING(Order.DeliveryType) ) + lcDelim +
+   lcKialaCode.
+
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = "".
 

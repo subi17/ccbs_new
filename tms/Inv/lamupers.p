@@ -3,35 +3,35 @@
 */
 &GLOBAL-DEFINE EDRHandling NO
 
-{commali.i}                                                                   
-{tmsconst.i}
-{fixedfee.i}
-{cparam2.i}
-{timestamp.i}
-{fapvat.i}
-{billrund.i {1}}
-{fcustbal.i}
-{fcustcnt.i}
-{nncoit2.i}
-{fcurrency.i}
-{eventval.i}
-{fduedate.i}
-{fsubser.i}
-{eventlog.i}
-{finvnum.i}
-{ftaxdata.i}
-{log.i}
-{finvoiceacc.i}
-{funcrunprocess_update.i}
-{rerate_request.i}
-{lamupers_temptable.i}
-{invrowcounter_move.i}
-{old_unbilled_events.i}
-{eventval.i}
+{Syst/commali.i}                                                                   
+{Syst/tmsconst.i}
+{Func/fixedfee.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fapvat.i}
+{Inv/billrund.i {1}}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/nncoit2.i}
+{Func/fcurrency.i}
+{Syst/eventval.i}
+{Func/fduedate.i}
+{Func/fsubser.i}
+{Syst/eventlog.i}
+{Func/finvnum.i}
+{Func/ftaxdata.i}
+{Func/log.i}
+{Func/finvoiceacc.i}
+{Syst/funcrunprocess_update.i}
+{Rate/rerate_request.i}
+{Inv/lamupers_temptable.i}
+{Inv/invrowcounter_move.i}
+{Inv/old_unbilled_events.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
    lhSingleFee = BUFFER SingleFee:HANDLE.
@@ -43,15 +43,15 @@ DEF VAR fhVDHandle AS HANDLE  NO-UNDO.
 /* volume discount functions */
 FUNCTION fVolDiscMob RETURNS LOG (BUFFER VMobCDR FOR MobCDR,iiAgrCust AS INT) 
    IN fhVDHandle. 
-RUN voldisc.p PERSISTENT SET fhVDHandle. 
+RUN Inv/voldisc.p PERSISTENT SET fhVDHandle. 
 
 &IF "{&EDRHandling}" NE "NO"
 &THEN
 DEF VAR fhDCHandle AS HANDLE  NO-UNDO.
 DEF VAR fhRRHandle AS HANDLE  NO-UNDO.
 
-RUN domcopers.p  PERSISTENT SET fhDCHandle.
-RUN cust_ratep.p PERSISTENT SET fhRRHandle.
+RUN Mm/domcopers.p  PERSISTENT SET fhDCHandle.
+RUN Rate/cust_ratep.p PERSISTENT SET fhRRHandle.
 
 &ENDIF
 &ENDIF
@@ -166,7 +166,7 @@ DEF TEMP-TABLE ttRowVat NO-UNDO
 DEF BUFFER bttIR  FOR ttIR.
 DEF BUFFER bttCLI FOR ttCLI.
 
-DEF TEMP-TABLE ttInvoiceItem
+DEF TEMP-TABLE ttInvoiceItem NO-UNDO
    FIELD tType  AS INT
    FIELD MsSeq  AS INT
    FIELD tRecId AS RECID
@@ -255,7 +255,7 @@ IF lcMinConsFatime > "" THEN DO:
    lcMinConsFatimeBillCode = SUBSTRING(lcMinConsFatimeBillCode,2).
 END.
 
-{cparam2.i}
+{Func/cparam2.i}
 IF AdvPaymAcc = 0 THEN AdvPaymAcc = OverPayAcc. 
 IF lcNoMinCons = ? THEN lcNoMinCons = "".
 IF lcMinConsFatime = ? THEN lcMinConsFatime = "".
@@ -1462,7 +1462,7 @@ PROCEDURE pCreateInv:
       IF llRunSpecFee AND
          CAN-FIND(FIRST ttIR) AND NOT llCashInvoice THEN 
       DO liCnt = 1 TO LENGTH(bCustomer.RepCodes):
-         RUN creasfee.p (bCustomer.CustNum,
+         RUN Mc/creasfee.p (bCustomer.CustNum,
                          0,
                          idaToDate,
                          "InvSpec",
@@ -1521,7 +1521,7 @@ PROCEDURE pCreateInv:
                
                IF lcMobRep > "" THEN 
                DO liCnt = 1 TO LENGTH(lcMobRep):
-                  RUN creasfee.p (MsOwner.CustNum,
+                  RUN Mc/creasfee.p (MsOwner.CustNum,
                                   MsOwner.MSSeq,
                                   idaToDate,
                                   "CLISpec",
@@ -1928,7 +1928,7 @@ PROCEDURE pCancel:
 
    FOR EACH ttNewInv:
 
-      RUN del_inv.p (ttNewInv.InvNum). 
+      RUN Inv/del_inv.p (ttNewInv.InvNum). 
 
       /* no need to save eventlog to db */
       FOR EACH EventLog EXCLUSIVE-LOCK WHERE
@@ -3646,7 +3646,7 @@ PROCEDURE pInvoiceHeader:
                lcFixedNumber = MsOwner.FixedNumber
                liUserCust    = MsOwner.CustNum.
          END.
- 
+
          IF ttRowVat.ITGDeltype EQ {&INV_DEL_TYPE_FUSION_EMAIL} OR
             ttRowVat.ITGDeltype EQ {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} THEN
             lcFixedNumber = "".
@@ -3702,7 +3702,16 @@ PROCEDURE pInvoiceHeader:
             ttSubInv.CustNum      = liUserCust
             ttSubInv.VatPos       = 0.
       END.
-            
+
+      /* For partially terminated use billing period ttRowVat.CLI 
+         if there were events with mobile number */
+      IF AVAIL ttSubInv AND
+               ttSubInv.CLI EQ ttSubInv.FixedNumber AND
+              (ttRowVat.CLI BEGINS "6" OR
+               ttRowVat.CLI BEGINS "7") AND
+               ttRowVat.MsSeq EQ ttSubInv.MsSeq THEN
+         ASSIGN ttSubInv.CLI = ttRowVat.CLI.
+
       ASSIGN 
          ttRowVat.SubInvNum = liSubInv
          ttRowVat.ITGroupID = liITGroupID.
@@ -4619,7 +4628,7 @@ PROCEDURE pInvoiceHeader:
 
       /* write payment */
       IF lcPaymSrc > "" THEN DO:
-         RUN makepaym.p(BUFFER Invoice,
+         RUN Ar/makepaym.p(BUFFER Invoice,
                         Invoice.InvAmt,
                         Invoice.InvDate,
                         liPaymAcc,
@@ -4971,18 +4980,18 @@ PROCEDURE pRatingQueues:
    
       IF lcParamList > "" THEN DO:
          THIS-PROCEDURE:PRIVATE-DATA = "TMQueue_Param:" + lcParamList.
-         RUN tmqueue_analysis.p.
+         RUN Rate/tmqueue_analysis.p.
       END.   
    END.
 
    WHEN "TriggerRate" THEN DO:
       THIS-PROCEDURE:PRIVATE-DATA = "TriggerRate_Param:" + STRING(iiInvCust).
-      RUN triggerrate.p(0,0,OUTPUT liDone).
+      RUN Rate/triggerrate.p(0,0,OUTPUT liDone).
    END.
 
    WHEN "RerateRequest" THEN DO:
       THIS-PROCEDURE:PRIVATE-DATA = "Rerate_Param:" + STRING(iiInvCust).
-      RUN rerate_request.p(-1).
+      RUN Rate/rerate_request.p(-1).
    END.
    
    END CASE.

@@ -6,12 +6,12 @@
   CREATED ......: 24.06.14
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{tmsconst.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 DEFINE TEMP-TABLE ttDelivery NO-UNDO
    FIELD LoStatus AS INTEGER
@@ -57,7 +57,7 @@ FUNCTION fPopulateTTDelivery RETURNS LOGICAL
       IF LOOKUP(STRING(OrderDelivery.LoStatusId), {&DEXTRA_CANCELLED_STATUSES}) > 0
       THEN RETURN FALSE.
 
-      IF LOOKUP(STRING(OrderDelivery.LoStatusId), "8,12,100,900,3000,3100,3350,4000,4030") = 0
+      IF LOOKUP(STRING(OrderDelivery.LoStatusId), "8,12,19,100,110,125,241,900,3000,3001,3100,3101,3350,3351,4000,4030") = 0
       THEN NEXT.
 
       FIND ttDelivery WHERE ttDelivery.LoStatus = OrderDelivery.LoStatusId NO-ERROR.
@@ -70,7 +70,8 @@ FUNCTION fPopulateTTDelivery RETURNS LOGICAL
             .
 
         IF OrderDelivery.LoStatusId = 8 OR
-           (OrderDelivery.LoStatusId = 12 AND fGetDStamp(8) EQ ?)
+           ((OrderDelivery.LoStatusId = 12 OR 
+           OrderDelivery.LoStatusId = 125) AND fGetDStamp(8) EQ ?)
         THEN RETURN TRUE.
       END.
    END.
@@ -107,7 +108,7 @@ FUNCTION fCancelOrder RETURNS LOGICAL
       RETURN FALSE.
    END.
 
-   RUN cancelorder.p(iiOrderId,FALSE).
+   RUN Mc/cancelorder.p(iiOrderId,FALSE).
    fLogToFile("CANCELLED").
 
    IF NOT ilCheckActionLog
@@ -174,12 +175,28 @@ FUNCTION fGetTFStatus RETURNS CHARACTER
       END CASE.
    END.
 
-   ELSE IF fGetDStamp(12) < DATETIME(TODAY - 20,0)
+   ELSE IF (fGetDStamp(12) < DATETIME(TODAY - 20,0) OR
+            fGetDStamp(125) < DATETIME(TODAY - 20,0))
    THEN DO:
       fCancelOrder(iiOrderId, TRUE).
       RETURN "".
    END.
-
+   ELSE IF fGetDStamp(19) NE ? THEN DO:
+      ldtStamp = fGetDStamp(110).
+      IF ldtStamp NE ?
+      THEN
+      CASE fNextLoStatus(INPUT ldtStamp):
+         WHEN 3001 OR
+         WHEN 3101 OR
+         WHEN 3351 OR
+         WHEN 241
+         THEN DO:
+            fCancelOrder(iiOrderId, TRUE).
+            RETURN "".
+         END.   
+      END CASE.
+   END.
+   
    RETURN lcTFStatus.
 
 END FUNCTION.
@@ -215,7 +232,7 @@ FOR EACH Order NO-LOCK WHERE
       IF FIRST-OF(OrderDelivery.OrderId) AND
          OrderDelivery.LoStatusId EQ 8 AND
          OrderDelivery.LoTimeStamp < DATETIME(TODAY - 14,0) THEN DO:
-         RUN orderhold.p(Order.OrderId, "RELEASE_BATCH").
+         RUN Mc/orderhold.p(Order.OrderId, "RELEASE_BATCH").
          fLogToFile("RELEASED: delayed activation, delivered to customer more than 14 days ago").
          NEXT ORDER_LOOP.
       END.
@@ -223,13 +240,15 @@ FOR EACH Order NO-LOCK WHERE
       IF LOOKUP(STRING(OrderDelivery.LoStatusId),
          {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN NEXT ORDER_LOOP.
       
-      IF LOOKUP(STRING(OrderDelivery.LoStatusId),"8,12,100") = 0 THEN NEXT.
+      IF LOOKUP(STRING(OrderDelivery.LoStatusId),"8,12,19,100,125") = 0 THEN 
+         NEXT.
 
-      IF OrderDelivery.LoStatusId = 12 AND
+      IF (OrderDelivery.LoStatusId = 12 OR OrderDelivery.LoStatusId = 125) AND
          OrderDelivery.LoTimeStamp < DATETIME(TODAY - 20,0) THEN DO:
-         RUN closeorder.p(Order.OrderId, TRUE).
-         fLogToFile("CLOSED (no final status for 12 status after 20 days):"
-                     + STRING(RETURN-VALUE)).
+         RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         fLogToFile("CLOSED (no final status for " + 
+         STRING(OrderDelivery.LoStatusId) + " status after 20 days):" + 
+         STRING(RETURN-VALUE)).
       END.
 
       LEAVE.

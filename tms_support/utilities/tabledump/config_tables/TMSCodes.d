@@ -714,6 +714,8 @@
 "MFCodeToCLIType" "CLIType" "Bundles" "FLATMF30" "MFBillCode To CLIType Conversion" "" "CONTF30" 1
 "MFCodeToCLIType" "CLIType" "Bundles" "FLATMF40" "MFBillCode To CLIType Conversion" "" "CONTF40" 1
 "MFCodeToCLIType" "CLIType" "Bundles" "FLATMF55" "MFBillCode To CLIType Conversion" "" "CONTF55" 1
+"MNPCal" "DeliveryType" "MNP" "0" "DEFAULT" "" "" 1
+"MNPCal" "DeliveryType" "MNP" "6" "Delivery to POS" "" "" 1
 "MNPCal" "MessageType" "MNP" "ACON" "" "" "" 1
 "MNPCal" "MessageType" "MNP" "AENV" "" "" "" 1
 "MNPCal" "MessageType" "MNP" "APOR" "" "" "" 1
@@ -973,6 +975,7 @@
 "Order" "DeliveryType" "Orders" "2" "Kiala" "" "" 1
 "Order" "DeliveryType" "Orders" "3" "Post office secure" "" "" 1
 "Order" "DeliveryType" "Orders" "4" "Post office" "" "" 1
+"Order" "DeliveryType" "Orders" "5" "Delivery to POS secure" "" "" 1
 "order" "mnpstatus" "mnp" "1" "new" "" "" 1
 "order" "MNPStatus" "mnp" "10" "Done" "" "" 1
 "order" "MNPStatus" "MNP" "5" "contract" "" "" 1
@@ -1256,7 +1259,7 @@
 "PrepEDR" "ErrorCode" "EDR" "5006" "Service class mismatch" "" "" 1
 "PrepEDR" "ErrorCode" "EDR" "7002" "Invalid date or time" "" "" 1
 "Provisioning" "" "UI_Maint" "Left" "" "" "Enable/Disable solog handling" 1
-"Provisioning" "provmaint" "UI_Maint" "Top" "Turn on/off provisioning" "" "Notify backend of this incident via e-mail" 1
+"Provisioning" "Mc/provmaint.p" "UI_Maint" "Top" "Turn on/off provisioning" "" "Notify backend of this incident via e-mail" 1
 "ProvMaintBreak" "TimeFrom" "Maint" "0" "Provisioning maintenance break starting time" "" "" 1
 "ProvMaintBreak" "TimeTo" "Maint" "0" "Provisioning maintenance break ending time" "" "" 1
 "ReportConfRow" "RowType" "Reports" "ErrorCode" "Error codes" "" "" 1
@@ -1368,6 +1371,7 @@
 "RoamTariff" "Service" "Roaming" "GPRS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "SMS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "VOICE" "" "" "" 1
+"Salesman" "SmPrefix" "IFS" "AB" "B12 CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AF" "AMPLIFFICA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AK" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AL" "Alcampo" "" "13" 0
@@ -1390,6 +1394,7 @@
 "Salesman" "SmPrefix" "IFS" "CT" "CASTURTEL EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "DX" "Dextra" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "EM" "" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "EO" "CELLCOM EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EU" "Emision Unisono" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "GE" "GSS EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GR" "GSS RECEPCION" "" "15" 1
@@ -1398,6 +1403,7 @@
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MD" "Mundo Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "MG" "MGM" "" "14" 0
+"Salesman" "SmPrefix" "IFS" "MK" "MARKTEL CROSS-SELL" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MM" "Media Markt" "" "18" 0
 "Salesman" "SmPrefix" "IFS" "PE" "Phone House Televenta Emision" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PH" "The Phone House" "" "11" 0

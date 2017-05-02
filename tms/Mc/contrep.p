@@ -8,8 +8,8 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i}
+{Syst/commali.i}
+{Syst/utumaa.i}
 
 DEF INPUT PARAMETER icInvGrp1    AS CHAR  NO-UNDO. 
 DEF INPUT PARAMETER icInvGrp2    AS CHAR  NO-UNDO. 
@@ -81,7 +81,7 @@ FUNCTION fCheckPage RETURNS LOGIC
     (iAddLine AS INT).
 
     if rl + iAddLine >= skayt1 then do:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         assign rlx = 0
                sl = sl + 1.
         view stream tul frame sivuotsi.  
@@ -231,5 +231,5 @@ BY Contract.ToDate DESC:
 
 END.
 
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 

@@ -2,11 +2,11 @@
 /* Simulate Credit Scoring  Response XML */
 
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 gcBrand = "1".
 
-{xmlfunction.i}
+{Func/xmlfunction.i}
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
 IMPORT lcHostName.

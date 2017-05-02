@@ -10,12 +10,12 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{accexcel.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Func/accexcel.i}
+{Func/fcustbal.i}
 
 /* print-linemuuttujat */
-{utumaa.i}
+{Syst/utumaa.i}
 
 DEF INPUT PARAMETER iInvGrp1    AS CHAR  NO-UNDO.
 DEF INPUT PARAMETER iInvGrp2    AS CHAR  NO-UNDO.
@@ -74,7 +74,7 @@ FUNCTION CheckPage RETURNS LOGIC
     (iAddLine AS INT).
 
     IF rl >= skayt1 - iAddLine THEN DO:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         ASSIGN rlx = 0
                sl = sl + 1.
         VIEW STREAM tul FRAME sivuotsi.  
@@ -237,7 +237,7 @@ PUT STREAM tul
     SKIP.
 ASSIGN rl = rl + 2.
 
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 
 ASSIGN SESSION:NUMERIC-FORMAT = xSessionNum.
 

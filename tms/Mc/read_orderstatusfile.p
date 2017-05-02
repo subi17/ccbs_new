@@ -11,16 +11,17 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{date.i}
-{email.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/date.i}
+{Func/email.i}
+{Mc/orderfusion.i}
 
 DEF VAR lcLine AS CHARACTER NO-UNDO.
 DEF VAR lcSep AS CHARACTER NO-UNDO INIT ";".
@@ -177,6 +178,8 @@ PROCEDURE pUpdateOrderStatus:
    DEF INPUT PARAMETER icMemoTitle AS CHAR NO-UNDO.
    DEF INPUT PARAMETER icMemoText AS CHAR NO-UNDO.
 
+   DEF VAR lcError AS CHAR NO-UNDO.
+
    /* find order */   
    FIND Order WHERE 
         Order.Brand = gcBrand AND
@@ -187,7 +190,7 @@ PROCEDURE pUpdateOrderStatus:
    IF Order.CLI NE icMSISDN THEN
       RETURN "ERROR:MSISDN does not match with order".
 
-   IF LOOKUP(icOldStatus,"20,21,22,41,42,43,44,50,51,73,76,78,99") = 0 THEN
+   IF LOOKUP(icOldStatus,"20,21,22,41,42,43,44,50,51,73,76,77,78,79,80,99") = 0 THEN
       RETURN "ERROR:Unsupported current order status value".
 
    IF Order.StatusCode NE icOldStatus THEN
@@ -197,11 +200,14 @@ PROCEDURE pUpdateOrderStatus:
       RETURN SUBST("ERROR:Error order ID &1 already in status &2", 
                    Order.OrderId, icNewStatus).
 
-   IF iiSecure NE 0 AND iiSecure NE 1 THEN
+   IF iiSecure < 0 OR iiSecure > 2 THEN
       RETURN "ERROR:Unsupported secure option value".
 
-   IF iiSecure EQ 1 THEN DO:
-               
+   IF iiSecure = 0 AND Order.DeliverySecure > 0 AND icNewStatus NE "7" AND
+      icNewStatus NE "8" AND icNewStatus NE "9" THEN
+      RETURN "ERROR:It is not allowed to change secure delivery type to non secure type.".
+
+   IF iiSecure > 0 THEN DO:
       IF INDEX(Order.OrderChannel,"pos") > 0 OR
                Order.OrderType > 2 THEN 
         RETURN "ERROR:Secure option is allowed only with direct channel orders".
@@ -212,41 +218,82 @@ PROCEDURE pUpdateOrderStatus:
       IF icNewStatus NE "6" THEN
          RETURN "ERROR:Secure option and new order status are not compatible".
 
+      IF iiSecure EQ 2 AND Order.DeliveryType NE {&ORDER_DELTYPE_POS} THEN
+         RETURN "ERROR:Secure to POS in allowed only for POS delivery type".
    END.
    
    IF icOldStatus EQ "76" OR icOldStatus EQ "22" OR 
       icOldStatus EQ "73" OR icOldStatus EQ "78" THEN DO:
       CASE icNewStatus:
-         WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
       END.
    END.
    ELSE IF LOOKUP(icOldStatus,"20,21,51") > 0 THEN DO:
       CASE icNewStatus:
-         WHEN "6" THEN RUN orderhold.p(Order.OrderId, "RELEASE_BATCH").
-         WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
+         WHEN "6" THEN RUN Mc/orderhold.p(Order.OrderId, "RELEASE_BATCH").
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
       END.
    END.
    ELSE IF icOldStatus EQ "50" THEN DO:
       CASE icNewStatus:
          WHEN "6" THEN DO: 
-            RUN orderinctrl.p(Order.OrderId, iiSecure, TRUE).
-            /* RUN sendorderreq.p(Order.OrderId). not needed here? confirmation sent */
+            RUN Mc/orderinctrl.p(Order.OrderId, iiSecure, TRUE).
+            /* RUN Mc/sendorderreq.p(Order.OrderId). not needed here? confirmation sent */
          END.
-         WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         OTHERWISE RETURN "ERROR:Unsupported new order status value".
+      END.
+   END.
+   ELSE IF icOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE} /* 77 */ THEN DO:
+      CASE icNewStatus:
+         WHEN "7" THEN DO:
+            FIND OrderFusion NO-LOCK WHERE
+                 OrderFusion.Brand = gcBrand AND
+                 OrderFusion.OrderID = Order.OrderID NO-ERROR.
+            IF NOT AVAILABLE OrderFusion THEN
+               RETURN "ERROR:Order type is not Fusion".
+            IF OrderFusion.fusionstatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN
+               RETURN "ERROR:Not allowed because fusion status ONG".
+            IF fCreateFusionCancelOrderMessage(OrderFusion.OrderID,
+                                               OUTPUT lcError) EQ FALSE THEN
+               RETURN SUBST("ERROR:Cancel message creation failed: &1", lcError).
+        END.
+        OTHERWISE RETURN "ERROR:Unsupported new order status value".
+     END.
+   END.
+   ELSE IF icOldStatus EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} /* 79 */ THEN DO:
+     CASE icNewStatus:
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         WHEN "8" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
+                                          {&ORDER_STATUS_CLOSED_BY_FRAUD}).
+         WHEN "9" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
+                                          {&ORDER_STATUS_AUTO_CLOSED}).
+         OTHERWISE RETURN "ERROR:Unsupported new order status value".
+      END.
+   END.
+   ELSE IF icOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} /* 80 */
+   THEN DO:
+      CASE icNewStatus:
+         WHEN "6" THEN RUN Mc/orderinctrl.p(Order.OrderId, iiSecure, TRUE).
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         WHEN "8" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
+                                          {&ORDER_STATUS_CLOSED_BY_FRAUD}).
+         WHEN "9" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
+                                          {&ORDER_STATUS_AUTO_CLOSED}).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
       END.
    END.
    ELSE DO:
       CASE icNewStatus:
-         WHEN "6" THEN RUN orderinctrl.p(Order.OrderId, iiSecure, TRUE).
-         WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
-         WHEN "8" THEN RUN orderbyfraud.p(Order.OrderId, TRUE,
+         WHEN "6" THEN RUN Mc/orderinctrl.p(Order.OrderId, iiSecure, TRUE).
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         WHEN "8" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
                                           {&ORDER_STATUS_CLOSED_BY_FRAUD}).
-         WHEN "9" THEN RUN orderbyfraud.p(Order.OrderId, TRUE,
+         WHEN "9" THEN RUN Mc/orderbyfraud.p(Order.OrderId, TRUE,
                                           {&ORDER_STATUS_AUTO_CLOSED}).
-         WHEN "44" THEN RUN orderneeddoc.p(Order.OrderId, TRUE).
+         WHEN "44" THEN RUN Mc/orderneeddoc.p(Order.OrderId, TRUE).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
       END.
    END.

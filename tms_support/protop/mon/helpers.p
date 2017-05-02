@@ -40,11 +40,11 @@
  *
  */
 
-{lib/protop.i}
+{protop/lib/protop.i}
 
 define variable support as character no-undo initial "Helper Processes".
 
-{lib/tt_xstat.i}
+{protop/lib/tt_xstat.i}
 
 ratio-calc = 1.
 

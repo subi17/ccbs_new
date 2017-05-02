@@ -17,9 +17,9 @@
  */
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {json_key.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
+{Syst/tmsconst.i}
 &SCOPED-DEFINE RESELLERS "PH,TC,TP"
 
 /* Input parameters */

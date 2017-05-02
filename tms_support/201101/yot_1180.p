@@ -1,4 +1,4 @@
-{date.i}
+{Func/date.i}
 
 find mnpprocess where
    mnpprocess.mnptype = 2 and

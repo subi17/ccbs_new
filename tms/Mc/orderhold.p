@@ -8,12 +8,12 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{forderstamp.i}
-{orderfunc.i}
-{orderfusion.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Mc/orderfusion.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER icAction AS CHAR NO-UNDO.
@@ -55,7 +55,7 @@ END.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER Order:HANDLE.
@@ -127,9 +127,11 @@ ELSE IF Order.MultiSIMId > 0 AND
 END.
 ELSE IF Order.Ordertype < 2 AND
    CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand = gcBrand AND
-                  CLIType.CLIType = Order.CLIType AND
-                  CLIType.LineType > 0) AND
+                  CLIType.Brand       = gcBrand                          AND
+                  CLIType.CLIType     = Order.CLIType                    AND
+                  CLIType.LineType    > 0                                AND 
+                  CLIType.TariffType NE {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
+                  CLIType.TariffType NE {&CLITYPE_TARIFFTYPE_FIXEDONLY}) AND
    NOT CAN-FIND(FIRST OrderAction WHERE
                      OrderAction.Brand = gcBrand AND
                      OrderAction.OrderId = Order.OrderID AND

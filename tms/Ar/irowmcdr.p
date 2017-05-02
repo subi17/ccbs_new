@@ -20,8 +20,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
+{Syst/commali.i}
+{Func/msisdn.i}
 
 DEF /* NEW */ SHARED VAR siirto AS C.
 DEF INPUT PARAMETER  iiInvNum   AS i    NO-UNDO.
@@ -58,7 +58,7 @@ DEF VAR stime        AS C                      NO-UNDO.
 DEF VAR Billed     AS LOG                      NO-UNDO.
 DEF VAR def-ccode    AS C                      NO-UNDO.
 DEF VAR lcCustName   AS CHAR                   NO-UNDO.
-{tmsparam.i DefCCode   return} def-ccode = TMSParam.CharVal.
+{Func/tmsparam.i DefCCode   return} def-ccode = TMSParam.CharVal.
 
 DEF TEMP-TABLE ttRow NO-UNDO
    FIELD MobCdr   AS INT
@@ -110,7 +110,7 @@ form /* seek Mobile Call  BY A-sub. */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Call Date,,BY MSISDN No.,By 4".
@@ -221,20 +221,20 @@ BROWSE:
         ufk[1]= 713 ufk[2]= 0  ufk[3]= 0 ufk[4]= 0
         ufk[5]= 265 ufk[6]= 0  ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MobCDR.DateSt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MobCDR.DateSt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobCDR.DateSt WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MobCDR.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MobCDR.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobCDR.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW MobCDR.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MobCDR.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobCDR.CLI WITH FRAME sel.
       END.
 
@@ -363,8 +363,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET DateSt WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -387,7 +387,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"enter,return,5,f5") > 0 THEN DO:  /* VIEW */
         RUN local-find-this(TRUE).
-        RUN viewmbd(ttRow.MobCDR).
+        RUN Mm/viewmbd.p(ttRow.MobCDR).
 
         ufkey = TRUE.
         NEXT loop.

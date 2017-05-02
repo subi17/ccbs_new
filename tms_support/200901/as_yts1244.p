@@ -1,8 +1,8 @@
-{testpaa.i}
+{Syst/testpaa.i}
 gcbrand = "1".
 katun = "anttis".
-{timestamp.i}
-{ftopup.i}
+{Func/timestamp.i}
+{Func/ftopup.i}
 
 session:numeric-format = "european".
 

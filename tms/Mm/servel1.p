@@ -10,7 +10,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER lcBrand AS C NO-UNDO.
 DEF INPUT PARAMETER ServPac LIKE ServPac.ServPac NO-UNDO.
@@ -69,7 +69,7 @@ FIND ServPac WHERE
      ServPac.Brand   = lcBrand AND 
      ServPac.ServPac = ServPac.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By 2,By 3, By 4".
@@ -97,12 +97,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ServEl  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR ServEl.ServCom WITH FRAME lis EDITING:
@@ -214,13 +214,13 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 0 ufk[3]= 251 ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"5,6"'}
-        RUN ufkey.p.
+        {Syst/uright1.i '"5,6"'}
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ServEl.ServCom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServEl.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServEl.ServCom WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -348,8 +348,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET ServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -372,19 +372,19 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO TRANS:  /* Within ServPac */
        RUN local-find-this(FALSE).                                        
-       run servel2(ServEl.ServCom).
+       RUN Mm/servel2.p(ServEl.ServCom).
        ufkey = TRUE.
        NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -433,11 +433,11 @@ BROWSE:
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ServEl.ServCom.
 
        RUN local-UPDATE-record.                                  

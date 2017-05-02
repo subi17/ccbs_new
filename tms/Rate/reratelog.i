@@ -1,8 +1,8 @@
 /* reratelog.i     16.03.12/aam
 */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF VAR lrRerateLog AS ROWID NO-UNDO.
 

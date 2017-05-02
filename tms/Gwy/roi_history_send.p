@@ -9,12 +9,12 @@
   Version ......: xfera
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-{timestamp.i}
-{heartbeat.i}
-{log.i}
-{tmsconst.i}
-{cparam2.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
+{Func/heartbeat.i}
+{Func/log.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 {xmlrpc/xmlrpc_client.i}
 
 gcBrand = "1".
@@ -162,6 +162,22 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
 
    add_string(pcStruct,"order_status",Order.StatusCode).
    add_string(pcStruct,"risk_code",Order.RiskCode).  
+
+   /* ADDLINE-22 Additional Line */
+   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                     CLIType.CLIType    = Order.CLIType               AND
+                     CLIType.PayType    = {&CLITYPE_PAYTYPE_POSTPAID} AND
+                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND
+      LOOKUP(Order.CLIType, {&ADDLINE_CLITYPES}) > 0 THEN DO: 
+      IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                        OrderAction.Brand    = gcBrand           AND
+                        OrderAction.OrderID  = Order.OrderID     AND
+                        OrderAction.ItemType = "AddLineDiscount" AND
+                        LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) THEN
+         add_int(pcStruct, "C_ADDITIONAL_LINE", 1).
+      ELSE
+         add_int(pcStruct, "C_ADDITIONAL_LINE", 0).
+   END.
 
    RETURN TRUE.
 END.

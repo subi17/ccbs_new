@@ -1,5 +1,5 @@
 /* monitoring script for checking sms send queue length */
-{timestamp.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE d AS DECIMAL NO-UNDO. 

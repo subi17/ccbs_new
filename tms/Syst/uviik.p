@@ -58,7 +58,7 @@ ELSE DO:   /* edellisen vuoden viimeinen viikko */
     /* alkuperAinen talteen ettei kutsuvassa sekoile */
     apupv = uvpvm.
     uvpvm = date(12,31,year(uvpvm) - 1).
-    RUN uviik.p.
+    RUN Syst/uviik.p.
     uvpvm = apupv.
 END.
 

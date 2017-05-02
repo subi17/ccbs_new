@@ -3,7 +3,7 @@
  * @output success;boolean;true or error
  */
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 /* Input parameters */
 DEF VAR pcCli         AS CHAR NO-UNDO.

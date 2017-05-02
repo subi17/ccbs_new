@@ -3,7 +3,7 @@
  * Authors: ilkkasav & kariaika.
  *
  * @input   lcCLI;char;mandatory;msisdn for the own subscriber
-            lcSecCLI;char;mandatory;other party id
+            lcSecCLI;char;mandatory;Call destination number (B number)
             lcCDRFile;char;mandatory;base file for CDR data
             ldaDateTime;datetime;mandatory;Date&time for generated data
             liCount;int;mandatory;number of CDRs
@@ -11,8 +11,8 @@
  * @output success;boolean
  */
 {xmlrpc/xmlrpc_access.i}
-{mnpoutchk.i}
-{commpaa.i}
+{Mnp/mnpoutchk.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
 
@@ -39,9 +39,9 @@ DEF VAR lcc AS CHAR NO-UNDO.
 DEF VAR lcError AS CHARACTER NO-UNDO. 
 
 /*Search correct directory*/
-lcRootDir = SEARCH("donotremove_testdir.txt").
+lcRootDir = SEARCH("testing/donotremove_testdir.txt").
 lcRootDir = REPLACE(lcrootDir, "donotremove_testdir.txt", "").
-lcRateDir = REPLACE(lcrootDir, "testing", "Rate").
+lcRateDir = "Rate/".
 
 IF validate_request(param_toplevel_id, "string,string,string,datetime,int,int") EQ ? THEN RETURN.
 
@@ -55,7 +55,8 @@ liMeas      = get_int(param_toplevel_id, "5").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /*Check that customer exists*/
-IF lcCli BEGINS "9" THEN DO:
+IF lcCli BEGINS "8" OR 
+   lcCli BEGINS "9" THEN DO:
    FIND mobsub NO-LOCK
    WHERE mobsub.brand = "1" and
          MobSub.FixedNumber = lcCLI NO-ERROR.
@@ -75,7 +76,7 @@ lcImsi = mobsub.imsi.
 lcCDRDir = lcRootDir + "cdrfiles/".
 /*Generate CDR files*/
 /*RUN VALUE(lcRootDir + "create_test_cdrfile.p")*/
-RUN create_test_cdrfile.p (
+RUN testing/create_test_cdrfile.p (
           lcCli,
           lcSecCLI,
           LCiMSI,

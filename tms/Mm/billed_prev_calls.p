@@ -10,13 +10,13 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{coinv.i}
-{fvatfact.i}
-{ftransdir.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/coinv.i}
+{Func/fvatfact.i}
+{Func/ftransdir.i}
+{Syst/funcrunprocess_update.i}
 
 DEFINE INPUT  PARAMETER iiInvType          AS INT  NO-UNDO.
 DEFINE INPUT  PARAMETER iiBillPeriod       AS INT  NO-UNDO.

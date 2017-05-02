@@ -12,15 +12,15 @@
   Modified:
 */
 
-{commali.i}
-{refcode.i}
-{timestamp.i}
-{fbundle.i}
-{offer.i}
-{fbankdata.i}
-{mnp.i}
-{cparam2.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/refcode.i}
+{Func/timestamp.i}
+{Mm/fbundle.i}
+{Mc/offer.i}
+{Func/fbankdata.i}
+{Mnp/mnp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
 
 &SCOPED-DEFINE ORDERTYPE_MNP_EN "Portability"
 &SCOPED-DEFINE ORDERTYPE_MNP_SP "Portabilidad"
@@ -33,6 +33,7 @@ DEF VAR ldeMonthlyFee AS DEC NO-UNDO.
 DEF VAR liMonths      AS INT NO-UNDO.
 DEF VAR ldeFinalFee   AS DEC NO-UNDO.
 DEF VAR lcRegion      AS CHAR NO-UNDO.
+DEF VAR lcDelRegion   AS CHAR NO-UNDO.
 DEF VAR lcRegionName  AS CHAR NO-UNDO.
 DEF VAR lcCRegionName AS CHAR NO-UNDO.
 DEF VAR lcDelRegionName AS CHAR NO-UNDO.
@@ -71,11 +72,12 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
       FIND FIRST OrderCustomer NO-LOCK WHERE
                  OrderCustomer.Brand   = gcBrand       AND
                  OrderCustomer.OrderID = Order.OrderID AND
-                 OrderCustomer.RowType = 1 NO-ERROR.
+                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
       ASSIGN
          liCustNum = Order.CustNum
          lcRegion = OrderCustomer.Region
+         lcDelRegion = OrderCustomer.Region   /* init to same as lcRegion */
          liLang = 1. /* INT(OrderCustomer.Language). Decision only spanish 
                         supported. YDR-1637 YTS-7046 */
          lcCustAddress = OrderCustomer.Address.
@@ -112,12 +114,12 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
       FIND FIRST companycustomer WHERE
                  companycustomer.Brand   = Order.Brand AND
                  companycustomer.OrderId = Order.OrderID AND
-                 companycustomer.RowType = 5 NO-LOCK NO-ERROR.
+                 companycustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} NO-LOCK NO-ERROR.
       
       FIND FIRST DeliveryCustomer WHERE
                  DeliveryCustomer.Brand   = Order.Brand AND
                  DeliveryCustomer.OrderId = Order.OrderID AND
-                 DeliveryCustomer.RowType = 4 NO-LOCK NO-ERROR.           
+                 DeliveryCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-LOCK NO-ERROR.           
    
    END.
    IF NOT AVAIL OrderCustomer THEN
@@ -133,6 +135,8 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
       ELSE lcCRegionName = "".
    END.
    IF AVAIL DeliveryCustomer THEN DO:
+      IF DeliveryCustomer.region > "" THEN
+         lcDelRegion = DeliveryCustomer.region. /* if available fill actual */
       FIND FIRST Region WHERE
          Region.Region = DeliveryCustomer.Region NO-LOCK NO-ERROR.
 
@@ -373,7 +377,7 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
          /* fees have not been created yet */
          ELSE DO:
             /* make virtual creation */
-            RUN cashfee.p (Order.OrderID,
+            RUN Mc/cashfee.p (Order.OrderID,
                          4,     /* leave out campaign topups */
                          OUTPUT lcList,
                          OUTPUT ldInvTot,
@@ -1152,21 +1156,40 @@ PROCEDURE pGetDELIVERY_DATE:
          ldamnp = fmnpchangewindowdate(
                              fmakets(),
                              order.orderchannel,
-                             ordercustomer.region,
+                             lcDelRegion,
                              lcProduct,
-                             Order.CliType).
+                             Order.CliType,
+                             Order.DeliveryType).
       ELSE ldaMNP = Order.PortingDate.
       ldaDate = ldaMNP - 1.
       ldaDate = fMNPHoliday(ldaDate,FALSE).
       lcResult = fDateFmt(ldaDate,"dd/mm/yy").
    END.
    ELSE DO:
-      IF lcRegion > "" THEN CASE lcRegion:
-         WHEN "07" THEN liDays = 5.
-         WHEN "38" OR WHEN "35" OR WHEN "51" OR WHEN "52" THEN liDays = 7.
-         OTHERWISE liDays = 3.
+      IF lcDelRegion > "" THEN CASE lcDelRegion:
+         WHEN "07"
+         THEN DO:
+            IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+            THEN liDays = 4.
+            ELSE liDays = 5.
+         END.
+         WHEN "38" OR WHEN "35" OR WHEN "51" OR WHEN "52"
+         THEN DO:
+            IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+            THEN liDays = 6.
+            ELSE liDays = 7.
+         END.
+         OTHERWISE DO:
+            IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+            THEN liDays = 2.
+            ELSE liDays = 3.
+         END.
+      END. 
+      ELSE DO:
+         IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
+         THEN liDays = 6.
+         ELSE liDays = 3.
       END.
-      ELSE liDays = 3.
       ldaDate = TODAY.
       DO liCount = 1 TO liDays:
          ldaDate = ldaDate + 1.
@@ -1216,9 +1239,10 @@ PROCEDURE pGetMNP_DATE:
       ldamnp = fmnpchangewindowdate(
                           fmakets(),
                           order.orderchannel,
-                          ordercustomer.region,
+                          lcDelRegion,
                           lcProduct,
-                          Order.CliType).
+                          Order.CliType,
+                          Order.DeliveryType).
    ELSE ldaMNP = Order.PortingDate.
 
    lcMonth = fTeksti(542 + MONTH(ldaMNP),(IF liLang EQ 5 THEN 5 ELSE 1)).
@@ -1238,8 +1262,10 @@ PROCEDURE pGetDELADDR:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    IF Order.DeliverySecure EQ 1 OR
-      Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR 
-      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
+      Order.DeliverySecure EQ 2 OR
+      Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
+      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
+      Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
       lcDelAddress = "". /* YPR-2660 */
    ELSE DO:
       /* separate delivery address */
@@ -1270,8 +1296,10 @@ PROCEDURE pGetDELPOST:
       lcErr = fGetOrderData (INPUT iiOrderNBR).
 
       IF Order.DeliverySecure EQ 1 OR
+         Order.DeliverySecure EQ 2 OR
          Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
-         Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
+         Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} OR
+         Order.DeliveryType EQ {&ORDER_DELTYPE_POS} THEN
          lcDelPost = "".
       ELSE DO:
          /* separate delivery address */
@@ -1322,7 +1350,8 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
    /* Check that includes at least separator characters */
    IF INDEX(OrderAction.ItemKey,";") > 0 AND 
       NUM-ENTRIES(OrderAction.itemKey,";") = 9 THEN DO:
-      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
+      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+         Order.deliverytype = {&ORDER_DELTYPE_POS} THEN DO: /* UPS */
          DO liCount = 2 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
             lcUseEntries = lcUseEntries + STRING(liCount) + "|".
          END.
@@ -1340,7 +1369,8 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
                    DeliveryCustomer.ZipCode + " " +
                    DeliveryCustomer.postoffice + /* " " + 
                    lcDelRegionName + */ "<br /><br />" +
-                   IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN 
+                   IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+                      Order.deliverytype = {&ORDER_DELTYPE_POS} THEN 
                    "<b>Horarios:</b><br /><table border='0'>" ELSE
                    "<b>Horarios:</b><br />".
       lcUseEntries = RIGHT-TRIM(lcUseEntries,"|"). /* remove last separator */
@@ -1352,7 +1382,8 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
          /*remove possible extra ; */
          lcDailyHours = LEFT-TRIM(lcDailyHours, ";").
          /* handle several times for day */
-         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
+         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+            Order.deliverytype = {&ORDER_DELTYPE_POS} THEN DO: /* UPS */
             lcHoursText = REPLACE(lcDailyHours, "h",":").
          END.   
          ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} THEN DO:
@@ -1373,7 +1404,7 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
          lcHoursText = RIGHT-TRIM(lcHoursText).
          lcHoursText = RIGHT-TRIM(lcHoursText,"/").
          /* Correos need different day name syntax */
-         IF Order.deliverytype = {&ORDER_DELTYPE_POST} AND /* Correos */
+         IF Order.deliverytype = {&ORDER_DELTYPE_POST} /* Correos */ AND
             INT(ENTRY(liCount,lcUseEntries,"|")) = 7 THEN 
             lcDay = "S".
          ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} AND
@@ -1381,14 +1412,16 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
             lcDay = "Festivos".
          ELSE   
             lcDay = ENTRY(INT(ENTRY(liCount,lcUseEntries,"|")),lcDayList,"|").
-         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN
+         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+            Order.deliverytype = {&ORDER_DELTYPE_POS} THEN
             lcUPSHours = lcUPSHours + "<tr><td><b>" + lcDay + 
                          "</b>:</td> <td>" + lcHoursText + " </td></tr> ".
          ELSE
             lcUPSHours = lcUPSHours + "<b>" + lcDay + "</b>: " + 
                          lcHoursText + "<br />".
       END.
-      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN
+      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} OR
+         Order.deliverytype = {&ORDER_DELTYPE_POS} THEN
          lcUPSHours = lcUPSHours + "</table>".
    END.
 
@@ -1515,7 +1548,7 @@ PROCEDURE pGetPENALTYFEE:
    DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).  
    
-   RUN offer_penaltyfee(Order.OrderID,
+   RUN Mc/offer_penaltyfee.p(Order.OrderID,
                         Output liTermMonths,
                         OUTPUT ldAmt).
 
@@ -1623,7 +1656,7 @@ PROCEDURE pGetPOD:
    DEF VAR ldInvTot AS DEC NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
          
-   RUN cashfee.p (Order.OrderID,
+   RUN Mc/cashfee.p (Order.OrderID,
                   4,     /* leave out campaign topups */
                   OUTPUT lcList,
                   OUTPUT ldInvTot,
@@ -1835,23 +1868,22 @@ PROCEDURE pGetCTNAME:
 
       DEF VAR ldeCallPrice AS DEC NO-UNDO.
       DEF VAR ldeMFWithTax AS DEC NO-UNDO.
+      DEF VAR ldeMFNoDisc  AS DEC NO-UNDO.
 
       DEFINE VARIABLE ldtOrderDate AS DATE NO-UNDO.
       DEFINE VARIABLE ldiOrderDate AS INT  NO-UNDO.
       DEFINE VARIABLE llgOrderDate AS LOG  NO-UNDO.
       DEFINE VARIABLE lcMFText     AS CHAR No-UNDO.
       DEFINE VARIABLE llgEmailText AS LOG  NO-UNDO. 
+      DEFINE VARIABLE llAddLineDiscount AS LOG NO-UNDO.
+      DEFINE VARIABLE ldDiscValue  AS DEC  NO-UNDO.
 
       llgOrderDate = fSplitTS(Order.CrStamp,
                               OUTPUT ldtOrderDate,
                               OUTPUT ldiOrderDate).
-
-      IF CLIType.CLIType EQ "TARJ7" THEN
-         ldeMFWithTax = (1 + ldeTaxPerc / 100) * 6.61. /* 8.00 IVA incl */
-      ELSE IF CLIType.CLIType EQ "TARJ9" THEN
-         ldeMFWithTax = (1 + ldeTaxPerc / 100) * 8.265. /* 10.00 IVA incl */
-      ELSE IF CLiType.CommercialFee > 0 THEN
-         ldeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CommercialFee.
+      
+      /*YDR-2347 removed the hard coded values AND now fetching the values from Commercial Fee itself*/
+      ldeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CommercialFee.
 
        CASE CLIType.CLIType:
          WHEN "CONT9" OR WHEN "CONT10" OR WHEN "CONT15" THEN lcList = "0 cent/min".
@@ -1861,46 +1893,73 @@ PROCEDURE pGetCTNAME:
          OTHERWISE lcList = "".
        END.
 
-       IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 THEN
-          FOR FIRST OfferItem WHERE
-                    OfferItem.Brand       = gcBrand             AND
-                    OfferItem.Offer       = Order.Offer         AND
-                    OfferItem.ItemType    = "discountplan"      AND
-                    LOOKUP(OfferItem.ItemKey,
-                    "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC") > 0 AND
-                    OfferItem.BeginStamp <= Order.CrStamp       AND
-                    OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
-             FIRST DiscountPlan WHERE
-                   DiscountPlan.Brand    = gcBrand AND
-                   DiscountPlan.DPRuleId = OfferItem.ItemKey NO-LOCK,
-             FIRST DPRate WHERE
-                   DPRate.DPId = DiscountPlan.DPId AND
-                   DPRate.ValidFrom <= ldtOrderDate AND
-                   DPRate.ValidTo   >= ldtOrderDate NO-LOCK:
+       IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 OR fIsConvergenceTariff(Order.CLIType) THEN DO:
 
-             lcMFText = STRING(DiscountPlan.ValidPeriods)                    +
-                       (IF liLang EQ 5 THEN " months. " ELSE " meses. ") +
-                       "<br/>" +
-                       (IF liLang EQ 5 THEN "After " ELSE "Después ")    +
-                       TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99"))             + " &euro;/" +
-                       (IF liLang EQ 5 THEN "month" ELSE "mes")          +
-                       (IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
-             /*Offeritem values must be used if such is available.
-               Otherwise the value is taken from discountplan settings.*/
-             IF Offeritem.Amount > 0 THEN DO:
-                IF DiscountPlan.DPUnit EQ "Percentage" THEN
-                   ldeMFWithTax = ldeMFWithTax - ((Offeritem.amount / 100) * ldeMFWithTax).
-                ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
-                    ldeMFWithTax = ldeMFWithTax - Offeritem.amount.
+          llAddLineDiscount = FALSE.
+
+          /* Additional line discount information in emails */
+          FOR FIRST OrderAction NO-LOCK WHERE
+                    OrderAction.Brand    = gcBrand       AND
+                    OrderAction.OrderID  = Order.OrderID AND
+                    OrderAction.ItemType = "AddLineDiscount":
+
+             FOR FIRST DiscountPlan NO-LOCK WHERE
+                       DiscountPlan.DPRuleID = OrderAction.ItemKey,
+                 FIRST DPRate WHERE
+                       DPRate.DPId       = DiscountPlan.DPId AND
+                       DPRate.ValidFrom <= ldtOrderDate      AND
+                       DPRate.ValidTo   >= ldtOrderDate      NO-LOCK:
+             
+                 llAddLineDiscount = TRUE.
+                 ldeMFNoDisc       = ldeMFWithTax.
+                 ldDiscValue       = DPRate.DiscValue.
+                 ldeMFWithTax      = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
+
+             END.
+
+          END. /* ADDITIONAL-LINE */
+
+          IF NOT llAddLineDiscount THEN
+             FOR FIRST OfferItem WHERE
+                       OfferItem.Brand       = gcBrand             AND
+                       OfferItem.Offer       = Order.Offer         AND
+                       OfferItem.ItemType    = "discountplan"      AND
+                       LOOKUP(OfferItem.ItemKey,
+                       "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC,CONVDISC") > 0 AND
+                       OfferItem.BeginStamp <= Order.CrStamp       AND
+                       OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
+                 FIRST DiscountPlan WHERE
+                       DiscountPlan.Brand    = gcBrand AND
+                       DiscountPlan.DPRuleId = OfferItem.ItemKey NO-LOCK,
+                 FIRST DPRate WHERE
+                       DPRate.DPId = DiscountPlan.DPId AND
+                       DPRate.ValidFrom <= ldtOrderDate AND
+                       DPRate.ValidTo   >= ldtOrderDate NO-LOCK:
+
+                lcMFText = STRING(DiscountPlan.ValidPeriods)                    +
+                           (IF liLang EQ 5 THEN " months. " ELSE " meses. ") +
+                           "<br/>" +
+                           (IF liLang EQ 5 THEN "After " ELSE "Después ")    +
+                           TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99"))             + " &euro;/" +
+                           (IF liLang EQ 5 THEN "month" ELSE "mes")          +
+                           (IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
+                /*Offeritem values must be used if such is available.
+                  Otherwise the value is taken from discountplan settings.*/
+                IF Offeritem.Amount > 0 THEN DO:
+                   IF DiscountPlan.DPUnit EQ "Percentage" THEN
+                      ldeMFWithTax = ldeMFWithTax - ((Offeritem.amount / 100) * ldeMFWithTax).
+                   ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
+                      ldeMFWithTax = ldeMFWithTax - Offeritem.amount.
  
+                END.
+                ELSE DO:
+                   IF DiscountPlan.DPUnit EQ "Percentage" THEN
+                      ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
+                   ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
+                      ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
+                END.
              END.
-             ELSE DO:
-                IF DiscountPlan.DPUnit EQ "Percentage" THEN
-                   ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
-                ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
-                    ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
-             END.
-          END.
+       END.
 
        FIND FIRST DiscountPlan NO-LOCK WHERE
                   DiscountPlan.DPRuleId = "BONO7DISC" NO-ERROR.
@@ -1978,20 +2037,38 @@ PROCEDURE pGetCTNAME:
           lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>25 GB/mes extra free during 6 months"
                               ELSE "<br/>25 GB/mes extra gratis durante 6 meses").
        END.
+       ELSE IF Order.CliType EQ "CONT25" AND /* April promotion */
+               NOT llAddLineDiscount     AND
+               Order.Ordertype = {&ORDER_TYPE_MNP} AND
+              (Order.Crstamp >= fCParamDe("March2017AprilFromDate") AND /* 20170403 */
+               Order.Crstamp < fCParamDe("March2017PromoToDate")) THEN DO:
+          lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>25 GB/mes extra free during 6 months"
+                              ELSE "<br/>25 GB/mes extra gratis durante 6 meses").
+       END.
 
-       IF ldeMFWithTax > 0 THEN
-         /* YBU-4648 LENGTH check added for fitting one line */
-         lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,
-                               "->>>>>>>9.99")) + " &euro;/" + (IF liLang 
-                               EQ 5 THEN "month" ELSE "mes")) > 36 THEN 
-                               ",<br/>" ELSE " ") +
-                  TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
-                  (IF liLang EQ 5 THEN "month" ELSE "mes").
+       IF ldeMFWithTax > 0 THEN DO:
+          IF llAddLineDiscount THEN
+             lcList = lcList + (IF lcList > "" THEN ",<br/>" ELSE "") + "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
+                      TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
+                      (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>" + TRIM(STRING(ldDiscValue,"99"))+ "% DTO. para siempre".
+          ELSE
+             /* YBU-4648 LENGTH check added for fitting one line */
+             lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,
+                                   "->>>>>>>9.99")) + " &euro;/" + (IF liLang 
+                                   EQ 5 THEN "month" ELSE "mes")) > 36 THEN 
+                                   ",<br/>" ELSE " ") +
+                      TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
+                      (IF liLang EQ 5 THEN "month" ELSE "mes").
+       END.
 
-       IF lcList > "" THEN
-         lcTagCTName = lcTagCTName + ",<br/> " + lcList +
-          (IF liLang EQ 5 THEN " VAT. incl<br/>"
-           ELSE " imp. incl.<br/>").
+       IF lcList > "" THEN DO:
+         IF llAddLineDiscount THEN
+            lcTagCTName = lcTagCTName + ",<br/> " + lcList + "<br/>".
+         ELSE
+            lcTagCTName = lcTagCTName + ",<br/> " + lcList +
+                          (IF liLang EQ 5 THEN " VAT. incl<br/>"
+                           ELSE " imp. incl.<br/>").
+       END.
 
         IF lcMFText NE ""  THEN
            lcTagCTName = lcTagCTName + " " + lcMFText.
@@ -2054,7 +2131,7 @@ PROCEDURE pGetORDERSUMMARY:
     lcList = fGetOFEES_internal( INPUT iiOrderNBR,
                                  OUTPUT lgErr,
                                  OUTPUT ldTotalFee ).
-   /*RUN cashfee.p (Order.OrderID,
+   /*RUN Mc/cashfee.p (Order.OrderID,
                   4,     /* leave out campaign topups */
                   OUTPUT lcList,
                   OUTPUT ldInvTot,
@@ -2079,7 +2156,7 @@ PROCEDURE pGetINITIALFEE:
    DEF VAR lgErr AS LOG NO-UNDO.
 
    lcErr = fGetOrderData (INPUT iiOrderNBR).
-   /*RUN cashfee.p (Order.OrderID,
+   /*RUN Mc/cashfee.p (Order.OrderID,
                          4,     /* leave out campaign topups */
                          OUTPUT lcList,
                          OUTPUT ldInvTot,

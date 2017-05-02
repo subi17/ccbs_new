@@ -1,5 +1,5 @@
 {xmlrpc/xmlrpc_access.i}
-{matrix.i}
+{Func/matrix.i}
 
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 

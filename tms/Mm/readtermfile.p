@@ -3,12 +3,12 @@
    read subscription terminations from file
 */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fsubstermreq.i}
-{msisdn_prefix.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fsubstermreq.i}
+{Func/msisdn_prefix.i}
+{Func/main_add_lines.i}
 
 DEF INPUT  PARAMETER icFile      AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icLogFile   AS CHAR NO-UNDO.
@@ -232,6 +232,7 @@ REPEAT:
                                    "5",        /* source */
                                    "",         /* creator */
                                    0,          /* father request */
+                                   {&TERMINATION_TYPE_FULL},
                                    OUTPUT lcError).
     
    IF liRequest = 0 THEN DO:

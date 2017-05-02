@@ -1,20 +1,20 @@
 &GLOBAL-DEFINE AllIncludes YES
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{printdoc1tt.i}
-{transname.i}
-{ftransdir.i}
-{email.i}
-{fsubser.i}
-{nnpura.i}
-{customer_address.i}
-{fdestcountry.i}
-{tmsconst.i}
-{ftaxdata.i}
-{fbundle.i}
-{q25functions.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Inv/printdoc1tt.i}
+{Func/transname.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Func/fsubser.i}
+{Inv/nnpura.i}
+{Func/customer_address.i}
+{Func/fdestcountry.i}
+{Syst/tmsconst.i}
+{Func/ftaxdata.i}
+{Mm/fbundle.i}
+{Func/q25functions.i}
 
 &GLOBAL-DEFINE INSTALLMENT_DISCOUNT_BILLCODES "DISCPAYTERMDIR,DISCPAYTERMINDIR"
 
@@ -146,6 +146,7 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD TariffActDate   AS CHAR
    FIELD MessageType     AS CHAR
    FIELD GBValue         AS DEC
+   FIELD PrintCLI        AS LOGICAL INITIAL FALSE
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
@@ -1071,6 +1072,9 @@ PROCEDURE pGetSubInvoiceHeaderData:
                ASSIGN ttSub.CLIType  = ttCLIType.CLIType
                       ttSub.CTName   = ttCLIType.CTName
                       ttSub.CliEvent = ttMSOwner.CLIEvent.
+
+            /* Mobile provisioned during month. Used for convergent */
+            IF ttMSOwner.CliEvent NE "F" THEN ttSub.PrintCLI = TRUE.
 
             /* Immediate STC logic non-fusion to non-fusion */
             IF lliSTR                AND

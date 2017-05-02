@@ -1,5 +1,5 @@
-{date.i}
-{heartbeat.i}
+{Func/date.i}
+{Func/heartbeat.i}
 
 DEFINE VARIABLE lcDelivFile AS CHARACTER NO-UNDO FORMAT "X(23)".
 DEFINE VARIABLE ldaDate     AS DATE      NO-UNDO.

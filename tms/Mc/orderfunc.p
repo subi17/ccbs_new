@@ -8,8 +8,8 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF INPUT PARAMETER   icStatusCode  AS CHAR NO-UNDO.
 DEF INPUT PARAMETER   iiOrderID     AS INT  NO-UNDO.
@@ -46,13 +46,19 @@ DO i = 1 TO 2:
       FIRST OrderFunction NO-LOCK WHERE 
             OrderFunction.OFID = OFItem.OFID:
 
+      IF AVAILABLE Order AND
+         OrderFunction.OfModule EQ "Mc/orderinctrl.p,iiOrderId,2" AND
+         (Order.DeliveryType NE {&ORDER_DELTYPE_POS} OR
+          INDEX(Order.OrderChannel,"pos") > 0 OR
+          Order.OrderType > 2) THEN NEXT.
+
       IF AVAIL Order AND
-               OrderFunction.OfModule EQ "orderinctrl,iiOrderId,1" AND
+               OrderFunction.OfModule EQ "Mc/orderinctrl.p,iiOrderId,1" AND
                (INDEX(Order.OrderChannel,"pos") > 0 OR
                 Order.OrderType > 2) THEN NEXT.
 
-      IF AVAIL Order AND Order.DeliverySecure EQ 1 AND
-               OrderFunction.OfModule EQ "orderinctrl,iiOrderId,0" THEN NEXT.
+      IF AVAIL Order AND Order.DeliverySecure > 0 AND
+               OrderFunction.OfModule EQ "Mc/orderinctrl.p,iiOrderId,0" THEN NEXT.
       
       CREATE ttBrowser.     
       ASSIGN
@@ -98,7 +104,7 @@ WITH ROW FrmRow width 40 OVERLAY FrmDown DOWN
     FRAME sel.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -180,16 +186,16 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttBrowser.OFName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttBrowser.OFName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttBrowser.OFName WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW ttBrowser.OFName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttBrowser.OFName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttBrowser.OFName WITH FRAME sel.
       END.
 
@@ -340,63 +346,64 @@ REPEAT WITH FRAME sel:
         
            lcModule = ENTRY(1,ttbrowser.ofmodule,",").
            
-           IF lcModule = "prinoinf" THEN DO:
-              RUN prinoinf (INPUT 0,iiOrderID,FALSE,OUTPUT lcError).           
+           IF lcModule = "Mc/prinoinf.p" THEN DO:
+              RUN Mc/prinoinf.p (INPUT 0,iiOrderID,FALSE,OUTPUT lcError).           
 
               IF lcError > "" THEN MESSAGE
               lcerror
               VIEW-AS ALERT-BOX.
            END.
-           ELSE IF lcModule = "orderhold" THEN DO:
+           ELSE IF lcModule = "Mc/orderhold.p" THEN DO:
               lcAction = "".
               lcAction = ENTRY(3,ttbrowser.ofmodule,",") NO-ERROR.
               RUN VALUE(lcModule) (iiOrderid, lcAction).
 
            END.
-           ELSE IF lcModule = "credithold" THEN DO:
+           ELSE IF lcModule = "Mc/credithold.p" THEN DO:
               llTrue = ilTrue =
                 (STRING(ENTRY(3,ttbrowser.ofmodule,",")) = "TRUE").
 
               RUN VALUE(lcModule) (iiOrderid, llTrue).
            END.
            
-           ELSE IF lcModule = "Eventsel" THEN DO:
-              RUN
-              eventsel ("Order", Order.Brand +  CHR(255) +                                  STRING(Order.OrderID)).                
+           ELSE IF lcModule = "Eventsel" OR lcModule = "Mc/eventsel.p" THEN DO:
+              RUN Mc/eventsel.p("Order", Order.Brand + CHR(255) + STRING(Order.OrderID)).
            END.
 
-           ELSE IF lcModule = "nnasla" THEN DO:
-              RUN nnasla(0,Order.OrderID).
+           ELSE IF lcModule = "nnasla" OR lcModule = "Mc/nnasla.p" THEN DO:
+              RUN Mc/nnasla.p(0,Order.OrderID).
            END. 
            
-           ELSE IF lcModule = "mnpbr" THEN DO:
-              RUN mnpbr(Order.OrderId,0,0).
+           ELSE IF lcModule = "mnpbr" OR lcModule = "Mnp/mnpbr.p" THEN DO:
+              RUN Mnp/mnpbr.p(Order.OrderId,0,0).
            END. 
            
-           ELSE IF lcModule = "offer" THEN DO:
-              IF Order.Offer NE "" THEN RUN offer.p(Order.Offer,FALSE).
+           ELSE IF lcModule = "offer" OR lcModule = "Mc/offer.p" THEN DO:
+              IF Order.Offer NE "" THEN RUN Mc/offer.p(Order.Offer,FALSE).
            END. 
            
-           ELSE IF lcModule = "orderinctrl" THEN DO:
-              IF TRIM(ENTRY(3,ttbrowser.ofmodule,",")) EQ "1"
-              THEN RUN VALUE(lcModule) (iiOrderid, 1, FALSE).
-              ELSE RUN VALUE(lcModule) (iiOrderid, 0, FALSE).
+           ELSE IF lcModule = "Mc/orderinctrl.p" THEN DO:
+              CASE TRIM(ENTRY(3,ttbrowser.ofmodule,",")):
+                 WHEN "1" THEN RUN VALUE(lcModule) (iiOrderid, 1, FALSE).
+                 WHEN "2" THEN RUN VALUE(lcModule) (iiOrderid, 2, FALSE).
+                 OTHERWISE RUN VALUE(lcModule) (iiOrderid, 0, FALSE).
+              END CASE.
            END.
-           
-           ELSE IF lookup(lcModule,"closeorder,orderneeddoc") > 0 THEN DO:
+
+           ELSE IF lookup(lcModule,"Mc/closeorder.p,Mc/orderneeddoc.p") > 0 THEN DO:
               RUN VALUE(lcModule) (iiOrderid,FALSE).
            END. 
 
-           ELSE IF lcModule = "orderbyfraud" THEN DO:
+           ELSE IF lcModule = "Mc/orderbyfraud.p" THEN DO:
               RUN VALUE(lcModule) (iiOrderid,FALSE,{&ORDER_STATUS_CLOSED_BY_FRAUD}).
            END.
 
-           ELSE IF lcModule = "dpmember" THEN DO:
+           ELSE IF lcModule = "Mc/dpmember.p" THEN DO:
               RUN VALUE(lcModule) (0,"MobSub",Order.MsSeq).
            END.
 
-           ELSE IF lcModule = "dms" THEN DO:
-              RUN dms.p(Order.OrderId,Order.ContractID).
+           ELSE IF lcModule = "dms" OR lcModule = "Mc/dms.p" THEN DO:
+              RUN Mc/dms.p(Order.OrderId,Order.ContractID).
            END.
            
            ELSE IF Num-ENTRIES(ttbrowser.ofmodule,",") = 2 THEN DO:
@@ -405,8 +412,8 @@ REPEAT WITH FRAME sel:
                 MESSAGE RETURN-VALUE VIEW-AS ALERT-BOX.
            END.
 
-           ELSE IF lcModule = "convview" THEN DO:
-              RUN convview.p(Order.Orderid).
+           ELSE IF lcModule = "convview" OR lcModule = "Mc/convview.p" THEN DO:
+              RUN Mc/convview.p(Order.Orderid).
            END.
 
            ELSE 

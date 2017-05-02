@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 
-{fmakesms.i}
+{Func/fmakesms.i}
 
 DEFINE VARIABLE liCount       AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE liSubCount    AS INTEGER   NO-UNDO. 

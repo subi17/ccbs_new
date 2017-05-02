@@ -8,8 +8,8 @@ CHANGED ......: 29.1.2015 kariaika & ilkkasav
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-{cdrreader.i}
+{Syst/commpaa.i}
+{testing/cdrreader.i}
 ASSIGN
    katun = "Qvantel"
    gcBrand = "1".
@@ -38,7 +38,7 @@ lcRootDir = FILE-INFO:FULL-PATHNAME + "/". */
 /* lcRootDir = "/apps/xfera/kariaika/yoigo/tms_support/testing/". */
 
 /*Search correct directory*/
-lcRootDir = SEARCH("donotremove_testdir.txt").
+lcRootDir = SEARCH("testing/donotremove_testdir.txt").
 lcRootDir = REPLACE(lcrootDir, "donotremove_testdir.txt", "").
 
 
@@ -90,7 +90,7 @@ PROCEDURE pUserInput:
          lcMeas WITH FRAME lis EDITING:
       
          IF ufkey THEN DO:
-            ASSIGN ehto = 9. RUN ufkey.p.
+            ASSIGN ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
@@ -100,7 +100,7 @@ PROCEDURE pUserInput:
             
          IF KEYLABEL(LASTKEY) = "F9" AND 
             FRAME-FIELD = "lcCDRFile" THEN DO:
-            RUN filebrowser.p(
+            RUN Syst/filebrowser.p(
                lcRootDir + "cdrfiles/*.asc").
             LCcdrfILE = RETURN-VALUE.
             DISP lcCDRFile WITH FRAME lis.

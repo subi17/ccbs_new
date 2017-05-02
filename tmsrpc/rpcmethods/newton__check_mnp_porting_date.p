@@ -4,15 +4,16 @@
            order_channel;string;mandatory;
            region;string;mandatory;
            product;string;optional;
-           tariff;string;optional
+           tariff;string;optional;
+           delivery_type;int;optional
  * @output mnp_porting_date;datetime;
  */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{mnp.i}
+{Mnp/mnp.i}
 
 /* Input parameters */
 DEF VAR pdMNPPortingDate AS DATE NO-UNDO.
@@ -21,8 +22,8 @@ DEF VAR pcRegion         AS CHAR NO-UNDO.
 DEF VAR pcStruct         AS CHAR NO-UNDO.
 DEF VAR lcStruct         AS CHAR NO-UNDO.
 DEF VAR pcProduct        AS CHAR NO-UNDO. 
-DEF VAR pcTariff         AS CHAR NO-UNDO. 
-
+DEF VAR pcTariff         AS CHAR NO-UNDO.
+DEF VAR piDelType        AS INT  NO-UNDO.
 DEF VAR ldMNPPortingDate AS DATE NO-UNDO.
 DEF VAR ldeCurrentTime   AS DEC  NO-UNDO.
 
@@ -31,7 +32,7 @@ IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_request(pcStruct,"mnp_porting_date!,order_channel!,region!,product,tariff").
+lcStruct = validate_request(pcStruct,"mnp_porting_date!,order_channel!,region!,product,tariff,delivery_type").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN pdMNPPortingDate = get_date(pcStruct,"mnp_porting_date")
@@ -39,6 +40,18 @@ ASSIGN pdMNPPortingDate = get_date(pcStruct,"mnp_porting_date")
        pcRegion         = get_string(pcStruct,"region")
        pcProduct        = get_string(pcStruct,"product")
        pcTariff         = get_string(pcStruct,"tariff").
+
+IF LOOKUP("delivery_type", pcStruct) GT 0
+THEN piDelType = get_int(pcStruct,"delivery_type").
+
+FIND FIRST TMSCodes NO-LOCK WHERE
+   TMSCodes.TableName = "MNPCal"       AND
+   TMSCodes.FieldName = "DeliveryType" AND
+   TMSCodes.CodeValue = STRING(piDelType)
+NO-ERROR.
+
+IF NOT AVAILABLE TMSCodes
+THEN RETURN appl_err("Invalid delivery type").
 
 IF pdMNPPortingDate = ? OR pdMNPPortingDate < TODAY THEN
    RETURN appl_err("Invalid MNP Porting Date").
@@ -60,7 +73,8 @@ ldMNPPortingDate = fMNPChangeWindowDate(ldeCurrentTime,
                                         pcOrderChannel,
                                         pcRegion,
                                         pcProduct,
-                                        pcTariff).
+                                        pcTariff,
+                                        piDelType).
 
 IF ldMNPPortingDate = ? THEN
    RETURN appl_err("Invalid Estimated MNP Porting Date").

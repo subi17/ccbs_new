@@ -1,5 +1,5 @@
-{testpaa.i}
-{tmsconst.i}
+{Syst/testpaa.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE lcErrorCodes AS CHARACTER NO-UNDO. 
 

@@ -8,9 +8,9 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{msreqfunc.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msreqfunc.i}
 
 DEFINE INPUT PARAMETER iiReqId AS INTEGER   NO-UNDO.
 

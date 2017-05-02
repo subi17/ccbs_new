@@ -13,23 +13,23 @@
   Version ......: Cubio
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhServiceLimit AS HANDLE NO-UNDO.
    lhServiceLimit = BUFFER ServiceLimit:HANDLE.
    RUN StarEventInitialize(lhServiceLimit).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhServiceLimit).
+      RUN Mc/eventview2.p(lhServiceLimit).
    END.
 
 END.
@@ -135,7 +135,7 @@ END FUNCTION.
          
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Price List,By SLCode  ,By 3, By 4".
@@ -169,12 +169,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ServiceLimit  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -309,16 +309,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ServiceLimit.GroupCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServiceLimit.GroupCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServiceLimit.GroupCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ServiceLimit.SLCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServiceLimit.SLCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServiceLimit.SLCode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -457,8 +457,8 @@ BROWSE:
 
         IF AVAIL DayCampaign AND            
                  LOOKUP(DayCampaign.dcType,"4,8") > 0 
-        THEN RUN proglimit(INPUT ServiceLimit.slseq).           
-        ELSE RUN servicelimittarget(INPUT ServiceLimit.slseq).
+        THEN RUN Mm/proglimit.p(INPUT ServiceLimit.slseq).           
+        ELSE RUN Mm/servicelimittarget.p(INPUT ServiceLimit.slseq).
 
         ufkey = TRUE.
         NEXT loop.
@@ -468,7 +468,7 @@ BROWSE:
      
         RUN local-find-this(FALSE).
 
-        RUN mservicelimit(INPUT 0 , 
+        RUN Mm/mservicelimit.p(INPUT 0 , 
                                   ServiceLimit.dialtype,
                                   Servicelimit.slseq ).
         ufkey = TRUE.
@@ -543,8 +543,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY
           ServiceLimit.SLCode
           ServiceLimit.GroupCode
@@ -669,7 +669,7 @@ PROCEDURE local-update-record:
              IF keylabel(LASTKEY) = "F9" AND 
                 FRAME-FIELD = "InclUnit" 
              THEN DO:
-                RUN h-tmscodes(INPUT "ServiceLimit", /* TableName */
+                RUN Help/h-tmscodes.p(INPUT "ServiceLimit", /* TableName */
                                      "InclUnit", /* FieldName */
                                      "ServiceLimit", /* GroupCode */
                                OUTPUT lcCode).
@@ -680,7 +680,7 @@ PROCEDURE local-update-record:
                    WITH FRAME lis.
                 END.
                 ehto = 9.
-                RUN ufkey.
+                RUN Syst/ufkey.p.
                 NEXT. 
              END.
 

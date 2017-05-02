@@ -8,15 +8,15 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{fmakemsreq.i}
-{fpcmaintreq.i}
-{service.i}
-{cparam2.i}
-{requestaction_exec.i}
-{tmsconst.i}
-{penaltyfee.i}
-{fcustpl.i}
+{Syst/commali.i}
+{Func/fmakemsreq.i}
+{Func/fpcmaintreq.i}
+{Func/service.i}
+{Func/cparam2.i}
+{Mm/requestaction_exec.i}
+{Syst/tmsconst.i}
+{Func/penaltyfee.i}
+{Func/fcustpl.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLIType    AS CHAR NO-UNDO.
@@ -249,8 +249,9 @@ PROCEDURE pPeriodicalContract:
       /* request should wait until another bundle request is completed */
       lcWaitFor = "".
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
-         icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} THEN DO:
-         
+         (icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} OR
+          icSource =  {&REQUEST_SOURCE_STC} ) THEN DO:
+
          FOR EACH bBundleRequest NO-LOCK USE-INDEX OrigRequest WHERE
                   bBundleRequest.OrigRequest = iiMsRequest AND
                   bBundleRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
@@ -261,6 +262,7 @@ PROCEDURE pPeriodicalContract:
                   bBundleContract.DCEvent = bBundleRequest.ReqCParam3 AND
                   LOOKUP(bBundleContract.DCType,
                          {&PERCONTRACT_RATING_PACKAGE}) > 0:
+            IF fIsConvergentFixedContract(bBundleRequest.ReqCParam3) THEN NEXT. 
             lcWaitFor = ":wait" + STRING(bBundleRequest.MsRequest).
          END.     
       END.
@@ -620,7 +622,7 @@ PROCEDURE pServicePackage:
       CASE CTServPac.ServType:
       /* barring */
       WHEN 8 THEN DO:
-         RUN barrengine (liMsSeq,
+         RUN Mm/barrengine.p (liMsSeq,
                          lcActionKey,
                          icSource,            /* source  */
                          "ReqAct",            /* creator */
@@ -844,7 +846,7 @@ PROCEDURE pBarring:
    /* activation */
    WHEN 1 THEN DO:
          
-      RUN barrengine (liMsSeq,
+      RUN Mm/barrengine.p (liMsSeq,
                       ttAction.ActionKey,
                       icSource,            /* source  */
                       "ReqAct",            /* creator */

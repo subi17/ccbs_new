@@ -10,11 +10,11 @@
  * @output      success;boolean;Result status of saving SMS
 */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+{Syst/tmsconst.i}
 gcBrand = "1".
 
-{eventval.i}
+{Syst/eventval.i}
 DEFINE VARIABLE pcReqList AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcKeyValue AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcUserName AS CHARACTER NO-UNDO.
@@ -39,7 +39,7 @@ IF TRIM(pcUserName) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    lhInvText = BUFFER InvText:HANDLE.
    lhRepText = BUFFER RepText:HANDLE.
    RUN StarEventInitialize(lhInvText).

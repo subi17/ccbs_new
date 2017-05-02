@@ -6,13 +6,13 @@
   CREATED ......: 19.4.2016
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
-{tmsconst.i}
-{q25functions.i}
-{ftransdir.i}
-{eventlog.i}
-{gbilling.i}
+{Syst/tmsconst.i}
+{Func/q25functions.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Func/gbilling.i}
 
 DEF VAR lcResponseFile AS CHAR NO-UNDO.
 DEF VAR lcRootDir AS CHAR NO-UNDO.

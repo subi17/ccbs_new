@@ -11,26 +11,27 @@
   Version ......: Yoigo
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{msreqfunc.i}
-{eventval.i}
-{fwebuser.i}
-{fmakemsreq.i}
-{msisdn.i}
-{timestamp.i}
-{ftmrlimit.i}
-{fcustdata.i}
-{msagrcustchg.i}
-{fuserright.i}
-{tmsconst.i}
-{invoicetarget.i}
-{fdss.i}
-{femailinvoice.i}
-{fcustchangereq.i}
-{fsubstermreq.i}
-{main_add_lines.i}
-{fbankdata.i}
-{fbundle.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fwebuser.i}
+{Func/fmakemsreq.i}
+{Func/msisdn.i}
+{Func/timestamp.i}
+{Func/ftmrlimit.i}
+{Func/fcustdata.i}
+{Mm/msagrcustchg.i}
+{Func/fuserright.i}
+{Syst/tmsconst.i}
+{Mc/invoicetarget.i}
+{Func/fdss.i}
+{Func/femailinvoice.i}
+{Func/fcustchangereq.i}
+{Func/fsubstermreq.i}
+{Func/main_add_lines.i}
+{Func/fbankdata.i}
+{Mm/fbundle.i}
+{Mc/dpmember.i}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
@@ -48,7 +49,7 @@ IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 10 THEN
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobSub AS HANDLE NO-UNDO.
    lhMobSub = BUFFER MobSub:HANDLE.
@@ -133,12 +134,12 @@ PROCEDURE pFinalize:
    IF AVAILABLE MsOwner AND MsOwner.PayType THEN liPayType = 2.
    
    IF liPayType = 2 THEN 
-      RUN cli_prepaidrate (icCLI,     
+      RUN Rate/cli_prepaidrate.p (icCLI,     
                            ldaFromDate,  
                            ldaToDate,    
                            TRUE).      /* silent = true */  
    ELSE 
-      RUN cli_rate (icCLI,
+      RUN Rate/cli_rate.p (icCLI,
                     ldaFromDate,
                     ldaToDate,
                     TRUE).
@@ -217,7 +218,7 @@ PROCEDURE pOwnerChange:
       ELSE DO:
          IF liOrigStat > 0 AND INDEX(RETURN-VALUE,"SMS") > 0 THEN DO:
             
-            RUN acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Rejected",
                             IF NUM-ENTRIES(RETURN-VALUE,"/") >= 3 
@@ -310,12 +311,12 @@ PROCEDURE pOwnerChange:
             MsRequest.ReqDParam1 > MsRequest.ActStamp
          THEN DO:
             
-            RUN acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Accepted",
                             "").
 
-            RUN acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "PreviousDay",
                             "").
@@ -445,7 +446,7 @@ PROCEDURE pOwnerChange:
       
          ASSIGN liCreated[liReqCnt] = liDefCust
                 llNewCust           = TRUE.
-         RUN copymobcu.p(INPUT-OUTPUT liCreated[liReqCnt],
+         RUN Mm/copymobcu.p(INPUT-OUTPUT liCreated[liReqCnt],
                        FALSE).
       END.
       
@@ -706,7 +707,7 @@ PROCEDURE pOwnerChange:
 
    /* send SMS */
    IF MsRequest.SendSMS = 1 THEN 
-      RUN acc_sendsms(MsRequest.MsRequest,
+      RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                       liNewOwner,
                       "Done",
                       "").  
@@ -714,7 +715,7 @@ PROCEDURE pOwnerChange:
    /* fee from owner change to new customer (actually to invoice customer) */
    IF MsRequest.CreateFees THEN DO:
    
-      RUN create_charge_comp.p(
+      RUN Mm/create_charge_comp.p(
          {&REQUEST_SOURCE_MANUAL_TMS},
          Mobsub.MsSeq,   
          MsRequest.UserCode,
@@ -884,6 +885,7 @@ PROCEDURE pMsCustMove:
    DEF VAR ldaDate      AS DATE NO-UNDO. 
    DEF VAR liManTime    AS INT  NO-UNDO. 
    DEF VAR lcDate       AS CHAR NO-UNDO. 
+   DEF VAR liOldAgrCust AS INT  NO-UNDO.
 
    DEF BUFFER bBillTarget FOR BillTarget.
    DEF BUFFER bOwner      FOR MSOwner.
@@ -1277,6 +1279,7 @@ PROCEDURE pMsCustMove:
    FIND CURRENT MobSub EXCLUSIVE-LOCK.
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobSub).
+   liOldAgrCust = MobSub.AgrCust.
    ASSIGN MobSub.CustNum = iiNewUser    WHEN iiNewUser > 0
           MobSub.InvCust = iiNewInvCust WHEN iiNewInvCust > 0
           MobSub.AgrCust = iiNewOwner.
@@ -1284,6 +1287,26 @@ PROCEDURE pMsCustMove:
    IF MsRequest.ReqIParam3 = 1 THEN DO: 
       Mobsub.Salesman = ENTRY(11,MsRequest.ReqCParam1,";").
    END.   
+
+   /* ADDLINE-20 Additional Line */
+   IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+      fCloseAddLineDiscount(MobSub.AgrCust,
+                            MobSub.MsSeq,
+                            MobSub.CLIType,
+                            TODAY - 1).
+   END.
+   ELSE IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:
+      FOR EACH bOMobSub NO-LOCK WHERE
+               bOMobSub.Brand   = gcBrand      AND
+               bOMobSub.AgrCust = liOldAgrCust AND
+               bOMobSub.MsSeq  <> MobSub.MsSeq AND
+               LOOKUP(bOMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+            fCloseAddLineDiscount(bOMobSub.AgrCust,
+                                  bOMobSub.MsSeq,
+                                  bOMobSub.CLIType,
+                                  TODAY - 1).
+      END.
+   END.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobSub).
    

@@ -16,8 +16,8 @@
                   Version ......: Tele1Europe
                        -------------------------------------------------------------------------- */
 
-{testpaa.i}
-{tmsparam2.i}
+{Syst/testpaa.i}
+{Func/tmsparam2.i}
 
 def var pvmlog    as log  no-undo format "Yes/No" init TRUE.
 def var ticfile   as char no-undo format "x(60)".
@@ -47,7 +47,7 @@ ASSIGN ok = TRUE
        "/apps/mtv/tms/snet".
 ticfile = "/tmp/cdr2004022.asc".
 IF ok THEN DO:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       ticfile
    WITH FRAME loki EDITING.
@@ -66,7 +66,7 @@ if ticfile = "" OR ticfile = "Mobile OnLine" THEN LEAVE.
 
 
 ufk = 0. ehto = 3.
-RUN ufkey. PAUSE 0.
+RUN Syst/ufkey.p. PAUSE 0.
 
 message "Are You SURE You want to start reading CDRs into database ?"
 UPDATE ok.

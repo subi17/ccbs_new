@@ -8,10 +8,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{date.i}
-{cparam2.i}
-{email.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/email.i}
 
 DEF INPUT PARAMETER idaRunDate AS DATE NO-UNDO.
 

@@ -6,15 +6,15 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
-{ftaxdata.i}
-{offer.i}
-{ftopup.i}
-{service.i}
-{dpmember.i}
-{contract_end_date.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/ftaxdata.i}
+{Mc/offer.i}
+{Func/ftopup.i}
+{Func/service.i}
+{Mc/dpmember.i}
+{Func/contract_end_date.i}
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiOrderID     AS INT  NO-UNDO.
@@ -225,7 +225,7 @@ PROCEDURE pFatime:
          THEN RETURN "".
    END.
 
-   RUN creafat (MobSub.CustNum,
+   RUN Mc/creafat.p (MobSub.CustNum,
                 MobSub.MsSeq,
                 OfferItem.ItemKey,      /* FatGroup  */
                 OfferItem.Amount,
@@ -449,6 +449,24 @@ PROCEDURE pDiscountPlanMember:
          WHEN "CONT24" THEN lcDiscPlan = "CONT24DISC".
          WHEN "CONT23" THEN lcDiscPlan = "CONT23DISC".
       END CASE.
+   END.
+  
+  /* ADDLINE-20 If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
+   IF LOOKUP(Order.CLIType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
+      FIND FIRST OrderCustomer WHERE
+                 OrderCustomer.Brand   = gcBrand       AND
+                 OrderCustomer.OrderID = Order.OrderID AND
+                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+      IF AVAILABLE OrderCustomer THEN DO:
+         IF fCheckExistingConvergent(OrderCustomer.CustIDType,OrderCustomer.CustID) OR
+            fCheckOngoingConvergentOrder(OrderCustomer.CustIDType,OrderCustomer.CustID) THEN DO:
+            IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                              OrderAction.Brand    = gcBrand           AND
+                              OrderAction.OrderID  = Order.OrderID     AND
+                              OrderAction.ItemType = "AddLineDiscount" AND
+                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) THEN RETURN "".
+         END.
+      END.
    END.
 
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,

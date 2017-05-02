@@ -4,10 +4,10 @@
 */
 
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 
-{eventlog.i}
+{Syst/eventlog.i}
        
 DEF VAR liQty   AS INT    NO-UNDO.
 DEF VAR liDel   AS INT    NO-UNDO. 
@@ -17,7 +17,7 @@ DEF VAR lcError AS CHAR   NO-UNDO.
 /* new customers to post's address surveillance */
 fELog("DAILY","NewCust2PostiStarted").
 
-RUN postfilec (OUTPUT liQty,
+RUN Mc/postfilec.p (OUTPUT liQty,
                OUTPUT liDel,
                OUTPUT lcError).
 

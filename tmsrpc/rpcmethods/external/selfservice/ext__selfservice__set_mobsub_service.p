@@ -34,16 +34,16 @@
 
 {xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
-{commpaa.i}
+{Syst/commpaa.i}
 katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
 gcBrand = "1".
-{tmsconst.i}
-{fmakemsreq.i}
-{subser.i}
-{barrfunc.i}
-{fbundle.i}
-{fexternalapi.i}
-{service.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Mm/subser.i}
+{Func/barrfunc.i}
+{Mm/fbundle.i}
+{Func/fexternalapi.i}
+{Func/service.i}
 
 /* Input parameters */
 DEF VAR pcReqList       AS CHAR NO-UNDO.
@@ -133,7 +133,8 @@ END.
 
 /*YPR-4773*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
-IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
+IF MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}   /*16*/ OR
+   MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} /*17*/ THEN
    RETURN appl_err("Mobile line provisioning is not complete").
 
 

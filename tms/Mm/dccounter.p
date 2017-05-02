@@ -8,8 +8,8 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{daycampaign.i}
+{Syst/commali.i}
+{Rate/daycampaign.i}
 
 DEF  INPUT PARAMETER iiMsseq       AS INT    NO-UNDO.
 DEF  INPUT PARAMETER icEvent       AS CHAR   NO-UNDO.
@@ -88,7 +88,7 @@ form /*  search WITH FIELD DCCounter */
     with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FUNCTION fDispUnit RETURNS LOGICAL
@@ -140,13 +140,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* DCCounter -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
       
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 5. RUN ufkey.
+        ehto = 5. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE DCCounter.
@@ -226,14 +226,14 @@ BROWSE:
         
         IF iiMsseq > 0 THEN ufk[1] = 0.
         ASSIGN ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       
       
       IF order = 1 THEN DO:
-        CHOOSE ROW DCCounter.dcdate ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW DCCounter.dcdate {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) DCCounter.dcdate WITH FRAME sel.
       END. 
       nap = keylabel(LASTKEY).
@@ -360,9 +360,9 @@ BROWSE:
             recid(DCCounter) = rtab[frame-line(sel)]
        /*exclusive-lock*/ no-lock.
        assign fr-header = " VIEW " ufkey = TRUE ehto = 5.
-       RUN ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        

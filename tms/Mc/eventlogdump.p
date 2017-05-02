@@ -1,7 +1,7 @@
-{commali.i}
-{timestamp.i}
-{dumpfile_run.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/dumpfile_run.i}
+{Func/cparam2.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.

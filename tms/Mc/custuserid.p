@@ -8,9 +8,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{fwebuser.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/fwebuser.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 
@@ -95,7 +95,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       ufk   = 0  
       ufk[8]= 8 
       ehto = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 8 THEN LEAVE.
 

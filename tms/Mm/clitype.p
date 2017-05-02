@@ -23,22 +23,22 @@
 
 &GLOBAL-DEFINE BrTable Clitype
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CLIType'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CLIType'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCLIType AS HANDLE NO-UNDO.
    lhCLIType = BUFFER CLIType:HANDLE.
    RUN StarEventInitialize(lhCLIType).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCLIType).
+      RUN Mc/eventview2.p(lhCLIType).
    END.
 
 END.
@@ -83,6 +83,7 @@ DEF VAR lcUsageType  AS CHAR NO-UNDO.
 DEF VAR lcBundleType AS CHAR NO-UNDO.
 DEF VAR lcLineType   AS CHAR NO-UNDO.
 DEF VAR lcFixedLineType  AS CHAR NO-UNDO.
+DEF VAR lcTariffType     AS CHAR NO-UNDO. 
 
 form
     CliType.Brand      FORMAT "X(2)" COLUMN-LABEL "Br"
@@ -100,7 +101,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     "CLIType ......:"  CLIType.CLIType FORMAT "X(12)" SKIP
@@ -112,13 +113,12 @@ form
     "Usage Type....:"  AT 35 CLIType.UsageType
         HELP "1=Voice, 2=Data"
         lcUsageType NO-LABEL FORMAT "X(15)" SKIP
-    "Rate plan ....:"  CLIType.PricePlan FORMAT "X(13)" PLName   SKIP
+    "Rate plan ....:"  CLIType.PricePlan FORMAT "X(20)" PLName   SKIP
     "Disc. plan ...:"  CLIType.DiscPlan    DPName   SKIP
     
     "Service pack .:"  CliType.ServicePack FORMAT "x(2)" 
-      SPName FORMAT "x(10)" SKIP
-    "Service Class :"  CliType.ServiceClass     SKIP
-    
+      SPName FORMAT "x(10)" 
+    "Service Class :"  AT 35 CliType.ServiceClass     SKIP
     
     "BillingTarget :"  Clitype.BillTarget           SKIP
     "DOC1 Code ....:"  Clitype.ContrType 
@@ -152,7 +152,10 @@ form
     "Fixed LineType:"  AT 35 CLIType.FixedLineType
         HELP "1=ADSL, 2=FIBER"
         lcFixedLineType NO-LABEL FORMAT "X(15)" SKIP
-    
+    "Tariff Type...:" CLIType.TariffType  
+        HELP "0=MobileOnly, 1=Convergent, 2=FixedOnly, 3=Fusion"
+        lcTariffType NO-LABEL FORMAT "X(15)" 
+
 WITH OVERLAY ROW 2 centered
    COLOR value(cfc)
    TITLE COLOR value(ctc)
@@ -227,6 +230,15 @@ FUNCTION fFixedLineType RETURNS LOGIC
                                       STRING(iiFixedLineType)).
 END FUNCTION.
 
+FUNCTION fTariffType RETURNS LOGIC
+   (iiTariffType AS INT):
+
+   lcTariffType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
+                                   "CLIType",
+                                   "TariffType",
+                                    STRING(iiTariffType)).
+END FUNCTION.   
+
 FUNCTION fUsageType RETURNS LOGIC
    (iiUsageType AS INT):
 
@@ -236,7 +248,7 @@ FUNCTION fUsageType RETURNS LOGIC
                                       STRING(iiUsageType)).
 END FUNCTION.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST CLIType Where 
@@ -266,12 +278,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CLIType  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR CLIType.CLIType
@@ -363,16 +375,16 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CLIType.CLIType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CLIType.CLIType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CLIType.CLIType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CLIType.CLIName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CLIType.CLIName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CLIType.CLIName WITH FRAME sel.
       END.
 
@@ -501,8 +513,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP CLIType With FRAME f1.
        SET  lcBrand WHEN gcallbrand = TRUE CLIType WITH FRAME f1.
@@ -528,7 +540,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
         RUN local-find-this(FALSE).
 
-        RUN ctservpac (CLIType.CLIType).
+        RUN Mm/ctservpac.p (CLIType.CLIType).
         
         ufkey = TRUE.
         NEXT LOOP.
@@ -537,7 +549,7 @@ BROWSE:
      /* translations */
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
         RUN local-find-this(FALSE).
-        RUN invlang(9,CLIType.CLIType).
+        RUN Mc/invlang.p(9,CLIType.CLIType).
           
         ufkey = TRUE.
         NEXT LOOP.
@@ -546,7 +558,7 @@ BROWSE:
      /* memo */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "CLIType",
                  INPUT STRING(CLIType.CLIType),
                  INPUT "CLI Type").
@@ -615,7 +627,7 @@ BROWSE:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CLIType.CLIType.
 
        RUN local-UPDATE-record.                                  
@@ -708,6 +720,8 @@ PROCEDURE local-find-others.
 
    fFixedLineType(CLIType.FixedLineType).
 
+   fTariffType(CLIType.TariffType).
+   
    fUsageType(CLIType.UsageType).
    
 END PROCEDURE.
@@ -766,6 +780,7 @@ PROCEDURE local-UPDATE-record:
           CLIType.StatusCode lcStatus
           CLIType.LineType lcLineType
           CLIType.FixedLineType lcFixedLineType
+          CLIType.TariffType  lcTariffType
       WITH FRAME lis.
 
       ASSIGN lcAccName = fAccName(CLIType.ARAccNum)
@@ -779,14 +794,14 @@ PROCEDURE local-UPDATE-record:
          ufk[1] = 7 WHEN lcRight = "RW"
          ufk[8] = 8
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
          
       IF toimi = 1 THEN 
       ChangeType:
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          PROMPT-FOR
             CLIType.CLIName
@@ -809,6 +824,7 @@ PROCEDURE local-UPDATE-record:
             CLIType.StatusCode
             CLIType.LineType
             CLIType.FixedLineType
+            CLIType.TariffType
          WITH FRAME lis EDITING:
          
             READKEY.
@@ -818,7 +834,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "PayType" THEN DO:
-                  RUN h-tmscodes("CLIType",
+                  RUN Help/h-tmscodes.p("CLIType",
                                  "PayType",
                                  "MobSub",
                                  OUTPUT lcCode).
@@ -828,7 +844,7 @@ PROCEDURE local-UPDATE-record:
                   WITH FRAME lis.
                END.
                ELSE IF FRAME-FIELD = "ServicePack" THEN DO:
-                  RUN h-tmscodes.p("CLIType",
+                  RUN Help/h-tmscodes.p("CLIType",
                                  "ServicePack",
                                  "Profile",
                                  OUTPUT lcCode).
@@ -839,7 +855,7 @@ PROCEDURE local-UPDATE-record:
                END.
              
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -967,6 +983,17 @@ PROCEDURE local-UPDATE-record:
                   END.    
                END.
 
+               ELSE IF FRAME-FIELD = "TariffType" THEN DO:
+                  fTariffType(INPUT INPUT CLIType.TariffType).
+                  DISP lcTariffType WITH FRAME lis.
+
+                  IF lcTariffType = "" THEN DO:
+                     MESSAGE "Unknown Tariff type"
+                     VIEW-AS ALERT-BOX ERROR.
+                     NEXT.
+                  END.    
+               END.
+
             END.
             APPLY LASTKEY.
          END.
@@ -1007,7 +1034,8 @@ PROCEDURE local-UPDATE-record:
                CLIType.WebStatusCode
                CLIType.StatusCode
                CLIType.LineType
-               CLIType.FixedLineType.
+               CLIType.FixedLineType
+               CLIType.TariffType.
 
             IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCLIType).
             

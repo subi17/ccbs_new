@@ -17,17 +17,21 @@
                    voip_amount;double;bono voip data amount (MB)
                    dss2_compatible;boolean;DSS2 compatible
                    voip_compatible;boolean;Voip Compatible
+ * @region taxzone;string; VAT Code Name
+           taxinclvalue;decimal; Monthly Cost based on including Zone Tax
  */
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
 DEF VAR pcIdArray AS CHAR NO-UNDO. 
 DEF VAR liCounter AS INTEGER NO-UNDO. 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
+DEF VAR lcRegionArray  AS CHAR NO-UNDO.
+DEF VAR lcRegionStruct AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
 pcIDArray = get_array(param_toplevel_id, "0").
@@ -54,9 +58,9 @@ DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
 DEF VAR llVoIPCompatible   AS LOG NO-UNDO.
 DEF VAR lcPromotionBundles AS CHAR NO-UNDO. 
 
-{cparam2.i}
-{tmsconst.i}
-{fprepaidfee.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/fprepaidfee.i}
 
 ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcCONTDContracts = fCParamC("CONTD_CONTRACTS")
@@ -179,6 +183,16 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
                  ServiceLimit.GroupCode = "BONO_VOIP" NO-LOCK NO-ERROR.
       IF AVAIL ServiceLimit THEN
          add_double(lcResultStruct,"voip_amount", ServiceLimit.InclAmt).
+   END.
+
+   lcRegionArray = add_array(lcResultStruct, "region").
+   FOR EACH VATCode NO-LOCK WHERE
+            VATCode.TaxClass  = "1"   AND
+            VATCode.FromDate <= TODAY AND
+            VATCOde.ToDate   >= TODAY:
+      lcRegionStruct = add_struct(lcRegionArray,"").
+      add_string(lcRegionStruct,"taxzone", VATCode.VCName).
+      add_double(lcRegionStruct,"taxinclvalue", (1 + VatCode.VatPerc / 100) * ldeFee).
    END.
 END.
 

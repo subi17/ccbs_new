@@ -7,12 +7,12 @@
   CREATED ......: 24.02.1997 pt
   changePVM ....: 01.04.1998 pt Invoice.InvAmt : one may NOT UPDATE
                   21.04.1998 kl InvGroup.UpdCustBal ( AccNum receivable )
-                  09.10.1998 pt RUN memo (nninme.p)
+                  09.10.1998 pt RUN Mc/memo.p (nninme.p)
                   13.04.1999 pt in English
                   24.08.1999 pt set TimeStamp when changed
                   30.04.2002 aam "kr" references removed 
                   02.05.2002 tk  eventlogging added
-                  20.05.2002 tk  RUN memo
+                  20.05.2002 tk  RUN Mc/memo.p
                   10.06.2002 aam use Invoice.OverPaym AND OPAccNum FOR
                                  overpayment,
                                  don't UPDATE InvDate, InvType, PaymState, 
@@ -39,26 +39,26 @@
   Version ......: M15
   ---------------------------------------------------------------------------*/
 
-{commali.i}
-{timestamp.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
-{fctype.i}
-{fduedate.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
+{Func/fctype.i}
+{Func/fduedate.i}
+{Func/cparam2.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER Invoice:HANDLE.
    RUN StarEventINITialize(lhInvoice).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhInvoice).
+      RUN Mc/eventview2.p(lhInvoice).
    END.
 
 END.
@@ -195,7 +195,7 @@ FUNCTION fClaimStateName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "yri". RUN ufcolor.
+cfc = "yri". RUN Syst/ufcolor.p.
 
 liDueDate = fCParamI("DueDateTrans").
 
@@ -238,7 +238,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
    PAUSE 0 no-message.
    assign lasnimi = ""
           kodnim = "".
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    PROMPT-FOR Invoice.InvNum /*WITH FRAME Invoice */
    VALIDATE(input InvNum = "" OR input InvNum ="0" OR
             CAN-FIND (FIRST Invoice WHERE 
@@ -250,7 +250,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
         exclusive-lock no-error.
 
    IF AVAILABLE Invoice THEN DO:
-      RUN invbal(Invoice.InvNum,
+      RUN Ar/invbal.p(Invoice.InvNum,
                  OUTPUT suoritettu).
       suoritettu = Invoice.InvAmt - suoritettu.                 
    END.
@@ -329,9 +329,9 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufk[6] = (IF lcRight = "RW" THEN 12 ELSE 0)
       ufk[7] = 0  ufk[7] = 0   ufk[8] = 8   ufk[9] = 0 ehto = 0.
 
-      ehto = 0. RUN ufkey.p.
+      ehto = 0. RUN Syst/ufkey.p.
       IF toimi = 1 AND lcRight = "RW" THEN DO:
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhInvoice).
 
@@ -376,7 +376,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
                IF FRAME-FIELD = "ClaimState"
                THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",    /* TableName */
                                        "ClaimState", /* FieldName */
                                        "AccRec",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -393,7 +393,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
                ELSE IF FRAME-FIELD = "ClaimCancel"
                THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice",     /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName */
                                        "ClaimCancel", /* FieldName */
                                        "AccRec",      /* GroupCode */
                                  OUTPUT lcCode).
@@ -409,7 +409,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
                ELSE IF FRAME-FIELD = "ChargeType" THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                                        "ChargeType",       /* FieldName */
                                        "AccRec",      /* GroupCode */
                                  OUTPUT lcCode).
@@ -426,7 +426,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
                ELSE IF FRAME-FIELD = "DelType" THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                                        "DelType",       /* FieldName */
                                        "Billing",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -443,7 +443,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
                ELSE IF FRAME-FIELD = "SpecDel" THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                                        "SpecDel",       /* FieldName */
                                        "Billing",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -458,7 +458,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
                END.
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -546,7 +546,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
       END.
 
       ELSE IF toimi = 3 THEN DO : /* memo */
-         RUN memo(INPUT Invoice.Custnum,
+         RUN Mc/memo.p(INPUT Invoice.Custnum,
                   INPUT "invoice",
                   INPUT STRING(Invoice.InvNum),
                   INPUT "Invoice Number").

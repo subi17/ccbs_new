@@ -8,17 +8,17 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}.
+{Syst/commali.i}.
 
 DEFINE INPUT PARAM piCustNum   AS INT NO-UNDO. 
 DEFINE INPUT PARAM piMsSeq     AS INT NO-UNDO. 
 DEFINE INPUT PARAM piLimitType AS INT NO-UNDO. 
 DEFINE INPUT PARAM piTMRuleSeq AS INT NO-UNDO. 
 
-{lib/tokenlib.i}
-{dataformat.i}
-{flimitreq.i}
-{tmsconst.i}
+{Mc/lib/tokenlib.i}
+{Func/dataformat.i}
+{Func/flimitreq.i}
+{Syst/tmsconst.i}
 
 DEF NEW shared VAR siirto AS CHAR.
 
@@ -110,7 +110,7 @@ WITH  OVERLAY ROW 8 centered
 orders = "By Customer    ,By Subscription".
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -207,16 +207,16 @@ BROWSE:
         ufk[6] = 1752   WHEN AVAIL Limit 
         ufk[8]= 8 
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Limit.Custnum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Limit.Custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Limit.Custnum WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
-        CHOOSE ROW Limit.MsSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Limit.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Limit.MsSeq WITH FRAME sel.
       END.
       
@@ -244,7 +244,7 @@ BROWSE:
       
       IF LOOKUP(nap,"f4") > 0 AND ufk[4] > 0 THEN DO:
          
-         RUN selectbox(
+         RUN Syst/selectbox.p(
             "LIMIT FUNCTIONS",
             "Set limit",
             OUTPUT lcSelected).
@@ -375,7 +375,7 @@ BROWSE:
          
          RUN local-find-this(FALSE).
          
-         RUN memo
+         RUN Mc/memo.p
             (Limit.Custnum,
             "Limit",
             STRING(Limit.Custnum) + ";" + STRING(Limit.TMRuleSeq),
@@ -390,7 +390,7 @@ BROWSE:
       
          RUN local-find-this(FALSE).
          
-         RUN eventsel("limit",
+         RUN Mc/eventsel.p("limit",
          "#BEGIN" + chr(255) + STRING(piCustnum) + chr(255) + 
          STRING(Limit.LimitType) + chr(255) + string(pitmruleseq) + 
          chr(255) + STRING(Limit.LimitID) + chr(255) + 
@@ -568,7 +568,7 @@ PROCEDURE local-UPDATE-record:
    UPDATE-LOOP:
    REPEAT ON ENDKEY UNDO, LEAVE:
    
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.p.
   
       DISP ldeValue lcValueDesc WITH FRAME lis.
    
@@ -585,7 +585,7 @@ PROCEDURE local-UPDATE-record:
       
       IF FRAME-FIELD = "ldeValue" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN tmscodesel(INPUT "Limit",  
+         RUN Syst/tmscodesel.p(INPUT "Limit",  
                               lcLimitType,
                               "Limit",
                               "",
@@ -601,7 +601,7 @@ PROCEDURE local-UPDATE-record:
          END.   
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          NEXT. 
          
       END.

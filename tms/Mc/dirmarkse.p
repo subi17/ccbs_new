@@ -8,7 +8,7 @@
                   16.09.03 jp Brand 
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF SHARED VAR siirto AS CHAR.
 
@@ -39,7 +39,7 @@ FORM
     WITH CENTERED OVERLAY SCROLL 1 13 DOWN ROW 3
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) " Direct Marketing " FRAME sel.
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
    FIND FIRST DMarketing USE-INDEX DirMarkName WHERE 
               DMArketing.Brand = gcBrand 
    NO-LOCK NO-ERROR.
@@ -131,16 +131,16 @@ BROWSE:
          ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3   ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 2 THEN DO:
-         CHOOSE ROW DMarketing.DirMark ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW DMarketing.DirMark {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) DMarketing.DirMark WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
-        CHOOSE ROW DMarketing.DirMarkName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DMarketing.DirMarkName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) DMarketing.DirMarkName WITH FRAME sel.
       END.
 

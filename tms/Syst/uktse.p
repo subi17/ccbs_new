@@ -13,7 +13,7 @@
   siirto:  STRING, joka ilmaisee valitun numeron          (out)
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -30,7 +30,7 @@ WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
 title color value(ctc) " USERS "
 OVERLAY FRAME kase.
 
-cfc = "kase". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "kase". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 runko:
 repeat:
 
@@ -39,7 +39,7 @@ repeat:
      ufk = 0 ufk[5] = 11
      ufk[6] = 0  ufk[7] = 0  ufk[8] = 8  ufk[9] = 1 siirto = ?.
 
-   ehto = 3. RUN ufkey.p.
+   ehto = 3. RUN Syst/ufkey.p.
 
    FIND FIRST TMSUser no-lock no-error.
    IF NOT AVAILABLE TMSUser THEN DO:
@@ -80,7 +80,7 @@ BROWSE:
       repeat WITH FRAME kase ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE.
-         CHOOSE ROW TMSUser.UserCode ;(uchoose.i;) no-error WITH FRAME kase.
+         CHOOSE ROW TMSUser.UserCode {Syst/uchoose.i} no-error WITH FRAME kase.
          COLOR DISPLAY value(ccc) TMSUser.UserCode WITH FRAME kase.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.
