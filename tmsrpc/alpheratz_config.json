@@ -36,7 +36,7 @@
 	},
 	"mnp": {
 		"3050": {
-			"/": [ "mnp", {
+			"/mnp": [ "mnp", {
 				"check-local": "\"disable\"",
 				"min-procs": "1",
 				"max-procs": "1",
@@ -50,7 +50,7 @@
 	},
     "mnp_mock": {
         "3051": {
-            "/": [ "mnp_mock", {
+            "/mnp": [ "mnp_mock", {
                     "check-local": "\"disable\"",
                     "min-procs": "1",
                     "max-procs": "1",
