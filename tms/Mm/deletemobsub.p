@@ -29,6 +29,7 @@
 {Func/fixedlinefunc.i}
 {Func/orderfunc.i}
 {Mc/dpmember.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -726,18 +727,46 @@ PROCEDURE pTerminate:
    END.
 
    /* YNC-61 + YDR-193 */
-   IF LOOKUP(lcTermReason,"1,4,5,6,9,10") > 0      AND 
-      fIsYoigoCLI(MobSub.CLI)             EQ FALSE AND 
-      fIsMasmovilCLI(MobSub.CLI)          EQ FALSE THEN 
+   IF LOOKUP(lcTermReason,"1,4,5,6,9,10") > 0 THEN 
    DO:
-      
-      RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
-      
-      IF RETURN-VALUE BEGINS "ERROR" THEN
-         fLocalMemo("TermMobsub",
-                    STRING(MobSub.MsSeq),
-                    "BAJA",
-                    RETURN-VALUE). 
+      IF fIsYoigoCLI(MobSub.CLI) EQ FALSE AND fIsMasmovilCLI(MobSub.CLI) EQ FALSE THEN
+      DO:
+          RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
+          
+          IF RETURN-VALUE BEGINS "ERROR" THEN
+             fLocalMemo("TermMobsub",
+                        STRING(MobSub.MsSeq),
+                        "BAJA",
+                        RETURN-VALUE). 
+      END.
+      ELSE IF BUFFER-TENANT-NAME(MobSub) = {&TENANT_YOIGO} AND fIsMasmovilCLI(MobSub.CLI) THEN
+      DO:
+          fsetEffectiveTenantForAllDB({&TENANT_MASMOVIL}).
+
+          RUN pReturnMSISDN(MobSub.CLI).
+
+          fsetEffectiveTenantForAllDB({&TENANT_YOIGO}).    
+
+          IF RETURN-VALUE BEGINS "ERROR" THEN
+             fLocalMemo("TermMobsub",
+                        STRING(MobSub.MsSeq),
+                        "BAJA",
+                        RETURN-VALUE).
+      END.   
+      ELSE IF BUFFER-TENANT-NAME(MobSub) = {&TENANT_MASMOVIL} AND fIsYoigoCLI(MobSub.CLI) THEN
+      DO:
+          fsetEffectiveTenantForAllDB({&TENANT_YOIGO}).
+
+          RUN pReturnMSISDN(MobSub.CLI).
+
+          fsetEffectiveTenantForAllDB({&TENANT_MASMOVIL}).   
+
+          IF RETURN-VALUE BEGINS "ERROR" THEN
+             fLocalMemo("TermMobsub",
+                        STRING(MobSub.MsSeq),
+                        "BAJA",
+                        RETURN-VALUE).
+      END.
    END.
 
    /* subscription is terminated by customer or by ported out request
@@ -977,6 +1006,31 @@ PROCEDURE pTerminate:
 
    RETURN "".
    
+END PROCEDURE.
+
+PROCEDURE pReturnMSISDN:
+   DEF INPUT PARAMETER icMSISDN AS CHAR NO-UNDO.
+
+   FIND FIRST MSISDN WHERE MSISDN.Brand = gcBrand AND MSISDN.CLI = icMSISDN NO-LOCK USE-INDEX CLI NO-ERROR.
+   IF NOT AVAILABLE MSISDN THEN 
+      RETURN "ERROR:MSISDN not available".
+
+   FIND MobSub WHERE MobSub.Brand = gcBrand AND MobSub.Cli = MSISDN.Cli NO-LOCK NO-ERROR.
+   IF AVAIL MobSub THEN 
+      RETURN "ERROR:MSISDN is in use".
+   
+   FIND Order WHERE Order.Brand = gcBrand AND Order.cli = msisdn.cli AND LOOKUP(Order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0 NO-LOCK NO-ERROR.
+   IF AVAIL Order THEN 
+      RETURN "ERROR:MSISDN is in ongoing order".
+
+   fMakeMsidnHistory(RECID(MSISDN)).
+   
+   ASSIGN
+      MSISDN.StatusCode = ({&MSISDN_ST_RETURNED_TO_YOIGO})
+      MSISDN.Actiondate = TODAY.
+
+   RETURN "".
+
 END PROCEDURE.
 
 /* YOT-1013 */
