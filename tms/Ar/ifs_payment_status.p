@@ -13,6 +13,7 @@
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/eventval.i}
+{Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -241,7 +242,7 @@ PROCEDURE pReadEvents:
 
        /* MasMovil tenant External ID is 14 characters long and can
           start with 0 value. That is why overwritten here. */
-       IF TENANT-ID(LDBNAME(1)) > 0 THEN
+       IF TENANT-NAME(LDBNAME(1)) EQ {&TENANT_MASMOVIL} THEN
          lcInvID        = SUBSTRING(lcReadLine,25,14).
 
       FIND FIRST Customer WHERE Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
