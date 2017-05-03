@@ -43,11 +43,13 @@ FUNCTION fCanRetryFusionMessage RETURNS LOGICAL
 
    /* automatic resending check */
    IF (icError BEGINS "NW_ERROR" AND 
-       LOOKUP(icResultCode,"1,2,3") = 0) OR
+       (LOOKUP(icResultCode,"1,2,3") = 0 OR
+        icResultDesc EQ "Could not parse JSON")) /* YTS-10682 */
+      OR
       (icResultCode EQ {&MASMOVIL_ERROR_ADAPTER_NETWORK} OR
       (icResultCode EQ {&MASMOVIL_ERROR_MASMOVIL} AND
        LOOKUP(icResultDesc,{&MASMOVIL_RETRY_ERROR_CODES}) > 0))
-       OR
+      OR
       LOOKUP(icResultCode,{&MASMOVIL_RETRY_ERROR_CODES}) > 0 THEN DO:
 
       FOR EACH bFusionMessage NO-LOCK WHERE
