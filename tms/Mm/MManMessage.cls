@@ -45,8 +45,8 @@ CLASS Mm.MManMessage FINAL:
 
       objJsonObject = NEW JsonObject().
 
-      DO lii = 1 TO NUM-ENTRIES(icParamKeys, "¤"):
-         lcEntry = ENTRY(lii,icParamKeys,"¤").
+      DO lii = 1 TO NUM-ENTRIES(icParamKeys, "|"):
+         lcEntry = ENTRY(lii,icParamKeys,"|").
          IF NUM-ENTRIES(lcEntry,"=") NE 2
          THEN RETURN ERROR NEW Progress.Lang.AppError("Invalid param key value " + lcEntry, 1).
          objJsonObject:Add(ENTRY(1,lcEntry,"="),ENTRY(2,lcEntry,"=")).
@@ -111,7 +111,7 @@ CLASS Mm.MManMessage FINAL:
         icSMSRecipient   AS CHARACTER,
         icEmailRecipient AS CHARACTER,
         icPushRecipient  AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "¤" separated list */
+        icParamValues    AS CHARACTER ): /* "|" separated list */
 
       IF iiITNum > 0
       THEN FIND InvText NO-LOCK WHERE InvText.ITNum = iiITNum NO-ERROR.
@@ -171,7 +171,7 @@ CLASS Mm.MManMessage FINAL:
         icKeyValue       AS CHARACTER,
         iiLanguage       AS INTEGER,
         icSMSRecipient   AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "¤" separated list */
+        icParamValues    AS CHARACTER ): /* "|" separated list */
 
       RETURN mCreateMessage(?,
                             icTarget,
@@ -187,7 +187,7 @@ CLASS Mm.MManMessage FINAL:
    METHOD PUBLIC STATIC LOGICAL mCreateSMSMessage
       ( iiITNum          AS INTEGER,
         icSMSRecipient   AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "¤" separated list */
+        icParamValues    AS CHARACTER ): /* "|" separated list */
 
       RETURN mCreateMessage(iiITNum,
                             "",
@@ -205,7 +205,7 @@ CLASS Mm.MManMessage FINAL:
         icKeyValue       AS CHARACTER,
         iiLanguage       AS INTEGER,
         icEmailRecipient AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "¤" separated list */
+        icParamValues    AS CHARACTER ): /* "|" separated list */
 
       RETURN mCreateMessage(?,
                             icTarget,
@@ -221,7 +221,7 @@ CLASS Mm.MManMessage FINAL:
    METHOD PUBLIC STATIC LOGICAL mCreateEmailMessage
       ( iiITNum          AS INTEGER,
         icEmailRecipient AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "¤" separated list */
+        icParamValues    AS CHARACTER ): /* "|" separated list */
 
       RETURN mCreateMessage(iiITNum,
                             "",
@@ -239,7 +239,7 @@ CLASS Mm.MManMessage FINAL:
         icKeyValue       AS CHARACTER,
         iiLanguage       AS INTEGER,
         icPushRecipient  AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "¤" separated list */
+        icParamValues    AS CHARACTER ): /* "|" separated list */
 
       RETURN mCreateMessage(?,
                             icTarget,
@@ -255,7 +255,7 @@ CLASS Mm.MManMessage FINAL:
    METHOD PUBLIC STATIC LOGICAL mCreatePushMessage
       ( iiITNum          AS INTEGER,
         icPushRecipient  AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "¤" separated list */
+        icParamValues    AS CHARACTER ): /* "|" separated list */
 
       RETURN mCreateMessage(iiITNum,
                             "",
