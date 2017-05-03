@@ -585,12 +585,11 @@ FOR EACH MobSub NO-LOCK WHERE
                                  Order.OrderChannel = "VIP") THEN
       NEXT EACH_MOBSUB.
 
-   FOR EACH bfMobSub WHERE bfMobSub.Brand = "1" AND
+   FOR EACH bfMobSub WHERE bfMobSub.Brand   = MobSub.Brand AND
                            bfMobsub.CustNum = MobSub.CustNum NO-LOCK:
-      IF CAN-FIND(FIRST CLIType WHERE CLIType.Brand = MobSub.Brand AND 
+      IF CAN-FIND(FIRST CLIType WHERE CLIType.Brand   = bfMobSub.Brand AND 
                                       CLIType.CliType = bfMobSub.CliTYpe AND
-                                      (CLIType.WebStatusCode = 0 OR
-                                       CLIType.StatusCode = 0)) THEN
+                                      CLIType.WebStatusCode = 0) THEN
          NEXT EACH_MOBSUB.                              
                            
    END.                        
