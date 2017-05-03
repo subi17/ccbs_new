@@ -37,16 +37,17 @@ CLASS Mm.MManMessage FINAL:
       ( icParamKeyValue AS CHARACTER ):
 
       IF icParamKeyValue = ""
-      THEN RETURN.
+      THEN RETURN "".
 
       DEFINE VARIABLE objJsonObject AS CLASS JsonObject NO-UNDO.
       DEFINE VARIABLE lcEntry       AS CHARACTER        NO-UNDO.
+      DEFINE VARIABLE lcJson        AS CHARACTER        NO-UNDO.
       DEFINE VARIABLE lii           AS INTEGER          NO-UNDO.
 
       objJsonObject = NEW JsonObject().
 
-      DO lii = 1 TO NUM-ENTRIES(icParamKeys, "|"):
-         lcEntry = ENTRY(lii,icParamKeys,"|").
+      DO lii = 1 TO NUM-ENTRIES(icParamKeyValue, "|"):
+         lcEntry = ENTRY(lii,icParamKeyValue,"|").
          IF NUM-ENTRIES(lcEntry,"=") NE 2
          THEN RETURN ERROR NEW Progress.Lang.AppError("Invalid param key value " + lcEntry, 1).
          objJsonObject:Add(ENTRY(1,lcEntry,"="),ENTRY(2,lcEntry,"=")).
@@ -68,8 +69,10 @@ CLASS Mm.MManMessage FINAL:
       ( INPUT  icTarget        AS CHARACTER,
         INPUT  icKeyValue      AS CHARACTER,
         INPUT  iiLanguage      AS INTEGER,
-        OUTPUT oiITNum         AS INTEGER,
-        OUTPUT ocParamKeyValue AS CHARACTER ):
+        OUTPUT ocParamKeyValue AS CHARACTER,
+        OUTPUT oiITNum         AS INTEGER ):
+
+      DEFINE BUFFER InvText FOR InvText.
 
       ASSIGN
          oiITNum         = ?
@@ -113,6 +116,9 @@ CLASS Mm.MManMessage FINAL:
         icPushRecipient  AS CHARACTER,
         icParamValues    AS CHARACTER ): /* "|" separated list */
 
+      DEFINE BUFFER InvText FOR InvText.
+      DEFINE BUFFER MMLog   FOR MMLog.
+
       IF iiITNum > 0
       THEN FIND InvText NO-LOCK WHERE InvText.ITNum = iiITNum NO-ERROR.
 
@@ -154,7 +160,7 @@ CLASS Mm.MManMessage FINAL:
          MMLog.Language           = mLanguageCode(iiLanguage)
          MMLog.MessageBody        = InvText.InvText WHEN InvText.TemplateID = "" 
          MMLog.Category           = InvText.Category
-         MMLog.SchedulingPolicy   = InvText.ShedulingPolicy
+         MMLog.SchedulingPolicy   = InvText.SchedulingPolicy
          MMLog.SchedulingPriority = InvText.SchedulingPriority
          MMLog.CallBacks          = InvText.CallBacks
          MMLog.JsonParam          = mConvertToJson(icParamValues)
