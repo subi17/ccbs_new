@@ -240,7 +240,7 @@ PROCEDURE pAddRequestStructElement:
    add_string(lcRequestStruct, "codigoContrato", lcFormRequest).
 
    add_boolean(lcRequestStruct, "fechaVentanaCambioPorAbonado",FALSE ).
-   add_string(lcRequestStruct, "NRNReceptor", "004").
+   add_string(lcRequestStruct, "NRNReceptor", "730000").
    add_string(lcRequestStruct, "codigoOperadorReceptor", "004").
    add_string(lcRequestStruct, "codigoOperadorDonante", "005").
    add_timestamp(lcRequestStruct, "fechaSolicitudPorAbonado", fMakeTS()).
