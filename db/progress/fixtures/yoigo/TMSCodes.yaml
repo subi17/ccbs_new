@@ -3229,6 +3229,46 @@ bulkload: TMSCodes
   InUse: 1
 
 bulkload: TMSCodes
+  TableName: "DumpHPD"
+  FieldName: "UnitType"
+  CodeGroup: "DumpHPD"
+  CodeValue: "days"
+  CodeName: "days"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "DumpHPD"
+  FieldName: "UnitType"
+  CodeGroup: "DumpHPD"
+  CodeValue: "hours"
+  CodeName: "hours"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "DumpHPD"
+  FieldName: "UnitType"
+  CodeGroup: "DumpHPD"
+  CodeValue: "months"
+  CodeName: "months"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "DumpHPD"
+  FieldName: "UnitType"
+  CodeGroup: "DumpHPD"
+  CodeValue: "weeks"
+  CodeName: "weeks"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "DumpHPD"
+  FieldName: "UnitType"
+  CodeGroup: "DumpHPD"
+  CodeValue: "years"
+  CodeName: "years"
+  InUse: 1
+
+bulkload: TMSCodes
   TableName: "EventLog"
   FieldName: "EventLogStatus"
   CodeGroup: "Timing"
@@ -5564,7 +5604,7 @@ bulkload: TMSCodes
   FieldName: "MEmotype"
   CodeGroup: "MemoType"
   CodeValue: "Customer"
-  CodeName: "Customer"
+  CodeName: "Customer Name"
   InUse: 1
 
 bulkload: TMSCodes
@@ -7972,6 +8012,22 @@ bulkload: TMSCodes
   CodeGroup: "Order"
   CodeValue: "Fusion_Telesales"
   CodeName: "Fusion Telesales"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Order"
+  FieldName: "OrderChannel"
+  CodeGroup: "Order"
+  CodeValue: "Migration"
+  CodeName: "Migration"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Order"
+  FieldName: "OrderChannel"
+  CodeGroup: "Order"
+  CodeValue: "Migration_ota"
+  CodeName: "Migration_ota"
   InUse: 1
 
 bulkload: TMSCodes
@@ -11059,6 +11115,15 @@ bulkload: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
+  CodeValue: "AK"
+  CodeName: "ATAKAM DISTRIBUCION ONLINE"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
   CodeValue: "AL"
   CodeName: "Alcampo"
   ConfigValue: "13"
@@ -11069,6 +11134,15 @@ bulkload: TMSCodes
   CodeGroup: "IFS"
   CodeValue: "AM"
   CodeName: "AONMOBILE"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "AN"
+  CodeName: "ATAKAM EMISION"
   ConfigValue: "15"
   InUse: 1
 
@@ -11258,6 +11332,15 @@ bulkload: TMSCodes
   CodeValue: "KH"
   CodeName: "K-HABLS"
   ConfigValue: "27"
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "KR"
+  CodeName: "KONECTA RECEPCION"
+  ConfigValue: "15"
+  InUse: 1
 
 bulkload: TMSCodes
   TableName: "Salesman"

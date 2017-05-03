@@ -115,6 +115,7 @@ gcBrand = "1".
 {Func/fixedfee.i}
 {Func/fctchange.i}
 {Mnp/mnpoutchk.i}
+{Func/multitenantfunc.i}
 
 FIND FIRST Segmentation NO-LOCK WHERE
            Segmentation.MsSeq = piMsSeq NO-ERROR.
@@ -124,6 +125,7 @@ IF AVAILABLE Segmentation THEN ASSIGN
 
 resp_struct = add_struct(response_toplevel_id, "").
 
+add_string(resp_struct, "brand",fConvertTenantToBrand(vcTenant)).
 add_string(resp_struct, "cli", mobsub.cli).
 IF Mobsub.fixednumber NE ? THEN
    add_string(resp_struct, "fixed_number", Mobsub.fixednumber).
@@ -267,7 +269,7 @@ IF liMNPStatus NE ? THEN
       STRING(liMNPStatus EQ 0, "new/mnp")).
 ELSE  
    add_string(resp_struct, "number_type",
-      STRING(fISYoigoCLI(MobSub.CLI), "new/mnp")).
+      STRING((fISYoigoCLI(MobSub.CLI) OR fIsMasmovilCLI(MobSub.CLI)), "new/mnp")).
 
 /* subscription terminals  */
 term_array = add_array(resp_struct,"sub_terminals").

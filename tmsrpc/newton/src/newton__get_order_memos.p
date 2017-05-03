@@ -18,24 +18,27 @@
 {Syst/commpaa.i}
 gcbrand = "1".
 
-DEFINE VARIABLE piOrderId AS INTEGER NO-UNDO. 
-DEFINE VARIABLE pcType    AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE piMaxCount   AS INTEGER NO-UNDO.
-DEFINE VARIABLE piLastId  AS INTEGER NO-UNDO. 
-DEFINE VARIABLE top_struct AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE top_array AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE liCounter AS INTEGER NO-UNDO. 
-DEFINE VARIABLE liLeftCounter AS INTEGER NO-UNDO. 
+DEFINE VARIABLE pcTenant      AS CHAR      NO-UNDO.
+DEFINE VARIABLE piOrderId     AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE pcType        AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE piMaxCount    AS INTEGER   NO-UNDO.
+DEFINE VARIABLE piLastId      AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE top_struct    AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE top_array     AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE liCounter     AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE liLeftCounter AS INTEGER   NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "int,string,int,int") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,int,string,int,int") EQ ? THEN RETURN.
 
-piOrderId  = get_pos_int(param_toplevel_id, "0").
-pcType     = get_string(param_toplevel_id, "1").
-piMaxCount = get_int(param_toplevel_id, "2").
-piLastid   = get_int(param_toplevel_id, "3").
+pcTenant   = get_string(param_toplevel_id, "0").
+piOrderId  = get_pos_int(param_toplevel_id, "1").
+pcType     = get_string(param_toplevel_id, "2").
+piMaxCount = get_int(param_toplevel_id, "3").
+piLastid   = get_int(param_toplevel_id, "4").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
+{newton/src/settenant.i pcTenant}
 
 top_struct = add_struct(response_toplevel_id, "").
 top_array = add_array(top_struct, "memos").

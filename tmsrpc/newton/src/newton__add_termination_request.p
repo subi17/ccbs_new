@@ -93,7 +93,7 @@ IF pcTermType EQ {&TERMINATION_TYPE_PARTIAL} AND
 END.
 
 /* Yoigo MSISDN? */
-llYoigoCLI = fIsYoigoCLI(MobSub.CLI).            
+llYoigoCLI = (fIsYoigoCLI(MobSub.CLI) OR fIsMasmovilCLI(MobSub.CLI)).            
 liError = fCheckOrderer(piOrderer, llYoigoCLI, ocResult).            
 IF liError NE 0 THEN DO:
    RETURN appl_err(ocResult).

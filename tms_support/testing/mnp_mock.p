@@ -254,7 +254,8 @@ PROCEDURE pAddRequestStructElement:
    add_string(lcPersondata, "nombre", MNPDetails.FirstName).
    add_string(lcPersondata, "primerApellido", MNPDetails.SurName1).
 
-
+   IF MNPDetails.CustIdType = "CIF"
+   THEN add_string(lcPersondata, "razonSocial", MNPDetails.CompanyName).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
    ocResponse = SUBST("ERROR: XML creation: &1", gc_xmlrpc_error).

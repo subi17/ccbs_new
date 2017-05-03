@@ -1246,7 +1246,10 @@ PROCEDURE pMsCustMove:
           bOwner.AgrCust = iiNewOwner
           bOwner.CLIEvent = "ACC".
 
-   IF MobSub.CLIType BEGINS "CONT" THEN DO:
+   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                     CLIType.CLIType = MobSub.CLIType AND
+                     CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN DO:
+
       /* Create Mandate for Subscription and store it into MsOwner */
       fSplitTS(MsRequest.CreStamp, OUTPUT ldaDate, OUTPUT liManTime).
    

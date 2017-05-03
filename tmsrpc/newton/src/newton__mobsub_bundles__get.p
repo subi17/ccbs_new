@@ -43,8 +43,11 @@ DEF VAR lcOptionsStruct AS CHAR NO-UNDO.
 DEF VAR llUpComingDataBundle AS LOG NO-UNDO.
 DEF VAR llUpgradeUpsell AS LOG NO-UNDO.
 DEF VAR lcBONOContracts AS CHAR NO-UNDO.
-DEF VAR ldeActivationTS AS DEC NO-UNDO. 
-DEF VAR liActAllowed AS INT NO-UNDO INIT 1.
+DEF VAR lcVoiceBundles  AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryDataBundles  AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryVoiceBundles AS CHAR NO-UNDO.
+DEF VAR ldeActivationTS AS DEC  NO-UNDO. 
+DEF VAR liActAllowed    AS INT  NO-UNDO INIT 1.
 
 DEFINE BUFFER bMsRequest  FOR MsRequest.
 
@@ -118,14 +121,12 @@ FUNCTION fGetMDUBStatus RETURNS INT (
    END. /* IF pcBundle BEGINS {&DSS} THEN DO: */
 
    /* pending request for MDUB/PMDUB termination */
-   ELSE IF CAN-FIND(FIRST MsRequest WHERE
-                     MsRequest.MsSeq      = MobSub.MsSeq  AND
-                     MsRequest.ReqType    = {&REQTYPE_CONTRACT_TERMINATION} AND
-                     MsRequest.ReqCParam3 = pcBundle AND
-                     LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 
-                     USE-INDEX MsSeq) THEN 
-                     liStat = 2. /* cancelled ongoing */
-
+   ELSE IF CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq      = MobSub.MsSeq  AND
+                                          MsRequest.ReqType    = {&REQTYPE_CONTRACT_TERMINATION} AND
+                                          MsRequest.ReqCParam3 = pcBundle AND
+                                          LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 
+                                          USE-INDEX MsSeq) THEN 
+      liStat = 2. /* cancelled ongoing */
    /* if there is no active data bundle the return cancelled ongoing */
    ELSE IF pcBundle = "BONO_VOIP" AND
            fGetCurrentSpecificBundle(Mobsub.MsSeq,pcBundle) > "" AND
@@ -141,26 +142,80 @@ FUNCTION fGetMDUBStatus RETURNS INT (
                      MsRequest.MsSeq      = MobSub.MsSeq  AND
                      MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
                      MsRequest.ReqCParam3 = pcBundle AND
-                     LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
+                     LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0
                      USE-INDEX MsSeq) THEN
                      liStat = 3. /* activation ongoing */
 
    /* ongoing btc change */
-   ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO:
+   ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN 
+   DO:
       FIND FIRST MsRequest WHERE
-                 MsRequest.MsSeq   = MobSub.MsSeq AND
-                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
-                 LOOKUP(STRING(MsRequest.ReqStatus),
-                        {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
-                 LOOKUP(MsRequest.ReqCparam1,lcBONOContracts) > 0
-           NO-LOCK NO-ERROR.
-      IF AVAILABLE MsRequest THEN DO:
-         ASSIGN liStat = 4
-                pcBTCBundleId = MsRequest.ReqCparam2.
-         IF MsRequest.ReqCparam5 > "" THEN llUpgradeUpsell = TRUE.
+                 MsRequest.MsSeq   = MobSub.MsSeq                                        AND
+                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                            AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                 LOOKUP(MsRequest.ReqCparam1,lcBONOContracts) > 0                        NO-LOCK NO-ERROR.
+      IF AVAILABLE MsRequest THEN 
+      DO:
+         ASSIGN 
+            liStat = 4
+            pcBTCBundleId = MsRequest.ReqCparam2.
+
+         IF MsRequest.ReqCparam5 > "" THEN 
+            llUpgradeUpsell = TRUE.
       END. /* IF AVAILABLE MsRequest THEN DO: */
    END. /* ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO: */
-   
+   /* ongoing btc change */
+   ELSE IF LOOKUP(pcBundle,lcVoiceBundles) > 0 THEN 
+   DO:
+      FIND FIRST MsRequest WHERE
+                 MsRequest.MsSeq   = MobSub.MsSeq                                        AND
+                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                            AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                 LOOKUP(MsRequest.ReqCparam1,lcVoiceBundles) > 0                         NO-LOCK NO-ERROR.
+      IF AVAILABLE MsRequest THEN 
+      DO:
+         ASSIGN 
+            liStat = 4
+            pcBTCBundleId = MsRequest.ReqCparam2.
+            
+         IF MsRequest.ReqCparam5 > "" THEN 
+            llUpgradeUpsell = TRUE.
+      END. /* IF AVAILABLE MsRequest THEN DO: */
+   END. /* ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO: */
+   ELSE IF LOOKUP(pcBundle,lcSupplementaryDataBundles) > 0 THEN 
+   DO:
+      FIND FIRST MsRequest WHERE
+                 MsRequest.MsSeq   = MobSub.MsSeq                                        AND
+                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                            AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                 LOOKUP(MsRequest.ReqCparam1,lcSupplementaryDataBundles) > 0             NO-LOCK NO-ERROR.
+      IF AVAILABLE MsRequest THEN 
+      DO:
+         ASSIGN 
+            liStat = 4
+            pcBTCBundleId = MsRequest.ReqCparam2.
+            
+         IF MsRequest.ReqCparam5 > "" THEN 
+            llUpgradeUpsell = TRUE.
+      END. /* IF AVAILABLE MsRequest THEN DO: */
+   END. /* ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO: */
+   ELSE IF LOOKUP(pcBundle,lcSupplementaryVoiceBundles) > 0 THEN 
+   DO:
+      FIND FIRST MsRequest WHERE
+                 MsRequest.MsSeq   = MobSub.MsSeq                                        AND
+                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                            AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                 LOOKUP(MsRequest.ReqCparam1,lcSupplementaryVoiceBundles) > 0            NO-LOCK NO-ERROR.
+      IF AVAILABLE MsRequest THEN 
+      DO:
+         ASSIGN 
+            liStat = 4
+            pcBTCBundleId = MsRequest.ReqCparam2.
+            
+         IF MsRequest.ReqCparam5 > "" THEN 
+            llUpgradeUpsell = TRUE.
+      END. /* IF AVAILABLE MsRequest THEN DO: */
+   END. /* ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO: */
    RETURN liStat. 
 
 END FUNCTION.
@@ -176,8 +231,15 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
    
-   ASSIGN lcBONOContracts = fCParamC("BONO_CONTRACTS").
-
+   IF lcBONOContracts = "" THEN 
+   DO:
+       ASSIGN 
+          lcBONOContracts             = fCParamC("BONO_CONTRACTS")
+          lcVoiceBundles              = fCParamC("VOICE_BONO_CONTRACTS")
+          lcSupplementaryDataBundles  = fCParamC("SUPPLEMENT_DATA_BONO_CONTRACTS")
+          lcSupplementaryVoiceBundles = fCParamC("SUPPLEMENT_VOICE_BONO_CONTRACTS").
+   END.
+      
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "id", pcBundleId + "|" + STRING(MobSub.MsSeq)).
 
@@ -192,13 +254,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
        liActivations = fGetUpSellCount(pcBundleId,piMsSeq,MobSub.Custnum,OUTPUT lcError).
        add_int(lcResultStruct, "activations",liActivations).
    END.
-   /* check BONO contracts and customer level bundle status */
-   IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") > 0 OR
-      LOOKUP(pcBundleId,{&DSS_BUNDLES}) > 0 OR 
-      (MobSub.CLIType = "CONT15" AND pcBundleId = "VOICE100") OR
-      (MobSub.CLIType = "CONT9" AND pcBundleId = "FREE100MINUTES") OR
-      (MobSub.CLIType = "CONT10" AND pcBundleId = "FREE100MINUTES") OR 
-      vcTenant = {&TENANT_MASMOVIL} THEN 
+   ELSE
    DO:
        liStatus = fGetMDUBStatus(pcBundleId, OUTPUT ldeActivationTS).
        
@@ -212,7 +268,6 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
        lcOptionsStruct = add_struct(lcResultStruct,"options").
        add_boolean(lcOptionsStruct, "upcoming_data_bundle", llUpComingDataBundle).
    END.
-   ELSE lcError = "Invalid Bundle Id: " + pcBundleId .
 END.
 
 FINALLY:

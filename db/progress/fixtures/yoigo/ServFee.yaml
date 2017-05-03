@@ -152,6 +152,15 @@ bulkload: ServFee
 bulkload: ServFee
   Brand: "1"
   ServType: "MOBSUB"
+  ServKey: "ESTOAVAUS_WW"
+  EventType: 1
+  FromDate: 2004-01-01
+  ToDate: 2050-12-31
+  InvInfo: "0"
+
+bulkload: ServFee
+  Brand: "1"
+  ServType: "MOBSUB"
   ServKey: "ESTO_MUUTOS"
   EventType: 1
   FromDate: 2004-01-01
@@ -170,15 +179,6 @@ bulkload: ServFee
   Brand: "1"
   ServType: "MobSub"
   ServKey: "ESTO_SMS_WWW"
-  EventType: 1
-  FromDate: 2004-01-01
-  ToDate: 2050-12-31
-  InvInfo: "0"
-
-bulkload: ServFee
-  Brand: "1"
-  ServType: "MOBSUB"
-  ServKey: "ESTOAVAUS_WW"
   EventType: 1
   FromDate: 2004-01-01
   ToDate: 2050-12-31

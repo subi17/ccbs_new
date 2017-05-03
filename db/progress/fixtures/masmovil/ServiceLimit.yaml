@@ -35,6 +35,18 @@ bulkload: ServiceLimit
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
+  GroupCode: "MM_500_UPSELL"
+  SLSeq: 94
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_500_UPSELL"
+  SLName: "Upsell"
+  InclUnit: 4
+  InclAmt: 500
+  ValidFrom: 2017-04-15
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
   GroupCode: "MM_512_UPSELL"
   SLSeq: 72
   WebDisp: 0
@@ -105,6 +117,18 @@ bulkload: ServiceLimit
   InclAmt: 4096
   ValidFrom: 2017-03-16
   ValidTo: 2020-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "MM_DATA500"
+  SLSeq: 95
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MM_DATA500"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 500
+  ValidFrom: 2017-04-15
+  ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
   GroupCode: "MM_DATA512"

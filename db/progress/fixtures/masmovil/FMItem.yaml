@@ -1,4 +1,26 @@
 bulkload: FMItem
+  FeeModel: "Compensa 5"
+  PriceList: "COMMON"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: -5
+  BillType: "CC"
+  FromDate: 2017-04-03
+  ToDate: 2017-04-30
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "Handset"
+  PriceList: "COMMON2"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: 5
+  BillType: "CC"
+  FromDate: 2017-04-03
+  ToDate: 2017-04-24
+  Brand: "1"
+
+bulkload: FMItem
   FeeModel: "MM_1024_UPSELLMF"
   PriceList: "COMMON"
   BillCode: "MM_1024_UPSELLMF"
@@ -21,6 +43,20 @@ bulkload: FMItem
   BillType: "MF"
   BillCycle: 2
   FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_500_UPSELLMF"
+  PriceList: "COMMON"
+  BillCode: "MM_500_UPSELLMF"
+  Interval: 1
+  Amount: 4.13
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-04-15
   ToDate: 2049-12-31
   Brand: "1"
   BrokenRental: 2
@@ -62,6 +98,7 @@ bulkload: FMItem
   Amount: 3
   BillType: "MF"
   BillCycle: 2
+  FFItemQty: 24
   FromDate: 2017-02-23
   ToDate: 2049-12-31
   Brand: "1"
@@ -119,6 +156,20 @@ bulkload: FMItem
   BillType: "MF"
   BillCycle: 2
   FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_DATA500MF"
+  PriceList: "COMMON"
+  BillCode: "MM_DATA500MF"
+  Interval: 1
+  Amount: .06
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-04-15
   ToDate: 2049-12-31
   Brand: "1"
   BrokenRental: 2
@@ -291,4 +342,15 @@ bulkload: FMItem
   Brand: "1"
   BrokenRental: 2
   FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "single_fee_charge"
+  PriceList: "COMMON"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: 10
+  BillType: "CC"
+  FromDate: 2017-04-13
+  ToDate: 2018-03-31
+  Brand: "1"
 

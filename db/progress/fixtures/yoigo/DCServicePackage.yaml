@@ -750,3 +750,11 @@ bulkload: DCServicePackage
   FromDate: 2017-02-01
   ToDate: 2049-12-31
 
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT27"
+  DCServicePackageID: 96
+  ServPac: "SHAPER"
+  FromDate: 2017-04-13
+  ToDate: 2049-12-31
+

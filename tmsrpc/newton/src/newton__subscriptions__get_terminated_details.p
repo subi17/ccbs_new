@@ -174,7 +174,7 @@ IF AVAIL Order THEN DO:
 END.
 ELSE DO: 
    add_string(resp_struct, "number_type",
-      STRING(fISYoigoCLI(TermMobSub.CLI), "new/mnp")).
+      STRING((fISYoigoCLI(TermMobSub.CLI) OR fIsMasmovilCLI(MobSub.CLI)), "new/mnp")).
 END.
 
 FIND FIRST Msowner WHERE 

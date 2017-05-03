@@ -377,6 +377,55 @@ bulkload: Matrix
   Prior: 46
 
 bulkload: Matrix
+  MXName: "CONTDSL39"
+  MXKey: "PERCONTR"
+  MXSeq: 124
+  MXRes: 1
+  Prior: 47
+
+bulkload: Matrix
+  MXName: "CONTDSL52"
+  MXKey: "PERCONTR"
+  MXSeq: 125
+  MXRes: 1
+  Prior: 48
+
+bulkload: Matrix
+  MXName: "CONTFH39_50"
+  MXKey: "PERCONTR"
+  MXSeq: 126
+  MXRes: 1
+  Prior: 49
+
+bulkload: Matrix
+  MXName: "CONTFH49_300"
+  MXKey: "PERCONTR"
+  MXSeq: 127
+  MXRes: 1
+  Prior: 50
+
+bulkload: Matrix
+  MXName: "CONTFH52_50"
+  MXKey: "PERCONTR"
+  MXSeq: 128
+  MXRes: 1
+  Prior: 51
+
+bulkload: Matrix
+  MXName: "CONTFH62_300"
+  MXKey: "PERCONTR"
+  MXSeq: 129
+  MXRes: 1
+  Prior: 52
+
+bulkload: Matrix
+  MXName: "CONT27"
+  MXKey: "PERCONTR"
+  MXSeq: 847
+  MXRes: 1
+  Prior: 53
+
+bulkload: Matrix
   MXName: "ST CHANGE"
   MXKey: "STC-IDType"
   MXSeq: 1

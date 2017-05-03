@@ -125,10 +125,10 @@ FUNCTION fGetAllowedBundlesForSubscriptionType RETURNS CHAR
                             "CONT*"
                         ELSE IF icCliType BEGINS "CONT" THEN
                             "CONT*"
-                        ELSE IF icCliType BEGINS "TRAJ" THEN
-                            "TRAJ*"
+                        ELSE IF icCliType BEGINS "TARJ" THEN
+                            "TARJ*"
                         ELSE "")
-    lcSubsTypePrefix = (IF lcSubsTypePrefix <> "" THEN "," ELSE "") + icCliType.
+    lcSubsTypePrefix = lcSubsTypePrefix + (IF lcSubsTypePrefix <> "" THEN "," ELSE "") + icCliType.
 
   IF lcSubsTypePrefix > "" THEN
   DO liCount = 1 TO NUM-ENTRIES(lcSubsTypePrefix):

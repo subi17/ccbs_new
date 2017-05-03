@@ -9,8 +9,6 @@ import errno
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
-if environment == 'development':
-    open('Mc/version.i', 'wt').write(appversion)
 
 myself = os.path.basename(os.getcwd())
 
@@ -78,7 +76,7 @@ def getpf(pf):
         else:
             raise ValueError('Unknown tenant')
     else:
-        return '{}.pf'.format(pf)
+        return '{0}.pf'.format(pf)
 
 def active_cdr_db_pf():
     if '-S' in open('../db/progress/store/common.pf').read():
@@ -122,8 +120,7 @@ def daemon(*a):
     args = mpro + ['-b', '-p', 'gearbox/daemons/run_daemon.p',
             '-clientlog', '../var/log/d-' + daemon + instance + '.log',
             '-logthreshold', '209715200', '-numlogfiles', '0',
-            '-param', daemon + ',' + instance + ',../var/run',
-            '-T', '../var/tmp']
+            '-param', daemon + ',' + instance + ',../var/run']
 
     dbcount = 0
     for pp in parameters[2:]:
@@ -154,31 +151,46 @@ def daemon(*a):
 def rundaemons(*a): pass
 
 @target
-def build(*a):
+def build(match, *a):
+    '''build|buildextapi'''
     if len(parameters) != 1:
         raise PikeException('Expected build_dir as parameter')
     build_dir = parameters[0]
-    for file in nonp_source + ['Makefile.py']:
-        mkdir_p(os.path.dirname(os.path.join(build_dir, file)))
-        shutil.copy2(file, os.path.join(build_dir, file))
-    require('code.pl', [])
+    mkdir_p(build_dir)
+
+    if match == 'build':
+        for file in nonp_source + ['Makefile.py']:
+            mkdir_p(os.path.dirname(os.path.join(build_dir, file)))
+            shutil.copy2(file, os.path.join(build_dir, file))
+        require('compile.and.do.pl', [])
+    else:
+        print('Using /tmsapps r-files. Please make sure that you have compiled them!')
+        do_pl('/tmsapps')
+
     shutil.move(myself + '.pl', build_dir + '/' + myself + '.pl')
 
-@target
-def code_pl(*a):
-    """code.pl"""
-    if os.path.exists(myself + '.pl'):
-        os.unlink(myself + '.pl')
-    compiledir = 'temp_r'
-    _compile('COMPILE %s SAVE INTO {}.'.format(compiledir), compiledir)
-    os.chdir(compiledir)
-    call([dlc + '/bin/prolib', '../%s.pl' % myself, '-create'])
+def do_pl(rdir):
+    currdir = os.getcwd()
+    plfile = '{0}/{1}.pl'.format(currdir, myself)
+
+    if os.path.exists(plfile):
+        os.unlink(plfile)
+
+    os.chdir(rdir)
+    call([dlc + '/bin/prolib', plfile, '-create'])
     for dir, _dirs, files in os.walk('.'):
         for file in files:
             if file.endswith('.r'):
-                call([dlc + '/bin/prolib', '../%s.pl' % myself, '-add',
+                call([dlc + '/bin/prolib', plfile, '-add',
                       os.path.join(dir[2:], file)])
-    os.chdir('..')
+    os.chdir(currdir)
+
+@target
+def compile_and_do_pl(*a):
+    '''compile.and.do.pl'''
+    compiledir = 'temp_r'
+    _compile('COMPILE %s SAVE INTO {0}.'.format(compiledir), compiledir)
+    do_pl(compiledir)
     shutil.rmtree(compiledir)
 
 @target
@@ -186,17 +198,20 @@ def compile(match, *a):
     '''compile$|compilec$|preprocess$|xref$'''
 
     if match == 'compile':
-        compiledir = 'r'
-        compilecommand = 'COMPILE %s SAVE INTO {}.'
+        if environment == 'safeproduction':
+            compiledir = '/tmsapps'
+        else:
+            compiledir = 'r'
+        compilecommand = 'COMPILE %s SAVE INTO {0}.'
     elif match == 'compilec':
         compiledir = None
         compilecommand = 'COMPILE %s.'
     elif match == 'preprocess':
         compiledir = 'pp'
-        compilecommand = 'COMPILE %s PREPROCESS {}/%s.'
+        compilecommand = 'COMPILE %s PREPROCESS {0}/%s.'
     else:
         compiledir = 'xref'
-        compilecommand = 'COMPILE %s XREF {}/%s.'
+        compilecommand = 'COMPILE %s XREF {0}/%s.'
 
     if 'dir' in globals():
         compiledir = dir
@@ -211,9 +226,9 @@ def _compile(compilecommand, compiledir):
     else:
         source_files.extend(['applhelp.p'])
         for source_dir in os.listdir('.'):
-            if not os.path.isdir(source_dir) or source_dir in ['test', 'scripts', 'r', compiledir, 'pp', 'xref']:
+            if not os.path.isdir(source_dir) or source_dir in ['test', 'scripts', 'r', 'newdf', compiledir, 'pp', 'xref']:
                 continue
-            source_files.extend([ filu for filu in glob('{}/*'.format(source_dir)) if re.search(r'.*\.(p|cls)$', filu)] )
+            source_files.extend([ filu for filu in glob('{0}/*'.format(source_dir)) if re.search(r'.*\.(p|cls)$', filu)] )
 
     if compiledir:
         seen = []
@@ -253,7 +268,7 @@ def mkdir_p(directory):
             raise
 
 def make_compiler(cline, files, show='.'):
-    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='rt+')
+    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
     compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n')
     for ff in files:
         if show == '.':
@@ -295,7 +310,7 @@ def cui(*a):
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
 
-    args.extend(['-T', '../var/tmp', '-p', program])
+    args.extend(['-p', program])
 
     cmd = Popen(mpro + args)
     while cmd.poll() is None:
@@ -340,7 +355,7 @@ def terminal(*a):
         elif pp != 'all':
             args.append(pp)
 
-    args.extend(['-T', '../var/tmp', '-p', parameters[0]])
+    args.extend(['-p', parameters[0]])
 
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
@@ -366,7 +381,7 @@ def batch(*a):
     
     module_base = os.path.basename(batch_module)
     if 'tenant' in globals():
-        module_base = '{}_{}'.format(module_base,tenant)
+        module_base = '{0}_{1}'.format(module_base,tenant)
 
     cdr_dict = {}
 
@@ -378,7 +393,7 @@ def batch(*a):
        fd.write(str(os.getpid()))
        fd.close()
 
-    args = ['-T', '../var/tmp', '-b', '-p', batch_module + '.p']
+    args = ['-b', '-p', batch_module + '.p']
 
     all_in_parameters = False
     if 'all' in parameters[1:]:
@@ -433,7 +448,7 @@ def idbatch(*a):
     batch_module = parameters[0]
     module_base = os.path.basename(batch_module)
     if 'tenant' in globals():
-        module_base = '{}_{}'.format(module_base,tenant)
+        module_base = '{0}_{1}'.format(module_base,tenant)
 
     cdr_dict = {}
 
@@ -455,7 +470,7 @@ def idbatch(*a):
     fd.write(str(os.getpid()))
     fd.close()
 
-    args = ['-T', '../var/tmp', '-b', '-p', batch_module + '.p']
+    args = ['-b', '-p', batch_module + '.p']
 
     all_in_parameters = False
     if 'all' in parameters[1:]:
@@ -521,5 +536,5 @@ def editor(*a):
         tenant = "masmovil"
 
     args = parameters or (['-pf', getpf('../db/progress/store/all')])
-    args = mpro + args + ['-T', '../var/tmp', '-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
+    args = mpro + args + ['-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
     os.execlp(args[0], *args)

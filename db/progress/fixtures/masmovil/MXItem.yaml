@@ -151,11 +151,6 @@ bulkload: MXItem
 bulkload: MXItem
   MXSeq: 51
   MXName: "SubsTypeTo"
-  MXValue: "CONT*"
-
-bulkload: MXItem
-  MXSeq: 51
-  MXName: "SubsTypeTo"
   MXValue: "TARJ*"
 
 bulkload: MXItem
@@ -166,7 +161,7 @@ bulkload: MXItem
 bulkload: MXItem
   MXSeq: 837
   MXName: "PerContract"
-  MXValue: "MM_DATA512"
+  MXValue: "MM_DATA500"
 
 bulkload: MXItem
   MXSeq: 837
@@ -216,7 +211,7 @@ bulkload: MXItem
 bulkload: MXItem
   MXSeq: 837
   MXName: "PerContract"
-  MXValue: "MM_512_UPSELL"
+  MXValue: "MM_500_UPSELL"
 
 bulkload: MXItem
   MXSeq: 837
@@ -227,6 +222,11 @@ bulkload: MXItem
   MXSeq: 837
   MXName: "PerContract"
   MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
 
 bulkload: MXItem
   MXSeq: 837
@@ -255,6 +255,26 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 839
   MXName: "SubsTypeTo"
   MXValue: "MM_NET_5GB"
 
@@ -280,6 +300,26 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 840
   MXName: "SubsTypeTo"
   MXValue: "MM_NET_10GB"
 
@@ -305,6 +345,26 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 841
   MXName: "SubsTypeTo"
   MXValue: "MM_NET_20GB"
 
@@ -330,6 +390,26 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 842
   MXName: "SubsTypeTo"
   MXValue: "MM_NET_50GB"
 
@@ -355,6 +435,26 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 843
   MXName: "SubsTypeTo"
   MXValue: "MM_CERO_5GB"
 
@@ -380,6 +480,26 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 844
   MXName: "SubsTypeTo"
   MXValue: "MM_MAS_1GB"
 
@@ -405,6 +525,26 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 845
   MXName: "SubsTypeTo"
   MXValue: "MM_MAS_3GB"
 
@@ -427,6 +567,26 @@ bulkload: MXItem
   MXSeq: 846
   MXName: "PerContract"
   MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
 
 bulkload: MXItem
   MXSeq: 846

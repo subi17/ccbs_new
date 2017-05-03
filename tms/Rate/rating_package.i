@@ -205,17 +205,16 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
          lcNewTypeList  = ""
          llUpsell = FALSE.
 
-      IF BUFFER-TENANT-NAME(MsOwner) = "TMasmovil" THEN
-      DO:
-          /* Check availability of RELAX packages on subscription */
-          FOR EACH  ttServiceLimit NO-LOCK WHERE ttServiceLimit.GroupCode = "BONO_RELAX",
-              FIRST MServiceLimit NO-LOCK WHERE MServiceLimit.MsSeq    = MSOwner.MsSeq        AND
-                                                MServiceLimit.DialType = liDialType           AND
-                                                MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND
-                                                MServiceLimit.FromTS  <= CallTimeStamp        AND
-                                                MServiceLimit.EndTS   >= CallTimeStamp:
-              ASSIGN llAvailRelaxPackage = TRUE.                                        
-          END.                                      
+      
+      /* Check availability of RELAX packages on subscription */
+      FOR EACH  ttServiceLimit NO-LOCK WHERE ttServiceLimit.GroupCode = "MM_BONO_RELAX",
+          FIRST MServiceLimit NO-LOCK WHERE MServiceLimit.MsSeq    = MSOwner.MsSeq        AND
+                                            MServiceLimit.DialType = liDialType           AND
+                                            MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND
+                                            MServiceLimit.FromTS  <= CallTimeStamp        AND
+                                            MServiceLimit.EndTS   >= CallTimeStamp:
+          ASSIGN llAvailRelaxPackage = TRUE.
+          LEAVE.
       END.
       
       IF llAvailRelaxPackage THEN 

@@ -463,3 +463,52 @@ bulkload: DPTarget
   TargetTable: "BillItem"
   TargetKey: "CONTFH300MF"
 
+bulkload: DPTarget
+  DPId: 42
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT10MF"
+
+bulkload: DPTarget
+  DPId: 42
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT15MF"
+
+bulkload: DPTarget
+  DPId: 42
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT24MF"
+
+bulkload: DPTarget
+  DPId: 42
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT25MF"
+
+bulkload: DPTarget
+  DPId: 42
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONT26MF"
+
+bulkload: DPTarget
+  DPId: 42
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTDSLMF"
+
+bulkload: DPTarget
+  DPId: 42
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+  TargetTable: "BillItem"
+  TargetKey: "CONTS2GBMF"
+

@@ -791,6 +791,12 @@ bulkload: MNPOperator
 
 bulkload: MNPOperator
   Brand: "1"
+  OperName: "Yoigo Dumy"
+  OperCode: "705"
+  Active: TRUE 
+
+bulkload: MNPOperator
+  Brand: "1"
   OperName: "Lowi"
   OperCode: "813"
   ICCPrefix: "893457"

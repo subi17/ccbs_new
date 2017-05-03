@@ -170,7 +170,9 @@ PROCEDURE pMNPAnalyse:
             
             ASSIGN
                liCustnum = TermMobSub.Custnum
-               llIsPrepaid = (TermMobSub.clitype begins "tarj"). 
+               llIsPrepaid = CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                                CLIType.CLIType = TermMobSub.CLIType AND
+                                CLIType.PayType = {&CLITYPE_PAYTYPE_PREPAID}).
          END.
            
          FIND Customer WHERE Customer.Custnum = liCustnum NO-LOCK NO-ERROR.

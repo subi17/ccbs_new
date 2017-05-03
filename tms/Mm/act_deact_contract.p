@@ -92,7 +92,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
             RETURN "ERROR:Contract is not allowed for this subscription type".
 
          IF LOOKUP(icContract,lcBONOContracts) > 0 AND
-            NOT fAllowMDUBActivation() THEN
+            NOT fAllowMDUBActivation("") THEN
             RETURN "ERROR:Contract activation is not allowed".
 
          IF icContract EQ "BONO_VOIP" AND
@@ -128,7 +128,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
       END. /* WHEN "1" THEN DO: */
       WHEN "0" THEN DO:
          IF LOOKUP(icContract,lcBONOContracts) > 0 THEN DO:
-            IF NOT fAllowMDUBTermination() THEN
+            IF NOT fAllowMDUBTermination("") THEN
                RETURN "ERROR:Contract termination is not allowed".
             /* Ongoing BTC with upgrade upsell */
             ELSE IF fOngoingBTC(INPUT MobSub.MsSeq,

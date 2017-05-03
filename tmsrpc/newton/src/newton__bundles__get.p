@@ -39,23 +39,28 @@ DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
 DEF VAR lcRegionArray  AS CHAR NO-UNDO.
 DEF VAR lcRegionStruct AS CHAR NO-UNDO.
 
-DEF VAR lcIPLContracts     AS CHAR NO-UNDO.
-DEF VAR lcCONTDContracts   AS CHAR NO-UNDO.
-DEF VAR lcFLATContracts    AS CHAR NO-UNDO.
-DEF VAR lcBONOContracts    AS CHAR NO-UNDO.
-DEF VAR lcCONTSContracts   AS CHAR NO-UNDO.
-DEF VAR lcCONTSFContracts  AS CHAR NO-UNDO.
-DEF VAR lcCLIType          AS CHAR NO-UNDO.
-DEF VAR lcBundleType       AS CHAR NO-UNDO.
-DEF VAR ldeFee             AS DEC  NO-UNDO.
-DEF VAR liLineType         AS INT  NO-UNDO.
-DEF VAR llDss2Compatible   AS LOG NO-UNDO. 
-DEF VAR liFixedLineType    AS INT  NO-UNDO.
-DEF VAR lcVoIPBaseContracts AS CHAR NO-UNDO.
-DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+DEF VAR lcIPLContracts         AS CHAR NO-UNDO.
+DEF VAR lcCONTDContracts       AS CHAR NO-UNDO.
+DEF VAR lcFLATContracts        AS CHAR NO-UNDO.
+DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
+DEF VAR lcCONTSContracts       AS CHAR NO-UNDO.
+DEF VAR lcCONTSFContracts      AS CHAR NO-UNDO.
+DEF VAR lcCLIType              AS CHAR NO-UNDO.
+DEF VAR lcBundleType           AS CHAR NO-UNDO.
+DEF VAR ldeFee                 AS DEC  NO-UNDO.
+DEF VAR liLineType             AS INT  NO-UNDO.
+DEF VAR llDss2Compatible       AS LOG NO-UNDO. 
+DEF VAR liFixedLineType        AS INT  NO-UNDO.
+DEF VAR lcVoIPBaseContracts    AS CHAR NO-UNDO.
+DEF VAR lcAllowedDSS2SubsType  AS CHAR NO-UNDO.
 DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
-DEF VAR llVoIPCompatible   AS LOG NO-UNDO.
-DEF VAR lcPromotionBundles AS CHAR NO-UNDO. 
+DEF VAR llVoIPCompatible       AS LOG NO-UNDO.
+DEF VAR lcPromotionBundles     AS CHAR NO-UNDO. 
+DEF VAR lcVoiceBundles         AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryVoiceBundles AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryDataBundles  AS CHAR NO-UNDO.
+DEF VAR lcSupplementBundles         AS CHAR NO-UNDO.
+DEF VAR lcDefaultBundles            AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
 
@@ -64,17 +69,6 @@ pcIDArray = get_array(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "").
-
-ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
-       lcCONTDContracts = fCParamC("CONTD_CONTRACTS")
-       lcFLATContracts  = fCParamC("FLAT_CONTRACTS")
-       lcBONOContracts  = fCParamC("BONO_CONTRACTS")
-       lcCONTSContracts = fCParamC("CONTS_CONTRACTS")
-       lcCONTSFContracts = fCParamC("CONTSF_CONTRACTS")
-       lcVoIPBaseContracts = fCParamC("BONO_VOIP_BASE_BUNDLES")
-       lcAllVoIPNativeBundles = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
-       lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-       lcPromotionBundles    = fCParamC("PROMOTION_BUNDLES").
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
@@ -91,7 +85,27 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    {newton/src/settenant.i pcTenant}
 
-   FIND FIRST DayCampaign NO-LOCK WHERE
+   IF lcBONOContracts = "" THEN
+   DO:
+       ASSIGN 
+           lcIPLContracts              = fCParamC("IPL_CONTRACTS")
+           lcCONTDContracts            = fCParamC("CONTD_CONTRACTS")
+           lcFLATContracts             = fCParamC("FLAT_CONTRACTS")
+           lcBONOContracts             = fCParamC("BONO_CONTRACTS")
+           lcCONTSContracts            = fCParamC("CONTS_CONTRACTS")
+           lcCONTSFContracts           = fCParamC("CONTSF_CONTRACTS")
+           lcVoIPBaseContracts         = fCParamC("BONO_VOIP_BASE_BUNDLES")
+           lcAllVoIPNativeBundles      = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
+           lcAllowedDSS2SubsType       = fCParamC("DSS2_SUBS_TYPE")
+           lcPromotionBundles          = fCParamC("PROMOTION_BUNDLES")
+           lcVoiceBundles              = fCParamC("VOICE_BONO_CONTRACTS")
+           lcSupplementaryVoiceBundles = fCParamC("SUPPLEMENT_VOICE_BONO_CONTRACTS")
+           lcSupplementaryDataBundles  = fCParamC("SUPPLEMENT_DATA_BONO_CONTRACTS") 
+           lcDefaultBundles            = "MM_DATA600"
+           lcSupplementBundles         = TRIM(lcSupplementaryVoiceBundles + "," + lcSupplementaryDataBundles, ",").
+   END.    
+
+   FIND FIRST DayCampaign NO-LOCK WHERE 
               DayCampaign.Brand   = "1"  AND
               DayCampaign.DCEvent = pcID NO-ERROR.
    IF NOT AVAIL DayCampaign THEN
@@ -139,21 +153,16 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       END. /* FOR EACH ServiceLimit WHERE */
    END. /* IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO: */
    
-   IF LOOKUP(DayCampaign.DCEvent,lcBONOContracts) > 0 OR
-      DayCampaign.DCEvent = "HSPA_ROAM_EU"            OR 
-      (pcTenant = {&TENANT_MASMOVIL} AND DayCampaign.DCType = {&DCTYPE_BUNDLE}) THEN
+   IF (LOOKUP(DayCampaign.DCEvent,lcBONOContracts    ) > 0 OR
+       LOOKUP(DayCampaign.DCEvent,lcVoiceBundles     ) > 0 OR 
+       LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 OR 
+       LOOKUP(DayCampaign.DCEvent,lcDefaultBundles)    > 0 OR 
+       DayCampaign.DCEvent = "HSPA_ROAM_EU")               THEN
    DO:
-      IF INDEX(DayCampaign.DCEvent,"RELAX") > 0 THEN   
-         lcBundleType = "supplement_bundle".
+      IF LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 THEN   
+         lcBundleType = "supplemental_bundle".
       ELSE      
          lcBundleType = "bundle".
-   END.   
-   ELSE IF (pcTenant = {&TENANT_MASMOVIL} AND DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE}) THEN
-   DO:
-      IF INDEX(DayCampaign.DCEvent,"DATA") > 0 OR INDEX(DayCampaign.DCEvent,"VOICE") > 0 THEN   
-         lcBundleType = "bundle".
-      ELSE      
-         lcBundleType = "service".  
    END.
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcIPLContracts) > 0 THEN
       ASSIGN lcBundleType = "subscription"

@@ -31,6 +31,14 @@ db_locations = {
                   'prepedr': '/db1/prepedr/prepedr',
                   'fraudcdr': '/db1/fraudcdr/fraudcdr',
                   'reratelog': '/db1/reratelog/reratelog'},
+    'spica': {'common': 'alpheratz.int.asp.qvantel.net:common',
+             'ordercanal': 'alpheratz.int.asp.qvantel.net:ordercanal',
+             'mobile': 'alpheratz.int.asp.qvantel.net:mobile',
+             'counter': 'alpheratz.int.asp.qvantel.net:counter',
+             'star': 'alpheratz.int.asp.qvantel.net:star',
+             'prepedr': 'alpheratz.int.asp.qvantel.net:prepedr',
+             'fraudcdr': 'alpheratz.int.asp.qvantel.net:fraudcdr',
+             'reratelog': 'alpheratz.int.asp.qvantel.net:reratelog'},
     'yanai': {'common': '/db1/common/common',
               'ordercanal': '/db1/ordercanal/ordercanal',
               'mobile': '/db1/mobile/mobile',
@@ -39,6 +47,14 @@ db_locations = {
               'prepedr': '/db1/prepedr/prepedr',
               'fraudcdr': '/db1/fraudcdr/fraudcdr',
               'reratelog': '/db1/reratelog/reratelog'},
+    'yanney': {'common': 'yanai.int.asp.qvantel.net:common',
+               'ordercanal': 'yanai.int.asp.qvantel.net:ordercanal',
+               'mobile': 'yanai.int.asp.qvantel.net:mobile',
+               'counter': 'yanai.int.asp.qvantel.net:counter',
+               'star': 'yanai.int.asp.qvantel.net:star',
+               'prepedr': 'yanai.int.asp.qvantel.net:prepedr',
+               'fraudcdr': 'yanai.int.asp.qvantel.net:fraudcdr',
+               'reratelog': 'yanai.int.asp.qvantel.net:reratelog'},
     'arneb': {'common': '/db1/common/common',
               'ordercanal': '/db1/ordercanal/ordercanal',
               'mobile': '/db1/mobile/mobile',
@@ -55,26 +71,30 @@ db_locations = {
                'prepedr': '/db1/prepedr/prepedr',
                'fraudcdr': '/db1/fraudcdr10/fraudcdr10',
                'reratelog': '/db1/reratelog/reratelog'},
+    'sinistra': {'common': 'pallas.int.asp.qvantel.net:common',
+                 'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
+                 'mobile': 'pallas.int.asp.qvantel.net:mobile',
+                 'counter': 'pallas.int.asp.qvantel.net:counter',
+                 'star': 'pallas.int.asp.qvantel.net:star',
+                 'prepedr': 'pallas.int.asp.qvantel.net:prepedr',
+                 'fraudcdr': 'pallas.int.asp.qvantel.net:fraudcdr10',
+                 'reratelog': 'pallas.int.asp.qvantel.net:reratelog'},
     'leto': {'common': 'pallas.int.asp.qvantel.net:common',
              'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
              'mobile': 'pallas.int.asp.qvantel.net:mobile',
              'counter': 'pallas.int.asp.qvantel.net:counter',
              'star': 'pallas.int.asp.qvantel.net:star',
-             'prepedr': 'pallas.int.asp.qvantel.net:prepedr'},
+             'prepedr': 'pallas.int.asp.qvantel.net:prepedr',
+             'fraudcdr': 'pallas.int.asp.qvantel.net:fraudcdr10',
+             'reratelog': 'pallas.int.asp.qvantel.net:reratelog'},
     'maja': {'common': 'pallas.int.asp.qvantel.net:common',
              'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
              'mobile': 'pallas.int.asp.qvantel.net:mobile',
              'counter': 'pallas.int.asp.qvantel.net:counter',
              'star': 'pallas.int.asp.qvantel.net:star',
-             'prepedr': 'pallas.int.asp.qvantel.net:prepedr'},
-    'yanney': {'common': 'yanai.int.asp.qvantel.net:common',
-               'ordercanal': 'yanai.int.asp.qvantel.net:ordercanal',
-               'mobile': 'yanai.int.asp.qvantel.net:mobile',
-               'counter': 'yanai.int.asp.qvantel.net:counter',
-               'star': 'yanai.int.asp.qvantel.net:star',
-               'prepedr': 'yanai.int.asp.qvantel.net:prepedr',
-               'fraudcdr': 'yanai.int.asp.qvantel.net:fraudcdr',
-               'reratelog': 'yanai.int.asp.qvantel.net:reratelog'}
+             'prepedr': 'pallas.int.asp.qvantel.net:prepedr',
+             'fraudcdr': 'pallas.int.asp.qvantel.net:fraudcdr10',
+             'reratelog': 'pallas.int.asp.qvantel.net:reratelog'}
 }
 
 db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
@@ -108,6 +128,11 @@ sql_startup_options = {
 # All .pf files that are used by the clients. You need to define
 # producing target functions below for each added file. Check all_pf!
 main_pf_files = ['all.pf']
+
+# Global variables to migrations
+migrations_dir = os.path.join(work_dir, 'db', 'progress', 'migrations')
+migcache_dir   = 'migrations'
+if os.path.exists(migrations_dir) and not os.path.exists(migcache_dir): os.mkdir(migcache_dir)
 
 ########################## Implementation #############################
 
@@ -200,14 +225,14 @@ def structure_file(match, deps, db_dir, db_name):
         
 
 @target
-def remote_database_file(match, deps, host, db_dir, db_name):
-    '''([a-zA-Z]+):([-_/a-zA-Z0-9]+)/([_a-zA-Z0-9]+).db'''
-    print('Remote creation of database %s in %s on %s not implemented' % \
-            (db_name, db_dir, host))
+def remote_database_file(match, deps, host, db_name):
+    '''([a-zA-Z0-9.]+):([_a-zA-Z0-9]+).db'''
+    print('Remote creation of database %s on %s not implemented' % \
+            (db_name, host))
 
 def write_pf_file(filename, tenant='', logical_names={}):
     if tenant:
-        tenant = '_{}'.format(tenant)
+        tenant = '_{0}'.format(tenant)
     with open(filename, 'wt') as fd:
         if cdr_databases:
              fd.write('-h %d\n' % (len(databases) + len(cdr_databases)))
@@ -217,16 +242,20 @@ def write_pf_file(filename, tenant='', logical_names={}):
             name_map = ' -ld %s' % logical_names[db] if db in logical_names else ''
             fd.write('-pf {0}/{1}{2}.pf{3}\n'.format(getcwd(), db, tenant, name_map))
 
-@target(['{}.pf'.format(x) for x in databases] + [ 'tenant_{}'.format(x) for x in tenancies ])
+@target(['{0}.pf'.format(x) for x in databases] + [ 'tenant_{0}'.format(x) for x in tenancies ])
 def all_pf(match, deps):
     '''all\.pf'''
     write_pf_file(match)
     for tenant in tenancies:
-        write_pf_file('all_{}.pf'.format(tenant), tenant)
+        write_pf_file('all_{0}.pf'.format(tenant), tenant)
 
 @target(r'\1.pf')
 def startup_parameter_file(match, deps, db_name):
     '''([_a-zA-Z0-9]+)_startup\.pf'''
+
+    if environment != 'development':
+        raise PikeException('Currently creating startup pf file is only allowed in development mode.')
+
     path = db_full_path(db_name, '').split(':')
     if len(path) > 1:
         return False
@@ -262,11 +291,12 @@ def connect_parameter_file(match, deps, db_name):
 
     fd = open(db_name + '.pf', 'wt')
     if len(path) > 1:
-        fd.write('-db %s\n' % path[1].split('/')[0])
+        fd.write('-db %s\n' % path[1])
         fd.write('-H %s\n' % path[0])
-        fd.write('-S %s\n' % (db_name))
+        fd.write('-S %s\n' % path[1])
     else:
         fd.write('-db %s\n' % path[0])
+    fd.write('-ld %s\n' % db_name)
     fd.close()
     for tenant in tenancies:
         with open('{0}_{1}.pf'.format(db_name, tenant), 'wt') as fd:
@@ -274,13 +304,13 @@ def connect_parameter_file(match, deps, db_name):
             fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
 
 @target
-@applies_to(['tenant_none'] + [ 'tenant_{}'.format(x) for x in tenancies ])
+@applies_to(['tenant_none'] + [ 'tenant_{0}'.format(x) for x in tenancies ])
 def tenantcredentials_file(match, deps):
     tenant = match.split('_')[1]
     if tenant in tenancies:
-        with open('tenant_{}.pf'.format(tenant), 'wt') as fd:
+        with open('tenant_{0}.pf'.format(tenant), 'wt') as fd:
             fd.write('-U {0}@{1}\n'.format(tenancies[tenant]['username'], tenancies[tenant]['domain']))
-            fd.write('-P {}\n'.format(tenancies[tenant]['password']))
+            fd.write('-P {0}\n'.format(tenancies[tenant]['password']))
 
 db_running_msg = True
 
@@ -371,12 +401,6 @@ def clean(match, deps):
 
 # Migrations
 
-migrations_dir = os.path.join(work_dir, 'db', 'progress', 'migrations')
-migcache_dir   = 'migrations'
-if not os.path.exists(migcache_dir): os.mkdir(migcache_dir)
-avail_migrations = sorted((x.group(1), int(x.group(2))) \
-                     for x in [re.match(r'^((\d+)_.*)\.py$', y) \
-                               for y in os.listdir(migrations_dir)] if x)
 def done_migrations():
     return sorted(x[:-3] for x in os.listdir(migcache_dir) if x.endswith('.py'))
 
@@ -431,6 +455,10 @@ def migrate(match, deps):
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
 
+    avail_migrations = sorted((x.group(1), int(x.group(2))) \
+                       for x in [re.match(r'^((\d+)_.*)\.py$', y) \
+                       for y in os.listdir(migrations_dir)] if x)
+
     version = int(parameters[0]) if parameters else 99999
     done_migs = done_migrations()
 
@@ -458,6 +486,10 @@ def status(match, deps):
 
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
+
+    avail_migrations = sorted((x.group(1), int(x.group(2))) \
+                       for x in [re.match(r'^((\d+)_.*)\.py$', y) \
+                       for y in os.listdir(migrations_dir)] if x)
 
     done_migs = done_migrations()
     for name, number in avail_migrations:
@@ -538,7 +570,7 @@ def active_cdr_db_pf(tenant):
     args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
 
     if not tenant == '':
-        args.extend(['-pf', 'common_{}.pf'.format(tenant)])
+        args.extend(['-pf', 'common_{0}.pf'.format(tenant)])
     else:
         args.extend(['-pf', 'common.pf'])
 
@@ -562,27 +594,27 @@ def fixtures(*a):
     tenant = None
     for tenant in tenancies:
         if tenancies[tenant]['tenanttype'] != 'Super':
-            tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{}.pf'.format(tenant)}
+            tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{0}.pf'.format(tenant)}
         if tenancies[tenant]['tenanttype'] == 'Default':
-            tenantdict['Default'] = {'tenant': tenant, 'pf': 'all_{}.pf'.format(tenant)}
+            tenantdict['Default'] = {'tenant': tenant, 'pf': 'all_{0}.pf'.format(tenant)}
     if tenant is None:
         tenantdict[''] = {'tenant': '', 'pf': 'all.pf' }
 
     for tenant in tenantdict:
         if not tenant == '' and not tenant == 'Default':
-            print('Loading fixtures for tenant t{}...'.format(tenantdict[tenant]['tenant']))
+            print('Loading fixtures for tenant t{0}...'.format(tenantdict[tenant]['tenant']))
             fixturedir = '{0}/db/progress/fixtures/{1}'.format(work_dir, tenantdict[tenant]['tenant'])
             try:
                 os.makedirs(fixturedir)
             except OSError:
                 if not os.path.isdir(fixturedir):
-                    raise PikeException('Cannot use directory {}'.format(fixturedir))
+                    raise PikeException('Cannot use directory {0}'.format(fixturedir))
         else:
             print('Loading fixtures...')
             fixturedir = '{0}/db/progress/fixtures'.format(work_dir)
 
         args = ['-pf', tenantdict[tenant]['pf'], '-b', '-p', 'gearbox/fixtures/load_fixtures.r',
-                '-param', 'fix_dir={},bulk=yes'.format(fixturedir)]
+                '-param', 'fix_dir={0},bulk=yes'.format(fixturedir)]
 
         cdr_dict = {}
 
@@ -619,21 +651,21 @@ def dumpfixtures(*a):
     tenant = None
     for tenant in tenancies:
         if tenancies[tenant]['tenanttype'] != 'Super':
-            tenantdict[tenant] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
+            tenantdict[tenant] = {'tenant': tenant, 'postfix': '_{0}.pf'.format(tenant)}
         if tenancies[tenant]['tenanttype'] == 'Default':
-            tenantdict['default'] = {'tenant': tenant, 'postfix': '_{}.pf'.format(tenant)}
+            tenantdict['default'] = {'tenant': tenant, 'postfix': '_{0}.pf'.format(tenant)}
     if tenant is None:
         tenantdict[''] = {'tenant': '', 'postfix': '.pf' }
 
     for tenant in tenantdict:
         if not tenant == '' and not tenant == 'default':
-            print('Dumping fixtures for tenant t{}...'.format(tenantdict[tenant]['tenant']))
+            print('Dumping fixtures for tenant t{0}...'.format(tenantdict[tenant]['tenant']))
             fixturedir = '{0}/db/progress/fixtures/{1}'.format(work_dir, tenantdict[tenant]['tenant'])
             try:
                 os.makedirs(fixturedir)
             except OSError:
                 if not os.path.isdir(fixturedir):
-                    raise PikeException('Cannot use directory {}'.format(fixturedir))
+                    raise PikeException('Cannot use directory {0}'.format(fixturedir))
         else:
             print('Dumping fixtures...')
             fixturedir = '{0}/db/progress/fixtures'.format(work_dir)
@@ -647,5 +679,5 @@ def dumpfixtures(*a):
             pf_entries.update(active_cdr_db_pf(tenantdict[tenant]['tenant']))
 
         for key in sorted(pf_entries):
-            dump_fixture = Popen(mpro + pf_entries[key] + ['-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '{}'.format(fixturedir)], stdout=PIPE)
+            dump_fixture = Popen(mpro + pf_entries[key] + ['-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '{0}'.format(fixturedir)], stdout=PIPE)
             call('/bin/cat', stdin=dump_fixture.stdout)

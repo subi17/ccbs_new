@@ -67,6 +67,15 @@ bulkload: CTServEl
 bulkload: CTServEl
   Brand: "1"
   CLIType: "MASMOVIL"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8904
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MASMOVIL"
   ServPac: "LP"
   ServCom: "LP"
   FromDate: 2017-02-22
@@ -198,6 +207,15 @@ bulkload: CTServEl
   FromDate: 2017-02-22
   DefValue: 1
   CTServEl: 8467
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8905
   ServType: 1
 
 bulkload: CTServEl
@@ -340,6 +358,15 @@ bulkload: CTServEl
 bulkload: CTServEl
   Brand: "1"
   CLIType: "MM_CERO_5GB"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8906
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_CERO_5GB"
   ServPac: "LP"
   ServCom: "LP"
   FromDate: 2017-02-22
@@ -472,6 +499,15 @@ bulkload: CTServEl
   FromDate: 2017-02-22
   DefValue: 1
   CTServEl: 8761
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_MAS_1GB"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8907
   ServType: 1
 
 bulkload: CTServEl
@@ -613,6 +649,15 @@ bulkload: CTServEl
 bulkload: CTServEl
   Brand: "1"
   CLIType: "MM_MAS_3GB"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8908
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_MAS_3GB"
   ServPac: "LP"
   ServCom: "LP"
   FromDate: 2017-02-22
@@ -749,6 +794,15 @@ bulkload: CTServEl
 bulkload: CTServEl
   Brand: "1"
   CLIType: "MM_MAS_8GB"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8909
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_MAS_8GB"
   ServPac: "LP"
   ServCom: "LP"
   FromDate: 2017-02-22
@@ -880,6 +934,15 @@ bulkload: CTServEl
   FromDate: 2017-02-22
   DefValue: 1
   CTServEl: 8593
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_NET_10GB"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8910
   ServType: 1
 
 bulkload: CTServEl
@@ -1022,6 +1085,15 @@ bulkload: CTServEl
 bulkload: CTServEl
   Brand: "1"
   CLIType: "MM_NET_20GB"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8911
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_NET_20GB"
   ServPac: "LP"
   ServCom: "LP"
   FromDate: 2017-02-22
@@ -1159,6 +1231,15 @@ bulkload: CTServEl
 bulkload: CTServEl
   Brand: "1"
   CLIType: "MM_NET_50GB"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8912
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_NET_50GB"
   ServPac: "LP"
   ServCom: "LP"
   FromDate: 2017-02-22
@@ -1291,6 +1372,15 @@ bulkload: CTServEl
   FromDate: 2017-02-22
   DefValue: 1
   CTServEl: 8551
+  ServType: 1
+
+bulkload: CTServEl
+  Brand: "1"
+  CLIType: "MM_NET_5GB"
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  FromDate: 2017-02-22
+  CTServEl: 8913
   ServType: 1
 
 bulkload: CTServEl

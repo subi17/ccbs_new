@@ -507,7 +507,8 @@ FUNCTION fMobCDRCollect RETURNS INTEGER
    END.
    
    /* unbillable error calls */
-   IF lcErrorQuery > "" THEN DO:
+   IF LOOKUP("error",icCDRType) > 0 OR
+      lcErrorQuery > "" THEN DO:
       fSetCollectionDBs("roamcdr",
                         "ErrorCDR",
                         idaFromDate,

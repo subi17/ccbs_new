@@ -51,7 +51,7 @@ PROCEDURE pRunRequest:
          /* there is a possibility that another process has just started
             handling this same request */
          IF MsRequest.ReqStatus NE iiReqStat THEN NEXT.
-         fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(MsRequest)).
+
          RUN VALUE(icProgram) (MsRequest.MsRequest).
 
          IF MsRequest.ReqType = 65 THEN DO:

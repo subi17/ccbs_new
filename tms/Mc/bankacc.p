@@ -84,6 +84,7 @@ form
        LABEL "Account"
        HELP "Account number"
     BankAccount.CreditorID  FORMAT "X(20)" COLON 15
+    BankAccount.PresenterID  FORMAT "X(20)" COLON 15
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
@@ -569,6 +570,7 @@ PROCEDURE local-UPDATE-record:
            BankAccount.InvForm
            BankAccount.BarCode
            BankAccount.CreditorID
+           BankAccount.presenterID
            BankAccount.BIC
            BankAccount.UnitCode
       WITH FRAME lis.
@@ -584,6 +586,7 @@ PROCEDURE local-UPDATE-record:
           BankAccount.BIC
           BankAccount.UnitCode
           BankAccount.CreditorID
+          BankAccount.PresenterID
          WITH FRAME lis.
       END.
 

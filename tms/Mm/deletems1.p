@@ -213,7 +213,7 @@ IF MobSub.MSStatus = 3 /* NOT activated yet */ THEN DO:
 END.
 
 /* Yoigo MSISDN? */
-llYoigoCLI = fIsYoigoCLI(Mobsub.CLI).
+llYoigoCLI = (fIsYoigoCLI(Mobsub.CLI) OR fIsMasmovilCLI(Mobsub.CLI)).
 
 DISPLAY
    MobSub.MsSeq

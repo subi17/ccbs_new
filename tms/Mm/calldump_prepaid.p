@@ -11,6 +11,7 @@ gcBrand = "1".
 {Func/excel.i}
 {Func/coinv.i}
 {Func/cparam2.i}
+{Func/multitenantfunc.i}
 
 /*DEFINE INPUT PARAMETER  iiper AS INTEGER NO-UNDO.*/
 DEFINE VARIABLE  iiper AS INTEGER NO-UNDO INIT 0.
@@ -54,7 +55,8 @@ assign
    lcOdir     =  fCparam("dumpoutgoing","calldump_prepaid.p") 
    lcSdir     =  fCParam("dumpspool","calldump_prepaid.p") 
    ldate1     = idaDate
-   filename   = "calls_prepaid" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
+   filename   = CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                "_calls_prepaid" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
                 REPLACE(STRING(TIME,"hh:mm:ss"),":","") + ".dump"
    ldate1     = idaDate - 1
    ldate2     = ldate1

@@ -116,6 +116,22 @@ bulkload: DayCampaign
   BundleUpsell: "DATA200_UPSELL"
 
 bulkload: DayCampaign
+  DCEvent: "CONT27"
+  ValidFrom: 2017-04-13
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "CONT27MF"
+  DCName: "LA INFINITA 2 GB DTO."
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONT27MF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL,DATA6_UPSELL"
+
+bulkload: DayCampaign
   DCEvent: "CONT9"
   ValidFrom: 2014-05-01
   InclUnit: 4
@@ -150,25 +166,6 @@ bulkload: DayCampaign
   StatusCode: 2
   BundleUpsell: "DATA6_UPSELL,DATA200_UPSELL"
   DSSPriority: 50
-  PayType: 1
-
-bulkload: DayCampaign
-  DCEvent: "CONTD2_UPSELL"
-  ValidFrom: 2010-11-01
-  InclUnit: 4
-  ValidTo: 2049-12-31
-  BillCode: "CONTDATA2"
-  DCName: "IPL 35 Upsell"
-  CCN: 93
-  Brand: "1"
-  DCType: "6"
-  CalcMethod: 1
-  DurType: 2
-  DurMonths: 1
-  FeeModel: "CONTD2MFUPS"
-  DurUnit: 3
-  Effective: 1
-  InstanceLimit: 100
   PayType: 1
 
 bulkload: DayCampaign
@@ -207,6 +204,25 @@ bulkload: DayCampaign
   DurUnit: 3
   Effective: 1
   StatusCode: 0
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTD2_UPSELL"
+  ValidFrom: 2010-11-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "CONTDATA2"
+  DCName: "IPL 35 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "CONTD2MFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
   PayType: 1
 
 bulkload: DayCampaign
@@ -326,25 +342,6 @@ bulkload: DayCampaign
   PayType: 1
 
 bulkload: DayCampaign
-  DCEvent: "CONTDATA_UPSELL"
-  ValidFrom: 2010-11-01
-  InclUnit: 4
-  ValidTo: 2049-12-31
-  BillCode: "CONTDATA1"
-  DCName: "IPL 25 Upsell"
-  CCN: 93
-  Brand: "1"
-  DCType: "6"
-  CalcMethod: 1
-  DurType: 2
-  DurMonths: 1
-  FeeModel: "CONTDATAMFUPS"
-  DurUnit: 3
-  Effective: 1
-  InstanceLimit: 100
-  PayType: 1
-
-bulkload: DayCampaign
   DCEvent: "CONTDATAACT"
   ValidFrom: 2008-06-11
   InclUnit: 4
@@ -384,6 +381,25 @@ bulkload: DayCampaign
   DurUnit: 3
   Effective: 1
   StatusCode: 0
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CONTDATA_UPSELL"
+  ValidFrom: 2010-11-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "CONTDATA1"
+  DCName: "IPL 25 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "CONTDATAMFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
   PayType: 1
 
 bulkload: DayCampaign
@@ -1387,26 +1403,6 @@ bulkload: DayCampaign
   PayType: 1
 
 bulkload: DayCampaign
-  DCEvent: "MDUB_UPSELL"
-  ValidFrom: 2010-11-01
-  InclUnit: 4
-  ValidTo: 2049-12-31
-  BillCode: "MDUB"
-  DCName: "Bono 8 Upsell"
-  CCN: 93
-  Brand: "1"
-  DCType: "6"
-  CalcMethod: 1
-  DurType: 2
-  DurMonths: 1
-  FeeModel: "MDUBMFUPS"
-  DurUnit: 3
-  Effective: 1
-  InstanceLimit: 100
-  StatusCode: 2
-  PayType: 1
-
-bulkload: DayCampaign
   DCEvent: "MDUBACT"
   ValidFrom: 2010-03-01
   InclUnit: 4
@@ -1442,6 +1438,26 @@ bulkload: DayCampaign
   DurUnit: 3
   Effective: 1
   StatusCode: 0
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "MDUB_UPSELL"
+  ValidFrom: 2010-11-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "MDUB"
+  DCName: "Bono 8 Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "MDUBMFUPS"
+  DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  StatusCode: 2
   PayType: 1
 
 bulkload: DayCampaign
@@ -2125,6 +2141,20 @@ bulkload: DayCampaign
   PayType: 2
 
 bulkload: DayCampaign
+  DCEvent: "TARJD1"
+  ValidFrom: 2009-01-01
+  ValidTo: 2049-12-31
+  DCName: "Tarjeta Datos"
+  Brand: "1"
+  DCType: "4"
+  CalcMethod: 3
+  DurType: 1
+  Effective: 1
+  InclStartCharge: FALSE
+  StatusCode: 2
+  PayType: 2
+
+bulkload: DayCampaign
   DCEvent: "TARJ_UPSELL"
   ValidFrom: 2012-12-01
   InclUnit: 4
@@ -2138,20 +2168,6 @@ bulkload: DayCampaign
   FeeModel: "TARJ_UPSELLFee"
   DurUnit: 1
   Effective: 1
-  PayType: 2
-
-bulkload: DayCampaign
-  DCEvent: "TARJD1"
-  ValidFrom: 2009-01-01
-  ValidTo: 2049-12-31
-  DCName: "Tarjeta Datos"
-  Brand: "1"
-  DCType: "4"
-  CalcMethod: 3
-  DurType: 1
-  Effective: 1
-  InclStartCharge: FALSE
-  StatusCode: 2
   PayType: 2
 
 bulkload: DayCampaign

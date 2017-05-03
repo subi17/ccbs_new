@@ -360,8 +360,18 @@ bulkload: TMRLimit
 
 bulkload: TMRLimit
   TMRuleSeq: 14
-  FromDate: 2012-05-28
+  FromDate: 2017-02-23
   ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 2
+  LimitPerc: 95
+  Action: 30
+  SMSText: "DubLimit"
+
+bulkload: TMRLimit
+  TMRuleSeq: 14
+  FromDate: 2012-05-28
+  ToDate: 2017-02-22
   LimitID: 1
   ValueType: 2
   LimitPerc: 95
@@ -480,8 +490,18 @@ bulkload: TMRLimit
 
 bulkload: TMRLimit
   TMRuleSeq: 18
-  FromDate: 2012-05-28
+  FromDate: 2017-02-22
   ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 2
+  LimitPerc: 95
+  Action: 30
+  SMSText: "UpsellPMDUBLimit"
+
+bulkload: TMRLimit
+  TMRuleSeq: 18
+  FromDate: 2012-05-28
+  ToDate: 2017-02-21
   LimitID: 1
   ValueType: 2
   LimitPerc: 95
@@ -689,8 +709,18 @@ bulkload: TMRLimit
 
 bulkload: TMRLimit
   TMRuleSeq: 24
-  FromDate: 2011-11-01
+  FromDate: 2017-02-22
   ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 2
+  LimitPerc: 95
+  Action: 30
+  SMSText: "UpsellDSSLimit"
+
+bulkload: TMRLimit
+  TMRuleSeq: 24
+  FromDate: 2011-11-01
+  ToDate: 2017-02-21
   LimitID: 1
   ValueType: 2
   LimitPerc: 95

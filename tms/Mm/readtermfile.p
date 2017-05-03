@@ -149,7 +149,7 @@ REPEAT:
    END.
 
    /* Yoigo MSISDN? */
-   llYoigoCLI = fIsYoigoCLI(Mobsub.CLI).
+   llYoigoCLI = (fIsYoigoCLI(Mobsub.CLI) OR fIsMasmovilCLI(Mobsub.CLI)).
 
    IF (MobSub.PayType = TRUE AND LOOKUP(lcReason,"6,7,8") = 0) OR
       (MobSub.PayType = FALSE AND LOOKUP(lcReason,"4,7,8,10,3,1") = 0) THEN DO:

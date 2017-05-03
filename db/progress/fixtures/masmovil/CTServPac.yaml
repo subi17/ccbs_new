@@ -25,6 +25,14 @@ bulkload: CTServPac
 bulkload: CTServPac
   Brand: "1"
   CLIType: "MASMOVIL"
+  ServPac: "HSDPA"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MASMOVIL"
   ServPac: "LP"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
@@ -89,6 +97,14 @@ bulkload: CTServPac
 bulkload: CTServPac
   Brand: "1"
   CLIType: "MM_CERO"
+  ServPac: "HSDPA"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO"
   ServPac: "LP"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
@@ -153,6 +169,14 @@ bulkload: CTServPac
 bulkload: CTServPac
   Brand: "1"
   CLIType: "MM_CERO_5GB"
+  ServPac: "HSDPA"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_CERO_5GB"
   ServPac: "LP"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
@@ -210,6 +234,14 @@ bulkload: CTServPac
   Brand: "1"
   CLIType: "MM_MAS_1GB"
   ServPac: "BB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_MAS_1GB"
+  ServPac: "HSDPA"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
   ServType: 3
@@ -274,6 +306,14 @@ bulkload: CTServPac
   Brand: "1"
   CLIType: "MM_MAS_3GB"
   ServPac: "BB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_MAS_3GB"
+  ServPac: "HSDPA"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
   ServType: 3
@@ -338,6 +378,14 @@ bulkload: CTServPac
   Brand: "1"
   CLIType: "MM_MAS_8GB"
   ServPac: "BB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_MAS_8GB"
+  ServPac: "HSDPA"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
   ServType: 3
@@ -402,6 +450,14 @@ bulkload: CTServPac
   Brand: "1"
   CLIType: "MM_NET_10GB"
   ServPac: "BB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_NET_10GB"
+  ServPac: "HSDPA"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
   ServType: 3
@@ -466,6 +522,14 @@ bulkload: CTServPac
   Brand: "1"
   CLIType: "MM_NET_20GB"
   ServPac: "BB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_NET_20GB"
+  ServPac: "HSDPA"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
   ServType: 3
@@ -530,6 +594,14 @@ bulkload: CTServPac
   Brand: "1"
   CLIType: "MM_NET_50GB"
   ServPac: "BB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_NET_50GB"
+  ServPac: "HSDPA"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
   ServType: 3
@@ -594,6 +666,14 @@ bulkload: CTServPac
   Brand: "1"
   CLIType: "MM_NET_5GB"
   ServPac: "BB"
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "MM_NET_5GB"
+  ServPac: "HSDPA"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
   ServType: 3

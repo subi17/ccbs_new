@@ -153,6 +153,7 @@ bulkload: ServiceLimit
   InclAmt: 5000
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
+  BDestLimit: 300
 
 bulkload: ServiceLimit
   GroupCode: "CONT26"
@@ -162,6 +163,41 @@ bulkload: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "CONT27"
+  SLSeq: 144
+  WebDisp: 0
+  DialType: 7
+  SLCode: "CONT27_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 2048
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "CONT27"
+  SLSeq: 145
+  WebDisp: 0
+  DialType: 4
+  SLCode: "CONT27_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 5000
+  ValidFrom: 2017-04-13
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "CONT27"
+  SLSeq: 146
+  WebDisp: 0
+  SLCode: "CONT27_QTY"
+  SLName: "BDest"
+  InclUnit: 7
+  InclAmt: 300
+  ValidFrom: 2017-04-13
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
@@ -189,18 +225,6 @@ bulkload: ServiceLimit
   ValidTo: 2050-12-31
 
 bulkload: ServiceLimit
-  GroupCode: "CONTD2_UPSELL"
-  SLSeq: 15
-  WebDisp: 0
-  DialType: 7
-  SLCode: "CONTD2_UPSELL"
-  SLName: "Contrato Datos 2 Upsell Bundle"
-  InclUnit: 4
-  InclAmt: 1024
-  ValidFrom: 2010-11-01
-  ValidTo: 2049-12-31
-
-bulkload: ServiceLimit
   GroupCode: "CONTD2ACT"
   SLSeq: 8
   WebDisp: 0
@@ -223,6 +247,18 @@ bulkload: ServiceLimit
   InclAmt: 6072
   ValidFrom: 2009-12-01
   ValidTo: 2054-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "CONTD2_UPSELL"
+  SLSeq: 15
+  WebDisp: 0
+  DialType: 7
+  SLCode: "CONTD2_UPSELL"
+  SLName: "Contrato Datos 2 Upsell Bundle"
+  InclUnit: 4
+  InclAmt: 1024
+  ValidFrom: 2010-11-01
+  ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
   GroupCode: "CONTD3"
@@ -297,18 +333,6 @@ bulkload: ServiceLimit
   ValidTo: 2050-12-31
 
 bulkload: ServiceLimit
-  GroupCode: "CONTDATA_UPSELL"
-  SLSeq: 14
-  WebDisp: 0
-  DialType: 7
-  SLCode: "CONTDATA_UPSELL"
-  SLName: "Contrato Datos Upsell Bundle"
-  InclUnit: 4
-  InclAmt: 1024
-  ValidFrom: 2010-11-01
-  ValidTo: 2049-12-31
-
-bulkload: ServiceLimit
   GroupCode: "CONTDATAACT"
   SLSeq: 4
   WebDisp: 0
@@ -331,6 +355,18 @@ bulkload: ServiceLimit
   InclAmt: 6072
   ValidFrom: 2009-01-01
   ValidTo: 2054-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "CONTDATA_UPSELL"
+  SLSeq: 14
+  WebDisp: 0
+  DialType: 7
+  SLCode: "CONTDATA_UPSELL"
+  SLName: "Contrato Datos Upsell Bundle"
+  InclUnit: 4
+  InclAmt: 1024
+  ValidFrom: 2010-11-01
+  ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
   GroupCode: "CONTDSL"
@@ -1402,18 +1438,6 @@ bulkload: ServiceLimit
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
-  GroupCode: "MDUB_UPSELL"
-  SLSeq: 13
-  WebDisp: 0
-  DialType: 7
-  SLCode: "MDUB_UPSELL"
-  SLName: "Mobile Data Usage Upsell"
-  InclUnit: 4
-  InclAmt: 300
-  ValidFrom: 2010-11-01
-  ValidTo: 2049-12-31
-
-bulkload: ServiceLimit
   GroupCode: "MDUBACT"
   SLSeq: 11
   WebDisp: 0
@@ -1436,6 +1460,18 @@ bulkload: ServiceLimit
   InclAmt: 500
   ValidFrom: 2010-03-01
   ValidTo: 2011-05-03
+
+bulkload: ServiceLimit
+  GroupCode: "MDUB_UPSELL"
+  SLSeq: 13
+  WebDisp: 0
+  DialType: 7
+  SLCode: "MDUB_UPSELL"
+  SLName: "Mobile Data Usage Upsell"
+  InclUnit: 4
+  InclAmt: 300
+  ValidFrom: 2010-11-01
+  ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
   GroupCode: "PMDUB"
@@ -1517,6 +1553,16 @@ bulkload: ServiceLimit
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
+  GroupCode: "TARJD1"
+  SLSeq: 23
+  WebDisp: 0
+  DialType: 7
+  SLCode: "TARJD1"
+  SLName: "Tarjeta Datos"
+  ValidFrom: 2009-01-01
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
   GroupCode: "TARJ_UPSELL"
   SLSeq: 60
   WebDisp: 0
@@ -1526,16 +1572,6 @@ bulkload: ServiceLimit
   InclUnit: 4
   InclAmt: 15
   ValidFrom: 2012-12-01
-  ValidTo: 2049-12-31
-
-bulkload: ServiceLimit
-  GroupCode: "TARJD1"
-  SLSeq: 23
-  WebDisp: 0
-  DialType: 7
-  SLCode: "TARJD1"
-  SLName: "Tarjeta Datos"
-  ValidFrom: 2009-01-01
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit

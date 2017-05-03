@@ -892,7 +892,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
                      Order.MsSeq = iiMsSeq AND
                      Order.CLIType = icContrType AND
                      Order.Crstamp >= 20170301 AND
-                     Order.Crstamp < 20170401 AND
+                     Order.Crstamp < 20170405.25200 AND
                      Order.OrderType < 2) THEN DO:
       
       FIND ServiceLimit NO-LOCK where

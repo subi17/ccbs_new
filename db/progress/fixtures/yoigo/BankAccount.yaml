@@ -8,6 +8,7 @@ bulkload: BankAccount
   BIC: "BSCHESMMXXX"
   BankCodes: "0049,0030"
   DDAllocation: 41
+  PresenterId: "ES49002A82528548"
 
 bulkload: BankAccount
   BankAccount: "ES5221002931940200451663"
@@ -18,6 +19,7 @@ bulkload: BankAccount
   CreditorId: "ES49002A82528548"
   BIC: "CAIXESBBXXX"
   BankCodes: "2100"
+  PresenterId: "ES49002A82528548"
 
 bulkload: BankAccount
   BankAccount: "ES6401823994040201521208"
@@ -29,6 +31,7 @@ bulkload: BankAccount
   BIC: "BBVAESMMXXX"
   BankCodes: "0182,2040,2074,2059,2017"
   DDAllocation: 41
+  PresenterId: "ES49002A82528548"
 
 bulkload: BankAccount
   BankAccount: "ES7700810300620001847093"
@@ -40,4 +43,5 @@ bulkload: BankAccount
   BIC: "BSABESBBXXX"
   BankCodes: "0081"
   DDAllocation: 18
+  PresenterId: "ES49002A82528548"
 

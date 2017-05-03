@@ -12,6 +12,7 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Func/timestamp.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE lcTimeStamp AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName  AS CHARACTER NO-UNDO.
@@ -27,7 +28,9 @@ ASSIGN
    lcTimeStamp = REPLACE(lcTimeStamp," ","")
    lcSpoolDir  = fCParam("DUMPSPOOL","ppcomprep.p")
    lcOutgDir   = fCParam("DUMPOUTGOING","ppcomprep.p")
-   lcFileName  = lcSpoolDir + "cc_prepaid_comp_" + lcTimeStamp + ".txt".
+   lcFileName  = lcSpoolDir + 
+                 CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                 "cc_prepaid_comp_" + lcTimeStamp + ".txt".
 
 OUTPUT STREAM sDump TO VALUE(lcFileName).
 

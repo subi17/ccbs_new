@@ -13,19 +13,26 @@
  */
 
 {newton/src/header_get.i}
+{Func/multitenantfunc.i}
+
 DEF VAR liId AS INTEGER NO-UNDO. 
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
-   liId = INT(pcId) NO-ERROR.
+
+   ASSIGN 
+      pcTenant = ENTRY(2,pcId,"|")
+      liId     = INT(ENTRY(1,pcId,"|")) NO-ERROR.
    
+   {newton/src/settenant.i pcTenant}
+
    FIND TFConf NO-LOCK WHERE TFConf.TFConfId = liId NO-ERROR.
    IF NOT AVAIL TFConf THEN
       RETURN appl_err("Terminal financing configuation row not found: "+ pcId).
 
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", STRING(tfconf.tfconfid)). 
+   add_string(lcResultStruct, "id", STRING(tfconf.tfconfid) + "|" + fConvertTenantToBrand(pcTenant)). 
    add_double(lcResultStruct, "rv_percentage", TFConf.RVPercentage).
    add_double(lcResultStruct, "commission_fee_percentage", TFConf.CommFeePerc).
    add_double(lcResultStruct, "tae", TFConf.tae).

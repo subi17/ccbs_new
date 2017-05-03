@@ -83,7 +83,7 @@ FOR EACH PrepCDR NO-LOCK USE-INDEX ReadDate WHERE
       STRING(PrepCDR.TimeSt,"hh:mm:ss")    lcDelimiter
       PrepCDR.ReadInTS                     lcDelimiter
       PrepCDR.GsmBnr                       lcDelimiter
-      INTEGER(fIsYoigoCLI(PrepCDR.GsmBnr)) lcDelimiter
+      INTEGER(fIsYoigoCLI(PrepCDR.GsmBnr) OR fIsMasmovilCLI(PrepCDR.GsmBnr)) lcDelimiter
       PrepCDR.BillCode                     lcDelimiter
       PrepCDR.CCN                          lcDelimiter
       PrepCDR.BillDur                      lcDelimiter

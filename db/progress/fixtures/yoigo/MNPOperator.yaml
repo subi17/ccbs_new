@@ -677,6 +677,12 @@ bulkload: MNPOperator
 
 bulkload: MNPOperator
   Brand: "1"
+  OperName: "MasMovilNew"
+  OperCode: "200"
+  Active: TRUE 
+
+bulkload: MNPOperator
+  Brand: "1"
   OperName: "Lebara"
   OperCode: "203"
   ICCPrefix: "893456"

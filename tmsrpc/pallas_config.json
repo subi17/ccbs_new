@@ -13,7 +13,8 @@
 			"server.username": "\"tmsrpc\"",
 			"server.groupname": "\"yapps\"",
 			"server.modules": "( \"mod_fastcgi\", \"mod_status\", \"mod_accesslog\" )",
-			"server.network-backend": "\"writev\""
+			"server.network-backend": "\"writev\"",
+            "conditional_param": { "$HTTP[\"remoteip\"] == \"127.0.0.1\"": [ { "param": "status.status-url", "value": "\"/server-status\"" } ] }
 		},
 		"3002": {
 			"/fcgiproxy_xfera": [ "newton", {
@@ -28,7 +29,8 @@
 			"server.username": "\"tmsrpc\"",
 			"server.groupname": "\"yapps\"",
 			"server.modules": "( \"mod_fastcgi\", \"mod_status\", \"mod_accesslog\" )",
-			"server.network-backend": "\"writev\""
+			"server.network-backend": "\"writev\"",
+            "conditional_param": { "$HTTP[\"remoteip\"] == \"127.0.0.1\"": [ { "param": "status.status-url", "value": "\"/server-status\"" } ] }
 		}
 	}
 }

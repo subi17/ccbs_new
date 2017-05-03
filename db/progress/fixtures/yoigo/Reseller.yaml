@@ -6,6 +6,13 @@ bulkload: Reseller
   EntityCode: 99
 
 bulkload: Reseller
+  Reseller: "AK"
+  RsName: "ATAKAM DISTRIBUCION ONLINE"
+  EMail: "teobaldo.gomez@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "AL"
   RsName: "ALCAMPO"
   EMail: "Luis.Leyva.Ruano@yoigo.com"
@@ -16,6 +23,13 @@ bulkload: Reseller
   Reseller: "AM"
   RsName: "AMPLIFFICA"
   EMail: "maria.barreiro.sanisidro@ext.yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "AN"
+  RsName: "ATAKAM EMISION"
+  EMail: "luis.estrada@masmovil.com"
   Brand: "1"
   EntityCode: 99
 
@@ -209,6 +223,13 @@ bulkload: Reseller
   EntityCode: 99
   FUC1: "323841619"
   FUC2: "332296730"
+
+bulkload: Reseller
+  Reseller: "KR"
+  RsName: "KONECTA RECEPCION"
+  EMail: "cristina.munoz@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
 
 bulkload: Reseller
   Reseller: "MD"

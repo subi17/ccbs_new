@@ -43,7 +43,9 @@ def customize():
     fd = open('etc/config.py', 'w')
     fd.write('# Project configuration (should be under RC)\n')
     fd.write('from os import environ as ENV\n\n')
-    fd.write('%-14s = [%s]\n' % ('mpro', "'%s/bin/mpro' % dlc,\n                  '-pf', '%s/etc/pf/formats.pf' % (work_dir)"))
+    fd.write('%-14s = [%s\n' % ('mpro', "'%s/bin/mpro' % dlc,"))
+    fd.write('                  %s\n' % ("'-pf', '%s/etc/pf/formats.pf' % (work_dir),"))
+    fd.write('                  %s]\n' % ("'-T', '%s/var/tmp' % (work_dir)"))
     fd.write("%-14s = '%s'\n" % ('appname', appname))
     fd.write("%-14s = '%s'\n" % ('appversion', appversion))
     fd.write("%-14s = '%s'\n" % ('proversion', proversion))
@@ -57,8 +59,7 @@ skip_srcpkg_check = True
 relpath = '.'
 exec(open(relpath + '/etc/make_site.py', 'rb').read())
 
-
-@file_target(['srcpkg>initialize', 'db>initialize'])
+@file_target(['relink_var', 'srcpkg>initialize', 'db>initialize'])
 def initialized(*a):
     '''.initialized'''
     open(a[0], 'w').close()
@@ -69,6 +70,28 @@ def initialize(*a):
     '''default|initialize|init'''
     pass
 
+@target
+def relink_var(*a):
+    if environment == 'safeproduction':
+        vardir = '../var'
+    elif environment == 'development':
+        vardir = 'var'
+    else:
+        return
+
+    if not os.path.exists(vardir) and environment == 'safeproduction':
+        print('Creating var directory in %s.' % os.path.abspath('..'),
+              'Please check permissions!')
+    for subdir in ['', '/log', '/log/eventlog', '/log/usagelog',
+                               '/log/errorlog',
+                       '/run', '/tmp']:
+        if not os.path.exists(vardir + subdir):
+            os.mkdir(vardir + subdir)
+    if environment == 'safeproduction':
+        if not os.path.islink('var'):
+            if os.path.isdir('var'):
+                shutil.rmtree('var')
+            os.symlink('../var', 'var')
 
 @target(['.initialized', 'db>start'] + \
         ['%s>compile' % x for x in modules] + \
@@ -115,6 +138,11 @@ def dist(*a):
     for mod in modules:
         require('%s>build' % mod, [os.path.join(dist_dir, mod)])
     shutil.copyfile('.DeployMakefile.py', dist_dir + '/Makefile.py')
+
+    if environment == 'safeproduction':
+        open('.safeproduction', 'a').close()
+        shutil.copyfile('.safeproduction', dist_dir + '/.safeproduction')
+
     print('Archiving...')
     subprocess.call(['tar', '-cf', dist_basename + '.tar',
                             '-C', build_dir, dist_basename])
@@ -122,7 +150,42 @@ def dist(*a):
     if parameters and parameters[0] in ['bz2', 'gz']:
         print('Compressing...')
         if parameters[0] == 'gz':
-            subprocess.call('gzip', dist_basename + '.tar')
+            subprocess.call(['gzip', '-f', dist_basename + '.tar'])
         else:
-            subprocess.call('bzip2', dist_basename + '.tar')
+            subprocess.call(['bzip2', '-f', dist_basename + '.tar'])
 
+@target
+def extapi(*a):
+    rdbmesses = [x for x in os.listdir('db') if os.path.isdir('db/' + x)]
+    build_dir = tempfile.mkdtemp()
+    dist_basename = '{0}-extapi'.format(get_distribution_name())
+    dist_dir = os.path.join(build_dir, dist_basename)
+    os.mkdir(dist_dir)
+    print('Building into %s...' % build_dir)
+    for directory in ['tools', 'db'] + \
+                     ['db/%s/store' % x for x in rdbmesses]:
+        for dir in (os.path.join(dist_dir, *directory.split('/')[:ii + 1]) \
+                            for ii in range(directory.count('/') + 1)):
+            if not os.path.exists(dir):
+                os.mkdir(dir)
+        if os.path.exists(directory + '/Makefile.py'):
+            shutil.copyfile(directory + '/Makefile.py',
+                            os.path.join(dist_dir, directory) + '/Makefile.py')
+    for directory in ['etc', 'srcpkg']:
+        shutil.copytree(directory, os.path.join(dist_dir, directory))
+    os.unlink(dist_dir + '/etc/site.py')
+    for mod in modules:
+        require('%s>buildextapi' % mod, [os.path.join(dist_dir, mod)])
+    shutil.copyfile('.DeployMakefile.py', dist_dir + '/Makefile.py')
+
+    if environment == 'safeproduction':
+        open('.safeproduction', 'a').close()
+        shutil.copyfile('.safeproduction', dist_dir + '/.safeproduction')
+
+    print('Archiving...')
+    subprocess.call(['tar', '-cf', dist_basename + '.tar',
+                            '-C', build_dir, dist_basename])
+    shutil.rmtree(build_dir)
+
+    print('Compressing...')
+    subprocess.call(['bzip2', '-f', dist_basename + '.tar'])

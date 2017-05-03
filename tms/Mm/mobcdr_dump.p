@@ -116,7 +116,7 @@ PROCEDURE pWrite2File:
       STRING(MobCdr.TimeSt,"hh:mm:ss")    lcDelimiter
       MobCDR.ReadInTS                     lcDelimiter
       MobCDR.GsmBnr                       lcDelimiter
-      INTEGER(fIsYoigoCLI(MobCDR.GsmBnr)) lcDelimiter
+      INTEGER((fIsYoigoCLI(MobCDR.GsmBnr) OR fIsMasmovilCLI(MobCDR.GsmBnr))) lcDelimiter
       MobCDR.BillCode                     lcDelimiter
       MobCDR.CCN                          lcDelimiter
       MobCDR.BillDur                      lcDelimiter

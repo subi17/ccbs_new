@@ -21,6 +21,9 @@
 {Func/upsellbundle.i}
 {Mc/dpmember.i}
 {Migration/migrationfunc.i}
+{Func/ftransdir.i}
+
+gcBrand = "1".
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -36,6 +39,9 @@ DEF VAR lcTimePart AS CHAR. /*For log file name*/
 DEF VAR lcLogFile AS CHAR NO-UNDO.
 DEF VAR lcRowStatus AS CHAR NO-UNDO.
 DEF VAR lcErr AS CHAR NO-UNDO.
+DEF VAR lcFileName AS CHAR NO-UNDO.
+DEF VAR lcInputFile AS CHAR NO-UNDO.
+DEF VAR lcProcDir AS CHAR NO-UNDO.
 
 
 DEFINE TEMP-TABLE ttBarrings NO-UNDO SERIALIZE-NAME ""
@@ -70,7 +76,19 @@ ASSIGN
    lcInDir = fCParam("MB_Migration", "MigrationInDir").
 
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
-IF lcInDir EQ "" OR lcInDir EQ ? THEN lcInDir = "/tmp/".
+IF lcInDir EQ "" OR lcInDir EQ ? THEN DO:
+   ASSIGN
+      lcInDir = "/tmp/"
+      lcLogDir = "/tmp/"
+      lcProcDir = "/tmp/".
+END.
+ELSE DO:
+   ASSIGN
+      lcProcDir = lcInDir + "/processed/"
+      lcLogDir = lcInDir + "/logs/"
+      lcInDir = lcInDir + "/incoming/".
+END.
+
 
 /*Set output and log files*/
 ldaReadDate = TODAY.
@@ -115,7 +133,7 @@ DO TRANS:
    END.
 END.
 /*Execution part*/
-lcErr = fInitMigrationMQ("response").
+lcErr = fInitMigrationMQ("oper_data_reader").
 IF lcErr NE "" THEN DO:
    PUT STREAM sLog UNFORMATTED
    "MQ error. Operational data file will be skipped: " + lcErr +
@@ -124,7 +142,23 @@ IF lcErr NE "" THEN DO:
 END.
 ELSE DO:
    /*Execution part*/
-   RUN pHandleInputJson. 
+   INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcindir + "/OPER_DATA*" ).
+   REPEAT:
+      IMPORT STREAM sFile UNFORMATTED lcFileName.
+      lcInputFile =  lcFileName.
+      IF SEARCH(lcInputFile) NE ? THEN INPUT STREAM sIn FROM VALUE(lcInputFile).
+      ELSE NEXT.
+      /*OPER_DATA_SET -> setting
+       OPER_DATA_VALIDATE -> validation
+      */ 
+
+      IF lcInputFile MATCHES "*OPER_DATA_SET*" THEN /**/
+         RUN pReadInputJSON(lcInputFile, FALSE).
+      ELSE RUN pReadInputJSON(lcInputFile, TRUE).
+      fMove2TransDir(lcInputFile,"",lcProcDir).
+   END.
+
+
 END.
 /*Release ActionLog lock*/
 DO TRANS:
@@ -162,7 +196,7 @@ FUNCTION fUpsellExists RETURNS CHAR
    (icUPS AS CHAR):
    DEF BUFFER DayCampaign for DayCampaign.
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand EQ "1" AND
+              DayCampaign.Brand EQ gcBrand AND
               DayCampaign.DCEvent EQ icUps NO-ERROR.
    IF NOT AVAIL DayCampaign THEN RETURN "Item not found " + icUPS.
 
@@ -187,54 +221,6 @@ END.
 
 
 /*Functions and procedures*/
-
-/*Function generates a barring command from separated list format:
-  barring1,barring2,barring3 ->
-  barring1=1,barring2=1,barring3=1
-  The program clears list so that already active barrings are not set to
-  list to be activated again. (Idea: reduce errors by incoorect input)
-  List handling creates log for problem solving purposes.
-  The program does not make validations for barring command compability etc.
-  The checks are done when calling actual barring functions.  
-  */
- /*TODO: changes this when incoming data format is clear*/
-FUNCTION fMMInputToBarrCmd RETURNS CHAR
-   (iiMsSeq AS INT,
-    icInput AS CHAR,
-    icInputSeparator AS CHAR):
-   DEF VAR i AS INT NO-UNDO.
-   DEF VAR lcCommand AS CHAR NO-UNDO.
-
-   PUT STREAM sLog UNFORMATTED
-      "Generating Barring Command, input: "
-      STRING(iiMsSeq) + " " +
-      icInput "." SKIP.
-
-   IF icInput EQ "" THEN DO:
-      PUT STREAM sLog UNFORMATTED
-         "Empty barring list " SKIP.
-      RETURN icInput.
-   END.
-   DO i = 1 TO NUM-ENTRIES(icInput,icInputSeparator):
-      IF fGetBarringStatus(ENTRY(i,icInput,icInputSeparator), iiMsSeq) EQ
-         {&BARR_STATUS_ACTIVE} THEN DO:
-         PUT STREAM sLog UNFORMATTED
-            "Already active, not added to command: "
-            ENTRY(i,icInput,icInputSeparator) " " SKIP.
-      END.
-      ELSE DO:
-         lcCommand = lcCommand + ENTRY(i,icInput,icInputSeparator) + "=1".
-         IF i NE NUM-ENTRIES(icInput,icInputSeparator) THEN
-            lcCommand = lcCommand + ",".
-      END.
-   END.
-   PUT STREAM sLog UNFORMATTED
-      "Generated Barring Command: "
-       STRING(iiMsSeq) + " " +
-       lcCommand "." SKIP.
-
-   RETURN lcCommand.
-END.
 
 /*Function validates barring request.
 Codes:
@@ -302,13 +288,16 @@ END FUNCTION.
  Other code -> Barring setting failed*/
 FUNCTION fSetMigrationBarring RETURNS CHAR
    (iiMsSeq AS INT,
-    icCommand AS CHAR):
+    icCommand AS CHAR,
+    ilgSimulate AS LOGICAL):
    DEF VAR lcStat AS CHAR NO-UNDO.
    DEF VAR liReq AS INT NO-UNDO.
    
    lcStat = fValidateMMBarringCommand(iiMsSeq, icCommand).
    IF lcStat NE "" THEN RETURN lcStat.
    IF icCommand EQ "" THEN RETURN "".
+
+   IF ilgSimulate EQ TRUE THEN RETURN "".
    RUN Mm/barrengine.p(iiMsSeq,
                        icCommand,
                        {&REQUEST_SOURCE_MIGRATION},
@@ -325,16 +314,51 @@ END.
 FUNCTION fSetMigrationFees RETURNS CHAR
    (iiMsSeq AS INT,
     icCommand AS CHAR):
-    DEF VAR lcStat AS CHAR NO-UNDO.
    RETURN "".
 END.
+/*Function sets migration related upsells*/
+/*Note: current version suppots only postpaid upsells*/
+FUNCTION fSetMigrationUpsell RETURNS CHAR
+   (iiMsSeq AS INT,
+    icCommand AS CHAR,
+    iiAmount AS INT,
+    ilgSimulate AS LOGICAL):
+    DEF VAR i AS INT NO-UNDO.
+    DEF VAR lcError AS CHAR NO-UNDO.
+    DEF VAR lcReturn AS CHAR NO-UNDO.
+    DEF VAR liReq AS INT NO-UNDO.
+    IF NOT icCommand MATCHES "*UPSELL*" THEN 
+       RETURN "Not valid upsell " + icCommand.
+       
+    IF ilgSimulate EQ TRUE THEN RETURN "".
+
+    FIND FIRST MobSub NO-LOCK where 
+               MobSub.MsSeq EQ iiMsSeq NO-ERROR.
+    IF NOT AVAIL MobSub THEN RETURN "Upsell setting failed, no mobsub " +
+                             STRING(iiMsSeq).
+    /* TODO mobsub cgheck */
+               
+    DO i = 1 TO iiAmount:
+       fCreateUpsellBundle(iiMsSeq,
+                           icCommand,
+                           {&REQUEST_SOURCE_MIGRATION},
+                           fMakeTS(),
+                           OUTPUT liReq,
+                           OUTPUT lcError).
+       IF lcError NE "" THEN DO:
+          lcReturn = lcReturn + "|" + lcError.
+       END.
+   END.
+
+   RETURN "".
+END.
+
 
 /*Function sets migration related upsells*/
 /*Note: current version suppots only postpaid upsells*/
 FUNCTION fSetMigrationUpsells RETURNS CHAR
    (iiMsSeq AS INT,
     icCommand AS CHAR):
-    DEF VAR lcStat AS CHAR NO-UNDO.
     DEF VAR i AS INT NO-UNDO.
     DEF VAR lcUpsell AS CHAR NO-UNDO.
     DEF VAR lcError AS CHAR NO-UNDO.
@@ -366,7 +390,6 @@ FUNCTION fSetMigrationTerminals RETURNS CHAR
    (iiMsSeq AS INT,
     iiOrderID AS INT,
     icTerminals AS CHAR):
-   DEF VAR lcStat AS CHAR NO-UNDO.
    DEF VAR lcTerminal AS CHAR NO-UNDO.
    DEF VAR i AS INT NO-UNDO.
 
@@ -386,7 +409,6 @@ END.
 FUNCTION fSetMigrationUsedData RETURNS CHAR
    (iiMsSeq AS INT,
     iiCommand AS INT):
-    DEF VAR lcStat AS CHAR NO-UNDO.
    RETURN "".
 END.
 
@@ -437,7 +459,6 @@ END.
 FUNCTION fSetMigrationBonos RETURNS CHAR
    (iiMsSeq AS INT,
     icCommand AS CHAR):
-    DEF VAR lcStat AS CHAR NO-UNDO.
     DEF VAR i AS INT NO-UNDO.
     DEF VAR lc AS CHAR NO-UNDO.
     DEF VAR lcError AS CHAR NO-UNDO.
@@ -473,7 +494,6 @@ END.
 FUNCTION fSetMigrationFAT RETURNS CHAR
    (iiMsSeq AS INT,
     idCommand AS DECIMAL):
-    DEF VAR lcStat AS CHAR NO-UNDO.
 /*
      ocErrInfo =  fCreateFatRow(
                              "GOOGLEVASFAT",
@@ -499,6 +519,12 @@ END.
   Program tries to set all settings even some setting fails.
   If all requests are created sccessfully the notification is sent
   after requests are done (by different program).
+  NOTE IMPORTANT:
+  Migration projectais paused(?) according to customer sttrategy decision.
+  Implementation is ready only for barrings and upsells that were clear 
+  in specifiaction phase Other data types have also functions for handling
+  but they are not used..
+
 */
 FUNCTION fSetOperData RETURNS CHAR
    (icMSISDN AS CHAR,
@@ -520,35 +546,36 @@ FUNCTION fSetOperData RETURNS CHAR
 
    lcCommands = STRING(iiMsSeq) + "|" + icMSISDN + "|".
 
-   lcStat =  fSetMigrationBarring(iiMsSeq, icBarrings). 
+   lcStat =  fSetMigrationBarring(iiMsSeq, icBarrings, TRUE). 
    lcCommands = lcCommands + icBarrings + "|".
    IF lcStat NE "" THEN DO:
       lcRet = "Barring error: " + lcStat + "/".
       lcStat = "".
    END.
-
-   lcStat = lcStat + fSetMigrationFees(iiMsSeq, icSinglefees).
+/*
+   lcStat = fSetMigrationFees(iiMsSeq, icSinglefees).
    lcCommands = lcCommands + icSingleFees + "|".
    IF lcStat NE "" THEN DO:
       lcRet = lcRet + "Fee setting error: " + lcStat + "/".
       lcStat = "".
    END.
-
-   lcStat = lcStat + fSetMigrationUpsells(iiMsSeq, icUpsells).
+*/
+   lcStat = fSetMigrationUpsells(iiMsSeq, icUpsells).
    lcCommands = lcCommands + icUpsells + "|".
    IF lcStat NE "" THEN DO:
       lcRet = lcRet + "Upsell setting error: " + lcStat + "/".
       lcStat = "".
    END.
-
-   lcStat = lcStat + fSetMigrationUsedData(iiMsSeq,iiUsedData).
+/*
+   lcStat = fSetMigrationUsedData(iiMsSeq,iiUsedData).
    lcCommands = lcCommands + STRING(iiUsedData) + "|".
    IF lcStat NE "" THEN DO:
       lcRet = lcRet + "Data update error: " + lcStat + "/".
       lcStat = "".
    END.
 
-   lcStat = lcStat + fSetMigrationTerminals(iiMsSeq,
+
+   lcStat = fSetMigrationTerminals(iiMsSeq,
                                             liOrderID,
                                             icTerminals).
    lcCommands = lcCommands + icTerminals + "|".
@@ -557,34 +584,34 @@ FUNCTION fSetOperData RETURNS CHAR
       lcStat = "".
    END.
 
-   lcStat = lcStat + fSetMigrationDiscounts(iiMsSeq,icDiscounts).
+   lcStat = fSetMigrationDiscounts(iiMsSeq,icDiscounts).
    lcCommands = lcCommands + icDiscounts + "|".
    IF lcStat NE "" THEN DO:
       lcRet = lcRet + "Discount setting error " + lcStat + "/".
       lcStat = "".
    END.
 
-   lcStat = lcStat + fSetMigrationBonos(iiMsSeq,icBonos).
+   lcStat = fSetMigrationBonos(iiMsSeq,icBonos).
    lcCommands = lcCommands + icBonos + "|".
    IF lcStat NE "" THEN DO:
       lcRet = lcRet + "Bundle setting error " + lcStat + "/".
       lcStat = "".
    END.
-/* To be added when prepaid support is implemented
+ To be added when prepaid support is implemented
    lcCommands = lcCommands + xxx + "|".
    lcStat = lcStat + fSetPrepaidSaldo(iiMsSeq,).
    IF lcStat NE "" THEN DO:
       lcRet = lcRet + "Prepaid setting error " + lcStat + "/".
       lcStat = "".
    END.
-*/
-   lcStat = lcStat + fSetMigrationFat(iiMsSeq,idFat).
+
+   lcStat = fSetMigrationFat(iiMsSeq,idFat).
    lcCommands = lcCommands + STRING(idFat) + "|".
    IF lcStat NE "" THEN DO:
       lcRet = lcRet + "FAT setting error " + lcStat + "/".
       lcStat = "".
    END.
-
+*/
    PUT STREAM sLog UNFORMATTED lcCommands + lcRet SKIP.
    
    /*In failure cases WEB must know status as soon as possible*/
@@ -613,67 +640,11 @@ FUNCTION fSetOperData RETURNS CHAR
 
 END.
 
-
-
-/*File reading and data processing for each filed.  
-  MSISDN (Single value)
-  Barrings (list):
-     List of barrings will be set in a command.
-     Barring list handling filters out already active barrings and
-     makes also other validations.
-  Services (list)
-     Services are set one by one.
-  Bono (single value)     
-  Upsell (Single value)
-  Data (Single value)
-  */
-PROCEDURE pHandleInputFile:
-   DEF VAR lcLine AS CHAR NO-UNDO.
-   DEF VAR lcMSISDN AS CHAR NO-UNDO.
-   DEF VAR lcFileName AS CHAR NO-UNDO.
-   DEF VAR liLineNumber AS INT NO-UNDO.
-   DEF VAR lcMMOrderID AS CHAR NO-UNDO. 
-   DEF VAR lcBarringList AS CHAR NO-UNDO.
-   DEF VAR lcServiceList AS CHAR NO-UNDO.
-   DEF VAR lcBono AS CHAR NO-UNDO.
-   DEF VAR lcUpsell AS CHAR NO-UNDO.
-   DEF VAR liDataAmount AS INT NO-UNDO.
-   PUT STREAM sLog UNFORMATTED
-      "List collection starts " + fTS2HMS(fMakeTS()) SKIP.
-   FILE_LINE:
-   REPEAT TRANS:
-
-      IMPORT STREAM sin UNFORMATTED lcLine.
-      IF TRIM(lcLine) EQ "" THEN NEXT.
-      liLineNumber = liLineNumber + 1.
-
-      IF NOT SESSION:BATCH AND liLineNumber MOD 10 = 0 THEN DO:
-         disp "Reading data: " lcFilename liLineNumber with frame a.
-         pause 0.
-      END.
-      IF NUM-ENTRIES (lcLine) NE 3 THEN DO:
-         PUT STREAM sLog UNFORMATTED
-         lcLine + ";" + "ERROR:Incorrect input format"  SKIP.
-         NEXT.
-
-      END.
-      assign
-         lcMMOrderID = STRING(ENTRY(1,lcline,";"))
-         lcMSISDN = STRING(ENTRY(2,lcline,";"))
-         lcBarringList = STRING(ENTRY(3,lcline,";"))
-         lcServiceList = STRING(ENTRY(4,lcline,";"))
-         lcBono = STRING(ENTRY(5,lcline,";"))
-         lcUpsell = STRING(ENTRY(6,lcline,";"))
-         liDataAmount = INT(ENTRY(7,lcline,";")).
-
-   END. /* Line handling END */
-
-   PUT STREAM sLog UNFORMATTED
-      "Read " + STRING(liLineNumber) + " lines. " 
-      "Collection done " + fTS2HMS(fMakeTS()) SKIP.
-END.
-
+/*Todo: Move rest functionality from fSetOperData here if the feature 
+  is taken into use.*/
 PROCEDURE pReadInputJSON:
+   DEF INPUT PARAMETER icFile AS CHAR.
+   DEF INPUT PARAMETER ilgSimulate AS LOGICAL.
    DEF VAR lcMSISDN AS CHAR NO-UNDO.
    DEF VAR lcFileName AS CHAR NO-UNDO.
    DEF VAR lcMMOrderID AS CHAR NO-UNDO. 
@@ -683,9 +654,20 @@ PROCEDURE pReadInputJSON:
    DEF VAR lcUpsell AS CHAR NO-UNDO.
    DEF VAR liDataAmount AS INT NO-UNDO.
    DEF VAR objJsonToTT AS CLASS Class.JsonToTT.
+   DEF VAR lcBCommand AS CHAR NO-UNDO.
+   DEF VAR liMsSeq AS INT NO-UNDO.
+   DEF VAR lcCommands AS CHAR NO-UNDO.
+   DEF VAR lcStat AS CHAR NO-UNDO.
+   DEF VAR lcRet AS CHAR NO-UNDO.
+   DEF VAR liOrderID AS INT NO-UNDO.
+   DEF VAR lcMQMessage AS CHAR NO-UNDO.
+   DEF VAR lcMode AS CHAR NO-UNDO INIT "Set values".
+
+   IF ilgSimulate EQ TRUE THEN lcMode = "Simulation".
 
    PUT STREAM sLog UNFORMATTED
-      "List collection starts " + fTS2HMS(fMakeTS()) SKIP.
+      "List collection starts " + fTS2HMS(fMakeTS()) + 
+      "Mode: " + lcMode SKIP.
 
 
    objJsonToTT = NEW Class.JsonToTT().
@@ -697,24 +679,82 @@ PROCEDURE pReadInputJSON:
    objJsonToTT:mStoreTT("upsells", BUFFER ttUpsells:HANDLE).
    objJsonToTT:mStoreTT("discounts", BUFFER ttDiscounts:HANDLE).
 
-   objJsonToTT:mParseJsonFile("/tmp/ilkka.json").
+
+   objJsonToTT:mParseJsonFile(icFile).
    DO WHILE objJsonToTT:mGetNext():
-      FOR EACH ttRootLevel: DISP ttRootLevel. END.
-      FOR EACH ttBarrings: DISP ttBarrings. END.
-      FOR EACH ttSinglefees: DISP ttSinglefees. END.
-      FOR EACH ttUpsells: DISP ttUpsells. END.
-      FOR EACH ttDiscounts: DISP ttDiscounts. END.
+      lcRet = "".
+      FOR EACH ttRootLevel: 
+         lcMSISDN = ttRootLevel.msisdn. 
+         limsseq = 0.
+         FIND FIRST mobsub NO-LOCK WHERE
+                    mobsub.brand = gcBrand AND
+                    mobsub.cli = lcMSISDN NO-ERROR.
+         IF AVAIL mobsub then do:
+            liMsSeq = mobsub.msseq.
+         END.
+      END.
+      lcCommands = STRING(liMsSeq) + "|" + lcMSISDN + "|".
 
-      MESSAGE objJsonToTT:mListJsonArrayNames() 
-         VIEW-AS ALERT-BOX TITLE "Arrays".
-      MESSAGE objJsonToTT:mListJsonObjectNames() 
-         VIEW-AS ALERT-BOX TITLE "Objects".
+      FOR EACH ttBarrings: 
+        if lcBCommand NE "" THEN lcBCommand = lcBCommand + ",".
+               lcBCommand = lcBCommand + barring_id + "=1".
+      END.
+      lcStat =  fSetMigrationBarring(liMsSeq, lcBCommand, ilgSimulate).
+      lcCommands = lcCommands + lcBCommand + "|".
+      IF lcStat NE "" THEN DO:
+         lcRet = lcRet + "Barring error: " + lcStat + "/".
+         lcStat = "".
+      END.
+
+      FOR EACH ttUpsells: 
+         lcStat = fSetMigrationUpsell(liMsSeq, 
+                                      ttUpsells.upsell_id, 
+                                      ttUpsells.amount,
+                                      ilgSimulate).
+
+          lcCommands = lcCommands + " " + ttUpsells.upsell_id.                            
+          IF lcStat NE "" THEN DO:
+             lcRet = lcRet + "Upsell error: " + lcStat + "/".
+             lcStat = "".
+         END.
+         lcCommands = lcCommands + "|".
+      END.
+      FOR EACH ttDiscounts: 
+         /*DISP ttDiscounts. */
+      END.
+      FOR EACH ttSinglefees:
+         /*DISP ttSinglefees.*/
+      END.
+
+      PUT STREAM sLog UNFORMATTED lcCommands + lcRet SKIP.
+
+      /*In failure cases WEB must know status as soon as possible*/
+      IF lcRet NE "" THEN DO:
+         FIND FIRST Order NO-LOCK WHERE
+                    Order.CLI EQ lcMSISDN AND
+                    Order.Orderchannel BEGINS "migration"
+                    NO-ERROR.
+         IF AVAIL Order THEN liOrderID = Order.Orderid.
+         ELSE liOrderID = 0.
+
+         lcMQMessage = fGenerateOrderInfo(liOrderID,
+                                       lcMSISDN,
+                                       lcRet).
+         IF lcMQMessage EQ "" THEN
+            lcCommands = lcCommands + ";Message creation failed".
+         ELSE DO:
+            lcCommands = ";" + fWriteToMQ(lcMQMessage).
+         END.
+         PUT STREAM sLog UNFORMATTED lcCommands SKIP.
+         PUT STREAM sLog UNFORMATTED lcMQMessage SKIP.
+
+      END.
+
    END.
-
-
 
    PUT STREAM sLog UNFORMATTED
       "Collection done " + fTS2HMS(fMakeTS()) SKIP.
+   RETURN "".   
 END.
 
 

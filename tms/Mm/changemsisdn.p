@@ -275,7 +275,9 @@ PROCEDURE pChangeMSISDN:
    END.
 
    /* Activate the HSDPA with new msisdn, if it was activated before */
-   IF MobSub.CLIType BEGINS "TARJ" THEN
+   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                     CLIType.CLIType EQ MobSub.CLIType AND
+                     CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID}) THEN
    FOR FIRST SubSer NO-LOCK WHERE
              SubSer.MsSeq = MobSub.MsSeq AND
              SubSer.ServCom = "HSDPA" AND

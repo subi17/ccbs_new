@@ -199,6 +199,30 @@ bulkload: PListConf
   Brand: "1"
 
 bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO27"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "CONTRATOS"
+  RatePlan: "CONTRATO27"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO27"
+  Brand: "1"
+
+bulkload: PListConf
   dFrom: 2014-05-01
   dTo: 2054-12-31
   Prior: 5

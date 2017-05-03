@@ -45,12 +45,13 @@ DEF VAR llWildSearch AS LOG NO-UNDO.
 DEF VAR liCases AS INT NO-UNDO. 
 DEF VAR pcTenant AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 
-pcTenant = get_struct(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
-lcStruct = validate_struct(pcStruct,
-   "starttime,endtime,dumpid,filename").
+pcStruct = get_struct(param_toplevel_id, "0").
+
+lcStruct = validate_struct(pcStruct,"brand,starttime,endtime,dumpid,filename").
+
+pcTenant = get_string(pcStruct, "brand").
 
 IF LOOKUP("starttime", lcStruct) > 0 THEN
    ldeStartTime = get_timestamp(pcStruct, "starttime").

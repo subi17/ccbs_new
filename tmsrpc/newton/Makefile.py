@@ -11,13 +11,6 @@ import glob
 relpath = '../..'
 exec(open(relpath + '/etc/make_site.py').read())
 
-def write_version():
-    fd = open('src/version.i', mode='wt')
-    fd.write(appversion)
-    fd.close()
-if os.path.exists('src'):
-    write_version()
-
 show_file = False
 
 def getpf(pf):
@@ -25,7 +18,7 @@ def getpf(pf):
         for tenant in tenancies:
             if tenancies[tenant].get('tenanttype', '') == 'Super':
                 return '{0}_{1}.pf'.format(pf, tenant)
-    return '{}.pf'.format(pf)
+    return '{0}.pf'.format(pf)
 
 def userandpass():
     if 'tenancies' in globals():
@@ -42,7 +35,7 @@ def active_cdr_db_pf():
     else:
         connection_type = "local"
 
-    args = ['-b', '-p', '../../tms/Syst/list_active_cdr_databases.p', '-param', connection_type]
+    args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
     args.extend(['-pf', getpf('../../db/progress/store/common')])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
@@ -120,7 +113,7 @@ def compile(*a):
 
 
 def make_compiler(cline, files, show='.'):
-    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='rt+')
+    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
     compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n')
     for ff in files:
         if show == '.':
@@ -144,8 +137,8 @@ def clean(*a):
         os.unlink(file)
 
 
-logging_level = '1'
-extraargs = ['-logginglevel', logging_level, '-logthreshold', '500000']
+logging_level = '3'
+extraargs = ['-logginglevel', logging_level, '-logthreshold', '1500000']
 
 @target
 def run_agent(*a):
@@ -165,7 +158,7 @@ def run_agent(*a):
 
     
     os.environ['PROPATH'] += ',rpcmethods.pl'
-    args.extend(['-T', '../../var/tmp', '-clientlog', '../../var/log/%s_agent.%d.log' % \
+    args.extend(['-clientlog', '../../var/log/%s_agent.%d.log' % \
             	          (agent_name, os.getpid())])
     args = mpro + args + extraargs + ['-b', '-p', 'fcgi_agent/nq_xmlrpc.p']
     os.execlp(args[0], *args)

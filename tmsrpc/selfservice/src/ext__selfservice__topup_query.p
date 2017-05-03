@@ -19,10 +19,10 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 ASSIGN gcBrand = "1"
-       katun   = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
+       katun   = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 {Func/fexternalapi.i}
 
 /* Input parameters */
@@ -40,7 +40,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {newton/src/findtenant.i NO ordercanal MobSub Cli pcCLI}
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName,substring(pcTransId,1,3)) THEN
+IF NOT fchkTMSCodeValues(ghAuthLog::UserName,substring(pcTransId,1,3)) THEN
    RETURN appl_err("Application Id does not match").
   
 FIND FIRST customer NO-LOCK WHERE
@@ -65,7 +65,7 @@ add_string(top_struct, "custid", Customer.OrgId).
 
 FINALLY:
    /* Store the transaction id */
-   gbAuthLog.TransactionId = pcTransId.
+   ghAuthLog::TransactionId = pcTransId.
 
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.

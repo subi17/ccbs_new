@@ -1743,3 +1743,69 @@ bulkload: ServiceLimitTarget
   OutsideRate: "CONT26_VOICE_OUT"
   InsideRate: "CONT26_VOICE_IN"
 
+bulkload: ServiceLimitTarget
+  SLSeq: 144
+  ServiceLMember: "14100001"
+  OutsideRate: "CONT27_DATA_OUT"
+  InsideRate: "CONT27_DATA_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 145
+  ServiceLMember: "10100001"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 145
+  ServiceLMember: "10100003"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 145
+  ServiceLMember: "10100005"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 145
+  ServiceLMember: "CFOTHER"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 145
+  ServiceLMember: "CFYOIGO"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 146
+  ServiceLMember: "10100001"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 146
+  ServiceLMember: "10100003"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 146
+  ServiceLMember: "10100005"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 146
+  ServiceLMember: "CFOTHER"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 146
+  ServiceLMember: "CFYOIGO"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+

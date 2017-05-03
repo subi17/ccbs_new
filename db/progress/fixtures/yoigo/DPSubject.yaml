@@ -202,3 +202,39 @@ bulkload: DPSubject
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
 
+bulkload: DPSubject
+  DPId: 42
+  DPSubject: "CONTDSL39"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: DPSubject
+  DPId: 42
+  DPSubject: "CONTDSL45"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: DPSubject
+  DPId: 42
+  DPSubject: "CONTDSL48"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: DPSubject
+  DPId: 42
+  DPSubject: "CONTDSL52"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: DPSubject
+  DPId: 42
+  DPSubject: "CONTDSL58"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: DPSubject
+  DPId: 42
+  DPSubject: "CONTDSL59"
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+

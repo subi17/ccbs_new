@@ -231,26 +231,6 @@ bulkload: FMItem
   Brand: "1"
 
 bulkload: FMItem
-  FeeModel: "COMP_POSTPAID"
-  PriceList: "COMMON"
-  BillCode: "GENERALCOMP"
-  BillMethod: TRUE 
-  BillType: "CC"
-  FromDate: 2009-05-28
-  ToDate: 2009-07-02
-  Brand: "1"
-
-bulkload: FMItem
-  FeeModel: "COMP_PREPAID"
-  PriceList: "COMMON2"
-  BillCode: "GENERALCOMP"
-  BillMethod: TRUE 
-  BillType: "CC"
-  FromDate: 2009-05-28
-  ToDate: 2009-07-02
-  Brand: "1"
-
-bulkload: FMItem
   FeeModel: "Compensa 10"
   PriceList: "COMMON"
   BillCode: "GENERALCOMP"
@@ -349,6 +329,26 @@ bulkload: FMItem
   Brand: "1"
 
 bulkload: FMItem
+  FeeModel: "COMP_POSTPAID"
+  PriceList: "COMMON"
+  BillCode: "GENERALCOMP"
+  BillMethod: TRUE 
+  BillType: "CC"
+  FromDate: 2009-05-28
+  ToDate: 2009-07-02
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "COMP_PREPAID"
+  PriceList: "COMMON2"
+  BillCode: "GENERALCOMP"
+  BillMethod: TRUE 
+  BillType: "CC"
+  FromDate: 2009-05-28
+  ToDate: 2009-07-02
+  Brand: "1"
+
+bulkload: FMItem
   FeeModel: "CONT10MF"
   PriceList: "CONTRATO8"
   BillCode: "CONT10MF"
@@ -421,6 +421,18 @@ bulkload: FMItem
   BillType: "MF"
   BillCycle: 2
   FromDate: 2017-02-01
+  ToDate: 2049-12-31
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "CONT27MF"
+  PriceList: "CONTRATOS"
+  BillCode: "CONT27MF"
+  Interval: 1
+  Amount: 13.22
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-04-13
   ToDate: 2049-12-31
   Brand: "1"
 
@@ -3100,6 +3112,17 @@ bulkload: FMItem
   Brand: "1"
   BrokenRental: 1
   FirstMonthBR: 1
+
+bulkload: FMItem
+  FeeModel: "Pos123"
+  PriceList: "COMMON2"
+  BillCode: "ACCCHARGE"
+  BillMethod: TRUE 
+  Amount: 10
+  BillType: "CC"
+  FromDate: 2017-03-21
+  ToDate: 2017-03-22
+  Brand: "1"
 
 bulkload: FMItem
   FeeModel: "POSMNP10"
@@ -27796,6 +27819,17 @@ bulkload: FMItem
   Brand: "1"
   BrokenRental: 1
   FirstMonthBR: 1
+
+bulkload: FMItem
+  FeeModel: "TESTSK"
+  PriceList: "COMMON2"
+  BillCode: "SIMLOCK"
+  BillMethod: TRUE 
+  Amount: 5
+  BillType: "CC"
+  FromDate: 2017-04-03
+  ToDate: 2017-04-30
+  Brand: "1"
 
 bulkload: FMItem
   FeeModel: "TOPUPCAMP20"

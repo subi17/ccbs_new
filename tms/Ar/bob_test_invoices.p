@@ -18,6 +18,7 @@ gcBrand = "1".
 {Syst/eventlog.i}
 {Func/date.i}
 {Inv/billrund.i NEW}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE lcLine   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSep    AS CHARACTER NO-UNDO INITIAL ";".
@@ -45,7 +46,8 @@ DEFINE VARIABLE lcToday         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFuncRunQAllow AS CHARACTER NO-UNDO.
 DEFINE VARIABLE i               AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE ldtInvDate      AS DATE      NO-UNDO.
-
+DEFINE VARIABLE lcBrand         AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcTenant      AS CHARACTER NO-UNDO.
 /* field variables */
 DEFINE VARIABLE liCustNum AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcAction  AS CHARACTER NO-UNDO.
@@ -55,11 +57,13 @@ DEFINE VARIABLE lcAction  AS CHARACTER NO-UNDO.
 /* ***************************  Main Block  *************************** */
 
 EMPTY TEMP-TABLE ttInvCust.
+
+fsetEffectiveTenantForAllDB("Default").
       
 ASSIGN
    lcIncDir        = fCParam("TestInvoices","IncDir") 
-   lcProcDir       = fCParam("TestInvoices","IncProcDir")
    lcSpoolDir      = fCParam("TestInvoices","OutSpoolDir")
+   lcProcDir       = fCParam("TestInvoices","IncProcDir")
    lcOutDir        = fCParam("TestInvoices","OutDir")
    lcFuncRunQAllow = fCParam("TestInvoices","FuncRunConfigList")
    ldtFromDate     = DATE((MONTH(TODAY)), 1 , YEAR(TODAY))
@@ -126,14 +130,26 @@ REPEAT:
    
    ASSIGN
       liNumOk  = 0
-      liNumErr = 0.
-   
-   IF NOT lcFileName BEGINS lcToday THEN DO:
+      liNumErr = 0
+      lcBrand  = ENTRY(1,lcFileName,"-").
+
+   IF LOOKUP(lcBrand,"Yoigo,Masmovil") = 0 THEN
+   DO:
+      fError("Brand information is invalid/missing on input filename"). 
+      RUN pTransOnError.
+      NEXT.
+   END.
+   ELSE IF NOT ENTRY(2,lcFileName,"-") BEGINS lcToday THEN 
+   DO:
       fError("Incorrect input filename format"). 
       RUN pTransOnError.
       NEXT.
    END.
-          
+   
+   ASSIGN lcTenant = fConvertBrandToTenant(lcBrand).
+
+   fsetEffectiveTenantForAllDB(lcTenant).
+
    RUN pCheckFuncRunQueue.
    
    IF RETURN-VALUE <> "" THEN DO: 

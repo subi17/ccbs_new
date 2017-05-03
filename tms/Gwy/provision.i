@@ -93,7 +93,7 @@ function fMakeCommLine returns CHAR
                              ELSE STRING(Order.PayType,"PREPAID/POSTPAID"))
                 lcProfile = (IF AVAILABLE CLIType 
                              THEN CLIType.ServicePack
-                             ELSE IF fConvertTenantToBrand(BUFFER-TENANT-NAME(Order)) = "masmovil"
+                             ELSE IF BUFFER-TENANT-NAME(Order) = {&TENANT_MASMOVIL}
                              THEN STRING(Order.PayType,"52/51")
                              ELSE STRING(Order.PayType,"42/41")).
 

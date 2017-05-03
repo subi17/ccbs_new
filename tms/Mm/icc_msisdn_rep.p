@@ -17,6 +17,7 @@
 {Func/cparam2.i}
 {Func/msisdn.i}
 {Func/ftransdir.i}
+{Func/multitenantfunc.i}
 
 OUTPUT THROUGH cat.
 
@@ -219,7 +220,9 @@ PROCEDURE pChangeToHardCodedErrorFile:
       Hardcoded error file is the last chance file operation
       for error operations. */
 
-   lcErrorFile = "/tmp/icc_msisdn_rep_errorfile" + pcTimeStampPart + ".txt".
+   lcErrorFile = "/tmp/" + 
+                 CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) + 
+                 "_icc_msisdn_rep_errorfile" + pcTimeStampPart + ".txt".
    pcNewErrorFile = lcErrorFile.
 
    RUN pReportFileError("Error file ", pcOrigErrorFile, "ErrorFile",

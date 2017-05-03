@@ -137,7 +137,7 @@ PROCEDURE pTerminateSubscription:
   FIND FIRST MobSub WHERE
              MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
 
-  llYoigoCLI = fIsYoigoCLI(MobSub.CLI).
+  llYoigoCLI = (fIsYoigoCLI(MobSub.CLI) OR fIsMasmovilCLI(MobSub.CLI)).
   llPenaltyFee = fIsPenalty(liTermReason,Order.MsSeq).
   liError = fCheckOrderer(liTermReason, llYoigoCLI, ocResult).
   IF liError NE 0 THEN RETURN appl_err(ocResult).

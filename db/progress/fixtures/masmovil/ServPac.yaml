@@ -19,6 +19,11 @@ bulkload: ServPac
   Brand: "1"
 
 bulkload: ServPac
+  ServPac: "HSDPA"
+  SPName: "High speed data"
+  Brand: "1"
+
+bulkload: ServPac
   ServPac: "LP"
   SPName: "Debtor landing page"
   Brand: "1"

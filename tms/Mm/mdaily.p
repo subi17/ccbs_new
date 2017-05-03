@@ -29,6 +29,7 @@ katun = "cron".
 {Func/direct_dbconnect.i}
 
 /* weekday related processes */
+/* MB-734 MB-735 Moved to Dumptool 
 CASE WEEKDAY(TODAY):
 
    /* Sunday */
@@ -58,7 +59,7 @@ RUN pCallDump ("MobCDR,ErrorCDR",
 fELog("DAILY","CallDumpStopped").
 
 QUIT.
-
+*/
 
 PROCEDURE pCallDump:
 

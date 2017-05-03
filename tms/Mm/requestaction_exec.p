@@ -249,8 +249,9 @@ PROCEDURE pPeriodicalContract:
       /* request should wait until another bundle request is completed */
       lcWaitFor = "".
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
-         icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} THEN DO:
-         
+         (icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} OR
+          icSource =  {&REQUEST_SOURCE_STC} ) THEN DO:
+
          FOR EACH bBundleRequest NO-LOCK USE-INDEX OrigRequest WHERE
                   bBundleRequest.OrigRequest = iiMsRequest AND
                   bBundleRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
@@ -261,6 +262,7 @@ PROCEDURE pPeriodicalContract:
                   bBundleContract.DCEvent = bBundleRequest.ReqCParam3 AND
                   LOOKUP(bBundleContract.DCType,
                          {&PERCONTRACT_RATING_PACKAGE}) > 0:
+            IF fIsConvergentFixedContract(bBundleRequest.ReqCParam3) THEN NEXT. 
             lcWaitFor = ":wait" + STRING(bBundleRequest.MsRequest).
          END.     
       END.
@@ -352,7 +354,10 @@ PROCEDURE pPeriodicalContract:
            Don't charge penalty when:
            STC is requested on the same day of the renewal order AND
            New type is POSTPAID */
-         IF bOrigRequest.reqcparam2 BEGINS "CONT" /* POSTPAID */ THEN DO:
+         IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                           CLIType.CLIType EQ bOrigRequest.reqcparam2 AND
+                           CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) 
+            THEN DO:
             ORDER_LOOP:
             FOR EACH bOrder NO-LOCK WHERE
                bOrder.MSSeq EQ bOrigRequest.MsSeq AND

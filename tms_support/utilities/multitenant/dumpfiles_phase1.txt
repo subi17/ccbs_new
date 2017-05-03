@@ -5,6 +5,7 @@ BicMissingCheck
 BillingPermEvents
 BillingPermTXT
 ChargeCompDump
+ClitypeDump
 CreditNotesTxt
 CustContact
 CustDumpTXT
@@ -64,8 +65,8 @@ HPD_EDRHistory
 HPD_MobCDR
 OrderAction
 OrderDumpTXT
-OrderFusion 
-OfferItem
+
+
 OrderAccessory_ORIG 
 MServiceLPoolDump
 PerContrDump
@@ -73,4 +74,5 @@ PerContrDump
 SingleFeeEvent
 
 MSOwner
+PrepaidCompReport
 

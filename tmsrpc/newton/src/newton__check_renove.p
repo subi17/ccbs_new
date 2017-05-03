@@ -156,7 +156,6 @@ DEF VAR ldtFirstDay        AS DATE NO-UNDO.
 DEF VAR ldePendingFees AS DECIMAL NO-UNDO.
 DEF VAR liPeriod AS INT NO-UNDO. 
 DEF VAR ldaDate AS DATE NO-UNDO. 
-DEF VAR lcFixedOnlyConvergentCliTypeList AS CHAR NO-UNDO.
 
 DEF BUFFER bServiceRequest FOR MSRequest.
 DEF BUFFER bMobSub FOR MobSub.
@@ -186,8 +185,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/settenant.i pcTenant} 
 
 ASSIGN lcPostpaidVoiceTariffs           = fCParamC("POSTPAID_VOICE_TARIFFS")
-       lcPrepaidVoiceTariffs            = fCParamC("PREPAID_VOICE_TARIFFS")
-       lcFixedOnlyConvergentCliTypeList = fCParamC("FIXED_ONLY_CONVERGENT_CLITYPES").
+       lcPrepaidVoiceTariffs            = fCParamC("PREPAID_VOICE_TARIFFS").
 
 FIND Mobsub WHERE 
      Mobsub.Brand = gcBrand AND
@@ -196,8 +194,8 @@ FIND Mobsub WHERE
 IF NOT AVAIL Mobsub THEN
    RETURN appl_err("number_not_valid").
 
-/* TODO: Add new field to Clitype indicating fixedonly convergent and remove this TMSParam */
-IF LOOKUP(MobSub.CliType,lcFixedOnlyConvergentCliTypeList) > 0 THEN 
+FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = MobSub.CliType NO-LOCK NO-ERROR.
+IF AVAIL CliType AND CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN  
     RETURN appl_err("renewal_not_allowed_for_fixed_only").
 
 FIND FIRST Segmentation NO-LOCK WHERE

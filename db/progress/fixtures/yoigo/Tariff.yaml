@@ -6242,6 +6242,42 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "CONT27_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 80625
+  ValidFrom: 2017-04-13
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 30
+  BillCode: "CONT27CF_A"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT27_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 80626
+  ValidFrom: 2017-04-13
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 30
+  BillCode: "CONT27CF_B"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   BDest: "CONTS12_VOICE_IN"
   TZTo[1]: "2400"
   Discount[4]: yes
@@ -78154,6 +78190,42 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "CONT27_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 80627
+  ValidFrom: 2017-04-13
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 81
+  BillCode: "CONT27VOICE_A"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT27_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 80628
+  ValidFrom: 2017-04-13
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 81
+  BillCode: "CONT27VOICE_B"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   BDest: "CONTS12_VOICE_IN"
   TZTo[1]: "2400"
   Discount[4]: yes
@@ -79014,76 +79086,6 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
-  BDest: "GPRS_DATA200_UPSELL"
-  Discount[4]: yes
-  PriceList: "COMMON"
-  TariffNum: 4620
-  ValidFrom: 2015-05-01
-  ValidTo: 2052-12-31
-  TZName[1]: "Off Peak"
-  TZName[2]: "Peak"
-  TZName[3]: "Off Peak"
-  CCN: 93
-  BillCode: "DATA200UPSELL"
-  TariffType: 0
-  DataType: 4
-  Brand: "1"
-
-bulkload: Tariff
-  BDest: "GPRS_DATA5_UPSELL"
-  TZTo[1]: "2400"
-  Discount[4]: yes
-  PriceList: "COMMON"
-  TariffNum: 4313
-  ValidFrom: 2013-09-01
-  DayType[1]: 1
-  ValidTo: 2052-12-31
-  TZName[1]: "Off Peak"
-  TZName[2]: "Peak"
-  TZName[3]: "Off Peak"
-  CCN: 93
-  BillCode: "DATA5UPSELL"
-  TariffType: 0
-  DataType: 4
-  Brand: "1"
-
-bulkload: Tariff
-  BDest: "GPRS_DATA6_UPSELL"
-  TZTo[1]: "2400"
-  Discount[4]: yes
-  PriceList: "COMMON"
-  TariffNum: 4426
-  ValidFrom: 2014-05-01
-  DayType[1]: 1
-  ValidTo: 2052-12-31
-  TZName[1]: "Off Peak"
-  TZName[2]: "Peak"
-  TZName[3]: "Off Peak"
-  CCN: 93
-  BillCode: "DATA6UPSELL"
-  TariffType: 0
-  DataType: 4
-  Brand: "1"
-
-bulkload: Tariff
-  BDest: "GPRS_DATA9_UPSELL"
-  TZTo[1]: "2400"
-  Discount[4]: yes
-  PriceList: "COMMON"
-  TariffNum: 4072
-  ValidFrom: 2012-12-01
-  DayType[1]: 1
-  ValidTo: 2052-12-31
-  TZName[1]: "Off Peak"
-  TZName[2]: "Peak"
-  TZName[3]: "Off Peak"
-  CCN: 93
-  BillCode: "DATA9UPSELL"
-  TariffType: 0
-  DataType: 4
-  Brand: "1"
-
-bulkload: Tariff
   BDest: "GPRSDATA2_DATA5"
   TZTo[1]: "2400"
   Discount[4]: yes
@@ -79365,6 +79367,76 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 93
   BillCode: "DSS200UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA200_UPSELL"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 4620
+  ValidFrom: 2015-05-01
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "DATA200UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA5_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 4313
+  ValidFrom: 2013-09-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "DATA5UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA6_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 4426
+  ValidFrom: 2014-05-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "DATA6UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA9_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 4072
+  ValidFrom: 2012-12-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "DATA9UPSELL"
   TariffType: 0
   DataType: 4
   Brand: "1"
@@ -81953,6 +82025,40 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 93
   BillCode: "CONTDATA26"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT27_DATA_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 80629
+  ValidFrom: 2017-04-13
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "CONTDATA27"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT27_DATA_OUT"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 80630
+  ValidFrom: 2017-04-13
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "CONTDATA27"
   DataType: 4
   Brand: "1"
 
