@@ -921,7 +921,7 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
                             FALSE,             /* Set fees */
                             FALSE,             /* SMS */
                             "",
-                            "",
+                            {&REQUEST_SOURCE_HRLP_READER},
                             0,
                             FALSE,
                             OUTPUT lcError).
