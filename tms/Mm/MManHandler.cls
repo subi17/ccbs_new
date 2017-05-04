@@ -8,7 +8,7 @@
   ----------------------------------------------------------------------*/
 USING Progress.Lang.*.
 USING PROGRESS.Json.ObjectModel.*.
-USING qstomp.*.
+USING QStomp.*.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
