@@ -6,6 +6,7 @@
 {Func/detailvalue.i}
 {Syst/dumpfile_run.i}
 {Func/msisdn_prefix.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
