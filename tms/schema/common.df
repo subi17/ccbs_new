@@ -2590,10 +2590,10 @@ ADD INDEX "BIName" ON "BillItem"
   INDEX-FIELD "BIName" ASCENDING 
 
 ADD TABLE "BillTarget"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   LABEL "Billing Target"
   DESCRIPTION "Customer's Billing Target"
-  DUMP-NAME "billtarg"
+  DUMP-NAME "billtarget"
 
 ADD FIELD "CustNum" OF "BillTarget" AS integer 
   FORMAT ">>>>>>>>9"
@@ -2627,24 +2627,24 @@ ADD FIELD "DiscPlan" OF "BillTarget" AS character
   ORDER 80
 
 ADD FIELD "RatePlan" OF "BillTarget" AS character 
-  FORMAT "x(12)"
+  FORMAT "x(15)"
   INITIAL ""
   LABEL "Rating Plan"
   POSITION 15
-  MAX-WIDTH 24
+  MAX-WIDTH 30
   COLUMN-LABEL "RatePlan"
   HELP "Rating plan code"
   ORDER 130
 
 ADD INDEX "CustNum" ON "BillTarget" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "BillTarget" ASCENDING 
 
 ADD INDEX "RatePlan" ON "BillTarget" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   INDEX-FIELD "RatePlan" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
 
@@ -2740,7 +2740,7 @@ ADD INDEX "BIGName" ON "BItemGroup"
   INDEX-FIELD "BIGName" ASCENDING 
 
 ADD TABLE "BRAND"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   DESCRIPTION "Brand info
 "
   DUMP-NAME "brand"
@@ -3438,6 +3438,65 @@ ADD INDEX "b-asno" ON "BSer"
   AREA "Sta_Index_2"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CliFrom" ASCENDING 
+
+ADD TABLE "BTarget_old"
+  AREA "Sta_Data_256"
+  LABEL "Billing Target"
+  DESCRIPTION "Customer's Billing Target"
+  DUMP-NAME "billtarg"
+
+ADD FIELD "CustNum" OF "BTarget_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer Number"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "BillTarget" OF "BTarget_old" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Billing Target"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "BT"
+  HELP "No. for customer's billing target"
+  ORDER 20
+
+ADD FIELD "DiscPlan" OF "BTarget_old" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Discount Plan"
+  POSITION 9
+  MAX-WIDTH 24
+  COLUMN-LABEL "Discount Plan"
+  HELP "Code of a Discount Plan"
+  ORDER 80
+
+ADD FIELD "RatePlan" OF "BTarget_old" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Rating Plan"
+  POSITION 15
+  MAX-WIDTH 24
+  COLUMN-LABEL "RatePlan"
+  HELP "Rating plan code"
+  ORDER 130
+
+ADD INDEX "CustNum" ON "BTarget_old" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "BillTarget" ASCENDING 
+
+ADD INDEX "RatePlan" ON "BTarget_old" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "RatePlan" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
 
 ADD TABLE "CallLimit"
   AREA "Sta_Data_128"
@@ -4259,7 +4318,7 @@ ADD INDEX "b-nr" ON "cfoSer"
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD TABLE "CGMember"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Customer Group Members"
   DESCRIPTION "Customer Group Member records;  join customers&cust.groups"
   DUMP-NAME "cgmember"
@@ -4453,26 +4512,26 @@ ADD FIELD "SubInvNum" OF "ClaimHist" AS integer
   ORDER 100
 
 ADD INDEX "InvNum_s" ON "ClaimHist" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "Claim" ASCENDING 
 
 ADD INDEX "ClaimDate" ON "ClaimHist" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ClaimDate" DESCENDING 
   INDEX-FIELD "InvNum" ASCENDING 
 
 ADD INDEX "CustNum" ON "ClaimHist" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "ClaimDate" DESCENDING 
 
 ADD INDEX "InvNum" ON "ClaimHist" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "Claim" ASCENDING 
@@ -5229,7 +5288,7 @@ ADD FIELD "HistCont" OF "Contract" AS character
   ORDER 80
 
 ADD INDEX "Contract" ON "Contract" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -5242,24 +5301,24 @@ ADD INDEX "ContrType" ON "Contract"
   INDEX-FIELD "CloseDate" DESCENDING 
 
 ADD INDEX "CustNum" ON "Contract" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "FromDate" DESCENDING 
 
 ADD INDEX "CustNum_s" ON "Contract" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "FromDate" DESCENDING 
 
 ADD INDEX "FromDate" ON "Contract" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FromDate" DESCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD INDEX "Salesman" ON "Contract" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Salesman" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
@@ -5915,7 +5974,7 @@ ADD FIELD "CreatedTS" OF "CoTarg" AS decimal
   ORDER 170
 
 ADD INDEX "CoRuleID" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CoRuleID" ASCENDING 
@@ -5923,28 +5982,28 @@ ADD INDEX "CoRuleID" ON "CoTarg"
   INDEX-FIELD "CoTarg" ASCENDING 
 
 ADD INDEX "CommStatus" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CommStatus" ASCENDING 
   INDEX-FIELD "CoTarg" ASCENDING 
 
 ADD INDEX "CoTargID" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "CoTargId" ASCENDING 
 
 ADD INDEX "OrderId" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "OrderId" ASCENDING 
 
 ADD INDEX "PromotedID" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "PromotedID" ASCENDING 
 
 ADD INDEX "TargType" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TargType" ASCENDING 
   INDEX-FIELD "CoTarg" ASCENDING 
@@ -6706,15 +6765,22 @@ ADD FIELD "CreditLoss" OF "CustBal" AS decimal
   DECIMALS 2
   ORDER 1410
 
-ADD INDEX "CustNum" ON "CustBal" 
-  AREA "Sta_Index_2"
+ADD INDEX "Custnum" ON "CustBal" 
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
 
-ADD INDEX "MsSeq" ON "CustBal" 
+ADD INDEX "Custnum_old" ON "CustBal" 
   AREA "Sta_Index_2"
+  UNIQUE
+  INACTIVE
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+
+ADD INDEX "MsSeq" ON "CustBal" 
+  AREA "Sta_Index_3"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "MsSeq" ASCENDING 
 
@@ -6869,7 +6935,7 @@ ADD INDEX "CatName" ON "CustCat"
   INDEX-FIELD "MaxCredit" ASCENDING 
 
 ADD TABLE "CustClass"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   DESCRIPTION "
 "
   DUMP-NAME "custclas"
@@ -7252,12 +7318,10 @@ ADD INDEX "CustContact" ON "CustContact"
   INDEX-FIELD "CustType" ASCENDING 
 
 ADD TABLE "CustCount"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Customer counters"
-  DESCRIPTION "Customer counters
-
-"
-  DUMP-NAME "custcoun"
+  DESCRIPTION "Customer counters"
+  DUMP-NAME "custcount"
 
 ADD FIELD "CustNum" OF "CustCount" AS integer 
   FORMAT ">>>>>>>>9"
@@ -7281,13 +7345,48 @@ ADD FIELD "Unbilled" OF "CustCount" AS decimal
   ORDER 20
 
 ADD INDEX "CustNum" ON "CustCount" 
+  AREA "Sta_Index_3"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD TABLE "CustCount_old"
+  AREA "Sta_Data_256"
+  LABEL "Customer counters"
+  DESCRIPTION "Customer counters
+
+"
+  DUMP-NAME "custcoun"
+
+ADD FIELD "CustNum" OF "CustCount_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer's number"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "Unbilled" OF "CustCount_old" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Unbilled"
+  POSITION 3
+  MAX-WIDTH 17
+  HELP "Amount of customer's unbilled events"
+  DECIMALS 2
+  ORDER 20
+
+ADD INDEX "CustNum" ON "CustCount_old" 
   AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD TABLE "CustGroup"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Customer Groups"
   DESCRIPTION "Customer Groups"
   DUMP-NAME "custgrou"
@@ -9841,7 +9940,7 @@ ADD INDEX "DumpID" ON "DFTimeTable"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "DialType"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Dialling Type"
   DESCRIPTION "Dialling Type
 Dialling Type
@@ -10287,7 +10386,7 @@ ADD INDEX "DirMarkName" ON "DMarketing"
   INDEX-FIELD "DirMarkName" ASCENDING 
 
 ADD TABLE "DPBasis"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Volume Discount Basis"
   DESCRIPTION "Basis of volume discount (DpConf).
 "
@@ -10358,7 +10457,7 @@ ADD INDEX "KeyField" ON "DPBasis"
   INDEX-FIELD "KeyField" ASCENDING 
 
 ADD TABLE "DPConf"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Volume Discount Config."
   DESCRIPTION "Configuration for volume discount. Additional configurations in DpBasis.
 "
@@ -12411,7 +12510,7 @@ ADD FIELD "Brand" OF "FATime" AS character
   ORDER 300
 
 ADD INDEX "FatType" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
@@ -12420,53 +12519,53 @@ ADD INDEX "FatType" ON "FATime"
   INDEX-FIELD "Period" ASCENDING 
 
 ADD INDEX "CLI" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD INDEX "CLI_s" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD INDEX "CustNum_s" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD INDEX "FATId" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FATId" ASCENDING 
 
 ADD INDEX "FATNum" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FATNum" ASCENDING 
 
 ADD INDEX "ftgrd" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FTGrp" ASCENDING 
 
 ADD INDEX "HostTable" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING 
 
 ADD INDEX "InvNum" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "SubInvNum" ASCENDING 
 
 ADD INDEX "Mobsub" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "Period" ASCENDING 
 
 ADD INDEX "OrigFat" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "OrigFat" ASCENDING 
 
@@ -15965,7 +16064,7 @@ ADD INDEX "InvNum" ON "InvASub"
   INDEX-FIELD "BillCode" ASCENDING 
 
 ADD TABLE "InvAttach"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Invoice Attachments"
   DESCRIPTION "Attachment definitions for EPL printing of invoices"
   DUMP-NAME "invattac"
@@ -16062,7 +16161,7 @@ ADD FIELD "PrintStamp" OF "InvAttach" AS decimal
   ORDER 90
 
 ADD INDEX "CustNum" ON "InvAttach" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
@@ -16073,7 +16172,7 @@ ADD INDEX "PrintStamp" ON "InvAttach"
   INDEX-FIELD "PrintStamp" DESCENDING 
 
 ADD INDEX "ToDate" ON "InvAttach" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "ToDate" DESCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
 
@@ -17534,10 +17633,10 @@ ADD INDEX "InvType" ON "Invoice"
   INDEX-FIELD "InvDate" DESCENDING 
 
 ADD TABLE "InvoiceTarget"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   LABEL "Invoice Target"
   DESCRIPTION "Invoice target"
-  DUMP-NAME "invoicetarget"
+  DUMP-NAME "invoicetarget-------1"
 
 ADD FIELD "ITGroupID" OF "InvoiceTarget" AS integer 
   FORMAT ">>>>>>>>>>9"
@@ -17590,18 +17689,18 @@ ADD FIELD "ToDate" OF "InvoiceTarget" AS date
   ORDER 50
 
 ADD INDEX "InvoiceTargetID" ON "InvoiceTarget" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "InvoiceTargetID" ASCENDING 
 
 ADD INDEX "ITGroupID" ON "InvoiceTarget" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   INDEX-FIELD "ITGroupID" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "MsSeq" ON "InvoiceTarget" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
@@ -17706,6 +17805,78 @@ ADD INDEX "DefaultGroup" ON "InvoiceTargetGroup"
   INDEX-FIELD "AgrCust" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "DefaultGroup" ASCENDING 
+
+ADD TABLE "InvoiceTarget_old"
+  AREA "Sta_Data_256"
+  LABEL "Invoice Target"
+  DESCRIPTION "Invoice target"
+  DUMP-NAME "invoicetarget"
+
+ADD FIELD "ITGroupID" OF "InvoiceTarget_old" AS integer 
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Target Group ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "IT Group"
+  HELP "Unique ID for target group"
+  ORDER 10
+
+ADD FIELD "InvoiceTargetID" OF "InvoiceTarget_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Target ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Target ID"
+  HELP "Unique id for invoice target"
+  ORDER 20
+
+ADD FIELD "MsSeq" OF "InvoiceTarget_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subscr.ID"
+  HELP "Subscription ID"
+  ORDER 30
+
+ADD FIELD "FromDate" OF "InvoiceTarget_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Valid from"
+  ORDER 40
+
+ADD FIELD "ToDate" OF "InvoiceTarget_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Valid to"
+  ORDER 50
+
+ADD INDEX "InvoiceTargetID" ON "InvoiceTarget_old" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "InvoiceTargetID" ASCENDING 
+
+ADD INDEX "ITGroupID" ON "InvoiceTarget_old" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "ITGroupID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "MsSeq" ON "InvoiceTarget_old" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "InvRow"
   AREA "Dyn_Data_64"
@@ -18954,10 +19125,10 @@ ADD INDEX "LangName" ON "Language"
   INDEX-FIELD "Language" ASCENDING 
 
 ADD TABLE "Limit"
-  AREA "Sta_Data_256"
+  AREA "Limit_Data"
   LABEL "Limit"
   DESCRIPTION "Limits for customer and subscription"
-  DUMP-NAME "limit"
+  DUMP-NAME "limit-------1"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-limit.p" CRC "?" 
   TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-limit.p" CRC "?" 
 
@@ -19024,8 +19195,6 @@ ADD FIELD "LimitPerc" OF "Limit" AS decimal
   ORDER 80
 
 ADD FIELD "TMRuleSeq" OF "Limit" AS integer 
-  DESCRIPTION "
-"
   FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "Rule Sequence"
@@ -19085,7 +19254,7 @@ ADD FIELD "Brand" OF "Limit" AS character
   ORDER 120
 
 ADD INDEX "CustNum" ON "Limit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "LimitType" ASCENDING 
@@ -19094,20 +19263,178 @@ ADD INDEX "CustNum" ON "Limit"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "LimitType" ON "Limit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "LimitType" ASCENDING 
   INDEX-FIELD "LimitID" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "MsSeq" ON "Limit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "LimitType" ASCENDING 
   INDEX-FIELD "TMRuleSeq" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "TMRuleSeq" ON "Limit" 
+  AREA "Sta_Index_4"
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "LimitID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "Limit_old"
+  AREA "Sta_Data_256"
+  LABEL "Limit"
+  DESCRIPTION "Limits for customer and subscription"
+  DUMP-NAME "limit"
+
+ADD FIELD "CustNum" OF "Limit_old" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Cust"
+  HELP "Customer number"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "MsSeq" OF "Limit_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "MobSub"
+  HELP "Mobile subscription ID"
+  ORDER 20
+
+ADD FIELD "FromDate" OF "Limit_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Date when rule becomes effective"
+  ORDER 50
+
+ADD FIELD "LimitAmt" OF "Limit_old" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Limit Amount"
+  POSITION 5
+  MAX-WIDTH 17
+  COLUMN-LABEL "Amount"
+  HELP "Limit amount"
+  DECIMALS 2
+  ORDER 70
+
+ADD FIELD "LimitID" OF "Limit_old" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Limit ID"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Limit ID"
+  ORDER 40
+
+ADD FIELD "LimitPerc" OF "Limit_old" AS decimal 
+  FORMAT ">>9.99"
+  INITIAL "0"
+  LABEL "Limit Percent"
+  POSITION 7
+  MAX-WIDTH 17
+  COLUMN-LABEL "Percent"
+  HELP "Limit percent"
+  DECIMALS 2
+  ORDER 80
+
+ADD FIELD "TMRuleSeq" OF "Limit_old" AS integer 
+  DESCRIPTION "
+"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Rule Sequence"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq"
+  HELP "Rule ID"
+  ORDER 30
+
+ADD FIELD "ToDate" OF "Limit_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "Date when rule expires"
+  ORDER 60
+
+ADD FIELD "LimitType" OF "Limit_old" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Limit Type"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Type of limit"
+  ORDER 90
+
+ADD FIELD "ValueType" OF "Limit_old" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Value Type"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Type of limit value"
+  ORDER 100
+
+ADD FIELD "DefValue" OF "Limit_old" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "Yes"
+  LABEL "Default Value"
+  POSITION 12
+  MAX-WIDTH 1
+  COLUMN-LABEL "Default"
+  HELP "Limit has the default value"
+  ORDER 110
+
+ADD FIELD "Brand" OF "Limit_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 13
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 120
+
+ADD INDEX "CustNum" ON "Limit_old" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "LimitType" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "LimitID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "LimitType" ON "Limit_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "LimitType" ASCENDING 
+  INDEX-FIELD "LimitID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "MsSeq" ON "Limit_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "LimitType" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "TMRuleSeq" ON "Limit_old" 
   AREA "Sta_Index_2"
   INDEX-FIELD "TMRuleSeq" ASCENDING 
   INDEX-FIELD "LimitID" ASCENDING 
@@ -19434,12 +19761,12 @@ ADD FIELD "XMLMessage" OF "M2MReceive" AS character
   ORDER 100
 
 ADD INDEX "RecStatus" ON "M2MReceive" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "RecStatus" ASCENDING 
 
 ADD TABLE "M2MTime"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   DUMP-NAME "m2mtime"
 
 ADD FIELD "Date" OF "M2MTime" AS date 
@@ -19554,11 +19881,11 @@ ADD INDEX "Brand" ON "Matrix"
   INDEX-FIELD "Prior" ASCENDING 
 
 ADD TABLE "Memo"
-  AREA "Sta_Data_32"
+  AREA "Memo32_Data"
   LABEL "Memo pool"
   DESCRIPTION "This file is a common storage area for all kind of memos
 assigned to different tables/records"
-  DUMP-NAME "memo"
+  DUMP-NAME "memo-------1"
 
 ADD FIELD "HostTable" OF "Memo" AS character 
   FORMAT "x(12)"
@@ -19710,7 +20037,7 @@ ADD FIELD "Source" OF "Memo" AS character
   ORDER 140
 
 ADD INDEX "HostTable" ON "Memo" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_6"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -19719,25 +20046,251 @@ ADD INDEX "HostTable" ON "Memo"
   INDEX-FIELD "MemoSeq" DESCENDING 
 
 ADD INDEX "CustNum" ON "Memo" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_6"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING 
 
 ADD INDEX "CustOrder" ON "Memo" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_7"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "MemoSeq" DESCENDING 
 
 ADD INDEX "MemoSeq" ON "Memo" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_7"
   UNIQUE
   INDEX-FIELD "MemoSeq" ASCENDING 
 
 ADD INDEX "MemoType" ON "Memo" 
+  AREA "Sta_Index_7"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "MemoType" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD TABLE "Memo_old"
+  AREA "Sta_Data_32"
+  LABEL "Memo pool"
+  DESCRIPTION "This file is a common storage area for all kind of memos
+assigned to different tables/records"
+  DUMP-NAME "memo"
+
+ADD FIELD "HostTable" OF "Memo_old" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "HostTable"
+  POSITION 2
+  MAX-WIDTH 24
+  COLUMN-LABEL "HostTable"
+  HELP "Name of table where this memo record is assigned"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "KeyValue" OF "Memo_old" AS character 
+  DESCRIPTION "Key value of hosting rec converted into formatted string expression"
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "KeyValue"
+  POSITION 3
+  MAX-WIDTH 32
+  COLUMN-LABEL "KeyValue"
+  HELP "Unique value of hosting record"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "MemoSeq" OF "Memo_old" AS integer 
+  DESCRIPTION "sequence from memoSeq sequence"
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Seq"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq"
+  HELP "Unique, consecutive sequence no. of memo record"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "CreStamp" OF "Memo_old" AS decimal 
+  DESCRIPTION "Time Stamp yyyymmdd.time (sec)"
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Created"
+  POSITION 5
+  MAX-WIDTH 20
+  COLUMN-LABEL "Created"
+  HELP "Date and time when this memo record was CREATED"
+  DECIMALS 5
+  ORDER 40
+
+ADD FIELD "CreUser" OF "Memo_old" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Created By"
+  POSITION 6
+  MAX-WIDTH 16
+  COLUMN-LABEL "Created by"
+  HELP "User who CREATED this memo record"
+  ORDER 50
+
+ADD FIELD "ChgStamp" OF "Memo_old" AS decimal 
+  DESCRIPTION "Time Stamp yyyymmdd.time (sec)"
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "ModTime"
+  POSITION 7
+  MAX-WIDTH 20
+  COLUMN-LABEL "ModTime"
+  HELP "Modification Date and Time"
+  DECIMALS 5
+  ORDER 60
+
+ADD FIELD "ChgUser" OF "Memo_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Mod By"
+  POSITION 8
+  MAX-WIDTH 16
+  COLUMN-LABEL "Mod By"
+  HELP "User who MODIFIED this memo"
+  ORDER 70
+
+ADD FIELD "MemoTitle" OF "Memo_old" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Title"
+  POSITION 9
+  MAX-WIDTH 80
+  COLUMN-LABEL "Title/topic"
+  HELP "Title or topic of this memo"
+  ORDER 80
+
+ADD FIELD "MemoText" OF "Memo_old" AS character 
+  FORMAT "x(900)"
+  INITIAL ""
+  LABEL "MemoText"
+  POSITION 10
+  MAX-WIDTH 1800
+  COLUMN-LABEL "MemoText"
+  HELP "MemoText"
+  ORDER 90
+
+ADD FIELD "Brand" OF "Memo_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 11
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 100
+
+ADD FIELD "CustNum" OF "Memo_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer's number"
+  ORDER 110
+  MANDATORY
+
+ADD FIELD "MemoType" OF "Memo_old" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MemoType"
+  POSITION 13
+  MAX-WIDTH 24
+  COLUMN-LABEL "MemoType"
+  HELP "Type of memo"
+  ORDER 120
+
+ADD FIELD "Priority" OF "Memo_old" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Priority"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "Pri"
+  HELP "Priority"
+  ORDER 130
+
+ADD FIELD "Source" OF "Memo_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Source"
+  POSITION 15
+  MAX-WIDTH 16
+  COLUMN-LABEL "Source"
+  ORDER 140
+
+ADD INDEX "HostTable" ON "Memo_old" 
   AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+  INDEX-FIELD "MemoSeq" DESCENDING 
+
+ADD INDEX "CustNum" ON "Memo_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+
+ADD INDEX "CustNum_new" ON "Memo_old" 
+  AREA "Sta_Index_3"
+  INACTIVE
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+
+ADD INDEX "CustOrder" ON "Memo_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "MemoSeq" DESCENDING 
+
+ADD INDEX "CustOrder_new" ON "Memo_old" 
+  AREA "Sta_Index_4"
+  INACTIVE
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "MemoSeq" DESCENDING 
+
+ADD INDEX "HostTable_new" ON "Memo_old" 
+  AREA "Sta_Index_5"
+  UNIQUE
+  INACTIVE
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+  INDEX-FIELD "MemoSeq" DESCENDING 
+
+ADD INDEX "MemoSeq" ON "Memo_old" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "MemoSeq" ASCENDING 
+
+ADD INDEX "MemoSeq_new" ON "Memo_old" 
+  AREA "Sta_Index_4"
+  UNIQUE
+  INACTIVE
+  INDEX-FIELD "MemoSeq" ASCENDING 
+
+ADD INDEX "MemoType" ON "Memo_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "MemoType" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD INDEX "MemoType_new" ON "Memo_old" 
+  AREA "Sta_Index_3"
+  INACTIVE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MemoType" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
@@ -20058,6 +20611,16 @@ ADD FIELD "MNPTariff" OF "MNPCal" AS character
   HELP "Tariff"
   ORDER 60
 
+ADD FIELD "DeliveryType" OF "MNPCal" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Delivery Type"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "DelType"
+  HELP "Delivery Type"
+  ORDER 70
+
 ADD INDEX "Region" ON "MNPCal" 
   AREA "Sta_Index_2"
   PRIMARY
@@ -20135,13 +20698,13 @@ ADD FIELD "Pdf" OF "MNPCancelProposal" AS blob
   ORDER 60
 
 ADD INDEX "MNPSeq" ON "MNPCancelProposal" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "MNPSeq" ASCENDING 
   INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD INDEX "StatusCode" ON "MNPCancelProposal" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "StatusCode" ASCENDING 
   INDEX-FIELD "CreatedTS" DESCENDING 
 
@@ -20298,12 +20861,12 @@ ADD FIELD "DonorExtraOrdinary" OF "MNPDetails" AS logical
   ORDER 150
 
 ADD INDEX "MNPSeq" ON "MNPDetails" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "MNPSeq" ASCENDING 
 
 ADD INDEX "CustId" ON "MNPDetails" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "CustId" ASCENDING 
 
 ADD TABLE "MNPMessage"
@@ -20369,12 +20932,12 @@ ADD FIELD "MsgTurn" OF "MNPMessage" AS integer
   ORDER 90
 
 ADD INDEX "MNPSeq" ON "MNPMessage" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "MNPSeq" ASCENDING 
 
 ADD INDEX "Sender" ON "MNPMessage" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Sender" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
 
@@ -20527,27 +21090,39 @@ ADD FIELD "ErrorDesc" OF "MNPOperation" AS character
   ORDER 140
 
 ADD INDEX "MNPOperation" ON "MNPOperation" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "MNPOperationID" ASCENDING 
 
 ADD INDEX "CreatedTS" ON "MNPOperation" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD INDEX "ErrorCode" ON "MNPOperation" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "ErrorHandled" ASCENDING 
   INDEX-FIELD "ErrorCode" ASCENDING 
 
-ADD INDEX "MNPSeq" ON "MNPOperation" 
+ADD INDEX "MNPOperation_old" ON "MNPOperation" 
   AREA "Sta_Index_2"
+  UNIQUE
+  INACTIVE
+  INDEX-FIELD "MNPOperationID" ASCENDING 
+
+ADD INDEX "MNPSeq" ON "MNPOperation" 
+  AREA "Sta_Index_5"
+  INDEX-FIELD "MNPSeq" ASCENDING 
+  INDEX-FIELD "CreatedTS" ASCENDING 
+
+ADD INDEX "MNPSeq_old" ON "MNPOperation" 
+  AREA "Sta_Index_2"
+  INACTIVE
   INDEX-FIELD "MNPSeq" ASCENDING 
   INDEX-FIELD "CreatedTS" ASCENDING 
 
 ADD INDEX "Sender" ON "MNPOperation" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Sender" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
 
@@ -20779,70 +21354,70 @@ ADD FIELD "PortingTime" OF "MNPProcess" AS decimal
   ORDER 140
 
 ADD INDEX "MNPSeq" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "MNPSeq" ASCENDING 
 
 ADD INDEX "FormRequest" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "FormRequest" ASCENDING 
 
 ADD INDEX "MNPType" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
   INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD INDEX "OperCreated" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "OperCode" ASCENDING 
   INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD INDEX "OperPorting" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "OperCode" ASCENDING 
   INDEX-FIELD "PortingTime" DESCENDING 
 
 ADD INDEX "OperStatus" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "OperCode" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
 
 ADD INDEX "OrderId" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "OrderId" ASCENDING 
 
 ADD INDEX "PortingTime" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
   INDEX-FIELD "PortingTime" DESCENDING 
 
 ADD INDEX "PortRequest" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "PortRequest" ASCENDING 
 
 ADD INDEX "StateFlag" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "StateFlag" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
 
 ADD INDEX "StatusCode" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "StatusCode" ASCENDING 
 
 ADD INDEX "UpdateTS" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "UpdateTS" DESCENDING 
@@ -21091,20 +21666,20 @@ ADD FIELD "RetentionPlatform" OF "MNPSub" AS character
   ORDER 80
 
 ADD INDEX "MNPSeq" ON "MNPSub" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "MNPSeq" ASCENDING 
 
 ADD INDEX "CLI" ON "MNPSub" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD INDEX "MsSeq" ON "MNPSub" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "MsSeq" ASCENDING 
 
 ADD TABLE "MNPXml"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   DUMP-NAME "mnpxml"
 
 ADD FIELD "XMLSeq" OF "MNPXml" AS integer 
@@ -21278,7 +21853,7 @@ ADD FIELD "MSID" OF "MServiceLimit" AS integer
   ORDER 90
 
 ADD INDEX "msseq" ON "MServiceLimit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_5"
   UNIQUE
   PRIMARY
   INDEX-FIELD "MsSeq" ASCENDING 
@@ -21287,21 +21862,38 @@ ADD INDEX "msseq" ON "MServiceLimit"
   INDEX-FIELD "EndTS" DESCENDING 
 
 ADD INDEX "Active" ON "MServiceLimit" 
+  AREA "Sta_Index_4"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "DialType" ASCENDING 
+  INDEX-FIELD "FromTS" ASCENDING 
+  INDEX-FIELD "EndTS" ASCENDING 
+
+ADD INDEX "Active_old" ON "MServiceLimit" 
   AREA "Sta_Index_2"
+  INACTIVE
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "DialType" ASCENDING 
   INDEX-FIELD "FromTS" ASCENDING 
   INDEX-FIELD "EndTS" ASCENDING 
 
 ADD INDEX "CustNum" ON "MServiceLimit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "custnum" ASCENDING 
   INDEX-FIELD "DialType" ASCENDING 
   INDEX-FIELD "SLSeq" ASCENDING 
   INDEX-FIELD "EndTS" DESCENDING 
 
-ADD INDEX "slseq" ON "MServiceLimit" 
+ADD INDEX "msseq_old" ON "MServiceLimit" 
   AREA "Sta_Index_2"
+  UNIQUE
+  INACTIVE
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "DialType" ASCENDING 
+  INDEX-FIELD "SLSeq" ASCENDING 
+  INDEX-FIELD "EndTS" DESCENDING 
+
+ADD INDEX "slseq" ON "MServiceLimit" 
+  AREA "Sta_Index_4"
   INDEX-FIELD "SLSeq" ASCENDING 
   INDEX-FIELD "DialType" ASCENDING 
   INDEX-FIELD "EndTS" DESCENDING 
@@ -21383,7 +21975,7 @@ ADD INDEX "MSSeq" ON "MServiceLPool"
   INDEX-FIELD "EndTS" DESCENDING 
 
 ADD INDEX "CustNum" ON "MServiceLPool" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "custnum" ASCENDING 
   INDEX-FIELD "SLSeq" ASCENDING 
   INDEX-FIELD "EndTS" DESCENDING 
@@ -22027,7 +22619,7 @@ ADD FIELD "CLI" OF "OPLog" AS character
   ORDER 110
 
 ADD INDEX "CustNum" ON "OPLog" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CreStamp" DESCENDING 
@@ -22037,19 +22629,19 @@ ADD INDEX "CLI" ON "OPLog"
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD INDEX "CustDate" ON "OPLog" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "EventDate" DESCENDING 
   INDEX-FIELD "Voucher" ASCENDING 
 
 ADD INDEX "CustInv" ON "OPLog" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "EventDate" DESCENDING 
 
 ADD INDEX "InvNum" ON "OPLog" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "SubInvNum" ASCENDING 
   INDEX-FIELD "EventDate" DESCENDING 
@@ -22977,7 +23569,7 @@ ADD INDEX "PPStatus" ON "PaymPlan"
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD TABLE "PaymVouch"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Payment Voucher"
   DESCRIPTION "Number series for payment vouchers"
   DUMP-NAME "paymvouc"
@@ -23022,7 +23614,7 @@ ADD FIELD "FromDate" OF "PaymVouch" AS date
   ORDER 40
 
 ADD INDEX "Voucher" ON "PaymVouch" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "VoucherType" ASCENDING 
@@ -24043,7 +24635,7 @@ ADD INDEX "Region" ON "PostCode"
   INDEX-FIELD "ZipCode" ASCENDING 
 
 ADD INDEX "PostOffice" ON "PostCode" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Country" ASCENDING 
   INDEX-FIELD "PostOffice" ASCENDING 
 
@@ -24748,7 +25340,7 @@ ADD INDEX "EffName" ON "PrintCodes"
   INDEX-FIELD "EffName" ASCENDING 
 
 ADD TABLE "PrintHouseConf"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Printhouse Configuration"
   DESCRIPTION "Printhouse configuration"
   DUMP-NAME "printhouseconf"
@@ -25368,7 +25960,7 @@ ADD INDEX "SendTime" ON "RepLog"
   INDEX-FIELD "EventTime" ASCENDING 
 
 ADD TABLE "ReportConf"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Report Configuration"
   DESCRIPTION "Report configuration"
   DUMP-NAME "reportconf"
@@ -25410,7 +26002,7 @@ ADD INDEX "ReportID" ON "ReportConf"
   INDEX-FIELD "ReportID" ASCENDING 
 
 ADD TABLE "ReportConfRow"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Report Configuration Row"
   DESCRIPTION "Report configuration row"
   DUMP-NAME "reportconfrow"
@@ -25634,7 +26226,7 @@ ADD FIELD "ToDate" OF "RepText" AS date
   ORDER 90
 
 ADD INDEX "LinkCode" ON "RepText" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -25644,7 +26236,7 @@ ADD INDEX "LinkCode" ON "RepText"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "Language" ON "RepText" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TextType" ASCENDING 
   INDEX-FIELD "Language" ASCENDING 
@@ -27053,7 +27645,14 @@ ADD INDEX "MSSeq" ON "ServiceLCounter"
   INDEX-FIELD "SLSeq" ASCENDING 
 
 ADD INDEX "CustNum" ON "ServiceLCounter" 
+  AREA "Sta_Index_4"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "Period" DESCENDING 
+  INDEX-FIELD "SLSeq" ASCENDING 
+
+ADD INDEX "CustNum_old" ON "ServiceLCounter" 
   AREA "Sta_Index_2"
+  INACTIVE
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "Period" DESCENDING 
   INDEX-FIELD "SLSeq" ASCENDING 
@@ -27681,63 +28280,93 @@ ADD FIELD "OrderId" OF "SingleFee" AS integer
   ORDER 290
 
 ADD INDEX "CustNum_s" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_5"
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "BillPeriod" ASCENDING 
   INDEX-FIELD "Billed" ASCENDING 
 
 ADD INDEX "BillCode" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BillCode" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD INDEX "CalcObj" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CalcObj" ASCENDING 
 
 ADD INDEX "Contract" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Contract" ASCENDING 
   INDEX-FIELD "BillCode" ASCENDING 
 
-ADD INDEX "CustNum" ON "SingleFee" 
-  AREA "Sta_Index_2"
+ADD INDEX "Custnum" ON "SingleFee" 
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING 
   INDEX-FIELD "BillPeriod" DESCENDING 
 
-ADD INDEX "FMItemId" ON "SingleFee" 
+ADD INDEX "Custnum_old" ON "SingleFee" 
   AREA "Sta_Index_2"
+  INACTIVE
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+  INDEX-FIELD "BillPeriod" DESCENDING 
+
+ADD INDEX "CustNum_s_old" ON "SingleFee" 
+  AREA "Sta_Index_2"
+  INACTIVE
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "BillPeriod" ASCENDING 
+  INDEX-FIELD "Billed" ASCENDING 
+
+ADD INDEX "FMItemId" ON "SingleFee" 
+  AREA "Sta_Index_4"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FMItemId" ASCENDING 
 
-ADD INDEX "HostTable" ON "SingleFee" 
+ADD INDEX "FMItemId_old" ON "SingleFee" 
   AREA "Sta_Index_2"
+  UNIQUE
+  INACTIVE
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "FMItemId" ASCENDING 
+
+ADD INDEX "HostTable" ON "SingleFee" 
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING ABBREVIATED 
 
 ADD INDEX "InvNum" ON "SingleFee" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "InvNum" ASCENDING 
+
+ADD INDEX "InvNum_old" ON "SingleFee" 
   AREA "Sta_Index_2"
+  INACTIVE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "InvNum" ASCENDING 
 
 ADD INDEX "InvNum_s" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "InvNum" ASCENDING 
 
 ADD TABLE "SLCounterItem"
-  AREA "Sta_Data_128"
+  AREA "Sta_Data_2_128"
   DESCRIPTION "Keep a count of items for ServiceLCounter"
-  DUMP-NAME "slcounteritem"
+  DUMP-NAME "slcounteritem-------1"
 
 ADD FIELD "SLSeq" OF "SLCounterItem" AS integer 
   FORMAT ">>>>>>9"
@@ -27777,8 +28406,66 @@ ADD FIELD "SLCItem" OF "SLCounterItem" AS character
   ORDER 40
 
 ADD INDEX "msseq" ON "SLCounterItem" 
+  AREA "Sta_Index_5"
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "Period" DESCENDING 
+  INDEX-FIELD "SLSeq" ASCENDING 
+  INDEX-FIELD "SLCItem" ASCENDING 
+
+ADD TABLE "SLCounterItem_old"
+  AREA "Sta_Data_128"
+  DESCRIPTION "Keep a count of items for ServiceLCounter"
+  DUMP-NAME "slcounteritem"
+
+ADD FIELD "SLSeq" OF "SLCounterItem_old" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "SLSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "SLseq"
+  HELP "Sequence for Servicelimit"
+  ORDER 10
+
+ADD FIELD "MsSeq" OF "SLCounterItem_old" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MsSeq"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Link to mobsub-table"
+  ORDER 20
+
+ADD FIELD "Period" OF "SLCounterItem_old" AS integer 
+  FORMAT "999999"
+  INITIAL "0"
+  LABEL "Period"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Period what Servicecounter is to be"
+  ORDER 30
+
+ADD FIELD "SLCItem" OF "SLCounterItem_old" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "SLCItem"
+  POSITION 5
+  MAX-WIDTH 30
+  ORDER 40
+
+ADD INDEX "msseq" ON "SLCounterItem_old" 
   AREA "Sta_Index_2"
   PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "Period" DESCENDING 
+  INDEX-FIELD "SLSeq" ASCENDING 
+  INDEX-FIELD "SLCItem" ASCENDING 
+
+ADD INDEX "msseq_new" ON "SLCounterItem_old" 
+  AREA "Sta_Index_5"
+  INACTIVE
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "Period" DESCENDING 
   INDEX-FIELD "SLSeq" ASCENDING 
@@ -28662,7 +29349,7 @@ ADD FIELD "ServRid" OF "Tariff" AS character
   ORDER 310
 
 ADD INDEX "CCN" ON "Tariff" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CCN" ASCENDING 
@@ -29401,7 +30088,7 @@ ADD FIELD "Creator" OF "TMSPass" AS character
   MANDATORY
 
 ADD INDEX "UserCode" ON "TMSPass" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "UserCode" ASCENDING 
@@ -30048,7 +30735,7 @@ ADD INDEX "UserCode" ON "TMSUser"
   INDEX-FIELD "UserCode" ASCENDING ABBREVIATED 
 
 ADD INDEX "ForeignId" ON "TMSUser" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "ForeignId" ASCENDING 
   INDEX-FIELD "UserCode" ASCENDING 
   INDEX-FIELD "UserName" ASCENDING 
@@ -30058,7 +30745,7 @@ ADD INDEX "UserGroup" ON "TMSUser"
   INDEX-FIELD "UserGroup" ASCENDING 
 
 ADD INDEX "UserName" ON "TMSUser" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "UserName" ASCENDING 
   INDEX-FIELD "UserCode" ASCENDING 
@@ -32866,6 +33553,9 @@ UPDATE TABLE "BillItem"
 UPDATE INDEX "CustNum" OF "BillTarget"
   BUFFER-POOL "Alternate"
 
+UPDATE INDEX "CustNum" OF "BTarget_old"
+  BUFFER-POOL "Alternate"
+
 UPDATE TABLE "CustCat"
   BUFFER-POOL "Alternate"
 
@@ -32943,4 +33633,4 @@ PSC
 bufpool=yes
 cpstream=1252
 .
-0000672670
+0000687775
