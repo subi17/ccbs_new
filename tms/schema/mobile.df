@@ -748,7 +748,7 @@ ADD INDEX "ServPac" ON "CTServPac"
   INDEX-FIELD "FromDate" DESCENDING 
 
 ADD TABLE "DayCampaign"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DUMP-NAME "daycampa"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-daycampaign.p" CRC "?" 
   TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-daycampaign.p" CRC "?" 
@@ -1753,7 +1753,7 @@ ADD INDEX "DCServiceComponentID" ON "DCServiceAttribute"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "DCServiceComponent"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   LABEL "DC Service Component"
   DESCRIPTION "Service component settings for packages related to periodical contract"
   DUMP-NAME "dcservicecomponent"
@@ -1838,7 +1838,7 @@ ADD INDEX "DCServicePackageID" ON "DCServiceComponent"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "DCServicePackage"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   LABEL "DC Service Package"
   DESCRIPTION "Service packages related to periodical contract"
   DUMP-NAME "dcservicepackage"
@@ -2107,7 +2107,7 @@ ADD INDEX "FraudName" ON "Fraud"
   INDEX-FIELD "Fraud" ASCENDING 
 
 ADD TABLE "IFiSpx"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DESCRIPTION "IMSI Delivery File Specifications
 "
   DUMP-NAME "ifispx"
@@ -2270,7 +2270,7 @@ ADD INDEX "mancode" ON "IFiSpx"
   INDEX-FIELD "Version" ASCENDING 
 
 ADD TABLE "IMEIRegister"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   LABEL "IMEI Register"
   DESCRIPTION "IMEI register"
   DUMP-NAME "imeiregister"
@@ -3391,10 +3391,10 @@ ADD INDEX "SaStatus" ON "MsALog"
   INDEX-FIELD "MsALog" ASCENDING 
 
 ADD TABLE "MSBalance"
-  AREA "Sta_Data_128"
+  AREA "Sta_Data_2_128"
   LABEL "Mobsub Balance"
   DESCRIPTION "Subscription balances"
-  DUMP-NAME "msbalance"
+  DUMP-NAME "msbalance-------1"
 
 ADD FIELD "MSSeq" OF "MSBalance" AS integer 
   FORMAT ">>>>>>>9"
@@ -3448,7 +3448,7 @@ ADD FIELD "CustNum" OF "MSBalance" AS integer
   ORDER 50
 
 ADD INDEX "MsSeq" ON "MSBalance" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "MSSeq" ASCENDING 
@@ -3456,18 +3456,18 @@ ADD INDEX "MsSeq" ON "MSBalance"
   INDEX-FIELD "BalType" ASCENDING 
 
 ADD INDEX "CustNum" ON "MSBalance" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "MSSeq" ASCENDING 
   INDEX-FIELD "BalType" ASCENDING 
 
-ADD TABLE "MSBalance_new"
-  AREA "Sta_Data_128_2"
+ADD TABLE "MSBalance_old"
+  AREA "Sta_Data_128"
   LABEL "Mobsub Balance"
   DESCRIPTION "Subscription balances"
-  DUMP-NAME "msbalance-------1"
+  DUMP-NAME "msbalance"
 
-ADD FIELD "MSSeq" OF "MSBalance_new" AS integer 
+ADD FIELD "MSSeq" OF "MSBalance_old" AS integer 
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "Subscription ID"
@@ -3478,7 +3478,7 @@ ADD FIELD "MSSeq" OF "MSBalance_new" AS integer
   ORDER 10
   MANDATORY
 
-ADD FIELD "BalType" OF "MSBalance_new" AS character 
+ADD FIELD "BalType" OF "MSBalance_old" AS character 
   FORMAT "x(8)"
   INITIAL ""
   LABEL "Balance Type"
@@ -3488,7 +3488,7 @@ ADD FIELD "BalType" OF "MSBalance_new" AS character
   HELP "Balance type"
   ORDER 20
 
-ADD FIELD "Amount" OF "MSBalance_new" AS decimal 
+ADD FIELD "Amount" OF "MSBalance_old" AS decimal 
   FORMAT "->>>>>>>9.99"
   INITIAL "0"
   LABEL "Balance"
@@ -3498,7 +3498,7 @@ ADD FIELD "Amount" OF "MSBalance_new" AS decimal
   DECIMALS 5
   ORDER 30
 
-ADD FIELD "BalDate" OF "MSBalance_new" AS date 
+ADD FIELD "BalDate" OF "MSBalance_old" AS date 
   FORMAT "99-99-99"
   INITIAL ?
   LABEL "Balance Date"
@@ -3508,7 +3508,7 @@ ADD FIELD "BalDate" OF "MSBalance_new" AS date
   HELP "Latest update to balance"
   ORDER 40
 
-ADD FIELD "CustNum" OF "MSBalance_new" AS integer 
+ADD FIELD "CustNum" OF "MSBalance_old" AS integer 
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "Customer"
@@ -3518,7 +3518,7 @@ ADD FIELD "CustNum" OF "MSBalance_new" AS integer
   HELP "Customer number"
   ORDER 50
 
-ADD INDEX "MsSeq" ON "MSBalance_new" 
+ADD INDEX "MsSeq" ON "MSBalance_old" 
   AREA "Sta_Index_1"
   UNIQUE
   PRIMARY
@@ -3526,14 +3526,14 @@ ADD INDEX "MsSeq" ON "MSBalance_new"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "BalType" ASCENDING 
 
-ADD INDEX "CustNum" ON "MSBalance_new" 
+ADD INDEX "CustNum" ON "MSBalance_old" 
   AREA "Sta_Index_1"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "MSSeq" ASCENDING 
   INDEX-FIELD "BalType" ASCENDING 
 
 ADD TABLE "MSClass"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   LABEL "MSISDN Classes"
   DESCRIPTION "
 "
@@ -4018,7 +4018,7 @@ ADD INDEX "MsSeq" ON "MSOwner"
   INDEX-FIELD "TsBegin" DESCENDING 
 
 ADD TABLE "MSRange"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DESCRIPTION "MSISDN Range
 "
   DUMP-NAME "msrange"
@@ -4644,7 +4644,7 @@ ADD INDEX "UserCode" ON "MSRequest"
   INDEX-FIELD "ActStamp" DESCENDING 
 
 ADD TABLE "MSStat"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DESCRIPTION "MSISDN Status
 "
   DUMP-NAME "msstat"
@@ -4681,7 +4681,7 @@ ADD INDEX "StatusName" ON "MSStat"
   INDEX-FIELD "StatusCode" ASCENDING 
 
 ADD TABLE "PGRequest"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DUMP-NAME "pgrequest"
 
 ADD FIELD "ReqID" OF "PGRequest" AS character 
@@ -4852,7 +4852,7 @@ ADD INDEX "SendTime" ON "RepLog"
   INDEX-FIELD "EventTime" ASCENDING 
 
 ADD TABLE "RoamBDest"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DUMP-NAME "roambdes"
 
 ADD FIELD "TariffNum" OF "RoamBDest" AS integer 
@@ -4907,7 +4907,7 @@ ADD INDEX "RoamBDest" ON "RoamBDest"
   INDEX-FIELD "TZTo" ASCENDING 
 
 ADD TABLE "RoamCountry"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DUMP-NAME "roamcoun"
 
 ADD FIELD "CountryName" OF "RoamCountry" AS character 
@@ -4948,7 +4948,7 @@ ADD INDEX "RateZone" ON "RoamCountry"
   INDEX-FIELD "Prefix" ASCENDING 
 
 ADD TABLE "RoamGroup"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   DUMP-NAME "roamgrou"
 
 ADD FIELD "RoamGroup" OF "RoamGroup" AS character 
@@ -4975,7 +4975,7 @@ ADD INDEX "RoamGroup" ON "RoamGroup"
   INDEX-FIELD "RoamGroup" ASCENDING 
 
 ADD TABLE "RoamOper"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DUMP-NAME "roamoper"
 
 ADD FIELD "Country" OF "RoamOper" AS character 
@@ -5110,7 +5110,7 @@ ADD INDEX "PLMN" ON "RoamOper"
   INDEX-FIELD "PLMN" ASCENDING 
 
 ADD TABLE "RoamTariff"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DUMP-NAME "roamtari"
 
 ADD FIELD "TariffNum" OF "RoamTariff" AS integer 
@@ -5219,7 +5219,7 @@ ADD INDEX "RateType" ON "RoamTariff"
   INDEX-FIELD "Service" ASCENDING 
 
 ADD TABLE "RTItem"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DUMP-NAME "roamgprs"
 
 ADD FIELD "TariffNum" OF "RTItem" AS integer 
@@ -5867,7 +5867,7 @@ ADD INDEX "Service" ON "ServCom"
   INDEX-FIELD "ServCom" ASCENDING 
 
 ADD TABLE "ServEl"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   LABEL "Servel"
   DESCRIPTION "Service elements (service component group)
 
@@ -8293,10 +8293,10 @@ ADD INDEX "MultiSimID" ON "TermMobSub"
   INDEX-FIELD "MultiSimID" DESCENDING 
 
 ADD TABLE "TMCounter"
-  AREA "Sta_Data_256"
+  AREA "TMCounter_Data"
   LABEL "TM Counter"
   DESCRIPTION "TM counter"
-  DUMP-NAME "tmcounter"
+  DUMP-NAME "tmcounter-------1"
 
 ADD FIELD "CustNum" OF "TMCounter" AS integer 
   FORMAT ">>>>>>>9"
@@ -8339,8 +8339,6 @@ ADD FIELD "MsSeq" OF "TMCounter" AS integer
   ORDER 30
 
 ADD FIELD "TMRuleSeq" OF "TMCounter" AS integer 
-  DESCRIPTION "
-"
   FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "Rule Sequence"
@@ -8360,9 +8358,6 @@ ADD FIELD "ToDate" OF "TMCounter" AS date
   ORDER 60
 
 ADD FIELD "Amount" OF "TMCounter" AS decimal 
-  DESCRIPTION "
-
-"
   FORMAT "->>>>>>9.99999"
   INITIAL "0"
   LABEL "Amount"
@@ -8406,20 +8401,146 @@ ADD FIELD "DecValue" OF "TMCounter" AS decimal
   ORDER 100
 
 ADD INDEX "MsSeq" ON "TMCounter" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "TMRuleSeq" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "CustNum" ON "TMCounter" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "TMCounter_old"
+  AREA "Sta_Data_256"
+  LABEL "TM Counter"
+  DESCRIPTION "TM counter"
+  DUMP-NAME "tmcounter"
+
+ADD FIELD "CustNum" OF "TMCounter_old" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Cust"
+  HELP "Customer number"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "FromDate" OF "TMCounter_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Date when rule becomes effective"
+  ORDER 50
+
+ADD FIELD "LimitID" OF "TMCounter_old" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Limit ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Limit that has been exceeded"
+  ORDER 40
+
+ADD FIELD "MsSeq" OF "TMCounter_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "MobSub"
+  HELP "Mobile subscription ID"
+  ORDER 30
+
+ADD FIELD "TMRuleSeq" OF "TMCounter_old" AS integer 
+  DESCRIPTION "
+"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Rule Sequence"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq"
+  HELP "Rule ID"
+  ORDER 10
+
+ADD FIELD "ToDate" OF "TMCounter_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Date when rule expires"
+  ORDER 60
+
+ADD FIELD "Amount" OF "TMCounter_old" AS decimal 
+  DESCRIPTION "
+
+"
+  FORMAT "->>>>>>9.99999"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "Amt"
+  HELP "Amount"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "LimitAmt" OF "TMCounter_old" AS decimal 
+  FORMAT "->>>>>>9.99999"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 9
+  MAX-WIDTH 20
+  COLUMN-LABEL "LimitAmt"
+  HELP "Limit Amount"
+  DECIMALS 5
+  ORDER 80
+
+ADD FIELD "IntValue" OF "TMCounter_old" AS integer 
+  FORMAT "->>>>>>>>9"
+  INITIAL "0"
+  LABEL "IntValue"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "IntValue"
+  HELP "General integer value field"
+  ORDER 90
+
+ADD FIELD "DecValue" OF "TMCounter_old" AS decimal 
+  FORMAT "->>>>>>9.99999"
+  INITIAL "0"
+  LABEL "DecValue"
+  POSITION 11
+  MAX-WIDTH 20
+  COLUMN-LABEL "DecValue"
+  HELP "General decimal value field"
+  DECIMALS 5
+  ORDER 100
+
+ADD INDEX "MsSeq" ON "TMCounter_old" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "CustNum" ON "TMCounter_old" 
   AREA "Sta_Index_2"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "TMRuleSeq" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "TMRItemValue"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   LABEL "TM Rule Item Values"
   DESCRIPTION "TM rule item values
 "
@@ -8940,9 +9061,12 @@ UPDATE INDEX "PriceList" OF "RoamTariff"
 UPDATE INDEX "MsSeq" OF "TMCounter"
   BUFFER-POOL "Alternate"
 
+UPDATE INDEX "MsSeq" OF "TMCounter_old"
+  BUFFER-POOL "Alternate"
+
 .
 PSC
 bufpool=yes
 cpstream=1252
 .
-0000181309
+0000183863
