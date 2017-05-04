@@ -54,7 +54,7 @@ ASSIGN ldUnBillPeriod = fInt2Date(iiBillPeriod,1)
        lcOdir         = fCParamC("CDRTransDir")
        lcSdir         = fCParamC("CDRSpoolDir")
        lcTdir         = fCParamC("UnbilledTrackDir")
-       lcfilename     = CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+       lcfilename     = CAPS(Syst.Parameters:Tenant) +
                         "_unbilled_calls_" + STRING(iiBillPeriod) + ".dump"
        lcNumeric      = SESSION:NUMERIC-FORMAT
        SESSION:NUMERIC-FORMAT = "AMERICAN"

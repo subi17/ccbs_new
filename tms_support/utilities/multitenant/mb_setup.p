@@ -167,6 +167,20 @@ do i = 1 to 2:
    IF INDEX(TMSParam.charval,lcbrand) EQ 0 THEN
       TMSParam.charval = REPLACE(TMSParam.charval,"spool/IFS","spool/" + CAPS(lcbrand) + "_IFS").
 
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "Pentaho" AND
+              TMSParam.ParamCode EQ "PentahoBITotals" NO-ERROR.
+   IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"/billing","/#TENANT_billing").
+   
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "Pentaho" AND
+              TMSParam.ParamCode EQ "InvGrainFile" NO-ERROR.
+   IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"invoice_row_dump",
+                                 "#TENANT_invoice_row_dump").
    FOR EACH BankAccount.
       IF i eq 1 THEN
          ASSIGN
