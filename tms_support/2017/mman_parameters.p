@@ -4,7 +4,7 @@ FUNCTION fCreateTMSParam RETURNS LOGICAL
      icParamType AS CHARACTER,
      icParamValue AS CHARACTER ):
 
-   FIND TMSParam NO-LOCK WHERE
+   FIND TMSParam EXCLUSIVE-LOCK WHERE
       TMSParam.Brand = "1" AND
       TMSParam.ParamGroup = icGroup AND
       TMSParam.ParamCode = icCode
