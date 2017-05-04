@@ -151,6 +151,14 @@ do i = 1 to 2:
               TMSParam.ParamCode EQ "DoubleCallLog" NO-ERROR.
    IF INDEX(TMSParam.charval,lcbrand) EQ 0 THEN
       TMSParam.charval = REPLACE(TMSParam.charval,"mobcdr",CAPS(lcbrand) + "_mobcdr").
+   
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "BillRun" AND
+              TMSParam.ParamCode EQ "BillRunStatFile" NO-ERROR.
+   IF INDEX(TMSParam.charval,lcbrand) EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"billrun_statistic",
+                         CAPS(lcbrand) + "_billrun_statistic").
 
    FIND FIRST TMSParam WHERE
               TMSParam.brand EQ "1" AND
