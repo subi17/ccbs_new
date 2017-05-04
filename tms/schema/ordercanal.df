@@ -469,7 +469,7 @@ ADD INDEX "TimeStamp" ON "CallAlarm"
   INDEX-FIELD "ActStamp" DESCENDING 
 
 ADD TABLE "CLIType"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DESCRIPTION "
 
 
@@ -794,6 +794,15 @@ ADD FIELD "FixedLineUpload" OF "CLIType" AS character
   COLUMN-LABEL "FixedLineUpload"
   HELP "Fixed line upload speed"
   ORDER 320
+
+ADD FIELD "TariffType" OF "CLIType" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Tariff Type"
+  POSITION 35
+  MAX-WIDTH 4
+  COLUMN-LABEL "TariffType"
+  ORDER 330
 
 ADD INDEX "Clitype" ON "CLIType" 
   AREA "Sta_Index_2"
@@ -1719,9 +1728,9 @@ ADD INDEX "MultiSimID" ON "MobSub"
   INDEX-FIELD "MultiSimID" DESCENDING 
 
 ADD TABLE "MSISDN"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_64"
   DESCRIPTION "A Single MSISDN number"
-  DUMP-NAME "msisdn"
+  DUMP-NAME "msisdn-------1"
 
 ADD FIELD "CLI" OF "MSISDN" AS character 
   FORMAT "X(11)"
@@ -1915,7 +1924,7 @@ ADD FIELD "POS" OF "MSISDN" AS character
   ORDER 29
 
 ADD INDEX "CLI" ON "MSISDN" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -1923,58 +1932,58 @@ ADD INDEX "CLI" ON "MSISDN"
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD INDEX "ActionDate" ON "MSISDN" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
   INDEX-FIELD "ActionDate" ASCENDING 
 
 ADD INDEX "CLI_s" ON "MSISDN" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD INDEX "CustNum" ON "MSISDN" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD INDEX "MSSeq" ON "MSISDN" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "MSSeq" ASCENDING 
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD INDEX "OrderID" ON "MSISDN" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "OrderID" DESCENDING 
 
 ADD INDEX "POS" ON "MSISDN" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_4"
   INDEX-FIELD "POS" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD INDEX "POSDCLI" ON "MSISDN" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "POS" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
   INDEX-FIELD "CLI" DESCENDING 
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD INDEX "StatusCode" ON "MSISDN" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
   INDEX-FIELD "ValidFrom" DESCENDING 
 
-ADD TABLE "MSISDNNUMBER"
-  AREA "Sta_Data_256"
+ADD TABLE "MSISDNNumber"
+  AREA "Sta_Data_2_256"
   DESCRIPTION "A Single MSISDN number"
-  DUMP-NAME "msisdnnu"
+  DUMP-NAME "msisdnnumber"
 
-ADD FIELD "CLI" OF "MSISDNNUMBER" AS character 
+ADD FIELD "CLI" OF "MSISDNNumber" AS character 
   FORMAT "X(11)"
   INITIAL ""
   LABEL "MSISDN"
@@ -1984,7 +1993,7 @@ ADD FIELD "CLI" OF "MSISDNNUMBER" AS character
   HELP "MSISDN Subscriber No"
   ORDER 10
 
-ADD FIELD "MsisdnType" OF "MSISDNNUMBER" AS integer 
+ADD FIELD "MsisdnType" OF "MSISDNNumber" AS integer 
   FORMAT ">9"
   INITIAL "0"
   LABEL "MSISDNType"
@@ -1994,7 +2003,7 @@ ADD FIELD "MsisdnType" OF "MSISDNNUMBER" AS integer
   HELP "MSISDN Type"
   ORDER 20
 
-ADD FIELD "Rank" OF "MSISDNNUMBER" AS integer 
+ADD FIELD "Rank" OF "MSISDNNumber" AS integer 
   FORMAT ">>>9"
   INITIAL "0"
   LABEL "Rank"
@@ -2004,11 +2013,303 @@ ADD FIELD "Rank" OF "MSISDNNUMBER" AS integer
   HELP "Rank"
   ORDER 30
 
-ADD INDEX "CLI" ON "MSISDNNUMBER" 
+ADD INDEX "CLI" ON "MSISDNNumber" 
+  AREA "Sta_Index_4"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "CLI" ASCENDING 
+
+ADD TABLE "MSISDNNumber_old"
+  AREA "Sta_Data_256"
+  DESCRIPTION "A Single MSISDN number"
+  DUMP-NAME "msisdnnu"
+
+ADD FIELD "CLI" OF "MSISDNNumber_old" AS character 
+  FORMAT "X(11)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 2
+  MAX-WIDTH 22
+  COLUMN-LABEL "MSISDN No"
+  HELP "MSISDN Subscriber No"
+  ORDER 10
+
+ADD FIELD "MsisdnType" OF "MSISDNNumber_old" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "MSISDNType"
+  POSITION 19
+  MAX-WIDTH 4
+  COLUMN-LABEL "MSISDNType"
+  HELP "MSISDN Type"
+  ORDER 20
+
+ADD FIELD "Rank" OF "MSISDNNumber_old" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Rank"
+  POSITION 20
+  MAX-WIDTH 4
+  COLUMN-LABEL "MSISDNType"
+  HELP "Rank"
+  ORDER 30
+
+ADD INDEX "CLI" ON "MSISDNNumber_old" 
   AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CLI" ASCENDING 
+
+ADD TABLE "MSISDN_old"
+  AREA "Sta_Data_256"
+  DESCRIPTION "A Single MSISDN number"
+  DUMP-NAME "msisdn"
+
+ADD FIELD "CLI" OF "MSISDN_old" AS character 
+  FORMAT "X(11)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 2
+  MAX-WIDTH 22
+  COLUMN-LABEL "MSISDN No"
+  HELP "MSISDN Subscriber No"
+  ORDER 10
+
+ADD FIELD "StatusCode" OF "MSISDN_old" AS integer 
+  FORMAT "z9"
+  INITIAL "1"
+  LABEL "Status"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Status"
+  HELP "Status Code"
+  ORDER 20
+
+ADD FIELD "CustNum" OF "MSISDN_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer's number IF this MSISDN is delivered to a customer"
+  ORDER 40
+
+ADD FIELD "MNP" OF "MSISDN_old" AS logical 
+  FORMAT "MNP/"
+  INITIAL "FALSE"
+  LABEL "MNP"
+  POSITION 7
+  MAX-WIDTH 1
+  COLUMN-LABEL "MNP"
+  HELP "MNP Number"
+  ORDER 26
+
+ADD FIELD "ValidFrom" OF "MSISDN_old" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "99999999,99999"
+  LABEL "Usage valid"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "Usage valid"
+  HELP "Time Stamp, when usage begin"
+  DECIMALS 5
+  ORDER 22
+
+ADD FIELD "McCode" OF "MSISDN_old" AS integer 
+  FORMAT "zz9"
+  INITIAL "1"
+  LABEL "Class"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Class"
+  HELP "Code of MSISDN Class"
+  ORDER 80
+
+ADD FIELD "PrevMuSeq" OF "MSISDN_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "SeqNo"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "SeqNo"
+  HELP "Internal, consecutive sequence no of PREVIOUS user"
+  ORDER 110
+
+ADD FIELD "ActionDate" OF "MSISDN_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "ActionDate"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "PortDate"
+  HELP "Date when action happens"
+  ORDER 28
+
+ADD FIELD "PortingTime" OF "MSISDN_old" AS decimal 
+  FORMAT "99.99"
+  INITIAL "0"
+  LABEL "Ptime"
+  POSITION 14
+  MAX-WIDTH 17
+  COLUMN-LABEL "Ptime"
+  HELP "Time when this MSISDN can be activated (INported) earliest"
+  DECIMALS 2
+  ORDER 130
+
+ADD FIELD "OutOperator" OF "MSISDN_old" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "OutOp"
+  POSITION 15
+  MAX-WIDTH 24
+  COLUMN-LABEL "OutOp"
+  HELP "Name of operator to whom this MSISDN was OUTported"
+  ORDER 140
+
+ADD FIELD "OrderID" OF "MSISDN_old" AS integer 
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 17
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  ORDER 160
+
+ADD FIELD "Brand" OF "MSISDN_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "BrCode"
+  POSITION 18
+  MAX-WIDTH 16
+  COLUMN-LABEL "BrCode"
+  HELP "Code Of Brand"
+  ORDER 170
+
+ADD FIELD "MsisdnType" OF "MSISDN_old" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "MSISDNType"
+  POSITION 19
+  MAX-WIDTH 4
+  COLUMN-LABEL "MSISDNType"
+  HELP "MSISDN Type"
+  ORDER 180
+
+ADD FIELD "LockedTo" OF "MSISDN_old" AS decimal 
+  FORMAT "999999.99999"
+  INITIAL "0"
+  POSITION 20
+  MAX-WIDTH 17
+  DECIMALS 2
+  ORDER 190
+
+ADD FIELD "MSSeq" OF "MSISDN_old" AS integer 
+  FORMAT "zzzzzzzz9"
+  INITIAL ?
+  LABEL "MSSeq"
+  POSITION 21
+  MAX-WIDTH 4
+  COLUMN-LABEL "MSSEq"
+  HELP "Sequence for subscriptions"
+  ORDER 21
+
+ADD FIELD "PayType" OF "MSISDN_old" AS logical 
+  FORMAT "PrePaid/PostPaid"
+  INITIAL "FALSE"
+  LABEL "PayType"
+  POSITION 22
+  MAX-WIDTH 1
+  COLUMN-LABEL "PayType"
+  HELP "PayType"
+  ORDER 27
+
+ADD FIELD "ValidTo" OF "MSISDN_old" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "99999999,99999"
+  LABEL "Usage valid"
+  POSITION 23
+  MAX-WIDTH 20
+  COLUMN-LABEL "Usage valid to"
+  HELP "Time Stamp, when usage end"
+  DECIMALS 5
+  ORDER 24
+
+ADD FIELD "PortingDate" OF "MSISDN_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "PortDate"
+  POSITION 24
+  MAX-WIDTH 4
+  COLUMN-LABEL "PortDate"
+  HELP "Date when this MSISN no. was ported in or out"
+  ORDER 120
+
+ADD FIELD "POS" OF "MSISDN_old" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "POS"
+  POSITION 25
+  MAX-WIDTH 24
+  COLUMN-LABEL "POS"
+  HELP "Point of Sales"
+  ORDER 29
+
+ADD INDEX "CLI" ON "MSISDN_old" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "ValidFrom" DESCENDING 
+
+ADD INDEX "ActionDate" ON "MSISDN_old" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "StatusCode" ASCENDING 
+  INDEX-FIELD "ActionDate" ASCENDING 
+
+ADD INDEX "CLI_s" ON "MSISDN_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CLI" ASCENDING 
+
+ADD INDEX "CustNum" ON "MSISDN_old" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "ValidFrom" DESCENDING 
+
+ADD INDEX "MSSeq" ON "MSISDN_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "MSSeq" ASCENDING 
+  INDEX-FIELD "ValidFrom" DESCENDING 
+
+ADD INDEX "OrderID" ON "MSISDN_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "OrderID" DESCENDING 
+
+ADD INDEX "POS" ON "MSISDN_old" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "POS" ASCENDING 
+  INDEX-FIELD "StatusCode" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "ValidFrom" DESCENDING 
+
+ADD INDEX "POSDCLI" ON "MSISDN_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "POS" ASCENDING 
+  INDEX-FIELD "StatusCode" ASCENDING 
+  INDEX-FIELD "CLI" DESCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD INDEX "StatusCode" ON "MSISDN_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "StatusCode" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD TABLE "Offer"
   AREA "Sta_Data_64"
@@ -2114,20 +2415,20 @@ ADD FIELD "Priority" OF "Offer" AS integer
   ORDER 150
 
 ADD INDEX "Offer" ON "Offer" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Offer" ASCENDING 
 
 ADD INDEX "Active" ON "Offer" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Active" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "ToDate" ON "Offer" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
@@ -2219,36 +2520,36 @@ ADD FIELD "OfferCriteriaID" OF "OfferCriteria" AS integer
   ORDER 80
 
 ADD INDEX "Criteria" ON "OfferCriteria" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Offer" ASCENDING 
   INDEX-FIELD "OfferCriteriaID" ASCENDING 
 
 ADD INDEX "CriteriaType" ON "OfferCriteria" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CriteriaType" ASCENDING 
   INDEX-FIELD "EndStamp" DESCENDING 
 
 ADD INDEX "EndStamp" ON "OfferCriteria" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "EndStamp" DESCENDING 
 
 ADD INDEX "Offer" ON "OfferCriteria" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Offer" ASCENDING 
   INDEX-FIELD "EndStamp" DESCENDING 
 
 ADD INDEX "OfferCriteriaID" ON "OfferCriteria" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "OfferCriteriaID" ASCENDING 
 
 ADD INDEX "OfferCriteriaType" ON "OfferCriteria" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Offer" ASCENDING 
   INDEX-FIELD "CriteriaType" ASCENDING 
@@ -2382,26 +2683,26 @@ ADD FIELD "Periods" OF "OfferItem" AS integer
   ORDER 120
 
 ADD INDEX "Item" ON "OfferItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Offer" ASCENDING 
   INDEX-FIELD "OfferItemID" ASCENDING 
 
 ADD INDEX "EndStamp" ON "OfferItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Offer" ASCENDING 
   INDEX-FIELD "EndStamp" DESCENDING 
 
 ADD INDEX "ItemKey" ON "OfferItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ItemType" ASCENDING 
   INDEX-FIELD "ItemKey" ASCENDING 
 
 ADD INDEX "ItemType" ON "OfferItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Offer" ASCENDING 
   INDEX-FIELD "ItemType" ASCENDING 
@@ -2409,7 +2710,7 @@ ADD INDEX "ItemType" ON "OfferItem"
   INDEX-FIELD "EndStamp" DESCENDING 
 
 ADD INDEX "OfferItemID" ON "OfferItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "OfferItemID" ASCENDING 
 
@@ -4112,6 +4413,16 @@ ADD FIELD "TerritoryOwner" OF "OrderCustomer" AS character
   HELP "Territory Owner"
   ORDER 1130
 
+ADD FIELD "CoverageToken" OF "OrderCustomer" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "CoverageToken"
+  POSITION 75
+  MAX-WIDTH 80
+  COLUMN-LABEL "CoverageToken"
+  HELP "Coverage Token"
+  ORDER 1140
+
 ADD INDEX "OrderId" ON "OrderCustomer" 
   AREA "Sta_Index_1"
   PRIMARY
@@ -5131,7 +5442,7 @@ ADD INDEX "SendTime" ON "RepLog"
   INDEX-FIELD "EventTime" ASCENDING 
 
 ADD TABLE "Salesman"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_64"
   LABEL "Salesman"
   DESCRIPTION "Salesman"
   DUMP-NAME "salesman"
@@ -5249,7 +5560,7 @@ ADD FIELD "Active" OF "Salesman" AS logical
   ORDER 110
 
 ADD INDEX "Salesman" ON "Salesman" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -5257,27 +5568,27 @@ ADD INDEX "Salesman" ON "Salesman"
   INDEX-FIELD "SmName" ASCENDING 
 
 ADD INDEX "CustNum" ON "Salesman" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "Salesman" ASCENDING 
 
 ADD INDEX "Reseller" ON "Salesman" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Reseller" ASCENDING 
   INDEX-FIELD "RsLevel" ASCENDING 
   INDEX-FIELD "Salesman" ASCENDING 
 
 ADD INDEX "SalesOffice" ON "Salesman" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "SalesOffice" ASCENDING 
   INDEX-FIELD "Salesman" ASCENDING 
 
 ADD INDEX "SmName" ON "Salesman" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "SmName" ASCENDING 
   INDEX-FIELD "SalesOffice" ASCENDING 
@@ -6284,9 +6595,9 @@ ADD INDEX "customer" ON "UserAccess"
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD TABLE "UserAccount"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_128"
   DESCRIPTION "Enduser accounts for logging-in on selfcare pages"
-  DUMP-NAME "useracco"
+  DUMP-NAME "useraccount"
 
 ADD FIELD "login" OF "UserAccount" AS character 
   FORMAT "X(12)"
@@ -6325,12 +6636,64 @@ ADD FIELD "active" OF "UserAccount" AS integer
   ORDER 40
 
 ADD INDEX "login" ON "UserAccount" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "login" ASCENDING 
 
 ADD INDEX "CustNum" ON "UserAccount" 
+  AREA "Sta_Index_3"
+  UNIQUE
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD TABLE "UserAccount_old"
+  AREA "Sta_Data_256"
+  DESCRIPTION "Enduser accounts for logging-in on selfcare pages"
+  DUMP-NAME "useracco"
+
+ADD FIELD "login" OF "UserAccount_old" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Login"
+  POSITION 2
+  MAX-WIDTH 24
+  HELP "Login name"
+  ORDER 10
+
+ADD FIELD "CustNum" OF "UserAccount_old" AS integer 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "The customer that can use this account"
+  ORDER 20
+
+ADD FIELD "password" OF "UserAccount_old" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Passw"
+  POSITION 4
+  MAX-WIDTH 40
+  HELP "Password"
+  ORDER 30
+
+ADD FIELD "active" OF "UserAccount_old" AS integer 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  LABEL "status"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Active status"
+  ORDER 40
+
+ADD INDEX "login" ON "UserAccount_old" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "login" ASCENDING 
+
+ADD INDEX "CustNum" ON "UserAccount_old" 
   AREA "Sta_Index_2"
   UNIQUE
   INDEX-FIELD "CustNum" ASCENDING 
@@ -6488,6 +6851,9 @@ UPDATE INDEX "MsSeq" OF "MobSub"
 UPDATE INDEX "POS" OF "MSISDN"
   BUFFER-POOL "Alternate"
 
+UPDATE INDEX "POS" OF "MSISDN_old"
+  BUFFER-POOL "Alternate"
+
 UPDATE INDEX "OrderID" OF "Order"
   BUFFER-POOL "Alternate"
 
@@ -6496,4 +6862,4 @@ PSC
 bufpool=yes
 cpstream=1252
 .
-0000135040
+0000142746
