@@ -45,8 +45,8 @@ DEF VAR lcOutOper        AS CHAR NO-UNDO.
 DEF VAR llYoigoCLI       AS LOG  NO-UNDO.
 DEF VAR llMasmovilCLI    AS LOG  NO-UNDO.
 DEF VAR lcTenant         AS CHAR      NO-UNDO.
-DEF VAR llYoigoTenant    AS CHAR      NO-UNDO INIT FALSE.
-DEF VAR llMasmovilTenant AS CHAR      NO-UNDO INIT FALSE.
+DEF VAR llYoigoTenant    AS LOGI      NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant AS LOGI      NO-UNDO INIT FALSE.
 DEF VAR liBillPerm       AS INT  NO-UNDO. 
 DEF VAR liError          AS INT  NO-UNDO. 
 
