@@ -12,6 +12,7 @@
 {Syst/dumpfile_run.i}
 {Syst/tmsconst.i}
 {Func/msisdn_prefix.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -25,12 +26,15 @@ DEF INPUT  PARAMETER ilAppend      AS LOG  NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
-DEF VAR lcNumeric   AS CHAR NO-UNDO.
-DEF VAR lcCallID    AS CHAR NO-UNDO.
-DEF VAR lcDelimiter AS CHAR NO-UNDO.
-DEF VAR liCase      AS INT  NO-UNDO.
-DEF VAR lcVersion   AS CHAR NO-UNDO.
-DEF VAR liPos       AS INT  NO-UNDO.
+DEF VAR lcNumeric        AS CHAR NO-UNDO.
+DEF VAR lcCallID         AS CHAR NO-UNDO.
+DEF VAR lcDelimiter      AS CHAR NO-UNDO.
+DEF VAR liCase           AS INT  NO-UNDO.
+DEF VAR lcVersion        AS CHAR NO-UNDO.
+DEF VAR liPos            AS INT  NO-UNDO.
+DEF VAR lcTenant         AS CHAR NO-UNDO.
+DEF VAR llYoigoTenant    AS CHAR NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant AS CHAR NO-UNDO INIT FALSE.
 
 DEF STREAM sFile.
 
@@ -49,6 +53,11 @@ ELSE DO:
       lcDelimiter = CHR(9)
       SESSION:NUMERIC-FORMAT = "AMERICAN".
 END.
+
+ASSIGN
+    lcTenant         = fGetCurrentTenant()
+    llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)   
+    llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
 IF ilAppend THEN 
    OUTPUT STREAM sFile TO VALUE(icFile) APPEND.
@@ -116,7 +125,8 @@ PROCEDURE pWrite2File:
       STRING(MobCdr.TimeSt,"hh:mm:ss")    lcDelimiter
       MobCDR.ReadInTS                     lcDelimiter
       MobCDR.GsmBnr                       lcDelimiter
-      INTEGER((fIsYoigoCLI(MobCDR.GsmBnr) OR fIsMasmovilCLI(MobCDR.GsmBnr))) lcDelimiter
+      INTEGER(((fIsYoigoCLI(MobCDR.GsmBnr)    AND llYoigoTenant   ) OR 
+               (fIsMasmovilCLI(MobCDR.GsmBnr) AND llMasmovilTenant))) lcDelimiter
       MobCDR.BillCode                     lcDelimiter
       MobCDR.CCN                          lcDelimiter
       MobCDR.BillDur                      lcDelimiter

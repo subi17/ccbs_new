@@ -117,13 +117,14 @@ PROCEDURE pTerminateSubscription:
 
   DEF OUTPUT PARAMETER oiReq AS INT NO-UNDO.
 
-  DEFINE VARIABLE ldeTS AS DECIMAL NO-UNDO.
-  DEFINE VARIABLE llYoigoCLi AS LOGICAL NO-UNDO. 
-  DEFINE VARIABLE liMsisdnStat AS INTEGER NO-UNDO. 
-  DEFINE VARIABLE liSimStat AS INTEGER NO-UNDO. 
-  DEFINE VARIABLE liQuarTime AS INTEGER NO-UNDO. 
-  DEFINE VARIABLE llPenaltyFee AS LOGICAL NO-UNDO. 
-  DEFINE VARIABLE liTermReason AS INT NO-UNDO. 
+  DEFINE VARIABLE ldeTS         AS DECIMAL NO-UNDO.
+  DEFINE VARIABLE llYoigoCLi    AS LOGICAL NO-UNDO. 
+  DEFINE VARIABLE llMasmovilCLi AS LOGICAL NO-UNDO.
+  DEFINE VARIABLE liMsisdnStat  AS INTEGER NO-UNDO. 
+  DEFINE VARIABLE liSimStat     AS INTEGER NO-UNDO. 
+  DEFINE VARIABLE liQuarTime    AS INTEGER NO-UNDO. 
+  DEFINE VARIABLE llPenaltyFee  AS LOGICAL NO-UNDO. 
+  DEFINE VARIABLE liTermReason  AS INT NO-UNDO. 
 
   /* terminate the subscription */
   ASSIGN liTermReason = {&SUBSCRIPTION_TERM_REASON_POS_ORDER_CANCELATION}
@@ -134,12 +135,14 @@ PROCEDURE pTerminateSubscription:
   IF liError EQ 3 THEN RETURN appl_err("Ongoing termination requests"). 
   IF liError NE 0 THEN RETURN appl_err(ocResult). 
 
-  FIND FIRST MobSub WHERE
-             MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
+  FIND FIRST MobSub WHERE MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
 
-  llYoigoCLI = (fIsYoigoCLI(MobSub.CLI) OR fIsMasmovilCLI(MobSub.CLI)).
-  llPenaltyFee = fIsPenalty(liTermReason,Order.MsSeq).
-  liError = fCheckOrderer(liTermReason, llYoigoCLI, ocResult).
+  ASSIGN  
+      llYoigoCLI    = fIsYoigoCLI(MobSub.CLI)
+      llMasmovilCLi = fIsMasmovilCLI(MobSub.CLI)
+      llPenaltyFee  = fIsPenalty(liTermReason,Order.MsSeq).
+  
+  liError = fCheckOrderer(liTermReason, llYoigoCLI, llMasmovilCLi, ocResult).
   IF liError NE 0 THEN RETURN appl_err(ocResult).
 
   liError = fCheckKillTS(liTermReason,ldeTS, OUTPUT ocResult).
@@ -147,6 +150,7 @@ PROCEDURE pTerminateSubscription:
 
   fInitialiseValues(INPUT liTermReason,
                     INPUT llYoigoCLi,
+                    INPUT llMasmovilCLi,
                     OUTPUT liMsisdnStat,
                     OUTPUT liSimStat,
                     OUTPUT liQuarTime).

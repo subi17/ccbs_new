@@ -996,10 +996,11 @@ PROCEDURE pHandleFromASOL2ACON:
       DEF VAR ldaMNPDate AS DATE NO-UNDO. 
 
       fInitialiseValues(2, 
-         (fIsYoigoCLI(MNPSub.CLI) OR fIsMasmovilCLI(MNPSub.CLI)),
-         output liMsisdnStat,
-         output liSimStat,
-         output liQuarTime).
+                        fIsYoigoCLI(MNPSub.CLI),
+                        fIsMasmovilCLI(MNPSub.CLI)),
+                        output liMsisdnStat,
+                        output liSimStat,
+                        output liQuarTime).
 
       llPenalty = fIsPenalty(2, MNPSub.MsSeq).
       
