@@ -997,7 +997,7 @@ PROCEDURE pHandleFromASOL2ACON:
 
       fInitialiseValues(2, 
                         fIsYoigoCLI(MNPSub.CLI),
-                        fIsMasmovilCLI(MNPSub.CLI)),
+                        fIsMasmovilCLI(MNPSub.CLI),
                         output liMsisdnStat,
                         output liSimStat,
                         output liQuarTime).
