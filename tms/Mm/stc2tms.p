@@ -29,6 +29,7 @@
 {Func/create_eventlog.i}
 {Func/barrfunc.i}
 {Func/fixedlinefunc.i}
+{Func/fsendsms.i}
 
 {Migration/migrationfunc.i}
 
