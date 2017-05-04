@@ -333,8 +333,8 @@ FUNCTION fInitialiseValues RETURNS INT
    OUTPUT piQuarTime   AS INT):
 
    DEF VAR lcTenant         AS CHAR NO-UNDO.
-   DEF VAR llYoigoTenant    AS CHAR NO-UNDO INIT FALSE.
-   DEF VAR llMasmovilTenant AS CHAR NO-UNDO INIT FALSE.
+   DEF VAR llYoigoTenant    AS LOGI NO-UNDO INIT FALSE.
+   DEF VAR llMasmovilTenant AS LOGI NO-UNDO INIT FALSE.
 
    ASSIGN lcTenant = fGetCurrentTenant().
    IF lcTenant = "" THEN 
