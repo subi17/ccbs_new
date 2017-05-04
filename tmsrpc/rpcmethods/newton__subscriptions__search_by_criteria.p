@@ -580,6 +580,7 @@ FOR EACH MobSub NO-LOCK WHERE
    /*Any Barrings Exist*/
    IF plBarring AND fGetActiveBarrings(MobSub.MsSeq) EQ "" THEN NEXT EACH_MOBSUB.
 
+   /* YDA-1012 and YDA-1017 */
    IF CAN-FIND(FIRST Order WHERE Order.MsSeq = MobSub.MsSeq AND
                                  Order.OrderChannel = "VIP") THEN
       NEXT EACH_MOBSUB.
