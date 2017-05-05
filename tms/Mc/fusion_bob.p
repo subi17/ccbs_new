@@ -186,18 +186,19 @@ PROCEDURE pUpdateFusionOrder:
    DEF INPUT PARAM pcFixedSubStatus AS CHAR NO-UNDO.
    DEF INPUT PARAM pcExternalTicket AS CHAR NO-UNDO.
    DEF INPUT PARAM pcReleaseMobile AS CHAR NO-UNDO.
-   DEF VAR liTermReason AS INTEGER NO-UNDO.
-   DEF VAR ldeTS AS DECIMAL NO-UNDO.
-   DEF VAR liReq AS INTEGER NO-UNDO.
-   DEF VAR llYoigoCLi AS LOGICAL NO-UNDO.
-   DEF VAR liMsisdnStat AS INTEGER NO-UNDO.
-   DEF VAR liSimStat AS INTEGER NO-UNDO.
-   DEF VAR liQuarTime AS INTEGER NO-UNDO.
-   DEF VAR llPenaltyFee AS LOGICAL NO-UNDO.
-   DEF VAR lcResult AS CHARACTER NO-UNDO.
 
-   DEF VAR liRequest AS INT NO-UNDO. 
-   DEF VAR lcError AS CHAR NO-UNDO.
+   DEF VAR liTermReason  AS INTEGER   NO-UNDO.
+   DEF VAR ldeTS         AS DECIMAL   NO-UNDO.
+   DEF VAR liReq         AS INTEGER   NO-UNDO.
+   DEF VAR llYoigoCLi    AS LOGICAL   NO-UNDO.
+   DEF VAR llMasmovilCLi AS LOGICAL   NO-UNDO.
+   DEF VAR liMsisdnStat  AS INTEGER   NO-UNDO.
+   DEF VAR liSimStat     AS INTEGER   NO-UNDO.
+   DEF VAR liQuarTime    AS INTEGER   NO-UNDO.
+   DEF VAR llPenaltyFee  AS LOGICAL   NO-UNDO.
+   DEF VAR lcResult      AS CHARACTER NO-UNDO.
+   DEF VAR liRequest     AS INT       NO-UNDO. 
+   DEF VAR lcError       AS CHAR      NO-UNDO.
 
    IF pcReleaseMobile > "" AND
       pcReleaseMobile NE "Y" THEN
@@ -332,12 +333,14 @@ PROCEDURE pUpdateFusionOrder:
               Order.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
          fSetOrderStatus(Order.OrderID,"7").
          ASSIGN
-            liTermReason = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
-            llYoigoCLI = (fIsYoigoCLI(order.CLI) OR fIsMasmovilCLI(order.CLI))
-            llPenaltyFee = fIsPenalty(liTermReason,Order.MsSeq).
+            liTermReason  = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
+            llYoigoCLI    = fIsYoigoCLI(order.CLI)
+            llMasmovilCLi = fIsMasmovilCLI(order.CLI)
+            llPenaltyFee  = fIsPenalty(liTermReason,Order.MsSeq).
          fInitialiseValues(
-            INPUT liTermReason,
-            INPUT llYoigoCLi,
+            INPUT  liTermReason,
+            INPUT  llYoigoCLi,
+            INPUT  llMasmovilCLi,
             OUTPUT liMsisdnStat,
             OUTPUT liSimStat,
             OUTPUT liQuarTime).

@@ -1185,7 +1185,8 @@ PROCEDURE pMultiSIMTermination:
 
       fInitialiseValues(
          {&SUBSCRIPTION_TERM_REASON_MULTISIM},
-         (fIsYoigoCLI(lbMobSub.CLI) OR fIsMasmovilCLI(lbMobSub.CLI)),
+         fIsYoigoCLI(lbMobSub.CLI), 
+         fIsMasmovilCLI(lbMobSub.CLI),
          OUTPUT liMsisdnStat,
          OUTPUT liSimStat,
          OUTPUT liQuarTime).

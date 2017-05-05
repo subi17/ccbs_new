@@ -15,36 +15,40 @@ DEF INPUT  PARAMETER icLogFile   AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiRead      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiErrors    AS INT  NO-UNDO.
 
-DEF VAR lcLine       AS CHAR NO-UNDO.
-DEF VAR liMsSeq      AS INT  NO-UNDO.
-DEF VAR lcCLI        AS CHAR NO-UNDO.
-DEF VAR lcICC        AS CHAR NO-UNDO.
-DEF VAR lcCLIType    AS CHAR NO-UNDO.
-DEF VAR lcReason     AS CHAR NO-UNDO.
-DEF VAR lcTermDate   AS CHAR NO-UNDO.
-DEF VAR ldtTermDate  AS DATE NO-UNDO.
-DEF VAR lcTermTime   AS CHAR NO-UNDO.
-DEF VAR liTermTime   AS INT  NO-UNDO.
-DEF VAR liMaxDates   AS INT  NO-UNDO.
-DEF VAR lcMemoTitle  AS CHAR NO-UNDO.
-DEF VAR lcMemoTxt    AS CHAR NO-UNDO.
-DEF VAR lcSep        AS CHAR NO-UNDO INIT "|".
-DEF VAR ldCurrent    AS DEC  NO-UNDO.
-DEF VAR lcSource     AS CHAR NO-UNDO.
-DEF VAR lcChannel    AS CHAR NO-UNDO.
-DEF VAR lcError      AS CHAR NO-UNDO.
-DEF VAR lcPlainFile  AS CHAR NO-UNDO.
-DEF VAR liCnt        AS INT  NO-UNDO.
-DEF VAR liRequest    AS INT  NO-UNDO.
-DEF VAR ldKillStamp  AS DEC  NO-UNDO.
-DEF VAR liMSISDNStat AS INT  NO-UNDO.
-DEF VAR liSIMStat    AS INT  NO-UNDO.
-DEF VAR liQuarantine AS INT  NO-UNDO.
-DEF VAR llPenalty    AS LOG  NO-UNDO.
-DEF VAR lcOutOper    AS CHAR NO-UNDO.
-DEF VAR llYoigoCLI   AS LOG  NO-UNDO.
-DEF VAR liBillPerm   AS INT  NO-UNDO. 
-DEF VAR liError      AS INT  NO-UNDO. 
+DEF VAR lcLine           AS CHAR NO-UNDO.
+DEF VAR liMsSeq          AS INT  NO-UNDO.
+DEF VAR lcCLI            AS CHAR NO-UNDO.
+DEF VAR lcICC            AS CHAR NO-UNDO.
+DEF VAR lcCLIType        AS CHAR NO-UNDO.
+DEF VAR lcReason         AS CHAR NO-UNDO.
+DEF VAR lcTermDate       AS CHAR NO-UNDO.
+DEF VAR ldtTermDate      AS DATE NO-UNDO.
+DEF VAR lcTermTime       AS CHAR NO-UNDO.
+DEF VAR liTermTime       AS INT  NO-UNDO.
+DEF VAR liMaxDates       AS INT  NO-UNDO.
+DEF VAR lcMemoTitle      AS CHAR NO-UNDO.
+DEF VAR lcMemoTxt        AS CHAR NO-UNDO.
+DEF VAR lcSep            AS CHAR NO-UNDO INIT "|".
+DEF VAR ldCurrent        AS DEC  NO-UNDO.
+DEF VAR lcSource         AS CHAR NO-UNDO.
+DEF VAR lcChannel        AS CHAR NO-UNDO.
+DEF VAR lcError          AS CHAR NO-UNDO.
+DEF VAR lcPlainFile      AS CHAR NO-UNDO.
+DEF VAR liCnt            AS INT  NO-UNDO.
+DEF VAR liRequest        AS INT  NO-UNDO.
+DEF VAR ldKillStamp      AS DEC  NO-UNDO.
+DEF VAR liMSISDNStat     AS INT  NO-UNDO.
+DEF VAR liSIMStat        AS INT  NO-UNDO.
+DEF VAR liQuarantine     AS INT  NO-UNDO.
+DEF VAR llPenalty        AS LOG  NO-UNDO.
+DEF VAR lcOutOper        AS CHAR NO-UNDO.
+DEF VAR llYoigoCLI       AS LOG  NO-UNDO.
+DEF VAR llMasmovilCLI    AS LOG  NO-UNDO.
+DEF VAR lcTenant         AS CHAR      NO-UNDO.
+DEF VAR llYoigoTenant    AS LOGI      NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant AS LOGI      NO-UNDO INIT FALSE.
+DEF VAR liBillPerm       AS INT  NO-UNDO. 
+DEF VAR liError          AS INT  NO-UNDO. 
 
 DEF STREAM sRead.
 DEF STREAM sLog.
@@ -149,7 +153,12 @@ REPEAT:
    END.
 
    /* Yoigo MSISDN? */
-   llYoigoCLI = (fIsYoigoCLI(Mobsub.CLI) OR fIsMasmovilCLI(Mobsub.CLI)).
+   ASSIGN
+      lcTenant         = BUFFER-TENANT-NAME(MobSub)
+      llYoigoCLI       = fIsYoigoCLI(Mobsub.CLI)
+      llMasmovilCLI    = fIsMasmovilCLI(Mobsub.CLI)
+      llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+      llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
    IF (MobSub.PayType = TRUE AND LOOKUP(lcReason,"6,7,8") = 0) OR
       (MobSub.PayType = FALSE AND LOOKUP(lcReason,"4,7,8,10,3,1") = 0) THEN DO:
@@ -157,14 +166,15 @@ REPEAT:
       NEXT.
    END.
 
-   IF INT(lcReason) = 3 AND NOT llYoigoCLI THEN DO:
+   IF INT(lcReason) = 3 AND ((NOT llYoigoCLI AND llYoigoTenant) OR (NOT llMasmovilCLI AND llMasmovilTenant))THEN DO:
       fError("Cannot choose Order cancellation with MNP numbers!").
       NEXT.
    END.
 
    fInitialiseValues(
-                  INPUT INT(lcReason),
-                  INPUT llYoigoCLI,
+                  INPUT  INT(lcReason),
+                  INPUT  llYoigoCLI,
+                  INPUT  llMasmovilCLI,
                   OUTPUT liMsisdnStat,
                   OUTPUT liSimStat,
                   OUTPUT liQuarantine).

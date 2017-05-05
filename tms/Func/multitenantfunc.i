@@ -168,6 +168,17 @@ FUNCTION fGetCurrentBrand RETURNS CHAR ():
    ELSE RETURN fConvertTenantToBrand(TENANT-NAME(LDBNAME("common"))).
 END FUNCTION.
 
+FUNCTION fGetCurrentTenant RETURNS CHAR ():
+   DEF BUFFER Company FOR Company.
+
+   FIND FIRST Company NO-LOCK WHERE Company.Brand = "1" NO-ERROR.
+   IF AVAIL Company THEN 
+      RETURN BUFFER-TENANT-NAME(Company).
+   ELSE 
+      RETURN TENANT-NAME(LDBNAME("common")).
+      
+END FUNCTION.
+
 /*
    Function returns the brand name of a given table name.
    A caller must take care that the table name exists.

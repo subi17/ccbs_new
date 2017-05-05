@@ -237,13 +237,21 @@ PROCEDURE pMNPStatusCheck:
 
    DEF BUFFER bMNPSub FOR MNPSub.
 
-   DEFINE VARIABLE liNCStatus AS INTEGER NO-UNDO. 
-   DEFINE VARIABLE lcTMSStatus AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE liTMSStatus AS INTEGER NO-UNDO.
+   DEFINE VARIABLE liNCStatus       AS INTEGER   NO-UNDO. 
+   DEFINE VARIABLE lcTMSStatus      AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE liTMSStatus      AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcTenant         AS CHAR      NO-UNDO.
+   DEFINE VARIABLE llYoigoTenant    AS LOGI      NO-UNDO INIT FALSE.
+   DEFINE VARIABLE llMasmovilTenant AS LOGI      NO-UNDO INIT FALSE.
 
    FIND MNPProcess NO-LOCK WHERE 
         MNPProcess.PortRequest = icRefCode NO-ERROR.
    IF NOT AVAIL MNPProcess THEN RETURN "ERROR: MNP process not found".
+
+   ASSIGN
+      lcTenant         = BUFFER-TENANT-NAME(MNPProcess)
+      llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)   
+      llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
    IF MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED} THEN
       liTMSStatus = {&MNP_ST_AREC}.
@@ -316,7 +324,7 @@ PROCEDURE pMNPStatusCheck:
 
             IF AVAIL msisdn THEN DO:
             
-               liMSISDNStatus = (IF (fIsYoigoCLI(msisdn.CLI) OR fIsMasmovilCLI(msisdn.CLI)) THEN 
+               liMSISDNStatus = (IF ((fIsYoigoCLI(msisdn.CLI) AND llYoigoTenant) OR (fIsMasmovilCLI(msisdn.CLI) AND llMasmovilTenant)) THEN 
                      {&MSISDN_ST_MNP_OUT_YOIGO} ELSE
                      {&MSISDN_ST_MNP_OUT_OTHER}).
       
@@ -356,7 +364,7 @@ PROCEDURE pMNPStatusCheck:
 
             fMakeMsidnHistory(recid(msisdn)).
 
-            liMSISDNStatus = (IF (fIsYoigoCLI(MNPSub.CLI) OR fIsMasmovilCLI(MNPSub.CLI)) THEN 
+            liMSISDNStatus = (IF ((fIsYoigoCLI(msisdn.CLI) AND llYoigoTenant) OR (fIsMasmovilCLI(msisdn.CLI) AND llMasmovilTenant)) THEN 
                   {&MSISDN_ST_MNP_OUT_YOIGO} ELSE
                   {&MSISDN_ST_MNP_OUT_OTHER}).
          

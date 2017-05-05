@@ -6,6 +6,7 @@
 {Func/detailvalue.i}
 {Syst/dumpfile_run.i}
 {Func/msisdn_prefix.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -19,9 +20,12 @@ DEF INPUT  PARAMETER ilAppend      AS LOG  NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
-DEF VAR lcNumeric   AS CHAR NO-UNDO.
-DEF VAR lcCallID    AS CHAR NO-UNDO.
-DEF VAR lcDelimiter AS CHAR NO-UNDO.
+DEF VAR lcNumeric        AS CHAR NO-UNDO.
+DEF VAR lcCallID         AS CHAR NO-UNDO.
+DEF VAR lcDelimiter      AS CHAR NO-UNDO.
+DEF VAR lcTenant         AS CHAR NO-UNDO.
+DEF VAR llYoigoTenant    AS LOGI NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant AS LOGI NO-UNDO INIT FALSE.
 
 DEF STREAM sFile.
 
@@ -40,6 +44,11 @@ ELSE DO:
       lcDelimiter = CHR(9)
       SESSION:NUMERIC-FORMAT = "AMERICAN".
 END.
+
+ASSIGN
+    lcTenant         = fGetCurrentTenant()
+    llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)   
+    llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
 IF ilAppend THEN 
    OUTPUT STREAM sFile TO VALUE(icFile) APPEND.
@@ -83,7 +92,8 @@ FOR EACH PrepCDR NO-LOCK USE-INDEX ReadDate WHERE
       STRING(PrepCDR.TimeSt,"hh:mm:ss")    lcDelimiter
       PrepCDR.ReadInTS                     lcDelimiter
       PrepCDR.GsmBnr                       lcDelimiter
-      INTEGER(fIsYoigoCLI(PrepCDR.GsmBnr) OR fIsMasmovilCLI(PrepCDR.GsmBnr)) lcDelimiter
+      INTEGER((fIsYoigoCLI(PrepCDR.GsmBnr) AND llYoigoTenant) OR 
+              (fIsMasmovilCLI(PrepCDR.GsmBnr) AND llMasmovilTenant)) lcDelimiter
       PrepCDR.BillCode                     lcDelimiter
       PrepCDR.CCN                          lcDelimiter
       PrepCDR.BillDur                      lcDelimiter

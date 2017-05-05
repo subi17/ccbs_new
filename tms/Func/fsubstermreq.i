@@ -16,6 +16,7 @@
 {Func/timestamp.i}
 {Func/msisdn_prefix.i}
 {Func/fixedlinefunc.i}
+{Func/multitenantfunc.i}
 
 FUNCTION fTerminationRequest RETURNS INTEGER
    (INPUT  iiMsSeq        AS INT,    /* subscription         */
@@ -267,15 +268,28 @@ OUTPUT ocError AS CHAR):
 END.
 
 FUNCTION fCheckOrderer RETURNS INT            
-(piOrderer AS INT,
-llYoigoCLI AS LOG,
-OUTPUT ocError AS CHAR):
-   
+(INPUT  piOrderer     AS INT,
+ INPUT  llYoigoCLI    AS LOG,
+ INPUT  llMasmovilCLI AS LOG,
+ OUTPUT ocError       AS CHAR):
+ 
+ DEF VAR lcTenant         AS CHAR NO-UNDO.
+ DEF VAR llYoigoTenant    AS LOGI NO-UNDO INIT FALSE.
+ DEF VAR llMasmovilTenant AS LOGI NO-UNDO INIT FALSE.
+ 
+   ASSIGN lcTenant = fGetCurrentTenant().
+   IF lcTenant = "" THEN 
+       ASSIGN lcTenant = {&TENANT_YOIGO}.
+
+   ASSIGN 
+       llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+       llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
+
    IF LOOKUP(STRING(piOrderer),"1,2,3,4,5,9,10,11,12") = 0 THEN DO:
       ocError = "Unknown Orderer". 
       RETURN 1.
    END.
-   IF piOrderer = 3 AND NOT llYoigoCLI THEN DO:
+   IF piOrderer = 3 AND ((NOT llYoigoCLI AND llYoigoTenant) OR (NOT llMasmovilCLI AND llMasmovilTenant)) THEN DO:
       ocError = "Cannot choose Order cancellation with MNP numbers!".
       RETURN 2.
    END.
@@ -311,37 +325,50 @@ FUNCTION fCheckSimStat RETURNS INT
 END FUNCTION. 
 
 FUNCTION fInitialiseValues RETURNS INT            
-(  iiOrderer AS INT,
-   ilYoigoCLI AS LOG,
+(  INPUT iiOrderer     AS INT,
+   INPUT ilYoigoCLI    AS LOG,
+   INPUT ilMasmovilCLI AS LOG,
    OUTPUT piMSISDNStat AS INT,
-   OUTPUT piSimStat AS INT,
-   OUTPUT piQuarTime AS INT):
+   OUTPUT piSimStat    AS INT,
+   OUTPUT piQuarTime   AS INT):
+
+   DEF VAR lcTenant         AS CHAR NO-UNDO.
+   DEF VAR llYoigoTenant    AS LOGI NO-UNDO INIT FALSE.
+   DEF VAR llMasmovilTenant AS LOGI NO-UNDO INIT FALSE.
+
+   ASSIGN lcTenant = fGetCurrentTenant().
+   IF lcTenant = "" THEN 
+      ASSIGN lcTenant = {&TENANT_YOIGO}.
+
+   ASSIGN 
+      llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+      llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
    CASE iiOrderer:
       WHEN 1 OR WHEN 4 OR WHEN 5 OR WHEN 9 OR WHEN 10 OR WHEN 13 OR WHEN 14 THEN
          ASSIGN
-            piMSISDNStat   = IF ilYoigoCLI THEN 4  ELSE 11
-            piQuarTime     = IF ilYoigoCLI THEN 90 ELSE -1 
+            piMSISDNStat   = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 4  ELSE 11)
+            piQuarTime     = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 90 ELSE -1) 
             piSimStat      = 7.
       WHEN 6 OR WHEN 7 OR WHEN 8 THEN
          ASSIGN
-            piMSISDNStat   = IF ilYoigoCLI THEN 4  ELSE 11
-            piQuarTime     = IF ilYoigoCLI THEN 30 ELSE -1 
+            piMSISDNStat   = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 4  ELSE 11)
+            piQuarTime     = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 30 ELSE -1) 
             piSimStat      = 7.
       WHEN 2 THEN
          ASSIGN
-            piMSISDNStat   = IF ilYoigoCLI THEN 6  ELSE 13
-            piQuarTime     = IF ilYoigoCLI THEN -1 ELSE -1
+            piMSISDNStat   = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 6  ELSE 13)
+            piQuarTime     = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN -1 ELSE -1)
             piSimStat      = 7.
       WHEN 3 THEN 
          ASSIGN
-            piMSISDNStat   = IF ilYoigoCLI THEN 4  ELSE 11
-            piQuarTime     = IF ilYoigoCLI THEN 1  ELSE -1
+            piMSISDNStat   = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 4  ELSE 11)
+            piQuarTime     = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 1  ELSE -1)
             piSimStat      = 9.
       WHEN 11 OR WHEN 12 THEN 
          ASSIGN
-            piMSISDNStat   = IF ilYoigoCLI THEN 1  ELSE 11
-            piQuarTime     = IF ilYoigoCLI THEN -1 ELSE -1
+            piMSISDNStat   = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 1  ELSE 11)
+            piQuarTime     = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN -1 ELSE -1)
             piSimStat      = 1.
 
    END.

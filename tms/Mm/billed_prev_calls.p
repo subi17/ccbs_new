@@ -58,8 +58,7 @@ ASSIGN ldFromDate = fInt2Date(iiBillPeriod,1)
        lcTdir     = fCParamC("BilledTrackDir")
        lcfilename = REPLACE("#TENANT_billed_prev_calls_" +
                             STRING(iiBillPeriod) + ".dump", "#TENANT",
-                            CAPS(fgetBrandNamebyTenantId(TENANT-ID(
-                                                         LDBNAME(1)))))
+                            CAPS(Syst.Parameters:Tenant))
        lcNumeric  = SESSION:NUMERIC-FORMAT
        SESSION:NUMERIC-FORMAT = "AMERICAN"
        liInvPeriod    = YEAR(TODAY) * 100 + MONTH(TODAY)
