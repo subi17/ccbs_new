@@ -10,7 +10,7 @@ PIDFILE=../var/run/d-$DAEMONNAME.pid
 DIEFILE=../var/run/d-$DAEMONNAME.die
 
 if test -z "$INSTANCE"; then
-  INSTANCE=?
+  INSTANCE="__NO__"
 fi
 
 if test -z "$DATABASES"; then
