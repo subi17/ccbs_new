@@ -85,6 +85,7 @@ form
        HELP "Account number"
     BankAccount.CreditorID  FORMAT "X(20)" COLON 15
     BankAccount.PresenterID  FORMAT "X(20)" COLON 15
+    BankAccount.DDAllocation  FORMAT ">>9" COLON 15
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
@@ -573,6 +574,7 @@ PROCEDURE local-UPDATE-record:
            BankAccount.presenterID
            BankAccount.BIC
            BankAccount.UnitCode
+           BankAccount.DDAllocation
       WITH FRAME lis.
 
       IF lcRight = "RW" THEN DO:
@@ -587,6 +589,7 @@ PROCEDURE local-UPDATE-record:
           BankAccount.UnitCode
           BankAccount.CreditorID
           BankAccount.PresenterID
+          BankAccount.DDAllocation
          WITH FRAME lis.
       END.
 
