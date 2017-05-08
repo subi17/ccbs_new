@@ -1,0 +1,360 @@
+Reseller1: Reseller
+  Reseller: "AF"
+  RsName: "AMPLIFFICA"
+  EMail: "maria.barreiro.sanisidro@ext.yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller2: Reseller
+  Reseller: "AL"
+  RsName: "ALCAMPO"
+  EMail: "Luis.Leyva.Ruano@yoigo.com"
+  Brand: "1"
+  Active: FALSE
+
+Reseller3: Reseller
+  Reseller: "AM"
+  RsName: "AMPLIFFICA"
+  EMail: "maria.barreiro.sanisidro@ext.yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller4: Reseller
+  Reseller: "AP"
+  RsName: "Apple"
+  EMail: "dragutin.vukotic@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  FUC1: "332040484"
+  FUC2: "332296854"
+
+Reseller5: Reseller
+  Reseller: "AX"
+  RsName: "AXIA"
+  EMail: "Ignacio.Larragan.Silva@yoigo.com"
+  Brand: "1"
+  EntityCode: 44
+  FUC1: "323841452"
+  FUC2: "332296599"
+
+Reseller6: Reseller
+  Reseller: "BC"
+  RsName: "BackOffice Fusion"
+  EMail: "Sonia.Borrega.Bahon@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller7: Reseller
+  Reseller: "BE"
+  RsName: "BYMOVIL EMISION"
+  EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller8: Reseller
+  Reseller: "BF"
+  RsName: "Backoffice Fusion"
+  EMail: "anaisabel.serrano@yoigo.com"
+  Brand: "1"
+  EntityCode: 27
+  Active: FALSE
+
+Reseller9: Reseller
+  Reseller: "BG"
+  RsName: "BOULANGER"
+  EMail: "ignacio.larragan.silva@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+Reseller10: Reseller
+  Reseller: "BM"
+  RsName: "BYMOVIL RETENCION"
+  EMail: "gonzalo.garrido.arsuaga@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller11: Reseller
+  Reseller: "BO"
+  RsName: "Backoffice Convergencia"
+  EMail: "Sonia.Borrega.Bahon@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller12: Reseller
+  Reseller: "BR"
+  RsName: "BYMOVIL RECEPCION"
+  EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller13: Reseller
+  Reseller: "BY"
+  RsName: "BY MOVIL"
+  EMail: "Ignacio.Larragan.Silva@yoigo.com"
+  Brand: "1"
+  EntityCode: 44
+  FUC1: "323841452"
+  FUC2: "332296599"
+
+Reseller14: Reseller
+  Reseller: "CA"
+  RsName: "CARREFOUR"
+  EMail: "Luis.Leyva.Ruano@yoigo.com"
+  Brand: "1"
+  Active: FALSE
+
+Reseller15: Reseller
+  Reseller: "CL"
+  RsName: "CASTURTEL LEON"
+  EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+Reseller16: Reseller
+  Reseller: "CM"
+  RsName: "COMMOVILE"
+  EMail: "Esmeralda.Domenech.Cambiazzo@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+Reseller17: Reseller
+  Reseller: "CP"
+  RsName: "CASTURTEL PALENCIA"
+  EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+Reseller18: Reseller
+  Reseller: "CR"
+  RsName: "CASTILIAN RETENCION"
+  EMail: "gonzalo.garrido.arsuaga@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller19: Reseller
+  Reseller: "CT"
+  RsName: "CASTURTEL EMISION"
+  EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller20: Reseller
+  Reseller: "DX"
+  RsName: "DEXTRA"
+  EMail: "Ignacio.Larragan.Silva@yoigo.com"
+  Brand: "1"
+  EntityCode: 41
+  FUC1: "323841577"
+  FUC2: "332296698"
+
+Reseller21: Reseller
+  Reseller: "EC"
+  RsName: "EL CORTE INGLES"
+  EMail: "marta.delarosa@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller22: Reseller
+  Reseller: "EM"
+  RsName: "EMERGIA TELEVENTA"
+  EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+Reseller23: Reseller
+  Reseller: "FM"
+  RsName: "FILMAMADRID"
+  EMail: "marta.delarosa@yoigo.es"
+  Brand: "1"
+  Active: FALSE
+
+Reseller24: Reseller
+  Reseller: "GE"
+  RsName: "GSS EMISION"
+  EMail: "maria.barreiro.sanisidro@ext.yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller25: Reseller
+  Reseller: "GR"
+  RsName: "GSS RECEPCION"
+  EMail: "maria.barreiro.sanisidro@ext.yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller26: Reseller
+  Reseller: "HI"
+  RsName: "HIPERCOR"
+  EMail: "marta.delarosa@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller27: Reseller
+  Reseller: "KH"
+  RsName: "KHBLAS"
+  EMail: "marta.delarosa@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  FUC1: "323841619"
+  FUC2: "332296730"
+
+Reseller28: Reseller
+  Reseller: "MD"
+  RsName: "MUNDO DIGITAL"
+  EMail: "mcastrosan@bellpartners.es"
+  Brand: "1"
+  EntityCode: 41
+  FUC1: "323841577"
+  FUC2: "332296698"
+
+Reseller29: Reseller
+  Reseller: "MM"
+  RsName: "MEDIAMARKT"
+  EMail: "Ignacio.Larragan.Silva@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+Reseller30: Reseller
+  Reseller: "PE"
+  RsName: "PhoneHouse Emision Televenta"
+  EMail: "maria.barreiro.sanisidro@ext.yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller31: Reseller
+  Reseller: "PH"
+  RsName: "PHONE HOUSE"
+  EMail: "Ignacio.Larragan.Silva@yoigo.com"
+  Brand: "1"
+  EntityCode: 43
+  FUC1: "323841551"
+  FUC2: "332296607"
+
+Reseller32: Reseller
+  Reseller: "PJ"
+  RsName: "PhoneHouse Retencion Jerez"
+  EMail: "gonzalo.garrido.arsuaga@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+Reseller33: Reseller
+  Reseller: "PR"
+  RsName: "PhoneHouse Recepcion Televenta"
+  EMail: "maria.barreiro.sanisidro@ext.yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller34: Reseller
+  Reseller: "RC"
+  RsName: "CASTURTEL RECEPCION"
+  EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller35: Reseller
+  Reseller: "TA"
+  RsName: "TAL DIGITAL"
+  EMail: "Luis.Leyva.Ruano@yoigo.com"
+  Brand: "1"
+  EntityCode: 42
+  FUC1: "323841619"
+  FUC2: "332296730"
+
+Reseller36: Reseller
+  Reseller: "TC"
+  RsName: "TELECOR"
+  EMail: "Luis.Leyva.Ruano@yoigo.com"
+  Brand: "1"
+  FUC1: "323840132"
+  FUC2: "332296367"
+
+Reseller37: Reseller
+  Reseller: "TE"
+  RsName: "TESTING"
+  EMail: "sanjeev.kamani@qvantel.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller38: Reseller
+  Reseller: "TL"
+  RsName: "TEL&COM"
+  EMail: "ignacio.larragan.silva@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+Reseller39: Reseller
+  Reseller: "TM"
+  RsName: "TELESTANT TM"
+  EMail: "Sonia.Borrega.Bahon@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller40: Reseller
+  Reseller: "TO"
+  RsName: "TELESTANT ONLINE"
+  EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller41: Reseller
+  Reseller: "TP"
+  RsName: "YOIGO PHONE HOUSE"
+  EMail: "marta.delarosa@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  FUC1: "323841551"
+  FUC2: "332296607"
+
+Reseller42: Reseller
+  Reseller: "TR"
+  RsName: "TRECEDIS"
+  EMail: "Felix.deIturriaga.Gandini@yoigo.com"
+  Brand: "1"
+  Active: FALSE
+
+Reseller43: Reseller
+  Reseller: "TU"
+  RsName: "TU Y TU"
+  EMail: "Luis.Leyva.Ruano@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+Reseller44: Reseller
+  Reseller: "UN"
+  RsName: "UNISONO"
+  EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+Reseller45: Reseller
+  Reseller: "UR"
+  RsName: "URENDE"
+  EMail: "Luis.Leyva.Ruano@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+Reseller46: Reseller
+  Reseller: "WH"
+  RsName: "WHISBI"
+  EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+Reseller47: Reseller
+  Reseller: "YC"
+  RsName: "YOIGO (Customer Care)"
+  EMail: "clientes@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
