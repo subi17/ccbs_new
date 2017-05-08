@@ -95,6 +95,7 @@
                   mark_post_3rd;boolean;optional;
                   mark_sms_3rd;boolean;optional;
                   mark_email_3rd;boolean;optional;
+                  mark_dont_share_personal_data;boolean;optional;
                   mark_bank_3rd;boolean;optional;
                   language;string;optional;
                   latitude;string;optional;
@@ -131,6 +132,7 @@
                   mark_post_3rd;boolean;optional;
                   mark_sms_3rd;boolean;optional;
                   mark_email_3rd;boolean;optional;
+                  mark_dont_share_personal_data;boolean;optional;
                   mark_bank_3rd;boolean;optional;
                   language;string;optional;
                   latitude;string;optional;
@@ -171,9 +173,10 @@
                  mark_post_3rd;boolean;optional;
                  mark_sms_3rd;boolean;optional;
                  mark_email_3rd;boolean;optional;
+                 mark_dont_share_personal_data;boolean;optional;
                  mark_bank_3rd;boolean;optional;
                  language;string;optional;
-                 latitude;string;optional;
+                 lantitude;string;optional;
                  longitude;string;optional;
                  person_id;string;optional;contact person id
                  id_type;string;optional;NIF,NIE,CIF or Passport
@@ -1295,6 +1298,7 @@ gcCustomerStructFields = "birthday," +
                          "lname2," +
                          "mark_email," +
                          "mark_email_3rd," +
+                         "mark_dont_share_personal_data" +
                          "mark_post," +
                          "mark_post_3rd," +
                          "mark_sms," +

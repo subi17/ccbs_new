@@ -37,6 +37,7 @@
             mark_post_3rd;boolean;optional;
             mark_sms_3rd;boolean;optional;
             mark_email_3rd;boolean;optional;
+            mark_dont_share_personal_data;boolean;optional;
             city_code;string;optional;
             street_code;string;optional;
  * @memo    title;string;mandatory
@@ -124,7 +125,8 @@ lcDataFields = "title,lname!,lname2,fname!,coname,street!,zip!,city!,region!," +
                ",id_type!,company_id,company_name,company_foundationdate," +
                "phone_number,city_code,street_code,municipality_code," +
                "mark_post,mark_sms,mark_email," + 
-               "mark_post_3rd,mark_sms_3rd,mark_email_3rd".
+               "mark_post_3rd,mark_sms_3rd,mark_email_3rd," + 
+               "mark_dont_share_personal_data".
 lcstruct = validate_request(pcstruct, lcDataFields).
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -192,6 +194,7 @@ ASSIGN
    ttCustomer.DirMarkPost = get_bool(pcStruct, "mark_post") WHEN LOOKUP("mark_post", lcStruct) > 0
    ttCustomer.OutMarkSMS = get_bool(pcStruct, "mark_sms_3rd") WHEN LOOKUP("mark_sms_3rd", lcStruct) > 0
    ttCustomer.OutMarkEmail = get_bool(pcStruct, "mark_email_3rd") WHEN LOOKUP("mark_email_3rd", lcStruct) > 0
+   ttCustomer.DontSharePersData = get_bool(pcStruct, "mark_dont_share_personal_data") WHEN LOOKUP("mark_dont_share_personal_data", lcStruct) > 0
    ttCustomer.OutMarkPost = get_bool(pcStruct, "mark_post_3rd") WHEN LOOKUP("mark_post_3rd", lcStruct) > 0
    ttCustomer.StreetCode = get_string(pcStruct, "street_code") WHEN LOOKUP("street_code", lcStruct) > 0
    ttCustomer.CityCode = get_string(pcStruct, "city_code") WHEN LOOKUP("city_code", lcStruct) > 0
