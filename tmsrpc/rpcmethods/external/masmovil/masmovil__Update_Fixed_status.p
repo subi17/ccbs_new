@@ -188,9 +188,11 @@ END.
 
 ASSIGN
    OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_INITIALIZED} /*YTS-10051*/
-      WHEN OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
+      WHEN OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR} OR
+           OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_NEW}
    OrderFusion.FusionStatusDesc = ""
-      WHEN OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
+      WHEN OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR} OR
+           OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_NEW}
    OrderFusion.FixedStatus = lcStatus
    OrderFusion.FixedStatusTS = ldeNotificationTime
    OrderFusion.UpdateTS = FusionMessage.CreatedTS.
