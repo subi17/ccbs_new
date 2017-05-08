@@ -95,7 +95,11 @@ CLASS Mm.MManMessage FINAL:
       END.
 
       IF NOT AVAILABLE InvText
-      THEN RETURN ERROR NEW Progress.Lang.AppError("InvText with Target " + icTarget + " and KeyValue " + icKeyValue + " doesn't exist!", 1).
+      THEN DO:
+         IF LOG-MANAGER:LOGFILE-NAME > ""
+         THEN LOG-MANAGER:WRITE-MESSAGE("InvText with Target " + icTarget + " and KeyValue " + icKeyValue + " doesn't exist!", "ERROR").
+         RETURN FALSE.
+      END.
 
       ASSIGN
          oiITNum         = InvText.ITNum
@@ -140,9 +144,13 @@ CLASS Mm.MManMessage FINAL:
 
       IF NOT AVAILABLE InvText
       THEN DO:
-         IF iiITNum > 0
-         THEN RETURN ERROR NEW Progress.Lang.AppError("InvText with ITNum " + STRING(iiITNum) + " doesn't exist!", 1).
-         ELSE RETURN ERROR NEW Progress.Lang.AppError("InvText with Target " + icTarget + " and KeyValue " + icKeyValue + " doesn't exist!", 1).
+         IF LOG-MANAGER:LOGFILE-NAME > ""
+         THEN DO:
+            IF iiITNum > 0
+            THEN LOG-MANAGER:WRITE-MESSAGE("InvText with ITNum " + STRING(iiITNum) + " doesn't exist!", "ERROR").
+            ELSE LOG-MANAGER:WRITE-MESSAGE("InvText with Target " + icTarget + " and KeyValue " + icKeyValue + " doesn't exist!", "ERROR").
+         END.
+         RETURN FALSE.
       END.
 
       IF NOT InvText.UseMMan
