@@ -133,8 +133,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_string(lcResultStruct,"tariff_type"              , fTMSCodeName("CLIType","TariffType",STRING(CliType.TariffType))).
    add_string(lcResultStruct,"fixed_line_download_speed", CliType.FixedLineDownload).
    add_string(lcResultStruct,"fixed_line_upload_speed"  , CliType.FixedLineUpload).
-   add_double(lcResultStruct,"fixed2fixed_voice_amount" , (IF lcFixedLineBB > "" THEN fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_FIXED_VOICE_BDEST} ) ELSE 0)).
-   add_double(lcResultStruct,"fixed2mobile_voice_amount", (IF lcFixedLineBB > "" THEN fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_FIXED_VOICE}) ELSE 0)).
+   add_double(lcResultStruct,"fixed2fixed_voice_amount" , (IF lcFixedLineBB > "" THEN fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE_BDEST} ) ELSE 0)).
+   add_double(lcResultStruct,"fixed2mobile_voice_amount", (IF lcFixedLineBB > "" THEN fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE}) ELSE 0)).
    add_string(lcResultStruct,"rateplan_id"              , CliType.Priceplan).
 
    lcRegionArray = add_array(lcResultStruct, "region").
