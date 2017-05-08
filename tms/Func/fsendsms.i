@@ -182,18 +182,16 @@ PROCEDURE pSendSMS:
    FIND FIRST Customer OF bMobSub NO-LOCK NO-ERROR.
    IF NOT AVAILABLE Customer THEN RETURN.
 
-   IF Mm.MManMessage:mGetMessageIdAndParam("SMS",
-                                           icSMSText,
-                                           Customer.Language,
-                                           OUTPUT lcMessage,
-                                           OUTPUT liITNum)
+   IF Mm.MManMessage:mGetMessage("SMS",
+                                 icSMSText,
+                                 Customer.Language)
    THEN DO:
       IF iiMsRequest > 0
       THEN lcMessage = fReplaceTags(INPUT iiMsRequest,
-                                    INPUT lcMessage,
+                                    INPUT Mm.MManMessage:ParamKeyValue,
                                     INPUT icExtraParams,
                                     OUTPUT liSMSType).
-      Mm.MManMessage:mCreateSMSMessage(liITNum,bMobSub.CLI,lcMessage).
+      Mm.MManMessage:mCreateMMLogSMS(bMobSub.CLI,lcMessage).
       RETURN.
    END.
 

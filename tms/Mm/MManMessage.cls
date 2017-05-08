@@ -17,6 +17,19 @@ CLASS Mm.MManMessage FINAL:
 
    END CONSTRUCTOR.
 
+   DEFINE PRIVATE STATIC VARIABLE acBrandName          AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE STATIC VARIABLE acTemplateId         AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE STATIC VARIABLE acLanguage           AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE STATIC VARIABLE acMessageBody        AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE STATIC VARIABLE acCategory           AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE STATIC VARIABLE acSchedulingPolicy   AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE STATIC VARIABLE aiSchedulingPriority AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE STATIC VARIABLE acCallBacks          AS CHARACTER NO-UNDO.
+
+
+   DEFINE PUBLIC STATIC PROPERTY ParamKeyValue  AS CHARACTER NO-UNDO
+      GET.
+      PRIVATE SET.
 
    METHOD PRIVATE STATIC CHARACTER mLanguageCode
       ( iiLanguageID AS INTEGER ):
@@ -65,18 +78,31 @@ CLASS Mm.MManMessage FINAL:
    END METHOD.
 
 
-   METHOD PUBLIC STATIC LOGICAL mGetMessageIdAndParam
-      ( INPUT  icTarget        AS CHARACTER,
-        INPUT  icKeyValue      AS CHARACTER,
-        INPUT  iiLanguage      AS INTEGER,
-        OUTPUT ocParamKeyValue AS CHARACTER,
-        OUTPUT oiITNum         AS INTEGER ):
+   METHOD PRIVATE STATIC VOID mClearData():
+
+      ASSIGN
+         acBrandName          = ""
+         acTemplateId         = ""
+         ParamKeyValue        = ""
+         acLanguage           = ""
+         acMessageBody        = ""
+         acCategory           = ""
+         acSchedulingPolicy   = ""
+         aiSchedulingPriority = 0
+         acCallBacks          = ""
+         .
+
+   END METHOD.
+
+
+   METHOD PUBLIC STATIC LOGICAL mGetMessage
+      ( icTarget   AS CHARACTER,
+        icKeyValue AS CHARACTER,
+        iiLanguage AS INTEGER ):
 
       DEFINE BUFFER InvText FOR InvText.
 
-      ASSIGN
-         oiITNum         = ?
-         ocParamKeyValue = "".
+      mClearData().
 
       DO WHILE TRUE:
 
@@ -101,224 +127,88 @@ CLASS Mm.MManMessage FINAL:
          RETURN FALSE.
       END.
 
-      ASSIGN
-         oiITNum         = InvText.ITNum
-         ocParamKeyValue = InvText.ParamKeyValue.
+      IF InvText.UseMMan
+      THEN ASSIGN
+              acBrandName          = multitenancy.TenantInformation:mGetBrandForTable("InvText")
+              acTemplateId         = InvText.TemplateID
+              ParamKeyValue        = InvText.ParamKeyValue
+              acLanguage           = mLanguageCode(iiLanguage)
+              acMessageBody        = InvText.InvText WHEN InvText.TemplateID = ""
+              acCategory           = InvText.Category
+              acSchedulingPolicy   = InvText.SchedulingPolicy
+              aiSchedulingPriority = InvText.SchedulingPriority
+              acCallBacks          = InvText.CallBacks
+              .
 
       RETURN InvText.UseMMan.
 
    END METHOD.
 
 
-   METHOD PRIVATE STATIC LOGICAL mCreateMessage
-      ( iiITNum          AS INTEGER,
-        icTarget         AS CHARACTER,
-        icKeyValue       AS CHARACTER,
-        iiLanguage       AS INTEGER,
-        icSMSRecipient   AS CHARACTER,
+   METHOD PUBLIC STATIC LOGICAL mCreateMMLog
+      ( icSMSRecipient   AS CHARACTER,
         icEmailRecipient AS CHARACTER,
         icPushRecipient  AS CHARACTER,
         icParamValues    AS CHARACTER ): /* "|" separated list */
 
-      DEFINE BUFFER InvText FOR InvText.
       DEFINE BUFFER MMLog   FOR MMLog.
-
-      IF iiITNum > 0
-      THEN FIND InvText NO-LOCK WHERE InvText.ITNum = iiITNum NO-ERROR.
-
-      ELSE DO WHILE TRUE:
-
-         FIND LAST InvText NO-LOCK WHERE
-            InvText.Brand    = "1"        AND
-            InvText.Target   = icTarget   AND
-            InvText.KeyValue = icKeyValue AND
-            InvText.FromDate <= TODAY     AND
-            InvText.Language = iiLanguage
-         NO-ERROR.
-
-         IF NOT AVAILABLE InvText AND iiLanguage NE 1
-         THEN iiLanguage = 1.
-         ELSE LEAVE.
-
-      END.
-
-      IF NOT AVAILABLE InvText
-      THEN DO:
-         IF LOG-MANAGER:LOGFILE-NAME > ""
-         THEN DO:
-            IF iiITNum > 0
-            THEN LOG-MANAGER:WRITE-MESSAGE("InvText with ITNum " + STRING(iiITNum) + " doesn't exist!", "ERROR").
-            ELSE LOG-MANAGER:WRITE-MESSAGE("InvText with Target " + icTarget + " and KeyValue " + icKeyValue + " doesn't exist!", "ERROR").
-         END.
-         RETURN FALSE.
-      END.
-
-      IF NOT InvText.UseMMan
-      THEN RETURN FALSE.
 
       CREATE MMLog.
       ASSIGN
          MMLog.RequestID          = "706" + GUID(GENERATE-UUID)
-         MMLog.BrandName          = multitenancy.TenantInformation:mGetBrandForTable("InvText")
+         MMLog.BrandName          = acBrandName
          MMLog.Originator         = PROGRAM-NAME(2) WHEN PROGRAM-NAME(2) NE ?
          MMLog.SMSRecipient       = icSMSRecipient
          MMLog.EmailRecipient     = icEmailRecipient
          MMLog.PushRecipient      = icPushRecipient
-         MMLog.TemplateId         = InvText.TemplateID
-         MMLog.Language           = mLanguageCode(iiLanguage)
-         MMLog.MessageBody        = InvText.InvText WHEN InvText.TemplateID = "" 
-         MMLog.Category           = InvText.Category
-         MMLog.SchedulingPolicy   = InvText.SchedulingPolicy
-         MMLog.SchedulingPriority = InvText.SchedulingPriority
-         MMLog.CallBacks          = InvText.CallBacks
+         MMLog.TemplateId         = acTemplateID
+         MMLog.Language           = acLanguage
+         MMLog.MessageBody        = acMessageBody
+         MMLog.Category           = acCategory
+         MMLog.SchedulingPolicy   = acSchedulingPolicy
+         MMLog.SchedulingPriority = aiSchedulingPriority
+         MMLog.CallBacks          = acCallBacks
          MMLog.JsonParam          = mConvertToJson(icParamValues)
          MMLog.RequestTime        = NOW
          .
+
+      mClearData().
 
       RETURN TRUE.
 
    END METHOD.        
 
 
-   METHOD PUBLIC STATIC LOGICAL mCreateSMSMessage
-      ( icTarget         AS CHARACTER,
-        icKeyValue       AS CHARACTER,
-        iiLanguage       AS INTEGER,
-        icSMSRecipient   AS CHARACTER,
+   METHOD PUBLIC STATIC LOGICAL mCreateMMLogSMS
+      ( icSMSRecipient   AS CHARACTER,
         icParamValues    AS CHARACTER ): /* "|" separated list */
 
-      RETURN mCreateMessage(?,
-                            icTarget,
-                            icKeyValue,
-                            iiLanguage,
-                            icSMSRecipient,
+      RETURN mCreateMessage(icSMSRecipient,
                             "",
                             "",
                             icParamValues).
    END METHOD.
 
 
-   METHOD PUBLIC STATIC LOGICAL mCreateSMSMessage
-      ( iiITNum          AS INTEGER,
-        icSMSRecipient   AS CHARACTER,
+   METHOD PUBLIC STATIC LOGICAL mCreateMMLogEmail
+      ( icEmailRecipient AS CHARACTER,
         icParamValues    AS CHARACTER ): /* "|" separated list */
 
-      RETURN mCreateMessage(iiITNum,
-                            "",
-                            "",
-                            0,
-                            icSMSRecipient,
-                            "",
-                            "",
-                            icParamValues).
-   END METHOD.
-
-
-   METHOD PUBLIC STATIC LOGICAL mCreateEmailMessage
-      ( icTarget         AS CHARACTER,
-        icKeyValue       AS CHARACTER,
-        iiLanguage       AS INTEGER,
-        icEmailRecipient AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "|" separated list */
-
-      RETURN mCreateMessage(?,
-                            icTarget,
-                            icKeyValue,
-                            iiLanguage,
-                            "",
+      RETURN mCreateMessage("",
                             icEmailRecipient,
                             "",
                             icParamValues).
    END METHOD.
 
 
-   METHOD PUBLIC STATIC LOGICAL mCreateEmailMessage
-      ( iiITNum          AS INTEGER,
-        icEmailRecipient AS CHARACTER,
+   METHOD PUBLIC STATIC LOGICAL mCreateMMLogPush
+      ( icPushRecipient  AS CHARACTER,
         icParamValues    AS CHARACTER ): /* "|" separated list */
 
-      RETURN mCreateMessage(iiITNum,
-                            "",
-                            "",
-                            0,
-                            "",
-                            icEmailRecipient,
-                            "",
-                            icParamValues).
-   END METHOD.
-
-
-   METHOD PUBLIC STATIC LOGICAL mCreatePushMessage
-      ( icTarget         AS CHARACTER,
-        icKeyValue       AS CHARACTER,
-        iiLanguage       AS INTEGER,
-        icPushRecipient  AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "|" separated list */
-
-      RETURN mCreateMessage(?,
-                            icTarget,
-                            icKeyValue,
-                            iiLanguage,
-                            "",
+      RETURN mCreateMessage("",
                             "",
                             icPushRecipient,
                             icParamValues).
-   END METHOD.
-
-
-   METHOD PUBLIC STATIC LOGICAL mCreatePushMessage
-      ( iiITNum          AS INTEGER,
-        icPushRecipient  AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "|" separated list */
-
-      RETURN mCreateMessage(iiITNum,
-                            "",
-                            "",
-                            0,
-                            "",
-                            "",
-                            icPushRecipient,
-                            icParamValues).
-   END METHOD.
-
-
-   METHOD PUBLIC STATIC LOGICAL mCreateMessage
-      ( iiITNum          AS INTEGER,
-        icSMSRecipient   AS CHARACTER,
-        icEmailRecipient AS CHARACTER,
-        icPushRecipient  AS CHARACTER,
-        icParamValues    AS CHARACTER ):
-
-      RETURN mCreateMessage(iiITNum,
-                            "",
-                            "",
-                            0,
-                            icSMSRecipient,
-                            icEmailRecipient,
-                            icPushRecipient,
-                            icParamValues).
-
-   END METHOD.
-
-
-   METHOD PUBLIC STATIC LOGICAL mCreateMessage
-      ( icTarget         AS CHARACTER,
-        icKeyValue       AS CHARACTER,
-        iiLanguage       AS INTEGER,
-        icSMSRecipient   AS CHARACTER,
-        icEmailRecipient AS CHARACTER,
-        icPushRecipient  AS CHARACTER,
-        icParamValues    AS CHARACTER ):
-
-      RETURN mCreateMessage(?,
-                            icTarget,
-                            icKeyValue,
-                            iiLanguage,
-                            icSMSRecipient,
-                            icEmailRecipient,
-                            icPushRecipient,
-                            icParamValues).
-
    END METHOD.
 
 END CLASS.
