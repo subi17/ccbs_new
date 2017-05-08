@@ -130,7 +130,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE
       add_string(lcResultStruct,"usage_type", "data").
 
-   add_string(lcResultStruct,"tariff_type"              , fTMSCodeName("CLIType","TariffType",STRING(CliType.TariffType)).
+   add_string(lcResultStruct,"tariff_type"              , fTMSCodeName("CLIType","TariffType",STRING(CliType.TariffType))).
    add_string(lcResultStruct,"fixed_line_download_speed", CliType.FixedLineDownload).
    add_string(lcResultStruct,"fixed_line_upload_speed"  , CliType.FixedLineUpload).
    add_double(lcResultStruct,"fixed2fixed_voice_amount" , (IF lcFixedLineBB > "" THEN fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_FIXED_VOICE_BDEST} ) ELSE 0)).
