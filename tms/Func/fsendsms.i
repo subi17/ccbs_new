@@ -167,7 +167,6 @@ PROCEDURE pSendSMS:
 
    DEFINE VARIABLE ldReqStamp             AS DECIMAL   NO-UNDO.
    DEFINE VARIABLE liSMSType              AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE liITNum                AS INTEGER   NO-UNDO.
    DEF VAR lcMessage AS CHAR NO-UNDO. 
 
    DEFINE BUFFER bMobSub    FOR MobSub.

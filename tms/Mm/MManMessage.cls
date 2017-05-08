@@ -151,6 +151,13 @@ CLASS Mm.MManMessage FINAL:
         icPushRecipient  AS CHARACTER,
         icParamValues    AS CHARACTER ): /* "|" separated list */
 
+      IF acBrandName EQ ""
+      THEN DO:
+         IF LOG-MANAGER:LOGFILE-NAME > ""
+         THEN LOG-MANAGER:WRITE-MESSAGE("MMLog record is not created in mCreateMMLog method because the mGetMessage method call is missing!", "ERROR").
+         RETURN FALSE.
+      END.
+
       DEFINE BUFFER MMLog   FOR MMLog.
 
       CREATE MMLog.
