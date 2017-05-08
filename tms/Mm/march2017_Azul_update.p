@@ -147,9 +147,9 @@ FUNCTION fCollect RETURNS CHAR
          lcErr = "No active mobsub " + STRING(Order.MsSeq).
          PUT STREAM sLogFile UNFORMATTED lcErr SKIP.
          NEXT.
-       END.  
-      IF Mobsub.CliType NE Order.Clitype THEN DO:
-         lcErr = "Clitypes do not match " + 
+      END.  
+      IF fIsAzul(Mobsub.CliType) NE TRUE THEN DO:
+         lcErr = "No campaign CLITYPE" + 
                  STRING(Order.Orderid) + "|" +
                  STRING(Order.clitype) + "|" +
                  STRING(Mobsub.clitype).
