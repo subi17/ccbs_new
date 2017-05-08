@@ -3,7 +3,7 @@
     Purpose     : 
     Syntax      : 
     Description : Creates MMLog records. They are created using a
-                  method mCreateMessage
+                  method mCreateMMLog
   ----------------------------------------------------------------------*/
 
 USING Progress.Lang.*.
@@ -190,7 +190,7 @@ CLASS Mm.MManMessage FINAL:
       ( icSMSRecipient   AS CHARACTER,
         icParamValues    AS CHARACTER ): /* "|" separated list */
 
-      RETURN mCreateMessage(icSMSRecipient,
+      RETURN mCreateMMLog(icSMSRecipient,
                             "",
                             "",
                             icParamValues).
@@ -201,7 +201,7 @@ CLASS Mm.MManMessage FINAL:
       ( icEmailRecipient AS CHARACTER,
         icParamValues    AS CHARACTER ): /* "|" separated list */
 
-      RETURN mCreateMessage("",
+      RETURN mCreateMMLog("",
                             icEmailRecipient,
                             "",
                             icParamValues).
@@ -212,7 +212,7 @@ CLASS Mm.MManMessage FINAL:
       ( icPushRecipient  AS CHARACTER,
         icParamValues    AS CHARACTER ): /* "|" separated list */
 
-      RETURN mCreateMessage("",
+      RETURN mCreateMMLog("",
                             "",
                             icPushRecipient,
                             icParamValues).
