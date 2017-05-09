@@ -579,7 +579,7 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.FullCollModule  = ""
       dumpfile.LinkKey         = ""
       dumpfile.LogFile         = ""
-      dumpfile.LogicModule     = "Gwy/ppcomprep_dump.p"
+      dumpfile.LogicModule     = "Gwy/ppcomprep.p"
       dumpfile.MainTable       = "PrepaidRequest"
       dumpfile.ModCollModule   = ""
       dumpfile.ModFromEventLog = TRUE
@@ -591,7 +591,47 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.UseIndex        = "".
 END.
 
-
+FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "HighUsageReport" NO-ERROR.
+IF NOT AVAIL DumpFile THEN DO:
+   FIND LAST DumpFile USE-INDEX DumpID NO-LOCK NO-ERROR.
+   IF AVAILABLE DumpFile
+   THEN liid = DumpFile.DumpID + 1.
+   ELSE liid = 1.
+   CREATE DumpFile .
+   ASSIGN
+      dumpfile.Active          = TRUE
+      dumpfile.AllowReplica    = NO
+      dumpfile.AveDurFull      = 1770
+      dumpfile.AveDurMod       = 2
+      dumpfile.BatchID         = 1
+      dumpfile.Brand           = "1"
+      dumpfile.ConfigParam     = ""
+      dumpfile.DecimalPoint    = "."
+      dumpfile.Description     = ""
+      dumpfile.DumpCharSet     = ""
+      dumpfile.DumpDelimiter   = "|"
+      dumpfile.DumpFormat      = "ASCII"
+      dumpfile.DumpID          = liid
+      dumpfile.DumpLineFeed    = ""
+      dumpfile.DumpName        = "HighUsageReport"
+      dumpfile.EmptyFile       = TRUE
+      dumpfile.EventLogFields  = ""
+      dumpfile.FileCategory    = "DWH"
+      dumpfile.FileName        = "#TENANT_highspender_#DATE_#TIME.txt"
+      dumpfile.FullCollModule  = ""
+      dumpfile.LinkKey         = ""
+      dumpfile.LogFile         = ""
+      dumpfile.LogicModule     = "Gwy/highusagerep.p"
+      dumpfile.MainTable       = "HighUsage"
+      dumpfile.ModCollModule   = ""
+      dumpfile.ModFromEventLog = TRUE
+      dumpfile.ModFromField    = "EventTS"
+      dumpfile.QueryClause     = ""
+      dumpfile.SideTables      = ""
+      dumpfile.SpoolDir        = "/store/riftp/dumpfiles/highspender/spool/"
+      dumpfile.TransDir        = "/store/riftp/dumpfiles/highspender/outgoing/"
+      dumpfile.UseIndex        = "".
+END.
 
 INPUT STREAM sin FROM VALUE("../tms_support/utilities/multitenant/dumpfiles_phase1.txt").
 
