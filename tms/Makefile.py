@@ -108,7 +108,7 @@ def daemon(*a):
     instance = parameters[1]
     cdr_dict = {}
 
-    if instance == "?":
+    if instance == "__NO__":
         instance = ""
     pid_file = '../var/run/d-' + daemon + instance + '.pid'
 

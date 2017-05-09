@@ -316,7 +316,8 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
              lvdeSecSIMTermStamp = fMake2Dt(lvdaSecSIMTermDate,86399).
 
    fInitialiseValues(iiTermReason,
-                     (fIsYoigoCLI(icCLI) OR fIsMasmovilCLI(icCLI)),
+                     fIsYoigoCLI(icCLI),
+                     fIsMasmovilCLI(icCLI),
                      OUTPUT lviMsisdnStat,
                      OUTPUT lviSimStat,
                      OUTPUT lviQuarTime).

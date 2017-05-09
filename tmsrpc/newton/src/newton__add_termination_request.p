@@ -40,14 +40,18 @@ DEF VAR pcTermStruct AS CHAR NO-UNDO.
 DEF VAR lcTermStruct AS CHAR NO-UNDO.
 
 /* Local variables */
-DEF VAR ocResult AS CHAR NO-UNDO.
-DEF VAR llPenalty AS LOG NO-UNDO.
-DEF VAR liError AS INT NO-UNDO.
-DEF VAR llYoigoCLI AS LOG NO-UNDO.
-DEF VAR lcKillTS AS CHAR NO-UNDO.
-DEF VAR liReq AS INT NO-UNDO.
-DEF VAR lcOpCode AS CHARACTER NO-UNDO. 
-DEF VAR ldaTermDate AS DATE NO-UNDO. 
+DEF VAR ocResult         AS CHAR      NO-UNDO.
+DEF VAR llPenalty        AS LOG       NO-UNDO.
+DEF VAR liError          AS INT       NO-UNDO.
+DEF VAR llYoigoCLI       AS LOG       NO-UNDO.
+DEF VAR llMasmovilCLI    AS LOG       NO-UNDO.
+DEF VAR lcKillTS         AS CHAR      NO-UNDO.
+DEF VAR liReq            AS INT       NO-UNDO.
+DEF VAR lcOpCode         AS CHARACTER NO-UNDO. 
+DEF VAR ldaTermDate      AS DATE      NO-UNDO. 
+DEF VAR lcTenant         AS CHAR      NO-UNDO.
+DEF VAR llYoigoTenant    AS CHAR      NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant AS CHAR      NO-UNDO INIT FALSE.
 
 /* Output parameters */
 DEF VAR result AS LOGICAL.
@@ -93,8 +97,14 @@ IF pcTermType EQ {&TERMINATION_TYPE_PARTIAL} AND
 END.
 
 /* Yoigo MSISDN? */
-llYoigoCLI = (fIsYoigoCLI(MobSub.CLI) OR fIsMasmovilCLI(MobSub.CLI)).            
-liError = fCheckOrderer(piOrderer, llYoigoCLI, ocResult).            
+ASSIGN 
+    lcTenant         = BUFFER-TENANT-NAME(MobSub)
+    llYoigoCLI       = fIsYoigoCLI(MobSub.CLI)
+    llMasmovilCLI    = fIsMasmovilCLI(MobSub.CLI)
+    llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+    llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
+
+liError = fCheckOrderer(piOrderer, llYoigoCLI, llMasmovilCLI, ocResult).            
 IF liError NE 0 THEN DO:
    RETURN appl_err(ocResult).
 END.
@@ -107,6 +117,7 @@ END.
 fInitialiseValues(
    INPUT piOrderer,
    INPUT llYoigoCLi,
+   INPUT llMasmovilCLI,
    OUTPUT piMsisdnStat,
    OUTPUT piSimStat,
    OUTPUT piQuarTime).
@@ -134,7 +145,7 @@ IF piOrderer EQ 5 THEN DO:
    END.
    
    IF LOOKUP("msisdnstat", lcTermStruct) GT 0 THEN DO:
-      IF llYoigoCLI THEN DO:
+      IF ((llYoigoCLI AND llYoigoTenant) OR (llMasmovilCLI AND llMasmovilTenant)) THEN DO:
          piMSISDNStat = get_pos_int(pcTermStruct, "msisdnstat").
          liError = fCheckMsisdnStat(piMSISDNStat, OUTPUT ocResult).
          IF liError NE 0 THEN DO:
@@ -147,7 +158,7 @@ IF piOrderer EQ 5 THEN DO:
    END.
 
    IF LOOKUP("quartime", lcTermStruct) GT 0 THEN DO: 
-      IF llYoigoCLI AND piMSISDNStat EQ 4 THEN DO:
+      IF ((llYoigoCLI AND llYoigoTenant) OR (llMasmovilCLI AND llMasmovilTenant)) AND piMSISDNStat EQ 4 THEN DO:
          piQuarTime  = get_pos_int(pcTermStruct, "quartime").
          IF piQuarTime < 1 OR piQuarTime > 90 THEN DO:
             RETURN appl_err("Value must be between 1 and 90!").

@@ -79,7 +79,8 @@ IF icRunMode = "test" THEN DO:
       lcFile = lcTransDir + "/" + ENTRY(NUM-ENTRIES(lcFile,"/"),lcFile,"/").
 END.
 IF lcFile = ? OR lcFile = "" THEN
-   lcFile = "/tmp/billrun_statistics_#IDATE.txt".
+   lcFile = SUBST("/tmp/&1_billrun_statistics_#IDATE.txt",
+                  Syst.Parameters:Tenant).
 lcFile = REPLACE(lcFile,"#IDATE",STRING(YEAR(idaInvDate),"9999") +
                                  STRING(MONTH(idaInvDate),"99") + 
                                  STRING(DAY(idaInvDate),"99")).

@@ -151,6 +151,14 @@ do i = 1 to 2:
               TMSParam.ParamCode EQ "DoubleCallLog" NO-ERROR.
    IF INDEX(TMSParam.charval,lcbrand) EQ 0 THEN
       TMSParam.charval = REPLACE(TMSParam.charval,"mobcdr",CAPS(lcbrand) + "_mobcdr").
+   
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "BillRun" AND
+              TMSParam.ParamCode EQ "BillRunStatFile" NO-ERROR.
+   IF INDEX(TMSParam.charval,lcbrand) EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"billrun_statistic",
+                         CAPS(lcbrand) + "_billrun_statistic").
 
    FIND FIRST TMSParam WHERE
               TMSParam.brand EQ "1" AND
@@ -159,6 +167,20 @@ do i = 1 to 2:
    IF INDEX(TMSParam.charval,lcbrand) EQ 0 THEN
       TMSParam.charval = REPLACE(TMSParam.charval,"spool/IFS","spool/" + CAPS(lcbrand) + "_IFS").
 
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "Pentaho" AND
+              TMSParam.ParamCode EQ "PentahoBITotals" NO-ERROR.
+   IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"/billing","/#TENANT_billing").
+   
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.Paramgroup EQ "Pentaho" AND
+              TMSParam.ParamCode EQ "InvGrainFile" NO-ERROR.
+   IF INDEX(TMSParam.charval,"#TENANT") EQ 0 THEN
+      TMSParam.charval = REPLACE(TMSParam.charval,"invoice_row_dump",
+                                 "#TENANT_invoice_row_dump").
    FOR EACH BankAccount.
       IF i eq 1 THEN
          ASSIGN
@@ -167,6 +189,14 @@ do i = 1 to 2:
       ELSE
          bankaccount.presenterID = lctempId.
    END.
+
+   FIND FIRST Company.
+   IF i eq 1 then assign
+      company.CreditorName = "YOIGO".
+   else assign
+      company.CreditorName = "MASMOVIL TELECOM"
+      Company.compname = "MASMOVIL TELECOM 3.0, SAU".
+
 END.
 
 /* ----------------------------------------------------------------------
@@ -203,9 +233,6 @@ FOR EACH BankAccount:
       DELETE BankAccount.
 
 END.
-
-FIND FIRST Company.
-Company.compname = "MASMOVIL TELECOM 3.0, SAU".
 
 
 /* Common tables */

@@ -4,30 +4,35 @@ CLASS Syst.Parameters FINAL:
 
    DEFINE STATIC BUFFER lbTMSParam FOR TMSParam.
    DEFINE PUBLIC STATIC VARIABLE gcBrand AS CHARACTER NO-UNDO INITIAL "1".
-   DEFINE PUBLIC STATIC VARIABLE Tenant AS CHARACTER.
-
+   
    METHOD PUBLIC STATIC CHARACTER getc
       ( icCode AS CHARACTER ):
       
       RETURN getc(icCode, ?).
    
    END METHOD.
-   
-   CONSTRUCTOR STATIC Parameters ():
 
+   DEFINE PUBLIC STATIC PROPERTY Tenant AS CHARACTER NO-UNDO
+   GET ():
+      
       DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO. 
 
-      lcTenant = TENANT-NAME(LDBNAME("common")).
+      FIND FIRST lbTMSParam NO-LOCK NO-ERROR.
+      
+      IF NOT AVAIL lbTMSParam THEN
+         RETURN ERROR NEW Progress.Lang.AppError("Cannot find TMSParam"). 
+
+      lcTenant = BUFFER-TENANT-NAME(lbTMSParam).
 
       CASE lcTenant:
          WHEN "Default" THEN
-            ASSIGN Tenant = "yoigo".
+            RETURN "yoigo".
          WHEN "Tmasmovil" THEN 
-            ASSIGN Tenant = "masmovil".
-         OTHERWISE
-            ASSIGN Tenant = "".
+            RETURN "masmovil".
+         OTHERWISE RETURN "?".
       END CASE.        
-   END CONSTRUCTOR.
+
+   END GET.
 
    METHOD PUBLIC STATIC CHARACTER getc
       ( icCode  AS CHARACTER,

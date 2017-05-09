@@ -133,13 +133,21 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       WHEN 7  THEN ASSIGN Mod_bsub  = "RT" b_type = 0.
       WHEN 17 THEN ASSIGN Mod_bsub  = "RT" b_type = 0 .
       WHEN 51 THEN DO:     
-         IF b_type = 1 THEN mod_bsub = "INTERNATIONAL".
+         IF b_type = 1 THEN DO:
+            IF TENANT-NAME("common") EQ {&TENANT_YOIGO} THEN
+               mod_bsub = "INTERNATIONAL".
+         END.
          ELSE IF b_type = 4 THEN b_type = 4.
          ELSE IF b_type = 7 THEN b_type = 7. /* YOT-1684 */
-         ELSE IF b_type = 5 AND ttCall.IMSI2 BEGINS "21404" 
-            THEN Mod_Bsub = "YOIGO". /*YDR-1499*/
-         ELSE IF b_type = 5 AND ttCall.IMSI2 BEGINS "214" 
-            THEN Mod_Bsub = "OTHER". /*YDR-1499*/
+         ELSE IF b_type = 5 AND
+            TENANT-NAME("common") EQ {&TENANT_YOIGO} THEN DO:
+
+            IF ttCall.IMSI2 BEGINS "21404" 
+               THEN Mod_Bsub = "YOIGO". /*YDR-1499*/
+            ELSE IF b_type = 5 AND ttCall.IMSI2 BEGINS "214" 
+               THEN Mod_Bsub = "OTHER". /*YDR-1499*/
+
+         END.
          ELSE b_type = 5.
       END.
       WHEN 53 THEN ASSIGN Mod_bsub  = "ROAMSMS"  b_type = 0.
@@ -306,7 +314,8 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       END.
    END.
 
-   IF ttCall.Spocmt NE 3 AND 
+   IF TENANT-NAME("common") EQ {&TENANT_YOIGO} AND
+      ttCall.Spocmt NE 3 AND 
       ttCall.Spocmt NE 4 AND 
       fIsYoigoCLI(mod_bsub) THEN DO:
 

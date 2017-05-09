@@ -17,20 +17,21 @@ hell MODULE .......: cancelorder.p
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilCheckLOStatus AS LOG NO-UNDO.
 
-DEF VAR liTermReason AS INTEGER NO-UNDO.
-DEF VAR ldeTS AS DECIMAL NO-UNDO.
-DEF VAR liReq AS INTEGER NO-UNDO.
-DEF VAR llYoigoCLi AS LOGICAL NO-UNDO.
-DEF VAR liMsisdnStat AS INTEGER NO-UNDO.
-DEF VAR liSimStat AS INTEGER NO-UNDO.
-DEF VAR liQuarTime AS INTEGER NO-UNDO.
-DEF VAR llPenaltyFee AS LOGICAL NO-UNDO.
-DEF VAR lcResult AS CHARACTER NO-UNDO. 
+DEF VAR liTermReason   AS INTEGER   NO-UNDO.
+DEF VAR ldeTS          AS DECIMAL   NO-UNDO.
+DEF VAR liReq          AS INTEGER   NO-UNDO.
+DEF VAR llYoigoCLi     AS LOGICAL   NO-UNDO.
+DEF VAR llMasmovilCLi  AS LOGICAL   NO-UNDO.
+DEF VAR liMsisdnStat   AS INTEGER   NO-UNDO.
+DEF VAR liSimStat      AS INTEGER   NO-UNDO.
+DEF VAR liQuarTime     AS INTEGER   NO-UNDO.
+DEF VAR llPenaltyFee   AS LOGICAL   NO-UNDO.
+DEF VAR lcResult       AS CHARACTER NO-UNDO. 
 DEF VAR lcCreditReason AS CHARACTER NO-UNDO. 
-DEF VAR liCount AS INTEGER NO-UNDO.
-DEF VAR ldtLOTS AS DATETIME NO-UNDO.
-DEF VAR liError AS INT NO-UNDO. 
-DEF VAR lcTermType AS CHARACTER NO-UNDO. 
+DEF VAR liCount        AS INTEGER   NO-UNDO.
+DEF VAR ldtLOTS        AS DATETIME  NO-UNDO.
+DEF VAR liError        AS INT       NO-UNDO. 
+DEF VAR lcTermType     AS CHARACTER NO-UNDO. 
 
 DEFINE BUFFER bOrderDelivery FOR OrderDelivery.
 
@@ -210,9 +211,12 @@ ELSE DO:
                                     OUTPUT lcResult).
       IF liError EQ 0 THEN DO:
          lcResult = "".
-         llYoigoCLI = (fIsYoigoCLI(MobSub.CLI) OR fIsMasmovilCLI(MobSub.CLI)).
-         llPenaltyFee = fIsPenalty(liTermReason,Order.MsSeq).
-         fCheckOrderer(liTermReason, llYoigoCLI, OUTPUT lcResult).
+         ASSIGN 
+            llYoigoCLI    = fIsYoigoCLI(MobSub.CLI) 
+            llMasmovilCLI = fIsMasmovilCLI(MobSub.CLI)
+            llPenaltyFee  = fIsPenalty(liTermReason,Order.MsSeq).
+            
+         fCheckOrderer(liTermReason, llYoigoCLI, llMasmovilCLI, OUTPUT lcResult).
       END.
       IF lcResult EQ "" THEN 
          fCheckKillTS(liTermReason,ldeTS, OUTPUT lcResult). 
@@ -222,6 +226,7 @@ ELSE DO:
          fInitialiseValues(
             INPUT liTermReason,
             INPUT llYoigoCLi,
+            INPUT llMasmovilCLI,
             OUTPUT liMsisdnStat,
             OUTPUT liSimStat,
             OUTPUT liQuarTime).

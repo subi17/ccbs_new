@@ -566,9 +566,7 @@ PROCEDURE pCollectData2XML:
          ttDDCreditor.PmtInfId = lcPmtInfId
          ttDDCreditor.SeqTp = lcSeqTp
          ttDDCreditor.ReqdColltnDt = Invoice.DueDate
-         ttDDCreditor.CompNm = SUBSTRING(CAPS(fgetBrandNamebyTenantId(
-                                              BUFFER-TENANT-ID(Invoice))) +
-                                              " TELECOM",1,70)
+         ttDDCreditor.CompNm = SUBST(Company.CreditorName,1,70)
          ttDDCreditor.CompAdd = SUBSTRING(Company.Address,1,70)
          ttDDCreditor.CompIBAN = BankAccount.BankAccount
          ttDDCreditor.CompBIC = lcCompBIC

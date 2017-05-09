@@ -729,7 +729,8 @@ PROCEDURE pTerminate:
    /* YNC-61 + YDR-193 */
    IF LOOKUP(lcTermReason,"1,4,5,6,9,10") > 0 THEN 
    DO:
-      IF fIsYoigoCLI(MobSub.CLI) EQ FALSE AND fIsMasmovilCLI(MobSub.CLI) EQ FALSE THEN
+      IF (BUFFER-TENANT-NAME(MobSub) = {&TENANT_YOIGO}    AND fIsYoigoCLI(MobSub.CLI)    EQ FALSE) OR 
+         (BUFFER-TENANT-NAME(MobSub) = {&TENANT_MASMOVIL} AND fIsMasmovilCLI(MobSub.CLI) EQ FALSE) THEN
       DO:
           RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
           
@@ -738,35 +739,7 @@ PROCEDURE pTerminate:
                         STRING(MobSub.MsSeq),
                         "BAJA",
                         RETURN-VALUE). 
-      END.
-      ELSE IF BUFFER-TENANT-NAME(MobSub) = {&TENANT_YOIGO} AND fIsMasmovilCLI(MobSub.CLI) THEN
-      DO:
-          fsetEffectiveTenantForAllDB({&TENANT_MASMOVIL}).
-
-          RUN pReturnMSISDN(MobSub.CLI).
-
-          fsetEffectiveTenantForAllDB({&TENANT_YOIGO}).    
-
-          IF RETURN-VALUE BEGINS "ERROR" THEN
-             fLocalMemo("TermMobsub",
-                        STRING(MobSub.MsSeq),
-                        "BAJA",
-                        RETURN-VALUE).
-      END.   
-      ELSE IF BUFFER-TENANT-NAME(MobSub) = {&TENANT_MASMOVIL} AND fIsYoigoCLI(MobSub.CLI) THEN
-      DO:
-          fsetEffectiveTenantForAllDB({&TENANT_YOIGO}).
-
-          RUN pReturnMSISDN(MobSub.CLI).
-
-          fsetEffectiveTenantForAllDB({&TENANT_MASMOVIL}).   
-
-          IF RETURN-VALUE BEGINS "ERROR" THEN
-             fLocalMemo("TermMobsub",
-                        STRING(MobSub.MsSeq),
-                        "BAJA",
-                        RETURN-VALUE).
-      END.
+      END. 
    END.
 
    /* subscription is terminated by customer or by ported out request
@@ -1212,7 +1185,8 @@ PROCEDURE pMultiSIMTermination:
 
       fInitialiseValues(
          {&SUBSCRIPTION_TERM_REASON_MULTISIM},
-         (fIsYoigoCLI(lbMobSub.CLI) OR fIsMasmovilCLI(lbMobSub.CLI)),
+         fIsYoigoCLI(lbMobSub.CLI), 
+         fIsMasmovilCLI(lbMobSub.CLI),
          OUTPUT liMsisdnStat,
          OUTPUT liSimStat,
          OUTPUT liQuarTime).

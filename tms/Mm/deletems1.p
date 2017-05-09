@@ -56,36 +56,39 @@ DEFINE VARIABLE lcOutOper     AS CHAR  NO-UNDO FORMAT "x(12)".
 DEFINE VARIABLE hh            AS INT   NO-UNDO.
 DEFINE VARIABLE mm            AS INT   NO-UNDO.
 
-DEFINE VARIABLE lcUserCode    AS CHAR  NO-UNDO.
-DEFINE VARIABLE ldtPContr     AS DATE  NO-UNDO.
-DEFINE VARIABLE llPenalty     AS LOG   NO-UNDO. 
-DEFINE VARIABLE lcUsrName     AS CHAR  NO-UNDO.
-DEFINE VARIABLE lcAgrName     AS CHAR  NO-UNDO.
-DEFINE VARIABLE lcInvName     AS CHAR  NO-UNDO.
-DEFINE VARIABLE ocResult      AS CHAR  NO-UNDO.
-DEFINE VARIABLE ldeKillTS     AS DEC   NO-UNDO.
-DEFINE VARIABLE liMsReq       AS INT   NO-UNDO.
-DEFINE VARIABLE liOrderer     AS INT   NO-UNDO.
-DEFINE VARIABLE lcOrderer     AS CHAR  NO-UNDO.
-DEFINE VARIABLE liQuarTime    AS INT   NO-UNDO.
-DEFINE VARIABLE lcQuarTime    AS CHAR  NO-UNDO.
-DEFINE VARIABLE lcCode        AS CHAR  NO-UNDO.
-DEFINE VARIABLE lcCodeName    AS CHAR  NO-UNDO.
-DEFINE VARIABLE liMsisdnStat  AS INT   NO-UNDO.
-DEFINE VARIABLE lcMsisdnStat  AS CHAR  NO-UNDO.
-DEFINE VARIABLE liLastKey     AS INT   NO-UNDO.
-DEFINE VARIABLE llPContr      AS LOG   NO-UNDO.
-DEFINE VARIABLE llAdmin       AS LOG   NO-UNDO.
-DEFINE VARIABLE llYoigoCLI    AS LOG   NO-UNDO.
-DEFINE VARIABLE liSimStat     AS INT   NO-UNDO.
-DEFINE VARIABLE lcSimStat     AS CHAR  NO-UNDO.
-DEFINE VARIABLE llHelp        AS LOG   NO-UNDO INIT TRUE.
-DEFINE VARIABLE lcError       AS CHAR  NO-UNDO.
-DEFINE VARIABLE liError       AS INT   NO-UNDO.
-DEFINE VARIABLE llBillPer     AS LOGICAL NO-UNDO.
-DEFINE VARIABLE lcTermType    AS CHAR  NO-UNDO INIT "Full".
-
-DEFINE VARIABLE llAddLineTerm   AS LOG  NO-UNDO.
+DEFINE VARIABLE lcUserCode       AS CHAR  NO-UNDO.
+DEFINE VARIABLE ldtPContr        AS DATE  NO-UNDO.
+DEFINE VARIABLE llPenalty        AS LOG   NO-UNDO. 
+DEFINE VARIABLE lcUsrName        AS CHAR  NO-UNDO.
+DEFINE VARIABLE lcAgrName        AS CHAR  NO-UNDO.
+DEFINE VARIABLE lcInvName        AS CHAR  NO-UNDO.
+DEFINE VARIABLE ocResult         AS CHAR  NO-UNDO.
+DEFINE VARIABLE ldeKillTS        AS DEC   NO-UNDO.
+DEFINE VARIABLE liMsReq          AS INT   NO-UNDO.
+DEFINE VARIABLE liOrderer        AS INT   NO-UNDO.
+DEFINE VARIABLE lcOrderer        AS CHAR  NO-UNDO.
+DEFINE VARIABLE liQuarTime       AS INT   NO-UNDO.
+DEFINE VARIABLE lcQuarTime       AS CHAR  NO-UNDO.
+DEFINE VARIABLE lcCode           AS CHAR  NO-UNDO.
+DEFINE VARIABLE lcCodeName       AS CHAR  NO-UNDO.
+DEFINE VARIABLE liMsisdnStat     AS INT   NO-UNDO.
+DEFINE VARIABLE lcMsisdnStat     AS CHAR  NO-UNDO.
+DEFINE VARIABLE liLastKey        AS INT   NO-UNDO.
+DEFINE VARIABLE llPContr         AS LOG   NO-UNDO.
+DEFINE VARIABLE llAdmin          AS LOG   NO-UNDO.
+DEFINE VARIABLE llYoigoCLI       AS LOG   NO-UNDO.
+DEFINE VARIABLE llMasmovilCLI    AS LOG   NO-UNDO.
+DEFINE VARIABLE liSimStat        AS INT   NO-UNDO.
+DEFINE VARIABLE lcSimStat        AS CHAR  NO-UNDO.
+DEFINE VARIABLE llHelp           AS LOG   NO-UNDO INIT TRUE.
+DEFINE VARIABLE lcError          AS CHAR  NO-UNDO.
+DEFINE VARIABLE liError          AS INT   NO-UNDO.
+DEFINE VARIABLE llBillPer        AS LOGICAL NO-UNDO.
+DEFINE VARIABLE lcTermType       AS CHAR  NO-UNDO INIT "Full".
+DEFINE VARIABLE lcTenant         AS CHAR NO-UNDO.
+DEFINE VARIABLE llYoigoTenant    AS LOGI NO-UNDO INIT FALSE.
+DEFINE VARIABLE llMasmovilTenant AS LOGI NO-UNDO INIT FALSE.
+DEFINE VARIABLE llAddLineTerm    AS LOG  NO-UNDO.
 
 DEFINE BUFFER UsrCustomer FOR Customer.
 DEFINE BUFFER AgrCustomer FOR Customer.
@@ -213,7 +216,12 @@ IF MobSub.MSStatus = 3 /* NOT activated yet */ THEN DO:
 END.
 
 /* Yoigo MSISDN? */
-llYoigoCLI = (fIsYoigoCLI(Mobsub.CLI) OR fIsMasmovilCLI(Mobsub.CLI)).
+ASSIGN
+   lcTenant         = BUFFER-TENANT-NAME(MobSub)
+   llYoigoCLI       = fIsYoigoCLI(Mobsub.CLI) 
+   llMasmovilCLI    = fIsMasmovilCLI(Mobsub.CLI)   
+   llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+   llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
 DISPLAY
    MobSub.MsSeq
@@ -241,7 +249,7 @@ REPEAT WITH FRAME main:
          "Date other than EMPTY must not be earlier than today !")
       KillTime
       lcTermType     WHEN fIsConvergenceTariff(Mobsub.clitype)
-      liMsisdnStat   WHEN llYoigoCLI AND liOrderer EQ 5
+      liMsisdnStat   WHEN ((llYoigoCLI AND llYoigoTenant) OR (llMasmovilCLI AND llMasmovilTenant)) AND liOrderer EQ 5
       liQuarTime     WHEN liOrderer EQ 5 AND liMsisdnStat EQ 4 AND
                           liQuarTime > -1
       liSimStat      WHEN liOrderer EQ 5
@@ -266,7 +274,7 @@ REPEAT WITH FRAME main:
 
          IF lcCode ne "" AND lcCode NE ? THEN DO:
                
-               IF INT(lcCode) = 3 AND NOT llYoigoCLI THEN DO:
+               IF INT(lcCode) = 3 AND ((NOT llYoigoCLI AND llYoigoTenant) OR (NOT llMasmovilCLI AND llMasmovilTenant)) THEN DO:
                   MESSAGE "Cannot choose Order cancellation with MNP numbers!"
                   VIEW-AS ALERT-BOX.
                   NEXT.
@@ -344,7 +352,7 @@ REPEAT WITH FRAME main:
                NEXT.
             END. 
 
-            IF INPUT liOrderer = 3 AND NOT llYoigoCLI THEN DO:
+            IF INPUT liOrderer = 3 AND ((NOT llYoigoCLI AND llYoigoTenant) OR (NOT llMasmovilCLI AND llMasmovilTenant)) THEN DO:
                MESSAGE "Cannot choose Order cancellation with MNP numbers!"
                VIEW-AS ALERT-BOX.
                NEXT-PROMPT liOrderer.
@@ -377,6 +385,7 @@ REPEAT WITH FRAME main:
                fInitialiseValues(
                   INPUT INPUT liOrderer,
                   INPUT llYoigoCLI,
+                  INPUT llMasmovilCLI,
                   OUTPUT liMsisdnStat,
                   OUTPUT liSimStat,
                   OUTPUT liQuarTime).
