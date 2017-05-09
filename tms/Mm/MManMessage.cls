@@ -106,11 +106,12 @@ CLASS Mm.MManMessage FINAL:
 
       DO WHILE TRUE:
 
-         FIND LAST InvText NO-LOCK WHERE
+         FIND LAST InvText NO-LOCK USE-INDEX target WHERE
             InvText.Brand    = "1"        AND
             InvText.Target   = icTarget   AND
             InvText.KeyValue = icKeyValue AND
             InvText.FromDate <= TODAY     AND
+            InvText.ToDate   >= TODAY     AND
             InvText.Language = iiLanguage
          NO-ERROR.
 
