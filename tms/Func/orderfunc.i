@@ -365,14 +365,9 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
        EACH labOrder NO-LOCK WHERE
             labOrder.Brand      EQ Syst.Parameters:gcBrand  AND
             labOrder.orderid    EQ labOrderCustomer.Orderid AND
-            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
+            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+            LOOKUP(labOrder.CLIType,{&ADDLINE_CLITYPES}) > 0:
 
-      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand      = Syst.Parameters:gcBrand           AND
-                        CLIType.CLIType    = labOrder.CLIType                  AND
-                        CLIType.LineType   = {&CLITYPE_LINETYPE_NONMAIN}       AND
-                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
-         
          CASE labOrder.OrderType:
             WHEN {&ORDER_TYPE_NEW} THEN
                  lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_NEW}
@@ -400,7 +395,6 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
                fCleanEventObjects().
             END.
          END.
-      END.
    END.   
    
    RETURN TRUE.
