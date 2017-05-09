@@ -123,6 +123,7 @@ CLASS Mm.MManHandler FINAL:
       DEFINE VARIABLE lhField       AS HANDLE            NO-UNDO.
       DEFINE VARIABLE lcElemName    AS CHARACTER         NO-UNDO.
       DEFINE VARIABLE lcJsonData    AS LONGCHAR          NO-UNDO.
+      DEFINE VARIABLE lcBufferValue AS CHARACTER         NO-UNDO.
       DEFINE VARIABLE objJsonObject AS CLASS JsonObject  NO-UNDO.
       DEFINE VARIABLE objJOParam    AS CLASS JsonObject  NO-UNDO.
 
@@ -140,11 +141,19 @@ CLASS Mm.MManHandler FINAL:
 
          IF lcElemName = ""
          THEN NEXT.
-         
+
+         lcBufferValue = ?.
+         IF lhField:DATA-TYPE = "CHARACTER"
+         THEN lcBufferValue = CODEPAGE-CONVERT(lhField:BUFFER-VALUE(), "UTF-8", SESSION:CHARSET).
+
          IF lcElemName NE "params"
-         THEN objJsonObject:Add(mConvertName(lhField:NAME), lhField:BUFFER-VALUE()).
-         ELSE IF lhField:BUFFER-VALUE() NE ""
-         THEN objJOParam = CAST(objOMParser:Parse(lhField:BUFFER-VALUE()),JsonObject).
+         THEN DO:
+            IF lcBufferValue NE ?
+            THEN objJsonObject:Add(mConvertName(lhField:NAME), lcBufferValue).
+            ELSE objJsonObject:Add(mConvertName(lhField:NAME), lhField:BUFFER-VALUE()).
+         END.
+         ELSE IF lcBufferValue > ""
+         THEN objJOParam = CAST(objOMParser:Parse(lcBufferValue),JsonObject).
 
       END.
 
