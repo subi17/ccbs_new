@@ -3,6 +3,7 @@ set tabstop=3
 set expandtab
 set ignorecase
 set foldmethod=syntax
+set hidden
 normal zR
 
 execute "set path+=" . ccbspath . "/tms"
