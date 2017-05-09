@@ -231,11 +231,10 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
    RUN pUpdateSubscription.
 
    IF MobSub.MultiSIMID > 0 THEN RUN pMultiSimSTC (INPUT ldtActDate).
-   ELSE IF bOldTariff.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
-           bNewTariff.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN
+   ELSE IF bOldTariff.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN
       fAdditionalLineSTC(MsRequest.Msrequest,
                         fMake2Dt(ldtActDate + 1,0),
-                        "STC").
+                        "STC_FINAL").
 
    /* close periodical contracts that are not allowed on new type */
    RUN pCloseContracts(MsRequest.MsRequest,
