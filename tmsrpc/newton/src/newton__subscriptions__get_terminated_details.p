@@ -92,8 +92,8 @@ DEF VAR liMNPOutExists   AS INT  NO-UNDO.
 DEF VAR lcDataBundle     AS CHAR NO-UNDO.
 DEF VAR lcSegment        AS CHAR NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
-DEF VAR llYoigoTenant    AS CHAR NO-UNDO INIT FALSE.
-DEF VAR llMasmovilTenant AS CHAR NO-UNDO INIT FALSE.
+DEF VAR llYoigoTenant    AS LOG NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant AS LOG NO-UNDO INIT FALSE.
 
 IF validate_request(param_toplevel_id, "int,boolean") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
