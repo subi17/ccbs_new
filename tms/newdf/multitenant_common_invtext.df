@@ -1,0 +1,65 @@
+ADD FIELD "TemplateId" OF "InvText" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "TemplateId"
+  POSITION 27
+  MAX-WIDTH 40
+  COLUMN-LABEL "TemplateId"
+  HELP "Identifier of the message template to be used. (if present)"
+  ORDER 260
+
+ADD FIELD "SchedulingPolicy" OF "InvText" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "SchedulingPolicy"
+  POSITION 28
+  MAX-WIDTH 60
+  COLUMN-LABEL "SPolicy"
+  HELP "From template. Name of scheduling policy. (optional)"
+  ORDER 270
+
+ADD FIELD "SchedulingPriority" OF "InvText" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "SchedulingPriority"
+  POSITION 29
+  MAX-WIDTH 4
+  COLUMN-LABEL "SPriority"
+  HELP "From template. Priority of message for scheduling in RabbitMQ. (optional)"
+  ORDER 280
+
+ADD FIELD "Callbacks" OF "InvText" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "Callbacks"
+  POSITION 30
+  MAX-WIDTH 120
+  COLUMN-LABEL "Callbacks"
+  HELP "From template. List of callbacks to call (optional)"
+  ORDER 290
+
+ADD FIELD "ParamKeyValue" OF "InvText" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "ParamKeyValue"
+  POSITION 31
+  MAX-WIDTH 120
+  COLUMN-LABEL "ParamKV"
+  HELP "Parameter key=value list. (if present)"
+  ORDER 300
+
+ADD FIELD "UseMMan" OF "InvText" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Use message manager"
+  POSITION 32
+  MAX-WIDTH 1
+  COLUMN-LABEL "UseMMan"
+  HELP "Use message manager"
+  ORDER 310
+
+.
+PSC
+cpstream=1252
+.
+0000007217
