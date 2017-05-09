@@ -218,7 +218,7 @@ IF icInputFileDir > "" THEN DO:
             RETURN "ERROR:Invalid bank account".
       END.
       IF NOT AVAIL BankAccount THEN
-         RETURN SUBST("ERROR:Invalid bank code1: &1", lcBankCode).
+         RETURN SUBST("ERROR:Invalid bank code: &1", lcBankCode).
       
       IF CAN-FIND(FIRST ttDueDate WHERE 
                         ttDueDate.DueDate  = ldaDueDate AND
