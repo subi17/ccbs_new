@@ -186,11 +186,11 @@ PROCEDURE pSendSMS:
                                  Customer.Language)
    THEN DO:
       IF iiMsRequest > 0
-      THEN lcMessage = fReplaceTags(INPUT iiMsRequest,
-                                    INPUT Mm.MManMessage:ParamKeyValue,
-                                    INPUT icExtraParams,
-                                    OUTPUT liSMSType).
-      Mm.MManMessage:mCreateMMLogSMS(bMobSub.CLI,lcMessage).
+      THEN Mm.MManMessage:ParamKeyValue = fReplaceTags(INPUT iiMsRequest,
+                                                       INPUT Mm.MManMessage:ParamKeyValue,
+                                                       INPUT icExtraParams,
+                                                       OUTPUT liSMSType).
+      Mm.MManMessage:mCreateMMLogSMS(bMobSub.CLI).
       RETURN.
    END.
 

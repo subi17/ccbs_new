@@ -29,7 +29,7 @@ CLASS Mm.MManMessage FINAL:
 
    DEFINE PUBLIC STATIC PROPERTY ParamKeyValue  AS CHARACTER NO-UNDO
       GET.
-      PRIVATE SET.
+      SET.
 
    METHOD PRIVATE STATIC CHARACTER mLanguageCode
       ( iiLanguageID AS INTEGER ):
@@ -131,7 +131,7 @@ CLASS Mm.MManMessage FINAL:
       THEN ASSIGN
               acBrandName          = multitenancy.TenantInformation:mGetBrandForTable("InvText")
               acTemplateId         = InvText.TemplateID
-              ParamKeyValue        = InvText.ParamKeyValue
+              ParamKeyValue        = InvText.ParamKeyValue /* "|" separated list */
               acLanguage           = mLanguageCode(iiLanguage)
               acMessageBody        = InvText.InvText WHEN InvText.TemplateID = ""
               acCategory           = InvText.Category
@@ -148,8 +148,7 @@ CLASS Mm.MManMessage FINAL:
    METHOD PUBLIC STATIC LOGICAL mCreateMMLog
       ( icSMSRecipient   AS CHARACTER,
         icEmailRecipient AS CHARACTER,
-        icPushRecipient  AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "|" separated list */
+        icPushRecipient  AS CHARACTER ):
 
       IF acBrandName EQ ""
       THEN DO:
@@ -175,7 +174,7 @@ CLASS Mm.MManMessage FINAL:
          MMLog.SchedulingPolicy   = acSchedulingPolicy
          MMLog.SchedulingPriority = aiSchedulingPriority
          MMLog.CallBacks          = acCallBacks
-         MMLog.JsonParam          = mConvertToJson(icParamValues)
+         MMLog.JsonParam          = mConvertToJson(ParamKeyValue)
          MMLog.RequestTime        = NOW
          .
 
@@ -187,35 +186,29 @@ CLASS Mm.MManMessage FINAL:
 
 
    METHOD PUBLIC STATIC LOGICAL mCreateMMLogSMS
-      ( icSMSRecipient   AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "|" separated list */
+      ( icSMSRecipient   AS CHARACTER ):
 
       RETURN mCreateMMLog(icSMSRecipient,
-                            "",
-                            "",
-                            icParamValues).
+                          "",
+                          "").
    END METHOD.
 
 
    METHOD PUBLIC STATIC LOGICAL mCreateMMLogEmail
-      ( icEmailRecipient AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "|" separated list */
+      ( icEmailRecipient AS CHARACTER ):
 
       RETURN mCreateMMLog("",
-                            icEmailRecipient,
-                            "",
-                            icParamValues).
+                          icEmailRecipient,
+                          "").
    END METHOD.
 
 
    METHOD PUBLIC STATIC LOGICAL mCreateMMLogPush
-      ( icPushRecipient  AS CHARACTER,
-        icParamValues    AS CHARACTER ): /* "|" separated list */
+      ( icPushRecipient  AS CHARACTER ):
 
       RETURN mCreateMMLog("",
-                            "",
-                            icPushRecipient,
-                            icParamValues).
+                          "",
+                          icPushRecipient).
    END METHOD.
 
 END CLASS.
