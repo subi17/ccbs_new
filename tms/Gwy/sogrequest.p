@@ -19,6 +19,9 @@
 {Syst/commpaa.i} katun = "SOG". gcbrand = "1".
 {Func/msreqfunc.i}
 {Func/tmsparam4.i}
+{Func/multitenantfunc.i}
+{Func/log.i}
+{Syst/tmsconst.i}
 
 gcBrand = "1".
 
@@ -26,17 +29,11 @@ DEFINE VARIABLE ldToday       AS DATE      NO-UNDO.
 DEFINE VARIABLE lcTime        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogPath     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liLoop        AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liPause       AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcReturn      AS CHARACTER NO-UNDO INIT "ERROR".
 DEFINE VARIABLE liNagios      AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liMSSeq       AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liParams      AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcParams      AS CHARACTER NO-UNDO EXTENT 4.
 DEFINE VARIABLE liAmount      AS INT       NO-UNDO.
 DEFINE VARIABLE lcTime2       AS CHAR      NO-UNDO FORMAT "X(20)" .
 DEFINE VARIABLE lcCommandLine AS CHAR      NO-UNDO FORMAT "X(37)" .
 DEFINE VARIABLE lcNagios      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE ocResult      AS CHAR      NO-UNDO.
 DEFINE VARIABLE ocError       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcURL         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE clsNagios     AS CLASS Class.nagios    NO-UNDO.
@@ -45,15 +42,15 @@ DEFINE VARIABLE llTime        AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lhSocket      AS HANDLE NO-UNDO.
 DEFINE VARIABLE lcLogFile     AS CHAR NO-UNDO. 
 DEFINE VARIABLE llLogFile     AS LOG NO-UNDO. 
+DEFINE VARIABLE liTenant      AS INT NO-UNDO. 
 
 DEF VAR lcHostName AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
 IMPORT lcHostName.
 INPUT CLOSE.
 
-IF LOOKUP(lcHostName,"hebe,pallas") = 0 AND
-   LOOKUP(lcHostName,{&HOSTNAME_STAGING}) = 0 AND 
-   LOOKUP(lcHostName,"yanai,yanney") = 0 THEN DO:
+IF LOOKUP(lcHostName,"pallas") = 0 AND
+   LOOKUP(lcHostName,{&HOSTNAME_STAGING}) = 0 THEN DO:
    MESSAGE "Unknown host" lcHostName VIEW-AS ALERT-BOX.
    RETURN.
 END.
@@ -146,7 +143,22 @@ DO WHILE TRUE :
       
    IF llTime THEN llTime = (fCParamC4(gcBrand,"ServiceBreak","Activation") = "0").
 
-   IF llTime THEN RUN pSogRequest.
+   IF llTime THEN DO:
+   
+      /* super tenant */
+      IF TENANT-ID(LDBNAME(1)) < 0 THEN DO:
+         DO liTenant = 1 to NUM-ENTRIES({&TENANTS}):
+            IF fsetEffectiveTenantForAllDB(ENTRY(liTenant,{&TENANTS})) EQ FALSE THEN DO:
+               fLogError(SUBST("ERROR:Cannot switch to tenant: &1", 
+                         ENTRY(liTenant,{&TENANTS}))).
+               NEXT.
+            END.
+            RUN pSogRequest.
+         END.
+      END.
+      ELSE RUN pSogRequest.
+
+   END.
 
    PUT SCREEN ROW 23 "                                  ".   
    

@@ -189,6 +189,14 @@ do i = 1 to 2:
       ELSE
          bankaccount.presenterID = lctempId.
    END.
+
+   FIND FIRST Company.
+   IF i eq 1 then assign
+      company.CreditorName = "YOIGO".
+   else assign
+      company.CreditorName = "MASMOVIL TELECOM"
+      Company.compname = "MASMOVIL TELECOM 3.0, SAU".
+
 END.
 
 /* ----------------------------------------------------------------------
@@ -225,9 +233,6 @@ FOR EACH BankAccount:
       DELETE BankAccount.
 
 END.
-
-FIND FIRST Company.
-Company.compname = "MASMOVIL TELECOM 3.0, SAU".
 
 
 /* Common tables */
