@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# This daemon polls the mmlog table and sends one message manager message
+# for each record of the table.
+#
+
+DAEMON=Mm.MManDaemon
+LOGLEVEL=4
+DATABASES="ordercanal"
+cd $(dirname $0)/..
+. script/daemon.sh
