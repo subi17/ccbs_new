@@ -27,6 +27,7 @@ DEFINE VARIABLE liPause    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE llNagBeat  AS LOG       NO-UNDO INIT TRUE.
 DEFINE VARIABLE liTimeOut  AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcURL      AS CHARACTER NO-UNDO. 
+DEF VAR liTenant AS INT NO-UNDO. 
 
 FORM
    SKIP(1)
@@ -53,7 +54,18 @@ DO WHILE TRUE
    WITH FRAME frmMain.
    PAUSE 0.
 
-   RUN pMNPAnalyse.   
+    /* super tenant */
+   IF TENANT-ID(LDBNAME(1)) < 0 THEN DO:
+      DO liTenant = 1 to NUM-ENTRIES({&TENANTS}):
+         IF fsetEffectiveTenantForAllDB(ENTRY(liTenant,{&TENANTS})) EQ FALSE THEN DO:
+            fLogError(SUBST("ERROR:Cannot switch to tenant: &1", 
+                      ENTRY(liTenant,{&TENANTS}))).
+            NEXT.
+         END.
+         RUN pMNPAnalyse.
+      END.
+   END.
+   ELSE RUN pMNPAnalyse.
 
    PUT SCREEN ROW 22 COL 1
       "F8 TO QUIT, OTHER KEYS START HANDLING IMMEDIATELLY".
@@ -90,16 +102,12 @@ PROCEDURE pMNPAnalyse:
    ldeCreated = fSecOffSet(fMakeTS(),-10).
 
    MNPPROCESS_LOOP:
-   FOR EACH MNPProcess EXCLUSIVE-LOCK WHERE MNPProcess.Brand      = gcBrand                       AND
-                                            MNPProcess.MNPType    = {&MNP_TYPE_OUT}               AND
-                                            MNPProcess.StatusCode = {&MNP_ST_ASOL}                AND
-                                            MNPProcess.StateFlag  = {&MNP_STATEFLAG_NOT_ANALYSED} AND
-                                            MNPProcess.CreatedTS  < ldeCreated                     
-                                            TENANT-WHERE TENANT-ID() >= 0
-       ON ERROR UNDO, THROW:
-
-      IF NOT fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(MNPProcess)) THEN
-          UNDO, THROW NEW Progress.Lang.AppError("Unable to change tenant. Abort!",1). 
+   FOR EACH MNPProcess WHERE
+      MNPProcess.Brand = gcBrand AND
+      MNPProcess.MNPType = {&MNP_TYPE_OUT} AND
+      MNPProcess.StatusCode = {&MNP_ST_ASOL} AND
+      MNPProcess.StateFlag = {&MNP_STATEFLAG_NOT_ANALYSED} AND
+      MNPProcess.CreatedTS < ldeCreated EXCLUSIVE-LOCK:
 
       lcRejectReason = "".
 
