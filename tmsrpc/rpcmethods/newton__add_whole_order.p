@@ -656,8 +656,11 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          lcField = SUBSTRING(lcField, 6).
          IF INDEX(lcField, "3rd") GT 0 THEN
             lcMarkOut = TRIM(lcMarkOut + "|" + REPLACE(lcField, "_3rd", ""), "|").
-         ELSE
+         ELSE DO:
+            IF lcField EQ "mark_dont_share_personal_data" THEN
+               lcField = "".
             lcMarketing = TRIM(lcMarketing + "|" + lcField, "|").
+         END.   
       END. /* IF lcField BEGINS "mark_" ... */
       ELSE IF lcField EQ "birthday" THEN 
       DO:
@@ -830,6 +833,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.FoundationDate     = ldFoundationDate
          OrderCustomer.Birthday           = ldBirthday
          OrderCustomer.Language           = STRING(liLanguage)
+/*         OrderCustomer.DontSharePersData   = (LOOKUP("dont_share_personal_data",                                              lcMarketing, "|") NE 0)
+*/
          OrderCustomer.OperSMSMarketing   = (LOOKUP("SMS", lcMarketing, "|") NE 0)
          OrderCustomer.OperEmailMarketing = (LOOKUP("Email", lcMarketing, "|") NE 0)
          OrderCustomer.OperPostMarketing  = (LOOKUP("Post", lcMarketing, "|") NE 0)
