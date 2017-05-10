@@ -1,0 +1,8 @@
+ADD FIELD "DontSharePersData" OF "OrderCustomer" AS LOGICAL
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "DontSharePersData"
+  COLUMN-LABEL "DontSharePersData"
+  HELP "Do Not Share Personal Data among Mas Movil Group"
+  ORDER 295
+
