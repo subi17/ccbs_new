@@ -569,6 +569,7 @@ bulkload: CTServEl
   ChgAllowed: FALSE
   CTServEl: 8770
   ServType: 1
+  DefParam: "MM_MAS_1GB"
 
 bulkload: CTServEl
   Brand: "1"
@@ -714,6 +715,7 @@ bulkload: CTServEl
   ChgAllowed: FALSE
   CTServEl: 8812
   ServType: 1
+  DefParam: "MM_MAS_3GB"
 
 bulkload: CTServEl
   Brand: "1"
@@ -859,6 +861,7 @@ bulkload: CTServEl
   ChgAllowed: FALSE
   CTServEl: 8854
   ServType: 1
+  DefParam: "MM_MAS_8GB"
 
 bulkload: CTServEl
   Brand: "1"

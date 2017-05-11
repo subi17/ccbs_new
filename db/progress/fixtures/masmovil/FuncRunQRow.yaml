@@ -1,28 +1,4 @@
 bulkload: FuncRunQRow
-  FRQueueID: 1
-  FRQRowSeq: 5
-  FRConfigID: 1
-
-bulkload: FuncRunQRow
-  FRQueueID: 1
-  FRQRowSeq: 10
-  FRConfigID: 14
-  WaitForRowSeq: 5
-
-bulkload: FuncRunQRow
-  FRQueueID: 1
-  FRQRowSeq: 15
-  FRConfigID: 2
-  WaitForRowSeq: 10
-  FeedFromRowSeq: 5
-
-bulkload: FuncRunQRow
-  FRQueueID: 1
-  FRQRowSeq: 20
-  FRConfigID: 3
-  WaitForRowSeq: 15
-
-bulkload: FuncRunQRow
   FRQueueID: 2
   FRQRowSeq: 10
   FRConfigID: 1

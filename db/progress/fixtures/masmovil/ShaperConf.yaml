@@ -29,7 +29,7 @@ bulkload: ShaperConf
   Template: "HSPA_MONTHLY"
   TariffType: "MM_BASE_HI"
   Tariff: "MM_CERO_1G"
-  LimitUnshaped: 1677721600
+  LimitUnshaped: 1702887424
   LimitShaped: 20971520
 
 bulkload: ShaperConf
@@ -47,7 +47,7 @@ bulkload: ShaperConf
   Template: "HSPA_MONTHLY"
   TariffType: "MM_BASE_HI"
   Tariff: "MM_CERO_2G"
-  LimitUnshaped: 2726297600
+  LimitUnshaped: 2776629248
   LimitShaped: 20971520
 
 bulkload: ShaperConf
@@ -65,7 +65,7 @@ bulkload: ShaperConf
   Template: "HSPA_MONTHLY"
   TariffType: "MM_BASE_HI"
   Tariff: "MM_CERO_4G"
-  LimitUnshaped: 4823449600
+  LimitUnshaped: 4924112896
   LimitShaped: 20971520
 
 bulkload: ShaperConf
@@ -101,7 +101,7 @@ bulkload: ShaperConf
   Template: "HSPA_MONTHLY"
   TariffType: "MM_BASE_HI"
   Tariff: "MM_MAS_5G"
-  LimitUnshaped: 5872025600
+  LimitUnshaped: 5997854720
   LimitShaped: 20971520
 
 bulkload: ShaperConf
@@ -163,7 +163,7 @@ bulkload: ShaperConf
   ShaperConfID: "MM_MAS_8GBwMM_BONO_RELAX"
   Template: "HSPA_MONTHLY"
   TariffType: "MM_RELAX_HI"
-  Tariff: "MM_MAS_8GwBRELAX"
+  Tariff: "MM_MAS_8G_RLX"
   LimitUnshaped: 8799649792
   LimitShaped: 20971520
 

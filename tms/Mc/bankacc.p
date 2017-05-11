@@ -150,7 +150,8 @@ ADD-ROW:
            IF INPUT FRAME lis BankAccount.BankAccount = "" THEN 
            LEAVE add-row.
 
-           IF CAN-FIND(BankAccount using FRAME lis BankAccount.BankAccount
+           IF CAN-FIND(BankAccount using FRAME lis BankAccount.BankAccount AND
+                                                   BankAccount.unitcode
                        WHERE BankAccount.Brand = lcBrand)
            THEN DO:
               MESSAGE 

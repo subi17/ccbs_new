@@ -206,19 +206,3 @@ bulkload: DCServicePackage
   FromDate: 2017-03-24
   ToDate: 2049-12-31
 
-bulkload: DCServicePackage
-  Brand: "1"
-  DCEvent: "MM_500_UPSELL"
-  DCServicePackageID: 85
-  ServPac: "SHAPER"
-  FromDate: 2017-04-15
-  ToDate: 2049-12-31
-
-bulkload: DCServicePackage
-  Brand: "1"
-  DCEvent: "MM_DATA500"
-  DCServicePackageID: 86
-  ServPac: "SHAPER"
-  FromDate: 2017-04-15
-  ToDate: 2049-12-31
-
