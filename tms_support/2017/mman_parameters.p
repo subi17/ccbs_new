@@ -34,9 +34,22 @@ FUNCTION fCreateTMSParam RETURNS LOGICAL
 END FUNCTION.
 
 
+/* Staging */
+/*
 fCreateTMSParam("MMan.Interface","MMan.Queue.Host","C","172.20.51.97").
 fCreateTMSParam("MMan.Interface","MMan.Queue.Port","I","61613").
 fCreateTMSParam("MMan.Interface","MMan.Queue.Username","C","tms").
 fCreateTMSParam("MMan.Interface","MMan.Queue.Password","C","aMSqevibpMFUdv").
 fCreateTMSParam("MMan.Interface","MMan.Queue.Queue","C","/exchange/message-manager.input/v1").
 fCreateTMSParam("MMan.Interface","MMan.Queue.TransactSize","I","5000").
+*/
+
+/* UAT */
+/*
+fCreateTMSParam("MMan.Interface","MMan.Queue.Host","C","mqueue_ng1").
+fCreateTMSParam("MMan.Interface","MMan.Queue.Port","I","5672").
+fCreateTMSParam("MMan.Interface","MMan.Queue.Username","C","tms").
+fCreateTMSParam("MMan.Interface","MMan.Queue.Password","C","spMezCWqrWfP1WBXBd8h").
+fCreateTMSParam("MMan.Interface","MMan.Queue.Queue","C","/exchange/message-manager.input/v2").
+fCreateTMSParam("MMan.Interface","MMan.Queue.TransactSize","I","5000").
+*/
