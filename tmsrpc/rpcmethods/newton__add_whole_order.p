@@ -1303,7 +1303,7 @@ gcCustomerStructFields = "birthday," +
                          "lname2," +
                          "mark_email," +
                          "mark_email_3rd," +
-                         "mark_dont_share_personal_data" +
+                         "mark_dont_share_personal_data," +
                          "mark_post," +
                          "mark_post_3rd," +
                          "mark_sms," +
