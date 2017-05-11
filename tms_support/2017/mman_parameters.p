@@ -46,8 +46,8 @@ fCreateTMSParam("MMan.Interface","MMan.Queue.TransactSize","I","5000").
 
 /* UAT */
 /*
-fCreateTMSParam("MMan.Interface","MMan.Queue.Host","C","mqueue_ng1").
-fCreateTMSParam("MMan.Interface","MMan.Queue.Port","I","5672").
+fCreateTMSParam("MMan.Interface","MMan.Queue.Host","C","localhost").
+fCreateTMSParam("MMan.Interface","MMan.Queue.Port","I","61613").
 fCreateTMSParam("MMan.Interface","MMan.Queue.Username","C","tms").
 fCreateTMSParam("MMan.Interface","MMan.Queue.Password","C","spMezCWqrWfP1WBXBd8h").
 fCreateTMSParam("MMan.Interface","MMan.Queue.Queue","C","/exchange/message-manager.input/v2").
