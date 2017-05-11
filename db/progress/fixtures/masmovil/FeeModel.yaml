@@ -1,12 +1,42 @@
 bulkload: FeeModel
+  FeeModel: "CargoPost_05"
+  FeeName: "Cargo_5euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "CargoPost_10"
+  FeeName: "Cargo_10euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "CargoPost_20"
+  FeeName: "Cargo_20euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
   FeeModel: "Compensa 5"
   FeeName: "Compensa_5eurosMM"
   Brand: "1"
   FMGroup: 1
 
 bulkload: FeeModel
+  FeeModel: "Doa no procede"
+  FeeName: "DOA no procede"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
   FeeModel: "Handset"
   FeeName: "Cargo_5eurosMM"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Importe_descontado"
+  FeeName: "Importe descontado"
   Brand: "1"
   FMGroup: 1
 
@@ -124,6 +154,18 @@ bulkload: FeeModel
   FeeModel: "MM_VOICE40MF"
   FeeName: "Voice 40 Min. Package"
   Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "RECONNECTION"
+  FeeName: "Reconnection Fee"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Reparacion"
+  FeeName: "Reparacion"
+  Brand: "1"
+  FMGroup: 1
 
 bulkload: FeeModel
   FeeModel: "single_fee_charge"

@@ -31,7 +31,7 @@ bulkload: CLIType
   CliName: "Tarifa Mas 0 + 5 GB"
   BillTarget: 7
   PricePlan: "MM_CERO_MAS"
-  ServicePack: "11"
+  ServicePack: "51"
   Brand: "1"
   ContrType: 7
   CompareFee: 13.967
@@ -47,7 +47,7 @@ bulkload: CLIType
   CliName: "Tarifa Mas 1 GB"
   BillTarget: 8
   PricePlan: "MM_MAS"
-  ServicePack: "11"
+  ServicePack: "51"
   Brand: "1"
   ContrType: 8
   CompareFee: 13.967
@@ -63,7 +63,7 @@ bulkload: CLIType
   CliName: "Tarifa Mas 3 GB"
   BillTarget: 9
   PricePlan: "MM_MAS"
-  ServicePack: "11"
+  ServicePack: "51"
   Brand: "1"
   ContrType: 9
   CompareFee: 16.446
@@ -79,7 +79,7 @@ bulkload: CLIType
   CliName: "Tarifa Mas 8 GB"
   BillTarget: 10
   PricePlan: "MM_MAS"
-  ServicePack: "11"
+  ServicePack: "51"
   Brand: "1"
   ContrType: 10
   CompareFee: 22.231
@@ -95,7 +95,7 @@ bulkload: CLIType
   CliName: "Tarifa Internet Total 10 GB"
   BillTarget: 4
   PricePlan: "MM_NET"
-  ServicePack: "11"
+  ServicePack: "51"
   Brand: "1"
   ContrType: 4
   CompareFee: 24.711
@@ -111,7 +111,7 @@ bulkload: CLIType
   CliName: "Tarifa Internet Total 20 GB"
   BillTarget: 5
   PricePlan: "MM_NET"
-  ServicePack: "11"
+  ServicePack: "51"
   Brand: "1"
   ContrType: 5
   CompareFee: 32.975
@@ -127,7 +127,7 @@ bulkload: CLIType
   CliName: "Tarifa Internet Total 50 GB"
   BillTarget: 6
   PricePlan: "MM_NET"
-  ServicePack: "11"
+  ServicePack: "51"
   Brand: "1"
   ContrType: 6
   CompareFee: 74.298
@@ -143,7 +143,7 @@ bulkload: CLIType
   CliName: "Tarifa Internet Total 5 GB"
   BillTarget: 3
   PricePlan: "MM_NET"
-  ServicePack: "11"
+  ServicePack: "51"
   Brand: "1"
   ContrType: 3
   CompareFee: 16.446

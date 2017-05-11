@@ -1730,22 +1730,6 @@ bulkload: TMSCodes
   TableName: "CliType"
   FieldName: "ServicePack"
   CodeGroup: "Profile"
-  CodeValue: "11"
-  CodeName: "Post paid"
-  InUse: 1
-
-bulkload: TMSCodes
-  TableName: "CliType"
-  FieldName: "ServicePack"
-  CodeGroup: "Profile"
-  CodeValue: "12"
-  CodeName: "Pre paid"
-  InUse: 1
-
-bulkload: TMSCodes
-  TableName: "CliType"
-  FieldName: "ServicePack"
-  CodeGroup: "Profile"
   CodeValue: "3"
   CodeName: "Pre paid (no calls yet)"
   InUse: 1
@@ -1756,6 +1740,22 @@ bulkload: TMSCodes
   CodeGroup: "Profile"
   CodeValue: "4"
   CodeName: "Data postpaid"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "CliType"
+  FieldName: "ServicePack"
+  CodeGroup: "Profile"
+  CodeValue: "51"
+  CodeName: "Post paid"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "CliType"
+  FieldName: "ServicePack"
+  CodeGroup: "Profile"
+  CodeValue: "52"
+  CodeName: "Pre paid"
   InUse: 1
 
 bulkload: TMSCodes
@@ -3803,6 +3803,15 @@ bulkload: TMSCodes
   CodeGroup: "SIM"
   CodeValue: "23"
   CodeName: "Universal SIM"
+  ConfigValue: "Universal"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "IFiSpx"
+  FieldName: "SimArt"
+  CodeGroup: "SIM"
+  CodeValue: "24"
+  CodeName: "Universal SIM for testing"
   ConfigValue: "Universal"
   InUse: 1
 

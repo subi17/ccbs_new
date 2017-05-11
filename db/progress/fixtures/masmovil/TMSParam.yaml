@@ -1592,7 +1592,7 @@ bulkload: TMSParam
   ParamGroup: "BillRun"
   ParamCode: "BillRunStatFile"
   ParamType: "C"
-  CharVal: "/scratch/log/invoicestat/billrun_statistic_#IDATE.txt"
+  CharVal: "/scratch/log/invoicestat/MASMOVIL_billrun_statistic_#IDATE.txt"
   ParamName: "File name for statistics"
   Brand: "1"
 
@@ -1630,7 +1630,7 @@ bulkload: TMSParam
   ParamGroup: "Bundles"
   ParamCode: "ALLOWED_BONO_CONTRACTS"
   ParamType: "C"
-  CharVal: "MM_DATA512,MM_DATA1024,MM_DATA2048,MM_DATA4096,MM_INTVOICE100,MM_VOICE40,MM_VOICE100,MM_VOICE250,MM_BONO_RELAX"
+  CharVal: "MM_DATA500,MM_DATA1024,MM_DATA2048,MM_DATA4096,MM_INTVOICE100,MM_VOICE40,MM_VOICE100,MM_VOICE250,MM_BONO_RELAX"
   ParamName: "Allowed BONO Contracts"
   Brand: "1"
 
@@ -2140,7 +2140,7 @@ bulkload: TMSParam
   ParamGroup: "CDR"
   ParamCode: "DoubleCallLog"
   ParamType: "C"
-  CharVal: "/scratch/log/double_calls/mobcdr_doubles_#DATE.txt"
+  CharVal: "/scratch/log/double_calls/MASMOVIL_mobcdr_doubles_#DATE.txt"
   ParamName: "Log file for double call check"
   Brand: "1"
 
@@ -2633,7 +2633,7 @@ bulkload: TMSParam
   ParamGroup: "CreditScoring"
   ParamCode: "URL"
   ParamType: "C"
-  CharVal: "http://217.168.2.239:8080/credit-scoring/"
+  CharVal: "http://172.16.8.215:8080/credit-scoring/"
   Online: TRUE 
   Brand: "1"
 
@@ -3376,7 +3376,7 @@ bulkload: TMSParam
   ParamGroup: "DOC1"
   ParamCode: "Doc1File"
   ParamType: "C"
-  CharVal: "/store/riftp/doc1/production/spool/YOIGOBR_#IGRP_#IDATE.txt"
+  CharVal: "/store/riftp/doc1/production/spool/MASMOVILBR_#IGRP_#IDATE.txt"
   ParamName: "File name"
   Brand: "1"
 
@@ -5210,7 +5210,7 @@ bulkload: TMSParam
   ParamGroup: "IFS"
   ParamCode: "IFSPaymStatusLog"
   ParamType: "C"
-  CharVal: "/store/riftp/ifs/outgoing/spool/IFS_PAYSTATUS_LOG_#DATE_#SEQ.DAT"
+  CharVal: "/store/riftp/ifs/outgoing/spool/MASMOVIL_IFS_PAYSTATUS_LOG_#DATE_#SEQ.DAT"
   ParamName: "Log file for status handling"
   Brand: "1"
 
@@ -5681,7 +5681,7 @@ bulkload: TMSParam
   ParamGroup: "MNP"
   ParamCode: "MNPSendHost"
   ParamType: "C"
-  CharVal: "-H 172.16.8.215 -S 8080"
+  CharVal: "-H 127.0.0.1 -S 3051"
   ParamName: "mnpsendnc.p host"
   Brand: "1"
 
@@ -5697,7 +5697,7 @@ bulkload: TMSParam
   ParamGroup: "MNP"
   ParamCode: "MNPSendURL"
   ParamType: "C"
-  CharVal: "/masmovil-mnp/"
+  CharVal: "/mnp/"
   ParamName: "MNPSend connection URL"
   Brand: "1"
 
@@ -7120,7 +7120,7 @@ bulkload: TMSParam
   ParamGroup: "Pentaho"
   ParamCode: "InvGrainFile"
   ParamType: "c"
-  CharVal: "/tmp/invoice_row_dump_#DATE.txt"
+  CharVal: "/tmp/#TENANT_invoice_row_dump_#DATE.txt"
   ParamName: "Invoice grain dump filename"
   Brand: "1"
 
@@ -7146,7 +7146,7 @@ bulkload: TMSParam
   ParamGroup: "Pentaho"
   ParamCode: "PentahoBITotals"
   ParamType: "C"
-  CharVal: "/mnt/qss/billing_item_totals"
+  CharVal: "/mnt/qss/#TENANT_billing_item_totals"
   ParamName: "Billing Item totals repo"
   Brand: "1"
 
@@ -8017,7 +8017,7 @@ bulkload: TMSParam
   ParamGroup: "Report"
   ParamCode: "ErrorFile"
   ParamType: "C"
-  CharVal: "/scratch/nagios/tms/errorcodes/icc_msisdn_rep_errorfile_MasMovil.txt"
+  CharVal: "/scratch/nagios/tms/errorcodes/MasMovil_icc_msisdn_rep_errorfile.txt"
   ParamName: "iccmsisdnrep error file"
   Brand: "1"
 
@@ -8033,7 +8033,7 @@ bulkload: TMSParam
   ParamGroup: "Report"
   ParamCode: "MSISDNStatistics"
   ParamType: "C"
-  CharVal: "/scratch/nagios/tms/msisdnstock/MSISDNStatistics_MasMovil.txt"
+  CharVal: "/scratch/nagios/tms/msisdnstock/MasMovil_MSISDNStatistics.txt"
   ParamName: "iccmsisdnrep MSISDN statistics file"
   Brand: "1"
 
@@ -8041,7 +8041,7 @@ bulkload: TMSParam
   ParamGroup: "Report"
   ParamCode: "SIMStatistics"
   ParamType: "C"
-  CharVal: "/scratch/nagios/tms/simstock/SIMStatistics_MasMovil.txt"
+  CharVal: "/scratch/nagios/tms/simstock/MasMovil_SIMStatistics_.txt"
   ParamName: "iccmsisdnrep SIM statistics file"
   Brand: "1"
 
@@ -8875,7 +8875,7 @@ bulkload: TMSParam
   ParamGroup: "SOG"
   ParamCode: "URL_Post"
   ParamType: "C"
-  CharVal: "-H rotanev.int.asp.qvantel.net -S 14400"
+  CharVal: "-H yanhua.int.asp.qvantel.net -S 14400"
   ParamName: "Sog Post URL"
   Brand: "1"
 
@@ -8883,7 +8883,7 @@ bulkload: TMSParam
   ParamGroup: "SOG"
   ParamCode: "URL_Read"
   ParamType: "C"
-  CharVal: "-H rotanev.int.asp.qvantel.net -S 14401"
+  CharVal: "-H yanhua.int.asp.qvantel.net -S 14401"
   ParamName: "Sog Read URL"
   Brand: "1"
 
@@ -9938,7 +9938,7 @@ bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "urlDextra"
   ParamType: "C"
-  CharVal: "http://217.168.2.239:8080/order-status/xmlrpc"
+  CharVal: "http://172.16.8.215:8080/order-status/xmlrpc"
   ParamName: "Dextra online interface"
   Brand: "1"
 
@@ -9946,7 +9946,7 @@ bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "urlMasmovil"
   ParamType: "C"
-  CharVal: "http://217.168.2.239:8080/masmovil/xmlrpc"
+  CharVal: "http://172.16.8.215:8080/masmovil/xmlrpc"
   ParamName: "Masmovil Adapter"
   Brand: "1"
 
@@ -9970,7 +9970,7 @@ bulkload: TMSParam
   ParamGroup: "URL"
   ParamCode: "urlROI"
   ParamType: "C"
-  CharVal: "http://217.168.2.239:7001/com-yoigo-roi-webapp/xmlrpc"
+  CharVal: "http://172.16.8.215:7001/com-yoigo-roi-webapp/xmlrpc"
   ParamName: "ROI History URL"
   Brand: "1"
 
@@ -10169,7 +10169,7 @@ bulkload: TMSParam
   ParamGroup: "XML"
   ParamCode: "InvXMLTransDir"
   ParamType: "C"
-  CharVal: "/mnt/xmlstore/#BILLRUN/#FF/#SS"
+  CharVal: "/mnt/masmovil/xmlstore/#BILLRUN/#FF/#SS"
   ParamName: "Transfer dir for xml invoices"
   Brand: "1"
 

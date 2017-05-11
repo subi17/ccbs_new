@@ -1,9 +1,4 @@
 bulkload: FuncRunQueue
-  FRQueueID: 1
-  QueueDesc: "Billing process <-01.08.2010 (not used)"
-  Brand: "1"
-
-bulkload: FuncRunQueue
   FRQueueID: 2
   QueueDesc: "Stress test run"
   Brand: "1"
@@ -11,7 +6,7 @@ bulkload: FuncRunQueue
 
 bulkload: FuncRunQueue
   FRQueueID: 3
-  QueueDesc: "Billing process 01.09.2010-> (active)"
+  QueueDesc: "Billing process"
   Brand: "1"
   Active: TRUE 
 

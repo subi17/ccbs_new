@@ -1839,6 +1839,21 @@ bulkload: BillItem
   VIPAccNum: 70514100
 
 bulkload: BillItem
+  BillCode: "MM_500_UPSELLMF"
+  BIName: "Data 500MB Upsell Monthly Fee"
+  AccNum: 70514100
+  BIGroup: "3"
+  EUAccNum: 70514100
+  FSAccNum: 70514100
+  Brand: "1"
+  EUConAccNum: 70514100
+  CostCentre: "SL"
+  AltAccNum: 70514100
+  TaxClass: "1"
+  SAPRid: "051"
+  VIPAccNum: 70514100
+
+bulkload: BillItem
   BillCode: "MM_512_UPSELLMF"
   BIName: "Data 512 MB Upsell Monthly Fee"
   AccNum: 70514100

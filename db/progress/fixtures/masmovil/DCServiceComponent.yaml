@@ -38,7 +38,7 @@ bulkload: DCServiceComponent
   DCServicePackageID: 60
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "MM_DATA500#ADDBUNDLE"
+  DefParam: "#CLITYPE#MM_DATA500"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
   DCServiceComponentID: 73
@@ -65,7 +65,7 @@ bulkload: DCServiceComponent
   DCServicePackageID: 63
   ServCom: "SHAPER"
   DefValue: 1
-  DefParam: "MM_500_UPSELL#ADDBUNDLE"
+  DefParam: "524288000#UPSELL,GRACE=0,TEMPLATE=HSPA"
   FromDate: 2017-02-22
   ToDate: 2049-12-31
   DCServiceComponentID: 76
@@ -222,22 +222,4 @@ bulkload: DCServiceComponent
   FromDate: 2017-03-24
   ToDate: 2049-12-31
   DCServiceComponentID: 97
-
-bulkload: DCServiceComponent
-  DCServicePackageID: 85
-  ServCom: "SHAPER"
-  DefValue: 1
-  DefParam: "MM_500_UPSELL#ADDBUNDLE"
-  FromDate: 2017-04-15
-  ToDate: 2049-12-31
-  DCServiceComponentID: 98
-
-bulkload: DCServiceComponent
-  DCServicePackageID: 86
-  ServCom: "SHAPER"
-  DefValue: 1
-  DefParam: "MM_DATA500#ADDBUNDLE"
-  FromDate: 2017-04-15
-  ToDate: 2049-12-31
-  DCServiceComponentID: 99
 

@@ -1,4 +1,37 @@
 bulkload: FMItem
+  FeeModel: "CargoPost_05"
+  PriceList: "COMMON"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: 5
+  BillType: "CC"
+  FromDate: 2017-04-20
+  ToDate: 2017-07-28
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "CargoPost_10"
+  PriceList: "COMMON"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: 10
+  BillType: "CC"
+  FromDate: 2017-04-21
+  ToDate: 2017-10-12
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "CargoPost_20"
+  PriceList: "COMMON"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: 20
+  BillType: "CC"
+  FromDate: 2017-04-21
+  ToDate: 2018-02-02
+  Brand: "1"
+
+bulkload: FMItem
   FeeModel: "Compensa 5"
   PriceList: "COMMON"
   BillCode: "GENERALCARGO"
@@ -10,6 +43,17 @@ bulkload: FMItem
   Brand: "1"
 
 bulkload: FMItem
+  FeeModel: "Doa no procede"
+  PriceList: "COMMON"
+  BillCode: "DOA"
+  BillMethod: TRUE 
+  Amount: 150
+  BillType: "CC"
+  FromDate: 2017-04-20
+  ToDate: 2017-09-15
+  Brand: "1"
+
+bulkload: FMItem
   FeeModel: "Handset"
   PriceList: "COMMON2"
   BillCode: "GENERALCARGO"
@@ -18,6 +62,17 @@ bulkload: FMItem
   BillType: "CC"
   FromDate: 2017-04-03
   ToDate: 2017-04-24
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "Importe_descontado"
+  PriceList: "COMMON"
+  BillCode: "ACCCHARGE"
+  BillMethod: TRUE 
+  Amount: 200
+  BillType: "CC"
+  FromDate: 2017-04-21
+  ToDate: 2017-05-24
   Brand: "1"
 
 bulkload: FMItem
@@ -342,6 +397,28 @@ bulkload: FMItem
   Brand: "1"
   BrokenRental: 2
   FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "RECONNECTION"
+  PriceList: "COMMON"
+  BillCode: "RECONNECTION"
+  BillMethod: TRUE 
+  Amount: 10
+  BillType: "CC"
+  FromDate: 2017-04-20
+  ToDate: 2018-01-17
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "Reparacion"
+  PriceList: "COMMON"
+  BillCode: "REPAIRCHARGE"
+  BillMethod: TRUE 
+  Amount: 10
+  BillType: "CC"
+  FromDate: 2017-04-27
+  ToDate: 2017-12-21
+  Brand: "1"
 
 bulkload: FMItem
   FeeModel: "single_fee_charge"
