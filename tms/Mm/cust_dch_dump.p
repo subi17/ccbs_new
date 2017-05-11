@@ -33,6 +33,7 @@ DEFINE VARIABLE lcAction     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOrderId    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSalesMan   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcChannel    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcUserCode   AS CHARACTER NO-UNDO.
 
 
 DEF VAR ldaLastDumpDate AS DATE    NO-UNDO.
@@ -52,7 +53,7 @@ lc255 = CHR(255).
 
 FUNCTION fCollectEvent RETURNS LOGICAL
    (INPUT icCustNum    AS CHAR,
-    INPUT icEventTable AS CHAR):
+    INPUT icEventTable AS CHAR): 
 
    ASSIGN
       lcModFields = ""
@@ -61,14 +62,25 @@ FUNCTION fCollectEvent RETURNS LOGICAL
       lcOrderId   = ""
       lcSalesMan  = ""
       lcChannel   = ""
+      lcUserCode  = ""
       ldEventTS   = fHMS2TS(EventLog.EventDate, EventLog.EventTime)
       liEntries   = NUM-ENTRIES(EventLog.Memo,lc255).
+
+   IF EventLog.Usercode BEGINS "VISTA_" THEN
+      ASSIGN lcUserCode = ENTRY(2,EventLog.UserCode,"_").
+   ELSE
+      ASSIGN lcUserCode = EventLog.UserCode.
 
    CASE liEntries:
 
       WHEN 2 THEN ASSIGN
          lcAction   = ENTRY(1,EventLog.Memo,lc255) 
-         lcChannel  = ENTRY(2,EventLog.Memo,lc255).          
+         lcChannel  = ENTRY(2,EventLog.Memo,lc255)
+         lcSalesMan = lcUserCode.
+      WHEN 3 THEN ASSIGN
+         lcAction   = ENTRY(1,EventLog.Memo,lc255)
+         lcChannel  = ENTRY(2,EventLog.Memo,lc255)
+         lcSalesMan = ENTRY(3,EventLog.Memo,lc255).
       WHEN 4 THEN ASSIGN
          lcAction   = ENTRY(1,EventLog.Memo,lc255)
          lcOrderId  = ENTRY(3,EventLog.Memo,lc255)
