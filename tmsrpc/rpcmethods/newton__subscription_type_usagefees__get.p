@@ -25,8 +25,9 @@
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
-DEFINE TEMP-TABLE ttPListConf LIKE PListConf NO-UNDO.
-DEFINE TEMP-TABLE ttPriceList LIKE PriceList NO-UNDO.
+DEFINE TEMP-TABLE ttTariff    NO-UNDO LIKE Tariff.
+DEFINE TEMP-TABLE ttPListConf NO-UNDO LIKE PListConf.
+DEFINE TEMP-TABLE ttPriceList NO-UNDO LIKE PriceList.
 
 FUNCTION fFillTariff RETURNS LOGICAL:
 
