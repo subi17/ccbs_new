@@ -25,6 +25,11 @@
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
+DEF VAR lcMobileStruct       AS CHAR NO-UNDO.
+DEF VAR lcFixed2FixedStruct  AS CHAR NO-UNDO.
+DEF VAR lcFixed2MobileStruct AS CHAR NO-UNDO.
+DEF VAR lcFixedLineBB        AS CHAR NO-UNDO.
+
 DEFINE TEMP-TABLE ttTariff    NO-UNDO LIKE Tariff.
 DEFINE TEMP-TABLE ttPListConf NO-UNDO LIKE PListConf.
 DEFINE TEMP-TABLE ttPriceList NO-UNDO LIKE PriceList.
@@ -61,6 +66,23 @@ FUNCTION fFillPriceList RETURNS LOGICAL:
    END.
    
 END FUNCTION.
+
+FUNCTION fGetFixedLineBaseBundle RETURNS CHARACTER
+  (icCliType AS CHARACTER):
+
+  FIND FIRST RequestAction WHERE RequestAction.Brand      = "1"             AND
+                                 RequestAction.ReqType    = 14              AND
+                                 RequestAction.CliType    = icCliType       AND
+                                 RequestAction.ActionType = "DayCampaign"   AND
+                                 RequestAction.Action     = 1               AND
+                                 RequestAction.ValidFrom <= TODAY           AND
+                                 RequestAction.ValidTo   >= TODAY           NO-LOCK NO-ERROR. 
+  IF AVAIL RequestAction THEN 
+    RETURN RequestAction.ActionKey.                               
+
+  RETURN "".
+
+END FUNCTION.  
 
 FUNCTION fGetTMSCodeName RETURNS CHAR
   (icTableName AS CHAR,
@@ -120,7 +142,7 @@ FUNCTION fGetTariffCCNAndBDest RETURNS LOGICAL
                     ELSE IF icCallRegion = "International" THEN
                         ASSIGN oiCCN = 97 ocBDest = "". 
                 END.
-                OTHERWISE:
+                OTHERWISE
                 DO:
                     ASSIGN
                         oiCCN   = 0
@@ -138,7 +160,7 @@ FUNCTION fGetTariffCCNAndBDest RETURNS LOGICAL
                     ELSE IF icCallRegion = "International" THEN
                         ASSIGN oiCCN = 1002 ocBDest = "". 
                 END.
-                OTHERWISE:
+                OTHERWISE
                 DO:
                     ASSIGN
                         oiCCN   = 0
@@ -156,7 +178,7 @@ FUNCTION fGetTariffCCNAndBDest RETURNS LOGICAL
                     ELSE IF icCallRegion = "International" THEN
                         ASSIGN oiCCN = 1002 ocBDest = "". 
                 END.
-                OTHERWISE:
+                OTHERWISE
                 DO:
                     ASSIGN
                         oiCCN   = 0
@@ -184,7 +206,6 @@ FUNCTION fGetStruct RETURNS CHAR
 
     DEF VAR lcDialTypeStruct  AS CHAR NO-UNDO.
     
-
     DEF VAR ldPrice   AS DECI NO-UNDO.
     DEF VAR lcUnit    AS CHAR NO-UNDO.
     DEF VAR ldSetup   AS DECI NO-UNDO.
@@ -294,17 +315,19 @@ DO ON ERROR UNDO, THROW:
        ELSE IF CliType.PricePlan = "" THEN  
           RETURN appl_err("Rateplan not found: "+ pcId).
        
+       ASSIGN lcFixedLineBB = fGetFixedLineBaseBundle(CliType.CliType).
+
        lcResultStruct = add_struct(resp_array, "").
        add_string(lcResultStruct, "rate_plan", CliType.PricePlan).
 
        lcMobileStruct   = add_struct(lcResultStruct, "mobile").
-       fGetStruct("Mobile", CliType.PricePlan, INPUT-OUTPUT lcMobileStruct).
+       fGetStruct("Mobile", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, INPUT-OUTPUT lcMobileStruct).
 
-       lcfixed2fixedStruct   = add_struct(lcResultStruct, "fixed2fixed").
-       fGetStruct("Fixed2Fixed", INPUT-OUTPUT lcfixed2fixedStruct).
+       lcFixed2FixedStruct   = add_struct(lcResultStruct, "fixed2fixed").
+       fGetStruct("Fixed2Fixed", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, INPUT-OUTPUT lcFixed2FixedStruct).
 
-       lcfixed2mobileStruct   = add_struct(lcResultStruct, "fixed2mobile").
-       fGetStruct("Fixed2Mobile", INPUT-OUTPUT lcfixed2mobileStruct).
+       lcFixed2MobileStruct   = add_struct(lcResultStruct, "fixed2mobile").
+       fGetStruct("Fixed2Mobile", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, INPUT-OUTPUT lcFixed2MobileStruct).
     END.
 
 END.
