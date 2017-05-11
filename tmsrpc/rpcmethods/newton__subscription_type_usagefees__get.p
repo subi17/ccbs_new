@@ -20,7 +20,7 @@
            taxinclvalue;decimal; Monthly Cost based on including Zone Tax  
  */
 
-{header_get.i}
+{newton/src/header_get.i}
 {Func/transname.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -90,10 +90,10 @@ FUNCTION fGetTMSCodeName RETURNS CHAR
    icCodeGroup AS CHAR,
    icCodeValue AS INT ):
 
-    FIND FIRST TMSCodes WHERE TMSCodes.TableName = "Tariff"                AND
-                              TMSCodes.FieldName = "DataType"              AND
-                              TMSCodes.CodeGroup = "Tariff"                AND
-                              TMSCodes.CodeValue = STRING(Tariff.DataType) NO-LOCK NO-ERROR.
+    FIND FIRST TMSCodes WHERE TMSCodes.TableName = "Tariff"            AND
+                              TMSCodes.FieldName = "DataType"          AND
+                              TMSCodes.CodeGroup = "Tariff"            AND
+                              TMSCodes.CodeValue = STRING(icCodeValue) NO-LOCK NO-ERROR.
     IF AVAIL TMSCodes THEN 
         RETURN TMSCodes.CodeName.
 
@@ -259,9 +259,9 @@ FUNCTION fGetStruct RETURNS CHAR
 
     DEF VAR lcDialTypeStruct  AS CHAR NO-UNDO.
     
-    DEF VAR ldPrice   AS DECI NO-UNDO.
+    DEF VAR ldPrice   AS DECI NO-UNDO FORMAT "zz9.99".
     DEF VAR lcUnit    AS CHAR NO-UNDO.
-    DEF VAR ldSetup   AS DECI NO-UNDO.
+    DEF VAR ldSetup   AS DECI NO-UNDO FORMAT "zz9.99".
 
     DEF VAR liCCN       AS INTE NO-UNDO.
     DEF VAR lcBDest     AS CHAR NO-UNDO.
@@ -324,11 +324,15 @@ DO ON ERROR UNDO, THROW:
        lcMobileStruct   = add_struct(lcResultStruct, "mobile").
        fGetStruct("Mobile", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, lcMobileStruct).
 
-       lcFixed2FixedStruct   = add_struct(lcResultStruct, "fixed2fixed").
-       fGetStruct("Fixed2Fixed", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, lcFixed2FixedStruct).
+       IF lcFixedLineBB > "" THEN 
+       DO:
+           lcFixed2FixedStruct   = add_struct(lcResultStruct, "fixed2fixed").
+           fGetStruct("Fixed2Fixed", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, lcFixed2FixedStruct).
 
-       lcFixed2MobileStruct   = add_struct(lcResultStruct, "fixed2mobile").
-       fGetStruct("Fixed2Mobile", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, INPUT-OUTPUT lcFixed2MobileStruct).
+           lcFixed2MobileStruct   = add_struct(lcResultStruct, "fixed2mobile").
+           fGetStruct("Fixed2Mobile", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, INPUT-OUTPUT lcFixed2MobileStruct).
+       END.
+       
     END.
 
 END.
