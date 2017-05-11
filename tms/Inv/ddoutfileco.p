@@ -523,15 +523,15 @@ END PROCEDURE.
 
 PROCEDURE pSplitInvoice:
 
-   IF liSBICount <= liSBIValue THEN
+   IF liSBIPerc > 0 AND liSBICount <= liSBIValue THEN
       ASSIGN 
          ttInvoice.BankCode = {&TF_BANK_SABADELL}
          liSBICount         = liSBICount + 1.
-   ELSE IF liSAICount <= liSAIValue THEN
+   ELSE IF liSAIPerc > 0 AND liSAICount <= liSAIValue THEN
       ASSIGN 
          ttInvoice.BankCode = {&TF_BANK_UNOE}
          liSAICount         = liSAICount + 1.
-   ELSE IF liBBICount <= liBBIValue THEN
+   ELSE IF liBBIPerc > 0 AND liBBICount <= liBBIValue THEN
       ASSIGN 
          ttInvoice.BankCode = {&TF_BANK_BBVA}
          liBBICount         = liBBICount + 1.

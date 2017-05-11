@@ -14,7 +14,7 @@ DEF VAR pcTenant        AS CHAR NO-UNDO.
 DEF VAR lcMSISDN        AS CHAR NO-UNDO.
 DEF VAR MSISDN_status   AS INT  NO-UNDO FORMAT "Z9".
 
-IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
 
 pcTenant = get_string(param_toplevel_id,"0").
 lcMSISDN = get_string(param_toplevel_id,"1").

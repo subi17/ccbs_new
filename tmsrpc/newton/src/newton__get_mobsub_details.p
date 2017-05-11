@@ -90,8 +90,8 @@ DEF VAR liMnpStatus       AS INT     NO-UNDO.
 DEF VAR liOrderId         AS INT     NO-UNDO. 
 DEF VAR installment_array AS CHAR    NO-UNDO.
 DEF VAR lderesidualFee    AS DEC     NO-UNDO. 
-DEF VAR llYoigoTenant     AS CHAR    NO-UNDO INIT FALSE.
-DEF VAR llMasmovilTenant  AS CHAR    NO-UNDO INIT FALSE.
+DEF VAR llYoigoTenant     AS LOG    NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant  AS LOG    NO-UNDO INIT FALSE.
 
 DEF BUFFER lbMobSub FOR MobSub.
 DEF BUFFER bActRequest FOR MsRequest.

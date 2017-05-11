@@ -18,6 +18,8 @@ DEF VAR lcIdList AS CHAR NO-UNDO.
 
 lcIdList = fgetTenantIds().
 /* Go through all possible tenants */
+/* MB-736 high usage report to dumptool
+   MB-737 icc/msisdn stock to dumptool
 DO liid = 1 to NUM-ENTRIES(lcIdList):
    fELog("MDAILY_AMNP","HighSpenderStarted for " + 
       fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))).
@@ -28,6 +30,7 @@ DO liid = 1 to NUM-ENTRIES(lcIdList):
    fELog("MDAILY_AMNP","HighSpenderStopped for " +
          fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))).
 END.
+
 DO liid = 1 to NUM-ENTRIES(lcIdList):
 fELog("MDAILY_AMNP","IccMSISDNRepStarted for " +
       fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))).
@@ -40,4 +43,5 @@ fELog("MDAILY_AMNP","IccMSISDNRepStarted for " +
    fELog("MDAILY_AMNP","IccMSISDNRepStopped for " +
          fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))).
 END.
+*/
 quit.

@@ -13,8 +13,17 @@
 {Func/cparam2.i}
 {Func/multitenantfunc.i}
 
-DEF input parameter   ideCreateTS  AS DE    NO-UNDO FORMAT "99999999.99999".
-DEF  input parameter   iStatus       AS INT  NO-UNDO.
+DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
+DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
+DEF INPUT  PARAMETER icDumpMode    AS CHAR NO-UNDO.
+DEF INPUT  PARAMETER idLastDump    AS DEC  NO-UNDO.
+DEF INPUT  PARAMETER icEventSource AS CHAR NO-UNDO.
+DEF INPUT  PARAMETER icEventFields AS CHAR NO-UNDO.
+DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
+DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
+
+DEF VAR ldeCreateTS  AS DEC NO-UNDO FORMAT "99999999.99999".
+DEF VAR liStatus     AS INT  NO-UNDO.
 
 DEF VAR tiednimi AS c no-undo.
 DEF VAR liAmountOfInvoice  AS INT               NO-UNDO.
@@ -46,17 +55,22 @@ DEF BUFFER xxhighusage for highusage .
 {Func/cparam.i HighSpenderDirectory  return}.  xhighspenderDir = tmsparam.CharVal.
 
 ASSIGN 
-      tiednimi    = fCParam("CRONSPOOL","highspendnew.p") +
-         CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
-         "_highspender_" +
-         REPLACE(STRING(YEAR(TODAY),"9999")  +
+   ldeCreateTS = fMake2Dt(INPUT today - 90, INPUT 0)
+   liStatus    = 0.
+
+/*   
+   tiednimi    = fCParam("CRONSPOOL","highspendnew.p") +
+                 CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                 "_highspender_" +
+                 REPLACE(STRING(YEAR(TODAY),"9999")  +
                  STRING(MONTH(TODAY),"99")   +
                  STRING(DAY(TODAY),"99")     +
                  STRING(time,"hh:mm:ss") + ".dump",":","").
                  
 lcOutPath   = fCParam("CRONOUTGOING","highspendnew.p").
+*/
 
-OUTPUT STREAM excel TO  VALUE(tiednimi).
+OUTPUT STREAM excel TO  VALUE(icfile).
 
 PUT STREAM excel UNFORMATTED
 "Customer number"   tab
@@ -84,8 +98,8 @@ PUT STREAM excel UNFORMATTED
 "Period"            MY-nl.
 
 FOR EACH HighUsage NO-LOCK WHERE 
-         HighUsage.HiUsageStatus = iStatus  AND
-         HighUsage.crStamp >= ideCreateTS, 
+         HighUsage.HiUsageStatus = liStatus  AND
+         HighUsage.crStamp >= ldeCreateTS, 
    FIRST invseq NO-LOCK WHERE 
          Invseq.invseq = HighUsage.Invseq  AND 
          invseq.billed = FALSE.
@@ -164,61 +178,60 @@ FOR EACH HighUsage NO-LOCK WHERE
       lcperiod = STRING(Invseq.FromDate) + " - " + STRING(Invseq.Todate)
       liperiod = YEAR(Invseq.todate) * 100 + MONTH(Invseq.todate).
 
-  FIND FIRST memo WHERE 
-             Memo.Brand     = gcBrand               AND
-             memo.Custnum   = Invseq.Custnum        AND 
-             Memo.Hosttable = "Highusage"           AND  
-             memo.keyvalue  = STRING(HighUsage.Invseq) + "|" +  
+   FIND FIRST memo WHERE 
+              Memo.Brand     = gcBrand               AND
+              memo.Custnum   = Invseq.Custnum        AND 
+              Memo.Hosttable = "Highusage"           AND  
+              memo.keyvalue  = STRING(HighUsage.Invseq) + "|" +  
                               STRING(Highusage.cli)
-  NO-LOCK NO-ERROR.
+   NO-LOCK NO-ERROR.
              
              
-  IF avail memo THEN  DO:
-     ASSIGN memotext = REPLACE(memo.memotext,chr(10)," ") .
-     IF memo.CreStamp > memo.ChgStamp THEN 
-        memostamp = fTS2HMS(memo.CreStamp) .
-     ELSE memostamp = fTS2HMS(memo.ChgStamp).   
+   IF avail memo THEN  DO:
+      ASSIGN memotext = REPLACE(memo.memotext,chr(10)," ") .
+      IF memo.CreStamp > memo.ChgStamp THEN 
+         memostamp = fTS2HMS(memo.CreStamp) .
+      ELSE memostamp = fTS2HMS(memo.ChgStamp).   
      
-  END.    
-  ELSE   ASSIGN memotext = "" memostamp = "".
+   END.    
+   ELSE   ASSIGN memotext = "" memostamp = "".
 
 
-  FIND FIRST HiUsageLimit WHERE
-             HiUsageLimit.category = Highusage.category AND 
-             HiUsageLimit.billcode = HighUsage.Launch no-lock no-error.
+   FIND FIRST HiUsageLimit WHERE
+              HiUsageLimit.category = Highusage.category AND 
+              HiUsageLimit.billcode = HighUsage.Launch no-lock no-error.
              
-  if avail hiusagelimit then ldelimit = hiusagelimit.limit.
-  ELSE                       ldelimit = 0 .           
+   if avail hiusagelimit then ldelimit = hiusagelimit.limit.
+   ELSE                       ldelimit = 0 .           
   
-  fTotalHU(INPUT highusage.cli, OUTPUT totalunbilled).
+   fTotalHU(INPUT highusage.cli, OUTPUT totalunbilled).
 
-  PUT STREAM excel UNFORMATTED
-  Customer.Custnum   TAB
-  lcCustName         TAB
-  Customer.Orgid     TAB
-  HighUsage.cli      TAB
-  Username           TAB 
-  Activedays         TAB 
-  customer.birthday  TAB 
-  HighUsage.Launch   TAB
-  HighUsage.Category TAB 
-  ldelimit           TAB
-  HighUsage.Amount   TAB
-  TotalUnbilled      TAB
-  HighUsage.Dategrow TAB
-  HighUsage.date%    TAB
-  HighUsage.date     TAB
-  ldeInvoiceAverage  TAB
-  liAmountOfInvoice  TAB
-  llOpenInvoice      TAB
-  llClaim            TAB
-  Statusname         TAB
-  memotext           TAB
-  memostamp          TAB
-  liperiod           MY-nl.
-
+   PUT STREAM excel UNFORMATTED
+   Customer.Custnum   TAB
+   lcCustName         TAB
+   Customer.Orgid     TAB
+   HighUsage.cli      TAB
+   Username           TAB 
+   Activedays         TAB 
+   customer.birthday  TAB 
+   HighUsage.Launch   TAB
+   HighUsage.Category TAB 
+   ldelimit           TAB
+   HighUsage.Amount   TAB
+   TotalUnbilled      TAB
+   HighUsage.Dategrow TAB
+   HighUsage.date%    TAB
+   HighUsage.date     TAB
+   ldeInvoiceAverage  TAB
+   liAmountOfInvoice  TAB
+   llOpenInvoice      TAB
+   llClaim            TAB
+   Statusname         TAB
+   memotext           TAB
+   memostamp          TAB
+   liperiod           MY-nl.
+  
+   oiEvents = oiEvents + 1.
 END.
 
 OUTPUT STREAM excel CLOSE.
-                                  
-UNIX SILENT VALUE("mv " + tiednimi + " " + lcOutPath).

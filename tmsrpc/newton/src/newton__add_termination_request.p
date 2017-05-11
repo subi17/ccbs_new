@@ -50,8 +50,8 @@ DEF VAR liReq            AS INT       NO-UNDO.
 DEF VAR lcOpCode         AS CHARACTER NO-UNDO. 
 DEF VAR ldaTermDate      AS DATE      NO-UNDO. 
 DEF VAR lcTenant         AS CHAR      NO-UNDO.
-DEF VAR llYoigoTenant    AS CHAR      NO-UNDO INIT FALSE.
-DEF VAR llMasmovilTenant AS CHAR      NO-UNDO INIT FALSE.
+DEF VAR llYoigoTenant    AS LOG       NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant AS LOG       NO-UNDO INIT FALSE.
 
 /* Output parameters */
 DEF VAR result AS LOGICAL.
