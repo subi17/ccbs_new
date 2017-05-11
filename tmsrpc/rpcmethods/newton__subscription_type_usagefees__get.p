@@ -28,9 +28,6 @@
 DEFINE TEMP-TABLE ttPListConf LIKE PListConf NO-UNDO.
 DEFINE TEMP-TABLE ttPriceList LIKE PriceList NO-UNDO.
 
-DEF VAR vcCallType  AS CHAR NO-UNDO INIT 'national,international'.
-DEF VAR vcDialType  AS CHAR NO-UNDO INIT "gprs,voice,sms,mms".
-
 FUNCTION fFillTariff RETURNS LOGICAL:
 
    EMPTY TEMP-TABLE ttTariff.
@@ -90,59 +87,83 @@ FUNCTION fGetTariffCCNAndBDest RETURNS LOGICAL
      OUTPUT oiCCN   AS INTE,
      OUTPUT ocBDest AS CHAR):
 
-   IF icCallRegion = "National" THEN
-   DO:
-       CASE icType:
-          WHEN "Mobile" THEN 
-          DO:
-              CASE icDialType:
-                  WHEN "GPRS" THEN 
-                  DO:
-                      ASSIGN 
-                          oiCCN   = 93
-                          ocBDest = "GPRSDATA_" + icMobileBB.        
-                  END. 
-                  WHEN "VOICE" THEN 
-                  DO:
-
-                  END.
-                  WHEN "SMS" THEN 
-                  DO:
-
-                  END.       
-                  WHEN "MMS" THEN 
-                  DO:
-
-                  END.
-              END CASE.
-          END.
-          WHEN "Fixed2Fixed" THEN 
-          DO:
-
-          END.
-          WHEN "Fixed2Mobile" THEN 
-          DO:
-
-          END.
-       END CASE.
-   END.
-   ELSE IF icCallRegion = "International" THEN
-   DO:
-      CASE icType:
-          WHEN "Mobile" THEN 
-          DO:
-
-          END.
-          WHEN "Fixed2Fixed" THEN 
-          DO:
-
-          END.
-          WHEN "Fixed2Mobile" THEN 
-          DO:
-
-          END.
-       END CASE.
-   END.
+     CASE icType:
+        WHEN "Mobile" THEN 
+        DO:
+            CASE icDialType:
+                WHEN "GPRS" THEN 
+                DO:
+                    IF icCallRegion = "National" THEN
+                        ASSIGN oiCCN = 93 ocBDest = "GPRSDATA2_" + icMobileBB.        
+                    ELSE IF icCallRegion = "International" THEN
+                        ASSIGN oiCCN = 0 ocBDest = "".        
+                END.
+                WHEN "VOICE" THEN 
+                DO:
+                    IF icCallRegion = "National" THEN
+                        ASSIGN oiCCN = 81 ocBDest = icMobileBB + "_VOICE_OUT".        
+                    ELSE IF icCallRegion = "International" THEN
+                        ASSIGN oiCCN = 2 ocBDest = "".    
+                END.
+                WHEN "SMS" THEN 
+                DO:
+                    IF icCallRegion = "National" THEN
+                        ASSIGN oiCCN = 51 ocBDest = "".        
+                    ELSE IF icCallRegion = "International" THEN
+                        ASSIGN oiCCN = 51 ocBDest = "INTERNATIONAL". 
+                END.       
+                WHEN "MMS" THEN 
+                DO:
+                    IF icCallRegion = "National" THEN
+                        ASSIGN oiCCN = 94 ocBDest = "".        
+                    ELSE IF icCallRegion = "International" THEN
+                        ASSIGN oiCCN = 97 ocBDest = "". 
+                END.
+                OTHERWISE:
+                DO:
+                    ASSIGN
+                        oiCCN   = 0
+                        ocBDest = "". 
+                END.
+            END CASE.
+        END.
+        WHEN "Fixed2Fixed" THEN 
+        DO:
+            CASE icDialType:
+                WHEN "VOICE" THEN 
+                DO:
+                    IF icCallRegion = "National" THEN
+                        ASSIGN oiCCN = 1081 ocBDest = icFixedLineBB + "_QTY_OUT".        
+                    ELSE IF icCallRegion = "International" THEN
+                        ASSIGN oiCCN = 1002 ocBDest = "". 
+                END.
+                OTHERWISE:
+                DO:
+                    ASSIGN
+                        oiCCN   = 0
+                        ocBDest = "". 
+                END.
+            END CASE.
+        END.
+        WHEN "Fixed2Mobile" THEN 
+        DO:
+            CASE icDialType:
+                WHEN "VOICE" THEN 
+                DO:
+                    IF icCallRegion = "National" THEN
+                        ASSIGN oiCCN = 1081 ocBDest = icFixedLineBB + "_MIN_OUT".        
+                    ELSE IF icCallRegion = "International" THEN
+                        ASSIGN oiCCN = 1002 ocBDest = "". 
+                END.
+                OTHERWISE:
+                DO:
+                    ASSIGN
+                        oiCCN   = 0
+                        ocBDest = "". 
+                END.
+            END CASE.
+        END.
+     END CASE.
 
 END FUNCTION.
 
@@ -153,6 +174,8 @@ FUNCTION fGetStruct RETURNS CHAR
      icFixedLineBB AS CHAR,   
      icStruct      AS CHAR):
 
+    DEF VAR lcCallType    AS CHAR NO-UNDO INIT 'national,international'.
+    DEF VAR lcDialType    AS CHAR NO-UNDO INIT "gprs,voice,sms,mms".
     DEF VAR liKount       AS INTE NO-UNDO.
     DEF VAR liCount       AS INTE NO-UNDO.
 
@@ -168,17 +191,17 @@ FUNCTION fGetStruct RETURNS CHAR
     DEF VAR liCCN       AS INTE NO-UNDO.
     DEF VAR lcBDest     AS CHAR NO-UNDO.
 
-    DO liCount = 1 TO NUM-ENTRIES(vcCallType):
+    DO liCount = 1 TO NUM-ENTRIES(lcCallType):
 
-       lcOutStruct   = add_struct(icStruct, ENTRY(liCount,vcCallType)).
+       lcOutStruct   = add_struct(icStruct, ENTRY(liCount,lcCallType)).
 
-       DO liKount = 1 TO NUM-ENTRIES(vcDialType):
+       DO liKount = 1 TO NUM-ENTRIES(lcDialType):
 
-           fGetTariffCCNAndBDest(icType, ENTRY(liCount,vcCallType), CAPS(ENTRY(liKount,vcDialType)), icMobileBB, icFixedLineBB, OUTPUT liCCN, OUTPUT lcBDest).
+           fGetTariffCCNAndBDest(icType, ENTRY(liCount,lcCallType), CAPS(ENTRY(liKount,lcDialType)), icMobileBB, icFixedLineBB, OUTPUT liCCN, OUTPUT lcBDest).
 
            IF liCCN > 0 THEN 
            DO:
-               lcDialTypeStruct    = add_struct(lcOutStruct, ENTRY(liKount,vcDialType)). 
+               lcDialTypeStruct    = add_struct(lcOutStruct, ENTRY(liKount,lcDialType)). 
 
                fGetTariffAttributes(icPriceplan,
                                     liCCN,
@@ -187,9 +210,9 @@ FUNCTION fGetStruct RETURNS CHAR
                                     OUTPUT lcUnit,
                                     OUTPUT ldSetup).
 
-               add_double(lcDialTypeStruct,"price", ldPrice).
-               add_string(lcDialTypeStruct,"unit" , lcUnit).
-               add_double(lcDialTypeStruct,"setup", ldSetup).
+               add_double(lcDialTypeStruct,"price"    , ldPrice).
+               add_string(lcDialTypeStruct,"unit"     , lcUnit).
+               add_double(lcDialTypeStruct,"setup_fee", ldSetup).
            END.
 
        END.
