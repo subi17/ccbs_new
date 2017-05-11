@@ -190,60 +190,6 @@ FUNCTION fGetTariffCCNAndBDest RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fGetStruct RETURNS CHAR 
-    (icType        AS CHAR,
-     icPriceplan   AS CHAR,
-     icMobileBB    AS CHAR,   
-     icFixedLineBB AS CHAR,   
-     icStruct      AS CHAR):
-
-    DEF VAR lcCallType    AS CHAR NO-UNDO INIT 'national,international'.
-    DEF VAR lcDialType    AS CHAR NO-UNDO INIT "gprs,voice,sms,mms".
-    DEF VAR liKount       AS INTE NO-UNDO.
-    DEF VAR liCount       AS INTE NO-UNDO.
-
-    DEF VAR lcOutStruct   AS CHAR NO-UNDO.
-
-    DEF VAR lcDialTypeStruct  AS CHAR NO-UNDO.
-    
-    DEF VAR ldPrice   AS DECI NO-UNDO.
-    DEF VAR lcUnit    AS CHAR NO-UNDO.
-    DEF VAR ldSetup   AS DECI NO-UNDO.
-
-    DEF VAR liCCN       AS INTE NO-UNDO.
-    DEF VAR lcBDest     AS CHAR NO-UNDO.
-
-    DO liCount = 1 TO NUM-ENTRIES(lcCallType):
-
-       lcOutStruct   = add_struct(icStruct, ENTRY(liCount,lcCallType)).
-
-       DO liKount = 1 TO NUM-ENTRIES(lcDialType):
-
-           fGetTariffCCNAndBDest(icType, ENTRY(liCount,lcCallType), CAPS(ENTRY(liKount,lcDialType)), icMobileBB, icFixedLineBB, OUTPUT liCCN, OUTPUT lcBDest).
-
-           IF liCCN > 0 THEN 
-           DO:
-               lcDialTypeStruct    = add_struct(lcOutStruct, ENTRY(liKount,lcDialType)). 
-
-               fGetTariffAttributes(icPriceplan,
-                                    liCCN,
-                                    lcBDest,
-                                    OUTPUT ldPrice,
-                                    OUTPUT lcUnit,
-                                    OUTPUT ldSetup).
-
-               add_double(lcDialTypeStruct,"price"    , ldPrice).
-               add_string(lcDialTypeStruct,"unit"     , lcUnit).
-               add_double(lcDialTypeStruct,"setup_fee", ldSetup).
-           END.
-
-       END.
-   END.
-
-   RETURN lcOutStruct.
-
-END FUNCTION.    
-
 FUNCTION fGetTariffAttributes RETURNS LOGICAL
     (INPUT  icPricePlan AS CHAR,
      INPUT  iiCCN       AS INTE,
@@ -296,6 +242,61 @@ FUNCTION fGetTariffAttributes RETURNS LOGICAL
 
 END FUNCTION.
 
+
+FUNCTION fGetStruct RETURNS CHAR 
+    (icType        AS CHAR,
+     icPriceplan   AS CHAR,
+     icMobileBB    AS CHAR,   
+     icFixedLineBB AS CHAR,   
+     INPUT-OUTPUT icStruct AS CHAR):
+
+    DEF VAR lcCallType    AS CHAR NO-UNDO INIT 'national,international'.
+    DEF VAR lcDialType    AS CHAR NO-UNDO INIT "gprs,voice,sms,mms".
+    DEF VAR liKount       AS INTE NO-UNDO.
+    DEF VAR liCount       AS INTE NO-UNDO.
+
+    DEF VAR lcOutStruct   AS CHAR NO-UNDO.
+
+    DEF VAR lcDialTypeStruct  AS CHAR NO-UNDO.
+    
+    DEF VAR ldPrice   AS DECI NO-UNDO.
+    DEF VAR lcUnit    AS CHAR NO-UNDO.
+    DEF VAR ldSetup   AS DECI NO-UNDO.
+
+    DEF VAR liCCN       AS INTE NO-UNDO.
+    DEF VAR lcBDest     AS CHAR NO-UNDO.
+
+    DO liCount = 1 TO NUM-ENTRIES(lcCallType):
+
+       lcOutStruct   = add_struct(icStruct, ENTRY(liCount,lcCallType)).
+
+       DO liKount = 1 TO NUM-ENTRIES(lcDialType):
+
+           fGetTariffCCNAndBDest(icType, ENTRY(liCount,lcCallType), CAPS(ENTRY(liKount,lcDialType)), icMobileBB, icFixedLineBB, OUTPUT liCCN, OUTPUT lcBDest).
+
+           IF liCCN > 0 THEN 
+           DO:
+               lcDialTypeStruct    = add_struct(lcOutStruct, ENTRY(liKount,lcDialType)). 
+
+               fGetTariffAttributes(icPriceplan,
+                                    liCCN,
+                                    lcBDest,
+                                    OUTPUT ldPrice,
+                                    OUTPUT lcUnit,
+                                    OUTPUT ldSetup).
+
+               add_double(lcDialTypeStruct,"price"    , ldPrice).
+               add_string(lcDialTypeStruct,"unit"     , lcUnit).
+               add_double(lcDialTypeStruct,"setup_fee", ldSetup).
+           END.
+
+       END.
+   END.
+
+   RETURN lcOutStruct.
+
+END FUNCTION.    
+
 /* Main Block */
 DO ON ERROR UNDO, THROW:
     
@@ -321,10 +322,10 @@ DO ON ERROR UNDO, THROW:
        add_string(lcResultStruct, "rate_plan", CliType.PricePlan).
 
        lcMobileStruct   = add_struct(lcResultStruct, "mobile").
-       fGetStruct("Mobile", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, INPUT-OUTPUT lcMobileStruct).
+       fGetStruct("Mobile", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, lcMobileStruct).
 
        lcFixed2FixedStruct   = add_struct(lcResultStruct, "fixed2fixed").
-       fGetStruct("Fixed2Fixed", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, INPUT-OUTPUT lcFixed2FixedStruct).
+       fGetStruct("Fixed2Fixed", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, lcFixed2FixedStruct).
 
        lcFixed2MobileStruct   = add_struct(lcResultStruct, "fixed2mobile").
        fGetStruct("Fixed2Mobile", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, INPUT-OUTPUT lcFixed2MobileStruct).
