@@ -43,17 +43,23 @@ PROCEDURE pAddressChange:
    DEF BUFFER bACC FOR MsRequest.
 
    DEF VAR lcStreetCode AS CHAR NO-UNDO. 
-   DEF VAR lcCityCode AS CHAR NO-UNDO. 
-   DEF VAR lcTownCode AS CHAR NO-UNDO. 
-   DEF VAR lcMemo     AS CHAR NO-UNDO.
-
-   IF MsRequest.ReqSource = "4" THEN
-      lcMemo = "Agent" + CHR(255) + "TMS".
-   ELSE IF MsRequest.ReqSource = "6" THEN
-      lcMemo = "Agent" + CHR(255) + "VISTA".
+   DEF VAR lcCityCode   AS CHAR NO-UNDO. 
+   DEF VAR lcTownCode   AS CHAR NO-UNDO. 
+   DEF VAR lcMemo       AS CHAR NO-UNDO.
+   DEF VAR lcUserCode   AS CHAR NO-UNDO.
    
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
+
+   IF MsRequest.UserCode BEGINS "VISTA_" THEN
+      ASSIGN lcUserCode = ENTRY(2,MsRequest.UserCode,"_").
+   ELSE
+      ASSIGN lcUserCode = MsRequest.UserCode.
+
+   IF MsRequest.ReqSource = "4" THEN
+      lcMemo = "Agent" + CHR(255) + "TMS" + CHR(255) + lcUserCode.
+   ELSE IF MsRequest.ReqSource = "6" THEN
+      lcMemo = "Agent" + CHR(255) + "VISTA" + CHR(255) + lcUserCode.
 
    lcRegion = STRING(MsRequest.ReqIParam2,"99").
    
@@ -131,6 +137,5 @@ PROCEDURE pAddressChange:
    fReqStatus(2,""). 
  
 END PROCEDURE.
-
 
 
