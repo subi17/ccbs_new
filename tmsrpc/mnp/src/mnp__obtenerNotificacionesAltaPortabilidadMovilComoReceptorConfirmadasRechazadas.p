@@ -48,7 +48,10 @@ DEF VAR lcTenant AS CHAR NO-UNDO.
 FIND FIRST ttInput NO-ERROR.
 IF AVAIL ttInput THEN 
 DO:    
-   ASSIGN lcTenant = (IF ttInput.receptorCode = "005" THEN {&TENANT_YOIGO} ELSE IF ttInput.receptorCode = "200" THEN {&TENANT_MASMOVIL} ELSE ""). 
+   ASSIGN lcTenant = 
+      (IF ttInput.receptorCode = "005" THEN {&TENANT_YOIGO}
+       ELSE IF ttInput.receptorCode = "200" THEN {&TENANT_MASMOVIL}
+       ELSE ""). 
 
    {mnp/src/mnp_settenant.i lcTenant}
 END.

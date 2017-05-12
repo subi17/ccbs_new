@@ -16,10 +16,8 @@ DEFINE VARIABLE liDBCount AS INTEGER NO-UNDO.
 
 IF {1} = "" THEN 
 DO:
-   lcError = "Invalid tenant, check receptorcode for" + " " + ttInput.PortRequest.
-   fErrorHandle(lcError).
-   fLogError(lcError). 
-   add_string(lcRespArray, "", ttInput.NotificationCode).
+   lcError = "Invalid tenant, check donor/receptorcode for" + " " + ttInput.PortRequest.
+   RETURN appl_err(lcError).
 END.
 
 DO liDBCount = 1 TO NUM-DBS
@@ -29,8 +27,6 @@ DO liDBCount = 1 TO NUM-DBS
     
     CATCH e AS Progress.Lang.Error:
         ASSIGN lcError = e:GetMessage(1).
-        fErrorHandle(lcError).
-        fLogError(lcError). 
-        add_string(lcRespArray, "", ttInput.NotificationCode).
+        RETURN appl_err(lcError).
     END CATCH.
 END.

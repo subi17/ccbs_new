@@ -53,6 +53,11 @@ END.
 lcRespStruct = add_struct(response_toplevel_id, "").
 lcRespArray = add_array(lcRespStruct, "codigoReferencia").
 
+/* prevalidation */
+FOR EACH ttInput NO-LOCK:   
+   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
+END.
+
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
    

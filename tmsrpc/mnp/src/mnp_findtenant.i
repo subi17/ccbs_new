@@ -17,12 +17,12 @@
 
 DEFINE VARIABLE liRecordCnt AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liDBCount   AS INTEGER   NO-UNDO.
-DEFINE VARIABLE vcTenant    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcTenant    AS CHARACTER NO-UNDO.
 
 &ENDIF
 
 DO ON ERROR UNDO, THROW:
-    ASSIGN liRecordCnt = 0 liDBCount = 0 vcTenant = "".
+    ASSIGN liRecordCnt = 0 liDBCount = 0 lcTenant = "".
     /* This is to validate availability of multiple records with unique id passed. Ideally, only 1 record is expected, since sequences are globally unique */
     FOR EACH {3} WHERE &IF {1} &THEN {3}.Brand = gcBrand AND &ENDIF {3}.{4} = {5} TENANT-WHERE TENANT-ID() > -1 NO-LOCK
         ON ERROR UNDO, THROW:
@@ -32,33 +32,27 @@ DO ON ERROR UNDO, THROW:
         IF liRecordCnt > 1 THEN
         DO:
             ASSIGN lcError = SUBST("Multiple {3} records identified for given &1. So, unable to set access to specific tenant!", {5}).
-            fErrorHandle(lcError).
-            fLogError(lcError). 
-            add_string(lcRespArray, "", ttInput.NotificationCode).
-            NEXT MESSAGE_LOOP.
+            RETURN appl_err(lcError).
         END.    
     END.
         
     /* This is to find the appropriate record w.r.t input parameters. */
     FOR FIRST {3} WHERE &IF {1} &THEN {3}.Brand = gcBrand AND &ENDIF {3}.{4} = {5} TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
-        ASSIGN vcTenant = BUFFER-TENANT-NAME({3}).                
+        ASSIGN lcTenant = BUFFER-TENANT-NAME({3}).                
     END.
     
     IF NOT AVAILABLE {3} THEN 
         UNDO, THROW NEW Progress.Lang.AppError(SUBST("{3} with {4} &1 doesn't exists!", {5}),1).                 
     
-    IF vcTenant > "" THEN 
+    IF lcTenant > "" THEN 
     DO liDBCount = 1 TO NUM-DBS
        ON ERROR UNDO, THROW:
-        SET-EFFECTIVE-TENANT(vcTenant, LDBNAME(liDBCount)).
+        SET-EFFECTIVE-TENANT(lcTenant, LDBNAME(liDBCount)).
     END.
 
     CATCH e AS Progress.Lang.Error:
         ASSIGN lcError = e:GetMessage(1).
-        fErrorHandle(lcError).
-        fLogError(lcError). 
-        add_string(lcRespArray, "", ttInput.NotificationCode).
-        NEXT MESSAGE_LOOP.
+        RETURN appl_err(lcError).
     END CATCH.    
 END.
 
