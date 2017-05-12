@@ -38,8 +38,8 @@ FUNCTION fUpdateInvText RETURNS LOGICAL
 
 END FUNCTION.
 
-fUpdateInvText("SMS", "STC_DONE", 1, "STC_DONE", "CLITYPE=#CLITYPE").
-fUpdateInvText("SMS", "STC_DONE", 2, "STC_DONE", "CLITYPE=#CLITYPE").
-fUpdateInvText("SMS", "STC_DONE", 3, "STC_DONE", "CLITYPE=#CLITYPE").
-fUpdateInvText("SMS", "STC_DONE", 4, "STC_DONE", "CLITYPE=#CLITYPE").
-fUpdateInvText("SMS", "STC_DONE", 5, "STC_DONE", "CLITYPE=#CLITYPE").
+fUpdateInvText("SMS", "STC_DONE", 1, "stc/done", "cliType=#CLITYPE").
+fUpdateInvText("SMS", "STC_DONE", 2, "stc/done", "cliType=#CLITYPE").
+fUpdateInvText("SMS", "STC_DONE", 3, "stc/done", "cliType=#CLITYPE").
+fUpdateInvText("SMS", "STC_DONE", 4, "stc/done", "cliType=#CLITYPE").
+fUpdateInvText("SMS", "STC_DONE", 5, "stc/done", "cliType=#CLITYPE").
