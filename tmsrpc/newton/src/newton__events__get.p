@@ -40,7 +40,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       
    lcResultStruct = add_struct(resp_array, "").
    
-   add_string(lcResultStruct, "id", STRING(MsRequest.MsRequest)). 
+   add_string(lcResultStruct, "id", (STRING(MsRequest.MsRequest) + "|" + fConvertTenantToBrand(BUFFER-TENANT-NAME(MsRequest)))). 
    add_string(lcResultStruct, "msisdn", MsRequest.CLI).
    add_int(lcResultStruct, "customer_number", MsRequest.Custnum).
    add_string(lcResultStruct, "username", MsRequest.UserCode).
