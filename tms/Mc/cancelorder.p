@@ -138,17 +138,17 @@ ELSE IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
                        12/31/2049).
 END.
 ELSE DO:
-   FIND MobSub WHERE
-        MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
-
-   IF NOT AVAIL MobSub THEN RETURN "".
-
    lcResult = fCashRevertOrder(Order.OrderId).
 
    IF lcResult > ""
    THEN RETURN lcResult.
 
    IF Order.OrderType EQ {&ORDER_TYPE_NEW} THEN DO:
+      FIND MobSub WHERE
+           MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
+
+      IF NOT AVAIL MobSub THEN RETURN "". /* subscription already terminated */
+
       ASSIGN
          liTermReason = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
          ldeTS = fSecOffSet(fMakeTS(),5).
