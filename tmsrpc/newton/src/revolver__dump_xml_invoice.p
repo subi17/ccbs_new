@@ -19,6 +19,7 @@ DEF VAR piInvnum  AS INT  NO-UNDO.
 DEF VAR pcDirname AS CHAR NO-UNDO.
 
 DEF VAR lcOutDir  AS CHAR NO-UNDO.
+DEF VAR liCount   AS INTE NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int,string") EQ ? THEN RETURN.
 
@@ -38,6 +39,17 @@ RUN Inv/invoice_xml_printone.p(piInvnum, (lcOutDir + pcDirname), "").
 
 IF RETURN-VALUE BEGINS "ERROR" THEN 
 	RETURN appl_err(RETURN-VALUE).
+
+CHECK_FILE_AVAIL:
+REPEAT:
+	PAUSE 1 NO-MESSAGE.
+
+	FILE-INFO:FILE-NAME = (lcOutDir + pcDirname + (IF SUBSTRING(pcDirname,LENGTH(pcDirname),1) <> "/" THEN "/" ELSE "") + STRING(piInvnum) + ".xml").
+	IF (FILE-INFO:FULL-PATHNAME > "" AND FILE-INFO:FILE-SIZE > 0) OR liCount >= 5 THEN 
+		LEAVE CHECK_FILE_AVAIL.
+
+	ASSIGN liCount = liCount + 1.	
+END.
 
 add_boolean(response_toplevel_id, "", TRUE).
 
