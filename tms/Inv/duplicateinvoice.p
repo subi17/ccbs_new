@@ -15,6 +15,7 @@ gcBrand = "1".
 {Func/duplicate_invoice.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liInvCount AS INTEGER NO-UNDO.
 DEF VAR liPrinted AS INT NO-UNDO. 
@@ -87,7 +88,9 @@ END.
                
 IF NOT CAN-FIND(FIRST ttInvoice) THEN RETURN.
 
-lcFile = lcSpoolDir + "NewDup" + STRING(YEAR(TODAY),"9999") +
+lcFile = lcSpoolDir + 
+         CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+         "_NewDup" + STRING(YEAR(TODAY),"9999") +
    STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99") + ".txt".
 lcFileCall = lcInvoiceDir + "*" + lcFile.
 
