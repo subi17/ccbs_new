@@ -6,6 +6,8 @@ import shutil
 import subprocess
 
 skip_srcpkg_check = True
+relpath = '..'
+exec(open(relpath + '/etc/make_site.py').read())
 
 tools_dir =  os.path.abspath('../tools/')
 

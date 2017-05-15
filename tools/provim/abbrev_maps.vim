@@ -35,10 +35,9 @@ iab proc PROCEDURE pFoo:<enter><enter>END PROCEDURE.
 iab idef <C-O>gg&IF "{&}" NE "YES" &THEN<enter>&GLOBAL-DEFINE  YES<enter>
 \<C-O>G<enter>&ENDIF
 "F5 New buffer with default progress comments
-map <F5>
-\:let tmpfile = tempname()<enter>
+map <F5> :let tmpfile = tempname()<enter>
 \:exe "e " tmpfile<enter>
-\:exe "r " ccbspath . "tools/provim/template_procedure.p"<enter>
+\:exe "r " ccbspath . "/tools/provim/template_procedure.p"<enter>
 \:set syntax=progress<enter>
 \:%s/\*\*_TODAY_\*\*/\=strftime('%d.%m.%y',localtime())/<enter>
 \:%s/\*\*_USER_\*\*/\=expand("$USER")/<enter>
@@ -66,7 +65,7 @@ map <F9> :nohl<enter>:set syntax=progress<enter>
 
 function! Search_word(ext)
    let tmpfile = tempname()
-   call system("find " . ccbspath . "/tms/ -name '*." . a:ext . "' 2>/dev/null | xargs grep -i '" . expand("<cword>") . "' > " . tmpfile)
+   call system("find " . g:ccbspath . "/tms/ -name '*." . a:ext . "' 2>/dev/null | xargs grep -i '" . expand("<cword>") . "' > " . tmpfile)
    execute "e " tmpfile
 endfunction
 
