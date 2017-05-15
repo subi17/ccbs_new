@@ -259,9 +259,9 @@ FUNCTION fGetStruct RETURNS CHAR
 
     DEF VAR lcDialTypeStruct  AS CHAR NO-UNDO.
     
-    DEF VAR ldPrice   AS DECI NO-UNDO FORMAT "zz9.99".
+    DEF VAR ldPrice   AS DECI NO-UNDO FORMAT "zz9.999".
     DEF VAR lcUnit    AS CHAR NO-UNDO.
-    DEF VAR ldSetup   AS DECI NO-UNDO FORMAT "zz9.99".
+    DEF VAR ldSetup   AS DECI NO-UNDO FORMAT "zz9.999".
 
     DEF VAR liCCN       AS INTE NO-UNDO.
     DEF VAR lcBDest     AS CHAR NO-UNDO.
@@ -332,7 +332,7 @@ DO ON ERROR UNDO, THROW:
            lcFixed2MobileStruct   = add_struct(lcResultStruct, "fixed2mobile").
            fGetStruct("Fixed2Mobile", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, INPUT-OUTPUT lcFixed2MobileStruct).
        END.
-       
+
     END.
 
 END.

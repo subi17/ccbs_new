@@ -99,7 +99,10 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_int(lcResultStruct,"status", DayCampaign.StatusCode).
 
    FIND FIRST CCN WHERE CCN.Brand = "1" AND CCN.CCN = DayCampaign.CCN NO-LOCK NO-ERROR.
-   add_string(lcResultStruct,"category", (IF AVAIL CCN THEN CCN.CCNName ELSE "National")).
+   add_string(lcResultStruct,"category", (IF AVAIL CCN THEN (IF INDEX(CCN.CCNName,"Roaming") > 0 THEN "Roaming" 
+                                                             ELSE IF INDEX(CCN.CCNName,"International") > 0 THEN "International" 
+                                                             ELSE "National") 
+                                          ELSE "National")).
 
    FIND FIRST FMItem NO-LOCK WHERE
               FMItem.Brand     = gcBrand              AND
