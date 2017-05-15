@@ -5,10 +5,10 @@
 &THEN
 &GLOBAL-DEFINE BundleFirstMonthFee YES
 
-{date.i}
-{detailvalue.i}
-{tmsconst.i}
-{cparam2.i}
+{Func/date.i}
+{Func/detailvalue.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 FUNCTION fCalculateProportionalFee RETURNS DEC
    (idUsage      AS DEC,

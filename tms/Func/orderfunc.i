@@ -13,14 +13,22 @@
 &THEN
 
 &GLOBAL-DEFINE orderfunc YES
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{eventval.i}
-{forderstamp.i}
-{dextra.i}
-{cparam2.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Func/dextra.i}
+{Func/cparam2.i}
+{Func/main_add_lines.i}
+
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER katun
+
+   {Func/lib/eventlog.i}
+
+   DEFINE VARIABLE lhOrderStatusChange AS HANDLE NO-UNDO.
+END.
 
 /* set status of order */
 FUNCTION fSetOrderStatus RETURNS LOGICAL
@@ -31,6 +39,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF BUFFER bfOrder2 FOR Order.
    DEF BUFFER bfOrderCustomer FOR OrderCustomer.
    DEF BUFFER bfOrderCustomer2 FOR OrderCustomer.
+   DEF BUFFER MobSub FOR MobSub.
 
    DEF VAR lcResult   AS CHAR    NO-UNDO. 
    DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
@@ -81,6 +90,32 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                      OrderFusion.UpdateTS = fMakeTS().
                   RELEASE OrderFusion.
                END.
+
+               /* Convergent mobile part closing */
+               IF fIsConvergenceTariff (bfOrder.CLIType) THEN DO:
+                  /* Mark subscription partially terminated */
+                  IF bfOrder.OrderType EQ {&ORDER_TYPE_MNP} OR
+                     bfOrder.OrderType EQ {&ORDER_TYPE_NEW} THEN DO:
+                     FIND FIRST MobSub EXCLUSIVE-LOCK WHERE
+                                MobSub.MsSeq = bfOrder.MsSeq AND
+                                MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG}
+                                NO-ERROR.
+                     IF AVAIL MobSub THEN DO:
+                        ASSIGN
+                           MobSub.CLI = MobSub.FixedNumber
+                           MobSub.ICC = ""
+                           MobSub.IMSI = ""
+                           MobSub.MsStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
+                        /* Update MSOwner accordingly */
+                        &IF DEFINED(STAR_EVENT_USER) = 0 
+                        &THEN 
+                           &GLOBAL-DEFINE STAR_EVENT_USER "OrderClose"
+                        &ENDIF
+                        fUpdatePartialMSOwner(bfOrder.MsSeq, MobSub.FixedNumber).
+                        RELEASE MobSub.
+                     END.
+                  END. /* IF bfOrder.OrderType EQ */
+               END. /* IF fIsConvergenceTariff  */
 
                FIND FIRST FusionMessage EXCLUSIVE-LOCK WHERE
                           FusionMessage.orderID EQ bfOrder.OrderId AND
@@ -166,7 +201,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                             bfOrder2.MultiSimID = bfOrder.MultiSimID AND
                             bfOrder2.MultiSimType =
                               {&MULTISIMTYPE_SECONDARY}:
-                     RUN closeorder.p(bfOrder2.OrderId,TRUE).
+                     RUN Mc/closeorder.p(bfOrder2.OrderId,TRUE).
                   END.
 
                END.
@@ -217,7 +252,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                                              CLIType.Brand = gcBrand AND
                                              CLIType.CLIType = OrderAction.ItemKey AND
                                              CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})) THEN NEXT.
-                     RUN closeorder.p(bfOrder2.OrderId,TRUE).
+                     RUN Mc/closeorder.p(bfOrder2.OrderId,TRUE).
                   END.
                END.
 
@@ -311,6 +346,66 @@ FUNCTION fSearchStock RETURNS CHARACTER
    RETURN icStock.
 
 END FUNCTION.
+
+/* Function releases OR CLOSE Additional lines */
+FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
+   (INPUT icCustIDType  AS CHAR,
+    INPUT icCustID      AS CHAR):
+
+   DEF BUFFER labOrder         FOR Order.
+   DEF BUFFER labOrderCustomer FOR OrderCustomer.
+
+   DEF VAR lcNewOrderStatus AS CHAR NO-UNDO.
+
+   FOR EACH labOrderCustomer NO-LOCK WHERE
+            labOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            labOrderCustomer.CustId     EQ icCustID                AND
+            labOrderCustomer.CustIdType EQ icCustIDType            AND
+            labOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH labOrder NO-LOCK WHERE
+            labOrder.Brand      EQ Syst.Parameters:gcBrand  AND
+            labOrder.orderid    EQ labOrderCustomer.Orderid AND
+            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
+
+      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                        CLIType.Brand      = Syst.Parameters:gcBrand           AND
+                        CLIType.CLIType    = labOrder.CLIType                  AND
+                        CLIType.LineType   = {&CLITYPE_LINETYPE_NONMAIN}       AND
+                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
+         
+         CASE labOrder.OrderType:
+            WHEN {&ORDER_TYPE_NEW} THEN
+                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_NEW}
+                                    ELSE {&ORDER_STATUS_NEW}.
+            WHEN {&ORDER_TYPE_MNP} THEN
+                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_MNP}
+                                    ELSE {&ORDER_STATUS_MNP}.
+            WHEN {&ORDER_TYPE_RENEWAL} THEN
+                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
+                                    ELSE {&ORDER_STATUS_RENEWAL_STC}.
+            OTHERWISE.
+         END CASE.
+
+         IF lcNewOrderStatus > "" THEN DO:
+            IF llDoEvent THEN DO:
+               lhOrderStatusChange = BUFFER labOrder:HANDLE.
+               RUN StarEventInitialize(lhOrderStatusChange).
+               RUN StarEventSetOldBuffer(lhOrderStatusChange).
+            END.
+
+            fSetOrderStatus(labOrder.OrderId,lcNewOrderStatus).
+
+            IF llDoEvent THEN DO:
+               RUN StarEventMakeModifyEvent(lhOrderStatusChange).
+               fCleanEventObjects().
+            END.
+         END.
+      END.
+   END.   
+   
+   RETURN TRUE.
+
+END FUNCTION.   
 
 &ENDIF.
 

@@ -8,9 +8,9 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'AreaPair'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'AreaPair'}
 
 DEF INPUT PARAMETER AreaCode LIKE AreaCode.AreaCode NO-UNDO.
 
@@ -57,7 +57,7 @@ form /* angrAnsande riktnr. search WITH FIELD NeigArea */
 
 FIND this-rnom where this-rnom.AreaCode = AreaCode no-lock.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST AreaPair where AreaPair.AreaCode = AreaCode no-lock no-error.
@@ -87,13 +87,13 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* AreaPair -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
       CLEAR FRAME lis no-pause.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
     PAUSE 0 no-message.
    /*    CLEAR FRAME lis no-pause.  */
-    ehto = 9. RUN ufkey.
+    ehto = 9. RUN Syst/ufkey.p.
     DO TRANSACTION:
        assign NeigArea = "".
        UPDATE NeigArea WITH FRAME lis EDITING:
@@ -212,24 +212,24 @@ BROWSE:
     ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
     ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
     ehto = 3 ufkey = FALSE.
-    RUN ufkey.p.
+    RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-    CHOOSE ROW AreaPair.NeigArea ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW AreaPair.NeigArea {Syst/uchoose.i} no-error WITH FRAME sel.
     COLOR DISPLAY value(ccc) AreaPair.NeigArea WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-    CHOOSE ROW AreaPair.NeigArea ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW AreaPair.NeigArea {Syst/uchoose.i} no-error WITH FRAME sel.
     COLOR DISPLAY value(ccc) AreaPair.NeigArea WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-    CHOOSE ROW AreaPair.?? ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW AreaPair.?? {Syst/uchoose.i} no-error WITH FRAME sel.
     COLOR DISPLAY value(ccc) AreaPair.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-    CHOOSE ROW AreaPair.??  ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW AreaPair.??  {Syst/uchoose.i} no-error WITH FRAME sel.
     COLOR DISPLAY value(ccc) AreaPair.? WITH FRAME sel.
       END.
 */
@@ -407,9 +407,9 @@ BROWSE:
      /* Haku sarakk. 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-   cfc = "puyr". RUN ufcolor.
+   cfc = "puyr". RUN Syst/ufcolor.p.
    NeigArea = "".
-   ehto = 9. RUN ufkey. ufkey = TRUE.
+   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE NeigArea WITH FRAME f1.
    HIDE FRAME f1 no-pause.
    if NeigArea <> "" THEN DO:

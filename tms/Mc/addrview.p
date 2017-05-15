@@ -8,8 +8,8 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 
 FIND FIRST OrderCustomer NO-LOCK where
@@ -26,7 +26,7 @@ FORM
    "Country..........:" OrderCustomer.Country SKIP
    "Region...........:" OrderCustomer.Region SKIP
    "Post Office......:" OrderCustomer.PostOffice SKIP
-   "Street...........:" OrderCustomer.Street SKIP
+   "Street...........:" OrderCustomer.Street format "x(59)" SKIP
    "Street Type......:" OrderCustomer.StreetType SKIP
    "Building Number..:" OrderCustomer.BuildingNum SKIP
    "Bis Duplicate....:" OrderCustomer.BisDuplicate SKIP
@@ -40,7 +40,7 @@ FORM
    "Zip..............:" OrderCustomer.ZipCode SKIP(2)
 WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) "Address"
+    TITLE COLOR VALUE(ctc) " Installation Address "
     NO-LABELS
     FRAME fAddr.
 PAUSE 0 NO-MESSAGE.
@@ -75,7 +75,7 @@ REPEAT WITH FRAME fAddr ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufk[6]= 0
       ufk[8]= 8 
       ehto  = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 8 THEN LEAVE.
 

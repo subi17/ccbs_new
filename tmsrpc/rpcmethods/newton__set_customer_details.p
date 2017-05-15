@@ -20,11 +20,11 @@
             coname;string;optional;
             street;string;optional;
             zip;string;optional;
-     	      city;string;optional;
+            city;string;optional;
             language;string;optional;
             nationality;string;optional;
             bankaccount;string;optional;
-	         country;string;optional;
+            country;string;optional;
             email;string;optional;
             sms_number;string;optional;
             phone_number;string;optional;
@@ -63,11 +63,11 @@
  * Note: Address data is updated using RPC newton__set_customer_address.p
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
-{timestamp.i}
-{fbankdata.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/fbankdata.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -145,6 +145,8 @@ DEF VAR liDelType AS INT NO-UNDO.
 DEF VAR lcError AS CHAR NO-UNDO. 
 DEF VAR lcMemoHostTable AS CHAR NO-UNDO INIT "Customer".
 DEF VAR liChargeType AS INT NO-UNDO.
+DEF VAR lcMemo    AS CHAR  NO-UNDO.
+lcMemo = "Agent" + CHR(255) + "VISTA".
 
 ASSIGN
     lcCustomerData[1] = customer.HonTitle
@@ -282,10 +284,10 @@ END.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{flimitreq.i}
-{fcustdata.i}
-{fmakemsreq.i}
-{femailinvoice.i}
+{Func/flimitreq.i}
+{Func/fcustdata.i}
+{Func/fmakemsreq.i}
+{Func/femailinvoice.i}
 
 DEF BUFFER bCustomer FOR Customer.
 DEFINE VARIABLE lcOrgId AS CHARACTER NO-UNDO. 
@@ -343,7 +345,9 @@ IF Customer.CustIdType = "CIF" THEN DO:
          WHEN LOOKUP("id_type", lcStruct) > 0 
          Customer.AuthCustId = get_string(pcStruct, "person_id")
          WHEN LOOKUP("person_id", lcStruct) > 0.
-      RUN StarEventMakeModifyEvent(lhCustomer).
+      RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                           {&STAR_EVENT_USER}, 
+                                           lcMemo).
    END.
    FIND CURRENT Customer NO-LOCK.
   
@@ -560,7 +564,9 @@ IF llCustomerChanged THEN DO:
     END. /* IF customer.email */
 
     FIND CURRENT Customer NO-LOCK.
-    RUN StarEventMakeModifyEvent(lhCustomer).
+    RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                         {&STAR_EVENT_USER}, 
+                                         lcMemo).
 END.
    
 fCleanEventObjects().
@@ -695,3 +701,5 @@ END.
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.
+
+

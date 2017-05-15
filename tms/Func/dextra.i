@@ -9,13 +9,13 @@
 &IF "{&DEXTRA_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE DEXTRA_I YES
-{commali.i}
-{fgettxt.i}
-{date.i}
-{fmakesms.i}
-{tmsconst.i}
-{fcreatereq.i}
-{msisdn_prefix.i}
+{Syst/commali.i}
+{Func/fgettxt.i}
+{Func/date.i}
+{Func/fmakesms.i}
+{Syst/tmsconst.i}
+{Func/fcreatereq.i}
+{Func/msisdn_prefix.i}
 
 FUNCTION fSendDextraSMS RETURNS LOGICAL
 (iiOrderId AS INTEGER,
@@ -44,7 +44,7 @@ FUNCTION fSendDextraSMS RETURNS LOGICAL
 
    CASE iiLOStatusId:
       WHEN 6 THEN DO: 
-         IF Order.DeliverySecure EQ 1 THEN
+         IF Order.DeliverySecure EQ 1 OR Order.DeliverySecure EQ 2 THEN
             lcSMSToken = "LogisticDelivery_SECUR".
          ELSE lcSMSToken = "LogisticDelivery_ALL".
       END.   

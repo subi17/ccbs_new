@@ -26,12 +26,12 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MSOwner'}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MSOwner'}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 DEF /* NEW */ SHARED VAR siirto AS CHAR .
 
@@ -85,7 +85,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMSOwner AS HANDLE NO-UNDO.
    lhMSOwner = BUFFER MSOwner:HANDLE.
@@ -93,7 +93,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhMSOwner).
+      RUN Mc/eventview2.p(lhMSOwner).
    END.
 END.
 
@@ -214,7 +214,7 @@ FUNCTION fChkTime RETURNS LOGICAL
 END FUNCTION.                    
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 
 orders = "By Date,By 2,By 3, By 4".
 
@@ -248,12 +248,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a MSOwner  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR MSOwner.CLI
@@ -342,12 +342,12 @@ BROWSE:
         ufk[4]= 7 WHEN llVendor AND NOT llTerminated
         ufk[5]= 0  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MSOwner.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSOwner.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSOwner.CustNum WITH FRAME sel.
       END.
 
@@ -495,7 +495,7 @@ BROWSE:
 
         IF llUpdate AND lcRight = "RW" THEN DO:
 
-           ehto = 9. RUN ufkey.
+           ehto = 9. RUN Syst/ufkey.p.
 
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOwner).
 
@@ -572,8 +572,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
-       ASSIGN ac-hdr = " VIEW MSOwner " ufkey = TRUE ehto = 9. /*RUN ufkey.*/
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW MSOwner " ufkey = TRUE ehto = 9. /*RUN Syst/ufkey.p.*/
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MSOwner.CLI.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOwner).
        RUN local-UPDATE-record.                                  
@@ -693,7 +693,7 @@ END PROCEDURE.
 
 PROCEDURE local-UPDATE-record:
 
-   ehto = 3. ufk = 0. run ufkey.p.
+   ehto = 3. ufk = 0. RUN Syst/ufkey.p.
    ufkey = true.
 
    DEF VAR llUpdate    AS LOG  NO-UNDO. 
@@ -728,7 +728,8 @@ PROCEDURE local-UPDATE-record:
       DISP 
       MSOwner.CLI
       MSOwner.CLI + " / " + MSOwner.FixedNumber WHEN
-         MSOwner.FixedNumber NE "" AND MSOwner.FixedNumber NE ? @ MSOwner.CLI
+         (MSOwner.FixedNumber NE "" AND MSOwner.FixedNumber NE ? AND 
+          MSOwner.FixedNumber NE MSOwner.Cli) @ MSOwner.CLI
       MSOwner.MsSeq
       MsOwner.AgrCust lcAgrName
       MsOwner.InvCust lcInvName

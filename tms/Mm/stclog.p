@@ -8,12 +8,12 @@
    Version ......: xfera 
    --------------------------------------------------- */               
                                                                 
-{commpaa.i} 
+{Syst/commpaa.i} 
 katun = "cron".
 gcbrand = "1".
 
-{cparam2.i}
-{tsformat.i}
+{Func/cparam2.i}
+{Func/tsformat.i}
 
 DEF VAR lcSpooldir   AS C    NO-UNDO.
 DEF VAR lcOutdir     AS C    NO-UNDO.

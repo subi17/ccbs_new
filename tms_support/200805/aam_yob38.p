@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
 def var lccli      as char no-undo.
@@ -59,7 +59,7 @@ repeat:
    
    ttseq.invnum = min(ttseq.invnum,integer(substring(invoice.extinvid,5))).
    
-   run del_inv.p (invoice.invnum).
+   RUN Inv/del_inv.p (invoice.invnum).
    
 end.
 

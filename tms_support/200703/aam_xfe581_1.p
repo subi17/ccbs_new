@@ -1,6 +1,6 @@
-{testpaa.i}
-{ftaxdata.i}
-{fvoucher.i}
+{Syst/testpaa.i}
+{Func/ftaxdata.i}
+{Func/fvoucher.i}
 
 def var ldtaxperc  as dec  no-undo.
 def var i          as int  no-undo.

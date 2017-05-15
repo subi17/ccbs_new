@@ -10,7 +10,7 @@
  * @output success;boolean
  */
 {xmlrpc/xmlrpc_access.i}
-{mnpoutchk.i}
+{Mnp/mnpoutchk.i}
 
 DEF VAR liReq AS INTEGER NO-UNDO.
 
@@ -50,7 +50,8 @@ IF NOT AVAILABLE mobsub THEN
 
 /*YPR-4777*/
 /*Operation is not allowed if fixed line provisioning is pending*/
-IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
+IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR
+    MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN
    RETURN appl_err("Mobile line provisioning is not complete").
 
 FIND FIRST SIM NO-LOCK WHERE SIM.ICC = pcValue NO-ERROR. 
@@ -77,12 +78,12 @@ IF fIsMNPOutOngoing(mobsub.cli) THEN RETURN appl_err("Ongoing MNP OUT request").
 
 IF TRIM(pcSalesman) EQ "" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun = "VISTA_" + pcSalesman.
-{fmakemsreq.i}
-{fcharge_comp_loaded.i}
+{Func/fmakemsreq.i}
+{Func/fcharge_comp_loaded.i}
 
 IF pdeCharge > 0 THEN DO:
    lcError = fCheckChargeLimits (

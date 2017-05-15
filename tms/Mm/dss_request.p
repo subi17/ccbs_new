@@ -6,14 +6,14 @@
   CREATED ......: 10.09.11   
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{date.i}
-{timestamp.i}
-{fsendsms.i}
-{fcpfat.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/fsendsms.i}
+{Func/fcpfat.i}
 {Mm/active_bundle.i}
-{service.i}
+{Func/service.i}
 
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
@@ -213,7 +213,7 @@ PROCEDURE pFinalize:
    ldeCurrentTS = fMakeTS().
 
    /* Send the SMS using Request Action Rules for DSS */
-   RUN requestaction_sms.p(INPUT MsRequest.MsRequest,
+   RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
                            INPUT lcUseCLIType,
                            INPUT MsRequest.ReqSource).
 
@@ -323,7 +323,7 @@ PROCEDURE pFinalize:
                         MsRequest.Custnum,
                         liPeriod) THEN DO:
 
-         RUN creafat.p(MsRequest.CustNum,
+         RUN Mc/creafat.p(MsRequest.CustNum,
                        liDSSMsSeq,
                        "DSSCPFREE",
                        ?, /* amount */

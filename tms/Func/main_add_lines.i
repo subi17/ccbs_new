@@ -9,15 +9,15 @@
   CREATED ......: 28.08.13
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{tmsconst.i}
-{mnpoutchk.i}
-{cparam2.i}
-{date.i}
-{fsubstermreq.i}
-{msreqfunc.i}
-{fmakemsreq.i}
-{fgettxt.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Mnp/mnpoutchk.i}
+{Func/cparam2.i}
+{Func/date.i}
+{Func/fsubstermreq.i}
+{Func/msreqfunc.i}
+{Func/fmakemsreq.i}
+{Func/fgettxt.i}
 
 DEF TEMP-TABLE tt_AdditionalSIM NO-UNDO
     FIELD MsSeq    AS INT
@@ -333,6 +333,7 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
                        icSource,
                        katun,
                        iiOrigRequest, /* orig. request */
+                       {&TERMINATION_TYPE_FULL},
                        OUTPUT lvcError).
    IF lviRequest EQ 0 THEN
       DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,

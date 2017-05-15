@@ -11,7 +11,7 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
 

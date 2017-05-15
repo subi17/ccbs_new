@@ -7,12 +7,12 @@ hell MODULE .......: cancelorder.p
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{fsubstermreq.i}
-{ordercancel.i}
-{fmakemsreq.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fsubstermreq.i}
+{Func/ordercancel.i}
+{Func/fmakemsreq.i}
+{Func/main_add_lines.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilCheckLOStatus AS LOG NO-UNDO.
@@ -30,6 +30,7 @@ DEF VAR lcCreditReason AS CHARACTER NO-UNDO.
 DEF VAR liCount AS INTEGER NO-UNDO.
 DEF VAR ldtLOTS AS DATETIME NO-UNDO.
 DEF VAR liError AS INT NO-UNDO. 
+DEF VAR lcTermType AS CHARACTER NO-UNDO. 
 
 DEFINE BUFFER bOrderDelivery FOR OrderDelivery.
 
@@ -231,6 +232,10 @@ ELSE DO:
             liSimStat = {&SIM_SIMSTAT_TEMP}.
          END.
 
+         IF fIsConvergenceTariff(MobSub.CLIType) 
+            THEN lcTermType = {&TERMINATION_TYPE_PARTIAL}.
+         ELSE lcTermType = {&TERMINATION_TYPE_FULL}.
+
          liReq = fTerminationRequest(
                         Order.MsSeq,
                         ldeTS,    /* when request should be handled */
@@ -243,6 +248,7 @@ ELSE DO:
                         {&REQUEST_SOURCE_ORDER_CANCELLATION},
                         "",
                         0,
+                        lcTermType,
                         OUTPUT lcResult).
    
          IF liReq > 0 THEN

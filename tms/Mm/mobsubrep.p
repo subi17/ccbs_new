@@ -8,8 +8,8 @@
   Version ......:
   ------------------------------------------------------------------ */
 
-{commali.i}  
-{mobsub1.i}
+{Syst/commali.i}  
+{Mm/mobsub1.i}
 
 DEF VAR InvGroup  LIKE Customer.InvGroup NO-UNDO.
 DEF VAR CustNum1  AS I   no-undo format "zzzzzz9".
@@ -51,11 +51,11 @@ ASSIGN
    actdate1 = date(month(actdate2),1,year(actdate2)).
 
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       InvGroup
@@ -113,12 +113,12 @@ repeat WITH FRAME start:
 task:
    repeat WITH FRAME start:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 
       IF toimi = 5 THEN DO:
-         RUN mobsubreppr.p(
+         RUN Mm/mobsubreppr.p(
             InvGroup,
             CustNum1,
             CustNum2,

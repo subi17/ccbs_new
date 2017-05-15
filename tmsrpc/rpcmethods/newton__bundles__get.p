@@ -16,17 +16,21 @@
                    fixed_line_type;int;fixed line type (ADSL=1 or FIBER=2)
                    dss2_compatible;boolean;DSS2 compatible
                    voip_compatible;boolean;Voip Compatible
+ * @region taxzone;string; VAT Code Name
+           taxinclvalue;decimal; Monthly Cost based on including Zone Tax
  */
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
 DEF VAR pcIdArray AS CHAR NO-UNDO. 
 DEF VAR liCounter AS INTEGER NO-UNDO. 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
+DEF VAR lcRegionArray  AS CHAR NO-UNDO.
+DEF VAR lcRegionStruct AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
 pcIDArray = get_array(param_toplevel_id, "0").
@@ -50,9 +54,9 @@ DEF VAR liFixedLineType    AS INT  NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
 DEF VAR lcPromotionBundles AS CHAR NO-UNDO. 
 
-{cparam2.i}
-{tmsconst.i}
-{fprepaidfee.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/fprepaidfee.i}
 
 ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcCONTDContracts = fCParamC("CONTD_CONTRACTS")
@@ -161,8 +165,17 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_int(lcResultStruct,"line_type", liLineType).
    add_int(lcResultStruct,"fixed_line_type", liFixedLineType).
    add_boolean(lcResultStruct,"dss2_compatible", llDss2Compatible).
-   add_boolean(lcResultStruct,"voip_compatible", FALSE /*llVoIPCompatible*/).
+   add_boolean(lcResultStruct,"voip_compatible", FALSE).
 
+   lcRegionArray = add_array(lcResultStruct, "region").
+   FOR EACH VATCode NO-LOCK WHERE
+            VATCode.TaxClass  = "1"   AND
+            VATCode.FromDate <= TODAY AND
+            VATCOde.ToDate   >= TODAY:
+      lcRegionStruct = add_struct(lcRegionArray,"").
+      add_string(lcRegionStruct,"taxzone", VATCode.VCName).
+      add_double(lcRegionStruct,"taxinclvalue", (1 + VatCode.VatPerc / 100) * ldeFee).
+   END.
 END.
 
 FINALLY:

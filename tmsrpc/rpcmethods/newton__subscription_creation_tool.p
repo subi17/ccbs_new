@@ -1,13 +1,13 @@
 /* Subscription Creation Testing Tool */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "Newton".
-{timestamp.i}
-{tmsconst.i}
-{cparam2.i}
-{ftransdir.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
 
 /* Input parameters */
 DEF VAR pcStruct                    AS CHAR NO-UNDO.

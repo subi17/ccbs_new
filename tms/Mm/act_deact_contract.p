@@ -7,18 +7,18 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{timestamp.i}
-{eventlog.i}
-{fmakemsreq.i}
-{mdub.i}
-{service.i}
-{fprepaidfee.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/eventlog.i}
+{Func/fmakemsreq.i}
+{Func/mdub.i}
+{Func/service.i}
+{Func/fprepaidfee.i}
 {Mm/active_bundle.i}
 
 /* files and dirs */

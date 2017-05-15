@@ -1,15 +1,15 @@
-{commali.i} 
-{xmlfunction.i}
-{mathfunction.i}
-{msreqfunc.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i} 
+{Func/xmlfunction.i}
+{Func/mathfunction.i}
+{Func/msreqfunc.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 DEFINE INPUT PARAMETER iiRequest AS INT             NO-UNDO.
 
 DEF VAR lcType AS CHAR NO-UNDO.
 
-DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "tcpgwy" . 
+DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "Gwy/tcpgwy.p" . 
    
 DEF BUFFER bOrigRequest FOR MsRequest.
 
@@ -83,7 +83,7 @@ IF Customer.CustIdType = "CIF" AND
       RETURN.
    END.
    
-   RUN creditscoring.p(
+   RUN Mc/creditscoring.p(
       MobSub.MsSeq,
       "NORMAL",
       OUTPUT llOk,
@@ -109,7 +109,7 @@ ELSE DO:
       fReqError(lcResp).
 
       IF lcType = "ACC" THEN
-         RUN acc_sendsms(MsRequest.OrigRequest,
+         RUN Mm/acc_sendsms.p(MsRequest.OrigRequest,
                          MsRequest.CustNum,
                          "Rejected",
                          "HT:309").
@@ -229,7 +229,7 @@ PROCEDURE pCreditScoring:
    SET-SIZE(lmXML) = 0.
 
    RUN VALUE(lcTCPModule) (lcHTTPHeader + lcXML,lcURL,5,2,"<").  
-   /* RUN tcpgwy(lcHTTPHeader + lcXML,lcURL,5,2,"<").   */
+   /* RUN Gwy/tcpgwy.p(lcHTTPHeader + lcXML,lcURL,5,2,"<").   */
 
    lcReturn = RETURN-VALUE.
    
@@ -397,7 +397,23 @@ PROCEDURE pHeader:
          lcSalesman = "Y300000000"
          lcSimOnly = "N"
          lcOfferId = Order.Offer.
-         
+
+      FOR FIRST Order NO-LOCK WHERE
+            Order.Brand = gcBrand                   AND
+            Order.OrderID = bOrigRequest.ReqIParam2 /*AND
+            Order.DeliveryType = {&ORDER_DELTYPE_POS} */ ,
+         FIRST OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand = "1"               AND
+            OrderCustomer.OrderId = Order.OrderID   AND
+            OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}:
+
+         ASSIGN
+            lcAddress     = OrderCustomer.Address
+            lcZipCode     = OrderCustomer.ZipCode
+            lcRegion      = OrderCustomer.Region
+            lcPostOffice  = OrderCustomer.PostOffice
+            .
+      END.
    END.      
          
    IF lcBirthDay = ? THEN lcBirthDay = "".

@@ -21,22 +21,22 @@
  */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
 
-{tmsconst.i}
-{date.i}
-{timestamp.i}
-{cparam2.i}
-{fixedfee.i}
-{fbundle.i}
-{fcustpl.i}
-{penaltyfee.i}
-{fctchange.i}
-{main_add_lines.i}
-{fdss.i}
-{fixedlinefunc.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fixedfee.i}
+{Mm/fbundle.i}
+{Func/fcustpl.i}
+{Func/penaltyfee.i}
+{Func/fctchange.i}
+{Func/main_add_lines.i}
+{Func/fdss.i}
+{Func/fixedlinefunc.i}
 
 /* Input parameters */
 DEF VAR piMsSeq            AS INT     NO-UNDO.
@@ -184,9 +184,9 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
        NOT(MobSub.PayType = TRUE  OR CLIType.PayType = 2)) AND
           ldaSTCDates[1] <> ldaSTCDates[2]                 AND
           lliSTCAllowed                                    THEN
-      liCount = 1.
+      liCount = 1.  /* collect both STC dates (iSTC and normal) */
    ELSE
-      liCount = 2. 
+      liCount = 2.  /* collect the 2nd STC date only (normal) */
 
    sub_struct = add_struct(response_toplevel_id, "").
    penalty_array = add_array(sub_struct,"penalties").

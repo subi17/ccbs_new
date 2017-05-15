@@ -11,9 +11,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invseq'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invseq'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -91,7 +91,7 @@ form /* seek Mobile user  BY InvNum */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By InvSeq   ,By CustNo  ,By InvNum , By 4".
@@ -165,21 +165,21 @@ BROWSE:
         ufk[1]= 1840  ufk[2]= 702 ufk[3]= 0 /* 92 */ ufk[4]= 0
         ufk[5]= 1830  ufk[6]= 1831 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"7"'}
-        RUN ufkey.p.
+        {Syst/uright1.i '"7"'}
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvSeq.InvSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSeq.InvSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSeq.InvSeq WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW InvSeq.InvNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSeq.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSeq.InvNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW InvSeq.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSeq.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSeq.CustNum WITH FRAME sel.
       END.
 
@@ -308,8 +308,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET InvSeq WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -331,8 +331,8 @@ BROWSE:
 
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET CustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.

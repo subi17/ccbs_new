@@ -6,14 +6,14 @@
   CREATED ......: 25.04.13
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commali.i}
-{cparam2.i}
-{dumpfile_run.i}
-{timestamp.i}
-{tmsconst.i}
-{forderstamp.i}
-{msreqfunc.i}
-{ftransdir.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/dumpfile_run.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/forderstamp.i}
+{Func/msreqfunc.i}
+{Func/ftransdir.i}
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -638,7 +638,8 @@ PROCEDURE pPrintLine:
    /*CMONEDAOPER*/   "02" FORMAT "X(2)"
    /*FORMA_DE_PAGO*/ icPayTermType FORMAT "X(4)"
    /*FILLER VACIO*/  " " FORMAT "X(4)"
-   /*DES-MAIL*/      " " FORMAT "X(50)"
+   /*DES-MAIL*/      (IF lcTFBank EQ {&TF_BANK_CETELEM} THEN ttOrderCustomer.Email
+                      ELSE " ") FORMAT "X(50)"
    /*COD-PAIS*/      "0011" FORMAT "X(4)"
    /*XTI-ROBINSON*/  (IF lcTFBank EQ {&TF_BANK_UNOE} THEN "S"
                       ELSE STRING(ttOrderCustomer.OutBankMarketing,"S/N"))

@@ -38,7 +38,7 @@ END.
      
 uvpvm = TODAY.
 
-RUN uviik.p.
+RUN Syst/uviik.p.
 
 lcF = "/scratch/nagios/tms/order/total/totalorders" + STRING(uviikko) + 
 ".dump".

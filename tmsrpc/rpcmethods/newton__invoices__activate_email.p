@@ -7,13 +7,13 @@
  */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "tmsrpc".
-{cparam2.i}
-{tmsconst.i}
-{msreqfunc.i}
-{eventval.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
 
 DEF VAR pcHashKey      AS CHAR   NO-UNDO.
 DEF VAR piRequestId    AS INT    NO-UNDO.
@@ -32,7 +32,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
    lhInvoiceTargetGroup = BUFFER InvoiceTargetGroup:HANDLE.
 END. /* IF llDoEvent THEN DO: */

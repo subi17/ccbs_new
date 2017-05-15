@@ -7,8 +7,8 @@
                   12.09.03 jp Brand
   VERSION ......: M15
 ----------------------------------------------------------------------------- */
-{commali.i}
-{fcurrency.i}
+{Syst/commali.i}
+{Func/fcurrency.i}
 
 DEF SHARED TEMP-TABLE nnpvti
    FIELD pt-tuno AS CHAR

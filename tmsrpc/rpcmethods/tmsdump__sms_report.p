@@ -20,7 +20,7 @@ INDEX name IS PRIMARY UNIQUE name.
 IF NOT get_paramcount(param_toplevel_id) EQ 0 THEN
     RETURN param_err("Unexpected parameters").
 
-RUN smsreport_data.p(output table ttReport BY-REFERENCE).
+RUN Mc/smsreport_data.p(output table ttReport BY-REFERENCE).
 
 resp_array = add_array(response_toplevel_id, "").
 

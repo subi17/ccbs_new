@@ -8,10 +8,10 @@
 
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
-{timestamp.i}
-{tmsconst.i}
-{barrfunc.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/barrfunc.i}
 katun    = "NewtonAd".
 gcBrand  = "1".
 
@@ -49,14 +49,15 @@ IF NOT AVAILABLE Mobsub THEN
 
 /*YPR-4774*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
-IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
+IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR
+    MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN
    RETURN appl_err("Mobile line provisioning is not complete").
 
 IF fIsReasonableSet(pcCommand, MobSub.MsSeq) EQ FALSE THEN
    RETURN appl_err("Barring status already active/inactive").
 
 /*Barrengine makes required validations*/
-RUN barrengine.p(MobSub.MsSeq,
+RUN Mm/barrengine.p(MobSub.MsSeq,
                  pcCommand,
                  {&REQUEST_SOURCE_NEWTON},
                  "",

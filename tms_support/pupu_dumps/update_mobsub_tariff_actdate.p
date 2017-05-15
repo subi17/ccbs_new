@@ -1,11 +1,11 @@
 
 DISABLE TRIGGERS FOR LOAD OF MobSub.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{timestamp.i}
-{fbundle.i}
+{Func/timestamp.i}
+{Mm/fbundle.i}
 
 DEF VAR lcTariff     AS CHAR NO-UNDO.
 DEF VAR liNum        AS INT  NO-UNDO.

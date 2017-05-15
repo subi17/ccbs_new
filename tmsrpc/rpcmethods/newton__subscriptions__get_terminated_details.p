@@ -43,15 +43,15 @@
                 service;int;0 = no memos, 1 = at least one memo
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
-{tmsconst.i}
-{flimitreq.i}
-{fbundle.i}
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
+{Mm/fbundle.i}
 {get_memos.i}
-{timestamp.i}
-{msisdn_prefix.i}
+{Func/timestamp.i}
+{Func/msisdn_prefix.i}
 
 DEF VAR plAdmin AS LOG NO-UNDO.
 
@@ -63,7 +63,8 @@ FUNCTION fIsViewableTermMobsub RETURNS LOGICAL
    DEF BUFFER MsOwner FOR MsOwner.
    
    FIND FIRST Msowner WHERE 
-              Msowner.msseq = iiMsSeq
+              Msowner.msseq EQ iiMsSeq AND
+              Msowner.tsend LT fmakets()
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
    IF NOT AVAIL Msowner THEN RETURN FALSE.
    
@@ -180,7 +181,8 @@ ELSE DO:
 END.
 
 FIND FIRST Msowner WHERE 
-           Msowner.msseq = TermMobsub.MSseq
+           Msowner.msseq EQ TermMobsub.MSseq AND
+           Msowner.tsend LT fmakets()
 NO-LOCK USE-INDEX MsSeq NO-ERROR.
 IF AVAIL msowner THEN DO:
    fSplitTS(msowner.tsend, OUTPUT ldaTermDate, OUTPUT liTermTime).

@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 
 def var ldaeventdate as date no-undo.
 def var lidelay as int no-undo.

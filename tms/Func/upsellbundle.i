@@ -8,14 +8,14 @@
        
 &GLOBAL-DEFINE upsellbundle YES
 
-{timestamp.i}
-{fmakemsreq.i}
-{date.i}
-{tmsconst.i}
-{fbundle.i}
-{fsendsms.i}
-{fdss.i}
-{fprepaidfee.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
+{Func/fsendsms.i}
+{Func/fdss.i}
+{Func/fprepaidfee.i}
 {Func/upsellcount.i}
 
 FUNCTION fGetUpSellBasicContract RETURNS CHAR
@@ -49,7 +49,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
       IF NOT AVAIL bMobSub THEN RETURN "".
   
       FOR EACH bServiceLimit NO-LOCK WHERE
-          {dss_search.i "bServiceLimit.GroupCode"},
+          {Func/dss_search.i "bServiceLimit.GroupCode"},
           EACH bMServiceLimit NO-LOCK WHERE
                bMServiceLimit.CustNum  = iiCustNum              AND
                bMServiceLimit.DialType = bServiceLimit.DialType AND
@@ -100,7 +100,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
                   DayCampaign.BundleUpsell NE "DATA200_UPSELL" AND
                   DayCampaign.BundleUpsell > "":
-            IF {dss_search.i "DayCampaign.DCEvent"} THEN NEXT.
+            IF {Func/dss_search.i "DayCampaign.DCEvent"} THEN NEXT.
             RETURN bServiceLimit.GroupCode.
          END. /* FOR EACH bMServiceLimit NO-LOCK WHERE */
       END.

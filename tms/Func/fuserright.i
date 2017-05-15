@@ -5,7 +5,7 @@
 &IF "{&FUSERRIGHT_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE FUSERRIGHT_I YES
-{commali.i}
+{Syst/commali.i}
 
 FUNCTION fTokenRights RETURNS CHAR
    (icUserCode AS CHAR,

@@ -12,10 +12,10 @@
   VERSION ......: M15 
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{finvnum.i}
-{billrund.i NEW}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/finvnum.i}
+{Inv/billrund.i NEW}
 
 def var invDte     as date format "99-99-99"     no-undo init today.
 def var lasno      as char format "x(12)"        no-undo.
@@ -49,7 +49,7 @@ DEF VAR lcPrefix   AS CHAR NO-UNDO.
 
 DEF BUFFER bEventCust FOR Customer.
 
-{tmsparam.i oh-tuasno  RETURN}. unknown  = tmsparam.IntVal.
+{Func/tmsparam.i oh-tuasno  RETURN}. unknown  = tmsparam.IntVal.
 
 /* default values from cparam */
 defcurr  = fCParamC("DefCurrency").
@@ -66,7 +66,7 @@ if not avail currency OR defcurr = ? OR defcurr = "" then do:
 end.
 
 def var pHandle   as handle no-undo.
-run lamupers persistent set pHandle.
+RUN Inv/lamupers.p persistent set pHandle.
 
 form
    skip(17)
@@ -125,11 +125,11 @@ with
    title color value (ctc) " INVOICE GROUP DATA " color value(cfc)
    overlay centered row 15 frame lasno.
 
-cfc = "sel". run ufcolor. ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
 view frame taka. pause 0 no-message.
 
-cfc = "lis". run ufcolor.
-ehto = 9. run ufkey.
+cfc = "lis". RUN Syst/ufcolor.p.
+ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN
 atpvm2 = date(month(today),1,year(today)) - 1
@@ -185,7 +185,7 @@ toimi:
    repeat with frame valinta on endkey undo toimi, return:
       if kysy_rajat then do:
          /* We ask the limits */
-         ehto = 9. run ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          update
             InvGroup
             asno1 asno2   validate(input asno2  >= input asno1,
@@ -280,7 +280,7 @@ toimi:
                END.
 
                ELSE IF FRAME-FIELD = "ciperiod" THEN DO:
-                  RUN uperch(INPUT FRAME rajat ciperiod,output i).
+                  RUN Syst/uperch.p(INPUT FRAME rajat ciperiod,output i).
                   IF i > 0 THEN NEXT.
 
                END.
@@ -298,7 +298,7 @@ toimi:
       assign ufk = 0 ufk[1] = 132 ufk[2] = 0
                      ufk[4] = 0 ufk[5] = 795
                      ufk[8] = 8 ehto = 0.
-      run ufkey.
+      RUN Syst/ufkey.p.
       if toimi = 1 then do:
          kysy_rajat = true.
          next toimi.

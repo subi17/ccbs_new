@@ -30,16 +30,16 @@
 
  */
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{callquery.i}
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
+{Func/callquery.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 {Mm/active_bundle.i}
-{upsellbundle.i}
-{tarj6.i}
-{istc.i}
+{Func/upsellbundle.i}
+{Func/tarj6.i}
+{Func/istc.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -291,12 +291,14 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
             ttCDR.TimeStart >= liPrepRenewal THEN DO:
 
             IF ttCDR.EventType EQ "GPRS" THEN DO:
-               IF ttCDR.Charge EQ 0 THEN DO:
+               IF ttCDR.Charge EQ 0 AND
+                  ttCDR.Accumulator > 0 THEN DO:
                   ldePrepDataUsageMonthly  = ttCDR.Accumulator.
                END.
             END.
             ELSE IF ttCDR.EventType EQ "CALL" AND 
-                    ttCDR.CLIType EQ "TARJ9" THEN DO:  
+                    ttCDR.CLIType EQ "TARJ9" AND
+                    ttCDR.Accumulator > 0 THEN DO:  
                ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
             END.
          END.

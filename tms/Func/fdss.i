@@ -12,17 +12,17 @@
 
 &GLOBAL-DEFINE fDSS YES
 
-{commali.i}
-{tmsconst.i}
-{date.i}
-{cparam2.i}
-{timestamp.i}
-{fmakemsreq.i}
-{fparse.i}
-{fixedfee.i}
-{matrix.i}
-{eventval.i}
-{create_eventlog.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
+{Func/fparse.i}
+{Func/fixedfee.i}
+{Func/matrix.i}
+{Syst/eventval.i}
+{Func/create_eventlog.i}
 
 &GLOBAL-DEFINE PL_LIMIT_SHAPED 20971520
 
@@ -71,7 +71,7 @@ FUNCTION fDSSRequest RETURNS INTEGER
 
    /* Pre-check only for CREATE, there is no ongoing ACC request */
    IF icAction = "CREATE" THEN DO:
-      RUN requestaction_check.p(INPUT {&REQTYPE_DSS},
+      RUN Mm/requestaction_check.p(INPUT {&REQTYPE_DSS},
                                 INPUT lcCLIType,
                                 INPUT iiMsSeq,
                                 INPUT icSource,
@@ -104,7 +104,7 @@ FUNCTION fDSSRequest RETURNS INTEGER
    RELEASE bCreaReq.
 
    /* Send the SMS using Request Action Rules for DSS */
-   RUN requestaction_sms.p(INPUT liReqCreated,
+   RUN Mm/requestaction_sms.p(INPUT liReqCreated,
                            INPUT lcCLIType,
                            INPUT icSource).
   
@@ -153,7 +153,7 @@ FUNCTION fIsDSSActive RETURNS LOG (INPUT iiCustNum    AS INT,
    DEF BUFFER ServiceLimit FOR ServiceLimit.
 
    FOR EACH ServiceLimit NO-LOCK WHERE
-            {dss_search.i "ServiceLimit.GroupCode"}:
+            {Func/dss_search.i "ServiceLimit.GroupCode"}:
        IF CAN-FIND (FIRST MServiceLimit NO-LOCK WHERE
                           MServiceLimit.CustNum = iiCustNum          AND
                           MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -174,7 +174,7 @@ FUNCTION fGetDSSMsSeqLimit RETURNS LOG (INPUT  iiCustNum   AS INT,
                                         OUTPUT ocBundleId  AS CHAR):
 
    FOR EACH ServiceLimit NO-LOCK WHERE
-            {dss_search.i "ServiceLimit.GroupCode"},
+            {Func/dss_search.i "ServiceLimit.GroupCode"},
       FIRST MServiceLimit NO-LOCK WHERE
             MServiceLimit.CustNum  = iiCustNum             AND
             MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -204,7 +204,7 @@ FUNCTION fGetDSSMsSeqLimitTerm RETURNS LOG (INPUT  iiCustNum   AS INT,
    DEF BUFFER bMServiceLimit FOR MServiceLimit.
 
    FOR EACH ServiceLimit NO-LOCK WHERE
-            {dss_search.i "ServiceLimit.GroupCode"},
+            {Func/dss_search.i "ServiceLimit.GroupCode"},
        EACH MServiceLimit NO-LOCK WHERE
             MServiceLimit.CustNum  = iiCustNum             AND
             MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -238,7 +238,7 @@ FUNCTION fGetActiveDSSId RETURNS CHAR (INPUT iiCustNum   AS INT,
    DEF BUFFER MServiceLimit FOR MServiceLimit.
 
    FOR EACH ServiceLimit NO-LOCK WHERE
-            {dss_search.i "ServiceLimit.GroupCode"},
+            {Func/dss_search.i "ServiceLimit.GroupCode"},
       FIRST MServiceLimit NO-LOCK WHERE
             MServiceLimit.CustNum  = iiCustNum             AND
             MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -259,7 +259,7 @@ FUNCTION fGetDSSId RETURNS CHAR (
    DEF BUFFER MServiceLimit FOR MServiceLimit.
 
    FOR EACH ServiceLimit NO-LOCK WHERE
-            {dss_search.i "ServiceLimit.GroupCode"},
+            {Func/dss_search.i "ServiceLimit.GroupCode"},
       FIRST MServiceLimit NO-LOCK WHERE
             MServiceLimit.CustNum  = iiCustNum             AND
             MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -285,7 +285,7 @@ FUNCTION fGetDSSUsage RETURNS DEC (INPUT iiCustNum    AS INT,
    ldeActStamp = fHMS2TS(fLastDayOfMonth(idActDate),"23:59:59").
 
    FOR EACH ServiceLimit NO-LOCK WHERE
-            {dss_search.i "ServiceLimit.GroupCode"},
+            {Func/dss_search.i "ServiceLimit.GroupCode"},
       FIRST MServiceLimit NO-LOCK WHERE
             MServiceLimit.CustNum = iiCustNum          AND
             MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -330,7 +330,7 @@ FUNCTION fGetTotalDSSUsage RETURNS LOG (INPUT iiCustNum    AS INT,
           ldeFromTS   = fHMS2TS(ldaFromDate,"00:00:00").
 
    FOR EACH ServiceLimit NO-LOCK WHERE
-            {dss_search.i "ServiceLimit.GroupCode"},
+            {Func/dss_search.i "ServiceLimit.GroupCode"},
       FIRST MServiceLimit NO-LOCK WHERE
             MServiceLimit.CustNum  = iiCustNum          AND
             MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -1066,7 +1066,7 @@ FUNCTION fTransferDSS RETURNS LOG
            EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL FixedFee THEN DO:
          /* Close Fee from current subscription */
-         RUN closefee(FixedFee.FFNum,
+         RUN Mc/closefee.p(FixedFee.FFNum,
                       ldMonthEndDate,
                       FALSE,
                       FALSE,
@@ -1091,7 +1091,7 @@ FUNCTION fTransferDSS RETURNS LOG
          END. /* IF DAY(FixedFee.BegPeriod) > 1 AND FMItem.FirstMonthBR = 0 */
 
          /* Open fee on new DSS subs. from next month */
-         RUN creasfee(bMobSub.CustNum,
+         RUN Mc/creasfee.p(bMobSub.CustNum,
                       bMobSub.MsSeq,
                       ldNextMonthFromDate,
                       "FeeModel",
@@ -1305,7 +1305,7 @@ PROCEDURE pUpdateDSSLimit:
    liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
 
    FOR EACH bServiceLimit NO-LOCK WHERE
-            {dss_search.i "bServiceLimit.GroupCode"},
+            {Func/dss_search.i "bServiceLimit.GroupCode"},
        EACH MDSSServiceLimit EXCLUSIVE-LOCK WHERE
             MDSSServiceLimit.CustNum = iiCustNum           AND
             MDSSServiceLimit.DialType = bServiceLimit.DialType AND

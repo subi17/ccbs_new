@@ -11,23 +11,23 @@
 
 &GLOBAL-DEFINE BrTable TMSParam
 
-{commali.i}
-{function.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMSParam'}
-{eventval.i}
+{Syst/commali.i}
+{Func/function.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMSParam'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTMSParam AS HANDLE NO-UNDO.
    lhTMSParam = BUFFER TMSParam:HANDLE.
    RUN StarEventInitialize(lhTMSParam).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhTMSParam).
+      RUN Mc/eventview2.p(lhTMSParam).
    END.
 
 END.
@@ -95,7 +95,7 @@ form
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek PARAM  BY  ParamCode */
     "Brand:" lcBrand skip
@@ -152,7 +152,7 @@ form
     FRAME f4.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = " By Code , By Group , By Name , By 4".
@@ -192,13 +192,13 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a TMSParam  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            CLEAR FRAME lis NO-PAUSE.
            DISPLAY lcBrand @ TMSParam.Brand.
@@ -284,20 +284,20 @@ BROWSE:
         ufk[8]= 8
         ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 2 THEN DO:
-        CHOOSE ROW TMSParam.ParamCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMSParam.ParamCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMSParam.ParamCode WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
-        CHOOSE ROW TMSParam.ParamGroup ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMSParam.ParamGroup {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMSParam.ParamGroup WITH FRAME sel.
       END.
     IF order = 3 THEN DO:
-        CHOOSE ROW TMSParam.ParamName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMSParam.ParamName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMSParam.ParamName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -425,9 +425,9 @@ BROWSE:
 
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        ParamCode = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
               ParamCode WITH FRAME f1.
@@ -448,9 +448,9 @@ BROWSE:
      /* Search BY col 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        ParamGroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
               ParamGroup WITH FRAME f2.
@@ -471,9 +471,9 @@ BROWSE:
      /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        ParamName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN gcAllBrand
               ParamName WITH FRAME f3.
@@ -494,14 +494,14 @@ BROWSE:
 
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         RUN local-find-this(TRUE).
 
         DISPLAY TMSParam.Memo WITH FRAME f4.
 
         IF lcRight = "RW" THEN DO:
 
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSParam).
 
            UPDATE TMSParam.Memo WITH FRAME f4.
@@ -585,8 +585,8 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY TMSParam.ParamCode
                TMSParam.ParamGroup 
@@ -621,7 +621,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN eventsel.p("TMSParam", gcBrand + chr(255) + TMSParam.ParamGroup +
+        RUN Mc/eventsel.p("TMSParam", gcBrand + chr(255) + TMSParam.ParamGroup +
                                    chr(255) + TMSParam.ParamCode).
         ufkey = TRUE.
         NEXT.

@@ -6,9 +6,9 @@
   CREATED ......: 16.04.14
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{date.i}
-{air.i}
+{Syst/commali.i}
+{Func/date.i}
+{Gwy/air.i}
 
 DEFINE INPUT PARAMETER pcCLI AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER piServiceClassTemp AS INT NO-UNDO.

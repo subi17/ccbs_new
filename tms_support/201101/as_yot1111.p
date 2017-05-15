@@ -1,5 +1,5 @@
 input from as_yot1111.input.
-{date.i}
+{Func/date.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO.
 def stream sout.

@@ -8,10 +8,10 @@
   VERSION ......: xfera
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{date.i}
-{tmsconst.i}
-{nnpura.i}
+{Syst/commali.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Inv/nnpura.i}
  
 DEF INPUT PARAM iMSSeq    AS INT  NO-UNDO.
 DEF INPUT PARAM iiCustNum AS INT  NO-UNDO.
@@ -59,9 +59,9 @@ form
     ldaFromDate              FORMAT 99-99-9999 Column-label "From"
     ldaEndDate               FORMAT 99-99-9999 Column-label "To"
     lcEventName              FORMAT "X(15)" Column-label "ServiceLimit" 
-    lcInclUnit               FORMAT "X(12)" column-label "Unit"
-    lcLimit                  FORMAT "x(8)" column-label "Limit"
-    lcUsage                  FORMAT "x(8)" column-label "Usage"           
+    lcInclUnit               FORMAT "X(10)" column-label "Unit"
+    lcLimit                  FORMAT "x(9)" column-label "Limit"
+    lcUsage                  FORMAT "x(9)" column-label "Usage"           
     lcBDestLimit             FORMAT "x(4)" column-label "BDestAmt"
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(cfc)   
@@ -92,7 +92,7 @@ WITH OVERLAY ROW 2 centered
    WITH no-labels side-labels
    FRAME lis.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By MSSeq   , By SLSeq ,By 3, By 4".
@@ -124,12 +124,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ServiceLCounter  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR ServiceLCounter.MSSeq
@@ -215,12 +215,12 @@ BROWSE:
         ufk[7]= 925 
         ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row ldaFromDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row ldaFromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ldaFromDate WITH FRAME sel.
       END.
       
@@ -354,8 +354,8 @@ BROWSE:
 /*
        /* change */
        RUN local-find-this(false).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. 
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. 
        
        RUN local-update-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -384,7 +384,7 @@ BROWSE:
      
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
          RUN local-find-this(false).
-         run slcounteritem.p(ServiceLCounter.msseq, 
+         RUN Mm/slcounteritem.p(ServiceLCounter.msseq, 
                              ServiceLCounter.Period,
                              ServiceLCounter.SLSeq).
          ufkey = True.
@@ -633,8 +633,8 @@ PROCEDURE local-find-others.
     
       CASE ServiceLimit.InclUnit:
          WHEN 1 THEN DO:
-            lcUsage = fSec2C(ServiceLCounter.Amt,8).
-            lcLimit = fSec2C(ldeLimit * 60,8).
+            lcUsage = fSec2C(ServiceLCounter.Amt,9).
+            lcLimit = fSec2C(ldeLimit * 60,9).
          END.
          WHEN 2 THEN DO:
             lcUsage = fSec2C(ServiceLCounter.Amt,8).

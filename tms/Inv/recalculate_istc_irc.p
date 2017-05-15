@@ -6,11 +6,11 @@ AUTHOR .......: anttis
 CREATED ......: 12.02.14
 Version ......: yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{date.i}
-{istc.i}
-{tmsconst.i}
-{chk_cdr_invrowcounter.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/istc.i}
+{Syst/tmsconst.i}
+{Inv/chk_cdr_invrowcounter.i}
 
 DEFINE INPUT PARAMETER iiDate AS DATE NO-UNDO. 
 DEFINE INPUT PARAMETER icMode AS CHAR NO-UNDO. 
@@ -97,7 +97,7 @@ IF CAN-FIND(FIRST ttSubs) THEN DO:
 
    lcRunID = replace(string(time,"HH:MM:SS"),":","") + "_istc".
 
-   RUN chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
+   RUN Inv/chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
                                lcRunID,
                                ldaPeriodEnd,
                                0, /* fr process id */
@@ -109,7 +109,7 @@ FOR EACH ttSubs:
 
    IF ttSubs.ErrorFound THEN DO:
       
-      run recalculate_invrowcounter.p(
+      RUN Inv/recalculate_invrowcounter.p(
          ttSubs.InvCust,
          ttSubs.msseq,
          0, /* invseq */

@@ -16,7 +16,7 @@
  */
 
 {header_get.i}
-{transname.i}
+{Func/transname.i}
 
 DEFINE VARIABLE lctitle   AS CHARACTER NO-UNDO EXTENT 5 
                           INITIAL ["title_es","title_ca","title_eu","title_ga","title_en"] . 

@@ -7,31 +7,33 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{cparam2.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{msisdn.i}
-{tmsconst.i}
-{freacmobsub.i}
-{contract_end_date.i}
-{service.i}
-{fdss.i}
-{forderstamp.i}
-{orderfunc.i}
-{ftopup.i}
-{ftaxdata.i}
-{fsubstermreq.i}
-{fbankdata.i}
-{fbtc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Func/msisdn.i}
+{Syst/tmsconst.i}
+{Func/freacmobsub.i}
+{Func/contract_end_date.i}
+{Func/service.i}
+{Func/fdss.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Func/ftopup.i}
+{Func/ftaxdata.i}
+{Func/fsubstermreq.i}
+{Func/fbankdata.i}
+{Func/fbtc.i}
+{Mc/dpmember.i}
 
 DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 
 DEFINE VARIABLE ldCurrTS            AS  DECIMAL   NO-UNDO.
 
 DEFINE BUFFER bTermMsRequest FOR MsRequest.
+DEF TEMP-TABLE ttoldmsowner NO-UNDO LIKE msowner.
 
 FIND FIRST MSRequest WHERE
            MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
@@ -47,7 +49,7 @@ ldCurrTS = fMakeTS().
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMSISDN    AS HANDLE    NO-UNDO.
    DEFINE VARIABLE lhSIM       AS HANDLE    NO-UNDO.
@@ -182,8 +184,28 @@ DO TRANSACTION:
    END. /* IF NOT AVAILABLE Msowner THEN DO: */
    ELSE DO:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
-      MSOWner.TSEnd = 99999999.99999.
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOWNER).
+      IF MSOwner.clievent EQ "F" THEN DO: /* react of partial terminated */
+         BUFFER-COPY msowner TO ttoldmsowner.
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
+         MSOwner.TsEnd = ldCurrTS.
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOWNER).
+         CREATE MSOwner.
+         BUFFER-COPY ttoldmsowner EXCEPT cli imsi clievent TO msowner.
+         ASSIGN 
+            MSOwner.cli = TermMobsub.cli
+            MSowner.imsi = TermMobsub.imsi
+            MSOwner.clievent = "T"
+            MSOwner.TSbegin = fSecOffSet(ldCurrTS,1).
+         IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
+                                            "",
+                                            katun,
+                                            ""). 
+      END.      
+      ELSE DO:
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
+         MSOWner.TSEnd = 99999999.99999.
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOWNER).
+      END.   
    END. /* ELSE DO: */
 
    /* YDR-2052 */
@@ -208,9 +230,23 @@ DO TRANSACTION:
 
    END. 
 
-   CREATE Mobsub.
-   BUFFER-COPY TermMobsub TO Mobsub.
-   DELETE TermMobsub.
+   /* COFF */
+   FIND FIRST MobSub WHERE
+              Mobsub.msseq EQ MSRequest.MSSeq /* COFF Partial terminated */
+              NO-ERROR.
+   IF AVAIL Mobsub THEN DO:
+      ASSIGN 
+         MobSub.cli = TermMobsub.Cli
+         MobSub.imsi = TermMobsub.imsi
+         MobSub.icc = TermMobsub.icc
+         Mobsub.msstatus = TermMobsub.msStatus.
+      DELETE TermMobsub.
+   END.
+   ELSE DO:
+      CREATE Mobsub.
+      BUFFER-COPY TermMobsub TO Mobsub.
+      DELETE TermMobsub.
+   END.
 
    RELEASE MSISDN.
 
@@ -248,7 +284,7 @@ DO TRANSACTION:
    /* Reactivate the Barring package(if present) */
    IF MobSub.MsStatus NE 4 THEN DO:
 
-       RUN barrengine.p(MobSub.MsSeq,
+       RUN Mm/barrengine.p(MobSub.MsSeq,
                         "#REFRESH",
                         {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
                         katun,               /* creator */
@@ -699,7 +735,32 @@ DO TRANSACTION:
    END.
 
    fReqStatus(2,"").
-         
+   
+
+   /* ADDLINE-20 Additional Line 
+      IF the Customer reactivates the below additional line tariff's then,
+      checking if convergent active OR not, based on that closing the old one AND creating the new discount */
+   IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+      FIND FIRST Customer NO-LOCK WHERE
+                 Customer.Custnum = MobSub.Custnum NO-ERROR.
+      FOR EACH DiscountPlan NO-LOCK WHERE
+               DiscountPlan.Brand    = gcBrand                         AND
+               LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
+               DiscountPlan.ValidTo >= TODAY,
+         FIRST DPMember NO-LOCK WHERE
+               DPMember.DPID       = DiscountPlan.DPID    AND
+               DPMember.HostTable  = "MobSub"             AND
+               DPMember.KeyValue   = STRING(MobSub.MsSeq):
+         IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
+            fCreateAddLineDiscount(MobSub.MsSeq,
+                                   MobSub.CLIType,
+                                   TODAY).
+            IF RETURN-VALUE BEGINS "ERROR" THEN
+               RETURN RETURN-VALUE.
+         END.
+      END.
+   END.
+
    /* YDR-2037 */
    RUN pRecoverSTC IN THIS-PROCEDURE (BUFFER MobSub, BUFFER MsRequest).
 

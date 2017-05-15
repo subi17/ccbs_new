@@ -1,4 +1,4 @@
-{timestamp.i}
+{Func/timestamp.i}
 
 def temp-table ttcli no-undo
     field clitype as char.

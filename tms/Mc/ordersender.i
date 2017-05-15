@@ -12,6 +12,7 @@
                 define variable llOrdStChg   as logical   no-undo.
                 DEF VAR llReserveSimAndMsisdn AS LOG NO-UNDO. 
                 DEFINE VARIABLE lh99Order AS HANDLE NO-UNDO.
+                DEFINE VARIABLE lh76Order AS HANDLE NO-UNDO.
 
             &ENDIF
                 
@@ -101,6 +102,50 @@
             END.
 
             ASSIGN llOrdStChg = no.
+            
+            /* Move Mobile only tariff order to 76 queue, if customer 
+               has ongoing convergent order */
+            IF CAN-FIND(FIRST CLIType NO-LOCK WHERE 
+                              CLIType.Brand      = gcBrand       AND 
+                              CLIType.CLIType    = Order.CLIType AND 
+                              CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
+ 
+               FIND FIRST OrderCustomer NO-LOCK WHERE
+                          OrderCustomer.Brand   = gcBrand       AND
+                          OrderCustomer.OrderId = Order.OrderId AND
+                          OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+               
+               IF NOT fCheckExistingConvergent(OrderCustomer.CustIDType,
+                                               OrderCustomer.CustID) THEN DO:
+                  
+                  IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                                    OrderAction.Brand    = gcBrand           AND
+                                    OrderAction.OrderID  = Order.OrderId     AND
+                                    OrderAction.ItemType = "AddLineDiscount" AND
+                             LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) AND
+                     fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
+                                                  OrderCustomer.CustId) THEN DO:
+                     IF llDoEvent THEN DO:
+                        lh76Order = BUFFER Order:HANDLE.
+                        RUN StarEventInitialize(lh76Order).
+                        RUN StarEventSetOldBuffer(lh76Order).
+                     END.
+
+                     fSetOrderStatus(Order.OrderID,
+                                     {&ORDER_STATUS_PENDING_MAIN_LINE}).
+
+                     IF llDoEvent THEN DO:
+                        RUN StarEventMakeModifyEvent(lh76Order).
+                        fCleanEventObjects().
+                     END.
+
+                     NEXT {1}.
+                  END.
+               
+               END.
+
+            END.    
+            
             /* YDR-1825 MNP SIM ONLY Orders
               Additional ordertimestamp is to prevent infinitive loop */
             IF lcSIMonlyMNP EQ "true" AND
@@ -327,7 +372,7 @@
             IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN DO:
  
                /* YBP-596 */ 
-               RUN fusion_stc.p(Order.OrderID, OUTPUT liRequestID).
+               RUN Mm/fusion_stc.p(Order.OrderID, OUTPUT liRequestID).
                
                IF liRequestID > 0 THEN
                   /* YBP-597 */ 
@@ -518,7 +563,7 @@
                 (Order.MnpStatus = 0 OR Order.StatusCode = "3") THEN DO:  
                 
                 /* YBP-613 */
-                RUN prinoconf.p (Order.OrderID).
+                RUN Mc/prinoconf.p (Order.OrderID).
                 
                 IF RETURN-VALUE BEGINS "ERROR" THEN DO:
                    DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -539,7 +584,7 @@
                    Order.MNPStatus = 6. /* fake mnp process (ACON) */
                 ELSE DO:
                    /* YBP-621 */
-                   run mnprequestnc.p(order.orderid).
+                   RUN Mnp/mnprequestnc.p(order.orderid).
                    /* YBP-622 */
                    IF RETURN-VALUE EQ "ERROR:AREC CUPO4" THEN
                    llOrdStChg = fSetOrderStatus(Order.OrderId,

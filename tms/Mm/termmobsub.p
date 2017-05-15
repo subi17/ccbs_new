@@ -7,7 +7,7 @@
   CHANGED ......: 21.05.02/tk  Event logging added
                   28.02.03 tk  tokens
                   08.02.06/aam periodical contract 
-                  12.12.06/mvi new param to run msrequest (reqstat = ?)
+                  12.12.06/mvi new param to RUN Mm/msrequest.p (reqstat = ?)
                   20.03.07 kl  yoigo version
                   18.07.07 kl  termmobsubfind
                   31.10.07 jp  new parameter for msrequest
@@ -18,34 +18,34 @@
 DEFINE INPUT PARAMETER iiCustNum AS INT  NO-UNDO.
 DEFINE INPUT PARAMETER icType   AS CHAR NO-UNDO.
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Customer'}
-{func.i}
-{timestamp.i}
-{msisdn.i}
-{errors.i}
-{fcustbal.i}
-{eventval.i}
-{cparam2.i}
-{mobsub1.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Customer'}
+{Func/func.p}
+{Func/timestamp.i}
+{Func/msisdn.i}
+{Mf/errors.i}
+{Func/fcustbal.i}
+{Syst/eventval.i}
+{Func/cparam2.i}
+{Mm/mobsub1.i}
 
-{ffeecont.i}
-{fsubser.i}
-{fctserval.i}
+{Func/ffeecont.i}
+{Func/fsubser.i}
+{Func/fctserval.i}
 
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTermMobsub AS HANDLE NO-UNDO.
    lhTermMobsub = BUFFER TermMobsub:HANDLE.
    RUN StarEventInitialize(lhTermMobsub).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhTermMobsub).
+      RUN Mc/eventview2.p(lhTermMobsub).
    END.
 
 END.
@@ -102,7 +102,7 @@ DEF VAR lcSaldoFatime AS C  NO-UNDO.
 ASSIGN lcSaldoFatime = fCParamC("SaldoAgreementAccount")
        lcDCEvent     = fCParamC("PerContractID").
 
-{termmobsub.frm}
+{Mm/termmobsub.frm}
 
 form
     TermMobsub.CLI         COLUMN-LABEL "MSISDN" FORMAT "X(10)"
@@ -184,7 +184,7 @@ form /* seek Mobsub MsSeq */
     WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Subscription ID "
     COLOR VALUE(cfc) WIDTH 24  NO-LABELS OVERLAY FRAME fMsSeq.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By MSISDN  ,  By SUBS ID ,  By CUSTNUM  ,  BY STATUS  , By 4".
@@ -287,24 +287,24 @@ BROWSE:
             UFK[6] =  0
             UFK[7] =  0.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TermMobsub.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TermMobsub.MsSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.MsSeq WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW TermMobsub.AgrCust ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.AgrCust {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.AgrCust WITH FRAME sel.
       END.
       IF order = 4 THEN DO:
-        CHOOSE ROW TermMobsub.MSStatus ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.MSStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.MSStatus WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -433,8 +433,8 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lccli WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -456,8 +456,8 @@ BROWSE:
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME fMsSeq.
        SET liMsSeq WITH FRAME fMsSeq.
        HIDE FRAME fMsSeq NO-PAUSE.
@@ -478,8 +478,8 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        SET liCustNum WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -502,34 +502,34 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND NOT llMore AND 
        icType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f4.
        SET lcLastName lcFirstname WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
 
        IF lcFirstName  > ""  OR lcLastName   > ""  THEN DO:
-          run termmobsubfind.p("AGRNAME",lcLastname + "|" + lcFirstName).
+          RUN Mm/termmobsubfind.p("AGRNAME",lcLastname + "|" + lcFirstName).
        END.
      END. /* Search-4 */
     
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f5.
        SET lcPersonid WITH FRAME f5.
        HIDE FRAME f5 NO-PAUSE.
 
        IF lcPersonID > "" THEN DO:
-          run termmobsubfind.p("ID",lcPersonid).
+          RUN Mm/termmobsubfind.p("ID",lcPersonid).
        END.
      END. /* Search-5 */
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND NOT llMore AND lcRight = "RW" AND 
        ictype = "" THEN DO: 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f6.
        SET liMSStatus WITH FRAME f6.
        IF  liMSStatus  ne 0  THEN DO:
@@ -557,8 +557,8 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND llMore AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f7.
        SET lcICC WITH FRAME f7.
        HIDE FRAME f7 NO-PAUSE.
@@ -601,8 +601,8 @@ BROWSE:
      
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND llMore AND lcRight = "RW" AND 
         ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME frSearchFixed.
         SET lcFixedNumber WITH FRAME frSearchFixed.
         HIDE FRAME frSearchFixed NO-PAUSE.
@@ -651,16 +651,16 @@ BROWSE:
              ufk[7] = 249 WHEN getTMSRight("VENDOR") = "RW"
              ufk[8] = 8  .
           
-          run ufkey.   
+          RUN Syst/ufkey.p.   
           
           IF toimi = 8 THEN DO:
              HIDE FRAME lis NO-PAUSE.
              LEAVE.
           ENd.
 
-          IF toimi = 2  THEN RUN persondata(TermMobsub.msseq).
+          IF toimi = 2  THEN RUN Mm/persondata.p(TermMobsub.msseq).
           ELSE IF toimi = 3  THEN DO:
-             RUN msrequest(-1,
+             RUN Mm/msrequest.p(-1,
                            ?, /* reqstat ? for all */
                            TermMobsub.MsSeq,
                            0,
@@ -669,8 +669,8 @@ BROWSE:
              /* in case a request was run */
              RUN local-UPDATE-record(FALSE).
           END.      
-          ELSE IF toimi = 4  THEN RUN termsubser(TermMobsub.MsSeq).
-          ELSE IF Toimi = 5  THEN RUN memo(INPUT TermMobsub.CustNum,
+          ELSE IF toimi = 4  THEN RUN Mm/termsubser.p(TermMobsub.MsSeq).
+          ELSE IF Toimi = 5  THEN RUN Mc/memo.p(INPUT TermMobsub.CustNum,
                                            INPUT "TermMobsub",
                                            INPUT STRING(TermMobsub.MsSeq),
                                            INPUT "TermMobsub").
@@ -692,33 +692,33 @@ BROWSE:
                    ufk[6]= 0
                    ufk[7]= 0.
                    ufk[8]= 8.
-                run ufkey.   
+                RUN Syst/ufkey.p.   
         
                 IF toimi = 8 THEN DO:
                    LEAVE CALLBROWSE.
                 ENd.
 
-                IF       toimi = 1  THEN RUN  msisdniv(TermMobsub.MsSeq).
+                IF       toimi = 1  THEN RUN Mm/msisdniv.p(TermMobsub.MsSeq).
 
                 ELSE IF toimi = 2 AND avail TermMobsub  THEN
-                   RUN  callstat.p(INPUT 0,TermMobsub.cli,"PRODUCT").
+                   RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"PRODUCT").
        
                 ELSE IF toimi = 3 AND avail TermMobsub  THEN 
-                   RUN  callstat.p(INPUT 0,TermMobsub.cli,"DATE").
+                   RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"DATE").
        
                 ELSE IF toimi = 4 AND avail TermMobsub  THEN
-                   RUN  callstat.p(INPUT 0,TermMobsub.cli,"CCN").
+                   RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"CCN").
 
                 ELSE IF toimi = 6 THEN 
-                   RUN persondata(TermMobsub.msseq).
+                   RUN Mm/persondata.p(TermMobsub.msseq).
         
              END.
           END.
           ELSE IF toimi = 7 AND ufk[7] > 0 AND avail TermMobsub  THEN DO:
-             RUN mobsubdi.p(INPUT TermMobsub.MSSeq, OUTPUT killed).
+             RUN Mm/mobsubdi.p(INPUT TermMobsub.MSSeq, OUTPUT killed).
           END.
           ELSE IF toimi = 6 THEN 
-             RUN persondata(TermMobsub.msseq).
+             RUN Mm/persondata.p(TermMobsub.msseq).
        END.
        ASSIGN  Memory = recid(TermMobsub) must-print = TRUE.
        NEXT LOOP.
@@ -765,22 +765,22 @@ PROCEDURE local-find-FIRST:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND FIRST TermMobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN DO: {termmobfind.i FIRST } end.
+       ELSE IF order = 1  THEN DO: {Mm/termmobfind.i FIRST } end.
 
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND FIRST TermMobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 2 THEN  {termmobfind.i FIRST }
+       ELSE IF order = 2 THEN  {Mm/termmobfind.i FIRST }
 
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND FIRST TermMobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {termmobfind.i FIRST }
+       ELSE IF order = 3 THEN  {Mm/termmobfind.i FIRST }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND FIRST TermMobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {termmobfind.i FIRST }
+       ELSE IF ORDER = 4 THEN  {Mm/termmobfind.i FIRST }
        
 
 END PROCEDURE.
@@ -790,22 +790,22 @@ PROCEDURE local-find-LAST:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND LAST  TermMobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN  {termmobfind.i LAST  }
+       ELSE IF order = 1  THEN  {Mm/termmobfind.i LAST  }
        
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND LAST TermMobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 2 THEN  {termmobfind.i LAST }
+       ELSE IF order = 2 THEN  {Mm/termmobfind.i LAST }
        
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND LAST  TermMobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {termmobfind.i LAST  }
+       ELSE IF order = 3 THEN  {Mm/termmobfind.i LAST  }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND LAST  TermMobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {termmobfind.i LAST  }
+       ELSE IF ORDER = 4 THEN  {Mm/termmobfind.i LAST  }
  
 END PROCEDURE.
 
@@ -814,22 +814,22 @@ PROCEDURE local-find-NEXT:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND NEXT TermMobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN  {termmobfind.i NEXT }
+       ELSE IF order = 1  THEN  {Mm/termmobfind.i NEXT }
        
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND NEXT TermMobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 2 THEN  {termmobfind.i NEXT }
+       ELSE IF order = 2 THEN  {Mm/termmobfind.i NEXT }
        
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND NEXT TermMobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {termmobfind.i NEXT }
+       ELSE IF order = 3 THEN  {Mm/termmobfind.i NEXT }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND NEXT TermMobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {termmobfind.i NEXT }
+       ELSE IF ORDER = 4 THEN  {Mm/termmobfind.i NEXT }
  
 END PROCEDURE.
 
@@ -838,22 +838,22 @@ PROCEDURE local-find-PREV:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND PREV TermMobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN  {termmobfind.i PREV }
+       ELSE IF order = 1  THEN  {Mm/termmobfind.i PREV }
        
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND PREV TermMobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 2 THEN  {termmobfind.i PREV }
+       ELSE IF order = 2 THEN  {Mm/termmobfind.i PREV }
        
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND PREV TermMobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {termmobfind.i PREV }
+       ELSE IF order = 3 THEN  {Mm/termmobfind.i PREV }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND PREV TermMobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {termmobfind.i PREV }
+       ELSE IF ORDER = 4 THEN  {Mm/termmobfind.i PREV }
  
 
 END PROCEDURE.
@@ -994,8 +994,9 @@ PROCEDURE local-find-others.
                                        INPUT year(today) * 100 + Month(today),
                                        INPUT lcSaldofatime).
       FIND FIRST Msowner WHERE 
-                 Msowner.msseq = TermMobsub.MSseq
-      NO-LOCK NO-ERROR.
+                 Msowner.msseq = TermMobsub.MSseq AND
+                 Msowner.tsend LT fmakets() /* needed for partial term */
+      USE-INDEX MsSeq NO-LOCK NO-ERROR.
 
       IF AVAIL msowner THEN
          lcTerMinated  = "TERMINATED....: " + fTS2HMS(msowner.tsend).

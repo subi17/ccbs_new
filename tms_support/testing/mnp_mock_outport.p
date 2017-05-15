@@ -8,14 +8,14 @@ CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "Qvantel"
       gcBrand = "1".
-{cparam2.i}
+{Func/cparam2.i}
 {xmlrpc/xmlrpc_client.i}
-{tmsconst.i}
-{timestamp.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 
 DEFINE VARIABLE ocResponse AS CHAR NO-UNDO.
@@ -84,7 +84,7 @@ PROCEDURE pUserInput:
       UPDATE lcCLI liCustNum WITH FRAME lis EDITING:
 
          IF ufkey THEN DO:
-            ASSIGN ehto = 9. RUN ufkey.p.
+            ASSIGN ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
@@ -240,7 +240,7 @@ PROCEDURE pAddRequestStructElement:
    add_string(lcRequestStruct, "codigoContrato", lcFormRequest).
 
    add_boolean(lcRequestStruct, "fechaVentanaCambioPorAbonado",FALSE ).
-   add_string(lcRequestStruct, "NRNReceptor", "004").
+   add_string(lcRequestStruct, "NRNReceptor", "730000").
    add_string(lcRequestStruct, "codigoOperadorReceptor", "004").
    add_string(lcRequestStruct, "codigoOperadorDonante", "005").
    add_timestamp(lcRequestStruct, "fechaSolicitudPorAbonado", fMakeTS()).

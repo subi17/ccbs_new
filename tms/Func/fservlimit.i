@@ -1,11 +1,11 @@
-{tmsconst.i}
-{fdss.i}
+{Syst/tmsconst.i}
+{Func/fdss.i}
 
 DEF TEMP-TABLE ttServiceLCounter NO-UNDO
-   LIKE ServiceLCounter.
+   LIKE ServiceLCounter USE-INDEX msseq USE-INDEX Custnum.
 
 DEF TEMP-TABLE ttSLCounterItem NO-UNDO
-   LIKE SLCounterItem
+   LIKE SLCounterItem USE-INDEX msseq
    FIELD Picked AS INT.
    
 FUNCTION fConvertAmountUnit RETURNS DECIMAL
@@ -85,14 +85,14 @@ FUNCTION fIsServiceLimitAllowed RETURNS LOG
          FIND FIRST ServiceLCounter WHERE
                     ServiceLCounter.Custnum = iicustnum           AND
                     serviceLCounter.SLseq   = iiSlseq             AND 
-                    ServiceLCounter.Period  = liPeriod  
-              EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+                    ServiceLCounter.Period  = liPeriod            AND
+                    ServiceLCounter.MsId    = iiMSID              EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
       ELSE
          FIND FIRST ServiceLCounter WHERE
                     ServiceLCounter.Msseq   = msseq               AND
                     serviceLCounter.SLseq   = iiSlseq             AND 
-                    ServiceLCounter.Period  = liPeriod  
-              EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+                    ServiceLCounter.Period  = liPeriod            AND
+                    ServiceLCounter.MsId    = iiMSID              EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
       liQty = liQty + 1.
       
@@ -233,12 +233,14 @@ FUNCTION fTempTableIsServiceLimitAllowed RETURNS LOG
          FIND FIRST ttServiceLCounter WHERE
                     ttServiceLCounter.Custnum = iiCustnum AND
                     ttserviceLCounter.SLseq   = iiSlseq   AND 
-                    ttServiceLCounter.Period  = liPeriod  NO-ERROR.
+                    ttServiceLCounter.Period  = liPeriod  AND 
+                    ttServiceLCounter.MsId    = iiMSID    NO-ERROR.
       ELSE
          FIND FIRST ttServiceLCounter WHERE
                     ttServiceLCounter.Msseq   = msseq    AND
                     ttserviceLCounter.SLseq   = iiSlseq  AND 
-                    ttServiceLCounter.Period  = liPeriod NO-ERROR.
+                    ttServiceLCounter.Period  = liPeriod AND 
+                    ttServiceLCounter.MsId    = iiMSID   NO-ERROR.
 
       /* NEW ServiceLimit Counter */
       IF NOT AVAIL ttServiceLCounter THEN DO:

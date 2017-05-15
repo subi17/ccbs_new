@@ -11,11 +11,13 @@
 &IF "{&FIXEDLINEFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
-{tmsconst.i}
-{timestamp.i}
-
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/create_eventlog.i}
 /* Function makes new MSOwner when subscription is partially
-   terminated or mobile part order closed */
+   terminated or mobile part order closed. Calling program must have
+   commali.i, katun defined and call fCleanEventObjects after this function */
 FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    (iiMsSeq AS INT,
     icFixedNumber AS CHAR):
@@ -30,7 +32,19 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAIL MSOwner THEN RETURN FALSE.
 
+   IF llDoEvent THEN DO:
+      DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
+      lhMsOwner = BUFFER MSOwner:HANDLE.
+      RUN StarEventInitialize(lhMsOwner).
+      RUN StarEventSetOldBuffer (lhMsOwner).
+   END.
+
    MSOwner.TsEnd = ldUpdateTS.
+
+   IF llDoEvent THEN DO:
+      RUN StarEventMakeModifyEvent (lhMsOwner).
+   END.
+
    CREATE bNewMsowner.
    BUFFER-COPY MSOwner EXCEPT TsEnd tsbegin TO bNewMsowner.
    ASSIGN
@@ -39,6 +53,12 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
       bNewMsowner.CliEvent = "F"
       bNewMsowner.tsbegin = fSecOffSet(ldUpdateTS,1)
       bNewMsowner.TsEnd = 99999999.99999.
+
+   IF llDoEvent THEN DO:
+      lhMsOwner = BUFFER bNewMsowner:HANDLE.
+      fMakeCreateEvent (lhMsOwner, "", "", "").
+   END.
+
    RELEASE MSOwner.
    RELEASE bNewMsowner.
    RETURN TRUE.
@@ -141,6 +161,25 @@ FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
    RETURN FALSE.
 END.   
 
+/* Check if Convergent tariff OR FixedOnly tariff */ 
+FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
+   (icCLIType AS CHARACTER):
+
+   DEFINE BUFFER bCLIType FOR CLIType.
+   
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = icCLIType                         AND
+                     bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
+                    (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN 
+      RETURN TRUE.
+
+   RETURN FALSE.
+
+END.   
+
+
 /* Check convergent STC compability. Special handling that allows convergent
    STC between subscription types which have same fixed line part.
    Convergent ADSL subscription can be changed to other ADSL
@@ -167,5 +206,64 @@ FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
    /* otherwise is not compatible */
    RETURN FALSE.
 END.                                         
+
+/* Function checks for ongoing 3P OR 2P convergent for a customer */
+FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR): 
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+
+   FOR EACH bOrderCustomer NO-LOCK WHERE   
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.orderid    EQ bOrderCustomer.Orderid  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND 
+            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
+      FIRST bOrderFusion NO-LOCK WHERE
+            bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
+            bOrderFusion.OrderID = bOrder.OrderID:
+
+      IF fIsConvergentORFixedOnly(bOrder.CLIType) THEN 
+         RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* Function checks for existing 3P OR 2P convergent for a customer */
+FUNCTION fCheckExistingConvergent RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR):
+
+   DEFINE BUFFER bCustomer FOR Customer.
+   DEFINE BUFFER bMobSub   FOR MobSub.
+
+   FOR FIRST bCustomer WHERE
+             bCustomer.Brand      = Syst.Parameters:gcBrand AND
+             bCustomer.OrgId      = icCustID                AND
+             bCustomer.CustidType = icCustIDType            AND
+             bCustomer.Roles     NE "inactive"              NO-LOCK,
+       EACH  bMobSub NO-LOCK WHERE
+             bMobSub.Brand   = Syst.Parameters:gcBrand AND
+             bMobSub.InvCust = bCustomer.CustNum       AND
+             bMobSub.PayType = FALSE:
+    
+      IF fIsConvergentORFixedOnly(bMobSub.CLIType) THEN 
+         RETURN TRUE.
+
+   END.   
+
+   RETURN FALSE.
+
+END FUNCTION.
 
 &ENDIF

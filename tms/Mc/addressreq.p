@@ -7,10 +7,10 @@
   Changed . ....: 
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
-{commali.i}
-{msreqfunc.i}
-{eventval.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fcustdata.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -23,7 +23,7 @@ IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 6 THEN RETURN "ERROR".
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER Customer:HANDLE.
@@ -43,11 +43,23 @@ PROCEDURE pAddressChange:
    DEF BUFFER bACC FOR MsRequest.
 
    DEF VAR lcStreetCode AS CHAR NO-UNDO. 
-   DEF VAR lcCityCode AS CHAR NO-UNDO. 
-   DEF VAR lcTownCode AS CHAR NO-UNDO. 
+   DEF VAR lcCityCode   AS CHAR NO-UNDO. 
+   DEF VAR lcTownCode   AS CHAR NO-UNDO. 
+   DEF VAR lcMemo       AS CHAR NO-UNDO.
+   DEF VAR lcUserCode   AS CHAR NO-UNDO.
    
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
+
+   IF MsRequest.UserCode BEGINS "VISTA_" THEN
+      ASSIGN lcUserCode = ENTRY(2,MsRequest.UserCode,"_").
+   ELSE
+      ASSIGN lcUserCode = MsRequest.UserCode.
+
+   IF MsRequest.ReqSource = "4" THEN
+      lcMemo = "Agent" + CHR(255) + "TMS" + CHR(255) + lcUserCode.
+   ELSE IF MsRequest.ReqSource = "6" THEN
+      lcMemo = "Agent" + CHR(255) + "VISTA" + CHR(255) + lcUserCode.
 
    lcRegion = STRING(MsRequest.ReqIParam2,"99").
    
@@ -89,7 +101,10 @@ PROCEDURE pAddressChange:
           Customer.Region     = lcRegion
           Customer.InvGroup    = fDefInvGroup(lcRegion).
    
-   IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+   IF llDoEvent THEN 
+      RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                           {&STAR_EVENT_USER}, 
+                                           lcMemo).
 
    ASSIGN
        lcStreetCode = (IF MsRequest.ReqIParam3 NE 0 THEN 
@@ -122,4 +137,5 @@ PROCEDURE pAddressChange:
    fReqStatus(2,""). 
  
 END PROCEDURE.
+
 

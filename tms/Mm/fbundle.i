@@ -7,18 +7,18 @@
 
 &GLOBAL-DEFINE fbundle YES
    
-{commali.i}
-{tmsconst.i}
-{date.i}
-{timestamp.i}
-{cparam2.i}
-{fcreatereq.i}
-{matrix.i}
-{transname.i}
-{ftaxdata.i}
-{xmlfunction.i}
-{date.i}
-{fdss.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fcreatereq.i}
+{Func/matrix.i}
+{Func/transname.i}
+{Func/ftaxdata.i}
+{Func/xmlfunction.i}
+{Func/date.i}
+{Func/fdss.i}
 {Mm/bundle_type.i}
 {Mm/active_bundle.i}
 
@@ -637,7 +637,7 @@ PROCEDURE pAdjustBal:
    ELSE IF icBundle = "TARJ7_UPSELL" THEN
       PrePaidRequest.PPReqPrefix = "975".
 
-   RUN pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
+   RUN Gwy/pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
    
    lcXML = RETURN-VALUE.
       
@@ -694,7 +694,7 @@ PROCEDURE pEnoughBalance:
    DEFINE VARIABLE ldeCurrBal           AS DECIMAL   NO-UNDO.
   
    IF ideAmountChk > 0 THEN DO:
-      RUN balancequery.p(icCLI).
+      RUN Gwy/balancequery.p(icCLI).
       IF RETURN-VALUE > "" THEN
          ldeCurrBal = DECIMAL(RETURN-VALUE) / 100 NO-ERROR.
       IF ldeCurrBal < ideAmountChk THEN DO:

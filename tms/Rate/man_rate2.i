@@ -14,7 +14,7 @@
                                  'roamint' and 'roamlocal' changed the other
                                  way round
 */
-{error_codes.i}
+{Rate/error_codes.i}
   
    /* Is this double call */    
    IF Mobcdr.ErrorCode = errorcode OR
@@ -171,7 +171,7 @@
          IF LOOKUP(STRING(ttCall.Spocmt),"3,4,7,17,32") = 0 OR
             (LOOKUP(STRING(ttCall.SpoCMT),"3,7") > 0 AND 
              ttCall.MSCID = "PRE" AND ttCall.PPFlag = 1) THEN DO:
-            IF ttCall.MSCID NE "FIXED" THEN
+            IF NOT ttCall.MSCID BEGINS "FIX" THEN
                fTicketCheck(INPUT "MSOWNER",
                             STRING(ttCall.CLI),
                             OUTPUT oiERrorCode).

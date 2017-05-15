@@ -7,15 +7,15 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{timestamp.i}
-{eventlog.i}
-{eventval.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/eventlog.i}
+{Syst/eventval.i}
 
 /* files and dirs */
 DEF VAR lcLine           AS CHAR NO-UNDO.
@@ -41,7 +41,7 @@ DEF STREAM sLog.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTerminalConf AS HANDLE NO-UNDO.
    lhTerminalConf = BUFFER TerminalConf:HANDLE.

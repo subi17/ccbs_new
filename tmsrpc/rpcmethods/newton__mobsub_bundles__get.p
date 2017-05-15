@@ -17,10 +17,10 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{cparam2.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 {Mm/active_bundle.i}
 {Mm/fbundle.i}
 {Func/upsellcount.i}

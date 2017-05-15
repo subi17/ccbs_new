@@ -10,25 +10,25 @@
 
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{date.i}
-{fwebuser.i}
-{transname.i}
-{ftaxdata.i}
-{eventlog.i}
-{log.i}
-{ftransdir.i}
-{tmsparam4.i}
-{forderstamp.i}
-{orderfunc.i}
-{fbundle.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/fwebuser.i}
+{Func/transname.i}
+{Func/ftaxdata.i}
+{Syst/eventlog.i}
+{Func/log.i}
+{Func/ftransdir.i}
+{Func/tmsparam4.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Mm/fbundle.i}
 {Mm/active_bundle.i}
-{mnp.i}
-{email.i}
+{Mnp/mnp.i}
+{Func/email.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
@@ -177,7 +177,7 @@ DEFINE TEMP-TABLE ttExtra NO-UNDO
    FIELD OrderDate   AS CHARACTER FORMAT "X(8)"
    FIELD ResidualAmount AS CHARACTER FORMAT "X(7)"
    FIELD DeliveryType AS CHAR FORMAT "X(1)"
-   FIELD KialaCode   AS CHAR FORMAT "X(4)"
+   FIELD KialaCode   AS CHAR FORMAT "X(16)"
    FIELD ContractFileName AS CHAR FORMAT "X(14)"
    INDEX RowNum AS PRIMARY RowNum.
 
@@ -423,7 +423,7 @@ FUNCTION fDelivSIM RETURNS LOG
    FIND FIRST AgreeCustomer WHERE
               AgreeCustomer.Brand   = Order.Brand   AND
               AgreeCustomer.OrderId = Order.OrderId AND
-              AgreeCustomer.RowType = 1
+              AgreeCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
    NO-LOCK NO-ERROR.
    IF NOT AVAIL AgreeCustomer THEN RETURN FALSE.
 
@@ -435,7 +435,7 @@ FUNCTION fDelivSIM RETURNS LOG
       /* YDR-1034-Move the Sales invoice creation
          from order process to Dextra */
       IF Order.InvNum = 0 OR Order.InvNum = ? THEN DO:
-         RUN cashfee.p(Order.OrderID,
+         RUN Mc/cashfee.p(Order.OrderID,
                        1,                     /* action 1=create fees */
                        OUTPUT lcError,
                        OUTPUT ldeAmount,
@@ -526,7 +526,7 @@ FUNCTION fDelivSIM RETURNS LOG
    FIND FIRST DelivCustomer WHERE
               DelivCustomer.Brand   = Order.Brand   AND
               DelivCustomer.OrderId = Order.OrderId AND
-              DelivCustomer.RowType = 4
+              DelivCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
    NO-LOCK NO-ERROR.
    
    IF NOT AVAIL DelivCustomer THEN DO:
@@ -534,7 +534,7 @@ FUNCTION fDelivSIM RETURNS LOG
       FIND FIRST DelivCustomer WHERE
                  DelivCustomer.Brand   = Order.Brand   AND
                  DelivCustomer.OrderId = Order.OrderId AND
-                 DelivCustomer.RowType = 1
+                 DelivCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
       NO-LOCK NO-ERROR.
    
    END.
@@ -542,7 +542,7 @@ FUNCTION fDelivSIM RETURNS LOG
    FIND FIRST ContactCustomer WHERE
               ContactCustomer.Brand   = Order.Brand AND
               ContactCustomer.OrderId = Order.OrderId AND
-              ContactCustomer.Rowtype = 5
+              ContactCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
    NO-LOCK NO-ERROR.
    
    IF NOT AVAIL ContactCustomer THEN DO:
@@ -550,7 +550,7 @@ FUNCTION fDelivSIM RETURNS LOG
       FIND FIRST ContactCustomer WHERE
                  ContactCustomer.Brand   = Order.Brand AND
                  ContactCustomer.OrderId = Order.OrderId AND
-                 ContactCustomer.Rowtype = 1
+                 ContactCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
       NO-LOCK NO-ERROR.
    
    END.
@@ -1241,7 +1241,10 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.TermAmt     = STRING(ldeAccAmt + ldePayTermFee + ldeResidualAmountVATExcl,"zzz9.99").
 
 
-   IF Order.DeliverySecure EQ 1 THEN liDelType = {&ORDER_DELTYPE_SECURE}.
+   IF Order.DeliverySecure EQ 1
+   THEN liDelType = {&ORDER_DELTYPE_POST_SECURE}.
+   ELSE IF Order.DeliverySecure EQ 2
+   THEN liDelType = {&ORDER_DELTYPE_POS_SECURE}.
    ELSE IF Order.DeliveryType EQ 0 THEN liDelType = {&ORDER_DELTYPE_COURIER}.
    ELSE liDelType = Order.DeliveryType.
 
@@ -1254,6 +1257,7 @@ FUNCTION fDelivSIM RETURNS LOG
           ttExtra.ResidualAmount = (IF ldeResidualAmountTotal > 0 THEN
                                     STRING(ldeResidualAmountTotal) ELSE "")
           ttExtra.DeliveryType = STRING(liDelType)
+          ttExtra.KialaCode    = DelivCustomer.KialaCode WHEN Order.DeliveryType = {&ORDER_DELTYPE_POS}
           ttExtra.ContractFileName = lcContractFileName.
 
    /* update SimStat when all skipping are checked */
@@ -1634,7 +1638,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
               Order.CustNum = 0 NO-LOCK NO-ERROR.
    IF AVAILABLE Order THEN
    DO:
-      RUN createcustomer(INPUT ttOneDelivery.OrderId,1,FALSE,TRUE,OUTPUT oiCustomer).
+      RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,1,FALSE,TRUE,OUTPUT oiCustomer).
 
       llCorporate = CAN-FIND(OrderCustomer WHERE
                              OrderCustomer.Brand      = gcBrand               AND
@@ -1647,7 +1651,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
                OrderCustomer.OrderID = ttOneDelivery.OrderID:
          IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN
          DO:
-            RUN createcustcontact.p(OrderCustomer.OrderID,
+            RUN Mm/createcustcontact.p(OrderCustomer.OrderID,
                                     oiCustomer,
                                     OrderCustomer.RowType,
                                     OUTPUT lcError).
@@ -1679,7 +1683,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
          END.
       END.
 
-      RUN createcustomer(INPUT ttOneDelivery.OrderId,3,FALSE,TRUE,OUTPUT oiCustomer).
+      RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,3,FALSE,TRUE,OUTPUT oiCustomer).
    END.
 
    DO liLoop1 = 1 TO lhTable:NUM-FIELDS:

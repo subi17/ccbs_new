@@ -19,13 +19,13 @@ newton__q25_add.p
 
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{fsendsms.i}
-{q25functions.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/fsendsms.i}
+{Func/q25functions.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
@@ -49,6 +49,8 @@ DEF VAR lcResult         AS CHARACTER NO-UNDO.
 
 DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
 DEF VAR ldaMonth24Date    AS DATE NO-UNDO.
+DEF VAR ldaMonth25Date    AS DATE NO-UNDO. /* YDR-2220 */
+DEF VAR llNewExtension    AS LOG  NO-UNDO. /* YDR-2220 */
 /* Contract activation timestamp */
 DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
@@ -146,7 +148,10 @@ ASSIGN
    ldaMonth22Date    = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
    ldaMonth22Date    = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date))
    ldaMonth24Date    = ADD-INTERVAL(DCCLI.ValidFrom, 24, 'months':U)
-   ldaMonth24Date    = DATE(MONTH(ldaMonth24Date),21,YEAR(ldaMonth24Date)).
+   ldaMonth24Date    = DATE(MONTH(ldaMonth24Date),21,YEAR(ldaMonth24Date))
+   ldaMonth25Date    = ADD-INTERVAL(DCCLI.ValidFrom, 25, 'months':U) 
+   ldaMonth25Date    = DATE(MONTH(ldaMonth25Date),21,YEAR(ldaMonth25Date)).
+   /* ldaMonth25Date YDR-2220 */
 
 /* If the Quota 25 prorate request is created between 1st day of month 22
    until 20th day of month 24 then
@@ -160,9 +165,17 @@ ELSE IF TODAY >= ldaMonth22Date AND
    TODAY < ldaMonth24Date THEN
    /* handle it on 21st day of month 24 at 00:00 */
    ldContractActivTS = fMake2Dt(ldaMonth24Date,0).
-ELSE ASSIGN
-   ldaMonth24Date = TODAY
-   ldContractActivTS = fSecOffSet(fMakeTS(),5). /* Handle it immediately */
+ELSE IF TODAY >= ldaMonth24Date AND 
+        TODAY < ldaMonth25Date THEN 
+   ASSIGN
+      ldaMonth24Date = TODAY
+      ldContractActivTS = fSecOffSet(fMakeTS(),5). /* Handle it immediately */
+/* YDR-2220 Quota 25 prorate request is created after 20th day of 25th month*/
+ELSE 
+   ASSIGN
+      ldaMonth25Date = TODAY
+      ldContractActivTS = fSecOffSet(fMakeTS(),5)
+      llNewExtension = YES . /* Handle it immediately */
 
 IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.Brand   EQ gcBrand AND
@@ -210,7 +223,6 @@ IF liCreated = 0 THEN DO:
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
 END.
-
 
 FIND FIRST MSRequest WHERE
            MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
@@ -267,11 +279,21 @@ IF lcSMSTxt > "" THEN DO:
    IF ldeFeeAmount > 0 THEN DO:
 
       ASSIGN
-         /* first payment is done next month to Q25 */
-         lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
-                             lower(entry(month(ADD-INTERVAL(ldaMonth24Date, 1,
-                             'months':U)),{&MONTHS_ES})))
-         lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
+         /* first payment is done next month to Q25 YDR-2220*/
+         lcSMSTxt = (IF NOT llNewExtension THEN 
+                       REPLACE(lcSMSTxt,"#MONTHNAME",
+                               lower(entry(month(ADD-INTERVAL(ldaMonth24Date, 1,
+                               'months':U)),{&MONTHS_ES})))
+                    ELSE
+                       REPLACE(lcSMSTxt,"#MONTHNAME",
+                               lower(entry(month(ADD-INTERVAL(ldaMonth25Date, 1,
+                               'months':U)),{&MONTHS_ES})))
+                    )
+         lcSMSTxt = (IF NOT llNewExtension THEN 
+                       REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
+                    ELSE
+                       REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth25Date)))
+                    )
          lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
                STRING(TRUNC(ldeFeeAmount / 12, 2))).
 
@@ -306,3 +328,4 @@ add_boolean(response_toplevel_id, "", TRUE).
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.
+

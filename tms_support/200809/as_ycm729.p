@@ -1,5 +1,5 @@
-{commpaa.i}
-{fmakemsreq.i}
+{Syst/commpaa.i}
+{Func/fmakemsreq.i}
 katun = "CreSub".
 gcBrand = "1".
 DEFINE VARIABLE liRequest AS INTEGER NO-UNDO.

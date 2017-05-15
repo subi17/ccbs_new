@@ -42,12 +42,12 @@
 
 &GLOBAL-DEFINE fmakemsreq YES
 
-{msreqfunc.i}
-{fcreatereq.i}
-{fctserval.i}
-{fcustdata.i}
-{tmsconst.i}
-{fixedlinefunc.i}
+{Func/msreqfunc.i}
+{Func/fcreatereq.i}
+{Func/fctserval.i}
+{Func/fcustdata.i}
+{Syst/tmsconst.i}
+{Func/fixedlinefunc.i}
 
 DEF BUFFER bReqOwner FOR MsOwner.
 DEF BUFFER bReqComp  FOR ServCom.
@@ -234,10 +234,10 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
    RELEASE bCreaReq.
 
    /* initial actions */
-   RUN requestaction_init.p (liReqCreated).
+   RUN Mm/requestaction_init.p (liReqCreated).
 
    /* Send right away SMS related to the CLI Type change */
-   RUN requestaction_sms.p(INPUT liReqCreated,
+   RUN Mm/requestaction_sms.p(INPUT liReqCreated,
                            INPUT icNewType,
                            INPUT icSource).
   
@@ -792,6 +792,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    DEF VAR lcBONOContracts  AS CHAR NO-UNDO.
    
    DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER ServiceLimit FOR ServiceLimit.
 
    lcBONOContracts = fCParamC("BONO_CONTRACTS").
    
@@ -884,6 +885,22 @@ FUNCTION fPCActionRequest RETURNS INTEGER
       IF fActivateTARJ7Promo(iiMsSeq, idActStamp) THEN
          bCreaReq.ReqDParam1 = 1228.
    END.
+
+   IF liReqType EQ 8 AND 
+      LOOKUP(icContrType,"TARJ7,TARJ9") > 0 AND
+      CAN-FIND(FIRST Order NO-LOCK WHERE
+                     Order.MsSeq = iiMsSeq AND
+                     Order.CLIType = icContrType AND
+                     Order.Crstamp >= 20170301 AND
+                     Order.Crstamp < 20170405.25200 AND
+                     Order.OrderType < 2) THEN DO:
+      
+      FIND ServiceLimit NO-LOCK where
+           ServiceLimit.groupcode = icContrType and
+           ServiceLimit.dialtype = {&DIAL_TYPE_GPRS} no-error.
+      IF AVAIL ServiceLimit THEN     
+         bCreaReq.ReqDParam1 = ServiceLimit.inclamt * 2.
+   END.
    
    /* Landing Page Enhancement with Upgrade UPSELL */
    IF bCreaReq.ReqCParam3 = "UPGRADE_UPSELL" OR
@@ -909,7 +926,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    IF LOOKUP(icContrType,lcBONOContracts + ",HSPA_ROAM_EU,TARJ_UPSELL") > 0 THEN DO:
       FIND FIRST bReqOwner WHERE bReqOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
       IF AVAILABLE bReqOwner THEN
-         RUN requestaction_sms.p(INPUT liReqCreated,
+         RUN Mm/requestaction_sms.p(INPUT liReqCreated,
                                  INPUT bReqOwner.CLIType,
                                  INPUT icSource).
    END. /* IF liReqType = 9 AND */

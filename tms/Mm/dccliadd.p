@@ -8,12 +8,12 @@
   Version ......: Yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fmakemsreq.i}
-{upsellbundle.i}
-{fdss.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
+{Func/upsellbundle.i}
+{Func/fdss.i}
 
 DEF INPUT PARAMETER iiMsSeq AS INT NO-UNDO. 
 
@@ -135,7 +135,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                   ELSE 0 
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    END.
    
    IF toimi = 1 THEN DO:
@@ -143,7 +143,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE 
             lcDCEvent

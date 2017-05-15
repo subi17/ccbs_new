@@ -19,28 +19,28 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{date.i}
-{msreqfunc.i}
-{fmakemsreq.i}
-{daycampaign.i}
-{eventval.i}
-{penaltyfee.i}
-{fmakeservlimit.i}
-{tmsconst.i}
-{matrix.i}
-{service.i}
-{fbundle.i}
-{nncoit2.i}
-{contract_end_date.i}
-{fcpfat.i}
-{rerate_request.i}
-{tmqueue_analysis.i}
-{dpmember.i}
-{terminal_financing.i}
-{ordercancel.i}
-{fprepaidfee.i}
-{fcreditreq.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/msreqfunc.i}
+{Func/fmakemsreq.i}
+{Rate/daycampaign.i}
+{Syst/eventval.i}
+{Func/penaltyfee.i}
+{Func/fmakeservlimit.i}
+{Syst/tmsconst.i}
+{Func/matrix.i}
+{Func/service.i}
+{Mm/fbundle.i}
+{Func/nncoit2.i}
+{Func/contract_end_date.i}
+{Func/fcpfat.i}
+{Rate/rerate_request.i}
+{Rate/tmqueue_analysis.i}
+{Mc/dpmember.i}
+{Func/terminal_financing.i}
+{Func/ordercancel.i}
+{Func/fprepaidfee.i}
+{Func/fcreditreq.i}
 {Func/fsendsms.i}
 
 FUNCTION fUpdateServicelCounterMSID RETURNS LOGICAL
@@ -106,7 +106,7 @@ DEF BUFFER bOrigRequest FOR MsRequest.
 
 IF llDoEvent THEN DO:
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFatime AS HANDLE NO-UNDO.
    lhFatime = BUFFER Fatime:HANDLE.
@@ -402,17 +402,7 @@ PROCEDURE pContractActivation:
          lcUseCLIType = bOrigRequest.ReqCParam2. 
    END.
 
-   /* is the new contract allowed */
-   IF lcDCEvent = "DATA7" THEN DO:
-      IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
-              lcUseCLIType = "CONT9" OR lcUseCLIType = "CONT10" OR
-              lcUseCLIType = "CONT26") AND
-         NOT fIsConvergenceTariff(lcUseCLIType) THEN DO:
-         fReqError("Contract is not allowed for this subscription type").
-         RETURN.
-      END.
-   END.   
-   ELSE IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
@@ -515,7 +505,7 @@ PROCEDURE pContractActivation:
 
    IF lcDCEvent EQ {&PMDUB} AND MsOwner.CLIType EQ "TARJ5" THEN DO:
       
-      RUN air_get_account_details.p(MsOwner.CLI, 
+      RUN Gwy/air_get_account_details.p(MsOwner.CLI, 
                                     OUTPUT liCurrentServiceClass,
                                     OUTPUT lcError).
    
@@ -526,7 +516,7 @@ PROCEDURE pContractActivation:
 
       IF liCurrentServiceClass EQ {&SC_TARJ5_PROMOTIONAL} THEN DO:
 
-         RUN air_update_serviceclass.p(MsOwner.CLI,
+         RUN Gwy/air_update_serviceclass.p(MsOwner.CLI,
                                        {&SC_TARJ5_NORMAL_BONO},
                                        {&SC_TARJ5_PROMOTIONAL_BONO},
                                        ?,
@@ -930,7 +920,7 @@ PROCEDURE pContractActivation:
 
          liFatPeriod = YEAR(ldtFatDate) * 100 + MONTH(ldtFatDate).
          
-         RUN creafat (MsOwner.CustNum,
+         RUN Mc/creafat.p (MsOwner.CustNum,
                       DCCLI.MsSeq,
                       DCCLI.DCEvent,
                       0,   /* amount */
@@ -1008,7 +998,7 @@ PROCEDURE pContractActivation:
       IF AVAIL bQ25SingleFee THEN
          liOrderId = bQ25SingleFee.OrderId.
 
-      RUN creasfee.p (MsOwner.CustNum,
+      RUN Mc/creasfee.p (MsOwner.CustNum,
                     (IF (lcDCEvent = {&DSS} + "_UPSELL" OR
                          lcDCEvent EQ  "DSS200_UPSELL" OR
                          lcDCEvent = "DSS2_UPSELL") THEN liDSSMsSeq
@@ -1040,7 +1030,7 @@ PROCEDURE pContractActivation:
          AVAIL DCCLI AND
          MsRequest.ReqDParam2 > 0 THEN DO:
 
-         RUN creasfee.p(MsOwner.CustNum,
+         RUN Mc/creasfee.p(MsOwner.CustNum,
                        MsOwner.MsSeq,
                        DCCLI.ValidTo + 1,
                        "FeeModel",
@@ -1507,12 +1497,12 @@ PROCEDURE pFinalize:
    fReqStatus(2,""). 
 
    /* Send the SMS using Request Action Rules */
-   RUN requestaction_sms.p(INPUT MsRequest.MsRequest,
+   RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
                            INPUT MsOwner.CliType,
                            INPUT MsRequest.ReqSource).
 
    /* terminate BB service package etc. */
-   RUN requestaction_exec.p(MsRequest.MsRequest,
+   RUN Mm/requestaction_exec.p(MsRequest.MsRequest,
                             MsOwner.CLIType,        /* CLI Type */
                             0,                      /* order    */
                             MsRequest.ActStamp,
@@ -1682,10 +1672,30 @@ PROCEDURE pFinalize:
             
    END.
    
-   IF lcDCEvent EQ "CONT15" AND
-      MsRequest.ReqType EQ 8 AND
-      MsRequest.ReqCParam2 EQ "act" THEN DO:
-   
+   /* When STCed between CONT15 and CONTDSL48 */
+   IF (lcDCEvent EQ "CONT15" OR LOOKUP(lcDCEvent,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) AND 
+      MsRequest.ReqType    EQ 8     AND
+      MsRequest.ReqCParam2 EQ "act" THEN 
+   DO:
+      IF NOT CAN-FIND(FIRST CliType WHERE CLIType.Brand      = gcBrand         AND 
+                                          CliType.CliType    = MsOwner.CliType AND 
+                                          CliType.BaseBundle = "CONT15"        NO-LOCK) THEN
+          LEAVE.
+      ELSE IF CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq      = MsOwner.MsSeq                             AND
+                                             MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION}            AND
+                                             LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND 
+                                             MsRequest.ReqCParam3 = "VOICE100" USE-INDEX MsSeq NO-LOCK)       THEN      
+          LEAVE.
+      ELSE 
+      DO:
+          FIND FIRST ServiceLimit WHERE ServiceLimit.GroupCode = "VOICE100" NO-LOCK NO-ERROR.
+          IF AVAIL ServiceLimit AND CAN-FIND(FIRST MServiceLimit WHERE MServiceLimit.MsSeq    = MsOwner.MsSeq         AND 
+                                                                       MServiceLimit.DialType = ServiceLimit.Dialtype AND 
+                                                                       MServiceLimit.SLSeq    = ServiceLimit.SLSeq    AND 
+                                                                       MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK) THEN 
+              LEAVE.
+      END.
+
       ASSIGN
          ldaCont15PromoFrom = fCParamDa("CONT15PromoFromDate")
          ldaCont15PromoEnd  = fCParamDa("CONT15PromoEndDate")
@@ -1712,18 +1722,18 @@ PROCEDURE pFinalize:
          ldaOrderDate <= ldaCont15PromoEnd THEN DO:
 
          liRequest = fPCActionRequest(MsRequest.MsSeq,
-                                  "VOICE100",
-                                  "act",
-                                  MsRequest.ActStamp,
-                                  TRUE, /* fees */
-                                  {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
-                                  "",
-                                  MsRequest.MsRequest,
-                                  FALSE,
-                                  "",
-                                  0,
-                                  0,
-                                  OUTPUT lcError).
+                                      "VOICE100",
+                                      "act",
+                                      MsRequest.ActStamp,
+                                      TRUE, /* fees */
+                                      {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                      "",
+                                      MsRequest.MsRequest,
+                                      FALSE,
+                                      "",
+                                      0,
+                                      0,
+                                      OUTPUT lcError).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -1952,7 +1962,7 @@ PROCEDURE pContractTermination:
       MsRequest.ReqSource NE {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION}
       THEN DO:
       
-      RUN air_get_account_details.p(MsOwner.CLI, 
+      RUN Gwy/air_get_account_details.p(MsOwner.CLI, 
                                     OUTPUT liCurrentServiceClass,
                                     OUTPUT lcError).
    
@@ -1963,7 +1973,7 @@ PROCEDURE pContractTermination:
 
       IF liCurrentServiceClass EQ {&SC_TARJ5_PROMOTIONAL_BONO} THEN DO:
 
-         RUN air_update_serviceclass.p(MsOwner.CLI,
+         RUN Gwy/air_update_serviceclass.p(MsOwner.CLI,
                                        {&SC_TARJ5_NORMAL},
                                        {&SC_TARJ5_PROMOTIONAL},
                                        ?, 
@@ -2374,7 +2384,7 @@ PROCEDURE pContractTermination:
 
       IF llCreatePenaltyFee THEN DO:
 
-         RUN creasfee.p (MsOwner.CustNum,
+         RUN Mc/creasfee.p (MsOwner.CustNum,
                          MsRequest.MsSeq,
                          ldtActDate,
                          "FeeModel",
@@ -2472,7 +2482,7 @@ PROCEDURE pContractTermination:
          END.
       END.
 
-      RUN closefee.p(FixedFee.FFNum,
+      RUN Mc/closefee.p(FixedFee.FFNum,
                      ldtActDate,
                      FALSE, /* credit billed fees */
                      TRUE,
@@ -2879,7 +2889,7 @@ PROCEDURE pMaintainContract:
                OUTPUT ldtActDate,
                OUTPUT liReqCnt).
                
-      RUN creasfee.p (MsRequest.CustNum,
+      RUN Mc/creasfee.p (MsRequest.CustNum,
                     MsRequest.MsSeq,
                     ldtActDate,
                     "FeeModel",
@@ -2957,7 +2967,7 @@ PROCEDURE pPerContractPIN:
    END. 
    
    /* print a letter */
-   RUN prinpcpin(MsRequest.CustNum,
+   RUN Mm/prinpcpin.p(MsRequest.CustNum,
                  MsRequest.MsRequest,
                  OUTPUT lcReqChar).
 
@@ -3231,17 +3241,7 @@ PROCEDURE pContractReactivation:
       RETURN.
    END. /* IF NOT AVAILABLE DayCampaign OR */
 
-   /* is the contract allowed */
-   IF lcDCEvent = "DATA7" THEN DO:
-      IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
-              lcUseCLIType = "CONT9" OR lcUseCLIType = "CONT10" OR
-              lcUseCLIType = "CONT26") AND
-         NOT fIsConvergenceTariff(lcUseCLIType) THEN DO:
-         fReqError("Contract is not allowed for this subscription type").
-         RETURN.
-      END.
-   END.
-   ELSE IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
@@ -3516,7 +3516,7 @@ PROCEDURE pContractReactivation:
                      STRING(DCCLI.PerContractID) = FixedFee.SourceKey AND
                      DCCLI.Amount NE ? AND DCCLI.Amount > 0 THEN DO:
 
-               RUN creasfee.p(MsOwner.CustNum,
+               RUN Mc/creasfee.p(MsOwner.CustNum,
                              MsOwner.MsSeq,
                              DCCLI.ValidTo + 1,
                              "FeeModel",

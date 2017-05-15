@@ -7,11 +7,11 @@
   CHANGED ......: 
   Version ......: xfera 
   ---------------------------------------------------------------------- */
-{commali.i}
-{lib/tokenlib.i}
-{timestamp.i}
-{transname.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Func/timestamp.i}
+{Func/transname.i}
+{Syst/tmsconst.i}
 
 DEFINE INPUT PARAMETER iiOrderId AS INTEGER NO-UNDO. 
 
@@ -87,7 +87,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 LOOP:
@@ -147,12 +147,12 @@ BROWSE:
         ufk[1]= 0  ufk[2]= 0 ufk[3]= 0
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OrderDelivery.LOTimeStamp ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OrderDelivery.LOTimeStamp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OrderDelivery.LOTimeStamp WITH FRAME sel.
       END.
       
@@ -417,7 +417,7 @@ END PROCEDURE.
 PROCEDURE local-view-record:
 
    ufk = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    RUN local-find-this(FALSE).
   

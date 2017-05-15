@@ -8,16 +8,16 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
-{finvbal.i}
-{faccper.i}
-{fcustbal.i}
-{fcustcnt.i}
-{eventval.i} 
-{fhdrtext.i}
-{fbankdata.i}
-{fpaymentreq.i}
+{Func/finvbal.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Syst/eventval.i} 
+{Func/fhdrtext.i}
+{Func/fbankdata.i}
+{Func/fpaymentreq.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 

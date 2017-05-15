@@ -10,19 +10,20 @@
              msisdnstat;int;optional;a new msisdn status after termination (optional)
              quartime;int;optional;quarantine time in days (optional)
              opcode;int;optional;operator code (required when orderer = 2)
+             termination_type;string;optional;full (default) or partial for convergent mobile part
 
  * @output  success;boolean
  */
 
 {xmlrpc/xmlrpc_access.i} 
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{fsubstermreq.i}
-{fbundle.i}
-{msisdn_prefix.i}
-{main_add_lines.i}
+{Func/timestamp.i}
+{Func/fsubstermreq.i}
+{Mm/fbundle.i}
+{Func/msisdn_prefix.i}
+{Func/main_add_lines.i}
 
 /* Input parameters */
 DEF VAR piMsSeq    AS INT  NO-UNDO.
@@ -33,6 +34,7 @@ DEF VAR piSimStat  AS INT NO-UNDO.
 DEF VAR piMSISDNStat AS INT NO-UNDO.
 DEF VAR piQuarTime AS INT NO-UNDO.
 DEF VAR piOpCode   AS INT NO-UNDO.
+DEF VAR pcTermType AS CHAR NO-UNDO.
 
 DEF VAR pcTermStruct AS CHAR NO-UNDO.
 DEF VAR lcTermStruct AS CHAR NO-UNDO.
@@ -50,11 +52,13 @@ DEF VAR ldaTermDate AS DATE NO-UNDO.
 /* Output parameters */
 DEF VAR result AS LOGICAL.
 
+pcTermType = {&TERMINATION_TYPE_FULL}. /* Default value */
+
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 pcTermStruct = get_struct(param_toplevel_id, "0").
 
 lcTermStruct = validate_request(pcTermStruct,
-        "salesman!,msseq!,orderer!,killts!,simstat,msisdnstat,quartime,opcode").
+        "salesman!,msseq!,orderer!,killts!,simstat,msisdnstat,quartime,opcode,termination_type").
 IF lcTermStruct EQ ? THEN RETURN.
 
 /* required params */
@@ -62,11 +66,17 @@ piMsSeq     = get_pos_int(pcTermStruct, "msseq").
 katun       = "VISTA_" + get_string(pcTermStruct, "salesman").
 piOrderer   = get_pos_int(pcTermStruct, "orderer").
 pdeKillTS   = get_timestamp(pcTermStruct, "killts").
+IF LOOKUP("termination_type", lcTermStruct) GT 0 THEN
+   pcTermType  = get_string(pcTermStruct, "termination_type").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(katun) EQ "VISTA_" THEN DO:
    RETURN appl_err("username is empty").
 END.
+
+IF NOT (pcTermType EQ {&TERMINATION_TYPE_PARTIAL} OR
+        pcTermType EQ {&TERMINATION_TYPE_FULL}) THEN
+      RETURN appl_err("Incorrect termination type").
 
 /* Check that mobsub is available */
 FIND MobSub WHERE
@@ -74,6 +84,11 @@ FIND MobSub WHERE
 NO-LOCK NO-ERROR.
 IF NOT AVAIL MobSub THEN DO:
    RETURN appl_err("System Error ! Mobile Subscription not available").
+END.
+
+IF pcTermType EQ {&TERMINATION_TYPE_PARTIAL} AND 
+   MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
+   RETURN appl_err("System Error ! Partial termination not allowed").
 END.
 
 /* Yoigo MSISDN? */
@@ -176,6 +191,7 @@ liReq = fTerminationRequest(
    ({&REQUEST_SOURCE_NEWTON}),
    "",
    0,
+   pcTermType,
    OUTPUT ocResult).
 
 IF liReq > 0 THEN DO:

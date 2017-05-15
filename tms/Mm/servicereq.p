@@ -8,17 +8,17 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
-{fmakemsreq.i}
-{ffeecont.i}
-{fsubser.i}
-{fctserval.i}
-{servcomfee.i}
-{barrgrp.i}
-{fnumberinq.i}
-{msopenbatch.i}
-{remfees.i}
-{barrfunc.i}
+{Func/msreqfunc.i}
+{Func/fmakemsreq.i}
+{Func/ffeecont.i}
+{Func/fsubser.i}
+{Func/fctserval.i}
+{Func/servcomfee.i}
+{Mm/barrgrp.i}
+{Func/fnumberinq.i}
+{Func/msopenbatch.i}
+{Func/remfees.i}
+{Func/barrfunc.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -126,7 +126,7 @@ PROCEDURE pServCompSolog:
                        OUTPUT liReqCnt).
    
    /* create solog */
-   RUN setms.p(MsRequest.MSRequest,
+   RUN Mm/setms.p(MsRequest.MSRequest,
              TRUE,
              OUTPUT liReqCnt,
              OUTPUT lcError).
@@ -213,7 +213,7 @@ PROCEDURE pServAttrSolog:
    END.
  
    /* create solog */
-   RUN setms(MsRequest.MSRequest,
+   RUN Mm/setms.p(MsRequest.MSRequest,
              TRUE,
              OUTPUT liReqCnt,
              OUTPUT lcError).
@@ -321,7 +321,7 @@ PROCEDURE pServCompUpdate:
       IF NOT llOngoing AND
           fIsInList("Debt_HOTL,Debt_HOTLP,Internet", lcBarring) EQ TRUE THEN DO:
       
-         RUN barrengine.p(MobSub.MsSeq,
+         RUN Mm/barrengine.p(MobSub.MsSeq,
                           "#REFRESH",
                           {&REQUEST_SOURCE_SERVICE_CHANGE},
                           katun,               /* creator */
@@ -585,7 +585,7 @@ PROCEDURE pServCompUpdate:
    IF SubSer.ServCom = "SALDOAGR" AND
       liOldValue = 0 AND SubSer.SSStat > 0 
    THEN DO:
-      RUN prinmsal (MobSub.MsSeq,
+      RUN Mc/prinmsal.p (MobSub.MsSeq,
                     OUTPUT lcReqChar).
       IF lcReqChar > "" THEN DO:
          fReqLog("Saldo Agr. confirmation print failed: " + lcReqChar).
@@ -655,7 +655,7 @@ PROCEDURE pServCompUpdate:
          /* barring with lower priority was activated */
          llAlleviate = TRUE 
       THEN DO:
-          RUN creasfee (MobSub.CustNum,
+          RUN Mc/creasfee.p (MobSub.CustNum,
                         MobSub.MsSeq,
                         SubSer.SSDate,
                         "MobSub",
@@ -690,7 +690,7 @@ PROCEDURE pServCompUpdate:
    /* answering service activated */
    IF SubSer.ServCom = "PP2" AND liOldValue = 0 AND SubSer.SSStat = 1
    THEN DO:
-      RUN makedcf(MobSub.MsSeq,
+      RUN Mm/makedcf.p(MobSub.MsSeq,
                   SubSer.SSDate,
                   TRUE).
    END.
@@ -714,7 +714,7 @@ PROCEDURE pServCompUpdate:
       THEN fOpenSaldoBarring().
    END.
       
-   /* run rerate (needed especially with saldo-services) */
+   /* RUN Rate/rerate.p (needed especially with saldo-services) */
    IF llReRate AND NOT llDenyReRate THEN DO:
    
       fReRateTriggerEvent(INPUT MsRequest.MSRequest,RECID(MSRequest)).
@@ -1054,7 +1054,7 @@ PROCEDURE pReRate:
                                        ldtFrom,
                                        ldtTo,
                                        TRUE).
-      &ELSE RUN cli_rate (icCLI,
+      &ELSE RUN Rate/cli_rate.p (icCLI,
                           ldtFrom,
                           ldtTo,
                           TRUE).    

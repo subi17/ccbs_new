@@ -8,22 +8,25 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i}
+{Syst/commali.i}
+{Syst/eventval.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
+
+DEF VAR lcMemo AS CHAR  NO-UNDO. 
+ASSIGN lcMemo = "Agent" + CHR(255) + "TMS".
 
 IF llDoEvent THEN DO FOR Customer:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER Customer:HANDLE.
    RUN StarEventInitialize(lhCustomer).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCustomer).
+      RUN Mc/eventview2.p(lhCustomer).
    END.
 
 END.
@@ -89,7 +92,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
            Customer.OutMarkSMS
            Customer.OutMarkEMail
            Customer.OutMarkPost
-            Customer.OutMarkBank
+           Customer.OutMarkBank
            Customer.RobinsonsLimit.
 
    ASSIGN
@@ -97,13 +100,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       ufk[1]= 7  
       ufk[8]= 8 
       ehto = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
             
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          
          FIND CURRENT Customer EXCLUSIVE-LOCK.
 
@@ -118,7 +121,10 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
                 Customer.OutMarkPost
                 Customer.OutMarkBank.
 
-         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+         IF llDoEvent THEN 
+            RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                                 {&STAR_EVENT_USER}, 
+                                                  lcMemo).
           
          RELEASE Customer.
          
@@ -132,4 +138,6 @@ END. /* lCustMark */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCriter NO-PAUSE.    
+
+
 
