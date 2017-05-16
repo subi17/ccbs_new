@@ -206,7 +206,10 @@ DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF BUFFER bFixedFee FOR FixedFee.
 
 DEF VAR lcTFStatus AS CHAR NO-UNDO. 
-   
+DEF VAR liLoop     AS INT  NO-UNDO.
+DEF VAR lcFResult  AS CHAR NO-UNDO EXTENT 2 INIT
+   [{&TF_STATUS_HOLD_SENDING},{&TF_STATUS_YOIGO_SUB_TERMINATED}].
+
 lcLogDir = fCParam("TermFinance","LogDir").
 IF NOT lcLogDir > "" THEN RETURN.
 
@@ -256,23 +259,26 @@ FOR EACH Order NO-LOCK WHERE
 END.
 
 FF_LOOP:
-FOR EACH FixedFee NO-LOCK WHERE
-         FixedFee.FinancedResult = {&TF_STATUS_HOLD_SENDING},
-   FIRST Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
-         Order.OrderID = FixedFee.OrderID:
+/* Check both cases TF_STATUS_HOLD_SENDING and TF_STATUS_YOIGO_SUB_TERMINATED */
+DO liLoop = 1 TO EXTENT(lcFResult):
+   FOR EACH FixedFee NO-LOCK WHERE
+            FixedFee.FinancedResult = lcFResult[liLoop],
+      FIRST Order NO-LOCK WHERE
+            Order.Brand = gcBrand AND
+            Order.OrderID = FixedFee.OrderID:
 
-   lcTFStatus = fGetTFStatus(Order.OrderID).
+      lcTFStatus = fGetTFStatus(Order.OrderID).
 
-   IF lcTFStatus > ""
-   THEN DO:
-      FIND bFixedFee EXCLUSIVE-LOCK WHERE
-           ROWID(bFixedFee) = ROWID(FixedFee) NO-ERROR.
-      bFixedFee.FinancedResult = lcTFStatus.
-      RELEASE bFixedFee.
-      fLogToFile(lcTFStatus).
+      IF lcTFStatus > ""
+      THEN DO:
+         FIND bFixedFee EXCLUSIVE-LOCK WHERE
+              ROWID(bFixedFee) = ROWID(FixedFee) NO-ERROR.
+         bFixedFee.FinancedResult = lcTFStatus.
+         RELEASE bFixedFee.
+         fLogToFile(lcTFStatus).
+      END.
+
    END.
-
 END.
 
 FINALLY:
