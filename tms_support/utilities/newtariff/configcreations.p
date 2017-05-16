@@ -335,9 +335,14 @@ PROCEDURE pCLIType:
       END.
 
       IF ttCliType.TariffBundle = "" THEN    
-         RUN pSLGAnalyse(ttCliType.CliType, ttCliType.CopyServicesFromCliType, ttCliType.BaseBundle, ttCliType.FixedLineBaseBundle, ttCliType.AllowedBundles).         
+         RUN pSLGAnalyse(ttCliType.CliType, 
+                         ttCliType.CopyServicesFromCliType, 
+                         ttCliType.BaseBundle, 
+                         ttCliType.FixedLineBaseBundle, 
+                         ttCliType.AllowedBundles,
+                         (ttCliType.PayType = 2)).         
 
-      IF ttCliType.BundleType = False THEN     
+      IF ttCliType.PayType = 1 AND ttCliType.BundleType = False THEN     
          RUN pRequestAction(ttCliType.CliType, 
                             ttCliType.BaseBundle, 
                             ttCliType.FixedLineBaseBundle, 
@@ -352,13 +357,15 @@ PROCEDURE pCLIType:
          RUN pUpdateTMSParam("BB_PROFILE_1",ttCliType.CliType).
       END.
       
-      IF ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "" THEN       
+      IF ttCLIType.PayType = 1 AND (ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN       
          RUN pUpdateTMSParam("DATA_BUNDLE_BASED_CLITYPES", ttCliType.CliType).
 
       IF ttCLIType.PayType = 1 AND ttCLIType.UsageType = 1 THEN 
          RUN pUpdateTMSParam("POSTPAID_VOICE_TARIFFS", ttCliType.CliType).
       ELSE IF ttCLIType.PayType = 2 AND ttCLIType.UsageType = 1 THEN 
-         RUN pUpdateTMSParam("PREPAID_VOICE_TARIFFS", ttCliType.CliType).         
+         RUN pUpdateTMSParam("PREPAID_VOICE_TARIFFS", ttCliType.CliType).  
+      ELSE IF ttCliType.PayType = 2 AND ttCliType.UsageType = 2 THEN
+         RUN pUpdateTMSParam("PREPAID_DATA_CONTRACTS", ttCliType.CliType).          
    END.
      
    RETURN "".
@@ -417,7 +424,8 @@ PROCEDURE pSLGAnalyse:
     DEFINE INPUT PARAMETER icMobileBaseBundle    AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icFixedLineBaseBundle AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icAllowedBundles      AS CHARACTER NO-UNDO.
-    
+    DEFINE INPUT PARAMETER ilPrepaid             AS LOGICAL   NO-UNDO.
+
     DEFINE VARIABLE liCnt                         AS INTEGER   NO-UNDO.
     DEFINE VARIABLE liCount                       AS INTEGER   NO-UNDO.
     DEFINE VARIABLE lcSubsTypePrefix              AS CHARACTER NO-UNDO.
@@ -580,6 +588,7 @@ PROCEDURE pSLGAnalyse:
     END.    
 
     /* Voice national related */
+    IF NOT ilPrepaid THEN 
     DO liCount = 1 TO NUM-ENTRIES(lcBillCodeList)
        ON ERROR UNDO, THROW:
 
