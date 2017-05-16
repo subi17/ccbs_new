@@ -391,83 +391,83 @@ PROCEDURE pProcessTT:
       ttCliType.ServicesForReCreateOnSTC  = lcServicesForReCreateOnSTC
       ttCliType.CopyServicesFromCliType   = (IF lcTariffBundle > "" THEN "" ELSE lcCopyServicesFromCliType).
 
-   IF lcPaymentType = "PostPaid" THEN 
-   DO:
-      IF lcMobile_BaseBundle > "" OR lcTariffBundle > "" THEN 
-      DO:
-         ASSIGN 
-             liFirstMonthBR   = (IF lcMobile_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcMobile_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
-             liLastMonthBR    = (IF lcMobile_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcMobile_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0)
-
-             liDLFirstMonthBR = (IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
-             liDLLastMonthBR  = (IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0) 
-
-             liVLFirstMonthBR = (IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
-             liVLLastMonthBR  = (IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0) 
-
-             liBDLFirstMonthBR = (IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
-             liBDLLastMonthBR  = (IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0).
-
-         RUN pBundle("Mobile",
-                     ttCliType.CliType,
-                     (IF lcTariffBundle > "" THEN lcTariffBundle ELSE lcMobile_BaseBundle),
-                     ttCliType.CliName,
-                     lcMobile_BaseBundleType,
-                     lcMobile_MonthlyFeeBillCode,
-                     lcMobile_BaseBundleUpsell,
-                     LOGICAL(lcMobile_BaseBundleBonoSupport),
-                     DECIMAL(lcMobile_CommercialFee),
-                     liFirstMonthBR,
-                     liLastMonthBR,
-                     DECIMAL(lcMobile_DataLimit),
-                     liDLFirstMonthBR,
-                     liDLLastMonthBR,
-                     DECIMAL(lcMobile_VoiceLimit),
-                     liVLFirstMonthBR,
-                     liVLLastMonthBR,
-                     DECIMAL(lcMobile_BDestLimit),
-                     liBDLFirstMonthBR,
-                     liBDLLastMonthBR).        
-      END.
-
-      IF lcFixedLine_BaseBundle > "" THEN 
-      DO:
-          ASSIGN 
-             liFirstMonthBR   = (IF lcFixedLine_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcFixedLine_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
-             liLastMonthBR    = (IF lcFixedLine_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcFixedLine_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0)
-
-             liDLFirstMonthBR = 0
-             liDLLastMonthBR  = 0
-
-             liVLFirstMonthBR = (IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
-             liVLLastMonthBR  = (IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0) 
-
-             liBDLFirstMonthBR = (IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
-             liBDLLastMonthBR  = (IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0).
-
-          RUN pBundle("FixedLine",
-                      ttCliType.CliType,
-                      lcFixedLine_BaseBundle,
-                      ttCliType.CliName,
-                      lcFixedLine_BaseBundleType,
-                      lcFixedLine_MonthlyFeeBillCode,
-                      lcFixedLine_BaseBundleUpsell,
-                      LOGICAL(lcFixedLine_BaseBundleBonoSupport),
-                      DECIMAL(lcFixedLine_CommercialFee),
-                      liFirstMonthBR,
-                      liLastMonthBR,
-                      0,
-                      liDLFirstMonthBR,
-                      liDLLastMonthBR,
-                      DECIMAL(lcFixedLine_VoiceLimit),
-                      liVLFirstMonthBR,
-                      liVLLastMonthBR,
-                      DECIMAL(lcFixedLine_BDestLimit),
-                      liBDLFirstMonthBR,
-                      liBDLLastMonthBR).        
-      END.
-   END.
    
+    IF lcMobile_BaseBundle > "" OR lcTariffBundle > "" THEN 
+    DO:
+       ASSIGN 
+           liFirstMonthBR   = (IF lcMobile_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcMobile_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
+           liLastMonthBR    = (IF lcMobile_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcMobile_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0)
+
+           liDLFirstMonthBR = (IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_DataLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
+           liDLLastMonthBR  = (IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_DataLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0) 
+
+           liVLFirstMonthBR = (IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_VoiceLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
+           liVLLastMonthBR  = (IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_VoiceLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0) 
+
+           liBDLFirstMonthBR = (IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
+           liBDLLastMonthBR  = (IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcMobile_BDestLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0).
+
+       RUN pBundle("Mobile",
+                   ttCliType.CliType,
+                   (IF lcTariffBundle > "" THEN lcTariffBundle ELSE lcMobile_BaseBundle),
+                   ttCliType.CliName,
+                   lcMobile_BaseBundleType,
+                   lcMobile_MonthlyFeeBillCode,
+                   lcMobile_BaseBundleUpsell,
+                   LOGICAL(lcMobile_BaseBundleBonoSupport),
+                   DECIMAL(lcMobile_CommercialFee),
+                   liFirstMonthBR,
+                   liLastMonthBR,
+                   DECIMAL(lcMobile_DataLimit),
+                   liDLFirstMonthBR,
+                   liDLLastMonthBR,
+                   DECIMAL(lcMobile_VoiceLimit),
+                   liVLFirstMonthBR,
+                   liVLLastMonthBR,
+                   DECIMAL(lcMobile_BDestLimit),
+                   liBDLFirstMonthBR,
+                   liBDLLastMonthBR).        
+    END.
+
+    IF lcFixedLine_BaseBundle > "" THEN 
+    DO:
+        ASSIGN 
+           liFirstMonthBR   = (IF lcFixedLine_FirstMonthFeeCalc BEGINS "Full" THEN 1 ELSE IF lcFixedLine_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_FirstMonthFeeCalc BEGINS "Relative" THEN 0 ELSE 0)
+           liLastMonthBR    = (IF lcFixedLine_LastMonthFeeCalc  BEGINS "Full" THEN 1 ELSE IF lcFixedLine_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_LastMonthFeeCalc  BEGINS "Relative" THEN 0 ELSE 0)
+
+           liDLFirstMonthBR = 0
+           liDLLastMonthBR  = 0
+
+           liVLFirstMonthBR = (IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_VoiceLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
+           liVLLastMonthBR  = (IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_VoiceLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0) 
+
+           liBDLFirstMonthBR = (IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_BDestLimit_FirstMonthFeeCalc BEGINS "Full" THEN 0 ELSE 0)
+           liBDLLastMonthBR  = (IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Relative" THEN 1 ELSE IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Usage" THEN 2 ELSE IF lcFixedLine_BDestLimit_LastMonthFeeCalc  BEGINS "Full" THEN 0 ELSE 0).
+
+        RUN pBundle("FixedLine",
+                    ttCliType.CliType,
+                    lcFixedLine_BaseBundle,
+                    ttCliType.CliName,
+                    lcFixedLine_BaseBundleType,
+                    lcFixedLine_MonthlyFeeBillCode,
+                    lcFixedLine_BaseBundleUpsell,
+                    LOGICAL(lcFixedLine_BaseBundleBonoSupport),
+                    DECIMAL(lcFixedLine_CommercialFee),
+                    liFirstMonthBR,
+                    liLastMonthBR,
+                    0,
+                    liDLFirstMonthBR,
+                    liDLLastMonthBR,
+                    DECIMAL(lcFixedLine_VoiceLimit),
+                    liVLFirstMonthBR,
+                    liVLLastMonthBR,
+                    DECIMAL(lcFixedLine_BDestLimit),
+                    liBDLFirstMonthBR,
+                    liBDLLastMonthBR).        
+    END.
+    
+    RETURN "".
+    
 END PROCEDURE.
 
 PROCEDURE pCreateServiceLimit_Data:
