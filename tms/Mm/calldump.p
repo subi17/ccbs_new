@@ -24,6 +24,15 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Func/multitenantfunc.i}
 
+DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
+DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
+DEF INPUT  PARAMETER icDumpMode    AS CHAR NO-UNDO.
+DEF INPUT  PARAMETER idLastDump    AS DEC  NO-UNDO.
+DEF INPUT  PARAMETER icEventSource AS CHAR NO-UNDO.
+DEF INPUT  PARAMETER icEventFields AS CHAR NO-UNDO.
+DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
+DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
+
 DEFINE VARIABLE  iiper AS INTEGER NO-UNDO INIT 0.
 
 DEFINE VARIABLE idaDate AS DATE NO-UNDO. 
@@ -42,15 +51,9 @@ ELSE idaDate = TODAY.
 
 DEFINE VARIABLE ldate1     as da NO-UNDO.
 DEFINE VARIABLE ldate2     as da NO-UNDO.
-DEFINE VARIABLE ldtDate    AS DA NO-UNDO.
-DEFINE VARIABLE counter    as i  NO-UNDO.
 DEFINE VARIABLE i          as i  NO-UNDO.
 DEFINE VARIABLE tmplaskuri as i  NO-UNDO.
 DEFINE VARIABLE labels     as c  NO-UNDO.
-DEFINE VARIABLE filename   as c  NO-UNDO.
-DEFINE VARIABLE dformat    as c  NO-UNDO.
-DEFINE VARIABLE lcOdir     as c  NO-UNDO.
-DEFINE VARIABLE lcSdir     as c  NO-UNDO.
 DEFINE VARIABLE numform    as c  NO-UNDO.
 
 DEFINE VARIABLE ldVatFactor AS DEC  NO-UNDO.
@@ -72,12 +75,6 @@ DEF STREAM sLog.
 
 
 assign
-   lcOdir     =  fCparam("dumpoutgoing","calldump.p")
-   lcSdir     =  fCParam("dumpspool","calldump.p")
-   ldate1     = idaDate
-   filename   = CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
-                "_calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
-                REPLACE(STRING(TIME,"hh:mm:ss"),":","") + ".dump"
    ldate1     = idaDate - 1
    ldate2     = ldate1
    numform    = session:numeric-format
@@ -87,17 +84,13 @@ assign
 IF lcLogDir = "" OR lcLogDir = ? THEN llLog = FALSE.
 ELSE DO:
    llLog = TRUE.
-   OUTPUT STREAM sLog TO VALUE(lcLogDir + "/dailycalls_" +
-                               STRING(ldate1,"999999") + ".log") APPEND.
+   OUTPUT STREAM sLog TO VALUE
+      (lcLogDir + "/" + 
+       CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+       "_dailycalls_" +
+       STRING(ldate1,"999999") + ".log") APPEND.
 END.                               
                                
-if iiper ne 0 then ASSIGN
-   lDate1 = fper2date(iiPer,0) 
-   lDate2 = fper2date(iiPer,1) - 1
-   filename = "monthlycalls" + string(iiPer) + ".dump".
-
-dformat = "yyyy-mm-dd".
-
 DEFINE TEMP-TABLE ttCalls
    FIELD calldate   AS DATE
    FIELD Mobtype    AS CHARACTER
@@ -176,7 +169,7 @@ END.
 
 IF llLog THEN OUTPUT STREAM sLog CLOSE.
 
-output stream excel to value(lcSdir + filename).
+output stream excel to value(icfile).
 
 for each ttCalls NO-LOCK:
    
@@ -193,15 +186,9 @@ for each ttCalls NO-LOCK:
    assign
      lcBiName  = Billitem.biname when avail billitem
      lcCCNName = ccn.ccnname when avail ccn.
-   
-   
-   if iiPer = 0 THEN put stream excel unformatted
-      ttCalls.calldate tab.
-   else put stream excel unformatted
-      string(MONTH(ttCalls.calldate),"99") + "/" + 
-      string(YEAR(ttCalls.calldate)) tab.
 
    put stream excel unformatted
+      ttCalls.calldate tab
       ttCalls.Mobtype  tab 
       ttCalls.CLI      tab 
       ttCalls.BillCode tab 
@@ -218,8 +205,6 @@ for each ttCalls NO-LOCK:
 end.
 
 output stream excel close.
-
-unix silent value("mv " + lcSdir + filename + " " + lcODir).
 
 session:numeric-format = numform.
 
