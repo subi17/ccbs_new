@@ -920,10 +920,16 @@ PROCEDURE pTerminate:
          RUN pChangeDelType(MobSub.CustNum).
    END. 
 
-   FIND FIRST OrderDelivery OF Order NO-LOCK NO-ERROR.
-   IF AVAILABLE OrderDelivery AND
-      OrderDelivery.LOStatusId = 12
-   THEN fCashRevertOrder(Order.OrderId).
+   /* YOT-4438 Revert renewal when LO status 12. Remove related fees */
+   FOR EACH Order NO-LOCK WHERE
+            Order.MsSeq EQ 70003043 AND
+            Order.OrderType EQ {&ORDER_TYPE_RENEWAL},
+      FIRST OrderDelivery NO-LOCK WHERE
+            OrderDelivery.Brand EQ "1" AND
+            OrderDelivery.OrderID EQ Order.OrderID:
+      IF OrderDelivery.LOStatusId = 12 THEN
+         fCashRevertOrder(Order.OrderId).
+   END.
 
    /* ADDLINE-20 Additional Line */
    IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
