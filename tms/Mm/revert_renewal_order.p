@@ -40,13 +40,6 @@ ELSE IF MsRequest.ReqType NE {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
    RETURN.
 END. /* ELSE IF MsRequest.ReqType NE {&REQTYPE_REVERT_RENEWAL_ORDER} */
 
-FIND FIRST MobSub WHERE
-           MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN DO:
-   fReqError("Subscription not found").
-   RETURN.
-END. /* IF NOT AVAIL MobSub THEN DO: */
-
 FIND FIRST bRenewalMsRequest WHERE
            bRenewalMsRequest.MsSeq      = MsRequest.MSSeq  AND
            bRenewalMsRequest.ReqType    = {&REQTYPE_AFTER_SALES_ORDER} AND
@@ -281,6 +274,7 @@ FIND FIRST MobSub WHERE
            MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
 IF NOT AVAIL MobSub THEN DO:
    IF NOT fRemoveOrderFees(MsRequest.ReqIparam1) THEN fReqError("Subscription not found").
+   IF llDoEvent THEN fCleanEventObjects().
    RETURN.
 END. /* IF NOT AVAIL MobSub THEN DO: */
 
