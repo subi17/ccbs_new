@@ -7,6 +7,7 @@
     Notes       : 
   ----------------------------------------------------------------------*/
 USING Progress.Lang.*.
+USING Mm.MManDaemon FROM PROPATH.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
@@ -15,6 +16,8 @@ CLASS Mm.MManDaemon INHERITS gearbox.daemons.Daemon:
    DEFINE PRIVATE VARIABLE objMManHandler AS CLASS Mm.MManHandler NO-UNDO.
    
    CONSTRUCTOR PUBLIC MManDaemon( ):
+
+      lMaxConsecutiveErrors = 1.
 
       IF LOG-MANAGER:LOGGING-LEVEL < 2 AND LOG-MANAGER:LOGFILE-NAME <> ?
       THEN LOG-MANAGER:WRITE-MESSAGE("Daemon started", "INFO").
