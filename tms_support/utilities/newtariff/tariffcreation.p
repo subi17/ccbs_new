@@ -1005,210 +1005,204 @@ PROCEDURE pValidateData:
                   UNDO, THROW NEW Progress.Lang.AppError("Invalid 'copy services from clitype'", 1).   
                ELSE 
                   lcCopyServicesFromCliType = ttTariffCre.FieldValue.
-            END.                        
-         END CASE.         
-
-         IF llgPostPaid THEN 
-         DO:
-            CASE ttTariffCre.FieldName:
-               WHEN {&RPA} THEN 
-               DO:
-                  IF ttTariffCre.FieldValue EQ "" AND LOOKUP(ttTariffCre.FieldValue,{&RP_ACTION}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Rateplan action is invalid", 1).
-                  ELSE 
-                     ASSIGN lcRatePlanAction = ttTariffCre.FieldValue.
-               END.
-               WHEN {&RP} THEN 
-               DO:
-                  IF ttTariffCre.FieldValue EQ "" THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Rateplan code is invalid", 1).
-                  ELSE 
-                     ASSIGN lcRatePlan = ttTariffCre.FieldValue.
-               END.
-               WHEN {&RRP} THEN 
-               DO:
-                  IF ttTariffCre.FieldValue EQ "" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = ttTariffCre.FieldValue NO-LOCK) THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan is invalid", 1).
-                  ELSE 
-                     ASSIGN lcReferenceRatePlan = ttTariffCre.FieldValue.
-               END.
-               /* Mobile */ 
-               WHEN {&M_BB} THEN 
-               DO:
-                  IF ttTariffCre.FieldValue NE "" AND llgTrafficBundle THEN                
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong BaseBundle data available", 1).
-                  ELSE 
-                     ASSIGN lcMobile_BaseBundle = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_BBT} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) EQ 0 THEN
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong Type of Contract data", 1).                  
-                  ELSE IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) GT 0 THEN
-                     lcMobile_BaseBundleType = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_UPSL} THEN 
-               DO:
-                  IF ttTariffCre.FieldValue NE "" THEN
-                     lcMobile_BaseBundleUpsell  = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_BONO} THEN
-               DO: 
-                  IF ttTariffCre.FieldValue NE "" THEN 
-                     lcMobile_BaseBundleBonoSupport = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_MFBC} THEN 
-                  lcMobile_MonthlyFeeBillCode = ttTariffCre.FieldValue. 
-               WHEN {&M_CF} THEN 
-                  lcMobile_CommercialFee = ttTariffCre.FieldValue.                
-               WHEN {&M_FMFC} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong First Month Fee calculation data", 1).
-                 ELSE 
-                    lcMobile_FirstMonthFeeCalc = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_LMFC} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong Last Month Fee calculation data", 1).                  
-                  ELSE 
-                     lcMobile_LastMonthFeeCalc = ttTariffCre.FieldValue.
-               END.    
-               WHEN {&M_DL} THEN 
-               DO:
-                  IF ttTariffCre.FieldValue NE "" THEN
-                     ASSIGN lcMobile_DataLimit  = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_VL} THEN 
-               DO:
-                  IF ttTariffCre.FieldValue NE "" THEN
-                     ASSIGN lcMobile_VoiceLimit  = ttTariffCre.FieldValue.
-               END.   
-               WHEN {&M_BDL} THEN
-               DO: 
-                  IF ttTariffCre.FieldValue NE "" THEN 
-                     ASSIGN lcMobile_BDestLimit  = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_FMDL} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong First month data limit value", 1).                  
-                  ELSE 
-                     lcMobile_DataLimit_FirstMonthFeeCalc = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_LMDL} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong Last month data limit value", 1).
-                  ELSE 
-                     lcMobile_DataLimit_LastMonthFeeCalc = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_FMVL} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong First month voice limit value", 1).                  
-                  ELSE 
-                     lcMobile_VoiceLimit_FirstMonthFeeCalc = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_LMVL} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong Last month voice limit value", 1).
-                  ELSE 
-                     lcMobile_VoiceLimit_LastMonthFeeCalc = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_FMBDL} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong First month BDestination limit value", 1).                  
-                  ELSE 
-                     lcMobile_BDestLimit_FirstMonthFeeCalc = ttTariffCre.FieldValue.
-               END.
-               WHEN {&M_LMBDL} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong Last month BDestination limit value", 1).
-                  ELSE 
-                     lcMobile_BDestLimit_LastMonthFeeCalc = ttTariffCre.FieldValue.
-               END.
-               /* FixedLine */
-               WHEN {&FL_BB} THEN 
-               DO:
-                  IF ttTariffCre.FieldValue NE "" AND llgTrafficBundle THEN                
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong BaseBundle data available", 1).
-                  ELSE 
-                     ASSIGN lcFixedLine_BaseBundle = ttTariffCre.FieldValue.
-               END.
-               WHEN {&FL_BBT} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) EQ 0 THEN
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong Type of Contract data", 1).                  
-                  ELSE IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) GT 0 THEN
-                     lcFixedLine_BaseBundleType = ttTariffCre.FieldValue.
-               END.
-               WHEN {&FL_UPSL} THEN                
-                  lcFixedLine_BaseBundleUpsell  = ttTariffCre.FieldValue.               
-               WHEN {&FL_BONO} THEN               
-                  lcFixedLine_BaseBundleBonoSupport = ttTariffCre.FieldValue.               
-               WHEN {&FL_MFBC} THEN 
-                  lcFixedLine_MonthlyFeeBillCode = ttTariffCre.FieldValue. 
-               WHEN {&FL_CF} THEN 
-                  lcFixedLine_CommercialFee = ttTariffCre.FieldValue.                
-               WHEN {&FL_FMFC} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong First Month Fee calculation data", 1).
-                 ELSE 
-                    lcFixedLine_FirstMonthFeeCalc = ttTariffCre.FieldValue.
-               END.
-               WHEN {&FL_LMFC} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong Last Month Fee calculation data", 1).                  
-                  ELSE 
-                     lcFixedLine_LastMonthFeeCalc = ttTariffCre.FieldValue.
-               END.                   
-               WHEN {&FL_VL} THEN 
-               DO:
-                  IF ttTariffCre.FieldValue NE "" THEN
-                     ASSIGN lcFixedLine_VoiceLimit  = ttTariffCre.FieldValue.
-               END.   
-               WHEN {&FL_BDL} THEN
-               DO: 
-                  IF ttTariffCre.FieldValue NE "" THEN 
-                     ASSIGN lcFixedLine_BDestLimit  = ttTariffCre.FieldValue.
-               END.               
-               WHEN {&FL_FMVL} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong First month voice limit value", 1).                  
-                  ELSE 
-                     lcFixedLine_VoiceLimit_FirstMonthFeeCalc = ttTariffCre.FieldValue.
-               END.
-               WHEN {&FL_LMVL} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong Last month voice limit value", 1).
-                  ELSE 
-                     lcFixedLine_VoiceLimit_LastMonthFeeCalc = ttTariffCre.FieldValue.
-               END.
-               WHEN {&FL_FMBDL} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong First month BDestination limit value", 1).                  
-                  ELSE 
-                     lcFixedLine_BDestLimit_FirstMonthFeeCalc = ttTariffCre.FieldValue.
-               END.
-               WHEN {&FL_LMBDL} THEN 
-               DO:
-                  IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
-                     UNDO, THROW NEW Progress.Lang.AppError("Wrong Last month BDestination limit value", 1).
-                  ELSE 
-                     lcFixedLine_BDestLimit_LastMonthFeeCalc = ttTariffCre.FieldValue.
-               END.              
-            END CASE.             
-         END. /* IF llgPostPaid THEN DO */      
+            END.                       
+            WHEN {&RPA} THEN 
+            DO:
+               IF ttTariffCre.FieldValue EQ "" AND LOOKUP(ttTariffCre.FieldValue,{&RP_ACTION}) EQ 0 THEN 
+                 UNDO, THROW NEW Progress.Lang.AppError("Rateplan action is invalid", 1).
+              ELSE 
+                 ASSIGN lcRatePlanAction = ttTariffCre.FieldValue.
+            END.
+            WHEN {&RP} THEN 
+            DO:
+               IF ttTariffCre.FieldValue EQ "" THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Rateplan code is invalid", 1).
+               ELSE 
+                  ASSIGN lcRatePlan = ttTariffCre.FieldValue.
+            END.
+            WHEN {&RRP} THEN 
+            DO:
+               IF ttTariffCre.FieldValue EQ "" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = ttTariffCre.FieldValue NO-LOCK) THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan is invalid", 1).
+               ELSE 
+                  ASSIGN lcReferenceRatePlan = ttTariffCre.FieldValue.
+            END.
+            /* Mobile */ 
+            WHEN {&M_BB} THEN 
+            DO:
+               IF ttTariffCre.FieldValue NE "" AND llgTrafficBundle THEN                
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong BaseBundle data available", 1).
+               ELSE 
+                  ASSIGN lcMobile_BaseBundle = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_BBT} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) EQ 0 THEN
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong Type of Contract data", 1).                  
+               ELSE IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) GT 0 THEN
+                  lcMobile_BaseBundleType = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_UPSL} THEN 
+            DO:
+               IF ttTariffCre.FieldValue NE "" THEN
+                  lcMobile_BaseBundleUpsell  = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_BONO} THEN
+            DO: 
+               IF ttTariffCre.FieldValue NE "" THEN 
+                  lcMobile_BaseBundleBonoSupport = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_MFBC} THEN 
+               lcMobile_MonthlyFeeBillCode = ttTariffCre.FieldValue. 
+            WHEN {&M_CF} THEN 
+               lcMobile_CommercialFee = ttTariffCre.FieldValue.                
+            WHEN {&M_FMFC} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong First Month Fee calculation data", 1).
+              ELSE 
+                 lcMobile_FirstMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_LMFC} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong Last Month Fee calculation data", 1).                  
+               ELSE 
+                  lcMobile_LastMonthFeeCalc = ttTariffCre.FieldValue.
+            END.    
+            WHEN {&M_DL} THEN 
+            DO:
+               IF ttTariffCre.FieldValue NE "" THEN
+                  ASSIGN lcMobile_DataLimit  = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_VL} THEN 
+            DO:
+               IF ttTariffCre.FieldValue NE "" THEN
+                  ASSIGN lcMobile_VoiceLimit  = ttTariffCre.FieldValue.
+            END.   
+            WHEN {&M_BDL} THEN
+            DO: 
+               IF ttTariffCre.FieldValue NE "" THEN 
+                  ASSIGN lcMobile_BDestLimit  = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_FMDL} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong First month data limit value", 1).                  
+               ELSE 
+                  lcMobile_DataLimit_FirstMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_LMDL} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong Last month data limit value", 1).
+               ELSE 
+                  lcMobile_DataLimit_LastMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_FMVL} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong First month voice limit value", 1).                  
+               ELSE 
+                  lcMobile_VoiceLimit_FirstMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_LMVL} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong Last month voice limit value", 1).
+               ELSE 
+                  lcMobile_VoiceLimit_LastMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_FMBDL} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong First month BDestination limit value", 1).                  
+               ELSE 
+                  lcMobile_BDestLimit_FirstMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            WHEN {&M_LMBDL} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong Last month BDestination limit value", 1).
+               ELSE 
+                  lcMobile_BDestLimit_LastMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            /* FixedLine */
+            WHEN {&FL_BB} THEN 
+            DO:
+               IF ttTariffCre.FieldValue NE "" AND llgTrafficBundle THEN                
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong BaseBundle data available", 1).
+               ELSE 
+                  ASSIGN lcFixedLine_BaseBundle = ttTariffCre.FieldValue.
+            END.
+            WHEN {&FL_BBT} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) EQ 0 THEN
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong Type of Contract data", 1).                  
+               ELSE IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) GT 0 THEN
+                  lcFixedLine_BaseBundleType = ttTariffCre.FieldValue.
+            END.
+            WHEN {&FL_UPSL} THEN                
+               lcFixedLine_BaseBundleUpsell  = ttTariffCre.FieldValue.               
+            WHEN {&FL_BONO} THEN               
+               lcFixedLine_BaseBundleBonoSupport = ttTariffCre.FieldValue.               
+            WHEN {&FL_MFBC} THEN 
+               lcFixedLine_MonthlyFeeBillCode = ttTariffCre.FieldValue. 
+            WHEN {&FL_CF} THEN 
+               lcFixedLine_CommercialFee = ttTariffCre.FieldValue.                
+            WHEN {&FL_FMFC} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong First Month Fee calculation data", 1).
+              ELSE 
+                 lcFixedLine_FirstMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            WHEN {&FL_LMFC} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong Last Month Fee calculation data", 1).                  
+               ELSE 
+                  lcFixedLine_LastMonthFeeCalc = ttTariffCre.FieldValue.
+            END.                   
+            WHEN {&FL_VL} THEN 
+            DO:
+               IF ttTariffCre.FieldValue NE "" THEN
+                  ASSIGN lcFixedLine_VoiceLimit  = ttTariffCre.FieldValue.
+            END.   
+            WHEN {&FL_BDL} THEN
+            DO: 
+               IF ttTariffCre.FieldValue NE "" THEN 
+                  ASSIGN lcFixedLine_BDestLimit  = ttTariffCre.FieldValue.
+            END.               
+            WHEN {&FL_FMVL} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong First month voice limit value", 1).                  
+               ELSE 
+                  lcFixedLine_VoiceLimit_FirstMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            WHEN {&FL_LMVL} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong Last month voice limit value", 1).
+               ELSE 
+                  lcFixedLine_VoiceLimit_LastMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            WHEN {&FL_FMBDL} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong First month BDestination limit value", 1).                  
+               ELSE 
+                  lcFixedLine_BDestLimit_FirstMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            WHEN {&FL_LMBDL} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&LIMITVALUE}) EQ 0 THEN 
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong Last month BDestination limit value", 1).
+               ELSE 
+                  lcFixedLine_BDestLimit_LastMonthFeeCalc = ttTariffCre.FieldValue.
+            END.              
+         END CASE.             
       END. /* FOR EACH ttSubTypeCr */      
 
       /* Validations */      
