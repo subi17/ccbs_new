@@ -1,0 +1,377 @@
+MSRange1: MSRange
+  CLIFrom: "622000027"
+  CLITo: "622000029"
+  CustNum: 1001
+  ReserveDate: 2006-10-20
+  ExpireDate: 2007-07-01
+  Brand: "1"
+
+MSRange2: MSRange
+  CLIFrom: "622000101"
+  CLITo: "622020333"
+  CustNum: 1001
+  ReserveDate: 2006-11-15
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange3: MSRange
+  CLIFrom: "622020334"
+  CLITo: "622040448"
+  CustNum: 1001
+  ReserveDate: 2007-01-25
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange4: MSRange
+  CLIFrom: "622040449"
+  CLITo: "622060563"
+  CustNum: 1001
+  ReserveDate: 2007-04-03
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange5: MSRange
+  CLIFrom: "622060564"
+  CLITo: "622080680"
+  CustNum: 1001
+  ReserveDate: 2007-06-12
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange6: MSRange
+  CLIFrom: "622080681"
+  CLITo: "622085706"
+  CustNum: 1001
+  ReserveDate: 2007-07-23
+  ExpireDate: 2049-12-31
+  SalesMan: "  POS"
+  Brand: "1"
+
+MSRange7: MSRange
+  CLIFrom: "622085707"
+  CLITo: "622105837"
+  CustNum: 1001
+  ReserveDate: 2007-07-27
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange8: MSRange
+  CLIFrom: "622105838"
+  CLITo: "622116033"
+  CustNum: 1001
+  ReserveDate: 2007-09-03
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange9: MSRange
+  CLIFrom: "622116034"
+  CLITo: "622156298"
+  CustNum: 1001
+  ReserveDate: 2007-09-13
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange10: MSRange
+  CLIFrom: "622156299"
+  CLITo: "622196522"
+  CustNum: 1001
+  ReserveDate: 2007-09-13
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange11: MSRange
+  CLIFrom: "622196523"
+  CLITo: "622199989"
+  CustNum: 1001
+  ReserveDate: 2007-09-13
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange12: MSRange
+  CLIFrom: "622200010"
+  CLITo: "622220125"
+  CustNum: 1001
+  ReserveDate: 2006-11-15
+  ExpireDate: 2049-12-31
+  SalesMan: "WEB"
+  Brand: "1"
+
+MSRange13: MSRange
+  CLIFrom: "622220126"
+  CLITo: "622240403"
+  CustNum: 1001
+  ReserveDate: 2007-04-04
+  ExpireDate: 2049-12-31
+  SalesMan: "webshop"
+  Brand: "1"
+
+MSRange14: MSRange
+  CLIFrom: "622240404"
+  CLITo: "622280636"
+  CustNum: 1001
+  ReserveDate: 2007-09-13
+  ExpireDate: 2049-12-31
+  SalesMan: "webshop"
+  Brand: "1"
+
+MSRange15: MSRange
+  CLIFrom: "622280637"
+  CLITo: "622320868"
+  CustNum: 1001
+  ReserveDate: 2007-09-13
+  ExpireDate: 2049-12-31
+  SalesMan: "webshop"
+  Brand: "1"
+
+MSRange16: MSRange
+  CLIFrom: "622320869"
+  CLITo: "622341154"
+  CustNum: 1001
+  ReserveDate: 2007-09-13
+  ExpireDate: 2049-12-31
+  SalesMan: "webshop"
+  Brand: "1"
+
+MSRange17: MSRange
+  CLIFrom: "622341155"
+  CLITo: "622396154"
+  CustNum: 1001
+  ReserveDate: 2007-11-23
+  ExpireDate: 2049-12-31
+  SalesMan: "PREACTIVATED"
+  Brand: "1"
+
+MSRange18: MSRange
+  CLIFrom: "622396155"
+  CLITo: "622791637"
+  CustNum: 1001
+  ReserveDate: 2008-01-10
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange19: MSRange
+  CLIFrom: "622400010"
+  CLITo: "622420117"
+  CustNum: 1001
+  ReserveDate: 2006-11-15
+  ExpireDate: 2049-12-31
+  SalesMan: "TELEM"
+  Brand: "1"
+
+MSRange20: MSRange
+  CLIFrom: "622440001"
+  CLITo: "622517000"
+  CustNum: 1001
+  ReserveDate: 2007-10-25
+  ExpireDate: 2049-12-31
+  SalesMan: "PREACTIVATED"
+  Brand: "1"
+
+MSRange21: MSRange
+  CLIFrom: "622517001"
+  CLITo: "622537115"
+  CustNum: 1001
+  ReserveDate: 2007-10-25
+  ExpireDate: 2049-12-31
+  SalesMan: "GIFT"
+  Brand: "1"
+
+MSRange22: MSRange
+  CLIFrom: "622537116"
+  CLITo: "622557378"
+  CustNum: 1001
+  ReserveDate: 2007-10-25
+  ExpireDate: 2049-12-31
+  SalesMan: "GIFT"
+  Brand: "1"
+
+MSRange23: MSRange
+  CLIFrom: "622557379"
+  CLITo: "622577514"
+  CustNum: 1001
+  ReserveDate: 2007-10-25
+  ExpireDate: 2049-12-31
+  SalesMan: "GIFT"
+  Brand: "1"
+
+MSRange24: MSRange
+  CLIFrom: "622577515"
+  CLITo: "622597632"
+  CustNum: 1001
+  ReserveDate: 2007-10-25
+  ExpireDate: 2049-12-31
+  SalesMan: "GIFT"
+  Brand: "1"
+
+MSRange25: MSRange
+  CLIFrom: "622600010"
+  CLITo: "622620117"
+  CustNum: 1001
+  ReserveDate: 2006-11-15
+  ExpireDate: 2049-12-31
+  SalesMan: "CC"
+  Brand: "1"
+
+MSRange26: MSRange
+  CLIFrom: "622620118"
+  CLITo: "622622125"
+  CustNum: 1001
+  ReserveDate: 2007-06-28
+  ExpireDate: 2049-12-31
+  SalesMan: "CC"
+  Brand: "1"
+
+MSRange27: MSRange
+  CLIFrom: "622622126"
+  CLITo: "622640232"
+  CustNum: 1001
+  ReserveDate: 2007-06-28
+  ExpireDate: 2049-12-31
+  SalesMan: "CC"
+  Brand: "1"
+
+MSRange28: MSRange
+  CLIFrom: "622640233"
+  CLITo: "622650290"
+  CustNum: 1001
+  ReserveDate: 2007-07-27
+  ExpireDate: 2049-12-31
+  SalesMan: "CC"
+  Brand: "1"
+
+MSRange29: MSRange
+  CLIFrom: "622650291"
+  CLITo: "622681439"
+  CustNum: 1001
+  ReserveDate: 2007-11-23
+  ExpireDate: 2049-12-31
+  SalesMan: "PREACTIV"
+  Brand: "1"
+
+MSRange30: MSRange
+  CLIFrom: "622681440"
+  CLITo: "622701563"
+  CustNum: 1001
+  ReserveDate: 2007-12-31
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange31: MSRange
+  CLIFrom: "622701564"
+  CLITo: "622737255"
+  CustNum: 1001
+  ReserveDate: 2008-01-02
+  ExpireDate: 2049-12-31
+  SalesMan: "PREACTIVATED"
+  Brand: "1"
+
+MSRange32: MSRange
+  CLIFrom: "622737256"
+  CLITo: "622757371"
+  CustNum: 1001
+  ReserveDate: 2008-01-02
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange33: MSRange
+  CLIFrom: "622757372"
+  CLITo: "622777371"
+  CustNum: 1001
+  ReserveDate: 2008-01-10
+  ExpireDate: 2049-12-31
+  SalesMan: "PREACTIVATED"
+  Brand: "1"
+
+MSRange34: MSRange
+  CLIFrom: "622791638"
+  CLITo: "622799989"
+  CustNum: 1001
+  ReserveDate: 2008-01-10
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange35: MSRange
+  CLIFrom: "622800010"
+  CLITo: "622805032"
+  CustNum: 1001
+  ReserveDate: 2008-02-22
+  ExpireDate: 2049-12-31
+  SalesMan: "OFFLINE"
+  Brand: "1"
+
+MSRange36: MSRange
+  CLIFrom: "622805033"
+  CLITo: "622830174"
+  CustNum: 1001
+  ReserveDate: 2008-02-29
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange37: MSRange
+  CLIFrom: "622830175"
+  CLITo: "622855314"
+  CustNum: 1001
+  ReserveDate: 2008-02-29
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange38: MSRange
+  CLIFrom: "622855315"
+  CLITo: "622875430"
+  CustNum: 1001
+  ReserveDate: 2008-04-28
+  ExpireDate: 2049-12-31
+  SalesMan: "CC"
+  Brand: "1"
+
+MSRange39: MSRange
+  CLIFrom: "622875431"
+  CLITo: "622895719"
+  CustNum: 1001
+  ReserveDate: 2008-04-28
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange40: MSRange
+  CLIFrom: "622895720"
+  CLITo: "622899989"
+  CustNum: 1001
+  ReserveDate: 2008-06-10
+  ExpireDate: 2049-12-31
+  SalesMan: "POS"
+  Brand: "1"
+
+MSRange41: MSRange
+  CLIFrom: "633999400"
+  CLITo: "633999404"
+  CustNum: 1001
+  ReserveDate: 2006-11-21
+  ExpireDate: 2049-12-31
+  SalesMan: "SNSTEST"
+  Brand: "1"
+
+MSRange42: MSRange
+  CLIFrom: "999999999999"
+  CLITo: "0"
+  CustNum: 1001
+  ReserveDate: 2006-11-21
+  ExpireDate: 2049-12-31
+  SalesMan: "SNSTEST"
+  Brand: "1"
+

@@ -1,0 +1,96 @@
+RequestQueue1: RequestQueue
+  Brand: "1"
+  Queue: 1
+  QName: "AR And Services"
+  Interval: 10
+  Monitor: "REQU1:AR and services"
+  LogEntry: "4GLTrace:4"
+  LogThreshold: 500000
+  MonitorOn: TRUE 
+
+RequestQueue2: RequestQueue
+  Brand: "1"
+  Queue: 2
+  QName: "Subscription Handling"
+  Interval: 20
+  Monitor: "REQU2:Subscription Requests"
+  MonitorOn: TRUE 
+
+RequestQueue3: RequestQueue
+  Brand: "1"
+  Queue: 3
+  QName: "STC"
+  Interval: 20
+  Monitor: "REQU3:STC"
+  LogEntry: "4GLTrace:4"
+  LogFile: "/home/ari/req3.log"
+  LogThreshold: 500000
+  MonitorOn: TRUE 
+
+RequestQueue4: RequestQueue
+  Brand: "1"
+  Queue: 4
+  QName: "Contracts"
+  Interval: 20
+  Monitor: "REQU4:Contracts"
+  LogEntry: "4GLTrace:4"
+  LogFile: "/home/ari/req4.log"
+  LogThreshold: 500000
+  MonitorOn: TRUE 
+
+RequestQueue5: RequestQueue
+  Brand: "1"
+  Queue: 5
+  QName: "Bank files"
+  Interval: 60
+  Monitor: "REQU5:Bank files"
+  MonitorOn: TRUE 
+
+RequestQueue6: RequestQueue
+  Brand: "1"
+  Queue: 6
+  QName: "ACC and Barrings"
+  Interval: 20
+  Monitor: "REQU6:ACC and Barrings"
+  MonitorOn: TRUE 
+
+RequestQueue7: RequestQueue
+  Brand: "1"
+  Queue: 7
+  QName: "Rerate"
+  Interval: 20
+  Monitor: "REQU7:Rerate"
+  MonitorOn: TRUE 
+
+RequestQueue8: RequestQueue
+  Brand: "1"
+  Queue: 8
+  QName: "Dextra online interface"
+  Interval: 30
+  Monitor: "REQU8:Dextra"
+  MonitorOn: TRUE 
+
+RequestQueue9: RequestQueue
+  Brand: "1"
+  Queue: 9
+  QName: "Contract termination"
+  Interval: 20
+  Monitor: "REQU9:ContractTerm"
+  MonitorOn: TRUE 
+
+RequestQueue10: RequestQueue
+  Brand: "1"
+  Queue: 10
+  QName: "Email invoice"
+  Interval: 60
+  Monitor: "REQU10:Email Invoice"
+  MonitorOn: TRUE 
+
+RequestQueue11: RequestQueue
+  Brand: "1"
+  Queue: 11
+  QName: "BTC"
+  Interval: 20
+  Monitor: "REQU11:BTC"
+  MonitorOn: TRUE 
+
