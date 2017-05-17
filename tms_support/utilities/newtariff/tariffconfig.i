@@ -63,7 +63,7 @@ DEFINE TEMP-TABLE ttDayCampaign NO-UNDO
     FIELD DCEvent        AS CHARACTER
     FIELD DCName         AS CHARACTER
     FIELD DCType         AS CHARACTER
-    FIELD PayType        AS CHARACTER
+    FIELD PayType        AS INTEGER
     FIELD BillCode       AS CHARACTER
     FIELD UpSell         AS CHARACTER
     FIELD BonoSupport    AS LOGICAL

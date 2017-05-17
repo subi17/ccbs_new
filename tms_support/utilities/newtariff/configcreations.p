@@ -630,7 +630,7 @@ PROCEDURE pDayCampaign:
          DayCampaign.Brand           = gcBrand
          DayCampaign.DCEvent         = ttDayCampaign.DCEvent 
          DayCampaign.DCName          = ttDayCampaign.DCName
-         DayCampaign.PayType         = INTEGER(fTMSCValue("CliType","PayType",ttDayCampaign.PayType))
+         DayCampaign.PayType         = ttDayCampaign.PayType
          DayCampaign.ValidFrom       = TODAY 
          DayCampaign.ValidTo         = DATE(12,31,2049)
          DayCampaign.StatusCode      = 1           /* Default value Active */
@@ -638,18 +638,18 @@ PROCEDURE pDayCampaign:
                                         ELSE IF ttDayCampaign.DCType = "PackageWithCounter" THEN "4" 
                                         ELSE IF ttDayCampaign.DCType = "Upsell" THEN "6" 
                                         ELSE "7")
-         DayCampaign.CCN             = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" THEN 93 ELSE 0)         
+         DayCampaign.CCN             = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" OR ttDayCampaign.PayType = 2 THEN 93 ELSE 0)         
          DayCampaign.InstanceLimit   = (IF ttDayCampaign.DCType = "Upsell" THEN 100 ELSE 1)
          DayCampaign.BillCode        = ttDayCampaign.BillCode          
-         DayCampaign.InclUnit        = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" THEN 4 ELSE 1) 
-         DayCampaign.CalcMethod      = (IF ttDayCampaign.DCType = "PackageWithCounter" THEN 4 ELSE 1)  
+         DayCampaign.InclUnit        = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" OR tDayCampaign.PayType = 2 THEN 4 ELSE 1) 
+         DayCampaign.CalcMethod      = (IF ttDayCampaign.DCType = "PackageWithCounter" OR tDayCampaign.PayType = 2 THEN 4 ELSE 1)  
          DayCampaign.InclStartCharge = YES                          
          DayCampaign.MaxChargeIncl   = 0                            
          DayCampaign.MaxChargeExcl   = 0
          DayCampaign.Effective       = INTEGER(fTMSCodeValue("Daycampaign","Effective","PerContr"))         
-         DayCampaign.DurType         = (IF ttDayCampaign.SLCreated THEN 1 ELSE 4)
+         DayCampaign.DurType         = (IF ttDayCampaign.SLCreated AND NOT tDayCampaign.PayType = 2 THEN 1 ELSE 4)
          DayCampaign.DurMonth        = 0
-         DayCampaign.DurUnit         = (IF ttDayCampaign.DCType = "PackageWithCounter" THEN 0 ELSE 1)
+         DayCampaign.DurUnit         = (IF ttDayCampaign.DCType = "PackageWithCounter" OR tDayCampaign.PayType = 2 THEN 0 ELSE 1)
          DayCampaign.WeekDay         = ""
          DayCampaign.BundleUpsell    = ttDayCampaign.UpSell
          DayCampaign.FeeModel        = ttDayCampaign.BillCode
@@ -658,7 +658,10 @@ PROCEDURE pDayCampaign:
          DayCampaign.TermFeeCalc     = 0.
          
       IF ttDayCampaign.DataLimit > 0 THEN   
-         RUN pDCServicePackage(ttDayCampaign.DCEvent, ttDayCampaign.BonoSupport).
+         RUN pDCServicePackage(ttDayCampaign.DCEvent, "SHAPER", ttDayCampaign.BonoSupport).
+
+      IF ttDayCampaign.PayType = "Prepaid" THEN 
+         RUN pDCServicePackage(ttDayCampaign.DCEvent, "HSDPA", NO).   
    END.
 
    RETURN "".    
@@ -667,7 +670,8 @@ END PROCEDURE.
 
 
 PROCEDURE pDCServicePackage:
-   DEFINE INPUT PARAMETER icDCEvent     AS CHARACTER NO-UNDO.   
+   DEFINE INPUT PARAMETER icDCEvent     AS CHARACTER NO-UNDO. 
+   DEFINE INPUT PARAMETER icServPac     AS CHARACTER NO-UNDO.  
    DEFINE INPUT PARAMETER ilBonoSupport AS LOGICAL   NO-UNDO.
 
    DEFINE VARIABLE liPackageID   AS INTEGER NO-UNDO.
@@ -690,20 +694,23 @@ PROCEDURE pDCServicePackage:
       DCServicePackage.Brand              = gcBrand 
       DCServicePackage.DCEvent            = icDCEvent 
       DCServicePackage.DCServicePackageID = liPackageID
-      DCServicePackage.ServPac            = "SHAPER"                    
+      DCServicePackage.ServPac            = icServPac                    
       DCServicePackage.FromDate           = TODAY 
       DCServicePackage.ToDate             = DATE(12,31,2049).   
-   
-   CREATE DCServiceComponent.
-   ASSIGN 
-      DCServiceComponent.DCServicePackageID   = DCServicePackage.DCServicePackageID 
-      DCServiceComponent.DCServiceComponentID = liComponentID      
-      DCServiceComponent.ServCom              = DCServicePackage.ServPac
-      DCServiceComponent.DefValue             = 1
-      DCServiceComponent.DefParam             = (IF ilBonoSupport THEN (icDCEvent + "#ADDBUNDLE") ELSE icDCEvent)
-      DCServiceComponent.FromDate             = TODAY 
-      DCServiceComponent.ToDate               = DATE(12,31,2049).   
-       
+
+   IF LOOKUP(icServPac, "SHAPER") > 0 THEN 
+   DO:
+       CREATE DCServiceComponent.
+       ASSIGN 
+          DCServiceComponent.DCServicePackageID   = DCServicePackage.DCServicePackageID 
+          DCServiceComponent.DCServiceComponentID = liComponentID      
+          DCServiceComponent.ServCom              = DCServicePackage.ServPac
+          DCServiceComponent.DefValue             = 1
+          DCServiceComponent.DefParam             = (IF ilBonoSupport THEN (icDCEvent + "#ADDBUNDLE") ELSE icDCEvent)
+          DCServiceComponent.FromDate             = TODAY 
+          DCServiceComponent.ToDate               = DATE(12,31,2049).   
+    END.
+
     RETURN "".
        
 END PROCEDURE.
