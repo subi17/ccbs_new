@@ -10,7 +10,7 @@ Version ......: xfera
 katun = "Cron".
 gcBrand = "1".
 {Func/log.i}
-{xmlrpc/xmlrpc_client.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
