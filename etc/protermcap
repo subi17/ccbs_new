@@ -1,0 +1,346 @@
+# Progress terminal capabilities definition file
+# See dp4gl.pdf (Deployment -> Managing ABL Applications)
+#
+# Mnemonic  Data type   Description 
+#    al      STRING     Add line. 
+#    bc      STRING     Backspace character. 
+#    BB      STRING     Enter COLOR 4 mode (usually blink mode). 
+#    BR      STRING     Exit COLOR 4 mode (usually blink mode). 
+#    CA      BOOLEAN    Terminal clears screen with current attribute.
+#                       If you do not specify and this capability is available,
+#                       full-screen clears with attributes other than NORMAL
+#                       will be slow. 
+#    ce      STRING     Clear to end of line. 
+#    CF      STRING     Cursor off. 
+#    cl      STRING     Clear screen. This improves speed. On some terminals,
+#                       you must define cl as home cursor followed by clear to
+#                       end of screen. 
+#    cm      STRING     Cursor motion. 
+#    CN      STRING     Cursor on. 
+#    co      INTEGER    Columns on screen (usually 80). see also ws
+#    cs      STRING     Change scroll region. Uses cm syntax. 
+#    ct      BOOLEAN    Terminal supports color. 
+#    dl      STRING     Delete line. 
+#    G1      STRING     Single-line upper-right corner character. 
+#    G2      STRING     Single-line upper-left corner character. 
+#    G3      STRING     Single-line lower-left corner character. 
+#    G4      STRING     Single-line lower-right corner character. 
+#    GE      STRING     Graphics end. Sent when finished drawing box or
+#                       underline. 
+#    GH      STRING     Single-line horizontal character. 
+#    GS      STRING     Graphics start. Sent to begin drawing box or underline. 
+#    GV      STRING     Vertical-line graphic character. 
+#    HR      STRING     Exit COLOR 3 mode (usually highlight mode). 
+#    HS      STRING     Enter COLOR 3 mode (usually highlight mode). This is
+#                       usually set to high intensity, if available. 
+#    is      STRING     Terminal initialization string. Sent when OpenEdge
+#                       starts. 
+#    k0-9    
+#    k.
+#    k,
+#    k-      STRING     Define the codes sent by the numeric keypad keys if
+#                       these are different from the codes sent by the
+#                       standard 0-9, period, comma, and hyphen keys. These
+#                       are only used by OpenEdge. 
+#    kd      STRING     Down arrow. 
+#    ke      STRING     Exit keypad mode. 
+#    kl      STRING     Left arrow. 
+#    kr      STRING     Right arrow. 
+#    ks      STRING     Set keypad mode. 
+#    ku      STRING     Up arrow. 
+#    li      INTEGER    Lines on screen (usually 24). see also ws
+#    pc      CHARACTER  Pad character (defaults to null). 
+#    Se      STRING     String to send when OpenEdge terminates (after te). 
+#    se      STRING     Exits COLOR 2 mode, or MESSAGE color (usually reverse
+#                       video). 
+#    sf      STRING     Scroll forward. You can use this on terminals that
+#                       have scrolling regions (for example, terminals with cs
+#                       and sr defined). 
+#    Si      STRING     String to send when OpenEdge starts (after is). 
+#    so      STRING     Enter COLOR 2 mode, or MESSAGE color (usually reverse
+#                       video). OpenEdge uses this attribute by default for
+#                       the two-line message area at the bottom of the screen.
+#                       It is also the default for the PROMPT-FOR color of
+#                       selectable widgets (that is, buttons, sliders,
+#                       toggle-boxes, etc.). If not set and the PROMPT-FOR
+#                       color of a widget is not explicitly set in the 4GL, a
+#                       widget might not be visible. 
+#    sr      STRING     Scroll reverse. 
+#    te      STRING     Cursor movement string to send when OpenEdge
+#                       terminates. 
+#    ti      STRING     Cursor movement string to send when OpenEdge starts. 
+#    ue      STRING     Exit COLOR 1 mode, or INPUT color. 
+#    us      STRING     Enter COLOR 1 mode, or INPUT color (usually the
+#                       underline attribute). OpenEdge uses COLOR 1 as the
+#                       default PROMPT-FOR color for fill-ins and editors. If
+#                       COLOR 1 is not defined by the us and ue capabilities,
+#                       and the PROMPT-FOR color for fill-ins and editor
+#                       widgets is not explicitly set in the 4GL, these
+#                       widgets might not be visible, and there might be no
+#                       indication they are enabled. 
+#    ws      BOOLEAN    Uses the device /dev/tty for the current port to
+#                       determine the number of columns and rows for the
+#                       terminal. If successful, overrides co and li.
+#                       OpenEdge will not automatically resize if the size of
+#                       the terminal changes after initialization. 
+#    xi      BOOLEAN    Terminal will not automatically do a hardware scroll
+#                       when the last position (last row and last column) on
+#                       the screen is written to. Specify whether available,
+#                       otherwise OpenEdge will not write to the last position
+#                       in order to avoid the automatic scrolling.
+#
+#
+# Bind progress editor and ABL client events to keys
+v7kf|version 7 key functions:\
+    :NEXT-WORD(CTRL-W)=^w:\
+    :HELP(ESC-?)=\E?:\
+    :COPY(ESC-C)=\Ec:\
+    :CHOICES(ESC-CTRL-H)=\E^h:\
+    :OPTIONS(ESC-CTRL-O)=\E^o:\
+    :GET(ESC-O)=\Eo:\
+    :MAIN-MENU(ESC-CTRL-M)=\E^m:\
+    :ENTER-MENUBAR(ESC-M)=\Em:\
+    :EDITOR-TAB(CTRL-G)=^g:\
+    :PREV-WORD(CTRL-P)=^p:\
+    :PUT(ESC-S)=\Es:\
+    :EDITOR-BACKTAB(CTRL-B)=^b:\
+    :DELETE-LINE(CTRL-D)=^d:\
+    :END-ERROR(CTRL-E)=^e:\
+    :FIND(CTRL-F)=^f:\
+    :BACKSPACE(CTRL-H)=^h:\
+    :TAB(CTRL-I)=^i:\
+    :CURSOR-DOWN(CTRL-J)=^j:\
+    :CURSOR-UP(CTRL-K)=^k:\
+    :CURSOR-RIGHT(CTRL-L)=^l:\
+    :RETURN(CTRL-M)=^m:\
+    :NEW-LINE(CTRL-N)=^n:\
+    :CURSOR-LEFT(CTRL-O)=^o:\
+    :RESUME-DISPLAY(CTRL-Q)=^q:\
+    :RECALL(CTRL-R)=^r:\
+    :STOP-DISPLAY(CTRL-S)=^s:\
+    :INSERT-MODE(CTRL-T)=^t:\
+    :BACK-TAB(CTRL-U)=^u:\
+    :BLOCK(CTRL-V)=^v:\
+    :GO(CTRL-X)=^x:\
+    :CLEAR(CTRL-Z)=^z:\
+    :SAVE-AS(ESC-A)=\Ea:\
+    :BREAK-LINE(ESC-B)=\Eb:\
+    :DELETE-WORD(ESC-D)=\Ed:\
+    :NEXT-ERROR(ESC-E)=\Ee:\
+    :FIND-NEXT(ESC-F)=\Ef:\
+    :GOTO(ESC-G)=\Eg:\
+    :FIND-PREVIOUS(ESC-I)=\Ei:\
+    :DELETE-END-LINE(ESC-K)=\Ek:\
+    :OPEN-LINE-ABOVE(ESC-L)=\El:\
+    :NEW(ESC-N)=\En:\
+    :COMPILE(ESC-P)=\Ep:\
+    :EXIT(ESC-Q)=\Eq:\
+    :REPLACE(ESC-R)=\Er:\
+    :SCROLL-MODE(ESC-T)=\Et:\
+    :DEFAULT-POP-UP(ESC-U)=\Eu:\
+    :PASTE(ESC-V)=\Ev:\
+    :PAGE-LEFT(ESC-W)=\Ew:\
+    :CUT(ESC-X)=\Ex:\
+    :PAGE-RIGHT(ESC-Y)=\Ey:\
+    :CLOSE(ESC-Z)=\Ez:\
+    :REPORTS(ESC-CTRL-A)=\E^a:\
+    :BOTTOM-COLUMN(ESC-CTRL-B)=\E^b:\
+    :DELETE-FIELD(ESC-CTRL-D)=\E^d:\
+    :INSERT-FIELD-LABEL(ESC-CTRL-E)=\E^e:\
+    :INSERT-FIELD-DATA(ESC-CTRL-F)=\E^f:\
+    :INSERT-FIELD(ESC-CTRL-G)=\E^g:\
+    :NEXT-FRAME(ESC-CTRL-I)=\E^i:\
+    :SCROLL-LEFT(ESC-CTRL-L)=\E^l:\
+    :INSERT-COLUMN(ESC-CTRL-N)=\E^n:\
+    :PICK(ESC-CTRL-P)=\E^p:\
+    :PICK-BOTH(ESC-CTRL-Q)=\E^q:\
+    :SCROLL-RIGHT(ESC-CTRL-R)=\E^r:\
+    :SETTINGS(ESC-CTRL-@)=\E^@:\
+    :TOP-COLUMN(ESC-CTRL-T)=\E^t:\
+    :PREV-FRAME(ESC-CTRL-U)=\E^u:\
+    :MOVE(ESC-CTRL-V)=\E^v:\
+    :PICK-AREA(ESC-CTRL-W)=\E^w:\
+    :CANCEL-PICK(ESC-CTRL-X)=\E^x:\
+    :LEFT-END(ESC-LEFT-ARROW)=\E^o:\
+    :RIGHT-END(ESC-RIGHT-ARROW)=\E^l:\
+    :PAGE-UP(ESC-UP-ARROW)=\E^k:\
+    :PAGE-DOWN(ESC-DOWN-ARROW)=\E^j:\
+    :APPEND-LINE(CTRL-A)=^a:\
+    :DELETE-COLUMN(ESC-CTRL-Z)=\E^z:
+#
+# VT100: a very basic terminal upon which most modern are based
+# This paragraph mostly binds the byte-sequence from the keyboard to
+# virtual keys. There are also some aliases for progress events.
+# :co and :li set the number of columns and lines
+# xterm will overwrite that with :ws (true) -> check stty and set co/li
+#
+# This definition combines all Function and Cursor key alternatives:
+# F1 - F4 = \EOP - \EOS        xterm / xterm linux
+# F1 - F4 = ^[[11~ - ^[[14~    putty / vt220
+# HOME, END = ^[[H, ^[[F       xterm / xterm linux
+# HOME, END = ^[[1~, ^[[4~     putty / vt220
+V1|vt100|VT100|vt100-80|vt100_series|DEC VT-100:\
+    :is=\E>\E[?3l\E[?4l\E[m\E[?7h\E[?8h\E(B\E)0:\
+    :nd=2\E[C:\
+    :do=\E[B:\
+    :cl=50\E[;H\E[2J:\
+    :cm=5\E[%i%d;%dH:\
+    :so=2\E[7m: :se=2\E[m: :us=2\E[4m: :ue=2\E[m:\
+    :GS=^N: :GE=^O:\
+    :G1=k: :G2=l: :G3=m: :G4=j: :GC=n: :GD=w:\
+    :GH=q: :GL=u: :GR=t: :GU=v: :GV=x:\
+    :HS=2\E[1m: :HR=2\E[m: :BB=2\E[5m: :BR=2\E[m:\
+    :ks=\E[?1h\E=: :ke=\E[?1l\E>:\
+    :cd=10\E[J: :ce=10\E[K:\
+    :co#80:\
+    :kd=\E[B: :kl=\E[D: :kr=\E[C: :ku=\E[A:\
+    :li#24:\
+    :up=\E[A:\
+    :xi:\
+    :cs=\E[%i%d;%dr:\
+    :sr=\EM:\
+    :sf=\n:\
+    :BACKSPACE(CTRL-H)=\177:\
+    :INSERT-MODE(INSERT-HERE)=^[[2~:\
+    :DELETE(DELETE)=^[[3~:\
+    :HOME(Home)=^[[1~:\
+    :END(End)=^[[4~:\
+    :PAGE-UP(Page-up)=^[[5~:\
+    :PAGE-DOWN(Page-down)=^[[6~:\
+    :HOME(Home)=^[[H:\
+    :END(End)=^[[F:\
+    :GO(F1)=\EOP:\
+    :HELP(F2)=\EOQ:\
+    :ENTER-MENUBAR(F3)=\EOR:\
+    :END-ERROR(F4)=\EOS:\
+    :GO(F1)=^[[11~:\
+    :HELP(F2)=^[[12~:\
+    :ENTER-MENUBAR(F3)=^[[13~:\
+    :END-ERROR(F4)=^[[14~:\
+    :GET(F5)=\E[15~:\
+    :PUT(F6)=\E[17~:\
+    :RECALL(F7)=\E[18~:\
+    :CLEAR(F8)=\E[19~:\
+    :COPY(F9)=\E[20~:\
+    :CUT(F10)=\E[21~:\
+    :INSERT-MODE(F11)=\E[23~:\
+    :PASTE(F12)=\E[24~:\
+    :PAGE-UP(ESC-UP-ARROW)=\E\E[A:\
+    :PAGE-DOWN(ESC-DOWN-ARROW)=\E\E[B:\
+    :LEFT-END(ESC-LEFT-ARROW)=\E\E[D:\
+    :RIGHT-END(ESC-RIGHT-ARROW)=\E\E[C:\
+    :tc=v7kf:
+#
+#
+xterm|a vanilla X Window System xterm client:\
+    :ws:\
+    :cd=\E[J:\
+    :ce=\E[K:\
+    :cl=\E[H\E[J:\
+    :cm=\E[%i%d;%dH:\
+    :tc=vt100:
+#
+xtermc|linux|ansi-color:\
+    :COLOR 5 BLACK=\E[37m\E40m:\E[m:\
+    :COLOR 6 RED=\E[37m\E[41m:\E[m:\
+    :COLOR 7 GREEN=\E[37m\E[42m:\E[m:\
+    :COLOR 8 BROWN=\E[37m\E[43m:\E[m:\
+    :COLOR 9 BLUE=\E[37m\E[44m:\E[m:\
+    :COLOR 10 MAGENTA=\E[37m\E[45m:\E[m:\
+    :COLOR 11 CYAN=\E[37m\E[46m:\E[m:\
+    :COLOR 12 BLK/RED=\E[30m\E[41m:\E[m:\
+    :COLOR 13 BLK/GRE=\E[30m\E[42m:\E[m:\
+    :COLOR 14 BLK/BRN=\E[30m\E[43m:\E[m:\
+    :COLOR 15 BLK/BLU=\E[30m\E[44m:\E[m:\
+    :COLOR 16 BLK/MGT=\E[30m\E[45m:\E[m:\
+    :COLOR 17 BLK/CYN=\E[30m\E[46m:\E[m:\
+    :COLOR 18 BLK/WHT=\E[30m\E[47m:\E[m:\
+    :COLOR 19 RED/BLK=\E[31m\E[40m:\E[m:\
+    :COLOR 20 RED/GRE=\E[31m\E[42m:\E[m:\
+    :COLOR 21 RED/BRN=\E[31m\E[43m:\E[m:\
+    :COLOR 22 RED/BLU=\E[31m\E[44m:\E[m:\
+    :COLOR 23 RED/MGT=\E[31m\E[45m:\E[m:\
+    :COLOR 24 RED/CYN=\E[31m\E[46m:\E[m:\
+    :COLOR 25 RED/WHT=\E[31m\E[47m:\E[m:\
+    :COLOR 26 GRE/BLK=\E[32m\E[40m:\E[m:\
+    :COLOR 27 GRE/RED=\E[32m\E[41m:\E[m:\
+    :COLOR 28 GRE/BRN=\E[32m\E[43m:\E[m:\
+    :COLOR 29 GRE/BLU=\E[32m\E[44m:\E[m:\
+    :COLOR 30 GRE/MGT=\E[32m\E[45m:\E[m:\
+    :COLOR 31 GRE/CYN=\E[32m\E[46m:\E[m:\
+    :COLOR 32 GRE/WHT=\E[32m\E[47m:\E[m:\
+    :COLOR 33 BRN/BLK=\E[33m\E[40m:\E[m:\
+    :COLOR 34 BRN/RED=\E[33m\E[41m:\E[m:\
+    :COLOR 35 BRN/GRE=\E[33m\E[42m:\E[m:\
+    :COLOR 36 BRN/BLU=\E[33m\E[44m:\E[m:\
+    :COLOR 37 BRN/MGT=\E[33m\E[45m:\E[m:\
+    :COLOR 38 BRN/CYN=\E[33m\E[46m:\E[m:\
+    :COLOR 39 BRN/WHT=\E[33m\E[47m:\E[m:\
+    :COLOR 40 BLU/BLK=\E[34m\E[40m:\E[m:\
+    :COLOR 41 BLU/RED=\E[34m\E[41m:\E[m:\
+    :COLOR 42 BLU/GRE=\E[34m\E[42m:\E[m:\
+    :COLOR 43 BLU/BRN=\E[34m\E[43m:\E[m:\
+    :COLOR 44 BLU/MGT=\E[34m\E[45m:\E[m:\
+    :COLOR 45 BLU/CYN=\E[34m\E[46m:\E[m:\
+    :COLOR 46 BLU/WHT=\E[34m\E[47m:\E[m:\
+    :COLOR 47 MGT/BLK=\E[35m\E[40m:\E[m:\
+    :COLOR 48 MGT/RED=\E[35m\E[41m:\E[m:\
+    :COLOR 49 MGT/GRE=\E[35m\E[42m:\E[m:\
+    :COLOR 50 MGT/BRN=\E[35m\E[43m:\E[m:\
+    :COLOR 51 MGT/BLU=\E[35m\E[44m:\E[m:\
+    :COLOR 52 MGT/CYN=\E[35m\E[46m:\E[m:\
+    :COLOR 53 MGT/WHT=\E[35m\E[47m:\E[m:\
+    :COLOR 54 CYN/BLK=\E[36m\E[40m:\E[m:\
+    :COLOR 55 CYN/RED=\E[36m\E[41m:\E[m:\
+    :COLOR 56 CYN/GRE=\E[36m\E[42m:\E[m:\
+    :COLOR 57 CYN/BRN=\E[36m\E[43m:\E[m:\
+    :COLOR 58 CYN/BLU=\E[36m\E[44m:\E[m:\
+    :COLOR 59 CYN/MGT=\E[36m\E[45m:\E[m:\
+    :COLOR 60 CYN/WHT=\E[36m\E[47m:\E[m:\
+    :COLOR 61 NORMAL=\E[37m\E[40m:\E[m:\
+    :tc=xterm:
+#
+# Aliassing the combined xterm/vt100 definition to these
+xterm-swe|vt320tera|vt220|putty|xterm-nor|screen:\
+    :tc=xterm:
+#
+# These are apparently only used for a legacy view used by the installer
+vermont_view:\
+    :fk0=\E[11~:    :L_fk0=<F1>:\
+    :fk1=\E[12~:    :L_fk1=<F2>:\
+    :fk2=\E[13~:    :L_fk2=<F3>:\
+    :fk3=\E[14~:    :L_fk3=<F4>:\
+    :fk4=\E[15~:    :L_fk4=<F5>:\
+    :fk5=\E[17~:    :L_fk5=<F6>:\
+    :fk6=\E[18~:    :L_fk6=<F7>:\
+    :fk7=\E[19~:    :L_fk7=<F8>:\
+    :fk8=\E[20~:    :L_fk8=<F9>:\
+    :fk9=\E[21~:    :L_fk9=<F10>:\
+    :ku=\E[A:    :L_ku=<Up>:\
+    :kd=\E[B:    :L_kd=<Down>:\
+    :kr=\E[C:    :L_kr=<Right>:\
+    :kl=\E[D:    :L_kl=<Left>:\
+    :bc=\177:       :.L_bc:\
+    :kh=\Eh:    :L_kh=<ESC> h:\
+    :EN=\Ee:    :L_EN=<ESC> e:\
+    :PU=^U:     :L_PU=<CTRL-U>:\
+    :PD=^K:     :L_PD=<CTRL-D>:\
+    :ki=\Ei:    :L_ki=<ESC> i:\
+    :DL=^X:     :L_DL=<CTRL-X>:\
+    :ESC=\E\E:    :L_ESC=<ESC> <ESC>:\
+    :bt=\Eb:    :L_bt=<ESC> b:\
+    :fk4=\EOP:    :L_fk4=<PF1>:\
+    :fk1=\EOQ:    :L_fk1=<PF2>:\
+    :fk2=\EOR:    :L_fk2=<PF3>:\
+    :fk3=\EOS:    :L_fk3=<PF4>:\
+    :fk5=\E6:    :L_fk5=<ESC> 6:\
+    :fk6=\E7:    :L_fk6=<ESC> 7:\
+    :fk7=\E8:    :L_fk7=<ESC> 8:\
+    :Aka=^k:      :L_Aka=Ctrl-K:\
+    :Akd=^z:      :L_Akd=Ctrl-Z:\
+    :Akp=^r:      :L_Akp=Ctrl-R:\
+    :Aks=^l:      :L_Aks=Ctrl-L:\
+    :Aku=\Em:      :L_Aku=Esc-M:\
+    :Akw=^g:      :L_Akw=Ctrl-G:\
+    :Aki=^e:      :L_Aki=Ctrl-E:
+#

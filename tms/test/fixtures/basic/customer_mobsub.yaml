@@ -1,0 +1,75 @@
+{Syst/tmsconst.i}
+
+custnum_seq: Sequence
+  n.
+
+msseq_seq: Sequence
+  n.
+
+custname_seq: Sequence
+  DEFINE VARIABLE lcFirstName AS CHARACTER NO-UNDO.
+  DEFINE VARIABLE lcSurName   AS CHARACTER NO-UNDO.
+  lcFirstName = ENTRY((n mod 10) + 1, "Bob,Bill,John,Jimmy,George,Hanna,Susan,Lisa,Marilyn,Kate").
+  lcSurName   = ENTRY(RANDOM(1,10), "Smith,Johnson,Williams,Brown,Jones,Miller,Davis,Garcia,Rodriguez,Wilson").
+  lcFirstName + " " + lcSurName.
+
+phone_number: Sequence
+  SUBST("72250&1", STRING(n, "9999")).
+
+
+NormalCustomer: Customer
+  CustNum: next(custnum_seq)
+  InvCust: %{CustNum}
+  RateCust: %{CustNum}
+  PaymCust: %{CustNum}
+  RepCust: %{CustNum}
+  AgrCust: %{CustNum}
+  CustName: next(custname_seq)
+  Address: "Avda. de la Vega 15"
+  ZipCode: "28109"
+  PostOffice: "ALCOBENDAS"
+  Country: "ES"
+  Language: 1
+  PaymTerm: 1
+  Category: "99"
+  ContrBeg: 2015-11-27
+  InvoiceTargetRule: 1
+  InvGroup: "VAT1"
+  CreUser: "user"
+  CreDate: 2015-11-27
+  UpdDate: 2015-12-14
+  UpdUser: "user"
+  Currency: "EUR"
+  ChgStamp: 20151214.55956
+  ChargeType: 2
+  DelType: 1
+  Brand: "1"
+  VATIncl: FALSE
+  CreditLimit: 100
+  FirstName: "VAT1"
+  Nationality: "ES"
+  Region: "28"
+
+
+NormalSubsription: MobSub
+  MsSeq: next(msseq_seq)
+  CustNum: generate(NormalCustomer).CustNum
+  InvCust: %{CustNum}
+  AgrCust: %{CustNum}
+  CLI: next(phone_number)
+  IMSI: "214040111747624"
+  ICC: "8934041513041501268"
+  CreationDate: 2016-02-10
+  Salesman: "WEB"
+  ActivationDate: 2016-02-10
+  MsStatus: {&MSSTATUS_ACTIVE}
+  CliType: "CONT9"
+  ActivationTS: 20160210.45765
+  SimDelStatus: 2
+  Brand: "1"
+  BillTarget: 27
+  MNPChannel: 2
+  IDCode: "6674"
+  BarrCode: "Y_HURP"
+  TariffActDate: 2016-02-10
+

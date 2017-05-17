@@ -1,0 +1,320 @@
+HiUsageLimit1: HiUsageLimit
+  Category: "1"
+  BillCode: "TOTAL"
+  Limit: 20
+
+HiUsageLimit2: HiUsageLimit
+  Category: "10"
+  BillCode: "TOTAL"
+  Limit: 20
+
+HiUsageLimit3: HiUsageLimit
+  Category: "11"
+  BillCode: "TOTAL"
+  Limit: 40
+
+HiUsageLimit4: HiUsageLimit
+  Category: "12"
+  BillCode: "TOTAL"
+  Limit: 80
+
+HiUsageLimit5: HiUsageLimit
+  Category: "13"
+  BillCode: "TOTAL"
+  Limit: 80
+
+HiUsageLimit6: HiUsageLimit
+  Category: "14"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit7: HiUsageLimit
+  Category: "15"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit8: HiUsageLimit
+  Category: "16"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit9: HiUsageLimit
+  Category: "17"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit10: HiUsageLimit
+  Category: "18"
+  BillCode: "TOTAL"
+  Limit: 60
+
+HiUsageLimit11: HiUsageLimit
+  Category: "19"
+  BillCode: "TOTAL"
+  Limit: 30
+
+HiUsageLimit12: HiUsageLimit
+  Category: "2"
+  BillCode: "TOTAL"
+  Limit: 40
+
+HiUsageLimit13: HiUsageLimit
+  Category: "20"
+  BillCode: "TOTAL"
+  Limit: 60
+
+HiUsageLimit14: HiUsageLimit
+  Category: "21"
+  BillCode: "TOTAL"
+  Limit: 80
+
+HiUsageLimit15: HiUsageLimit
+  Category: "22"
+  BillCode: "TOTAL"
+  Limit: 100
+
+HiUsageLimit16: HiUsageLimit
+  Category: "23"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit17: HiUsageLimit
+  Category: "24"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit18: HiUsageLimit
+  Category: "25"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit19: HiUsageLimit
+  Category: "26"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit20: HiUsageLimit
+  Category: "27"
+  BillCode: "TOTAL"
+  Limit: 60
+
+HiUsageLimit21: HiUsageLimit
+  Category: "28"
+  BillCode: "TOTAL"
+  Limit: 30
+
+HiUsageLimit22: HiUsageLimit
+  Category: "29"
+  BillCode: "TOTAL"
+  Limit: 60
+
+HiUsageLimit23: HiUsageLimit
+  Category: "3"
+  BillCode: "TOTAL"
+  Limit: 80
+
+HiUsageLimit24: HiUsageLimit
+  Category: "30"
+  BillCode: "TOTAL"
+  Limit: 80
+
+HiUsageLimit25: HiUsageLimit
+  Category: "31"
+  BillCode: "TOTAL"
+  Limit: 100
+
+HiUsageLimit26: HiUsageLimit
+  Category: "32"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit27: HiUsageLimit
+  Category: "33"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit28: HiUsageLimit
+  Category: "34"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit29: HiUsageLimit
+  Category: "35"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit30: HiUsageLimit
+  Category: "36"
+  BillCode: "TOTAL"
+  Limit: 60
+
+HiUsageLimit31: HiUsageLimit
+  Category: "37"
+  BillCode: "TOTAL"
+  Limit: 30
+
+HiUsageLimit32: HiUsageLimit
+  Category: "38"
+  BillCode: "TOTAL"
+  Limit: 60
+
+HiUsageLimit33: HiUsageLimit
+  Category: "39"
+  BillCode: "TOTAL"
+  Limit: 100
+
+HiUsageLimit34: HiUsageLimit
+  Category: "4"
+  BillCode: "TOTAL"
+  Limit: 100
+
+HiUsageLimit35: HiUsageLimit
+  Category: "40"
+  BillCode: "TOTAL"
+  Limit: 100
+
+HiUsageLimit36: HiUsageLimit
+  Category: "41"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit37: HiUsageLimit
+  Category: "42"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit38: HiUsageLimit
+  Category: "43"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit39: HiUsageLimit
+  Category: "44"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit40: HiUsageLimit
+  Category: "45"
+  BillCode: "TOTAL"
+  Limit: 60
+
+HiUsageLimit41: HiUsageLimit
+  Category: "46"
+  BillCode: "TOTAL"
+  Limit: 30
+
+HiUsageLimit42: HiUsageLimit
+  Category: "47"
+  BillCode: "TOTAL"
+  Limit: 60
+
+HiUsageLimit43: HiUsageLimit
+  Category: "48"
+  BillCode: "TOTAL"
+  Limit: 100
+
+HiUsageLimit44: HiUsageLimit
+  Category: "49"
+  BillCode: "TOTAL"
+  Limit: 100
+
+HiUsageLimit45: HiUsageLimit
+  Category: "5"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit46: HiUsageLimit
+  Category: "50"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit47: HiUsageLimit
+  Category: "51"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit48: HiUsageLimit
+  Category: "52"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit49: HiUsageLimit
+  Category: "53"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit50: HiUsageLimit
+  Category: "54"
+  BillCode: "TOTAL"
+  Limit: 50
+
+HiUsageLimit51: HiUsageLimit
+  Category: "55"
+  BillCode: "TOTAL"
+  Limit: 30
+
+HiUsageLimit52: HiUsageLimit
+  Category: "56"
+  BillCode: "TOTAL"
+  Limit: 60
+
+HiUsageLimit53: HiUsageLimit
+  Category: "57"
+  BillCode: "TOTAL"
+  Limit: 100
+
+HiUsageLimit54: HiUsageLimit
+  Category: "58"
+  BillCode: "TOTAL"
+  Limit: 100
+
+HiUsageLimit55: HiUsageLimit
+  Category: "59"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit56: HiUsageLimit
+  Category: "6"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit57: HiUsageLimit
+  Category: "60"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit58: HiUsageLimit
+  Category: "61"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit59: HiUsageLimit
+  Category: "62"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit60: HiUsageLimit
+  Category: "63"
+  BillCode: "TOTAL"
+  Limit: 50
+
+HiUsageLimit61: HiUsageLimit
+  Category: "7"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit62: HiUsageLimit
+  Category: "8"
+  BillCode: "TOTAL"
+  Limit: 170
+
+HiUsageLimit63: HiUsageLimit
+  Category: "9"
+  BillCode: "TOTAL"
+  Limit: 60
+
+HiUsageLimit64: HiUsageLimit
+  Category: "99"
+  BillCode: "TOTAL"
+  Limit: 170
+
