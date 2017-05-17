@@ -746,17 +746,18 @@ DO TRANSACTION:
       FIND FIRST Customer NO-LOCK WHERE
                  Customer.Custnum = MobSub.Custnum NO-ERROR.
       FOR EACH DiscountPlan NO-LOCK WHERE
-               DiscountPlan.Brand    = gcBrand                         AND
-               LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
+               DiscountPlan.Brand    = gcBrand AND
+        LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20}) > 0 AND
                DiscountPlan.ValidTo >= TODAY,
          FIRST DPMember NO-LOCK WHERE
-               DPMember.DPID       = DiscountPlan.DPID    AND
-               DPMember.HostTable  = "MobSub"             AND
+               DPMember.DPID       = DiscountPlan.DPID AND
+               DPMember.HostTable  = "MobSub" AND
                DPMember.KeyValue   = STRING(MobSub.MsSeq):
          IF fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CLIType) THEN DO:
             fCreateAddLineDiscount(MobSub.MsSeq,
                                    MobSub.CLIType,
-                                   TODAY).
+                                   TODAY,
+                                   DiscountPlan.DPRuleID).
             IF RETURN-VALUE BEGINS "ERROR" THEN
                RETURN RETURN-VALUE.
          END.

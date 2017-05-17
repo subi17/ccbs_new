@@ -470,7 +470,8 @@ PROCEDURE pFeesAndServices:
          fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN DO:
          fCreateAddLineDiscount(MsRequest.MsSeq,
                                 CLIType.CLIType,
-                                ldtActDate).
+                                ldtActDate,
+                                "").
          IF RETURN-VALUE BEGINS "ERROR" THEN
             RETURN RETURN-VALUE.
       END.

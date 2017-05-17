@@ -139,14 +139,16 @@ END FUNCTION.
 FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
    (iiMsSeq    AS INT,
     icCLIType  AS CHAR,
-    idtDate    AS DATE):
+    idtDate    AS DATE,
+    icDPRuleID AS CHAR):
 
    DEF VAR lcNewAddLineDisc AS CHAR NO-UNDO.
    DEF VAR liRequest        AS INT  NO-UNDO.
    DEF VAR lcResult         AS CHAR NO-UNDO.
 
-   lcNewAddLineDisc = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}),
-                            {&ADDLINE_DISCOUNTS}).
+   IF icDPRuleID NE "" THEN lcNewAddLineDisc = icDPRuleID. /* reactivation */
+   ELSE lcNewAddLineDisc = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}),
+                               {&ADDLINE_DISCOUNTS}).
 
    FOR FIRST DiscountPlan NO-LOCK WHERE
              DiscountPlan.Brand    = gcBrand          AND
