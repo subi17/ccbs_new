@@ -1,0 +1,1250 @@
+Country1: Country
+  Country: "AD"
+  CoName: "ANDORRA"
+  FraudGroup: "B"
+
+Country2: Country
+  Country: "AE"
+  CoName: "UNITED ARAB EMIRATES"
+  FraudGroup: "B"
+
+Country3: Country
+  Country: "AF"
+  CoName: "AFGHANISTAN"
+  FraudGroup: "C"
+
+Country4: Country
+  Country: "AG"
+  CoName: "ANTIGUA AND BARBUDA"
+  FraudGroup: "B"
+
+Country5: Country
+  Country: "AI"
+  CoName: "ANGUILLA"
+  FraudGroup: "B"
+
+Country6: Country
+  Country: "AL"
+  CoName: "ALBANIA"
+  FraudGroup: "B"
+
+Country7: Country
+  Country: "AM"
+  CoName: "ARMENIA"
+  FraudGroup: "B"
+
+Country8: Country
+  Country: "AN"
+  CoName: "NETHERLANDS ANTILLES"
+  FraudGroup: "B"
+
+Country9: Country
+  Country: "AO"
+  CoName: "ANGOLA"
+  FraudGroup: "C"
+
+Country10: Country
+  Country: "AQ"
+  CoName: "ANTARCTICA"
+  FraudGroup: "B"
+
+Country11: Country
+  Country: "AR"
+  CoName: "ARGENTINA"
+  FraudGroup: "B"
+
+Country12: Country
+  Country: "AS"
+  CoName: "AMERICAN SAMOA"
+  FraudGroup: "B"
+
+Country13: Country
+  Country: "AT"
+  CoName: "AUSTRIA"
+  FraudGroup: "A"
+
+Country14: Country
+  Country: "AU"
+  CoName: "AUSTRALIA"
+  FraudGroup: "B"
+
+Country15: Country
+  Country: "AW"
+  CoName: "ARUBA"
+  FraudGroup: "B"
+
+Country16: Country
+  Country: "AX"
+  CoName: "ALAND ISLANDS"
+  FraudGroup: "B"
+
+Country17: Country
+  Country: "AZ"
+  CoName: "AZERBAIJAN"
+  FraudGroup: "C"
+
+Country18: Country
+  Country: "BA"
+  CoName: "BOSNIA AND HERZEGOVINA"
+  FraudGroup: "B"
+
+Country19: Country
+  Country: "BB"
+  CoName: "BARBADOS"
+  FraudGroup: "B"
+
+Country20: Country
+  Country: "BD"
+  CoName: "BANGLADESH"
+  FraudGroup: "B"
+
+Country21: Country
+  Country: "BE"
+  CoName: "BELGIUM"
+  FraudGroup: "A"
+
+Country22: Country
+  Country: "BF"
+  CoName: "BURKINA FASO"
+  FraudGroup: "C"
+
+Country23: Country
+  Country: "BG"
+  CoName: "BULGARIA"
+  FraudGroup: "B"
+
+Country24: Country
+  Country: "BH"
+  CoName: "BAHRAIN"
+  FraudGroup: "B"
+
+Country25: Country
+  Country: "BI"
+  CoName: "BURUNDI"
+  FraudGroup: "B"
+
+Country26: Country
+  Country: "BJ"
+  CoName: "BENIN"
+  FraudGroup: "C"
+
+Country27: Country
+  Country: "BM"
+  CoName: "BERMUDA"
+  FraudGroup: "B"
+
+Country28: Country
+  Country: "BN"
+  CoName: "BRUNEI DARUSSALAM"
+  FraudGroup: "C"
+
+Country29: Country
+  Country: "BO"
+  CoName: "BOLIVIA"
+  FraudGroup: "B"
+
+Country30: Country
+  Country: "BR"
+  CoName: "BRAZIL"
+  FraudGroup: "B"
+
+Country31: Country
+  Country: "BS"
+  CoName: "BAHAMAS"
+  FraudGroup: "B"
+
+Country32: Country
+  Country: "BT"
+  CoName: "BHUTAN"
+  FraudGroup: "C"
+
+Country33: Country
+  Country: "BV"
+  CoName: "BOUVET ISLAND"
+  FraudGroup: "B"
+
+Country34: Country
+  Country: "BW"
+  CoName: "BOTSWANA"
+  FraudGroup: "C"
+
+Country35: Country
+  Country: "BY"
+  CoName: "BELARUS"
+  FraudGroup: "B"
+
+Country36: Country
+  Country: "BZ"
+  CoName: "BELIZE"
+  FraudGroup: "B"
+
+Country37: Country
+  Country: "CA"
+  CoName: "CANADA"
+  FraudGroup: "B"
+
+Country38: Country
+  Country: "CC"
+  CoName: "COCOS (KEELING) ISLANDS"
+  FraudGroup: "B"
+
+Country39: Country
+  Country: "CD"
+  CoName: "DEMOCRATIC REPUBLIC OF THE CONGO"
+  FraudGroup: "B"
+
+Country40: Country
+  Country: "CF"
+  CoName: "CENTRAL AFRICAN REPUBLIC"
+  FraudGroup: "C"
+
+Country41: Country
+  Country: "CG"
+  CoName: "CONGO"
+  FraudGroup: "C"
+
+Country42: Country
+  Country: "CH"
+  CoName: "SWITZERLAND"
+  FraudGroup: "A"
+
+Country43: Country
+  Country: "CI"
+  CoName: "COTE D'IVOIRE (IVORY COAST)"
+  FraudGroup: "C"
+
+Country44: Country
+  Country: "CK"
+  CoName: "COOK ISLANDS"
+  FraudGroup: "B"
+
+Country45: Country
+  Country: "CL"
+  CoName: "CHILE"
+  FraudGroup: "B"
+
+Country46: Country
+  Country: "CM"
+  CoName: "CAMEROON"
+  FraudGroup: "C"
+
+Country47: Country
+  Country: "CN"
+  CoName: "CHINA"
+  FraudGroup: "B"
+
+Country48: Country
+  Country: "CO"
+  CoName: "COLOMBIA"
+  FraudGroup: "B"
+
+Country49: Country
+  Country: "CR"
+  CoName: "COSTA RICA"
+  FraudGroup: "B"
+
+Country50: Country
+  Country: "CS"
+  CoName: "SERBIA AND MONTENEGRO"
+  FraudGroup: "B"
+
+Country51: Country
+  Country: "CU"
+  CoName: "CUBA"
+  FraudGroup: "C"
+
+Country52: Country
+  Country: "CV"
+  CoName: "CAPE VERDE"
+  FraudGroup: "C"
+
+Country53: Country
+  Country: "CX"
+  CoName: "CHRISTMAS ISLAND"
+  FraudGroup: "B"
+
+Country54: Country
+  Country: "CY"
+  CoName: "CYPRUS"
+  FraudGroup: "B"
+
+Country55: Country
+  Country: "CZ"
+  CoName: "CZECH REPUBLIC"
+  FraudGroup: "A"
+
+Country56: Country
+  Country: "DE"
+  CoName: "GERMANY"
+  FraudGroup: "A"
+
+Country57: Country
+  Country: "DJ"
+  CoName: "DJIBOUTI"
+  FraudGroup: "C"
+
+Country58: Country
+  Country: "DK"
+  CoName: "DENMARK"
+  FraudGroup: "A"
+
+Country59: Country
+  Country: "DM"
+  CoName: "DOMINICA"
+  FraudGroup: "B"
+
+Country60: Country
+  Country: "DO"
+  CoName: "DOMINICAN REPUBLIC"
+  FraudGroup: "B"
+
+Country61: Country
+  Country: "DZ"
+  CoName: "ALGERIA"
+  FraudGroup: "C"
+
+Country62: Country
+  Country: "EC"
+  CoName: "ECUADOR"
+  FraudGroup: "B"
+
+Country63: Country
+  Country: "EE"
+  CoName: "ESTONIA"
+  FraudGroup: "C"
+
+Country64: Country
+  Country: "EG"
+  CoName: "EGYPT"
+  FraudGroup: "B"
+
+Country65: Country
+  Country: "EH"
+  CoName: "WESTERN SAHARA"
+  FraudGroup: "B"
+
+Country66: Country
+  Country: "ER"
+  CoName: "ERITREA"
+  FraudGroup: "B"
+
+Country67: Country
+  Country: "ES"
+  CoName: "SPAIN"
+  FraudGroup: "A"
+
+Country68: Country
+  Country: "ET"
+  CoName: "ETHIOPIA"
+  FraudGroup: "C"
+
+Country69: Country
+  Country: "FI"
+  CoName: "FINLAND"
+  FraudGroup: "A"
+
+Country70: Country
+  Country: "FJ"
+  CoName: "FIJI"
+  FraudGroup: "B"
+
+Country71: Country
+  Country: "FK"
+  CoName: "FALKLAND ISLANDS (MALVINAS)"
+  FraudGroup: "B"
+
+Country72: Country
+  Country: "FM"
+  CoName: "FEDERATED STATES OF MICRONESIA"
+  FraudGroup: "B"
+
+Country73: Country
+  Country: "FO"
+  CoName: "FAROE ISLANDS"
+  FraudGroup: "C"
+
+Country74: Country
+  Country: "FR"
+  CoName: "FRANCE"
+  FraudGroup: "A"
+
+Country75: Country
+  Country: "FX"
+  CoName: "FRANCE, METROPOLITAN"
+  FraudGroup: "B"
+
+Country76: Country
+  Country: "GA"
+  CoName: "GABON"
+  FraudGroup: "C"
+
+Country77: Country
+  Country: "GB"
+  CoName: "GREAT BRITAIN (UK)"
+  FraudGroup: "A"
+
+Country78: Country
+  Country: "GD"
+  CoName: "GRENADA"
+  FraudGroup: "B"
+
+Country79: Country
+  Country: "GE"
+  CoName: "GEORGIA"
+  FraudGroup: "C"
+
+Country80: Country
+  Country: "GF"
+  CoName: "FRENCH GUIANA"
+  FraudGroup: "B"
+
+Country81: Country
+  Country: "GG"
+  CoName: "GUERNSEY"
+  FraudGroup: "B"
+
+Country82: Country
+  Country: "GH"
+  CoName: "GHANA"
+  FraudGroup: "C"
+
+Country83: Country
+  Country: "GI"
+  CoName: "GIBRALTAR"
+  FraudGroup: "B"
+
+Country84: Country
+  Country: "GL"
+  CoName: "GREENLAND"
+  FraudGroup: "A"
+
+Country85: Country
+  Country: "GM"
+  CoName: "GAMBIA"
+  FraudGroup: "B"
+
+Country86: Country
+  Country: "GN"
+  CoName: "GUINEA"
+  FraudGroup: "C"
+
+Country87: Country
+  Country: "GP"
+  CoName: "GUADELOUPE"
+  FraudGroup: "B"
+
+Country88: Country
+  Country: "GQ"
+  CoName: "EQUATORIAL GUINEA"
+  FraudGroup: "C"
+
+Country89: Country
+  Country: "GR"
+  CoName: "GREECE"
+  FraudGroup: "A"
+
+Country90: Country
+  Country: "GS"
+  CoName: "S. GEORGIA AND S. SANDWICH ISLANDS"
+  FraudGroup: "B"
+
+Country91: Country
+  Country: "GT"
+  CoName: "GUATEMALA"
+  FraudGroup: "B"
+
+Country92: Country
+  Country: "GU"
+  CoName: "GUAM"
+  FraudGroup: "B"
+
+Country93: Country
+  Country: "GW"
+  CoName: "GUINEA-BISSAU"
+  FraudGroup: "C"
+
+Country94: Country
+  Country: "GY"
+  CoName: "GUYANA"
+  FraudGroup: "B"
+
+Country95: Country
+  Country: "HK"
+  CoName: "HONG KONG"
+  FraudGroup: "B"
+
+Country96: Country
+  Country: "HM"
+  CoName: "HEARD ISLAND AND MCDONALD ISLANDS"
+  FraudGroup: "B"
+
+Country97: Country
+  Country: "HN"
+  CoName: "HONDURAS"
+  FraudGroup: "B"
+
+Country98: Country
+  Country: "HR"
+  CoName: "CROATIA (HRVATSKA)"
+  FraudGroup: "B"
+
+Country99: Country
+  Country: "HT"
+  CoName: "HAITI"
+  FraudGroup: "C"
+
+Country100: Country
+  Country: "HU"
+  CoName: "HUNGARY"
+  FraudGroup: "A"
+
+Country101: Country
+  Country: "ID"
+  CoName: "INDONESIA"
+  FraudGroup: "B"
+
+Country102: Country
+  Country: "IE"
+  CoName: "IRELAND"
+  FraudGroup: "A"
+
+Country103: Country
+  Country: "IL"
+  CoName: "ISRAEL"
+  FraudGroup: "B"
+
+Country104: Country
+  Country: "IM"
+  CoName: "ISLE OF MAN"
+  FraudGroup: "B"
+
+Country105: Country
+  Country: "IN"
+  CoName: "INDIA"
+  FraudGroup: "B"
+
+Country106: Country
+  Country: "IO"
+  CoName: "BRITISH INDIAN OCEAN TERRITORY"
+  FraudGroup: "B"
+
+Country107: Country
+  Country: "IQ"
+  CoName: "IRAQ"
+  FraudGroup: "C"
+
+Country108: Country
+  Country: "IR"
+  CoName: "IRAN"
+  FraudGroup: "C"
+
+Country109: Country
+  Country: "IS"
+  CoName: "ICELAND"
+  FraudGroup: "A"
+
+Country110: Country
+  Country: "IT"
+  CoName: "ITALY"
+  FraudGroup: "A"
+
+Country111: Country
+  Country: "JE"
+  CoName: "JERSEY"
+  FraudGroup: "A"
+
+Country112: Country
+  Country: "JM"
+  CoName: "JAMAICA"
+  FraudGroup: "B"
+
+Country113: Country
+  Country: "JO"
+  CoName: "JORDAN"
+  FraudGroup: "B"
+
+Country114: Country
+  Country: "JP"
+  CoName: "JAPAN"
+  FraudGroup: "B"
+
+Country115: Country
+  Country: "KE"
+  CoName: "KENYA"
+  FraudGroup: "C"
+
+Country116: Country
+  Country: "KG"
+  CoName: "KYRGYZSTAN"
+  FraudGroup: "C"
+
+Country117: Country
+  Country: "KH"
+  CoName: "CAMBODIA"
+  FraudGroup: "B"
+
+Country118: Country
+  Country: "KI"
+  CoName: "KIRIBATI"
+  FraudGroup: "C"
+
+Country119: Country
+  Country: "KM"
+  CoName: "COMOROS"
+  FraudGroup: "C"
+
+Country120: Country
+  Country: "KN"
+  CoName: "SAINT KITTS AND NEVIS"
+  FraudGroup: "B"
+
+Country121: Country
+  Country: "KP"
+  CoName: "KOREA (NORTH)"
+  FraudGroup: "C"
+
+Country122: Country
+  Country: "KR"
+  CoName: "KOREA (SOUTH)"
+  FraudGroup: "B"
+
+Country123: Country
+  Country: "KW"
+  CoName: "KUWAIT"
+  FraudGroup: "B"
+
+Country124: Country
+  Country: "KY"
+  CoName: "CAYMAN ISLANDS"
+  FraudGroup: "B"
+
+Country125: Country
+  Country: "KZ"
+  CoName: "KAZAKHSTAN"
+  FraudGroup: "B"
+
+Country126: Country
+  Country: "LA"
+  CoName: "LAOS"
+  FraudGroup: "B"
+
+Country127: Country
+  Country: "LB"
+  CoName: "LEBANON"
+  FraudGroup: "B"
+
+Country128: Country
+  Country: "LC"
+  CoName: "SAINT LUCIA"
+  FraudGroup: "B"
+
+Country129: Country
+  Country: "LI"
+  CoName: "LIECHTENSTEIN"
+  FraudGroup: "C"
+
+Country130: Country
+  Country: "LK"
+  CoName: "SRI LANKA"
+  FraudGroup: "C"
+
+Country131: Country
+  Country: "LR"
+  CoName: "LIBERIA"
+  FraudGroup: "C"
+
+Country132: Country
+  Country: "LS"
+  CoName: "LESOTHO"
+  FraudGroup: "C"
+
+Country133: Country
+  Country: "LT"
+  CoName: "LITHUANIA"
+  FraudGroup: "A"
+
+Country134: Country
+  Country: "LU"
+  CoName: "LUXEMBOURG"
+  FraudGroup: "A"
+
+Country135: Country
+  Country: "LV"
+  CoName: "LATVIA"
+  FraudGroup: "C"
+
+Country136: Country
+  Country: "LY"
+  CoName: "LIBYA"
+  FraudGroup: "C"
+
+Country137: Country
+  Country: "MA"
+  CoName: "MOROCCO"
+  FraudGroup: "C"
+
+Country138: Country
+  Country: "MC"
+  CoName: "MONACO"
+  FraudGroup: "A"
+
+Country139: Country
+  Country: "MD"
+  CoName: "MOLDOVA"
+  FraudGroup: "A"
+
+Country140: Country
+  Country: "MG"
+  CoName: "MADAGASCAR"
+  FraudGroup: "C"
+
+Country141: Country
+  Country: "MH"
+  CoName: "MARSHALL ISLANDS"
+  FraudGroup: "B"
+
+Country142: Country
+  Country: "MK"
+  CoName: "MACEDONIA"
+  FraudGroup: "B"
+
+Country143: Country
+  Country: "ML"
+  CoName: "MALI"
+  FraudGroup: "C"
+
+Country144: Country
+  Country: "MM"
+  CoName: "MYANMAR"
+  FraudGroup: "B"
+
+Country145: Country
+  Country: "MN"
+  CoName: "MONGOLIA"
+  FraudGroup: "C"
+
+Country146: Country
+  Country: "MO"
+  CoName: "MACAO"
+  FraudGroup: "B"
+
+Country147: Country
+  Country: "MP"
+  CoName: "NORTHERN MARIANA ISLANDS"
+  FraudGroup: "B"
+
+Country148: Country
+  Country: "MQ"
+  CoName: "MARTINIQUE"
+  FraudGroup: "B"
+
+Country149: Country
+  Country: "MR"
+  CoName: "MAURITANIA"
+  FraudGroup: "C"
+
+Country150: Country
+  Country: "MS"
+  CoName: "MONTSERRAT"
+  FraudGroup: "B"
+
+Country151: Country
+  Country: "MT"
+  CoName: "MALTA"
+  FraudGroup: "B"
+
+Country152: Country
+  Country: "MU"
+  CoName: "MAURITIUS"
+  FraudGroup: "C"
+
+Country153: Country
+  Country: "MV"
+  CoName: "MALDIVES"
+  FraudGroup: "B"
+
+Country154: Country
+  Country: "MW"
+  CoName: "MALAWI"
+  FraudGroup: "C"
+
+Country155: Country
+  Country: "MX"
+  CoName: "MEXICO"
+  FraudGroup: "B"
+
+Country156: Country
+  Country: "MY"
+  CoName: "MALAYSIA"
+  FraudGroup: "B"
+
+Country157: Country
+  Country: "MZ"
+  CoName: "MOZAMBIQUE"
+  FraudGroup: "C"
+
+Country158: Country
+  Country: "NA"
+  CoName: "NAMIBIA"
+  FraudGroup: "C"
+
+Country159: Country
+  Country: "NC"
+  CoName: "NEW CALEDONIA"
+  FraudGroup: "B"
+
+Country160: Country
+  Country: "NE"
+  CoName: "NIGER"
+  FraudGroup: "C"
+
+Country161: Country
+  Country: "NF"
+  CoName: "NORFOLK ISLAND"
+  FraudGroup: "B"
+
+Country162: Country
+  Country: "NG"
+  CoName: "NIGERIA"
+  FraudGroup: "C"
+
+Country163: Country
+  Country: "NI"
+  CoName: "NICARAGUA"
+  FraudGroup: "B"
+
+Country164: Country
+  Country: "NL"
+  CoName: "NETHERLANDS"
+  FraudGroup: "A"
+
+Country165: Country
+  Country: "NO"
+  CoName: "NORWAY"
+  FraudGroup: "A"
+
+Country166: Country
+  Country: "NP"
+  CoName: "NEPAL"
+  FraudGroup: "C"
+
+Country167: Country
+  Country: "NR"
+  CoName: "NAURU"
+  FraudGroup: "B"
+
+Country168: Country
+  Country: "NU"
+  CoName: "NIUE"
+  FraudGroup: "B"
+
+Country169: Country
+  Country: "NZ"
+  CoName: "NEW ZEALAND (AOTEAROA)"
+  FraudGroup: "B"
+
+Country170: Country
+  Country: "OM"
+  CoName: "OMAN"
+  FraudGroup: "B"
+
+Country171: Country
+  Country: "PA"
+  CoName: "PANAMA"
+  FraudGroup: "B"
+
+Country172: Country
+  Country: "PE"
+  CoName: "PERU"
+  FraudGroup: "B"
+
+Country173: Country
+  Country: "PF"
+  CoName: "FRENCH POLYNESIA"
+  FraudGroup: "B"
+
+Country174: Country
+  Country: "PG"
+  CoName: "PAPUA NEW GUINEA"
+  FraudGroup: "B"
+
+Country175: Country
+  Country: "PH"
+  CoName: "PHILIPPINES"
+  FraudGroup: "B"
+
+Country176: Country
+  Country: "PK"
+  CoName: "PAKISTAN"
+  FraudGroup: "C"
+
+Country177: Country
+  Country: "PL"
+  CoName: "POLAND"
+  FraudGroup: "A"
+
+Country178: Country
+  Country: "PM"
+  CoName: "SAINT PIERRE AND MIQUELON"
+  FraudGroup: "B"
+
+Country179: Country
+  Country: "PN"
+  CoName: "PITCAIRN"
+  FraudGroup: "B"
+
+Country180: Country
+  Country: "PR"
+  CoName: "PUERTO RICO"
+  FraudGroup: "B"
+
+Country181: Country
+  Country: "PS"
+  CoName: "PALESTINIAN TERRITORY"
+  FraudGroup: "B"
+
+Country182: Country
+  Country: "PT"
+  CoName: "PORTUGAL"
+  FraudGroup: "A"
+
+Country183: Country
+  Country: "PW"
+  CoName: "PALAU"
+  FraudGroup: "B"
+
+Country184: Country
+  Country: "PY"
+  CoName: "PARAGUAY"
+  FraudGroup: "B"
+
+Country185: Country
+  Country: "QA"
+  CoName: "QATAR"
+  FraudGroup: "B"
+
+Country186: Country
+  Country: "RE"
+  CoName: "REUNION"
+  FraudGroup: "B"
+
+Country187: Country
+  Country: "RO"
+  CoName: "ROMANIA"
+  FraudGroup: "B"
+
+Country188: Country
+  Country: "RU"
+  CoName: "RUSSIAN FEDERATION"
+  FraudGroup: "B"
+
+Country189: Country
+  Country: "RW"
+  CoName: "RWANDA"
+  FraudGroup: "C"
+
+Country190: Country
+  Country: "SA"
+  CoName: "SAUDI ARABIA"
+  FraudGroup: "B"
+
+Country191: Country
+  Country: "SB"
+  CoName: "SOLOMON ISLANDS"
+  FraudGroup: "B"
+
+Country192: Country
+  Country: "SC"
+  CoName: "SEYCHELLES"
+  FraudGroup: "B"
+
+Country193: Country
+  Country: "SD"
+  CoName: "SUDAN"
+  FraudGroup: "C"
+
+Country194: Country
+  Country: "SE"
+  CoName: "SWEDEN"
+  FraudGroup: "A"
+
+Country195: Country
+  Country: "SG"
+  CoName: "SINGAPORE"
+  FraudGroup: "B"
+
+Country196: Country
+  Country: "SH"
+  CoName: "SAINT HELENA"
+  FraudGroup: "B"
+
+Country197: Country
+  Country: "SI"
+  CoName: "SLOVENIA"
+  FraudGroup: "A"
+
+Country198: Country
+  Country: "SJ"
+  CoName: "SVALBARD AND JAN MAYEN"
+  FraudGroup: "B"
+
+Country199: Country
+  Country: "SK"
+  CoName: "SLOVAKIA"
+  FraudGroup: "A"
+
+Country200: Country
+  Country: "SL"
+  CoName: "SIERRA LEONE"
+  FraudGroup: "C"
+
+Country201: Country
+  Country: "SM"
+  CoName: "SAN MARINO"
+  FraudGroup: "A"
+
+Country202: Country
+  Country: "SN"
+  CoName: "SENEGAL"
+  FraudGroup: "C"
+
+Country203: Country
+  Country: "SO"
+  CoName: "SOMALIA"
+  FraudGroup: "C"
+
+Country204: Country
+  Country: "SR"
+  CoName: "SURINAME"
+  FraudGroup: "B"
+
+Country205: Country
+  Country: "ST"
+  CoName: "SAO TOME AND PRINCIPE"
+  FraudGroup: "C"
+
+Country206: Country
+  Country: "SU"
+  CoName: "USSR (FORMER)"
+  FraudGroup: "B"
+
+Country207: Country
+  Country: "SV"
+  CoName: "EL SALVADOR"
+  FraudGroup: "B"
+
+Country208: Country
+  Country: "SY"
+  CoName: "SYRIA"
+  FraudGroup: "C"
+
+Country209: Country
+  Country: "SZ"
+  CoName: "SWAZILAND"
+  FraudGroup: "C"
+
+Country210: Country
+  Country: "TC"
+  CoName: "TURKS AND CAICOS ISLANDS"
+  FraudGroup: "B"
+
+Country211: Country
+  Country: "TD"
+  CoName: "CHAD"
+  FraudGroup: "C"
+
+Country212: Country
+  Country: "TF"
+  CoName: "FRENCH SOUTHERN TERRITORIES"
+  FraudGroup: "B"
+
+Country213: Country
+  Country: "TG"
+  CoName: "TOGO"
+  FraudGroup: "C"
+
+Country214: Country
+  Country: "TH"
+  CoName: "THAILAND"
+  FraudGroup: "B"
+
+Country215: Country
+  Country: "TJ"
+  CoName: "TAJIKISTAN"
+  FraudGroup: "B"
+
+Country216: Country
+  Country: "TK"
+  CoName: "TOKELAU"
+  FraudGroup: "B"
+
+Country217: Country
+  Country: "TL"
+  CoName: "TIMOR-LESTE"
+  FraudGroup: "B"
+
+Country218: Country
+  Country: "TM"
+  CoName: "TURKMENISTAN"
+  FraudGroup: "C"
+
+Country219: Country
+  Country: "TN"
+  CoName: "TUNISIA"
+  FraudGroup: "C"
+
+Country220: Country
+  Country: "TO"
+  CoName: "TONGA"
+  FraudGroup: "B"
+
+Country221: Country
+  Country: "TP"
+  CoName: "EAST TIMOR"
+  FraudGroup: "C"
+
+Country222: Country
+  Country: "TR"
+  CoName: "TURKEY"
+  FraudGroup: "B"
+
+Country223: Country
+  Country: "TT"
+  CoName: "TRINIDAD AND TOBAGO"
+  FraudGroup: "B"
+
+Country224: Country
+  Country: "TV"
+  CoName: "TUVALU"
+  FraudGroup: "B"
+
+Country225: Country
+  Country: "TW"
+  CoName: "TAIWAN"
+  FraudGroup: "B"
+
+Country226: Country
+  Country: "TZ"
+  CoName: "TANZANIA"
+  FraudGroup: "C"
+
+Country227: Country
+  Country: "UA"
+  CoName: "UKRAINE"
+  FraudGroup: "B"
+
+Country228: Country
+  Country: "UG"
+  CoName: "UGANDA"
+  FraudGroup: "C"
+
+Country229: Country
+  Country: "UK"
+  CoName: "UNITED KINGDOM"
+  FraudGroup: "A"
+
+Country230: Country
+  Country: "UM"
+  CoName: "UNITED STATES MINOR OUTLYING ISLANDS"
+  FraudGroup: "B"
+
+Country231: Country
+  Country: "US"
+  CoName: "UNITED STATES"
+  FraudGroup: "B"
+
+Country232: Country
+  Country: "USA"
+  CoName: "N. AMERICA & CARIBBEAN"
+  FraudGroup: "B"
+
+Country233: Country
+  Country: "UY"
+  CoName: "URUGUAY"
+  FraudGroup: "B"
+
+Country234: Country
+  Country: "UZ"
+  CoName: "UZBEKISTAN"
+  FraudGroup: "B"
+
+Country235: Country
+  Country: "VA"
+  CoName: "VATICAN CITY STATE (HOLY SEE)"
+  FraudGroup: "B"
+
+Country236: Country
+  Country: "VC"
+  CoName: "SAINT VINCENT AND THE GRENADINES"
+  FraudGroup: "B"
+
+Country237: Country
+  Country: "VE"
+  CoName: "VENEZUELA"
+  FraudGroup: "B"
+
+Country238: Country
+  Country: "VG"
+  CoName: "VIRGIN ISLANDS (BRITISH)"
+  FraudGroup: "B"
+
+Country239: Country
+  Country: "VI"
+  CoName: "VIRGIN ISLANDS (U.S.)"
+  FraudGroup: "B"
+
+Country240: Country
+  Country: "VN"
+  CoName: "VIET NAM"
+  FraudGroup: "B"
+
+Country241: Country
+  Country: "VU"
+  CoName: "VANUATU"
+  FraudGroup: "B"
+
+Country242: Country
+  Country: "WF"
+  CoName: "WALLIS AND FUTUNA"
+  FraudGroup: "B"
+
+Country243: Country
+  Country: "WS"
+  CoName: "SAMOA"
+  FraudGroup: "B"
+
+Country244: Country
+  Country: "YE"
+  CoName: "YEMEN"
+  FraudGroup: "B"
+
+Country245: Country
+  Country: "YT"
+  CoName: "MAYOTTE"
+  FraudGroup: "B"
+
+Country246: Country
+  Country: "YU"
+  CoName: "YUGOSLAVIA (FORMER)"
+  FraudGroup: "B"
+
+Country247: Country
+  Country: "ZA"
+  CoName: "SOUTH AFRICA"
+  FraudGroup: "B"
+
+Country248: Country
+  Country: "ZM"
+  CoName: "ZAMBIA"
+  FraudGroup: "C"
+
+Country249: Country
+  Country: "ZR"
+  CoName: "ZAIRE (FORMER)"
+  FraudGroup: "B"
+
+Country250: Country
+  Country: "ZW"
+  CoName: "ZIMBABWE"
+  FraudGroup: "C"
+
