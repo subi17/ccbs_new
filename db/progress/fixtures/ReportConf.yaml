@@ -1,0 +1,10 @@
+ReportConf1: ReportConf
+  Brand: "1"
+  ReportID: "BillingReport"
+  ReportName: "Billing statistic"
+
+ReportConf2: ReportConf
+  Brand: "1"
+  ReportID: "UnbilledSubsQty"
+  ReportName: "Unbilled subscriptions"
+

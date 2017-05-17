@@ -1,0 +1,20 @@
+SimMan1: SimMan
+  Mancode: "G&D"
+  ManName: "G&D"
+  Brand: "1"
+
+SimMan2: SimMan
+  Mancode: "GEMALTO"
+  ManName: "Gemalto"
+  Brand: "1"
+
+SimMan3: SimMan
+  Mancode: "MORPHO"
+  ManName: "Morpho"
+  Brand: "1"
+
+SimMan4: SimMan
+  Mancode: "OBERHTUR"
+  ManName: "Oberhtur"
+  Brand: "1"
+

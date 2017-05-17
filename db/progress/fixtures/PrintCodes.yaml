@@ -1,0 +1,328 @@
+PrintCodes1: PrintCodes
+  Effect: "1"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027&k2G\027(s12H\027&l0E\027&f1y3X"
+  EffOn[2]: "E(0N&k2G(s12H&l0E&f1y3X"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Laskupohja"
+  PageWidth: 95
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes2: PrintCodes
+  Effect: "1"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027&k2G\027(s12H\027&l0E\027&f1y3X"
+  EffOn[2]: "E(0N&k2G(s12H&l0E&f1y3X"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Laskupohja"
+  PageWidth: 95
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes3: PrintCodes
+  Effect: "2"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027&l1E\027(0N\027&k2G\027(s12H\027&f2y3X"
+  EffOn[2]: "E&l1E(0N&k2G(s12H&f2y3X"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Kirjepohja"
+  PageWidth: 95
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes4: PrintCodes
+  Effect: "2"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027&k2G\027(s12H\027&l2E\027&f2y3X"
+  EffOn[2]: "E(0N&k2G(s12H&l2E&f2y3X"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Kirjepohja"
+  PageWidth: 95
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes5: PrintCodes
+  Effect: "6"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027&l2X\027&k2G\027&f1y3X\027(s12H"
+  EffOn[2]: "E(0N&l2X&k2G&f1y3X(s12H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Laskupohja, 2 kopiota"
+  PageWidth: 80
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes6: PrintCodes
+  Effect: "6"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027&l2X\027&k2G\027&f1y3X\027(s12H"
+  EffOn[2]: "E(0N&l2X&k2G&f1y3X(s12H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Laskupohja, 2 kopiota"
+  PageWidth: 80
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes7: PrintCodes
+  Effect: "9"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027&a5L\027(s17H\027&k2G\027&l6D\027&f6y3X"
+  EffOn[2]: "E(0N&a5L(s17H&k2G&l6D&f6y3X"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Raportti"
+  PageWidth: 130
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes8: PrintCodes
+  Effect: "9"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027&a5L\027(s17H\027&k2G\027&l6D\027&f6y3X"
+  EffOn[2]: "E(0N&a5L(s17H&k2G&l6D&f6y3X"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Raportti"
+  PageWidth: 130
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes9: PrintCodes
+  Effect: "E"
+  PrinterId: "E-MAIL"
+  EffName: "Ei Efektiä"
+  PageWidth: 130
+  PageLength: 72
+  AvailLines: 66
+
+PrintCodes10: PrintCodes
+  Effect: "E"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027(s110T\027&k2G\027&l6D\027&l0E"
+  EffOn[2]: "E(0N(s110T&k2G&l6D&l0E"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Ei tehostetta"
+  PageWidth: 999
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes11: PrintCodes
+  Effect: "E"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027(s110T\027&k2G\027&l6D\027&l2E"
+  EffOn[2]: "E(0N(s110T&k2G&l6D&l2E"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Ei tehostetta"
+  PageWidth: 999
+  PageLength: 64
+  AvailLines: 63
+
+PrintCodes12: PrintCodes
+  Effect: "E"
+  PrinterId: "Tiedosto"
+  EffName: "Ei tehostetta"
+  PageWidth: 130
+  PageLength: 80
+  AvailLines: 78
+
+PrintCodes13: PrintCodes
+  Effect: "K"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027&l1O\027&k2G\027(s17H"
+  EffOn[2]: "E(0N&l1O&k2G(s17H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Vaaka A4 17 cpi"
+  PageWidth: 200
+  PageLength: 43
+  AvailLines: 41
+
+PrintCodes14: PrintCodes
+  Effect: "K"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027&l1O\027&k2G\027(s17H"
+  EffOn[2]: "E(0N&l1O&k2G(s17H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Vaaka A4 17 cpi"
+  PageWidth: 200
+  PageLength: 43
+  AvailLines: 41
+
+PrintCodes15: PrintCodes
+  Effect: "N"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027&k2G\027(s10H"
+  EffOn[2]: "E(0N&k2G(s10H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Pysty A4 10 cpi"
+  PageWidth: 80
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes16: PrintCodes
+  Effect: "N"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027&k2G\027(s10H"
+  EffOn[2]: "E(0N&k2G(s10H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Pysty A4 10 cpi"
+  PageWidth: 80
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes17: PrintCodes
+  Effect: "P"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027&k2G\027(s12H"
+  EffOn[2]: "E(0N&k2G(s12H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Pysty A4 12 cpi"
+  PageWidth: 120
+  PageLength: 64
+  AvailLines: 63
+
+PrintCodes18: PrintCodes
+  Effect: "P"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027&k2G\027(s12H"
+  EffOn[2]: "E(0N&k2G(s12H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Pysty A4 12 cpi"
+  PageWidth: 120
+  PageLength: 64
+  AvailLines: 63
+
+PrintCodes19: PrintCodes
+  Effect: "Q"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027&k2G\027&a5L\027(s17H\027&l12D"
+  EffOn[2]: "E(0N&k2G&a5L(s17H&l12D"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Pysty A4 17 cpi, tiheät rivit"
+  PageWidth: 130
+  PageLength: 128
+  AvailLines: 125
+
+PrintCodes20: PrintCodes
+  Effect: "Q"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027&k2G\027&a5L\027(s17H\027&l12D"
+  EffOn[2]: "E(0N&k2G&a5L(s17H&l12D"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Pysty A4 17 cpi, tiheät rivit"
+  PageWidth: 130
+  PageLength: 128
+  AvailLines: 125
+
+PrintCodes21: PrintCodes
+  Effect: "T"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027&a5L\027&k2G\027&l6D\027(s17H"
+  EffOn[2]: "E(0N&a5L&k2G&l6D(s17H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Pysty A4 17 cpi"
+  PageWidth: 140
+  PageLength: 64
+  AvailLines: 63
+
+PrintCodes22: PrintCodes
+  Effect: "T"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027&a5L\027&k2G\027&l6D\027(s17H"
+  EffOn[2]: "E(0N&a5L&k2G&l6D(s17H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Pysty A4 17 cpi"
+  PageWidth: 140
+  PageLength: 64
+  AvailLines: 63
+
+PrintCodes23: PrintCodes
+  Effect: "V"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027&k2G\027&l1O"
+  EffOn[2]: "E(0N&k2G&l1O"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Vaaka A4 10 cpi"
+  PageWidth: 116
+  PageLength: 43
+  AvailLines: 41
+
+PrintCodes24: PrintCodes
+  Effect: "V"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027&k2G\027&l1O"
+  EffOn[2]: "E(0N&k2G&l1O"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Vaaka A4 10 cpi"
+  PageWidth: 116
+  PageLength: 43
+  AvailLines: 41
+
+PrintCodes25: PrintCodes
+  Effect: "W"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027&l1O\027&k2G\027(s12H"
+  EffOn[2]: "E(0N&l1O&k2G(s12H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Vaaka A4 12 cpi"
+  PageWidth: 132
+  PageLength: 43
+  AvailLines: 41
+
+PrintCodes26: PrintCodes
+  Effect: "W"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027&l1O\027&k2G\027(s12H"
+  EffOn[2]: "E(0N&l1O&k2G(s12H"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Vaaka A4 12 cpi"
+  PageWidth: 132
+  PageLength: 43
+  AvailLines: 41
+
+PrintCodes27: PrintCodes
+  Effect: "X"
+  PrinterId: "Starnet Canon"
+  EffOn[1]: "\027E\027(0N\027(s110T\027&k0G\027&l6D"
+  EffOn[2]: "E(0N(s110T&k0G&l6D"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Testi"
+  PageWidth: 80
+  PageLength: 64
+  AvailLines: 62
+
+PrintCodes28: PrintCodes
+  Effect: "X"
+  PrinterId: "Starnet CoffeeJet"
+  EffOn[1]: "\027E\027(0N\027(s110T\027&k0G\027&l6D"
+  EffOn[2]: "E(0N(s110T&k0G&l6D"
+  EffOff[1]: "\027E"
+  EffOff[2]: "E"
+  EffName: "Testi"
+  PageWidth: 80
+  PageLength: 64
+  AvailLines: 62
+
