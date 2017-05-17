@@ -1,0 +1,84 @@
+TriggerConf1: TriggerConf
+  TriggerConfID: "ALL"
+  TCName: "Re-Rate all"
+  Prior: 5
+  ValidFrom: 2001-01-01
+  ValidTo: 1950-12-31
+  EventRule: 4
+
+TriggerConf2: TriggerConf
+  TriggerConfID: "TARIFF"
+  TCName: "Tariff triggers"
+  Prior: 10
+  ValidFrom: 2001-01-01
+  ValidTo: 2049-12-31
+
+TriggerConf3: TriggerConf
+  TriggerConfID: "PLISTCONF"
+  TCName: "Plistconf triggers"
+  Prior: 11
+  ValidFrom: 2001-01-01
+  ValidTo: 2049-12-31
+
+TriggerConf4: TriggerConf
+  TriggerConfID: "MSERVICELIMIT"
+  TCName: "Packet trigger"
+  Prior: 12
+  ValidFrom: 2001-01-01
+  ValidTo: 2049-12-31
+  EventRule: 4
+
+TriggerConf5: TriggerConf
+  TriggerConfID: "BDEST"
+  TCName: "B-Destination triggers"
+  Prior: 20
+  ValidFrom: 2001-01-01
+  ValidTo: 2049-12-31
+
+TriggerConf6: TriggerConf
+  TriggerConfID: "MSREQUEST"
+  TCName: "Request"
+  Prior: 33
+  ValidFrom: 2001-01-01
+  ValidTo: 2040-12-31
+  EventRule: 4
+
+TriggerConf7: TriggerConf
+  TriggerConfID: "MSOWNER"
+  TCName: "Subscription event"
+  Prior: 40
+  ValidFrom: 2001-01-01
+  ValidTo: 2049-12-31
+  EventRule: 4
+
+TriggerConf8: TriggerConf
+  TriggerConfID: "MOBCDR"
+  TCName: "Cdr triggers"
+  Prior: 50
+  ValidFrom: 2001-01-01
+  ValidTo: 2049-12-31
+  EventRule: 4
+
+TriggerConf9: TriggerConf
+  TriggerConfID: "SPECIAL_FILE"
+  TCName: "Read custnums from file"
+  Prior: 87
+  ValidFrom: 2012-05-01
+  ValidTo: 2030-12-31
+  EventRule: 4
+
+TriggerConf10: TriggerConf
+  TriggerConfID: "SPECIAL_LIST"
+  TCName: "InvCust,CLI list"
+  Prior: 88
+  ValidFrom: 2001-01-01
+  ValidTo: 2024-12-31
+  EventRule: 4
+
+TriggerConf11: TriggerConf
+  TriggerConfID: "SLGANALYSE"
+  TCName: "Servicelimit Analyses"
+  Prior: 89
+  ValidFrom: 2012-03-01
+  ValidTo: 1950-12-31
+

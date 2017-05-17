@@ -1,0 +1,156 @@
+VATCode1: VATCode
+  VATCode: 1
+  VCName: "Mainland Usage"
+  VATPerc: 16
+  AccNum: 47700000
+  TaxZone: "1"
+  TaxClass: "1"
+  FromDate: 2006-01-01
+  ToDate: 2010-06-30
+
+VATCode2: VATCode
+  VATCode: 2
+  VCName: "Mainland Terminals"
+  VATPerc: 16
+  AccNum: 47700000
+  TaxZone: "1"
+  TaxClass: "2"
+  FromDate: 2006-01-01
+  ToDate: 2010-06-30
+
+VATCode3: VATCode
+  VATCode: 3
+  VCName: "Mainland Usage"
+  VATPerc: 18
+  AccNum: 47700000
+  TaxZone: "1"
+  TaxClass: "1"
+  FromDate: 2010-07-01
+  ToDate: 2012-08-31
+
+VATCode4: VATCode
+  VATCode: 4
+  VCName: "Mainland Terminals"
+  VATPerc: 18
+  AccNum: 47700000
+  TaxZone: "1"
+  TaxClass: "2"
+  FromDate: 2010-07-01
+  ToDate: 2012-08-31
+
+VATCode5: VATCode
+  VATCode: 5
+  VCName: "Mainland Usage"
+  VATPerc: 21
+  AccNum: 47700000
+  TaxZone: "1"
+  TaxClass: "1"
+  FromDate: 2012-09-01
+  ToDate: 2049-12-31
+
+VATCode6: VATCode
+  VATCode: 6
+  VCName: "Mainland Terminals"
+  VATPerc: 21
+  AccNum: 47700000
+  TaxZone: "1"
+  TaxClass: "2"
+  FromDate: 2012-09-01
+  ToDate: 2049-12-31
+
+VATCode7: VATCode
+  VATCode: 10
+  VCName: "Canary Islands Usage"
+  AccNum: 47720000
+  TaxZone: "2"
+  TaxClass: "1"
+  FromDate: 2006-01-01
+  ToDate: 2012-06-30
+
+VATCode8: VATCode
+  VATCode: 11
+  VCName: "Canary Islands Terminals"
+  VATPerc: 5
+  AccNum: 47720000
+  TaxZone: "2"
+  TaxClass: "2"
+  FromDate: 2006-01-01
+  ToDate: 2012-06-30
+
+VATCode9: VATCode
+  VATCode: 12
+  VCName: "Canary Islands Usage"
+  VATPerc: 7
+  AccNum: 47720000
+  TaxZone: "2"
+  TaxClass: "1"
+  FromDate: 2012-07-01
+  ToDate: 2049-12-31
+
+VATCode10: VATCode
+  VATCode: 13
+  VCName: "Canary Islands Terminals"
+  VATPerc: 7
+  AccNum: 47720000
+  TaxZone: "2"
+  TaxClass: "2"
+  FromDate: 2012-07-01
+  ToDate: 2049-12-31
+
+VATCode11: VATCode
+  VATCode: 20
+  VCName: "Ceuta Usage"
+  VATPerc: 8
+  AccNum: 47730000
+  TaxZone: "3"
+  TaxClass: "1"
+  FromDate: 2006-01-01
+  ToDate: 2012-10-31
+
+VATCode12: VATCode
+  VATCode: 21
+  VCName: "Ceuta Terminals"
+  AccNum: 47730000
+  TaxZone: "3"
+  TaxClass: "2"
+  FromDate: 2006-01-01
+  ToDate: 2049-12-31
+
+VATCode13: VATCode
+  VATCode: 22
+  VCName: "Ceuta Usage"
+  VATPerc: 10
+  AccNum: 47730000
+  TaxZone: "3"
+  TaxClass: "1"
+  FromDate: 2012-11-01
+  ToDate: 2049-12-31
+
+VATCode14: VATCode
+  VATCode: 30
+  VCName: "Melilla Usage"
+  VATPerc: 4
+  AccNum: 47740000
+  TaxZone: "4"
+  TaxClass: "1"
+  FromDate: 2006-01-01
+  ToDate: 2049-12-31
+
+VATCode15: VATCode
+  VATCode: 31
+  VCName: "Melilla Terminals"
+  AccNum: 47740000
+  TaxZone: "4"
+  TaxClass: "2"
+  FromDate: 2006-01-01
+  ToDate: 2049-12-31
+
+VATCode16: VATCode
+  VATCode: 40
+  VCName: "Yoigo own usage"
+  AccNum: 99999999
+  TaxZone: "5"
+  TaxClass: "0"
+  FromDate: 2006-01-01
+  ToDate: 2049-12-31
+
