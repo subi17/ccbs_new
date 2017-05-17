@@ -2090,14 +2090,16 @@ ELSE IF Order.statuscode NE "4" THEN DO:
 
             IF AVAIL MsRequest THEN DO:
                IF NOT fCheckExistingConvergent(OrderCustomer.CustIDType,
-                                               OrderCustomer.CustID) THEN DO:
+                                               OrderCustomer.CustID,
+                                               Order.CLIType) THEN DO:
                   IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                                     OrderAction.Brand    = gcBrand           AND
                                     OrderAction.OrderID  = Order.OrderId     AND
                                     OrderAction.ItemType = "AddLineDiscount" AND
                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) AND
                      fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
-                                                  OrderCustomer.CustId) THEN DO:
+                                                  OrderCustomer.CustId,
+                                                  Order.CLIType) THEN DO:
                      fSetOrderStatus(Order.OrderID, {&ORDER_STATUS_PENDING_MAIN_LINE}).
                   END.
                   ELSE

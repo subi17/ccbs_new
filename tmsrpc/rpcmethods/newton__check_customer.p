@@ -4,6 +4,8 @@
  * @input   person_id;string;mandatory;
             id_type;string;mandatory;
             self_employed;bool;mandatory;
+            orders;int;mandatory;
+            clitype;string;optional;
  *          
  * @output   check_customer;struct;mandatory; response structure
  * @check_customer order_allowed;boolean;mandatory;
@@ -16,13 +18,15 @@
 
 {Syst/commpaa.i}
 {Func/orderchk.i}
+{Syst/tmsconst.i}
 gcBrand = "1".
 
 /* Input parameters */
 DEF VAR pcPersonId       AS CHAR NO-UNDO.
 DEF VAR pcIdType         AS CHAR NO-UNDO.
 DEF VAR plSelfEmployed   AS LOG  NO-UNDO.
-DEF VAR piOrders         AS INT  NO-UNDO. 
+DEF VAR piOrders         AS INT  NO-UNDO.
+DEF VAR pcCliType        AS CHAR NO-UNDO.
 
 /* Local variable */
 DEF VAR llOrderAllowed   AS LOG  NO-UNDO.
@@ -37,10 +41,11 @@ DEF VAR liacts           AS INT NO-UNDO.
 IF validate_request(param_toplevel_id, "string,string,boolean,int") EQ ?
    THEN RETURN.
 
-pcPersonId = get_string(param_toplevel_id, "0").
-pcIdType = get_string(param_toplevel_id, "1").
+pcPersonId     = get_string(param_toplevel_id, "0").
+pcIdType       = get_string(param_toplevel_id, "1").
 plSelfEmployed = get_bool(param_toplevel_id, "2").
-piOrders = get_int(param_toplevel_id, "3").
+piOrders       = get_int(param_toplevel_id, "3").
+pcCliType      = get_string(param_toplevel_id, "4").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -58,10 +63,15 @@ llOrderAllowed = fSubscriptionLimitCheck(
 /* Removed legacy main-additional line code, as it is not 
    required any more to support it */ 
 
-IF fCheckExistingConvergent(pcIdType,pcPersonId) THEN
-   lcAddLineAllowed = "OK".
+IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
+   IF fCheckExistingConvergent(pcIdType,pcPersonId,pcCliType) THEN 
+      lcAddLineAllowed = "OK".
+   ELSE IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId,pcCliType) THEN 
+      lcAddLineAllowed = "OK".
+   ELSE lcAddLineAllowed = "NO_MAIN_LINE".
+END.
 
-IF lcAddLineAllowed NE "OK" THEN DO:
+IF lcAddLineAllowed = "" THEN DO:
       
    FOR EACH OrderCustomer NO-LOCK WHERE   
             OrderCustomer.Brand      EQ gcBrand AND 
@@ -92,9 +102,6 @@ IF lcAddLineAllowed NE "OK" THEN DO:
          LEAVE.
       END.
    END.
-
-   IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId) THEN 
-      lcAddLineAllowed = "OK".
 
 END.
 

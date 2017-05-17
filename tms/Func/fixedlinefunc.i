@@ -210,7 +210,8 @@ END.
 /* Function checks for ongoing 3P OR 2P convergent for a customer */
 FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
-    INPUT icCustID     AS CHAR): 
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR): 
 
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrder         FOR Order.
@@ -242,7 +243,8 @@ END FUNCTION.
 /* Function checks for existing 3P OR 2P convergent for a customer */
 FUNCTION fCheckExistingConvergent RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
-    INPUT icCustID     AS CHAR):
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
 
    DEFINE BUFFER bCustomer FOR Customer.
    DEFINE BUFFER bMobSub   FOR MobSub.

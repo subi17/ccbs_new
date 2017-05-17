@@ -753,7 +753,7 @@ DO TRANSACTION:
                DPMember.DPID       = DiscountPlan.DPID    AND
                DPMember.HostTable  = "MobSub"             AND
                DPMember.KeyValue   = STRING(MobSub.MsSeq):
-         IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
+         IF fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CLIType) THEN DO:
             fCreateAddLineDiscount(MobSub.MsSeq,
                                    MobSub.CLIType,
                                    TODAY).

@@ -173,7 +173,8 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
                         OrderAction.Brand    = gcBrand           AND
                         OrderAction.OrderID  = Order.OrderID     AND
                         OrderAction.ItemType = "AddLineDiscount" AND
-                        LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) THEN
+                        LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20}) > 0) 
+      THEN
          add_int(pcStruct, "C_ADDITIONAL_LINE", 1).
       ELSE
          add_int(pcStruct, "C_ADDITIONAL_LINE", 0).

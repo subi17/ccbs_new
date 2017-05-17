@@ -19,6 +19,7 @@ gcbrand = "1".
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 {Func/fcounter.i}
+{Func/fixedlinefunc.i}
 
 /* Input parameters */
 DEFINE VARIABLE piMsSeq          AS INTEGER   NO-UNDO. 
@@ -90,6 +91,19 @@ FIND MobSub WHERE
      MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAIL MobSub THEN
    RETURN appl_err("Mobile Subscription not available").
+
+FIND Customer OF Mobsub NO-LOCK NO-ERROR.
+IF NOT AVAIL Customer THEN
+   RETURN appl_err("Customer not available").
+
+IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) > 0 AND
+   LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN DO:
+   
+   IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) OR 
+      NOT fCheckOngoingConvergentOrder(Customer.CustIDType,Customer.OrgID,MobSub.CliType) THEN
+      RETURN appl_err("Discount Plan not allowed").
+
+END.
 
 FIND FIRST DiscountPlan WHERE
            DiscountPlan.Brand = gcBrand AND

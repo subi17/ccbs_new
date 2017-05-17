@@ -49,6 +49,7 @@ DEFINE VARIABLE lcTermReason AS CHARACTER NO-UNDO.
 
 DEF BUFFER bMNPSub FOR MNPSub.
 DEF BUFFER bMobsub FOR MobSub.
+DEF BUFFER bCLIType FOR CLIType.
 
 DEF TEMP-TABLE ttContract NO-UNDO
    FIELD DCEvent   AS CHAR
@@ -953,7 +954,12 @@ PROCEDURE pTerminate:
    IF AVAIL MSISDN THEN RELEASE MSISDN.
 
    /* ADDLine-20 Additional Line */
-   IF fIsConvergentORFixedOnly(TermMobSub.CLIType) THEN DO:
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = TermMobSub.CLIType                AND
+                     bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
+                    (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = gcBrand        AND
                bMobSub.AgrCust = TermMobSub.CustNum AND

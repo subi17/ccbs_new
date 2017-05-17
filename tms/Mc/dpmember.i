@@ -185,7 +185,7 @@ FUNCTION fCloseAddLineDiscount RETURNS LOGICAL
    FIND FIRST Customer NO-LOCK WHERE
               Customer.CustNum = iiCustNum NO-ERROR.
 
-   IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID) THEN DO:
+   IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,icCLIType) THEN DO:
       fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
                      iiMsSeq,
                      idtDate,

@@ -467,7 +467,7 @@ PROCEDURE pFeesAndServices:
    IF LOOKUP(CLIType.CliType , {&ADDLINE_CLITYPES}) > 0 AND
       LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
       IF llAddLineDisc AND
-         fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
+         fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN DO:
          fCreateAddLineDiscount(MsRequest.MsSeq,
                                 CLIType.CLIType,
                                 ldtActDate).
