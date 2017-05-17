@@ -15,6 +15,7 @@
 {Func/timestamp.i}
 {Syst/eventval.i}
 {Func/create_eventlog.i}
+{Func/matrix.i}
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
    commali.i, katun defined and call fCleanEventObjects after this function */
@@ -162,18 +163,27 @@ FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
 END.   
 
 /* Check if Convergent tariff OR FixedOnly tariff */ 
-FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
-   (icCLIType AS CHARACTER):
+FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
+   (icCLITypeConv    AS CHARACTER,
+    icCLITypeAddLine AS CHARACTER):
 
-   DEFINE BUFFER bCLIType FOR CLIType.
+   DEF VAR lcResult AS CHAR NO-UNDO.
+
+   DEF BUFFER bCLIType FOR CLIType.
    
    IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
                      bCLIType.Brand      = Syst.Parameters:gcBrand           AND
-                     bCLIType.CLIType    = icCLIType                         AND
+                     bCLIType.CLIType    = icCLITypeConv                     AND
                      bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
-                    (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
-                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN 
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) THEN DO:
+      
+      IF fMatrixAnalyse(Syst.Parameters:gcBrand,
+                        "ADDLINE",
+                        "SubsTypeFrom;SubsTypeTo",
+                        icCLITypeConv + ";" + icCLITypeAddLine,
+                        OUTPUT lcResult) = 1 THEN
       RETURN TRUE.
+   END.
 
    RETURN FALSE.
 
@@ -207,7 +217,7 @@ FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
    RETURN FALSE.
 END.                                         
 
-/* Function checks for ongoing 3P OR 2P convergent for a customer */
+/* Function checks for ongoing 3P convergent for a customer */
 FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR,
@@ -231,7 +241,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID:
 
-      IF fIsConvergentORFixedOnly(bOrder.CLIType) THEN 
+      IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
          RETURN TRUE.
 
    END.
@@ -240,7 +250,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
 END FUNCTION.
 
-/* Function checks for existing 3P OR 2P convergent for a customer */
+/* Function checks for existing 3P convergent for a customer */
 FUNCTION fCheckExistingConvergent RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR,
@@ -259,7 +269,7 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.PayType = FALSE:
     
-      IF fIsConvergentORFixedOnly(bMobSub.CLIType) THEN 
+      IF fIsConvergentAddLineOK(bMobSub.CLIType,icCliType) THEN 
          RETURN TRUE.
 
    END.   
