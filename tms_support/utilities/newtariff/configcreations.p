@@ -377,7 +377,8 @@ PROCEDURE pCLIType:
       IF ttCliType.AllowedBundles > "" THEN
       DO:    
           RUN pMatrix(ttCliType.CliType, 
-                      ((IF ttCliType.BaseBundle > "" THEN (ttCliType.BaseBundle + ",") ELSE "") + (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "") + ttCliType.AllowedBundles)).
+                      ((IF ttCliType.BaseBundle          > "" THEN (ttCliType.BaseBundle          + ",") ELSE "") + 
+                       (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "") + ttCliType.AllowedBundles)).
 
       END.
 
@@ -389,7 +390,7 @@ PROCEDURE pCLIType:
                          ttCliType.AllowedBundles,
                          (ttCliType.PayType = 2)).         
 
-      IF ttCliType.PayType = 1 AND ttCliType.BundleType = False THEN     
+      IF ttCliType.BundleType = False THEN     
          RUN pRequestAction(ttCliType.CliType, 
                             (ttCliType.PayType = 1),
                             ttCliType.BaseBundle, 
