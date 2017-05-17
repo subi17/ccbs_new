@@ -79,7 +79,9 @@ FUNCTION fGetNextRequestActionSequence RETURNS INTEGER
 END FUNCTION.    
 
 FUNCTION fPrepareRequestActionParam RETURNS LOGICAL
-  (INPUT icMobileBundles            AS CHARACTER,
+  (INPUT icCliType                  AS CHARACTER,
+   INPUT ilPostpaid                 AS LOGICAL  ,
+   INPUT icMobileBundles            AS CHARACTER,
    INPUT icFixedLineBundles         AS CHARACTER,
    INPUT icBundlesForActivateOnSTC  AS CHARACTER,
    INPUT icServicesRecreated        AS CHARACTER,
@@ -91,53 +93,98 @@ FUNCTION fPrepareRequestActionParam RETURNS LOGICAL
    DEFINE VARIABLE liCnt             AS INTEGER   NO-UNDO.   
    DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO.   
 
-   IF icMobileBundles > "" THEN 
-   DO liCount = 1 TO NUM-ENTRIES(icMobileBundles):    
+   IF ilPostpaid THEN
+   DO:
+       IF icMobileBundles > "" THEN 
+       DO liCount = 1 TO NUM-ENTRIES(icMobileBundles):    
 
-      DO liCnt = 1 TO 2:
-        ASSIGN 
-           ocReqTypeList     = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
-                                                                                               STRING({&REQTYPE_SUBSCRIPTION_CREATE}) 
-                                                                                            ELSE 
-                                                                                               STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})) 
-           ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
-           ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icMobileBundles)
-           ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
-      END.   
+          DO liCnt = 1 TO 2:
+            ASSIGN 
+               ocReqTypeList     = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
+                                                                                                   STRING({&REQTYPE_SUBSCRIPTION_CREATE}) 
+                                                                                                ELSE 
+                                                                                                   STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})) 
+               ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
+               ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icMobileBundles)
+               ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
+          END.   
 
+       END.
+
+       IF icFixedLineBundles > "" THEN 
+       DO liCount = 1 TO NUM-ENTRIES(icFixedLineBundles):    
+
+          DO liCnt = 1 TO 2: 
+             ASSIGN 
+                ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
+                                                                                                STRING({&REQTYPE_FIXED_LINE_CREATE}) 
+                                                                                             ELSE 
+                                                                                                STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}))  
+                ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
+                ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icFixedLineBundles)
+                ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
+          END.   
+       END.   
+
+       IF icBundlesForActivateOnSTC > "" THEN 
+       DO liCount = 1 TO NUM-ENTRIES(icBundlesForActivateOnSTC):
+          ASSIGN 
+                ocReqTypeList     = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})  
+                ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
+                ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icBundlesForActivateOnSTC)
+                ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
+       END.
+   
+       IF icServicesRecreated > "" THEN 
+       DO liCount = 1 TO NUM-ENTRIES(icServicesRecreated):
+          ASSIGN 
+                ocReqTypeList     = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})  
+                ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "RECREATE"
+                ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icServicesRecreated)
+                ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "CTServPac".
+       END.
    END.
+   ELSE
+   DO:
+      DO liCnt = 1 TO 3:
+           ASSIGN 
+              ocReqTypeList     = ocReqTypeList     + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
+                                                                                                      STRING({&REQTYPE_CONTRACT_ACTIVATION}) 
+                                                                                                   ELSE IF liCnt = 2 THEN 
+                                                                                                      STRING({&REQTYPE_CONTRACT_TERMINATION}) 
+                                                                                                   ELSE 
+                                                                                                      STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}))   
+              ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "SEND-SMS"
+              ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
+                                                                                                           "UpsellTARJ7Act" 
+                                                                                                       ELSE IF liCnt = 2 THEN 
+                                                                                                           icCliType + "DeAct|" 
+                                                                                                       ELSE 
+                                                                                                           icCliType + "STC|")
+              ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "SMS".
+      END.
 
-   IF icFixedLineBundles > "" THEN 
-   DO liCount = 1 TO NUM-ENTRIES(icFixedLineBundles):    
+      IF icServicesRecreated > "" THEN 
+      DO liCount = 1 TO NUM-ENTRIES(icServicesRecreated):
+         DO liCnt = 1 TO 3:
+             ASSIGN 
+                ocReqTypeList     = ocReqTypeList     + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
+                                                                                                        STRING({&REQTYPE_CONTRACT_ACTIVATION}) 
+                                                                                                     ELSE IF liCnt = 2 THEN 
+                                                                                                        STRING({&REQTYPE_CONTRACT_TERMINATION}) 
+                                                                                                     ELSE 
+                                                                                                        STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}))   
+                ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
+                                                                                                            "RECREATE" 
+                                                                                                         ELSE IF liCnt = 2 THEN 
+                                                                                                            "TERMINATE" 
+                                                                                                         ELSE 
+                                                                                                            "TERMINATE")
+                ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icServicesRecreated)
+                ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "CTServPac".
+         END.
+      END.
 
-      DO liCnt = 1 TO 2: 
-         ASSIGN 
-            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + (IF liCnt = 1 THEN 
-                                                                                            STRING({&REQTYPE_FIXED_LINE_CREATE}) 
-                                                                                         ELSE 
-                                                                                            STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}))  
-            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
-            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icFixedLineBundles)
-            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
-      END.   
-   END.   
-
-   IF icBundlesForActivateOnSTC > "" THEN 
-   DO liCount = 1 TO NUM-ENTRIES(icBundlesForActivateOnSTC):
-      ASSIGN 
-            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})  
-            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "CREATE"
-            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icBundlesForActivateOnSTC)
-            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "DayCampaign".
-   END.
-
-   IF icServicesRecreated > "" THEN 
-   DO liCount = 1 TO NUM-ENTRIES(icServicesRecreated):
-      ASSIGN 
-            ocReqTypeList = ocReqTypeList + (IF ocReqTypeList <> "" THEN "," ELSE "") + STRING({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE})  
-            ocActionList      = ocActionList      + (IF ocActionList      <> "" THEN "," ELSE "") + "RECREATE"
-            ocActionKeyList   = ocActionKeyList   + (IF ocActionKeyList   <> "" THEN "," ELSE "") + ENTRY(liCount, icServicesRecreated)
-            ocActionTypeList  = ocActionTypeList  + (IF ocActionTypeList  <> "" THEN "," ELSE "") + "CTServPac".
    END.
 
    RETURN TRUE.
@@ -344,15 +391,19 @@ PROCEDURE pCLIType:
 
       IF ttCliType.PayType = 1 AND ttCliType.BundleType = False THEN     
          RUN pRequestAction(ttCliType.CliType, 
+                            (ttCliType.PayType = 1),
                             ttCliType.BaseBundle, 
                             ttCliType.FixedLineBaseBundle, 
                             ttCliType.BundlesForActivateOnSTC, 
                             ttCliType.ServicesForReCreateOnSTC).      
 
-      IF ttCLIType.PayType = 1 AND NOT (CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN /* Non-convergent */
+      IF NOT (CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN /* Non-convergent */
       DO:
-         RUN pUpdateTMSParam("ALL_POSTPAID_CONTRACTS",ttCliType.CliType).  
-         RUN pUpdateTMSParam("POSTPAID_DATA_CONTRACTS", ttCliType.CliType).
+         IF ttCLIType.PayType = 1 THEN 
+         DO: 
+             RUN pUpdateTMSParam("ALL_POSTPAID_CONTRACTS",ttCliType.CliType).  
+             RUN pUpdateTMSParam("POSTPAID_DATA_CONTRACTS", ttCliType.CliType).
+         END.
          /*TODO: Parent of Tariff bundle needs to be excluded */
          RUN pUpdateTMSParam("BB_PROFILE_1",ttCliType.CliType).
       END.
@@ -363,7 +414,12 @@ PROCEDURE pCLIType:
       IF ttCLIType.PayType = 1 AND ttCLIType.UsageType = 1 THEN 
          RUN pUpdateTMSParam("POSTPAID_VOICE_TARIFFS", ttCliType.CliType).
       ELSE IF ttCLIType.PayType = 2 AND ttCLIType.UsageType = 1 THEN 
+      DO:
          RUN pUpdateTMSParam("PREPAID_VOICE_TARIFFS", ttCliType.CliType).  
+         
+         IF ttCliType.MobileBaseBundleDataLimit > 0 THEN 
+            RUN pUpdateTMSParam("PREPAID_DATA_CONTRACTS", ttCliType.CliType).
+      END.   
       ELSE IF ttCliType.PayType = 2 AND ttCliType.UsageType = 2 THEN
          RUN pUpdateTMSParam("PREPAID_DATA_CONTRACTS", ttCliType.CliType).          
    END.
@@ -445,12 +501,14 @@ PROCEDURE pSLGAnalyse:
         lcSubsTypePrefix = (IF icCliType BEGINS "CONTDSL" THEN 
                                 "CONTDSL*,CONT*" 
                             ELSE IF icCliType BEGINS "CONTFH" THEN 
-                                (icCliType + ",CONT*")     
+                                "CONT*"     
                             ELSE IF icCliType BEGINS "CONT" THEN 
                                 "CONT*" 
-                            ELSE IF icCliType BEGINS "TRAJ" THEN 
-                                "TRAJ*" 
+                            ELSE IF icCliType BEGINS "TARJ" THEN 
+                                "TARJ*" 
                             ELSE "").
+
+    ASSIGN lcSubsTypePrefix = lcSubsTypePrefix + (IF lcSubsTypePrefix <> "" THEN "," ELSE "") + icCliType.
 
     FIND FIRST bf_CliTypeCF WHERE bf_CliTypeCF.Brand = gcBrand AND bf_CliTypeCF.ClIType = icCliTypeCopyFrom NO-LOCK NO-ERROR.    
     IF AVAIL bf_CliTypeCF THEN 
@@ -928,6 +986,7 @@ END PROCEDURE.
 
 PROCEDURE pRequestAction:
    DEFINE INPUT PARAMETER icCLIType                  AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER ilPostpaid                 AS LOGICAL   NO-UNDO.
    DEFINE INPUT PARAMETER icMobileBundles            AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER icFixedLineBundles         AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER icBundlesForActivateOnSTC  AS CHARACTER NO-UNDO.   
@@ -951,7 +1010,9 @@ PROCEDURE pRequestAction:
       UNDO, THROW NEW Progress.Lang.AppError("CLIType doesn't exists for creating request actions", 1).
 
    /* This is to add mobile packages and fixed line packages to RequestType's subscription creation, fixedline activation & STC */    
-   fPrepareRequestActionParam(icMobileBundles,
+   fPrepareRequestActionParam(icCLIType,
+                              ilPostpaid,
+                              icMobileBundles,
                               icFixedLineBundles,
                               icBundlesForActivateOnSTC,
                               icServicesRecreated,
@@ -974,6 +1035,8 @@ PROCEDURE pRequestAction:
                              2 
                           ELSE IF lcAction = "RECREATE" THEN 
                              3 
+                          ELSE IF lcAction = "SEND-SMS" THEN 
+                             13    
                           ELSE 
                              1)
          lcActionKey   = ENTRY(liCount, lcActionKeyList)
@@ -1005,22 +1068,258 @@ PROCEDURE pRequestAction:
       END.
    END.  
 
-   FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand         AND 
-                                  RequestAction.PayType    = 1               AND 
-                                  RequestAction.ReqType    = 0               AND 
-                                  RequestAction.Action     = 13              AND 
-                                  RequestAction.ActionType = "SMS"           AND 
-                                  RequestAction.ActionKey  = "STC_Requested" AND 
-                                  RequestAction.ValidTo   >= TODAY           NO-LOCK NO-ERROR.
-   IF AVAIL RequestAction THEN 
+   IF ilPostpaid THEN 
    DO:
-       FIND FIRST RequestActionRule WHERE RequestActionRule.RequestActionID = RequestAction.RequestActionID AND RequestActionRule.ParamField = "ReqCParam2" AND RequestActionRule.ToDate >= TODAY EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-       IF AVAIL RequestActionRule AND LOOKUP(icMobileBundles, RequestActionRule.ParamValue) = 0 THEN 
-           ASSIGN RequestActionRule.ParamValue = RequestActionRule.ParamValue + (IF RequestActionRule.ParamValue <> '' THEN "," ELSE "") + icMobileBundles.
+       RUN pUpdateRequestActionRule("",
+                                    {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE},
+                                    1,
+                                    13,
+                                    "SMS",
+                                    "STC_Requested",
+                                    "ReqCParam2",
+                                    icMobileBundles).   
+   END.
+   ELSE
+   DO:
+       /* STC */
+       FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand                             AND 
+                                      RequestAction.CliType    = CliType.CliType                     AND   
+                                      RequestAction.ReqType    = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND 
+                                      RequestAction.PayType    = 0                                   AND 
+                                      RequestAction.Action     = 13                                  AND 
+                                      RequestAction.ActionType = "SMS"                               AND 
+                                      RequestAction.ActionKey  BEGINS (icCLIType + "STC|")           AND 
+                                      RequestAction.ValidTo   >= TODAY                               NO-LOCK NO-ERROR.
+       IF AVAIL RequestAction THEN
+       DO:
+          CREATE RequestActionRule.
+          ASSIGN
+              RequestActionRule.RequestActionid = RequestAction.RequestActionID
+              RequestActionRule.ParamField      = "ReqStatus"
+              RequestActionRule.ParamValue      = "2"
+              RequestActionRule.FromDate        = TODAY
+              RequestActionRule.ToDate          = DATE(12,31,2049).
+       END.
+
+       /* Activation */ 
+       FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand                        AND 
+                                      RequestAction.CliType    = CliType.CliType                AND
+                                      RequestAction.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND 
+                                      RequestAction.PayType    = 0                              AND
+                                      RequestAction.Action     = 13                             AND 
+                                      RequestAction.ActionType = "SMS"                          AND 
+                                      RequestAction.ActionKey  = "UpsellTARJ7Act"               AND 
+                                      RequestAction.ValidTo   >= TODAY                          NO-LOCK NO-ERROR.
+       IF AVAIL RequestAction THEN
+       DO:
+          CREATE RequestActionRule.
+          ASSIGN
+              RequestActionRule.RequestActionid = RequestAction.RequestActionID
+              RequestActionRule.ParamField      = "ReqCParam3"
+              RequestActionRule.ParamValue      = "+,TARJ7_UPSELL"
+              RequestActionRule.FromDate        = TODAY
+              RequestActionRule.ToDate          = DATE(12,31,2049).
+
+          CREATE RequestActionRule.
+          ASSIGN
+              RequestActionRule.RequestActionid = RequestAction.RequestActionID
+              RequestActionRule.ParamField      = "ReqStatus"
+              RequestActionRule.ParamValue      = "+,2"
+              RequestActionRule.FromDate        = TODAY
+              RequestActionRule.ToDate          = DATE(12,31,2049).    
+       END.
+
+       /* Deactivation */
+       FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand                         AND 
+                                      RequestAction.CliType    = CliType.CliType                 AND
+                                      RequestAction.ReqType    = {&REQTYPE_CONTRACT_TERMINATION} AND 
+                                      RequestAction.PayType    = 0                               AND
+                                      RequestAction.Action     = 13                              AND 
+                                      RequestAction.ActionType = "SMS"                           AND 
+                                      RequestAction.ActionKey  = "UpsellTARJ7Act"                AND 
+                                      RequestAction.ValidTo   >= TODAY                           NO-LOCK NO-ERROR.
+       IF AVAIL RequestAction THEN
+       DO:
+          CREATE RequestActionRule.
+          ASSIGN
+              RequestActionRule.RequestActionid = RequestAction.RequestActionID
+              RequestActionRule.ParamField      = "ReqCParam2"
+              RequestActionRule.ParamValue      = "+," + CliType.CliType
+              RequestActionRule.FromDate        = TODAY
+              RequestActionRule.ToDate          = DATE(12,31,2049).
+
+          CREATE RequestActionRule.
+          ASSIGN
+              RequestActionRule.RequestActionid = RequestAction.RequestActionID
+              RequestActionRule.ParamField      = "ReqStatus"
+              RequestActionRule.ParamValue      = "+,2"
+              RequestActionRule.FromDate        = TODAY
+              RequestActionRule.ToDate          = DATE(12,31,2049).    
+       END.
+
+       /* STC */ 
+       RUN pUpdateRequestActionRule("",
+                                    {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE},
+                                    2,
+                                    13,
+                                    "SMS",
+                                    "STC_Requested",
+                                    "ReqCParam2",
+                                    CliType.CliType,
+                                    "").
+
+       RUN pUpdateRequestActionRule("",
+                                    {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE},
+                                    2,
+                                    13,
+                                    "SMS",
+                                    "STC_DONE",
+                                    "ReqCParam2",
+                                    +,
+                                    CliType.CliType).
+
+       RUN pUpdateRequestActionRule("TARJ",
+                                    {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE},
+                                    0,
+                                    2,
+                                    "CTServPac",
+                                    "BB",
+                                    "ReqCParam1",
+                                    CliType.CliType,
+                                    "").
+
+       RUN pUpdateRequestActionRule("TARJ4",
+                                    {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE},
+                                    0,
+                                    2,
+                                    "CTServPac",
+                                    "BB",
+                                    "ReqCParam1",
+                                    CliType.CliType,
+                                    "").
+
+       RUN pUpdateRequestActionRule("TARJ5",
+                                    {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE},
+                                    0,
+                                    2,
+                                    "CTServPac",
+                                    "BB",
+                                    "ReqCParam1",
+                                    CliType.CliType,
+                                    "").
+
+       RUN pUpdateRequestActionRule("TARJ7",
+                                    {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE},
+                                    0,
+                                    2,
+                                    "CTServPac",
+                                    "BB",
+                                    "ReqCParam1",
+                                    CliType.CliType,
+                                    "").
+
+       RUN pUpdateRequestActionRule("TARJ8",
+                                    {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE},
+                                    0,
+                                    2,
+                                    "CTServPac",
+                                    "BB",
+                                    "ReqCParam1",
+                                    CliType.CliType,
+                                    "").
+
+       RUN pUpdateRequestActionRule("TARJ9",
+                                    {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE},
+                                    0,
+                                    2,
+                                    "CTServPac",
+                                    "BB",
+                                    "ReqCParam1",
+                                    CliType.CliType,
+                                    "").
+       /* Activation */
+       RUN pUpdateRequestActionRule("TARJ7",
+                                    {&REQTYPE_CONTRACT_ACTIVATION},
+                                    0,
+                                    3,
+                                    "CTServPac",
+                                    "BB",
+                                    "ReqCParam3",
+                                    CliType.CliType,
+                                    "").
+
+       RUN pUpdateRequestActionRule("TARJ9",
+                                    {&REQTYPE_CONTRACT_ACTIVATION},
+                                    0,
+                                    3,
+                                    "CTServPac",
+                                    "BB",
+                                    "ReqCParam3",
+                                    CliType.CliType,
+                                    "").
+       /* Deactication */
+       RUN pUpdateRequestActionRule("*",
+                                    {&REQTYPE_CONTRACT_TERMINATION},
+                                    0,
+                                    2,
+                                    "Service",
+                                    "VOIPVIDEO",
+                                    "ReqCParam3",
+                                    CliType.CliType,
+                                    "").
+
+       RUN pUpdateRequestActionRule("TARJ9",
+                                    {&REQTYPE_CONTRACT_TERMINATION},
+                                    0,
+                                    2,
+                                    "CTServPac",
+                                    "BB",
+                                    "ReqCParam3",
+                                    CliType.CliType,
+                                    "").
+
    END.
 
    RETURN "".
 
+END PROCEDURE.
+
+PROCEDURE pUpdateRequestActionRule:
+    DEFINE INPUT PARAMETER icCliType        AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER iiReqType        AS INTEGER   NO-UNDO.
+    DEFINE INPUT PARAMETER iiPayType        AS INTEGER   NO-UNDO.
+    DEFINE INPUT PARAMETER iiAction         AS INTEGER   NO-UNDO.
+    DEFINE INPUT PARAMETER icActionType     AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icActionKey      AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icParamField     AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icParamValue     AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icExclParamValue AS CHARACTER NO-UNDO.
+
+    FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand      AND 
+                                   RequestAction.CliType    = icCliType    AND 
+                                   RequestAction.ReqType    = iiReqType    AND 
+                                   RequestAction.PayType    = iiPayType    AND 
+                                   RequestAction.Action     = iiAction     AND 
+                                   RequestAction.ActionType = icActionType AND 
+                                   RequestAction.ActionKey  = icActionKey  AND 
+                                   RequestAction.ValidTo   >= TODAY        NO-LOCK NO-ERROR.
+    IF AVAIL RequestAction THEN 
+    DO:
+        FIND FIRST RequestActionRule WHERE RequestActionRule.RequestActionID = RequestAction.RequestActionID AND RequestActionRule.ParamField = icParamField AND RequestActionRule.ToDate >= TODAY EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+        IF AVAIL RequestActionRule THEN
+        DO: 
+            IF LOOKUP(icParamValue, RequestActionRule.ParamValue) = 0 THEN
+                ASSIGN RequestActionRule.ParamValue = RequestActionRule.ParamValue + (IF RequestActionRule.ParamValue <> '' THEN "," ELSE "") + icParamValue.
+
+            IF icExclParamValue > "" THEN 
+            DO:
+                IF LOOKUP(icExclParamValue, RequestActionRule.ExclParamValue) = 0 THEN
+                    ASSIGN RequestActionRule.ExclParamValue = RequestActionRule.ExclParamValue + (IF RequestActionRule.ExclParamValue <> '' THEN "," ELSE "") + icExclParamValue.                
+            END.      
+        END.      
+    END.
+
+    RETURN "".
 END PROCEDURE.
 
 

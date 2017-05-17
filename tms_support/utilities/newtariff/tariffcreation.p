@@ -179,25 +179,19 @@ PROCEDURE pSaveTariff:
                           /* ServiceLimitTarget */
                           FOR EACH ttServiceLimitTarget WHERE ttServiceLimitTarget.GroupCode = ttServiceLimit.GroupCode AND ttServiceLimitTarget.SLCode = ttServiceLimit.SLCode
                               ON ERROR UNDO, THROW:
-
-                              FOR EACH ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode AND ttBDest.SLCode = ttServiceLimitTarget.SLCode 
-                                  ON ERROR UNDO, THROW:
-                                  RUN pBDestination IN h_config(BUFFER ttBDest).
-                              END.
-
                               RUN pServiceLimitTarget IN h_config(BUFFER ttServiceLimitTarget, liSLSeq).                                                  
                           END.
 
                           /* ProgLimit */  
                           FOR EACH ttProgLimit WHERE ttProgLimit.GroupCode = ttServiceLimit.GroupCode AND ttProgLimit.SLCode = ttServiceLimit.SLCode
                               ON ERROR UNDO, THROW:
-
-                              FOR EACH ttBDest WHERE ttBDest.GroupCode = ttServiceLimit.GroupCode AND ttBDest.SLCode = ttServiceLimit.SLCode 
-                                  ON ERROR UNDO, THROW:
-                                  RUN pBDestination IN h_config(BUFFER ttBDest).
-                              END.
-
                               RUN pProgLimit IN h_config(BUFFER ttProgLimit, liSLSeq).  
+                          END.
+
+                          /* BDestination */  
+                          FOR EACH ttBDest WHERE ttBDest.GroupCode = ttServiceLimit.GroupCode AND ttBDest.SLCode = ttServiceLimit.SLCode 
+                              ON ERROR UNDO, THROW:
+                              RUN pBDestination IN h_config(BUFFER ttBDest).
                           END.
 
                       END.  /* IF liSeq > 0 THEN */
@@ -208,6 +202,14 @@ PROCEDURE pSaveTariff:
          FOR EACH ttTMRItemValue WHERE ttTMRItemValue.CliType = ttCliType.CliType
              ON ERROR UNDO, THROW:
              RUN pTMRItemValue IN h_config(BUFFER ttTMRItemValue).
+         END.
+
+         IF CAN-FIND(FIRST ttTariff) THEN
+         DO: 
+            FOR EACH ttTariff 
+               ON ERROR UNDO, THROW:
+               RUN pCustomRates IN h_config(BUFFER ttTariff).            
+            END.
          END.
 
       END. /* FOR EACH ttCliType */
@@ -319,15 +321,7 @@ PROCEDURE pProcessTT:
    DEFINE VARIABLE liBDLLastMonthBR  AS INTEGER NO-UNDO.  
    
    IF lcReferenceRatePlan > "" THEN    
-       RUN pRatePlan IN h_config(lcRatePlan, lcCliName, lcReferenceRatePlan, lcRatePlanAction).
-
-   IF CAN-FIND(FIRST ttTariff) THEN
-   DO: 
-       FOR EACH ttTariff 
-            ON ERROR UNDO, THROW:
-            RUN pCustomRates IN h_config(BUFFER ttTariff).            
-       END.
-   END.    
+       RUN pRatePlan IN h_config(lcRatePlan, lcCliName, lcReferenceRatePlan, lcRatePlanAction).   
 
    IF lcTariffBundle > "" THEN
    DO:
@@ -545,7 +539,16 @@ PROCEDURE pCreateServiceLimit_Data:
             END.
         END.
     END.
-        
+    ELSE
+    DO:
+        CREATE ttBDest.
+        ASSIGN
+            ttBDest.GroupCode = ttServiceLimit.GroupCode
+            ttBDest.SLCode    = ttServiceLimit.SLCode
+            ttBDest.BDest     = "GPRSDATA_" + icDCEvemt
+            ttBDest.BDName    = "GPRS Data " + icDCEvemt                 
+            ttBDest.CCN       = 93.
+    END.    
     RETURN "".
 
 END PROCEDURE.
