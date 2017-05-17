@@ -155,7 +155,7 @@ repeat:
    END.
 
    /*CONN - data calls: divide data to in/out */
-   IF (lcCDRType = "CONN") THEN DO:
+   IF (lcCDRType = "CONN") AND iiMeas NE 0 THEN DO:
       IF NOT fReplaceValue(INPUT-OUTPUT lcLine,liDataInPos,
           STRING(1024 * iiMeas / 2)) THEN NEXT.
       if ERROR-STATUS:ERROR THEN NEXT.
