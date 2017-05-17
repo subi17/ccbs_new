@@ -1,0 +1,12 @@
+OrderService1: OrderService
+  OrderId: 1
+  Service: "GPRS"
+  ServValue: "1"
+  Brand: "1"
+
+OrderService2: OrderService
+  OrderId: 1
+  Service: "CALLSPEC"
+  ServValue: "1"
+  Brand: "1"
+

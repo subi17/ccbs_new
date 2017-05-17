@@ -1,0 +1,358 @@
+RequestStatus1: RequestStatus
+  Brand: "1"
+  Program: "Mm/ctcrequest.p"
+
+RequestStatus2: RequestStatus
+  Brand: "1"
+  ReqStatus: 6
+  Program: "Mm/stc2tms.p"
+
+RequestStatus3: RequestStatus
+  Brand: "1"
+  ReqStatus: 8
+  Program: "Mm/stc2tms.p"
+  LogEntry: "4GLTrace:4"
+  LogFile: "/home/ari/req0.log"
+  LogThreshold: 500000
+
+RequestStatus4: RequestStatus
+  Brand: "1"
+  ReqType: 1
+
+RequestStatus5: RequestStatus
+  Brand: "1"
+  ReqType: 1
+  ReqStatus: 6
+
+RequestStatus6: RequestStatus
+  Brand: "1"
+  ReqType: 1
+  ReqStatus: 7
+
+RequestStatus7: RequestStatus
+  Brand: "1"
+  ReqType: 1
+  ReqStatus: 8
+
+RequestStatus8: RequestStatus
+  Brand: "1"
+  ReqType: 6
+
+RequestStatus9: RequestStatus
+  Brand: "1"
+  ReqType: 8
+
+RequestStatus10: RequestStatus
+  Brand: "1"
+  ReqType: 8
+  ReqStatus: 8
+
+RequestStatus11: RequestStatus
+  Brand: "1"
+  ReqType: 9
+
+RequestStatus12: RequestStatus
+  Brand: "1"
+  ReqType: 9
+  ReqStatus: 8
+
+RequestStatus13: RequestStatus
+  Brand: "1"
+  ReqType: 10
+
+RequestStatus14: RequestStatus
+  Brand: "1"
+  ReqType: 10
+  ReqStatus: 7
+  InUse: FALSE
+
+RequestStatus15: RequestStatus
+  Brand: "1"
+  ReqType: 10
+  ReqStatus: 8
+
+RequestStatus16: RequestStatus
+  Brand: "1"
+  ReqType: 13
+  Program: "Gwy/createsolog.p"
+
+RequestStatus17: RequestStatus
+  Brand: "1"
+  ReqType: 13
+  ReqStatus: 6
+  Program: "Mm/createmobsub.p"
+  LogEntry: "4gltrace:4"
+  LogFile: "/tmp/create.log"
+  LogThreshold: 500000
+
+RequestStatus18: RequestStatus
+  Brand: "1"
+  ReqType: 14
+
+RequestStatus19: RequestStatus
+  Brand: "1"
+  ReqType: 15
+  Program: "Gwy/createsolog.p"
+
+RequestStatus20: RequestStatus
+  Brand: "1"
+  ReqType: 15
+  ReqStatus: 6
+  Program: "Mm/changesim.p"
+
+RequestStatus21: RequestStatus
+  Brand: "1"
+  ReqType: 18
+  Program: "Gwy/createsolog.p"
+
+RequestStatus22: RequestStatus
+  Brand: "1"
+  ReqType: 18
+  ReqStatus: 6
+  Program: "Mm/deletemobsub.p"
+
+RequestStatus23: RequestStatus
+  Brand: "1"
+  ReqType: 18
+  ReqStatus: 8
+  Program: "Mm/deletemobsub.p"
+
+RequestStatus24: RequestStatus
+  Brand: "1"
+  ReqType: 19
+  Program: "Gwy/createsolog.p"
+
+RequestStatus25: RequestStatus
+  Brand: "1"
+  ReqType: 19
+  ReqStatus: 6
+  Program: "Mm/changemsisdn.p"
+
+RequestStatus26: RequestStatus
+  Brand: "1"
+  ReqType: 19
+  ReqStatus: 8
+  Program: "Mm/changemsisdn.p"
+
+RequestStatus27: RequestStatus
+  Brand: "1"
+  ReqType: 22
+
+RequestStatus28: RequestStatus
+  Brand: "1"
+  ReqType: 23
+
+RequestStatus29: RequestStatus
+  Brand: "1"
+  ReqType: 23
+  ReqStatus: 8
+
+RequestStatus30: RequestStatus
+  Brand: "1"
+  ReqType: 23
+  ReqStatus: 15
+
+RequestStatus31: RequestStatus
+  Brand: "1"
+  ReqType: 23
+  ReqStatus: 17
+  LogEntry: "4GLTrace:4"
+  LogFile: "/home/ari/stat17.log"
+  LogThreshold: 500010
+
+RequestStatus32: RequestStatus
+  Brand: "1"
+  ReqType: 24
+
+RequestStatus33: RequestStatus
+  Brand: "1"
+  ReqType: 24
+  ReqStatus: 15
+
+RequestStatus34: RequestStatus
+  Brand: "1"
+  ReqType: 27
+
+RequestStatus35: RequestStatus
+  Brand: "1"
+  ReqType: 28
+  Program: "pgrequest"
+
+RequestStatus36: RequestStatus
+  Brand: "1"
+  ReqType: 30
+
+RequestStatus37: RequestStatus
+  Brand: "1"
+  ReqType: 31
+
+RequestStatus38: RequestStatus
+  Brand: "1"
+  ReqType: 31
+  ReqStatus: 15
+
+RequestStatus39: RequestStatus
+  Brand: "1"
+  ReqType: 32
+
+RequestStatus40: RequestStatus
+  Brand: "1"
+  ReqType: 33
+  Program: "Mm/creditcheckrequest.p"
+
+RequestStatus41: RequestStatus
+  Brand: "1"
+  ReqType: 33
+  ReqStatus: 1
+  Program: "Gwy/creditcheckquery.p"
+
+RequestStatus42: RequestStatus
+  Brand: "1"
+  ReqType: 34
+
+RequestStatus43: RequestStatus
+  Brand: "1"
+  ReqType: 34
+  ReqStatus: 8
+
+RequestStatus44: RequestStatus
+  Brand: "1"
+  ReqType: 34
+  ReqStatus: 15
+
+RequestStatus45: RequestStatus
+  Brand: "1"
+  ReqType: 35
+
+RequestStatus46: RequestStatus
+  Brand: "1"
+  ReqType: 35
+  ReqStatus: 7
+  InUse: FALSE
+
+RequestStatus47: RequestStatus
+  Brand: "1"
+  ReqType: 35
+  ReqStatus: 8
+
+RequestStatus48: RequestStatus
+  Brand: "1"
+  ReqType: 39
+
+RequestStatus49: RequestStatus
+  Brand: "1"
+  ReqType: 40
+
+RequestStatus50: RequestStatus
+  Brand: "1"
+  ReqType: 46
+
+RequestStatus51: RequestStatus
+  Brand: "1"
+  ReqType: 49
+
+RequestStatus52: RequestStatus
+  Brand: "1"
+  ReqType: 65
+
+RequestStatus53: RequestStatus
+  Brand: "1"
+  ReqType: 76
+
+RequestStatus54: RequestStatus
+  Brand: "1"
+  ReqType: 78
+
+RequestStatus55: RequestStatus
+  Brand: "1"
+  ReqType: 78
+  ReqStatus: 8
+
+RequestStatus56: RequestStatus
+  Brand: "1"
+  ReqType: 79
+
+RequestStatus57: RequestStatus
+  Brand: "1"
+  ReqType: 81
+
+RequestStatus58: RequestStatus
+  Brand: "1"
+  ReqType: 81
+  ReqStatus: 8
+
+RequestStatus59: RequestStatus
+  Brand: "1"
+  ReqType: 82
+  Program: "Gwy/createsolog.p"
+
+RequestStatus60: RequestStatus
+  Brand: "1"
+  ReqType: 82
+  ReqStatus: 6
+  Program: "Mm/reacmobsub.p"
+
+RequestStatus61: RequestStatus
+  Brand: "1"
+  ReqType: 83
+  Program: "Gwy/createsolog.p"
+
+RequestStatus62: RequestStatus
+  Brand: "1"
+  ReqType: 83
+  ReqStatus: 6
+  Program: "Mm/dss_request.p"
+
+RequestStatus63: RequestStatus
+  Brand: "1"
+  ReqType: 83
+  ReqStatus: 8
+  Program: "Mm/dss_request.p"
+
+RequestStatus64: RequestStatus
+  Brand: "1"
+  ReqType: 84
+
+RequestStatus65: RequestStatus
+  Brand: "1"
+  ReqType: 85
+
+RequestStatus66: RequestStatus
+  Brand: "1"
+  ReqType: 86
+
+RequestStatus67: RequestStatus
+  Brand: "1"
+  ReqType: 87
+
+RequestStatus68: RequestStatus
+  Brand: "1"
+  ReqType: 88
+
+RequestStatus69: RequestStatus
+  Brand: "1"
+  ReqType: 88
+  ReqStatus: 8
+
+RequestStatus70: RequestStatus
+  Brand: "1"
+  ReqType: 89
+
+RequestStatus71: RequestStatus
+  Brand: "1"
+  ReqType: 90
+
+RequestStatus72: RequestStatus
+  Brand: "1"
+  ReqType: 91
+
+RequestStatus73: RequestStatus
+  Brand: "1"
+  ReqType: 92
+  Program: "Inv/publish_invoice.p"
+
+RequestStatus74: RequestStatus
+  Brand: "1"
+  ReqType: 93
+  Program: "Inv/publish_ifs.p"
+
