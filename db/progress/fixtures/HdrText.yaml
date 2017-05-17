@@ -1,0 +1,6022 @@
+HdrText1: HdrText
+  te-nro: 0
+  te-kie: 0
+  te-text: ""
+  Brand: ""
+
+HdrText2: HdrText
+  te-nro: 1
+  te-kie: 5
+  te-text: "Caller"
+  Brand: "1"
+
+HdrText3: HdrText
+  te-nro: 2
+  te-kie: 5
+  te-text: "Prices from customer"
+  Brand: "1"
+
+HdrText4: HdrText
+  te-nro: 3
+  te-kie: 5
+  te-text: "Invoice-customer"
+  Brand: "1"
+
+HdrText5: HdrText
+  te-nro: 4
+  te-kie: 5
+  te-text: "Report-customer"
+  Brand: "1"
+
+HdrText6: HdrText
+  te-nro: 5
+  te-kie: 5
+  te-text: "Report"
+  Brand: "1"
+
+HdrText7: HdrText
+  te-nro: 6
+  te-kie: 5
+  te-text: "Total"
+  Brand: "1"
+
+HdrText8: HdrText
+  te-nro: 7
+  te-kie: 5
+  te-text: "Telephone nr."
+  Brand: "1"
+
+HdrText9: HdrText
+  te-nro: 8
+  te-kie: 5
+  te-text: "From telephone nr."
+  Brand: "1"
+
+HdrText10: HdrText
+  te-nro: 9
+  te-kie: 5
+  te-text: " / COUNTRY"
+  Brand: "1"
+
+HdrText11: HdrText
+  te-nro: 10
+  te-kie: 5
+  te-text: "Call"
+  Brand: "1"
+
+HdrText12: HdrText
+  te-nro: 11
+  te-kie: 5
+  te-text: "Per call"
+  Brand: "1"
+
+HdrText13: HdrText
+  te-nro: 12
+  te-kie: 5
+  te-text: "CALLS"
+  Brand: "1"
+
+HdrText14: HdrText
+  te-nro: 13
+  te-kie: 5
+  te-text: "Call-time"
+  Brand: "1"
+
+HdrText15: HdrText
+  te-nro: 14
+  te-kie: 5
+  te-text: "Customer"
+  Brand: "1"
+
+HdrText16: HdrText
+  te-nro: 15
+  te-kie: 5
+  te-text: "Qty"
+  Brand: "1"
+
+HdrText17: HdrText
+  te-nro: 16
+  te-kie: 5
+  te-text: "Pcs"
+  Brand: "1"
+
+HdrText18: HdrText
+  te-nro: 17
+  te-kie: 5
+  te-text: "SYK."
+  Brand: "1"
+
+HdrText19: HdrText
+  te-nro: 18
+  te-kie: 5
+  te-text: "!! UNKNOWN !!"
+  Brand: "1"
+
+HdrText20: HdrText
+  te-nro: 19
+  te-kie: 5
+  te-text: "ALL CALLS ITEMIZED"
+  Brand: "1"
+
+HdrText21: HdrText
+  te-nro: 20
+  te-kie: 5
+  te-text: "GRAND TOTAL"
+  Brand: "1"
+
+HdrText22: HdrText
+  te-nro: 21
+  te-kie: 5
+  te-text: "Time"
+  Brand: "1"
+
+HdrText23: HdrText
+  te-nro: 22
+  te-kie: 5
+  te-text: "Called number"
+  Brand: "1"
+
+HdrText24: HdrText
+  te-nro: 23
+  te-kie: 5
+  te-text: "CALLS / COUNTRY / TELEPHONENO."
+  Brand: "1"
+
+HdrText25: HdrText
+  te-nro: 24
+  te-kie: 5
+  te-text: "--------------- Report stopped ----------------"
+  Brand: "1"
+
+HdrText26: HdrText
+  te-nro: 25
+  te-kie: 5
+  te-text: "TOTALS / COUNTRY"
+  Brand: "1"
+
+HdrText27: HdrText
+  te-nro: 26
+  te-kie: 5
+  te-text: "Trunc"
+  Brand: "1"
+
+HdrText28: HdrText
+  te-nro: 27
+  te-kie: 5
+  te-text: "Country/Service"
+  Brand: "1"
+
+HdrText29: HdrText
+  te-nro: 28
+  te-kie: 5
+  te-text: "Page"
+  Brand: "1"
+
+HdrText30: HdrText
+  te-nro: 29
+  te-kie: 5
+  te-text: "Durat."
+  Brand: "1"
+
+HdrText31: HdrText
+  te-nro: 30
+  te-kie: 5
+  te-text: "Date"
+  Brand: "1"
+
+HdrText32: HdrText
+  te-nro: 31
+  te-kie: 5
+  te-text: "Called from number"
+  Brand: "1"
+
+HdrText33: HdrText
+  te-nro: 32
+  te-kie: 5
+  te-text: "cent/min"
+  Brand: "1"
+
+HdrText34: HdrText
+  te-nro: 33
+  te-kie: 5
+  te-text: "To be paid"
+  Brand: "1"
+
+HdrText35: HdrText
+  te-nro: 34
+  te-kie: 5
+  te-text: "Apiece"
+  Brand: "1"
+
+HdrText36: HdrText
+  te-nro: 35
+  te-kie: 5
+  te-text: "Dsc.type"
+  Brand: "1"
+
+HdrText37: HdrText
+  te-nro: 36
+  te-kie: 5
+  te-text: "N% = Netprice (based on percentage)"
+  Brand: "1"
+
+HdrText38: HdrText
+  te-nro: 37
+  te-kie: 5
+  te-text: "N  = Netprice (based on unitprice)"
+  Brand: "1"
+
+HdrText39: HdrText
+  te-nro: 38
+  te-kie: 5
+  te-text: "GR = Universal discount as agr."
+  Brand: "1"
+
+HdrText40: HdrText
+  te-nro: 39
+  te-kie: 5
+  te-text: "PR = Progressive volume discount"
+  Brand: "1"
+
+HdrText41: HdrText
+  te-nro: 40
+  te-kie: 5
+  te-text: "Främmande a-nummer"
+  Brand: "1"
+
+HdrText42: HdrText
+  te-nro: 41
+  te-kie: 5
+  te-text: "Calls from period"
+  Brand: "1"
+
+HdrText43: HdrText
+  te-nro: 42
+  te-kie: 5
+  te-text: "Code"
+  Brand: "1"
+
+HdrText44: HdrText
+  te-nro: 43
+  te-kie: 5
+  te-text: "Service"
+  Brand: "1"
+
+HdrText45: HdrText
+  te-nro: 44
+  te-kie: 5
+  te-text: "TidPeak"
+  Brand: "1"
+
+HdrText46: HdrText
+  te-nro: 45
+  te-kie: 5
+  te-text: "TidOffPeak"
+  Brand: "1"
+
+HdrText47: HdrText
+  te-nro: 46
+  te-kie: 5
+  te-text: "020 SAMTAL"
+  Brand: "1"
+
+HdrText48: HdrText
+  te-nro: 47
+  te-kie: 5
+  te-text: "Unit Pr."
+  Brand: "1"
+
+HdrText49: HdrText
+  te-nro: 48
+  te-kie: 5
+  te-text: "TOTAL EUR"
+  Brand: "1"
+
+HdrText50: HdrText
+  te-nro: 49
+  te-kie: 5
+  te-text: "TOTAL FIM"
+  Brand: "1"
+
+HdrText51: HdrText
+  te-nro: 50
+  te-kie: 5
+  te-text: "EUR"
+  Brand: "1"
+
+HdrText52: HdrText
+  te-nro: 51
+  te-kie: 5
+  te-text: "FIM"
+  Brand: "1"
+
+HdrText53: HdrText
+  te-nro: 52
+  te-kie: 5
+  te-text: "Interest-P"
+  Brand: "1"
+
+HdrText54: HdrText
+  te-nro: 53
+  te-kie: 5
+  te-text: "Interest-I"
+  Brand: "1"
+
+HdrText55: HdrText
+  te-nro: 54
+  te-kie: 5
+  te-text: "TOTAL ..."
+  Brand: "1"
+
+HdrText56: HdrText
+  te-nro: 55
+  te-kie: 5
+  te-text: "days net"
+  Brand: "1"
+
+HdrText57: HdrText
+  te-nro: 56
+  te-kie: 5
+  te-text: "Days"
+  Brand: "1"
+
+HdrText58: HdrText
+  te-nro: 57
+  te-kie: 5
+  te-text: "Specification"
+  Brand: "1"
+
+HdrText59: HdrText
+  te-nro: 58
+  te-kie: 5
+  te-text: "Continues after payment slip"
+  Brand: "1"
+
+HdrText60: HdrText
+  te-nro: 59
+  te-kie: 5
+  te-text: "Invoice: Products"
+  Brand: "1"
+
+HdrText61: HdrText
+  te-nro: 60
+  te-kie: 5
+  te-text: "Product"
+  Brand: "1"
+
+HdrText62: HdrText
+  te-nro: 61
+  te-kie: 5
+  te-text: "From"
+  Brand: "1"
+
+HdrText63: HdrText
+  te-nro: 62
+  te-kie: 5
+  te-text: "To"
+  Brand: "1"
+
+HdrText64: HdrText
+  te-nro: 63
+  te-kie: 5
+  te-text: "Amount"
+  Brand: "1"
+
+HdrText65: HdrText
+  te-nro: 65
+  te-kie: 5
+  te-text: "Invoice"
+  Brand: "1"
+
+HdrText66: HdrText
+  te-nro: 66
+  te-kie: 5
+  te-text: "Duration"
+  Brand: "1"
+
+HdrText67: HdrText
+  te-nro: 67
+  te-kie: 5
+  te-text: "Payable"
+  Brand: "1"
+
+HdrText68: HdrText
+  te-nro: 68
+  te-kie: 5
+  te-text: "More"
+  Brand: "1"
+
+HdrText69: HdrText
+  te-nro: 69
+  te-kie: 5
+  te-text: "Number"
+  Brand: "1"
+
+HdrText70: HdrText
+  te-nro: 70
+  te-kie: 5
+  te-text: "Grand total"
+  Brand: "1"
+
+HdrText71: HdrText
+  te-nro: 71
+  te-kie: 5
+  te-text: "Debiting from bank account"
+  Brand: "1"
+
+HdrText72: HdrText
+  te-nro: 72
+  te-kie: 5
+  te-text: "Prices include VAT"
+  Brand: "1"
+
+HdrText73: HdrText
+  te-nro: 73
+  te-kie: 5
+  te-text: "Includes previously unbilled contract fees"
+  Brand: "1"
+
+HdrText74: HdrText
+  te-nro: 74
+  te-kie: 5
+  te-text: "CREDIT"
+  Brand: "1"
+
+HdrText75: HdrText
+  te-nro: 75
+  te-kie: 5
+  te-text: "Veroton summa"
+  Brand: "1"
+
+HdrText76: HdrText
+  te-nro: 76
+  te-kie: 5
+  te-text: "ALV"
+  Brand: "1"
+
+HdrText77: HdrText
+  te-nro: 77
+  te-kie: 5
+  te-text: "Payment"
+  Brand: "1"
+
+HdrText78: HdrText
+  te-nro: 78
+  te-kie: 5
+  te-text: "Debt"
+  Brand: "1"
+
+HdrText79: HdrText
+  te-nro: 79
+  te-kie: 5
+  te-text: "Due date"
+  Brand: "1"
+
+HdrText80: HdrText
+  te-nro: 80
+  te-kie: 1
+  te-text: "Total"
+  Brand: "1"
+
+HdrText81: HdrText
+  te-nro: 80
+  te-kie: 5
+  te-text: "Total amount"
+  Brand: "1"
+
+HdrText82: HdrText
+  te-nro: 81
+  te-kie: 5
+  te-text: "Credit for overpayments"
+  Brand: "1"
+
+HdrText83: HdrText
+  te-nro: 82
+  te-kie: 5
+  te-text: "Unpaid amount from previous bill"
+  Brand: "1"
+
+HdrText84: HdrText
+  te-nro: 83
+  te-kie: 5
+  te-text: "Reminder of the invoice number #InvNo #Invdate"
+  Brand: "1"
+
+HdrText85: HdrText
+  te-nro: 84
+  te-kie: 5
+  te-text: "VAT%"
+  Brand: "1"
+
+HdrText86: HdrText
+  te-nro: 85
+  te-kie: 5
+  te-text: "Your balance is # EUR after this invoice."
+  Brand: "1"
+
+HdrText87: HdrText
+  te-nro: 86
+  te-kie: 5
+  te-text: "joka hyvitetään seuraavalla laskullanne."
+  Brand: "1"
+
+HdrText88: HdrText
+  te-nro: 87
+  te-kie: 5
+  te-text: "Interest"
+  Brand: "1"
+
+HdrText89: HdrText
+  te-nro: 88
+  te-kie: 5
+  te-text: "Due"
+  Brand: "1"
+
+HdrText90: HdrText
+  te-nro: 89
+  te-kie: 5
+  te-text: "Reminder"
+  Brand: "1"
+
+HdrText91: HdrText
+  te-nro: 90
+  te-kie: 5
+  te-text: "nbr"
+  Brand: "1"
+
+HdrText92: HdrText
+  te-nro: 91
+  te-kie: 5
+  te-text: "Late"
+  Brand: "1"
+
+HdrText93: HdrText
+  te-nro: 92
+  te-kie: 5
+  te-text: "Customer number:"
+  Brand: "1"
+
+HdrText94: HdrText
+  te-nro: 93
+  te-kie: 5
+  te-text: "Cust.nr."
+  Brand: "1"
+
+HdrText95: HdrText
+  te-nro: 94
+  te-kie: 5
+  te-text: "Cust.name"
+  Brand: "1"
+
+HdrText96: HdrText
+  te-nro: 95
+  te-kie: 5
+  te-text: "Inv.num"
+  Brand: "1"
+
+HdrText97: HdrText
+  te-nro: 96
+  te-kie: 5
+  te-text: "DIRECT DEBITING"
+  Brand: "1"
+
+HdrText98: HdrText
+  te-nro: 97
+  te-kie: 5
+  te-text: "Your account will be debited on due day"
+  Brand: "1"
+
+HdrText99: HdrText
+  te-nro: 98
+  te-kie: 5
+  te-text: "Veloitussumma:"
+  Brand: "1"
+
+HdrText100: HdrText
+  te-nro: 99
+  te-kie: 5
+  te-text: "Allow rem."
+  Brand: "1"
+
+HdrText101: HdrText
+  te-nro: 100
+  te-kie: 5
+  Brand: "1"
+
+HdrText102: HdrText
+  te-nro: 101
+  te-kie: 5
+  te-text: "Your invoice has been paid with your earlier overpayment. The"
+  Brand: "1"
+
+HdrText103: HdrText
+  te-nro: 102
+  te-kie: 5
+  te-text: "remaining amount of # EUR will be taken into account in your next"
+  Brand: "1"
+
+HdrText104: HdrText
+  te-nro: 103
+  te-kie: 5
+  te-text: "invoice. If you wish the remaining amount to be returned, we kindly"
+  Brand: "1"
+
+HdrText105: HdrText
+  te-nro: 104
+  te-kie: 5
+  te-text: "ask you to inform our customer service your bank account information."
+  Brand: "1"
+
+HdrText106: HdrText
+  te-nro: 105
+  te-kie: 5
+  te-text: "PDF-Invoice"
+  Brand: "1"
+
+HdrText107: HdrText
+  te-nro: 106
+  te-kie: 5
+  te-text: "Liitteenä laskunne PDF-muodossa."
+  Brand: "1"
+
+HdrText108: HdrText
+  te-nro: 108
+  te-kie: 5
+  te-text: "Lyhytnro"
+  Brand: "1"
+
+HdrText109: HdrText
+  te-nro: 109
+  te-kie: 5
+  te-text: "Palvelu"
+  Brand: "1"
+
+HdrText110: HdrText
+  te-nro: 110
+  te-kie: 5
+  te-text: "Ajalta"
+  Brand: "1"
+
+HdrText111: HdrText
+  te-nro: 111
+  te-kie: 5
+  te-text: "Laskut. kpl"
+  Brand: "1"
+
+HdrText112: HdrText
+  te-nro: 112
+  te-kie: 5
+  te-text: "Laskutettu EUR"
+  Brand: "1"
+
+HdrText113: HdrText
+  te-nro: 113
+  te-kie: 5
+  te-text: "Laskutus-palkkio"
+  Brand: "1"
+
+HdrText114: HdrText
+  te-nro: 114
+  te-kie: 5
+  te-text: "Origin. kpl"
+  Brand: "1"
+
+HdrText115: HdrText
+  te-nro: 115
+  te-kie: 5
+  te-text: "Termin. oma kpl"
+  Brand: "1"
+
+HdrText116: HdrText
+  te-nro: 116
+  te-kie: 5
+  te-text: "Termin. muu kpl"
+  Brand: "1"
+
+HdrText117: HdrText
+  te-nro: 117
+  te-kie: 5
+  te-text: "Viestit yht.kpl"
+  Brand: "1"
+
+HdrText118: HdrText
+  te-nro: 118
+  te-kie: 5
+  te-text: "Viestit EUR"
+  Brand: "1"
+
+HdrText119: HdrText
+  te-nro: 119
+  te-kie: 5
+  te-text: "Tilitys EUR "
+  Brand: "1"
+
+HdrText120: HdrText
+  te-nro: 120
+  te-kie: 5
+  te-text: "PALVELUTUOTANNON RATKAISU TEKSTIVIESTIRAJAPINTA"
+  Brand: "1"
+
+HdrText121: HdrText
+  te-nro: 121
+  te-kie: 5
+  te-text: "Yhteenveto"
+  Brand: "1"
+
+HdrText122: HdrText
+  te-nro: 122
+  te-kie: 5
+  te-text: "Erittely ALV 0%"
+  Brand: "1"
+
+HdrText123: HdrText
+  te-nro: 123
+  te-kie: 5
+  te-text: "Virh. kpl"
+  Brand: "1"
+
+HdrText124: HdrText
+  te-nro: 124
+  te-kie: 5
+  te-text: "Liikennemaksut"
+  Brand: "1"
+
+HdrText125: HdrText
+  te-nro: 125
+  te-kie: 5
+  te-text: "Laskutettu loppukäyttäjiltä"
+  Brand: "1"
+
+HdrText126: HdrText
+  te-nro: 126
+  te-kie: 5
+  te-text: "Laskutuspalkkio"
+  Brand: "1"
+
+HdrText127: HdrText
+  te-nro: 127
+  te-kie: 5
+  te-text: "Tilitys"
+  Brand: "1"
+
+HdrText128: HdrText
+  te-nro: 128
+  te-kie: 5
+  te-text: "Kpl"
+  Brand: "1"
+
+HdrText129: HdrText
+  te-nro: 129
+  te-kie: 5
+  te-text: "EUR Veroton"
+  Brand: "1"
+
+HdrText130: HdrText
+  te-nro: 130
+  te-kie: 5
+  te-text: "ALV"
+  Brand: "1"
+
+HdrText131: HdrText
+  te-nro: 131
+  te-kie: 5
+  te-text: "EUR Verollinen"
+  Brand: "1"
+
+HdrText132: HdrText
+  te-nro: 133
+  te-kie: 5
+  te-text: "Puheluraportti"
+  Brand: "1"
+
+HdrText133: HdrText
+  te-nro: 134
+  te-kie: 5
+  te-text: "Ohessa puheluraporttinne PDF-muodossa."
+  Brand: "1"
+
+HdrText134: HdrText
+  te-nro: 135
+  te-kie: 5
+  te-text: "Kohdistamatt."
+  Brand: "1"
+
+HdrText135: HdrText
+  te-nro: 136
+  te-kie: 5
+  te-text: "Date"
+  Brand: "1"
+
+HdrText136: HdrText
+  te-nro: 137
+  te-kie: 5
+  te-text: "Viivästyskorko:"
+  Brand: "1"
+
+HdrText137: HdrText
+  te-nro: 138
+  te-kie: 5
+  te-text: "Maksukehotusmaksu:"
+  Brand: "1"
+
+HdrText138: HdrText
+  te-nro: 139
+  te-kie: 5
+  te-text: "Seuraavan laskun arvioitu eräpäivä:"
+  Brand: "1"
+
+HdrText139: HdrText
+  te-nro: 140
+  te-kie: 5
+  te-text: "Asiakasnumero:"
+  Brand: "1"
+
+HdrText140: HdrText
+  te-nro: 141
+  te-kie: 5
+  te-text: "Laskun numero:"
+  Brand: "1"
+
+HdrText141: HdrText
+  te-nro: 142
+  te-kie: 5
+  te-text: "Laskun päiväys:"
+  Brand: "1"
+
+HdrText142: HdrText
+  te-nro: 143
+  te-kie: 5
+  te-text: "Eräpäivä:"
+  Brand: "1"
+
+HdrText143: HdrText
+  te-nro: 144
+  te-kie: 5
+  te-text: "Summa:"
+  Brand: "1"
+
+HdrText144: HdrText
+  te-nro: 145
+  te-kie: 5
+  te-text: "Maksuviite:"
+  Brand: "1"
+
+HdrText145: HdrText
+  te-nro: 146
+  te-kie: 5
+  te-text: "Pankkitili:"
+  Brand: "1"
+
+HdrText146: HdrText
+  te-nro: 147
+  te-kie: 5
+  te-text: "Virtuaaliviivakoodi:"
+  Brand: "1"
+
+HdrText147: HdrText
+  te-nro: 148
+  te-kie: 5
+  te-text: "Maksukehotus"
+  Brand: "1"
+
+HdrText148: HdrText
+  te-nro: 149
+  te-kie: 5
+  te-text: "Oheinen laskunne on erääntynyt;"
+  Brand: "1"
+
+HdrText149: HdrText
+  te-nro: 150
+  te-kie: 5
+  te-text: "VEROTON!HINTA"
+  Brand: "1"
+
+HdrText150: HdrText
+  te-nro: 151
+  te-kie: 5
+  te-text: "VEROLL.!HINTA"
+  Brand: "1"
+
+HdrText151: HdrText
+  te-nro: 152
+  te-kie: 5
+  te-text: "VAT ID"
+  Brand: "1"
+
+HdrText152: HdrText
+  te-nro: 153
+  te-kie: 5
+  te-text: "VEROTON!KPL-HINTA"
+  Brand: "1"
+
+HdrText153: HdrText
+  te-nro: 154
+  te-kie: 5
+  te-text: "VEROLL.!KPL-HINTA"
+  Brand: "1"
+
+HdrText154: HdrText
+  te-nro: 155
+  te-kie: 5
+  te-text: "VEROTON!A-HINTA"
+  Brand: "1"
+
+HdrText155: HdrText
+  te-nro: 156
+  te-kie: 5
+  te-text: "VEROLL.!A-HINTA"
+  Brand: "1"
+
+HdrText156: HdrText
+  te-nro: 157
+  te-kie: 5
+  te-text: "VERO-!KANTA"
+  Brand: "1"
+
+HdrText157: HdrText
+  te-nro: 158
+  te-kie: 5
+  te-text: "Veroton!summa"
+  Brand: "1"
+
+HdrText158: HdrText
+  te-nro: 159
+  te-kie: 5
+  te-text: "Veroll.!summa"
+  Brand: "1"
+
+HdrText159: HdrText
+  te-nro: 160
+  te-kie: 5
+  te-text: "Verokanta"
+  Brand: "1"
+
+HdrText160: HdrText
+  te-nro: 161
+  te-kie: 5
+  te-text: "LASKU  FAKTURA"
+  Brand: "1"
+
+HdrText161: HdrText
+  te-nro: 162
+  te-kie: 5
+  te-text: "HYVITYSLASKU"
+  Brand: "1"
+
+HdrText162: HdrText
+  te-nro: 163
+  te-kie: 5
+  te-text: "HETI"
+  Brand: "1"
+
+HdrText163: HdrText
+  te-nro: 164
+  te-kie: 5
+  te-text: "LASKUN PVM"
+  Brand: "1"
+
+HdrText164: HdrText
+  te-nro: 165
+  te-kie: 5
+  te-text: "LASKUNRO"
+  Brand: "1"
+
+HdrText165: HdrText
+  te-nro: 166
+  te-kie: 5
+  te-text: "ERÄPÄIVÄ"
+  Brand: "1"
+
+HdrText166: HdrText
+  te-nro: 167
+  te-kie: 5
+  te-text: "VELKA"
+  Brand: "1"
+
+HdrText167: HdrText
+  te-nro: 168
+  te-kie: 5
+  te-text: "ERÄ NRO"
+  Brand: "1"
+
+HdrText168: HdrText
+  te-nro: 169
+  te-kie: 5
+  te-text: "SUMMA"
+  Brand: "1"
+
+HdrText169: HdrText
+  te-nro: 170
+  te-kie: 5
+  te-text: "MAKSUPÄIVÄ"
+  Brand: "1"
+
+HdrText170: HdrText
+  te-nro: 171
+  te-kie: 5
+  te-text: "Sopimusasiakas:"
+  Brand: "1"
+
+HdrText171: HdrText
+  te-nro: 172
+  te-kie: 5
+  te-text: "Käyttäjä:"
+  Brand: "1"
+
+HdrText172: HdrText
+  te-nro: 173
+  te-kie: 5
+  te-text: "Käyttömaksut yhteensä,"
+  Brand: "1"
+
+HdrText173: HdrText
+  te-nro: 174
+  te-kie: 5
+  te-text: "liittymä"
+  Brand: "1"
+
+HdrText174: HdrText
+  te-nro: 175
+  te-kie: 5
+  te-text: "MAKSUKEHOTUS"
+  Brand: "1"
+
+HdrText175: HdrText
+  te-nro: 176
+  te-kie: 1
+  te-text: "Datos de la Compañía"
+  Brand: "1"
+
+HdrText176: HdrText
+  te-nro: 176
+  te-kie: 5
+  te-text: "Company Information"
+  Brand: "1"
+
+HdrText177: HdrText
+  te-nro: 177
+  te-kie: 1
+  te-text: "Información comercial"
+  Brand: "1"
+
+HdrText178: HdrText
+  te-nro: 177
+  te-kie: 5
+  te-text: "Sales information"
+  Brand: "1"
+
+HdrText179: HdrText
+  te-nro: 178
+  te-kie: 5
+  Brand: "1"
+
+HdrText180: HdrText
+  te-nro: 180
+  te-kie: 5
+  te-text: "Viivästyskorot suorituksista"
+  Brand: "1"
+
+HdrText181: HdrText
+  te-nro: 181
+  te-kie: 5
+  te-text: "Hyvitettävä ennakkomaksu"
+  Brand: "1"
+
+HdrText182: HdrText
+  te-nro: 182
+  te-kie: 1
+  te-text: "Atención al Cliente"
+  Brand: "1"
+
+HdrText183: HdrText
+  te-nro: 182
+  te-kie: 5
+  te-text: "Customer Service"
+  Brand: "1"
+
+HdrText184: HdrText
+  te-nro: 183
+  te-kie: 5
+  te-text: "LASKUKOPIO"
+  Brand: "1"
+
+HdrText185: HdrText
+  te-nro: 184
+  te-kie: 5
+  te-text: "PDF-Puheluraportti"
+  Brand: "1"
+
+HdrText186: HdrText
+  te-nro: 185
+  te-kie: 5
+  te-text: "Liitteenä puheluerittelynne PDF-muodossa."
+  Brand: "1"
+
+HdrText187: HdrText
+  te-nro: 186
+  te-kie: 5
+  te-text: "LASKUN SAAJA"
+  Brand: "1"
+
+HdrText188: HdrText
+  te-nro: 187
+  te-kie: 5
+  te-text: "Liittymätyypin vaihto"
+  Brand: "1"
+
+HdrText189: HdrText
+  te-nro: 188
+  te-kie: 5
+  te-text: "GSM numero:"
+  Brand: "1"
+
+HdrText190: HdrText
+  te-nro: 189
+  te-kie: 5
+  te-text: "Liittymätyyppi:"
+  Brand: "1"
+
+HdrText191: HdrText
+  te-nro: 190
+  te-kie: 5
+  te-text: "Käyttäjätunnus:"
+  Brand: "1"
+
+HdrText192: HdrText
+  te-nro: 191
+  te-kie: 5
+  te-text: "salasana:"
+  Brand: "1"
+
+HdrText193: HdrText
+  te-nro: 192
+  te-kie: 5
+  te-text: "MPM"
+  Brand: "1"
+
+HdrText194: HdrText
+  te-nro: 193
+  te-kie: 5
+  te-text: "PALVELU"
+  Brand: "1"
+
+HdrText195: HdrText
+  te-nro: 201
+  te-kie: 1
+  te-text: "CONFIRMACIÓN DEL PEDIDO"
+  Brand: "1"
+
+HdrText196: HdrText
+  te-nro: 201
+  te-kie: 5
+  te-text: "ORDER CONFIRMATION"
+  Brand: "1"
+
+HdrText197: HdrText
+  te-nro: 203
+  te-kie: 5
+  te-text: "Subscription info"
+  Brand: "1"
+
+HdrText198: HdrText
+  te-nro: 204
+  te-kie: 5
+  te-text: "Extra services"
+  Brand: "1"
+
+HdrText199: HdrText
+  te-nro: 205
+  te-kie: 5
+  te-text: "Best Regards,"
+  Brand: "1"
+
+HdrText200: HdrText
+  te-nro: 206
+  te-kie: 5
+  te-text: "Tele Finland"
+  Brand: "1"
+
+HdrText201: HdrText
+  te-nro: 207
+  te-kie: 5
+  te-text: "Customer number:"
+  Brand: "1"
+
+HdrText202: HdrText
+  te-nro: 208
+  te-kie: 5
+  te-text: "User name:"
+  Brand: "1"
+
+HdrText203: HdrText
+  te-nro: 209
+  te-kie: 5
+  te-text: "Subscription type"
+  Brand: "1"
+
+HdrText204: HdrText
+  te-nro: 210
+  te-kie: 5
+  te-text: "GSM number:"
+  Brand: "1"
+
+HdrText205: HdrText
+  te-nro: 211
+  te-kie: 5
+  te-text: "IMSI"
+  Brand: "1"
+
+HdrText206: HdrText
+  te-nro: 212
+  te-kie: 5
+  te-text: "SIM"
+  Brand: "1"
+
+HdrText207: HdrText
+  te-nro: 213
+  te-kie: 5
+  te-text: "PIN1"
+  Brand: "1"
+
+HdrText208: HdrText
+  te-nro: 214
+  te-kie: 5
+  te-text: "PIN2"
+  Brand: "1"
+
+HdrText209: HdrText
+  te-nro: 215
+  te-kie: 5
+  te-text: "PUK1"
+  Brand: "1"
+
+HdrText210: HdrText
+  te-nro: 216
+  te-kie: 5
+  te-text: "PUK2"
+  Brand: "1"
+
+HdrText211: HdrText
+  te-nro: 217
+  te-kie: 5
+  te-text: "NUMBER PORTING TIME"
+  Brand: "1"
+
+HdrText212: HdrText
+  te-nro: 218
+  te-kie: 5
+  te-text: "Olemme avanneet sinulle GSM-liittymän liittymäsopimuksessa ilmoittamasi tietojen mukaan."
+  Brand: "1"
+
+HdrText213: HdrText
+  te-nro: 220
+  te-kie: 5
+  te-text: "Vastaaja, vastaajanumero"
+  Brand: "1"
+
+HdrText214: HdrText
+  te-nro: 221
+  te-kie: 5
+  te-text: "Saldosopimus, saldoraja"
+  Brand: "1"
+
+HdrText215: HdrText
+  te-nro: 222
+  te-kie: 5
+  te-text: "Saldomuistutus, saldoraja"
+  Brand: "1"
+
+HdrText216: HdrText
+  te-nro: 223
+  te-kie: 5
+  te-text: "Etukäteen tilattu puheluerittely"
+  Brand: "1"
+
+HdrText217: HdrText
+  te-nro: 224
+  te-kie: 5
+  te-text: "Salainen numero"
+  Brand: "1"
+
+HdrText218: HdrText
+  te-nro: 225
+  te-kie: 5
+  te-text: "Kaverisoitto, numeroihin"
+  Brand: "1"
+
+HdrText219: HdrText
+  te-nro: 226
+  te-kie: 5
+  te-text: "Liittymällä ei ole määräaikaisia sopimuksia."
+  Brand: "1"
+
+HdrText220: HdrText
+  te-nro: 227
+  te-kie: 5
+  te-text: "Voimassa"
+  Brand: "1"
+
+HdrText221: HdrText
+  te-nro: 228
+  te-kie: 5
+  te-text: "Liitteenä erilliset sopimusehdot"
+  Brand: "1"
+
+HdrText222: HdrText
+  te-nro: 250
+  te-kie: 5
+  te-text: "GSM AGREEMENT"
+  Brand: "1"
+
+HdrText223: HdrText
+  te-nro: 251
+  te-kie: 5
+  te-text: "Customer number"
+  Brand: "1"
+
+HdrText224: HdrText
+  te-nro: 252
+  te-kie: 5
+  te-text: "Customer"
+  Brand: "1"
+
+HdrText225: HdrText
+  te-nro: 253
+  te-kie: 5
+  te-text: "Address"
+  Brand: "1"
+
+HdrText226: HdrText
+  te-nro: 254
+  te-kie: 5
+  te-text: "Zip code and town"
+  Brand: "1"
+
+HdrText227: HdrText
+  te-nro: 255
+  te-kie: 5
+  te-text: "GSM number"
+  Brand: "1"
+
+HdrText228: HdrText
+  te-nro: 256
+  te-kie: 5
+  te-text: "Email address"
+  Brand: "1"
+
+HdrText229: HdrText
+  te-nro: 257
+  te-kie: 5
+  te-text: "Date and place"
+  Brand: "1"
+
+HdrText230: HdrText
+  te-nro: 258
+  te-kie: 5
+  te-text: "Signature"
+  Brand: "1"
+
+HdrText231: HdrText
+  te-nro: 259
+  te-kie: 5
+  te-text: "Person/VAT ID"
+  Brand: "1"
+
+HdrText232: HdrText
+  te-nro: 260
+  te-kie: 5
+  te-text: "UserName"
+  Brand: "1"
+
+HdrText233: HdrText
+  te-nro: 261
+  te-kie: 5
+  te-text: "Subscription Type"
+  Brand: "1"
+
+HdrText234: HdrText
+  te-nro: 262
+  te-kie: 5
+  te-text: "CUSTOMER'S INFO"
+  Brand: "1"
+
+HdrText235: HdrText
+  te-nro: 263
+  te-kie: 1
+  te-text: "Tarjeta/Contrato"
+  Brand: "1"
+
+HdrText236: HdrText
+  te-nro: 263
+  te-kie: 5
+  te-text: "Prepaid/Postpaid"
+  Brand: "1"
+
+HdrText237: HdrText
+  te-nro: 264
+  te-kie: 1
+  te-text: "En este documento adjunto encontrarás la confirmación de tu"
+  Brand: "1"
+
+HdrText238: HdrText
+  te-nro: 264
+  te-kie: 5
+  te-text: "Enclosed is your confirmation for Yoigo Subscription."
+  Brand: "1"
+
+HdrText239: HdrText
+  te-nro: 265
+  te-kie: 1
+  te-text: "suscripción a Yoigo."
+  Brand: "1"
+
+HdrText240: HdrText
+  te-nro: 265
+  te-kie: 5
+  Brand: "1"
+
+HdrText241: HdrText
+  te-nro: 266
+  te-kie: 1
+  te-text: "Este mes no has superado el consumo mínimo de"
+  Brand: "1"
+
+HdrText242: HdrText
+  te-nro: 266
+  te-kie: 2
+  te-text: "Aquest mes no has superat el consum mínim de"
+  Brand: "1"
+
+HdrText243: HdrText
+  te-nro: 266
+  te-kie: 3
+  te-text: "Hilabete honetan ez duzu kontsumo minimo hau gainditu"
+  Brand: "1"
+
+HdrText244: HdrText
+  te-nro: 266
+  te-kie: 5
+  te-text: "This month you have not exceeded the minimum consumption of"
+  Brand: "1"
+
+HdrText245: HdrText
+  te-nro: 267
+  te-kie: 1
+  te-text: "Subtotal"
+  Brand: "1"
+
+HdrText246: HdrText
+  te-nro: 268
+  te-kie: 1
+  te-text: "Base Imponible"
+  Brand: "1"
+
+HdrText247: HdrText
+  te-nro: 269
+  te-kie: 1
+  te-text: "Impuesto"
+  Brand: "1"
+
+HdrText248: HdrText
+  te-nro: 270
+  te-kie: 1
+  te-text: "al"
+  Brand: "1"
+
+HdrText249: HdrText
+  te-nro: 270
+  te-kie: 2
+  te-text: "al"
+  Brand: "1"
+
+HdrText250: HdrText
+  te-nro: 270
+  te-kie: 3
+  te-text: "etik"
+  Brand: "1"
+
+HdrText251: HdrText
+  te-nro: 270
+  te-kie: 5
+  te-text: "to"
+  Brand: "1"
+
+HdrText252: HdrText
+  te-nro: 271
+  te-kie: 1
+  te-text: "Ene"
+  Brand: "1"
+
+HdrText253: HdrText
+  te-nro: 271
+  te-kie: 2
+  te-text: "Gen"
+  Brand: "1"
+
+HdrText254: HdrText
+  te-nro: 271
+  te-kie: 3
+  te-text: "Urt"
+  Brand: "1"
+
+HdrText255: HdrText
+  te-nro: 271
+  te-kie: 5
+  te-text: "Jan"
+  Brand: "1"
+
+HdrText256: HdrText
+  te-nro: 272
+  te-kie: 1
+  te-text: "Feb"
+  Brand: "1"
+
+HdrText257: HdrText
+  te-nro: 272
+  te-kie: 2
+  te-text: "Feb"
+  Brand: "1"
+
+HdrText258: HdrText
+  te-nro: 272
+  te-kie: 3
+  te-text: "Ots"
+  Brand: "1"
+
+HdrText259: HdrText
+  te-nro: 272
+  te-kie: 5
+  te-text: "Feb"
+  Brand: "1"
+
+HdrText260: HdrText
+  te-nro: 273
+  te-kie: 1
+  te-text: "Mar"
+  Brand: "1"
+
+HdrText261: HdrText
+  te-nro: 273
+  te-kie: 2
+  te-text: "Mar"
+  Brand: "1"
+
+HdrText262: HdrText
+  te-nro: 273
+  te-kie: 3
+  te-text: "Mar"
+  Brand: "1"
+
+HdrText263: HdrText
+  te-nro: 273
+  te-kie: 5
+  te-text: "Mar"
+  Brand: "1"
+
+HdrText264: HdrText
+  te-nro: 274
+  te-kie: 1
+  te-text: "Abr"
+  Brand: "1"
+
+HdrText265: HdrText
+  te-nro: 274
+  te-kie: 2
+  te-text: "Abr"
+  Brand: "1"
+
+HdrText266: HdrText
+  te-nro: 274
+  te-kie: 3
+  te-text: "Api"
+  Brand: "1"
+
+HdrText267: HdrText
+  te-nro: 274
+  te-kie: 5
+  te-text: "Apr"
+  Brand: "1"
+
+HdrText268: HdrText
+  te-nro: 275
+  te-kie: 1
+  te-text: "May"
+  Brand: "1"
+
+HdrText269: HdrText
+  te-nro: 275
+  te-kie: 2
+  te-text: "Mai"
+  Brand: "1"
+
+HdrText270: HdrText
+  te-nro: 275
+  te-kie: 3
+  te-text: "Mai"
+  Brand: "1"
+
+HdrText271: HdrText
+  te-nro: 275
+  te-kie: 5
+  te-text: "May"
+  Brand: "1"
+
+HdrText272: HdrText
+  te-nro: 276
+  te-kie: 1
+  te-text: "Jun"
+  Brand: "1"
+
+HdrText273: HdrText
+  te-nro: 276
+  te-kie: 2
+  te-text: "Jun"
+  Brand: "1"
+
+HdrText274: HdrText
+  te-nro: 276
+  te-kie: 3
+  te-text: "Eka"
+  Brand: "1"
+
+HdrText275: HdrText
+  te-nro: 276
+  te-kie: 5
+  te-text: "Jun"
+  Brand: "1"
+
+HdrText276: HdrText
+  te-nro: 277
+  te-kie: 1
+  te-text: "Jul"
+  Brand: "1"
+
+HdrText277: HdrText
+  te-nro: 277
+  te-kie: 2
+  te-text: "Jul"
+  Brand: "1"
+
+HdrText278: HdrText
+  te-nro: 277
+  te-kie: 3
+  te-text: "Uzt"
+  Brand: "1"
+
+HdrText279: HdrText
+  te-nro: 277
+  te-kie: 5
+  te-text: "Jul"
+  Brand: "1"
+
+HdrText280: HdrText
+  te-nro: 278
+  te-kie: 1
+  te-text: "Ago"
+  Brand: "1"
+
+HdrText281: HdrText
+  te-nro: 278
+  te-kie: 2
+  te-text: "Ago"
+  Brand: "1"
+
+HdrText282: HdrText
+  te-nro: 278
+  te-kie: 3
+  te-text: "Abu"
+  Brand: "1"
+
+HdrText283: HdrText
+  te-nro: 278
+  te-kie: 5
+  te-text: "Aug"
+  Brand: "1"
+
+HdrText284: HdrText
+  te-nro: 279
+  te-kie: 1
+  te-text: "Sep"
+  Brand: "1"
+
+HdrText285: HdrText
+  te-nro: 279
+  te-kie: 2
+  te-text: "Set"
+  Brand: "1"
+
+HdrText286: HdrText
+  te-nro: 279
+  te-kie: 3
+  te-text: "Ira"
+  Brand: "1"
+
+HdrText287: HdrText
+  te-nro: 279
+  te-kie: 5
+  te-text: "Sep"
+  Brand: "1"
+
+HdrText288: HdrText
+  te-nro: 280
+  te-kie: 1
+  te-text: "Oct"
+  Brand: "1"
+
+HdrText289: HdrText
+  te-nro: 280
+  te-kie: 2
+  te-text: "Oct"
+  Brand: "1"
+
+HdrText290: HdrText
+  te-nro: 280
+  te-kie: 3
+  te-text: "Urr"
+  Brand: "1"
+
+HdrText291: HdrText
+  te-nro: 280
+  te-kie: 5
+  te-text: "Oct"
+  Brand: "1"
+
+HdrText292: HdrText
+  te-nro: 281
+  te-kie: 1
+  te-text: "Nov"
+  Brand: "1"
+
+HdrText293: HdrText
+  te-nro: 281
+  te-kie: 2
+  te-text: "Nov"
+  Brand: "1"
+
+HdrText294: HdrText
+  te-nro: 281
+  te-kie: 3
+  te-text: "Aza"
+  Brand: "1"
+
+HdrText295: HdrText
+  te-nro: 281
+  te-kie: 5
+  te-text: "Nov"
+  Brand: "1"
+
+HdrText296: HdrText
+  te-nro: 282
+  te-kie: 1
+  te-text: "Dic"
+  Brand: "1"
+
+HdrText297: HdrText
+  te-nro: 282
+  te-kie: 2
+  te-text: "Des"
+  Brand: "1"
+
+HdrText298: HdrText
+  te-nro: 282
+  te-kie: 3
+  te-text: "Abe"
+  Brand: "1"
+
+HdrText299: HdrText
+  te-nro: 282
+  te-kie: 5
+  te-text: "Dec"
+  Brand: "1"
+
+HdrText300: HdrText
+  te-nro: 283
+  te-kie: 1
+  te-text: "INICIO DETALLES DE TELEFONOS"
+  Brand: "1"
+
+HdrText301: HdrText
+  te-nro: 284
+  te-kie: 1
+  te-text: "Tarifa plana"
+  Brand: "1"
+
+HdrText302: HdrText
+  te-nro: 285
+  te-kie: 1
+  te-text: "FIN DETALLES DE TELEFONOS"
+  Brand: "1"
+
+HdrText303: HdrText
+  te-nro: 286
+  te-kie: 3
+  te-text: "era"
+  Brand: "1"
+
+HdrText304: HdrText
+  te-nro: 287
+  te-kie: 1
+  te-text: "Datos de la portabilidad"
+  Brand: "1"
+
+HdrText305: HdrText
+  te-nro: 287
+  te-kie: 5
+  te-text: "Portability Information"
+  Brand: "1"
+
+HdrText306: HdrText
+  te-nro: 288
+  te-kie: 1
+  te-text: "Operador actual:"
+  Brand: "1"
+
+HdrText307: HdrText
+  te-nro: 288
+  te-kie: 5
+  te-text: "Current operator:"
+  Brand: "1"
+
+HdrText308: HdrText
+  te-nro: 289
+  te-kie: 1
+  te-text: "Forma de pago actual:"
+  Brand: "1"
+
+HdrText309: HdrText
+  te-nro: 289
+  te-kie: 5
+  te-text: "Current payment method:"
+  Brand: "1"
+
+HdrText310: HdrText
+  te-nro: 290
+  te-kie: 1
+  te-text: "Número ICC de tu SIM:"
+  Brand: "1"
+
+HdrText311: HdrText
+  te-nro: 290
+  te-kie: 5
+  te-text: "ICC number on Your SIM card:"
+  Brand: "1"
+
+HdrText312: HdrText
+  te-nro: 291
+  te-kie: 1
+  te-text: "Referencia de solicitud:"
+  Brand: "1"
+
+HdrText313: HdrText
+  te-nro: 292
+  te-kie: 1
+  te-text: "Forma de pago del pedido"
+  Brand: "1"
+
+HdrText314: HdrText
+  te-nro: 292
+  te-kie: 5
+  te-text: "Payment Method"
+  Brand: "1"
+
+HdrText315: HdrText
+  te-nro: 293
+  te-kie: 1
+  te-text: "Domiciliación bancaria"
+  Brand: "1"
+
+HdrText316: HdrText
+  te-nro: 293
+  te-kie: 5
+  te-text: "Bank Data"
+  Brand: "1"
+
+HdrText317: HdrText
+  te-nro: 294
+  te-kie: 1
+  te-text: "Titular:"
+  Brand: "1"
+
+HdrText318: HdrText
+  te-nro: 294
+  te-kie: 5
+  te-text: "Holder:"
+  Brand: "1"
+
+HdrText319: HdrText
+  te-nro: 295
+  te-kie: 1
+  te-text: "Número de cuenta:"
+  Brand: "1"
+
+HdrText320: HdrText
+  te-nro: 295
+  te-kie: 5
+  te-text: "Account Number:"
+  Brand: "1"
+
+HdrText321: HdrText
+  te-nro: 296
+  te-kie: 1
+  te-text: "Si has comprado un Teléfono con Contrato, el descuento de #PF EUR"
+  Brand: "1"
+
+HdrText322: HdrText
+  te-nro: 296
+  te-kie: 5
+  te-text: "If you bought a terminal with postpaid, #PF euro discount"
+  Brand: "1"
+
+HdrText323: HdrText
+  te-nro: 297
+  te-kie: 1
+  te-text: "por permanencia ya está incluido en el precio."
+  Brand: "1"
+
+HdrText324: HdrText
+  te-nro: 297
+  te-kie: 5
+  te-text: "for permanency is already included in the final price."
+  Brand: "1"
+
+HdrText325: HdrText
+  te-nro: 298
+  te-kie: 1
+  te-text: "Código de oferta"
+  Brand: "1"
+
+HdrText326: HdrText
+  te-nro: 298
+  te-kie: 5
+  te-text: "Campaign code"
+  Brand: "1"
+
+HdrText327: HdrText
+  te-nro: 299
+  te-kie: 1
+  te-text: "Código:"
+  Brand: "1"
+
+HdrText328: HdrText
+  te-nro: 299
+  te-kie: 5
+  te-text: "Code:"
+  Brand: "1"
+
+HdrText329: HdrText
+  te-nro: 300
+  te-kie: 1
+  te-text: "Saldo extra de #FATAMT Euros incluido"
+  Brand: "1"
+
+HdrText330: HdrText
+  te-nro: 300
+  te-kie: 5
+  te-text: "#FATAMT EUR of free credit included"
+  Brand: "1"
+
+HdrText331: HdrText
+  te-nro: 301
+  te-kie: 1
+  te-text: "Credito Yoigo"
+  Brand: "1"
+
+HdrText332: HdrText
+  te-nro: 302
+  te-kie: 1
+  te-text: "La misma que la persona autorizada."
+  Brand: "1"
+
+HdrText333: HdrText
+  te-nro: 302
+  te-kie: 5
+  te-text: "Same than representative."
+  Brand: "1"
+
+HdrText334: HdrText
+  te-nro: 303
+  te-kie: 1
+  te-text: "Internet para llevar 25"
+  Brand: "1"
+
+HdrText335: HdrText
+  te-nro: 303
+  te-kie: 2
+  te-text: "Internet para llevar 25"
+  Brand: "1"
+
+HdrText336: HdrText
+  te-nro: 303
+  te-kie: 3
+  te-text: "Internet para llevar 25"
+  Brand: "1"
+
+HdrText337: HdrText
+  te-nro: 303
+  te-kie: 5
+  te-text: "Internet para llevar 25"
+  Brand: "1"
+
+HdrText338: HdrText
+  te-nro: 304
+  te-kie: 1
+  te-text: "Si tienes contrato y has comprado un teléfono, el descuento de #AMOUNT EUR por permanencia ya está incluido en el precio."
+  Brand: "1"
+
+HdrText339: HdrText
+  te-nro: 304
+  te-kie: 5
+  te-text: "If you have a postpaid subscription and have bought a terminal, a #AMOUNT EUR discount for permanency is already included in the final price."
+  Brand: "1"
+
+HdrText340: HdrText
+  te-nro: 305
+  te-kie: 1
+  te-text: "Cargo pendiente, permanencia menor 18 meses"
+  Brand: "1"
+
+HdrText341: HdrText
+  te-nro: 305
+  te-kie: 2
+  te-text: "Càrrec pendent, permanència menor 18 mesos"
+  Brand: "1"
+
+HdrText342: HdrText
+  te-nro: 305
+  te-kie: 3
+  te-text: "Zordunketa egin gabe, 18 hilabete baino gutxiagoko iraupena"
+  Brand: "1"
+
+HdrText343: HdrText
+  te-nro: 305
+  te-kie: 5
+  te-text: "Charge pending, contract less than 18 months old "
+  Brand: "1"
+
+HdrText344: HdrText
+  te-nro: 306
+  te-kie: 1
+  te-text: "Vienes de parte de:"
+  Brand: "1"
+
+HdrText345: HdrText
+  te-nro: 306
+  te-kie: 5
+  te-text: "Your friend Yoigo number:"
+  Brand: "1"
+
+HdrText346: HdrText
+  te-nro: 307
+  te-kie: 1
+  te-text: "
+
+Ah, puedes ganar regalitos presentándonos a quien quieras y, claro, quien nos presentes también se lleva el suyo, entra en http://www.yoigo.com/amigo para más información.
+
+Si has venido a Yoigo presentado por un amigo, recuerda que pronto recibirás tu regalo, aunque eso no se olvida.
+"
+  Brand: "1"
+
+HdrText347: HdrText
+  te-nro: 307
+  te-kie: 5
+  te-text: "
+You can receive a gift if you invite your friends to join Yoigo, and of course your friend will also receive a gift. For more information go to http://www.yoigo.com/amigo
+
+If you were introduced to Yoigo by a friend and wrote in that friends phone number when you became a customer you will soon receive a small gift from Yoigo.
+"
+  Brand: "1"
+
+HdrText348: HdrText
+  te-nro: 308
+  te-kie: 1
+  te-text: "Descuento de #PF eur por permanencia ya incluido en el precio."
+  Brand: "1"
+
+HdrText349: HdrText
+  te-nro: 308
+  te-kie: 5
+  te-text: "#PF eur discount for permanency already included in the price."
+  Brand: "1"
+
+HdrText350: HdrText
+  te-nro: 309
+  te-kie: 1
+  te-text: "Gestión del riesgo"
+  Brand: "1"
+
+HdrText351: HdrText
+  te-nro: 309
+  te-kie: 5
+  te-text: "credit check"
+  Brand: "1"
+
+HdrText352: HdrText
+  te-nro: 310
+  te-kie: 1
+  te-text: "Una solicitud pendiente"
+  Brand: "1"
+
+HdrText353: HdrText
+  te-nro: 310
+  te-kie: 5
+  te-text: "another ongoing request"
+  Brand: "1"
+
+HdrText354: HdrText
+  te-nro: 311
+  te-kie: 1
+  te-text: "Servicio restringido"
+  Brand: "1"
+
+HdrText355: HdrText
+  te-nro: 311
+  te-kie: 5
+  te-text: "existing barring"
+  Brand: "1"
+
+HdrText356: HdrText
+  te-nro: 312
+  te-kie: 1
+  te-text: "Proceso de portabilidad en curso"
+  Brand: "1"
+
+HdrText357: HdrText
+  te-nro: 312
+  te-kie: 5
+  te-text: "ongoing MNP process"
+  Brand: "1"
+
+HdrText358: HdrText
+  te-nro: 313
+  te-kie: 1
+  te-text: "Internet para llevar 35"
+  Brand: "1"
+
+HdrText359: HdrText
+  te-nro: 313
+  te-kie: 2
+  te-text: "Internet para llevar 35"
+  Brand: "1"
+
+HdrText360: HdrText
+  te-nro: 313
+  te-kie: 3
+  te-text: "Internet para llevar 35"
+  Brand: "1"
+
+HdrText361: HdrText
+  te-nro: 313
+  te-kie: 5
+  te-text: "Internet para llevar 35"
+  Brand: "1"
+
+HdrText362: HdrText
+  te-nro: 314
+  te-kie: 1
+  te-text: "Internet para llevar 8"
+  Brand: "1"
+
+HdrText363: HdrText
+  te-nro: 314
+  te-kie: 2
+  te-text: "Internet para llevar 8"
+  Brand: "1"
+
+HdrText364: HdrText
+  te-nro: 314
+  te-kie: 3
+  te-text: "Internet para llevar 8"
+  Brand: "1"
+
+HdrText365: HdrText
+  te-nro: 314
+  te-kie: 5
+  te-text: "Internet para llevar 8"
+  Brand: "1"
+
+HdrText366: HdrText
+  te-nro: 351
+  te-kie: 1
+  te-text: "FACTURA:"
+  Brand: "1"
+
+HdrText367: HdrText
+  te-nro: 352
+  te-kie: 1
+  te-text: "FECHA FACTURA:"
+  Brand: "1"
+
+HdrText368: HdrText
+  te-nro: 353
+  te-kie: 1
+  te-text: "VENCIMIENTO:"
+  Brand: "1"
+
+HdrText369: HdrText
+  te-nro: 354
+  te-kie: 1
+  te-text: "YOIGO (XFERA MOVILES SA)"
+  Brand: "1"
+
+HdrText370: HdrText
+  te-nro: 355
+  te-kie: 1
+  te-text: "CIF:"
+  Brand: "1"
+
+HdrText371: HdrText
+  te-nro: 356
+  te-kie: 1
+  te-text: "AVENIDA DE LA VEGA 15, 28108 ALCOBENDAS"
+  Brand: "1"
+
+HdrText372: HdrText
+  te-nro: 357
+  te-kie: 1
+  te-text: "TITULAR:"
+  Brand: "1"
+
+HdrText373: HdrText
+  te-nro: 358
+  te-kie: 1
+  te-text: "PERIODO:"
+  Brand: "1"
+
+HdrText374: HdrText
+  te-nro: 359
+  te-kie: 1
+  te-text: "AL"
+  Brand: "1"
+
+HdrText375: HdrText
+  te-nro: 360
+  te-kie: 1
+  te-text: "TFNS.:"
+  Brand: "1"
+
+HdrText376: HdrText
+  te-nro: 361
+  te-kie: 1
+  te-text: "BASE IMPONIBLE:"
+  Brand: "1"
+
+HdrText377: HdrText
+  te-nro: 362
+  te-kie: 1
+  te-text: "IMPUESTO"
+  Brand: "1"
+
+HdrText378: HdrText
+  te-nro: 363
+  te-kie: 1
+  te-text: "TOTAL FACTURA:"
+  Brand: "1"
+
+HdrText379: HdrText
+  te-nro: 364
+  te-kie: 1
+  te-text: "(MAS INFORMACION: 622, 622622622, www.yoigo.com)"
+  Brand: "1"
+
+HdrText380: HdrText
+  te-nro: 365
+  te-kie: 1
+  te-text: "Información comercial: 1707 número gratuito"
+  Brand: "1"
+
+HdrText381: HdrText
+  te-nro: 365
+  te-kie: 5
+  te-text: "Free number for sales information: 1707"
+  Brand: "1"
+
+HdrText382: HdrText
+  te-nro: 366
+  te-kie: 1
+  te-text: "Atención a clientes: 622 gratuito desde un número Yoigo. 622 622 622 desde otro operador móvil o teléfono fijo (el precio de la llamada dependerá del operador que utilices)"
+  Brand: "1"
+
+HdrText383: HdrText
+  te-nro: 366
+  te-kie: 5
+  te-text: "Customer Service: call free to 622 from a Yoigo number. Call 622 622 622 from any other mobile or fixed operator (prices of the call will depend on the operator)."
+  Brand: "1"
+
+HdrText384: HdrText
+  te-nro: 367
+  te-kie: 1
+  te-text: "Teléfono gratuito de información comercial: 800 622 801"
+  Brand: "1"
+
+HdrText385: HdrText
+  te-nro: 367
+  te-kie: 5
+  te-text: "Free number for sales information: 800 622 801"
+  Brand: "1"
+
+HdrText386: HdrText
+  te-nro: 368
+  te-kie: 1
+  te-text: "Teléfono de Atención al Cliente 336 gratuito desde un Teléfono Yoigo, 633 633 336 desde cualquier teléfono (precios según operador)."
+  Brand: "1"
+
+HdrText387: HdrText
+  te-nro: 368
+  te-kie: 5
+  te-text: "Customer Service: call free to 336 from a Yoigo number. Call 633 633 336 from any other mobile or fixed operator (prices of the call will depend on the operator)."
+  Brand: "1"
+
+HdrText388: HdrText
+  te-nro: 369
+  te-kie: 1
+  te-text: "Bono 8 Internet de Contrato #MF euros/mes (Impuestos no incluidos)"
+  Brand: "1"
+
+HdrText389: HdrText
+  te-nro: 369
+  te-kie: 5
+  te-text: "Bono 8 Internet for Postpaid #MF euros/month (Taxes not included)"
+  Brand: "1"
+
+HdrText390: HdrText
+  te-nro: 370
+  te-kie: 1
+  te-text: "por permanencia en Yoigo y en tarifa ya esta incluido en el precio."
+  Brand: "1"
+
+HdrText391: HdrText
+  te-nro: 370
+  te-kie: 5
+  te-text: "for permanency in Yoigo and in the tariff is already included in the price"
+  Brand: "1"
+
+HdrText392: HdrText
+  te-nro: 371
+  te-kie: 1
+  te-text: "Sin consumo mínimo. Se desactivará el servicio si no se hace al menos una recarga de 5 euros o más cada nueve meses."
+  Brand: "1"
+
+HdrText393: HdrText
+  te-nro: 371
+  te-kie: 5
+  te-text: "Without minimum consumption. The service will be deactivated if there is no top up bigger than 5 euros every 9 months"
+  Brand: "1"
+
+HdrText394: HdrText
+  te-nro: 450
+  te-kie: 1
+  te-text: "Y MAS"
+  Brand: "1"
+
+HdrText395: HdrText
+  te-nro: 451
+  te-kie: 1
+  te-text: "Reserved"
+  Brand: "1"
+
+HdrText396: HdrText
+  te-nro: 452
+  te-kie: 1
+  te-text: "Reserved"
+  Brand: "1"
+
+HdrText397: HdrText
+  te-nro: 453
+  te-kie: 1
+  te-text: "Reserved"
+  Brand: "1"
+
+HdrText398: HdrText
+  te-nro: 454
+  te-kie: 1
+  te-text: "Reserved"
+  Brand: "1"
+
+HdrText399: HdrText
+  te-nro: 455
+  te-kie: 1
+  te-text: "Reserved"
+  Brand: "1"
+
+HdrText400: HdrText
+  te-nro: 456
+  te-kie: 1
+  te-text: "Reserved"
+  Brand: "1"
+
+HdrText401: HdrText
+  te-nro: 457
+  te-kie: 1
+  te-text: "Reserved"
+  Brand: "1"
+
+HdrText402: HdrText
+  te-nro: 458
+  te-kie: 1
+  te-text: "Reserved"
+  Brand: "1"
+
+HdrText403: HdrText
+  te-nro: 459
+  te-kie: 1
+  te-text: "Reserved"
+  Brand: "1"
+
+HdrText404: HdrText
+  te-nro: 500
+  te-kie: 5
+  te-text: "Laskua koskevat huomautukset on tehtävä eräpäivään mennessä."
+  Brand: "1"
+
+HdrText405: HdrText
+  te-nro: 501
+  te-kie: 5
+  Brand: "1"
+
+HdrText406: HdrText
+  te-nro: 505
+  te-kie: 5
+  te-text: "Maksun palautus"
+  Brand: "1"
+
+HdrText407: HdrText
+  te-nro: 506
+  te-kie: 5
+  te-text: "Bank Account:"
+  Brand: "1"
+
+HdrText408: HdrText
+  te-nro: 507
+  te-kie: 5
+  te-text: "Holder of the bank account:"
+  Brand: "1"
+
+HdrText409: HdrText
+  te-nro: 508
+  te-kie: 5
+  te-text: "Bank Account:"
+  Brand: "1"
+
+HdrText410: HdrText
+  te-nro: 509
+  te-kie: 1
+  te-text: "#YY meses en Contrato Yoigo por el descuento de #XXX euros ya incluido en el precio."
+  Brand: "1"
+
+HdrText411: HdrText
+  te-nro: 509
+  te-kie: 5
+  te-text: "#YY months in Yoigo postpaid by the discount of #XXX euros already included in the price."
+  Brand: "1"
+
+HdrText412: HdrText
+  te-nro: 510
+  te-kie: 1
+  te-text: "#YY meses en Yoigo y en tarifa por el descuento de #XXX euros ya incluido en el precio."
+  Brand: "1"
+
+HdrText413: HdrText
+  te-nro: 510
+  te-kie: 5
+  te-text: "#YY months in this tariff by the discount of #XXX euros already included in the price."
+  Brand: "1"
+
+HdrText414: HdrText
+  te-nro: 511
+  te-kie: 1
+  te-text: "Bono 15 Internet para llevar 15 euros/mes (Impuestos no incluidos)"
+  Brand: "1"
+
+HdrText415: HdrText
+  te-nro: 511
+  te-kie: 5
+  te-text: "Bono Internet 15 for mobile 15 euros/month (Taxes not included)"
+  Brand: "1"
+
+HdrText416: HdrText
+  te-nro: 512
+  te-kie: 1
+  te-text: "Bono 8 Internet de Tarjeta #MF euros/mes (Impuestos no incluidos)"
+  Brand: "1"
+
+HdrText417: HdrText
+  te-nro: 512
+  te-kie: 5
+  te-text: "Bono 8 Internet for Prepaid #MF euros/month (Taxes not included)"
+  Brand: "1"
+
+HdrText418: HdrText
+  te-nro: 513
+  te-kie: 1
+  te-text: "Servicio BlackBerry"
+  Brand: "1"
+
+HdrText419: HdrText
+  te-nro: 513
+  te-kie: 5
+  te-text: "BlackBerry Service"
+  Brand: "1"
+
+HdrText420: HdrText
+  te-nro: 514
+  te-kie: 1
+  te-text: "Activo"
+  Brand: "1"
+
+HdrText421: HdrText
+  te-nro: 514
+  te-kie: 5
+  te-text: "Active"
+  Brand: "1"
+
+HdrText422: HdrText
+  te-nro: 515
+  te-kie: 1
+  te-text: "Pago inicial al recibir el pedido"
+  Brand: "1"
+
+HdrText423: HdrText
+  te-nro: 515
+  te-kie: 5
+  te-text: "Initial payment"
+  Brand: "1"
+
+HdrText424: HdrText
+  te-nro: 516
+  te-kie: 1
+  te-text: "Pago Aplazado
+Mensual: #AMOUNT E/mes x #MONTHS meses"
+  Brand: "1"
+
+HdrText425: HdrText
+  te-nro: 516
+  te-kie: 5
+  te-text: "Financed Payment
+Monthly fee: #AMOUNT E/month x #MONTHS months"
+  Brand: "1"
+
+HdrText426: HdrText
+  te-nro: 517
+  te-kie: 1
+  te-text: "Pago aplazado:
+
+El importe del Pago Aplazado se incluirá en la factura mensual junto con el resto de consumos.
+
+Reembolso anticipado no permitido. La falta de pago de dos cuotas, consecutivas o alternas, o la baja en el servicio, podrá traer consigo el vencimiento anticipado de las restantes cuotas que deberán ser abonadas de una sola vez."
+  Brand: "1"
+
+HdrText427: HdrText
+  te-nro: 517
+  te-kie: 5
+  te-text: "The installments will be included in your monthly fee with the rest of consumption.
+
+You cannot pay the installments in advance.
+You can check your order calling us for free to 622."
+  Brand: "1"
+
+HdrText428: HdrText
+  te-nro: 518
+  te-kie: 1
+  te-text: "Promo Bono 8 gratis 1 mes"
+  Brand: "1"
+
+HdrText429: HdrText
+  te-nro: 518
+  te-kie: 5
+  te-text: "Promo Bono 8 free 1 month"
+  Brand: "1"
+
+HdrText430: HdrText
+  te-nro: 519
+  te-kie: 1
+  te-text: "Promo Bono 15 gratis 1 mes"
+  Brand: "1"
+
+HdrText431: HdrText
+  te-nro: 519
+  te-kie: 5
+  te-text: "Promo Bono 15 free 1 month"
+  Brand: "1"
+
+HdrText432: HdrText
+  te-nro: 520
+  te-kie: 1
+  te-text: "Promo Bono 8 gratis"
+  Brand: "1"
+
+HdrText433: HdrText
+  te-nro: 520
+  te-kie: 5
+  te-text: "Promo Bono 8 free"
+  Brand: "1"
+
+HdrText434: HdrText
+  te-nro: 521
+  te-kie: 1
+  te-text: "Promo 2 meses gratis"
+  Brand: "1"
+
+HdrText435: HdrText
+  te-nro: 521
+  te-kie: 5
+  te-text: "Promo 2 months free"
+  Brand: "1"
+
+HdrText436: HdrText
+  te-nro: 522
+  te-kie: 1
+  te-text: "Bono 25 Internet para llevar 25 euros/mes (Impuestos no incluidos)"
+  Brand: "1"
+
+HdrText437: HdrText
+  te-nro: 522
+  te-kie: 5
+  te-text: "Bono Internet 25 for mobile 25 euros/month (Taxes not included)"
+  Brand: "1"
+
+HdrText438: HdrText
+  te-nro: 523
+  te-kie: 1
+  te-text: "Bono 35 Internet para llevar 35 euros/mes (Impuestos no incluidos)"
+  Brand: "1"
+
+HdrText439: HdrText
+  te-nro: 523
+  te-kie: 5
+  te-text: "Bono Internet 35 for mobile 35 euros/month (Taxes not included)"
+  Brand: "1"
+
+HdrText440: HdrText
+  te-nro: 524
+  te-kie: 1
+  te-text: "Promo Bono 25 gratis 1 mes"
+  Brand: "1"
+
+HdrText441: HdrText
+  te-nro: 524
+  te-kie: 5
+  te-text: "Promo Bono 25 free 1 month"
+  Brand: "1"
+
+HdrText442: HdrText
+  te-nro: 525
+  te-kie: 1
+  te-text: "Promo Bono 35 gratis 1 mes"
+  Brand: "1"
+
+HdrText443: HdrText
+  te-nro: 525
+  te-kie: 5
+  te-text: "Promo Bono 35 free 1 month"
+  Brand: "1"
+
+HdrText444: HdrText
+  te-nro: 526
+  te-kie: 1
+  te-text: "Servicio Internet Multilínea"
+  Brand: "1"
+
+HdrText445: HdrText
+  te-nro: 526
+  te-kie: 5
+  te-text: "Internet MultiLinea Service"
+  Brand: "1"
+
+HdrText446: HdrText
+  te-nro: 527
+  te-kie: 1
+  te-text: "Los mensajes de tarificación adicional (Premium SMS) con un precio de 10 céntimos, impuestos indirectos no incluidos, son los mensajes soporte.
+Estos son los mensajes de petición, confirmación o rechazo de los servicios de tarificación adicional Premium SMS."
+  Brand: "1"
+
+HdrText447: HdrText
+  te-nro: 527
+  te-kie: 2
+  te-text: "Els missatges de tarifació addicional (Premium SMS) amb un preu de 10 cèntims, impostos indirectes no inclosos, són els missatges suport.
+Aquests són els missatges de petició, confirmació o rebuig dels serveis de tarifació addicional Premium SMS."
+  Brand: "1"
+
+HdrText448: HdrText
+  te-nro: 527
+  te-kie: 3
+  te-text: "Tarifikazio gehigarriko mezuak (Premium SMS) euskarri-mezuak dira. 10 zentimoko prezioa dute, zeharkako zergak sartu gabe.
+Honak hauek dira Premium SMS tarifikazio gehigarriko zerbitzuak eskatu, baieztatu edo ezeztatzeko mezuak."
+  Brand: "1"
+
+HdrText449: HdrText
+  te-nro: 527
+  te-kie: 5
+  te-text: "Additional-charge messages (Premium SMS) at a cost of 10 cents, indirect taxes not included, are support messages.
+These are messages requesting, confirming or rejecting additional-charge services (Premium SMS)."
+  Brand: "1"
+
+HdrText450: HdrText
+  te-nro: 528
+  te-kie: 1
+  te-text: "Cuando llamas a un número Premium, te cobramos la suma de dos conceptos: el coste de una llamada según tu tarifa con Yoigo, como si llamaras a un fijo o móvil nacional, más el de la empresa a la que llamas por el servicio que te dan. En el detalle (Proveedor de Servicios/Destino) de esa llamada aparece el nombre del operador al que pertenece el número al que llamaste.
+Cuando envías o recibes un mensaje Premium, Yoigo te cobra 10 céntimos (sin impuestos indirectos), el resto es lo que cobra la empresa a la que envías o de la que recibes el mensaje, por eso en la factura puede aparecer más de una línea. En el detalle (Proveedor de Servicios/Destino) aparecerá el CIF y el nombre de la empresa. Además puede que no coincida con el nombre que aparece, ya que puede ser la denominación social de la empresa y no el nombre comercial o marca.
+Cuando envías un mensaje a un número Premium para la recaudación de fondos de campañas benéficas o solidarias (Donaciones), no se aplican impuestos indirectos.
+Cuando llamas o mandas un mensaje a un número Premium incluido en la regulación del juego, te cobramos dos conceptos: el coste de la empresa del servicio (al que no se le aplican impuestos indirectos) y el coste del soporte del servicio."
+  Brand: "1"
+
+HdrText451: HdrText
+  te-nro: 528
+  te-kie: 2
+  te-text: "Quan truques a un número Premium et cobrem la suma de dos conceptes: el cost d'una trucada segons la teva tarifa amb Yoigo, com si truquessis a un fix o mòbil nacional, més el de l'empresa on truques pel servei que et donen. En el detall (Proveïdor de Serveis / Destí) d'aquella trucada apareix el nom de l'operador a qui pertany el número on truques.
+Quan envies o reps un missatge Premium, Yoigo et cobra 10 cèntims (sense impostos indirectes), la resta és el que cobra l'empresa on envies o des d'on reps el missatge, per això a la factura hi pot aparèixer més d'una línia. En el detall (Proveïdor de Serveis / Destí) hi apareixerà el CIF i el nom de l'empresa. A més és possible que no coincideixi amb el nom que hi apareix, ja que pot ser la denominació social de l'empresa i no el nom comercial o marca.
+Quan envies un missatge a un número Premium per a la recaptació de fons de campanyes benèfiques o solidàries (Donacions), no s'apliquen impostos indirectes.
+Quan truques o envies un missatge a un número Premium inclòs en la regulació del joc, et cobrem dos conceptes: el cost de l'empresa del servei (al qual no se li apliquen impostos indirectes) i el cost del suport del servei."
+  Brand: "1"
+
+HdrText452: HdrText
+  te-nro: 528
+  te-kie: 3
+  te-text: "Premium zenbaki batera deitzen duzunean, bi kontzepturen batuketa kobratzen dizugu:deiaren kostua, Yoigo-rekin duzun tarifan oinarrituta (finko edo mugikor nazional batera deituko bazenu bezala), eta deitzen duzun enpresaren kostua, eskaintzen dizuten zerbitzuarengatik. Dei horren xehetasunetan (Zerbitzu-hornitzailea / Helmuga) deitutako zenbakiari dagokion operadorearen izena agertzen da.
+Premium mezuak bidaltzen edo jasotzen dituzunean, Yoigo-k 10 zentimo kobratzen dizkizu (zeharkako zergak kanpo) eta, gainerakoa, mezua bidaltzen edo jasotzen duzun enpresak kobratzen duen zenbatekoa da. Horregatik, fakturan lerro bat baino gehiago ager daiteke. Xehetasunetan (Zerbitzu-hornitzailea / Helmuga) enpresaren IFZa eta izena agertuko dira. Horrez gain, baliteke agertzen den izenarekin bat ez etortzea, enpresaren izen soziala izan daitekeelako, eta ez izen komertziala edo marka.
+Ongintzako kanpaina edo kanpaina solidarioetarako dirua biltzeko (Dohaintzak) Premium zenbaki batera mezuak bidaltzen dituzunean, ez da zeharkako zergarik aplikatzen.
+Jokoaren legeriaren barne dagoen Premium zenbaki batera deitzean edo mezuak bidaltzean, bi kontzeptu kobratzen dizkizugu:zerbitzuaren enpresaren kostua (ez zaio zeharkako zergarik aplikatzen) eta zerbitzua eskaintzeagatiko kostua."
+  Brand: "1"
+
+HdrText453: HdrText
+  te-nro: 528
+  te-kie: 5
+  te-text: "When you call a Premium number, we charge you the total for two items: the cost of a call according to your Yoigo rate, as if you were calling a Spanish landline or mobile, plus that of the company you call for the service it provides. The breakdown (Destination/Service Provider) for this call shows the name of the operator to which the number you called belongs.
+When you send or receive a Premium message, Yoigo charges you 10 cents (indirect taxes not included), and the rest is what the company to which you send it or which receives the message charges you, which is why there may be more than one line on your bill. The breakdown (Destination/Service Provider) shows the company's name and tax number. The name shown may not match, as this may be the company name rather than its trade or band name.
+When you send a message to a Premium number for fund-raising for charity campaigns (Donations), these indirect taxes are not applied. 
+When you call or send a message to a Premium number covered by the gaming regulations, we charge you for two items: the cost of the company providing the service (to which indirect taxes are not applied) and the cost of supporting the service."
+  Brand: "1"
+
+HdrText454: HdrText
+  te-nro: 529
+  te-kie: 1
+  te-text: "Bono 12 Internet para llevar 12 euros/mes (Impuestos no incluidos)"
+  Brand: "1"
+
+HdrText455: HdrText
+  te-nro: 529
+  te-kie: 5
+  te-text: "Bono Internet 12 for mobile 12 euros/month (Taxes not included)"
+  Brand: "1"
+
+HdrText456: HdrText
+  te-nro: 530
+  te-kie: 1
+  te-text: "Promo Bono 12 gratis 1 mes"
+  Brand: "1"
+
+HdrText457: HdrText
+  te-nro: 530
+  te-kie: 5
+  te-text: "Promo Bono 12 free 1 month"
+  Brand: "1"
+
+HdrText458: HdrText
+  te-nro: 531
+  te-kie: 1
+  te-text: "Promo Internet Multilínea gratis"
+  Brand: "1"
+
+HdrText459: HdrText
+  te-nro: 531
+  te-kie: 5
+  te-text: "Promo Internet Multilinea free"
+  Brand: "1"
+
+HdrText460: HdrText
+  te-nro: 532
+  te-kie: 1
+  te-text: "12 meses por el descuento de 100 euros en el coste de instalación, regulado en la condición particular de permanencia del las CCGGs de fijo."
+  Brand: "1"
+
+HdrText461: HdrText
+  te-nro: 532
+  te-kie: 5
+  te-text: "With 12 months permanency in the tariff by its conditions. If you do not accomplish, the maximum penalty is 100 euros, according the time that rest."
+  Brand: "1"
+
+HdrText462: HdrText
+  te-nro: 533
+  te-kie: 1
+  te-text: "Bono 9 Internet para llevar 9 euros/mes (Impuestos no incluidos)"
+  Brand: "1"
+
+HdrText463: HdrText
+  te-nro: 533
+  te-kie: 5
+  te-text: "Bono Internet 9 for mobile 9 euros/month (Taxes not included)"
+  Brand: "1"
+
+HdrText464: HdrText
+  te-nro: 534
+  te-kie: 1
+  te-text: "Promoción iPhone: Yoigo te regala la última mensualidad, salvo impago de alguna cuota anterior, baja o renuevo antes del mes 24"
+  Brand: "1"
+
+HdrText465: HdrText
+  te-nro: 535
+  te-kie: 1
+  te-text: "Promo Bono 8 primer mes a mitad de precio"
+  Brand: "1"
+
+HdrText466: HdrText
+  te-nro: 535
+  te-kie: 5
+  te-text: "Promo Bono 8 first month half price"
+  Brand: "1"
+
+HdrText467: HdrText
+  te-nro: 536
+  te-kie: 1
+  te-text: "Pago del móvil: Yoigo gestiona el cobro del Crédito otorgado por UNOE BANK, S.A., con CIF nº A-08024796 y domicilio social en C/ Julián Camarillo 4, 28037 - Madrid. Operación exenta del IVA. TIN: 0% y TAE: #TAE%."
+  Brand: "1"
+
+HdrText468: HdrText
+  te-nro: 536
+  te-kie: 2
+  te-text: "Pagament del mòbil: Yoigo gestiona el cobrament del crèdit atorgat per UNOE BANK, S.A., amb CIF núm. A-08024796 i domicili social al c/ Julián Camarillo 4, 28037 - Madrid. Operació exempta de l'IVA. TIN: 0% i TAE: #TAE%."
+  Brand: "1"
+
+HdrText469: HdrText
+  te-nro: 536
+  te-kie: 3
+  te-text: "Mugikorraren ordainketa: Yoigo-k kudeatzen du ondoren aipatzen den erakundeak emandako Kreditua: UNOE BANK, S.A., IFZ A-08024796 eta egoitza soziala C/ Julián Camarillo 4, 28037 - Madrid. Eragiketa BEZatik salbuetsita dago. ITN: % 0 eta UTB: % #TAE."
+  Brand: "1"
+
+HdrText470: HdrText
+  te-nro: 536
+  te-kie: 5
+  te-text: "Mobile payment: Yoigo manages the payment of the credit granted by UNOE BANK, S.A., with tax ID no. A-08024796 and registered office at C/ Julián Camarillo 4, 28037 - Madrid. VAT exempt transaction. NIR: 0% and APR: #TAE%."
+  Brand: "1"
+
+HdrText471: HdrText
+  te-nro: 537
+  te-kie: 1
+  te-text: "Promo Infinita 30: 25 euros/mes para siempre"
+  Brand: "1"
+
+HdrText472: HdrText
+  te-nro: 537
+  te-kie: 5
+  te-text: "Promo Infinita 30: 25 euros/month for ever"
+  Brand: "1"
+
+HdrText473: HdrText
+  te-nro: 538
+  te-kie: 1
+  te-text: "Bono #MF Internet para llevar #MF euros/mes (Impuestos no incluidos)"
+  Brand: "1"
+
+HdrText474: HdrText
+  te-nro: 538
+  te-kie: 5
+  te-text: "Bono Internet #MF for mobile #MF euros/month (Taxes not included)"
+  Brand: "1"
+
+HdrText475: HdrText
+  te-nro: 539
+  te-kie: 1
+  te-text: "Esta tarifa es para una línea adicional con unas condiciones especiales. La portabilidad a otro operador o la cancelación de la línea principal implicara la baja de esta linea adicional, a no ser que realices antes un cambio a otra tarifa de Yoigo."
+  Brand: "1"
+
+HdrText476: HdrText
+  te-nro: 539
+  te-kie: 5
+  te-text: "This tariff is for an additional line, with special conditions. The portability to another operator or the cancellation of the main line will involve the loss of this additional line, unless you make prior to a move to another Yoigo tariff."
+  Brand: "1"
+
+HdrText477: HdrText
+  te-nro: 540
+  te-kie: 1
+  te-text: "Promo cuota 1er mes a mitad de precio"
+  Brand: "1"
+
+HdrText478: HdrText
+  te-nro: 540
+  te-kie: 5
+  te-text: "Promo first month half Price fee"
+  Brand: "1"
+
+HdrText479: HdrText
+  te-nro: 541
+  te-kie: 1
+  te-text: "Orden de domiciliación:"
+  Brand: "1"
+
+HdrText480: HdrText
+  te-nro: 541
+  te-kie: 5
+  te-text: "Mandate:"
+  Brand: "1"
+
+HdrText481: HdrText
+  te-nro: 542
+  te-kie: 1
+  te-text: "Cuenta Corriente (IBAN):"
+  Brand: "1"
+
+HdrText482: HdrText
+  te-nro: 542
+  te-kie: 5
+  te-text: "Current Account (IBAN):"
+  Brand: "1"
+
+HdrText483: HdrText
+  te-nro: 543
+  te-kie: 1
+  te-text: "DE ENERO"
+  Brand: "1"
+
+HdrText484: HdrText
+  te-nro: 543
+  te-kie: 2
+  te-text: "DE GENER"
+  Brand: "1"
+
+HdrText485: HdrText
+  te-nro: 543
+  te-kie: 5
+  te-text: "JANUARY"
+  Brand: "1"
+
+HdrText486: HdrText
+  te-nro: 544
+  te-kie: 1
+  te-text: "DE FEBRERO"
+  Brand: "1"
+
+HdrText487: HdrText
+  te-nro: 544
+  te-kie: 2
+  te-text: "DE FEBRER"
+  Brand: "1"
+
+HdrText488: HdrText
+  te-nro: 544
+  te-kie: 5
+  te-text: "FEBRUARY"
+  Brand: "1"
+
+HdrText489: HdrText
+  te-nro: 545
+  te-kie: 1
+  te-text: "DE MARZO"
+  Brand: "1"
+
+HdrText490: HdrText
+  te-nro: 545
+  te-kie: 2
+  te-text: "DE MARÇ"
+  Brand: "1"
+
+HdrText491: HdrText
+  te-nro: 545
+  te-kie: 5
+  te-text: "MARCH"
+  Brand: "1"
+
+HdrText492: HdrText
+  te-nro: 546
+  te-kie: 1
+  te-text: "DE ABRIL"
+  Brand: "1"
+
+HdrText493: HdrText
+  te-nro: 546
+  te-kie: 2
+  te-text: "D&#39ABRIL"
+  Brand: "1"
+
+HdrText494: HdrText
+  te-nro: 546
+  te-kie: 5
+  te-text: "APRIL"
+  Brand: "1"
+
+HdrText495: HdrText
+  te-nro: 547
+  te-kie: 1
+  te-text: "DE MAYO"
+  Brand: "1"
+
+HdrText496: HdrText
+  te-nro: 547
+  te-kie: 2
+  te-text: "DE MAIG"
+  Brand: "1"
+
+HdrText497: HdrText
+  te-nro: 547
+  te-kie: 5
+  te-text: "MAY"
+  Brand: "1"
+
+HdrText498: HdrText
+  te-nro: 548
+  te-kie: 1
+  te-text: "DE JUNIO"
+  Brand: "1"
+
+HdrText499: HdrText
+  te-nro: 548
+  te-kie: 2
+  te-text: "DE JUNY"
+  Brand: "1"
+
+HdrText500: HdrText
+  te-nro: 548
+  te-kie: 5
+  te-text: "JUNE"
+  Brand: "1"
+
+HdrText501: HdrText
+  te-nro: 549
+  te-kie: 1
+  te-text: "DE JULIO"
+  Brand: "1"
+
+HdrText502: HdrText
+  te-nro: 549
+  te-kie: 2
+  te-text: "DE JULIOL"
+  Brand: "1"
+
+HdrText503: HdrText
+  te-nro: 549
+  te-kie: 5
+  te-text: "JULY"
+  Brand: "1"
+
+HdrText504: HdrText
+  te-nro: 550
+  te-kie: 1
+  te-text: "DE AGOSTO"
+  Brand: "1"
+
+HdrText505: HdrText
+  te-nro: 550
+  te-kie: 2
+  te-text: "D&#39AGOST"
+  Brand: "1"
+
+HdrText506: HdrText
+  te-nro: 550
+  te-kie: 5
+  te-text: "AUGUST"
+  Brand: "1"
+
+HdrText507: HdrText
+  te-nro: 551
+  te-kie: 1
+  te-text: "DE SEPTIEMBRE"
+  Brand: "1"
+
+HdrText508: HdrText
+  te-nro: 551
+  te-kie: 2
+  te-text: "DE SETEMBRE"
+  Brand: "1"
+
+HdrText509: HdrText
+  te-nro: 551
+  te-kie: 5
+  te-text: "SEPTEMBER"
+  Brand: "1"
+
+HdrText510: HdrText
+  te-nro: 552
+  te-kie: 1
+  te-text: "DE OCTUBRE"
+  Brand: "1"
+
+HdrText511: HdrText
+  te-nro: 552
+  te-kie: 2
+  te-text: "D&#39OCTUBRE"
+  Brand: "1"
+
+HdrText512: HdrText
+  te-nro: 552
+  te-kie: 5
+  te-text: "OCTOBER"
+  Brand: "1"
+
+HdrText513: HdrText
+  te-nro: 553
+  te-kie: 1
+  te-text: "DE NOVIEMBRE"
+  Brand: "1"
+
+HdrText514: HdrText
+  te-nro: 553
+  te-kie: 2
+  te-text: "DE NOVEMBRE"
+  Brand: "1"
+
+HdrText515: HdrText
+  te-nro: 553
+  te-kie: 5
+  te-text: "NOVEMBER"
+  Brand: "1"
+
+HdrText516: HdrText
+  te-nro: 554
+  te-kie: 1
+  te-text: "DE DICIEMBRE"
+  Brand: "1"
+
+HdrText517: HdrText
+  te-nro: 554
+  te-kie: 2
+  te-text: "DE DESEMBRE"
+  Brand: "1"
+
+HdrText518: HdrText
+  te-nro: 554
+  te-kie: 5
+  te-text: "DECEMBER"
+  Brand: "1"
+
+HdrText519: HdrText
+  te-nro: 555
+  te-kie: 1
+  te-text: "Pago aplazado:
+
+El importe del Pago Aplazado se incluirá en la factura mensual junto con el resto de consumos.
+
+El mes #XX podrás elegir si quieres quedarte con el móvil abonando el Pago Final o, siempre que se encienda y la pantalla no esté dañada, devolverlo y no pagar nada y además, si quieres, llevarte uno nuevo.
+
+Reembolso anticipado no permitido. La falta de pago de dos cuotas,consecutivas o alternas, la baja en el servicio o la realización de un Renuevo, podrá traer consigo el vencimiento anticipado de las restantes cuotas que deberán ser abonadas de una sola vez."
+  Brand: "1"
+
+HdrText520: HdrText
+  te-nro: 555
+  te-kie: 5
+  te-text: "The installments will be included in your monthly fee with the rest of consumption.
+
+In month #XX you will choose to keep the handset paying final payment, or, if the handset is in good conditions, return it and don't pay anything.
+
+You cannot pay the installments in advance."
+  Brand: "1"
+
+HdrText521: HdrText
+  te-nro: 556
+  te-kie: 1
+  te-text: "Pago Aplazado
+Mensual: #AMOUNT E/mes x #MONTHS meses
+Pago final: A pagar el mes #XX"
+  Brand: "1"
+
+HdrText522: HdrText
+  te-nro: 556
+  te-kie: 5
+  te-text: "Financed Payment
+Monthly fee: #AMOUNT E/month x #MONTHS months
+Final payment: To be paid the month #XX"
+  Brand: "1"
+
+HdrText523: HdrText
+  te-nro: 557
+  te-kie: 1
+  te-text: "Pago del móvil: UNOE nos ha cedido los derechos de crédito derivados de la financiación del terminal que compraste al darte de alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la cláusula 13 del contrato de crédito."
+  Brand: "1"
+
+HdrText524: HdrText
+  te-nro: 557
+  te-kie: 2
+  te-text: "Pagament del mòbil: UNOE ens ha cedit els drets de crèdit derivats del finançament del terminal que vas comprar en donar-te d'alta o fer un Renuevo, la qual cosa et comuniquem en compliment de la clàusula 13 del contracte de crèdit."
+  Brand: "1"
+
+HdrText525: HdrText
+  te-nro: 557
+  te-kie: 3
+  te-text: "Mugikorraren ordainketa: alta ematean edo Renuevo plana onartzean erosi zenuen terminalaren finantzaketaren ondorio diren kreditu-eskubideak eman dizkigu UNOE erakundeak. Kreditu-kontratuaren 13. klausulari jarraiki jakinarazten dizugu aipatutakoa."
+  Brand: "1"
+
+HdrText526: HdrText
+  te-nro: 557
+  te-kie: 5
+  te-text: "Handset payment: In accordance with the provisions of Clause 13 of your credit contract, UNOE has passed us the credit claim related to the financing of the handset you purchased when you signed up to Yoigo or renewed your contract with Renuevo."
+  Brand: "1"
+
+HdrText527: HdrText
+  te-nro: 558
+  te-kie: 1
+  te-text: "Pago del móvil: Yoigo gestiona el cobro del Crédito otorgado por BanSabadell Fincom E.F.C., S.A.U., con CIF nº A-63574719 y domicilio social en C/ Sena nº 12 , Edif. CBS Pol. Can Sant Joan, 08174 - Sant Cugat del Vallés (Barcelona). Operación exenta del IVA. TIN: 0% y TAE: #TAE%."
+  Brand: "1"
+
+HdrText528: HdrText
+  te-nro: 558
+  te-kie: 2
+  te-text: "Pagament del mòbil: Yoigo gestiona el cobrament del crèdit atorgat per BanSabadell Fincom E.F.C., S.A.U., amb CIF núm. A-63574719 i domicili social al c/ Sena núm. 12, edif. CBS, pol. Can Sant Joan, 08174 - Sant Cugat del Vallès (Barcelona). Operació exempta de l'IVA. TIN: 0% i TAE: #TAE%."
+  Brand: "1"
+
+HdrText529: HdrText
+  te-nro: 558
+  te-kie: 3
+  te-text: "Mugikorraren ordainketa: Yoigo-k kudeatzen du ondoren aipatzen den erakundeak emandako Kreditua: BanSabadell Fincom E.F.C., S.A.U., IFZ A-63574719 eta egoitza soziala C/ Sena nº 12, edif. CBS, pol. Can Sant Joan, 08174 - Sant Cugat del Vallès (Barcelona). Eragiketa BEZatik salbuetsita dago. ITN: % 0 eta UTB: % #TAE."
+  Brand: "1"
+
+HdrText530: HdrText
+  te-nro: 558
+  te-kie: 5
+  te-text: "Mobile payment: Yoigo manages the payment of the credit granted by BanSabadell Fincom E.F.C., S.A.U., tax ID no. A-63574719 and registered office at C/ Sena nº 12, edif. CBS, pol. Can Sant Joan, 08174 - Sant Cugat del Vallès (Barcelona). VAT exempt transaction. NIR: 0% and APR: #TAE%."
+  Brand: "1"
+
+HdrText531: HdrText
+  te-nro: 559
+  te-kie: 1
+  te-text: "Pago del móvil: BANSABADELL nos ha cedido los derechos de crédito
+derivados de la financiación del terminal que compraste al darte de
+alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la
+cláusula 16 del contrato de préstamo."
+  Brand: "1"
+
+HdrText532: HdrText
+  te-nro: 559
+  te-kie: 2
+  te-text: "Pagament del mòbil: BANSABADELL ens ha cedit els drets de crèdit derivats del finançament del terminal que vas comprar en donar-te d'alta o fer un Renuevo, la qual cosa et comuniquem en compliment de la clàusula 16 del contracte de préstec."
+  Brand: "1"
+
+HdrText533: HdrText
+  te-nro: 559
+  te-kie: 3
+  te-text: "Mugikorraren ordainketa: alta ematean edo Renuevo plana onartzean erosi zenuen terminalaren finantzaketaren ondorio diren kreditu-eskubideak eman dizkigu BANSABADELL erakundeak. Mailegu-kontratuaren 16. klausulari jarraiki jakinarazten dizugu aipatutakoa."
+  Brand: "1"
+
+HdrText534: HdrText
+  te-nro: 559
+  te-kie: 5
+  te-text: "Handset payment: In accordance with the provisions of Clause 16 of your loan contract, BANSABADELL has passed us the credit claim related to the financing of the handset you purchased when you signed up to Yoigo or renewed your contract with Renuevo."
+  Brand: "1"
+
+HdrText535: HdrText
+  te-nro: 560
+  te-kie: 1
+  te-text: "Oficina de correos"
+  Brand: "1"
+
+HdrText536: HdrText
+  te-nro: 560
+  te-kie: 5
+  te-text: "Post office"
+  Brand: "1"
+
+HdrText537: HdrText
+  te-nro: 561
+  te-kie: 1
+  te-text: "Bono 1 GB Internet #MF euros/mes (Impuestos incluidos)"
+  Brand: "1"
+
+HdrText538: HdrText
+  te-nro: 561
+  te-kie: 5
+  te-text: "Bono 1 GB Internet #MF euros/month (Taxes included)"
+  Brand: "1"
+
+HdrText539: HdrText
+  te-nro: 562
+  te-kie: 1
+  te-text: "Disponibilidad del servicio: Quiero tener disponible el servicio al recibir el pedido."
+  Brand: "1"
+
+HdrText540: HdrText
+  te-nro: 562
+  te-kie: 5
+  te-text: "Service availability: I want to have the service available as soon as I get the order"
+  Brand: "1"
+
+HdrText541: HdrText
+  te-nro: 563
+  te-kie: 1
+  te-text: "Disponibilidad del servicio: Prefiero esperar 14 días para usar el servicio, pero no podré llamar ni recibir llamadas, ni SMS ni usar internet si lo he contratado."
+  Brand: "1"
+
+HdrText542: HdrText
+  te-nro: 563
+  te-kie: 5
+  te-text: "Service availability: I prefer to wait 14 days to use the service, but I won't be able to call or receive calls or SMS or internet"
+  Brand: "1"
+
+HdrText543: HdrText
+  te-nro: 564
+  te-kie: 1
+  te-text: "Factura mensual: electronica"
+  Brand: "1"
+
+HdrText544: HdrText
+  te-nro: 564
+  te-kie: 5
+  te-text: "Type of monthly invoice: electronic"
+  Brand: "1"
+
+HdrText545: HdrText
+  te-nro: 565
+  te-kie: 1
+  te-text: "Factura mensual: en papel"
+  Brand: "1"
+
+HdrText546: HdrText
+  te-nro: 565
+  te-kie: 5
+  te-text: "Type of monthly invoice: paper"
+  Brand: "1"
+
+HdrText547: HdrText
+  te-nro: 566
+  te-kie: 1
+  te-text: "Pago a plazos:
+
+Pago aplazado: #LOAN_FEE euros. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER% (#CF_FEE euros) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE euros. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.
+
+Teniendo en cuenta las condiciones que se te han ofrecido y tus compromisos asumidos, la baja en el servicio contratado o la realización de un Renuevo, podrá traer consigo el vencimiento anticipado de los pagos que deberán ser abonados de una sola vez.
+
+En los 15 días siguientes al pago de la cuota 24 podrás acogerte a la opción ofrecida por YOIGO de sustituir el Pago Final por la entrega del móvil, siempre que se encienda y la pantalla no esté dañada, en cuyo caso YOIGO abonará por tu cuenta a Banco Cetelem el importe del Pago Final."
+  Brand: "1"
+
+HdrText548: HdrText
+  te-nro: 566
+  te-kie: 5
+  te-text: "Financed Payment:
+
+Deferred payment: #LOAN_FEE euros. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE euros) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE euros. Financing Transaction with Banco Cetelem, S.A.U.
+
+Given the conditions you have provided and your commitments, low in the contracted service or performance of a Renuevo, you can bring the acceleration of payments which must be paid at once. 
+
+In the 15 days following payment of the fee 24 you have the option offered by YOIGO of replacing the Final Payment for the delivery of the mobile, if it turn on and the screen is not damaged, in which case YOIGO will pai for your account Banco Cetelem the amount of the Final Payment."
+  Brand: "1"
+
+HdrText549: HdrText
+  te-nro: 567
+  te-kie: 1
+  te-text: "Pago a plazos:
+
+Pago aplazado: #LOAN_FEE euros. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER% (#CF_FEE euros) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE euros. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.
+
+Teniendo en cuenta las condiciones que se te han ofrecido y tus compromisos asumidos, la baja en el servicio contratado o la realización de un Renuevo, podrá traer consigo el vencimiento anticipado de los pagos que deberán ser abonados de una sola vez."
+  Brand: "1"
+
+HdrText550: HdrText
+  te-nro: 567
+  te-kie: 5
+  te-text: "Financed Payment:
+
+Deferred payment: #LOAN_FEE euros. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE euros) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE euros. Financing Transaction with Banco Cetelem, S.A.U.
+
+Given the conditions you have provided and your commitments, low in the contracted service or performance of a Renuevo, you can bring the acceleration of payments which must be paid at once."
+  Brand: "1"
+
+HdrText551: HdrText
+  te-nro: 568
+  te-kie: 1
+  te-text: "Doble de MB hasta el 31/01/15"
+  Brand: "1"
+
+HdrText552: HdrText
+  te-nro: 568
+  te-kie: 5
+  te-text: "Double MB until 31/01/15"
+  Brand: "1"
+
+HdrText553: HdrText
+  te-nro: 569
+  te-kie: 1
+  te-text: "<strong>Pago aplazado:</strong><br/><br/>                                                   
+El importe del Pago Aplazado se incluirá en la factura mensual junto 
+con el resto de consumos.<br/>
+
+Reembolso anticipado no permitido. La falta de pago de dos cuotas,    consecutivas o alternas, o la baja en el servicio, podrá traer consigo
+el vencimiento anticipado de las restantes cuotas que deberán ser     abonadas de una sola vez."
+  Brand: "1"
+
+HdrText554: HdrText
+  te-nro: 569
+  te-kie: 5
+  te-text: "<strong>Financed payment:</strong><br/><br/>                          
+The installments will be included in your monthly fee with the rest of consumption.<br/>
+
+You cannot pay the installments in advance. You can check your order  calling us for free to 622."
+  Brand: "1"
+
+HdrText555: HdrText
+  te-nro: 570
+  te-kie: 1
+  te-text: "<strong>Pago aplazado:</strong><br/><br/>                                                       
+El importe del Pago Aplazado se incluirá en la factura mensual junto 
+con el resto de consumos.<br/>
+
+El mes #XX podrás elegir si quieres quedarte con el móvil abonando el
+Pago Final o, siempre que se encienda y la pantalla no esté dañada,  
+devolverlo y no pagar nada y además, si quieres, llevarte uno        
+nuevo.<br/>
+
+Reembolso anticipado no permitido. La falta de pago de dos           
+cuotas,consecutivas o alternas, la baja en el servicio o la          
+realización de un Renuevo, podrá traer consigo el vencimiento        
+anticipado de las restantes cuotas que deberán ser abonadas de una   
+sola vez."
+  Brand: "1"
+
+HdrText556: HdrText
+  te-nro: 570
+  te-kie: 5
+  te-text: "<strong>Financed payment:</strong><br/><br/>
+
+The installments will be included in your monthly fee with the rest of consumption.<br/>
+
+In month #XX you will choose to keep the handset paying final payment, or, if the handset is in good conditions, return it and don't pay anything.<br/>
+
+You cannot pay the installments in advance. "
+  Brand: "1"
+
+HdrText557: HdrText
+  te-nro: 571
+  te-kie: 1
+  te-text: "<strong>Pago a plazos:</strong><br/><br/>                                              
+Pago aplazado: #LOAN_FEE &euro;. Tipo de Interés Nominal Anual (TIN):
+0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER%  
+(#CF_FEE &euro;) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE &euro;. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.<br/>                                                            
+Teniendo en cuenta las condiciones que se te han ofrecido y tus      
+compromisos asumidos, la baja en el servicio contratado o la         
+realización de un Renuevo, podrá traer consigo el vencimiento        
+anticipado de los pagos que deberán ser abonados de una sola vez.<br/>    
+
+En los 15 días siguientes al pago de la cuota 24 podrás acogerte a la
+opción ofrecida por YOIGO de sustituir el Pago Final por la entrega  
+del móvil, siempre que se encienda y la pantalla no esté dañada, en  
+cuyo caso YOIGO abonará por tu cuenta a Banco Cetelem el importe del Pago Final."
+  Brand: "1"
+
+HdrText558: HdrText
+  te-nro: 571
+  te-kie: 5
+  te-text: "<strong>Financed Payment:</strong><br/><br/>
+
+Deferred payment: #LOAN_FEE &euro;. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE &euro;) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE &euro;. Financing Transaction with Banco Cetelem, S.A.U.<br/>
+            
+Given the conditions you have provided and your commitments, low in  
+the contracted service or performance of a Renuevo, you can bring the
+acceleration of payments which must be paid at once.<br/>       
+
+In the 15 days following payment of the fee 24 you have the option    offered by YOIGO of replacing the Final Payment for the delivery of  
+the mobile, if it turn on and the screen is not damaged, in which case
+YOIGO will pai for your account Banco Cetelem the amount of the Final Payment."
+  Brand: "1"
+
+HdrText559: HdrText
+  te-nro: 572
+  te-kie: 1
+  te-text: "<strong>Pago a plazos:</strong><br/><br/>                          
+
+Pago aplazado: #LOAN_FEE &euro;. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER%  
+(#CF_FEE &euro;) se incluirá en la factura con el primer pago mensual.
+Total adeudado: #TOTAL_FEE &euro;. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.<br/>                                                        
+
+Teniendo en cuenta las condiciones que se tehan ofrecido y tus       
+compromisos asumidos, la baja en el servicio contratado o la         
+realización de un Renuevo, podrá traer consigo el vencimiento        
+anticipado de los pagos que deberán ser abonados de una sola vez."
+  Brand: "1"
+
+HdrText560: HdrText
+  te-nro: 572
+  te-kie: 5
+  te-text: "<strong>Financed Payment:</strong><br/><br/>
+
+Deferred payment: #LOAN_FEE &euro;. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE &euro;) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE &euro;. Financing Transaction with Banco Cetelem, S.A.U.<br/>
+    
+Given the conditions you have provided and your commitments, low in   
+the contracted service or performance of a Renuevo, you can bring the
+acceleration of payments which must be paid at once."
+  Brand: "1"
+
+HdrText561: HdrText
+  te-nro: 573
+  te-kie: 1
+  te-text: "Cuando llamas a un número Premium, te cobramos la suma de dos conceptos: el coste de una llamada según tu tarifa con Yoigo, como si llamaras a un fijo o móvil nacional, más el de la empresa a la que llamas por el servicio que te dan. En el detalle (Proveedor de Servicios/Destino) de esa llamada aparece el nombre del operador al que pertenece el número al que llamaste.Cuando envías o recibes un mensaje Premium, Yoigo te cobra 10 céntimos (sin impuestos indirectos), el resto es lo que cobra la empresa a la que envías o de la que recibes el mensaje, por eso en la factura puede aparecer más de una línea. En el detalle (Proveedor de Servicios/Destino) aparecerá el CIF y el nombre de la empresa. Además puede que no coincida con el nombre que aparece, ya que puede ser la denominación social de la empresa y no el nombre comercial o marca."
+  Brand: "1"
+
+HdrText562: HdrText
+  te-nro: 573
+  te-kie: 2
+  te-text: "Quan truques a un número Premium et cobrem la suma de dos conceptes: el cost d'una trucada segons la teva tarifa amb Yoigo, com si truquessis a un fix o mobil nacional, més el de l'empresa on truques pel servei que et donen. En el detall (Proveidor de Serveis / Destí) d'aquella trucada apareix el nom de l'operador a qui pertany el número on truques.Quan envies o reps un missatge Premium, Yoigo et cobra 10 centims (sense impostos indirectes), la resta és el que cobra l'empresa on envies o des d'on reps el missatge, per aixo a la factura hi pot apareixer més d'una línia. En el detall (Proveidor de Serveis / Destí) hi apareixera el CIF i el nom de l'empresa. A més és possible que no coincideixi amb el nom que hi apareix, ja que pot ser la denominació social de l'empresa i no el nom comercial o marca."
+  Brand: "1"
+
+HdrText563: HdrText
+  te-nro: 573
+  te-kie: 3
+  te-text: "Premium zenbaki batera deitzen duzunean, bi kontzepturen batuketa kobratzen dizugu:deiaren kostua, Yoigo-rekin duzun tarifan oinarrituta (finko edo mugikor nazional batera deituko bazenu bezala), eta deitzen duzun enpresaren kostua, eskaintzen dizuten zerbitzuarengatik. Dei horren xehetasunetan (Zerbitzu-hornitzailea / Helmuga) deitutako zenbakiari dagokion operadorearen izena agertzen da.Premium mezuak bidaltzen edo jasotzen dituzunean, Yoigo-k 10 zentimo kobratzen dizkizu (zeharkako zergak kanpo) eta, gainerakoa, mezua bidaltzen edo jasotzen duzun enpresak kobratzen duen zenbatekoa da. Horregatik, fakturan lerro bat baino gehiago ager daiteke. Xehetasunetan (Zerbitzu-hornitzailea / Helmuga) enpresaren IFZa eta izena agertuko dira. Horrez gain, baliteke agertzen den izenarekin bat ez etortzea, enpresaren izen soziala izan daitekeelako, eta ez izen komertziala edo marka."
+  Brand: "1"
+
+HdrText564: HdrText
+  te-nro: 573
+  te-kie: 5
+  te-text: "When you call a Premium number, we charge you the total for two items: the cost of a call according to your Yoigo rate, as if you were calling a Spanish landline or mobile, plus that of the company you call for the service it provides. The breakdown (Destination/Service Provider) for this call shows the name of the operator to which the number you called belongs.When you send or receive a Premium message, Yoigo charges you 10 cents (indirect taxes not included), and the rest is what the company to which you send it or which receives the message charges you, which is why there may be more than one line on your bill. The breakdown (Destination/Service Provider) shows the company's name and tax number. The name shown may not match, as this may be the company name rather than its trade or band name."
+  Brand: "1"
+
+HdrText565: HdrText
+  te-nro: 574
+  te-kie: 1
+  te-text: "Cuando pagas tu compra de Contenidos de Google Play a través de Yoigo no se aplican impuestos al ser compras que has realizado directamente a Google. Tienes más información sobre las compras realizadas en wallet.google.com y play.google.com/store/account utilizando tu cuenta de Google."
+  Brand: "1"
+
+HdrText566: HdrText
+  te-nro: 574
+  te-kie: 2
+  te-text: "Quan pagues la teva compra de continguts de Google Play a través de Yoigo no s.hi apliquen impostos ja que són compres que has fet directament a Google. Tens més informació sobre les compres fetes a wallet.google.com i play.google.com/store/account fent servir el teu compte de Google."
+  Brand: "1"
+
+HdrText567: HdrText
+  te-nro: 574
+  te-kie: 3
+  te-text: "Google Play edukiak erostean Yoigo-ren bidez ordaintzen duzunean, ez da zergarik aplikatuko, Google-ri zuzenean egin dizkiozun erosketak baitira. Google kontua erabilita egindako erosketei buruzko informazio gehiago duzu eskuragarri wallet.google.com eta play.google.com/store/account helbideetan."
+  Brand: "1"
+
+HdrText568: HdrText
+  te-nro: 574
+  te-kie: 5
+  te-text: "When you pay for your purchase of Google Play Content through Yoigo no taxes are applied as they are purchases made directly from Google. You can find further information about purchases you have made at wallet.google.com and play.google.com/store/account, using your Google account."
+  Brand: "1"
+
+HdrText569: HdrText
+  te-nro: 575
+  te-kie: 1
+  te-text: "Pago del móvil: Yoigo gestiona el cobro del Crédito otorgado por Banco Cetelem, S.A.U., con CIF nº A-78650348 y domicilio social en Madrid, c/ Retama, 3 (28045). Operación exenta del IVA. TIN: 0% y TAE: #TAE%."
+  Brand: "1"
+
+HdrText570: HdrText
+  te-nro: 575
+  te-kie: 2
+  te-text: "Pagament del mòbil: Yoigo gestiona el cobrament del crèdit atorgat per Banco Cetelem, S.A.U., amb CIF núm. A-78650348 i domicili social al Madrid, c/ Retama, 3 (28045). Operació exempta de l'IVA. TIN: 0% i TAE: #TAE%."
+  Brand: "1"
+
+HdrText571: HdrText
+  te-nro: 575
+  te-kie: 3
+  te-text: "Mugikorraren ordainketa: Yoigo-k kudeatzen du ondoren aipatzen den erakundeak emandako Kreditua: Banco Cetelem, S.A.U., IFZ A-78650348 eta egoitza soziala Madrid, c/ Retama, 3 (28045). Eragiketa BEZatik salbuetsita dago. ITN: % 0 eta UTB: % #TAE."
+  Brand: "1"
+
+HdrText572: HdrText
+  te-nro: 575
+  te-kie: 5
+  te-text: "Mobile payment: Yoigo manages the payment of the credit granted by Banco Cetelem, S.A.U., with tax ID no. A-78650348 and registered office at Madrid, c/ Retama, 3 (28045). VAT exempt transaction. NIR: 0% and APR: #TAE%."
+  Brand: "1"
+
+HdrText573: HdrText
+  te-nro: 576
+  te-kie: 1
+  te-text: "Pago del móvil: Banco Cetelem nos ha cedido los derechos de crédito derivados de la financiación del terminal que compraste al darte de alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la cláusula 13 del contrato de crédito."
+  Brand: "1"
+
+HdrText574: HdrText
+  te-nro: 576
+  te-kie: 2
+  te-text: "Pagament del mòbil: Banco Cetelem ens ha cedit els drets de crèdit derivats del finançament del terminal que vas comprar en donar-te d'alta o fer un Renuevo, la qual cosa et comuniquem en compliment de la clàusula 13 del contracte de crèdit."
+  Brand: "1"
+
+HdrText575: HdrText
+  te-nro: 576
+  te-kie: 3
+  te-text: "Mugikorraren ordainketa: alta ematean edo Renuevo plana onartzean erosi zenuen terminalaren finantzaketaren ondorio diren kreditu-eskubideak eman dizkigu Banco Cetelem erakundeak. Kreditu-kontratuaren 13. klausulari jarraiki jakinarazten dizugu aipatutakoa."
+  Brand: "1"
+
+HdrText576: HdrText
+  te-nro: 576
+  te-kie: 5
+  te-text: "Handset payment: In accordance with the provisions of Clause 13 of your credit contract, Banco Cetelem has passed us the credit claim related to the financing of the handset you purchased when you signed up to Yoigo or renewed your contract with Renuevo."
+  Brand: "1"
+
+HdrText577: HdrText
+  te-nro: 1
+  te-kie: 1
+  te-text: "Soittaja-asiakas"
+  Brand: "2"
+
+HdrText578: HdrText
+  te-nro: 1
+  te-kie: 2
+  te-text: "Abonnent"
+  Brand: "2"
+
+HdrText579: HdrText
+  te-nro: 1
+  te-kie: 5
+  te-text: "Caller"
+  Brand: "2"
+
+HdrText580: HdrText
+  te-nro: 1
+  te-kie: 6
+  te-text: "Abonnent"
+  Brand: "2"
+
+HdrText581: HdrText
+  te-nro: 2
+  te-kie: 1
+  te-text: "Hinnastoasiakas"
+  Brand: "2"
+
+HdrText582: HdrText
+  te-nro: 2
+  te-kie: 2
+  te-text: "Priser från kund"
+  Brand: "2"
+
+HdrText583: HdrText
+  te-nro: 2
+  te-kie: 5
+  te-text: "Prices from customer"
+  Brand: "2"
+
+HdrText584: HdrText
+  te-nro: 3
+  te-kie: 1
+  te-text: "Laskun saaja"
+  Brand: "2"
+
+HdrText585: HdrText
+  te-nro: 3
+  te-kie: 2
+  te-text: "Fakturamottagare"
+  Brand: "2"
+
+HdrText586: HdrText
+  te-nro: 3
+  te-kie: 5
+  te-text: "Invoice-customer"
+  Brand: "2"
+
+HdrText587: HdrText
+  te-nro: 3
+  te-kie: 6
+  te-text: "Faktura mottaker"
+  Brand: "2"
+
+HdrText588: HdrText
+  te-nro: 4
+  te-kie: 1
+  te-text: "Raportin saaja"
+  Brand: "2"
+
+HdrText589: HdrText
+  te-nro: 4
+  te-kie: 2
+  te-text: "Samtalsrapport till"
+  Brand: "2"
+
+HdrText590: HdrText
+  te-nro: 4
+  te-kie: 5
+  te-text: "Report-customer"
+  Brand: "2"
+
+HdrText591: HdrText
+  te-nro: 5
+  te-kie: 1
+  te-text: "Raportti"
+  Brand: "2"
+
+HdrText592: HdrText
+  te-nro: 5
+  te-kie: 2
+  te-text: "Rapport"
+  Brand: "2"
+
+HdrText593: HdrText
+  te-nro: 5
+  te-kie: 5
+  te-text: "Report"
+  Brand: "2"
+
+HdrText594: HdrText
+  te-nro: 6
+  te-kie: 1
+  te-text: "Yhteensä"
+  Brand: "2"
+
+HdrText595: HdrText
+  te-nro: 6
+  te-kie: 2
+  te-text: "Totalt"
+  Brand: "2"
+
+HdrText596: HdrText
+  te-nro: 6
+  te-kie: 5
+  te-text: "Total"
+  Brand: "2"
+
+HdrText597: HdrText
+  te-nro: 7
+  te-kie: 1
+  te-text: "Liittymä"
+  Brand: "2"
+
+HdrText598: HdrText
+  te-nro: 7
+  te-kie: 2
+  te-text: "Telefon nr."
+  Brand: "2"
+
+HdrText599: HdrText
+  te-nro: 7
+  te-kie: 5
+  te-text: "Telephone nr."
+  Brand: "2"
+
+HdrText600: HdrText
+  te-nro: 8
+  te-kie: 1
+  te-text: "Liittymästä"
+  Brand: "2"
+
+HdrText601: HdrText
+  te-nro: 8
+  te-kie: 2
+  te-text: "Från A-nummer"
+  Brand: "2"
+
+HdrText602: HdrText
+  te-nro: 8
+  te-kie: 5
+  te-text: "From telephone nr."
+  Brand: "2"
+
+HdrText603: HdrText
+  te-nro: 9
+  te-kie: 1
+  te-text: "TUOTTEITTAIN/MAITTAIN"
+  Brand: "2"
+
+HdrText604: HdrText
+  te-nro: 9
+  te-kie: 2
+  te-text: "/ TJÄNST"
+  Brand: "2"
+
+HdrText605: HdrText
+  te-nro: 9
+  te-kie: 5
+  te-text: " / COUNTRY"
+  Brand: "2"
+
+HdrText606: HdrText
+  te-nro: 10
+  te-kie: 1
+  te-text: "Puhelu"
+  Brand: "2"
+
+HdrText607: HdrText
+  te-nro: 10
+  te-kie: 2
+  te-text: "Samtal"
+  Brand: "2"
+
+HdrText608: HdrText
+  te-nro: 10
+  te-kie: 5
+  te-text: "Call"
+  Brand: "2"
+
+HdrText609: HdrText
+  te-nro: 11
+  te-kie: 1
+  te-text: "Puheluittain"
+  Brand: "2"
+
+HdrText610: HdrText
+  te-nro: 11
+  te-kie: 2
+  te-text: "Per samtal"
+  Brand: "2"
+
+HdrText611: HdrText
+  te-nro: 11
+  te-kie: 5
+  te-text: "Per call"
+  Brand: "2"
+
+HdrText612: HdrText
+  te-nro: 12
+  te-kie: 1
+  te-text: "PUHELUT"
+  Brand: "2"
+
+HdrText613: HdrText
+  te-nro: 12
+  te-kie: 2
+  te-text: "SAMTAL"
+  Brand: "2"
+
+HdrText614: HdrText
+  te-nro: 12
+  te-kie: 5
+  te-text: "CALLS"
+  Brand: "2"
+
+HdrText615: HdrText
+  te-nro: 13
+  te-kie: 1
+  te-text: "Soittoaika"
+  Brand: "2"
+
+HdrText616: HdrText
+  te-nro: 13
+  te-kie: 2
+  te-text: "Tid (tot)"
+  Brand: "2"
+
+HdrText617: HdrText
+  te-nro: 13
+  te-kie: 5
+  te-text: "Call-time"
+  Brand: "2"
+
+HdrText618: HdrText
+  te-nro: 14
+  te-kie: 1
+  te-text: "Asiakas"
+  Brand: "2"
+
+HdrText619: HdrText
+  te-nro: 14
+  te-kie: 2
+  te-text: "Kund"
+  Brand: "2"
+
+HdrText620: HdrText
+  te-nro: 14
+  te-kie: 5
+  te-text: "Customer"
+  Brand: "2"
+
+HdrText621: HdrText
+  te-nro: 15
+  te-kie: 1
+  te-text: "KPL"
+  Brand: "2"
+
+HdrText622: HdrText
+  te-nro: 15
+  te-kie: 2
+  te-text: "Antal"
+  Brand: "2"
+
+HdrText623: HdrText
+  te-nro: 15
+  te-kie: 5
+  te-text: "Qty"
+  Brand: "2"
+
+HdrText624: HdrText
+  te-nro: 16
+  te-kie: 1
+  te-text: "Kpl"
+  Brand: "2"
+
+HdrText625: HdrText
+  te-nro: 16
+  te-kie: 2
+  te-text: "Antal"
+  Brand: "2"
+
+HdrText626: HdrText
+  te-nro: 16
+  te-kie: 5
+  te-text: "Pcs"
+  Brand: "2"
+
+HdrText627: HdrText
+  te-nro: 17
+  te-kie: 1
+  te-text: "Normaalihinta"
+  Brand: "2"
+
+HdrText628: HdrText
+  te-nro: 17
+  te-kie: 2
+  te-text: "Normal pris"
+  Brand: "2"
+
+HdrText629: HdrText
+  te-nro: 17
+  te-kie: 5
+  te-text: "Normal price"
+  Brand: "2"
+
+HdrText630: HdrText
+  te-nro: 18
+  te-kie: 1
+  te-text: "!! POISTETTU !!"
+  Brand: "2"
+
+HdrText631: HdrText
+  te-nro: 18
+  te-kie: 2
+  te-text: "!! OKÄND !!"
+  Brand: "2"
+
+HdrText632: HdrText
+  te-nro: 18
+  te-kie: 5
+  te-text: "!! UNKNOWN !!"
+  Brand: "2"
+
+HdrText633: HdrText
+  te-nro: 19
+  te-kie: 1
+  te-text: "ERITTELY PUHELUITTAIN"
+  Brand: "2"
+
+HdrText634: HdrText
+  te-nro: 19
+  te-kie: 2
+  te-text: "ALLA SAMTAL"
+  Brand: "2"
+
+HdrText635: HdrText
+  te-nro: 19
+  te-kie: 5
+  te-text: "ALL CALLS ITEMIZED"
+  Brand: "2"
+
+HdrText636: HdrText
+  te-nro: 20
+  te-kie: 1
+  te-text: "KAIKKI YHTEENSÄ"
+  Brand: "2"
+
+HdrText637: HdrText
+  te-nro: 20
+  te-kie: 2
+  te-text: "TOTALT"
+  Brand: "2"
+
+HdrText638: HdrText
+  te-nro: 20
+  te-kie: 5
+  te-text: "GRAND TOTAL"
+  Brand: "2"
+
+HdrText639: HdrText
+  te-nro: 21
+  te-kie: 1
+  te-text: "AIKA"
+  Brand: "2"
+
+HdrText640: HdrText
+  te-nro: 21
+  te-kie: 2
+  te-text: "Tid"
+  Brand: "2"
+
+HdrText641: HdrText
+  te-nro: 21
+  te-kie: 5
+  te-text: "Time"
+  Brand: "2"
+
+HdrText642: HdrText
+  te-nro: 22
+  te-kie: 1
+  te-text: "SOITETTU NUMEROON"
+  Brand: "2"
+
+HdrText643: HdrText
+  te-nro: 22
+  te-kie: 2
+  te-text: "Till nummer"
+  Brand: "2"
+
+HdrText644: HdrText
+  te-nro: 22
+  te-kie: 5
+  te-text: "Called number"
+  Brand: "2"
+
+HdrText645: HdrText
+  te-nro: 23
+  te-kie: 1
+  te-text: "PUHELUERITTELY"
+  Brand: "2"
+
+HdrText646: HdrText
+  te-nro: 23
+  te-kie: 2
+  te-text: "SAMTAL / TJÄNST / A-NUMMER"
+  Brand: "2"
+
+HdrText647: HdrText
+  te-nro: 23
+  te-kie: 5
+  te-text: "CALLS / COUNTRY / TELEPHONENO."
+  Brand: "2"
+
+HdrText648: HdrText
+  te-nro: 24
+  te-kie: 1
+  te-text: "---------- Tulostus keskeytetty -----------"
+  Brand: "2"
+
+HdrText649: HdrText
+  te-nro: 24
+  te-kie: 2
+  te-text: "------------- Rapport stoppad -----------"
+  Brand: "2"
+
+HdrText650: HdrText
+  te-nro: 24
+  te-kie: 5
+  te-text: "--------------- Report stopped ----------------"
+  Brand: "2"
+
+HdrText651: HdrText
+  te-nro: 25
+  te-kie: 1
+  te-text: "PUHELUYHTEENVETORAPORTTI MAITTAIN"
+  Brand: "2"
+
+HdrText652: HdrText
+  te-nro: 25
+  te-kie: 2
+  te-text: "ALLA SAMTAL TOTALT / TJÄNST"
+  Brand: "2"
+
+HdrText653: HdrText
+  te-nro: 25
+  te-kie: 5
+  te-text: "TOTALS / COUNTRY"
+  Brand: "2"
+
+HdrText654: HdrText
+  te-nro: 26
+  te-kie: 1
+  te-text: "Trunc"
+  Brand: "2"
+
+HdrText655: HdrText
+  te-nro: 26
+  te-kie: 2
+  te-text: "Trunk"
+  Brand: "2"
+
+HdrText656: HdrText
+  te-nro: 26
+  te-kie: 5
+  te-text: "Trunc"
+  Brand: "2"
+
+HdrText657: HdrText
+  te-nro: 27
+  te-kie: 1
+  te-text: "MAA/PALVELU"
+  Brand: "2"
+
+HdrText658: HdrText
+  te-nro: 27
+  te-kie: 2
+  te-text: "Land"
+  Brand: "2"
+
+HdrText659: HdrText
+  te-nro: 27
+  te-kie: 5
+  te-text: "Country/Service"
+  Brand: "2"
+
+HdrText660: HdrText
+  te-nro: 28
+  te-kie: 1
+  te-text: "Sivu"
+  Brand: "2"
+
+HdrText661: HdrText
+  te-nro: 28
+  te-kie: 2
+  te-text: "Sida"
+  Brand: "2"
+
+HdrText662: HdrText
+  te-nro: 28
+  te-kie: 5
+  te-text: "Page"
+  Brand: "2"
+
+HdrText663: HdrText
+  te-nro: 29
+  te-kie: 1
+  te-text: "KESTO"
+  Brand: "2"
+
+HdrText664: HdrText
+  te-nro: 29
+  te-kie: 2
+  te-text: "Tid"
+  Brand: "2"
+
+HdrText665: HdrText
+  te-nro: 29
+  te-kie: 5
+  te-text: "Durat."
+  Brand: "2"
+
+HdrText666: HdrText
+  te-nro: 30
+  te-kie: 1
+  te-text: "PVM"
+  Brand: "2"
+
+HdrText667: HdrText
+  te-nro: 30
+  te-kie: 2
+  te-text: "Datum"
+  Brand: "2"
+
+HdrText668: HdrText
+  te-nro: 30
+  te-kie: 5
+  te-text: "Date"
+  Brand: "2"
+
+HdrText669: HdrText
+  te-nro: 31
+  te-kie: 1
+  te-text: "Soitettu numerosta"
+  Brand: "2"
+
+HdrText670: HdrText
+  te-nro: 31
+  te-kie: 2
+  te-text: "Samtal från nummer"
+  Brand: "2"
+
+HdrText671: HdrText
+  te-nro: 31
+  te-kie: 5
+  te-text: "Called from number"
+  Brand: "2"
+
+HdrText672: HdrText
+  te-nro: 32
+  te-kie: 1
+  te-text: "cent/min"
+  Brand: "2"
+
+HdrText673: HdrText
+  te-nro: 32
+  te-kie: 2
+  te-text: "cent/min"
+  Brand: "2"
+
+HdrText674: HdrText
+  te-nro: 32
+  te-kie: 5
+  te-text: "cent/min"
+  Brand: "2"
+
+HdrText675: HdrText
+  te-nro: 33
+  te-kie: 1
+  te-text: "HINTA"
+  Brand: "2"
+
+HdrText676: HdrText
+  te-nro: 33
+  te-kie: 2
+  te-text: "Att betala"
+  Brand: "2"
+
+HdrText677: HdrText
+  te-nro: 33
+  te-kie: 5
+  te-text: "To be paid"
+  Brand: "2"
+
+HdrText678: HdrText
+  te-nro: 34
+  te-kie: 1
+  te-text: "Kpl-hinta"
+  Brand: "2"
+
+HdrText679: HdrText
+  te-nro: 34
+  te-kie: 2
+  te-text: "Per styck"
+  Brand: "2"
+
+HdrText680: HdrText
+  te-nro: 34
+  te-kie: 5
+  te-text: "Apiece"
+  Brand: "2"
+
+HdrText681: HdrText
+  te-nro: 35
+  te-kie: 1
+  te-text: "Aletyyp"
+  Brand: "2"
+
+HdrText682: HdrText
+  te-nro: 35
+  te-kie: 2
+  te-text: "Rab.typ."
+  Brand: "2"
+
+HdrText683: HdrText
+  te-nro: 35
+  te-kie: 5
+  te-text: "Dsc.type"
+  Brand: "2"
+
+HdrText684: HdrText
+  te-nro: 36
+  te-kie: 1
+  te-text: "N% = Nettohinta (%-alennus)"
+  Brand: "2"
+
+HdrText685: HdrText
+  te-nro: 36
+  te-kie: 2
+  te-text: "N% nettopris (fastställt. %-avdrag)"
+  Brand: "2"
+
+HdrText686: HdrText
+  te-nro: 36
+  te-kie: 5
+  te-text: "N% = Netprice (based on percentage)"
+  Brand: "2"
+
+HdrText687: HdrText
+  te-nro: 37
+  te-kie: 1
+  te-text: "N  = Nettohinta (yksikköhinta)"
+  Brand: "2"
+
+HdrText688: HdrText
+  te-nro: 37
+  te-kie: 2
+  te-text: "N  nettopris (fastställt enhetspris)"
+  Brand: "2"
+
+HdrText689: HdrText
+  te-nro: 37
+  te-kie: 5
+  te-text: "N  = Netprice (based on unitprice)"
+  Brand: "2"
+
+HdrText690: HdrText
+  te-nro: 38
+  te-kie: 1
+  te-text: "GR = Yleisalennus sop. mukaan"
+  Brand: "2"
+
+HdrText691: HdrText
+  te-nro: 38
+  te-kie: 2
+  te-text: "GR generell rabatt enl. avtal"
+  Brand: "2"
+
+HdrText692: HdrText
+  te-nro: 38
+  te-kie: 5
+  te-text: "GR = Universal discount as agr."
+  Brand: "2"
+
+HdrText693: HdrText
+  te-nro: 39
+  te-kie: 1
+  te-text: "PR = Progressiivinen määräalennus"
+  Brand: "2"
+
+HdrText694: HdrText
+  te-nro: 39
+  te-kie: 2
+  te-text: "PR progressiv volymrabatt"
+  Brand: "2"
+
+HdrText695: HdrText
+  te-nro: 39
+  te-kie: 5
+  te-text: "PR = Progressive volume discount"
+  Brand: "2"
+
+HdrText696: HdrText
+  te-nro: 40
+  te-kie: 2
+  te-text: "Främmande a-nummer"
+  Brand: "2"
+
+HdrText697: HdrText
+  te-nro: 41
+  te-kie: 2
+  te-text: "Samtal under tiden"
+  Brand: "2"
+
+HdrText698: HdrText
+  te-nro: 41
+  te-kie: 5
+  te-text: "Calls from period"
+  Brand: "2"
+
+HdrText699: HdrText
+  te-nro: 42
+  te-kie: 2
+  te-text: "Kod"
+  Brand: "2"
+
+HdrText700: HdrText
+  te-nro: 42
+  te-kie: 5
+  te-text: "Code"
+  Brand: "2"
+
+HdrText701: HdrText
+  te-nro: 43
+  te-kie: 2
+  te-text: "Tjänst"
+  Brand: "2"
+
+HdrText702: HdrText
+  te-nro: 43
+  te-kie: 5
+  te-text: "Service"
+  Brand: "2"
+
+HdrText703: HdrText
+  te-nro: 44
+  te-kie: 2
+  te-text: "TidPeak"
+  Brand: "2"
+
+HdrText704: HdrText
+  te-nro: 45
+  te-kie: 2
+  te-text: "TidOffPeak"
+  Brand: "2"
+
+HdrText705: HdrText
+  te-nro: 46
+  te-kie: 2
+  te-text: "020 SAMTAL"
+  Brand: "2"
+
+HdrText706: HdrText
+  te-nro: 47
+  te-kie: 1
+  te-text: "A-hinta"
+  Brand: "2"
+
+HdrText707: HdrText
+  te-nro: 47
+  te-kie: 2
+  te-text: "Enh.pris"
+  Brand: "2"
+
+HdrText708: HdrText
+  te-nro: 47
+  te-kie: 5
+  te-text: "Unit Pr."
+  Brand: "2"
+
+HdrText709: HdrText
+  te-nro: 48
+  te-kie: 1
+  te-text: "YHTEENSÄ EUR"
+  Brand: "2"
+
+HdrText710: HdrText
+  te-nro: 48
+  te-kie: 2
+  te-text: "TOTALT EUR"
+  Brand: "2"
+
+HdrText711: HdrText
+  te-nro: 48
+  te-kie: 5
+  te-text: "TOTAL EUR"
+  Brand: "2"
+
+HdrText712: HdrText
+  te-nro: 49
+  te-kie: 1
+  te-text: "YHTEENSÄ MK"
+  Brand: "2"
+
+HdrText713: HdrText
+  te-nro: 49
+  te-kie: 2
+  te-text: "TOTALT MK"
+  Brand: "2"
+
+HdrText714: HdrText
+  te-nro: 49
+  te-kie: 5
+  te-text: "TOTAL FIM"
+  Brand: "2"
+
+HdrText715: HdrText
+  te-nro: 50
+  te-kie: 1
+  te-text: "EUR"
+  Brand: "2"
+
+HdrText716: HdrText
+  te-nro: 51
+  te-kie: 1
+  te-text: "MK"
+  Brand: "2"
+
+HdrText717: HdrText
+  te-nro: 51
+  te-kie: 5
+  te-text: "FIM"
+  Brand: "2"
+
+HdrText718: HdrText
+  te-nro: 52
+  te-kie: 2
+  te-text: "Interest-P"
+  Brand: "2"
+
+HdrText719: HdrText
+  te-nro: 53
+  te-kie: 2
+  te-text: "Interest-I"
+  Brand: "2"
+
+HdrText720: HdrText
+  te-nro: 54
+  te-kie: 2
+  te-text: "TOTAL ..."
+  Brand: "2"
+
+HdrText721: HdrText
+  te-nro: 55
+  te-kie: 1
+  te-text: "päivää netto"
+  Brand: "2"
+
+HdrText722: HdrText
+  te-nro: 55
+  te-kie: 2
+  te-text: "dagar netto"
+  Brand: "2"
+
+HdrText723: HdrText
+  te-nro: 55
+  te-kie: 5
+  te-text: "days net"
+  Brand: "2"
+
+HdrText724: HdrText
+  te-nro: 56
+  te-kie: 1
+  te-text: "vrk"
+  Brand: "2"
+
+HdrText725: HdrText
+  te-nro: 56
+  te-kie: 2
+  te-text: "Dagar"
+  Brand: "2"
+
+HdrText726: HdrText
+  te-nro: 56
+  te-kie: 5
+  te-text: "Days"
+  Brand: "2"
+
+HdrText727: HdrText
+  te-nro: 57
+  te-kie: 1
+  te-text: "ERITTELY"
+  Brand: "2"
+
+HdrText728: HdrText
+  te-nro: 57
+  te-kie: 2
+  te-text: "Spesificering"
+  Brand: "2"
+
+HdrText729: HdrText
+  te-nro: 57
+  te-kie: 5
+  te-text: "Specification"
+  Brand: "2"
+
+HdrText730: HdrText
+  te-nro: 58
+  te-kie: 1
+  te-text: "Jatkuu tilisiirtolomakkeen jälkeen"
+  Brand: "2"
+
+HdrText731: HdrText
+  te-nro: 58
+  te-kie: 2
+  te-text: "Fortsätter efter girering verifikat"
+  Brand: "2"
+
+HdrText732: HdrText
+  te-nro: 58
+  te-kie: 5
+  te-text: "Continues after payment slip"
+  Brand: "2"
+
+HdrText733: HdrText
+  te-nro: 59
+  te-kie: 1
+  te-text: "Lasku: Tuotteet"
+  Brand: "2"
+
+HdrText734: HdrText
+  te-nro: 59
+  te-kie: 2
+  te-text: "Faktura: Produkter"
+  Brand: "2"
+
+HdrText735: HdrText
+  te-nro: 59
+  te-kie: 5
+  te-text: "Invoice: Products"
+  Brand: "2"
+
+HdrText736: HdrText
+  te-nro: 60
+  te-kie: 1
+  te-text: "Tuote"
+  Brand: "2"
+
+HdrText737: HdrText
+  te-nro: 60
+  te-kie: 2
+  te-text: "Produkt"
+  Brand: "2"
+
+HdrText738: HdrText
+  te-nro: 60
+  te-kie: 5
+  te-text: "Product"
+  Brand: "2"
+
+HdrText739: HdrText
+  te-nro: 61
+  te-kie: 1
+  te-text: "ALKAEN"
+  Brand: "2"
+
+HdrText740: HdrText
+  te-nro: 61
+  te-kie: 2
+  te-text: "Från"
+  Brand: "2"
+
+HdrText741: HdrText
+  te-nro: 61
+  te-kie: 5
+  te-text: "From"
+  Brand: "2"
+
+HdrText742: HdrText
+  te-nro: 62
+  te-kie: 1
+  te-text: "ASTI"
+  Brand: "2"
+
+HdrText743: HdrText
+  te-nro: 62
+  te-kie: 2
+  te-text: "Till"
+  Brand: "2"
+
+HdrText744: HdrText
+  te-nro: 62
+  te-kie: 5
+  te-text: "To"
+  Brand: "2"
+
+HdrText745: HdrText
+  te-nro: 63
+  te-kie: 1
+  te-text: "Määrä"
+  Brand: "2"
+
+HdrText746: HdrText
+  te-nro: 63
+  te-kie: 2
+  te-text: "Antal"
+  Brand: "2"
+
+HdrText747: HdrText
+  te-nro: 63
+  te-kie: 5
+  te-text: "Amount"
+  Brand: "2"
+
+HdrText748: HdrText
+  te-nro: 65
+  te-kie: 1
+  te-text: "Lasku"
+  Brand: "2"
+
+HdrText749: HdrText
+  te-nro: 65
+  te-kie: 2
+  te-text: "Faktura"
+  Brand: "2"
+
+HdrText750: HdrText
+  te-nro: 65
+  te-kie: 5
+  te-text: "Invoice"
+  Brand: "2"
+
+HdrText751: HdrText
+  te-nro: 66
+  te-kie: 1
+  te-text: "Kesto"
+  Brand: "2"
+
+HdrText752: HdrText
+  te-nro: 66
+  te-kie: 2
+  te-text: "Längd"
+  Brand: "2"
+
+HdrText753: HdrText
+  te-nro: 66
+  te-kie: 5
+  te-text: "Duration"
+  Brand: "2"
+
+HdrText754: HdrText
+  te-nro: 67
+  te-kie: 1
+  te-text: "Hinta"
+  Brand: "2"
+
+HdrText755: HdrText
+  te-nro: 67
+  te-kie: 2
+  te-text: "Att betala"
+  Brand: "2"
+
+HdrText756: HdrText
+  te-nro: 67
+  te-kie: 5
+  te-text: "Payable"
+  Brand: "2"
+
+HdrText757: HdrText
+  te-nro: 68
+  te-kie: 1
+  te-text: "Lisää"
+  Brand: "2"
+
+HdrText758: HdrText
+  te-nro: 68
+  te-kie: 2
+  te-text: "Mera"
+  Brand: "2"
+
+HdrText759: HdrText
+  te-nro: 68
+  te-kie: 5
+  te-text: "More"
+  Brand: "2"
+
+HdrText760: HdrText
+  te-nro: 69
+  te-kie: 1
+  te-text: "Numero"
+  Brand: "2"
+
+HdrText761: HdrText
+  te-nro: 69
+  te-kie: 2
+  te-text: "Nummer"
+  Brand: "2"
+
+HdrText762: HdrText
+  te-nro: 69
+  te-kie: 5
+  te-text: "Number"
+  Brand: "2"
+
+HdrText763: HdrText
+  te-nro: 70
+  te-kie: 1
+  te-text: "Kaikki yhteensä"
+  Brand: "2"
+
+HdrText764: HdrText
+  te-nro: 70
+  te-kie: 5
+  te-text: "Grand total"
+  Brand: "2"
+
+HdrText765: HdrText
+  te-nro: 71
+  te-kie: 1
+  te-text: "Veloitetaan tililtä"
+  Brand: "2"
+
+HdrText766: HdrText
+  te-nro: 71
+  te-kie: 5
+  te-text: "Debiting from bank account"
+  Brand: "2"
+
+HdrText767: HdrText
+  te-nro: 72
+  te-kie: 1
+  te-text: "Hintoihin sisältyy alv"
+  Brand: "2"
+
+HdrText768: HdrText
+  te-nro: 72
+  te-kie: 2
+  te-text: "Priserna innehåller Moms"
+  Brand: "2"
+
+HdrText769: HdrText
+  te-nro: 72
+  te-kie: 5
+  te-text: "Prices include VAT"
+  Brand: "2"
+
+HdrText770: HdrText
+  te-nro: 73
+  te-kie: 1
+  te-text: "Sisältää aiemmin laskuttamattomat sopimuslaskuerät"
+  Brand: "2"
+
+HdrText771: HdrText
+  te-nro: 73
+  te-kie: 2
+  te-text: "Inkluderar tidigare ofakturerade avtalsrater"
+  Brand: "2"
+
+HdrText772: HdrText
+  te-nro: 73
+  te-kie: 5
+  te-text: "Includes previously unbilled contract fees"
+  Brand: "2"
+
+HdrText773: HdrText
+  te-nro: 74
+  te-kie: 1
+  te-text: "HYVITYS"
+  Brand: "2"
+
+HdrText774: HdrText
+  te-nro: 74
+  te-kie: 2
+  te-text: "KREDIT"
+  Brand: "2"
+
+HdrText775: HdrText
+  te-nro: 74
+  te-kie: 5
+  te-text: "CREDIT"
+  Brand: "2"
+
+HdrText776: HdrText
+  te-nro: 75
+  te-kie: 1
+  te-text: "Veroton summa"
+  Brand: "2"
+
+HdrText777: HdrText
+  te-nro: 76
+  te-kie: 1
+  te-text: "ALV"
+  Brand: "2"
+
+HdrText778: HdrText
+  te-nro: 77
+  te-kie: 1
+  te-text: "Suoritus"
+  Brand: "2"
+
+HdrText779: HdrText
+  te-nro: 77
+  te-kie: 2
+  te-text: "Abonnem."
+  Brand: "2"
+
+HdrText780: HdrText
+  te-nro: 77
+  te-kie: 5
+  te-text: "Payment"
+  Brand: "2"
+
+HdrText781: HdrText
+  te-nro: 78
+  te-kie: 1
+  te-text: "Velka"
+  Brand: "2"
+
+HdrText782: HdrText
+  te-nro: 78
+  te-kie: 2
+  te-text: "Skuld"
+  Brand: "2"
+
+HdrText783: HdrText
+  te-nro: 78
+  te-kie: 5
+  te-text: "Debt"
+  Brand: "2"
+
+HdrText784: HdrText
+  te-nro: 79
+  te-kie: 1
+  te-text: "Eräpäivä"
+  Brand: "2"
+
+HdrText785: HdrText
+  te-nro: 79
+  te-kie: 2
+  te-text: "Förf.dag"
+  Brand: "2"
+
+HdrText786: HdrText
+  te-nro: 79
+  te-kie: 5
+  te-text: "Due date"
+  Brand: "2"
+
+HdrText787: HdrText
+  te-nro: 80
+  te-kie: 1
+  te-text: "Summa"
+  Brand: "2"
+
+HdrText788: HdrText
+  te-nro: 80
+  te-kie: 2
+  te-text: "Sum"
+  Brand: "2"
+
+HdrText789: HdrText
+  te-nro: 80
+  te-kie: 5
+  te-text: "Sum"
+  Brand: "2"
+
+HdrText790: HdrText
+  te-nro: 81
+  te-kie: 1
+  te-text: "Hyvitettävä saldo"
+  Brand: "2"
+
+HdrText791: HdrText
+  te-nro: 81
+  te-kie: 2
+  te-text: "Kreditering av förra betalningar"
+  Brand: "2"
+
+HdrText792: HdrText
+  te-nro: 81
+  te-kie: 5
+  te-text: "Credit for overpayments"
+  Brand: "2"
+
+HdrText793: HdrText
+  te-nro: 82
+  te-kie: 1
+  te-text: "Avoin maksamaton saldo"
+  Brand: "2"
+
+HdrText794: HdrText
+  te-nro: 82
+  te-kie: 2
+  te-text: "Skuld från förra faktura"
+  Brand: "2"
+
+HdrText795: HdrText
+  te-nro: 82
+  te-kie: 5
+  te-text: "Unpaid amount from previous bill"
+  Brand: "2"
+
+HdrText796: HdrText
+  te-nro: 83
+  te-kie: 1
+  te-text: "Kehotus #Invdate laskusta numero #InvNo"
+  Brand: "2"
+
+HdrText797: HdrText
+  te-nro: 83
+  te-kie: 2
+  te-text: "Påminnelse av fakturan nummer #InvNo den #Invdate"
+  Brand: "2"
+
+HdrText798: HdrText
+  te-nro: 83
+  te-kie: 5
+  te-text: "Reminder of the invoice number #InvNo #Invdate"
+  Brand: "2"
+
+HdrText799: HdrText
+  te-nro: 84
+  te-kie: 1
+  te-text: "ALV%"
+  Brand: "2"
+
+HdrText800: HdrText
+  te-nro: 84
+  te-kie: 2
+  te-text: "Moms"
+  Brand: "2"
+
+HdrText801: HdrText
+  te-nro: 84
+  te-kie: 5
+  te-text: "VAT%"
+  Brand: "2"
+
+HdrText802: HdrText
+  te-nro: 85
+  te-kie: 1
+  te-text: "Tämän laskun jälkeen saldonne on # EUR."
+  Brand: "2"
+
+HdrText803: HdrText
+  te-nro: 85
+  te-kie: 2
+  te-text: "Ert saldo efter detta faktura är # EUR."
+  Brand: "2"
+
+HdrText804: HdrText
+  te-nro: 85
+  te-kie: 5
+  te-text: "Your balance is # EUR after this invoice."
+  Brand: "2"
+
+HdrText805: HdrText
+  te-nro: 86
+  te-kie: 1
+  te-text: "joka hyvitetään seuraavalla laskullanne."
+  Brand: "2"
+
+HdrText806: HdrText
+  te-nro: 87
+  te-kie: 1
+  te-text: "Korko"
+  Brand: "2"
+
+HdrText807: HdrText
+  te-nro: 87
+  te-kie: 5
+  te-text: "Interest"
+  Brand: "2"
+
+HdrText808: HdrText
+  te-nro: 88
+  te-kie: 1
+  te-text: "Velka"
+  Brand: "2"
+
+HdrText809: HdrText
+  te-nro: 88
+  te-kie: 5
+  te-text: "Due"
+  Brand: "2"
+
+HdrText810: HdrText
+  te-nro: 89
+  te-kie: 1
+  te-text: "Muistutus"
+  Brand: "2"
+
+HdrText811: HdrText
+  te-nro: 89
+  te-kie: 5
+  te-text: "Reminder"
+  Brand: "2"
+
+HdrText812: HdrText
+  te-nro: 90
+  te-kie: 1
+  te-text: "nro"
+  Brand: "2"
+
+HdrText813: HdrText
+  te-nro: 90
+  te-kie: 5
+  te-text: "nbr"
+  Brand: "2"
+
+HdrText814: HdrText
+  te-nro: 91
+  te-kie: 1
+  te-text: "KAUSIMAKSUT"
+  Brand: "2"
+
+HdrText815: HdrText
+  te-nro: 91
+  te-kie: 5
+  te-text: "Late"
+  Brand: "2"
+
+HdrText816: HdrText
+  te-nro: 92
+  te-kie: 1
+  te-text: "KERTAMAKSUT"
+  Brand: "2"
+
+HdrText817: HdrText
+  te-nro: 92
+  te-kie: 5
+  te-text: "Customer number:"
+  Brand: "2"
+
+HdrText818: HdrText
+  te-nro: 93
+  te-kie: 1
+  te-text: "KÄYTTÖMAKSUT"
+  Brand: "2"
+
+HdrText819: HdrText
+  te-nro: 93
+  te-kie: 5
+  te-text: "Cust.nr."
+  Brand: "2"
+
+HdrText820: HdrText
+  te-nro: 94
+  te-kie: 1
+  te-text: "Selite"
+  Brand: "2"
+
+HdrText821: HdrText
+  te-nro: 94
+  te-kie: 5
+  te-text: "Cust.name"
+  Brand: "2"
+
+HdrText822: HdrText
+  te-nro: 95
+  te-kie: 1
+  te-text: "DATA KT"
+  Brand: "2"
+
+HdrText823: HdrText
+  te-nro: 95
+  te-kie: 5
+  te-text: "Inv.num"
+  Brand: "2"
+
+HdrText824: HdrText
+  te-nro: 96
+  te-kie: 1
+  te-text: "*ILMOITUS SUORAVELOITUKSESTA*"
+  Brand: "2"
+
+HdrText825: HdrText
+  te-nro: 96
+  te-kie: 5
+  te-text: "Value"
+  Brand: "2"
+
+HdrText826: HdrText
+  te-nro: 97
+  te-kie: 1
+  te-text: "*Lasku veloitetaan tililtänne eräpäivänä*"
+  Brand: "2"
+
+HdrText827: HdrText
+  te-nro: 97
+  te-kie: 5
+  te-text: "Direct debit from bank account"
+  Brand: "2"
+
+HdrText828: HdrText
+  te-nro: 98
+  te-kie: 5
+  te-text: "Rem."
+  Brand: "2"
+
+HdrText829: HdrText
+  te-nro: 99
+  te-kie: 5
+  te-text: "Allow rem."
+  Brand: "2"
+
+HdrText830: HdrText
+  te-nro: 100
+  te-kie: 1
+  Brand: "2"
+
+HdrText831: HdrText
+  te-nro: 101
+  te-kie: 1
+  te-text: "Laskunne on kuitattu maksetuksi aiemmin kirjaantuneesta liikasuori-"
+  Brand: "2"
+
+HdrText832: HdrText
+  te-nro: 101
+  te-kie: 2
+  te-text: "Er faktura har kvitterats mot Er tidigare överbetalning. Det"
+  Brand: "2"
+
+HdrText833: HdrText
+  te-nro: 101
+  te-kie: 5
+  te-text: "Your invoice has been paid with your earlier overpayment. The"
+  Brand: "2"
+
+HdrText834: HdrText
+  te-nro: 102
+  te-kie: 1
+  te-text: "tuksestanne. Jäljellä oleva summa # EUR hyvitetään seuraavassa las-"
+  Brand: "2"
+
+HdrText835: HdrText
+  te-nro: 102
+  te-kie: 2
+  te-text: "kvarvarande beloppet # EUR krediteras i Er följande faktura. Ifall Ni"
+  Brand: "2"
+
+HdrText836: HdrText
+  te-nro: 102
+  te-kie: 5
+  te-text: "remaining amount of # EUR will be taken into account in your next"
+  Brand: "2"
+
+HdrText837: HdrText
+  te-nro: 103
+  te-kie: 1
+  te-text: "kussanne. Mikäli haluatte, että jäljelle jäänyt summa palautetaan,"
+  Brand: "2"
+
+HdrText838: HdrText
+  te-nro: 103
+  te-kie: 2
+  te-text: "önskar att det kvarvarande beloppet returneras till Er tidigare,"
+  Brand: "2"
+
+HdrText839: HdrText
+  te-nro: 103
+  te-kie: 5
+  te-text: "invoice. If you wish the remaining amount to be returned, we kindly"
+  Brand: "2"
+
+HdrText840: HdrText
+  te-nro: 104
+  te-kie: 1
+  te-text: "pyydämme Teitä ilmoittamaan tilitietonne asiakaspalveluumme."
+  Brand: "2"
+
+HdrText841: HdrText
+  te-nro: 104
+  te-kie: 2
+  te-text: "vänligen ange Era bankförbindelseuppgifter till vår kundservice."
+  Brand: "2"
+
+HdrText842: HdrText
+  te-nro: 104
+  te-kie: 5
+  te-text: "ask you to inform our customer service your bank account information."
+  Brand: "2"
+
+HdrText843: HdrText
+  te-nro: 105
+  te-kie: 1
+  te-text: "PDF-lasku"
+  Brand: "2"
+
+HdrText844: HdrText
+  te-nro: 105
+  te-kie: 5
+  te-text: "PDF-Invoice"
+  Brand: "2"
+
+HdrText845: HdrText
+  te-nro: 106
+  te-kie: 1
+  te-text: "Liitteenä laskunne PDF-muodossa."
+  Brand: "2"
+
+HdrText846: HdrText
+  te-nro: 108
+  te-kie: 1
+  te-text: "Lyhytnro"
+  Brand: "2"
+
+HdrText847: HdrText
+  te-nro: 109
+  te-kie: 1
+  te-text: "Palvelu"
+  Brand: "2"
+
+HdrText848: HdrText
+  te-nro: 110
+  te-kie: 1
+  te-text: "Ajalta"
+  Brand: "2"
+
+HdrText849: HdrText
+  te-nro: 110
+  te-kie: 2
+  te-text: "Specifikation för faktura #INV."
+  Brand: "2"
+
+HdrText850: HdrText
+  te-nro: 111
+  te-kie: 1
+  te-text: "Laskut. kpl"
+  Brand: "2"
+
+HdrText851: HdrText
+  te-nro: 112
+  te-kie: 1
+  te-text: "Laskutettu EUR"
+  Brand: "2"
+
+HdrText852: HdrText
+  te-nro: 113
+  te-kie: 1
+  te-text: "Laskutus-palkkio"
+  Brand: "2"
+
+HdrText853: HdrText
+  te-nro: 114
+  te-kie: 1
+  te-text: "Origin. kpl"
+  Brand: "2"
+
+HdrText854: HdrText
+  te-nro: 115
+  te-kie: 1
+  te-text: "Termin. oma kpl"
+  Brand: "2"
+
+HdrText855: HdrText
+  te-nro: 116
+  te-kie: 1
+  te-text: "Termin. muu kpl"
+  Brand: "2"
+
+HdrText856: HdrText
+  te-nro: 117
+  te-kie: 1
+  te-text: "Viestit yht.kpl"
+  Brand: "2"
+
+HdrText857: HdrText
+  te-nro: 118
+  te-kie: 1
+  te-text: "Viestit EUR"
+  Brand: "2"
+
+HdrText858: HdrText
+  te-nro: 119
+  te-kie: 1
+  te-text: "Tilitys EUR"
+  Brand: "2"
+
+HdrText859: HdrText
+  te-nro: 120
+  te-kie: 1
+  te-text: "PALVELUTUOTANNON RATKAISU TEKSTIVIESTIRAJAPINTA"
+  Brand: "2"
+
+HdrText860: HdrText
+  te-nro: 121
+  te-kie: 1
+  te-text: "Yhteenveto"
+  Brand: "2"
+
+HdrText861: HdrText
+  te-nro: 122
+  te-kie: 1
+  te-text: "Erittely ALV 0%"
+  Brand: "2"
+
+HdrText862: HdrText
+  te-nro: 123
+  te-kie: 1
+  te-text: "Virh. kpl"
+  Brand: "2"
+
+HdrText863: HdrText
+  te-nro: 124
+  te-kie: 1
+  te-text: "Liikennemaksut"
+  Brand: "2"
+
+HdrText864: HdrText
+  te-nro: 125
+  te-kie: 1
+  te-text: "Laskutettu loppukäyttäjiltä"
+  Brand: "2"
+
+HdrText865: HdrText
+  te-nro: 126
+  te-kie: 1
+  te-text: "Laskutuspalkkio"
+  Brand: "2"
+
+HdrText866: HdrText
+  te-nro: 127
+  te-kie: 1
+  te-text: "Tilitys"
+  Brand: "2"
+
+HdrText867: HdrText
+  te-nro: 128
+  te-kie: 1
+  te-text: "Kpl"
+  Brand: "2"
+
+HdrText868: HdrText
+  te-nro: 129
+  te-kie: 1
+  te-text: "EUR Veroton"
+  Brand: "2"
+
+HdrText869: HdrText
+  te-nro: 130
+  te-kie: 1
+  te-text: "ALV"
+  Brand: "2"
+
+HdrText870: HdrText
+  te-nro: 131
+  te-kie: 1
+  te-text: "EUR Verollinen"
+  Brand: "2"
+
+HdrText871: HdrText
+  te-nro: 133
+  te-kie: 1
+  te-text: "Puheluraportti"
+  Brand: "2"
+
+HdrText872: HdrText
+  te-nro: 134
+  te-kie: 1
+  te-text: "Ohessa puheluraporttinne PDF-muodossa."
+  Brand: "2"
+
+HdrText873: HdrText
+  te-nro: 135
+  te-kie: 1
+  te-text: "Kohdistamatt."
+  Brand: "2"
+
+HdrText874: HdrText
+  te-nro: 136
+  te-kie: 1
+  te-text: "Päivämäärä:"
+  Brand: "2"
+
+HdrText875: HdrText
+  te-nro: 136
+  te-kie: 2
+  te-text: "Datum:"
+  Brand: "2"
+
+HdrText876: HdrText
+  te-nro: 136
+  te-kie: 5
+  te-text: "Date:"
+  Brand: "2"
+
+HdrText877: HdrText
+  te-nro: 137
+  te-kie: 1
+  te-text: "Viivästyskorko:"
+  Brand: "2"
+
+HdrText878: HdrText
+  te-nro: 138
+  te-kie: 1
+  te-text: "Maksukehotusmaksu:"
+  Brand: "2"
+
+HdrText879: HdrText
+  te-nro: 139
+  te-kie: 1
+  te-text: "Seuraavan laskun arvioitu eräpäivä:"
+  Brand: "2"
+
+HdrText880: HdrText
+  te-nro: 140
+  te-kie: 1
+  te-text: "Asiakasnumero:"
+  Brand: "2"
+
+HdrText881: HdrText
+  te-nro: 141
+  te-kie: 1
+  te-text: "Laskun numero:"
+  Brand: "2"
+
+HdrText882: HdrText
+  te-nro: 142
+  te-kie: 1
+  te-text: "Laskun päiväys:"
+  Brand: "2"
+
+HdrText883: HdrText
+  te-nro: 143
+  te-kie: 1
+  te-text: "Eräpäivä:"
+  Brand: "2"
+
+HdrText884: HdrText
+  te-nro: 144
+  te-kie: 1
+  te-text: "Summa:"
+  Brand: "2"
+
+HdrText885: HdrText
+  te-nro: 145
+  te-kie: 1
+  te-text: "Maksuviite:"
+  Brand: "2"
+
+HdrText886: HdrText
+  te-nro: 146
+  te-kie: 1
+  te-text: "Pankkitili:"
+  Brand: "2"
+
+HdrText887: HdrText
+  te-nro: 147
+  te-kie: 1
+  te-text: "Virtuaaliviivakoodi:"
+  Brand: "2"
+
+HdrText888: HdrText
+  te-nro: 148
+  te-kie: 1
+  te-text: "Maksukehotus"
+  Brand: "2"
+
+HdrText889: HdrText
+  te-nro: 149
+  te-kie: 1
+  te-text: "Oheinen laskunne on erääntynyt;"
+  Brand: "2"
+
+HdrText890: HdrText
+  te-nro: 150
+  te-kie: 1
+  te-text: "VEROTON!HINTA"
+  Brand: "2"
+
+HdrText891: HdrText
+  te-nro: 151
+  te-kie: 1
+  te-text: "VEROLL.!HINTA"
+  Brand: "2"
+
+HdrText892: HdrText
+  te-nro: 152
+  te-kie: 1
+  te-text: "VAT ID"
+  Brand: "2"
+
+HdrText893: HdrText
+  te-nro: 153
+  te-kie: 1
+  te-text: "VEROTON!KPL-HINTA"
+  Brand: "2"
+
+HdrText894: HdrText
+  te-nro: 154
+  te-kie: 1
+  te-text: "VEROLL.!KPL-HINTA"
+  Brand: "2"
+
+HdrText895: HdrText
+  te-nro: 155
+  te-kie: 1
+  te-text: "VEROTON!A-HINTA"
+  Brand: "2"
+
+HdrText896: HdrText
+  te-nro: 156
+  te-kie: 1
+  te-text: "VEROLL.!A-HINTA"
+  Brand: "2"
+
+HdrText897: HdrText
+  te-nro: 157
+  te-kie: 1
+  te-text: "VERO-!KANTA"
+  Brand: "2"
+
+HdrText898: HdrText
+  te-nro: 158
+  te-kie: 1
+  te-text: "Veroton summa"
+  Brand: "2"
+
+HdrText899: HdrText
+  te-nro: 159
+  te-kie: 1
+  te-text: "Veroll. summa"
+  Brand: "2"
+
+HdrText900: HdrText
+  te-nro: 160
+  te-kie: 1
+  te-text: "Verokanta"
+  Brand: "2"
+
+HdrText901: HdrText
+  te-nro: 161
+  te-kie: 1
+  te-text: "LASKU  FAKTURA"
+  Brand: "2"
+
+HdrText902: HdrText
+  te-nro: 162
+  te-kie: 1
+  te-text: "MAKSUKEHOTUS"
+  Brand: "2"
+
+HdrText903: HdrText
+  te-nro: 163
+  te-kie: 1
+  te-text: "Heti"
+  Brand: "2"
+
+HdrText904: HdrText
+  te-nro: 164
+  te-kie: 1
+  te-text: "LASKUN PVM"
+  Brand: "2"
+
+HdrText905: HdrText
+  te-nro: 165
+  te-kie: 1
+  te-text: "LASKUNUMERO"
+  Brand: "2"
+
+HdrText906: HdrText
+  te-nro: 166
+  te-kie: 1
+  te-text: "ERÄPÄIVÄ"
+  Brand: "2"
+
+HdrText907: HdrText
+  te-nro: 167
+  te-kie: 1
+  te-text: "VELKA"
+  Brand: "2"
+
+HdrText908: HdrText
+  te-nro: 168
+  te-kie: 1
+  te-text: "ERÄ NRO"
+  Brand: "2"
+
+HdrText909: HdrText
+  te-nro: 169
+  te-kie: 1
+  te-text: "SUMMA"
+  Brand: "2"
+
+HdrText910: HdrText
+  te-nro: 170
+  te-kie: 1
+  te-text: "MAKSUPÄIVÄ"
+  Brand: "2"
+
+HdrText911: HdrText
+  te-nro: 171
+  te-kie: 1
+  te-text: "Omistaja:"
+  Brand: "2"
+
+HdrText912: HdrText
+  te-nro: 172
+  te-kie: 1
+  te-text: "Käyttäjä:"
+  Brand: "2"
+
+HdrText913: HdrText
+  te-nro: 173
+  te-kie: 1
+  te-text: "Käyttömaksut yhteensä, liittymä"
+  Brand: "2"
+
+HdrText914: HdrText
+  te-nro: 174
+  te-kie: 1
+  te-text: "liittymä"
+  Brand: "2"
+
+HdrText915: HdrText
+  te-nro: 175
+  te-kie: 1
+  te-text: "Laatija"
+  Brand: "2"
+
+HdrText916: HdrText
+  te-nro: 176
+  te-kie: 1
+  te-text: "Yritystiedot"
+  Brand: "2"
+
+HdrText917: HdrText
+  te-nro: 177
+  te-kie: 1
+  te-text: "Käynti- ja postitusosoite"
+  Brand: "2"
+
+HdrText918: HdrText
+  te-nro: 178
+  te-kie: 1
+  te-text: "Puhelin"
+  Brand: "2"
+
+HdrText919: HdrText
+  te-nro: 201
+  te-kie: 1
+  te-text: "Tilausvahvistus"
+  Brand: "2"
+
+HdrText920: HdrText
+  te-nro: 201
+  te-kie: 5
+  te-text: "Order confirmation"
+  Brand: "2"
+
+HdrText921: HdrText
+  te-nro: 202
+  te-kie: 1
+  te-text: "Tervetuloa Tele Finland-asiakkaaksi!"
+  Brand: "2"
+
+HdrText922: HdrText
+  te-nro: 202
+  te-kie: 5
+  te-text: "Welcome to Tele Finland -customer!"
+  Brand: "2"
+
+HdrText923: HdrText
+  te-nro: 203
+  te-kie: 1
+  te-text: "Liittymän tiedot"
+  Brand: "2"
+
+HdrText924: HdrText
+  te-nro: 203
+  te-kie: 5
+  te-text: "Subscription info"
+  Brand: "2"
+
+HdrText925: HdrText
+  te-nro: 204
+  te-kie: 1
+  te-text: "Liittymälle kytketyt lisäpalvelut"
+  Brand: "2"
+
+HdrText926: HdrText
+  te-nro: 204
+  te-kie: 5
+  te-text: "Extra services"
+  Brand: "2"
+
+HdrText927: HdrText
+  te-nro: 205
+  te-kie: 1
+  te-text: "Terveisin,"
+  Brand: "2"
+
+HdrText928: HdrText
+  te-nro: 205
+  te-kie: 5
+  te-text: "Best Regards,"
+  Brand: "2"
+
+HdrText929: HdrText
+  te-nro: 206
+  te-kie: 1
+  te-text: "Tele Finland"
+  Brand: "2"
+
+HdrText930: HdrText
+  te-nro: 206
+  te-kie: 5
+  te-text: "Tele Finland"
+  Brand: "2"
+
+HdrText931: HdrText
+  te-nro: 207
+  te-kie: 1
+  te-text: "Asiakasnumero:"
+  Brand: "2"
+
+HdrText932: HdrText
+  te-nro: 207
+  te-kie: 5
+  te-text: "Customer number:"
+  Brand: "2"
+
+HdrText933: HdrText
+  te-nro: 208
+  te-kie: 1
+  te-text: "Käyttäjän nimi:"
+  Brand: "2"
+
+HdrText934: HdrText
+  te-nro: 208
+  te-kie: 5
+  te-text: "User name:"
+  Brand: "2"
+
+HdrText935: HdrText
+  te-nro: 209
+  te-kie: 1
+  te-text: "Liittymätyyppi"
+  Brand: "2"
+
+HdrText936: HdrText
+  te-nro: 209
+  te-kie: 5
+  te-text: "Subscription type"
+  Brand: "2"
+
+HdrText937: HdrText
+  te-nro: 210
+  te-kie: 1
+  te-text: "GSM-numero:"
+  Brand: "2"
+
+HdrText938: HdrText
+  te-nro: 210
+  te-kie: 5
+  te-text: "GSM number:"
+  Brand: "2"
+
+HdrText939: HdrText
+  te-nro: 211
+  te-kie: 1
+  te-text: "IMSI"
+  Brand: "2"
+
+HdrText940: HdrText
+  te-nro: 211
+  te-kie: 5
+  te-text: "IMSI"
+  Brand: "2"
+
+HdrText941: HdrText
+  te-nro: 212
+  te-kie: 1
+  te-text: "SIM"
+  Brand: "2"
+
+HdrText942: HdrText
+  te-nro: 212
+  te-kie: 5
+  te-text: "SIM"
+  Brand: "2"
+
+HdrText943: HdrText
+  te-nro: 213
+  te-kie: 1
+  te-text: "PIN1"
+  Brand: "2"
+
+HdrText944: HdrText
+  te-nro: 213
+  te-kie: 5
+  te-text: "PIN1"
+  Brand: "2"
+
+HdrText945: HdrText
+  te-nro: 214
+  te-kie: 1
+  te-text: "PIN2"
+  Brand: "2"
+
+HdrText946: HdrText
+  te-nro: 214
+  te-kie: 5
+  te-text: "PIN2"
+  Brand: "2"
+
+HdrText947: HdrText
+  te-nro: 215
+  te-kie: 1
+  te-text: "PUK1"
+  Brand: "2"
+
+HdrText948: HdrText
+  te-nro: 215
+  te-kie: 5
+  te-text: "PUK1"
+  Brand: "2"
+
+HdrText949: HdrText
+  te-nro: 216
+  te-kie: 1
+  te-text: "PUK2"
+  Brand: "2"
+
+HdrText950: HdrText
+  te-nro: 216
+  te-kie: 5
+  te-text: "PUK2"
+  Brand: "2"
+
+HdrText951: HdrText
+  te-nro: 217
+  te-kie: 1
+  te-text: "Numeronsiirron ajankohta"
+  Brand: "2"
+
+HdrText952: HdrText
+  te-nro: 217
+  te-kie: 5
+  te-text: "NUMBER PORTING TIME"
+  Brand: "2"
+
+HdrText953: HdrText
+  te-nro: 218
+  te-kie: 1
+  te-text: "Olemme avanneet sinulle GSM-liittymän liittymäsopimuksessa ilmoittamasi tietojen mukaan."
+  Brand: "2"
+
+HdrText954: HdrText
+  te-nro: 250
+  te-kie: 1
+  te-text: "GSM-LIITTYMÄSOPIMUS"
+  Brand: "2"
+
+HdrText955: HdrText
+  te-nro: 250
+  te-kie: 5
+  te-text: "GSM AGREEMENT"
+  Brand: "2"
+
+HdrText956: HdrText
+  te-nro: 251
+  te-kie: 1
+  te-text: "Asiakasnumero"
+  Brand: "2"
+
+HdrText957: HdrText
+  te-nro: 251
+  te-kie: 5
+  te-text: "Customer number"
+  Brand: "2"
+
+HdrText958: HdrText
+  te-nro: 252
+  te-kie: 1
+  te-text: "Asiakas"
+  Brand: "2"
+
+HdrText959: HdrText
+  te-nro: 252
+  te-kie: 5
+  te-text: "Customer"
+  Brand: "2"
+
+HdrText960: HdrText
+  te-nro: 253
+  te-kie: 1
+  te-text: "Osoite"
+  Brand: "2"
+
+HdrText961: HdrText
+  te-nro: 253
+  te-kie: 5
+  te-text: "Address"
+  Brand: "2"
+
+HdrText962: HdrText
+  te-nro: 254
+  te-kie: 1
+  te-text: "Postinumero ja postitoimipaikka"
+  Brand: "2"
+
+HdrText963: HdrText
+  te-nro: 254
+  te-kie: 5
+  te-text: "Zip code and town"
+  Brand: "2"
+
+HdrText964: HdrText
+  te-nro: 255
+  te-kie: 1
+  te-text: "GSM-numero"
+  Brand: "2"
+
+HdrText965: HdrText
+  te-nro: 255
+  te-kie: 5
+  te-text: "GSM number"
+  Brand: "2"
+
+HdrText966: HdrText
+  te-nro: 256
+  te-kie: 1
+  te-text: "Sähköpostiosoite"
+  Brand: "2"
+
+HdrText967: HdrText
+  te-nro: 256
+  te-kie: 5
+  te-text: "Email address"
+  Brand: "2"
+
+HdrText968: HdrText
+  te-nro: 257
+  te-kie: 1
+  te-text: "Paikka ja aika"
+  Brand: "2"
+
+HdrText969: HdrText
+  te-nro: 257
+  te-kie: 5
+  te-text: "Date and place"
+  Brand: "2"
+
+HdrText970: HdrText
+  te-nro: 258
+  te-kie: 1
+  te-text: "Allekirjoitus"
+  Brand: "2"
+
+HdrText971: HdrText
+  te-nro: 258
+  te-kie: 5
+  te-text: "Signature"
+  Brand: "2"
+
+HdrText972: HdrText
+  te-nro: 259
+  te-kie: 1
+  te-text: "Henkilö-/Y-tunnus"
+  Brand: "2"
+
+HdrText973: HdrText
+  te-nro: 259
+  te-kie: 5
+  te-text: "Person/VAT ID"
+  Brand: "2"
+
+HdrText974: HdrText
+  te-nro: 260
+  te-kie: 1
+  te-text: "Käyttäjä"
+  Brand: "2"
+
+HdrText975: HdrText
+  te-nro: 260
+  te-kie: 5
+  te-text: "UserName"
+  Brand: "2"
+
+HdrText976: HdrText
+  te-nro: 261
+  te-kie: 1
+  te-text: "Liittymätyyppi"
+  Brand: "2"
+
+HdrText977: HdrText
+  te-nro: 261
+  te-kie: 5
+  te-text: "Subscription Type"
+  Brand: "2"
+
+HdrText978: HdrText
+  te-nro: 262
+  te-kie: 1
+  te-text: "ASIAKKAAN TIEDOT"
+  Brand: "2"
+
+HdrText979: HdrText
+  te-nro: 262
+  te-kie: 5
+  te-text: "CUSTOMER'S INFO"
+  Brand: "2"
+
+HdrText980: HdrText
+  te-nro: 500
+  te-kie: 1
+  te-text: "Laskua koskevat huomautukset on tehtävä eräpäivään mennessä."
+  Brand: "2"
+
+HdrText981: HdrText
+  te-nro: 501
+  te-kie: 1
+  te-text: "Lisätietoa laskutuksesta www.shark.fi"
+  Brand: "2"
+
+HdrText982: HdrText
+  te-nro: 505
+  te-kie: 1
+  te-text: "Maksun palautus"
+  Brand: "2"
+
