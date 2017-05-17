@@ -38,7 +38,7 @@ DEF VAR lcAddLineAllowed AS CHAR NO-UNDO.
 DEF VAR liActLimit       AS INT  NO-UNDO.
 DEF VAR liacts           AS INT NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string,boolean,int") EQ ?
+IF validate_request(param_toplevel_id, "string,string,boolean,int,string") EQ ?
    THEN RETURN.
 
 pcPersonId     = get_string(param_toplevel_id, "0").
