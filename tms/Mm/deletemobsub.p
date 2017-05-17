@@ -922,7 +922,7 @@ PROCEDURE pTerminate:
 
    /* YOT-4438 Revert renewal when LO status 12. Remove related fees */
    FOR EACH Order NO-LOCK WHERE
-            Order.MsSeq EQ 70003043 AND
+            Order.MsSeq EQ MobSub.MsSeq AND
             Order.OrderType EQ {&ORDER_TYPE_RENEWAL},
       FIRST OrderDelivery NO-LOCK WHERE
             OrderDelivery.Brand EQ "1" AND
