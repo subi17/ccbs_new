@@ -10,6 +10,8 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Func/multitenantfunc.i}
 
+DEF INPUT PARAMETER icFilename AS CHAR NO-UNDO.
+
 DEFINE VARIABLE idaDate AS DATE NO-UNDO. 
 DEFINE VARIABLE lcParam AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldate1     AS DATE NO-UNDO.
@@ -38,18 +40,10 @@ END.
 ELSE idaDate = TODAY.
 
 ASSIGN
-   lcOdir     =  fCparamC("PentahoErrorCalls")
-   lcSdir     =  fCParamC("PentahoSpool")
-   ldate1     = idaDate
-   lcFileName   = CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
-                  "_error_calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
-                REPLACE(STRING(TIME,"hh:mm:ss"),":","") + ".dump"
    ldate1     = idaDate - 1
    ldate2     = ldate1
    lcNumForm    = SESSION:NUMERIC-FORMAT 
    SESSION:NUMERIC-FORMAT = "AMERICAN".
-
-dformat = "yyyy-mm-dd".
 
 DEFINE TEMP-TABLE ttSumErrorCDR
    FIELD CallDate   AS DATE
@@ -104,7 +98,7 @@ FOR EACH ErrorCDR NO-LOCK USE-INDEX ReadDate WHERE
                   ErrorCDR.ErrorCode).
 END.
 
-OUTPUT STREAM lsErrorCDR  TO VALUE(lcSdir + "/" + lcFileName).
+OUTPUT STREAM lsErrorCDR  TO VALUE(icfilename).
 
 FOR EACH ttSumErrorCDR NO-LOCK :
   PUT STREAM lsErrorCDR UNFORMATTED 
@@ -115,8 +109,6 @@ FOR EACH ttSumErrorCDR NO-LOCK :
 END.
 
 OUTPUT STREAM lsErrorCDR CLOSE.
-
-UNIX SILENT VALUE("mv " + lcSdir + "/" + lcFileName + " " + lcODir).
 
 SESSION:NUMERIC-FORMAT = lcNumForm.
 

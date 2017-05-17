@@ -13,7 +13,7 @@
   VERSION ......: SHARK
   ------------------------------------------------------ */
 
-{Syst/commali.i}
+{Syst/commpaa.i}
 katun = "cron".
 gcBrand = "1".
 
@@ -24,16 +24,7 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Func/multitenantfunc.i}
 
-DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
-DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
-DEF INPUT  PARAMETER icDumpMode    AS CHAR NO-UNDO.
-DEF INPUT  PARAMETER idLastDump    AS DEC  NO-UNDO.
-DEF INPUT  PARAMETER icEventSource AS CHAR NO-UNDO.
-DEF INPUT  PARAMETER icEventFields AS CHAR NO-UNDO.
-DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
-DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
-
-DEFINE VARIABLE  iiper AS INTEGER NO-UNDO INIT 0.
+DEF INPUT  PARAMETER icfilename      AS CHAR  NO-UNDO.
 
 DEFINE VARIABLE idaDate AS DATE NO-UNDO. 
 DEFINE VARIABLE lcParam AS CHARACTER NO-UNDO.
@@ -169,7 +160,7 @@ END.
 
 IF llLog THEN OUTPUT STREAM sLog CLOSE.
 
-output stream excel to value(icfile).
+output stream excel to value(icfilename).
 
 for each ttCalls NO-LOCK:
    
@@ -205,6 +196,4 @@ for each ttCalls NO-LOCK:
 end.
 
 output stream excel close.
-
-session:numeric-format = numform.
 

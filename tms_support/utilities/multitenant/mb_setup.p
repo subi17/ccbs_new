@@ -592,7 +592,7 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.Brand           = "1"
       dumpfile.ConfigParam     = ""
       dumpfile.DecimalPoint    = "."
-      dumpfile.Description     = ""
+      dumpfile.Description     = "Prepaid compensation report"
       dumpfile.DumpCharSet     = ""
       dumpfile.DumpDelimiter   = "|"
       dumpfile.DumpFormat      = "ASCII"
@@ -634,7 +634,7 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.Brand           = "1"
       dumpfile.ConfigParam     = ""
       dumpfile.DecimalPoint    = "."
-      dumpfile.Description     = ""
+      dumpfile.Description     = "High usage report"
       dumpfile.DumpCharSet     = ""
       dumpfile.DumpDelimiter   = "|"
       dumpfile.DumpFormat      = "ASCII"
@@ -657,6 +657,132 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.SideTables      = ""
       dumpfile.SpoolDir        = "/store/riftp/dumpfiles/highspender/spool/"
       dumpfile.TransDir        = "/store/riftp/dumpfiles/highspender/outgoing/"
+      dumpfile.UseIndex        = "".
+END.
+
+FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "CallDump" NO-ERROR.
+IF NOT AVAIL DumpFile THEN DO:
+   FIND LAST DumpFile USE-INDEX DumpID NO-LOCK NO-ERROR.
+   IF AVAILABLE DumpFile
+   THEN liid = DumpFile.DumpID + 1.
+   ELSE liid = 1.
+   CREATE DumpFile .
+   ASSIGN
+      dumpfile.Active          = TRUE
+      dumpfile.AllowReplica    = NO
+      dumpfile.AveDurFull      = 1770
+      dumpfile.AveDurMod       = 2
+      dumpfile.BatchID         = 1
+      dumpfile.Brand           = "1"
+      dumpfile.ConfigParam     = ""
+      dumpfile.DecimalPoint    = "."
+      dumpfile.Description     = "Call dump"
+      dumpfile.DumpCharSet     = ""
+      dumpfile.DumpDelimiter   = "|"
+      dumpfile.DumpFormat      = "ASCII"
+      dumpfile.DumpID          = liid
+      dumpfile.DumpLineFeed    = ""
+      dumpfile.DumpName        = "CallDump"
+      dumpfile.EmptyFile       = TRUE
+      dumpfile.EventLogFields  = ""
+      dumpfile.FileCategory    = "DWH"
+      dumpfile.FileName        = "#TENANT_calls_#DATE_#TIME.dump"
+      dumpfile.FullCollModule  = ""
+      dumpfile.LinkKey         = ""
+      dumpfile.LogFile         = ""
+      dumpfile.LogicModule     = "Mm/calldump.p"
+      dumpfile.MainTable       = "MobCDR"
+      dumpfile.ModCollModule   = ""
+      dumpfile.ModFromEventLog = TRUE
+      dumpfile.ModFromField    = "EventTS"
+      dumpfile.QueryClause     = ""
+      dumpfile.SideTables      = ""
+      dumpfile.SpoolDir        = "/store/riftp/dumpfiles/calls/spool/"
+      dumpfile.TransDir        = "/store/riftp/dumpfiles/calls/outgoing/"
+      dumpfile.UseIndex        = "".
+END.
+
+FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "CallDumpPrepaid" NO-ERROR.
+IF NOT AVAIL DumpFile THEN DO:
+   FIND LAST DumpFile USE-INDEX DumpID NO-LOCK NO-ERROR.
+   IF AVAILABLE DumpFile
+   THEN liid = DumpFile.DumpID + 1.
+   ELSE liid = 1.
+   CREATE DumpFile .
+   ASSIGN
+      dumpfile.Active          = TRUE
+      dumpfile.AllowReplica    = NO
+      dumpfile.AveDurFull      = 1770
+      dumpfile.AveDurMod       = 2
+      dumpfile.BatchID         = 1
+      dumpfile.Brand           = "1"
+      dumpfile.ConfigParam     = ""
+      dumpfile.DecimalPoint    = "."
+      dumpfile.Description     = "Prepaid call dump"
+      dumpfile.DumpCharSet     = ""
+      dumpfile.DumpDelimiter   = "|"
+      dumpfile.DumpFormat      = "ASCII"
+      dumpfile.DumpID          = liid
+      dumpfile.DumpLineFeed    = ""
+      dumpfile.DumpName        = "CallDumpPrepaid"
+      dumpfile.EmptyFile       = TRUE
+      dumpfile.EventLogFields  = ""
+      dumpfile.FileCategory    = "DWH"
+      dumpfile.FileName        = "#TENANT_calls_prepaid#DATE_#TIME.dump"
+      dumpfile.FullCollModule  = ""
+      dumpfile.LinkKey         = ""
+      dumpfile.LogFile         = ""
+      dumpfile.LogicModule     = "Mm/calldump_prepaid.p"
+      dumpfile.MainTable       = "PrepCDR"
+      dumpfile.ModCollModule   = ""
+      dumpfile.ModFromEventLog = TRUE
+      dumpfile.ModFromField    = "EventTS"
+      dumpfile.QueryClause     = ""
+      dumpfile.SideTables      = ""
+      dumpfile.SpoolDir        = "/store/riftp/dumpfiles/calls/spool/"
+      dumpfile.TransDir        = "/store/riftp/dumpfiles/calls/outgoing/"
+      dumpfile.UseIndex        = "".
+END.
+
+FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "ErrorCallDump" NO-ERROR.
+IF NOT AVAIL DumpFile THEN DO:
+   FIND LAST DumpFile USE-INDEX DumpID NO-LOCK NO-ERROR.
+   IF AVAILABLE DumpFile
+   THEN liid = DumpFile.DumpID + 1.
+   ELSE liid = 1.
+   CREATE DumpFile .
+   ASSIGN
+      dumpfile.Active          = TRUE
+      dumpfile.AllowReplica    = NO
+      dumpfile.AveDurFull      = 1770
+      dumpfile.AveDurMod       = 2
+      dumpfile.BatchID         = 1
+      dumpfile.Brand           = "1"
+      dumpfile.ConfigParam     = ""
+      dumpfile.DecimalPoint    = "."
+      dumpfile.Description     = "Error call dump"
+      dumpfile.DumpCharSet     = ""
+      dumpfile.DumpDelimiter   = "|"
+      dumpfile.DumpFormat      = "ASCII"
+      dumpfile.DumpID          = liid
+      dumpfile.DumpLineFeed    = ""
+      dumpfile.DumpName        = "ErrorCallDump"
+      dumpfile.EmptyFile       = TRUE
+      dumpfile.EventLogFields  = ""
+      dumpfile.FileCategory    = "DWH"
+      dumpfile.FileName        = "#TENANT_error_calls#DATE_#TIME.dump"
+      dumpfile.FullCollModule  = ""
+      dumpfile.LinkKey         = ""
+      dumpfile.LogFile         = ""
+      dumpfile.LogicModule     = "Mm/error_calldump.p"
+      dumpfile.MainTable       = "MobCDR"
+      dumpfile.ModCollModule   = ""
+      dumpfile.ModFromEventLog = TRUE
+      dumpfile.ModFromField    = "EventTS"
+      dumpfile.QueryClause     = ""
+      dumpfile.SideTables      = ""
+      dumpfile.SpoolDir        = "/mnt/qss/spool/"
+      dumpfile.TransDir        = "/mnt/qss/error_calls/"
       dumpfile.UseIndex        = "".
 END.
 

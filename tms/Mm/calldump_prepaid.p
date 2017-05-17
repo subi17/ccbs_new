@@ -13,14 +13,7 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Func/multitenantfunc.i}
 
-DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
-DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
-DEF INPUT  PARAMETER icDumpMode    AS CHAR NO-UNDO.
-DEF INPUT  PARAMETER idLastDump    AS DEC  NO-UNDO.
-DEF INPUT  PARAMETER icEventSource AS CHAR NO-UNDO.
-DEF INPUT  PARAMETER icEventFields AS CHAR NO-UNDO.
-DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
-DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
+DEF INPUT  PARAMETER icFilename        AS CHAR NO-UNDO.
 
 DEFINE VARIABLE idaDate AS DATE NO-UNDO. 
 DEFINE VARIABLE lcParam AS CHARACTER NO-UNDO.
@@ -105,7 +98,7 @@ FOR EACH PrepCDR NO-LOCK USE-INDEX ReadDate WHERE
          tmplaskuri      = tmplaskuri      + 1.
 END.
 
-output stream excel to value(icfile).
+output stream excel to value(icfilename).
 
 for each ttCalls NO-LOCK:
    
