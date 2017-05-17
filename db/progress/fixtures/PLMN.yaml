@@ -1,0 +1,3781 @@
+PLMN1: PLMN
+  CoName: "Afghanistan"
+  Country: "AF"
+  CountryPrefix: "93"
+
+PLMN2: PLMN
+  CoName: "Anguilla"
+  Country: "AI"
+
+PLMN3: PLMN
+  CoName: "Armenia"
+  Country: "AM"
+  CountryPrefix: "374"
+
+PLMN4: PLMN
+  CoName: "Netherlands Antilles"
+  Country: "AN"
+  CountryPrefix: "599"
+
+PLMN5: PLMN
+  CoName: "Angola"
+  Country: "AO"
+  CountryPrefix: "244"
+
+PLMN6: PLMN
+  CoName: "American Samoa"
+  Country: "AS"
+
+PLMN7: PLMN
+  CoName: "Aruba"
+  Country: "AW"
+  CountryPrefix: "297"
+
+PLMN8: PLMN
+  CoName: "Barbados"
+  Country: "BB"
+
+PLMN9: PLMN
+  CoName: "Burkina Faso"
+  Country: "BF"
+  CountryPrefix: "226"
+
+PLMN10: PLMN
+  CoName: "Burundi"
+  Country: "BI"
+  CountryPrefix: "257"
+
+PLMN11: PLMN
+  CoName: "Benin"
+  Country: "BJ"
+  CountryPrefix: "229"
+
+PLMN12: PLMN
+  CoName: "Bolivia"
+  Country: "BO"
+  CountryPrefix: "591"
+
+PLMN13: PLMN
+  CoName: "Bahamas"
+  Country: "BS"
+
+PLMN14: PLMN
+  CoName: "Bhutan"
+  Country: "BT"
+  CountryPrefix: "975"
+
+PLMN15: PLMN
+  CoName: "Belize"
+  Country: "BZ"
+  CountryPrefix: "501"
+
+PLMN16: PLMN
+  CoName: "Central African Republic"
+  Country: "CF"
+  CountryPrefix: "236"
+
+PLMN17: PLMN
+  CoName: "Cook Islands"
+  Country: "CK"
+  CountryPrefix: "682"
+
+PLMN18: PLMN
+  CoName: "Cameroon"
+  Country: "CM"
+  CountryPrefix: "237"
+
+PLMN19: PLMN
+  CoName: "Colombia"
+  Country: "CO"
+  CountryPrefix: "57"
+
+PLMN20: PLMN
+  CoName: "Costa Rica"
+  Country: "CR"
+  CountryPrefix: "506"
+
+PLMN21: PLMN
+  CoName: "Cape Verde"
+  Country: "CV"
+  CountryPrefix: "238"
+
+PLMN22: PLMN
+  CoName: "Djibouti"
+  Country: "DJ"
+  CountryPrefix: "253"
+
+PLMN23: PLMN
+  CoName: "Dominica"
+  Country: "DM"
+
+PLMN24: PLMN
+  CoName: "Algeria"
+  Country: "DZ"
+  CountryPrefix: "213"
+
+PLMN25: PLMN
+  CoName: "Ecuador"
+  Country: "EC"
+  CountryPrefix: "593"
+
+PLMN26: PLMN
+  CoName: "Eritrea"
+  Country: "ER"
+  CountryPrefix: "291"
+
+PLMN27: PLMN
+  CoName: "Ethiopia"
+  Country: "ET"
+  CountryPrefix: "251"
+
+PLMN28: PLMN
+  CoName: "Gabon"
+  Country: "GA"
+  CountryPrefix: "241"
+
+PLMN29: PLMN
+  CoName: "Great Britain (UK)"
+  Country: "GB"
+  CountryPrefix: "44"
+
+PLMN30: PLMN
+  CoName: "Grenada"
+  Country: "GD"
+
+PLMN31: PLMN
+  CoName: "French Guiana"
+  Country: "GF"
+  CountryPrefix: "594"
+
+PLMN32: PLMN
+  CoName: "Gambia"
+  Country: "GM"
+  CountryPrefix: "220"
+
+PLMN33: PLMN
+  CoName: "Guinea"
+  Country: "GN"
+  CountryPrefix: "224"
+
+PLMN34: PLMN
+  CoName: "Guadeloupe"
+  Country: "GP"
+  CountryPrefix: "590"
+
+PLMN35: PLMN
+  CoName: "Equatorial Guinea"
+  Country: "GQ"
+  CountryPrefix: "240"
+
+PLMN36: PLMN
+  CoName: "Guatemala"
+  Country: "GT"
+  CountryPrefix: "502"
+
+PLMN37: PLMN
+  CoName: "Guam"
+  Country: "GU"
+
+PLMN38: PLMN
+  CoName: "Guinea-Bissau"
+  Country: "GW"
+  CountryPrefix: "245"
+
+PLMN39: PLMN
+  CoName: "Guyana"
+  Country: "GY"
+  CountryPrefix: "592"
+
+PLMN40: PLMN
+  CoName: "Honduras"
+  Country: "HN"
+  CountryPrefix: "504"
+
+PLMN41: PLMN
+  CoName: "Haiti"
+  Country: "HT"
+  CountryPrefix: "509"
+
+PLMN42: PLMN
+  CoName: "Iraq"
+  Country: "IQ"
+  CountryPrefix: "964"
+
+PLMN43: PLMN
+  CoName: "Iran"
+  Country: "IR"
+  CountryPrefix: "98"
+
+PLMN44: PLMN
+  CoName: "Kiribati"
+  Country: "KI"
+  CountryPrefix: "686"
+
+PLMN45: PLMN
+  CoName: "Comoros"
+  Country: "KM"
+  CountryPrefix: "269"
+
+PLMN46: PLMN
+  CoName: "Saint Kitts and Nevis"
+  Country: "KN"
+
+PLMN47: PLMN
+  CoName: "Korea (North)"
+  Country: "KP"
+  CountryPrefix: "850"
+
+PLMN48: PLMN
+  CoName: "Korea (South)"
+  Country: "KR"
+  CountryPrefix: "82"
+
+PLMN49: PLMN
+  CoName: "Cayman Islands"
+  Country: "KY"
+
+PLMN50: PLMN
+  CoName: "Laos"
+  Country: "LA"
+  CountryPrefix: "856"
+
+PLMN51: PLMN
+  CoName: "Saint Lucia"
+  Country: "LC"
+
+PLMN52: PLMN
+  CoName: "Liberia"
+  Country: "LR"
+  CountryPrefix: "231"
+
+PLMN53: PLMN
+  CoName: "Lesotho"
+  Country: "LS"
+  CountryPrefix: "266"
+
+PLMN54: PLMN
+  CoName: "Libya"
+  Country: "LY"
+  CountryPrefix: "218"
+
+PLMN55: PLMN
+  CoName: "Monaco"
+  Country: "MC"
+  CountryPrefix: "377"
+
+PLMN56: PLMN
+  CoName: "Marshall Islands"
+  Country: "MH"
+  CountryPrefix: "692"
+
+PLMN57: PLMN
+  CoName: "Mali"
+  Country: "ML"
+  CountryPrefix: "223"
+
+PLMN58: PLMN
+  CoName: "Myanmar"
+  Country: "MM"
+  CountryPrefix: "95"
+
+PLMN59: PLMN
+  CoName: "Mongolia"
+  Country: "MN"
+  CountryPrefix: "976"
+
+PLMN60: PLMN
+  CoName: "Northern Mariana Islands"
+  Country: "MP"
+
+PLMN61: PLMN
+  CoName: "Martinique"
+  Country: "MQ"
+  CountryPrefix: "596"
+
+PLMN62: PLMN
+  CoName: "Mauritania"
+  Country: "MR"
+  CountryPrefix: "222"
+
+PLMN63: PLMN
+  CoName: "Montserrat"
+  Country: "MS"
+
+PLMN64: PLMN
+  CoName: "Maldives"
+  Country: "MV"
+  CountryPrefix: "960"
+
+PLMN65: PLMN
+  CoName: "Malawi"
+  Country: "MW"
+  CountryPrefix: "265"
+
+PLMN66: PLMN
+  CoName: "New Caledonia"
+  Country: "NC"
+  CountryPrefix: "687"
+
+PLMN67: PLMN
+  CoName: "Niger"
+  Country: "NE"
+  CountryPrefix: "227"
+
+PLMN68: PLMN
+  CoName: "Nicaragua"
+  Country: "NI"
+  CountryPrefix: "505"
+
+PLMN69: PLMN
+  CoName: "Nepal"
+  Country: "NP"
+  CountryPrefix: "977"
+
+PLMN70: PLMN
+  CoName: "Nauru"
+  Country: "NR"
+  CountryPrefix: "674"
+
+PLMN71: PLMN
+  CoName: "Niue"
+  Country: "NU"
+  CountryPrefix: "683"
+
+PLMN72: PLMN
+  CoName: "French Polynesia"
+  Country: "PF"
+  CountryPrefix: "689"
+
+PLMN73: PLMN
+  CoName: "Papua New Guinea"
+  Country: "PG"
+  CountryPrefix: "675"
+
+PLMN74: PLMN
+  CoName: "Pakistan"
+  Country: "PK"
+  CountryPrefix: "92"
+
+PLMN75: PLMN
+  CoName: "Saint Pierre and Miquelon"
+  Country: "PM"
+  CountryPrefix: "508"
+
+PLMN76: PLMN
+  CoName: "Puerto Rico"
+  Country: "PR"
+
+PLMN77: PLMN
+  CoName: "Palau"
+  Country: "PW"
+  CountryPrefix: "680"
+
+PLMN78: PLMN
+  CoName: "Reunion"
+  Country: "RE"
+  CountryPrefix: "262"
+
+PLMN79: PLMN
+  CoName: "Rwanda"
+  Country: "RW"
+  CountryPrefix: "250"
+
+PLMN80: PLMN
+  CoName: "Solomon Islands"
+  Country: "SB"
+  CountryPrefix: "677"
+
+PLMN81: PLMN
+  CoName: "Sudan"
+  Country: "SD"
+  CountryPrefix: "249"
+
+PLMN82: PLMN
+  CoName: "Saint Helena"
+  Country: "SH"
+  CountryPrefix: "290"
+
+PLMN83: PLMN
+  CoName: "Sierra Leone"
+  Country: "SL"
+  CountryPrefix: "232"
+
+PLMN84: PLMN
+  CoName: "San Marino"
+  Country: "SM"
+  CountryPrefix: "378"
+
+PLMN85: PLMN
+  CoName: "Somalia"
+  Country: "SO"
+  CountryPrefix: "252"
+
+PLMN86: PLMN
+  CoName: "Suriname"
+  Country: "SR"
+  CountryPrefix: "597"
+
+PLMN87: PLMN
+  CoName: "Sao Tome and Principe"
+  Country: "ST"
+  CountryPrefix: "239"
+
+PLMN88: PLMN
+  CoName: "El Salvador"
+  Country: "SV"
+  CountryPrefix: "503"
+
+PLMN89: PLMN
+  CoName: "Swaziland"
+  Country: "SZ"
+  CountryPrefix: "268"
+
+PLMN90: PLMN
+  CoName: "Turks and Caicos Islands"
+  Country: "TC"
+
+PLMN91: PLMN
+  CoName: "Chad"
+  Country: "TD"
+  CountryPrefix: "235"
+
+PLMN92: PLMN
+  CoName: "Tajikistan"
+  Country: "TJ"
+  CountryPrefix: "992"
+
+PLMN93: PLMN
+  CoName: "Tokelau"
+  Country: "TK"
+  CountryPrefix: "690"
+
+PLMN94: PLMN
+  CoName: "Turkmenistan"
+  Country: "TM"
+  CountryPrefix: "993"
+
+PLMN95: PLMN
+  CoName: "Tonga"
+  Country: "TO"
+  CountryPrefix: "676"
+
+PLMN96: PLMN
+  CoName: "East Timor"
+  Country: "TP"
+  CountryPrefix: "670"
+
+PLMN97: PLMN
+  CoName: "Tuvalu"
+  Country: "TV"
+  CountryPrefix: "688"
+
+PLMN98: PLMN
+  CoName: "N. America & Caribbean"
+  Country: "USA"
+  CountryPrefix: "1"
+
+PLMN99: PLMN
+  CoName: "Uruguay"
+  Country: "UY"
+  CountryPrefix: "598"
+
+PLMN100: PLMN
+  CoName: "Saint Vincent and the Grenadines"
+  Country: "VC"
+
+PLMN101: PLMN
+  CoName: "Vanuatu"
+  Country: "VU"
+  CountryPrefix: "678"
+
+PLMN102: PLMN
+  CoName: "Wallis and Futuna"
+  Country: "WF"
+  CountryPrefix: "681"
+
+PLMN103: PLMN
+  CoName: "Samoa"
+  Country: "WS"
+  CountryPrefix: "685"
+
+PLMN104: PLMN
+  CoName: "Yemen"
+  Country: "YE"
+  CountryPrefix: "967"
+
+PLMN105: PLMN
+  CoName: "Zambia"
+  Country: "ZM"
+  CountryPrefix: "260"
+
+PLMN106: PLMN
+  PLMN: "AFGTD"
+  CommName: "Roshan"
+  CoName: "Afganistan"
+  Country: "AF"
+  CountryPrefix: "93"
+
+PLMN107: PLMN
+  PLMN: "AGOUT"
+  CommName: "Unitel"
+  CoName: "Angola"
+  Country: "AO"
+  CountryPrefix: "244"
+
+PLMN108: PLMN
+  PLMN: "ALBAM"
+  CommName: "Albanian Mobile Communications"
+  CoName: "Albania"
+  Country: "AL"
+  CountryPrefix: "355"
+
+PLMN109: PLMN
+  PLMN: "ALBEM"
+  CommName: "Eagle Mobile"
+  CoName: "Albania"
+  Country: "AL"
+  CountryPrefix: "355"
+
+PLMN110: PLMN
+  PLMN: "ALBVF"
+  CommName: "Vodafone"
+  CoName: "Albania"
+  Country: "AL"
+  CountryPrefix: "355"
+
+PLMN111: PLMN
+  PLMN: "ANDMA"
+  CommName: "S.T.A"
+  CoName: "Andorra"
+  Country: "AD"
+  CountryPrefix: "376"
+
+PLMN112: PLMN
+  PLMN: "AREDU"
+  CommName: "Emirates Integrated Telecommunications"
+  CoName: "United Arab Emirates"
+  Country: "AE"
+  CountryPrefix: "971"
+
+PLMN113: PLMN
+  PLMN: "ARETC"
+  CommName: "Emirates Telecom (Etisalat)"
+  CoName: "United Arab Emirates"
+  Country: "AE"
+  CountryPrefix: "971"
+
+PLMN114: PLMN
+  PLMN: "ARGCM"
+  CommName: "CTI Movil"
+  CoName: "Argentina"
+  Country: "AR"
+  CountryPrefix: "54"
+
+PLMN115: PLMN
+  PLMN: "ARGNC"
+  CommName: "Nextel International"
+  CoName: "Argentina"
+  Country: "AR"
+  CountryPrefix: "54"
+
+PLMN116: PLMN
+  PLMN: "ARGTP"
+  CommName: "Personal"
+  CoName: "Argentina"
+  Country: "AR"
+  CountryPrefix: "54"
+
+PLMN117: PLMN
+  PLMN: "ARM05"
+  CommName: "VivaCell"
+  CoName: "Armenia"
+  Country: "AM"
+  CountryPrefix: "374"
+
+PLMN118: PLMN
+  PLMN: "ATG03"
+  CommName: "APUA"
+  CoName: "Antigua and Barbuda"
+  Country: "AG"
+  CountryPrefix: "1268"
+
+PLMN119: PLMN
+  PLMN: "AUSHU"
+  CommName: "H3G"
+  CoName: "Australia"
+  Country: "AU"
+  CountryPrefix: "61"
+
+PLMN120: PLMN
+  PLMN: "AUSOP"
+  CommName: "Optus"
+  CoName: "Australia"
+  Country: "AU"
+  CountryPrefix: "61"
+
+PLMN121: PLMN
+  PLMN: "AUSTA"
+  CommName: "Telstra"
+  CoName: "Australia"
+  Country: "AU"
+  CountryPrefix: "61"
+
+PLMN122: PLMN
+  PLMN: "AUSVF"
+  CommName: "Vodafone Pacific Pty Ltd."
+  CoName: "Australia"
+  Country: "AU"
+  CountryPrefix: "61"
+
+PLMN123: PLMN
+  PLMN: "AUTCA"
+  CommName: "One"
+  CoName: "Austria"
+  Country: "AT"
+  CountryPrefix: "43"
+
+PLMN124: PLMN
+  PLMN: "AUTHU"
+  CommName: "3"
+  CoName: "Austria"
+  Country: "AT"
+  CountryPrefix: "43"
+
+PLMN125: PLMN
+  PLMN: "AUTMM"
+  CommName: "T-Mobile Austria"
+  CoName: "Austria"
+  Country: "AT"
+  CountryPrefix: "43"
+
+PLMN126: PLMN
+  PLMN: "AUTON"
+  CommName: "ONE"
+  CoName: "Austria"
+  Country: "AT"
+  CountryPrefix: "43"
+
+PLMN127: PLMN
+  PLMN: "AUTPT"
+  CommName: "ONE / Mobilkom"
+  CoName: "Austria"
+  Country: "AT"
+  CountryPrefix: "43"
+
+PLMN128: PLMN
+  PLMN: "AUTTR"
+  CommName: "telering"
+  CoName: "Austria"
+  Country: "AT"
+  CountryPrefix: "43"
+
+PLMN129: PLMN
+  PLMN: "AZEAC"
+  CommName: "Azercell Telecom B.M."
+  CoName: "Azerbaijan"
+  Country: "AZ"
+  CountryPrefix: "994"
+
+PLMN130: PLMN
+  PLMN: "AZEBC"
+  CommName: "Bakcell"
+  CoName: "Azerbaijan"
+  Country: "AZ"
+  CountryPrefix: "994"
+
+PLMN131: PLMN
+  PLMN: "BELKO"
+  CommName: "KPN Orange Belgium NV/SA"
+  CoName: "Belgium"
+  Country: "BE"
+  CountryPrefix: "32"
+
+PLMN132: PLMN
+  PLMN: "BELMO"
+  CommName: "Mobistar S.A."
+  CoName: "Belgium"
+  Country: "BE"
+  CountryPrefix: "32"
+
+PLMN133: PLMN
+  PLMN: "BELTB"
+  CommName: "Belgacom Mobile"
+  CoName: "Belgium"
+  Country: "BE"
+  CountryPrefix: "32"
+
+PLMN134: PLMN
+  PLMN: "BGDGP"
+  CommName: "Grameenphone"
+  CoName: "Bangladesh"
+  Country: "BD"
+  CountryPrefix: "880"
+
+PLMN135: PLMN
+  PLMN: "BGDTT"
+  CommName: "Teletalk"
+  CoName: "Bangladesh"
+  Country: "BD"
+  CountryPrefix: "880"
+
+PLMN136: PLMN
+  PLMN: "BGDWT"
+  CommName: "Warid"
+  CoName: "Bangladesh"
+  Country: "BD"
+  CountryPrefix: "880"
+
+PLMN137: PLMN
+  PLMN: "BGR01"
+  CommName: "MobiTel AD Bulgaria"
+  CoName: "Bulgaria"
+  Country: "BG"
+  CountryPrefix: "359"
+
+PLMN138: PLMN
+  PLMN: "BGRCM"
+  CommName: "Globul - Cosmo Bulgaria"
+  CoName: "Bulgaria"
+  Country: "BG"
+  CountryPrefix: "359"
+
+PLMN139: PLMN
+  PLMN: "BGRVA"
+  CommName: "Vivatel Bulgaria"
+  CoName: "Bulgaria"
+  Country: "BG"
+  CountryPrefix: "359"
+
+PLMN140: PLMN
+  PLMN: "BHRBT"
+  CommName: "Batelco"
+  CoName: "Bahrain"
+  Country: "BH"
+  CountryPrefix: "973"
+
+PLMN141: PLMN
+  PLMN: "BHRST"
+  CommName: "STC"
+  CoName: "Bahrain"
+  Country: "BH"
+  CountryPrefix: "973"
+
+PLMN142: PLMN
+  PLMN: "BIHMS"
+  CommName: "Mobilna Srpska"
+  CoName: "Bosnia and Herzegovina"
+  Country: "BA"
+  CountryPrefix: "387"
+
+PLMN143: PLMN
+  PLMN: "BIHPT"
+  CommName: "BH Telecom"
+  CoName: "Bosnia and Herzegovina"
+  Country: "BA"
+  CountryPrefix: "387"
+
+PLMN144: PLMN
+  PLMN: "BLR02"
+  CommName: "Mobile TeleSystems"
+  CoName: "Belarus"
+  Country: "BY"
+  CountryPrefix: "375"
+
+PLMN145: PLMN
+  PLMN: "BLRMD"
+  CommName: "MDC"
+  CoName: "Belarus"
+  Country: "BY"
+  CountryPrefix: "375"
+
+PLMN146: PLMN
+  PLMN: "BLZ67"
+  CommName: "Digicell (Belize Telemedia)"
+  CoName: "Belize"
+  Country: "BZ"
+  CountryPrefix: "501"
+
+PLMN147: PLMN
+  PLMN: "BMU01"
+  CommName: "Bermuda Telecom"
+  CoName: "Bermuda"
+  Country: "BM"
+  CountryPrefix: "1441"
+
+PLMN148: PLMN
+  PLMN: "BOLME"
+  CommName: "Entel"
+  CoName: "Bolivia"
+  Country: "BO"
+  CountryPrefix: "591"
+
+PLMN149: PLMN
+  PLMN: "BOLNT"
+  CommName: "Nuevatel"
+  CoName: "Bolivia"
+  Country: "BO"
+  CountryPrefix: "591"
+
+PLMN150: PLMN
+  PLMN: "BOLTE"
+  CommName: "Tigo (Telecel)"
+  CoName: "Bolivia"
+  Country: "BO"
+  CountryPrefix: "591"
+
+PLMN151: PLMN
+  PLMN: "BRABT"
+  CommName: "Brasil Telecom"
+  CoName: "Brazil"
+  Country: "BR"
+  CountryPrefix: "55"
+
+PLMN152: PLMN
+  PLMN: "BRACL"
+  CommName: "Claro"
+  CoName: "Brazil"
+  Country: "BR"
+  CountryPrefix: "55"
+
+PLMN153: PLMN
+  PLMN: "BRACS"
+  CommName: "TIM"
+  CoName: "Brazil"
+  Country: "BR"
+  CountryPrefix: "55"
+
+PLMN154: PLMN
+  PLMN: "BRANC"
+  CommName: "Nextel International"
+  CoName: "Brazil"
+  Country: "BR"
+  CountryPrefix: "55"
+
+PLMN155: PLMN
+  PLMN: "BRARN"
+  CommName: "TIM"
+  CoName: "Brazil"
+  Country: "BR"
+  CountryPrefix: "55"
+
+PLMN156: PLMN
+  PLMN: "BRASP"
+  CommName: "TIM"
+  CoName: "Brazil"
+  Country: "BR"
+  CountryPrefix: "55"
+
+PLMN157: PLMN
+  PLMN: "BRATC"
+  CommName: "Telemig"
+  CoName: "Brazil"
+  Country: "BR"
+  CountryPrefix: "55"
+
+PLMN158: PLMN
+  PLMN: "BRATM"
+  CommName: "Oi/TNL PCS S.A"
+  CoName: "Brazil"
+  Country: "BR"
+  CountryPrefix: "55"
+
+PLMN159: PLMN
+  PLMN: "BRG01"
+  CommName: "MobilTel AD"
+  CoName: "Bulgaria"
+  Country: "BG"
+  CountryPrefix: "359"
+
+PLMN160: PLMN
+  PLMN: "BRNDS"
+  CommName: "DSTCom"
+  CoName: "Brunei Darussalam"
+  Country: "BN"
+  CountryPrefix: "673"
+
+PLMN161: PLMN
+  PLMN: "BWAGA"
+  CommName: "Mascom"
+  CoName: "Botswana"
+  Country: "BW"
+  CountryPrefix: "267"
+
+PLMN162: PLMN
+  PLMN: "BWAVC"
+  CommName: "Orange"
+  CoName: "Botswana"
+  Country: "BW"
+  CountryPrefix: "267"
+
+PLMN163: PLMN
+  PLMN: "CANMC"
+  CommName: "Microcell"
+  CoName: "Canada"
+  Country: "CA"
+
+PLMN164: PLMN
+  PLMN: "CANRW"
+  CommName: "Rogers Wireless"
+  CoName: "Canada"
+  Country: "CA"
+
+PLMN165: PLMN
+  PLMN: "CHEC1"
+  CommName: "Swisscom"
+  CoName: "Switzerland"
+  Country: "CH"
+  CountryPrefix: "41"
+
+PLMN166: PLMN
+  PLMN: "CHEDX"
+  CommName: "Sunrise"
+  CoName: "Switzerland"
+  Country: "CH"
+  CountryPrefix: "41"
+
+PLMN167: PLMN
+  PLMN: "CHEOR"
+  CommName: "Orange Communications SA"
+  CoName: "Switzerland"
+  Country: "CH"
+  CountryPrefix: "41"
+
+PLMN168: PLMN
+  PLMN: "CHLMV"
+  CommName: "Entel PCS"
+  CoName: "Chile"
+  Country: "CL"
+  CountryPrefix: "56"
+
+PLMN169: PLMN
+  PLMN: "CHLSM"
+  CommName: "Claro"
+  CoName: "Chile"
+  Country: "CL"
+  CountryPrefix: "56"
+
+PLMN170: PLMN
+  PLMN: "CHNCT"
+  CommName: "China Telecom"
+  CoName: "China"
+  Country: "CN"
+  CountryPrefix: "86"
+
+PLMN171: PLMN
+  PLMN: "CHNCU"
+  CommName: "China Unicom"
+  CoName: "China"
+  Country: "CN"
+  CountryPrefix: "86"
+
+PLMN172: PLMN
+  PLMN: "CIV03"
+  CommName: "Orange"
+  CoName: "Cote D'Ivoire (Ivory Coast)"
+  Country: "CI"
+  CountryPrefix: "2258"
+
+PLMN173: PLMN
+  PLMN: "CIVTL"
+  CommName: "Loteny Telecom"
+  CoName: "Cote D'Ivoire (Ivory Coast)"
+  Country: "CI"
+  CountryPrefix: "225"
+
+PLMN174: PLMN
+  PLMN: "CODCT"
+  CommName: "Celtel Congo"
+  CoName: "Congo"
+  Country: "CG"
+  CountryPrefix: "243"
+
+PLMN175: PLMN
+  PLMN: "COLCM"
+  CommName: "Comcel"
+  CoName: "Colombia"
+  Country: "CO"
+  CountryPrefix: "57"
+
+PLMN176: PLMN
+  PLMN: "COLCO"
+  CommName: "Tigo"
+  CoName: "Colombia"
+  Country: "CO"
+  CountryPrefix: "57"
+
+PLMN177: PLMN
+  PLMN: "CRICE"
+  CommName: "Grupo Ice"
+  CoName: "Costa Rica"
+  Country: "CR"
+  CountryPrefix: "506"
+
+PLMN178: PLMN
+  PLMN: "CRICR"
+  CommName: "Grupo Ice"
+  CoName: "Costa Rica"
+  Country: "CR"
+  CountryPrefix: "506"
+
+PLMN179: PLMN
+  PLMN: "CUB01"
+  CommName: "C_Com"
+  CoName: "Cuba"
+  Country: "CU"
+  CountryPrefix: "53"
+
+PLMN180: PLMN
+  PLMN: "CUB02"
+  CommName: "Empresa de Telecommunicaciones de Cuba"
+  CoName: "Cuba"
+  Country: "CU"
+  CountryPrefix: "53"
+
+PLMN181: PLMN
+  PLMN: "CYPCT"
+  CommName: "CYTA GSM"
+  CoName: "Cyprus"
+  Country: "CY"
+  CountryPrefix: "357"
+
+PLMN182: PLMN
+  PLMN: "CYPPT"
+  CommName: "PrimeTel."
+  CoName: "CYPRUS"
+  Country: "CY"
+  CountryPrefix: "357"
+
+PLMN183: PLMN
+  PLMN: "CYPSC"
+  CommName: "MTN"
+  CoName: "Cyprus"
+  Country: "CY"
+  CountryPrefix: "357"
+
+PLMN184: PLMN
+  PLMN: "CZECM"
+  CommName: "Cesky Mobil"
+  CoName: "Czech Republic"
+  Country: "CZ"
+  CountryPrefix: "420"
+
+PLMN185: PLMN
+  PLMN: "CZEET"
+  CommName: "Eurotel Praha Ltd"
+  CoName: "Czech Republic"
+  Country: "CZ"
+  CountryPrefix: "420"
+
+PLMN186: PLMN
+  PLMN: "CZERM"
+  CommName: "T-Mobile Czech Republic"
+  CoName: "Czech Republic"
+  Country: "CZ"
+  CountryPrefix: "420"
+
+PLMN187: PLMN
+  PLMN: "DEUD1"
+  CommName: "T- Mobile Deutschland"
+  CoName: "Germany"
+  Country: "DE"
+  CountryPrefix: "49"
+
+PLMN188: PLMN
+  PLMN: "DEUD2"
+  CommName: "D2 Vodafone"
+  CoName: "Germany"
+  Country: "DE"
+  CountryPrefix: "49"
+
+PLMN189: PLMN
+  PLMN: "DEUE1"
+  CommName: "E-Plus Mobilfunk GmbH"
+  CoName: "Germany"
+  Country: "DE"
+  CountryPrefix: "49"
+
+PLMN190: PLMN
+  PLMN: "DEUE2"
+  CommName: "VIAG Interkom"
+  CoName: "Germany"
+  Country: "DE"
+  CountryPrefix: "49"
+
+PLMN191: PLMN
+  PLMN: "DEUO2"
+  CommName: "O2"
+  CoName: "Germany"
+  Country: "DE"
+  CountryPrefix: "49"
+
+PLMN192: PLMN
+  PLMN: "DEUV1"
+  CommName: "E-Plus"
+  CoName: "Germany"
+  Country: "DE"
+  CountryPrefix: "49"
+
+PLMN193: PLMN
+  PLMN: "DK0DM"
+  CommName: "Sonofon"
+  CoName: "Denmark"
+  Country: "DK"
+  CountryPrefix: "45"
+
+PLMN194: PLMN
+  PLMN: "DNKDM"
+  CommName: "Sonofon"
+  CoName: "Denmark"
+  Country: "DK"
+  CountryPrefix: "45"
+
+PLMN195: PLMN
+  PLMN: "DNKDT"
+  CommName: "TDC Mobil "
+  CoName: "Denmark"
+  Country: "DK"
+  CountryPrefix: "45"
+
+PLMN196: PLMN
+  PLMN: "DNKHU"
+  CommName: "3 DK (Hi3G Denmark)"
+  CoName: "Denmark"
+  Country: "DK"
+  CountryPrefix: "45"
+
+PLMN197: PLMN
+  PLMN: "DNKIA"
+  CommName: "Telia AB"
+  CoName: "Denmark"
+  Country: "DK"
+  CountryPrefix: "45"
+
+PLMN198: PLMN
+  PLMN: "DNKMX"
+  CommName: "Orange"
+  CoName: "Denmark"
+  Country: "DK"
+  CountryPrefix: "45"
+
+PLMN199: PLMN
+  PLMN: "DNKTD"
+  CommName: "TDC Mobil"
+  CoName: "Denmark"
+  Country: "DK"
+  CountryPrefix: "45"
+
+PLMN200: PLMN
+  PLMN: "DOM01"
+  CommName: "Orange Dominicana"
+  CoName: "Dominican Republic"
+  Country: "DO"
+  CountryPrefix: "1809 "
+
+PLMN201: PLMN
+  PLMN: "DOMCL"
+  CommName: "Claro"
+  CoName: "Dominican Republic"
+  Country: "DO"
+  CountryPrefix: "1809"
+
+PLMN202: PLMN
+  PLMN: "DZAWT"
+  CommName: "Watanya"
+  CoName: "Algerie"
+  Country: "DZ"
+  CountryPrefix: "213"
+
+PLMN203: PLMN
+  PLMN: "ECUAL"
+  CommName: "Alegro"
+  CoName: "Ecuador"
+  Country: "EC"
+  CountryPrefix: "593"
+
+PLMN204: PLMN
+  PLMN: "ECUPG"
+  CommName: "Conecel"
+  CoName: "Ecuador"
+  Country: "EC"
+  CountryPrefix: "593"
+
+PLMN205: PLMN
+  PLMN: "EGYAR"
+  CommName: "Mobinil"
+  CoName: "Egypt"
+  Country: "EG"
+  CountryPrefix: "20"
+
+PLMN206: PLMN
+  PLMN: "EGYEM"
+  CommName: "Etisalat"
+  CoName: "Egypt"
+  Country: "EG"
+  CountryPrefix: "20"
+
+PLMN207: PLMN
+  PLMN: "EGYMS"
+  CommName: "Vodafone"
+  CoName: "Egypt"
+  Country: "EG"
+  CountryPrefix: "20"
+
+PLMN208: PLMN
+  PLMN: "ESPAT"
+  CommName: "Vodafone Espana"
+  CoName: "Spain"
+  Country: "ES"
+  CountryPrefix: "34"
+
+PLMN209: PLMN
+  PLMN: "ESPRT"
+  CommName: "Amena"
+  CoName: "Spain"
+  Country: "ES"
+  CountryPrefix: "34"
+
+PLMN210: PLMN
+  PLMN: "ESPTE"
+  CommName: "Telefonica Moviles"
+  CoName: "Spain"
+  Country: "ES"
+  CountryPrefix: "34"
+
+PLMN211: PLMN
+  PLMN: "ESPVV"
+  CommName: "Vodafone 3G Spain"
+  CoName: "Spain"
+  Country: "ES"
+  CountryPrefix: "34"
+
+PLMN212: PLMN
+  PLMN: "ESPXF"
+  CommName: "Yoigo (Xfera Moviles)"
+  CoName: "Spain"
+  Country: "ES"
+  CountryPrefix: "34"
+
+PLMN213: PLMN
+  PLMN: "ESTEM"
+  CommName: "EMT (Formerly Estonian Mobil Telephone)"
+  CoName: "Estonia"
+  Country: "EE"
+  CountryPrefix: "372"
+
+PLMN214: PLMN
+  PLMN: "ESTRB"
+  CommName: "Tele2 Estonia"
+  CoName: "Estonia"
+  Country: "EE"
+  CountryPrefix: "372"
+
+PLMN215: PLMN
+  PLMN: "ESTRE"
+  CommName: "Radiolinja Eesti"
+  CoName: "Estonia"
+  Country: "EE"
+  CountryPrefix: "372"
+
+PLMN216: PLMN
+  PLMN: "EYGAR"
+  CommName: "Mobinil"
+  CoName: "Egypt"
+  Country: "EG"
+  CountryPrefix: "20"
+
+PLMN217: PLMN
+  PLMN: "FIN2G"
+  CommName: "DNA GSM (DNA Networks Ltd)"
+  CoName: "Finland"
+  Country: "FI"
+  CountryPrefix: "358"
+
+PLMN218: PLMN
+  PLMN: "FINAM"
+  CommName: "Alands Mobitelefon"
+  CoName: "Finland"
+  Country: "FI"
+  CountryPrefix: "358"
+
+PLMN219: PLMN
+  PLMN: "FINRL"
+  CommName: "Elisa Corporation Finland"
+  CoName: "Finland"
+  Country: "FI"
+  CountryPrefix: "358"
+
+PLMN220: PLMN
+  PLMN: "FINTA"
+  CommName: "DNA 3G (DNA Networks Ltd)"
+  CoName: "Finland"
+  Country: "FI"
+  CountryPrefix: "358"
+
+PLMN221: PLMN
+  PLMN: "FINTF"
+  CommName: "Finland TeliaSon"
+  CoName: "Finland"
+  Country: "FI"
+  CountryPrefix: "358"
+
+PLMN222: PLMN
+  PLMN: "FINV1"
+  CommName: "TeliaSonera Oyj"
+  CoName: "Finland"
+  Country: "FI"
+  CountryPrefix: "358"
+
+PLMN223: PLMN
+  PLMN: "FJIVF"
+  CommName: "Vodafone"
+  CoName: "Fiji"
+  Country: "FJ"
+  CountryPrefix: "679"
+
+PLMN224: PLMN
+  PLMN: "FRAF1"
+  CommName: "Orange France"
+  CoName: "France"
+  Country: "FR"
+  CountryPrefix: "33"
+
+PLMN225: PLMN
+  PLMN: "FRAF2"
+  CommName: "SFR"
+  CoName: "France"
+  Country: "FR"
+  CountryPrefix: "33"
+
+PLMN226: PLMN
+  PLMN: "FRAF3"
+  CommName: "Bouygues Telecom"
+  CoName: "France"
+  Country: "FR"
+  CountryPrefix: "33"
+
+PLMN227: PLMN
+  PLMN: "FRAF4"
+  CommName: "Digicel F Martinique, French Guyana, Guadeloupe"
+  CoName: "FRENCH GUIANA"
+  Country: "GF"
+  CountryPrefix: "594"
+
+PLMN228: PLMN
+  PLMN: "FRAFM"
+  CommName: "Free Mobile"
+  CoName: "FRANCE"
+  Country: "FR"
+  CountryPrefix: "33"
+
+PLMN229: PLMN
+  PLMN: "FRARE"
+  CommName: "SRR"
+  CoName: "Reunion Island"
+  Country: "RE"
+  CountryPrefix: "262"
+
+PLMN230: PLMN
+  PLMN: "FRATK"
+  CommName: "1"
+  CoName: "FRENCH POLYNESIA"
+  Country: "PF"
+  CountryPrefix: "689"
+
+PLMN231: PLMN
+  PLMN: "FROFT"
+  CommName: "Faroese Telecom"
+  CoName: "Faroe Islands"
+  Country: "FO"
+  CountryPrefix: "298"
+
+PLMN232: PLMN
+  PLMN: "GB0CN"
+  CommName: "O2 "
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN233: PLMN
+  PLMN: "GB0GT"
+  CommName: "Cable & Wireless Guernsey "
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN234: PLMN
+  PLMN: "GB0HM"
+  CommName: "Orange "
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN235: PLMN
+  PLMN: "GB0JT"
+  CommName: "Jersey Telecoms"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN236: PLMN
+  PLMN: "GB0ME"
+  CommName: "T-Mobile UK"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN237: PLMN
+  PLMN: "GB0VF"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN238: PLMN
+  PLMN: "GBRCA"
+  CommName: "Cable & Wireless"
+  CoName: "UNITED KINGDOM"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN239: PLMN
+  PLMN: "GBRCN"
+  CommName: "O2 GSM & 3G UK"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN240: PLMN
+  PLMN: "GBRHU"
+  CommName: "H3G"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN241: PLMN
+  PLMN: "GBRJT"
+  CommName: "Jersey Telecom"
+  CoName: "UNITED KINGDOM"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN242: PLMN
+  PLMN: "GBRME"
+  CommName: "T-Mobile GSM & 3G UK"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN243: PLMN
+  PLMN: "GBRMS"
+  CommName: "Jersey Telecom"
+  CoName: "UNITED KINGDOM"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN244: PLMN
+  PLMN: "GBROR"
+  CommName: "Orange GSM & 3G UK"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN245: PLMN
+  PLMN: "GBRPR"
+  CommName: "Orange"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN246: PLMN
+  PLMN: "GBRVA"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN247: PLMN
+  PLMN: "GBRVB"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN248: PLMN
+  PLMN: "GBRVC"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN249: PLMN
+  PLMN: "GBRVD"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN250: PLMN
+  PLMN: "GBRVE"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN251: PLMN
+  PLMN: "GBRVF"
+  CommName: "Vodafone GSM & 3G UK"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN252: PLMN
+  PLMN: "GBRVG"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN253: PLMN
+  PLMN: "GBRVH"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN254: PLMN
+  PLMN: "GBRVI"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN255: PLMN
+  PLMN: "GBRVJ"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN256: PLMN
+  PLMN: "GBRVK"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN257: PLMN
+  PLMN: "GBRVL"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN258: PLMN
+  PLMN: "GBRVM"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN259: PLMN
+  PLMN: "GBRVN"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN260: PLMN
+  PLMN: "GBRVO"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN261: PLMN
+  PLMN: "GBRVP"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN262: PLMN
+  PLMN: "GBRVQ"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN263: PLMN
+  PLMN: "GBRVR"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN264: PLMN
+  PLMN: "GBRVS"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN265: PLMN
+  PLMN: "GBRVT"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN266: PLMN
+  PLMN: "GBRVU"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN267: PLMN
+  PLMN: "GBRVV"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN268: PLMN
+  PLMN: "GBRVW"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN269: PLMN
+  PLMN: "GBRVX"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN270: PLMN
+  PLMN: "GBRVY"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN271: PLMN
+  PLMN: "GBRVZ"
+  CommName: "Vodafone"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN272: PLMN
+  PLMN: "GEOGC"
+  CommName: "Geocell Limited"
+  CoName: "Georgia"
+  Country: "GE"
+  CountryPrefix: "995"
+
+PLMN273: PLMN
+  PLMN: "GEOMA"
+  CommName: "Magti GSM"
+  CoName: "Georgia"
+  Country: "GE"
+  CountryPrefix: "995"
+
+PLMN274: PLMN
+  PLMN: "GHASC"
+  CommName: "Scancom"
+  CoName: "Ghana"
+  Country: "GH"
+  CountryPrefix: "233"
+
+PLMN275: PLMN
+  PLMN: "GIBGT"
+  CommName: "Gibraltar Telecoms Int'l"
+  CoName: "Gibraltar"
+  Country: "GI"
+  CountryPrefix: "350"
+
+PLMN276: PLMN
+  PLMN: "GIBGT"
+  CommName: "Gibtel Telecommunications (Gibraltar)"
+  CoName: "United Kingdom"
+  Country: "UK"
+  CountryPrefix: "44"
+
+PLMN277: PLMN
+  PLMN: "GLP01"
+  CommName: "Orange Cara‹be (French West Indies)"
+  CoName: "GUADELOUPE"
+  Country: "GP"
+  CountryPrefix: "590"
+
+PLMN278: PLMN
+  PLMN: "GRCCO"
+  CommName: "Cosmote"
+  CoName: "GREECE"
+  Country: "GR"
+  CountryPrefix: "30"
+
+PLMN279: PLMN
+  PLMN: "GRCPF"
+  CommName: "Vodafone - Panafon"
+  CoName: "Greece"
+  Country: "GR"
+  CountryPrefix: "30"
+
+PLMN280: PLMN
+  PLMN: "GRCPH"
+  CommName: "Vodafone"
+  CoName: "Greece"
+  Country: "GR"
+  CountryPrefix: "30"
+
+PLMN281: PLMN
+  PLMN: "GRCSH"
+  CommName: "TIM "
+  CoName: "Greece"
+  Country: "GR"
+  CountryPrefix: "30"
+
+PLMN282: PLMN
+  PLMN: "GRLTG"
+  CommName: "Tele Greenland"
+  CoName: "Greenland"
+  Country: "GL"
+  CountryPrefix: "299"
+
+PLMN283: PLMN
+  PLMN: "GTMCM"
+  CommName: "Tigo (Comcel)"
+  CoName: "Guatemala"
+  Country: "GT"
+  CountryPrefix: "502"
+
+PLMN284: PLMN
+  PLMN: "GTMSC"
+  CommName: "Claro"
+  CoName: "Guatemala"
+  Country: "GT"
+  CountryPrefix: "502"
+
+PLMN285: PLMN
+  PLMN: "GUYCS"
+  CommName: "Digicel (Umobile)"
+  CoName: "Guyana"
+  Country: "GY"
+  CountryPrefix: "592"
+
+PLMN286: PLMN
+  PLMN: "GUYGT"
+  CommName: "Cellink (Guyana Tel & Tel)"
+  CoName: "Guyana"
+  Country: "GY"
+  CountryPrefix: "592"
+
+PLMN287: PLMN
+  PLMN: "HK0HT"
+  CommName: "Hutchison Telecom"
+  CoName: "Macao"
+  Country: "MO"
+  CountryPrefix: "853"
+
+PLMN288: PLMN
+  PLMN: "HKGH3"
+  CommName: "Hutchison"
+  CoName: "Hong Kong"
+  Country: "HK"
+  CountryPrefix: "852"
+
+PLMN289: PLMN
+  PLMN: "HKGHT"
+  CommName: "Hutchison Telecom (HK) Ltd"
+  CoName: "Hong Kong"
+  Country: "HK"
+  CountryPrefix: "852"
+
+PLMN290: PLMN
+  PLMN: "HKGM3"
+  CommName: "PCCW Mobile HK Ltd (Sunday)"
+  CoName: "Hong Kong"
+  Country: "HK"
+  CountryPrefix: "852"
+
+PLMN291: PLMN
+  PLMN: "HKGMC"
+  CommName: "Mandarin Communications"
+  CoName: "Hong Kong"
+  Country: "HK"
+  CountryPrefix: "852"
+
+PLMN292: PLMN
+  PLMN: "HKGNW"
+  CommName: "New World PCS"
+  CoName: "Hong Kong"
+  Country: "HK"
+  CountryPrefix: "852"
+
+PLMN293: PLMN
+  PLMN: "HKGPP"
+  CommName: "Peoples Telephone Co Ltd"
+  CoName: "Hong Kong"
+  Country: "HK"
+  CountryPrefix: "852"
+
+PLMN294: PLMN
+  PLMN: "HKGSM"
+  CommName: "SmarTone Mobile Comms Ltd"
+  CoName: "Hong Kong"
+  Country: "HK"
+  CountryPrefix: "852"
+
+PLMN295: PLMN
+  PLMN: "HKGTC"
+  CommName: "CSL"
+  CoName: "Hong Kong"
+  Country: "HK"
+  CountryPrefix: "852"
+
+PLMN296: PLMN
+  PLMN: "HND02"
+  CommName: "Tigo (Celtel)"
+  CoName: "Honduras"
+  Country: "HN"
+  CountryPrefix: "504"
+
+PLMN297: PLMN
+  PLMN: "HNDME"
+  CommName: "Claro"
+  CoName: "Honduras"
+  Country: "HN"
+  CountryPrefix: "504"
+
+PLMN298: PLMN
+  PLMN: "HRVCN"
+  CommName: "Croatian Telecom"
+  CoName: "Croatia (Hrvatska)"
+  Country: "HR"
+  CountryPrefix: "385"
+
+PLMN299: PLMN
+  PLMN: "HRVT2"
+  CommName: "Tele2"
+  CoName: "Croatia"
+  Country: "HR"
+  CountryPrefix: "385"
+
+PLMN300: PLMN
+  PLMN: "HRVVI"
+  CommName: "Vipnet"
+  CoName: "Croatia"
+  Country: "HR"
+  CountryPrefix: "385"
+
+PLMN301: PLMN
+  PLMN: "HRVVN"
+  CommName: "VIP Net"
+  CoName: "Croatia (Hrvatska)"
+  Country: "HR"
+  CountryPrefix: "385"
+
+PLMN302: PLMN
+  PLMN: "HUNH1"
+  CommName: "Pannon GSM Telecoms Plc"
+  CoName: "Hungary"
+  Country: "HU"
+  CountryPrefix: "36"
+
+PLMN303: PLMN
+  PLMN: "HUNH2"
+  CommName: "Westel 900 GSM Mobile"
+  CoName: "Hungary"
+  Country: "HU"
+  CountryPrefix: "36"
+
+PLMN304: PLMN
+  PLMN: "HUNVF"
+  CommName: "Vodafone Hungary"
+  CoName: "Hungary"
+  Country: "HU"
+  CountryPrefix: "36"
+
+PLMN305: PLMN
+  PLMN: "HUNVR"
+  CommName: "Vodafone Hungary"
+  CoName: "Hungary"
+  Country: "HU"
+  CountryPrefix: "36"
+
+PLMN306: PLMN
+  PLMN: "I00SI"
+  CommName: "Telecom Italia Mobile"
+  CoName: "Italy"
+  Country: "IT"
+  CountryPrefix: "39"
+
+PLMN307: PLMN
+  PLMN: "I00W1"
+  CommName: "Wind Telecomunicazioni SpA"
+  CoName: "Italy"
+  Country: "IT"
+  CountryPrefix: "39"
+
+PLMN308: PLMN
+  PLMN: "IDN89"
+  CommName: "H3G"
+  CoName: "Indonesia"
+  Country: "ID"
+  CountryPrefix: "62"
+
+PLMN309: PLMN
+  PLMN: "IDNST"
+  CommName: "Satelindo"
+  CoName: "Indonesia"
+  Country: "ID"
+  CountryPrefix: "62"
+
+PLMN310: PLMN
+  PLMN: "IDNTS"
+  CommName: "Telkomsel"
+  CoName: "Indonesia"
+  Country: "ID"
+  CountryPrefix: "62"
+
+PLMN311: PLMN
+  PLMN: "INDA1"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN312: PLMN
+  PLMN: "INDA2"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN313: PLMN
+  PLMN: "INDA3"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN314: PLMN
+  PLMN: "INDA4"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN315: PLMN
+  PLMN: "INDA5"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN316: PLMN
+  PLMN: "INDA6"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN317: PLMN
+  PLMN: "INDA7"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN318: PLMN
+  PLMN: "INDA8"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN319: PLMN
+  PLMN: "INDA9"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN320: PLMN
+  PLMN: "INDAT"
+  CommName: "Bharti Cellular"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN321: PLMN
+  PLMN: "INDB1"
+  CommName: "BPL Mobile"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN322: PLMN
+  PLMN: "INDBK"
+  CommName: "BPL Cellular Kerala"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN323: PLMN
+  PLMN: "INDBL"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN324: PLMN
+  PLMN: "INDBM"
+  CommName: "BPL Cellular Maharasthra"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN325: PLMN
+  PLMN: "INDBO"
+  CommName: "IDEA Cellular"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN326: PLMN
+  PLMN: "INDBT"
+  CommName: "BPL Cellular Tamil Nadu"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN327: PLMN
+  PLMN: "INDCC"
+  CommName: "Hutchison Telecom East"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN328: PLMN
+  PLMN: "INDE1"
+  CommName: "Essar"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN329: PLMN
+  PLMN: "INDEH"
+  CommName: "Escotel/Harayana"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN330: PLMN
+  PLMN: "INDEK"
+  CommName: "Escotel/Kerala"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN331: PLMN
+  PLMN: "INDEU"
+  CommName: "Escotel/Up-West"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN332: PLMN
+  PLMN: "INDF1"
+  CommName: "Fascel Ltd"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN333: PLMN
+  PLMN: "INDH1"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN334: PLMN
+  PLMN: "INDHM"
+  CommName: "Orange"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN335: PLMN
+  PLMN: "INDJB"
+  CommName: "Bharti Mobile Karnataka"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN336: PLMN
+  PLMN: "INDJH"
+  CommName: "Bharti Mobile Andra Pradesh"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN337: PLMN
+  PLMN: "INDMT"
+  CommName: "Bharti Airtel"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN338: PLMN
+  PLMN: "INDRC"
+  CommName: "RPG Cellular"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN339: PLMN
+  PLMN: "INDSC"
+  CommName: "Bharti Mobinet"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN340: PLMN
+  PLMN: "INDSK"
+  CommName: "Spice Karnataka"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN341: PLMN
+  PLMN: "INDSP"
+  CommName: "Spice Punjab"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN342: PLMN
+  PLMN: "INDWB"
+  CommName: "BSNL"
+  CoName: "India"
+  Country: "IN"
+  CountryPrefix: "91"
+
+PLMN343: PLMN
+  PLMN: "IRLDF"
+  CommName: "O2 Communications"
+  CoName: "Ireland"
+  Country: "IE"
+  CountryPrefix: "353"
+
+PLMN344: PLMN
+  PLMN: "IRLEC"
+  CommName: " Vodafone."
+  CoName: "Ireland"
+  Country: "IE"
+  CountryPrefix: "353"
+
+PLMN345: PLMN
+  PLMN: "IRLH3"
+  CommName: "H3G"
+  CoName: "Ireland"
+  Country: "IE"
+  CountryPrefix: "353"
+
+PLMN346: PLMN
+  PLMN: "IRLLT"
+  CommName: "O2 3G Ireland"
+  CoName: "Ireland"
+  Country: "IE"
+  CountryPrefix: "353"
+
+PLMN347: PLMN
+  PLMN: "IRLME"
+  CommName: "Meteor"
+  CoName: "Ireland"
+  Country: "IE"
+  CountryPrefix: "353"
+
+PLMN348: PLMN
+  PLMN: "IRNMI"
+  CommName: "IranCell"
+  CoName: "Iran"
+  Country: "IR"
+  CountryPrefix: "98"
+
+PLMN349: PLMN
+  PLMN: "IS0PS"
+  CommName: "Siminn"
+  CoName: "Iceland"
+  Country: "IS"
+  CountryPrefix: "354"
+
+PLMN350: PLMN
+  PLMN: "ISLNO"
+  CommName: "Nova"
+  CoName: "Iceland"
+  Country: "IS"
+  CountryPrefix: "354"
+
+PLMN351: PLMN
+  PLMN: "ISLOC"
+  CommName: "On-waves - GSM 900/1800 - ICELAND"
+  CoName: "Iceland"
+  Country: "IS"
+  CountryPrefix: "354"
+
+PLMN352: PLMN
+  PLMN: "ISLPS"
+  CommName: "S¡minn hf"
+  CoName: "Iceland"
+  Country: "IS"
+  CountryPrefix: "354"
+
+PLMN353: PLMN
+  PLMN: "ISLTL"
+  CommName: "OG Vodafone"
+  CoName: "Iceland"
+  Country: "IS"
+  CountryPrefix: "354"
+
+PLMN354: PLMN
+  PLMN: "ISLVW"
+  CommName: "Viking Wireless"
+  CoName: "Iceland"
+  Country: "IS"
+  CountryPrefix: "354"
+
+PLMN355: PLMN
+  PLMN: "ISR01"
+  CommName: "Partner Communications"
+  CoName: "Israel"
+  Country: "IL"
+  CountryPrefix: "972"
+
+PLMN356: PLMN
+  PLMN: "ISRCL"
+  CommName: "Cellcom"
+  CoName: "Israel"
+  Country: "IL"
+  CountryPrefix: "972"
+
+PLMN357: PLMN
+  PLMN: "ITAGT"
+  CommName: "TIM"
+  CoName: "Italy"
+  Country: "IT"
+  CountryPrefix: "39"
+
+PLMN358: PLMN
+  PLMN: "ITAH3"
+  CommName: "3"
+  CoName: "Italy"
+  Country: "IT"
+  CountryPrefix: "39"
+
+PLMN359: PLMN
+  PLMN: "ITAOM"
+  CommName: "Vodafone Omnitel"
+  CoName: "Italy"
+  Country: "IT"
+  CountryPrefix: "39"
+
+PLMN360: PLMN
+  PLMN: "ITASI"
+  CommName: "Telecom Italia S"
+  CoName: "Italy"
+  Country: "IT"
+  CountryPrefix: "39"
+
+PLMN361: PLMN
+  PLMN: "ITAWI"
+  CommName: "Wind Italy"
+  CoName: "Italy"
+  Country: "IT"
+  CountryPrefix: "39"
+
+PLMN362: PLMN
+  PLMN: "JAMCL"
+  CommName: "Claro (miphone)"
+  CoName: "Jamaica"
+  Country: "JM"
+  CountryPrefix: "1876"
+
+PLMN363: PLMN
+  PLMN: "JAMDC"
+  CommName: "Mossel Digicel"
+  CoName: "Jamaica"
+  Country: "JM"
+  CountryPrefix: "1876"
+
+PLMN364: PLMN
+  PLMN: "JORFL"
+  CommName: "Fastlink"
+  CoName: "Jordan"
+  Country: "JO"
+  CountryPrefix: "962"
+
+PLMN365: PLMN
+  PLMN: "JORMC"
+  CommName: "MobileCom"
+  CoName: "Jordan"
+  Country: "JO"
+  CountryPrefix: "962"
+
+PLMN366: PLMN
+  PLMN: "JPNDo"
+  CommName: "DoCoMo"
+  CoName: "Japan"
+  Country: "JP"
+  CountryPrefix: "81"
+
+PLMN367: PLMN
+  PLMN: "JPNJP"
+  CommName: "Vodafone K.K"
+  CoName: "Japan"
+  Country: "JP"
+  CountryPrefix: "81"
+
+PLMN368: PLMN
+  PLMN: "KAZKT"
+  CommName: "Kartel"
+  CoName: "Kazakhstan"
+  Country: "KZ"
+  CountryPrefix: "7"
+
+PLMN369: PLMN
+  PLMN: "KAZKZ"
+  CommName: "K'Cell"
+  CoName: "Kazakhstan"
+  Country: "KZ"
+  CountryPrefix: "7"
+
+PLMN370: PLMN
+  PLMN: "KENKC"
+  CommName: "Kencell"
+  CoName: "Kenya"
+  Country: "KE"
+  CountryPrefix: "254"
+
+PLMN371: PLMN
+  PLMN: "KENSA"
+  CommName: "Safaricom Ltd"
+  CoName: "Kenya"
+  Country: "KE"
+  CountryPrefix: "254"
+
+PLMN372: PLMN
+  PLMN: "KGZ01"
+  CommName: "Bitel"
+  CoName: "Kyrgyzstan"
+  Country: "KG"
+  CountryPrefix: "996"
+
+PLMN373: PLMN
+  PLMN: "KHMGM"
+  CommName: "CamGSM"
+  CoName: "Cambodia"
+  Country: "KH"
+  CountryPrefix: "855"
+
+PLMN374: PLMN
+  PLMN: "KHMSC"
+  CommName: "Applifone"
+  CoName: "Cambodia"
+  Country: "KH"
+  CountryPrefix: "855"
+
+PLMN375: PLMN
+  PLMN: "KORKF"
+  CommName: "KT Freetel"
+  CoName: "South Korea"
+  Country: "KR"
+  CountryPrefix: "82"
+
+PLMN376: PLMN
+  PLMN: "KORSK"
+  CommName: "SK Telecom"
+  CoName: "South Korea"
+  Country: "KR"
+  CountryPrefix: "82"
+
+PLMN377: PLMN
+  PLMN: "KT0MT"
+  CommName: "Mobile Telecoms Co."
+  CoName: "Kuwait"
+  Country: "KW"
+  CountryPrefix: "965"
+
+PLMN378: PLMN
+  PLMN: "KWTKT"
+  CommName: "VIVA"
+  CoName: "Kuwait"
+  Country: "KW"
+  CountryPrefix: "965"
+
+PLMN379: PLMN
+  PLMN: "KWTMT"
+  CommName: "Zain "
+  CoName: "Kuwait"
+  Country: "KW"
+  CountryPrefix: "965"
+
+PLMN380: PLMN
+  PLMN: "KWTNM"
+  CommName: "Watanaya Telecom"
+  CoName: "Kuwait"
+  Country: "KW"
+  CountryPrefix: "965"
+
+PLMN381: PLMN
+  PLMN: "LBNFL"
+  CommName: "FTML Service Cellulaire"
+  CoName: "Lebanon"
+  Country: "LB"
+  CountryPrefix: "961"
+
+PLMN382: PLMN
+  PLMN: "LBNLC"
+  CommName: "Libancell"
+  CoName: "Lebanon"
+  Country: "LB"
+  CountryPrefix: "961"
+
+PLMN383: PLMN
+  PLMN: "LDPN"
+  CommName: "T-Mobile Netherlands"
+  CoName: "Netherlands"
+  Country: "NL"
+  CountryPrefix: "31"
+
+PLMN384: PLMN
+  PLMN: "LIEMK"
+  CommName: "Mobilkom"
+  CoName: "Liechtenstein"
+  Country: "LI"
+  CountryPrefix: "423"
+
+PLMN385: PLMN
+  PLMN: "LIETG"
+  CommName: "Millicom Tango"
+  CoName: "Liechtenstein"
+  Country: "LI"
+  CountryPrefix: "423"
+
+PLMN386: PLMN
+  PLMN: "LIEVE"
+  CommName: "Orange Liechtenstein"
+  CoName: "Liechtenstein"
+  Country: "LI"
+  CountryPrefix: "423"
+
+PLMN387: PLMN
+  PLMN: "LKACT"
+  CommName: "Tigo (Celltel Lanka Ltd)"
+  CoName: "Sri Lanka"
+  Country: "LK"
+  CountryPrefix: "94"
+
+PLMN388: PLMN
+  PLMN: "LKADG"
+  CommName: "MTN Networks"
+  CoName: "Sri Lanka"
+  Country: "LK"
+  CountryPrefix: "94"
+
+PLMN389: PLMN
+  PLMN: "LTU03"
+  CommName: "Tele2"
+  CoName: "Lithuania"
+  Country: "LT"
+  CountryPrefix: "370"
+
+PLMN390: PLMN
+  PLMN: "LTUMT"
+  CommName: "UAB Bite GSM"
+  CoName: "Lithuania"
+  Country: "LT"
+  CountryPrefix: "370"
+
+PLMN391: PLMN
+  PLMN: "LTUOM"
+  CommName: "Omnitel"
+  CoName: "Lithuania"
+  Country: "LT"
+  CountryPrefix: "370"
+
+PLMN392: PLMN
+  PLMN: "LUXPT"
+  CommName: "P+T Luxemburg"
+  CoName: "Luxembourg"
+  Country: "LU"
+  CountryPrefix: "352"
+
+PLMN393: PLMN
+  PLMN: "LUXTG"
+  CommName: "Millicom Tango"
+  CoName: "Luxembourg"
+  Country: "LU"
+  CountryPrefix: "352"
+
+PLMN394: PLMN
+  PLMN: "LUXVM"
+  CommName: "VOXmobile GSM & 3G"
+  CoName: "Luxembourg"
+  Country: "LU"
+  CountryPrefix: "352"
+
+PLMN395: PLMN
+  PLMN: "LVABC"
+  CommName: "Tele2"
+  CoName: "Latvia"
+  Country: "LV"
+  CountryPrefix: "371"
+
+PLMN396: PLMN
+  PLMN: "LVABT"
+  CommName: "Bite Latvija"
+  CoName: "Latvia"
+  Country: "LV"
+  CountryPrefix: "371"
+
+PLMN397: PLMN
+  PLMN: "LVALM"
+  CommName: "Latvian Mobile Tel. Co."
+  CoName: "Latvia"
+  Country: "LV"
+  CountryPrefix: "371"
+
+PLMN398: PLMN
+  PLMN: "MACCT"
+  CommName: "C.T.M."
+  CoName: "Macao"
+  Country: "MO"
+  CountryPrefix: "853"
+
+PLMN399: PLMN
+  PLMN: "MAGTI"
+  CommName: "Magticom"
+  CoName: "Georgia"
+  Country: "GE"
+  CountryPrefix: "995"
+
+PLMN400: PLMN
+  PLMN: "MARM1"
+  CommName: "Maroc Telecom"
+  CoName: "Morocco"
+  Country: "MA"
+  CountryPrefix: "212"
+
+PLMN401: PLMN
+  PLMN: "MARMT"
+  CommName: "Medi Telecom"
+  CoName: "Morocco"
+  Country: "MA"
+  CountryPrefix: "212"
+
+PLMN402: PLMN
+  PLMN: "MCOM1"
+  CommName: "Monaco Telecom"
+  CoName: "MONACO"
+  Country: "MC"
+  CountryPrefix: "377"
+
+PLMN403: PLMN
+  PLMN: "MCOM2"
+  CommName: "Monaco Telecom"
+  CoName: "MONACO"
+  Country: "MC"
+  CountryPrefix: "377"
+
+PLMN404: PLMN
+  PLMN: "MDAMC"
+  CommName: "Moldcell"
+  CoName: "Moldova"
+  Country: "MD"
+  CountryPrefix: "373"
+
+PLMN405: PLMN
+  PLMN: "MDAVX"
+  CommName: "Voxtel S.A"
+  CoName: "Moldova"
+  Country: "MD"
+  CountryPrefix: "373"
+
+PLMN406: PLMN
+  PLMN: "MDGCO"
+  CommName: "Madacom"
+  CoName: "Madagascar"
+  Country: "MG"
+  CountryPrefix: "261"
+
+PLMN407: PLMN
+  PLMN: "MDVWM"
+  CommName: "Wataniya"
+  CoName: "Maldives"
+  Country: "MV"
+  CountryPrefix: "960"
+
+PLMN408: PLMN
+  PLMN: "MEXNC"
+  CommName: "Nextel International"
+  CoName: "Mexico"
+  Country: "MX"
+  CountryPrefix: "52"
+
+PLMN409: PLMN
+  PLMN: "MEXTL"
+  CommName: "Telcel"
+  CoName: "Mexico"
+  Country: "MX"
+  CountryPrefix: "52"
+
+PLMN410: PLMN
+  PLMN: "MKDMM"
+  CommName: "Mobimak"
+  CoName: "Macedonia"
+  Country: "MK"
+  CountryPrefix: "389"
+
+PLMN411: PLMN
+  PLMN: "MLTGO"
+  CommName: "Go Mobile"
+  CoName: "Malta"
+  Country: "MT"
+  CountryPrefix: "356"
+
+PLMN412: PLMN
+  PLMN: "MLTTL"
+  CommName: "Vodafone Malta Ltd"
+  CoName: "Malta"
+  Country: "MT"
+  CountryPrefix: "356"
+
+PLMN413: PLMN
+  PLMN: "MNEMT"
+  CommName: "MTEL"
+  CoName: "Montenegro"
+  Country: "CS"
+  CountryPrefix: "382"
+
+PLMN414: PLMN
+  PLMN: "MOZ01"
+  CommName: "TDM"
+  CoName: "Mozambique"
+  Country: "MZ"
+  CountryPrefix: "258"
+
+PLMN415: PLMN
+  PLMN: "MUSCP"
+  CommName: "Cellplus Mobile Comms"
+  CoName: "Mauritius"
+  Country: "MU"
+  CountryPrefix: "230"
+
+PLMN416: PLMN
+  PLMN: "MUSEM"
+  CommName: "Emtel Ltd"
+  CoName: "Mauritius"
+  Country: "MU"
+  CountryPrefix: "230"
+
+PLMN417: PLMN
+  PLMN: "MYSBC"
+  CommName: "Maxis"
+  CoName: "Malaysia"
+  Country: "MY"
+  CountryPrefix: "60"
+
+PLMN418: PLMN
+  PLMN: "MYSCC"
+  CommName: "Celcom"
+  CoName: "Malaysia"
+  Country: "MY"
+  CountryPrefix: "60"
+
+PLMN419: PLMN
+  PLMN: "MYSMT"
+  CommName: "Digi Telecom"
+  CoName: "Malaysia"
+  Country: "MY"
+  CountryPrefix: "60"
+
+PLMN420: PLMN
+  PLMN: "MYSSD"
+  CommName: "Malaysian Mobile Services Sdn Bhd"
+  CoName: "Malaysia"
+  Country: "MY"
+  CountryPrefix: "60"
+
+PLMN421: PLMN
+  PLMN: "NAM01"
+  CommName: "MTC"
+  CoName: "Namibia"
+  Country: "NA"
+  CountryPrefix: "264"
+
+PLMN422: PLMN
+  PLMN: "NGAET"
+  CommName: "Econet"
+  CoName: "Nigeria"
+  Country: "NG"
+  CountryPrefix: "234"
+
+PLMN423: PLMN
+  PLMN: "NGAMN"
+  CommName: "MTN"
+  CoName: "Nigeria"
+  Country: "NG"
+  CountryPrefix: "234"
+
+PLMN424: PLMN
+  PLMN: "NICEN"
+  CommName: "Claro"
+  CoName: "Nicaragua"
+  Country: "NI"
+  CountryPrefix: "505"
+
+PLMN425: PLMN
+  PLMN: "NICSC"
+  CommName: "Claro"
+  CoName: "Nicaragua"
+  Country: "NI"
+  CountryPrefix: "505"
+
+PLMN426: PLMN
+  PLMN: "NLDDT"
+  CommName: "Dutchtone"
+  CoName: "Netherlands"
+  Country: "NL"
+  CountryPrefix: "31"
+
+PLMN427: PLMN
+  PLMN: "NLDLT"
+  CommName: "Libertel Vodafone"
+  CoName: "Netherlands"
+  Country: "NL"
+  CountryPrefix: "31"
+
+PLMN428: PLMN
+  PLMN: "NLDPN"
+  CommName: "T-Mobile GSM & 3G Netherlands"
+  CoName: "Netherlands"
+  Country: "NL"
+  CountryPrefix: "31"
+
+PLMN429: PLMN
+  PLMN: "NLDPT"
+  CommName: "KPN Telecom"
+  CoName: "Netherlands"
+  Country: "NL"
+  CountryPrefix: "31"
+
+PLMN430: PLMN
+  PLMN: "NLDTM"
+  CommName: "Telfort (O2)"
+  CoName: "Netherlands"
+  Country: "NL"
+  CountryPrefix: "31"
+
+PLMN431: PLMN
+  PLMN: "NORNC"
+  CommName: "NetCom A.S."
+  CoName: "Norway"
+  Country: "NO"
+  CountryPrefix: "47"
+
+PLMN432: PLMN
+  PLMN: "NORNN"
+  CommName: "Network Norway"
+  CoName: "Norway"
+  Country: "NO"
+  CountryPrefix: "47"
+
+PLMN433: PLMN
+  PLMN: "NORT3"
+  CommName: "Teletopia Mobile"
+  CoName: "Norway"
+  Country: "NO"
+  CountryPrefix: "47"
+
+PLMN434: PLMN
+  PLMN: "NORTM"
+  CommName: "Telenor Mobil AS"
+  CoName: "Norway"
+  Country: "NO"
+  CountryPrefix: "47"
+
+PLMN435: PLMN
+  PLMN: "NZLBS"
+  CommName: "Vodafone New Zealand Ltd"
+  CoName: "New Zealand (Aotearoa)"
+  Country: "NZ"
+  CountryPrefix: "64"
+
+PLMN436: PLMN
+  PLMN: "NZLNH"
+  CommName: "NZ Communications "
+  CoName: "New Zealand"
+  Country: "NZ"
+  CountryPrefix: "64"
+
+PLMN437: PLMN
+  PLMN: "OMNGT"
+  CommName: "Omantel"
+  CoName: "Oman"
+  Country: "OM"
+  CountryPrefix: "968"
+
+PLMN438: PLMN
+  PLMN: "OMNNT"
+  CommName: "Nawras"
+  CoName: "Oman"
+  Country: "OM"
+  CountryPrefix: "968"
+
+PLMN439: PLMN
+  PLMN: "PAKWA"
+  CommName: "Warid"
+  CoName: "Pakistan"
+  Country: "PK"
+  CountryPrefix: "92"
+
+PLMN440: PLMN
+  PLMN: "PANCL"
+  CommName: "Claro"
+  CoName: "Panama"
+  Country: "PA"
+  CountryPrefix: "507"
+
+PLMN441: PLMN
+  PLMN: "PANCW"
+  CommName: "Cable & Wireless Panama"
+  CoName: "Panama"
+  Country: "PA"
+  CountryPrefix: "507"
+
+PLMN442: PLMN
+  PLMN: "PERNC"
+  CommName: "Nextel International"
+  CoName: "Peru"
+  Country: "PE"
+  CountryPrefix: "51"
+
+PLMN443: PLMN
+  PLMN: "PERTM"
+  CommName: "TIM"
+  CoName: "Peru"
+  Country: "PE"
+  CountryPrefix: "51"
+
+PLMN444: PLMN
+  PLMN: "PHLDG"
+  CommName: "Digitel"
+  CoName: "Philippines"
+  Country: "PH"
+  CountryPrefix: "63"
+
+PLMN445: PLMN
+  PLMN: "PHLGT"
+  CommName: "Globe Telecom"
+  CoName: "Philippines"
+  Country: "PH"
+  CountryPrefix: "63"
+
+PLMN446: PLMN
+  PLMN: "PHLIC"
+  CommName: "Islacom"
+  CoName: "Philippines"
+  Country: "PH"
+  CountryPrefix: "63"
+
+PLMN447: PLMN
+  PLMN: "PHLNC"
+  CommName: "Nextel International"
+  CoName: "Philippines"
+  Country: "PH"
+  CountryPrefix: "63"
+
+PLMN448: PLMN
+  PLMN: "PHLSC"
+  CommName: "Smart Gold GSM 1800"
+  CoName: "Philippines"
+  Country: "PH"
+  CountryPrefix: "63"
+
+PLMN449: PLMN
+  PLMN: "PHLSR"
+  CommName: "Smart"
+  CoName: "Philippines"
+  Country: "PH"
+  CountryPrefix: "63"
+
+PLMN450: PLMN
+  PLMN: "POL02"
+  CommName: "Polska Telefonia Cyfrowa"
+  CoName: "Poland"
+  Country: "PL"
+  CountryPrefix: "48"
+
+PLMN451: PLMN
+  PLMN: "POL03"
+  CommName: "PTK Centertel"
+  CoName: "Poland"
+  Country: "PL"
+  CountryPrefix: "48"
+
+PLMN452: PLMN
+  PLMN: "POL04"
+  CommName: "P4"
+  CoName: "Poland"
+  Country: "PL"
+  CountryPrefix: "48"
+
+PLMN453: PLMN
+  PLMN: "POLKM"
+  CommName: "Polkomtel S.A"
+  CoName: "Poland"
+  Country: "PL"
+  CountryPrefix: "48"
+
+PLMN454: PLMN
+  PLMN: "POLP4"
+  CommName: "P4 Sp. z o.o"
+  CoName: "Poland"
+  Country: "PL"
+  CountryPrefix: "48"
+
+PLMN455: PLMN
+  PLMN: "POLWL"
+  CommName: "Era 3G"
+  CoName: "Poland"
+  Country: "PL"
+  CountryPrefix: "48"
+
+PLMN456: PLMN
+  PLMN: "PRICL"
+  CommName: "Claro"
+  CoName: "Puerto Rico"
+  Country: "PR"
+
+PLMN457: PLMN
+  PLMN: "PRTOP"
+  CommName: "Optimus"
+  CoName: "Portugal"
+  Country: "PT"
+  CountryPrefix: "351"
+
+PLMN458: PLMN
+  PLMN: "PRTTL"
+  CommName: " Vodafone"
+  CoName: "Portugal"
+  Country: "PT"
+  CountryPrefix: "351"
+
+PLMN459: PLMN
+  PLMN: "PRTTM"
+  CommName: "Telecomunicacoes Moveis Nacionais S.A."
+  CoName: "Portugal"
+  Country: "PT"
+  CountryPrefix: "351"
+
+PLMN460: PLMN
+  PLMN: "PRTWL"
+  CommName: "Vodafone"
+  CoName: "Portugal"
+  Country: "PT"
+  CountryPrefix: "351"
+
+PLMN461: PLMN
+  PLMN: "PRYHT"
+  CommName: "CTI  "
+  CoName: "Paraguay"
+  Country: "PY"
+  CountryPrefix: "595"
+
+PLMN462: PLMN
+  PLMN: "PRYNP"
+  CommName: "Personal/Nucleo"
+  CoName: "Paraguay"
+  Country: "PY"
+  CountryPrefix: "595"
+
+PLMN463: PLMN
+  PLMN: "PRYTC"
+  CommName: "Tigo"
+  CoName: "Paraguay"
+  Country: "PY"
+  CountryPrefix: "595"
+
+PLMN464: PLMN
+  PLMN: "PRYVX"
+  CommName: "Hola Paraguay"
+  CoName: "Paraguay"
+  Country: "PY"
+  CountryPrefix: "595"
+
+PLMN465: PLMN
+  PLMN: "PSEJE"
+  CommName: "Palcell"
+  CoName: "Palestinian Territory"
+  Country: "PS"
+  CountryPrefix: "970"
+
+PLMN466: PLMN
+  PLMN: "QATQT"
+  CommName: "Q-Tel"
+  CoName: "Qatar"
+  Country: "QA"
+  CountryPrefix: "974"
+
+PLMN467: PLMN
+  PLMN: "REU02"
+  CommName: "Orange Reunion (La)"
+  CoName: "REUNION"
+  Country: "RE"
+  CountryPrefix: "262"
+
+PLMN468: PLMN
+  PLMN: "REUOT"
+  CommName: "Outremer Telecom Reunion (La)"
+  CoName: "REUNION"
+  Country: "RE"
+  CountryPrefix: "262"
+
+PLMN469: PLMN
+  PLMN: "ROM05"
+  CommName: "S.C.RCS&RDS S.A."
+  CoName: "ROMANIA"
+  Country: "RO"
+  CountryPrefix: "40"
+
+PLMN470: PLMN
+  PLMN: "ROMCS"
+  CommName: "COSMOTE Romanian Mobile Telecommunications S.A"
+  CoName: "Romania"
+  Country: "RO"
+  CountryPrefix: "40"
+
+PLMN471: PLMN
+  PLMN: "ROMMF"
+  CommName: "MobiFon S.A."
+  CoName: "Romania"
+  Country: "RO"
+  CountryPrefix: "40"
+
+PLMN472: PLMN
+  PLMN: "ROMMR"
+  CommName: "Orange Romania"
+  CoName: "Romania"
+  Country: "RO"
+  CountryPrefix: "40"
+
+PLMN473: PLMN
+  PLMN: "RUS01"
+  CommName: "Mobile TeleSystem "
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN474: PLMN
+  PLMN: "RUS04"
+  CommName: "Sibchallence"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN475: PLMN
+  PLMN: "RUS07"
+  CommName: "ZAO Smarts"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN476: PLMN
+  PLMN: "RUS16"
+  CommName: "New Telephone Company"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN477: PLMN
+  PLMN: "RUS17"
+  CommName: "Ermak RMS"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN478: PLMN
+  PLMN: "RUS28"
+  CommName: "JSC Extel"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN479: PLMN
+  PLMN: "RUS39"
+  CommName: "Uraltel Ltd"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN480: PLMN
+  PLMN: "RUSBD"
+  CommName: "KB Impuls"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN481: PLMN
+  PLMN: "RUSDT"
+  CommName: "Don Telecom"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN482: PLMN
+  PLMN: "RUSKH"
+  CommName: "FECS-900"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN483: PLMN
+  PLMN: "RUSKU"
+  CommName: "Kuban-GSM JSC"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN484: PLMN
+  PLMN: "RUSNW"
+  CommName: "MegaFon"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN485: PLMN
+  PLMN: "RUSSC"
+  CommName: "SCS-900"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN486: PLMN
+  PLMN: "RUSST"
+  CommName: "Stavtelesot"
+  CoName: "Russian Federation"
+  Country: "RU"
+  CountryPrefix: "7"
+
+PLMN487: PLMN
+  PLMN: "RUST2"
+  CommName: "Tele2"
+  CoName: "Russia"
+  Country: "KZ"
+  CountryPrefix: "7"
+
+PLMN488: PLMN
+  PLMN: "RUSVM"
+  CommName: "Tele2"
+  CoName: "Russia"
+  Country: "KZ"
+  CountryPrefix: "7"
+
+PLMN489: PLMN
+  PLMN: "SAUAJ"
+  CommName: "Saudi Telecom Company"
+  CoName: "Saudi Arabia"
+  Country: "SA"
+  CountryPrefix: "966"
+
+PLMN490: PLMN
+  PLMN: "SAUET"
+  CommName: "Eitisalat Mobily"
+  CoName: "Saudi Arabia"
+  Country: "SA"
+  CountryPrefix: "966"
+
+PLMN491: PLMN
+  PLMN: "SAUZN"
+  CommName: "Zain"
+  CoName: "Saudi Arabia"
+  Country: "SA"
+  CountryPrefix: "966"
+
+PLMN492: PLMN
+  PLMN: "SENAZ"
+  CommName: "Sonatel"
+  CoName: "Senegal"
+  Country: "SN"
+  CountryPrefix: "221"
+
+PLMN493: PLMN
+  PLMN: "SENSG"
+  CommName: "Sentel"
+  CoName: "Senegal"
+  Country: "SN"
+  CountryPrefix: "221"
+
+PLMN494: PLMN
+  PLMN: "SGPM1"
+  CommName: "MobilOne Ltd"
+  CoName: "Singapore"
+  Country: "SG"
+  CountryPrefix: "65"
+
+PLMN495: PLMN
+  PLMN: "SGPML"
+  CommName: "SingTel Mobile"
+  CoName: "SINGAPORE"
+  Country: "SG"
+  CountryPrefix: "65"
+
+PLMN496: PLMN
+  PLMN: "SGPSH"
+  CommName: "StarHub"
+  CoName: "SINGAPORE"
+  Country: "SG"
+  CountryPrefix: "65"
+
+PLMN497: PLMN
+  PLMN: "SGPST"
+  CommName: "SingTel"
+  CoName: "SINGAPORE"
+  Country: "SG"
+  CountryPrefix: "65"
+
+PLMN498: PLMN
+  PLMN: "SGPSV"
+  CommName: "SingTel"
+  CoName: "SINGAPORE"
+  Country: "SG"
+  CountryPrefix: "65"
+
+PLMN499: PLMN
+  PLMN: "SLVDC"
+  CommName: "Digicel"
+  CoName: "El Salvador"
+  Country: "SV"
+  CountryPrefix: "503"
+
+PLMN500: PLMN
+  PLMN: "SLVTM"
+  CommName: "Tigo/Telemovil"
+  CoName: "El Salvador"
+  Country: "SV"
+  CountryPrefix: "503"
+
+PLMN501: PLMN
+  PLMN: "SLVTP"
+  CommName: "Claro/CTE"
+  CoName: "El Salvador"
+  Country: "SV"
+  CountryPrefix: "503"
+
+PLMN502: PLMN
+  PLMN: "SMOSM"
+  CommName: "San Marino Telecom (Prima)"
+  CoName: "San Marino"
+  Country: "SM"
+  CountryPrefix: "378"
+
+PLMN503: PLMN
+  PLMN: "SVKET"
+  CommName: "EuroTel Bratislava a.s."
+  CoName: "Slovakia"
+  Country: "SK"
+  CountryPrefix: "421"
+
+PLMN504: PLMN
+  PLMN: "SVKGT"
+  CommName: "Orange Slovensko a.s."
+  CoName: "Slovakia"
+  Country: "SK"
+  CountryPrefix: "421"
+
+PLMN505: PLMN
+  PLMN: "SVKO2"
+  CommName: "O2 Slovakia"
+  CoName: "Slovakia"
+  Country: "SK"
+  CountryPrefix: "421"
+
+PLMN506: PLMN
+  PLMN: "SVNMT"
+  CommName: "Mobitel d.d."
+  CoName: "Slovenia"
+  Country: "SI"
+  CountryPrefix: "386"
+
+PLMN507: PLMN
+  PLMN: "SVNSM"
+  CommName: "SI Mobil"
+  CoName: "Slovenia"
+  Country: "SI"
+  CountryPrefix: "386"
+
+PLMN508: PLMN
+  PLMN: "SVNVG"
+  CommName: "Tursmobile"
+  CoName: "SLOVENIA"
+  Country: "SI"
+  CountryPrefix: "386"
+
+PLMN509: PLMN
+  PLMN: "SWEEP"
+  CommName: "Vodafone Sverige AB"
+  CoName: "Sweden"
+  Country: "SE"
+  CountryPrefix: "46"
+
+PLMN510: PLMN
+  PLMN: "SWEHU"
+  CommName: "3 Sweden (Hi3G Access Ab)"
+  CoName: "Sweden"
+  Country: "SE"
+  CountryPrefix: "46"
+
+PLMN511: PLMN
+  PLMN: "SWEIQ"
+  CommName: "Comviq AB"
+  CoName: "Sweden"
+  Country: "SE"
+  CountryPrefix: "46"
+
+PLMN512: PLMN
+  PLMN: "SWESM"
+  CommName: "TELE2 Sweden 2"
+  CoName: "Sweden"
+  Country: "SE"
+  CountryPrefix: "46"
+
+PLMN513: PLMN
+  PLMN: "SWESP"
+  CommName: "Swefour"
+  CoName: "Sweden"
+  Country: "SE"
+  CountryPrefix: "46"
+
+PLMN514: PLMN
+  PLMN: "SWETR"
+  CommName: "TeliaSonera Mobile Networks AB"
+  CoName: "Sweden"
+  Country: "SE"
+  CountryPrefix: "46"
+
+PLMN515: PLMN
+  PLMN: "SYCAT"
+  CommName: "Telecom (Seychelles Limited)"
+  CoName: "Seychelles"
+  Country: "SC"
+  CountryPrefix: "248"
+
+PLMN516: PLMN
+  PLMN: "SYR01"
+  CommName: "Syriatel"
+  CoName: "Syria"
+  Country: "SY"
+  CountryPrefix: "963"
+
+PLMN517: PLMN
+  PLMN: "TGOTC"
+  CommName: "Togocell"
+  CoName: "Togo"
+  Country: "TG"
+  CountryPrefix: "228"
+
+PLMN518: PLMN
+  PLMN: "THAAS"
+  CommName: "Advanced Info Service Plc"
+  CoName: "Thailand"
+  Country: "TH"
+  CountryPrefix: "66"
+
+PLMN519: PLMN
+  PLMN: "THACO"
+  CommName: "TrueMove"
+  CoName: "Thailand"
+  Country: "TH"
+  CountryPrefix: "66"
+
+PLMN520: PLMN
+  PLMN: "THAWP"
+  CommName: "TAC"
+  CoName: "Thailand"
+  Country: "TH"
+  CountryPrefix: "66"
+
+PLMN521: PLMN
+  PLMN: "TJK01"
+  CommName: "Indigo"
+  CoName: "Tajikistan"
+  Country: "TJ"
+  CountryPrefix: "992"
+
+PLMN522: PLMN
+  PLMN: "TJKIT"
+  CommName: "Indigo"
+  CoName: "Tajikistan"
+  Country: "TJ"
+  CountryPrefix: "992"
+
+PLMN523: PLMN
+  PLMN: "TT012"
+  CommName: "Trinidad and Tobago"
+  CoName: "Trinidad and Tobago"
+  Country: "TT"
+  CountryPrefix: "1868"
+
+PLMN524: PLMN
+  PLMN: "TUNTT"
+  CommName: "Tunisie Telecom"
+  CoName: "Tunisia"
+  Country: "TN"
+  CountryPrefix: "216"
+
+PLMN525: PLMN
+  PLMN: "TURAC"
+  CommName: "AVEA"
+  CoName: "Turkey"
+  Country: "TR"
+  CountryPrefix: "90"
+
+PLMN526: PLMN
+  PLMN: "TURIS"
+  CommName: "AVEA"
+  CoName: "Turkey"
+  Country: "TR"
+  CountryPrefix: "90"
+
+PLMN527: PLMN
+  PLMN: "TURTC"
+  CommName: "Turkcell"
+  CoName: "Turkey"
+  Country: "TR"
+  CountryPrefix: "90"
+
+PLMN528: PLMN
+  PLMN: "TURTK"
+  CommName: "Turkcell"
+  CoName: "Turkey"
+  Country: "TR"
+  CountryPrefix: "90"
+
+PLMN529: PLMN
+  PLMN: "TURTS"
+  CommName: "TELSIM Mobil Telekomuniksyon Hiz.A.S"
+  CoName: "Turkey"
+  Country: "TR"
+  CountryPrefix: "90"
+
+PLMN530: PLMN
+  PLMN: "TWNFE"
+  CommName: "Far Eastone"
+  CoName: "Taiwan"
+  Country: "TW"
+  CountryPrefix: "886"
+
+PLMN531: PLMN
+  PLMN: "TWNKG"
+  CommName: "KG Telecommunications"
+  CoName: "Taiwan"
+  Country: "TW"
+  CountryPrefix: "886"
+
+PLMN532: PLMN
+  PLMN: "TWNLD"
+  CommName: "Chunghwa Telecom LDM"
+  CoName: "Taiwan"
+  Country: "TW"
+  CountryPrefix: "886"
+
+PLMN533: PLMN
+  PLMN: "TWNTA"
+  CommName: "Transasia"
+  CoName: "Taiwan"
+  Country: "TW"
+  CountryPrefix: "886"
+
+PLMN534: PLMN
+  PLMN: "TWNTM"
+  CommName: "Taiwain Mobile"
+  CoName: "Taiwan"
+  Country: "TW"
+  CountryPrefix: "886"
+
+PLMN535: PLMN
+  PLMN: "TZAVC"
+  CommName: "Vodacom "
+  CoName: "Tanzania"
+  Country: "TZ"
+  CountryPrefix: "255"
+
+PLMN536: PLMN
+  PLMN: "UAETC"
+  CommName: "Etisalat"
+  CoName: "United Arab Emirates"
+  Country: "AE"
+  CountryPrefix: "971"
+
+PLMN537: PLMN
+  PLMN: "UGACE"
+  CommName: "Celtel"
+  CoName: "Uganda"
+  Country: "UG"
+  CountryPrefix: "256"
+
+PLMN538: PLMN
+  PLMN: "UGAMN"
+  CommName: "MTN"
+  CoName: "Uganda"
+  Country: "UG"
+  CountryPrefix: "256"
+
+PLMN539: PLMN
+  PLMN: "UKRAS"
+  CommName: "Astelit"
+  CoName: "Ukraine"
+  Country: "UA"
+  CountryPrefix: "380"
+
+PLMN540: PLMN
+  PLMN: "UKRGT"
+  CommName: "Golden Telecom"
+  CoName: "Ukraine"
+  Country: "UA"
+  CountryPrefix: "380"
+
+PLMN541: PLMN
+  PLMN: "UKRKS"
+  CommName: ""Kyivstar" GSM JSC"
+  CoName: "Ukraine"
+  Country: "UA"
+  CountryPrefix: "380"
+
+PLMN542: PLMN
+  PLMN: "UKRUM"
+  CommName: "Ukrainian Mobile Comms"
+  CoName: "Ukraine"
+  Country: "UA"
+  CountryPrefix: "380"
+
+PLMN543: PLMN
+  PLMN: "UKRUT"
+  CommName: "Ukrtelecom"
+  CoName: "Ukraine"
+  Country: "UA"
+  CountryPrefix: "380"
+
+PLMN544: PLMN
+  PLMN: "URYAM"
+  CommName: "CTI"
+  CoName: "Uruguay"
+  Country: "UY"
+  CountryPrefix: "598"
+
+PLMN545: PLMN
+  PLMN: "URYAN"
+  CommName: "Ancel (Antel)"
+  CoName: "Uruguay"
+  Country: "UY"
+  CountryPrefix: "598"
+
+PLMN546: PLMN
+  PLMN: "USA16"
+  CommName: "T-Mobile"
+  CoName: "USA"
+  Country: "US"
+
+PLMN547: PLMN
+  PLMN: "USA27"
+  CommName: "T-Mobile"
+  CoName: "USA"
+  Country: "US"
+
+PLMN548: PLMN
+  PLMN: "USA31"
+  CommName: "T-Mobile"
+  CoName: "USA"
+  Country: "US"
+
+PLMN549: PLMN
+  PLMN: "USAAT"
+  CommName: "AT&T"
+  CoName: "United States"
+  Country: "US"
+
+PLMN550: PLMN
+  PLMN: "USACG"
+  CommName: "AT&T"
+  CoName: "USA"
+  Country: "US"
+
+PLMN551: PLMN
+  PLMN: "USAD1"
+  CommName: "T-Mobile"
+  CoName: "USA"
+  Country: "US"
+
+PLMN552: PLMN
+  PLMN: "USANC"
+  CommName: "Nextel"
+  CoName: "United States"
+  Country: "US"
+
+PLMN553: PLMN
+  PLMN: "USAPB"
+  CommName: "Cingular Wireless"
+  CoName: "United States"
+  Country: "US"
+
+PLMN554: PLMN
+  PLMN: "USAW0"
+  CommName: "T-Mobile"
+  CoName: "USA"
+  Country: "US"
+
+PLMN555: PLMN
+  PLMN: "USAW0-6, USA16"
+  CommName: "T-Mobile"
+  CoName: "United States"
+  Country: "US"
+
+PLMN556: PLMN
+  PLMN: "USAW1"
+  CommName: "T-Mobile"
+  CoName: "USA"
+  Country: "US"
+
+PLMN557: PLMN
+  PLMN: "USAW2"
+  CommName: "T-Mobile"
+  CoName: "USA"
+  Country: "US"
+
+PLMN558: PLMN
+  PLMN: "USAW3"
+  CommName: "T-Mobile"
+  CoName: "USA"
+  Country: "US"
+
+PLMN559: PLMN
+  PLMN: "USAW4"
+  CommName: "T-Mobile"
+  CoName: "USA"
+  Country: "US"
+
+PLMN560: PLMN
+  PLMN: "USAW5"
+  CommName: "T-Mobile"
+  CoName: "USA"
+  Country: "US"
+
+PLMN561: PLMN
+  PLMN: "USAW6"
+  CommName: "T-Mobile"
+  CoName: "USA"
+  Country: "US"
+
+PLMN562: PLMN
+  PLMN: "UZB05"
+  CommName: "Coscom"
+  CoName: "Uzbekistan"
+  Country: "UZ"
+  CountryPrefix: "998"
+
+PLMN563: PLMN
+  PLMN: "UZBDU"
+  CommName: "Unitel/Beeline"
+  CoName: "Uzbekistan"
+  Country: "UZ"
+  CountryPrefix: "998"
+
+PLMN564: PLMN
+  PLMN: "VEND2"
+  CommName: "Digitel"
+  CoName: "Venezuela"
+  Country: "VE"
+  CountryPrefix: "58"
+
+PLMN565: PLMN
+  PLMN: "VENMV"
+  CommName: "Movilnet"
+  CoName: "Venezuela"
+  Country: "VE"
+  CountryPrefix: "58"
+
+PLMN566: PLMN
+  PLMN: "VNMBL"
+  CommName: "GTEL Mobile"
+  CoName: "Vietnam"
+  Country: "VN"
+  CountryPrefix: "84"
+
+PLMN567: PLMN
+  PLMN: "VNMVI"
+  CommName: "Vinaphone"
+  CoName: "Viet Nam"
+  Country: "VN"
+  CountryPrefix: "84"
+
+PLMN568: PLMN
+  PLMN: "YUGMT"
+  CommName: "MOBTEL"
+  CoName: "Serbia and Montenegro"
+  Country: "CS"
+  CountryPrefix: "381"
+
+PLMN569: PLMN
+  PLMN: "YUGPM"
+  CommName: "Promonte"
+  CoName: "Serbia and Montenegro"
+  Country: "CS"
+  CountryPrefix: "381"
+
+PLMN570: PLMN
+  PLMN: "YUGTM"
+  CommName: "Monet"
+  CoName: "Serbia and Montenegro"
+  Country: "CS"
+  CountryPrefix: "381"
+
+PLMN571: PLMN
+  PLMN: "YUGTS"
+  CommName: "Telekom Srbija"
+  CoName: "Serbia"
+  Country: "CS"
+  CountryPrefix: "381"
+
+PLMN572: PLMN
+  PLMN: "ZAFCC"
+  CommName: "Cell C"
+  CoName: "South Africa"
+  Country: "ZA"
+  CountryPrefix: "27"
+
+PLMN573: PLMN
+  PLMN: "ZAFMN"
+  CommName: "MTN (Pty) Ltd"
+  CoName: "South Africa"
+  Country: "ZA"
+  CountryPrefix: "27"
+
+PLMN574: PLMN
+  PLMN: "ZAFVC"
+  CommName: "Vodacom (Pty) Ltd"
+  CoName: "South Africa"
+  Country: "ZA"
+  CountryPrefix: "27"
+
+PLMN575: PLMN
+  PLMN: "ZWEET"
+  CommName: "Econet"
+  CoName: "Zimbabwe"
+  Country: "ZW"
+  CountryPrefix: "263"
+

@@ -8,7 +8,7 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 {Syst/tmsconst.i}
-{xmlrpc/xmlrpc_client.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Func/forderstamp.i}
 {Func/fixedlinefunc.i}
 

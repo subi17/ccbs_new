@@ -1,0 +1,12 @@
+Currency1: Currency
+  Currency: "EUR"
+  CurrName: "Euro"
+  SubUnit: "1/100"
+  SubName: "Cnt"
+
+Currency2: Currency
+  Currency: "SDR"
+  CurrName: "Special Drawing Righ"
+  SubUnit: "1/100"
+  SubName: "SDR"
+
