@@ -27,6 +27,7 @@ DEF VAR pcIdType         AS CHAR NO-UNDO.
 DEF VAR plSelfEmployed   AS LOG  NO-UNDO.
 DEF VAR piOrders         AS INT  NO-UNDO.
 DEF VAR pcCliType        AS CHAR NO-UNDO.
+DEF VAR top_array        AS CHAR NO-UNDO.
 
 /* Local variable */
 DEF VAR llOrderAllowed   AS LOG  NO-UNDO.
@@ -38,14 +39,15 @@ DEF VAR lcAddLineAllowed AS CHAR NO-UNDO.
 DEF VAR liActLimit       AS INT  NO-UNDO.
 DEF VAR liacts           AS INT NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,string,boolean,int,string") EQ ?
-   THEN RETURN.
+top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string]").
+IF top_array EQ ? THEN RETURN.
 
 pcPersonId     = get_string(param_toplevel_id, "0").
 pcIdType       = get_string(param_toplevel_id, "1").
 plSelfEmployed = get_bool(param_toplevel_id, "2").
 piOrders       = get_int(param_toplevel_id, "3").
-pcCliType      = get_string(param_toplevel_id, "4").
+IF NUM-ENTRIES(top_array) >= 5 THEN
+   pcCliType   = get_string(param_toplevel_id, "4").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
