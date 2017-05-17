@@ -1,0 +1,48 @@
+InvGroup1: InvGroup
+  InvGroup: "IGIC1"
+  IGName: "Canary Islands 1"
+  InvForm: "IGIC1"
+  Brand: "1"
+  TaxZone: "2"
+
+InvGroup2: InvGroup
+  InvGroup: "IPSIC1"
+  IGName: "Ceuta 1"
+  InvForm: "IPSIC1"
+  Brand: "1"
+  TaxZone: "3"
+
+InvGroup3: InvGroup
+  InvGroup: "IPSIM1"
+  IGName: "Melilla 1"
+  InvForm: "IPSIM1"
+  Brand: "1"
+  TaxZone: "4"
+
+InvGroup4: InvGroup
+  InvGroup: "UNKNOWN"
+  IGName: "Unknown Pre paid customer"
+  BillPerm: FALSE
+  InvForm: "UNKNOWN"
+  Brand: "1"
+
+InvGroup5: InvGroup
+  InvGroup: "VAT1"
+  IGName: "Mainland 1"
+  InvForm: "VAT1"
+  Brand: "1"
+  TaxZone: "1"
+
+InvGroup6: InvGroup
+  InvGroup: "VIP"
+  IGName: "Yoigo external VIP usage"
+  InvForm: "VIP"
+  Brand: "1"
+
+InvGroup7: InvGroup
+  InvGroup: "YOIGO"
+  IGName: "Yoigo internal VIP usage"
+  InvForm: "YOIGO"
+  Brand: "1"
+  TaxZone: "5"
+

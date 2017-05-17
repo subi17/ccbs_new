@@ -1,0 +1,110 @@
+TriggerField1: TriggerField
+  TriggerConfID: "ALL"
+  TableName: "*"
+  FieldName: "*"
+
+TriggerField2: TriggerField
+  TriggerConfID: "BDEST"
+  TableName: "Bdest"
+  FieldName: "Bdest"
+
+TriggerField3: TriggerField
+  TriggerConfID: "BDEST"
+  TableName: "BDest"
+  FieldName: "ratebdest"
+
+TriggerField4: TriggerField
+  TriggerConfID: "bdest"
+  TableName: "bdest"
+  FieldName: "ccn"
+
+TriggerField5: TriggerField
+  TriggerConfID: "bdest"
+  TableName: "bdest"
+  FieldName: "class"
+
+TriggerField6: TriggerField
+  TriggerConfID: "Mobcdr"
+  TableName: "Mobcdr"
+  FieldName: "DCevent"
+
+TriggerField7: TriggerField
+  TriggerConfID: "mServicelimit"
+  TableName: "mServicelimit"
+  FieldName: "Endts"
+
+TriggerField8: TriggerField
+  TriggerConfID: "mServicelimit"
+  TableName: "mServicelimit"
+  FieldName: "Fromts"
+
+TriggerField9: TriggerField
+  TriggerConfID: "mServicelimit"
+  TableName: "mServicelimit"
+  FieldName: "InclAmt"
+
+TriggerField10: TriggerField
+  TriggerConfID: "mServiceLimit"
+  TableName: "mServiceLimit"
+  FieldName: "slrule"
+
+TriggerField11: TriggerField
+  TriggerConfID: "Msowner"
+  TableName: "Msowner"
+  FieldName: "tsbegin"
+
+TriggerField12: TriggerField
+  TriggerConfID: "Msowner"
+  TableName: "Msowner"
+  FieldName: "tsend"
+
+TriggerField13: TriggerField
+  TriggerConfID: "MSREQUEST"
+  TableName: "SPECIAL CASE"
+  FieldName: "SPECIAL CASE"
+
+TriggerField14: TriggerField
+  TriggerConfID: "PlistConf"
+  TableName: "PlistConf"
+  FieldName: "dfrom"
+
+TriggerField15: TriggerField
+  TriggerConfID: "PlistConf"
+  TableName: "PlistConf"
+  FieldName: "dto"
+
+TriggerField16: TriggerField
+  TriggerConfID: "PlistConf"
+  TableName: "PlistConf"
+  FieldName: "Prior"
+
+TriggerField17: TriggerField
+  TriggerConfID: "PlistConf"
+  TableName: "PlistConf"
+  FieldName: "RatePlan"
+
+TriggerField18: TriggerField
+  TriggerConfID: "Tariff"
+  TableName: "Tariff"
+  FieldName: "BillItem"
+
+TriggerField19: TriggerField
+  TriggerConfID: "Tariff"
+  TableName: "Tariff"
+  FieldName: "price[1]"
+
+TriggerField20: TriggerField
+  TriggerConfID: "Tariff"
+  TableName: "Tariff"
+  FieldName: "ValidFrom"
+
+TriggerField21: TriggerField
+  TriggerConfID: "Tariff"
+  TableName: "Tariff"
+  FieldName: "ValidTo"
+
+TriggerField22: TriggerField
+  TriggerConfID: "TARIFF"
+  TableName: "Tariff"
+  FieldName: "StartCharge[1]"
+
