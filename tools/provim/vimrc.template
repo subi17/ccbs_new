@@ -1,3 +1,17 @@
-if &syntax == "pascal"
-  set syntax=progress
-endif
+let s:path = $PWD
+let s:ccbspath = ""
+while s:path != "/"
+    if glob(s:path . "/tools/provim/ccbs.vim") != ""
+        let s:ccbspath = s:path
+        let s:path = "/"
+    endi
+    let s:path = fnamemodify(s:path, ":h")
+endw
+
+
+au BufReadPost *.p set syntax=progress
+au BufReadPost *.i set syntax=progress
+au BufReadPost *.cls set syntax=progress
+autocmd BufEnter * if &filetype == "" && s:ccbspath != "" | set syntax=progress | endif
+
+set encoding=latin1

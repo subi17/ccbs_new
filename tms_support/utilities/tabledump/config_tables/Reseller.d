@@ -49,5 +49,6 @@
 "TU" "TU Y TU" "" 0 "" "" "" "Luis.Leyva.Ruano@yoigo.com" "1" 99 no "" ""
 "UN" "UNISONO" "" 0 "" "" "" "maria.barreiro.sanisidro@yoigo.com" "1" 99 yes "" ""
 "UR" "URENDE" "" 0 "" "" "" "Luis.Leyva.Ruano@yoigo.com" "1" 99 no "" ""
+"VD" "B2B ULTRATACTICA" "" 0 "" "" "" "sergio.garde@masmovil.com" "1" 99 yes "" ""
 "WH" "WHISBI" "" 0 "" "" "" "maria.barreiro.sanisidro@yoigo.com" "1" 99 no "" ""
 "YC" "YOIGO (Customer Care)" "" 0 "" "" "" "clientes@yoigo.com" "1" 99 yes "" ""

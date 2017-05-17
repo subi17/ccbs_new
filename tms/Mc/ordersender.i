@@ -396,7 +396,8 @@
              IF Order.OrderType <> 3 AND
                 CAN-FIND(FIRST MsRequest WHERE
                                MsRequest.MsSeq   = Order.MSSeq  AND
-                               MsRequest.ReqType = 13)
+                               MsRequest.ReqType = 13 AND
+                               MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED})
              THEN DO: 
                 NEXT.
              END.

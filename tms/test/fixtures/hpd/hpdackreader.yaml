@@ -1,0 +1,95 @@
+TMSParamHPDAck1: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.BatchSize"
+  ParamType: "I"
+  IntVal: 100
+  Brand: "1"
+
+TMSParamHPDAck2: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.CheckWaitMin"
+  ParamType: "I"
+  IntVal: 15
+  Brand: "1"
+
+TMSParamHPDAck3: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.ExportDir"
+  ParamType: "C"
+  CharVal: "/store/hpd/ack"
+  Brand: "1"
+
+TMSParamHPDAck4: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.HostName"
+  ParamType: "C"
+  CharVal: "activemq"
+  Brand: "1"
+
+TMSParamHPDAck5: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.MaxLockedLoop"
+  ParamType: "I"
+  IntVal: 10
+  Brand: "1"
+
+TMSParamHPDAck6: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.MaxSendCount"
+  ParamType: "I"
+  IntVal: 5
+  Brand: "1"
+
+TMSParamHPDAck7: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.Password"
+  ParamType: "C"
+  Brand: "1"
+
+TMSParamHPDAck8: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.PortNumber"
+  ParamType: "I"
+  IntVal: 61613
+  Brand: "1"
+
+TMSParamHPDAck9: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.QueueCommon"
+  ParamType: "C"
+  CharVal: "hpd.common.ack"
+  Brand: "1"
+
+TMSParamHPDAck10: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.QueueMobile"
+  ParamType: "C"
+  CharVal: "hpd.mobile.ack"
+  Brand: "1"
+
+TMSParamHPDAck11: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.QueueOrdercanal"
+  ParamType: "C"
+  CharVal: "hpd.ordercanal.ack"
+  Brand: "1"
+
+TMSParamHPDAck12: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.RetryMinutes"
+  ParamType: "I"
+  IntVal: 30
+  Brand: "1"
+
+TMSParamHPDAck13: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.SingleReplogDB"
+  ParamType: "C"
+  CharVal: "Common,Mobile,Ordercanal"
+  Brand: "1"
+
+TMSParamHPDAck14: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.Ack.UserName"
+  ParamType: "C"
+  Brand: "1"
