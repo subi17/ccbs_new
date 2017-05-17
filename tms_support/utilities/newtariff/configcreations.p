@@ -700,15 +700,15 @@ PROCEDURE pDayCampaign:
          DayCampaign.CCN             = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" OR ttDayCampaign.PayType = 2 THEN 93 ELSE 0)         
          DayCampaign.InstanceLimit   = (IF ttDayCampaign.DCType = "Upsell" THEN 100 ELSE 1)
          DayCampaign.BillCode        = ttDayCampaign.BillCode          
-         DayCampaign.InclUnit        = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" OR tDayCampaign.PayType = 2 THEN 4 ELSE 1) 
-         DayCampaign.CalcMethod      = (IF ttDayCampaign.DCType = "PackageWithCounter" OR tDayCampaign.PayType = 2 THEN 4 ELSE 1)  
+         DayCampaign.InclUnit        = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" OR ttDayCampaign.PayType = 2 THEN 4 ELSE 1) 
+         DayCampaign.CalcMethod      = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.PayType = 2 THEN 4 ELSE 1)  
          DayCampaign.InclStartCharge = YES                          
          DayCampaign.MaxChargeIncl   = 0                            
          DayCampaign.MaxChargeExcl   = 0
          DayCampaign.Effective       = INTEGER(fTMSCodeValue("Daycampaign","Effective","PerContr"))         
-         DayCampaign.DurType         = (IF ttDayCampaign.SLCreated AND NOT tDayCampaign.PayType = 2 THEN 1 ELSE 4)
+         DayCampaign.DurType         = (IF ttDayCampaign.SLCreated AND NOT ttDayCampaign.PayType = 2 THEN 1 ELSE 4)
          DayCampaign.DurMonth        = 0
-         DayCampaign.DurUnit         = (IF ttDayCampaign.DCType = "PackageWithCounter" OR tDayCampaign.PayType = 2 THEN 0 ELSE 1)
+         DayCampaign.DurUnit         = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.PayType = 2 THEN 0 ELSE 1)
          DayCampaign.WeekDay         = ""
          DayCampaign.BundleUpsell    = ttDayCampaign.UpSell
          DayCampaign.FeeModel        = ttDayCampaign.BillCode
@@ -719,7 +719,7 @@ PROCEDURE pDayCampaign:
       IF ttDayCampaign.DataLimit > 0 THEN   
          RUN pDCServicePackage(ttDayCampaign.DCEvent, "SHAPER", ttDayCampaign.BonoSupport).
 
-      IF ttDayCampaign.PayType = "Prepaid" THEN 
+      IF ttDayCampaign.PayType = 2 THEN 
          RUN pDCServicePackage(ttDayCampaign.DCEvent, "HSDPA", NO).   
    END.
 
@@ -1176,7 +1176,7 @@ PROCEDURE pRequestAction:
                                     "SMS",
                                     "STC_DONE",
                                     "ReqCParam2",
-                                    +,
+                                    "+",
                                     CliType.CliType).
 
        RUN pUpdateRequestActionRule("TARJ",
