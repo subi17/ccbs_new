@@ -1,0 +1,1590 @@
+TMRItemValue1: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "1064"
+
+TMRItemValue2: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "1066"
+
+TMRItemValue3: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "1067"
+
+TMRItemValue4: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "1069"
+
+TMRItemValue5: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "64"
+
+TMRItemValue6: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "65"
+
+TMRItemValue7: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "66"
+
+TMRItemValue8: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "67"
+
+TMRItemValue9: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "68"
+
+TMRItemValue10: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "69"
+
+TMRItemValue11: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "71"
+
+TMRItemValue12: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "72"
+
+TMRItemValue13: TMRItemValue
+  TMRuleSeq: 1
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "78"
+
+TMRItemValue14: TMRItemValue
+  TMRuleSeq: 2
+  FromDate: 2008-06-12
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTDATA,CONTRD1"
+
+TMRItemValue15: TMRItemValue
+  TMRuleSeq: 3
+  FromDate: 2008-09-24
+  ToDate: 2049-12-31
+  CounterItemValues: "*"
+
+TMRItemValue16: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "1002"
+
+TMRItemValue17: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-13
+  ToDate: 2008-10-29
+  CounterItemValues: "2"
+
+TMRItemValue18: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2049-12-31
+  CounterItemValues: "2,*"
+
+TMRItemValue19: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "200,*"
+
+TMRItemValue20: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-13
+  ToDate: 2008-10-29
+  CounterItemValues: "51"
+
+TMRItemValue21: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2011-11-30
+  CounterItemValues: "51,252"
+
+TMRItemValue22: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2011-11-30
+  CounterItemValues: "51,53"
+
+TMRItemValue23: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2011-11-30
+  CounterItemValues: "51,850"
+
+TMRItemValue24: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2049-12-31
+  CounterItemValues: "51,INTERNATIONAL"
+
+TMRItemValue25: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-13
+  ToDate: 2008-10-29
+  CounterItemValues: "97"
+
+TMRItemValue26: TMRItemValue
+  TMRuleSeq: 4
+  FromDate: 2008-10-30
+  ToDate: 2049-12-31
+  CounterItemValues: "97,*"
+
+TMRItemValue27: TMRItemValue
+  TMRuleSeq: 5
+  FromDate: 2009-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "*,TARJRD1"
+
+TMRItemValue28: TMRItemValue
+  TMRuleSeq: 5
+  FromDate: 2009-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "TopupEvent,TARJRD1"
+
+TMRItemValue29: TMRItemValue
+  TMRuleSeq: 6
+  FromDate: 2009-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "*,TARJ"
+
+TMRItemValue30: TMRItemValue
+  TMRuleSeq: 6
+  FromDate: 2009-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "*,TARJ4"
+
+TMRItemValue31: TMRItemValue
+  TMRuleSeq: 6
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "*,TARJ5"
+
+TMRItemValue32: TMRItemValue
+  TMRuleSeq: 6
+  FromDate: 2009-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "TopupEvent,TARJ"
+
+TMRItemValue33: TMRItemValue
+  TMRuleSeq: 6
+  FromDate: 2009-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "TopupEvent,TARJ4"
+
+TMRItemValue34: TMRItemValue
+  TMRuleSeq: 6
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "TopupEvent,TARJ5"
+
+TMRItemValue35: TMRItemValue
+  TMRuleSeq: 7
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "*"
+
+TMRItemValue36: TMRItemValue
+  TMRuleSeq: 8
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "A,3"
+
+TMRItemValue37: TMRItemValue
+  TMRuleSeq: 8
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "A,4"
+
+TMRItemValue38: TMRItemValue
+  TMRuleSeq: 9
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "B,3"
+
+TMRItemValue39: TMRItemValue
+  TMRuleSeq: 9
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "B,4"
+
+TMRItemValue40: TMRItemValue
+  TMRuleSeq: 10
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "C,3"
+
+TMRItemValue41: TMRItemValue
+  TMRuleSeq: 10
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItemValues: "C,4"
+
+TMRItemValue42: TMRItemValue
+  TMRuleSeq: 11
+  FromDate: 2011-08-10
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSD1_A,CONTDATA1,CONTRD"
+
+TMRItemValue43: TMRItemValue
+  TMRuleSeq: 11
+  FromDate: 2011-08-10
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSD1_A,CONTDATA1,CONTRD1"
+
+TMRItemValue44: TMRItemValue
+  TMRuleSeq: 11
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1A,CONTDATA,CONTRD1"
+
+TMRItemValue45: TMRItemValue
+  TMRuleSeq: 11
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONTDATA,CONTRD1"
+
+TMRItemValue46: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2011-05-04
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1A,CONT"
+
+TMRItemValue47: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2011-05-04
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1A,CONT4"
+
+TMRItemValue48: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2011-05-04
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1A,CONT5"
+
+TMRItemValue49: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2012-01-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1A,CONTF"
+
+TMRItemValue50: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2011-08-10
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1A,CONTRD"
+
+TMRItemValue51: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2011-05-04
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1A,CONTRD3"
+
+TMRItemValue52: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2011-05-04
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONT"
+
+TMRItemValue53: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2011-05-04
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONT4"
+
+TMRItemValue54: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2011-05-04
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONT5"
+
+TMRItemValue55: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2012-01-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONTF"
+
+TMRItemValue56: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2011-08-10
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONTRD"
+
+TMRItemValue57: TMRItemValue
+  TMRuleSeq: 12
+  FromDate: 2011-05-04
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONTRD3"
+
+TMRItemValue58: TMRItemValue
+  TMRuleSeq: 13
+  FromDate: 2011-08-10
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSD2_A,CONTDATA2,CONTRD"
+
+TMRItemValue59: TMRItemValue
+  TMRuleSeq: 13
+  FromDate: 2011-08-10
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSD2_A,CONTDATA2,CONTRD2"
+
+TMRItemValue60: TMRItemValue
+  TMRuleSeq: 13
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1A,CONTDATA,CONTRD2"
+
+TMRItemValue61: TMRItemValue
+  TMRuleSeq: 13
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONTDATA,CONTRD2"
+
+TMRItemValue62: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT15_DATA_IN,CONTDSL48"
+
+TMRItemValue63: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT15_DATA_IN,CONTFH48_50"
+
+TMRItemValue64: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT15_DATA_IN,CONTFH58_300"
+
+TMRItemValue65: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2015-08-12
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT23_DATA_IN,CONT23"
+
+TMRItemValue66: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2015-03-04
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_DATA_IN,CONT24"
+
+TMRItemValue67: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_DATA_IN,CONTDSL58"
+
+TMRItemValue68: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_DATA_IN,CONTFH58_50"
+
+TMRItemValue69: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_DATA_IN,CONTFH68_300"
+
+TMRItemValue70: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT25_DATA_IN,CONT25"
+
+TMRItemValue71: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT9_DATA_IN,CONTDSL40"
+
+TMRItemValue72: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT9_DATA_IN,CONTFH40_50"
+
+TMRItemValue73: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT9_DATA_IN,CONTFH50_300"
+
+TMRItemValue74: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2015-04-14
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTF11_DATA_IN,CONTF"
+
+TMRItemValue75: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2015-04-14
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTF8_DATA_IN,CONTF"
+
+TMRItemValue76: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTFFDATA2_A,CONTFF"
+
+TMRItemValue77: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2015-04-14
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS12_DATA_IN,CONTS"
+
+TMRItemValue78: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS2GB_DATA_IN,CONTDSL45"
+
+TMRItemValue79: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS2GB_DATA_IN,CONTFH45_50"
+
+TMRItemValue80: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS2GB_DATA_IN,CONTFH55_300"
+
+TMRItemValue81: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSDATA16_A,CONTS"
+
+TMRItemValue82: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSDATA20_A,CONTS"
+
+TMRItemValue83: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSDATA21_A,CONTS"
+
+TMRItemValue84: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSDATA25_A,CONTS"
+
+TMRItemValue85: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSDATA26_A,CONTS"
+
+TMRItemValue86: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2012-05-28
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSDATA30_A,CONTS"
+
+TMRItemValue87: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSDATA32_A,CONTS"
+
+TMRItemValue88: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSDATA35_A,CONTS"
+
+TMRItemValue89: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2012-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSDATA39_A,CONTS"
+
+TMRItemValue90: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSFDATA10_A,CONTSF"
+
+TMRItemValue91: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSFDATA14_A,CONTSF"
+
+TMRItemValue92: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA20D_A,CONTF"
+
+TMRItemValue93: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA30_A,CONTF"
+
+TMRItemValue94: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA40_A,CONTF"
+
+TMRItemValue95: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA55_A,CONTF"
+
+TMRItemValue96: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSD9_A,CONTD"
+
+TMRItemValue97: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2014-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_CONT15,CONT15"
+
+TMRItemValue98: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_CONT9,CONT9"
+
+TMRItemValue99: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DUB,CONT6"
+
+TMRItemValue100: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2012-05-28
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DUB2,CONT7"
+
+TMRItemValue101: TMRItemValue
+  TMRuleSeq: 14
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DUB3,CONT8"
+
+TMRItemValue102: TMRItemValue
+  TMRuleSeq: 15
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1A,MDUB,CONT6"
+
+TMRItemValue103: TMRItemValue
+  TMRuleSeq: 15
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,MDUB,CONT6"
+
+TMRItemValue104: TMRItemValue
+  TMRuleSeq: 16
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB2,MDUB2,CONT"
+
+TMRItemValue105: TMRItemValue
+  TMRuleSeq: 16
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB2,MDUB2,CONT4"
+
+TMRItemValue106: TMRItemValue
+  TMRuleSeq: 16
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB2,MDUB2,CONT5"
+
+TMRItemValue107: TMRItemValue
+  TMRuleSeq: 16
+  FromDate: 2012-01-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB2,MDUB2,CONTF"
+
+TMRItemValue108: TMRItemValue
+  TMRuleSeq: 17
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB2,MDUB2,CONT6"
+
+TMRItemValue109: TMRItemValue
+  TMRuleSeq: 18
+  FromDate: 2011-06-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,TARJ"
+
+TMRItemValue110: TMRItemValue
+  TMRuleSeq: 18
+  FromDate: 2011-06-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,TARJ4"
+
+TMRItemValue111: TMRItemValue
+  TMRuleSeq: 18
+  FromDate: 2012-01-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,TARJ5"
+
+TMRItemValue112: TMRItemValue
+  TMRuleSeq: 18
+  FromDate: 2011-06-22
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA2,TARJ"
+
+TMRItemValue113: TMRItemValue
+  TMRuleSeq: 18
+  FromDate: 2011-06-22
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA2,TARJ4"
+
+TMRItemValue114: TMRItemValue
+  TMRuleSeq: 18
+  FromDate: 2012-01-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA2,TARJ5"
+
+TMRItemValue115: TMRItemValue
+  TMRuleSeq: 19
+  FromDate: 2011-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSD3_A,CONTDATA3,CONTRD"
+
+TMRItemValue116: TMRItemValue
+  TMRuleSeq: 20
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB3,MDUB3,CONT"
+
+TMRItemValue117: TMRItemValue
+  TMRuleSeq: 20
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB3,MDUB3,CONT4"
+
+TMRItemValue118: TMRItemValue
+  TMRuleSeq: 20
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB3,MDUB3,CONT5"
+
+TMRItemValue119: TMRItemValue
+  TMRuleSeq: 20
+  FromDate: 2012-01-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB3,MDUB3,CONTF"
+
+TMRItemValue120: TMRItemValue
+  TMRuleSeq: 21
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB4,MDUB4,CONT"
+
+TMRItemValue121: TMRItemValue
+  TMRuleSeq: 21
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB4,MDUB4,CONT4"
+
+TMRItemValue122: TMRItemValue
+  TMRuleSeq: 21
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB4,MDUB4,CONT5"
+
+TMRItemValue123: TMRItemValue
+  TMRuleSeq: 21
+  FromDate: 2012-01-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB4,MDUB4,CONTF"
+
+TMRItemValue124: TMRItemValue
+  TMRuleSeq: 22
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB3,MDUB3,CONT6"
+
+TMRItemValue125: TMRItemValue
+  TMRuleSeq: 23
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB4,MDUB4,CONT6"
+
+TMRItemValue126: TMRItemValue
+  TMRuleSeq: 24
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,UPGRADEDATA"
+
+TMRItemValue127: TMRItemValue
+  TMRuleSeq: 24
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDSS2_A,DSS2"
+
+TMRItemValue128: TMRItemValue
+  TMRuleSeq: 24
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDSS_A,DSS"
+
+TMRItemValue129: TMRItemValue
+  TMRuleSeq: 25
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSD4_A,CONTDATA4,CONTRD"
+
+TMRItemValue130: TMRItemValue
+  TMRuleSeq: 26
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTFFVOICE,CONTFF"
+
+TMRItemValue131: TMRItemValue
+  TMRuleSeq: 26
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATVOICE,CONTF"
+
+TMRItemValue132: TMRItemValue
+  TMRuleSeq: 27
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA30_A,CONTF"
+
+TMRItemValue133: TMRItemValue
+  TMRuleSeq: 28
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA55_A,CONTF"
+
+TMRItemValue134: TMRItemValue
+  TMRuleSeq: 29
+  FromDate: 2012-02-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA20D_A,CONTF"
+
+TMRItemValue135: TMRItemValue
+  TMRuleSeq: 30
+  FromDate: 2012-02-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA40_A,CONTF"
+
+TMRItemValue136: TMRItemValue
+  TMRuleSeq: 31
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSD1_A,CONTRD"
+
+TMRItemValue137: TMRItemValue
+  TMRuleSeq: 31
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSD2_A,CONTRD"
+
+TMRItemValue138: TMRItemValue
+  TMRuleSeq: 31
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSD3_A,CONTRD"
+
+TMRItemValue139: TMRItemValue
+  TMRuleSeq: 31
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSD4_A,CONTRD"
+
+TMRItemValue140: TMRItemValue
+  TMRuleSeq: 31
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONTRD"
+
+TMRItemValue141: TMRItemValue
+  TMRuleSeq: 32
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA20D_A,CONTF"
+
+TMRItemValue142: TMRItemValue
+  TMRuleSeq: 32
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA30_A,CONTF"
+
+TMRItemValue143: TMRItemValue
+  TMRuleSeq: 32
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA40_A,CONTF"
+
+TMRItemValue144: TMRItemValue
+  TMRuleSeq: 32
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATDATA55_A,CONTF"
+
+TMRItemValue145: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONT"
+
+TMRItemValue146: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONT4"
+
+TMRItemValue147: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONT5"
+
+TMRItemValue148: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONT6"
+
+TMRItemValue149: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-05-28
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONT7"
+
+TMRItemValue150: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONT8"
+
+TMRItemValue151: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONTF"
+
+TMRItemValue152: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONTFF"
+
+TMRItemValue153: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONTM"
+
+TMRItemValue154: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-05-28
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONTS"
+
+TMRItemValue155: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA1B,CONTSF"
+
+TMRItemValue156: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT"
+
+TMRItemValue157: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2014-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT15"
+
+TMRItemValue158: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2015-08-12
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT23"
+
+TMRItemValue159: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2015-03-04
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT24"
+
+TMRItemValue160: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT25"
+
+TMRItemValue161: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT4"
+
+TMRItemValue162: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT5"
+
+TMRItemValue163: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT6"
+
+TMRItemValue164: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT7"
+
+TMRItemValue165: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT8"
+
+TMRItemValue166: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONT9"
+
+TMRItemValue167: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTD"
+
+TMRItemValue168: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTDSL45"
+
+TMRItemValue169: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTDSL58"
+
+TMRItemValue170: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTF"
+
+TMRItemValue171: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTFF"
+
+TMRItemValue172: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTFH45_50"
+
+TMRItemValue173: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTFH55_300"
+
+TMRItemValue174: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTFH58_50"
+
+TMRItemValue175: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTFH68_300"
+
+TMRItemValue176: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTM"
+
+TMRItemValue177: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTM2"
+
+TMRItemValue178: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTS"
+
+TMRItemValue179: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_DATA*,CONTSF"
+
+TMRItemValue180: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONT"
+
+TMRItemValue181: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONT4"
+
+TMRItemValue182: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONT5"
+
+TMRItemValue183: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONT6"
+
+TMRItemValue184: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-05-28
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONT7"
+
+TMRItemValue185: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONT8"
+
+TMRItemValue186: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONT9"
+
+TMRItemValue187: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONTD"
+
+TMRItemValue188: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONTF"
+
+TMRItemValue189: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONTFF"
+
+TMRItemValue190: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONTM"
+
+TMRItemValue191: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-05-28
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONTS"
+
+TMRItemValue192: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_MDUB*,CONTSF"
+
+TMRItemValue193: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONT"
+
+TMRItemValue194: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONT4"
+
+TMRItemValue195: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONT5"
+
+TMRItemValue196: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONT6"
+
+TMRItemValue197: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-05-28
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONT7"
+
+TMRItemValue198: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONT8"
+
+TMRItemValue199: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONTF"
+
+TMRItemValue200: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONTFF"
+
+TMRItemValue201: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONTM"
+
+TMRItemValue202: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2012-05-28
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONTS"
+
+TMRItemValue203: TMRItemValue
+  TMRuleSeq: 33
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRSDATA_UPGRADE,CONTSF"
+
+TMRItemValue204: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2015-08-12
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT23_VOICE_IN,CONT23"
+
+TMRItemValue205: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2015-03-04
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_VOICE_IN,CONT24"
+
+TMRItemValue206: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_VOICE_IN,CONTDSL58"
+
+TMRItemValue207: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_VOICE_IN,CONTFH58_50"
+
+TMRItemValue208: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2016-11-10
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_VOICE_IN,CONTFH68_300"
+
+TMRItemValue209: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT25_VOICE_IN,CONT25"
+
+TMRItemValue210: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2015-04-15
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS12_VOICE_IN,CONTS"
+
+TMRItemValue211: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS2GB_VOICE_IN,CONTDSL45"
+
+TMRItemValue212: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS2GB_VOICE_IN,CONTFH45_50"
+
+TMRItemValue213: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS2GB_VOICE_IN,CONTFH55_300"
+
+TMRItemValue214: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSFVOICE10_A,CONTSF"
+
+TMRItemValue215: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSFVOICE14_A,CONTSF"
+
+TMRItemValue216: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE15_A,CONTS"
+
+TMRItemValue217: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE16_A,CONTS"
+
+TMRItemValue218: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE20_A,CONTS"
+
+TMRItemValue219: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE21_A,CONTS"
+
+TMRItemValue220: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE25_A,CONTS"
+
+TMRItemValue221: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE26_A,CONTS"
+
+TMRItemValue222: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE32_A,CONTS"
+
+TMRItemValue223: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE35_A,CONTS"
+
+TMRItemValue224: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2012-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE39_A,CONTS"
+
+TMRItemValue225: TMRItemValue
+  TMRuleSeq: 34
+  FromDate: 2012-08-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE_A,CONTS"
+
+TMRItemValue226: TMRItemValue
+  TMRuleSeq: 35
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTFFVOICE,CONTFF"
+
+TMRItemValue227: TMRItemValue
+  TMRuleSeq: 35
+  FromDate: 2012-08-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FLATVOICE,CONTF"
+
+TMRItemValue228: TMRItemValue
+  TMRuleSeq: 36
+  FromDate: 2012-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRS"
+
+TMRItemValue229: TMRItemValue
+  TMRuleSeq: 37
+  FromDate: 2012-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "GPRS"
+
+TMRItemValue230: TMRItemValue
+  TMRuleSeq: 38
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  CounterItemValues: "VOICE3000"
+
+TMRItemValue231: TMRItemValue
+  TMRuleSeq: 39
+  FromDate: 2014-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "64"
+
+TMRItemValue232: TMRItemValue
+  TMRuleSeq: 39
+  FromDate: 2014-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "65"
+
+TMRItemValue233: TMRItemValue
+  TMRuleSeq: 39
+  FromDate: 2014-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "66"
+
+TMRItemValue234: TMRItemValue
+  TMRuleSeq: 39
+  FromDate: 2014-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "67"
+
+TMRItemValue235: TMRItemValue
+  TMRuleSeq: 39
+  FromDate: 2014-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "68"
+
+TMRItemValue236: TMRItemValue
+  TMRuleSeq: 39
+  FromDate: 2014-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "69"
+
+TMRItemValue237: TMRItemValue
+  TMRuleSeq: 39
+  FromDate: 2014-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "71"
+
+TMRItemValue238: TMRItemValue
+  TMRuleSeq: 39
+  FromDate: 2014-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "72"
+
+TMRItemValue239: TMRItemValue
+  TMRuleSeq: 39
+  FromDate: 2014-09-01
+  ToDate: 2049-12-31
+  CounterItemValues: "78"
+
+TMRItemValue240: TMRItemValue
+  TMRuleSeq: 40
+  FromDate: 2016-06-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FREE100MINUTES"
+
+TMRItemValue241: TMRItemValue
+  TMRuleSeq: 40
+  FromDate: 2015-01-01
+  ToDate: 2049-12-31
+  CounterItemValues: "VOICE100"
+
+TMRItemValue242: TMRItemValue
+  TMRuleSeq: 41
+  FromDate: 2016-06-01
+  ToDate: 2049-12-31
+  CounterItemValues: "FREE100MINUTES"
+
+TMRItemValue243: TMRItemValue
+  TMRuleSeq: 41
+  FromDate: 2015-01-01
+  ToDate: 2049-12-31
+  CounterItemValues: "VOICE100"
+
+TMRItemValue244: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT23_VOICE_IN,CONT23"
+
+TMRItemValue245: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_VOICE_IN,CONT24"
+
+TMRItemValue246: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_VOICE_IN,CONTDSL58"
+
+TMRItemValue247: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_VOICE_IN,CONTFH58_50"
+
+TMRItemValue248: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT24_VOICE_IN,CONTFH68_300"
+
+TMRItemValue249: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  CounterItemValues: "CONT25_VOICE_IN,CONT25"
+
+TMRItemValue250: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS12_VOICE_IN,CONTS"
+
+TMRItemValue251: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS2GB_VOICE_IN,CONTDSL45"
+
+TMRItemValue252: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS2GB_VOICE_IN,CONTFH45_50"
+
+TMRItemValue253: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-11-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTS2GB_VOICE_IN,CONTFH55_300"
+
+TMRItemValue254: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSFVOICE10_A,CONTSF"
+
+TMRItemValue255: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSFVOICE14_A,CONTSF"
+
+TMRItemValue256: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE15_A,CONTS"
+
+TMRItemValue257: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE16_A,CONTS"
+
+TMRItemValue258: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE20_A,CONTS"
+
+TMRItemValue259: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE21_A,CONTS"
+
+TMRItemValue260: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE25_A,CONTS"
+
+TMRItemValue261: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE26_A,CONTS"
+
+TMRItemValue262: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE32_A,CONTS"
+
+TMRItemValue263: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE35_A,CONTS"
+
+TMRItemValue264: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE39_A,CONTS"
+
+TMRItemValue265: TMRItemValue
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItemValues: "CONTSVOICE_A,CONTS"
+

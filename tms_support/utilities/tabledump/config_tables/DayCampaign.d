@@ -5,6 +5,7 @@
 "CONT24" 04/03/15 1 31/12/49 "CONT24MF" 0 "" "" "Contrato 24" 0 0 "1" "1" 1 1 0 0 "CONT24MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 1
 "CONT25" 12/12/16 1 31/12/49 "CONT25MF" 0 "" "" "Contrato 25" 0 0 "1" "1" 1 1 0 0 "CONT25MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 1
 "CONT26" 01/02/17 1 31/12/49 "CONT26MF" 0 "" "" "Contrato 26" 0 0 "1" "1" 1 1 0 0 "CONT26MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0
+"CONT27" 18/04/17 1 31/12/49 "CONT27MF" 0 "" "" "LA INFINITA 2 GB DTO." 0 0 "1" "1" 1 1 0 0 "CONT27MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL,DATA6_UPSELL" 0 0
 "CONT9" 01/05/14 4 31/12/49 "CONT9" 0 "" "" "La del Cero 1,2 GB" 93 0 "1" "4" 4 1 0 0 "CONT9MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 53 1
 "CONTD2" 01/12/09 4 31/12/54 "CONTDATA2" 0 "" "" "Internet para llevar 35" 93 0 "1" "4" 4 1 0 0 "CONTD2MF" "" "" 0 1 0 yes 1 0 0 2 "DATA6_UPSELL,DATA200_UPSELL" 50 1
 "CONTD2ACT" 01/12/09 4 17/05/11 "CONTDATA" 0 "" "" "Contrato Datos 2 1st billing period" 93 0 "1" "4" 4 2 1 0 "" "" "TERMCONTD2" 3 1 1 yes 1 0 0 0 "" 0 1
