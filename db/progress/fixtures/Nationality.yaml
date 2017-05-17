@@ -1,0 +1,1172 @@
+Nationality1: Nationality
+  Nationality: "AD"
+  NtName: "Andorran"
+  TFNationality: "0043"
+
+Nationality2: Nationality
+  Nationality: "AE"
+  NtName: "Emirian"
+  TFNationality: "0647"
+
+Nationality3: Nationality
+  Nationality: "AF"
+  NtName: "Afghan"
+  TFNationality: "0660"
+
+Nationality4: Nationality
+  Nationality: "AG"
+  TFNationality: "0031"
+
+Nationality5: Nationality
+  Nationality: "AI"
+  NtName: "Antiguans"
+  TFNationality: "0033"
+
+Nationality6: Nationality
+  Nationality: "AL"
+  NtName: "Albanian"
+  TFNationality: "0070"
+
+Nationality7: Nationality
+  Nationality: "AM"
+  NtName: "Armenian"
+  TFNationality: "0082"
+
+Nationality8: Nationality
+  Nationality: "AN"
+
+Nationality9: Nationality
+  Nationality: "AO"
+  NtName: "Angolan"
+  TFNationality: "0330"
+
+Nationality10: Nationality
+  Nationality: "AQ"
+  TFNationality: "0034"
+
+Nationality11: Nationality
+  Nationality: "AR"
+  NtName: "Argentine"
+  TFNationality: "0528"
+
+Nationality12: Nationality
+  Nationality: "AS"
+  TFNationality: "0035"
+
+Nationality13: Nationality
+  Nationality: "AT"
+  NtName: "Austrian"
+  TFNationality: "0038"
+
+Nationality14: Nationality
+  Nationality: "AU"
+  NtName: "Australian"
+  TFNationality: "0800"
+
+Nationality15: Nationality
+  Nationality: "AW"
+  TFNationality: "0037"
+
+Nationality16: Nationality
+  Nationality: "AX"
+  TFNationality: "0032"
+
+Nationality17: Nationality
+  Nationality: "AZ"
+  NtName: "Azerbaijani"
+  TFNationality: "0083"
+
+Nationality18: Nationality
+  Nationality: "BA"
+  NtName: "Bosnian-Herzegovinian"
+  TFNationality: "0200"
+
+Nationality19: Nationality
+  Nationality: "BB"
+  NtName: "Barbadian"
+  TFNationality: "0469"
+
+Nationality20: Nationality
+  Nationality: "BD"
+  NtName: "Bangladeshi"
+  TFNationality: "0666"
+
+Nationality21: Nationality
+  Nationality: "BE"
+  NtName: "Belgian"
+  TFNationality: "0002"
+
+Nationality22: Nationality
+  Nationality: "BF"
+  NtName: "Burkinabe"
+  TFNationality: "0236"
+
+Nationality23: Nationality
+  Nationality: "BG"
+  NtName: "Bulgarian"
+  TFNationality: "0068"
+
+Nationality24: Nationality
+  Nationality: "BH"
+  NtName: "Bahraini"
+  TFNationality: "0640"
+
+Nationality25: Nationality
+  Nationality: "BI"
+  NtName: "Burundian"
+  TFNationality: "0328"
+
+Nationality26: Nationality
+  Nationality: "BJ"
+  NtName: "Beninese"
+  TFNationality: "0284"
+
+Nationality27: Nationality
+  Nationality: "BM"
+  TFNationality: "0413"
+
+Nationality28: Nationality
+  Nationality: "BN"
+  NtName: "Bruneian"
+  TFNationality: "0703"
+
+Nationality29: Nationality
+  Nationality: "BO"
+  NtName: "Bolivian"
+  TFNationality: "0516"
+
+Nationality30: Nationality
+  Nationality: "BR"
+  NtName: "Brazilian"
+  TFNationality: "0508"
+
+Nationality31: Nationality
+  Nationality: "BS"
+  NtName: "Bahamian"
+  TFNationality: "0453"
+
+Nationality32: Nationality
+  Nationality: "BT"
+  NtName: "Bhutanese"
+  TFNationality: "0675"
+
+Nationality33: Nationality
+  Nationality: "BV"
+  TFNationality: "0111"
+
+Nationality34: Nationality
+  Nationality: "BW"
+  NtName: "Batswana"
+  TFNationality: "0391"
+
+Nationality35: Nationality
+  Nationality: "BY"
+  NtName: "Belarusian"
+  TFNationality: "0112"
+
+Nationality36: Nationality
+  Nationality: "BZ"
+  NtName: "Belizean"
+  TFNationality: "0421"
+
+Nationality37: Nationality
+  Nationality: "CA"
+  NtName: "Canadian"
+  TFNationality: "0404"
+
+Nationality38: Nationality
+  Nationality: "CC"
+  TFNationality: "0114"
+
+Nationality39: Nationality
+  Nationality: "CD"
+  NtName: "Congolese"
+  TFNationality: "0322"
+
+Nationality40: Nationality
+  Nationality: "CF"
+  NtName: "Central African"
+  TFNationality: "0306"
+
+Nationality41: Nationality
+  Nationality: "CG"
+  NtName: "Congolese"
+  TFNationality: "0318"
+
+Nationality42: Nationality
+  Nationality: "CH"
+  NtName: "Swiss"
+  TFNationality: "0036"
+
+Nationality43: Nationality
+  Nationality: "CI"
+  NtName: "Ivorian"
+  TFNationality: "0272"
+
+Nationality44: Nationality
+  Nationality: "CK"
+  TFNationality: "0115"
+
+Nationality45: Nationality
+  Nationality: "CL"
+  NtName: "Chilean"
+  TFNationality: "0512"
+
+Nationality46: Nationality
+  Nationality: "CM"
+  NtName: "Cameroonian"
+  TFNationality: "0302"
+
+Nationality47: Nationality
+  Nationality: "CN"
+  NtName: "Chinese"
+  TFNationality: "0720"
+
+Nationality48: Nationality
+  Nationality: "CO"
+  NtName: "Colombian"
+  TFNationality: "0480"
+
+Nationality49: Nationality
+  Nationality: "CR"
+  NtName: "Costa Rican"
+  TFNationality: "0436"
+
+Nationality50: Nationality
+  Nationality: "CS"
+  NtName: "Serbian"
+
+Nationality51: Nationality
+  Nationality: "CU"
+  NtName: "Cuban"
+  TFNationality: "0448"
+
+Nationality52: Nationality
+  Nationality: "CV"
+  NtName: "Cape Verdian"
+  TFNationality: "0247"
+
+Nationality53: Nationality
+  Nationality: "CX"
+  TFNationality: "0113"
+
+Nationality54: Nationality
+  Nationality: "CY"
+  NtName: "Cypriot"
+  TFNationality: "0600"
+
+Nationality55: Nationality
+  Nationality: "CZ"
+  NtName: "Czech"
+  TFNationality: "0161"
+
+Nationality56: Nationality
+  Nationality: "DE"
+  NtName: "German"
+  TFNationality: "0004"
+
+Nationality57: Nationality
+  Nationality: "DJ"
+  NtName: "Djibouti"
+  TFNationality: "0338"
+
+Nationality58: Nationality
+  Nationality: "DK"
+  NtName: "Dane"
+  TFNationality: "0008"
+
+Nationality59: Nationality
+  Nationality: "DM"
+  NtName: "Dominican"
+  TFNationality: "0460"
+
+Nationality60: Nationality
+  Nationality: "DO"
+  NtName: "Dominican"
+  TFNationality: "0456"
+
+Nationality61: Nationality
+  Nationality: "DZ"
+  NtName: "Algerian"
+  TFNationality: "0208"
+
+Nationality62: Nationality
+  Nationality: "EC"
+  NtName: "Ecuadorean"
+  TFNationality: "0500"
+
+Nationality63: Nationality
+  Nationality: "EE"
+  NtName: "Estonian"
+  TFNationality: "0084"
+
+Nationality64: Nationality
+  Nationality: "EG"
+  NtName: "Egyptian"
+  TFNationality: "0220"
+
+Nationality65: Nationality
+  Nationality: "EH"
+  TFNationality: "0047"
+
+Nationality66: Nationality
+  Nationality: "ER"
+  NtName: "Eritrean"
+  TFNationality: "0281"
+
+Nationality67: Nationality
+  Nationality: "ES"
+  NtName: "Spaniard"
+  TFNationality: "0011"
+
+Nationality68: Nationality
+  Nationality: "ET"
+  NtName: "Ethiopian"
+  TFNationality: "0334"
+
+Nationality69: Nationality
+  Nationality: "FI"
+  NtName: "Finn"
+  TFNationality: "0032"
+
+Nationality70: Nationality
+  Nationality: "FJ"
+  NtName: "Fijian"
+  TFNationality: "0815"
+
+Nationality71: Nationality
+  Nationality: "FK"
+  TFNationality: "0529"
+
+Nationality72: Nationality
+  Nationality: "FM"
+  NtName: "Micronesian"
+  TFNationality: "0049"
+
+Nationality73: Nationality
+  Nationality: "FO"
+  TFNationality: "0025"
+
+Nationality74: Nationality
+  Nationality: "FR"
+  NtName: "French"
+  TFNationality: "0001"
+
+Nationality75: Nationality
+  Nationality: "GA"
+  NtName: "Gabonese"
+  TFNationality: "0314"
+
+Nationality76: Nationality
+  Nationality: "GB"
+  NtName: "British"
+  TFNationality: "0006"
+
+Nationality77: Nationality
+  Nationality: "GD"
+  NtName: "Grenadian"
+  TFNationality: "0473"
+
+Nationality78: Nationality
+  Nationality: "GE"
+  NtName: "Georgian"
+  TFNationality: "0085"
+
+Nationality79: Nationality
+  Nationality: "GF"
+  TFNationality: "0496"
+
+Nationality80: Nationality
+  Nationality: "GG"
+  TFNationality: "0051"
+
+Nationality81: Nationality
+  Nationality: "GH"
+  NtName: "Ghanaian"
+  TFNationality: "0276"
+
+Nationality82: Nationality
+  Nationality: "GI"
+  TFNationality: "0044"
+
+Nationality83: Nationality
+  Nationality: "GL"
+  TFNationality: "0406"
+
+Nationality84: Nationality
+  Nationality: "GM"
+  NtName: "Gambian"
+  TFNationality: "0252"
+
+Nationality85: Nationality
+  Nationality: "GN"
+  NtName: "Guinean"
+  TFNationality: "0260"
+
+Nationality86: Nationality
+  Nationality: "GP"
+  TFNationality: "0458"
+
+Nationality87: Nationality
+  Nationality: "GQ"
+  NtName: "Equatorial Guinean"
+  TFNationality: "0310"
+
+Nationality88: Nationality
+  Nationality: "GR"
+  NtName: "Greek"
+  TFNationality: "0009"
+
+Nationality89: Nationality
+  Nationality: "GS"
+  TFNationality: "0238"
+
+Nationality90: Nationality
+  Nationality: "GT"
+  NtName: "Guatemalan"
+  TFNationality: "0416"
+
+Nationality91: Nationality
+  Nationality: "GU"
+  TFNationality: "0118"
+
+Nationality92: Nationality
+  Nationality: "GW"
+  NtName: "Guinea-Bissauan"
+  TFNationality: "0257"
+
+Nationality93: Nationality
+  Nationality: "GY"
+  NtName: "Guyanese"
+  TFNationality: "0488"
+
+Nationality94: Nationality
+  Nationality: "HK"
+  TFNationality: "0740"
+
+Nationality95: Nationality
+  Nationality: "HM"
+  TFNationality: "0119"
+
+Nationality96: Nationality
+  Nationality: "HN"
+  NtName: "Honduran"
+  TFNationality: "0424"
+
+Nationality97: Nationality
+  Nationality: "HR"
+  NtName: "Croat"
+  TFNationality: "0094"
+
+Nationality98: Nationality
+  Nationality: "HT"
+  NtName: "Haitian"
+  TFNationality: "0452"
+
+Nationality99: Nationality
+  Nationality: "HU"
+  NtName: "Hungarian"
+  TFNationality: "0064"
+
+Nationality100: Nationality
+  Nationality: "ID"
+  NtName: "Indonesian"
+  TFNationality: "0700"
+
+Nationality101: Nationality
+  Nationality: "IE"
+  NtName: "Irish"
+  TFNationality: "0007"
+
+Nationality102: Nationality
+  Nationality: "IL"
+  NtName: "Israeli"
+  TFNationality: "0624"
+
+Nationality103: Nationality
+  Nationality: "IM"
+  TFNationality: "0053"
+
+Nationality104: Nationality
+  Nationality: "IN"
+  NtName: "Indian"
+  TFNationality: "0664"
+
+Nationality105: Nationality
+  Nationality: "IO"
+  TFNationality: "0357"
+
+Nationality106: Nationality
+  Nationality: "IQ"
+  NtName: "Iraqi"
+  TFNationality: "0612"
+
+Nationality107: Nationality
+  Nationality: "IR"
+  NtName: "Iranian"
+  TFNationality: "0616"
+
+Nationality108: Nationality
+  Nationality: "IS"
+  NtName: "Icelander"
+  TFNationality: "0024"
+
+Nationality109: Nationality
+  Nationality: "IT"
+  NtName: "Italian"
+  TFNationality: "0005"
+
+Nationality110: Nationality
+  Nationality: "JE"
+  TFNationality: "0054"
+
+Nationality111: Nationality
+  Nationality: "JM"
+  NtName: "Jamaican"
+  TFNationality: "0464"
+
+Nationality112: Nationality
+  Nationality: "JO"
+  NtName: "Jordanian"
+  TFNationality: "0628"
+
+Nationality113: Nationality
+  Nationality: "JP"
+  NtName: "Japanese"
+  TFNationality: "0732"
+
+Nationality114: Nationality
+  Nationality: "KE"
+  NtName: "Kenyan"
+  TFNationality: "0346"
+
+Nationality115: Nationality
+  Nationality: "KG"
+  NtName: "Kyrgyz"
+  TFNationality: "0087"
+
+Nationality116: Nationality
+  Nationality: "KH"
+  NtName: "Cambodian"
+  TFNationality: "0696"
+
+Nationality117: Nationality
+  Nationality: "KI"
+  NtName: "I-Kiribati"
+  TFNationality: "0055"
+
+Nationality118: Nationality
+  Nationality: "KM"
+  NtName: "Comoran"
+  TFNationality: "0375"
+
+Nationality119: Nationality
+  Nationality: "KN"
+  NtName: "Kittian"
+  TFNationality: "0057"
+
+Nationality120: Nationality
+  Nationality: "KP"
+  NtName: "North Korean"
+  TFNationality: "0724"
+
+Nationality121: Nationality
+  Nationality: "KR"
+  NtName: "South Korean"
+  TFNationality: "0728"
+
+Nationality122: Nationality
+  Nationality: "KW"
+  NtName: "Kuwaiti"
+  TFNationality: "0636"
+
+Nationality123: Nationality
+  Nationality: "KY"
+  TFNationality: "0463"
+
+Nationality124: Nationality
+  Nationality: "KZ"
+  NtName: "Kazakhstani"
+  TFNationality: "0086"
+
+Nationality125: Nationality
+  Nationality: "LA"
+  NtName: "Laotian"
+  TFNationality: "0684"
+
+Nationality126: Nationality
+  Nationality: "LB"
+  NtName: "Lebanese"
+  TFNationality: "0604"
+
+Nationality127: Nationality
+  Nationality: "LC"
+  NtName: "Saint Lucian"
+  TFNationality: "0465"
+
+Nationality128: Nationality
+  Nationality: "LI"
+  NtName: "Liechtensteiner"
+  TFNationality: "0059"
+
+Nationality129: Nationality
+  Nationality: "LK"
+  NtName: "Sri Lankan"
+  TFNationality: "0669"
+
+Nationality130: Nationality
+  Nationality: "LR"
+  NtName: "Liberian"
+  TFNationality: "0268"
+
+Nationality131: Nationality
+  Nationality: "LS"
+  NtName: "Mosotho"
+  TFNationality: "0395"
+
+Nationality132: Nationality
+  Nationality: "LT"
+  NtName: "Lithuanian"
+  TFNationality: "0089"
+
+Nationality133: Nationality
+  Nationality: "LU"
+  NtName: "Luxembourger"
+  TFNationality: "0061"
+
+Nationality134: Nationality
+  Nationality: "LV"
+  NtName: "Latvian"
+  TFNationality: "0088"
+
+Nationality135: Nationality
+  Nationality: "LY"
+  NtName: "Libyan"
+  TFNationality: "0216"
+
+Nationality136: Nationality
+  Nationality: "MA"
+  NtName: "Moroccan"
+  TFNationality: "0204"
+
+Nationality137: Nationality
+  Nationality: "MC"
+  NtName: "Monegasque or Monacan"
+  TFNationality: "0063"
+
+Nationality138: Nationality
+  Nationality: "MD"
+  NtName: "Moldovan"
+  TFNationality: "0090"
+
+Nationality139: Nationality
+  Nationality: "ME"
+  NtName: "Montenegro"
+  TFNationality: "0170"
+
+Nationality140: Nationality
+  Nationality: "MG"
+  NtName: "Malagasy"
+  TFNationality: "0370"
+
+Nationality141: Nationality
+  Nationality: "MH"
+  NtName: "Marshallese"
+  TFNationality: "0065"
+
+Nationality142: Nationality
+  Nationality: "MK"
+  NtName: "Macedonian"
+  TFNationality: "0096"
+
+Nationality143: Nationality
+  Nationality: "ML"
+  NtName: "Malian"
+  TFNationality: "0232"
+
+Nationality144: Nationality
+  Nationality: "MM"
+  NtName: "Burmese or Myanmarese"
+  TFNationality: "0676"
+
+Nationality145: Nationality
+  Nationality: "MN"
+  NtName: "Mongolian"
+  TFNationality: "0716"
+
+Nationality146: Nationality
+  Nationality: "MO"
+  TFNationality: "0743"
+
+Nationality147: Nationality
+  Nationality: "MP"
+  TFNationality: "0067"
+
+Nationality148: Nationality
+  Nationality: "MQ"
+  NtName: "Mauritanian"
+  TFNationality: "0462"
+
+Nationality149: Nationality
+  Nationality: "MR"
+  NtName: "Mauritian"
+  TFNationality: "0228"
+
+Nationality150: Nationality
+  Nationality: "MS"
+  TFNationality: "0069"
+
+Nationality151: Nationality
+  Nationality: "MT"
+  NtName: "Maltese"
+  TFNationality: "0046"
+
+Nationality152: Nationality
+  Nationality: "MU"
+  TFNationality: "0373"
+
+Nationality153: Nationality
+  Nationality: "MV"
+  NtName: "Maldivan"
+  TFNationality: "0667"
+
+Nationality154: Nationality
+  Nationality: "MW"
+  NtName: "Malawian"
+  TFNationality: "0386"
+
+Nationality155: Nationality
+  Nationality: "MX"
+  NtName: "Mexican"
+  TFNationality: "0412"
+
+Nationality156: Nationality
+  Nationality: "MY"
+  NtName: "Malaysian"
+  TFNationality: "0701"
+
+Nationality157: Nationality
+  Nationality: "MZ"
+  NtName: "Mozambican"
+  TFNationality: "0366"
+
+Nationality158: Nationality
+  Nationality: "NA"
+  NtName: "Namibian"
+  TFNationality: "0071"
+
+Nationality159: Nationality
+  Nationality: "NC"
+  TFNationality: "0809"
+
+Nationality160: Nationality
+  Nationality: "NE"
+  NtName: "Nigerien"
+  TFNationality: "0240"
+
+Nationality161: Nationality
+  Nationality: "NF"
+  TFNationality: "0122"
+
+Nationality162: Nationality
+  Nationality: "NG"
+  NtName: "Nigerian"
+  TFNationality: "0288"
+
+Nationality163: Nationality
+  Nationality: "NI"
+  NtName: "Nicaraguan"
+  TFNationality: "0432"
+
+Nationality164: Nationality
+  Nationality: "NL"
+  NtName: "Dutch"
+  TFNationality: "0003"
+
+Nationality165: Nationality
+  Nationality: "NO"
+  NtName: "Norwegian"
+  TFNationality: "0028"
+
+Nationality166: Nationality
+  Nationality: "NP"
+  NtName: "Nepalese"
+  TFNationality: "0672"
+
+Nationality167: Nationality
+  Nationality: "NR"
+  NtName: "Nauruan"
+  TFNationality: "0803"
+
+Nationality168: Nationality
+  Nationality: "NU"
+  TFNationality: "0121"
+
+Nationality169: Nationality
+  Nationality: "NZ"
+  NtName: "New Zealander"
+  TFNationality: "0804"
+
+Nationality170: Nationality
+  Nationality: "OM"
+  NtName: "Omani"
+  TFNationality: "0649"
+
+Nationality171: Nationality
+  Nationality: "PA"
+  NtName: "Panamanian"
+  TFNationality: "0442"
+
+Nationality172: Nationality
+  Nationality: "PE"
+  NtName: "Peruvian"
+  TFNationality: "0504"
+
+Nationality173: Nationality
+  Nationality: "PF"
+  TFNationality: "0822"
+
+Nationality174: Nationality
+  Nationality: "PG"
+  NtName: "Papua New Guinean"
+  TFNationality: "0801"
+
+Nationality175: Nationality
+  Nationality: "PH"
+  NtName: "Filipino"
+  TFNationality: "0708"
+
+Nationality176: Nationality
+  Nationality: "PK"
+  NtName: "Pakistani"
+  TFNationality: "0662"
+
+Nationality177: Nationality
+  Nationality: "PL"
+  NtName: "Pole"
+  TFNationality: "0060"
+
+Nationality178: Nationality
+  Nationality: "PM"
+  TFNationality: "0408"
+
+Nationality179: Nationality
+  Nationality: "PN"
+  TFNationality: "0813"
+
+Nationality180: Nationality
+  Nationality: "PR"
+  TFNationality: "0074"
+
+Nationality181: Nationality
+  Nationality: "PS"
+  TFNationality: "0973"
+
+Nationality182: Nationality
+  Nationality: "PT"
+  NtName: "Portuguese"
+  TFNationality: "0010"
+
+Nationality183: Nationality
+  Nationality: "PW"
+  NtName: "Palauan"
+  TFNationality: "0075"
+
+Nationality184: Nationality
+  Nationality: "PY"
+  NtName: "Paraguayan"
+  TFNationality: "0520"
+
+Nationality185: Nationality
+  Nationality: "QA"
+  NtName: "Qatari"
+  TFNationality: "0644"
+
+Nationality186: Nationality
+  Nationality: "RE"
+  TFNationality: "0372"
+
+Nationality187: Nationality
+  Nationality: "RO"
+  NtName: "Romanian"
+  TFNationality: "0066"
+
+Nationality188: Nationality
+  Nationality: "RS"
+  NtName: "Serbia"
+  TFNationality: "0171"
+
+Nationality189: Nationality
+  Nationality: "RU"
+  NtName: "Russian"
+  TFNationality: "0056"
+
+Nationality190: Nationality
+  Nationality: "RW"
+  NtName: "Rwandan"
+  TFNationality: "0324"
+
+Nationality191: Nationality
+  Nationality: "SA"
+  NtName: "Saudi Arabian"
+  TFNationality: "0632"
+
+Nationality192: Nationality
+  Nationality: "SB"
+  NtName: "Solomon Islander"
+  TFNationality: "0806"
+
+Nationality193: Nationality
+  Nationality: "SC"
+  NtName: "Seychellois"
+  TFNationality: "0355"
+
+Nationality194: Nationality
+  Nationality: "SD"
+  NtName: "Sudanese"
+  TFNationality: "0224"
+
+Nationality195: Nationality
+  Nationality: "SE"
+  NtName: "Swede"
+  TFNationality: "0030"
+
+Nationality196: Nationality
+  Nationality: "SG"
+  NtName: "Singaporean"
+  TFNationality: "0706"
+
+Nationality197: Nationality
+  Nationality: "SH"
+  TFNationality: "0329"
+
+Nationality198: Nationality
+  Nationality: "SI"
+  NtName: "Slovene"
+  TFNationality: "0095"
+
+Nationality199: Nationality
+  Nationality: "SJ"
+  TFNationality: "0124"
+
+Nationality200: Nationality
+  Nationality: "SK"
+  NtName: "Slovak"
+  TFNationality: "0163"
+
+Nationality201: Nationality
+  Nationality: "SL"
+  NtName: "Sierra Leonean"
+  TFNationality: "0264"
+
+Nationality202: Nationality
+  Nationality: "SM"
+  NtName: "Sammarinese"
+  TFNationality: "0076"
+
+Nationality203: Nationality
+  Nationality: "SN"
+  NtName: "Senegalese"
+  TFNationality: "0248"
+
+Nationality204: Nationality
+  Nationality: "SO"
+  NtName: "Somali"
+  TFNationality: "0342"
+
+Nationality205: Nationality
+  Nationality: "SR"
+  NtName: "Surinamer"
+  TFNationality: "0492"
+
+Nationality206: Nationality
+  Nationality: "ST"
+  NtName: "Sao Tomean"
+  TFNationality: "0311"
+
+Nationality207: Nationality
+  Nationality: "SV"
+  NtName: "Salvadoran"
+  TFNationality: "0428"
+
+Nationality208: Nationality
+  Nationality: "SY"
+  NtName: "Syrian"
+  TFNationality: "0608"
+
+Nationality209: Nationality
+  Nationality: "SZ"
+  NtName: "Swazi"
+  TFNationality: "0393"
+
+Nationality210: Nationality
+  Nationality: "TC"
+  TFNationality: "0454"
+
+Nationality211: Nationality
+  Nationality: "TD"
+  NtName: "Chadian"
+  TFNationality: "0244"
+
+Nationality212: Nationality
+  Nationality: "TF"
+  TFNationality: "0077"
+
+Nationality213: Nationality
+  Nationality: "TG"
+  NtName: "Togolese"
+  TFNationality: "0280"
+
+Nationality214: Nationality
+  Nationality: "TH"
+  NtName: "Thai"
+  TFNationality: "0680"
+
+Nationality215: Nationality
+  Nationality: "TJ"
+  NtName: "Tajik"
+  TFNationality: "0091"
+
+Nationality216: Nationality
+  Nationality: "TK"
+  TFNationality: "0125"
+
+Nationality217: Nationality
+  Nationality: "TL"
+  NtName: "East Timorese"
+  TFNationality: "0117"
+
+Nationality218: Nationality
+  Nationality: "TM"
+  NtName: "Turkmen"
+  TFNationality: "0092"
+
+Nationality219: Nationality
+  Nationality: "TN"
+  NtName: "Tunisian"
+  TFNationality: "0212"
+
+Nationality220: Nationality
+  Nationality: "TO"
+  NtName: "Tongan"
+  TFNationality: "0817"
+
+Nationality221: Nationality
+  Nationality: "TR"
+  NtName: "Turk"
+  TFNationality: "0052"
+
+Nationality222: Nationality
+  Nationality: "TT"
+  NtName: "Trinidadian and Tobagonian"
+  TFNationality: "0472"
+
+Nationality223: Nationality
+  Nationality: "TV"
+  NtName: "Tuvaluan"
+  TFNationality: "0807"
+
+Nationality224: Nationality
+  Nationality: "TW"
+  NtName: "Taiwanese"
+  TFNationality: "0736"
+
+Nationality225: Nationality
+  Nationality: "TZ"
+  NtName: "Tanzanian"
+  TFNationality: "0352"
+
+Nationality226: Nationality
+  Nationality: "UA"
+  NtName: "Ukrainian"
+  TFNationality: "0126"
+
+Nationality227: Nationality
+  Nationality: "UG"
+  NtName: "Ugandan"
+  TFNationality: "0350"
+
+Nationality228: Nationality
+  Nationality: "UM"
+  TFNationality: "0078"
+
+Nationality229: Nationality
+  Nationality: "US"
+  NtName: "American"
+  TFNationality: "0400"
+
+Nationality230: Nationality
+  Nationality: "UY"
+  NtName: "Uruguayan"
+  TFNationality: "0524"
+
+Nationality231: Nationality
+  Nationality: "UZ"
+  NtName: "Uzbek or Uzbekistani"
+  TFNationality: "0093"
+
+Nationality232: Nationality
+  Nationality: "VA"
+  NtName: "Vatican"
+  TFNationality: "0045"
+
+Nationality233: Nationality
+  Nationality: "VC"
+  TFNationality: "0467"
+
+Nationality234: Nationality
+  Nationality: "VE"
+  NtName: "Venezuelan"
+  TFNationality: "0484"
+
+Nationality235: Nationality
+  Nationality: "VG"
+  TFNationality: "0455"
+
+Nationality236: Nationality
+  Nationality: "VI"
+  TFNationality: "0457"
+
+Nationality237: Nationality
+  Nationality: "VN"
+  NtName: "Vietnamese"
+  TFNationality: "0690"
+
+Nationality238: Nationality
+  Nationality: "VU"
+  NtName: "Ni-Vanuatu"
+  TFNationality: "0080"
+
+Nationality239: Nationality
+  Nationality: "WF"
+  TFNationality: "0811"
+
+Nationality240: Nationality
+  Nationality: "WS"
+  NtName: "Samoan"
+  TFNationality: "0819"
+
+Nationality241: Nationality
+  Nationality: "YE"
+  NtName: "Yemeni or Yemenite"
+  TFNationality: "0652"
+
+Nationality242: Nationality
+  Nationality: "YT"
+  TFNationality: "0901"
+
+Nationality243: Nationality
+  Nationality: "ZA"
+  NtName: "South African"
+  TFNationality: "0390"
+
+Nationality244: Nationality
+  Nationality: "ZM"
+  NtName: "Zambian"
+  TFNationality: "0378"
+
+Nationality245: Nationality
+  Nationality: "ZW"
+  NtName: "Zimbabwean"
+  TFNationality: "0081"
+

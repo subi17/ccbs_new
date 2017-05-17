@@ -84,3 +84,5 @@
 47 05/04/17 31/12/49 "BillItem" "CONT10MF" yes
 48 05/04/17 31/12/49 "BillItem" "CONT26MF" yes
 49 05/04/17 31/12/49 "BillItem" "CONT25MF" yes
+50 02/05/17 31/12/49 "BillItem" "CONTFH300MF" yes
+51 02/05/17 31/12/49 "BillItem" "CONTFH300MF" yes
