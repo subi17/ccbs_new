@@ -1,0 +1,44 @@
+BillType1: BillType
+  BillType: "CC"
+  BTName: "Charge and Compensation"
+
+BillType2: BillType
+  BillType: "DC"
+  BTName: "Discounts"
+
+BillType3: BillType
+  BillType: "DF"
+  BTName: "Delivery Fees"
+
+BillType4: BillType
+  BillType: "IC"
+  BTName: "Sim"
+
+BillType5: BillType
+  BillType: "MF"
+  BTName: "Monthly Fee"
+
+BillType6: BillType
+  BillType: "NF"
+  BTName: "No Fee"
+
+BillType7: BillType
+  BillType: "PF"
+  BTName: "Penalty fees"
+
+BillType8: BillType
+  BillType: "SF"
+  BTName: "Single Fee"
+
+BillType9: BillType
+  BillType: "TE"
+  BTName: "Terminals"
+
+BillType10: BillType
+  BillType: "TR"
+  BTName: "Traffic"
+
+BillType11: BillType
+  BillType: "TU"
+  BTName: "Top Up"
+
