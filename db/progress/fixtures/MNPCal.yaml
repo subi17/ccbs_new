@@ -1,0 +1,241 @@
+MNPCal1: MNPCal
+  Region: "07"
+  MessageType: "APOR"
+  Periods: 12
+  OrderChannel: "cc"
+
+MNPCal2: MNPCal
+  Region: "07"
+  MessageType: "APOR"
+  Periods: 12
+  OrderChannel: "self"
+
+MNPCal3: MNPCal
+  Region: "07"
+  MessageType: "APOR"
+  Periods: 12
+  OrderChannel: "telesales"
+
+MNPCal4: MNPCal
+  Region: "07"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "cc"
+  MNPProduct: "S"
+
+MNPCal5: MNPCal
+  Region: "07"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "self"
+  MNPProduct: "S"
+
+MNPCal6: MNPCal
+  Region: "07"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "telesales"
+  MNPProduct: "S"
+
+MNPCal7: MNPCal
+  Region: "35"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "cc"
+
+MNPCal8: MNPCal
+  Region: "35"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "self"
+
+MNPCal9: MNPCal
+  Region: "35"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "telesales"
+
+MNPCal10: MNPCal
+  Region: "35"
+  MessageType: "APOR"
+  Periods: 8
+  OrderChannel: "cc"
+  MNPProduct: "S"
+
+MNPCal11: MNPCal
+  Region: "35"
+  MessageType: "APOR"
+  Periods: 8
+  OrderChannel: "self"
+  MNPProduct: "S"
+
+MNPCal12: MNPCal
+  Region: "35"
+  MessageType: "APOR"
+  Periods: 8
+  OrderChannel: "telesales"
+  MNPProduct: "S"
+
+MNPCal13: MNPCal
+  Region: "38"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "cc"
+
+MNPCal14: MNPCal
+  Region: "38"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "self"
+
+MNPCal15: MNPCal
+  Region: "38"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "telesales"
+
+MNPCal16: MNPCal
+  Region: "38"
+  MessageType: "APOR"
+  Periods: 8
+  OrderChannel: "cc"
+  MNPProduct: "S"
+
+MNPCal17: MNPCal
+  Region: "38"
+  MessageType: "APOR"
+  Periods: 8
+  OrderChannel: "self"
+  MNPProduct: "S"
+
+MNPCal18: MNPCal
+  Region: "38"
+  MessageType: "APOR"
+  Periods: 8
+  OrderChannel: "telesales"
+  MNPProduct: "S"
+
+MNPCal19: MNPCal
+  Region: "51"
+  MessageType: "APOR"
+  Periods: 12
+  OrderChannel: "cc"
+
+MNPCal20: MNPCal
+  Region: "51"
+  MessageType: "APOR"
+  Periods: 12
+  OrderChannel: "self"
+
+MNPCal21: MNPCal
+  Region: "51"
+  MessageType: "APOR"
+  Periods: 12
+  OrderChannel: "telesales"
+
+MNPCal22: MNPCal
+  Region: "51"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "cc"
+  MNPProduct: "S"
+
+MNPCal23: MNPCal
+  Region: "51"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "self"
+  MNPProduct: "S"
+
+MNPCal24: MNPCal
+  Region: "51"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "telesales"
+  MNPProduct: "S"
+
+MNPCal25: MNPCal
+  Region: "52"
+  MessageType: "APOR"
+  Periods: 12
+  OrderChannel: "cc"
+
+MNPCal26: MNPCal
+  Region: "52"
+  MessageType: "APOR"
+  Periods: 12
+  OrderChannel: "self"
+
+MNPCal27: MNPCal
+  Region: "52"
+  MessageType: "APOR"
+  Periods: 12
+  OrderChannel: "telesales"
+
+MNPCal28: MNPCal
+  Region: "52"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "cc"
+  MNPProduct: "S"
+
+MNPCal29: MNPCal
+  Region: "52"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "self"
+  MNPProduct: "S"
+
+MNPCal30: MNPCal
+  Region: "52"
+  MessageType: "APOR"
+  Periods: 10
+  OrderChannel: "telesales"
+  MNPProduct: "S"
+
+MNPCal31: MNPCal
+  Region: "99"
+  MessageType: "ACON"
+
+MNPCal32: MNPCal
+  Region: "99"
+  MessageType: "APOR"
+  Periods: 8
+
+MNPCal33: MNPCal
+  Region: "99"
+  MessageType: "APOR"
+  Periods: 4
+  OrderChannel: "pos"
+
+MNPCal34: MNPCal
+  Region: "99"
+  MessageType: "APOR"
+  Periods: 4
+  OrderChannel: "inversa"
+
+MNPCal35: MNPCal
+  Region: "99"
+  MessageType: "APOR"
+  Periods: 4
+  OrderChannel: "cc"
+  MNPProduct: "S"
+
+MNPCal36: MNPCal
+  Region: "99"
+  MessageType: "APOR"
+  Periods: 4
+  OrderChannel: "self"
+  MNPProduct: "S"
+
+MNPCal37: MNPCal
+  Region: "99"
+  MessageType: "APOR"
+  Periods: 4
+  OrderChannel: "telesales"
+  MNPProduct: "S"
+
+MNPCal38: MNPCal
+  Region: "99"
+  MessageType: "ASOL"
+
