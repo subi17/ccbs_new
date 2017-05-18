@@ -690,7 +690,7 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.FullCollModule  = ""
       dumpfile.LinkKey         = ""
       dumpfile.LogFile         = ""
-      dumpfile.LogicModule     = "Mm/calldump.p"
+      dumpfile.LogicModule     = "Mm/calldump_exec.p"
       dumpfile.MainTable       = "MobCDR"
       dumpfile.ModCollModule   = ""
       dumpfile.ModFromEventLog = TRUE
@@ -732,7 +732,7 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.FullCollModule  = ""
       dumpfile.LinkKey         = ""
       dumpfile.LogFile         = ""
-      dumpfile.LogicModule     = "Mm/calldump_prepaid.p"
+      dumpfile.LogicModule     = "Mm/calldump_prepaid_exec.p"
       dumpfile.MainTable       = "PrepCDR"
       dumpfile.ModCollModule   = ""
       dumpfile.ModFromEventLog = TRUE
@@ -774,7 +774,7 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.FullCollModule  = ""
       dumpfile.LinkKey         = ""
       dumpfile.LogFile         = ""
-      dumpfile.LogicModule     = "Mm/error_calldump.p"
+      dumpfile.LogicModule     = "Mm/error_calldump_exec.p"
       dumpfile.MainTable       = "MobCDR"
       dumpfile.ModCollModule   = ""
       dumpfile.ModFromEventLog = TRUE
