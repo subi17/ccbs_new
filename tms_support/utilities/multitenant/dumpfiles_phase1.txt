@@ -75,4 +75,7 @@ SingleFeeEvent
 
 MSOwner
 PrepaidCompReport
-
+HighUsageReport
+ErrorCallDump
+CallDumpPrepaid
+CallDump
