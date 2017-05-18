@@ -160,7 +160,7 @@ END.
 
 IF llLog THEN OUTPUT STREAM sLog CLOSE.
 
-output stream excel to value(icfilename).
+output stream excel to value(icfilename) APPEND.
 
 for each ttCalls NO-LOCK:
    

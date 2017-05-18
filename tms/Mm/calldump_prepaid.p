@@ -98,7 +98,7 @@ FOR EACH PrepCDR NO-LOCK USE-INDEX ReadDate WHERE
          tmplaskuri      = tmplaskuri      + 1.
 END.
 
-output stream excel to value(icfilename).
+output stream excel to value(icfilename) APPEND.
 
 for each ttCalls NO-LOCK:
    
