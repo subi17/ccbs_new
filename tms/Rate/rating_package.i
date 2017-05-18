@@ -8,6 +8,8 @@
    One subscription may have several overlapping packages which are used in 
    the priority order defined in SLGAnalyse. 
 */
+{Func/cparam2.i}
+
 FUNCTION fIncludedUnit RETURNS DEC
    (iiInclUnit AS INT):
  
@@ -146,7 +148,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
       ttCall.BillCode   = bsub-prod
       lcOrigBillCode    = bsub-prod
       lcCliTypeList     = fMobileSubscriptionTypeList()	+ "," + fFamilySubscriptionTypeList() + "," + fConvergentSubscriptionTypeList()
-      lcDSS2CliTypeList = fSubscriptionTypeList('DSS2') 
+      lcDSS2CliTypeList = fCParamC("DSS2_SUBS_TYPE")
       ldPackageAmt      = 0
       ldTotalPrice      = 0
       liUnitUsed        = ?
