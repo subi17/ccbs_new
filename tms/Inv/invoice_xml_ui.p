@@ -87,14 +87,14 @@ FORM
    lcInvID[1] COLON 20
       LABEL "Invoices"
       HELP  "Invoices"
-      FORMAT "X(12)"
+      FORMAT "X(14)"
    "-"
    lcInvID[2]
       NO-LABEL
       HELP "Invoices"
       VALIDATE(INPUT lcInvID[2] >= INPUT lcInvID[1],
                "Invalid definition")
-      FORMAT "X(12)"
+      FORMAT "X(14)"
       SKIP           
             
    llOnlyNew COLON 20
