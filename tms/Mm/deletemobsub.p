@@ -16,7 +16,6 @@
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
 {Func/msreqfunc.i}
-{Func/msisdn.i}
 {Func/fcreditreq.i}
 {Func/flimitreq.i}
 {Func/fdss.i}
@@ -203,23 +202,35 @@ PROCEDURE pTerminate:
                  SIM.ICC = MobSub.ICC
       EXCLUSIVE-LOCK NO-ERROR.
 
-      fMakeMsidnHistory(INPUT RECID(MSISDN)).
+      IF AVAIL MSISDN THEN DO:
+         /* Mobile not been activated. No need to return MSISDN. */
+         IF liMsisdnStat     EQ {&MSISDN_ST_WAITING_RETURN} AND
+            (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+             MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
+            IF fIsYoigoCLI(MobSub.CLI) EQ FALSE THEN
+                 liMsisdnStat = {&MSISDN_ST_MNP_OUT_YOIGO}.
+            ELSE liMsisdnStat = {&MSISDN_ST_ASSIGNED_TO_ORDER}.
+            liQuarTime = 0.
+         END.
 
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSISDN).
-      
-      MSISDN.StatusCode = liMsisdnStat.
-      MSISDN.CustNum    = 0.
-      ASSIGN
-         MSISDN.ValidTo    = fDate2TS(TODAY + liQuarTime) + (time / 100000)
-                             WHEN liQuarTime >= 0
-         MSISDN.ValidTo    = 99999999.99999 WHEN liQuarTime = -1.
+         fMakeMsidnHistory(INPUT RECID(MSISDN)).
 
-      IF llOutPort THEN ASSIGN
-         MSISDN.PortingDate = ldaKillDate  /* Date ported out  */
-         MSISDN.OutOperator = lcOutOper.   /*Name of receiving op.*/
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSISDN).
+         
+         MSISDN.StatusCode = liMsisdnStat.
+         MSISDN.CustNum    = 0.
+         ASSIGN
+            MSISDN.ValidTo    = fDate2TS(TODAY + liQuarTime) + (time / 100000)
+                                WHEN liQuarTime >= 0
+            MSISDN.ValidTo    = 99999999.99999 WHEN liQuarTime = -1.
 
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSISDN).
-      
+         IF llOutPort THEN ASSIGN
+            MSISDN.PortingDate = ldaKillDate  /* Date ported out  */
+            MSISDN.OutOperator = lcOutOper.   /*Name of receiving op.*/
+
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSISDN).
+      END.
+   
       /* SIM card is (TO be) destroyed */
       IF AVAIL SIM THEN DO:
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSIM).
@@ -728,8 +739,10 @@ PROCEDURE pTerminate:
    /* YNC-61 + YDR-193 */
    IF LOOKUP(lcTermReason,"1,4,5,6,9,10") > 0 AND
       fIsYoigoCLI(MobSub.CLI) EQ FALSE THEN DO:
-      
-      RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
+
+      IF NOT (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+              MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN
+         RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
       
       IF RETURN-VALUE BEGINS "ERROR" THEN
          fLocalMemo("TermMobsub",

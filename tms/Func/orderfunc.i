@@ -21,6 +21,7 @@
 {Func/dextra.i}
 {Func/cparam2.i}
 {Func/main_add_lines.i}
+{Func/msisdn.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -44,6 +45,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF VAR lcResult   AS CHAR    NO-UNDO. 
    DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
    DEF VAR llCancelFusion AS LOGICAL NO-UNDO INIT FALSE.
+   DEF VAR lhMSISDN       AS HANDLE  NO-UNDO.
 
    DEF BUFFER OrderPayment FOR OrderPayment.
    DEF BUFFER MsRequest FOR MsRequest.
@@ -101,6 +103,31 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                                 MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG}
                                 NO-ERROR.
                      IF AVAIL MobSub THEN DO:
+
+                        FIND FIRST MSISDN WHERE
+                                   MSISDN.Brand = gcBrand AND
+                                   MSISDN.CLI   = MobSub.CLI
+                        EXCLUSIVE-LOCK NO-ERROR.
+                        /* No mobile created. Release MSISDN */
+                        IF AVAIL MSISDN AND MSISDN.StatusCode EQ 3 THEN DO:
+                           IF llDoEvent THEN DO:
+                              lhMSISDN  = BUFFER MSISDN:HANDLE.
+                              RUN StarEventInitialize(lhMSISDN).
+                           END.
+                           fMakeMsidnHistory(INPUT RECID(MSISDN)).
+
+                           IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSISDN).
+                           IF fIsYoigoCLI(MobSub.CLI) EQ FALSE THEN
+                              MSISDN.StatusCode = {&MSISDN_ST_MNP_OUT_YOIGO}.
+                           ELSE MSISDN.StatusCode = {&MSISDN_ST_ASSIGNED_TO_ORDER}.
+                           MSISDN.CustNum    = 0.
+                           MSISDN.ValidTo = fMakeTS().
+                           IF llDoEvent THEN DO:
+                              RUN StarEventMakeModifyEvent(lhMSISDN).
+                              fCleanEventObjects().
+                           END.
+                        END.
+
                         ASSIGN
                            MobSub.CLI = MobSub.FixedNumber
                            MobSub.ICC = ""
