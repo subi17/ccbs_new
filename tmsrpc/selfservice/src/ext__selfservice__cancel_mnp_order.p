@@ -46,7 +46,7 @@ IF NUM-ENTRIES(top_array) > 3 THEN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
+{selfservice/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 lcApplicationId = substring(pcTransId,1,3).
 
