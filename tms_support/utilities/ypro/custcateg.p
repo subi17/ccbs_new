@@ -29,7 +29,7 @@ FUNCTION fcreateCustcat RETURNS CHAR (
 END FUNCTION.
 
 fcreateCustCat("20", "21", "PRO SOHO Company CIF", 25, 35, TRUE, "PRO-Company").
-fcreateCustCat("20", "22", "Big Companies CIF", 25, 35, TRUE, "Company").
+fcreateCustCat("20", "22", "Big Companies CIF", 25, 35, TRUE, "PRO-Company").
 fcreateCustCat("40", "42", "PRO Self-employee NIF", 5, 7, TRUE, "PRO-Self-employed").
 fcreateCustCat("41", "43", "PRO Self-employee NIE", 5, 7, TRUE, "PRO-Self-employed").
 
