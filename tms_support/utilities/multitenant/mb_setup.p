@@ -648,7 +648,7 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.FullCollModule  = ""
       dumpfile.LinkKey         = ""
       dumpfile.LogFile         = ""
-      dumpfile.LogicModule     = "Gwy/highusagerep.p"
+      dumpfile.LogicModule     = "Mm/highusagerep.p"
       dumpfile.MainTable       = "HighUsage"
       dumpfile.ModCollModule   = ""
       dumpfile.ModFromEventLog = TRUE
