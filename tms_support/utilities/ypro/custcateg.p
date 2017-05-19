@@ -1,4 +1,5 @@
 DEF BUFFER bCustCat FOR CustCat.
+DEF BUFFER bTMSCodes FOR TMSCodes.
 
 FUNCTION fcreateCustcat RETURNS CHAR (
    INPUT icbasecat AS CHAR,
@@ -80,4 +81,42 @@ FIND FIRST CustCat WHERE
            custcat.brand EQ "1" AND
            custcat.category EQ "99".
    ASSIGN Custcat.segment = "Consumer".
- 
+
+IF NOT CAN-FIND (FIRST Tmscodes WHERE
+           tmscodes.codegroup EQ "order" AND
+           tmscodes.fieldname EQ "orderchannel" AND
+           tmscodes.codevalue EQ "fusion_telesales_pro") THEN DO:
+   FIND FIRST Tmscodes WHERE
+              tmscodes.codegroup EQ "order" AND
+              tmscodes.fieldname EQ "orderchannel" AND
+              tmscodes.codevalue EQ "fusion_telesales" NO-LOCK NO-error.
+   CREATE btmscodes.
+   BUFFER-COPY tmscodes except codevalue to btmscodes.
+   ASSIGN
+      btmscodes.codevalue = tmscodes.codevalue + "_PRO"
+      btmscodes.codename = tmscodes.codename + " PRO".
+   RELEASE btmscodes.
+
+   FIND FIRST Tmscodes WHERE
+              tmscodes.codegroup EQ "order" AND
+              tmscodes.fieldname EQ "orderchannel" AND
+              tmscodes.codevalue EQ "telesales" NO-LOCK NO-error.
+   CREATE btmscodes.
+   BUFFER-COPY tmscodes except codevalue to btmscodes.
+   ASSIGN
+      btmscodes.codevalue = tmscodes.codevalue + "_PRO"
+      btmscodes.codename = tmscodes.codename + " PRO".
+   RELEASE btmscodes.   
+
+   FIND FIRST Tmscodes WHERE
+              tmscodes.codegroup EQ "order" AND
+              tmscodes.fieldname EQ "orderchannel" AND
+              tmscodes.codevalue EQ "CC" NO-LOCK NO-error.
+   CREATE btmscodes.
+   BUFFER-COPY tmscodes except codevalue to btmscodes.
+   ASSIGN
+      btmscodes.codevalue = tmscodes.codevalue + "_PRO"
+      btmscodes.codename = tmscodes.codename + " PRO".
+   RELEASE btmscodes.
+
+END.
