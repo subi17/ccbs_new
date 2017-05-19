@@ -136,7 +136,10 @@ form
       HELP "How many subscription activation request can have by default" SKIP
     CustCat.SelfEmployed LABEL "Self Employed" COLON 24
       HELP "Is this category self employed or not" SKIP 
-    
+    CustCat.pro LABEL "PRO" COLON 24
+      HELP "Is PRO customer or not" SKIP
+    CustCat.segment LABEL "Segment" COLON 24
+      HELP "Customer segment" SKIP 
  WITH  OVERLAY ROW 7 col 5
     COLOR value(cfc)
     TITLE COLOR value(ctc)
