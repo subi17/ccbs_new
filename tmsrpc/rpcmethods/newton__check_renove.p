@@ -606,7 +606,7 @@ add_string(top_struct, "subscription_bundle", MobSub.TariffBundle).
 IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
    FOR EACH DiscountPlan NO-LOCK WHERE
             DiscountPlan.Brand    = gcBrand AND
-     LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} > 0 AND
+     LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
             DiscountPlan.ValidTo >= TODAY,
       FIRST DPMember NO-LOCK WHERE
             DPMember.DPID       = DiscountPlan.DPID AND
