@@ -30,9 +30,9 @@ DO ON ERROR UNDO, THROW:
     
     IF NOT AVAILABLE {3} THEN
     DO: 
-        IF {6} = "SpecialMobSubError" THEN 
+        IF "{6}" = "SpecialMobSubError" THEN 
           UNDO, THROW NEW Progress.Lang.AppError(SUBST("MobSub entry &1 not found", {5}),1).   
-        ELSE IF {3} = "MobSub" THEN 
+        ELSE IF "{3}" = "MobSub" THEN 
           UNDO, THROW NEW Progress.Lang.AppError(SUBST("Subscription &1 was not found", {5}),1). 
         ELSE
           UNDO, THROW NEW Progress.Lang.AppError(SUBST("{3} with {4} &1 doesn't exists!", {5}),1).                 

@@ -30,15 +30,15 @@ DO ON ERROR UNDO, THROW:
     
     IF NOT AVAILABLE {3} THEN
     DO: 
-        IF {6} = "SpecialMobSubError" THEN 
+        IF "{6}" = "SpecialMobSubError" THEN 
           UNDO, THROW NEW Progress.Lang.AppError(SUBST("MobSub entry &1 not found", {5}),1).   
-        ELSE IF {3} = "MobSub" THEN 
+        ELSE IF "{3}" = "MobSub" THEN 
           UNDO, THROW NEW Progress.Lang.AppError("MobSub not found",1). 
-        ELSE IF {3} = "Invoice" THEN 
+        ELSE IF "{3}" = "Invoice" THEN 
           UNDO, THROW NEW Progress.Lang.AppError("Invoice not found",1). 
-        ELSE IF {3} = "Order" THEN 
+        ELSE IF "{3}" = "Order" THEN 
           UNDO, THROW NEW Progress.Lang.AppError("Order not found",1).   
-        ELSE IF {3} = "CliType" THEN 
+        ELSE IF "{3}" = "CliType" THEN 
           UNDO, THROW NEW Progress.Lang.AppError(SUBST("Unknown CLIType &1", {5}),1).   
         ELSE
           UNDO, THROW NEW Progress.Lang.AppError(SUBST("{3} with {4} &1 doesn't exists!", {5}),1).                 
