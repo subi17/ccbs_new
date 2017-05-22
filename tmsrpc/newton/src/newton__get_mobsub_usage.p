@@ -288,7 +288,7 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
    IF ttCDR.ErrorCode NE 0 THEN NEXT.
 
    /* Only Package data once TARJ7-12 is activated */
-   LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
+   IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
 
       IF ((ttCDR.CLIType EQ "TARJ7" AND MobSub.CLIType EQ "TARJ7") OR
           (ttCDR.CLIType EQ "TARJ9" AND MobSub.CLIType EQ "TARJ9") OR
