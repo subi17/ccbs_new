@@ -38,7 +38,7 @@ pcBundleId = get_string(param_toplevel_id,"1").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 ASSIGN ldEndStamp = fMake2Dt(fLastDayOfMonth(TODAY),86399)
        lcBONOContracts = fCParamC("BONO_CONTRACTS").

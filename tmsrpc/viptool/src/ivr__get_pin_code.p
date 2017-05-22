@@ -15,6 +15,6 @@ IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcCLI = get_string(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i NO Ordercanal MobSub CLI pcCli}
+{viptool/src/findtenant.i NO Ordercanal MobSub CLI pcCli}
 
 add_string(response_toplevel_id,"",MobSub.IDCode).

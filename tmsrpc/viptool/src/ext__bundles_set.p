@@ -64,7 +64,7 @@ pcActionValue = get_string(param_toplevel_id,"2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 ASSIGN lcPostpaidVoiceTariffs = fCParamC("POSTPAID_VOICE_TARIFFS")
        lcPrepaidVoiceTariffs  = fCParamC("PREPAID_VOICE_TARIFFS")

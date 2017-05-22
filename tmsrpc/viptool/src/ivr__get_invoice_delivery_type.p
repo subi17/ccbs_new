@@ -31,7 +31,7 @@ IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcMSISDN = get_string(param_toplevel_id,"0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
+{viptool/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
 
 FIND FIRST Customer WHERE 
            Customer.CustNum = MobSub.CustNum NO-LOCK NO-ERROR.

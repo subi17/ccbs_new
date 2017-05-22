@@ -50,7 +50,7 @@ IF llDoEvent THEN DO:
    lhCustomer = BUFFER Customer:HANDLE.
 END.
 
-{newton/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
+{viptool/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
 
 CASE piDelType:
    WHEN {&INV_DEL_TYPE_PAPER}       THEN .

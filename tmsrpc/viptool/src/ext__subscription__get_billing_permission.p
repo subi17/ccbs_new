@@ -15,7 +15,7 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.

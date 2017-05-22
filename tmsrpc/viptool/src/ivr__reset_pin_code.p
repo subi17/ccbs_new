@@ -45,7 +45,7 @@ pcCLI = get_string(param_toplevel_id, "0").
 pcPIN = get_string(param_toplevel_id, "1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i NO Ordercanal MobSub CLI pcCli}
+{viptool/src/findtenant.i NO Ordercanal MobSub CLI pcCli}
 
 IF LENGTH(pcPIN) NE 4 THEN RETURN appl_err("Incorrect PIN length").
 

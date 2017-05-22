@@ -556,7 +556,7 @@ lcOrderStruct = validate_request(pcOrderStruct, gcOrderStructFields).
 IF lcOrderStruct EQ ? THEN RETURN.
 fGetOrderFields().
 
-{newton/src/findtenant.i YES ordercanal CliType CliType pcSubType}
+{viptool/src/findtenant.i YES ordercanal CliType CliType pcSubType}
 
 IF pcOfferId NE "" THEN DO:
    FIND Offer WHERE 

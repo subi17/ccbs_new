@@ -26,9 +26,7 @@ pcMSISDN = get_string(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i NO ordercanal MobSub Cli pcMSISDN}
-
-FOR EACH MNPSub WHERE MNPSub.CLI = pcMSISDN NO-LOCK:
+FOR EACH MNPSub WHERE MNPSub.CLI = pcMSISDN TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
 
    FIND MNPProcess WHERE
         MNPProcess.MNPSeq = MNPSub.MNPSeq AND

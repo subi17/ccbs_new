@@ -19,7 +19,7 @@ piMsSeq = get_int(param_toplevel_id, "0").
 piBillingPermission = get_int(param_toplevel_id, "1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 FIND TMSCodes WHERE
      TMSCodes.TableName = "Limit" AND

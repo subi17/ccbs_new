@@ -45,7 +45,7 @@ llUpgradeUpsell = get_bool(param_toplevel_id,"2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 ASSIGN lcAllowedBONOContracts  = fCParamC("ALLOWED_BONO_CONTRACTS")
        lcAllowedCONTSContracts = fCParamC("ALLOWED_CONTS_CONTRACTS").

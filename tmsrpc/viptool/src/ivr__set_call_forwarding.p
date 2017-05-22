@@ -66,7 +66,7 @@ liLookUp = LOOKUP(pcCFNRY,"0,VM").
 IF liLookUp = 0 THEN RETURN appl_err("Incorrect CFNRY value").
 lcSetting = lcSetting + STRING(liLookUp - 1).
 
-{newton/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
+{viptool/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
 
 FIND FIRST SubSer NO-LOCK WHERE
            SubSer.MsSeq = Mobsub.MsSeq AND

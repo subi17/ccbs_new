@@ -44,7 +44,7 @@ lcEventId = get_string(pcstruct,"charge_event_id").
 ldChargeLimit = get_double(pcstruct,"charge_limit").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{newton/src/findtenant.i NO ordercanal MobSub MsSeq liMsSeq}
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq liMsSeq "SpecialMobSubError"}
 
 IF LOOKUP("amount", lcStruct) GT 0 THEN
   ldAmount = get_double(pcstruct,"amount").
