@@ -119,7 +119,8 @@ DEF VAR lcData200Bundle AS CHAR NO-UNDO.
 DEF VAR lcUpsellId AS CHAR NO-UNDO. 
 DEF VAR liCount AS INT NO-UNDO.
 DEF VAR liRstTime AS INT NO-UNDO. 
-DEF VAR ldaRstDate AS DATE NO-UNDO. 
+DEF VAR ldaRstDate AS DATE NO-UNDO.
+DEF VAR lcResetTemplate AS CHAR NO-UNDO.
 
 DEF BUFFER bServiceLimit FOR ServiceLimit.
 
@@ -189,11 +190,11 @@ IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
 
             IF LOOKUP(MobSub.CliType,"TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
                CASE MobSub.CliType:
-                  WHEN "TARJ9"  THEN lcReset = "LADEL1_PRE_PLUS_RESET".
-                  WHEN "TARJ10" THEN lcReset = "TARJ10_RESET".
-                  WHEN "TARJ11" THEN lcReset = "TARJ11_RESET".
-                  WHEN "TARJ12" THEN lcReset = "TARJ11_RESET".
-                  OTHERWISE lcReset = ""
+                  WHEN "TARJ9"  THEN lcResetTemplate = "LADEL1_PRE_PLUS_RESET".
+                  WHEN "TARJ10" THEN lcResetTemplate = "TARJ10_RESET".
+                  WHEN "TARJ11" THEN lcResetTemplate = "TARJ11_RESET".
+                  WHEN "TARJ12" THEN lcResetTemplate = "TARJ11_RESET".
+                  OTHERWISE lcResetTemplate = ""
                END CASE.
                FIND FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
                           MsRequest.MsSeq = MobSub.MsSeq AND
@@ -201,7 +202,7 @@ IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
                           MsRequest.ActStamp <= fHMS2TS(ldaPrepRenewal,"23:59:59") AND
                           MsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
                           MsRequest.ReqStatus <= {&REQUEST_STATUS_DONE} AND
-                          MsRequest.ReqCParam2 = lcReset
+                          MsRequest.ReqCParam2 = lcResetTemplate
                           NO-ERROR.
                IF AVAIL MsRequest THEN DO:
                   fSplitTS(MsRequest.ActStamp,OUTPUT ldaRstDate, OUTPUT liRstTime).
