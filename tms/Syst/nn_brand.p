@@ -320,14 +320,7 @@ ACTION: repeat:
 
          /* shall a module be run ? */
          if MenuType = 1 then do:
-            if search(MenuTree.Module + ".r") = ? then do:
-               bell.
-               message "Function is not available !".
-               pause 2 no-message.
-            end.
-            else do:
-
-               assign
+            assign
                qcode  = MenuTree.MenuId
                qtitle = MenuTree.MenuTitle
                qupd   = TRUE.
@@ -338,7 +331,6 @@ ACTION: repeat:
                hide frame menu_frame no-pause.
                hide message no-pause.
                next MAIN_LOOP.
-            end.
          end.
          else if MenuType = 2 then do:
             /* Open a submenu */
@@ -415,25 +407,20 @@ ACTION: repeat:
          substring(ftitle[mlevel],59) = string("(" + f_id[toimi] + ")","x(10)").
          next MAIN_LOOP.
       end.
-
+      else if item_type[toimi] EQ 0 THEN
+         BELL.
       else do: /* run a program module */
-         if search(f_name[toimi] + ".r") = ? then do:
-            bell.
-            message "Function is not available !".
-            pause 2 no-message.
-         end.
-         else do:
-            assign
-               qcode  =  f_id   [toimi]
-               qtitle =  f_title[toimi].
-               qupd   =  TRUE . 
+         assign
+            qcode  =  f_id   [toimi]
+            qtitle =  f_title[toimi].
+            qupd   =  TRUE . 
 
-            run value(f_name[toimi]).
-            /* clear screen */
-            hide frame menu_frame no-pause.
+         run value(f_name[toimi]).
+         /* clear screen */
+         hide frame menu_frame no-pause.
 
-            pause 0. display empty with frame empty. pause 0.
-         end.
+         pause 0. display empty with frame empty. pause 0.
+         
          next MAIN_LOOP.
       end.
 

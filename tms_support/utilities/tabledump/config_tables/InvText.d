@@ -1215,6 +1215,7 @@ Tu pedido
 -----------
 Número de teléfono: #MSISDN
 Modalidad: Renuevo
+#CTNAME
 
 #CAMPAIGN
 #FATIME
@@ -1268,6 +1269,7 @@ Your order
 ------------
 Phone number: #MSISDN
 Type: Renuevo
+#CTNAME
 
 #CAMPAIGN
 #FATIME
@@ -1329,6 +1331,7 @@ Your order
 ------------
 Phone number: #MSISDN
 Type: Renuevo
+#CTNAME
 
 Your products
 ---------------
@@ -1383,6 +1386,7 @@ Tu pedido
 ----------
 Número de teléfono: #MSISDN
 Modalidad: Renuevo
+#CTNAME
 
 Tus productos
 ---------------

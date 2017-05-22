@@ -1,0 +1,82 @@
+CustCat1: CustCat
+  Category: "10"
+  CatName: "Consumer NIF"
+  Brand: "1"
+  CustIdType: "NIF"
+  MobSubLimit: 3
+  ActivationLimit: 5
+
+CustCat2: CustCat
+  Category: "11"
+  CatName: "Consumer NIE"
+  Brand: "1"
+  CustIdType: "NIE"
+  MobSubLimit: 3
+  ActivationLimit: 5
+
+CustCat3: CustCat
+  Category: "12"
+  CatName: "Unknown consumer"
+  Brand: "1"
+  CustIdType: "N/A"
+  MobSubLimit: 3
+  ActivationLimit: 5
+
+CustCat4: CustCat
+  Category: "13"
+  CatName: "Consumer Passport"
+  Brand: "1"
+  CustIdType: "Passport"
+  MobSubLimit: 3
+  ActivationLimit: 5
+
+CustCat5: CustCat
+  Category: "20"
+  CatName: "Company CIF"
+  Brand: "1"
+  CustIdType: "CIF"
+  MobSubLimit: 25
+  ActivationLimit: 35
+
+CustCat6: CustCat
+  Category: "30"
+  CatName: "Employees - Internal customer"
+  Brand: "1"
+  MobSubLimit: 5
+  ActivationLimit: 999
+
+CustCat7: CustCat
+  Category: "31"
+  CatName: "VIP - Yoigo external customer"
+  Brand: "1"
+  MobSubLimit: 5
+  ActivationLimit: 999
+
+CustCat8: CustCat
+  Category: "40"
+  CatName: "Sole trader NIF"
+  Brand: "1"
+  CustIdType: "NIF"
+  SelfEmployed: TRUE 
+  MobSubLimit: 3
+  ActivationLimit: 5
+
+CustCat9: CustCat
+  Category: "41"
+  CatName: "Sole trader NIE"
+  Brand: "1"
+  CustIdType: "NIE"
+  SelfEmployed: TRUE 
+  MobSubLimit: 3
+  ActivationLimit: 5
+
+CustCat10: CustCat
+  Category: "99"
+  CatName: "Default customers"
+  ArAccNum: 77777777
+  PerAccNum: 77777777
+  UnbillAccNum: 77777777
+  Brand: "1"
+  MobSubLimit: 3
+  ActivationLimit: 5
+
