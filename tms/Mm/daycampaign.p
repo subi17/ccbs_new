@@ -1126,6 +1126,7 @@ PROCEDURE pUpdate:
                   NEXT.
                END.
                else if
+                  input frame lis DayCampaign.DCEvent NE "VOICE100" AND
                   input frame lis DayCampaign.DCType NE "6" AND
                   input frame lis DayCampaign.InstanceLimit > 1 THEN DO:
                   BELL.
