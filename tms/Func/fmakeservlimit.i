@@ -146,7 +146,7 @@ FUNCTION fMakeServLimit RETURN LOGICAL
             ServiceLimit.ValidFrom <= ldtDate             AND 
             ServiceLimit.ValidTo   >= ldtDate:
 
-      IF bContract.DCType EQ "8" THEN DO:
+      IF bContract.DCType EQ "8" OR bContract.InstanceLimit > 1 THEN DO:
          FIND LAST MServiceLimit NO-LOCK WHERE
                    MServiceLimit.MsSeq    = iiMsSeq AND
                    MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -209,6 +209,7 @@ FUNCTION fMakeServLimit RETURN LOGICAL
             THEN NEXT.
          END. /* IF llCreateDSS THEN DO: */
          ELSE IF bContract.DCType NE "8" AND
+                 bContract.InstanceLimit <= 1 AND
             CAN-FIND(FIRST MServiceLimit WHERE 
                            MServiceLimit.MSSeq    = iiMSSeq               AND
                            MServiceLimit.DialType = ServiceLimit.DialType AND

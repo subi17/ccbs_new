@@ -247,7 +247,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
 
          END.
 
-         IF lii > DayCampaign.InstanceLimit
+         IF lii >= DayCampaign.InstanceLimit
          THEN DO:
             MESSAGE "Subscription already has maximum allowed periodical contract amount"
                     "for the given contract ID and period."
