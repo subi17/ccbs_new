@@ -29,6 +29,7 @@ DEF VAR lcResult      AS CHAR NO-UNDO.
 DEF VAR liConCount    AS INT  NO-UNDO.
 DEF VAR lcSource      AS CHAR NO-UNDO.
 DEF VAR llContrSource  AS LOG  NO-UNDO.
+DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 
 /* DSS related variables */
 DEF VAR ldeCurrMonthLimit   AS DEC  NO-UNDO.
@@ -233,7 +234,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                             ELSE 0).
  
       IF DayCampaign.DCType = "1" THEN DO:
-
+         lii = 0.
          FOR EACH MServiceLimit NO-LOCK WHERE
                   MServiceLimit.MsSeq  = MobSub.MsSeq AND
                   MServiceLimit.FromTS <= ldActStamp  AND
@@ -242,7 +243,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                   ServiceLimit.SLSeq     = MServiceLimit.SLSeq  AND
                   ServiceLimit.GroupCode = lcDCEvent:
 
-            MESSAGE "Subscription already has a valid periodical contract"
+            lii = lii + 1.
+
+         END.
+
+         IF lii > DayCampaign.InstanceLimit
+         THEN DO:
+            MESSAGE "Subscription already has maximum allowed periodical contract amount"
                     "for the given contract ID and period."
             VIEW-AS ALERT-BOX ERROR.
             NEXT.
