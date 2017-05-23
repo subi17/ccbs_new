@@ -314,6 +314,7 @@ DEF VAR piDeliverySecure AS INT NO-UNDO.
 DEF VAR plKeepInstallment AS LOG NO-UNDO. 
 DEF VAR pcUpsHours AS CHAR NO-UNDO. 
 DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
+DEF VAR llCustPro AS LOGICAL NO-UNDO.
 DEF VAR pcIdentifiedSmsNumber AS CHAR NO-UNDO.
 DEF VAR plMultiOrder AS LOGICAL NO-UNDO.
 DEF VAR pcGescal AS CHAR NO-UNDO. 
@@ -685,6 +686,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       END.
       ELSE IF liFieldIndex EQ 0 THEN
          lcFError = SUBST("Unknown data field `&1`", lcField).
+      
       ELSE
          data[liFieldIndex] = get_string(pcStructId, lcField).
    END. /* DO lii = */
@@ -719,6 +721,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          lcIdOrderCustomer,
          lcIdTypeOrderCustomer,
          llSelfEmployed,
+         llCustPro,
          1,
          OUTPUT lcFError,
          OUTPUT liSubLimit,
@@ -840,7 +843,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
  
          OrderCustomer.Address = OrderCustomer.Street 
          OrderCustomer.CustDataRetr = plCustdataRetr
-         OrderCustomer.MSISDNForIdent = pcIdentifiedSmsNumber.
+         OrderCustomer.MSISDNForIdent = pcIdentifiedSmsNumber
+         OrderCustomer.pro = llCustPro.
 
          IF OrderCustomer.BuildingNum NE "" THEN 
             OrderCustomer.Address = OrderCustomer.Address + " " +
@@ -1330,7 +1334,8 @@ gcCustomerStructFields = "birthday," +
                          "hand," + 
                          "km," +
                          "territory_owner," +
-                         "coverage_token".
+                         "coverage_token" +
+                         "pro".
 
 /* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
@@ -1572,6 +1577,8 @@ IF pcOfferId NE "" THEN DO:
             when "orderchannel" then do:
                lcOfferOrderChannel = 
                   (IF LOOKUP(pcChannel,"telesales,emission") > 0 THEN "cc"
+                   ELSE IF LOOKUP(pcChannel,"telesales_PRO,emission_PRO") > 0 
+                      THEN "cc_PRO"
                    ELSE IF LOOKUP(pcChannel,"fusion_telesales,fusion_emission,fusion_cc") > 0
                    THEN "fusion_telesales" ELSE pcChannel).
                if lookup(lcOfferOrderChannel, offercriteria.includedvalue) = 0 then do:
@@ -1628,7 +1635,11 @@ DO:
    lccTemp = validate_request(pcContactStruct, gcCustomerStructFields).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
- 
+IF INDEX(pcChannel,"PRO") > 0 THEN DO:
+   llCustPro = TRUE.
+   IF clitype.paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
+      RETURN appl_err("Prepaid not allowed for PRO").
+END.
 /* YBP-536 */ 
 lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).

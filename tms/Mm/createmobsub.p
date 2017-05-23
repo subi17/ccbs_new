@@ -418,7 +418,6 @@ IF NOT AVAIL mobsub THEN DO:
       Segmentation.SegmentOffer = "OFF"
       Segmentation.SegmentDate  = TODAY
       Segmentation.SegmentCreation = fMakeTS().
-
    CREATE msowner.
    ASSIGN
       MSOwner.CLI       = Mobsub.cli
@@ -493,7 +492,7 @@ IF NOT AVAIL mobsub THEN DO:
                                 {&REQUEST_ACTIONLIST_ALL}).
 
    /* Welcome SMS for all tariffs (Excluding Corporate) */
-   IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO:
+   IF LOOKUP(Customer.category,"20,21,22,40,41,42,43") = 0 THEN DO:
 
       lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
       

@@ -321,11 +321,13 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       FIND FIRST CustCat NO-LOCK WHERE
          CustCat.Brand = gcBrand AND
          LOOKUP(OrderCustomer.CustIDType,CustCat.CustIDType) > 0 AND
-         CustCat.SelfEmployed = OrderCustomer.SelfEmployed NO-ERROR.  
+         CustCat.SelfEmployed = OrderCustomer.SelfEmployed AND
+         custCat.pro EQ ordercustomer.pro NO-ERROR.  
       IF NOT AVAILABLE CustCat THEN    
       FIND FIRST CustCat NO-LOCK WHERE
          CustCat.Brand = gcBrand AND
-         LOOKUP(OrderCustomer.CustIDType,CustCat.CustIDType) > 0 NO-ERROR.
+         LOOKUP(OrderCustomer.CustIDType,CustCat.CustIDType) > 0 AND
+         custCat.pro EQ ordercustomer.pro NO-ERROR.
       IF AVAIL CustCat THEN
          Customer.Category = CustCat.Category.
 
