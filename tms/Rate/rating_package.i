@@ -77,6 +77,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    DEF VAR liCallPeriod          AS INT NO-UNDO. 
    DEF VAR ldeEndTs              AS DEC NO-UNDO. 
    DEF VAR lcCliTypeList         AS CHAR NO-UNDO.
+   DEFINE VARIABLE lcmSL AS CHARACTER NO-UNDO.
 
    ASSIGN	
       ttCall.BillCode = bsub-prod
@@ -218,148 +219,167 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                                 ServiceLimit.ValidTo   >= ttCall.DateSt)
          THEN liDialtype = 0.
 
-         llServLimit = fCheckTarget(INPUT  MSOwner.MsSeq,
-                                    INPUT  MSOwner.Custnum,
-                                    INPUT  liDialtype,
-                                    INPUT  CallTimeStamp,
-                                    INPUT  lcOrigBillCode,
-                                    INPUT  lcSLGroup,
-                                    OUTPUT liMSID,
-                                    OUTPUT lcInBDest,
-                                    OUTPUT lcOutBDest,
-                                    OUTPUT liSLSeq,
-                                    OUTPUT liInclUnit,
-                                    OUTPUT ldLimitTo,
-                                    OUTPUT liBDestLimit).
-       
-         IF llServLimit THEN DO WHILE TRUE:
+         FOR
+            FIRST ttServiceLimit NO-LOCK WHERE
+               ttServiceLimit.GroupCode = lcSLGroup      AND
+               ttServiceLimit.DialType  = liDialtype     AND
+               ttServiceLimit.ValidFrom <= ttCall.DateSt AND
+               ttServiceLimit.ValidTo   >= ttCall.DateSt,
+            FIRST ServiceLimitTarget NO-LOCK WHERE
+               ServiceLimitTarget.SLSeq = ttServiceLimit.SLSeq AND
+               ServiceLimitTarget.ServiceLMember = lcOrigBillCode:
 
-            IF NOT llPackageUsed THEN ASSIGN 
-               liUnitUsed = liInclUnit
-               liSLGAUsed = liSLGAType.
-            ELSE IF liInclUnit NE liUnitUsed OR
-                    liSLGAType NE liSLGAUsed
-            THEN NEXT PACKET.
-            
-            IF NOT llPackageUsed THEN DO:
-               ldPackageAmt = fIncludedUnit(liInclUnit).   
-           
-               IF liBDestLimit > 0 OR
-                  liInclUnit EQ {&INCLUNIT_BDEST_QTY} THEN DO:
+            IF ttServiceLimit.GroupCode BEGINS {&DSS}
+            THEN lcmSL = "Customer|" + STRING(iiCustNum).
+            ELSE lcmSL = "msseq|" + STRING(iiMSSeq).
+
+            objDynQueryMServiceLimit:mSetQuery
+               (SUBSTITUTE("FOR EACH &1 NO-LOCK USE-INDEX &2 WHERE " +
+                           "&1.&2 = &3 AND " +
+                           "&1.Dialtype = &4 AND " +
+                           "&1.SLSeq = &5 AND " +
+                           "&1.EndTS >= &6 AND " +
+                           "&1.FromTS <= &6",
+                           "mServiceLimit",
+                           ENTRY(1,lcmSL,"|"),
+                           ENTRY(2,lcmSL,"|"),
+                           liDialtype,
+                           ttServiceLimit.SLSeq,
+                           REPLACE(STRING(CallTimeStamp),",","."))).
+
+            IF objDynQueryMServiceLimit:DataAvailable
+            THEN DO:
+
+               liBDestLimit = ttServiceLimit.BDestLimit.
+
+               IF NOT llPackageUsed THEN ASSIGN
+                  liUnitUsed = MserviceLimit.InclUnit
+                  liSLGAUsed = liSLGAType.
+               ELSE IF MserviceLimit.InclUnit NE liUnitUsed OR
+                       liSLGAType NE liSLGAUsed
+               THEN NEXT PACKET.
+
+               IF NOT llPackageUsed THEN DO:
+                  ldPackageAmt = fIncludedUnit(MserviceLimit.InclUnit).
+
+                  IF liBDestLimit > 0 OR
+                     MserviceLimit.InclUnit EQ {&INCLUNIT_BDEST_QTY} THEN DO:
+
+                     liBDestAmt = f{&CounterHandling}CheckSLCounterItem
+                                    (MSOwner.MsSeq,
+                                     ServiceLimitTarget.SLSeq,
+                                     CallTimeStamp,
+                                     ttCall.GsmBnr).
                   
-                  liBDestAmt = f{&CounterHandling}CheckSLCounterItem
-                                 (MSOwner.MsSeq,
-                                  liSLseq,
-                                  CallTimeStamp,
-                                  ttCall.GsmBnr).
-               
-                  IF liInclUnit EQ {&INCLUNIT_BDEST_QTY} THEN ASSIGN
-                     ldPackageAmt = liBDestAmt
-                     liBDestAmt = 0
-                     liBDestLimit = 0.
+                     IF MserviceLimit.InclUnit EQ {&INCLUNIT_BDEST_QTY} THEN ASSIGN
+                        ldPackageAmt = liBDestAmt
+                        liBDestAmt = 0
+                        liBDestLimit = 0.
+                  END.
                END.
-            END.
 
-            ASSIGN
-               llPackageUsed = TRUE
-               ldAmtUsed = ldPackageAmt.
- 
-            llServiceGrp = f{&CounterHandling}IsServiceLimitAllowed
-                                    ( liMSID,
-                                      MSOwner.MsSeq,
-                                     (IF liDialtype = {&DIAL_TYPE_GPRS} AND
-                                      llActiveDSS THEN MSOwner.Custnum ELSE 0),
+               ASSIGN
+                  llPackageUsed = TRUE
+                  ldAmtUsed = ldPackageAmt.
+
+               DO WHILE objDynQueryMServiceLimit:mGetNext():
+                  llServiceGrp = f{&CounterHandling}IsServiceLimitAllowed
+                                          ( mServiceLimit.MSID,
+                                            MSOwner.MsSeq,
+                                           (IF liDialtype = {&DIAL_TYPE_GPRS} AND
+                                            llActiveDSS THEN MSOwner.Custnum ELSE 0),
                                            ttCall.InvSeq,
-                                           liSLSeq,
-                                           liInclUnit,
-                                           ldLimitTo,
+                                           ServiceLimitTarget.SLSeq,
+                                           MserviceLimit.InclUnit,
+                                           MServiceLimit.InclAmt,
                                            CallTimeStamp,
                                            liSLGAType,
                                            liBDestLimit,
                                            liBDestAmt,  
-                                     INPUT-OUTPUT ldPackageAmt).
+                                           INPUT-OUTPUT ldPackageAmt).
+                  ldAmtUsed = ldAmtUsed - ldPackageAmt.
+               END.
 
-            ASSIGN
-               rate-plcode = ""
-               ldAmtUsed = ldAmtUsed - ldPackageAmt.
+               ASSIGN
+                  rate-plcode = "".
 
-            IF llServiceGrp THEN DO:
+               IF llServiceGrp THEN DO:
 
-               /* if a voice cdr fits only partially to package then 
-                  the leftover is rated with normal tariff but without 
-                  starting charge */
-               IF ldPackageAmt > 0 AND 
-                  liDialType = {&DIAL_TYPE_VOICE} OR
-                  liDialType = {&DIAL_TYPE_FIXED_VOICE}
-               THEN DO:
-                  c_dur = ldPackageAmt.
-                  fTariff().
-                  IF rc ne 0 THEN DO:
-                     ttCall.ErrorCode = {&CDR_ERROR_NO_RATE_PLAN_FOUND}.
-                     RETURN FALSE. 
+                  /* if a voice cdr fits only partially to package then
+                     the leftover is rated with normal tariff but without
+                     starting charge */
+                  IF ldPackageAmt > 0 AND
+                     liDialType = {&DIAL_TYPE_VOICE} OR
+                     liDialType = {&DIAL_TYPE_FIXED_VOICE}
+                  THEN DO:
+                     c_dur = ldPackageAmt.
+                     fTariff().
+                     IF rc ne 0 THEN DO:
+                        ttCall.ErrorCode = {&CDR_ERROR_NO_RATE_PLAN_FOUND}.
+                        RETURN FALSE.
+                     END.
+
+                     ASSIGN
+                        ldTotalPrice = ldTotalPrice + bprice - base
+                        base = 0
+                        ldPackageAmt = 0.
                   END.
-          
-                  ASSIGN 
-                     ldTotalPrice = ldTotalPrice + bprice - base
-                     base = 0
-                     ldPackageAmt = 0.
+
+                  /* note; so far all gprs traffic is rated with zero price and
+                     leftover is not necessarily handled at all here (if this is
+                     the last package in the list), but if that changes, i.e.
+                     there will be a rate for outside package traffic then also
+                     gprs leftover needs to be taken care of */
+
+                  ASSIGN
+                     ttCall.BDest   = ServiceLimitTarget.InSideRate
+                     b_dest         = ServiceLimitTarget.InSideRate
+                     bsubs          = ServiceLimitTarget.InSideRate
+                     ttCall.DCType  = "1"
+                     ttCall.DCEvent = lcSLGroup.
+
+
+                  IF liDialType = {&DIAL_TYPE_VOICE} OR
+                     liDialType = {&DIAL_TYPE_FIXED_VOICE} OR
+                     liDialType = {&DIAL_TYPE_GPRS} THEN
+                        c_dur = ldAmtUsed.
                END.
-                
-               /* note; so far all gprs traffic is rated with zero price and
-                  leftover is not necessarily handled at all here (if this is
-                  the last package in the list), but if that changes, i.e. 
-                  there will be a rate for outside package traffic then also
-                  gprs leftover needs to be taken care of */
-                  
-               ASSIGN
-                  ttCall.BDest   = lcInBDest
-                  b_dest         = lcInBDest
-                  bsubs          = lcInBDest
-                  ttCall.DCType  = "1"
-                  ttCall.DCEvent = lcSLGroup.
 
- 
-               IF liDialType = {&DIAL_TYPE_VOICE} OR
-                  liDialType = {&DIAL_TYPE_FIXED_VOICE} OR
-                  liDialType = {&DIAL_TYPE_GPRS} THEN
-                     c_dur = ldAmtUsed.
-            END.
+               ELSE DO:
 
-            ELSE DO:
-            
-               /* there are other packages available */
-               IF liSLGPacket < NUM-ENTRIES(lcSLGroupList) AND
-                  (lcOutBDest = "" OR (MSOwner.CLIType BEGINS "CONTF" AND NOT MSOwner.CLIType BEGINS "CONTFH")) 
-               THEN DO:
-                  IF lcOutBDest = "" THEN llPackageUsed = FALSE.
-                  NEXT PACKET.
+                  /* there are other packages available */
+                  IF liSLGPacket < NUM-ENTRIES(lcSLGroupList) AND
+                     (ServiceLimitTarget.OutSideRate = "" OR (MSOwner.CLIType BEGINS "CONTF" AND NOT MSOwner.CLIType BEGINS "CONTFH"))
+                  THEN DO:
+                     IF ServiceLimitTarget.OutSideRate = "" THEN llPackageUsed = FALSE.
+                     NEXT PACKET.
+                  END.
+
+                  ASSIGN
+                     ttCall.BDest = IF ServiceLimitTarget.OutSideRate ne ""
+                                    THEN ServiceLimitTarget.OutSideRate
+                                    ELSE ttCall.bdest
+                     b_dest       = IF ServiceLimitTarget.OutSideRate ne ""
+                                    THEN ServiceLimitTarget.OutSideRate
+                                    ELSE b_dest
+                     bsubs        = IF ServiceLimitTarget.OutSideRate ne ""
+                                    THEN ServiceLimitTarget.OutSideRate
+                                    ELSE bsubs.
                END.
-               
+
+               fTariff().
+
+               IF rc ne 0 THEN DO:
+                  ttCall.ErrorCode = {&CDR_ERROR_NO_RATE_PLAN_FOUND}.
+                  RETURN FALSE.
+               END.
+
                ASSIGN
-                  ttCall.BDest = IF lcOutBDest ne "" 
-                                 THEN lcOutBDest
-                                 ELSE ttCall.bdest
-                  b_dest       = IF lcOutBDest ne "" 
-                                 THEN lcOutBDest
-                                 ELSE b_dest
-                  bsubs        = IF lcOutBDest ne "" 
-                                 THEN lcOutBDest
-                                 ELSE bsubs.
+                  ldTotalPrice = ldTotalPrice + bprice
+                  ttCall.BillCode = bsub-prod.
             END.
-
-            fTariff().
-
-            IF rc ne 0 THEN DO:
-               ttCall.ErrorCode = {&CDR_ERROR_NO_RATE_PLAN_FOUND}.
-               RETURN FALSE. 
-            END.
-            
-            ASSIGN 
-               ldTotalPrice = ldTotalPrice + bprice
-               ttCall.BillCode = bsub-prod.
-            LEAVE.
          END.
-         
+
       END.   /* SLGAType=1 */
             
       /* Daycampaign */ 
@@ -886,6 +906,5 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    ttCall.ErrorCode = 0.
    
    RETURN llPackageUsed.
-   
-END FUNCTION.
 
+END FUNCTION.

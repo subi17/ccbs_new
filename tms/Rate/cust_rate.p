@@ -20,6 +20,10 @@ DEF INPUT PARAMETER idtFrom    AS DATE NO-UNDO.
 DEF INPUT PARAMETER idtTo      AS DATE NO-UNDO. 
 DEF INPUT PARAMETER ilSilent   AS LOG  NO-UNDO.
 
+DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
+objDynQueryMServiceLimit = NEW Syst.DynQuery().
+objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
+
 DEF VAR ldeBegStamp AS DEC  NO-UNDO.
 
 /* Default values */
@@ -92,5 +96,8 @@ REPEAT:
       TRANSACTION WITH FRAME MobCDR: 
        
          {Rate/man_rate2.i}
-       
-       
+
+FINALLY:
+   IF VALID-OBJECT(objDynQueryMServiceLimit)
+   THEN DELETE OBJECT objDynQueryMServiceLimit.
+END FINALLY.

@@ -44,6 +44,10 @@ DEF INPUT PARAMETER    iiPort      AS INT  NO-UNDO.
 SESSION:SYSTEM-ALERT-BOXES = TRUE. 
 SESSION:NUMERIC-FORMAT     = "European".
 
+DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
+objDynQueryMServiceLimit = NEW Syst.DynQuery().
+objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
+
 DEF STREAM callrec.
 DEF STREAM errors.
 DEF STREAM cdrfiles.
@@ -1068,4 +1072,7 @@ HIDE FRAME err NO-PAUSE.
 
 RETURN lcReturn.
 
-
+FINALLY:
+   IF VALID-OBJECT(objDynQueryMServiceLimit)
+   THEN DELETE OBJECT objDynQueryMServiceLimit.
+END FINALLY.

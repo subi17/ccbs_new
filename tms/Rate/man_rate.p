@@ -27,6 +27,10 @@ DEF VAR llRateCCN          AS LOG NO-UNDO INIT FALSE.
 DEF VAR ldebegStamp        AS DEC NO-UNDO.
 DEF VAR lcTakeCLI          AS CHAR NO-UNDO.
 DEF VAR liMsSeq            AS INT  NO-UNDO. 
+
+DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
+objDynQueryMServiceLimit = NEW Syst.DynQuery().
+objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
        
 DEF TEMP-TABLE ttCust NO-UNDO
    FIELD CustNum AS INT
@@ -337,3 +341,10 @@ for each inv-cust no-lock where
        {Rate/man_rate2.i}
         
 fRerateLogFinish(liRerateSeq).
+
+FINALLY:
+   IF VALID-OBJECT(objDynQueryMServiceLimit)
+   THEN DELETE OBJECT objDynQueryMServiceLimit.
+END FINALLY.
+
+

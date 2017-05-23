@@ -12,6 +12,10 @@
 
 DEF INPUT PARAMETER   iiErrorCode AS INT  NO-UNDO.
 
+DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
+objDynQueryMServiceLimit = NEW Syst.DynQuery().
+objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
+
 /* Default starts values */
 ASSIGN 
   lcRerateSource = "ERROR"
@@ -55,3 +59,8 @@ DO:
        {Rate/man_rate2.i} 
        
 fRerateLogFinish(liRerateSeq).
+
+FINALLY:
+   IF VALID-OBJECT(objDynQueryMServiceLimit)
+   THEN DELETE OBJECT objDynQueryMServiceLimit.
+END FINALLY.

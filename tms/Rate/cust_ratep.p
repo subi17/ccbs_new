@@ -18,6 +18,10 @@
 {Rate/rerate_define.i}
 {Rate/premiumnumber.i}
 
+DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
+objDynQueryMServiceLimit = NEW Syst.DynQuery().
+objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
+
 PROCEDURE pInitializeRerate:
 
    fFillTT().
@@ -138,5 +142,9 @@ PROCEDURE pRunRerate:
          TRANSACTION WITH FRAME MobCDR: 
        
             {Rate/man_rate2.i}           
-       
-       
+
+FINALLY:
+   IF VALID-OBJECT(objDynQueryMServiceLimit)
+   THEN DELETE OBJECT objDynQueryMServiceLimit.
+END FINALLY.
+
