@@ -202,8 +202,6 @@ ELSE DO:
    END.
 END.
 
-FIND FIRST CustTemp NO-LOCK NO-ERROR.
-
 /*YDR-1824
 AC1: Request activation time is used as a beginning of a subscription timestamps if the request handling time is the same day than activation date. 
 AC2: First second of subscription handling date is used as a beginning of subscription timestamps if the request handling time is not the same day than activation date.*/
@@ -356,7 +354,19 @@ IF NOT AVAIL mobsub THEN DO:
       FIND CURRENT Customer NO-LOCK NO-ERROR.
    END.
 
-{Mm/cr_bscode.i}
+   FIND FIRST BillTarget NO-LOCK WHERE 
+              BillTarget.CustNum    = Customer.CustNum AND
+              BillTarget.BillTarget = CliType.BillTarget 
+   NO-ERROR.
+
+   IF NOT AVAIL BillTarget THEN DO:
+      CREATE BillTarget.
+      ASSIGN
+         BillTarget.CustNum    = Customer.CustNum
+         BillTarget.BillTarget = CliType.BillTarget
+         BillTarget.DiscPlan   = CliType.DiscPlan
+         BillTarget.RatePlan   = CliType.PricePlan.
+   END.
 
    ASSIGN
       MobSub.CLI              = Order.CLI
