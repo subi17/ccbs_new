@@ -353,35 +353,46 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.SpoolDir        = "/store/riftp/dumpfiles/dwh/spool"
       dumpfile.TransDir        = "/store/riftp/dumpfiles/dwh/outgoing"
       dumpfile.UseIndex        = "".
-    CREATE DFTimeTable.
-    ASSIGN
-      dfTimeTable.Brand = "1"
-      dfTimeTable.DumpDay = ""
-      dfTimeTable.DumpID = liid
-      dfTimeTable.DumpMode = "Modified"
-      dfTimeTable.DumpTime = "02:20"
-      dfTimeTable.DumpTrigger = FALSE
-      dfTimeTable.DumpWeekday = "*"
-      dfTimeTable.FileNameTag = ""
-      dfTimeTable.FromDate = 05/23/17
-      dfTimeTable.Ongoing = 0
-      dfTimeTable.ToDate = 12/31/49
-      dfTimeTable.UseReplica = FALSE.
-    CREATE DFTimeTable.
-    ASSIGN
-      dfTimeTable.Brand = "1"
-      dfTimeTable.DumpDay = "4"
-      dfTimeTable.DumpID = liid
-      dfTimeTable.DumpMode = "Full"
-      dfTimeTable.DumpTime = "02:20"
-      dfTimeTable.DumpTrigger = FALSE
-      dfTimeTable.DumpWeekday = ""
-      dfTimeTable.FileNameTag = ""
-      dfTimeTable.FromDate = 05/23/17
-      dfTimeTable.Ongoing = 0
-      dfTimeTable.ToDate = 12/31/49
-      dfTimeTable.UseReplica = FALSE.
+   do i = 1 to 2:
 
+      if i eq 1 then do:
+         fsetEffectiveTenantForAllDB("Default").
+         lcBrand = "Yoigo".
+      end.
+      else do:
+         fsetEffectiveTenantForAllDB("tMasmovil").
+         lcBrand = "MasMovil".
+      end.
+
+       CREATE DFTimeTable.
+       ASSIGN
+         dfTimeTable.Brand = "1"
+         dfTimeTable.DumpDay = ""
+         dfTimeTable.DumpID = liid
+         dfTimeTable.DumpMode = "Modified"
+         dfTimeTable.DumpTime = "02:20"
+         dfTimeTable.DumpTrigger = FALSE
+         dfTimeTable.DumpWeekday = "*"
+         dfTimeTable.FileNameTag = ""
+         dfTimeTable.FromDate = 05/23/17
+         dfTimeTable.Ongoing = 0
+         dfTimeTable.ToDate = 12/31/49
+         dfTimeTable.UseReplica = FALSE.
+       CREATE DFTimeTable.
+       ASSIGN
+         dfTimeTable.Brand = "1"
+         dfTimeTable.DumpDay = "4"
+         dfTimeTable.DumpID = liid
+         dfTimeTable.DumpMode = "Full"
+         dfTimeTable.DumpTime = "02:20"
+         dfTimeTable.DumpTrigger = FALSE
+         dfTimeTable.DumpWeekday = ""
+         dfTimeTable.FileNameTag = ""
+         dfTimeTable.FromDate = 05/23/17
+         dfTimeTable.Ongoing = 0
+         dfTimeTable.ToDate = 12/31/49
+         dfTimeTable.UseReplica = FALSE.
+   END.
    CREATE DFField.
    ASSIGN
       DFField.brand = "1"
@@ -480,21 +491,32 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.SpoolDir        = "/store/riftp/dumpfiles/dwh/spool"
       dumpfile.TransDir        = "/store/riftp/dumpfiles/dwh/outgoing"
       dumpfile.UseIndex        = "".
-    CREATE DFTimeTable.
-    ASSIGN
-      dfTimeTable.Brand = "1"
-      dfTimeTable.DumpDay = "*"
-      dfTimeTable.DumpID = liid
-      dfTimeTable.DumpMode = "Modified"
-      dfTimeTable.DumpTime = "02:15"
-      dfTimeTable.DumpTrigger = FALSE
-      dfTimeTable.DumpWeekday = ""
-      dfTimeTable.FileNameTag = ""
-      dfTimeTable.FromDate = 05/23/17
-      dfTimeTable.Ongoing = 0
-      dfTimeTable.ToDate = 12/31/49
-      dfTimeTable.UseReplica = FALSE.
+   do i = 1 to 2:
 
+      if i eq 1 then do:
+         fsetEffectiveTenantForAllDB("Default").
+         lcBrand = "Yoigo".
+      end.
+      else do:
+         fsetEffectiveTenantForAllDB("tMasmovil").
+         lcBrand = "MasMovil".
+      end.
+
+       CREATE DFTimeTable.
+       ASSIGN
+         dfTimeTable.Brand = "1"
+         dfTimeTable.DumpDay = "*"
+         dfTimeTable.DumpID = liid
+         dfTimeTable.DumpMode = "Modified"
+         dfTimeTable.DumpTime = "02:15"
+         dfTimeTable.DumpTrigger = FALSE
+         dfTimeTable.DumpWeekday = ""
+         dfTimeTable.FileNameTag = ""
+         dfTimeTable.FromDate = 05/23/17
+         dfTimeTable.Ongoing = 0
+         dfTimeTable.ToDate = 12/31/49
+         dfTimeTable.UseReplica = FALSE.
+   END.
 END.
 
 FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "ClitypeDump" NO-ERROR.
@@ -539,21 +561,32 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.SpoolDir        = "/mnt/qss/spool"
       dumpfile.TransDir        = "/mnt/qss/subscription_types"
       dumpfile.UseIndex        = "".
-    CREATE DFTimeTable.
-    ASSIGN
-      dfTimeTable.Brand = "1"
-      dfTimeTable.DumpDay = ""
-      dfTimeTable.DumpID = liid
-      dfTimeTable.DumpMode = "Full"
-      dfTimeTable.DumpTime = "15:09"
-      dfTimeTable.DumpTrigger = FALSE
-      dfTimeTable.DumpWeekday = "1-7"
-      dfTimeTable.FileNameTag = ""
-      dfTimeTable.FromDate = 05/23/17
-      dfTimeTable.Ongoing = 0
-      dfTimeTable.ToDate = 12/31/49
-      dfTimeTable.UseReplica = FALSE.
+   do i = 1 to 2:
 
+      if i eq 1 then do:
+         fsetEffectiveTenantForAllDB("Default").
+         lcBrand = "Yoigo".
+      end.
+      else do:
+         fsetEffectiveTenantForAllDB("tMasmovil").
+         lcBrand = "MasMovil".
+      end.
+
+       CREATE DFTimeTable.
+       ASSIGN
+         dfTimeTable.Brand = "1"
+         dfTimeTable.DumpDay = ""
+         dfTimeTable.DumpID = liid
+         dfTimeTable.DumpMode = "Full"
+         dfTimeTable.DumpTime = "15:09"
+         dfTimeTable.DumpTrigger = FALSE
+         dfTimeTable.DumpWeekday = "1-7"
+         dfTimeTable.FileNameTag = ""
+         dfTimeTable.FromDate = 05/23/17
+         dfTimeTable.Ongoing = 0
+         dfTimeTable.ToDate = 12/31/49
+         dfTimeTable.UseReplica = FALSE.
+   END.
 
    CREATE DFField.
    ASSIGN 
@@ -686,21 +719,32 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.SpoolDir        = "/store/riftp/dumpfiles/prepaidcomp/spool/"
       dumpfile.TransDir        = "/store/riftp/dumpfiles/prepaidcomp/outgoing/"
       dumpfile.UseIndex        = "".
+   do i = 1 to 2:
 
-    CREATE DFTimeTable.
-    ASSIGN
-      dfTimeTable.Brand = "1"     
-      dfTimeTable.DumpDay = ""   
-      dfTimeTable.DumpID = liid    
-      dfTimeTable.DumpMode = "Full"  
-      dfTimeTable.DumpTime = "01:55"  
-      dfTimeTable.DumpTrigger = FALSE 
-      dfTimeTable.DumpWeekday = "1-6"
-      dfTimeTable.FileNameTag = ""
-      dfTimeTable.FromDate = 05/23/17 
-      dfTimeTable.Ongoing = 0   
-      dfTimeTable.ToDate = 12/31/49   
-      dfTimeTable.UseReplica = FALSE.
+      if i eq 1 then do:
+         fsetEffectiveTenantForAllDB("Default").
+         lcBrand = "Yoigo".
+      end.
+      else do:
+         fsetEffectiveTenantForAllDB("tMasmovil").
+         lcBrand = "MasMovil".
+      end.
+
+       CREATE DFTimeTable.
+       ASSIGN
+         dfTimeTable.Brand = "1"     
+         dfTimeTable.DumpDay = ""   
+         dfTimeTable.DumpID = liid    
+         dfTimeTable.DumpMode = "Full"  
+         dfTimeTable.DumpTime = "01:55"  
+         dfTimeTable.DumpTrigger = FALSE 
+         dfTimeTable.DumpWeekday = "1-6"
+         dfTimeTable.FileNameTag = ""
+         dfTimeTable.FromDate = 05/23/17 
+         dfTimeTable.Ongoing = 0   
+         dfTimeTable.ToDate = 12/31/49   
+         dfTimeTable.UseReplica = FALSE.
+   END.
 END.
 
 FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "HighUsageReport" NO-ERROR.
@@ -743,21 +787,32 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.SpoolDir        = "/store/riftp/dumpfiles/highspender/spool/"
       dumpfile.TransDir        = "/store/riftp/dumpfiles/highspender/outgoing/"
       dumpfile.UseIndex        = "".
+   do i = 1 to 2:
 
-    CREATE DFTimeTable.
-    ASSIGN
-      dfTimeTable.Brand = "1"
-      dfTimeTable.DumpDay = ""
-      dfTimeTable.DumpID = liid
-      dfTimeTable.DumpMode = "Full"
-      dfTimeTable.DumpTime = "05:40"
-      dfTimeTable.DumpTrigger = FALSE
-      dfTimeTable.DumpWeekday = "1-7"
-      dfTimeTable.FileNameTag = ""
-      dfTimeTable.FromDate = 05/23/17
-      dfTimeTable.Ongoing = 0
-      dfTimeTable.ToDate = 12/31/49
-      dfTimeTable.UseReplica = FALSE.
+      if i eq 1 then do:
+         fsetEffectiveTenantForAllDB("Default").
+         lcBrand = "Yoigo".
+      end.
+      else do:
+         fsetEffectiveTenantForAllDB("tMasmovil").
+         lcBrand = "MasMovil".
+      end.
+
+       CREATE DFTimeTable.
+       ASSIGN
+         dfTimeTable.Brand = "1"
+         dfTimeTable.DumpDay = ""
+         dfTimeTable.DumpID = liid
+         dfTimeTable.DumpMode = "Full"
+         dfTimeTable.DumpTime = "05:40"
+         dfTimeTable.DumpTrigger = FALSE
+         dfTimeTable.DumpWeekday = "1-7"
+         dfTimeTable.FileNameTag = ""
+         dfTimeTable.FromDate = 05/23/17
+         dfTimeTable.Ongoing = 0
+         dfTimeTable.ToDate = 12/31/49
+         dfTimeTable.UseReplica = FALSE.
+   END.
 END.
 
 FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "CallDump" NO-ERROR.
@@ -800,21 +855,32 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.SpoolDir        = "/store/riftp/dumpfiles/calls/spool/"
       dumpfile.TransDir        = "/store/riftp/dumpfiles/calls/outgoing/"
       dumpfile.UseIndex        = "".
-    CREATE DFTimeTable.
-    ASSIGN
-      dfTimeTable.Brand = "1"
-      dfTimeTable.DumpDay = ""
-      dfTimeTable.DumpID = liid
-      dfTimeTable.DumpMode = "Full"
-      dfTimeTable.DumpTime = "01:55"
-      dfTimeTable.DumpTrigger = FALSE
-      dfTimeTable.DumpWeekday = "1-6"
-      dfTimeTable.FileNameTag = ""
-      dfTimeTable.FromDate = 05/23/17
-      dfTimeTable.Ongoing = 0
-      dfTimeTable.ToDate = 12/31/49
-      dfTimeTable.UseReplica = FALSE.
+   do i = 1 to 2:
 
+      if i eq 1 then do:
+         fsetEffectiveTenantForAllDB("Default").
+         lcBrand = "Yoigo".
+      end.
+      else do:
+         fsetEffectiveTenantForAllDB("tMasmovil").
+         lcBrand = "MasMovil".
+      end.
+
+       CREATE DFTimeTable.
+       ASSIGN
+         dfTimeTable.Brand = "1"
+         dfTimeTable.DumpDay = ""
+         dfTimeTable.DumpID = liid
+         dfTimeTable.DumpMode = "Full"
+         dfTimeTable.DumpTime = "01:55"
+         dfTimeTable.DumpTrigger = FALSE
+         dfTimeTable.DumpWeekday = "1-6"
+         dfTimeTable.FileNameTag = ""
+         dfTimeTable.FromDate = 05/23/17
+         dfTimeTable.Ongoing = 0
+         dfTimeTable.ToDate = 12/31/49
+         dfTimeTable.UseReplica = FALSE.
+   END.
 END.
 
 FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "CallDumpPrepaid" NO-ERROR.
@@ -857,21 +923,32 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.SpoolDir        = "/store/riftp/dumpfiles/calls/spool/"
       dumpfile.TransDir        = "/store/riftp/dumpfiles/calls/outgoing/"
       dumpfile.UseIndex        = "".
-    CREATE DFTimeTable.
-    ASSIGN
-      dfTimeTable.Brand = "1"
-      dfTimeTable.DumpDay = ""
-      dfTimeTable.DumpID = liid
-      dfTimeTable.DumpMode = "Full"
-      dfTimeTable.DumpTime = "01:55"
-      dfTimeTable.DumpTrigger = FALSE
-      dfTimeTable.DumpWeekday = "1-6"
-      dfTimeTable.FileNameTag = ""
-      dfTimeTable.FromDate = 05/23/17
-      dfTimeTable.Ongoing = 0
-      dfTimeTable.ToDate = 12/31/49
-      dfTimeTable.UseReplica = FALSE.
+   do i = 1 to 2:
 
+      if i eq 1 then do:
+         fsetEffectiveTenantForAllDB("Default").
+         lcBrand = "Yoigo".
+      end.
+      else do:
+         fsetEffectiveTenantForAllDB("tMasmovil").
+         lcBrand = "MasMovil".
+      end.
+
+       CREATE DFTimeTable.
+       ASSIGN
+         dfTimeTable.Brand = "1"
+         dfTimeTable.DumpDay = ""
+         dfTimeTable.DumpID = liid
+         dfTimeTable.DumpMode = "Full"
+         dfTimeTable.DumpTime = "01:55"
+         dfTimeTable.DumpTrigger = FALSE
+         dfTimeTable.DumpWeekday = "1-6"
+         dfTimeTable.FileNameTag = ""
+         dfTimeTable.FromDate = 05/23/17
+         dfTimeTable.Ongoing = 0
+         dfTimeTable.ToDate = 12/31/49
+         dfTimeTable.UseReplica = FALSE.
+   END.
 END.
 
 FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "ErrorCallDump" NO-ERROR.
@@ -914,21 +991,32 @@ IF NOT AVAIL DumpFile THEN DO:
       dumpfile.SpoolDir        = "/mnt/qss/spool/"
       dumpfile.TransDir        = "/mnt/qss/error_calls/"
       dumpfile.UseIndex        = "".
-    CREATE DFTimeTable.
-    ASSIGN
-      dfTimeTable.Brand = "1"
-      dfTimeTable.DumpDay = ""
-      dfTimeTable.DumpID = liid
-      dfTimeTable.DumpMode = "Full"
-      dfTimeTable.DumpTime = "01:55"
-      dfTimeTable.DumpTrigger = FALSE
-      dfTimeTable.DumpWeekday = "1-6"
-      dfTimeTable.FileNameTag = ""
-      dfTimeTable.FromDate = 05/23/17
-      dfTimeTable.Ongoing = 0
-      dfTimeTable.ToDate = 12/31/49
-      dfTimeTable.UseReplica = FALSE.
+   do i = 1 to 2:
 
+      if i eq 1 then do:
+         fsetEffectiveTenantForAllDB("Default").
+         lcBrand = "Yoigo".
+      end.
+      else do:
+         fsetEffectiveTenantForAllDB("tMasmovil").
+         lcBrand = "MasMovil".
+      end.
+
+       CREATE DFTimeTable.
+       ASSIGN
+         dfTimeTable.Brand = "1"
+         dfTimeTable.DumpDay = ""
+         dfTimeTable.DumpID = liid
+         dfTimeTable.DumpMode = "Full"
+         dfTimeTable.DumpTime = "01:55"
+         dfTimeTable.DumpTrigger = FALSE
+         dfTimeTable.DumpWeekday = "1-6"
+         dfTimeTable.FileNameTag = ""
+         dfTimeTable.FromDate = 05/23/17
+         dfTimeTable.Ongoing = 0
+         dfTimeTable.ToDate = 12/31/49
+         dfTimeTable.UseReplica = FALSE.
+   END.
 END.
 
 INPUT STREAM sin FROM VALUE("../tms_support/utilities/multitenant/dumpfiles_phase1.txt").
