@@ -12,6 +12,10 @@
 
 &GLOBAL-DEFINE CounterHandling TempTable
 
+DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
+objDynQueryMServiceLimit = NEW Syst.DynQuery().
+objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
+
 {Syst/commali.i} 
 {Rate/rerate_define.i}
 {Rate/premiumnumber.i}
@@ -27,10 +31,6 @@ DEF VAR llRateCCN          AS LOG NO-UNDO INIT FALSE.
 DEF VAR ldebegStamp        AS DEC NO-UNDO.
 DEF VAR lcTakeCLI          AS CHAR NO-UNDO.
 DEF VAR liMsSeq            AS INT  NO-UNDO. 
-
-DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
-objDynQueryMServiceLimit = NEW Syst.DynQuery().
-objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
        
 DEF TEMP-TABLE ttCust NO-UNDO
    FIELD CustNum AS INT

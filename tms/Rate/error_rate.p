@@ -6,15 +6,15 @@
  VERSION .......: M15
  ============================================================================*/
 
+DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
+objDynQueryMServiceLimit = NEW Syst.DynQuery().
+objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
+
 {Syst/commali.i}
 {Rate/rerate_define.i}
 {Rate/premiumnumber.i}
 
 DEF INPUT PARAMETER   iiErrorCode AS INT  NO-UNDO.
-
-DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
-objDynQueryMServiceLimit = NEW Syst.DynQuery().
-objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
 
 /* Default starts values */
 ASSIGN 

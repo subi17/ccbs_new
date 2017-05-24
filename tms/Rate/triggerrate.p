@@ -1,6 +1,10 @@
 &GLOBAL-DEFINE PersistentRun YES
 &GLOBAL-DEFINE CounterHandling TempTable
 
+DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
+objDynQueryMServiceLimit = NEW Syst.DynQuery().
+objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
+
 {Syst/commali.i}
 {Rate/rerate_define.i}
 {Rate/premiumnumber.i}
@@ -43,10 +47,6 @@ DEF VAR ldtItemTime AS DATETIME NO-UNDO.
 DEF VAR liActiveDB    AS INT  NO-UNDO.
 DEF VAR ldaActiveFrom AS DATE NO-UNDO.
 DEF VAR ldaActiveTo   AS DATE NO-UNDO.
-
-DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
-objDynQueryMServiceLimit = NEW Syst.DynQuery().
-objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
 
 RUN pInitializeRerate.
 

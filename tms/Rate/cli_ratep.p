@@ -12,13 +12,13 @@
 &GLOBAL-DEFINE PersistentRun YES
 &GLOBAL-DEFINE CounterHandling TempTable
 
-{Syst/commali.i}      
-{Rate/rerate_define.i}
-{Rate/premiumnumber.i}
-
 DEFINE VARIABLE objDynQueryMServiceLimit AS CLASS Syst.DynQuery NO-UNDO.
 objDynQueryMServiceLimit = NEW Syst.DynQuery().
 objDynQueryMServiceLimit:mAddBuffer(BUFFER mServiceLimit:HANDLE).
+
+{Syst/commali.i}
+{Rate/rerate_define.i}
+{Rate/premiumnumber.i}
 
 PROCEDURE pInitializeRerate:
 

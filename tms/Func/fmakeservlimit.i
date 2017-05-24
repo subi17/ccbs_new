@@ -328,7 +328,7 @@ FUNCTION fMakeServLPool RETURN LOGICAL
             OUTPUT liTime).
 
    IF ldtDate = ? THEN DO:
-      ocResult = SUBST("Corrupted activation stamp: &1", idActStamp).
+      ocError = SUBST("Corrupted activation stamp: &1", idActStamp).
       RETURN FALSE.
    END.
    
