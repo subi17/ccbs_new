@@ -219,6 +219,11 @@ ASSIGN
 {Func/fcharge_comp_loaded.i}
 {Func/orderchk.i}
 
+/*ACC is allowed for PRO-PRO and NON_PRO-NON_PRO*/
+lcError = fCheckACCCompability(bOriginalCustomer.Custnun,
+                               Customer.Custnum).
+IF lcError > "" THEN RETURN appl_err(lcError).                               
+
 lcError = fPreCheckSubscriptionForACC(MobSub.MsSeq).
 IF lcError > "" THEN RETURN appl_err(lcError).
 
