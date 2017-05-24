@@ -479,7 +479,7 @@ IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
             DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
             DPMember.ValidTo   >= TODAY AND
             DPMember.ValidFrom <= DPMember.ValidTo:
-      add_boolean(top_struct, "additional_line_discount_50", TRUE).
+      add_boolean(resp_struct, "additional_line_discount_50", TRUE).
    END.
 END.
 
