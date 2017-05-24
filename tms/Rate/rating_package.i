@@ -230,8 +230,8 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                ServiceLimitTarget.ServiceLMember = lcOrigBillCode:
 
             IF ttServiceLimit.GroupCode BEGINS {&DSS}
-            THEN lcmSL = "Customer|" + STRING(iiCustNum).
-            ELSE lcmSL = "msseq|" + STRING(iiMSSeq).
+            THEN lcmSL = "Customer|" + STRING(MSOwner.Custnum).
+            ELSE lcmSL = "msseq|" + STRING(MSOwner.MSSeq).
 
             objDynQueryMServiceLimit:mSetQuery
                (SUBSTITUTE("FOR EACH &1 NO-LOCK USE-INDEX &2 WHERE " +
