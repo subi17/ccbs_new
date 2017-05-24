@@ -8,7 +8,7 @@ DEF VAR lcLine AS CHAR NO-UNDO.
 DEF VAR lcDFIdList AS CHAR NO-UNDO.
 DEF VAR liId AS INT NO-UNDO.
 DEF BUFFER MMInvText FOR InvText.
-
+DEF BUFFER bBankAccount FOR BankAccount.
 /* Copy Invtext to MM */
 /*
 fsetEffectiveTenantForAllDB("tMasMovil").
@@ -226,14 +226,26 @@ FOR EACH BankAccount:
          bankaccount.bankaccount = "ES0701824572400201566648"
          bankaccount.bankdata = "ES0701824572400201566648"
          bankaccount.bic = "BBVAESMMXXX"
-         bankaccount.creditorid = "ES22000A84633643".
+         bankaccount.creditorid = "ES22000A84633643"
          bankaccount.ddallocation = 100.0.
+   
    END.
    ELSE 
       DELETE BankAccount.
 
 END.
 
+FIND FIRST BankAccount WHERE
+           BankAccount.brand EQ "1" AND
+           BankAccount.unitcode EQ 0 AND
+           bankaccount.bankaccount = "ES0701824572400201566648" NO-ERROR.
+IF AVAIL BankAccount THEN DO:
+      CREATE bBankAccount.
+      BUFFER-COPY bankAccount EXCEPT unitcode TO bBankAccount.
+      ASSIGN bBankAccount.unitcode = 1
+             bBankAccount.bankoffice = "ALL"
+             bBankAccount.invform = "DDALL".
+END. 
 
 /* Common tables */
 
@@ -802,3 +814,4 @@ FOR EACH DFTimeTable WHERE
    /*DELETE DFTimeTable */
 
 END.
+

@@ -329,7 +329,7 @@ END.
 
 /* Call pSplitOtherInvoices to split other bank code invoices */
 /* based on the algorithm specified in the YOT-1450           */
-IF icInputFileDir EQ "" AND ilSplit THEN DO:
+IF icInputFileDir EQ "" THEN DO:
    
    /* Fetch allocation percentage for each individual banks */
    FOR EACH BankAccount NO-LOCK:
