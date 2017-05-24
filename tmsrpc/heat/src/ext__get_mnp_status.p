@@ -11,6 +11,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 
 /* Input parameters */
 DEF VAR pcMSISDN AS CHAR NO-UNDO.
@@ -21,12 +22,14 @@ DEF VAR ldeCreated AS DECIMAL NO-UNDO INIT 20000101.
 DEF VAR lrMNPProcess AS ROWID NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
-
 pcMSISDN = get_string(param_toplevel_id, "0").
-
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FOR EACH MNPSub WHERE MNPSub.CLI = pcMSISDN TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+IF NOT fsetEffectiveTenantForAllDB({&TENANT_YOIGO}) THEN RETURN
+   int_err("Tenant change failed").
+
+FOR EACH MNPSub WHERE
+         MNPSub.CLI = pcMSISDN NO-LOCK:
 
    FIND MNPProcess WHERE
         MNPProcess.MNPSeq = MNPSub.MNPSeq AND

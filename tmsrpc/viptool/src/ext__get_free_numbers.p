@@ -8,6 +8,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 
 /* Input parameters */
 DEF VAR pcSearch AS CHAR NO-UNDO.
@@ -31,6 +32,9 @@ IF gi_xmlrpc_error NE 0 then RETURN.
 
 IF pcFor <> {&MSISDN_STOCK_VIP} THEN
   RETURN appl_err("Input Channel should be: VIP").
+
+IF NOT fsetEffectiveTenantForAllDB({&TENANT_YOIGO}) THEN RETURN
+   int_err("Tenant change failed").
 
 ldTS = {&nowTS}.
 

@@ -33,6 +33,7 @@ ASSIGN katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
 {Func/smsmessage.i}
 {Func/fmakemsreq.i}
 {Func/fexternalapi.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE pcTransId               AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcDNIType               AS CHARACTER NO-UNDO.
@@ -61,13 +62,14 @@ DEFINE VARIABLE liCustNum               AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liMsSeq                 AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liOrderId               AS INTEGER   NO-UNDO.
 
+
 pcReqList = validate_request(param_toplevel_id, "string,string,string,[string]").
 IF pcReqList EQ ? THEN RETURN.
 
-ASSIGN pcTransId    = get_string(param_toplevel_id, "1")
-       pcDNIType    = get_string(param_toplevel_id, "2")
-       pcDNI        = get_string(param_toplevel_id, "3")
-       pcDelType    = get_string(param_toplevel_id, "4").
+ASSIGN pcTransId    = get_string(param_toplevel_id, "0")
+       pcDNIType    = get_string(param_toplevel_id, "1")
+       pcDNI        = get_string(param_toplevel_id, "2")
+       pcDelType    = get_string(param_toplevel_id, "3").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -80,6 +82,9 @@ katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF LOOKUP(pcDelType,"EMAIL,SMS") = 0 THEN
    RETURN appl_err("Invalid Delivery Type").
+
+IF NOT fsetEffectiveTenantForAllDB({&TENANT_YOIGO}) THEN RETURN
+   int_err("Tenant change failed").
 
 FOR EACH OrderCustomer WHERE 
          OrderCustomer.Brand      = gcBrand   AND
