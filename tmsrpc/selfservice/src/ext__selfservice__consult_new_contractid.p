@@ -73,6 +73,9 @@ ASSIGN pcTransId    = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+IF NOT fsetEffectiveTenantForAllDB({&TENANT_YOIGO}) THEN RETURN
+   int_err("Tenant change failed").
+
 lcApplicationId = substring(pcTransId,1,3).
 
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
@@ -83,8 +86,6 @@ katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 IF LOOKUP(pcDelType,"EMAIL,SMS") = 0 THEN
    RETURN appl_err("Invalid Delivery Type").
 
-IF NOT fsetEffectiveTenantForAllDB({&TENANT_YOIGO}) THEN RETURN
-   int_err("Tenant change failed").
 
 FOR EACH OrderCustomer WHERE 
          OrderCustomer.Brand      = gcBrand   AND
