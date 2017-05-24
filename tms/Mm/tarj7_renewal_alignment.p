@@ -144,8 +144,11 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
 
       DO liRetry = 1 TO 3.
          RUN Gwy/air_set_temp_sc.p(MobSub.CLI,
-                               IF Mobsub.CliType = "TARJ7" THEN 303
-                                                           ELSE 309, /* SC temp */
+                               IF      Mobsub.CliType = "TARJ7"  THEN 303
+                               ELSE IF Mobsub.CliType = "TARJ10" THEN 310
+                               ELSE IF Mobsub.CliType = "TARJ11" THEN 311
+                               ELSE IF Mobsub.CliType = "TARJ12" THEN 312
+                                                                 ELSE 309, /* SC temp */
                                ldaExpDate,
                                OUTPUT lcerror).
          IF INDEX(lcError,"ERR:Unable to Connect") = 0 AND

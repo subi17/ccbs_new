@@ -193,7 +193,7 @@ IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
                   WHEN "TARJ9"  THEN lcResetTemplate = "LADEL1_PRE_PLUS_RESET".
                   WHEN "TARJ10" THEN lcResetTemplate = "TARJ10_RESET".
                   WHEN "TARJ11" THEN lcResetTemplate = "TARJ11_RESET".
-                  WHEN "TARJ12" THEN lcResetTemplate = "TARJ11_RESET".
+                  WHEN "TARJ12" THEN lcResetTemplate = "TARJ12_RESET".
                   OTHERWISE lcResetTemplate = "".
                END CASE.
                FIND FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
