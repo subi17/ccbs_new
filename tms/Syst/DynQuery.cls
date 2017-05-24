@@ -47,15 +47,6 @@ CLASS Syst.DynQuery FINAL:
       GET.
       PRIVATE SET.
 
-   DEFINE PUBLIC PROPERTY DataAvailable AS LOGICAL NO-UNDO
-      GET:
-         IF NOT VALID-HANDLE(QueryHandle)
-         THEN RETURN FALSE.
-   
-         RETURN QueryHandle:NUM-RESULTS > 0.
-      END GET.
-      
-
    DEFINE PRIVATE VARIABLE alNextAvailable AS LOGICAL NO-UNDO.
 
    CONSTRUCTOR PUBLIC DynQuery():

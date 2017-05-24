@@ -230,7 +230,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                ServiceLimitTarget.ServiceLMember = lcOrigBillCode:
 
             IF ttServiceLimit.GroupCode BEGINS {&DSS}
-            THEN lcmSL = "Customer|" + STRING(MSOwner.Custnum).
+            THEN lcmSL = "CustNum|" + STRING(MSOwner.Custnum).
             ELSE lcmSL = "msseq|" + STRING(MSOwner.MSSeq).
 
             objDynQueryMServiceLimit:mSetQuery
@@ -247,7 +247,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                            ttServiceLimit.SLSeq,
                            REPLACE(STRING(CallTimeStamp),",","."))).
 
-            IF objDynQueryMServiceLimit:DataAvailable
+            IF objDynQueryMServiceLimit:mGetNext()
             THEN DO:
 
                liBDestLimit = ttServiceLimit.BDestLimit.
@@ -282,7 +282,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                   llPackageUsed = TRUE
                   ldAmtUsed = ldPackageAmt.
 
-               DO WHILE objDynQueryMServiceLimit:mGetNext():
+               DO WHILE TRUE:
                   llServiceGrp = f{&CounterHandling}IsServiceLimitAllowed
                                           ( mServiceLimit.MSID,
                                             MSOwner.MsSeq,
@@ -298,6 +298,8 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                                            liBDestAmt,  
                                            INPUT-OUTPUT ldPackageAmt).
                   ldAmtUsed = ldAmtUsed - ldPackageAmt.
+                  IF NOT objDynQueryMServiceLimit:mGetNext()
+                  THEN LEAVE.
                END.
 
                ASSIGN
