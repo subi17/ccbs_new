@@ -14,6 +14,7 @@
 
 DEF VAR lcConURL AS CHAR NO-UNDO.
 DEF VAR liPrintXML AS INT NO-UNDO.
+DEF VAR lcAddressId AS CHAR NO-UNDO.
 
 /*For testing*/
 liPrintXML = 0.
@@ -145,6 +146,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    IF fIsConvergenceTariff(Order.CliType) THEN DO:
       FIND FIRST CLIType NO-LOCK WHERE
                  CLIType.CLIType EQ Order.CliType NO-ERROR.
+
       IF AVAIL CLIType THEN DO:
          IF CLIType.FixedLineType EQ 1 THEN DO:
             lcOrderType = "Alta xDSL + VOIP".
@@ -163,7 +165,6 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    END.
    ELSE
       RETURN "ERROR: Not allowed CLITYPE " + Order.CliType.
-
    IF fTS2Date(Order.CrStamp, OUTPUT ldaCreDate) EQ FALSE THEN
       RETURN "ERROR: Date reading failed".
 
@@ -275,6 +276,28 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
                             "DownloadSpeed",             /*param name*/
                             CLIType.FixedLineDownload,  /*param value*/
                             "").                         /*old value*/
+
+/* YDR-2532 */
+   
+         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                            "Territory Owner",             /*param name*/
+                            OrderCustomer.TerritoryOwner,  /*param value*/
+                            "").                         /*old value*/
+
+         lcAddressId = OrderCustomer.Gescal + " " + OrderCustomer.Block.
+
+         fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                            "AddressId",            /*param name*/
+                            lcAddressId,    /*param value*/
+                            "").                   /*old value*/
+
+
+         fAddCharacteristic(lcCharacteristicsArray,     /*base*/
+                            "Caracteristicatecnica",    /*param name*/
+                            CLIType.Caracteristicatecnica, /*param value*/
+                            "").                         /*old value*/
+/* YDR-2532 */
+
    END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
