@@ -1,0 +1,7 @@
+ADD FIELD "Caracteristicatecnica" OF "CLIType" AS character
+  FORMAT "x(8)"
+  INITIAL "DHCP"
+  LABEL "Caracteristic a tecnica"
+  COLUMN-LABEL "Caracteristicatecnica"
+  HELP "Dynamic IP configuration protocol"
+  ORDER 340
