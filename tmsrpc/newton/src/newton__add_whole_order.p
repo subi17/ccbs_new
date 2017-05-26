@@ -245,6 +245,7 @@ katun = "NewtonRPC".
 {Func/order_data.i}
 {Func/smsmessage.i}
 {Mc/orderfusion.i}
+{Func/fixedlinefunc.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
@@ -429,6 +430,8 @@ DEF VAR lcItemParam AS CHAR NO-UNDO.
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
 DEF BUFFER lbMobSub FOR MobSub. 
+
+DEF VAR llCheckConvergent AS LOGICAL NO-UNDO.
 
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
@@ -615,7 +618,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
      (INPUT pcStructId AS CHARACTER,
       INPUT pcStructFields AS CHARACTER,
       INPUT piRowType AS INTEGER,
-      INPUT plUpdate  AS LOGICAL):
+      INPUT plUpdate  AS LOGICAL,
+      INPUT plCheckConv AS LOGICAL):
 
    DEF VAR lcFError AS CHAR NO-UNDO. 
    DEF VAR iData AS INTEGER NO-UNDO. 
@@ -709,7 +713,12 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       
       IF lcIdOrderCustomer EQ "" AND piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
           lcFError = "Expected either person_id or company_id".
-
+      IF plCheckConv AND
+         NOT(fCheckExistingConvergent (lcIdtypeOrderCustomer, 
+                                       lcIdOrderCustomer) OR
+             fCheckOngoingConvergentOrder (lcIdtypeOrderCustomer,
+                                           lcIdOrderCustomer)) THEN
+            lcFError = "Expected Convergent for PRO".                                  
       /* YTS-2453 */
       IF NOT plBypassRules AND
          lcFError = "" AND 
@@ -1635,25 +1644,28 @@ DO:
    lccTemp = validate_request(pcContactStruct, gcCustomerStructFields).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
+/* YPRO-18 */
 IF INDEX(pcChannel,"PRO") > 0 THEN DO:
    llCustPro = TRUE.
    IF clitype.paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
       RETURN appl_err("Prepaid not allowed for PRO").
+   IF NOT fIsConvergenceTariff (clitype.clitype) THEN 
+      llCheckConvergent EQ TRUE.
 END.
-/* YBP-536 */ 
-lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
+/* YBP-536 */ /* YPRO-18 check ongoing/existing convergent for pro */ 
+lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE, llCheckConvergent).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-537 */ 
 IF pcAddressStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_DELIVERY}, FALSE).
+   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_DELIVERY}, FALSE, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-538 */ 
 IF pcContactStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE).
+   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1820,6 +1832,7 @@ IF pcFusionStruct > "" THEN DO:
    lcError = fCreateOrderCustomer(pcFixedInstallAddress, 
                                   gcCustomerStructFields,
                                   {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL},
+                                  FALSE,
                                   FALSE).
    IF lcError <> "" THEN RETURN appl_err(lcError).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -1928,16 +1941,16 @@ IF plCheck THEN
                pcSalesMan).
 
 /* YBP-550 */
-fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, TRUE).
+fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, TRUE, FALSE).
 pcAccount = "".
 
 /* YBP-551 */
 IF pcAddressStruct > "" THEN 
-   fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, 4, TRUE).
+   fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, 4, TRUE, FALSE).
 
 /* YBP-552 */
 IF pcContactStruct > "" THEN 
-   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, TRUE).
+   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, TRUE, FALSE).
    
 /* YBP-553 */
 /* should be called only after rowtype=1 creation */
@@ -1945,7 +1958,8 @@ IF pcFixedInstallAddress > "" THEN
    fCreateOrderCustomer(pcFixedInstallAddress,
                         gcCustomerStructFields,
                         {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL},
-                        TRUE). 
+                        TRUE,
+                        FALSE). 
 
 /* YBP-555 */
 /* mobsub handling */
