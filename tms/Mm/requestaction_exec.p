@@ -737,7 +737,7 @@ PROCEDURE pServicePackage:
             ELSE lcParam = "".
          END.
          ELSE IF SubSer.SSStat  = 2 AND SubSer.ServCom = "BB" AND
-                (icCLIType = "TARJ7" OR icCLIType = "TARJ9")
+                LOOKUP(icCLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0
                 THEN lcParam = "3".
          ELSE RETURN.
 

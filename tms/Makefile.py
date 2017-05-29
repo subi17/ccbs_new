@@ -251,6 +251,9 @@ def _compile(compilecommand, compiledir):
     if environment == 'safeproduction':
         os.environ['PROPATH'] = os.environ['PROPATH'].split(',', 1)[1]
 
+    if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
+        os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
+
     comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', procedure_file.name], stdout=PIPE)
     call('/bin/cat', stdin=comp.stdout)
     if comp.wait() != 0:
