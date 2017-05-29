@@ -96,11 +96,27 @@ FIND Customer OF Mobsub NO-LOCK NO-ERROR.
 IF NOT AVAIL Customer THEN
    RETURN appl_err("Customer not available").
 
+/* ADDLINE-275 */
 IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) > 0 AND
    LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN DO:
    
    IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) THEN
       RETURN appl_err("Discount Plan not allowed").
+
+   FOR EACH DCCLI NO-LOCK WHERE
+            DCCLI.MsSeq = MobSub.MsSeq AND
+            DCCLI.DCEvent BEGINS "TERM" AND
+            DCCLI.ValidTo >= TODAY AND
+            DCCLI.ValidFrom <= TODAY AND
+            DCCLI.CreateFees = TRUE,
+      FIRST DayCampaign WHERE
+            DayCampaign.Brand = gcBrand AND
+            DayCampaign.DCEvent = DCCLI.DCEvent AND
+            DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
+            DayCampaign.TermFeeModel NE "" AND
+            DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
+      RETURN appl_err("Subscription has active terminal permanency").
+   END.
 
 END.
 
