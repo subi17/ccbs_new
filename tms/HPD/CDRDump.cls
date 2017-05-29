@@ -157,10 +157,34 @@ CLASS HPD.CDRDump FINAL INHERITS DumpHandlerWithQuery:
                                lhMainTable::EventType = "CALL" AND
                                lhMainTable::Accumulator > 0
                        THEN "TARJ9"
+                       ELSE IF lhMainTable::CLIType = "TARJ10"  AND
+                               lhMainTable::EventType = "CALL" AND
+                               lhMainTable::Accumulator > 0
+                       THEN "TARJ10"
+                       ELSE IF lhMainTable::CLIType = "TARJ11"  AND
+                               lhMainTable::EventType = "CALL" AND
+                               lhMainTable::Accumulator > 0
+                       THEN "TARJ11"
+                       ELSE IF lhMainTable::CLIType = "TARJ12"  AND
+                               lhMainTable::EventType = "CALL" AND
+                               lhMainTable::Accumulator > 0
+                       THEN "TARJ12"
                        ELSE IF lhMainTable::CLIType = "TARJ9"  AND
                                lhMainTable::Charge = 0         AND
                                LOOKUP(lhMainTable::GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0
                        THEN "TARJ9"
+                       ELSE IF lhMainTable::CLIType = "TARJ10"  AND
+                               lhMainTable::Charge = 0         AND
+                               LOOKUP(lhMainTable::GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0
+                       THEN "TARJ10"
+                       ELSE IF lhMainTable::CLIType = "TARJ11"  AND
+                               lhMainTable::Charge = 0         AND
+                               LOOKUP(lhMainTable::GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0
+                       THEN "TARJ11"
+                       ELSE IF lhMainTable::CLIType = "TARJ12"  AND
+                               lhMainTable::Charge = 0         AND
+                               LOOKUP(lhMainTable::GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0
+                       THEN "TARJ12"
                        ELSE "".
          END.
          /*
