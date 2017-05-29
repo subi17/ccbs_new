@@ -221,6 +221,14 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
       RETURN FALSE.
    END.
 
+   IF fIsConvergenceTariff(NewCLIType.Clitype) AND
+      (fIsConvergenceTariff(MobSub.CLItype) EQ FALSE OR
+       NOT fCheckConvergentSTCCompability(NewCLIType.CLIType,
+                                          MobSub.clitype)) THEN DO:
+      ocError = "Function not allowed due to business rules!".
+      RETURN FALSE.
+   END.
+
    /* partial convergent to mobile */
    IF (mobsub.msstatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
        mobsub.msstatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND 
