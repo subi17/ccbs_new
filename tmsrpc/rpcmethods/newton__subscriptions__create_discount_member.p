@@ -99,8 +99,7 @@ IF NOT AVAIL Customer THEN
 IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) > 0 AND
    LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN DO:
    
-   IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) OR 
-      NOT fCheckOngoingConvergentOrder(Customer.CustIDType,Customer.OrgID,MobSub.CliType) THEN
+   IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) THEN
       RETURN appl_err("Discount Plan not allowed").
 
 END.
