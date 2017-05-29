@@ -35,7 +35,7 @@ DEF VAR lcGroupCodes          AS CHAR NO-UNDO.
 DEF STREAM sout.
 
 ASSIGN ldaLastDay   = fLastdayofMonth(today)
-       lcGroupCodes = "TARJ7,TARJ9".
+       lcGroupCodes = "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12".
 
 OUTPUT STREAM sout TO VALUE(icFile) APPEND.
 
@@ -101,8 +101,11 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
          NEXT.
       END.
 
-      IF (Mobsub.CliType = "TARJ7" AND liCurrentServiceClass EQ 303) OR
-         (Mobsub.CliType = "TARJ9" AND liCurrentServiceClass EQ 309) THEN DO:
+      IF (Mobsub.CliType = "TARJ7"  AND liCurrentServiceClass EQ 303) OR
+         (Mobsub.CliType = "TARJ9"  AND liCurrentServiceClass EQ 309) OR
+         (Mobsub.CliType = "TARJ10" AND liCurrentServiceClass EQ 310) OR
+         (Mobsub.CliType = "TARJ11" AND liCurrentServiceClass EQ 311) OR
+         (Mobsub.CliType = "TARJ12" AND liCurrentServiceClass EQ 312) THEN DO:
          PUT STREAM sout UNFORMATTED
             MobSub.custnum ";"
             MobSub.MsSeq ";"
@@ -118,8 +121,11 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
          NEXT.
       END.
 
-      IF (Mobsub.CliType = "TARJ7" AND liCurrentServiceClass NE 3) OR
-         (Mobsub.CliType = "TARJ9" AND liCurrentServiceClass NE 9) THEN DO:
+      IF (Mobsub.CliType = "TARJ7"  AND liCurrentServiceClass NE 3)  OR
+         (Mobsub.CliType = "TARJ9"  AND liCurrentServiceClass NE 9)  OR
+         (Mobsub.CliType = "TARJ10" AND liCurrentServiceClass NE 10) OR
+         (Mobsub.CliType = "TARJ11" AND liCurrentServiceClass NE 11) OR
+         (Mobsub.CliType = "TARJ12" AND liCurrentServiceClass NE 12) THEN DO:
          PUT STREAM sout UNFORMATTED
             MobSub.custnum ";"
             MobSub.MsSeq ";"
@@ -138,8 +144,11 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
 
       DO liRetry = 1 TO 3.
          RUN Gwy/air_set_temp_sc.p(MobSub.CLI,
-                               IF Mobsub.CliType = "TARJ7" THEN 303
-                                                           ELSE 309, /* SC temp */
+                               IF      Mobsub.CliType = "TARJ7"  THEN 303
+                               ELSE IF Mobsub.CliType = "TARJ10" THEN 310
+                               ELSE IF Mobsub.CliType = "TARJ11" THEN 311
+                               ELSE IF Mobsub.CliType = "TARJ12" THEN 312
+                                                                 ELSE 309, /* SC temp */
                                ldaExpDate,
                                OUTPUT lcerror).
          IF INDEX(lcError,"ERR:Unable to Connect") = 0 AND
