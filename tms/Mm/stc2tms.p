@@ -840,7 +840,7 @@ PROCEDURE pFinalize:
     IF bOldType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} AND
        bOldType.CLIType EQ "TARJ6"                    AND
        CLIType.PayType  EQ {&CLITYPE_PAYTYPE_PREPAID} AND
-       LOOKUP(CLIType.CLIType,"TARJ7,TARJ9") > 0      THEN DO:
+       LOOKUP(CLIType.CLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
 
        FIND FIRST ServiceLimit NO-LOCK WHERE
                   ServiceLimit.Groupcode EQ CLIType.CLIType AND
