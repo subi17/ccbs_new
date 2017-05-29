@@ -36,7 +36,7 @@
 "1" 42 "Contract Target" "List" "Percentage" 1 no "" "DISCWINBACK" 22/02/17 31/12/49 "DISCWINBACK" "Winback ADSL Discount" "" "List" 0 0 0 6
 "1" 21 "Contract Target" "List" "Percentage" 3 no "" "INC_DISC" 01/12/14 31/12/49 "INC_DISC" "Descuento Incidencia red" "" "All " 0 0 1 1
 "1" 19 "Contract Target" "List" "Percentage" 2 no "" "INTLCALLDISC" 01/07/14 31/12/49 "INTLCALLDISC" "Discount international Calls" "" "All " 0 0 0 0
-"1" 11 "Contract Target" "List" "Percentage" 2 no "" "LRDISC" 01/02/14 31/12/49 "LRDISC" "Loyalty & retention discount" "" "All " 0 0 0 0
+"1" 11 "Contract Target" "List" "Percentage" 3 no "" "LRDISC" 01/02/14 31/12/49 "LRDISC" "Loyalty & retention discount" "" "All " 0 0 0 0
 "1" 5 "Contract Target" "List" "Percentage" 2 no "" "DISCPAYTERMDIR" 01/02/13 31/12/49 "PAYTERMDISCDIR" "Payterm discount direct channel" "" "All " 0 0 0 1
 "1" 6 "Contract Target" "List" "Percentage" 2 no "" "DISCPAYTERMINDIR" 01/02/13 31/12/49 "PAYTERMDISCINDIR" "Payterm discount indirect channel" "" "All " 0 0 0 1
 "1" 26 "Contract Target" "List" "Fixed" 2 no "" "REJECT_FEE_DISC" 01/03/15 31/12/49 "REJECT_FEE_DISC" "Rejection fee discount" "" "All " 0 0 0 1

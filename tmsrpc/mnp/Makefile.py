@@ -55,6 +55,10 @@ def compile(*a):
                 source_files.append(os.path.join(source_dir, file))
     procedure_file = make_compiler(format, source_files,
                                        show='name' if show_file else '.')
+
+    if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
+        os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
+
     comp = Popen(mpro + ['-pf', '../../db/progress/store/all.pf', '-s', '120',
                          '-b', '-p', procedure_file.name], stdout=PIPE)
     call('/bin/cat', stdin=comp.stdout)
