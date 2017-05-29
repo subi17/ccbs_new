@@ -319,7 +319,8 @@ DO ON ERROR UNDO, THROW:
        ASSIGN lcFixedLineBB = fGetFixedLineBaseBundle(CliType.CliType).
 
        lcResultStruct = add_struct(resp_array, "").
-       add_string(lcResultStruct, "rate_plan", CliType.PricePlan).
+       add_string(lcResultStruct, "id"         , CliType.CliType).
+       add_string(lcResultStruct, "rateplan_id", CliType.PricePlan).
 
        lcMobileStruct   = add_struct(lcResultStruct, "mobile").
        fGetStruct("Mobile", CliType.PricePlan, CliType.BaseBundle, lcFixedLineBB, lcMobileStruct).
