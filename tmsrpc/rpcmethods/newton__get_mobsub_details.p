@@ -34,7 +34,6 @@
                 multisim_msisdn;string;optional;multisim primary/secondary msisdn
                 multisim_warning_for_secondary;boolean;optional;warning flag for secondary line
                 tarj7_reset_date;datetime;optional;Reset date (if past date then use red otherwise green color)
-                additional_line_discount_50;boolean;optional;
  * @memo_counts mobsub;int;0 = no memos, 1 = at least one memo
                 customer;int;0 = no memos, 1 = at least one memo
                 invoice;int;0 = no memos, 1 = at least one memo
@@ -464,22 +463,6 @@ IF MobSub.MultiSIMType > 0 AND
          NOT fIsMNPOutOngoing(INPUT MobSub.CLI) AND
          fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN
          add_boolean(resp_struct,"multisim_warning_for_secondary",TRUE).
-   END.
-END.
-
-/* if subscription has one of 50% additional line discount active */
-IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
-   FOR EACH DiscountPlan NO-LOCK WHERE
-            DiscountPlan.Brand    = gcBrand AND
-     LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
-            DiscountPlan.ValidTo >= TODAY,
-      FIRST DPMember NO-LOCK WHERE
-            DPMember.DPID       = DiscountPlan.DPID AND
-            DPMember.HostTable  = "MobSub" AND
-            DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
-            DPMember.ValidTo   >= TODAY AND
-            DPMember.ValidFrom <= DPMember.ValidTo:
-      add_boolean(resp_struct, "additional_line_discount_50", TRUE).
    END.
 END.
 
