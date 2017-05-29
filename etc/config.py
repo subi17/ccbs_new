@@ -4,6 +4,10 @@ from os import environ as ENV
 mpro           = ['%s/bin/mpro' % dlc,
                   '-pf', '%s/etc/pf/formats.pf' % (work_dir),
                   '-T', '%s/var/tmp' % (work_dir)]
+
+if environment != 'development':
+    mpro.append('-q')
+
 appname        = 'yoigo'
 appversion     = '0.1'
 proversion     = '11.2'
