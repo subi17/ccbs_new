@@ -1,3 +1,4 @@
+"AA" "Advanced Analytics" "" 0 "" "" "" "gonzalo.garrido.arsuaga@yoigo.com" "1" 99 yes "" ""
 "AB" "B12 CROSS-SELLING" "" 0 "" "" "" "lisandro.racedo@masmovil.com" "1" 99 yes "" ""
 "AF" "AMPLIFFICA" "" 0 "" "" "" "maria.barreiro.sanisidro@ext.yoigo.com" "1" 99 yes "" ""
 "AK" "ATAKAM DISTRIBUCION ONLINE" "" 0 "" "" "" "teobaldo.gomez@masmovil.com" "1" 99 yes "" ""
@@ -34,6 +35,7 @@
 "MD" "MUNDO DIGITAL" "" 0 "" "" "" "mcastrosan@bellpartners.es" "1" 41 yes "323841577" "332296698"
 "MK" "MARKTEL CROSS-SELLING" "" 0 "" "" "" "lisandro.racedo@masmovil.com" "1" 99 yes "" ""
 "MM" "MEDIAMARKT" "" 0 "" "" "" "Ignacio.Larragan.Silva@yoigo.com" "1" 99 no "" ""
+"N2" "N2 Averias Convergencia" "" 0 "" "" "" "jorge.gil@masmovil.com" "1" 99 yes "" ""
 "PE" "PhoneHouse Emision Televenta" "" 0 "" "" "" "maria.barreiro.sanisidro@ext.yoigo.com" "1" 99 yes "" ""
 "PH" "PHONE HOUSE" "" 0 "" "" "" "Ignacio.Larragan.Silva@yoigo.com" "1" 43 yes "323841551" "332296607"
 "PJ" "PhoneHouse Retencion Jerez" "" 0 "" "" "" "gonzalo.garrido.arsuaga@yoigo.com" "1" 99 no "" ""

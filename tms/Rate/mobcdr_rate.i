@@ -330,6 +330,18 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       ELSE IF ttCall.ServiceClass = {&SC_TARJ9_INSIDE_DATABUNDLE1}
       OR ttCall.ServiceClass = {&SC_TARJ9_INSIDE_DATABUNDLE2} THEN
          mod_bsub = "GPRSDATA_TARJ9".
+      /* TARJ10 case */
+      ELSE IF ttCall.ServiceClass = {&SC_TARJ10_INSIDE_DATABUNDLE1}
+      OR ttCall.ServiceClass = {&SC_TARJ10_INSIDE_DATABUNDLE2} THEN
+         mod_bsub = "GPRSDATA_TARJ10".
+      /* TARJ11 case */
+      ELSE IF ttCall.ServiceClass = {&SC_TARJ11_INSIDE_DATABUNDLE1}
+      OR ttCall.ServiceClass = {&SC_TARJ11_INSIDE_DATABUNDLE2} THEN
+         mod_bsub = "GPRSDATA_TARJ11".
+      /* TARJ12 case */
+      ELSE IF ttCall.ServiceClass = {&SC_TARJ12_INSIDE_DATABUNDLE1}
+      OR ttCall.ServiceClass = {&SC_TARJ12_INSIDE_DATABUNDLE2} THEN
+         mod_bsub = "GPRSDATA_TARJ12".
    END.
 
    IF dest_recid = ? OR 
