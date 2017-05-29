@@ -31,6 +31,53 @@ DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
 DEF VAR ldaCont15PromoEnd      AS DATE NO-UNDO.
 DEF VAR lcRegionArray          AS CHAR NO-UNDO.
 DEF VAR lcRegionStruct         AS CHAR NO-UNDO.
+DEF VAR lcFixedLineBB          AS CHAR NO-UNDO.
+
+FUNCTION fTMSCodeName RETURNS CHARACTER
+   (iTableName AS CHAR,
+    iFieldName AS CHAR,
+    iCodeValue AS CHAR).
+
+   FIND FIRST TMSCodes NO-LOCK WHERE
+              TMSCodes.TableName = iTableName AND
+              TMSCodes.FieldName = iFieldName AND
+              TMSCodes.CodeValue = iCodeValue NO-ERROR.
+
+   IF AVAILABLE TMSCodes AND TMSCodes.InUse > 0 THEN RETURN TMSCodes.CodeName.
+   ELSE RETURN "".
+
+END FUNCTION.
+
+FUNCTION fGetSLAmount RETURNS DECIMAL 
+  (icServiceLimitGroup AS CHARACTER,
+   iiDialType          AS INTEGER):
+
+  FIND FIRST ServiceLimit NO-LOCK WHERE ServiceLimit.GroupCode = icServiceLimitGroup AND
+                                        ServiceLimit.DialType  = iiDialType          AND
+                                        ServiceLimit.ValidTo   >= TODAY              NO-ERROR.
+  IF AVAIL ServiceLimit THEN 
+    RETURN ServiceLimit.InclAmt.
+
+  RETURN 0.                                          
+         
+END FUNCTION.  
+
+FUNCTION fGetFixedLineBaseBundle RETURNS CHARACTER
+  (icCliType AS CHARACTER):
+
+  FIND FIRST RequestAction WHERE RequestAction.Brand      = "1"             AND
+                                 RequestAction.ReqType    = 14              AND
+                                 RequestAction.CliType    = icCliType       AND
+                                 RequestAction.ActionType = "DayCampaign"   AND
+                                 RequestAction.Action     = 1               AND
+                                 RequestAction.ValidFrom <= TODAY           AND
+                                 RequestAction.ValidTo   >= TODAY           NO-LOCK NO-ERROR. 
+  IF AVAIL RequestAction THEN 
+    RETURN RequestAction.ActionKey.                               
+
+  RETURN "".
+
+END FUNCTION.  
 
 ASSIGN lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE")
        lcAllVoIPNativeBundles = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
@@ -46,7 +93,9 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
               CLIType.WebStatusCode > 0 NO-ERROR.
    IF NOT AVAIL CLIType THEN RETURN appl_err("Subscription Type not found: "+ pcId).
 
-   lcCLITypeTransName = fGetItemName("1","CLIType",CLIType.CLIType,1,TODAY).
+   ASSIGN 
+      lcCLITypeTransName = fGetItemName("1","CLIType",CLIType.CLIType,1,TODAY)
+      lcFixedLineBB      = fGetFixedLineBaseBundle(CliType.CliType) WHEN CliType.TariffType > 0.
 
    IF CLIType.CLIType = "CONTFF" THEN
       lcCLITypeTransName = CLIType.CLIName.
@@ -71,17 +120,26 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
                LOOKUP(CLIType.CLIType,lcAllVoIPNativeBundles) > 0).
 
    IF CLIType.BaseBundle > "" THEN
-      FOR FIRST ServiceLimit NO-LOCK WHERE
-                ServiceLimit.GroupCode = CLIType.BaseBundle AND
-                ServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
-                ServiceLimit.ValidTo >= TODAY:
-         add_double(lcResultStruct,"data_amount", ServiceLimit.InclAmt).
-      END.
+   DO:
+      add_double(lcResultStruct,"data_amount" , fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_GPRS} )).
+      add_double(lcResultStruct,"voice_amount", fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_VOICE})).
+   END.
+
+   IF lcFixedLineBB > "" THEN
+   DO:
+       add_string(lcResultStruct,"fixed_line_download_speed", CliType.FixedLineDownload).
+       add_string(lcResultStruct,"fixed_line_upload_speed"  , CliType.FixedLineUpload). 
+       add_double(lcResultStruct,"fixed2fixed_voice_amount" , (IF lcFixedLineBB > "" THEN fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE_BDEST} ) ELSE 0)).
+       add_double(lcResultStruct,"fixed2mobile_voice_amount", (IF lcFixedLineBB > "" THEN fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE}) ELSE 0)).
+   END.
 
    IF CLIType.UsageType = 1 THEN
       add_string(lcResultStruct,"usage_type", "voice").
    ELSE
       add_string(lcResultStruct,"usage_type", "data").
+
+   add_string(lcResultStruct,"tariff_type", fTMSCodeName("CLIType","TariffType",STRING(CliType.TariffType))).
+   add_string(lcResultStruct,"rateplan_id", CliType.Priceplan).
 
    lcRegionArray = add_array(lcResultStruct, "region").
    FOR EACH VATCode NO-LOCK WHERE
