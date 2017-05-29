@@ -498,8 +498,7 @@ IF NOT AVAIL mobsub THEN DO:
       lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
       
        /* TARJ7 and TARJ9 have their own Welcome SMSes */
-       IF MobSub.CliType = "TARJ7" OR
-          MobSub.CliType = "TARJ9" THEN
+       IF LOOKUP(MobSub.CliType, "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN
           lcSMSText = fGetSMSTxt(MobSub.CliType + "Act",
                                  TODAY,
                                  Customer.Language,

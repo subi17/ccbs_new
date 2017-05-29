@@ -1277,6 +1277,7 @@
 "RepText" "TextType" "Report" "23" "Delivery incident" "" "" 1
 "RepText" "TextType" "Report" "24" "Delivery incident measure" "" "" 1
 "RepText" "TextType" "Report" "25" "Profession" "" "" 1
+"RepText" "TextType" "Report" "26" "Barring" "" "" 1
 "RepText" "TextType" "Report" "3" "CCN" "" "" 1
 "RepText" "TextType" "Report" "31" "Discount plan" "" "" 1
 "RepText" "TextType" "Report" "32" "SMS" "" "" 1
@@ -1371,6 +1372,7 @@
 "RoamTariff" "Service" "Roaming" "GPRS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "SMS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "VOICE" "" "" "" 1
+"Salesman" "SmPrefix" "IFS" "AA" "Advance Analytics" "" "14" 1
 "Salesman" "SmPrefix" "IFS" "AB" "B12 CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AF" "AMPLIFFICA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AK" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
