@@ -33,7 +33,6 @@ Currency
 CustCat
 CustClass
 CustGroup
-CustIntEvent
 CustTemp
 DayCampaign
 DCServiceComponent

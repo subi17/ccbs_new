@@ -292,6 +292,12 @@ function fMakeCommLine2 returns CHAR
                 ProvCLIType.CLIType = "TARJ7" THEN "0003"
              ELSE IF ProvMSrequest.ReqCParam1 BEGINS "TARJ" AND
                 ProvCLIType.CLIType = "TARJ9" THEN "0009"
+             ELSE IF ProvMSrequest.ReqCParam1 BEGINS "TARJ" AND
+                ProvCLIType.CLIType = "TARJ10" THEN "0010"
+             ELSE IF ProvMSrequest.ReqCParam1 BEGINS "TARJ" AND
+                ProvCLIType.CLIType = "TARJ11" THEN "0011"
+             ELSE IF ProvMSrequest.ReqCParam1 BEGINS "TARJ" AND
+                ProvCLIType.CLIType = "TARJ12" THEN "0012"
              ELSE ProvCliType.ServiceClass) + "," .
 
       IF ProvCLIType.PayType + 1 <= NUM-ENTRIES(lcPayTypes)
