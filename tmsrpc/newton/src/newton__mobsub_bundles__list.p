@@ -65,7 +65,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles):
    
    lcActiveBundle = ENTRY(liCount,lcActiveBundles).
    
-   IF lcActiveBundle = "TARJ7" OR lcActiveBundle = "TARJ9" THEN
+   IF LOOKUP(lcActiveBundle,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN
       add_string(lcResultArray,"", "TARJ7_UPSELL|" + STRING(Mobsub.MsSeq)).
    
    IF LOOKUP(lcActiveBundle, lcBONOContracts + "," + lcIPLContracts + ",BONO_VOIP") = 0 THEN NEXT.

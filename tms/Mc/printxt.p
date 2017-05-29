@@ -1125,7 +1125,10 @@ IF NOT llErrors THEN DO:
 
             /* Check if TopUpScheme has DisplayAmount to show */
             IF Order.CliType BEGINS "TARJ7" OR
-               Order.CliType BEGINS "TARJ9" THEN
+               Order.CliType BEGINS "TARJ9" OR
+               Order.CliType BEGINS "TARJ10" OR
+               Order.CliType BEGINS "TARJ11" OR 
+               Order.CliType BEGINS "TARJ12" THEN
                FOR EACH TopUpSchemeRow NO-LOCK WHERE
                         TopUpSchemeRow.BillCode = InvRow.BillCode AND
                         TopUpSchemeRow.Amount = InvRow.Amt:
@@ -1918,6 +1921,9 @@ FOR FIRST CLIType NO-LOCK WHERE
       WHEN "TARJ7" THEN lcList = "1 cent/min".
       WHEN "TARJ8" THEN lcList = "6,05 cent/min".
       WHEN "TARJ9" THEN lcList = "1 cent/min".
+      WHEN "TARJ10" THEN lcList = "1 cent/min".
+      WHEN "TARJ11" THEN lcList = "1 cent/min".
+      WHEN "TARJ12" THEN lcList = "1 cent/min".
       OTHERWISE lcList = "".
     END.
 
