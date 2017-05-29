@@ -268,7 +268,7 @@ IF llBBActive THEN DO:
       LOOKUP(MsRequest.ReqCParam2,lcPrepaidVoiceTariffs) > 0 AND
       MsRequest.ReqCParam2 <> "TARJ6" THEN /* BB allowed for TARJ6 */
       lcSMSText = "BBDeActSTCPreV_1".
-   ELSE IF LOOKUP(MsRequest.ReqCParam1,"TARJ6,TARJ7,TARJ9") > 0 THEN
+   ELSE IF LOOKUP(MsRequest.ReqCParam1,"TARJ6,TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN
       lcSMSText = "BBDeActSTCPreV_1".
    ELSE IF MsRequest.ReqCParam2 = "TARJRD1" THEN
       lcSMSText = "BBDeActSTCPreD_1".
