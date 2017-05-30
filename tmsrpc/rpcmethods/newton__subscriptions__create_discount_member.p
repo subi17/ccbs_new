@@ -96,6 +96,17 @@ FIND Customer OF Mobsub NO-LOCK NO-ERROR.
 IF NOT AVAIL Customer THEN
    RETURN appl_err("Customer not available").
 
+FIND FIRST DiscountPlan WHERE
+           DiscountPlan.Brand = gcBrand AND
+           DiscountPlan.DPRuleID = lcDPRuleID NO-LOCK NO-ERROR.
+IF NOT AVAILABLE DiscountPlan THEN
+   RETURN appl_err("Unknown Discount Plan").
+
+IF liValidPeriods = 999 THEN
+   ldaValidTo = 12/31/2049.
+ELSE
+   ldaValidTo = fCalcDPMemberValidTo(ldaValidFrom, liValidPeriods).
+
 /* ADDLINE-275 */
 IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) > 0 AND
    LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN DO:
@@ -119,16 +130,6 @@ IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) > 0 AND
    END.
 
 END.
-
-FIND FIRST DiscountPlan WHERE
-           DiscountPlan.Brand = gcBrand AND
-           DiscountPlan.DPRuleID = lcDPRuleID NO-LOCK NO-ERROR.
-IF NOT AVAILABLE DiscountPlan THEN
-   RETURN appl_err("Unknown Discount Plan").
-IF liValidPeriods = 999 THEN
-   ldaValidTo = 12/31/2049.
-ELSE
-   ldaValidTo = fCalcDPMemberValidTo(ldaValidFrom, liValidPeriods).
 
 FIND FIRST DPMember WHERE
            DPMember.DPId = DiscountPlan.DPId AND
