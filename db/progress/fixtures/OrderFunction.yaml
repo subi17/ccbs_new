@@ -1,0 +1,140 @@
+OrderFunction1: OrderFunction
+  OFID: 3
+  OFName: "Release In Control"
+  OFModule: "Mc/orderinctrl.p,iiOrderId,0"
+
+OrderFunction2: OrderFunction
+  OFID: 4
+  OFName: "Set In Control"
+  OFModule: "Mc/ordercontrol.p,iiOrder"
+
+OrderFunction3: OrderFunction
+  OFID: 5
+  OFName: "Release Credit Hold"
+  OFModule: "Mc/credithold.p,iiOrderID,FALSE"
+
+OrderFunction4: OrderFunction
+  OFID: 7
+  OFName: "Cash Invoice"
+  OFModule: "Mc/nnasla.p"
+
+OrderFunction5: OrderFunction
+  OFID: 10
+  OFName: "Close Order"
+  OFModule: "Mc/closeorder.p,iiOrderID"
+
+OrderFunction6: OrderFunction
+  OFID: 12
+  OFName: "Credit functions"
+  OFModule: "creditorder,iiOrderID"
+
+OrderFunction7: OrderFunction
+  OFID: 14
+  OFName: "Print Text"
+  OFModule: "Mc/prinoinf.p"
+
+OrderFunction8: OrderFunction
+  OFID: 15
+  OFName: "Hold order"
+  OFModule: "Mc/orderhold.p,iiOrderID,TRUE"
+
+OrderFunction9: OrderFunction
+  OFID: 16
+  OFName: "Release Hold"
+  OFModule: "Mc/orderhold.p,iiOrderID,RELEASE"
+
+OrderFunction10: OrderFunction
+  OFID: 18
+  OFName: "Order Event Log"
+  OFModule: "eventsel ,iiOrderID"
+
+OrderFunction11: OrderFunction
+  OFID: 27
+  OFName: "Credit Hold Order"
+  OFModule: "Mc/credithold.p,iiOrderID,TRUE"
+
+OrderFunction12: OrderFunction
+  OFID: 29
+  OFName: "Rescue Failed"
+  OFModule: "Mm/rescuefailed.p,iiorderid"
+
+OrderFunction13: OrderFunction
+  OFID: 30
+  OFName: "Received Confirmation"
+  OFModule: "Mm/receiveconfirmation.p,iiorderid"
+
+OrderFunction14: OrderFunction
+  OFID: 32
+  OFName: "Print Rescue Confirmation"
+  OFModule: "prrescueconf,iiorderid"
+
+OrderFunction15: OrderFunction
+  OFID: 34
+  OFName: "Change Person/OrgID"
+  OFModule: "chpersonid,iiorderid"
+
+OrderFunction16: OrderFunction
+  OFID: 36
+  OFName: "MNP Messages"
+  OFModule: "Mnp/mnpbr.p,iiOrderId"
+
+OrderFunction17: OrderFunction
+  OFID: 39
+  OFName: "MNP Resend"
+  OFModule: "Mnp/mnpresend.p,iiOrderId"
+
+OrderFunction18: OrderFunction
+  OFID: 40
+  OFName: "Credit Scoring"
+  OFModule: "Mc/creditscoringh.p,iiOrderId"
+
+OrderFunction19: OrderFunction
+  OFID: 45
+  OFName: "Release Data Order"
+  OFModule: "Mc/orderrelease.p,iiOrderID"
+
+OrderFunction20: OrderFunction
+  OFID: 47
+  OFName: "Show Offer"
+  OFModule: "Mc/offer.p"
+
+OrderFunction21: OrderFunction
+  OFID: 49
+  OFName: "More documentation needed"
+  OFModule: "Mc/orderneeddoc.p,iiOrderId"
+
+OrderFunction22: OrderFunction
+  OFID: 50
+  OFName: "Closed by Fraud"
+  OFModule: "Mc/orderbyfraud.p,iiOrderId"
+
+OrderFunction23: OrderFunction
+  OFID: 53
+  OFName: "Show Action Items"
+  OFModule: "Mc/orderaction.p,iiOrderId"
+
+OrderFunction24: OrderFunction
+  OFID: 55
+  OFName: "Change Customer Data"
+  OFModule: "Mc/orderhold.p,iiOrderId,MODIFY"
+
+OrderFunction25: OrderFunction
+  OFID: 57
+  OFName: "Release in control with secure"
+  OFModule: "Mc/orderinctrl.p,iiOrderId,1"
+
+OrderFunction26: OrderFunction
+  OFID: 59
+  OFName: "Document Management"
+  OFModule: "Mc/dms.p"
+
+OrderFunction27: OrderFunction
+  OFID: 60
+  OFName: "Show Convergent data"
+  OFModule: "Mc/convview.p"
+
+OrderFunction28: OrderFunction
+  OFID: 61
+  OFName: "Cancel fixed line order"
+  OFModule: "Mc/fusion_order_cancel.p,iiOrderId"
+
