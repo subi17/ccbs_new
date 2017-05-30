@@ -139,7 +139,6 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       add_string(lcResultStruct,"usage_type", "data").
 
    add_string(lcResultStruct,"tariff_type", fTMSCodeName("CLIType","TariffType",STRING(CliType.TariffType))).
-   add_string(lcResultStruct,"rateplan_id", CliType.Priceplan).
 
    lcRegionArray = add_array(lcResultStruct, "region").
    FOR EACH VATCode NO-LOCK WHERE
