@@ -94,6 +94,9 @@ def compile(*a):
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
 
+    if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
+        os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
+
     comp = Popen(mpro + args + ['-s', '120', '-b', '-p', procedure_file.name], stdout=PIPE)
 
     call('/bin/cat', stdin=comp.stdout)
