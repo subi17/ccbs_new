@@ -1,0 +1,54 @@
+CDRError1: CDRError
+  CDRError: 8042
+
+CDRError2: CDRError
+  CDRError: 8043
+
+CDRError3: CDRError
+  CDRError: 9000
+
+CDRError4: CDRError
+  CDRError: 9050
+
+CDRError5: CDRError
+  CDRError: 9051
+
+CDRError6: CDRError
+  CDRError: 9052
+
+CDRError7: CDRError
+  CDRError: 9053
+
+CDRError8: CDRError
+  CDRError: 9054
+
+CDRError9: CDRError
+  CDRError: 9055
+
+CDRError10: CDRError
+  CDRError: 9056
+
+CDRError11: CDRError
+  CDRError: 9057
+
+CDRError12: CDRError
+  CDRError: 9061
+
+CDRError13: CDRError
+  CDRError: 9062
+
+CDRError14: CDRError
+  CDRError: 9063
+
+CDRError15: CDRError
+  CDRError: 9064
+
+CDRError16: CDRError
+  CDRError: 9067
+
+CDRError17: CDRError
+  CDRError: 9070
+
+CDRError18: CDRError
+  CDRError: 9071
+

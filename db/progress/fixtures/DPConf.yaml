@@ -1,0 +1,10 @@
+DPConf1: DPConf
+  DiscPlan: "SMSAUG2009"
+  DPConfNum: 2
+  ValidFrom: 2009-08-01
+  DPCName: "Half price"
+  ValidTo: 2009-08-31
+  DiscPrcnt[1]: 50
+  StartFee: TRUE 
+  Brand: "1"
+
