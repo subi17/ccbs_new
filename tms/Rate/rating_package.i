@@ -257,7 +257,10 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                   liSLGAUsed = liSLGAType.
                ELSE IF MserviceLimit.InclUnit NE liUnitUsed OR
                        liSLGAType NE liSLGAUsed
-               THEN NEXT PACKET.
+               THEN DO:
+                  objDynQueryMServiceLimit:mCloseQuery().
+                  NEXT PACKET.
+               END.
 
                IF NOT llPackageUsed THEN DO:
                   ldPackageAmt = fIncludedUnit(MserviceLimit.InclUnit).
