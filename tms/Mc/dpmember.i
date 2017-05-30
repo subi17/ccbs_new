@@ -192,6 +192,10 @@ FUNCTION fCloseAddLineDiscount RETURNS LOGICAL
                      iiMsSeq,
                      idtDate,
                      FALSE).
+      fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}),
+                     iiMsSeq,
+                     idtDate,
+                     FALSE).
    END.
 
    RETURN TRUE.

@@ -926,6 +926,10 @@ PROCEDURE pTerminate:
                      MobSub.MsSeq,
                      fLastDayOfMonth(TODAY),
                      FALSE).
+      fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}),
+                     MobSub.MsSeq,
+                     fLastDayOfMonth(TODAY),
+                     FALSE).
    END.
 
    /* COFF Partial termination */
