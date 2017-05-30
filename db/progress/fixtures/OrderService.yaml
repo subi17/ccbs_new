@@ -1,10 +1,10 @@
-OrderService1: OrderService
+bulkload: OrderService
   OrderId: 1
   Service: "GPRS"
   ServValue: "1"
   Brand: "1"
 
-OrderService2: OrderService
+bulkload: OrderService
   OrderId: 1
   Service: "CALLSPEC"
   ServValue: "1"
