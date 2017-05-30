@@ -77,7 +77,6 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    DEF VAR liCallPeriod          AS INT NO-UNDO. 
    DEF VAR ldeEndTs              AS DEC NO-UNDO. 
    DEF VAR lcCliTypeList         AS CHAR NO-UNDO.
-   DEFINE VARIABLE lcmSL AS CHARACTER NO-UNDO.
 
    ASSIGN	
       ttCall.BillCode = bsub-prod
@@ -229,10 +228,6 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                ServiceLimitTarget.SLSeq = ttServiceLimit.SLSeq AND
                ServiceLimitTarget.ServiceLMember = lcOrigBillCode:
 
-            IF ttServiceLimit.GroupCode BEGINS {&DSS}
-            THEN lcmSL = "CustNum|" + STRING(MSOwner.Custnum).
-            ELSE lcmSL = "msseq|" + STRING(MSOwner.MSSeq).
-
             objDynQueryMServiceLimit:mSetQuery
                (SUBSTITUTE("FOR EACH &1 NO-LOCK USE-INDEX &2 WHERE " +
                            "&1.&2 = &3 AND " +
@@ -241,11 +236,13 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                            "&1.EndTS >= &6 AND " +
                            "&1.FromTS <= &6",
                            "mServiceLimit",
-                           ENTRY(1,lcmSL,"|"),
-                           ENTRY(2,lcmSL,"|"),
+                           IF ttServiceLimit.GroupCode BEGINS {&DSS}
+                           THEN "CustNum" ELSE "msseq",
+                           IF ttServiceLimit.GroupCode BEGINS {&DSS}
+                           THEN STRING(MSOwner.Custnum) ELSE STRING(MSOwner.MSSeq),
                            liDialtype,
                            ttServiceLimit.SLSeq,
-                           REPLACE(STRING(CallTimeStamp),",","."))).
+                           QUOTER(CallTimeStamp))).
 
             IF objDynQueryMServiceLimit:mGetNext()
             THEN DO:
@@ -283,7 +280,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
 
                ASSIGN
                   llPackageUsed = TRUE
-                  ldAmtUsed = ldPackageAmt.
+                  ldAmtUsed = ldPackageAmt. /* How much there was in a CDR */
 
                DO WHILE TRUE:
                   llServiceGrp = f{&CounterHandling}IsServiceLimitAllowed
@@ -299,7 +296,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                                            liSLGAType,
                                            liBDestLimit,
                                            liBDestAmt,  
-                                           INPUT-OUTPUT ldPackageAmt).
+                                           INPUT-OUTPUT ldPackageAmt). /* How much didn't fit to the packet */
                   ldAmtUsed = ldAmtUsed - ldPackageAmt.
                   IF NOT objDynQueryMServiceLimit:mGetNext()
                   THEN LEAVE.
