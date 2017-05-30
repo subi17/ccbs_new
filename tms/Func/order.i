@@ -256,6 +256,8 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.ExtInvRef    = OrderCustomer.ExtInvRef
    Customer.FoundationDate = OrderCustomer.FoundationDate
 
+   Customer.DontSharePersData = OrderCustomer.DontSharePersData
+
    /* marketing values */
    Customer.DirMarkSMS   = OrderCustomer.OperSMSMarketing
    Customer.DirMarkEmail = OrderCustomer.OperEMailMarketing
