@@ -1,0 +1,340 @@
+ReportConfRow1: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Delivery Type"
+  IntValue: 1
+  DecValue: 1
+
+ReportConfRow2: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "Invalid address"
+  IntValue: 201
+  DecValue: 2
+  ConfRowID: 1
+  LogicValue: TRUE 
+
+ReportConfRow3: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "Delivery denied"
+  IntValue: 202
+  DecValue: 2
+  ConfRowID: 2
+  LogicValue: TRUE 
+
+ReportConfRow4: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "Credit note"
+  IntValue: 203
+  DecValue: 2
+  ConfRowID: 3
+  LogicValue: TRUE 
+
+ReportConfRow5: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "Delivery type"
+  IntValue: 204
+  DecValue: 2
+  ConfRowID: 4
+  LogicValue: TRUE 
+
+ReportConfRow6: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "Unknown reason"
+  IntValue: 210
+  DecValue: 2
+  ConfRowID: 5
+  LogicValue: TRUE 
+
+ReportConfRow7: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "Invalid bank account"
+  IntValue: 402
+  DecValue: 4
+  ConfRowID: 6
+  LogicValue: TRUE 
+
+ReportConfRow8: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "Paid"
+  IntValue: 403
+  DecValue: 4
+  ConfRowID: 7
+  LogicValue: TRUE 
+
+ReportConfRow9: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "Undelivered"
+  IntValue: 404
+  DecValue: 4
+  ConfRowID: 8
+  LogicValue: TRUE 
+
+ReportConfRow10: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "Unknown reason"
+  IntValue: 410
+  DecValue: 4
+  ConfRowID: 9
+  LogicValue: TRUE 
+
+ReportConfRow11: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Delivery Type"
+  IntValue: 2
+  DecValue: 1
+  ConfRowID: 11
+
+ReportConfRow12: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Delivery Status"
+  DecValue: 2
+  ConfRowID: 12
+  LogicValue: TRUE 
+
+ReportConfRow13: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Delivery Status"
+  IntValue: 1
+  DecValue: 2
+  ConfRowID: 13
+
+ReportConfRow14: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Charge Type"
+  IntValue: 1
+  DecValue: 3
+  ConfRowID: 14
+  LogicValue: TRUE 
+
+ReportConfRow15: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Charge Type"
+  IntValue: 2
+  DecValue: 3
+  ConfRowID: 15
+
+ReportConfRow16: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Charge Type"
+  IntValue: 3
+  DecValue: 3
+  ConfRowID: 16
+  LogicValue: TRUE 
+
+ReportConfRow17: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Charge Type"
+  IntValue: 5
+  DecValue: 3
+  ConfRowID: 17
+  LogicValue: TRUE 
+
+ReportConfRow18: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Direct Debit Status"
+  IntValue: 2
+  DecValue: 4
+  ConfRowID: 18
+  LogicValue: TRUE 
+
+ReportConfRow19: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Direct Debit Status"
+  IntValue: 1
+  DecValue: 4
+  ConfRowID: 19
+
+ReportConfRow20: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Delivery Type"
+  DecValue: 1
+  ConfRowID: 20
+  LogicValue: TRUE 
+
+ReportConfRow21: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "Invoice amount zero"
+  IntValue: 401
+  DecValue: 4
+  ConfRowID: 21
+
+ReportConfRow22: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "Delivery denied"
+  IntValue: 205
+  DecValue: 2
+  ConfRowID: 23
+  LogicValue: TRUE 
+
+ReportConfRow23: ReportConfRow
+  Brand: "1"
+  ReportID: "UnbilledSubsQty"
+  RowType: "ReportItem"
+  CharValue: "Suspended"
+  IntValue: 201
+  DecValue: 2
+  ConfRowID: 24
+
+ReportConfRow24: ReportConfRow
+  Brand: "1"
+  ReportID: "UnbilledSubsQty"
+  RowType: "ReportItem"
+  CharValue: "Prohibited and active in the end of the Billing Period"
+  IntValue: 202
+  DecValue: 2
+  ConfRowID: 25
+
+ReportConfRow25: ReportConfRow
+  Brand: "1"
+  ReportID: "UnbilledSubsQty"
+  RowType: "ReportItem"
+  CharValue: "New subscription without consumption"
+  IntValue: 301
+  DecValue: 3
+  ConfRowID: 26
+
+ReportConfRow26: ReportConfRow
+  Brand: "1"
+  ReportID: "UnbilledSubsQty"
+  RowType: "ReportItem"
+  CharValue: "Termination on 1. day of period"
+  IntValue: 302
+  DecValue: 3
+  ConfRowID: 27
+
+ReportConfRow27: ReportConfRow
+  Brand: "1"
+  ReportID: "UnbilledSubsQty"
+  RowType: "ReportItem"
+  CharValue: "STC on 1. day of period"
+  IntValue: 303
+  DecValue: 3
+  ConfRowID: 28
+
+ReportConfRow28: ReportConfRow
+  Brand: "1"
+  ReportID: "UnbilledSubsQty"
+  RowType: "ReportItem"
+  CharValue: "Unclear customer"
+  IntValue: 401
+  DecValue: 4
+  ConfRowID: 29
+
+ReportConfRow29: ReportConfRow
+  Brand: "1"
+  ReportID: "UnbilledSubsQty"
+  RowType: "ReportItem"
+  CharValue: "Unclear subscription"
+  IntValue: 402
+  DecValue: 4
+  ConfRowID: 30
+  LogicValue: TRUE 
+
+ReportConfRow30: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "No subscription on invoice"
+  IntValue: 903
+  DecValue: 5
+  FromDate: 2009-08-01
+  ToDate: 2049-12-31
+  ConfRowID: 31
+
+ReportConfRow31: ReportConfRow
+  Brand: "1"
+  ReportID: "UnbilledSubsQty"
+  RowType: "ReportItem"
+  CharValue: "Prohibited and terminated during the Billing Period"
+  IntValue: 203
+  DecValue: 2
+  ConfRowID: 32
+
+ReportConfRow32: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Delivery Type"
+  IntValue: 10
+  DecValue: 1
+  ConfRowID: 33
+
+ReportConfRow33: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ErrorCode"
+  CharValue: "No paper invoice"
+  IntValue: 206
+  DecValue: 2
+  ConfRowID: 34
+
+ReportConfRow34: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Delivery Type"
+  IntValue: 4
+  DecValue: 1
+  ConfRowID: 35
+
+ReportConfRow35: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Delivery Type"
+  IntValue: 11
+  DecValue: 1
+  ConfRowID: 36
+
+ReportConfRow36: ReportConfRow
+  Brand: "1"
+  ReportID: "BillingReport"
+  RowType: "ReportItem"
+  CharValue: "Delivery Type"
+  IntValue: 12
+  DecValue: 1
+  ConfRowID: 37
+

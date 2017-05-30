@@ -1,0 +1,174 @@
+ResellerTF1: ResellerTF
+  Brand: "1"
+  Reseller: "AP"
+  TFBank: "0049"
+  ValidFrom: 2013-01-01
+
+ResellerTF2: ResellerTF
+  Brand: "1"
+  Reseller: "AX"
+  TFBank: "0225"
+  ValidFrom: 2016-10-03
+
+ResellerTF3: ResellerTF
+  Brand: "1"
+  Reseller: "AX"
+  TFBank: "0081"
+  ValidFrom: 2014-06-04
+
+ResellerTF4: ResellerTF
+  Brand: "1"
+  Reseller: "AX"
+  TFBank: "0049"
+  ValidFrom: 2013-01-01
+
+ResellerTF5: ResellerTF
+  Brand: "1"
+  Reseller: "BY"
+  TFBank: "0081"
+  ValidFrom: 2016-12-01
+
+ResellerTF6: ResellerTF
+  Brand: "1"
+  Reseller: "BY"
+  TFBank: "0225"
+  ValidFrom: 2016-10-03
+
+ResellerTF7: ResellerTF
+  Brand: "1"
+  Reseller: "BY"
+  TFBank: "0081"
+  ValidFrom: 2014-06-04
+
+ResellerTF8: ResellerTF
+  Brand: "1"
+  Reseller: "BY"
+  TFBank: "0049"
+  ValidFrom: 2013-01-01
+
+ResellerTF9: ResellerTF
+  Brand: "1"
+  Reseller: "DX"
+  TFBank: "0081"
+  ValidFrom: 2016-12-01
+
+ResellerTF10: ResellerTF
+  Brand: "1"
+  Reseller: "DX"
+  TFBank: "0225"
+  ValidFrom: 2016-10-03
+
+ResellerTF11: ResellerTF
+  Brand: "1"
+  Reseller: "DX"
+  TFBank: "0081"
+  ValidFrom: 2014-06-04
+
+ResellerTF12: ResellerTF
+  Brand: "1"
+  Reseller: "DX"
+  TFBank: "0049"
+  ValidFrom: 2013-01-01
+
+ResellerTF13: ResellerTF
+  Brand: "1"
+  Reseller: "KH"
+  TFBank: "0049"
+  ValidFrom: 2016-12-01
+
+ResellerTF14: ResellerTF
+  Brand: "1"
+  Reseller: "KH"
+  TFBank: "0225"
+  ValidFrom: 2016-10-03
+
+ResellerTF15: ResellerTF
+  Brand: "1"
+  Reseller: "KH"
+  TFBank: "0081"
+  ValidFrom: 2014-06-04
+
+ResellerTF16: ResellerTF
+  Brand: "1"
+  Reseller: "KH"
+  TFBank: "0049"
+  ValidFrom: 2013-01-01
+
+ResellerTF17: ResellerTF
+  Brand: "1"
+  Reseller: "MD"
+  TFBank: "0225"
+  ValidFrom: 2016-10-03
+
+ResellerTF18: ResellerTF
+  Brand: "1"
+  Reseller: "MD"
+  TFBank: "0081"
+  ValidFrom: 2014-06-04
+
+ResellerTF19: ResellerTF
+  Brand: "1"
+  Reseller: "MD"
+  TFBank: "0049"
+  ValidFrom: 2013-01-01
+
+ResellerTF20: ResellerTF
+  Brand: "1"
+  Reseller: "PH"
+  TFBank: "0049"
+  ValidFrom: 2016-12-01
+
+ResellerTF21: ResellerTF
+  Brand: "1"
+  Reseller: "PH"
+  TFBank: "0225"
+  ValidFrom: 2016-10-03
+
+ResellerTF22: ResellerTF
+  Brand: "1"
+  Reseller: "PH"
+  TFBank: "0049"
+  ValidFrom: 2013-01-01
+
+ResellerTF23: ResellerTF
+  Brand: "1"
+  Reseller: "TA"
+  TFBank: "0225"
+  ValidFrom: 2016-10-03
+
+ResellerTF24: ResellerTF
+  Brand: "1"
+  Reseller: "TA"
+  TFBank: "0081"
+  ValidFrom: 2014-06-04
+
+ResellerTF25: ResellerTF
+  Brand: "1"
+  Reseller: "TA"
+  TFBank: "0049"
+  ValidFrom: 2013-01-01
+
+ResellerTF26: ResellerTF
+  Brand: "1"
+  Reseller: "TC"
+  TFBank: "0049"
+  ValidFrom: 2013-01-01
+
+ResellerTF27: ResellerTF
+  Brand: "1"
+  Reseller: "TP"
+  TFBank: "0225"
+  ValidFrom: 2016-10-03
+
+ResellerTF28: ResellerTF
+  Brand: "1"
+  Reseller: "TP"
+  TFBank: "0081"
+  ValidFrom: 2014-06-04
+
+ResellerTF29: ResellerTF
+  Brand: "1"
+  Reseller: "TP"
+  TFBank: "0049"
+  ValidFrom: 2013-01-01
+
