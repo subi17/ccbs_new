@@ -1,256 +1,256 @@
-BItemGroup1: BItemGroup
+bulkload: BItemGroup
   BIGroup: "1"
   BIGName: "Calls"
   Brand: "1"
   ReportCode: "1002,1"
   InvoiceOrder: 40
 
-BItemGroup2: BItemGroup
+bulkload: BItemGroup
   BIGroup: "10"
   BIGName: "Discounts"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 190
 
-BItemGroup3: BItemGroup
+bulkload: BItemGroup
   BIGroup: "11"
   BIGName: "Delivery costs"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 140
 
-BItemGroup4: BItemGroup
+bulkload: BItemGroup
   BIGroup: "12"
   BIGName: "TopUp (Prepaid)"
   Brand: "1"
 
-BItemGroup5: BItemGroup
+bulkload: BItemGroup
   BIGroup: "13"
   BIGName: "Discounts & Charges"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 210
 
-BItemGroup6: BItemGroup
+bulkload: BItemGroup
   BIGroup: "14"
   BIGName: "Discount Penalty"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 110
 
-BItemGroup7: BItemGroup
+bulkload: BItemGroup
   BIGroup: "15"
   BIGName: "Subscriptions StartUp Fees"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 160
 
-BItemGroup8: BItemGroup
+bulkload: BItemGroup
   BIGroup: "16"
   BIGName: "Minimum consumption"
   Brand: "1"
   ReportCode: "1001,"
   InvoiceOrder: 10
 
-BItemGroup9: BItemGroup
+bulkload: BItemGroup
   BIGroup: "17"
   BIGName: "Provisional telephone number"
   Brand: "1"
 
-BItemGroup10: BItemGroup
+bulkload: BItemGroup
   BIGroup: "18"
   BIGName: "Tarifa Plana"
   Brand: "1"
   ReportCode: "1001,"
 
-BItemGroup11: BItemGroup
+bulkload: BItemGroup
   BIGroup: "19"
   BIGName: "Fixline for MinCons Postpaid"
   Brand: "1"
 
-BItemGroup12: BItemGroup
+bulkload: BItemGroup
   BIGroup: "2"
   BIGName: "Video calls"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 100
 
-BItemGroup13: BItemGroup
+bulkload: BItemGroup
   BIGroup: "20"
   BIGName: "CDR's wihtout analysis (pre)"
   Brand: "1"
 
-BItemGroup14: BItemGroup
+bulkload: BItemGroup
   BIGroup: "21"
   BIGName: "Gift"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 200
 
-BItemGroup15: BItemGroup
+bulkload: BItemGroup
   BIGroup: "22"
   BIGName: "Voice (Pre)"
   Brand: "1"
 
-BItemGroup16: BItemGroup
+bulkload: BItemGroup
   BIGroup: "23"
   BIGName: "Delivery costs (Pre)"
   Brand: "1"
 
-BItemGroup17: BItemGroup
+bulkload: BItemGroup
   BIGroup: "24"
   BIGName: "Discount penalty (Pre)"
   Brand: "1"
 
-BItemGroup18: BItemGroup
+bulkload: BItemGroup
   BIGroup: "25"
   BIGName: "Minimum consumption (Pre)"
   Brand: "1"
   ReportCode: ","
 
-BItemGroup19: BItemGroup
+bulkload: BItemGroup
   BIGroup: "26"
   BIGName: "Video calls (Pre)"
   Brand: "1"
 
-BItemGroup20: BItemGroup
+bulkload: BItemGroup
   BIGroup: "27"
   BIGName: "Data (Pre)"
   Brand: "1"
 
-BItemGroup21: BItemGroup
+bulkload: BItemGroup
   BIGroup: "28"
   BIGName: "SMS (Pre)"
   Brand: "1"
 
-BItemGroup22: BItemGroup
+bulkload: BItemGroup
   BIGroup: "29"
   BIGName: "MMS (Pre)"
   Brand: "1"
 
-BItemGroup23: BItemGroup
+bulkload: BItemGroup
   BIGroup: "3"
   BIGName: "Internet"
   Brand: "1"
   ReportCode: "1002,3"
   InvoiceOrder: 70
 
-BItemGroup24: BItemGroup
+bulkload: BItemGroup
   BIGroup: "30"
   BIGName: "Contents (Prepaid)"
   Brand: "1"
   ReportCode: ","
 
-BItemGroup25: BItemGroup
+bulkload: BItemGroup
   BIGroup: "31"
   BIGName: "Charge"
   Brand: "1"
   ReportCode: "1004,"
   InvoiceOrder: 170
 
-BItemGroup26: BItemGroup
+bulkload: BItemGroup
   BIGroup: "32"
   BIGName: "Compensation"
   Brand: "1"
   ReportCode: "1005,"
   InvoiceOrder: 180
 
-BItemGroup27: BItemGroup
+bulkload: BItemGroup
   BIGroup: "33"
   BIGName: "Installment"
   Brand: "1"
   ReportCode: "1018,"
   InvoiceOrder: 130
 
-BItemGroup28: BItemGroup
+bulkload: BItemGroup
   BIGroup: "34"
   BIGName: "Laptops"
   Brand: "1"
 
-BItemGroup29: BItemGroup
+bulkload: BItemGroup
   BIGroup: "35"
   BIGName: "Data bundle"
   Brand: "1"
   ReportCode: "1002,3"
   InvoiceOrder: 60
 
-BItemGroup30: BItemGroup
+bulkload: BItemGroup
   BIGroup: "36"
   BIGName: "IPL monthly fee"
   Brand: "1"
   ReportCode: "1001,3"
   InvoiceOrder: 30
 
-BItemGroup31: BItemGroup
+bulkload: BItemGroup
   BIGroup: "37"
   BIGName: "Data bundle"
   Brand: "1"
   ReportCode: ",3"
   InvoiceOrder: 61
 
-BItemGroup32: BItemGroup
+bulkload: BItemGroup
   BIGroup: "38"
   BIGName: "Blackberry"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 65
 
-BItemGroup33: BItemGroup
+bulkload: BItemGroup
   BIGroup: "39"
   BIGName: "Data bundle"
   Brand: "1"
   ReportCode: ",3"
   InvoiceOrder: 62
 
-BItemGroup34: BItemGroup
+bulkload: BItemGroup
   BIGroup: "4"
   BIGName: "Messages"
   Brand: "1"
   ReportCode: "1002,4"
   InvoiceOrder: 50
 
-BItemGroup35: BItemGroup
+bulkload: BItemGroup
   BIGroup: "40"
   BIGName: "Data bundle"
   Brand: "1"
   ReportCode: ",3"
   InvoiceOrder: 63
 
-BItemGroup36: BItemGroup
+bulkload: BItemGroup
   BIGroup: "41"
   BIGName: "DSS monthly fee"
   Brand: "1"
   ReportCode: ",3"
 
-BItemGroup37: BItemGroup
+bulkload: BItemGroup
   BIGroup: "42"
   BIGName: "Data bundle"
   Brand: "1"
   ReportCode: ",3"
   InvoiceOrder: 64
 
-BItemGroup38: BItemGroup
+bulkload: BItemGroup
   BIGroup: "43"
   BIGName: "Accessories"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 121
 
-BItemGroup39: BItemGroup
+bulkload: BItemGroup
   BIGroup: "44"
   BIGName: "Google Premium Services"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 85
 
-BItemGroup40: BItemGroup
+bulkload: BItemGroup
   BIGroup: "45"
   BIGName: "Google Discounts & Charges"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 86
 
-BItemGroup41: BItemGroup
+bulkload: BItemGroup
   BIGroup: "46"
   BIGName: "Convergent Monthly fee"
   Brand: "1"
@@ -258,7 +258,7 @@ BItemGroup41: BItemGroup
   ReportCode: ","
   InvoiceOrder: 31
 
-BItemGroup42: BItemGroup
+bulkload: BItemGroup
   BIGroup: "47"
   BIGName: "Fixed voice"
   Brand: "1"
@@ -266,14 +266,14 @@ BItemGroup42: BItemGroup
   ReportCode: ","
   InvoiceOrder: 32
 
-BItemGroup43: BItemGroup
+bulkload: BItemGroup
   BIGroup: "5"
   BIGName: "MMS"
   Brand: "1"
   ReportCode: "1002,5"
   InvoiceOrder: 90
 
-BItemGroup44: BItemGroup
+bulkload: BItemGroup
   BIGroup: "51"
   BIGName: "Calls Fixed"
   Brand: "1"
@@ -281,7 +281,7 @@ BItemGroup44: BItemGroup
   ReportCode: ","
   InvoiceOrder: 20
 
-BItemGroup45: BItemGroup
+bulkload: BItemGroup
   BIGroup: "53"
   BIGName: "Premium Services Fixed"
   Brand: "1"
@@ -289,28 +289,28 @@ BItemGroup45: BItemGroup
   ReportCode: ","
   InvoiceOrder: 30
 
-BItemGroup46: BItemGroup
+bulkload: BItemGroup
   BIGroup: "6"
   BIGName: "Premium Services"
   Brand: "1"
   ReportCode: "1002,6"
   InvoiceOrder: 80
 
-BItemGroup47: BItemGroup
+bulkload: BItemGroup
   BIGroup: "7"
   BIGName: "Terminals"
   Brand: "1"
   ReportCode: ","
   InvoiceOrder: 120
 
-BItemGroup48: BItemGroup
+bulkload: BItemGroup
   BIGroup: "8"
   BIGName: "Fixed fees"
   Brand: "1"
   ReportCode: "1001,"
   InvoiceOrder: 20
 
-BItemGroup49: BItemGroup
+bulkload: BItemGroup
   BIGroup: "9"
   BIGName: "SIM"
   Brand: "1"
