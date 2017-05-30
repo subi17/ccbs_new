@@ -64,7 +64,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 form
     ShaperConf.Brand SKIP
     ShaperConf.ShaperConfID SKIP
-    ShaperConf.Template SKIP
+    ShaperConf.Template FORMAT "x(30)" SKIP
     ShaperConf.tariffType SKIP
     ShaperConf.tariff SKIP
     ShaperConf.LimitUnshaped SKIP
