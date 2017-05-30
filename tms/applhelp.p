@@ -447,7 +447,7 @@ ELSE DO: /* Mobile-related tables ... */
  ELSE IF INDEX(FRAME-FIELD,"ReqStat") > 0      THEN hmod = "Help/h-reqstat".
 
  if hmod ne "" AND hmod NE ? THEN DO:
-    RUN VALUE(hmod).
+    RUN VALUE(hmod + ".p").
     IF siirto NE ? THEN frame-value = siirto.
  END.
 END.    

@@ -4,10 +4,7 @@ DEF VAR lcAbbrevDatatypes AS CHAR INITIAL "char,int,log,dec" NO-UNDO.
 
 DEF VAR lcName AS CHAR NO-UNDO.
 
-DEF STREAM lsOut.
-
-OUTPUT STREAM lsOut TO VALUE(ENTRY(1, SESSION:PARAMETER)).
-lcName = ENTRY(2, SESSION:PARAMETER).
+lcName = SESSION:PARAMETER.
 
 
 FIND dictdb._sequence
@@ -22,8 +19,8 @@ IF AVAILABLE dictdb._sequence THEN DO:
     OUTPUT CLOSE.
     RUN VALUE(lcTempFile)(OUTPUT liCurVal).
     OS-DELETE VALUE(lcTempFile).
-    PUT STREAM lsOut UNFORMATTED "Sequence description for " lcName.
-    DISPLAY STREAM lsOut
+    PUT UNFORMATTED "Sequence description for " lcName.
+    DISPLAY 
             dictdb._sequence._seq-name FORMAT "x(18)" LABEL "Name"
             dictdb._sequence._seq-init FORMAT ">>>>>>9" LABEL "Init"
             dictdb._sequence._seq-incr FORMAT ">>>>>9" LABEL "Incr"
@@ -31,14 +28,14 @@ IF AVAILABLE dictdb._sequence THEN DO:
             dictdb._sequence._seq-min FORMAT ">>>>>>9" LABEL "Min"
             dictdb._sequenc._seq-max  FORMAT ">>>>>>>>>>>>9" LABEL "Max"
             liCurVal FORMAT ">>>>>>>>>>>>9" LABEL "Current".
-    PUT STREAM lsOut UNFORMATTED "~n".
+    PUT UNFORMATTED "~n".
 END.
 
 FIND dictdb._file
 WHERE dictdb._file._file-name EQ lcName NO-ERROR.
 IF AVAILABLE dictdb._file THEN DO:
     DEF VAR lcDataType AS CHAR NO-UNDO.
-    PUT STREAM lsOut UNFORMATTED "Table description for " lcName.
+    PUT UNFORMATTED "Table description for " lcName.
     FOR EACH dictdb._field OF dictdb._file:
         lcDataType = dictdb._field._data-type.
         IF LOOKUP(lcDataType, lcLongDatatypes) > 0 THEN
@@ -47,7 +44,7 @@ IF AVAILABLE dictdb._file THEN DO:
         IF dictdb._field._Extent > 1 THEN
             lcDataType = lcDataType + SUBST("[&1]", dictdb._field._Extent).
 
-        DISPLAY STREAM lsOut
+        DISPLAY 
                 dictdb._field._field-name FORMAT "x(20)"
                 lcDataType FORMAT "x(8)" LABEL "Datatype"
                 dictdb._field._initial FORMAT "x(5)"
@@ -55,12 +52,12 @@ IF AVAILABLE dictdb._file THEN DO:
                 dictdb._field._label FORMAT "x(25)".
 
     END.
-    PUT STREAM lsOut UNFORMATTED "~n".
+    PUT UNFORMATTED "~n".
     DEF VAR lcIndexType AS CHAR NO-UNDO.
     DEF VAR lcIndexFields AS CHAR NO-UNDO.
     DEF VAR lcc AS CHAR NO-UNDO.
-    PUT STREAM lsOut UNFORMATTED "Index name            Type Index fields" SKIP.
-    PUT STREAM lsOut UNFORMATTED "--------------------- ---- --------------------------------------------------" SKIP.
+    PUT UNFORMATTED "Index name            Type Index fields" SKIP.
+    PUT UNFORMATTED "--------------------- ---- --------------------------------------------------" SKIP.
     FOR EACH dictdb._index of dictdb._file
     WHERE dictdb._index._active:
     
@@ -96,15 +93,15 @@ IF AVAILABLE dictdb._file THEN DO:
             lcIndexFields = SUBSTRING(lcIndexFields, 1, lipos).
         END.
     
-        PUT STREAM lsOut UNFORMATTED
+        PUT UNFORMATTED
                 STRING(dictdb._index._index-name, "x(21)") + " " +
                 STRING(lcIndexType, "x(4)") + " " +
                 STRING(lcIndexFields) + "~n".
     
-        PUT STREAM lsOut UNFORMATTED lcc.
+        PUT UNFORMATTED lcc.
     END.
 
 END.
 
-OUTPUT STREAM lsOut CLOSE.
+OUTPUT CLOSE.
 QUIT.
