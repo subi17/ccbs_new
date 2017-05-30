@@ -16,7 +16,8 @@ def var module as c  format "x(30)"   NO-UNDO.
 def var ok     as lo format "Yes/No" NO-UNDO.
 form
    module    label "Module ...."
-             help  "Name of the program module You want to run"                          validate( input module = ""
+             help  "Name of the program module You want to run"
+             validate( input module = ""
              or search(input module + ".r") NE ?
              or search(input module + ".p") NE ?,
              "Unknown module !")
@@ -28,16 +29,7 @@ PAUSE 0.
 ehto = 9. RUN Syst/ufkey.p.
 UPDATE module WITH FRAME modu.
 if module ne "" THEN DO:
-
-   if search(module + ".p") NE ? THEN DO:
-      BELL.
-      message "Do you want to compile this module before run (Y/N) ?"
-      UPDATE ok.
-
-      if ok then compile value(search(module + ".p")) save into ../r.
-   END.
    HIDE FRAME modu.
-   RUN value(module).
+   RUN value(module + ".p").
 END.
 HIDE FRAME modu.
-
