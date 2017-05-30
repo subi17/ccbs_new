@@ -126,7 +126,7 @@ IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) > 0 AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeModel NE "" AND
             DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
-      RETURN appl_err("Subscription has active terminal permanency").
+      RETURN appl_err("Discount Plan not allowed").
    END.
 
 END.
