@@ -1,5 +1,10 @@
 DEF BUFFER bCustCat FOR CustCat.
 DEF BUFFER bTMSCodes FOR TMSCodes.
+DEF BUFFER bservicelimitTarget FOR ServiceLimitTarget.
+
+DEF VAR ldaFrom AS DATE INIT 05/31/17.
+DEF VAR limode AS INT INIT 1.
+DEF VAR laskuri AS INT.
 
 FUNCTION fcreateCustcat RETURNS CHAR (
    INPUT icbasecat AS CHAR,
@@ -120,3 +125,115 @@ IF NOT CAN-FIND (FIRST Tmscodes WHERE
    RELEASE btmscodes.
 
 END.
+
+DEF TEMP-TABLE ttDaycampaign NO-UNDO LIKE Daycampaign.
+
+FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
+                                             INPUT icEvent AS CHAR,
+                                             INPUT icname AS CHAR,
+                                             INPUT icdctype AS CHAR,
+                                             INPUT iiUpdateMode AS INT):
+   FIND FIRST Daycampaign WHERE
+              Daycampaign.brand EQ "1" AND
+              Daycampaign.dcevent EQ icBaseDCEvent NO-ERROR.
+      CREATE ttDaycampaign.
+      BUFFER-COPY daycampaign TO ttDaycampaign.
+      ttDaycampaign.dctype = icDctype.
+      ttDaycampaign.dcevent = icevent.
+      ttDaycampaign.billcode = icevent + "MF".
+      ttDaycampaign.feemodel = icevent + "MF".
+      ttDaycampaign.dcname = icName.
+      ttDaycampaign.bundleupsell = "".
+
+      IF iiUpdateMode NE 0 THEN DO:
+         CREATE Daycampaign.
+         BUFFER-COPY ttDaycampaign TO Daycampaign.
+         DELETE ttDaycampaign. /*ror safety reasons*/
+      END.
+      ELSE DISP ttDayCampaign.
+
+END.
+
+/*  old ones, can be removec */
+fcreateDaycampaign("FLEX_UPSELL","FLEX_UPSELL_500MB","Flex upsell national GPRS","6",limode).
+fcreateDaycampaign("FLEX_UPSELL","FLEX_UPSELL_5GB","Flex upsell national GPRS","6",limode).
+fcreateDaycampaign("VOICE100","VOICE5000","Cont national voice","1",limode).
+fcreateDaycampaign("VOICE100","VOICE200","Cont national voice","1",limode).
+fcreateDaycampaign("VOICE100","INT_VOICE100","Cont international voice","1",limode).
+fcreateDaycampaign("VOICE100","FIX_VOICE1000","Fixed national voice","1",limode).
+fcreateDaycampaign("VOICE100","INT_FIX_VOICE1000","Fixed international voice","1",limode).
+fcreateDaycampaign("VOICE100","SMS5000","National SMS","1",limode).
+
+
+FUNCTION create_group returns log (INPUT lcCode as CHAR, INPUT lcName AS CHAR):
+   IF CAN-FIND(FIRST ServiceLimitgroup WHERE
+                     Servicelimitgroup.brand = "1" AND
+                     servicelimitgroup.groupcode EQ lcCode) THEN
+      return false.
+   CREATE servicelimitgroup.
+   ASSIGN servicelimitgroup.brand = "1"
+          servicelimitgroup.groupcode = lcCode
+          servicelimitgroup.groupname = lcName
+          servicelimitgroup.validfrom = ldafrom
+          servicelimitgroup.validto = 12/31/49.
+   return true.
+END.
+
+FUNCTION create_limit returns log (INPUT lcCode as CHAR,
+                                   INPUT lcName AS CHAR,
+                                   INPUT lclimit AS CHAR,
+                                   INPUT ldAmt AS DEC,
+                                   INPUT liDialType AS INT,
+                                   INPUT liUnit AS INT,
+                                   INPUT lcbasegroup AS CHAR):
+   DEF VAR lcTempBI AS CHAR.
+
+   IF CAN-FIND(FIRST ServiceLimit WHERE servicelimit.groupcode EQ lccode AND
+                                  servicelimit.slname EQ lcName) THEN
+      RETURN false.
+   find last servicelimit  use-index slseq no-lock no-error.
+
+           if not avail servicelimit then laskuri = 1.
+           else laskuri = servicelimit.slseq + 1.
+
+   CREATE servicelimit.
+   ASSIGN servicelimit.dialtype = lidialtype
+          servicelimit.inclunit = liUnit
+          servicelimit.groupcode = lcCode
+          servicelimit.slcode = lcCode + lcLimit
+          servicelimit.slname = lcName
+          servicelimit.validfrom = ldafrom
+          servicelimit.validto = 12/31/49
+          servicelimit.slseq = laskuri
+          servicelimit.inclamt = ldAmt
+          servicelimit.firstmonthcalc = 0
+          servicelimit.lastmonthcalc = 0
+          servicelimit.webdisp = 1.
+
+   FIND FIRST Servicelimit WHERE
+              Servicelimit.groupcode EQ lcbaseGroup NO-ERROR.
+   IF AVAIL servicelimit THEN DO:
+      FOR EACH servicelimittarget WHERE
+               servicelimittarget.slseq eq Servicelimit.slseq:
+         CREATE bservicelimitTarget.
+         BUFFER-COPY servicelimittarget EXCEPT slseq TO bservicelimittarget.
+         ASSIGN bservicelimittarget.slseq = laskuri
+                bservicelimittarget.insiderate = lcCode.
+      END.         
+   END.
+   return true.
+END.
+
+create_group("VOICE5000", "Voice 5000").
+create_group("VOICE200", "Voice 200").
+create_group("INT_VOICE100", "International Voice 100").
+create_group("FIX_VOICE1000", "National fixed voice 1000").
+create_group("INT_FIX_VOICE1000", "International fixed Voice 1000").
+create_group("SMS5000", "SMS 5000").
+
+create_limit("VOICE5000", "National calls", "_MIN",5000.0, 1, 1,"VOICE100").
+create_limit("VOICE200", "National calls", "_MIN",200.0, 1, 1, "VOICE100").
+create_limit("INT_VOICE100", "International calls", "_MIN",100.0, 1, 1,"VOICE100").
+create_limit("FIX_VOICE1000", "National fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
+create_limit("INT_FIX_VOICE1000", "International fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
+create_limit("SMS5000", "National sms", "_AMT",5000.0, 2, 6,"VOICE100").
