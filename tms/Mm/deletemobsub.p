@@ -969,10 +969,17 @@ PROCEDURE pTerminate:
                bMobSub.AgrCust = TermMobSub.CustNum AND
                bMobSub.MsSeq  <> TermMobSub.MsSeq   AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
-         fCloseAddLineDiscount(bMobSub.CustNum,
-                               bMobSub.MsSeq,
-                               bMobSub.CLIType,
-                               fLastDayOfMonth(TODAY)).
+         
+         IF lcTerminationType = {&TERMINATION_TYPE_PARTIAL} AND
+            bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}
+         THEN fCloseDiscount(ENTRY(LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
+                                          bMobSub.MsSeq,
+                                          fLastDayOfMonth(TODAY),
+                                          FALSE).
+         ELSE fCloseAddLineDiscount(bMobSub.CustNum,
+                                    bMobSub.MsSeq,
+                                    bMobSub.CLIType,
+                                    fLastDayOfMonth(TODAY)).
       END.
    END.
 
