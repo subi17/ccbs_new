@@ -297,7 +297,6 @@ PROCEDURE pFeesAndServices:
    DEF VAR llAddLineDisc      AS LOG  NO-UNDO.
 
    DEF BUFFER bMember FOR DPMember.
-   DEF BUFFER bMobSub FOR MobSub.
    
    /* first handle services that are not on subscription level;
       fees etc. */
@@ -478,24 +477,6 @@ PROCEDURE pFeesAndServices:
       END.
    END.
    
-   /* ADDLINE-324 Additional Line Discounts 
-      CHANGE: If STC happened on convergent, AND the customer does not have any other fully convergent
-      then CLOSE the all addline discounts to (STC Date - 1) */
-   IF fIsConvergenceTariff(bOldType.CliType) AND NOT fIsConvergenceTariff(CLIType.CliType) AND
-      NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType)     THEN DO:
-      FOR EACH bMobSub NO-LOCK WHERE
-               bMobSub.Brand   = gcBrand          AND
-               bMobSub.AgrCust = Customer.CustNum AND
-               bMobSub.MsSeq  <> MsRequest.MsSeq  AND
-               LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
-         fCloseAddLineDiscount(bMobSub.CustNum,
-                               bMobSub.MsSeq,
-                               bMobSub.CLIType,
-                               IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) THEN fLastDayOfMonth(TODAY)
-                               ELSE ldtActDate - 1).
-      END.
-   END.
-
 END PROCEDURE.
 
 PROCEDURE pUpdateSubscription:
@@ -516,6 +497,7 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liSecs AS INT NO-UNDO. 
    
    DEF BUFFER bOwner FOR MsOwner.
+   DEF BUFFER bMobSub FOR MobSub.
 
    /* make sure that customer has a billtarget with correct rateplan */
    liBillTarg = CLIType.BillTarget.
@@ -737,6 +719,24 @@ PROCEDURE pUpdateSubscription:
                             MsRequest.UserCode,
                             "STC").
       END. /* FOR FIRST SubSer WHERE */
+
+   /* ADDLINE-324 Additional Line Discounts
+      CHANGE: If STC happened on convergent, AND the customer does not have any other fully convergent
+      then CLOSE the all addline discounts to (STC Date - 1) */
+   IF fIsConvergenceTariff(bOldType.CliType) AND NOT fIsConvergenceTariff(CLIType.CliType) AND
+      NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType)     THEN DO:
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobSub.Brand   = gcBrand          AND
+               bMobSub.AgrCust = Customer.CustNum AND
+               bMobSub.MsSeq  <> MsRequest.MsSeq  AND
+               LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) THEN fLastDayOfMonth(TODAY)
+                               ELSE ldtActDate - 1).
+      END.
+   END.
 
 END PROCEDURE.
 
