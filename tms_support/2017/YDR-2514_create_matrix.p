@@ -37,7 +37,6 @@ FUNCTION fCreateMatrix RETURNS LOGICAL
       Matrix.MXKey  = icMXKey
       Matrix.Prior  = iiPrior
       Matrix.MXName = icMXName
-      Matrix.MXSeq  = iiMXSeq
       Matrix.MXRes  = iiMXRes.
 
 END FUNCTION.
@@ -80,7 +79,7 @@ FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
       SLGAnalyse.Prior    = 0          AND
       SLGAnalyse.ValidTo  = DATE(12,31,2049) AND
       SLGAnalyse.ServiceLimitGroup = icServiceLimitGroup AND
-      SLGAnalyse.SLGAType = iiSLGAnalyse
+      SLGAnalyse.SLGAType = iiSLGAType
    NO-ERROR.
    
    IF NOT AVAILABLE SLGAnalyse
@@ -94,8 +93,11 @@ FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
       SLGAnalyse.CCN      = iiCCN
       SLGAnalyse.BDest    = icBDest
       SLGAnalyse.Prior    = 0
-      SLGAnalyse.ValidFrom = DATE(5,1,2017).
-      SLGAnalyse.ValidTo  = DATE(12,31,2049).
+      SLGAnalyse.ValidFrom = DATE(5,1,2017)
+      SLGAnalyse.ValidTo  = DATE(12,31,2049)
+      SLGAnalyse.ServiceLimitGroup = icServiceLimitGroup
+      SLGAnalyse.SLGAType = iiSLGAType
+      .
       
 END FUNCTION.
 
