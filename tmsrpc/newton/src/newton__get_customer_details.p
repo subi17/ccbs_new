@@ -61,7 +61,7 @@
                     person_idr;string;
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-
+{Func/profunc.i}
 
 /* Input parameters */
 DEF VAR piCustnum AS INT NO-UNDO.
@@ -277,6 +277,7 @@ llLimitNotReached = fSubscriptionLimitCheck(
    Customer.orgId,
    Customer.custidType,
    llSelfEmployed,
+   fispro(Customer.category),
    1,
    OUTPUT lcReason,
    OUTPUT liSubLimit,

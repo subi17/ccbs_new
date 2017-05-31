@@ -220,7 +220,7 @@ ASSIGN
 {Func/orderchk.i}
 
 /*ACC is allowed for PRO-PRO and NON_PRO-NON_PRO*/
-lcError = fCheckACCCompability(bOriginalCustomer.Custnun,
+lcError = fCheckACCCompability(bOriginalCustomer.Custnum,
                                Customer.Custnum).
 IF lcError > "" THEN RETURN appl_err(lcError).                               
 
@@ -256,6 +256,7 @@ IF lcError > "" THEN
 IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
                                INPUT ttCustomer.CustIdType,
                                INPUT NO,
+                               fIsPro(ttCustomer.category),
                                1,
                                OUTPUT lcError,
                                OUTPUT liSubLimit,

@@ -16,6 +16,7 @@
 
 {Syst/commpaa.i}
 {Func/orderchk.i}
+{Func/profunc.i}
 gcBrand = "1".
 
 /* Input parameters */
@@ -44,10 +45,17 @@ piOrders = get_int(param_toplevel_id, "3").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+FIND FIRST Customer NO-LOCK WHERE
+           Customer.Brand      = gcBrand    AND
+           Customer.OrgID      = pcPersonId AND
+           Customer.CustIDType = pcIdType   AND
+           Customer.Roles     NE "inactive" NO-ERROR.
+
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,
+   fIsPro(Customer.category),
    piOrders,
    OUTPUT lcReason,
    OUTPUT liSubLimit,

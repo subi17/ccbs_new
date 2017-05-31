@@ -6,6 +6,7 @@
 {Mnp/mnpoutchk.i}
 {Func/orderchk.i}
 {Func/fixedlinefunc.i}
+{Func/profunc.i}
 
 &SCOPED-DEFINE ACC_OLB_BARRINGS_NOT_ALLOWED "Y_HURG"
    
@@ -221,7 +222,7 @@ PROCEDURE pCheckTargetCustomerForACC:
       NOT fSubscriptionLimitCheck(INPUT bACCNewCust.OrgId,
                                   INPUT bACCNewCust.CustIdType,
                                   INPUT NO,
-                                  FALSE, /*fIsPro(Customer.Category)*/
+                                  fIsPro(bACCNewCust.Category),
                                   1,
                                   OUTPUT ocMessage,
                                   OUTPUT liSubLimit,
