@@ -88,7 +88,14 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
                            "PERCONTR",
                            "PerContract;SubsTypeTo",
                            icContract + ";" + MobSub.CLIType,
-                           OUTPUT lcResult) NE 1 THEN
+                           OUTPUT lcResult) NE 1 AND
+            ( MobSub.TariffBundle = "" OR
+              fMatrixAnalyse(gcBrand,
+                           "PERCONTR",
+                           "PerContract;SubsTypeTo",
+                           icContract + ";" + MobSub.TariffBundle,
+                           OUTPUT lcResult) NE 1 )
+                           THEN
             RETURN "ERROR:Contract is not allowed for this subscription type".
 
          IF LOOKUP(icContract,lcBONOContracts) > 0 AND

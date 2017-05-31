@@ -305,6 +305,7 @@ PROCEDURE pContractActivation:
    DEF VAR llSubRequest  AS LOG  NO-UNDO.
    DEF VAR lcError       AS CHAR NO-UNDO.
    DEF VAR lcUseCLIType  AS CHAR NO-UNDO.
+   DEF VAR lcUseTariffBundle AS CHAR NO-UNDO.   
    DEF VAR lcSMSName     AS CHAR NO-UNDO.
    DEF VAR lcSender      AS CHAR NO-UNDO.
    DEF VAR llResult      AS LOG  NO-UNDO.
@@ -394,19 +395,30 @@ PROCEDURE pContractActivation:
    END.
 
    /* which subscription type should be used for rules */
-   lcUseCLIType = MsOwner.CLIType.
+   ASSIGN
+      lcUseTariffBundle = MSOwner.TariffBundle
+      lcUseCLIType = MsOwner.CLIType.
    IF MsRequest.OrigRequest > 0 THEN 
    FOR FIRST bOrigRequest NO-LOCK WHERE
              bOrigRequest.MsRequest = MsRequest.OrigRequest:
-      IF bOrigRequest.ReqType = 0 THEN 
-         lcUseCLIType = bOrigRequest.ReqCParam2. 
+      IF bOrigRequest.ReqType = 0
+      THEN ASSIGN
+             lcUseTariffBundle = bOrigRequest.ReqCParam5
+             lcUseCLIType = bOrigRequest.ReqCParam2. 
    END.
 
    IF fMatrixAnalyse(gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
-                     OUTPUT lcReqChar) NE 1 THEN DO:
+                     OUTPUT lcReqChar) NE 1 AND
+      ( lcUseTariffBundle = "" OR
+        fMatrixAnalyse(gcBrand,
+                       "PERCONTR",
+                       "PerContract;SubsTypeTo",
+                       lcDCEvent + ";" + lcUseTariffBundle,
+                       OUTPUT lcReqChar) NE 1 )
+      THEN DO:
       fReqError("Contract is not allowed for this subscription type").
       RETURN.
    END.
@@ -3289,7 +3301,13 @@ PROCEDURE pContractReactivation:
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
-                     OUTPUT lcReqChar) NE 1
+                     OUTPUT lcReqChar) NE 1 AND
+      ( MsOwner.TariffBundle = "" OR
+        fMatrixAnalyse(gcBrand,
+                       "PERCONTR",
+                       "PerContract;SubsTypeTo",
+                       lcDCEvent + ";" + MsOwner.TariffBundle,
+                       OUTPUT lcReqChar) NE 1 )
    THEN DO:
       fReqError("Contract is not allowed for this subscription type").
       RETURN.

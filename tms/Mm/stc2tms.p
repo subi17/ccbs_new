@@ -1295,7 +1295,15 @@ PROCEDURE pCloseContracts:
                         "PerContract;SubsTypeTo",
                          lcContract + ";" + icNewType,
                         OUTPUT lcReqChar) NE 1 AND
-          ENTRY(1,lcReqChar,";") NE "?") 
+          ENTRY(1,lcReqChar,";") NE "?" AND
+          ( icBaseBundle = "" OR
+            ( fMatrixAnalyse(gcBrand,
+                             "PERCONTR",
+                             "PerContract;SubsTypeTo",
+                             lcContract + ";" + icBaseBundle,
+                             OUTPUT lcReqChar) NE 1 AND
+              ENTRY(1,lcReqChar,";") NE "?" ) )
+          )
          OR
          /* Since, convergent base bundles CONTDSL/CONTFH50/CONTFH300 are reused in fixed only convergent also with different prices.
             Above matrix condition will fail and convergent base bundles are not terminated for prices to change. So, below is introduced. */
