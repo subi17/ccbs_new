@@ -297,6 +297,7 @@ PROCEDURE pFeesAndServices:
    DEF VAR llAddLineDisc      AS LOG  NO-UNDO.
 
    DEF BUFFER bMember FOR DPMember.
+   DEF BUFFER bMobSub FOR MobSub.
    
    /* first handle services that are not on subscription level;
       fees etc. */
@@ -474,6 +475,24 @@ PROCEDURE pFeesAndServices:
                                 "").
          IF RETURN-VALUE BEGINS "ERROR" THEN
             RETURN RETURN-VALUE.
+      END.
+   END.
+   
+   /* ADDLINE-324 Additional Line Discounts 
+      CHANGE: If STC happened on convergent, AND the customer does not have any other fully convergent
+      then CLOSE the all addline discounts to (STC Date - 1) */
+   IF fIsConvergenceTariff(bOldType.CliType) AND NOT fIsConvergenceTariff(CLIType.CliType) AND
+      NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType)     THEN DO:
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobSub.Brand   = gcBrand          AND
+               bMobSub.AgrCust = Customer.CustNum AND
+               bMobSub.MsSeq  <> MsRequest.MsSeq  AND
+               LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) THEN fLastDayOfMonth(TODAY)
+                               ELSE ldtActDate - 1).
       END.
    END.
 
