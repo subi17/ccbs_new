@@ -1,4 +1,4 @@
-DCServicePackage1: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTRATOx"
   DCServicePackageID: 1
@@ -6,7 +6,7 @@ DCServicePackage1: DCServicePackage
   FromDate: 2011-01-01
   ToDate: 2049-12-31
 
-DCServicePackage2: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTRATOx"
   DCServicePackageID: 2
@@ -14,7 +14,7 @@ DCServicePackage2: DCServicePackage
   FromDate: 2011-01-01
   ToDate: 2049-12-31
 
-DCServicePackage3: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DUB"
   DCServicePackageID: 3
@@ -22,7 +22,7 @@ DCServicePackage3: DCServicePackage
   FromDate: 2011-01-01
   ToDate: 2049-12-31
 
-DCServicePackage4: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB2"
   DCServicePackageID: 4
@@ -30,7 +30,7 @@ DCServicePackage4: DCServicePackage
   FromDate: 2011-01-01
   ToDate: 2049-12-31
 
-DCServicePackage5: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB2"
   DCServicePackageID: 5
@@ -38,7 +38,7 @@ DCServicePackage5: DCServicePackage
   FromDate: 2011-01-01
   ToDate: 2013-01-03
 
-DCServicePackage6: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB2_UPSELL"
   DCServicePackageID: 6
@@ -46,7 +46,7 @@ DCServicePackage6: DCServicePackage
   FromDate: 2011-01-01
   ToDate: 2049-12-31
 
-DCServicePackage7: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DUB"
   DCServicePackageID: 7
@@ -54,7 +54,7 @@ DCServicePackage7: DCServicePackage
   FromDate: 2011-01-01
   ToDate: 2012-12-18
 
-DCServicePackage8: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTD2_UPSELL"
   DCServicePackageID: 8
@@ -62,7 +62,7 @@ DCServicePackage8: DCServicePackage
   FromDate: 2011-02-01
   ToDate: 2049-12-31
 
-DCServicePackage9: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB_UPSELL"
   DCServicePackageID: 9
@@ -70,7 +70,7 @@ DCServicePackage9: DCServicePackage
   FromDate: 2011-02-01
   ToDate: 2049-12-31
 
-DCServicePackage10: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTDATA_UPSELL"
   DCServicePackageID: 10
@@ -78,7 +78,7 @@ DCServicePackage10: DCServicePackage
   FromDate: 2011-02-01
   ToDate: 2049-12-31
 
-DCServicePackage11: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB"
   DCServicePackageID: 11
@@ -86,7 +86,7 @@ DCServicePackage11: DCServicePackage
   FromDate: 2011-02-01
   ToDate: 2013-01-03
 
-DCServicePackage12: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB"
   DCServicePackageID: 12
@@ -94,7 +94,7 @@ DCServicePackage12: DCServicePackage
   FromDate: 2011-02-01
   ToDate: 2049-12-31
 
-DCServicePackage13: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTD2"
   DCServicePackageID: 13
@@ -102,7 +102,7 @@ DCServicePackage13: DCServicePackage
   FromDate: 2011-02-01
   ToDate: 2013-01-03
 
-DCServicePackage14: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTD2"
   DCServicePackageID: 14
@@ -110,7 +110,7 @@ DCServicePackage14: DCServicePackage
   FromDate: 2011-02-01
   ToDate: 2045-12-31
 
-DCServicePackage15: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTDATA"
   DCServicePackageID: 15
@@ -118,7 +118,7 @@ DCServicePackage15: DCServicePackage
   FromDate: 2011-02-01
   ToDate: 2013-01-03
 
-DCServicePackage16: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTDATA"
   DCServicePackageID: 16
@@ -126,7 +126,7 @@ DCServicePackage16: DCServicePackage
   FromDate: 2011-02-01
   ToDate: 2045-12-31
 
-DCServicePackage17: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "TARJD1"
   DCServicePackageID: 17
@@ -134,7 +134,7 @@ DCServicePackage17: DCServicePackage
   FromDate: 2009-01-01
   ToDate: 2049-12-31
 
-DCServicePackage18: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "TARJD1"
   DCServicePackageID: 18
@@ -142,7 +142,7 @@ DCServicePackage18: DCServicePackage
   FromDate: 2009-01-01
   ToDate: 2049-12-31
 
-DCServicePackage19: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "PMDUB"
   DCServicePackageID: 19
@@ -150,7 +150,7 @@ DCServicePackage19: DCServicePackage
   FromDate: 2011-05-01
   ToDate: 2049-12-31
 
-DCServicePackage20: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "PMDUB"
   DCServicePackageID: 20
@@ -158,7 +158,7 @@ DCServicePackage20: DCServicePackage
   FromDate: 2011-05-01
   ToDate: 2049-12-31
 
-DCServicePackage21: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "PMDUB_UPSELL"
   DCServicePackageID: 21
@@ -166,7 +166,7 @@ DCServicePackage21: DCServicePackage
   FromDate: 2011-06-01
   ToDate: 2049-12-31
 
-DCServicePackage22: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTD3"
   DCServicePackageID: 22
@@ -174,7 +174,7 @@ DCServicePackage22: DCServicePackage
   FromDate: 2011-05-01
   ToDate: 2013-01-03
 
-DCServicePackage23: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTD3"
   DCServicePackageID: 23
@@ -182,7 +182,7 @@ DCServicePackage23: DCServicePackage
   FromDate: 2011-05-01
   ToDate: 2049-12-31
 
-DCServicePackage24: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTD3_UPSELL"
   DCServicePackageID: 24
@@ -190,7 +190,7 @@ DCServicePackage24: DCServicePackage
   FromDate: 2011-05-01
   ToDate: 2049-12-31
 
-DCServicePackage25: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTD4"
   DCServicePackageID: 25
@@ -198,7 +198,7 @@ DCServicePackage25: DCServicePackage
   FromDate: 2011-11-23
   ToDate: 2013-01-03
 
-DCServicePackage26: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTD4"
   DCServicePackageID: 26
@@ -206,7 +206,7 @@ DCServicePackage26: DCServicePackage
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-DCServicePackage27: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTD4_UPSELL"
   DCServicePackageID: 27
@@ -214,7 +214,7 @@ DCServicePackage27: DCServicePackage
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-DCServicePackage28: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB3"
   DCServicePackageID: 28
@@ -222,7 +222,7 @@ DCServicePackage28: DCServicePackage
   FromDate: 2011-11-23
   ToDate: 2013-01-03
 
-DCServicePackage29: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB3"
   DCServicePackageID: 29
@@ -230,7 +230,7 @@ DCServicePackage29: DCServicePackage
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-DCServicePackage30: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB3_UPSELL"
   DCServicePackageID: 30
@@ -238,7 +238,7 @@ DCServicePackage30: DCServicePackage
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-DCServicePackage31: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB4"
   DCServicePackageID: 31
@@ -246,7 +246,7 @@ DCServicePackage31: DCServicePackage
   FromDate: 2011-11-23
   ToDate: 2013-01-03
 
-DCServicePackage32: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB4"
   DCServicePackageID: 32
@@ -254,7 +254,7 @@ DCServicePackage32: DCServicePackage
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-DCServicePackage33: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB4_UPSELL"
   DCServicePackageID: 33
@@ -262,7 +262,7 @@ DCServicePackage33: DCServicePackage
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-DCServicePackage34: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF20"
   DCServicePackageID: 34
@@ -270,7 +270,7 @@ DCServicePackage34: DCServicePackage
   FromDate: 2011-12-01
   ToDate: 2049-12-31
 
-DCServicePackage35: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF30"
   DCServicePackageID: 35
@@ -278,7 +278,7 @@ DCServicePackage35: DCServicePackage
   FromDate: 2011-12-01
   ToDate: 2013-01-03
 
-DCServicePackage36: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF30"
   DCServicePackageID: 36
@@ -286,7 +286,7 @@ DCServicePackage36: DCServicePackage
   FromDate: 2011-12-01
   ToDate: 2049-12-31
 
-DCServicePackage37: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF55"
   DCServicePackageID: 37
@@ -294,7 +294,7 @@ DCServicePackage37: DCServicePackage
   FromDate: 2011-12-01
   ToDate: 2013-01-03
 
-DCServicePackage38: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF55"
   DCServicePackageID: 38
@@ -302,7 +302,7 @@ DCServicePackage38: DCServicePackage
   FromDate: 2011-12-01
   ToDate: 2049-12-31
 
-DCServicePackage39: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF10"
   DCServicePackageID: 39
@@ -310,7 +310,7 @@ DCServicePackage39: DCServicePackage
   FromDate: 2012-02-22
   ToDate: 2049-12-31
 
-DCServicePackage40: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF20D"
   DCServicePackageID: 40
@@ -318,7 +318,7 @@ DCServicePackage40: DCServicePackage
   FromDate: 2012-02-22
   ToDate: 2013-01-03
 
-DCServicePackage41: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF20D"
   DCServicePackageID: 41
@@ -326,7 +326,7 @@ DCServicePackage41: DCServicePackage
   FromDate: 2012-02-22
   ToDate: 2049-12-31
 
-DCServicePackage42: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF40"
   DCServicePackageID: 42
@@ -334,7 +334,7 @@ DCServicePackage42: DCServicePackage
   FromDate: 2012-02-22
   ToDate: 2013-01-03
 
-DCServicePackage43: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF40"
   DCServicePackageID: 43
@@ -342,7 +342,7 @@ DCServicePackage43: DCServicePackage
   FromDate: 2012-02-22
   ToDate: 2049-12-31
 
-DCServicePackage44: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB5"
   DCServicePackageID: 44
@@ -350,7 +350,7 @@ DCServicePackage44: DCServicePackage
   FromDate: 2012-03-26
   ToDate: 2013-01-03
 
-DCServicePackage45: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB5"
   DCServicePackageID: 45
@@ -358,7 +358,7 @@ DCServicePackage45: DCServicePackage
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-DCServicePackage46: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB5_UPSELL"
   DCServicePackageID: 46
@@ -366,7 +366,7 @@ DCServicePackage46: DCServicePackage
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-DCServicePackage47: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "UPGRADE_UPSELL"
   DCServicePackageID: 47
@@ -374,7 +374,7 @@ DCServicePackage47: DCServicePackage
   FromDate: 2012-01-23
   ToDate: 2049-12-31
 
-DCServicePackage48: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DUB2"
   DCServicePackageID: 48
@@ -382,7 +382,7 @@ DCServicePackage48: DCServicePackage
   FromDate: 2012-05-01
   ToDate: 2012-12-18
 
-DCServicePackage49: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DUB2"
   DCServicePackageID: 49
@@ -390,7 +390,7 @@ DCServicePackage49: DCServicePackage
   FromDate: 2012-05-01
   ToDate: 2049-12-31
 
-DCServicePackage50: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS30"
   DCServicePackageID: 50
@@ -398,7 +398,7 @@ DCServicePackage50: DCServicePackage
   FromDate: 2012-05-01
   ToDate: 2012-12-26
 
-DCServicePackage51: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS30"
   DCServicePackageID: 51
@@ -406,7 +406,7 @@ DCServicePackage51: DCServicePackage
   FromDate: 2012-05-01
   ToDate: 2049-12-31
 
-DCServicePackage52: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS39"
   DCServicePackageID: 52
@@ -414,7 +414,7 @@ DCServicePackage52: DCServicePackage
   FromDate: 2012-09-01
   ToDate: 2049-12-31
 
-DCServicePackage53: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS39"
   DCServicePackageID: 53
@@ -422,7 +422,7 @@ DCServicePackage53: DCServicePackage
   FromDate: 2012-09-01
   ToDate: 2012-12-26
 
-DCServicePackage54: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "BONO_VOIP"
   DCServicePackageID: 54
@@ -430,7 +430,7 @@ DCServicePackage54: DCServicePackage
   FromDate: 2012-09-06
   ToDate: 2049-12-31
 
-DCServicePackage55: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "SPOTIFY"
   DCServicePackageID: 55
@@ -438,7 +438,7 @@ DCServicePackage55: DCServicePackage
   FromDate: 2012-09-06
   ToDate: 2049-12-31
 
-DCServicePackage56: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "HSPA_ROAM_EU"
   DCServicePackageID: 56
@@ -446,7 +446,7 @@ DCServicePackage56: DCServicePackage
   FromDate: 2012-10-10
   ToDate: 2049-12-31
 
-DCServicePackage57: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTD9"
   DCServicePackageID: 57
@@ -454,7 +454,7 @@ DCServicePackage57: DCServicePackage
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-DCServicePackage58: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DATA9_UPSELL"
   DCServicePackageID: 58
@@ -462,7 +462,7 @@ DCServicePackage58: DCServicePackage
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-DCServicePackage59: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "MDUB9"
   DCServicePackageID: 59
@@ -470,7 +470,7 @@ DCServicePackage59: DCServicePackage
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-DCServicePackage60: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "TARJ_UPSELL"
   DCServicePackageID: 60
@@ -478,7 +478,7 @@ DCServicePackage60: DCServicePackage
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-DCServicePackage61: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DUB3"
   DCServicePackageID: 61
@@ -486,7 +486,7 @@ DCServicePackage61: DCServicePackage
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-DCServicePackage62: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS15"
   DCServicePackageID: 62
@@ -494,7 +494,7 @@ DCServicePackage62: DCServicePackage
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-DCServicePackage63: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS20"
   DCServicePackageID: 63
@@ -502,7 +502,7 @@ DCServicePackage63: DCServicePackage
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-DCServicePackage64: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS25"
   DCServicePackageID: 64
@@ -510,7 +510,7 @@ DCServicePackage64: DCServicePackage
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-DCServicePackage65: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS35"
   DCServicePackageID: 65
@@ -518,7 +518,7 @@ DCServicePackage65: DCServicePackage
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-DCServicePackage66: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DATA5"
   DCServicePackageID: 66
@@ -526,7 +526,7 @@ DCServicePackage66: DCServicePackage
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-DCServicePackage67: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DATA5_UPSELL"
   DCServicePackageID: 67
@@ -534,7 +534,7 @@ DCServicePackage67: DCServicePackage
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-DCServicePackage68: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTFF2"
   DCServicePackageID: 68
@@ -542,7 +542,7 @@ DCServicePackage68: DCServicePackage
   FromDate: 2013-10-01
   ToDate: 2049-12-31
 
-DCServicePackage69: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTSF10"
   DCServicePackageID: 69
@@ -550,7 +550,7 @@ DCServicePackage69: DCServicePackage
   FromDate: 2013-10-01
   ToDate: 2049-12-31
 
-DCServicePackage70: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTSF14"
   DCServicePackageID: 70
@@ -558,7 +558,7 @@ DCServicePackage70: DCServicePackage
   FromDate: 2013-10-01
   ToDate: 2049-12-31
 
-DCServicePackage71: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "TARJ7"
   DCServicePackageID: 71
@@ -566,7 +566,7 @@ DCServicePackage71: DCServicePackage
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-DCServicePackage72: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "TARJ7"
   DCServicePackageID: 72
@@ -574,7 +574,7 @@ DCServicePackage72: DCServicePackage
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-DCServicePackage73: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "TARJ7_UPSELL"
   DCServicePackageID: 73
@@ -582,7 +582,7 @@ DCServicePackage73: DCServicePackage
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-DCServicePackage74: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS21"
   DCServicePackageID: 74
@@ -590,7 +590,7 @@ DCServicePackage74: DCServicePackage
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-DCServicePackage75: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS26"
   DCServicePackageID: 75
@@ -598,7 +598,7 @@ DCServicePackage75: DCServicePackage
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-DCServicePackage76: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS32"
   DCServicePackageID: 76
@@ -606,7 +606,7 @@ DCServicePackage76: DCServicePackage
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-DCServicePackage77: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS16"
   DCServicePackageID: 77
@@ -614,7 +614,7 @@ DCServicePackage77: DCServicePackage
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-DCServicePackage78: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONT9"
   DCServicePackageID: 78
@@ -622,7 +622,7 @@ DCServicePackage78: DCServicePackage
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-DCServicePackage79: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DATA6"
   DCServicePackageID: 80
@@ -630,7 +630,7 @@ DCServicePackage79: DCServicePackage
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-DCServicePackage80: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DATA6_UPSELL"
   DCServicePackageID: 81
@@ -638,7 +638,7 @@ DCServicePackage80: DCServicePackage
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-DCServicePackage81: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONT15"
   DCServicePackageID: 82
@@ -646,7 +646,7 @@ DCServicePackage81: DCServicePackage
   FromDate: 2014-10-01
   ToDate: 2049-12-31
 
-DCServicePackage82: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONT24"
   DCServicePackageID: 83
@@ -654,7 +654,7 @@ DCServicePackage82: DCServicePackage
   FromDate: 2015-03-04
   ToDate: 2049-12-31
 
-DCServicePackage83: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF8"
   DCServicePackageID: 84
@@ -662,7 +662,7 @@ DCServicePackage83: DCServicePackage
   FromDate: 2015-04-14
   ToDate: 2049-12-31
 
-DCServicePackage84: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS12"
   DCServicePackageID: 85
@@ -670,7 +670,7 @@ DCServicePackage84: DCServicePackage
   FromDate: 2015-04-14
   ToDate: 2049-12-31
 
-DCServicePackage85: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTF11"
   DCServicePackageID: 86
@@ -678,7 +678,7 @@ DCServicePackage85: DCServicePackage
   FromDate: 2015-04-14
   ToDate: 2049-12-31
 
-DCServicePackage86: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "TARJ9"
   DCServicePackageID: 87
@@ -686,7 +686,7 @@ DCServicePackage86: DCServicePackage
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-DCServicePackage87: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "TARJ9"
   DCServicePackageID: 88
@@ -694,7 +694,7 @@ DCServicePackage87: DCServicePackage
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-DCServicePackage88: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONT23"
   DCServicePackageID: 89
@@ -702,7 +702,7 @@ DCServicePackage88: DCServicePackage
   FromDate: 2015-08-12
   ToDate: 2049-12-31
 
-DCServicePackage89: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DATA200_UPSELL"
   DCServicePackageID: 90
@@ -710,7 +710,7 @@ DCServicePackage89: DCServicePackage
   FromDate: 2015-06-01
   ToDate: 2049-12-31
 
-DCServicePackage90: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "DATA7"
   DCServicePackageID: 91
@@ -718,7 +718,7 @@ DCServicePackage90: DCServicePackage
   FromDate: 2015-12-01
   ToDate: 2049-12-31
 
-DCServicePackage91: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONTS2GB"
   DCServicePackageID: 92
@@ -726,11 +726,43 @@ DCServicePackage91: DCServicePackage
   FromDate: 2016-10-27
   ToDate: 2049-12-31
 
-DCServicePackage92: DCServicePackage
+bulkload: DCServicePackage
   Brand: "1"
   DCEvent: "CONT25"
   DCServicePackageID: 93
   ServPac: "SHAPER"
   FromDate: 2016-12-12
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT26"
+  DCServicePackageID: 94
+  ServPac: "SHAPER"
+  FromDate: 2017-02-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT10"
+  DCServicePackageID: 95
+  ServPac: "SHAPER"
+  FromDate: 2017-02-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "FLEX_UPSELL"
+  DCServicePackageID: 96
+  ServPac: "SHAPER"
+  FromDate: 2017-03-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT27"
+  DCServicePackageID: 97
+  ServPac: "SHAPER"
+  FromDate: 2017-04-18
   ToDate: 2049-12-31
 

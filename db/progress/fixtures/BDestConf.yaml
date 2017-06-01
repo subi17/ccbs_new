@@ -1,4 +1,4 @@
-BDestConf1: BDestConf
+bulkload: BDestConf
   Brand: "1"
   BDCGroup: "DUR11CCN1066"
   BDCName: "Bill duration over 11 seconds"
@@ -8,7 +8,7 @@ BDestConf1: BDestConf
   ToDate: 2049-12-31
   GroupType: 1
 
-BDestConf2: BDestConf
+bulkload: BDestConf
   Brand: "1"
   BDCGroup: "DUR11CCN1069"
   BDCName: "Bill duration over 11 seconds"
@@ -18,7 +18,7 @@ BDestConf2: BDestConf
   ToDate: 2049-12-31
   GroupType: 1
 
-BDestConf3: BDestConf
+bulkload: BDestConf
   Brand: "1"
   BDCGroup: "DUR11CCN66"
   BDCName: "Bill duration over 11 seconds"
@@ -28,7 +28,7 @@ BDestConf3: BDestConf
   ToDate: 2049-12-31
   GroupType: 1
 
-BDestConf4: BDestConf
+bulkload: BDestConf
   Brand: "1"
   BDCGroup: "DUR11CCN69"
   BDCName: "Bill duration over 11 seconds"
@@ -38,7 +38,7 @@ BDestConf4: BDestConf
   ToDate: 2049-12-31
   GroupType: 1
 
-BDestConf5: BDestConf
+bulkload: BDestConf
   Brand: "1"
   BDCGroup: "DUR20CCN1064"
   BDCName: "Bill duration over 20 seconds"
@@ -48,7 +48,7 @@ BDestConf5: BDestConf
   ToDate: 2049-12-31
   GroupType: 1
 
-BDestConf6: BDestConf
+bulkload: BDestConf
   Brand: "1"
   BDCGroup: "DUR20CCN64"
   BDCName: "Bill duration over 20 seconds"
@@ -58,7 +58,7 @@ BDestConf6: BDestConf
   ToDate: 2049-12-31
   GroupType: 1
 
-BDestConf7: BDestConf
+bulkload: BDestConf
   Brand: "1"
   BDCGroup: "DUR71CCN1066"
   BDCName: "Bill duration over 71 seconds"
@@ -68,7 +68,7 @@ BDestConf7: BDestConf
   ToDate: 2049-12-31
   GroupType: 1
 
-BDestConf8: BDestConf
+bulkload: BDestConf
   Brand: "1"
   BDCGroup: "DUR71CCN66"
   BDCName: "Bill duration over 71 seconds"

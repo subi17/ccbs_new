@@ -1,4 +1,4 @@
-Stock1: Stock
+bulkload: Stock
   Stock: "CC"
   StoName: "Customer Care"
   StoFile1: "/tmp/iccfilename.txt"
@@ -7,19 +7,19 @@ Stock1: Stock
   Brand: "1"
   StoType: "CC"
 
-Stock2: Stock
+bulkload: Stock
   Stock: "CC_CAN_ISL"
   StoName: "CC Canary Islands"
   Brand: "1"
   StoType: "CC"
   ZipCodeExp: "35*,38*"
 
-Stock3: Stock
+bulkload: Stock
   Stock: "GIFT"
   StoName: "Gift"
   Brand: "1"
 
-Stock4: Stock
+bulkload: Stock
   Stock: "MNP"
   StoName: "MNP Number"
   StoFile1: "/tmp/iccfilename.txt"
@@ -28,14 +28,14 @@ Stock4: Stock
   Brand: "1"
   StoType: "MNP"
 
-Stock5: Stock
+bulkload: Stock
   Stock: "MNP_CAN_ISL"
   StoName: "MNP Canary Islands"
   Brand: "1"
   StoType: "MNP"
   ZipCodeExp: "35*,38*"
 
-Stock6: Stock
+bulkload: Stock
   Stock: "NEW"
   StoName: "New Number"
   StoFile1: "/tmp/iccfilename.txt"
@@ -44,19 +44,19 @@ Stock6: Stock
   Brand: "1"
   StoType: "NEW"
 
-Stock7: Stock
+bulkload: Stock
   Stock: "NEW_CAN_ISL"
   StoName: "NEW Canary Islands"
   Brand: "1"
   StoType: "NEW"
   ZipCodeExp: "35*,38*"
 
-Stock8: Stock
+bulkload: Stock
   Stock: "PREACTIV"
   StoName: "Pre Activated"
   Brand: "1"
 
-Stock9: Stock
+bulkload: Stock
   Stock: "RETAILER"
   StoName: "Retailer (POS)"
   StoFile1: "/tmp/iccfilename.txt"
@@ -64,7 +64,7 @@ Stock9: Stock
   StoFile3: "/tmp/simdisrfile.txt"
   Brand: "1"
 
-Stock10: Stock
+bulkload: Stock
   Stock: "RETURNED"
   StoName: "Returned from customer"
   StoFile1: "/tmp/iccfilename.txt"
@@ -72,12 +72,12 @@ Stock10: Stock
   StoFile3: "/tmp/simdisrfile.txt"
   Brand: "1"
 
-Stock11: Stock
+bulkload: Stock
   Stock: "VIP"
   StoName: "VIP"
   Brand: "1"
 
-Stock12: Stock
+bulkload: Stock
   Stock: "YOIGO"
   StoName: "YOIGO (for internal use only)"
   StoFile1: "/tmp/iccfilename.txt"
