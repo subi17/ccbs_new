@@ -1,4 +1,4 @@
-BankAccount1: BankAccount
+bulkload: BankAccount
   BankAccount: "ES2700491500052610403100"
   BankData: "ES2700491500052610403100"
   Brand: "1"
@@ -9,7 +9,7 @@ BankAccount1: BankAccount
   BankCodes: "0049,0030"
   DDAllocation: 41
 
-BankAccount2: BankAccount
+bulkload: BankAccount
   BankAccount: "ES5221002931940200451663"
   BankData: "ES5221002931940200451663"
   Brand: "1"
@@ -19,7 +19,7 @@ BankAccount2: BankAccount
   BIC: "CAIXESBBXXX"
   BankCodes: "2100"
 
-BankAccount3: BankAccount
+bulkload: BankAccount
   BankAccount: "ES6401823994040201521208"
   BankData: "ES6401823994040201521208"
   Brand: "1"
@@ -30,7 +30,7 @@ BankAccount3: BankAccount
   BankCodes: "0182,2040,2074,2059,2017"
   DDAllocation: 41
 
-BankAccount4: BankAccount
+bulkload: BankAccount
   BankAccount: "ES7700810300620001847093"
   BankData: "ES7700810300620001847093"
   Brand: "1"
