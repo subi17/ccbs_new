@@ -1,109 +1,109 @@
-TriggerField1: TriggerField
+bulkload: TriggerField
   TriggerConfID: "ALL"
   TableName: "*"
   FieldName: "*"
 
-TriggerField2: TriggerField
+bulkload: TriggerField
   TriggerConfID: "BDEST"
   TableName: "Bdest"
   FieldName: "Bdest"
 
-TriggerField3: TriggerField
+bulkload: TriggerField
   TriggerConfID: "BDEST"
   TableName: "BDest"
   FieldName: "ratebdest"
 
-TriggerField4: TriggerField
+bulkload: TriggerField
   TriggerConfID: "bdest"
   TableName: "bdest"
   FieldName: "ccn"
 
-TriggerField5: TriggerField
+bulkload: TriggerField
   TriggerConfID: "bdest"
   TableName: "bdest"
   FieldName: "class"
 
-TriggerField6: TriggerField
+bulkload: TriggerField
   TriggerConfID: "Mobcdr"
   TableName: "Mobcdr"
   FieldName: "DCevent"
 
-TriggerField7: TriggerField
+bulkload: TriggerField
   TriggerConfID: "mServicelimit"
   TableName: "mServicelimit"
   FieldName: "Endts"
 
-TriggerField8: TriggerField
+bulkload: TriggerField
   TriggerConfID: "mServicelimit"
   TableName: "mServicelimit"
   FieldName: "Fromts"
 
-TriggerField9: TriggerField
+bulkload: TriggerField
   TriggerConfID: "mServicelimit"
   TableName: "mServicelimit"
   FieldName: "InclAmt"
 
-TriggerField10: TriggerField
+bulkload: TriggerField
   TriggerConfID: "mServiceLimit"
   TableName: "mServiceLimit"
   FieldName: "slrule"
 
-TriggerField11: TriggerField
+bulkload: TriggerField
   TriggerConfID: "Msowner"
   TableName: "Msowner"
   FieldName: "tsbegin"
 
-TriggerField12: TriggerField
+bulkload: TriggerField
   TriggerConfID: "Msowner"
   TableName: "Msowner"
   FieldName: "tsend"
 
-TriggerField13: TriggerField
+bulkload: TriggerField
   TriggerConfID: "MSREQUEST"
   TableName: "SPECIAL CASE"
   FieldName: "SPECIAL CASE"
 
-TriggerField14: TriggerField
+bulkload: TriggerField
   TriggerConfID: "PlistConf"
   TableName: "PlistConf"
   FieldName: "dfrom"
 
-TriggerField15: TriggerField
+bulkload: TriggerField
   TriggerConfID: "PlistConf"
   TableName: "PlistConf"
   FieldName: "dto"
 
-TriggerField16: TriggerField
+bulkload: TriggerField
   TriggerConfID: "PlistConf"
   TableName: "PlistConf"
   FieldName: "Prior"
 
-TriggerField17: TriggerField
+bulkload: TriggerField
   TriggerConfID: "PlistConf"
   TableName: "PlistConf"
   FieldName: "RatePlan"
 
-TriggerField18: TriggerField
+bulkload: TriggerField
   TriggerConfID: "Tariff"
   TableName: "Tariff"
   FieldName: "BillItem"
 
-TriggerField19: TriggerField
+bulkload: TriggerField
   TriggerConfID: "Tariff"
   TableName: "Tariff"
   FieldName: "price[1]"
 
-TriggerField20: TriggerField
+bulkload: TriggerField
   TriggerConfID: "Tariff"
   TableName: "Tariff"
   FieldName: "ValidFrom"
 
-TriggerField21: TriggerField
+bulkload: TriggerField
   TriggerConfID: "Tariff"
   TableName: "Tariff"
   FieldName: "ValidTo"
 
-TriggerField22: TriggerField
+bulkload: TriggerField
   TriggerConfID: "TARIFF"
   TableName: "Tariff"
   FieldName: "StartCharge[1]"
