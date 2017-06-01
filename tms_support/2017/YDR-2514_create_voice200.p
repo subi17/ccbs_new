@@ -30,6 +30,21 @@ FUNCTION fGetNextBDestID RETURNS INTEGER ():
 
 END FUNCTION.
 
+
+FUNCTION fGetNextRequestActionID RETURNS INTEGER ():
+
+   DEFINE BUFFER RequestAction FOR RequestAction.
+
+   FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
+
+   IF AVAILABLE RequestAction
+   THEN RETURN RequestAction.RequestActionID + 1.
+
+   RETURN 1.
+
+END FUNCTION.
+
+
 FUNCTION fGetNextSlSeq RETURNS INTEGER ():
 
    DEFINE BUFFER ServiceLimit FOR ServiceLimit.
@@ -412,6 +427,39 @@ FUNCTION fCreateTMRItemValue RETURNS LOGICAL
 
 END FUNCTION.
 
+/* RequestAction */
+FUNCTION fCreateRequestAction RETURNS LOGICAL
+   ( icCLIType AS CHARACTER,
+     iiReqType AS INTEGER ):
+
+   FIND FIRST RequestAction EXCLUSIVE-LOCK WHERE
+      RequestAction.Brand  = "1" AND
+      RequestAction.CLIType = icCLIType AND
+      RequestAction.ReqType = iiReqType AND
+      RequestAction.ValidTo  = DATE(12,31,2049) AND
+      RequestAction.ActionType = "DayCampaign" AND
+      RequestAction.ActionKey = "VOICE200" AND
+      RequestAction.Action = 1
+   NO-ERROR.
+   
+   IF NOT AVAILABLE RequestAction
+   THEN DO:
+      CREATE RequestAction.
+      RequestAction.RequestActionID = fGetNextRequestActionID().
+   END.
+   
+   ASSIGN
+      RequestAction.Brand  = "1"
+      RequestAction.CLIType    = icCLIType
+      RequestAction.ReqType = iiReqType
+      RequestAction.ValidFrom = DATE(6,1,2017)
+      RequestAction.ValidTo  = DATE(12,31,2049)
+      RequestAction.ActionType = "DayCampaign"
+      RequestAction.ActionKey = "VOICE200"
+      RequestAction.Action = 1
+      .
+
+END FUNCTION.
 
 /* In 5.6.2017 Deployment we need following configuration changes */
 
@@ -499,8 +547,18 @@ fCreateSLGAnalyse("CONTFH49_300", "10100005", 81, "*", "VOICE200", 1).
 fCreateSLGAnalyse("CONTFH49_300", "CFOTHER", 30, "*", "VOICE200", 1).
 fCreateSLGAnalyse("CONTFH49_300", "CFYOIGO", 30, "*", "VOICE200", 1).
 
-
-
+fCreateRequestAction("CONTDSL39", 13).
+fCreateRequestAction("CONTFH39_50", 13).
+fCreateRequestAction("CONTFH49_300", 13).
+fCreateRequestAction("CONTDSL48", 13).
+fCreateRequestAction("CONTFH48_50", 13).
+fCreateRequestAction("CONTFH58_300", 13).
+fCreateRequestAction("CONTDSL39", 0).
+fCreateRequestAction("CONTFH39_50", 0).
+fCreateRequestAction("CONTFH49_300", 0).
+fCreateRequestAction("CONTDSL48", 0).
+fCreateRequestAction("CONTFH48_50", 0).
+fCreateRequestAction("CONTFH58_300", 0).
 
 /* After the 5.6.2017 deployment following can be used (maybe?) */
 
