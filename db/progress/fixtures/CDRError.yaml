@@ -1,54 +1,54 @@
-CDRError1: CDRError
+bulkload: CDRError
   CDRError: 8042
 
-CDRError2: CDRError
+bulkload: CDRError
   CDRError: 8043
 
-CDRError3: CDRError
+bulkload: CDRError
   CDRError: 9000
 
-CDRError4: CDRError
+bulkload: CDRError
   CDRError: 9050
 
-CDRError5: CDRError
+bulkload: CDRError
   CDRError: 9051
 
-CDRError6: CDRError
+bulkload: CDRError
   CDRError: 9052
 
-CDRError7: CDRError
+bulkload: CDRError
   CDRError: 9053
 
-CDRError8: CDRError
+bulkload: CDRError
   CDRError: 9054
 
-CDRError9: CDRError
+bulkload: CDRError
   CDRError: 9055
 
-CDRError10: CDRError
+bulkload: CDRError
   CDRError: 9056
 
-CDRError11: CDRError
+bulkload: CDRError
   CDRError: 9057
 
-CDRError12: CDRError
+bulkload: CDRError
   CDRError: 9061
 
-CDRError13: CDRError
+bulkload: CDRError
   CDRError: 9062
 
-CDRError14: CDRError
+bulkload: CDRError
   CDRError: 9063
 
-CDRError15: CDRError
+bulkload: CDRError
   CDRError: 9064
 
-CDRError16: CDRError
+bulkload: CDRError
   CDRError: 9067
 
-CDRError17: CDRError
+bulkload: CDRError
   CDRError: 9070
 
-CDRError18: CDRError
+bulkload: CDRError
   CDRError: 9071
 
