@@ -1,74 +1,74 @@
-FuncRunQueue1: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 1
   QueueDesc: "Billing process <-01.08.2010 (not used)"
   Brand: "1"
 
-FuncRunQueue2: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 2
   QueueDesc: "Stress test run"
   Brand: "1"
   Active: TRUE 
 
-FuncRunQueue3: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 3
   QueueDesc: "Billing process 01.09.2010-> (active)"
   Brand: "1"
   Active: TRUE 
 
-FuncRunQueue4: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 4
   QueueDesc: "Unbilled invoice row counter check"
   Brand: "1"
   Active: TRUE 
 
-FuncRunQueue5: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 5
   QueueDesc: "XML creation"
   Brand: "1"
   Active: TRUE 
 
-FuncRunQueue6: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 6
   QueueDesc: "Triggered rerate"
   Brand: "1"
   Active: TRUE 
 
-FuncRunQueue7: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 7
   QueueDesc: "Billed invoice row counter check"
   Brand: "1"
   Active: TRUE 
 
-FuncRunQueue8: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 8
   QueueDesc: "Automated test run review"
   Brand: "1"
   Active: TRUE 
 
-FuncRunQueue9: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 9
   QueueDesc: "Temporary billing queue, can be modified and used to run only wanted billing processes"
   Brand: "1"
   Active: TRUE 
 
-FuncRunQueue10: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 10
   QueueDesc: "IFS testing (not used)"
   Brand: "1"
 
-FuncRunQueue11: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 11
   QueueDesc: "Test invoice deletion"
   Brand: "1"
   Active: TRUE 
 
-FuncRunQueue12: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 12
   QueueDesc: "Billing reports, can be modified if needed"
   Brand: "1"
   Active: TRUE 
 
-FuncRunQueue13: FuncRunQueue
+bulkload: FuncRunQueue
   FRQueueID: 13
   QueueDesc: "CSB19 creation"
   Brand: "1"

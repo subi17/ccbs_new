@@ -1,4 +1,4 @@
-CustCat1: CustCat
+bulkload: CustCat
   Category: "10"
   CatName: "Consumer NIF"
   Brand: "1"
@@ -6,7 +6,7 @@ CustCat1: CustCat
   MobSubLimit: 3
   ActivationLimit: 5
 
-CustCat2: CustCat
+bulkload: CustCat
   Category: "11"
   CatName: "Consumer NIE"
   Brand: "1"
@@ -14,7 +14,7 @@ CustCat2: CustCat
   MobSubLimit: 3
   ActivationLimit: 5
 
-CustCat3: CustCat
+bulkload: CustCat
   Category: "12"
   CatName: "Unknown consumer"
   Brand: "1"
@@ -22,7 +22,7 @@ CustCat3: CustCat
   MobSubLimit: 3
   ActivationLimit: 5
 
-CustCat4: CustCat
+bulkload: CustCat
   Category: "13"
   CatName: "Consumer Passport"
   Brand: "1"
@@ -30,7 +30,7 @@ CustCat4: CustCat
   MobSubLimit: 3
   ActivationLimit: 5
 
-CustCat5: CustCat
+bulkload: CustCat
   Category: "20"
   CatName: "Company CIF"
   Brand: "1"
@@ -38,21 +38,21 @@ CustCat5: CustCat
   MobSubLimit: 25
   ActivationLimit: 35
 
-CustCat6: CustCat
+bulkload: CustCat
   Category: "30"
   CatName: "Employees - Internal customer"
   Brand: "1"
   MobSubLimit: 5
   ActivationLimit: 999
 
-CustCat7: CustCat
+bulkload: CustCat
   Category: "31"
   CatName: "VIP - Yoigo external customer"
   Brand: "1"
   MobSubLimit: 5
   ActivationLimit: 999
 
-CustCat8: CustCat
+bulkload: CustCat
   Category: "40"
   CatName: "Sole trader NIF"
   Brand: "1"
@@ -61,7 +61,7 @@ CustCat8: CustCat
   MobSubLimit: 3
   ActivationLimit: 5
 
-CustCat9: CustCat
+bulkload: CustCat
   Category: "41"
   CatName: "Sole trader NIE"
   Brand: "1"
@@ -70,7 +70,7 @@ CustCat9: CustCat
   MobSubLimit: 3
   ActivationLimit: 5
 
-CustCat10: CustCat
+bulkload: CustCat
   Category: "99"
   CatName: "Default customers"
   ArAccNum: 77777777
