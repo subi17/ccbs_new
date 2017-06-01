@@ -1921,9 +1921,9 @@ FOR FIRST CLIType NO-LOCK WHERE
       WHEN "TARJ7" THEN lcList = "1 cent/min".
       WHEN "TARJ8" THEN lcList = "6,05 cent/min".
       WHEN "TARJ9" THEN lcList = "1 cent/min".
-      WHEN "TARJ10" THEN lcList = "1 cent/min".
-      WHEN "TARJ11" THEN lcList = "1 cent/min".
-      WHEN "TARJ12" THEN lcList = "1 cent/min".
+      WHEN "TARJ10" THEN lcList = "20 min/mes gratis,".
+      WHEN "TARJ11" THEN lcList = "50 min/mes gratis,".
+      WHEN "TARJ12" THEN lcList = "100 min/mes gratis,".
       OTHERWISE lcList = "".
     END.
 
