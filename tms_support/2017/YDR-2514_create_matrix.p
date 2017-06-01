@@ -161,6 +161,60 @@ FUNCTION fCreateTariff RETURNS LOGICAL
 
 END FUNCTION.
 
+/* In 5.6.2017 Deployment we need following configuration changes */
+
+/* CONTDSL48, CONTFH48_50, CONTFH58_300: giMXSeq should be 115 after the call */
+fCreateMatrix("Convergent 5GB  mobile", "PERCONTR", 1, 40).
+fCreateMXItem(giMXSeq, "PerContract", "VOICE100").
+fCreateSLGAnalyse("CONTDSL48", "10100001", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTDSL48", "10100003", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTDSL48", "10100005", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTDSL48", "CFOTHER", 30, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTDSL48", "CFYOIGO", 30, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH48_50", "10100001", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH48_50", "10100003", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH48_50", "10100005", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH48_50", "CFOTHER", 30, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH48_50", "CFYOIGO", 30, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH58_300", "10100001", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH58_300", "10100003", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH58_300", "10100005", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH58_300", "CFOTHER", 30, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH58_300", "CFYOIGO", 30, "*", "VOICE100", 1).
+
+/* CONTDSL39: giMXSeq should be 124 after the call */
+fCreateMatrix("CONTDSL39", "PERCONTR", 1, 47).
+fCreateMXItem(giMXSeq, "PerContract", "VOICE100").
+fCreateSLGAnalyse("CONTDSL39", "10100001", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTDSL39", "10100003", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTDSL39", "10100005", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTDSL39", "CFOTHER", 30, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTDSL39", "CFYOIGO", 30, "*", "VOICE100", 1).
+
+/* CONTFH39_50: giMXSeq should be 124 after the call */
+fCreateMatrix("CONTFH39_50", "PERCONTR", 1, 49).
+fCreateMXItem(giMXSeq, "PerContract", "VOICE100").
+fCreateSLGAnalyse("CONTFH39_50", "10100001", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH39_50", "10100003", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH39_50", "10100005", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH39_50", "CFOTHER", 30, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH39_50", "CFYOIGO", 30, "*", "VOICE100", 1).
+
+/* CONTFH49_300: giMXSeq should be 127 after the call */
+fCreateMatrix("CONTFH49_300", "PERCONTR", 1, 50).
+fCreateMXItem(giMXSeq, "PerContract", "VOICE100").
+fCreateSLGAnalyse("CONTFH49_300", "10100001", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH49_300", "10100003", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH49_300", "10100005", 81, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH49_300", "CFOTHER", 30, "*", "VOICE100", 1).
+fCreateSLGAnalyse("CONTFH49_300", "CFYOIGO", 30, "*", "VOICE100", 1).
+
+
+
+/* After the 5.6.2017 deployment a following changes will be needed */
+
+/*
+
 /* Create new tariffs */
 fCreateTariff(81, "VOICE100").
 fCreateTariff(30, "VOICE100CF").
@@ -193,3 +247,4 @@ fCreateSLGAnalyse("CONT10", "10100005", 81, "*", "VOICE100", 1).
 fCreateSLGAnalyse("CONT10", "CFOTHER", 30, "*", "VOICE100", 1).
 fCreateSLGAnalyse("CONT10", "CFYOIGO", 30, "*", "VOICE100", 1).
 
+*/
