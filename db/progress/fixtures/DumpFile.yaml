@@ -1,4 +1,4 @@
-DumpFile1: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customers"
   DumpID: 4
@@ -15,7 +15,7 @@ DumpFile1: DumpFile
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
 
-DumpFile2: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customer data file including fields which are used and defined by operator. "
   DumpID: 5
@@ -34,7 +34,7 @@ DumpFile2: DumpFile
   AveDurFull: 12629
   AveDurMod: 1322
 
-DumpFile3: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Transfer customer data to SAP"
   DumpID: 6
@@ -50,7 +50,7 @@ DumpFile3: DumpFile
   LogicModule: "sap_business_partner"
   ModFromEventLog: TRUE 
 
-DumpFile4: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Transfer subscriptions to SAP"
   DumpID: 7
@@ -67,7 +67,7 @@ DumpFile4: DumpFile
   ModFromEventLog: TRUE 
   ModFromField: "ActivationTS"
 
-DumpFile5: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Transfer invoices to SAP"
   DumpID: 8
@@ -84,7 +84,7 @@ DumpFile5: DumpFile
   ModFromEventLog: TRUE 
   ModFromField: "ChgStamp"
 
-DumpFile6: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Requests"
   DumpID: 9
@@ -104,7 +104,7 @@ DumpFile6: DumpFile
   AveDurFull: 9197
   AveDurMod: 1490
 
-DumpFile7: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Subscription data file including fields which are defined and used by operator"
   DumpID: 10
@@ -124,7 +124,7 @@ DumpFile7: DumpFile
   AveDurMod: 1195
   AllowReplica: TRUE 
 
-DumpFile8: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Timestamp (MsOwner) file including fields which are defined and used by operator"
   DumpID: 11
@@ -142,7 +142,7 @@ DumpFile8: DumpFile
   ModFromEventLog: TRUE 
   ModFromField: "TSBegin"
 
-DumpFile9: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order dump used by pentaho and DWH"
   DumpID: 12
@@ -162,7 +162,7 @@ DumpFile9: DumpFile
   AveDurMod: 46
   AllowReplica: TRUE 
 
-DumpFile10: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order customer data file including fields which are defined and used by operator"
   DumpID: 13
@@ -182,7 +182,7 @@ DumpFile10: DumpFile
   AveDurMod: 20
   AllowReplica: TRUE 
 
-DumpFile11: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order payment data file including fields which are defined and used by operator."
   DumpID: 14
@@ -201,7 +201,7 @@ DumpFile11: DumpFile
   AveDurMod: 4
   AllowReplica: TRUE 
 
-DumpFile12: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order accessory data file including fields which are defined and used by operator"
   DumpID: 15
@@ -218,7 +218,7 @@ DumpFile12: DumpFile
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
 
-DumpFile13: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "This dump includes Logistics status information. Status updates has been registered based on data provided by Logistics operator"
   DumpID: 16
@@ -238,7 +238,7 @@ DumpFile13: DumpFile
   AveDurMod: 6708
   AllowReplica: TRUE 
 
-DumpFile14: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Yoigo's invoices report. NOTE: A/R data is reported directly to SAP with deteiled General ledger information"
   DumpID: 17
@@ -256,7 +256,7 @@ DumpFile14: DumpFile
   ModFromEventLog: TRUE 
   ModFromField: "ChgStamp,ClaimStamp"
 
-DumpFile15: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Subscription billing permissions"
   DumpID: 18
@@ -274,7 +274,7 @@ DumpFile15: DumpFile
   AveDurFull: 109
   AveDurMod: 111
 
-DumpFile16: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Dump for creators and amount of credit notes and the MSISDN
 for which they relate to "
@@ -297,7 +297,7 @@ MsRequest.ReqType = 22 AND MsRequest.ReqStatus = 2, FIRST Invoice WHERE Invoice.
   AveDurFull: 1746
   AveDurMod: 1778
 
-DumpFile17: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Free Air Times"
   DumpID: 20
@@ -316,7 +316,7 @@ DumpFile17: DumpFile
   AveDurFull: 18441
   AveDurMod: 2
 
-DumpFile18: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Detailed postpaid CDR dump
 
@@ -337,7 +337,7 @@ DumpFile18: DumpFile
   AveDurMod: 2368
   AllowReplica: TRUE 
 
-DumpFile19: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Roaming Tariff Items"
   DumpID: 23
@@ -356,7 +356,7 @@ DumpFile19: DumpFile
   AveDurMod: 13
   AllowReplica: TRUE 
 
-DumpFile20: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Roaming Operators description"
   DumpID: 24
@@ -375,7 +375,7 @@ DumpFile20: DumpFile
   AveDurMod: 1
   AllowReplica: TRUE 
 
-DumpFile21: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Roaming Tariffs "
   DumpID: 25
@@ -394,7 +394,7 @@ DumpFile21: DumpFile
   AveDurMod: 3
   AllowReplica: TRUE 
 
-DumpFile22: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "CCN names and codes for Calls detail dump"
   DumpID: 26
@@ -411,7 +411,7 @@ DumpFile22: DumpFile
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
 
-DumpFile23: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Billing Item names for calls detail dump"
   DumpID: 27
@@ -428,7 +428,7 @@ DumpFile23: DumpFile
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
 
-DumpFile24: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Statistics of error CDRs (billing report)
 "
@@ -444,7 +444,7 @@ DumpFile24: DumpFile
   FileCategory: "INV"
   LogicModule: "errorcdr_stat_dump"
 
-DumpFile25: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "ACC requests"
   DumpID: 29
@@ -464,7 +464,7 @@ DumpFile25: DumpFile
   AveDurMod: 765
   AllowReplica: TRUE 
 
-DumpFile26: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customers to IFS"
   DumpID: 30
@@ -481,7 +481,7 @@ DumpFile26: DumpFile
   AveDurFull: 2538
   AveDurMod: 898
 
-DumpFile27: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Subscriptions to IFS"
   DumpID: 31
@@ -501,7 +501,7 @@ DumpFile27: DumpFile
   AveDurMod: 1890
   AllowReplica: TRUE 
 
-DumpFile28: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Service invoices (i.e. monthly postpaid invoices) to IFS
 "
@@ -522,7 +522,7 @@ DumpFile28: DumpFile
   AveDurFull: 1691
   AveDurMod: 238
 
-DumpFile29: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Charge and Compensation request data"
   DumpID: 33
@@ -542,7 +542,7 @@ DumpFile29: DumpFile
   AveDurFull: 13401
   AveDurMod: 32
 
-DumpFile30: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Prepaid topup requests"
   DumpID: 34
@@ -561,7 +561,7 @@ DumpFile30: DumpFile
   AveDurFull: 14584
   AveDurMod: 6
 
-DumpFile31: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Sales invoices (i.e. cash invoices) to IFS
 "
@@ -581,7 +581,7 @@ DumpFile31: DumpFile
   ModFromField: "ChgStamp"
   ConfigParam: "6,7,8,9"
 
-DumpFile32: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Detailed prepaid CDR dump (YDR-64)
 Matti Ahola - 04/03/10 13:17
@@ -599,7 +599,7 @@ Will not be deployed as agreed by Miguel and Matti. "
   FileCategory: "DWH"
   LogicModule: "prepcdr_dump_start"
 
-DumpFile33: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Original full invoice table dump (Delta file check is taken in logic module)"
   DumpID: 37
@@ -615,7 +615,7 @@ DumpFile33: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
 
-DumpFile34: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "New installment contracts daily to IFS
 "
@@ -632,7 +632,7 @@ DumpFile34: DumpFile
   FileCategory: "IFS"
   LogicModule: "ifs_installment"
 
-DumpFile35: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Installment cancellations monthly to IFS"
   DumpID: 39
@@ -648,7 +648,7 @@ DumpFile35: DumpFile
   FileCategory: "IFS"
   LogicModule: "ifs_installment_cancel"
 
-DumpFile36: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Original MsOwner dump, moved to datadump tool"
   DumpID: 40
@@ -666,7 +666,7 @@ DumpFile36: DumpFile
   AveDurFull: 6643
   AveDurMod: 3470
 
-DumpFile37: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Original OrderAccessory dump, used both DWH and pentaho"
   DumpID: 41
@@ -684,7 +684,7 @@ DumpFile37: DumpFile
   AveDurMod: 4
   AllowReplica: TRUE 
 
-DumpFile38: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Susbcription Periodical Contracts"
   DumpID: 42
@@ -703,7 +703,7 @@ DumpFile38: DumpFile
   AveDurFull: 108012
   AveDurMod: 167
 
-DumpFile39: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Orders Periodical Contract"
   DumpID: 43
@@ -720,7 +720,7 @@ DumpFile39: DumpFile
   AveDurFull: 9304
   AveDurMod: 8
 
-DumpFile40: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order cancellation IMEI release (YDR-69)"
   DumpID: 44
@@ -746,7 +746,7 @@ DumpFile40: DumpFile
   AveDurMod: 910
   AllowReplica: TRUE 
 
-DumpFile41: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Active services of subscriptions"
   DumpID: 45
@@ -765,7 +765,7 @@ DumpFile41: DumpFile
   AveDurMod: 6811
   AllowReplica: TRUE 
 
-DumpFile42: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MSISDNs"
   DumpID: 46
@@ -782,7 +782,7 @@ DumpFile42: DumpFile
   AveDurFull: 8077
   AveDurMod: 339
 
-DumpFile43: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MServiceLPool used by Pentaho"
   DumpID: 47
@@ -805,7 +805,7 @@ DumpFile43: DumpFile
   AveDurFull: 125223
   AveDurMod: 105
 
-DumpFile44: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Prepaid error calls (detailed). YOT-1074
 
@@ -825,7 +825,7 @@ DumpFile44: DumpFile
   AveDurMod: 399
   AllowReplica: TRUE 
 
-DumpFile45: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "List of Billing Items used by Pentaho
 
@@ -851,7 +851,7 @@ DumpFile45: DumpFile
   AveDurFull: 1
   AveDurMod: 88
 
-DumpFile46: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP KPI dump for Track (SER-465)"
   DumpID: 50
@@ -869,7 +869,7 @@ DumpFile46: DumpFile
   AveDurFull: 1
   AveDurMod: 2
 
-DumpFile47: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Error Calls Dump. YDR-222"
   DumpID: 51
@@ -888,7 +888,7 @@ DumpFile47: DumpFile
   AveDurMod: 1150
   AllowReplica: TRUE 
 
-DumpFile48: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Invoice Details Report"
   DumpID: 52
@@ -906,7 +906,7 @@ DumpFile48: DumpFile
   AveDurFull: 3682
   AveDurMod: 3682
 
-DumpFile49: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Description: Cancellation attachments to DWH. YDR-233"
   DumpID: 53
@@ -921,7 +921,7 @@ DumpFile49: DumpFile
   LogicModule: "mnp_attachment_dump"
   AveDurFull: 1
 
-DumpFile50: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Payment on delivery sales invoices (cash invoices) / credit notes to IFS"
   DumpID: 54
@@ -940,7 +940,7 @@ DumpFile50: DumpFile
   AveDurFull: 14770
   AveDurMod: 40
 
-DumpFile51: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Credit card sales invoices (cash receipts) / credit notes to IFS
 
@@ -961,7 +961,7 @@ DumpFile51: DumpFile
   AveDurFull: 13902
   AveDurMod: 10
 
-DumpFile52: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customer address validation values. YDR-180"
   DumpID: 56
@@ -978,7 +978,7 @@ DumpFile52: DumpFile
   AveDurFull: 1379
   AveDurMod: 1379
 
-DumpFile53: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Invoice Report"
   DumpID: 57
@@ -996,7 +996,7 @@ DumpFile53: DumpFile
   AveDurFull: 9235
   AveDurMod: 564
 
-DumpFile54: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Bill Run Statistic Report for Track - YOT-1455"
   DumpID: 58
@@ -1013,7 +1013,7 @@ DumpFile54: DumpFile
   AveDurFull: 6908
   AveDurMod: 1
 
-DumpFile55: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Offer dump including fields which are defined and used by operator."
   DumpID: 59
@@ -1032,7 +1032,7 @@ DumpFile55: DumpFile
   AveDurMod: 55
   AllowReplica: TRUE 
 
-DumpFile56: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OfferCriteria dump including fields which are defined and used by operator."
   DumpID: 60
@@ -1051,7 +1051,7 @@ DumpFile56: DumpFile
   AveDurMod: 208
   AllowReplica: TRUE 
 
-DumpFile57: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OfferItem dump including fields which are defined and used by operator."
   DumpID: 61
@@ -1070,7 +1070,7 @@ DumpFile57: DumpFile
   AveDurMod: 299
   AllowReplica: TRUE 
 
-DumpFile58: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Installment activations and cancellations to IFS. YDR-328
 This is executed from the ifs bank file read process."
@@ -1088,7 +1088,7 @@ This is executed from the ifs bank file read process."
   AveDurFull: 203
   AveDurMod: 609
 
-DumpFile59: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "External API log dump for Track. SER-2700"
   DumpID: 63
@@ -1107,7 +1107,7 @@ DumpFile59: DumpFile
   AveDurMod: 3
   AllowReplica: TRUE 
 
-DumpFile60: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderAction dump. YDR-494
 Sent to both Track and DWH"
@@ -1126,7 +1126,7 @@ Sent to both Track and DWH"
   AveDurMod: 2
   AllowReplica: TRUE 
 
-DumpFile61: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "IPRange table dump for DWH. YDR-474"
   DumpID: 65
@@ -1142,7 +1142,7 @@ DumpFile61: DumpFile
   AveDurFull: 1
   AveDurMod: 2
 
-DumpFile62: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Discount plan members"
   DumpID: 66
@@ -1161,7 +1161,7 @@ DumpFile62: DumpFile
   AveDurFull: 339
   AveDurMod: 1793
 
-DumpFile63: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "XML file with PhoneHouse MNP orders. YOT-1850"
   DumpID: 67
@@ -1178,7 +1178,7 @@ DumpFile63: DumpFile
   AveDurFull: 133
   AveDurMod: 7
 
-DumpFile64: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP porting in cancellations log. YDR-578"
   DumpID: 68
@@ -1195,7 +1195,7 @@ DumpFile64: DumpFile
   AveDurFull: 5
   AveDurMod: 5
 
-DumpFile65: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Fees datasmart. YDR-455"
   DumpID: 69
@@ -1211,7 +1211,7 @@ DumpFile65: DumpFile
   AveDurFull: 11
   AveDurMod: 11
 
-DumpFile66: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Billing permission dump for billing permission create/modify events. YOT-1635
 "
@@ -1230,7 +1230,7 @@ DumpFile66: DumpFile
   AveDurMod: 5
   AllowReplica: TRUE 
 
-DumpFile67: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Description: YOT-185 Data Protection Law: Access Logs
 "
@@ -1248,7 +1248,7 @@ DumpFile67: DumpFile
   AveDurMod: 2
   AllowReplica: TRUE 
 
-DumpFile68: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Rerate log dump for TRACK. YOT-2127"
   DumpID: 72
@@ -1267,7 +1267,7 @@ DumpFile68: DumpFile
   AveDurMod: 5
   AllowReplica: TRUE 
 
-DumpFile69: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "IFS file about orders cancelled because ROVE. YDR-560
 "
@@ -1286,7 +1286,7 @@ DumpFile69: DumpFile
   AveDurFull: 21
   AveDurMod: 21
 
-DumpFile70: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "TMS users dump file"
   DumpID: 74
@@ -1305,7 +1305,7 @@ DumpFile70: DumpFile
   AveDurMod: 1
   AllowReplica: TRUE 
 
-DumpFile71: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Dumps whole Limit table"
   DumpID: 75
@@ -1324,7 +1324,7 @@ DumpFile71: DumpFile
   AveDurFull: 3844
   AveDurMod: 3844
 
-DumpFile72: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP porting IN"
   DumpID: 76
@@ -1344,7 +1344,7 @@ DumpFile72: DumpFile
   AveDurFull: 2318
   AveDurMod: 2318
 
-DumpFile73: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP porting OUT"
   DumpID: 77
@@ -1364,7 +1364,7 @@ DumpFile73: DumpFile
   AveDurFull: 2015
   AveDurMod: 2015
 
-DumpFile74: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP Termination"
   DumpID: 78
@@ -1384,7 +1384,7 @@ DumpFile74: DumpFile
   AveDurFull: 99
   AveDurMod: 99
 
-DumpFile75: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Report MNP IN/OUT error messages."
   DumpID: 79
@@ -1403,7 +1403,7 @@ DumpFile75: DumpFile
   AveDurFull: 147
   AveDurMod: 147
 
-DumpFile76: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "All failed MNP activations"
   DumpID: 80
@@ -1422,7 +1422,7 @@ DumpFile76: DumpFile
   AveDurFull: 1
   AveDurMod: 8
 
-DumpFile77: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP OUT delayed rejections/confirmations."
   DumpID: 81
@@ -1441,7 +1441,7 @@ DumpFile77: DumpFile
   AveDurFull: 1
   AveDurMod: 8
 
-DumpFile78: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Dump Salesman records"
   DumpID: 82
@@ -1460,7 +1460,7 @@ DumpFile78: DumpFile
   AveDurMod: 20
   AllowReplica: TRUE 
 
-DumpFile79: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Dump SIM records"
   DumpID: 83
@@ -1479,7 +1479,7 @@ DumpFile79: DumpFile
   AveDurMod: 2454
   AllowReplica: TRUE 
 
-DumpFile80: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "EDR data dump to TRACK and DWH"
   DumpID: 84
@@ -1497,7 +1497,7 @@ DumpFile80: DumpFile
   AveDurMod: 2
   AllowReplica: TRUE 
 
-DumpFile81: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Terminal financing file for the bank. YDR-945"
   DumpID: 85
@@ -1513,7 +1513,7 @@ DumpFile81: DumpFile
   AveDurFull: 4
   AveDurMod: 8
 
-DumpFile82: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Invoice Dump for Cassandra for HPD project."
   DumpID: 86
@@ -1532,7 +1532,7 @@ DumpFile82: DumpFile
   AveDurFull: 1753
   AveDurMod: 2290
 
-DumpFile83: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Payment Dump for Cassandra for HPD project."
   DumpID: 87
@@ -1551,7 +1551,7 @@ DumpFile83: DumpFile
   AveDurFull: 1302
   AveDurMod: 24
 
-DumpFile84: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "ServiceLCounter Dump for Cassandra for HPD project."
   DumpID: 88
@@ -1571,7 +1571,7 @@ DumpFile84: DumpFile
   AveDurFull: 9
   AveDurMod: 9
 
-DumpFile85: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "PrepEDR Dump for Cassandra for HPD project."
   DumpID: 89
@@ -1590,7 +1590,7 @@ DumpFile85: DumpFile
   AveDurMod: 1
   AllowReplica: TRUE 
 
-DumpFile86: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderFusion dump used for both DWH and pentaho"
   DumpID: 90
@@ -1609,7 +1609,7 @@ DumpFile86: DumpFile
   AveDurMod: 1
   AllowReplica: TRUE 
 
-DumpFile87: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Fusion invoices to IFS"
   DumpID: 91
@@ -1628,7 +1628,7 @@ DumpFile87: DumpFile
   AveDurFull: 33
   AveDurMod: 46
 
-DumpFile88: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Check whether customer BIC cannot be found from system"
   DumpID: 92
@@ -1646,7 +1646,7 @@ DumpFile88: DumpFile
   AveDurFull: 12979
   AveDurMod: 12979
 
-DumpFile89: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "TARJ7 renewal date alignment"
   DumpID: 93
@@ -1662,7 +1662,7 @@ DumpFile89: DumpFile
   AveDurFull: 12624
   AveDurMod: 12624
 
-DumpFile90: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "New IFS dextra order file for NTFM-Direct Channel"
   DumpID: 94
@@ -1680,7 +1680,7 @@ DumpFile90: DumpFile
   AveDurFull: 1
   AveDurMod: 2618
 
-DumpFile91: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "EventLog Dump"
   DumpID: 95
@@ -1696,7 +1696,7 @@ DumpFile91: DumpFile
   AveDurMod: 11
   AllowReplica: TRUE 
 
-DumpFile92: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customers event log information"
   DumpID: 96
@@ -1715,7 +1715,7 @@ DumpFile92: DumpFile
   AveDurFull: 69785
   AveDurMod: 149
 
-DumpFile93: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Dump for collecting info about Single Fees and Fixed Fees"
   DumpID: 97
@@ -1734,7 +1734,7 @@ DumpFile93: DumpFile
   AveDurFull: 13
   AveDurMod: 8
 
-DumpFile94: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MsOwner full dump for Track"
   DumpID: 98
@@ -1752,7 +1752,7 @@ DumpFile94: DumpFile
   AveDurFull: 7931
   AveDurMod: 7931
 
-DumpFile95: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Offers sent by SMS"
   DumpID: 99
@@ -1771,7 +1771,7 @@ DumpFile95: DumpFile
   AveDurMod: 125
   AllowReplica: TRUE 
 
-DumpFile96: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Offer response SMSes from end-customers"
   DumpID: 100
@@ -1790,7 +1790,7 @@ DumpFile96: DumpFile
   AveDurMod: 4
   AllowReplica: TRUE 
 
-DumpFile97: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Subscription barrings"
   DumpID: 101
@@ -1810,7 +1810,7 @@ DumpFile97: DumpFile
   AveDurFull: 823
   AveDurMod: 2
 
-DumpFile98: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "PayPal sales invoices (cash receipts) / credit notes to IFS"
   DumpID: 102
@@ -1829,7 +1829,7 @@ DumpFile98: DumpFile
   AveDurFull: 13596
   AveDurMod: 11
 
-DumpFile99: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Collect rows to a dump file for DMS records"
   DumpID: 103
@@ -1847,7 +1847,7 @@ DumpFile99: DumpFile
   ModFromEventLog: TRUE 
   AveDurMod: 5
 
-DumpFile100: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Collect rows to a dump file for DMSDoc records"
   DumpID: 104
@@ -1865,7 +1865,7 @@ DumpFile100: DumpFile
   ModFromEventLog: TRUE 
   AveDurMod: 2
 
-DumpFile101: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Collect rows to a dump file for customer contact records"
   DumpID: 105
@@ -1884,7 +1884,7 @@ DumpFile101: DumpFile
   AveDurFull: 43
   AveDurMod: 2
 
-DumpFile102: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customer Data History Dump created daily with old customer data"
   DumpID: 106
@@ -1902,7 +1902,7 @@ DumpFile102: DumpFile
   ModFromEventLog: TRUE 
   AveDurMod: 4
 
-DumpFile103: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Collect rows to a dump file for TermReturn records"
   DumpID: 107
@@ -1920,7 +1920,7 @@ DumpFile103: DumpFile
   ModFromEventLog: TRUE 
   AveDurMod: 16
 
-DumpFile104: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Barring dump to HPD"
   DumpID: 200
@@ -1940,7 +1940,7 @@ DumpFile104: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 2
 
-DumpFile105: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "BarringConf dump to HPD"
   DumpID: 201
@@ -1960,7 +1960,7 @@ DumpFile105: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 2
 
-DumpFile106: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "BillItem dump to HPD"
   DumpID: 202
@@ -1980,7 +1980,7 @@ DumpFile106: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 2
 
-DumpFile107: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "BItemGroup dump to HPD"
   DumpID: 203
@@ -2000,7 +2000,7 @@ DumpFile107: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 2
 
-DumpFile108: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customer dump to HPD"
   DumpID: 204
@@ -2022,7 +2022,7 @@ DumpFile108: DumpFile
   AveDurMod: 1252
   BatchID: 7
 
-DumpFile109: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MServiceLimit dump to HPD"
   DumpID: 205
@@ -2042,7 +2042,7 @@ DumpFile109: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 5
 
-DumpFile110: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MServiceLPool dump to HPD"
   DumpID: 206
@@ -2064,7 +2064,7 @@ DumpFile110: DumpFile
   AveDurMod: 753
   BatchID: 7
 
-DumpFile111: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DayCampaign dump to HPD"
   DumpID: 207
@@ -2084,7 +2084,7 @@ DumpFile111: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 2
 
-DumpFile112: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DCCLI dump to HPD"
   DumpID: 208
@@ -2104,7 +2104,7 @@ DumpFile112: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 8
 
-DumpFile113: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DiscountPlan dump to HPD"
   DumpID: 209
@@ -2124,7 +2124,7 @@ DumpFile113: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 3
 
-DumpFile114: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DMS dump to HPD"
   DumpID: 210
@@ -2144,7 +2144,7 @@ DumpFile114: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 3
 
-DumpFile115: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DMSDoc dump to HPD"
   DumpID: 211
@@ -2164,7 +2164,7 @@ DumpFile115: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 3
 
-DumpFile116: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DPMember dump to HPD"
   DumpID: 212
@@ -2184,7 +2184,7 @@ DumpFile116: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 7
 
-DumpFile117: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DPTarget dump to HPD"
   DumpID: 213
@@ -2204,7 +2204,7 @@ DumpFile117: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 3
 
-DumpFile118: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "FATGroup dump to HPD"
   DumpID: 214
@@ -2224,7 +2224,7 @@ DumpFile118: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 10
 
-DumpFile119: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "FATime dump to HPD"
   DumpID: 215
@@ -2244,7 +2244,7 @@ DumpFile119: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 10
 
-DumpFile120: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "FixedFee dump to HPD"
   DumpID: 216
@@ -2264,7 +2264,7 @@ DumpFile120: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 5
 
-DumpFile121: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "FMItem dump to HPD"
   DumpID: 217
@@ -2284,7 +2284,7 @@ DumpFile121: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 2
 
-DumpFile122: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "IMSI dump to HPD"
   DumpID: 218
@@ -2304,7 +2304,7 @@ DumpFile122: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 3
 
-DumpFile123: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MobCDR dump to HPD"
   DumpID: 219
@@ -2329,7 +2329,7 @@ DumpFile123: DumpFile
   AveDurMod: 77
   BatchID: 2
 
-DumpFile124: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MobSub dump to HPD"
   DumpID: 220
@@ -2350,7 +2350,7 @@ DumpFile124: DumpFile
   FullCollModule: "1"
   BatchID: 6
 
-DumpFile125: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MsRequest dump to HPD"
   DumpID: 221
@@ -2372,7 +2372,7 @@ DumpFile125: DumpFile
   FullCollModule: "30"
   BatchID: 6
 
-DumpFile126: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "NatHoliday dump to HPD"
   DumpID: 222
@@ -2393,7 +2393,7 @@ DumpFile126: DumpFile
   FullCollModule: "1"
   BatchID: 11
 
-DumpFile127: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order dump to HPD"
   DumpID: 223
@@ -2415,7 +2415,7 @@ DumpFile127: DumpFile
   FullCollModule: "365"
   BatchID: 7
 
-DumpFile128: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderAction dump to HPD"
   DumpID: 224
@@ -2436,7 +2436,7 @@ DumpFile128: DumpFile
   FullCollModule: "1"
   BatchID: 12
 
-DumpFile129: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderCustomer dump to HPD"
   DumpID: 225
@@ -2459,7 +2459,7 @@ DumpFile129: DumpFile
   AveDurMod: 9453
   BatchID: 9
 
-DumpFile130: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderDelivery dump to HPD"
   DumpID: 226
@@ -2480,7 +2480,7 @@ DumpFile130: DumpFile
   FullCollModule: "1"
   BatchID: 13
 
-DumpFile131: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderFusion dump to HPD"
   DumpID: 227
@@ -2501,7 +2501,7 @@ DumpFile131: DumpFile
   FullCollModule: "1"
   BatchID: 6
 
-DumpFile132: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "PrepaidRequest dump to HPD"
   DumpID: 228
@@ -2523,7 +2523,7 @@ DumpFile132: DumpFile
   FullCollModule: "30"
   BatchID: 10
 
-DumpFile133: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "PrepCDR dump to HPD"
   DumpID: 229
@@ -2548,7 +2548,7 @@ DumpFile133: DumpFile
   AveDurMod: 6
   BatchID: 3
 
-DumpFile134: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "PrepEDR dump to HPD"
   DumpID: 230
@@ -2572,7 +2572,7 @@ DumpFile134: DumpFile
   AveDurMod: 1
   BatchID: 5
 
-DumpFile135: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "RepText dump to HPD"
   DumpID: 231
@@ -2593,7 +2593,7 @@ DumpFile135: DumpFile
   FullCollModule: "1"
   BatchID: 2
 
-DumpFile136: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "RequestType dump to HPD"
   DumpID: 232
@@ -2614,7 +2614,7 @@ DumpFile136: DumpFile
   FullCollModule: "1"
   BatchID: 10
 
-DumpFile137: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "ServiceLimit dump to HPD"
   DumpID: 233
@@ -2635,7 +2635,7 @@ DumpFile137: DumpFile
   FullCollModule: "1"
   BatchID: 2
 
-DumpFile138: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "ServPac dump to HPD"
   DumpID: 234
@@ -2656,7 +2656,7 @@ DumpFile138: DumpFile
   FullCollModule: "1"
   BatchID: 2
 
-DumpFile139: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "SingleFee dump to HPD"
   DumpID: 235
@@ -2677,7 +2677,7 @@ DumpFile139: DumpFile
   FullCollModule: "1"
   BatchID: 7
 
-DumpFile140: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "SubSer dump to HPD"
   DumpID: 236
@@ -2698,7 +2698,7 @@ DumpFile140: DumpFile
   FullCollModule: "1"
   BatchID: 2
 
-DumpFile141: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "SubsTerminal dump to HPD"
   DumpID: 237
@@ -2718,7 +2718,7 @@ DumpFile141: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 11
 
-DumpFile142: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "TermReturn dump to HPD"
   DumpID: 238
@@ -2738,7 +2738,7 @@ DumpFile142: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 2
 
-DumpFile143: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "TopupSchemeRow dump to HPD"
   DumpID: 239
@@ -2759,7 +2759,7 @@ DumpFile143: DumpFile
   FullCollModule: "1"
   BatchID: 6
 
-DumpFile144: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Invoice dump to HPD. InvRow and SubInvoice dumps are executed together with this dump."
   DumpID: 240
@@ -2782,7 +2782,7 @@ DumpFile144: DumpFile
   AveDurMod: 8931
   BatchID: 99
 
-DumpFile145: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "SubInvoice dump to HPD. Do not activate! Offline dump is done together with invoice dump."
   DumpID: 241
@@ -2802,7 +2802,7 @@ DumpFile145: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 8
 
-DumpFile146: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "InvRow dump to HPD. Do not activate! Offline dump is done together with invoice dump."
   DumpID: 242
@@ -2822,7 +2822,7 @@ DumpFile146: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 8
 
-DumpFile147: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Rerate MobCDR dump to HPD"
   DumpID: 243
@@ -2845,7 +2845,7 @@ DumpFile147: DumpFile
   AveDurMod: 2
   BatchID: 4
 
-DumpFile148: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Payment dump to HPD"
   DumpID: 244
@@ -2868,7 +2868,7 @@ DumpFile148: DumpFile
   AveDurMod: 30
   BatchID: 9
 
-DumpFile149: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "ServiceLCounter dump to HPD"
   DumpID: 245
@@ -2892,7 +2892,7 @@ DumpFile149: DumpFile
   AveDurMod: 20
   BatchID: 3
 
-DumpFile150: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "CustContact dump to HPD"
   DumpID: 246
@@ -2912,7 +2912,7 @@ DumpFile150: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 6
 
-DumpFile151: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Limit dump to HPD"
   DumpID: 247
@@ -2932,7 +2932,7 @@ DumpFile151: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 6
 
-DumpFile152: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Dump to send AREC resent requests information to DWH"
   DumpID: 411
