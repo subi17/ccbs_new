@@ -1,220 +1,220 @@
-FATGMember1: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO12CPACT"
   MemberType: 1
   FtgMember: "MDUB5"
   Brand: "1"
 
-FATGMember2: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO12CPACT"
   MemberType: 1
   FtgMember: "MDUB5MF"
   Brand: "1"
 
-FATGMember3: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO15CPACT"
   MemberType: 1
   FtgMember: "MDUB2"
   Brand: "1"
 
-FATGMember4: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO15CPACT"
   MemberType: 1
   FtgMember: "MDUB2MF"
   Brand: "1"
 
-FATGMember5: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO25CPACT"
   MemberType: 1
   FtgMember: "MDUB3"
   Brand: "1"
 
-FATGMember6: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO25CPACT"
   MemberType: 1
   FtgMember: "MDUB3MF"
   Brand: "1"
 
-FATGMember7: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO35CPACT"
   MemberType: 1
   FtgMember: "MDUB4"
   Brand: "1"
 
-FATGMember8: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO35CPACT"
   MemberType: 1
   FtgMember: "MDUB4MF"
   Brand: "1"
 
-FATGMember9: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO8CP"
   MemberType: 1
   FtgMember: "MDUB"
   Brand: "1"
 
-FATGMember10: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO8CP"
   MemberType: 1
   FtgMember: "MDUBMF"
   Brand: "1"
 
-FATGMember11: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO8CPACT"
   MemberType: 1
   FtgMember: "MDUB"
   Brand: "1"
 
-FATGMember12: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO8CPACT"
   MemberType: 1
   FtgMember: "MDUBMF"
   Brand: "1"
 
-FATGMember13: FATGMember
+bulkload: FATGMember
   FtGrp: "BONO8CPFREE"
   MemberType: 1
   FtgMember: "MDUBMF"
   Brand: "1"
 
-FATGMember14: FATGMember
+bulkload: FATGMember
   FtGrp: "BONOVOCPBONO"
   MemberType: 1
   FtgMember: "MDUB2MF"
   Brand: "1"
 
-FATGMember15: FATGMember
+bulkload: FATGMember
   FtGrp: "BONOVOCPBONO"
   MemberType: 1
   FtgMember: "MDUB3MF"
   Brand: "1"
 
-FATGMember16: FATGMember
+bulkload: FATGMember
   FtGrp: "BONOVOCPBONO"
   MemberType: 1
   FtgMember: "MDUB4MF"
   Brand: "1"
 
-FATGMember17: FATGMember
+bulkload: FATGMember
   FtGrp: "BONOVOCPBONO"
   MemberType: 1
   FtgMember: "MDUB5MF"
   Brand: "1"
 
-FATGMember18: FATGMember
+bulkload: FATGMember
   FtGrp: "BONOVOCPBONO"
   MemberType: 1
   FtgMember: "MDUBMF"
   Brand: "1"
 
-FATGMember19: FATGMember
+bulkload: FATGMember
   FtGrp: "BONOVOCPIPL"
   MemberType: 1
   FtgMember: "CONTD2MF"
   Brand: "1"
 
-FATGMember20: FATGMember
+bulkload: FATGMember
   FtGrp: "BONOVOCPIPL"
   MemberType: 1
   FtgMember: "CONTD3MF"
   Brand: "1"
 
-FATGMember21: FATGMember
+bulkload: FATGMember
   FtGrp: "BONOVOCPIPL"
   MemberType: 1
   FtgMember: "CONTD4MF"
   Brand: "1"
 
-FATGMember22: FATGMember
+bulkload: FATGMember
   FtGrp: "BONOVOCPIPL"
   MemberType: 1
   FtgMember: "CONTDATAMF"
   Brand: "1"
 
-FATGMember23: FATGMember
+bulkload: FATGMember
   FtGrp: "BONOVOIPCPACT"
   MemberType: 1
   FtgMember: "BONO_VOIPMF"
   Brand: "1"
 
-FATGMember24: FATGMember
+bulkload: FATGMember
   FtGrp: "COMPCF"
   MemberType: 1
   FtgMember: "PAYTERM1E"
   Brand: "1"
 
-FATGMember25: FATGMember
+bulkload: FATGMember
   FtGrp: "CONSMINFAT"
   MemberType: 1
   FtgMember: "MCCONTR1"
   Brand: "1"
 
-FATGMember26: FATGMember
+bulkload: FATGMember
   FtGrp: "CPSMSFAT"
   MemberType: 1
   FtgMember: "12100001"
   Brand: "1"
 
-FATGMember27: FATGMember
+bulkload: FATGMember
   FtGrp: "CPSMSFAT"
   MemberType: 1
   FtgMember: "12100002"
   Brand: "1"
 
-FATGMember28: FATGMember
+bulkload: FATGMember
   FtGrp: "CPSMSFAT"
   MemberType: 1
   FtgMember: "12100003"
   Brand: "1"
 
-FATGMember29: FATGMember
+bulkload: FATGMember
   FtGrp: "CPSMSFAT"
   MemberType: 1
   FtgMember: "12100007"
   Brand: "1"
 
-FATGMember30: FATGMember
+bulkload: FATGMember
   FtGrp: "CPSMSFAT"
   MemberType: 1
   FtgMember: "12100008"
   Brand: "1"
 
-FATGMember31: FATGMember
+bulkload: FATGMember
   FtGrp: "CPSMSFAT"
   MemberType: 1
   FtgMember: "12100009"
   Brand: "1"
 
-FATGMember32: FATGMember
+bulkload: FATGMember
   FtGrp: "DSSCPFREE"
   MemberType: 1
   FtgMember: "DSSMF"
   Brand: "1"
 
-FATGMember33: FATGMember
+bulkload: FATGMember
   FtGrp: "IPL15CPACT"
   MemberType: 1
   FtgMember: "CONTD4MF"
   Brand: "1"
 
-FATGMember34: FATGMember
+bulkload: FATGMember
   FtGrp: "IPL8CPACT"
   MemberType: 1
   FtgMember: "CONTD3MF"
   Brand: "1"
 
-FATGMember35: FATGMember
+bulkload: FATGMember
   FtGrp: "IPL8CPACT2"
   MemberType: 1
   FtgMember: "CONTD3MF"
   Brand: "1"
 
-FATGMember36: FATGMember
+bulkload: FATGMember
   FtGrp: "SPOTIFYCPACT"
   MemberType: 1
   FtgMember: "SPOTIFYMF"
   Brand: "1"
 
-FATGMember37: FATGMember
+bulkload: FATGMember
   FtGrp: "TBONO8"
   MemberType: 1
   FtgMember: "MDUBMF"
