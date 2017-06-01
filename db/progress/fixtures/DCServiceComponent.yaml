@@ -1,4 +1,4 @@
-DCServiceComponent1: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 2
   ServCom: "SHAPER"
   DefValue: 1
@@ -7,7 +7,7 @@ DCServiceComponent1: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 1
 
-DCServiceComponent2: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 3
   ServCom: "SHAPER"
   DefValue: 1
@@ -16,7 +16,7 @@ DCServiceComponent2: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 2
 
-DCServiceComponent3: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 5
   ServCom: "HSDPA"
   DefValue: 1
@@ -24,7 +24,7 @@ DCServiceComponent3: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 3
 
-DCServiceComponent4: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 4
   ServCom: "SHAPER"
   DefValue: 1
@@ -33,7 +33,7 @@ DCServiceComponent4: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 4
 
-DCServiceComponent5: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 6
   ServCom: "SHAPER"
   DefValue: 1
@@ -42,7 +42,7 @@ DCServiceComponent5: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 5
 
-DCServiceComponent6: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 7
   ServCom: "HSDPA"
   DefValue: 1
@@ -50,7 +50,7 @@ DCServiceComponent6: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 6
 
-DCServiceComponent7: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 8
   ServCom: "SHAPER"
   DefValue: 1
@@ -59,7 +59,7 @@ DCServiceComponent7: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 7
 
-DCServiceComponent8: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 9
   ServCom: "SHAPER"
   DefValue: 1
@@ -68,7 +68,7 @@ DCServiceComponent8: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 8
 
-DCServiceComponent9: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 10
   ServCom: "SHAPER"
   DefValue: 1
@@ -77,7 +77,7 @@ DCServiceComponent9: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 9
 
-DCServiceComponent10: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 11
   ServCom: "HSDPA"
   DefValue: 1
@@ -85,7 +85,7 @@ DCServiceComponent10: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 10
 
-DCServiceComponent11: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 12
   ServCom: "SHAPER"
   DefValue: 1
@@ -94,7 +94,7 @@ DCServiceComponent11: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 11
 
-DCServiceComponent12: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 13
   ServCom: "HSDPA"
   DefValue: 1
@@ -102,7 +102,7 @@ DCServiceComponent12: DCServiceComponent
   ToDate: 2045-12-31
   DCServiceComponentID: 12
 
-DCServiceComponent13: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 14
   ServCom: "SHAPER"
   DefValue: 1
@@ -111,7 +111,7 @@ DCServiceComponent13: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 13
 
-DCServiceComponent14: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 15
   ServCom: "HSDPA"
   DefValue: 1
@@ -119,7 +119,7 @@ DCServiceComponent14: DCServiceComponent
   ToDate: 2045-12-31
   DCServiceComponentID: 14
 
-DCServiceComponent15: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 16
   ServCom: "SHAPER"
   DefValue: 1
@@ -128,7 +128,7 @@ DCServiceComponent15: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 15
 
-DCServiceComponent16: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 17
   ServCom: "HSDPA"
   DefValue: 1
@@ -136,7 +136,7 @@ DCServiceComponent16: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 16
 
-DCServiceComponent17: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 18
   ServCom: "SHAPER"
   DefValue: 1
@@ -145,7 +145,7 @@ DCServiceComponent17: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 17
 
-DCServiceComponent18: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 21
   ServCom: "SHAPER"
   DefValue: 1
@@ -154,7 +154,7 @@ DCServiceComponent18: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 18
 
-DCServiceComponent19: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 22
   ServCom: "HSDPA"
   DefValue: 1
@@ -162,7 +162,7 @@ DCServiceComponent19: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 19
 
-DCServiceComponent20: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 23
   ServCom: "SHAPER"
   DefValue: 1
@@ -171,7 +171,7 @@ DCServiceComponent20: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 20
 
-DCServiceComponent21: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 24
   ServCom: "SHAPER"
   DefValue: 1
@@ -180,7 +180,7 @@ DCServiceComponent21: DCServiceComponent
   ToDate: 2011-09-30
   DCServiceComponentID: 21
 
-DCServiceComponent22: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 14
   ServCom: "SHAPER"
   DefValue: 1
@@ -189,7 +189,7 @@ DCServiceComponent22: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 22
 
-DCServiceComponent23: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 8
   ServCom: "SHAPER"
   DefValue: 1
@@ -198,7 +198,7 @@ DCServiceComponent23: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 23
 
-DCServiceComponent24: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 23
   ServCom: "SHAPER"
   DefValue: 1
@@ -207,7 +207,7 @@ DCServiceComponent24: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 24
 
-DCServiceComponent25: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 24
   ServCom: "SHAPER"
   DefValue: 1
@@ -216,7 +216,7 @@ DCServiceComponent25: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 25
 
-DCServiceComponent26: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 16
   ServCom: "SHAPER"
   DefValue: 1
@@ -225,7 +225,7 @@ DCServiceComponent26: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 26
 
-DCServiceComponent27: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 10
   ServCom: "SHAPER"
   DefValue: 1
@@ -234,7 +234,7 @@ DCServiceComponent27: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 27
 
-DCServiceComponent28: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 3
   ServCom: "SHAPER"
   DefValue: 1
@@ -243,7 +243,7 @@ DCServiceComponent28: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 28
 
-DCServiceComponent29: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 12
   ServCom: "SHAPER"
   DefValue: 1
@@ -252,7 +252,7 @@ DCServiceComponent29: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 29
 
-DCServiceComponent30: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 4
   ServCom: "SHAPER"
   DefValue: 1
@@ -261,7 +261,7 @@ DCServiceComponent30: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 30
 
-DCServiceComponent31: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 6
   ServCom: "SHAPER"
   DefValue: 1
@@ -270,7 +270,7 @@ DCServiceComponent31: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 31
 
-DCServiceComponent32: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 9
   ServCom: "SHAPER"
   DefValue: 1
@@ -279,7 +279,7 @@ DCServiceComponent32: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 32
 
-DCServiceComponent33: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 20
   ServCom: "SHAPER"
   DefValue: 1
@@ -288,7 +288,7 @@ DCServiceComponent33: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 33
 
-DCServiceComponent34: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 21
   ServCom: "SHAPER"
   DefValue: 1
@@ -297,7 +297,7 @@ DCServiceComponent34: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 34
 
-DCServiceComponent35: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 18
   ServCom: "SHAPER"
   DefValue: 1
@@ -306,7 +306,7 @@ DCServiceComponent35: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 35
 
-DCServiceComponent36: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 25
   ServCom: "HSDPA"
   DefValue: 1
@@ -314,7 +314,7 @@ DCServiceComponent36: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 36
 
-DCServiceComponent37: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 26
   ServCom: "SHAPER"
   DefValue: 1
@@ -323,7 +323,7 @@ DCServiceComponent37: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 37
 
-DCServiceComponent38: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 27
   ServCom: "SHAPER"
   DefValue: 1
@@ -332,7 +332,7 @@ DCServiceComponent38: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 38
 
-DCServiceComponent39: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 28
   ServCom: "HSDPA"
   DefValue: 1
@@ -340,7 +340,7 @@ DCServiceComponent39: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 39
 
-DCServiceComponent40: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 29
   ServCom: "SHAPER"
   DefValue: 1
@@ -349,7 +349,7 @@ DCServiceComponent40: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 40
 
-DCServiceComponent41: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 30
   ServCom: "SHAPER"
   DefValue: 1
@@ -358,7 +358,7 @@ DCServiceComponent41: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 41
 
-DCServiceComponent42: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 31
   ServCom: "HSDPA"
   DefValue: 1
@@ -366,7 +366,7 @@ DCServiceComponent42: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 42
 
-DCServiceComponent43: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 32
   ServCom: "SHAPER"
   DefValue: 1
@@ -375,7 +375,7 @@ DCServiceComponent43: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 43
 
-DCServiceComponent44: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 33
   ServCom: "SHAPER"
   DefValue: 1
@@ -384,7 +384,7 @@ DCServiceComponent44: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 44
 
-DCServiceComponent45: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 34
   ServCom: "SHAPER"
   DefValue: 1
@@ -393,7 +393,7 @@ DCServiceComponent45: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 45
 
-DCServiceComponent46: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 35
   ServCom: "HSDPA"
   DefValue: 1
@@ -401,7 +401,7 @@ DCServiceComponent46: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 46
 
-DCServiceComponent47: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 36
   ServCom: "SHAPER"
   DefValue: 1
@@ -410,7 +410,7 @@ DCServiceComponent47: DCServiceComponent
   ToDate: 2012-01-24
   DCServiceComponentID: 47
 
-DCServiceComponent48: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 37
   ServCom: "HSDPA"
   DefValue: 1
@@ -418,7 +418,7 @@ DCServiceComponent48: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 48
 
-DCServiceComponent49: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 38
   ServCom: "SHAPER"
   DefValue: 1
@@ -427,7 +427,7 @@ DCServiceComponent49: DCServiceComponent
   ToDate: 2012-01-24
   DCServiceComponentID: 49
 
-DCServiceComponent50: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 36
   ServCom: "SHAPER"
   DefValue: 1
@@ -436,7 +436,7 @@ DCServiceComponent50: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 50
 
-DCServiceComponent51: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 38
   ServCom: "SHAPER"
   DefValue: 1
@@ -445,7 +445,7 @@ DCServiceComponent51: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 51
 
-DCServiceComponent52: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 39
   ServCom: "SHAPER"
   DefValue: 1
@@ -454,7 +454,7 @@ DCServiceComponent52: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 52
 
-DCServiceComponent53: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 40
   ServCom: "HSDPA"
   DefValue: 1
@@ -462,7 +462,7 @@ DCServiceComponent53: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 53
 
-DCServiceComponent54: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 41
   ServCom: "SHAPER"
   DefValue: 1
@@ -471,7 +471,7 @@ DCServiceComponent54: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 54
 
-DCServiceComponent55: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 42
   ServCom: "HSDPA"
   DefValue: 1
@@ -479,7 +479,7 @@ DCServiceComponent55: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 55
 
-DCServiceComponent56: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 43
   ServCom: "SHAPER"
   DefValue: 1
@@ -488,7 +488,7 @@ DCServiceComponent56: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 56
 
-DCServiceComponent57: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 44
   ServCom: "HSDPA"
   DefValue: 1
@@ -496,7 +496,7 @@ DCServiceComponent57: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 57
 
-DCServiceComponent58: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 45
   ServCom: "SHAPER"
   DefValue: 1
@@ -505,7 +505,7 @@ DCServiceComponent58: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 58
 
-DCServiceComponent59: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 46
   ServCom: "SHAPER"
   DefValue: 1
@@ -514,7 +514,7 @@ DCServiceComponent59: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 59
 
-DCServiceComponent60: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 47
   ServCom: "SHAPER"
   DefValue: 1
@@ -523,7 +523,7 @@ DCServiceComponent60: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 60
 
-DCServiceComponent61: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 48
   ServCom: "HSDPA"
   DefValue: 1
@@ -531,7 +531,7 @@ DCServiceComponent61: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 61
 
-DCServiceComponent62: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 49
   ServCom: "SHAPER"
   DefValue: 1
@@ -540,7 +540,7 @@ DCServiceComponent62: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 62
 
-DCServiceComponent63: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 50
   ServCom: "HSDPA"
   DefValue: 1
@@ -548,7 +548,7 @@ DCServiceComponent63: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 63
 
-DCServiceComponent64: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 51
   ServCom: "SHAPER"
   DefValue: 1
@@ -557,7 +557,7 @@ DCServiceComponent64: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 64
 
-DCServiceComponent65: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 53
   ServCom: "HSDPA"
   DefValue: 1
@@ -565,7 +565,7 @@ DCServiceComponent65: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 65
 
-DCServiceComponent66: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 52
   ServCom: "SHAPER"
   DefValue: 1
@@ -574,7 +574,7 @@ DCServiceComponent66: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 66
 
-DCServiceComponent67: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 54
   ServCom: "SHAPER"
   DefValue: 1
@@ -583,7 +583,7 @@ DCServiceComponent67: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 67
 
-DCServiceComponent68: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 55
   ServCom: "SHAPER"
   DefValue: 1
@@ -592,7 +592,7 @@ DCServiceComponent68: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 68
 
-DCServiceComponent69: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 56
   ServCom: "SHAPER"
   DefValue: 1
@@ -601,7 +601,7 @@ DCServiceComponent69: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 69
 
-DCServiceComponent70: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 57
   ServCom: "SHAPER"
   DefValue: 1
@@ -610,7 +610,7 @@ DCServiceComponent70: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 70
 
-DCServiceComponent71: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 58
   ServCom: "SHAPER"
   DefValue: 1
@@ -619,7 +619,7 @@ DCServiceComponent71: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 71
 
-DCServiceComponent72: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 59
   ServCom: "SHAPER"
   DefValue: 1
@@ -628,7 +628,7 @@ DCServiceComponent72: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 72
 
-DCServiceComponent73: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 60
   ServCom: "SHAPER"
   DefValue: 1
@@ -637,7 +637,7 @@ DCServiceComponent73: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 73
 
-DCServiceComponent74: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 61
   ServCom: "SHAPER"
   DefValue: 1
@@ -646,7 +646,7 @@ DCServiceComponent74: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 74
 
-DCServiceComponent75: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 62
   ServCom: "SHAPER"
   DefValue: 1
@@ -655,7 +655,7 @@ DCServiceComponent75: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 75
 
-DCServiceComponent76: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 63
   ServCom: "SHAPER"
   DefValue: 1
@@ -664,7 +664,7 @@ DCServiceComponent76: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 76
 
-DCServiceComponent77: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 64
   ServCom: "SHAPER"
   DefValue: 1
@@ -673,7 +673,7 @@ DCServiceComponent77: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 77
 
-DCServiceComponent78: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 65
   ServCom: "SHAPER"
   DefValue: 1
@@ -682,7 +682,7 @@ DCServiceComponent78: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 78
 
-DCServiceComponent79: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 66
   ServCom: "SHAPER"
   DefValue: 1
@@ -691,7 +691,7 @@ DCServiceComponent79: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 79
 
-DCServiceComponent80: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 67
   ServCom: "SHAPER"
   DefValue: 1
@@ -700,7 +700,7 @@ DCServiceComponent80: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 80
 
-DCServiceComponent81: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 68
   ServCom: "SHAPER"
   DefValue: 1
@@ -709,7 +709,7 @@ DCServiceComponent81: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 81
 
-DCServiceComponent82: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 69
   ServCom: "SHAPER"
   DefValue: 1
@@ -718,7 +718,7 @@ DCServiceComponent82: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 82
 
-DCServiceComponent83: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 70
   ServCom: "SHAPER"
   DefValue: 1
@@ -727,7 +727,7 @@ DCServiceComponent83: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 83
 
-DCServiceComponent84: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 73
   ServCom: "SHAPER"
   DefValue: 1
@@ -736,7 +736,7 @@ DCServiceComponent84: DCServiceComponent
   ToDate: 2015-09-14
   DCServiceComponentID: 84
 
-DCServiceComponent85: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 72
   ServCom: "SHAPER"
   DefValue: 1
@@ -745,7 +745,7 @@ DCServiceComponent85: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 85
 
-DCServiceComponent86: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 74
   ServCom: "SHAPER"
   DefValue: 1
@@ -754,7 +754,7 @@ DCServiceComponent86: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 86
 
-DCServiceComponent87: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 75
   ServCom: "SHAPER"
   DefValue: 1
@@ -763,7 +763,7 @@ DCServiceComponent87: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 87
 
-DCServiceComponent88: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 76
   ServCom: "SHAPER"
   DefValue: 1
@@ -772,7 +772,7 @@ DCServiceComponent88: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 88
 
-DCServiceComponent89: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 77
   ServCom: "SHAPER"
   DefValue: 1
@@ -781,7 +781,7 @@ DCServiceComponent89: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 89
 
-DCServiceComponent90: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 78
   ServCom: "SHAPER"
   DefValue: 1
@@ -790,7 +790,7 @@ DCServiceComponent90: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 90
 
-DCServiceComponent91: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 80
   ServCom: "SHAPER"
   DefValue: 1
@@ -799,7 +799,7 @@ DCServiceComponent91: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 92
 
-DCServiceComponent92: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 81
   ServCom: "SHAPER"
   DefValue: 1
@@ -808,7 +808,7 @@ DCServiceComponent92: DCServiceComponent
   ToDate: 2015-09-14
   DCServiceComponentID: 93
 
-DCServiceComponent93: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 82
   ServCom: "SHAPER"
   DefValue: 1
@@ -817,7 +817,7 @@ DCServiceComponent93: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 94
 
-DCServiceComponent94: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 83
   ServCom: "SHAPER"
   DefValue: 1
@@ -826,7 +826,7 @@ DCServiceComponent94: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 95
 
-DCServiceComponent95: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 84
   ServCom: "SHAPER"
   DefValue: 1
@@ -835,7 +835,7 @@ DCServiceComponent95: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 96
 
-DCServiceComponent96: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 85
   ServCom: "SHAPER"
   DefValue: 1
@@ -844,7 +844,7 @@ DCServiceComponent96: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 97
 
-DCServiceComponent97: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 86
   ServCom: "SHAPER"
   DefValue: 1
@@ -853,7 +853,7 @@ DCServiceComponent97: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 98
 
-DCServiceComponent98: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 87
   ServCom: "SHAPER"
   DefValue: 1
@@ -862,7 +862,7 @@ DCServiceComponent98: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 99
 
-DCServiceComponent99: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 89
   ServCom: "SHAPER"
   DefValue: 1
@@ -871,7 +871,7 @@ DCServiceComponent99: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 100
 
-DCServiceComponent100: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 81
   ServCom: "SHAPER"
   DefValue: 1
@@ -880,7 +880,7 @@ DCServiceComponent100: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 101
 
-DCServiceComponent101: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 73
   ServCom: "SHAPER"
   DefValue: 1
@@ -889,7 +889,7 @@ DCServiceComponent101: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 102
 
-DCServiceComponent102: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 90
   ServCom: "SHAPER"
   DefValue: 1
@@ -898,7 +898,7 @@ DCServiceComponent102: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 103
 
-DCServiceComponent103: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 91
   ServCom: "SHAPER"
   DefValue: 1
@@ -907,7 +907,7 @@ DCServiceComponent103: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 104
 
-DCServiceComponent104: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 92
   ServCom: "SHAPER"
   DefValue: 1
@@ -916,7 +916,7 @@ DCServiceComponent104: DCServiceComponent
   ToDate: 2049-12-31
   DCServiceComponentID: 105
 
-DCServiceComponent105: DCServiceComponent
+bulkload: DCServiceComponent
   DCServicePackageID: 93
   ServCom: "SHAPER"
   DefValue: 1
@@ -924,4 +924,40 @@ DCServiceComponent105: DCServiceComponent
   FromDate: 2016-12-12
   ToDate: 2049-12-31
   DCServiceComponentID: 106
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 94
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT26#ADDBUNDLE"
+  FromDate: 2017-02-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 107
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 95
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT10#ADDBUNDLE"
+  FromDate: 2017-02-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 108
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 96
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "26843545600#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2017-03-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 109
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 97
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT27#ADDBUNDLE"
+  FromDate: 2017-04-18
+  ToDate: 2049-12-31
+  DCServiceComponentID: 110
 
