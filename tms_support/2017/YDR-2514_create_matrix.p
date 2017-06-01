@@ -1,3 +1,6 @@
+/* It should be safe to run this multiple times as it will just
+   update the data if it exists already */
+
 DEFINE VARIABLE giMXSeq AS INTEGER NO-UNDO.
 
 FUNCTION fGetNextMXSeq RETURNS INTEGER ():
@@ -11,6 +14,25 @@ FUNCTION fGetNextMXSeq RETURNS INTEGER ():
    RETURN 1.
 
 END FUNCTION.
+
+
+FUNCTION fGetNextTariffNum RETURNS INTEGER ():
+
+   DEFINE BUFFER Tariff FOR Tariff.
+
+   FIND LAST Tariff USE-INDEX tariffnum NO-LOCK NO-ERROR.
+
+   IF NOT AVAILABLE Tariff
+   THEN DO:
+      CURRENT-VALUE(tariff) = 1.
+      RETURN 1.
+   END.
+
+   CURRENT-VALUE(tariff) = Tariff.Tariffnum + 1.
+   RETURN CURRENT-VALUE(tariff).
+
+END FUNCTION.
+
 
 FUNCTION fCreateMatrix RETURNS LOGICAL
    ( icMXName  AS CHARACTER,
@@ -101,6 +123,47 @@ FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
       
 END FUNCTION.
 
+FUNCTION fCreateTariff RETURNS LOGICAL
+   ( iiCCN AS INTEGER,
+     icBillCode AS CHARACTER ):
+
+   FIND FIRST Tariff EXCLUSIVE-LOCK WHERE
+      Tariff.Brand     = "1"            AND
+      Tariff.CCN       = iiCCN          AND
+      Tariff.PriceList = "CONTRATOF"    AND
+      Tariff.BDest     = "VOICE100"     AND
+      Tariff.ValidFrom = DATE(5,1,2017) AND
+      Tariff.ValidTo   = DATE(12,31,2052)
+   NO-ERROR.
+
+   IF NOT AVAILABLE Tariff
+   THEN DO:
+      CREATE Tariff.
+      Tariff.TariffNum = fGetNextTariffNum().
+   END.
+
+   ASSIGN
+      Tariff.Brand       = "1"
+      Tariff.CCN         = iiCCN
+      Tariff.PriceList   = "CONTRATOF"
+      Tariff.BDest       = "VOICE100"
+      Tariff.ValidFrom   = DATE(5,1,2017)
+      Tariff.ValidTo     = DATE(12,31,2052)
+      Tariff.BillCode    = icBillCode
+      Tariff.TZTo[1]     = "2400"
+      Tariff.Discount[4] = YES
+      Tariff.DayType[1]  = 1
+      Tariff.TZName[1]   = "Off Peak"
+      Tariff.TZName[2]   = "Peak"
+      Tariff.TZName[3]   = "Off Peak"
+      Tariff.TariffType  = 0
+      Tariff.DataType    = 1.
+
+END FUNCTION.
+
+/* Create new tariffs */
+fCreateTariff(81, "VOICE100").
+fCreateTariff(30, "VOICE100CF").
 
 /* CONTF8: giMXSeq should get a new value after the call */
 fCreateMatrix("CONTF8", "PERCONTR", 1, 54).
