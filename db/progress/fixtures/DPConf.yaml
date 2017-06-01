@@ -1,4 +1,4 @@
-DPConf1: DPConf
+bulkload: DPConf
   DiscPlan: "SMSAUG2009"
   DPConfNum: 2
   ValidFrom: 2009-08-01

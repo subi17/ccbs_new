@@ -1,4 +1,4 @@
-MSRange1: MSRange
+bulkload: MSRange
   CLIFrom: "622000027"
   CLITo: "622000029"
   CustNum: 1001
@@ -6,7 +6,7 @@ MSRange1: MSRange
   ExpireDate: 2007-07-01
   Brand: "1"
 
-MSRange2: MSRange
+bulkload: MSRange
   CLIFrom: "622000101"
   CLITo: "622020333"
   CustNum: 1001
@@ -15,7 +15,7 @@ MSRange2: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange3: MSRange
+bulkload: MSRange
   CLIFrom: "622020334"
   CLITo: "622040448"
   CustNum: 1001
@@ -24,7 +24,7 @@ MSRange3: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange4: MSRange
+bulkload: MSRange
   CLIFrom: "622040449"
   CLITo: "622060563"
   CustNum: 1001
@@ -33,7 +33,7 @@ MSRange4: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange5: MSRange
+bulkload: MSRange
   CLIFrom: "622060564"
   CLITo: "622080680"
   CustNum: 1001
@@ -42,7 +42,7 @@ MSRange5: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange6: MSRange
+bulkload: MSRange
   CLIFrom: "622080681"
   CLITo: "622085706"
   CustNum: 1001
@@ -51,7 +51,7 @@ MSRange6: MSRange
   SalesMan: "  POS"
   Brand: "1"
 
-MSRange7: MSRange
+bulkload: MSRange
   CLIFrom: "622085707"
   CLITo: "622105837"
   CustNum: 1001
@@ -60,7 +60,7 @@ MSRange7: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange8: MSRange
+bulkload: MSRange
   CLIFrom: "622105838"
   CLITo: "622116033"
   CustNum: 1001
@@ -69,7 +69,7 @@ MSRange8: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange9: MSRange
+bulkload: MSRange
   CLIFrom: "622116034"
   CLITo: "622156298"
   CustNum: 1001
@@ -78,7 +78,7 @@ MSRange9: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange10: MSRange
+bulkload: MSRange
   CLIFrom: "622156299"
   CLITo: "622196522"
   CustNum: 1001
@@ -87,7 +87,7 @@ MSRange10: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange11: MSRange
+bulkload: MSRange
   CLIFrom: "622196523"
   CLITo: "622199989"
   CustNum: 1001
@@ -96,7 +96,7 @@ MSRange11: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange12: MSRange
+bulkload: MSRange
   CLIFrom: "622200010"
   CLITo: "622220125"
   CustNum: 1001
@@ -105,7 +105,7 @@ MSRange12: MSRange
   SalesMan: "WEB"
   Brand: "1"
 
-MSRange13: MSRange
+bulkload: MSRange
   CLIFrom: "622220126"
   CLITo: "622240403"
   CustNum: 1001
@@ -114,7 +114,7 @@ MSRange13: MSRange
   SalesMan: "webshop"
   Brand: "1"
 
-MSRange14: MSRange
+bulkload: MSRange
   CLIFrom: "622240404"
   CLITo: "622280636"
   CustNum: 1001
@@ -123,7 +123,7 @@ MSRange14: MSRange
   SalesMan: "webshop"
   Brand: "1"
 
-MSRange15: MSRange
+bulkload: MSRange
   CLIFrom: "622280637"
   CLITo: "622320868"
   CustNum: 1001
@@ -132,7 +132,7 @@ MSRange15: MSRange
   SalesMan: "webshop"
   Brand: "1"
 
-MSRange16: MSRange
+bulkload: MSRange
   CLIFrom: "622320869"
   CLITo: "622341154"
   CustNum: 1001
@@ -141,7 +141,7 @@ MSRange16: MSRange
   SalesMan: "webshop"
   Brand: "1"
 
-MSRange17: MSRange
+bulkload: MSRange
   CLIFrom: "622341155"
   CLITo: "622396154"
   CustNum: 1001
@@ -150,7 +150,7 @@ MSRange17: MSRange
   SalesMan: "PREACTIVATED"
   Brand: "1"
 
-MSRange18: MSRange
+bulkload: MSRange
   CLIFrom: "622396155"
   CLITo: "622791637"
   CustNum: 1001
@@ -159,7 +159,7 @@ MSRange18: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange19: MSRange
+bulkload: MSRange
   CLIFrom: "622400010"
   CLITo: "622420117"
   CustNum: 1001
@@ -168,7 +168,7 @@ MSRange19: MSRange
   SalesMan: "TELEM"
   Brand: "1"
 
-MSRange20: MSRange
+bulkload: MSRange
   CLIFrom: "622440001"
   CLITo: "622517000"
   CustNum: 1001
@@ -177,7 +177,7 @@ MSRange20: MSRange
   SalesMan: "PREACTIVATED"
   Brand: "1"
 
-MSRange21: MSRange
+bulkload: MSRange
   CLIFrom: "622517001"
   CLITo: "622537115"
   CustNum: 1001
@@ -186,7 +186,7 @@ MSRange21: MSRange
   SalesMan: "GIFT"
   Brand: "1"
 
-MSRange22: MSRange
+bulkload: MSRange
   CLIFrom: "622537116"
   CLITo: "622557378"
   CustNum: 1001
@@ -195,7 +195,7 @@ MSRange22: MSRange
   SalesMan: "GIFT"
   Brand: "1"
 
-MSRange23: MSRange
+bulkload: MSRange
   CLIFrom: "622557379"
   CLITo: "622577514"
   CustNum: 1001
@@ -204,7 +204,7 @@ MSRange23: MSRange
   SalesMan: "GIFT"
   Brand: "1"
 
-MSRange24: MSRange
+bulkload: MSRange
   CLIFrom: "622577515"
   CLITo: "622597632"
   CustNum: 1001
@@ -213,7 +213,7 @@ MSRange24: MSRange
   SalesMan: "GIFT"
   Brand: "1"
 
-MSRange25: MSRange
+bulkload: MSRange
   CLIFrom: "622600010"
   CLITo: "622620117"
   CustNum: 1001
@@ -222,7 +222,7 @@ MSRange25: MSRange
   SalesMan: "CC"
   Brand: "1"
 
-MSRange26: MSRange
+bulkload: MSRange
   CLIFrom: "622620118"
   CLITo: "622622125"
   CustNum: 1001
@@ -231,7 +231,7 @@ MSRange26: MSRange
   SalesMan: "CC"
   Brand: "1"
 
-MSRange27: MSRange
+bulkload: MSRange
   CLIFrom: "622622126"
   CLITo: "622640232"
   CustNum: 1001
@@ -240,7 +240,7 @@ MSRange27: MSRange
   SalesMan: "CC"
   Brand: "1"
 
-MSRange28: MSRange
+bulkload: MSRange
   CLIFrom: "622640233"
   CLITo: "622650290"
   CustNum: 1001
@@ -249,7 +249,7 @@ MSRange28: MSRange
   SalesMan: "CC"
   Brand: "1"
 
-MSRange29: MSRange
+bulkload: MSRange
   CLIFrom: "622650291"
   CLITo: "622681439"
   CustNum: 1001
@@ -258,7 +258,7 @@ MSRange29: MSRange
   SalesMan: "PREACTIV"
   Brand: "1"
 
-MSRange30: MSRange
+bulkload: MSRange
   CLIFrom: "622681440"
   CLITo: "622701563"
   CustNum: 1001
@@ -267,7 +267,7 @@ MSRange30: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange31: MSRange
+bulkload: MSRange
   CLIFrom: "622701564"
   CLITo: "622737255"
   CustNum: 1001
@@ -276,7 +276,7 @@ MSRange31: MSRange
   SalesMan: "PREACTIVATED"
   Brand: "1"
 
-MSRange32: MSRange
+bulkload: MSRange
   CLIFrom: "622737256"
   CLITo: "622757371"
   CustNum: 1001
@@ -285,7 +285,7 @@ MSRange32: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange33: MSRange
+bulkload: MSRange
   CLIFrom: "622757372"
   CLITo: "622777371"
   CustNum: 1001
@@ -294,7 +294,7 @@ MSRange33: MSRange
   SalesMan: "PREACTIVATED"
   Brand: "1"
 
-MSRange34: MSRange
+bulkload: MSRange
   CLIFrom: "622791638"
   CLITo: "622799989"
   CustNum: 1001
@@ -303,7 +303,7 @@ MSRange34: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange35: MSRange
+bulkload: MSRange
   CLIFrom: "622800010"
   CLITo: "622805032"
   CustNum: 1001
@@ -312,7 +312,7 @@ MSRange35: MSRange
   SalesMan: "OFFLINE"
   Brand: "1"
 
-MSRange36: MSRange
+bulkload: MSRange
   CLIFrom: "622805033"
   CLITo: "622830174"
   CustNum: 1001
@@ -321,7 +321,7 @@ MSRange36: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange37: MSRange
+bulkload: MSRange
   CLIFrom: "622830175"
   CLITo: "622855314"
   CustNum: 1001
@@ -330,7 +330,7 @@ MSRange37: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange38: MSRange
+bulkload: MSRange
   CLIFrom: "622855315"
   CLITo: "622875430"
   CustNum: 1001
@@ -339,7 +339,7 @@ MSRange38: MSRange
   SalesMan: "CC"
   Brand: "1"
 
-MSRange39: MSRange
+bulkload: MSRange
   CLIFrom: "622875431"
   CLITo: "622895719"
   CustNum: 1001
@@ -348,7 +348,7 @@ MSRange39: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange40: MSRange
+bulkload: MSRange
   CLIFrom: "622895720"
   CLITo: "622899989"
   CustNum: 1001
@@ -357,7 +357,7 @@ MSRange40: MSRange
   SalesMan: "POS"
   Brand: "1"
 
-MSRange41: MSRange
+bulkload: MSRange
   CLIFrom: "633999400"
   CLITo: "633999404"
   CustNum: 1001
@@ -366,7 +366,7 @@ MSRange41: MSRange
   SalesMan: "SNSTEST"
   Brand: "1"
 
-MSRange42: MSRange
+bulkload: MSRange
   CLIFrom: "999999999999"
   CLITo: "0"
   CustNum: 1001
