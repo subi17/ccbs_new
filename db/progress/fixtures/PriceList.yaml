@@ -1,4 +1,4 @@
-PriceList1: PriceList
+bulkload: PriceList
   PriceList: "Campaigne"
   PLName: "Campaign"
   Memo: "Campaign price list for all subscription types"
@@ -7,7 +7,7 @@ PriceList1: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList2: PriceList
+bulkload: PriceList
   PriceList: "COMMON"
   PLName: "Common Postpaid"
   Memo: "Common Price List for all Postpaid subscription types"
@@ -16,7 +16,7 @@ PriceList2: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList3: PriceList
+bulkload: PriceList
   PriceList: "COMMON2"
   PLName: "Common Prepaid"
   Memo: "Common price list for Pre paid subscriptions"
@@ -25,7 +25,7 @@ PriceList3: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList4: PriceList
+bulkload: PriceList
   PriceList: "COMMON3"
   PLName: "Common postpaid special"
   Memo: "Common Price List for all Postpaid subscription types"
@@ -34,7 +34,7 @@ PriceList4: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList5: PriceList
+bulkload: PriceList
   PriceList: "CONTD"
   PLName: "Contrato Data"
   Currency: "EUR"
@@ -42,7 +42,7 @@ PriceList5: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList6: PriceList
+bulkload: PriceList
   PriceList: "CONTRATO"
   PLName: "Contrato1"
   Memo: "Contrato subscription type specific price list"
@@ -51,7 +51,7 @@ PriceList6: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList7: PriceList
+bulkload: PriceList
   PriceList: "CONTRATO2"
   PLName: "Contrato2"
   Memo: "Contrato 2 subcription type specific price list"
@@ -60,7 +60,7 @@ PriceList7: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList8: PriceList
+bulkload: PriceList
   PriceList: "CONTRATO4"
   PLName: "Contrato4"
   Memo: "Contrato 4 subcription type specific price list"
@@ -69,7 +69,7 @@ PriceList8: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList9: PriceList
+bulkload: PriceList
   PriceList: "CONTRATO5"
   PLName: "Contrato5"
   Memo: "Contrato 5 subcription type specific price list"
@@ -78,7 +78,7 @@ PriceList9: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList10: PriceList
+bulkload: PriceList
   PriceList: "CONTRATO6"
   PLName: "Contrato6"
   Memo: "Contrato 6 subcription type specific price list"
@@ -87,7 +87,7 @@ PriceList10: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList11: PriceList
+bulkload: PriceList
   PriceList: "CONTRATO7"
   PLName: "Contrato7"
   Memo: "Contrato 7 subcription type specific price list"
@@ -96,7 +96,7 @@ PriceList11: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList12: PriceList
+bulkload: PriceList
   PriceList: "CONTRATO8"
   PLName: "Contrato 8"
   Currency: "EUR"
@@ -104,7 +104,7 @@ PriceList12: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList13: PriceList
+bulkload: PriceList
   PriceList: "CONTRATOD"
   PLName: "Contrato Datos"
   Memo: "Contrato Datos subcription type specific price list"
@@ -113,7 +113,7 @@ PriceList13: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList14: PriceList
+bulkload: PriceList
   PriceList: "CONTRATOD2"
   PLName: "Contrato Datos 2"
   Memo: "Contrato Datos 2 subcription type specific price list"
@@ -122,7 +122,7 @@ PriceList14: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList15: PriceList
+bulkload: PriceList
   PriceList: "CONTRATOD3"
   PLName: "Contrato Datos"
   Memo: "Contrato Datos subcription type specific price list"
@@ -131,7 +131,7 @@ PriceList15: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList16: PriceList
+bulkload: PriceList
   PriceList: "CONTRATODATA"
   PLName: "Contrato Datos"
   Memo: "Contrato Datos subcription type specific price list"
@@ -140,7 +140,7 @@ PriceList16: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList17: PriceList
+bulkload: PriceList
   PriceList: "CONTRATOF"
   PLName: "Contratof"
   Memo: "Contrato flat subcription type specific price list"
@@ -149,7 +149,7 @@ PriceList17: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList18: PriceList
+bulkload: PriceList
   PriceList: "CONTRATOFIXED"
   PLName: "Contrato fixed"
   Memo: "Contrato fixed pricelist"
@@ -158,7 +158,16 @@ PriceList18: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList19: PriceList
+bulkload: PriceList
+  PriceList: "CONTRATOFIXEDONLY"
+  PLName: "Fixed only convergent"
+  Memo: "Contrato fixed only pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
   PriceList: "CONTRATOM"
   PLName: "Contrato M"
   Currency: "EUR"
@@ -166,7 +175,7 @@ PriceList19: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList20: PriceList
+bulkload: PriceList
   PriceList: "CONTRATOM2"
   PLName: "Contrato M2"
   Currency: "EUR"
@@ -174,7 +183,7 @@ PriceList20: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList21: PriceList
+bulkload: PriceList
   PriceList: "CONTRATOS"
   PLName: "Contratos"
   Memo: "Contrato S subcription type specific price list"
@@ -183,7 +192,7 @@ PriceList21: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList22: PriceList
+bulkload: PriceList
   PriceList: "OrderCh"
   PLName: "Order Price list"
   Memo: "Used for product pricing in order channels incl. tax"
@@ -191,7 +200,7 @@ PriceList22: PriceList
   Rounding: 4
   Brand: "1"
 
-PriceList23: PriceList
+bulkload: PriceList
   PriceList: "ORDERCONT"
   PLName: "Contrato Order Channel Prices"
   Memo: "Contrato Price List in Order Channels"
@@ -199,7 +208,7 @@ PriceList23: PriceList
   Rounding: 4
   Brand: "1"
 
-PriceList24: PriceList
+bulkload: PriceList
   PriceList: "ORDERCONT2"
   PLName: "Contrato2 Order Channel Prices"
   Memo: "Contrato2 Price List in Order Channels"
@@ -207,7 +216,7 @@ PriceList24: PriceList
   Rounding: 4
   Brand: "1"
 
-PriceList25: PriceList
+bulkload: PriceList
   PriceList: "ORDERTARJ"
   PLName: "Tarjeta Order Channel Prices"
   Memo: "Tarjeta Price List in Order Channels"
@@ -215,7 +224,7 @@ PriceList25: PriceList
   Rounding: 4
   Brand: "1"
 
-PriceList26: PriceList
+bulkload: PriceList
   PriceList: "ORDERTARJ2"
   PLName: "Tarjeta2 Order Channel Prices"
   Memo: "Tarjeta2 Price List in Order Channels"
@@ -223,7 +232,7 @@ PriceList26: PriceList
   Rounding: 4
   Brand: "1"
 
-PriceList27: PriceList
+bulkload: PriceList
   PriceList: "TARJETA"
   PLName: "Tarjeta"
   Memo: "Tarjeta subsciption type specific price list"
@@ -232,7 +241,7 @@ PriceList27: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList28: PriceList
+bulkload: PriceList
   PriceList: "TARJETA2"
   PLName: "Tarjeta"
   Memo: "Tarjeta 2 subscription type specific price list"
@@ -241,7 +250,7 @@ PriceList28: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList29: PriceList
+bulkload: PriceList
   PriceList: "TARJETA4"
   PLName: "Tarjeta4"
   Memo: "Tarjeta 4 subscription type specific price list"
@@ -250,7 +259,7 @@ PriceList29: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList30: PriceList
+bulkload: PriceList
   PriceList: "TARJETA5"
   PLName: "Tarjeta4"
   Memo: "Tarjeta 4 subscription type specific price list"
@@ -259,7 +268,7 @@ PriceList30: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList31: PriceList
+bulkload: PriceList
   PriceList: "TARJETA6"
   PLName: "Tarjeta 6"
   Currency: "EUR"
@@ -267,7 +276,7 @@ PriceList31: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList32: PriceList
+bulkload: PriceList
   PriceList: "TARJETA7"
   PLName: "Tarjeta 7"
   Currency: "EUR"
@@ -275,7 +284,7 @@ PriceList32: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList33: PriceList
+bulkload: PriceList
   PriceList: "TARJETA8"
   PLName: "Tarjeta 8"
   Currency: "EUR"
@@ -283,7 +292,7 @@ PriceList33: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList34: PriceList
+bulkload: PriceList
   PriceList: "TARJETA9"
   PLName: "Tarjeta 9"
   Currency: "EUR"
@@ -291,7 +300,7 @@ PriceList34: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList35: PriceList
+bulkload: PriceList
   PriceList: "TARJETADATA"
   PLName: "Tarjeta"
   Memo: "Tarjeta datos subsciption type specific price list"
@@ -300,7 +309,7 @@ PriceList35: PriceList
   InclVAT: FALSE
   Brand: "1"
 
-PriceList36: PriceList
+bulkload: PriceList
   PriceList: "TopUp"
   PLName: "TopUp Payments"
   Memo: "Used for topup payments"
