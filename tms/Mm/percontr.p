@@ -1715,6 +1715,10 @@ PROCEDURE pFinalize:
                                           CliType.CliType    = MsOwner.CliType AND 
                                           CliType.BaseBundle = "CONT15"        NO-LOCK) THEN
           LEAVE.
+      ELSE IF NOT CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq     = MsOwner.MsSeq                  AND 
+                                                 MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_CREATE} AND 
+                                                 MsRequest.ReqStatus > 0                              USE-INDEX MsSeq NO-LOCK) THEN
+          LEAVE.                                               
       ELSE IF CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq      = MsOwner.MsSeq                             AND
                                              MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION}            AND
                                              LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND 
