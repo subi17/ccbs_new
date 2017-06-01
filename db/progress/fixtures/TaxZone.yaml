@@ -1,20 +1,20 @@
-TaxZone1: TaxZone
+bulkload: TaxZone
   TaxZone: "1"
   TZName: "VAT (Mainland)"
 
-TaxZone2: TaxZone
+bulkload: TaxZone
   TaxZone: "2"
   TZName: "IGIC (Canary Islands)"
 
-TaxZone3: TaxZone
+bulkload: TaxZone
   TaxZone: "3"
   TZName: "IPSI (Ceuta)"
 
-TaxZone4: TaxZone
+bulkload: TaxZone
   TaxZone: "4"
   TZName: "IPSI (Melilla)"
 
-TaxZone5: TaxZone
+bulkload: TaxZone
   TaxZone: "5"
   TZName: "YOIGO (own usage)"
 

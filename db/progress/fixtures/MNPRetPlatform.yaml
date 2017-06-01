@@ -1,4 +1,4 @@
-MNPRetPlatform1: MNPRetPlatform
+bulkload: MNPRetPlatform
   Brand: "1"
   RetentionPlatform: "1"
   Percentage: 50
@@ -7,7 +7,7 @@ MNPRetPlatform1: MNPRetPlatform
   ToDate: 2049-12-31
   Name: "Emergia"
 
-MNPRetPlatform2: MNPRetPlatform
+bulkload: MNPRetPlatform
   Brand: "1"
   RetentionPlatform: "2"
   Percentage: 50
@@ -16,7 +16,7 @@ MNPRetPlatform2: MNPRetPlatform
   ToDate: 2049-12-31
   Name: "Castilian1"
 
-MNPRetPlatform3: MNPRetPlatform
+bulkload: MNPRetPlatform
   Brand: "1"
   RetentionPlatform: "3"
   SMSSender: "800622890"
