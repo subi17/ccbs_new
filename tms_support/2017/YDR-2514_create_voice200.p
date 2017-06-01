@@ -430,7 +430,9 @@ END FUNCTION.
 /* RequestAction */
 FUNCTION fCreateRequestAction RETURNS LOGICAL
    ( icCLIType AS CHARACTER,
-     iiReqType AS INTEGER ):
+     iiReqType AS INTEGER,
+     iiAction AS INT,
+     icActionKey AS CHAR):
 
    FIND FIRST RequestAction EXCLUSIVE-LOCK WHERE
       RequestAction.Brand  = "1" AND
@@ -438,8 +440,8 @@ FUNCTION fCreateRequestAction RETURNS LOGICAL
       RequestAction.ReqType = iiReqType AND
       RequestAction.ValidTo  = DATE(12,31,2049) AND
       RequestAction.ActionType = "DayCampaign" AND
-      RequestAction.ActionKey = "VOICE200" AND
-      RequestAction.Action = 1
+      RequestAction.ActionKey = icActionKey AND
+      RequestAction.Action = iiAction
    NO-ERROR.
    
    IF NOT AVAILABLE RequestAction
@@ -455,8 +457,8 @@ FUNCTION fCreateRequestAction RETURNS LOGICAL
       RequestAction.ValidFrom = DATE(6,1,2017)
       RequestAction.ValidTo  = DATE(12,31,2049)
       RequestAction.ActionType = "DayCampaign"
-      RequestAction.ActionKey = "VOICE200"
-      RequestAction.Action = 1
+      RequestAction.ActionKey = icActionKey
+      RequestAction.Action = iiAction
       .
 
 END FUNCTION.
@@ -547,18 +549,26 @@ fCreateSLGAnalyse("CONTFH49_300", "10100005", 81, "*", "VOICE200", 1).
 fCreateSLGAnalyse("CONTFH49_300", "CFOTHER", 30, "*", "VOICE200", 1).
 fCreateSLGAnalyse("CONTFH49_300", "CFYOIGO", 30, "*", "VOICE200", 1).
 
-fCreateRequestAction("CONTDSL39", 13).
-fCreateRequestAction("CONTFH39_50", 13).
-fCreateRequestAction("CONTFH49_300", 13).
-fCreateRequestAction("CONTDSL48", 13).
-fCreateRequestAction("CONTFH48_50", 13).
-fCreateRequestAction("CONTFH58_300", 13).
-fCreateRequestAction("CONTDSL39", 0).
-fCreateRequestAction("CONTFH39_50", 0).
-fCreateRequestAction("CONTFH49_300", 0).
-fCreateRequestAction("CONTDSL48", 0).
-fCreateRequestAction("CONTFH48_50", 0).
-fCreateRequestAction("CONTFH58_300", 0).
+fCreateRequestAction("CONTDSL39", 13, 1, "VOICE200").
+fCreateRequestAction("CONTFH39_50", 13, 1, "VOICE200").
+fCreateRequestAction("CONTFH49_300", 13, 1, "VOICE200").
+fCreateRequestAction("CONTDSL48", 13, 1, "VOICE200").
+fCreateRequestAction("CONTFH48_50", 13, 1, "VOICE200").
+fCreateRequestAction("CONTFH58_300", 13, 1, "VOICE200").
+
+fCreateRequestAction("CONTDSL39", 0, 1, "VOICE200").
+fCreateRequestAction("CONTFH39_50", 0, 1, "VOICE200").
+fCreateRequestAction("CONTFH49_300", 0, 1, "VOICE200").
+fCreateRequestAction("CONTDSL48", 0, 1, "VOICE200").
+fCreateRequestAction("CONTFH48_50", 0, 1, "VOICE200").
+fCreateRequestAction("CONTFH58_300", 0, 1, "VOICE200").
+
+fCreateRequestAction("CONTDSL39", 0, 2, "VOICE100").
+fCreateRequestAction("CONTFH39_50", 0, 2, "VOICE100").
+fCreateRequestAction("CONTFH49_300", 0, 2, "VOICE100").
+fCreateRequestAction("CONTDSL48", 0, 2, "VOICE100").
+fCreateRequestAction("CONTFH48_50", 0, 2, "VOICE100").
+fCreateRequestAction("CONTFH58_300", 0, 2, "VOICE100").
 
 /* After the 5.6.2017 deployment following can be used (maybe?) */
 
