@@ -94,10 +94,11 @@ FUNCTION fCreateMXItem RETURNS LOGICAL
    ( iiMXSeq   AS INTEGER,
      icMXName  AS CHARACTER,
      icMXValue AS CHARACTER):
-   
+
    FIND FIRST MXItem EXCLUSIVE-LOCK WHERE
       MXItem.MXSeq  = iiMXSeq AND
-      MXItem.MXName = icMXName
+      MXItem.MXName = icMXName AND
+      MXItem.MXValue = icMXValue
    NO-ERROR.
    
    IF NOT AVAILABLE MXItem
@@ -161,7 +162,7 @@ FUNCTION fCreateTariff RETURNS LOGICAL
       Tariff.CCN       = iiCCN          AND
       Tariff.PriceList = icPriceList    AND
       Tariff.BDest     = icBDest        AND
-      Tariff.ValidFrom = DATE(5,1,2017) AND
+      Tariff.ValidFrom = DATE(6,1,2017) AND
       Tariff.ValidTo   = DATE(12,31,2052) AND
       Tariff.BillCode  = icBillCode
    NO-ERROR.
