@@ -1,6 +1,7 @@
 DEF BUFFER bCustCat FOR CustCat.
 DEF BUFFER bTMSCodes FOR TMSCodes.
 DEF BUFFER bservicelimitTarget FOR ServiceLimitTarget.
+DEF BUFFER bSLGAnalyse FOR SLGAnalyse.
 
 DEF VAR ldaFrom AS DATE INIT 05/31/17.
 DEF VAR limode AS INT INIT 1.
@@ -236,4 +237,48 @@ create_limit("VOICE200", "National calls", "_MIN",200.0, 1, 1, "VOICE100").
 create_limit("INT_VOICE100", "International calls", "_MIN",100.0, 1, 1,"VOICE100").
 create_limit("FIX_VOICE1000", "National fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
 create_limit("INT_FIX_VOICE1000", "International fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
-create_limit("SMS5000", "National sms", "_AMT",5000.0, 2, 6,"VOICE100").
+create_limit("SMS5000", "National sms", "_AMT",5000.0, 2, 5,"VOICE100").
+
+FUNCTION fcreateSLGAnalyses RETURNS LOGICAL (INPUT icbasecli AS CHAR,
+                                             INPUT icClitype AS CHAR,
+                                             INPUT icbasegroup AS CHAR,
+                                             INPUT icgroup AS CHAR):
+   FIND FIRST SLGAnalyse where INDEX(SLGAnalyse.servicelimitgroup,
+                                     icGroup) > 0 NO-ERROR.
+   IF NOT AVAIL SLGanalyse THEN DO:                            
+      FOR EACH SLGAnalyse no-lock where INDEX(SLGAnalyse.servicelimitgroup, 
+                                        icBaseGroup) > 0 AND 
+                                        SLGANalyse.clitype EQ icbasecli:
+         CREATE bSLGAnalyse.
+         BUFFER-COPY SLGAnalyse TO bSLGAnalyse.
+         ASSIGN
+            bSLGAnalyse.servicelimitgroup = icGroup.
+      END.                            
+   END.
+
+END.
+
+DEF VAR lcListofslg AS CHAR.
+DEF VAR liLoop AS INT.
+DEF VAR lcCli AS CHAR.
+lcListofSLG = "CONT10,CONT15,CONT25,CONT26".
+
+DO liLoop = 1 TO NUM-ENTRIES(lcListofSLG):
+   lcCli = ENTRY(liLoop,lcListOfSLG).
+
+   fcreateSLGAnalyses("CONT15",lcCli,"VOICE100","VOICE5000").
+   fcreateSLGAnalyses("CONT15",lcCli,"VOICE100","VOICE200").
+   fcreateSLGAnalyses("CONT15",lcCli,"VOICE100","INT_VOICE100").
+   fcreateSLGAnalyses("CONT15",lcCli,"VOICE100","SMS5000").
+
+END.
+
+lcListofSLG = "CONTDSL48,CONTFH48_50,CONTFH58_300".
+
+DO liLoop = 1 TO NUM-ENTRIES(lcListofSLG):
+   lcCli = ENTRY(liLoop,lcListOfSLG).
+
+   fcreateSLGAnalyses("CONTDSL39",lcCli,"CONTDSL","FIX_VOICE1000").
+   fcreateSLGAnalyses("CONTDSL39",lcCli,"CONTDSL","INT_FIX_VOICE1000").
+END.
+
