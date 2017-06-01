@@ -1,4 +1,4 @@
-ServAttr1: ServAttr
+bulkload: ServAttr
   ServAttr: "Invoice Attach"
   ServCom: "CALLSPEC"
   SAName: "0=invoice attachment, 1=only separately"
@@ -6,7 +6,7 @@ ServAttr1: ServAttr
   Brand: "1"
   DefValue: "0"
 
-ServAttr2: ServAttr
+bulkload: ServAttr
   ServAttr: "ReportCode"
   ServCom: "CALLSPEC"
   SAName: "Default report code"
@@ -14,21 +14,21 @@ ServAttr2: ServAttr
   Brand: "1"
   DefValue: "4"
 
-ServAttr3: ServAttr
+bulkload: ServAttr
   ServAttr: "Not allowed"
   ServCom: "CAMPAIGN"
   SAName: "Campaigns that are not allowed"
   ScChgable: FALSE
   Brand: "1"
 
-ServAttr4: ServAttr
+bulkload: ServAttr
   ServAttr: "KesPassword"
   ServCom: "KES"
   SAName: "Kes Password"
   ScValueRange[2]: 1
   Brand: "1"
 
-ServAttr5: ServAttr
+bulkload: ServAttr
   ServAttr: "BillItem"
   ServCom: "MFEE"
   SAName: "Billing Item code for monthly fee"
@@ -36,7 +36,7 @@ ServAttr5: ServAttr
   Brand: "1"
   DefValue: "KKMAKSU"
 
-ServAttr6: ServAttr
+bulkload: ServAttr
   ServAttr: "BrokenMonth"
   ServCom: "MFEE"
   SAName: "1=Fee can be changed in the middle of month"
@@ -44,7 +44,7 @@ ServAttr6: ServAttr
   Brand: "1"
   DefValue: "1"
 
-ServAttr7: ServAttr
+bulkload: ServAttr
   ServAttr: "ChangeMonth"
   ServCom: "MFEE"
   SAName: "1=Use new fee for entire change month"
@@ -52,7 +52,7 @@ ServAttr7: ServAttr
   Brand: "1"
   DefValue: "0"
 
-ServAttr8: ServAttr
+bulkload: ServAttr
   ServAttr: "Credit"
   ServCom: "MFEE"
   SAName: "1=Crediting allowed"
@@ -60,7 +60,7 @@ ServAttr8: ServAttr
   Brand: "1"
   DefValue: "1"
 
-ServAttr9: ServAttr
+bulkload: ServAttr
   ServAttr: "MMSLanguage"
   ServCom: "MMS"
   SAName: "MMS Kieli, 1=eng 2=suomi 11=ruotsi"
@@ -69,49 +69,49 @@ ServAttr9: ServAttr
   Brand: "1"
   DefValue: "2"
 
-ServAttr10: ServAttr
+bulkload: ServAttr
   ServAttr: "ADDRESS"
   ServCom: "NUMBERINQ"
   SAName: "Publish address (F=fully,P=partially,S=secret)"
   Brand: "1"
   DefValue: "F"
 
-ServAttr11: ServAttr
+bulkload: ServAttr
   ServAttr: "CD"
   ServCom: "NUMBERINQ"
   SAName: "Publish in all electric services"
   Brand: "1"
   DefValue: "0"
 
-ServAttr12: ServAttr
+bulkload: ServAttr
   ServAttr: "DA"
   ServCom: "NUMBERINQ"
   SAName: "Publish in number services"
   Brand: "1"
   DefValue: "1"
 
-ServAttr13: ServAttr
+bulkload: ServAttr
   ServAttr: "ED"
   ServCom: "NUMBERINQ"
   SAName: "Publish in electric services which require an id"
   Brand: "1"
   DefValue: "1"
 
-ServAttr14: ServAttr
+bulkload: ServAttr
   ServAttr: "PR"
   ServCom: "NUMBERINQ"
   SAName: "Publish in printed catalogues"
   Brand: "1"
   DefValue: "0"
 
-ServAttr15: ServAttr
+bulkload: ServAttr
   ServAttr: "SEX"
   ServCom: "NUMBERINQ"
   SAName: "Publish subscriber's sex"
   Brand: "1"
   DefValue: "1"
 
-ServAttr16: ServAttr
+bulkload: ServAttr
   ServAttr: "Language"
   ServCom: "PP2"
   SAName: "Vastaajan kieli, 1=engl 2=suomi 11=ruotsi"
@@ -120,7 +120,7 @@ ServAttr16: ServAttr
   Brand: "1"
   DefValue: "2"
 
-ServAttr17: ServAttr
+bulkload: ServAttr
   ServAttr: "MSISDN2"
   ServCom: "PP2"
   SAName: "MSISDN2"
@@ -128,7 +128,7 @@ ServAttr17: ServAttr
   ScValueRange[2]: 1
   Brand: "1"
 
-ServAttr18: ServAttr
+bulkload: ServAttr
   ServAttr: "Password"
   ServCom: "PP2"
   SAName: "Password"
@@ -136,7 +136,7 @@ ServAttr18: ServAttr
   Brand: "1"
   DefValue: "1234"
 
-ServAttr19: ServAttr
+bulkload: ServAttr
   ServAttr: "SM3"
   ServCom: "PP2"
   SAName: "SM3"
@@ -145,7 +145,7 @@ ServAttr19: ServAttr
   Brand: "1"
   DefValue: "1"
 
-ServAttr20: ServAttr
+bulkload: ServAttr
   ServAttr: "Language"
   ServCom: "PPO"
   SAName: "0=DEF,1=CAS,2=CAT,3=EUS,4=GAL,5=ING"
@@ -153,28 +153,28 @@ ServAttr20: ServAttr
   Brand: "1"
   DefValue: "0"
 
-ServAttr21: ServAttr
+bulkload: ServAttr
   ServAttr: "PAYTYPE"
   ServCom: "PROFILE"
   ScChgable: FALSE
   Brand: "1"
   DefValue: "->PREPAID"
 
-ServAttr22: ServAttr
+bulkload: ServAttr
   ServAttr: "FIRSTDAY"
   ServCom: "TCTiming"
   SAName: "Only to 1. day of month"
   ScValueRange[2]: 1
   Brand: "1"
 
-ServAttr23: ServAttr
+bulkload: ServAttr
   ServAttr: "BankAccount"
   ServCom: "TYPECHG"
   SAName: "1 = Mandatory BankAccount for Clitype"
   Brand: "1"
   DefValue: "1"
 
-ServAttr24: ServAttr
+bulkload: ServAttr
   ServAttr: "ChgMonthFee"
   ServCom: "TYPECHG"
   SAName: "1 = Charge monthly fees from change month"
@@ -182,28 +182,28 @@ ServAttr24: ServAttr
   Brand: "1"
   DefValue: "0"
 
-ServAttr25: ServAttr
+bulkload: ServAttr
   ServAttr: "CIF"
   ServCom: "TYPECHG"
   SAName: "CIF (1=Allowed)"
   Brand: "1"
   DefValue: "0"
 
-ServAttr26: ServAttr
+bulkload: ServAttr
   ServAttr: "CreditCheck"
   ServCom: "TYPECHG"
   SAName: "1 = Mandatory external credit check"
   Brand: "1"
   DefValue: "1"
 
-ServAttr27: ServAttr
+bulkload: ServAttr
   ServAttr: "FailedRequest"
   ServCom: "TYPECHG"
   SAName: "1 = Failed request prevent changes"
   Brand: "1"
   DefValue: "1"
 
-ServAttr28: ServAttr
+bulkload: ServAttr
   ServAttr: "FreePerYear"
   ServCom: "TYPECHG"
   SAName: "Free type changes per year"
@@ -211,35 +211,35 @@ ServAttr28: ServAttr
   Brand: "1"
   DefValue: "4"
 
-ServAttr29: ServAttr
+bulkload: ServAttr
   ServAttr: "MobsubInDays"
   ServCom: "TYPECHG"
   SAName: "Days since activation"
   Brand: "1"
   DefValue: "30"
 
-ServAttr30: ServAttr
+bulkload: ServAttr
   ServAttr: "NIE"
   ServCom: "TYPECHG"
   SAName: "NIE (1=Allowed)"
   Brand: "1"
   DefValue: "0"
 
-ServAttr31: ServAttr
+bulkload: ServAttr
   ServAttr: "NIF"
   ServCom: "TYPECHG"
   SAName: "NIF (1=Allowed)"
   Brand: "1"
   DefValue: "0"
 
-ServAttr32: ServAttr
+bulkload: ServAttr
   ServAttr: "OngoingMNP"
   ServCom: "TYPECHG"
   SAName: "1 = Ongoing MNP prevent changes"
   Brand: "1"
   DefValue: "1"
 
-ServAttr33: ServAttr
+bulkload: ServAttr
   ServAttr: "OnLastDay"
   ServCom: "TYPECHG"
   SAName: "1 = CLI type can be closed only on last day of month"
@@ -247,21 +247,21 @@ ServAttr33: ServAttr
   Brand: "1"
   DefValue: "0"
 
-ServAttr34: ServAttr
+bulkload: ServAttr
   ServAttr: "OperatorBarr"
   ServCom: "TYPECHG"
   SAName: "1 = Operator Barring prevent changes"
   Brand: "1"
   DefValue: "1"
 
-ServAttr35: ServAttr
+bulkload: ServAttr
   ServAttr: "PassPort"
   ServCom: "TYPECHG"
   SAName: "PassPort (1=Allowed)"
   Brand: "1"
   DefValue: "0"
 
-ServAttr36: ServAttr
+bulkload: ServAttr
   ServAttr: "PerMonth"
   ServCom: "TYPECHG"
   SAName: "How many times type can be changed per month"
@@ -269,14 +269,14 @@ ServAttr36: ServAttr
   Brand: "1"
   DefValue: "1"
 
-ServAttr37: ServAttr
+bulkload: ServAttr
   ServAttr: "SchedDate"
   ServCom: "TYPECHG"
   SAName: "Next date for change"
   Brand: "1"
   DefValue: "1"
 
-ServAttr38: ServAttr
+bulkload: ServAttr
   ServAttr: "SchedTime"
   ServCom: "TYPECHG"
   SAName: "Latest schedule time for change"
@@ -284,7 +284,7 @@ ServAttr38: ServAttr
   Brand: "1"
   DefValue: "00.00"
 
-ServAttr39: ServAttr
+bulkload: ServAttr
   ServAttr: "TiePeriod"
   ServCom: "TYPECHG"
   SAName: "1 = Periodical contract prevent changes"

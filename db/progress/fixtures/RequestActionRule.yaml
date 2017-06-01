@@ -1,466 +1,466 @@
-RequestActionRule1: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 104
   ParamField: "ReqCParam1"
   FromDate: 2010-03-03
   ToDate: 2049-12-31
   ExclParamValue: "CONT2,CONT4,CONT5"
 
-RequestActionRule2: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 112
   ParamField: "ReqCParam1"
   FromDate: 2010-03-03
   ToDate: 2049-12-31
   ExclParamValue: "CONT,CONT4,CONT5"
 
-RequestActionRule3: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 117
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2010-01-01
   ToDate: 2009-12-31
 
-RequestActionRule4: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 131
   ParamField: "ReqCParam1"
   FromDate: 2010-03-03
   ToDate: 2049-12-31
   ExclParamValue: "CONT,CONT2,CONT5"
 
-RequestActionRule5: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 141
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2009-03-01
   ToDate: 2049-12-31
 
-RequestActionRule6: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 141
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2009-12-01
   ToDate: 2046-12-31
 
-RequestActionRule7: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 142
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2009-03-01
   ToDate: 2049-12-31
 
-RequestActionRule8: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 142
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2009-12-01
   ToDate: 2046-12-31
 
-RequestActionRule9: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 143
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2009-03-01
   ToDate: 2049-12-31
 
-RequestActionRule10: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 143
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2009-12-01
   ToDate: 2046-12-31
 
-RequestActionRule11: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 144
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2009-03-01
   ToDate: 2049-12-31
 
-RequestActionRule12: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 144
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2009-12-01
   ToDate: 2046-12-31
 
-RequestActionRule13: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 145
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2009-03-25
   ToDate: 2049-12-31
 
-RequestActionRule14: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 145
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2009-12-01
   ToDate: 2049-12-31
 
-RequestActionRule15: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 146
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2009-03-25
   ToDate: 2049-12-31
 
-RequestActionRule16: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 146
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2009-12-01
   ToDate: 2049-12-31
 
-RequestActionRule17: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 161
   ParamField: "ReqCParam1"
   FromDate: 2010-03-03
   ToDate: 2049-12-31
   ExclParamValue: "CONT,CONT2,CONT4"
 
-RequestActionRule18: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 163
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2009-12-01
   ToDate: 2049-12-31
 
-RequestActionRule19: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 167
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2009-11-18
   ToDate: 2049-12-31
 
-RequestActionRule20: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 167
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2009-12-01
   ToDate: 2046-12-31
 
-RequestActionRule21: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 168
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2009-12-01
   ToDate: 2046-12-31
 
-RequestActionRule22: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 168
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2009-11-18
   ToDate: 2045-12-31
 
-RequestActionRule23: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 182
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2009-12-01
   ToDate: 2045-12-31
 
-RequestActionRule24: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 183
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2009-12-01
   ToDate: 2045-12-31
 
-RequestActionRule25: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 184
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2009-12-01
   ToDate: 2045-12-31
 
-RequestActionRule26: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 185
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2009-12-01
   ToDate: 2046-12-31
 
-RequestActionRule27: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 186
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2009-12-01
   ToDate: 2046-12-31
 
-RequestActionRule28: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 187
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2009-12-01
   ToDate: 2046-12-31
 
-RequestActionRule29: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 202
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2010-02-01
   ToDate: 2049-12-31
 
-RequestActionRule30: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 203
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2010-02-08
   ToDate: 2049-12-31
 
-RequestActionRule31: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 203
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2010-02-08
   ToDate: 2049-12-31
 
-RequestActionRule32: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 204
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2010-02-08
   ToDate: 2049-12-31
 
-RequestActionRule33: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 204
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2010-02-08
   ToDate: 2049-12-31
 
-RequestActionRule34: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 205
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2010-02-08
   ToDate: 2049-12-31
 
-RequestActionRule35: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 206
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2010-02-08
   ToDate: 2049-12-31
 
-RequestActionRule36: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 208
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2010-02-08
   ToDate: 2049-12-31
 
-RequestActionRule37: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 208
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2010-02-08
   ToDate: 2046-12-31
 
-RequestActionRule38: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 209
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2010-02-08
   ToDate: 2049-12-31
 
-RequestActionRule39: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 209
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2010-02-08
   ToDate: 2046-12-31
 
-RequestActionRule40: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 210
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2010-02-08
   ToDate: 2045-12-31
 
-RequestActionRule41: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 211
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2010-02-08
   ToDate: 2046-12-31
 
-RequestActionRule42: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 213
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2010-03-01
   ToDate: 2049-12-31
 
-RequestActionRule43: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 213
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2010-03-01
   ToDate: 2046-12-31
 
-RequestActionRule44: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 214
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD1,CONTRD2"
   FromDate: 2010-03-01
   ToDate: 2049-12-31
 
-RequestActionRule45: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 214
   ParamField: "ReqCParam1"
   ParamValue: "CONT5<CONTRD1"
   FromDate: 2010-03-01
   ToDate: 2046-12-31
 
-RequestActionRule46: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 215
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD2"
   FromDate: 2010-03-01
   ToDate: 2045-12-31
 
-RequestActionRule47: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 228
   ParamField: "ReqCParam2"
   ParamValue: "CONT5>CONT4"
   FromDate: 2010-05-19
   ToDate: 2049-12-31
 
-RequestActionRule48: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 228
   ParamField: "ReqCParam2"
   ParamValue: "CONT6>CONT4"
   FromDate: 2011-01-01
   ToDate: 2049-12-31
 
-RequestActionRule49: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 228
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD>CONT4"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule50: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 228
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD1>CONT4"
   FromDate: 2011-11-01
   ToDate: 2049-12-31
 
-RequestActionRule51: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 228
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD2>CONT4"
   FromDate: 2011-11-01
   ToDate: 2049-12-31
 
-RequestActionRule52: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 228
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD3>CONT4"
   FromDate: 2011-11-01
   ToDate: 2049-12-31
 
-RequestActionRule53: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 228
   ParamField: "ReqCParam2"
   ParamValue: "CONTF>CONT4"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule54: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 228
   ParamField: "ReqCParam2"
   ParamValue: "CONT7>CONT4"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule55: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 228
   ParamField: "ReqCParam2"
   ParamValue: "CONTS>CONT4"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule56: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 231
   ParamField: "ReqCParam2"
   ParamValue: "CONT6>CONT5"
   FromDate: 2011-01-01
   ToDate: 2049-12-31
 
-RequestActionRule57: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 231
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTD2>CONT5"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule58: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 231
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTDATA>CONT5"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule59: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 231
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF55>CONT5"
   FromDate: 2012-01-01
   ToDate: 2049-12-31
 
-RequestActionRule60: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 231
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF40>CONT5"
   FromDate: 2012-01-01
   ToDate: 2049-12-31
 
-RequestActionRule61: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 231
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF30>CONT5"
   FromDate: 2012-01-01
   ToDate: 2049-12-31
 
-RequestActionRule62: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 231
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF20>CONT5"
   FromDate: 2012-01-01
   ToDate: 2049-12-31
 
-RequestActionRule63: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 231
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF20D>CONT5"
   FromDate: 2012-01-01
   ToDate: 2049-12-31
 
-RequestActionRule64: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 231
   ParamField: "ReqCParam2"
   ParamValue: "CONTS>CONT5"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule65: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 234
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD2>CONTRD1"
   FromDate: 2010-05-19
   ToDate: 2049-12-31
 
-RequestActionRule66: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 238
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD2>CONTRD1"
   FromDate: 2010-06-29
   ToDate: 2049-12-31
 
-RequestActionRule67: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 239
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD2>CONTRD1"
@@ -468,693 +468,693 @@ RequestActionRule67: RequestActionRule
   ToDate: 2049-12-31
   ExclParamValue: "INSTALLMENT"
 
-RequestActionRule68: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 239
   ParamField: "ReqCParam2"
   ParamValue: "CONT6>CONTRD1"
   FromDate: 2011-01-01
   ToDate: 2049-12-31
 
-RequestActionRule69: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 253
   ParamField: "ReqCParam2"
   ParamValue: "CONT5>CONT"
   FromDate: 2010-05-19
   ToDate: 2049-12-31
 
-RequestActionRule70: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 253
   ParamField: "ReqCParam2"
   ParamValue: "CONT6>CONT"
   FromDate: 2011-01-01
   ToDate: 2049-12-31
 
-RequestActionRule71: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 253
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD>CONT"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule72: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 253
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD1>CONT"
   FromDate: 2011-11-01
   ToDate: 2049-12-31
 
-RequestActionRule73: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 253
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD2>CONT"
   FromDate: 2011-11-01
   ToDate: 2049-12-31
 
-RequestActionRule74: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 253
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD3>CONT"
   FromDate: 2011-11-01
   ToDate: 2049-12-31
 
-RequestActionRule75: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 253
   ParamField: "ReqCParam2"
   ParamValue: "CONTF>CONT"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule76: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 253
   ParamField: "ReqCParam2"
   ParamValue: "CONT7>CONT"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule77: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 253
   ParamField: "ReqCParam2"
   ParamValue: "CONTS>CONT"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule78: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 271
   ParamField: "ReqCParam1"
-  ParamValue: "+,CONT,CONT4,CONT5,CONT6,CONTF,CONT7,CONTS,CONT8,CONTM,CONTM2,CONTSF,CONTFF,CONT9"
+  ParamValue: "+,CONT,CONT4,CONT5,CONT6,CONTF,CONT7,CONTS,CONT8,CONTM,CONTM2,CONTSF,CONTFF,CONT9,CONT10"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule79: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 271
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTRD,TARJ,TARJ4,TARJRD1,TARJ5,TARJ6,CONTD,TARJ7,TARJ8"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule80: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 273
   ParamField: "#FEECOMPARE"
   ParamValue: "ORIGINAL>NEW"
   FromDate: 2011-01-01
   ToDate: 2049-12-31
 
-RequestActionRule81: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 291
   ParamField: "ReqCParam2"
   ParamValue: "CONT6>CONTRD2"
   FromDate: 2011-01-01
   ToDate: 2049-12-31
 
-RequestActionRule82: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 299
   ParamField: "ReqCParam2"
   ParamValue: "CONT5>CONTRD3"
   FromDate: 2011-05-18
   ToDate: 2049-12-31
 
-RequestActionRule83: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 299
   ParamField: "ReqCParam2"
   ParamValue: "CONT6>CONTRD3"
   FromDate: 2011-05-18
   ToDate: 2049-12-31
 
-RequestActionRule84: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 299
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD1>CONTRD3"
   FromDate: 2011-05-18
   ToDate: 2049-12-31
 
-RequestActionRule85: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 299
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD2>CONTRD3"
   FromDate: 2011-05-18
   ToDate: 2049-12-31
 
-RequestActionRule86: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 300
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule87: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 301
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule88: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 302
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule89: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 303
   ParamField: "ReqCParam1"
   ParamValue: "CONTRD"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule90: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 306
   ParamField: "ReqCParam1"
   ParamValue: "+,MDUB,MDUB5,MDUB9"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule91: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 306
   ParamField: "ReqCParam2"
   ParamValue: "+,MDUB2,MDUB3,MDUB4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule92: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 307
   ParamField: "ReqCParam1"
   ParamValue: "+,MDUB,MDUB5,MDUB9"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule93: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 307
   ParamField: "ReqCParam2"
   ParamValue: "+,MDUB2,MDUB3,MDUB4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule94: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 308
   ParamField: "ReqCParam1"
   ParamValue: "+,MDUB,MDUB5,MDUB9"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule95: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 308
   ParamField: "ReqCParam2"
   ParamValue: "+,MDUB2,MDUB3,MDUB4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule96: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 310
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTD3"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule97: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 310
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTDATA,CONTD2,CONTD4"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule98: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 315
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTDATA>CONTD3"
   FromDate: 2011-09-01
   ToDate: 2049-12-31
 
-RequestActionRule99: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 315
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTD2>CONTD3"
   FromDate: 2011-09-01
   ToDate: 2049-12-31
 
-RequestActionRule100: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 315
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTD2>CONTDATA"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule101: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 315
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTD4>CONTD3"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule102: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 315
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTD2>CONTD4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule103: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 315
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTDATA>CONTD4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule104: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 315
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTDATA>MDUB"
   FromDate: 2011-08-10
   ToDate: 2011-11-22
 
-RequestActionRule105: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 315
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTD2>MDUB"
   FromDate: 2011-08-10
   ToDate: 2011-11-22
 
-RequestActionRule106: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 318
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTDATA,CONTD2,CONTD4"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule107: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 318
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTD3"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule108: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 321
   ParamField: "ReqCParam5"
   ParamValue: "CONTD2"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule109: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 322
   ParamField: "ReqCParam5"
   ParamValue: "CONTDATA"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule110: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 323
   ParamField: "ReqCParam5"
   ParamValue: "CONTD3"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule111: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "CONT6>CONTDATA"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule112: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "CONT6>CONTD2"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule113: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "CONT5>CONTD3"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule114: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "CONT6>CONTD3"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule115: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "CONT6>CONTD4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule116: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "CONT5>CONTD4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule117: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF20>CONTD3"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule118: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF20>CONTD4"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule119: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF30>CONTDATA"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule120: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF30>CONTD3"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule121: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF30>CONTD4"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule122: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF55>CONTD2"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule123: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF55>CONTDATA"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule124: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF55>CONTD3"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule125: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF55>CONTD4"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule126: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF40>CONTD2"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule127: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF40>CONTDATA"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule128: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF40>CONTD4"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule129: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF40>CONTD3"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule130: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF10>CONTD3"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule131: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF20D>CONTD4"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule132: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTF20D>CONTD3"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule133: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "CONT7>CONTD3"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule134: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "CONTS>CONTDATA"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule135: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "CONTS>CONTD4"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule136: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "CONTS>CONTD3"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule137: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 324
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTS39>CONTD2"
   FromDate: 2012-09-01
   ToDate: 2049-12-31
 
-RequestActionRule138: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 325
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTRD"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule139: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 325
   ParamField: "ReqCParam2"
   ParamValue: "+,CONT,CONT4,CONT5,CONT6,TARJ,TARJ4,TARJRD1,CONTF,TARJ5,CONT7,CONTS,CONTD,CONT8,TARJ6,CONTM2,CONTSF,CONTFF,TARJ7,TARJ8"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule140: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 326
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule141: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 326
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule142: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 327
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule143: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 327
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule144: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 328
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule145: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 328
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule146: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 329
   ParamField: "ReqCParam3"
   ParamValue: "+,PMDUB"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule147: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 329
   ParamField: "ReqSource"
   ParamValue: "+,4,5,6,11,15"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule148: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 331
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTRD"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule149: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 331
   ParamField: "ReqCParam2"
   ParamValue: "+,CONT,CONT4,CONT5"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule150: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 332
   ParamField: "ReqCParam1"
   ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule151: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 333
   ParamField: "ReqCParam1"
   ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
-RequestActionRule152: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 336
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule153: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 337
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule154: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 338
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule155: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 339
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule156: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 340
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTDATA"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule157: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 340
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule158: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 341
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTD2"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule159: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 341
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule160: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 342
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTD3"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule161: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 342
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule162: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 343
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule163: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 344
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule164: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 345
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule165: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 346
   ParamField: "ReqStatus"
   ParamValue: "2"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule166: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 347
   ParamField: "ReqCParam2"
   ParamValue: "+"
@@ -1162,966 +1162,966 @@ RequestActionRule166: RequestActionRule
   ToDate: 2049-12-31
   ExclParamValue: "TARJ7,TARJ9"
 
-RequestActionRule167: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 347
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule168: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 348
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTDATA"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule169: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 348
   ParamField: "ReqCParam5"
   ParamValue: "+,"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule170: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 348
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule171: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 349
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTD2"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule172: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 349
   ParamField: "ReqCParam5"
   ParamValue: "+,"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule173: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 349
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule174: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 350
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTD3"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule175: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 350
   ParamField: "ReqCParam5"
   ParamValue: "+,"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule176: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 350
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule177: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 351
   ParamField: "ReqCParam5"
   ParamValue: "+,"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule178: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 351
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule179: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 352
   ParamField: "ReqCParam2"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule180: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 352
   ParamField: "ReqCParam5"
   ParamValue: "+,"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule181: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 352
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule182: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 353
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB2"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule183: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 353
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule184: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 353
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule185: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 354
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule186: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 354
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule187: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 354
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule188: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 355
   ParamField: "ReqCParam3"
   ParamValue: "+,PMDUB"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule189: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 355
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule190: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 355
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule191: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 356
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB2"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule192: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 356
   ParamField: "ReqSource"
   ParamValue: "+,1"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule193: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 357
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB2"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule194: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 357
   ParamField: "ReqSource"
   ParamValue: "+,4,6,7,11,15"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule195: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 358
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule196: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 358
   ParamField: "ReqSource"
   ParamValue: "+,1"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule197: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 359
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule198: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 359
   ParamField: "ReqSource"
   ParamValue: "+,4,6,7,11,15"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule199: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 360
   ParamField: "ReqCParam3"
   ParamValue: "+,CONTDATA_UPSELL"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule200: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 360
   ParamField: "ReqSource"
   ParamValue: "+,4,6"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule201: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 361
   ParamField: "ReqCParam3"
   ParamValue: "+,CONTD2_UPSELL"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule202: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 361
   ParamField: "ReqSource"
   ParamValue: "+,4,6"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule203: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 362
   ParamField: "ReqCParam3"
   ParamValue: "+,CONTDATA_UPSELL,CONTD2_UPSELL"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule204: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 362
   ParamField: "ReqSource"
   ParamValue: "+,11,15"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule205: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 363
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB2_UPSELL"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule206: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 363
   ParamField: "ReqSource"
   ParamValue: "+,4,6"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule207: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 364
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB2_UPSELL"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule208: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 364
   ParamField: "ReqSource"
   ParamValue: "+,11,15"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule209: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 365
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB_UPSELL"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule210: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 365
   ParamField: "ReqSource"
   ParamValue: "+,4,6"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule211: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 366
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB_UPSELL"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule212: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 366
   ParamField: "ReqSource"
   ParamValue: "+,11,15"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule213: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 367
   ParamField: "ReqCParam3"
   ParamValue: "+,PMDUB"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule214: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 367
   ParamField: "ReqSource"
   ParamValue: "+,1"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule215: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 368
   ParamField: "ReqCParam3"
   ParamValue: "+,PMDUB"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule216: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 368
   ParamField: "ReqSource"
   ParamValue: "+,4,6,7,11,15"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule217: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 369
   ParamField: "ReqCParam3"
   ParamValue: "+,PMDUB_UPSELL"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule218: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 369
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule219: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 370
   ParamField: "ReqCParam3"
   ParamValue: "+,CONTD3_UPSELL"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule220: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 370
   ParamField: "ReqSource"
   ParamValue: "+,11,15"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule221: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 371
   ParamField: "ReqCParam3"
   ParamValue: "+,CONTD3_UPSELL"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule222: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 371
   ParamField: "ReqSource"
   ParamValue: "+,4,6"
   FromDate: 2011-10-05
   ToDate: 2049-12-31
 
-RequestActionRule223: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 374
   ParamField: "ReqCParam1"
   ParamValue: "+,ADD"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule224: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 374
   ParamField: "ReqCParam3"
   ParamValue: "+,DSS"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule225: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 374
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule226: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 375
   ParamField: "ReqCParam1"
   ParamValue: "+,CREATE"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule227: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 375
   ParamField: "ReqCParam3"
   ParamValue: "+,DSS"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule228: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 375
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule229: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 376
   ParamField: "ReqCParam1"
   ParamValue: "+,DELETE"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule230: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 376
   ParamField: "ReqCParam3"
   ParamValue: "+,DSS"
   FromDate: 2013-08-01
   ToDate: 2049-12-31
 
-RequestActionRule231: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 376
   ParamField: "ReqSource"
   ParamValue: "+,2,12,21"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule232: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 376
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule233: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 377
   ParamField: "ReqCParam1"
   ParamValue: "+,DELETE"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule234: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 377
   ParamField: "ReqCParam3"
   ParamValue: "+,DSS"
   FromDate: 2013-08-01
   ToDate: 2049-12-31
 
-RequestActionRule235: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 377
   ParamField: "ReqSource"
   ParamValue: "+,3,4,5,6,11,15"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule236: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 377
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule237: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 378
   ParamField: "ReqCParam5"
   ParamValue: "CONTD4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule238: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 379
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTD4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule239: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 379
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule240: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 380
   ParamField: "ReqCParam3"
   ParamValue: "DSS_UPSELL"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule241: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 381
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB3"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule242: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 381
   ParamField: "ReqSource"
   ParamValue: "+,1"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule243: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 382
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB3"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule244: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 382
   ParamField: "ReqSource"
   ParamValue: "+,4,6,7,11,15"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule245: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 383
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule246: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 383
   ParamField: "ReqSource"
   ParamValue: "+,1"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule247: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 384
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule248: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 384
   ParamField: "ReqSource"
   ParamValue: "+,4,6,7,11,15"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule249: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 385
   ParamField: "ReqCParam3"
   ParamValue: "+,CONTD4_UPSELL"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule250: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 385
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule251: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 386
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB3_UPSELL"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule252: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 386
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule253: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 387
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB4_UPSELL"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule254: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 387
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule255: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 388
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB3"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule256: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 388
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule257: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 388
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule258: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 389
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule259: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 389
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule260: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 389
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule261: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 390
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTD4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule262: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 390
   ParamField: "ReqCParam5"
   ParamValue: "+,"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule263: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 390
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule264: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 391
   ParamField: "ReqCParam1"
   ParamValue: "+,MDUB2,MDUB3,MDUB4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule265: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 391
   ParamField: "ReqCParam2"
   ParamValue: "+,MDUB,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule266: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 392
   ParamField: "ReqCParam1"
   ParamValue: "+,MDUB2,MDUB3,MDUB4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule267: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 392
   ParamField: "ReqCParam2"
   ParamValue: "+,MDUB,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule268: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 393
   ParamField: "ReqCParam1"
   ParamValue: "+,MDUB2,MDUB3,MDUB4"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule269: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 393
   ParamField: "ReqCParam2"
   ParamValue: "+,MDUB,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2011-11-23
   ToDate: 2049-12-31
 
-RequestActionRule270: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 394
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTRD"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule271: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 394
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTF20,CONTF10"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule272: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 395
   ParamField: "ReqCParam5"
   ParamValue: "CONTF20"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule273: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 396
   ParamField: "ReqCParam5"
   ParamValue: "CONTF30"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule274: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 397
   ParamField: "ReqCParam5"
   ParamValue: "CONTF55"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule275: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "CONT6>CONTF20"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule276: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "CONT6>CONTF30"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule277: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTD2>CONTF20"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule278: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTD2>CONTF30"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule279: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTDATA>CONTF20"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule280: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "CONT6>CONTF20D"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule281: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "CONT6>CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule282: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "CONT5>CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule283: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTD2>CONTF20D"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule284: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTD2>CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule285: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTDATA>CONTF20D"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule286: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTDATA>CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule287: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTD4>CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule288: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "CONTS>CONTF10"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule289: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "CONTS>CONTF20"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule290: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "CONTS>CONTF20D"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule291: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 398
   ParamField: "ReqCParam5"
   ParamValue: "BUNDLE:CONTS39>CONTF30"
   FromDate: 2012-09-01
   ToDate: 2049-12-31
 
-RequestActionRule292: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 399
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTF"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule293: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 399
   ParamField: "ReqCParam2"
   ParamValue: "+,CONT,CONT4,CONT5,CONT6,CONT7,CONTS,CONT8,CONTD,CONTRD,CONTM2,CONTSF,CONTFF"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule294: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 400
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTF20"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule295: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 400
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule296: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 401
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTF30"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule297: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 401
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule298: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 402
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTF55"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule299: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 402
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule300: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 403
   ParamField: "ReqCParam1"
   ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule301: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 404
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule302: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 405
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTRD,CONT,CONT4,CONT5"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule303: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 405
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTF30,CONTF55,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule304: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 406
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5,DATA6,DATA7"
@@ -2129,525 +2129,525 @@ RequestActionRule304: RequestActionRule
   ToDate: 2049-12-31
   ExclParamValue: "BUNDLE,CONTF30,CONTF55,CONTF20D,CONTF40,CONTF8,CONTF11"
 
-RequestActionRule305: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 406
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule306: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 407
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTF20,CONTF10"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule307: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 407
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF30,CONTF55,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule308: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF55>CONTF30"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule309: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF55>CONTF20"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule310: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF30>CONTF20"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule311: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF55>CONTF20D"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule312: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF55>CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule313: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF55>CONTF40"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule314: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF30>CONTF20D"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule315: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF30>CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule316: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF20>CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule317: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF20D>CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule318: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF40>CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule319: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF40>CONTF20D"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule320: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF40>CONTF20"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule321: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF40>CONTF30"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule322: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 409
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule323: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 409
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule324: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 410
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF20"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule325: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 410
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule326: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 411
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF30"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule327: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 411
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule328: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 412
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF55"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule329: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 412
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule330: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 413
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule331: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 413
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule332: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 413
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule333: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 414
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF55>CONT6"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule334: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 414
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF40>CONT6"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule335: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 415
   ParamField: "ReqCParam5"
   ParamValue: "CONTF30,CONTF55,CONTF20D,CONTF40,CONTF11,CONTF8"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule336: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 416
   ParamField: "ReqCParam1"
   ParamValue: "+,CONT6,CONTRD,TARJ,TARJ4,TARJ5,TARJRD1,CONT7,CONTS,CONT8,CONTD"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule337: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 416
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTF20,CONTF10"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule338: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 417
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTF30,CONTF55,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule339: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 417
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF20,CONTF10"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule340: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 418
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTF20,CONTF10"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule341: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 418
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF30,CONTF55,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
-RequestActionRule342: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 421
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2011-12-01
   ToDate: 2049-12-31
 
-RequestActionRule343: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 421
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2011-12-01
   ToDate: 2049-12-31
 
-RequestActionRule344: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 423
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule345: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 423
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule346: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 424
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF20D"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule347: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 424
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule348: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 425
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF40"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule349: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 425
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule350: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 426
   ParamField: "ReqCParam5"
   ParamValue: "CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule351: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 427
   ParamField: "ReqCParam5"
   ParamValue: "CONTF20D"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule352: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 428
   ParamField: "ReqCParam5"
   ParamValue: "CONTF40"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule353: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 429
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTF10"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule354: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 429
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule355: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 430
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTF20D"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule356: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 430
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule357: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 431
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTF40"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule358: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 431
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
-RequestActionRule359: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 432
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB5,MDUB_UPSELL,MDUB2_UPSELL,MDUB3_UPSELL,MDUB4_UPSELL,MDUB5_UPSELL,CONTDATA_UPSELL,CONTD2_UPSELL,CONTD3_UPSELL,CONTD4_UPSELL,DSS_UPSELL,PMDUB_UPSELL,DATA9_UPSELL,MDUB9,DATA5,DATA5_UPSELL,DATA6,DATA6_UPSELL,DSS2_UPSELL,DATA200_UPSELL,DSS200_UPSELL,DATA7"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule360: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 432
   ParamField: "ReqSource"
   ParamValue: "+,1,4,6,11,15"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule361: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 432
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2012-10-11
   ToDate: 2049-12-31
 
-RequestActionRule362: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 433
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule363: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 433
   ParamField: "ReqSource"
   ParamValue: "+,1,4,6,11,15"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule364: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 433
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2012-10-11
   ToDate: 2049-12-31
 
-RequestActionRule365: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 434
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB2,MDUB3,MDUB4"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule366: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 434
   ParamField: "ReqSource"
   ParamValue: "+,1,4,6,11,15"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule367: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 434
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2012-10-11
   ToDate: 2049-12-31
 
-RequestActionRule368: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 435
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB5"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule369: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 435
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule370: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 435
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule371: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 436
   ParamField: "ReqCParam5"
   ParamValue: "+,MDUBTOMDUB2,MDUBTOMDUB3,MDUBTOMDUB4,MDUBTOMDUB5,MDUB2TOMDUB3,MDUB2TOMDUB4,MDUB3TOMDUB4,MDUB5TOMDUB2,MDUB5TOMDUB3,MDUB5TOMDUB4,CONTDATATOCONTD2,CONTD3TOCONTDATA,CONTD3TOCONTD2,CONTD3TOCONTD4,CONTD4TOCONTDATA,CONTD4TOCONTD2"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule372: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 436
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-03-26
   ToDate: 2049-12-31
 
-RequestActionRule373: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 437
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2012-04-25
   ToDate: 2049-12-31
 
-RequestActionRule374: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 437
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2012-04-25
   ToDate: 2049-12-31
 
-RequestActionRule375: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 438
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2012-04-25
   ToDate: 2049-12-31
 
-RequestActionRule376: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 438
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2012-04-25
   ToDate: 2049-12-31
 
-RequestActionRule377: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 439
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2012-04-25
   ToDate: 2049-12-31
 
-RequestActionRule378: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 439
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2012-04-25
   ToDate: 2049-12-31
 
-RequestActionRule379: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 440
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5,DATA6,DATA7"
@@ -2655,210 +2655,210 @@ RequestActionRule379: RequestActionRule
   ToDate: 2049-12-31
   ExclParamValue: "BUNDLE,CONTF30,CONTF55,CONTF20D,CONTF40,CONTF8,CONTF11"
 
-RequestActionRule380: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 440
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2012-04-25
   ToDate: 2049-12-31
 
-RequestActionRule381: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 441
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTRD"
   FromDate: 2012-04-25
   ToDate: 2049-12-31
 
-RequestActionRule382: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 441
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTF20,CONTF10"
   FromDate: 2012-04-25
   ToDate: 2049-12-31
 
-RequestActionRule383: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 442
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTRD"
   FromDate: 2012-04-25
   ToDate: 2049-12-31
 
-RequestActionRule384: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 442
   ParamField: "ReqCParam2"
   ParamValue: "+,CONT,CONT4,CONT5"
   FromDate: 2012-04-25
   ToDate: 2049-12-31
 
-RequestActionRule385: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 446
   ParamField: "ReqCParam2"
   ParamValue: "CONT5>CONT7"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule386: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 446
   ParamField: "ReqCParam2"
   ParamValue: "CONT6>CONT7"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule387: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 446
   ParamField: "ReqCParam2"
   ParamValue: "CONTS>CONT7"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule388: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 446
   ParamField: "ReqCParam2"
   ParamValue: "CONTF>CONT7"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule389: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 446
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTD2>CONT7"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule390: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 446
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTDATA>CONT7"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule391: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 446
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTD4>CONT7"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule392: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 446
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD1>CONT7"
   FromDate: 2012-09-01
   ToDate: 2049-12-31
 
-RequestActionRule393: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 446
   ParamField: "ReqCParam2"
   ParamValue: "CONTRD2>CONT7"
   FromDate: 2012-09-01
   ToDate: 2049-12-31
 
-RequestActionRule394: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 447
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule395: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 449
   ParamField: "ReqCParam5"
   ParamValue: "CONTS30"
   FromDate: 2012-09-01
   ToDate: 2049-12-31
 
-RequestActionRule396: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 450
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2012-05-28
   ToDate: 2049-12-31
 
-RequestActionRule397: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 459
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTRD"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule398: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 459
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTF20,CONTF10"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule399: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 460
   ParamField: "ReqCParam5"
   ParamValue: "CONTS30"
   FromDate: 2012-09-01
   ToDate: 2049-12-31
 
-RequestActionRule400: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 461
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTRD"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule401: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 461
   ParamField: "ReqCParam2"
   ParamValue: "+,CONT,CONT4,CONT5"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule402: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 462
   ParamField: "ReqCParam1"
   ParamValue: "CONTS"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule403: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 464
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule404: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 464
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule405: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 465
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule406: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 465
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule407: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 466
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule408: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 466
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule409: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 467
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5"
@@ -2866,420 +2866,420 @@ RequestActionRule409: RequestActionRule
   ToDate: 2049-12-31
   ExclParamValue: "BUNDLE,CONTF30,CONTF55,CONTF20D,CONTF40"
 
-RequestActionRule410: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 467
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2012-07-01
   ToDate: 2049-12-31
 
-RequestActionRule411: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 471
   ParamField: "ReqCParam3"
   ParamValue: "+,PMDUB"
   FromDate: 2012-09-26
   ToDate: 2049-12-31
 
-RequestActionRule412: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 471
   ParamField: "ReqSource"
   ParamValue: "+,1,4,5,6,11,15,19"
   FromDate: 2012-09-26
   ToDate: 2049-12-31
 
-RequestActionRule413: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 471
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2012-10-11
   ToDate: 2049-12-31
 
-RequestActionRule414: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 472
   ParamField: "ReqCParam5"
   ParamValue: "CONTS39"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule415: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 472
   ParamField: "ReqCParam5"
   ParamValue: "+,"
   FromDate: 2012-09-01
   ToDate: 2012-12-09
 
-RequestActionRule416: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 474
   ParamField: "ReqCParam3"
   ParamValue: "+,HSPA_ROAM_EU"
   FromDate: 2012-10-11
   ToDate: 2049-12-31
 
-RequestActionRule417: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 474
   ParamField: "ReqSource"
   ParamValue: "+,1,4,6,11,15"
   FromDate: 2012-10-11
   ToDate: 2049-12-31
 
-RequestActionRule418: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 474
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2012-10-11
   ToDate: 2049-12-31
 
-RequestActionRule419: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 475
   ParamField: "ReqCParam3"
   ParamValue: "+,HSPA_ROAM_EU"
   FromDate: 2012-10-11
   ToDate: 2049-12-31
 
-RequestActionRule420: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 475
   ParamField: "ReqSource"
   ParamValue: "+,1,4,6,11,15"
   FromDate: 2012-10-11
   ToDate: 2049-12-31
 
-RequestActionRule421: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 475
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-10-11
   ToDate: 2049-12-31
 
-RequestActionRule422: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 476
   ParamField: "ReqCParam3"
   ParamValue: "MDUB4,CONTD2,CONTF40,CONTF55,CONTS39,CONTS35"
   FromDate: 2012-11-01
   ToDate: 2049-12-31
 
-RequestActionRule423: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 477
   ParamField: "ReqCParam3"
   ParamValue: "MDUB4,CONTD2,CONTF40,CONTF55,CONTS39,CONTS35"
   FromDate: 2012-11-01
   ToDate: 2049-12-31
 
-RequestActionRule424: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 481
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-RequestActionRule425: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 483
   ParamField: "ReqCParam5"
   ParamValue: "CONTD9"
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-RequestActionRule426: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 484
   ParamField: "ReqCParam1"
   ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6"
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-RequestActionRule427: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 485
   ParamField: "ReqCParam1"
   ParamValue: "+,TARJ*"
   FromDate: 2013-03-01
   ToDate: 2049-12-31
 
-RequestActionRule428: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 485
   ParamField: "ReqCParam2"
   ParamValue: "+,TARJ6"
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-RequestActionRule429: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 486
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-RequestActionRule430: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 487
   ParamField: "ReqCParam3"
   ParamValue: "+,TARJ_UPSELL"
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-RequestActionRule431: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 487
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-RequestActionRule432: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 488
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB9"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule433: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 488
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule434: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 488
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule435: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 493
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTS30,CONTS39,CONTS15,CONTS20,CONTS25,CONTS35,CONTS16,CONTS21,CONTS26,CONTS32,CONTS12"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule436: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 493
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS30,CONTS39,CONTS15,CONTS20,CONTS25,CONTS35,CONTS16,CONTS21,CONTS26,CONTS32,CONTS12"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule437: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 494
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS30"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule438: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 494
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule439: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 495
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS39"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule440: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 495
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule441: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 496
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTS30"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule442: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 496
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule443: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 497
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTS39"
   FromDate: 2012-12-10
   ToDate: 2049-12-31
 
-RequestActionRule444: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 497
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2049-12-10
   ToDate: 2049-12-31
 
-RequestActionRule445: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 499
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTD9"
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-RequestActionRule446: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 499
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2012-12-01
   ToDate: 2049-12-31
 
-RequestActionRule447: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 506
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS30,CONTS39,CONTS15,CONTS20,CONTS25,CONTS35,CONTS16,CONTS21,CONTS26,CONTS32,CONTS12"
   FromDate: 2013-01-02
   ToDate: 2049-12-31
 
-RequestActionRule448: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 506
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2013-01-02
   ToDate: 2049-12-31
 
-RequestActionRule449: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 507
   ParamField: "ReqCParam1"
   ParamValue: "+,CONT*"
   FromDate: 2013-03-01
   ToDate: 2049-12-31
 
-RequestActionRule450: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 507
   ParamField: "ReqCParam2"
   ParamValue: "+,TARJ6"
   FromDate: 2013-03-01
   ToDate: 2049-12-31
 
-RequestActionRule451: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 513
   ParamField: "#FEECOMPARE"
   ParamValue: "ORIGINAL>NEW"
   FromDate: 2013-03-01
   ToDate: 2049-12-31
 
-RequestActionRule452: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 514
   ParamField: "#FEECOMPARE"
   ParamValue: "+,ORIGINAL>NEW"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule453: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 514
   ParamField: "#FEECOMPARE"
   ParamValue: "ORIGINAL>NEW"
   FromDate: 2013-04-03
   ToDate: 2013-08-31
 
-RequestActionRule454: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 514
   ParamField: "ReqIParam5"
   ParamValue: "+,0"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule455: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 515
   ParamField: "#FEECOMPARE"
   ParamValue: "+,ORIGINAL>NEW"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule456: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 515
   ParamField: "#FEECOMPARE"
   ParamValue: "ORIGINAL>NEW"
   FromDate: 2013-04-03
   ToDate: 2013-08-31
 
-RequestActionRule457: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 515
   ParamField: "ReqIParam5"
   ParamValue: "+,0"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule458: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 516
   ParamField: "#FEECOMPARE"
   ParamValue: "+,ORIGINAL>NEW"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule459: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 516
   ParamField: "#FEECOMPARE"
   ParamValue: "ORIGINAL>NEW"
   FromDate: 2013-04-03
   ToDate: 2013-08-31
 
-RequestActionRule460: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 516
   ParamField: "ReqIParam5"
   ParamValue: "+,0"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule461: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 519
   ParamField: "#FEECOMPARE"
   ParamValue: "+,ORIGINAL>NEW"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule462: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 519
   ParamField: "#FEECOMPARE"
   ParamValue: "ORIGINAL>NEW"
   FromDate: 2013-04-03
   ToDate: 2013-08-31
 
-RequestActionRule463: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 519
   ParamField: "ReqIParam5"
   ParamValue: "+,0"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule464: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 526
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTS30,CONTS39,CONTS15,CONTS20,CONTS25,CONTS35,CONTS16,CONTS21,CONTS26,CONTS32,CONTS12"
   FromDate: 2013-04-12
   ToDate: 2049-12-31
 
-RequestActionRule465: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 526
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS30,CONTS39,CONTS15,CONTS20,CONTS25,CONTS35,CONTS16,CONTS21,CONTS26,CONTS32,CONTS12"
   FromDate: 2013-04-12
   ToDate: 2049-12-31
 
-RequestActionRule466: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 529
   ParamField: "ReqCParam3"
   ParamValue: "+,DATA5"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule467: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 529
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule468: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 529
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule469: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 530
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5"
@@ -3287,14 +3287,14 @@ RequestActionRule469: RequestActionRule
   ToDate: 2049-12-31
   ExclParamValue: "BUNDLE,CONTS30,CONTS39,CONTS20,CONTS25,CONTS35"
 
-RequestActionRule470: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 530
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule471: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 531
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5"
@@ -3302,14 +3302,14 @@ RequestActionRule471: RequestActionRule
   ToDate: 2049-12-31
   ExclParamValue: "BUNDLE,CONTS30,CONTS39,CONTS20,CONTS25,CONTS35"
 
-RequestActionRule472: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 531
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule473: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 532
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5"
@@ -3317,910 +3317,910 @@ RequestActionRule473: RequestActionRule
   ToDate: 2049-12-31
   ExclParamValue: "BUNDLE,CONTS30,CONTS39,CONTS20,CONTS25,CONTS35"
 
-RequestActionRule474: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 532
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule475: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 536
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule476: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 537
   ParamField: "ReqCParam5"
   ParamValue: "CONTS15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule477: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 538
   ParamField: "ReqCParam5"
   ParamValue: "CONTS20"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule478: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 539
   ParamField: "ReqCParam5"
   ParamValue: "CONTS25"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule479: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 540
   ParamField: "ReqCParam5"
   ParamValue: "CONTS35"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule480: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 541
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTRD"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule481: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 541
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTS15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule482: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 542
   ParamField: "ReqCParam5"
   ParamValue: "CONTS30,CONTS39,CONTS20,CONTS25,CONTS35,CONTS16,CONTS21,CONTS26,CONTS32,CONTS12"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule483: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 543
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTRD"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule484: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 543
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTS15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule485: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 544
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTS15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule486: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 544
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule487: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 545
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTS20"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule488: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 545
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule489: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 546
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTS25"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule490: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 546
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule491: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 547
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTS35"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule492: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 547
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule493: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 548
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTRD"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule494: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 548
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTS15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule495: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 549
   ParamField: "ReqCParam1"
   ParamValue: "+,CONT6,CONTRD,TARJ,TARJ4,TARJ5,TARJRD1,CONT7,CONTF,CONT8,CONTD"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule496: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 549
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTS15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule497: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 550
   ParamField: "#FEECOMPARE"
   ParamValue: "+,ORIGINAL>NEW"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule498: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 550
   ParamField: "ReqIParam5"
   ParamValue: "+,1"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule499: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 551
   ParamField: "#FEECOMPARE"
   ParamValue: "+,ORIGINAL>NEW"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule500: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 551
   ParamField: "ReqIParam5"
   ParamValue: "+,1"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule501: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 552
   ParamField: "#FEECOMPARE"
   ParamValue: "+,ORIGINAL>NEW"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule502: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 552
   ParamField: "ReqIParam5"
   ParamValue: "+,1"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule503: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 553
   ParamField: "#FEECOMPARE"
   ParamValue: "+,ORIGINAL>NEW"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule504: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 553
   ParamField: "ReqIParam5"
   ParamValue: "+,1"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule505: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 555
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTS"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule506: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 556
   ParamField: "ReqCParam1"
   ParamValue: "CONTM2"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule507: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 557
   ParamField: "ReqCParam1"
   ParamValue: "CONTM2"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule508: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 557
   ParamField: "ReqCParam2"
   ParamValue: "CONTM2"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule509: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 559
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTS15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule510: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 559
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS30,CONTS39,CONTS20,CONTS25,CONTS35,CONTS16,CONTS21,CONTS26,CONTS32,CONTS12"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule511: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 561
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule512: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 561
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule513: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 562
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS20"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule514: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 562
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule515: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 563
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS25"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule516: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 563
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule517: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 564
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS35"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule518: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 564
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule519: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 565
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTS20,CONTS25,CONTS30,CONTS35,CONTS39,CONTS16,CONTS21,CONTS26,CONTS32,CONTS12"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule520: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 565
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS15"
   FromDate: 2013-09-05
   ToDate: 2049-12-31
 
-RequestActionRule521: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 566
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule522: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 566
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule523: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 567
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5,DATA6,DATA7"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule524: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 567
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule525: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 568
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule526: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 568
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule527: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 569
   ParamField: "ReqCParam3"
   ParamValue: "+,MDUB,MDUB2,MDUB3,MDUB4,MDUB5,MDUB9,DATA5"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule528: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 569
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2013-09-01
   ToDate: 2049-12-31
 
-RequestActionRule529: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 573
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2013-10-01
   ToDate: 2049-12-31
 
-RequestActionRule530: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 575
   ParamField: "ReqCParam5"
   ParamValue: "CONTSF10"
   FromDate: 2013-10-01
   ToDate: 2049-12-31
 
-RequestActionRule531: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 576
   ParamField: "ReqCParam5"
   ParamValue: "CONTSF14"
   FromDate: 2013-10-01
   ToDate: 2049-12-31
 
-RequestActionRule532: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 577
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTSF10"
   FromDate: 2013-10-01
   ToDate: 2049-12-31
 
-RequestActionRule533: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 577
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2013-10-01
   ToDate: 2049-12-31
 
-RequestActionRule534: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 578
   ParamField: "ReqCParam5"
   ParamValue: "+,CONTSF14"
   FromDate: 2013-10-01
   ToDate: 2049-12-31
 
-RequestActionRule535: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 578
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2013-10-01
   ToDate: 2049-12-31
 
-RequestActionRule536: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 579
   ParamField: "ReqCParam1"
   ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ,TARJ4,TARJ5,TARJ8,TARJ9"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule537: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 580
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule538: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 581
   ParamField: "ReqCParam1"
   ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule539: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 582
   ParamField: "ReqStatus"
   ParamValue: "0"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule540: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 583
   ParamField: "ReqCParam3"
   ParamValue: "+,TARJ7,TARJ9"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule541: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 583
   ParamField: "ReqSource"
   ParamValue: "+,4,5"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule542: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 584
   ParamField: "ReqCParam3"
   ParamValue: "+,TARJ7_UPSELL"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule543: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 584
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule544: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 585
   ParamField: "ReqCParam3"
   ParamValue: "+,TARJ7"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule545: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 585
   ParamField: "ReqSource"
   ParamValue: "+,5"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule546: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 586
   ParamField: "ReqCParam3"
   ParamValue: "+,TARJ7"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule547: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 586
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule548: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 587
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTSF10,CONTSF14"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule549: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 587
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTSF10,CONTSF14"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule550: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 588
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTSF"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
-RequestActionRule551: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 589
   ParamField: "ReqCParam2"
-  ParamValue: "+,CONT,CONT4,CONT5,CONT6,CONT7,CONT8,CONTD,CONTRD,CONTF,CONTS,CONTM,CONTM2,CONT9,CONT15,CONT24,CONT23"
+  ParamValue: "+,CONT,CONT4,CONT5,CONT6,CONT7,CONT8,CONTD,CONTRD,CONTF,CONTS,CONTM,CONTM2,CONT9,CONT15,CONT24,CONT23,CONT25,CONT26,CONT10,DUB,CONT27"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
-RequestActionRule552: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 589
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
-RequestActionRule553: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 590
   ParamField: "ReqCParam2"
   ParamValue: "+,TARJ,TARJ4,TARJ5,TARJ6,TARJ7,TARJ8,TARJRD1,TARJ9"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
-RequestActionRule554: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 590
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
-RequestActionRule555: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 591
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
-RequestActionRule556: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 591
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
-RequestActionRule557: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 591
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
-RequestActionRule558: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 592
   ParamField: "ReqCParam5"
   ParamValue: "+,"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
-RequestActionRule559: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 592
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
-RequestActionRule560: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 593
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTS30,CONTS39,CONTS15,CONTS20,CONTS25,CONTS35,CONTS16,CONTS21,CONTS26,CONTS32,CONTS12"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
-RequestActionRule561: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 593
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2014-06-01
   ToDate: 2049-12-31
 
-RequestActionRule562: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 593
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
-RequestActionRule563: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 595
   ParamField: "ReqCParam3"
   ParamValue: "+,DATA6"
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-RequestActionRule564: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 595
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-RequestActionRule565: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 595
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-RequestActionRule566: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 601
   ParamField: "ReqCParam5"
   ParamValue: "CONTS16"
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-RequestActionRule567: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 602
   ParamField: "ReqCParam5"
   ParamValue: "CONTS26"
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-RequestActionRule568: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 603
   ParamField: "ReqCParam5"
   ParamValue: "CONTS21"
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-RequestActionRule569: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 604
   ParamField: "ReqCParam5"
   ParamValue: "CONTS32"
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-RequestActionRule570: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 605
   ParamField: "ReqCParam5"
   ParamValue: "CONTS26"
   FromDate: 2014-05-01
   ToDate: 2049-12-31
 
-RequestActionRule571: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 606
   ParamField: "ReqCParam1"
   ParamValue: "TARJ*"
   FromDate: 2014-08-01
   ToDate: 2049-12-31
 
-RequestActionRule572: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 609
   ParamField: "ReqCParam1"
   ParamValue: "TARJ*"
   FromDate: 2014-09-01
   ToDate: 2049-12-31
 
-RequestActionRule573: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 612
   ParamField: "ReqCParam1"
   ParamValue: "TARJ*"
   FromDate: 2014-10-01
   ToDate: 2049-12-31
 
-RequestActionRule574: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 613
   ParamField: "ReqCParam1"
   ParamValue: "CONT*"
   FromDate: 2014-10-01
   ToDate: 2049-12-31
 
-RequestActionRule575: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 618
   ParamField: "ReqCParam1"
   ParamValue: "CONT*"
   FromDate: 2014-11-01
   ToDate: 2049-12-31
 
-RequestActionRule576: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 619
   ParamField: "ReqCParam3"
   ParamValue: "MDUB4,CONTD2,CONTS39,CONTS35,CONTS15,CONTS16,CONTS20,CONTS21,CONTS25,CONTS26,CONTS30,CONTS32,CONTSF10,CONTSF14,CONT15,BONO_VOIP,CONT24,CONTS12,CONT23"
   FromDate: 2014-11-26
   ToDate: 2049-12-31
 
-RequestActionRule577: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 620
   ParamField: "ReqCParam3"
   ParamValue: "BONO_VOIP,MDUB4,TARJ9"
   FromDate: 2014-11-26
   ToDate: 2049-12-31
 
-RequestActionRule578: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 621
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTF40,CONTF55"
   FromDate: 2014-11-26
   ToDate: 2049-12-31
 
-RequestActionRule579: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 621
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF10,CONTF20,CONTF20D,CONTF30,CONTF8,CONTF11"
   FromDate: 2014-11-26
   ToDate: 2049-12-31
 
-RequestActionRule580: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 625
   ParamField: "ReqCParam5"
   ParamValue: "CONTF11"
   FromDate: 2015-04-14
   ToDate: 2049-12-31
 
-RequestActionRule581: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 626
   ParamField: "ReqCParam5"
   ParamValue: "CONTF8"
   FromDate: 2015-04-14
   ToDate: 2049-12-31
 
-RequestActionRule582: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 627
   ParamField: "ReqCParam5"
   ParamValue: "CONTS12"
   FromDate: 2015-04-14
   ToDate: 2049-12-31
 
-RequestActionRule583: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 628
   ParamField: "ReqCParam1"
   ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ,TARJ4,TARJ5,TARJ8,TARJ9"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-RequestActionRule584: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 629
   ParamField: "ReqCParam3"
   ParamValue: "+,TARJ9"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-RequestActionRule585: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 629
   ParamField: "ReqSource"
   ParamValue: "+,4,5"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-RequestActionRule586: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 630
   ParamField: "ReqCParam3"
   ParamValue: "+,TARJ7_UPSELL"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-RequestActionRule587: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 630
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-RequestActionRule588: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 631
   ParamField: "ReqCParam3"
   ParamValue: "+,TARJ9"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-RequestActionRule589: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 631
   ParamField: "ReqSource"
   ParamValue: "+,5"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-RequestActionRule590: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 632
   ParamField: "ReqCParam2"
   ParamValue: "+,TARJ9"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-RequestActionRule591: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 632
   ParamField: "ReqStatus"
   ParamValue: "+,2"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-RequestActionRule592: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 633
   ParamField: "ReqCParam3"
   ParamValue: "TARJ9"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
-RequestActionRule593: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 634
   ParamField: "ReqStatus"
   ParamValue: "2"
   FromDate: 2015-06-02
   ToDate: 2049-12-31
 
-RequestActionRule594: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 635
   ParamField: "ReqStatus"
   ParamValue: "2"
   FromDate: 2015-06-02
   ToDate: 2049-12-31
 
-RequestActionRule595: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 639
   ParamField: "ReqCParam3"
   ParamValue: "+,DATA7"
   FromDate: 2015-12-09
   ToDate: 2049-12-31
 
-RequestActionRule596: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 639
   ParamField: "ReqSource"
   ParamValue: "+,4,6,11,15"
   FromDate: 2015-12-09
   ToDate: 2049-12-31
 
-RequestActionRule597: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 639
   ParamField: "ReqStatus"
   ParamValue: "+,0"
   FromDate: 2015-12-09
   ToDate: 2049-12-31
 
-RequestActionRule598: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 652
   ParamField: "#FEECOMPARE"
   ParamValue: "+,ORIGINAL>NEW"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
 
-RequestActionRule599: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 652
   ParamField: "ReqCParam1"
   ParamValue: "+,CONTDSL*,CONTFH*"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
 
-RequestActionRule600: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 652
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTDSL*,CONTFH*"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
 
-RequestActionRule601: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 652
   ParamField: "ReqIParam5"
   ParamValue: "+,0"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
 
-RequestActionRule602: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 653
   ParamField: "ReqCParam1"
   FromDate: 2016-10-27
   ToDate: 2049-12-31
   ExclParamValue: "CONTDSL*,CONTFH*,CONTSF*,CONTFF"
 
-RequestActionRule603: RequestActionRule
+bulkload: RequestActionRule
   RequestActionID: 653
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTDSL*,CONTFH*"
