@@ -1,336 +1,336 @@
-TMSRepCfg1: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "********"
   PrinterId: "Tiedosto"
   Effect: "E"
 
-TMSRepCfg2: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "accdatll"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg3: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "arbalrel"
   PrinterId: "Starnet CoffeeJet"
   Effect: "E"
 
-TMSRepCfg4: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "cuadvrep"
   PrinterId: "Tiedosto"
   Effect: "E"
 
-TMSRepCfg5: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "InvText"
   PrinterId: "Starnet Canon"
   Effect: "P"
 
-TMSRepCfg6: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "InvText"
   UserCode: "anttim"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg7: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "InvText"
   UserCode: "ejarkkoh"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg8: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "InvText"
   UserCode: "ejuhos"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg9: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "InvText"
   UserCode: "eka"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg10: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "InvText"
   UserCode: "epetrir"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg11: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "InvText"
   UserCode: "eseijak"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg12: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "InvText"
   UserCode: "mias"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg13: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "memo"
   PrinterId: "Starnet CoffeeJet"
   Effect: "E"
 
-TMSRepCfg14: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "memo"
   UserCode: "anttim"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg15: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "memo"
   UserCode: "eka"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg16: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnadli"
   PrinterId: "Starnet CoffeeJet"
   Effect: "V"
 
-TMSRepCfg17: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnanra"
   PrinterId: "Starnet CoffeeJet"
   Effect: "E"
 
-TMSRepCfg18: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnasll"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg19: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnasls"
   PrinterId: "Starnet CoffeeJet"
   Effect: "K"
 
-TMSRepCfg20: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnaslu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "K"
 
-TMSRepCfg21: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnatra"
   PrinterId: "Starnet CoffeeJet"
   Effect: "E"
 
-TMSRepCfg22: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nncgrtu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "T"
 
-TMSRepCfg23: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnchlu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "E"
 
-TMSRepCfg24: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nncltu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg25: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nncotu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "T"
 
-TMSRepCfg26: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nndpbi"
   PrinterId: "Starnet CoffeeJet"
   Effect: "E"
 
-TMSRepCfg27: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnerlu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "W"
 
-TMSRepCfg28: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnhara"
   PrinterId: "Starnet CoffeeJet"
   Effect: "T"
 
-TMSRepCfg29: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnhilu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "K"
 
-TMSRepCfg30: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnikaj"
   PrinterId: "Starnet CoffeeJet"
   Effect: "W"
 
-TMSRepCfg31: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnisaex"
   PrinterId: "Starnet CoffeeJet"
   Effect: "W"
 
-TMSRepCfg32: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnkaen"
   PrinterId: "Starnet CoffeeJet"
   Effect: "W"
 
-TMSRepCfg33: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnkapa"
   UserCode: "eka"
   PrinterId: "Starnet CoffeeJet"
   Effect: "W"
 
-TMSRepCfg34: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnkatu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "B"
 
-TMSRepCfg35: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnkosu"
   PrinterId: "Tiedosto"
   Effect: "E"
 
-TMSRepCfg36: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnkosu"
   UserCode: "jaakkol"
   PrinterId: "Tiedosto"
   Effect: "E"
 
-TMSRepCfg37: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnkosu"
   UserCode: "marikav"
   PrinterId: "Tiedosto"
   Effect: "E"
 
-TMSRepCfg38: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnlaki"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg39: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnlalu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "W"
 
-TMSRepCfg40: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnlati"
   PrinterId: "Starnet CoffeeJet"
   Effect: "T"
 
-TMSRepCfg41: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnmatu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg42: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnmora"
   PrinterId: "Starnet CoffeeJet"
   Effect: "T"
 
-TMSRepCfg43: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnmttu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "V"
 
-TMSRepCfg44: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnomra"
   PrinterId: "Starnet CoffeeJet"
   Effect: "T"
 
-TMSRepCfg45: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnpltu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "Q"
 
-TMSRepCfg46: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnprtu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "W"
 
-TMSRepCfg47: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnpura1"
   PrinterId: "Starnet CoffeeJet"
   Effect: "9"
 
-TMSRepCfg48: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnpura2"
   PrinterId: "Starnet CoffeeJet"
   Effect: "9"
 
-TMSRepCfg49: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnpura3"
   PrinterId: "Starnet CoffeeJet"
   Effect: "9"
 
-TMSRepCfg50: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnpura4"
   PrinterId: "Starnet CoffeeJet"
   Effect: "9"
 
-TMSRepCfg51: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnpura5"
   PrinterId: "Starnet CoffeeJet"
   Effect: "9"
 
-TMSRepCfg52: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnpura6"
   PrinterId: "Starnet CoffeeJet"
   Effect: "9"
 
-TMSRepCfg53: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnpura7"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg54: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnpura8"
   PrinterId: "Starnet CoffeeJet"
   Effect: "9"
 
-TMSRepCfg55: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnpurab"
   PrinterId: "Starnet CoffeeJet"
   Effect: "W"
 
-TMSRepCfg56: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnpurab2"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg57: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnputu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg58: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnrelu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "W"
 
-TMSRepCfg59: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnster"
   PrinterId: "Starnet CoffeeJet"
   Effect: "Q"
 
-TMSRepCfg60: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnsulu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "W"
 
-TMSRepCfg61: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnsvmsg"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg62: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnxbcgr"
   PrinterId: "Starnet CoffeeJet"
   Effect: "T"
 
-TMSRepCfg63: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnxbli"
   PrinterId: "Starnet CoffeeJet"
   Effect: "P"
 
-TMSRepCfg64: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "nnxbtu"
   PrinterId: "Starnet CoffeeJet"
   Effect: "T"
 
-TMSRepCfg65: TMSRepCfg
+bulkload: TMSRepCfg
   RepName: "sorecv"
   PrinterId: "Starnet CoffeeJet"
   Effect: "E"

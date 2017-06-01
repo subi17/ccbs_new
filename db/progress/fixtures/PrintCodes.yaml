@@ -1,4 +1,4 @@
-PrintCodes1: PrintCodes
+bulkload: PrintCodes
   Effect: "1"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027&k2G\027(s12H\027&l0E\027&f1y3X"
@@ -10,7 +10,7 @@ PrintCodes1: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes2: PrintCodes
+bulkload: PrintCodes
   Effect: "1"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027&k2G\027(s12H\027&l0E\027&f1y3X"
@@ -22,7 +22,7 @@ PrintCodes2: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes3: PrintCodes
+bulkload: PrintCodes
   Effect: "2"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027&l1E\027(0N\027&k2G\027(s12H\027&f2y3X"
@@ -34,7 +34,7 @@ PrintCodes3: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes4: PrintCodes
+bulkload: PrintCodes
   Effect: "2"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027&k2G\027(s12H\027&l2E\027&f2y3X"
@@ -46,7 +46,7 @@ PrintCodes4: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes5: PrintCodes
+bulkload: PrintCodes
   Effect: "6"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027&l2X\027&k2G\027&f1y3X\027(s12H"
@@ -58,7 +58,7 @@ PrintCodes5: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes6: PrintCodes
+bulkload: PrintCodes
   Effect: "6"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027&l2X\027&k2G\027&f1y3X\027(s12H"
@@ -70,7 +70,7 @@ PrintCodes6: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes7: PrintCodes
+bulkload: PrintCodes
   Effect: "9"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027&a5L\027(s17H\027&k2G\027&l6D\027&f6y3X"
@@ -82,7 +82,7 @@ PrintCodes7: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes8: PrintCodes
+bulkload: PrintCodes
   Effect: "9"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027&a5L\027(s17H\027&k2G\027&l6D\027&f6y3X"
@@ -94,7 +94,7 @@ PrintCodes8: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes9: PrintCodes
+bulkload: PrintCodes
   Effect: "E"
   PrinterId: "E-MAIL"
   EffName: "Ei Efektiä"
@@ -102,7 +102,7 @@ PrintCodes9: PrintCodes
   PageLength: 72
   AvailLines: 66
 
-PrintCodes10: PrintCodes
+bulkload: PrintCodes
   Effect: "E"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027(s110T\027&k2G\027&l6D\027&l0E"
@@ -114,7 +114,7 @@ PrintCodes10: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes11: PrintCodes
+bulkload: PrintCodes
   Effect: "E"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027(s110T\027&k2G\027&l6D\027&l2E"
@@ -126,7 +126,7 @@ PrintCodes11: PrintCodes
   PageLength: 64
   AvailLines: 63
 
-PrintCodes12: PrintCodes
+bulkload: PrintCodes
   Effect: "E"
   PrinterId: "Tiedosto"
   EffName: "Ei tehostetta"
@@ -134,7 +134,7 @@ PrintCodes12: PrintCodes
   PageLength: 80
   AvailLines: 78
 
-PrintCodes13: PrintCodes
+bulkload: PrintCodes
   Effect: "K"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027&l1O\027&k2G\027(s17H"
@@ -146,7 +146,7 @@ PrintCodes13: PrintCodes
   PageLength: 43
   AvailLines: 41
 
-PrintCodes14: PrintCodes
+bulkload: PrintCodes
   Effect: "K"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027&l1O\027&k2G\027(s17H"
@@ -158,7 +158,7 @@ PrintCodes14: PrintCodes
   PageLength: 43
   AvailLines: 41
 
-PrintCodes15: PrintCodes
+bulkload: PrintCodes
   Effect: "N"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027&k2G\027(s10H"
@@ -170,7 +170,7 @@ PrintCodes15: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes16: PrintCodes
+bulkload: PrintCodes
   Effect: "N"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027&k2G\027(s10H"
@@ -182,7 +182,7 @@ PrintCodes16: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes17: PrintCodes
+bulkload: PrintCodes
   Effect: "P"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027&k2G\027(s12H"
@@ -194,7 +194,7 @@ PrintCodes17: PrintCodes
   PageLength: 64
   AvailLines: 63
 
-PrintCodes18: PrintCodes
+bulkload: PrintCodes
   Effect: "P"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027&k2G\027(s12H"
@@ -206,7 +206,7 @@ PrintCodes18: PrintCodes
   PageLength: 64
   AvailLines: 63
 
-PrintCodes19: PrintCodes
+bulkload: PrintCodes
   Effect: "Q"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027&k2G\027&a5L\027(s17H\027&l12D"
@@ -218,7 +218,7 @@ PrintCodes19: PrintCodes
   PageLength: 128
   AvailLines: 125
 
-PrintCodes20: PrintCodes
+bulkload: PrintCodes
   Effect: "Q"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027&k2G\027&a5L\027(s17H\027&l12D"
@@ -230,7 +230,7 @@ PrintCodes20: PrintCodes
   PageLength: 128
   AvailLines: 125
 
-PrintCodes21: PrintCodes
+bulkload: PrintCodes
   Effect: "T"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027&a5L\027&k2G\027&l6D\027(s17H"
@@ -242,7 +242,7 @@ PrintCodes21: PrintCodes
   PageLength: 64
   AvailLines: 63
 
-PrintCodes22: PrintCodes
+bulkload: PrintCodes
   Effect: "T"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027&a5L\027&k2G\027&l6D\027(s17H"
@@ -254,7 +254,7 @@ PrintCodes22: PrintCodes
   PageLength: 64
   AvailLines: 63
 
-PrintCodes23: PrintCodes
+bulkload: PrintCodes
   Effect: "V"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027&k2G\027&l1O"
@@ -266,7 +266,7 @@ PrintCodes23: PrintCodes
   PageLength: 43
   AvailLines: 41
 
-PrintCodes24: PrintCodes
+bulkload: PrintCodes
   Effect: "V"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027&k2G\027&l1O"
@@ -278,7 +278,7 @@ PrintCodes24: PrintCodes
   PageLength: 43
   AvailLines: 41
 
-PrintCodes25: PrintCodes
+bulkload: PrintCodes
   Effect: "W"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027&l1O\027&k2G\027(s12H"
@@ -290,7 +290,7 @@ PrintCodes25: PrintCodes
   PageLength: 43
   AvailLines: 41
 
-PrintCodes26: PrintCodes
+bulkload: PrintCodes
   Effect: "W"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027&l1O\027&k2G\027(s12H"
@@ -302,7 +302,7 @@ PrintCodes26: PrintCodes
   PageLength: 43
   AvailLines: 41
 
-PrintCodes27: PrintCodes
+bulkload: PrintCodes
   Effect: "X"
   PrinterId: "Starnet Canon"
   EffOn[1]: "\027E\027(0N\027(s110T\027&k0G\027&l6D"
@@ -314,7 +314,7 @@ PrintCodes27: PrintCodes
   PageLength: 64
   AvailLines: 62
 
-PrintCodes28: PrintCodes
+bulkload: PrintCodes
   Effect: "X"
   PrinterId: "Starnet CoffeeJet"
   EffOn[1]: "\027E\027(0N\027(s110T\027&k0G\027&l6D"
