@@ -279,7 +279,6 @@ FUNCTION fCreateDayCampaign RETURNS LOGICAL
       DayCampaign.CalcMethod = 1
       DayCampaign.DurType = 1
       DayCampaign.Effective = 1
-      DayCampaign.BundleUpsell = "DATA200_UPSELL"
       DayCampaign.PayType = 1.
 
 END FUNCTION.
