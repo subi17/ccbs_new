@@ -1,4 +1,4 @@
-RequestAction1: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT"
@@ -9,7 +9,7 @@ RequestAction1: RequestAction
   Action: 1
   RequestActionID: 1
 
-RequestAction2: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT2"
@@ -20,7 +20,7 @@ RequestAction2: RequestAction
   Action: 1
   RequestActionID: 2
 
-RequestAction3: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT"
@@ -31,7 +31,7 @@ RequestAction3: RequestAction
   Action: 1
   RequestActionID: 3
 
-RequestAction4: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT2"
@@ -42,7 +42,7 @@ RequestAction4: RequestAction
   Action: 1
   RequestActionID: 4
 
-RequestAction5: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ"
   ValidFrom: 2006-12-01
@@ -52,7 +52,7 @@ RequestAction5: RequestAction
   Action: 2
   RequestActionID: 5
 
-RequestAction6: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ2"
   ValidFrom: 2006-12-01
@@ -62,7 +62,7 @@ RequestAction6: RequestAction
   Action: 2
   RequestActionID: 6
 
-RequestAction7: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT"
@@ -73,7 +73,7 @@ RequestAction7: RequestAction
   Action: 1
   RequestActionID: 7
 
-RequestAction8: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ"
   ValidFrom: 2006-12-01
@@ -83,7 +83,7 @@ RequestAction8: RequestAction
   Action: 2
   RequestActionID: 8
 
-RequestAction9: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ2"
   ValidFrom: 2006-12-01
@@ -93,7 +93,7 @@ RequestAction9: RequestAction
   Action: 2
   RequestActionID: 9
 
-RequestAction10: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT2"
   ValidFrom: 2008-01-01
@@ -103,7 +103,7 @@ RequestAction10: RequestAction
   Action: 2
   RequestActionID: 10
 
-RequestAction11: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ"
   ValidFrom: 2008-01-01
@@ -113,7 +113,7 @@ RequestAction11: RequestAction
   Action: 2
   RequestActionID: 11
 
-RequestAction12: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ2"
   ValidFrom: 2008-01-01
@@ -123,7 +123,7 @@ RequestAction12: RequestAction
   Action: 2
   RequestActionID: 12
 
-RequestAction13: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT"
   ValidFrom: 2008-01-01
@@ -133,7 +133,7 @@ RequestAction13: RequestAction
   Action: 1
   RequestActionID: 13
 
-RequestAction14: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT"
   ValidFrom: 2006-12-01
@@ -143,7 +143,7 @@ RequestAction14: RequestAction
   Action: 1
   RequestActionID: 14
 
-RequestAction15: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT2"
   ValidFrom: 2006-12-01
@@ -153,7 +153,7 @@ RequestAction15: RequestAction
   Action: 1
   RequestActionID: 15
 
-RequestAction16: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTRD1"
@@ -164,7 +164,7 @@ RequestAction16: RequestAction
   Action: 1
   RequestActionID: 16
 
-RequestAction17: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTRD1"
@@ -175,7 +175,7 @@ RequestAction17: RequestAction
   Action: 1
   RequestActionID: 17
 
-RequestAction18: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT2"
@@ -186,7 +186,7 @@ RequestAction18: RequestAction
   Action: 1
   RequestActionID: 18
 
-RequestAction19: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONTRD1"
   ValidFrom: 2008-06-01
@@ -196,7 +196,7 @@ RequestAction19: RequestAction
   Action: 1
   RequestActionID: 19
 
-RequestAction20: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT2"
   ValidFrom: 2008-01-01
@@ -206,7 +206,7 @@ RequestAction20: RequestAction
   Action: 1
   RequestActionID: 20
 
-RequestAction21: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT"
   ValidFrom: 2008-01-01
@@ -216,7 +216,7 @@ RequestAction21: RequestAction
   Action: 2
   RequestActionID: 21
 
-RequestAction22: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ"
   ValidFrom: 2008-01-01
@@ -226,7 +226,7 @@ RequestAction22: RequestAction
   Action: 2
   RequestActionID: 22
 
-RequestAction23: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ2"
   ValidFrom: 2008-01-01
@@ -236,7 +236,7 @@ RequestAction23: RequestAction
   Action: 2
   RequestActionID: 23
 
-RequestAction24: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONTRD1"
   ValidFrom: 2008-06-01
@@ -246,7 +246,7 @@ RequestAction24: RequestAction
   Action: 2
   RequestActionID: 24
 
-RequestAction25: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2008-09-01
@@ -256,7 +256,7 @@ RequestAction25: RequestAction
   Action: 1
   RequestActionID: 25
 
-RequestAction26: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONTRD1"
   ValidFrom: 2008-06-01
@@ -266,7 +266,7 @@ RequestAction26: RequestAction
   Action: 2
   RequestActionID: 26
 
-RequestAction27: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT"
   ValidFrom: 2008-06-01
@@ -276,7 +276,7 @@ RequestAction27: RequestAction
   Action: 2
   RequestActionID: 27
 
-RequestAction28: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ"
   ValidFrom: 2008-06-01
@@ -286,7 +286,7 @@ RequestAction28: RequestAction
   Action: 2
   RequestActionID: 28
 
-RequestAction29: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ2"
   ValidFrom: 2008-06-01
@@ -296,7 +296,7 @@ RequestAction29: RequestAction
   Action: 2
   RequestActionID: 29
 
-RequestAction30: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT"
   ValidFrom: 2008-09-01
@@ -306,7 +306,7 @@ RequestAction30: RequestAction
   Action: 2
   RequestActionID: 30
 
-RequestAction31: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT"
   ValidFrom: 2008-09-01
@@ -316,7 +316,7 @@ RequestAction31: RequestAction
   Action: 2
   RequestActionID: 31
 
-RequestAction32: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT"
   ValidFrom: 2008-09-01
@@ -326,7 +326,7 @@ RequestAction32: RequestAction
   Action: 2
   RequestActionID: 32
 
-RequestAction33: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT2"
   ValidFrom: 2008-09-01
@@ -336,7 +336,7 @@ RequestAction33: RequestAction
   Action: 2
   RequestActionID: 33
 
-RequestAction34: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT2"
   ValidFrom: 2008-09-01
@@ -346,7 +346,7 @@ RequestAction34: RequestAction
   Action: 2
   RequestActionID: 34
 
-RequestAction35: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT2"
   ValidFrom: 2008-09-01
@@ -356,7 +356,7 @@ RequestAction35: RequestAction
   Action: 2
   RequestActionID: 35
 
-RequestAction36: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT2"
   ValidFrom: 2008-09-01
@@ -366,7 +366,7 @@ RequestAction36: RequestAction
   Action: 2
   RequestActionID: 36
 
-RequestAction37: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2008-09-01
@@ -376,7 +376,7 @@ RequestAction37: RequestAction
   Action: 2
   RequestActionID: 37
 
-RequestAction38: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONTRD1"
   ValidFrom: 2008-09-01
@@ -386,7 +386,7 @@ RequestAction38: RequestAction
   Action: 2
   RequestActionID: 38
 
-RequestAction39: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONTRD1"
   ValidFrom: 2008-09-01
@@ -396,7 +396,7 @@ RequestAction39: RequestAction
   Action: 2
   RequestActionID: 39
 
-RequestAction40: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONTRD1"
   ValidFrom: 2008-09-01
@@ -406,7 +406,7 @@ RequestAction40: RequestAction
   Action: 2
   RequestActionID: 40
 
-RequestAction41: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -416,7 +416,7 @@ RequestAction41: RequestAction
   Action: 2
   RequestActionID: 41
 
-RequestAction42: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -426,7 +426,7 @@ RequestAction42: RequestAction
   Action: 2
   RequestActionID: 42
 
-RequestAction43: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -436,7 +436,7 @@ RequestAction43: RequestAction
   Action: 1
   RequestActionID: 43
 
-RequestAction44: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -446,7 +446,7 @@ RequestAction44: RequestAction
   Action: 2
   RequestActionID: 44
 
-RequestAction45: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -456,7 +456,7 @@ RequestAction45: RequestAction
   Action: 2
   RequestActionID: 45
 
-RequestAction46: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -466,7 +466,7 @@ RequestAction46: RequestAction
   Action: 2
   RequestActionID: 46
 
-RequestAction47: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -476,7 +476,7 @@ RequestAction47: RequestAction
   Action: 2
   RequestActionID: 47
 
-RequestAction48: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ"
   ValidFrom: 2008-09-01
@@ -486,7 +486,7 @@ RequestAction48: RequestAction
   Action: 2
   RequestActionID: 48
 
-RequestAction49: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ"
   ValidFrom: 2008-09-01
@@ -496,7 +496,7 @@ RequestAction49: RequestAction
   Action: 2
   RequestActionID: 49
 
-RequestAction50: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ2"
   ValidFrom: 2008-09-01
@@ -506,7 +506,7 @@ RequestAction50: RequestAction
   Action: 2
   RequestActionID: 50
 
-RequestAction51: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ2"
   ValidFrom: 2008-09-01
@@ -516,7 +516,7 @@ RequestAction51: RequestAction
   Action: 2
   RequestActionID: 51
 
-RequestAction52: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ4"
   ValidFrom: 2008-09-01
@@ -526,7 +526,7 @@ RequestAction52: RequestAction
   Action: 2
   RequestActionID: 52
 
-RequestAction53: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ4"
   ValidFrom: 2008-09-01
@@ -536,7 +536,7 @@ RequestAction53: RequestAction
   Action: 2
   RequestActionID: 53
 
-RequestAction54: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ4"
   ValidFrom: 2008-09-01
@@ -546,7 +546,7 @@ RequestAction54: RequestAction
   Action: 2
   RequestActionID: 54
 
-RequestAction55: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ4"
   ValidFrom: 2008-09-01
@@ -556,7 +556,7 @@ RequestAction55: RequestAction
   Action: 2
   RequestActionID: 55
 
-RequestAction56: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ4"
   ValidFrom: 2008-09-01
@@ -566,7 +566,7 @@ RequestAction56: RequestAction
   Action: 2
   RequestActionID: 56
 
-RequestAction57: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ4"
   ValidFrom: 2008-09-01
@@ -576,7 +576,7 @@ RequestAction57: RequestAction
   Action: 2
   RequestActionID: 57
 
-RequestAction58: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ4"
   ValidFrom: 2008-09-01
@@ -586,7 +586,7 @@ RequestAction58: RequestAction
   Action: 2
   RequestActionID: 58
 
-RequestAction59: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTRD1"
@@ -597,7 +597,7 @@ RequestAction59: RequestAction
   Action: 1
   RequestActionID: 59
 
-RequestAction60: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "TARJ"
@@ -608,7 +608,7 @@ RequestAction60: RequestAction
   Action: 1
   RequestActionID: 60
 
-RequestAction61: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "TARJ2"
@@ -619,7 +619,7 @@ RequestAction61: RequestAction
   Action: 1
   RequestActionID: 61
 
-RequestAction62: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "TARJ4"
@@ -630,7 +630,7 @@ RequestAction62: RequestAction
   Action: 1
   RequestActionID: 62
 
-RequestAction63: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONTRD1"
   ValidFrom: 2008-09-01
@@ -640,7 +640,7 @@ RequestAction63: RequestAction
   Action: 1
   RequestActionID: 63
 
-RequestAction64: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "CONT"
@@ -651,7 +651,7 @@ RequestAction64: RequestAction
   Action: 3
   RequestActionID: 64
 
-RequestAction65: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "CONT2"
@@ -662,7 +662,7 @@ RequestAction65: RequestAction
   Action: 3
   RequestActionID: 65
 
-RequestAction66: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "CONT4"
@@ -673,7 +673,7 @@ RequestAction66: RequestAction
   Action: 3
   RequestActionID: 66
 
-RequestAction67: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "CONT"
@@ -684,7 +684,7 @@ RequestAction67: RequestAction
   Action: 2
   RequestActionID: 67
 
-RequestAction68: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "CONT2"
@@ -695,7 +695,7 @@ RequestAction68: RequestAction
   Action: 2
   RequestActionID: 68
 
-RequestAction69: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "CONT4"
@@ -706,7 +706,7 @@ RequestAction69: RequestAction
   Action: 2
   RequestActionID: 69
 
-RequestAction70: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "TARJ"
@@ -717,7 +717,7 @@ RequestAction70: RequestAction
   Action: 2
   RequestActionID: 70
 
-RequestAction71: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "TARJ2"
@@ -728,7 +728,7 @@ RequestAction71: RequestAction
   Action: 2
   RequestActionID: 71
 
-RequestAction72: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "TARJ4"
@@ -739,7 +739,7 @@ RequestAction72: RequestAction
   Action: 2
   RequestActionID: 72
 
-RequestAction73: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "TARJ"
@@ -750,7 +750,7 @@ RequestAction73: RequestAction
   Action: 3
   RequestActionID: 73
 
-RequestAction74: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "TARJ2"
@@ -761,7 +761,7 @@ RequestAction74: RequestAction
   Action: 3
   RequestActionID: 74
 
-RequestAction75: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "TARJ4"
@@ -772,7 +772,7 @@ RequestAction75: RequestAction
   Action: 3
   RequestActionID: 75
 
-RequestAction76: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTRD1"
@@ -783,7 +783,7 @@ RequestAction76: RequestAction
   Action: 1
   RequestActionID: 76
 
-RequestAction77: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT4"
@@ -794,7 +794,7 @@ RequestAction77: RequestAction
   Action: 1
   RequestActionID: 77
 
-RequestAction78: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT4"
@@ -805,7 +805,7 @@ RequestAction78: RequestAction
   Action: 1
   RequestActionID: 78
 
-RequestAction79: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "*"
   ValidFrom: 2008-09-24
@@ -815,7 +815,7 @@ RequestAction79: RequestAction
   Action: 4
   RequestActionID: 79
 
-RequestAction80: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "*"
   ValidFrom: 2008-09-24
@@ -825,7 +825,7 @@ RequestAction80: RequestAction
   Action: 4
   RequestActionID: 80
 
-RequestAction81: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONTRD1"
   ValidFrom: 2009-01-01
@@ -835,7 +835,7 @@ RequestAction81: RequestAction
   Action: 1
   RequestActionID: 81
 
-RequestAction82: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 19
   CLIType: "CONTRD1"
@@ -846,7 +846,7 @@ RequestAction82: RequestAction
   Action: 1
   RequestActionID: 82
 
-RequestAction83: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONTRD1"
   ValidFrom: 2009-01-01
@@ -856,7 +856,7 @@ RequestAction83: RequestAction
   Action: 1
   RequestActionID: 83
 
-RequestAction84: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT"
   ValidFrom: 2009-01-01
@@ -866,7 +866,7 @@ RequestAction84: RequestAction
   Action: 2
   RequestActionID: 84
 
-RequestAction85: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT2"
   ValidFrom: 2009-01-01
@@ -876,7 +876,7 @@ RequestAction85: RequestAction
   Action: 2
   RequestActionID: 85
 
-RequestAction86: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONT4"
   ValidFrom: 2009-01-01
@@ -886,7 +886,7 @@ RequestAction86: RequestAction
   Action: 2
   RequestActionID: 86
 
-RequestAction87: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ"
   ValidFrom: 2009-01-01
@@ -896,7 +896,7 @@ RequestAction87: RequestAction
   Action: 2
   RequestActionID: 87
 
-RequestAction88: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ2"
   ValidFrom: 2009-01-01
@@ -906,7 +906,7 @@ RequestAction88: RequestAction
   Action: 2
   RequestActionID: 88
 
-RequestAction89: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 19
   CLIType: "CONTRD1"
@@ -917,7 +917,7 @@ RequestAction89: RequestAction
   Action: 1
   RequestActionID: 89
 
-RequestAction90: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ4"
   ValidFrom: 2009-01-01
@@ -927,7 +927,7 @@ RequestAction90: RequestAction
   Action: 2
   RequestActionID: 90
 
-RequestAction91: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ4"
   ValidFrom: 2009-03-04
@@ -937,7 +937,7 @@ RequestAction91: RequestAction
   Action: 2
   RequestActionID: 91
 
-RequestAction92: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ2"
   ValidFrom: 2009-03-04
@@ -947,7 +947,7 @@ RequestAction92: RequestAction
   Action: 2
   RequestActionID: 92
 
-RequestAction93: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "TARJ"
   ValidFrom: 2009-03-04
@@ -957,7 +957,7 @@ RequestAction93: RequestAction
   Action: 2
   RequestActionID: 93
 
-RequestAction94: RequestAction
+bulkload: RequestAction
   Brand: "8"
   CLIType: "CONTRD1"
   ValidFrom: 2009-03-18
@@ -967,7 +967,7 @@ RequestAction94: RequestAction
   Action: 2
   RequestActionID: 94
 
-RequestAction95: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2008-01-01
@@ -977,7 +977,7 @@ RequestAction95: RequestAction
   Action: 1
   RequestActionID: 95
 
-RequestAction96: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2006-12-01
@@ -987,7 +987,7 @@ RequestAction96: RequestAction
   Action: 1
   RequestActionID: 96
 
-RequestAction97: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2008-01-01
@@ -997,7 +997,7 @@ RequestAction97: RequestAction
   Action: 2
   RequestActionID: 97
 
-RequestAction98: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2008-06-01
@@ -1007,7 +1007,7 @@ RequestAction98: RequestAction
   Action: 2
   RequestActionID: 98
 
-RequestAction99: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2008-09-01
@@ -1017,7 +1017,7 @@ RequestAction99: RequestAction
   Action: 2
   RequestActionID: 99
 
-RequestAction100: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2008-09-01
   ValidTo: 2012-08-29
@@ -1027,7 +1027,7 @@ RequestAction100: RequestAction
   PayType: 1
   RequestActionID: 100
 
-RequestAction101: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2008-09-01
   ValidTo: 2012-08-29
@@ -1037,7 +1037,7 @@ RequestAction101: RequestAction
   PayType: 1
   RequestActionID: 101
 
-RequestAction102: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "*"
   ValidFrom: 2008-09-24
@@ -1047,7 +1047,7 @@ RequestAction102: RequestAction
   Action: 4
   RequestActionID: 102
 
-RequestAction103: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "*"
   ValidFrom: 2008-09-24
@@ -1057,7 +1057,7 @@ RequestAction103: RequestAction
   Action: 4
   RequestActionID: 103
 
-RequestAction104: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2009-01-01
@@ -1067,7 +1067,7 @@ RequestAction104: RequestAction
   Action: 2
   RequestActionID: 104
 
-RequestAction105: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT2"
   ValidFrom: 2008-01-01
@@ -1077,7 +1077,7 @@ RequestAction105: RequestAction
   Action: 2
   RequestActionID: 105
 
-RequestAction106: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT2"
   ValidFrom: 2006-12-01
@@ -1087,7 +1087,7 @@ RequestAction106: RequestAction
   Action: 1
   RequestActionID: 106
 
-RequestAction107: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT2"
   ValidFrom: 2008-01-01
@@ -1097,7 +1097,7 @@ RequestAction107: RequestAction
   Action: 1
   RequestActionID: 107
 
-RequestAction108: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT2"
   ValidFrom: 2008-09-01
@@ -1107,7 +1107,7 @@ RequestAction108: RequestAction
   Action: 2
   RequestActionID: 108
 
-RequestAction109: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT2"
   ValidFrom: 2008-09-01
@@ -1117,7 +1117,7 @@ RequestAction109: RequestAction
   Action: 2
   RequestActionID: 109
 
-RequestAction110: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT2"
   ValidFrom: 2009-01-01
@@ -1127,7 +1127,7 @@ RequestAction110: RequestAction
   Action: 2
   RequestActionID: 112
 
-RequestAction111: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2008-06-01
@@ -1137,7 +1137,7 @@ RequestAction111: RequestAction
   Action: 1
   RequestActionID: 113
 
-RequestAction112: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2008-06-01
@@ -1147,7 +1147,7 @@ RequestAction112: RequestAction
   Action: 2
   RequestActionID: 114
 
-RequestAction113: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2008-06-01
@@ -1157,7 +1157,7 @@ RequestAction113: RequestAction
   Action: 2
   RequestActionID: 115
 
-RequestAction114: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2008-09-01
@@ -1167,7 +1167,7 @@ RequestAction114: RequestAction
   Action: 2
   RequestActionID: 117
 
-RequestAction115: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2008-09-01
@@ -1177,7 +1177,7 @@ RequestAction115: RequestAction
   Action: 1
   RequestActionID: 120
 
-RequestAction116: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2009-01-01
@@ -1187,7 +1187,7 @@ RequestAction116: RequestAction
   Action: 1
   RequestActionID: 121
 
-RequestAction117: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2009-01-01
@@ -1197,7 +1197,7 @@ RequestAction117: RequestAction
   Action: 1
   RequestActionID: 122
 
-RequestAction118: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2009-03-18
@@ -1207,7 +1207,7 @@ RequestAction118: RequestAction
   Action: 2
   RequestActionID: 123
 
-RequestAction119: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -1217,7 +1217,7 @@ RequestAction119: RequestAction
   Action: 2
   RequestActionID: 124
 
-RequestAction120: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -1227,7 +1227,7 @@ RequestAction120: RequestAction
   Action: 2
   RequestActionID: 125
 
-RequestAction121: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -1237,7 +1237,7 @@ RequestAction121: RequestAction
   Action: 1
   RequestActionID: 126
 
-RequestAction122: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -1247,7 +1247,7 @@ RequestAction122: RequestAction
   Action: 2
   RequestActionID: 127
 
-RequestAction123: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2008-09-01
@@ -1257,7 +1257,7 @@ RequestAction123: RequestAction
   Action: 2
   RequestActionID: 128
 
-RequestAction124: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2009-01-01
@@ -1267,7 +1267,7 @@ RequestAction124: RequestAction
   Action: 2
   RequestActionID: 131
 
-RequestAction125: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2006-12-01
   ValidTo: 2011-03-24
@@ -1277,7 +1277,7 @@ RequestAction125: RequestAction
   PayType: 2
   RequestActionID: 132
 
-RequestAction126: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2006-12-01
   ValidTo: 2010-05-18
@@ -1287,7 +1287,7 @@ RequestAction126: RequestAction
   PayType: 2
   RequestActionID: 133
 
-RequestAction127: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2008-01-01
   ValidTo: 2011-03-24
@@ -1297,7 +1297,7 @@ RequestAction127: RequestAction
   PayType: 2
   RequestActionID: 134
 
-RequestAction128: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2008-01-01
   ValidTo: 2011-03-24
@@ -1307,7 +1307,7 @@ RequestAction128: RequestAction
   PayType: 2
   RequestActionID: 135
 
-RequestAction129: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2008-06-01
   ValidTo: 2011-03-24
@@ -1317,7 +1317,7 @@ RequestAction129: RequestAction
   PayType: 2
   RequestActionID: 136
 
-RequestAction130: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2008-09-01
   ValidTo: 2010-05-18
@@ -1327,7 +1327,7 @@ RequestAction130: RequestAction
   PayType: 2
   RequestActionID: 137
 
-RequestAction131: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2008-09-01
   ValidTo: 2011-03-24
@@ -1337,7 +1337,7 @@ RequestAction131: RequestAction
   PayType: 2
   RequestActionID: 138
 
-RequestAction132: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2009-01-01
   ValidTo: 2011-03-24
@@ -1347,7 +1347,7 @@ RequestAction132: RequestAction
   PayType: 2
   RequestActionID: 139
 
-RequestAction133: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2009-03-04
   ValidTo: 2010-05-18
@@ -1357,7 +1357,7 @@ RequestAction133: RequestAction
   PayType: 2
   RequestActionID: 140
 
-RequestAction134: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2009-03-25
@@ -1367,7 +1367,7 @@ RequestAction134: RequestAction
   Action: 2
   RequestActionID: 141
 
-RequestAction135: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2009-03-25
@@ -1377,7 +1377,7 @@ RequestAction135: RequestAction
   Action: 2
   RequestActionID: 142
 
-RequestAction136: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2009-03-25
@@ -1387,7 +1387,7 @@ RequestAction136: RequestAction
   Action: 2
   RequestActionID: 143
 
-RequestAction137: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2008-03-25
@@ -1397,7 +1397,7 @@ RequestAction137: RequestAction
   Action: 2
   RequestActionID: 144
 
-RequestAction138: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2009-03-25
@@ -1407,7 +1407,7 @@ RequestAction138: RequestAction
   Action: 2
   RequestActionID: 145
 
-RequestAction139: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2009-03-25
@@ -1417,7 +1417,7 @@ RequestAction139: RequestAction
   Action: 2
   RequestActionID: 146
 
-RequestAction140: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "TARJRD1"
@@ -1428,7 +1428,7 @@ RequestAction140: RequestAction
   Action: 2
   RequestActionID: 147
 
-RequestAction141: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "TARJRD1"
@@ -1439,7 +1439,7 @@ RequestAction141: RequestAction
   Action: 3
   RequestActionID: 148
 
-RequestAction142: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJRD1"
   ValidFrom: 2009-04-01
@@ -1449,7 +1449,7 @@ RequestAction142: RequestAction
   Action: 1
   RequestActionID: 149
 
-RequestAction143: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJRD1"
   ValidFrom: 2009-04-01
@@ -1459,7 +1459,7 @@ RequestAction143: RequestAction
   Action: 1
   RequestActionID: 150
 
-RequestAction144: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJRD1"
   ValidFrom: 2009-04-01
@@ -1469,7 +1469,7 @@ RequestAction144: RequestAction
   Action: 1
   RequestActionID: 151
 
-RequestAction145: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "TARJRD1"
@@ -1480,7 +1480,7 @@ RequestAction145: RequestAction
   Action: 1
   RequestActionID: 152
 
-RequestAction146: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 19
   CLIType: "TARJRD1"
@@ -1491,7 +1491,7 @@ RequestAction146: RequestAction
   Action: 1
   RequestActionID: 153
 
-RequestAction147: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 19
   CLIType: "TARJRD1"
@@ -1502,7 +1502,7 @@ RequestAction147: RequestAction
   Action: 1
   RequestActionID: 154
 
-RequestAction148: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-11-01
@@ -1512,7 +1512,7 @@ RequestAction148: RequestAction
   Action: 2
   RequestActionID: 155
 
-RequestAction149: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-11-01
@@ -1522,7 +1522,7 @@ RequestAction149: RequestAction
   Action: 2
   RequestActionID: 156
 
-RequestAction150: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-11-01
@@ -1532,7 +1532,7 @@ RequestAction150: RequestAction
   Action: 1
   RequestActionID: 157
 
-RequestAction151: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-11-01
@@ -1542,7 +1542,7 @@ RequestAction151: RequestAction
   Action: 2
   RequestActionID: 158
 
-RequestAction152: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-11-01
@@ -1552,7 +1552,7 @@ RequestAction152: RequestAction
   Action: 2
   RequestActionID: 159
 
-RequestAction153: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-11-01
@@ -1562,7 +1562,7 @@ RequestAction153: RequestAction
   Action: 2
   RequestActionID: 161
 
-RequestAction154: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-11-01
@@ -1572,7 +1572,7 @@ RequestAction154: RequestAction
   Action: 2
   RequestActionID: 163
 
-RequestAction155: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT5"
@@ -1583,7 +1583,7 @@ RequestAction155: RequestAction
   Action: 1
   RequestActionID: 164
 
-RequestAction156: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT5"
@@ -1594,7 +1594,7 @@ RequestAction156: RequestAction
   Action: 1
   RequestActionID: 165
 
-RequestAction157: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "CONT5"
@@ -1605,7 +1605,7 @@ RequestAction157: RequestAction
   Action: 2
   RequestActionID: 166
 
-RequestAction158: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2009-11-18
@@ -1615,7 +1615,7 @@ RequestAction158: RequestAction
   Action: 2
   RequestActionID: 167
 
-RequestAction159: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2009-11-18
@@ -1625,7 +1625,7 @@ RequestAction159: RequestAction
   Action: 2
   RequestActionID: 168
 
-RequestAction160: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2009-11-18
   ValidTo: 2010-05-18
@@ -1635,7 +1635,7 @@ RequestAction160: RequestAction
   PayType: 2
   RequestActionID: 170
 
-RequestAction161: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2009-12-01
@@ -1645,7 +1645,7 @@ RequestAction161: RequestAction
   Action: 1
   RequestActionID: 171
 
-RequestAction162: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2009-12-01
@@ -1655,7 +1655,7 @@ RequestAction162: RequestAction
   Action: 2
   RequestActionID: 172
 
-RequestAction163: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2009-12-01
@@ -1665,7 +1665,7 @@ RequestAction163: RequestAction
   Action: 2
   RequestActionID: 173
 
-RequestAction164: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2009-12-01
@@ -1675,7 +1675,7 @@ RequestAction164: RequestAction
   Action: 1
   RequestActionID: 174
 
-RequestAction165: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2009-12-01
@@ -1685,7 +1685,7 @@ RequestAction165: RequestAction
   Action: 1
   RequestActionID: 175
 
-RequestAction166: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2009-12-01
@@ -1695,7 +1695,7 @@ RequestAction166: RequestAction
   Action: 1
   RequestActionID: 176
 
-RequestAction167: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2009-12-01
@@ -1705,7 +1705,7 @@ RequestAction167: RequestAction
   Action: 2
   RequestActionID: 177
 
-RequestAction168: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTRD2"
@@ -1716,7 +1716,7 @@ RequestAction168: RequestAction
   Action: 1
   RequestActionID: 178
 
-RequestAction169: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTRD2"
@@ -1727,7 +1727,7 @@ RequestAction169: RequestAction
   Action: 1
   RequestActionID: 179
 
-RequestAction170: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 19
   CLIType: "CONTRD2"
@@ -1738,7 +1738,7 @@ RequestAction170: RequestAction
   Action: 1
   RequestActionID: 180
 
-RequestAction171: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 19
   CLIType: "CONTRD2"
@@ -1749,7 +1749,7 @@ RequestAction171: RequestAction
   Action: 1
   RequestActionID: 181
 
-RequestAction172: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-12-01
@@ -1759,7 +1759,7 @@ RequestAction172: RequestAction
   Action: 2
   RequestActionID: 182
 
-RequestAction173: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-12-01
@@ -1769,7 +1769,7 @@ RequestAction173: RequestAction
   Action: 2
   RequestActionID: 183
 
-RequestAction174: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-12-01
@@ -1779,7 +1779,7 @@ RequestAction174: RequestAction
   Action: 2
   RequestActionID: 184
 
-RequestAction175: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2009-12-01
@@ -1789,7 +1789,7 @@ RequestAction175: RequestAction
   Action: 2
   RequestActionID: 185
 
-RequestAction176: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2009-12-01
@@ -1799,7 +1799,7 @@ RequestAction176: RequestAction
   Action: 2
   RequestActionID: 186
 
-RequestAction177: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2009-12-01
@@ -1809,7 +1809,7 @@ RequestAction177: RequestAction
   Action: 2
   RequestActionID: 187
 
-RequestAction178: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2009-12-01
@@ -1819,7 +1819,7 @@ RequestAction178: RequestAction
   Action: 2
   RequestActionID: 188
 
-RequestAction179: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2009-12-01
@@ -1829,7 +1829,7 @@ RequestAction179: RequestAction
   Action: 2
   RequestActionID: 189
 
-RequestAction180: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2009-12-01
   ValidTo: 2011-03-24
@@ -1839,7 +1839,7 @@ RequestAction180: RequestAction
   PayType: 2
   RequestActionID: 190
 
-RequestAction181: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2009-12-01
   ValidTo: 2011-03-24
@@ -1849,7 +1849,7 @@ RequestAction181: RequestAction
   PayType: 2
   RequestActionID: 191
 
-RequestAction182: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2009-12-01
@@ -1859,7 +1859,7 @@ RequestAction182: RequestAction
   Action: 2
   RequestActionID: 192
 
-RequestAction183: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2009-12-01
@@ -1869,7 +1869,7 @@ RequestAction183: RequestAction
   Action: 2
   RequestActionID: 193
 
-RequestAction184: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT2"
   ValidFrom: 2009-12-01
@@ -1879,7 +1879,7 @@ RequestAction184: RequestAction
   Action: 2
   RequestActionID: 194
 
-RequestAction185: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT2"
   ValidFrom: 2009-12-01
@@ -1889,7 +1889,7 @@ RequestAction185: RequestAction
   Action: 2
   RequestActionID: 195
 
-RequestAction186: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2009-12-01
@@ -1899,7 +1899,7 @@ RequestAction186: RequestAction
   Action: 2
   RequestActionID: 196
 
-RequestAction187: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2009-12-01
@@ -1909,7 +1909,7 @@ RequestAction187: RequestAction
   Action: 2
   RequestActionID: 197
 
-RequestAction188: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-12-01
@@ -1919,7 +1919,7 @@ RequestAction188: RequestAction
   Action: 2
   RequestActionID: 198
 
-RequestAction189: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2009-12-01
@@ -1929,7 +1929,7 @@ RequestAction189: RequestAction
   Action: 2
   RequestActionID: 199
 
-RequestAction190: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2009-12-01
@@ -1939,7 +1939,7 @@ RequestAction190: RequestAction
   Action: 2
   RequestActionID: 200
 
-RequestAction191: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2009-12-01
@@ -1949,7 +1949,7 @@ RequestAction191: RequestAction
   Action: 2
   RequestActionID: 201
 
-RequestAction192: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2010-02-01
@@ -1959,7 +1959,7 @@ RequestAction192: RequestAction
   Action: 2
   RequestActionID: 202
 
-RequestAction193: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2010-02-08
@@ -1969,7 +1969,7 @@ RequestAction193: RequestAction
   Action: 2
   RequestActionID: 203
 
-RequestAction194: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2010-02-08
@@ -1979,7 +1979,7 @@ RequestAction194: RequestAction
   Action: 2
   RequestActionID: 204
 
-RequestAction195: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2010-02-08
@@ -1989,7 +1989,7 @@ RequestAction195: RequestAction
   Action: 2
   RequestActionID: 205
 
-RequestAction196: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2010-02-08
@@ -1999,7 +1999,7 @@ RequestAction196: RequestAction
   Action: 2
   RequestActionID: 206
 
-RequestAction197: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2010-02-08
   ValidTo: 2010-05-18
@@ -2009,7 +2009,7 @@ RequestAction197: RequestAction
   PayType: 2
   RequestActionID: 207
 
-RequestAction198: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2010-02-08
@@ -2019,7 +2019,7 @@ RequestAction198: RequestAction
   Action: 2
   RequestActionID: 208
 
-RequestAction199: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2010-02-08
@@ -2029,7 +2029,7 @@ RequestAction199: RequestAction
   Action: 2
   RequestActionID: 209
 
-RequestAction200: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2010-02-08
@@ -2039,7 +2039,7 @@ RequestAction200: RequestAction
   Action: 2
   RequestActionID: 210
 
-RequestAction201: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2010-02-08
@@ -2049,7 +2049,7 @@ RequestAction201: RequestAction
   Action: 2
   RequestActionID: 211
 
-RequestAction202: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2010-02-08
   ValidTo: 2010-05-18
@@ -2059,7 +2059,7 @@ RequestAction202: RequestAction
   PayType: 2
   RequestActionID: 212
 
-RequestAction203: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2010-03-01
@@ -2069,7 +2069,7 @@ RequestAction203: RequestAction
   Action: 2
   RequestActionID: 213
 
-RequestAction204: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2010-03-01
@@ -2079,7 +2079,7 @@ RequestAction204: RequestAction
   Action: 2
   RequestActionID: 214
 
-RequestAction205: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2010-03-01
@@ -2089,7 +2089,7 @@ RequestAction205: RequestAction
   Action: 2
   RequestActionID: 215
 
-RequestAction206: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2010-03-01
   ValidTo: 2010-05-18
@@ -2099,7 +2099,7 @@ RequestAction206: RequestAction
   PayType: 2
   RequestActionID: 216
 
-RequestAction207: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2010-03-03
@@ -2109,7 +2109,7 @@ RequestAction207: RequestAction
   Action: 2
   RequestActionID: 217
 
-RequestAction208: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2010-03-03
@@ -2119,7 +2119,7 @@ RequestAction208: RequestAction
   Action: 2
   RequestActionID: 218
 
-RequestAction209: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2010-03-03
@@ -2129,7 +2129,7 @@ RequestAction209: RequestAction
   Action: 2
   RequestActionID: 219
 
-RequestAction210: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2010-03-03
@@ -2139,7 +2139,7 @@ RequestAction210: RequestAction
   Action: 2
   RequestActionID: 220
 
-RequestAction211: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2010-03-03
   ValidTo: 2011-03-24
@@ -2149,7 +2149,7 @@ RequestAction211: RequestAction
   PayType: 2
   RequestActionID: 221
 
-RequestAction212: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2010-03-03
   ValidTo: 2011-03-24
@@ -2159,7 +2159,7 @@ RequestAction212: RequestAction
   PayType: 2
   RequestActionID: 222
 
-RequestAction213: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2010-05-19
@@ -2169,7 +2169,7 @@ RequestAction213: RequestAction
   Action: 5
   RequestActionID: 223
 
-RequestAction214: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2010-05-19
@@ -2179,7 +2179,7 @@ RequestAction214: RequestAction
   Action: 5
   RequestActionID: 226
 
-RequestAction215: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2010-05-19
@@ -2189,7 +2189,7 @@ RequestAction215: RequestAction
   Action: 5
   RequestActionID: 227
 
-RequestAction216: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2010-05-19
@@ -2199,7 +2199,7 @@ RequestAction216: RequestAction
   Action: 2
   RequestActionID: 228
 
-RequestAction217: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2010-05-19
@@ -2209,7 +2209,7 @@ RequestAction217: RequestAction
   Action: 5
   RequestActionID: 229
 
-RequestAction218: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2010-05-19
@@ -2219,7 +2219,7 @@ RequestAction218: RequestAction
   Action: 5
   RequestActionID: 230
 
-RequestAction219: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2010-05-19
@@ -2229,7 +2229,7 @@ RequestAction219: RequestAction
   Action: 2
   RequestActionID: 231
 
-RequestAction220: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2010-05-19
@@ -2239,7 +2239,7 @@ RequestAction220: RequestAction
   Action: 5
   RequestActionID: 232
 
-RequestAction221: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2010-05-19
@@ -2249,7 +2249,7 @@ RequestAction221: RequestAction
   Action: 5
   RequestActionID: 233
 
-RequestAction222: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2010-05-19
@@ -2259,7 +2259,7 @@ RequestAction222: RequestAction
   Action: 2
   RequestActionID: 234
 
-RequestAction223: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2010-05-19
   ValidTo: 2013-04-02
@@ -2269,7 +2269,7 @@ RequestAction223: RequestAction
   PayType: 2
   RequestActionID: 235
 
-RequestAction224: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   ValidFrom: 2010-05-26
@@ -2280,7 +2280,7 @@ RequestAction224: RequestAction
   PayType: 1
   RequestActionID: 236
 
-RequestAction225: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   ValidFrom: 2010-05-26
@@ -2291,7 +2291,7 @@ RequestAction225: RequestAction
   PayType: 2
   RequestActionID: 237
 
-RequestAction226: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2010-06-29
@@ -2301,7 +2301,7 @@ RequestAction226: RequestAction
   Action: 5
   RequestActionID: 238
 
-RequestAction227: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2010-08-26
@@ -2311,7 +2311,7 @@ RequestAction227: RequestAction
   Action: 2
   RequestActionID: 239
 
-RequestAction228: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2010-05-19
@@ -2321,7 +2321,7 @@ RequestAction228: RequestAction
   Action: 5
   RequestActionID: 252
 
-RequestAction229: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2010-03-19
@@ -2331,7 +2331,7 @@ RequestAction229: RequestAction
   Action: 2
   RequestActionID: 253
 
-RequestAction230: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2010-12-01
@@ -2341,7 +2341,7 @@ RequestAction230: RequestAction
   Action: 5
   RequestActionID: 259
 
-RequestAction231: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2010-12-01
@@ -2351,7 +2351,7 @@ RequestAction231: RequestAction
   Action: 5
   RequestActionID: 260
 
-RequestAction232: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2010-12-01
@@ -2361,7 +2361,7 @@ RequestAction232: RequestAction
   Action: 5
   RequestActionID: 261
 
-RequestAction233: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2010-12-01
@@ -2371,7 +2371,7 @@ RequestAction233: RequestAction
   Action: 5
   RequestActionID: 262
 
-RequestAction234: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2011-01-01
   ValidTo: 2049-12-31
@@ -2381,7 +2381,7 @@ RequestAction234: RequestAction
   PayType: 1
   RequestActionID: 271
 
-RequestAction235: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2011-01-01
   ValidTo: 2013-04-02
@@ -2391,7 +2391,7 @@ RequestAction235: RequestAction
   PayType: 1
   RequestActionID: 273
 
-RequestAction236: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2011-01-01
   ValidTo: 2013-09-04
@@ -2401,7 +2401,7 @@ RequestAction236: RequestAction
   PayType: 1
   RequestActionID: 274
 
-RequestAction237: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2011-01-01
   ValidTo: 2013-09-04
@@ -2411,7 +2411,7 @@ RequestAction237: RequestAction
   PayType: 1
   RequestActionID: 276
 
-RequestAction238: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT6"
   ValidFrom: 2011-01-01
@@ -2421,7 +2421,7 @@ RequestAction238: RequestAction
   Action: 1
   RequestActionID: 286
 
-RequestAction239: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT6"
@@ -2432,7 +2432,7 @@ RequestAction239: RequestAction
   Action: 1
   RequestActionID: 289
 
-RequestAction240: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT6"
@@ -2443,7 +2443,7 @@ RequestAction240: RequestAction
   Action: 1
   RequestActionID: 290
 
-RequestAction241: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2011-01-01
@@ -2453,7 +2453,7 @@ RequestAction241: RequestAction
   Action: 2
   RequestActionID: 291
 
-RequestAction242: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD1"
   ValidFrom: 2011-01-01
@@ -2463,7 +2463,7 @@ RequestAction242: RequestAction
   Action: 2
   RequestActionID: 292
 
-RequestAction243: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD2"
   ValidFrom: 2011-01-01
@@ -2473,7 +2473,7 @@ RequestAction243: RequestAction
   Action: 2
   RequestActionID: 293
 
-RequestAction244: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2011-01-01
   ValidTo: 2011-03-24
@@ -2483,7 +2483,7 @@ RequestAction244: RequestAction
   PayType: 2
   RequestActionID: 294
 
-RequestAction245: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT6"
   ValidFrom: 2011-01-01
@@ -2493,7 +2493,7 @@ RequestAction245: RequestAction
   Action: 1
   RequestActionID: 295
 
-RequestAction246: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJRD1"
   ValidFrom: 2011-03-24
@@ -2503,7 +2503,7 @@ RequestAction246: RequestAction
   Action: 1
   RequestActionID: 296
 
-RequestAction247: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "TARJRD1"
@@ -2514,7 +2514,7 @@ RequestAction247: RequestAction
   Action: 1
   RequestActionID: 297
 
-RequestAction248: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTRD3"
@@ -2525,7 +2525,7 @@ RequestAction248: RequestAction
   Action: 1
   RequestActionID: 298
 
-RequestAction249: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD3"
   ValidFrom: 2011-05-18
@@ -2535,7 +2535,7 @@ RequestAction249: RequestAction
   Action: 2
   RequestActionID: 299
 
-RequestAction250: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2011-05-18
@@ -2545,7 +2545,7 @@ RequestAction250: RequestAction
   Action: 2
   RequestActionID: 300
 
-RequestAction251: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2011-05-18
@@ -2555,7 +2555,7 @@ RequestAction251: RequestAction
   Action: 2
   RequestActionID: 301
 
-RequestAction252: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2011-05-18
@@ -2565,7 +2565,7 @@ RequestAction252: RequestAction
   Action: 2
   RequestActionID: 302
 
-RequestAction253: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT6"
   ValidFrom: 2011-05-18
@@ -2575,7 +2575,7 @@ RequestAction253: RequestAction
   Action: 2
   RequestActionID: 303
 
-RequestAction254: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD3"
   ValidFrom: 2011-05-18
@@ -2585,7 +2585,7 @@ RequestAction254: RequestAction
   Action: 1
   RequestActionID: 304
 
-RequestAction255: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD3"
   ValidFrom: 2011-05-18
@@ -2595,7 +2595,7 @@ RequestAction255: RequestAction
   Action: 1
   RequestActionID: 305
 
-RequestAction256: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONT"
@@ -2606,7 +2606,7 @@ RequestAction256: RequestAction
   Action: 3
   RequestActionID: 306
 
-RequestAction257: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONT4"
@@ -2617,7 +2617,7 @@ RequestAction257: RequestAction
   Action: 3
   RequestActionID: 307
 
-RequestAction258: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONT5"
@@ -2628,7 +2628,7 @@ RequestAction258: RequestAction
   Action: 3
   RequestActionID: 308
 
-RequestAction259: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -2639,7 +2639,7 @@ RequestAction259: RequestAction
   Action: 4
   RequestActionID: 309
 
-RequestAction260: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -2650,7 +2650,7 @@ RequestAction260: RequestAction
   Action: 3
   RequestActionID: 310
 
-RequestAction261: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -2661,7 +2661,7 @@ RequestAction261: RequestAction
   Action: 2
   RequestActionID: 311
 
-RequestAction262: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -2672,7 +2672,7 @@ RequestAction262: RequestAction
   Action: 2
   RequestActionID: 312
 
-RequestAction263: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -2683,7 +2683,7 @@ RequestAction263: RequestAction
   Action: 5
   RequestActionID: 313
 
-RequestAction264: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -2694,7 +2694,7 @@ RequestAction264: RequestAction
   Action: 5
   RequestActionID: 314
 
-RequestAction265: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -2705,7 +2705,7 @@ RequestAction265: RequestAction
   Action: 2
   RequestActionID: 315
 
-RequestAction266: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -2716,7 +2716,7 @@ RequestAction266: RequestAction
   Action: 12
   RequestActionID: 316
 
-RequestAction267: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -2728,7 +2728,7 @@ RequestAction267: RequestAction
   PayType: 1
   RequestActionID: 318
 
-RequestAction268: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-08-10
@@ -2738,7 +2738,7 @@ RequestAction268: RequestAction
   Action: 3
   RequestActionID: 319
 
-RequestAction269: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-08-10
@@ -2748,7 +2748,7 @@ RequestAction269: RequestAction
   Action: 1
   RequestActionID: 320
 
-RequestAction270: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-08-10
@@ -2758,7 +2758,7 @@ RequestAction270: RequestAction
   Action: 1
   RequestActionID: 321
 
-RequestAction271: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-08-10
@@ -2768,7 +2768,7 @@ RequestAction271: RequestAction
   Action: 1
   RequestActionID: 322
 
-RequestAction272: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-08-10
@@ -2778,7 +2778,7 @@ RequestAction272: RequestAction
   Action: 1
   RequestActionID: 323
 
-RequestAction273: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-08-10
@@ -2788,7 +2788,7 @@ RequestAction273: RequestAction
   Action: 2
   RequestActionID: 324
 
-RequestAction274: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-08-10
@@ -2798,7 +2798,7 @@ RequestAction274: RequestAction
   Action: 12
   RequestActionID: 325
 
-RequestAction275: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONT"
@@ -2809,7 +2809,7 @@ RequestAction275: RequestAction
   Action: 2
   RequestActionID: 326
 
-RequestAction276: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONT4"
@@ -2820,7 +2820,7 @@ RequestAction276: RequestAction
   Action: 2
   RequestActionID: 327
 
-RequestAction277: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONT5"
@@ -2831,7 +2831,7 @@ RequestAction277: RequestAction
   Action: 2
   RequestActionID: 328
 
-RequestAction278: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   ValidFrom: 2011-08-10
@@ -2842,7 +2842,7 @@ RequestAction278: RequestAction
   PayType: 2
   RequestActionID: 329
 
-RequestAction279: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT6"
   ValidFrom: 2011-08-10
@@ -2852,7 +2852,7 @@ RequestAction279: RequestAction
   Action: 3
   RequestActionID: 330
 
-RequestAction280: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2011-08-10
   ValidTo: 2013-08-31
@@ -2862,7 +2862,7 @@ RequestAction280: RequestAction
   PayType: 1
   RequestActionID: 331
 
-RequestAction281: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ"
   ValidFrom: 2011-08-10
@@ -2872,7 +2872,7 @@ RequestAction281: RequestAction
   Action: 2
   RequestActionID: 332
 
-RequestAction282: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ4"
   ValidFrom: 2011-08-10
@@ -2882,7 +2882,7 @@ RequestAction282: RequestAction
   Action: 2
   RequestActionID: 333
 
-RequestAction283: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJRD1"
   ValidFrom: 2011-08-10
@@ -2892,7 +2892,7 @@ RequestAction283: RequestAction
   Action: 2
   RequestActionID: 334
 
-RequestAction284: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2011-08-24
   ValidTo: 2013-04-02
@@ -2902,7 +2902,7 @@ RequestAction284: RequestAction
   PayType: 2
   RequestActionID: 335
 
-RequestAction285: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT"
   ValidFrom: 2011-10-05
@@ -2912,7 +2912,7 @@ RequestAction285: RequestAction
   Action: 13
   RequestActionID: 336
 
-RequestAction286: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT4"
   ValidFrom: 2011-10-05
@@ -2922,7 +2922,7 @@ RequestAction286: RequestAction
   Action: 13
   RequestActionID: 337
 
-RequestAction287: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT5"
   ValidFrom: 2011-10-05
@@ -2932,7 +2932,7 @@ RequestAction287: RequestAction
   Action: 13
   RequestActionID: 338
 
-RequestAction288: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT6"
   ValidFrom: 2011-10-05
@@ -2942,7 +2942,7 @@ RequestAction288: RequestAction
   Action: 13
   RequestActionID: 339
 
-RequestAction289: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-10-05
@@ -2952,7 +2952,7 @@ RequestAction289: RequestAction
   Action: 13
   RequestActionID: 340
 
-RequestAction290: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-10-05
@@ -2962,7 +2962,7 @@ RequestAction290: RequestAction
   Action: 13
   RequestActionID: 341
 
-RequestAction291: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-10-05
@@ -2972,7 +2972,7 @@ RequestAction291: RequestAction
   Action: 13
   RequestActionID: 342
 
-RequestAction292: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ"
   ValidFrom: 2011-10-05
@@ -2982,7 +2982,7 @@ RequestAction292: RequestAction
   Action: 13
   RequestActionID: 343
 
-RequestAction293: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ4"
   ValidFrom: 2011-10-05
@@ -2992,7 +2992,7 @@ RequestAction293: RequestAction
   Action: 13
   RequestActionID: 344
 
-RequestAction294: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJRD1"
   ValidFrom: 2011-10-05
@@ -3002,7 +3002,7 @@ RequestAction294: RequestAction
   Action: 13
   RequestActionID: 345
 
-RequestAction295: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2011-10-05
   ValidTo: 2049-12-31
@@ -3012,7 +3012,7 @@ RequestAction295: RequestAction
   PayType: 1
   RequestActionID: 346
 
-RequestAction296: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2011-10-05
   ValidTo: 2049-12-31
@@ -3022,7 +3022,7 @@ RequestAction296: RequestAction
   PayType: 2
   RequestActionID: 347
 
-RequestAction297: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -3033,7 +3033,7 @@ RequestAction297: RequestAction
   Action: 13
   RequestActionID: 348
 
-RequestAction298: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -3044,7 +3044,7 @@ RequestAction298: RequestAction
   Action: 13
   RequestActionID: 349
 
-RequestAction299: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -3055,7 +3055,7 @@ RequestAction299: RequestAction
   Action: 13
   RequestActionID: 350
 
-RequestAction300: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -3066,7 +3066,7 @@ RequestAction300: RequestAction
   Action: 13
   RequestActionID: 351
 
-RequestAction301: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   ValidFrom: 2011-10-05
@@ -3077,7 +3077,7 @@ RequestAction301: RequestAction
   PayType: 1
   RequestActionID: 352
 
-RequestAction302: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   ValidFrom: 2011-10-05
@@ -3088,7 +3088,7 @@ RequestAction302: RequestAction
   PayType: 1
   RequestActionID: 353
 
-RequestAction303: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   ValidFrom: 2011-10-05
@@ -3099,7 +3099,7 @@ RequestAction303: RequestAction
   PayType: 1
   RequestActionID: 354
 
-RequestAction304: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   ValidFrom: 2011-10-05
@@ -3110,7 +3110,7 @@ RequestAction304: RequestAction
   PayType: 2
   RequestActionID: 355
 
-RequestAction305: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3121,7 +3121,7 @@ RequestAction305: RequestAction
   PayType: 1
   RequestActionID: 356
 
-RequestAction306: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3132,7 +3132,7 @@ RequestAction306: RequestAction
   PayType: 1
   RequestActionID: 357
 
-RequestAction307: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3143,7 +3143,7 @@ RequestAction307: RequestAction
   PayType: 1
   RequestActionID: 358
 
-RequestAction308: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3154,7 +3154,7 @@ RequestAction308: RequestAction
   PayType: 1
   RequestActionID: 359
 
-RequestAction309: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3165,7 +3165,7 @@ RequestAction309: RequestAction
   PayType: 1
   RequestActionID: 360
 
-RequestAction310: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3176,7 +3176,7 @@ RequestAction310: RequestAction
   PayType: 1
   RequestActionID: 361
 
-RequestAction311: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3187,7 +3187,7 @@ RequestAction311: RequestAction
   PayType: 1
   RequestActionID: 362
 
-RequestAction312: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3198,7 +3198,7 @@ RequestAction312: RequestAction
   PayType: 1
   RequestActionID: 363
 
-RequestAction313: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3209,7 +3209,7 @@ RequestAction313: RequestAction
   PayType: 1
   RequestActionID: 364
 
-RequestAction314: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3220,7 +3220,7 @@ RequestAction314: RequestAction
   PayType: 1
   RequestActionID: 365
 
-RequestAction315: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3231,7 +3231,7 @@ RequestAction315: RequestAction
   PayType: 1
   RequestActionID: 366
 
-RequestAction316: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3242,7 +3242,7 @@ RequestAction316: RequestAction
   PayType: 2
   RequestActionID: 367
 
-RequestAction317: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3253,7 +3253,7 @@ RequestAction317: RequestAction
   PayType: 2
   RequestActionID: 368
 
-RequestAction318: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3264,7 +3264,7 @@ RequestAction318: RequestAction
   PayType: 2
   RequestActionID: 369
 
-RequestAction319: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3275,7 +3275,7 @@ RequestAction319: RequestAction
   PayType: 1
   RequestActionID: 370
 
-RequestAction320: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-10-05
@@ -3286,7 +3286,7 @@ RequestAction320: RequestAction
   PayType: 1
   RequestActionID: 371
 
-RequestAction321: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   ValidFrom: 2011-10-05
@@ -3297,7 +3297,7 @@ RequestAction321: RequestAction
   PayType: 1
   RequestActionID: 372
 
-RequestAction322: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   ValidFrom: 2011-10-05
@@ -3308,7 +3308,7 @@ RequestAction322: RequestAction
   PayType: 2
   RequestActionID: 373
 
-RequestAction323: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 83
   ValidFrom: 2011-11-23
@@ -3319,7 +3319,7 @@ RequestAction323: RequestAction
   PayType: 1
   RequestActionID: 374
 
-RequestAction324: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 83
   ValidFrom: 2011-11-23
@@ -3330,7 +3330,7 @@ RequestAction324: RequestAction
   PayType: 1
   RequestActionID: 375
 
-RequestAction325: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 83
   ValidFrom: 2011-11-23
@@ -3341,7 +3341,7 @@ RequestAction325: RequestAction
   PayType: 1
   RequestActionID: 376
 
-RequestAction326: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 83
   ValidFrom: 2011-11-23
@@ -3352,7 +3352,7 @@ RequestAction326: RequestAction
   PayType: 1
   RequestActionID: 377
 
-RequestAction327: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-11-23
@@ -3362,7 +3362,7 @@ RequestAction327: RequestAction
   Action: 1
   RequestActionID: 378
 
-RequestAction328: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTRD"
   ValidFrom: 2011-11-23
@@ -3372,7 +3372,7 @@ RequestAction328: RequestAction
   Action: 13
   RequestActionID: 379
 
-RequestAction329: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-11-23
@@ -3383,7 +3383,7 @@ RequestAction329: RequestAction
   PayType: 1
   RequestActionID: 380
 
-RequestAction330: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-11-23
@@ -3394,7 +3394,7 @@ RequestAction330: RequestAction
   PayType: 1
   RequestActionID: 381
 
-RequestAction331: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-11-23
@@ -3405,7 +3405,7 @@ RequestAction331: RequestAction
   PayType: 1
   RequestActionID: 382
 
-RequestAction332: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-11-23
@@ -3416,7 +3416,7 @@ RequestAction332: RequestAction
   PayType: 1
   RequestActionID: 383
 
-RequestAction333: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-11-23
@@ -3427,7 +3427,7 @@ RequestAction333: RequestAction
   PayType: 1
   RequestActionID: 384
 
-RequestAction334: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-11-23
@@ -3438,7 +3438,7 @@ RequestAction334: RequestAction
   PayType: 1
   RequestActionID: 385
 
-RequestAction335: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-11-23
@@ -3449,7 +3449,7 @@ RequestAction335: RequestAction
   PayType: 1
   RequestActionID: 386
 
-RequestAction336: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2011-11-23
@@ -3460,7 +3460,7 @@ RequestAction336: RequestAction
   PayType: 1
   RequestActionID: 387
 
-RequestAction337: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   ValidFrom: 2011-11-23
@@ -3471,7 +3471,7 @@ RequestAction337: RequestAction
   PayType: 1
   RequestActionID: 388
 
-RequestAction338: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   ValidFrom: 2011-11-23
@@ -3482,7 +3482,7 @@ RequestAction338: RequestAction
   PayType: 1
   RequestActionID: 389
 
-RequestAction339: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -3493,7 +3493,7 @@ RequestAction339: RequestAction
   Action: 13
   RequestActionID: 390
 
-RequestAction340: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONT"
@@ -3505,7 +3505,7 @@ RequestAction340: RequestAction
   PayType: 1
   RequestActionID: 391
 
-RequestAction341: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONT4"
@@ -3517,7 +3517,7 @@ RequestAction341: RequestAction
   PayType: 1
   RequestActionID: 392
 
-RequestAction342: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONT5"
@@ -3529,7 +3529,7 @@ RequestAction342: RequestAction
   PayType: 1
   RequestActionID: 393
 
-RequestAction343: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-15
@@ -3539,7 +3539,7 @@ RequestAction343: RequestAction
   Action: 2
   RequestActionID: 394
 
-RequestAction344: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-15
@@ -3549,7 +3549,7 @@ RequestAction344: RequestAction
   Action: 1
   RequestActionID: 395
 
-RequestAction345: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-15
@@ -3559,7 +3559,7 @@ RequestAction345: RequestAction
   Action: 1
   RequestActionID: 396
 
-RequestAction346: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-15
@@ -3569,7 +3569,7 @@ RequestAction346: RequestAction
   Action: 1
   RequestActionID: 397
 
-RequestAction347: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-15
@@ -3579,7 +3579,7 @@ RequestAction347: RequestAction
   Action: 2
   RequestActionID: 398
 
-RequestAction348: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-15
@@ -3589,7 +3589,7 @@ RequestAction348: RequestAction
   Action: 12
   RequestActionID: 399
 
-RequestAction349: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-15
@@ -3599,7 +3599,7 @@ RequestAction349: RequestAction
   Action: 13
   RequestActionID: 400
 
-RequestAction350: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-15
@@ -3609,7 +3609,7 @@ RequestAction350: RequestAction
   Action: 13
   RequestActionID: 401
 
-RequestAction351: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-15
@@ -3619,7 +3619,7 @@ RequestAction351: RequestAction
   Action: 13
   RequestActionID: 402
 
-RequestAction352: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ5"
   ValidFrom: 2011-12-15
@@ -3629,7 +3629,7 @@ RequestAction352: RequestAction
   Action: 2
   RequestActionID: 403
 
-RequestAction353: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ5"
   ValidFrom: 2011-12-15
@@ -3639,7 +3639,7 @@ RequestAction353: RequestAction
   Action: 13
   RequestActionID: 404
 
-RequestAction354: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-15
@@ -3650,7 +3650,7 @@ RequestAction354: RequestAction
   PayType: 1
   RequestActionID: 405
 
-RequestAction355: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONTF"
@@ -3661,7 +3661,7 @@ RequestAction355: RequestAction
   Action: 2
   RequestActionID: 406
 
-RequestAction356: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3672,7 +3672,7 @@ RequestAction356: RequestAction
   Action: 3
   RequestActionID: 407
 
-RequestAction357: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3683,7 +3683,7 @@ RequestAction357: RequestAction
   Action: 2
   RequestActionID: 408
 
-RequestAction358: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3694,7 +3694,7 @@ RequestAction358: RequestAction
   Action: 12
   RequestActionID: 409
 
-RequestAction359: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3705,7 +3705,7 @@ RequestAction359: RequestAction
   Action: 13
   RequestActionID: 410
 
-RequestAction360: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3716,7 +3716,7 @@ RequestAction360: RequestAction
   Action: 13
   RequestActionID: 411
 
-RequestAction361: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3727,7 +3727,7 @@ RequestAction361: RequestAction
   Action: 13
   RequestActionID: 412
 
-RequestAction362: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3738,7 +3738,7 @@ RequestAction362: RequestAction
   Action: 13
   RequestActionID: 413
 
-RequestAction363: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT6"
   ValidFrom: 2011-12-15
@@ -3748,7 +3748,7 @@ RequestAction363: RequestAction
   Action: 2
   RequestActionID: 414
 
-RequestAction364: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-15
@@ -3758,7 +3758,7 @@ RequestAction364: RequestAction
   Action: 2
   RequestActionID: 415
 
-RequestAction365: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2011-12-01
@@ -3769,7 +3769,7 @@ RequestAction365: RequestAction
   PayType: 1
   RequestActionID: 416
 
-RequestAction366: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3780,7 +3780,7 @@ RequestAction366: RequestAction
   Action: 1
   RequestActionID: 417
 
-RequestAction367: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3792,7 +3792,7 @@ RequestAction367: RequestAction
   PayType: 1
   RequestActionID: 418
 
-RequestAction368: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3803,7 +3803,7 @@ RequestAction368: RequestAction
   Action: 5
   RequestActionID: 419
 
-RequestAction369: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3814,7 +3814,7 @@ RequestAction369: RequestAction
   Action: 5
   RequestActionID: 420
 
-RequestAction370: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3825,7 +3825,7 @@ RequestAction370: RequestAction
   Action: 4
   RequestActionID: 421
 
-RequestAction371: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   ValidFrom: 2011-12-01
@@ -3836,7 +3836,7 @@ RequestAction371: RequestAction
   PayType: 1
   RequestActionID: 422
 
-RequestAction372: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3847,7 +3847,7 @@ RequestAction372: RequestAction
   Action: 13
   RequestActionID: 423
 
-RequestAction373: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3858,7 +3858,7 @@ RequestAction373: RequestAction
   Action: 13
   RequestActionID: 424
 
-RequestAction374: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -3869,7 +3869,7 @@ RequestAction374: RequestAction
   Action: 13
   RequestActionID: 425
 
-RequestAction375: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2012-02-01
@@ -3879,7 +3879,7 @@ RequestAction375: RequestAction
   Action: 1
   RequestActionID: 426
 
-RequestAction376: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2012-02-01
@@ -3889,7 +3889,7 @@ RequestAction376: RequestAction
   Action: 1
   RequestActionID: 427
 
-RequestAction377: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2012-02-01
@@ -3899,7 +3899,7 @@ RequestAction377: RequestAction
   Action: 1
   RequestActionID: 428
 
-RequestAction378: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2012-02-01
@@ -3909,7 +3909,7 @@ RequestAction378: RequestAction
   Action: 13
   RequestActionID: 429
 
-RequestAction379: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2012-02-01
@@ -3919,7 +3919,7 @@ RequestAction379: RequestAction
   Action: 13
   RequestActionID: 430
 
-RequestAction380: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2012-02-01
@@ -3929,7 +3929,7 @@ RequestAction380: RequestAction
   Action: 13
   RequestActionID: 431
 
-RequestAction381: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   CLIType: "*"
@@ -3940,7 +3940,7 @@ RequestAction381: RequestAction
   Action: 13
   RequestActionID: 432
 
-RequestAction382: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   CLIType: "*"
@@ -3951,7 +3951,7 @@ RequestAction382: RequestAction
   Action: 13
   RequestActionID: 433
 
-RequestAction383: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   CLIType: "*"
@@ -3962,7 +3962,7 @@ RequestAction383: RequestAction
   Action: 13
   RequestActionID: 434
 
-RequestAction384: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   ValidFrom: 2012-03-26
@@ -3973,7 +3973,7 @@ RequestAction384: RequestAction
   PayType: 1
   RequestActionID: 435
 
-RequestAction385: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   ValidFrom: 2012-03-26
@@ -3984,7 +3984,7 @@ RequestAction385: RequestAction
   PayType: 1
   RequestActionID: 436
 
-RequestAction386: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONT"
@@ -3995,7 +3995,7 @@ RequestAction386: RequestAction
   Action: 2
   RequestActionID: 437
 
-RequestAction387: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONT4"
@@ -4006,7 +4006,7 @@ RequestAction387: RequestAction
   Action: 2
   RequestActionID: 438
 
-RequestAction388: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONT5"
@@ -4017,7 +4017,7 @@ RequestAction388: RequestAction
   Action: 2
   RequestActionID: 439
 
-RequestAction389: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONTF"
@@ -4028,7 +4028,7 @@ RequestAction389: RequestAction
   Action: 2
   RequestActionID: 440
 
-RequestAction390: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2012-04-25
@@ -4038,7 +4038,7 @@ RequestAction390: RequestAction
   Action: 2
   RequestActionID: 441
 
-RequestAction391: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2012-04-25
   ValidTo: 2013-08-31
@@ -4048,7 +4048,7 @@ RequestAction391: RequestAction
   PayType: 1
   RequestActionID: 442
 
-RequestAction392: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2012-04-25
   ValidTo: 2049-12-31
@@ -4058,7 +4058,7 @@ RequestAction392: RequestAction
   PayType: 2
   RequestActionID: 443
 
-RequestAction393: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT7"
   ValidFrom: 2012-05-28
@@ -4068,7 +4068,7 @@ RequestAction393: RequestAction
   Action: 3
   RequestActionID: 444
 
-RequestAction394: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT7"
   ValidFrom: 2012-05-28
@@ -4078,7 +4078,7 @@ RequestAction394: RequestAction
   Action: 1
   RequestActionID: 445
 
-RequestAction395: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT7"
   ValidFrom: 2012-05-28
@@ -4088,7 +4088,7 @@ RequestAction395: RequestAction
   Action: 2
   RequestActionID: 446
 
-RequestAction396: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT7"
   ValidFrom: 2012-05-28
@@ -4098,7 +4098,7 @@ RequestAction396: RequestAction
   Action: 13
   RequestActionID: 447
 
-RequestAction397: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2012-05-28
@@ -4108,7 +4108,7 @@ RequestAction397: RequestAction
   Action: 3
   RequestActionID: 448
 
-RequestAction398: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2012-05-28
@@ -4118,7 +4118,7 @@ RequestAction398: RequestAction
   Action: 1
   RequestActionID: 449
 
-RequestAction399: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2012-05-28
@@ -4128,7 +4128,7 @@ RequestAction399: RequestAction
   Action: 13
   RequestActionID: 450
 
-RequestAction400: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT7"
@@ -4139,7 +4139,7 @@ RequestAction400: RequestAction
   Action: 1
   RequestActionID: 451
 
-RequestAction401: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTS"
@@ -4150,7 +4150,7 @@ RequestAction401: RequestAction
   Action: 1
   RequestActionID: 452
 
-RequestAction402: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2012-06-01
   ValidTo: 2013-09-04
@@ -4160,7 +4160,7 @@ RequestAction402: RequestAction
   PayType: 1
   RequestActionID: 453
 
-RequestAction403: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2012-06-01
   ValidTo: 2013-09-04
@@ -4170,7 +4170,7 @@ RequestAction403: RequestAction
   PayType: 1
   RequestActionID: 454
 
-RequestAction404: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -4181,7 +4181,7 @@ RequestAction404: RequestAction
   Action: 5
   RequestActionID: 455
 
-RequestAction405: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -4192,7 +4192,7 @@ RequestAction405: RequestAction
   Action: 5
   RequestActionID: 456
 
-RequestAction406: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -4203,7 +4203,7 @@ RequestAction406: RequestAction
   Action: 5
   RequestActionID: 457
 
-RequestAction407: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -4214,7 +4214,7 @@ RequestAction407: RequestAction
   Action: 5
   RequestActionID: 458
 
-RequestAction408: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2012-07-01
@@ -4224,7 +4224,7 @@ RequestAction408: RequestAction
   Action: 2
   RequestActionID: 459
 
-RequestAction409: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2012-07-01
@@ -4234,7 +4234,7 @@ RequestAction409: RequestAction
   Action: 1
   RequestActionID: 460
 
-RequestAction410: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2012-07-01
   ValidTo: 2013-08-31
@@ -4244,7 +4244,7 @@ RequestAction410: RequestAction
   PayType: 1
   RequestActionID: 461
 
-RequestAction411: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2012-07-01
   ValidTo: 2013-04-02
@@ -4254,7 +4254,7 @@ RequestAction411: RequestAction
   PayType: 1
   RequestActionID: 462
 
-RequestAction412: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2012-07-01
   ValidTo: 2014-11-25
@@ -4264,7 +4264,7 @@ RequestAction412: RequestAction
   PayType: 2
   RequestActionID: 463
 
-RequestAction413: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONT"
@@ -4275,7 +4275,7 @@ RequestAction413: RequestAction
   Action: 2
   RequestActionID: 464
 
-RequestAction414: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONT4"
@@ -4286,7 +4286,7 @@ RequestAction414: RequestAction
   Action: 2
   RequestActionID: 465
 
-RequestAction415: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONT5"
@@ -4297,7 +4297,7 @@ RequestAction415: RequestAction
   Action: 2
   RequestActionID: 466
 
-RequestAction416: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONTF"
@@ -4308,7 +4308,7 @@ RequestAction416: RequestAction
   Action: 2
   RequestActionID: 467
 
-RequestAction417: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTS"
@@ -4319,7 +4319,7 @@ RequestAction417: RequestAction
   Action: 1
   RequestActionID: 468
 
-RequestAction418: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 83
   ValidFrom: 2012-07-01
@@ -4330,7 +4330,7 @@ RequestAction418: RequestAction
   PayType: 1
   RequestActionID: 469
 
-RequestAction419: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   CLIType: "CONTS"
@@ -4341,7 +4341,7 @@ RequestAction419: RequestAction
   Action: 5
   RequestActionID: 470
 
-RequestAction420: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2012-09-26
@@ -4352,7 +4352,7 @@ RequestAction420: RequestAction
   PayType: 2
   RequestActionID: 471
 
-RequestAction421: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2012-09-01
@@ -4362,7 +4362,7 @@ RequestAction421: RequestAction
   Action: 1
   RequestActionID: 472
 
-RequestAction422: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2012-09-01
@@ -4372,7 +4372,7 @@ RequestAction422: RequestAction
   Action: 5
   RequestActionID: 473
 
-RequestAction423: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   CLIType: "*"
@@ -4383,7 +4383,7 @@ RequestAction423: RequestAction
   Action: 13
   RequestActionID: 474
 
-RequestAction424: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   CLIType: "*"
@@ -4394,7 +4394,7 @@ RequestAction424: RequestAction
   Action: 13
   RequestActionID: 475
 
-RequestAction425: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2012-11-01
@@ -4405,7 +4405,7 @@ RequestAction425: RequestAction
   PayType: 1
   RequestActionID: 476
 
-RequestAction426: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2012-11-01
@@ -4416,7 +4416,7 @@ RequestAction426: RequestAction
   PayType: 1
   RequestActionID: 477
 
-RequestAction427: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2012-12-01
@@ -4426,7 +4426,7 @@ RequestAction427: RequestAction
   Action: 1
   RequestActionID: 478
 
-RequestAction428: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2012-12-01
@@ -4436,7 +4436,7 @@ RequestAction428: RequestAction
   Action: 3
   RequestActionID: 479
 
-RequestAction429: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2012-12-01
@@ -4446,7 +4446,7 @@ RequestAction429: RequestAction
   Action: 2
   RequestActionID: 480
 
-RequestAction430: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2012-12-01
@@ -4456,7 +4456,7 @@ RequestAction430: RequestAction
   Action: 13
   RequestActionID: 481
 
-RequestAction431: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTD"
   ValidFrom: 2012-12-01
@@ -4466,7 +4466,7 @@ RequestAction431: RequestAction
   Action: 3
   RequestActionID: 482
 
-RequestAction432: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTD"
   ValidFrom: 2012-12-01
@@ -4476,7 +4476,7 @@ RequestAction432: RequestAction
   Action: 1
   RequestActionID: 483
 
-RequestAction433: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ6"
   ValidFrom: 2012-12-01
@@ -4486,7 +4486,7 @@ RequestAction433: RequestAction
   Action: 2
   RequestActionID: 484
 
-RequestAction434: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ6"
   ValidFrom: 2012-12-01
@@ -4496,7 +4496,7 @@ RequestAction434: RequestAction
   Action: 1
   RequestActionID: 485
 
-RequestAction435: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ6"
   ValidFrom: 2012-12-01
@@ -4506,7 +4506,7 @@ RequestAction435: RequestAction
   Action: 13
   RequestActionID: 486
 
-RequestAction436: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   CLIType: "TARJ6"
@@ -4517,7 +4517,7 @@ RequestAction436: RequestAction
   Action: 13
   RequestActionID: 487
 
-RequestAction437: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   ValidFrom: 2012-12-10
@@ -4528,7 +4528,7 @@ RequestAction437: RequestAction
   PayType: 1
   RequestActionID: 488
 
-RequestAction438: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT8"
@@ -4539,7 +4539,7 @@ RequestAction438: RequestAction
   Action: 1
   RequestActionID: 489
 
-RequestAction439: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTM"
@@ -4550,7 +4550,7 @@ RequestAction439: RequestAction
   Action: 1
   RequestActionID: 490
 
-RequestAction440: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTM"
@@ -4561,7 +4561,7 @@ RequestAction440: RequestAction
   Action: 1
   RequestActionID: 491
 
-RequestAction441: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "TARJ6"
@@ -4572,7 +4572,7 @@ RequestAction441: RequestAction
   Action: 13
   RequestActionID: 492
 
-RequestAction442: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -4583,7 +4583,7 @@ RequestAction442: RequestAction
   Action: 12
   RequestActionID: 493
 
-RequestAction443: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -4594,7 +4594,7 @@ RequestAction443: RequestAction
   Action: 13
   RequestActionID: 494
 
-RequestAction444: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -4605,7 +4605,7 @@ RequestAction444: RequestAction
   Action: 13
   RequestActionID: 495
 
-RequestAction445: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2012-12-10
@@ -4615,7 +4615,7 @@ RequestAction445: RequestAction
   Action: 13
   RequestActionID: 496
 
-RequestAction446: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2012-12-10
@@ -4625,7 +4625,7 @@ RequestAction446: RequestAction
   Action: 13
   RequestActionID: 497
 
-RequestAction447: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2012-12-01
@@ -4635,7 +4635,7 @@ RequestAction447: RequestAction
   Action: 2
   RequestActionID: 498
 
-RequestAction448: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTD"
   ValidFrom: 2012-12-01
@@ -4645,7 +4645,7 @@ RequestAction448: RequestAction
   Action: 13
   RequestActionID: 499
 
-RequestAction449: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2012-12-01
@@ -4655,7 +4655,7 @@ RequestAction449: RequestAction
   Action: 2
   RequestActionID: 500
 
-RequestAction450: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2012-12-01
@@ -4665,7 +4665,7 @@ RequestAction450: RequestAction
   Action: 2
   RequestActionID: 501
 
-RequestAction451: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2012-12-01
@@ -4675,7 +4675,7 @@ RequestAction451: RequestAction
   Action: 2
   RequestActionID: 502
 
-RequestAction452: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2012-12-01
@@ -4685,7 +4685,7 @@ RequestAction452: RequestAction
   Action: 2
   RequestActionID: 503
 
-RequestAction453: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
@@ -4695,7 +4695,7 @@ RequestAction453: RequestAction
   PayType: 2
   RequestActionID: 504
 
-RequestAction454: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2012-12-01
   ValidTo: 2049-12-31
@@ -4705,7 +4705,7 @@ RequestAction454: RequestAction
   PayType: 1
   RequestActionID: 505
 
-RequestAction455: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -4716,7 +4716,7 @@ RequestAction455: RequestAction
   Action: 13
   RequestActionID: 506
 
-RequestAction456: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ6"
   ValidFrom: 2013-03-01
@@ -4726,7 +4726,7 @@ RequestAction456: RequestAction
   Action: 1
   RequestActionID: 507
 
-RequestAction457: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTM"
   ValidFrom: 2013-03-01
@@ -4736,7 +4736,7 @@ RequestAction457: RequestAction
   Action: 12
   RequestActionID: 508
 
-RequestAction458: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -4747,7 +4747,7 @@ RequestAction458: RequestAction
   Action: 5
   RequestActionID: 509
 
-RequestAction459: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -4758,7 +4758,7 @@ RequestAction459: RequestAction
   Action: 5
   RequestActionID: 510
 
-RequestAction460: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -4769,7 +4769,7 @@ RequestAction460: RequestAction
   Action: 5
   RequestActionID: 511
 
-RequestAction461: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -4780,7 +4780,7 @@ RequestAction461: RequestAction
   Action: 5
   RequestActionID: 512
 
-RequestAction462: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -4791,7 +4791,7 @@ RequestAction462: RequestAction
   Action: 2
   RequestActionID: 513
 
-RequestAction463: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -4802,7 +4802,7 @@ RequestAction463: RequestAction
   Action: 11
   RequestActionID: 514
 
-RequestAction464: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -4813,7 +4813,7 @@ RequestAction464: RequestAction
   Action: 11
   RequestActionID: 515
 
-RequestAction465: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -4824,7 +4824,7 @@ RequestAction465: RequestAction
   Action: 11
   RequestActionID: 516
 
-RequestAction466: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2013-04-03
   ValidTo: 2049-12-31
@@ -4834,7 +4834,7 @@ RequestAction466: RequestAction
   PayType: 2
   RequestActionID: 517
 
-RequestAction467: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2013-04-03
   ValidTo: 2049-12-31
@@ -4844,7 +4844,7 @@ RequestAction467: RequestAction
   PayType: 2
   RequestActionID: 518
 
-RequestAction468: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2013-04-03
   ValidTo: 2049-12-31
@@ -4854,7 +4854,7 @@ RequestAction468: RequestAction
   PayType: 1
   RequestActionID: 519
 
-RequestAction469: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2013-04-03
@@ -4864,7 +4864,7 @@ RequestAction469: RequestAction
   Action: 11
   RequestActionID: 520
 
-RequestAction470: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2013-04-03
@@ -4874,7 +4874,7 @@ RequestAction470: RequestAction
   Action: 11
   RequestActionID: 521
 
-RequestAction471: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2013-04-03
@@ -4884,7 +4884,7 @@ RequestAction471: RequestAction
   Action: 11
   RequestActionID: 522
 
-RequestAction472: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2013-04-03
@@ -4894,7 +4894,7 @@ RequestAction472: RequestAction
   Action: 11
   RequestActionID: 523
 
-RequestAction473: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2013-04-03
@@ -4904,7 +4904,7 @@ RequestAction473: RequestAction
   Action: 11
   RequestActionID: 524
 
-RequestAction474: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT8"
   ValidFrom: 2013-04-03
@@ -4914,7 +4914,7 @@ RequestAction474: RequestAction
   Action: 11
   RequestActionID: 525
 
-RequestAction475: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -4925,7 +4925,7 @@ RequestAction475: RequestAction
   Action: 4
   RequestActionID: 526
 
-RequestAction476: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTM2"
@@ -4936,7 +4936,7 @@ RequestAction476: RequestAction
   Action: 1
   RequestActionID: 527
 
-RequestAction477: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTM2"
@@ -4947,7 +4947,7 @@ RequestAction477: RequestAction
   Action: 1
   RequestActionID: 528
 
-RequestAction478: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   ValidFrom: 2013-09-01
@@ -4958,7 +4958,7 @@ RequestAction478: RequestAction
   PayType: 1
   RequestActionID: 529
 
-RequestAction479: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTM2"
   ValidFrom: 2013-09-05
@@ -4968,7 +4968,7 @@ RequestAction479: RequestAction
   Action: 1
   RequestActionID: 533
 
-RequestAction480: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTM2"
   ValidFrom: 2013-09-05
@@ -4978,7 +4978,7 @@ RequestAction480: RequestAction
   Action: 1
   RequestActionID: 534
 
-RequestAction481: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTM2"
   ValidFrom: 2013-09-05
@@ -4988,7 +4988,7 @@ RequestAction481: RequestAction
   Action: 12
   RequestActionID: 535
 
-RequestAction482: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTM2"
   ValidFrom: 2013-09-05
@@ -4998,7 +4998,7 @@ RequestAction482: RequestAction
   Action: 13
   RequestActionID: 536
 
-RequestAction483: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5008,7 +5008,7 @@ RequestAction483: RequestAction
   Action: 1
   RequestActionID: 537
 
-RequestAction484: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5018,7 +5018,7 @@ RequestAction484: RequestAction
   Action: 1
   RequestActionID: 538
 
-RequestAction485: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5028,7 +5028,7 @@ RequestAction485: RequestAction
   Action: 1
   RequestActionID: 539
 
-RequestAction486: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5038,7 +5038,7 @@ RequestAction486: RequestAction
   Action: 1
   RequestActionID: 540
 
-RequestAction487: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5048,7 +5048,7 @@ RequestAction487: RequestAction
   Action: 2
   RequestActionID: 541
 
-RequestAction488: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5058,7 +5058,7 @@ RequestAction488: RequestAction
   Action: 2
   RequestActionID: 542
 
-RequestAction489: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5068,7 +5068,7 @@ RequestAction489: RequestAction
   Action: 2
   RequestActionID: 543
 
-RequestAction490: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5078,7 +5078,7 @@ RequestAction490: RequestAction
   Action: 13
   RequestActionID: 544
 
-RequestAction491: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5088,7 +5088,7 @@ RequestAction491: RequestAction
   Action: 13
   RequestActionID: 545
 
-RequestAction492: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5098,7 +5098,7 @@ RequestAction492: RequestAction
   Action: 13
   RequestActionID: 546
 
-RequestAction493: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5108,7 +5108,7 @@ RequestAction493: RequestAction
   Action: 13
   RequestActionID: 547
 
-RequestAction494: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5119,7 +5119,7 @@ RequestAction494: RequestAction
   PayType: 1
   RequestActionID: 548
 
-RequestAction495: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5130,7 +5130,7 @@ RequestAction495: RequestAction
   PayType: 1
   RequestActionID: 549
 
-RequestAction496: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2013-09-01
   ValidTo: 2049-12-31
@@ -5140,7 +5140,7 @@ RequestAction496: RequestAction
   PayType: 1
   RequestActionID: 550
 
-RequestAction497: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -5151,7 +5151,7 @@ RequestAction497: RequestAction
   Action: 6
   RequestActionID: 551
 
-RequestAction498: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -5162,7 +5162,7 @@ RequestAction498: RequestAction
   Action: 6
   RequestActionID: 552
 
-RequestAction499: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -5173,7 +5173,7 @@ RequestAction499: RequestAction
   Action: 6
   RequestActionID: 553
 
-RequestAction500: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5183,7 +5183,7 @@ RequestAction500: RequestAction
   Action: 12
   RequestActionID: 554
 
-RequestAction501: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2013-09-05
@@ -5193,7 +5193,7 @@ RequestAction501: RequestAction
   Action: 12
   RequestActionID: 555
 
-RequestAction502: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2013-09-01
   ValidTo: 2015-07-07
@@ -5203,7 +5203,7 @@ RequestAction502: RequestAction
   PayType: 2
   RequestActionID: 556
 
-RequestAction503: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2013-09-01
   ValidTo: 2015-07-07
@@ -5213,7 +5213,7 @@ RequestAction503: RequestAction
   PayType: 1
   RequestActionID: 557
 
-RequestAction504: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -5224,7 +5224,7 @@ RequestAction504: RequestAction
   Action: 2
   RequestActionID: 559
 
-RequestAction505: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -5235,7 +5235,7 @@ RequestAction505: RequestAction
   Action: 12
   RequestActionID: 560
 
-RequestAction506: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -5246,7 +5246,7 @@ RequestAction506: RequestAction
   Action: 13
   RequestActionID: 561
 
-RequestAction507: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -5257,7 +5257,7 @@ RequestAction507: RequestAction
   Action: 13
   RequestActionID: 562
 
-RequestAction508: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -5268,7 +5268,7 @@ RequestAction508: RequestAction
   Action: 13
   RequestActionID: 563
 
-RequestAction509: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -5279,7 +5279,7 @@ RequestAction509: RequestAction
   Action: 13
   RequestActionID: 564
 
-RequestAction510: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -5291,7 +5291,7 @@ RequestAction510: RequestAction
   PayType: 1
   RequestActionID: 565
 
-RequestAction511: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONTM"
@@ -5302,7 +5302,7 @@ RequestAction511: RequestAction
   Action: 2
   RequestActionID: 566
 
-RequestAction512: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONTM"
@@ -5313,7 +5313,7 @@ RequestAction512: RequestAction
   Action: 2
   RequestActionID: 567
 
-RequestAction513: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONTM"
@@ -5324,7 +5324,7 @@ RequestAction513: RequestAction
   Action: 2
   RequestActionID: 568
 
-RequestAction514: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "CONTM2"
@@ -5335,7 +5335,7 @@ RequestAction514: RequestAction
   Action: 2
   RequestActionID: 569
 
-RequestAction515: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTFF"
@@ -5346,7 +5346,7 @@ RequestAction515: RequestAction
   Action: 1
   RequestActionID: 570
 
-RequestAction516: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFF"
   ValidFrom: 2013-10-01
@@ -5356,7 +5356,7 @@ RequestAction516: RequestAction
   Action: 3
   RequestActionID: 571
 
-RequestAction517: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFF"
   ValidFrom: 2013-10-01
@@ -5366,7 +5366,7 @@ RequestAction517: RequestAction
   Action: 1
   RequestActionID: 572
 
-RequestAction518: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFF"
   ValidFrom: 2013-10-01
@@ -5376,7 +5376,7 @@ RequestAction518: RequestAction
   Action: 13
   RequestActionID: 573
 
-RequestAction519: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTSF"
   ValidFrom: 2013-10-01
@@ -5386,7 +5386,7 @@ RequestAction519: RequestAction
   Action: 3
   RequestActionID: 574
 
-RequestAction520: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTSF"
   ValidFrom: 2013-10-01
@@ -5396,7 +5396,7 @@ RequestAction520: RequestAction
   Action: 1
   RequestActionID: 575
 
-RequestAction521: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTSF"
   ValidFrom: 2013-10-01
@@ -5406,7 +5406,7 @@ RequestAction521: RequestAction
   Action: 1
   RequestActionID: 576
 
-RequestAction522: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTSF"
   ValidFrom: 2013-10-01
@@ -5416,7 +5416,7 @@ RequestAction522: RequestAction
   Action: 13
   RequestActionID: 577
 
-RequestAction523: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTSF"
   ValidFrom: 2013-10-01
@@ -5426,7 +5426,7 @@ RequestAction523: RequestAction
   Action: 13
   RequestActionID: 578
 
-RequestAction524: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ7"
   ValidFrom: 2013-11-01
@@ -5436,7 +5436,7 @@ RequestAction524: RequestAction
   Action: 2
   RequestActionID: 579
 
-RequestAction525: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ7"
   ValidFrom: 2013-11-01
@@ -5446,7 +5446,7 @@ RequestAction525: RequestAction
   Action: 13
   RequestActionID: 580
 
-RequestAction526: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ8"
   ValidFrom: 2013-11-01
@@ -5456,7 +5456,7 @@ RequestAction526: RequestAction
   Action: 2
   RequestActionID: 581
 
-RequestAction527: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ8"
   ValidFrom: 2013-11-01
@@ -5466,7 +5466,7 @@ RequestAction527: RequestAction
   Action: 13
   RequestActionID: 582
 
-RequestAction528: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   CLIType: "TARJ7"
@@ -5477,7 +5477,7 @@ RequestAction528: RequestAction
   Action: 3
   RequestActionID: 583
 
-RequestAction529: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   CLIType: "TARJ7"
@@ -5488,7 +5488,7 @@ RequestAction529: RequestAction
   Action: 13
   RequestActionID: 584
 
-RequestAction530: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "TARJ7"
@@ -5499,7 +5499,7 @@ RequestAction530: RequestAction
   Action: 2
   RequestActionID: 585
 
-RequestAction531: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "TARJ7"
@@ -5510,7 +5510,7 @@ RequestAction531: RequestAction
   Action: 13
   RequestActionID: 586
 
-RequestAction532: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTSF"
@@ -5521,7 +5521,7 @@ RequestAction532: RequestAction
   Action: 12
   RequestActionID: 587
 
-RequestAction533: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTSF"
   ValidFrom: 2013-11-01
@@ -5531,7 +5531,7 @@ RequestAction533: RequestAction
   Action: 12
   RequestActionID: 588
 
-RequestAction534: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2014-02-05
   ValidTo: 2049-12-31
@@ -5541,7 +5541,7 @@ RequestAction534: RequestAction
   PayType: 1
   RequestActionID: 589
 
-RequestAction535: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2014-02-05
   ValidTo: 2049-12-31
@@ -5551,7 +5551,7 @@ RequestAction535: RequestAction
   PayType: 2
   RequestActionID: 590
 
-RequestAction536: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -5562,7 +5562,7 @@ RequestAction536: RequestAction
   Action: 13
   RequestActionID: 591
 
-RequestAction537: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTRD"
@@ -5573,7 +5573,7 @@ RequestAction537: RequestAction
   Action: 13
   RequestActionID: 592
 
-RequestAction538: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTS"
@@ -5584,7 +5584,7 @@ RequestAction538: RequestAction
   Action: 13
   RequestActionID: 593
 
-RequestAction539: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT9"
@@ -5595,7 +5595,7 @@ RequestAction539: RequestAction
   Action: 1
   RequestActionID: 594
 
-RequestAction540: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   ValidFrom: 2014-05-01
@@ -5606,7 +5606,7 @@ RequestAction540: RequestAction
   PayType: 1
   RequestActionID: 595
 
-RequestAction541: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT9"
   ValidFrom: 2014-05-01
@@ -5616,7 +5616,7 @@ RequestAction541: RequestAction
   Action: 1
   RequestActionID: 597
 
-RequestAction542: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT9"
   ValidFrom: 2014-05-01
@@ -5626,7 +5626,7 @@ RequestAction542: RequestAction
   Action: 3
   RequestActionID: 599
 
-RequestAction543: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2014-05-01
@@ -5636,7 +5636,7 @@ RequestAction543: RequestAction
   Action: 1
   RequestActionID: 601
 
-RequestAction544: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS26"
   ValidFrom: 2014-05-01
@@ -5646,7 +5646,7 @@ RequestAction544: RequestAction
   Action: 1
   RequestActionID: 602
 
-RequestAction545: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2014-05-01
@@ -5656,7 +5656,7 @@ RequestAction545: RequestAction
   Action: 1
   RequestActionID: 603
 
-RequestAction546: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2014-05-01
@@ -5666,7 +5666,7 @@ RequestAction546: RequestAction
   Action: 1
   RequestActionID: 604
 
-RequestAction547: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2014-05-01
@@ -5676,7 +5676,7 @@ RequestAction547: RequestAction
   Action: 1
   RequestActionID: 605
 
-RequestAction548: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2014-08-01
   ValidTo: 2049-12-31
@@ -5686,7 +5686,7 @@ RequestAction548: RequestAction
   PayType: 1
   RequestActionID: 606
 
-RequestAction549: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   ValidFrom: 2014-08-01
@@ -5697,7 +5697,7 @@ RequestAction549: RequestAction
   PayType: 1
   RequestActionID: 607
 
-RequestAction550: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   ValidFrom: 2014-09-01
@@ -5708,7 +5708,7 @@ RequestAction550: RequestAction
   PayType: 2
   RequestActionID: 608
 
-RequestAction551: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2014-09-01
   ValidTo: 2014-08-30
@@ -5718,7 +5718,7 @@ RequestAction551: RequestAction
   PayType: 2
   RequestActionID: 609
 
-RequestAction552: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   ValidFrom: 2014-10-01
@@ -5729,7 +5729,7 @@ RequestAction552: RequestAction
   PayType: 1
   RequestActionID: 610
 
-RequestAction553: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   ValidFrom: 2014-10-01
@@ -5740,7 +5740,7 @@ RequestAction553: RequestAction
   PayType: 2
   RequestActionID: 611
 
-RequestAction554: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2014-10-01
   ValidTo: 2015-07-07
@@ -5750,7 +5750,7 @@ RequestAction554: RequestAction
   PayType: 1
   RequestActionID: 612
 
-RequestAction555: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2014-10-01
   ValidTo: 2015-07-07
@@ -5760,7 +5760,7 @@ RequestAction555: RequestAction
   PayType: 2
   RequestActionID: 613
 
-RequestAction556: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT15"
@@ -5771,7 +5771,7 @@ RequestAction556: RequestAction
   Action: 1
   RequestActionID: 614
 
-RequestAction557: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT15"
   ValidFrom: 2014-10-01
@@ -5781,7 +5781,7 @@ RequestAction557: RequestAction
   Action: 3
   RequestActionID: 615
 
-RequestAction558: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT15"
   ValidFrom: 2014-10-01
@@ -5791,7 +5791,7 @@ RequestAction558: RequestAction
   Action: 1
   RequestActionID: 616
 
-RequestAction559: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   ValidFrom: 2014-11-01
@@ -5802,7 +5802,7 @@ RequestAction559: RequestAction
   PayType: 2
   RequestActionID: 617
 
-RequestAction560: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2014-11-01
   ValidTo: 2049-12-31
@@ -5812,7 +5812,7 @@ RequestAction560: RequestAction
   PayType: 2
   RequestActionID: 618
 
-RequestAction561: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2014-11-26
@@ -5823,7 +5823,7 @@ RequestAction561: RequestAction
   PayType: 1
   RequestActionID: 619
 
-RequestAction562: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "*"
@@ -5834,7 +5834,7 @@ RequestAction562: RequestAction
   Action: 2
   RequestActionID: 620
 
-RequestAction563: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 81
   CLIType: "CONTF"
@@ -5845,7 +5845,7 @@ RequestAction563: RequestAction
   Action: 2
   RequestActionID: 621
 
-RequestAction564: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT24"
   ValidFrom: 2015-03-04
@@ -5855,7 +5855,7 @@ RequestAction564: RequestAction
   Action: 3
   RequestActionID: 622
 
-RequestAction565: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT24"
   ValidFrom: 2015-03-04
@@ -5865,7 +5865,7 @@ RequestAction565: RequestAction
   Action: 1
   RequestActionID: 623
 
-RequestAction566: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT24"
@@ -5876,7 +5876,7 @@ RequestAction566: RequestAction
   Action: 1
   RequestActionID: 624
 
-RequestAction567: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2015-04-14
@@ -5886,7 +5886,7 @@ RequestAction567: RequestAction
   Action: 1
   RequestActionID: 625
 
-RequestAction568: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTF"
   ValidFrom: 2015-04-14
@@ -5896,7 +5896,7 @@ RequestAction568: RequestAction
   Action: 1
   RequestActionID: 626
 
-RequestAction569: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTS"
   ValidFrom: 2015-04-14
@@ -5906,7 +5906,7 @@ RequestAction569: RequestAction
   Action: 1
   RequestActionID: 627
 
-RequestAction570: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ9"
   ValidFrom: 2015-05-29
@@ -5916,7 +5916,7 @@ RequestAction570: RequestAction
   Action: 2
   RequestActionID: 628
 
-RequestAction571: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   CLIType: "TARJ9"
@@ -5927,7 +5927,7 @@ RequestAction571: RequestAction
   Action: 3
   RequestActionID: 629
 
-RequestAction572: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   CLIType: "TARJ9"
@@ -5938,7 +5938,7 @@ RequestAction572: RequestAction
   Action: 13
   RequestActionID: 630
 
-RequestAction573: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "TARJ9"
@@ -5949,7 +5949,7 @@ RequestAction573: RequestAction
   Action: 2
   RequestActionID: 631
 
-RequestAction574: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   CLIType: "TARJ9"
@@ -5960,7 +5960,7 @@ RequestAction574: RequestAction
   Action: 13
   RequestActionID: 632
 
-RequestAction575: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 8
   ValidFrom: 2015-05-29
@@ -5971,7 +5971,7 @@ RequestAction575: RequestAction
   PayType: 2
   RequestActionID: 633
 
-RequestAction576: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ7"
   ValidFrom: 2015-05-02
@@ -5981,7 +5981,7 @@ RequestAction576: RequestAction
   Action: 13
   RequestActionID: 634
 
-RequestAction577: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "TARJ9"
   ValidFrom: 2015-06-02
@@ -5991,7 +5991,7 @@ RequestAction577: RequestAction
   Action: 13
   RequestActionID: 635
 
-RequestAction578: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT23"
   ValidFrom: 2015-08-12
@@ -6001,7 +6001,7 @@ RequestAction578: RequestAction
   Action: 3
   RequestActionID: 636
 
-RequestAction579: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT23"
   ValidFrom: 2015-08-12
@@ -6011,7 +6011,7 @@ RequestAction579: RequestAction
   Action: 1
   RequestActionID: 637
 
-RequestAction580: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT23"
@@ -6022,7 +6022,7 @@ RequestAction580: RequestAction
   Action: 1
   RequestActionID: 638
 
-RequestAction581: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 9
   ValidFrom: 2015-12-09
@@ -6033,7 +6033,7 @@ RequestAction581: RequestAction
   PayType: 1
   RequestActionID: 639
 
-RequestAction582: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL45"
   ValidFrom: 2016-10-27
@@ -6043,7 +6043,7 @@ RequestAction582: RequestAction
   Action: 3
   RequestActionID: 640
 
-RequestAction583: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL45"
   ValidFrom: 2016-10-27
@@ -6053,7 +6053,7 @@ RequestAction583: RequestAction
   Action: 1
   RequestActionID: 641
 
-RequestAction584: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTDSL45"
@@ -6064,7 +6064,7 @@ RequestAction584: RequestAction
   Action: 1
   RequestActionID: 642
 
-RequestAction585: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH45_50"
   ValidFrom: 2016-10-27
@@ -6074,7 +6074,7 @@ RequestAction585: RequestAction
   Action: 3
   RequestActionID: 643
 
-RequestAction586: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH45_50"
   ValidFrom: 2016-10-27
@@ -6084,7 +6084,7 @@ RequestAction586: RequestAction
   Action: 1
   RequestActionID: 644
 
-RequestAction587: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTFH45_50"
@@ -6095,7 +6095,7 @@ RequestAction587: RequestAction
   Action: 1
   RequestActionID: 645
 
-RequestAction588: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH55_300"
   ValidFrom: 2016-10-27
@@ -6105,7 +6105,7 @@ RequestAction588: RequestAction
   Action: 3
   RequestActionID: 646
 
-RequestAction589: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH55_300"
   ValidFrom: 2016-10-27
@@ -6115,7 +6115,7 @@ RequestAction589: RequestAction
   Action: 1
   RequestActionID: 647
 
-RequestAction590: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTFH55_300"
@@ -6126,7 +6126,7 @@ RequestAction590: RequestAction
   Action: 1
   RequestActionID: 648
 
-RequestAction591: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTDSL45"
@@ -6137,7 +6137,7 @@ RequestAction591: RequestAction
   Action: 1
   RequestActionID: 649
 
-RequestAction592: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTFH45_50"
@@ -6148,7 +6148,7 @@ RequestAction592: RequestAction
   Action: 1
   RequestActionID: 650
 
-RequestAction593: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTFH55_300"
@@ -6159,7 +6159,7 @@ RequestAction593: RequestAction
   Action: 1
   RequestActionID: 651
 
-RequestAction594: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2016-10-27
   ValidTo: 2049-12-31
@@ -6169,7 +6169,7 @@ RequestAction594: RequestAction
   PayType: 1
   RequestActionID: 652
 
-RequestAction595: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ValidFrom: 2016-10-27
   ValidTo: 2049-12-31
@@ -6179,7 +6179,7 @@ RequestAction595: RequestAction
   PayType: 1
   RequestActionID: 653
 
-RequestAction596: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 46
   ValidFrom: 2016-10-27
@@ -6190,7 +6190,7 @@ RequestAction596: RequestAction
   PayType: 1
   RequestActionID: 654
 
-RequestAction597: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   ValidFrom: 2016-10-27
@@ -6201,7 +6201,7 @@ RequestAction597: RequestAction
   PayType: 1
   RequestActionID: 655
 
-RequestAction598: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL45"
   ValidFrom: 2016-10-27
@@ -6211,7 +6211,7 @@ RequestAction598: RequestAction
   Action: 1
   RequestActionID: 656
 
-RequestAction599: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH45_50"
   ValidFrom: 2016-10-27
@@ -6221,7 +6221,7 @@ RequestAction599: RequestAction
   Action: 1
   RequestActionID: 657
 
-RequestAction600: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH55_300"
   ValidFrom: 2016-10-27
@@ -6231,7 +6231,7 @@ RequestAction600: RequestAction
   Action: 1
   RequestActionID: 658
 
-RequestAction601: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL58"
   ValidFrom: 2016-10-27
@@ -6241,7 +6241,7 @@ RequestAction601: RequestAction
   Action: 3
   RequestActionID: 659
 
-RequestAction602: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL58"
   ValidFrom: 2016-10-27
@@ -6251,7 +6251,7 @@ RequestAction602: RequestAction
   Action: 1
   RequestActionID: 660
 
-RequestAction603: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTDSL58"
@@ -6262,7 +6262,7 @@ RequestAction603: RequestAction
   Action: 1
   RequestActionID: 661
 
-RequestAction604: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL58"
   ValidFrom: 2016-10-27
@@ -6272,7 +6272,7 @@ RequestAction604: RequestAction
   Action: 1
   RequestActionID: 663
 
-RequestAction605: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH58_50"
   ValidFrom: 2016-10-27
@@ -6282,7 +6282,7 @@ RequestAction605: RequestAction
   Action: 3
   RequestActionID: 664
 
-RequestAction606: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH58_50"
   ValidFrom: 2016-10-27
@@ -6292,7 +6292,7 @@ RequestAction606: RequestAction
   Action: 1
   RequestActionID: 665
 
-RequestAction607: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTFH58_50"
@@ -6303,7 +6303,7 @@ RequestAction607: RequestAction
   Action: 1
   RequestActionID: 666
 
-RequestAction608: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH58_50"
   ValidFrom: 2016-10-27
@@ -6313,7 +6313,7 @@ RequestAction608: RequestAction
   Action: 1
   RequestActionID: 668
 
-RequestAction609: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH68_300"
   ValidFrom: 2016-10-27
@@ -6323,7 +6323,7 @@ RequestAction609: RequestAction
   Action: 3
   RequestActionID: 669
 
-RequestAction610: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH68_300"
   ValidFrom: 2016-10-27
@@ -6333,7 +6333,7 @@ RequestAction610: RequestAction
   Action: 1
   RequestActionID: 670
 
-RequestAction611: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTFH68_300"
@@ -6344,7 +6344,7 @@ RequestAction611: RequestAction
   Action: 1
   RequestActionID: 671
 
-RequestAction612: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH68_300"
   ValidFrom: 2016-10-27
@@ -6354,7 +6354,7 @@ RequestAction612: RequestAction
   Action: 1
   RequestActionID: 673
 
-RequestAction613: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTDSL58"
@@ -6365,7 +6365,7 @@ RequestAction613: RequestAction
   Action: 1
   RequestActionID: 674
 
-RequestAction614: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTFH58_50"
@@ -6376,7 +6376,7 @@ RequestAction614: RequestAction
   Action: 1
   RequestActionID: 675
 
-RequestAction615: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTFH68_300"
@@ -6387,7 +6387,7 @@ RequestAction615: RequestAction
   Action: 1
   RequestActionID: 676
 
-RequestAction616: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL40"
   ValidFrom: 2016-11-23
@@ -6397,7 +6397,7 @@ RequestAction616: RequestAction
   Action: 3
   RequestActionID: 677
 
-RequestAction617: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL40"
   ValidFrom: 2016-11-23
@@ -6407,7 +6407,7 @@ RequestAction617: RequestAction
   Action: 1
   RequestActionID: 678
 
-RequestAction618: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTDSL40"
@@ -6418,7 +6418,7 @@ RequestAction618: RequestAction
   Action: 1
   RequestActionID: 679
 
-RequestAction619: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL40"
   ValidFrom: 2016-11-23
@@ -6428,7 +6428,7 @@ RequestAction619: RequestAction
   Action: 1
   RequestActionID: 681
 
-RequestAction620: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH40_50"
   ValidFrom: 2016-11-23
@@ -6438,7 +6438,7 @@ RequestAction620: RequestAction
   Action: 3
   RequestActionID: 682
 
-RequestAction621: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH40_50"
   ValidFrom: 2016-11-23
@@ -6448,7 +6448,7 @@ RequestAction621: RequestAction
   Action: 1
   RequestActionID: 683
 
-RequestAction622: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTFH40_50"
@@ -6459,7 +6459,7 @@ RequestAction622: RequestAction
   Action: 1
   RequestActionID: 684
 
-RequestAction623: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH40_50"
   ValidFrom: 2016-11-23
@@ -6469,7 +6469,7 @@ RequestAction623: RequestAction
   Action: 1
   RequestActionID: 686
 
-RequestAction624: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH50_300"
   ValidFrom: 2016-11-23
@@ -6479,7 +6479,7 @@ RequestAction624: RequestAction
   Action: 3
   RequestActionID: 687
 
-RequestAction625: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH50_300"
   ValidFrom: 2016-11-23
@@ -6489,7 +6489,7 @@ RequestAction625: RequestAction
   Action: 1
   RequestActionID: 688
 
-RequestAction626: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTFH50_300"
@@ -6500,7 +6500,7 @@ RequestAction626: RequestAction
   Action: 1
   RequestActionID: 689
 
-RequestAction627: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH50_300"
   ValidFrom: 2016-11-23
@@ -6510,7 +6510,7 @@ RequestAction627: RequestAction
   Action: 1
   RequestActionID: 691
 
-RequestAction628: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTDSL40"
@@ -6521,7 +6521,7 @@ RequestAction628: RequestAction
   Action: 1
   RequestActionID: 692
 
-RequestAction629: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTFH40_50"
@@ -6532,7 +6532,7 @@ RequestAction629: RequestAction
   Action: 1
   RequestActionID: 693
 
-RequestAction630: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTFH50_300"
@@ -6543,7 +6543,7 @@ RequestAction630: RequestAction
   Action: 1
   RequestActionID: 694
 
-RequestAction631: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL48"
   ValidFrom: 2016-11-23
@@ -6553,7 +6553,7 @@ RequestAction631: RequestAction
   Action: 3
   RequestActionID: 695
 
-RequestAction632: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL48"
   ValidFrom: 2016-11-23
@@ -6563,7 +6563,7 @@ RequestAction632: RequestAction
   Action: 1
   RequestActionID: 696
 
-RequestAction633: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTDSL48"
@@ -6574,7 +6574,7 @@ RequestAction633: RequestAction
   Action: 1
   RequestActionID: 697
 
-RequestAction634: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTDSL48"
   ValidFrom: 2016-11-23
@@ -6584,7 +6584,7 @@ RequestAction634: RequestAction
   Action: 1
   RequestActionID: 699
 
-RequestAction635: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH48_50"
   ValidFrom: 2016-11-23
@@ -6594,7 +6594,7 @@ RequestAction635: RequestAction
   Action: 3
   RequestActionID: 700
 
-RequestAction636: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH48_50"
   ValidFrom: 2016-11-23
@@ -6604,7 +6604,7 @@ RequestAction636: RequestAction
   Action: 1
   RequestActionID: 701
 
-RequestAction637: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTFH48_50"
@@ -6615,7 +6615,7 @@ RequestAction637: RequestAction
   Action: 1
   RequestActionID: 702
 
-RequestAction638: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH48_50"
   ValidFrom: 2016-11-23
@@ -6625,7 +6625,7 @@ RequestAction638: RequestAction
   Action: 1
   RequestActionID: 704
 
-RequestAction639: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH58_300"
   ValidFrom: 2016-11-23
@@ -6635,7 +6635,7 @@ RequestAction639: RequestAction
   Action: 3
   RequestActionID: 705
 
-RequestAction640: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH58_300"
   ValidFrom: 2016-11-23
@@ -6645,7 +6645,7 @@ RequestAction640: RequestAction
   Action: 1
   RequestActionID: 706
 
-RequestAction641: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 14
   CLIType: "CONTFH58_300"
@@ -6656,7 +6656,7 @@ RequestAction641: RequestAction
   Action: 1
   RequestActionID: 707
 
-RequestAction642: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONTFH58_300"
   ValidFrom: 2016-11-23
@@ -6666,7 +6666,7 @@ RequestAction642: RequestAction
   Action: 1
   RequestActionID: 709
 
-RequestAction643: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTDSL48"
@@ -6677,7 +6677,7 @@ RequestAction643: RequestAction
   Action: 1
   RequestActionID: 710
 
-RequestAction644: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTFH48_50"
@@ -6688,7 +6688,7 @@ RequestAction644: RequestAction
   Action: 1
   RequestActionID: 711
 
-RequestAction645: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONTFH58_300"
@@ -6699,7 +6699,7 @@ RequestAction645: RequestAction
   Action: 1
   RequestActionID: 712
 
-RequestAction646: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT25"
   ValidFrom: 2016-12-12
@@ -6709,7 +6709,7 @@ RequestAction646: RequestAction
   Action: 3
   RequestActionID: 713
 
-RequestAction647: RequestAction
+bulkload: RequestAction
   Brand: "1"
   CLIType: "CONT25"
   ValidFrom: 2016-12-12
@@ -6719,7 +6719,7 @@ RequestAction647: RequestAction
   Action: 1
   RequestActionID: 714
 
-RequestAction648: RequestAction
+bulkload: RequestAction
   Brand: "1"
   ReqType: 13
   CLIType: "CONT25"
@@ -6729,4 +6729,721 @@ RequestAction648: RequestAction
   ActionKey: "CONT25"
   Action: 1
   RequestActionID: 718
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT26"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 719
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT26"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 720
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT26"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 721
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT10"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 722
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT10"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 723
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT10"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 724
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL59"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 725
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL59"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 726
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL59"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 727
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL59"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 728
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL59"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 729
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH59_50"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 730
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH59_50"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 731
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH59_50"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 732
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH59_50"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 733
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH59_50"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 734
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH69_300"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 735
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH69_300"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 736
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH69_300"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 737
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH69_300"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 738
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH69_300"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 739
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL39"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 740
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 741
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL39"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 742
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 743
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 744
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL52"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 745
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 746
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL52"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 747
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 748
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 749
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH39_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 750
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 751
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH39_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 752
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 753
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 754
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH49_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 755
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 756
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH49_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 757
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 758
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 759
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH52_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 760
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 761
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH52_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 762
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 763
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 764
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH62_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 765
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 766
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH62_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 767
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 768
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 769
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL35"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 770
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 771
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL35"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 772
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 773
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 774
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH45_300"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 775
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 776
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH45_300"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 777
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 778
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 779
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH35_50"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 780
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 781
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH35_50"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 782
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 783
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 784
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT27"
+  ValidFrom: 2017-04-18
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT27"
+  Action: 1
+  RequestActionID: 785
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT27"
+  ValidFrom: 2017-04-18
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT27"
+  Action: 1
+  RequestActionID: 786
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT27"
+  ValidFrom: 2017-04-18
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 787
 
