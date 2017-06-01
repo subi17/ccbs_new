@@ -295,6 +295,7 @@ PROCEDURE pFeesAndServices:
    DEF VAR liRequest          AS INT  NO-UNDO.
    DEF VAR lcResult           AS CHAR NO-UNDO.
    DEF VAR llAddLineDisc      AS LOG  NO-UNDO.
+   DEF VAR lcAddLineDisc      AS CHAR NO-UNDO.
 
    DEF BUFFER bMember FOR DPMember.
    
@@ -453,8 +454,10 @@ PROCEDURE pFeesAndServices:
          bMember.ValidTo = ldtActDate - 1. 
 
          IF llAddLineDisc = FALSE AND
-            LOOKUP(DiscountPlan.DPRuleID,{&ADDLINE_DISCOUNTS}) > 0
-            THEN llAddLineDisc = TRUE.
+            LOOKUP(DiscountPlan.DPRuleID,{&ADDLINE_DISCOUNTS} + {&ADDLINE_DISCOUNTS_20}) > 0
+            THEN ASSIGN llAddLineDisc = TRUE
+                        lcAddLineDisc = DiscountPlan.DPRuleID
+                        .
          
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
 
@@ -462,16 +465,29 @@ PROCEDURE pFeesAndServices:
    END.
   
    /* ADDLINE-20 Additional Line Discounts 
-      CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type */
+      CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type 
+      ADDLINE-267 Phase 2 fix */
 
-   IF LOOKUP(CLIType.CliType , {&ADDLINE_CLITYPES}) > 0 AND
+   IF llAddLineDisc AND
+      LOOKUP(CLIType.CliType , {&ADDLINE_CLITYPES}) > 0 AND
       LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
-      IF llAddLineDisc AND
+      
+      IF lcAddLineDisc = ENTRY(LOOKUP(bOLDType.CLIType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS}) AND
          fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN DO:
          fCreateAddLineDiscount(MsRequest.MsSeq,
                                 CLIType.CLIType,
                                 ldtActDate,
-                                "").
+                                ENTRY(LOOKUP(CLIType.CLIType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS})).
+         IF RETURN-VALUE BEGINS "ERROR" THEN
+            RETURN RETURN-VALUE.
+      END.
+
+      IF lcAddLineDisc = ENTRY(LOOKUP(bOLDType.CLIType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_20}) AND
+         fCheckExisting2PConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN DO:
+         fCreateAddLineDiscount(MsRequest.MsSeq,
+                                CLIType.CLIType,
+                                ldtActDate,
+                                ENTRY(LOOKUP(CLIType.CLIType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_20})).
          IF RETURN-VALUE BEGINS "ERROR" THEN
             RETURN RETURN-VALUE.
       END.

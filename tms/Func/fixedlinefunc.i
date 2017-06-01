@@ -163,6 +163,24 @@ FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
 END.   
 
 /* Check if Convergent tariff OR FixedOnly tariff */ 
+FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
+   (icCLIType AS CHARACTER):
+
+   DEFINE BUFFER bCLIType FOR CLIType.
+   
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = icCLIType                         AND
+                     bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
+                    (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN 
+      RETURN TRUE.
+
+   RETURN FALSE.
+
+END.
+
+/* Check if Convergent tariff OR FixedOnly tariff */ 
 FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
    (icCLITypeConv    AS CHARACTER,
     icCLITypeAddLine AS CHARACTER):
@@ -298,7 +316,7 @@ FUNCTION fCheckExisting2PConvergent RETURNS LOGICAL
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.PayType = FALSE:
 
-      IF fIsConvergentAddLineOK(bMobSub.CLIType,icCliType) THEN
+      IF fIsConvergentORFixedOnly(bMobSub.CLIType) THEN
          RETURN TRUE.
 
    END.
