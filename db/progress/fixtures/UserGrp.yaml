@@ -1,4 +1,4 @@
-UserGrp1: UserGrp
+bulkload: UserGrp
   UserGroup: "Billing"
   UGName: "Yoigo billing group user"
   CreDate: 2003-03-21
@@ -8,7 +8,7 @@ UserGrp1: UserGrp
   ShowTokens: "AR,BILL,CC,CCSUPER,COMM,CUSTOMER,FIX,MAIN,MOB,MOBMAIN,ORDER"
   ModifyTokens: "AR,BILL,CC,CCSUPER,CUSTOMER,MOB,MOBMAIN,ORDER"
 
-UserGrp2: UserGrp
+bulkload: UserGrp
   UserGroup: "CCSUPER"
   UGName: "Yoigo ADMIN user"
   CreDate: 2008-02-28
@@ -18,7 +18,7 @@ UserGrp2: UserGrp
   ShowTokens: "AR,BILL,CC,CCSUPER,CUSTOMER,MOB,MOBMAIN,ORDER,SULKU"
   ModifyTokens: "AR,BILL,CC,CCSUPER,CUSTOMER,MOB,MOBMAIN,ORDER,SULKU"
 
-UserGrp3: UserGrp
+bulkload: UserGrp
   UserGroup: "CustCare"
   UGName: "Customer Care"
   CreDate: 2003-03-21
@@ -28,7 +28,7 @@ UserGrp3: UserGrp
   ShowTokens: "CC,CUSTOMER,MOB,MOBMAIN,ORDER,SULKU"
   ModifyTokens: "CC,CUSTOMER,MOB,MOBMAIN,ORDER,SULKU"
 
-UserGrp4: UserGrp
+bulkload: UserGrp
   UserGroup: "NOTinUSE"
   UGName: "De-activated user rights"
   CreDate: 2005-03-10
@@ -36,7 +36,7 @@ UserGrp4: UserGrp
   CreUser: "marikav"
   ChgUser: "anttis"
 
-UserGrp5: UserGrp
+bulkload: UserGrp
   UserGroup: "readonly"
   UGName: "Readonly used For UNISONO"
   CreDate: 2003-03-11
@@ -45,7 +45,7 @@ UserGrp5: UserGrp
   ChgUser: "anttis"
   ShowTokens: "MOB,ORDER"
 
-UserGrp6: UserGrp
+bulkload: UserGrp
   UserGroup: "RoamOutIP"
   UGName: "Roaming OUT IP range tool"
   CreDate: 2012-10-29
@@ -53,7 +53,7 @@ UserGrp6: UserGrp
   ShowTokens: "ROAM_OUT_IP"
   ModifyTokens: "ROAM_OUT_IP"
 
-UserGrp7: UserGrp
+bulkload: UserGrp
   UserGroup: "Syst"
   UGName: "Qvantel ADMIN users"
   CreDate: 2003-03-21
@@ -63,7 +63,7 @@ UserGrp7: UserGrp
   ShowTokens: "AR,BILL,CC,CCSUPER,COMM,CUSTOMER,FIX,MAIN,MOB,MOBMAIN,ORDER,ROAM_OUT_IP,SULKU,SYST"
   ModifyTokens: "AR,BILL,CC,CCSUPER,COMM,CUSTOMER,FIX,MAIN,MOB,MOBMAIN,ORDER,ROAM_OUT_IP,SULKU,SYST"
 
-UserGrp8: UserGrp
+bulkload: UserGrp
   UserGroup: "testi"
   UGName: "testi"
   CreDate: 2003-02-20
@@ -73,7 +73,7 @@ UserGrp8: UserGrp
   ShowTokens: "AR,BILL,CC,COMM,FIX,MAIN,MOB,SYST"
   ModifyTokens: "AR,BILL,CC,COMM,FIX,MAIN,MOB,SYST"
 
-UserGrp9: UserGrp
+bulkload: UserGrp
   UserGroup: "Vendor"
   UGName: "Vendor users"
   CreDate: 2009-02-18
