@@ -31,6 +31,7 @@ DEF VAR lcBONOContracts          AS CHAR NO-UNDO.
 DEF VAR lcIPLContracts           AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType    AS CHAR NO-UNDO.
 DEF VAR lcDayCampBundleUpsells AS CHAR NO-UNDO. 
+DEF VAR lcVoiceBundle AS CHARACTER NO-UNDO. 
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
@@ -116,11 +117,11 @@ IF lcDSSBundleId = {&DSS} OR
    END.
 END.
 /*ILP ENDS*/
-IF MobSub.CliType EQ "CONT15" AND
-   fGetCurrentSpecificBundle(
+lcVoiceBundle = fGetCurrentSpecificBundle(
       MobSub.MsSeq,
-      "VOICE100") > "" THEN
-   add_string(lcResultArray,"", "VOICE100|" + STRING(Mobsub.MsSeq)).
+      "VOICE").
+IF lcVoiceBundle > "" THEN
+   add_string(lcResultArray,"", lcVoiceBundle + "|" + STRING(Mobsub.MsSeq)).
 
 IF (MobSub.CliType EQ "CONT9" OR
     MobSub.CliType EQ "CONT10") AND
