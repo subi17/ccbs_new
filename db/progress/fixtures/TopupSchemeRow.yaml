@@ -1,4 +1,4 @@
-TopupSchemeRow1: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT10"
   Amount: 10
@@ -9,7 +9,7 @@ TopupSchemeRow1: TopupSchemeRow
   EndStamp: 20491231.86399
   TopupSchemeRowID: 1
 
-TopupSchemeRow2: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT14"
   Amount: 14.13
@@ -21,7 +21,7 @@ TopupSchemeRow2: TopupSchemeRow
   TopupSchemeRowID: 13
   DisplayAmount: 10
 
-TopupSchemeRow3: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT15"
   Amount: 15
@@ -32,7 +32,7 @@ TopupSchemeRow3: TopupSchemeRow
   EndStamp: 20491231.86399
   TopupSchemeRowID: 5
 
-TopupSchemeRow4: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT18"
   Amount: 18
@@ -44,7 +44,7 @@ TopupSchemeRow4: TopupSchemeRow
   TopupSchemeRowID: 9
   DisplayAmount: 15
 
-TopupSchemeRow5: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT18"
   Amount: 18.31
@@ -56,7 +56,7 @@ TopupSchemeRow5: TopupSchemeRow
   TopupSchemeRowID: 17
   DisplayAmount: 15
 
-TopupSchemeRow6: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT19"
   Amount: 19.13
@@ -68,7 +68,7 @@ TopupSchemeRow6: TopupSchemeRow
   TopupSchemeRowID: 14
   DisplayAmount: 15
 
-TopupSchemeRow7: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT2"
   Amount: 1.75
@@ -79,7 +79,7 @@ TopupSchemeRow7: TopupSchemeRow
   EndStamp: 20491231.86399
   TopupSchemeRowID: 4
 
-TopupSchemeRow8: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT20"
   Amount: 20
@@ -90,7 +90,7 @@ TopupSchemeRow8: TopupSchemeRow
   EndStamp: 20491231.86399
   TopupSchemeRowID: 2
 
-TopupSchemeRow9: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT23"
   Amount: 23
@@ -102,7 +102,7 @@ TopupSchemeRow9: TopupSchemeRow
   TopupSchemeRowID: 7
   DisplayAmount: 20
 
-TopupSchemeRow10: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT23"
   Amount: 23.31
@@ -114,7 +114,7 @@ TopupSchemeRow10: TopupSchemeRow
   TopupSchemeRowID: 21
   DisplayAmount: 20
 
-TopupSchemeRow11: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT24"
   Amount: 24.13
@@ -126,7 +126,7 @@ TopupSchemeRow11: TopupSchemeRow
   TopupSchemeRowID: 15
   DisplayAmount: 20
 
-TopupSchemeRow12: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT25"
   Amount: 25
@@ -137,7 +137,7 @@ TopupSchemeRow12: TopupSchemeRow
   EndStamp: 20491231.86399
   TopupSchemeRowID: 10
 
-TopupSchemeRow13: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT28"
   Amount: 28
@@ -149,7 +149,7 @@ TopupSchemeRow13: TopupSchemeRow
   TopupSchemeRowID: 11
   DisplayAmount: 25
 
-TopupSchemeRow14: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT28"
   Amount: 28.31
@@ -161,7 +161,7 @@ TopupSchemeRow14: TopupSchemeRow
   TopupSchemeRowID: 22
   DisplayAmount: 25
 
-TopupSchemeRow15: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT29"
   Amount: 29.13
@@ -173,7 +173,7 @@ TopupSchemeRow15: TopupSchemeRow
   TopupSchemeRowID: 16
   DisplayAmount: 25
 
-TopupSchemeRow16: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT5"
   Amount: 5
@@ -184,7 +184,7 @@ TopupSchemeRow16: TopupSchemeRow
   EndStamp: 20491231.86399
   TopupSchemeRowID: 3
 
-TopupSchemeRow17: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT8"
   Amount: 8
@@ -196,7 +196,7 @@ TopupSchemeRow17: TopupSchemeRow
   TopupSchemeRowID: 8
   DisplayAmount: 5
 
-TopupSchemeRow18: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT8"
   Amount: 8.31
@@ -208,7 +208,7 @@ TopupSchemeRow18: TopupSchemeRow
   TopupSchemeRowID: 20
   DisplayAmount: 5
 
-TopupSchemeRow19: TopupSchemeRow
+bulkload: TopupSchemeRow
   Brand: "1"
   TopupScheme: "ORDERINIT9"
   Amount: 9.13

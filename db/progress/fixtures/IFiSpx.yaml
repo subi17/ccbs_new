@@ -1,4 +1,4 @@
-IFiSpx1: IFiSpx
+bulkload: IFiSpx
   ManCode: "G&D"
   Version: "00001"
   Hrowd: 32
@@ -21,7 +21,7 @@ IFiSpx1: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx2: IFiSpx
+bulkload: IFiSpx
   ManCode: "G&D"
   Version: "00002"
   Hrowd: 32
@@ -44,7 +44,7 @@ IFiSpx2: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx3: IFiSpx
+bulkload: IFiSpx
   ManCode: "G&D"
   Version: "00003"
   Hrowd: 32
@@ -67,7 +67,7 @@ IFiSpx3: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx4: IFiSpx
+bulkload: IFiSpx
   ManCode: "G&D"
   Version: "00004"
   Hrowd: 32
@@ -90,7 +90,7 @@ IFiSpx4: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx5: IFiSpx
+bulkload: IFiSpx
   ManCode: "GEMALTO"
   Version: "00001"
   Hrowd: 32
@@ -113,7 +113,7 @@ IFiSpx5: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx6: IFiSpx
+bulkload: IFiSpx
   ManCode: "GEMALTO"
   Version: "00002"
   Hrowd: 32
@@ -136,7 +136,7 @@ IFiSpx6: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx7: IFiSpx
+bulkload: IFiSpx
   ManCode: "GEMALTO"
   Version: "00003"
   Hrowd: 32
@@ -159,7 +159,7 @@ IFiSpx7: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx8: IFiSpx
+bulkload: IFiSpx
   ManCode: "GEMALTO"
   Version: "00004"
   Hrowd: 32
@@ -182,7 +182,7 @@ IFiSpx8: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx9: IFiSpx
+bulkload: IFiSpx
   ManCode: "MORPHO"
   Version: "00001"
   Hrowd: 32
@@ -205,7 +205,7 @@ IFiSpx9: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx10: IFiSpx
+bulkload: IFiSpx
   ManCode: "MORPHO"
   Version: "00002"
   Hrowd: 32
@@ -228,7 +228,7 @@ IFiSpx10: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx11: IFiSpx
+bulkload: IFiSpx
   ManCode: "MORPHO"
   Version: "00003"
   Hrowd: 32
@@ -251,7 +251,7 @@ IFiSpx11: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx12: IFiSpx
+bulkload: IFiSpx
   ManCode: "MORPHO"
   Version: "00004"
   Hrowd: 32
@@ -274,7 +274,7 @@ IFiSpx12: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx13: IFiSpx
+bulkload: IFiSpx
   ManCode: "OBERHTUR"
   Version: "00001"
   Hrowd: 32
@@ -297,7 +297,7 @@ IFiSpx13: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx14: IFiSpx
+bulkload: IFiSpx
   ManCode: "OBERHTUR"
   Version: "00002"
   Hrowd: 32
@@ -320,7 +320,7 @@ IFiSpx14: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx15: IFiSpx
+bulkload: IFiSpx
   ManCode: "OBERHTUR"
   Version: "00003"
   Hrowd: 32
@@ -343,7 +343,7 @@ IFiSpx15: IFiSpx
   Isc1[2]: 8
   Brand: "1"
 
-IFiSpx16: IFiSpx
+bulkload: IFiSpx
   ManCode: "OBERHTUR"
   Version: "00004"
   Hrowd: 32
