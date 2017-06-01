@@ -1,4 +1,4 @@
-PaymPlan1: PaymPlan
+bulkload: PaymPlan
   PPlanID: 1
   CustNum: 67517
   PPDate: 2007-03-03
@@ -7,7 +7,7 @@ PaymPlan1: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan2: PaymPlan
+bulkload: PaymPlan
   PPlanID: 2
   CustNum: 55409
   PPDate: 2007-03-12
@@ -16,7 +16,7 @@ PaymPlan2: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan3: PaymPlan
+bulkload: PaymPlan
   PPlanID: 3
   CustNum: 55409
   PPDate: 2007-03-12
@@ -25,7 +25,7 @@ PaymPlan3: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan4: PaymPlan
+bulkload: PaymPlan
   PPlanID: 4
   CustNum: 44892
   PPDate: 2007-03-12
@@ -34,7 +34,7 @@ PaymPlan4: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan5: PaymPlan
+bulkload: PaymPlan
   PPlanID: 5
   CustNum: 44892
   PPDate: 2007-03-12
@@ -43,7 +43,7 @@ PaymPlan5: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan6: PaymPlan
+bulkload: PaymPlan
   PPlanID: 6
   CustNum: 11855
   PPDate: 2007-03-12
@@ -52,7 +52,7 @@ PaymPlan6: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan7: PaymPlan
+bulkload: PaymPlan
   PPlanID: 7
   CustNum: 11855
   PPDate: 2007-03-12
@@ -61,7 +61,7 @@ PaymPlan7: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan8: PaymPlan
+bulkload: PaymPlan
   PPlanID: 8
   CustNum: 44220
   PPDate: 2007-03-12
@@ -70,7 +70,7 @@ PaymPlan8: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan9: PaymPlan
+bulkload: PaymPlan
   PPlanID: 9
   CustNum: 23604
   PPDate: 2007-03-13
@@ -79,7 +79,7 @@ PaymPlan9: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan10: PaymPlan
+bulkload: PaymPlan
   PPlanID: 10
   CustNum: 55670
   PPDate: 2007-03-15
@@ -88,7 +88,7 @@ PaymPlan10: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan11: PaymPlan
+bulkload: PaymPlan
   PPlanID: 11
   CustNum: 24305
   PPDate: 2007-04-11
@@ -97,7 +97,7 @@ PaymPlan11: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan12: PaymPlan
+bulkload: PaymPlan
   PPlanID: 12
   CustNum: 24305
   PPDate: 2007-04-11
@@ -106,7 +106,7 @@ PaymPlan12: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan13: PaymPlan
+bulkload: PaymPlan
   PPlanID: 13
   CustNum: 39391
   PPDate: 2007-05-01
@@ -115,7 +115,7 @@ PaymPlan13: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan14: PaymPlan
+bulkload: PaymPlan
   PPlanID: 14
   CustNum: 111153
   PPDate: 2007-11-22
@@ -124,7 +124,7 @@ PaymPlan14: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan15: PaymPlan
+bulkload: PaymPlan
   PPlanID: 15
   CustNum: 19891
   PPDate: 2008-06-07
@@ -133,7 +133,7 @@ PaymPlan15: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan16: PaymPlan
+bulkload: PaymPlan
   PPlanID: 17
   CustNum: 207721
   PPDate: 2009-12-07
@@ -142,7 +142,7 @@ PaymPlan16: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan17: PaymPlan
+bulkload: PaymPlan
   PPlanID: 18
   CustNum: 329366
   PPDate: 2010-07-05
@@ -151,7 +151,7 @@ PaymPlan17: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan18: PaymPlan
+bulkload: PaymPlan
   PPlanID: 19
   CustNum: 1264396
   PPDate: 2011-04-24
@@ -160,7 +160,7 @@ PaymPlan18: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan19: PaymPlan
+bulkload: PaymPlan
   PPlanID: 20
   CustNum: 2033850
   PPDate: 2012-07-01
@@ -169,7 +169,7 @@ PaymPlan19: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan20: PaymPlan
+bulkload: PaymPlan
   PPlanID: 21
   CustNum: 4322322
   PPDate: 2013-07-02
@@ -178,7 +178,7 @@ PaymPlan20: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan21: PaymPlan
+bulkload: PaymPlan
   PPlanID: 22
   CustNum: 3347881
   PPDate: 2013-10-01
@@ -187,7 +187,7 @@ PaymPlan21: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan22: PaymPlan
+bulkload: PaymPlan
   PPlanID: 23
   CustNum: 4260069
   PPDate: 2013-10-07
@@ -196,7 +196,7 @@ PaymPlan22: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan23: PaymPlan
+bulkload: PaymPlan
   PPlanID: 24
   CustNum: 6563945
   PPDate: 2016-02-19
@@ -205,7 +205,7 @@ PaymPlan23: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan24: PaymPlan
+bulkload: PaymPlan
   PPlanID: 25
   CustNum: 6563945
   PPDate: 2016-02-19
@@ -214,7 +214,7 @@ PaymPlan24: PaymPlan
   PPType: 3
   Brand: "1"
 
-PaymPlan25: PaymPlan
+bulkload: PaymPlan
   PPlanID: 26
   CustNum: 7515052
   PPDate: 2016-09-23

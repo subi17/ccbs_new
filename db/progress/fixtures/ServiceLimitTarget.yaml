@@ -1,1679 +1,1786 @@
-ServiceLimitTarget1: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 1
   ServiceLMember: "10100001"
   InsideRate: "PD002"
 
-ServiceLimitTarget2: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 1
   ServiceLMember: "10100002"
   InsideRate: "PD002"
 
-ServiceLimitTarget3: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 1
   ServiceLMember: "10100003"
   InsideRate: "PD002"
 
-ServiceLimitTarget4: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 1
   ServiceLMember: "10100005"
   InsideRate: "PD002"
 
-ServiceLimitTarget5: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 1
   ServiceLMember: "10100007"
   InsideRate: "PD002"
 
-ServiceLimitTarget6: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 1
   ServiceLMember: "10100008"
   InsideRate: "PD002"
 
-ServiceLimitTarget7: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 1
   ServiceLMember: "10100009"
   InsideRate: "PD002"
 
-ServiceLimitTarget8: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 1
   ServiceLMember: "10100011"
   InsideRate: "PD002"
 
-ServiceLimitTarget9: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 2
   ServiceLMember: "12100001"
   InsideRate: "PD001"
 
-ServiceLimitTarget10: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 2
   ServiceLMember: "12100002"
   InsideRate: "PD001"
 
-ServiceLimitTarget11: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 2
   ServiceLMember: "12100003"
   InsideRate: "PD001"
 
-ServiceLimitTarget12: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 2
   ServiceLMember: "12100004"
   InsideRate: "PD001"
 
-ServiceLimitTarget13: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 2
   ServiceLMember: "12100007"
   InsideRate: "PD001"
 
-ServiceLimitTarget14: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 2
   ServiceLMember: "12100008"
   InsideRate: "PD001"
 
-ServiceLimitTarget15: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 2
   ServiceLMember: "12100009"
   InsideRate: "PD001"
 
-ServiceLimitTarget16: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 2
   ServiceLMember: "12100010"
   InsideRate: "PD001"
 
-ServiceLimitTarget17: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 3
   ServiceLMember: "10100001"
   InsideRate: "PD002"
 
-ServiceLimitTarget18: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 3
   ServiceLMember: "10100002"
   InsideRate: "PD002"
 
-ServiceLimitTarget19: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 3
   ServiceLMember: "10100003"
   InsideRate: "PD002"
 
-ServiceLimitTarget20: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 3
   ServiceLMember: "10100005"
   InsideRate: "PD002"
 
-ServiceLimitTarget21: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 3
   ServiceLMember: "10100007"
   InsideRate: "PD002"
 
-ServiceLimitTarget22: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 3
   ServiceLMember: "10100008"
   InsideRate: "PD002"
 
-ServiceLimitTarget23: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 3
   ServiceLMember: "10100009"
   InsideRate: "PD002"
 
-ServiceLimitTarget24: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 3
   ServiceLMember: "10100011"
   InsideRate: "PD002"
 
-ServiceLimitTarget25: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 13
   ServiceLMember: "14100001"
   InsideRate: "GPRSDATA1B"
 
-ServiceLimitTarget26: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 14
   ServiceLMember: "14100001"
   InsideRate: "GPRSD1_A"
 
-ServiceLimitTarget27: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 15
   ServiceLMember: "14100001"
   InsideRate: "GPRSD2_A"
 
-ServiceLimitTarget28: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 22
   ServiceLMember: "14100001"
   InsideRate: "GPRSDATA_MDUB2"
 
-ServiceLimitTarget29: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 25
   ServiceLMember: "PRE14100001"
   InsideRate: "GPRSDATA1B"
 
-ServiceLimitTarget30: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 27
   ServiceLMember: "14100001"
   InsideRate: "GPRSD3_A"
 
-ServiceLimitTarget31: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 29
   ServiceLMember: "14100001"
   InsideRate: "GPRSDSS_A"
 
-ServiceLimitTarget32: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 31
   ServiceLMember: "14100001"
   InsideRate: "GPRSD4_A"
 
-ServiceLimitTarget33: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 33
   ServiceLMember: "14100001"
   InsideRate: "GPRSDATA_MDUB3"
 
-ServiceLimitTarget34: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 35
   ServiceLMember: "14100001"
   InsideRate: "GPRSDATA_MDUB4"
 
-ServiceLimitTarget35: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 36
   ServiceLMember: "10100001"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget36: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 36
   ServiceLMember: "10100003"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget37: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 36
   ServiceLMember: "10100005"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget38: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 36
   ServiceLMember: "CFOTHER"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget39: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 36
   ServiceLMember: "CFYOIGO"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget40: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 37
   ServiceLMember: "10100001"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget41: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 37
   ServiceLMember: "10100003"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget42: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 37
   ServiceLMember: "10100005"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget43: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 37
   ServiceLMember: "CFOTHER"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget44: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 37
   ServiceLMember: "CFYOIGO"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget45: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 38
   ServiceLMember: "14100001"
   OutsideRate: "FLATDATA30_B"
   InsideRate: "FLATDATA30_A"
 
-ServiceLimitTarget46: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 39
   ServiceLMember: "10100001"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget47: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 39
   ServiceLMember: "10100003"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget48: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 39
   ServiceLMember: "10100005"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget49: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 39
   ServiceLMember: "CFOTHER"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget50: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 39
   ServiceLMember: "CFYOIGO"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget51: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 40
   ServiceLMember: "14100001"
   OutsideRate: "FLATDATA55_B"
   InsideRate: "FLATDATA55_A"
 
-ServiceLimitTarget52: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 41
   ServiceLMember: "10100001"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget53: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 41
   ServiceLMember: "10100003"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget54: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 41
   ServiceLMember: "10100005"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget55: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 41
   ServiceLMember: "CFOTHER"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget56: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 41
   ServiceLMember: "CFYOIGO"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget57: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 42
   ServiceLMember: "10100001"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget58: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 42
   ServiceLMember: "10100003"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget59: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 42
   ServiceLMember: "10100005"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget60: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 42
   ServiceLMember: "CFOTHER"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget61: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 42
   ServiceLMember: "CFYOIGO"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget62: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 43
   ServiceLMember: "14100001"
   OutsideRate: "FLATDATA20D_B"
   InsideRate: "FLATDATA20D_A"
 
-ServiceLimitTarget63: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 44
   ServiceLMember: "10100001"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget64: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 44
   ServiceLMember: "10100003"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget65: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 44
   ServiceLMember: "10100005"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget66: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 44
   ServiceLMember: "CFOTHER"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget67: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 44
   ServiceLMember: "CFYOIGO"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget68: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 45
   ServiceLMember: "14100001"
   OutsideRate: "FLATDATA40_B"
   InsideRate: "FLATDATA40_A"
 
-ServiceLimitTarget69: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 47
   ServiceLMember: "14100001"
   InsideRate: "GPRSDATA_MDUB5"
 
-ServiceLimitTarget70: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 48
   ServiceLMember: "14100001"
   InsideRate: "GPRSDATA_UPGRADE"
 
-ServiceLimitTarget71: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 49
   ServiceLMember: "14100001"
   InsideRate: "GPRSDATA_UPGRADE"
 
-ServiceLimitTarget72: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 51
   ServiceLMember: "14100001"
   OutsideRate: "CONTSDATA30_B"
   InsideRate: "CONTSDATA30_A"
 
-ServiceLimitTarget73: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 52
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE_B"
   InsideRate: "CONTSVOICE_A"
 
-ServiceLimitTarget74: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 52
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE_B"
   InsideRate: "CONTSVOICE_A"
 
-ServiceLimitTarget75: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 52
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE_B"
   InsideRate: "CONTSVOICE_A"
 
-ServiceLimitTarget76: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 52
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE_B"
   InsideRate: "CONTSVOICE_A"
 
-ServiceLimitTarget77: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 52
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE_B"
   InsideRate: "CONTSVOICE_A"
 
-ServiceLimitTarget78: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 54
   ServiceLMember: "14100001"
   OutsideRate: "CONTSDATA39_B"
   InsideRate: "CONTSDATA39_A"
 
-ServiceLimitTarget79: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 55
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE39_B"
   InsideRate: "CONTSVOICE39_A"
 
-ServiceLimitTarget80: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 55
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE39_B"
   InsideRate: "CONTSVOICE39_A"
 
-ServiceLimitTarget81: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 55
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE39_B"
   InsideRate: "CONTSVOICE39_A"
 
-ServiceLimitTarget82: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 55
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE39_B"
   InsideRate: "CONTSVOICE39_A"
 
-ServiceLimitTarget83: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 55
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE39_B"
   InsideRate: "CONTSVOICE39_A"
 
-ServiceLimitTarget84: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 58
   ServiceLMember: "14100001"
   InsideRate: "GPRS_DATA9_UPSELL"
 
-ServiceLimitTarget85: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 62
   ServiceLMember: "10100001"
   InsideRate: "VOICE3000"
 
-ServiceLimitTarget86: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 62
   ServiceLMember: "10100003"
   InsideRate: "VOICE3000"
 
-ServiceLimitTarget87: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 62
   ServiceLMember: "10100005"
   InsideRate: "VOICE3000"
 
-ServiceLimitTarget88: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 62
   ServiceLMember: "CFOTHER"
   InsideRate: "VOICE3000"
 
-ServiceLimitTarget89: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 62
   ServiceLMember: "CFYOIGO"
   InsideRate: "VOICE3000"
 
-ServiceLimitTarget90: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 64
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE15_B"
   InsideRate: "CONTSVOICE15_A"
 
-ServiceLimitTarget91: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 64
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE15_B"
   InsideRate: "CONTSVOICE15_A"
 
-ServiceLimitTarget92: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 64
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE15_B"
   InsideRate: "CONTSVOICE15_A"
 
-ServiceLimitTarget93: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 64
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE15_B"
   InsideRate: "CONTSVOICE15_A"
 
-ServiceLimitTarget94: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 64
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE15_B"
   InsideRate: "CONTSVOICE15_A"
 
-ServiceLimitTarget95: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 65
   ServiceLMember: "14100001"
   OutsideRate: "CONTSDATA20_B"
   InsideRate: "CONTSDATA20_A"
 
-ServiceLimitTarget96: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 66
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE20_B"
   InsideRate: "CONTSVOICE20_A"
 
-ServiceLimitTarget97: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 66
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE20_B"
   InsideRate: "CONTSVOICE20_A"
 
-ServiceLimitTarget98: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 66
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE20_B"
   InsideRate: "CONTSVOICE20_A"
 
-ServiceLimitTarget99: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 66
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE20_B"
   InsideRate: "CONTSVOICE20_A"
 
-ServiceLimitTarget100: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 66
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE20_B"
   InsideRate: "CONTSVOICE20_A"
 
-ServiceLimitTarget101: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 67
   ServiceLMember: "14100001"
   OutsideRate: "CONTSDATA25_B"
   InsideRate: "CONTSDATA25_A"
 
-ServiceLimitTarget102: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 68
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE25_B"
   InsideRate: "CONTSVOICE25_A"
 
-ServiceLimitTarget103: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 68
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE25_B"
   InsideRate: "CONTSVOICE25_A"
 
-ServiceLimitTarget104: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 68
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE25_B"
   InsideRate: "CONTSVOICE25_A"
 
-ServiceLimitTarget105: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 68
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE25_B"
   InsideRate: "CONTSVOICE25_A"
 
-ServiceLimitTarget106: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 68
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE25_B"
   InsideRate: "CONTSVOICE25_A"
 
-ServiceLimitTarget107: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 69
   ServiceLMember: "14100001"
   OutsideRate: "CONTSDATA35_B"
   InsideRate: "CONTSDATA35_A"
 
-ServiceLimitTarget108: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 70
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE35_B"
   InsideRate: "CONTSVOICE35_A"
 
-ServiceLimitTarget109: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 70
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE35_B"
   InsideRate: "CONTSVOICE35_A"
 
-ServiceLimitTarget110: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 70
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE35_B"
   InsideRate: "CONTSVOICE35_A"
 
-ServiceLimitTarget111: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 70
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE35_B"
   InsideRate: "CONTSVOICE35_A"
 
-ServiceLimitTarget112: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 70
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE35_B"
   InsideRate: "CONTSVOICE35_A"
 
-ServiceLimitTarget113: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 72
   ServiceLMember: "14100001"
   InsideRate: "GPRS_DATA5_UPSELL"
 
-ServiceLimitTarget114: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 74
   ServiceLMember: "14100001"
   InsideRate: "GPRSDSS2_A"
 
-ServiceLimitTarget115: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 75
   ServiceLMember: "10100001"
   InsideRate: "CONTFFVOICE"
 
-ServiceLimitTarget116: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 75
   ServiceLMember: "10100003"
   InsideRate: "CONTFFVOICE"
 
-ServiceLimitTarget117: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 75
   ServiceLMember: "10100005"
   InsideRate: "CONTFFVOICE"
 
-ServiceLimitTarget118: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 75
   ServiceLMember: "CFOTHER"
   InsideRate: "CONTFFVOICE"
 
-ServiceLimitTarget119: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 75
   ServiceLMember: "CFYOIGO"
   InsideRate: "CONTFFVOICE"
 
-ServiceLimitTarget120: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 76
   ServiceLMember: "14100001"
   OutsideRate: "CONTFFDATA2_B"
   InsideRate: "CONTFFDATA2_A"
 
-ServiceLimitTarget121: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 77
   ServiceLMember: "14100001"
   OutsideRate: "CONTSFDATA10_B"
   InsideRate: "CONTSFDATA10_A"
 
-ServiceLimitTarget122: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 78
   ServiceLMember: "10100001"
   OutsideRate: "CONTSFVOICE10_B"
   InsideRate: "CONTSFVOICE10_A"
 
-ServiceLimitTarget123: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 78
   ServiceLMember: "10100003"
   OutsideRate: "CONTSFVOICE10_B"
   InsideRate: "CONTSFVOICE10_A"
 
-ServiceLimitTarget124: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 78
   ServiceLMember: "10100005"
   OutsideRate: "CONTSFVOICE10_B"
   InsideRate: "CONTSFVOICE10_A"
 
-ServiceLimitTarget125: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 78
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSFVOICE10_B"
   InsideRate: "CONTSFVOICE10_A"
 
-ServiceLimitTarget126: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 78
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSFVOICE10_B"
   InsideRate: "CONTSFVOICE10_A"
 
-ServiceLimitTarget127: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 79
   ServiceLMember: "14100001"
   OutsideRate: "CONTSFDATA14_B"
   InsideRate: "CONTSFDATA14_A"
 
-ServiceLimitTarget128: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 80
   ServiceLMember: "10100001"
   OutsideRate: "CONTSFVOICE14_B"
   InsideRate: "CONTSFVOICE14_A"
 
-ServiceLimitTarget129: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 80
   ServiceLMember: "10100003"
   OutsideRate: "CONTSFVOICE14_B"
   InsideRate: "CONTSFVOICE14_A"
 
-ServiceLimitTarget130: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 80
   ServiceLMember: "10100005"
   OutsideRate: "CONTSFVOICE14_B"
   InsideRate: "CONTSFVOICE14_A"
 
-ServiceLimitTarget131: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 80
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSFVOICE14_B"
   InsideRate: "CONTSFVOICE14_A"
 
-ServiceLimitTarget132: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 80
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSFVOICE14_B"
   InsideRate: "CONTSFVOICE14_A"
 
-ServiceLimitTarget133: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 83
   ServiceLMember: "14100001"
   OutsideRate: "CONTSDATA21_B"
   InsideRate: "CONTSDATA21_A"
 
-ServiceLimitTarget134: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 84
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE21_B"
   InsideRate: "CONTSVOICE21_A"
 
-ServiceLimitTarget135: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 84
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE21_B"
   InsideRate: "CONTSVOICE21_A"
 
-ServiceLimitTarget136: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 84
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE21_B"
   InsideRate: "CONTSVOICE21_A"
 
-ServiceLimitTarget137: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 84
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE21_B"
   InsideRate: "CONTSVOICE21_A"
 
-ServiceLimitTarget138: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 84
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE21_B"
   InsideRate: "CONTSVOICE21_A"
 
-ServiceLimitTarget139: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 85
   ServiceLMember: "14100001"
   OutsideRate: "CONTSDATA26_B"
   InsideRate: "CONTSDATA26_A"
 
-ServiceLimitTarget140: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 86
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE26_B"
   InsideRate: "CONTSVOICE26_A"
 
-ServiceLimitTarget141: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 86
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE26_B"
   InsideRate: "CONTSVOICE26_A"
 
-ServiceLimitTarget142: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 86
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE26_B"
   InsideRate: "CONTSVOICE26_A"
 
-ServiceLimitTarget143: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 86
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE26_B"
   InsideRate: "CONTSVOICE26_A"
 
-ServiceLimitTarget144: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 86
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE26_B"
   InsideRate: "CONTSVOICE26_A"
 
-ServiceLimitTarget145: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 87
   ServiceLMember: "14100001"
   OutsideRate: "CONTSDATA32_B"
   InsideRate: "CONTSDATA32_A"
 
-ServiceLimitTarget146: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 88
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE32_B"
   InsideRate: "CONTSVOICE32_A"
 
-ServiceLimitTarget147: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 88
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE32_B"
   InsideRate: "CONTSVOICE32_A"
 
-ServiceLimitTarget148: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 88
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE32_B"
   InsideRate: "CONTSVOICE32_A"
 
-ServiceLimitTarget149: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 88
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE32_B"
   InsideRate: "CONTSVOICE32_A"
 
-ServiceLimitTarget150: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 88
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE32_B"
   InsideRate: "CONTSVOICE32_A"
 
-ServiceLimitTarget151: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 89
   ServiceLMember: "14100001"
   OutsideRate: "CONTSDATA16_B"
   InsideRate: "CONTSDATA16_A"
 
-ServiceLimitTarget152: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 90
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE16_B"
   InsideRate: "CONTSVOICE16_A"
 
-ServiceLimitTarget153: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 90
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE16_B"
   InsideRate: "CONTSVOICE16_A"
 
-ServiceLimitTarget154: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 90
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE16_B"
   InsideRate: "CONTSVOICE16_A"
 
-ServiceLimitTarget155: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 90
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE16_B"
   InsideRate: "CONTSVOICE16_A"
 
-ServiceLimitTarget156: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 90
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE16_B"
   InsideRate: "CONTSVOICE16_A"
 
-ServiceLimitTarget157: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 93
   ServiceLMember: "14100001"
   InsideRate: "GPRS_DATA6_UPSELL"
 
-ServiceLimitTarget158: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 95
   ServiceLMember: "10100001"
   InsideRate: "VOICE100"
 
-ServiceLimitTarget159: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 95
   ServiceLMember: "10100003"
   InsideRate: "VOICE100"
 
-ServiceLimitTarget160: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 95
   ServiceLMember: "10100005"
   InsideRate: "VOICE100"
 
-ServiceLimitTarget161: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 95
   ServiceLMember: "CFOTHER"
   InsideRate: "VOICE100"
 
-ServiceLimitTarget162: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 95
   ServiceLMember: "CFYOIGO"
   InsideRate: "VOICE100"
 
-ServiceLimitTarget163: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 96
   ServiceLMember: "14100001"
   OutsideRate: "CONT24_DATA_OUT"
   InsideRate: "CONT24_DATA_IN"
 
-ServiceLimitTarget164: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 97
   ServiceLMember: "10100001"
   OutsideRate: "CONT24_VOICE_OUT"
   InsideRate: "CONT24_VOICE_IN"
 
-ServiceLimitTarget165: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 97
   ServiceLMember: "10100003"
   OutsideRate: "CONT24_VOICE_OUT"
   InsideRate: "CONT24_VOICE_IN"
 
-ServiceLimitTarget166: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 97
   ServiceLMember: "10100005"
   OutsideRate: "CONT24_VOICE_OUT"
   InsideRate: "CONT24_VOICE_IN"
 
-ServiceLimitTarget167: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 97
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONT24_VOICE_OUT"
   InsideRate: "CONT24_VOICE_IN"
 
-ServiceLimitTarget168: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 97
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONT24_VOICE_OUT"
   InsideRate: "CONT24_VOICE_IN"
 
-ServiceLimitTarget169: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 98
   ServiceLMember: "14100001"
   OutsideRate: "CONTF8_DATA_OUT"
   InsideRate: "CONTF8_DATA_IN"
 
-ServiceLimitTarget170: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 99
   ServiceLMember: "10100001"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget171: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 99
   ServiceLMember: "10100003"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget172: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 99
   ServiceLMember: "10100005"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget173: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 99
   ServiceLMember: "CFOTHER"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget174: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 99
   ServiceLMember: "CFYOIGO"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget175: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 100
   ServiceLMember: "14100001"
   OutsideRate: "CONTS12_DATA_OUT"
   InsideRate: "CONTS12_DATA_IN"
 
-ServiceLimitTarget176: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 101
   ServiceLMember: "10100001"
   OutsideRate: "CONTS12_VOICE_OUT"
   InsideRate: "CONTS12_VOICE_IN"
 
-ServiceLimitTarget177: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 101
   ServiceLMember: "10100003"
   OutsideRate: "CONTS12_VOICE_OUT"
   InsideRate: "CONTS12_VOICE_IN"
 
-ServiceLimitTarget178: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 101
   ServiceLMember: "10100005"
   OutsideRate: "CONTS12_VOICE_OUT"
   InsideRate: "CONTS12_VOICE_IN"
 
-ServiceLimitTarget179: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 101
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTS12_VOICE_OUT"
   InsideRate: "CONTS12_VOICE_IN"
 
-ServiceLimitTarget180: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 101
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTS12_VOICE_OUT"
   InsideRate: "CONTS12_VOICE_IN"
 
-ServiceLimitTarget181: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 102
   ServiceLMember: "14100001"
   OutsideRate: "CONTF11_DATA_OUT"
   InsideRate: "CONTF11_DATA_IN"
 
-ServiceLimitTarget182: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 103
   ServiceLMember: "10100001"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget183: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 103
   ServiceLMember: "10100003"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget184: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 103
   ServiceLMember: "10100005"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget185: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 103
   ServiceLMember: "CFOTHER"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget186: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 103
   ServiceLMember: "CFYOIGO"
   InsideRate: "FLATVOICE"
 
-ServiceLimitTarget187: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 106
   ServiceLMember: "14100001"
   OutsideRate: "CONT23_DATA_OUT"
   InsideRate: "CONT23_DATA_IN"
 
-ServiceLimitTarget188: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 107
   ServiceLMember: "10100001"
   OutsideRate: "CONT23_VOICE_OUT"
   InsideRate: "CONT23_VOICE_IN"
 
-ServiceLimitTarget189: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 107
   ServiceLMember: "10100003"
   OutsideRate: "CONT23_VOICE_OUT"
   InsideRate: "CONT23_VOICE_IN"
 
-ServiceLimitTarget190: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 107
   ServiceLMember: "10100005"
   OutsideRate: "CONT23_VOICE_OUT"
   InsideRate: "CONT23_VOICE_IN"
 
-ServiceLimitTarget191: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 107
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONT23_VOICE_OUT"
   InsideRate: "CONT23_VOICE_IN"
 
-ServiceLimitTarget192: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 107
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONT23_VOICE_OUT"
   InsideRate: "CONT23_VOICE_IN"
 
-ServiceLimitTarget193: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 110
   ServiceLMember: "14100001"
   InsideRate: "GPRS_DATA200_UPSELL"
 
-ServiceLimitTarget194: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 111
   ServiceLMember: "14100001"
   InsideRate: "GPRSDSS200_A"
 
-ServiceLimitTarget195: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 113
   ServiceLMember: "10100001"
   InsideRate: "FREE100MINUTES"
 
-ServiceLimitTarget196: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 113
   ServiceLMember: "10100003"
   InsideRate: "FREE100MINUTES"
 
-ServiceLimitTarget197: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 113
   ServiceLMember: "10100005"
   InsideRate: "FREE100MINUTES"
 
-ServiceLimitTarget198: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 113
   ServiceLMember: "CFOTHER"
   InsideRate: "FREE100MINUTES"
 
-ServiceLimitTarget199: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 113
   ServiceLMember: "CFYOIGO"
   InsideRate: "FREE100MINUTES"
 
-ServiceLimitTarget200: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 114
   ServiceLMember: "10100001"
   OutsideRate: "CONT23_VOICE_OUT"
   InsideRate: "CONT23_VOICE_IN"
 
-ServiceLimitTarget201: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 114
   ServiceLMember: "10100003"
   OutsideRate: "CONT23_VOICE_OUT"
   InsideRate: "CONT23_VOICE_IN"
 
-ServiceLimitTarget202: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 114
   ServiceLMember: "10100005"
   OutsideRate: "CONT23_VOICE_OUT"
   InsideRate: "CONT23_VOICE_IN"
 
-ServiceLimitTarget203: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 114
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONT23_VOICE_OUT"
   InsideRate: "CONT23_VOICE_IN"
 
-ServiceLimitTarget204: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 114
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONT23_VOICE_OUT"
   InsideRate: "CONT23_VOICE_IN"
 
-ServiceLimitTarget205: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 115
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE15_B"
   InsideRate: "CONTSVOICE15_A"
 
-ServiceLimitTarget206: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 115
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE15_B"
   InsideRate: "CONTSVOICE15_A"
 
-ServiceLimitTarget207: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 115
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE15_B"
   InsideRate: "CONTSVOICE15_A"
 
-ServiceLimitTarget208: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 115
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE15_B"
   InsideRate: "CONTSVOICE15_A"
 
-ServiceLimitTarget209: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 115
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE15_B"
   InsideRate: "CONTSVOICE15_A"
 
-ServiceLimitTarget210: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 116
   ServiceLMember: "10100001"
   OutsideRate: "CONT24_VOICE_OUT"
   InsideRate: "CONT24_VOICE_IN"
 
-ServiceLimitTarget211: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 116
   ServiceLMember: "10100003"
   OutsideRate: "CONT24_VOICE_OUT"
   InsideRate: "CONT24_VOICE_IN"
 
-ServiceLimitTarget212: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 116
   ServiceLMember: "10100005"
   OutsideRate: "CONT24_VOICE_OUT"
   InsideRate: "CONT24_VOICE_IN"
 
-ServiceLimitTarget213: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 116
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONT24_VOICE_OUT"
   InsideRate: "CONT24_VOICE_IN"
 
-ServiceLimitTarget214: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 116
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONT24_VOICE_OUT"
   InsideRate: "CONT24_VOICE_IN"
 
-ServiceLimitTarget215: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 117
   ServiceLMember: "10100001"
   OutsideRate: "CONTS12_VOICE_OUT"
   InsideRate: "CONTS12_VOICE_IN"
 
-ServiceLimitTarget216: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 117
   ServiceLMember: "10100003"
   OutsideRate: "CONTS12_VOICE_OUT"
   InsideRate: "CONTS12_VOICE_IN"
 
-ServiceLimitTarget217: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 117
   ServiceLMember: "10100005"
   OutsideRate: "CONTS12_VOICE_OUT"
   InsideRate: "CONTS12_VOICE_IN"
 
-ServiceLimitTarget218: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 117
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTS12_VOICE_OUT"
   InsideRate: "CONTS12_VOICE_IN"
 
-ServiceLimitTarget219: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 117
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTS12_VOICE_OUT"
   InsideRate: "CONTS12_VOICE_IN"
 
-ServiceLimitTarget220: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 118
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE16_B"
   InsideRate: "CONTSVOICE16_A"
 
-ServiceLimitTarget221: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 118
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE16_B"
   InsideRate: "CONTSVOICE16_A"
 
-ServiceLimitTarget222: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 118
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE16_B"
   InsideRate: "CONTSVOICE16_A"
 
-ServiceLimitTarget223: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 118
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE16_B"
   InsideRate: "CONTSVOICE16_A"
 
-ServiceLimitTarget224: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 118
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE16_B"
   InsideRate: "CONTSVOICE16_A"
 
-ServiceLimitTarget225: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 119
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE20_B"
   InsideRate: "CONTSVOICE20_A"
 
-ServiceLimitTarget226: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 119
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE20_B"
   InsideRate: "CONTSVOICE20_A"
 
-ServiceLimitTarget227: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 119
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE20_B"
   InsideRate: "CONTSVOICE20_A"
 
-ServiceLimitTarget228: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 119
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE20_B"
   InsideRate: "CONTSVOICE20_A"
 
-ServiceLimitTarget229: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 119
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE20_B"
   InsideRate: "CONTSVOICE20_A"
 
-ServiceLimitTarget230: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 120
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE21_B"
   InsideRate: "CONTSVOICE21_A"
 
-ServiceLimitTarget231: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 120
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE21_B"
   InsideRate: "CONTSVOICE21_A"
 
-ServiceLimitTarget232: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 120
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE21_B"
   InsideRate: "CONTSVOICE21_A"
 
-ServiceLimitTarget233: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 120
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE21_B"
   InsideRate: "CONTSVOICE21_A"
 
-ServiceLimitTarget234: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 120
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE21_B"
   InsideRate: "CONTSVOICE21_A"
 
-ServiceLimitTarget235: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 121
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE25_B"
   InsideRate: "CONTSVOICE25_A"
 
-ServiceLimitTarget236: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 121
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE25_B"
   InsideRate: "CONTSVOICE25_A"
 
-ServiceLimitTarget237: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 121
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE25_B"
   InsideRate: "CONTSVOICE25_A"
 
-ServiceLimitTarget238: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 121
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE25_B"
   InsideRate: "CONTSVOICE25_A"
 
-ServiceLimitTarget239: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 121
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE25_B"
   InsideRate: "CONTSVOICE25_A"
 
-ServiceLimitTarget240: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 122
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE26_B"
   InsideRate: "CONTSVOICE26_A"
 
-ServiceLimitTarget241: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 122
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE26_B"
   InsideRate: "CONTSVOICE26_A"
 
-ServiceLimitTarget242: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 122
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE26_B"
   InsideRate: "CONTSVOICE26_A"
 
-ServiceLimitTarget243: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 122
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE26_B"
   InsideRate: "CONTSVOICE26_A"
 
-ServiceLimitTarget244: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 122
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE26_B"
   InsideRate: "CONTSVOICE26_A"
 
-ServiceLimitTarget245: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 123
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE_B"
   InsideRate: "CONTSVOICE_A"
 
-ServiceLimitTarget246: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 123
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE_B"
   InsideRate: "CONTSVOICE_A"
 
-ServiceLimitTarget247: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 123
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE_B"
   InsideRate: "CONTSVOICE_A"
 
-ServiceLimitTarget248: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 123
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE_B"
   InsideRate: "CONTSVOICE_A"
 
-ServiceLimitTarget249: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 123
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE_B"
   InsideRate: "CONTSVOICE_A"
 
-ServiceLimitTarget250: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 124
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE32_B"
   InsideRate: "CONTSVOICE32_A"
 
-ServiceLimitTarget251: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 124
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE32_B"
   InsideRate: "CONTSVOICE32_A"
 
-ServiceLimitTarget252: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 124
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE32_B"
   InsideRate: "CONTSVOICE32_A"
 
-ServiceLimitTarget253: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 124
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE32_B"
   InsideRate: "CONTSVOICE32_A"
 
-ServiceLimitTarget254: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 124
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE32_B"
   InsideRate: "CONTSVOICE32_A"
 
-ServiceLimitTarget255: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 125
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE35_B"
   InsideRate: "CONTSVOICE35_A"
 
-ServiceLimitTarget256: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 125
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE35_B"
   InsideRate: "CONTSVOICE35_A"
 
-ServiceLimitTarget257: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 125
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE35_B"
   InsideRate: "CONTSVOICE35_A"
 
-ServiceLimitTarget258: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 125
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE35_B"
   InsideRate: "CONTSVOICE35_A"
 
-ServiceLimitTarget259: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 125
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE35_B"
   InsideRate: "CONTSVOICE35_A"
 
-ServiceLimitTarget260: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 126
   ServiceLMember: "10100001"
   OutsideRate: "CONTSVOICE39_B"
   InsideRate: "CONTSVOICE39_A"
 
-ServiceLimitTarget261: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 126
   ServiceLMember: "10100003"
   OutsideRate: "CONTSVOICE39_B"
   InsideRate: "CONTSVOICE39_A"
 
-ServiceLimitTarget262: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 126
   ServiceLMember: "10100005"
   OutsideRate: "CONTSVOICE39_B"
   InsideRate: "CONTSVOICE39_A"
 
-ServiceLimitTarget263: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 126
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSVOICE39_B"
   InsideRate: "CONTSVOICE39_A"
 
-ServiceLimitTarget264: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 126
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSVOICE39_B"
   InsideRate: "CONTSVOICE39_A"
 
-ServiceLimitTarget265: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 127
   ServiceLMember: "10100001"
   OutsideRate: "CONTSFVOICE10_B"
   InsideRate: "CONTSFVOICE10_A"
 
-ServiceLimitTarget266: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 127
   ServiceLMember: "10100003"
   OutsideRate: "CONTSFVOICE10_B"
   InsideRate: "CONTSFVOICE10_A"
 
-ServiceLimitTarget267: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 127
   ServiceLMember: "10100005"
   OutsideRate: "CONTSFVOICE10_B"
   InsideRate: "CONTSFVOICE10_A"
 
-ServiceLimitTarget268: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 127
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSFVOICE10_B"
   InsideRate: "CONTSFVOICE10_A"
 
-ServiceLimitTarget269: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 127
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSFVOICE10_B"
   InsideRate: "CONTSFVOICE10_A"
 
-ServiceLimitTarget270: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 128
   ServiceLMember: "10100001"
   OutsideRate: "CONTSFVOICE14_B"
   InsideRate: "CONTSFVOICE14_A"
 
-ServiceLimitTarget271: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 128
   ServiceLMember: "10100003"
   OutsideRate: "CONTSFVOICE14_B"
   InsideRate: "CONTSFVOICE14_A"
 
-ServiceLimitTarget272: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 128
   ServiceLMember: "10100005"
   OutsideRate: "CONTSFVOICE14_B"
   InsideRate: "CONTSFVOICE14_A"
 
-ServiceLimitTarget273: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 128
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTSFVOICE14_B"
   InsideRate: "CONTSFVOICE14_A"
 
-ServiceLimitTarget274: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 128
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTSFVOICE14_B"
   InsideRate: "CONTSFVOICE14_A"
 
-ServiceLimitTarget275: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 129
   ServiceLMember: "F10100005"
   OutsideRate: "CONTDSL_QTY_OUT"
   InsideRate: "CONTDSL_QTY_IN"
 
-ServiceLimitTarget276: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 130
   ServiceLMember: "F10100005"
   OutsideRate: "CONTFH50_QTY_OUT"
   InsideRate: "CONTFH50_QTY_IN"
 
-ServiceLimitTarget277: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 131
   ServiceLMember: "F10100005"
   OutsideRate: "CONTFH300_QTY_OUT"
   InsideRate: "CONTFH300_QTY_IN"
 
-ServiceLimitTarget278: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 132
   ServiceLMember: "F10100003"
   OutsideRate: "CONTDSL_MIN_OUT"
   InsideRate: "CONTDSL_MIN_IN"
 
-ServiceLimitTarget279: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 133
   ServiceLMember: "F10100003"
   OutsideRate: "CONTFH50_MIN_OUT"
   InsideRate: "CONTFH50_MIN_IN"
 
-ServiceLimitTarget280: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 134
   ServiceLMember: "F10100003"
   OutsideRate: "CONTFH300_MIN_OUT"
   InsideRate: "CONTFH300_MIN_IN"
 
-ServiceLimitTarget281: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 135
   ServiceLMember: "14100001"
   OutsideRate: "CONTS2GB_DATA_OUT"
   InsideRate: "CONTS2GB_DATA_IN"
 
-ServiceLimitTarget282: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 136
   ServiceLMember: "10100001"
   OutsideRate: "CONTS2GB_VOICE_OUT"
   InsideRate: "CONTS2GB_VOICE_IN"
 
-ServiceLimitTarget283: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 136
   ServiceLMember: "10100003"
   OutsideRate: "CONTS2GB_VOICE_OUT"
   InsideRate: "CONTS2GB_VOICE_IN"
 
-ServiceLimitTarget284: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 136
   ServiceLMember: "10100005"
   OutsideRate: "CONTS2GB_VOICE_OUT"
   InsideRate: "CONTS2GB_VOICE_IN"
 
-ServiceLimitTarget285: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 136
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONTS2GB_VOICE_OUT"
   InsideRate: "CONTS2GB_VOICE_IN"
 
-ServiceLimitTarget286: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 136
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONTS2GB_VOICE_OUT"
   InsideRate: "CONTS2GB_VOICE_IN"
 
-ServiceLimitTarget287: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 137
   ServiceLMember: "14100001"
   OutsideRate: "CONT25_DATA_OUT"
   InsideRate: "CONT25_DATA_IN"
 
-ServiceLimitTarget288: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 138
   ServiceLMember: "10100001"
   OutsideRate: "CONT25_VOICE_OUT"
   InsideRate: "CONT25_VOICE_IN"
 
-ServiceLimitTarget289: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 138
   ServiceLMember: "10100003"
   OutsideRate: "CONT25_VOICE_OUT"
   InsideRate: "CONT25_VOICE_IN"
 
-ServiceLimitTarget290: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 138
   ServiceLMember: "10100005"
   OutsideRate: "CONT25_VOICE_OUT"
   InsideRate: "CONT25_VOICE_IN"
 
-ServiceLimitTarget291: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 138
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONT25_VOICE_OUT"
   InsideRate: "CONT25_VOICE_IN"
 
-ServiceLimitTarget292: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 138
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONT25_VOICE_OUT"
   InsideRate: "CONT25_VOICE_IN"
 
-ServiceLimitTarget293: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 139
   ServiceLMember: "10100001"
   OutsideRate: "CONT25_VOICE_OUT"
   InsideRate: "CONT25_VOICE_IN"
 
-ServiceLimitTarget294: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 139
   ServiceLMember: "10100003"
   OutsideRate: "CONT25_VOICE_OUT"
   InsideRate: "CONT25_VOICE_IN"
 
-ServiceLimitTarget295: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 139
   ServiceLMember: "10100005"
   OutsideRate: "CONT25_VOICE_OUT"
   InsideRate: "CONT25_VOICE_IN"
 
-ServiceLimitTarget296: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 139
   ServiceLMember: "CFOTHER"
   OutsideRate: "CONT25_VOICE_OUT"
   InsideRate: "CONT25_VOICE_IN"
 
-ServiceLimitTarget297: ServiceLimitTarget
+bulkload: ServiceLimitTarget
   SLSeq: 139
   ServiceLMember: "CFYOIGO"
   OutsideRate: "CONT25_VOICE_OUT"
   InsideRate: "CONT25_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 140
+  ServiceLMember: "14100001"
+  OutsideRate: "CONT26_DATA_OUT"
+  InsideRate: "CONT26_DATA_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 141
+  ServiceLMember: "10100001"
+  OutsideRate: "CONT26_VOICE_OUT"
+  InsideRate: "CONT26_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 141
+  ServiceLMember: "10100003"
+  OutsideRate: "CONT26_VOICE_OUT"
+  InsideRate: "CONT26_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 141
+  ServiceLMember: "10100005"
+  OutsideRate: "CONT26_VOICE_OUT"
+  InsideRate: "CONT26_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 141
+  ServiceLMember: "CFOTHER"
+  OutsideRate: "CONT26_VOICE_OUT"
+  InsideRate: "CONT26_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 141
+  ServiceLMember: "CFYOIGO"
+  OutsideRate: "CONT26_VOICE_OUT"
+  InsideRate: "CONT26_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 142
+  ServiceLMember: "10100001"
+  OutsideRate: "CONT26_VOICE_OUT"
+  InsideRate: "CONT26_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 142
+  ServiceLMember: "10100003"
+  OutsideRate: "CONT26_VOICE_OUT"
+  InsideRate: "CONT26_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 142
+  ServiceLMember: "10100005"
+  OutsideRate: "CONT26_VOICE_OUT"
+  InsideRate: "CONT26_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 142
+  ServiceLMember: "CFOTHER"
+  OutsideRate: "CONT26_VOICE_OUT"
+  InsideRate: "CONT26_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 142
+  ServiceLMember: "CFYOIGO"
+  OutsideRate: "CONT26_VOICE_OUT"
+  InsideRate: "CONT26_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 144
+  ServiceLMember: "14100001"
+  InsideRate: "GPRS_FLEX_UPSELL"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 145
+  ServiceLMember: "14100001"
+  OutsideRate: "CONT27_DATA_OUT"
+  InsideRate: "CONT27_DATA_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 146
+  ServiceLMember: "10100001"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 146
+  ServiceLMember: "10100003"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 146
+  ServiceLMember: "10100005"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 146
+  ServiceLMember: "CFOTHER"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
+
+bulkload: ServiceLimitTarget
+  SLSeq: 146
+  ServiceLMember: "CFYOIGO"
+  OutsideRate: "CONT27_VOICE_OUT"
+  InsideRate: "CONT27_VOICE_IN"
 
