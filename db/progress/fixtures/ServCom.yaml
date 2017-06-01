@@ -1,4 +1,4 @@
-ServCom1: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "BAIC"
   ScName: "Barring of all incoming calls"
@@ -6,7 +6,7 @@ ServCom1: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom2: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "BAOC"
   ScName: "Barring of all outgoing calls"
@@ -14,7 +14,7 @@ ServCom2: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom3: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "BARRING"
   ScName: "Network barring"
@@ -24,7 +24,7 @@ ServCom3: ServCom
   Brand: "1"
   ServType: 1
 
-ServCom4: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "BB"
   ScName: "BlackBerry"
@@ -34,7 +34,7 @@ ServCom4: ServCom
   FeeModel: "BBMF"
   ServType: 1
 
-ServCom5: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "BCG"
   ScName: "Barring of Content GW"
@@ -43,7 +43,7 @@ ServCom5: ServCom
   Brand: "1"
   ServType: 1
 
-ServCom6: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "BOIC"
   ScName: "Barring of all outgoing international"
@@ -51,7 +51,7 @@ ServCom6: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom7: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "BPSUB"
   ScName: "BarPremium subscription"
@@ -59,7 +59,7 @@ ServCom7: ServCom
   Brand: "1"
   ServType: 1
 
-ServCom8: ServCom
+bulkload: ServCom
   Service: "9"
   ServCom: "CALLSPEC"
   ScName: "Call Specification"
@@ -69,7 +69,7 @@ ServCom8: ServCom
   ActType: 1
   ServType: 1
 
-ServCom9: ServCom
+bulkload: ServCom
   Service: "9"
   ServCom: "CAMPAIGN"
   ScName: "Campaigns"
@@ -81,7 +81,7 @@ ServCom9: ServCom
   Target: 1
   ServAttrL: TRUE 
 
-ServCom10: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "CCGW"
   ScName: "CCGW"
@@ -89,14 +89,14 @@ ServCom10: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom11: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "CF"
   ScName: "Call Forwarding"
   ScValueRange[2]: 2
   Brand: "1"
 
-ServCom12: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "CLIP"
   ScName: "Calling Line Identification Presentation"
@@ -104,7 +104,7 @@ ServCom12: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom13: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "CLIR"
   ScName: "Calling line identification restriction"
@@ -112,7 +112,7 @@ ServCom13: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom14: ServCom
+bulkload: ServCom
   Service: "7"
   ServCom: "CONTRATO2"
   ScName: "Contrato2 Flat Rate"
@@ -124,7 +124,7 @@ ServCom14: ServCom
   ActType: 1
   CloseTime: 1
 
-ServCom15: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "GPRS"
   ScName: "Mobile Data"
@@ -132,7 +132,7 @@ ServCom15: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom16: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "HOTLINE"
   ScName: "Hot lining"
@@ -140,7 +140,7 @@ ServCom16: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom17: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "HSDPA"
   ScName: "High speed data"
@@ -149,14 +149,14 @@ ServCom17: ServCom
   Brand: "1"
   ServType: 1
 
-ServCom18: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "IRDCUTOFF"
   ScName: "International Roaiming Data Cut Off"
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom19: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "IVR"
   ScName: "Inteligent voice responder"
@@ -164,14 +164,14 @@ ServCom19: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom20: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "KEEP"
   ScName: "Keep gprs settings"
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom21: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "LANG"
   ScName: "Pre paid voicemail language"
@@ -180,7 +180,7 @@ ServCom21: ServCom
   ScPosition: 10
   Brand: "1"
 
-ServCom22: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "LP"
   ScName: "Debtor landing page"
@@ -189,7 +189,7 @@ ServCom22: ServCom
   Brand: "1"
   ServType: 1
 
-ServCom23: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "LTE"
   ScName: "LTE (4G)"
@@ -198,7 +198,7 @@ ServCom23: ServCom
   Brand: "1"
   ServType: 1
 
-ServCom24: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "MMS"
   ScName: "MMS"
@@ -206,7 +206,7 @@ ServCom24: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom25: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "NAM"
   ScName: "Network access"
@@ -214,7 +214,7 @@ ServCom25: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom26: ServCom
+bulkload: ServCom
   Service: "9"
   ServCom: "NTFNBR"
   ScName: "Notify Number"
@@ -225,7 +225,7 @@ ServCom26: ServCom
   ActType: 1
   ServType: 1
 
-ServCom27: ServCom
+bulkload: ServCom
   Service: "9"
   ServCom: "NUMBERINQ"
   ScName: "Number inquiry"
@@ -235,7 +235,7 @@ ServCom27: ServCom
   ActType: 1
   ServAttrL: TRUE 
 
-ServCom28: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "OBA"
   ScName: "Barring of all incoming and outgoing calls"
@@ -243,21 +243,21 @@ ServCom28: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom29: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "OBI"
   ScName: "Operator determined barring of incoming calls"
   ScValueRange[2]: 2
   Brand: "1"
 
-ServCom30: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "OBO"
   ScName: "Operator Determined Barring Of All outgoing C"
   ScValueRange[2]: 2
   Brand: "1"
 
-ServCom31: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "OBOPRE"
   ScName: "Barring of outgoing premium rate calls"
@@ -265,7 +265,7 @@ ServCom31: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom32: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "OBOPRI"
   ScName: "Barring of outgoing premium"
@@ -273,7 +273,7 @@ ServCom32: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom33: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "OBR"
   ScName: "Barring of roaming"
@@ -281,7 +281,7 @@ ServCom33: ServCom
   ScValueRange[2]: 2
   Brand: "1"
 
-ServCom34: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "RSA"
   ScName: "Barring of premium voice and premium content"
@@ -289,7 +289,7 @@ ServCom34: ServCom
   ScValueRange[2]: 100
   Brand: "1"
 
-ServCom35: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "SHAPER"
   ScName: "Data shaper"
@@ -298,7 +298,7 @@ ServCom35: ServCom
   Brand: "1"
   ServType: 1
 
-ServCom36: ServCom
+bulkload: ServCom
   Service: "9"
   ServCom: "SHAPER_STP"
   ScName: "Subscription type specific SHAPER parameter"
@@ -310,7 +310,7 @@ ServCom36: ServCom
   Target: 1
   ServType: 1
 
-ServCom37: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "SMSBundle"
   ScName: "SMS Bundle for Prepaid"
@@ -320,7 +320,7 @@ ServCom37: ServCom
   ServType: 1
   SMSTxt: "SMSBundle"
 
-ServCom38: ServCom
+bulkload: ServCom
   Service: "9"
   ServCom: "SMSINVOICE"
   ScName: "SMS invoice for Postpaid"
@@ -329,7 +329,7 @@ ServCom38: ServCom
   Brand: "1"
   ActType: 1
 
-ServCom39: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "SOCLIR"
   ScName: "Calling line identification restrictio"
@@ -338,7 +338,7 @@ ServCom39: ServCom
   Brand: "1"
   ServType: 1
 
-ServCom40: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "TEMPLATE"
   ScName: "Prepaid Voice Service"
@@ -346,7 +346,7 @@ ServCom40: ServCom
   Brand: "1"
   Target: 3
 
-ServCom41: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "TS21"
   ScName: "Teleservice, Short message MT/PP"
@@ -354,7 +354,7 @@ ServCom41: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom42: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "TS22"
   ScName: "Teleservice, Short message MO/PP"
@@ -362,7 +362,7 @@ ServCom42: ServCom
   ScValueRange[2]: 1
   Brand: "1"
 
-ServCom43: ServCom
+bulkload: ServCom
   Service: "9"
   ServCom: "TYPECHG"
   ScName: "CLIType Change"
@@ -374,7 +374,7 @@ ServCom43: ServCom
   Target: 1
   ServAttrL: TRUE 
 
-ServCom44: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "VMS"
   ScName: "VoiceMail"
@@ -383,7 +383,7 @@ ServCom44: ServCom
   Brand: "1"
   ServType: 1
 
-ServCom45: ServCom
+bulkload: ServCom
   Service: "1"
   ServCom: "VOIPVIDEO"
   ScName: "VOIP service"

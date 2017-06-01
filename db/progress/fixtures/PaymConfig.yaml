@@ -1,4 +1,4 @@
-PaymConfig1: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 4
   PaymSrc: "APRF"
@@ -9,7 +9,7 @@ PaymConfig1: PaymConfig
   Description: "Manual payment; transfer advance payment balance to refund balance"
   PaymConfig: 10
 
-PaymConfig2: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 4
   PaymSrc: "RFUND"
@@ -20,7 +20,7 @@ PaymConfig2: PaymConfig
   Description: "Transfer refund balance to advance payment"
   PaymConfig: 1
 
-PaymConfig3: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 6
   PaymSrc: "RFUND"
@@ -31,7 +31,7 @@ PaymConfig3: PaymConfig
   Description: "Money transfer from refund balance "
   PaymConfig: 2
 
-PaymConfig4: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 7
   PaymSrc: "ATM"
@@ -42,7 +42,7 @@ PaymConfig4: PaymConfig
   Description: "Successfull ATM re-charge payment to Pre paid account"
   PaymConfig: 3
 
-PaymConfig5: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 7
   PaymSrc: "MAMANFIX"
@@ -53,7 +53,7 @@ PaymConfig5: PaymConfig
   Description: "Posting of minus adjustment after successful prepaid account deduction. Payment event hasn't been created automatically due to unidentified posting rules or errroneus request handling. Different payment source is informative data for error handling control"
   PaymConfig: 25
 
-PaymConfig6: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 7
   PaymSrc: "MANFIX"
@@ -64,7 +64,7 @@ PaymConfig6: PaymConfig
   Description: "Posting of Top up payment after successful recharge. Payment event hasn't been created automatically due to unidentified posting rules or erroneus request handling. Different payment source informative data for error handling control."
   PaymConfig: 24
 
-PaymConfig7: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 7
   PaymSrc: "PAMA"
@@ -75,7 +75,7 @@ PaymConfig7: PaymConfig
   Description: "Automatic payment cancellation through ATM"
   PaymConfig: 4
 
-PaymConfig8: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 7
   PaymSrc: "PUMA"
@@ -86,7 +86,7 @@ PaymConfig8: PaymConfig
   Description: "Manual Top Up payment cancellation trough user interface"
   PaymConfig: 5
 
-PaymConfig9: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 9
   PaymSrc: "IT"
@@ -97,7 +97,7 @@ PaymConfig9: PaymConfig
   Description: "Intial Top Up payment posting after successful re-charge to subscriptions Pre paid account"
   PaymConfig: 6
 
-PaymConfig10: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 9
   PaymSrc: "MACAMP"
@@ -108,7 +108,7 @@ PaymConfig10: PaymConfig
   Description: "Minus adjustment to Pre paid Campaign Top Up"
   PaymConfig: 12
 
-PaymConfig11: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 9
   PaymSrc: "MAMANFIX"
@@ -119,7 +119,7 @@ PaymConfig11: PaymConfig
   Description: "Posting of Minus adjustment to Intial Top up after successful deduction or Prepaid account. Payment event hasn't been created automatically due to undefined posting rules or erroneus request handling. Different payment source is informative data for error handling control."
   PaymConfig: 23
 
-PaymConfig12: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 9
   PaymSrc: "MANFIX"
@@ -130,7 +130,7 @@ PaymConfig12: PaymConfig
   Description: "Posting of Intial Top up after successful recharge. Payment event hasn't been created automatically due to undefined posting rules or erroneus request handling. Different payment source is informative data for error handling control."
   PaymConfig: 22
 
-PaymConfig13: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 9
   PaymSrc: "MPIT"
@@ -141,7 +141,7 @@ PaymConfig13: PaymConfig
   Description: "Successful re-charge payment posting for Manual Initial Top Up (Re-charge through user interface)"
   PaymConfig: 13
 
-PaymConfig14: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 9
   PaymSrc: "PRCAMP"
@@ -152,7 +152,7 @@ PaymConfig14: PaymConfig
   Description: "Posting of successful Campaign re-charge to Pre paid account"
   PaymConfig: 11
 
-PaymConfig15: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 9
   PaymSrc: "PUMA"
@@ -163,7 +163,7 @@ PaymConfig15: PaymConfig
   Description: "Minus adjustment to Intial Top Up event"
   PaymConfig: 7
 
-PaymConfig16: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 10
   PaymSrc: "COMM"
@@ -174,7 +174,7 @@ PaymConfig16: PaymConfig
   Description: "Commission paid as compensation"
   PaymConfig: 28
 
-PaymConfig17: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 10
   PaymSrc: "COMP"
@@ -185,7 +185,7 @@ PaymConfig17: PaymConfig
   Description: "Pre paid compensation payment after successful re-charge to Pre paid account"
   PaymConfig: 8
 
-PaymConfig18: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 10
   PaymSrc: "MAMANFIX"
@@ -196,7 +196,7 @@ PaymConfig18: PaymConfig
   Description: "Posting of Minus adjustment to compensation after successful deduction of prepaid account. Payment event hasn't been created automatically due to unidentified posting rules or erroneus request handling. Different payment source is informative data for error handling control"
   PaymConfig: 27
 
-PaymConfig19: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 10
   PaymSrc: "MANFIX"
@@ -207,7 +207,7 @@ PaymConfig19: PaymConfig
   Description: "Posting of compensation after successful recharge to Prepaid account. Payment event hasn't been created automatically due to unidentified posting rules or erroneus request handling. Different payment source is informative data for error handling control"
   PaymConfig: 26
 
-PaymConfig20: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 10
   PaymSrc: "MAPQ"
@@ -218,7 +218,7 @@ PaymConfig20: PaymConfig
   Description: "Payment posting after successfull balance deduction from Prepaid account. Deducted balance = Price quarantee."
   PaymConfig: 20
 
-PaymConfig21: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 10
   PaymSrc: "MPPQ"
@@ -229,7 +229,7 @@ PaymConfig21: PaymConfig
   Description: "Payment posting after successful manual recharge of Price quarantee Top Up"
   PaymConfig: 21
 
-PaymConfig22: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 10
   PaymSrc: "PQ"
@@ -240,7 +240,7 @@ PaymConfig22: PaymConfig
   Description: "Payment posting after successfull automatic recharge of Price quarantee Top up"
   PaymConfig: 19
 
-PaymConfig23: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 10
   PaymSrc: "PUMA"
@@ -251,7 +251,7 @@ PaymConfig23: PaymConfig
   Description: "Minus Adjustment to Prepaid compensation"
   PaymConfig: 9
 
-PaymConfig24: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 11
   PaymSrc: "MAOU"
@@ -262,7 +262,7 @@ PaymConfig24: PaymConfig
   Description: "Payment posting after successfull Minus Adjustment to Own usage"
   PaymConfig: 16
 
-PaymConfig25: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 11
   PaymSrc: "MPOU"
@@ -273,7 +273,7 @@ PaymConfig25: PaymConfig
   Description: "Payment posting after successful manual re-charge of own usage Top Up"
   PaymConfig: 15
 
-PaymConfig26: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 11
   PaymSrc: "PROU"
@@ -284,7 +284,7 @@ PaymConfig26: PaymConfig
   Description: "Payment posting after successful automatic re-charge of Own usage Top up."
   PaymConfig: 14
 
-PaymConfig27: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 12
   PaymSrc: "MCNOC"
@@ -295,7 +295,7 @@ PaymConfig27: PaymConfig
   Description: "Posting to Failed minimum consumption balance when deduction has been failed (Total amount or part of it)"
   PaymConfig: 18
 
-PaymConfig28: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 12
   PaymSrc: "MINCONS"
@@ -309,7 +309,7 @@ PaymConfig28: PaymConfig
 "
   PaymConfig: 17
 
-PaymConfig29: PaymConfig
+bulkload: PaymConfig
   Brand: "1"
   PaymType: 13
   PaymSrc: "CHARGE"
