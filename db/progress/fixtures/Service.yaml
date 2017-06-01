@@ -1,19 +1,19 @@
-Service1: Service
+bulkload: Service
   Service: "1"
   SEName: "HLR components"
   Brand: "1"
 
-Service2: Service
+bulkload: Service
   Service: "7"
   SEName: "Services including limits and counters"
   Brand: "1"
 
-Service3: Service
+bulkload: Service
   Service: "9"
   SEName: "Internal use, not sent to NW"
   Brand: "1"
 
-Service4: Service
+bulkload: Service
   Service: "TESTI"
   SEName: "Testigroup"
   Brand: "2"

@@ -1,4 +1,4 @@
-MenuTree1: MenuTree
+bulkload: MenuTree
   MenuNum: 9041
   Module: "igsplit"
   MenuId: "igsplit"
@@ -6,7 +6,7 @@ MenuTree1: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree2: MenuTree
+bulkload: MenuTree
   Level: "0"
   MenuNum: 710
   Module: "customer"
@@ -15,7 +15,7 @@ MenuTree2: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree3: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Syst/ukayt.p"
   MenuId: "users"
@@ -23,7 +23,7 @@ MenuTree3: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree4: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Syst/uvaliv6.p"
   MenuId: "menutree"
@@ -31,7 +31,7 @@ MenuTree4: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree5: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Syst/usearch.p"
   MenuId: "find"
@@ -39,7 +39,7 @@ MenuTree5: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree6: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Syst/nnpcyp.p"
   MenuId: "class"
@@ -47,7 +47,7 @@ MenuTree6: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree7: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Syst/nnuryp.p"
   MenuId: "right"
@@ -55,7 +55,7 @@ MenuTree7: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree8: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Syst/cparam.p"
   MenuId: "cparam"
@@ -63,7 +63,7 @@ MenuTree8: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree9: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "remcfile"
   MenuId: "remedy"
@@ -71,7 +71,7 @@ MenuTree9: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree10: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Mf/sunuser.p"
   MenuId: "sunuser"
@@ -79,7 +79,7 @@ MenuTree10: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree11: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "k"
   MenuId: "compile"
@@ -87,7 +87,7 @@ MenuTree11: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree12: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Mm/epgrp.p"
   MenuId: "epgrp"
@@ -95,7 +95,7 @@ MenuTree12: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree13: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "cli-list"
   MenuId: "cli-list"
@@ -103,7 +103,7 @@ MenuTree13: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree14: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "getbisize"
   MenuId: "bisize"
@@ -111,7 +111,7 @@ MenuTree14: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree15: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Mc/invseq.p"
   MenuId: "invseq"
@@ -119,21 +119,21 @@ MenuTree15: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree16: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "mc_spec"
   MenuId: "cdetail"
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree17: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Syst/cparam.p"
   MenuId: "tmsparam"
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree18: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "ctask"
   MenuId: "ctask"
@@ -141,7 +141,7 @@ MenuTree18: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree19: MenuTree
+bulkload: MenuTree
   Level: "0"
   MenuNum: 1040
   Module: "fonectaui"
@@ -150,14 +150,14 @@ MenuTree19: MenuTree
   MenuClass: 9999
   TokenCode: "MOBMAIN"
 
-MenuTree20: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Mc/orderfunction.p"
   MenuId: "orderf"
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree21: MenuTree
+bulkload: MenuTree
   Level: "0"
   MenuNum: 906
   MenuType: 2
@@ -166,7 +166,7 @@ MenuTree21: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree22: MenuTree
+bulkload: MenuTree
   Level: "0"
   MenuNum: 727
   Module: "Mf/nncdrfi.p"
@@ -175,7 +175,7 @@ MenuTree22: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree23: MenuTree
+bulkload: MenuTree
   Level: "0"
   MenuNum: 945
   Module: "nncdrdt"
@@ -184,7 +184,7 @@ MenuTree23: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree24: MenuTree
+bulkload: MenuTree
   Level: "0"
   Module: "Mf/nnrun.p"
   MenuId: "run"
@@ -192,7 +192,7 @@ MenuTree24: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree25: MenuTree
+bulkload: MenuTree
   Level: "0"
   MenuNum: 9013
   Module: "Inv/billtest.p"
@@ -201,7 +201,7 @@ MenuTree25: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree26: MenuTree
+bulkload: MenuTree
   Level: "0"
   MenuNum: 1994
   Module: "Syst/dumpfile_ui.p"
@@ -210,7 +210,7 @@ MenuTree26: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree27: MenuTree
+bulkload: MenuTree
   Level: "0"
   MenuNum: 1996
   Module: "Mc/offer_start.p"
@@ -219,7 +219,7 @@ MenuTree27: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree28: MenuTree
+bulkload: MenuTree
   Level: "0"
   Position: 1
   MenuNum: 1
@@ -229,7 +229,7 @@ MenuTree28: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree29: MenuTree
+bulkload: MenuTree
   Level: "0"
   Position: 1
   MenuNum: 1103
@@ -239,14 +239,14 @@ MenuTree29: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree30: MenuTree
+bulkload: MenuTree
   Level: "0"
   Position: 1
   MenuNum: 9799
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree31: MenuTree
+bulkload: MenuTree
   Level: "0"
   Position: 2
   MenuNum: 297
@@ -256,7 +256,7 @@ MenuTree31: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree32: MenuTree
+bulkload: MenuTree
   Level: "0"
   Position: 2
   MenuNum: 1861
@@ -267,7 +267,7 @@ MenuTree32: MenuTree
   State[1]: yes
   TokenCode: "BILL"
 
-MenuTree33: MenuTree
+bulkload: MenuTree
   Level: "0"
   Position: 3
   MenuNum: 1860
@@ -277,7 +277,7 @@ MenuTree33: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree34: MenuTree
+bulkload: MenuTree
   Level: "0"
   Position: 7
   MenuNum: 1999
@@ -287,7 +287,7 @@ MenuTree34: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree35: MenuTree
+bulkload: MenuTree
   Level: "0"
   Position: 7
   MenuNum: 804
@@ -298,7 +298,7 @@ MenuTree35: MenuTree
   State[1]: yes
   TokenCode: "BILL"
 
-MenuTree36: MenuTree
+bulkload: MenuTree
   Level: "1"
   Position: 1
   MenuNum: 51
@@ -315,7 +315,7 @@ MenuTree36: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree37: MenuTree
+bulkload: MenuTree
   Level: "1"
   Position: 2
   MenuNum: 788
@@ -325,7 +325,7 @@ MenuTree37: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree38: MenuTree
+bulkload: MenuTree
   Level: "1"
   Position: 3
   MenuNum: 260
@@ -335,7 +335,7 @@ MenuTree38: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree39: MenuTree
+bulkload: MenuTree
   Level: "1"
   Position: 4
   MenuNum: 9000
@@ -345,7 +345,7 @@ MenuTree39: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree40: MenuTree
+bulkload: MenuTree
   Level: "1"
   Position: 5
   MenuNum: 737
@@ -355,7 +355,7 @@ MenuTree40: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree41: MenuTree
+bulkload: MenuTree
   Level: "1"
   Position: 6
   MenuNum: 820
@@ -365,7 +365,7 @@ MenuTree41: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree42: MenuTree
+bulkload: MenuTree
   Level: "1"
   Position: 7
   MenuNum: 728
@@ -375,7 +375,7 @@ MenuTree42: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree43: MenuTree
+bulkload: MenuTree
   Level: "1"
   Position: 8
   MenuNum: 3
@@ -384,7 +384,7 @@ MenuTree43: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree44: MenuTree
+bulkload: MenuTree
   Level: "11"
   Position: 1
   MenuNum: 14
@@ -394,7 +394,7 @@ MenuTree44: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree45: MenuTree
+bulkload: MenuTree
   Level: "11"
   Position: 2
   MenuNum: 877
@@ -404,7 +404,7 @@ MenuTree45: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree46: MenuTree
+bulkload: MenuTree
   Level: "11"
   Position: 5
   MenuNum: 42
@@ -414,7 +414,7 @@ MenuTree46: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree47: MenuTree
+bulkload: MenuTree
   Level: "11"
   Position: 7
   MenuNum: 756
@@ -424,7 +424,7 @@ MenuTree47: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree48: MenuTree
+bulkload: MenuTree
   Level: "11"
   Position: 8
   MenuNum: 8
@@ -432,7 +432,7 @@ MenuTree48: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree49: MenuTree
+bulkload: MenuTree
   Level: "111"
   Position: 1
   MenuNum: 601
@@ -443,7 +443,7 @@ MenuTree49: MenuTree
   State[1]: yes
   TokenCode: "MAIN"
 
-MenuTree50: MenuTree
+bulkload: MenuTree
   Level: "111"
   Position: 2
   MenuNum: 754
@@ -453,7 +453,7 @@ MenuTree50: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree51: MenuTree
+bulkload: MenuTree
   Level: "111"
   Position: 3
   MenuNum: 750
@@ -463,7 +463,7 @@ MenuTree51: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree52: MenuTree
+bulkload: MenuTree
   Level: "111"
   Position: 4
   MenuNum: 602
@@ -473,7 +473,7 @@ MenuTree52: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree53: MenuTree
+bulkload: MenuTree
   Level: "111"
   Position: 5
   MenuNum: 1162
@@ -483,7 +483,7 @@ MenuTree53: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree54: MenuTree
+bulkload: MenuTree
   Level: "111"
   Position: 6
   MenuNum: 814
@@ -493,7 +493,7 @@ MenuTree54: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree55: MenuTree
+bulkload: MenuTree
   Level: "111"
   Position: 7
   MenuNum: 591
@@ -503,7 +503,7 @@ MenuTree55: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree56: MenuTree
+bulkload: MenuTree
   Level: "111"
   Position: 8
   MenuNum: 8
@@ -511,7 +511,7 @@ MenuTree56: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree57: MenuTree
+bulkload: MenuTree
   Level: "1112"
   Position: 1
   MenuNum: 754
@@ -521,7 +521,7 @@ MenuTree57: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree58: MenuTree
+bulkload: MenuTree
   Level: "1112"
   Position: 2
   MenuNum: 974
@@ -531,7 +531,7 @@ MenuTree58: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree59: MenuTree
+bulkload: MenuTree
   Level: "1112"
   Position: 3
   MenuNum: 1113
@@ -541,7 +541,7 @@ MenuTree59: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree60: MenuTree
+bulkload: MenuTree
   Level: "1112"
   Position: 4
   MenuNum: 999
@@ -551,7 +551,7 @@ MenuTree60: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree61: MenuTree
+bulkload: MenuTree
   Level: "1112"
   Position: 5
   MenuNum: 295
@@ -561,7 +561,7 @@ MenuTree61: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree62: MenuTree
+bulkload: MenuTree
   Level: "1112"
   Position: 6
   MenuNum: 1751
@@ -572,7 +572,7 @@ MenuTree62: MenuTree
   State[1]: yes
   TokenCode: "MAIN"
 
-MenuTree63: MenuTree
+bulkload: MenuTree
   Level: "1112"
   Position: 8
   MenuNum: 8
@@ -580,7 +580,7 @@ MenuTree63: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree64: MenuTree
+bulkload: MenuTree
   Level: "1117"
   Position: 1
   MenuNum: 592
@@ -590,14 +590,14 @@ MenuTree64: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree65: MenuTree
+bulkload: MenuTree
   Level: "1117"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "MAIN"
 
-MenuTree66: MenuTree
+bulkload: MenuTree
   Level: "112"
   Position: 1
   MenuNum: 51
@@ -607,7 +607,7 @@ MenuTree66: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree67: MenuTree
+bulkload: MenuTree
   Level: "112"
   Position: 2
   MenuNum: 1722
@@ -617,7 +617,7 @@ MenuTree67: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree68: MenuTree
+bulkload: MenuTree
   Level: "112"
   Position: 3
   MenuNum: 234
@@ -627,7 +627,7 @@ MenuTree68: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree69: MenuTree
+bulkload: MenuTree
   Level: "112"
   Position: 4
   MenuNum: 878
@@ -637,7 +637,7 @@ MenuTree69: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree70: MenuTree
+bulkload: MenuTree
   Level: "112"
   Position: 5
   MenuNum: 1763
@@ -647,7 +647,7 @@ MenuTree70: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree71: MenuTree
+bulkload: MenuTree
   Level: "112"
   Position: 6
   MenuNum: 1753
@@ -657,7 +657,7 @@ MenuTree71: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree72: MenuTree
+bulkload: MenuTree
   Level: "112"
   Position: 7
   MenuNum: 555
@@ -667,7 +667,7 @@ MenuTree72: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree73: MenuTree
+bulkload: MenuTree
   Level: "112"
   Position: 8
   MenuNum: 8
@@ -675,7 +675,7 @@ MenuTree73: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree74: MenuTree
+bulkload: MenuTree
   Level: "1121"
   Position: 1
   MenuNum: 876
@@ -685,7 +685,7 @@ MenuTree74: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree75: MenuTree
+bulkload: MenuTree
   Level: "1121"
   Position: 2
   MenuNum: 1161
@@ -695,7 +695,7 @@ MenuTree75: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree76: MenuTree
+bulkload: MenuTree
   Level: "1121"
   Position: 3
   MenuNum: 1791
@@ -705,7 +705,7 @@ MenuTree76: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree77: MenuTree
+bulkload: MenuTree
   Level: "1121"
   Position: 8
   MenuNum: 8
@@ -713,7 +713,7 @@ MenuTree77: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree78: MenuTree
+bulkload: MenuTree
   Level: "1126"
   Position: 1
   MenuNum: 1753
@@ -723,7 +723,7 @@ MenuTree78: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree79: MenuTree
+bulkload: MenuTree
   Level: "1126"
   Position: 3
   MenuNum: 1756
@@ -733,7 +733,7 @@ MenuTree79: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree80: MenuTree
+bulkload: MenuTree
   Level: "1126"
   Position: 4
   MenuNum: 1754
@@ -743,7 +743,7 @@ MenuTree80: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree81: MenuTree
+bulkload: MenuTree
   Level: "1126"
   Position: 8
   MenuNum: 8
@@ -751,7 +751,7 @@ MenuTree81: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree82: MenuTree
+bulkload: MenuTree
   Level: "1127"
   Position: 1
   MenuNum: 994
@@ -761,7 +761,7 @@ MenuTree82: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree83: MenuTree
+bulkload: MenuTree
   Level: "1127"
   Position: 3
   MenuNum: 970
@@ -771,14 +771,14 @@ MenuTree83: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree84: MenuTree
+bulkload: MenuTree
   Level: "1127"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "MAIN"
 
-MenuTree85: MenuTree
+bulkload: MenuTree
   Level: "114"
   Position: 8
   MenuNum: 8
@@ -786,7 +786,7 @@ MenuTree85: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree86: MenuTree
+bulkload: MenuTree
   Level: "115"
   Position: 2
   MenuNum: 9810
@@ -795,7 +795,7 @@ MenuTree86: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree87: MenuTree
+bulkload: MenuTree
   Level: "115"
   Position: 3
   MenuNum: 9811
@@ -804,7 +804,7 @@ MenuTree87: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree88: MenuTree
+bulkload: MenuTree
   Level: "115"
   Position: 4
   MenuNum: 810
@@ -814,7 +814,7 @@ MenuTree88: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree89: MenuTree
+bulkload: MenuTree
   Level: "115"
   Position: 6
   MenuNum: 809
@@ -824,7 +824,7 @@ MenuTree89: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree90: MenuTree
+bulkload: MenuTree
   Level: "115"
   Position: 8
   MenuNum: 8
@@ -832,7 +832,7 @@ MenuTree90: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree91: MenuTree
+bulkload: MenuTree
   Level: "116"
   Position: 8
   MenuNum: 8
@@ -841,7 +841,7 @@ MenuTree91: MenuTree
   State[1]: yes
   TokenCode: "MAIN"
 
-MenuTree92: MenuTree
+bulkload: MenuTree
   Level: "117"
   Position: 2
   MenuNum: 952
@@ -851,7 +851,7 @@ MenuTree92: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree93: MenuTree
+bulkload: MenuTree
   Level: "117"
   Position: 3
   MenuNum: 756
@@ -861,7 +861,7 @@ MenuTree93: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree94: MenuTree
+bulkload: MenuTree
   Level: "117"
   Position: 4
   MenuNum: 525
@@ -872,7 +872,7 @@ MenuTree94: MenuTree
   State[1]: yes
   TokenCode: "MAIN"
 
-MenuTree95: MenuTree
+bulkload: MenuTree
   Level: "117"
   Position: 5
   MenuNum: 16
@@ -883,7 +883,7 @@ MenuTree95: MenuTree
   State[1]: yes
   TokenCode: "MAIN"
 
-MenuTree96: MenuTree
+bulkload: MenuTree
   Level: "117"
   Position: 7
   MenuNum: 2430
@@ -893,7 +893,7 @@ MenuTree96: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree97: MenuTree
+bulkload: MenuTree
   Level: "117"
   Position: 8
   MenuNum: 8
@@ -901,7 +901,7 @@ MenuTree97: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree98: MenuTree
+bulkload: MenuTree
   Level: "12"
   Position: 1
   MenuNum: 526
@@ -911,7 +911,7 @@ MenuTree98: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree99: MenuTree
+bulkload: MenuTree
   Level: "12"
   Position: 2
   MenuNum: 710
@@ -922,7 +922,7 @@ MenuTree99: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree100: MenuTree
+bulkload: MenuTree
   Level: "12"
   Position: 3
   MenuNum: 1788
@@ -932,7 +932,7 @@ MenuTree100: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree101: MenuTree
+bulkload: MenuTree
   Level: "12"
   Position: 5
   MenuNum: 735
@@ -942,7 +942,7 @@ MenuTree101: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree102: MenuTree
+bulkload: MenuTree
   Level: "12"
   Position: 6
   MenuNum: 1761
@@ -952,7 +952,7 @@ MenuTree102: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree103: MenuTree
+bulkload: MenuTree
   Level: "12"
   Position: 7
   MenuNum: 1758
@@ -963,7 +963,7 @@ MenuTree103: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree104: MenuTree
+bulkload: MenuTree
   Level: "12"
   Position: 8
   MenuNum: 8
@@ -971,7 +971,7 @@ MenuTree104: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree105: MenuTree
+bulkload: MenuTree
   Level: "121"
   Position: 1
   MenuNum: 787
@@ -981,7 +981,7 @@ MenuTree105: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree106: MenuTree
+bulkload: MenuTree
   Level: "121"
   Position: 2
   MenuNum: 558
@@ -991,7 +991,7 @@ MenuTree106: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree107: MenuTree
+bulkload: MenuTree
   Level: "121"
   Position: 3
   MenuNum: 1513
@@ -1001,7 +1001,7 @@ MenuTree107: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree108: MenuTree
+bulkload: MenuTree
   Level: "121"
   Position: 4
   MenuNum: 1095
@@ -1011,7 +1011,7 @@ MenuTree108: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree109: MenuTree
+bulkload: MenuTree
   Level: "121"
   Position: 5
   MenuNum: 1514
@@ -1021,7 +1021,7 @@ MenuTree109: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree110: MenuTree
+bulkload: MenuTree
   Level: "121"
   Position: 6
   MenuNum: 1015
@@ -1031,7 +1031,7 @@ MenuTree110: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree111: MenuTree
+bulkload: MenuTree
   Level: "121"
   Position: 8
   MenuNum: 8
@@ -1039,7 +1039,7 @@ MenuTree111: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree112: MenuTree
+bulkload: MenuTree
   Level: "1217"
   Position: 8
   MenuNum: 8
@@ -1047,7 +1047,7 @@ MenuTree112: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree113: MenuTree
+bulkload: MenuTree
   Level: "123"
   Position: 1
   MenuNum: 875
@@ -1057,7 +1057,7 @@ MenuTree113: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree114: MenuTree
+bulkload: MenuTree
   Level: "123"
   Position: 2
   MenuNum: 520
@@ -1067,7 +1067,7 @@ MenuTree114: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree115: MenuTree
+bulkload: MenuTree
   Level: "123"
   Position: 3
   MenuNum: 1786
@@ -1078,7 +1078,7 @@ MenuTree115: MenuTree
   State[1]: yes
   TokenCode: "CC"
 
-MenuTree116: MenuTree
+bulkload: MenuTree
   Level: "123"
   Position: 8
   MenuNum: 8
@@ -1086,7 +1086,7 @@ MenuTree116: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree117: MenuTree
+bulkload: MenuTree
   Level: "124"
   Position: 1
   MenuNum: 979
@@ -1096,7 +1096,7 @@ MenuTree117: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree118: MenuTree
+bulkload: MenuTree
   Level: "124"
   Position: 2
   MenuNum: 562
@@ -1106,7 +1106,7 @@ MenuTree118: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree119: MenuTree
+bulkload: MenuTree
   Level: "124"
   Position: 8
   MenuNum: 8
@@ -1114,7 +1114,7 @@ MenuTree119: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree120: MenuTree
+bulkload: MenuTree
   Level: "125"
   Position: 1
   MenuNum: 1736
@@ -1124,7 +1124,7 @@ MenuTree120: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree121: MenuTree
+bulkload: MenuTree
   Level: "125"
   Position: 2
   MenuNum: 1737
@@ -1135,7 +1135,7 @@ MenuTree121: MenuTree
   State[1]: yes
   TokenCode: "CC"
 
-MenuTree122: MenuTree
+bulkload: MenuTree
   Level: "125"
   Position: 3
   MenuNum: 1738
@@ -1145,7 +1145,7 @@ MenuTree122: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree123: MenuTree
+bulkload: MenuTree
   Level: "125"
   Position: 4
   MenuNum: 1031
@@ -1156,7 +1156,7 @@ MenuTree123: MenuTree
   State[1]: yes
   TokenCode: "CC"
 
-MenuTree124: MenuTree
+bulkload: MenuTree
   Level: "125"
   Position: 5
   MenuNum: 1033
@@ -1167,7 +1167,7 @@ MenuTree124: MenuTree
   State[1]: yes
   TokenCode: "CC"
 
-MenuTree125: MenuTree
+bulkload: MenuTree
   Level: "125"
   Position: 7
   MenuNum: 1152
@@ -1178,7 +1178,7 @@ MenuTree125: MenuTree
   State[1]: yes
   TokenCode: "CC"
 
-MenuTree126: MenuTree
+bulkload: MenuTree
   Level: "125"
   Position: 8
   MenuNum: 8
@@ -1186,7 +1186,7 @@ MenuTree126: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree127: MenuTree
+bulkload: MenuTree
   Level: "1251"
   Position: 1
   MenuNum: 915
@@ -1196,7 +1196,7 @@ MenuTree127: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree128: MenuTree
+bulkload: MenuTree
   Level: "1251"
   Position: 2
   MenuNum: 916
@@ -1206,7 +1206,7 @@ MenuTree128: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree129: MenuTree
+bulkload: MenuTree
   Level: "1251"
   Position: 6
   MenuNum: 917
@@ -1216,7 +1216,7 @@ MenuTree129: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree130: MenuTree
+bulkload: MenuTree
   Level: "1251"
   Position: 7
   MenuNum: 918
@@ -1226,7 +1226,7 @@ MenuTree130: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree131: MenuTree
+bulkload: MenuTree
   Level: "1251"
   Position: 8
   MenuNum: 8
@@ -1234,7 +1234,7 @@ MenuTree131: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree132: MenuTree
+bulkload: MenuTree
   Level: "1252"
   Position: 8
   MenuNum: 8
@@ -1242,7 +1242,7 @@ MenuTree132: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree133: MenuTree
+bulkload: MenuTree
   Level: "1253"
   Position: 8
   MenuNum: 8
@@ -1250,7 +1250,7 @@ MenuTree133: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree134: MenuTree
+bulkload: MenuTree
   Level: "1254"
   Position: 8
   MenuNum: 8
@@ -1258,7 +1258,7 @@ MenuTree134: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree135: MenuTree
+bulkload: MenuTree
   Level: "1257"
   Position: 8
   MenuNum: 8
@@ -1267,7 +1267,7 @@ MenuTree135: MenuTree
   State[1]: yes
   TokenCode: "CC"
 
-MenuTree136: MenuTree
+bulkload: MenuTree
   Level: "13"
   Position: 1
   MenuNum: 1882
@@ -1277,7 +1277,7 @@ MenuTree136: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree137: MenuTree
+bulkload: MenuTree
   Level: "13"
   Position: 2
   MenuNum: 1884
@@ -1287,7 +1287,7 @@ MenuTree137: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree138: MenuTree
+bulkload: MenuTree
   Level: "13"
   Position: 3
   MenuNum: 259
@@ -1297,7 +1297,7 @@ MenuTree138: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree139: MenuTree
+bulkload: MenuTree
   Level: "13"
   Position: 4
   MenuNum: 738
@@ -1307,7 +1307,7 @@ MenuTree139: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree140: MenuTree
+bulkload: MenuTree
   Level: "13"
   Position: 5
   MenuNum: 226
@@ -1317,7 +1317,7 @@ MenuTree140: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree141: MenuTree
+bulkload: MenuTree
   Level: "13"
   Position: 6
   MenuNum: 201
@@ -1327,7 +1327,7 @@ MenuTree141: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree142: MenuTree
+bulkload: MenuTree
   Level: "13"
   Position: 7
   MenuNum: 239
@@ -1337,14 +1337,14 @@ MenuTree142: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree143: MenuTree
+bulkload: MenuTree
   Level: "13"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "MOB"
 
-MenuTree144: MenuTree
+bulkload: MenuTree
   Level: "131"
   Position: 1
   MenuNum: 293
@@ -1354,7 +1354,7 @@ MenuTree144: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree145: MenuTree
+bulkload: MenuTree
   Level: "131"
   Position: 2
   MenuNum: 2205
@@ -1364,7 +1364,7 @@ MenuTree145: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree146: MenuTree
+bulkload: MenuTree
   Level: "131"
   Position: 3
   MenuNum: 1340
@@ -1374,7 +1374,7 @@ MenuTree146: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree147: MenuTree
+bulkload: MenuTree
   Level: "131"
   Position: 4
   MenuNum: 1141
@@ -1384,7 +1384,7 @@ MenuTree147: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree148: MenuTree
+bulkload: MenuTree
   Level: "131"
   Position: 5
   MenuNum: 2951
@@ -1394,7 +1394,7 @@ MenuTree148: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree149: MenuTree
+bulkload: MenuTree
   Level: "131"
   Position: 6
   MenuNum: 1815
@@ -1404,7 +1404,7 @@ MenuTree149: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree150: MenuTree
+bulkload: MenuTree
   Level: "131"
   Position: 7
   MenuNum: 1370
@@ -1414,14 +1414,14 @@ MenuTree150: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree151: MenuTree
+bulkload: MenuTree
   Level: "131"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "MOB"
 
-MenuTree152: MenuTree
+bulkload: MenuTree
   Level: "1313"
   Position: 1
   MenuNum: 1513
@@ -1431,7 +1431,7 @@ MenuTree152: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree153: MenuTree
+bulkload: MenuTree
   Level: "1313"
   Position: 2
   MenuNum: 1341
@@ -1441,7 +1441,7 @@ MenuTree153: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree154: MenuTree
+bulkload: MenuTree
   Level: "1313"
   Position: 3
   MenuNum: 1910
@@ -1451,7 +1451,7 @@ MenuTree154: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree155: MenuTree
+bulkload: MenuTree
   Level: "1313"
   Position: 4
   MenuNum: 2410
@@ -1461,7 +1461,7 @@ MenuTree155: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree156: MenuTree
+bulkload: MenuTree
   Level: "1313"
   Position: 8
   MenuNum: 8
@@ -1469,7 +1469,7 @@ MenuTree156: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree157: MenuTree
+bulkload: MenuTree
   Level: "132"
   Position: 1
   MenuNum: 1763
@@ -1479,7 +1479,7 @@ MenuTree157: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree158: MenuTree
+bulkload: MenuTree
   Level: "132"
   Position: 2
   MenuNum: 2117
@@ -1489,7 +1489,7 @@ MenuTree158: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree159: MenuTree
+bulkload: MenuTree
   Level: "132"
   Position: 4
   MenuNum: 2134
@@ -1499,7 +1499,7 @@ MenuTree159: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree160: MenuTree
+bulkload: MenuTree
   Level: "132"
   Position: 5
   MenuNum: 2960
@@ -1509,7 +1509,7 @@ MenuTree160: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree161: MenuTree
+bulkload: MenuTree
   Level: "132"
   Position: 6
   MenuNum: 1975
@@ -1519,7 +1519,7 @@ MenuTree161: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree162: MenuTree
+bulkload: MenuTree
   Level: "132"
   Position: 7
   MenuNum: 2422
@@ -1529,14 +1529,14 @@ MenuTree162: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree163: MenuTree
+bulkload: MenuTree
   Level: "132"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "MOB"
 
-MenuTree164: MenuTree
+bulkload: MenuTree
   Level: "13217"
   Position: 8
   MenuNum: 8
@@ -1544,7 +1544,7 @@ MenuTree164: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree165: MenuTree
+bulkload: MenuTree
   Level: "1322"
   Position: 1
   MenuNum: 1451
@@ -1554,7 +1554,7 @@ MenuTree165: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree166: MenuTree
+bulkload: MenuTree
   Level: "1322"
   Position: 2
   MenuNum: 1452
@@ -1564,7 +1564,7 @@ MenuTree166: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree167: MenuTree
+bulkload: MenuTree
   Level: "1322"
   Position: 3
   MenuNum: 1453
@@ -1574,7 +1574,7 @@ MenuTree167: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree168: MenuTree
+bulkload: MenuTree
   Level: "1322"
   Position: 8
   MenuNum: 8
@@ -1582,7 +1582,7 @@ MenuTree168: MenuTree
   MenuClass: 8888
   TokenCode: "MOB"
 
-MenuTree169: MenuTree
+bulkload: MenuTree
   Level: "13227"
   Position: 8
   MenuNum: 8
@@ -1590,7 +1590,7 @@ MenuTree169: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree170: MenuTree
+bulkload: MenuTree
   Level: "1323"
   Position: 3
   MenuNum: 1110
@@ -1600,7 +1600,7 @@ MenuTree170: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree171: MenuTree
+bulkload: MenuTree
   Level: "1323"
   Position: 4
   MenuNum: 1111
@@ -1610,14 +1610,14 @@ MenuTree171: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree172: MenuTree
+bulkload: MenuTree
   Level: "1323"
   Position: 8
   MenuNum: 8
   MenuType: 3
   MenuClass: 9999
 
-MenuTree173: MenuTree
+bulkload: MenuTree
   Level: "1324"
   Position: 1
   MenuNum: 2132
@@ -1628,7 +1628,7 @@ MenuTree173: MenuTree
   State[1]: yes
   TokenCode: "mob"
 
-MenuTree174: MenuTree
+bulkload: MenuTree
   Level: "1324"
   Position: 4
   MenuNum: 1043
@@ -1638,7 +1638,7 @@ MenuTree174: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree175: MenuTree
+bulkload: MenuTree
   Level: "1324"
   Position: 5
   MenuNum: 2604
@@ -1648,7 +1648,7 @@ MenuTree175: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree176: MenuTree
+bulkload: MenuTree
   Level: "1324"
   Position: 6
   MenuNum: 2611
@@ -1658,7 +1658,7 @@ MenuTree176: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree177: MenuTree
+bulkload: MenuTree
   Level: "1324"
   Position: 7
   MenuNum: 9821
@@ -1668,7 +1668,7 @@ MenuTree177: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree178: MenuTree
+bulkload: MenuTree
   Level: "1324"
   Position: 8
   MenuNum: 8
@@ -1676,7 +1676,7 @@ MenuTree178: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree179: MenuTree
+bulkload: MenuTree
   Level: "1325"
   Position: 1
   MenuNum: 2961
@@ -1686,7 +1686,7 @@ MenuTree179: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree180: MenuTree
+bulkload: MenuTree
   Level: "1325"
   Position: 2
   MenuNum: 2962
@@ -1696,7 +1696,7 @@ MenuTree180: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree181: MenuTree
+bulkload: MenuTree
   Level: "1325"
   Position: 3
   MenuNum: 9834
@@ -1706,7 +1706,7 @@ MenuTree181: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree182: MenuTree
+bulkload: MenuTree
   Level: "1325"
   Position: 6
   MenuNum: 1741
@@ -1717,7 +1717,7 @@ MenuTree182: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree183: MenuTree
+bulkload: MenuTree
   Level: "1325"
   Position: 8
   MenuNum: 8
@@ -1725,7 +1725,7 @@ MenuTree183: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree184: MenuTree
+bulkload: MenuTree
   Level: "13251"
   Position: 1
   MenuNum: 1742
@@ -1736,7 +1736,7 @@ MenuTree184: MenuTree
   State[1]: yes
   TokenCode: "mob"
 
-MenuTree185: MenuTree
+bulkload: MenuTree
   Level: "13251"
   Position: 2
   MenuNum: 1743
@@ -1746,7 +1746,7 @@ MenuTree185: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree186: MenuTree
+bulkload: MenuTree
   Level: "13251"
   Position: 3
   MenuNum: 1744
@@ -1756,14 +1756,14 @@ MenuTree186: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree187: MenuTree
+bulkload: MenuTree
   Level: "13251"
   Position: 8
   MenuNum: 8
   MenuType: 3
   MenuClass: 9999
 
-MenuTree188: MenuTree
+bulkload: MenuTree
   Level: "1326"
   Position: 1
   MenuNum: 1973
@@ -1773,7 +1773,7 @@ MenuTree188: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree189: MenuTree
+bulkload: MenuTree
   Level: "1326"
   Position: 2
   MenuNum: 1977
@@ -1783,7 +1783,7 @@ MenuTree189: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree190: MenuTree
+bulkload: MenuTree
   Level: "1326"
   Position: 3
   MenuNum: 1974
@@ -1793,7 +1793,7 @@ MenuTree190: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree191: MenuTree
+bulkload: MenuTree
   Level: "1326"
   Position: 8
   MenuNum: 8
@@ -1801,7 +1801,7 @@ MenuTree191: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree192: MenuTree
+bulkload: MenuTree
   Level: "1327"
   Position: 1
   MenuNum: 2428
@@ -1811,7 +1811,7 @@ MenuTree192: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree193: MenuTree
+bulkload: MenuTree
   Level: "1327"
   Position: 2
   MenuNum: 2429
@@ -1821,7 +1821,7 @@ MenuTree193: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree194: MenuTree
+bulkload: MenuTree
   Level: "1327"
   Position: 3
   MenuNum: 2422
@@ -1831,7 +1831,7 @@ MenuTree194: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree195: MenuTree
+bulkload: MenuTree
   Level: "1327"
   Position: 4
   MenuNum: 1822
@@ -1841,7 +1841,7 @@ MenuTree195: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree196: MenuTree
+bulkload: MenuTree
   Level: "1327"
   Position: 6
   MenuNum: 1824
@@ -1852,7 +1852,7 @@ MenuTree196: MenuTree
   State[1]: yes
   TokenCode: "VENDOR"
 
-MenuTree197: MenuTree
+bulkload: MenuTree
   Level: "1327"
   Position: 8
   MenuNum: 8
@@ -1860,7 +1860,7 @@ MenuTree197: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree198: MenuTree
+bulkload: MenuTree
   Level: "133"
   Position: 2
   MenuNum: 710
@@ -1870,7 +1870,7 @@ MenuTree198: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree199: MenuTree
+bulkload: MenuTree
   Level: "133"
   Position: 3
   MenuNum: 259
@@ -1880,7 +1880,7 @@ MenuTree199: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree200: MenuTree
+bulkload: MenuTree
   Level: "133"
   Position: 4
   MenuNum: 728
@@ -1889,7 +1889,7 @@ MenuTree200: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree201: MenuTree
+bulkload: MenuTree
   Level: "133"
   Position: 5
   MenuNum: 2206
@@ -1899,7 +1899,7 @@ MenuTree201: MenuTree
   MenuClass: 9999
   TokenCode: "ORDER"
 
-MenuTree202: MenuTree
+bulkload: MenuTree
   Level: "133"
   Position: 6
   MenuNum: 1960
@@ -1909,7 +1909,7 @@ MenuTree202: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree203: MenuTree
+bulkload: MenuTree
   Level: "133"
   Position: 7
   MenuNum: 42
@@ -1919,14 +1919,14 @@ MenuTree203: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree204: MenuTree
+bulkload: MenuTree
   Level: "133"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "MOB"
 
-MenuTree205: MenuTree
+bulkload: MenuTree
   Level: "1334"
   Position: 2
   MenuNum: 1065
@@ -1936,7 +1936,7 @@ MenuTree205: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree206: MenuTree
+bulkload: MenuTree
   Level: "1334"
   Position: 3
   MenuNum: 1066
@@ -1946,7 +1946,7 @@ MenuTree206: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree207: MenuTree
+bulkload: MenuTree
   Level: "1334"
   Position: 4
   MenuNum: 1067
@@ -1956,7 +1956,7 @@ MenuTree207: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree208: MenuTree
+bulkload: MenuTree
   Level: "1334"
   Position: 5
   MenuNum: 1123
@@ -1966,7 +1966,7 @@ MenuTree208: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree209: MenuTree
+bulkload: MenuTree
   Level: "1334"
   Position: 8
   MenuNum: 8
@@ -1974,7 +1974,7 @@ MenuTree209: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree210: MenuTree
+bulkload: MenuTree
   Level: "13341"
   Position: 8
   MenuNum: 8
@@ -1982,7 +1982,7 @@ MenuTree210: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree211: MenuTree
+bulkload: MenuTree
   Level: "1335"
   Position: 2
   MenuNum: 9022
@@ -1991,7 +1991,7 @@ MenuTree211: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree212: MenuTree
+bulkload: MenuTree
   Level: "1335"
   Position: 3
   MenuNum: 2849
@@ -2001,7 +2001,7 @@ MenuTree212: MenuTree
   MenuClass: 9
   TokenCode: "MOB"
 
-MenuTree213: MenuTree
+bulkload: MenuTree
   Level: "1335"
   Position: 4
   MenuNum: 2850
@@ -2011,7 +2011,7 @@ MenuTree213: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree214: MenuTree
+bulkload: MenuTree
   Level: "1335"
   Position: 5
   MenuNum: 2206
@@ -2021,7 +2021,7 @@ MenuTree214: MenuTree
   MenuClass: 9999
   TokenCode: "ORDER"
 
-MenuTree215: MenuTree
+bulkload: MenuTree
   Level: "1335"
   Position: 6
   MenuNum: 2851
@@ -2031,7 +2031,7 @@ MenuTree215: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree216: MenuTree
+bulkload: MenuTree
   Level: "1335"
   Position: 7
   MenuNum: 9055
@@ -2041,7 +2041,7 @@ MenuTree216: MenuTree
   MenuClass: 9999
   TokenCode: "ORDER"
 
-MenuTree217: MenuTree
+bulkload: MenuTree
   Level: "1335"
   Position: 8
   MenuNum: 8
@@ -2049,7 +2049,7 @@ MenuTree217: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree218: MenuTree
+bulkload: MenuTree
   Level: "13355"
   Position: 1
   MenuNum: 9
@@ -2059,7 +2059,7 @@ MenuTree218: MenuTree
   MenuClass: 9999
   TokenCode: "ORDER"
 
-MenuTree219: MenuTree
+bulkload: MenuTree
   Level: "13355"
   Position: 2
   MenuNum: 150
@@ -2069,7 +2069,7 @@ MenuTree219: MenuTree
   MenuClass: 9999
   TokenCode: "ORDER"
 
-MenuTree220: MenuTree
+bulkload: MenuTree
   Level: "13355"
   Position: 3
   MenuNum: 9066
@@ -2080,7 +2080,7 @@ MenuTree220: MenuTree
   State[1]: yes
   TokenCode: "ORDER"
 
-MenuTree221: MenuTree
+bulkload: MenuTree
   Level: "13355"
   Position: 4
   MenuNum: 9047
@@ -2090,7 +2090,7 @@ MenuTree221: MenuTree
   MenuClass: 9999
   TokenCode: "ORDER"
 
-MenuTree222: MenuTree
+bulkload: MenuTree
   Level: "13355"
   Position: 5
   MenuNum: 9061
@@ -2100,7 +2100,7 @@ MenuTree222: MenuTree
   MenuClass: 9999
   TokenCode: "ORDER"
 
-MenuTree223: MenuTree
+bulkload: MenuTree
   Level: "13355"
   Position: 7
   MenuNum: 9045
@@ -2110,7 +2110,7 @@ MenuTree223: MenuTree
   MenuClass: 9999
   TokenCode: "ORDER"
 
-MenuTree224: MenuTree
+bulkload: MenuTree
   Level: "13355"
   Position: 8
   MenuNum: 8
@@ -2118,7 +2118,7 @@ MenuTree224: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree225: MenuTree
+bulkload: MenuTree
   Level: "133557"
   Position: 3
   MenuNum: 9052
@@ -2128,7 +2128,7 @@ MenuTree225: MenuTree
   MenuClass: 9999
   TokenCode: "ORDER"
 
-MenuTree226: MenuTree
+bulkload: MenuTree
   Level: "133557"
   Position: 4
   MenuNum: 9054
@@ -2138,7 +2138,7 @@ MenuTree226: MenuTree
   MenuClass: 9999
   TokenCode: "ORDER"
 
-MenuTree227: MenuTree
+bulkload: MenuTree
   Level: "133557"
   Position: 8
   MenuNum: 8
@@ -2146,7 +2146,7 @@ MenuTree227: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree228: MenuTree
+bulkload: MenuTree
   Level: "13356"
   Position: 8
   MenuNum: 8
@@ -2154,7 +2154,7 @@ MenuTree228: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree229: MenuTree
+bulkload: MenuTree
   Level: "133567"
   Position: 2
   MenuNum: 9052
@@ -2163,7 +2163,7 @@ MenuTree229: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree230: MenuTree
+bulkload: MenuTree
   Level: "133567"
   Position: 3
   MenuNum: 9053
@@ -2172,7 +2172,7 @@ MenuTree230: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree231: MenuTree
+bulkload: MenuTree
   Level: "133567"
   Position: 4
   MenuNum: 9054
@@ -2181,7 +2181,7 @@ MenuTree231: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree232: MenuTree
+bulkload: MenuTree
   Level: "133567"
   Position: 8
   MenuNum: 8
@@ -2189,7 +2189,7 @@ MenuTree232: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree233: MenuTree
+bulkload: MenuTree
   Level: "1337"
   Position: 3
   MenuNum: 1134
@@ -2199,7 +2199,7 @@ MenuTree233: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree234: MenuTree
+bulkload: MenuTree
   Level: "1337"
   Position: 4
   MenuNum: 2226
@@ -2208,7 +2208,7 @@ MenuTree234: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree235: MenuTree
+bulkload: MenuTree
   Level: "1337"
   Position: 5
   MenuNum: 269
@@ -2218,7 +2218,7 @@ MenuTree235: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree236: MenuTree
+bulkload: MenuTree
   Level: "1337"
   Position: 6
   MenuNum: 1157
@@ -2228,7 +2228,7 @@ MenuTree236: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree237: MenuTree
+bulkload: MenuTree
   Level: "1337"
   Position: 8
   MenuNum: 8
@@ -2236,7 +2236,7 @@ MenuTree237: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree238: MenuTree
+bulkload: MenuTree
   Level: "134"
   Position: 1
   MenuNum: 716
@@ -2245,7 +2245,7 @@ MenuTree238: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree239: MenuTree
+bulkload: MenuTree
   Level: "134"
   Position: 2
   MenuNum: 1158
@@ -2255,7 +2255,7 @@ MenuTree239: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree240: MenuTree
+bulkload: MenuTree
   Level: "134"
   Position: 3
   MenuNum: 1136
@@ -2265,7 +2265,7 @@ MenuTree240: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree241: MenuTree
+bulkload: MenuTree
   Level: "134"
   Position: 4
   MenuNum: 2571
@@ -2274,7 +2274,7 @@ MenuTree241: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree242: MenuTree
+bulkload: MenuTree
   Level: "134"
   Position: 5
   MenuNum: 9790
@@ -2284,7 +2284,7 @@ MenuTree242: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree243: MenuTree
+bulkload: MenuTree
   Level: "134"
   Position: 6
   MenuNum: 9804
@@ -2294,7 +2294,7 @@ MenuTree243: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree244: MenuTree
+bulkload: MenuTree
   Level: "134"
   Position: 7
   MenuNum: 42
@@ -2302,7 +2302,7 @@ MenuTree244: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree245: MenuTree
+bulkload: MenuTree
   Level: "134"
   Position: 8
   MenuNum: 8
@@ -2310,7 +2310,7 @@ MenuTree245: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree246: MenuTree
+bulkload: MenuTree
   Level: "1341"
   Position: 1
   MenuNum: 298
@@ -2320,7 +2320,7 @@ MenuTree246: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree247: MenuTree
+bulkload: MenuTree
   Level: "1341"
   Position: 2
   MenuNum: 593
@@ -2329,7 +2329,7 @@ MenuTree247: MenuTree
   MenuClass: 999
   TokenCode: "mob"
 
-MenuTree248: MenuTree
+bulkload: MenuTree
   Level: "1341"
   Position: 3
   MenuNum: 299
@@ -2339,7 +2339,7 @@ MenuTree248: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree249: MenuTree
+bulkload: MenuTree
   Level: "1341"
   Position: 4
   MenuNum: 120
@@ -2349,7 +2349,7 @@ MenuTree249: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree250: MenuTree
+bulkload: MenuTree
   Level: "1341"
   Position: 5
   MenuNum: 2570
@@ -2359,7 +2359,7 @@ MenuTree250: MenuTree
   State[1]: yes
   TokenCode: "VENDOR"
 
-MenuTree251: MenuTree
+bulkload: MenuTree
   Level: "1341"
   Position: 7
   MenuNum: 9830
@@ -2368,7 +2368,7 @@ MenuTree251: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree252: MenuTree
+bulkload: MenuTree
   Level: "1341"
   Position: 8
   MenuNum: 8
@@ -2376,7 +2376,7 @@ MenuTree252: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree253: MenuTree
+bulkload: MenuTree
   Level: "1344"
   Position: 1
   MenuNum: 2570
@@ -2386,7 +2386,7 @@ MenuTree253: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree254: MenuTree
+bulkload: MenuTree
   Level: "1344"
   Position: 2
   MenuNum: 2572
@@ -2396,7 +2396,7 @@ MenuTree254: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree255: MenuTree
+bulkload: MenuTree
   Level: "1344"
   Position: 3
   MenuNum: 2573
@@ -2406,7 +2406,7 @@ MenuTree255: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree256: MenuTree
+bulkload: MenuTree
   Level: "1344"
   Position: 8
   MenuNum: 8
@@ -2414,7 +2414,7 @@ MenuTree256: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree257: MenuTree
+bulkload: MenuTree
   Level: "1345"
   Position: 1
   MenuNum: 9791
@@ -2424,7 +2424,7 @@ MenuTree257: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree258: MenuTree
+bulkload: MenuTree
   Level: "1345"
   Position: 2
   MenuNum: 9790
@@ -2434,7 +2434,7 @@ MenuTree258: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree259: MenuTree
+bulkload: MenuTree
   Level: "1345"
   Position: 8
   MenuNum: 8
@@ -2442,7 +2442,7 @@ MenuTree259: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree260: MenuTree
+bulkload: MenuTree
   Level: "1347"
   Position: 1
   MenuNum: 977
@@ -2452,7 +2452,7 @@ MenuTree260: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree261: MenuTree
+bulkload: MenuTree
   Level: "1347"
   Position: 2
   MenuNum: 1822
@@ -2462,7 +2462,7 @@ MenuTree261: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree262: MenuTree
+bulkload: MenuTree
   Level: "1347"
   Position: 8
   MenuNum: 8
@@ -2470,7 +2470,7 @@ MenuTree262: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree263: MenuTree
+bulkload: MenuTree
   Level: "135"
   Position: 1
   MenuNum: 526
@@ -2480,7 +2480,7 @@ MenuTree263: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree264: MenuTree
+bulkload: MenuTree
   Level: "135"
   Position: 2
   MenuNum: 279
@@ -2490,7 +2490,7 @@ MenuTree264: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree265: MenuTree
+bulkload: MenuTree
   Level: "135"
   Position: 3
   MenuNum: 218
@@ -2500,7 +2500,7 @@ MenuTree265: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree266: MenuTree
+bulkload: MenuTree
   Level: "135"
   Position: 4
   MenuNum: 228
@@ -2510,14 +2510,14 @@ MenuTree266: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree267: MenuTree
+bulkload: MenuTree
   Level: "135"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "MOB"
 
-MenuTree268: MenuTree
+bulkload: MenuTree
   Level: "1351"
   Position: 1
   MenuNum: 223
@@ -2527,7 +2527,7 @@ MenuTree268: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree269: MenuTree
+bulkload: MenuTree
   Level: "1351"
   Position: 2
   MenuNum: 220
@@ -2537,7 +2537,7 @@ MenuTree269: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree270: MenuTree
+bulkload: MenuTree
   Level: "1351"
   Position: 3
   MenuNum: 225
@@ -2547,7 +2547,7 @@ MenuTree270: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree271: MenuTree
+bulkload: MenuTree
   Level: "1351"
   Position: 4
   MenuNum: 9828
@@ -2557,14 +2557,14 @@ MenuTree271: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree272: MenuTree
+bulkload: MenuTree
   Level: "1351"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "MOB"
 
-MenuTree273: MenuTree
+bulkload: MenuTree
   Level: "136"
   Position: 1
   MenuNum: 219
@@ -2574,7 +2574,7 @@ MenuTree273: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree274: MenuTree
+bulkload: MenuTree
   Level: "136"
   Position: 2
   MenuNum: 242
@@ -2585,7 +2585,7 @@ MenuTree274: MenuTree
   State[1]: yes
   TokenCode: "MAIN"
 
-MenuTree275: MenuTree
+bulkload: MenuTree
   Level: "136"
   Position: 3
   MenuNum: 229
@@ -2595,7 +2595,7 @@ MenuTree275: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree276: MenuTree
+bulkload: MenuTree
   Level: "136"
   Position: 4
   MenuNum: 232
@@ -2605,14 +2605,14 @@ MenuTree276: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree277: MenuTree
+bulkload: MenuTree
   Level: "136"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "MOB"
 
-MenuTree278: MenuTree
+bulkload: MenuTree
   Level: "137"
   Position: 1
   MenuNum: 264
@@ -2622,7 +2622,7 @@ MenuTree278: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree279: MenuTree
+bulkload: MenuTree
   Level: "137"
   Position: 2
   MenuNum: 253
@@ -2632,7 +2632,7 @@ MenuTree279: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree280: MenuTree
+bulkload: MenuTree
   Level: "137"
   Position: 3
   MenuNum: 254
@@ -2642,7 +2642,7 @@ MenuTree280: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree281: MenuTree
+bulkload: MenuTree
   Level: "137"
   Position: 4
   MenuNum: 9817
@@ -2652,7 +2652,7 @@ MenuTree281: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree282: MenuTree
+bulkload: MenuTree
   Level: "137"
   Position: 7
   MenuNum: 267
@@ -2661,14 +2661,14 @@ MenuTree282: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree283: MenuTree
+bulkload: MenuTree
   Level: "137"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "MOB"
 
-MenuTree284: MenuTree
+bulkload: MenuTree
   Level: "14"
   Position: 1
   MenuNum: 9001
@@ -2678,7 +2678,7 @@ MenuTree284: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree285: MenuTree
+bulkload: MenuTree
   Level: "14"
   Position: 2
   MenuNum: 9809
@@ -2688,7 +2688,7 @@ MenuTree285: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree286: MenuTree
+bulkload: MenuTree
   Level: "14"
   Position: 3
   MenuNum: 9021
@@ -2698,7 +2698,7 @@ MenuTree286: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree287: MenuTree
+bulkload: MenuTree
   Level: "14"
   Position: 4
   MenuNum: 6900
@@ -2708,7 +2708,7 @@ MenuTree287: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree288: MenuTree
+bulkload: MenuTree
   Level: "14"
   Position: 5
   MenuNum: 9014
@@ -2718,7 +2718,7 @@ MenuTree288: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree289: MenuTree
+bulkload: MenuTree
   Level: "14"
   Position: 6
   MenuNum: 9818
@@ -2726,7 +2726,7 @@ MenuTree289: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree290: MenuTree
+bulkload: MenuTree
   Level: "14"
   Position: 7
   MenuNum: 9805
@@ -2736,13 +2736,13 @@ MenuTree290: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree291: MenuTree
+bulkload: MenuTree
   Level: "14"
   Position: 8
   MenuNum: 8
   MenuType: 3
 
-MenuTree292: MenuTree
+bulkload: MenuTree
   Level: "141"
   Position: 1
   MenuNum: 9002
@@ -2753,7 +2753,7 @@ MenuTree292: MenuTree
   State[1]: yes
   TokenCode: "CCSUPER"
 
-MenuTree293: MenuTree
+bulkload: MenuTree
   Level: "141"
   Position: 2
   MenuNum: 9803
@@ -2764,7 +2764,7 @@ MenuTree293: MenuTree
   State[1]: yes
   TokenCode: "CCSUPER"
 
-MenuTree294: MenuTree
+bulkload: MenuTree
   Level: "141"
   Position: 3
   MenuNum: 9010
@@ -2775,7 +2775,7 @@ MenuTree294: MenuTree
   State[1]: yes
   TokenCode: "CCSUPER"
 
-MenuTree295: MenuTree
+bulkload: MenuTree
   Level: "141"
   Position: 4
   MenuNum: 9008
@@ -2786,7 +2786,7 @@ MenuTree295: MenuTree
   State[1]: yes
   TokenCode: "CCSUPER"
 
-MenuTree296: MenuTree
+bulkload: MenuTree
   Level: "141"
   Position: 5
   MenuNum: 570
@@ -2796,7 +2796,7 @@ MenuTree296: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree297: MenuTree
+bulkload: MenuTree
   Level: "141"
   Position: 7
   MenuNum: 9009
@@ -2807,13 +2807,13 @@ MenuTree297: MenuTree
   State[1]: yes
   TokenCode: "CCSUPER"
 
-MenuTree298: MenuTree
+bulkload: MenuTree
   Level: "141"
   Position: 8
   MenuNum: 8
   MenuType: 3
 
-MenuTree299: MenuTree
+bulkload: MenuTree
   Level: "145"
   Position: 1
   MenuNum: 9015
@@ -2823,7 +2823,7 @@ MenuTree299: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree300: MenuTree
+bulkload: MenuTree
   Level: "145"
   Position: 3
   MenuNum: 1191
@@ -2833,7 +2833,7 @@ MenuTree300: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree301: MenuTree
+bulkload: MenuTree
   Level: "145"
   Position: 4
   MenuNum: 1192
@@ -2843,7 +2843,7 @@ MenuTree301: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree302: MenuTree
+bulkload: MenuTree
   Level: "145"
   Position: 5
   MenuNum: 1179
@@ -2853,13 +2853,13 @@ MenuTree302: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree303: MenuTree
+bulkload: MenuTree
   Level: "145"
   Position: 8
   MenuNum: 8
   MenuType: 3
 
-MenuTree304: MenuTree
+bulkload: MenuTree
   Level: "146"
   Position: 1
   MenuNum: 227
@@ -2869,7 +2869,7 @@ MenuTree304: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree305: MenuTree
+bulkload: MenuTree
   Level: "146"
   Position: 2
   MenuNum: 229
@@ -2878,7 +2878,7 @@ MenuTree305: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree306: MenuTree
+bulkload: MenuTree
   Level: "146"
   Position: 3
   MenuNum: 9820
@@ -2888,7 +2888,7 @@ MenuTree306: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree307: MenuTree
+bulkload: MenuTree
   Level: "146"
   Position: 4
   MenuNum: 9226
@@ -2898,7 +2898,7 @@ MenuTree307: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree308: MenuTree
+bulkload: MenuTree
   Level: "146"
   Position: 5
   MenuNum: 9822
@@ -2908,14 +2908,14 @@ MenuTree308: MenuTree
   MenuClass: 9999
   TokenCode: "ROAM_OUT_IP"
 
-MenuTree309: MenuTree
+bulkload: MenuTree
   Level: "146"
   Position: 8
   MenuNum: 8
   MenuType: 3
   MenuClass: 9999
 
-MenuTree310: MenuTree
+bulkload: MenuTree
   Level: "147"
   Position: 5
   MenuNum: 2204
@@ -2924,7 +2924,7 @@ MenuTree310: MenuTree
   MenuTitle: "Change Password"
   TokenCode: "CCSUPER"
 
-MenuTree311: MenuTree
+bulkload: MenuTree
   Level: "147"
   Position: 8
   MenuNum: 8
@@ -2932,7 +2932,7 @@ MenuTree311: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree312: MenuTree
+bulkload: MenuTree
   Level: "15"
   Position: 1
   MenuNum: 1068
@@ -2942,7 +2942,7 @@ MenuTree312: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree313: MenuTree
+bulkload: MenuTree
   Level: "15"
   Position: 2
   MenuNum: 957
@@ -2952,7 +2952,7 @@ MenuTree313: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree314: MenuTree
+bulkload: MenuTree
   Level: "15"
   Position: 3
   MenuNum: 798
@@ -2962,7 +2962,7 @@ MenuTree314: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree315: MenuTree
+bulkload: MenuTree
   Level: "15"
   Position: 4
   MenuNum: 42
@@ -2972,7 +2972,7 @@ MenuTree315: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree316: MenuTree
+bulkload: MenuTree
   Level: "15"
   Position: 5
   MenuNum: 794
@@ -2982,7 +2982,7 @@ MenuTree316: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree317: MenuTree
+bulkload: MenuTree
   Level: "15"
   Position: 6
   MenuNum: 791
@@ -2992,7 +2992,7 @@ MenuTree317: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree318: MenuTree
+bulkload: MenuTree
   Level: "15"
   Position: 7
   MenuNum: 792
@@ -3002,7 +3002,7 @@ MenuTree318: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree319: MenuTree
+bulkload: MenuTree
   Level: "15"
   Position: 8
   MenuNum: 8
@@ -3010,7 +3010,7 @@ MenuTree319: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree320: MenuTree
+bulkload: MenuTree
   Level: "151"
   Position: 1
   MenuNum: 1988
@@ -3020,7 +3020,7 @@ MenuTree320: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree321: MenuTree
+bulkload: MenuTree
   Level: "151"
   Position: 2
   MenuNum: 1921
@@ -3030,7 +3030,7 @@ MenuTree321: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree322: MenuTree
+bulkload: MenuTree
   Level: "151"
   Position: 3
   MenuNum: 1922
@@ -3040,7 +3040,7 @@ MenuTree322: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree323: MenuTree
+bulkload: MenuTree
   Level: "151"
   Position: 4
   MenuNum: 9024
@@ -3050,7 +3050,7 @@ MenuTree323: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree324: MenuTree
+bulkload: MenuTree
   Level: "151"
   Position: 5
   MenuNum: 2116
@@ -3060,7 +3060,7 @@ MenuTree324: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree325: MenuTree
+bulkload: MenuTree
   Level: "151"
   Position: 7
   MenuNum: 9842
@@ -3070,7 +3070,7 @@ MenuTree325: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree326: MenuTree
+bulkload: MenuTree
   Level: "151"
   Position: 8
   MenuNum: 8
@@ -3078,7 +3078,7 @@ MenuTree326: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree327: MenuTree
+bulkload: MenuTree
   Level: "152"
   Position: 1
   MenuNum: 907
@@ -3088,7 +3088,7 @@ MenuTree327: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree328: MenuTree
+bulkload: MenuTree
   Level: "152"
   Position: 2
   MenuNum: 1110
@@ -3097,7 +3097,7 @@ MenuTree328: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree329: MenuTree
+bulkload: MenuTree
   Level: "152"
   Position: 3
   MenuNum: 956
@@ -3107,7 +3107,7 @@ MenuTree329: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree330: MenuTree
+bulkload: MenuTree
   Level: "152"
   Position: 4
   MenuNum: 987
@@ -3117,7 +3117,7 @@ MenuTree330: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree331: MenuTree
+bulkload: MenuTree
   Level: "152"
   Position: 5
   MenuNum: 295
@@ -3127,7 +3127,7 @@ MenuTree331: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree332: MenuTree
+bulkload: MenuTree
   Level: "152"
   Position: 6
   MenuNum: 1776
@@ -3137,7 +3137,7 @@ MenuTree332: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree333: MenuTree
+bulkload: MenuTree
   Level: "152"
   Position: 7
   MenuNum: 918
@@ -3147,7 +3147,7 @@ MenuTree333: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree334: MenuTree
+bulkload: MenuTree
   Level: "152"
   Position: 8
   MenuNum: 8
@@ -3155,7 +3155,7 @@ MenuTree334: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree335: MenuTree
+bulkload: MenuTree
   Level: "153"
   Position: 1
   MenuNum: 798
@@ -3165,7 +3165,7 @@ MenuTree335: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree336: MenuTree
+bulkload: MenuTree
   Level: "153"
   Position: 5
   MenuNum: 1795
@@ -3175,7 +3175,7 @@ MenuTree336: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree337: MenuTree
+bulkload: MenuTree
   Level: "153"
   Position: 6
   MenuNum: 1796
@@ -3185,7 +3185,7 @@ MenuTree337: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree338: MenuTree
+bulkload: MenuTree
   Level: "153"
   Position: 8
   MenuNum: 8
@@ -3193,7 +3193,7 @@ MenuTree338: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree339: MenuTree
+bulkload: MenuTree
   Level: "154"
   Position: 1
   MenuNum: 1861
@@ -3203,7 +3203,7 @@ MenuTree339: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree340: MenuTree
+bulkload: MenuTree
   Level: "154"
   Position: 2
   MenuNum: 1866
@@ -3213,7 +3213,7 @@ MenuTree340: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree341: MenuTree
+bulkload: MenuTree
   Level: "154"
   Position: 3
   MenuNum: 1867
@@ -3223,7 +3223,7 @@ MenuTree341: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree342: MenuTree
+bulkload: MenuTree
   Level: "154"
   Position: 4
   MenuNum: 1825
@@ -3233,7 +3233,7 @@ MenuTree342: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree343: MenuTree
+bulkload: MenuTree
   Level: "154"
   Position: 5
   MenuNum: 1718
@@ -3243,7 +3243,7 @@ MenuTree343: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree344: MenuTree
+bulkload: MenuTree
   Level: "154"
   Position: 6
   MenuNum: 1035
@@ -3253,7 +3253,7 @@ MenuTree344: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree345: MenuTree
+bulkload: MenuTree
   Level: "154"
   Position: 7
   MenuNum: 1512
@@ -3263,7 +3263,7 @@ MenuTree345: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree346: MenuTree
+bulkload: MenuTree
   Level: "154"
   Position: 8
   MenuNum: 8
@@ -3271,7 +3271,7 @@ MenuTree346: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree347: MenuTree
+bulkload: MenuTree
   Level: "155"
   Position: 1
   MenuNum: 9798
@@ -3281,7 +3281,7 @@ MenuTree347: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree348: MenuTree
+bulkload: MenuTree
   Level: "155"
   Position: 2
   MenuNum: 1009
@@ -3292,7 +3292,7 @@ MenuTree348: MenuTree
   State[1]: yes
   TokenCode: "BILL"
 
-MenuTree349: MenuTree
+bulkload: MenuTree
   Level: "155"
   Position: 3
   MenuNum: 1010
@@ -3302,7 +3302,7 @@ MenuTree349: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree350: MenuTree
+bulkload: MenuTree
   Level: "155"
   Position: 4
   MenuNum: 1647
@@ -3312,7 +3312,7 @@ MenuTree350: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree351: MenuTree
+bulkload: MenuTree
   Level: "155"
   Position: 5
   MenuNum: 1166
@@ -3322,7 +3322,7 @@ MenuTree351: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree352: MenuTree
+bulkload: MenuTree
   Level: "155"
   Position: 6
   MenuNum: 1920
@@ -3332,7 +3332,7 @@ MenuTree352: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree353: MenuTree
+bulkload: MenuTree
   Level: "155"
   Position: 7
   MenuNum: 1022
@@ -3342,7 +3342,7 @@ MenuTree353: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree354: MenuTree
+bulkload: MenuTree
   Level: "155"
   Position: 8
   MenuNum: 8
@@ -3350,7 +3350,7 @@ MenuTree354: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree355: MenuTree
+bulkload: MenuTree
   Level: "1551"
   Position: 2
   MenuNum: 9800
@@ -3360,14 +3360,14 @@ MenuTree355: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree356: MenuTree
+bulkload: MenuTree
   Level: "1551"
   Position: 3
   MenuNum: 9801
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree357: MenuTree
+bulkload: MenuTree
   Level: "1551"
   Position: 4
   MenuNum: 9802
@@ -3377,7 +3377,7 @@ MenuTree357: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree358: MenuTree
+bulkload: MenuTree
   Level: "1551"
   Position: 5
   MenuNum: 9799
@@ -3387,7 +3387,7 @@ MenuTree358: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree359: MenuTree
+bulkload: MenuTree
   Level: "1551"
   Position: 6
   MenuNum: 9806
@@ -3397,14 +3397,14 @@ MenuTree359: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree360: MenuTree
+bulkload: MenuTree
   Level: "1551"
   Position: 8
   MenuNum: 8
   MenuType: 3
   MenuClass: 9999
 
-MenuTree361: MenuTree
+bulkload: MenuTree
   Level: "157"
   MenuNum: 610
   Module: "nntibi"
@@ -3414,7 +3414,7 @@ MenuTree361: MenuTree
   State[1]: yes
   TokenCode: "BILL"
 
-MenuTree362: MenuTree
+bulkload: MenuTree
   Level: "157"
   Position: 1
   MenuNum: 986
@@ -3425,7 +3425,7 @@ MenuTree362: MenuTree
   State[1]: yes
   TokenCode: "BILL"
 
-MenuTree363: MenuTree
+bulkload: MenuTree
   Level: "157"
   Position: 2
   MenuNum: 984
@@ -3436,7 +3436,7 @@ MenuTree363: MenuTree
   State[1]: yes
   TokenCode: "VENDOR"
 
-MenuTree364: MenuTree
+bulkload: MenuTree
   Level: "157"
   Position: 3
   MenuNum: 1455
@@ -3446,7 +3446,7 @@ MenuTree364: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree365: MenuTree
+bulkload: MenuTree
   Level: "157"
   Position: 4
   MenuNum: 1456
@@ -3456,7 +3456,7 @@ MenuTree365: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree366: MenuTree
+bulkload: MenuTree
   Level: "157"
   Position: 5
   MenuNum: 1085
@@ -3466,7 +3466,7 @@ MenuTree366: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree367: MenuTree
+bulkload: MenuTree
   Level: "157"
   Position: 6
   MenuNum: 1165
@@ -3476,7 +3476,7 @@ MenuTree367: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree368: MenuTree
+bulkload: MenuTree
   Level: "157"
   Position: 8
   MenuNum: 8
@@ -3484,7 +3484,7 @@ MenuTree368: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree369: MenuTree
+bulkload: MenuTree
   Level: "1576"
   Position: 1
   MenuNum: 1005
@@ -3494,7 +3494,7 @@ MenuTree369: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree370: MenuTree
+bulkload: MenuTree
   Level: "1576"
   Position: 8
   MenuNum: 8
@@ -3502,7 +3502,7 @@ MenuTree370: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree371: MenuTree
+bulkload: MenuTree
   Level: "16"
   Position: 1
   MenuNum: 51
@@ -3512,7 +3512,7 @@ MenuTree371: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree372: MenuTree
+bulkload: MenuTree
   Level: "16"
   Position: 2
   MenuNum: 893
@@ -3522,7 +3522,7 @@ MenuTree372: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree373: MenuTree
+bulkload: MenuTree
   Level: "16"
   Position: 3
   MenuNum: 829
@@ -3532,7 +3532,7 @@ MenuTree373: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree374: MenuTree
+bulkload: MenuTree
   Level: "16"
   Position: 4
   MenuNum: 42
@@ -3542,7 +3542,7 @@ MenuTree374: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree375: MenuTree
+bulkload: MenuTree
   Level: "16"
   Position: 5
   MenuNum: 908
@@ -3552,7 +3552,7 @@ MenuTree375: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree376: MenuTree
+bulkload: MenuTree
   Level: "16"
   Position: 6
   MenuNum: 1004
@@ -3562,7 +3562,7 @@ MenuTree376: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree377: MenuTree
+bulkload: MenuTree
   Level: "16"
   Position: 7
   MenuNum: 895
@@ -3572,7 +3572,7 @@ MenuTree377: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree378: MenuTree
+bulkload: MenuTree
   Level: "16"
   Position: 8
   MenuNum: 8
@@ -3580,7 +3580,7 @@ MenuTree378: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree379: MenuTree
+bulkload: MenuTree
   Level: "161"
   Position: 1
   MenuNum: 828
@@ -3590,7 +3590,7 @@ MenuTree379: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree380: MenuTree
+bulkload: MenuTree
   Level: "161"
   Position: 3
   MenuNum: 1649
@@ -3600,7 +3600,7 @@ MenuTree380: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree381: MenuTree
+bulkload: MenuTree
   Level: "161"
   Position: 4
   MenuNum: 1719
@@ -3610,7 +3610,7 @@ MenuTree381: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree382: MenuTree
+bulkload: MenuTree
   Level: "161"
   Position: 5
   MenuNum: 1711
@@ -3620,7 +3620,7 @@ MenuTree382: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree383: MenuTree
+bulkload: MenuTree
   Level: "161"
   Position: 6
   MenuNum: 1699
@@ -3630,7 +3630,7 @@ MenuTree383: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree384: MenuTree
+bulkload: MenuTree
   Level: "161"
   Position: 7
   MenuNum: 830
@@ -3641,7 +3641,7 @@ MenuTree384: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree385: MenuTree
+bulkload: MenuTree
   Level: "161"
   Position: 8
   MenuNum: 8
@@ -3649,7 +3649,7 @@ MenuTree385: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree386: MenuTree
+bulkload: MenuTree
   Level: "1613"
   Position: 1
   MenuNum: 9012
@@ -3659,7 +3659,7 @@ MenuTree386: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree387: MenuTree
+bulkload: MenuTree
   Level: "1613"
   Position: 3
   MenuNum: 1648
@@ -3669,7 +3669,7 @@ MenuTree387: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree388: MenuTree
+bulkload: MenuTree
   Level: "1613"
   Position: 8
   MenuNum: 8
@@ -3677,7 +3677,7 @@ MenuTree388: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree389: MenuTree
+bulkload: MenuTree
   Level: "1615"
   Position: 1
   MenuNum: 975
@@ -3687,7 +3687,7 @@ MenuTree389: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree390: MenuTree
+bulkload: MenuTree
   Level: "1615"
   Position: 2
   MenuNum: 1724
@@ -3697,7 +3697,7 @@ MenuTree390: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree391: MenuTree
+bulkload: MenuTree
   Level: "1615"
   Position: 3
   MenuNum: 1091
@@ -3707,7 +3707,7 @@ MenuTree391: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree392: MenuTree
+bulkload: MenuTree
   Level: "1615"
   Position: 4
   MenuNum: 1092
@@ -3717,7 +3717,7 @@ MenuTree392: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree393: MenuTree
+bulkload: MenuTree
   Level: "1615"
   Position: 5
   MenuNum: 1090
@@ -3727,7 +3727,7 @@ MenuTree393: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree394: MenuTree
+bulkload: MenuTree
   Level: "1615"
   Position: 6
   MenuNum: 999
@@ -3737,7 +3737,7 @@ MenuTree394: MenuTree
   MenuClass: 9999
   TokenCode: "Syst"
 
-MenuTree395: MenuTree
+bulkload: MenuTree
   Level: "1615"
   Position: 8
   MenuNum: 8
@@ -3745,7 +3745,7 @@ MenuTree395: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree396: MenuTree
+bulkload: MenuTree
   Level: "162"
   Position: 1
   MenuNum: 831
@@ -3755,7 +3755,7 @@ MenuTree396: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree397: MenuTree
+bulkload: MenuTree
   Level: "162"
   Position: 2
   MenuNum: 862
@@ -3765,7 +3765,7 @@ MenuTree397: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree398: MenuTree
+bulkload: MenuTree
   Level: "162"
   Position: 3
   MenuNum: 1798
@@ -3775,7 +3775,7 @@ MenuTree398: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree399: MenuTree
+bulkload: MenuTree
   Level: "162"
   Position: 4
   MenuNum: 1008
@@ -3785,7 +3785,7 @@ MenuTree399: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree400: MenuTree
+bulkload: MenuTree
   Level: "162"
   Position: 5
   MenuNum: 1495
@@ -3795,7 +3795,7 @@ MenuTree400: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree401: MenuTree
+bulkload: MenuTree
   Level: "162"
   Position: 6
   MenuNum: 1492
@@ -3805,7 +3805,7 @@ MenuTree401: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree402: MenuTree
+bulkload: MenuTree
   Level: "162"
   Position: 8
   MenuNum: 8
@@ -3813,7 +3813,7 @@ MenuTree402: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree403: MenuTree
+bulkload: MenuTree
   Level: "163"
   Position: 1
   MenuNum: 850
@@ -3823,7 +3823,7 @@ MenuTree403: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree404: MenuTree
+bulkload: MenuTree
   Level: "163"
   Position: 2
   MenuNum: 849
@@ -3833,7 +3833,7 @@ MenuTree404: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree405: MenuTree
+bulkload: MenuTree
   Level: "163"
   Position: 3
   MenuNum: 1783
@@ -3843,7 +3843,7 @@ MenuTree405: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree406: MenuTree
+bulkload: MenuTree
   Level: "163"
   Position: 4
   MenuNum: 129
@@ -3853,7 +3853,7 @@ MenuTree406: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree407: MenuTree
+bulkload: MenuTree
   Level: "163"
   Position: 5
   MenuNum: 1726
@@ -3864,7 +3864,7 @@ MenuTree407: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree408: MenuTree
+bulkload: MenuTree
   Level: "163"
   Position: 6
   MenuNum: 762
@@ -3874,7 +3874,7 @@ MenuTree408: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree409: MenuTree
+bulkload: MenuTree
   Level: "163"
   Position: 7
   MenuNum: 1496
@@ -3884,7 +3884,7 @@ MenuTree409: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree410: MenuTree
+bulkload: MenuTree
   Level: "163"
   Position: 8
   MenuNum: 8
@@ -3892,7 +3892,7 @@ MenuTree410: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree411: MenuTree
+bulkload: MenuTree
   Level: "1632"
   Position: 1
   MenuNum: 1804
@@ -3902,7 +3902,7 @@ MenuTree411: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree412: MenuTree
+bulkload: MenuTree
   Level: "1632"
   Position: 3
   MenuNum: 1793
@@ -3912,7 +3912,7 @@ MenuTree412: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree413: MenuTree
+bulkload: MenuTree
   Level: "1632"
   Position: 4
   MenuNum: 1792
@@ -3922,7 +3922,7 @@ MenuTree413: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree414: MenuTree
+bulkload: MenuTree
   Level: "1632"
   Position: 8
   MenuNum: 8
@@ -3930,7 +3930,7 @@ MenuTree414: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree415: MenuTree
+bulkload: MenuTree
   Level: "1633"
   Position: 1
   MenuNum: 1783
@@ -3940,7 +3940,7 @@ MenuTree415: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree416: MenuTree
+bulkload: MenuTree
   Level: "1633"
   Position: 3
   MenuNum: 1064
@@ -3950,7 +3950,7 @@ MenuTree416: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree417: MenuTree
+bulkload: MenuTree
   Level: "1633"
   Position: 8
   MenuNum: 8
@@ -3958,7 +3958,7 @@ MenuTree417: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree418: MenuTree
+bulkload: MenuTree
   Level: "1637"
   Position: 1
   MenuNum: 1078
@@ -3968,7 +3968,7 @@ MenuTree418: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree419: MenuTree
+bulkload: MenuTree
   Level: "1637"
   Position: 2
   MenuNum: 1075
@@ -3978,7 +3978,7 @@ MenuTree419: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree420: MenuTree
+bulkload: MenuTree
   Level: "1637"
   Position: 3
   MenuNum: 1019
@@ -3989,7 +3989,7 @@ MenuTree420: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree421: MenuTree
+bulkload: MenuTree
   Level: "1637"
   Position: 4
   MenuNum: 1074
@@ -3999,7 +3999,7 @@ MenuTree421: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree422: MenuTree
+bulkload: MenuTree
   Level: "1637"
   Position: 5
   MenuNum: 1076
@@ -4009,7 +4009,7 @@ MenuTree422: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree423: MenuTree
+bulkload: MenuTree
   Level: "1637"
   Position: 6
   MenuNum: 1251
@@ -4019,7 +4019,7 @@ MenuTree423: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree424: MenuTree
+bulkload: MenuTree
   Level: "1637"
   Position: 7
   MenuNum: 1252
@@ -4030,7 +4030,7 @@ MenuTree424: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree425: MenuTree
+bulkload: MenuTree
   Level: "1637"
   Position: 8
   MenuNum: 8
@@ -4038,7 +4038,7 @@ MenuTree425: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree426: MenuTree
+bulkload: MenuTree
   Level: "164"
   Position: 1
   MenuNum: 564
@@ -4048,7 +4048,7 @@ MenuTree426: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree427: MenuTree
+bulkload: MenuTree
   Level: "164"
   Position: 2
   MenuNum: 565
@@ -4058,7 +4058,7 @@ MenuTree427: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree428: MenuTree
+bulkload: MenuTree
   Level: "164"
   Position: 3
   MenuNum: 1761
@@ -4068,7 +4068,7 @@ MenuTree428: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree429: MenuTree
+bulkload: MenuTree
   Level: "164"
   Position: 4
   MenuNum: 1496
@@ -4079,7 +4079,7 @@ MenuTree429: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree430: MenuTree
+bulkload: MenuTree
   Level: "164"
   Position: 5
   MenuNum: 1632
@@ -4089,7 +4089,7 @@ MenuTree430: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree431: MenuTree
+bulkload: MenuTree
   Level: "164"
   Position: 6
   MenuNum: 1082
@@ -4099,7 +4099,7 @@ MenuTree431: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree432: MenuTree
+bulkload: MenuTree
   Level: "164"
   Position: 8
   MenuNum: 8
@@ -4107,7 +4107,7 @@ MenuTree432: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree433: MenuTree
+bulkload: MenuTree
   Level: "1641"
   Position: 1
   MenuNum: 821
@@ -4117,7 +4117,7 @@ MenuTree433: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree434: MenuTree
+bulkload: MenuTree
   Level: "1641"
   Position: 2
   MenuNum: 822
@@ -4128,7 +4128,7 @@ MenuTree434: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree435: MenuTree
+bulkload: MenuTree
   Level: "1641"
   Position: 3
   MenuNum: 823
@@ -4138,7 +4138,7 @@ MenuTree435: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree436: MenuTree
+bulkload: MenuTree
   Level: "1641"
   Position: 4
   MenuNum: 561
@@ -4148,7 +4148,7 @@ MenuTree436: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree437: MenuTree
+bulkload: MenuTree
   Level: "1641"
   Position: 5
   MenuNum: 582
@@ -4158,7 +4158,7 @@ MenuTree437: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree438: MenuTree
+bulkload: MenuTree
   Level: "1641"
   Position: 6
   MenuNum: 1755
@@ -4169,7 +4169,7 @@ MenuTree438: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree439: MenuTree
+bulkload: MenuTree
   Level: "1641"
   Position: 8
   MenuNum: 8
@@ -4177,7 +4177,7 @@ MenuTree439: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree440: MenuTree
+bulkload: MenuTree
   Level: "1642"
   Position: 1
   MenuNum: 824
@@ -4187,7 +4187,7 @@ MenuTree440: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree441: MenuTree
+bulkload: MenuTree
   Level: "1642"
   Position: 2
   MenuNum: 825
@@ -4197,7 +4197,7 @@ MenuTree441: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree442: MenuTree
+bulkload: MenuTree
   Level: "1642"
   Position: 3
   MenuNum: 826
@@ -4207,7 +4207,7 @@ MenuTree442: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree443: MenuTree
+bulkload: MenuTree
   Level: "1642"
   Position: 5
   MenuNum: 762
@@ -4217,7 +4217,7 @@ MenuTree443: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree444: MenuTree
+bulkload: MenuTree
   Level: "1642"
   Position: 6
   MenuNum: 1717
@@ -4227,7 +4227,7 @@ MenuTree444: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree445: MenuTree
+bulkload: MenuTree
   Level: "1642"
   Position: 7
   MenuNum: 1733
@@ -4237,7 +4237,7 @@ MenuTree445: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree446: MenuTree
+bulkload: MenuTree
   Level: "1642"
   Position: 8
   MenuNum: 8
@@ -4245,7 +4245,7 @@ MenuTree446: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree447: MenuTree
+bulkload: MenuTree
   Level: "16423"
   Position: 1
   MenuNum: 826
@@ -4256,7 +4256,7 @@ MenuTree447: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree448: MenuTree
+bulkload: MenuTree
   Level: "16423"
   Position: 2
   MenuNum: 990
@@ -4266,7 +4266,7 @@ MenuTree448: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree449: MenuTree
+bulkload: MenuTree
   Level: "16423"
   Position: 8
   MenuNum: 8
@@ -4274,7 +4274,7 @@ MenuTree449: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree450: MenuTree
+bulkload: MenuTree
   Level: "16425"
   Position: 1
   MenuNum: 764
@@ -4284,7 +4284,7 @@ MenuTree450: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree451: MenuTree
+bulkload: MenuTree
   Level: "16425"
   Position: 2
   MenuNum: 765
@@ -4294,7 +4294,7 @@ MenuTree451: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree452: MenuTree
+bulkload: MenuTree
   Level: "16425"
   Position: 8
   MenuNum: 8
@@ -4302,7 +4302,7 @@ MenuTree452: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree453: MenuTree
+bulkload: MenuTree
   Level: "1643"
   Position: 1
   MenuNum: 827
@@ -4313,7 +4313,7 @@ MenuTree453: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree454: MenuTree
+bulkload: MenuTree
   Level: "1643"
   Position: 2
   MenuNum: 1814
@@ -4323,7 +4323,7 @@ MenuTree454: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree455: MenuTree
+bulkload: MenuTree
   Level: "1643"
   Position: 3
   MenuNum: 1762
@@ -4333,7 +4333,7 @@ MenuTree455: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree456: MenuTree
+bulkload: MenuTree
   Level: "1643"
   Position: 4
   MenuNum: 1727
@@ -4343,7 +4343,7 @@ MenuTree456: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree457: MenuTree
+bulkload: MenuTree
   Level: "1643"
   Position: 5
   MenuNum: 1766
@@ -4353,14 +4353,14 @@ MenuTree457: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree458: MenuTree
+bulkload: MenuTree
   Level: "1643"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "AR"
 
-MenuTree459: MenuTree
+bulkload: MenuTree
   Level: "1644"
   Position: 1
   MenuNum: 1497
@@ -4371,7 +4371,7 @@ MenuTree459: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree460: MenuTree
+bulkload: MenuTree
   Level: "1644"
   Position: 2
   MenuNum: 1498
@@ -4382,7 +4382,7 @@ MenuTree460: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree461: MenuTree
+bulkload: MenuTree
   Level: "1644"
   Position: 8
   MenuNum: 8
@@ -4390,7 +4390,7 @@ MenuTree461: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree462: MenuTree
+bulkload: MenuTree
   Level: "1645"
   Position: 1
   MenuNum: 1712
@@ -4400,7 +4400,7 @@ MenuTree462: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree463: MenuTree
+bulkload: MenuTree
   Level: "1645"
   Position: 2
   MenuNum: 1633
@@ -4410,7 +4410,7 @@ MenuTree463: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree464: MenuTree
+bulkload: MenuTree
   Level: "1645"
   Position: 3
   MenuNum: 1735
@@ -4420,14 +4420,14 @@ MenuTree464: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree465: MenuTree
+bulkload: MenuTree
   Level: "1645"
   Position: 8
   MenuNum: 8
   MenuType: 3
   TokenCode: "AR"
 
-MenuTree466: MenuTree
+bulkload: MenuTree
   Level: "1646"
   Position: 1
   MenuNum: 1083
@@ -4437,7 +4437,7 @@ MenuTree466: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree467: MenuTree
+bulkload: MenuTree
   Level: "1646"
   Position: 2
   MenuNum: 1084
@@ -4447,7 +4447,7 @@ MenuTree467: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree468: MenuTree
+bulkload: MenuTree
   Level: "1646"
   Position: 8
   MenuNum: 8
@@ -4455,7 +4455,7 @@ MenuTree468: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree469: MenuTree
+bulkload: MenuTree
   Level: "166"
   Position: 1
   MenuNum: 1011
@@ -4465,7 +4465,7 @@ MenuTree469: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree470: MenuTree
+bulkload: MenuTree
   Level: "166"
   Position: 2
   MenuNum: 1012
@@ -4475,7 +4475,7 @@ MenuTree470: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree471: MenuTree
+bulkload: MenuTree
   Level: "166"
   Position: 3
   MenuNum: 52
@@ -4485,7 +4485,7 @@ MenuTree471: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree472: MenuTree
+bulkload: MenuTree
   Level: "166"
   Position: 4
   MenuNum: 68
@@ -4495,7 +4495,7 @@ MenuTree472: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree473: MenuTree
+bulkload: MenuTree
   Level: "166"
   Position: 5
   MenuNum: 1013
@@ -4505,7 +4505,7 @@ MenuTree473: MenuTree
   MenuClass: 9999
   TokenCode: "BILL"
 
-MenuTree474: MenuTree
+bulkload: MenuTree
   Level: "166"
   Position: 8
   MenuNum: 8
@@ -4513,7 +4513,7 @@ MenuTree474: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree475: MenuTree
+bulkload: MenuTree
   Level: "167"
   Position: 1
   MenuNum: 896
@@ -4523,7 +4523,7 @@ MenuTree475: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree476: MenuTree
+bulkload: MenuTree
   Level: "167"
   Position: 2
   MenuNum: 879
@@ -4533,7 +4533,7 @@ MenuTree476: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree477: MenuTree
+bulkload: MenuTree
   Level: "167"
   Position: 3
   MenuNum: 898
@@ -4544,7 +4544,7 @@ MenuTree477: MenuTree
   State[1]: yes
   TokenCode: "AR"
 
-MenuTree478: MenuTree
+bulkload: MenuTree
   Level: "167"
   Position: 4
   MenuNum: 899
@@ -4555,7 +4555,7 @@ MenuTree478: MenuTree
   State[1]: yes
   TokenCode: "COMM"
 
-MenuTree479: MenuTree
+bulkload: MenuTree
   Level: "167"
   Position: 5
   MenuNum: 1818
@@ -4566,7 +4566,7 @@ MenuTree479: MenuTree
   State[1]: yes
   TokenCode: "COMM"
 
-MenuTree480: MenuTree
+bulkload: MenuTree
   Level: "167"
   Position: 7
   MenuNum: 51
@@ -4576,7 +4576,7 @@ MenuTree480: MenuTree
   State[1]: yes
   TokenCode: "COMM"
 
-MenuTree481: MenuTree
+bulkload: MenuTree
   Level: "167"
   Position: 8
   MenuNum: 8
@@ -4584,7 +4584,7 @@ MenuTree481: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree482: MenuTree
+bulkload: MenuTree
   Level: "1674"
   Position: 1
   MenuNum: 1130
@@ -4594,7 +4594,7 @@ MenuTree482: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree483: MenuTree
+bulkload: MenuTree
   Level: "1674"
   Position: 3
   MenuNum: 1129
@@ -4604,7 +4604,7 @@ MenuTree483: MenuTree
   MenuClass: 9999
   TokenCode: "COMM"
 
-MenuTree484: MenuTree
+bulkload: MenuTree
   Level: "1674"
   Position: 8
   MenuNum: 8
@@ -4612,7 +4612,7 @@ MenuTree484: MenuTree
   MenuClass: 9999
   TokenCode: "COMM"
 
-MenuTree485: MenuTree
+bulkload: MenuTree
   Level: "1677"
   Position: 1
   MenuNum: 1036
@@ -4622,7 +4622,7 @@ MenuTree485: MenuTree
   MenuClass: 9999
   TokenCode: "COMM"
 
-MenuTree486: MenuTree
+bulkload: MenuTree
   Level: "1677"
   Position: 2
   MenuNum: 952
@@ -4632,7 +4632,7 @@ MenuTree486: MenuTree
   MenuClass: 9999
   TokenCode: "COMM"
 
-MenuTree487: MenuTree
+bulkload: MenuTree
   Level: "1677"
   Position: 3
   MenuNum: 756
@@ -4642,7 +4642,7 @@ MenuTree487: MenuTree
   MenuClass: 9999
   TokenCode: "COMM"
 
-MenuTree488: MenuTree
+bulkload: MenuTree
   Level: "1677"
   Position: 5
   MenuNum: 1037
@@ -4652,7 +4652,7 @@ MenuTree488: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree489: MenuTree
+bulkload: MenuTree
   Level: "1677"
   Position: 8
   MenuNum: 8
@@ -4660,7 +4660,7 @@ MenuTree489: MenuTree
   MenuClass: 9999
   TokenCode: "COMM"
 
-MenuTree490: MenuTree
+bulkload: MenuTree
   Level: "169"
   Position: 1
   MenuNum: 887
@@ -4670,7 +4670,7 @@ MenuTree490: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree491: MenuTree
+bulkload: MenuTree
   Level: "169"
   Position: 2
   MenuNum: 894
@@ -4680,7 +4680,7 @@ MenuTree491: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree492: MenuTree
+bulkload: MenuTree
   Level: "169"
   Position: 3
   MenuNum: 940
@@ -4690,7 +4690,7 @@ MenuTree492: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree493: MenuTree
+bulkload: MenuTree
   Level: "169"
   Position: 4
   MenuNum: 976
@@ -4700,7 +4700,7 @@ MenuTree493: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree494: MenuTree
+bulkload: MenuTree
   Level: "169"
   Position: 5
   MenuNum: 919
@@ -4710,7 +4710,7 @@ MenuTree494: MenuTree
   MenuClass: 9999
   TokenCode: "AR"
 
-MenuTree495: MenuTree
+bulkload: MenuTree
   Level: "17"
   Position: 1
   MenuNum: 880
@@ -4720,7 +4720,7 @@ MenuTree495: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree496: MenuTree
+bulkload: MenuTree
   Level: "17"
   Position: 2
   MenuNum: 569
@@ -4730,7 +4730,7 @@ MenuTree496: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree497: MenuTree
+bulkload: MenuTree
   Level: "17"
   Position: 3
   MenuNum: 778
@@ -4740,7 +4740,7 @@ MenuTree497: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree498: MenuTree
+bulkload: MenuTree
   Level: "17"
   Position: 4
   MenuNum: 1127
@@ -4750,7 +4750,7 @@ MenuTree498: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree499: MenuTree
+bulkload: MenuTree
   Level: "17"
   Position: 5
   MenuNum: 9837
@@ -4760,7 +4760,7 @@ MenuTree499: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree500: MenuTree
+bulkload: MenuTree
   Level: "17"
   Position: 6
   MenuNum: 2200
@@ -4770,7 +4770,7 @@ MenuTree500: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree501: MenuTree
+bulkload: MenuTree
   Level: "17"
   Position: 7
   MenuNum: 2204
@@ -4780,7 +4780,7 @@ MenuTree501: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree502: MenuTree
+bulkload: MenuTree
   Level: "17"
   Position: 8
   MenuNum: 8
@@ -4788,7 +4788,7 @@ MenuTree502: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree503: MenuTree
+bulkload: MenuTree
   Level: "171"
   Position: 1
   MenuNum: 1993
@@ -4798,7 +4798,7 @@ MenuTree503: MenuTree
   MenuClass: 9999
   TokenCode: "VENDOR"
 
-MenuTree504: MenuTree
+bulkload: MenuTree
   Level: "171"
   Position: 2
   MenuNum: 6912
@@ -4808,7 +4808,7 @@ MenuTree504: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree505: MenuTree
+bulkload: MenuTree
   Level: "171"
   Position: 3
   MenuNum: 751
@@ -4818,7 +4818,7 @@ MenuTree505: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree506: MenuTree
+bulkload: MenuTree
   Level: "171"
   Position: 4
   MenuNum: 1023
@@ -4829,7 +4829,7 @@ MenuTree506: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree507: MenuTree
+bulkload: MenuTree
   Level: "171"
   Position: 5
   MenuNum: 1800
@@ -4839,7 +4839,7 @@ MenuTree507: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree508: MenuTree
+bulkload: MenuTree
   Level: "171"
   Position: 6
   MenuNum: 802
@@ -4849,7 +4849,7 @@ MenuTree508: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree509: MenuTree
+bulkload: MenuTree
   Level: "171"
   Position: 7
   MenuNum: 58
@@ -4859,7 +4859,7 @@ MenuTree509: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree510: MenuTree
+bulkload: MenuTree
   Level: "171"
   Position: 8
   MenuNum: 8
@@ -4867,7 +4867,7 @@ MenuTree510: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree511: MenuTree
+bulkload: MenuTree
   Level: "1712"
   Position: 1
   MenuNum: 6910
@@ -4877,7 +4877,7 @@ MenuTree511: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree512: MenuTree
+bulkload: MenuTree
   Level: "1712"
   Position: 2
   MenuNum: 6909
@@ -4887,7 +4887,7 @@ MenuTree512: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree513: MenuTree
+bulkload: MenuTree
   Level: "1712"
   Position: 8
   MenuNum: 8
@@ -4895,7 +4895,7 @@ MenuTree513: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree514: MenuTree
+bulkload: MenuTree
   Level: "172"
   Position: 1
   MenuNum: 9069
@@ -4905,7 +4905,7 @@ MenuTree514: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree515: MenuTree
+bulkload: MenuTree
   Level: "172"
   Position: 2
   MenuNum: 752
@@ -4915,7 +4915,7 @@ MenuTree515: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree516: MenuTree
+bulkload: MenuTree
   Level: "172"
   Position: 7
   MenuNum: 9070
@@ -4925,7 +4925,7 @@ MenuTree516: MenuTree
   MenuClass: 9999
   TokenCode: "Syst"
 
-MenuTree517: MenuTree
+bulkload: MenuTree
   Level: "172"
   Position: 8
   MenuNum: 8
@@ -4933,7 +4933,7 @@ MenuTree517: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree518: MenuTree
+bulkload: MenuTree
   Level: "1721"
   Position: 1
   MenuNum: 589
@@ -4943,7 +4943,7 @@ MenuTree518: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree519: MenuTree
+bulkload: MenuTree
   Level: "1721"
   Position: 2
   MenuNum: 588
@@ -4953,7 +4953,7 @@ MenuTree519: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree520: MenuTree
+bulkload: MenuTree
   Level: "1721"
   Position: 3
   MenuNum: 590
@@ -4963,7 +4963,7 @@ MenuTree520: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree521: MenuTree
+bulkload: MenuTree
   Level: "1721"
   Position: 4
   MenuNum: 1509
@@ -4973,7 +4973,7 @@ MenuTree521: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree522: MenuTree
+bulkload: MenuTree
   Level: "1721"
   Position: 5
   MenuNum: 1510
@@ -4983,7 +4983,7 @@ MenuTree522: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree523: MenuTree
+bulkload: MenuTree
   Level: "1721"
   Position: 6
   MenuNum: 1511
@@ -4993,7 +4993,7 @@ MenuTree523: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree524: MenuTree
+bulkload: MenuTree
   Level: "1721"
   Position: 8
   MenuNum: 8
@@ -5001,7 +5001,7 @@ MenuTree524: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree525: MenuTree
+bulkload: MenuTree
   Level: "1722"
   Position: 1
   MenuNum: 940
@@ -5012,7 +5012,7 @@ MenuTree525: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree526: MenuTree
+bulkload: MenuTree
   Level: "1722"
   Position: 2
   MenuNum: 976
@@ -5023,7 +5023,7 @@ MenuTree526: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree527: MenuTree
+bulkload: MenuTree
   Level: "1722"
   Position: 3
   MenuNum: 809
@@ -5034,7 +5034,7 @@ MenuTree527: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree528: MenuTree
+bulkload: MenuTree
   Level: "1722"
   Position: 4
   MenuNum: 532
@@ -5045,7 +5045,7 @@ MenuTree528: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree529: MenuTree
+bulkload: MenuTree
   Level: "1722"
   Position: 5
   MenuNum: 571
@@ -5056,7 +5056,7 @@ MenuTree529: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree530: MenuTree
+bulkload: MenuTree
   Level: "1722"
   Position: 8
   MenuNum: 8
@@ -5064,7 +5064,7 @@ MenuTree530: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree531: MenuTree
+bulkload: MenuTree
   Level: "1723"
   Position: 1
   MenuNum: 612
@@ -5075,7 +5075,7 @@ MenuTree531: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree532: MenuTree
+bulkload: MenuTree
   Level: "1723"
   Position: 2
   MenuNum: 613
@@ -5086,7 +5086,7 @@ MenuTree532: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree533: MenuTree
+bulkload: MenuTree
   Level: "1723"
   Position: 3
   MenuNum: 619
@@ -5097,7 +5097,7 @@ MenuTree533: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree534: MenuTree
+bulkload: MenuTree
   Level: "1723"
   Position: 4
   MenuNum: 620
@@ -5108,7 +5108,7 @@ MenuTree534: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree535: MenuTree
+bulkload: MenuTree
   Level: "1723"
   Position: 5
   MenuNum: 621
@@ -5119,7 +5119,7 @@ MenuTree535: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree536: MenuTree
+bulkload: MenuTree
   Level: "1723"
   Position: 6
   MenuNum: 622
@@ -5130,7 +5130,7 @@ MenuTree536: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree537: MenuTree
+bulkload: MenuTree
   Level: "1723"
   Position: 7
   MenuNum: 555
@@ -5139,7 +5139,7 @@ MenuTree537: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree538: MenuTree
+bulkload: MenuTree
   Level: "1723"
   Position: 8
   MenuNum: 8
@@ -5147,7 +5147,7 @@ MenuTree538: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree539: MenuTree
+bulkload: MenuTree
   Level: "17237"
   Position: 1
   MenuNum: 554
@@ -5158,7 +5158,7 @@ MenuTree539: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree540: MenuTree
+bulkload: MenuTree
   Level: "17237"
   Position: 2
   MenuNum: 557
@@ -5169,7 +5169,7 @@ MenuTree540: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree541: MenuTree
+bulkload: MenuTree
   Level: "17237"
   Position: 3
   MenuNum: 583
@@ -5180,7 +5180,7 @@ MenuTree541: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree542: MenuTree
+bulkload: MenuTree
   Level: "17237"
   Position: 8
   MenuNum: 8
@@ -5189,7 +5189,7 @@ MenuTree542: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree543: MenuTree
+bulkload: MenuTree
   Level: "1725"
   Position: 1
   MenuNum: 625
@@ -5198,7 +5198,7 @@ MenuTree543: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree544: MenuTree
+bulkload: MenuTree
   Level: "1725"
   Position: 8
   MenuNum: 8
@@ -5207,7 +5207,7 @@ MenuTree544: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree545: MenuTree
+bulkload: MenuTree
   Level: "1727"
   Position: 1
   MenuNum: 859
@@ -5217,7 +5217,7 @@ MenuTree545: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree546: MenuTree
+bulkload: MenuTree
   Level: "1727"
   Position: 2
   MenuNum: 551
@@ -5227,7 +5227,7 @@ MenuTree546: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree547: MenuTree
+bulkload: MenuTree
   Level: "1727"
   Position: 3
   MenuNum: 866
@@ -5237,7 +5237,7 @@ MenuTree547: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree548: MenuTree
+bulkload: MenuTree
   Level: "1727"
   Position: 4
   MenuNum: 550
@@ -5247,7 +5247,7 @@ MenuTree548: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree549: MenuTree
+bulkload: MenuTree
   Level: "1727"
   Position: 6
   MenuNum: 553
@@ -5257,7 +5257,7 @@ MenuTree549: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree550: MenuTree
+bulkload: MenuTree
   Level: "1727"
   Position: 7
   MenuNum: 552
@@ -5267,7 +5267,7 @@ MenuTree550: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree551: MenuTree
+bulkload: MenuTree
   Level: "1727"
   Position: 8
   MenuNum: 8
@@ -5276,7 +5276,7 @@ MenuTree551: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree552: MenuTree
+bulkload: MenuTree
   Level: "173"
   Position: 1
   MenuNum: 779
@@ -5286,7 +5286,7 @@ MenuTree552: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree553: MenuTree
+bulkload: MenuTree
   Level: "173"
   Position: 2
   MenuNum: 780
@@ -5296,7 +5296,7 @@ MenuTree553: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree554: MenuTree
+bulkload: MenuTree
   Level: "173"
   Position: 4
   MenuNum: 985
@@ -5306,7 +5306,7 @@ MenuTree554: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree555: MenuTree
+bulkload: MenuTree
   Level: "173"
   Position: 5
   MenuNum: 9819
@@ -5316,7 +5316,7 @@ MenuTree555: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree556: MenuTree
+bulkload: MenuTree
   Level: "173"
   Position: 8
   MenuNum: 8
@@ -5324,7 +5324,7 @@ MenuTree556: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree557: MenuTree
+bulkload: MenuTree
   Level: "174"
   Position: 1
   MenuNum: 1752
@@ -5334,7 +5334,7 @@ MenuTree557: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree558: MenuTree
+bulkload: MenuTree
   Level: "174"
   Position: 2
   MenuNum: 1125
@@ -5344,7 +5344,7 @@ MenuTree558: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree559: MenuTree
+bulkload: MenuTree
   Level: "174"
   Position: 3
   MenuNum: 1126
@@ -5354,7 +5354,7 @@ MenuTree559: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree560: MenuTree
+bulkload: MenuTree
   Level: "174"
   Position: 4
   MenuNum: 1745
@@ -5364,7 +5364,7 @@ MenuTree560: MenuTree
   MenuClass: 9999
   TokenCode: "mob"
 
-MenuTree561: MenuTree
+bulkload: MenuTree
   Level: "174"
   Position: 8
   MenuNum: 8
@@ -5372,7 +5372,7 @@ MenuTree561: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree562: MenuTree
+bulkload: MenuTree
   Level: "175"
   Position: 1
   MenuNum: 9836
@@ -5382,7 +5382,7 @@ MenuTree562: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree563: MenuTree
+bulkload: MenuTree
   Level: "175"
   Position: 2
   MenuNum: 9839
@@ -5392,7 +5392,7 @@ MenuTree563: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree564: MenuTree
+bulkload: MenuTree
   Level: "175"
   Position: 3
   MenuNum: 9841
@@ -5402,7 +5402,7 @@ MenuTree564: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree565: MenuTree
+bulkload: MenuTree
   Level: "175"
   Position: 4
   MenuNum: 9838
@@ -5412,7 +5412,7 @@ MenuTree565: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree566: MenuTree
+bulkload: MenuTree
   Level: "175"
   Position: 5
   MenuNum: 9840
@@ -5422,7 +5422,7 @@ MenuTree566: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree567: MenuTree
+bulkload: MenuTree
   Level: "175"
   Position: 6
   MenuNum: 9835
@@ -5432,7 +5432,7 @@ MenuTree567: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree568: MenuTree
+bulkload: MenuTree
   Level: "175"
   Position: 8
   MenuNum: 8
@@ -5440,7 +5440,7 @@ MenuTree568: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree569: MenuTree
+bulkload: MenuTree
   Level: "176"
   Position: 1
   MenuNum: 2201
@@ -5450,7 +5450,7 @@ MenuTree569: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree570: MenuTree
+bulkload: MenuTree
   Level: "176"
   Position: 2
   MenuNum: 2202
@@ -5460,7 +5460,7 @@ MenuTree570: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree571: MenuTree
+bulkload: MenuTree
   Level: "176"
   Position: 3
   MenuNum: 2228
@@ -5470,7 +5470,7 @@ MenuTree571: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree572: MenuTree
+bulkload: MenuTree
   Level: "176"
   Position: 4
   MenuNum: 2229
@@ -5480,7 +5480,7 @@ MenuTree572: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree573: MenuTree
+bulkload: MenuTree
   Level: "176"
   Position: 5
   MenuNum: 781
@@ -5490,7 +5490,7 @@ MenuTree573: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree574: MenuTree
+bulkload: MenuTree
   Level: "176"
   Position: 6
   MenuNum: 546
@@ -5500,7 +5500,7 @@ MenuTree574: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree575: MenuTree
+bulkload: MenuTree
   Level: "176"
   Position: 7
   MenuNum: 2204
@@ -5510,7 +5510,7 @@ MenuTree575: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree576: MenuTree
+bulkload: MenuTree
   Level: "176"
   Position: 8
   MenuNum: 8
@@ -5518,7 +5518,7 @@ MenuTree576: MenuTree
   MenuClass: 9999
   TokenCode: "SYST"
 
-MenuTree577: MenuTree
+bulkload: MenuTree
   Level: "199"
   Position: 5
   MenuNum: 805
@@ -5529,7 +5529,7 @@ MenuTree577: MenuTree
   State[1]: yes
   TokenCode: "SYST"
 
-MenuTree578: MenuTree
+bulkload: MenuTree
   Level: "2"
   Position: 1
   MenuNum: 2001
@@ -5538,7 +5538,7 @@ MenuTree578: MenuTree
   MenuTitle: "Genesys action"
   MenuClass: 9999
 
-MenuTree579: MenuTree
+bulkload: MenuTree
   Level: "21"
   Position: 1
   MenuNum: 2001
@@ -5547,7 +5547,7 @@ MenuTree579: MenuTree
   MenuTitle: "Read Genesys Calls/Events"
   MenuClass: 9999
 
-MenuTree580: MenuTree
+bulkload: MenuTree
   Level: "21"
   Position: 2
   MenuNum: 2002
@@ -5556,7 +5556,7 @@ MenuTree580: MenuTree
   MenuTitle: "Analyse Genesys Calls/Events"
   MenuClass: 9999
 
-MenuTree581: MenuTree
+bulkload: MenuTree
   Level: "21"
   Position: 3
   MenuNum: 2003
@@ -5565,7 +5565,7 @@ MenuTree581: MenuTree
   MenuTitle: "Rate Genesys Calls/Events"
   MenuClass: 9999
 
-MenuTree582: MenuTree
+bulkload: MenuTree
   Level: "21"
   Position: 4
   MenuNum: 2015
@@ -5574,7 +5574,7 @@ MenuTree582: MenuTree
   MenuTitle: "View Genesys Calls/Events"
   MenuClass: 9999
 
-MenuTree583: MenuTree
+bulkload: MenuTree
   Level: "21"
   Position: 5
   MenuNum: 2013
@@ -5583,7 +5583,7 @@ MenuTree583: MenuTree
   MenuTitle: "Errorneous Genesys Calls/Events"
   MenuClass: 9999
 
-MenuTree584: MenuTree
+bulkload: MenuTree
   Level: "21"
   Position: 6
   MenuNum: 2005
@@ -5592,14 +5592,14 @@ MenuTree584: MenuTree
   MenuTitle: "Genesys Events and Rates"
   MenuClass: 9999
 
-MenuTree585: MenuTree
+bulkload: MenuTree
   Level: "21"
   Position: 7
   MenuNum: 555
   MenuType: 2
   MenuClass: 9999
 
-MenuTree586: MenuTree
+bulkload: MenuTree
   Level: "21"
   Position: 8
   MenuNum: 8
@@ -5607,7 +5607,7 @@ MenuTree586: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree587: MenuTree
+bulkload: MenuTree
   Level: "217"
   Position: 1
   MenuNum: 2009
@@ -5616,7 +5616,7 @@ MenuTree587: MenuTree
   MenuTitle: "Volume Discount (only genesys)"
   MenuClass: 9999
 
-MenuTree588: MenuTree
+bulkload: MenuTree
   Level: "217"
   Position: 4
   MenuNum: 2010
@@ -5625,7 +5625,7 @@ MenuTree588: MenuTree
   MenuTitle: "Make OBI records"
   MenuClass: 9999
 
-MenuTree589: MenuTree
+bulkload: MenuTree
   Level: "217"
   Position: 5
   MenuNum: 2011
@@ -5634,7 +5634,7 @@ MenuTree589: MenuTree
   MenuTitle: "All OBI records"
   MenuClass: 9999
 
-MenuTree590: MenuTree
+bulkload: MenuTree
   Level: "217"
   Position: 6
   MenuNum: 2008
@@ -5643,7 +5643,7 @@ MenuTree590: MenuTree
   MenuTitle: "Genesys Error Codes"
   MenuClass: 9999
 
-MenuTree591: MenuTree
+bulkload: MenuTree
   Level: "217"
   Position: 7
   MenuNum: 794
@@ -5652,7 +5652,7 @@ MenuTree591: MenuTree
   MenuTitle: "Create Bills"
   MenuClass: 9999
 
-MenuTree592: MenuTree
+bulkload: MenuTree
   Level: "217"
   Position: 8
   MenuNum: 8
@@ -5660,7 +5660,7 @@ MenuTree592: MenuTree
   MenuClass: 9999
   TokenCode: "MAIN"
 
-MenuTree593: MenuTree
+bulkload: MenuTree
   Level: "3"
   Position: 1
   MenuNum: 2
@@ -5669,7 +5669,7 @@ MenuTree593: MenuTree
   MenuClass: 9999
   TokenCode: "cc"
 
-MenuTree594: MenuTree
+bulkload: MenuTree
   Level: "3"
   Position: 8
   MenuNum: 3
@@ -5677,7 +5677,7 @@ MenuTree594: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree595: MenuTree
+bulkload: MenuTree
   Level: "31"
   Position: 1
   MenuNum: 2204
@@ -5686,7 +5686,7 @@ MenuTree595: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree596: MenuTree
+bulkload: MenuTree
   Level: "31"
   Position: 2
   MenuNum: 788
@@ -5695,7 +5695,7 @@ MenuTree596: MenuTree
   MenuClass: 9999
   TokenCode: "cc"
 
-MenuTree597: MenuTree
+bulkload: MenuTree
   Level: "31"
   Position: 3
   MenuNum: 1881
@@ -5704,7 +5704,7 @@ MenuTree597: MenuTree
   MenuClass: 9999
   TokenCode: "cc"
 
-MenuTree598: MenuTree
+bulkload: MenuTree
   Level: "31"
   Position: 5
   MenuNum: 737
@@ -5713,7 +5713,7 @@ MenuTree598: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree599: MenuTree
+bulkload: MenuTree
   Level: "31"
   Position: 6
   MenuNum: 820
@@ -5722,7 +5722,7 @@ MenuTree599: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree600: MenuTree
+bulkload: MenuTree
   Level: "31"
   Position: 7
   MenuNum: 9042
@@ -5731,7 +5731,7 @@ MenuTree600: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree601: MenuTree
+bulkload: MenuTree
   Level: "31"
   Position: 8
   MenuNum: 3
@@ -5739,7 +5739,7 @@ MenuTree601: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree602: MenuTree
+bulkload: MenuTree
   Level: "312"
   Position: 8
   MenuNum: 8
@@ -5747,7 +5747,7 @@ MenuTree602: MenuTree
   MenuClass: 9999
   TokenCode: "cc"
 
-MenuTree603: MenuTree
+bulkload: MenuTree
   Level: "313"
   Position: 2
   MenuNum: 710
@@ -5756,7 +5756,7 @@ MenuTree603: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree604: MenuTree
+bulkload: MenuTree
   Level: "313"
   Position: 3
   MenuNum: 259
@@ -5765,7 +5765,7 @@ MenuTree604: MenuTree
   MenuClass: 9999
   TokenCode: "MOB"
 
-MenuTree605: MenuTree
+bulkload: MenuTree
   Level: "313"
   Position: 4
   MenuNum: 2206
@@ -5774,7 +5774,7 @@ MenuTree605: MenuTree
   MenuClass: 9999
   TokenCode: "cc"
 
-MenuTree606: MenuTree
+bulkload: MenuTree
   Level: "313"
   Position: 5
   MenuNum: 9043
@@ -5782,7 +5782,7 @@ MenuTree606: MenuTree
   MenuClass: 9999
   TokenCode: "cc"
 
-MenuTree607: MenuTree
+bulkload: MenuTree
   Level: "313"
   Position: 7
   MenuNum: 239
@@ -5791,7 +5791,7 @@ MenuTree607: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree608: MenuTree
+bulkload: MenuTree
   Level: "313"
   Position: 8
   MenuNum: 8
@@ -5799,7 +5799,7 @@ MenuTree608: MenuTree
   MenuClass: 9999
   TokenCode: "cc"
 
-MenuTree609: MenuTree
+bulkload: MenuTree
   Level: "3134"
   Position: 5
   MenuNum: 2220
@@ -5808,7 +5808,7 @@ MenuTree609: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree610: MenuTree
+bulkload: MenuTree
   Level: "3134"
   Position: 6
   MenuNum: 2221
@@ -5817,7 +5817,7 @@ MenuTree610: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree611: MenuTree
+bulkload: MenuTree
   Level: "3134"
   Position: 7
   MenuNum: 9045
@@ -5826,7 +5826,7 @@ MenuTree611: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree612: MenuTree
+bulkload: MenuTree
   Level: "3134"
   Position: 8
   MenuNum: 8
@@ -5834,7 +5834,7 @@ MenuTree612: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree613: MenuTree
+bulkload: MenuTree
   Level: "3135"
   Position: 3
   MenuNum: 2813
@@ -5843,7 +5843,7 @@ MenuTree613: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree614: MenuTree
+bulkload: MenuTree
   Level: "3135"
   Position: 4
   MenuNum: 1950
@@ -5852,7 +5852,7 @@ MenuTree614: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree615: MenuTree
+bulkload: MenuTree
   Level: "3135"
   Position: 8
   MenuNum: 8
@@ -5860,7 +5860,7 @@ MenuTree615: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree616: MenuTree
+bulkload: MenuTree
   Level: "31353"
   Position: 2
   MenuNum: 2805
@@ -5869,7 +5869,7 @@ MenuTree616: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree617: MenuTree
+bulkload: MenuTree
   Level: "31353"
   Position: 3
   MenuNum: 1951
@@ -5878,7 +5878,7 @@ MenuTree617: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree618: MenuTree
+bulkload: MenuTree
   Level: "31353"
   Position: 4
   MenuNum: 2809
@@ -5887,7 +5887,7 @@ MenuTree618: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree619: MenuTree
+bulkload: MenuTree
   Level: "31353"
   Position: 5
   MenuNum: 2814
@@ -5896,7 +5896,7 @@ MenuTree619: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree620: MenuTree
+bulkload: MenuTree
   Level: "31353"
   Position: 6
   MenuNum: 1966
@@ -5905,7 +5905,7 @@ MenuTree620: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree621: MenuTree
+bulkload: MenuTree
   Level: "31353"
   Position: 8
   MenuNum: 8
@@ -5913,7 +5913,7 @@ MenuTree621: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree622: MenuTree
+bulkload: MenuTree
   Level: "31354"
   Position: 1
   MenuNum: 1951
@@ -5922,7 +5922,7 @@ MenuTree622: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree623: MenuTree
+bulkload: MenuTree
   Level: "31354"
   Position: 2
   MenuNum: 1952
@@ -5931,7 +5931,7 @@ MenuTree623: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree624: MenuTree
+bulkload: MenuTree
   Level: "31354"
   Position: 3
   MenuNum: 1956
@@ -5940,7 +5940,7 @@ MenuTree624: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree625: MenuTree
+bulkload: MenuTree
   Level: "31354"
   Position: 5
   MenuNum: 1957
@@ -5949,7 +5949,7 @@ MenuTree625: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree626: MenuTree
+bulkload: MenuTree
   Level: "31354"
   Position: 6
   MenuNum: 1964
@@ -5958,7 +5958,7 @@ MenuTree626: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree627: MenuTree
+bulkload: MenuTree
   Level: "31354"
   Position: 7
   MenuNum: 1965
@@ -5967,7 +5967,7 @@ MenuTree627: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree628: MenuTree
+bulkload: MenuTree
   Level: "31354"
   Position: 8
   MenuNum: 8
@@ -5975,7 +5975,7 @@ MenuTree628: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree629: MenuTree
+bulkload: MenuTree
   Level: "3137"
   Position: 1
   MenuNum: 9044
@@ -5984,7 +5984,7 @@ MenuTree629: MenuTree
   MenuClass: 9999
   TokenCode: "cc"
 
-MenuTree630: MenuTree
+bulkload: MenuTree
   Level: "3137"
   Position: 2
   MenuNum: 228
@@ -5993,7 +5993,7 @@ MenuTree630: MenuTree
   MenuClass: 9999
   TokenCode: "cc"
 
-MenuTree631: MenuTree
+bulkload: MenuTree
   Level: "3137"
   Position: 8
   MenuNum: 8
@@ -6001,7 +6001,7 @@ MenuTree631: MenuTree
   MenuClass: 9999
   TokenCode: "CC"
 
-MenuTree632: MenuTree
+bulkload: MenuTree
   Level: "317"
   Position: 1
   MenuNum: 229
@@ -6010,7 +6010,7 @@ MenuTree632: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree633: MenuTree
+bulkload: MenuTree
   Level: "317"
   Position: 2
   MenuNum: 2230
@@ -6019,7 +6019,7 @@ MenuTree633: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree634: MenuTree
+bulkload: MenuTree
   Level: "317"
   Position: 3
   MenuNum: 1960
@@ -6028,7 +6028,7 @@ MenuTree634: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree635: MenuTree
+bulkload: MenuTree
   Level: "317"
   Position: 5
   MenuNum: 64
@@ -6037,7 +6037,7 @@ MenuTree635: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree636: MenuTree
+bulkload: MenuTree
   Level: "317"
   Position: 6
   MenuNum: 59
@@ -6046,7 +6046,7 @@ MenuTree636: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree637: MenuTree
+bulkload: MenuTree
   Level: "317"
   Position: 8
   MenuNum: 8
@@ -6054,7 +6054,7 @@ MenuTree637: MenuTree
   MenuClass: 9999
   TokenCode: "CCSUPER"
 
-MenuTree638: MenuTree
+bulkload: MenuTree
   Level: "998"
   Position: 1
   MenuNum: 1
