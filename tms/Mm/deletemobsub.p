@@ -672,13 +672,15 @@ PROCEDURE pTerminate:
                MNPProcess.StatusCode = ({&MNP_ST_ACON}) AND
                MNPProcess.MNPType = ({&MNP_TYPE_OUT}) EXCLUSIVE-LOCK:
 
-         /* check that all subscriptions are terminated 
+         /* check that all mobile subscriptions are terminated 
             before marking mnp out process closed */
          FOR EACH bMNPSub WHERE
                   bMNPSub.MNPSeq = MNPSub.MNPSeq AND
                   bMNPSub.MsSeq NE MNPSub.MsSeq NO-LOCK:
             IF CAN-FIND(FIRST bMobsub NO-LOCK WHERE
-               bMobsub.MsSeq = bMNPSub.MsSeq) THEN LEAVE MNP_LOOP.
+               bMobsub.MsSeq    EQ bMNPSub.MsSeq AND
+               bMobsub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE})
+               THEN LEAVE MNP_LOOP.
          END.
 
          ASSIGN
