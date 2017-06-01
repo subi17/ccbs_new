@@ -1,4 +1,4 @@
-FuncRunConfig1: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "BillRunSplit"
   FRConfigID: 1
   RunQty: 1
@@ -10,7 +10,7 @@ FuncRunConfig1: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig2: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "BillRun"
   FRConfigID: 2
   RunQty: 15
@@ -23,7 +23,7 @@ FuncRunConfig2: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig3: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "InvoiceNumbering"
   FRConfigID: 3
   RunQty: 1
@@ -35,7 +35,7 @@ FuncRunConfig3: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig4: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "PrintDOC1"
   FRConfigID: 4
   RunQty: 25
@@ -47,7 +47,7 @@ FuncRunConfig4: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig5: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "InvPrintSplit"
   FRConfigID: 5
   RunQty: 1
@@ -59,7 +59,7 @@ FuncRunConfig5: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig6: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "PrintXML"
   FRConfigID: 6
   RunQty: 25
@@ -71,7 +71,7 @@ FuncRunConfig6: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig7: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "CreateCSB19"
   FRConfigID: 7
   RunQty: 1
@@ -83,7 +83,7 @@ FuncRunConfig7: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig8: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "BillingQualityRepI"
   FRConfigID: 8
   RunQty: 1
@@ -95,7 +95,7 @@ FuncRunConfig8: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig9: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "BillingQualityRepII"
   FRConfigID: 9
   RunQty: 1
@@ -107,7 +107,7 @@ FuncRunConfig9: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig10: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "CCReport"
   FRConfigID: 10
   RunQty: 1
@@ -120,7 +120,7 @@ FuncRunConfig10: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig11: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "DeleteTestInvoices"
   FRConfigID: 11
   RunQty: 1
@@ -132,7 +132,7 @@ FuncRunConfig11: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig12: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "CombineDOC1Files"
   FRConfigID: 12
   RunQty: 1
@@ -143,7 +143,7 @@ FuncRunConfig12: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig13: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "BillRunStatistic"
   FRConfigID: 13
   RunQty: 1
@@ -155,7 +155,7 @@ FuncRunConfig13: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig14: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "Bundle 1. month fee"
   FRConfigID: 14
   RunQty: 1
@@ -167,7 +167,7 @@ FuncRunConfig14: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig15: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "BillRun_Counter"
   FRConfigID: 15
   RunQty: 25
@@ -176,7 +176,7 @@ FuncRunConfig15: FuncRunConfig
   StatusInterval: 1000
   Brand: "1"
 
-FuncRunConfig16: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "LateBilledCalls"
   FRConfigID: 16
   RunQty: 1
@@ -188,7 +188,7 @@ FuncRunConfig16: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig17: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "UnbilledCalls"
   FRConfigID: 17
   RunQty: 1
@@ -200,7 +200,7 @@ FuncRunConfig17: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig18: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "DoubleCall"
   FRConfigID: 18
   RunQty: 1
@@ -212,7 +212,7 @@ FuncRunConfig18: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig19: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "TriggerRerate"
   FRConfigID: 19
   RunQty: 6
@@ -224,7 +224,7 @@ FuncRunConfig19: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig20: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "InvrowCounterCheck"
   FRConfigID: 20
   RunQty: 15
@@ -235,10 +235,10 @@ FuncRunConfig20: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig21: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "IRCBilledCheck"
   FRConfigID: 21
-  RunQty: 15
+  RunQty: 1
   Description: "Check billed invoice row counters against CDRs"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_chk_irc_billed.p tms#HOST.pf #PARAM"
@@ -246,7 +246,7 @@ FuncRunConfig21: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig22: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "PrintXMLTar"
   FRConfigID: 22
   RunQty: 10
@@ -255,7 +255,7 @@ FuncRunConfig22: FuncRunConfig
   StatusInterval: 100
   Brand: "1"
 
-FuncRunConfig23: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "TestCaseCollect"
   FRConfigID: 23
   RunQty: 1
@@ -267,7 +267,7 @@ FuncRunConfig23: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig24: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "TestResultAnalysis"
   FRConfigID: 24
   RunQty: 1
@@ -279,7 +279,7 @@ FuncRunConfig24: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig25: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "InvoiceSentToIFS"
   FRConfigID: 25
   RunQty: 1
@@ -287,9 +287,8 @@ FuncRunConfig25: FuncRunConfig
   RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_ifs_invoice.p tms.pf #PARAM"
   StatusInterval: 1000
   Brand: "1"
-  Active: TRUE 
 
-FuncRunConfig26: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "InvoicesReadyForIFS"
   FRConfigID: 26
   RunQty: 1
@@ -300,7 +299,7 @@ FuncRunConfig26: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig27: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "InvPrintSplitTest"
   FRConfigID: 27
   RunQty: 1
@@ -309,7 +308,7 @@ FuncRunConfig27: FuncRunConfig
   StatusInterval: 100
   Brand: "1"
 
-FuncRunConfig28: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "InvPrintSplitTestNP"
   FRConfigID: 28
   RunQty: 1
@@ -318,7 +317,7 @@ FuncRunConfig28: FuncRunConfig
   StatusInterval: 100
   Brand: "1"
 
-FuncRunConfig29: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "IRCUnbilledSplit"
   FRConfigID: 29
   RunQty: 1
@@ -328,7 +327,7 @@ FuncRunConfig29: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig30: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "InvPrintSplitNP"
   FRConfigID: 30
   RunQty: 1
@@ -340,7 +339,7 @@ FuncRunConfig30: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig31: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "IRCBilledSplit"
   FRConfigID: 31
   RunQty: 1
@@ -350,7 +349,7 @@ FuncRunConfig31: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig32: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "TerminalFinanceMove"
   FRConfigID: 32
   RunQty: 1
@@ -362,7 +361,7 @@ FuncRunConfig32: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig33: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "PrintXMLNoPaper"
   FRConfigID: 33
   RunQty: 25
@@ -374,7 +373,7 @@ FuncRunConfig33: FuncRunConfig
   Brand: "1"
   Active: TRUE 
 
-FuncRunConfig34: FuncRunConfig
+bulkload: FuncRunConfig
   ConfName: "FRInvXMLTarReport"
   FRConfigID: 34
   RunQty: 1
