@@ -1,135 +1,135 @@
-FATConfig1: FATConfig
+bulkload: FATConfig
   FtGrp: "COMP75"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ"
   ValidFrom: 2006-12-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig2: FATConfig
+bulkload: FATConfig
   FtGrp: "COMP75"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ2"
   ValidFrom: 2007-01-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig3: FATConfig
+bulkload: FATConfig
   FtGrp: "COMP75"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ3"
   ValidFrom: 2007-11-15
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig4: FATConfig
+bulkload: FATConfig
   FtGrp: "COMP75"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ4"
   ValidFrom: 2008-09-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig5: FATConfig
+bulkload: FATConfig
   FtGrp: "COMPPRE1000"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ"
   ValidFrom: 2007-11-15
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig6: FATConfig
+bulkload: FATConfig
   FtGrp: "COMPPRE1000"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ2"
   ValidFrom: 2007-11-15
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig7: FATConfig
+bulkload: FATConfig
   FtGrp: "COMPPRE1000"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ3"
   ValidFrom: 2007-11-15
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig8: FATConfig
+bulkload: FATConfig
   FtGrp: "COMPPRE1000"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ4"
   ValidFrom: 2008-09-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig9: FATConfig
+bulkload: FATConfig
   FtGrp: "CPSMSFAT"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ"
   ValidFrom: 2009-09-21
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig10: FATConfig
+bulkload: FATConfig
   FtGrp: "CPSMSFAT"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ2"
   ValidFrom: 2009-09-21
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig11: FATConfig
+bulkload: FATConfig
   FtGrp: "CPSMSFAT"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ3"
   ValidFrom: 2009-09-21
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig12: FATConfig
+bulkload: FATConfig
   FtGrp: "CPSMSFAT"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJ4"
   ValidFrom: 2009-09-21
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig13: FATConfig
+bulkload: FATConfig
   FtGrp: "CPSMSFAT"
   ConfType: 4
   ConfTarget: "CLIType"
   ConfRule1: "TARJRD1"
   ValidFrom: 2009-09-21
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig14: FATConfig
+bulkload: FATConfig
   FtGrp: "RETFAT"
   ConfType: 6
   ConfTarget: "BillingItem"
   ConfRule1: "TERMPERIOD"
   ValidFrom: 2011-06-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
-FATConfig15: FATConfig
+bulkload: FATConfig
   FtGrp: "RETFAT"
   ConfType: 7
   ConfTarget: "BillingItemG"
   ConfRule1: "31"
   ValidFrom: 2011-06-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   Brand: "1"
 
