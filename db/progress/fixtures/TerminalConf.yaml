@@ -1,4744 +1,5986 @@
-TerminalConf1: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P011T45N2"
   DextraPrice: 59.74
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf2: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P011T45N2"
   DextraPrice: 60.03
   ValidFrom: 2015-03-03
   ValidTo: 2015-09-02
 
-TerminalConf3: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P011T45W2"
   DextraPrice: 59.74
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf4: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P011T45W2"
   DextraPrice: 60.03
   ValidFrom: 2015-03-03
   ValidTo: 2015-09-02
 
-TerminalConf5: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P012WSUW2"
+  DextraPrice: 45.25
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P012WSUW2"
+  DextraPrice: 45.32
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P018Q50N2"
   DextraPrice: 247.8
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf6: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P018Q50W2"
   DextraPrice: 247.8
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf7: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P018Z14W2"
   DextraPrice: 221.99
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf8: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P018Z30N2"
   DextraPrice: 390
   ValidFrom: 2014-07-12
   ValidTo: 2049-12-31
 
-TerminalConf9: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0214GCN2"
   DextraPrice: 133.19
   ValidFrom: 2014-08-11
   ValidTo: 2049-12-31
 
-TerminalConf10: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0214GCW2"
   DextraPrice: 133.19
   ValidFrom: 2014-08-11
   ValidTo: 2049-12-31
 
-TerminalConf11: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG2N2"
   DextraPrice: 123.54
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf12: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG2N2"
   DextraPrice: 117.36
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf13: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG2N2"
   DextraPrice: 123.54
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf14: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG2N2"
   DextraPrice: 123.9
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf15: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG2W2"
   DextraPrice: 123.54
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf16: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG2W2"
   DextraPrice: 117.36
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf17: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG2W2"
   DextraPrice: 123.54
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf18: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG2W2"
   DextraPrice: 123.9
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf19: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG3N2"
   DextraPrice: 149.28
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf20: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG3W2"
   DextraPrice: 149.28
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf21: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG4N2"
   DextraPrice: 133.19
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf22: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MG4W2"
   DextraPrice: 133.19
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf23: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MOEN2"
   DextraPrice: 84.67
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf24: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MOEW2"
   DextraPrice: 84.67
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf25: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MOGN2"
   DextraPrice: 127.66
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf26: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MOGN2"
   DextraPrice: 128.03
   ValidFrom: 2014-07-09
   ValidTo: 2015-09-02
 
-TerminalConf27: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MOXB2"
   DextraPrice: 283.94
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf28: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MOXN2"
   DextraPrice: 283.94
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf29: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MOXND"
   DextraPrice: 283.94
   ValidFrom: 2015-04-09
   ValidTo: 2049-12-31
 
-TerminalConf30: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MOXW2"
   DextraPrice: 283.94
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf31: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MOXWD"
   DextraPrice: 283.94
   ValidFrom: 2015-04-09
   ValidTo: 2049-12-31
 
-TerminalConf32: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MX2B2"
   DextraPrice: 342.82
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf33: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MX2B2"
   DextraPrice: 341.79
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf34: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MX2B2"
   DextraPrice: 342.82
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf35: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021MX2B2"
   DextraPrice: 343.82
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf36: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021PG2N2"
   DextraPrice: 123.54
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf37: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021PG2N2"
   DextraPrice: 117.36
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf38: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021PG2N2"
   DextraPrice: 123.54
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf39: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021PG2N2"
   DextraPrice: 123.9
   ValidFrom: 2014-12-15
   ValidTo: 2015-09-02
 
-TerminalConf40: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021PG2W2"
   DextraPrice: 123.54
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf41: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021PG2W2"
   DextraPrice: 117.36
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf42: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021PG2W2"
   DextraPrice: 123.54
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf43: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P021PG2W2"
   DextraPrice: 123.9
   ValidFrom: 2014-12-15
   ValidTo: 2015-09-02
 
-TerminalConf44: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023100G2"
   DextraPrice: 18.29
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf45: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023100P2"
   DextraPrice: 18.29
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf46: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023520W2"
   DextraPrice: 129.06
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf47: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023535N2"
   DextraPrice: 78.69
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf48: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023535N2"
   DextraPrice: 78.69
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf49: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023535N2"
   DextraPrice: 78.69
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf50: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023535N2"
   DextraPrice: 79.08
   ValidFrom: 2015-04-30
   ValidTo: 2015-09-02
 
-TerminalConf51: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023550N2"
   DextraPrice: 84.25
   ValidFrom: 2016-02-01
   ValidTo: 2049-12-31
 
-TerminalConf52: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023550W2"
   DextraPrice: 84.25
   ValidFrom: 2016-02-01
   ValidTo: 2049-12-31
 
-TerminalConf53: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023625N2"
   DextraPrice: 183.79
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf54: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023625W2"
   DextraPrice: 183.79
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf55: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023L62N2"
   DextraPrice: 183.79
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf56: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P023L62W2"
   DextraPrice: 183.79
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf57: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P030107G2"
+  DextraPrice: 143.92
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P030107GP"
+  DextraPrice: 216.09
+  ValidFrom: 2017-05-01
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P030107GP"
+  DextraPrice: 231.24
+  ValidFrom: 2017-04-05
+  ValidTo: 2017-04-30
+
+bulkload: TerminalConf
+  TerminalCode: "P0305SECP"
+  DextraPrice: 389.61
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P0305SECP"
+  DextraPrice: 390.18
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0305SEN2"
+  DextraPrice: 389.61
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P0305SEN2"
   DextraPrice: 390.18
   ValidFrom: 2016-12-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0305SENP"
+  DextraPrice: 389.61
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf58: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0305SENP"
   DextraPrice: 390.18
   ValidFrom: 2016-12-01
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf59: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030802N2"
   DextraPrice: 411.97
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf60: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030802ND"
   DextraPrice: 411.97
   ValidFrom: 2015-03-31
   ValidTo: 2049-12-31
 
-TerminalConf61: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030802W2"
   DextraPrice: 411.97
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf62: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030802WD"
   DextraPrice: 411.97
   ValidFrom: 2015-03-31
   ValidTo: 2049-12-31
 
-TerminalConf63: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELD2"
   DextraPrice: 120.45
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf64: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELD2"
   DextraPrice: 109.13
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf65: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELD2"
   DextraPrice: 120.45
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf66: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELD2"
   DextraPrice: 120.8
   ValidFrom: 2015-01-26
   ValidTo: 2015-09-02
 
-TerminalConf67: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELN2"
   DextraPrice: 120.45
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf68: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELN2"
   DextraPrice: 109.13
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf69: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELN2"
   DextraPrice: 120.45
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf70: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELN2"
   DextraPrice: 120.8
   ValidFrom: 2014-12-09
   ValidTo: 2015-09-02
 
-TerminalConf71: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELW2"
   DextraPrice: 120.45
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf72: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELW2"
   DextraPrice: 109.13
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf73: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELW2"
   DextraPrice: 120.45
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf74: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030BELW2"
   DextraPrice: 120.8
   ValidFrom: 2014-12-09
   ValidTo: 2015-09-02
 
-TerminalConf75: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G2MN2"
   DextraPrice: 185.85
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf76: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G2MW2"
   DextraPrice: 185.85
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf77: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SD2"
   DextraPrice: 185.31
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf78: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SD2"
   DextraPrice: 161.63
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf79: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SD2"
   DextraPrice: 185.31
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf80: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SD2"
   DextraPrice: 185.85
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf81: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SS2"
   DextraPrice: 185.31
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf82: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SS2"
   DextraPrice: 161.63
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf83: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SS2"
   DextraPrice: 185.31
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf84: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SS2"
   DextraPrice: 185.85
   ValidFrom: 2014-09-02
   ValidTo: 2015-09-02
 
-TerminalConf85: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SW2"
   DextraPrice: 185.31
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf86: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SW2"
   DextraPrice: 161.63
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf87: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SW2"
   DextraPrice: 185.31
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf88: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030G3SW2"
   DextraPrice: 185.85
   ValidFrom: 2014-09-01
   ValidTo: 2015-09-02
 
-TerminalConf89: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P030G5BNP"
+  DextraPrice: 535.34
+  ValidFrom: 2017-01-07
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P030G5BNP"
   DextraPrice: 535.34
   ValidFrom: 2016-05-04
   ValidTo: 2016-12-31
 
-TerminalConf90: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030GF2N2"
   DextraPrice: 452.98
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf91: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030GF2N2"
   DextraPrice: 454.3
   ValidFrom: 2015-04-30
   ValidTo: 2015-09-02
 
-TerminalConf92: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P030K10A2"
+  DextraPrice: 143.92
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P030K10A2"
   DextraPrice: 144.13
   ValidFrom: 2016-07-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P030K10W2"
+  DextraPrice: 143.92
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf93: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030K10W2"
   DextraPrice: 144.13
   ValidFrom: 2016-07-01
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf94: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030L32N2"
   DextraPrice: 76.18
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf95: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030L32W2"
   DextraPrice: 76.18
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf96: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030L4GD2"
   DextraPrice: 81.37
   ValidFrom: 2015-12-01
   ValidTo: 2049-12-31
 
-TerminalConf97: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030L4GN2"
   DextraPrice: 81.37
   ValidFrom: 2015-12-01
   ValidTo: 2049-12-31
 
-TerminalConf98: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030L50N2"
   DextraPrice: 60.77
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf99: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030L50N2"
   DextraPrice: 61.07
   ValidFrom: 2014-09-01
   ValidTo: 2015-09-02
 
-TerminalConf100: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030L72N2"
   DextraPrice: 122.87
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf101: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030L72W2"
   DextraPrice: 122.87
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf102: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG3N2"
   DextraPrice: 432.39
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf103: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG3N2"
   DextraPrice: 355.18
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf104: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG3N2"
   DextraPrice: 432.39
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf105: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG3N2"
   DextraPrice: 433.65
   ValidFrom: 2014-07-09
   ValidTo: 2015-09-02
 
-TerminalConf106: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG3W2"
   DextraPrice: 432.39
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf107: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG3W2"
   DextraPrice: 355.18
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf108: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG3W2"
   DextraPrice: 432.39
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf109: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG3W2"
   DextraPrice: 433.65
   ValidFrom: 2014-07-09
   ValidTo: 2015-09-02
 
-TerminalConf110: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG4B2"
   DextraPrice: 400.48
   ValidFrom: 2015-12-01
   ValidTo: 2049-12-31
 
-TerminalConf111: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG4B2"
   DextraPrice: 503.43
   ValidFrom: 2015-09-03
   ValidTo: 2015-11-30
 
-TerminalConf112: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG4B2"
   DextraPrice: 504.89
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf113: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG4G2"
   DextraPrice: 400.48
   ValidFrom: 2015-12-01
   ValidTo: 2049-12-31
 
-TerminalConf114: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG4G2"
   DextraPrice: 503.43
   ValidFrom: 2015-09-03
   ValidTo: 2015-11-30
 
-TerminalConf115: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG4G2"
   DextraPrice: 504.89
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf116: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG4W2"
   DextraPrice: 400.48
   ValidFrom: 2015-12-01
   ValidTo: 2049-12-31
 
-TerminalConf117: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG5N2"
   DextraPrice: 535.34
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf118: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LG5NP"
   DextraPrice: 535.34
   ValidFrom: 2016-09-01
   ValidTo: 2049-12-31
 
-TerminalConf119: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P030LG6G2"
+  DextraPrice: 508.86
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P030LK8A2"
+  DextraPrice: 101.77
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P030LK8A2"
   DextraPrice: 101.92
   ValidFrom: 2016-05-31
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf120: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LK8AP"
   DextraPrice: 101.92
   ValidFrom: 2016-05-31
   ValidTo: 2049-12-31
 
-TerminalConf121: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P030LK8W2"
+  DextraPrice: 101.77
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P030LK8W2"
   DextraPrice: 101.92
   ValidFrom: 2016-05-31
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf122: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030LK8WP"
   DextraPrice: 101.92
   ValidFrom: 2016-05-31
   ValidTo: 2049-12-31
 
-TerminalConf123: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030NE5N2"
   DextraPrice: 309.75
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf124: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030NE5W2"
   DextraPrice: 309.75
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf125: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030OF6N2"
   DextraPrice: 185.85
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf126: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030OF6W2"
   DextraPrice: 185.85
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf127: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030OPGN2"
   DextraPrice: 391.32
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf128: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030SP4N2"
   DextraPrice: 116.33
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf129: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030SP4N2"
   DextraPrice: 116.67
   ValidFrom: 2015-04-30
   ValidTo: 2015-09-02
 
-TerminalConf130: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030SP4W2"
   DextraPrice: 116.33
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf131: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030SP4W2"
   DextraPrice: 116.67
   ValidFrom: 2015-04-30
   ValidTo: 2015-09-02
 
-TerminalConf132: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P030WISA2"
   DextraPrice: 128.69
   ValidFrom: 2015-10-01
   ValidTo: 2049-12-31
 
-TerminalConf133: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034127R2"
   DextraPrice: 19.86
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf134: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034127W2"
   DextraPrice: 19.86
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf135: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0346EPD2"
   DextraPrice: 634.17
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf136: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0346EPN2"
   DextraPrice: 634.17
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf137: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034727G2"
   DextraPrice: 156.94
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf138: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034727N2"
   DextraPrice: 156.94
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf139: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034727W2"
   DextraPrice: 156.94
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf140: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P0347EGDP"
+  DextraPrice: 542.55
+  ValidFrom: 2017-03-01
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P0347EGDP"
   DextraPrice: 624.91
   ValidFrom: 2016-02-22
+  ValidTo: 2017-02-28
+
+bulkload: TerminalConf
+  TerminalCode: "P0347EGNP"
+  DextraPrice: 542.55
+  ValidFrom: 2017-03-01
   ValidTo: 2049-12-31
 
-TerminalConf141: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0347EGNP"
   DextraPrice: 624.91
   ValidFrom: 2016-02-22
-  ValidTo: 2049-12-31
+  ValidTo: 2017-02-28
 
-TerminalConf142: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034906W2"
   DextraPrice: 123.54
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf143: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034906W2"
   DextraPrice: 112.22
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf144: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034906W2"
   DextraPrice: 123.54
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf145: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034906W2"
   DextraPrice: 123.9
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf146: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034906W2"
   DextraPrice: 123.9
   ValidFrom: 2014-09-01
   ValidTo: 2015-05-28
 
-TerminalConf147: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034906W2"
   DextraPrice: 144.55
   ValidFrom: 2014-07-09
   ValidTo: 2014-08-31
 
-TerminalConf148: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P03490PN2"
   DextraPrice: 97.8
   ValidFrom: 2015-10-01
   ValidTo: 2049-12-31
 
-TerminalConf149: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P03490PN2"
   DextraPrice: 117.36
   ValidFrom: 2015-09-03
   ValidTo: 2015-09-30
 
-TerminalConf150: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P03490PN2"
   DextraPrice: 117.71
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf151: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P03490PN2"
   DextraPrice: 118.22
   ValidFrom: 2015-01-07
   ValidTo: 2015-05-28
 
-TerminalConf152: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P03490PW2"
   DextraPrice: 97.8
   ValidFrom: 2015-10-01
   ValidTo: 2049-12-31
 
-TerminalConf153: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P03490PW2"
   DextraPrice: 117.36
   ValidFrom: 2015-09-03
   ValidTo: 2015-09-30
 
-TerminalConf154: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P03490PW2"
   DextraPrice: 117.71
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf155: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P03490PW2"
   DextraPrice: 118.22
   ValidFrom: 2015-01-07
   ValidTo: 2015-05-28
 
-TerminalConf156: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034919N2"
   DextraPrice: 268.45
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf157: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034919W2"
   DextraPrice: 268.45
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf158: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P03491YN1"
   DextraPrice: 268.45
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf159: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P03491YW1"
   DextraPrice: 268.45
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf160: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034950N2"
   DextraPrice: 485.28
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf161: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034950W2"
   DextraPrice: 485.28
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf162: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0349PYN1"
   DextraPrice: 268.45
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf163: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0349PYN2"
   DextraPrice: 268.45
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf164: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0349PYW1"
   DextraPrice: 268.45
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf165: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0349PYW2"
   DextraPrice: 268.45
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf166: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034A36D2"
   DextraPrice: 195.61
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf167: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034A36D2"
   DextraPrice: 216.2
   ValidFrom: 2016-02-01
   ValidTo: 2016-06-30
 
-TerminalConf168: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034A36N2"
   DextraPrice: 195.61
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf169: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034A36N2"
   DextraPrice: 216.2
   ValidFrom: 2016-02-01
   ValidTo: 2016-06-30
 
-TerminalConf170: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034A36R2"
   DextraPrice: 195.61
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf171: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034A36R2"
   DextraPrice: 216.2
   ValidFrom: 2016-02-19
   ValidTo: 2016-06-30
 
-TerminalConf172: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034A37D2"
+  DextraPrice: 246.72
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P034A37D2"
+  DextraPrice: 247.08
+  ValidFrom: 2017-02-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P034A37N2"
+  DextraPrice: 246.72
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P034A37N2"
+  DextraPrice: 247.08
+  ValidFrom: 2017-02-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034A56D2"
   DextraPrice: 257.38
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf173: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034A56D2"
   DextraPrice: 298.56
   ValidFrom: 2016-02-01
   ValidTo: 2016-06-30
 
-TerminalConf174: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034A56N2"
   DextraPrice: 257.38
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf175: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034A56N2"
   DextraPrice: 298.56
   ValidFrom: 2016-02-01
   ValidTo: 2016-06-30
 
-TerminalConf176: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034A56R2"
   DextraPrice: 257.38
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf177: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034A56R2"
   DextraPrice: 298.56
   ValidFrom: 2016-02-19
   ValidTo: 2016-06-30
 
-TerminalConf178: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034A57D2"
+  DextraPrice: 318.68
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P034A57D2"
+  DextraPrice: 319.15
+  ValidFrom: 2017-02-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P034A57N2"
+  DextraPrice: 318.68
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P034A57N2"
+  DextraPrice: 319.15
+  ValidFrom: 2017-02-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034E19M2"
   DextraPrice: 20.9
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf179: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034E19R2"
   DextraPrice: 20.9
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf180: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034EXPW2"
   DextraPrice: 256.06
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf181: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034G85N2"
   DextraPrice: 452.98
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf182: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034G85N2"
   DextraPrice: 272.82
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf183: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034G85N2"
   DextraPrice: 452.98
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf184: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034G85N2"
   DextraPrice: 454.3
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf185: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034G85W2"
   DextraPrice: 452.98
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf186: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034G85W2"
   DextraPrice: 272.82
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf187: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034G85W2"
   DextraPrice: 452.98
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf188: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034G85W2"
   DextraPrice: 454.3
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf189: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GA5N2"
   DextraPrice: 226.49
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf190: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GA5N2"
   DextraPrice: 247.8
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf191: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GA5N2"
   DextraPrice: 278.78
   ValidFrom: 2015-02-01
   ValidTo: 2015-05-28
 
-TerminalConf192: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GA5S2"
   DextraPrice: 226.49
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf193: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GA5S2"
   DextraPrice: 247.8
   ValidFrom: 2015-06-13
   ValidTo: 2015-09-02
 
-TerminalConf194: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GA5S2"
   DextraPrice: 278.78
   ValidFrom: 2015-05-13
   ValidTo: 2015-06-12
 
-TerminalConf195: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GA5W2"
   DextraPrice: 226.49
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf196: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GA5W2"
   DextraPrice: 247.8
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf197: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GA5W2"
   DextraPrice: 278.78
   ValidFrom: 2015-02-01
   ValidTo: 2015-05-28
 
-TerminalConf198: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GCPN2"
   DextraPrice: 108.41
   ValidFrom: 2014-10-01
   ValidTo: 2049-12-31
 
-TerminalConf199: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GCPW2"
   DextraPrice: 108.41
   ValidFrom: 2014-10-01
   ValidTo: 2049-12-31
 
-TerminalConf200: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GGPD2"
   DextraPrice: 123.54
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf201: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GGPD2"
   DextraPrice: 144.55
   ValidFrom: 2015-03-03
   ValidTo: 2015-09-02
 
-TerminalConf202: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GGPN2"
   DextraPrice: 123.54
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf203: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GGPN2"
   DextraPrice: 144.55
   ValidFrom: 2015-02-01
   ValidTo: 2015-09-02
 
-TerminalConf204: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GGPW2"
   DextraPrice: 123.54
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf205: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GGPW2"
   DextraPrice: 144.55
   ValidFrom: 2015-02-01
   ValidTo: 2015-09-02
 
-TerminalConf206: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ1A2"
   DextraPrice: 72.1
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf207: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ1A2"
   DextraPrice: 65.92
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf208: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ1A2"
   DextraPrice: 72.1
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf209: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ1A2"
   DextraPrice: 72.45
   ValidFrom: 2015-07-01
   ValidTo: 2015-09-02
 
-TerminalConf210: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ1A2"
   DextraPrice: 77.63
   ValidFrom: 2015-03-03
   ValidTo: 2015-06-30
 
-TerminalConf211: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ1W2"
   DextraPrice: 72.1
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf212: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ1W2"
   DextraPrice: 65.92
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf213: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ1W2"
   DextraPrice: 72.1
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf214: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ1W2"
   DextraPrice: 72.45
   ValidFrom: 2015-07-01
   ValidTo: 2015-09-02
 
-TerminalConf215: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ1W2"
   DextraPrice: 77.63
   ValidFrom: 2015-03-03
   ValidTo: 2015-06-30
 
-TerminalConf216: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034GJ3D2"
+  DextraPrice: 128.5
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P034GJ3D2"
   DextraPrice: 128.69
   ValidFrom: 2016-03-01
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf217: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ3DP"
   DextraPrice: 128.69
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf218: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034GJ3N2"
+  DextraPrice: 128.5
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P034GJ3N2"
   DextraPrice: 128.69
   ValidFrom: 2016-03-01
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf219: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ3NP"
   DextraPrice: 128.69
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf220: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034GJ3W2"
+  DextraPrice: 128.5
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P034GJ3W2"
   DextraPrice: 128.69
   ValidFrom: 2016-03-01
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf221: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ3WP"
   DextraPrice: 128.69
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf222: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ5D2"
   DextraPrice: 154.43
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf223: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ5N2"
   DextraPrice: 154.43
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf224: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GJ5W2"
   DextraPrice: 154.43
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf225: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GKZN2"
   DextraPrice: 340.73
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf226: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GKZW2"
   DextraPrice: 340.73
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf227: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GPCN2"
   DextraPrice: 102.95
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf228: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GPCN2"
   DextraPrice: 93.17
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf229: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GPCN2"
   DextraPrice: 102.95
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf230: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GPCN2"
   DextraPrice: 108.41
   ValidFrom: 2015-02-01
   ValidTo: 2015-09-02
 
-TerminalConf231: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GPCW2"
   DextraPrice: 102.95
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf232: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GPCW2"
   DextraPrice: 93.17
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf233: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GPCW2"
   DextraPrice: 102.95
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf234: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GPCW2"
   DextraPrice: 108.41
   ValidFrom: 2015-02-01
   ValidTo: 2015-09-02
 
-TerminalConf235: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5D2"
   DextraPrice: 494.16
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf236: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5D2"
   DextraPrice: 396.36
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf237: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5D2"
   DextraPrice: 494.16
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf238: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5D2"
   DextraPrice: 495.6
   ValidFrom: 2014-07-09
   ValidTo: 2015-09-02
 
-TerminalConf239: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5N2"
   DextraPrice: 494.16
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf240: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5N2"
   DextraPrice: 396.36
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf241: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5N2"
   DextraPrice: 494.16
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf242: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5N2"
   DextraPrice: 495.6
   ValidFrom: 2014-07-09
   ValidTo: 2015-09-02
 
-TerminalConf243: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5W2"
   DextraPrice: 494.16
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf244: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5W2"
   DextraPrice: 396.36
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf245: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5W2"
   DextraPrice: 494.16
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf246: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS5W2"
   DextraPrice: 495.6
   ValidFrom: 2014-07-09
   ValidTo: 2015-09-02
 
-TerminalConf247: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6D2"
   DextraPrice: 394.3
   ValidFrom: 2016-10-04
   ValidTo: 2049-12-31
 
-TerminalConf248: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6D2"
   DextraPrice: 473.57
   ValidFrom: 2015-09-03
   ValidTo: 2016-10-03
 
-TerminalConf249: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6D2"
   DextraPrice: 474.95
   ValidFrom: 2015-08-10
   ValidTo: 2015-09-02
 
-TerminalConf250: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6D2"
   DextraPrice: 555.49
   ValidFrom: 2015-04-28
   ValidTo: 2015-08-09
 
-TerminalConf251: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6N2"
   DextraPrice: 394.3
   ValidFrom: 2016-10-04
   ValidTo: 2049-12-31
 
-TerminalConf252: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6N2"
   DextraPrice: 473.57
   ValidFrom: 2015-09-03
   ValidTo: 2016-10-03
 
-TerminalConf253: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6N2"
   DextraPrice: 474.95
   ValidFrom: 2015-08-10
   ValidTo: 2015-09-02
 
-TerminalConf254: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6N2"
   DextraPrice: 555.49
   ValidFrom: 2015-03-31
   ValidTo: 2015-08-09
 
-TerminalConf255: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6W2"
   DextraPrice: 394.3
   ValidFrom: 2016-10-04
   ValidTo: 2049-12-31
 
-TerminalConf256: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6W2"
   DextraPrice: 473.57
   ValidFrom: 2015-09-03
   ValidTo: 2016-10-03
 
-TerminalConf257: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6W2"
   DextraPrice: 474.95
   ValidFrom: 2015-08-10
   ValidTo: 2015-09-02
 
-TerminalConf258: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GS6W2"
   DextraPrice: 555.49
   ValidFrom: 2015-03-31
   ValidTo: 2015-08-09
 
-TerminalConf259: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034GS7D2"
+  DextraPrice: 465.68
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P034GS7D2"
+  DextraPrice: 466.36
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034GS7D2"
   DextraPrice: 547.69
   ValidFrom: 2016-02-22
+  ValidTo: 2017-02-28
+
+bulkload: TerminalConf
+  TerminalCode: "P034GS7N2"
+  DextraPrice: 465.68
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf260: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034GS7N2"
+  DextraPrice: 466.36
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034GS7N2"
   DextraPrice: 547.69
   ValidFrom: 2016-02-22
+  ValidTo: 2017-02-28
+
+bulkload: TerminalConf
+  TerminalCode: "P034GS7P2"
+  DextraPrice: 465.68
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf261: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034GS7P2"
+  DextraPrice: 466.36
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034GS7P2"
   DextraPrice: 547.69
   ValidFrom: 2016-12-01
+  ValidTo: 2017-02-28
+
+bulkload: TerminalConf
+  TerminalCode: "P034GS8G2"
+  DextraPrice: 632.22
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf262: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034GS8N2"
+  DextraPrice: 632.22
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P034GS8S2"
+  DextraPrice: 632.22
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P034GTPN2"
   DextraPrice: 74.52
   ValidFrom: 2015-05-29
   ValidTo: 2049-12-31
 
-TerminalConf263: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GTPN2"
   DextraPrice: 74.52
   ValidFrom: 2014-09-01
   ValidTo: 2015-05-28
 
-TerminalConf264: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GTPN2"
   DextraPrice: 113.58
   ValidFrom: 2014-07-09
   ValidTo: 2014-08-31
 
-TerminalConf265: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GTPW2"
   DextraPrice: 74.52
   ValidFrom: 2015-05-29
   ValidTo: 2049-12-31
 
-TerminalConf266: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GTPW2"
   DextraPrice: 74.52
   ValidFrom: 2014-09-01
   ValidTo: 2015-05-28
 
-TerminalConf267: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034GTPW2"
   DextraPrice: 113.58
   ValidFrom: 2014-07-09
   ValidTo: 2014-08-31
 
-TerminalConf268: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034J56D2"
+  DextraPrice: 162.42
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P034J56D2"
+  DextraPrice: 162.66
+  ValidFrom: 2017-01-07
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034J56D2"
   DextraPrice: 169.87
   ValidFrom: 2016-05-31
+  ValidTo: 2017-01-06
+
+bulkload: TerminalConf
+  TerminalCode: "P034J56DP"
+  DextraPrice: 162.66
+  ValidFrom: 2017-01-07
   ValidTo: 2049-12-31
 
-TerminalConf269: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034J56DP"
   DextraPrice: 169.87
   ValidFrom: 2016-07-01
+  ValidTo: 2017-01-06
+
+bulkload: TerminalConf
+  TerminalCode: "P034J56N2"
+  DextraPrice: 162.42
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf270: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034J56N2"
+  DextraPrice: 162.66
+  ValidFrom: 2017-01-07
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034J56N2"
   DextraPrice: 169.87
   ValidFrom: 2016-05-31
+  ValidTo: 2017-01-06
+
+bulkload: TerminalConf
+  TerminalCode: "P034J56NP"
+  DextraPrice: 162.66
+  ValidFrom: 2017-01-07
   ValidTo: 2049-12-31
 
-TerminalConf271: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034J56NP"
   DextraPrice: 169.87
   ValidFrom: 2016-07-01
+  ValidTo: 2017-01-06
+
+bulkload: TerminalConf
+  TerminalCode: "P034J56W2"
+  DextraPrice: 162.42
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf272: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034J56W2"
+  DextraPrice: 162.66
+  ValidFrom: 2017-01-07
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034J56W2"
   DextraPrice: 169.87
   ValidFrom: 2016-05-31
+  ValidTo: 2017-01-06
+
+bulkload: TerminalConf
+  TerminalCode: "P034J56WP"
+  DextraPrice: 162.66
+  ValidFrom: 2017-01-07
   ValidTo: 2049-12-31
 
-TerminalConf273: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034J56WP"
   DextraPrice: 169.87
   ValidFrom: 2016-07-01
+  ValidTo: 2017-01-06
+
+bulkload: TerminalConf
+  TerminalCode: "P034J76D2"
+  DextraPrice: 205.6
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf274: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034J76D2"
+  DextraPrice: 205.9
+  ValidFrom: 2017-01-07
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034J76D2"
   DextraPrice: 211.05
   ValidFrom: 2016-05-31
+  ValidTo: 2017-01-06
+
+bulkload: TerminalConf
+  TerminalCode: "P034J76N2"
+  DextraPrice: 205.6
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf275: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034J76N2"
+  DextraPrice: 205.9
+  ValidFrom: 2017-01-07
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034J76N2"
   DextraPrice: 211.05
   ValidFrom: 2016-05-31
+  ValidTo: 2017-01-06
+
+bulkload: TerminalConf
+  TerminalCode: "P034J76W2"
+  DextraPrice: 205.6
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf276: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034J76W2"
+  DextraPrice: 205.9
+  ValidFrom: 2017-01-07
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034J76W2"
   DextraPrice: 211.05
   ValidFrom: 2016-05-31
-  ValidTo: 2049-12-31
+  ValidTo: 2017-01-06
 
-TerminalConf277: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034MEGN2"
   DextraPrice: 342.79
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf278: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034MEGW2"
   DextraPrice: 342.79
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf279: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034MNYA2"
   DextraPrice: 342.79
   ValidFrom: 2014-10-20
   ValidTo: 2049-12-31
 
-TerminalConf280: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034MWYW2"
   DextraPrice: 342.79
   ValidFrom: 2014-10-20
   ValidTo: 2049-12-31
 
-TerminalConf281: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034N90N2"
   DextraPrice: 531.74
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf282: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034N90P2"
   DextraPrice: 531.74
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf283: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034N90W2"
   DextraPrice: 531.74
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf284: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034NT4N2"
   DextraPrice: 466.36
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf285: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034NT4N2"
   DextraPrice: 547.23
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf286: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034NT4W2"
   DextraPrice: 466.36
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf287: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034NT4W2"
   DextraPrice: 547.23
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf288: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034NT7A2"
   DextraPrice: 663
   ValidFrom: 2016-09-01
   ValidTo: 2049-12-31
 
-TerminalConf289: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034NT7N2"
   DextraPrice: 663
   ValidFrom: 2016-09-01
   ValidTo: 2049-12-31
 
-TerminalConf290: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S4ZW2"
   DextraPrice: 309.75
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf291: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6ED2"
   DextraPrice: 547.69
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf292: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6ED2"
   DextraPrice: 549.29
   ValidFrom: 2015-08-10
   ValidTo: 2015-09-02
 
-TerminalConf293: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6ED2"
   DextraPrice: 665.96
   ValidFrom: 2015-05-29
   ValidTo: 2015-08-09
 
-TerminalConf294: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6EN2"
   DextraPrice: 547.69
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf295: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6EN2"
   DextraPrice: 549.29
   ValidFrom: 2015-08-10
   ValidTo: 2015-09-02
 
-TerminalConf296: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6EN2"
   DextraPrice: 665.96
   ValidFrom: 2015-03-31
   ValidTo: 2015-08-09
 
-TerminalConf297: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6EV2"
   DextraPrice: 547.69
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf298: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6EV2"
   DextraPrice: 549.29
   ValidFrom: 2015-08-10
   ValidTo: 2015-09-02
 
-TerminalConf299: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6EV2"
   DextraPrice: 665.96
   ValidFrom: 2015-04-30
   ValidTo: 2015-08-09
 
-TerminalConf300: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6EW2"
   DextraPrice: 547.69
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf301: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6EW2"
   DextraPrice: 549.29
   ValidFrom: 2015-08-10
   ValidTo: 2015-09-02
 
-TerminalConf302: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S6EW2"
   DextraPrice: 665.96
   ValidFrom: 2015-03-31
   ValidTo: 2015-08-09
 
-TerminalConf303: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034S7EA2"
+  DextraPrice: 541.76
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P034S7EA2"
+  DextraPrice: 542.55
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P034S7EA2"
+  DextraPrice: 624.91
+  ValidFrom: 2017-01-05
+  ValidTo: 2017-02-28
+
+bulkload: TerminalConf
+  TerminalCode: "P034S7ED2"
+  DextraPrice: 541.76
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P034S7ED2"
+  DextraPrice: 542.55
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034S7ED2"
   DextraPrice: 624.91
   ValidFrom: 2016-02-22
+  ValidTo: 2017-02-28
+
+bulkload: TerminalConf
+  TerminalCode: "P034S7EN2"
+  DextraPrice: 541.76
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf304: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034S7EN2"
+  DextraPrice: 542.55
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P034S7EN2"
   DextraPrice: 624.91
   ValidFrom: 2016-02-22
+  ValidTo: 2017-02-28
+
+bulkload: TerminalConf
+  TerminalCode: "P034S7GDP"
+  DextraPrice: 466.36
+  ValidFrom: 2017-03-01
   ValidTo: 2049-12-31
 
-TerminalConf305: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S7GDP"
   DextraPrice: 547.69
   ValidFrom: 2016-02-22
+  ValidTo: 2017-02-28
+
+bulkload: TerminalConf
+  TerminalCode: "P034S7GNP"
+  DextraPrice: 466.36
+  ValidFrom: 2017-03-01
   ValidTo: 2049-12-31
 
-TerminalConf306: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034S7GNP"
   DextraPrice: 547.69
   ValidFrom: 2016-02-22
+  ValidTo: 2017-02-28
+
+bulkload: TerminalConf
+  TerminalCode: "P034S8PG2"
+  DextraPrice: 710.35
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf307: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P034S8PN2"
+  DextraPrice: 710.35
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P034S8PS2"
+  DextraPrice: 710.35
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P034TA6W2"
+  DextraPrice: 246.72
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P034TA6W2"
   DextraPrice: 247.08
   ValidFrom: 2016-07-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P034TBAW2"
+  DextraPrice: 248.78
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf308: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034TBAW2"
   DextraPrice: 249.14
   ValidFrom: 2015-10-01
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf309: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034TP1W2"
   DextraPrice: 463.59
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf310: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034TS1D2"
   DextraPrice: 456.07
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf311: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034TS1D2"
   DextraPrice: 457.4
   ValidFrom: 2015-06-23
   ValidTo: 2015-09-02
 
-TerminalConf312: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034TS1D2"
   DextraPrice: 490.44
   ValidFrom: 2014-07-09
   ValidTo: 2015-06-22
 
-TerminalConf313: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034TS1W2"
   DextraPrice: 456.07
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf314: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034TS1W2"
   DextraPrice: 457.4
   ValidFrom: 2015-06-23
   ValidTo: 2015-09-02
 
-TerminalConf315: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034TS1W2"
   DextraPrice: 490.44
   ValidFrom: 2014-07-09
   ValidTo: 2015-06-22
 
-TerminalConf316: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034YOUA2"
   DextraPrice: 86.73
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf317: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034YOUR2"
   DextraPrice: 86.73
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf318: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P034YOUW2"
   DextraPrice: 86.73
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf319: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0374AAN2"
   DextraPrice: 171.27
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf320: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0374AAN2"
   DextraPrice: 175.02
   ValidFrom: 2015-11-01
   ValidTo: 2016-01-06
 
-TerminalConf321: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0374AAW2"
   DextraPrice: 171.27
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf322: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0374AAW2"
   DextraPrice: 175.02
   ValidFrom: 2015-11-01
   ValidTo: 2016-01-06
 
-TerminalConf323: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0375PSN2"
   DextraPrice: 684.62
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf324: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0375PSN2"
   DextraPrice: 702.4
   ValidFrom: 2016-01-07
   ValidTo: 2016-03-31
 
-TerminalConf325: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0375PSN2"
   DextraPrice: 715.5
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf326: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037E4GW2"
   DextraPrice: 92.66
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf327: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037E4GW2"
   DextraPrice: 92.93
   ValidFrom: 2015-04-30
   ValidTo: 2015-09-02
 
-TerminalConf328: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4AN2"
   DextraPrice: 171.27
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf329: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4AN2"
   DextraPrice: 175.02
   ValidFrom: 2015-11-01
   ValidTo: 2016-01-06
 
-TerminalConf330: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4AN2"
   DextraPrice: 195.61
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf331: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4AN2"
   DextraPrice: 196.18
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf332: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4AW2"
   DextraPrice: 171.27
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf333: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4AW2"
   DextraPrice: 175.02
   ValidFrom: 2015-11-01
   ValidTo: 2016-01-06
 
-TerminalConf334: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4AW2"
   DextraPrice: 195.61
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf335: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4AW2"
   DextraPrice: 196.18
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf336: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4SN2"
   DextraPrice: 320.55
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf337: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4SN2"
   DextraPrice: 324.29
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf338: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4SW2"
   DextraPrice: 320.55
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf339: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037M4SW2"
   DextraPrice: 324.29
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf340: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P037XA1N2"
+  DextraPrice: 201.49
+  ValidFrom: 2017-05-01
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P037XA1W2"
+  DextraPrice: 201.49
+  ValidFrom: 2017-05-01
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P037XC5N2"
   DextraPrice: 275.91
   ValidFrom: 2016-01-04
   ValidTo: 2049-12-31
 
-TerminalConf341: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XC5W2"
   DextraPrice: 275.91
   ValidFrom: 2016-01-04
   ValidTo: 2049-12-31
 
-TerminalConf342: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XE1N2"
   DextraPrice: 87.76
   ValidFrom: 2014-11-01
   ValidTo: 2049-12-31
 
-TerminalConf343: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XE1W2"
   DextraPrice: 87.76
   ValidFrom: 2014-11-01
   ValidTo: 2049-12-31
 
-TerminalConf344: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XM2W2"
   DextraPrice: 164.72
   ValidFrom: 2015-11-04
   ValidTo: 2049-12-31
 
-TerminalConf345: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XM2W2"
   DextraPrice: 123.54
   ValidFrom: 2015-11-01
   ValidTo: 2015-11-03
 
-TerminalConf346: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XM2W2"
   DextraPrice: 164.72
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf347: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XM2W2"
   DextraPrice: 165.2
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf348: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XM2W2"
   DextraPrice: 165.2
   ValidFrom: 2014-10-01
   ValidTo: 2015-05-28
 
-TerminalConf349: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XM2W2"
   DextraPrice: 180.69
   ValidFrom: 2014-07-09
   ValidTo: 2014-09-30
 
-TerminalConf350: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XM5N2"
   DextraPrice: 277.97
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf351: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XM5N2"
   DextraPrice: 298.53
   ValidFrom: 2016-03-01
   ValidTo: 2016-03-31
 
-TerminalConf352: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XM5W2"
   DextraPrice: 277.97
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf353: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XM5W2"
   DextraPrice: 298.53
   ValidFrom: 2016-03-01
   ValidTo: 2016-03-31
 
-TerminalConf354: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XP1N2"
   DextraPrice: 504.89
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf355: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XP1W2"
   DextraPrice: 504.89
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf356: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XPJN2"
   DextraPrice: 113.58
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf357: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XPJW2"
   DextraPrice: 113.58
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf358: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XPLN2"
   DextraPrice: 118.74
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf359: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XPLW2"
   DextraPrice: 118.74
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf360: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XPMM2"
   DextraPrice: 87.76
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf361: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XPMN2"
   DextraPrice: 87.76
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf362: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XPMW2"
   DextraPrice: 87.76
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf363: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XPUW2"
   DextraPrice: 530.71
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf364: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XPYM2"
   DextraPrice: 504.89
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf365: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XPZN2"
   DextraPrice: 485.28
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf366: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XPZW2"
   DextraPrice: 485.28
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf367: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P037XXAN2"
+  DextraPrice: 165.1
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P037XXAN2"
+  DextraPrice: 165.34
+  ValidFrom: 2017-01-07
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P037XXAN2"
   DextraPrice: 184.28
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-01-06
 
-TerminalConf368: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XXAN2"
   DextraPrice: 203.84
   ValidFrom: 2016-07-01
   ValidTo: 2016-10-03
 
-TerminalConf369: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P037XXZS2"
+  DextraPrice: 411.2
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P037XXZS2"
+  DextraPrice: 453.59
+  ValidFrom: 2017-01-07
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P037XXZS2"
   DextraPrice: 514.75
   ValidFrom: 2016-10-02
-  ValidTo: 2049-12-31
+  ValidTo: 2017-01-06
 
-TerminalConf370: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XYLN1"
   DextraPrice: 118.74
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf371: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ2N2"
   DextraPrice: 392.35
   ValidFrom: 2015-05-29
   ValidTo: 2049-12-31
 
-TerminalConf372: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ2N2"
   DextraPrice: 392.35
   ValidFrom: 2014-10-01
   ValidTo: 2015-05-28
 
-TerminalConf373: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ2N2"
   DextraPrice: 480.11
   ValidFrom: 2014-07-09
   ValidTo: 2014-09-30
 
-TerminalConf374: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ2W2"
   DextraPrice: 392.35
   ValidFrom: 2015-05-29
   ValidTo: 2049-12-31
 
-TerminalConf375: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ2W2"
   DextraPrice: 392.35
   ValidFrom: 2014-10-01
   ValidTo: 2015-05-28
 
-TerminalConf376: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ2W2"
   DextraPrice: 480.11
   ValidFrom: 2014-07-09
   ValidTo: 2014-09-30
 
-TerminalConf377: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ3N2"
   DextraPrice: 370.62
   ValidFrom: 2015-10-01
   ValidTo: 2049-12-31
 
-TerminalConf378: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ3N2"
   DextraPrice: 380.92
   ValidFrom: 2015-09-03
   ValidTo: 2015-09-30
 
-TerminalConf379: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ3N2"
   DextraPrice: 382.03
   ValidFrom: 2015-07-01
   ValidTo: 2015-09-02
 
-TerminalConf380: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ3N2"
   DextraPrice: 441.4
   ValidFrom: 2015-05-29
   ValidTo: 2015-06-30
 
-TerminalConf381: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ3N2"
   DextraPrice: 500.76
   ValidFrom: 2014-10-01
   ValidTo: 2015-05-28
 
-TerminalConf382: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ3W2"
   DextraPrice: 370.62
   ValidFrom: 2015-10-01
   ValidTo: 2049-12-31
 
-TerminalConf383: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ3W2"
   DextraPrice: 380.92
   ValidFrom: 2015-09-03
   ValidTo: 2015-09-30
 
-TerminalConf384: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ3W2"
   DextraPrice: 382.03
   ValidFrom: 2015-07-01
   ValidTo: 2015-09-02
 
-TerminalConf385: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ3W2"
   DextraPrice: 441.4
   ValidFrom: 2015-05-29
   ValidTo: 2015-06-30
 
-TerminalConf386: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ3W2"
   DextraPrice: 500.76
   ValidFrom: 2014-10-01
   ValidTo: 2015-05-28
 
-TerminalConf387: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ5N2"
   DextraPrice: 480.06
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf388: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ5N2"
   DextraPrice: 501.37
   ValidFrom: 2015-10-01
   ValidTo: 2016-01-06
 
-TerminalConf389: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ5W2"
   DextraPrice: 480.06
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf390: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZ5W2"
   DextraPrice: 501.37
   ValidFrom: 2015-10-01
   ValidTo: 2016-01-06
 
-TerminalConf391: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZCP2"
   DextraPrice: 360.34
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf392: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZCW2"
   DextraPrice: 360.34
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf393: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037XZCY2"
   DextraPrice: 360.34
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf394: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037Z3BN2"
   DextraPrice: 370.62
   ValidFrom: 2016-01-10
   ValidTo: 2049-12-31
 
-TerminalConf395: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037Z3BW2"
   DextraPrice: 370.62
   ValidFrom: 2016-01-10
   ValidTo: 2049-12-31
 
-TerminalConf396: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037Z5PN2"
   DextraPrice: 535.34
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf397: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037Z5PN2"
   DextraPrice: 553.12
   ValidFrom: 2016-01-07
   ValidTo: 2016-03-31
 
-TerminalConf398: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037Z5PN2"
   DextraPrice: 566.23
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf399: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037Z5RN2"
   DextraPrice: 480.06
   ValidFrom: 2016-01-10
   ValidTo: 2049-12-31
 
-TerminalConf400: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037Z5RW2"
   DextraPrice: 480.06
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf401: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037Z5SN2"
   DextraPrice: 629.33
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf402: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037Z5SN2"
   DextraPrice: 650.64
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf403: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037Z5SW2"
   DextraPrice: 629.33
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf404: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P037Z5SW2"
   DextraPrice: 650.64
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf405: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P04310PN2"
+  DextraPrice: 543.81
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P043313N2"
   DextraPrice: 19.86
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf406: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043313W2"
   DextraPrice: 19.86
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf407: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043517N2"
   DextraPrice: 91.89
   ValidFrom: 2015-05-29
   ValidTo: 2049-12-31
 
-TerminalConf408: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043517N2"
   DextraPrice: 91.89
   ValidFrom: 2014-07-09
   ValidTo: 2015-05-28
 
-TerminalConf409: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P0438L7N2"
+  DextraPrice: 173.73
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P0438L7N2"
+  DextraPrice: 173.99
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0438L7W2"
+  DextraPrice: 173.73
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P0438L7W2"
+  DextraPrice: 173.99
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P0438LRN2"
   DextraPrice: 258.4
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf410: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0438LRN2"
   DextraPrice: 263.55
   ValidFrom: 2016-01-07
   ValidTo: 2016-03-31
 
-TerminalConf411: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0438LRN2"
   DextraPrice: 277.97
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf412: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0438LRW2"
   DextraPrice: 258.4
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf413: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0438LRW2"
   DextraPrice: 263.55
   ValidFrom: 2016-01-07
   ValidTo: 2016-03-31
 
-TerminalConf414: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0438LRW2"
   DextraPrice: 277.97
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf415: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0439LPNP"
   DextraPrice: 204.87
   ValidFrom: 2016-04-27
   ValidTo: 2049-12-31
 
-TerminalConf416: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0439LPWP"
   DextraPrice: 204.87
   ValidFrom: 2016-04-27
   ValidTo: 2049-12-31
 
-TerminalConf417: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043AG7N2"
   DextraPrice: 184.28
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf418: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043AG7N2"
   DextraPrice: 184.82
   ValidFrom: 2014-11-01
   ValidTo: 2015-09-02
 
-TerminalConf419: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043AG7W2"
   DextraPrice: 184.28
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf420: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043AG7W2"
   DextraPrice: 184.82
   ValidFrom: 2014-11-01
   ValidTo: 2015-09-02
 
-TerminalConf421: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043AP7N2"
   DextraPrice: 257.09
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf422: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043AP7W2"
   DextraPrice: 257.09
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf423: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043E2HN2"
   DextraPrice: 31.93
   ValidFrom: 2016-02-11
   ValidTo: 2049-12-31
 
-TerminalConf424: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043E2HW2"
   DextraPrice: 31.93
   ValidFrom: 2016-02-11
   ValidTo: 2049-12-31
 
-TerminalConf425: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043E33N2"
   DextraPrice: 31.93
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf426: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043E33N2"
   DextraPrice: 32.09
   ValidFrom: 2014-09-02
   ValidTo: 2015-09-02
 
-TerminalConf427: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043E33W2"
   DextraPrice: 31.93
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf428: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043E33W2"
   DextraPrice: 32.09
   ValidFrom: 2014-09-02
   ValidTo: 2015-09-02
 
-TerminalConf429: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G51N2"
   DextraPrice: 122.87
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf430: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G51W2"
   DextraPrice: 122.87
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf431: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G52N2"
   DextraPrice: 143.52
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf432: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G62N2"
   DextraPrice: 112.22
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf433: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G62N2"
   DextraPrice: 112.54
   ValidFrom: 2014-11-01
   ValidTo: 2015-09-02
 
-TerminalConf434: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G62W2"
   DextraPrice: 112.22
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf435: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G62W2"
   DextraPrice: 112.54
   ValidFrom: 2014-11-19
   ValidTo: 2015-09-02
 
-TerminalConf436: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G63N2"
   DextraPrice: 112.54
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf437: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G63W2"
   DextraPrice: 112.54
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf438: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G74N2"
   DextraPrice: 184.82
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf439: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G74W2"
   DextraPrice: 184.82
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf440: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G8RD2"
   DextraPrice: 370.62
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf441: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G8RD2"
   DextraPrice: 370.62
   ValidFrom: 2016-03-01
   ValidTo: 2016-03-31
 
-TerminalConf442: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G8RD2"
   DextraPrice: 380.92
   ValidFrom: 2016-01-07
   ValidTo: 2016-02-29
 
-TerminalConf443: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G8RD2"
   DextraPrice: 391.21
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf444: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G8RG2"
   DextraPrice: 370.62
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf445: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G8RG2"
   DextraPrice: 370.62
   ValidFrom: 2016-03-01
   ValidTo: 2016-03-31
 
-TerminalConf446: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G8RG2"
   DextraPrice: 380.92
   ValidFrom: 2016-01-07
   ValidTo: 2016-02-29
 
-TerminalConf447: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043G8RG2"
   DextraPrice: 391.21
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf448: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HG8D2"
   DextraPrice: 257.38
   ValidFrom: 2016-10-04
   ValidTo: 2049-12-31
 
-TerminalConf449: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HG8D2"
   DextraPrice: 266.64
   ValidFrom: 2016-04-01
   ValidTo: 2016-10-03
 
-TerminalConf450: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HG8D2"
   DextraPrice: 266.64
   ValidFrom: 2016-03-01
   ValidTo: 2016-03-31
 
-TerminalConf451: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HG8D2"
   DextraPrice: 276.94
   ValidFrom: 2016-01-07
   ValidTo: 2016-02-29
 
-TerminalConf452: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HG8D2"
   DextraPrice: 287.23
   ValidFrom: 2015-10-01
   ValidTo: 2016-01-06
 
-TerminalConf453: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HG8G2"
   DextraPrice: 257.38
   ValidFrom: 2016-10-04
   ValidTo: 2049-12-31
 
-TerminalConf454: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HG8G2"
   DextraPrice: 266.64
   ValidFrom: 2016-04-01
   ValidTo: 2016-10-03
 
-TerminalConf455: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HG8G2"
   DextraPrice: 266.64
   ValidFrom: 2016-03-01
   ValidTo: 2016-03-31
 
-TerminalConf456: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HG8G2"
   DextraPrice: 276.94
   ValidFrom: 2016-01-07
   ValidTo: 2016-02-29
 
-TerminalConf457: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HG8G2"
   DextraPrice: 287.23
   ValidFrom: 2015-10-01
   ValidTo: 2016-01-06
 
-TerminalConf458: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P043HNPD2"
+  DextraPrice: 307.82
+  ValidFrom: 2017-03-23
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P043HNPG2"
+  DextraPrice: 307.37
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P043HNPG2"
   DextraPrice: 307.82
   ValidFrom: 2016-10-02
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P043HNPGP"
+  DextraPrice: 307.37
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf459: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HNPGP"
   DextraPrice: 307.82
   ValidFrom: 2016-10-04
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P043HNPS2"
+  DextraPrice: 307.37
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf460: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HNPS2"
   DextraPrice: 307.82
   ValidFrom: 2016-10-02
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P043HNPSP"
+  DextraPrice: 307.37
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf461: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HNPSP"
   DextraPrice: 307.82
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf462: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HP8S2"
   DextraPrice: 287.23
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf463: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HP8S2"
   DextraPrice: 328.41
   ValidFrom: 2015-09-03
   ValidTo: 2016-01-06
 
-TerminalConf464: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HP8S2"
   DextraPrice: 329.37
   ValidFrom: 2015-04-30
   ValidTo: 2015-09-02
 
-TerminalConf465: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P043HP9N2"
+  DextraPrice: 389.61
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P043HP9N2"
   DextraPrice: 390.18
   ValidFrom: 2016-04-20
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf466: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HP9NP"
   DextraPrice: 390.18
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf467: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P043HP9W2"
+  DextraPrice: 389.61
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P043HP9W2"
   DextraPrice: 390.18
   ValidFrom: 2016-04-20
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf468: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HP9WP"
   DextraPrice: 390.18
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf469: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HY6N2"
   DextraPrice: 112.22
   ValidFrom: 2015-10-01
   ValidTo: 2049-12-31
 
-TerminalConf470: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043HY6W2"
   DextraPrice: 112.22
   ValidFrom: 2015-10-01
   ValidTo: 2049-12-31
 
-TerminalConf471: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P043L10N2"
+  DextraPrice: 235.41
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P043L10NP"
+  DextraPrice: 235.41
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P043L10W2"
+  DextraPrice: 235.41
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P043L10WP"
+  DextraPrice: 235.41
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P043MT9G2"
+  DextraPrice: 492.41
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P043MT9G2"
   DextraPrice: 493.13
   ValidFrom: 2016-12-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P043MT9GP"
+  DextraPrice: 492.41
+  ValidFrom: 2017-05-01
   ValidTo: 2049-12-31
 
-TerminalConf472: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P043P10N2"
+  DextraPrice: 441.01
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P043P10N2"
+  DextraPrice: 441.66
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P043P10W2"
+  DextraPrice: 441.01
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P043P10W2"
+  DextraPrice: 441.66
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P043P8GD2"
   DextraPrice: 287.23
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf473: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8GD2"
   DextraPrice: 328.41
   ValidFrom: 2015-09-03
   ValidTo: 2016-01-06
 
-TerminalConf474: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8GD2"
   DextraPrice: 329.37
   ValidFrom: 2015-07-24
   ValidTo: 2015-09-02
 
-TerminalConf475: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8GD2"
   DextraPrice: 308.72
   ValidFrom: 2015-07-06
   ValidTo: 2015-07-23
 
-TerminalConf476: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P043P8LN2"
+  DextraPrice: 149.06
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P043P8LN2"
   DextraPrice: 149.28
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf477: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8LN2"
   DextraPrice: 154.43
   ValidFrom: 2016-04-01
   ValidTo: 2016-10-03
 
-TerminalConf478: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8LN2"
   DextraPrice: 159.57
   ValidFrom: 2016-01-07
   ValidTo: 2016-03-31
 
-TerminalConf479: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8LN2"
   DextraPrice: 173.99
   ValidFrom: 2015-09-03
   ValidTo: 2016-01-06
 
-TerminalConf480: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8LN2"
   DextraPrice: 174.49
   ValidFrom: 2015-04-30
   ValidTo: 2015-09-02
 
-TerminalConf481: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P043P8LW2"
+  DextraPrice: 149.06
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P043P8LW2"
   DextraPrice: 149.28
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf482: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8LW2"
   DextraPrice: 154.43
   ValidFrom: 2016-04-01
   ValidTo: 2016-10-03
 
-TerminalConf483: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8LW2"
   DextraPrice: 159.57
   ValidFrom: 2016-01-07
   ValidTo: 2016-03-31
 
-TerminalConf484: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8LW2"
   DextraPrice: 173.99
   ValidFrom: 2015-09-03
   ValidTo: 2016-01-06
 
-TerminalConf485: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8LW2"
   DextraPrice: 174.49
   ValidFrom: 2015-04-30
   ValidTo: 2015-09-02
 
-TerminalConf486: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8RD2"
   DextraPrice: 391.21
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf487: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8RD2"
   DextraPrice: 432.39
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf488: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8RG2"
   DextraPrice: 391.21
   ValidFrom: 2016-01-07
   ValidTo: 2049-12-31
 
-TerminalConf489: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P8RG2"
   DextraPrice: 432.39
   ValidFrom: 2015-12-01
   ValidTo: 2016-01-06
 
-TerminalConf490: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P9ANP"
   DextraPrice: 390.18
   ValidFrom: 2016-04-20
   ValidTo: 2049-12-31
 
-TerminalConf491: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P9AWP"
   DextraPrice: 390.18
   ValidFrom: 2016-04-20
   ValidTo: 2049-12-31
 
-TerminalConf492: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P043P9LN2"
+  DextraPrice: 204.57
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P043P9LN2"
   DextraPrice: 204.87
   ValidFrom: 2016-04-27
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P043P9LW2"
+  DextraPrice: 204.57
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf493: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P9LW2"
   DextraPrice: 204.87
   ValidFrom: 2016-04-27
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf494: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043P9PG2"
   DextraPrice: 472.54
   ValidFrom: 2016-07-01
   ValidTo: 2049-12-31
 
-TerminalConf495: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P043P9PN2"
+  DextraPrice: 471.85
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P043P9PN2"
   DextraPrice: 472.54
   ValidFrom: 2016-07-05
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf496: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043PL2N2"
   DextraPrice: 257.09
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf497: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y21N2"
   DextraPrice: 61.07
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf498: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y21W2"
   DextraPrice: 61.07
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf499: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y30M2"
   DextraPrice: 96.02
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf500: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y30N2"
   DextraPrice: 96.02
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf501: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y33N2"
   DextraPrice: 50.72
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf502: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y33W2"
   DextraPrice: 50.72
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf503: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P043Y52N2"
+  DextraPrice: 80.22
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P043Y52N2"
   DextraPrice: 80.34
   ValidFrom: 2016-07-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P043Y52W2"
+  DextraPrice: 80.22
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf504: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y52W2"
   DextraPrice: 80.34
   ValidFrom: 2016-07-01
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf505: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y53N2"
   DextraPrice: 81.77
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf506: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y53W2"
   DextraPrice: 81.77
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf507: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P043Y62N2"
+  DextraPrice: 101.77
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P043Y62N2"
   DextraPrice: 101.92
   ValidFrom: 2016-07-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P043Y62W2"
+  DextraPrice: 101.77
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf508: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y62W2"
   DextraPrice: 101.92
   ValidFrom: 2016-07-01
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf509: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y65N2"
   DextraPrice: 89.57
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf510: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y65N2"
   DextraPrice: 91.63
   ValidFrom: 2016-01-07
   ValidTo: 2016-03-31
 
-TerminalConf511: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y65N2"
   DextraPrice: 101.92
   ValidFrom: 2015-09-03
   ValidTo: 2016-01-06
 
-TerminalConf512: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y65N2"
   DextraPrice: 102.22
   ValidFrom: 2015-03-31
   ValidTo: 2015-09-02
 
-TerminalConf513: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y65W2"
   DextraPrice: 89.57
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf514: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y65W2"
   DextraPrice: 91.63
   ValidFrom: 2016-01-07
   ValidTo: 2016-03-31
 
-TerminalConf515: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y65W2"
   DextraPrice: 101.92
   ValidFrom: 2015-09-03
   ValidTo: 2016-01-06
 
-TerminalConf516: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P043Y65W2"
   DextraPrice: 102.22
   ValidFrom: 2015-03-31
   ValidTo: 2015-09-02
 
-TerminalConf517: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P044HX5G2"
   DextraPrice: 190.46
   ValidFrom: 2016-03-01
   ValidTo: 2049-12-31
 
-TerminalConf518: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P044HX5W2"
   DextraPrice: 190.46
   ValidFrom: 2016-03-01
   ValidTo: 2049-12-31
 
-TerminalConf519: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P04508GN2"
+  DextraPrice: 23.89
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P045103Q2"
   DextraPrice: 16.62
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf520: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045103S2"
   DextraPrice: 16.62
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf521: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045135G2"
   DextraPrice: 16.3
   ValidFrom: 2015-02-01
   ValidTo: 2049-12-31
 
-TerminalConf522: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045135W2"
   DextraPrice: 16.3
   ValidFrom: 2015-02-01
   ValidTo: 2049-12-31
 
-TerminalConf523: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045200N2"
   DextraPrice: 24.04
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf524: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045200W2"
   DextraPrice: 24.04
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf525: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045204N2"
   DextraPrice: 23.51
   ValidFrom: 2015-02-01
   ValidTo: 2049-12-31
 
-TerminalConf526: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045204W2"
   DextraPrice: 23.51
   ValidFrom: 2015-02-01
   ValidTo: 2049-12-31
 
-TerminalConf527: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045292B2"
   DextraPrice: 16.62
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf528: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045292N2"
   DextraPrice: 16.62
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf529: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045355D2"
   DextraPrice: 96.77
   ValidFrom: 2016-03-01
   ValidTo: 2049-12-31
 
-TerminalConf530: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045355S2"
   DextraPrice: 96.77
   ValidFrom: 2016-03-01
   ValidTo: 2049-12-31
 
-TerminalConf531: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C3FP2"
   DextraPrice: 50.47
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf532: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C3FP2"
   DextraPrice: 50.72
   ValidFrom: 2015-06-13
   ValidTo: 2015-09-02
 
-TerminalConf533: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C3FP2"
   DextraPrice: 62
   ValidFrom: 2015-01-07
   ValidTo: 2015-06-12
 
-TerminalConf534: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C3SP2"
   DextraPrice: 50.47
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf535: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C3SP2"
   DextraPrice: 50.72
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf536: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C3SP2"
   DextraPrice: 62
   ValidFrom: 2014-07-09
   ValidTo: 2015-05-28
 
-TerminalConf537: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C3SW2"
   DextraPrice: 50.47
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf538: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C3SW2"
   DextraPrice: 50.72
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf539: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C3SW2"
   DextraPrice: 62
   ValidFrom: 2014-07-09
   ValidTo: 2015-05-28
 
-TerminalConf540: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C7SN2"
   DextraPrice: 81.89
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf541: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C7SN2"
   DextraPrice: 82.28
   ValidFrom: 2014-07-09
   ValidTo: 2015-09-02
 
-TerminalConf542: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C7SW2"
   DextraPrice: 81.89
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf543: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045C7SW2"
   DextraPrice: 82.28
   ValidFrom: 2014-07-09
   ValidTo: 2015-09-02
 
-TerminalConf544: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045D5SW2"
   DextraPrice: 59
   ValidFrom: 2015-05-29
   ValidTo: 2049-12-31
 
-TerminalConf545: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045D5SW2"
   DextraPrice: 66.24
   ValidFrom: 2014-09-01
   ValidTo: 2015-05-28
 
-TerminalConf546: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045GPWW2"
   DextraPrice: 195.61
   ValidFrom: 2015-12-01
   ValidTo: 2049-12-31
 
-TerminalConf547: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045ID3S2"
   DextraPrice: 179.13
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf548: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045ID3S2"
   DextraPrice: 179.66
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf549: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045IDMP2"
   DextraPrice: 102.22
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf550: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045IDMS2"
   DextraPrice: 102.22
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf551: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045P34N2"
   DextraPrice: 52.53
   ValidFrom: 2015-12-17
   ValidTo: 2049-12-31
 
-TerminalConf552: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045P34W2"
   DextraPrice: 52.53
   ValidFrom: 2015-12-17
   ValidTo: 2049-12-31
 
-TerminalConf553: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045P35D2"
   DextraPrice: 81.37
   ValidFrom: 2016-03-01
   ValidTo: 2049-12-31
 
-TerminalConf554: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045P35S2"
   DextraPrice: 81.37
   ValidFrom: 2016-03-01
   ValidTo: 2049-12-31
 
-TerminalConf555: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045P3SD2"
   DextraPrice: 67.98
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf556: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045P3SP2"
   DextraPrice: 67.98
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf557: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P045P43W2"
+  DextraPrice: 60.68
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P045P43W2"
+  DextraPrice: 60.77
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P045P44S2"
+  DextraPrice: 69.94
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P045P44S2"
   DextraPrice: 70.04
   ValidFrom: 2016-10-02
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P045P44W2"
+  DextraPrice: 69.94
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf558: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045P44W2"
   DextraPrice: 70.04
   ValidFrom: 2016-10-02
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P045P45G2"
+  DextraPrice: 74.05
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf559: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045P45G2"
   DextraPrice: 74.16
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf560: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045P45G2"
   DextraPrice: 90.6
   ValidFrom: 2016-05-31
   ValidTo: 2016-10-03
 
-TerminalConf561: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P045P45W2"
+  DextraPrice: 74.05
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P045P45W2"
   DextraPrice: 74.16
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf562: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045P45W2"
   DextraPrice: 90.6
   ValidFrom: 2016-05-31
   ValidTo: 2016-10-03
 
-TerminalConf563: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045PS7A2"
   DextraPrice: 101.92
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf564: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045PS7A2"
   DextraPrice: 102.22
   ValidFrom: 2015-03-03
   ValidTo: 2015-09-02
 
-TerminalConf565: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045PS7W2"
   DextraPrice: 101.92
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf566: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045PS7W2"
   DextraPrice: 102.22
   ValidFrom: 2015-03-03
   ValidTo: 2015-09-02
 
-TerminalConf567: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045SPON2"
   DextraPrice: 67.28
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf568: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045SPOW2"
   DextraPrice: 67.28
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf569: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045W80W2"
   DextraPrice: 88.54
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf570: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P045W80W2"
   DextraPrice: 88.8
   ValidFrom: 2014-07-09
   ValidTo: 2015-09-02
 
-TerminalConf571: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P047W23N2"
+  DextraPrice: 50.35
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P047W23N2"
   DextraPrice: 50.42
   ValidFrom: 2016-07-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P047W23NP"
+  DextraPrice: 122.49
+  ValidFrom: 2017-05-01
   ValidTo: 2049-12-31
 
-TerminalConf572: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P047W23NP"
+  DextraPrice: 137.64
+  ValidFrom: 2017-04-05
+  ValidTo: 2017-04-30
+
+bulkload: TerminalConf
+  TerminalCode: "P047W23W2"
+  DextraPrice: 50.35
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P047W23W2"
   DextraPrice: 50.42
   ValidFrom: 2016-10-04
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P047W23WP"
+  DextraPrice: 122.49
+  ValidFrom: 2017-05-01
   ValidTo: 2049-12-31
 
-TerminalConf573: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P047W23WP"
+  DextraPrice: 137.64
+  ValidFrom: 2017-04-05
+  ValidTo: 2017-04-30
+
+bulkload: TerminalConf
   TerminalCode: "P075220S2"
   DextraPrice: 112.22
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf574: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075220S2"
   DextraPrice: 112.54
   ValidFrom: 2015-04-30
   ValidTo: 2015-09-02
 
-TerminalConf575: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P075310G2"
+  DextraPrice: 63.25
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P075310G2"
+  DextraPrice: 58.71
+  ValidFrom: 2017-01-13
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P075310W2"
+  DextraPrice: 63.25
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P075310W2"
+  DextraPrice: 58.71
+  ValidFrom: 2017-01-13
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P075452D2"
+  DextraPrice: 81.25
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P075452D2"
   DextraPrice: 81.37
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf576: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075452D2"
   DextraPrice: 91.63
   ValidFrom: 2016-02-01
   ValidTo: 2016-10-03
 
-TerminalConf577: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P075452N2"
+  DextraPrice: 81.25
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P075452N2"
   DextraPrice: 81.37
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf578: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075452N2"
   DextraPrice: 91.63
   ValidFrom: 2016-02-01
   ValidTo: 2016-10-03
 
-TerminalConf579: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P075452W2"
+  DextraPrice: 81.25
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P075452W2"
   DextraPrice: 81.37
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf580: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075452W2"
   DextraPrice: 91.63
   ValidFrom: 2016-02-01
   ValidTo: 2016-10-03
 
-TerminalConf581: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P075610D2"
+  DextraPrice: 95.6
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P075610G2"
+  DextraPrice: 95.6
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P075A46N2"
+  DextraPrice: 58.62
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P075A46N2"
   DextraPrice: 58.71
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf582: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075A46N2"
   DextraPrice: 67.98
   ValidFrom: 2016-04-01
   ValidTo: 2016-10-03
 
-TerminalConf583: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075A46N2"
   DextraPrice: 78.28
   ValidFrom: 2016-01-07
   ValidTo: 2016-03-31
 
-TerminalConf584: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075A46N2"
   DextraPrice: 81.37
   ValidFrom: 2015-10-01
   ValidTo: 2016-01-06
 
-TerminalConf585: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P075A46W2"
+  DextraPrice: 58.62
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P075A46W2"
   DextraPrice: 58.71
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf586: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075A46W2"
   DextraPrice: 67.98
   ValidFrom: 2016-04-01
   ValidTo: 2016-10-03
 
-TerminalConf587: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075A46W2"
   DextraPrice: 78.28
   ValidFrom: 2016-01-07
   ValidTo: 2016-03-31
 
-TerminalConf588: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075A46W2"
   DextraPrice: 81.37
   ValidFrom: 2015-10-01
   ValidTo: 2016-01-06
 
-TerminalConf589: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P075A7MS2"
+  DextraPrice: 211.77
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P075A7MS2"
+  DextraPrice: 212.08
+  ValidFrom: 2017-02-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
   TerminalCode: "P075BGLW2"
   DextraPrice: 59.74
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf590: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BGLW2"
   DextraPrice: 60.03
   ValidFrom: 2014-11-01
   ValidTo: 2015-09-02
 
-TerminalConf591: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BGPW2"
   DextraPrice: 81.77
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf592: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BL2N2"
   DextraPrice: 76.07
   ValidFrom: 2015-06-13
   ValidTo: 2049-12-31
 
-TerminalConf593: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BL2N2"
   DextraPrice: 83.63
   ValidFrom: 2014-11-01
   ValidTo: 2015-06-12
 
-TerminalConf594: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BL2W2"
   DextraPrice: 76.07
   ValidFrom: 2015-06-16
   ValidTo: 2049-12-31
 
-TerminalConf595: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BL2W2"
   DextraPrice: 83.63
   ValidFrom: 2014-10-01
   ValidTo: 2015-06-15
 
-TerminalConf596: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BL2W2"
   DextraPrice: 98.09
   ValidFrom: 2014-07-09
   ValidTo: 2014-09-30
 
-TerminalConf597: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BL3N2"
   DextraPrice: 66.44
   ValidFrom: 2015-11-16
   ValidTo: 2049-12-31
 
-TerminalConf598: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BL3S2"
   DextraPrice: 66.44
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf599: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BL3S2"
   DextraPrice: 66.76
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf600: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BL3W2"
   DextraPrice: 66.44
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf601: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BL3W2"
   DextraPrice: 66.76
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf602: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BLVN2"
   DextraPrice: 143.52
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf603: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BQMW2"
   DextraPrice: 87.76
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf604: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BS6W2"
   DextraPrice: 164.72
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf605: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BS6W2"
   DextraPrice: 165.2
   ValidFrom: 2015-06-02
   ValidTo: 2015-09-02
 
-TerminalConf606: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BS6W2"
   DextraPrice: 76.07
   ValidFrom: 2015-06-01
   ValidTo: 2015-06-01
 
-TerminalConf607: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BS6W2"
   DextraPrice: 165.2
   ValidFrom: 2015-04-30
   ValidTo: 2015-05-31
 
-TerminalConf608: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P075BV7S2"
+  DextraPrice: 143.92
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P075BV7S2"
   DextraPrice: 144.13
   ValidFrom: 2016-07-01
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf609: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BV7SP"
   DextraPrice: 144.13
   ValidFrom: 2016-07-05
   ValidTo: 2049-12-31
 
-TerminalConf610: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BVYN1"
   DextraPrice: 143.52
   ValidFrom: 2014-10-14
   ValidTo: 2049-12-31
 
-TerminalConf611: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BY2N1"
   DextraPrice: 76.07
   ValidFrom: 2015-06-16
   ValidTo: 2049-12-31
 
-TerminalConf612: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BY2N1"
   DextraPrice: 83.63
   ValidFrom: 2014-11-01
   ValidTo: 2015-06-15
 
-TerminalConf613: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BY2W1"
   DextraPrice: 76.07
   ValidFrom: 2015-06-16
   ValidTo: 2049-12-31
 
-TerminalConf614: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075BY2W1"
   DextraPrice: 83.63
   ValidFrom: 2014-10-14
   ValidTo: 2015-06-15
 
-TerminalConf615: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075GRMN2"
   DextraPrice: 257.09
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf616: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075GRMND"
   DextraPrice: 257.09
   ValidFrom: 2015-04-09
   ValidTo: 2049-12-31
 
-TerminalConf617: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075L2AN1"
   DextraPrice: 76.07
   ValidFrom: 2015-06-16
   ValidTo: 2049-12-31
 
-TerminalConf618: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075L2AN1"
   DextraPrice: 83.63
   ValidFrom: 2014-11-01
   ValidTo: 2015-06-15
 
-TerminalConf619: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075L2AN2"
   DextraPrice: 76.07
   ValidFrom: 2015-06-16
   ValidTo: 2049-12-31
 
-TerminalConf620: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075L2AN2"
   DextraPrice: 83.63
   ValidFrom: 2014-11-01
   ValidTo: 2015-06-15
 
-TerminalConf621: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075L2AW1"
   DextraPrice: 76.07
   ValidFrom: 2015-06-16
   ValidTo: 2049-12-31
 
-TerminalConf622: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075L2AW1"
   DextraPrice: 83.63
   ValidFrom: 2014-11-01
   ValidTo: 2015-06-15
 
-TerminalConf623: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075L2AW2"
   DextraPrice: 76.07
   ValidFrom: 2015-06-16
   ValidTo: 2049-12-31
 
-TerminalConf624: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P075L2AW2"
   DextraPrice: 83.63
   ValidFrom: 2014-11-01
   ValidTo: 2015-06-15
 
-TerminalConf625: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0860M8N2"
   DextraPrice: 513.72
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf626: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0860M8N2"
   DextraPrice: 515.22
   ValidFrom: 2014-07-09
   ValidTo: 2015-09-02
 
-TerminalConf627: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086310A2"
   DextraPrice: 112.54
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf628: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P086530W2"
+  DextraPrice: 150.09
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P086530W2"
   DextraPrice: 150.31
   ValidFrom: 2016-10-04
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf629: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086530W2"
   DextraPrice: 160.6
   ValidFrom: 2016-04-01
   ValidTo: 2016-10-03
 
-TerminalConf630: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086601W2"
   DextraPrice: 246.77
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf631: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086626W2"
   DextraPrice: 152.51
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf632: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086626W2"
   DextraPrice: 152.51
   ValidFrom: 2016-03-01
   ValidTo: 2016-03-31
 
-TerminalConf633: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086626W2"
   DextraPrice: 210.02
   ValidFrom: 2015-12-01
   ValidTo: 2016-02-29
 
-TerminalConf634: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P08681YW1"
   DextraPrice: 243.67
   ValidFrom: 2014-08-01
   ValidTo: 2049-12-31
 
-TerminalConf635: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086DEXN2"
   DextraPrice: 210.63
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf636: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086DEXW2"
   DextraPrice: 210.63
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf637: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086H10G2"
   DextraPrice: 588.87
   ValidFrom: 2016-05-31
   ValidTo: 2049-12-31
 
-TerminalConf638: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086OM9O2"
   DextraPrice: 468.42
   ValidFrom: 2015-10-01
   ValidTo: 2049-12-31
 
-TerminalConf639: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086OM9O2"
   DextraPrice: 525.05
   ValidFrom: 2015-09-03
   ValidTo: 2015-09-30
 
-TerminalConf640: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086OM9O2"
   DextraPrice: 526.58
   ValidFrom: 2015-06-30
   ValidTo: 2015-09-02
 
-TerminalConf641: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086ONEN2"
   DextraPrice: 504.89
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf642: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P086ONES2"
   DextraPrice: 504.89
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf643: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088516N2"
   DextraPrice: 144.13
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf644: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088A45N2"
   DextraPrice: 122.87
   ValidFrom: 2015-11-01
   ValidTo: 2049-12-31
 
-TerminalConf645: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088A45W2"
   DextraPrice: 122.87
   ValidFrom: 2015-11-01
   ValidTo: 2049-12-31
 
-TerminalConf646: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088AM5N2"
   DextraPrice: 173.49
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf647: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088AM5N2"
   DextraPrice: 180.73
   ValidFrom: 2015-09-03
   ValidTo: 2016-03-31
 
-TerminalConf648: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088AM5N2"
   DextraPrice: 181.26
   ValidFrom: 2015-06-30
   ValidTo: 2015-09-02
 
-TerminalConf649: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088AM5W2"
   DextraPrice: 173.49
   ValidFrom: 2016-04-01
   ValidTo: 2049-12-31
 
-TerminalConf650: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088AM5W2"
   DextraPrice: 180.73
   ValidFrom: 2015-09-03
   ValidTo: 2016-03-31
 
-TerminalConf651: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088AM5W2"
   DextraPrice: 181.26
   ValidFrom: 2015-06-30
   ValidTo: 2015-09-02
 
-TerminalConf652: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P088AQUG2"
+  DextraPrice: 115.48
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P088AQUG2"
   DextraPrice: 115.64
   ValidFrom: 2016-10-02
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P088AQXN2"
+  DextraPrice: 202.13
+  ValidFrom: 2017-05-01
   ValidTo: 2049-12-31
 
-TerminalConf653: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P088AQXR2"
+  DextraPrice: 202.13
+  ValidFrom: 2017-05-01
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P088AX5N2"
   DextraPrice: 159.04
   ValidFrom: 2015-12-01
   ValidTo: 2049-12-31
 
-TerminalConf654: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088AX5R2"
   DextraPrice: 159.04
   ValidFrom: 2016-01-17
   ValidTo: 2049-12-31
 
-TerminalConf655: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088AX5W2"
   DextraPrice: 159.04
   ValidFrom: 2015-12-01
   ValidTo: 2049-12-31
 
-TerminalConf656: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P088X5PN2"
+  DextraPrice: 194.91
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P088X5PN2"
   DextraPrice: 195.19
   ValidFrom: 2016-09-01
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P088X5PW2"
+  DextraPrice: 194.91
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf657: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P088X5PW2"
   DextraPrice: 195.19
   ValidFrom: 2016-09-01
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf658: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P092HPTN1"
   DextraPrice: 84.96
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf659: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P092HPTS1"
   DextraPrice: 84.96
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf660: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P092HPTW1"
   DextraPrice: 84.96
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf661: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P09706SD2"
+  DextraPrice: 575.68
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P09706SD2"
   DextraPrice: 576.52
   ValidFrom: 2015-10-09
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P09706SG2"
+  DextraPrice: 575.68
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf662: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P09706SG2"
   DextraPrice: 576.52
   ValidFrom: 2015-10-09
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P09706SR2"
+  DextraPrice: 575.68
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf663: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P09706SR2"
   DextraPrice: 576.52
   ValidFrom: 2015-10-09
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P09706SS2"
+  DextraPrice: 575.68
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf664: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P09706SS2"
   DextraPrice: 576.52
   ValidFrom: 2015-10-09
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf665: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0974S1W2"
   DextraPrice: 459.46
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf666: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0974S8N2"
   DextraPrice: 314.91
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf667: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0974S8W2"
   DextraPrice: 314.91
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf668: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097516N2"
   DextraPrice: 542.06
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf669: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097516W2"
   DextraPrice: 542.06
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf670: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097532N2"
   DextraPrice: 624.66
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf671: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097532W2"
   DextraPrice: 624.66
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf672: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097564N2"
   DextraPrice: 712.43
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf673: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097564W2"
   DextraPrice: 712.43
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf674: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C2W2"
   DextraPrice: 542.06
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf675: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C6A2"
   DextraPrice: 459.46
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf676: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C6P2"
   DextraPrice: 459.46
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf677: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C6V2"
   DextraPrice: 459.46
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf678: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C6W2"
   DextraPrice: 459.46
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf679: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C6Y2"
   DextraPrice: 459.46
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf680: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C8A2"
   DextraPrice: 308.85
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf681: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C8A2"
   DextraPrice: 309.75
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf682: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C8P2"
   DextraPrice: 308.85
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf683: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C8P2"
   DextraPrice: 309.75
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf684: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C8V2"
   DextraPrice: 308.85
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf685: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C8V2"
   DextraPrice: 309.75
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf686: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C8W2"
   DextraPrice: 308.85
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf687: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C8W2"
   DextraPrice: 309.75
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf688: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C8Y2"
   DextraPrice: 308.85
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf689: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975C8Y2"
   DextraPrice: 309.75
   ValidFrom: 2014-10-01
   ValidTo: 2015-09-02
 
-TerminalConf690: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S1N2"
   DextraPrice: 459.46
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf691: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S2D2"
   DextraPrice: 624.66
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf692: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S2N2"
   DextraPrice: 624.66
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf693: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S2S2"
   DextraPrice: 624.66
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf694: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S4S2"
   DextraPrice: 712.43
   ValidFrom: 2014-07-09
   ValidTo: 2049-12-31
 
-TerminalConf695: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S6D2"
   DextraPrice: 393.27
   ValidFrom: 2015-11-01
   ValidTo: 2049-12-31
 
-TerminalConf696: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S6D2"
   DextraPrice: 458.13
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf697: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S6D2"
   DextraPrice: 459.46
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf698: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S6D2"
   DextraPrice: 459.46
   ValidFrom: 2014-12-09
   ValidTo: 2015-05-28
 
-TerminalConf699: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S6D2"
   DextraPrice: 542.06
   ValidFrom: 2014-07-09
   ValidTo: 2014-12-08
 
-TerminalConf700: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S6S2"
   DextraPrice: 393.27
   ValidFrom: 2015-11-01
   ValidTo: 2049-12-31
 
-TerminalConf701: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S6S2"
   DextraPrice: 458.13
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf702: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S6S2"
   DextraPrice: 459.46
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf703: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S6S2"
   DextraPrice: 459.46
   ValidFrom: 2014-12-09
   ValidTo: 2015-05-28
 
-TerminalConf704: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975S6S2"
   DextraPrice: 542.06
   ValidFrom: 2014-07-09
   ValidTo: 2014-12-08
 
-TerminalConf705: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975SPD2"
   DextraPrice: 624.66
   ValidFrom: 2014-11-17
   ValidTo: 2049-12-31
 
-TerminalConf706: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975SPN2"
   DextraPrice: 624.66
   ValidFrom: 2014-11-17
   ValidTo: 2049-12-31
 
-TerminalConf707: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0975SPS2"
   DextraPrice: 624.66
   ValidFrom: 2014-11-17
   ValidTo: 2049-12-31
 
-TerminalConf708: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097616D2"
   DextraPrice: 540.49
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf709: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097616D2"
   DextraPrice: 542.06
   ValidFrom: 2014-09-26
   ValidTo: 2015-09-02
 
-TerminalConf710: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097616G2"
   DextraPrice: 540.49
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf711: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097616G2"
   DextraPrice: 542.06
   ValidFrom: 2014-09-26
   ValidTo: 2015-09-02
 
-TerminalConf712: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097616S2"
   DextraPrice: 540.49
   ValidFrom: 2015-09-03
   ValidTo: 2049-12-31
 
-TerminalConf713: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097616S2"
   DextraPrice: 542.06
   ValidFrom: 2014-09-26
   ValidTo: 2015-09-02
 
-TerminalConf714: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097664D2"
   DextraPrice: 622.85
   ValidFrom: 2015-09-09
   ValidTo: 2049-12-31
 
-TerminalConf715: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P0976P6D2"
+  DextraPrice: 621.94
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P0976P6D2"
   DextraPrice: 622.85
   ValidFrom: 2015-09-03
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf716: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976P6D2"
   DextraPrice: 624.66
   ValidFrom: 2014-09-26
   ValidTo: 2015-09-02
 
-TerminalConf717: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P0976P6G2"
+  DextraPrice: 621.94
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P0976P6G2"
   DextraPrice: 622.85
   ValidFrom: 2015-09-03
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf718: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976P6G2"
   DextraPrice: 624.66
   ValidFrom: 2014-09-26
   ValidTo: 2015-09-02
 
-TerminalConf719: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P0976P6S2"
+  DextraPrice: 621.94
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P0976P6S2"
   DextraPrice: 622.85
   ValidFrom: 2015-09-03
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf720: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976P6S2"
   DextraPrice: 624.66
   ValidFrom: 2014-09-26
   ValidTo: 2015-09-02
 
-TerminalConf721: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P0976S1D2"
+  DextraPrice: 740.16
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P0976S1D2"
   DextraPrice: 741.24
   ValidFrom: 2015-12-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976S1G2"
+  DextraPrice: 740.16
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf722: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976S1G2"
   DextraPrice: 741.24
   ValidFrom: 2016-01-04
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976S1R2"
+  DextraPrice: 740.16
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf723: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976S1R2"
   DextraPrice: 741.24
   ValidFrom: 2016-02-25
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf724: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976S1S2"
   DextraPrice: 741.24
   ValidFrom: 2015-12-17
   ValidTo: 2049-12-31
 
-TerminalConf725: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P0976S3D2"
+  DextraPrice: 503.72
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P0976S3D2"
   DextraPrice: 504.46
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976S3G2"
+  DextraPrice: 503.72
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf726: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976S3G2"
   DextraPrice: 504.46
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976S3R2"
+  DextraPrice: 503.72
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf727: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976S3R2"
   DextraPrice: 504.46
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976S3S2"
+  DextraPrice: 503.72
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf728: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976S3S2"
   DextraPrice: 504.46
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976S6D2"
+  DextraPrice: 657.92
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf729: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976S6D2"
   DextraPrice: 658.88
   ValidFrom: 2015-11-19
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976S6G2"
+  DextraPrice: 657.92
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf730: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976S6G2"
   DextraPrice: 658.88
   ValidFrom: 2015-11-19
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976S6R2"
+  DextraPrice: 657.92
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf731: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976S6R2"
   DextraPrice: 658.88
   ValidFrom: 2015-11-19
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976S6S2"
+  DextraPrice: 657.92
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf732: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976S6S2"
   DextraPrice: 658.88
   ValidFrom: 2015-11-19
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976SPD2"
+  DextraPrice: 657.92
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf733: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976SPD2"
   DextraPrice: 658.88
   ValidFrom: 2015-10-09
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976SPG2"
+  DextraPrice: 657.92
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf734: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976SPG2"
   DextraPrice: 658.88
   ValidFrom: 2015-10-09
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976SPR2"
+  DextraPrice: 657.92
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf735: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976SPR2"
   DextraPrice: 658.88
   ValidFrom: 2015-10-09
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0976SPS2"
+  DextraPrice: 657.92
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf736: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0976SPS2"
   DextraPrice: 658.88
   ValidFrom: 2015-10-09
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097712B2"
+  DextraPrice: 678.48
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf737: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097712B2"
   DextraPrice: 679.47
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097712D2"
+  DextraPrice: 678.48
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf738: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097712D2"
   DextraPrice: 679.47
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097712N2"
+  DextraPrice: 678.48
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf739: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097712N2"
   DextraPrice: 679.47
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097712R2"
+  DextraPrice: 678.48
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf740: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097712R2"
   DextraPrice: 679.47
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097712S2"
+  DextraPrice: 678.48
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf741: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097712S2"
   DextraPrice: 679.47
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097725B2"
+  DextraPrice: 765.86
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf742: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097725B2"
   DextraPrice: 766.98
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097725D2"
+  DextraPrice: 765.86
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf743: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097725D2"
   DextraPrice: 766.98
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097725N2"
+  DextraPrice: 765.86
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf744: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097725N2"
   DextraPrice: 766.98
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097725R2"
+  DextraPrice: 765.86
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf745: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097725R2"
   DextraPrice: 766.98
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097725S2"
+  DextraPrice: 765.86
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf746: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097725S2"
   DextraPrice: 766.98
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097732D2"
+  DextraPrice: 591.1
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf747: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097732D2"
   DextraPrice: 591.96
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097732N2"
+  DextraPrice: 591.1
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf748: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097732N2"
   DextraPrice: 591.96
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097732R2"
+  DextraPrice: 591.1
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf749: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097732R2"
   DextraPrice: 591.96
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097732S2"
+  DextraPrice: 591.1
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf750: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097732S2"
   DextraPrice: 591.96
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P1B2"
+  DextraPrice: 786.42
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf751: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P1B2"
   DextraPrice: 787.57
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P1D2"
+  DextraPrice: 786.42
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf752: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P1D2"
   DextraPrice: 787.57
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P1N2"
+  DextraPrice: 786.42
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf753: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P1N2"
   DextraPrice: 787.57
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P1R2"
+  DextraPrice: 786.42
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf754: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P1R2"
   DextraPrice: 787.57
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P1S2"
+  DextraPrice: 786.42
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf755: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P1S2"
   DextraPrice: 787.57
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P2B2"
+  DextraPrice: 873.8
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf756: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P2B2"
   DextraPrice: 875.08
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P2D2"
+  DextraPrice: 873.8
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf757: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P2D2"
   DextraPrice: 875.08
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P2N2"
+  DextraPrice: 873.8
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf758: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P2N2"
   DextraPrice: 875.08
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P2R2"
+  DextraPrice: 873.8
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf759: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P2R2"
   DextraPrice: 875.08
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P2S2"
+  DextraPrice: 873.8
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf760: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P2S2"
   DextraPrice: 875.08
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P3D2"
+  DextraPrice: 699.04
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf761: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P3D2"
   DextraPrice: 700.06
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P3N2"
+  DextraPrice: 699.04
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf762: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P3N2"
   DextraPrice: 700.06
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P3R2"
+  DextraPrice: 699.04
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf763: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P3R2"
   DextraPrice: 700.06
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P0977P3S2"
+  DextraPrice: 699.04
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf764: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P0977P3S2"
   DextraPrice: 700.06
   ValidFrom: 2016-09-16
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf765: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097S56S2"
   DextraPrice: 393.27
   ValidFrom: 2015-11-01
   ValidTo: 2049-12-31
 
-TerminalConf766: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097S56S2"
   DextraPrice: 458.13
   ValidFrom: 2015-09-03
   ValidTo: 2015-10-31
 
-TerminalConf767: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097S56S2"
   DextraPrice: 459.46
   ValidFrom: 2015-05-29
   ValidTo: 2015-09-02
 
-TerminalConf768: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097S56S2"
   DextraPrice: 459.46
   ValidFrom: 2014-12-09
   ValidTo: 2015-05-28
 
-TerminalConf769: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097S56S2"
   DextraPrice: 542.06
   ValidFrom: 2014-07-09
   ValidTo: 2014-12-08
 
-TerminalConf770: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P097SE1D2"
+  DextraPrice: 370.08
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P097SE1D2"
   DextraPrice: 370.62
   ValidFrom: 2016-04-05
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097SE1G2"
+  DextraPrice: 370.08
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf771: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SE1G2"
   DextraPrice: 370.62
   ValidFrom: 2016-04-05
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097SE1R2"
+  DextraPrice: 370.08
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf772: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SE1R2"
   DextraPrice: 370.62
   ValidFrom: 2016-04-05
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097SE1S2"
+  DextraPrice: 370.08
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf773: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SE1S2"
   DextraPrice: 370.62
   ValidFrom: 2016-04-05
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097SE2D2"
+  DextraPrice: 457.46
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf774: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P097SE2G2"
+  DextraPrice: 457.46
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P097SE2P2"
+  DextraPrice: 457.46
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P097SE2S2"
+  DextraPrice: 457.46
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P097SE3D2"
+  DextraPrice: 370.08
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P097SE3G2"
+  DextraPrice: 370.08
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P097SE3R2"
+  DextraPrice: 370.08
+  ValidFrom: 2017-05-01
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
+  TerminalCode: "P097SE3R2 "
+  DextraPrice: 370.08
+  ValidFrom: 2017-04-05
+  ValidTo: 2017-04-30
+
+bulkload: TerminalConf
+  TerminalCode: "P097SE3S2"
+  DextraPrice: 370.08
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P097SE6D2"
   DextraPrice: 411.8
   ValidFrom: 2016-10-04
   ValidTo: 2049-12-31
 
-TerminalConf775: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SE6D2"
   DextraPrice: 452.98
   ValidFrom: 2016-04-06
   ValidTo: 2016-10-03
 
-TerminalConf776: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SE6G2"
   DextraPrice: 411.8
   ValidFrom: 2016-10-04
   ValidTo: 2049-12-31
 
-TerminalConf777: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SE6G2"
   DextraPrice: 452.98
   ValidFrom: 2016-04-06
   ValidTo: 2016-10-03
 
-TerminalConf778: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SE6R2"
   DextraPrice: 411.8
   ValidFrom: 2016-10-04
   ValidTo: 2049-12-31
 
-TerminalConf779: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SE6R2"
   DextraPrice: 452.98
   ValidFrom: 2016-04-06
   ValidTo: 2016-10-03
 
-TerminalConf780: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SE6S2"
   DextraPrice: 411.8
   ValidFrom: 2016-10-04
   ValidTo: 2049-12-31
 
-TerminalConf781: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SE6S2"
   DextraPrice: 452.98
   ValidFrom: 2016-04-06
   ValidTo: 2016-10-03
 
-TerminalConf782: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P097SP1D2"
+  DextraPrice: 822.4
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P097SP1D2"
   DextraPrice: 823.6
   ValidFrom: 2015-11-03
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf783: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SP1G2"
   DextraPrice: 823.6
   ValidFrom: 2016-01-04
   ValidTo: 2049-12-31
 
-TerminalConf784: TerminalConf
+bulkload: TerminalConf
+  TerminalCode: "P097SP1R2"
+  DextraPrice: 822.4
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: TerminalConf
   TerminalCode: "P097SP1R2"
   DextraPrice: 823.6
   ValidFrom: 2016-01-04
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097SP1S2"
+  DextraPrice: 822.4
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf785: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SP1S2"
   DextraPrice: 823.6
   ValidFrom: 2016-01-04
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097SP3D2"
+  DextraPrice: 591.1
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf786: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SP3D2"
   DextraPrice: 591.96
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097SP3G2"
+  DextraPrice: 591.1
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf787: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SP3G2"
   DextraPrice: 591.96
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097SP3R2"
+  DextraPrice: 591.1
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf788: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SP3R2"
   DextraPrice: 591.96
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097SP3S2"
+  DextraPrice: 591.1
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf789: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SP3S2"
   DextraPrice: 591.96
   ValidFrom: 2016-09-16
+  ValidTo: 2017-04-04
+
+bulkload: TerminalConf
+  TerminalCode: "P097SP6D2"
+  DextraPrice: 740.16
+  ValidFrom: 2017-04-05
   ValidTo: 2049-12-31
 
-TerminalConf790: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "P097SP6D2"
   DextraPrice: 741.24
   ValidFrom: 2015-11-03
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-04
 
-TerminalConf791: TerminalConf
+bulkload: TerminalConf
   TerminalCode: "SUMIDERO2"
   DextraPrice: 101.15
   ValidFrom: 2016-11-30
