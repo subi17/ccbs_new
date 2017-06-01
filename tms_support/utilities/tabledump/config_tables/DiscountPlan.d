@@ -22,7 +22,7 @@
 "1" 17 "Contract Target" "List" "Percentage" 2 no "" "CONTS26DISC" 01/06/14 31/12/49 "CONTS26DISC" "Discount La Infinita 2GB" "" "List" 0 0 0 4
 "1" 7 "Contract Target" "List" "Percentage" 2 no "" "CONTS30DISC" 01/06/13 31/12/49 "CONTS30DISC" "Infinita 30 Discount" "" "List" 5 0 0 180
 "1" 18 "Contract Target" "List" "Percentage" 2 no "" "CONTS32DISC" 01/06/14 31/12/49 "CONTS32DISC" "Discount La infinita 4 GB" "" "List" 0 0 0 4
-"1" 45 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC" 01/04/17 31/05/17 "CONVDISC" "Convergent 20% discount" "" "List" 0 0 1 6
+"1" 45 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC" 01/04/17 30/06/17 "CONVDISC" "Convergent 20% discount" "" "List" 0 0 1 6
 "1" 47 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT10" 05/04/17 31/12/49 "DISCCONT10" "Additional Line CONT10" "" "List" 0 0 1 0
 "1" 46 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT15" 05/04/17 31/12/49 "DISCCONT15" "Additional Line CONT15" "" "List" 0 0 1 0
 "1" 49 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT25" 05/04/17 31/12/49 "DISCCONT25" "Additional Line CONT25" "" "List" 0 0 1 0
