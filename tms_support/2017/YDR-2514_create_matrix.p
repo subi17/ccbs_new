@@ -191,7 +191,7 @@ fCreateSLGAnalyse("CONTDSL39", "10100005", 81, "*", "VOICE100", 1).
 fCreateSLGAnalyse("CONTDSL39", "CFOTHER", 30, "*", "VOICE100", 1).
 fCreateSLGAnalyse("CONTDSL39", "CFYOIGO", 30, "*", "VOICE100", 1).
 
-/* CONTFH39_50: giMXSeq should be 124 after the call */
+/* CONTFH39_50: giMXSeq should be 126 after the call */
 fCreateMatrix("CONTFH39_50", "PERCONTR", 1, 49).
 fCreateMXItem(giMXSeq, "PerContract", "VOICE100").
 fCreateSLGAnalyse("CONTFH39_50", "10100001", 81, "*", "VOICE100", 1).
