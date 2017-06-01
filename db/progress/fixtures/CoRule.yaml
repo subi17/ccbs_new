@@ -1,4 +1,4 @@
-CoRule1: CoRule
+bulkload: CoRule
   coFrom: 2008-11-01
   coTo: 2049-12-31
   coNoInst: 4
@@ -20,7 +20,7 @@ CoRule1: CoRule
   MaxPendingDays: 365
   Priority: 20
 
-CoRule2: CoRule
+bulkload: CoRule
   coFrom: 2008-11-01
   coTo: 2049-12-31
   coNoInst: 4
@@ -43,7 +43,7 @@ CoRule2: CoRule
   MaxPendingDays: 365
   Priority: 20
 
-CoRule3: CoRule
+bulkload: CoRule
   coFrom: 2008-11-01
   coTo: 2049-12-31
   coNoInst: 1
@@ -64,7 +64,7 @@ CoRule3: CoRule
   MaxPendingDays: 365
   Priority: 20
 
-CoRule4: CoRule
+bulkload: CoRule
   coFrom: 2008-11-01
   coTo: 2049-12-31
   coNoInst: 1

@@ -3440,6 +3440,31 @@
 1 "" 3 "ZTE Blade V8" 0 "G0000333" "1" 28/04/17 31/12/49
 1 "" 4 "ZTE Blade V8" 0 "G0000333" "1" 28/04/17 31/12/49
 1 "" 5 "ZTE Blade V8" 0 "G0000333" "1" 28/04/17 31/12/49
+1 "" 1 "Honor 6X" 0 "G0000334" "1" 24/05/17 31/12/49
+1 "" 2 "Honor 6X" 0 "G0000334" "1" 24/05/17 31/12/49
+1 "" 3 "Honor 6X" 0 "G0000334" "1" 24/05/17 31/12/49
+1 "" 4 "Honor 6X" 0 "G0000334" "1" 24/05/17 31/12/49
+1 "" 5 "Honor 6X" 0 "G0000334" "1" 24/05/17 31/12/49
+1 "" 1 "Sony Xperia L1" 0 "G0000335" "1" 24/05/17 31/12/49
+1 "" 2 "Sony Xperia L1" 0 "G0000335" "1" 24/05/17 31/12/49
+1 "" 3 "Sony Xperia L1" 0 "G0000335" "1" 24/05/17 31/12/49
+1 "" 4 "Sony Xperia L1" 0 "G0000335" "1" 24/05/17 31/12/49
+1 "" 5 "Sony Xperia L1" 0 "G0000335" "1" 24/05/17 31/12/49
+1 "" 1 "Wileyfox Swift 2" 0 "G0000336" "1" 24/05/17 31/12/49
+1 "" 2 "Wileyfox Swift 2" 0 "G0000336" "1" 24/05/17 31/12/49
+1 "" 3 "Wileyfox Swift 2" 0 "G0000336" "1" 24/05/17 31/12/49
+1 "" 4 "Wileyfox Swift 2" 0 "G0000336" "1" 24/05/17 31/12/49
+1 "" 5 "Wileyfox Swift 2" 0 "G0000336" "1" 24/05/17 31/12/49
+1 "" 1 "Wolder Wiam 27" 0 "G0000337" "1" 24/05/17 31/12/49
+1 "" 2 "Wolder Wiam 27" 0 "G0000337" "1" 24/05/17 31/12/49
+1 "" 3 "Wolder Wiam 27" 0 "G0000337" "1" 24/05/17 31/12/49
+1 "" 4 "Wolder Wiam 27" 0 "G0000337" "1" 24/05/17 31/12/49
+1 "" 5 "Wolder Wiam 27" 0 "G0000337" "1" 24/05/17 31/12/49
+1 "" 1 "Wolder Wiam 65 Lite" 0 "G0000338" "1" 24/05/17 31/12/49
+1 "" 2 "Wolder Wiam 65 Lite" 0 "G0000338" "1" 24/05/17 31/12/49
+1 "" 3 "Wolder Wiam 65 Lite" 0 "G0000338" "1" 24/05/17 31/12/49
+1 "" 4 "Wolder Wiam 65 Lite" 0 "G0000338" "1" 24/05/17 31/12/49
+1 "" 5 "Wolder Wiam 65 Lite" 0 "G0000338" "1" 24/05/17 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -6110,6 +6135,11 @@
 1 "" 3 "Sony Xperia U Negro con PSP" 0 "P037PPUN2" "1" 10/12/12 31/12/49
 1 "" 4 "Sony Xperia U Negro con PSP" 0 "P037PPUN2" "1" 10/12/12 31/12/49
 1 "" 5 "Sony Xperia U Black con PSP" 0 "P037PPUN2" "1" 10/12/12 31/12/49
+1 "" 1 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
+1 "" 2 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
+1 "" 3 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
+1 "" 4 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
+1 "" 5 "Sony Xperia XA1 Gold" 0 "P037XA1D2" "1" 26/05/17 31/12/49
 1 "" 1 "Sony Xperia XA1 Negro" 0 "P037XA1N2" "1" 26/04/17 31/12/49
 1 "" 2 "Sony Xperia XA1 Negro" 0 "P037XA1N2" "1" 26/04/17 31/12/49
 1 "" 3 "Sony Xperia XA1 Negro" 0 "P037XA1N2" "1" 26/04/17 31/12/49
@@ -6140,6 +6170,11 @@
 1 "" 3 "Sony Xperia E1 Blanco" 0 "P037XE1W2" "1" 27/10/14 31/12/49
 1 "" 4 "Sony Xperia E1 Blanco" 0 "P037XE1W2" "1" 27/10/14 31/12/49
 1 "" 5 "Sony Xperia E1 White" 0 "P037XE1W2" "1" 27/10/14 31/12/49
+1 "" 1 "Sony Xperia L1 Blanco" 0 "P037XL1W2" "1" 24/05/17 31/12/49
+1 "" 2 "Sony Xperia L1 Blanco" 0 "P037XL1W2" "1" 24/05/17 31/12/49
+1 "" 3 "Sony Xperia L1 Blanco" 0 "P037XL1W2" "1" 24/05/17 31/12/49
+1 "" 4 "Sony Xperia L1 Blanco" 0 "P037XL1W2" "1" 24/05/17 31/12/49
+1 "" 5 "Sony Xperia L1 White" 0 "P037XL1W2" "1" 24/05/17 31/12/49
 1 "" 1 "Sony Xperia M2 Blanco" 0 "P037XM2W2" "1" 26/06/14 31/12/49
 1 "" 2 "Sony Xperia M2 Blanco" 0 "P037XM2W2" "1" 26/06/14 31/12/49
 1 "" 3 "Sony Xperia M2 Blanco" 0 "P037XM2W2" "1" 26/06/14 31/12/49
@@ -7045,6 +7080,16 @@
 1 "" 3 "Huawei Y635 Blanco" 0 "P043Y65W2" "1" 26/03/15 31/12/49
 1 "" 4 "Huawei Y635 Blanco" 0 "P043Y65W2" "1" 26/03/15 31/12/49
 1 "" 5 "Huawei Y635 White" 0 "P043Y65W2" "1" 26/03/15 31/12/49
+1 "" 1 "Honor 6X Gris" 0 "P044H6XG2" "1" 24/05/17 31/12/49
+1 "" 2 "Honor 6X Gris" 0 "P044H6XG2" "1" 24/05/17 31/12/49
+1 "" 3 "Honor 6X Gris" 0 "P044H6XG2" "1" 24/05/17 31/12/49
+1 "" 4 "Honor 6X Gris" 0 "P044H6XG2" "1" 24/05/17 31/12/49
+1 "" 5 "Honor 6X Grey" 0 "P044H6XG2" "1" 24/05/17 31/12/49
+1 "" 1 "Honor 6X Plata" 0 "P044H6XS2" "1" 24/05/17 31/12/49
+1 "" 2 "Honor 6X Plata" 0 "P044H6XS2" "1" 24/05/17 31/12/49
+1 "" 3 "Honor 6X Plata" 0 "P044H6XS2" "1" 24/05/17 31/12/49
+1 "" 4 "Honor 6X Plata" 0 "P044H6XS2" "1" 24/05/17 31/12/49
+1 "" 5 "Honor 6X Silver" 0 "P044H6XS2" "1" 24/05/17 31/12/49
 1 "" 1 "Honor 5x Gris" 0 "P044HX5G2" "1" 22/02/16 31/12/49
 1 "" 2 "Honor 5x Gris" 0 "P044HX5G2" "1" 22/02/16 31/12/49
 1 "" 3 "Honor 5x Gris" 0 "P044HX5G2" "1" 22/02/16 31/12/49
@@ -7406,6 +7451,11 @@
 1 "" 3 "Módem USB Alcatel OT-X228L Azul" 0 "P045X22A2" "1" 27/07/10 31/12/49
 1 "" 4 "Módem USB Alcatel OT-X228L Azul" 0 "P045X22A2" "1" 27/07/10 31/12/49
 1 "" 5 "Módem USB Alcatel OT-X228L Blue" 0 "P045X22A2" "1" 27/07/10 31/12/49
+1 "" 1 "Wolder Wiam 65 Lite Plata" 0 "P047L65S2" "1" 24/05/17 31/12/49
+1 "" 2 "Wolder Wiam 65 Lite Plata" 0 "P047L65S2" "1" 24/05/17 31/12/49
+1 "" 3 "Wolder Wiam 65 Lite Plata" 0 "P047L65S2" "1" 24/05/17 31/12/49
+1 "" 4 "Wolder Wiam 65 Lite Plata" 0 "P047L65S2" "1" 24/05/17 31/12/49
+1 "" 5 "Wolder Wiam 65 Lite Silver" 0 "P047L65S2" "1" 24/05/17 31/12/49
 1 "" 1 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 2 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 3 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
@@ -7426,11 +7476,26 @@
 1 "" 3 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
 1 "" 4 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
 1 "" 5 "Wolder Wiam 23 White with Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 1 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
+1 "" 2 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
+1 "" 3 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
+1 "" 4 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
+1 "" 5 "Wolder Wiam 27 Black" 0 "P047W27N2" "1" 24/05/17 31/12/49
 1 "" 1 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
 1 "" 2 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
 1 "" 3 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
 1 "" 4 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
 1 "" 5 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 1 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
+1 "" 2 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
+1 "" 3 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
+1 "" 4 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
+1 "" 5 "Wileyfox Swift 2 Gold" 0 "P048WS2D2" "1" 24/05/17 31/12/49
+1 "" 1 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
+1 "" 2 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
+1 "" 3 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
+1 "" 4 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
+1 "" 5 "Wileyfox Swift 2 Black" 0 "P048WS2N2" "1" 24/05/17 31/12/49
 1 "" 1 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
 1 "" 2 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
 1 "" 3 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
@@ -7946,6 +8011,11 @@
 1 "" 3 "BQ Aquaris X Rosa" 0 "P088AQXR2" "1" 26/04/17 31/12/49
 1 "" 4 "BQ Aquaris X Rosa" 0 "P088AQXR2" "1" 26/04/17 31/12/49
 1 "" 5 "BQ Aquaris X Pink" 0 "P088AQXR2" "1" 26/04/17 31/12/49
+1 "" 1 "BQ Aquaris X Blanco" 0 "P088AQXW2" "1" 29/05/17 31/12/49
+1 "" 2 "BQ Aquaris X Blanco" 0 "P088AQXW2" "1" 29/05/17 31/12/49
+1 "" 3 "BQ Aquaris X Blanco" 0 "P088AQXW2" "1" 29/05/17 31/12/49
+1 "" 4 "BQ Aquaris X Blanco" 0 "P088AQXW2" "1" 29/05/17 31/12/49
+1 "" 5 "BQ Aquaris X White" 0 "P088AQXW2" "1" 29/05/17 31/12/49
 1 "" 1 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
 1 "" 2 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
 1 "" 3 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
