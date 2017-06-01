@@ -1,8 +1,8 @@
-MSClass1: MSClass
+bulkload: MSClass
   McName: "ClassName"
   Brand: "1"
 
-MSClass2: MSClass
+bulkload: MSClass
   McCode: 1
   McName: "Basic Class"
   Brand: "1"
