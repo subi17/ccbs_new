@@ -715,9 +715,11 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
           lcFError = "Expected either person_id or company_id".
       IF plCheckConv AND
          NOT(fCheckExistingConvergent (lcIdtypeOrderCustomer, 
-                                       lcIdOrderCustomer) OR
+                                       lcIdOrderCustomer,
+                                       pcCLI) OR
              fCheckOngoingConvergentOrder (lcIdtypeOrderCustomer,
-                                           lcIdOrderCustomer)) THEN
+                                           lcIdOrderCustomer,
+                                           pcCLI)) THEN
             lcFError = "Expected Convergent for PRO".                                  
       /* YTS-2453 */
       IF NOT plBypassRules AND
