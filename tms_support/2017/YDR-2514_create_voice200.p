@@ -159,7 +159,7 @@ FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
       SLGAnalyse.CCN      = iiCCN
       SLGAnalyse.BDest    = icBDest
       SLGAnalyse.Prior    = 0
-      SLGAnalyse.ValidFrom = DATE(5,1,2017)
+      SLGAnalyse.ValidFrom = DATE(6,1,2017)
       SLGAnalyse.ValidTo  = DATE(12,31,2049)
       SLGAnalyse.ServiceLimitGroup = icServiceLimitGroup
       SLGAnalyse.SLGAType = iiSLGAType
@@ -458,7 +458,7 @@ FUNCTION fCreateRequestAction RETURNS LOGICAL
       RequestAction.Brand  = "1"
       RequestAction.CLIType    = icCLIType
       RequestAction.ReqType = iiReqType
-      RequestAction.ValidFrom = DATE(6,1,2017)
+      RequestAction.ValidFrom = DATE(6,5,2017)
       RequestAction.ValidTo  = DATE(12,31,2049)
       RequestAction.ActionType = "DayCampaign"
       RequestAction.ActionKey = icActionKey
@@ -486,7 +486,7 @@ FUNCTION fCreateRequestActionRule RETURNS LOGICAL
    ASSIGN
       RequestActionRule.RequestActionID = iiRequestActionID
       RequestActionRule.ParamField      = icParamField
-      RequestActionRule.FromDate        = DATE(6,1,2017)
+      RequestActionRule.FromDate        = DATE(6,5,2017)
       RequestActionRule.ToDate          = DATE(12,31,2049)
       RequestActionRule.ParamValue      = icParamValue.
       .
