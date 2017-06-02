@@ -851,15 +851,20 @@ PROCEDURE pFinalize:
                           "STC",
                           OUTPUT liReqCnt).
 
+   FIND FIRST Order NO-LOCK WHERE
+      Order.Brand = gcBrand AND
+      Order.OrderID = MsRequest.ReqIParam2 AND
+      Order.OrderType EQ {&ORDER_TYPE_STC} NO-ERROR.
+
     /* activate/terminate periodical contracts, service packages etc. */
-    RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
-                              MsRequest.ReqCParam2, /* definitions on new type */
-                              0,                      /* order */
-                              ldBegStamp,
-                              ldEndStamp,
-                              TRUE,                   /* create fees */
-                              {&REQUEST_SOURCE_STC},  /* req.source */
-                              {&REQUEST_ACTIONLIST_ALL}).
+   RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
+                               MsRequest.ReqCParam2, /* definitions on new type */
+                               (IF AVAILABLE Order THEN Order.OrderId ELSE 0), /* order */
+                               ldBegStamp,
+                               ldEndStamp,
+                               TRUE,                   /* create fees */
+                               {&REQUEST_SOURCE_STC},  /* req.source */
+                               {&REQUEST_ACTIONLIST_ALL}).
 
     /* Create charge for new paytype */
     IF MsRequest.CreateFees THEN 

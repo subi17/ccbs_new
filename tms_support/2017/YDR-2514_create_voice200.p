@@ -3,6 +3,7 @@
 
 DEFINE VARIABLE giMXSeq AS INTEGER NO-UNDO.
 DEFINE VARIABLE giSlSeq AS INTEGER NO-UNDO.
+DEFINE VARIABLE giRequestActionID AS INTEGER NO-UNDO.
 
 FUNCTION fGetNextMXSeq RETURNS INTEGER ():
 
@@ -158,7 +159,7 @@ FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
       SLGAnalyse.CCN      = iiCCN
       SLGAnalyse.BDest    = icBDest
       SLGAnalyse.Prior    = 0
-      SLGAnalyse.ValidFrom = DATE(5,1,2017)
+      SLGAnalyse.ValidFrom = DATE(6,1,2017)
       SLGAnalyse.ValidTo  = DATE(12,31,2049)
       SLGAnalyse.ServiceLimitGroup = icServiceLimitGroup
       SLGAnalyse.SLGAType = iiSLGAType
@@ -432,7 +433,8 @@ FUNCTION fCreateRequestAction RETURNS LOGICAL
    ( icCLIType AS CHARACTER,
      iiReqType AS INTEGER,
      iiAction AS INT,
-     icActionKey AS CHAR):
+     icActionKey AS CHAR,
+     iiPayType AS INT):
 
    FIND FIRST RequestAction EXCLUSIVE-LOCK WHERE
       RequestAction.Brand  = "1" AND
@@ -441,7 +443,8 @@ FUNCTION fCreateRequestAction RETURNS LOGICAL
       RequestAction.ValidTo  = DATE(12,31,2049) AND
       RequestAction.ActionType = "DayCampaign" AND
       RequestAction.ActionKey = icActionKey AND
-      RequestAction.Action = iiAction
+      RequestAction.Action = iiAction AND
+      RequestAction.PayType = iiPaytype
    NO-ERROR.
    
    IF NOT AVAILABLE RequestAction
@@ -451,14 +454,41 @@ FUNCTION fCreateRequestAction RETURNS LOGICAL
    END.
    
    ASSIGN
+      giRequestActionID = RequestAction.RequestActionID
       RequestAction.Brand  = "1"
       RequestAction.CLIType    = icCLIType
       RequestAction.ReqType = iiReqType
-      RequestAction.ValidFrom = DATE(6,1,2017)
+      RequestAction.ValidFrom = DATE(6,5,2017)
       RequestAction.ValidTo  = DATE(12,31,2049)
       RequestAction.ActionType = "DayCampaign"
       RequestAction.ActionKey = icActionKey
       RequestAction.Action = iiAction
+      RequestAction.PayType = iiPaytype
+      .
+
+END FUNCTION.
+
+/* RequestActionRule */
+FUNCTION fCreateRequestActionRule RETURNS LOGICAL
+   ( iiRequestActionID AS INTEGER,
+     icParamField AS CHARACTER,
+     icParamValue AS CHARACTER ):
+
+   FIND FIRST RequestActionRule EXCLUSIVE-LOCK WHERE
+      RequestActionRule.RequestActionID  = iiRequestActionID AND
+      RequestActionRule.ParamField = icParamField AND
+      RequestActionRule.ToDate  = DATE(12,31,2049)
+   NO-ERROR.
+
+   IF NOT AVAILABLE RequestActionRule
+   THEN CREATE RequestActionRule.
+
+   ASSIGN
+      RequestActionRule.RequestActionID = iiRequestActionID
+      RequestActionRule.ParamField      = icParamField
+      RequestActionRule.FromDate        = DATE(6,5,2017)
+      RequestActionRule.ToDate          = DATE(12,31,2049)
+      RequestActionRule.ParamValue      = icParamValue.
       .
 
 END FUNCTION.
@@ -549,26 +579,36 @@ fCreateSLGAnalyse("CONTFH49_300", "10100005", 81, "*", "VOICE200", 1).
 fCreateSLGAnalyse("CONTFH49_300", "CFOTHER", 30, "*", "VOICE200", 1).
 fCreateSLGAnalyse("CONTFH49_300", "CFYOIGO", 30, "*", "VOICE200", 1).
 
-fCreateRequestAction("CONTDSL39", 13, 1, "VOICE200").
-fCreateRequestAction("CONTFH39_50", 13, 1, "VOICE200").
-fCreateRequestAction("CONTFH49_300", 13, 1, "VOICE200").
-fCreateRequestAction("CONTDSL48", 13, 1, "VOICE200").
-fCreateRequestAction("CONTFH48_50", 13, 1, "VOICE200").
-fCreateRequestAction("CONTFH58_300", 13, 1, "VOICE200").
+fCreateRequestAction("CONTDSL39", 13, 1, "VOICE200", 0).
+fCreateRequestAction("CONTFH39_50", 13, 1, "VOICE200", 0).
+fCreateRequestAction("CONTFH49_300", 13, 1, "VOICE200", 0).
+fCreateRequestAction("CONTDSL48", 13, 1, "VOICE200", 0).
+fCreateRequestAction("CONTFH48_50", 13, 1, "VOICE200", 0).
+fCreateRequestAction("CONTFH58_300", 13, 1, "VOICE200", 0).
 
-fCreateRequestAction("CONTDSL39", 0, 1, "VOICE200").
-fCreateRequestAction("CONTFH39_50", 0, 1, "VOICE200").
-fCreateRequestAction("CONTFH49_300", 0, 1, "VOICE200").
-fCreateRequestAction("CONTDSL48", 0, 1, "VOICE200").
-fCreateRequestAction("CONTFH48_50", 0, 1, "VOICE200").
-fCreateRequestAction("CONTFH58_300", 0, 1, "VOICE200").
+fCreateRequestAction("CONTDSL39", 0, 1, "VOICE200", 0).
+fCreateRequestAction("CONTFH39_50", 0, 1, "VOICE200", 0).
+fCreateRequestAction("CONTFH49_300", 0, 1, "VOICE200", 0).
+fCreateRequestAction("CONTDSL48", 0, 1, "VOICE200", 0).
+fCreateRequestAction("CONTFH48_50", 0, 1, "VOICE200", 0).
+fCreateRequestAction("CONTFH58_300", 0, 1, "VOICE200", 0).
 
-fCreateRequestAction("CONTDSL39", 0, 2, "VOICE100").
-fCreateRequestAction("CONTFH39_50", 0, 2, "VOICE100").
-fCreateRequestAction("CONTFH49_300", 0, 2, "VOICE100").
-fCreateRequestAction("CONTDSL48", 0, 2, "VOICE100").
-fCreateRequestAction("CONTFH48_50", 0, 2, "VOICE100").
-fCreateRequestAction("CONTFH58_300", 0, 2, "VOICE100").
+fCreateRequestAction("CONTDSL39", 0, 2, "VOICE100", 0).
+fCreateRequestAction("CONTFH39_50", 0, 2, "VOICE100", 0).
+fCreateRequestAction("CONTFH49_300", 0, 2, "VOICE100", 0).
+fCreateRequestAction("CONTDSL48", 0, 2, "VOICE100", 0).
+fCreateRequestAction("CONTFH48_50", 0, 2, "VOICE100", 0).
+fCreateRequestAction("CONTFH58_300", 0, 2, "VOICE100", 0).
+
+
+fCreateRequestAction("", 8, 2, "VOICE100", 1).
+fCreateRequestActionRule(giRequestActionID, "ReqCParam3", "+,VOICE200").
+fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,2").
+
+fCreateRequestAction("", 8, 2, "VOICE200", 1).
+fCreateRequestActionRule(giRequestActionID, "ReqCParam3", "+,VOICE100").
+fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,2").
+
 
 /* After the 5.6.2017 deployment following can be used (maybe?) */
 
