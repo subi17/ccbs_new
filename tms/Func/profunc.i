@@ -8,7 +8,7 @@
   CREATED ......: 24.5.2017
   CHANGED ......:
   ------------------------------------------------------------------------*/
-{Syst/commali.i}  
+ 
 
 &IF "{&YOIGOPROFUNC_I}" NE "YES"
 &THEN
@@ -18,7 +18,7 @@ FUNCTION fIsPro RETURNS LOGICAL
    (icCategory AS CHAR):
 
    FIND FIRST CustCat NO-LOCK where
-              CustCat.Brand EQ gcBrand AND
+              CustCat.Brand EQ Syst.Parameters:gcbrand AND
               CustCat.Category EQ icCategory NO-ERROR.
               
    IF AVAIL CustCat AND Custcat.pro THEN RETURN TRUE.

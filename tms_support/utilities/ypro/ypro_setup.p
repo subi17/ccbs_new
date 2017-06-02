@@ -252,7 +252,8 @@ FUNCTION fcreateSLGAnalyses RETURNS LOGICAL (INPUT icbasecli AS CHAR,
          CREATE bSLGAnalyse.
          BUFFER-COPY SLGAnalyse TO bSLGAnalyse.
          ASSIGN
-            bSLGAnalyse.servicelimitgroup = icGroup.
+            bSLGAnalyse.servicelimitgroup = icGroup
+            bSLGAnalyse.clitype = icClitype.
       END.                            
    END.
 
