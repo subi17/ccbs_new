@@ -1694,8 +1694,8 @@ PROCEDURE pFinalize:
             
    END.
    
-   /* When STCed between CONT15 and CONTDSL48 */
-   IF (lcDCEvent EQ "CONT15" OR LOOKUP(lcDCEvent,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) AND 
+   IF lcDCEvent EQ "CONT15" AND 
+      MsOwner.CLIType EQ "CONT15" AND
       MsRequest.ReqType    EQ 8     AND
       MsRequest.ReqCParam2 EQ "act" THEN 
    DO:

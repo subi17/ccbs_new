@@ -1,0 +1,29 @@
+bulkload: SimArt
+  SimArt: "Micro"
+  SAName: "Micro"
+  Balance: 2628026
+  DetBal[1]: 2505180
+  Brand: "1"
+
+bulkload: SimArt
+  SimArt: "Nano"
+  SAName: "Nano"
+  Balance: 1115009
+  DetBal[1]: 1115009
+  Brand: "1"
+
+bulkload: SimArt
+  SimArt: "Plug_IN"
+  ManCode: "GEMALTO"
+  SAName: "Plug-IN"
+  Balance: 12297074
+  DetBal[1]: 3187110
+  Brand: "1"
+
+bulkload: SimArt
+  SimArt: "Universal"
+  SAName: "Universal"
+  Balance: 1800305
+  DetBal[1]: 1800305
+  Brand: "1"
+
