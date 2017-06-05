@@ -28,6 +28,18 @@ IF llDoEvent THEN DO:
 
 END.
 
+FUNCTION fGetNextMXSeq RETURNS INTEGER ():
+
+   DEFINE BUFFER Matrix FOR Matrix.
+
+   FOR EACH Matrix NO-LOCK BY Matrix.MXSeq DESCENDING:
+     RETURN Matrix.MXSeq + 1.
+   END.
+
+   RETURN 1.
+
+END FUNCTION.
+
 DEF  shared VAR siirto AS CHAR.
 
 DEF VAR Matrix      LIKE Matrix.Brand        NO-UNDO.
@@ -129,7 +141,7 @@ ADD-ROW:
            CREATE Matrix.
            ASSIGN
            Matrix.Brand  = gcBrand
-           Matrix.MXSeq  = NEXT-VALUE(imsi).
+           Matrix.MXSeq  = fGetNextMXSeq().
 
            RUN local-UPDATE-record.
 
