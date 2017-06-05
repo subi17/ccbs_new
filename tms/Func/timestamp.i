@@ -94,6 +94,29 @@ function fTS2Date returns log
 
 end.
 
+function fTSToDate returns date
+  (input ts as dec).
+
+   def var yy  as i  no-undo.
+   def var mm  as i  no-undo.
+   def var dd  as i  no-undo.
+   def var c   as c  no-undo.
+   def var dte as date no-undo.
+
+   assign
+      c   = substr(string(ts,"99999999.99999"),1,8)
+      yy  = integer(substr(c,1,4))
+      mm  = integer(substr(c,5,2))
+      dd  = integer(substr(c,7,2))
+      dte = date(mm,dd,yy)
+   no-error.
+
+   if error-status:error
+   then return ?.
+   else return dte.
+
+end.
+
 FUNCTION fHMS2TS RETURNS DECIMAL
    (INPUT pDate AS DATE, INPUT pTime AS CHARACTER).
 
@@ -397,6 +420,9 @@ END FUNCTION.
 FUNCTION fSecOffSet RETURNS DECIMAL
   (INPUT ideTS    AS DECIMAL,
    INPUT iiOffSet AS INTEGER): 
+
+   IF ideTS > 99999999
+   THEN RETURN ideTS + (0.00001 * iiOffSet).
 
    DEFINE VARIABLE ldtCalcTime AS DATETIME NO-UNDO.
    DEFINE VARIABLE ldTemp      AS DECIMAL  NO-UNDO.
