@@ -5,7 +5,7 @@ mpro           = ['%s/bin/mpro' % dlc,
                   '-pf', '%s/etc/pf/formats.pf' % (work_dir),
                   '-T', '%s/var/tmp' % (work_dir)]
 
-if environment != 'development':
+if 'environment' in globals() and environment != 'development':
     mpro.append('-q')
 
 appname        = 'yoigo'
