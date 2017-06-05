@@ -49,6 +49,7 @@ DEFINE VARIABLE lcTermReason AS CHARACTER NO-UNDO.
 
 DEF BUFFER bMNPSub FOR MNPSub.
 DEF BUFFER bMobsub FOR MobSub.
+DEF BUFFER bCLIType FOR CLIType.
 
 DEF TEMP-TABLE ttContract NO-UNDO
    FIELD DCEvent   AS CHAR
@@ -672,13 +673,15 @@ PROCEDURE pTerminate:
                MNPProcess.StatusCode = ({&MNP_ST_ACON}) AND
                MNPProcess.MNPType = ({&MNP_TYPE_OUT}) EXCLUSIVE-LOCK:
 
-         /* check that all subscriptions are terminated 
+         /* check that all mobile subscriptions are terminated 
             before marking mnp out process closed */
          FOR EACH bMNPSub WHERE
                   bMNPSub.MNPSeq = MNPSub.MNPSeq AND
                   bMNPSub.MsSeq NE MNPSub.MsSeq NO-LOCK:
             IF CAN-FIND(FIRST bMobsub NO-LOCK WHERE
-               bMobsub.MsSeq = bMNPSub.MsSeq) THEN LEAVE MNP_LOOP.
+               bMobsub.MsSeq    EQ bMNPSub.MsSeq AND
+               bMobsub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE})
+               THEN LEAVE MNP_LOOP.
          END.
 
          ASSIGN
@@ -925,6 +928,10 @@ PROCEDURE pTerminate:
                      MobSub.MsSeq,
                      fLastDayOfMonth(TODAY),
                      FALSE).
+      fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}),
+                     MobSub.MsSeq,
+                     fLastDayOfMonth(TODAY),
+                     FALSE).
    END.
 
    /* COFF Partial termination */
@@ -952,10 +959,16 @@ PROCEDURE pTerminate:
    END.   
    IF AVAIL MSISDN THEN RELEASE MSISDN.
 
-   /* ADDLine-20 Additional Line */
-   IF fIsConvergentORFixedOnly(TermMobSub.CLIType) THEN DO:
+   /* ADDLine-20 Additional Line 
+      ADDLINE-323 fixed bug */
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = TermMobSub.CLIType                AND
+                     bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
+                    (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobSub.Brand   = gcBrand        AND
+               bMobSub.Brand   = gcBrand            AND
                bMobSub.AgrCust = TermMobSub.CustNum AND
                bMobSub.MsSeq  <> TermMobSub.MsSeq   AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:

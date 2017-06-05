@@ -116,7 +116,8 @@
                           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
                
                IF NOT fCheckExistingConvergent(OrderCustomer.CustIDType,
-                                               OrderCustomer.CustID) THEN DO:
+                                               OrderCustomer.CustID,
+                                               Order.CLIType) THEN DO:
                   
                   IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                                     OrderAction.Brand    = gcBrand           AND
@@ -124,7 +125,8 @@
                                     OrderAction.ItemType = "AddLineDiscount" AND
                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) AND
                      fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
-                                                  OrderCustomer.CustId) THEN DO:
+                                                  OrderCustomer.CustId,
+                                                  Order.CLIType) THEN DO:
                      IF llDoEvent THEN DO:
                         lh76Order = BUFFER Order:HANDLE.
                         RUN StarEventInitialize(lh76Order).
