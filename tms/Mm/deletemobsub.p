@@ -944,6 +944,14 @@ PROCEDURE pTerminate:
          Mobsub.icc = ""
          Mobsub.imsi = ""
          MobSub.msStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
+      
+      /* YDR-2495 Auto STC for Convergent After Mobile Line Termination to Fixed Line  */
+      liRequest = fConvFixedSTCReq(MobSub.CLIType,
+                                   MobSub.MsSeq,
+                                   IF llOutport THEN fMakeShiftedTS(MsRequest.ActStamp,"120h")
+                                   ELSE fMakeShiftedTS(MsRequest.ActStamp,"1s"),
+                                   {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                                   MsRequest.MsRequest).
    END.      
    ELSE DO: 
       FIND FIRST TermMobsub WHERE 
