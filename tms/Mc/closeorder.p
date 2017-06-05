@@ -223,10 +223,12 @@ DO:
               lbOrderCustomer.RowType = 1             NO-ERROR.
 
     IF NOT fCheckOngoingConvergentOrder(lbOrderCustomer.CustIdType,
-                                        lbOrderCustomer.CustID) THEN DO:
+                                        lbOrderCustomer.CustID,
+                                        Order.CliType) THEN DO:
        /* If Main Line is Closed and customer has no other main line then removing the additional line discount */
        IF NOT fCheckExistingConvergent(lbOrderCustomer.CustIdType,
-                                       lbOrderCustomer.CustID) THEN DO:
+                                       lbOrderCustomer.CustID,
+                                       Order.CliType) THEN DO:
           FOR EACH OrderCustomer NO-LOCK WHERE
                    OrderCustomer.Brand      = gcBrand                    AND
                    OrderCustomer.CustIDType = lbOrderCustomer.CustIDType AND
@@ -241,7 +243,7 @@ DO:
                         OrderAction.Brand    = gcBrand           AND
                         OrderAction.OrderID  = lbOrder.OrderID   AND
                         OrderAction.ItemType = "AddLineDiscount" AND
-                        LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0 NO-ERROR.
+                 LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20}) > 0 NO-ERROR.
              IF AVAILABLE OrderAction THEN DO:
                 DELETE OrderAction.
 
