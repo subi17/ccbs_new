@@ -202,16 +202,16 @@ def compile(match, *a):
             compiledir = '/tmsapps'
         else:
             compiledir = 'r'
-        compilecommand = 'COMPILE %s SAVE INTO {0}.'
+        compilecommand = 'COMPILE %s SAVE INTO {0} NO-ERROR.'
     elif match == 'compilec':
         compiledir = None
-        compilecommand = 'COMPILE %s.'
+        compilecommand = 'COMPILE %s NO-ERROR.'
     elif match == 'preprocess':
         compiledir = 'pp'
-        compilecommand = 'COMPILE %s PREPROCESS {0}/%s.'
+        compilecommand = 'COMPILE %s PREPROCESS {0}/%s NO-ERROR.'
     else:
         compiledir = 'xref'
-        compilecommand = 'COMPILE %s XREF {0}/%s.'
+        compilecommand = 'COMPILE %s XREF {0}/%s NO-ERROR.'
 
     if 'dir' in globals():
         compiledir = dir
@@ -246,7 +246,7 @@ def _compile(compilecommand, compiledir):
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
 
-    procedure_file = make_compiler(compilecommand, source_files, show='name' if show_file else '.')
+    compile_p = make_compiler(compilecommand, source_files, show='name' if show_file else '.')
 
     if environment == 'safeproduction':
         os.environ['PROPATH'] = os.environ['PROPATH'].split(',', 1)[1]
@@ -254,10 +254,18 @@ def _compile(compilecommand, compiledir):
     if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
         os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
 
-    comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', procedure_file.name], stdout=PIPE)
-    call('/bin/cat', stdin=comp.stdout)
-    if comp.wait() != 0:
-        raise PikeException('Compilation failed')
+    processes = []
+    for file in compile_p:
+        comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', file], stdout=PIPE)
+        processes.append(comp)
+
+    comp_error = False
+    for comp in processes:
+        call('/bin/cat', stdin=comp.stdout)
+        comp.wait()
+
+    for file in compile_p:
+        os.unlink(file)
 
     print('')
 
@@ -270,17 +278,48 @@ def mkdir_p(directory):
         else:
             raise
 
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in xrange(0, len(l), n):
+        yield l[i:i + n]
+
 def make_compiler(cline, files, show='.'):
-    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
-    compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n')
-    for ff in files:
-        if show == '.':
-            compiler.write('PUT UNFORMATTED \'.\'.\n')
-        elif show == 'name':
-            compiler.write('PUT UNFORMATTED \'%s~n\'.\n' % ff)
-        compiler.write(cline.replace('%s', ff) + '\n')
-    compiler.flush()
-    return compiler
+    if not 'multi' in globals():
+        global multi
+        multi = 1
+    else:
+        if multi.isdigit() == False or int(multi) > 16 or int(multi) < 1:
+            raise PikeException('multi must be integer from 1 to 16')
+        multi = int(multi)
+
+    compiler_p_list = []
+    for subfiles in chunks(files, (len(files) + multi - 1) // multi):
+        compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+', delete=False)
+        compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n\n')
+        compiler.write('FUNCTION fCheckError RETURNS LOGICAL ():\n')
+        compiler.write('   IF ERROR-STATUS:ERROR = NO\n')
+        compiler.write('   THEN RETURN FALSE.\n\n')
+        compiler.write('   DEFINE VARIABLE liError AS INTEGER   NO-UNDO.\n')
+        compiler.write('   PUT UNFORMATTED SKIP.\n')
+        compiler.write('   DO liError = 1 TO ERROR-STATUS:NUM-MESSAGES:\n')
+        compiler.write('      PUT UNFORMATTED (IF COMPILER:WARNING THEN "Warning: " ELSE "ERROR: ") +\n')
+        compiler.write('         ERROR-STATUS:GET-MESSAGE(liError) SKIP.\n')
+        compiler.write('   END.\n\n')
+        compiler.write('   RETURN TRUE.\n\n')
+        compiler.write('END FUNCTION.\n')
+
+        for ff in subfiles:
+            if show == '.':
+                compiler.write('PUT UNFORMATTED \'.\'.\n')
+            elif show == 'name':
+                compiler.write('PUT UNFORMATTED \'%s~n\'.\n' % ff)
+            compiler.write(cline.replace('%s', ff) + '\n')
+            compiler.write('fCheckError().\n')
+
+        compiler.flush()
+        compiler_p_list.append(compiler.name)
+
+    return compiler_p_list
 
 @target
 def clean(*a):
