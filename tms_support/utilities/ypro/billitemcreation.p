@@ -9,14 +9,14 @@
   ----------------------------------------------------------------------*/
 
 /* ***************************  Definitions  ************************** */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{cparam2.i}
-{eventlog.i}
-{ftransdir.i}
-{tariffconfig.i}
-{tariffcons.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/ftransdir.i}
+{/apps/yoigo/tms_support/2016/convergent/tariffconfig.i}
+{/apps/yoigo/tms_support/2016/convergent/tariffcons.i}
 
 DEFINE TEMP-TABLE ttBillItem NO-UNDO
    FIELD BillItem   AS CHARACTER
@@ -27,8 +27,11 @@ DEFINE TEMP-TABLE ttBillItem NO-UNDO
    FIELD IFSCode    AS CHARACTER
    FIELD CostCenter AS CHARACTER.
 
-DEFINE INPUT  PARAMETER icIncDir   AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
+DEFINE VAR icIncDir   AS CHARACTER NO-UNDO.
+DEFINE VAR icSpoolDir AS CHARACTER NO-UNDO.
+
+icIncDir = "/apps/xfera/kaaikas/ccbs/tms_support/utilities/ypro/".
+icSpoolDir = "/apps/xfera/kaaikas/ccbs/tms_support/utilities/ypro/spool/".
 
 DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile   AS CHARACTER NO-UNDO.
@@ -82,7 +85,7 @@ REPEAT:
 
    IF ERROR-STATUS:ERROR THEN DO:
       fError("Incorrect input data").
-      RETURN "ERROR".
+      MESSAGE "ERROR Incorrect input data" VIEW-AS ALERT-BOX.
    END.
 
 END.
@@ -114,7 +117,7 @@ REPEAT:
 
    IF ERROR-STATUS:ERROR THEN DO:
       fError("Incorrect input translation data").
-      RETURN "ERROR".
+      MESSAGE "ERROR Incorrect input translation data" VIEW-AS ALERT-BOX.
    END.
 
 END.
@@ -122,19 +125,19 @@ END.
 RUN pValidateFileData.
 
 IF RETURN-VALUE <> "OK" THEN
-   RETURN RETURN-VALUE.
+   MESSAGE RETURN-VALUE VIEW-AS ALERT-BOX.
 
 RUN pCreateBillingItem.
 
 IF RETURN-VALUE <> "OK" THEN
-   RETURN RETURN-VALUE.
+   MESSAGE RETURN-VALUE VIEW-AS ALERT-BOX.
 
 OUTPUT STREAM BILog CLOSE.
 OUTPUT STREAM BTLog CLOSE.
 INPUT  STREAM BIIn  CLOSE.
 INPUT  STREAM BTIn  CLOSE.
 
-RETURN "OK".
+MESSAGE "OK" VIEW-AS ALERT-BOX.
 
 /* ***************************  Main End  *************************** */
 

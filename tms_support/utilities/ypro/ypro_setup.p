@@ -2,6 +2,7 @@ DEF BUFFER bCustCat FOR CustCat.
 DEF BUFFER bTMSCodes FOR TMSCodes.
 DEF BUFFER bservicelimitTarget FOR ServiceLimitTarget.
 DEF BUFFER bSLGAnalyse FOR SLGAnalyse.
+DEF BUFFER tempSLGAnalyse FOR SLGAnalyse.
 
 DEF VAR ldaFrom AS DATE INIT TODAY.
 DEF VAR limode AS INT INIT 1.
@@ -237,7 +238,7 @@ create_limit("VOICE200", "National calls", "_MIN",200.0, 1, 1, "VOICE100").
 create_limit("INT_VOICE100", "International calls", "_MIN",100.0, 1, 1,"VOICE100").
 create_limit("FIX_VOICE1000", "National fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
 create_limit("INT_FIX_VOICE1000", "International fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
-create_limit("SMS5000", "National sms", "_AMT",5000.0, 2, 5,"VOICE100").
+create_limit("SMS5000", "National sms", "_QTY",5000.0, 2, 5,"VOICE100").
 
 FUNCTION fcreateSLGAnalyses RETURNS LOGICAL (INPUT icClitype AS CHAR,
                                              INPUT icbasegroup AS CHAR,
@@ -245,14 +246,15 @@ FUNCTION fcreateSLGAnalyses RETURNS LOGICAL (INPUT icClitype AS CHAR,
    FIND FIRST SLGAnalyse where INDEX(SLGAnalyse.servicelimitgroup,
                                      icGroup) > 0 NO-ERROR.
    IF NOT AVAIL SLGanalyse THEN DO:                            
-      FOR EACH SLGAnalyse no-lock where INDEX(SLGAnalyse.servicelimitgroup, 
+      FOR EACH tempSLGAnalyse no-lock where INDEX(SLGAnalyse.servicelimitgroup, 
                                         icBaseGroup) > 0 AND 
                                         SLGANalyse.clitype EQ icclitype:
          CREATE bSLGAnalyse.
-         BUFFER-COPY SLGAnalyse TO bSLGAnalyse.
+         BUFFER-COPY tempSLGAnalyse TO bSLGAnalyse.
          ASSIGN
             bSLGAnalyse.servicelimitgroup = icGroup.
-            .
+            
+         RELEASE bSLGAnalyse.   
       END.                            
    END.
 
