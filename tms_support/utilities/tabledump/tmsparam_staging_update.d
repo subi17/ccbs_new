@@ -1,6 +1,6 @@
 "" "TCPModule" "c" 0 0 "test/fake/tcpgwy_fake.p" ? "" "" "" "" "" "" "" "" "" "" "Fake tcpgwy" yes "1"
 "CDR" "OldCDRDb" "C" 0 0 "-H merak -S 5987" ? "" "" "" "" "" "" "" "" "" "" "Connect parameters to old db" no "1"
-"CreditScoring" "URL" "C" 0 0 "http://217.168.2.239:8080/credit-scoring/" ? "" "" "" "" "" "" "" "" "" "" "" yes "1"
+"CreditScoring" "URL" "C" 0 0 "http://217.168.2.239:7001/com-yoigo-roi-webapp/xmlrpc" ? "" "" "" "" "" "" "" "" "" "" "" yes "1"
 "DA" "EmailFromAddress" "C" 0 0 "tufactura@facturayoigo.com" ? "" "" "" "" "" "" "" "" "" "" "Email From Address" no "1"
 "DA" "EmailSubject" "C" 0 0 "Discount Analyzer Report" ? "" "" "" "" "" "" "" "" "" "" "Email Subject" no "1"
 "DA" "processed" "C" 0 0 "/store/riftp/discount_analyzer/processed" ? "" "" "" "" "" "" "" "" "" "" "Processed Directory" no "1"
