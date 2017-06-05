@@ -85,8 +85,11 @@ FUNCTION fMakeServLimit RETURN LOGICAL
    fSplitTS(idActStamp,
             OUTPUT ldtDate,
             OUTPUT liTime).
-   
-   IF ldtDate = ? THEN ldtDate = TODAY.
+
+   IF ldtDate = ? THEN DO:
+      ocResult = SUBST("Corrupted activation stamp: &1", idActStamp).
+      RETURN FALSE.
+   END.
 
    FIND FIRST bMobSub WHERE bMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    IF NOT AVAILABLE bMobSub THEN DO:
@@ -146,16 +149,17 @@ FUNCTION fMakeServLimit RETURN LOGICAL
             ServiceLimit.ValidFrom <= ldtDate             AND 
             ServiceLimit.ValidTo   >= ldtDate:
 
-      IF bContract.DCType EQ "8" THEN DO:
+      IF bContract.DCType EQ "8" THEN
+      DO WHILE TRUE:
          FIND LAST MServiceLimit NO-LOCK WHERE
                    MServiceLimit.MsSeq    = iiMsSeq AND
                    MServiceLimit.DialType = ServiceLimit.DialType AND
-                   MServiceLimit.SlSeq   = ServiceLimit.SlSeq AND
-                   MServiceLimit.EndTS <= idEndStamp AND
-                   MServiceLimit.FromTS >= fMake2Dt(ldtDate,0)
+                   MServiceLimit.SlSeq    = ServiceLimit.SlSeq AND
+                   MServiceLimit.EndTS    = idEndStamp
          USE-INDEX MsSeq NO-ERROR.
-         IF AVAIL MServiceLimit THEN
-            idEndStamp = fSecOffSet(MServiceLimit.EndTS,-1).
+         IF AVAIL MServiceLimit
+         THEN idEndStamp = fSecOffSet(MServiceLimit.EndTS,-1).
+         ELSE LEAVE.
       END.
 
       ASSIGN
@@ -321,9 +325,12 @@ FUNCTION fMakeServLPool RETURN LOGICAL
    fSplitTS(idActStamp,
             OUTPUT ldtDate,
             OUTPUT liTime).
-   
-   IF ldtDate = ? THEN ldtDate = TODAY.
-   
+
+   IF ldtDate = ? THEN DO:
+      ocError = SUBST("Corrupted activation stamp: &1", idActStamp).
+      RETURN FALSE.
+   END.
+
    FOR FIRST ServiceLimitGroup NO-LOCK WHERE 
              ServiceLimitGroup.Brand     = gcBrand AND
              ServiceLimitGroup.GroupCode = icServiceLimitGroup,
