@@ -1510,11 +1510,11 @@ FUNCTION fConvFixedSTCReq RETURNS INTEGER
    DEF VAR lcError   AS CHAR NO-UNDO.
    DEF VAR lcResult  AS CHAR NO-UNDO.
 
-   IF fMatrixAnalyse(gcBrand,
-                     "CONVFIXEDSTC",
-                     "SubsTypeFrom;SubsTypeTo",
-                     icCLIType,
-                     OUTPUT lcResult) = 1 THEN DO:
+   IF fListMatrix(gcBrand,
+                  "CONVFIXEDSTC",
+                  "SubsTypeFrom;SubsTypeTo",
+                  icCLIType,
+                  OUTPUT lcResult) = 1 THEN DO:
       liRequest = fCTChangeRequest(iiMsSeq,
                                    lcResult,
                                    "",    /* lcBundleID */
