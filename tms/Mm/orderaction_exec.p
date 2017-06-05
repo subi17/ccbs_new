@@ -635,7 +635,8 @@ PROCEDURE pAddLineDiscountPlan:
 
    fCreateAddLineDiscount(MobSub.MsSeq,
                           MobSub.CLIType,
-                          TODAY).
+                          TODAY,
+                          "").
    IF RETURN-VALUE BEGINS "ERROR" THEN
       RETURN RETURN-VALUE.
 
