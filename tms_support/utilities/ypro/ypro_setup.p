@@ -3,7 +3,7 @@ DEF BUFFER bTMSCodes FOR TMSCodes.
 DEF BUFFER bservicelimitTarget FOR ServiceLimitTarget.
 DEF BUFFER bSLGAnalyse FOR SLGAnalyse.
 
-DEF VAR ldaFrom AS DATE INIT 05/31/17.
+DEF VAR ldaFrom AS DATE INIT TODAY.
 DEF VAR limode AS INT INIT 1.
 DEF VAR laskuri AS INT.
 
