@@ -15,6 +15,7 @@
 {Func/timestamp.i}
 {Syst/eventval.i}
 {Func/create_eventlog.i}
+{Func/matrix.i}
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
    commali.i, katun defined and call fCleanEventObjects after this function */
@@ -176,6 +177,33 @@ FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
 
    RETURN FALSE.
 
+END.
+
+/* Check if Convergent tariff OR FixedOnly tariff */ 
+FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
+   (icCLITypeConv    AS CHARACTER,
+    icCLITypeAddLine AS CHARACTER):
+
+   DEF VAR lcResult AS CHAR NO-UNDO.
+
+   DEF BUFFER bCLIType FOR CLIType.
+   
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = icCLITypeConv                     AND
+                     bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) THEN DO:
+      
+      IF fMatrixAnalyse(Syst.Parameters:gcBrand,
+                        "ADDLINE",
+                        "SubsTypeFrom;SubsTypeTo",
+                        icCLITypeConv + ";" + icCLITypeAddLine,
+                        OUTPUT lcResult) = 1 THEN
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
 END.   
 
 
@@ -206,10 +234,11 @@ FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
    RETURN FALSE.
 END.                                         
 
-/* Function checks for ongoing 3P OR 2P convergent for a customer */
+/* Function checks for ongoing 3P convergent for a customer */
 FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
-    INPUT icCustID     AS CHAR): 
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR): 
 
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrder         FOR Order.
@@ -229,7 +258,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID:
 
-      IF fIsConvergentORFixedOnly(bOrder.CLIType) THEN 
+      IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
          RETURN TRUE.
 
    END.
@@ -238,10 +267,40 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
 END FUNCTION.
 
-/* Function checks for existing 3P OR 2P convergent for a customer */
+/* Function checks for existing 3P convergent for a customer */
 FUNCTION fCheckExistingConvergent RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
-    INPUT icCustID     AS CHAR):
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
+
+   DEFINE BUFFER bCustomer FOR Customer.
+   DEFINE BUFFER bMobSub   FOR MobSub.
+
+   FOR FIRST bCustomer WHERE
+             bCustomer.Brand      = Syst.Parameters:gcBrand AND
+             bCustomer.OrgId      = icCustID                AND
+             bCustomer.CustidType = icCustIDType            AND
+             bCustomer.Roles     NE "inactive"              NO-LOCK,
+       EACH  bMobSub NO-LOCK WHERE
+             bMobSub.Brand   = Syst.Parameters:gcBrand AND
+             bMobSub.InvCust = bCustomer.CustNum       AND
+             bMobSub.PayType = FALSE                   AND
+             bMobSub.MsStatus <> {&MSSTATUS_MOBILE_NOT_ACTIVE}:
+    
+      IF fIsConvergentAddLineOK(bMobSub.CLIType,icCliType) THEN 
+         RETURN TRUE.
+
+   END.   
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* Function checks for existing 2P OR 3P convergent for a customer */
+FUNCTION fCheckExisting2PConvergent RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
 
    DEFINE BUFFER bCustomer FOR Customer.
    DEFINE BUFFER bMobSub   FOR MobSub.
@@ -255,11 +314,11 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
              bMobSub.Brand   = Syst.Parameters:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.PayType = FALSE:
-    
-      IF fIsConvergentORFixedOnly(bMobSub.CLIType) THEN 
+
+      IF fIsConvergentORFixedOnly(bMobSub.CLIType) THEN
          RETURN TRUE.
 
-   END.   
+   END.
 
    RETURN FALSE.
 
