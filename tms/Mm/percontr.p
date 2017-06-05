@@ -1774,7 +1774,7 @@ PROCEDURE pFinalize:
             
    END.
    
-   /* When STCed between CONT15 and CONTDSL48 */
+   /* When STCed between CONT15 and Convergent with CONT15 base bundle */
    IF (lcDCEvent EQ "CONT15" OR LOOKUP(lcDCEvent,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) AND 
       MsRequest.ReqType    EQ 8     AND
       MsRequest.ReqCParam2 EQ "act" THEN 
@@ -1783,6 +1783,10 @@ PROCEDURE pFinalize:
                                           CliType.CliType    = MsOwner.CliType AND 
                                           CliType.BaseBundle = "CONT15"        NO-LOCK) THEN
           LEAVE.
+      ELSE IF NOT CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq     = MsOwner.MsSeq                  AND 
+                                                 MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_CREATE} AND 
+                                                 MsRequest.ReqStatus > 0                              USE-INDEX MsSeq NO-LOCK) THEN
+          LEAVE. 
       ELSE IF CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq      = MsOwner.MsSeq                             AND
                                              MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION}            AND
                                              LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND 
@@ -1821,7 +1825,9 @@ PROCEDURE pFinalize:
          ldaCont15PromoFrom NE ? AND
          ldaCont15PromoEnd NE ? AND
          ldaOrderDate >= ldaCont15PromoFrom AND
-         ldaOrderDate <= ldaCont15PromoEnd THEN DO:
+         ldaOrderDate <= ldaCont15PromoEnd AND
+         /* Convergent+CONT15 has VOICE200 instead of VOICE100 after 5.6.2017 */
+        (lcDCEvent EQ "CONT15" OR ldaOrderDate < 6/5/2017) THEN DO:
 
          liRequest = fPCActionRequest(MsRequest.MsSeq,
                                       "VOICE100",
