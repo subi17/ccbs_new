@@ -11,6 +11,7 @@
 {Func/orderfunc.i}
 {Mnp/mnpoutchk.i}
 {Mc/orderfusion.i}
+{Func/profunc.i}
 
 DEF INPUT PARAMETER iiOrder        AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.
@@ -24,6 +25,7 @@ DEF VAR lcOldStatus     AS CHAR NO-UNDO.
 DEF VAR lcNewStatus     AS CHAR NO-UNDO. 
 DEF VAR lcError         AS CHAR NO-UNDO.
 DEF VAR llCompanyScoringNeeded AS LOG NO-UNDO. 
+DEF VAR liRequest       AS INT NO-UNDO.
 
 DEF BUFFER lbOrder          FOR Order.
 
@@ -429,7 +431,105 @@ IF fIsConvergenceTariff(Order.CLIType) THEN DO:
        
        fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
                                        OrderCustomer.CustID) . 
-   END.   
+   END.
+   FIND FIRST Customer WHERE Customer.custnum EQ Order.custnum 
+      NO-LOCK NO-ERROR. 
+      
+   IF AVAIL Customer AND fIsPro(customer.category) AND 
+      (lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
+       lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) AND
+      (lcNewStatus = {&ORDER_STATUS_NEW}  OR
+       lcNewStatus = {&ORDER_STATUS_MNP}) THEN DO:
+      liRequest = fPCActionRequest(MsRequest.MsSeq,
+                                   "FIX_VOICE1000",
+                                   "act",
+                                   MsRequest.ActStamp,
+                                   TRUE, /* fees */
+                                   {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                   "",
+                                   MsRequest.MsRequest,
+                                   FALSE,
+                                   "",
+                                   0,
+                                   0,
+                                   OUTPUT lcError).
+      IF liRequest = 0 THEN
+         /* write possible error to a memo */
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "MobSub",
+                          STRING(MsRequest.MsSeq),
+                          MsRequest.Custnum,
+                          "FIX_VOICE1000 activation failed",
+                          lcError).
+      liRequest = fPCActionRequest(MsRequest.MsSeq,
+                                   "INT_FIX_VOICE1000",
+                                   "act",
+                                   MsRequest.ActStamp,
+                                   TRUE, /* fees */
+                                   {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                   "",
+                                   MsRequest.MsRequest,
+                                   FALSE,
+                                   "",
+                                   0,
+                                   0,
+                                   OUTPUT lcError).
+      IF liRequest = 0 THEN
+         /* write possible error to a memo */
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "MobSub",
+                          STRING(MsRequest.MsSeq),
+                          MsRequest.Custnum,
+                          "INT_FIX_VOICE1000 activation failed",
+                          lcError).   
+   END.
+   IF AVAIL Customer AND fIsPro(customer.category) AND
+      lcOldStatus EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} AND
+      (lcNewStatus = {&ORDER_STATUS_NEW}  OR
+       lcNewStatus = {&ORDER_STATUS_MNP}) THEN DO:
+      liRequest = fPCActionRequest(MsRequest.MsSeq,
+                                   "FIX_VOICE1000",
+                                   "act",
+                                   MsRequest.ActStamp,
+                                   TRUE, /* fees */
+                                   {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                   "",
+                                   MsRequest.MsRequest,
+                                   FALSE,
+                                   "",
+                                   0,
+                                   0,
+                                   OUTPUT lcError).
+      IF liRequest = 0 THEN
+         /* write possible error to a memo */
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "MobSub",
+                          STRING(MsRequest.MsSeq),
+                          MsRequest.Custnum,
+                          "FIX_VOICE1000 activation failed",
+                          lcError).
+      liRequest = fPCActionRequest(MsRequest.MsSeq,
+                                   "INT_FIX_VOICE1000",
+                                   "act",
+                                   MsRequest.ActStamp,
+                                   TRUE, /* fees */
+                                   {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                   "",
+                                   MsRequest.MsRequest,
+                                   FALSE,
+                                   "",
+                                   0,
+                                   0,
+                                   OUTPUT lcError).
+      IF liRequest = 0 THEN
+         /* write possible error to a memo */
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "MobSub",
+                          STRING(MsRequest.MsSeq),
+                          MsRequest.Custnum,
+                          "INT_FIX_VOICE1000 activation failed",
+                          lcError).
+   END.
 END.
 IF llDoEvent THEN DO:
    RUN StarEventMakeModifyEvent(lhOrder).
