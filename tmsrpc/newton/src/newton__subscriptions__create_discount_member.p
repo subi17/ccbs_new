@@ -108,9 +108,11 @@ ELSE
    ldaValidTo = fCalcDPMemberValidTo(ldaValidFrom, liValidPeriods).
 
 /* ADDLINE-275 */
-IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) > 0 AND
-   LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN DO:
+IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN DO:
    
+   IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) = 0 THEN
+      RETURN appl_err("Discount Plan not allowed").
+      
    IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) THEN
       RETURN appl_err("Discount Plan not allowed").
 
