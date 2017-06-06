@@ -713,6 +713,10 @@ PROCEDURE pUpdateSubscription:
           MobSub.FixedNumber = lcFixedNumber
           MobSub.MsStatus = {&MSSTATUS_ACTIVE} WHEN
                             MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}.
+   IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN
+      ASSIGN MobSub.ICC  = ""
+             MobSub.IMSI = ""
+             .
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
    
