@@ -84,7 +84,8 @@ FOR EACH OrderAction NO-LOCK WHERE
          RUN pPeriodicalContract.
       END.
       WHEN "Service" THEN RUN pService.
-      WHEN "Discount" THEN RUN pDiscountPlan.
+      WHEN "Discount" THEN RUN pDiscountPlan. 
+      WHEN "AddLineDiscount" THEN RUN pAddLineDiscountPlan.
       WHEN "Q25Discount" THEN RUN pQ25Discount.
       WHEN "Q25Extension" THEN RUN pQ25Extension.
       OTHERWISE NEXT ORDERACTION_LOOP.
@@ -255,7 +256,8 @@ PROCEDURE pPeriodicalContract:
       /* request should wait until another bundle request is completed */
       lcWaitFor = "".
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
-         icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} THEN DO:
+         (icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} OR
+          icSource =  {&REQUEST_SOURCE_STC} ) THEN DO:
          
          FOR EACH bBundleRequest NO-LOCK USE-INDEX OrigRequest WHERE
                   bBundleRequest.OrigRequest = iiOrigRequest AND
@@ -267,6 +269,8 @@ PROCEDURE pPeriodicalContract:
                   bBundleContract.DCEvent = bBundleRequest.ReqCParam3 AND
                   LOOKUP(bBundleContract.DCType,
                          {&PERCONTRACT_RATING_PACKAGE}) > 0:
+
+            IF fIsConvergentFixedContract(bBundleRequest.ReqCParam3) THEN NEXT.
             lcWaitFor = ":wait" + STRING(bBundleRequest.MsRequest).
          END.     
       END.
@@ -405,7 +409,10 @@ PROCEDURE pDiscountPlan:
       DPMember.DiscValue = DPRate.DiscValue.
    END.
 
-
+   /* ADDLINE-20 Additional Line */
+   IF LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
+      DPMember.ValidTo = ? THEN
+      DPMember.ValidTo = 12/31/49.
    
    RETURN "".
 
@@ -616,5 +623,21 @@ PROCEDURE pQ25Discount:
                          SingleFee.OrderId, /* Q25 OrderId */
                          OUTPUT lcResult).
    RETURN lcResult.
+
+END PROCEDURE.
+
+PROCEDURE pAddLineDiscountPlan:
+
+   FIND FIRST DiscountPlan NO-LOCK WHERE
+              DiscountPlan.DPRuleID = OrderAction.ItemKey NO-ERROR.
+   IF NOT AVAIL DiscountPlan THEN 
+      RETURN "ERROR:Additional Line DiscountPlan ID: " + OrderAction.ItemKey + " not found".
+
+   fCreateAddLineDiscount(MobSub.MsSeq,
+                          MobSub.CLIType,
+                          TODAY,
+                          "").
+   IF RETURN-VALUE BEGINS "ERROR" THEN
+      RETURN RETURN-VALUE.
 
 END PROCEDURE.

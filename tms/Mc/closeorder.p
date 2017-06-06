@@ -20,10 +20,14 @@
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
 
-DEF VAR llOk AS LOG NO-UNDO.
-DEF VAR lcError AS CHARACTER NO-UNDO.
-DEF VAR lcQuestion AS CHARACTER NO-UNDO. 
-DEF VAR lcCreditReason AS CHARACTER NO-UNDO. 
+DEF VAR llOk             AS LOG       NO-UNDO.
+DEF VAR lcError          AS CHARACTER NO-UNDO.
+DEF VAR lcQuestion       AS CHARACTER NO-UNDO. 
+DEF VAR lcCreditReason   AS CHARACTER NO-UNDO. 
+DEF VAR lcOldOrderStatus AS CHARACTER NO-UNDO. 
+
+DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
+DEFINE BUFFER lbOrder         FOR Order.
 
 FIND Order WHERE 
      Order.Brand   = gcBrand AND 
@@ -34,6 +38,8 @@ IF not avail order THEN DO:
    IF NOT ilSilent THEN MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
    RETURN lcError.
 END.
+
+lcOldOrderStatus = Order.StatusCode.
 
 IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES} + ",12") > 0 THEN DO:
    lcError = SUBST("Cannot close order with status &1",Order.StatusCode).
@@ -198,6 +204,61 @@ fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_CLOSED}).
 
 IF llDoEvent THEN
    RUN StarEventMakeModifyEvent(lhOrder).
+
+/* ADDLINE-19 AC10 Additional Line */
+IF lcOldOrderStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_1}               OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_2}               OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_3}               OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_IN_CONTROL}                OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_MNP_REJECTED}              OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED}           OR
+   lcOldOrderStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN
+DO:
+   FIND FIRST lbOrderCustomer NO-LOCK WHERE
+              lbOrderCustomer.Brand   = gcBrand       AND
+              lbOrderCustomer.OrderId = Order.OrderId AND
+              lbOrderCustomer.RowType = 1             NO-ERROR.
+
+    IF NOT fCheckOngoingConvergentOrder(lbOrderCustomer.CustIdType,
+                                        lbOrderCustomer.CustID,
+                                        Order.CliType) THEN DO:
+       /* If Main Line is Closed and customer has no other main line then removing the additional line discount */
+       IF NOT fCheckExistingConvergent(lbOrderCustomer.CustIdType,
+                                       lbOrderCustomer.CustID,
+                                       Order.CliType) THEN DO:
+          FOR EACH OrderCustomer NO-LOCK WHERE
+                   OrderCustomer.Brand      = gcBrand                    AND
+                   OrderCustomer.CustIDType = lbOrderCustomer.CustIDType AND
+                   OrderCustomer.CustID     = lbOrderCustomer.CustID,
+             FIRST lbOrder NO-LOCK WHERE
+                   lbOrder.Brand      = gcBrand                           AND
+                   lbOrder.OrderID    = OrderCustomer.OrderID             AND
+                   lbOrder.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+                   LOOKUP(lbOrder.CLIType, {&ADDLINE_CLITYPES}) > 0:
+
+             FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
+                        OrderAction.Brand    = gcBrand           AND
+                        OrderAction.OrderID  = lbOrder.OrderID   AND
+                        OrderAction.ItemType = "AddLineDiscount" AND
+                 LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20}) > 0 NO-ERROR.
+             IF AVAILABLE OrderAction THEN DO:
+                DELETE OrderAction.
+
+                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                 "Order",
+                                 STRING(lbOrder.OrderID),
+                                 0,
+                                 "ADDLINE DISCOUNT ORDERACTION REMOVED",
+                                 "Removed AddLineDiscount Item from OrderAction").
+             END.
+          END.
+
+          fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
+                                         lbOrderCustomer.CustID).
+      END.
+   END.
+END. 
 
 FOR EACH MNPProcess WHERE
    MNPProcess.OrderID = Order.OrderId AND

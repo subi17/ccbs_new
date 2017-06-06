@@ -1,0 +1,648 @@
+bulkload: Account
+  AccNum: 111111
+  AccName: "TopUp balance Not valid 01/08"
+  AccType: 20
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 222222
+  AccName: "TopUp Tax Not valid 01/2008"
+  AccType: 5
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 333333
+  AccName: "TopUp payment Not valid 01/08"
+  AccType: 4
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 444444
+  AccName: "TopUp min.cons.'bank N/A 01/08"
+  AccType: 4
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 11111111
+  AccName: "1     75902002 Ingresos reparaciones clientes"
+  AccType: 4
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 12312312
+  AccName: "Pre paid minimum consumption"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 12312313
+  AccName: "Failed Min.consumption balance"
+  AccType: 20
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 12412412
+  AccName: "Prepaid charges"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 13131313
+  AccName: "Refund balance"
+  AccType: 22
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 23232323
+  AccName: "Invoice crediting"
+  AccType: 4
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 33331111
+  AccName: "Initial TopUp"
+  AccType: 13
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 33331122
+  AccName: "Price quarantee"
+  AccType: 13
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 33331133
+  AccName: "Price quarantee balance"
+  AccType: 20
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 33332222
+  AccName: "Initial TopUp Balance"
+  AccType: 20
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 33334444
+  AccName: "Pre paid compensation balance"
+  AccType: 20
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 33335555
+  AccName: "TopUp re-charge balance"
+  AccType: 20
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 33336666
+  AccName: "Pre paid Compensation"
+  AccType: 23
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 33337777
+  AccName: "Campaign Top Up"
+  AccType: 13
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 33338888
+  AccName: "Campaign Top Up Balance"
+  AccType: 20
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 43000000
+  AccName: "Account receivable Postpaid"
+  AccType: 1
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 43000001
+  AccName: "Advance payments"
+  AccType: 19
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 43001000
+  AccName: "Accounts receivable Prepaid"
+  AccType: 1
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 43002004
+  AccName: "Credit note for the installment"
+  AccType: 43
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 43002008
+  AccName: "Discount Extension over Q25"
+  AccType: 43
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 43008889
+  AccName: "Installment"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 43434343
+  AccName: "Overpayments"
+  AccType: 6
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 44444444
+  AccName: "Prepaid minimum cons. calc."
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 44445555
+  AccName: "Failed prepaid minimum cons."
+  AccType: 17
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 44446666
+  AccName: "Pre paid deduction via charge tool"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 47000000
+  AccName: "Assisting account for AP TAX"
+  AccType: 5
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 47700000
+  AccName: "VAT (Mainland)"
+  AccType: 5
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 47710000
+  AccName: "VAT (IVA) Not in use"
+  AccType: 5
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 47720000
+  AccName: "IGIC (Canary Islands)"
+  AccType: 5
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 47730000
+  AccName: "IPSI (Ceuta)"
+  AccType: 5
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 47740000
+  AccName: "IPSI Melilla"
+  AccType: 5
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 48090000
+  AccName: "Other advanced expences"
+  AccType: 13
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 48500000
+  AccName: "Ingesos anticipados por tarj"
+  AccType: 13
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 52100400
+  AccName: "Donation"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 53535353
+  AccName: "Pre-activated POS"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55321000
+  AccName: "Installment"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55322000
+  AccName: "Commission"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55323000
+  AccName: "Residual"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55331000
+  AccName: "Installment"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55332000
+  AccName: "Commission"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55333000
+  AccName: "Residual"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55341000
+  AccName: "Installment"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55342000
+  AccName: "Commission"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55343000
+  AccName: "Residual"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55380000
+  AccName: "Google Purchase"
+  AccType: 55
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55551111
+  AccName: "Own usage"
+  AccType: 24
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55552222
+  AccName: "Own usage balance"
+  AccType: 20
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 55555555
+  AccName: "Yoigo's Bank account"
+  AccType: 4
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 60722114
+  AccName: "Expense"
+  AccType: 13
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 60722119
+  AccName: "Q25 discount"
+  AccType: 60
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 62700800
+  AccName: "Compensation plan (Postpaid)"
+  AccType: 21
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 66666666
+  AccName: "Bank to NetPlus payments"
+  AccType: 4
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 67899999
+  AccName: "Q25 discount"
+  AccType: 60
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 69696969
+  AccName: "Unidentified Prepaid revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70019000
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70019105
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70019106
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70020105
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70020106
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70023105
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70023106
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70024105
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70510100
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70510101
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70510103
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70510104
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70510116
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70511100
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70511101
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70511103
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70511104
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70511116
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70512100
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70512101
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70512103
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70512104
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70512116
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70513100
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70513101
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70513103
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70513104
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70513116
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70514100
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70514103
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70514104
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70515100
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70516100
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70516103
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70516104
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70517100
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70517103
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70517104
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70518107
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70518109
+  AccName: "Charge and Compensation"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70518110
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70518111
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70525001
+  AccName: "Q25 discount"
+  AccType: 70
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 75900000
+  AccName: "Ingresos por servicios diver."
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 75902000
+  AccName: "Ingresos por servicios diver."
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 75902002
+  AccName: "Ingresos reparaciones clientes"
+  AccType: 25
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 75902003
+  AccName: "Ingresos devolución factura"
+  AccType: 26
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 77777777
+  AccName: "Default and cash customers"
+  AccType: 2
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 79502004
+  AccName: "Charge any type of discount over Q25"
+  AccType: 79
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 99999999
+  AccName: "Account not defined"
+  AccType: 1
+  Brand: "1"
+

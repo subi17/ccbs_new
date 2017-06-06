@@ -1332,11 +1332,11 @@ ADD INDEX "DateFrom" ON "CronLog"
   INDEX-FIELD "DateFrom" ASCENDING 
   INDEX-FIELD "DateTo" ASCENDING 
 
-ADD TABLE "eventlog"
-  AREA "Sta_Data_64"
-  DUMP-NAME "eventlog"
+ADD TABLE "EventLog"
+  AREA "EventLog_Data"
+  DUMP-NAME "eventlog-------1"
 
-ADD FIELD "eventdate" OF "eventlog" AS date 
+ADD FIELD "eventdate" OF "EventLog" AS date 
   FORMAT "99.99.99"
   INITIAL ?
   LABEL "Date"
@@ -1345,7 +1345,7 @@ ADD FIELD "eventdate" OF "eventlog" AS date
   HELP "Event date"
   ORDER 10
 
-ADD FIELD "eventtime" OF "eventlog" AS character 
+ADD FIELD "eventtime" OF "EventLog" AS character 
   FORMAT "X(8)"
   INITIAL ""
   LABEL "Time"
@@ -1354,7 +1354,7 @@ ADD FIELD "eventtime" OF "eventlog" AS character
   HELP "Event time"
   ORDER 20
 
-ADD FIELD "usercode" OF "eventlog" AS character 
+ADD FIELD "usercode" OF "EventLog" AS character 
   FORMAT "X(8)"
   INITIAL ""
   LABEL "User"
@@ -1363,7 +1363,7 @@ ADD FIELD "usercode" OF "eventlog" AS character
   HELP "User code"
   ORDER 30
 
-ADD FIELD "tablename" OF "eventlog" AS character 
+ADD FIELD "tablename" OF "EventLog" AS character 
   FORMAT "X(15)"
   INITIAL ""
   LABEL "Table"
@@ -1372,7 +1372,7 @@ ADD FIELD "tablename" OF "eventlog" AS character
   HELP "Source table name"
   ORDER 40
 
-ADD FIELD "key" OF "eventlog" AS character 
+ADD FIELD "key" OF "EventLog" AS character 
   FORMAT "X(30)"
   INITIAL ""
   LABEL "Key"
@@ -1381,7 +1381,7 @@ ADD FIELD "key" OF "eventlog" AS character
   HELP "Key to source record"
   ORDER 50
 
-ADD FIELD "action" OF "eventlog" AS character 
+ADD FIELD "action" OF "EventLog" AS character 
   FORMAT "X(8)"
   INITIAL ""
   LABEL "Action"
@@ -1390,7 +1390,7 @@ ADD FIELD "action" OF "eventlog" AS character
   HELP "Action type.. Create,Modity,Delete"
   ORDER 60
 
-ADD FIELD "datavalues" OF "eventlog" AS character 
+ADD FIELD "datavalues" OF "EventLog" AS character 
   FORMAT "X(50)"
   INITIAL ""
   LABEL "Values"
@@ -1399,7 +1399,7 @@ ADD FIELD "datavalues" OF "eventlog" AS character
   HELP "Changed values of record"
   ORDER 70
 
-ADD FIELD "modifiedfields" OF "eventlog" AS character 
+ADD FIELD "modifiedfields" OF "EventLog" AS character 
   FORMAT "X(50)"
   INITIAL ""
   LABEL "Modified fields"
@@ -1408,7 +1408,7 @@ ADD FIELD "modifiedfields" OF "eventlog" AS character
   HELP "Fieldnames from BUFFER-COMPARE"
   ORDER 80
 
-ADD FIELD "fieldformats" OF "eventlog" AS character 
+ADD FIELD "fieldformats" OF "EventLog" AS character 
   FORMAT "X(50)"
   INITIAL ""
   LABEL "Field formats"
@@ -1417,7 +1417,7 @@ ADD FIELD "fieldformats" OF "eventlog" AS character
   HELP "Field formats of modified fields"
   ORDER 90
 
-ADD FIELD "EventLogStatus" OF "eventlog" AS integer 
+ADD FIELD "EventLogStatus" OF "EventLog" AS integer 
   FORMAT "9"
   INITIAL "0"
   LABEL "EventLogStatus"
@@ -1427,7 +1427,7 @@ ADD FIELD "EventLogStatus" OF "eventlog" AS integer
   HELP "Status of eventlog"
   ORDER 100
 
-ADD FIELD "TimingTS" OF "eventlog" AS decimal 
+ADD FIELD "TimingTS" OF "EventLog" AS decimal 
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "TimingTS"
@@ -1438,7 +1438,7 @@ ADD FIELD "TimingTS" OF "eventlog" AS decimal
   DECIMALS 5
   ORDER 110
 
-ADD FIELD "TimingDate" OF "eventlog" AS date 
+ADD FIELD "TimingDate" OF "EventLog" AS date 
   FORMAT "99-99-99"
   INITIAL ?
   LABEL "TimingDate"
@@ -1448,7 +1448,7 @@ ADD FIELD "TimingDate" OF "eventlog" AS date
   HELP "Timing Date (schedule date)"
   ORDER 120
 
-ADD FIELD "TimingTime" OF "eventlog" AS decimal 
+ADD FIELD "TimingTime" OF "EventLog" AS decimal 
   FORMAT "99.99"
   INITIAL "0"
   LABEL "TimingTime"
@@ -1459,7 +1459,7 @@ ADD FIELD "TimingTime" OF "eventlog" AS decimal
   DECIMALS 2
   ORDER 130
 
-ADD FIELD "Memo" OF "eventlog" AS character 
+ADD FIELD "Memo" OF "EventLog" AS character 
   FORMAT "x(40)"
   INITIAL ""
   LABEL "Memo"
@@ -1468,7 +1468,7 @@ ADD FIELD "Memo" OF "eventlog" AS character
   COLUMN-LABEL "Memo"
   ORDER 140
 
-ADD INDEX "TableName" ON "eventlog" 
+ADD INDEX "TableName" ON "EventLog" 
   AREA "Sta_Index_1"
   PRIMARY
   INDEX-FIELD "tablename" ASCENDING 
@@ -1476,19 +1476,181 @@ ADD INDEX "TableName" ON "eventlog"
   INDEX-FIELD "eventdate" DESCENDING 
   INDEX-FIELD "eventtime" DESCENDING 
 
-ADD INDEX "EventDate" ON "eventlog" 
+ADD INDEX "EventDate" ON "EventLog" 
   AREA "Sta_Index_1"
   INDEX-FIELD "eventdate" DESCENDING 
   INDEX-FIELD "eventtime" DESCENDING 
   INDEX-FIELD "tablename" ASCENDING 
   INDEX-FIELD "key" ASCENDING 
 
-ADD INDEX "EventLogStatus" ON "eventlog" 
+ADD INDEX "EventLogStatus" ON "EventLog" 
   AREA "Sta_Index_1"
   INDEX-FIELD "EventLogStatus" ASCENDING 
   INDEX-FIELD "TimingTS" DESCENDING 
 
-ADD INDEX "UserName" ON "eventlog" 
+ADD INDEX "UserName" ON "EventLog" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "usercode" ASCENDING 
+  INDEX-FIELD "eventdate" DESCENDING 
+  INDEX-FIELD "eventtime" DESCENDING 
+
+ADD TABLE "EventLog_old"
+  AREA "Sta_Data_64"
+  DUMP-NAME "eventlog"
+
+ADD FIELD "eventdate" OF "EventLog_old" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "Date"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Event date"
+  ORDER 10
+
+ADD FIELD "eventtime" OF "EventLog_old" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Time"
+  POSITION 3
+  MAX-WIDTH 16
+  HELP "Event time"
+  ORDER 20
+
+ADD FIELD "usercode" OF "EventLog_old" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "User"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "User code"
+  ORDER 30
+
+ADD FIELD "tablename" OF "EventLog_old" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Table"
+  POSITION 5
+  MAX-WIDTH 30
+  HELP "Source table name"
+  ORDER 40
+
+ADD FIELD "key" OF "EventLog_old" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Key"
+  POSITION 6
+  MAX-WIDTH 60
+  HELP "Key to source record"
+  ORDER 50
+
+ADD FIELD "action" OF "EventLog_old" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Action"
+  POSITION 7
+  MAX-WIDTH 16
+  HELP "Action type.. Create,Modity,Delete"
+  ORDER 60
+
+ADD FIELD "datavalues" OF "EventLog_old" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Values"
+  POSITION 8
+  MAX-WIDTH 100
+  HELP "Changed values of record"
+  ORDER 70
+
+ADD FIELD "modifiedfields" OF "EventLog_old" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Modified fields"
+  POSITION 9
+  MAX-WIDTH 100
+  HELP "Fieldnames from BUFFER-COMPARE"
+  ORDER 80
+
+ADD FIELD "fieldformats" OF "EventLog_old" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Field formats"
+  POSITION 10
+  MAX-WIDTH 100
+  HELP "Field formats of modified fields"
+  ORDER 90
+
+ADD FIELD "EventLogStatus" OF "EventLog_old" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "EventLogStatus"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "EventLogStatus"
+  HELP "Status of eventlog"
+  ORDER 100
+
+ADD FIELD "TimingTS" OF "EventLog_old" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "TimingTS"
+  POSITION 12
+  MAX-WIDTH 20
+  COLUMN-LABEL "TimingTS"
+  HELP "Timing Timestamp"
+  DECIMALS 5
+  ORDER 110
+
+ADD FIELD "TimingDate" OF "EventLog_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "TimingDate"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "TimingDate"
+  HELP "Timing Date (schedule date)"
+  ORDER 120
+
+ADD FIELD "TimingTime" OF "EventLog_old" AS decimal 
+  FORMAT "99.99"
+  INITIAL "0"
+  LABEL "TimingTime"
+  POSITION 14
+  MAX-WIDTH 17
+  COLUMN-LABEL "TimingTime"
+  HELP "Timing Time (Scheluded time)"
+  DECIMALS 2
+  ORDER 130
+
+ADD FIELD "Memo" OF "EventLog_old" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Memo"
+  POSITION 15
+  MAX-WIDTH 80
+  COLUMN-LABEL "Memo"
+  ORDER 140
+
+ADD INDEX "TableName" ON "EventLog_old" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "tablename" ASCENDING 
+  INDEX-FIELD "key" ASCENDING 
+  INDEX-FIELD "eventdate" DESCENDING 
+  INDEX-FIELD "eventtime" DESCENDING 
+
+ADD INDEX "EventDate" ON "EventLog_old" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "eventdate" DESCENDING 
+  INDEX-FIELD "eventtime" DESCENDING 
+  INDEX-FIELD "tablename" ASCENDING 
+  INDEX-FIELD "key" ASCENDING 
+
+ADD INDEX "EventLogStatus" ON "EventLog_old" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "EventLogStatus" ASCENDING 
+  INDEX-FIELD "TimingTS" DESCENDING 
+
+ADD INDEX "UserName" ON "EventLog_old" 
   AREA "Sta_Index_1"
   INDEX-FIELD "usercode" ASCENDING 
   INDEX-FIELD "eventdate" DESCENDING 
@@ -4523,7 +4685,7 @@ ADD INDEX "Operator" ON "NumPlan"
   INDEX-FIELD "Prefix" ASCENDING 
 
 ADD TABLE "OLRefresh"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "OLRefresh"
   DESCRIPTION "Log for updated files"
   DUMP-NAME "olrefres"
@@ -5927,8 +6089,8 @@ ADD INDEX "ProgramName" ON "StarSessionData"
   INDEX-FIELD "programname" ASCENDING 
 
 ADD TABLE "TopUpQueue"
-  AREA "Sta_Data_256"
-  DUMP-NAME "topupqueue"
+  AREA "Sta_Data_2_128"
+  DUMP-NAME "topupqueue-------1"
 
 ADD FIELD "State" OF "TopUpQueue" AS integer 
   FORMAT ">9"
@@ -5938,7 +6100,7 @@ ADD FIELD "State" OF "TopUpQueue" AS integer
   ORDER 10
 
 ADD FIELD "PPRequest" OF "TopUpQueue" AS int64 
-  FORMAT "->,>>>,>>9"
+  FORMAT "->>>,>>>,>>9"
   INITIAL "0"
   POSITION 3
   MAX-WIDTH 8
@@ -5982,6 +6144,66 @@ ADD FIELD "Source" OF "TopUpQueue" AS character
   ORDER 70
 
 ADD INDEX "State" ON "TopUpQueue" 
+  AREA "Sta_Index_3"
+  PRIMARY
+  INDEX-FIELD "State" ASCENDING 
+
+ADD TABLE "TopUpQueue_old"
+  AREA "Sta_Data_256"
+  DUMP-NAME "topupqueue"
+
+ADD FIELD "State" OF "TopUpQueue_old" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+
+ADD FIELD "PPRequest" OF "TopUpQueue_old" AS int64 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  POSITION 3
+  MAX-WIDTH 8
+  ORDER 20
+
+ADD FIELD "CLI" OF "TopUpQueue_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 4
+  MAX-WIDTH 16
+  ORDER 30
+
+ADD FIELD "TopUpAmt" OF "TopUpQueue_old" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  POSITION 5
+  MAX-WIDTH 17
+  DECIMALS 2
+  ORDER 40
+
+ADD FIELD "VatAmt" OF "TopUpQueue_old" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  POSITION 6
+  MAX-WIDTH 17
+  DECIMALS 2
+  ORDER 50
+
+ADD FIELD "Date" OF "TopUpQueue_old" AS date 
+  FORMAT "99/99/99"
+  INITIAL ?
+  POSITION 7
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "Source" OF "TopUpQueue_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 8
+  MAX-WIDTH 16
+  ORDER 70
+
+ADD INDEX "State" ON "TopUpQueue_old" 
   AREA "Sta_Index_2"
   PRIMARY
   INDEX-FIELD "State" ASCENDING 
@@ -6094,11 +6316,11 @@ ADD INDEX "TrunkCode" ON "Trunk"
   INDEX-FIELD "ExCode" ASCENDING 
 
 ADD TABLE "UpdateQueue"
-  AREA "Sta_Data_64"
-  DUMP-NAME "updatequ"
+  AREA "Sta_Data_2_64"
+  DUMP-NAME "updatequeue"
 
 ADD FIELD "Seq1" OF "UpdateQueue" AS integer 
-  FORMAT ">>>>>>9"
+  FORMAT ">>>>>>>>9"
   INITIAL "0"
   POSITION 2
   MAX-WIDTH 4
@@ -6149,12 +6371,77 @@ ADD FIELD "TSUpdate" OF "UpdateQueue" AS decimal
   ORDER 70
 
 ADD INDEX "Seq1" ON "UpdateQueue" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Seq1" ASCENDING 
   INDEX-FIELD "State" ASCENDING 
 
 ADD INDEX "State" ON "UpdateQueue" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "State" ASCENDING 
+
+ADD TABLE "UpdateQueue_old"
+  AREA "Sta_Data_64"
+  DUMP-NAME "updatequ"
+
+ADD FIELD "Seq1" OF "UpdateQueue_old" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+
+ADD FIELD "Value1" OF "UpdateQueue_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 3
+  MAX-WIDTH 16
+  ORDER 20
+
+ADD FIELD "Seq2" OF "UpdateQueue_old" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  POSITION 4
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD FIELD "Value2" OF "UpdateQueue_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 5
+  MAX-WIDTH 16
+  ORDER 40
+
+ADD FIELD "State" OF "UpdateQueue_old" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  POSITION 6
+  MAX-WIDTH 4
+  ORDER 50
+
+ADD FIELD "TSCreate" OF "UpdateQueue_old" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  POSITION 7
+  MAX-WIDTH 20
+  DECIMALS 5
+  ORDER 60
+
+ADD FIELD "TSUpdate" OF "UpdateQueue_old" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  POSITION 8
+  MAX-WIDTH 20
+  DECIMALS 5
+  ORDER 70
+
+ADD INDEX "Seq1" ON "UpdateQueue_old" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "Seq1" ASCENDING 
+  INDEX-FIELD "State" ASCENDING 
+
+ADD INDEX "State" ON "UpdateQueue_old" 
   AREA "Sta_Index_2"
   INDEX-FIELD "State" ASCENDING 
 
@@ -8127,4 +8414,4 @@ ADD INDEX "invseq" ON "VASCDR"
 PSC
 cpstream=1252
 .
-0000160622
+0000166304

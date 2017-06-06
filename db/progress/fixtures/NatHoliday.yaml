@@ -1,0 +1,448 @@
+bulkload: NatHoliday
+  Holiday: 2007-01-01
+  HName: "Año Nuevo"
+
+bulkload: NatHoliday
+  Holiday: 2007-01-06
+  HName: "Epifania del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2007-03-19
+  HName: "San José"
+
+bulkload: NatHoliday
+  Holiday: 2007-04-05
+  HName: "Jueves Santol"
+
+bulkload: NatHoliday
+  Holiday: 2007-04-06
+  HName: "Viernes Santo"
+
+bulkload: NatHoliday
+  Holiday: 2007-05-01
+  HName: "Fiesta del Trabajo"
+
+bulkload: NatHoliday
+  Holiday: 2007-05-02
+  HName: "Fiesta de la Comuni. de Madrid"
+
+bulkload: NatHoliday
+  Holiday: 2007-05-15
+  HName: "San Isidro"
+
+bulkload: NatHoliday
+  Holiday: 2007-07-25
+  HName: "Santiago Apóstol"
+
+bulkload: NatHoliday
+  Holiday: 2007-08-15
+  HName: "Asunción de la Virgen"
+
+bulkload: NatHoliday
+  Holiday: 2007-10-12
+  HName: "Fiesta Nacional de España"
+
+bulkload: NatHoliday
+  Holiday: 2007-11-01
+  HName: "Todos los Santos"
+
+bulkload: NatHoliday
+  Holiday: 2007-11-09
+  HName: "Ntra.Sra. de la Almudena"
+
+bulkload: NatHoliday
+  Holiday: 2007-12-06
+  HName: "Dia de la Constitución"
+
+bulkload: NatHoliday
+  Holiday: 2007-12-08
+  HName: "La Immaculada Concepción"
+
+bulkload: NatHoliday
+  Holiday: 2007-12-25
+  HName: "Natividad del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2008-01-01
+  HName: "New Year's Day"
+
+bulkload: NatHoliday
+  Holiday: 2008-01-07
+  HName: "Three King's day"
+
+bulkload: NatHoliday
+  Holiday: 2008-03-20
+  HName: "Maundy Thursday"
+
+bulkload: NatHoliday
+  Holiday: 2008-03-21
+  HName: "Good Friday"
+
+bulkload: NatHoliday
+  Holiday: 2008-05-01
+  HName: "Labour Day"
+
+bulkload: NatHoliday
+  Holiday: 2008-05-02
+  HName: "Local Holiday of Comm ofMadrid"
+
+bulkload: NatHoliday
+  Holiday: 2008-05-15
+  HName: "Patron Saint of Madrid"
+
+bulkload: NatHoliday
+  Holiday: 2008-07-25
+  HName: "Santiago Apostol"
+
+bulkload: NatHoliday
+  Holiday: 2008-08-15
+  HName: "Assumption of Mary"
+
+bulkload: NatHoliday
+  Holiday: 2008-09-09
+  HName: "Sta Maria de la Cabeza"
+
+bulkload: NatHoliday
+  Holiday: 2008-11-01
+  HName: "All Saint's Day"
+
+bulkload: NatHoliday
+  Holiday: 2008-12-06
+  HName: "Spanish Constitution"
+
+bulkload: NatHoliday
+  Holiday: 2008-12-08
+  HName: "Virgin Birth"
+
+bulkload: NatHoliday
+  Holiday: 2008-12-25
+  HName: "Christmas"
+
+bulkload: NatHoliday
+  Holiday: 2009-01-01
+  HName: "Año Nuevo"
+
+bulkload: NatHoliday
+  Holiday: 2009-01-06
+  HName: "Epifanía del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2009-03-19
+  HName: "San José"
+
+bulkload: NatHoliday
+  Holiday: 2009-04-09
+  HName: "Jueves Santo"
+
+bulkload: NatHoliday
+  Holiday: 2009-04-10
+  HName: "Viernes Santo"
+
+bulkload: NatHoliday
+  Holiday: 2009-05-01
+  HName: "Fiesta del Trabajo"
+
+bulkload: NatHoliday
+  Holiday: 2009-05-02
+  HName: "Fiesta Comunidad de Madrid"
+
+bulkload: NatHoliday
+  Holiday: 2009-05-15
+  HName: "San Isidro"
+
+bulkload: NatHoliday
+  Holiday: 2009-06-11
+  HName: "Corpus Christi"
+
+bulkload: NatHoliday
+  Holiday: 2009-08-15
+  HName: "Asunción de la Virgen"
+
+bulkload: NatHoliday
+  Holiday: 2009-10-12
+  HName: "Fiesta Nacional de España"
+
+bulkload: NatHoliday
+  Holiday: 2009-12-08
+  HName: "La Immaculada Concepción"
+
+bulkload: NatHoliday
+  Holiday: 2009-12-25
+  HName: "Natividad del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2010-01-01
+  HName: "Año Nuevo"
+
+bulkload: NatHoliday
+  Holiday: 2010-01-06
+  HName: "Epifanía del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2010-04-02
+  HName: "Viernes Santo"
+
+bulkload: NatHoliday
+  Holiday: 2010-05-01
+  HName: "Fiesta del Trabajo"
+
+bulkload: NatHoliday
+  Holiday: 2010-06-03
+  HName: "Corpus Christi"
+
+bulkload: NatHoliday
+  Holiday: 2010-10-12
+  HName: "Fiesta Nacional de España"
+
+bulkload: NatHoliday
+  Holiday: 2010-11-01
+  HName: "Todos los Santos"
+
+bulkload: NatHoliday
+  Holiday: 2010-12-06
+  HName: "Día de la Constitucíon"
+
+bulkload: NatHoliday
+  Holiday: 2010-12-08
+  HName: "La Inmaculada"
+
+bulkload: NatHoliday
+  Holiday: 2010-12-25
+  HName: "Natividad del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2011-01-01
+  HName: "Año Nuevo"
+
+bulkload: NatHoliday
+  Holiday: 2011-01-06
+  HName: "Epifanía del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2011-04-22
+  HName: "Viernes Santo"
+
+bulkload: NatHoliday
+  Holiday: 2011-08-15
+  HName: "Asuncion de la Virgen"
+
+bulkload: NatHoliday
+  Holiday: 2011-10-12
+  HName: "Fiesta Nacional de España"
+
+bulkload: NatHoliday
+  Holiday: 2011-11-01
+  HName: "Todos los Santos"
+
+bulkload: NatHoliday
+  Holiday: 2011-12-06
+  HName: "Día de la Constitución"
+
+bulkload: NatHoliday
+  Holiday: 2011-12-08
+  HName: "La Inmaculada"
+
+bulkload: NatHoliday
+  Holiday: 2012-01-06
+  HName: "Epifanía del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2012-04-06
+  HName: "Viernes Santo"
+
+bulkload: NatHoliday
+  Holiday: 2012-05-01
+  HName: "Fiesta del Trabajo"
+
+bulkload: NatHoliday
+  Holiday: 2012-08-15
+  HName: "Asuncion de la Virgen"
+
+bulkload: NatHoliday
+  Holiday: 2012-10-12
+  HName: "Fiesta Nacional de España"
+
+bulkload: NatHoliday
+  Holiday: 2012-11-01
+  HName: "Todos los Santos"
+
+bulkload: NatHoliday
+  Holiday: 2012-12-06
+  HName: "Día de la Constitución"
+
+bulkload: NatHoliday
+  Holiday: 2012-12-08
+  HName: "La Inmaculada"
+
+bulkload: NatHoliday
+  Holiday: 2012-12-25
+  HName: "Natividad del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2013-01-01
+  HName: "Año nuevo"
+
+bulkload: NatHoliday
+  Holiday: 2013-03-29
+  HName: "Viernes Santos"
+
+bulkload: NatHoliday
+  Holiday: 2013-05-01
+  HName: "Fiesta del Trabajo"
+
+bulkload: NatHoliday
+  Holiday: 2013-08-15
+  HName: "Asuncion de la Virgen"
+
+bulkload: NatHoliday
+  Holiday: 2013-10-12
+  HName: "Fiesta Nacional de España"
+
+bulkload: NatHoliday
+  Holiday: 2013-11-01
+  HName: "Todos los Santos"
+
+bulkload: NatHoliday
+  Holiday: 2013-12-06
+  HName: "Día de la Constitución"
+
+bulkload: NatHoliday
+  Holiday: 2013-12-25
+  HName: "Natividad del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2014-01-01
+  HName: "Año nuevo"
+
+bulkload: NatHoliday
+  Holiday: 2014-01-06
+  HName: "Epifanía del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2014-04-18
+  HName: "viernes santo"
+
+bulkload: NatHoliday
+  Holiday: 2014-05-01
+  HName: "Fiesta del trabajo"
+
+bulkload: NatHoliday
+  Holiday: 2014-08-15
+  HName: "Asunción de la Virgen"
+
+bulkload: NatHoliday
+  Holiday: 2014-11-01
+  HName: "Todos los santos"
+
+bulkload: NatHoliday
+  Holiday: 2014-12-06
+  HName: "Dia de la constitucion"
+
+bulkload: NatHoliday
+  Holiday: 2014-12-08
+  HName: "Inmaculada concepción"
+
+bulkload: NatHoliday
+  Holiday: 2014-12-25
+  HName: "Navidad"
+
+bulkload: NatHoliday
+  Holiday: 2015-01-01
+  HName: "Año Nuevo"
+
+bulkload: NatHoliday
+  Holiday: 2015-01-06
+  HName: "Epifania del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2015-04-03
+  HName: "Viernes Santo"
+
+bulkload: NatHoliday
+  Holiday: 2015-05-01
+  HName: "Fiesta del Trabajo"
+
+bulkload: NatHoliday
+  Holiday: 2015-08-15
+  HName: "Asuncion de la Virgen"
+
+bulkload: NatHoliday
+  Holiday: 2015-10-12
+  HName: "Fiesta Nacional de España"
+
+bulkload: NatHoliday
+  Holiday: 2015-12-08
+  HName: "La Inmaculada Concepcion"
+
+bulkload: NatHoliday
+  Holiday: 2015-12-25
+  HName: "Navidad"
+
+bulkload: NatHoliday
+  Holiday: 2016-01-01
+  HName: "Año nuevo"
+
+bulkload: NatHoliday
+  Holiday: 2016-01-06
+  HName: "Epifania del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2016-03-25
+  HName: "Viernes Santo"
+
+bulkload: NatHoliday
+  Holiday: 2016-08-15
+  HName: "Asuncion de la Virgen"
+
+bulkload: NatHoliday
+  Holiday: 2016-10-12
+  HName: "Fiesta Nacional de España"
+
+bulkload: NatHoliday
+  Holiday: 2016-11-01
+  HName: "Todos los Santos"
+
+bulkload: NatHoliday
+  Holiday: 2016-12-06
+  HName: "Dia de la Constitucion"
+
+bulkload: NatHoliday
+  Holiday: 2016-12-08
+  HName: "La Inmaculada Concepcion"
+
+bulkload: NatHoliday
+  Holiday: 2017-01-06
+  HName: "Epifania del Señor"
+
+bulkload: NatHoliday
+  Holiday: 2017-04-14
+  HName: "Viernes Santo"
+
+bulkload: NatHoliday
+  Holiday: 2017-05-01
+  HName: "Fiesta del Trabajo"
+
+bulkload: NatHoliday
+  Holiday: 2017-08-15
+  HName: "Asunciion de la Virgen"
+
+bulkload: NatHoliday
+  Holiday: 2017-10-12
+  HName: "Fiesta Nacional de España"
+
+bulkload: NatHoliday
+  Holiday: 2017-11-01
+  HName: "Dia de Todos los Santos"
+
+bulkload: NatHoliday
+  Holiday: 2017-12-06
+  HName: "Dia de la Constitucion"
+
+bulkload: NatHoliday
+  Holiday: 2017-12-08
+  HName: "La Inmaculada Concepcion"
+
+bulkload: NatHoliday
+  Holiday: 2017-12-25
+  HName: "Epifania del Señor"
+

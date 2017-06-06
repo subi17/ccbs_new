@@ -1,0 +1,28 @@
+bulkload: Campaign
+  Campaign: "PREACT10"
+  CaName: "Preactivated prepaid pos"
+  FromDate: 2007-11-01
+  ToDate: 2054-12-31
+  Brand: "1"
+
+bulkload: Campaign
+  Campaign: "TOPUP20"
+  CaName: "Initial Top up"
+  FromDate: 2006-11-01
+  ToDate: 2010-12-31
+  Brand: "1"
+
+bulkload: Campaign
+  Campaign: "TOPUPSIM"
+  CaName: "Initial topup for only sim orders"
+  FromDate: 2008-01-01
+  ToDate: 2049-12-31
+  Brand: "1"
+
+bulkload: Campaign
+  Campaign: "XMASGIFT"
+  CaName: "Gift 2007"
+  FromDate: 2007-11-01
+  ToDate: 2007-12-31
+  Brand: "1"
+

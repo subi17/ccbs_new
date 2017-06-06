@@ -731,6 +731,30 @@
 1 "" 2 "Nacionals" 0 "CONT26VOICE_B" "1" 01/02/17 31/12/49
 1 "" 3 "Nazionalak" 0 "CONT26VOICE_B" "1" 01/02/17 31/12/49
 1 "" 5 "National" 0 "CONT26VOICE_B" "1" 01/02/17 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONT27CF_A" "1" 18/04/17 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT27CF_A" "1" 18/04/17 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT27CF_A" "1" 18/04/17 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT27CF_A" "1" 18/04/17 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONT27CF_B" "1" 18/04/17 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT27CF_B" "1" 18/04/17 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT27CF_B" "1" 18/04/17 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT27CF_B" "1" 18/04/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONT27DISC" "1" 18/04/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONT27DISC" "1" 18/04/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONT27DISC" "1" 18/04/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONT27DISC" "1" 18/04/17 31/12/49
+1 "" 1 "La Infinita 2 GB DTO." 0 "CONT27MF" "1" 18/04/17 31/12/49
+1 "" 2 "La Infinita 2 GB DTO." 0 "CONT27MF" "1" 18/04/17 31/12/49
+1 "" 3 "La Infinita 2 GB DTO." 0 "CONT27MF" "1" 18/04/17 31/12/49
+1 "" 5 "La Infinita 2 GB DTO." 0 "CONT27MF" "1" 18/04/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONT27VOICE_A" "1" 18/04/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONT27VOICE_A" "1" 18/04/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT27VOICE_A" "1" 18/04/17 31/12/49
+1 "" 5 "National" 0 "CONT27VOICE_A" "1" 18/04/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONT27VOICE_B" "1" 18/04/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONT27VOICE_B" "1" 18/04/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT27VOICE_B" "1" 18/04/17 31/12/49
+1 "" 5 "National" 0 "CONT27VOICE_B" "1" 18/04/17 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONT8DISC" "1" 01/12/12 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONT8DISC" "1" 01/12/12 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT8DISC" "1" 01/12/12 31/12/49
@@ -874,6 +898,10 @@
 1 "" 2 "Internet" 0 "CONTDATA26" "1" 01/02/17 31/12/49
 1 "" 3 "Internet" 0 "CONTDATA26" "1" 01/02/17 31/12/49
 1 "" 5 "Internet" 0 "CONTDATA26" "1" 01/02/17 31/12/49
+1 "" 1 "Internet" 0 "CONTDATA27" "1" 18/04/17 31/12/49
+1 "" 2 "Internet" 0 "CONTDATA27" "1" 18/04/17 31/12/49
+1 "" 3 "Internet" 0 "CONTDATA27" "1" 18/04/17 31/12/49
+1 "" 5 "Internet" 0 "CONTDATA27" "1" 18/04/17 31/12/49
 1 "" 1 "Internet para Llevar 8" 0 "CONTDATA3" "1" 01/04/12 31/12/49
 1 "" 1 "Datos" 0 "CONTDATA3" "1" 01/01/10 31/03/12
 1 "" 2 "Internet para Llevar 8" 0 "CONTDATA3" "1" 01/04/12 31/12/49
@@ -1368,6 +1396,10 @@
 1 "" 2 "Internet" 0 "CONTSFDATA14" "1" 01/10/13 31/12/49
 1 "" 3 "Internet" 0 "CONTSFDATA14" "1" 01/10/13 31/12/49
 1 "" 5 "Internet" 0 "CONTSFDATA14" "1" 01/10/13 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONVDISC" "1" 01/04/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONVDISC" "1" 01/04/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONVDISC" "1" 01/04/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONVDISC" "1" 01/04/17 31/12/49
 1 "" 1 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
 1 "" 2 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
 1 "" 3 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
@@ -1473,6 +1505,22 @@
 1 "" 3 "Pago de terminal" 0 "DESCONTADO" "1" 27/11/12 31/12/49
 1 "" 4 "Pago de terminal" 0 "DESCONTADO" "1" 27/11/12 31/12/49
 1 "" 5 "Handset payment" 0 "DESCONTADO" "1" 27/11/12 31/12/49
+1 "" 1 "Descuento línea adicional" 0 "DISCCONT10" "1" 05/04/17 31/12/49
+1 "" 2 "Descompte per línea adicional" 0 "DISCCONT10" "1" 05/04/17 31/12/17
+1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT10" "1" 05/04/17 31/12/49
+1 "" 5 "Additional line discount" 0 "DISCCONT10" "1" 05/04/17 31/12/49
+1 "" 1 "Descuento línea adicional" 0 "DISCCONT15" "1" 05/04/17 31/12/49
+1 "" 2 "Descompte per línea adicional" 0 "DISCCONT15" "1" 05/04/17 31/12/49
+1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT15" "1" 05/04/17 31/12/49
+1 "" 5 "Additional line discount" 0 "DISCCONT15" "1" 05/04/17 31/12/49
+1 "" 1 "Descuento línea adicional" 0 "DISCCONT25" "1" 05/04/17 31/12/49
+1 "" 2 "Descompte per línea adicional" 0 "DISCCONT25" "1" 05/04/17 31/12/49
+1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT25" "1" 05/04/17 31/12/49
+1 "" 5 "Additional line discount" 0 "DISCCONT25" "1" 05/04/17 31/12/49
+1 "" 1 "Descuento línea adicional" 0 "DISCCONT26" "1" 05/04/17 31/12/49
+1 "" 2 "Descompte per línea adicional" 0 "DISCCONT26" "1" 05/04/17 31/12/49
+1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT26" "1" 05/04/17 31/12/49
+1 "" 5 "Additional line discount" 0 "DISCCONT26" "1" 05/04/17 31/12/49
 1 "" 1 "Descuento promoción" 0 "DISCFH300" "1" 01/11/16 31/12/54
 1 "" 2 "Descompte promoció" 0 "DISCFH300" "1" 01/11/16 31/12/54
 1 "" 3 "Promozio-deskontua" 0 "DISCFH300" "1" 01/11/16 31/12/54
@@ -1481,10 +1529,18 @@
 1 "" 2 "Descompte promoció Fibra 300" 0 "DISCFH3002P" "1" 01/02/17 31/12/49
 1 "" 3 "Promozio-deskontua Fibra 300" 0 "DISCFH3002P" "1" 01/02/17 31/12/49
 1 "" 5 "Promotional discount Fiber 300" 0 "DISCFH3002P" "1" 01/02/17 31/12/49
+1 "" 1 "Descuento promoción Fibra 300" 0 "DISCFH3002PDWN" "1" 02/05/17 31/12/49
+1 "" 2 "Descompte promoció Fibra 300" 0 "DISCFH3002PDWN" "1" 02/05/17 31/12/49
+1 "" 3 "Promozio-deskontua Fibra 300" 0 "DISCFH3002PDWN" "1" 02/05/17 31/12/49
+1 "" 5 "Promotional discount Fiber 300" 0 "DISCFH3002PDWN" "1" 02/05/17 31/12/49
 1 "" 1 "Descuento promoción Fibra 300" 0 "DISCFH300P" "1" 01/02/17 31/12/49
 1 "" 2 "Descompte promoció Fibra 300" 0 "DISCFH300P" "1" 01/02/17 31/12/49
 1 "" 3 "Promozio-deskontua Fibra 300" 0 "DISCFH300P" "1" 01/02/17 31/12/49
 1 "" 5 "Promotional discount Fiber 300" 0 "DISCFH300P" "1" 01/02/17 31/12/49
+1 "" 1 "Descuento promoción Fibra 300" 0 "DISCFH300PDWN" "1" 02/05/17 31/12/49
+1 "" 2 "Descompte promoció Fibra 300" 0 "DISCFH300PDWN" "1" 02/05/17 31/12/49
+1 "" 3 "Promozio-deskontua Fibra 300" 0 "DISCFH300PDWN" "1" 02/05/17 31/12/49
+1 "" 5 "Promotional discount Fiber 300" 0 "DISCFH300PDWN" "1" 02/05/17 31/12/49
 1 "" 1 "Descuento promoción Fijo" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
 1 "" 2 "Descompte promoció Fix" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoaren promozioagatiko deskontua" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
@@ -1622,9 +1678,6 @@
 1 "" 2 "Internet" 0 "DUB3" "1" 01/12/12 31/12/49
 1 "" 3 "Internet" 0 "DUB3" "1" 01/12/12 31/12/49
 1 "" 5 "Internet" 0 "DUB3" "1" 01/12/12 31/12/49
-1 "" 2 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
-1 "" 3 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
-1 "" 5 "LA DEL CUATRO" 0 "DUBMF" "1" 01/02/11 31/12/49
 1 "" 1 "Nacionales" 0 "F10100003" "1" 01/11/16 31/12/49
 1 "" 2 "Nacionals" 0 "F10100003" "1" 01/11/16 31/12/49
 1 "" 3 "Nazionalak" 0 "F10100003" "1" 01/11/16 31/12/49
@@ -1645,6 +1698,14 @@
 1 "" 2 "Números Gratuïts" 0 "F15100027" "1" 01/11/16 31/12/49
 1 "" 3 "Doako zenbakiak" 0 "F15100027" "1" 01/11/16 31/12/49
 1 "" 5 "Free Numbers" 0 "F15100027" "1" 01/11/16 31/12/49
+1 "" 1 "Coste fijo por apuesta 905" 0 "F905WOVAT" "1" 01/04/17 31/12/49
+1 "" 2 "Cost fix per aposta 905" 0 "F905WOVAT" "1" 01/04/17 31/12/49
+1 "" 3 "905 apustuen kostu finkoa" 0 "F905WOVAT" "1" 01/04/17 31/12/49
+1 "" 5 "Fixed rate per 905 bet" 0 "F905WOVAT" "1" 01/04/17 31/12/49
+1 "" 1 "Llamada a servicio apuesta 905" 0 "F905WVAT" "1" 01/04/17 31/12/49
+1 "" 2 "Trucada a servei aposta 905" 0 "F905WVAT" "1" 01/04/17 31/12/49
+1 "" 3 "905 apustu-zerbitzurako deia" 0 "F905WVAT" "1" 01/04/17 31/12/49
+1 "" 5 "Call to 905 betting service" 0 "F905WVAT" "1" 01/04/17 31/12/49
 1 "" 1 "Atención al cliente" 0 "FCCYOIGO" "1" 01/11/16 31/12/49
 1 "" 2 "Atenció al client" 0 "FCCYOIGO" "1" 01/11/16 31/12/49
 1 "" 3 "Bezeroarentzako arreta-zerbitzua" 0 "FCCYOIGO" "1" 01/11/16 31/12/49
@@ -1777,6 +1838,10 @@
 1 "" 2 "Incompliment de permanència La Combinada" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 3 "La Combinada tarifaren iraunkortasun-epea urratzea" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 5 "Non-compliance with term contract on La Combinada tariff" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 1 "Contestador" 0 "FVMC" "1" 01/04/17 31/12/49
+1 "" 2 "Contestador" 0 "FVMC" "1" 01/04/17 31/12/49
+1 "" 3 "Erantzungailua" 0 "FVMC" "1" 01/04/17 31/12/49
+1 "" 5 "Answering service" 0 "FVMC" "1" 01/04/17 31/12/49
 1 "" 1 "Contestador" 0 "FVMS" "1" 01/11/16 31/12/49
 1 "" 2 "Contestador" 0 "FVMS" "1" 01/11/16 31/12/49
 1 "" 3 "Erantzungailua" 0 "FVMS" "1" 01/11/16 31/12/49
@@ -3310,6 +3375,96 @@
 1 "" 3 "Alcatel 2008G" 0 "G0000320" "1" 22/02/17 31/12/49
 1 "" 4 "Alcatel 2008G" 0 "G0000320" "1" 22/02/17 31/12/49
 1 "" 5 "Alcatel 2008G" 0 "G0000320" "1" 22/02/17 31/12/49
+1 "" 1 "Huawei P10 Lite" 0 "G0000321" "1" 27/03/17 31/12/49
+1 "" 2 "Huawei P10 Lite" 0 "G0000321" "1" 27/03/17 31/12/49
+1 "" 3 "Huawei P10 Lite" 0 "G0000321" "1" 27/03/17 31/12/49
+1 "" 4 "Huawei P10 Lite" 0 "G0000321" "1" 27/03/17 31/12/49
+1 "" 5 "Huawei P10 Lite" 0 "G0000321" "1" 27/03/17 31/12/49
+1 "" 1 "Huawei P10 Plus" 0 "G0000322" "1" 27/03/17 31/12/49
+1 "" 2 "Huawei P10 Plus" 0 "G0000322" "1" 27/03/17 31/12/49
+1 "" 3 "Huawei P10 Plus" 0 "G0000322" "1" 27/03/17 31/12/49
+1 "" 4 "Huawei P10 Plus" 0 "G0000322" "1" 27/03/17 31/12/49
+1 "" 5 "Huawei P10 Plus" 0 "G0000322" "1" 27/03/17 31/12/49
+1 "" 1 "LG G6" 0 "G0000323" "1" 27/03/17 31/12/49
+1 "" 2 "LG G6" 0 "G0000323" "1" 27/03/17 31/12/49
+1 "" 3 "LG G6" 0 "G0000323" "1" 27/03/17 31/12/49
+1 "" 4 "LG G6" 0 "G0000323" "1" 27/03/17 31/12/49
+1 "" 5 "LG G6" 0 "G0000323" "1" 27/03/17 31/12/49
+1 "" 1 "LG K10 2017" 0 "G0000324" "1" 27/03/17 31/12/49
+1 "" 2 "LG K10 2017" 0 "G0000324" "1" 27/03/17 31/12/49
+1 "" 3 "LG K10 2017" 0 "G0000324" "1" 27/03/17 31/12/49
+1 "" 4 "LG K10 2017" 0 "G0000324" "1" 27/03/17 31/12/49
+1 "" 5 "LG K10 2017" 0 "G0000324" "1" 27/03/17 31/12/49
+1 "" 1 "Samsung Galaxy S8" 0 "G0000325" "1" 27/03/17 31/12/49
+1 "" 2 "Samsung Galaxy S8" 0 "G0000325" "1" 27/03/17 31/12/49
+1 "" 3 "Samsung Galaxy S8" 0 "G0000325" "1" 27/03/17 31/12/49
+1 "" 4 "Samsung Galaxy S8" 0 "G0000325" "1" 27/03/17 31/12/49
+1 "" 5 "Samsung Galaxy S8" 0 "G0000325" "1" 27/03/17 31/12/49
+1 "" 1 "Samsung Galaxy S8+" 0 "G0000326" "1" 27/03/17 31/12/49
+1 "" 2 "Samsung Galaxy S8+" 0 "G0000326" "1" 27/03/17 31/12/49
+1 "" 3 "Samsung Galaxy S8+" 0 "G0000326" "1" 27/03/17 31/12/49
+1 "" 4 "Samsung Galaxy S8+" 0 "G0000326" "1" 27/03/17 31/12/49
+1 "" 5 "Samsung Galaxy S8+" 0 "G0000326" "1" 27/03/17 31/12/49
+1 "" 1 "ZTE Blade A610" 0 "G0000327" "1" 27/03/17 31/12/49
+1 "" 2 "ZTE Blade A610" 0 "G0000327" "1" 27/03/17 31/12/49
+1 "" 3 "ZTE Blade A610" 0 "G0000327" "1" 27/03/17 31/12/49
+1 "" 4 "ZTE Blade A610" 0 "G0000327" "1" 27/03/17 31/12/49
+1 "" 5 "ZTE Blade A610" 0 "G0000327" "1" 27/03/17 31/12/49
+1 "" 1 "iPhone SE 32 GB" 0 "G0000328" "1" 28/03/17 31/12/49
+1 "" 2 "iPhone SE 32 GB" 0 "G0000328" "1" 28/03/17 31/12/49
+1 "" 3 "iPhone SE 32 GB" 0 "G0000328" "1" 28/03/17 31/12/49
+1 "" 4 "iPhone SE 32 GB" 0 "G0000328" "1" 28/03/17 31/12/49
+1 "" 5 "iPhone SE 32 GB" 0 "G0000328" "1" 28/03/17 31/12/49
+1 "" 1 "iPhone SE 128 GB" 0 "G0000329" "1" 30/03/17 31/12/49
+1 "" 2 "iPhone SE 128 GB" 0 "G0000329" "1" 30/03/17 31/12/49
+1 "" 3 "iPhone SE 128 GB" 0 "G0000329" "1" 30/03/17 31/12/49
+1 "" 4 "iPhone SE 128 GB" 0 "G0000329" "1" 30/03/17 31/12/49
+1 "" 5 "iPhone SE 128 GB" 0 "G0000329" "1" 30/03/17 31/12/49
+1 "" 1 "LG G6 + TV" 0 "G0000330" "1" 05/04/17 31/12/49
+1 "" 2 "LG G6 + TV" 0 "G0000330" "1" 05/04/17 31/12/49
+1 "" 3 "LG G6 + TV" 0 "G0000330" "1" 05/04/17 31/12/49
+1 "" 4 "LG G6 + TV" 0 "G0000330" "1" 05/04/17 31/12/49
+1 "" 5 "LG G6 + TV" 0 "G0000330" "1" 05/04/17 31/12/49
+1 "" 1 "Bq Aquaris X" 0 "G0000331" "1" 26/04/17 31/12/49
+1 "" 2 "Bq Aquaris X" 0 "G0000331" "1" 26/04/17 31/12/49
+1 "" 3 "Bq Aquaris X" 0 "G0000331" "1" 26/04/17 31/12/49
+1 "" 4 "Bq Aquaris X" 0 "G0000331" "1" 26/04/17 31/12/49
+1 "" 5 "Bq Aquaris X" 0 "G0000331" "1" 26/04/17 31/12/49
+1 "" 1 "Sony Xperia XA1" 0 "G0000332" "1" 26/04/17 31/12/49
+1 "" 2 "Sony Xperia XA1" 0 "G0000332" "1" 26/04/17 31/12/49
+1 "" 3 "Sony Xperia XA1" 0 "G0000332" "1" 26/04/17 31/12/49
+1 "" 4 "Sony Xperia XA1" 0 "G0000332" "1" 26/04/17 31/12/49
+1 "" 5 "Sony Xperia XA1" 0 "G0000332" "1" 26/04/17 31/12/49
+1 "" 1 "ZTE Blade V8" 0 "G0000333" "1" 28/04/17 31/12/49
+1 "" 2 "ZTE Blade V8" 0 "G0000333" "1" 28/04/17 31/12/49
+1 "" 3 "ZTE Blade V8" 0 "G0000333" "1" 28/04/17 31/12/49
+1 "" 4 "ZTE Blade V8" 0 "G0000333" "1" 28/04/17 31/12/49
+1 "" 5 "ZTE Blade V8" 0 "G0000333" "1" 28/04/17 31/12/49
+1 "" 1 "Honor 6X" 0 "G0000334" "1" 24/05/17 31/12/49
+1 "" 2 "Honor 6X" 0 "G0000334" "1" 24/05/17 31/12/49
+1 "" 3 "Honor 6X" 0 "G0000334" "1" 24/05/17 31/12/49
+1 "" 4 "Honor 6X" 0 "G0000334" "1" 24/05/17 31/12/49
+1 "" 5 "Honor 6X" 0 "G0000334" "1" 24/05/17 31/12/49
+1 "" 1 "Sony Xperia L1" 0 "G0000335" "1" 24/05/17 31/12/49
+1 "" 2 "Sony Xperia L1" 0 "G0000335" "1" 24/05/17 31/12/49
+1 "" 3 "Sony Xperia L1" 0 "G0000335" "1" 24/05/17 31/12/49
+1 "" 4 "Sony Xperia L1" 0 "G0000335" "1" 24/05/17 31/12/49
+1 "" 5 "Sony Xperia L1" 0 "G0000335" "1" 24/05/17 31/12/49
+1 "" 1 "Wileyfox Swift 2" 0 "G0000336" "1" 24/05/17 31/12/49
+1 "" 2 "Wileyfox Swift 2" 0 "G0000336" "1" 24/05/17 31/12/49
+1 "" 3 "Wileyfox Swift 2" 0 "G0000336" "1" 24/05/17 31/12/49
+1 "" 4 "Wileyfox Swift 2" 0 "G0000336" "1" 24/05/17 31/12/49
+1 "" 5 "Wileyfox Swift 2" 0 "G0000336" "1" 24/05/17 31/12/49
+1 "" 1 "Wolder Wiam 27" 0 "G0000337" "1" 24/05/17 31/12/49
+1 "" 2 "Wolder Wiam 27" 0 "G0000337" "1" 24/05/17 31/12/49
+1 "" 3 "Wolder Wiam 27" 0 "G0000337" "1" 24/05/17 31/12/49
+1 "" 4 "Wolder Wiam 27" 0 "G0000337" "1" 24/05/17 31/12/49
+1 "" 5 "Wolder Wiam 27" 0 "G0000337" "1" 24/05/17 31/12/49
+1 "" 1 "Wolder Wiam 65 Lite" 0 "G0000338" "1" 24/05/17 31/12/49
+1 "" 2 "Wolder Wiam 65 Lite" 0 "G0000338" "1" 24/05/17 31/12/49
+1 "" 3 "Wolder Wiam 65 Lite" 0 "G0000338" "1" 24/05/17 31/12/49
+1 "" 4 "Wolder Wiam 65 Lite" 0 "G0000338" "1" 24/05/17 31/12/49
+1 "" 5 "Wolder Wiam 65 Lite" 0 "G0000338" "1" 24/05/17 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -4477,6 +4632,16 @@
 1 "" 5 "Sagem my600X Black" 0 "P027M60N2" "1" 01/01/06 31/12/49
 1 "" 1 "Sagem my901C Azul" 0 "P027M90A2" "1" 01/01/06 31/12/49
 1 "" 5 "Sagem my901C Blue" 0 "P027M90A2" "1" 01/01/06 31/12/49
+1 "" 1 "LG K10 2017 Titan" 0 "P030107G2" "1" 27/03/17 31/12/49
+1 "" 2 "LG K10 2017 Titan" 0 "P030107G2" "1" 27/03/17 31/12/49
+1 "" 3 "LG K10 2017 Titan" 0 "P030107G2" "1" 27/03/17 31/12/49
+1 "" 4 "LG K10 2017 Titan" 0 "P030107G2" "1" 27/03/17 31/12/49
+1 "" 5 "LG K10 2017 Titan" 0 "P030107G2" "1" 27/03/17 31/12/49
+1 "" 1 "LG K10 2017 Titan con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 2 "LG K10 2017 Titan con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 3 "LG K10 2017 Titan con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 4 "LG K10 2017 Titan con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 5 "LG K10 2017 Titan with Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
 1 "" 1 "LG G2 Negro+ LGL3 II negro" 0 "P0302N3N2" "1" 21/01/14 31/12/49
 1 "" 2 "LG G2 Negro+ LGL3 II negro" 0 "P0302N3N2" "1" 21/01/14 31/12/49
 1 "" 3 "LG G2 Negro+ LGL3 II negro" 0 "P0302N3N2" "1" 21/01/14 31/12/49
@@ -4810,6 +4975,16 @@
 1 "" 3 "LG G5 Plata" 0 "P030LG5S2" "1" 22/06/16 31/12/49
 1 "" 4 "LG G5 Plata" 0 "P030LG5S2" "1" 22/06/16 31/12/49
 1 "" 5 "LG G5 Silver" 0 "P030LG5S2" "1" 22/06/16 31/12/49
+1 "" 1 "LG G6 Plata" 0 "P030LG6G2" "1" 27/03/17 31/12/49
+1 "" 2 "LG G6 Plata" 0 "P030LG6G2" "1" 27/03/17 31/12/49
+1 "" 3 "LG G6 Plata" 0 "P030LG6G2" "1" 27/03/17 31/12/49
+1 "" 4 "LG G6 Plata" 0 "P030LG6G2" "1" 27/03/17 31/12/49
+1 "" 5 "LG G6 Ice-Platinum" 0 "P030LG6G2" "1" 27/03/17 31/12/49
+1 "" 1 "LG G6 Negro" 0 "P030LG6N2" "1" 19/04/17 31/12/49
+1 "" 2 "LG G6 Negro" 0 "P030LG6N2" "1" 19/04/17 31/12/49
+1 "" 3 "LG G6 Negro" 0 "P030LG6N2" "1" 19/04/17 31/12/49
+1 "" 4 "LG G6 Negro" 0 "P030LG6N2" "1" 19/04/17 31/12/49
+1 "" 5 "LG G6 Black" 0 "P030LG6N2" "1" 19/04/17 31/12/49
 1 "" 1 "LG K8 4G Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
 1 "" 2 "LG K8 Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
 1 "" 3 "LG K8 Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
@@ -5462,6 +5637,26 @@
 1 "" 3 "Samsung Galaxy S7 Rosa" 0 "P034GS7P2" "1" 25/11/16 31/12/49
 1 "" 4 "Samsung Galaxy S7 Rosa" 0 "P034GS7P2" "1" 25/11/16 31/12/49
 1 "" 5 "Samsung Galaxy S7 Pink" 0 "P034GS7P2" "1" 25/11/16 31/12/49
+1 "" 1 "Samsung Galaxy S7 Plata" 0 "P034GS7S2" "1" 15/03/17 31/12/49
+1 "" 2 "Samsung Galaxy S7 Plata" 0 "P034GS7S2" "1" 15/03/17 31/12/49
+1 "" 3 "Samsung Galaxy S7 Plata" 0 "P034GS7S2" "1" 15/03/17 31/12/49
+1 "" 4 "Samsung Galaxy S7 Plata" 0 "P034GS7S2" "1" 15/03/17 31/12/49
+1 "" 5 "Samsung Galaxy S7 Silver" 0 "P034GS7S2" "1" 15/03/17 31/12/49
+1 "" 1 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8G2" "1" 27/03/17 31/12/49
+1 "" 2 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8G2" "1" 27/03/17 31/12/49
+1 "" 3 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8G2" "1" 27/03/17 31/12/49
+1 "" 4 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8G2" "1" 27/03/17 31/12/49
+1 "" 5 "Samsung Galaxy S8 Orchid grey" 0 "P034GS8G2" "1" 27/03/17 31/12/49
+1 "" 1 "Samsung Galaxy S8 Negro" 0 "P034GS8N2" "1" 27/03/17 31/12/49
+1 "" 2 "Samsung Galaxy S8 Negro" 0 "P034GS8N2" "1" 27/03/17 31/12/49
+1 "" 3 "Samsung Galaxy S8 Negro" 0 "P034GS8N2" "1" 27/03/17 31/12/49
+1 "" 4 "Samsung Galaxy S8 Negro" 0 "P034GS8N2" "1" 27/03/17 31/12/49
+1 "" 5 "Samsung Galaxy S8 Black" 0 "P034GS8N2" "1" 27/03/17 31/12/49
+1 "" 1 "Samsung Galaxy S8 Plata" 0 "P034GS8S2" "1" 27/03/17 31/12/49
+1 "" 2 "Samsung Galaxy S8 Plata" 0 "P034GS8S2" "1" 27/03/17 31/12/49
+1 "" 3 "Samsung Galaxy S8 Plata" 0 "P034GS8S2" "1" 27/03/17 31/12/49
+1 "" 4 "Samsung Galaxy S8 Plata" 0 "P034GS8S2" "1" 27/03/17 31/12/49
+1 "" 5 "Samsung Galaxy S8 Silver" 0 "P034GS8S2" "1" 27/03/17 31/12/49
 1 "" 1 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
 1 "" 2 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
 1 "" 3 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
@@ -5798,6 +5993,21 @@
 1 "" 3 "Samsung Wave II" 0 "P034S85N2" "1" 23/12/10 31/12/49
 1 "" 4 "Samsung Wave II" 0 "P034S85N2" "1" 23/12/10 31/12/49
 1 "" 5 "Samsung Wave II" 0 "P034S85N2" "1" 23/12/10 31/12/49
+1 "" 1 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
+1 "" 2 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
+1 "" 3 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
+1 "" 4 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
+1 "" 5 "Samsung Galaxy S8+ Orchid grey" 0 "P034S8PG2" "1" 27/03/17 31/12/49
+1 "" 1 "Samsung Galaxy S8+ Negro" 0 "P034S8PN2" "1" 27/03/17 31/12/49
+1 "" 2 "Samsung Galaxy S8+ Negro" 0 "P034S8PN2" "1" 27/03/17 31/12/49
+1 "" 3 "Samsung Galaxy S8+ Negro" 0 "P034S8PN2" "1" 27/03/17 31/12/49
+1 "" 4 "Samsung Galaxy S8+ Negro" 0 "P034S8PN2" "1" 27/03/17 31/12/49
+1 "" 5 "Samsung Galaxy S8+ Black" 0 "P034S8PN2" "1" 27/03/17 31/12/49
+1 "" 1 "Samsung Galaxy S8+ Plata" 0 "P034S8PS2" "1" 27/03/17 31/12/49
+1 "" 2 "Samsung Galaxy S8+ Plata" 0 "P034S8PS2" "1" 27/03/17 31/12/49
+1 "" 3 "Samsung Galaxy S8+ Plata" 0 "P034S8PS2" "1" 27/03/17 31/12/49
+1 "" 4 "Samsung Galaxy S8+ Plata" 0 "P034S8PS2" "1" 27/03/17 31/12/49
+1 "" 5 "Samsung Galaxy S8+ Silver" 0 "P034S8PS2" "1" 27/03/17 31/12/49
 1 "" 1 "Samsung Galaxy Tab 2 10.1 Blanca" 0 "P034T21W2" "1" 29/11/12 31/12/49
 1 "" 2 "Samsung Galaxy Tab 2 7.0" 0 "P034T21W2" "1" 29/11/12 31/12/49
 1 "" 3 "Samsung Galaxy Tab 2 7.0" 0 "P034T21W2" "1" 29/11/12 31/12/49
@@ -5925,6 +6135,21 @@
 1 "" 3 "Sony Xperia U Negro con PSP" 0 "P037PPUN2" "1" 10/12/12 31/12/49
 1 "" 4 "Sony Xperia U Negro con PSP" 0 "P037PPUN2" "1" 10/12/12 31/12/49
 1 "" 5 "Sony Xperia U Black con PSP" 0 "P037PPUN2" "1" 10/12/12 31/12/49
+1 "" 1 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
+1 "" 2 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
+1 "" 3 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
+1 "" 4 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
+1 "" 5 "Sony Xperia XA1 Gold" 0 "P037XA1D2" "1" 26/05/17 31/12/49
+1 "" 1 "Sony Xperia XA1 Negro" 0 "P037XA1N2" "1" 26/04/17 31/12/49
+1 "" 2 "Sony Xperia XA1 Negro" 0 "P037XA1N2" "1" 26/04/17 31/12/49
+1 "" 3 "Sony Xperia XA1 Negro" 0 "P037XA1N2" "1" 26/04/17 31/12/49
+1 "" 4 "Sony Xperia XA1 Negro" 0 "P037XA1N2" "1" 26/04/17 31/12/49
+1 "" 5 "Sony Xperia XA1 Black" 0 "P037XA1N2" "1" 26/04/17 31/12/49
+1 "" 1 "Sony Xperia XA1 Blanco" 0 "P037XA1W2" "1" 26/04/17 31/12/49
+1 "" 2 "Sony Xperia XA1 Blanco" 0 "P037XA1W2" "1" 26/04/17 31/12/49
+1 "" 3 "Sony Xperia XA1 Blanco" 0 "P037XA1W2" "1" 26/04/17 31/12/49
+1 "" 4 "Sony Xperia XA1 Blanco" 0 "P037XA1W2" "1" 26/04/17 31/12/49
+1 "" 5 "Sony Xperia XA1 White" 0 "P037XA1W2" "1" 26/04/17 31/12/49
 1 "" 1 "Sony Xperia C5 Ultra Dual Negro" 0 "P037XC5N2" "1" 04/01/16 31/12/49
 1 "" 2 "Sony Xperia C5 Ultra Dual Negro" 0 "P037XC5N2" "1" 04/01/16 31/12/49
 1 "" 3 "Sony Xperia C5 Ultra Dual Negro" 0 "P037XC5N2" "1" 04/01/16 31/12/49
@@ -5945,6 +6170,11 @@
 1 "" 3 "Sony Xperia E1 Blanco" 0 "P037XE1W2" "1" 27/10/14 31/12/49
 1 "" 4 "Sony Xperia E1 Blanco" 0 "P037XE1W2" "1" 27/10/14 31/12/49
 1 "" 5 "Sony Xperia E1 White" 0 "P037XE1W2" "1" 27/10/14 31/12/49
+1 "" 1 "Sony Xperia L1 Blanco" 0 "P037XL1W2" "1" 24/05/17 31/12/49
+1 "" 2 "Sony Xperia L1 Blanco" 0 "P037XL1W2" "1" 24/05/17 31/12/49
+1 "" 3 "Sony Xperia L1 Blanco" 0 "P037XL1W2" "1" 24/05/17 31/12/49
+1 "" 4 "Sony Xperia L1 Blanco" 0 "P037XL1W2" "1" 24/05/17 31/12/49
+1 "" 5 "Sony Xperia L1 White" 0 "P037XL1W2" "1" 24/05/17 31/12/49
 1 "" 1 "Sony Xperia M2 Blanco" 0 "P037XM2W2" "1" 26/06/14 31/12/49
 1 "" 2 "Sony Xperia M2 Blanco" 0 "P037XM2W2" "1" 26/06/14 31/12/49
 1 "" 3 "Sony Xperia M2 Blanco" 0 "P037XM2W2" "1" 26/06/14 31/12/49
@@ -6270,6 +6500,16 @@
 1 "" 1 "Toshiba Portégé G810" 0 "P040G81N4" "1" 11/03/09 31/12/49
 1 "" 5 "Toshiba Portégé G810" 0 "P040G81N4" "1" 11/03/09 31/12/49
 1 "" 5 "Toshiba TS705 Black" 0 "P040T75G2" "1" 01/01/06 31/12/49
+1 "" 1 "Huawei P10 Plus Dorado" 0 "P04310PD2" "1" 06/04/17 31/12/49
+1 "" 2 "Huawei P10 Plus Dorado" 0 "P04310PD2" "1" 06/04/17 31/12/49
+1 "" 3 "Huawei P10 Plus Dorado" 0 "P04310PD2" "1" 06/04/17 31/12/49
+1 "" 4 "Huawei P10 Plus Dorado" 0 "P04310PD2" "1" 06/04/17 31/12/49
+1 "" 5 "Huawei P10 Plus Gold" 0 "P04310PD2" "1" 06/04/17 31/12/49
+1 "" 1 "Huawei P10 Plus Negro" 0 "P04310PN2" "1" 27/03/17 31/12/49
+1 "" 2 "Huawei P10 Plus Negro" 0 "P04310PN2" "1" 27/03/17 31/12/49
+1 "" 3 "Huawei P10 Plus Negro" 0 "P04310PN2" "1" 27/03/17 31/12/49
+1 "" 4 "Huawei P10 Plus Negro" 0 "P04310PN2" "1" 27/03/17 31/12/49
+1 "" 5 "Huawei P10 Plus Black" 0 "P04310PN2" "1" 27/03/17 31/12/49
 1 "" 1 "Modem USB Huawei E3131S-2 Negro" 0 "P043313N2" "1" 30/07/13 31/12/49
 1 "" 2 "Modem USB Huawei E3131S-2 Negro" 0 "P043313N2" "1" 30/07/13 31/12/49
 1 "" 3 "Modem USB Huawei E3131S-2 Negro" 0 "P043313N2" "1" 30/07/13 31/12/49
@@ -6320,6 +6560,11 @@
 1 "" 3 "Huawei U8800 Blanco" 0 "P043880W2" "1" 30/11/11 31/12/49
 1 "" 4 "Huawei U8800 Blanco" 0 "P043880W2" "1" 30/11/11 31/12/49
 1 "" 5 "Huawei U8800 White" 0 "P043880W2" "1" 30/11/11 31/12/49
+1 "" 1 "Huawei P8 Lite 2017 Dorado" 0 "P0438L7D2" "1" 26/04/17 31/12/49
+1 "" 2 "Huawei P8 Lite 2017 Dorado" 0 "P0438L7D2" "1" 26/04/17 31/12/49
+1 "" 3 "Huawei P8 Lite 2017 Dorado" 0 "P0438L7D2" "1" 26/04/17 31/12/49
+1 "" 4 "Huawei P8 Lite 2017 Dorado" 0 "P0438L7D2" "1" 26/04/17 31/12/49
+1 "" 5 "Huawei P8 Lite 2017 Gold" 0 "P0438L7D2" "1" 26/04/17 31/12/49
 1 "" 1 "Huawei P8 Lite 2017 Negro" 0 "P0438L7N2" "1" 22/02/17 31/12/49
 1 "" 2 "Huawei P8 Lite 2017 Negro" 0 "P0438L7N2" "1" 22/02/17 31/12/49
 1 "" 3 "Huawei P8 Lite 2017 Negro" 0 "P0438L7N2" "1" 22/02/17 31/12/49
@@ -6581,11 +6826,56 @@
 1 "" 3 "Huawei Y6 Blanco" 0 "P043HY6W2" "1" 25/09/15 31/12/49
 1 "" 4 "Huawei Y6 Blanco" 0 "P043HY6W2" "1" 25/09/15 31/12/49
 1 "" 5 "Huawei Y6 White" 0 "P043HY6W2" "1" 25/09/15 31/12/49
+1 "" 1 "Huawei P10 Lite Oro" 0 "P043L10D2" "1" 04/04/17 31/12/49
+1 "" 2 "Huawei P10 Lite Oro" 0 "P043L10D2" "1" 04/04/17 31/12/49
+1 "" 3 "Huawei P10 Lite Oro" 0 "P043L10D2" "1" 04/04/17 31/12/49
+1 "" 4 "Huawei P10 Lite Oro" 0 "P043L10D2" "1" 04/04/17 31/12/49
+1 "" 5 "Huawei P10 Lite Gold" 0 "P043L10D2" "1" 04/04/17 31/12/49
+1 "" 1 "Huawei P10 Lite Negro" 0 "P043L10N2" "1" 24/03/17 31/12/49
+1 "" 2 "Huawei P10 Lite Negro" 0 "P043L10N2" "1" 24/03/17 31/12/49
+1 "" 3 "Huawei P10 Lite Negro" 0 "P043L10N2" "1" 24/03/17 31/12/49
+1 "" 4 "Huawei P10 Lite Negro" 0 "P043L10N2" "1" 24/03/17 31/12/49
+1 "" 5 "Huawei P10 Lite Black" 0 "P043L10N2" "1" 24/03/17 31/12/49
+1 "" 1 "Huawei P10 Lite Negro con funda de regalo" 0 "P043L10NP" "1" 24/03/17 31/12/49
+1 "" 2 "Huawei P10 Lite Negro con funda de regalo" 0 "P043L10NP" "1" 24/03/17 31/12/49
+1 "" 3 "Huawei P10 Lite Negro con funda de regalo" 0 "P043L10NP" "1" 24/03/17 31/12/49
+1 "" 4 "Huawei P10 Lite Negro con funda de regalo" 0 "P043L10NP" "1" 24/03/17 31/12/49
+1 "" 5 "Huawei P10 Lite Black with cover gift" 0 "P043L10NP" "1" 24/03/17 31/12/49
+1 "" 1 "Huawei P10 Lite Blanco" 0 "P043L10W2" "1" 24/03/17 31/12/49
+1 "" 2 "Huawei P10 Lite Blanco" 0 "P043L10W2" "1" 24/03/17 31/12/49
+1 "" 3 "Huawei P10 Lite Blanco" 0 "P043L10W2" "1" 24/03/17 31/12/49
+1 "" 4 "Huawei P10 Lite Blanco" 0 "P043L10W2" "1" 24/03/17 31/12/49
+1 "" 5 "Huawei P10 Lite White" 0 "P043L10W2" "1" 24/03/17 31/12/49
+1 "" 1 "Huawei P10 Lite Blanco con funda de regalo" 0 "P043L10WP" "1" 24/03/17 31/12/49
+1 "" 2 "Huawei P10 Lite Blanco con funda de regalo" 0 "P043L10WP" "1" 24/03/17 31/12/49
+1 "" 3 "Huawei P10 Lite Blanco con funda de regalo" 0 "P043L10WP" "1" 24/03/17 31/12/49
+1 "" 4 "Huawei P10 Lite Blanco con funda de regalo" 0 "P043L10WP" "1" 24/03/17 31/12/49
+1 "" 5 "Huawei P10 Lite White with cover gift" 0 "P043L10WP" "1" 24/03/17 31/12/49
 1 "" 1 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
 1 "" 2 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
 1 "" 3 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
 1 "" 4 "Huawei Mate 9 Gris" 0 "P043MT9G2" "1" 24/11/16 31/12/49
 1 "" 5 "Huawei Mate 9 Grey" 0 "P043MT9G2" "1" 24/11/16 31/12/49
+1 "" 1 "Huawei Mate 9 Gris con accesorios de regalo" 0 "P043MT9GP" "1" 26/04/17 31/12/49
+1 "" 2 "Huawei Mate 9 Gris con accesorios de regalo" 0 "P043MT9GP" "1" 26/04/17 31/12/49
+1 "" 3 "Huawei Mate 9 Gris con accesorios de regalo" 0 "P043MT9GP" "1" 26/04/17 31/12/49
+1 "" 4 "Huawei Mate 9 Gris con accesorios de regalo" 0 "P043MT9GP" "1" 26/04/17 31/12/49
+1 "" 5 "Huawei Mate 9 Grey with accessories gift" 0 "P043MT9GP" "1" 26/04/17 31/12/49
+1 "" 1 "Huawei Mate 9 Negro" 0 "P043MT9N2" "1" 15/03/17 31/12/49
+1 "" 2 "Huawei Mate 9 Negro" 0 "P043MT9N2" "1" 15/03/17 31/12/49
+1 "" 3 "Huawei Mate 9 Negro" 0 "P043MT9N2" "1" 15/03/17 31/12/49
+1 "" 4 "Huawei Mate 9 Negro" 0 "P043MT9N2" "1" 15/03/17 31/12/49
+1 "" 5 "Huawei Mate 9 Black" 0 "P043MT9N2" "1" 15/03/17 31/12/49
+1 "" 1 "Huawei Mate 9 Blanco" 0 "P043MT9W2" "1" 15/03/17 31/12/49
+1 "" 2 "Huawei Mate 9 Blanco" 0 "P043MT9W2" "1" 15/03/17 31/12/49
+1 "" 3 "Huawei Mate 9 Blanco" 0 "P043MT9W2" "1" 15/03/17 31/12/49
+1 "" 4 "Huawei Mate 9 Blanco" 0 "P043MT9W2" "1" 15/03/17 31/12/49
+1 "" 5 "Huawei Mate 9 White" 0 "P043MT9W2" "1" 15/03/17 31/12/49
+1 "" 1 "Huawei P10 Oro" 0 "P043P10D2" "1" 24/03/17 31/12/49
+1 "" 2 "Huawei P10 Oro" 0 "P043P10D2" "1" 24/03/17 31/12/49
+1 "" 3 "Huawei P10 Oro" 0 "P043P10D2" "1" 24/03/17 31/12/49
+1 "" 4 "Huawei P10 Oro" 0 "P043P10D2" "1" 24/03/17 31/12/49
+1 "" 5 "Huawei P10 Gold" 0 "P043P10D2" "1" 24/03/17 31/12/49
 1 "" 1 "Huawei P10 Negro" 0 "P043P10N2" "1" 22/02/17 31/12/49
 1 "" 2 "Huawei P10 Negro" 0 "P043P10N2" "1" 22/02/17 31/12/49
 1 "" 3 "Huawei P10 Negro" 0 "P043P10N2" "1" 22/02/17 31/12/49
@@ -6790,6 +7080,16 @@
 1 "" 3 "Huawei Y635 Blanco" 0 "P043Y65W2" "1" 26/03/15 31/12/49
 1 "" 4 "Huawei Y635 Blanco" 0 "P043Y65W2" "1" 26/03/15 31/12/49
 1 "" 5 "Huawei Y635 White" 0 "P043Y65W2" "1" 26/03/15 31/12/49
+1 "" 1 "Honor 6X Gris" 0 "P044H6XG2" "1" 24/05/17 31/12/49
+1 "" 2 "Honor 6X Gris" 0 "P044H6XG2" "1" 24/05/17 31/12/49
+1 "" 3 "Honor 6X Gris" 0 "P044H6XG2" "1" 24/05/17 31/12/49
+1 "" 4 "Honor 6X Gris" 0 "P044H6XG2" "1" 24/05/17 31/12/49
+1 "" 5 "Honor 6X Grey" 0 "P044H6XG2" "1" 24/05/17 31/12/49
+1 "" 1 "Honor 6X Plata" 0 "P044H6XS2" "1" 24/05/17 31/12/49
+1 "" 2 "Honor 6X Plata" 0 "P044H6XS2" "1" 24/05/17 31/12/49
+1 "" 3 "Honor 6X Plata" 0 "P044H6XS2" "1" 24/05/17 31/12/49
+1 "" 4 "Honor 6X Plata" 0 "P044H6XS2" "1" 24/05/17 31/12/49
+1 "" 5 "Honor 6X Silver" 0 "P044H6XS2" "1" 24/05/17 31/12/49
 1 "" 1 "Honor 5x Gris" 0 "P044HX5G2" "1" 22/02/16 31/12/49
 1 "" 2 "Honor 5x Gris" 0 "P044HX5G2" "1" 22/02/16 31/12/49
 1 "" 3 "Honor 5x Gris" 0 "P044HX5G2" "1" 22/02/16 31/12/49
@@ -7075,16 +7375,16 @@
 1 "" 3 "Alcatel ONETOUCH POP 3 Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP 3 Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
 1 "" 5 "Alcatel POP 3 (5) Soft Silver" 0 "P045P3SP2" "1" 25/08/15 31/12/49
-1 "" 1 "Alcatel Pixi 4 5 3G Negro" 0 "P045P43N2" "1" 03/03/17 31/12/49
+1 "" 1 "ALCATEL PIXI 4 5 3G Negro" 0 "P045P43N2" "1" 03/03/17 31/12/49
 1 "" 2 "Alcatel Pixi 4 5 3G Negro" 0 "P045P43N2" "1" 03/03/17 31/12/49
 1 "" 3 "Alcatel Pixi 4 5 3G Negro" 0 "P045P43N2" "1" 03/03/17 31/12/49
 1 "" 4 "Alcatel Pixi 4 5 3G Negro" 0 "P045P43N2" "1" 03/03/17 31/12/49
-1 "" 5 "Alcatel Pixi 4 5 3G Black" 0 "P045P43N2" "1" 03/03/17 31/12/49
-1 "" 1 "Alcatel Pixi 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49
+1 "" 5 "ALCATEL PIXI 4 5 3G Black" 0 "P045P43N2" "1" 03/03/17 31/12/49
+1 "" 1 "ALCATEL PIXI 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49
 1 "" 2 "Alcatel Pixi 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49
 1 "" 3 "Alcatel Pixi 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49
 1 "" 4 "Alcatel Pixi 4 5 3G Blanco" 0 "P045P43W2" "1" 22/02/17 31/12/49
-1 "" 5 "Alcatel Pixi 4 5 3G White" 0 "P045P43W2" "1" 22/02/17 31/12/49
+1 "" 5 "ALCATEL PIXI 4 5 3G White" 0 "P045P43W2" "1" 22/02/17 31/12/49
 1 "" 1 "ALCATEL PIXI 4 5 Plata metal" 0 "P045P44S2" "1" 21/09/16 31/12/49
 1 "" 2 "ALCATEL PIXI 4 5 Plata metal" 0 "P045P44S2" "1" 21/09/16 31/12/49
 1 "" 3 "ALCATEL PIXI 4 5 Plata metal" 0 "P045P44S2" "1" 21/09/16 31/12/49
@@ -7151,16 +7451,51 @@
 1 "" 3 "Módem USB Alcatel OT-X228L Azul" 0 "P045X22A2" "1" 27/07/10 31/12/49
 1 "" 4 "Módem USB Alcatel OT-X228L Azul" 0 "P045X22A2" "1" 27/07/10 31/12/49
 1 "" 5 "Módem USB Alcatel OT-X228L Blue" 0 "P045X22A2" "1" 27/07/10 31/12/49
+1 "" 1 "Wolder Wiam 65 Lite Plata" 0 "P047L65S2" "1" 24/05/17 31/12/49
+1 "" 2 "Wolder Wiam 65 Lite Plata" 0 "P047L65S2" "1" 24/05/17 31/12/49
+1 "" 3 "Wolder Wiam 65 Lite Plata" 0 "P047L65S2" "1" 24/05/17 31/12/49
+1 "" 4 "Wolder Wiam 65 Lite Plata" 0 "P047L65S2" "1" 24/05/17 31/12/49
+1 "" 5 "Wolder Wiam 65 Lite Silver" 0 "P047L65S2" "1" 24/05/17 31/12/49
 1 "" 1 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 2 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 3 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 4 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 5 "Wolder Wiam 23 Black" 0 "P047W23N2" "1" 10/06/16 31/12/49
+1 "" 1 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 2 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 3 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 4 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 5 "Wolder Wiam 23 Black with Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
 1 "" 1 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 2 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 3 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 4 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 5 "Wolder Wiam 23 White" 0 "P047W23W2" "1" 03/10/16 31/12/49
+1 "" 1 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 2 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 3 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 4 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 5 "Wolder Wiam 23 White with Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 1 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
+1 "" 2 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
+1 "" 3 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
+1 "" 4 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
+1 "" 5 "Wolder Wiam 27 Black" 0 "P047W27N2" "1" 24/05/17 31/12/49
+1 "" 1 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 2 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 3 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 4 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 5 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 1 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
+1 "" 2 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
+1 "" 3 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
+1 "" 4 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
+1 "" 5 "Wileyfox Swift 2 Gold" 0 "P048WS2D2" "1" 24/05/17 31/12/49
+1 "" 1 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
+1 "" 2 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
+1 "" 3 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
+1 "" 4 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
+1 "" 5 "Wileyfox Swift 2 Black" 0 "P048WS2N2" "1" 24/05/17 31/12/49
 1 "" 1 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
 1 "" 2 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
 1 "" 3 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
@@ -7196,6 +7531,26 @@
 1 "" 3 "ZTE Blade A452 Blanco" 0 "P075452W2" "1" 19/01/16 31/12/49
 1 "" 4 "ZTE Blade A452 Blanco" 0 "P075452W2" "1" 19/01/16 31/12/49
 1 "" 5 "ZTE Blade A452 White" 0 "P075452W2" "1" 19/01/16 31/12/49
+1 "" 1 "ZTE Blade A610 Oro" 0 "P075610D2" "1" 27/03/17 31/12/49
+1 "" 2 "ZTE Blade A610 Oro" 0 "P075610D2" "1" 27/03/17 31/12/49
+1 "" 3 "ZTE Blade A610 Oro" 0 "P075610D2" "1" 27/03/17 31/12/49
+1 "" 4 "ZTE Blade A610 Oro" 0 "P075610D2" "1" 27/03/17 31/12/49
+1 "" 5 "ZTE Blade A610 Gold" 0 "P075610D2" "1" 27/03/17 31/12/49
+1 "" 1 "ZTE Blade A610 Gris" 0 "P075610G2" "1" 27/03/17 31/12/49
+1 "" 2 "ZTE Blade A610 Gris" 0 "P075610G2" "1" 27/03/17 31/12/49
+1 "" 3 "ZTE Blade A610 Gris" 0 "P075610G2" "1" 27/03/17 31/12/49
+1 "" 4 "ZTE Blade A610 Gris" 0 "P075610G2" "1" 27/03/17 31/12/49
+1 "" 5 "ZTE Blade A610 Grey" 0 "P075610G2" "1" 27/03/17 31/12/49
+1 "" 1 "ZTE Blade A610 Negro" 0 "P075610N2" "1" 04/04/17 31/12/49
+1 "" 2 "ZTE Blade A610 Negro" 0 "P075610N2" "1" 04/04/17 31/12/49
+1 "" 3 "ZTE Blade A610 Negro" 0 "P075610N2" "1" 04/04/17 31/12/49
+1 "" 4 "ZTE Blade A610 Negro" 0 "P075610N2" "1" 04/04/17 31/12/49
+1 "" 5 "ZTE Blade A610 Black" 0 "P075610N2" "1" 04/04/17 31/12/49
+1 "" 1 "ZTE Blade A610 Blanco" 0 "P075610W2" "1" 04/04/17 31/12/49
+1 "" 2 "ZTE Blade A610 Blanco" 0 "P075610W2" "1" 04/04/17 31/12/49
+1 "" 3 "ZTE Blade A610 Blanco" 0 "P075610W2" "1" 04/04/17 31/12/49
+1 "" 4 "ZTE Blade A610 Blanco" 0 "P075610W2" "1" 04/04/17 31/12/49
+1 "" 5 "ZTE Blade A610 White" 0 "P075610W2" "1" 04/04/17 31/12/49
 1 "" 1 "ZTE F950 táctil" 0 "P07595002" "1" 26/11/09 31/12/49
 1 "" 2 "ZTE F950 táctil" 0 "P07595002" "1" 26/11/09 31/12/49
 1 "" 3 "ZTE F950 táctil" 0 "P07595002" "1" 26/11/09 31/12/49
@@ -7306,6 +7661,21 @@
 1 "" 3 "ZTE Blade V7 Plata con Altavoz bluetooth sumergible" 0 "P075BV7SP" "1" 04/07/16 31/12/49
 1 "" 4 "ZTE Blade V7 Plata con Altavoz bluetooth sumergible" 0 "P075BV7SP" "1" 04/07/16 31/12/49
 1 "" 5 "ZTE Blade V7 Silver with waterproof bluetooth Speaker" 0 "P075BV7SP" "1" 04/07/16 31/12/49
+1 "" 1 "ZTE Blade V8 Oro" 0 "P075BV8D2" "1" 28/04/17 31/12/49
+1 "" 2 "ZTE Blade V8 Oro" 0 "P075BV8D2" "1" 28/04/17 31/12/49
+1 "" 3 "ZTE Blade V8 Oro" 0 "P075BV8D2" "1" 28/04/17 31/12/49
+1 "" 4 "ZTE Blade V8 Oro" 0 "P075BV8D2" "1" 28/04/17 31/12/49
+1 "" 5 "ZTE Blade V8 Gold" 0 "P075BV8D2" "1" 28/04/17 31/12/49
+1 "" 1 "ZTE Blade V8 Gris" 0 "P075BV8G2" "1" 28/04/17 31/12/49
+1 "" 2 "ZTE Blade V8 Gris" 0 "P075BV8G2" "1" 28/04/17 31/12/49
+1 "" 3 "ZTE Blade V8 Gris" 0 "P075BV8G2" "1" 28/04/17 31/12/49
+1 "" 4 "ZTE Blade V8 Gris" 0 "P075BV8G2" "1" 28/04/17 31/12/49
+1 "" 5 "ZTE Blade V8 Grey" 0 "P075BV8G2" "1" 28/04/17 31/12/49
+1 "" 1 "ZTE Blade V8 Rosa" 0 "P075BV8P2" "1" 28/04/17 31/12/49
+1 "" 2 "ZTE Blade V8 Rosa" 0 "P075BV8P2" "1" 28/04/17 31/12/49
+1 "" 3 "ZTE Blade V8 Rosa" 0 "P075BV8P2" "1" 28/04/17 31/12/49
+1 "" 4 "ZTE Blade V8 Rosa" 0 "P075BV8P2" "1" 28/04/17 31/12/49
+1 "" 5 "ZTE Blade V8 Rosa" 0 "P075BV8P2" "1" 28/04/17 31/12/49
 1 "" 1 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
 1 "" 2 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
 1 "" 3 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
@@ -7631,6 +8001,21 @@
 1 "" 3 "BQ Aquaris U Gris" 0 "P088AQUG2" "1" 21/09/16 31/12/49
 1 "" 4 "BQ Aquaris U Gris" 0 "P088AQUG2" "1" 21/09/16 31/12/49
 1 "" 5 "BQ Aquaris U Dark grey" 0 "P088AQUG2" "1" 21/09/16 31/12/49
+1 "" 1 "BQ Aquaris X Negro" 0 "P088AQXN2" "1" 26/04/17 31/12/49
+1 "" 2 "BQ Aquaris X Negro" 0 "P088AQXN2" "1" 26/04/17 31/12/49
+1 "" 3 "BQ Aquaris X Negro" 0 "P088AQXN2" "1" 26/04/17 31/12/49
+1 "" 4 "BQ Aquaris X Negro" 0 "P088AQXN2" "1" 26/04/17 31/12/49
+1 "" 5 "BQ Aquaris X Black" 0 "P088AQXN2" "1" 26/04/17 31/12/49
+1 "" 1 "BQ Aquaris X Rosa" 0 "P088AQXR2" "1" 26/04/17 31/12/49
+1 "" 2 "BQ Aquaris X Rosa" 0 "P088AQXR2" "1" 26/04/17 31/12/49
+1 "" 3 "BQ Aquaris X Rosa" 0 "P088AQXR2" "1" 26/04/17 31/12/49
+1 "" 4 "BQ Aquaris X Rosa" 0 "P088AQXR2" "1" 26/04/17 31/12/49
+1 "" 5 "BQ Aquaris X Pink" 0 "P088AQXR2" "1" 26/04/17 31/12/49
+1 "" 1 "BQ Aquaris X Blanco" 0 "P088AQXW2" "1" 29/05/17 31/12/49
+1 "" 2 "BQ Aquaris X Blanco" 0 "P088AQXW2" "1" 29/05/17 31/12/49
+1 "" 3 "BQ Aquaris X Blanco" 0 "P088AQXW2" "1" 29/05/17 31/12/49
+1 "" 4 "BQ Aquaris X Blanco" 0 "P088AQXW2" "1" 29/05/17 31/12/49
+1 "" 5 "BQ Aquaris X White" 0 "P088AQXW2" "1" 29/05/17 31/12/49
 1 "" 1 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
 1 "" 2 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
 1 "" 3 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
@@ -8046,6 +8431,11 @@
 1 "" 3 "iPhone 7 128 GB Oro" 0 "P097712D2" "1" 13/09/16 31/12/49
 1 "" 4 "iPhone 7 128 GB Oro" 0 "P097712D2" "1" 13/09/16 31/12/49
 1 "" 5 "iPhone 7 128 GB Gold" 0 "P097712D2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 128 GB Rojo" 0 "P097712H2" "1" 06/04/17 31/12/49
+1 "" 2 "iPhone 7 128 GB Rojo" 0 "P097712H2" "1" 06/04/17 31/12/49
+1 "" 3 "iPhone 7 128 GB Rojo" 0 "P097712H2" "1" 06/04/17 31/12/49
+1 "" 4 "iPhone 7 128 GB Rojo" 0 "P097712H2" "1" 06/04/17 31/12/49
+1 "" 5 "iPhone 7 128 GB Red" 0 "P097712H2" "1" 06/04/17 31/12/49
 1 "" 1 "iPhone 7 128 GB Negro" 0 "P097712N2" "1" 13/09/16 31/12/49
 1 "" 2 "iPhone 7 128 GB Negro" 0 "P097712N2" "1" 13/09/16 31/12/49
 1 "" 3 "iPhone 7 128 GB Negro" 0 "P097712N2" "1" 13/09/16 31/12/49
@@ -8071,6 +8461,11 @@
 1 "" 3 "iPhone 7 256 GB Oro" 0 "P097725D2" "1" 13/09/16 31/12/49
 1 "" 4 "iPhone 7 256 GB Oro" 0 "P097725D2" "1" 13/09/16 31/12/49
 1 "" 5 "iPhone 7 256 GB Gold" 0 "P097725D2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 256 GB Rojo" 0 "P097725H2" "1" 06/04/17 31/12/49
+1 "" 2 "iPhone 7 256 GB Rojo" 0 "P097725H2" "1" 06/04/17 31/12/49
+1 "" 3 "iPhone 7 256 GB Rojo" 0 "P097725H2" "1" 06/04/17 31/12/49
+1 "" 4 "iPhone 7 256 GB Rojo" 0 "P097725H2" "1" 06/04/17 31/12/49
+1 "" 5 "iPhone 7 256 GB Red" 0 "P097725H2" "1" 06/04/17 31/12/49
 1 "" 1 "iPhone 7 256 GB Negro" 0 "P097725N2" "1" 13/09/16 31/12/49
 1 "" 2 "iPhone 7 256 GB Negro" 0 "P097725N2" "1" 13/09/16 31/12/49
 1 "" 3 "iPhone 7 256 GB Negro" 0 "P097725N2" "1" 13/09/16 31/12/49
@@ -8116,6 +8511,11 @@
 1 "" 3 "iPhone 7 Plus 128 GB Oro" 0 "P0977P1D2" "1" 13/09/16 31/12/49
 1 "" 4 "iPhone 7 Plus 128 GB Oro" 0 "P0977P1D2" "1" 13/09/16 31/12/49
 1 "" 5 "iPhone 7 Plus 128 GB Gold" 0 "P0977P1D2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 128 GB Rojo" 0 "P0977P1H2" "1" 06/04/17 31/12/49
+1 "" 2 "iPhone 7 Plus 128 GB Rojo" 0 "P0977P1H2" "1" 06/04/17 31/12/49
+1 "" 3 "iPhone 7 Plus 128 GB Rojo" 0 "P0977P1H2" "1" 06/04/17 31/12/49
+1 "" 4 "iPhone 7 Plus 128 GB Rojo" 0 "P0977P1H2" "1" 06/04/17 31/12/49
+1 "" 5 "iPhone 7 Plus 128 GB Red" 0 "P0977P1H2" "1" 06/04/17 31/12/49
 1 "" 1 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1N2" "1" 13/09/16 31/12/49
 1 "" 2 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1N2" "1" 13/09/16 31/12/49
 1 "" 3 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1N2" "1" 13/09/16 31/12/49
@@ -8201,6 +8601,46 @@
 1 "" 3 "iPhone SE 16 GB Plata" 0 "P097SE1S2" "1" 05/04/16 31/12/49
 1 "" 4 "iPhone SE 16 GB Plata" 0 "P097SE1S2" "1" 05/04/16 31/12/49
 1 "" 5 "iPhone SE 16 GB Silver" 0 "P097SE1S2" "1" 05/04/16 31/12/49
+1 "" 1 "iPhone SE 128 GB Oro" 0 "P097SE2D2" "1" 29/03/17 31/12/49
+1 "" 2 "iPhone SE 128 GB Oro" 0 "P097SE2D2" "1" 29/03/17 31/12/49
+1 "" 3 "iPhone SE 128 GB Oro" 0 "P097SE2D2" "1" 29/03/17 31/12/49
+1 "" 4 "iPhone SE 128 GB Oro" 0 "P097SE2D2" "1" 29/03/17 31/12/49
+1 "" 5 "iPhone SE 128 GB Gold" 0 "P097SE2D2" "1" 29/03/17 31/12/49
+1 "" 1 "iPhone SE 128 GB Gris" 0 "P097SE2G2" "1" 29/03/17 31/12/49
+1 "" 2 "iPhone SE 128 GB Gris" 0 "P097SE2G2" "1" 29/03/17 31/12/49
+1 "" 3 "iPhone SE 128 GB Gris" 0 "P097SE2G2" "1" 29/03/17 31/12/49
+1 "" 4 "iPhone SE 128 GB Gris" 0 "P097SE2G2" "1" 29/03/17 31/12/49
+1 "" 5 "iPhone SE 128 GB Space grey" 0 "P097SE2G2" "1" 29/03/17 31/12/49
+1 "" 1 "iPhone SE 128 GB Oro rosa" 0 "P097SE2P2" "1" 29/03/17 31/12/49
+1 "" 2 "iPhone SE 128 GB Oro rosa" 0 "P097SE2P2" "1" 29/03/17 31/12/49
+1 "" 3 "iPhone SE 128 GB Oro rosa" 0 "P097SE2P2" "1" 29/03/17 31/12/49
+1 "" 4 "iPhone SE 128 GB Oro rosa" 0 "P097SE2P2" "1" 29/03/17 31/12/49
+1 "" 5 "iPhone SE 128 GB Rose gold" 0 "P097SE2P2" "1" 29/03/17 31/12/49
+1 "" 1 "iPhone SE 128 GB Plata" 0 "P097SE2S2" "1" 29/03/17 31/12/49
+1 "" 2 "iPhone SE 128 GB Plata" 0 "P097SE2S2" "1" 29/03/17 31/12/49
+1 "" 3 "iPhone SE 128 GB Plata" 0 "P097SE2S2" "1" 29/03/17 31/12/49
+1 "" 4 "iPhone SE 128 GB Plata" 0 "P097SE2S2" "1" 29/03/17 31/12/49
+1 "" 5 "iPhone SE 128 GB Silver" 0 "P097SE2S2" "1" 29/03/17 31/12/49
+1 "" 1 "iPhone SE 32 GB Oro" 0 "P097SE3D2" "1" 29/03/17 31/12/49
+1 "" 2 "iPhone SE 32 GB Oro" 0 "P097SE3D2" "1" 29/03/17 31/12/49
+1 "" 3 "iPhone SE 32 GB Oro" 0 "P097SE3D2" "1" 29/03/17 31/12/49
+1 "" 4 "iPhone SE 32 GB Oro" 0 "P097SE3D2" "1" 29/03/17 31/12/49
+1 "" 5 "iPhone SE 32 GB Gold" 0 "P097SE3D2" "1" 29/03/17 31/12/49
+1 "" 1 "iPhone SE 32 GB Gris" 0 "P097SE3G2" "1" 29/03/17 31/12/49
+1 "" 2 "iPhone SE 32 GB Gris" 0 "P097SE3G2" "1" 29/03/17 31/12/49
+1 "" 3 "iPhone SE 32 GB Gris" 0 "P097SE3G2" "1" 29/03/17 31/12/49
+1 "" 4 "iPhone SE 32 GB Gris" 0 "P097SE3G2" "1" 29/03/17 31/12/49
+1 "" 5 "iPhone SE 32 GB Space grey" 0 "P097SE3G2" "1" 29/03/17 31/12/49
+1 "" 1 "iPhone SE 32 GB Oro rosa" 0 "P097SE3R2" "1" 27/03/17 31/12/49
+1 "" 2 "iPhone SE 32 GB Oro rosa" 0 "P097SE3R2" "1" 27/03/17 31/12/49
+1 "" 3 "iPhone SE 32 GB Oro rosa" 0 "P097SE3R2" "1" 27/03/17 31/12/49
+1 "" 4 "iPhone SE 32 GB Oro rosa" 0 "P097SE3R2" "1" 27/03/17 31/12/49
+1 "" 5 "iPhone SE 32 GB Rose gold" 0 "P097SE3R2" "1" 27/03/17 31/12/49
+1 "" 1 "iPhone SE 32 GB Plata" 0 "P097SE3S2" "1" 27/03/17 31/12/49
+1 "" 2 "iPhone SE 32 GB Plata" 0 "P097SE3S2" "1" 27/03/17 31/12/49
+1 "" 3 "iPhone SE 32 GB Plata" 0 "P097SE3S2" "1" 27/03/17 31/12/49
+1 "" 4 "iPhone SE 32 GB Plata" 0 "P097SE3S2" "1" 27/03/17 31/12/49
+1 "" 5 "iPhone SE 32GB Silver" 0 "P097SE3S2" "1" 27/03/17 31/12/49
 1 "" 1 "iPhone SE 64 GB Oro" 0 "P097SE6D2" "1" 05/04/16 31/12/49
 1 "" 2 "iPhone SE 64 GB Oro" 0 "P097SE6D2" "1" 05/04/16 31/12/49
 1 "" 3 "iPhone SE 64 GB Oro" 0 "P097SE6D2" "1" 05/04/16 31/12/49
@@ -9222,9 +9662,6 @@
 1 "" 3 "Roaminga" 0 "VMCROAM" "1" 01/01/06 31/03/12
 1 "" 5 "Answering service abroad" 0 "VMCROAM" "1" 01/04/12 31/12/49
 1 "" 5 "Roaming" 0 "VMCROAM" "1" 01/01/06 31/03/12
-1 "" 2 "Bústia ve veu" 0 "VMS" "1" 01/01/06 31/12/49
-1 "" 3 "Ahots-postontzia" 0 "VMS" "1" 01/01/06 31/12/49
-1 "" 5 "Voicemail" 0 "VMS" "1" 01/01/06 31/12/49
 1 "" 1 "En 100 min" 0 "VOICE100" "1" 01/01/15 31/12/49
 1 "" 2 "En 100 min" 0 "VOICE100" "1" 01/01/15 31/12/49
 1 "" 3 "100 minutuan" 0 "VOICE100" "1" 01/01/15 31/12/49
@@ -9605,10 +10042,22 @@
 3 "" 2 "Operador nacional" 0 "10" "1" 01/01/06 31/12/49
 3 "" 3 "Operadore nazionala" 0 "10" "1" 01/01/06 31/12/49
 3 "" 5 "National operator" 0 "10" "1" 01/01/06 31/12/49
+3 "" 1 "Operador internacional" 0 "1002" "1" 01/04/17 31/12/49
+3 "" 2 "Operador internacional" 0 "1002" "1" 01/04/17 31/12/49
+3 "" 3 "Nazioarteko operadorea" 0 "1002" "1" 01/04/17 31/12/49
+3 "" 5 "International operator" 0 "1002" "1" 01/04/17 31/12/49
 3 "" 1 "e-mail" 0 "104" "1" 01/01/06 31/12/49
 3 "" 2 "e-mail" 0 "104" "1" 01/01/06 31/12/49
 3 "" 3 "e-mail" 0 "104" "1" 01/01/06 31/12/49
 3 "" 5 "e-mail" 0 "104" "1" 01/01/06 31/12/49
+3 "" 1 "Operador nacional" 0 "1081" "1" 01/04/17 31/12/49
+3 "" 2 "Operador nacional" 0 "1081" "1" 01/04/17 31/12/49
+3 "" 3 "Operadore nazionala" 0 "1081" "1" 01/04/17 31/12/49
+3 "" 5 "National operator" 0 "1081" "1" 01/04/17 31/12/49
+3 "" 1 "Yoigo" 0 "1098" "1" 01/04/17 31/12/49
+3 "" 2 "Yoigo" 0 "1098" "1" 01/04/17 31/12/49
+3 "" 3 "Yoigo" 0 "1098" "1" 01/04/17 31/12/49
+3 "" 5 "Yoigo" 0 "1098" "1" 01/04/17 31/12/49
 3 "" 1 "Operador nacional" 0 "11" "1" 01/01/06 31/12/49
 3 "" 2 "Operador nacional" 0 "11" "1" 01/01/06 31/12/49
 3 "" 3 "Operadore nazionala" 0 "11" "1" 01/01/06 31/12/49
@@ -11300,6 +11749,10 @@
 9 "" 2 "La Infinita 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
 9 "" 3 "La Infinita 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
 9 "" 5 "La Infinita 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
+9 "" 1 "La Infinita 2 GB DTO." 0 "CONT27" "1" 18/04/17 31/12/49
+9 "" 2 "La Infinita 2 GB DTO." 0 "CONT27" "1" 18/04/17 31/12/49
+9 "" 3 "La Infinita 2 GB DTO." 0 "CONT27" "1" 18/04/17 31/12/49
+9 "" 5 "La Infinita 2 GB DTO." 0 "CONT27" "1" 18/04/17 31/12/49
 9 "" 1 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
 9 "" 2 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
 9 "" 3 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
@@ -11358,6 +11811,10 @@
 9 "" 2 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 3 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 5 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
+9 "" 1 "La De Casa 20" 0 "CONTDSL35" "1" 07/03/17 31/12/49
+9 "" 2 "La De Casa 20" 0 "CONTDSL35" "1" 07/03/17 31/12/49
+9 "" 3 "La De Casa 20" 0 "CONTDSL35" "1" 07/03/17 31/12/49
+9 "" 5 "La De Casa 20" 0 "CONTDSL35" "1" 07/03/17 31/12/49
 9 "" 1 "La Combinada Naranja 20" 0 "CONTDSL39" "1" 20/02/17 31/12/49
 9 "" 2 "La Combinada Naranja 20" 0 "CONTDSL39" "1" 20/02/17 31/12/49
 9 "" 3 "La Combinada Naranja 20" 0 "CONTDSL39" "1" 20/02/17 31/12/49
@@ -11441,6 +11898,10 @@
 9 "" 4 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
 9 "" 5 "Fusión Plana a lo Yoigo" 0 "CONTFF" "1" 16/06/15 31/12/54
 9 "" 5 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
+9 "" 1 "La De Casa 50" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
+9 "" 2 "La De Casa 50" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
+9 "" 3 "La De Casa 50" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
+9 "" 5 "La De Casa 50" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
 9 "" 1 "La Combinada Naranja 50" 0 "CONTFH39_50" "1" 20/02/17 31/12/49
 9 "" 2 "La Combinada Naranja 50" 0 "CONTFH39_50" "1" 20/02/17 31/12/49
 9 "" 3 "La Combinada Naranja 50" 0 "CONTFH39_50" "1" 20/02/17 31/12/49
@@ -11449,6 +11910,10 @@
 9 "" 2 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
 9 "" 5 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
+9 "" 1 "La De Casa 300" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
+9 "" 2 "La De Casa 300" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
+9 "" 3 "La De Casa 300" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
+9 "" 5 "La De Casa 300" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
 9 "" 1 "La Combinada Morada 50 con 2 GB" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
 9 "" 2 "La Combinada Morada 50 con 2 GB" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 50 con 2 GB" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
@@ -11717,6 +12182,10 @@
 11 "" 2 "La Infinita 5 GB" 0 "CONTRATO26" "1" 01/02/17 31/12/49
 11 "" 3 "La Infinita 5 GB" 0 "CONTRATO26" "1" 01/02/17 31/12/49
 11 "" 5 "La Infinita 5 GB" 0 "CONTRATO26" "1" 01/02/17 31/12/49
+11 "" 1 "LA INFINITA 2 GB DTO." 0 "CONTRATO27" "1" 18/04/17 31/12/49
+11 "" 2 "LA INFINITA 2 GB DTO." 0 "CONTRATO27" "1" 18/04/17 31/12/49
+11 "" 3 "LA INFINITA 2 GB DTO." 0 "CONTRATO27" "1" 18/04/17 31/12/49
+11 "" 5 "LA INFINITA 2 GB DTO." 0 "CONTRATO27" "1" 18/04/17 31/12/49
 11 "" 1 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
 11 "" 2 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
 11 "" 3 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54

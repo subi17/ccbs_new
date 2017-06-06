@@ -1,0 +1,768 @@
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTRATOx"
+  DCServicePackageID: 1
+  ServPac: "HSDPA"
+  FromDate: 2011-01-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTRATOx"
+  DCServicePackageID: 2
+  ServPac: "SHAPER"
+  FromDate: 2011-01-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DUB"
+  DCServicePackageID: 3
+  ServPac: "SHAPER"
+  FromDate: 2011-01-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB2"
+  DCServicePackageID: 4
+  ServPac: "SHAPER"
+  FromDate: 2011-01-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB2"
+  DCServicePackageID: 5
+  ServPac: "HSDPA"
+  FromDate: 2011-01-01
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB2_UPSELL"
+  DCServicePackageID: 6
+  ServPac: "SHAPER"
+  FromDate: 2011-01-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DUB"
+  DCServicePackageID: 7
+  ServPac: "HSDPA"
+  FromDate: 2011-01-01
+  ToDate: 2012-12-18
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTD2_UPSELL"
+  DCServicePackageID: 8
+  ServPac: "SHAPER"
+  FromDate: 2011-02-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB_UPSELL"
+  DCServicePackageID: 9
+  ServPac: "SHAPER"
+  FromDate: 2011-02-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTDATA_UPSELL"
+  DCServicePackageID: 10
+  ServPac: "SHAPER"
+  FromDate: 2011-02-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB"
+  DCServicePackageID: 11
+  ServPac: "HSDPA"
+  FromDate: 2011-02-01
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB"
+  DCServicePackageID: 12
+  ServPac: "SHAPER"
+  FromDate: 2011-02-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTD2"
+  DCServicePackageID: 13
+  ServPac: "HSDPA"
+  FromDate: 2011-02-01
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTD2"
+  DCServicePackageID: 14
+  ServPac: "SHAPER"
+  FromDate: 2011-02-01
+  ToDate: 2045-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTDATA"
+  DCServicePackageID: 15
+  ServPac: "HSDPA"
+  FromDate: 2011-02-01
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTDATA"
+  DCServicePackageID: 16
+  ServPac: "SHAPER"
+  FromDate: 2011-02-01
+  ToDate: 2045-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJD1"
+  DCServicePackageID: 17
+  ServPac: "HSDPA"
+  FromDate: 2009-01-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJD1"
+  DCServicePackageID: 18
+  ServPac: "SHAPER"
+  FromDate: 2009-01-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "PMDUB"
+  DCServicePackageID: 19
+  ServPac: "HSDPA"
+  FromDate: 2011-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "PMDUB"
+  DCServicePackageID: 20
+  ServPac: "SHAPER"
+  FromDate: 2011-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "PMDUB_UPSELL"
+  DCServicePackageID: 21
+  ServPac: "SHAPER"
+  FromDate: 2011-06-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTD3"
+  DCServicePackageID: 22
+  ServPac: "HSDPA"
+  FromDate: 2011-05-01
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTD3"
+  DCServicePackageID: 23
+  ServPac: "SHAPER"
+  FromDate: 2011-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTD3_UPSELL"
+  DCServicePackageID: 24
+  ServPac: "SHAPER"
+  FromDate: 2011-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTD4"
+  DCServicePackageID: 25
+  ServPac: "HSDPA"
+  FromDate: 2011-11-23
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTD4"
+  DCServicePackageID: 26
+  ServPac: "SHAPER"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTD4_UPSELL"
+  DCServicePackageID: 27
+  ServPac: "SHAPER"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB3"
+  DCServicePackageID: 28
+  ServPac: "HSDPA"
+  FromDate: 2011-11-23
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB3"
+  DCServicePackageID: 29
+  ServPac: "SHAPER"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB3_UPSELL"
+  DCServicePackageID: 30
+  ServPac: "SHAPER"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB4"
+  DCServicePackageID: 31
+  ServPac: "HSDPA"
+  FromDate: 2011-11-23
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB4"
+  DCServicePackageID: 32
+  ServPac: "SHAPER"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB4_UPSELL"
+  DCServicePackageID: 33
+  ServPac: "SHAPER"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF20"
+  DCServicePackageID: 34
+  ServPac: "SHAPER"
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF30"
+  DCServicePackageID: 35
+  ServPac: "HSDPA"
+  FromDate: 2011-12-01
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF30"
+  DCServicePackageID: 36
+  ServPac: "SHAPER"
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF55"
+  DCServicePackageID: 37
+  ServPac: "HSDPA"
+  FromDate: 2011-12-01
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF55"
+  DCServicePackageID: 38
+  ServPac: "SHAPER"
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF10"
+  DCServicePackageID: 39
+  ServPac: "SHAPER"
+  FromDate: 2012-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF20D"
+  DCServicePackageID: 40
+  ServPac: "HSDPA"
+  FromDate: 2012-02-22
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF20D"
+  DCServicePackageID: 41
+  ServPac: "SHAPER"
+  FromDate: 2012-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF40"
+  DCServicePackageID: 42
+  ServPac: "HSDPA"
+  FromDate: 2012-02-22
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF40"
+  DCServicePackageID: 43
+  ServPac: "SHAPER"
+  FromDate: 2012-02-22
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB5"
+  DCServicePackageID: 44
+  ServPac: "HSDPA"
+  FromDate: 2012-03-26
+  ToDate: 2013-01-03
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB5"
+  DCServicePackageID: 45
+  ServPac: "SHAPER"
+  FromDate: 2012-03-26
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB5_UPSELL"
+  DCServicePackageID: 46
+  ServPac: "SHAPER"
+  FromDate: 2012-03-26
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "UPGRADE_UPSELL"
+  DCServicePackageID: 47
+  ServPac: "SHAPER"
+  FromDate: 2012-01-23
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DUB2"
+  DCServicePackageID: 48
+  ServPac: "HSDPA"
+  FromDate: 2012-05-01
+  ToDate: 2012-12-18
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DUB2"
+  DCServicePackageID: 49
+  ServPac: "SHAPER"
+  FromDate: 2012-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS30"
+  DCServicePackageID: 50
+  ServPac: "HSDPA"
+  FromDate: 2012-05-01
+  ToDate: 2012-12-26
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS30"
+  DCServicePackageID: 51
+  ServPac: "SHAPER"
+  FromDate: 2012-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS39"
+  DCServicePackageID: 52
+  ServPac: "SHAPER"
+  FromDate: 2012-09-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS39"
+  DCServicePackageID: 53
+  ServPac: "HSDPA"
+  FromDate: 2012-09-01
+  ToDate: 2012-12-26
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "BONO_VOIP"
+  DCServicePackageID: 54
+  ServPac: "SHAPER"
+  FromDate: 2012-09-06
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "SPOTIFY"
+  DCServicePackageID: 55
+  ServPac: "SHAPER"
+  FromDate: 2012-09-06
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "HSPA_ROAM_EU"
+  DCServicePackageID: 56
+  ServPac: "SHAPER"
+  FromDate: 2012-10-10
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTD9"
+  DCServicePackageID: 57
+  ServPac: "SHAPER"
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DATA9_UPSELL"
+  DCServicePackageID: 58
+  ServPac: "SHAPER"
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "MDUB9"
+  DCServicePackageID: 59
+  ServPac: "SHAPER"
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ_UPSELL"
+  DCServicePackageID: 60
+  ServPac: "SHAPER"
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DUB3"
+  DCServicePackageID: 61
+  ServPac: "SHAPER"
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS15"
+  DCServicePackageID: 62
+  ServPac: "SHAPER"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS20"
+  DCServicePackageID: 63
+  ServPac: "SHAPER"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS25"
+  DCServicePackageID: 64
+  ServPac: "SHAPER"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS35"
+  DCServicePackageID: 65
+  ServPac: "SHAPER"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DATA5"
+  DCServicePackageID: 66
+  ServPac: "SHAPER"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DATA5_UPSELL"
+  DCServicePackageID: 67
+  ServPac: "SHAPER"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTFF2"
+  DCServicePackageID: 68
+  ServPac: "SHAPER"
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTSF10"
+  DCServicePackageID: 69
+  ServPac: "SHAPER"
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTSF14"
+  DCServicePackageID: 70
+  ServPac: "SHAPER"
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ7"
+  DCServicePackageID: 71
+  ServPac: "HSDPA"
+  FromDate: 2013-11-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ7"
+  DCServicePackageID: 72
+  ServPac: "SHAPER"
+  FromDate: 2013-11-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ7_UPSELL"
+  DCServicePackageID: 73
+  ServPac: "SHAPER"
+  FromDate: 2013-11-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS21"
+  DCServicePackageID: 74
+  ServPac: "SHAPER"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS26"
+  DCServicePackageID: 75
+  ServPac: "SHAPER"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS32"
+  DCServicePackageID: 76
+  ServPac: "SHAPER"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS16"
+  DCServicePackageID: 77
+  ServPac: "SHAPER"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT9"
+  DCServicePackageID: 78
+  ServPac: "SHAPER"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DATA6"
+  DCServicePackageID: 80
+  ServPac: "SHAPER"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DATA6_UPSELL"
+  DCServicePackageID: 81
+  ServPac: "SHAPER"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT15"
+  DCServicePackageID: 82
+  ServPac: "SHAPER"
+  FromDate: 2014-10-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT24"
+  DCServicePackageID: 83
+  ServPac: "SHAPER"
+  FromDate: 2015-03-04
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF8"
+  DCServicePackageID: 84
+  ServPac: "SHAPER"
+  FromDate: 2015-04-14
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS12"
+  DCServicePackageID: 85
+  ServPac: "SHAPER"
+  FromDate: 2015-04-14
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTF11"
+  DCServicePackageID: 86
+  ServPac: "SHAPER"
+  FromDate: 2015-04-14
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ9"
+  DCServicePackageID: 87
+  ServPac: "SHAPER"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ9"
+  DCServicePackageID: 88
+  ServPac: "HSDPA"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT23"
+  DCServicePackageID: 89
+  ServPac: "SHAPER"
+  FromDate: 2015-08-12
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DATA200_UPSELL"
+  DCServicePackageID: 90
+  ServPac: "SHAPER"
+  FromDate: 2015-06-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "DATA7"
+  DCServicePackageID: 91
+  ServPac: "SHAPER"
+  FromDate: 2015-12-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONTS2GB"
+  DCServicePackageID: 92
+  ServPac: "SHAPER"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT25"
+  DCServicePackageID: 93
+  ServPac: "SHAPER"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT26"
+  DCServicePackageID: 94
+  ServPac: "SHAPER"
+  FromDate: 2017-02-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT10"
+  DCServicePackageID: 95
+  ServPac: "SHAPER"
+  FromDate: 2017-02-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "FLEX_UPSELL"
+  DCServicePackageID: 96
+  ServPac: "SHAPER"
+  FromDate: 2017-03-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT27"
+  DCServicePackageID: 97
+  ServPac: "SHAPER"
+  FromDate: 2017-04-18
+  ToDate: 2049-12-31
+

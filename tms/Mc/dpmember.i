@@ -7,6 +7,8 @@
 {Syst/commali.i}
 {Func/date.i}
 {Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/fixedlinefunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -129,6 +131,72 @@ FUNCTION fCloseDiscount RETURNS LOGICAL
    IF llDoEvent AND
       ilCleanEventObjects THEN
       fCleanEventObjects().
+
+   RETURN TRUE.
+
+END FUNCTION.
+
+FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
+   (iiMsSeq    AS INT,
+    icCLIType  AS CHAR,
+    idtDate    AS DATE,
+    icDPRuleID AS CHAR):
+
+   DEF VAR lcNewAddLineDisc AS CHAR NO-UNDO.
+   DEF VAR liRequest        AS INT  NO-UNDO.
+   DEF VAR lcResult         AS CHAR NO-UNDO.
+
+   IF icDPRuleID NE "" THEN lcNewAddLineDisc = icDPRuleID. /* reactivation */
+   ELSE lcNewAddLineDisc = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}),
+                               {&ADDLINE_DISCOUNTS}).
+
+   FOR FIRST DiscountPlan NO-LOCK WHERE
+             DiscountPlan.Brand    = gcBrand          AND
+             DiscountPlan.DPRuleID = lcNewAddLineDisc AND
+             DiscountPlan.ValidTo >= idtDate,
+       FIRST DPRate NO-LOCK WHERE
+             DPRate.DPId       = DiscountPlan.DPId AND
+             DPRate.ValidFrom <= idtDate           AND
+             DPRate.ValidTo   >= idtDate:
+
+      fCloseDiscount(DiscountPlan.DPRuleID,
+                     iiMsSeq,
+                     idtDate - 1,
+                     FALSE).
+
+      liRequest = fAddDiscountPlanMember(iiMsSeq,
+                                         DiscountPlan.DPRuleID,
+                                         DPRate.DiscValue,
+                                         idtDate,
+                                         DiscountPlan.ValidPeriods,
+                                         0,
+                                         OUTPUT lcResult).
+
+      IF liRequest NE 0 THEN
+         RETURN "ERROR:Additional Line Discount not created; " + lcResult.
+   END.
+
+END FUNCTION.
+
+FUNCTION fCloseAddLineDiscount RETURNS LOGICAL
+   (iiCustNum AS INT,
+    iiMsSeq   AS INT,
+    icCLIType AS CHAR,
+    idtDate   AS DATE):
+   
+   FIND FIRST Customer NO-LOCK WHERE
+              Customer.CustNum = iiCustNum NO-ERROR.
+
+   IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,icCLIType) THEN
+      fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
+                     iiMsSeq,
+                     idtDate,
+                     FALSE).
+   IF NOT fCheckExisting2PConvergent(Customer.CustIDType,Customer.OrgID,icCLIType) THEN
+      fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}),
+                     iiMsSeq,
+                     idtDate,
+                     FALSE).
 
    RETURN TRUE.
 

@@ -1,0 +1,55 @@
+bulkload: IMEIRegister
+  Brand: "1"
+  IMEI: "01177100"
+  BillCode: "01177100"
+
+bulkload: IMEIRegister
+  Brand: "1"
+  IMEI: "01177200"
+  BillCode: "01177100"
+
+bulkload: IMEIRegister
+  Brand: "1"
+  IMEI: "01177300"
+  BillCode: "01177100"
+
+bulkload: IMEIRegister
+  Brand: "1"
+  IMEI: "01177400"
+  BillCode: "01177100"
+
+bulkload: IMEIRegister
+  Brand: "1"
+  IMEI: "01177500"
+  BillCode: "01177100"
+
+bulkload: IMEIRegister
+  Brand: "1"
+  IMEI: "01177600"
+  BillCode: "01177100"
+
+bulkload: IMEIRegister
+  Brand: "1"
+  IMEI: "35292402"
+  BillCode: "P023E7104"
+
+bulkload: IMEIRegister
+  Brand: "1"
+  IMEI: "35394702"
+  BillCode: "P040G81N4"
+
+bulkload: IMEIRegister
+  Brand: "1"
+  IMEI: "35418302"
+  BillCode: "P023580R4"
+
+bulkload: IMEIRegister
+  Brand: "1"
+  IMEI: "35683602"
+  BillCode: "P023E6304"
+
+bulkload: IMEIRegister
+  Brand: "1"
+  IMEI: "35732301"
+  BillCode: "P030KS2N3"
+

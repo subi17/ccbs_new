@@ -1,0 +1,135 @@
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT10"
+  Description: "Initial topup for prepaid orders"
+  FromDate: 2009-01-01
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT14"
+  Description: "Topup 14.13 Eur, Discount 14.13 Eur"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT15"
+  Description: "Topup 15 Eur, Discount 15 Eur"
+  FromDate: 2013-11-01
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT18"
+  Description: "Topup 18 Eur, Discount 18 Eur"
+  FromDate: 2013-11-01
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT19"
+  Description: "Topup 19.13 Eur, Discount 19.13 Eur"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT2"
+  Description: "Topup 1,75 Eur, Discount 1,75 Eur"
+  FromDate: 2013-02-01
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT20"
+  Description: "Topup 20 Eur, Discount 20 Eur"
+  FromDate: 2009-02-19
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT23"
+  Description: "Topup 23 Eur, Discount 23 Eur"
+  FromDate: 2013-11-01
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT24"
+  Description: "Topup 24.13 Eur, Discount 24.13 Eur"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT25"
+  Description: "Topup 25 Eur, Discount 25 Eur"
+  FromDate: 2014-08-01
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT28"
+  Description: "Topup 28 Eur, Discount 28 Eur"
+  FromDate: 2014-08-01
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT29"
+  Description: "Topup 29.13 Eur, Discount 29.13 Eur"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT5"
+  Description: "Topup 5 Eur, Discount 5 Eur"
+  FromDate: 2009-02-19
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT8"
+  Description: "Topup 8 Eur, Discount 8 Eur"
+  FromDate: 2013-11-01
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+
+bulkload: TopupScheme
+  Brand: "1"
+  TopupScheme: "ORDERINIT9"
+  Description: "Topup 9.13 Eur, Discount 9.13 Eur"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  TopupSource: "Web Order"
+  PPReqPrefix: "997"
+

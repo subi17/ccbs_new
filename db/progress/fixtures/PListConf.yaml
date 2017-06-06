@@ -1,0 +1,816 @@
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTD"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-12-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTD"
+  RatePlan: "CONTD"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-12-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTD"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2007-03-01
+  dTo: 2014-04-30
+  Prior: 5
+  PriceList: "Campaigne"
+  RatePlan: "CONTRATO"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2006-11-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTRATO"
+  RatePlan: "CONTRATO"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2006-11-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO10"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-12-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTRATO8"
+  RatePlan: "CONTRATO10"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-12-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO10"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2007-03-01
+  dTo: 2014-05-13
+  Prior: 5
+  PriceList: "Campaigne"
+  RatePlan: "CONTRATO2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2006-11-01
+  dTo: 2014-05-13
+  Prior: 10
+  PriceList: "CONTRATO2"
+  RatePlan: "CONTRATO2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2006-11-01
+  dTo: 2014-05-13
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-08-12
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO23"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-08-12
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "CONTRATOS"
+  RatePlan: "CONTRATO23"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-08-12
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO23"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-03-04
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO24"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-03-04
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "CONTRATOS"
+  RatePlan: "CONTRATO24"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-03-04
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO24"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO25"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "CONTRATOS"
+  RatePlan: "CONTRATO25"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO25"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO26"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "CONTRATOS"
+  RatePlan: "CONTRATO26"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO26"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO27"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "CONTRATOS"
+  RatePlan: "CONTRATO27"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO27"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO4"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2008-08-25
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTRATO4"
+  RatePlan: "CONTRATO4"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2008-08-25
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO4"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO5"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2009-11-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTRATO5"
+  RatePlan: "CONTRATO5"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2009-11-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO5"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO6"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2011-02-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTRATO6"
+  RatePlan: "CONTRATO6"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2011-02-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO6"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO7"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-05-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTRATO7"
+  RatePlan: "CONTRATO7"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-05-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO7"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO8"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-12-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTRATO8"
+  RatePlan: "CONTRATO8"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-12-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO8"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOCONVC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 20
+  PriceList: "CONTRATO8"
+  RatePlan: "CONTRATOCONVC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 30
+  PriceList: "CONTRATOFIXED"
+  RatePlan: "CONTRATOCONVC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 60
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOCONVC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-10-27
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOCONVS"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-10-27
+  dTo: 2049-12-31
+  Prior: 20
+  PriceList: "CONTRATOS"
+  RatePlan: "CONTRATOCONVS"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-10-27
+  dTo: 2049-12-31
+  Prior: 30
+  PriceList: "CONTRATOFIXED"
+  RatePlan: "CONTRATOCONVS"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-10-27
+  dTo: 2049-12-31
+  Prior: 60
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOCONVS"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOD"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2008-06-01
+  dTo: 2054-12-31
+  Prior: 7
+  PriceList: "CONTRATOD"
+  RatePlan: "CONTRATOD"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2008-06-01
+  dTo: 2054-12-31
+  Prior: 11
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOD"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2008-06-01
+  dTo: 2014-04-30
+  Prior: 6
+  PriceList: "Campaigne"
+  RatePlan: "CONTRATOD"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOD2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2009-12-01
+  dTo: 2054-12-31
+  Prior: 7
+  PriceList: "CONTRATOD2"
+  RatePlan: "CONTRATOD2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2009-12-01
+  dTo: 2054-12-31
+  Prior: 11
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOD2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2009-12-01
+  dTo: 2014-04-30
+  Prior: 6
+  PriceList: "Campaigne"
+  RatePlan: "CONTRATOD2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOD3"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2011-05-01
+  dTo: 2054-12-31
+  Prior: 7
+  PriceList: "CONTRATOD3"
+  RatePlan: "CONTRATOD3"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2011-05-01
+  dTo: 2054-12-31
+  Prior: 11
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOD3"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2011-05-01
+  dTo: 2014-04-30
+  Prior: 6
+  PriceList: "Campaigne"
+  RatePlan: "CONTRATOD3"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATODATA"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2008-06-02
+  dTo: 2054-12-31
+  Prior: 11
+  PriceList: "COMMON"
+  RatePlan: "CONTRATODATA"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2008-06-01
+  dTo: 2054-12-31
+  Prior: 7
+  PriceList: "CONTRATODATA"
+  RatePlan: "CONTRATODATA"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2008-06-01
+  dTo: 2014-04-30
+  Prior: 6
+  PriceList: "Campaigne"
+  RatePlan: "CONTRATODATA"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOF"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2011-12-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTRATOF"
+  RatePlan: "CONTRATOF"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2011-12-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOF"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 1
+  PriceList: "CONTRATOFIXEDONLY"
+  RatePlan: "CONTRATOFIXEDC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOFIXEDC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 20
+  PriceList: "CONTRATO8"
+  RatePlan: "CONTRATOFIXEDC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 30
+  PriceList: "CONTRATOFIXED"
+  RatePlan: "CONTRATOFIXEDC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 60
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOFIXEDC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOM"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-12-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTRATOM"
+  RatePlan: "CONTRATOM"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-12-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOM"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOM2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2013-09-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTRATOM2"
+  RatePlan: "CONTRATOM2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2013-09-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOM2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2014-05-01
+  dTo: 2054-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOS"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-05-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "CONTRATOS"
+  RatePlan: "CONTRATOS"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-05-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOS"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2006-11-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "TARJETA"
+  RatePlan: "TARJETA"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2006-11-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2006-11-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "TARJETA2"
+  RatePlan: "TARJETA2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2006-11-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA2"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2008-08-25
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "TARJETA4"
+  RatePlan: "TARJETA4"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2008-08-25
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA4"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2011-12-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "TARJETA5"
+  RatePlan: "TARJETA5"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2011-12-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA5"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-12-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "TARJETA6"
+  RatePlan: "TARJETA6"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2012-12-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA6"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2013-11-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "TARJETA7"
+  RatePlan: "TARJETA7"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2013-11-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA7"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2013-11-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "TARJETA8"
+  RatePlan: "TARJETA8"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2013-11-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA8"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-05-29
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "TARJETA9"
+  RatePlan: "TARJETA9"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-05-29
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA9"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2009-04-01
+  dTo: 2054-12-31
+  Prior: 10
+  PriceList: "TARJETADATA"
+  RatePlan: "TARJETADATA"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2009-04-01
+  dTo: 2054-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETADATA"
+  Brand: "1"
+

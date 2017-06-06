@@ -23,6 +23,14 @@
 {Func/main_add_lines.i}
 {Mc/shipping_cost.i}
 
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER katun
+
+   {Func/lib/eventlog.i}
+
+   DEFINE VARIABLE lhOrderStatusChange AS HANDLE NO-UNDO.
+END.
+
 /* set status of order */
 FUNCTION fSetOrderStatus RETURNS LOGICAL
    (iOrderId AS INT,
@@ -345,6 +353,66 @@ FUNCTION fSearchStock RETURNS CHARACTER
    RETURN icStock.
 
 END FUNCTION.
+
+/* Function releases OR CLOSE Additional lines */
+FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
+   (INPUT icCustIDType  AS CHAR,
+    INPUT icCustID      AS CHAR):
+
+   DEF BUFFER labOrder         FOR Order.
+   DEF BUFFER labOrderCustomer FOR OrderCustomer.
+
+   DEF VAR lcNewOrderStatus AS CHAR NO-UNDO.
+
+   FOR EACH labOrderCustomer NO-LOCK WHERE
+            labOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            labOrderCustomer.CustId     EQ icCustID                AND
+            labOrderCustomer.CustIdType EQ icCustIDType            AND
+            labOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH labOrder NO-LOCK WHERE
+            labOrder.Brand      EQ Syst.Parameters:gcBrand  AND
+            labOrder.orderid    EQ labOrderCustomer.Orderid AND
+            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
+
+      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                        CLIType.Brand      = Syst.Parameters:gcBrand           AND
+                        CLIType.CLIType    = labOrder.CLIType                  AND
+                        CLIType.LineType   = {&CLITYPE_LINETYPE_NONMAIN}       AND
+                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
+         
+         CASE labOrder.OrderType:
+            WHEN {&ORDER_TYPE_NEW} THEN
+                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_NEW}
+                                    ELSE {&ORDER_STATUS_NEW}.
+            WHEN {&ORDER_TYPE_MNP} THEN
+                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_MNP}
+                                    ELSE {&ORDER_STATUS_MNP}.
+            WHEN {&ORDER_TYPE_RENEWAL} THEN
+                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
+                                    ELSE {&ORDER_STATUS_RENEWAL_STC}.
+            OTHERWISE.
+         END CASE.
+
+         IF lcNewOrderStatus > "" THEN DO:
+            IF llDoEvent THEN DO:
+               lhOrderStatusChange = BUFFER labOrder:HANDLE.
+               RUN StarEventInitialize(lhOrderStatusChange).
+               RUN StarEventSetOldBuffer(lhOrderStatusChange).
+            END.
+
+            fSetOrderStatus(labOrder.OrderId,lcNewOrderStatus).
+
+            IF llDoEvent THEN DO:
+               RUN StarEventMakeModifyEvent(lhOrderStatusChange).
+               fCleanEventObjects().
+            END.
+         END.
+      END.
+   END.   
+   
+   RETURN TRUE.
+
+END FUNCTION.   
 
 &ENDIF.
 

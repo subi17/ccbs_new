@@ -13,7 +13,7 @@ ASSIGN
    katun = "Qvantel"
       gcBrand = "1".
 {Func/cparam2.i}
-{xmlrpc/xmlrpc_client.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 
@@ -240,7 +240,7 @@ PROCEDURE pAddRequestStructElement:
    add_string(lcRequestStruct, "codigoContrato", lcFormRequest).
 
    add_boolean(lcRequestStruct, "fechaVentanaCambioPorAbonado",FALSE ).
-   add_string(lcRequestStruct, "NRNReceptor", "004").
+   add_string(lcRequestStruct, "NRNReceptor", "730000").
    add_string(lcRequestStruct, "codigoOperadorReceptor", "004").
    add_string(lcRequestStruct, "codigoOperadorDonante", "005").
    add_timestamp(lcRequestStruct, "fechaSolicitudPorAbonado", fMakeTS()).

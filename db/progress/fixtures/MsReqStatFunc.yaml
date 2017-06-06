@@ -1,0 +1,863 @@
+bulkload: MsReqStatFunc
+  FuncGroup: "0,1,6"
+
+bulkload: MsReqStatFunc
+  ReqStatus: 1
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqStatus: 3
+  FuncGroup: "0,4,3,2"
+
+bulkload: MsReqStatFunc
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqStatus: 5
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqStatus: 6
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqStatus: 7
+  FuncGroup: "0,10"
+
+bulkload: MsReqStatFunc
+  ReqStatus: 8
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqStatus: 9
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqStatus: 19
+  FuncGroup: "0,1,15"
+
+bulkload: MsReqStatFunc
+  ReqType: 1
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqType: 1
+  ReqStatus: 1
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqType: 1
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 1
+  ReqStatus: 3
+  FuncGroup: "0,2,4,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 1
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 1
+  ReqStatus: 5
+  FuncGroup: "0,4"
+
+bulkload: MsReqStatFunc
+  ReqType: 1
+  ReqStatus: 6
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 1
+  ReqStatus: 9
+
+bulkload: MsReqStatFunc
+  ReqType: 2
+
+bulkload: MsReqStatFunc
+  ReqType: 2
+  ReqStatus: 5
+
+bulkload: MsReqStatFunc
+  ReqType: 3
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 3
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 3
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 3
+  ReqStatus: 3
+  FuncGroup: "0,2,3,4"
+
+bulkload: MsReqStatFunc
+  ReqType: 3
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 3
+  ReqStatus: 6
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 3
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 3
+  ReqStatus: 19
+
+bulkload: MsReqStatFunc
+  ReqType: 4
+
+bulkload: MsReqStatFunc
+  ReqType: 5
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 5
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 5
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 5
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 5
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 5
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 6
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 6
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 6
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 6
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 6
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 6
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 8
+  ReqStatus: 3
+  FuncGroup: "0,3,2"
+
+bulkload: MsReqStatFunc
+  ReqType: 9
+  FuncGroup: "0,1,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 9
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 9
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 9
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 9
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 9
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 10
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 10
+  ReqStatus: 1
+
+bulkload: MsReqStatFunc
+  ReqType: 10
+  ReqStatus: 2
+
+bulkload: MsReqStatFunc
+  ReqType: 10
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 10
+  ReqStatus: 4
+
+bulkload: MsReqStatFunc
+  ReqType: 10
+  ReqStatus: 8
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 10
+  ReqStatus: 9
+
+bulkload: MsReqStatFunc
+  ReqType: 10
+  ReqStatus: 19
+  FuncGroup: "0,1,8"
+
+bulkload: MsReqStatFunc
+  ReqType: 12
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 12
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 12
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 12
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 12
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 12
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 13
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 13
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 13
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 13
+  ReqStatus: 3
+  FuncGroup: "0,2,3,4"
+
+bulkload: MsReqStatFunc
+  ReqType: 13
+  ReqStatus: 4
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqType: 13
+  ReqStatus: 5
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 13
+  ReqStatus: 6
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 13
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 14
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 14
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 14
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 14
+  ReqStatus: 3
+  FuncGroup: "0,2"
+
+bulkload: MsReqStatFunc
+  ReqType: 14
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 14
+  ReqStatus: 9
+
+bulkload: MsReqStatFunc
+  ReqType: 15
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 15
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 15
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 15
+  ReqStatus: 3
+  FuncGroup: "0,2,3,4"
+
+bulkload: MsReqStatFunc
+  ReqType: 15
+  ReqStatus: 4
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqType: 15
+  ReqStatus: 5
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 15
+  ReqStatus: 6
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 15
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 15
+  ReqStatus: 15
+  FuncGroup: "0,4"
+
+bulkload: MsReqStatFunc
+  ReqType: 15
+  ReqStatus: 19
+  FuncGroup: "0,7,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 15
+  ReqStatus: 20
+  FuncGroup: "0,7,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 18
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 18
+  ReqStatus: 1
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqType: 18
+  ReqStatus: 2
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqType: 18
+  ReqStatus: 3
+  FuncGroup: "0,4,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 18
+  ReqStatus: 4
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqType: 18
+  ReqStatus: 5
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 18
+  ReqStatus: 6
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqType: 18
+  ReqStatus: 9
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqType: 18
+  ReqStatus: 19
+  FuncGroup: "0,1,9"
+
+bulkload: MsReqStatFunc
+  ReqType: 19
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 19
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 19
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 19
+  ReqStatus: 3
+  FuncGroup: "0,2,3,4"
+
+bulkload: MsReqStatFunc
+  ReqType: 19
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 19
+  ReqStatus: 5
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 19
+  ReqStatus: 6
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 19
+  ReqStatus: 9
+  FuncGroup: "0,"
+
+bulkload: MsReqStatFunc
+  ReqType: 20
+  FuncGroup: "0,13,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 20
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 20
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 20
+  ReqStatus: 3
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 20
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 20
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 22
+  FuncGroup: "0,3,1,6"
+
+bulkload: MsReqStatFunc
+  ReqType: 22
+  ReqStatus: 3
+  FuncGroup: "0,3,2"
+
+bulkload: MsReqStatFunc
+  ReqType: 23
+  FuncGroup: "0,6,12,11"
+
+bulkload: MsReqStatFunc
+  ReqType: 23
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 23
+  ReqStatus: 16
+  FuncGroup: "0,12"
+
+bulkload: MsReqStatFunc
+  ReqType: 23
+  ReqStatus: 19
+  FuncGroup: "0,5,11,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 24
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 24
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 24
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 24
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 24
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 24
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 24
+  ReqStatus: 15
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 24
+  ReqStatus: 19
+  FuncGroup: "0,1,5"
+
+bulkload: MsReqStatFunc
+  ReqType: 27
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 27
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 27
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 27
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 27
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 27
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 28
+
+bulkload: MsReqStatFunc
+  ReqType: 28
+  ReqStatus: 1
+
+bulkload: MsReqStatFunc
+  ReqType: 28
+  ReqStatus: 2
+
+bulkload: MsReqStatFunc
+  ReqType: 28
+  ReqStatus: 3
+
+bulkload: MsReqStatFunc
+  ReqType: 28
+  ReqStatus: 9
+
+bulkload: MsReqStatFunc
+  ReqType: 28
+  ReqStatus: 24
+
+bulkload: MsReqStatFunc
+  ReqType: 31
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 31
+  ReqStatus: 3
+  FuncGroup: "0,3,2"
+
+bulkload: MsReqStatFunc
+  ReqType: 31
+  ReqStatus: 19
+  FuncGroup: "0,5,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 32
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 32
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 32
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 32
+  ReqStatus: 19
+  FuncGroup: "0,1,5"
+
+bulkload: MsReqStatFunc
+  ReqType: 33
+  ReqStatus: 3
+  FuncGroup: "0,3,2"
+
+bulkload: MsReqStatFunc
+  ReqType: 34
+  FuncGroup: "0,1,6"
+
+bulkload: MsReqStatFunc
+  ReqType: 34
+  ReqStatus: 3
+  FuncGroup: "0,3,2"
+
+bulkload: MsReqStatFunc
+  ReqType: 34
+  ReqStatus: 19
+  FuncGroup: "0,1,5"
+
+bulkload: MsReqStatFunc
+  ReqType: 35
+  ReqStatus: 3
+  FuncGroup: "0,3,2"
+
+bulkload: MsReqStatFunc
+  ReqType: 38
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 39
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 39
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 39
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 39
+  ReqStatus: 3
+  FuncGroup: "0,2"
+
+bulkload: MsReqStatFunc
+  ReqType: 39
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 39
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 40
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 40
+  ReqStatus: 1
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 40
+  ReqStatus: 2
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 40
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 40
+  ReqStatus: 4
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 40
+  ReqStatus: 9
+  FuncGroup: "0"
+
+bulkload: MsReqStatFunc
+  ReqType: 46
+  ReqStatus: 3
+  FuncGroup: "0,3,2"
+
+bulkload: MsReqStatFunc
+  ReqType: 49
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 65
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 77
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 77
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 78
+
+bulkload: MsReqStatFunc
+  ReqType: 78
+  ReqStatus: 3
+  FuncGroup: "0,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 81
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 81
+  ReqStatus: 3
+  FuncGroup: "0,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 82
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 82
+  ReqStatus: 3
+  FuncGroup: "0,2,3,4"
+
+bulkload: MsReqStatFunc
+  ReqType: 82
+  ReqStatus: 19
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 83
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 83
+  ReqStatus: 3
+  FuncGroup: "0,2,3,4"
+
+bulkload: MsReqStatFunc
+  ReqType: 83
+  ReqStatus: 19
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 84
+  ReqStatus: 3
+  FuncGroup: "0,1,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 84
+  ReqStatus: 19
+  FuncGroup: "0,1,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 86
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 87
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 87
+  ReqStatus: 3
+  FuncGroup: "0,2,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 88
+  ReqStatus: 3
+  FuncGroup: "0,1,3"
+
+bulkload: MsReqStatFunc
+  ReqType: 91
+  FuncGroup: "0,1"
+
+bulkload: MsReqStatFunc
+  ReqType: 91
+  ReqStatus: 3
+  FuncGroup: "0,3"
+

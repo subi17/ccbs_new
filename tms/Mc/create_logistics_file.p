@@ -731,7 +731,7 @@ FUNCTION fDelivSIM RETURNS LOG
    IF Order.CLIType EQ "CONT15" THEN DO:
       
       IF Order.OrderType EQ 2 THEN DO:
-         IF fGetCurrentSpecificBundle(Order.MsSeq, "VOICE100") > "" THEN
+         IF fGetCurrentSpecificBundle(Order.MsSeq, "VOICE") EQ "VOICE100" THEN
             lcCLIType = "CONT15V100".
       END.
       ELSE DO:
@@ -1335,11 +1335,9 @@ FUNCTION fDelivSIM RETURNS LOG
 
 
    IF Order.DeliverySecure EQ 1
-   THEN DO:
-      IF Order.DeliveryType = {&ORDER_DELTYPE_POS}
-      THEN liDelType = {&ORDER_DELTYPE_POS_SECURE}.
-      ELSE liDelType = {&ORDER_DELTYPE_POST_SECURE}.
-   END.
+   THEN liDelType = {&ORDER_DELTYPE_POST_SECURE}.
+   ELSE IF Order.DeliverySecure EQ 2
+   THEN liDelType = {&ORDER_DELTYPE_POS_SECURE}.
    ELSE IF Order.DeliveryType EQ 0 THEN liDelType = {&ORDER_DELTYPE_COURIER}.
    ELSE liDelType = Order.DeliveryType.
 

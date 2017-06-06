@@ -1,0 +1,3361 @@
+bulkload: FeeModel
+  FeeModel: "ACC_POSTPAID"
+  FeeName: "Agreement Customer Change Postpaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "ACC_PREPAID"
+  FeeName: "Agreement Customer Change Prepaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "BALANCE_PREPAID"
+  FeeName: "Balance Query Prepaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "BBMF"
+  FeeName: "BlackBerry Monthly Fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "BONO_VOIPMF"
+  FeeName: "Mobile data usage bundle VoIP"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CargoPost_05"
+  FeeName: "Cargo_5euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "CargoPost_10"
+  FeeName: "Cargo_10euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "CargoPost_20"
+  FeeName: "Cargo_20euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "CargoPrep_05"
+  FeeName: "Cargo_5euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "CargoPrep_10"
+  FeeName: "Cargo_10euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "CargoPrep_20"
+  FeeName: "Cargo_20euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Compensa 10"
+  FeeName: "Compensa 10euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Compensa 100"
+  FeeName: "Compensa 100euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Compensa 15"
+  FeeName: "Compensa 15euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Compensa 20"
+  FeeName: "Compensa 20euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Compensa 5"
+  FeeName: "Compensa 5euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Compensa_05"
+  FeeName: "Compensa 5euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Compensa_10"
+  FeeName: "Compensa 10euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Compensa_20"
+  FeeName: "Compensa 20euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Compensa_5"
+  FeeName: "NO USAR"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "COMP_POSTPAID"
+  FeeName: "Compensation General Postpaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "COMP_PREPAID"
+  FeeName: "Compensation General Prepaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "CONT10MF"
+  FeeName: "Contrato 10"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONT15MF"
+  FeeName: "La del Cero 5 GB monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONT23MF"
+  FeeName: "Contrato 23 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONT24MF"
+  FeeName: "Contrato 24 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONT25MF"
+  FeeName: "Contrato 25 MonthlyFee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONT26MF"
+  FeeName: "Contrato 26"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONT27MF"
+  FeeName: "LA INFINITA 2 GB DTO."
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONT7MF"
+  FeeName: "Contrato 7 Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONT8MF"
+  FeeName: "La del Uno service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONT9MF"
+  FeeName: "Contrato 9 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD2MF"
+  FeeName: "Contrato datos 2 Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD2MFUPS"
+  FeeName: "IPL35 Data Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD3MF"
+  FeeName: "Contrato datos 3 Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD3MFUPS"
+  FeeName: "IPL8 Data Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD3TOCONTD2"
+  FeeName: "IPL 8 to IPL 35 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD3TOCONTD4"
+  FeeName: "IPL 8 to IPL 15 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD3TOCONTDATA"
+  FeeName: "IPL 8 to IPL 25 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD4MF"
+  FeeName: "Contrato datos 4 Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD4MFUPS"
+  FeeName: "IPL15 Data Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD4TOCONTD2"
+  FeeName: "IPL 15 to IPL 35 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD4TOCONTDATA"
+  FeeName: "IPL 15 to IPL 25 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTD9MF"
+  FeeName: "Contrato datos 9 Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTDATAMF"
+  FeeName: "Contrato Datos Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTDATAMFUPS"
+  FeeName: "IPL25 Data Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTDATATOCONTD2"
+  FeeName: "IPL 25 to IPL 35 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTDSLMF"
+  FeeName: "Convergent ADSL monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTF10"
+  FeeName: "CONTRATOF 10 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTF11MF"
+  FeeName: "Contrato Flat 11 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTF20"
+  FeeName: "CONTRATOF 20 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTF20D"
+  FeeName: "CONTRATOF 20D monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTF30"
+  FeeName: "CONTRATOF 30 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTF40"
+  FeeName: "CONTRATOF 40 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTF55"
+  FeeName: "CONTRATOF 55 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTF8MF"
+  FeeName: "Contrato Flat 8 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTFF2MF"
+  FeeName: "CONTRATOFF 2 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTFH300MF"
+  FeeName: "Convergent FIBER 300MB monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTFH50MF"
+  FeeName: "Convergent FIBER 50MB monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTM2MF"
+  FeeName: "CONTRATOM2 monthly fe"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTMMF"
+  FeeName: "CONTRATOM monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTRATO2"
+  FeeName: "Contrato2 Monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS12MF"
+  FeeName: "Contrato S 12 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS15MF"
+  FeeName: "CONTRATOS 15 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS16MF"
+  FeeName: "CONTRATOS 16 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS20MF"
+  FeeName: "CONTRATOS 20 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS21MF"
+  FeeName: "CONTRATOS 21 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS25MF"
+  FeeName: "CONTRATOS 25 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS26MF"
+  FeeName: "CONTRATOS 26 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS2GBMF"
+  FeeName: "Convergent mobile monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS30MF"
+  FeeName: "CONTRATOS 30 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS32MF"
+  FeeName: "CONTRATOS 32 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS35MF"
+  FeeName: "CONTRATOS 35 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTS39MF"
+  FeeName: "CONTRATOS 39 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTSF10MF"
+  FeeName: "CONTRATOSF 10 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONTSF14MF"
+  FeeName: "CONTRATOSF 14 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CRVTERMDT"
+  FeeName: "Q25 discount revert fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "DATA200MFUPS"
+  FeeName: "DATA200 upsell monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "DATA5MF"
+  FeeName: "Mobile Data Usage Bundle Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "DATA5MFUPS"
+  FeeName: "Cont Data Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "DATA6MF"
+  FeeName: "DATA6 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "DATA6MFUPS"
+  FeeName: "DATA6 upsell monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "DATA7MF"
+  FeeName: "DATA7 monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "DATA9MFUPS"
+  FeeName: "Cont Data Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "DELCOST"
+  FeeName: "Shipment costs"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "Doa no procede"
+  FeeName: "DOA no procede"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "DSS200MFUPS"
+  FeeName: "DSS200 upsell monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "DSS2MFUPS"
+  FeeName: "Data Sharing Service 2 Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "DSSMF"
+  FeeName: "Data Sharing Service Bundle package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "DSSMFUPS"
+  FeeName: "Data Sharing Service Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "ERROR_RECARGA"
+  FeeName: "Compensa 20euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "FLEX_MFUPS"
+  FeeName: "Flex upsell monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "FTERMPERIOD"
+  FeeName: "Fixed line contract termination"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "HANDSET"
+  FeeName: "Terminal"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "ICC_POSTPAID"
+  FeeName: "Change of ICC Charge Postpaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "ICC_PREPAID"
+  FeeName: "Change of ICC Charge Prepaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Importe_descontado"
+  FeeName: "Importe descontado"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "MDUB2MF"
+  FeeName: "Mobile Data Usage Bundle Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB2MFUPS"
+  FeeName: "MDUB2 Data Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB2TOMDUB3"
+  FeeName: "Bono 15 to Bono 25 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB2TOMDUB4"
+  FeeName: "Bono 15 to Bono 35 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB3MF"
+  FeeName: "Mobile Data Usage Bundle Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB3MFUPS"
+  FeeName: "MDUB3 Data Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB3TOMDUB4"
+  FeeName: "Bono 25 to Bono 35 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB4MF"
+  FeeName: "Mobile Data Usage Bundle Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB4MFUPS"
+  FeeName: "MDUB4 Data Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB5MF"
+  FeeName: "Mobile Data Usage Bundle Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB5MFUPS"
+  FeeName: "MDUB5 Data Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB5TOMDUB2"
+  FeeName: "Bono 12 to Bono 15 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB5TOMDUB3"
+  FeeName: "Bono 12 to Bono 25 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB5TOMDUB4"
+  FeeName: "Bono 12 to Bono 35 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB5TOMDUB9"
+  FeeName: "Bono 12 to Bono 9 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUB9MF"
+  FeeName: "Mobile Data Usage Bundle Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUBMF"
+  FeeName: "Mobile Data Usage Bundle Service package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUBMFUPS"
+  FeeName: "MDUB Data Upsell Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUBTOMDUB2"
+  FeeName: "Bono 8 to Bono 15 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUBTOMDUB3"
+  FeeName: "Bono 8 to Bono 25 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUBTOMDUB4"
+  FeeName: "Bono 8 to Bono 35 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUBTOMDUB5"
+  FeeName: "Bono 8 to Bono 12 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MDUBTOMDUB9"
+  FeeName: "Bono 8 to Bono 9 Upgrade Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MSISDN_POSTPAID"
+  FeeName: "Change MSISDN Charge Postpaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "MSISDN_PREPAID"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "PAYDELSIM"
+  FeeName: "Payment on deliver cost - SIM only"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYDELTER"
+  FeeName: "Payment on deliver cost - Terminal"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM10"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM15"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM18_3"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM18_30"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM18_5"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM18_8"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM20"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM2410"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM2415"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_1"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_12"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_18"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_2"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_20"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_22"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_25"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_3"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_30"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_4"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_5"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_6"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM24_8"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERM25"
+  FeeName: "Periodical contract installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERMCG1E"
+  FeeName: "Commission fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERMCGBC"
+  FeeName: "Commission fee CETELEM"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PAYTERMCGBS"
+  FeeName: "Commission fee Sabadell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PMDUBFee"
+  FeeName: "Prepaid BONO8 Fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP10"
+  FeeName: "Post paid - K800i BRONZE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP100"
+  FeeName: "Post paid - Samsung U700 Black II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP101"
+  FeeName: "Post paid - Samsung U700 Violet II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP102"
+  FeeName: "Post paid - Nokia 5800 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP103"
+  FeeName: "Post paid - Nokia 5800 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP104"
+  FeeName: "Post paid - Nokia E63 Blue II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP105"
+  FeeName: "Post paid - Nokia E63 Blue III"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP106"
+  FeeName: "Post paid - Nokia E71 Silver II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP107"
+  FeeName: "Post paid - Nokia E71 Silver III"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP108"
+  FeeName: "Post paid - Motorola VE538 White & green"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP109"
+  FeeName: "Post paid - Motorola VE538 Black & orang"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP11"
+  FeeName: "Post Paid - N70 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP12"
+  FeeName: "Post Paid - TS705 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP13"
+  FeeName: "Post Paid - SE W880i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP14"
+  FeeName: "Post Paid - N70 + Memory card reader"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP15"
+  FeeName: "Post Paid - E65 Maroon"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP16"
+  FeeName: "Post paid - LG Chocolate 3G"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP17"
+  FeeName: "Post paid - K610i Black DUO"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP18"
+  FeeName: "Post paid - K610i Red DUO"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP19"
+  FeeName: "Post paid - Samsung SGH Z240"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP2"
+  FeeName: "Post paid - K610i BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP20"
+  FeeName: "Post paid - K610i Black Special Promot"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP21"
+  FeeName: "Post paid - LG KU250 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP22"
+  FeeName: "Post paid - Motorola V3xx 3G Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP23"
+  FeeName: "Post paid - SE K610i Black + HF Parrot"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP24"
+  FeeName: "Post paid - 6151 Black + Hands free Parr"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP25"
+  FeeName: "Post paid - Nokia 6555"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP26"
+  FeeName: "Post paid - Nokia 6288 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP27"
+  FeeName: "Post Paid - Nokia 5700 XpressMusic Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP28"
+  FeeName: "Post paid - Nokia 6110 Navigator"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP29"
+  FeeName: "Post paid - Nokia N95 Arena"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP3"
+  FeeName: "Post paid - K610i RED"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP30"
+  FeeName: "Post paid - Sagem my600X Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP31"
+  FeeName: "Post paid - LG KU380 Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP32"
+  FeeName: "Post paid - SE K530i Plata"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP33"
+  FeeName: "Post paid - Samsung L760 Plata"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP34"
+  FeeName: "Post paid - SE W660 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP35"
+  FeeName: "Post paid - Nokia N81 8GB Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP36"
+  FeeName: "Post paid - Nokia 6110 Navigator White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP37"
+  FeeName: "Post paid - SE M600i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP38"
+  FeeName: "Post paid - Toshiba Portégé G500 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP39"
+  FeeName: "Post paid - Toshipa Portege G500 promo"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP4"
+  FeeName: "Post paid - Z610i BLUE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP40"
+  FeeName: "Post paid - Sagem my600X White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP41"
+  FeeName: "Post Paid - Nokia 6120 Classic Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP42"
+  FeeName: "Post paid - Nokia 6267 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP43"
+  FeeName: "Post paid - Nokia 6151 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP44"
+  FeeName: "Post paid - Sagem my901C Blue"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP45"
+  FeeName: "Post paid - Samsung SGH Z170 Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP46"
+  FeeName: "Post paid - Nokia N94 Violeta"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP47"
+  FeeName: "Post paid - Nokia N73 Plata y Purpura"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP48"
+  FeeName: "Post paid - SE W660 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP49"
+  FeeName: "Post paid - SE T280i Silver on Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP5"
+  FeeName: "Post paid - Z610i PINK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP50"
+  FeeName: "Post paid - SE T280i Copper on Silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP51"
+  FeeName: "Post paid - Sony Ericsson J120i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP52"
+  FeeName: "Post paid - Samsung SGH B300 Blue"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP53"
+  FeeName: "Post paid - Samsung SGH B300 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP54"
+  FeeName: "Post paid - Nokia 3120 Classic Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP55"
+  FeeName: "Post paid - Nokia 2610 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP56"
+  FeeName: "Post paid - Modem USB Huawei E220"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP57"
+  FeeName: "Post paid - SE C702 Black and silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP58"
+  FeeName: "Post paid - Motorola RAZR2 V9 Black and"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP59"
+  FeeName: "Post paid - Sony Ericsson G502 Silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP6"
+  FeeName: "Post paid - K800i BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP60"
+  FeeName: "Post paid - Sony EricssonW760 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP61"
+  FeeName: "Post paid - Samsung F330 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP62"
+  FeeName: "Post paid - Samsung F480 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP63"
+  FeeName: "Post paid - Motorola Z10 Black and silve"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP64"
+  FeeName: "Post paid - Alcatel S210 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP65"
+  FeeName: "Post paid - Alcatel S210 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP66"
+  FeeName: "Post paid - Alcatel S319 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP67"
+  FeeName: "Post paid - Nokia 2760 Red and silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP68"
+  FeeName: "Post paid - Samsung SGH B300 Titanium"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP69"
+  FeeName: "Post paid - Modem USB ZTE MF626"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP7"
+  FeeName: "Post paid - 6151 BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP70"
+  FeeName: "Post paid - Samsung SGH B130 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP71"
+  FeeName: "Post paid - SE T280i Pink and silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP72"
+  FeeName: "Post paid - LG KF310 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP73"
+  FeeName: "Post paid - Motorola MOTORAZR maxx V6 Bl"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP74"
+  FeeName: "Post paid - Sony Ericsson C902 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP75"
+  FeeName: "Post paid - Samsung F330 White MNP speci"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP76"
+  FeeName: "Post paid - Sony Ericsson C702 MNP Speci"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP77"
+  FeeName: "Post paid - Sony Ericsson W760 MNP speci"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP78"
+  FeeName: "Post paid - Motorola RAZR2 V9 MNP specia"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP79"
+  FeeName: "Post paid - Nokia N73 MNP special"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP8"
+  FeeName: "Post Paid - N70 BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP80"
+  FeeName: "Post paid - Sony Ericsson C902i MNP spec"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP81"
+  FeeName: "Post paid - Samsung F480 Black MNP speci"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP82"
+  FeeName: "Post paid - Samsung SGH L760"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP83"
+  FeeName: "Post paid - Samsung L760 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP84"
+  FeeName: "Post paid - Nokia 3120 Classic Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP85"
+  FeeName: "Post paid - SE W890i Silver I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP86"
+  FeeName: "Post paid - SE W890i Silver II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP87"
+  FeeName: "Post paid - N73 Silver and Mocca"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP88"
+  FeeName: "Post paid - Toshiba Portégé G810 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP89"
+  FeeName: "Post paid - Toshiba Portégé G810 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP9"
+  FeeName: "Post paid - V3x BLUE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP90"
+  FeeName: "Post paid - LG Viewty 990 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP91"
+  FeeName: "Post paid - LG Viewty 990 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP92"
+  FeeName: "Post paid - Samsung U700 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP93"
+  FeeName: "Post paid - Samsung U700 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP94"
+  FeeName: "Post paid - Samsung J400 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP95"
+  FeeName: "Post paid - LG KS20"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP96"
+  FeeName: "Post paid - ZTE F188"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP97"
+  FeeName: "Post paid - Samsung J400 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP98"
+  FeeName: "Post paid - Samsung U700 Violet I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNP99"
+  FeeName: "Post paid - Samsung U700 Black I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNPDATA"
+  FeeName: "Post paid - Only SIM"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSMNPSIM"
+  FeeName: "Post paid - Only SIM"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW10"
+  FeeName: "Post paid - K800i BRONZE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW11"
+  FeeName: "Post Paid - N70 WHITE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW12"
+  FeeName: "Post Paid - TS705 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW13"
+  FeeName: "Post Paid - SE W880i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW14"
+  FeeName: "Post Paid - N70 + Memory card reader"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW15"
+  FeeName: "Post Paid - E65 Maroon"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW16"
+  FeeName: "Post paid - LG Chocolate 3G"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW17"
+  FeeName: "Post paid - K610i Black DUO"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW18"
+  FeeName: "Post paid - K610i Red DUO"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW19"
+  FeeName: "Post paid - Samsung SGH Z240"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW2"
+  FeeName: "Post paid - K610i BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW20"
+  FeeName: "Post paid - K610i Black SPECIAL"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW21"
+  FeeName: "Post paid - LG KU250 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW22"
+  FeeName: "Post Paid - Motorola V3xx 3G Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW23"
+  FeeName: "Post paid - SE K610i Black + HF Parrot"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW24"
+  FeeName: "Post paid - 6151 Black + Hands free Parr"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW25"
+  FeeName: "Post paid - Nokia 6555"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW26"
+  FeeName: "Post paid - Nokia 6288 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW27"
+  FeeName: "Post Paid - Nokia 5700 XpressMusic Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW28"
+  FeeName: "Post paid - Nokia 6110 Navigator Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW29"
+  FeeName: "Post paid - Nokia N95 Arena"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW3"
+  FeeName: "Post paid - K610i RED"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW30"
+  FeeName: "Post paid - Sagem my600X Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW31"
+  FeeName: "Post paid - LG KU380 Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW32"
+  FeeName: "Post paid - SE K530i Plata"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW33"
+  FeeName: "Post paid - Samsung L760 Plata"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW34"
+  FeeName: "Post paid - SE W660 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW35"
+  FeeName: "Post paid - Nokia N81 8GB Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW36"
+  FeeName: "Post paid - Nokia 6110 Navigator White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW37"
+  FeeName: "Post paid - SE M600i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW38"
+  FeeName: "Post paid - Toshiba Portégé G500 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW39"
+  FeeName: "Post paid - Toshiba Portege G500 promo"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW4"
+  FeeName: "Post paid - Z610i BLUE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW40"
+  FeeName: "Post paid - Sagem my600X White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW41"
+  FeeName: "Post paid - Nokia 6120 Classic Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW42"
+  FeeName: "Post paid - Nokia 6267 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW43"
+  FeeName: "Post paid - Nokia 6151 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW44"
+  FeeName: "Post paid - Sagem my901C"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW45"
+  FeeName: "Post paid - Samsung SGH Z170 Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW46"
+  FeeName: "Post paid - Nokia N94 Violeta"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW47"
+  FeeName: "Post paid - Nokia N73 Plata y Purpura"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW48"
+  FeeName: "Post paid - SE W660 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW49"
+  FeeName: "Post paid - SE T280i Silver on Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW5"
+  FeeName: "Post paid - Z610i PINK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW50"
+  FeeName: "Post paid - SE T280i Copper on Silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW51"
+  FeeName: "Post paid - Sony Ericsson J120i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW52"
+  FeeName: "Post paid - Samsung SGH B300 Blue"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW53"
+  FeeName: "Post paid - Samsung SGH B300 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW54"
+  FeeName: "Post paid - Nokia 3120 Classic Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW55"
+  FeeName: "Post paid - Nokia 2610 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW56"
+  FeeName: "Post paid - Modem USB Huawei E220"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW57"
+  FeeName: "Post paid - SE C702 Black and silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW58"
+  FeeName: "Post paid - Motorola RAZR2 V9 Black and"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW59"
+  FeeName: "Post paid - Sony Ericsson G502 Silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW6"
+  FeeName: "Post paid - K800i BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW60"
+  FeeName: "Post paid - Sony EricssonW760 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW61"
+  FeeName: "Post paid - Samsung F330 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW62"
+  FeeName: "Post paid - Samsung F480 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW63"
+  FeeName: "Post paid - Motorola Z10 Black and silve"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW64"
+  FeeName: "Post paid - Alcatel S210 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW65"
+  FeeName: "Post paid - Alcatel S210 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW66"
+  FeeName: "Post paid - Alcatel S319 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW67"
+  FeeName: "Post paid - Nokia 2760 Red and silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW68"
+  FeeName: "Post paid - Samsung SGH B300 Titanium"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW69"
+  FeeName: "Post paid - Modem USB ZTE MF626"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW7"
+  FeeName: "Post paid - 6151 BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW70"
+  FeeName: "Post paid - Samsung SGH B130 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW71"
+  FeeName: "Post paid - SE T280i Pink and silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW72"
+  FeeName: "Post paid - LG KF310 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW73"
+  FeeName: "Post paid - Motorola MOTORAZR maxx V6 Bl"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW74"
+  FeeName: "Post paid - Sony Ericsson C902 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW75"
+  FeeName: "Post paid - Samsung L760 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW76"
+  FeeName: "Post paid - Nokia 3120 Classic Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW77"
+  FeeName: "Post paid - SE W890i Silver I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW78"
+  FeeName: "Post paid - SE W890i Silver II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW79"
+  FeeName: "Post paid - N73 Silver and Mocca"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW8"
+  FeeName: "Post paid - N70 BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW80"
+  FeeName: "Post paid - Toshiba Portégé G810 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW81"
+  FeeName: "Post paid - Toshiba Portégé G810 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW82"
+  FeeName: "Post paid - LG Viewty 990 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW83"
+  FeeName: "Post paid - LG Viewty 990 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW84"
+  FeeName: "Post paid - Samsung U700 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW85"
+  FeeName: "Post paid - Samsung U700 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW86"
+  FeeName: "Post paid - Samsung J400 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW87"
+  FeeName: "Post paid - LG KS20"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW88"
+  FeeName: "Post paid - ZTE F188"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW89"
+  FeeName: "Post paid - Samsung J400 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW9"
+  FeeName: "Post paid - V3x BLUE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW90"
+  FeeName: "Post paid - Samsung U700 Violet I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW91"
+  FeeName: "Post paid - Samsung U700 Black I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW92"
+  FeeName: "Post paid - Samsung U700 Violet II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW93"
+  FeeName: "Post paid - Samsung U700 Black II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW94"
+  FeeName: "Post paid - Nokia 5800 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW95"
+  FeeName: "Post paid - Nokia 5800 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW96"
+  FeeName: "Post paid - Nokia E63 Blue II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW97"
+  FeeName: "Post paid - Nokia E71 Silver II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW98"
+  FeeName: "Post paid - Motorola VE538 White & green"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEW99"
+  FeeName: "Post paid - Motorola VE538 Black & orang"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEWDATA"
+  FeeName: "Post paid - Only SIM"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSNEWSIM"
+  FeeName: "Post paid - Only SIM"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN10"
+  FeeName: "Post paid - K800i BRONZE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN11"
+  FeeName: "Post Paid - N70 WHITE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN12"
+  FeeName: "Post Paid - TS705 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN13"
+  FeeName: "Post Paid - SE W880i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN14"
+  FeeName: "Post Paid - N70"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN15"
+  FeeName: "Post Paid - E65 Maroon"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN16"
+  FeeName: "Post paid - LG Chocolate 3G"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN17"
+  FeeName: "Post paid - K610i Black DUO"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN18"
+  FeeName: "Post paid - K610i Red DUO"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN19"
+  FeeName: "Post paid - Samsung SGH Z240"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN2"
+  FeeName: "Post paid - K610i BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN20"
+  FeeName: "Post paid - K610i Black SPECIAL"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN21"
+  FeeName: "Post paid - LG KU250 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN22"
+  FeeName: "Post Paid - Motorola V3xx 3G Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN23"
+  FeeName: "Post paid - SE K610i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN24"
+  FeeName: "Post paid - 6151 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN25"
+  FeeName: "Post paid - Nokia 6555"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN26"
+  FeeName: "Post paid - Nokia 6288 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN27"
+  FeeName: "Post Paid - Nokia 5700 XpressMusic Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN28"
+  FeeName: "Post paid - Nokia 6110 Navigator Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN29"
+  FeeName: "Post paid - Nokia N95 Arena"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN3"
+  FeeName: "Post paid - K610i RED"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN30"
+  FeeName: "Post paid - Sagem my600X Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN31"
+  FeeName: "Post paid - LG KU380 Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN32"
+  FeeName: "Post paid - SE K530i Plata"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN33"
+  FeeName: "Post paid - Samsung L760 Plata"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN34"
+  FeeName: "Post paid - SE W660 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN35"
+  FeeName: "Post paid - Nokia N81 8GB Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN36"
+  FeeName: "Post paid - Nokia 6110 Navigator White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN37"
+  FeeName: "Post paid - SE M600i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN38"
+  FeeName: "Post paid - Toshiba Portégé G500 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN39"
+  FeeName: "Post paid - Toshiba Portege G500 promo"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN4"
+  FeeName: "Post paid - Z610i BLUE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN40"
+  FeeName: "Post paid - Sagem my600X White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN41"
+  FeeName: "Post paid - Nokia 6120 Classic Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN42"
+  FeeName: "Post paid - Nokia 6267 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN43"
+  FeeName: "Post paid - Nokia 6151 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN44"
+  FeeName: "Post paid - Sagem my901C"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN45"
+  FeeName: "Post paid - Samsung SGH Z170 Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN46"
+  FeeName: "Post paid - Nokia N94 Violeta"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN47"
+  FeeName: "Post paid - Nokia N73 Plata y Purpura"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN48"
+  FeeName: "Post paid - SE W660 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN49"
+  FeeName: "Post paid - SE T280i Silver on Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN5"
+  FeeName: "Post paid - Z610i PINK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN50"
+  FeeName: "Post paid - SE T280i Copper on Silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN51"
+  FeeName: "Post paid - Sony Ericsson J120i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN52"
+  FeeName: "Post paid - Samsung SGH B300 Blue"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN53"
+  FeeName: "Post paid - Samsung SGH B300 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN54"
+  FeeName: "Post paid - Nokia 3120 Classic Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN55"
+  FeeName: "Post paid - Nokia 2610 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN56"
+  FeeName: "Post paid - Modem USB Huawei E220"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN57"
+  FeeName: "Post paid - SE C702 Black and silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN58"
+  FeeName: "Post paid - Motorola RAZR2 V9 Black and"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN59"
+  FeeName: "Post paid - Sony Ericsson G502 Silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN6"
+  FeeName: "Post paid - K800i BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN60"
+  FeeName: "Post paid - Sony EricssonW760 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN61"
+  FeeName: "Post paid - Samsung F330 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN62"
+  FeeName: "Post paid - Samsung F480 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN63"
+  FeeName: "Post paid - Motorola Z10 Black and silve"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN64"
+  FeeName: "Post paid - Alcatel S210 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN65"
+  FeeName: "Post paid - Alcatel S210 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN66"
+  FeeName: "Post paid - Alcatel S319 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN67"
+  FeeName: "Post paid - Nokia 2760 Red and silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN68"
+  FeeName: "Post paid - Modem USB ZTE MF626"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN69"
+  FeeName: "Post paid - Samsung SGH B130 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN7"
+  FeeName: "Post paid - 6151 BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN70"
+  FeeName: "Post paid - SE T280i Pink and silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN71"
+  FeeName: "Post paid - LG KF310 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN72"
+  FeeName: "Post paid - Motorola MOTORAZR maxx V6 Bl"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN73"
+  FeeName: "Post paid - Sony Ericsson C902 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN74"
+  FeeName: "Post paid - Samsung L760 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN75"
+  FeeName: "Post paid - Nokia 3120 Classic Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN76"
+  FeeName: "Post paid - SE W890i Silver I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN77"
+  FeeName: "Post paid - SE W890i Silver II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN78"
+  FeeName: "Post paid - Toshiba Portégé G810 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN79"
+  FeeName: "Post paid - Toshiba Portégé G810 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN8"
+  FeeName: "Post paid - N70 BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN80"
+  FeeName: "Post paid - LG Viewty 990 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN81"
+  FeeName: "Post paid - LG Viewty 990 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN82"
+  FeeName: "Post paid - Samsung U700 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN83"
+  FeeName: "Post paid - Samsung U700 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN84"
+  FeeName: "Post paid - Samsung J400 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN85"
+  FeeName: "Post paid - LG KS20"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN86"
+  FeeName: "Post paid - ZTE F188 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN87"
+  FeeName: "Post paid - Samsung J400 II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN88"
+  FeeName: "Post paid - Nokia 5800 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN89"
+  FeeName: "Post paid - Nokia E63 Blue II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN9"
+  FeeName: "Post paid - V3x BLUE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "POSREN90"
+  FeeName: "Post paid - Nokia E71 Silver II"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREACTPOS"
+  FeeName: "Pre-activated Prepaid for POS sales"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP10"
+  FeeName: "Pre paid - TS705 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP11"
+  FeeName: "Pre paid - N70 + Memory card reader"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP12"
+  FeeName: "Pre paid - LG Chocolate 3G + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP13"
+  FeeName: "Pre paid - K610i Black DUO + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP14"
+  FeeName: "Pre paid - K610i Red DUO + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP15"
+  FeeName: "Pre paid - Samsung SGH Z240 + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP16"
+  FeeName: "Pre paid - LG KU250 Black + 20eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP17"
+  FeeName: "Pre paid - Motorola V3xx 3G + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP18"
+  FeeName: "Pre paid - SE K610i Black + HF Parrot"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP19"
+  FeeName: "Pre paid - 6151 Black + Hands free Parr"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP2"
+  FeeName: "Pre paid - K610i Black + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP20"
+  FeeName: "Pre paid - Nokia 6555 + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP21"
+  FeeName: "Pre paid - Sagem my600X Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP22"
+  FeeName: "Pre paid - LG KU380 Negro + 20 eur TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP23"
+  FeeName: "Pre paid - SE K530i Plata + 20eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP24"
+  FeeName: "Pre paid - Samsung L760 Plata +20e TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP25"
+  FeeName: "Pre paid - SE W660 Red + 20Eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP26"
+  FeeName: "Pre paid - SE K800i + 20 Eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP27"
+  FeeName: "Pre paid - Sagem my600X White +20e TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP28"
+  FeeName: "Pre paid - Nokia 6120 Black + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP29"
+  FeeName: "Pre paid - Nokia 6151 W + 10e top up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP3"
+  FeeName: "Pre paid - K610i Red + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP30"
+  FeeName: "Pre paid - Sagem my901C + 10e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP31"
+  FeeName: "Pre paid - Samsung SGH Z170 Negro + 10e"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP32"
+  FeeName: "Pre paid - SE W880i + 10e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP33"
+  FeeName: "Pre paid - SE W660 Black + 10e TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP34"
+  FeeName: "Pre paid - SE T280i Silver on Black + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP35"
+  FeeName: "Pre paid - SE T280i Copper on Silver+TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP36"
+  FeeName: "Pre paid - Sony Ericsson J120i Black+TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP37"
+  FeeName: "Pre paid - Samsung SGH B300 Blue + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP38"
+  FeeName: "Pre paid - Samsung SGH B300 Red + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP39"
+  FeeName: "Pre paid - Nokia 3120 Classic Black + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP4"
+  FeeName: "Pre paid - Z610i BLUE + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP40"
+  FeeName: "Pre paid - Nokia 2610 Black  + Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP41"
+  FeeName: "Pre paid - Nokia 2610 Black + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP42"
+  FeeName: "Pre paid - SE G502 Silver + Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP43"
+  FeeName: "Pre paid - Alcatel S210 White + TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP44"
+  FeeName: "Pre paid - Alcatel S210 Black + TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP45"
+  FeeName: "Pre paid - Alcatel S319 Black + TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP46"
+  FeeName: "Pre paid - Nokia 2760 Red and silv + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP47"
+  FeeName: "Pre paid - Samsung SGH B300 Titanium +TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP48"
+  FeeName: "Pre paid - Samsung SGH B130 White + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP49"
+  FeeName: "Pre paid - SE T280i Pink and silver + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP5"
+  FeeName: "Pre paid - Z610i PINK + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP50"
+  FeeName: "Pre paid - LG KF310 Black + TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP51"
+  FeeName: "Pre paid - Motorola MOTORAZRmaxxV6 B +TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP52"
+  FeeName: "Pre paid - Samsung SGH B130 White + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP53"
+  FeeName: "Pre paid - Samsung L760 White +20e TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP54"
+  FeeName: "Pre paid - Nokia 3120 Classic Red + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP55"
+  FeeName: "Pre paid - Samsung J400 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP56"
+  FeeName: "Pre paid - LG KS20"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP57"
+  FeeName: "Pre paid - ZTE F188 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP58"
+  FeeName: "Pre paid - Motorola VE538 White & green"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP59"
+  FeeName: "Pre paid - Motorola VE538 Black & orange"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP6"
+  FeeName: "Pre paid - 6151 BLACK + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP7"
+  FeeName: "Pre paid - V3x BLUE + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP8"
+  FeeName: "Pre paid - N70 White + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNP9"
+  FeeName: "Pre paid - N70 SILVER + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREMNPSIM"
+  FeeName: "Pre paid - Only SIM + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW10"
+  FeeName: "Pre paid - TS705 Black + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW11"
+  FeeName: "Pre paid - N70 + Memory card reader"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW12"
+  FeeName: "Pre paid - LD Chocolate 3G + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW13"
+  FeeName: "Pre paid - K610i Black DUO + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW14"
+  FeeName: "Pre paid - K610i Red DUO + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW15"
+  FeeName: "Pre paid - Samsung SGH Z240 + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW16"
+  FeeName: "Pre paid - LG KU250 Black + 20eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW17"
+  FeeName: "Pre paid - Motorola V3xx 3G + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW18"
+  FeeName: "Pre paid - SE K610i Black + HF Parrot"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW19"
+  FeeName: "Pre paid - 6151 Black + Hands free Parr"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW2"
+  FeeName: "Pre paid - K610i BLUE + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW20"
+  FeeName: "Pre paid - Nokia 6555 + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW21"
+  FeeName: "Pre paid - Sagem my600X Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW22"
+  FeeName: "Pre paid - LG KU380 Negro + 20eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW23"
+  FeeName: "Pre paid - SE K530i Plata + 20eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW24"
+  FeeName: "Pre paid - Samsung L760 Plata +20e TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW25"
+  FeeName: "Pre paid - SE W660 red + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW26"
+  FeeName: "Pre paid - SE K800i + 20 Eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW27"
+  FeeName: "Pre paid - Sagem my600X White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW28"
+  FeeName: "Pre paid - Nokia 6120 Black + 20e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW29"
+  FeeName: "Pre paid - Nokia 6151 W + 10e top up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW3"
+  FeeName: "Pre paid - K610i RED + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW30"
+  FeeName: "Pre paid - Sagem my901C + 10e top up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW31"
+  FeeName: "Pre paid - Samsung SGH Z170 Negro + 10e"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW32"
+  FeeName: "Pre paid - SE W880i + 10e Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW33"
+  FeeName: "Pre paid - SE W660 Black + 10e TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW34"
+  FeeName: "Pre paid - SE T280i Silver on Black + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW35"
+  FeeName: "Pre paid - SE T280i Copper on Silver+TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW36"
+  FeeName: "Pre paid - Sony Ericsson J120i Black+TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW37"
+  FeeName: "Pre paid - Samsung SGH B300 Blue + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW38"
+  FeeName: "Pre paid - Samsung SGH B300 Red + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW39"
+  FeeName: "Pre paid - Nokia 3120 Classic Black + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW4"
+  FeeName: "Pre paid - Z610i BLUE + 20 eur TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW40"
+  FeeName: "Pre paid - Nokia 2610 Black  + Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW41"
+  FeeName: "Pre paid - Nokia 2610 Black + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW42"
+  FeeName: "Pre paid - SE G502 Silver + Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW43"
+  FeeName: "Pre paid - Alcatel S210 White + TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW44"
+  FeeName: "Pre paid - Alcatel S210 Black + TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW45"
+  FeeName: "Pre paid - Alcatel S319 Black + TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW46"
+  FeeName: "Pre paid - Nokia 2760 Red and silv + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW47"
+  FeeName: "Pre paid - Samsung SGH B300 Titanium +TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW48"
+  FeeName: "Pre paid - Samsung SGH B130 White + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW49"
+  FeeName: "Pre paid - SE T280i Pink and silver + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW5"
+  FeeName: "Pre paid - Z610i PINK + 20 eur TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW50"
+  FeeName: "Pre paid - LG KF310 Black + TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW51"
+  FeeName: "Pre paid - Motorola MOTORAZRmaxxV6 B +TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW52"
+  FeeName: "Pre paid - Samsung SGH B130 White + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW53"
+  FeeName: "Pre paid - Samsung L760 White +20e TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW54"
+  FeeName: "Pre paid - Nokia 3120 Classic Red + TU"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW55"
+  FeeName: "Pre paid - Samsung J400 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW56"
+  FeeName: "Pre paid - LG KS20"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW57"
+  FeeName: "Pre paid - ZTE F188 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW58"
+  FeeName: "Pre paid - Motorola VE538 White & green"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW59"
+  FeeName: "Pre paid - Motorola VE538 Black & orange"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW6"
+  FeeName: "Pre paid - 6151 BLACK + 20 eur TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW7"
+  FeeName: "Pre paid - V3x BLUE + 20 eur TopUp"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW8"
+  FeeName: "Pre paid - N70 WHITE + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEW9"
+  FeeName: "Pre paid - N70 SILVER + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRENEWSIM"
+  FeeName: "Pre paid - Sim Only + 20 eur Top Up"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN10"
+  FeeName: "Pre paid - TS705 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN11"
+  FeeName: "Pre paid - N70"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN12"
+  FeeName: "Pre paid - LD Chocolate 3G"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN13"
+  FeeName: "Pre paid - K610i Black DUO"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN14"
+  FeeName: "Pre paid - K610i Red DUO"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN15"
+  FeeName: "Pre paid - Samsung SGH Z240"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN16"
+  FeeName: "Pre paid - LG KU250 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN17"
+  FeeName: "Pre paid - Motorola V3xx 3G"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN18"
+  FeeName: "Pre paid - SE K610i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN19"
+  FeeName: "Pre paid - 6151 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN2"
+  FeeName: "Pre paid - K610i BLUE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN20"
+  FeeName: "Pre paid - Nokia 6555"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN21"
+  FeeName: "Pre paid - Sagem my600X Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN22"
+  FeeName: "Pre paid - LG KU380 Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN23"
+  FeeName: "Pre paid - SE K530i Plata"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN24"
+  FeeName: "Pre paid - Samsung L760 Plata"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN25"
+  FeeName: "Pre paid - SE W660 red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN26"
+  FeeName: "Pre paid - SE K800i"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN27"
+  FeeName: "Pre paid - Sagem my600X White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN28"
+  FeeName: "Pre paid - Nokia 6120 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN29"
+  FeeName: "Pre paid - Nokia 6151 W"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN3"
+  FeeName: "Pre paid - K610i RED"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN30"
+  FeeName: "Pre paid - Sagem my901C"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN31"
+  FeeName: "Pre paid - Samsung SGH Z170 Negro"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN32"
+  FeeName: "Pre paid - SE W880i"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN33"
+  FeeName: "Pre paid - SE W660 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN34"
+  FeeName: "Pre paid - SE T280i Silver on Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN35"
+  FeeName: "Pre paid - SE T280i Copper on Silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN36"
+  FeeName: "Pre paid - Sony Ericsson J120i Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN37"
+  FeeName: "Pre paid - Samsung SGH B300 Blue"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN38"
+  FeeName: "Pre paid - Samsung SGH B300 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN39"
+  FeeName: "Pre paid - Nokia 3120 Classic Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN4"
+  FeeName: "Pre paid - Z610i BLUE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN40"
+  FeeName: "Pre paid - Nokia 2610 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN41"
+  FeeName: "Pre paid - Nokia 2610 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN42"
+  FeeName: "Pre paid - SE G502 Silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN43"
+  FeeName: "Pre paid - Alcatel S210 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN44"
+  FeeName: "Pre paid - Alcatel S210 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN45"
+  FeeName: "Pre paid - Alcatel S319 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN46"
+  FeeName: "Pre paid - Nokia 2760 Red and silv"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN47"
+  FeeName: "Pre paid - Samsung SGH B130 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN48"
+  FeeName: "Pre paid - SE T280i Pink and silver"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN49"
+  FeeName: "Pre paid - LG KF310 Black"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN5"
+  FeeName: "Pre paid - Z610i PINK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN50"
+  FeeName: "Pre paid - Motorola MOTORAZRmaxxV6 B"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN51"
+  FeeName: "Pre paid - Samsung L760 White"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN52"
+  FeeName: "Pre paid - Nokia 3120 Classic Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN53"
+  FeeName: "Pre paid - Samsung J400 I"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN54"
+  FeeName: "Pre paid - LG KS20"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN55"
+  FeeName: "Pre paid - ZTE F188 Red"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN6"
+  FeeName: "Pre paid - 6151 BLACK"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN7"
+  FeeName: "Pre paid - V3x BLUE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN8"
+  FeeName: "Pre paid - N70 WHITE"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PREREN9"
+  FeeName: "Pre paid - N70 SILVER"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "RECONNECTION"
+  FeeName: "Reconnection Fee"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Reparacion"
+  FeeName: "Reparacion"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "RVTERM"
+  FeeName: "Terminal Residual Amount"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "RVTERM12"
+  FeeName: "Q25 extension periodical contract"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "SIMLOCK"
+  FeeName: "Codigo desbloqueo"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "SIMLOCK1"
+  FeeName: "Prueba"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "SPOTIFYMF"
+  FeeName: "Spotify Monthly Fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "STC_POSTPAID"
+  FeeName: "Change of Tariff Charge Postpaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "STC_PREPAID"
+  FeeName: "Change of Tariff Charge Prepaid"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "STERMPERIOD"
+  FeeName: "Periodical contract discount penalty"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TARJ7_BundleFee"
+  FeeName: "TARJ7 Bundle Fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TARJ7_UPSELLFee"
+  FeeName: "TARJ7 Upsell Fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TARJ9_BundleFee"
+  FeeName: "TARJ9 Bundle Fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TARJ_UPSELLFee"
+  FeeName: "TARJ UPSELL Fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMCONTD2"
+  FeeName: "Terminate contr.datos 2 on 1. month"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMCONTDATA"
+  FeeName: "Terminate contr.datos on 1. month"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMMDUB"
+  FeeName: "Terminate Mobile Data Usage Bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPAYTERM"
+  FeeName: "Terminate Installment"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD"
+  FeeName: "Periodical contract discount penalty"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD05"
+  FeeName: "Periodical contract discount penalty 05"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD125"
+  FeeName: "Periodical contract discount penalty"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD15"
+  FeeName: "Periodical contract discount penalty 150"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD175"
+  FeeName: "Periodical contract discount penalty"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD2"
+  FeeName: "Periodical contract discount penalty 2"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD225"
+  FeeName: "Periodical contract discount penalty"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD250"
+  FeeName: "Periodical contract discount penalty"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD275"
+  FeeName: "Periodical contract discount penalty"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD3"
+  FeeName: "Periodical contract discount penalty 3"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD4"
+  FeeName: "Periodical contract discount penalty 4"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD5"
+  FeeName: "Periodical contract discount penalty 5"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD6"
+  FeeName: "Periodical contract discount penalty 6"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMPERIOD75"
+  FeeName: "Periodical contract discount penalty"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TERMRVTERM"
+  FeeName: "Q25 extension termination"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TOPUPCAMP20"
+  FeeName: "TopUp Campaign"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TOPUPCAMPGIFT"
+  FeeName: "Initial topup for gift orders"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TOPUPPREACT"
+  FeeName: "Re-charge of Pre-activated Prepaid (POS)"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "TOPUPSIM"
+  FeeName: "Initial topup for only sim orders"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "UPSELL_PMDUBFee"
+  FeeName: "PMDUB UPSELL Fee"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "Uso No Razonable"
+  FeeName: "Uso No Razonable"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "UsoNoRazonable"
+  FeeName: "UsoNoRazonable"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "X9305871W"
+  FeeName: "X9305871W"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "XMASGIFT"
+  FeeName: "Gift 2007"
+  Brand: "1"
+

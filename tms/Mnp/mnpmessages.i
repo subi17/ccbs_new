@@ -13,8 +13,8 @@
 &GLOBAL-DEFINE MNPMESSAGES_I YES
 
 {Func/timestamp.i}
-{xmlrpc/xmlrpc.i &SERIALIZE_ONLY=1}
-{xmlrpc/xmlrpc_access.i &TOGETHER=1}
+{fcgi_agent/xmlrpc/xmlrpc.i &SERIALIZE_ONLY=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &TOGETHER=1 &UTF8CONVERT=1}
 
 DEFINE TEMP-TABLE ttPortabilityQuery NO-UNDO
    FIELD ResultsPerPage AS INT INIT 10

@@ -200,11 +200,14 @@ PROCEDURE pUpdateOrderStatus:
       RETURN SUBST("ERROR:Error order ID &1 already in status &2", 
                    Order.OrderId, icNewStatus).
 
-   IF iiSecure NE 0 AND iiSecure NE 1 THEN
+   IF iiSecure < 0 OR iiSecure > 2 THEN
       RETURN "ERROR:Unsupported secure option value".
 
-   IF iiSecure EQ 1 THEN DO:
-               
+   IF iiSecure = 0 AND Order.DeliverySecure > 0 AND icNewStatus NE "7" AND
+      icNewStatus NE "8" AND icNewStatus NE "9" THEN
+      RETURN "ERROR:It is not allowed to change secure delivery type to non secure type.".
+
+   IF iiSecure > 0 THEN DO:
       IF INDEX(Order.OrderChannel,"pos") > 0 OR
                Order.OrderType > 2 THEN 
         RETURN "ERROR:Secure option is allowed only with direct channel orders".
@@ -215,6 +218,8 @@ PROCEDURE pUpdateOrderStatus:
       IF icNewStatus NE "6" THEN
          RETURN "ERROR:Secure option and new order status are not compatible".
 
+      IF iiSecure EQ 2 AND Order.DeliveryType NE {&ORDER_DELTYPE_POS} THEN
+         RETURN "ERROR:Secure to POS in allowed only for POS delivery type".
    END.
    
    IF icOldStatus EQ "76" OR icOldStatus EQ "22" OR 

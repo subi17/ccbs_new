@@ -1363,7 +1363,7 @@ PROCEDURE pFinalize:
       END. /* FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE */
    END. /* IF LOOKUP(lcDCEvent,lcFLATContracts) > 0 AND */
 
-   IF lcDCEvent = "TARJ7" OR lcDCEvent = "TARJ9" THEN DO:
+   IF LOOKUP(lcDCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
       CASE iiRequestType:
          WHEN 8 THEN ASSIGN lcSMSText = lcDCEvent + "RenewalOK"
                             ldaPrepResetDate = ADD-INTERVAL(ldtActDate,1,"months").
@@ -1395,7 +1395,7 @@ PROCEDURE pFinalize:
            WHEN "MDUB5" THEN ASSIGN
               lcSMSText = REPLACE(lcSMSText,"#BUNDLE", "12")
               lcSender = "22644".
-           WHEN "TARJ7" OR WHEN "TARJ9" THEN
+           WHEN "TARJ7" OR WHEN "TARJ9" OR WHEN "TARJ10" OR WHEN "TARJ11" OR WHEN "TARJ12" THEN
               ASSIGN lcSMSText = REPLACE(lcSMSText,"#DATE",
                                          STRING(DAY(ldaPrepResetDate)) + "/" +
                                          STRING(MONTH(ldaPrepResetDate)))
@@ -1698,10 +1698,34 @@ PROCEDURE pFinalize:
             
    END.
    
-   IF lcDCEvent EQ "CONT15" AND
-      MsRequest.ReqType EQ 8 AND
-      MsRequest.ReqCParam2 EQ "act" THEN DO:
-   
+   /* When STCed between CONT15 and Convergent with CONT15 base bundle */
+   IF (lcDCEvent EQ "CONT15" OR LOOKUP(lcDCEvent,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) AND 
+      MsRequest.ReqType    EQ 8     AND
+      MsRequest.ReqCParam2 EQ "act" THEN 
+   DO:
+      IF NOT CAN-FIND(FIRST CliType WHERE CLIType.Brand      = gcBrand         AND 
+                                          CliType.CliType    = MsOwner.CliType AND 
+                                          CliType.BaseBundle = "CONT15"        NO-LOCK) THEN
+          LEAVE.
+      ELSE IF NOT CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq     = MsOwner.MsSeq                  AND 
+                                                 MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_CREATE} AND 
+                                                 MsRequest.ReqStatus > 0                              USE-INDEX MsSeq NO-LOCK) THEN
+          LEAVE. 
+      ELSE IF CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq      = MsOwner.MsSeq                             AND
+                                             MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION}            AND
+                                             LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND 
+                                             MsRequest.ReqCParam3 = "VOICE100" USE-INDEX MsSeq NO-LOCK)       THEN      
+          LEAVE.
+      ELSE 
+      DO:
+          FIND FIRST ServiceLimit WHERE ServiceLimit.GroupCode = "VOICE100" NO-LOCK NO-ERROR.
+          IF AVAIL ServiceLimit AND CAN-FIND(FIRST MServiceLimit WHERE MServiceLimit.MsSeq    = MsOwner.MsSeq         AND 
+                                                                       MServiceLimit.DialType = ServiceLimit.Dialtype AND 
+                                                                       MServiceLimit.SLSeq    = ServiceLimit.SLSeq    AND 
+                                                                       MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK) THEN 
+              LEAVE.
+      END.
+
       ASSIGN
          ldaCont15PromoFrom = fCParamDa("CONT15PromoFromDate")
          ldaCont15PromoEnd  = fCParamDa("CONT15PromoEndDate")
@@ -1725,21 +1749,23 @@ PROCEDURE pFinalize:
          ldaCont15PromoFrom NE ? AND
          ldaCont15PromoEnd NE ? AND
          ldaOrderDate >= ldaCont15PromoFrom AND
-         ldaOrderDate <= ldaCont15PromoEnd THEN DO:
+         ldaOrderDate <= ldaCont15PromoEnd AND
+         /* Convergent+CONT15 has VOICE200 instead of VOICE100 after 5.6.2017 */
+        (lcDCEvent EQ "CONT15" OR ldaOrderDate < 6/5/2017) THEN DO:
 
          liRequest = fPCActionRequest(MsRequest.MsSeq,
-                                  "VOICE100",
-                                  "act",
-                                  MsRequest.ActStamp,
-                                  TRUE, /* fees */
-                                  {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
-                                  "",
-                                  MsRequest.MsRequest,
-                                  FALSE,
-                                  "",
-                                  0,
-                                  0,
-                                  OUTPUT lcError).
+                                      "VOICE100",
+                                      "act",
+                                      MsRequest.ActStamp,
+                                      TRUE, /* fees */
+                                      {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                      "",
+                                      MsRequest.MsRequest,
+                                      FALSE,
+                                      "",
+                                      0,
+                                      0,
+                                      OUTPUT lcError).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -2066,7 +2092,7 @@ PROCEDURE pContractTermination:
             ldNewEndStamp = fSecOffSet(ldNewEndStamp,-1). 
          END.
 
-         IF lcDCEvent = "TARJ7" OR lcDCEvent = "TARJ9" THEN DO:
+         IF LOOKUP(lcDCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
             FOR FIRST bServiceLimit WHERE
                       bServiceLimit.GroupCode = "TARJ7_UPSELL",
                 FIRST bMServiceLimit EXCLUSIVE-LOCK WHERE

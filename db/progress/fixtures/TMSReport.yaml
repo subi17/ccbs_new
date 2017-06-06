@@ -1,0 +1,275 @@
+bulkload: TMSReport
+  RepName: "********"
+  Memo: "General report"
+  PageWidth: 116
+  EMail: "marika@starnet.fi,riston@starnet.fi,jaana@starnet.fi"
+
+bulkload: TMSReport
+  RepName: "1337"
+  Memo: "testi"
+  PageWidth: 10
+  EMail: "teemu@starnet.fi"
+
+bulkload: TMSReport
+  RepName: "actmsub"
+  Memo: "Activation of Mob Subscribers"
+  PageWidth: 132
+
+bulkload: TMSReport
+  RepName: "cuadvrep"
+  Memo: "Customers' Advance Payments"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "custrep"
+  Memo: "Customer report"
+  EMail: "marika@starnet.fi"
+  ChEMail: TRUE 
+
+bulkload: TMSReport
+  RepName: "ddstatre"
+  Memo: "DD Status"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "InvText"
+  Memo: "Information texts"
+  PageWidth: 90
+  EMail: "marika@starnet.fi"
+
+bulkload: TMSReport
+  RepName: "listms"
+  Memo: "List of subscriber's parameters"
+  PageWidth: 80
+  EMail: "marika@starnet.fi"
+  ChEMail: TRUE 
+
+bulkload: TMSReport
+  RepName: "memo"
+  Memo: "Memo/note"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nnadli"
+  Memo: "Advance Payments and Deposits"
+  PageWidth: 80
+  EMail: "marika@starnet.fi"
+
+bulkload: TMSReport
+  RepName: "nnanra"
+  Memo: "Kund/abonnent rapport"
+  PageWidth: 116
+
+bulkload: TMSReport
+  RepName: "nnasll"
+  Memo: "Customer list, wide"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nnasls"
+  Memo: "Customer list, narrow"
+  PageWidth: 150
+
+bulkload: TMSReport
+  RepName: "nnaslu"
+  Memo: "Customer List"
+  PageWidth: 132
+
+bulkload: TMSReport
+  RepName: "nnatra"
+  Memo: "Subscrnt/kund rapport"
+  PageWidth: 116
+
+bulkload: TMSReport
+  RepName: "nncgrtu"
+  Memo: "Circuit Group Counters"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nnchlu"
+  Memo: "Errorlog for CH-file  reading"
+  PageWidth: 80
+  UpdPerm: FALSE
+
+bulkload: TMSReport
+  RepName: "nncltu"
+  Memo: "Customer letter"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nncore1"
+  Memo: "Spesification for contract fees"
+  PageWidth: 130
+
+bulkload: TMSReport
+  RepName: "nncotu"
+  Memo: "Profits per salesman / product"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nndpbi"
+  Memo: "Part Payment Bills"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nnerlu"
+  Memo: "Due invoices"
+  PageWidth: 114
+
+bulkload: TMSReport
+  RepName: "nnhara"
+  Memo: "Alarm list"
+  PageWidth: 116
+
+bulkload: TMSReport
+  RepName: "nnhilu"
+  Memo: "Customer Price List"
+  PageWidth: 150
+  EMail: "marika@starnet.fi"
+  ChEMail: TRUE 
+
+bulkload: TMSReport
+  RepName: "nnikaj"
+  Memo: "Age Analysis"
+  PageWidth: 114
+  EMail: "marika@starnet.fi,risto.nupponen@starnet.fi"
+
+bulkload: TMSReport
+  RepName: "nnisaex"
+  Memo: "Commission letters"
+  PageWidth: 130
+
+bulkload: TMSReport
+  RepName: "nnkaen"
+  Memo: "Cash flow forecst"
+  PageWidth: 114
+
+bulkload: TMSReport
+  RepName: "nnkapa"
+  Memo: "Radering av betalda fakturor"
+  PageWidth: 114
+
+bulkload: TMSReport
+  RepName: "nnkatu"
+  Memo: "Remainders"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nnkosu"
+  Memo: "Journal of OCR payments"
+  PageWidth: 114
+
+bulkload: TMSReport
+  RepName: "nnlaki"
+  Memo: "Invoices (local printing)"
+  PageWidth: 80
+  EMail: "TMSUser"
+
+bulkload: TMSReport
+  RepName: "nnlalu"
+  Memo: "Invoice Journal"
+  PageWidth: 114
+  EMail: "marika@starnet.fi,risto.nupponen@starnet.fi"
+
+bulkload: TMSReport
+  RepName: "nnlati"
+  Memo: "Invoice Statistics salesman/cust"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nnmatu"
+  Memo: "Country number report"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nnmora"
+  Memo: "Land/operat÷r rapport"
+  PageWidth: 116
+
+bulkload: TMSReport
+  RepName: "nnmttu"
+  Memo: "Monthly Call Counter report"
+  PageWidth: 114
+
+bulkload: TMSReport
+  RepName: "nnomra"
+  Memo: "Operator/country report"
+  PageWidth: 116
+
+bulkload: TMSReport
+  RepName: "nnprtu"
+  Memo: "Commission report salesman/cntry"
+  PageWidth: 114
+
+bulkload: TMSReport
+  RepName: "nnpura1"
+  Memo: "Countery/Product Report"
+  PageWidth: 130
+  EMail: "TMSUser"
+
+bulkload: TMSReport
+  RepName: "nnpura2"
+  Memo: "Product/A-sub. report"
+  PageWidth: 130
+  EMail: "TMSUser"
+
+bulkload: TMSReport
+  RepName: "nnpura3"
+  Memo: "Product/country/A-number report"
+  PageWidth: 130
+  EMail: "TMSUser"
+
+bulkload: TMSReport
+  RepName: "nnpura4"
+  Memo: "Call report/country report"
+  PageWidth: 130
+  EMail: "TMSUser"
+  ChEMail: TRUE 
+
+bulkload: TMSReport
+  RepName: "nnpura7"
+  Memo: "Mobile spec 1"
+  PageWidth: 130
+
+bulkload: TMSReport
+  RepName: "nnputu"
+  Memo: "Commission rules"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nnrelu"
+  Memo: "Reskontralistan"
+  PageWidth: 114
+
+bulkload: TMSReport
+  RepName: "nnster"
+  Memo: "Account Summary"
+  PageWidth: 114
+  ChEMail: TRUE 
+
+bulkload: TMSReport
+  RepName: "nnsulu"
+  Memo: "Payment Journal"
+  PageWidth: 114
+  EMail: "marika@starnet.fi,risto.nupponen@starnet.fi"
+
+bulkload: TMSReport
+  RepName: "nnxbcgr"
+  Memo: "Circuit Group Counters"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nnxbli"
+  Memo: "Special b-number listing"
+  PageWidth: 80
+
+bulkload: TMSReport
+  RepName: "nnxbtu"
+  Memo: "Special b-number report"
+  PageWidth: 116
+
+bulkload: TMSReport
+  RepName: "prinowne"
+  Memo: "Print owner contract"
+  PageWidth: 80
+

@@ -1,0 +1,328 @@
+bulkload: MobError
+  MobError: 1001
+  MEName: "Unknown MSISDN for the Billing System"
+
+bulkload: MobError
+  MobError: 1002
+  MEName: "MSISDN not active in the BS when connection was opened"
+
+bulkload: MobError
+  MobError: 1003
+  MEName: "No mobile subscription found"
+
+bulkload: MobError
+  MobError: 1004
+  MEName: "Unknown Billing target"
+
+bulkload: MobError
+  MobError: 1005
+  MEName: "Customer not found"
+
+bulkload: MobError
+  MobError: 1006
+  MEName: "Unknown mobile subscription type"
+
+bulkload: MobError
+  MobError: 1007
+  MEName: "Unknown rateplan"
+
+bulkload: MobError
+  MobError: 1009
+  MEName: "IMSI Missing"
+
+bulkload: MobError
+  MobError: 1020
+  MEName: "Wrong Paytype"
+
+bulkload: MobError
+  MobError: 1100
+  MEName: "SMS Error; Network Determined Errors"
+
+bulkload: MobError
+  MobError: 2001
+  MEName: "Unidentified B-destination"
+
+bulkload: MobError
+  MobError: 2002
+  MEName: "Unidentified B-destination (VoIP)"
+
+bulkload: MobError
+  MobError: 3001
+  MEName: "No rate found for a destination (BillingTarget)"
+
+bulkload: MobError
+  MobError: 3002
+  MEName: "No rate found for a destination (RatePlan)"
+
+bulkload: MobError
+  MobError: 3003
+  MEName: "No rate found for a destination (RatePref)"
+
+bulkload: MobError
+  MobError: 3004
+  MEName: "No rate found for a destination (Tariff)"
+
+bulkload: MobError
+  MobError: 4001
+  MEName: "Erroneous VAS CDR"
+
+bulkload: MobError
+  MobError: 4002
+  MEName: "Unidentified B-destination"
+
+bulkload: MobError
+  MobError: 4003
+  MEName: "Unknown Value Added Service name"
+
+bulkload: MobError
+  MobError: 4004
+  MEName: "Unknown tariff class"
+
+bulkload: MobError
+  MobError: 4005
+  MEName: "Non-billable VAS ticket"
+
+bulkload: MobError
+  MobError: 4006
+  MEName: "Non-billable WAP VAS ticket (unknown operator)"
+
+bulkload: MobError
+  MobError: 4007
+  MEName: "Translated B-destination address not found"
+
+bulkload: MobError
+  MobError: 4101
+  MEName: "Non-billable WAP ticket (additional services)"
+
+bulkload: MobError
+  MobError: 4102
+  MEName: "Non-billable GPRS (mms) ticket"
+
+bulkload: MobError
+  MobError: 6001
+  MEName: "Unknown fixed number for the Billing System"
+
+bulkload: MobError
+  MobError: 6002
+  MEName: "Fixed number not active in the BS when connection was opened"
+
+bulkload: MobError
+  MobError: 7001
+  MEName: "Unknown Call Module Type"
+
+bulkload: MobError
+  MobError: 7002
+  MEName: "Invalid Date or Time field(s)"
+
+bulkload: MobError
+  MobError: 7003
+  MEName: "Invalid A-number"
+
+bulkload: MobError
+  MobError: 7004
+  MEName: "Invalid GsmBsub"
+
+bulkload: MobError
+  MobError: 7005
+  MEName: "Unknown Call type"
+
+bulkload: MobError
+  MobError: 7006
+  MEName: "NON-Billable Call Forwarding"
+
+bulkload: MobError
+  MobError: 7009
+  MEName: "Billing duration less than minimum billing length"
+
+bulkload: MobError
+  MobError: 8001
+  MEName: "Double Call"
+
+bulkload: MobError
+  MobError: 8002
+  MEName: "Non-billable call"
+
+bulkload: MobError
+  MobError: 8003
+  MEName: "Double call check failed"
+
+bulkload: MobError
+  MobError: 8004
+  MEName: "Double CCGW CDR"
+
+bulkload: MobError
+  MobError: 8005
+  MEName: "Double data CDR"
+
+bulkload: MobError
+  MobError: 8010
+  MEName: "Non-billable AMLI"
+
+bulkload: MobError
+  MobError: 8011
+  MEName: "NON-BILLABLE VAS MT-SMS"
+
+bulkload: MobError
+  MobError: 8012
+  MEName: "NON-BILLABLE VAS MO-SMS"
+
+bulkload: MobError
+  MobError: 8013
+  MEName: "Non-billable old CDRs"
+
+bulkload: MobError
+  MobError: 8014
+  MEName: "Non-billable CONTM2 call"
+
+bulkload: MobError
+  MobError: 8040
+  MEName: "Out of the Invoicing Run (temporarily)"
+
+bulkload: MobError
+  MobError: 8041
+  MEName: "Roaming Out double calls"
+
+bulkload: MobError
+  MobError: 8042
+  MEName: "Roaming GPRS (international) with zero data amount"
+
+bulkload: MobError
+  MobError: 8043
+  MEName: "National GPRS with zero data amount"
+
+bulkload: MobError
+  MobError: 8048
+  MEName: "Old events removed from billing"
+
+bulkload: MobError
+  MobError: 8049
+  MEName: "Not Invoiceable Calls"
+
+bulkload: MobError
+  MobError: 9000
+  MEName: "Non-billable CDR"
+
+bulkload: MobError
+  MobError: 9001
+  MEName: "SSP Call; not billable"
+
+bulkload: MobError
+  MobError: 9003
+  MEName: "B-number missing on NON-billable CDR"
+
+bulkload: MobError
+  MobError: 9004
+  MEName: "Duration less than minimum billing length"
+
+bulkload: MobError
+  MobError: 9005
+  MEName: "0800 calls / Free Calls"
+
+bulkload: MobError
+  MobError: 9006
+  MEName: "Emergency calls: not billable"
+
+bulkload: MobError
+  MobError: 9007
+  MEName: "Roaming calls"
+
+bulkload: MobError
+  MobError: 9008
+  MEName: "B-number unknown"
+
+bulkload: MobError
+  MobError: 9009
+  MEName: "Free call forwarding to voice mail: not billable"
+
+bulkload: MobError
+  MobError: 9010
+  MEName: "Roaming call forwarding to VMS (MT)"
+
+bulkload: MobError
+  MobError: 9011
+  MEName: "Roaming call forwarding to VMS (MO)"
+
+bulkload: MobError
+  MobError: 9012
+  MEName: "Invalid MSRN on roaming MT"
+
+bulkload: MobError
+  MobError: 9013
+  MEName: "Erroneously analyzed CDRs"
+
+bulkload: MobError
+  MobError: 9050
+  MEName: "Other non-billable"
+
+bulkload: MobError
+  MobError: 9051
+  MEName: "Non-billable call"
+
+bulkload: MobError
+  MobError: 9052
+  MEName: "Non-billable call received"
+
+bulkload: MobError
+  MobError: 9053
+  MEName: "Non-billable SMS sent"
+
+bulkload: MobError
+  MobError: 9054
+  MEName: "Non-billable SMS received"
+
+bulkload: MobError
+  MobError: 9055
+  MEName: "Non-billable MMS sent"
+
+bulkload: MobError
+  MobError: 9056
+  MEName: "Non-billable MMS received"
+
+bulkload: MobError
+  MobError: 9057
+  MEName: "Non-billable GPRS usage"
+
+bulkload: MobError
+  MobError: 9061
+  MEName: "Non-billable call (TAP3)"
+
+bulkload: MobError
+  MobError: 9062
+  MEName: "Non-billable call received (TAP3)"
+
+bulkload: MobError
+  MobError: 9063
+  MEName: "Non-billable SMS sent (TAP3)"
+
+bulkload: MobError
+  MobError: 9064
+  MEName: "Non-billable  SMS received (TAP3)"
+
+bulkload: MobError
+  MobError: 9067
+  MEName: "Non-billable GPRS usage (TAP3)"
+
+bulkload: MobError
+  MobError: 9070
+  MEName: "SMS delivery (CCGW)"
+
+bulkload: MobError
+  MobError: 9071
+  MEName: "SMS submit (CCGW)"
+
+bulkload: MobError
+  MobError: 9100
+  MEName: "For analysis"
+
+bulkload: MobError
+  MobError: 9997
+  MEName: "CDR analysed: not billable / Terminating call"
+
+bulkload: MobError
+  MobError: 9998
+  MEName: "CDR analysed but not RATED yet"
+
+bulkload: MobError
+  MobError: 9999
+  MEName: "CDR not analysed yet"
+

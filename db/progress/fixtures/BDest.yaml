@@ -1,0 +1,10783 @@
+bulkload: BDest
+  BDest: "010"
+  BDName: "Servicios de emergencia"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 1
+
+bulkload: BDest
+  BDest: "010A"
+  BDName: "Informacion ciudadana local"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 940
+
+bulkload: BDest
+  BDest: "010B1"
+  BDName: "Informacion ciudadana local"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 941
+
+bulkload: BDest
+  BDest: "010B2"
+  BDName: "Informacion ciudadana local"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 942
+
+bulkload: BDest
+  BDest: "010C"
+  BDName: "Informacion ciudadana local"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 943
+
+bulkload: BDest
+  BDest: "011"
+  BDName: "InformaciÛn sobre tr·fico y au"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 2
+
+bulkload: BDest
+  BDest: "012"
+  BDName: "Servicios de emergencia"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 3
+
+bulkload: BDest
+  BDest: "012A"
+  BDName: "Informacion ciudadana"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 944
+
+bulkload: BDest
+  BDest: "012B1"
+  BDName: "Informacion ciudadana"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 945
+
+bulkload: BDest
+  BDest: "012B2"
+  BDName: "Informacion ciudadana"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 946
+
+bulkload: BDest
+  BDest: "012C"
+  BDName: "Informacion ciudadana"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 947
+
+bulkload: BDest
+  BDest: "012D"
+  BDName: "Informacion ciudadana"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-08-01
+  BdestID: 970
+
+bulkload: BDest
+  BDest: "015"
+  BDName: "InformaciÛn otro operador"
+  CCN: 8
+  Class: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 4
+
+bulkload: BDest
+  BDest: "016"
+  BDName: "InformaciÛn y Asesoramiento"
+  CCN: 8
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 5
+
+bulkload: BDest
+  BDest: "022"
+  BDName: "InformaciÛn otro operador"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 6
+
+bulkload: BDest
+  BDest: "026"
+  BDName: "InformaciÛn otro operador"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 7
+
+bulkload: BDest
+  BDest: "045"
+  BDName: "InformaciÛn otro operador"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 8
+
+bulkload: BDest
+  BDest: "060"
+  BDName: "Servicio InterÈs Social"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 9
+
+bulkload: BDest
+  BDest: "061"
+  BDName: "Seguridad Social"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 10
+
+bulkload: BDest
+  BDest: "062"
+  BDName: "Guardia Civil"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 11
+
+bulkload: BDest
+  BDest: "065"
+  BDName: "Servicio atenciÛn personas en"
+  CCN: 8
+  Class: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 12
+
+bulkload: BDest
+  BDest: "069"
+  BDName: "Fixed voice mail call"
+  CCN: 1098
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-04-01
+  BdestID: 1073
+
+bulkload: BDest
+  BDest: "080"
+  BDName: "Bomberos"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 13
+
+bulkload: BDest
+  BDest: "082"
+  BDName: "Soccorro MontaÒa"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 14
+
+bulkload: BDest
+  BDest: "083"
+  BDName: "InformaciÛn otro operador"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 15
+
+bulkload: BDest
+  BDest: "085"
+  BDName: "Bomberos"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 16
+
+bulkload: BDest
+  BDest: "088"
+  BDName: "PolicÌa AutÛnoma"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 17
+
+bulkload: BDest
+  BDest: "090"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 18
+
+bulkload: BDest
+  BDest: "091"
+  BDName: "PolicÌa Nacional"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 19
+
+bulkload: BDest
+  BDest: "092"
+  BDName: "PolicÌa Municipal"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 20
+
+bulkload: BDest
+  BDest: "093"
+  BDName: "InformaciÛn horaria"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 21
+
+bulkload: BDest
+  BDest: "095"
+  BDName: "Noticias RNE"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 22
+
+bulkload: BDest
+  BDest: "096"
+  BDName: "Aviso y despertador de Telef."
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 23
+
+bulkload: BDest
+  BDest: "097"
+  BDName: "InformaciÛn deportiva"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 24
+
+bulkload: BDest
+  BDest: "098"
+  BDName: "InfomaciÛn"
+  CCN: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 25
+
+bulkload: BDest
+  BDest: "1"
+  BDName: "Other operators' services"
+  CCN: 9
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 26
+
+bulkload: BDest
+  BDest: "1002"
+  BDName: "InformaciÛn otro operador"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 27
+
+bulkload: BDest
+  BDest: "1004"
+  BDName: "InformaciÛn otro operador"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 28
+
+bulkload: BDest
+  BDest: "1006"
+  BDName: "ProtecciÛn Civil"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 29
+
+bulkload: BDest
+  BDest: "1015"
+  BDName: "InformaciÛn otro operador"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 30
+
+bulkload: BDest
+  BDest: "10201"
+  BDName: "Fixed Voice mail calls"
+  CCN: 1098
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-11-01
+  BdestID: 1061
+
+bulkload: BDest
+  BDest: "112/911"
+  BDName: "Emergencia"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 31
+
+bulkload: BDest
+  BDest: "11810"
+  BDName: " de InformaciÛn TelefÛnica n˙mero 11812 (AUNA)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 32
+
+bulkload: BDest
+  BDest: "11811"
+  BDName: " de NIT SAU"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 33
+
+bulkload: BDest
+  BDest: "11812"
+  BDName: "11812 de InformaciÛn TelefÛnica n˙mero 1"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 34
+
+bulkload: BDest
+  BDest: "11813"
+  BDName: " B.P.O. (BT)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 35
+
+bulkload: BDest
+  BDest: "11814"
+  BDName: "11814 de Teleservicio Expres (Quality)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 36
+
+bulkload: BDest
+  BDest: "11815"
+  BDName: "11815 de LÌneas de Red Inteligente (VODA"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 37
+
+bulkload: BDest
+  BDest: "11816"
+  BDName: " de TeleatenciÛn Mediterr·nea"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 38
+
+bulkload: BDest
+  BDest: "11817"
+  BDName: "11817 de Andarosa TV (FT)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 39
+
+bulkload: BDest
+  BDest: "11818"
+  BDName: "Servicio  (T>11 seg)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 40
+
+bulkload: BDest
+  BDest: "11819"
+  BDName: "11819 de Nirnet Invest (AVYS TELECOM)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 41
+
+bulkload: BDest
+  BDest: "11820"
+  BDName: " de Operadora de Serv. de Telecom. de RI"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 42
+
+bulkload: BDest
+  BDest: "11821"
+  BDName: " Audiotex Internet Services (France Telecom)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 43
+
+bulkload: BDest
+  BDest: "11822"
+  BDName: "11822 de Atento Teleservicios Espa√±a"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 44
+
+bulkload: BDest
+  BDest: "11823"
+  BDName: "11823 de Barnor 2001 (Auna)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 45
+
+bulkload: BDest
+  BDest: "11824"
+  BDName: "11824 de Infotecnia 11824 (VODAFONE ONO)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 46
+
+bulkload: BDest
+  BDest: "11825"
+  BDName: "11825 de Atento Teleservicios Espa√±a"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 47
+
+bulkload: BDest
+  BDest: "11826"
+  BDName: " de Informatel Hispania (Quality)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 48
+
+bulkload: BDest
+  BDest: "11827"
+  BDName: "11827 de HELLO TV (BT)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 49
+
+bulkload: BDest
+  BDest: "11828"
+  BDName: "11828 de VODAFONE ONO"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 50
+
+bulkload: BDest
+  BDest: "11829"
+  BDName: "11829 de Air Ebites (AUNA)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 51
+
+bulkload: BDest
+  BDest: "11830"
+  BDName: " de ADVANCED TELEPHONE SERVICES S.A."
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 52
+
+bulkload: BDest
+  BDest: "11831"
+  BDName: " de DIALPLAN TELECOM"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 53
+
+bulkload: BDest
+  BDest: "11832"
+  BDName: "11832 de ANCUTATEL (Quality)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 54
+
+bulkload: BDest
+  BDest: "11833"
+  BDName: "11833 de Premium Numbers(Orange Espagne)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 55
+
+bulkload: BDest
+  BDest: "11834"
+  BDName: "11834 de Nvia GestiÛn de Datos"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 56
+
+bulkload: BDest
+  BDest: "11835"
+  BDName: " de Incotel Servicios (Opera)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 57
+
+bulkload: BDest
+  BDest: "11836"
+  BDName: " de InformaciÛn TelefÛnica 11836"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 58
+
+bulkload: BDest
+  BDest: "11837"
+  BDName: " de Foreign Information Services (Uni2)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 59
+
+bulkload: BDest
+  BDest: "11838"
+  BDName: " de Opera"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 60
+
+bulkload: BDest
+  BDest: "11839"
+  BDName: " de Movilservicio Urgente (BT)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 61
+
+bulkload: BDest
+  BDest: "11840"
+  BDName: " de Euskaltel"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 62
+
+bulkload: BDest
+  BDest: "11841"
+  BDName: "11841 de LINOCIO HAGEN (VODAFONE ONO)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 63
+
+bulkload: BDest
+  BDest: "11842"
+  BDName: "11842 de 11842 INFORMACI”N TELEF”NICA (V"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 64
+
+bulkload: BDest
+  BDest: "11843"
+  BDName: " de ATENCI”N TELEF”NICA AVANZADA"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 65
+
+bulkload: BDest
+  BDest: "11844"
+  BDName: " de InformaciÛn Directa (AUNA)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 66
+
+bulkload: BDest
+  BDest: "11845"
+  BDName: " de Incotel IngenierÌa (Opera)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 67
+
+bulkload: BDest
+  BDest: "11846"
+  BDName: "11846 de TICTACTELECOMUNICACIONES"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 68
+
+bulkload: BDest
+  BDest: "11847"
+  BDName: "11847 de TELECOMING, S.A.UNIPERSONAL"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 69
+
+bulkload: BDest
+  BDest: "11848"
+  BDName: "11848 de Grupo R"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 70
+
+bulkload: BDest
+  BDest: "11849"
+  BDName: "11849 de Digitaran (Orange Espagne)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-01-01
+  BdestID: 894
+
+bulkload: BDest
+  BDest: "11850"
+  BDName: "11850 de 11850 INFORMACI√ìN EMPRESARIAL,"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 71
+
+bulkload: BDest
+  BDest: "11851"
+  BDName: " TELELÕNEA LOCAL (France Telecom)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 72
+
+bulkload: BDest
+  BDest: "11852"
+  BDName: "11852 de Viajes Bolero (BT)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 73
+
+bulkload: BDest
+  BDest: "11853"
+  BDName: "de …xito Comunicaciones(Opera)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 74
+
+bulkload: BDest
+  BDest: "11854"
+  BDName: " de Servicios de InformaciÛn Audiotex TelelÌnea (Uni2)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 75
+
+bulkload: BDest
+  BDest: "11855"
+  BDName: " de Vodafone"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 76
+
+bulkload: BDest
+  BDest: "11856"
+  BDName: "de Emsertex 2002 (ONO)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-08-01
+  BdestID: 870
+
+bulkload: BDest
+  BDest: "11857"
+  BDName: "11857 de MEDIAPUBLILINE (VODAFONE ONO)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-09-01
+  BdestID: 873
+
+bulkload: BDest
+  BDest: "11858"
+  BDName: " de Opera"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 77
+
+bulkload: BDest
+  BDest: "11859"
+  BDName: " de Spantel 2000 (BT)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 78
+
+bulkload: BDest
+  BDest: "11860"
+  BDName: " de ATENCI”N 24 HORAS. S.L. 11811 NIT SA"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 79
+
+bulkload: BDest
+  BDest: "11861"
+  BDName: "11861 de Hispano TelevisiÛn y TelefonÌa"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 80
+
+bulkload: BDest
+  BDest: "11862"
+  BDName: "11862 de ALAI"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 81
+
+bulkload: BDest
+  BDest: "11863"
+  BDName: "11863 de GuÌas 118  (Quality)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 82
+
+bulkload: BDest
+  BDest: "11864"
+  BDName: "11864 de Next Touch Telecom (A"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 83
+
+bulkload: BDest
+  BDest: "11865"
+  BDName: "11865 de Micamosa Mon de Servei (VODAFON"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 84
+
+bulkload: BDest
+  BDest: "11866"
+  BDName: "11866 de Servicaterers BCN (VODAFONE ONO"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 85
+
+bulkload: BDest
+  BDest: "11867"
+  BDName: "de Comunicaciones 2012 (ONO)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 86
+
+bulkload: BDest
+  BDest: "11868"
+  BDName: " de Incotel"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 87
+
+bulkload: BDest
+  BDest: "11869"
+  BDName: " de Servicios TelefÛnicos de Audiotex"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 88
+
+bulkload: BDest
+  BDest: "11870"
+  BDName: " de InformaciÛn en General (OPERA)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 89
+
+bulkload: BDest
+  BDest: "11871"
+  BDName: " de Data Premium de Venezuela"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 90
+
+bulkload: BDest
+  BDest: "11872"
+  BDName: " de World Premium Rates (BT)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 91
+
+bulkload: BDest
+  BDest: "11873"
+  BDName: " Nac Comunicaciones, SL (France Telecom)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 92
+
+bulkload: BDest
+  BDest: "11874"
+  BDName: " de Audiotex Phone Systems"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 93
+
+bulkload: BDest
+  BDest: "11875"
+  BDName: " de QDQ Media (Uni2)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 94
+
+bulkload: BDest
+  BDest: "11876"
+  BDName: " de Internet"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 95
+
+bulkload: BDest
+  BDest: "11877"
+  BDName: "11877 de Remirson Inversora (VODAFONE ON"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 96
+
+bulkload: BDest
+  BDest: "11878"
+  BDName: " de Quality Telecom (BT)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 97
+
+bulkload: BDest
+  BDest: "11879"
+  BDName: "11879 de TelefonosdecastellÛn (VODAFONE"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-04-01
+  BdestID: 897
+
+bulkload: BDest
+  BDest: "11880"
+  BDName: " de LIFI COMUNICACIONES. S.L."
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 98
+
+bulkload: BDest
+  BDest: "11881"
+  BDName: "11881 de XTRA TELECOM"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 99
+
+bulkload: BDest
+  BDest: "11882"
+  BDName: "11882 de Telinfocom (Orange Espagne)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 100
+
+bulkload: BDest
+  BDest: "11883"
+  BDName: "11883 de Compcall Avanzados"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 101
+
+bulkload: BDest
+  BDest: "11884"
+  BDName: " de 11883 Telecom (BT)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 102
+
+bulkload: BDest
+  BDest: "11885"
+  BDName: "11885 de TELEFON√çA INFOGUS, S.L."
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 103
+
+bulkload: BDest
+  BDest: "11886"
+  BDName: "11886 de 11888 S.C.T."
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 104
+
+bulkload: BDest
+  BDest: "11887"
+  BDName: " de ESTO ES MARKETING, S.L."
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 105
+
+bulkload: BDest
+  BDest: "11888"
+  BDName: "11888 de 11888 S.C.T."
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 106
+
+bulkload: BDest
+  BDest: "11889"
+  BDName: " de EditaTeide (BT)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 107
+
+bulkload: BDest
+  BDest: "11890"
+  BDName: " de PRETENIUM (MASVOZ)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-27
+  BdestID: 948
+
+bulkload: BDest
+  BDest: "11891"
+  BDName: " de IN4YOU SIGLO XXI, S.L. UNIPERSONAL"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-08-28
+  BdestID: 971
+
+bulkload: BDest
+  BDest: "11892"
+  BDName: " de TIGRAD ATENCI”N TELEF”NICA"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-11-01
+  BdestID: 975
+
+bulkload: BDest
+  BDest: "11894"
+  BDName: "11894 de FULLTIME NETWORKS LIMITED (MASV"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-11-27
+  BdestID: 976
+
+bulkload: BDest
+  BDest: "11895"
+  BDName: "11895 de INFONICA, S.L. (VODAFONE ONO)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-08-28
+  BdestID: 972
+
+bulkload: BDest
+  BDest: "11897"
+  BDName: "11897 de ACTIVAOPER SERVICIOS (Xtra Tele"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-02-27
+  BdestID: 935
+
+bulkload: BDest
+  BDest: "11898"
+  BDName: "11898 de Trisonata (VODAFONE ONO)"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-01
+  BdestID: 896
+
+bulkload: BDest
+  BDest: "11899"
+  BDName: "de Servicio TelefÛnico para el Ciudadano"
+  CCN: 66
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-06-28
+  BdestID: 901
+
+bulkload: BDest
+  BDest: "1204"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 681
+
+bulkload: BDest
+  BDest: "1226"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 682
+
+bulkload: BDest
+  BDest: "1249"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 683
+
+bulkload: BDest
+  BDest: "1250"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 684
+
+bulkload: BDest
+  BDest: "1289"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 685
+
+bulkload: BDest
+  BDest: "1306"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 686
+
+bulkload: BDest
+  BDest: "1343"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 687
+
+bulkload: BDest
+  BDest: "1354"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 688
+
+bulkload: BDest
+  BDest: "1382"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 689
+
+bulkload: BDest
+  BDest: "1400"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 108
+
+bulkload: BDest
+  BDest: "1401"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 109
+
+bulkload: BDest
+  BDest: "1402"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 110
+
+bulkload: BDest
+  BDest: "1403"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 690
+
+bulkload: BDest
+  BDest: "1403"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 111
+
+bulkload: BDest
+  BDest: "1404"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 761
+
+bulkload: BDest
+  BDest: "1405"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 112
+
+bulkload: BDest
+  BDest: "1406"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 759
+
+bulkload: BDest
+  BDest: "1406"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2012-01-31
+  FromDate: 2006-12-01
+  BdestID: 113
+
+bulkload: BDest
+  BDest: "1408"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 114
+
+bulkload: BDest
+  BDest: "1409"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 115
+
+bulkload: BDest
+  BDest: "1410"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 116
+
+bulkload: BDest
+  BDest: "1411"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 117
+
+bulkload: BDest
+  BDest: "1412"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 118
+
+bulkload: BDest
+  BDest: "1413"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 119
+
+bulkload: BDest
+  BDest: "1414"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 120
+
+bulkload: BDest
+  BDest: "1415"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 121
+
+bulkload: BDest
+  BDest: "1416"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 691
+
+bulkload: BDest
+  BDest: "1416"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 122
+
+bulkload: BDest
+  BDest: "1417"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 123
+
+bulkload: BDest
+  BDest: "1418"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 692
+
+bulkload: BDest
+  BDest: "1420"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 744
+
+bulkload: BDest
+  BDest: "1421"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 745
+
+bulkload: BDest
+  BDest: "1422"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 124
+
+bulkload: BDest
+  BDest: "1423"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 746
+
+bulkload: BDest
+  BDest: "1424"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 125
+
+bulkload: BDest
+  BDest: "1425"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 126
+
+bulkload: BDest
+  BDest: "1428"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 127
+
+bulkload: BDest
+  BDest: "1430"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 747
+
+bulkload: BDest
+  BDest: "1431"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 693
+
+bulkload: BDest
+  BDest: "1431"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 748
+
+bulkload: BDest
+  BDest: "1432"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 762
+
+bulkload: BDest
+  BDest: "1433"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 128
+
+bulkload: BDest
+  BDest: "1434"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 129
+
+bulkload: BDest
+  BDest: "1437"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 694
+
+bulkload: BDest
+  BDest: "1438"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 695
+
+bulkload: BDest
+  BDest: "1440"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 130
+
+bulkload: BDest
+  BDest: "1441"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 131
+
+bulkload: BDest
+  BDest: "1442"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 132
+
+bulkload: BDest
+  BDest: "1443"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 133
+
+bulkload: BDest
+  BDest: "1444"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 134
+
+bulkload: BDest
+  BDest: "1445"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 135
+
+bulkload: BDest
+  BDest: "1446"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 136
+
+bulkload: BDest
+  BDest: "1447"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 137
+
+bulkload: BDest
+  BDest: "1449"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 138
+
+bulkload: BDest
+  BDest: "1450"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 696
+
+bulkload: BDest
+  BDest: "1450"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 139
+
+bulkload: BDest
+  BDest: "1451"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 140
+
+bulkload: BDest
+  BDest: "1456"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 141
+
+bulkload: BDest
+  BDest: "1460"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 697
+
+bulkload: BDest
+  BDest: "1460"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 142
+
+bulkload: BDest
+  BDest: "1461"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 143
+
+bulkload: BDest
+  BDest: "1465"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 144
+
+bulkload: BDest
+  BDest: "1466"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 145
+
+bulkload: BDest
+  BDest: "1467"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 146
+
+bulkload: BDest
+  BDest: "1468"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 147
+
+bulkload: BDest
+  BDest: "1469"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 148
+
+bulkload: BDest
+  BDest: "1470"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 149
+
+bulkload: BDest
+  BDest: "1471"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 150
+
+bulkload: BDest
+  BDest: "1472"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 151
+
+bulkload: BDest
+  BDest: "1473"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 152
+
+bulkload: BDest
+  BDest: "1474"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 698
+
+bulkload: BDest
+  BDest: "1474"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 153
+
+bulkload: BDest
+  BDest: "1476"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 154
+
+bulkload: BDest
+  BDest: "1477"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 155
+
+bulkload: BDest
+  BDest: "1478"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 156
+
+bulkload: BDest
+  BDest: "1479"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 157
+
+bulkload: BDest
+  BDest: "1480"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-07-31
+  BdestID: 903
+
+bulkload: BDest
+  BDest: "1484"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-01-01
+  BdestID: 978
+
+bulkload: BDest
+  BDest: "1485"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 158
+
+bulkload: BDest
+  BDest: "1486"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 159
+
+bulkload: BDest
+  BDest: "1488"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 160
+
+bulkload: BDest
+  BDest: "1489"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 161
+
+bulkload: BDest
+  BDest: "1490"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 162
+
+bulkload: BDest
+  BDest: "1491"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 163
+
+bulkload: BDest
+  BDest: "1492"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 164
+
+bulkload: BDest
+  BDest: "1493"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 165
+
+bulkload: BDest
+  BDest: "1494"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 166
+
+bulkload: BDest
+  BDest: "1495"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 167
+
+bulkload: BDest
+  BDest: "1496"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 168
+
+bulkload: BDest
+  BDest: "1497"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 169
+
+bulkload: BDest
+  BDest: "1498"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 170
+
+bulkload: BDest
+  BDest: "1499"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 171
+
+bulkload: BDest
+  BDest: "1500"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 172
+
+bulkload: BDest
+  BDest: "1501"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 173
+
+bulkload: BDest
+  BDest: "1502"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 749
+
+bulkload: BDest
+  BDest: "1503"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 750
+
+bulkload: BDest
+  BDest: "1505"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 174
+
+bulkload: BDest
+  BDest: "1506"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 699
+
+bulkload: BDest
+  BDest: "1506"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 175
+
+bulkload: BDest
+  BDest: "1507"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 176
+
+bulkload: BDest
+  BDest: "1508"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 177
+
+bulkload: BDest
+  BDest: "1509"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 178
+
+bulkload: BDest
+  BDest: "1510"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 179
+
+bulkload: BDest
+  BDest: "1514"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 700
+
+bulkload: BDest
+  BDest: "1515"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 180
+
+bulkload: BDest
+  BDest: "1516"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 181
+
+bulkload: BDest
+  BDest: "1517"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 182
+
+bulkload: BDest
+  BDest: "1519"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 701
+
+bulkload: BDest
+  BDest: "1520"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 183
+
+bulkload: BDest
+  BDest: "1521"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 184
+
+bulkload: BDest
+  BDest: "1525"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 185
+
+bulkload: BDest
+  BDest: "1526"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 186
+
+bulkload: BDest
+  BDest: "1531"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 187
+
+bulkload: BDest
+  BDest: "1533"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 188
+
+bulkload: BDest
+  BDest: "1534"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 189
+
+bulkload: BDest
+  BDest: "1535"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 190
+
+bulkload: BDest
+  BDest: "1536"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 191
+
+bulkload: BDest
+  BDest: "1537"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 192
+
+bulkload: BDest
+  BDest: "1540"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 193
+
+bulkload: BDest
+  BDest: "1545"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 194
+
+bulkload: BDest
+  BDest: "1550"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 195
+
+bulkload: BDest
+  BDest: "1551"
+  BDName: "InformaciÛn y atenciÛn a clientes Servic"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 196
+
+bulkload: BDest
+  BDest: "1552"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 197
+
+bulkload: BDest
+  BDest: "1553"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 760
+
+bulkload: BDest
+  BDest: "1553"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2012-01-31
+  FromDate: 2006-12-01
+  BdestID: 198
+
+bulkload: BDest
+  BDest: "1554"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 751
+
+bulkload: BDest
+  BDest: "1555"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 199
+
+bulkload: BDest
+  BDest: "1556"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 200
+
+bulkload: BDest
+  BDest: "1560"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 201
+
+bulkload: BDest
+  BDest: "1561"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 202
+
+bulkload: BDest
+  BDest: "1562"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 203
+
+bulkload: BDest
+  BDest: "1563"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 204
+
+bulkload: BDest
+  BDest: "1565"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 205
+
+bulkload: BDest
+  BDest: "1566"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 206
+
+bulkload: BDest
+  BDest: "1567"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 207
+
+bulkload: BDest
+  BDest: "1568"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 208
+
+bulkload: BDest
+  BDest: "1569"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 209
+
+bulkload: BDest
+  BDest: "1570"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 210
+
+bulkload: BDest
+  BDest: "1571"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 211
+
+bulkload: BDest
+  BDest: "1575"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 212
+
+bulkload: BDest
+  BDest: "1576"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 213
+
+bulkload: BDest
+  BDest: "1579"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 702
+
+bulkload: BDest
+  BDest: "1580"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 214
+
+bulkload: BDest
+  BDest: "1581"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 703
+
+bulkload: BDest
+  BDest: "1584"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 704
+
+bulkload: BDest
+  BDest: "1587"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 705
+
+bulkload: BDest
+  BDest: "1587"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 215
+
+bulkload: BDest
+  BDest: "1588"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 216
+
+bulkload: BDest
+  BDest: "1590"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 217
+
+bulkload: BDest
+  BDest: "1591"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 218
+
+bulkload: BDest
+  BDest: "1592"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 219
+
+bulkload: BDest
+  BDest: "1593"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 220
+
+bulkload: BDest
+  BDest: "1594"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 221
+
+bulkload: BDest
+  BDest: "1596"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 222
+
+bulkload: BDest
+  BDest: "1597"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 223
+
+bulkload: BDest
+  BDest: "1598"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 224
+
+bulkload: BDest
+  BDest: "1600"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 706
+
+bulkload: BDest
+  BDest: "1600"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 225
+
+bulkload: BDest
+  BDest: "1601"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 226
+
+bulkload: BDest
+  BDest: "1602"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 227
+
+bulkload: BDest
+  BDest: "1603"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 228
+
+bulkload: BDest
+  BDest: "1604"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 707
+
+bulkload: BDest
+  BDest: "1604"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 229
+
+bulkload: BDest
+  BDest: "1606"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 230
+
+bulkload: BDest
+  BDest: "1608"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 231
+
+bulkload: BDest
+  BDest: "1613"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 708
+
+bulkload: BDest
+  BDest: "1616"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 232
+
+bulkload: BDest
+  BDest: "1617"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 233
+
+bulkload: BDest
+  BDest: "1618"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 234
+
+bulkload: BDest
+  BDest: "1620"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 235
+
+bulkload: BDest
+  BDest: "1622"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 236
+
+bulkload: BDest
+  BDest: "1624"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 752
+
+bulkload: BDest
+  BDest: "1626"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 763
+
+bulkload: BDest
+  BDest: "1630"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 237
+
+bulkload: BDest
+  BDest: "1631"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 238
+
+bulkload: BDest
+  BDest: "1632"
+  BDName: "BuzÛn de voz"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 239
+
+bulkload: BDest
+  BDest: "1633"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 240
+
+bulkload: BDest
+  BDest: "1634"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 241
+
+bulkload: BDest
+  BDest: "1636"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 242
+
+bulkload: BDest
+  BDest: "1644"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 243
+
+bulkload: BDest
+  BDest: "1645"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 244
+
+bulkload: BDest
+  BDest: "1647"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 709
+
+bulkload: BDest
+  BDest: "1650"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 245
+
+bulkload: BDest
+  BDest: "1661"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 246
+
+bulkload: BDest
+  BDest: "1666"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 247
+
+bulkload: BDest
+  BDest: "1670"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 248
+
+bulkload: BDest
+  BDest: "1671"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 249
+
+bulkload: BDest
+  BDest: "1672"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 710
+
+bulkload: BDest
+  BDest: "1672"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 250
+
+bulkload: BDest
+  BDest: "1674"
+  BDName: "BuzÛn de voz"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 251
+
+bulkload: BDest
+  BDest: "1681"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 252
+
+bulkload: BDest
+  BDest: "1682"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 253
+
+bulkload: BDest
+  BDest: "1683"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 254
+
+bulkload: BDest
+  BDest: "1685"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 255
+
+bulkload: BDest
+  BDest: "1686"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 256
+
+bulkload: BDest
+  BDest: "1687"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 257
+
+bulkload: BDest
+  BDest: "1688"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 258
+
+bulkload: BDest
+  BDest: "1690"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 259
+
+bulkload: BDest
+  BDest: "1691"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 260
+
+bulkload: BDest
+  BDest: "1692"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 261
+
+bulkload: BDest
+  BDest: "1693"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 262
+
+bulkload: BDest
+  BDest: "1694"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 263
+
+bulkload: BDest
+  BDest: "1700"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 264
+
+bulkload: BDest
+  BDest: "1701"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 265
+
+bulkload: BDest
+  BDest: "1702"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 266
+
+bulkload: BDest
+  BDest: "1703"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 753
+
+bulkload: BDest
+  BDest: "1704"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 267
+
+bulkload: BDest
+  BDest: "1705"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 711
+
+bulkload: BDest
+  BDest: "1705"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 268
+
+bulkload: BDest
+  BDest: "1706"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 269
+
+bulkload: BDest
+  BDest: "1707"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 270
+
+bulkload: BDest
+  BDest: "1708"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 271
+
+bulkload: BDest
+  BDest: "1709"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 712
+
+bulkload: BDest
+  BDest: "1709"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 272
+
+bulkload: BDest
+  BDest: "1710"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 273
+
+bulkload: BDest
+  BDest: "1711"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 274
+
+bulkload: BDest
+  BDest: "1712"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 275
+
+bulkload: BDest
+  BDest: "1714"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 754
+
+bulkload: BDest
+  BDest: "1715"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 755
+
+bulkload: BDest
+  BDest: "1717"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 276
+
+bulkload: BDest
+  BDest: "1718"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 277
+
+bulkload: BDest
+  BDest: "1720"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 756
+
+bulkload: BDest
+  BDest: "1721"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 757
+
+bulkload: BDest
+  BDest: "1722"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 758
+
+bulkload: BDest
+  BDest: "1723"
+  BDName: "Servicio Datafono"
+  CCN: 9
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-09-01
+  BdestID: 872
+
+bulkload: BDest
+  BDest: "1726"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 278
+
+bulkload: BDest
+  BDest: "1727"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-04-28
+  BdestID: 1039
+
+bulkload: BDest
+  BDest: "1730"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 279
+
+bulkload: BDest
+  BDest: "1731"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 280
+
+bulkload: BDest
+  BDest: "1732"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 281
+
+bulkload: BDest
+  BDest: "1733"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 282
+
+bulkload: BDest
+  BDest: "1745"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 283
+
+bulkload: BDest
+  BDest: "1750"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 284
+
+bulkload: BDest
+  BDest: "1770"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-01-30
+  BdestID: 934
+
+bulkload: BDest
+  BDest: "1771"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 285
+
+bulkload: BDest
+  BDest: "1772"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 286
+
+bulkload: BDest
+  BDest: "1774"
+  BDName: "InformaciÛn y atenciÛn a clien"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 287
+
+bulkload: BDest
+  BDest: "1775"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 288
+
+bulkload: BDest
+  BDest: "1776"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 289
+
+bulkload: BDest
+  BDest: "1777"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 290
+
+bulkload: BDest
+  BDest: "1778"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 713
+
+bulkload: BDest
+  BDest: "1778"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 291
+
+bulkload: BDest
+  BDest: "1779"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 292
+
+bulkload: BDest
+  BDest: "1780"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 714
+
+bulkload: BDest
+  BDest: "1780"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 293
+
+bulkload: BDest
+  BDest: "1781"
+  BDName: "Asistencia tÈcnica"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 294
+
+bulkload: BDest
+  BDest: "1782"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 295
+
+bulkload: BDest
+  BDest: "1783"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 296
+
+bulkload: BDest
+  BDest: "1790"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 297
+
+bulkload: BDest
+  BDest: "1791"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 298
+
+bulkload: BDest
+  BDest: "1792"
+  BDName: "InformaciÛn y atenciÛn a clientes"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 299
+
+bulkload: BDest
+  BDest: "1793"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 300
+
+bulkload: BDest
+  BDest: "1794"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 301
+
+bulkload: BDest
+  BDest: "1799"
+  BDName: "Servicio de tarjetas"
+  CCN: 8
+  Class: 2
+  DestType: 11
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 302
+
+bulkload: BDest
+  BDest: "1807"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 715
+
+bulkload: BDest
+  BDest: "1809"
+  BDName: "Dominican Rep"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 303
+
+bulkload: BDest
+  BDest: "1819"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 716
+
+bulkload: BDest
+  BDest: "1825"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 717
+
+bulkload: BDest
+  BDest: "1829"
+  BDName: "Dominican Rep"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 304
+
+bulkload: BDest
+  BDest: "1849"
+  BDName: "Dominican Rep"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 305
+
+bulkload: BDest
+  BDest: "1867"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 718
+
+bulkload: BDest
+  BDest: "1873"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 719
+
+bulkload: BDest
+  BDest: "1879"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 720
+
+bulkload: BDest
+  BDest: "1902"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 721
+
+bulkload: BDest
+  BDest: "1905"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 722
+
+bulkload: BDest
+  BDest: "1942"
+  BDName: "Canada"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 723
+
+bulkload: BDest
+  BDest: "20"
+  BDName: "Informative service by SMS"
+  CCN: 51
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 306
+
+bulkload: BDest
+  BDest: "200"
+  BDName: "Egypt"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 798
+
+bulkload: BDest
+  BDest: "202"
+  BDName: "Egypt"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 799
+
+bulkload: BDest
+  BDest: "203"
+  BDName: "Egypt"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 800
+
+bulkload: BDest
+  BDest: "204"
+  BDName: "Egypt"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 802
+
+bulkload: BDest
+  BDest: "205"
+  BDName: "Egypt"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 801
+
+bulkload: BDest
+  BDest: "206"
+  BDName: "Egypt"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 803
+
+bulkload: BDest
+  BDest: "207"
+  BDName: "Egypt"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 804
+
+bulkload: BDest
+  BDest: "208"
+  BDName: "Egypt"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 805
+
+bulkload: BDest
+  BDest: "209"
+  BDName: "Egypt"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 806
+
+bulkload: BDest
+  BDest: "21"
+  BDName: "informative service by SMS"
+  CCN: 51
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 307
+
+bulkload: BDest
+  BDest: "212"
+  BDName: "Morocco"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 308
+
+bulkload: BDest
+  BDest: "213"
+  BDName: "Algeria"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 309
+
+bulkload: BDest
+  BDest: "23"
+  BDName: "VAS"
+  CCN: 73
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-04-01
+  BdestID: 936
+
+bulkload: BDest
+  BDest: "252"
+  BDName: "Somalia"
+  CCN: 160
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 310
+
+bulkload: BDest
+  BDest: "280"
+  BDName: "VAS"
+  CCN: 73
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-04-01
+  BdestID: 937
+
+bulkload: BDest
+  BDest: "30"
+  BDName: "Greece"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 672
+
+bulkload: BDest
+  BDest: "31"
+  BDName: "Netherlands"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 311
+
+bulkload: BDest
+  BDest: "32"
+  BDName: "Belgium"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 312
+
+bulkload: BDest
+  BDest: "33"
+  BDName: "France"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 313
+
+bulkload: BDest
+  BDest: "33"
+  BDName: "VAS"
+  CCN: 73
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-04-01
+  BdestID: 938
+
+bulkload: BDest
+  BDest: "350"
+  BDName: "Gibraltar"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 727
+
+bulkload: BDest
+  BDest: "351"
+  BDName: "Portugal"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 314
+
+bulkload: BDest
+  BDest: "3520"
+  BDName: "Luxembourg"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 815
+
+bulkload: BDest
+  BDest: "3521"
+  BDName: "Luxembourg"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 816
+
+bulkload: BDest
+  BDest: "3522"
+  BDName: "Luxembourg"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 817
+
+bulkload: BDest
+  BDest: "3523"
+  BDName: "Luxembourg"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 818
+
+bulkload: BDest
+  BDest: "3524"
+  BDName: "Luxembourg"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 819
+
+bulkload: BDest
+  BDest: "3525"
+  BDName: "Luxembourg"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 820
+
+bulkload: BDest
+  BDest: "3527"
+  BDName: "Luxembourg"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 821
+
+bulkload: BDest
+  BDest: "3528"
+  BDName: "Luxembourg"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 822
+
+bulkload: BDest
+  BDest: "3529"
+  BDName: "Luxembourg"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 823
+
+bulkload: BDest
+  BDest: "353"
+  BDName: "Ireland"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 677
+
+bulkload: BDest
+  BDest: "354"
+  BDName: "Iceland"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 728
+
+bulkload: BDest
+  BDest: "3550"
+  BDName: "Albania"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 782
+
+bulkload: BDest
+  BDest: "3551"
+  BDName: "Albania"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 783
+
+bulkload: BDest
+  BDest: "3552"
+  BDName: "Albania"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 784
+
+bulkload: BDest
+  BDest: "3553"
+  BDName: "Albania"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 785
+
+bulkload: BDest
+  BDest: "3554"
+  BDName: "Albania"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 786
+
+bulkload: BDest
+  BDest: "3555"
+  BDName: "Albania"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 787
+
+bulkload: BDest
+  BDest: "3557"
+  BDName: "Albania"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 789
+
+bulkload: BDest
+  BDest: "3558"
+  BDName: "Albania"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 790
+
+bulkload: BDest
+  BDest: "3559"
+  BDName: "Albania"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 791
+
+bulkload: BDest
+  BDest: "356"
+  BDName: "Malta"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 729
+
+bulkload: BDest
+  BDest: "357"
+  BDName: "Cyprus"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 730
+
+bulkload: BDest
+  BDest: "358"
+  BDName: "Finland"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 678
+
+bulkload: BDest
+  BDest: "359"
+  BDName: "Bulgaria"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 315
+
+bulkload: BDest
+  BDest: "36"
+  BDName: "Hungary"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 724
+
+bulkload: BDest
+  BDest: "370"
+  BDName: "Lithuania"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 679
+
+bulkload: BDest
+  BDest: "372"
+  BDName: "Estonia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 731
+
+bulkload: BDest
+  BDest: "376"
+  BDName: "Andorra"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 680
+
+bulkload: BDest
+  BDest: "380"
+  BDName: "Ukraine"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 316
+
+bulkload: BDest
+  BDest: "380"
+  BDName: "VAS"
+  CCN: 73
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-07-01
+  BdestID: 1042
+
+bulkload: BDest
+  BDest: "385"
+  BDName: "Croatia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 732
+
+bulkload: BDest
+  BDest: "386"
+  BDName: "Slovenia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 841
+
+bulkload: BDest
+  BDest: "39"
+  BDName: "Italy"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 317
+
+bulkload: BDest
+  BDest: "40"
+  BDName: "Romania"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 318
+
+bulkload: BDest
+  BDest: "41"
+  BDName: "Switzerland"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 842
+
+bulkload: BDest
+  BDest: "420"
+  BDName: "Czech Republic"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 733
+
+bulkload: BDest
+  BDest: "4210"
+  BDName: "Slovakia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 832
+
+bulkload: BDest
+  BDest: "4211"
+  BDName: "Slovakia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 833
+
+bulkload: BDest
+  BDest: "4212"
+  BDName: "Slovakia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 834
+
+bulkload: BDest
+  BDest: "4213"
+  BDName: "Slovakia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 835
+
+bulkload: BDest
+  BDest: "4214"
+  BDName: "Slovakia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 836
+
+bulkload: BDest
+  BDest: "4215"
+  BDName: "Slovakia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 837
+
+bulkload: BDest
+  BDest: "4216"
+  BDName: "Slovakia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 838
+
+bulkload: BDest
+  BDest: "4217"
+  BDName: "Slovakia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 839
+
+bulkload: BDest
+  BDest: "4218"
+  BDName: "Slovakia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 840
+
+bulkload: BDest
+  BDest: "43"
+  BDName: "Austria"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 725
+
+bulkload: BDest
+  BDest: "44"
+  BDName: "United Kingdom"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 319
+
+bulkload: BDest
+  BDest: "45"
+  BDName: "Denmark"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 673
+
+bulkload: BDest
+  BDest: "46"
+  BDName: "Sweden"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 320
+
+bulkload: BDest
+  BDest: "47"
+  BDName: "Norway"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 321
+
+bulkload: BDest
+  BDest: "48"
+  BDName: "Poland"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 322
+
+bulkload: BDest
+  BDest: "49"
+  BDName: "Germany"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 323
+
+bulkload: BDest
+  BDest: "500"
+  BDName: "Yoigo Special number"
+  CCN: 8
+  DestType: 90
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 324
+
+bulkload: BDest
+  BDest: "502"
+  BDName: "Guatemala"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 807
+
+bulkload: BDest
+  BDest: "5060"
+  BDName: "Costa Rica"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 792
+
+bulkload: BDest
+  BDest: "5061"
+  BDName: "Costa Rica"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 793
+
+bulkload: BDest
+  BDest: "5062"
+  BDName: "Costa Rica"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 794
+
+bulkload: BDest
+  BDest: "5063"
+  BDName: "Costa Rica"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 795
+
+bulkload: BDest
+  BDest: "5064"
+  BDName: "Costa Rica"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 796
+
+bulkload: BDest
+  BDest: "5069"
+  BDName: "Costa Rica"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 797
+
+bulkload: BDest
+  BDest: "5070"
+  BDName: "Panama"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 824
+
+bulkload: BDest
+  BDest: "5071"
+  BDName: "Panama"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 825
+
+bulkload: BDest
+  BDest: "5072"
+  BDName: "Panama"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 826
+
+bulkload: BDest
+  BDest: "5073"
+  BDName: "Panama"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 827
+
+bulkload: BDest
+  BDest: "5074"
+  BDName: "Panama"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 828
+
+bulkload: BDest
+  BDest: "5075"
+  BDName: "Panama"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 829
+
+bulkload: BDest
+  BDest: "5078"
+  BDName: "Panama"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 830
+
+bulkload: BDest
+  BDest: "5079"
+  BDName: "Panama"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 831
+
+bulkload: BDest
+  BDest: "51"
+  BDName: "Peru"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 325
+
+bulkload: BDest
+  BDest: "511"
+  BDName: "Svn_nogeo"
+  CCN: 81
+  DestType: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 326
+
+bulkload: BDest
+  BDest: "512"
+  BDName: "Svn_nogeo"
+  CCN: 81
+  DestType: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 327
+
+bulkload: BDest
+  BDest: "513"
+  BDName: "Svn_nogeo"
+  CCN: 81
+  DestType: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 328
+
+bulkload: BDest
+  BDest: "514"
+  BDName: "Svn_nogeo"
+  CCN: 81
+  DestType: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 329
+
+bulkload: BDest
+  BDest: "515"
+  BDName: "Svn_nogeo"
+  CCN: 81
+  DestType: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 330
+
+bulkload: BDest
+  BDest: "516"
+  BDName: "Svn_nogeo"
+  CCN: 81
+  DestType: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 331
+
+bulkload: BDest
+  BDest: "517"
+  BDName: "Svn_nogeo"
+  CCN: 81
+  DestType: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 332
+
+bulkload: BDest
+  BDest: "518"
+  BDName: "Svn_nogeo"
+  CCN: 81
+  DestType: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 333
+
+bulkload: BDest
+  BDest: "519"
+  BDName: "Svn_nogeo"
+  CCN: 81
+  DestType: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 334
+
+bulkload: BDest
+  BDest: "53"
+  BDName: "Cuba"
+  CCN: 241
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 335
+
+bulkload: BDest
+  BDest: "54"
+  BDName: "Argentina"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 336
+
+bulkload: BDest
+  BDest: "55"
+  BDName: "Brazil"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 337
+
+bulkload: BDest
+  BDest: "556"
+  BDName: "MCA Missed Call Alert"
+  CCN: 98
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 338
+
+bulkload: BDest
+  BDest: "556"
+  BDName: "MCA Missed Call Alert"
+  CCN: 98
+  DestType: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 850
+
+bulkload: BDest
+  BDest: "56"
+  BDName: "Chile"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 339
+
+bulkload: BDest
+  BDest: "57"
+  BDName: "Colombia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 340
+
+bulkload: BDest
+  BDest: "58"
+  BDName: "Venezuela"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 341
+
+bulkload: BDest
+  BDest: "59"
+  BDName: "M2M"
+  CCN: 81
+  DestType: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 849
+
+bulkload: BDest
+  BDest: "591"
+  BDName: "Bolivia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 342
+
+bulkload: BDest
+  BDest: "593"
+  BDName: "Ecuador"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 343
+
+bulkload: BDest
+  BDest: "595"
+  BDName: "Paraguay"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 344
+
+bulkload: BDest
+  BDest: "598"
+  BDName: "Uruguay"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 345
+
+bulkload: BDest
+  BDest: "6"
+  BDName: "Other operator"
+  CCN: 99
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 346
+
+bulkload: BDest
+  BDest: "600"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 347
+
+bulkload: BDest
+  BDest: "6010"
+  BDName: "CABLEUROPA, S.A.U."
+  CCN: 17
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 348
+
+bulkload: BDest
+  BDest: "6011"
+  BDName: "CABLEUROPA, S.A.U."
+  CCN: 17
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 349
+
+bulkload: BDest
+  BDest: "6012"
+  BDName: "CABLEUROPA, S.A.U."
+  CCN: 17
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 350
+
+bulkload: BDest
+  BDest: "6013"
+  BDName: "CABLEUROPA, S.A.U."
+  CCN: 17
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-06-01
+  BdestID: 898
+
+bulkload: BDest
+  BDest: "6015"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-12-01
+  BdestID: 885
+
+bulkload: BDest
+  BDest: "6016"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-01
+  BdestID: 780
+
+bulkload: BDest
+  BDest: "6020"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 845
+
+bulkload: BDest
+  BDest: "6021"
+  BDName: "BARABLU M”VIL ESPA—A, S.L"
+  CCN: 21
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 351
+
+bulkload: BDest
+  BDest: "6022"
+  BDName: "BARABLU M”VIL ESPA—A, S.L"
+  CCN: 21
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 352
+
+bulkload: BDest
+  BDest: "6023"
+  BDName: "BARABLU M”VIL ESPA—A, S.L"
+  CCN: 21
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 353
+
+bulkload: BDest
+  BDest: "6024"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 354
+
+bulkload: BDest
+  BDest: "6025"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 355
+
+bulkload: BDest
+  BDest: "6026"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 356
+
+bulkload: BDest
+  BDest: "6027"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 357
+
+bulkload: BDest
+  BDest: "6028"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 846
+
+bulkload: BDest
+  BDest: "6029"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-08-01
+  BdestID: 902
+
+bulkload: BDest
+  BDest: "6030"
+  BDName: "VIZZAVI ESPA—A, S.L."
+  CCN: 22
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 358
+
+bulkload: BDest
+  BDest: "6031"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-06
+  BdestID: 769
+
+bulkload: BDest
+  BDest: "6032"
+  BDName: "VODAFONE ESPA—A, S.A"
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 359
+
+bulkload: BDest
+  BDest: "6033"
+  BDName: "VODAFONE ESPA—A, S.A"
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 360
+
+bulkload: BDest
+  BDest: "6034"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 361
+
+bulkload: BDest
+  BDest: "6035"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 362
+
+bulkload: BDest
+  BDest: "6036"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 363
+
+bulkload: BDest
+  BDest: "6037"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 364
+
+bulkload: BDest
+  BDest: "6038"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 365
+
+bulkload: BDest
+  BDest: "6039"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 366
+
+bulkload: BDest
+  BDest: "605"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 367
+
+bulkload: BDest
+  BDest: "606"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 368
+
+bulkload: BDest
+  BDest: "607"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 369
+
+bulkload: BDest
+  BDest: "608"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 370
+
+bulkload: BDest
+  BDest: "609"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 371
+
+bulkload: BDest
+  BDest: "610"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 372
+
+bulkload: BDest
+  BDest: "6111"
+  BDName: "BT ESPA—A COMPA—ÕA DE SERVICIO"
+  CCN: 18
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 373
+
+bulkload: BDest
+  BDest: "6112"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 374
+
+bulkload: BDest
+  BDest: "6113"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-10-01
+  BdestID: 878
+
+bulkload: BDest
+  BDest: "6114"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-03-01
+  BdestID: 895
+
+bulkload: BDest
+  BDest: "6116"
+  BDName: "BT ESPA—A COMPA—ÕA DE SERVICIO"
+  CCN: 18
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 375
+
+bulkload: BDest
+  BDest: "615"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 376
+
+bulkload: BDest
+  BDest: "616"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 377
+
+bulkload: BDest
+  BDest: "617"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 378
+
+bulkload: BDest
+  BDest: "618"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 379
+
+bulkload: BDest
+  BDest: "619"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 380
+
+bulkload: BDest
+  BDest: "62"
+  BDName: "Indonesia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 674
+
+bulkload: BDest
+  BDest: "620"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 381
+
+bulkload: BDest
+  BDest: "622"
+  BDName: "Yoigo CC Short number"
+  CCN: 901
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 382
+
+bulkload: BDest
+  BDest: "6226"
+  BDName: "Xfera MÛviles s.a"
+  CCN: 901
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 383
+
+bulkload: BDest
+  BDest: "622622622"
+  BDName: "Yoigo CC number"
+  CCN: 901
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 384
+
+bulkload: BDest
+  BDest: "622FF"
+  BDName: "Hotlining"
+  CCN: 80
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 385
+
+bulkload: BDest
+  BDest: "625"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 386
+
+bulkload: BDest
+  BDest: "626"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 387
+
+bulkload: BDest
+  BDest: "627"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 388
+
+bulkload: BDest
+  BDest: "628"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 389
+
+bulkload: BDest
+  BDest: "629"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 390
+
+bulkload: BDest
+  BDest: "63"
+  BDName: "Philippines"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 726
+
+bulkload: BDest
+  BDest: "630"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 391
+
+bulkload: BDest
+  BDest: "6310"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-07-01
+  BdestID: 864
+
+bulkload: BDest
+  BDest: "6311"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-07-01
+  BdestID: 865
+
+bulkload: BDest
+  BDest: "6312"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-07-01
+  BdestID: 866
+
+bulkload: BDest
+  BDest: "6313"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-11-01
+  BdestID: 882
+
+bulkload: BDest
+  BDest: "6314"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-11-01
+  BdestID: 883
+
+bulkload: BDest
+  BDest: "6315"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-11-01
+  BdestID: 884
+
+bulkload: BDest
+  BDest: "632"
+  BDName: "Yoigo VM Common access"
+  CCN: 98
+  DestType: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 392
+
+bulkload: BDest
+  BDest: "6320"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 739
+
+bulkload: BDest
+  BDest: "6321"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 393
+
+bulkload: BDest
+  BDest: "6322"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 394
+
+bulkload: BDest
+  BDest: "6323"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 395
+
+bulkload: BDest
+  BDest: "6324"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 396
+
+bulkload: BDest
+  BDest: "6325"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 397
+
+bulkload: BDest
+  BDest: "6326"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 398
+
+bulkload: BDest
+  BDest: "6327"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 399
+
+bulkload: BDest
+  BDest: "6328"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 400
+
+bulkload: BDest
+  BDest: "6329"
+  BDName: "LYCAMOBILE, S.L."
+  CCN: 23
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 740
+
+bulkload: BDest
+  BDest: "633"
+  BDName: "Yoigo VM Short number"
+  CCN: 98
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 401
+
+bulkload: BDest
+  BDest: "633633556"
+  BDName: "MCA Missed Call Alert"
+  CCN: 98
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 402
+
+bulkload: BDest
+  BDest: "633633632"
+  BDName: "Yoigo VM Common access"
+  CCN: 98
+  DestType: 9
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 403
+
+bulkload: BDest
+  BDest: "633633633"
+  BDName: "Yoigo VM number"
+  CCN: 98
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 404
+
+bulkload: BDest
+  BDest: "633800800"
+  BDName: "Roaming Customer Care"
+  CCN: 8
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 405
+
+bulkload: BDest
+  BDest: "634"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 406
+
+bulkload: BDest
+  BDest: "6340"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-06
+  BdestID: 770
+
+bulkload: BDest
+  BDest: "6341"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-06
+  BdestID: 771
+
+bulkload: BDest
+  BDest: "6343"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-09-01
+  BdestID: 871
+
+bulkload: BDest
+  BDest: "6344"
+  BDName: "VIZZAVI ESPA—A, S.L."
+  CCN: 22
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 407
+
+bulkload: BDest
+  BDest: "635"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 408
+
+bulkload: BDest
+  BDest: "636"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 409
+
+bulkload: BDest
+  BDest: "637"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 410
+
+bulkload: BDest
+  BDest: "638"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 411
+
+bulkload: BDest
+  BDest: "639"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 412
+
+bulkload: BDest
+  BDest: "6400"
+  BDName: "JAZZ TELECOM, S.A.U."
+  CCN: 19
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 413
+
+bulkload: BDest
+  BDest: "6401"
+  BDName: "JAZZ TELECOM, S.A.U."
+  CCN: 19
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 414
+
+bulkload: BDest
+  BDest: "6402"
+  BDName: "JAZZ TELECOM, S.A.U."
+  CCN: 19
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-07-01
+  BdestID: 899
+
+bulkload: BDest
+  BDest: "6403"
+  BDName: "JAZZ TELECOM, S.A.U."
+  CCN: 19
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-01
+  BdestID: 781
+
+bulkload: BDest
+  BDest: "6405"
+  BDName: "JAZZ TELECOM, S.A.U."
+  CCN: 19
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-07-01
+  BdestID: 900
+
+bulkload: BDest
+  BDest: "6423"
+  BDName: "DIGI SPAIN TELECOM, S.L."
+  CCN: 27
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-06
+  BdestID: 772
+
+bulkload: BDest
+  BDest: "6424"
+  BDName: "DIGI SPAIN TELECOM, S.L."
+  CCN: 27
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-06
+  BdestID: 773
+
+bulkload: BDest
+  BDest: "6426"
+  BDName: "DIGI SPAIN TELECOM, S.L."
+  CCN: 27
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 415
+
+bulkload: BDest
+  BDest: "6427"
+  BDName: "DIGI SPAIN TELECOM, S.L."
+  CCN: 27
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 416
+
+bulkload: BDest
+  BDest: "6429"
+  BDName: "DIGI SPAIN TELECOM, S.L."
+  CCN: 27
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 417
+
+bulkload: BDest
+  BDest: "6440"
+  BDName: "KPN SPAIN, S.L. UNIPESONAL"
+  CCN: 26
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 418
+
+bulkload: BDest
+  BDest: "6441"
+  BDName: "E-PLUS M”VILES VIRTUALES ESPA—"
+  CCN: 20
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 419
+
+bulkload: BDest
+  BDest: "6442"
+  BDName: "E-PLUS M”VILES VIRTUALES ESPA—"
+  CCN: 20
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 420
+
+bulkload: BDest
+  BDest: "6443"
+  BDName: "E-PLUS M”VILES VIRTUALES ESPA—"
+  CCN: 20
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 421
+
+bulkload: BDest
+  BDest: "6444"
+  BDName: "E-PLUS M”VILES VIRTUALES ESPA—"
+  CCN: 20
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 422
+
+bulkload: BDest
+  BDest: "6446"
+  BDName: "KPN SPAIN, S.L. UNIPESONAL"
+  CCN: 26
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 423
+
+bulkload: BDest
+  BDest: "6447"
+  BDName: "KPN SPAIN, S.L. UNIPESONAL"
+  CCN: 26
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 424
+
+bulkload: BDest
+  BDest: "6448"
+  BDName: "KPN SPAIN, S.L. UNIPESONAL"
+  CCN: 26
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 847
+
+bulkload: BDest
+  BDest: "6449"
+  BDName: "KPN SPAIN, S.L. UNIPESONAL"
+  CCN: 26
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 848
+
+bulkload: BDest
+  BDest: "645"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 425
+
+bulkload: BDest
+  BDest: "646"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 426
+
+bulkload: BDest
+  BDest: "647"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 427
+
+bulkload: BDest
+  BDest: "648"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 428
+
+bulkload: BDest
+  BDest: "649"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 429
+
+bulkload: BDest
+  BDest: "650"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 430
+
+bulkload: BDest
+  BDest: "651"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 431
+
+bulkload: BDest
+  BDest: "652"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 432
+
+bulkload: BDest
+  BDest: "653"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 433
+
+bulkload: BDest
+  BDest: "654"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 434
+
+bulkload: BDest
+  BDest: "655"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 435
+
+bulkload: BDest
+  BDest: "656"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 436
+
+bulkload: BDest
+  BDest: "657"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 437
+
+bulkload: BDest
+  BDest: "658"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 438
+
+bulkload: BDest
+  BDest: "659"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 439
+
+bulkload: BDest
+  BDest: "660"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 440
+
+bulkload: BDest
+  BDest: "661"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 441
+
+bulkload: BDest
+  BDest: "662"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 442
+
+bulkload: BDest
+  BDest: "663"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 443
+
+bulkload: BDest
+  BDest: "664"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 444
+
+bulkload: BDest
+  BDest: "665"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 445
+
+bulkload: BDest
+  BDest: "666"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 446
+
+bulkload: BDest
+  BDest: "667"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 447
+
+bulkload: BDest
+  BDest: "6681"
+  BDName: "DATEL ENTERPRISE, S.L."
+  CCN: 28
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 448
+
+bulkload: BDest
+  BDest: "6685"
+  BDName: "FRANCE TELECOM ESPANA, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 449
+
+bulkload: BDest
+  BDest: "6686"
+  BDName: "FONYOU TELECOM, S.L."
+  CCN: 24
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 450
+
+bulkload: BDest
+  BDest: "6688"
+  BDName: "FONYOU TELECOM, S.L."
+  CCN: 24
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 451
+
+bulkload: BDest
+  BDest: "6689"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 452
+
+bulkload: BDest
+  BDest: "669"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 453
+
+bulkload: BDest
+  BDest: "670"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 454
+
+bulkload: BDest
+  BDest: "671"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 455
+
+bulkload: BDest
+  BDest: "6720"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 456
+
+bulkload: BDest
+  BDest: "6721"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 457
+
+bulkload: BDest
+  BDest: "6722"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 458
+
+bulkload: BDest
+  BDest: "6723"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 459
+
+bulkload: BDest
+  BDest: "6724"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 460
+
+bulkload: BDest
+  BDest: "6725"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-06
+  BdestID: 774
+
+bulkload: BDest
+  BDest: "6728"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-06
+  BdestID: 775
+
+bulkload: BDest
+  BDest: "6729"
+  BDName: "VODAFONE ENABLER ESPA—A, S.L."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-06
+  BdestID: 776
+
+bulkload: BDest
+  BDest: "673"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 461
+
+bulkload: BDest
+  BDest: "674"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 462
+
+bulkload: BDest
+  BDest: "675"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 463
+
+bulkload: BDest
+  BDest: "676"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 464
+
+bulkload: BDest
+  BDest: "677"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 465
+
+bulkload: BDest
+  BDest: "678"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 466
+
+bulkload: BDest
+  BDest: "679"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 467
+
+bulkload: BDest
+  BDest: "680"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 468
+
+bulkload: BDest
+  BDest: "6810"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A"
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 469
+
+bulkload: BDest
+  BDest: "6811"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A"
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 470
+
+bulkload: BDest
+  BDest: "6812"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A"
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 471
+
+bulkload: BDest
+  BDest: "6813"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A"
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 472
+
+bulkload: BDest
+  BDest: "6814"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A"
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 473
+
+bulkload: BDest
+  BDest: "6815"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A"
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 474
+
+bulkload: BDest
+  BDest: "683"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A"
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 475
+
+bulkload: BDest
+  BDest: "6840"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A"
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 476
+
+bulkload: BDest
+  BDest: "6841"
+  BDName: "TUENTI TECHNOLOGIES, S.L."
+  CCN: 29
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 477
+
+bulkload: BDest
+  BDest: "6846"
+  BDName: "TELECABLE DE ASTURIAS, S.A.U."
+  CCN: 25
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 478
+
+bulkload: BDest
+  BDest: "685"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 479
+
+bulkload: BDest
+  BDest: "686"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 480
+
+bulkload: BDest
+  BDest: "687"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 481
+
+bulkload: BDest
+  BDest: "6880"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 482
+
+bulkload: BDest
+  BDest: "6881"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 741
+
+bulkload: BDest
+  BDest: "6882"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 483
+
+bulkload: BDest
+  BDest: "6883"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 484
+
+bulkload: BDest
+  BDest: "6884"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 485
+
+bulkload: BDest
+  BDest: "6885"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 742
+
+bulkload: BDest
+  BDest: "6886"
+  BDName: "EUSKALTEL, S.A."
+  CCN: 15
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 486
+
+bulkload: BDest
+  BDest: "6888"
+  BDName: "EUSKALTEL, S.A."
+  CCN: 15
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 487
+
+bulkload: BDest
+  BDest: "6889"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 488
+
+bulkload: BDest
+  BDest: "689"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 489
+
+bulkload: BDest
+  BDest: "690"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 490
+
+bulkload: BDest
+  BDest: "691"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 491
+
+bulkload: BDest
+  BDest: "692"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 492
+
+bulkload: BDest
+  BDest: "6930"
+  BDName: "FRANCE TELECOM ESPANA, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 493
+
+bulkload: BDest
+  BDest: "6931"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 494
+
+bulkload: BDest
+  BDest: "6932"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 495
+
+bulkload: BDest
+  BDest: "6933"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 496
+
+bulkload: BDest
+  BDest: "6934"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 497
+
+bulkload: BDest
+  BDest: "6935"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 498
+
+bulkload: BDest
+  BDest: "6936"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 499
+
+bulkload: BDest
+  BDest: "6937"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 500
+
+bulkload: BDest
+  BDest: "6938"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 501
+
+bulkload: BDest
+  BDest: "6939"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 502
+
+bulkload: BDest
+  BDest: "6940"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-07-01
+  BdestID: 867
+
+bulkload: BDest
+  BDest: "6944"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-11-01
+  BdestID: 881
+
+bulkload: BDest
+  BDest: "695"
+  BDName: "RETEVISI”N M”VIL, S.A."
+  CCN: 10
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 503
+
+bulkload: BDest
+  BDest: "696"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 504
+
+bulkload: BDest
+  BDest: "697"
+  BDName: "VODAFONE ESPA—A, S.A."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 505
+
+bulkload: BDest
+  BDest: "6980"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 506
+
+bulkload: BDest
+  BDest: "6981"
+  BDName: "R CABLE Y TELECOM. GALICIA,S.A"
+  CCN: 16
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 507
+
+bulkload: BDest
+  BDest: "6982"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 508
+
+bulkload: BDest
+  BDest: "6983"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 509
+
+bulkload: BDest
+  BDest: "6984"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 510
+
+bulkload: BDest
+  BDest: "6985"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 511
+
+bulkload: BDest
+  BDest: "6986"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 512
+
+bulkload: BDest
+  BDest: "6987"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 513
+
+bulkload: BDest
+  BDest: "6988"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 514
+
+bulkload: BDest
+  BDest: "6989"
+  BDName: "VIZZAVI ESPA—A, S.L."
+  CCN: 22
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 515
+
+bulkload: BDest
+  BDest: "699"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A.U."
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 516
+
+bulkload: BDest
+  BDest: "7"
+  BDName: "Russia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-06-01
+  BdestID: 671
+
+bulkload: BDest
+  BDest: "7"
+  BDName: "Other operator"
+  CCN: 99
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 517
+
+bulkload: BDest
+  BDest: "70"
+  BDName: "Service"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 518
+
+bulkload: BDest
+  BDest: "7111"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 743
+
+bulkload: BDest
+  BDest: "7117"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-07-01
+  BdestID: 868
+
+bulkload: BDest
+  BDest: "7170"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A"
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 519
+
+bulkload: BDest
+  BDest: "7171"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 520
+
+bulkload: BDest
+  BDest: "7177"
+  BDName: "TELEF”NICA M”VILES ESPA—A, S.A"
+  CCN: 11
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-06
+  BdestID: 768
+
+bulkload: BDest
+  BDest: "7277"
+  BDName: "VODAFONE ESPA—A, S.A.U."
+  CCN: 12
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-07-01
+  BdestID: 869
+
+bulkload: BDest
+  BDest: "7477"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 521
+
+bulkload: BDest
+  BDest: "7478"
+  BDName: "FRANCE TELECOM ESPA—A, S.A."
+  CCN: 14
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 522
+
+bulkload: BDest
+  BDest: "8"
+  BDName: "Fixed dest. of other PSTN"
+  CCN: 81
+  DestType: 4
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 523
+
+bulkload: BDest
+  BDest: "800"
+  CCN: 8
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 524
+
+bulkload: BDest
+  BDest: "8030"
+  BDName: "Nivel1"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 525
+
+bulkload: BDest
+  BDest: "8031"
+  BDName: "Nivel2"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 526
+
+bulkload: BDest
+  BDest: "8032"
+  BDName: "Nivel 2"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 527
+
+bulkload: BDest
+  BDest: "8033"
+  BDName: "Nivel 3"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 528
+
+bulkload: BDest
+  BDest: "8034"
+  BDName: "Nivel 3"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 529
+
+bulkload: BDest
+  BDest: "803410"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1006
+
+bulkload: BDest
+  BDest: "803415"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1007
+
+bulkload: BDest
+  BDest: "803418"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1008
+
+bulkload: BDest
+  BDest: "803425"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1009
+
+bulkload: BDest
+  BDest: "803428"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1037
+
+bulkload: BDest
+  BDest: "803446"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2017-01-31
+  FromDate: 2016-03-01
+  BdestID: 1010
+
+bulkload: BDest
+  BDest: "803448"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1038
+
+bulkload: BDest
+  BDest: "803469"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2016-06-30
+  FromDate: 2016-03-01
+  BdestID: 1011
+
+bulkload: BDest
+  BDest: "803494"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2017-03-31
+  FromDate: 2016-03-01
+  BdestID: 1012
+
+bulkload: BDest
+  BDest: "8035"
+  BDName: "Nivel 4"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 531
+
+bulkload: BDest
+  BDest: "803510"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1013
+
+bulkload: BDest
+  BDest: "803554"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1014
+
+bulkload: BDest
+  BDest: "8036"
+  BDName: "Nivel4"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 532
+
+bulkload: BDest
+  BDest: "8037"
+  BDName: "Nivel4"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 533
+
+bulkload: BDest
+  BDest: "8038"
+  BDName: "Nivel5"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 534
+
+bulkload: BDest
+  BDest: "8039"
+  BDName: "Nivel6"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 535
+
+bulkload: BDest
+  BDest: "8060"
+  BDName: "Nivel1"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 536
+
+bulkload: BDest
+  BDest: "8061"
+  BDName: "Nivel2"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 537
+
+bulkload: BDest
+  BDest: "8062"
+  BDName: "Nivel 2"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 538
+
+bulkload: BDest
+  BDest: "8063"
+  BDName: "Nivel 3"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 539
+
+bulkload: BDest
+  BDest: "8064"
+  BDName: "Nivel 3"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 540
+
+bulkload: BDest
+  BDest: "806410"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1015
+
+bulkload: BDest
+  BDest: "806415"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1016
+
+bulkload: BDest
+  BDest: "806418"
+  BDName: "Nivel 3"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 541
+
+bulkload: BDest
+  BDest: "806418"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1017
+
+bulkload: BDest
+  BDest: "806425"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1018
+
+bulkload: BDest
+  BDest: "806428"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1019
+
+bulkload: BDest
+  BDest: "806446"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2017-01-31
+  FromDate: 2016-03-01
+  BdestID: 1020
+
+bulkload: BDest
+  BDest: "806494"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2017-03-31
+  FromDate: 2016-03-01
+  BdestID: 1021
+
+bulkload: BDest
+  BDest: "8065"
+  BDName: "Nivel 4"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 542
+
+bulkload: BDest
+  BDest: "806510"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1022
+
+bulkload: BDest
+  BDest: "806567"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1023
+
+bulkload: BDest
+  BDest: "806592"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2016-06-30
+  FromDate: 2016-03-01
+  BdestID: 1024
+
+bulkload: BDest
+  BDest: "806596"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1025
+
+bulkload: BDest
+  BDest: "8066"
+  BDName: "Nivel4"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 543
+
+bulkload: BDest
+  BDest: "8067"
+  BDName: "Nivel4"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 544
+
+bulkload: BDest
+  BDest: "8068"
+  BDName: "Nivel5"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 545
+
+bulkload: BDest
+  BDest: "8069"
+  BDName: "Nivel6"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 546
+
+bulkload: BDest
+  BDest: "8070"
+  BDName: "Nivel1"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 547
+
+bulkload: BDest
+  BDest: "8071"
+  BDName: "Nivel2"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 548
+
+bulkload: BDest
+  BDest: "8072"
+  BDName: "Nivel 2"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 549
+
+bulkload: BDest
+  BDest: "8073"
+  BDName: "Nivel 3"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 550
+
+bulkload: BDest
+  BDest: "8074"
+  BDName: "Nivel 3"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 551
+
+bulkload: BDest
+  BDest: "807410"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1026
+
+bulkload: BDest
+  BDest: "807415"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1027
+
+bulkload: BDest
+  BDest: "807418"
+  BDName: "Nivel 3"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 552
+
+bulkload: BDest
+  BDest: "807418"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1028
+
+bulkload: BDest
+  BDest: "807422"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2016-11-29
+  FromDate: 2016-03-01
+  BdestID: 1029
+
+bulkload: BDest
+  BDest: "807425"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1030
+
+bulkload: BDest
+  BDest: "807428"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1031
+
+bulkload: BDest
+  BDest: "807431"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1032
+
+bulkload: BDest
+  BDest: "807446"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2017-05-02
+  FromDate: 2016-03-01
+  BdestID: 1033
+
+bulkload: BDest
+  BDest: "807494"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2017-03-31
+  FromDate: 2016-03-01
+  BdestID: 1034
+
+bulkload: BDest
+  BDest: "8075"
+  BDName: "Nivel 4"
+  CCN: 64
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 553
+
+bulkload: BDest
+  BDest: "807510"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2016-06-01
+  FromDate: 2016-03-01
+  BdestID: 1035
+
+bulkload: BDest
+  BDest: "807525"
+  BDName: "Nivel 3"
+  CCN: 63
+  DestType: 23
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-03-01
+  BdestID: 1036
+
+bulkload: BDest
+  BDest: "8076"
+  BDName: "Nivel4"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 554
+
+bulkload: BDest
+  BDest: "8077"
+  BDName: "Nivel4"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 555
+
+bulkload: BDest
+  BDest: "8078"
+  BDName: "Nivel5"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 556
+
+bulkload: BDest
+  BDest: "8079"
+  BDName: "Nivel6"
+  CCN: 64
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 557
+
+bulkload: BDest
+  BDest: "810"
+  BDName: "Japan"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 808
+
+bulkload: BDest
+  BDest: "811"
+  BDName: "Japan"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 809
+
+bulkload: BDest
+  BDest: "812"
+  BDName: "Japan"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 810
+
+bulkload: BDest
+  BDest: "813"
+  BDName: "Japan"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 811
+
+bulkload: BDest
+  BDest: "814"
+  BDName: "Japan"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 812
+
+bulkload: BDest
+  BDest: "815"
+  BDName: "Japan"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 813
+
+bulkload: BDest
+  BDest: "816"
+  BDName: "Japan"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-02
+  BdestID: 814
+
+bulkload: BDest
+  BDest: "850"
+  BDName: "North Corea"
+  CCN: 722
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 558
+
+bulkload: BDest
+  BDest: "86"
+  BDName: "China"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 559
+
+bulkload: BDest
+  BDest: "9"
+  BDName: "Fixed dest. of other PSTN"
+  CCN: 81
+  DestType: 4
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 560
+
+bulkload: BDest
+  BDest: "90"
+  BDName: "Turkey"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 675
+
+bulkload: BDest
+  BDest: "900"
+  BDName: "900"
+  CCN: 8
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 561
+
+bulkload: BDest
+  BDest: "901"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 562
+
+bulkload: BDest
+  BDest: "902"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 563
+
+bulkload: BDest
+  BDest: "905010"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2013-08-29
+  FromDate: 2006-12-01
+  BdestID: 564
+
+bulkload: BDest
+  BDest: "905015"
+  BDName: "Llamadas Masivas - Niv. 3"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2013-08-29
+  FromDate: 2006-12-01
+  BdestID: 565
+
+bulkload: BDest
+  BDest: "905018"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2013-08-29
+  FromDate: 2006-12-01
+  BdestID: 566
+
+bulkload: BDest
+  BDest: "905019"
+  BDName: "Llamadas Masivas - Niv. 2"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2013-08-29
+  FromDate: 2006-12-01
+  BdestID: 567
+
+bulkload: BDest
+  BDest: "905040"
+  BDName: "Llamadas Masivas - Niv. 3"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2013-08-29
+  FromDate: 2006-12-01
+  BdestID: 568
+
+bulkload: BDest
+  BDest: "9051"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 569
+
+bulkload: BDest
+  BDest: "905105"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 570
+
+bulkload: BDest
+  BDest: "905110"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 571
+
+bulkload: BDest
+  BDest: "905111"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 572
+
+bulkload: BDest
+  BDest: "905120"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 573
+
+bulkload: BDest
+  BDest: "905121"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 574
+
+bulkload: BDest
+  BDest: "905123"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 575
+
+bulkload: BDest
+  BDest: "905131"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 576
+
+bulkload: BDest
+  BDest: "905151"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 577
+
+bulkload: BDest
+  BDest: "905189"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 578
+
+bulkload: BDest
+  BDest: "9052"
+  BDName: "Llamadas Masivas - Niv. 2"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 579
+
+bulkload: BDest
+  BDest: "905221"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2009-10-20
+  FromDate: 2006-12-01
+  BdestID: 580
+
+bulkload: BDest
+  BDest: "905222"
+  BDName: "Llamadas Masivas - Niv. 2"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2009-10-20
+  FromDate: 2006-12-01
+  BdestID: 581
+
+bulkload: BDest
+  BDest: "905300"
+  BDName: "Llamadas Masivas - Niv. 2"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2013-08-29
+  FromDate: 2006-12-01
+  BdestID: 582
+
+bulkload: BDest
+  BDest: "905333"
+  BDName: "Llamadas Masiva - Niv. 3"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2013-08-29
+  FromDate: 2006-12-01
+  BdestID: 583
+
+bulkload: BDest
+  BDest: "9054"
+  BDName: "Llamadas Masivas - Niv. 3"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 584
+
+bulkload: BDest
+  BDest: "905448"
+  BDName: "Llamadas Masivas - Niv. 3"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2009-10-20
+  FromDate: 2006-12-01
+  BdestID: 585
+
+bulkload: BDest
+  BDest: "9055"
+  BDName: "Llamadas Masivas - Niv. 2"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 586
+
+bulkload: BDest
+  BDest: "9055"
+  BDName: "Premium gambling voice"
+  CCN: 74
+  DestType: 24
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-14
+  BdestID: 939
+
+bulkload: BDest
+  BDest: "905654"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2013-08-29
+  FromDate: 2006-12-01
+  BdestID: 587
+
+bulkload: BDest
+  BDest: "905679"
+  BDName: "Llamadas Masivas - Niv. 3"
+  CCN: 69
+  DestType: 2
+  Brand: "1"
+  ToDate: 2013-08-29
+  FromDate: 2006-12-01
+  BdestID: 588
+
+bulkload: BDest
+  BDest: "9057"
+  BDName: "Llamadas Masivas - Niv. 2"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 589
+
+bulkload: BDest
+  BDest: "9058"
+  BDName: "Llamadas Masivas - Niv. 3"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 590
+
+bulkload: BDest
+  BDest: "905830"
+  BDName: "Llamadas Masivas - Niv. 1"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2009-10-20
+  FromDate: 2006-12-01
+  BdestID: 591
+
+bulkload: BDest
+  BDest: "905860"
+  BDName: "Llamadas Masivas - Niv. 3"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2009-10-20
+  FromDate: 2006-12-01
+  BdestID: 592
+
+bulkload: BDest
+  BDest: "905870"
+  BDName: "Llamadas Masivas - Niv. 3"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2009-10-20
+  FromDate: 2006-12-01
+  BdestID: 593
+
+bulkload: BDest
+  BDest: "905905"
+  BDName: "Llamadas Masivas - Niv. 3"
+  CCN: 69
+  Class: 2
+  DestType: 2
+  Brand: "1"
+  ToDate: 2013-08-29
+  FromDate: 2006-12-01
+  BdestID: 594
+
+bulkload: BDest
+  BDest: "91"
+  BDName: "India"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-10-01
+  BdestID: 676
+
+bulkload: BDest
+  BDest: "92"
+  BDName: "Pakistan"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 595
+
+bulkload: BDest
+  BDest: "995"
+  BDName: "Georgia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 596
+
+bulkload: BDest
+  BDest: "CONT15_DATA_IN"
+  BDName: "CONT15 DATA_IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-11-23
+  BdestID: 1057
+
+bulkload: BDest
+  BDest: "CONT15_DATA_OUT"
+  BDName: "CONT15 DATA_OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-11-23
+  BdestID: 1058
+
+bulkload: BDest
+  BDest: "CONT15_VOICE_IN"
+  BDName: "CONT15 VOICE_IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-11-23
+  BdestID: 1059
+
+bulkload: BDest
+  BDest: "CONT15_VOICE_OUT"
+  BDName: "CONT15 VOICE_OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-11-23
+  BdestID: 1060
+
+bulkload: BDest
+  BDest: "CONT23_DATA_IN"
+  BDName: "CONT23_DATA_IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-08-12
+  BdestID: 996
+
+bulkload: BDest
+  BDest: "CONT23_DATA_OUT"
+  BDName: "CONT23_DATA_OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-08-12
+  BdestID: 997
+
+bulkload: BDest
+  BDest: "CONT23_VOICE_IN"
+  BDName: "CONT23_VOICE_IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-08-12
+  BdestID: 998
+
+bulkload: BDest
+  BDest: "CONT23_VOICE_OUT"
+  BDName: "CONT23_VOICE_OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-08-12
+  BdestID: 999
+
+bulkload: BDest
+  BDest: "CONT24_DATA_IN"
+  BDName: "CONT24 DATA_IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-03-04
+  BdestID: 979
+
+bulkload: BDest
+  BDest: "CONT24_DATA_OUT"
+  BDName: "CONT24 DATA_OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-03-04
+  BdestID: 980
+
+bulkload: BDest
+  BDest: "CONT24_VOICE_IN"
+  BDName: "CONT24 VOICE_IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-03-04
+  BdestID: 981
+
+bulkload: BDest
+  BDest: "CONT24_VOICE_OUT"
+  BDName: "CONT24 VOICE_OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-03-04
+  BdestID: 982
+
+bulkload: BDest
+  BDest: "CONT25_DATA_IN"
+  BDName: "CONT25 DATA_IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-12-12
+  BdestID: 1062
+
+bulkload: BDest
+  BDest: "CONT25_DATA_OUT"
+  BDName: "CONT25 DATA_OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-12-12
+  BdestID: 1063
+
+bulkload: BDest
+  BDest: "CONT25_VOICE_IN"
+  BDName: "CONT25 VOICE_IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-12-12
+  BdestID: 1064
+
+bulkload: BDest
+  BDest: "CONT25_VOICE_OUT"
+  BDName: "CONT25 VOICE_OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-12-12
+  BdestID: 1065
+
+bulkload: BDest
+  BDest: "CONT26_DATA_IN"
+  BDName: "CONT26 DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-01
+  BdestID: 1066
+
+bulkload: BDest
+  BDest: "CONT26_DATA_OUT"
+  BDName: "CONT26 DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-01
+  BdestID: 1067
+
+bulkload: BDest
+  BDest: "CONT26_VOICE_IN"
+  BDName: "CONT26 VOICE IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-01
+  BdestID: 1068
+
+bulkload: BDest
+  BDest: "CONT26_VOICE_OUT"
+  BDName: "CONT26 VOICE OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-01
+  BdestID: 1069
+
+bulkload: BDest
+  BDest: "CONT27_DATA_IN"
+  BDName: "CONT27 DATA IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-04-18
+  BdestID: 1074
+
+bulkload: BDest
+  BDest: "CONT27_DATA_OUT"
+  BDName: "CONT27 DATA OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-04-18
+  BdestID: 1075
+
+bulkload: BDest
+  BDest: "CONT27_VOICE_IN"
+  BDName: "CONT27 VOICE IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-04-18
+  BdestID: 1076
+
+bulkload: BDest
+  BDest: "CONT27_VOICE_OUT"
+  BDName: "CONT27 VOICE OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-04-18
+  BdestID: 1077
+
+bulkload: BDest
+  BDest: "CONTDSL_MIN_IN"
+  BDName: "CONTDSL MIN_IN"
+  CCN: 81
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-10-27
+  BdestID: 1044
+
+bulkload: BDest
+  BDest: "CONTDSL_QTY_IN"
+  BDName: "CONTDSL QTY_IN"
+  CCN: 81
+  DestType: 4
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-10-27
+  BdestID: 1043
+
+bulkload: BDest
+  BDest: "CONTF11_DATA_IN"
+  BDName: "CONTF11 DATA_IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-04-14
+  BdestID: 989
+
+bulkload: BDest
+  BDest: "CONTF11_DATA_OUT"
+  BDName: "CONTF11 DATA_OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-04-14
+  BdestID: 990
+
+bulkload: BDest
+  BDest: "CONTF8_DATA_IN"
+  BDName: "CONTF8 DATA_IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-04-14
+  BdestID: 983
+
+bulkload: BDest
+  BDest: "CONTF8_DATA_OUT"
+  BDName: "CONTF8 DATA_OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-04-14
+  BdestID: 984
+
+bulkload: BDest
+  BDest: "CONTFFDATA2_A"
+  BDName: "CONTFF data 2"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-10-01
+  BdestID: 923
+
+bulkload: BDest
+  BDest: "CONTFFDATA2_B"
+  BDName: "CONTFF data 2"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-10-01
+  BdestID: 924
+
+bulkload: BDest
+  BDest: "CONTFFVOICE"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-10-01
+  BdestID: 925
+
+bulkload: BDest
+  BDest: "CONTFH300_MIN_IN"
+  BDName: "CONTFH300 MIN_IN"
+  CCN: 81
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-10-27
+  BdestID: 1048
+
+bulkload: BDest
+  BDest: "CONTFH300_QTY_IN"
+  BDName: "CONTFH300 QTY_IN"
+  CCN: 81
+  DestType: 4
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-10-27
+  BdestID: 1047
+
+bulkload: BDest
+  BDest: "CONTFH50_MIN_IN"
+  BDName: "CONTFH50 MIN_IN"
+  CCN: 81
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-10-27
+  BdestID: 1046
+
+bulkload: BDest
+  BDest: "CONTFH50_QTY_IN"
+  BDName: "CONTFH50 QTY_IN"
+  CCN: 81
+  DestType: 4
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-10-27
+  BdestID: 1045
+
+bulkload: BDest
+  BDest: "CONTS12_DATA_IN"
+  BDName: "CONTS12 DATA_IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-04-14
+  BdestID: 985
+
+bulkload: BDest
+  BDest: "CONTS12_DATA_OUT"
+  BDName: "CONTS12 DATA_OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-04-14
+  BdestID: 986
+
+bulkload: BDest
+  BDest: "CONTS12_VOICE_IN"
+  BDName: "CONTS12 VOICE_IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-04-14
+  BdestID: 987
+
+bulkload: BDest
+  BDest: "CONTS12_VOICE_OUT"
+  BDName: "CONTS12 VOICE_OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-04-14
+  BdestID: 988
+
+bulkload: BDest
+  BDest: "CONTS2GB_DATA_IN"
+  BDName: "CONTS2GB DATA_IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-10-27
+  BdestID: 1049
+
+bulkload: BDest
+  BDest: "CONTS2GB_DATA_OUT"
+  BDName: "CONTS2GB DATA_OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-10-27
+  BdestID: 1050
+
+bulkload: BDest
+  BDest: "CONTS2GB_VOICE_IN"
+  BDName: "CONTS2GB VOICE_IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-10-27
+  BdestID: 1051
+
+bulkload: BDest
+  BDest: "CONTS2GB_VOICE_OUT"
+  BDName: "CONTS2GB VOICE_OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-10-27
+  BdestID: 1052
+
+bulkload: BDest
+  BDest: "CONTSDATA16_A"
+  BDName: "CONTS data 16"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 960
+
+bulkload: BDest
+  BDest: "CONTSDATA16_B"
+  BDName: "CONTS data 16"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 961
+
+bulkload: BDest
+  BDest: "CONTSDATA20_A"
+  BDName: "CONTS data 20"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 904
+
+bulkload: BDest
+  BDest: "CONTSDATA20_B"
+  BDName: "CONTS data 20"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 905
+
+bulkload: BDest
+  BDest: "CONTSDATA21_A"
+  BDName: "CONTS data 21"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 954
+
+bulkload: BDest
+  BDest: "CONTSDATA21_B"
+  BDName: "CONTS data 21"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 955
+
+bulkload: BDest
+  BDest: "CONTSDATA25_A"
+  BDName: "CONTS data 25"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 906
+
+bulkload: BDest
+  BDest: "CONTSDATA25_B"
+  BDName: "CONTS data 25"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 907
+
+bulkload: BDest
+  BDest: "CONTSDATA26_A"
+  BDName: "CONTS data 26"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 956
+
+bulkload: BDest
+  BDest: "CONTSDATA26_B"
+  BDName: "CONTS data 26"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 957
+
+bulkload: BDest
+  BDest: "CONTSDATA30_A"
+  BDName: "CONTS data 30"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 851
+
+bulkload: BDest
+  BDest: "CONTSDATA30_B"
+  BDName: "CONTS data 30"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 852
+
+bulkload: BDest
+  BDest: "CONTSDATA32_A"
+  BDName: "CONTS data 32"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 958
+
+bulkload: BDest
+  BDest: "CONTSDATA32_B"
+  BDName: "CONTS data 32"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 959
+
+bulkload: BDest
+  BDest: "CONTSDATA35_A"
+  BDName: "CONTS data 35"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 909
+
+bulkload: BDest
+  BDest: "CONTSDATA35_B"
+  BDName: "CONTS data 35"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 908
+
+bulkload: BDest
+  BDest: "CONTSDATA39_A"
+  BDName: "CONTS data 39"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-09-01
+  BdestID: 874
+
+bulkload: BDest
+  BDest: "CONTSDATA39_B"
+  BDName: "CONTS data 39"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-09-01
+  BdestID: 875
+
+bulkload: BDest
+  BDest: "CONTSFDATA10_A"
+  BDName: "CONTSF data 10"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-10-01
+  BdestID: 926
+
+bulkload: BDest
+  BDest: "CONTSFDATA10_B"
+  BDName: "CONTSF data 10"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-10-01
+  BdestID: 927
+
+bulkload: BDest
+  BDest: "CONTSFDATA14_A"
+  BDName: "CONTSF data 14"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-10-01
+  BdestID: 928
+
+bulkload: BDest
+  BDest: "CONTSFDATA14_B"
+  BDName: "CONTSF data 14"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-10-01
+  BdestID: 929
+
+bulkload: BDest
+  BDest: "CONTSFVOICE10_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-10-01
+  BdestID: 930
+
+bulkload: BDest
+  BDest: "CONTSFVOICE10_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-10-01
+  BdestID: 931
+
+bulkload: BDest
+  BDest: "CONTSFVOICE14_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-10-01
+  BdestID: 932
+
+bulkload: BDest
+  BDest: "CONTSFVOICE14_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-10-01
+  BdestID: 933
+
+bulkload: BDest
+  BDest: "CONTSVOICE15_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 910
+
+bulkload: BDest
+  BDest: "CONTSVOICE15_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 911
+
+bulkload: BDest
+  BDest: "CONTSVOICE16_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 968
+
+bulkload: BDest
+  BDest: "CONTSVOICE16_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 969
+
+bulkload: BDest
+  BDest: "CONTSVOICE20_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 912
+
+bulkload: BDest
+  BDest: "CONTSVOICE20_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 913
+
+bulkload: BDest
+  BDest: "CONTSVOICE21_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 962
+
+bulkload: BDest
+  BDest: "CONTSVOICE21_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 963
+
+bulkload: BDest
+  BDest: "CONTSVOICE25_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 914
+
+bulkload: BDest
+  BDest: "CONTSVOICE25_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 915
+
+bulkload: BDest
+  BDest: "CONTSVOICE26_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 964
+
+bulkload: BDest
+  BDest: "CONTSVOICE26_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 965
+
+bulkload: BDest
+  BDest: "CONTSVOICE32_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 966
+
+bulkload: BDest
+  BDest: "CONTSVOICE32_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 967
+
+bulkload: BDest
+  BDest: "CONTSVOICE35_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 916
+
+bulkload: BDest
+  BDest: "CONTSVOICE35_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 917
+
+bulkload: BDest
+  BDest: "CONTSVOICE39_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-09-01
+  BdestID: 876
+
+bulkload: BDest
+  BDest: "CONTSVOICE39_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-09-01
+  BdestID: 877
+
+bulkload: BDest
+  BDest: "CONTSVOICE_A"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-07-01
+  BdestID: 862
+
+bulkload: BDest
+  BDest: "CONTSVOICE_B"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-07-01
+  BdestID: 863
+
+bulkload: BDest
+  BDest: "EMail"
+  BDName: "Email"
+  CCN: 104
+  DestType: 98
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 597
+
+bulkload: BDest
+  BDest: "FLATDATA20D_A"
+  BDName: "Flat rate data 20D"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 764
+
+bulkload: BDest
+  BDest: "FLATDATA20D_B"
+  BDName: "Flat rate data 20D"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 765
+
+bulkload: BDest
+  BDest: "FLATDATA30_A"
+  BDName: "Flat rate data 30"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 734
+
+bulkload: BDest
+  BDest: "FLATDATA30_B"
+  BDName: "Flat rate data 30"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 735
+
+bulkload: BDest
+  BDest: "FLATDATA40_A"
+  BDName: "Flat rate data 40"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 766
+
+bulkload: BDest
+  BDest: "FLATDATA40_B"
+  BDName: "Flat rate data 40"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-02-01
+  BdestID: 767
+
+bulkload: BDest
+  BDest: "FLATDATA55_A"
+  BDName: "Flat rate data 55"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 736
+
+bulkload: BDest
+  BDest: "FLATDATA55_B"
+  BDName: "Flat rate data 55"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 737
+
+bulkload: BDest
+  BDest: "FLATVOICE"
+  BDName: "Flat rate voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2011-12-01
+  BdestID: 738
+
+bulkload: BDest
+  BDest: "FREE100MINUTES"
+  BDName: "Free 100 minutes voice package"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-06-01
+  BdestID: 1040
+
+bulkload: BDest
+  BDest: "GOOGLE"
+  BDName: "Google Play"
+  CCN: 790
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2016-06-01
+  BdestID: 1041
+
+bulkload: BDest
+  BDest: "GPRS"
+  BDName: "GPRS"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 598
+
+bulkload: BDest
+  BDest: "GPRSD1_A"
+  BDName: "GPRS data 25"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 599
+
+bulkload: BDest
+  BDest: "GPRSD1_B"
+  BDName: "GPRS data 25"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 600
+
+bulkload: BDest
+  BDest: "GPRSD2_A"
+  BDName: "GPRS data 35"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 601
+
+bulkload: BDest
+  BDest: "GPRSD2_B"
+  BDName: "GPRS data 35"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 602
+
+bulkload: BDest
+  BDest: "GPRSD3_A"
+  BDName: "GPRS data 8"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 603
+
+bulkload: BDest
+  BDest: "GPRSD3_B"
+  BDName: "GPRS data 8"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 604
+
+bulkload: BDest
+  BDest: "GPRSD4_A"
+  BDName: "GPRS data 15"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 605
+
+bulkload: BDest
+  BDest: "GPRSD4_B"
+  BDName: "GPRS data 15"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 606
+
+bulkload: BDest
+  BDest: "GPRSD9_A"
+  BDName: "GPRS data 9"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-12-01
+  BdestID: 886
+
+bulkload: BDest
+  BDest: "GPRSD9_B"
+  BDName: "GPRS data 9"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-12-01
+  BdestID: 887
+
+bulkload: BDest
+  BDest: "GPRSDATA1A"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 607
+
+bulkload: BDest
+  BDest: "GPRSDATA1B"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 608
+
+bulkload: BDest
+  BDest: "GPRSDATA2"
+  BDName: "GPRS DATOS"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 609
+
+bulkload: BDest
+  BDest: "GPRSDATA2_CONT10"
+  BDName: "GPRS DATA SLOW"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-01
+  BdestID: 1070
+
+bulkload: BDest
+  BDest: "GPRSDATA2_CONT15"
+  BDName: "GPRS data slow"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-10-01
+  BdestID: 973
+
+bulkload: BDest
+  BDest: "GPRSDATA2_CONT9"
+  BDName: "GPRS data slow"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 952
+
+bulkload: BDest
+  BDest: "GPRSDATA2_DATA5"
+  BDName: "GPRS Data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 918
+
+bulkload: BDest
+  BDest: "GPRSDATA2_DATA6"
+  BDName: "GPRS Data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 950
+
+bulkload: BDest
+  BDest: "GPRSDATA2_DATA7"
+  BDName: "GPRS Data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-12-01
+  BdestID: 1004
+
+bulkload: BDest
+  BDest: "GPRSDATA2_DUB2"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 854
+
+bulkload: BDest
+  BDest: "GPRSDATA2_DUB3"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-12-01
+  BdestID: 892
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MDUB2"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 610
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MDUB3"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 611
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MDUB4"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 612
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MDUB5"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-26
+  BdestID: 778
+
+bulkload: BDest
+  BDest: "GPRSDATA2_MDUB9"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-12-01
+  BdestID: 889
+
+bulkload: BDest
+  BDest: "GPRSDATA2_VOIP"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-01
+  BdestID: 844
+
+bulkload: BDest
+  BDest: "GPRSDATA3"
+  BDName: "GPRS DATOS"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 613
+
+bulkload: BDest
+  BDest: "GPRSDATA_CONT10"
+  BDName: "GPRS DATA HIGH"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-02-01
+  BdestID: 1071
+
+bulkload: BDest
+  BDest: "GPRSDATA_CONT15"
+  BDName: "GPRS data high"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-10-01
+  BdestID: 974
+
+bulkload: BDest
+  BDest: "GPRSDATA_CONT9"
+  BDName: "GPRS Data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 951
+
+bulkload: BDest
+  BDest: "GPRSDATA_DATA5"
+  BDName: "GPRS Data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 919
+
+bulkload: BDest
+  BDest: "GPRSDATA_DATA6"
+  BDName: "GPRS Data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 949
+
+bulkload: BDest
+  BDest: "GPRSDATA_DATA7"
+  BDName: "GPRS Data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-12-01
+  BdestID: 1005
+
+bulkload: BDest
+  BDest: "GPRSDATA_DUB"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 614
+
+bulkload: BDest
+  BDest: "GPRSDATA_DUB2"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 853
+
+bulkload: BDest
+  BDest: "GPRSDATA_DUB3"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-12-01
+  BdestID: 891
+
+bulkload: BDest
+  BDest: "GPRSDATA_MDUB2"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 615
+
+bulkload: BDest
+  BDest: "GPRSDATA_MDUB3"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 616
+
+bulkload: BDest
+  BDest: "GPRSDATA_MDUB4"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 617
+
+bulkload: BDest
+  BDest: "GPRSDATA_MDUB5"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-26
+  BdestID: 777
+
+bulkload: BDest
+  BDest: "GPRSDATA_MDUB9"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-12-01
+  BdestID: 888
+
+bulkload: BDest
+  BDest: "GPRSDATA_TARJ7"
+  BDName: "GPRS data tarj7"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-10-21
+  BdestID: 1002
+
+bulkload: BDest
+  BDest: "GPRSDATA_TARJ9"
+  BDName: "GPRS data tarj9"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-10-21
+  BdestID: 1003
+
+bulkload: BDest
+  BDest: "GPRSDATA_UPGRADE"
+  BDName: "GPRS data Upgrade Upsell"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-03-26
+  BdestID: 779
+
+bulkload: BDest
+  BDest: "GPRSDATA_VOIP"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-04-01
+  BdestID: 843
+
+bulkload: BDest
+  BDest: "GPRSDSS200_A"
+  BDName: "GPRS data DSS200"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-06-01
+  BdestID: 1001
+
+bulkload: BDest
+  BDest: "GPRSDSS2_A"
+  BDName: "GPRS data DSS2"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 921
+
+bulkload: BDest
+  BDest: "GPRSDSS2_B"
+  BDName: "GPRS data DSS2"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 922
+
+bulkload: BDest
+  BDest: "GPRSDSS_A"
+  BDName: "GPRS data DSS"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 618
+
+bulkload: BDest
+  BDest: "GPRSDSS_B"
+  BDName: "GPRS data DSS"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 619
+
+bulkload: BDest
+  BDest: "GPRS_DATA200_UPSELL"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-06-01
+  BdestID: 1000
+
+bulkload: BDest
+  BDest: "GPRS_DATA5_UPSELL"
+  BDName: "GPRS Data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2013-09-01
+  BdestID: 920
+
+bulkload: BDest
+  BDest: "GPRS_DATA6_UPSELL"
+  BDName: "GPRS data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+  BdestID: 953
+
+bulkload: BDest
+  BDest: "GPRS_DATA9_UPSELL"
+  BDName: "GPRS Data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-12-01
+  BdestID: 890
+
+bulkload: BDest
+  BDest: "GPRS_FLEX_UPSELL"
+  BDName: "GPRS Data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 1072
+
+bulkload: BDest
+  BDest: "INTERNATIONAL"
+  BDName: "International"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 620
+
+bulkload: BDest
+  BDest: "OTHER"
+  BDName: "SMS sent to other operator"
+  CCN: 52
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-01-01
+  BdestID: 991
+
+bulkload: BDest
+  BDest: "PD001"
+  BDName: "Contrato2 SMS Flat rate"
+  CCN: 103
+  DestType: 90
+  Brand: "1"
+  ToDate: 2011-11-30
+  FromDate: 2006-12-01
+  BdestID: 621
+
+bulkload: BDest
+  BDest: "PD002"
+  BDName: "Contrato2 Voice Flat rate"
+  CCN: 102
+  DestType: 4
+  Brand: "1"
+  ToDate: 2011-11-30
+  FromDate: 2006-12-01
+  BdestID: 622
+
+bulkload: BDest
+  BDest: "ROAMGPRS"
+  BDName: "Roaming GPRS"
+  CCN: 92
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 856
+
+bulkload: BDest
+  BDest: "ROAMGPRS_EU"
+  BDName: "Roaming GPRS in EU"
+  CCN: 91
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 857
+
+bulkload: BDest
+  BDest: "ROAMGPRS_EU_A"
+  BDName: "Roaming GPRS in EU"
+  CCN: 91
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-10-10
+  BdestID: 879
+
+bulkload: BDest
+  BDest: "ROAMGPRS_EU_B"
+  BDName: "Roaming GPRS in EU"
+  CCN: 91
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-10-10
+  BdestID: 880
+
+bulkload: BDest
+  BDest: "ROAMINT"
+  BDName: "Roaming international destin"
+  CCN: 3
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 623
+
+bulkload: BDest
+  BDest: "ROAMLOCAL"
+  BDName: "Roaming local destination"
+  CCN: 4
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 624
+
+bulkload: BDest
+  BDest: "ROAMMMSMO"
+  BDName: "MMS Roaming (MO)"
+  CCN: 105
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 858
+
+bulkload: BDest
+  BDest: "ROAMMMSMO_EU"
+  BDName: "MMS Roaming (MO) EU"
+  CCN: 95
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 859
+
+bulkload: BDest
+  BDest: "ROAMMMSMT"
+  BDName: "MMS Roaming (MT)"
+  CCN: 106
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 860
+
+bulkload: BDest
+  BDest: "ROAMMMSMT_EU"
+  BDName: "MMS Roaming (MT) EU"
+  CCN: 96
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 861
+
+bulkload: BDest
+  BDest: "ROAMSMS"
+  BDName: "Roaming SMS"
+  CCN: 53
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 625
+
+bulkload: BDest
+  BDest: "ROAMSMS_EU"
+  BDName: "Roaming SMS in EU"
+  CCN: 54
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 626
+
+bulkload: BDest
+  BDest: "ROAMSMS_EUINT"
+  BDName: "Roaming SMS EU-INT"
+  CCN: 55
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-05-01
+  BdestID: 855
+
+bulkload: BDest
+  BDest: "ROAM_EU"
+  BDName: "Roaming EU"
+  CCN: 5
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 627
+
+bulkload: BDest
+  BDest: "ROAM_EUINT"
+  BDName: "Roaming international destin"
+  CCN: 801
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 628
+
+bulkload: BDest
+  BDest: "ROAM_INTEU"
+  BDName: "Roaming international destin"
+  CCN: 802
+  DestType: 1
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 629
+
+bulkload: BDest
+  BDest: "ROGPRS"
+  BDName: "Roaming GPRS"
+  CCN: 92
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 630
+
+bulkload: BDest
+  BDest: "ROGPRS_EU"
+  BDName: "Roaming GPRS in EU"
+  CCN: 91
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 631
+
+bulkload: BDest
+  BDest: "RT"
+  BDName: "Roaming Terminating"
+  CCN: 7
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 632
+
+bulkload: BDest
+  BDest: "RUS"
+  BDName: "Russia"
+  CCN: 2
+  DestType: 1
+  Brand: "1"
+  ToDate: 2011-11-30
+  FromDate: 2006-12-01
+  BdestID: 633
+
+bulkload: BDest
+  BDest: "SMS"
+  BDName: "SMS"
+  CCN: 51
+  DestType: 90
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 634
+
+bulkload: BDest
+  BDest: "TARJ9_DATA_IN"
+  BDName: "TARJ9 DATA_IN"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-05-29
+  BdestID: 992
+
+bulkload: BDest
+  BDest: "TARJ9_DATA_OUT"
+  BDName: "TARJ9 DATA_OUT"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-05-29
+  BdestID: 993
+
+bulkload: BDest
+  BDest: "TARJ9_VOICE_IN"
+  BDName: "TARJ9 VOICE_IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-05-29
+  BdestID: 994
+
+bulkload: BDest
+  BDest: "TARJ9_VOICE_OUT"
+  BDName: "TARJ9 VOICE_OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-05-29
+  BdestID: 995
+
+bulkload: BDest
+  BDest: "VAS"
+  BDName: "VAS"
+  CCN: 72
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 635
+
+bulkload: BDest
+  BDest: "VOICE100"
+  BDName: "Voice 100 Minutes"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2015-01-01
+  BdestID: 977
+
+bulkload: BDest
+  BDest: "VOICE3000"
+  BDName: "Cont Voice"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2012-12-01
+  BdestID: 893
+
+bulkload: BDest
+  BDest: "WAPVAS"
+  BDName: "Premium WAP"
+  CCN: 78
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 636
+
+bulkload: BDest
+  BDest: "YOIGO"
+  BDName: "Yoigo"
+  CCN: 80
+  DestType: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 637
+
+bulkload: BDest
+  BDest: "252"
+  BDName: "Somalia"
+  CCN: 160
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 638
+
+bulkload: BDest
+  BDest: "53"
+  BDName: "Cuba"
+  CCN: 241
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 639
+
+bulkload: BDest
+  BDest: "5321"
+  BDName: "Cuba-Santiag De Cuba Santia"
+  CCN: 241
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 640
+
+bulkload: BDest
+  BDest: "53213556"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 641
+
+bulkload: BDest
+  BDest: "53213557"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 642
+
+bulkload: BDest
+  BDest: "5322668"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 643
+
+bulkload: BDest
+  BDest: "53234277"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 644
+
+bulkload: BDest
+  BDest: "53234278"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 645
+
+bulkload: BDest
+  BDest: "5324419"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 646
+
+bulkload: BDest
+  BDest: "532461"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 647
+
+bulkload: BDest
+  BDest: "5331466"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 648
+
+bulkload: BDest
+  BDest: "5331467"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 649
+
+bulkload: BDest
+  BDest: "53322259"
+  BDName: "Cuba- Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 650
+
+bulkload: BDest
+  BDest: "53332259"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 651
+
+bulkload: BDest
+  BDest: "53332668"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 652
+
+bulkload: BDest
+  BDest: "53332669"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 653
+
+bulkload: BDest
+  BDest: "53333011"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 654
+
+bulkload: BDest
+  BDest: "53333014"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 655
+
+bulkload: BDest
+  BDest: "53333081"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 656
+
+bulkload: BDest
+  BDest: "53333084"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 657
+
+bulkload: BDest
+  BDest: "53333089"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 658
+
+bulkload: BDest
+  BDest: "5341286"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 659
+
+bulkload: BDest
+  BDest: "5341287"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 660
+
+bulkload: BDest
+  BDest: "53419967"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 661
+
+bulkload: BDest
+  BDest: "53419968"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 662
+
+bulkload: BDest
+  BDest: "5352249"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 663
+
+bulkload: BDest
+  BDest: "535616"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 664
+
+bulkload: BDest
+  BDest: "5361319"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 665
+
+bulkload: BDest
+  BDest: "53780"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 666
+
+bulkload: BDest
+  BDest: "53785"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 667
+
+bulkload: BDest
+  BDest: "538264"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 668
+
+bulkload: BDest
+  BDest: "5382749"
+  BDName: "Cuba-Mobile"
+  CCN: 641
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 669
+
+bulkload: BDest
+  BDest: "5399"
+  BDName: "Cuba-Guantanamo Bay"
+  CCN: 241
+  DestType: 1
+  Brand: "2"
+  ToDate: 2049-12-31
+  FromDate: 2006-12-01
+  BdestID: 670
+

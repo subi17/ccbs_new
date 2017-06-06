@@ -1,0 +1,7415 @@
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqCParam1"
+  Usage: "Old CLIType"
+  CharConfig: "CLIType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqCParam2"
+  Usage: "New CLIType"
+  CharConfig: "CLIType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqCParam3"
+  Usage: "Bank Account"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqCParam5"
+  Usage: "Data Bundle Type"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqDParam1"
+  Usage: "STC Timestamp"
+  CharConfig: "TimeStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqDParam2"
+  Usage: "Fee amount"
+  DispParam: FALSE
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqIParam1"
+  Usage: "Credit Check"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqIParam2"
+  Usage: "Order ID (pos-stc)"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqIParam3"
+  Usage: "Prepaid balance"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqIParam4"
+  Usage: "Solog offset"
+  DispParam: FALSE
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqIParam5"
+  Usage: "Extend TERM contract"
+  Description: "0=No,1=Yes"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqStatus"
+  Usage: "Request Status"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqCParam1"
+  Usage: "Service"
+  CharConfig: "ServCom"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqCParam2"
+  Usage: "Setting"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqIParam1"
+  Usage: "Parameter"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 1
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqCParam1"
+  Usage: "Payment Type"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqDParam1"
+  Usage: "Amount"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 2
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqCParam1"
+  Usage: "User Name"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqCParam2"
+  Usage: "Address"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqIParam1"
+  Usage: "User Nbr"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqIParam2"
+  Usage: "Inv.Cust Nbr"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 3
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqCParam1"
+  Usage: "Inv.Cust Name"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqCParam2"
+  Usage: "Address"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqIParam1"
+  Usage: "User Nbr"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqIParam2"
+  Usage: "Inv.Cust Nbr"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 4
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqCParam1"
+  Usage: "Change Type"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqCParam2"
+  Usage: "Parameter"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 5
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqCParam1"
+  Usage: "Address"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqCParam2"
+  Usage: "City"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqCParam3"
+  Usage: "Country"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqCParam4"
+  Usage: "C/O"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqIParam1"
+  Usage: "ZipCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqIParam2"
+  Usage: "Region"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqIParam3"
+  Usage: "Address Validation Code"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqIParam4"
+  Usage: "City Validation Code"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 6
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 7
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqCParam1"
+  Usage: "Values changed"
+  Description: "On updates"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqCParam2"
+  Usage: "Action"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqCParam3"
+  Usage: "Contract ID"
+  CharConfig: "DayCampaign"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqCParam4"
+  Usage: "New values"
+  Description: "On update"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqCParam5"
+  Usage: "Upgrade Upsell FeeModel"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqDParam1"
+  Usage: "Special data limit"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqDParam2"
+  Usage: "Installment residual fee"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqIParam2"
+  Usage: "Wait for another request"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqIParam3"
+  Usage: "Payterm contract id"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqIParam4"
+  Usage: "Run rerate"
+  Description: "1=yes"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqSource"
+  Usage: "Request Source"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqStatus"
+  Usage: "Request Status"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 8
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqCParam1"
+  Usage: "PIN"
+  DispParam: FALSE
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqCParam2"
+  Usage: "Action"
+  Description: "Contract termination"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqCParam3"
+  Usage: "Contract ID"
+  CharConfig: "DayCampaign"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqDParam1"
+  Usage: "Term.stamp for data package"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqIParam1"
+  Usage: "Contract Id"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqIParam2"
+  Usage: "Wait for another request"
+  DispParam: FALSE
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqIParam3"
+  Usage: "Periodical contract id"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqIParam4"
+  Usage: "Run rerate"
+  Description: "1=yes"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqSource"
+  Usage: "Request Source"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqStatus"
+  Usage: "Request Status"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 9
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqCParam1"
+  Usage: "New customer"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqCParam4"
+  Usage: "Roles"
+  DispParam: FALSE
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqDParam1"
+  Usage: "Activation"
+  CharConfig: "TimeStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqIParam1"
+  Usage: "New customer nbr"
+  CharConfig: "CustName"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqIParam3"
+  Usage: "Preactivated (TARJ3)"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 10
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqCParam1"
+  Usage: "Type"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqCParam2"
+  Usage: "Batches"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqIParam1"
+  Usage: "Invoice"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqIParam2"
+  Usage: "Payment Plan ID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 11
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqCParam1"
+  Usage: "Direct Marketing"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqCParam2"
+  Usage: "3rd Party Mark."
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 12
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqCParam1"
+  Usage: "Action"
+  Description: "Subscription creation"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 13
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 14
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqCParam1"
+  Usage: "Action"
+  CharConfig: "ICC change"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqCParam2"
+  Usage: "New ICC"
+  Description: "New ICC number"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqIParam5"
+  Usage: "Pending request"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 15
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqCParam1"
+  Usage: "Action"
+  Description: "De-activation"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqCParam2"
+  Usage: "MNP Operator"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqCParam3"
+  Usage: "Termination Reason"
+  CharConfig: "TMSCodes,MsRequest,TermReason"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqCParam6"
+  Usage: "Termination Type"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqIParam1"
+  Usage: "MSISDN status"
+  CharConfig: "TMSCodes,MSISDN,StatusCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqIParam2"
+  Usage: "ICC status"
+  CharConfig: "TMSCodes,SIM,SimStat"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqIParam3"
+  Usage: "Quarantine time"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqIParam5"
+  Usage: "Pending request"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqCParam1"
+  Usage: "Command"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqCParam2"
+  Usage: "New MSISDN"
+  Description: "Subcription's New MSISDN"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqCParam3"
+  Usage: "Shaper parameter"
+  DispParam: FALSE
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqIParam1"
+  Usage: "Old MSISDN Status"
+  Description: "New status for old MSISDN"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 19
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqCParam1"
+  Usage: "Invoice"
+  CharConfig: "ExtInvID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqDParam1"
+  Usage: "Invoice Amount"
+  Description: "EUR"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqIParam2"
+  Usage: "Charge Type"
+  CharConfig: "TMSCodes,Invoice,ChargeType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 20
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqCParam1"
+  Usage: "Reason"
+  CharConfig: "TMSCodes,CreditNote,Reason"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqCParam2"
+  Usage: "Reason Note/Jira"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqCParam3"
+  Usage: "Credit Mode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqCParam4"
+  Usage: "Sub invoices"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqCParam5"
+  Usage: "Invoice Rows Details"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqIParam1"
+  Usage: "Credited invoice"
+  CharConfig: "ExtInvID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqIParam2"
+  Usage: "Release"
+  Description: "0=no, 1=release billed events"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqIParam3"
+  Usage: "Credit note"
+  CharConfig: "ExtInvID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqIParam4"
+  Usage: "Return Of Payment"
+  Description: "0=no return, 1=to adv.payment, 2=money refund"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 22
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqCParam1"
+  Usage: "Reason"
+  CharConfig: "TMSCodes,CreditNote,Reason"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqCParam2"
+  Usage: "Customer bank account"
+  Description: "Target bank account"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqCParam3"
+  Usage: "Bank File"
+  Description: "CSB34.1 file name"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqDParam1"
+  Usage: "Refund amount"
+  Description: "EUR"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqDParam2"
+  Usage: "Refund type"
+  Description: "1=to adv.payment, 2=refund payment"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqDtParam1"
+  Usage: "Payment date (bank file)"
+  Description: "Payment date to customer"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqIParam1"
+  Usage: "Invoice number"
+  CharConfig: "ExtInvID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqIParam2"
+  Usage: "Voucher number"
+  DispParam: FALSE
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqIParam3"
+  Usage: "Payment type"
+  DispParam: FALSE
+  Description: "1=money, 2=overpayment, 3=adv.payment"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 23
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqCParam1"
+  Usage: "Command"
+  Description: "Bank account change"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqCParam2"
+  Usage: "New bank account"
+  Description: "Bank account number"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 24
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqCParam1"
+  Usage: "Terminal"
+  CharConfig: "BillCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqDParam1"
+  Usage: "New price"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqDtParam1"
+  Usage: "Valid From"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqIParam1"
+  Usage: "Paytype"
+  Description: "0=both, 1=prepaid, 2=postpaid"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqIParam2"
+  Usage: "MSISDN type"
+  Description: "0=both, 1=MNP, 2=new"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 27
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 28
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 30
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqCParam1"
+  Usage: "Paym.Source"
+  CharConfig: "TMSCodes,Payment,PaymSrc"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqCParam2"
+  Usage: "Postings"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqCParam3"
+  Usage: "Accounts"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqDParam1"
+  Usage: "Amount"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqIParam1"
+  Usage: "Invoice Number"
+  CharConfig: "ExtInvID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqIParam2"
+  Usage: "Payment Type"
+  CharConfig: "TMSCodes,Payment,PaymType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 31
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqCParam1"
+  Usage: "Command"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqCParam2"
+  Usage: "Bank Account"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 32
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 33
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqCParam1"
+  Usage: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqDParam1"
+  Usage: "Amount"
+  Description: "EUR"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqIParam1"
+  Usage: "Invoice Number"
+  CharConfig: "ExtInvID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqIParam2"
+  Usage: "Manual Paym.Type"
+  Description: "1=from adv.payment"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 34
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqCParam1"
+  Usage: "Service package"
+  CharConfig: "ServPac"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqCParam2"
+  Usage: "OLB/CLB"
+  Description: "Waiting for restoration"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqCParam3"
+  Usage: "Collection ID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqCParam5"
+  Usage: "Barring Mask"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqIParam2"
+  Usage: "Linked Barring Request"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqIParam3"
+  Usage: "TM Rule"
+  CharConfig: "TMRule"
+  Description: "TM rule which triggered the barring event"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqIParam4"
+  Usage: "Limit ID"
+  Description: "Limit which was exceeded"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 37
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqCParam1"
+  Usage: "Changed fields"
+  Description: "List of fields that have been changed"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqCParam2"
+  Usage: "New values"
+  Description: "Values for changed fields"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqCParam3"
+  Usage: "Contract ID"
+  CharConfig: "DayCampaign"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 39
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqCParam1"
+  Usage: "Act"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqDParam1"
+  Usage: "Limit 1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqDParam2"
+  Usage: "Limit 2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqIParam1"
+  Usage: "LimitType"
+  CharConfig: "TMSCodes,Limit,LimitType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqIParam2"
+  Usage: "TMRID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqIParam3"
+  Usage: "DefValue"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 40
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqIParam1"
+  Usage: "Order ID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqIParam1"
+  Usage: "OrderId"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 49
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqDParam2"
+  Usage: "Original activation time"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqDtParam1"
+  Usage: "Period begin"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqDtParam2"
+  Usage: "Period end"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqIParam1"
+  Usage: "Wait for other subrequests"
+  Description: "1=yes"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqIParam2"
+  Usage: "Run double check"
+  Description: "1=run (only for subscription rerates)"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 65
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqCParam1"
+  Usage: "BillEventId"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqDParam1"
+  Usage: "Charge"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 76
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqCParam1"
+  Usage: "Invoice ID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqIParam1"
+  Usage: "Invoice ID internal"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 77
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqCParam1"
+  Usage: "Bundle ID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqIParam1"
+  Usage: "Action"
+  Description: "0=deact, 1=act"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 78
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqDtParam1"
+  Usage: "Period"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 79
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqCParam1"
+  Usage: "Old IMEI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqCParam2"
+  Usage: "New IMEI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqCParam3"
+  Usage: "Offer"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqIParam1"
+  Usage: "Order ID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 80
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqCParam1"
+  Usage: "Old bundle"
+  CharConfig: "Daycampaign"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqCParam2"
+  Usage: "New bundle"
+  CharConfig: "Daycampaign"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqCParam5"
+  Usage: "Upgrade Upsell"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqIParam5"
+  Usage: "Extend TERM contract"
+  Description: "0=No,1=Yes"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqSource"
+  Usage: "Request Source"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqStatus"
+  Usage: "Request Status"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 81
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqCParam1"
+  Usage: "Action"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqIParam1"
+  Usage: "OrderId"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 82
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqCParam1"
+  Usage: "Action"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqCParam2"
+  Usage: "Parameters"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqCParam3"
+  Usage: "Bundle Id"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqIParam2"
+  Usage: "Pending Request"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqSource"
+  Usage: "Request Source"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqStatus"
+  Usage: "Request Status"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 83
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqCParam1"
+  Usage: "Email Address"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqDtParam1"
+  Usage: "Action Date"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 84
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqDtParam1"
+  Usage: "Period"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 85
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqCParam1"
+  Usage: "Email Template"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqCParam2"
+  Usage: "Email Address"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqCParam3"
+  Usage: "Possible Token"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 86
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqCParam1"
+  Usage: "Operation"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqIParam1"
+  Usage: "Order ID"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 87
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqCParam1"
+  Usage: "Old Contract"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqCParam2"
+  Usage: "New Contract"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqDParam1"
+  Usage: "Possible Credit Note Amt"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqDParam2"
+  Usage: "New contract residual fee"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 88
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqCParam1"
+  Usage: "Bank Code"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqDtParam1"
+  Usage: "Order Delivery Date From"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqDtParam2"
+  Usage: "Order Delivery Date To"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 89
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 90
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqCParam1"
+  Usage: "Bank Code"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqDtParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 91
+  ParamField: "UserCode"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ActStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "Brand"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "CLI"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "CreateFees"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "CreStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "CustNum"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "DoneStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "Forced"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "Mandatory"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "Memo"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "MsRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "MsSeq"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "OrigRequest"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqCParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqCParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqCParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqCParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqDParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqDParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqDtParam1"
+  Usage: "Period"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqDtParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqIParam1"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqIParam2"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqIParam3"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqIParam4"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqIParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqSource"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqStatus"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "ReqType"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "Salesman"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "SendSMS"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "SMSText"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "SoLog"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "UpdateStamp"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 94
+  ParamField: "UserCode"
+

@@ -1,0 +1,14 @@
+bulkload: CallLimit
+  Dfrom: 2007-02-13
+  Dto: 2050-12-31
+  CLSeq: 10
+  CreditType: 2
+  Brand: "1"
+
+bulkload: CallLimit
+  Dfrom: 2008-02-21
+  Dto: 2050-12-31
+  CLSeq: 21
+  CreditType: 2
+  Brand: "1"
+

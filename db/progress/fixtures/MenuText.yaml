@@ -1,0 +1,5628 @@
+bulkload: MenuText
+  MenuNum: 2
+  MenuText: "CONTINUE        "
+
+bulkload: MenuText
+  MenuNum: 3
+  MenuText: "QUIT            "
+
+bulkload: MenuText
+  MenuNum: 4
+  MenuText: "DELETE  RECORD  "
+
+bulkload: MenuText
+  MenuNum: 5
+  MenuText: "NEW     RECORD  "
+
+bulkload: MenuText
+  MenuNum: 7
+  MenuText: "CHANGE          "
+
+bulkload: MenuText
+  MenuNum: 8
+  MenuText: "RETURN          "
+
+bulkload: MenuText
+  MenuNum: 9
+  MenuText: "NEW     NUMBER  "
+
+bulkload: MenuText
+  MenuNum: 10
+  MenuText: "USER'S  RIGHTS  "
+
+bulkload: MenuText
+  MenuNum: 11
+  MenuText: "CHOOSE  THIS    "
+
+bulkload: MenuText
+  MenuNum: 12
+  MenuText: "DON'T   SAVE    "
+
+bulkload: MenuText
+  MenuNum: 13
+  MenuText: "CHANGE  RIGHT   "
+
+bulkload: MenuText
+  MenuNum: 14
+  MenuText: "UPDATE  FILES   "
+
+bulkload: MenuText
+  MenuNum: 15
+  MenuText: "SAVE            "
+
+bulkload: MenuText
+  MenuNum: 16
+  MenuText: "RESELLERCOMMISS."
+
+bulkload: MenuText
+  MenuNum: 17
+  MenuText: "ONE ROW UPWARD  "
+
+bulkload: MenuText
+  MenuNum: 18
+  MenuText: "NEXT    ROW     "
+
+bulkload: MenuText
+  MenuNum: 19
+  MenuText: "PREVIOUSPAGE    "
+
+bulkload: MenuText
+  MenuNum: 20
+  MenuText: "NEXT    PAGE    "
+
+bulkload: MenuText
+  MenuNum: 21
+  MenuText: "DON'T   SAVE    "
+
+bulkload: MenuText
+  MenuNum: 22
+  MenuText: "FIND    LEVEL   "
+
+bulkload: MenuText
+  MenuNum: 23
+  MenuText: "FIND    CLASS NR"
+
+bulkload: MenuText
+  MenuNum: 24
+  MenuText: "PREVIOUSMONTH   "
+
+bulkload: MenuText
+  MenuNum: 25
+  MenuText: "NEXT    MONTH   "
+
+bulkload: MenuText
+  MenuNum: 26
+  MenuText: "USER'S  LIMITS  "
+
+bulkload: MenuText
+  MenuNum: 28
+  MenuText: "FIND    DATE    "
+
+bulkload: MenuText
+  MenuNum: 29
+  MenuText: "RUNTIME PARAMS. "
+
+bulkload: MenuText
+  MenuNum: 30
+  MenuText: "FIND    NAME    "
+
+bulkload: MenuText
+  MenuNum: 31
+  MenuText: "GROUP'S LIMITS  "
+
+bulkload: MenuText
+  MenuNum: 32
+  MenuText: "FIND    PERSON  "
+
+bulkload: MenuText
+  MenuNum: 33
+  MenuText: "SHOW    ADDRESS "
+
+bulkload: MenuText
+  MenuNum: 34
+  MenuText: "PAPER   PRINTOUT"
+
+bulkload: MenuText
+  MenuNum: 35
+  MenuText: "FIND    CODE    "
+
+bulkload: MenuText
+  MenuNum: 36
+  MenuText: "FIND    NUMBER  "
+
+bulkload: MenuText
+  MenuNum: 37
+  MenuText: "SHOW    HISTORY "
+
+bulkload: MenuText
+  MenuNum: 38
+  MenuText: "SHOW    ACTIVE  "
+
+bulkload: MenuText
+  MenuNum: 39
+  MenuText: "FIND    NAME    "
+
+bulkload: MenuText
+  MenuNum: 41
+  MenuText: "CHANGE  TEXT    "
+
+bulkload: MenuText
+  MenuNum: 42
+  MenuText: "PRINT-  OUTS    "
+
+bulkload: MenuText
+  MenuNum: 43
+  MenuText: "COMPANY DATA    "
+
+bulkload: MenuText
+  MenuNum: 44
+  MenuText: "CALL    NUMBER  "
+
+bulkload: MenuText
+  MenuNum: 45
+  MenuText: "MOVE    CUSTOMRS"
+
+bulkload: MenuText
+  MenuNum: 46
+  MenuText: "HIDE NOTIN USE  "
+
+bulkload: MenuText
+  MenuNum: 47
+  MenuText: "SHOW ALLUSERS   "
+
+bulkload: MenuText
+  MenuNum: 49
+  MenuText: "SCREEN  COLOURS "
+
+bulkload: MenuText
+  MenuNum: 51
+  MenuText: "BASIC   FILES   "
+
+bulkload: MenuText
+  MenuNum: 52
+  MenuText: "FAILED  DD AUTH."
+
+bulkload: MenuText
+  MenuNum: 53
+  MenuText: "PRINT DPAGREEMEN"
+
+bulkload: MenuText
+  MenuNum: 56
+  MenuText: "CHOOSE  ALL     "
+
+bulkload: MenuText
+  MenuNum: 57
+  MenuText: "DEL THISPLAN    "
+
+bulkload: MenuText
+  MenuNum: 58
+  MenuText: "BANK    ACCOUNTS"
+
+bulkload: MenuText
+  MenuNum: 59
+  MenuText: "CLITYPE CHANGES "
+
+bulkload: MenuText
+  MenuNum: 60
+  MenuText: "PENDING REQUEST "
+
+bulkload: MenuText
+  MenuNum: 61
+  MenuText: "EXTREME FUNCTION"
+
+bulkload: MenuText
+  MenuNum: 62
+  MenuText: "CUSTOMERPRINTOUT"
+
+bulkload: MenuText
+  MenuNum: 63
+  MenuText: "START   PRINTING"
+
+bulkload: MenuText
+  MenuNum: 64
+  MenuText: "SERVICE CHANGES "
+
+bulkload: MenuText
+  MenuNum: 66
+  MenuText: "HISTORY         "
+
+bulkload: MenuText
+  MenuNum: 67
+  MenuText: "CANCEL  REFUND  "
+
+bulkload: MenuText
+  MenuNum: 68
+  MenuText: "DD STAT.REPORT  "
+
+bulkload: MenuText
+  MenuNum: 69
+  MenuText: "CANCEL  PRINTING"
+
+bulkload: MenuText
+  MenuNum: 70
+  MenuText: "FIND    SERVICE "
+
+bulkload: MenuText
+  MenuNum: 71
+  MenuText: "FIND UPDSERVICE "
+
+bulkload: MenuText
+  MenuNum: 72
+  MenuText: "SERVICE LINKS   "
+
+bulkload: MenuText
+  MenuNum: 73
+  MenuText: "COPY    COMPONEN"
+
+bulkload: MenuText
+  MenuNum: 74
+  MenuText: "SALDO   PAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 89
+  MenuText: "UPDATE  BANK ACC"
+
+bulkload: MenuText
+  MenuNum: 90
+  MenuText: "RUN     REQUEST "
+
+bulkload: MenuText
+  MenuNum: 91
+  MenuText: "CHANGE          "
+
+bulkload: MenuText
+  MenuNum: 92
+  MenuText: "FIND    INVOICE "
+
+bulkload: MenuText
+  MenuNum: 93
+  MenuText: "FIND    CUSTNAME"
+
+bulkload: MenuText
+  MenuNum: 94
+  MenuText: "FIND AN INVOICE "
+
+bulkload: MenuText
+  MenuNum: 95
+  MenuText: "FIND    PLMN    "
+
+bulkload: MenuText
+  MenuNum: 96
+  MenuText: "FIND    CODE    "
+
+bulkload: MenuText
+  MenuNum: 98
+  MenuText: "COPY            "
+
+bulkload: MenuText
+  MenuNum: 99
+  MenuText: "ADD TO  MIDDLE  "
+
+bulkload: MenuText
+  MenuNum: 101
+  MenuText: "ADD TO  END     "
+
+bulkload: MenuText
+  MenuNum: 112
+  MenuText: "WRITE   DATA    "
+
+bulkload: MenuText
+  MenuNum: 120
+  MenuText: "SUBSCR. CDRS    "
+
+bulkload: MenuText
+  MenuNum: 127
+  MenuText: "MEMO    TEXT    "
+
+bulkload: MenuText
+  MenuNum: 128
+  MenuText: "TEST-   PRINT   "
+
+bulkload: MenuText
+  MenuNum: 129
+  MenuText: "ADV.PAYM&DEPOSIT"
+
+bulkload: MenuText
+  MenuNum: 130
+  MenuText: "BILLING DATA    "
+
+bulkload: MenuText
+  MenuNum: 132
+  MenuText: "CHANGE  PARAM'S "
+
+bulkload: MenuText
+  MenuNum: 133
+  MenuText: "FIND    NUMBER  "
+
+bulkload: MenuText
+  MenuNum: 134
+  MenuText: "FIND    TEXT    "
+
+bulkload: MenuText
+  MenuNum: 135
+  MenuText: "FIND ID         "
+
+bulkload: MenuText
+  MenuNum: 140
+  MenuText: "MOVE    MENU    "
+
+bulkload: MenuText
+  MenuNum: 150
+  MenuText: "NEW MNP NUMBER  "
+
+bulkload: MenuText
+  MenuNum: 151
+  MenuText: "NEXT    PRINTER "
+
+bulkload: MenuText
+  MenuNum: 152
+  MenuText: "NEXT    EFFECT  "
+
+bulkload: MenuText
+  MenuNum: 153
+  MenuText: "CHANGE #OF ROWS "
+
+bulkload: MenuText
+  MenuNum: 154
+  MenuText: "NEXT    PRINTER "
+
+bulkload: MenuText
+  MenuNum: 155
+  MenuText: "CHANGE 2EFFECT  "
+
+bulkload: MenuText
+  MenuNum: 156
+  MenuText: "MUUTA 2.RIVILKM "
+
+bulkload: MenuText
+  MenuNum: 157
+  MenuText: "CANCEL  PRINTOUT"
+
+bulkload: MenuText
+  MenuNum: 158
+  MenuText: "PRINTERS        "
+
+bulkload: MenuText
+  MenuNum: 159
+  MenuText: "PRINT-  OUTS    "
+
+bulkload: MenuText
+  MenuNum: 161
+  MenuText: "PRINTER EFFECTS "
+
+bulkload: MenuText
+  MenuNum: 164
+  MenuText: "PRINTOUTPARAM'S "
+
+bulkload: MenuText
+  MenuNum: 177
+  MenuText: "FIND    VOUCHER "
+
+bulkload: MenuText
+  MenuNum: 178
+  MenuText: "START   DELETING"
+
+bulkload: MenuText
+  MenuNum: 179
+  MenuText: "CHANGE  PARAM'S "
+
+bulkload: MenuText
+  MenuNum: 180
+  MenuText: "CHANGE  STICKERS"
+
+bulkload: MenuText
+  MenuNum: 183
+  MenuText: "FIND    TARGET  "
+
+bulkload: MenuText
+  MenuNum: 184
+  MenuText: "COPY    TARGET  "
+
+bulkload: MenuText
+  MenuNum: 185
+  MenuText: "MORE    INFO    "
+
+bulkload: MenuText
+  MenuNum: 187
+  MenuText: "DELETE  UNBILLED"
+
+bulkload: MenuText
+  MenuNum: 199
+  MenuText: "USER'S  SUBSCRIP"
+
+bulkload: MenuText
+  MenuNum: 200
+  MenuText: "IMSI NOSOF SIM  "
+
+bulkload: MenuText
+  MenuNum: 201
+  MenuText: "MSISDN  NOS.    "
+
+bulkload: MenuText
+  MenuNum: 202
+  MenuText: "DETAILEDBALANCE "
+
+bulkload: MenuText
+  MenuNum: 203
+  MenuText: "FIND    STOCK   "
+
+bulkload: MenuText
+  MenuNum: 204
+  MenuText: "FIND SIMARTICLE "
+
+bulkload: MenuText
+  MenuNum: 205
+  MenuText: "FIND SIMART.CODE"
+
+bulkload: MenuText
+  MenuNum: 206
+  MenuText: "FIND SIMICC     "
+
+bulkload: MenuText
+  MenuNum: 207
+  MenuText: "4~      CONTAINS"
+
+bulkload: MenuText
+  MenuNum: 208
+  MenuText: "BAL IN  STOCKS  "
+
+bulkload: MenuText
+  MenuNum: 209
+  MenuText: "FIND    MSISDN  "
+
+bulkload: MenuText
+  MenuNum: 210
+  MenuText: "FIND ICCOF SIM  "
+
+bulkload: MenuText
+  MenuNum: 211
+  MenuText: "FIND    IMSI NBR"
+
+bulkload: MenuText
+  MenuNum: 212
+  MenuText: "FIND A  MOB CUST"
+
+bulkload: MenuText
+  MenuNum: 213
+  MenuText: "CHECK   SIM FILE"
+
+bulkload: MenuText
+  MenuNum: 214
+  MenuText: "READ IN SIM FILE"
+
+bulkload: MenuText
+  MenuNum: 215
+  MenuText: "FIND SIMMANUFACT"
+
+bulkload: MenuText
+  MenuNum: 216
+  MenuText: "MOBILE  DATA    "
+
+bulkload: MenuText
+  MenuNum: 217
+  MenuText: "CODES & NAMES   "
+
+bulkload: MenuText
+  MenuNum: 218
+  MenuText: "SIM STATCODES   "
+
+bulkload: MenuText
+  MenuNum: 219
+  MenuText: "MSISDN  ST.CODES"
+
+bulkload: MenuText
+  MenuNum: 220
+  MenuText: "SIM     VENDORS "
+
+bulkload: MenuText
+  MenuNum: 221
+  MenuText: "SIM     CARDS   "
+
+bulkload: MenuText
+  MenuNum: 222
+  MenuText: "MSISDN  NUMBERS "
+
+bulkload: MenuText
+  MenuNum: 223
+  MenuText: "SIM     STOCKS  "
+
+bulkload: MenuText
+  MenuNum: 224
+  MenuText: "BEARER  CAPABILI"
+
+bulkload: MenuText
+  MenuNum: 225
+  MenuText: "SIM     TYPES   "
+
+bulkload: MenuText
+  MenuNum: 226
+  MenuText: "SIM     LOGISTIC"
+
+bulkload: MenuText
+  MenuNum: 227
+  MenuText: "LOAD A  SIM FILE"
+
+bulkload: MenuText
+  MenuNum: 228
+  MenuText: "SIM     CARDS   "
+
+bulkload: MenuText
+  MenuNum: 229
+  MenuText: "MSISDN  NUMBERS "
+
+bulkload: MenuText
+  MenuNum: 230
+  MenuText: "ADD SUB-LEVEL   "
+
+bulkload: MenuText
+  MenuNum: 231
+  MenuText: "ADD     LEVEL   "
+
+bulkload: MenuText
+  MenuNum: 232
+  MenuText: "MSISDN  RANGES  "
+
+bulkload: MenuText
+  MenuNum: 233
+  MenuText: "PRICE   PLANS   "
+
+bulkload: MenuText
+  MenuNum: 234
+  MenuText: "DISCOUNTPLANS   "
+
+bulkload: MenuText
+  MenuNum: 235
+  MenuText: "DISCOUNTCONFIG  "
+
+bulkload: MenuText
+  MenuNum: 236
+  MenuText: "BALANCE REVIEW  "
+
+bulkload: MenuText
+  MenuNum: 237
+  MenuText: "INDIVID.SIM CARD"
+
+bulkload: MenuText
+  MenuNum: 238
+  MenuText: "SUBSCRBRDATA    "
+
+bulkload: MenuText
+  MenuNum: 239
+  MenuText: "MOBILE  SERVICE "
+
+bulkload: MenuText
+  MenuNum: 240
+  MenuText: "MOB. SUBSCRIBERS"
+
+bulkload: MenuText
+  MenuNum: 241
+  MenuText: "TESTREADONLY    "
+
+bulkload: MenuText
+  MenuNum: 242
+  MenuText: "MSISDN  CLASSES "
+
+bulkload: MenuText
+  MenuNum: 243
+  MenuText: "MANUAL  ADD     "
+
+bulkload: MenuText
+  MenuNum: 244
+  MenuText: "CHANGE  NAME    "
+
+bulkload: MenuText
+  MenuNum: 245
+  MenuText: "FIND    SERVPACK"
+
+bulkload: MenuText
+  MenuNum: 246
+  MenuText: "FIND    SERVCOMP"
+
+bulkload: MenuText
+  MenuNum: 247
+  MenuText: "MOVE SIMCARDS   "
+
+bulkload: MenuText
+  MenuNum: 248
+  MenuText: "COPY A  SERVPACK"
+
+bulkload: MenuText
+  MenuNum: 249
+  MenuText: "MOBSUB  FUNCTION"
+
+bulkload: MenuText
+  MenuNum: 250
+  MenuText: "PACKAGE CONTAINS"
+
+bulkload: MenuText
+  MenuNum: 251
+  MenuText: "APPEARS IN PACK "
+
+bulkload: MenuText
+  MenuNum: 252
+  MenuText: "SERVICE COMPON. "
+
+bulkload: MenuText
+  MenuNum: 253
+  MenuText: "SERVICE PACKAGES"
+
+bulkload: MenuText
+  MenuNum: 254
+  MenuText: "SERVPACKELEMENTS"
+
+bulkload: MenuText
+  MenuNum: 255
+  MenuText: "JOIN NOSINTO CL "
+
+bulkload: MenuText
+  MenuNum: 256
+  MenuText: "CLASS   CONTAINS"
+
+bulkload: MenuText
+  MenuNum: 257
+  MenuText: "ADD NEW RANGE   "
+
+bulkload: MenuText
+  MenuNum: 258
+  MenuText: "RANGE   CONTAINS"
+
+bulkload: MenuText
+  MenuNum: 259
+  MenuText: "MOBILE  SUBSCRIP"
+
+bulkload: MenuText
+  MenuNum: 260
+  MenuText: "MOBILE  DATA    "
+
+bulkload: MenuText
+  MenuNum: 261
+  MenuText: "SEND -> SOG/HLR "
+
+bulkload: MenuText
+  MenuNum: 262
+  MenuText: "BATCH   CONTAINS"
+
+bulkload: MenuText
+  MenuNum: 263
+  MenuText: "SIM     BATCHES "
+
+bulkload: MenuText
+  MenuNum: 264
+  MenuText: "SERVICE GROUPS  "
+
+bulkload: MenuText
+  MenuNum: 265
+  MenuText: "VIEW            "
+
+bulkload: MenuText
+  MenuNum: 266
+  MenuText: "FIND    SEQUENCE"
+
+bulkload: MenuText
+  MenuNum: 267
+  MenuText: "SERVICE ORD LOG "
+
+bulkload: MenuText
+  MenuNum: 268
+  MenuText: "FIND    LASTNAME"
+
+bulkload: MenuText
+  MenuNum: 269
+  MenuText: "COUNT NOOF M.SUB"
+
+bulkload: MenuText
+  MenuNum: 270
+  MenuText: "CLOSEDW MOBSUB  "
+
+bulkload: MenuText
+  MenuNum: 271
+  MenuText: "NEW TEMPNUMBER  "
+
+bulkload: MenuText
+  MenuNum: 272
+  MenuText: "COPY    PRINTER "
+
+bulkload: MenuText
+  MenuNum: 273
+  MenuText: "SYNCHRONTMS<-HLR"
+
+bulkload: MenuText
+  MenuNum: 274
+  MenuText: "SYNCHRONTMS->HLR"
+
+bulkload: MenuText
+  MenuNum: 275
+  MenuText: "FIND    SUBSTITU"
+
+bulkload: MenuText
+  MenuNum: 276
+  MenuText: "FIND INVTARGET  "
+
+bulkload: MenuText
+  MenuNum: 277
+  MenuText: "FIND    F.NAME  "
+
+bulkload: MenuText
+  MenuNum: 278
+  MenuText: "KNOWN   OWNERS  "
+
+bulkload: MenuText
+  MenuNum: 279
+  MenuText: "QUICK   SIM INV."
+
+bulkload: MenuText
+  MenuNum: 280
+  MenuText: "COMMISS.LISTING "
+
+bulkload: MenuText
+  MenuNum: 281
+  MenuText: "FIND SUBSCRIPTIO"
+
+bulkload: MenuText
+  MenuNum: 282
+  MenuText: "MOBSUB  ACTIVAT."
+
+bulkload: MenuText
+  MenuNum: 283
+  MenuText: "SUB.DATA-> FILE "
+
+bulkload: MenuText
+  MenuNum: 284
+  MenuText: "PORTING ACTIVAT."
+
+bulkload: MenuText
+  MenuNum: 290
+  MenuText: "FIND    DISC.GRP"
+
+bulkload: MenuText
+  MenuNum: 291
+  MenuText: "MOB.DEST-> FILE "
+
+bulkload: MenuText
+  MenuNum: 292
+  MenuText: "VOL.DISCGROUPS  "
+
+bulkload: MenuText
+  MenuNum: 293
+  MenuText: "RATING  ERRCODES"
+
+bulkload: MenuText
+  MenuNum: 294
+  MenuText: "EVENT   CONTAINS"
+
+bulkload: MenuText
+  MenuNum: 295
+  MenuText: "FEE     MODEL   "
+
+bulkload: MenuText
+  MenuNum: 296
+  MenuText: "MOB. CDRHANDLING"
+
+bulkload: MenuText
+  MenuNum: 297
+  MenuText: "RAW     CDRS    "
+
+bulkload: MenuText
+  MenuNum: 298
+  MenuText: "BILLABLEMOB CDRS"
+
+bulkload: MenuText
+  MenuNum: 299
+  MenuText: "ERRONEUSPOSTCDRS"
+
+bulkload: MenuText
+  MenuNum: 300
+  MenuText: "LIST    FILE    "
+
+bulkload: MenuText
+  MenuNum: 301
+  MenuText: "SHOW    LEVEL   "
+
+bulkload: MenuText
+  MenuNum: 302
+  MenuText: "CHARGE- COMP    "
+
+bulkload: MenuText
+  MenuNum: 400
+  MenuText: "BILL TO TELEGATE"
+
+bulkload: MenuText
+  MenuNum: 401
+  MenuText: "EVENT   MANAGER "
+
+bulkload: MenuText
+  MenuNum: 501
+  MenuText: "PERSONALDETAILS "
+
+bulkload: MenuText
+  MenuNum: 502
+  MenuText: "FIND    PERSON  "
+
+bulkload: MenuText
+  MenuNum: 506
+  MenuText: "FIND    PRODCODE"
+
+bulkload: MenuText
+  MenuNum: 507
+  MenuText: "SET     DATE    "
+
+bulkload: MenuText
+  MenuNum: 508
+  MenuText: "START   MOVING  "
+
+bulkload: MenuText
+  MenuNum: 509
+  MenuText: "SET     CUST.NBR"
+
+bulkload: MenuText
+  MenuNum: 510
+  MenuText: "MEMBERS OF GROUP"
+
+bulkload: MenuText
+  MenuNum: 511
+  MenuText: "ADD ONE CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 512
+  MenuText: "ADD ONE GROUP   "
+
+bulkload: MenuText
+  MenuNum: 513
+  MenuText: "BROWSE  CUSTOMRS"
+
+bulkload: MenuText
+  MenuNum: 514
+  MenuText: "BROWSE  GROUPS  "
+
+bulkload: MenuText
+  MenuNum: 515
+  MenuText: "ADD /   REMOVE  "
+
+bulkload: MenuText
+  MenuNum: 516
+  MenuText: "COPY    MEMBERS "
+
+bulkload: MenuText
+  MenuNum: 517
+  MenuText: "COPY M- SHIPS   "
+
+bulkload: MenuText
+  MenuNum: 518
+  MenuText: "OTHER   M-SHIPS "
+
+bulkload: MenuText
+  MenuNum: 519
+  MenuText: "OTHER   MEMBERS "
+
+bulkload: MenuText
+  MenuNum: 520
+  MenuText: "EXT.CUSTGROUPS  "
+
+bulkload: MenuText
+  MenuNum: 521
+  MenuText: "ADD ONE SALESMAN"
+
+bulkload: MenuText
+  MenuNum: 522
+  MenuText: "BROWSE  SALESMEN"
+
+bulkload: MenuText
+  MenuNum: 523
+  MenuText: "FIND S- OFFICE  "
+
+bulkload: MenuText
+  MenuNum: 524
+  MenuText: "M-SHIPS IN GROUP"
+
+bulkload: MenuText
+  MenuNum: 525
+  MenuText: "SALESMANGROUPS  "
+
+bulkload: MenuText
+  MenuNum: 526
+  MenuText: "RELATED FILES   "
+
+bulkload: MenuText
+  MenuNum: 527
+  MenuText: "FIND    PREFIX  "
+
+bulkload: MenuText
+  MenuNum: 528
+  MenuText: "GROUP   MEMO    "
+
+bulkload: MenuText
+  MenuNum: 529
+  MenuText: "GATHER  MEMBERS "
+
+bulkload: MenuText
+  MenuNum: 530
+  MenuText: "COUNT # OF MEMB."
+
+bulkload: MenuText
+  MenuNum: 531
+  MenuText: "SMAN/AGE-> EXCEL"
+
+bulkload: MenuText
+  MenuNum: 532
+  MenuText: "XOR     LISTS   "
+
+bulkload: MenuText
+  MenuNum: 533
+  MenuText: "STATIS- TICS    "
+
+bulkload: MenuText
+  MenuNum: 534
+  MenuText: "MOBILE  TRAFFIC "
+
+bulkload: MenuText
+  MenuNum: 535
+  MenuText: "INTERNATTRAFFIC "
+
+bulkload: MenuText
+  MenuNum: 536
+  MenuText: "PARTNERS-> EXCEL"
+
+bulkload: MenuText
+  MenuNum: 540
+  MenuText: "ADD ONE USER    "
+
+bulkload: MenuText
+  MenuNum: 541
+  MenuText: "BROWSE  USERS   "
+
+bulkload: MenuText
+  MenuNum: 542
+  MenuText: "FIND    USER ID "
+
+bulkload: MenuText
+  MenuNum: 543
+  MenuText: "FIND    USER NBR"
+
+bulkload: MenuText
+  MenuNum: 544
+  MenuText: "M-SHIPS IN GROUP"
+
+bulkload: MenuText
+  MenuNum: 546
+  MenuText: "USER    GROUPS  "
+
+bulkload: MenuText
+  MenuNum: 547
+  MenuText: "MOBILE  COUNTERS"
+
+bulkload: MenuText
+  MenuNum: 548
+  MenuText: "CDR PRE-PROSESS."
+
+bulkload: MenuText
+  MenuNum: 549
+  MenuText: "CDR PRE OPTIONS "
+
+bulkload: MenuText
+  MenuNum: 550
+  MenuText: "DEFAULT RANGES  "
+
+bulkload: MenuText
+  MenuNum: 551
+  MenuText: "SECTIONS        "
+
+bulkload: MenuText
+  MenuNum: 552
+  MenuText: "CREATE  CFG-FILE"
+
+bulkload: MenuText
+  MenuNum: 553
+  MenuText: "FILE    HISTORY "
+
+bulkload: MenuText
+  MenuNum: 554
+  MenuText: "AMOUNT  OPERATOR"
+
+bulkload: MenuText
+  MenuNum: 555
+  MenuText: "MORE ...        "
+
+bulkload: MenuText
+  MenuNum: 556
+  MenuText: "MAKE A  COPY    "
+
+bulkload: MenuText
+  MenuNum: 557
+  MenuText: "PRODUCT/CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 558
+  MenuText: "CUSTOMERCLASS   "
+
+bulkload: MenuText
+  MenuNum: 559
+  MenuText: "FIND    STATUS  "
+
+bulkload: MenuText
+  MenuNum: 560
+  MenuText: "ACCOUNT DATA    "
+
+bulkload: MenuText
+  MenuNum: 561
+  MenuText: "ACCOUNT SUMMARY "
+
+bulkload: MenuText
+  MenuNum: 562
+  MenuText: "CALL VALPER DAY "
+
+bulkload: MenuText
+  MenuNum: 563
+  MenuText: "CCN/OPERSUMMARY "
+
+bulkload: MenuText
+  MenuNum: 564
+  MenuText: "FOR BOOKKEEPING "
+
+bulkload: MenuText
+  MenuNum: 565
+  MenuText: "OTHER   PRINTOUT"
+
+bulkload: MenuText
+  MenuNum: 566
+  MenuText: "SPECIAL PRODUCTS"
+
+bulkload: MenuText
+  MenuNum: 567
+  MenuText: "NAT.FREEPHONE   "
+
+bulkload: MenuText
+  MenuNum: 568
+  MenuText: "INT.FREEPHONE   "
+
+bulkload: MenuText
+  MenuNum: 569
+  MenuText: "CALENDERSETTINGS"
+
+bulkload: MenuText
+  MenuNum: 570
+  MenuText: "CURRENCYRATES   "
+
+bulkload: MenuText
+  MenuNum: 571
+  MenuText: "XOR     COSTS   "
+
+bulkload: MenuText
+  MenuNum: 580
+  MenuText: "A-SUB   OWNERS  "
+
+bulkload: MenuText
+  MenuNum: 581
+  MenuText: "SET     SECRET  "
+
+bulkload: MenuText
+  MenuNum: 582
+  MenuText: "LIST OF ADVP/DEP"
+
+bulkload: MenuText
+  MenuNum: 583
+  MenuText: "PREFIX  TRAFFIC "
+
+bulkload: MenuText
+  MenuNum: 584
+  MenuText: "CENTREX GROUPS  "
+
+bulkload: MenuText
+  MenuNum: 585
+  MenuText: "OPERATORPREFIXES"
+
+bulkload: MenuText
+  MenuNum: 586
+  MenuText: "SCROLL  DISPLAY "
+
+bulkload: MenuText
+  MenuNum: 587
+  MenuText: "LIST    PAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 588
+  MenuText: "PREFIX  RESELLER"
+
+bulkload: MenuText
+  MenuNum: 589
+  MenuText: "RESELLERTYPES   "
+
+bulkload: MenuText
+  MenuNum: 590
+  MenuText: "RESELLERCLIS    "
+
+bulkload: MenuText
+  MenuNum: 591
+  MenuText: "CURRENC-IES     "
+
+bulkload: MenuText
+  MenuNum: 592
+  MenuText: "CURRENCYCODES   "
+
+bulkload: MenuText
+  MenuNum: 593
+  MenuText: "TRANSIT CALLS   "
+
+bulkload: MenuText
+  MenuNum: 594
+  MenuText: "RETAIL  CALLS   "
+
+bulkload: MenuText
+  MenuNum: 595
+  MenuText: "TRANSIT DBLCALLS"
+
+bulkload: MenuText
+  MenuNum: 596
+  MenuText: "TRANSF->UNREGIST"
+
+bulkload: MenuText
+  MenuNum: 597
+  MenuText: "DISPLAY REGISTR."
+
+bulkload: MenuText
+  MenuNum: 598
+  MenuText: "DISPLAY UNREGIST"
+
+bulkload: MenuText
+  MenuNum: 599
+  MenuText: "RATING  B-NUMBER"
+
+bulkload: MenuText
+  MenuNum: 601
+  MenuText: "A-      NUMBERS "
+
+bulkload: MenuText
+  MenuNum: 602
+  MenuText: "B-DEST          "
+
+bulkload: MenuText
+  MenuNum: 603
+  MenuText: "CUSTOMERRATES   "
+
+bulkload: MenuText
+  MenuNum: 604
+  MenuText: "SHOW    CHOOSEN "
+
+bulkload: MenuText
+  MenuNum: 605
+  MenuText: "CUSTOMRSBILLS   "
+
+bulkload: MenuText
+  MenuNum: 606
+  MenuText: "FIND    ITEM    "
+
+bulkload: MenuText
+  MenuNum: 607
+  MenuText: "COVERED INVOICES"
+
+bulkload: MenuText
+  MenuNum: 608
+  MenuText: "ITEMS ONAGREEM. "
+
+bulkload: MenuText
+  MenuNum: 609
+  MenuText: "BILLABLEITEMS   "
+
+bulkload: MenuText
+  MenuNum: 610
+  MenuText: "BILL TO EXT.OPER"
+
+bulkload: MenuText
+  MenuNum: 611
+  MenuText: "CALCULA-TE AMTS "
+
+bulkload: MenuText
+  MenuNum: 612
+  MenuText: "AMOUNT /PRODUCT "
+
+bulkload: MenuText
+  MenuNum: 613
+  MenuText: "AMOUNT /SWITCH  "
+
+bulkload: MenuText
+  MenuNum: 614
+  MenuText: "HAT     FILES   "
+
+bulkload: MenuText
+  MenuNum: 615
+  MenuText: "CALL    COSTS   "
+
+bulkload: MenuText
+  MenuNum: 616
+  MenuText: "COSTS / COUNTRY "
+
+bulkload: MenuText
+  MenuNum: 617
+  MenuText: "NATIONALCOSTS   "
+
+bulkload: MenuText
+  MenuNum: 618
+  MenuText: "CALC.   COSTS   "
+
+bulkload: MenuText
+  MenuNum: 619
+  MenuText: "AMOUNT  INVOICES"
+
+bulkload: MenuText
+  MenuNum: 620
+  MenuText: "AMOUNT  CUSTPROD"
+
+bulkload: MenuText
+  MenuNum: 621
+  MenuText: "AMOUNT  CUST/MTH"
+
+bulkload: MenuText
+  MenuNum: 622
+  MenuText: "AMOUNT  BSUBPROD"
+
+bulkload: MenuText
+  MenuNum: 623
+  MenuText: "PRICE   DETAILS "
+
+bulkload: MenuText
+  MenuNum: 624
+  MenuText: "DEBUG           "
+
+bulkload: MenuText
+  MenuNum: 625
+  MenuText: "CALL    ERRORS  "
+
+bulkload: MenuText
+  MenuNum: 626
+  MenuText: "INTERNATTRAFFIC "
+
+bulkload: MenuText
+  MenuNum: 627
+  MenuText: "CLEAR   CODES   "
+
+bulkload: MenuText
+  MenuNum: 628
+  MenuText: "COST    ACCOUNTS"
+
+bulkload: MenuText
+  MenuNum: 629
+  MenuText: "ASUB    COUNTERS"
+
+bulkload: MenuText
+  MenuNum: 630
+  MenuText: "CLI     HISTORY "
+
+bulkload: MenuText
+  MenuNum: 637
+  MenuText: "SHOW    PASSWORD"
+
+bulkload: MenuText
+  MenuNum: 638
+  MenuText: "PRINT           "
+
+bulkload: MenuText
+  MenuNum: 639
+  MenuText: "LOCAL   PRINTING"
+
+bulkload: MenuText
+  MenuNum: 650
+  MenuText: "TRAFFIC A/S > AB"
+
+bulkload: MenuText
+  MenuNum: 651
+  MenuText: "ACCOUNTSPER CUST"
+
+bulkload: MenuText
+  MenuNum: 652
+  MenuText: "FIND    PREFIX  "
+
+bulkload: MenuText
+  MenuNum: 653
+  MenuText: "FIND    MSISDN  "
+
+bulkload: MenuText
+  MenuNum: 701
+  MenuText: "FIND    PHONE # "
+
+bulkload: MenuText
+  MenuNum: 702
+  MenuText: "FIND    CUST NBR"
+
+bulkload: MenuText
+  MenuNum: 703
+  MenuText: "FIND    BILLCODE"
+
+bulkload: MenuText
+  MenuNum: 704
+  MenuText: "FIND    B-SUB # "
+
+bulkload: MenuText
+  MenuNum: 705
+  MenuText: "AREA-   CODE    "
+
+bulkload: MenuText
+  MenuNum: 706
+  MenuText: "NET     RATES   "
+
+bulkload: MenuText
+  MenuNum: 707
+  MenuText: "FIND    CUST NBR"
+
+bulkload: MenuText
+  MenuNum: 708
+  MenuText: "FIND BY ABBREV. "
+
+bulkload: MenuText
+  MenuNum: 709
+  MenuText: "OTHER   RATES   "
+
+bulkload: MenuText
+  MenuNum: 710
+  MenuText: "CUSTOM- ERS     "
+
+bulkload: MenuText
+  MenuNum: 711
+  MenuText: "A-SUB. #OF CUSTO"
+
+bulkload: MenuText
+  MenuNum: 712
+  MenuText: "CUSTOMERRATES   "
+
+bulkload: MenuText
+  MenuNum: 713
+  MenuText: "FIND DAYOF CALL "
+
+bulkload: MenuText
+  MenuNum: 714
+  MenuText: "FIND    CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 715
+  MenuText: "FIND A- SUB. NBR"
+
+bulkload: MenuText
+  MenuNum: 716
+  MenuText: "CALLS           "
+
+bulkload: MenuText
+  MenuNum: 717
+  MenuText: "FIND    NAME    "
+
+bulkload: MenuText
+  MenuNum: 718
+  MenuText: "FIND    COUNTRY "
+
+bulkload: MenuText
+  MenuNum: 719
+  MenuText: "MORE    INFO    "
+
+bulkload: MenuText
+  MenuNum: 720
+  MenuText: "LOOK AT CALLS   "
+
+bulkload: MenuText
+  MenuNum: 721
+  MenuText: "CREATE  INVOICES"
+
+bulkload: MenuText
+  MenuNum: 722
+  MenuText: "DISCNTS PER PROD"
+
+bulkload: MenuText
+  MenuNum: 723
+  MenuText: "CALL    PROFILE "
+
+bulkload: MenuText
+  MenuNum: 724
+  MenuText: "CALL    STATIST."
+
+bulkload: MenuText
+  MenuNum: 725
+  MenuText: "GENERATESTATISTI"
+
+bulkload: MenuText
+  MenuNum: 726
+  MenuText: "MORE    INFO    "
+
+bulkload: MenuText
+  MenuNum: 727
+  MenuText: "READ IN CDR'S   "
+
+bulkload: MenuText
+  MenuNum: 728
+  MenuText: "SUPPORT FUNCTION"
+
+bulkload: MenuText
+  MenuNum: 729
+  MenuText: "TICKET  ORD.NUM."
+
+bulkload: MenuText
+  MenuNum: 730
+  MenuText: "GENERERATICKET $"
+
+bulkload: MenuText
+  MenuNum: 731
+  MenuText: "CALCULATDISCNTS "
+
+bulkload: MenuText
+  MenuNum: 732
+  MenuText: "NEW     CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 733
+  MenuText: "PREVIOUSDAY     "
+
+bulkload: MenuText
+  MenuNum: 734
+  MenuText: "NEXT    DAY     "
+
+bulkload: MenuText
+  MenuNum: 735
+  MenuText: "CALL    REPORTS "
+
+bulkload: MenuText
+  MenuNum: 736
+  MenuText: "TOP TEN CUSTOMRS"
+
+bulkload: MenuText
+  MenuNum: 737
+  MenuText: "INVOIC- ING     "
+
+bulkload: MenuText
+  MenuNum: 738
+  MenuText: "CDR     DATA    "
+
+bulkload: MenuText
+  MenuNum: 739
+  MenuText: "FIND    CLITYPE "
+
+bulkload: MenuText
+  MenuNum: 740
+  MenuText: "CHANGE  IN KR - "
+
+bulkload: MenuText
+  MenuNum: 741
+  MenuText: "CHANGE  IN % +  "
+
+bulkload: MenuText
+  MenuNum: 742
+  MenuText: "CHANGE  IN % -  "
+
+bulkload: MenuText
+  MenuNum: 743
+  MenuText: "LOOK AT CHANGE  "
+
+bulkload: MenuText
+  MenuNum: 744
+  MenuText: "FIND EXPLANATION"
+
+bulkload: MenuText
+  MenuNum: 745
+  MenuText: "OPERATORFILE    "
+
+bulkload: MenuText
+  MenuNum: 746
+  MenuText: "DELETE  CALLS   "
+
+bulkload: MenuText
+  MenuNum: 747
+  MenuText: "NO CALLSAT ALL  "
+
+bulkload: MenuText
+  MenuNum: 748
+  MenuText: "SUM OF  CALLS   "
+
+bulkload: MenuText
+  MenuNum: 749
+  MenuText: "FIND    LANGUAGE"
+
+bulkload: MenuText
+  MenuNum: 750
+  MenuText: "CCN             "
+
+bulkload: MenuText
+  MenuNum: 751
+  MenuText: "HEADER  TEXTS   "
+
+bulkload: MenuText
+  MenuNum: 752
+  MenuText: "SPECIAL HOLIDAYS"
+
+bulkload: MenuText
+  MenuNum: 753
+  MenuText: "OTHER B.FILES   "
+
+bulkload: MenuText
+  MenuNum: 754
+  MenuText: "BILLING ITEMS   "
+
+bulkload: MenuText
+  MenuNum: 755
+  MenuText: "FOREIGN NAMES   "
+
+bulkload: MenuText
+  MenuNum: 756
+  MenuText: "SALESMEN        "
+
+bulkload: MenuText
+  MenuNum: 757
+  MenuText: "OPERATORPRICES  "
+
+bulkload: MenuText
+  MenuNum: 758
+  MenuText: "FIND    TRUNK   "
+
+bulkload: MenuText
+  MenuNum: 759
+  MenuText: "FIND    TYPE    "
+
+bulkload: MenuText
+  MenuNum: 760
+  MenuText: "CUSTOMERRANKING "
+
+bulkload: MenuText
+  MenuNum: 761
+  MenuText: "FIND    RESELLER"
+
+bulkload: MenuText
+  MenuNum: 762
+  MenuText: "UNREGISTPAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 763
+  MenuText: "FIND    REFNUM  "
+
+bulkload: MenuText
+  MenuNum: 764
+  MenuText: "UNREG.  REPORTS "
+
+bulkload: MenuText
+  MenuNum: 765
+  MenuText: "UNREG.  EVENTS  "
+
+bulkload: MenuText
+  MenuNum: 770
+  MenuText: "FIND    OPERATOR"
+
+bulkload: MenuText
+  MenuNum: 771
+  MenuText: "FIND    PERIOD  "
+
+bulkload: MenuText
+  MenuNum: 772
+  MenuText: "OP/CNTRYREPORT  "
+
+bulkload: MenuText
+  MenuNum: 773
+  MenuText: "CNTRY/OPREPORT  "
+
+bulkload: MenuText
+  MenuNum: 774
+  MenuText: "OPERATORSTATIST."
+
+bulkload: MenuText
+  MenuNum: 775
+  MenuText: "A-SUB #SOF CUST."
+
+bulkload: MenuText
+  MenuNum: 776
+  MenuText: "CUST/A- SUB REP."
+
+bulkload: MenuText
+  MenuNum: 777
+  MenuText: "A-SUB   TO FILE "
+
+bulkload: MenuText
+  MenuNum: 778
+  MenuText: "PRINT   SETUP   "
+
+bulkload: MenuText
+  MenuNum: 779
+  MenuText: "PRINTERS        "
+
+bulkload: MenuText
+  MenuNum: 780
+  MenuText: "PRINT-  OUTS    "
+
+bulkload: MenuText
+  MenuNum: 781
+  MenuText: "USERS           "
+
+bulkload: MenuText
+  MenuNum: 782
+  MenuText: "CALLS / COUNTRY "
+
+bulkload: MenuText
+  MenuNum: 783
+  MenuText: "CALLS / A-SUB.NR"
+
+bulkload: MenuText
+  MenuNum: 784
+  MenuText: "A-SUB/  SERVICE "
+
+bulkload: MenuText
+  MenuNum: 785
+  MenuText: "ACCOUNT-ING     "
+
+bulkload: MenuText
+  MenuNum: 786
+  MenuText: "STATIST.-> EXCEL"
+
+bulkload: MenuText
+  MenuNum: 787
+  MenuText: "CUSTOMERCATEGORY"
+
+bulkload: MenuText
+  MenuNum: 788
+  MenuText: "CUSTOMERDATA    "
+
+bulkload: MenuText
+  MenuNum: 789
+  MenuText: "FIND    AMOUNT  "
+
+bulkload: MenuText
+  MenuNum: 790
+  MenuText: "INVOICE ROWS    "
+
+bulkload: MenuText
+  MenuNum: 791
+  MenuText: "INVOICE FILE    "
+
+bulkload: MenuText
+  MenuNum: 792
+  MenuText: "PRINT   BILLS   "
+
+bulkload: MenuText
+  MenuNum: 793
+  MenuText: "PRINT   BILLS   "
+
+bulkload: MenuText
+  MenuNum: 794
+  MenuText: "CREATE  INVOICES"
+
+bulkload: MenuText
+  MenuNum: 795
+  MenuText: "START           "
+
+bulkload: MenuText
+  MenuNum: 796
+  MenuText: "RATE/   MINUTE  "
+
+bulkload: MenuText
+  MenuNum: 797
+  MenuText: "ACTIVATEINV.FORM"
+
+bulkload: MenuText
+  MenuNum: 798
+  MenuText: "INFORM. TEXTS   "
+
+bulkload: MenuText
+  MenuNum: 799
+  MenuText: "CHANGE #OF INV. "
+
+bulkload: MenuText
+  MenuNum: 800
+  MenuText: "STATIST.SMAN/CUS"
+
+bulkload: MenuText
+  MenuNum: 801
+  MenuText: "STATIST.SM/CU/CO"
+
+bulkload: MenuText
+  MenuNum: 802
+  MenuText: "COMPANY DATA    "
+
+bulkload: MenuText
+  MenuNum: 803
+  MenuText: "RE-     RATING  "
+
+bulkload: MenuText
+  MenuNum: 804
+  MenuText: "INVOICE REPORT  "
+
+bulkload: MenuText
+  MenuNum: 805
+  MenuText: "LOG OF  CH-FILES"
+
+bulkload: MenuText
+  MenuNum: 806
+  MenuText: "CUSTOMERMEMO    "
+
+bulkload: MenuText
+  MenuNum: 807
+  MenuText: "SMALL   PRINTOUT"
+
+bulkload: MenuText
+  MenuNum: 808
+  MenuText: "LARGE   PRINTOUT"
+
+bulkload: MenuText
+  MenuNum: 809
+  MenuText: "CUSTOMERLISTS   "
+
+bulkload: MenuText
+  MenuNum: 810
+  MenuText: "PRICE-  LIST    "
+
+bulkload: MenuText
+  MenuNum: 811
+  MenuText: "ALL     PAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 812
+  MenuText: "FIND    CUST ID "
+
+bulkload: MenuText
+  MenuNum: 813
+  MenuText: "FIND    BANKACC "
+
+bulkload: MenuText
+  MenuNum: 814
+  MenuText: "TRANSL. NAMES   "
+
+bulkload: MenuText
+  MenuNum: 815
+  MenuText: "REGISTERPAYMENT "
+
+bulkload: MenuText
+  MenuNum: 816
+  MenuText: "FIND            "
+
+bulkload: MenuText
+  MenuNum: 820
+  MenuText: "ACCOUNTSREC'VBLE"
+
+bulkload: MenuText
+  MenuNum: 821
+  MenuText: "INVOICE JOURNAL "
+
+bulkload: MenuText
+  MenuNum: 822
+  MenuText: "BALANCE REPORT  "
+
+bulkload: MenuText
+  MenuNum: 823
+  MenuText: "PAYMENT JOURNAL "
+
+bulkload: MenuText
+  MenuNum: 824
+  MenuText: "AGE-    ANALYSIS"
+
+bulkload: MenuText
+  MenuNum: 825
+  MenuText: "PAYMENT FORECAST"
+
+bulkload: MenuText
+  MenuNum: 826
+  MenuText: "DUE     INVOICES"
+
+bulkload: MenuText
+  MenuNum: 827
+  MenuText: "REMIND- ERS     "
+
+bulkload: MenuText
+  MenuNum: 828
+  MenuText: "CHANGE  AN INV. "
+
+bulkload: MenuText
+  MenuNum: 829
+  MenuText: "PAYMENTS        "
+
+bulkload: MenuText
+  MenuNum: 830
+  MenuText: "DELETE  BILLS   "
+
+bulkload: MenuText
+  MenuNum: 831
+  MenuText: "ALL     INVOICES"
+
+bulkload: MenuText
+  MenuNum: 832
+  MenuText: "OK, NO  INTEREST"
+
+bulkload: MenuText
+  MenuNum: 833
+  MenuText: "OK +MAKEINTEREST"
+
+bulkload: MenuText
+  MenuNum: 834
+  MenuText: "DELETE  BILLS   "
+
+bulkload: MenuText
+  MenuNum: 835
+  MenuText: "DAY/PRODSTATIST."
+
+bulkload: MenuText
+  MenuNum: 836
+  MenuText: "SUM     TOGETHER"
+
+bulkload: MenuText
+  MenuNum: 837
+  MenuText: "DAILY   STATIST."
+
+bulkload: MenuText
+  MenuNum: 838
+  MenuText: "DAY/CUSTSTATIST."
+
+bulkload: MenuText
+  MenuNum: 839
+  MenuText: "CALLS/  B-SUB.NR"
+
+bulkload: MenuText
+  MenuNum: 840
+  MenuText: "ALARM-  LIST    "
+
+bulkload: MenuText
+  MenuNum: 841
+  MenuText: "SUM TOT.ACCOUNT "
+
+bulkload: MenuText
+  MenuNum: 842
+  MenuText: "REPORTS FOR CUST"
+
+bulkload: MenuText
+  MenuNum: 843
+  MenuText: "REPORTS TO US   "
+
+bulkload: MenuText
+  MenuNum: 844
+  MenuText: "CALLS   PER PROD"
+
+bulkload: MenuText
+  MenuNum: 845
+  MenuText: "UNKNOWN A-SUB #S"
+
+bulkload: MenuText
+  MenuNum: 846
+  MenuText: "REMINDERTEXT    "
+
+bulkload: MenuText
+  MenuNum: 847
+  MenuText: "PRINT   TO FILE "
+
+bulkload: MenuText
+  MenuNum: 848
+  MenuText: "CHATLINEAVRÄKN. "
+
+bulkload: MenuText
+  MenuNum: 849
+  MenuText: "PAYMENT FILES   "
+
+bulkload: MenuText
+  MenuNum: 850
+  MenuText: "MANUAL  PAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 851
+  MenuText: "PRINT   SERV.LOG"
+
+bulkload: MenuText
+  MenuNum: 854
+  MenuText: "C-REPORT-> EXCEL"
+
+bulkload: MenuText
+  MenuNum: 855
+  MenuText: "TRAFFIC AREAS   "
+
+bulkload: MenuText
+  MenuNum: 856
+  MenuText: "CHOOSE  CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 857
+  MenuText: "ACCNTING-> EXCEL"
+
+bulkload: MenuText
+  MenuNum: 858
+  MenuText: "AREA    CODES   "
+
+bulkload: MenuText
+  MenuNum: 859
+  MenuText: "EXCHANGEFILE    "
+
+bulkload: MenuText
+  MenuNum: 860
+  MenuText: "ACTIVATEFORM    "
+
+bulkload: MenuText
+  MenuNum: 861
+  MenuText: "OP.STAT.->EXCEL "
+
+bulkload: MenuText
+  MenuNum: 862
+  MenuText: "INTERESTEVENTS  "
+
+bulkload: MenuText
+  MenuNum: 863
+  MenuText: "AREA-   CODES   "
+
+bulkload: MenuText
+  MenuNum: 864
+  MenuText: "EXCHANGEFILE    "
+
+bulkload: MenuText
+  MenuNum: 865
+  MenuText: "FIND    EXCHANGE"
+
+bulkload: MenuText
+  MenuNum: 866
+  MenuText: "CIRCUIT GROUPS  "
+
+bulkload: MenuText
+  MenuNum: 867
+  MenuText: "NATIONALNR-PLAN "
+
+bulkload: MenuText
+  MenuNum: 868
+  MenuText: "OPR.RATEEXCEL>NN"
+
+bulkload: MenuText
+  MenuNum: 869
+  MenuText: "OPERATORRATES   "
+
+bulkload: MenuText
+  MenuNum: 870
+  MenuText: "TEMPORARPRINTING"
+
+bulkload: MenuText
+  MenuNum: 871
+  MenuText: "SPREAD- SHEETS  "
+
+bulkload: MenuText
+  MenuNum: 872
+  MenuText: "PROFIT/ SALESMAN"
+
+bulkload: MenuText
+  MenuNum: 873
+  MenuText: "PROFIT/ CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 874
+  MenuText: "MOB TRAF->TELIA!"
+
+bulkload: MenuText
+  MenuNum: 875
+  MenuText: "INVOIC. GROUPS  "
+
+bulkload: MenuText
+  MenuNum: 876
+  MenuText: "PRICE   LISTS   "
+
+bulkload: MenuText
+  MenuNum: 877
+  MenuText: "RATING  DATA    "
+
+bulkload: MenuText
+  MenuNum: 878
+  MenuText: "RATES           "
+
+bulkload: MenuText
+  MenuNum: 879
+  MenuText: "COMMISS.HANDLING"
+
+bulkload: MenuText
+  MenuNum: 880
+  MenuText: "MISC.   FILES   "
+
+bulkload: MenuText
+  MenuNum: 881
+  MenuText: "RUN A   PROGRAM "
+
+bulkload: MenuText
+  MenuNum: 882
+  MenuText: "RETAIL  DBLCALLS"
+
+bulkload: MenuText
+  MenuNum: 883
+  MenuText: "CALLS   DAY/PROD"
+
+bulkload: MenuText
+  MenuNum: 884
+  MenuText: "CALLS   SMAN/PRO"
+
+bulkload: MenuText
+  MenuNum: 885
+  MenuText: "FIND    SALESMAN"
+
+bulkload: MenuText
+  MenuNum: 886
+  MenuText: "FIND    PLIST   "
+
+bulkload: MenuText
+  MenuNum: 887
+  MenuText: "PAYMENTS-> EXCEL"
+
+bulkload: MenuText
+  MenuNum: 888
+  MenuText: "NEIGBOURAREAS   "
+
+bulkload: MenuText
+  MenuNum: 889
+  MenuText: "FIND    AREACODE"
+
+bulkload: MenuText
+  MenuNum: 890
+  MenuText: "NATIONALTEL. NOS"
+
+bulkload: MenuText
+  MenuNum: 891
+  MenuText: "OPERATOR& PREFIX"
+
+bulkload: MenuText
+  MenuNum: 892
+  MenuText: "OWN     PREFIXES"
+
+bulkload: MenuText
+  MenuNum: 893
+  MenuText: "BROWSE  FILES   "
+
+bulkload: MenuText
+  MenuNum: 894
+  MenuText: "BILLS   -> EXCEL"
+
+bulkload: MenuText
+  MenuNum: 895
+  MenuText: "COMMISS.        "
+
+bulkload: MenuText
+  MenuNum: 896
+  MenuText: "COMMISS.RULES   "
+
+bulkload: MenuText
+  MenuNum: 897
+  MenuText: "CREATE  EVENTS  "
+
+bulkload: MenuText
+  MenuNum: 898
+  MenuText: "COMMISS.EVENTS  "
+
+bulkload: MenuText
+  MenuNum: 899
+  MenuText: "COMMISS.REPORTS "
+
+bulkload: MenuText
+  MenuNum: 900
+  MenuText: "FROM    BILLING "
+
+bulkload: MenuText
+  MenuNum: 901
+  MenuText: "FR OTHERCALLS   "
+
+bulkload: MenuText
+  MenuNum: 902
+  MenuText: "TERMIN. MOB.TRAF"
+
+bulkload: MenuText
+  MenuNum: 903
+  MenuText: "CREATE AWL-FILE "
+
+bulkload: MenuText
+  MenuNum: 904
+  MenuText: "PAYMENT STATUS  "
+
+bulkload: MenuText
+  MenuNum: 905
+  MenuText: "LIST OF C-RULES "
+
+bulkload: MenuText
+  MenuNum: 906
+  MenuText: "CDR'S           "
+
+bulkload: MenuText
+  MenuNum: 907
+  MenuText: "FIXED   FEES    "
+
+bulkload: MenuText
+  MenuNum: 908
+  MenuText: "MAKE A  CR. NOTE"
+
+bulkload: MenuText
+  MenuNum: 909
+  MenuText: "CLOSE   ALL     "
+
+bulkload: MenuText
+  MenuNum: 910
+  MenuText: "FIND    MONTH   "
+
+bulkload: MenuText
+  MenuNum: 911
+  MenuText: "CHANGE  THIS    "
+
+bulkload: MenuText
+  MenuNum: 912
+  MenuText: "CHANGE  ALL     "
+
+bulkload: MenuText
+  MenuNum: 913
+  MenuText: "CLOSE   THIS    "
+
+bulkload: MenuText
+  MenuNum: 914
+  MenuText: "MONTHLY COUNTERS"
+
+bulkload: MenuText
+  MenuNum: 915
+  MenuText: "MAINTAINCOUNTERS"
+
+bulkload: MenuText
+  MenuNum: 916
+  MenuText: "MAINTAINCL.CUST."
+
+bulkload: MenuText
+  MenuNum: 917
+  MenuText: "REMOVE  OLD CNTR"
+
+bulkload: MenuText
+  MenuNum: 918
+  MenuText: "REPORT          "
+
+bulkload: MenuText
+  MenuNum: 919
+  MenuText: "INV.LIST-> EXCEL"
+
+bulkload: MenuText
+  MenuNum: 920
+  MenuText: "SALES   OFFICES "
+
+bulkload: MenuText
+  MenuNum: 921
+  MenuText: "BROWSE  B-NUMBRS"
+
+bulkload: MenuText
+  MenuNum: 922
+  MenuText: "SPECIAL B-NUMBRS"
+
+bulkload: MenuText
+  MenuNum: 923
+  MenuText: "B-NUMBEROWNERS  "
+
+bulkload: MenuText
+  MenuNum: 924
+  MenuText: "MAINTAINB-NUMBRS"
+
+bulkload: MenuText
+  MenuNum: 925
+  MenuText: "B-NUMBERCOUNTER "
+
+bulkload: MenuText
+  MenuNum: 926
+  MenuText: "LOAD    B-NUMBRS"
+
+bulkload: MenuText
+  MenuNum: 927
+  MenuText: "MEMO            "
+
+bulkload: MenuText
+  MenuNum: 928
+  MenuText: "ACC/TERMCOSTS   "
+
+bulkload: MenuText
+  MenuNum: 929
+  MenuText: "TB      REPORT  "
+
+bulkload: MenuText
+  MenuNum: 930
+  MenuText: "TELEMANSINV.FORM"
+
+bulkload: MenuText
+  MenuNum: 931
+  MenuText: "TELE1'S INV.FORM"
+
+bulkload: MenuText
+  MenuNum: 932
+  MenuText: "BROWSE  ON SCREE"
+
+bulkload: MenuText
+  MenuNum: 933
+  MenuText: "MAKE AN EXCEL FI"
+
+bulkload: MenuText
+  MenuNum: 934
+  MenuText: "CHANGE  046-NUMB"
+
+bulkload: MenuText
+  MenuNum: 935
+  MenuText: "B-NUMBERLIST    "
+
+bulkload: MenuText
+  MenuNum: 936
+  MenuText: "CUSTOMERLETTER  "
+
+bulkload: MenuText
+  MenuNum: 937
+  MenuText: "MAINTAINLETTER  "
+
+bulkload: MenuText
+  MenuNum: 938
+  MenuText: "PRINT   LETTER  "
+
+bulkload: MenuText
+  MenuNum: 939
+  MenuText: "MAILING LIST    "
+
+bulkload: MenuText
+  MenuNum: 940
+  MenuText: "INV.JOUR-> XOR  "
+
+bulkload: MenuText
+  MenuNum: 941
+  MenuText: "A-NUMBERCHANGE  "
+
+bulkload: MenuText
+  MenuNum: 942
+  MenuText: "CUST. NOLIST    "
+
+bulkload: MenuText
+  MenuNum: 943
+  MenuText: "SHOW    MINUTES "
+
+bulkload: MenuText
+  MenuNum: 944
+  MenuText: "SHOW    HOURS   "
+
+bulkload: MenuText
+  MenuNum: 945
+  MenuText: "STUDY   CDR'S   "
+
+bulkload: MenuText
+  MenuNum: 946
+  MenuText: "FREEPH. -> EXCEL"
+
+bulkload: MenuText
+  MenuNum: 947
+  MenuText: "C->EXCELREPORT 1"
+
+bulkload: MenuText
+  MenuNum: 948
+  MenuText: "C->EXCELREPORT 2"
+
+bulkload: MenuText
+  MenuNum: 949
+  MenuText: "BILL TO S. AGENT"
+
+bulkload: MenuText
+  MenuNum: 950
+  MenuText: "B-NUMBERSERIES *"
+
+bulkload: MenuText
+  MenuNum: 951
+  MenuText: "NATIONALPREFIXES"
+
+bulkload: MenuText
+  MenuNum: 952
+  MenuText: "RESELLER        "
+
+bulkload: MenuText
+  MenuNum: 953
+  MenuText: "ERASE   SERIE   "
+
+bulkload: MenuText
+  MenuNum: 954
+  MenuText: "020     CALLS   "
+
+bulkload: MenuText
+  MenuNum: 955
+  MenuText: "COPY    RATES   "
+
+bulkload: MenuText
+  MenuNum: 956
+  MenuText: "BROWSE  PAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 957
+  MenuText: "CONTRACTFEES    "
+
+bulkload: MenuText
+  MenuNum: 958
+  MenuText: "INTERNATOPER'S  "
+
+bulkload: MenuText
+  MenuNum: 959
+  MenuText: "MISC    ROUTINES"
+
+bulkload: MenuText
+  MenuNum: 960
+  MenuText: "WRONG   IG&PL   "
+
+bulkload: MenuText
+  MenuNum: 961
+  MenuText: "CUSTOMEREQUIPMEN"
+
+bulkload: MenuText
+  MenuNum: 962
+  MenuText: "PRICE   SIMULATE"
+
+bulkload: MenuText
+  MenuNum: 963
+  MenuText: "CALLS/  B-NUMBER"
+
+bulkload: MenuText
+  MenuNum: 964
+  MenuText: "EQUIP-  MENT    "
+
+bulkload: MenuText
+  MenuNum: 965
+  MenuText: "SALESMANREPORTS "
+
+bulkload: MenuText
+  MenuNum: 966
+  MenuText: "SALESMAN/AGENT"
+
+bulkload: MenuText
+  MenuNum: 967
+  MenuText: "CGR     COUNTER "
+
+bulkload: MenuText
+  MenuNum: 968
+  MenuText: "COUNTERS        "
+
+bulkload: MenuText
+  MenuNum: 969
+  MenuText: "CIRCUIT GROUPS  "
+
+bulkload: MenuText
+  MenuNum: 970
+  MenuText: "CHANGE  RATES   "
+
+bulkload: MenuText
+  MenuNum: 971
+  MenuText: "MOBILE  PREFIXES"
+
+bulkload: MenuText
+  MenuNum: 972
+  MenuText: "LOOK ALLACCOUNTS"
+
+bulkload: MenuText
+  MenuNum: 973
+  MenuText: "FIND    GROUP   "
+
+bulkload: MenuText
+  MenuNum: 974
+  MenuText: "BILLITEMGROUPS  "
+
+bulkload: MenuText
+  MenuNum: 975
+  MenuText: "ACCOUNTS        "
+
+bulkload: MenuText
+  MenuNum: 976
+  MenuText: "PAYM.JOU-> XOR  "
+
+bulkload: MenuText
+  MenuNum: 977
+  MenuText: "PRODUCT STATIST."
+
+bulkload: MenuText
+  MenuNum: 978
+  MenuText: "UPDATE  INFO    "
+
+bulkload: MenuText
+  MenuNum: 979
+  MenuText: "COUNT   CUSTOMRS"
+
+bulkload: MenuText
+  MenuNum: 980
+  MenuText: "BILLED  PROD>EXC"
+
+bulkload: MenuText
+  MenuNum: 981
+  MenuText: "BIL.PRODTMAN>EXC"
+
+bulkload: MenuText
+  MenuNum: 982
+  MenuText: "NETRATES& DISCNT"
+
+bulkload: MenuText
+  MenuNum: 983
+  MenuText: "ABOUT   THIS    "
+
+bulkload: MenuText
+  MenuNum: 984
+  MenuText: "LOCAL   INVOICE "
+
+bulkload: MenuText
+  MenuNum: 985
+  MenuText: "PRINT   HOUSE   "
+
+bulkload: MenuText
+  MenuNum: 986
+  MenuText: "CHANGE  INV.DATE"
+
+bulkload: MenuText
+  MenuNum: 987
+  MenuText: "EXPIRINGPAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 988
+  MenuText: "OLD CGR COUNTERS"
+
+bulkload: MenuText
+  MenuNum: 989
+  MenuText: "OLD CGR REPORT  "
+
+bulkload: MenuText
+  MenuNum: 990
+  MenuText: "PAYMENTSINVOICES"
+
+bulkload: MenuText
+  MenuNum: 991
+  MenuText: "PRINT   MEMO    "
+
+bulkload: MenuText
+  MenuNum: 992
+  MenuText: "NOTES ONPAYMENT "
+
+bulkload: MenuText
+  MenuNum: 993
+  MenuText: "NOTES ONINVOICE "
+
+bulkload: MenuText
+  MenuNum: 994
+  MenuText: "B-NUMBERPRICES  "
+
+bulkload: MenuText
+  MenuNum: 995
+  MenuText: "CLOSED  A-NROS  "
+
+bulkload: MenuText
+  MenuNum: 996
+  MenuText: "FILES   -> XOR  "
+
+bulkload: MenuText
+  MenuNum: 997
+  MenuText: "CUST.COD-> XOR  "
+
+bulkload: MenuText
+  MenuNum: 998
+  MenuText: "ESTIMATEINTEREST"
+
+bulkload: MenuText
+  MenuNum: 999
+  MenuText: "TAX     CODES   "
+
+bulkload: MenuText
+  MenuNum: 1000
+  MenuText: "KHA FUNCTIONS   "
+
+bulkload: MenuText
+  MenuNum: 1001
+  MenuText: "EXPORT  FILES   "
+
+bulkload: MenuText
+  MenuNum: 1002
+  MenuText: "IMPORT  STATUS  "
+
+bulkload: MenuText
+  MenuNum: 1003
+  MenuText: "IMPORT  PAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 1004
+  MenuText: "DIRECT  DEBIT   "
+
+bulkload: MenuText
+  MenuNum: 1005
+  MenuText: "PAYER   FILE    "
+
+bulkload: MenuText
+  MenuNum: 1006
+  MenuText: "PAYMENT FILE    "
+
+bulkload: MenuText
+  MenuNum: 1007
+  MenuText: "BUDGET  REPORTS "
+
+bulkload: MenuText
+  MenuNum: 1008
+  MenuText: "UPD.OVERTIMEINT "
+
+bulkload: MenuText
+  MenuNum: 1009
+  MenuText: "USE     INV.CODE"
+
+bulkload: MenuText
+  MenuNum: 1010
+  MenuText: "INVOICE CREATION"
+
+bulkload: MenuText
+  MenuNum: 1011
+  MenuText: "IMPORT  DD.AUTH."
+
+bulkload: MenuText
+  MenuNum: 1012
+  MenuText: "UPDATE  DD.AUTH."
+
+bulkload: MenuText
+  MenuNum: 1013
+  MenuText: "D.DEBIT FILE    "
+
+bulkload: MenuText
+  MenuNum: 1014
+  MenuText: "DATA    RECORDS "
+
+bulkload: MenuText
+  MenuNum: 1015
+  MenuText: "DIRECT  MARKET. "
+
+bulkload: MenuText
+  MenuNum: 1018
+  MenuText: "FIND    SOURCE  "
+
+bulkload: MenuText
+  MenuNum: 1019
+  MenuText: "CLAIMING        "
+
+bulkload: MenuText
+  MenuNum: 1020
+  MenuText: "EPL     FILE    "
+
+bulkload: MenuText
+  MenuNum: 1021
+  MenuText: "REMIND. -> EPL  "
+
+bulkload: MenuText
+  MenuNum: 1022
+  MenuText: "FAILED  CREATION"
+
+bulkload: MenuText
+  MenuNum: 1023
+  MenuText: "MONTHLY STATUS  "
+
+bulkload: MenuText
+  MenuNum: 1025
+  MenuText: "VIEW    AGR.CUST"
+
+bulkload: MenuText
+  MenuNum: 1026
+  MenuText: "VIEW    INV.CUST"
+
+bulkload: MenuText
+  MenuNum: 1027
+  MenuText: "MAKE A  REQUEST "
+
+bulkload: MenuText
+  MenuNum: 1028
+  MenuText: "REQUESTS        "
+
+bulkload: MenuText
+  MenuNum: 1029
+  MenuText: "USER    CHANGES "
+
+bulkload: MenuText
+  MenuNum: 1030
+  MenuText: "CLI /   BILLITEM"
+
+bulkload: MenuText
+  MenuNum: 1031
+  MenuText: "CLI/BIT/CCN     "
+
+bulkload: MenuText
+  MenuNum: 1032
+  MenuText: "BILLITEM/ CCN   "
+
+bulkload: MenuText
+  MenuNum: 1033
+  MenuText: "CLI /   CCN     "
+
+bulkload: MenuText
+  MenuNum: 1034
+  MenuText: "ADDRESS CHANGES "
+
+bulkload: MenuText
+  MenuNum: 1035
+  MenuText: "FUTURE  BILLING "
+
+bulkload: MenuText
+  MenuNum: 1036
+  MenuText: "CONTRACTFUNCTION"
+
+bulkload: MenuText
+  MenuNum: 1037
+  MenuText: "CONTRACTREPORT  "
+
+bulkload: MenuText
+  MenuNum: 1038
+  MenuText: "INV.CUSTCHANGES "
+
+bulkload: MenuText
+  MenuNum: 1039
+  MenuText: "USER    ACCOUNTS"
+
+bulkload: MenuText
+  MenuNum: 1040
+  MenuText: "FONECTA         "
+
+bulkload: MenuText
+  MenuNum: 1041
+  MenuText: "PIN     ORDERS  "
+
+bulkload: MenuText
+  MenuNum: 1042
+  MenuText: "ACTIVAT.CONTRACT"
+
+bulkload: MenuText
+  MenuNum: 1043
+  MenuText: "PERIODICCONTRACT"
+
+bulkload: MenuText
+  MenuNum: 1044
+  MenuText: "CUSTOMERCHANGES "
+
+bulkload: MenuText
+  MenuNum: 1045
+  MenuText: "FIND    CONTRACT"
+
+bulkload: MenuText
+  MenuNum: 1046
+  MenuText: "CANCEL  CONTRACT"
+
+bulkload: MenuText
+  MenuNum: 1047
+  MenuText: "TERMINATCONTRACT"
+
+bulkload: MenuText
+  MenuNum: 1048
+  MenuText: "SPECIAL ACTIONS "
+
+bulkload: MenuText
+  MenuNum: 1049
+  MenuText: "IMMEDIATTERMINAT"
+
+bulkload: MenuText
+  MenuNum: 1050
+  MenuText: "FIND    ZIPCODE "
+
+bulkload: MenuText
+  MenuNum: 1051
+  MenuText: "EMPTY   TERMDATE"
+
+bulkload: MenuText
+  MenuNum: 1052
+  MenuText: "READY/GO        "
+
+bulkload: MenuText
+  MenuNum: 1053
+  MenuText: "AGREEM. CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 1054
+  MenuText: "CONFIRM         "
+
+bulkload: MenuText
+  MenuNum: 1055
+  MenuText: "CURRENT USER    "
+
+bulkload: MenuText
+  MenuNum: 1056
+  MenuText: "CURRENT INV.CUST"
+
+bulkload: MenuText
+  MenuNum: 1057
+  MenuText: "APPROVE REQUEST "
+
+bulkload: MenuText
+  MenuNum: 1058
+  MenuText: "ADV.PAYMINVOICE "
+
+bulkload: MenuText
+  MenuNum: 1059
+  MenuText: "CANCEL  REQUEST "
+
+bulkload: MenuText
+  MenuNum: 1060
+  MenuText: "HANDLE  REQUEST "
+
+bulkload: MenuText
+  MenuNum: 1061
+  MenuText: "COUNT   QUEUES  "
+
+bulkload: MenuText
+  MenuNum: 1062
+  MenuText: "ACCEPT  PLAN    "
+
+bulkload: MenuText
+  MenuNum: 1063
+  MenuText: "CANCEL  PLAN    "
+
+bulkload: MenuText
+  MenuNum: 1064
+  MenuText: "CREDIT  CONTROL "
+
+bulkload: MenuText
+  MenuNum: 1065
+  MenuText: "CUSTOMERREQUESTS"
+
+bulkload: MenuText
+  MenuNum: 1066
+  MenuText: "SUBSCR. REQUESTS"
+
+bulkload: MenuText
+  MenuNum: 1067
+  MenuText: "SERVICE REQUESTS"
+
+bulkload: MenuText
+  MenuNum: 1068
+  MenuText: "ADMIN   FUNCTION"
+
+bulkload: MenuText
+  MenuNum: 1069
+  MenuText: "CONFIG. RULES   "
+
+bulkload: MenuText
+  MenuNum: 1070
+  MenuText: "TERMINALACCESSOR"
+
+bulkload: MenuText
+  MenuNum: 1071
+  MenuText: "DELIVERYADDRESS "
+
+bulkload: MenuText
+  MenuNum: 1072
+  MenuText: "TOPUP           "
+
+bulkload: MenuText
+  MenuNum: 1073
+  MenuText: "IMPORT  TOPUP   "
+
+bulkload: MenuText
+  MenuNum: 1074
+  MenuText: "CLAIMNOTENDINV. "
+
+bulkload: MenuText
+  MenuNum: 1075
+  MenuText: "1.      REMINDER"
+
+bulkload: MenuText
+  MenuNum: 1076
+  MenuText: "2.      REMINDER"
+
+bulkload: MenuText
+  MenuNum: 1077
+  MenuText: "COMMISS.BASIS   "
+
+bulkload: MenuText
+  MenuNum: 1078
+  MenuText: "FAILED  PAYMPLAN"
+
+bulkload: MenuText
+  MenuNum: 1079
+  MenuText: "PREPAID BALANCE "
+
+bulkload: MenuText
+  MenuNum: 1080
+  MenuText: "EVENT   CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 1081
+  MenuText: "COMPEN- SATION  "
+
+bulkload: MenuText
+  MenuNum: 1082
+  MenuText: "TAX     REPORTS "
+
+bulkload: MenuText
+  MenuNum: 1083
+  MenuText: "INVOICE TAXES   "
+
+bulkload: MenuText
+  MenuNum: 1084
+  MenuText: "TOPUP   TAXES   "
+
+bulkload: MenuText
+  MenuNum: 1085
+  MenuText: "DOC1    FILE    "
+
+bulkload: MenuText
+  MenuNum: 1086
+  MenuText: "MINUS   ADJUSTM."
+
+bulkload: MenuText
+  MenuNum: 1087
+  MenuText: "RESET   REQUEST "
+
+bulkload: MenuText
+  MenuNum: 1088
+  MenuText: "RESPONSEXML     "
+
+bulkload: MenuText
+  MenuNum: 1089
+  MenuText: "ACCEPT  REQUEST "
+
+bulkload: MenuText
+  MenuNum: 1090
+  MenuText: "REGIONS         "
+
+bulkload: MenuText
+  MenuNum: 1091
+  MenuText: "TAX     ZONES   "
+
+bulkload: MenuText
+  MenuNum: 1092
+  MenuText: "TAX     CLASSES "
+
+bulkload: MenuText
+  MenuNum: 1093
+  MenuText: "FIND    TAX ZONE"
+
+bulkload: MenuText
+  MenuNum: 1094
+  MenuText: "FIND    TAXCLASS"
+
+bulkload: MenuText
+  MenuNum: 1095
+  MenuText: "NATION- ALITIES "
+
+bulkload: MenuText
+  MenuNum: 1096
+  MenuText: "CONTACT DATA    "
+
+bulkload: MenuText
+  MenuNum: 1097
+  MenuText: "FIND    ZIP CODE"
+
+bulkload: MenuText
+  MenuNum: 1098
+  MenuText: "FIND    POSTOFF."
+
+bulkload: MenuText
+  MenuNum: 1099
+  MenuText: "FIND    REGION  "
+
+bulkload: MenuText
+  MenuNum: 1100
+  MenuText: "INVOICE NUMBERS "
+
+bulkload: MenuText
+  MenuNum: 1101
+  MenuText: "SHOW ERRTEXT    "
+
+bulkload: MenuText
+  MenuNum: 1102
+  MenuText: "OWNERS  OF MSISD"
+
+bulkload: MenuText
+  MenuNum: 1103
+  MenuText: "CDR     FILES   "
+
+bulkload: MenuText
+  MenuNum: 1104
+  MenuText: "READ IN CDR     "
+
+bulkload: MenuText
+  MenuNum: 1105
+  MenuText: "ANALYSE CDR     "
+
+bulkload: MenuText
+  MenuNum: 1106
+  MenuText: "RATE MOBCDRS    "
+
+bulkload: MenuText
+  MenuNum: 1107
+  MenuText: "MOBILE  BILLING "
+
+bulkload: MenuText
+  MenuNum: 1108
+  MenuText: "MAKE OBIRECORDS "
+
+bulkload: MenuText
+  MenuNum: 1109
+  MenuText: "RATING &BILLING "
+
+bulkload: MenuText
+  MenuNum: 1110
+  MenuText: "SINGLE  FEES    "
+
+bulkload: MenuText
+  MenuNum: 1111
+  MenuText: "ALL CONTFEES    "
+
+bulkload: MenuText
+  MenuNum: 1112
+  MenuText: "SHOW    RATE REC"
+
+bulkload: MenuText
+  MenuNum: 1113
+  MenuText: "INVOICE SECTIONS"
+
+bulkload: MenuText
+  MenuNum: 1114
+  MenuText: "CALCUL. VOL.DISC"
+
+bulkload: MenuText
+  MenuNum: 1115
+  MenuText: "VIEW    RAW CDR "
+
+bulkload: MenuText
+  MenuNum: 1116
+  MenuText: "LOCAL   MOB SP.1"
+
+bulkload: MenuText
+  MenuNum: 1117
+  MenuText: "LOCAL   MOB SP.2"
+
+bulkload: MenuText
+  MenuNum: 1118
+  MenuText: "LOCAL   INVOICE "
+
+bulkload: MenuText
+  MenuNum: 1119
+  MenuText: "VOUCHER NUMBERS "
+
+bulkload: MenuText
+  MenuNum: 1120
+  MenuText: "NUMBER  SEQUENCE"
+
+bulkload: MenuText
+  MenuNum: 1121
+  MenuText: "REQUEST XML     "
+
+bulkload: MenuText
+  MenuNum: 1122
+  MenuText: "ODI     LIMIT   "
+
+bulkload: MenuText
+  MenuNum: 1123
+  MenuText: "A/R     REQUESTS"
+
+bulkload: MenuText
+  MenuNum: 1124
+  MenuText: "FIND    ACTION  "
+
+bulkload: MenuText
+  MenuNum: 1125
+  MenuText: "ERROR   LOG     "
+
+bulkload: MenuText
+  MenuNum: 1126
+  MenuText: "ACTION  LOG     "
+
+bulkload: MenuText
+  MenuNum: 1127
+  MenuText: "LOGS            "
+
+bulkload: MenuText
+  MenuNum: 1128
+  MenuText: "QTY OF  INVOICES"
+
+bulkload: MenuText
+  MenuNum: 1129
+  MenuText: "AC      REPORT  "
+
+bulkload: MenuText
+  MenuNum: 1130
+  MenuText: "EVENT   REPORT  "
+
+bulkload: MenuText
+  MenuNum: 1131
+  MenuText: "GROUP   CONTAINS"
+
+bulkload: MenuText
+  MenuNum: 1132
+  MenuText: "APPEARS IN GROUP"
+
+bulkload: MenuText
+  MenuNum: 1133
+  MenuText: "ORDER   ITEMS   "
+
+bulkload: MenuText
+  MenuNum: 1134
+  MenuText: "COMMISS.RESELLER"
+
+bulkload: MenuText
+  MenuNum: 1135
+  MenuText: "MOB.CALLBROWSERS"
+
+bulkload: MenuText
+  MenuNum: 1136
+  MenuText: "DOUBLE  MOBCALLS"
+
+bulkload: MenuText
+  MenuNum: 1137
+  MenuText: "INVOICE HANDLING"
+
+bulkload: MenuText
+  MenuNum: 1138
+  MenuText: "UNBILLEDINVOICE "
+
+bulkload: MenuText
+  MenuNum: 1139
+  MenuText: "CALL    TOTALS  "
+
+bulkload: MenuText
+  MenuNum: 1140
+  MenuText: "B-SUB   REPLACEM"
+
+bulkload: MenuText
+  MenuNum: 1141
+  MenuText: "BILL.OBJTYPE    "
+
+bulkload: MenuText
+  MenuNum: 1142
+  MenuText: "UNBILLEDMOB CDRS"
+
+bulkload: MenuText
+  MenuNum: 1145
+  MenuText: "MOB.RCDRHANDLING"
+
+bulkload: MenuText
+  MenuNum: 1146
+  MenuText: "READ    RCDR    "
+
+bulkload: MenuText
+  MenuNum: 1147
+  MenuText: "ANALYZE RCDR    "
+
+bulkload: MenuText
+  MenuNum: 1148
+  MenuText: "RATE    RCDR    "
+
+bulkload: MenuText
+  MenuNum: 1149
+  MenuText: "MULTIPLECOPY    "
+
+bulkload: MenuText
+  MenuNum: 1150
+  MenuText: "FIND    MODULE  "
+
+bulkload: MenuText
+  MenuNum: 1151
+  MenuText: "KILL    REQUESTS"
+
+bulkload: MenuText
+  MenuNum: 1152
+  MenuText: "OTHER   ACTIONS "
+
+bulkload: MenuText
+  MenuNum: 1153
+  MenuText: "BATCH   KILL    "
+
+bulkload: MenuText
+  MenuNum: 1154
+  MenuText: "FORCED  TERMINAT"
+
+bulkload: MenuText
+  MenuNum: 1155
+  MenuText: "FORCED  ACTIVATI"
+
+bulkload: MenuText
+  MenuNum: 1156
+  MenuText: "SIM-FILEDELIVERY"
+
+bulkload: MenuText
+  MenuNum: 1157
+  MenuText: "CUST&MOBREPORT  "
+
+bulkload: MenuText
+  MenuNum: 1158
+  MenuText: "RE-RATE MOBCDR  "
+
+bulkload: MenuText
+  MenuNum: 1160
+  MenuText: "COPY    CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 1161
+  MenuText: "DIALLINGTYPES   "
+
+bulkload: MenuText
+  MenuNum: 1162
+  MenuText: "RATING  CCN     "
+
+bulkload: MenuText
+  MenuNum: 1163
+  MenuText: "FIND    CCN     "
+
+bulkload: MenuText
+  MenuNum: 1164
+  MenuText: "CONTRACT        "
+
+bulkload: MenuText
+  MenuNum: 1165
+  MenuText: "DOC1    MULTIRUN"
+
+bulkload: MenuText
+  MenuNum: 1166
+  MenuText: "BILLING MULTIRUN"
+
+bulkload: MenuText
+  MenuNum: 1170
+  MenuText: "SUB-    INVOICES"
+
+bulkload: MenuText
+  MenuNum: 1179
+  MenuText: "CDR DB  CONFIG  "
+
+bulkload: MenuText
+  MenuNum: 1180
+  MenuText: "PARAME- TERS    "
+
+bulkload: MenuText
+  MenuNum: 1181
+  MenuText: "EXECUTI-ONS     "
+
+bulkload: MenuText
+  MenuNum: 1182
+  MenuText: "STATUS  INFO    "
+
+bulkload: MenuText
+  MenuNum: 1183
+  MenuText: "PROCESS-ES      "
+
+bulkload: MenuText
+  MenuNum: 1184
+  MenuText: "RESULTS         "
+
+bulkload: MenuText
+  MenuNum: 1185
+  MenuText: "SCHEDULE        "
+
+bulkload: MenuText
+  MenuNum: 1186
+  MenuText: "FOLLOW          "
+
+bulkload: MenuText
+  MenuNum: 1187
+  MenuText: "STOP    FOLLOWIN"
+
+bulkload: MenuText
+  MenuNum: 1188
+  MenuText: "STOP    QUEUE   "
+
+bulkload: MenuText
+  MenuNum: 1189
+  MenuText: "PAUSE   QUEUE   "
+
+bulkload: MenuText
+  MenuNum: 1190
+  MenuText: "CONTINUEQUEUE   "
+
+bulkload: MenuText
+  MenuNum: 1191
+  MenuText: "FUNC.RUNCONFIG  "
+
+bulkload: MenuText
+  MenuNum: 1192
+  MenuText: "FUNC.RUNQUEUE   "
+
+bulkload: MenuText
+  MenuNum: 1200
+  MenuText: "SERVCOMPCOMPARE "
+
+bulkload: MenuText
+  MenuNum: 1250
+  MenuText: "INTRUM          "
+
+bulkload: MenuText
+  MenuNum: 1251
+  MenuText: "AKF     COLLECT."
+
+bulkload: MenuText
+  MenuNum: 1252
+  MenuText: "AKF     CANCEL  "
+
+bulkload: MenuText
+  MenuNum: 1253
+  MenuText: "DISPLAY BOOKINGS"
+
+bulkload: MenuText
+  MenuNum: 1310
+  MenuText: "RATING  BSUB    "
+
+bulkload: MenuText
+  MenuNum: 1340
+  MenuText: "BNET &  PLMN    "
+
+bulkload: MenuText
+  MenuNum: 1341
+  MenuText: "PLMN    CODES   "
+
+bulkload: MenuText
+  MenuNum: 1342
+  MenuText: "CALL    VALUE   "
+
+bulkload: MenuText
+  MenuNum: 1343
+  MenuText: "FIND    IMSI    "
+
+bulkload: MenuText
+  MenuNum: 1350
+  MenuText: "FIND COLREF. NBR"
+
+bulkload: MenuText
+  MenuNum: 1351
+  MenuText: "FIND    BEG.DATE"
+
+bulkload: MenuText
+  MenuNum: 1352
+  MenuText: "FIND    END DATE"
+
+bulkload: MenuText
+  MenuNum: 1370
+  MenuText: "TECHNICACALLCASE"
+
+bulkload: MenuText
+  MenuNum: 1450
+  MenuText: "FREE    AIRTIME "
+
+bulkload: MenuText
+  MenuNum: 1451
+  MenuText: "FATIME  GROUP"
+
+bulkload: MenuText
+  MenuNum: 1452
+  MenuText: "FATIME  MEMBER"
+
+bulkload: MenuText
+  MenuNum: 1453
+  MenuText: "FATIME  EVENT"
+
+bulkload: MenuText
+  MenuNum: 1455
+  MenuText: "XML     FILE    "
+
+bulkload: MenuText
+  MenuNum: 1456
+  MenuText: "XML     MULTIRUN"
+
+bulkload: MenuText
+  MenuNum: 1460
+  MenuText: "FIND    IMSI NBR"
+
+bulkload: MenuText
+  MenuNum: 1491
+  MenuText: "INVOICE DATA    "
+
+bulkload: MenuText
+  MenuNum: 1492
+  MenuText: "CLAIMING        "
+
+bulkload: MenuText
+  MenuNum: 1493
+  MenuText: "PAYMENT DATA    "
+
+bulkload: MenuText
+  MenuNum: 1495
+  MenuText: "ALL     PAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 1496
+  MenuText: "CLAIMING        "
+
+bulkload: MenuText
+  MenuNum: 1497
+  MenuText: "CREDIT  LOSS INV"
+
+bulkload: MenuText
+  MenuNum: 1498
+  MenuText: "CLAIMINGCANCELLE"
+
+bulkload: MenuText
+  MenuNum: 1499
+  MenuText: "UPDATE  MEMBERS "
+
+bulkload: MenuText
+  MenuNum: 1500
+  MenuText: "VIEW    PRESEL  "
+
+bulkload: MenuText
+  MenuNum: 1501
+  MenuText: "MARK    PRESEL  "
+
+bulkload: MenuText
+  MenuNum: 1502
+  MenuText: "CARRIER PRESEL. "
+
+bulkload: MenuText
+  MenuNum: 1503
+  MenuText: "SELECT  ALL NOS."
+
+bulkload: MenuText
+  MenuNum: 1504
+  MenuText: "ALL CARRPRESEL  "
+
+bulkload: MenuText
+  MenuNum: 1505
+  MenuText: "EXPORT  PRESEL  "
+
+bulkload: MenuText
+  MenuNum: 1506
+  MenuText: "PRESEL  REPORT  "
+
+bulkload: MenuText
+  MenuNum: 1507
+  MenuText: "C.PRESELERR.CODE"
+
+bulkload: MenuText
+  MenuNum: 1508
+  MenuText: "RESELLERFUNCTION"
+
+bulkload: MenuText
+  MenuNum: 1509
+  MenuText: "READ    CLIFILE "
+
+bulkload: MenuText
+  MenuNum: 1510
+  MenuText: "READ    SW-LOG  "
+
+bulkload: MenuText
+  MenuNum: 1511
+  MenuText: "WEEKCDR REPORT  "
+
+bulkload: MenuText
+  MenuNum: 1512
+  MenuText: "RANKING LIST    "
+
+bulkload: MenuText
+  MenuNum: 1513
+  MenuText: "COUNTRY         "
+
+bulkload: MenuText
+  MenuNum: 1514
+  MenuText: "LANGUAGE        "
+
+bulkload: MenuText
+  MenuNum: 1515
+  MenuText: "FIND    REPCCN  "
+
+bulkload: MenuText
+  MenuNum: 1516
+  MenuText: "SELECT /UNSELECT"
+
+bulkload: MenuText
+  MenuNum: 1517
+  MenuText: "SELECT. OK      "
+
+bulkload: MenuText
+  MenuNum: 1518
+  MenuText: "SELECT  ITEMS   "
+
+bulkload: MenuText
+  MenuNum: 1519
+  MenuText: "SELECT  AMOUNT  "
+
+bulkload: MenuText
+  MenuNum: 1520
+  MenuText: "ITEM    VALUES  "
+
+bulkload: MenuText
+  MenuNum: 1521
+  MenuText: "LIMITS          "
+
+bulkload: MenuText
+  MenuNum: 1522
+  MenuText: "FUNCTION        "
+
+bulkload: MenuText
+  MenuNum: 1550
+  MenuText: "COPY TO NEW RULE"
+
+bulkload: MenuText
+  MenuNum: 1551
+  MenuText: "COPYFROMTEMPLATE"
+
+bulkload: MenuText
+  MenuNum: 1561
+  MenuText: "INV.ROW COUNTERS"
+
+bulkload: MenuText
+  MenuNum: 1630
+  MenuText: "DISPLAY DELETED "
+
+bulkload: MenuText
+  MenuNum: 1631
+  MenuText: "FIND    DIALTYPE"
+
+bulkload: MenuText
+  MenuNum: 1632
+  MenuText: "REVENUE         "
+
+bulkload: MenuText
+  MenuNum: 1633
+  MenuText: "AVERAGE REVENUE "
+
+bulkload: MenuText
+  MenuNum: 1634
+  MenuText: "FIND    SYST INV"
+
+bulkload: MenuText
+  MenuNum: 1635
+  MenuText: "INVOICE FILTER  "
+
+bulkload: MenuText
+  MenuNum: 1636
+  MenuText: "MSISDN          "
+
+bulkload: MenuText
+  MenuNum: 1637
+  MenuText: "SUBSCR. ID      "
+
+bulkload: MenuText
+  MenuNum: 1638
+  MenuText: "INVOICE TYPE    "
+
+bulkload: MenuText
+  MenuNum: 1639
+  MenuText: "UNPAID          "
+
+bulkload: MenuText
+  MenuNum: 1640
+  MenuText: "PAID            "
+
+bulkload: MenuText
+  MenuNum: 1641
+  MenuText: "DEBT            "
+
+bulkload: MenuText
+  MenuNum: 1642
+  MenuText: "MANUAL  PAYMENT "
+
+bulkload: MenuText
+  MenuNum: 1643
+  MenuText: "REQUEST PARAM.  "
+
+bulkload: MenuText
+  MenuNum: 1644
+  MenuText: "TAX     RULES   "
+
+bulkload: MenuText
+  MenuNum: 1645
+  MenuText: "FIND    SUBS.ID "
+
+bulkload: MenuText
+  MenuNum: 1646
+  MenuText: "REQUEST ACTIONS "
+
+bulkload: MenuText
+  MenuNum: 1647
+  MenuText: "BILLING DENIALS "
+
+bulkload: MenuText
+  MenuNum: 1648
+  MenuText: "READ    BANKDATA"
+
+bulkload: MenuText
+  MenuNum: 1649
+  MenuText: "BANK    DATA    "
+
+bulkload: MenuText
+  MenuNum: 1650
+  MenuText: "BILLING RUN ID  "
+
+bulkload: MenuText
+  MenuNum: 1697
+  MenuText: "INFO            "
+
+bulkload: MenuText
+  MenuNum: 1698
+  MenuText: "CHANGE  DESCRIP."
+
+bulkload: MenuText
+  MenuNum: 1699
+  MenuText: "POSTING RULES   "
+
+bulkload: MenuText
+  MenuNum: 1700
+  MenuText: "ACCOUNT RULES   "
+
+bulkload: MenuText
+  MenuNum: 1701
+  MenuText: "DIVISION        "
+
+bulkload: MenuText
+  MenuNum: 1702
+  MenuText: "DEPARTM.        "
+
+bulkload: MenuText
+  MenuNum: 1703
+  MenuText: "COST    CENTRE  "
+
+bulkload: MenuText
+  MenuNum: 1704
+  MenuText: "POSTING RULES   "
+
+bulkload: MenuText
+  MenuNum: 1705
+  MenuText: "COSTACC.RULES   "
+
+bulkload: MenuText
+  MenuNum: 1708
+  MenuText: "FIND    ACCOUNT "
+
+bulkload: MenuText
+  MenuNum: 1709
+  MenuText: "FIND    CATEGORY"
+
+bulkload: MenuText
+  MenuNum: 1710
+  MenuText: "RECREATEACCDATA "
+
+bulkload: MenuText
+  MenuNum: 1711
+  MenuText: "ACCOUNT.DATA    "
+
+bulkload: MenuText
+  MenuNum: 1712
+  MenuText: "REVENUE REPORT  "
+
+bulkload: MenuText
+  MenuNum: 1713
+  MenuText: "EXPORT  ACCDATA "
+
+bulkload: MenuText
+  MenuNum: 1714
+  MenuText: "CLAIMFIL->INTRUM"
+
+bulkload: MenuText
+  MenuNum: 1715
+  MenuText: "PAYMENT CONFIG  "
+
+bulkload: MenuText
+  MenuNum: 1716
+  MenuText: "INTERESTPERCENTS"
+
+bulkload: MenuText
+  MenuNum: 1717
+  MenuText: "BALANCES        "
+
+bulkload: MenuText
+  MenuNum: 1718
+  MenuText: "INVOICE STATIST."
+
+bulkload: MenuText
+  MenuNum: 1719
+  MenuText: "VOUCHER NUMBER  "
+
+bulkload: MenuText
+  MenuNum: 1720
+  MenuText: "FIND    DATE    "
+
+bulkload: MenuText
+  MenuNum: 1721
+  MenuText: "CANCEL  CREDITIN"
+
+bulkload: MenuText
+  MenuNum: 1722
+  MenuText: "RATING  PLANS   "
+
+bulkload: MenuText
+  MenuNum: 1723
+  MenuText: "DISCOUNTTARGETS "
+
+bulkload: MenuText
+  MenuNum: 1724
+  MenuText: "ACCOUNT.PERIODS "
+
+bulkload: MenuText
+  MenuNum: 1725
+  MenuText: "MAKE    PAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 1726
+  MenuText: "CREDIT  LOSS    "
+
+bulkload: MenuText
+  MenuNum: 1727
+  MenuText: "CUSTOMEROVERPAYM"
+
+bulkload: MenuText
+  MenuNum: 1728
+  MenuText: "ROWS            "
+
+bulkload: MenuText
+  MenuNum: 1729
+  MenuText: "FIND    CAMPAIGN"
+
+bulkload: MenuText
+  MenuNum: 1730
+  MenuText: "C-REPORT-> EMAIL"
+
+bulkload: MenuText
+  MenuNum: 1731
+  MenuText: "EMAIL   ADDRESS "
+
+bulkload: MenuText
+  MenuNum: 1732
+  MenuText: "CR.LOSS FILE    "
+
+bulkload: MenuText
+  MenuNum: 1733
+  MenuText: "PAYMENTSBY BANK "
+
+bulkload: MenuText
+  MenuNum: 1734
+  MenuText: "MAKE    PAYMENT "
+
+bulkload: MenuText
+  MenuNum: 1735
+  MenuText: "SUBSCR. REVENUE "
+
+bulkload: MenuText
+  MenuNum: 1736
+  MenuText: "SUMMARY BY CCN  "
+
+bulkload: MenuText
+  MenuNum: 1737
+  MenuText: "CALL    SPECIF. "
+
+bulkload: MenuText
+  MenuNum: 1738
+  MenuText: "UNIT PR.SPECIF. "
+
+bulkload: MenuText
+  MenuNum: 1739
+  MenuText: "FIND    REPORT  "
+
+bulkload: MenuText
+  MenuNum: 1740
+  MenuText: "FIND    ICC     "
+
+bulkload: MenuText
+  MenuNum: 1741
+  MenuText: "SALDO   MAINTENA"
+
+bulkload: MenuText
+  MenuNum: 1742
+  MenuText: "CREDIT  LIMIT"
+
+bulkload: MenuText
+  MenuNum: 1743
+  MenuText: "SALDO   REMINDER"
+
+bulkload: MenuText
+  MenuNum: 1744
+  MenuText: "SALDO   AGREEMEN"
+
+bulkload: MenuText
+  MenuNum: 1745
+  MenuText: "SALDO   ALARMS  "
+
+bulkload: MenuText
+  MenuNum: 1746
+  MenuText: "PAYMENT SOURCES "
+
+bulkload: MenuText
+  MenuNum: 1750
+  MenuText: "PRODUCT PACKAGES"
+
+bulkload: MenuText
+  MenuNum: 1751
+  MenuText: "PRODUCT ITEMS   "
+
+bulkload: MenuText
+  MenuNum: 1752
+  MenuText: "EVENTLOG        "
+
+bulkload: MenuText
+  MenuNum: 1753
+  MenuText: "CAMPAIGN        "
+
+bulkload: MenuText
+  MenuNum: 1754
+  MenuText: "CAMPAIGNSTATIST."
+
+bulkload: MenuText
+  MenuNum: 1755
+  MenuText: "DEPOSIT INVOICES"
+
+bulkload: MenuText
+  MenuNum: 1756
+  MenuText: "CAMPAIGNRUN     "
+
+bulkload: MenuText
+  MenuNum: 1757
+  MenuText: "CREATE  PAYMFILE"
+
+bulkload: MenuText
+  MenuNum: 1758
+  MenuText: "CONTACTS        "
+
+bulkload: MenuText
+  MenuNum: 1759
+  MenuText: "OTHER   CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 1760
+  MenuText: "INFORM. TEXTS   "
+
+bulkload: MenuText
+  MenuNum: 1761
+  MenuText: "CUSTOMERREPORT  "
+
+bulkload: MenuText
+  MenuNum: 1762
+  MenuText: "CUSTOMERBALANCES"
+
+bulkload: MenuText
+  MenuNum: 1763
+  MenuText: "PNP     MANAGEME"
+
+bulkload: MenuText
+  MenuNum: 1764
+  MenuText: "GROUP   NUMBERS "
+
+bulkload: MenuText
+  MenuNum: 1765
+  MenuText: "GROUP   RATING  "
+
+bulkload: MenuText
+  MenuNum: 1766
+  MenuText: "CUSTOMERADV.PAYM"
+
+bulkload: MenuText
+  MenuNum: 1768
+  MenuText: "SALDO   ALARMS"
+
+bulkload: MenuText
+  MenuNum: 1770
+  MenuText: "BROWSE  ALL     "
+
+bulkload: MenuText
+  MenuNum: 1771
+  MenuText: "SHOW    UNBILLED"
+
+bulkload: MenuText
+  MenuNum: 1772
+  MenuText: "SHOW    B-NUMBER"
+
+bulkload: MenuText
+  MenuNum: 1773
+  MenuText: "PDF     INVOICES"
+
+bulkload: MenuText
+  MenuNum: 1774
+  MenuText: "INVOICE DELIVERY"
+
+bulkload: MenuText
+  MenuNum: 1775
+  MenuText: "SPECIF. REPORT  "
+
+bulkload: MenuText
+  MenuNum: 1776
+  MenuText: "SERVICE FEES    "
+
+bulkload: MenuText
+  MenuNum: 1777
+  MenuText: "INVOICES        "
+
+bulkload: MenuText
+  MenuNum: 1778
+  MenuText: "BATCHES         "
+
+bulkload: MenuText
+  MenuNum: 1779
+  MenuText: "CREATE  BATCHES "
+
+bulkload: MenuText
+  MenuNum: 1780
+  MenuText: "DELETE  BATCHES "
+
+bulkload: MenuText
+  MenuNum: 1781
+  MenuText: "COLLECT ALL INV."
+
+bulkload: MenuText
+  MenuNum: 1782
+  MenuText: "NEW     PAYMPLAN"
+
+bulkload: MenuText
+  MenuNum: 1783
+  MenuText: "PAYMENT PLANS   "
+
+bulkload: MenuText
+  MenuNum: 1784
+  MenuText: "PICK    NEW LIST"
+
+bulkload: MenuText
+  MenuNum: 1785
+  MenuText: "ACTIVATEDISTFILE"
+
+bulkload: MenuText
+  MenuNum: 1786
+  MenuText: "CUST PNPGROUPS  "
+
+bulkload: MenuText
+  MenuNum: 1787
+  MenuText: "VIEW    HANDLED "
+
+bulkload: MenuText
+  MenuNum: 1788
+  MenuText: "CUSTOMERGROUPS  "
+
+bulkload: MenuText
+  MenuNum: 1789
+  MenuText: "VIEW    UNHANDLE"
+
+bulkload: MenuText
+  MenuNum: 1790
+  MenuText: "MARK    HANDLED "
+
+bulkload: MenuText
+  MenuNum: 1791
+  MenuText: "RATING  PREFIXES"
+
+bulkload: MenuText
+  MenuNum: 1792
+  MenuText: "REFUND  PAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 1793
+  MenuText: "READ    PAYMENTS"
+
+bulkload: MenuText
+  MenuNum: 1794
+  MenuText: "REDUCE  AMOUNT  "
+
+bulkload: MenuText
+  MenuNum: 1795
+  MenuText: "MAIL    TEXTS   "
+
+bulkload: MenuText
+  MenuNum: 1796
+  MenuText: "VIEW    SEND LOG"
+
+bulkload: MenuText
+  MenuNum: 1797
+  MenuText: "VIEW    OLD LIST"
+
+bulkload: MenuText
+  MenuNum: 1798
+  MenuText: "SUMMARY OF UNPAI"
+
+bulkload: MenuText
+  MenuNum: 1799
+  MenuText: "COPY    DATA    "
+
+bulkload: MenuText
+  MenuNum: 1800
+  MenuText: "BRAND           "
+
+bulkload: MenuText
+  MenuNum: 1801
+  MenuText: "INV. -> CLAIMING"
+
+bulkload: MenuText
+  MenuNum: 1802
+  MenuText: "OVERP.->INTEREST"
+
+bulkload: MenuText
+  MenuNum: 1803
+  MenuText: "TRANSF->CREDLOSS"
+
+bulkload: MenuText
+  MenuNum: 1804
+  MenuText: "PAYMENT CONFIG  "
+
+bulkload: MenuText
+  MenuNum: 1805
+  MenuText: "MARK AS CREDITED"
+
+bulkload: MenuText
+  MenuNum: 1806
+  MenuText: "ACCEPT  MARKINGS"
+
+bulkload: MenuText
+  MenuNum: 1807
+  MenuText: "PARTIAL CREDIT  "
+
+bulkload: MenuText
+  MenuNum: 1808
+  MenuText: "INTER. &OVERPAYM"
+
+bulkload: MenuText
+  MenuNum: 1809
+  MenuText: "UNMARK          "
+
+bulkload: MenuText
+  MenuNum: 1810
+  MenuText: "SERV OP INVOICE "
+
+bulkload: MenuText
+  MenuNum: 1811
+  MenuText: "UPDATE  PAYMDATE"
+
+bulkload: MenuText
+  MenuNum: 1812
+  MenuText: "VIEW    DEPO.INV"
+
+bulkload: MenuText
+  MenuNum: 1813
+  MenuText: "VIEW AP INVOICE "
+
+bulkload: MenuText
+  MenuNum: 1814
+  MenuText: "CURRENT BALANCES"
+
+bulkload: MenuText
+  MenuNum: 1815
+  MenuText: "CUSTOMERTEMPLATE"
+
+bulkload: MenuText
+  MenuNum: 1816
+  MenuText: "BROWSE  LISTS   "
+
+bulkload: MenuText
+  MenuNum: 1817
+  MenuText: "UPDATE  PAYMDATE"
+
+bulkload: MenuText
+  MenuNum: 1818
+  MenuText: "CREATE  FAT     "
+
+bulkload: MenuText
+  MenuNum: 1820
+  MenuText: "CREATE  NEW SERV"
+
+bulkload: MenuText
+  MenuNum: 1822
+  MenuText: "DAILY   TOP-10  "
+
+bulkload: MenuText
+  MenuNum: 1824
+  MenuText: "A-NUMBERREPORT  "
+
+bulkload: MenuText
+  MenuNum: 1825
+  MenuText: "INV STATREPORT  "
+
+bulkload: MenuText
+  MenuNum: 1826
+  MenuText: "CHARGE  TYPE    "
+
+bulkload: MenuText
+  MenuNum: 1827
+  MenuText: "DISPLAY ACTIVE  "
+
+bulkload: MenuText
+  MenuNum: 1828
+  MenuText: "DISPLAY ALL     "
+
+bulkload: MenuText
+  MenuNum: 1830
+  MenuText: "MOBILE  CALLS   "
+
+bulkload: MenuText
+  MenuNum: 1831
+  MenuText: "FIXED   CALLS   "
+
+bulkload: MenuText
+  MenuNum: 1832
+  MenuText: "VIEW    INVSEQ  "
+
+bulkload: MenuText
+  MenuNum: 1840
+  MenuText: "FIND    INVSEQ  "
+
+bulkload: MenuText
+  MenuNum: 1850
+  MenuText: "SMS     CREDIT  "
+
+bulkload: MenuText
+  MenuNum: 1851
+  MenuText: "UPDATE  CUSTCLAS"
+
+bulkload: MenuText
+  MenuNum: 1852
+  MenuText: "FIND    MEMBER  "
+
+bulkload: MenuText
+  MenuNum: 1853
+  MenuText: "FIND    REPLKEY "
+
+bulkload: MenuText
+  MenuNum: 1854
+  MenuText: "FIND    REPLTYPE"
+
+bulkload: MenuText
+  MenuNum: 1855
+  MenuText: "FETCH   RESPONSE"
+
+bulkload: MenuText
+  MenuNum: 1860
+  MenuText: "INV.SPECVIA EMAI"
+
+bulkload: MenuText
+  MenuNum: 1861
+  MenuText: "BILLING REPORT  "
+
+bulkload: MenuText
+  MenuNum: 1862
+  MenuText: "PRINT   INF.TEXT"
+
+bulkload: MenuText
+  MenuNum: 1863
+  MenuText: "PRINT   CONTRACT"
+
+bulkload: MenuText
+  MenuNum: 1865
+  MenuText: "RULES           "
+
+bulkload: MenuText
+  MenuNum: 1866
+  MenuText: "UNBILLEDSUBSCR. "
+
+bulkload: MenuText
+  MenuNum: 1867
+  MenuText: "BILLING QUALITY "
+
+bulkload: MenuText
+  MenuNum: 1871
+  MenuText: "UPDATE  CUSTCLAS"
+
+bulkload: MenuText
+  MenuNum: 1872
+  MenuText: "COMMISS.TARGETS "
+
+bulkload: MenuText
+  MenuNum: 1873
+  MenuText: "COMMISS.SHARING "
+
+bulkload: MenuText
+  MenuNum: 1880
+  MenuText: "FIXED   DATA    "
+
+bulkload: MenuText
+  MenuNum: 1881
+  MenuText: "MOBILE  DATA    "
+
+bulkload: MenuText
+  MenuNum: 1882
+  MenuText: "MOBILE  FILES   "
+
+bulkload: MenuText
+  MenuNum: 1883
+  MenuText: "CUSTOMERFUNCTION"
+
+bulkload: MenuText
+  MenuNum: 1884
+  MenuText: "BILLING DATA    "
+
+bulkload: MenuText
+  MenuNum: 1886
+  MenuText: "MOBUSER DATA    "
+
+bulkload: MenuText
+  MenuNum: 1888
+  MenuText: "MOBILE  INFO    "
+
+bulkload: MenuText
+  MenuNum: 1889
+  MenuText: "FIXED   INFO    "
+
+bulkload: MenuText
+  MenuNum: 1900
+  MenuText: "GROUP   TOKENS  "
+
+bulkload: MenuText
+  MenuNum: 1910
+  MenuText: "BNET    CODES   "
+
+bulkload: MenuText
+  MenuNum: 1920
+  MenuText: "CLEANINGRUN     "
+
+bulkload: MenuText
+  MenuNum: 1921
+  MenuText: "ALLOW   IFS TR. "
+
+bulkload: MenuText
+  MenuNum: 1922
+  MenuText: "ALLOW   WEB DISP"
+
+bulkload: MenuText
+  MenuNum: 1925
+  MenuText: "VIEW    CHANGES "
+
+bulkload: MenuText
+  MenuNum: 1950
+  MenuText: "WEB     MNP     "
+
+bulkload: MenuText
+  MenuNum: 1951
+  MenuText: "MNP     ORDER   "
+
+bulkload: MenuText
+  MenuNum: 1952
+  MenuText: "MNP     RESPONSE"
+
+bulkload: MenuText
+  MenuNum: 1953
+  MenuText: "ACTIVATENPO     "
+
+bulkload: MenuText
+  MenuNum: 1954
+  MenuText: "ACTIVATENPOC    "
+
+bulkload: MenuText
+  MenuNum: 1955
+  MenuText: "REJECT  NPOR    "
+
+bulkload: MenuText
+  MenuNum: 1956
+  MenuText: "MNP     REJECTED"
+
+bulkload: MenuText
+  MenuNum: 1957
+  MenuText: "MNP     ACTIVAT."
+
+bulkload: MenuText
+  MenuNum: 1958
+  MenuText: "RE-SEND NPO     "
+
+bulkload: MenuText
+  MenuNum: 1959
+  MenuText: "DELETE  MNP ORD."
+
+bulkload: MenuText
+  MenuNum: 1960
+  MenuText: "MOBSUB  HISTORY "
+
+bulkload: MenuText
+  MenuNum: 1961
+  MenuText: "BROWSE  ERRCALLS"
+
+bulkload: MenuText
+  MenuNum: 1962
+  MenuText: "RE-RATE ERR.CODE"
+
+bulkload: MenuText
+  MenuNum: 1963
+  MenuText: "DELETE  MNPORDER"
+
+bulkload: MenuText
+  MenuNum: 1964
+  MenuText: "ACTIVATEONGOING "
+
+bulkload: MenuText
+  MenuNum: 1965
+  MenuText: "WAIT    POSTINFO"
+
+bulkload: MenuText
+  MenuNum: 1966
+  MenuText: "WAIT    NPOT    "
+
+bulkload: MenuText
+  MenuNum: 1967
+  MenuText: "ACTIVATE        "
+
+bulkload: MenuText
+  MenuNum: 1968
+  MenuText: "RE-SEND MNP MSG "
+
+bulkload: MenuText
+  MenuNum: 1970
+  MenuText: "CREDIT  LIMIT   "
+
+bulkload: MenuText
+  MenuNum: 1971
+  MenuText: "SALDO   REMINDER"
+
+bulkload: MenuText
+  MenuNum: 1972
+  MenuText: "SALDO   AGREEMEN"
+
+bulkload: MenuText
+  MenuNum: 1973
+  MenuText: "VAS     B-NUMBER"
+
+bulkload: MenuText
+  MenuNum: 1974
+  MenuText: "WAPVAS  TARIFFCL"
+
+bulkload: MenuText
+  MenuNum: 1975
+  MenuText: "VAS     MANAGEME"
+
+bulkload: MenuText
+  MenuNum: 1976
+  MenuText: "VAS     B-DESTIN"
+
+bulkload: MenuText
+  MenuNum: 1977
+  MenuText: "WAPVAS  OPERATOR"
+
+bulkload: MenuText
+  MenuNum: 1980
+  MenuText: "CREDIT  LIMIT   "
+
+bulkload: MenuText
+  MenuNum: 1981
+  MenuText: "SALDO   REMINDER"
+
+bulkload: MenuText
+  MenuNum: 1982
+  MenuText: "FIELDS          "
+
+bulkload: MenuText
+  MenuNum: 1983
+  MenuText: "TIME-   TABLE   "
+
+bulkload: MenuText
+  MenuNum: 1984
+  MenuText: "ANALYSE TIMETABL"
+
+bulkload: MenuText
+  MenuNum: 1985
+  MenuText: "ADDIT.  SETTINGS"
+
+bulkload: MenuText
+  MenuNum: 1986
+  MenuText: "QUERY   CLAUSE  "
+
+bulkload: MenuText
+  MenuNum: 1988
+  MenuText: "EXTERNALINV.ID  "
+
+bulkload: MenuText
+  MenuNum: 1989
+  MenuText: "DEFAULT SERV.SET"
+
+bulkload: MenuText
+  MenuNum: 1990
+  MenuText: "SERVICES        "
+
+bulkload: MenuText
+  MenuNum: 1991
+  MenuText: "CALL    BROWSE  "
+
+bulkload: MenuText
+  MenuNum: 1992
+  MenuText: "BALANCES        "
+
+bulkload: MenuText
+  MenuNum: 1993
+  MenuText: "DUMP    CONFIG  "
+
+bulkload: MenuText
+  MenuNum: 1994
+  MenuText: "DUMPFILERUN     "
+
+bulkload: MenuText
+  MenuNum: 1995
+  MenuText: "FIND    CUST ID "
+
+bulkload: MenuText
+  MenuNum: 1996
+  MenuText: "OFFER           "
+
+bulkload: MenuText
+  MenuNum: 1997
+  MenuText: "ITEMS           "
+
+bulkload: MenuText
+  MenuNum: 1998
+  MenuText: "CRITERIA        "
+
+bulkload: MenuText
+  MenuNum: 1999
+  MenuText: "CFO     SERIES  "
+
+bulkload: MenuText
+  MenuNum: 2000
+  MenuText: "GENESYS ACTION  "
+
+bulkload: MenuText
+  MenuNum: 2001
+  MenuText: "READ    GENESYS "
+
+bulkload: MenuText
+  MenuNum: 2002
+  MenuText: "ANALYSE GENESYS "
+
+bulkload: MenuText
+  MenuNum: 2003
+  MenuText: "RATE    GENESYS "
+
+bulkload: MenuText
+  MenuNum: 2004
+  MenuText: "VIEW    GENESYS "
+
+bulkload: MenuText
+  MenuNum: 2005
+  MenuText: "TEL.CONFEVENTS  "
+
+bulkload: MenuText
+  MenuNum: 2007
+  MenuText: "MORE    GENESYS "
+
+bulkload: MenuText
+  MenuNum: 2008
+  MenuText: "ERROR   CODES   "
+
+bulkload: MenuText
+  MenuNum: 2009
+  MenuText: "GENESYS VOL.DISC"
+
+bulkload: MenuText
+  MenuNum: 2010
+  MenuText: "MAKE OBIRECORD  "
+
+bulkload: MenuText
+  MenuNum: 2011
+  MenuText: "SINGLE  FEES    "
+
+bulkload: MenuText
+  MenuNum: 2012
+  MenuText: "EVENT   RATES   "
+
+bulkload: MenuText
+  MenuNum: 2013
+  MenuText: "ERRONEUSCDRS    "
+
+bulkload: MenuText
+  MenuNum: 2015
+  MenuText: "VIEW            "
+
+bulkload: MenuText
+  MenuNum: 2016
+  MenuText: "OWNERS  OF MSISD"
+
+bulkload: MenuText
+  MenuNum: 2017
+  MenuText: "SHOW ERRTEXT    "
+
+bulkload: MenuText
+  MenuNum: 2018
+  MenuText: "EVENT   RATE    "
+
+bulkload: MenuText
+  MenuNum: 2019
+  MenuText: "B-SUB   RATES   "
+
+bulkload: MenuText
+  MenuNum: 2020
+  MenuText: "FIND    EVENT   "
+
+bulkload: MenuText
+  MenuNum: 2025
+  MenuText: "CHANGE  PORTTIME"
+
+bulkload: MenuText
+  MenuNum: 2026
+  MenuText: "CONTRACTSIGNED  "
+
+bulkload: MenuText
+  MenuNum: 2030
+  MenuText: "GENESYS ACTION  "
+
+bulkload: MenuText
+  MenuNum: 2031
+  MenuText: "READ    GENESYS "
+
+bulkload: MenuText
+  MenuNum: 2032
+  MenuText: "ANALYSE GENESYS "
+
+bulkload: MenuText
+  MenuNum: 2033
+  MenuText: "RATE    GENESYS "
+
+bulkload: MenuText
+  MenuNum: 2040
+  MenuText: "READ IN CUST.   "
+
+bulkload: MenuText
+  MenuNum: 2042
+  MenuText: "PAYMENT REF. NBR"
+
+bulkload: MenuText
+  MenuNum: 2100
+  MenuText: "GENERATECOUNTERS"
+
+bulkload: MenuText
+  MenuNum: 2101
+  MenuText: "COUNTER HANDLING"
+
+bulkload: MenuText
+  MenuNum: 2102
+  MenuText: "REMOVE  COUNTERS"
+
+bulkload: MenuText
+  MenuNum: 2104
+  MenuText: "GENERATEROWS    "
+
+bulkload: MenuText
+  MenuNum: 2105
+  MenuText: "COUNTERS        "
+
+bulkload: MenuText
+  MenuNum: 2108
+  MenuText: "DAY     CAMPAIGN"
+
+bulkload: MenuText
+  MenuNum: 2109
+  MenuText: "DATA    CDRS    "
+
+bulkload: MenuText
+  MenuNum: 2116
+  MenuText: "REMOVE  OLD EVEN"
+
+bulkload: MenuText
+  MenuNum: 2117
+  MenuText: "FAT     MANAGEME"
+
+bulkload: MenuText
+  MenuNum: 2118
+  MenuText: "CHANGE  INP.TIME"
+
+bulkload: MenuText
+  MenuNum: 2119
+  MenuText: "FIND ACTBATCH D."
+
+bulkload: MenuText
+  MenuNum: 2120
+  MenuText: "FIND    IDENT   "
+
+bulkload: MenuText
+  MenuNum: 2121
+  MenuText: "FIND    TABL&KEY"
+
+bulkload: MenuText
+  MenuNum: 2122
+  MenuText: "FIND    MOBILE #"
+
+bulkload: MenuText
+  MenuNum: 2132
+  MenuText: "SERVICE LIMIT   "
+
+bulkload: MenuText
+  MenuNum: 2133
+  MenuText: "SERVLIMICOUNTER "
+
+bulkload: MenuText
+  MenuNum: 2134
+  MenuText: "PER.CONTMANAGEME"
+
+bulkload: MenuText
+  MenuNum: 2140
+  MenuText: "MSISDN  HISTORY "
+
+bulkload: MenuText
+  MenuNum: 2150
+  MenuText: "INFO TO INVOICE "
+
+bulkload: MenuText
+  MenuNum: 2200
+  MenuText: "USER    RIGHTS  "
+
+bulkload: MenuText
+  MenuNum: 2201
+  MenuText: "UPDATE  TOKENS  "
+
+bulkload: MenuText
+  MenuNum: 2202
+  MenuText: "TABLE   TOKENS  "
+
+bulkload: MenuText
+  MenuNum: 2203
+  MenuText: "TOKEN   TABLES  "
+
+bulkload: MenuText
+  MenuNum: 2204
+  MenuText: "CHANGE  PASSWORD"
+
+bulkload: MenuText
+  MenuNum: 2205
+  MenuText: "SUBSCR. TYPES   "
+
+bulkload: MenuText
+  MenuNum: 2206
+  MenuText: "ORDERS          "
+
+bulkload: MenuText
+  MenuNum: 2207
+  MenuText: "INVOICEDMINUTES "
+
+bulkload: MenuText
+  MenuNum: 2208
+  MenuText: "CREATE  SUBSCR. "
+
+bulkload: MenuText
+  MenuNum: 2209
+  MenuText: "ORDER   CONFIRM."
+
+bulkload: MenuText
+  MenuNum: 2210
+  MenuText: "CHECK   CREDIT  "
+
+bulkload: MenuText
+  MenuNum: 2211
+  MenuText: "FIND    ORDER ID"
+
+bulkload: MenuText
+  MenuNum: 2212
+  MenuText: "MOVE TO CONTROL "
+
+bulkload: MenuText
+  MenuNum: 2213
+  MenuText: "CLOSE   ORDER   "
+
+bulkload: MenuText
+  MenuNum: 2214
+  MenuText: "FIND    CUST ID "
+
+bulkload: MenuText
+  MenuNum: 2215
+  MenuText: "PUT ON  HOLD    "
+
+bulkload: MenuText
+  MenuNum: 2216
+  MenuText: "CLEAR   HOLD    "
+
+bulkload: MenuText
+  MenuNum: 2217
+  MenuText: "CLEAN           "
+
+bulkload: MenuText
+  MenuNum: 2218
+  MenuText: "MNP     CONFIRM."
+
+bulkload: MenuText
+  MenuNum: 2219
+  MenuText: "CHANGE  MSSTAT  "
+
+bulkload: MenuText
+  MenuNum: 2220
+  MenuText: "ORDER   UNKNOWN "
+
+bulkload: MenuText
+  MenuNum: 2221
+  MenuText: "ORDER   KNOWN   "
+
+bulkload: MenuText
+  MenuNum: 2222
+  MenuText: "DEPOSIT INVOICE "
+
+bulkload: MenuText
+  MenuNum: 2223
+  MenuText: "CREDIT  ACTIONS "
+
+bulkload: MenuText
+  MenuNum: 2224
+  MenuText: "PNP     NUMBERS "
+
+bulkload: MenuText
+  MenuNum: 2225
+  MenuText: "CREDIT  RATING  "
+
+bulkload: MenuText
+  MenuNum: 2226
+  MenuText: "SUBSCR. REPORT  "
+
+bulkload: MenuText
+  MenuNum: 2227
+  MenuText: "ORDER   REPORT  "
+
+bulkload: MenuText
+  MenuNum: 2228
+  MenuText: "USER    NAMES   "
+
+bulkload: MenuText
+  MenuNum: 2229
+  MenuText: "USER    KEYS    "
+
+bulkload: MenuText
+  MenuNum: 2230
+  MenuText: "DELETE  SUBSCRIP"
+
+bulkload: MenuText
+  MenuNum: 2231
+  MenuText: "CREATE  AP INV. "
+
+bulkload: MenuText
+  MenuNum: 2232
+  MenuText: "VRK     CHECK   "
+
+bulkload: MenuText
+  MenuNum: 2233
+  MenuText: "ACTIVATENEW SIM "
+
+bulkload: MenuText
+  MenuNum: 2234
+  MenuText: "SAT     CHECK   "
+
+bulkload: MenuText
+  MenuNum: 2240
+  MenuText: "MEMO            "
+
+bulkload: MenuText
+  MenuNum: 2241
+  MenuText: "USER            "
+
+bulkload: MenuText
+  MenuNum: 2242
+  MenuText: "INVOICE CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 2243
+  MenuText: "ORDER   FUNCTION"
+
+bulkload: MenuText
+  MenuNum: 2244
+  MenuText: "REQUEST VIEW    "
+
+bulkload: MenuText
+  MenuNum: 2245
+  MenuText: "BROWSE  SUBSCRIP"
+
+bulkload: MenuText
+  MenuNum: 2246
+  MenuText: "AGREEM. CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 2349
+  MenuText: "BROWSE  INV.CUST"
+
+bulkload: MenuText
+  MenuNum: 2350
+  MenuText: "SERVICE ATTRIBUT"
+
+bulkload: MenuText
+  MenuNum: 2351
+  MenuText: "BROWSE  USERS   "
+
+bulkload: MenuText
+  MenuNum: 2352
+  MenuText: "PNP     NUMBERS "
+
+bulkload: MenuText
+  MenuNum: 2353
+  MenuText: "SHOW    MEMOS   "
+
+bulkload: MenuText
+  MenuNum: 2354
+  MenuText: "REVIVE          "
+
+bulkload: MenuText
+  MenuNum: 2355
+  MenuText: "SEND    SMS     "
+
+bulkload: MenuText
+  MenuNum: 2410
+  MenuText: "BROWSE  ROAMZONE"
+
+bulkload: MenuText
+  MenuNum: 2420
+  MenuText: "VIEW    MMS/WAP "
+
+bulkload: MenuText
+  MenuNum: 2421
+  MenuText: "VIEW    CDR     "
+
+bulkload: MenuText
+  MenuNum: 2422
+  MenuText: "HIGHSPENMANAGEME"
+
+bulkload: MenuText
+  MenuNum: 2423
+  MenuText: "HIGHSPENACTIONS "
+
+bulkload: MenuText
+  MenuNum: 2425
+  MenuText: "CHANGE  STATUS  "
+
+bulkload: MenuText
+  MenuNum: 2426
+  MenuText: "RELEASE LOCKED  "
+
+bulkload: MenuText
+  MenuNum: 2427
+  MenuText: "LOCK    MOBSUB  "
+
+bulkload: MenuText
+  MenuNum: 2428
+  MenuText: "HIGHSPENCATEGORY"
+
+bulkload: MenuText
+  MenuNum: 2429
+  MenuText: "HIGHSPENLIMITS  "
+
+bulkload: MenuText
+  MenuNum: 2430
+  MenuText: "CREATE  SALESMEN"
+
+bulkload: MenuText
+  MenuNum: 2431
+  MenuText: "EMAIL   PASSWDS "
+
+bulkload: MenuText
+  MenuNum: 2435
+  MenuText: "CALLS BYCCN     "
+
+bulkload: MenuText
+  MenuNum: 2440
+  MenuText: "ALLOWED CODES   "
+
+bulkload: MenuText
+  MenuNum: 2555
+  MenuText: "SHOW    LIMITS  "
+
+bulkload: MenuText
+  MenuNum: 2570
+  MenuText: "PREPAID CALLS   "
+
+bulkload: MenuText
+  MenuNum: 2571
+  MenuText: "PREPAID FUNCTION"
+
+bulkload: MenuText
+  MenuNum: 2572
+  MenuText: "PREPAID ERRORCDR"
+
+bulkload: MenuText
+  MenuNum: 2573
+  MenuText: "PREPAID ANALYSE "
+
+bulkload: MenuText
+  MenuNum: 2580
+  MenuText: "FIND    ROW ID  "
+
+bulkload: MenuText
+  MenuNum: 2581
+  MenuText: "FIND    CASE ID "
+
+bulkload: MenuText
+  MenuNum: 2582
+  MenuText: "FIND    DESCRIPT"
+
+bulkload: MenuText
+  MenuNum: 2600
+  MenuText: "SERVICE LIMIT   "
+
+bulkload: MenuText
+  MenuNum: 2601
+  MenuText: "SERVICELTARGETS "
+
+bulkload: MenuText
+  MenuNum: 2602
+  MenuText: "SERVICELSUBSCRIP"
+
+bulkload: MenuText
+  MenuNum: 2603
+  MenuText: "TERMINATSERVGROU"
+
+bulkload: MenuText
+  MenuNum: 2604
+  MenuText: "SERVICELGROUP   "
+
+bulkload: MenuText
+  MenuNum: 2609
+  MenuText: "SERVICELGROUP   "
+
+bulkload: MenuText
+  MenuNum: 2610
+  MenuText: "SERVICELMAINTENA"
+
+bulkload: MenuText
+  MenuNum: 2611
+  MenuText: "SLG     ANALYSIS"
+
+bulkload: MenuText
+  MenuNum: 2612
+  MenuText: "VIEW    SERVINFO"
+
+bulkload: MenuText
+  MenuNum: 2630
+  MenuText: "QUEUE   COUNTER "
+
+bulkload: MenuText
+  MenuNum: 2700
+  MenuText: "BROWSE  SUBSCRIP"
+
+bulkload: MenuText
+  MenuNum: 2750
+  MenuText: "CLOSE   DUE DEBT"
+
+bulkload: MenuText
+  MenuNum: 2780
+  MenuText: "INVOICE RUN(NEW)"
+
+bulkload: MenuText
+  MenuNum: 2800
+  MenuText: "SEND    NPO     "
+
+bulkload: MenuText
+  MenuNum: 2801
+  MenuText: "SEND    NPOC    "
+
+bulkload: MenuText
+  MenuNum: 2802
+  MenuText: "SEND    NPOR    "
+
+bulkload: MenuText
+  MenuNum: 2803
+  MenuText: "SEND    NPC     "
+
+bulkload: MenuText
+  MenuNum: 2804
+  MenuText: "CREATE  ORDERS  "
+
+bulkload: MenuText
+  MenuNum: 2805
+  MenuText: "M2M     QUEUE   "
+
+bulkload: MenuText
+  MenuNum: 2806
+  MenuText: "REQUEST MESSAGES"
+
+bulkload: MenuText
+  MenuNum: 2807
+  MenuText: "HANDLE  MESSAGE "
+
+bulkload: MenuText
+  MenuNum: 2808
+  MenuText: "SHOW XMLMESSAGE "
+
+bulkload: MenuText
+  MenuNum: 2809
+  MenuText: "M2M     RESCUE  "
+
+bulkload: MenuText
+  MenuNum: 2810
+  MenuText: "SEND    SC/SD   "
+
+bulkload: MenuText
+  MenuNum: 2811
+  MenuText: "NUMBER  DETAILS "
+
+bulkload: MenuText
+  MenuNum: 2812
+  MenuText: "FIND    REQ.ID  "
+
+bulkload: MenuText
+  MenuNum: 2813
+  MenuText: "M2M     MNP     "
+
+bulkload: MenuText
+  MenuNum: 2814
+  MenuText: "M2M     ERRORS  "
+
+bulkload: MenuText
+  MenuNum: 2815
+  MenuText: "SEND    NPOT    "
+
+bulkload: MenuText
+  MenuNum: 2816
+  MenuText: "MARK AS HANDLED "
+
+bulkload: MenuText
+  MenuNum: 2817
+  MenuText: "MOVE TO WEB CHAN"
+
+bulkload: MenuText
+  MenuNum: 2818
+  MenuText: "M2M     ACTION  "
+
+bulkload: MenuText
+  MenuNum: 2819
+  MenuText: "REQUEST XML     "
+
+bulkload: MenuText
+  MenuNum: 2820
+  MenuText: "RESPONSEXML     "
+
+bulkload: MenuText
+  MenuNum: 2821
+  MenuText: "CREATE  MESSAGE "
+
+bulkload: MenuText
+  MenuNum: 2822
+  MenuText: "CANCEL  MESSAGE "
+
+bulkload: MenuText
+  MenuNum: 2823
+  MenuText: "MNP     MSISDNS "
+
+bulkload: MenuText
+  MenuNum: 2829
+  MenuText: "                "
+
+bulkload: MenuText
+  MenuNum: 2849
+  MenuText: "MNP     CALENDAR"
+
+bulkload: MenuText
+  MenuNum: 2850
+  MenuText: "MNP     ADMIN   "
+
+bulkload: MenuText
+  MenuNum: 2851
+  MenuText: "ORDER   REQUEST "
+
+bulkload: MenuText
+  MenuNum: 2852
+  MenuText: "NEW MNP NUMBER  "
+
+bulkload: MenuText
+  MenuNum: 2853
+  MenuText: "AENV            "
+
+bulkload: MenuText
+  MenuNum: 2854
+  MenuText: "ASOL            "
+
+bulkload: MenuText
+  MenuNum: 2855
+  MenuText: "AACE            "
+
+bulkload: MenuText
+  MenuNum: 2856
+  MenuText: "ACON            "
+
+bulkload: MenuText
+  MenuNum: 2857
+  MenuText: "AREC            "
+
+bulkload: MenuText
+  MenuNum: 2858
+  MenuText: "ACAN            "
+
+bulkload: MenuText
+  MenuNum: 2859
+  MenuText: "SEND    CANCEL  "
+
+bulkload: MenuText
+  MenuNum: 2901
+  MenuText: "FIND    USERNAME"
+
+bulkload: MenuText
+  MenuNum: 2902
+  MenuText: "FIND AGRCUST NBR"
+
+bulkload: MenuText
+  MenuNum: 2903
+  MenuText: "FIND AGRCUSTNAME"
+
+bulkload: MenuText
+  MenuNum: 2950
+  MenuText: "MX GROUPITEMS   "
+
+bulkload: MenuText
+  MenuNum: 2951
+  MenuText: "MATRIX          "
+
+bulkload: MenuText
+  MenuNum: 2952
+  MenuText: "MATRIX  VIEW    "
+
+bulkload: MenuText
+  MenuNum: 2953
+  MenuText: "SHOWMAINREQUEST "
+
+bulkload: MenuText
+  MenuNum: 2954
+  MenuText: "SHOW SUBREQUEST "
+
+bulkload: MenuText
+  MenuNum: 2960
+  MenuText: "TICKET  MANAGEME"
+
+bulkload: MenuText
+  MenuNum: 2961
+  MenuText: "TM      QUEUE   "
+
+bulkload: MenuText
+  MenuNum: 2962
+  MenuText: "TM      RULES   "
+
+bulkload: MenuText
+  MenuNum: 3000
+  MenuText: "3000            "
+
+bulkload: MenuText
+  MenuNum: 3001
+  MenuText: "3001            "
+
+bulkload: MenuText
+  MenuNum: 3002
+  MenuText: "3002            "
+
+bulkload: MenuText
+  MenuNum: 3003
+  MenuText: "3003            "
+
+bulkload: MenuText
+  MenuNum: 3004
+  MenuText: "3004            "
+
+bulkload: MenuText
+  MenuNum: 3005
+  MenuText: "3005            "
+
+bulkload: MenuText
+  MenuNum: 3006
+  MenuText: "3006            "
+
+bulkload: MenuText
+  MenuNum: 3007
+  MenuText: "3007            "
+
+bulkload: MenuText
+  MenuNum: 3008
+  MenuText: "        3008    "
+
+bulkload: MenuText
+  MenuNum: 4000
+  MenuText: "TRIGGER EVENTS  "
+
+bulkload: MenuText
+  MenuNum: 4001
+  MenuText: "TRIGGER MAINTENA"
+
+bulkload: MenuText
+  MenuNum: 4002
+  MenuText: "TRIGGER ITEMS   "
+
+bulkload: MenuText
+  MenuNum: 4003
+  MenuText: "TRIGGER CONFIGUR"
+
+bulkload: MenuText
+  MenuNum: 4004
+  MenuText: "TRIGGER FIELDS  "
+
+bulkload: MenuText
+  MenuNum: 6900
+  MenuText: "REQUEST QUEUES  "
+
+bulkload: MenuText
+  MenuNum: 6902
+  MenuText: "COUNT   QUEUES  "
+
+bulkload: MenuText
+  MenuNum: 6909
+  MenuText: "REQUEST QUEUES  "
+
+bulkload: MenuText
+  MenuNum: 6910
+  MenuText: "REQUEST TYPES   "
+
+bulkload: MenuText
+  MenuNum: 6911
+  MenuText: "REQUEST STATUS  "
+
+bulkload: MenuText
+  MenuNum: 6912
+  MenuText: "REQUEST CONFIG  "
+
+bulkload: MenuText
+  MenuNum: 6969
+  MenuText: "CANCEL  COLLECT "
+
+bulkload: MenuText
+  MenuNum: 6970
+  MenuText: "ADD     STATUS  "
+
+bulkload: MenuText
+  MenuNum: 6972
+  MenuText: "MAINTAINREQUESTS"
+
+bulkload: MenuText
+  MenuNum: 9000
+  MenuText: "YOIGO   ADMIN   "
+
+bulkload: MenuText
+  MenuNum: 9001
+  MenuText: "ROAMING         "
+
+bulkload: MenuText
+  MenuNum: 9002
+  MenuText: "ROAMING OPERATOR"
+
+bulkload: MenuText
+  MenuNum: 9003
+  MenuText: "FILTER  BY DATE "
+
+bulkload: MenuText
+  MenuNum: 9004
+  MenuText: "FILTER  BY TYPE "
+
+bulkload: MenuText
+  MenuNum: 9005
+  MenuText: "FILTER  BY PLMN "
+
+bulkload: MenuText
+  MenuNum: 9006
+  MenuText: "ROAMOPERTARIFFS "
+
+bulkload: MenuText
+  MenuNum: 9007
+  MenuText: "ROAMGRP TARIFFS "
+
+bulkload: MenuText
+  MenuNum: 9008
+  MenuText: "ROAM    GROUP   "
+
+bulkload: MenuText
+  MenuNum: 9009
+  MenuText: "ROAMING TARIFFS "
+
+bulkload: MenuText
+  MenuNum: 9010
+  MenuText: "ROAM    COUNTRY "
+
+bulkload: MenuText
+  MenuNum: 9011
+  MenuText: "RE-CALC PRICES  "
+
+bulkload: MenuText
+  MenuNum: 9012
+  MenuText: "BANK    LIST    "
+
+bulkload: MenuText
+  MenuNum: 9013
+  MenuText: "BILLING TESTS   "
+
+bulkload: MenuText
+  MenuNum: 9014
+  MenuText: "PROCESS CONTROL "
+
+bulkload: MenuText
+  MenuNum: 9015
+  MenuText: "TMT             "
+
+bulkload: MenuText
+  MenuNum: 9016
+  MenuText: "COUNTER FILTER  "
+
+bulkload: MenuText
+  MenuNum: 9017
+  MenuText: "TMR     LIMITS  "
+
+bulkload: MenuText
+  MenuNum: 9018
+  MenuText: "FIND    SUBS ID "
+
+bulkload: MenuText
+  MenuNum: 9019
+  MenuText: "ORDER   LOGISTIC"
+
+bulkload: MenuText
+  MenuNum: 9020
+  MenuText: "MIN     WINDOW  "
+
+bulkload: MenuText
+  MenuNum: 9021
+  MenuText: "CCTOOL  ADMIN   "
+
+bulkload: MenuText
+  MenuNum: 9022
+  MenuText: "MSISDN  TERMINAT"
+
+bulkload: MenuText
+  MenuNum: 9023
+  MenuText: "INVOICE TARGETS "
+
+bulkload: MenuText
+  MenuNum: 9024
+  MenuText: "INVOICE TARG.GRP"
+
+bulkload: MenuText
+  MenuNum: 9025
+  MenuText: "                "
+
+bulkload: MenuText
+  MenuNum: 9026
+  MenuText: "CONTRACTSIGNED  "
+
+bulkload: MenuText
+  MenuNum: 9027
+  MenuText: "                "
+
+bulkload: MenuText
+  MenuNum: 9028
+  MenuText: "                "
+
+bulkload: MenuText
+  MenuNum: 9029
+  MenuText: "                "
+
+bulkload: MenuText
+  MenuNum: 9030
+  MenuText: "                "
+
+bulkload: MenuText
+  MenuNum: 9031
+  MenuText: "                "
+
+bulkload: MenuText
+  MenuNum: 9032
+  MenuText: "                "
+
+bulkload: MenuText
+  MenuNum: 9033
+  MenuText: "UPDATE  STATUS  "
+
+bulkload: MenuText
+  MenuNum: 9034
+  MenuText: "NEXT    BY CLI  "
+
+bulkload: MenuText
+  MenuNum: 9035
+  MenuText: "PREV    BY CLI  "
+
+bulkload: MenuText
+  MenuNum: 9036
+  MenuText: "NEXT    SOLOG   "
+
+bulkload: MenuText
+  MenuNum: 9037
+  MenuText: "PREV    SOLOG   "
+
+bulkload: MenuText
+  MenuNum: 9038
+  MenuText: "FIND ID TMS     "
+
+bulkload: MenuText
+  MenuNum: 9039
+  MenuText: "FIND ID FOREIGN "
+
+bulkload: MenuText
+  MenuNum: 9040
+  MenuText: "NEW     SPLIT   "
+
+bulkload: MenuText
+  MenuNum: 9041
+  MenuText: "INVGROUPSPLITTER"
+
+bulkload: MenuText
+  MenuNum: 9042
+  MenuText: "SUPER   USER    "
+
+bulkload: MenuText
+  MenuNum: 9043
+  MenuText: "NUMPAC  INTRFACE"
+
+bulkload: MenuText
+  MenuNum: 9044
+  MenuText: "HLR LOG         "
+
+bulkload: MenuText
+  MenuNum: 9045
+  MenuText: "ORDER   HISTORY "
+
+bulkload: MenuText
+  MenuNum: 9046
+  MenuText: "CHECKED         "
+
+bulkload: MenuText
+  MenuNum: 9047
+  MenuText: "IN      CONTROL "
+
+bulkload: MenuText
+  MenuNum: 9048
+  MenuText: "CONTROL         "
+
+bulkload: MenuText
+  MenuNum: 9049
+  MenuText: "CHECK   ERROR   "
+
+bulkload: MenuText
+  MenuNum: 9050
+  MenuText: "HOLD            "
+
+bulkload: MenuText
+  MenuNum: 9051
+  MenuText: "ORDER   RESCUE  "
+
+bulkload: MenuText
+  MenuNum: 9052
+  MenuText: "DELIVERD        "
+
+bulkload: MenuText
+  MenuNum: 9053
+  MenuText: "MNP-WEB REJECTED"
+
+bulkload: MenuText
+  MenuNum: 9054
+  MenuText: "CLOSED          "
+
+bulkload: MenuText
+  MenuNum: 9055
+  MenuText: "ALL     ORDERS  "
+
+bulkload: MenuText
+  MenuNum: 9056
+  MenuText: "RESCUE  FAILED  "
+
+bulkload: MenuText
+  MenuNum: 9057
+  MenuText: "RESCUE  OK      "
+
+bulkload: MenuText
+  MenuNum: 9058
+  MenuText: "REPAIR          "
+
+bulkload: MenuText
+  MenuNum: 9059
+  MenuText: "NEW             "
+
+bulkload: MenuText
+  MenuNum: 9060
+  MenuText: "RESCUE          "
+
+bulkload: MenuText
+  MenuNum: 9061
+  MenuText: "ORDER   QUEUES  "
+
+bulkload: MenuText
+  MenuNum: 9062
+  MenuText: "RETURNED        "
+
+bulkload: MenuText
+  MenuNum: 9063
+  MenuText: "MNP-M2M REJECTED"
+
+bulkload: MenuText
+  MenuNum: 9064
+  MenuText: "FIND    VALUE   "
+
+bulkload: MenuText
+  MenuNum: 9065
+  MenuText: "                "
+
+bulkload: MenuText
+  MenuNum: 9066
+  MenuText: "HOLD    QUEUE   "
+
+bulkload: MenuText
+  MenuNum: 9067
+  MenuText: "CREDIT  HOLD    "
+
+bulkload: MenuText
+  MenuNum: 9068
+  MenuText: "WAIT    CONFIRM."
+
+bulkload: MenuText
+  MenuNum: 9069
+  MenuText: "M2M     CALENDER"
+
+bulkload: MenuText
+  MenuNum: 9070
+  MenuText: "UPDATE  M2M CAL "
+
+bulkload: MenuText
+  MenuNum: 9071
+  MenuText: "HOLD    CS      "
+
+bulkload: MenuText
+  MenuNum: 9072
+  MenuText: "IN MNP  CONTROL "
+
+bulkload: MenuText
+  MenuNum: 9073
+  MenuText: "HOLD    OTHER   "
+
+bulkload: MenuText
+  MenuNum: 9074
+  MenuText: "REQUEST FUNCTION"
+
+bulkload: MenuText
+  MenuNum: 9223
+  MenuText: "DISCOUNTMEMBERS "
+
+bulkload: MenuText
+  MenuNum: 9224
+  MenuText: "DISCOUNTRATE    "
+
+bulkload: MenuText
+  MenuNum: 9225
+  MenuText: "DISCOUNTBITEMS  "
+
+bulkload: MenuText
+  MenuNum: 9226
+  MenuText: "READ DP MEMBERS "
+
+bulkload: MenuText
+  MenuNum: 9790
+  MenuText: "RATING  HISTORY "
+
+bulkload: MenuText
+  MenuNum: 9791
+  MenuText: "RATING  ACTIONS "
+
+bulkload: MenuText
+  MenuNum: 9796
+  MenuText: "FIND    CUST ID "
+
+bulkload: MenuText
+  MenuNum: 9797
+  MenuText: "                "
+
+bulkload: MenuText
+  MenuNum: 9798
+  MenuText: "INVOICE TESTING "
+
+bulkload: MenuText
+  MenuNum: 9799
+  MenuText: "TEST    CASES   "
+
+bulkload: MenuText
+  MenuNum: 9800
+  MenuText: "CREATE  TEST    "
+
+bulkload: MenuText
+  MenuNum: 9801
+  MenuText: "TEST    PRINTING"
+
+bulkload: MenuText
+  MenuNum: 9802
+  MenuText: "DELETE  TEST    "
+
+bulkload: MenuText
+  MenuNum: 9803
+  MenuText: "GENERATETAP FILE"
+
+bulkload: MenuText
+  MenuNum: 9804
+  MenuText: "MOB TIMESTAMPS  "
+
+bulkload: MenuText
+  MenuNum: 9805
+  MenuText: "CCBS    USERS   "
+
+bulkload: MenuText
+  MenuNum: 9806
+  MenuText: "TEST    QUEUE   "
+
+bulkload: MenuText
+  MenuNum: 9807
+  MenuText: "COPY    CRITERIA"
+
+bulkload: MenuText
+  MenuNum: 9808
+  MenuText: "IMSI    NUMBER  "
+
+bulkload: MenuText
+  MenuNum: 9809
+  MenuText: "MAINT   MENU    "
+
+bulkload: MenuText
+  MenuNum: 9810
+  MenuText: "BILLING ITEMS   "
+
+bulkload: MenuText
+  MenuNum: 9811
+  MenuText: "FEE     MODEL   "
+
+bulkload: MenuText
+  MenuNum: 9812
+  MenuText: "ONE FILE"
+
+bulkload: MenuText
+  MenuNum: 9813
+  MenuText: "MONTHLY FILES"
+
+bulkload: MenuText
+  MenuNum: 9814
+  MenuText: "                "
+
+bulkload: MenuText
+  MenuNum: 9815
+  MenuText: "DISPLAY DSS CMD "
+
+bulkload: MenuText
+  MenuNum: 9816
+  MenuText: "DISPLAY COMMAND "
+
+bulkload: MenuText
+  MenuNum: 9817
+  MenuText: "EMA     TEMPLATE"
+
+bulkload: MenuText
+  MenuNum: 9818
+  MenuText: "ADMIN   TOOLS   "
+
+bulkload: MenuText
+  MenuNum: 9819
+  MenuText: "LOAD PHOUSE CONF"
+
+bulkload: MenuText
+  MenuNum: 9820
+  MenuText: "PREMIUM NUMBERS"
+
+bulkload: MenuText
+  MenuNum: 9821
+  MenuText: "Bundles Cparam"
+
+bulkload: MenuText
+  MenuNum: 9822
+  MenuText: "ROAMOUT IPRANGES"
+
+bulkload: MenuText
+  MenuNum: 9823
+  MenuText: "RESPONSEVIEW    "
+
+bulkload: MenuText
+  MenuNum: 9827
+  MenuText: "MULTISIMINFO    "
+
+bulkload: MenuText
+  MenuNum: 9828
+  MenuText: "SIM     SPECS   "
+
+bulkload: MenuText
+  MenuNum: 9829
+  MenuText: "DUMP    LOG     "
+
+bulkload: MenuText
+  MenuNum: 9830
+  MenuText: "ERROR   EDRS    "
+
+bulkload: MenuText
+  MenuNum: 9831
+  MenuText: "ALLOWED QTY     "
+
+bulkload: MenuText
+  MenuNum: 9832
+  MenuText: "RESULT  STATS   "
+
+bulkload: MenuText
+  MenuNum: 9833
+  MenuText: "SIMULATEMODE    "
+
+bulkload: MenuText
+  MenuNum: 9834
+  MenuText: "TMQUEUE CPARAM  "
+
+bulkload: MenuText
+  MenuNum: 9835
+  MenuText: "RATING  CPARAM  "
+
+bulkload: MenuText
+  MenuNum: 9836
+  MenuText: "BILLING CPARAM  "
+
+bulkload: MenuText
+  MenuNum: 9837
+  MenuText: "CPARAMS         "
+
+bulkload: MenuText
+  MenuNum: 9838
+  MenuText: "DR.DEBITCPARAM  "
+
+bulkload: MenuText
+  MenuNum: 9839
+  MenuText: "XML     CPARAM  "
+
+bulkload: MenuText
+  MenuNum: 9840
+  MenuText: "ACCREC  CPARAM  "
+
+bulkload: MenuText
+  MenuNum: 9841
+  MenuText: "DOC1    CPARAM  "
+
+bulkload: MenuText
+  MenuNum: 9842
+  MenuText: "FUSION  INVOICES"
+
+bulkload: MenuText
+  MenuNum: 9843
+  MenuText: "BDEST   MAPPINGS"
+
+bulkload: MenuText
+  MenuNum: 9844
+  MenuText: "LOGIST. ADDRESS "
+
+bulkload: MenuText
+  MenuNum: 9845
+  MenuText: "FINANCE DATA    "
+
+bulkload: MenuText
+  MenuNum: 9846
+  MenuText: "SECPOS  ADDRESS "
+
+bulkload: MenuText
+  MenuNum: 9850
+  MenuText: "LIST    DOCUMENT"
+
+bulkload: MenuText
+  MenuNum: 9851
+  MenuText: "COMMENT         "
+
+bulkload: MenuText
+  MenuNum: 9852
+  MenuText: "FIND    FIXEDNUM"
+
+bulkload: MenuText
+  MenuNum: 9853
+  MenuText: "SHOW    MESSAGES"
+
+bulkload: MenuText
+  MenuNum: 9854
+  MenuText: "INSTALL ADDRESS"
+

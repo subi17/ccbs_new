@@ -1,0 +1,4507 @@
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO12"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO12"
+  LimitUnshaped: 838860800
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO12wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO12"
+  LimitUnshaped: 943718400
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO15"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO15"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO15wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO15"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO25"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO25wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO35"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO35"
+  LimitUnshaped: 10842275840
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO35wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO35"
+  LimitUnshaped: 10947133440
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO5"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO5_1"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO5wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO5_1"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO6"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO6_1"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO6wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO6_1"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO7"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO7wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO8"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO8"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO8wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO8"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO8_PRE"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_PRE"
+  Tariff: "BONO8_PRE"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO9"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO9_1"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "BONO9wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO9_1"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT10"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_E"
+  LimitUnshaped: 1610612736
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT10wBONO6"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_EwBONO6_1"
+  LimitUnshaped: 2684354560
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT10wBONO7"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_EwBONO25"
+  LimitUnshaped: 4831838208
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2"
+  LimitUnshaped: 5368709120
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT15wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO6_1"
+  LimitUnshaped: 6442450944
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT15wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO6_1"
+  LimitUnshaped: 6547308544
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT15wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO25"
+  LimitUnshaped: 8589934592
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT15wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO25"
+  LimitUnshaped: 8694792192
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2"
+  LimitUnshaped: 5473566720
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT23"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_F"
+  LimitUnshaped: 8589934592
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT23wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_FwBONO25"
+  LimitUnshaped: 11811160064
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT23wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_FwBONO35"
+  LimitUnshaped: 19327352832
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT23wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_FwBONO6_1"
+  LimitUnshaped: 9663676416
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT23wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_FwBONO25"
+  LimitUnshaped: 11811160064
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT24"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_D"
+  LimitUnshaped: 21474836480
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT24wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_DwBONO25"
+  LimitUnshaped: 24696061952
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT24wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_DwBONO25"
+  LimitUnshaped: 24800919552
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT24wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_DwBONO35"
+  LimitUnshaped: 32212254720
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT24wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_DwBONO35"
+  LimitUnshaped: 32317112320
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT24wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_DwBONO6_1"
+  LimitUnshaped: 22548578304
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT24wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_DwBONO6_1"
+  LimitUnshaped: 22653435904
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT24wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_DwBONO25"
+  LimitUnshaped: 24696061952
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT24wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_DwBONO25"
+  LimitUnshaped: 24800919552
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT24wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_D"
+  LimitUnshaped: 21579694080
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_D"
+  LimitUnshaped: 26843545600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT25wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_DwBONO25"
+  LimitUnshaped: 30064771072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT25wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_DwBONO35"
+  LimitUnshaped: 37580963840
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT25wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_DwBONO6_1"
+  LimitUnshaped: 27917287424
+  LimitShaped: 26214400
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT25wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_DwBONO25"
+  LimitUnshaped: 30064771072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT26"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_F"
+  LimitUnshaped: 5368709120
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT26wBONO6"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_FwBONO6_1"
+  LimitUnshaped: 6442450944
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT26wBONO7"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_FwBONO25"
+  LimitUnshaped: 8589934592
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT27"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_G"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT27wBONO6"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_GwBONO6_1"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT27wBONO7"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_GwBONO25"
+  LimitUnshaped: 5368709120
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL_A"
+  LimitUnshaped: 1288490189
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT9wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL_AwBONO25"
+  LimitUnshaped: 4509715661
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT9wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL_AwBONO25"
+  LimitUnshaped: 4614573261
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT9wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL_AwBONO35"
+  LimitUnshaped: 12025908429
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT9wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL_AwBONO35"
+  LimitUnshaped: 12130766029
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT9wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL_AwBONO6_1"
+  LimitUnshaped: 2362232013
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT9wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL_AwBONO6_1"
+  LimitUnshaped: 2467089613
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT9wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL_AwBONO25"
+  LimitUnshaped: 4509715661
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT9wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL_AwBONO25"
+  LimitUnshaped: 4614573261
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONT9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL_A"
+  LimitUnshaped: 1393347789
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTD9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL9_1"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTD9wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL9wBONO5_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTD9wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL9wBONO5_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTD9wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL9wBONO6_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTD9wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL9wBONO6_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTD9wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL9wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTD9wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL9wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTD9wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL9wBONO9_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTD9wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL9wBONO9_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTD9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL9_1"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO12"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO12"
+  LimitUnshaped: 838860800
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO12wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO12"
+  LimitUnshaped: 943718400
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO15"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO15"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO15wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO15"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO25"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO25wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO35"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO35"
+  LimitUnshaped: 10737418240
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO35wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO35"
+  LimitUnshaped: 10842275840
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO5"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO5_1"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO5wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO5_1"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO6"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO6_1"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO6wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO6_1"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO7"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO7wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO8"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO8"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO8wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO8"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO9"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO9_1"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF10wBONO9wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO9_1"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF11"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_B"
+  LimitUnshaped: 2684354560
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF11wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_BwBONO25"
+  LimitUnshaped: 5905580032
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF11wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_BwBONO35"
+  LimitUnshaped: 13421772800
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF11wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_BwBONO6_1"
+  LimitUnshaped: 3758096384
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF11wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_BwBONO25"
+  LimitUnshaped: 5905580032
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20D"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO12"
+  LimitUnshaped: 1912602624
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO12"
+  LimitUnshaped: 2017460224
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO15"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO15"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO35"
+  LimitUnshaped: 11811160064
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO35"
+  LimitUnshaped: 11916017664
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO5_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO5_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO6_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO6_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO8"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO8"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO9_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20wBONO9_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20DwVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA20"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO12"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO12"
+  LimitUnshaped: 838860800
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO12wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO12"
+  LimitUnshaped: 943718400
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO15"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO15"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO15wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO15"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO25"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO25wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO35"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO35"
+  LimitUnshaped: 10737418240
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO35wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO35"
+  LimitUnshaped: 10842275840
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO5"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO5_1"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO5wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO5_1"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO6"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO6_1"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO6wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO6_1"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO7"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO7wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO8"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO8"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO8wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO8"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO9"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO9_1"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF20wBONO9wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO9_1"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "PLANA30"
+  LimitUnshaped: 377487360
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "PLANA30wBONO12"
+  LimitUnshaped: 1216348160
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "PLANA30wBONO12"
+  LimitUnshaped: 1321205760
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "PLANA30wBONO15"
+  LimitUnshaped: 1451229184
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "PLANA30wBONO15"
+  LimitUnshaped: 1556086784
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO25"
+  LimitUnshaped: 3598712832
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO25"
+  LimitUnshaped: 3703570432
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO35"
+  LimitUnshaped: 11114905600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO35"
+  LimitUnshaped: 11219763200
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO5_1"
+  LimitUnshaped: 901775360
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO5_1"
+  LimitUnshaped: 1006632960
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO6_1"
+  LimitUnshaped: 1451229184
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO6_1"
+  LimitUnshaped: 1556086784
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO25"
+  LimitUnshaped: 3598712832
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO25"
+  LimitUnshaped: 3703570432
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "PLANA30wBONO8"
+  LimitUnshaped: 901775360
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "PLANA30wBONO8"
+  LimitUnshaped: 1006632960
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO9_1"
+  LimitUnshaped: 1451229184
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA30wBONO9_1"
+  LimitUnshaped: 1556086784
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF30wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "PLANA30"
+  LimitUnshaped: 482344960
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO12"
+  LimitUnshaped: 1912602624
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO12"
+  LimitUnshaped: 2017460224
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO15"
+  LimitUnshaped: 2122317824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO15"
+  LimitUnshaped: 2227175424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO35"
+  LimitUnshaped: 11811160064
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO35"
+  LimitUnshaped: 11916017664
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO5_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO5_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO6_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO6_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO8"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO8"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO9_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40wBONO9_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF40wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA40"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO12"
+  LimitUnshaped: 1912602624
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO12"
+  LimitUnshaped: 2017460224
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO15"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO15"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO35"
+  LimitUnshaped: 11811160064
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO35"
+  LimitUnshaped: 11916017664
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO5_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO5_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO6_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO6_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO8"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO8"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO9_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55wBONO9_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF55wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA55"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_A"
+  LimitUnshaped: 1288490189
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF8wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_AwBONO25"
+  LimitUnshaped: 4509715661
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF8wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_AwBONO35"
+  LimitUnshaped: 12025908429
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF8wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_AwBONO6_1"
+  LimitUnshaped: 2362232013
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTF8wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_AwBONO25"
+  LimitUnshaped: 4509715661
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01"
+  LimitUnshaped: 104857600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO12"
+  LimitUnshaped: 943718400
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO12"
+  LimitUnshaped: 1048576000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO15"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO15"
+  LimitUnshaped: 1283457024
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO25"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO25"
+  LimitUnshaped: 3430940672
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO35"
+  LimitUnshaped: 10842275840
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO35"
+  LimitUnshaped: 10947133440
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO5_1"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO5_1"
+  LimitUnshaped: 734003200
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO6_1"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO6_1"
+  LimitUnshaped: 1283457024
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO25"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO25"
+  LimitUnshaped: 3430940672
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO8"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO8"
+  LimitUnshaped: 734003200
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO9_1"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01wBONO9_1"
+  LimitUnshaped: 1283457024
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTFF2wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_01"
+  LimitUnshaped: 209715200
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_E"
+  LimitUnshaped: 2684354560
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS12wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_EwBONO25"
+  LimitUnshaped: 5905580032
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS12wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_EwBONO35"
+  LimitUnshaped: 13421772800
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS12wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_EwBONO6_1"
+  LimitUnshaped: 3758096384
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS12wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_EwBONO25"
+  LimitUnshaped: 5905580032
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO12"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO12"
+  LimitUnshaped: 838860800
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO12wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO12"
+  LimitUnshaped: 943718400
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO15"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO15"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO15wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO15"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO25"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO25wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO35"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO35"
+  LimitUnshaped: 10737418240
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO35wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO35"
+  LimitUnshaped: 10842275840
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO5"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO5_1"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO5wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO5_1"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO6"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO6_1"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO6wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO6_1"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO7"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO7wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "PLANA_HI"
+  Tariff: "BONO25"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO8"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO8"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO8wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_LO"
+  Tariff: "BONO8"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO9"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO9_1"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS15wBONO9wVOIP"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_HI"
+  Tariff: "BONO9_1"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS16"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_A"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS16wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO25"
+  LimitUnshaped: 3850371072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS16wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO25"
+  LimitUnshaped: 3955228672
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS16wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO35"
+  LimitUnshaped: 11366563840
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS16wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO35"
+  LimitUnshaped: 11471421440
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS16wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO6_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS16wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO6_1"
+  LimitUnshaped: 1807745024
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS16wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO25"
+  LimitUnshaped: 3850371072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS16wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO25"
+  LimitUnshaped: 3955228672
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS16wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_A"
+  LimitUnshaped: 734003200
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "INFINITA20wBONO12"
+  LimitUnshaped: 1363148800
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "INFINITA20wBONO12"
+  LimitUnshaped: 1468006400
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "INFINITA20wBONO15"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "INFINITA20wBONO15"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO25"
+  LimitUnshaped: 3745513472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO25"
+  LimitUnshaped: 3850371072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO35"
+  LimitUnshaped: 11261706240
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO35"
+  LimitUnshaped: 11366563840
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO5_1"
+  LimitUnshaped: 1048576000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO5_1"
+  LimitUnshaped: 1153433600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO6_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO6_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO25"
+  LimitUnshaped: 3745513472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO25"
+  LimitUnshaped: 3850371072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "INFINITA20wBONO8"
+  LimitUnshaped: 1048576000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "INFINITA20wBONO8"
+  LimitUnshaped: 1153433600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO9_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20wBONO9_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS20wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA20"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS21"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_A"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS21wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO25"
+  LimitUnshaped: 3850371072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS21wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO25"
+  LimitUnshaped: 3955228672
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS21wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO35"
+  LimitUnshaped: 11366563840
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS21wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO35"
+  LimitUnshaped: 11471421440
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS21wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO6_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS21wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO6_1"
+  LimitUnshaped: 1807745024
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS21wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO25"
+  LimitUnshaped: 3850371072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS21wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_AwBONO25"
+  LimitUnshaped: 3955228672
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS21wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_A"
+  LimitUnshaped: 734003200
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO12"
+  LimitUnshaped: 1912602624
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO12"
+  LimitUnshaped: 2017460224
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO15"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO15"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO35"
+  LimitUnshaped: 11811160064
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO35"
+  LimitUnshaped: 11916017664
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO5_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO5_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO6_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO6_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO8"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO8"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO9_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25wBONO9_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA25"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS26"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_B"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS26wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_BwBONO25"
+  LimitUnshaped: 5368709120
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS26wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_BwBONO25"
+  LimitUnshaped: 5473566720
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS26wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_BwBONO35"
+  LimitUnshaped: 12884901888
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS26wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_BwBONO35"
+  LimitUnshaped: 12989759488
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS26wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_BwBONO6_1"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS26wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_BwBONO6_1"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS26wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_BwBONO25"
+  LimitUnshaped: 5368709120
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS26wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_BwBONO25"
+  LimitUnshaped: 5473566720
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS26wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_B"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS2GB"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_C"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS2GBwBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "PLANA_CwBONO6_1"
+  LimitUnshaped: 3221225472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO12"
+  LimitUnshaped: 1912602624
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO12"
+  LimitUnshaped: 2017460224
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO15"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO15"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO35"
+  LimitUnshaped: 11811160064
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO35"
+  LimitUnshaped: 11916017664
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO5_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO5_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO6_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO6_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO8"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO8"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO9_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITAwBONO9_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS30wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_C"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO12"
+  LimitUnshaped: 5133828096
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO12"
+  LimitUnshaped: 5238685696
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO15"
+  LimitUnshaped: 5368709120
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO15"
+  LimitUnshaped: 5473566720
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO25"
+  LimitUnshaped: 7516192768
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO25"
+  LimitUnshaped: 7621050368
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO35"
+  LimitUnshaped: 15032385536
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO35"
+  LimitUnshaped: 15137243136
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO5_1"
+  LimitUnshaped: 4819255296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO5_1"
+  LimitUnshaped: 4924112896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO6_1"
+  LimitUnshaped: 5368709120
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO6_1"
+  LimitUnshaped: 5473566720
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO25"
+  LimitUnshaped: 7516192768
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO25"
+  LimitUnshaped: 7621050368
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO8"
+  LimitUnshaped: 4819255296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO8"
+  LimitUnshaped: 4924112896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO9_1"
+  LimitUnshaped: 5368709120
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_CwBONO9_1"
+  LimitUnshaped: 5473566720
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS32wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA_C"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO12"
+  LimitUnshaped: 3091202048
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO12"
+  LimitUnshaped: 3196059648
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO15"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO15"
+  LimitUnshaped: 3430940672
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO25"
+  LimitUnshaped: 5473566720
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO25"
+  LimitUnshaped: 5578424320
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO35"
+  LimitUnshaped: 12989759488
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO35"
+  LimitUnshaped: 13094617088
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO5_1"
+  LimitUnshaped: 2776629248
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO5_1"
+  LimitUnshaped: 2881486848
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO6_1"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO6_1"
+  LimitUnshaped: 3430940672
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO25"
+  LimitUnshaped: 5473566720
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO25"
+  LimitUnshaped: 5578424320
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO8"
+  LimitUnshaped: 2776629248
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO8"
+  LimitUnshaped: 2881486848
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO9_1"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35wBONO9_1"
+  LimitUnshaped: 3430940672
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA35"
+  LimitUnshaped: 2357198848
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO12"
+  LimitUnshaped: 3091202048
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO12"
+  LimitUnshaped: 3196059648
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO15"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO15"
+  LimitUnshaped: 3430940672
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO25"
+  LimitUnshaped: 5473566720
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO25"
+  LimitUnshaped: 5578424320
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO35"
+  LimitUnshaped: 12989759488
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO35"
+  LimitUnshaped: 13094617088
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO5_1"
+  LimitUnshaped: 2776629248
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO5_1"
+  LimitUnshaped: 2881486848
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO6_1"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO6_1"
+  LimitUnshaped: 3430940672
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO25"
+  LimitUnshaped: 5473566720
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO25"
+  LimitUnshaped: 5578424320
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO8"
+  LimitUnshaped: 2776629248
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO8"
+  LimitUnshaped: 2881486848
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO9_1"
+  LimitUnshaped: 3326083072
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2wBONO9_1"
+  LimitUnshaped: 3430940672
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTS39wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "INFINITA2"
+  LimitUnshaped: 2357198848
+  LimitShaped: 20971520
+  Active: FALSE
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO12"
+  LimitUnshaped: 1912602624
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO12"
+  LimitUnshaped: 2017460224
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO15"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO15"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO35"
+  LimitUnshaped: 11811160064
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO35"
+  LimitUnshaped: 11916017664
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO5_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO5_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO6_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO6_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO8"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO8"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO9_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03wBONO9_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF10wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_03"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO12"
+  LimitUnshaped: 1912602624
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO12"
+  LimitUnshaped: 2017460224
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO15"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO15"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO35"
+  LimitUnshaped: 11811160064
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO35"
+  LimitUnshaped: 11916017664
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO5_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO5_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO6_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO6_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO8"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO8"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO9_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02wBONO9_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "CONTSF14wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "FUSION_02"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "DEFAULT"
+  Template: "DEFAULT"
+  TariffType: "DEFAULT"
+  Tariff: "DEFAULT"
+  LimitUnshaped: ?
+  LimitShaped: ?
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "HSPA_ROAM_EU"
+  Template: "EU_DAILY_RST,QUOTA=0,GRACE=0"
+  LimitUnshaped: ?
+  LimitShaped: ?
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "IPL15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_LO"
+  Tariff: "IPL15"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "IPL15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_LO"
+  Tariff: "IPL15"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "IPL25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL25"
+  LimitUnshaped: 3598712832
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "IPL25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL25"
+  LimitUnshaped: 3703570432
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "IPL35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL35"
+  LimitUnshaped: 10842275840
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "IPL35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_HI"
+  Tariff: "IPL35"
+  LimitUnshaped: 10947133440
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "IPL8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_LO"
+  Tariff: "IPL8"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "IPL8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "IPL_LO"
+  Tariff: "IPL8"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "IPL8_PRE"
+  Template: "HSPA_DAILY"
+  TariffType: "IPL_PRE"
+  Tariff: "IPL8_PRE"
+  LimitUnshaped: 104857600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2TMP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2TMPwVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO12"
+  LimitUnshaped: 1912602624
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO12"
+  LimitUnshaped: 2017460224
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO15"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO15"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO35"
+  LimitUnshaped: 11811160064
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO35"
+  LimitUnshaped: 11916017664
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO5_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO5_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO6_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO6_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO25"
+  LimitUnshaped: 4294967296
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO25"
+  LimitUnshaped: 4399824896
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO8"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO8"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO9_1"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2wBONO9_1"
+  LimitUnshaped: 2252341248
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL2wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL2"
+  LimitUnshaped: 1178599424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "LADEL4"
+  LimitUnshaped: 524288000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO12"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "LADEL4wBONO12"
+  LimitUnshaped: 1363148800
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO12wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "LADEL4wBONO12"
+  LimitUnshaped: 1468006400
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO15"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "LADEL4wBONO15"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO15wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "LADEL4wBONO15"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO25"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO25"
+  LimitUnshaped: 3745513472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO25wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO25"
+  LimitUnshaped: 3850371072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO35"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO35"
+  LimitUnshaped: 11261706240
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO35wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO35"
+  LimitUnshaped: 11366563840
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO5"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO5_1"
+  LimitUnshaped: 1048576000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO5wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO5_1"
+  LimitUnshaped: 1153433600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO6"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO6_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO6wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO6_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO7"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO25"
+  LimitUnshaped: 3745513472
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO7wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO25"
+  LimitUnshaped: 3850371072
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO8"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "LADEL4wBONO8"
+  LimitUnshaped: 1048576000
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO8wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "LADEL4wBONO8"
+  LimitUnshaped: 1153433600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO9"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO9_1"
+  LimitUnshaped: 1598029824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wBONO9wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_HI"
+  Tariff: "LADEL4wBONO9_1"
+  LimitUnshaped: 1702887424
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "LADEL4wVOIP"
+  Template: "HSPA_MONTHLY_ADD"
+  TariffType: "PLANA_LO"
+  Tariff: "LADEL4"
+  LimitUnshaped: 629145600
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "MEGA5_PRE"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_PRE"
+  Tariff: "MEGA5_PRE"
+  LimitUnshaped: 36700160
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "MEGA5_PRE_NB"
+  Template: "HSPA_MONTHLY"
+  TariffType: "BONO_PRE"
+  Tariff: "MEGA5_PRE_NB"
+  LimitUnshaped: 36700160
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ7"
+  Template: "HSPA_DOM"
+  TariffType: "BONO_PRE"
+  Tariff: "LADEL1_PRE"
+  LimitUnshaped: 681574400
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ7_DOUBLE"
+  Template: "HSPA_DOM"
+  TariffType: "BONO_PRE"
+  Tariff: "LADEL1_PRE"
+  LimitUnshaped: 1363148800
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ7_PROMO"
+  Template: "HSPA_DOM"
+  TariffType: "BONO_PRE"
+  Tariff: "LADEL1_PRE"
+  LimitUnshaped: 1287651328
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ7_RESET"
+  Template: "HSPA_SET,QUOTA=0,GRACE=0"
+  LimitUnshaped: ?
+  LimitShaped: ?
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ9"
+  Template: "HSPA_DOM"
+  TariffType: "BONO_PRE"
+  Tariff: "LADEL1_PRE_PLUS"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ9_DOUBLE"
+  Template: "HSPA_DOM"
+  TariffType: "BONO_PRE"
+  Tariff: "LADEL1_PRE_PLUS"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ9_RESET"
+  Template: "HSPA_SET,QUOTA=0,GRACE=0"
+  LimitUnshaped: ?
+  LimitShaped: ?
+

@@ -714,6 +714,8 @@
 "MFCodeToCLIType" "CLIType" "Bundles" "FLATMF30" "MFBillCode To CLIType Conversion" "" "CONTF30" 1
 "MFCodeToCLIType" "CLIType" "Bundles" "FLATMF40" "MFBillCode To CLIType Conversion" "" "CONTF40" 1
 "MFCodeToCLIType" "CLIType" "Bundles" "FLATMF55" "MFBillCode To CLIType Conversion" "" "CONTF55" 1
+"MNPCal" "DeliveryType" "MNP" "0" "DEFAULT" "" "" 1
+"MNPCal" "DeliveryType" "MNP" "6" "Delivery to POS" "" "" 1
 "MNPCal" "MessageType" "MNP" "ACON" "" "" "" 1
 "MNPCal" "MessageType" "MNP" "AENV" "" "" "" 1
 "MNPCal" "MessageType" "MNP" "APOR" "" "" "" 1
@@ -973,6 +975,7 @@
 "Order" "DeliveryType" "Orders" "2" "Kiala" "" "" 1
 "Order" "DeliveryType" "Orders" "3" "Post office secure" "" "" 1
 "Order" "DeliveryType" "Orders" "4" "Post office" "" "" 1
+"Order" "DeliveryType" "Orders" "5" "Delivery to POS secure" "" "" 1
 "order" "mnpstatus" "mnp" "1" "new" "" "" 1
 "order" "MNPStatus" "mnp" "10" "Done" "" "" 1
 "order" "MNPStatus" "MNP" "5" "contract" "" "" 1
@@ -1274,6 +1277,7 @@
 "RepText" "TextType" "Report" "23" "Delivery incident" "" "" 1
 "RepText" "TextType" "Report" "24" "Delivery incident measure" "" "" 1
 "RepText" "TextType" "Report" "25" "Profession" "" "" 1
+"RepText" "TextType" "Report" "26" "Barring" "" "" 1
 "RepText" "TextType" "Report" "3" "CCN" "" "" 1
 "RepText" "TextType" "Report" "31" "Discount plan" "" "" 1
 "RepText" "TextType" "Report" "32" "SMS" "" "" 1
@@ -1368,6 +1372,7 @@
 "RoamTariff" "Service" "Roaming" "GPRS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "SMS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "VOICE" "" "" "" 1
+"Salesman" "SmPrefix" "IFS" "AA" "Advance Analytics" "" "14" 1
 "Salesman" "SmPrefix" "IFS" "AB" "B12 CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AF" "AMPLIFFICA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AK" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
@@ -1400,6 +1405,7 @@
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MD" "Mundo Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "MG" "MGM" "" "14" 0
+"Salesman" "SmPrefix" "IFS" "MK" "MARKTEL CROSS-SELL" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MM" "Media Markt" "" "18" 0
 "Salesman" "SmPrefix" "IFS" "PE" "Phone House Televenta Emision" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PH" "The Phone House" "" "11" 0

@@ -1,0 +1,624 @@
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 1
+  Name: "Premium Fraud"
+  FromDate: 2008-04-01
+  ToDate: 2049-12-31
+  CounterItems: "RateCCN"
+  CounterAmount: "6"
+  CounterType: 1
+  CounterPeriod: 2
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 2
+  Name: "Data"
+  FromDate: 2008-06-09
+  ToDate: 2011-08-09
+  CounterItems: "BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 3
+  Name: "Total Traffic Fraud"
+  FromDate: 2008-09-01
+  ToDate: 2049-12-31
+  CounterItems: "BillCode"
+  CounterAmount: "6"
+  CounterType: 1
+  CounterPeriod: 2
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 4
+  Name: "International Calls Fraud"
+  FromDate: 2008-10-13
+  ToDate: 2049-12-31
+  CounterItems: "RateCCN,BDest"
+  CounterAmount: "6"
+  CounterType: 1
+  CounterPeriod: 2
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 5
+  Name: "Topup recharge reminder TARJRD1"
+  FromDate: 2009-11-01
+  ToDate: 2049-12-31
+  CounterItems: "BillCode,CLIType"
+  CounterAmount: "6"
+  CounterType: 3
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 2
+  LimitCompare: 2
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 6
+  Name: "Topup recharge reminder TARJ,TARJ4,TARJ5"
+  FromDate: 2009-11-01
+  ToDate: 2049-12-31
+  CounterItems: "BillCode,CLIType"
+  CounterAmount: "6"
+  CounterType: 3
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 2
+  LimitCompare: 2
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 7
+  Name: "Roaming Out Fraud Consumption"
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItems: "RateCCN"
+  CounterAmount: "6"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 4
+  PayType: 1
+  TicketType: 2
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 8
+  Name: "Roaming Out Fraud Calls A Countries"
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItems: "#FraudGroup,RateCCN"
+  CounterAmount: "5"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 4
+  PayType: 1
+  TicketType: 2
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 9
+  Name: "Roaming Out Fraud Calls B Countries"
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItems: "#FraudGroup,RateCCN"
+  CounterAmount: "5"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 4
+  PayType: 1
+  TicketType: 2
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 10
+  Name: "Roaming Out Fraud Calls C Countries"
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  CounterItems: "#FraudGroup,RateCCN"
+  CounterAmount: "5"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 4
+  PayType: 1
+  TicketType: 2
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 11
+  Name: "IPL25 Upsell"
+  FromDate: 2010-11-24
+  ToDate: 2012-03-31
+  CounterItems: "BDest,BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 12
+  Name: "MDUB Upsell"
+  FromDate: 2010-11-24
+  ToDate: 2012-03-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 13
+  Name: "IPL35 Upsell"
+  FromDate: 2010-11-24
+  ToDate: 2012-03-31
+  CounterItems: "BDest,BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 14
+  Name: "Base Contract Data"
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 15
+  Name: "CONT6 MDUB Upsell"
+  FromDate: 2011-02-23
+  ToDate: 2012-03-31
+  CounterItems: "BDest,BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 16
+  Name: "MDUB2 Upsell"
+  FromDate: 2011-02-23
+  ToDate: 2012-03-31
+  CounterItems: "BDest,BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 17
+  Name: "CONT6 MDUB2 Upsell"
+  FromDate: 2011-02-23
+  ToDate: 2012-03-31
+  CounterItems: "BDest,BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 18
+  Name: "PMDUB Upsell"
+  FromDate: 2011-06-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 2
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 19
+  Name: "IPL8 Upsell"
+  FromDate: 2011-09-01
+  ToDate: 2012-03-31
+  CounterItems: "BDest,BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 20
+  Name: "MDUB3 Upsell"
+  FromDate: 2011-11-01
+  ToDate: 2012-03-31
+  CounterItems: "BDest,BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 21
+  Name: "MDUB4 Upsell"
+  FromDate: 2011-11-01
+  ToDate: 2012-03-31
+  CounterItems: "BDest,BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 22
+  Name: "CONT6 MDUB3 Upsell"
+  FromDate: 2011-11-01
+  ToDate: 2012-03-31
+  CounterItems: "BDest,BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 23
+  Name: "CONT6 MDUB4 Upsell"
+  FromDate: 2011-11-01
+  ToDate: 2012-03-31
+  CounterItems: "BDest,BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 24
+  Name: "DSS Upsell"
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest,BillCode"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 25
+  Name: "IPL15 Upsell"
+  FromDate: 2011-11-01
+  ToDate: 2012-03-31
+  CounterItems: "BDest,BillCode,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 26
+  Name: "CONTF Voice"
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "1"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 27
+  Name: "CONTF30 Data"
+  FromDate: 2011-12-01
+  ToDate: 2012-03-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 28
+  Name: "CONTF55 Data"
+  FromDate: 2011-12-01
+  ToDate: 2012-03-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 29
+  Name: "CONTF20 Data"
+  FromDate: 2012-02-01
+  ToDate: 2012-03-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 30
+  Name: "CONTF40 Data"
+  FromDate: 2012-02-01
+  ToDate: 2012-03-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 31
+  Name: "IPL Data"
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 32
+  Name: "CONTF Data"
+  FromDate: 2012-04-01
+  ToDate: 2013-09-30
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 33
+  Name: "Bono Data"
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 34
+  Name: "CONTS Voice BDestination Limit"
+  FromDate: 2012-08-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "7"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 35
+  Name: "CONTF Voice BDestination Limit"
+  FromDate: 2012-08-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "7"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 36
+  Name: "GPRS Postpaid"
+  FromDate: 2012-11-01
+  ToDate: 2049-12-31
+  CounterItems: "EventType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 0
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 37
+  Name: "GPRS Prepaid"
+  FromDate: 2012-11-01
+  ToDate: 2049-12-31
+  CounterItems: "EventType"
+  CounterAmount: "4"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 0
+  PayType: 2
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 38
+  Name: "VOICE3000"
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest"
+  CounterAmount: "1"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 39
+  Name: "Premium Fraud Prepaid"
+  FromDate: 2014-09-01
+  ToDate: 2049-12-31
+  CounterItems: "RateCCN"
+  CounterAmount: "6"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 2
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 40
+  Name: "VOICE100 Minutes"
+  FromDate: 2015-01-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest"
+  CounterAmount: "1"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 41
+  Name: "VOICE100 BDestination"
+  FromDate: 2015-01-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest"
+  CounterAmount: "7"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+
+bulkload: TMRule
+  Brand: "1"
+  TMRuleSeq: 42
+  Name: "VOICE 5000 Minutes"
+  FromDate: 2016-10-01
+  ToDate: 2049-12-31
+  CounterItems: "BDest,CLIType"
+  CounterAmount: "1"
+  CounterType: 1
+  CounterPeriod: 2
+  NewCustomer: FALSE
+  LimitSource: 3
+  PayType: 1
+  TicketType: 1
+

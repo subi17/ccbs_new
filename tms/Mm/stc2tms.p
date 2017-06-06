@@ -29,6 +29,7 @@
 {Func/create_eventlog.i}
 {Func/barrfunc.i}
 {Func/fixedlinefunc.i}
+{Func/fsendsms.i}
 
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
@@ -104,7 +105,8 @@ IF liOrigStatus = 8 AND MsRequest.ReqIParam2 > 0 THEN DO:
       RETURN.
    END.
    ELSE IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
-      IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} THEN DO:
+      IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}     OR
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} THEN DO: /* ADDLINE-19 Additional Line Renewal case handling */
          ASSIGN ldaNextMonthActDate  = (fLastDayOfMonth(ldtActDate) + 1)
                 ldNextMonthActStamp  = fMake2Dt(ldaNextMonthActDate,0).
          FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
@@ -289,7 +291,11 @@ PROCEDURE pFeesAndServices:
    DEF VAR liCredQty          AS INT  NO-UNDO. 
    DEF VAR liTimeLimit        AS INT  NO-UNDO. 
    DEF VAR ldaPrevMonth       AS DATE NO-UNDO. 
-   DEF VAR liPrevPeriod       AS INT NO-UNDO. 
+   DEF VAR liPrevPeriod       AS INT  NO-UNDO. 
+   DEF VAR liRequest          AS INT  NO-UNDO.
+   DEF VAR lcResult           AS CHAR NO-UNDO.
+   DEF VAR llAddLineDisc      AS LOG  NO-UNDO.
+   DEF VAR lcAddLineDisc      AS CHAR NO-UNDO.
 
    DEF BUFFER bMember FOR DPMember.
    
@@ -446,9 +452,45 @@ PROCEDURE pFeesAndServices:
          FIND FIRST bMember WHERE RECID(bMember) = RECID(DPMember) 
             EXCLUSIVE-LOCK.
          bMember.ValidTo = ldtActDate - 1. 
+
+         IF llAddLineDisc = FALSE AND
+            LOOKUP(DiscountPlan.DPRuleID,{&ADDLINE_DISCOUNTS} + {&ADDLINE_DISCOUNTS_20}) > 0
+            THEN ASSIGN llAddLineDisc = TRUE
+                        lcAddLineDisc = DiscountPlan.DPRuleID
+                        .
+         
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
 
       END.   
+   END.
+  
+   /* ADDLINE-20 Additional Line Discounts 
+      CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type 
+      ADDLINE-267 Phase 2 fix */
+
+   IF llAddLineDisc AND
+      LOOKUP(CLIType.CliType , {&ADDLINE_CLITYPES}) > 0 AND
+      LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+      
+      IF lcAddLineDisc = ENTRY(LOOKUP(bOLDType.CLIType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS}) AND
+         fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN DO:
+         fCreateAddLineDiscount(MsRequest.MsSeq,
+                                CLIType.CLIType,
+                                ldtActDate,
+                                ENTRY(LOOKUP(CLIType.CLIType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS})).
+         IF RETURN-VALUE BEGINS "ERROR" THEN
+            RETURN RETURN-VALUE.
+      END.
+
+      IF lcAddLineDisc = ENTRY(LOOKUP(bOLDType.CLIType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_20}) AND
+         fCheckExisting2PConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN DO:
+         fCreateAddLineDiscount(MsRequest.MsSeq,
+                                CLIType.CLIType,
+                                ldtActDate,
+                                ENTRY(LOOKUP(CLIType.CLIType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_20})).
+         IF RETURN-VALUE BEGINS "ERROR" THEN
+            RETURN RETURN-VALUE.
+      END.
    END.
    
 END PROCEDURE.
@@ -468,8 +510,10 @@ PROCEDURE pUpdateSubscription:
    DEF VAR ldeOrigTsEnd AS DEC NO-UNDO. 
    DEF VAR liLoop AS INT NO-UNDO. 
    DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
-
+   DEF VAR liSecs AS INT NO-UNDO. 
+   
    DEF BUFFER bOwner FOR MsOwner.
+   DEF BUFFER bMobSub FOR MobSub.
 
    /* make sure that customer has a billtarget with correct rateplan */
    liBillTarg = CLIType.BillTarget.
@@ -596,14 +640,24 @@ PROCEDURE pUpdateSubscription:
          
       IF liLoop EQ 1 THEN DO:
 
+         /* YOB-1145 */
+         liSecs = -1.
+         DO WHILE TRUE:
+            IF NOT CAN-FIND(FIRST bOwner WHERE
+                       bOwner.CLI = MSOwner.CLI AND
+                       bOwner.TSEnd = fSecOffSet(ldeNewBeginTs, liSecs))
+               THEN LEAVE.
+            liSecs = liSecs - 1.
+         END.
+         
          ASSIGN
             ldeOrigTsEnd = MSOwner.TsEnd
-            MSOwner.TsEnd = fSecOffSet(ldeNewBeginTs, -1).
+            MSOwner.TsEnd = fSecOffSet(ldeNewBeginTs, liSecs).
          
          CREATE bOwner.
          BUFFER-COPY MsOwner EXCEPT TsBegin TsEnd CLIEvent TO bOwner.
          ASSIGN bOwner.CLIType    = MsRequest.ReqCParam2
-                bOwner.TsBegin    = fSecOffSet(MsOwner.TsEnd,1)
+                bOwner.TsBegin    = ldeNewBeginTs
                 bOwner.TsEnd      = ldeOrigTsEnd
                 bOwner.BillTarget = liBillTarg
                 bOwner.Paytype    = (CLIType.PayType = 2)
@@ -681,6 +735,24 @@ PROCEDURE pUpdateSubscription:
                             MsRequest.UserCode,
                             "STC").
       END. /* FOR FIRST SubSer WHERE */
+
+   /* ADDLINE-324 Additional Line Discounts
+      CHANGE: If STC happened on convergent, AND the customer does not have any other fully convergent
+      then CLOSE the all addline discounts to (STC Date - 1) */
+   IF fIsConvergenceTariff(bOldType.CliType) AND NOT fIsConvergenceTariff(CLIType.CliType) AND
+      NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType)     THEN DO:
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobSub.Brand   = gcBrand          AND
+               bMobSub.AgrCust = Customer.CustNum AND
+               bMobSub.MsSeq  <> MsRequest.MsSeq  AND
+               LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) THEN fLastDayOfMonth(TODAY)
+                               ELSE ldtActDate - 1).
+      END.
+   END.
 
 END PROCEDURE.
 
@@ -779,15 +851,20 @@ PROCEDURE pFinalize:
                           "STC",
                           OUTPUT liReqCnt).
 
+   FIND FIRST Order NO-LOCK WHERE
+      Order.Brand = gcBrand AND
+      Order.OrderID = MsRequest.ReqIParam2 AND
+      Order.OrderType EQ {&ORDER_TYPE_STC} NO-ERROR.
+
     /* activate/terminate periodical contracts, service packages etc. */
-    RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
-                              MsRequest.ReqCParam2, /* definitions on new type */
-                              0,                      /* order */
-                              ldBegStamp,
-                              ldEndStamp,
-                              TRUE,                   /* create fees */
-                              {&REQUEST_SOURCE_STC},  /* req.source */
-                              {&REQUEST_ACTIONLIST_ALL}).
+   RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
+                               MsRequest.ReqCParam2, /* definitions on new type */
+                               (IF AVAILABLE Order THEN Order.OrderId ELSE 0), /* order */
+                               ldBegStamp,
+                               ldEndStamp,
+                               TRUE,                   /* create fees */
+                               {&REQUEST_SOURCE_STC},  /* req.source */
+                               {&REQUEST_ACTIONLIST_ALL}).
 
     /* Create charge for new paytype */
     IF MsRequest.CreateFees THEN 
@@ -804,7 +881,7 @@ PROCEDURE pFinalize:
     IF bOldType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} AND
        bOldType.CLIType EQ "TARJ6"                    AND
        CLIType.PayType  EQ {&CLITYPE_PAYTYPE_PREPAID} AND
-       LOOKUP(CLIType.CLIType,"TARJ7,TARJ9") > 0      THEN DO:
+       LOOKUP(CLIType.CLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
 
        FIND FIRST ServiceLimit NO-LOCK WHERE
                   ServiceLimit.Groupcode EQ CLIType.CLIType AND
@@ -1169,12 +1246,13 @@ PROCEDURE pCloseContracts:
    DEF VAR lcOnlyVoiceContracts      AS CHAR    NO-UNDO.
    DEF VAR lcBONOContracts           AS CHAR    NO-UNDO.
    DEF VAR lcAllVoIPNativeBundles    AS CHAR    NO-UNDO.
-   DEF VAR llCreateFees       AS LOG  NO-UNDO.
+   DEF VAR llCreateFees                         AS LOG NO-UNDO.
+   DEF VAR llIsSTCBetweenConvergent             AS LOG NO-UNDO.
+   DEF VAR llIsSTCBetweenFixedOnlyAndConvergent AS LOG NO-UNDO.
 
    EMPTY TEMP-TABLE ttContract.
 
-   FIND FIRST bOrigRequest WHERE
-              bOrigRequest.MsRequest = iiMainRequest NO-LOCK NO-ERROR.
+   FIND FIRST bOrigRequest WHERE bOrigRequest.MsRequest = iiMainRequest NO-LOCK NO-ERROR.
 
    /* end old bundles to the end of previous month */
    IF DAY(idaActDate) = 1 AND llOldPayType = FALSE THEN
@@ -1188,11 +1266,17 @@ PROCEDURE pCloseContracts:
    IF icNewType = "CONTF" THEN
       lcOnlyVoiceContracts = fCParamC("ONLY_VOICE_CONTRACTS").
 
-   IF NOT (CLIType.PayType  = {&CLITYPE_PAYTYPE_PREPAID} AND
-           bOldType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN
-      llCloseRVTermFee = FALSE.
-   ELSE liPeriod = YEAR(idaActDate - 1) * 100 + MONTH(idaActDate - 1).
-      
+   IF NOT (CLIType.PayType  = {&CLITYPE_PAYTYPE_PREPAID} AND bOldType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN
+       llCloseRVTermFee = FALSE.
+   ELSE 
+       liPeriod = YEAR(idaActDate - 1) * 100 + MONTH(idaActDate - 1).
+   
+   IF ((CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  AND bOldType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) OR 
+       (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND bOldType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN
+       ASSIGN llIsSTCBetweenFixedOnlyAndConvergent = TRUE.
+   ELSE IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND bOldType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+       ASSIGN llIsSTCBetweenConvergent = TRUE.
+
    FOR EACH DCCLI NO-LOCK WHERE
             DCCLI.MsSeq   = iiMsSeq  AND
             DCCLI.ValidTo >= idaActDate,
@@ -1230,7 +1314,7 @@ PROCEDURE pCloseContracts:
    lcContractList = lcContractList + 
                     (IF lcContractList > "" THEN "," ELSE "") + 
                     fGetActiveBundle(iiMsSeq,ldeActStamp).
-  
+          
    /* this rule is 'allowed' type, so result should be 1 (if no rule for
       contract id found then allowed) */
    DO liCount = 1 TO NUM-ENTRIES(lcContractList):
@@ -1254,24 +1338,27 @@ PROCEDURE pCloseContracts:
                         "PerContract;SubsTypeTo",
                          lcContract + ";" + icNewType,
                         OUTPUT lcReqChar) NE 1 AND
-          ENTRY(1,lcReqChar,";") NE "?") OR
-         (LOOKUP(lcContract,lcBonoContracts) > 0 AND
-          LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN DO:
-
+          ENTRY(1,lcReqChar,";") NE "?") 
+         OR
+         /* Since, convergent base bundles CONTDSL/CONTFH50/CONTFH300 are reused in fixed only convergent also with different prices.
+            Above matrix condition will fail and convergent base bundles are not terminated for prices to change. So, below is introduced. */
+         ((llIsSTCBetweenFixedOnlyAndConvergent OR llIsSTCBetweenConvergent) AND LOOKUP(lcContract,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) 
+         OR
+         (LOOKUP(lcContract,lcBonoContracts) > 0 AND LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN 
+      DO:
          /* YDR-2038 (stc/btc to prepaid)
             ReqIParam5
             (0=no extend_term_contract
              1=extend_term_contract
              2=exclude_term_penalty)
           */
-         IF AVAILABLE(bOrigRequest) AND
-            bOrigRequest.ReqIParam5 EQ 2 AND
-            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
-                           DayCampaign.Brand   EQ gcBrand AND
-                           DayCampaign.DCEvent EQ lcContract AND
-                           DayCampaign.DCType EQ {&DCTYPE_DISCOUNT})
-            THEN llCreateFees = FALSE.
-         ELSE llCreateFees = TRUE. 
+         IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqIParam5 EQ 2 AND
+            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   EQ gcBrand             AND 
+                                                     DayCampaign.DCEvent EQ lcContract          AND 
+                                                     DayCampaign.DCType  EQ {&DCTYPE_DISCOUNT}) THEN 
+             llCreateFees = FALSE.
+         ELSE 
+             llCreateFees = TRUE. 
 
          /* terminate periodical contract */
          liTerminate = fPCActionRequest(iiMsSeq,
@@ -1283,13 +1370,9 @@ PROCEDURE pCloseContracts:
                                         "",
                                         iiMainRequest,
                                         TRUE,   /* mandatory subreq. */
-                                        (IF lcContract EQ "PMDUB" THEN
-                                         "PMDUBDeActSTC" ELSE ""), 
-                                           /* SMS for PMDUB STC Deactivation */
+                                        (IF lcContract EQ "PMDUB" THEN "PMDUBDeActSTC" ELSE ""), /* SMS for PMDUB STC Deactivation */
                                         0,
-                                        (IF AVAIL DayCampaign AND
-                                                  DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} 
-                                        THEN liContractID ELSE 0),
+                                        (IF AVAIL DayCampaign AND DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN liContractID ELSE 0),
                                         OUTPUT lcError).
          IF liTerminate = 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,

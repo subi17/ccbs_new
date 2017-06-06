@@ -1,0 +1,225 @@
+bulkload: PaymPlan
+  PPlanID: 1
+  CustNum: 67517
+  PPDate: 2007-03-03
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 2
+  CustNum: 55409
+  PPDate: 2007-03-12
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 3
+  CustNum: 55409
+  PPDate: 2007-03-12
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 4
+  CustNum: 44892
+  PPDate: 2007-03-12
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 5
+  CustNum: 44892
+  PPDate: 2007-03-12
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 6
+  CustNum: 11855
+  PPDate: 2007-03-12
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 7
+  CustNum: 11855
+  PPDate: 2007-03-12
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 8
+  CustNum: 44220
+  PPDate: 2007-03-12
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 9
+  CustNum: 23604
+  PPDate: 2007-03-13
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 10
+  CustNum: 55670
+  PPDate: 2007-03-15
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 11
+  CustNum: 24305
+  PPDate: 2007-04-11
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 12
+  CustNum: 24305
+  PPDate: 2007-04-11
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 13
+  CustNum: 39391
+  PPDate: 2007-05-01
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 14
+  CustNum: 111153
+  PPDate: 2007-11-22
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 15
+  CustNum: 19891
+  PPDate: 2008-06-07
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 17
+  CustNum: 207721
+  PPDate: 2009-12-07
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 18
+  CustNum: 329366
+  PPDate: 2010-07-05
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 19
+  CustNum: 1264396
+  PPDate: 2011-04-24
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 20
+  CustNum: 2033850
+  PPDate: 2012-07-01
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 21
+  CustNum: 4322322
+  PPDate: 2013-07-02
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 22
+  CustNum: 3347881
+  PPDate: 2013-10-01
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 23
+  CustNum: 4260069
+  PPDate: 2013-10-07
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 24
+  CustNum: 6563945
+  PPDate: 2016-02-19
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 25
+  CustNum: 6563945
+  PPDate: 2016-02-19
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
+bulkload: PaymPlan
+  PPlanID: 26
+  CustNum: 7515052
+  PPDate: 2016-09-23
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+

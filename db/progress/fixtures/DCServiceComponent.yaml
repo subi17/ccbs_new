@@ -1,0 +1,963 @@
+bulkload: DCServiceComponent
+  DCServicePackageID: 2
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "DATA8"
+  FromDate: 2011-01-17
+  ToDate: 2011-09-30
+  DCServiceComponentID: 1
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 3
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT6#ADDBUNDLE"
+  FromDate: 2011-01-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 2
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 5
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2011-01-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 3
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 4
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "DATA15#CLITYPE"
+  FromDate: 2011-01-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 4
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 6
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "DATA15#CLITYPE|DATA15#CLITYPE#UPSELL"
+  FromDate: 2011-01-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 5
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 7
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2011-01-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 6
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 8
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTRD2|CONTRD2#UPSELL"
+  FromDate: 2011-02-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 7
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 9
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "DATA8#CLITYPE|DATA8#CLITYPE#UPSELL"
+  FromDate: 2011-02-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 8
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 10
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTRD1|CONTRD1#UPSELL"
+  FromDate: 2011-02-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 9
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 11
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2011-02-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 10
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 12
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "DATA8#CLITYPE"
+  FromDate: 2011-02-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 11
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 13
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2011-02-01
+  ToDate: 2045-12-31
+  DCServiceComponentID: 12
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 14
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTRD2"
+  FromDate: 2011-02-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 13
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 15
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2011-02-01
+  ToDate: 2045-12-31
+  DCServiceComponentID: 14
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 16
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTRD1"
+  FromDate: 2011-02-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 15
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 17
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2009-01-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 16
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 18
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "TARJRD1"
+  FromDate: 2009-01-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 17
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 21
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "TARJDATA8|TARJDATA8#UPSELL"
+  FromDate: 2011-06-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 18
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 22
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2011-05-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 19
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 23
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "DATA8"
+  FromDate: 2011-05-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 20
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 24
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "DATA8|DATA8#UPSELL"
+  FromDate: 2011-05-01
+  ToDate: 2011-09-30
+  DCServiceComponentID: 21
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 14
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "IPL35"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 22
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 8
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 23
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 23
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "IPL8"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 24
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 24
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "314572800#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 25
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 16
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "IPL25"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 26
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 10
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 27
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 3
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "LADEL4#ADDBUNDLE"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 28
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 12
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#BONO8"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 29
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 4
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#BONO15"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 30
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 6
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 31
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 9
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "314572800#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 32
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 20
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "BONO8_PRE"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 33
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 21
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "314572800#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 34
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 18
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "IPL8_PRE"
+  FromDate: 2011-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 35
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 25
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 36
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 26
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "IPL15"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 37
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 27
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 38
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 28
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 39
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 29
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#BONO25"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 40
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 30
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 41
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 31
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 42
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 32
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#BONO35"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 43
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 33
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2011-11-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 44
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 34
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "DEFAULT#ADDBUNDLE"
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 45
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 35
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 46
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 36
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "LADEL4#ADDBUNDLE"
+  FromDate: 2011-12-01
+  ToDate: 2012-01-24
+  DCServiceComponentID: 47
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 37
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 48
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 38
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "LADEL4#ADDBUNDLE"
+  FromDate: 2011-12-01
+  ToDate: 2012-01-24
+  DCServiceComponentID: 49
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 36
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTF30#ADDBUNDLE"
+  FromDate: 2012-01-25
+  ToDate: 2049-12-31
+  DCServiceComponentID: 50
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 38
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTF55#ADDBUNDLE"
+  FromDate: 2012-01-25
+  ToDate: 2049-12-31
+  DCServiceComponentID: 51
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 39
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "DEFAULT#ADDBUNDLE"
+  FromDate: 2012-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 52
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 40
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2012-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 53
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 41
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTF20D#ADDBUNDLE"
+  FromDate: 2012-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 54
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 42
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2012-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 55
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 43
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTF40#ADDBUNDLE"
+  FromDate: 2012-02-22
+  ToDate: 2049-12-31
+  DCServiceComponentID: 56
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 44
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2012-03-26
+  ToDate: 2049-12-31
+  DCServiceComponentID: 57
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 45
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#BONO12"
+  FromDate: 2012-03-26
+  ToDate: 2049-12-31
+  DCServiceComponentID: 58
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 46
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "314572800#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2012-03-26
+  ToDate: 2049-12-31
+  DCServiceComponentID: 59
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 47
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "UPGRADE#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2012-03-23
+  ToDate: 2049-12-31
+  DCServiceComponentID: 60
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 48
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2012-05-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 61
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 49
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "LADEL2#ADDBUNDLE"
+  FromDate: 2012-05-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 62
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 50
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2012-05-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 63
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 51
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS30#ADDBUNDLE"
+  FromDate: 2012-05-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 64
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 53
+  ServCom: "HSDPA"
+  DefValue: 1
+  FromDate: 2012-09-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 65
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 52
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS39#ADDBUNDLE"
+  FromDate: 2012-09-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 66
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 54
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "VOIP"
+  FromDate: 2012-09-06
+  ToDate: 2049-12-31
+  DCServiceComponentID: 67
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 55
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "SPOTIFY"
+  FromDate: 2012-09-06
+  ToDate: 2049-12-31
+  DCServiceComponentID: 68
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 56
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "HSPA_ROAM_EU"
+  FromDate: 2012-10-10
+  ToDate: 2049-12-31
+  DCServiceComponentID: 69
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 57
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTD9#ADDBUNDLE"
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 70
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 58
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "1073741824#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 71
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 59
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#BONO9"
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 72
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 60
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "15728640#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 73
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 61
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "LADEL2#ADDBUNDLE"
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 74
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 62
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "DEFAULT#ADDBUNDLE"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 75
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 63
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS20#ADDBUNDLE"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 76
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 64
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS25#ADDBUNDLE"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 77
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 65
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS35#ADDBUNDLE"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 78
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 66
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#BONO5"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 79
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 67
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "524288000#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2013-09-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 80
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 68
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTFF2#ADDBUNDLE"
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 81
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 69
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTSF10#ADDBUNDLE"
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 82
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 70
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTSF14#ADDBUNDLE"
+  FromDate: 2013-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 83
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 73
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "209715200#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  FromDate: 2013-11-01
+  ToDate: 2015-09-14
+  DCServiceComponentID: 84
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 72
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "TARJ7"
+  FromDate: 2013-11-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 85
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 74
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS21#ADDBUNDLE"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 86
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 75
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS26#ADDBUNDLE"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 87
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 76
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS32#ADDBUNDLE"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 88
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 77
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS16#ADDBUNDLE"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 89
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 78
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT9#ADDBUNDLE"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 90
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 80
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#BONO6"
+  FromDate: 2014-05-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 92
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 81
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "1073741824#UPSELL#GRACELIMIT,TEMPLATE=HSPA"
+  FromDate: 2014-04-05
+  ToDate: 2015-09-14
+  DCServiceComponentID: 93
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 82
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT15#ADDBUNDLE"
+  FromDate: 2014-10-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 94
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 83
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT24#ADDBUNDLE"
+  FromDate: 2015-03-04
+  ToDate: 2049-12-31
+  DCServiceComponentID: 95
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 84
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTF8#ADDBUNDLE"
+  FromDate: 2015-04-14
+  ToDate: 2049-12-31
+  DCServiceComponentID: 96
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 85
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS12#ADDBUNDLE"
+  FromDate: 2015-04-14
+  ToDate: 2049-12-31
+  DCServiceComponentID: 97
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 86
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTF11#ADDBUNDLE"
+  FromDate: 2015-04-14
+  ToDate: 2049-12-31
+  DCServiceComponentID: 98
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 87
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "TARJ9"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  DCServiceComponentID: 99
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 89
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT23#ADDBUNDLE"
+  FromDate: 2015-08-12
+  ToDate: 2049-12-31
+  DCServiceComponentID: 100
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 81
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "1610612736#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2015-09-15
+  ToDate: 2049-12-31
+  DCServiceComponentID: 101
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 73
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "314572800#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2015-09-15
+  ToDate: 2049-12-31
+  DCServiceComponentID: 102
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 90
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "209715200#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2015-06-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 103
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 91
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "#CLITYPE#BONO7"
+  FromDate: 2015-12-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 104
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 92
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONTS2GB#ADDBUNDLE"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  DCServiceComponentID: 105
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 93
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT25#ADDBUNDLE"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  DCServiceComponentID: 106
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 94
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT26#ADDBUNDLE"
+  FromDate: 2017-02-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 107
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 95
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT10#ADDBUNDLE"
+  FromDate: 2017-02-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 108
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 96
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "26843545600#UPSELL,GRACE=0,TEMPLATE=HSPA"
+  FromDate: 2017-03-01
+  ToDate: 2049-12-31
+  DCServiceComponentID: 109
+
+bulkload: DCServiceComponent
+  DCServicePackageID: 97
+  ServCom: "SHAPER"
+  DefValue: 1
+  DefParam: "CONT27#ADDBUNDLE"
+  FromDate: 2017-04-18
+  ToDate: 2049-12-31
+  DCServiceComponentID: 110
+

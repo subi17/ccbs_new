@@ -695,10 +695,9 @@ PROCEDURE pUseOffer:
                       TopupSchemeRow.EndStamp   >= idOfferStamp AND
                       TopupSchemeRow.BeginStamp <= idOfferStamp:
                /* Check if TopUpScheme has DisplayAmount to show */
-               IF ((Order.CliType EQ "TARJ7" OR
-                   Order.CliType EQ "TARJ9") AND
+               IF LOOKUP(Order.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 AND
                    TopUpSchemeRow.DisplayAmount > 0 AND
-                   (iiAction EQ 3 OR iiAction EQ 4)) THEN DO:
+                   (iiAction EQ 3 OR iiAction EQ 4) THEN DO:
                   ldtopupAmount = TopUpSchemeRow.DisplayAmount.
                   ldDiscAmount = TopUpSchemeRow.DisplayAmount * -1.
                END.

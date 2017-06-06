@@ -249,8 +249,9 @@ PROCEDURE pPeriodicalContract:
       /* request should wait until another bundle request is completed */
       lcWaitFor = "".
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
-         icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} THEN DO:
-         
+         (icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} OR
+          icSource =  {&REQUEST_SOURCE_STC} ) THEN DO:
+
          FOR EACH bBundleRequest NO-LOCK USE-INDEX OrigRequest WHERE
                   bBundleRequest.OrigRequest = iiMsRequest AND
                   bBundleRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
@@ -261,11 +262,18 @@ PROCEDURE pPeriodicalContract:
                   bBundleContract.DCEvent = bBundleRequest.ReqCParam3 AND
                   LOOKUP(bBundleContract.DCType,
                          {&PERCONTRACT_RATING_PACKAGE}) > 0:
+            IF fIsConvergentFixedContract(bBundleRequest.ReqCParam3) THEN NEXT. 
             lcWaitFor = ":wait" + STRING(bBundleRequest.MsRequest).
          END.     
       END.
-            
-      liRequest = fPCActionRequest(liMsSeq,
+
+      /* Temporary check due to ongoing orders created before 5.6.2017
+         TODO: REMOVE THE "THEN BLOCK" AFTER THERE ARE NO PENDING VOICE200 RELATED ORDERS */
+      IF ttAction.ActionKey EQ "VOICE200" AND
+         ( (NOT AVAILABLE Order AND fTSToDate(MsRequest.CreStamp) < RequestAction.ValidFrom) OR /* normal STC */
+           (AVAILABLE Order AND fTSToDate(Order.CrStamp) < RequestAction.ValidFrom) ) /* New or STC order */
+      THEN liRequest = 1.
+      ELSE liRequest = fPCActionRequest(liMsSeq,
                                    ttAction.ActionKey,
                                    "act" + lcWaitFor,
                                    ldeContrCreStamp,
@@ -735,7 +743,7 @@ PROCEDURE pServicePackage:
             ELSE lcParam = "".
          END.
          ELSE IF SubSer.SSStat  = 2 AND SubSer.ServCom = "BB" AND
-                (icCLIType = "TARJ7" OR icCLIType = "TARJ9")
+                LOOKUP(icCLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0
                 THEN lcParam = "3".
          ELSE RETURN.
 

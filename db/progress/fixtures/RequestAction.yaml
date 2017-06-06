@@ -1,0 +1,7449 @@
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT"
+  ValidFrom: 2006-12-01
+  ValidTo: 2012-06-12
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 1
+  RequestActionID: 1
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT2"
+  ValidFrom: 2006-12-01
+  ValidTo: 2012-06-12
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 1
+  RequestActionID: 2
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT"
+  ValidFrom: 2006-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 3
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT2"
+  ValidFrom: 2006-12-01
+  ValidTo: 2012-07-19
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 4
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ"
+  ValidFrom: 2006-12-01
+  ValidTo: 2044-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 2
+  RequestActionID: 5
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ2"
+  ValidFrom: 2006-12-01
+  ValidTo: 2043-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 2
+  RequestActionID: 6
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT"
+  ValidFrom: 2008-03-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 1
+  RequestActionID: 7
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ"
+  ValidFrom: 2006-12-01
+  ValidTo: 2044-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 8
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ2"
+  ValidFrom: 2006-12-01
+  ValidTo: 2043-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 9
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT2"
+  ValidFrom: 2008-01-01
+  ValidTo: 2048-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  RequestActionID: 10
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ"
+  ValidFrom: 2008-01-01
+  ValidTo: 2044-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  RequestActionID: 11
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ2"
+  ValidFrom: 2008-01-01
+  ValidTo: 2043-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  RequestActionID: 12
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT"
+  ValidFrom: 2008-01-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 1
+  RequestActionID: 13
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT"
+  ValidFrom: 2006-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 14
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT2"
+  ValidFrom: 2006-12-01
+  ValidTo: 2048-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 15
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-06-01
+  ValidTo: 2011-05-17
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 1
+  RequestActionID: 16
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-06-01
+  ValidTo: 2012-06-12
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 1
+  RequestActionID: 17
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT2"
+  ValidFrom: 2006-12-01
+  ValidTo: 2012-07-19
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 1
+  RequestActionID: 18
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-06-01
+  ValidTo: 2046-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 1
+  RequestActionID: 19
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT2"
+  ValidFrom: 2008-01-01
+  ValidTo: 2048-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 1
+  RequestActionID: 20
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT"
+  ValidFrom: 2008-01-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  RequestActionID: 21
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ"
+  ValidFrom: 2008-01-01
+  ValidTo: 2044-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  RequestActionID: 22
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ2"
+  ValidFrom: 2008-01-01
+  ValidTo: 2043-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  RequestActionID: 23
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-06-01
+  ValidTo: 2046-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 2
+  RequestActionID: 24
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2009-03-17
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 1
+  RequestActionID: 25
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-06-01
+  ValidTo: 2046-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  RequestActionID: 26
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT"
+  ValidFrom: 2008-06-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  RequestActionID: 27
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ"
+  ValidFrom: 2008-06-01
+  ValidTo: 2044-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  RequestActionID: 28
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ2"
+  ValidFrom: 2008-06-01
+  ValidTo: 2043-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  RequestActionID: 29
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT"
+  ValidFrom: 2008-09-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  RequestActionID: 30
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT"
+  ValidFrom: 2008-09-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 2
+  RequestActionID: 31
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT"
+  ValidFrom: 2008-09-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "PRERENOVE"
+  Action: 2
+  RequestActionID: 32
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT2"
+  ValidFrom: 2008-09-01
+  ValidTo: 2047-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  RequestActionID: 33
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT2"
+  ValidFrom: 2008-09-01
+  ValidTo: 2047-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  RequestActionID: 34
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT2"
+  ValidFrom: 2008-09-01
+  ValidTo: 2047-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 2
+  RequestActionID: 35
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT2"
+  ValidFrom: 2008-09-01
+  ValidTo: 2047-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "PRERENOVE"
+  Action: 2
+  RequestActionID: 36
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2009-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 37
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2046-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 2
+  RequestActionID: 38
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2046-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 2
+  RequestActionID: 39
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2046-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "PRERENOVE"
+  Action: 2
+  RequestActionID: 40
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2045-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  RequestActionID: 41
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2045-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  RequestActionID: 42
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2045-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 43
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2045-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  RequestActionID: 44
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2045-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  RequestActionID: 45
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2045-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 2
+  RequestActionID: 46
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2045-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "PRERENOVE"
+  Action: 2
+  RequestActionID: 47
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ"
+  ValidFrom: 2008-09-01
+  ValidTo: 2044-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 2
+  RequestActionID: 48
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ"
+  ValidFrom: 2008-09-01
+  ValidTo: 2044-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  RequestActionID: 49
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ2"
+  ValidFrom: 2008-09-01
+  ValidTo: 2043-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 2
+  RequestActionID: 50
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ2"
+  ValidFrom: 2008-09-01
+  ValidTo: 2043-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  RequestActionID: 51
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2042-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  RequestActionID: 52
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2042-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 2
+  RequestActionID: 53
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2042-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 54
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2042-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 2
+  RequestActionID: 55
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2042-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  RequestActionID: 56
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2042-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  RequestActionID: 57
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2042-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  RequestActionID: 58
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTRD1"
+  ValidFrom: 2006-11-30
+  ValidTo: 2009-03-01
+  ActionType: "CTServPac"
+  ActionKey: "Y_PRODINT"
+  Action: 1
+  RequestActionID: 59
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "TARJ"
+  ValidFrom: 2008-09-12
+  ValidTo: 2012-06-12
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 1
+  RequestActionID: 60
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "TARJ2"
+  ValidFrom: 2008-09-12
+  ValidTo: 2012-06-12
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 1
+  RequestActionID: 61
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "TARJ4"
+  ValidFrom: 2008-09-12
+  ValidTo: 2012-06-12
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 1
+  RequestActionID: 62
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2046-12-31
+  ActionType: "CTServPac"
+  ActionKey: "Y_PRODINT"
+  Action: 1
+  RequestActionID: 63
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "CONT"
+  ValidFrom: 2008-09-12
+  ValidTo: 2009-07-20
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 3
+  RequestActionID: 64
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "CONT2"
+  ValidFrom: 2008-09-12
+  ValidTo: 2009-07-20
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 3
+  RequestActionID: 65
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-12
+  ValidTo: 2009-07-20
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 3
+  RequestActionID: 66
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "CONT"
+  ValidFrom: 2008-09-12
+  ValidTo: 2010-05-25
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 67
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "CONT2"
+  ValidFrom: 2008-09-12
+  ValidTo: 2010-05-25
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 68
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-12
+  ValidTo: 2010-05-25
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 69
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "TARJ"
+  ValidFrom: 2008-09-12
+  ValidTo: 2010-05-25
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 2
+  RequestActionID: 70
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "TARJ2"
+  ValidFrom: 2008-09-12
+  ValidTo: 2010-05-25
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 2
+  RequestActionID: 71
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "TARJ4"
+  ValidFrom: 2008-09-12
+  ValidTo: 2010-05-25
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 2
+  RequestActionID: 72
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "TARJ"
+  ValidFrom: 2008-09-12
+  ValidTo: 2009-07-20
+  ActionType: "DayCampaign"
+  ActionKey: "PRERENOVE"
+  Action: 3
+  RequestActionID: 73
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "TARJ2"
+  ValidFrom: 2008-09-12
+  ValidTo: 2009-07-20
+  ActionType: "DayCampaign"
+  ActionKey: "PRERENOVE"
+  Action: 3
+  RequestActionID: 74
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "TARJ4"
+  ValidFrom: 2008-09-12
+  ValidTo: 2009-07-20
+  ActionType: "DayCampaign"
+  ActionKey: "PRERENOVE"
+  Action: 3
+  RequestActionID: 75
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2009-03-17
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 1
+  RequestActionID: 76
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2012-06-12
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 1
+  RequestActionID: 77
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 78
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "*"
+  ValidFrom: 2008-09-24
+  ValidTo: 2049-12-31
+  ActionType: "BarringsNotAllowed"
+  ActionKey: "Y_REST,Y_SARC"
+  Action: 4
+  RequestActionID: 79
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "*"
+  ValidFrom: 2008-09-24
+  ValidTo: 2049-12-31
+  ActionType: "RequestsNotAllowed"
+  ActionKey: "0,1,8,9,15,18,19,35,39,40"
+  Action: 4
+  RequestActionID: 80
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-01-01
+  ValidTo: 2046-12-31
+  ActionType: "CTServPac"
+  ActionKey: "SHAPER"
+  Action: 1
+  RequestActionID: 81
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 19
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-01-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "SHAPER"
+  Action: 1
+  RequestActionID: 82
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-01-01
+  ValidTo: 2046-12-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 1
+  RequestActionID: 83
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT"
+  ValidFrom: 2009-01-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 2
+  RequestActionID: 84
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT2"
+  ValidFrom: 2009-01-01
+  ValidTo: 2047-12-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 2
+  RequestActionID: 85
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONT4"
+  ValidFrom: 2009-01-01
+  ValidTo: 2045-12-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 2
+  RequestActionID: 86
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ"
+  ValidFrom: 2009-01-01
+  ValidTo: 2044-12-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 2
+  RequestActionID: 87
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ2"
+  ValidFrom: 2009-01-01
+  ValidTo: 2043-12-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 2
+  RequestActionID: 88
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 19
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-01-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 1
+  RequestActionID: 89
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ4"
+  ValidFrom: 2009-01-01
+  ValidTo: 2042-12-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 2
+  RequestActionID: 90
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ4"
+  ValidFrom: 2009-03-04
+  ValidTo: 2042-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18II"
+  Action: 2
+  RequestActionID: 91
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ2"
+  ValidFrom: 2009-03-04
+  ValidTo: 2043-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18II"
+  Action: 2
+  RequestActionID: 92
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "TARJ"
+  ValidFrom: 2009-03-04
+  ValidTo: 2044-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18II"
+  Action: 2
+  RequestActionID: 93
+
+bulkload: RequestAction
+  Brand: "8"
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-03-18
+  ValidTo: 2046-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  RequestActionID: 94
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2008-01-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 1
+  RequestActionID: 95
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2006-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 96
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2008-01-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  RequestActionID: 97
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2008-06-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  RequestActionID: 98
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2008-09-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  RequestActionID: 99
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2012-08-29
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 2
+  PayType: 1
+  RequestActionID: 100
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2012-08-29
+  ActionType: "DayCampaign"
+  ActionKey: "PRERENOVE"
+  Action: 2
+  PayType: 1
+  RequestActionID: 101
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "*"
+  ValidFrom: 2008-09-24
+  ValidTo: 2049-12-31
+  ActionType: "BarringsNotAllowed"
+  ActionKey: "Debt_Hotl,Debt_Restricted,Debt_HOTLP,Debt_LP,Limits_Restricted,Risk_Restricted,ATC_Service_Suspension,Risk_Suspension"
+  Action: 4
+  RequestActionID: 102
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "*"
+  ValidFrom: 2008-09-24
+  ValidTo: 2049-12-31
+  ActionType: "RequestsNotAllowed"
+  ActionKey: "0,18,19,39,40"
+  Action: 4
+  RequestActionID: 103
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2009-01-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 2
+  RequestActionID: 104
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT2"
+  ValidFrom: 2008-01-01
+  ValidTo: 2011-02-03
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  RequestActionID: 105
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT2"
+  ValidFrom: 2006-12-01
+  ValidTo: 2011-02-03
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 106
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT2"
+  ValidFrom: 2008-01-01
+  ValidTo: 2011-02-03
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 1
+  RequestActionID: 107
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT2"
+  ValidFrom: 2008-09-01
+  ValidTo: 2011-02-03
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  RequestActionID: 108
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT2"
+  ValidFrom: 2008-09-01
+  ValidTo: 2011-02-03
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  RequestActionID: 109
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT2"
+  ValidFrom: 2009-01-01
+  ValidTo: 2011-01-03
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 2
+  RequestActionID: 112
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-06-01
+  ValidTo: 2011-11-22
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 1
+  RequestActionID: 113
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-06-01
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 2
+  RequestActionID: 114
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-06-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  RequestActionID: 115
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2009-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 2
+  RequestActionID: 117
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2011-11-22
+  ActionType: "CTServPac"
+  ActionKey: "Y_PRODINT"
+  Action: 1
+  RequestActionID: 120
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-01-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "SHAPER"
+  Action: 1
+  RequestActionID: 121
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-01-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 1
+  RequestActionID: 122
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-03-18
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  RequestActionID: 123
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  RequestActionID: 124
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  RequestActionID: 125
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2045-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 126
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  RequestActionID: 127
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2008-09-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  RequestActionID: 128
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2009-01-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 2
+  RequestActionID: 131
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2006-12-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 2
+  PayType: 2
+  RequestActionID: 132
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2006-12-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  PayType: 2
+  RequestActionID: 133
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2008-01-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  PayType: 2
+  RequestActionID: 134
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2008-01-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  PayType: 2
+  RequestActionID: 135
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2008-06-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  PayType: 2
+  RequestActionID: 136
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 2
+  PayType: 2
+  RequestActionID: 137
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2008-09-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  PayType: 2
+  RequestActionID: 138
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2009-01-01
+  ValidTo: 2011-03-24
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 2
+  PayType: 2
+  RequestActionID: 139
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2009-03-04
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18II"
+  Action: 2
+  PayType: 2
+  RequestActionID: 140
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2009-03-25
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 141
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2009-03-25
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 142
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2009-03-25
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18II"
+  Action: 2
+  RequestActionID: 143
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2008-03-25
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18II"
+  Action: 2
+  RequestActionID: 144
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2009-03-25
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 2
+  RequestActionID: 145
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2009-03-25
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 2
+  RequestActionID: 146
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "TARJRD1"
+  ValidFrom: 2009-04-01
+  ValidTo: 2010-05-25
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 2
+  RequestActionID: 147
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "TARJRD1"
+  ValidFrom: 2009-04-01
+  ValidTo: 2009-07-20
+  ActionType: "DayCampaign"
+  ActionKey: "PRERENOVE"
+  Action: 3
+  RequestActionID: 148
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJRD1"
+  ValidFrom: 2009-04-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "Y_PRODINT"
+  Action: 1
+  RequestActionID: 149
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJRD1"
+  ValidFrom: 2009-04-01
+  ValidTo: 2011-03-24
+  ActionType: "CTServPac"
+  ActionKey: "SHAPER"
+  Action: 1
+  RequestActionID: 150
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJRD1"
+  ValidFrom: 2009-04-01
+  ValidTo: 2011-03-24
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 1
+  RequestActionID: 151
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "TARJRD1"
+  ValidFrom: 2009-04-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "Prod_Int"
+  Action: 1
+  RequestActionID: 152
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 19
+  CLIType: "TARJRD1"
+  ValidFrom: 2009-04-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "SHAPER"
+  Action: 1
+  RequestActionID: 153
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 19
+  CLIType: "TARJRD1"
+  ValidFrom: 2009-04-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 1
+  RequestActionID: 154
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-11-01
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  RequestActionID: 155
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-11-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  RequestActionID: 156
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-11-01
+  ValidTo: 2045-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 157
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-11-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  RequestActionID: 158
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-11-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  RequestActionID: 159
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-11-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 2
+  RequestActionID: 161
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-11-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 2
+  RequestActionID: 163
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT5"
+  ValidFrom: 2009-11-01
+  ValidTo: 2012-06-12
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 1
+  RequestActionID: 164
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT5"
+  ValidFrom: 2009-11-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 165
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "CONT5"
+  ValidFrom: 2009-11-01
+  ValidTo: 2010-05-25
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 166
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2009-11-18
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18III"
+  Action: 2
+  RequestActionID: 167
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2009-11-18
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18III"
+  Action: 2
+  RequestActionID: 168
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2009-11-18
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18III"
+  Action: 2
+  PayType: 2
+  RequestActionID: 170
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-11-22
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2"
+  Action: 1
+  RequestActionID: 171
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 2
+  RequestActionID: 172
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTRATO2"
+  Action: 2
+  RequestActionID: 173
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-11-22
+  ActionType: "CTServPac"
+  ActionKey: "Y_PRODINT"
+  Action: 1
+  RequestActionID: 174
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "SHAPER"
+  Action: 1
+  RequestActionID: 175
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 1
+  RequestActionID: 176
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "YOIGOYOIGO"
+  Action: 2
+  RequestActionID: 177
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-05-17
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2ACT"
+  Action: 1
+  RequestActionID: 178
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2012-06-12
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2"
+  Action: 1
+  RequestActionID: 179
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 19
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "SHAPER"
+  Action: 1
+  RequestActionID: 180
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 19
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 1
+  RequestActionID: 181
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 182
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18II"
+  Action: 2
+  RequestActionID: 183
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18III"
+  Action: 2
+  RequestActionID: 184
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 185
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18II"
+  Action: 2
+  RequestActionID: 186
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18III"
+  Action: 2
+  RequestActionID: 187
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2"
+  Action: 2
+  RequestActionID: 188
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2ACT"
+  Action: 2
+  RequestActionID: 189
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2"
+  Action: 2
+  PayType: 2
+  RequestActionID: 190
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2ACT"
+  Action: 2
+  PayType: 2
+  RequestActionID: 191
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2"
+  Action: 2
+  RequestActionID: 192
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2ACT"
+  Action: 2
+  RequestActionID: 193
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-02-03
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2ACT"
+  Action: 2
+  RequestActionID: 194
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-02-03
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2"
+  Action: 2
+  RequestActionID: 195
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2ACT"
+  Action: 2
+  RequestActionID: 196
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2"
+  Action: 2
+  RequestActionID: 197
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2ACT"
+  Action: 2
+  RequestActionID: 198
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2"
+  Action: 2
+  RequestActionID: 199
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 2
+  RequestActionID: 200
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2009-12-01
+  ValidTo: 2009-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATAACT"
+  Action: 2
+  RequestActionID: 201
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2010-02-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 2
+  RequestActionID: 202
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2010-02-08
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVEII"
+  Action: 2
+  RequestActionID: 203
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2010-02-08
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVEII"
+  Action: 2
+  RequestActionID: 204
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2010-02-08
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVEII"
+  Action: 2
+  RequestActionID: 205
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2010-02-08
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVEII"
+  Action: 2
+  RequestActionID: 206
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2010-02-08
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVEII"
+  Action: 2
+  PayType: 2
+  RequestActionID: 207
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2010-02-08
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18IV"
+  Action: 2
+  RequestActionID: 208
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2010-02-08
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18IV"
+  Action: 2
+  RequestActionID: 209
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2010-02-08
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18IV"
+  Action: 2
+  RequestActionID: 210
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2010-02-08
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18IV"
+  Action: 2
+  RequestActionID: 211
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2010-02-08
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18IV"
+  Action: 2
+  PayType: 2
+  RequestActionID: 212
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2010-03-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18-150"
+  Action: 2
+  RequestActionID: 213
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2010-03-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18-150"
+  Action: 2
+  RequestActionID: 214
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2010-03-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18-150"
+  Action: 2
+  RequestActionID: 215
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2010-03-01
+  ValidTo: 2010-05-18
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18-150"
+  Action: 2
+  PayType: 2
+  RequestActionID: 216
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2010-03-03
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB"
+  Action: 2
+  RequestActionID: 217
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2010-03-03
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "MDUBACT"
+  Action: 2
+  RequestActionID: 218
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2010-03-03
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB"
+  Action: 2
+  RequestActionID: 219
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2010-03-03
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "MDUBACT"
+  Action: 2
+  RequestActionID: 220
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2010-03-03
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB"
+  Action: 2
+  PayType: 2
+  RequestActionID: 221
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2010-03-03
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "MDUBACT"
+  Action: 2
+  PayType: 2
+  RequestActionID: 222
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2010-05-19
+  ValidTo: 2013-02-28
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 5
+  RequestActionID: 223
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2010-05-19
+  ValidTo: 2010-05-26
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 5
+  RequestActionID: 226
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2010-05-19
+  ValidTo: 2011-12-20
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 5
+  RequestActionID: 227
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2010-05-19
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 228
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2010-05-19
+  ValidTo: 2010-05-26
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 5
+  RequestActionID: 229
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2010-05-19
+  ValidTo: 2011-12-20
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 5
+  RequestActionID: 230
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2010-05-19
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 231
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2010-05-19
+  ValidTo: 2010-05-26
+  ActionType: "DayCampaign"
+  ActionKey: "POSTRENOVE"
+  Action: 5
+  RequestActionID: 232
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2010-05-19
+  ValidTo: 2011-11-22
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 5
+  RequestActionID: 233
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2010-05-19
+  ValidTo: 2010-08-25
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 234
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2010-05-19
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  PayType: 2
+  RequestActionID: 235
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  ValidFrom: 2010-05-26
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  PayType: 1
+  RequestActionID: 236
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  ValidFrom: 2010-05-26
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  PayType: 2
+  RequestActionID: 237
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2010-06-29
+  ValidTo: 2010-08-25
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18-150"
+  Action: 5
+  RequestActionID: 238
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2010-08-26
+  ValidTo: 2011-11-22
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 239
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2010-05-19
+  ValidTo: 2011-12-20
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 5
+  RequestActionID: 252
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2010-03-19
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 253
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2010-12-01
+  ValidTo: 2011-02-02
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24"
+  Action: 5
+  RequestActionID: 259
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2010-12-01
+  ValidTo: 2011-02-02
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24"
+  Action: 5
+  RequestActionID: 260
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2010-12-01
+  ValidTo: 2011-02-02
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24"
+  Action: 5
+  RequestActionID: 261
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2010-12-01
+  ValidTo: 2011-02-02
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24"
+  Action: 5
+  RequestActionID: 262
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-01-01
+  ValidTo: 2049-12-31
+  ActionType: "MsRequest"
+  ActionKey: "81"
+  Action: 12
+  PayType: 1
+  RequestActionID: 271
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-01-01
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  PayType: 1
+  RequestActionID: 273
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-01-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 5
+  PayType: 1
+  RequestActionID: 274
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-01-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24"
+  Action: 5
+  PayType: 1
+  RequestActionID: 276
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT6"
+  ValidFrom: 2011-01-01
+  ValidTo: 2011-01-31
+  ActionType: "CTServPac"
+  ActionKey: "HSDPA"
+  Action: 1
+  RequestActionID: 286
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT6"
+  ValidFrom: 2011-01-01
+  ValidTo: 2012-06-12
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 1
+  RequestActionID: 289
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT6"
+  ValidFrom: 2011-01-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 290
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2011-01-01
+  ValidTo: 2011-11-22
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 291
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD1"
+  ValidFrom: 2011-01-01
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB2"
+  Action: 2
+  RequestActionID: 292
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD2"
+  ValidFrom: 2011-01-01
+  ValidTo: 2011-01-31
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB2"
+  Action: 2
+  RequestActionID: 293
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-01-01
+  ValidTo: 2011-03-24
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB2"
+  Action: 2
+  PayType: 2
+  RequestActionID: 294
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT6"
+  ValidFrom: 2011-01-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 295
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJRD1"
+  ValidFrom: 2011-03-24
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "TARJD1"
+  Action: 1
+  RequestActionID: 296
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "TARJRD1"
+  ValidFrom: 2011-04-12
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "TARJD1"
+  Action: 1
+  RequestActionID: 297
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTRD3"
+  ValidFrom: 2011-05-01
+  ValidTo: 2012-06-12
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB"
+  Action: 1
+  RequestActionID: 298
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD3"
+  ValidFrom: 2011-05-18
+  ValidTo: 2011-11-22
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 299
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2011-05-18
+  ValidTo: 2011-11-22
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB"
+  Action: 2
+  RequestActionID: 300
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2011-05-18
+  ValidTo: 2011-11-22
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB"
+  Action: 2
+  RequestActionID: 301
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2011-05-18
+  ValidTo: 2011-11-22
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB"
+  Action: 2
+  RequestActionID: 302
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT6"
+  ValidFrom: 2011-05-18
+  ValidTo: 2011-11-22
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB"
+  Action: 2
+  RequestActionID: 303
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD3"
+  ValidFrom: 2011-05-18
+  ValidTo: 2011-11-22
+  ActionType: "CTServPac"
+  ActionKey: "Y_PRODINT"
+  Action: 1
+  RequestActionID: 304
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD3"
+  ValidFrom: 2011-05-18
+  ValidTo: 2011-11-22
+  ActionType: "DayCampaign"
+  ActionKey: "MDUB"
+  Action: 1
+  RequestActionID: 305
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONT"
+  ValidFrom: 2011-08-10
+  ValidTo: 2013-09-04
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 306
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONT4"
+  ValidFrom: 2011-08-10
+  ValidTo: 2013-09-04
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 307
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONT5"
+  ValidFrom: 2011-08-10
+  ValidTo: 2013-09-04
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 308
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "BarringsNotAllowed"
+  ActionKey: "Debt_Hotl,Debt_Restricted,Debt_HOTLP,Debt_LP,Limits_Restricted,Risk_Restricted,ATC_Service_Suspension,Risk_Suspension"
+  Action: 4
+  RequestActionID: 309
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 310
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2011-10-13
+  ActionType: "DayCampaign"
+  ActionKey: "PRERENOVE"
+  Action: 2
+  RequestActionID: 311
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2011-10-13
+  ActionType: "DayCampaign"
+  ActionKey: "PRETERM"
+  Action: 2
+  RequestActionID: 312
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 5
+  RequestActionID: 313
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24"
+  Action: 5
+  RequestActionID: 314
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 315
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "MsRequest"
+  ActionKey: "0"
+  Action: 12
+  RequestActionID: 316
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  PayType: 1
+  RequestActionID: 318
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 319
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "Prod_Int"
+  Action: 1
+  RequestActionID: 320
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD2"
+  Action: 1
+  RequestActionID: 321
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDATA"
+  Action: 1
+  RequestActionID: 322
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD3"
+  Action: 1
+  RequestActionID: 323
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 324
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "MsRequest"
+  ActionKey: "81"
+  Action: 12
+  RequestActionID: 325
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONT"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 326
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONT4"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 327
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONT5"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 328
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  PayType: 2
+  RequestActionID: 329
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT6"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 330
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-08-10
+  ValidTo: 2013-08-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  PayType: 1
+  RequestActionID: 331
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 332
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ4"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 333
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJRD1"
+  ValidFrom: 2011-08-10
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 334
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-08-24
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "5"
+  Action: 2
+  PayType: 2
+  RequestActionID: 335
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONT|22622"
+  Action: 13
+  RequestActionID: 336
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT4"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONT4|22622"
+  Action: 13
+  RequestActionID: 337
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT5"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONT5|22622"
+  Action: 13
+  RequestActionID: 338
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT6"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONT6|22622"
+  Action: 13
+  RequestActionID: 339
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCIPL25|22622"
+  Action: 13
+  RequestActionID: 340
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCIPL35|22622"
+  Action: 13
+  RequestActionID: 341
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCIPL8|22622"
+  Action: 13
+  RequestActionID: 342
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCTARJ|22622"
+  Action: 13
+  RequestActionID: 343
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ4"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCTARJ4|22622"
+  Action: 13
+  RequestActionID: 344
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJRD1"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCTARJRD1|22622"
+  Action: 13
+  RequestActionID: 345
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_DONE"
+  Action: 13
+  PayType: 1
+  RequestActionID: 346
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_DONE"
+  Action: 13
+  PayType: 2
+  RequestActionID: 347
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCIPL25|22622"
+  Action: 13
+  RequestActionID: 348
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCIPL35|22622"
+  Action: 13
+  RequestActionID: 349
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-10-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCIPL8|22622"
+  Action: 13
+  RequestActionID: 350
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_DONE"
+  Action: 13
+  RequestActionID: 351
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "BTCAct"
+  Action: 13
+  PayType: 1
+  RequestActionID: 352
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUB2DeActMan|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 353
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUBDeActMan|22642"
+  Action: 13
+  PayType: 1
+  RequestActionID: 354
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "PMDUBDeActMan|22642"
+  Action: 13
+  PayType: 2
+  RequestActionID: 355
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "MDUB2ActNew|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 356
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "MDUB2ActOld|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 357
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "MDUBActNew|22642"
+  Action: 13
+  PayType: 1
+  RequestActionID: 358
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "MDUBActOld|22642"
+  Action: 13
+  PayType: 1
+  RequestActionID: 359
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellIPL25|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 360
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellIPL35|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 361
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellIPL|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 362
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellMDUB2_WEB|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 363
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellMDUB2|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 364
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellMDUB_WEB|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 365
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellMDUB|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 366
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "PMDUBActNew|22642"
+  Action: 13
+  PayType: 2
+  RequestActionID: 367
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "PMDUBActOld|22642"
+  Action: 13
+  PayType: 2
+  RequestActionID: 368
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellPMDUB|622"
+  Action: 13
+  PayType: 2
+  RequestActionID: 369
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellIPL8|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 370
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-10-05
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellIPL8_WEB|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 371
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "5"
+  Action: 2
+  PayType: 1
+  RequestActionID: 372
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  ValidFrom: 2011-10-05
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "5"
+  Action: 2
+  PayType: 2
+  RequestActionID: 373
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 83
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DSSActOtherSubs"
+  Action: 13
+  PayType: 1
+  RequestActionID: 374
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 83
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DSSAct"
+  Action: 13
+  PayType: 1
+  RequestActionID: 375
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 83
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DSSAutoDeAct"
+  Action: 13
+  PayType: 1
+  RequestActionID: 376
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 83
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DSSManDeAct"
+  Action: 13
+  PayType: 1
+  RequestActionID: 377
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD4"
+  Action: 1
+  RequestActionID: 378
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTRD"
+  ValidFrom: 2011-11-23
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCIPL15|22622"
+  Action: 13
+  RequestActionID: 379
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-11-23
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "DSSUpsell|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 380
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-11-23
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "MDUB3ActNew|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 381
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-11-23
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "MDUB3ActOld|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 382
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-11-23
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "MDUB4ActNew|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 383
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-11-23
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "MDUB4ActOld|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 384
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-11-23
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellIPL15|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 385
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-11-23
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellMDUB3|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 386
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2011-11-23
+  ValidTo: 2012-03-25
+  ActionType: "SMS"
+  ActionKey: "UpsellMDUB4|622"
+  Action: 13
+  PayType: 1
+  RequestActionID: 387
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUB3DeActMan|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 388
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUB4DeActMan|22644"
+  Action: 13
+  PayType: 1
+  RequestActionID: 389
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2011-11-23
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCIPL15|22622"
+  Action: 13
+  RequestActionID: 390
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONT"
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  PayType: 1
+  RequestActionID: 391
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONT4"
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  PayType: 1
+  RequestActionID: 392
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONT5"
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  PayType: 1
+  RequestActionID: 393
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2013-08-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 394
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTF20"
+  Action: 1
+  RequestActionID: 395
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTF30"
+  Action: 1
+  RequestActionID: 396
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTF55"
+  Action: 1
+  RequestActionID: 397
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 398
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2049-12-31
+  ActionType: "MsRequest"
+  ActionKey: "81"
+  Action: 12
+  RequestActionID: 399
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF20|22622"
+  Action: 13
+  RequestActionID: 400
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF30|22622"
+  Action: 13
+  RequestActionID: 401
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF55|22622"
+  Action: 13
+  RequestActionID: 402
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ5"
+  ValidFrom: 2011-12-15
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 403
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ5"
+  ValidFrom: 2011-12-15
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCTARJ5|22622"
+  Action: 13
+  RequestActionID: 404
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  PayType: 1
+  RequestActionID: 405
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 406
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 407
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 408
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2049-12-31
+  ActionType: "MsRequest"
+  ActionKey: "0"
+  Action: 12
+  RequestActionID: 409
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF20|22622"
+  Action: 13
+  RequestActionID: 410
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF30|22622"
+  Action: 13
+  RequestActionID: 411
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF55|22622"
+  Action: 13
+  RequestActionID: 412
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_DONE"
+  Action: 13
+  RequestActionID: 413
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT6"
+  ValidFrom: 2011-12-15
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 414
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-15
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 2
+  RequestActionID: 415
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  PayType: 1
+  RequestActionID: 416
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 417
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 2
+  PayType: 1
+  RequestActionID: 418
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 5
+  RequestActionID: 419
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24"
+  Action: 5
+  RequestActionID: 420
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  ActionType: "BarringsNotAllowed"
+  ActionKey: "Debt_Hotl,Debt_Restricted,Debt_HOTLP,Debt_LP,Limits_Restricted,Risk_Restricted,ATC_Service_Suspension,Risk_Suspension"
+  Action: 4
+  RequestActionID: 421
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  ValidFrom: 2011-12-01
+  ValidTo: 2049-12-31
+  ActionType: "RequestsNotAllowed"
+  ActionKey: "10,18,19,39,40"
+  Action: 4
+  PayType: 1
+  RequestActionID: 422
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2012-02-01
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF10|22622"
+  Action: 13
+  RequestActionID: 423
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2012-02-01
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF20D|22622"
+  Action: 13
+  RequestActionID: 424
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2012-02-01
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF40|22622"
+  Action: 13
+  RequestActionID: 425
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2012-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTF10"
+  Action: 1
+  RequestActionID: 426
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2012-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTF20D"
+  Action: 1
+  RequestActionID: 427
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2012-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTF40"
+  Action: 1
+  RequestActionID: 428
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2012-02-01
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF10|22622"
+  Action: 13
+  RequestActionID: 429
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2012-02-01
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF20D|22622"
+  Action: 13
+  RequestActionID: 430
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2012-02-01
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTF40|22622"
+  Action: 13
+  RequestActionID: 431
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "*"
+  ValidFrom: 2012-03-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "BundleActivation|22622"
+  Action: 13
+  RequestActionID: 432
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "*"
+  ValidFrom: 2012-03-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "BundleActivation|22642"
+  Action: 13
+  RequestActionID: 433
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "*"
+  ValidFrom: 2012-03-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "BundleActivation|22644"
+  Action: 13
+  RequestActionID: 434
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2012-03-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUB5DeActMan"
+  Action: 13
+  PayType: 1
+  RequestActionID: 435
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  ValidFrom: 2012-03-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "BTCActUpgrade"
+  Action: 13
+  PayType: 1
+  RequestActionID: 436
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONT"
+  ValidFrom: 2012-04-25
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "BONO_VOIP"
+  Action: 2
+  RequestActionID: 437
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONT4"
+  ValidFrom: 2012-04-25
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "BONO_VOIP"
+  Action: 2
+  RequestActionID: 438
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONT5"
+  ValidFrom: 2012-04-25
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "BONO_VOIP"
+  Action: 2
+  RequestActionID: 439
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONTF"
+  ValidFrom: 2012-04-25
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "BONO_VOIP"
+  Action: 2
+  RequestActionID: 440
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2012-04-25
+  ValidTo: 2013-08-31
+  ActionType: "DayCampaign"
+  ActionKey: "BONO_VOIP"
+  Action: 2
+  RequestActionID: 441
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-04-25
+  ValidTo: 2013-08-31
+  ActionType: "DayCampaign"
+  ActionKey: "BONO_VOIP"
+  Action: 2
+  PayType: 1
+  RequestActionID: 442
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-04-25
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "BONO_VOIP"
+  Action: 2
+  PayType: 2
+  RequestActionID: 443
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT7"
+  ValidFrom: 2012-05-28
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 444
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT7"
+  ValidFrom: 2012-05-28
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB2"
+  Action: 1
+  RequestActionID: 445
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT7"
+  ValidFrom: 2012-05-28
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 446
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT7"
+  ValidFrom: 2012-05-28
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONT7|22622"
+  Action: 13
+  RequestActionID: 447
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2012-05-28
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 448
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2012-05-28
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS30"
+  Action: 1
+  RequestActionID: 449
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2012-05-28
+  ValidTo: 2012-12-09
+  ActionType: "SMS"
+  ActionKey: "STCCONTS|22622"
+  Action: 13
+  RequestActionID: 450
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT7"
+  ValidFrom: 2012-05-28
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB2"
+  Action: 1
+  RequestActionID: 451
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTS"
+  ValidFrom: 2012-05-28
+  ValidTo: 2012-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS30"
+  Action: 1
+  RequestActionID: 452
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-06-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18-50"
+  Action: 5
+  PayType: 1
+  RequestActionID: 453
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-06-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24-50"
+  Action: 5
+  PayType: 1
+  RequestActionID: 454
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2012-06-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18-50"
+  Action: 5
+  RequestActionID: 455
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2012-06-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24-50"
+  Action: 5
+  RequestActionID: 456
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2012-06-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18-50"
+  Action: 5
+  RequestActionID: 457
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2012-06-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24-50"
+  Action: 5
+  RequestActionID: 458
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2012-07-01
+  ValidTo: 2013-08-31
+  ActionType: "DayCampaign"
+  ActionKey: "SPOTIFY"
+  Action: 2
+  RequestActionID: 459
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2012-07-01
+  ValidTo: 2012-12-10
+  ActionType: "DayCampaign"
+  ActionKey: "STERM18"
+  Action: 1
+  RequestActionID: 460
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-07-01
+  ValidTo: 2013-08-31
+  ActionType: "DayCampaign"
+  ActionKey: "SPOTIFY"
+  Action: 2
+  PayType: 1
+  RequestActionID: 461
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-07-01
+  ValidTo: 2013-04-02
+  ActionType: "DayCampaign"
+  ActionKey: "STERM18"
+  Action: 2
+  PayType: 1
+  RequestActionID: 462
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-07-01
+  ValidTo: 2014-11-25
+  ActionType: "DayCampaign"
+  ActionKey: "SPOTIFY"
+  Action: 2
+  PayType: 2
+  RequestActionID: 463
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONT"
+  ValidFrom: 2012-07-01
+  ValidTo: 2014-11-25
+  ActionType: "DayCampaign"
+  ActionKey: "SPOTIFY"
+  Action: 2
+  RequestActionID: 464
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONT4"
+  ValidFrom: 2012-07-01
+  ValidTo: 2014-11-25
+  ActionType: "DayCampaign"
+  ActionKey: "SPOTIFY"
+  Action: 2
+  RequestActionID: 465
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONT5"
+  ValidFrom: 2012-07-01
+  ValidTo: 2014-11-25
+  ActionType: "DayCampaign"
+  ActionKey: "SPOTIFY"
+  Action: 2
+  RequestActionID: 466
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONTF"
+  ValidFrom: 2012-07-01
+  ValidTo: 2014-11-25
+  ActionType: "DayCampaign"
+  ActionKey: "SPOTIFY"
+  Action: 2
+  RequestActionID: 467
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTS"
+  ValidFrom: 2012-07-01
+  ValidTo: 2012-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "STERM18"
+  Action: 1
+  RequestActionID: 468
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 83
+  ValidFrom: 2012-07-01
+  ValidTo: 2014-02-25
+  ActionType: "RequestsNotAllowed"
+  ActionKey: "10"
+  Action: 4
+  PayType: 1
+  RequestActionID: 469
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  CLIType: "CONTS"
+  ValidFrom: 2012-05-01
+  ValidTo: 2013-04-02
+  ActionType: "DayCampaign"
+  ActionKey: "STERM18"
+  Action: 5
+  RequestActionID: 470
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2012-09-26
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "PMDUBAct|22642"
+  Action: 13
+  PayType: 2
+  RequestActionID: 471
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2012-09-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS39"
+  Action: 1
+  RequestActionID: 472
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2012-09-01
+  ValidTo: 2013-02-28
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 5
+  RequestActionID: 473
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "*"
+  ValidFrom: 2012-10-11
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "HSPARoamEUActivation|0034633800800"
+  Action: 13
+  RequestActionID: 474
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "*"
+  ValidFrom: 2012-10-11
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "HSPARoamEURequest|0034633800800"
+  Action: 13
+  RequestActionID: 475
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2012-11-01
+  ValidTo: 2014-11-25
+  ActionType: "CTServPac"
+  ActionKey: "SHAPER|BONO_VOIP"
+  Action: 1
+  PayType: 1
+  RequestActionID: 476
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2012-11-01
+  ValidTo: 2014-11-25
+  ActionType: "DayCampaign"
+  ActionKey: "BONO_VOIP"
+  Action: 2
+  PayType: 1
+  RequestActionID: 477
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB3"
+  Action: 1
+  RequestActionID: 478
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 479
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2012-12-01
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "5"
+  Action: 2
+  RequestActionID: 480
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2012-12-01
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONT8|22622"
+  Action: 13
+  RequestActionID: 481
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTD"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 482
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTD"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTD9"
+  Action: 1
+  RequestActionID: 483
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ6"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 484
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ6"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "SHAPER|MEGA5_PRE"
+  Action: 1
+  RequestActionID: 485
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ6"
+  ValidFrom: 2012-12-01
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCTARJ6|22622"
+  Action: 13
+  RequestActionID: 486
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "TARJ6"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "UpsellTARJ6Req"
+  Action: 13
+  RequestActionID: 487
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2012-12-10
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "MDUB9DeActMan"
+  Action: 13
+  PayType: 1
+  RequestActionID: 488
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT8"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB3"
+  Action: 1
+  RequestActionID: 489
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTM"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTM"
+  Action: 1
+  RequestActionID: 490
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTM"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 491
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "TARJ6"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "WelcomeTARJ6"
+  Action: 13
+  RequestActionID: 492
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2012-12-10
+  ValidTo: 2049-12-31
+  ActionType: "MsRequest"
+  ActionKey: "0"
+  Action: 12
+  RequestActionID: 493
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2012-12-10
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS30|22622"
+  Action: 13
+  RequestActionID: 494
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2012-12-10
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS39|22622"
+  Action: 13
+  RequestActionID: 495
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2012-12-10
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS30|22622"
+  Action: 13
+  RequestActionID: 496
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2012-12-10
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS39|22622"
+  Action: 13
+  RequestActionID: 497
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2012-12-01
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 498
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTD"
+  ValidFrom: 2012-12-01
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTD9|22622"
+  Action: 13
+  RequestActionID: 499
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2012-12-01
+  ValidTo: 2013-04-02
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 2
+  RequestActionID: 500
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2012-12-01
+  ValidTo: 2013-04-02
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18-50"
+  Action: 2
+  RequestActionID: 501
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2012-12-01
+  ValidTo: 2013-04-02
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24"
+  Action: 2
+  RequestActionID: 502
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2012-12-01
+  ValidTo: 2013-04-02
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24-50"
+  Action: 2
+  RequestActionID: 503
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "VOICE3000"
+  Action: 2
+  PayType: 2
+  RequestActionID: 504
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "VOICE3000"
+  Action: 2
+  PayType: 1
+  RequestActionID: 505
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-01-02
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_DONE"
+  Action: 13
+  RequestActionID: 506
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ6"
+  ValidFrom: 2013-03-01
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "SHAPER|MEGA5_PRE_NB"
+  Action: 1
+  RequestActionID: 507
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTM"
+  ValidFrom: 2013-03-01
+  ValidTo: 2015-12-01
+  ActionType: "MsRequest"
+  ActionKey: "18"
+  Action: 12
+  RequestActionID: 508
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-03-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 5
+  RequestActionID: 509
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-03-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18-50"
+  Action: 5
+  RequestActionID: 510
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-03-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24"
+  Action: 5
+  RequestActionID: 511
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-03-01
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24-50"
+  Action: 5
+  RequestActionID: 512
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-03-01
+  ValidTo: 2013-04-02
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 2
+  RequestActionID: 513
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2013-04-03
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 11
+  RequestActionID: 514
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2013-04-03
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 11
+  RequestActionID: 515
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-04-03
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 11
+  RequestActionID: 516
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2013-04-03
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 11
+  PayType: 2
+  RequestActionID: 517
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2013-04-03
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "5"
+  Action: 11
+  PayType: 2
+  RequestActionID: 518
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2013-04-03
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 11
+  PayType: 1
+  RequestActionID: 519
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2013-04-03
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18"
+  Action: 11
+  RequestActionID: 520
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2013-04-03
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM18-50"
+  Action: 11
+  RequestActionID: 521
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2013-04-03
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24"
+  Action: 11
+  RequestActionID: 522
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2013-04-03
+  ValidTo: 2013-09-04
+  ActionType: "DayCampaign"
+  ActionKey: "TERM24-50"
+  Action: 11
+  RequestActionID: 523
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2013-04-03
+  ValidTo: 2013-10-01
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 11
+  RequestActionID: 524
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT8"
+  ValidFrom: 2013-04-03
+  ValidTo: 2013-10-01
+  ActionType: "DCType"
+  ActionKey: "5"
+  Action: 11
+  RequestActionID: 525
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-04-12
+  ValidTo: 2049-12-31
+  ActionType: "BarringsNotAllowed"
+  ActionKey: "Debt_Hotl,Debt_Restricted,Debt_HOTLP,Debt_LP,Limits_Restricted,Risk_Restricted,ATC_Service_Suspension,Risk_Suspension"
+  Action: 4
+  RequestActionID: 526
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTM2"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTM2"
+  Action: 1
+  RequestActionID: 527
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTM2"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 528
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DATA5DeActMan"
+  Action: 13
+  PayType: 1
+  RequestActionID: 529
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTM2"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTM2"
+  Action: 1
+  RequestActionID: 533
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTM2"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  RequestActionID: 534
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTM2"
+  ValidFrom: 2013-09-05
+  ValidTo: 2015-12-01
+  ActionType: "MsRequest"
+  ActionKey: "18"
+  Action: 12
+  RequestActionID: 535
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTM2"
+  ValidFrom: 2013-09-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTM2|22622"
+  Action: 13
+  RequestActionID: 536
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS15"
+  Action: 1
+  RequestActionID: 537
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS20"
+  Action: 1
+  RequestActionID: 538
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS25"
+  Action: 1
+  RequestActionID: 539
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS35"
+  Action: 1
+  RequestActionID: 540
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2013-08-31
+  ActionType: "DayCampaign"
+  ActionKey: "BONO_VOIP"
+  Action: 2
+  RequestActionID: 541
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 2
+  RequestActionID: 542
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2013-08-31
+  ActionType: "DayCampaign"
+  ActionKey: "SPOTIFY"
+  Action: 2
+  RequestActionID: 543
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS15|22622"
+  Action: 13
+  RequestActionID: 544
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS20|22622"
+  Action: 13
+  RequestActionID: 545
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS25|22622"
+  Action: 13
+  RequestActionID: 546
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS35|22622"
+  Action: 13
+  RequestActionID: 547
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2013-08-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  PayType: 1
+  RequestActionID: 548
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  PayType: 1
+  RequestActionID: 549
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 6
+  PayType: 1
+  RequestActionID: 550
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 6
+  RequestActionID: 551
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 6
+  RequestActionID: 552
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  ActionType: "DCType"
+  ActionKey: "3"
+  Action: 6
+  RequestActionID: 553
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2015-12-01
+  ActionType: "MsRequest"
+  ActionKey: "18"
+  Action: 12
+  RequestActionID: 554
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "MsRequest"
+  ActionKey: "81"
+  Action: 12
+  RequestActionID: 555
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2013-09-01
+  ValidTo: 2015-07-07
+  ActionType: "Service"
+  ActionKey: "BARRING|#RESET"
+  Action: 1
+  PayType: 2
+  RequestActionID: 556
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2013-09-01
+  ValidTo: 2015-07-07
+  ActionType: "Service"
+  ActionKey: "BARRING|#RESET"
+  Action: 1
+  PayType: 1
+  RequestActionID: 557
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 2
+  RequestActionID: 559
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2015-12-01
+  ActionType: "MsRequest"
+  ActionKey: "18"
+  Action: 12
+  RequestActionID: 560
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS15|22622"
+  Action: 13
+  RequestActionID: 561
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS20|22622"
+  Action: 13
+  RequestActionID: 562
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS25|22622"
+  Action: 13
+  RequestActionID: 563
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCCONTS35|22622"
+  Action: 13
+  RequestActionID: 564
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2013-09-05
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "GPRS"
+  Action: 1
+  PayType: 1
+  RequestActionID: 565
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONTM"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 566
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONTM"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "BONO_VOIP"
+  Action: 2
+  RequestActionID: 567
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONTM"
+  ValidFrom: 2013-09-01
+  ValidTo: 2014-11-25
+  ActionType: "DayCampaign"
+  ActionKey: "SPOTIFY"
+  Action: 2
+  RequestActionID: 568
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "CONTM2"
+  ValidFrom: 2013-09-01
+  ValidTo: 2014-11-25
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 569
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFF"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFF2"
+  Action: 1
+  RequestActionID: 570
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFF"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 571
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFF"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFF2"
+  Action: 1
+  RequestActionID: 572
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFF"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STCCONTFF"
+  Action: 13
+  RequestActionID: 573
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTSF"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 574
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTSF"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTSF10"
+  Action: 1
+  RequestActionID: 575
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTSF"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTSF14"
+  Action: 1
+  RequestActionID: 576
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTSF"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STCCONTSF10"
+  Action: 13
+  RequestActionID: 577
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTSF"
+  ValidFrom: 2013-10-01
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STCCONTSF14"
+  Action: 13
+  RequestActionID: 578
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ7"
+  ValidFrom: 2013-11-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 579
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ7"
+  ValidFrom: 2013-11-01
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCTARJ7|22622"
+  Action: 13
+  RequestActionID: 580
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ8"
+  ValidFrom: 2013-11-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 581
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ8"
+  ValidFrom: 2013-11-01
+  ValidTo: 2014-02-04
+  ActionType: "SMS"
+  ActionKey: "STCTARJ8|22622"
+  Action: 13
+  RequestActionID: 582
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "TARJ7"
+  ValidFrom: 2013-11-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 583
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "TARJ7"
+  ValidFrom: 2013-11-01
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "UpsellTARJ7Act"
+  Action: 13
+  RequestActionID: 584
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "TARJ7"
+  ValidFrom: 2013-11-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 585
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "TARJ7"
+  ValidFrom: 2013-11-01
+  ValidTo: 2016-01-17
+  ActionType: "SMS"
+  ActionKey: "TARJ7DeAct"
+  Action: 13
+  RequestActionID: 586
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTSF"
+  ValidFrom: 2013-11-01
+  ValidTo: 2049-12-31
+  ActionType: "MsRequest"
+  ActionKey: "0"
+  Action: 12
+  RequestActionID: 587
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTSF"
+  ValidFrom: 2013-11-01
+  ValidTo: 2049-12-31
+  ActionType: "MsRequest"
+  ActionKey: "81"
+  Action: 12
+  RequestActionID: 588
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2014-02-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_Requested"
+  Action: 13
+  PayType: 1
+  RequestActionID: 589
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2014-02-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_Requested"
+  Action: 13
+  PayType: 2
+  RequestActionID: 590
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2014-02-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_Requested"
+  Action: 13
+  RequestActionID: 591
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTRD"
+  ValidFrom: 2014-02-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_Requested"
+  Action: 13
+  RequestActionID: 592
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTS"
+  ValidFrom: 2014-02-05
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "STC_Requested"
+  Action: 13
+  RequestActionID: 593
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT9"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT9"
+  Action: 1
+  RequestActionID: 594
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DATA6DeActMan"
+  Action: 13
+  PayType: 1
+  RequestActionID: 595
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT9"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT9"
+  Action: 1
+  RequestActionID: 597
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT9"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 599
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS16"
+  Action: 1
+  RequestActionID: 601
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS26"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS26"
+  Action: 1
+  RequestActionID: 602
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS21"
+  Action: 1
+  RequestActionID: 603
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS32"
+  Action: 1
+  RequestActionID: 604
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS26"
+  Action: 1
+  RequestActionID: 605
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2014-08-01
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "LTE"
+  Action: 1
+  PayType: 1
+  RequestActionID: 606
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  ValidFrom: 2014-08-01
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "LTE"
+  Action: 1
+  PayType: 1
+  RequestActionID: 607
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  ValidFrom: 2014-09-01
+  ValidTo: 2014-08-30
+  ActionType: "Service"
+  ActionKey: "LTE"
+  Action: 1
+  PayType: 2
+  RequestActionID: 608
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2014-09-01
+  ValidTo: 2014-08-30
+  ActionType: "Service"
+  ActionKey: "LTE"
+  Action: 1
+  PayType: 2
+  RequestActionID: 609
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  ValidFrom: 2014-10-01
+  ValidTo: 2015-07-07
+  ActionType: "Service"
+  ActionKey: "BPSUB|Y_BPSUB"
+  Action: 1
+  PayType: 1
+  RequestActionID: 610
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  ValidFrom: 2014-10-01
+  ValidTo: 2015-07-07
+  ActionType: "Service"
+  ActionKey: "BPSUB|Y_BPSUB"
+  Action: 1
+  PayType: 2
+  RequestActionID: 611
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2014-10-01
+  ValidTo: 2015-07-07
+  ActionType: "Service"
+  ActionKey: "BPSUB|Y_BPSUB"
+  Action: 1
+  PayType: 1
+  RequestActionID: 612
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2014-10-01
+  ValidTo: 2015-07-07
+  ActionType: "Service"
+  ActionKey: "BPSUB|Y_BPSUB"
+  Action: 1
+  PayType: 2
+  RequestActionID: 613
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT15"
+  ValidFrom: 2014-10-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT15"
+  Action: 1
+  RequestActionID: 614
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT15"
+  ValidFrom: 2014-10-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 615
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT15"
+  ValidFrom: 2014-10-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT15"
+  Action: 1
+  RequestActionID: 616
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  ValidFrom: 2014-11-01
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "LTE"
+  Action: 1
+  PayType: 2
+  RequestActionID: 617
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2014-11-01
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "LTE"
+  Action: 1
+  PayType: 2
+  RequestActionID: 618
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2014-11-26
+  ValidTo: 2016-09-11
+  ActionType: "Service"
+  ActionKey: "VOIPVIDEO"
+  Action: 1
+  PayType: 1
+  RequestActionID: 619
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "*"
+  ValidFrom: 2014-11-26
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "VOIPVIDEO"
+  Action: 2
+  RequestActionID: 620
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 81
+  CLIType: "CONTF"
+  ValidFrom: 2014-11-26
+  ValidTo: 2049-12-31
+  ActionType: "Service"
+  ActionKey: "VOIPVIDEO"
+  Action: 2
+  RequestActionID: 621
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT24"
+  ValidFrom: 2015-03-04
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 622
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT24"
+  ValidFrom: 2015-03-04
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT24"
+  Action: 1
+  RequestActionID: 623
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT24"
+  ValidFrom: 2015-03-02
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT24"
+  Action: 1
+  RequestActionID: 624
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2015-04-14
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTF11"
+  Action: 1
+  RequestActionID: 625
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTF"
+  ValidFrom: 2015-04-14
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTF8"
+  Action: 1
+  RequestActionID: 626
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTS"
+  ValidFrom: 2015-04-14
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS12"
+  Action: 1
+  RequestActionID: 627
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ9"
+  ValidFrom: 2015-05-29
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 628
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "TARJ9"
+  ValidFrom: 2015-05-29
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 629
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  CLIType: "TARJ9"
+  ValidFrom: 2015-05-29
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "UpsellTARJ7Act"
+  Action: 13
+  RequestActionID: 630
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "TARJ9"
+  ValidFrom: 2015-05-29
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 2
+  RequestActionID: 631
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  CLIType: "TARJ9"
+  ValidFrom: 2015-05-29
+  ValidTo: 2016-01-17
+  ActionType: "SMS"
+  ActionKey: "TARJ9DeAct|22622"
+  Action: 13
+  RequestActionID: 632
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 8
+  ValidFrom: 2015-05-29
+  ValidTo: 2016-09-11
+  ActionType: "Service"
+  ActionKey: "VOIPVIDEO"
+  Action: 1
+  PayType: 2
+  RequestActionID: 633
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ7"
+  ValidFrom: 2015-05-02
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "TARJ7STC|22622"
+  Action: 13
+  RequestActionID: 634
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "TARJ9"
+  ValidFrom: 2015-06-02
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "TARJ9STC|22622"
+  Action: 13
+  RequestActionID: 635
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT23"
+  ValidFrom: 2015-08-12
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 636
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT23"
+  ValidFrom: 2015-08-12
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT23"
+  Action: 1
+  RequestActionID: 637
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT23"
+  ValidFrom: 2015-08-12
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT23"
+  Action: 1
+  RequestActionID: 638
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 9
+  ValidFrom: 2015-12-09
+  ValidTo: 2049-12-31
+  ActionType: "SMS"
+  ActionKey: "DATA7DeActMan"
+  Action: 13
+  PayType: 1
+  RequestActionID: 639
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL45"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 640
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL45"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 641
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL45"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 642
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 643
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 644
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH45_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 645
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH55_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 646
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH55_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 647
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH55_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 648
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL45"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 649
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH45_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 650
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH55_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 651
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 11
+  PayType: 1
+  RequestActionID: 652
+
+bulkload: RequestAction
+  Brand: "1"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 1
+  PayType: 1
+  RequestActionID: 653
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 46
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 5
+  PayType: 1
+  RequestActionID: 654
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "FTERM12-100"
+  Action: 1
+  PayType: 1
+  RequestActionID: 655
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL45"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 656
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 657
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH55_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTS2GB"
+  Action: 1
+  RequestActionID: 658
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL58"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 659
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL58"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 660
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL58"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 661
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL58"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT24"
+  Action: 1
+  RequestActionID: 663
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH58_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 664
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH58_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 665
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH58_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 666
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH58_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT24"
+  Action: 1
+  RequestActionID: 668
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH68_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 669
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH68_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 670
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH68_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 671
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH68_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT24"
+  Action: 1
+  RequestActionID: 673
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL58"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT24"
+  Action: 1
+  RequestActionID: 674
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH58_50"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT24"
+  Action: 1
+  RequestActionID: 675
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH68_300"
+  ValidFrom: 2016-10-27
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT24"
+  Action: 1
+  RequestActionID: 676
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL40"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 677
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL40"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 678
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL40"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 679
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL40"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT9"
+  Action: 1
+  RequestActionID: 681
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH40_50"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 682
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH40_50"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 683
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH40_50"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 684
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH40_50"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT9"
+  Action: 1
+  RequestActionID: 686
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH50_300"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 687
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH50_300"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 688
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH50_300"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 689
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH50_300"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT9"
+  Action: 1
+  RequestActionID: 691
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL40"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT9"
+  Action: 1
+  RequestActionID: 692
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH40_50"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT9"
+  Action: 1
+  RequestActionID: 693
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH50_300"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT9"
+  Action: 1
+  RequestActionID: 694
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL48"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 695
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL48"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 696
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL48"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 697
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL48"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT15"
+  Action: 1
+  RequestActionID: 699
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH48_50"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 700
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH48_50"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 701
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH48_50"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 702
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH48_50"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT15"
+  Action: 1
+  RequestActionID: 704
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH58_300"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 705
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH58_300"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 706
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH58_300"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 707
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH58_300"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT15"
+  Action: 1
+  RequestActionID: 709
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL48"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT15"
+  Action: 1
+  RequestActionID: 710
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH48_50"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT15"
+  Action: 1
+  RequestActionID: 711
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH58_300"
+  ValidFrom: 2016-11-23
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT15"
+  Action: 1
+  RequestActionID: 712
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT25"
+  ValidFrom: 2016-12-12
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 713
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT25"
+  ValidFrom: 2016-12-12
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 714
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT25"
+  ValidFrom: 2016-12-12
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 718
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT26"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 719
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT26"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 720
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT26"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 721
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT10"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 722
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT10"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 723
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT10"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 724
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL59"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 725
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL59"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 726
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL59"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 727
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL59"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 728
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL59"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 729
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH59_50"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 730
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH59_50"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 731
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH59_50"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 732
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH59_50"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 733
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH59_50"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 734
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH69_300"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 735
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH69_300"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT25"
+  Action: 1
+  RequestActionID: 736
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH69_300"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 737
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH69_300"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 738
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH69_300"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 739
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL39"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 740
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 741
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL39"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 742
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 743
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL39"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 744
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL52"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 745
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 746
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL52"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 747
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 748
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL52"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 749
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH39_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 750
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 751
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH39_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 752
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 753
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH39_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 754
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH49_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 755
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT10"
+  Action: 1
+  RequestActionID: 756
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH49_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 757
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 758
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH49_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 759
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH52_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 760
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 761
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH52_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 762
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 763
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH52_50"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 764
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH62_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 765
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT26"
+  Action: 1
+  RequestActionID: 766
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH62_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 767
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 768
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH62_300"
+  ValidFrom: 2017-02-20
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 769
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTDSL35"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 770
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 771
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTDSL35"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 772
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTDSL"
+  Action: 1
+  RequestActionID: 773
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 774
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH45_300"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 775
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 776
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH45_300"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 777
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH300"
+  Action: 1
+  RequestActionID: 778
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 779
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONTFH35_50"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 780
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "DUB"
+  Action: 1
+  RequestActionID: 781
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 14
+  CLIType: "CONTFH35_50"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 782
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONTFH50"
+  Action: 1
+  RequestActionID: 783
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ValidFrom: 2017-03-07
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 784
+
+bulkload: RequestAction
+  Brand: "1"
+  ReqType: 13
+  CLIType: "CONT27"
+  ValidFrom: 2017-04-18
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT27"
+  Action: 1
+  RequestActionID: 785
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT27"
+  ValidFrom: 2017-04-18
+  ValidTo: 2049-12-31
+  ActionType: "DayCampaign"
+  ActionKey: "CONT27"
+  Action: 1
+  RequestActionID: 786
+
+bulkload: RequestAction
+  Brand: "1"
+  CLIType: "CONT27"
+  ValidFrom: 2017-04-18
+  ValidTo: 2049-12-31
+  ActionType: "CTServPac"
+  ActionKey: "BB"
+  Action: 3
+  RequestActionID: 787
+

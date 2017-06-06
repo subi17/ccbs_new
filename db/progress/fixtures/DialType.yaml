@@ -1,0 +1,99 @@
+bulkload: DialType
+  DTName: "General"
+
+bulkload: DialType
+  DialType: 1
+  DTName: "Fixed Voice (N/A)"
+
+bulkload: DialType
+  DialType: 2
+  DTName: "SMS (N/A)"
+
+bulkload: DialType
+  DialType: 3
+  DTName: "Fixed IP Data (N/A)"
+
+bulkload: DialType
+  DialType: 4
+  DTName: "Mobile Voice MO"
+
+bulkload: DialType
+  DialType: 5
+  DTName: "SMS MO"
+
+bulkload: DialType
+  DialType: 6
+  DTName: "Mobile data (N/A)"
+
+bulkload: DialType
+  DialType: 7
+  DTName: "GPRS MO"
+
+bulkload: DialType
+  DialType: 8
+  DTName: "Mobile fax (N/A)"
+
+bulkload: DialType
+  DialType: 9
+  DTName: "Roaming MT outside EU"
+
+bulkload: DialType
+  DialType: 10
+  DTName: "MMS MO"
+
+bulkload: DialType
+  DialType: 11
+  DTName: "Mobile HighSpeed Data (N/A)"
+
+bulkload: DialType
+  DialType: 12
+  DTName: "Call Forwarding MO"
+
+bulkload: DialType
+  DialType: 13
+  DTName: "VAS MO"
+
+bulkload: DialType
+  DialType: 14
+  DTName: "VAS MT"
+
+bulkload: DialType
+  DialType: 15
+  DTName: "VAS MMS MO"
+
+bulkload: DialType
+  DialType: 16
+  DTName: "VAS MMS MT"
+
+bulkload: DialType
+  DialType: 20
+  DTName: "Voice short number (type1)"
+
+bulkload: DialType
+  DialType: 21
+  DTName: "Voice short number (type2)"
+
+bulkload: DialType
+  DialType: 22
+  DTName: "Voice short number (type3)"
+
+bulkload: DialType
+  DialType: 23
+  DTName: "Fixed Voice short number (type1)"
+
+bulkload: DialType
+  DialType: 24
+  DTName: "Fixed Voice short number (type2)"
+
+bulkload: DialType
+  DialType: 41
+  DTName: "Roaming MO inside EU"
+
+bulkload: DialType
+  DialType: 47
+  DTName: "Roaming MT inside EU"
+
+bulkload: DialType
+  DialType: 50
+  DTName: "Fixed Voice Bdest"
+

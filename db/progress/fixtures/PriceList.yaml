@@ -1,0 +1,318 @@
+bulkload: PriceList
+  PriceList: "Campaigne"
+  PLName: "Campaign"
+  Memo: "Campaign price list for all subscription types"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "COMMON"
+  PLName: "Common Postpaid"
+  Memo: "Common Price List for all Postpaid subscription types"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "COMMON2"
+  PLName: "Common Prepaid"
+  Memo: "Common price list for Pre paid subscriptions"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "COMMON3"
+  PLName: "Common postpaid special"
+  Memo: "Common Price List for all Postpaid subscription types"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTD"
+  PLName: "Contrato Data"
+  Currency: "EUR"
+  Rounding: 6
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATO"
+  PLName: "Contrato1"
+  Memo: "Contrato subscription type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATO2"
+  PLName: "Contrato2"
+  Memo: "Contrato 2 subcription type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATO4"
+  PLName: "Contrato4"
+  Memo: "Contrato 4 subcription type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATO5"
+  PLName: "Contrato5"
+  Memo: "Contrato 5 subcription type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATO6"
+  PLName: "Contrato6"
+  Memo: "Contrato 6 subcription type specific price list"
+  Currency: "EUR"
+  Rounding: 6
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATO7"
+  PLName: "Contrato7"
+  Memo: "Contrato 7 subcription type specific price list"
+  Currency: "EUR"
+  Rounding: 6
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATO8"
+  PLName: "Contrato 8"
+  Currency: "EUR"
+  Rounding: 6
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATOD"
+  PLName: "Contrato Datos"
+  Memo: "Contrato Datos subcription type specific price list"
+  Currency: "EUR"
+  Rounding: 6
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATOD2"
+  PLName: "Contrato Datos 2"
+  Memo: "Contrato Datos 2 subcription type specific price list"
+  Currency: "EUR"
+  Rounding: 6
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATOD3"
+  PLName: "Contrato Datos"
+  Memo: "Contrato Datos subcription type specific price list"
+  Currency: "EUR"
+  Rounding: 6
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATODATA"
+  PLName: "Contrato Datos"
+  Memo: "Contrato Datos subcription type specific price list"
+  Currency: "EUR"
+  Rounding: 6
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATOF"
+  PLName: "Contratof"
+  Memo: "Contrato flat subcription type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATOFIXED"
+  PLName: "Contrato fixed"
+  Memo: "Contrato fixed pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATOFIXEDONLY"
+  PLName: "Fixed only convergent"
+  Memo: "Contrato fixed only pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATOM"
+  PLName: "Contrato M"
+  Currency: "EUR"
+  Rounding: 6
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATOM2"
+  PLName: "Contrato M2"
+  Currency: "EUR"
+  Rounding: 6
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "CONTRATOS"
+  PLName: "Contratos"
+  Memo: "Contrato S subcription type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "OrderCh"
+  PLName: "Order Price list"
+  Memo: "Used for product pricing in order channels incl. tax"
+  Currency: "EUR"
+  Rounding: 4
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "ORDERCONT"
+  PLName: "Contrato Order Channel Prices"
+  Memo: "Contrato Price List in Order Channels"
+  Currency: "EUR"
+  Rounding: 4
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "ORDERCONT2"
+  PLName: "Contrato2 Order Channel Prices"
+  Memo: "Contrato2 Price List in Order Channels"
+  Currency: "EUR"
+  Rounding: 4
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "ORDERTARJ"
+  PLName: "Tarjeta Order Channel Prices"
+  Memo: "Tarjeta Price List in Order Channels"
+  Currency: "EUR"
+  Rounding: 4
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "ORDERTARJ2"
+  PLName: "Tarjeta2 Order Channel Prices"
+  Memo: "Tarjeta2 Price List in Order Channels"
+  Currency: "EUR"
+  Rounding: 4
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA"
+  PLName: "Tarjeta"
+  Memo: "Tarjeta subsciption type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA2"
+  PLName: "Tarjeta"
+  Memo: "Tarjeta 2 subscription type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA4"
+  PLName: "Tarjeta4"
+  Memo: "Tarjeta 4 subscription type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA5"
+  PLName: "Tarjeta4"
+  Memo: "Tarjeta 4 subscription type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA6"
+  PLName: "Tarjeta 6"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA7"
+  PLName: "Tarjeta 7"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA8"
+  PLName: "Tarjeta 8"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA9"
+  PLName: "Tarjeta 9"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETADATA"
+  PLName: "Tarjeta"
+  Memo: "Tarjeta datos subsciption type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TopUp"
+  PLName: "TopUp Payments"
+  Memo: "Used for topup payments"
+  Currency: "EUR"
+  Brand: "1"
+

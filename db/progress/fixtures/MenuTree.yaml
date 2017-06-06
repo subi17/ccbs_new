@@ -1,0 +1,6066 @@
+bulkload: MenuTree
+  MenuNum: 9041
+  Module: "igsplit"
+  MenuId: "igsplit"
+  MenuTitle: "Invgroup Splitter"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  MenuNum: 710
+  Module: "customer"
+  MenuId: "sdo-cu"
+  MenuTitle: "Customer maintenance (SDO)"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Syst/ukayt.p"
+  MenuId: "users"
+  MenuTitle: "User file, update"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Syst/uvaliv6.p"
+  MenuId: "menutree"
+  MenuTitle: "UPDATE MENUTREE"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Syst/usearch.p"
+  MenuId: "find"
+  MenuTitle: "Find a program module"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Syst/nnpcyp.p"
+  MenuId: "class"
+  MenuTitle: "Update Program Classes"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Syst/nnuryp.p"
+  MenuId: "right"
+  MenuTitle: "Update Users' rights"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Syst/cparam.p"
+  MenuId: "cparam"
+  MenuTitle: "Company parameters"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "remcfile"
+  MenuId: "remedy"
+  MenuTitle: "make a customer export file for REMEDY"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Mf/sunuser.p"
+  MenuId: "sunuser"
+  MenuTitle: "Add users to SUN operating system"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "k"
+  MenuId: "compile"
+  MenuTitle: "Progress module compiler"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Mm/epgrp.p"
+  MenuId: "epgrp"
+  MenuTitle: "External product group"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "cli-list"
+  MenuId: "cli-list"
+  MenuTitle: "cleanup-aktiviteter"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "getbisize"
+  MenuId: "bisize"
+  MenuTitle: "Get CPARAM value for BI file size"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Mc/invseq.p"
+  MenuId: "invseq"
+  MenuTitle: "Invoice Sequences"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "mc_spec"
+  MenuId: "cdetail"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Syst/cparam.p"
+  MenuId: "tmsparam"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "ctask"
+  MenuId: "ctask"
+  MenuTitle: "Crontask"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "0"
+  MenuNum: 1040
+  Module: "fonectaui"
+  MenuId: "fonecta"
+  MenuTitle: "Fonecta File Creation"
+  MenuClass: 9999
+  TokenCode: "MOBMAIN"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Mc/orderfunction.p"
+  MenuId: "orderf"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "0"
+  MenuNum: 906
+  MenuType: 2
+  MenuId: "if-cdr"
+  MenuTitle: "HANDLING OF CDR'S"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "0"
+  MenuNum: 727
+  Module: "Mf/nncdrfi.p"
+  MenuId: "cdr-rd"
+  MenuTitle: "Read in CDRs"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "0"
+  MenuNum: 945
+  Module: "nncdrdt"
+  MenuId: "cdr-st"
+  MenuTitle: "Study NOKIA CDRs"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "0"
+  Module: "Mf/nnrun.p"
+  MenuId: "run"
+  MenuTitle: "Run a program (by module name)"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  MenuNum: 9013
+  Module: "Inv/billtest.p"
+  MenuId: "if-bt"
+  MenuTitle: "Billing Tests"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "0"
+  MenuNum: 1994
+  Module: "Syst/dumpfile_ui.p"
+  MenuId: "run_df"
+  MenuTitle: "Create Dump File"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  MenuNum: 1996
+  Module: "Mc/offer_start.p"
+  MenuId: "offer"
+  MenuTitle: "Offer Maintenance"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "0"
+  Position: 1
+  MenuNum: 1
+  MenuType: 2
+  MenuId: "-"
+  MenuTitle: "          TMS MASTER + V 2.0"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Position: 1
+  MenuNum: 1103
+  Module: "Mm/mcdrfile.p"
+  MenuId: "mra-cf"
+  MenuTitle: "Browse FLEX Cdr Files"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "0"
+  Position: 1
+  MenuNum: 9799
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "0"
+  Position: 2
+  MenuNum: 297
+  Module: "mcdr"
+  MenuId: "mra-cdr"
+  MenuTitle: "Browse RAW mobile CDR Data"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "0"
+  Position: 2
+  MenuNum: 1861
+  Module: "billrep"
+  MenuId: "mbi-brep"
+  MenuTitle: "BILLING REPORT"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "0"
+  Position: 3
+  MenuNum: 1860
+  Module: "sendinvm"
+  MenuId: "if-emai"
+  MenuTitle: "Send Invoice Specification"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "0"
+  Position: 7
+  MenuNum: 1999
+  Module: "Mm/cfoser.p"
+  MenuId: "cfo-ser"
+  MenuTitle: "CALL FORWARDING SERIES"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "0"
+  Position: 7
+  MenuNum: 804
+  Module: "invrep"
+  MenuId: "if-rep"
+  MenuTitle: "Print invoices Specification"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "1"
+  Position: 1
+  MenuNum: 51
+  MenuType: 2
+  MenuId: "bf-"
+  MenuTitle: "BASIC FILES"
+  Memo[1]: "JOHAN ÄR NOG INTE SÅ DUM.  HAN ÄR DUMMARE."
+  Memo[2]: "JA"
+  Memo[3]: "YES"
+  Memo[4]: "KYLLÄ"
+  Memo[5]: "DA"
+  Memo[6]: "OUI"
+  Memo[8]: "sade John."
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1"
+  Position: 2
+  MenuNum: 788
+  MenuType: 2
+  MenuId: "cu-"
+  MenuTitle: "CUSTOMER DATA"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1"
+  Position: 3
+  MenuNum: 260
+  MenuType: 2
+  MenuId: "md-"
+  MenuTitle: "Mobile Subscriber Data"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1"
+  Position: 4
+  MenuNum: 9000
+  MenuType: 2
+  MenuId: "yo-"
+  MenuTitle: "YOIGO ADMIN"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "1"
+  Position: 5
+  MenuNum: 737
+  MenuType: 2
+  MenuId: "if-"
+  MenuTitle: "INVOICING FUNCTIONS"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1"
+  Position: 6
+  MenuNum: 820
+  MenuType: 2
+  MenuId: "ar-"
+  MenuTitle: "ACCOUNTS RECEIVABLE"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1"
+  Position: 7
+  MenuNum: 728
+  MenuType: 2
+  MenuId: "su-"
+  MenuTitle: "SUPPORT FUNCTIONS"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1"
+  Position: 8
+  MenuNum: 3
+  MenuType: 3
+  Module: "**** SOVELLUKSEN LOPETUS ***"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "11"
+  Position: 1
+  MenuNum: 14
+  MenuType: 2
+  MenuId: "bf-upd"
+  MenuTitle: "UPDATE BASIC FILES"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "11"
+  Position: 2
+  MenuNum: 877
+  MenuType: 2
+  MenuId: "bf-rd"
+  MenuTitle: "RATING DATA"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "11"
+  Position: 5
+  MenuNum: 42
+  MenuType: 2
+  MenuId: "bf-pr"
+  MenuTitle: "PRINTOUTS FROM BASIC FILES"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "11"
+  Position: 7
+  MenuNum: 756
+  MenuType: 2
+  MenuId: "bf-smd"
+  MenuTitle: "SALESMAN DATA"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "11"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "111"
+  Position: 1
+  MenuNum: 601
+  Module: "nnliyp"
+  MenuId: "bf-as"
+  MenuTitle: "A-sub number file update"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "111"
+  Position: 2
+  MenuNum: 754
+  MenuType: 2
+  MenuId: "bf-pro"
+  MenuTitle: "Products"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "111"
+  Position: 3
+  MenuNum: 750
+  Module: "Mc/nnmayp.p"
+  MenuId: "bf-ccn"
+  MenuTitle: "CCNs"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "111"
+  Position: 4
+  MenuNum: 602
+  Module: "Mc/nnbtyp.p"
+  MenuId: "bf-bs"
+  MenuTitle: "B-sub/service number file"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "111"
+  Position: 5
+  MenuNum: 1162
+  Module: "rccn"
+  MenuId: "bf-rccn"
+  MenuTitle: "RATING CCN Browse"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "111"
+  Position: 6
+  MenuNum: 814
+  Module: "Mc/invlangm.p"
+  MenuId: "bf-fn"
+  MenuTitle: "Foreign names for products etc."
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "111"
+  Position: 7
+  MenuNum: 591
+  MenuType: 2
+  MenuId: "bf-curr"
+  MenuTitle: "Currencies"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "111"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1112"
+  Position: 1
+  MenuNum: 754
+  Module: "Mc/nntuyp.p"
+  MenuId: "bf-pd"
+  MenuTitle: "Product file"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1112"
+  Position: 2
+  MenuNum: 974
+  Module: "Mc/nnpgyp.p"
+  MenuId: "bf-pg"
+  MenuTitle: "Product groups"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1112"
+  Position: 3
+  MenuNum: 1113
+  Module: "Mc/invsect.p"
+  MenuId: "if-is"
+  MenuTitle: "Invoice Sections, update"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1112"
+  Position: 4
+  MenuNum: 999
+  Module: "Mc/vatcode.p"
+  MenuId: "cu-vc"
+  MenuTitle: "Update VAT codes"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1112"
+  Position: 5
+  MenuNum: 295
+  Module: "Mc/bevent.p"
+  MenuId: "rf-be"
+  MenuTitle: "Billing Events"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1112"
+  Position: 6
+  MenuNum: 1751
+  Module: "Mc/product.p"
+  MenuId: "bf-prod"
+  MenuTitle: "Products"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1112"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1117"
+  Position: 1
+  MenuNum: 592
+  Module: "Mc/nncuyp.p"
+  MenuId: "bf-cuco"
+  MenuTitle: "Currencies (codes & names)"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1117"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "112"
+  Position: 1
+  MenuNum: 51
+  MenuType: 2
+  MenuId: "rd-ba"
+  MenuTitle: "Basic Data of Rating"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "112"
+  Position: 2
+  MenuNum: 1722
+  Module: "Mc/rateplan.p"
+  MenuId: "rd-rp"
+  MenuTitle: "Rating plan"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "112"
+  Position: 3
+  MenuNum: 234
+  Module: "Mc/discountplan.p"
+  MenuId: "rd-dp"
+  MenuTitle: "DISCOUNT PLANS"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "112"
+  Position: 4
+  MenuNum: 878
+  Module: "Mc/tariffc.p"
+  MenuId: "rd-rate"
+  MenuTitle: "Rates, update"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "112"
+  Position: 5
+  MenuNum: 1763
+  Module: "Mc/pnpgroup.p"
+  MenuId: "rd-pnp"
+  MenuTitle: "PNP GROUP"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "112"
+  Position: 6
+  MenuNum: 1753
+  MenuType: 2
+  MenuId: "rd-camp"
+  MenuTitle: "Campaigns"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "112"
+  Position: 7
+  MenuNum: 555
+  MenuType: 2
+  MenuId: "rd-more"
+  MenuTitle: "MORE"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "112"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1121"
+  Position: 1
+  MenuNum: 876
+  Module: "Mc/nnplyp.p"
+  MenuId: "rd-pl"
+  MenuTitle: "Price list file, update"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1121"
+  Position: 2
+  MenuNum: 1161
+  Module: "Mc/dialtype.p"
+  MenuId: "rd-ct"
+  MenuTitle: "Dialling types"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1121"
+  Position: 3
+  MenuNum: 1791
+  Module: "Mc/ratepref.p"
+  MenuId: "rd-pref"
+  MenuTitle: "Rating Prefix Configuration"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1121"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1126"
+  Position: 1
+  MenuNum: 1753
+  Module: "Mc/campaign.p"
+  MenuId: "cm-ca"
+  MenuTitle: "Campaigns"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1126"
+  Position: 3
+  MenuNum: 1756
+  Module: "Mc/camprunui.p"
+  MenuId: "cm-run"
+  MenuTitle: "Campaign Run"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1126"
+  Position: 4
+  MenuNum: 1754
+  Module: "Mc/campstac.p"
+  MenuId: "cm-stat"
+  MenuTitle: "Campaign Statistics"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1126"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1127"
+  Position: 1
+  MenuNum: 994
+  Module: "Mc/nnbnrp.p"
+  MenuId: "rd-bpr"
+  MenuTitle: "B-numbers with prices, spreadsheet"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1127"
+  Position: 3
+  MenuNum: 970
+  Module: "Mc/nnhimu.p"
+  MenuId: "rd-ch"
+  MenuTitle: "Change rates"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "1127"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "114"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "115"
+  Position: 2
+  MenuNum: 9810
+  Module: "bitem_raport"
+  MenuTitle: "billing item raport"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "115"
+  Position: 3
+  MenuNum: 9811
+  Module: "Mm/bevent_raport.p"
+  MenuTitle: "billing event raport"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "115"
+  Position: 4
+  MenuNum: 810
+  Module: "Mc/nnhilu.p"
+  MenuId: "bf-ppl"
+  MenuTitle: "Price Lists, printout"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "115"
+  Position: 6
+  MenuNum: 809
+  Module: "Mc/nnalky.p"
+  MenuId: "bf-pcu"
+  MenuTitle: "Customer lists, printout"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "115"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "116"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "117"
+  Position: 2
+  MenuNum: 952
+  Module: "Mc/nnrsyp.p"
+  MenuId: "bf-rs"
+  MenuTitle: "Reseller file update"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "117"
+  Position: 3
+  MenuNum: 756
+  Module: "Mc/nnsmyp2.p"
+  MenuId: "bf-sm"
+  MenuTitle: "Salesman file update"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "117"
+  Position: 4
+  MenuNum: 525
+  Module: "Mc/nnsgro.p"
+  MenuId: "bf-sg"
+  MenuTitle: "Salesman groups, update"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "117"
+  Position: 5
+  MenuNum: 16
+  Module: "nnrcyp"
+  MenuId: "bf-rc"
+  MenuTitle: "Resellers commission rules by product"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "117"
+  Position: 7
+  MenuNum: 2430
+  Module: "Mm/creaters.p"
+  MenuId: "bf-crs"
+  MenuTitle: "Create reseller and salesmen"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "117"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "12"
+  Position: 1
+  MenuNum: 526
+  MenuType: 2
+  MenuId: "cu-rf"
+  MenuTitle: "CUSTOMER-RELATED FILES"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "12"
+  Position: 2
+  MenuNum: 710
+  Module: "Mc/customerbr.p"
+  MenuId: "cu-cu"
+  MenuTitle: "Customer file, update"
+  Memo[1]: "jana är ...."
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "12"
+  Position: 3
+  MenuNum: 1788
+  MenuType: 2
+  MenuId: "cu-group"
+  MenuTitle: "CUSTOMERS GROUP"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "12"
+  Position: 5
+  MenuNum: 735
+  MenuType: 2
+  MenuId: "cu-cr"
+  MenuTitle: "Call Reports"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "12"
+  Position: 6
+  MenuNum: 1761
+  Module: "Mc/custrep.p"
+  MenuId: "cu-rep"
+  MenuTitle: "Customer Report"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "12"
+  Position: 7
+  MenuNum: 1758
+  Module: "conlim"
+  MenuId: "cu-con"
+  MenuTitle: "Contacts"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "12"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "121"
+  Position: 1
+  MenuNum: 787
+  Module: "Mc/nnkayp.p"
+  MenuId: "cu-cc"
+  MenuTitle: "Customer category file, update"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "121"
+  Position: 2
+  MenuNum: 558
+  Module: "Mc/custclass.p"
+  MenuId: "cu-class"
+  MenuTitle: "custclass"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "121"
+  Position: 3
+  MenuNum: 1513
+  Module: "Mc/country.p"
+  MenuId: "cu-co"
+  MenuTitle: "Countries"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "121"
+  Position: 4
+  MenuNum: 1095
+  Module: "Mc/nationality.p"
+  MenuId: "cu-nat"
+  MenuTitle: "Nationalities"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "121"
+  Position: 5
+  MenuNum: 1514
+  Module: "Mc/language.p"
+  MenuId: "cu-lang"
+  MenuTitle: "Languages"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "121"
+  Position: 6
+  MenuNum: 1015
+  Module: "Mc/dirmark.p"
+  MenuId: "cu-dir"
+  MenuTitle: "Direct Marketing Codes"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "121"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1217"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "123"
+  Position: 1
+  MenuNum: 875
+  Module: "Mc/nnigyp.p"
+  MenuId: "cu-ig"
+  MenuTitle: "Invoicing group file, update"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "123"
+  Position: 2
+  MenuNum: 520
+  Module: "Mc/nncgro.p"
+  MenuId: "cu-eg"
+  MenuTitle: "External Customer Groups"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "123"
+  Position: 3
+  MenuNum: 1786
+  Module: "Mc/custpnpgrp.p"
+  MenuId: "cu-pnp"
+  MenuTitle: "Customer PNP Groups"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "123"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "124"
+  Position: 1
+  MenuNum: 979
+  Module: "Mc/nncusco.p"
+  MenuId: "cu-amt"
+  MenuTitle: "Amount of customers"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "124"
+  Position: 2
+  MenuNum: 562
+  Module: "nncaamt"
+  MenuId: "cu-val"
+  MenuTitle: "Value of customers calls per day"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "124"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "125"
+  Position: 1
+  MenuNum: 1736
+  Module: "Inv/nnprky3.p"
+  MenuId: "cr-bit"
+  MenuTitle: "Calls Sorted by BillItem / CCN"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "125"
+  Position: 2
+  MenuNum: 1737
+  Module: "Inv/nnprky2.p"
+  MenuId: "cr-cli"
+  MenuTitle: "Calls Sorted by CLI / Billing Item"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "125"
+  Position: 3
+  MenuNum: 1738
+  Module: "Inv/nnprky4.p"
+  MenuId: "cr-pri"
+  MenuTitle: "Specification with unit prices"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "125"
+  Position: 4
+  MenuNum: 1031
+  Module: "Inv/nnprky7.p"
+  MenuId: "cr-ccn"
+  MenuTitle: "Calls Sorted by CLI/Billing Item/Country"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "125"
+  Position: 5
+  MenuNum: 1033
+  Module: "Inv/nnprky3.p"
+  MenuId: "cr-clic"
+  MenuTitle: "Calls Sorted by CLI / CCN"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "125"
+  Position: 7
+  MenuNum: 1152
+  MenuType: 2
+  MenuId: "cu-oth"
+  MenuTitle: "Other Customer Related Actions"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "125"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1251"
+  Position: 1
+  MenuNum: 915
+  Module: "Mf/nnmtyp.p"
+  MenuId: "mc-ma"
+  MenuTitle: "Monthly call counters, maintain"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1251"
+  Position: 2
+  MenuNum: 916
+  Module: "Mf/nnccyp.p"
+  MenuId: "mc-sc"
+  MenuTitle: "Suspended (closed) customers, maintain"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1251"
+  Position: 6
+  MenuNum: 917
+  Module: "Mf/nnmtpo.p"
+  MenuId: "mc-rm"
+  MenuTitle: "Remove old monthly counters"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1251"
+  Position: 7
+  MenuNum: 918
+  Module: "Mf/nnmttu.p"
+  MenuId: "mc-rep"
+  MenuTitle: "Report with monthly counters"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1251"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1252"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1253"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1254"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1257"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "13"
+  Position: 1
+  MenuNum: 1882
+  MenuType: 2
+  MenuId: "mco-"
+  MenuTitle: "Mobile Codes"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "13"
+  Position: 2
+  MenuNum: 1884
+  MenuType: 2
+  MenuId: "mra-"
+  MenuTitle: "Mobile Rating Data"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "13"
+  Position: 3
+  MenuNum: 259
+  MenuType: 2
+  MenuId: "mo-su"
+  MenuTitle: "Mobile subscribers and subscriptions"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "13"
+  Position: 4
+  MenuNum: 738
+  MenuType: 2
+  MenuId: "call-dat"
+  MenuTitle: "MOBILE CALL DATA"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "13"
+  Position: 5
+  MenuNum: 226
+  MenuType: 2
+  MenuId: "sim-"
+  MenuTitle: "SIM Card Logistics"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "13"
+  Position: 6
+  MenuNum: 201
+  MenuType: 2
+  MenuId: "md-ms"
+  MenuTitle: "MSISDN NUMBER HANDLING"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "13"
+  Position: 7
+  MenuNum: 239
+  MenuType: 2
+  MenuId: "ms-mse"
+  MenuTitle: "MOBILE SERVICES"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "13"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "131"
+  Position: 1
+  MenuNum: 293
+  Module: "Mm/mrerr.p"
+  MenuId: "mra-er"
+  MenuTitle: "Mobile Rating Error Codes, update"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "131"
+  Position: 2
+  MenuNum: 2205
+  Module: "Mm/clitype.p"
+  MenuId: "mo-clty"
+  MenuTitle: "CLI Types"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "131"
+  Position: 3
+  MenuNum: 1340
+  MenuType: 2
+  MenuId: "mco-pc"
+  MenuTitle: "PLMN & COUNTRY"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "131"
+  Position: 4
+  MenuNum: 1141
+  Module: "Mm/obitype.p"
+  MenuId: "obi-type"
+  MenuTitle: "Type of Billing Object"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "131"
+  Position: 5
+  MenuNum: 2951
+  Module: "Mm/matrix.p"
+  MenuId: "matrix"
+  MenuTitle: "MATRIX"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "131"
+  Position: 6
+  MenuNum: 1815
+  Module: "Mm/custemp.p"
+  MenuId: "cu-templ"
+  MenuTitle: "Template of Customers"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "131"
+  Position: 7
+  MenuNum: 1370
+  Module: "Rate/tcc.p"
+  MenuId: "tcc"
+  MenuTitle: "TCC Maintenance"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "131"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1313"
+  Position: 1
+  MenuNum: 1513
+  Module: "Mc/country.p"
+  MenuId: "mco-co"
+  MenuTitle: "Country Codes"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1313"
+  Position: 2
+  MenuNum: 1341
+  Module: "Mm/plmn.p"
+  MenuId: "co-plmn"
+  MenuTitle: "PLMN Codes"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1313"
+  Position: 3
+  MenuNum: 1910
+  Module: "Mm/bnet.p"
+  MenuId: "bnet"
+  MenuTitle: "BNET CODES"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1313"
+  Position: 4
+  MenuNum: 2410
+  Module: "Mm/allrzitem.p"
+  MenuId: "roamzone"
+  MenuTitle: "ROAMZONE"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1313"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "132"
+  Position: 1
+  MenuNum: 1763
+  Module: "Mc/pnpgroup.p"
+  MenuId: "mbi-pnp"
+  MenuTitle: "PNP GROUP MAINTENANCE"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "132"
+  Position: 2
+  MenuNum: 2117
+  MenuType: 2
+  MenuId: "mbi-fat"
+  MenuTitle: "Free AirTime"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "132"
+  Position: 4
+  MenuNum: 2134
+  MenuType: 2
+  MenuId: "servicel"
+  MenuTitle: "SERVICELIMIT MAINTENANCE"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "132"
+  Position: 5
+  MenuNum: 2960
+  MenuType: 2
+  MenuId: "TMT"
+  MenuTitle: "Ticket Management tools"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "132"
+  Position: 6
+  MenuNum: 1975
+  MenuType: 2
+  MenuId: "vas"
+  MenuTitle: "VALUE ADDED SERVICE"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "132"
+  Position: 7
+  MenuNum: 2422
+  MenuType: 2
+  Module: "HIGHSPENDER"
+  MenuId: "highspe"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "132"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "13217"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1322"
+  Position: 1
+  MenuNum: 1451
+  Module: "Mm/ftgrp.p"
+  MenuId: "ft-grp"
+  MenuTitle: "FreeAirTime Group"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1322"
+  Position: 2
+  MenuNum: 1452
+  Module: "Mm/ftgmember.p"
+  MenuId: "ft-membe"
+  MenuTitle: "FreeAirTime Members"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1322"
+  Position: 3
+  MenuNum: 1453
+  Module: "Mm/fatimeall.p"
+  MenuId: "fa-event"
+  MenuTitle: "FreeAirTime Event"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1322"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 8888
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "13227"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1323"
+  Position: 3
+  MenuNum: 1110
+  Module: "Mc/bitem.p"
+  MenuId: "mbi-ob"
+  MenuTitle: "Browse All Billable Items"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1323"
+  Position: 4
+  MenuNum: 1111
+  Module: "Mc/nncoyp.p"
+  MenuId: "mbi-cf"
+  MenuTitle: "All Contract Fees"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1323"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "1324"
+  Position: 1
+  MenuNum: 2132
+  Module: "servicelimit1"
+  MenuId: "mbi-serv"
+  MenuTitle: "ALL SERVICES"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "1324"
+  Position: 4
+  MenuNum: 1043
+  Module: "Mm/daycampaign.p"
+  MenuId: "percont"
+  MenuTitle: "Periodical Contracts"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1324"
+  Position: 5
+  MenuNum: 2604
+  Module: "Mm/servicelimitgroup.p"
+  MenuId: "servlgrp"
+  MenuTitle: "SERVICELIMIT GROUP"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1324"
+  Position: 6
+  MenuNum: 2611
+  Module: "Mm/slganalyse.p"
+  MenuId: "slg-anal"
+  MenuTitle: "SERVICELIMIT GROUP ANALYSE"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1324"
+  Position: 7
+  MenuNum: 9821
+  Module: "Syst/group_cparam.p"
+  MenuId: "b-cparam"
+  MenuTitle: "Bundles TMSParam"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1324"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1325"
+  Position: 1
+  MenuNum: 2961
+  Module: "Mm/tmqueue.p"
+  MenuId: "tmq"
+  MenuTitle: "Ticket Management Queue"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1325"
+  Position: 2
+  MenuNum: 2962
+  Module: "Syst/tmrule.p"
+  MenuId: "tm-rule"
+  MenuTitle: "TM Rules"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1325"
+  Position: 3
+  MenuNum: 9834
+  Module: "Syst/tmt_cparam.p"
+  MenuId: "tm-param"
+  MenuTitle: "TMT TMS Params"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1325"
+  Position: 6
+  MenuNum: 1741
+  MenuType: 2
+  Module: "mbi-saldo"
+  MenuId: "saldo"
+  MenuTitle: "SALDO MAINTENANCE"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1325"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "13251"
+  Position: 1
+  MenuNum: 1742
+  Module: "Mm/calllimit1.p"
+  MenuId: "mbi-lim"
+  MenuTitle: "Customer's limit"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "13251"
+  Position: 2
+  MenuNum: 1743
+  Module: "Mm/calllimit2.p"
+  MenuId: "mbi-sr"
+  MenuTitle: "SALDO REMINDER"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "13251"
+  Position: 3
+  MenuNum: 1744
+  Module: "Mm/calllimit3.p"
+  MenuId: "mbi-sa"
+  MenuTitle: "SALDO AGREEMENT"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "13251"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "1326"
+  Position: 1
+  MenuNum: 1973
+  Module: "Mm/vaservice.p"
+  MenuId: "vas-serv"
+  MenuTitle: "VAS SERVICE"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "1326"
+  Position: 2
+  MenuNum: 1977
+  Module: "Mm/vasoper.p"
+  MenuId: "vas-oper"
+  MenuTitle: "VAS OPERATOR"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "1326"
+  Position: 3
+  MenuNum: 1974
+  Module: "Mm/vastariff.p"
+  MenuId: "vas-tar"
+  MenuTitle: "VAS TARIFFCLASS"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "1326"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "1327"
+  Position: 1
+  MenuNum: 2428
+  Module: "Mm/hiusagekat.p"
+  MenuId: "hiusagek"
+  MenuTitle: "HIGH USAGE KATEGORIES"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1327"
+  Position: 2
+  MenuNum: 2429
+  Module: "Mm/hiusagelimit1.p"
+  MenuId: "hiusagel"
+  MenuTitle: "HIGH USAGE LIMITS"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "1327"
+  Position: 3
+  MenuNum: 2422
+  Module: "Mm/highusage.p"
+  MenuId: "highspen"
+  MenuTitle: "HIGHSPENDER MAINTENANCE"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1327"
+  Position: 4
+  MenuNum: 1822
+  Module: "dailytopten_v"
+  MenuId: "topten"
+  MenuTitle: "DAILYTOPTEN"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1327"
+  Position: 6
+  MenuNum: 1824
+  Module: "mc_spec"
+  MenuId: "a-detail"
+  MenuTitle: "CALL SPECIFICATION"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1327"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "133"
+  Position: 2
+  MenuNum: 710
+  Module: "Mc/customerbr.p"
+  MenuId: "ms-cu"
+  MenuTitle: "Customers"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "133"
+  Position: 3
+  MenuNum: 259
+  Module: "Mm/mobsuball.p"
+  MenuId: "ms-su"
+  MenuTitle: "Mobile Subscriptions"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "133"
+  Position: 4
+  MenuNum: 728
+  MenuType: 2
+  MenuId: "su-fu"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "133"
+  Position: 5
+  MenuNum: 2206
+  MenuType: 2
+  MenuId: "ord-"
+  MenuTitle: "Orders"
+  MenuClass: 9999
+  TokenCode: "ORDER"
+
+bulkload: MenuTree
+  Level: "133"
+  Position: 6
+  MenuNum: 1960
+  Module: "Mm/termmobsuball.p"
+  MenuId: "ms-term"
+  MenuTitle: "Terminated mobile subscriptions"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "133"
+  Position: 7
+  MenuNum: 42
+  MenuType: 2
+  MenuId: "ms-pr"
+  MenuTitle: "PRINTOUTS FROM MOBILE SUBSCRIPTIONS"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "133"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1334"
+  Position: 2
+  MenuNum: 1065
+  Module: "Mm/msreqcume.p"
+  MenuId: "ms-creq"
+  MenuTitle: "Customer Requests"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1334"
+  Position: 3
+  MenuNum: 1066
+  Module: "Mm/msreqsume.p"
+  MenuId: "ms-req"
+  MenuTitle: "Subscription Request"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1334"
+  Position: 4
+  MenuNum: 1067
+  Module: "Mm/msreqseme.p"
+  MenuId: "ms-sereq"
+  MenuTitle: "Service Requests"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1334"
+  Position: 5
+  MenuNum: 1123
+  Module: "Mm/msreqarme.p"
+  MenuId: "ms-arreq"
+  MenuTitle: "A/R Requests"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1334"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "13341"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1335"
+  Position: 2
+  MenuNum: 9022
+  Module: "Mnp/msisdntermselect.p"
+  MenuTitle: "MSISDN Termination"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1335"
+  Position: 3
+  MenuNum: 2849
+  Module: "Mnp/mnpcal.p"
+  MenuId: "mnpcal"
+  MenuTitle: "MNP Calendar"
+  MenuClass: 9
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1335"
+  Position: 4
+  MenuNum: 2850
+  Module: "Mnp/mnptype.p"
+  MenuId: "mnp-"
+  MenuTitle: "MNP Administration"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1335"
+  Position: 5
+  MenuNum: 2206
+  MenuType: 2
+  MenuId: "ord-ku"
+  MenuTitle: "Order Queues"
+  MenuClass: 9999
+  TokenCode: "ORDER"
+
+bulkload: MenuTree
+  Level: "1335"
+  Position: 6
+  MenuNum: 2851
+  Module: "Mm/msreqorme.p"
+  MenuId: "ord-req"
+  MenuTitle: "Browse order request type 13"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1335"
+  Position: 7
+  MenuNum: 9055
+  Module: "Mc/orderbrwall.p"
+  MenuId: "ord-all"
+  MenuTitle: "Orders Browse All"
+  MenuClass: 9999
+  TokenCode: "ORDER"
+
+bulkload: MenuTree
+  Level: "1335"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "13355"
+  Position: 1
+  MenuNum: 9
+  Module: "Mc/orderst1.p"
+  MenuId: "ord-newn"
+  MenuTitle: "Order Browse of New Number"
+  MenuClass: 9999
+  TokenCode: "ORDER"
+
+bulkload: MenuTree
+  Level: "13355"
+  Position: 2
+  MenuNum: 150
+  Module: "Mc/orderst3.p"
+  MenuId: "ord-nmp"
+  MenuTitle: "Order Browse New MNP Order"
+  MenuClass: 9999
+  TokenCode: "ORDER"
+
+bulkload: MenuTree
+  Level: "13355"
+  Position: 3
+  MenuNum: 9066
+  Module: "Mc/orderst8.p"
+  MenuId: "ord-hold"
+  MenuTitle: "Order Hold Queue"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "ORDER"
+
+bulkload: MenuTree
+  Level: "13355"
+  Position: 4
+  MenuNum: 9047
+  Module: "Mc/orderst4.p"
+  MenuId: "ord-inco"
+  MenuTitle: "Order Browse In Control"
+  MenuClass: 9999
+  TokenCode: "ORDER"
+
+bulkload: MenuTree
+  Level: "13355"
+  Position: 5
+  MenuNum: 9061
+  Module: "Mc/orderstat.p"
+  MenuId: "ord-que"
+  MenuTitle: "Other Order Queues"
+  MenuClass: 9999
+  TokenCode: "ORDER"
+
+bulkload: MenuTree
+  Level: "13355"
+  Position: 7
+  MenuNum: 9045
+  MenuType: 2
+  MenuId: "ord-his"
+  MenuTitle: "Order Browse History"
+  MenuClass: 9999
+  TokenCode: "ORDER"
+
+bulkload: MenuTree
+  Level: "13355"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "133557"
+  Position: 3
+  MenuNum: 9052
+  Module: "Mc/orderbrwdeliv.p"
+  MenuId: "ord-deli"
+  MenuTitle: "Order Browse Delivered"
+  MenuClass: 9999
+  TokenCode: "ORDER"
+
+bulkload: MenuTree
+  Level: "133557"
+  Position: 4
+  MenuNum: 9054
+  Module: "Mc/orderbrwclosed.p"
+  MenuId: "ord-clos"
+  MenuTitle: "Order Browse Closed"
+  MenuClass: 9999
+  TokenCode: "ORDER"
+
+bulkload: MenuTree
+  Level: "133557"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "13356"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "133567"
+  Position: 2
+  MenuNum: 9052
+  Module: "OrderBrwDeliv"
+  MenuTitle: "Order Browse Delivered"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "133567"
+  Position: 3
+  MenuNum: 9053
+  Module: "OrderBrwNnpRej"
+  MenuTitle: "Order Browse NMP Rejected"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "133567"
+  Position: 4
+  MenuNum: 9054
+  Module: "OrderBrwClosed"
+  MenuTitle: "Order Browse Closed"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "133567"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "1337"
+  Position: 3
+  MenuNum: 1134
+  Module: "mocoex1"
+  MenuId: "ms-corse"
+  MenuTitle: "Comission report of mobile calls"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1337"
+  Position: 4
+  MenuNum: 2226
+  Module: "Mm/mobsubrep.p"
+  MenuId: "mob-rep"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1337"
+  Position: 5
+  MenuNum: 269
+  Module: "Mm/mscount.p"
+  MenuId: "ms-co"
+  MenuTitle: "Count Number Of Mobile Subscriptions"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1337"
+  Position: 6
+  MenuNum: 1157
+  Module: "Mm/cussubrep.p"
+  MenuId: "ms-curep"
+  MenuTitle: "CUSTOMER & SUBSCRIPTION"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1337"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "134"
+  Position: 1
+  MenuNum: 716
+  MenuType: 2
+  MenuTitle: "CALLS"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "134"
+  Position: 2
+  MenuNum: 1158
+  Module: "Rate/man_rate.p"
+  MenuId: "rerate"
+  MenuTitle: "Re-Rate Mobile CDRs"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "134"
+  Position: 3
+  MenuNum: 1136
+  Module: "Mm/nndomco.p"
+  MenuId: "mra-dbl"
+  MenuTitle: "Search and mark double mobile calls"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "134"
+  Position: 4
+  MenuNum: 2571
+  MenuType: 2
+  MenuId: "prep-fu"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "134"
+  Position: 5
+  MenuNum: 9790
+  MenuType: 2
+  MenuId: "ratehist"
+  MenuTitle: "Rating History"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "134"
+  Position: 6
+  MenuNum: 9804
+  Module: "Mm/killedmobs.p"
+  MenuId: "ms-hist"
+  MenuTitle: "Mobile subscription Timestamps"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "134"
+  Position: 7
+  MenuNum: 42
+  MenuType: 2
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "134"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1341"
+  Position: 1
+  MenuNum: 298
+  Module: "Mm/mobcallall.p"
+  MenuId: "mra-bc"
+  MenuTitle: "Billable Mobile Calls, browse"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1341"
+  Position: 2
+  MenuNum: 593
+  MenuId: "mobtranc"
+  MenuTitle: "Mobile Transit Calls"
+  MenuClass: 999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "1341"
+  Position: 3
+  MenuNum: 299
+  Module: "Mm/moberror.p"
+  MenuId: "mra-ec"
+  MenuTitle: "Bowse Erroneus Mobile Calls"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1341"
+  Position: 4
+  MenuNum: 120
+  Module: "Mm/subscription_cdr_query.p"
+  MenuId: "subscdr"
+  MenuTitle: "Query Subscription's CDRs"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1341"
+  Position: 5
+  MenuNum: 2570
+  Module: "Mm/prepaidbr.p"
+  MenuTitle: "PREPAID CALLS"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1341"
+  Position: 7
+  MenuNum: 9830
+  Module: "Mm/edrerror.p"
+  MenuTitle: "Browse EDR errors"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1341"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1344"
+  Position: 1
+  MenuNum: 2570
+  Module: "Mm/prepcdr.p"
+  MenuId: "prepcdr"
+  MenuTitle: "PREPAID CDRs"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1344"
+  Position: 2
+  MenuNum: 2572
+  Module: "Mm/errorprepaid.p"
+  MenuId: "err-prep"
+  MenuTitle: "ERROR PREPAID"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1344"
+  Position: 3
+  MenuNum: 2573
+  Module: "Rate/prep_rate.p"
+  MenuId: "prep-rat"
+  MenuTitle: "PREPAID ANALYSE"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1344"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1345"
+  Position: 1
+  MenuNum: 9791
+  Module: "Rate/reratelog.p"
+  MenuId: "ratelog"
+  MenuTitle: "Rerate Log"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1345"
+  Position: 2
+  MenuNum: 9790
+  Module: "Rate/edrhistory.p"
+  MenuId: "edrhist"
+  MenuTitle: "EDR Rating History"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1345"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1347"
+  Position: 1
+  MenuNum: 977
+  Module: "Mm/mobprodrep.p"
+  MenuId: "mob-prod"
+  MenuTitle: "Mobile calls per product"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "1347"
+  Position: 2
+  MenuNum: 1822
+  Module: "top10"
+  MenuId: "top10"
+  MenuTitle: "Daily topten"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1347"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "135"
+  Position: 1
+  MenuNum: 526
+  MenuType: 2
+  MenuId: "sim-rf"
+  MenuTitle: "SIM-RELATED FILES"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "135"
+  Position: 2
+  MenuNum: 279
+  Module: "Mm/simbal.p"
+  MenuId: "sim-inv"
+  MenuTitle: "Quick SIM inventory on-screen"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "135"
+  Position: 3
+  MenuNum: 218
+  Module: "Mm/simstat.p"
+  MenuId: "sim-sc"
+  MenuTitle: "SIM Status Codes"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "135"
+  Position: 4
+  MenuNum: 228
+  Module: "Mm/simall.p"
+  MenuId: "sim-sim"
+  MenuTitle: "SIM Cards"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "135"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1351"
+  Position: 1
+  MenuNum: 223
+  Module: "Mm/stock.p"
+  MenuId: "sim-sto"
+  MenuTitle: "SIM Stock Codes"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1351"
+  Position: 2
+  MenuNum: 220
+  Module: "Mm/simman.p"
+  MenuId: "sim-ve"
+  MenuTitle: "SIM Card Manufacturers/Vendors"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1351"
+  Position: 3
+  MenuNum: 225
+  Module: "Mm/simart.p"
+  MenuId: "sim-ty"
+  MenuTitle: "SIM Card types ("article codes")"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "1351"
+  Position: 4
+  MenuNum: 9828
+  Module: "Mm/ifispx.p"
+  MenuId: "sim-ifi"
+  MenuTitle: "SIM SPECS"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "1351"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "136"
+  Position: 1
+  MenuNum: 219
+  Module: "Mm/msstat.p"
+  MenuId: "ms-ms"
+  MenuTitle: "MSISDN Status Codes"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "136"
+  Position: 2
+  MenuNum: 242
+  Module: "Mm/msclass.p"
+  MenuId: "ms-msc"
+  MenuTitle: "MSISDN Classes"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "136"
+  Position: 3
+  MenuNum: 229
+  Module: "Mm/msisdnnumber.p"
+  MenuId: "ms-msi"
+  MenuTitle: "MSISDN Numbers"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "136"
+  Position: 4
+  MenuNum: 232
+  Module: "Mm/msrange.p"
+  MenuId: "ms-mra"
+  MenuTitle: "MSISDN Ranges"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "136"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "137"
+  Position: 1
+  MenuNum: 264
+  Module: "Mm/service.p"
+  MenuId: "ms-se"
+  MenuTitle: "Mobile Services"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "137"
+  Position: 2
+  MenuNum: 253
+  Module: "Mm/servpacm.p"
+  MenuId: "ms-sp"
+  MenuTitle: "Mobile Service Packages"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "137"
+  Position: 3
+  MenuNum: 254
+  Module: "Mm/servelm.p"
+  MenuId: "ms-sel"
+  MenuTitle: "Elements of Mobile Service Packages"
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "137"
+  Position: 4
+  MenuNum: 9817
+  Module: "Mc/shaperconf.p"
+  MenuId: "ms-ema"
+  MenuTitle: "EMA temptace configuration"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "137"
+  Position: 7
+  MenuNum: 267
+  Module: "Mm/solog.p"
+  MenuId: "so-log"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "137"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "14"
+  Position: 1
+  MenuNum: 9001
+  MenuType: 2
+  MenuId: "roam-"
+  MenuTitle: "Roaming functions"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "14"
+  Position: 2
+  MenuNum: 9809
+  Module: "Mc/maintmenu.p"
+  MenuId: "maintm"
+  MenuTitle: "Maintenance menu"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "14"
+  Position: 3
+  MenuNum: 9021
+  Module: "Mc/ccadmintool.p"
+  MenuId: "ccadmin"
+  MenuTitle: "Charge & Compensation tool"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "14"
+  Position: 4
+  MenuNum: 6900
+  Module: "Mm/requeuebrowser.p"
+  MenuId: "reque"
+  MenuTitle: "Request queue menu"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "14"
+  Position: 5
+  MenuNum: 9014
+  MenuType: 2
+  MenuId: "pc-"
+  MenuTitle: "Process Control"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "14"
+  Position: 6
+  MenuNum: 9818
+  MenuType: 2
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "14"
+  Position: 7
+  MenuNum: 9805
+  MenuType: 2
+  MenuId: "user-"
+  MenuTitle: "User Maintenance"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "14"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+
+bulkload: MenuTree
+  Level: "141"
+  Position: 1
+  MenuNum: 9002
+  Module: "roamoperbr"
+  MenuId: "yor-oper"
+  MenuTitle: "Roaming operators"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "141"
+  Position: 2
+  MenuNum: 9803
+  Module: "roamtestui"
+  MenuId: "yor-tfg"
+  MenuTitle: "ROAMING TEST FILE PROGRAM"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "141"
+  Position: 3
+  MenuNum: 9010
+  Module: "roamcountry"
+  MenuId: "yor-coun"
+  MenuTitle: "Roaming country"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "141"
+  Position: 4
+  MenuNum: 9008
+  Module: "roamgroup"
+  MenuId: "yor-grp"
+  MenuTitle: "Roaming groups"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "141"
+  Position: 5
+  MenuNum: 570
+  Module: "Mc/currate.p"
+  MenuId: "yor-cura"
+  MenuTitle: "Currency rates"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "141"
+  Position: 7
+  MenuNum: 9009
+  Module: "roamtarifflistc"
+  MenuId: "yor-tar"
+  MenuTitle: "Roaming Tariffs"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "141"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+
+bulkload: MenuTree
+  Level: "145"
+  Position: 1
+  MenuNum: 9015
+  Module: "Mm/tmruleselm.p"
+  MenuId: "pc-tmc"
+  MenuTitle: "Ticket Management Control"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "145"
+  Position: 3
+  MenuNum: 1191
+  Module: "Syst/funcrunconfig.p"
+  MenuId: "frconf"
+  MenuTitle: "Function Run Configuration"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "145"
+  Position: 4
+  MenuNum: 1192
+  Module: "Syst/funcrunqueue.p"
+  MenuId: "frqueue"
+  MenuTitle: "Function Run Queue"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "145"
+  Position: 5
+  MenuNum: 1179
+  Module: "Syst/dbconfig.p"
+  MenuId: "dbconf"
+  MenuTitle: "CDR Database Configuration"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "145"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+
+bulkload: MenuTree
+  Level: "146"
+  Position: 1
+  MenuNum: 227
+  Module: "Mm/simread_cui.p"
+  MenuId: "lf-sim"
+  MenuTitle: "Load SIM File"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "146"
+  Position: 2
+  MenuNum: 229
+  Module: "Mm/msisdnnumber.p"
+  MenuTitle: "MSISDN Numbers"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "146"
+  Position: 3
+  MenuNum: 9820
+  Module: "Mm/premium_numbers_info.p"
+  MenuId: "lf-prem"
+  MenuTitle: "Premium Numbers Information"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "146"
+  Position: 4
+  MenuNum: 9226
+  Module: "Mc/read_discount_member_ui.p"
+  MenuId: "read-dpm"
+  MenuTitle: "Read Discount Members"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "146"
+  Position: 5
+  MenuNum: 9822
+  Module: "Rate/iprange.p"
+  MenuId: "iprange"
+  MenuTitle: "Roaming OUT GPRS IP Ranges"
+  MenuClass: 9999
+  TokenCode: "ROAM_OUT_IP"
+
+bulkload: MenuTree
+  Level: "146"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "147"
+  Position: 5
+  MenuNum: 2204
+  Module: "Syst/pwadmin.p"
+  MenuId: "user-cpw"
+  MenuTitle: "Change Password"
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "147"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "15"
+  Position: 1
+  MenuNum: 1068
+  MenuType: 2
+  MenuId: "inv-adm"
+  MenuTitle: "Admin Functions"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "15"
+  Position: 2
+  MenuNum: 957
+  MenuType: 2
+  MenuId: "if-cp"
+  MenuTitle: "CONTRACT-BASED PAYMENTS"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "15"
+  Position: 3
+  MenuNum: 798
+  MenuType: 2
+  MenuId: "if-it"
+  MenuTitle: "INVOICE TEXTS"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "15"
+  Position: 4
+  MenuNum: 42
+  MenuType: 2
+  MenuId: "if-pr"
+  MenuTitle: "Invoicing Reports"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "15"
+  Position: 5
+  MenuNum: 794
+  MenuType: 2
+  MenuId: "if-cb"
+  MenuTitle: "Create invoices ('bills')"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "15"
+  Position: 6
+  MenuNum: 791
+  Module: "Ar/nnlayp.p"
+  MenuId: "if-inv"
+  MenuTitle: "Invoice file; browser"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "15"
+  Position: 7
+  MenuNum: 792
+  MenuType: 2
+  MenuId: "if-pb"
+  MenuTitle: "Print invoices ('bills')"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "15"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "151"
+  Position: 1
+  MenuNum: 1988
+  Module: "Inv/invoice_extinvid_ui.p"
+  MenuId: "setinvid"
+  MenuTitle: "Set External Invoice ID"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "151"
+  Position: 2
+  MenuNum: 1921
+  Module: "Inv/invoice_deliverystate_ui.p"
+  MenuId: "ifstrans"
+  MenuTitle: "Set Invoice Delivery State"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "151"
+  Position: 3
+  MenuNum: 1922
+  Module: "Inv/invoice_webdisp_ui.p"
+  MenuId: "webdisp"
+  MenuTitle: "Allow Web Visibility"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "151"
+  Position: 4
+  MenuNum: 9024
+  Module: "Mc/invoicetargetgroupm.p"
+  MenuId: "invtargg"
+  MenuTitle: "Invoice Target Groups"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "151"
+  Position: 5
+  MenuNum: 2116
+  Module: "Inv/remove_old_events_ui.p"
+  MenuId: "rem_old"
+  MenuTitle: "Remove Old Unbilled Events"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "151"
+  Position: 7
+  MenuNum: 9842
+  Module: "Inv/fusioninvoice.p"
+  MenuId: "fuinv"
+  MenuTitle: "Fusion Invoices"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "151"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "152"
+  Position: 1
+  MenuNum: 907
+  Module: "Mc/nncoyp.p"
+  MenuId: "cp-cp"
+  MenuTitle: "Contract payment file update"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "152"
+  Position: 2
+  MenuNum: 1110
+  Module: "Mc/bitem.p"
+  MenuId: "mbi-ob2"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "152"
+  Position: 3
+  MenuNum: 956
+  Module: "Mc/nncibr.p"
+  MenuId: "cp-br"
+  MenuTitle: "Contract payments, browse"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "152"
+  Position: 4
+  MenuNum: 987
+  Module: "Mc/nncial.p"
+  MenuId: "co-ep"
+  MenuTitle: "Contract payments, expiring payments"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "152"
+  Position: 5
+  MenuNum: 295
+  Module: "Mc/bevent.p"
+  MenuId: "if-bev"
+  MenuTitle: "Billing Events,Update"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "152"
+  Position: 6
+  MenuNum: 1776
+  Module: "Mc/servfee.p"
+  MenuId: "if-sfee"
+  MenuTitle: "Service Fees"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "152"
+  Position: 7
+  MenuNum: 918
+  Module: "Mc/nncili.p"
+  MenuId: "co-re"
+  MenuTitle: "Report contract payment definitions"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "152"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "153"
+  Position: 1
+  MenuNum: 798
+  Module: "Mc/invotxtc.p"
+  MenuId: "if-txt"
+  MenuTitle: "Information Texts"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "153"
+  Position: 5
+  MenuNum: 1795
+  Module: "Mc/itsendui.p"
+  MenuId: "if-mail"
+  MenuTitle: "Send Information Texts Via eMail"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "153"
+  Position: 6
+  MenuNum: 1796
+  Module: "Mc/itsendlm.p"
+  MenuId: "if-log"
+  MenuTitle: "View Mail Send Log"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "153"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "154"
+  Position: 1
+  MenuNum: 1861
+  Module: "Inv/billing_report_ui.p"
+  MenuId: "bill-rep"
+  MenuTitle: "Billing Report"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "154"
+  Position: 2
+  MenuNum: 1866
+  Module: "Inv/unbilled_subsqty_ui.p"
+  MenuId: "unb-rep"
+  MenuTitle: "Unbilled Subscriptions Report"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "154"
+  Position: 3
+  MenuNum: 1867
+  Module: "Inv/billing_quality_ui.p"
+  MenuId: "qual-rep"
+  MenuTitle: "Billing Quality Report"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "154"
+  Position: 4
+  MenuNum: 1825
+  Module: "Mm/billstat.p"
+  MenuId: "if-srep"
+  MenuTitle: "STATUS REPORT"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "154"
+  Position: 5
+  MenuNum: 1718
+  Module: "Inv/invstat_f.p"
+  MenuId: "if-stat"
+  MenuTitle: "Invoice statistics"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "154"
+  Position: 6
+  MenuNum: 1035
+  Module: "Inv/futbilrel.p"
+  MenuId: "if-fut"
+  MenuTitle: "Future Billing Report"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "154"
+  Position: 7
+  MenuNum: 1512
+  Module: "Mc/nnrank.p"
+  MenuId: "if-rank"
+  MenuTitle: "Ranking List"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "154"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "155"
+  Position: 1
+  MenuNum: 9798
+  MenuType: 2
+  MenuId: "if-test"
+  MenuTitle: "Invoice Testing"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "155"
+  Position: 2
+  MenuNum: 1009
+  Module: "nnlamu2"
+  MenuId: "if-cb-ic"
+  MenuTitle: "Create invoices use invoce's group code"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "155"
+  Position: 3
+  MenuNum: 1010
+  Module: "Inv/nnlamu31.p"
+  MenuId: "if-cb-cn"
+  MenuTitle: "Create invoices use customer number"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "155"
+  Position: 4
+  MenuNum: 1647
+  Module: "Inv/denybillingui.p"
+  MenuId: "ic-deny"
+  MenuTitle: "Import Billing Denials"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "155"
+  Position: 5
+  MenuNum: 1166
+  Module: "Inv/invrun_multi.p"
+  MenuId: "inv-mrun"
+  MenuTitle: "Create Invoices In Multirun Mode"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "155"
+  Position: 6
+  MenuNum: 1920
+  Module: "Mc/cleanrun.p"
+  MenuId: "if-clean"
+  MenuTitle: "Cleaning run for small amounts"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "155"
+  Position: 7
+  MenuNum: 1022
+  Module: "Inv/custnobui.p"
+  MenuId: "if-fail"
+  MenuTitle: "Failed Invoice Creation"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "155"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "1551"
+  Position: 2
+  MenuNum: 9800
+  Module: "Inv/testinvui1.p"
+  MenuId: "if-ctest"
+  MenuTitle: "Create test invoices"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1551"
+  Position: 3
+  MenuNum: 9801
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1551"
+  Position: 4
+  MenuNum: 9802
+  Module: "Inv/testinvdelui.p"
+  MenuId: "if-dtest"
+  MenuTitle: "Delete all test invoices"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1551"
+  Position: 5
+  MenuNum: 9799
+  Module: "Inv/brtestcase.p"
+  MenuId: "testcase"
+  MenuTitle: "Test Case Configuration"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "1551"
+  Position: 6
+  MenuNum: 9806
+  Module: "Inv/brtestqueue.p"
+  MenuId: "testq"
+  MenuTitle: "Test Queue"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "1551"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "157"
+  MenuNum: 610
+  Module: "nntibi"
+  MenuId: "if-ti"
+  MenuTitle: "Print invoice file to External Operator"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "157"
+  Position: 1
+  MenuNum: 986
+  Module: "Inv/nnidch.p"
+  MenuId: "if-cd"
+  MenuTitle: "Change invoices' dates"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "157"
+  Position: 2
+  MenuNum: 984
+  Module: "Inv/nnlaki.p"
+  MenuId: "if-pp"
+  MenuTitle: "Print invoices on printer or file"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "157"
+  Position: 3
+  MenuNum: 1455
+  Module: "Inv/invoice_xml_ui.p"
+  MenuId: "invxml"
+  MenuTitle: "XML FILE"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "157"
+  Position: 4
+  MenuNum: 1456
+  Module: "Inv/invoice_xml_multi.p"
+  MenuId: "xmlmulti"
+  MenuTitle: "XML Multirun"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "157"
+  Position: 5
+  MenuNum: 1085
+  Module: "Inv/printdoc1ui.p"
+  MenuId: "if-doc1"
+  MenuTitle: "Print Invoices To A DOC1 File"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "157"
+  Position: 6
+  MenuNum: 1165
+  Module: "Inv/printdoc1_multi.p"
+  MenuId: "doc1-m"
+  MenuTitle: "DOC1 Printing In Multiple Runs"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "157"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "1576"
+  Position: 1
+  MenuNum: 1005
+  Module: "didefi"
+  MenuId: "dd-pf"
+  MenuTitle: "Make a Direct Debit Payer File"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "1576"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "16"
+  Position: 1
+  MenuNum: 51
+  MenuType: 2
+  MenuId: "ar-bf"
+  MenuTitle: "BASIC FILES OF ACCOUNTS RECEIVABLE"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16"
+  Position: 2
+  MenuNum: 893
+  MenuType: 2
+  MenuId: "ar-br"
+  MenuTitle: "BROWSERS FOR A/R FILES"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16"
+  Position: 3
+  MenuNum: 829
+  MenuType: 2
+  MenuId: "ar-pay"
+  MenuTitle: "PAYMENTS"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16"
+  Position: 4
+  MenuNum: 42
+  MenuType: 2
+  MenuId: "ar-pr"
+  MenuTitle: "PRINTOUTS OF A/R"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16"
+  Position: 5
+  MenuNum: 908
+  Module: "Ar/nncimu.p"
+  MenuId: "ar-cb"
+  MenuTitle: "Credit bill; create from an old bill"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16"
+  Position: 6
+  MenuNum: 1004
+  MenuType: 2
+  MenuId: "cu-dd"
+  MenuTitle: "Direct Debit Authorizations"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "16"
+  Position: 7
+  MenuNum: 895
+  MenuType: 2
+  MenuId: "ar-cc"
+  MenuTitle: "COMMISSION CALCULATIONS"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "161"
+  Position: 1
+  MenuNum: 828
+  Module: "Ar/nnlsyp.p"
+  MenuId: "ar-ci"
+  MenuTitle: "Invoice; change an existing invoice"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "161"
+  Position: 3
+  MenuNum: 1649
+  MenuType: 2
+  MenuId: "ar-ba"
+  MenuTitle: "Bank Data"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "161"
+  Position: 4
+  MenuNum: 1719
+  Module: "Ar/paymvouch.p"
+  MenuId: "ar-vn"
+  MenuTitle: "Voucher number series"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "161"
+  Position: 5
+  MenuNum: 1711
+  MenuType: 2
+  MenuId: "ar-acc"
+  MenuTitle: "Accounting Data"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "161"
+  Position: 6
+  MenuNum: 1699
+  Module: "Ar/paymconfig.p"
+  MenuId: "paympost"
+  MenuTitle: "Posting Rules For Payments"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "161"
+  Position: 7
+  MenuNum: 830
+  Module: "nnkapa"
+  MenuId: "ar-cl"
+  MenuTitle: "Clean old paid bills from a/r file"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "161"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1613"
+  Position: 1
+  MenuNum: 9012
+  Module: "Mc/banklist.p"
+  MenuId: "ar-bl"
+  MenuTitle: "Bank Listing"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1613"
+  Position: 3
+  MenuNum: 1648
+  Module: "Mc/bankdataui.p"
+  MenuId: "ar-reb"
+  MenuTitle: "Read Bank Data"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1613"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1615"
+  Position: 1
+  MenuNum: 975
+  Module: "Mc/nnacyp.p"
+  MenuId: "su-ac"
+  MenuTitle: "Account file"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1615"
+  Position: 2
+  MenuNum: 1724
+  Module: "Ar/accperiod.p"
+  MenuId: "su-ap"
+  MenuTitle: "Accounting Periods"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1615"
+  Position: 3
+  MenuNum: 1091
+  Module: "Ar/taxzone.p"
+  MenuId: "ar-tzone"
+  MenuTitle: "Tax Zones"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1615"
+  Position: 4
+  MenuNum: 1092
+  Module: "Ar/taxclass.p"
+  MenuId: "ar-tclas"
+  MenuTitle: "Tax Classes"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1615"
+  Position: 5
+  MenuNum: 1090
+  Module: "Ar/region.p"
+  MenuId: "ar-reg"
+  MenuTitle: "Regions"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1615"
+  Position: 6
+  MenuNum: 999
+  Module: "Mc/vatcode.p"
+  MenuId: "ar-vat"
+  MenuTitle: "Vat Codes"
+  MenuClass: 9999
+  TokenCode: "Syst"
+
+bulkload: MenuTree
+  Level: "1615"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "162"
+  Position: 1
+  MenuNum: 831
+  Module: "Ar/nnlaky.p"
+  MenuId: "ar-bi"
+  MenuTitle: "Invoices, browse invoices and their paym"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "162"
+  Position: 2
+  MenuNum: 862
+  Module: "Ar/inteventm.p"
+  MenuId: "ar-int"
+  MenuTitle: "Overtime interest file; browse"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "162"
+  Position: 3
+  MenuNum: 1798
+  Module: "Mc/nnlala.p"
+  MenuId: "ar-chk"
+  MenuTitle: "Check total amount of all unpaid bills"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "162"
+  Position: 4
+  MenuNum: 1008
+  Module: "Ar/otint.p"
+  MenuId: "otint"
+  MenuTitle: "Update overtime interest"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "162"
+  Position: 5
+  MenuNum: 1495
+  Module: "Ar/paymentc.p"
+  MenuId: "ar-allpa"
+  MenuTitle: "Browse all payments"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "162"
+  Position: 6
+  MenuNum: 1492
+  Module: "Ar/claimhis2.p"
+  MenuId: "ar-clbr"
+  MenuTitle: "Claiming History"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "162"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "163"
+  Position: 1
+  MenuNum: 850
+  Module: "Ar/nnsusy.p"
+  MenuId: "ar-pam"
+  MenuTitle: "Payments into a/r, manual input"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "163"
+  Position: 2
+  MenuNum: 849
+  MenuType: 2
+  MenuId: "ar-file"
+  MenuTitle: "Payment Files"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "163"
+  Position: 3
+  MenuNum: 1783
+  MenuType: 2
+  MenuId: "ar-pplan"
+  MenuTitle: "Payment Plans"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "163"
+  Position: 4
+  MenuNum: 129
+  Module: "Ar/nndepo.p"
+  MenuId: "ar-pad"
+  MenuTitle: "Advance Payments and deposits"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "163"
+  Position: 5
+  MenuNum: 1726
+  Module: "credloss"
+  MenuId: "ar-clos"
+  MenuTitle: "Credit loss payments"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "163"
+  Position: 6
+  MenuNum: 762
+  Module: "Ar/unregpay.p"
+  MenuId: "ar-koh"
+  MenuTitle: "Unregist payments"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "163"
+  Position: 7
+  MenuNum: 1496
+  MenuType: 2
+  MenuId: "ar-claim"
+  MenuTitle: "Claiming"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "163"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1632"
+  Position: 1
+  MenuNum: 1804
+  Module: "Ar/ocrcfg.p"
+  MenuId: "ar-cfg"
+  MenuTitle: "OCR-configuration"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1632"
+  Position: 3
+  MenuNum: 1793
+  Module: "Ar/nnkosu.p"
+  MenuId: "ar-pao"
+  MenuTitle: "Payments into a/r, input from OCR file"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1632"
+  Position: 4
+  MenuNum: 1792
+  Module: "Ar/refupick.p"
+  MenuId: "ar-refu"
+  MenuTitle: "Refund Payments"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1632"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1633"
+  Position: 1
+  MenuNum: 1783
+  Module: "Ar/paymplam.p"
+  MenuId: "ar-pp"
+  MenuTitle: "Payment Plans"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1633"
+  Position: 3
+  MenuNum: 1064
+  Module: "Ar/ppcredctrl.p"
+  MenuId: "ar-ppcr"
+  MenuTitle: "Payment Plans In Credit Control"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1633"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1637"
+  Position: 1
+  MenuNum: 1078
+  Module: "pplanfui"
+  MenuId: "ar-ppf"
+  MenuTitle: "Failed Payment Plans"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1637"
+  Position: 2
+  MenuNum: 1075
+  Module: "rem1run"
+  MenuId: "ar-rem1"
+  MenuTitle: "EPL File of Reminders"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1637"
+  Position: 3
+  MenuNum: 1019
+  Module: "mslockui"
+  MenuId: "ar-lock"
+  MenuTitle: "Lock / unlock subscriptions due to debt"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1637"
+  Position: 4
+  MenuNum: 1074
+  Module: "claim5ui"
+  MenuId: "ar-rem5"
+  MenuTitle: "Claiming Note And End Invoice"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1637"
+  Position: 5
+  MenuNum: 1076
+  Module: "rem4run"
+  MenuId: "ar-rem2"
+  MenuTitle: "2. Reminders"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1637"
+  Position: 6
+  MenuNum: 1251
+  Module: "Ar/intrumli.p"
+  MenuId: "ar-inco"
+  MenuTitle: "Invoice collection file to Intrum"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1637"
+  Position: 7
+  MenuNum: 1252
+  Module: "intrumsl"
+  MenuId: "ar-inba"
+  MenuTitle: "Backing file to Intrum"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1637"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "164"
+  Position: 1
+  MenuNum: 564
+  MenuType: 2
+  MenuId: "ar-pbk"
+  MenuTitle: "A/R PRINTOUTS FOR BOOKKEEPING"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "164"
+  Position: 2
+  MenuNum: 565
+  MenuType: 2
+  MenuId: "ar-pot"
+  MenuTitle: "OTHER A/R PRINTOUTS"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "164"
+  Position: 3
+  MenuNum: 1761
+  MenuType: 2
+  MenuId: "ar-cus"
+  MenuTitle: "Customer reports"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "164"
+  Position: 4
+  MenuNum: 1496
+  MenuType: 2
+  MenuId: "ar-cla"
+  MenuTitle: "CLAIMING REPORTS"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "164"
+  Position: 5
+  MenuNum: 1632
+  MenuType: 2
+  MenuId: "ar-reven"
+  MenuTitle: "REVENUE REPORTS"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "164"
+  Position: 6
+  MenuNum: 1082
+  MenuType: 2
+  MenuId: "ar-tax"
+  MenuTitle: "Tax Reports"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "164"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1641"
+  Position: 1
+  MenuNum: 821
+  Module: "Ar/nnlalu.p"
+  MenuId: "ar-pij"
+  MenuTitle: "Invoice journal from a/r, printout"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1641"
+  Position: 2
+  MenuNum: 822
+  Module: "nnrelu"
+  MenuId: "ar-pbr"
+  MenuTitle: "Balance report from a/c, printout"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1641"
+  Position: 3
+  MenuNum: 823
+  Module: "Ar/nnsulu.p"
+  MenuId: "ar-ppj"
+  MenuTitle: "Payment journal from a/r, printout"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1641"
+  Position: 4
+  MenuNum: 561
+  Module: "Ar/nnster.p"
+  MenuId: "ar-as"
+  MenuTitle: "Account Summary, printout"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1641"
+  Position: 5
+  MenuNum: 582
+  Module: "Mc/nnadli.p"
+  MenuId: "ar-ad"
+  MenuTitle: "List of Advence Payments and Deposits"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1641"
+  Position: 6
+  MenuNum: 1755
+  Module: "depoinv_f"
+  MenuId: "ar-depo"
+  MenuTitle: "Deposit Invoices"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1641"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1642"
+  Position: 1
+  MenuNum: 824
+  Module: "Ar/nnikaj.p"
+  MenuId: "ar-paa"
+  MenuTitle: "Age analysis from a/r, printout"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1642"
+  Position: 2
+  MenuNum: 825
+  Module: "Ar/nnkaen.p"
+  MenuId: "ar-ppp"
+  MenuTitle: "Payment prognosis from a/r, printout"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1642"
+  Position: 3
+  MenuNum: 826
+  MenuType: 2
+  MenuId: "ar-di"
+  MenuTitle: "Due invoices"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1642"
+  Position: 5
+  MenuNum: 762
+  MenuType: 2
+  MenuId: "ar-unr"
+  MenuTitle: "Unregistered Payments Reports"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1642"
+  Position: 6
+  MenuNum: 1717
+  Module: "Ar/arbalrel.p"
+  MenuId: "ar-bsum"
+  MenuTitle: "Balance Summary"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1642"
+  Position: 7
+  MenuNum: 1733
+  Module: "Ar/pbankrel.p"
+  MenuId: "ar-bank"
+  MenuTitle: "Payments by Bank"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1642"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16423"
+  Position: 1
+  MenuNum: 826
+  Module: "nnerlu"
+  MenuId: "ar-pdi"
+  MenuTitle: "Due invoices from a/r, printout"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16423"
+  Position: 2
+  MenuNum: 990
+  Module: "Mc/nnpiex.p"
+  MenuId: "ar-pi"
+  MenuTitle: "Invoice list with payments, spreadsheet"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16423"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16425"
+  Position: 1
+  MenuNum: 764
+  Module: "Ar/unregrep.p"
+  MenuId: "ar-urr"
+  MenuTitle: "Unregistered payment report"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16425"
+  Position: 2
+  MenuNum: 765
+  Module: "unregeveui"
+  MenuId: "ar-unrev"
+  MenuTitle: "Unregistered Events"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "16425"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1643"
+  Position: 1
+  MenuNum: 827
+  Module: "nnkatu"
+  MenuId: "ar-pre"
+  MenuTitle: "Remainders with due invoices, printout"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1643"
+  Position: 2
+  MenuNum: 1814
+  Module: "Ar/balrel.p"
+  MenuId: "ar-cbal"
+  MenuTitle: "Current Balances"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1643"
+  Position: 3
+  MenuNum: 1762
+  Module: "Ar/custbalrem.p"
+  MenuId: "ar-cbr"
+  MenuTitle: "Customer balances repot"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1643"
+  Position: 4
+  MenuNum: 1727
+  Module: "Ar/opbalrel.p"
+  MenuId: "ar-op"
+  MenuTitle: "Customers' Overpayments"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1643"
+  Position: 5
+  MenuNum: 1766
+  Module: "cuadvrui"
+  MenuId: "ar-cuadv"
+  MenuTitle: "Customers' Advance Payment Balances"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1643"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1644"
+  Position: 1
+  MenuNum: 1497
+  Module: "clinvrel"
+  MenuId: "ar-clinv"
+  MenuTitle: "Credit loss invoices"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1644"
+  Position: 2
+  MenuNum: 1498
+  Module: "ccinvrel"
+  MenuId: "ar-ccrep"
+  MenuTitle: "Claim cancellation"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1644"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1645"
+  Position: 1
+  MenuNum: 1712
+  Module: "Ar/accdatll.p"
+  MenuId: "ar-rev"
+  MenuTitle: "Revenue Report"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1645"
+  Position: 2
+  MenuNum: 1633
+  Module: "Ar/arpurel.p"
+  MenuId: "ar-aver"
+  MenuTitle: "AVERAGE REVENUE PER USER"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1645"
+  Position: 3
+  MenuNum: 1735
+  Module: "Mc/subsrel.p"
+  MenuId: "ar-subr"
+  MenuTitle: "Subscription Revenue"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1645"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1646"
+  Position: 1
+  MenuNum: 1083
+  Module: "Ar/taxreportui.p"
+  MenuId: "ar-potax"
+  MenuTitle: "Postpaid Taxes"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1646"
+  Position: 2
+  MenuNum: 1084
+  Module: "Ar/taxvouchrepui.p"
+  MenuId: "ar-prtax"
+  MenuTitle: "Prepaid Taxes"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1646"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "166"
+  Position: 1
+  MenuNum: 1011
+  Module: "Ar/nnsvlu.p"
+  MenuId: "dd-im"
+  MenuTitle: "Import DD Authorizations"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "166"
+  Position: 2
+  MenuNum: 1012
+  Module: "Ar/nnsvypm.p"
+  MenuId: "dd-up"
+  MenuTitle: "Update DD Authorizations"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "166"
+  Position: 3
+  MenuNum: 52
+  Module: "Ar/nnsvypmf.p"
+  MenuId: "dd-fail"
+  MenuTitle: "Failed DD Authorizations"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "166"
+  Position: 4
+  MenuNum: 68
+  Module: "Ar/ddstatrel.p"
+  MenuId: "dd-rep"
+  MenuTitle: "DD Status Report"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "166"
+  Position: 5
+  MenuNum: 1013
+  Module: "Inv/ddoutfileui.p"
+  MenuId: "dd-fi"
+  MenuTitle: "Direct Debit File Creation"
+  MenuClass: 9999
+  TokenCode: "BILL"
+
+bulkload: MenuTree
+  Level: "166"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "167"
+  Position: 1
+  MenuNum: 896
+  Module: "Ar/corule.p"
+  MenuId: "commrule"
+  MenuTitle: "Commission Rules"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "167"
+  Position: 2
+  MenuNum: 879
+  Module: "Ar/commission_ui.p"
+  MenuId: "commrun"
+  MenuTitle: "Commission Queue Handling"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "167"
+  Position: 3
+  MenuNum: 898
+  Module: "Ar/coevent.p"
+  MenuId: "cc-cb"
+  MenuTitle: "Commission Events"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "167"
+  Position: 4
+  MenuNum: 899
+  MenuType: 2
+  MenuId: "co-rep"
+  MenuTitle: "Commission Reports"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "COMM"
+
+bulkload: MenuTree
+  Level: "167"
+  Position: 5
+  MenuNum: 1818
+  Module: "Ar/cobalui.p"
+  MenuId: "cc-fat"
+  MenuTitle: "Create FAT From Events"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "COMM"
+
+bulkload: MenuTree
+  Level: "167"
+  Position: 7
+  MenuNum: 51
+  MenuType: 2
+  MenuId: "cc-bas"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "COMM"
+
+bulkload: MenuTree
+  Level: "167"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1674"
+  Position: 1
+  MenuNum: 1130
+  Module: "Ar/copayrel.p"
+  MenuId: "cc-cp"
+  MenuTitle: "Commission Report"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1674"
+  Position: 3
+  MenuNum: 1129
+  Module: "Ar/coacrel.p"
+  MenuId: "co-acr"
+  MenuTitle: "AC Event Report"
+  MenuClass: 9999
+  TokenCode: "COMM"
+
+bulkload: MenuTree
+  Level: "1674"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "COMM"
+
+bulkload: MenuTree
+  Level: "1677"
+  Position: 1
+  MenuNum: 1036
+  Module: "Mc/contractm.p"
+  MenuId: "cc-cont"
+  MenuTitle: "Contract Maintenance"
+  MenuClass: 9999
+  TokenCode: "COMM"
+
+bulkload: MenuTree
+  Level: "1677"
+  Position: 2
+  MenuNum: 952
+  Module: "Mc/nnrsyp.p"
+  MenuId: "cc-rs"
+  MenuTitle: "Resellers"
+  MenuClass: 9999
+  TokenCode: "COMM"
+
+bulkload: MenuTree
+  Level: "1677"
+  Position: 3
+  MenuNum: 756
+  Module: "Mc/nnsmyp2.p"
+  MenuId: "cc-sm"
+  MenuTitle: "Salesmen"
+  MenuClass: 9999
+  TokenCode: "COMM"
+
+bulkload: MenuTree
+  Level: "1677"
+  Position: 5
+  MenuNum: 1037
+  Module: "Mc/contrel.p"
+  MenuId: "cu-crep"
+  MenuTitle: "Contract Report"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "1677"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "COMM"
+
+bulkload: MenuTree
+  Level: "169"
+  Position: 1
+  MenuNum: 887
+  Module: "Mc/nnbsex.p"
+  MenuId: "ar-epj"
+  MenuTitle: "Payment journal from a/r, spreadsheet"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "169"
+  Position: 2
+  MenuNum: 894
+  Module: "Mc/nnfsex.p"
+  MenuId: "ar-eij"
+  MenuTitle: "Invoice Journal from a/r, spreadsheet"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "169"
+  Position: 3
+  MenuNum: 940
+  Module: "Mc/nnfsxor.p"
+  MenuId: "ar-xij"
+  MenuTitle: "Invoice journal from a/r to XOR, file"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "169"
+  Position: 4
+  MenuNum: 976
+  Module: "Mc/nnbsxor.p"
+  MenuId: "ar-xpj"
+  MenuTitle: "Payment Journal to XOR, file"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "169"
+  Position: 5
+  MenuNum: 919
+  Module: "Mc/nnilex.p"
+  MenuId: "ar-eil"
+  MenuTitle: "Invoice list "Tman" from a/r, spreadshee"
+  MenuClass: 9999
+  TokenCode: "AR"
+
+bulkload: MenuTree
+  Level: "17"
+  Position: 1
+  MenuNum: 880
+  MenuType: 2
+  MenuId: "su-mf"
+  MenuTitle: "MISCELLANEOUS FILES"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "17"
+  Position: 2
+  MenuNum: 569
+  MenuType: 2
+  MenuId: "su-mr"
+  MenuTitle: "DIFFERENT TMS CALENDER SETTINGS"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "17"
+  Position: 3
+  MenuNum: 778
+  MenuType: 2
+  MenuId: "su-pr"
+  MenuTitle: "PRINTERS AND PRINTOUTS"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "17"
+  Position: 4
+  MenuNum: 1127
+  MenuType: 2
+  MenuId: "log"
+  MenuTitle: "Logs"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "17"
+  Position: 5
+  MenuNum: 9837
+  MenuType: 2
+  MenuId: "c-cparam"
+  MenuTitle: "TMS Parameters"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "17"
+  Position: 6
+  MenuNum: 2200
+  MenuType: 2
+  MenuId: "su-ur"
+  MenuTitle: "USER RIGHTS"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "17"
+  Position: 7
+  MenuNum: 2204
+  Module: "Syst/chpass.p"
+  MenuId: "su-pas"
+  MenuTitle: "Change user password"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "17"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "171"
+  Position: 1
+  MenuNum: 1993
+  Module: "Syst/dumpfile.p"
+  MenuId: "dump"
+  MenuTitle: "Dumpfile Configuration"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "171"
+  Position: 2
+  MenuNum: 6912
+  MenuType: 2
+  MenuId: "req-conf"
+  MenuTitle: "Request Configuration"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "171"
+  Position: 3
+  MenuNum: 751
+  Module: "Mc/nnteyp.p"
+  MenuId: "su-he"
+  MenuTitle: "Header text file update"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "171"
+  Position: 4
+  MenuNum: 1023
+  Module: "monstatl"
+  MenuId: "mo-stat"
+  MenuTitle: "Monthly Status Report"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "171"
+  Position: 5
+  MenuNum: 1800
+  Module: "Syst/brand.p"
+  MenuId: "brand"
+  MenuTitle: "Brands"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "171"
+  Position: 6
+  MenuNum: 802
+  Module: "Mc/nnyrit.p"
+  MenuId: "su-co"
+  MenuTitle: "Company data file update"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "171"
+  Position: 7
+  MenuNum: 58
+  Module: "Mc/bankacc.p"
+  MenuId: "su-bank"
+  MenuTitle: "Bank Accounts"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "171"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1712"
+  Position: 1
+  MenuNum: 6910
+  Module: "Syst/reqtypem.p"
+  MenuId: "req-type"
+  MenuTitle: "Request Types"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1712"
+  Position: 2
+  MenuNum: 6909
+  Module: "Syst/requestqueue.p"
+  MenuId: "rqueue"
+  MenuTitle: "Request Queues"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1712"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "172"
+  Position: 1
+  MenuNum: 9069
+  Module: "m2mtime"
+  MenuId: "m2m-time"
+  MenuTitle: "M2M Calender"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "172"
+  Position: 2
+  MenuNum: 752
+  Module: "Mc/nnpyyp.p"
+  MenuId: "su-sh"
+  MenuTitle: "Special holiday file update"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "172"
+  Position: 7
+  MenuNum: 9070
+  Module: "m2mtimecr"
+  MenuId: "m2m-upd"
+  MenuTitle: "UPDATE MORE DAYS TO M2M CALENDER"
+  MenuClass: 9999
+  TokenCode: "Syst"
+
+bulkload: MenuTree
+  Level: "172"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1721"
+  Position: 1
+  MenuNum: 589
+  Module: "rscode"
+  MenuId: "rs-ty"
+  MenuTitle: "Reseller prefix types"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1721"
+  Position: 2
+  MenuNum: 588
+  Module: "Mf/rsoper.p"
+  MenuId: "rs-op"
+  MenuTitle: "Prefix resellers"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1721"
+  Position: 3
+  MenuNum: 590
+  Module: "Mf/nnpacli.p"
+  MenuId: "rs-cli"
+  MenuTitle: "Hosting resellers CLIs"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1721"
+  Position: 4
+  MenuNum: 1509
+  Module: "rsreq"
+  MenuId: "rs-rf"
+  MenuTitle: "Read CLI requestfile"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1721"
+  Position: 5
+  MenuNum: 1510
+  Module: "Mf/cliswlog.p"
+  MenuId: "rs-sl"
+  MenuTitle: "Read switch response files"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1721"
+  Position: 6
+  MenuNum: 1511
+  Module: "cdrsweek"
+  MenuId: "rs-wr"
+  MenuTitle: "Generate a CDR report"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1721"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1722"
+  Position: 1
+  MenuNum: 940
+  Module: "Mc/nnfsxor.p"
+  MenuId: "xor-inv"
+  MenuTitle: "Invoice Journal to XOR"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1722"
+  Position: 2
+  MenuNum: 976
+  Module: "Mc/nnbsxor.p"
+  MenuId: "xor-pay"
+  MenuTitle: "Payment Journal to XOR"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1722"
+  Position: 3
+  MenuNum: 809
+  Module: "Mc/nnalky.p"
+  MenuId: "xor-cli"
+  MenuTitle: "Customer lists"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1722"
+  Position: 4
+  MenuNum: 532
+  Module: "Mc/nnxorpr.p"
+  MenuId: "xor-li"
+  MenuTitle: "XOR project & customer lists"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1722"
+  Position: 5
+  MenuNum: 571
+  Module: "nncoxor"
+  MenuId: "xor-co"
+  MenuTitle: "Call cost to XOR"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1722"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1723"
+  Position: 1
+  MenuNum: 612
+  Module: "nnpramt"
+  MenuId: "bf-apr"
+  MenuTitle: "Calculate product summary"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1723"
+  Position: 2
+  MenuNum: 613
+  Module: "Mf/nnswamt.p"
+  MenuId: "bf-asw"
+  MenuTitle: "Calculate switch summary"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1723"
+  Position: 3
+  MenuNum: 619
+  Module: "Mc/nnbiamt.p"
+  MenuId: "bf-abi"
+  MenuTitle: "Calculate invoice summary"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1723"
+  Position: 4
+  MenuNum: 620
+  Module: "nncpamt"
+  MenuId: "bf-acp"
+  MenuTitle: "Calculate customer / product summary"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1723"
+  Position: 5
+  MenuNum: 621
+  Module: "Mf/nnmtamt.p"
+  MenuId: "bf-amth"
+  MenuTitle: "Calculate calls / cust / month summary"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1723"
+  Position: 6
+  MenuNum: 622
+  Module: "nnfpamt"
+  MenuId: "bf-abpr"
+  MenuTitle: "Calculate call per bsub/cust/single prod"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1723"
+  Position: 7
+  MenuNum: 555
+  MenuType: 2
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1723"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "17237"
+  Position: 1
+  MenuNum: 554
+  Module: "Mf/nnopamt.p"
+  MenuId: "bf-aop"
+  MenuTitle: "Calculate call amount for an operator"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "17237"
+  Position: 2
+  MenuNum: 557
+  Module: "nncapr"
+  MenuId: "bf-capr"
+  MenuTitle: "Calculate calls per product / customer"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "17237"
+  Position: 3
+  MenuNum: 583
+  Module: "Mf/nnpref.p"
+  MenuId: "bf-pref"
+  MenuTitle: "Indirect prefix traffic spreadsheet"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "17237"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1725"
+  Position: 1
+  MenuNum: 625
+  Module: "callerr"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1725"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1727"
+  Position: 1
+  MenuNum: 859
+  Module: "nnexyp"
+  MenuId: "cdrp-ex"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1727"
+  Position: 2
+  MenuNum: 551
+  Module: "Mf/nncpsec.p"
+  MenuId: "cdrp-sec"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1727"
+  Position: 3
+  MenuNum: 866
+  Module: "Mf/nncpcgr.p"
+  MenuId: "cdrp-cgr"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1727"
+  Position: 4
+  MenuNum: 550
+  Module: "Mf/nncpdef.p"
+  MenuId: "cdrp-def"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1727"
+  Position: 6
+  MenuNum: 553
+  Module: "Mf/nncphi.p"
+  MenuId: "cdrp-hi"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1727"
+  Position: 7
+  MenuNum: 552
+  Module: "nncdrp"
+  MenuId: "cdrp-cr"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "1727"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "173"
+  Position: 1
+  MenuNum: 779
+  Module: "Syst/utukir.p"
+  MenuId: "printers"
+  MenuTitle: "Printer file update"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "173"
+  Position: 2
+  MenuNum: 780
+  Module: "Syst/ututul.p"
+  MenuId: "su-pro"
+  MenuTitle: "Printout definition file update"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "173"
+  Position: 4
+  MenuNum: 985
+  Module: "Mc/printhouseconf.p"
+  MenuId: "pr-house"
+  MenuTitle: "Printhouse Configuration"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "173"
+  Position: 5
+  MenuNum: 9819
+  Module: "Mc/read_printhouse_zipcode_ui.p"
+  MenuId: "pr-zfile"
+  MenuTitle: "Printhouse zip code load"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "173"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "174"
+  Position: 1
+  MenuNum: 1752
+  Module: "Mc/eventselm.p"
+  MenuId: "su-ev"
+  MenuTitle: "Browse eventlog"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "174"
+  Position: 2
+  MenuNum: 1125
+  Module: "Mc/errorlogm.p"
+  MenuId: "log-err"
+  MenuTitle: "Error Log"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "174"
+  Position: 3
+  MenuNum: 1126
+  Module: "Mc/actionlogm.p"
+  MenuId: "log-act"
+  MenuTitle: "Action Log"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "174"
+  Position: 4
+  MenuNum: 1745
+  Module: "Mc/callalarm1.p"
+  MenuId: "mbi-alar"
+  MenuTitle: "ALARMS"
+  MenuClass: 9999
+  TokenCode: "mob"
+
+bulkload: MenuTree
+  Level: "174"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "175"
+  Position: 1
+  MenuNum: 9836
+  Module: "Syst/billing_cparam.p"
+  MenuId: "bill-cpa"
+  MenuTitle: "Billing related TMS Params"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "175"
+  Position: 2
+  MenuNum: 9839
+  Module: "Syst/xml_cparam.p"
+  MenuId: "xml-cpa"
+  MenuTitle: "XML creation TMS Params"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "175"
+  Position: 3
+  MenuNum: 9841
+  Module: "Syst/doc1_cparam.p"
+  MenuId: "doc1-cpa"
+  MenuTitle: "DOC1 TMS Params"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "175"
+  Position: 4
+  MenuNum: 9838
+  Module: "Syst/drdebit_cparam.p"
+  MenuId: "csb-cpa"
+  MenuTitle: "Direct Debit TMS Params"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "175"
+  Position: 5
+  MenuNum: 9840
+  Module: "Syst/acc_rec_cparam.p"
+  MenuId: "arec-cpa"
+  MenuTitle: "Account Receivable TMS Params"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "175"
+  Position: 6
+  MenuNum: 9835
+  Module: "Syst/rating_cparam.p"
+  MenuId: "rat-cpa"
+  MenuTitle: "Rating TMS params"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "175"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "176"
+  Position: 1
+  MenuNum: 2201
+  Module: "Syst/token.p"
+  MenuId: "su-to"
+  MenuTitle: "Update tokens"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "176"
+  Position: 2
+  MenuNum: 2202
+  Module: "Syst/tabletoken.p"
+  MenuId: "su-tt"
+  MenuTitle: "Update Tabletokens"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "176"
+  Position: 3
+  MenuNum: 2228
+  Module: "Syst/username.p"
+  MenuId: "us-na"
+  MenuTitle: "Update user names"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "176"
+  Position: 4
+  MenuNum: 2229
+  Module: "Syst/userkeys.p"
+  MenuId: "us-ke"
+  MenuTitle: "Update user keys"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "176"
+  Position: 5
+  MenuNum: 781
+  Module: "Syst/ukayt.p"
+  MenuId: "su-usr"
+  MenuTitle: "Update users"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "176"
+  Position: 6
+  MenuNum: 546
+  Module: "Syst/nnugro.p"
+  MenuId: "su-ugr"
+  MenuTitle: "User Groups, update"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "176"
+  Position: 7
+  MenuNum: 2204
+  Module: "Syst/pwadmin.p"
+  MenuId: "pwadmin"
+  MenuTitle: "Password Change Admin"
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "176"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "199"
+  Position: 5
+  MenuNum: 805
+  Module: "nnchse"
+  MenuId: "su-chlog"
+  MenuTitle: "Log of DIAX ch-files"
+  MenuClass: 9999
+  State[1]: yes
+  TokenCode: "SYST"
+
+bulkload: MenuTree
+  Level: "2"
+  Position: 1
+  MenuNum: 2001
+  MenuType: 2
+  MenuId: "gen-"
+  MenuTitle: "Genesys action"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "21"
+  Position: 1
+  MenuNum: 2001
+  Module: "readgcdr"
+  MenuId: "gen-read"
+  MenuTitle: "Read Genesys Calls/Events"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "21"
+  Position: 2
+  MenuNum: 2002
+  Module: "analgcdr"
+  MenuId: "gen-anal"
+  MenuTitle: "Analyse Genesys Calls/Events"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "21"
+  Position: 3
+  MenuNum: 2003
+  Module: "rategcdr"
+  MenuId: "gen-rate"
+  MenuTitle: "Rate Genesys Calls/Events"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "21"
+  Position: 4
+  MenuNum: 2015
+  Module: "gencall"
+  MenuId: "gen-call"
+  MenuTitle: "View Genesys Calls/Events"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "21"
+  Position: 5
+  MenuNum: 2013
+  Module: "gencalle"
+  MenuId: "gen-cerr"
+  MenuTitle: "Errorneous Genesys Calls/Events"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "21"
+  Position: 6
+  MenuNum: 2005
+  Module: "tcevent"
+  MenuId: "gen-even"
+  MenuTitle: "Genesys Events and Rates"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "21"
+  Position: 7
+  MenuNum: 555
+  MenuType: 2
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "21"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "217"
+  Position: 1
+  MenuNum: 2009
+  Module: "genevd"
+  MenuId: "gen-vd"
+  MenuTitle: "Volume Discount (only genesys)"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "217"
+  Position: 4
+  MenuNum: 2010
+  Module: "billgcdr"
+  MenuId: "gen-obi"
+  MenuTitle: "Make OBI records"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "217"
+  Position: 5
+  MenuNum: 2011
+  Module: "Mc/bitem.p"
+  MenuId: "gen-ob"
+  MenuTitle: "All OBI records"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "217"
+  Position: 6
+  MenuNum: 2008
+  Module: "gserr"
+  MenuId: "gen-err"
+  MenuTitle: "Genesys Error Codes"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "217"
+  Position: 7
+  MenuNum: 794
+  Module: "nnlamu"
+  MenuId: "gen-lamu"
+  MenuTitle: "Create Bills"
+  MenuClass: 9999
+
+bulkload: MenuTree
+  Level: "217"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "MAIN"
+
+bulkload: MenuTree
+  Level: "3"
+  Position: 1
+  MenuNum: 2
+  MenuType: 2
+  MenuId: "-aspa"
+  MenuClass: 9999
+  TokenCode: "cc"
+
+bulkload: MenuTree
+  Level: "3"
+  Position: 8
+  MenuNum: 3
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31"
+  Position: 1
+  MenuNum: 2204
+  Module: "Syst/chpass.p"
+  MenuTitle: "CHANGE PASSWORD"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31"
+  Position: 2
+  MenuNum: 788
+  MenuType: 2
+  MenuTitle: "CUSTOMER DATA"
+  MenuClass: 9999
+  TokenCode: "cc"
+
+bulkload: MenuTree
+  Level: "31"
+  Position: 3
+  MenuNum: 1881
+  MenuType: 2
+  MenuTitle: "MOBILE DATA"
+  MenuClass: 9999
+  TokenCode: "cc"
+
+bulkload: MenuTree
+  Level: "31"
+  Position: 5
+  MenuNum: 737
+  MenuType: 2
+  MenuTitle: "INVOICING"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "31"
+  Position: 6
+  MenuNum: 820
+  MenuType: 2
+  MenuTitle: "RESCONTRA"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "31"
+  Position: 7
+  MenuNum: 9042
+  MenuType: 2
+  MenuTitle: "SUPER USER ACTIONS"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "31"
+  Position: 8
+  MenuNum: 3
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "312"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "cc"
+
+bulkload: MenuTree
+  Level: "313"
+  Position: 2
+  MenuNum: 710
+  Module: "Mc/customerbr.p"
+  MenuTitle: "Customers"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "313"
+  Position: 3
+  MenuNum: 259
+  Module: "Mm/mobsuball.p"
+  MenuTitle: "Mobile Subscriptions"
+  MenuClass: 9999
+  TokenCode: "MOB"
+
+bulkload: MenuTree
+  Level: "313"
+  Position: 4
+  MenuNum: 2206
+  MenuType: 2
+  MenuTitle: "ORDERS"
+  MenuClass: 9999
+  TokenCode: "cc"
+
+bulkload: MenuTree
+  Level: "313"
+  Position: 5
+  MenuNum: 9043
+  MenuType: 2
+  MenuClass: 9999
+  TokenCode: "cc"
+
+bulkload: MenuTree
+  Level: "313"
+  Position: 7
+  MenuNum: 239
+  MenuType: 2
+  MenuTitle: "MOBILE SERVICES"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "313"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "cc"
+
+bulkload: MenuTree
+  Level: "3134"
+  Position: 5
+  MenuNum: 2220
+  Module: "Mc/order2.p"
+  MenuTitle: "Browse unknown orders"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "3134"
+  Position: 6
+  MenuNum: 2221
+  Module: "Mc/order34.p"
+  MenuTitle: "Orders Known"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "3134"
+  Position: 7
+  MenuNum: 9045
+  Module: "Mc/order34.p"
+  MenuTitle: "All Orders"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "3134"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "3135"
+  Position: 3
+  MenuNum: 2813
+  MenuType: 2
+  MenuTitle: "M2M Interface"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "3135"
+  Position: 4
+  MenuNum: 1950
+  MenuType: 2
+  MenuTitle: "Mobile Number Portability WEB"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "3135"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31353"
+  Position: 2
+  MenuNum: 2805
+  Module: "m2mqall1"
+  MenuTitle: "All M2M messages"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31353"
+  Position: 3
+  MenuNum: 1951
+  Module: "m2mtype"
+  MenuTitle: "M2M Subscriptions"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31353"
+  Position: 4
+  MenuNum: 2809
+  Module: "m2mrtype"
+  MenuTitle: "M2M Rescue"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31353"
+  Position: 5
+  MenuNum: 2814
+  Module: "m2merror"
+  MenuTitle: "M2M Error messages"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31353"
+  Position: 6
+  MenuNum: 1966
+  Module: "m2mnpot"
+  MenuTitle: "M2M WAIT FOR NPOT"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31353"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31354"
+  Position: 1
+  MenuNum: 1951
+  Module: "mnporder"
+  MenuTitle: "Number Portability order"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31354"
+  Position: 2
+  MenuNum: 1952
+  Module: "Mnp/mnpresp.p"
+  MenuTitle: "Number portability response"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31354"
+  Position: 3
+  MenuNum: 1956
+  Module: "mnpreject"
+  MenuTitle: "Rejected Mobile Number Portabily numbers"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31354"
+  Position: 5
+  MenuNum: 1957
+  Module: "mnpact"
+  MenuTitle: "Mobile Number Portability Activation"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31354"
+  Position: 6
+  MenuNum: 1964
+  Module: "mnpong"
+  MenuTitle: "MNP ONGOING"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31354"
+  Position: 7
+  MenuNum: 1965
+  Module: "mnp10"
+  MenuTitle: "WAIT-FOR MNP HANDLING"
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "31354"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "3137"
+  Position: 1
+  MenuNum: 9044
+  Module: "Mm/solog.p"
+  MenuTitle: "HLR LOG"
+  MenuClass: 9999
+  TokenCode: "cc"
+
+bulkload: MenuTree
+  Level: "3137"
+  Position: 2
+  MenuNum: 228
+  Module: "Mm/simall.p"
+  MenuTitle: "SIM Cards"
+  MenuClass: 9999
+  TokenCode: "cc"
+
+bulkload: MenuTree
+  Level: "3137"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CC"
+
+bulkload: MenuTree
+  Level: "317"
+  Position: 1
+  MenuNum: 229
+  Module: "Mm/msisdn.p"
+  MenuTitle: "MSISDN Numbers"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "317"
+  Position: 2
+  MenuNum: 2230
+  Module: "deletems"
+  MenuTitle: "DELETE NON-ACTIVE MOBILE SUBSCRIPTION"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "317"
+  Position: 3
+  MenuNum: 1960
+  Module: "Mm/killedmobs.p"
+  MenuTitle: "Mobile Subscription History"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "317"
+  Position: 5
+  MenuNum: 64
+  Module: "screquest"
+  MenuTitle: "Service Change Request"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "317"
+  Position: 6
+  MenuNum: 59
+  Module: "Mm/msrequestm.p"
+  MenuTitle: "CLIType Change Request"
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "317"
+  Position: 8
+  MenuNum: 8
+  MenuType: 3
+  MenuClass: 9999
+  TokenCode: "CCSUPER"
+
+bulkload: MenuTree
+  Level: "998"
+  Position: 1
+  MenuNum: 1
+  Module: "Syst/umenu.p"
+  MenuId: "umenu"
+  MenuTitle: "Maintain menu texts"
+  MenuClass: 9999
+  TokenCode: "SYST"
+

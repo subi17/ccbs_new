@@ -1,0 +1,3437 @@
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 5
+  DumpTime: "00:00"
+  DumpMode: "Modified"
+  LastRun: 20160616.01479
+  FromDate: 2015-02-25
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 5
+  DumpTime: "00:10"
+  DumpMode: "Full"
+  LastRun: 20150422.14176
+  FromDate: 2015-02-12
+  ToDate: 2015-04-22
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 5
+  DumpTime: "01:30"
+  DumpMode: "Full"
+  LastRun: 20150211.4617
+  FromDate: 2008-11-13
+  ToDate: 2015-02-11
+  DumpWeekday: "1-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 6
+  DumpTime: "1"
+  DumpMode: "Modified"
+  LastRun: 20090605.05504
+  FromDate: 2008-12-04
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 6
+  DumpDay: "10"
+  DumpTime: "0:56"
+  DumpMode: "Full"
+  LastRun: 20090510.07441
+  FromDate: 2008-12-08
+  ToDate: 2049-12-31
+  FileNameTag: "_CONTROL_DATA"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 7
+  DumpTime: "0:59"
+  DumpMode: "Modified"
+  LastRun: 20090605.05259
+  FromDate: 2008-12-04
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 7
+  DumpDay: "10"
+  DumpTime: "0:55"
+  DumpMode: "Full"
+  LastRun: 20090510.06319
+  FromDate: 2008-12-08
+  ToDate: 2049-12-31
+  FileNameTag: "_CONTROL_DATA"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 8
+  DumpTime: "0:58"
+  DumpMode: "Modified"
+  LastRun: 20090605.03961
+  FromDate: 2008-12-04
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 8
+  DumpDay: "10"
+  DumpTime: "0:54"
+  DumpMode: "Full"
+  LastRun: 20090510.04903
+  FromDate: 2008-12-08
+  ToDate: 2049-12-31
+  FileNameTag: "_CONTROL_DATA"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 9
+  DumpTime: "1:05"
+  DumpMode: "Modified"
+  LastRun: 20160616.05494
+  FromDate: 2010-03-25
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 9
+  DumpDay: "4"
+  DumpTime: "10:05"
+  DumpMode: "Full"
+  LastRun: 20160604.45176
+  FromDate: 2015-09-04
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 9
+  DumpDay: "4"
+  DumpTime: "1:05"
+  DumpMode: "Full"
+  LastRun: 20150804.16087
+  FromDate: 2010-08-09
+  ToDate: 2015-09-03
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 9
+  DumpDay: "21"
+  DumpTime: "17:30"
+  DumpMode: "Full"
+  LastRun: 20140321.73608
+  FromDate: 2014-03-21
+  ToDate: 2014-03-21
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 10
+  DumpTime: "00:20"
+  DumpMode: "Full"
+  LastRun: 20160616.02301
+  FromDate: 2015-07-07
+  ToDate: 2049-12-31
+  DumpWeekday: "1-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 10
+  DumpTime: "03:15"
+  DumpMode: "Full"
+  LastRun: 20150706.13335
+  FromDate: 2008-11-25
+  ToDate: 2015-07-06
+  DumpWeekday: "1-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 11
+  DumpTime: "00:15"
+  DumpMode: "Modified"
+  LastRun: 20081126.49586
+  FromDate: 2008-11-25
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 11
+  DumpTime: "00:15"
+  DumpMode: "Full"
+  FromDate: 2008-11-25
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 12
+  DumpTime: "12:50"
+  DumpMode: "Modified"
+  LastRun: 20160615.46269
+  FromDate: 2010-03-23
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 12
+  DumpTime: "18:50"
+  DumpMode: "Modified"
+  LastRun: 20160615.67859
+  FromDate: 2011-01-27
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 12
+  DumpTime: "00:35"
+  DumpMode: "Modified"
+  LastRun: 20160616.02117
+  FromDate: 2015-07-07
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 12
+  DumpTime: "06:20"
+  DumpMode: "Modified"
+  LastRun: 20160616.22856
+  FromDate: 2015-12-17
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 12
+  DumpTime: "03:00"
+  DumpMode: "Modified"
+  LastRun: 20150706.10856
+  FromDate: 2012-12-20
+  ToDate: 2015-07-06
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 13
+  DumpTime: "05:00"
+  DumpMode: "Modified"
+  LastRun: 20160616.18025
+  FromDate: 2011-05-24
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 13
+  DumpDay: "15"
+  DumpTime: "00:25"
+  DumpMode: "Full"
+  LastRun: 20160615.24005
+  FromDate: 2011-05-12
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 14
+  DumpTime: "00:25"
+  DumpMode: "Modified"
+  LastRun: 20160616.01503
+  FromDate: 2011-04-19
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 14
+  DumpDay: "15"
+  DumpTime: "00:25"
+  DumpMode: "Full"
+  LastRun: 20160615.24363
+  FromDate: 2011-04-19
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 15
+  DumpTime: "00:40"
+  DumpMode: "Modified"
+  FromDate: 2008-11-25
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 15
+  DumpTime: "00:40"
+  DumpMode: "Full"
+  FromDate: 2008-11-25
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 16
+  DumpTime: "00:30"
+  DumpMode: "Modified"
+  LastRun: 20160616.08839
+  FromDate: 2009-01-16
+  ToDate: 2049-12-31
+  DumpWeekday: "1-6"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 16
+  DumpTime: "00:30"
+  DumpMode: "Full"
+  LastRun: 20160611.0852
+  FromDate: 2009-01-16
+  ToDate: 2049-12-31
+  DumpWeekday: "7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 18
+  DumpTime: "00:45"
+  DumpMode: "Modified"
+  LastRun: 20160616.02815
+  FromDate: 2009-05-06
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 18
+  DumpTime: "00:45"
+  DumpMode: "Full"
+  LastRun: 20160612.02811
+  FromDate: 2009-05-06
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 19
+  DumpTime: "00:15"
+  DumpMode: "Modified"
+  LastRun: 20160616.02968
+  FromDate: 2009-05-12
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 19
+  DumpTime: "00:15"
+  DumpMode: "Full"
+  LastRun: 20160612.02856
+  FromDate: 2009-05-12
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 20
+  DumpTime: "00:15"
+  DumpMode: "Modified"
+  LastRun: 20160616.0297
+  FromDate: 2009-05-12
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 20
+  DumpTime: "00:15"
+  DumpMode: "Full"
+  LastRun: 20160612.21167
+  FromDate: 2009-05-13
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 21
+  DumpDay: "1-31"
+  DumpTime: "2:00"
+  DumpMode: "Full"
+  LastRun: 20160616.11572
+  FromDate: 2009-04-16
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 23
+  DumpTime: "00:45"
+  DumpMode: "Modified"
+  LastRun: 20160616.02828
+  FromDate: 2009-05-12
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 23
+  DumpTime: "00:45"
+  DumpMode: "Full"
+  LastRun: 20160612.02824
+  FromDate: 2009-05-12
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 24
+  DumpTime: "00:45"
+  DumpMode: "Modified"
+  LastRun: 20160616.02829
+  FromDate: 2009-05-12
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 24
+  DumpTime: "00:45"
+  DumpMode: "Full"
+  LastRun: 20160612.02825
+  FromDate: 2009-05-12
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 25
+  DumpTime: "00:45"
+  DumpMode: "Modified"
+  LastRun: 20160616.02832
+  FromDate: 2009-05-12
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 25
+  DumpTime: "00:45"
+  DumpMode: "Full"
+  LastRun: 20160612.02828
+  FromDate: 2009-05-12
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 27
+  DumpDay: "15"
+  DumpTime: "00:15"
+  DumpMode: "Full"
+  FromDate: 2009-05-06
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 28
+  DumpDay: "10,20,31"
+  DumpTime: "7"
+  DumpMode: "Full"
+  FromDate: 2009-04-30
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 29
+  DumpTime: "00:40"
+  DumpMode: "Modified"
+  LastRun: 20160616.03403
+  FromDate: 2009-06-11
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 29
+  DumpTime: "00:40"
+  DumpMode: "Full"
+  LastRun: 20160612.0337
+  FromDate: 2009-06-11
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 30
+  DumpTime: "1:00"
+  DumpMode: "Modified"
+  LastRun: 20160616.06529
+  FromDate: 2009-06-05
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 30
+  DumpDay: "10"
+  DumpTime: "1:00"
+  DumpMode: "Full"
+  LastRun: 20121010.06253
+  FromDate: 2009-06-05
+  ToDate: 2012-10-23
+  FileNameTag: "_CONTROL_DATA"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 31
+  DumpTime: "0:59"
+  DumpMode: "Modified"
+  LastRun: 20160616.05655
+  FromDate: 2009-06-05
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 31
+  DumpDay: "10"
+  DumpTime: "0:55"
+  DumpMode: "Full"
+  LastRun: 20131010.68326
+  FromDate: 2009-06-05
+  ToDate: 2013-10-24
+  FileNameTag: "_CONTROL_DATA"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 32
+  DumpTime: "0:58"
+  DumpMode: "Modified"
+  LastRun: 20160616.03709
+  FromDate: 2009-06-05
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 32
+  DumpDay: "10"
+  DumpTime: "0:54"
+  DumpMode: "Full"
+  LastRun: 20130610.56893
+  FromDate: 2009-06-05
+  ToDate: 2013-06-13
+  FileNameTag: "_CONTROL_DATA"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 33
+  DumpTime: "00:30"
+  DumpMode: "Full"
+  LastRun: 20160612.23087
+  FromDate: 2009-07-03
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 33
+  DumpTime: "00:30"
+  DumpMode: "Modified"
+  LastRun: 20160616.08878
+  FromDate: 2009-07-03
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 34
+  DumpTime: "00:30"
+  DumpMode: "Modified"
+  LastRun: 20160616.08884
+  FromDate: 2009-07-06
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 35
+  DumpTime: "0:57"
+  DumpMode: "Modified"
+  LastRun: 20110608.03624
+  FromDate: 2009-06-05
+  ToDate: 2011-06-08
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 35
+  DumpDay: "10"
+  DumpTime: "0:53"
+  DumpMode: "Full"
+  LastRun: 20110510.06386
+  FromDate: 2009-06-05
+  ToDate: 2011-06-08
+  FileNameTag: "_CONTROL_DATA"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 36
+  DumpTime: "3:00"
+  DumpMode: "Full"
+  FromDate: 2009-12-15
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 37
+  DumpTime: "03:00"
+  DumpMode: "Modified"
+  FromDate: 2010-02-01
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 37
+  DumpTime: "03:00"
+  DumpMode: "Full"
+  FromDate: 2010-02-01
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 38
+  DumpTime: "2:30"
+  DumpMode: "Modified"
+  LastRun: 20110922.09079
+  FromDate: 2010-03-04
+  ToDate: 2011-09-22
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 39
+  DumpDay: "1"
+  DumpTime: "3:30"
+  DumpMode: "Modified"
+  LastRun: 20110901.12704
+  FromDate: 2010-04-01
+  ToDate: 2011-09-22
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 40
+  DumpTime: "00:05"
+  DumpMode: "Modified"
+  LastRun: 20160616.04106
+  FromDate: 2015-03-07
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 40
+  DumpTime: "03:10"
+  DumpMode: "Full"
+  LastRun: 20150412.21044
+  FromDate: 2015-03-06
+  ToDate: 2015-04-12
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 41
+  DumpTime: "12:50"
+  DumpMode: "Modified"
+  LastRun: 20160615.46272
+  FromDate: 2010-03-10
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 41
+  DumpTime: "18:50"
+  DumpMode: "Modified"
+  LastRun: 20160615.67863
+  FromDate: 2011-01-27
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 41
+  DumpTime: "02:59"
+  DumpMode: "Modified"
+  LastRun: 20160616.10805
+  FromDate: 2012-12-20
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 42
+  DumpTime: "00:35"
+  DumpMode: "Modified"
+  LastRun: 20160616.02277
+  FromDate: 2015-02-12
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 42
+  DumpDay: "17"
+  DumpTime: "00:55"
+  DumpMode: "Full"
+  LastRun: 20150518.24913
+  FromDate: 2015-02-12
+  ToDate: 2015-06-15
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 42
+  DumpDay: "18"
+  DumpTime: "04:45"
+  DumpMode: "Full"
+  LastRun: 20150119.24281
+  FromDate: 2010-03-19
+  ToDate: 2015-02-11
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 42
+  DumpTime: "04:30"
+  DumpMode: "Modified"
+  LastRun: 20150211.21025
+  FromDate: 2010-03-19
+  ToDate: 2015-02-11
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 42
+  DumpDay: "29"
+  DumpTime: "04:55"
+  DumpMode: "Full"
+  LastRun: 20140329.83449
+  FromDate: 2014-03-29
+  ToDate: 2014-03-29
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 42
+  DumpDay: "13"
+  DumpTime: "10:00"
+  DumpMode: "Full"
+  LastRun: 20130414.10412
+  FromDate: 2012-09-13
+  ToDate: 2013-05-03
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 43
+  DumpTime: "00:50"
+  DumpMode: "Modified"
+  LastRun: 20160616.0301
+  FromDate: 2016-03-08
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 43
+  DumpDay: "4"
+  DumpTime: "01:00"
+  DumpMode: "Full"
+  LastRun: 20150428.20196
+  FromDate: 2016-06-01
+  ToDate: 2016-05-30
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 43
+  DumpTime: "03:00"
+  DumpMode: "Modified"
+  LastRun: 20160307.10808
+  FromDate: 2010-04-06
+  ToDate: 2016-03-07
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 44
+  DumpTime: "00:30"
+  DumpMode: "Full"
+  LastRun: 20160612.23922
+  FromDate: 2010-05-19
+  ToDate: 2049-12-31
+  DumpWeekday: "1"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 44
+  DumpTime: "00:30"
+  DumpMode: "Modified"
+  LastRun: 20160616.10179
+  FromDate: 2010-05-19
+  ToDate: 2049-12-31
+  DumpWeekday: "2-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 45
+  DumpTime: "01:30"
+  DumpMode: "Modified"
+  LastRun: 20160616.15311
+  FromDate: 2010-09-08
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 45
+  DumpDay: "27"
+  DumpTime: "01:30"
+  DumpMode: "Full"
+  LastRun: 20160529.31679
+  FromDate: 2010-09-08
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 46
+  DumpDay: "5"
+  DumpTime: "02:30"
+  DumpMode: "Full"
+  LastRun: 20160605.24053
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 46
+  DumpTime: "02:30"
+  DumpMode: "Modified"
+  LastRun: 20160616.09334
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 47
+  DumpDay: "*"
+  DumpTime: "02:20"
+  DumpMode: "Modified"
+  LastRun: 20160616.08528
+  FromDate: 2014-04-25
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 47
+  DumpDay: "25"
+  DumpTime: "04:55"
+  DumpMode: "Full"
+  LastRun: 20160526.77462
+  FromDate: 2015-08-27
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 47
+  DumpDay: "25"
+  DumpTime: "05:00"
+  DumpMode: "Full"
+  LastRun: 20150826.3232
+  FromDate: 2014-04-25
+  ToDate: 2015-08-26
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 47
+  DumpTime: "05:00"
+  DumpMode: "Full"
+  LastRun: 20140424.31577
+  FromDate: 2010-11-30
+  ToDate: 2014-04-24
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 48
+  DumpTime: "04:00"
+  DumpMode: "Full"
+  LastRun: 20160616.14944
+  FromDate: 2011-01-12
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 49
+  DumpTime: "13:00"
+  DumpMode: "Full"
+  LastRun: 20160615.46801
+  FromDate: 2012-06-13
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 49
+  DumpTime: "19:00"
+  DumpMode: "Full"
+  LastRun: 20160615.684
+  FromDate: 2012-06-13
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 49
+  DumpTime: "1:20"
+  DumpMode: "Full"
+  LastRun: 20160616.04801
+  FromDate: 2012-11-20
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 50
+  DumpTime: "07:00:00"
+  DumpMode: "Modified"
+  LastRun: 20160616.25205
+  FromDate: 2011-03-10
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 50
+  DumpTime: "15:00:00"
+  DumpMode: "Modified"
+  LastRun: 20160615.54002
+  FromDate: 2011-04-13
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 51
+  DumpTime: "01:58"
+  DumpMode: "Full"
+  LastRun: 20160616.0865
+  FromDate: 2011-03-24
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 52
+  DumpDay: "7"
+  DumpTime: "01:00"
+  DumpMode: "Full"
+  LastRun: 20160607.0997
+  FromDate: 2011-04-06
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 52
+  DumpDay: "3"
+  DumpTime: "11:30"
+  DumpMode: "Full"
+  LastRun: 20160603.46912
+  FromDate: 2012-04-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 53
+  DumpTime: "00:30"
+  DumpMode: "Full"
+  LastRun: 20160616.1018
+  FromDate: 2011-06-30
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 54
+  DumpTime: "0:57"
+  DumpMode: "Modified"
+  LastRun: 20160616.03662
+  FromDate: 2011-06-09
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 54
+  DumpDay: "10"
+  DumpTime: "0:53"
+  DumpMode: "Full"
+  LastRun: 20160610.19733
+  FromDate: 2011-06-09
+  ToDate: 2049-12-31
+  FileNameTag: "_CONTROL_DATA"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 55
+  DumpTime: "0:57"
+  DumpMode: "Modified"
+  LastRun: 20160616.03678
+  FromDate: 2011-06-09
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 55
+  DumpDay: "10"
+  DumpTime: "0:53"
+  DumpMode: "Full"
+  LastRun: 20160610.36399
+  FromDate: 2011-06-09
+  ToDate: 2049-12-31
+  FileNameTag: "_CONTROL_DATA"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 56
+  DumpTime: "01:45"
+  DumpMode: "Full"
+  LastRun: 20160616.07696
+  FromDate: 2011-06-22
+  ToDate: 2049-12-31
+  DumpWeekday: "1-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 57
+  DumpDay: "26"
+  DumpTime: "03:01"
+  DumpMode: "Full"
+  LastRun: 20160526.21926
+  FromDate: 2011-08-10
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 57
+  DumpTime: "03:01"
+  DumpMode: "Modified"
+  LastRun: 20160616.11863
+  FromDate: 2011-08-10
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 59
+  DumpDay: "9"
+  DumpTime: "04:00"
+  DumpMode: "Full"
+  LastRun: 20160609.14652
+  FromDate: 2011-08-23
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 59
+  DumpTime: "04:00"
+  DumpMode: "Modified"
+  LastRun: 20160616.15012
+  FromDate: 2011-08-23
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 60
+  DumpDay: "9"
+  DumpTime: "04:00"
+  DumpMode: "Full"
+  LastRun: 20160609.14851
+  FromDate: 2011-08-23
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 60
+  DumpTime: "04:00"
+  DumpMode: "Modified"
+  LastRun: 20160616.15232
+  FromDate: 2011-08-23
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 61
+  DumpTime: "13:00"
+  DumpMode: "Full"
+  LastRun: 20160615.47159
+  FromDate: 2011-08-23
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 61
+  DumpTime: "19:00"
+  DumpMode: "Full"
+  LastRun: 20160615.68761
+  FromDate: 2012-06-13
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 61
+  DumpTime: "00:35"
+  DumpMode: "Full"
+  LastRun: 20160616.02529
+  FromDate: 2015-07-07
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 61
+  DumpTime: "06:20"
+  DumpMode: "Full"
+  LastRun: 20160616.23211
+  FromDate: 2015-12-17
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 61
+  DumpTime: "03:00"
+  DumpMode: "Full"
+  LastRun: 20150706.1116
+  FromDate: 2015-02-12
+  ToDate: 2015-07-06
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 61
+  DumpTime: "05:05"
+  DumpMode: "Full"
+  LastRun: 20150211.18572
+  FromDate: 2013-01-16
+  ToDate: 2015-02-11
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 62
+  DumpTime: "2:30"
+  DumpMode: "Modified"
+  LastRun: 20130821.10147
+  FromDate: 2011-09-23
+  ToDate: 2013-08-21
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 63
+  DumpDay: "*"
+  DumpTime: "04:00"
+  DumpMode: "Full"
+  LastRun: 20160616.15237
+  FromDate: 2012-05-29
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 64
+  DumpTime: "19:30"
+  DumpMode: "Modified"
+  LastRun: 20160615.70202
+  FromDate: 2012-06-13
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 64
+  DumpTime: "13:30"
+  DumpMode: "Modified"
+  LastRun: 20160615.48602
+  FromDate: 2012-05-29
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 64
+  DumpTime: "02:59"
+  DumpMode: "Modified"
+  LastRun: 20160616.10806
+  FromDate: 2012-12-19
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 65
+  DumpTime: "04:00"
+  DumpMode: "Full"
+  LastRun: 20160615.15286
+  FromDate: 2012-06-13
+  ToDate: 2049-12-31
+  DumpWeekday: "4"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 66
+  DumpDay: "*"
+  DumpTime: "01:10"
+  DumpMode: "Full"
+  LastRun: 20160616.04578
+  FromDate: 2016-04-19
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 66
+  DumpTime: "01:10"
+  DumpMode: "Modified"
+  LastRun: 20160418.06071
+  FromDate: 2013-09-06
+  ToDate: 2016-04-18
+  DumpWeekday: "1-7"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 66
+  DumpDay: "12"
+  DumpTime: "01:10"
+  DumpMode: "Full"
+  LastRun: 20160412.04535
+  FromDate: 2013-09-06
+  ToDate: 2016-04-18
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 67
+  DumpDay: "*"
+  DumpTime: "01:00"
+  DumpMode: "Modified"
+  LastRun: 20160616.06538
+  FromDate: 2012-09-20
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 68
+  DumpTime: "03:01"
+  DumpMode: "Full"
+  LastRun: 20160616.1187
+  FromDate: 2012-10-11
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 69
+  DumpTime: "01:20"
+  DumpMode: "Full"
+  LastRun: 20160616.04808
+  FromDate: 2012-10-14
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 70
+  DumpDay: "*"
+  DumpTime: "01:45"
+  DumpMode: "Full"
+  LastRun: 20160616.07697
+  FromDate: 2012-10-24
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 71
+  DumpDay: "*"
+  DumpTime: "01:50"
+  DumpMode: "Full"
+  LastRun: 20160616.06602
+  FromDate: 2012-11-22
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 72
+  DumpDay: "*"
+  DumpTime: "04:15"
+  DumpMode: "Full"
+  LastRun: 20160616.15302
+  FromDate: 2013-03-18
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 73
+  DumpDay: "*"
+  DumpTime: "01:20"
+  DumpMode: "Full"
+  LastRun: 20160616.04834
+  FromDate: 2013-01-24
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 74
+  DumpDay: "1"
+  DumpTime: "1:59"
+  DumpMode: "Full"
+  LastRun: 20160601.08423
+  FromDate: 2013-02-20
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 75
+  DumpDay: "*"
+  DumpTime: "5:00"
+  DumpMode: "Full"
+  LastRun: 20160616.21997
+  FromDate: 2013-02-20
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 76
+  DumpDay: "*"
+  DumpTime: "1:35"
+  DumpMode: "Full"
+  LastRun: 20160616.08374
+  FromDate: 2013-02-20
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 77
+  DumpDay: "*"
+  DumpTime: "1:25"
+  DumpMode: "Full"
+  LastRun: 20160616.07369
+  FromDate: 2015-09-02
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 77
+  DumpDay: "*"
+  DumpTime: "1:35"
+  DumpMode: "Full"
+  LastRun: 20150901.09655
+  FromDate: 2013-02-20
+  ToDate: 2015-09-01
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 78
+  DumpDay: "*"
+  DumpTime: "1:35"
+  DumpMode: "Full"
+  LastRun: 20160616.08506
+  FromDate: 2013-02-20
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 79
+  DumpDay: "*"
+  DumpTime: "1:35"
+  DumpMode: "Full"
+  LastRun: 20160616.08687
+  FromDate: 2013-02-20
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 80
+  DumpDay: "*"
+  DumpTime: "6:55"
+  DumpMode: "Full"
+  LastRun: 20160616.24901
+  FromDate: 2013-02-20
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 81
+  DumpTime: "8:30"
+  DumpMode: "Full"
+  LastRun: 20160616.30609
+  FromDate: 2013-02-20
+  ToDate: 2049-12-31
+  DumpWeekday: "2-6"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 81
+  DumpTime: "14:30"
+  DumpMode: "Full"
+  LastRun: 20160615.52202
+  FromDate: 2013-02-20
+  ToDate: 2049-12-31
+  DumpWeekday: "2-6"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 82
+  DumpDay: "*"
+  DumpTime: "1:45"
+  DumpMode: "Full"
+  LastRun: 20160616.07719
+  FromDate: 2013-02-20
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 83
+  DumpDay: "*"
+  DumpTime: "5:55"
+  DumpMode: "Full"
+  LastRun: 20160616.23815
+  FromDate: 2013-02-20
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 84
+  DumpTime: "03:30"
+  DumpMode: "Full"
+  LastRun: 20160616.12603
+  FromDate: 2013-03-05
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 86
+  DumpDay: "3"
+  DumpTime: "02:05"
+  DumpMode: "Full"
+  LastRun: 20160103.09058
+  FromDate: 2013-07-03
+  ToDate: 2016-01-28
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 87
+  DumpDay: "*"
+  DumpTime: "11:05"
+  DumpMode: "Modified"
+  LastRun: 20160420.39912
+  FromDate: 2013-06-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 87
+  DumpDay: "*"
+  DumpTime: "16:05"
+  DumpMode: "Modified"
+  LastRun: 20160420.57905
+  FromDate: 2013-06-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 87
+  DumpDay: "*"
+  DumpTime: "21:05"
+  DumpMode: "Modified"
+  LastRun: 20160420.75908
+  FromDate: 2013-06-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "01:00"
+  DumpMode: "Full"
+  LastRun: 20160420.06153
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "03:00"
+  DumpMode: "Full"
+  LastRun: 20160420.10813
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "05:00"
+  DumpMode: "Full"
+  LastRun: 20160420.21794
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "07:00"
+  DumpMode: "Full"
+  LastRun: 20160420.2521
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "09:00"
+  DumpMode: "Full"
+  LastRun: 20160420.32407
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "11:00"
+  DumpMode: "Full"
+  LastRun: 20160420.3961
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "13:00"
+  DumpMode: "Full"
+  LastRun: 20160420.47139
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "15:00"
+  DumpMode: "Full"
+  LastRun: 20160420.54013
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "17:00"
+  DumpMode: "Full"
+  LastRun: 20160420.6121
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "19:00"
+  DumpMode: "Full"
+  LastRun: 20160420.68659
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "21:00"
+  DumpMode: "Full"
+  LastRun: 20160420.75609
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 88
+  DumpDay: "*"
+  DumpTime: "23:45"
+  DumpMode: "Full"
+  LastRun: 20160419.8551
+  FromDate: 2013-08-28
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "02:00,02:15,02:30,02:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.1061
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "04:00,04:15,04:30,04:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.17101
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "06:00,06:15,06:30,06:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.24302
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "08:00,08:15,08:30,08:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.31501
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "10:00,10:15,10:30,10:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.38701
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "12:00,12:15,12:30,12:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.45902
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "14:00,14:15,14:30,14:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.53102
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "16:00,16:15,16:30,16:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.60301
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "18:00,18:15,18:30,18:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.67502
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "20:00,20:15,20:30,20:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.74701
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "22:00,22:15,22:30,22:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.81902
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "23:00,23:15,23:30,23:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.82801
+  FromDate: 2013-09-03
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "09:00,09:15,09:30,09:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.35101
+  FromDate: 2014-10-23
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "11:00,11:15,11:30,11:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.42301
+  FromDate: 2014-10-23
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "13:00,13:15,13:30,13:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.49502
+  FromDate: 2014-10-23
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "15:00,15:15,15:30,15:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.56702
+  FromDate: 2014-10-23
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "17:00,17:15,17:30,17:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.63901
+  FromDate: 2014-10-23
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "19:00,19:15,19:30,19:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.71102
+  FromDate: 2014-10-23
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "21:00,21:15,21:30,21:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.78302
+  FromDate: 2014-10-23
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "01:00,01:15,01:30,01:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.07609
+  FromDate: 2014-10-24
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "03:00,03:15,03:30,03:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.13502
+  FromDate: 2014-10-24
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "05:00,05:15,05:30,05:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.21795
+  FromDate: 2014-10-24
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "07:00,07:15,07:30,07:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.27901
+  FromDate: 2014-10-24
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 89
+  DumpDay: "*"
+  DumpTime: "00:00,00:15,00:30,00:45"
+  DumpMode: "Modified"
+  LastRun: 20160420.08594
+  FromDate: 2014-10-24
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 90
+  DumpTime: "12:55"
+  DumpMode: "Modified"
+  LastRun: 20160615.46502
+  FromDate: 2013-10-14
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 90
+  DumpTime: "18:55"
+  DumpMode: "Modified"
+  LastRun: 20160615.68101
+  FromDate: 2013-10-14
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 90
+  DumpTime: "03:05"
+  DumpMode: "Modified"
+  LastRun: 20160616.1187
+  FromDate: 2013-10-14
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 90
+  DumpDay: "15"
+  DumpTime: "03:05"
+  DumpMode: "Full"
+  LastRun: 20160615.12077
+  FromDate: 2013-10-14
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 91
+  DumpTime: "01:03"
+  DumpMode: "Modified"
+  LastRun: 20160616.03915
+  FromDate: 2013-12-03
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 92
+  DumpTime: "06:05"
+  DumpMode: "Full"
+  LastRun: 20160613.35407
+  FromDate: 2014-12-15
+  ToDate: 2049-12-31
+  DumpWeekday: "2"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 92
+  DumpDay: "*"
+  DumpTime: "04:05"
+  DumpMode: "Full"
+  LastRun: 20141211.27399
+  FromDate: 2014-02-21
+  ToDate: 2014-12-11
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 93
+  DumpDay: "15"
+  DumpTime: "09:00"
+  DumpMode: "Full"
+  LastRun: 20160615.45274
+  FromDate: 2014-05-15
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 94
+  DumpDay: "*"
+  DumpTime: "11:00"
+  DumpMode: "Modified"
+  LastRun: 20160616.42431
+  FromDate: 2014-07-09
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 95
+  DumpTime: "5:40"
+  DumpMode: "Full"
+  LastRun: 20160616.20406
+  FromDate: 2014-09-11
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 96
+  DumpDay: "*"
+  DumpTime: "03:45"
+  DumpMode: "Modified"
+  LastRun: 20160616.1372
+  FromDate: 2014-10-09
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 97
+  DumpDay: "*"
+  DumpTime: "02:15"
+  DumpMode: "Modified"
+  LastRun: 20160616.08114
+  FromDate: 2015-03-26
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 98
+  DumpTime: "03:10"
+  DumpMode: "Full"
+  LastRun: 20160616.19064
+  FromDate: 2015-04-20
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 99
+  DumpTime: "07:00"
+  DumpMode: "Full"
+  LastRun: 20160616.25464
+  FromDate: 2015-06-03
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 100
+  DumpTime: "07:00"
+  DumpMode: "Full"
+  LastRun: 20160616.25468
+  FromDate: 2015-06-03
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 101
+  DumpTime: "02:20"
+  DumpMode: "Modified"
+  LastRun: 20160616.08529
+  FromDate: 2015-07-09
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 101
+  DumpDay: "4"
+  DumpTime: "02:20"
+  DumpMode: "Full"
+  LastRun: 20160604.09384
+  FromDate: 2015-08-04
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 102
+  DumpTime: "0:57"
+  DumpMode: "Modified"
+  LastRun: 20160616.03693
+  FromDate: 2015-09-15
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 102
+  DumpDay: "10"
+  DumpTime: "0:53"
+  DumpMode: "Full"
+  LastRun: 20160610.51175
+  FromDate: 2015-09-15
+  ToDate: 2049-12-31
+  FileNameTag: "_CONTROL_DATA"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 103
+  DumpDay: "*"
+  DumpTime: "04:00"
+  DumpMode: "Modified"
+  LastRun: 20160616.15238
+  FromDate: 2015-10-21
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 104
+  DumpDay: "*"
+  DumpTime: "04:00"
+  DumpMode: "Modified"
+  LastRun: 20160616.15241
+  FromDate: 2015-10-21
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 105
+  DumpTime: "00:20"
+  DumpMode: "Modified"
+  LastRun: 20160616.02302
+  FromDate: 2015-11-04
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 106
+  DumpTime: "00:50"
+  DumpMode: "Modified"
+  LastRun: 20160616.03013
+  FromDate: 2015-11-06
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 106
+  DumpTime: "07:50"
+  DumpMode: "Modified"
+  LastRun: 20151105.29744
+  FromDate: 2015-11-05
+  ToDate: 2015-11-05
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 106
+  DumpDay: "5"
+  DumpTime: "00:50"
+  DumpMode: "Full"
+  FromDate: 2015-11-04
+  ToDate: 2015-11-04
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 107
+  DumpDay: "*"
+  DumpTime: "02:00"
+  DumpMode: "Modified"
+  LastRun: 20160616.11599
+  FromDate: 2016-02-10
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 200
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.07939
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 201
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160420.858
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 202
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160420.858
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 203
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160420.85801
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 204
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11"
+  DumpMode: "Full"
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 205
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.01763
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 206
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160426.57509
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 207
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160420.85801
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 208
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11"
+  DumpMode: "Full"
+  LastRun: 20160425.49324
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 209
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.03601
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 210
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.03902
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 211
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.03967
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 212
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.04104
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 213
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.04201
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 214
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.03902
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 215
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.07238
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 216
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160422.41305
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 217
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160420.85802
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 218
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.03237
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "00:00,00:15,00:30,00:45"
+  DumpMode: "Full"
+  LastRun: 20160616.02756
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "01:00,01:15,01:30,01:45"
+  DumpMode: "Full"
+  LastRun: 20160616.0633
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "02:00,02:15,02:30,02:45"
+  DumpMode: "Full"
+  LastRun: 20160616.09919
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "03:00,03:15,03:30,03:45"
+  DumpMode: "Full"
+  LastRun: 20160616.13638
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "04:00,04:15,04:30,04:45"
+  DumpMode: "Full"
+  LastRun: 20160616.17288
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "05:00,05:15,05:30,05:45"
+  DumpMode: "Full"
+  LastRun: 20160616.20707
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "06:00,06:15,06:30,06:45"
+  DumpMode: "Full"
+  LastRun: 20160616.2431
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "07:00,07:15,07:30,07:45"
+  DumpMode: "Full"
+  LastRun: 20160616.27921
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "08:00,08:15,08:30,08:45"
+  DumpMode: "Full"
+  LastRun: 20160616.31545
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "09:00,09:15,09:30,09:45"
+  DumpMode: "Full"
+  LastRun: 20160616.3517
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "11:00,11:15,11:30,11:45"
+  DumpMode: "Full"
+  LastRun: 20160616.42395
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "12:00,12:15,12:30,12:45"
+  DumpMode: "Full"
+  LastRun: 20160616.45096
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "13:00,13:15,13:30,13:45"
+  DumpMode: "Full"
+  LastRun: 20160615.49602
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "14:00,14:15,14:30,14:45"
+  DumpMode: "Full"
+  LastRun: 20160615.53209
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "15:00,15:15,15:30,15:45"
+  DumpMode: "Full"
+  LastRun: 20160615.56794
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "16:00,16:15,16:30,16:45"
+  DumpMode: "Full"
+  LastRun: 20160615.60385
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "17:00,17:15,17:30,17:45"
+  DumpMode: "Full"
+  LastRun: 20160615.63994
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "18:00,18:15,18:30,18:45"
+  DumpMode: "Full"
+  LastRun: 20160615.67627
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "19:00,19:15,19:30,19:45"
+  DumpMode: "Full"
+  LastRun: 20160615.71201
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "20:00,20:15,20:30,20:45"
+  DumpMode: "Full"
+  LastRun: 20160615.74808
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "21:00,21:15,21:30,21:45"
+  DumpMode: "Full"
+  LastRun: 20160615.78395
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "22:00,22:15,22:30,22:45"
+  DumpMode: "Full"
+  LastRun: 20160615.81989
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "23:00,23:15,23:30,23:45"
+  DumpMode: "Full"
+  LastRun: 20160615.85584
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 219
+  DumpDay: "*"
+  DumpTime: "10:00,10:15,10:30,10:45"
+  DumpMode: "Full"
+  LastRun: 20160616.38784
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 220
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.0121
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 221
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160426.00178
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 222
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.03903
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 223
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11"
+  DumpMode: "Full"
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 224
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.07568
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 225
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11"
+  DumpMode: "Full"
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 226
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.12042
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 227
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.03932
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 228
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160414.05323
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "00:05,00:20,00:35,00:50"
+  DumpMode: "Full"
+  LastRun: 20160616.03004
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "01:05,01:20,01:35,01:50"
+  DumpMode: "Full"
+  LastRun: 20160616.06603
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "02:05,02:20,02:35,02:50"
+  DumpMode: "Full"
+  LastRun: 20160616.10204
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "03:05,03:20,03:35,03:50"
+  DumpMode: "Full"
+  LastRun: 20160616.13803
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "04:05,04:20,04:35,04:50"
+  DumpMode: "Full"
+  LastRun: 20160616.17402
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "05:05,05:20,05:35,05:50"
+  DumpMode: "Full"
+  LastRun: 20160616.21041
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "06:05,06:20,06:35,06:50"
+  DumpMode: "Full"
+  LastRun: 20160616.24602
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "07:05,07:20,07:35,07:50"
+  DumpMode: "Full"
+  LastRun: 20160616.28202
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "08:05,08:20,08:35,08:50"
+  DumpMode: "Full"
+  LastRun: 20160616.31804
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "09:05,09:20,09:35,09:50"
+  DumpMode: "Full"
+  LastRun: 20160616.35406
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "11:05,11:20,11:35,11:50"
+  DumpMode: "Full"
+  LastRun: 20160616.42608
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "12:05,12:20,12:35,12:50"
+  DumpMode: "Full"
+  LastRun: 20160616.45308
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "13:05,13:20,13:35,13:50"
+  DumpMode: "Full"
+  LastRun: 20160615.49808
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "14:05,14:20,14:35,14:50"
+  DumpMode: "Full"
+  LastRun: 20160615.53407
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "15:05,15:20,15:35,15:50"
+  DumpMode: "Full"
+  LastRun: 20160615.57006
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "16:05,16:20,16:35,16:50"
+  DumpMode: "Full"
+  LastRun: 20160615.60608
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "17:05,17:20,17:35,17:50"
+  DumpMode: "Full"
+  LastRun: 20160615.64207
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "18:05,18:20,18:35,18:50"
+  DumpMode: "Full"
+  LastRun: 20160615.67808
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "19:05,19:20,19:35,19:50"
+  DumpMode: "Full"
+  LastRun: 20160615.71408
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "20:05,20:20,20:35,20:50"
+  DumpMode: "Full"
+  LastRun: 20160615.75008
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "21:05,21:20,21:35,21:50"
+  DumpMode: "Full"
+  LastRun: 20160615.78608
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "22:05,22:20,22:35,22:50"
+  DumpMode: "Full"
+  LastRun: 20160615.82206
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "23:05,23:20,23:35,23:50"
+  DumpMode: "Full"
+  LastRun: 20160615.85805
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 229
+  DumpDay: "*"
+  DumpTime: "10:00,10:15,10:30,10:45"
+  DumpMode: "Full"
+  LastRun: 20160616.38708
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "00:00,00:15,00:30,00:45"
+  DumpMode: "Full"
+  LastRun: 20160616.02701
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "01:00,01:15,01:30,01:45"
+  DumpMode: "Full"
+  LastRun: 20160616.06301
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "02:00,02:15,02:30,02:45"
+  DumpMode: "Full"
+  LastRun: 20160616.09902
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "03:00,03:15,03:30,03:45"
+  DumpMode: "Full"
+  LastRun: 20160616.13503
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "04:00,04:15,04:30,04:45"
+  DumpMode: "Full"
+  LastRun: 20160616.17102
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "05:00,05:15,05:30,05:45"
+  DumpMode: "Full"
+  LastRun: 20160616.20701
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "06:00,06:15,06:30,06:45"
+  DumpMode: "Full"
+  LastRun: 20160616.24301
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "07:00,07:15,07:30,07:45"
+  DumpMode: "Full"
+  LastRun: 20160616.27902
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "08:00,08:15,08:30,08:45"
+  DumpMode: "Full"
+  LastRun: 20160616.31502
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "09:00,09:15,09:30,09:45"
+  DumpMode: "Full"
+  LastRun: 20160616.35102
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "11:00,11:15,11:30,11:45"
+  DumpMode: "Full"
+  LastRun: 20160616.42302
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "12:00,12:15,12:30,12:45"
+  DumpMode: "Full"
+  LastRun: 20160616.45001
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "13:00,13:15,13:30,13:45"
+  DumpMode: "Full"
+  LastRun: 20160615.49501
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "14:00,14:15,14:30,14:45"
+  DumpMode: "Full"
+  LastRun: 20160615.53101
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "15:00,15:15,15:30,15:45"
+  DumpMode: "Full"
+  LastRun: 20160615.56702
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "16:00,16:15,16:30,16:45"
+  DumpMode: "Full"
+  LastRun: 20160615.60302
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "17:00,17:15,17:30,17:45"
+  DumpMode: "Full"
+  LastRun: 20160615.63901
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "18:00,18:15,18:30,18:45"
+  DumpMode: "Full"
+  LastRun: 20160615.67501
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "19:00,19:15,19:30,19:45"
+  DumpMode: "Full"
+  LastRun: 20160615.71102
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "20:00,20:15,20:30,20:45"
+  DumpMode: "Full"
+  LastRun: 20160615.74701
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "21:00,21:15,21:30,21:45"
+  DumpMode: "Full"
+  LastRun: 20160615.78301
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "22:00,22:15,22:30,22:45"
+  DumpMode: "Full"
+  LastRun: 20160615.81902
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "23:00,23:15,23:30,23:45"
+  DumpMode: "Full"
+  LastRun: 20160615.85502
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 230
+  DumpDay: "*"
+  DumpTime: "10:00,10:15,10:30,10:45"
+  DumpMode: "Full"
+  LastRun: 20160616.38703
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 231
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160420.85805
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 232
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.07239
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 233
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160420.85805
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 234
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160420.85805
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 235
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.00287
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 236
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11"
+  DumpMode: "Full"
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 237
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.0786
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 238
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.0391
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 239
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.12042
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 243
+  DumpDay: "*"
+  DumpTime: "00:15"
+  DumpMode: "Full"
+  LastRun: 20160616.00901
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 243
+  DumpDay: "*"
+  DumpTime: "03:15"
+  DumpMode: "Full"
+  LastRun: 20160616.11702
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 243
+  DumpDay: "*"
+  DumpTime: "06:15"
+  DumpMode: "Full"
+  LastRun: 20160616.22502
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 243
+  DumpDay: "*"
+  DumpTime: "09:15"
+  DumpMode: "Full"
+  LastRun: 20160616.33301
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 243
+  DumpDay: "*"
+  DumpTime: "12:15"
+  DumpMode: "Full"
+  LastRun: 20160616.44101
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 243
+  DumpDay: "*"
+  DumpTime: "15:15"
+  DumpMode: "Full"
+  LastRun: 20160615.54901
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 243
+  DumpDay: "*"
+  DumpTime: "18:15"
+  DumpMode: "Full"
+  LastRun: 20160615.65701
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 243
+  DumpDay: "*"
+  DumpTime: "21:15"
+  DumpMode: "Full"
+  LastRun: 20160615.76502
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 244
+  DumpDay: "*"
+  DumpTime: "00:05"
+  DumpMode: "Full"
+  LastRun: 20160616.00304
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 244
+  DumpDay: "*"
+  DumpTime: "16:15"
+  DumpMode: "Full"
+  LastRun: 20160615.58512
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 244
+  DumpDay: "*"
+  DumpTime: "21:05"
+  DumpMode: "Full"
+  LastRun: 20160615.75906
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "01:00"
+  DumpMode: "Full"
+  LastRun: 20160616.0362
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "03:00"
+  DumpMode: "Full"
+  LastRun: 20160616.1082
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "05:00"
+  DumpMode: "Full"
+  LastRun: 20160616.1802
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "07:00"
+  DumpMode: "Full"
+  LastRun: 20160616.25219
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "09:00"
+  DumpMode: "Full"
+  LastRun: 20160616.32421
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "11:00"
+  DumpMode: "Full"
+  LastRun: 20160616.3962
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "13:00"
+  DumpMode: "Full"
+  LastRun: 20160615.46819
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "15:00"
+  DumpMode: "Full"
+  LastRun: 20160615.5402
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "17:00"
+  DumpMode: "Full"
+  LastRun: 20160615.6122
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "19:00"
+  DumpMode: "Full"
+  LastRun: 20160615.68419
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "21:00"
+  DumpMode: "Full"
+  LastRun: 20160615.7562
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 245
+  DumpDay: "*"
+  DumpTime: "23:45"
+  DumpMode: "Full"
+  LastRun: 20160615.8552
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 246
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.04226
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 247
+  DumpTime: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+  DumpMode: "Full"
+  LastRun: 20160421.04253
+  FromDate: 2016-01-01
+  ToDate: 2049-12-31
+  DumpWeekday: "*"
+
+bulkload: DFTimeTable
+  Brand: "1"
+  DumpID: 411
+  DumpDay: "*"
+  DumpTime: "03:50"
+  DumpMode: "Modified"
+  LastRun: 20160616.13802
+  FromDate: 2016-04-28
+  ToDate: 2049-12-31
+

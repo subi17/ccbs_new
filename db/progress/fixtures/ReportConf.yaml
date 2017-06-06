@@ -1,0 +1,10 @@
+bulkload: ReportConf
+  Brand: "1"
+  ReportID: "BillingReport"
+  ReportName: "Billing statistic"
+
+bulkload: ReportConf
+  Brand: "1"
+  ReportID: "UnbilledSubsQty"
+  ReportName: "Unbilled subscriptions"
+
