@@ -941,7 +941,9 @@ PROCEDURE pTerminate:
       ASSIGN 
          TermMobsub.fixednumber = "" /* Fixed line stays active */
          MobSub.CLI = MobSub.FixedNumber
-         .
+         Mobsub.icc = ""
+         Mobsub.imsi = ""
+         MobSub.msStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
       
       /* YDR-2495 Auto STC for Convergent After Mobile Line Termination to Fixed Line  */
       liRequest = fConvFixedSTCReq(MobSub.CLIType,

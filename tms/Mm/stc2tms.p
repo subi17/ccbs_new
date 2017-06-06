@@ -1084,14 +1084,6 @@ PROCEDURE pFinalize:
               SUBST("Wrong order status: &1",Order.statusCode)).
       END.
    END.
-  
-   /* YDR-2495 Convergent to Fixed Line STC case fix */
-   IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN DO:
-      FIND CURRENT MobSub EXCLUSIVE-LOCK NO-ERROR.
-      ASSIGN MobSub.ICC  = ""
-             MobSub.IMSI = ""
-             .
-   END.
 
    /* request handled succesfully */
    fReqStatus(2,"").
