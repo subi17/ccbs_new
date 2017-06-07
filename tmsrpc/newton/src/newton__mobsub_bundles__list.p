@@ -24,7 +24,7 @@ DEF VAR piMsSeq             AS INT  NO-UNDO.
 DEF VAR liCount             AS INT  NO-UNDO.
 DEF VAR lcBundle            AS CHAR NO-UNDO.
 DEF VAR lcAllowedBundles    AS CHAR NO-UNDO.
-DEF VAR ldCurrentDateTime   AS CHAR NO-UNDO.
+DEF VAR ldCurrentDateTime   AS DECI NO-UNDO.
 DEF VAR llBundleActivated   AS LOGI NO-UNDO INIT FALSE.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
