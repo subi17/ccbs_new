@@ -333,6 +333,7 @@ DEF VAR lcOldPayType AS CHAR NO-UNDO.
 DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
 DEF VAR pcDataBundleType AS CHAR NO-UNDO. 
+DEF VAR pcDataBundleTypeArray AS CHAR NO-UNDO.
 DEF VAR pcMobsubBundleType AS CHAR NO-UNDO. 
 DEF VAR plDSSActivate    AS LOG NO-UNDO. 
 DEF VAR plBonoVoipActivate AS LOG NO-UNDO.
@@ -340,6 +341,7 @@ DEF VAR plByPassRules AS LOG NO-UNDO.
 DEF VAR lcdelivery_channel AS CHAR NO-UNDO.
 DEF VAR pcUsageType AS CHAR NO-UNDO. 
 
+DEF VAR liCount                AS INT  NO-UNDO.
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
@@ -522,8 +524,17 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
       pcROIriskcode = get_string(pcOrderStruct, "order_inspection_risk_code").
 
    IF LOOKUP("additional_bundle",lcOrderStruct) > 0 THEN
-      pcDataBundleType = get_string(pcOrderStruct,"additional_bundle").
-   
+   DO:
+      pcDataBundleTypeArray = get_array(pcOrderStruct,"additional_bundle").
+
+      DO liCount = 0 TO get_paramcount(pcDataBundleTypeArray) - 1:
+         ASSIGN pcDataBundleType = pcDataBundleType +
+                                   (IF pcDataBundleType <> "" THEN "," ELSE "")
+                                   +
+                                   get_string(pcDataBundleTypeArray, 
+                                              STRING(liCount)).
+      END.
+   END.   
    IF LOOKUP("subscription_bundle",lcOrderStruct) > 0 THEN
       pcMobsubBundleType = get_string(pcOrderStruct,"subscription_bundle").
 
