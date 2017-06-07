@@ -1500,15 +1500,18 @@ ELSE IF LOOKUP(pcSubType,lcBundleCLITypes) > 0 AND
    pcNumberType <> "renewal" THEN
    RETURN appl_err("Subscription based data bundle is missing").
 
-IF pcDataBundleType > "" THEN DO:
+IF pcDataBundleType > "" THEN
+DO:
    lcBONOContracts = fCParamC("BONO_CONTRACTS").
-   IF LOOKUP(pcDataBundleType,lcBONOContracts) = 0 THEN RETURN
-      appl_err(SUBST("Incorrect data bundle type: &1", pcDataBundleType)).   
+   IF LOOKUP(pcDataBundleType,lcBONOContracts) = 0 THEN
+      RETURN appl_err(SUBST("Incorrect data bundle type: &1", 
+                      pcDataBundleType)).
 
-   IF NOT fIsBundleAllowed
-      (pcSubType,
-       pcDataBundleType,
-       OUTPUT lcError) THEN RETURN appl_err(lcError).
+   DO liCount = 1 TO NUM-ENTRIES(pcDataBundleType):
+       IF NOT fIsBundleAllowed(pcSubType,ENTRY(liCount,pcDataBundleType),
+                               OUTPUT lcError) THEN
+          RETURN appl_err(lcError).
+   END.
 END.
 
 /* YBP-518 */
@@ -2281,7 +2284,9 @@ END.
 /* YBP-574 */ 
 /* add databundle */
 IF pcDataBundleType > "" THEN
-   fCreateOrderAction(Order.Orderid,"BundleItem",pcDataBundleType,"").
+DO liCount = 1 TO NUM-ENTRIES(pcDataBundleType):
+   fCreateOrderAction(Order.Orderid,"BundleItem", ENTRY(liCount, pcDataBundleType),"").
+END.
 IF pcMobSubBundleType > "" THEN DO:
    lcOnlyVoiceContracts = fCParamC("ONLY_VOICE_CONTRACTS").
    fCreateOrderAction(Order.Orderid,"BundleItem",pcMobSubBundleType,"").
