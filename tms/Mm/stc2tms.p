@@ -237,6 +237,10 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
                         fMake2Dt(ldtActDate + 1,0),
                         "STC").
 
+   /* Remove additional line termination request when correct STC done */
+   IF bNewTariff.LineType NE {&CLITYPE_LINETYPE_ADDITIONAL} THEN
+      fRemoveAdditionalLineTerminationReq(MobSub.MsSeq).
+
    /* close periodical contracts that are not allowed on new type */
    RUN pCloseContracts(MsRequest.MsRequest,
                        MsRequest.ReqCParam2,

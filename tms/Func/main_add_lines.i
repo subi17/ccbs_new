@@ -726,4 +726,29 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
 
 END FUNCTION.   
 
+/* Main line termination makes additional line termination request in future.
+   Remove additional line termination when STC done. */
+FUNCTION fRemoveAdditionalLineTerminationReq RETURNS LOGICAL
+   (INPUT iiMsSeq AS INT):
+
+   DEF BUFFER MsRequest FOR MsRequest.
+      
+   FIND FIRST MsRequest WHERE
+              MsRequest.MsSeq      EQ iiMsseq AND
+              MsRequest.ReqType    EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+              MsRequest.ReqStatus  EQ {&REQUEST_STATUS_NEW} AND
+              MsRequest.ReqCParam3 EQ 
+              STRING({&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM}) 
+              NO-LOCK NO-ERROR.
+   IF AVAIL MsRequest THEN DO:
+      fChangeReqStatus(MsRequest.Msrequest,
+                       4,
+                       "Additional line termination cancelled by STC").
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 &ENDIF
