@@ -39,6 +39,14 @@ db_locations = {
                   'prepedr': '/db1/prepedr/prepedr',
                   'fraudcdr': '/db1/fraudcdr/fraudcdr',
                   'reratelog': '/db1/reratelog/reratelog'},
+    'sadachbia': {'common': '/db1/common/common',
+                  'ordercanal': '/db1/ordercanal/ordercanal',
+                  'mobile': '/db1/mobile/mobile',
+                  'counter': '/db1/counter/counter',
+                  'star': '/db1/star/star',
+                  'prepedr': '/db1/prepedr/prepedr',
+                  'fraudcdr': '/db1/fraudcdr/fraudcdr',
+                  'reratelog': '/db1/reratelog/reratelog'},
     'spica': {'common': 'alpheratz.int.asp.qvantel.net:common',
              'ordercanal': 'alpheratz.int.asp.qvantel.net:ordercanal',
              'mobile': 'alpheratz.int.asp.qvantel.net:mobile',
@@ -200,7 +208,7 @@ def database_file(match, deps, db_dir, db_name):
                     ['\(6715\)$', '\(6718\)$', '\(451\)$',
                      '0 Percent complete.', '^$',
                      '\(6720\)$', '\(6722\)$', '\(1365\)$', '\(334\)$'])
-            if tenancies:
+            if len(tenancies) > 1:
                 callgrep([dlc + '/bin/proutil', match, '-C', 'enablemultitenancy'], ['Multi'])
             break
     else:

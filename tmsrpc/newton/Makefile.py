@@ -16,14 +16,14 @@ show_file = False
 def getpf(pf):
     if 'tenancies' in globals():
         for tenant in tenancies:
-            if tenancies[tenant].get('tenanttype', '') == 'Super':
+            if tenancies[tenant].get('tenanttype', '') == 'Super' or len(tenancies) == 1:
                 return '{0}_{1}.pf'.format(pf, tenant)
     return '{0}.pf'.format(pf)
 
 def userandpass():
     if 'tenancies' in globals():
         for t, tdict in tenancies.items():
-            if tdict['tenanttype'] == 'Super':
+            if tdict['tenanttype'] == 'Super' or len(tenancies) == 1:
                 return ['-U', '{0}@{1}'.format(tdict['username'], tdict['domain']), '-P', tdict['password'] ]
         raise ValueError('Cannot identify a super tenant')
     else:
