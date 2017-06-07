@@ -1747,7 +1747,7 @@ PROCEDURE pFinalize:
          ldaOrderDate >= ldaCont15PromoFrom AND
          ldaOrderDate <= ldaCont15PromoEnd AND
          /* Convergent+CONT15 has VOICE200 instead of VOICE100 after 5.6.2017 */
-        (lcDCEvent EQ "CONT15" OR ldaOrderDate < 6/5/2017) THEN DO:
+        (MsOwner.CLIType EQ "CONT15" OR ldaOrderDate < 6/5/2017) THEN DO:
 
          liRequest = fPCActionRequest(MsRequest.MsSeq,
                                       "VOICE100",
