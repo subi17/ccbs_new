@@ -142,6 +142,11 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    FIND FIRST Daycampaign WHERE
               Daycampaign.brand EQ "1" AND
               Daycampaign.dcevent EQ icBaseDCEvent NO-ERROR.
+      IF NOT AVAIL Daycampaign THEN DO:
+         MESSAGE icbasedcevent + " Not found" VIEW-AS ALERT-BOX.
+         RETURN FALSE.
+      END.
+
       CREATE ttDaycampaign.
       BUFFER-COPY daycampaign TO ttDaycampaign.
       ttDaycampaign.dctype = icDctype.
@@ -288,18 +293,21 @@ END FUNCTION.
 FUNCTION fcreateFixSLGAnalyses RETURNS LOGICAL (INPUT icClitype AS CHAR,
                                              INPUT icbasegroup AS CHAR,
                                              INPUT icgroup AS CHAR):
+   MESSAGE icgroup VIEW-AS ALERT-BOX.
    FIND FIRST SLGAnalyse where INDEX(SLGAnalyse.servicelimitgroup,
-                                     icGroup) > 0 NO-ERROR.
-   IF NOT AVAIL SLGanalyse THEN DO:                            
-      FOR EACH tempSLGAnalyse no-lock where INDEX(SLGAnalyse.servicelimitgroup, 
+                                     icGroup) > 0 AND
+                                     SLGANalyse.clitype EQ icclitype NO-ERROR.
+   IF NOT AVAIL SLGanalyse THEN DO:     
+      MESSAGE "2" VIEW-AS ALERT-BOX.
+      FOR EACH tempSLGAnalyse no-lock where INDEX(tempSLGAnalyse.servicelimitgroup, 
                                         icBaseGroup) > 0 AND 
-                                        SLGANalyse.clitype EQ icclitype:
+                                        tempSLGANalyse.clitype EQ icclitype:
+         MESSAGE "3" VIEW-AS ALERT-BOX.
          CREATE bSLGAnalyse.
          BUFFER-COPY tempSLGAnalyse TO bSLGAnalyse.
          ASSIGN
             bSLGAnalyse.servicelimitgroup = icGroup.
-            
-         RELEASE bSLGAnalyse.   
+               
       END.                            
    END.
 
