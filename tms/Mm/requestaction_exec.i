@@ -401,7 +401,10 @@ PROCEDURE pDoRulesAllow:
             FIND FIRST MobSub NO-LOCK WHERE
                        MobSub.MsSeq = iiMsSeq NO-ERROR.
             IF AVAILABLE MobSub THEN DO:
-               IF LOOKUP(STRING(MobSub.MsStatus),RequestActionRule.ExclParamValue) > 0 THEN NEXT CheckActionRules.
+               IF LOOKUP(STRING(MobSub.MsStatus),RequestActionRule.ExclParamValue) > 0 THEN DO:
+                  olMatch = FALSE.
+                  RETURN.
+               END.
             END.
          END.
          END CASE.
