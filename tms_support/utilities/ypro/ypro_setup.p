@@ -8,6 +8,10 @@ DEF VAR ldaFrom AS DATE INIT TODAY.
 DEF VAR limode AS INT INIT 1.
 DEF VAR laskuri AS INT.
 
+DEFINE VARIABLE giMXSeq AS INTEGER NO-UNDO.
+DEFINE VARIABLE giSlSeq AS INTEGER NO-UNDO.
+
+
 FUNCTION fcreateCustcat RETURNS CHAR (
    INPUT icbasecat AS CHAR,
    INPUT icnr AS CHAR,
@@ -240,7 +244,48 @@ create_limit("FIX_VOICE1000", "National fixed calls", "_MIN",1000.0, 1, 1,"VOICE
 create_limit("INT_FIX_VOICE1000", "International fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
 create_limit("SMS5000", "National sms", "_QTY",5000.0, 2, 5,"VOICE100").
 
-FUNCTION fcreateSLGAnalyses RETURNS LOGICAL (INPUT icClitype AS CHAR,
+FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
+   ( icClitype AS CHARACTER,
+     icBillCode AS CHARACTER,
+     iiCCN AS INTEGER,
+     icBDest AS CHARACTER,
+     icServiceLimitGroup AS CHARACTER,
+     iiSLGAType AS INTEGER ):
+
+   FIND FIRST SLGAnalyse EXCLUSIVE-LOCK WHERE
+      SLGAnalyse.Brand    = "1"        AND
+      SLGAnalyse.BelongTo = TRUE       AND
+      SLGAnalyse.Clitype  = icClitype  AND
+      SLGAnalyse.BillCode = icBillCode AND
+      SLGAnalyse.CCN      = iiCCN      AND
+      SLGAnalyse.BDest    = icBDest    AND
+      SLGAnalyse.Prior    = 0          AND
+      SLGAnalyse.ValidTo  = DATE(12,31,2049) AND
+      SLGAnalyse.ServiceLimitGroup = icServiceLimitGroup AND
+      SLGAnalyse.SLGAType = iiSLGAType
+   NO-ERROR.
+
+   IF NOT AVAILABLE SLGAnalyse
+   THEN CREATE SLGAnalyse.
+
+   ASSIGN
+      SLGAnalyse.Brand    = "1"
+      SLGAnalyse.BelongTo = TRUE
+      SLGAnalyse.Clitype  = icClitype
+      SLGAnalyse.BillCode = icBillCode
+      SLGAnalyse.CCN      = iiCCN
+      SLGAnalyse.BDest    = icBDest
+      SLGAnalyse.Prior    = 0
+      SLGAnalyse.ValidFrom = ldaFrom
+      SLGAnalyse.ValidTo  = DATE(12,31,2049)
+      SLGAnalyse.ServiceLimitGroup = icServiceLimitGroup
+      SLGAnalyse.SLGAType = iiSLGAType
+      .
+
+END FUNCTION.
+
+
+FUNCTION fcreateFixSLGAnalyses RETURNS LOGICAL (INPUT icClitype AS CHAR,
                                              INPUT icbasegroup AS CHAR,
                                              INPUT icgroup AS CHAR):
    FIND FIRST SLGAnalyse where INDEX(SLGAnalyse.servicelimitgroup,
@@ -260,6 +305,24 @@ FUNCTION fcreateSLGAnalyses RETURNS LOGICAL (INPUT icClitype AS CHAR,
 
 END.
 
+FUNCTION fcreateVoiceSLGAnalyses RETURNS LOGICAL (INPUT icClitype AS CHAR,
+                                             INPUT icgroup AS CHAR):
+   fCreateSLGAnalyse(icClitype, "10100001", 81, "*", icgroup, 1).
+   fCreateSLGAnalyse(icClitype, "10100003", 81, "*", icgroup, 1).
+   fCreateSLGAnalyse(icClitype, "10100005", 81, "*", icgroup, 1).
+   fCreateSLGAnalyse(icClitype, "CFOTHER", 30, "*", icgroup, 1).
+   fCreateSLGAnalyse(icClitype, "CFYOIGO", 30, "*", icGroup, 1).
+END.
+
+FUNCTION fcreateSMSSLGAnalyses RETURNS LOGICAL (INPUT icClitype AS CHAR,
+                                             INPUT icgroup AS CHAR):
+   fCreateSLGAnalyse(icClitype, "12100001", 51, "*", icgroup, 1).
+   fCreateSLGAnalyse(icClitype, "12100002", 51, "*", icgroup, 1).
+   fCreateSLGAnalyse(icClitype, "12100003", 51, "*", icgroup, 1).
+   fCreateSLGAnalyse(icClitype, "12100004", 51, "*", icgroup, 1).
+END.
+
+
 DEF VAR lcListofclitypes AS CHAR.
 DEF VAR liLoop AS INT.
 DEF VAR lcCli AS CHAR.
@@ -268,10 +331,10 @@ lcListofclitypes = "CONT10,CONT15,CONT25,CONT26".
 DO liLoop = 1 TO NUM-ENTRIES(lcListofClitypes):
    lcCli = ENTRY(liLoop,lcListOfClitypes).
 
-   fcreateSLGAnalyses(lcCli,"VOICE100","VOICE5000").
-   fcreateSLGAnalyses(lcCli,"VOICE100","VOICE200").
-   fcreateSLGAnalyses(lcCli,"VOICE100","INT_VOICE100").
-   fcreateSLGAnalyses(lcCli,"VOICE100","SMS5000").
+   fcreateVoiceSLGAnalyses(lcCli,"VOICE5000").
+   fcreateVoiceSLGAnalyses(lcCli,"VOICE200").
+   fcreateVoiceSLGAnalyses(lcCli,"INT_VOICE100").
+   fcreateSMSSLGAnalyses(lcCli,"SMS5000").
 
 END.
 
@@ -280,7 +343,135 @@ lcListofclitypes = "CONTDSL39,CONTDSL48,CONTDSL52,CONTDSL59,CONTFH39_50,CONTFH48
 DO liLoop = 1 TO NUM-ENTRIES(lcListofClitypes):
    lcCli = ENTRY(liLoop,lcListOfClitypes).
 
-   fcreateSLGAnalyses(lcCli,"CONTDSL","FIX_VOICE1000").
-   fcreateSLGAnalyses(lcCli,"CONTDSL","INT_FIX_VOICE1000").
+   fcreateFixSLGAnalyses(lcCli,"CONTDSL","FIX_VOICE1000").
+   fcreateFixSLGAnalyses(lcCli,"CONTDSL","INT_FIX_VOICE1000").
 END.
 
+FUNCTION fGetNextMXSeq RETURNS INTEGER ():
+
+   DEFINE BUFFER Matrix FOR Matrix.
+
+   FOR EACH Matrix NO-LOCK BY Matrix.MXSeq DESCENDING:
+     RETURN Matrix.MXSeq + 1.
+   END.
+
+   RETURN 1.
+
+END FUNCTION.
+
+FUNCTION fCreateMatrix RETURNS LOGICAL
+   ( icMXName  AS CHARACTER,
+     icMXKey   AS CHARACTER,
+     iiMXRes   AS INTEGER,
+     iiPrior   AS INTEGER ):
+
+   FIND FIRST Matrix EXCLUSIVE-LOCK WHERE
+      Matrix.Brand  = "1"      AND
+      Matrix.MXKey  = icMXKey  AND
+      Matrix.Prior  = iiPrior  AND
+      Matrix.MXName = icMXName
+   NO-ERROR.
+
+   IF NOT AVAILABLE Matrix
+   THEN CREATE Matrix.
+   ELSE DO:
+      giMXSeq       = Matrix.MXSeq.
+      RETURN TRUE.
+   END.
+   IF Matrix.MXSeq = 0
+   THEN Matrix.MXSeq = fGetNextMXSeq().
+
+   ASSIGN
+      giMXSeq       = Matrix.MXSeq
+      Matrix.Brand  = "1"
+      Matrix.MXKey  = icMXKey
+      Matrix.Prior  = iiPrior
+      Matrix.MXName = icMXName
+      Matrix.MXRes  = iiMXRes.
+
+END FUNCTION.
+
+FUNCTION fCreateMXItem RETURNS LOGICAL
+   ( iiMXSeq   AS INTEGER,
+     icMXName  AS CHARACTER,
+     icMXValue AS CHARACTER):
+
+   FIND FIRST MXItem EXCLUSIVE-LOCK WHERE
+      MXItem.MXSeq  = iiMXSeq AND
+      MXItem.MXName = icMXName AND
+      MXItem.MXValue = icMXValue
+   NO-ERROR.
+
+   IF NOT AVAILABLE MXItem
+   THEN CREATE MXItem.
+
+   ASSIGN
+      MXItem.MXSeq   = iiMXSeq
+      MXItem.MXName  = icMXName
+      MXItem.MXValue = icMXValue.
+
+END FUNCTION.
+
+fCreateMatrix("Convergent 5GB  mobile", "PERCONTR", 1, 40).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+
+fCreateMatrix("CONTDSL59", "PERCONTR", 1, 44).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+
+fCreateMatrix("CONTFH59_50", "PERCONTR", 1, 45).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+
+fCreateMatrix("CONTFH69_300", "PERCONTR", 1, 46).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+
+fCreateMatrix("CONTDSL39", "PERCONTR", 1, 47).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+
+fCreateMatrix("CONTDSL52", "PERCONTR", 1, 48).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+
+fCreateMatrix("CONTFH39_50", "PERCONTR", 1, 49).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+
+fCreateMatrix("CONTFH49_300", "PERCONTR", 1, 50).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+
+fCreateMatrix("CONTFH52_50", "PERCONTR", 1, 51).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+
+fCreateMatrix("CONTFH62_300", "PERCONTR", 1, 52).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+
+fCreateMatrix("CONT26", "PERCONTR", 1, 42).
+fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+
+fCreateMatrix("CONT10", "PERCONTR", 1, 43).
+fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+
+fCreateMatrix("Per.contract usage", "PERCONTR", 1, 41).
+fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+
+fCreateMatrix("Per.contract usage", "PERCONTR", 1, 29).
+fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").

@@ -397,8 +397,18 @@ PROCEDURE pDoRulesAllow:
                                RequestActionRule.ExclParamValue,
                                OUTPUT olMatch).
          END. /* WHEN "#FEECOMPARE" THEN DO: */
-         END CASE.
-         
+         WHEN "#ORDERCH" THEN DO:
+            IF RequestActionRule.ParamValue BEGINS "+," THEN
+               lcParamValue = SUBSTRING(RequestActionRule.ParamValue,3).
+            ELSE lcParamValue = RequestActionRule.ParamValue.
+            FIND FIRST Order WHERE 
+                       Order.msseq EQ iiMsSeq AND
+                       LOOKUP(order.orderchannel, lcParamValue) > 0 NO-ERROR.
+            IF AVAIL Order THEN DO:
+               olMatch = TRUE.              
+            END. 
+         END.
+         END CASE. 
          IF olMatch = FALSE AND
             LOOKUP("+", RequestActionRule.ParamValue) > 0 THEN RETURN.
 
