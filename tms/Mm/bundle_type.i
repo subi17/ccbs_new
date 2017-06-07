@@ -20,7 +20,7 @@ FUNCTION fGetBundles RETURNS CHAR (icBundleType AS CHAR):
       WHEN "DSS"          THEN lcContracts = {&DSS_BUNDLES}.
       WHEN "BONO_VOIP"    THEN lcContracts = "BONO_VOIP".
       WHEN "HSPA_ROAM_EU" THEN lcContracts = "HSPA_ROAM_EU".
-      WHEN "VOICE100"       THEN lcContracts = "VOICE100". 
+      WHEN "VOICE"       THEN lcContracts = "VOICE100,VOICE200". 
       WHEN "FREE100MINUTES" THEN lcContracts = "FREE100MINUTES".
       OTHERWISE RETURN "".
    END CASE. /* CASE icBundleType: */
