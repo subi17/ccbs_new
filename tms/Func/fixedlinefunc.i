@@ -65,6 +65,7 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
 
 END.   
 
+
 /*Function returns True if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */
 FUNCTION fIsConvergenceTariff RETURNS LOGICAL
