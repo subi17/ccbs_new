@@ -115,8 +115,7 @@ IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN DO:
    IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) = 0 THEN
       RETURN appl_err("Discount Plan not allowed").
    
-   IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) <> LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS})    OR
-      LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) <> LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_20}) THEN
+   IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) <> LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) THEN
       RETURN appl_err("Discount Plan not allowed").
 
    IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) THEN
@@ -143,7 +142,7 @@ FOR EACH bDiscountPlan WHERE
          bDiscountPlan.Brand = gcBrand AND
   LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20}) > 0,
   FIRST DPMember WHERE
-        DPMember.DPId       = DiscountPlan.DPId    AND
+        DPMember.DPId       = bDiscountPlan.DPId   AND
         DPMember.HostTable  = "MobSub"             AND
         DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
         DPMember.ValidTo   >= ldaValidFrom         AND
