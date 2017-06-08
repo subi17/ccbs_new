@@ -81,6 +81,9 @@
 "1" "MDUB_UPSELL" "MDUB UPSELL" 01/11/10 21/12/49
 "1" "PMDUB" "Prepaid MDUB" 01/05/11 31/12/49
 "1" "PMDUB_UPSELL" "Pre Mobile Data Usage Bundle" 01/06/11 31/12/49
+"1" "TARJ10" "La prepago de 1 GB" 29/05/17 31/12/49
+"1" "TARJ11" "La prepago de 2 GB" 29/05/17 31/12/49
+"1" "TARJ12" "La prepago de 4 GB" 29/05/17 31/12/49
 "1" "TARJ6" "TARJ6 Bundle" 01/08/13 31/12/49
 "1" "TARJ7" "TARJ7 Bundle" 01/11/13 31/12/49
 "1" "TARJ7_UPSELL" "TARJ7 Upsell" 01/11/13 31/12/49
@@ -89,4 +92,5 @@
 "1" "TARJ_UPSELL" "TARJ UPSELL" 01/12/12 31/12/49
 "1" "UPGRADE_UPSELL" "Upgrade Upsell" 23/03/12 31/12/49
 "1" "VOICE100" "Voice 100 Minutes Package" 01/01/15 31/12/49
+"1" "VOICE200" "Voice 200 Minutes Package" 01/06/17 31/12/49
 "1" "VOICE3000" "Contrato voice" 01/12/12 31/12/49
