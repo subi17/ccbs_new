@@ -425,6 +425,12 @@ def batch(*a):
     if 'tenant' in globals():
         module_base = '{0}_{1}'.format(module_base,tenant)
 
+    altdbs = []
+    if 'alt' in globals():
+        for altdb in alt.split(','):
+            if os.path.isfile('{0}/db/progress/store/{1}_alt.pf'.format(relpath, altdb)):
+                altdbs.append(altdb)
+
     cdr_dict = {}
 
     if a[0] == 'batch':
@@ -450,7 +456,7 @@ def batch(*a):
         if pp in databases:
             if all_in_parameters:
                 continue
-            args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
+            args.extend(['-pf', getpf('../db/progress/store/{0}{1}'.format(pp, '_alt' if pp in altdbs else ''))])
             dbcount += 1
         elif pp in cdr_databases:
             if all_in_parameters:

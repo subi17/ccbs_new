@@ -113,6 +113,14 @@ db_locations = {
              'reratelog': 'pallas.int.asp.qvantel.net:reratelog'}
 }
 
+# Alternative database location (on different partitions/remote hosts)
+# for production servers. There will be alternative pf file only for the databases
+# listed in here
+
+db_alternative_locations = {
+    'arneb': {'common': 'pallas.int.asp.qvantel.net:common'}
+}
+
 db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
                 'ordercanal': ['biw', 'wdog', ('apw', 4)],
                 'mobile': ['biw', 'wdog', ('apw', 4)],
@@ -171,6 +179,19 @@ def db_full_path(db_name, suffix='.db', host=None):
     locs = db_locations[host]
 
     return '{0}{1}'.format(locs.get(db_name, '{0}/{1}'.format(getcwd(), db_name)), suffix)
+
+def db_alternative_full_path(db_name, suffix='.db', host=None):
+
+    if environment == 'development':
+        return ''
+
+    host = host or gethostname()
+
+    if host in db_alternative_locations:
+        locs = db_alternative_locations[host]
+        if db_name in locs:
+            return '{0}{1}'.format(locs[db_name], suffix)
+    return ''
 
 @target(initialize_dependencies)
 def initialize(*a): pass
@@ -304,6 +325,7 @@ def startup_parameter_file(match, deps, db_name):
 def connect_parameter_file(match, deps, db_name):
     '''([_a-zA-Z0-9]+)\.pf'''
     path = db_full_path(db_name, '').split(':')
+    alternativepath = db_alternative_full_path(db_name, '').split(':')
 
     fd = open(db_name + '.pf', 'wt')
     if len(path) > 1:
@@ -314,10 +336,27 @@ def connect_parameter_file(match, deps, db_name):
         fd.write('-db %s\n' % path[0])
     fd.write('-ld %s\n' % db_name)
     fd.close()
+
     for tenant in tenancies:
         with open('{0}_{1}.pf'.format(db_name, tenant), 'wt') as fd:
             fd.write('-pf {0}/{1}.pf\n'.format(getcwd(), db_name))
             fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
+
+    if alternativepath[0]:
+        fd = open('{0}_alt.pf'.format(db_name), 'wt')
+        if len(alternativepath) > 1:
+            fd.write('-db %s\n' % alternativepath[1])
+            fd.write('-H %s\n' % alternativepath[0])
+            fd.write('-S %s\n' % alternativepath[1])
+        else:
+            fd.write('-db %s\n' % alternativepath[0])
+        fd.write('-ld %s\n' % db_name)
+        fd.close()
+
+        for tenant in tenancies:
+            with open('{0}_alt_{1}.pf'.format(db_name, tenant), 'wt') as fd:
+                fd.write('-pf {0}/{1}_alt.pf\n'.format(getcwd(), db_name))
+                fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
 
 @target
 @applies_to(['tenant_none'] + [ 'tenant_{0}'.format(x) for x in tenancies ])
