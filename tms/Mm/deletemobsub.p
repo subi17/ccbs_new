@@ -949,7 +949,7 @@ PROCEDURE pTerminate:
       liRequest = fConvFixedSTCReq(MobSub.CLIType,
                                    MobSub.MsSeq,
                                    IF llOutport THEN fMakeShiftedTS(MsRequest.ActStamp,"120h")
-                                   ELSE fMakeShiftedTS(MsRequest.ActStamp,"1s"),
+                                   ELSE fMakeShiftedTS(MsRequest.ActStamp,"5m"),
                                    {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                    MsRequest.MsRequest).
    END.      
