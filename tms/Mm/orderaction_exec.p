@@ -30,6 +30,10 @@ DEF VAR lcAllPostpaidContracts AS CHAR NO-UNDO.
 DEF VAR lcFHParam AS CHAR NO-UNDO. 
 DEF VAR lcSHParam AS CHAR NO-UNDO. 
 
+FIND FIRST MSRequest WHERE
+           MSRequest.brand EQ gcBrand AND
+           MsRequest.msRequest = iiOrigRequest NO-ERROR.
+
 FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MobSub THEN RETURN "ERROR:Subscription not available".
 

@@ -138,7 +138,8 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                              INPUT icEvent AS CHAR,
                                              INPUT icname AS CHAR,
                                              INPUT icdctype AS CHAR,
-                                             INPUT iiUpdateMode AS INT):
+                                             INPUT iiUpdateMode AS INT,
+                                             INPUT iiTarget AS INT):
    FIND FIRST Daycampaign WHERE
               Daycampaign.brand EQ "1" AND
               Daycampaign.dcevent EQ icBaseDCEvent NO-ERROR.
@@ -149,12 +150,14 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
 
       CREATE ttDaycampaign.
       BUFFER-COPY daycampaign TO ttDaycampaign.
-      ttDaycampaign.dctype = icDctype.
-      ttDaycampaign.dcevent = icevent.
-      ttDaycampaign.billcode = icevent + "MF".
-      ttDaycampaign.feemodel = icevent + "MF".
-      ttDaycampaign.dcname = icName.
-      ttDaycampaign.bundleupsell = "".
+      ASSIGN
+      ttDaycampaign.dctype = icDctype
+      ttDaycampaign.dcevent = icevent
+      ttDaycampaign.billcode = icevent + "MF"
+      ttDaycampaign.feemodel = icevent + "MF"
+      ttDaycampaign.dcname = icName
+      ttDaycampaign.bundleupsell = ""
+      ttDaycampaign.bundletarget = iiTarget.
 
       IF iiUpdateMode NE 0 THEN DO:
          CREATE Daycampaign.
@@ -166,14 +169,18 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
 END.
 
 /*  old ones, can be removec */
-fcreateDaycampaign("FLEX_UPSELL","FLEX_UPSELL_500MB","Flex upsell national GPRS","6",limode).
-fcreateDaycampaign("FLEX_UPSELL","FLEX_UPSELL_5GB","Flex upsell national GPRS","6",limode).
-fcreateDaycampaign("VOICE100","VOICE5000","Cont national voice","1",limode).
-fcreateDaycampaign("VOICE100","VOICE200","Cont national voice","1",limode).
-fcreateDaycampaign("VOICE100","INT_VOICE100","Cont international voice","1",limode).
-fcreateDaycampaign("VOICE100","FIX_VOICE1000","Fixed national voice","1",limode).
-fcreateDaycampaign("VOICE100","INT_FIX_VOICE1000","Fixed international voice","1",limode).
-fcreateDaycampaign("VOICE100","SMS5000","National SMS","1",limode).
+fcreateDaycampaign("FLEX_UPSELL","FLEX_UPSELL_500MB","Flex upsell national GPRS","6",limode,0).
+fcreateDaycampaign("FLEX_UPSELL","FLEX_UPSELL_5GB","Flex upsell national GPRS","6",limode,0).
+fcreateDaycampaign("VOICE100","VOICE5000","Cont national voice","1",limode,0).
+fcreateDaycampaign("VOICE100","VOICE200","Cont national voice","1",limode,0).
+fcreateDaycampaign("VOICE100","INT_VOICE100","Cont international voice","1",limode,0).
+fcreateDaycampaign("VOICE100","FIX_VOICE1000","Fixed national voice","1",limode,1).
+fcreateDaycampaign("VOICE100","INT_FIX_VOICE1000","Fixed international voice","1",limode,1).
+fcreateDaycampaign("VOICE100","SMS5000","National SMS","1",limode,0).
+
+FOR EACH TMSParam WHERE INDEX(TMSParam.charval,"FLEX_UPSELL") > 0:
+   TMSParam.charval = TMSParam.charval + ",FLEX_UPSELL_500MB,FLEX_UPSELL_5GB".
+END.
 
 
 FUNCTION create_group returns log (INPUT lcCode as CHAR, INPUT lcName AS CHAR):
