@@ -118,6 +118,9 @@
 "SPOTIFY" 01/07/12 0 31/12/49 "SPOTIFYMF" 0 "" "" "Bono Spotify" 0 0 "1" "7" 4 4 0 0 "SPOTIFYMF" "" "" 0 1 0 yes 1 0 0 0 "" 0 1
 "STERM18" 01/05/12 0 31/12/49 "STERMPERIOD" 0 "" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 18 0 "" "" "STERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 1
 "TARJ" 01/05/14 4 31/12/49 "" 0 "" "" "Tarj Upsell" 93 0 "1" "8" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 2 "TARJ_UPSELL" 0 2
+"TARJ10" 29/05/17 4 31/12/49 "PRETARJ10BUNDLE" 0 "" "" "La prepago de 1 GB" 93 0 "1" "1" 4 4 0 0 "PRETARJ10BUNDLE" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0 2
+"TARJ11" 29/05/17 4 31/12/49 "PRETARJ11BUNDLE" 0 "" "" "La prepago de 2 GB" 93 0 "1" "1" 4 4 0 0 "PRETARJ11BUNDLE" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0 2
+"TARJ12" 29/05/17 4 31/12/49 "PRETARJ12BUNDLE" 0 "" "" "La prepago de 4 GB" 93 0 "1" "1" 4 4 0 0 "PRETARJ12BUNDLE" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0 2
 "TARJ6" 01/08/13 4 31/12/49 "" 0 "" "" "Tarjeta 6 Bundle" 93 0 "1" "4" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 2 "TARJ_UPSELL" 0 2
 "TARJ7" 01/11/13 4 31/12/49 "" 0 "" "" "La del uno 650 MB" 93 0 "1" "4" 4 4 0 0 "TARJ7_BundleFee" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0 2
 "TARJ7_UPSELL" 01/11/13 4 31/12/49 "" 0 "" "" "Ampliación 300 MB" 93 0 "1" "6" 1 3 1 0 "TARJ7_UPSELLFee" "" "" 2 1 0 yes 999 0 0 1 "" 0 2
@@ -147,6 +150,7 @@
 "TERM24V" 01/12/10 0 31/12/49 "TERMPERIOD" 0 "" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 24 0 "" "" "TERMPERIOD5" 2 1 2 yes 1 0 0 1 "" 0 1
 "TERM24VI" 01/12/10 0 31/12/49 "TERMPERIOD" 0 "" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 24 0 "" "" "TERMPERIOD6" 2 1 2 yes 1 0 0 1 "" 0 1
 "UPGRADE_UPSELL" 23/03/12 4 31/12/49 "UPGRADEDATA" 0 "" "" "Upsell Upgrade" 93 0 "1" "6" 1 2 1 0 "" "" "" 3 1 0 yes 1 0 0 2 "" 0 1
-"VOICE100" 01/01/15 0 31/12/49 "" 0 "" "" "Promo 100 min/mes gratis" 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 1
+"VOICE100" 01/01/15 0 31/12/49 "" 0 "" "" "Promo 100 min/mes gratis" 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1
+"VOICE200" 01/06/17 0 31/12/49 "" 0 "" "" "Promo 200 min/mes gratis" 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1
 "VOICE3000" 01/12/12 0 31/12/49 "" 0 "" "" "Contrato service package" 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 0 1
 "YOIGOYOIGO" 01/02/08 2 31/12/54 "YOIGOYOIGO" 3600 "1" "" "Yoigo-Yoigo national calls daily limit" 80 3600 "1" "2" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1
