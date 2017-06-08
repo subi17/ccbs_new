@@ -14,10 +14,6 @@ VOICE5000CF;1;Spanish;Bono Ilimitado
 VOICE5000CF;2;Catalan;Bono Il limitat
 VOICE5000CF;3;Basque;Mugagabea bonus
 VOICE5000CF;5;English;Unlimited Bonus
-VOICE200;1;Spanish;Bono Nacional 200min
-VOICE200;2;Catalan;Bono Nacional 200 minuts
-VOICE200;3;Basque;National Bond 200 minutu 
-VOICE200;5;English;National 200 minute Bonus
 INT_VOICE100;1;Spanish;Bono Internacional 100min
 INT_VOICE100;2;Catalan;Bono Internacional 100 minuts
 INT_VOICE100;3;Basque;Nazioarteko Bond 100 minutu
