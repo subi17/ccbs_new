@@ -16,6 +16,9 @@ nonp_source = ['script/' + x for x in os.listdir('script')]
 skip_timelog = False
 show_file = False
 
+if 'umask' in globals():
+    os.umask(int(umask))
+
 def userandpass():
     if 'tenancies' in globals():
         if 'tenant' in globals():
