@@ -153,8 +153,8 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       ASSIGN
       ttDaycampaign.dctype = icDctype
       ttDaycampaign.dcevent = icevent
-      ttDaycampaign.billcode = icevent + "MF"
-      ttDaycampaign.feemodel = icevent + "MF"
+      /*ttDaycampaign.billcode = icevent + "MF"
+      ttDaycampaign.feemodel = icevent + "MF"*/
       ttDaycampaign.dcname = icName
       ttDaycampaign.bundleupsell = ""
       ttDaycampaign.bundletarget = iiTarget.
@@ -227,17 +227,48 @@ FUNCTION create_limit returns log (INPUT lcCode as CHAR,
           servicelimit.firstmonthcalc = 0
           servicelimit.lastmonthcalc = 0
           servicelimit.webdisp = 1.
-
-   FIND FIRST Servicelimit WHERE
-              Servicelimit.groupcode EQ lcbaseGroup NO-ERROR.
-   IF AVAIL servicelimit THEN DO:
-      FOR EACH servicelimittarget WHERE
-               servicelimittarget.slseq eq Servicelimit.slseq:
-         CREATE bservicelimitTarget.
-         BUFFER-COPY servicelimittarget EXCEPT slseq TO bservicelimittarget.
-         ASSIGN bservicelimittarget.slseq = laskuri
-                bservicelimittarget.insiderate = lcCode.
-      END.         
+   IF lcbaseGroup NE "SMS" THEN DO:
+      FIND FIRST Servicelimit WHERE
+                 Servicelimit.groupcode EQ lcbaseGroup NO-ERROR.
+      IF AVAIL servicelimit THEN DO:
+         FOR EACH servicelimittarget WHERE
+                  servicelimittarget.slseq eq Servicelimit.slseq:
+            CREATE bservicelimitTarget.
+            BUFFER-COPY servicelimittarget EXCEPT slseq TO bservicelimittarget.
+            ASSIGN bservicelimittarget.slseq = laskuri
+                   bservicelimittarget.insiderate = lcCode.
+         END.         
+      END.
+   END.
+   ELSE DO:
+      CREATE servicelimittarget.
+      ASSIGN
+         Servicelimittarget.InsideRate = lcCode
+         Servicelimittarget.OutsideRate = ""
+         Servicelimittarget.ServiceLimitMT = 0
+         Servicelimittarget.ServiceLMember = "12100001"
+         Servicelimittarget.SLSeq = laskuri.
+      CREATE servicelimittarget.
+      ASSIGN
+         Servicelimittarget.InsideRate = lcCode
+         Servicelimittarget.OutsideRate = ""
+         Servicelimittarget.ServiceLimitMT = 0
+         Servicelimittarget.ServiceLMember = "12100002"
+         Servicelimittarget.SLSeq = laskuri.
+      CREATE servicelimittarget.
+      ASSIGN
+         Servicelimittarget.InsideRate = lcCode
+         Servicelimittarget.OutsideRate = ""
+         Servicelimittarget.ServiceLimitMT = 0
+         Servicelimittarget.ServiceLMember = "12100003"
+         Servicelimittarget.SLSeq = laskuri.
+      CREATE servicelimittarget.
+      ASSIGN
+         Servicelimittarget.InsideRate = lcCode
+         Servicelimittarget.OutsideRate = ""
+         Servicelimittarget.ServiceLimitMT = 0
+         Servicelimittarget.ServiceLMember = "12100004"
+         Servicelimittarget.SLSeq = laskuri.         
    END.
    return true.
 END.
@@ -254,7 +285,7 @@ create_limit("VOICE200", "National calls", "_MIN",200.0, 1, 1, "VOICE100").
 create_limit("INT_VOICE100", "International calls", "_MIN",100.0, 1, 1,"VOICE100").
 create_limit("FIX_VOICE1000", "National fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
 create_limit("INT_FIX_VOICE1000", "International fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
-create_limit("SMS5000", "National sms", "_QTY",5000.0, 2, 5,"VOICE100").
+create_limit("SMS5000", "National sms", "_QTY",5000.0, 2, 5,"SMS").
 
 FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
    ( icClitype AS CHARACTER,
@@ -300,16 +331,13 @@ END FUNCTION.
 FUNCTION fcreateFixSLGAnalyses RETURNS LOGICAL (INPUT icClitype AS CHAR,
                                              INPUT icbasegroup AS CHAR,
                                              INPUT icgroup AS CHAR):
-   MESSAGE icgroup VIEW-AS ALERT-BOX.
    FIND FIRST SLGAnalyse where INDEX(SLGAnalyse.servicelimitgroup,
                                      icGroup) > 0 AND
                                      SLGANalyse.clitype EQ icclitype NO-ERROR.
    IF NOT AVAIL SLGanalyse THEN DO:     
-      MESSAGE "2" VIEW-AS ALERT-BOX.
       FOR EACH tempSLGAnalyse no-lock where INDEX(tempSLGAnalyse.servicelimitgroup, 
                                         icBaseGroup) > 0 AND 
                                         tempSLGANalyse.clitype EQ icclitype:
-         MESSAGE "3" VIEW-AS ALERT-BOX.
          CREATE bSLGAnalyse.
          BUFFER-COPY tempSLGAnalyse TO bSLGAnalyse.
          ASSIGN
