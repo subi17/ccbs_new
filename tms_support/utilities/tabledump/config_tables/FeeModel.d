@@ -621,6 +621,9 @@
 "PREREN7" "Pre paid - V3x BLUE" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PREREN8" "Pre paid - N70 WHITE" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PREREN9" "Pre paid - N70 SILVER" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PRETARJ10BUNDLE" "La prepago de 1 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PRETARJ11BUNDLE" "La prepago de 2 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PRETARJ12BUNDLE" "La prepago de 4 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "RECONNECTION" "Reconnection Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "Reparacion" "Reparacion" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "RVTERM" "Terminal Residual Amount" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
