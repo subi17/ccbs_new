@@ -40,6 +40,8 @@ DEFINE VARIABLE ldeMonthAmt      AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE ldeMonthFrom     AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthTo       AS DECIMAL   NO-UNDO.
 
+DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
+
 lcStructType = validate_request(param_toplevel_id, "int,string,struct,[boolean]").
 IF lcStructType EQ ? THEN RETURN.
 
@@ -112,6 +114,10 @@ IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN DO:
    
    IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) = 0 THEN
       RETURN appl_err("Discount Plan not allowed").
+   
+   IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES})) <> LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) OR
+      LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES})) <> LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_20}) THEN
+      RETURN appl_err("Discount Plan not allowed").
 
    IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) THEN
       RETURN appl_err("Discount Plan not allowed").
@@ -133,11 +139,23 @@ IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN DO:
 
 END.
 
+FOR EACH bDiscountPlan WHERE
+         bDiscountPlan.Brand = gcBrand AND
+  LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20}) > 0,
+  FIRST DPMember WHERE
+        DPMember.DPId       = DiscountPlan.DPId    AND
+        DPMember.HostTable  = "MobSub"             AND
+        DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+        DPMember.ValidTo   >= ldaValidFrom         AND
+        DPMember.ValidFrom <= ldaValidTo:
+   RETURN appl_err("Discount Plan already exists").
+END.
+
 FIND FIRST DPMember WHERE
-           DPMember.DPId = DiscountPlan.DPId AND
-           DPMember.HostTable = "MobSub" AND
-           DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
-           DPMember.ValidTo >= ldaValidFrom AND
+           DPMember.DPId       = DiscountPlan.DPId AND
+           DPMember.HostTable  = "MobSub" AND
+           DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+           DPMember.ValidTo   >= ldaValidFrom AND
            DPMember.ValidFrom <= ldaValidTo NO-LOCK NO-ERROR.
 
 IF AVAILABLE DPMember THEN
