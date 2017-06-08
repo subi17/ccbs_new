@@ -1818,7 +1818,16 @@ PROCEDURE pFinalize:
          FOR FIRST bMSRequest NO-LOCK WHERE
                    bMSRequest.MsRequest = MsRequest.OrigRequest AND
                    bMSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}:
-            fTS2Date(bMsRequest.CreStamp, OUTPUT ldaOrderDate).
+         
+            IF bMSRequest.ReqIParam2 > 0 THEN
+               FIND FIRST Order NO-LOCK WHERE
+                          Order.Brand = gcBrand AND
+                          Order.OrderId = bMSRequest.ReqIParam2 NO-ERROR.
+            ELSE RELEASE Order.
+
+            IF AVAIL Order THEN 
+               fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+            ELSE fTS2Date(bMsRequest.CreStamp, OUTPUT ldaOrderDate).
          END.
 
       IF ldaOrderDate NE ? AND
@@ -1827,7 +1836,7 @@ PROCEDURE pFinalize:
          ldaOrderDate >= ldaCont15PromoFrom AND
          ldaOrderDate <= ldaCont15PromoEnd AND
          /* Convergent+CONT15 has VOICE200 instead of VOICE100 after 5.6.2017 */
-        (lcDCEvent EQ "CONT15" OR ldaOrderDate < 6/5/2017) THEN DO:
+        (MsOwner.CLIType EQ "CONT15" OR ldaOrderDate < 6/5/2017) THEN DO:
 
          liRequest = fPCActionRequest(MsRequest.MsSeq,
                                       "VOICE100",
