@@ -3560,6 +3560,10 @@
 1 "" 2 "Descompte regal" 0 "LRDISC" "1" 01/02/14 31/12/49
 1 "" 3 "Deskontua oparitan" 0 "LRDISC" "1" 01/02/14 31/12/49
 1 "" 5 "Gift discount" 0 "LRDISC" "1" 01/02/14 31/12/49
+1 "" 1 "Descuento regalo" 0 "LRDISC2" "1" 01/05/17 31/12/49
+1 "" 2 "Descompte regal" 0 "LRDISC2" "1" 01/05/17 31/12/49
+1 "" 3 "Deskontua oparitan" 0 "LRDISC2" "1" 01/05/17 31/12/49
+1 "" 5 "Gift discount" 0 "LRDISC2" "1" 01/05/17 31/12/49
 1 "" 1 "M2M" 0 "M2MMMS" "1" 01/05/12 31/12/49
 1 "" 2 "M2M" 0 "M2MMMS" "1" 01/05/12 31/12/49
 1 "" 3 "M2M" 0 "M2MMMS" "1" 01/05/12 31/12/49
@@ -7491,11 +7495,21 @@
 1 "" 3 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
 1 "" 4 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
 1 "" 5 "Wileyfox Swift 2 Gold" 0 "P048WS2D2" "1" 24/05/17 31/12/49
+1 "" 1 "Wileyfox Swift 2 Dorado con funda de regalo" 0 "P048WS2DP" "1" 31/05/17 31/12/49
+1 "" 2 "Wileyfox Swift 2 Dorado con funda de regalo" 0 "P048WS2DP" "1" 31/05/17 31/12/49
+1 "" 3 "Wileyfox Swift 2 Dorado con funda de regalo" 0 "P048WS2DP" "1" 31/05/17 31/12/49
+1 "" 4 "Wileyfox Swift 2 Dorado con funda de regalo" 0 "P048WS2DP" "1" 31/05/17 31/12/49
+1 "" 5 "Wileyfox Swift 2 Gold with cover gift" 0 "P048WS2DP" "1" 31/05/17 31/12/49
 1 "" 1 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
 1 "" 2 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
 1 "" 3 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
 1 "" 4 "Wileyfox Swift 2 Negro" 0 "P048WS2N2" "1" 24/05/17 31/12/49
 1 "" 5 "Wileyfox Swift 2 Black" 0 "P048WS2N2" "1" 24/05/17 31/12/49
+1 "" 1 "Wileyfox Swift 2 Negro con funda de regalo" 0 "P048WS2NP" "1" 31/05/17 31/12/49
+1 "" 2 "Wileyfox Swift 2 Negro con funda de regalo" 0 "P048WS2NP" "1" 31/05/17 31/12/49
+1 "" 3 "Wileyfox Swift 2 Negro con funda de regalo" 0 "P048WS2NP" "1" 31/05/17 31/12/49
+1 "" 4 "Wileyfox Swift 2 Negro con funda de regalo" 0 "P048WS2NP" "1" 31/05/17 31/12/49
+1 "" 5 "Wileyfox Swift 2 Black with cover gift" 0 "P048WS2NP" "1" 31/05/17 31/12/49
 1 "" 1 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
 1 "" 2 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
 1 "" 3 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
@@ -9670,6 +9684,14 @@
 1 "" 2 "En 100 min" 0 "VOICE100CF" "1" 01/01/15 31/12/49
 1 "" 3 "100 minutuan" 0 "VOICE100CF" "1" 01/01/15 31/12/49
 1 "" 5 "In 100 min" 0 "VOICE100CF" "1" 01/01/15 31/12/49
+1 "" 1 "En 200 min" 0 "VOICE200" "1" 01/06/17 31/12/49
+1 "" 2 "En 200 min" 0 "VOICE200" "1" 01/06/17 31/12/49
+1 "" 3 "200 minutuan" 0 "VOICE200" "1" 01/06/17 31/12/49
+1 "" 5 "In 200 min" 0 "VOICE200" "1" 01/06/17 31/12/49
+1 "" 1 "En 200 min" 0 "VOICE200CF" "1" 01/06/17 31/12/49
+1 "" 2 "En 200 min" 0 "VOICE200CF" "1" 01/06/17 31/12/49
+1 "" 3 "200 minutuan" 0 "VOICE200CF" "1" 01/06/17 31/12/49
+1 "" 5 "In 200 min" 0 "VOICE200CF" "1" 01/06/17 31/12/49
 1 "" 1 "Nacionales" 0 "VOICE3000" "1" 01/12/12 31/12/49
 1 "" 2 "Nacionals" 0 "VOICE3000" "1" 01/12/12 31/12/49
 1 "" 3 "Nazionalak" 0 "VOICE3000" "1" 01/12/12 31/12/49
@@ -12068,6 +12090,18 @@
 9 "" 3 "La del Cero" 0 "TARJ" "1" 30/09/08 31/12/54
 9 "" 4 "La del Cero" 0 "TARJ" "1" 30/09/08 31/12/54
 9 "" 5 "La del Cero" 0 "TARJ" "1" 30/09/08 31/12/54
+9 "" 1 "La prepago de 1 GB" 0 "TARJ10" "1" 29/05/17 31/12/49
+9 "" 2 "La prepago de 1 GB" 0 "TARJ10" "1" 29/05/17 31/12/49
+9 "" 3 "La prepago de 1 GB" 0 "TARJ10" "1" 29/05/17 31/12/49
+9 "" 5 "La prepago de 1 GB" 0 "TARJ10" "1" 29/05/17 31/12/49
+9 "" 1 "La prepago de 2 GB" 0 "TARJ11" "1" 29/05/17 31/12/49
+9 "" 2 "La prepago de 2 GB" 0 "TARJ11" "1" 29/05/17 31/12/49
+9 "" 3 "La prepago de 2 GB" 0 "TARJ11" "1" 29/05/17 31/12/49
+9 "" 5 "La prepago de 2 GB" 0 "TARJ11" "1" 29/05/17 31/12/49
+9 "" 1 "La prepago de 4 GB" 0 "TARJ12" "1" 29/05/17 31/12/49
+9 "" 2 "La prepago de 4 GB" 0 "TARJ12" "1" 29/05/17 31/12/49
+9 "" 3 "La prepago de 4 GB" 0 "TARJ12" "1" 29/05/17 31/12/49
+9 "" 5 "La prepago de 4 GB" 0 "TARJ12" "1" 29/05/17 31/12/49
 9 "" 1 "Tarjeta 2" 0 "TARJ2" "1" 01/09/08 31/12/54
 9 "" 2 "Tarjeta 2" 0 "TARJ2" "1" 01/09/08 31/12/54
 9 "" 3 "Tarjeta 2" 0 "TARJ2" "1" 01/09/08 31/12/54
