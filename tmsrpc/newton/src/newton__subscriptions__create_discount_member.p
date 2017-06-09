@@ -19,6 +19,7 @@ gcbrand = "1".
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 {Func/fcounter.i}
+{Func/fixedlinefunc.i}
 
 /* Input parameters */
 DEFINE VARIABLE piMsSeq          AS INTEGER   NO-UNDO. 
@@ -87,15 +88,46 @@ katun = pcUserName.
 
 {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
+FIND Customer OF Mobsub NO-LOCK NO-ERROR.
+IF NOT AVAIL Customer THEN
+   RETURN appl_err("Customer not available").
+
 FIND FIRST DiscountPlan WHERE
            DiscountPlan.Brand = gcBrand AND
            DiscountPlan.DPRuleID = lcDPRuleID NO-LOCK NO-ERROR.
 IF NOT AVAILABLE DiscountPlan THEN
    RETURN appl_err("Unknown Discount Plan").
+
 IF liValidPeriods = 999 THEN
    ldaValidTo = 12/31/2049.
 ELSE
    ldaValidTo = fCalcDPMemberValidTo(ldaValidFrom, liValidPeriods).
+
+/* ADDLINE-275 */
+IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN DO:
+   
+   IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) = 0 THEN
+      RETURN appl_err("Discount Plan not allowed").
+      
+   IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) THEN
+      RETURN appl_err("Discount Plan not allowed").
+
+   FOR EACH DCCLI NO-LOCK WHERE
+            DCCLI.MsSeq = MobSub.MsSeq AND
+            DCCLI.DCEvent BEGINS "TERM" AND
+            DCCLI.ValidTo >= TODAY AND
+            DCCLI.ValidFrom <= TODAY AND
+            DCCLI.CreateFees = TRUE,
+      FIRST DayCampaign WHERE
+            DayCampaign.Brand = gcBrand AND
+            DayCampaign.DCEvent = DCCLI.DCEvent AND
+            DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
+            DayCampaign.TermFeeModel NE "" AND
+            DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
+      RETURN appl_err("Discount Plan not allowed").
+   END.
+
+END.
 
 FIND FIRST DPMember WHERE
            DPMember.DPId = DiscountPlan.DPId AND

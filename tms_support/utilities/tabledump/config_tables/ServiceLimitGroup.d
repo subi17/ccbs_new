@@ -5,6 +5,7 @@
 "1" "CONT24" "Contrato 24" 04/03/15 31/12/49
 "1" "CONT25" "Contrato 25" 12/12/16 31/12/49
 "1" "CONT26" "Contrato 26" 01/02/17 31/12/49
+"1" "CONT27" "LA INFINITA 2 GB DTO." 18/04/17 31/12/49
 "1" "CONT9" "Contrato 9" 01/05/14 31/12/49
 "1" "CONTD2" "Contrato Datos 2 continuous per" 01/12/09 31/12/54
 "1" "CONTD2ACT" "Contrato Datos 2 1st period" 01/12/09 31/12/54
@@ -80,6 +81,9 @@
 "1" "MDUB_UPSELL" "MDUB UPSELL" 01/11/10 21/12/49
 "1" "PMDUB" "Prepaid MDUB" 01/05/11 31/12/49
 "1" "PMDUB_UPSELL" "Pre Mobile Data Usage Bundle" 01/06/11 31/12/49
+"1" "TARJ10" "La prepago de 1 GB" 29/05/17 31/12/49
+"1" "TARJ11" "La prepago de 2 GB" 29/05/17 31/12/49
+"1" "TARJ12" "La prepago de 4 GB" 29/05/17 31/12/49
 "1" "TARJ6" "TARJ6 Bundle" 01/08/13 31/12/49
 "1" "TARJ7" "TARJ7 Bundle" 01/11/13 31/12/49
 "1" "TARJ7_UPSELL" "TARJ7 Upsell" 01/11/13 31/12/49
@@ -88,4 +92,5 @@
 "1" "TARJ_UPSELL" "TARJ UPSELL" 01/12/12 31/12/49
 "1" "UPGRADE_UPSELL" "Upgrade Upsell" 23/03/12 31/12/49
 "1" "VOICE100" "Voice 100 Minutes Package" 01/01/15 31/12/49
+"1" "VOICE200" "Voice 200 Minutes Package" 01/06/17 31/12/49
 "1" "VOICE3000" "Contrato voice" 01/12/12 31/12/49

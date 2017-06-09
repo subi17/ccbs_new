@@ -1422,7 +1422,7 @@ PROCEDURE pFinalize:
       END. /* FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE */
    END. /* IF LOOKUP(lcDCEvent,lcFLATContracts) > 0 AND */
 
-   IF lcDCEvent = "TARJ7" OR lcDCEvent = "TARJ9" THEN DO:
+   IF LOOKUP(lcDCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
       CASE iiRequestType:
          WHEN 8 THEN ASSIGN lcSMSText = lcDCEvent + "RenewalOK"
                             ldaPrepResetDate = ADD-INTERVAL(ldtActDate,1,"months").
@@ -1454,7 +1454,7 @@ PROCEDURE pFinalize:
            WHEN "MDUB5" THEN ASSIGN
               lcSMSText = REPLACE(lcSMSText,"#BUNDLE", "12")
               lcSender = "22644".
-           WHEN "TARJ7" OR WHEN "TARJ9" THEN
+           WHEN "TARJ7" OR WHEN "TARJ9" OR WHEN "TARJ10" OR WHEN "TARJ11" OR WHEN "TARJ12" THEN
               ASSIGN lcSMSText = REPLACE(lcSMSText,"#DATE",
                                          STRING(DAY(ldaPrepResetDate)) + "/" +
                                          STRING(MONTH(ldaPrepResetDate)))
@@ -1757,7 +1757,7 @@ PROCEDURE pFinalize:
             
    END.
    
-   /* When STCed between CONT15 and CONTDSL48 */
+   /* When STCed between CONT15 and Convergent with CONT15 base bundle */
    IF (lcDCEvent EQ "CONT15" OR LOOKUP(lcDCEvent,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) AND 
       MsRequest.ReqType    EQ 8     AND
       MsRequest.ReqCParam2 EQ "act" THEN 
@@ -1766,6 +1766,10 @@ PROCEDURE pFinalize:
                                           CliType.CliType    = MsOwner.CliType AND 
                                           CliType.BaseBundle = "CONT15"        NO-LOCK) THEN
           LEAVE.
+      ELSE IF NOT CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq     = MsOwner.MsSeq                  AND 
+                                                 MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_CREATE} AND 
+                                                 MsRequest.ReqStatus > 0                              USE-INDEX MsSeq NO-LOCK) THEN
+          LEAVE. 
       ELSE IF CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq      = MsOwner.MsSeq                             AND
                                              MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION}            AND
                                              LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND 
@@ -1797,14 +1801,25 @@ PROCEDURE pFinalize:
          FOR FIRST bMSRequest NO-LOCK WHERE
                    bMSRequest.MsRequest = MsRequest.OrigRequest AND
                    bMSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}:
-            fTS2Date(bMsRequest.CreStamp, OUTPUT ldaOrderDate).
+         
+            IF bMSRequest.ReqIParam2 > 0 THEN
+               FIND FIRST Order NO-LOCK WHERE
+                          Order.Brand = gcBrand AND
+                          Order.OrderId = bMSRequest.ReqIParam2 NO-ERROR.
+            ELSE RELEASE Order.
+
+            IF AVAIL Order THEN 
+               fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+            ELSE fTS2Date(bMsRequest.CreStamp, OUTPUT ldaOrderDate).
          END.
 
       IF ldaOrderDate NE ? AND
          ldaCont15PromoFrom NE ? AND
          ldaCont15PromoEnd NE ? AND
          ldaOrderDate >= ldaCont15PromoFrom AND
-         ldaOrderDate <= ldaCont15PromoEnd THEN DO:
+         ldaOrderDate <= ldaCont15PromoEnd AND
+         /* Convergent+CONT15 has VOICE200 instead of VOICE100 after 5.6.2017 */
+        (MsOwner.CLIType EQ "CONT15" OR ldaOrderDate < 6/5/2017) THEN DO:
 
          liRequest = fPCActionRequest(MsRequest.MsSeq,
                                       "VOICE100",
@@ -2145,7 +2160,7 @@ PROCEDURE pContractTermination:
             ldNewEndStamp = fSecOffSet(ldNewEndStamp,-1). 
          END.
 
-         IF lcDCEvent = "TARJ7" OR lcDCEvent = "TARJ9" THEN DO:
+         IF LOOKUP(lcDCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
             FOR FIRST bServiceLimit WHERE
                       bServiceLimit.GroupCode = "TARJ7_UPSELL",
                 FIRST bMServiceLimit EXCLUSIVE-LOCK WHERE

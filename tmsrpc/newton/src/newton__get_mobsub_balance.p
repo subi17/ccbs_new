@@ -486,7 +486,7 @@ ELSE DO:
       fCollectBalance(MobSub.CLIType,MobSub.TariffBundle,
                       "PRETARJ6UPSELL",ldeTARJ6UpsellChargeDay,"balance_day").
    END.
-   ELSE IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
+   ELSE IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
       FOR FIRST ServiceLimit NO-LOCK WHERE
                 ServiceLimit.GroupCode = MobSub.CliType:
          IF CAN-FIND (FIRST MServiceLimit WHERE

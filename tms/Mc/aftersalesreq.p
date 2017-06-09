@@ -17,6 +17,7 @@
 {Mc/offer.i}
 {Func/fcpfat.i}
 {Syst/tmsconst.i}
+{Mc/dpmember.i}
 
 DEFINE INPUT PARAMETER iiMSrequest AS INT NO-UNDO.
 
@@ -40,6 +41,7 @@ DEFINE VARIABLE ldLastMonthDate AS DATE      NO-UNDO.
 DEFINE VARIABLE liLastPeriod    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldeTimeStamp    AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeFinalFee     AS DECIMAL   NO-UNDO.
+DEFINE VARIABLE lcDPRuleID      AS CHARACTER NO-UNDO.
 
 /* msrequest parameters */
 DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
@@ -291,6 +293,13 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
    katun = "request".
 
 END. /* IF Order.OrderType = 2 AND Order.ICC > "" AND */
+
+IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+   fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
+                  MobSub.MsSeq,
+                  fLastDayOfMonth(TODAY),
+                  FALSE).
+END.
 
 /* skip dextra handling */
 

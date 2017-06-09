@@ -22,6 +22,7 @@
           pending_stc;boolean;optional;true
           liQtyTFs;int;mandatory;number of installments
           subscription_bundle;string;mandatory;tariff bundle of mobsub
+          additional_line_discount_50;boolean;optional;
  * @installment;array of installment structs;two fields insidde struct
  * @installment;struct per_contract_id;int;installment periodical contract id
 */
@@ -603,9 +604,24 @@ FOR EACH  DCCLI WHERE
 END.
 add_int(top_struct,"TF_quantity",liQtyTFs).
 
-
 /* Return Subs. based bundle */
 add_string(top_struct, "subscription_bundle", MobSub.TariffBundle).
+
+/* if subscription has one of 50% additional line discount active */
+IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+   FOR EACH DiscountPlan NO-LOCK WHERE
+            DiscountPlan.Brand    = gcBrand AND
+     LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
+            DiscountPlan.ValidTo >= TODAY,
+      FIRST DPMember NO-LOCK WHERE
+            DPMember.DPID       = DiscountPlan.DPID AND
+            DPMember.HostTable  = "MobSub" AND
+            DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+            DPMember.ValidTo   >= TODAY AND
+            DPMember.ValidFrom <= DPMember.ValidTo:
+      add_boolean(top_struct, "additional_line_discount_50", TRUE).
+   END.
+END.
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

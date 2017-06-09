@@ -3,7 +3,6 @@ bulkload: MNPRetentionRule
   RetentionRuleID: 1
   SegmentCode: "OFA"
   CLIType: "CONT"
-  ConsumptionAverage: 5
   SMSText: "MNPRescue"
   FromDate: 2012-06-04
   ToDate: 2049-12-31
@@ -13,7 +12,6 @@ bulkload: MNPRetentionRule
   RetentionRuleID: 2
   SegmentCode: "OFB"
   CLIType: "CONT"
-  ConsumptionAverage: 5
   SMSText: "MNPRescue"
   FromDate: 2012-06-04
   ToDate: 2049-12-31
@@ -23,7 +21,6 @@ bulkload: MNPRetentionRule
   RetentionRuleID: 3
   SegmentCode: "OFC"
   CLIType: "CONT"
-  ConsumptionAverage: 5
   SMSText: "MNPRescue"
   FromDate: 2012-06-04
   ToDate: 2049-12-31
@@ -33,7 +30,6 @@ bulkload: MNPRetentionRule
   RetentionRuleID: 4
   SegmentCode: "OFD"
   CLIType: "CONT"
-  ConsumptionAverage: 5
   SMSText: "MNPRescue"
   FromDate: 2012-06-04
   ToDate: 2049-12-31
@@ -52,7 +48,7 @@ bulkload: MNPRetentionRule
   RetentionRuleID: 6
   SegmentCode: "OFA"
   CLIType: "TARJ"
-  ConsumptionAverage: 7
+  ConsumptionAverage: 5
   SMSText: "MNPRescue"
   FromDate: 2012-06-04
   ToDate: 2049-12-31
@@ -62,7 +58,7 @@ bulkload: MNPRetentionRule
   RetentionRuleID: 7
   SegmentCode: "OFB"
   CLIType: "TARJ"
-  ConsumptionAverage: 7
+  ConsumptionAverage: 5
   SMSText: "MNPRescue"
   FromDate: 2012-06-04
   ToDate: 2049-12-31
@@ -121,8 +117,16 @@ bulkload: MNPRetentionRule
   RetentionRuleID: 13
   SegmentCode: "OFE"
   CLIType: "CONT"
-  ConsumptionAverage: 5
   SMSText: "MNPRescue"
   FromDate: 2013-02-06
+  ToDate: 2049-12-31
+
+bulkload: MNPRetentionRule
+  Brand: "1"
+  RetentionRuleID: 14
+  SegmentCode: "OFF"
+  CLIType: "CONT"
+  SMSText: "MNPRescue"
+  FromDate: 2017-03-15
   ToDate: 2049-12-31
 

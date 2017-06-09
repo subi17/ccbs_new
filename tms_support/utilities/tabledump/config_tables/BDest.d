@@ -64,7 +64,7 @@
 "11831" " de DIALPLAN TELECOM" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 53
 "11832" "11832 de ANCUTATEL (Quality)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 54
 "11833" "11833 de Premium Numbers(Orange Espagne)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 55
-"11834" "11834 de Nvia Gestión de Datos" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 56
+"11834" "11834 de DATA PREMIUM DE VENEZUELA 11,C." 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 56
 "11835" " de Incotel Servicios (Opera)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 57
 "11836" " de Información Telefónica 11836" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 58
 "11837" " de Foreign Information Services (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 59
@@ -862,6 +862,10 @@
 "CONT26_DATA_OUT" "CONT26 DATA OUT" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/02/17 1067
 "CONT26_VOICE_IN" "CONT26 VOICE IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/02/17 1068
 "CONT26_VOICE_OUT" "CONT26 VOICE OUT" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/02/17 1069
+"CONT27_DATA_IN" "CONT27 DATA IN" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 18/04/17 1074
+"CONT27_DATA_OUT" "CONT27 DATA OUT" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 18/04/17 1075
+"CONT27_VOICE_IN" "CONT27 VOICE IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 18/04/17 1076
+"CONT27_VOICE_OUT" "CONT27 VOICE OUT" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 18/04/17 1077
 "CONTDSL_MIN_IN" "CONTDSL MIN_IN" 81 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 27/10/16 1044
 "CONTDSL_QTY_IN" "CONTDSL QTY_IN" 81 1 0 0 "" "" 0 no 4 no "" 0 0 "1" 31/12/49 27/10/16 1043
 "CONTF11_DATA_IN" "CONTF11 DATA_IN" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 14/04/15 989
@@ -984,6 +988,9 @@
 "GPRSDATA_MDUB4" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 617
 "GPRSDATA_MDUB5" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 26/03/12 777
 "GPRSDATA_MDUB9" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 888
+"GPRSDATA_TARJ10" "GPRS Data TARJ10" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/17 1078
+"GPRSDATA_TARJ11" "GPRS Data TARJ11" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/17 1079
+"GPRSDATA_TARJ12" "GPRS Data TARJ12" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/17 1080
 "GPRSDATA_TARJ7" "GPRS data tarj7" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/10/15 1002
 "GPRSDATA_TARJ9" "GPRS data tarj9" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/10/15 1003
 "GPRSDATA_UPGRADE" "GPRS data Upgrade Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 26/03/12 779
@@ -1029,6 +1036,7 @@
 "TARJ9_VOICE_OUT" "TARJ9 VOICE_OUT" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/15 995
 "VAS" "VAS" 72 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/12/06 635
 "VOICE100" "Voice 100 Minutes" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/01/15 977
+"VOICE200" "Voice 200 Minutes" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/06/17 1081
 "VOICE3000" "Cont Voice" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 893
 "WAPVAS" "Premium WAP" 78 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/12/06 636
 "YOIGO" "Yoigo" 80 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/12/06 637

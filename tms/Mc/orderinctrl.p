@@ -23,6 +23,7 @@ DEF VAR ldeSMSStamp     AS DEC  NO-UNDO.
 DEF VAR lcOldStatus     AS CHAR NO-UNDO. 
 DEF VAR lcNewStatus     AS CHAR NO-UNDO. 
 DEF VAR lcError         AS CHAR NO-UNDO.
+DEF VAR llCompanyScoringNeeded AS LOG NO-UNDO. 
 
 DEF BUFFER lbOrder          FOR Order.
 
@@ -98,6 +99,11 @@ FIND FIRST OrderCustomer WHERE
    OrderCustomer.OrderId = Order.OrderId AND
    OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
+llCompanyScoringNeeded = 
+   (Order.CREventQty = 0 AND 
+   Order.CredOk = FALSE AND
+   OrderCustomer.CustidType = "CIF").
+
 IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).
 
 IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO:
@@ -172,7 +178,9 @@ IF ((Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} AND
      Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}  OR
      Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
      Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT}) AND
-     Order.OrderChannel BEGINS "fusion" THEN DO:
+     Order.OrderChannel BEGINS "fusion" AND
+     Order.OrderType NE 2 AND
+     NOT llCompanyScoringNeeded THEN DO:
 
    fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
 
@@ -309,26 +317,23 @@ IF lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_MOBILE_LINE} AND
-   Order.CREventQty = 0 AND 
-   Order.CredOk = FALSE AND
-   Order.OrderType NE 2 THEN DO: /* Credit scoring is not tried yet */
+   Order.OrderType NE 2 AND
+   llCompanyScoringNeeded THEN DO:
    
-   IF OrderCustomer.CustidType = "CIF" THEN DO:
-      FIND FIRST Customer WHERE
-         Customer.Brand      = Order.Brand          AND 
-         Customer.OrgId      = OrderCustomer.CustId AND
-         Customer.CustIdType = OrderCustomer.CustIdType AND
-         Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
-      IF AVAIL Customer THEN DO:
-         FIND FIRST MobSub WHERE
-                    MobSub.Brand   = gcBrand AND
-                    MobSub.AgrCust = Customer.CustNum
-              NO-LOCK NO-ERROR.
-         IF NOT AVAIL MobSub THEN lcNewStatus = "20".
-         ELSE lcNewStatus = "21".
-      END. /* IF AVAIL Customer THEN DO: */
-      ELSE lcNewStatus = "20".
-   END. /* IF OrderCustomer.CustidType = "CIF" THEN */
+   FIND FIRST Customer WHERE
+      Customer.Brand      = Order.Brand          AND 
+      Customer.OrgId      = OrderCustomer.CustId AND
+      Customer.CustIdType = OrderCustomer.CustIdType AND
+      Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
+   IF AVAIL Customer THEN DO:
+      FIND FIRST MobSub WHERE
+                 MobSub.Brand   = gcBrand AND
+                 MobSub.AgrCust = Customer.CustNum
+           NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN lcNewStatus = "20".
+      ELSE lcNewStatus = "21".
+   END. /* IF AVAIL Customer THEN DO: */
+   ELSE lcNewStatus = "20".
 END.
 
 /* MNP Retention Project */
@@ -398,9 +403,7 @@ ELSE IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
             END.
          
             /* YDR-323 */
-            lcNewStatus = (IF OrderCustomer.CustIdType EQ "CIF" AND
-                              Order.CredOk = FALSE AND
-                              Order.CREventQty = 0
+            lcNewStatus = (IF llCompanyScoringNeeded
                            THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
                            ELSE {&ORDER_STATUS_RENEWAL_STC}).
          END.
@@ -415,15 +418,19 @@ fSetOrderStatus(Order.OrderId,lcNewStatus).
 
 /* Release pending additional lines orders, in case of pending convergent 
    mail line order is released */
-IF lcOldStatus EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}       OR
-   lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
-   lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} OR
-   lcOldStatus EQ {&ORDER_STATUS_OFFER_SENT}                THEN DO:
-    
-    fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
-                                    OrderCustomer.CustID) . 
-END.   
-
+/* YTS-10832 FIX */
+IF fIsConvergenceTariff(Order.CLIType) THEN DO:
+   IF (lcOldStatus EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}       OR
+       lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
+       lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} OR
+       lcOldStatus EQ {&ORDER_STATUS_OFFER_SENT})               AND
+      (lcNewStatus = {&ORDER_STATUS_NEW}  OR
+       lcNewStatus = {&ORDER_STATUS_MNP}) THEN DO:
+       
+       fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
+                                       OrderCustomer.CustID) . 
+   END.   
+END.
 IF llDoEvent THEN DO:
    RUN StarEventMakeModifyEvent(lhOrder).
    fCleanEventObjects().

@@ -255,7 +255,8 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
    IF pcContractId = "" OR pcContractId = ? THEN
       RETURN appl_err("Contract Id is blank or unknown").
 
-   IF CAN-FIND(FIRST MobSub WHERE
+   IF NOT fHasConvergenceTariff(piMsSeq) AND
+      CAN-FIND(FIRST MobSub WHERE
                      MobSub.MsSeq = piMsSeq NO-LOCK) THEN
       RETURN appl_err("Subscription is alreay active").
 

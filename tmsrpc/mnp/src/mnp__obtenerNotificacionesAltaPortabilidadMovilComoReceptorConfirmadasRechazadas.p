@@ -139,7 +139,7 @@ FOR EACH ttInput NO-LOCK:
          MNPProcess.StatusCode = {&MNP_ST_AREC}.
          Order.MNPStatus = {&MNP_ST_AREC} + 1.
 
-      fSetOrderStatus(Order.OrderId,"73").
+      fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_MNP_REJECTED}). /* 73 */
       
       END.
    END.
@@ -178,7 +178,8 @@ FOR EACH ttInput NO-LOCK:
       /* double check activation */
       FIND FIRST MsRequest WHERE
                  MsRequest.MsSeq = Order.MsSeq AND
-                 MsRequest.ReqType = ({&REQTYPE_SUBSCRIPTION_CREATE})
+                 MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_CREATE} AND
+                 MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED}
       NO-LOCK NO-ERROR.
       IF NOT AVAIL MsRequest OR Order.OrderType EQ 3 THEN DO:
   
@@ -230,10 +231,12 @@ FOR EACH ttInput NO-LOCK:
       MNPProcess.UpdateTS = {&nowts}
       MNPProcess.MNPUpdateTS = ttInput.statusTS.
       
-   /* YOT-924 - AREC IDENT automatic cancellation */
-   IF Order.StatusCode = "73" AND
+   /* YOT-924 - AREC IDENT automatic cancellation 
+      YDR-2506 - no automatic cancellation for convergent tarifs */
+   IF Order.StatusCode = {&ORDER_STATUS_MNP_REJECTED} AND /* 73 */
       LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
-      ttInput.StatusReason EQ "RECH_IDENT" THEN DO:
+      ttInput.StatusReason EQ "RECH_IDENT" AND
+      NOT fIsConvergenceTariff(Order.CliType) THEN DO:
       RUN Mc/closeorder.p(Order.OrderId,TRUE).
       IF RETURN-VALUE EQ "" THEN fReleaseIMEI(Order.Orderid).
    END.   

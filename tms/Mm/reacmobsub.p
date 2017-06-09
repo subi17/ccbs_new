@@ -557,8 +557,7 @@ DO TRANSACTION:
 
       /* Don't reactivate TARJ7 and TARJ9 service periodical contract 
          Don't reactivate BONO_VOIP YPR-3458 */
-      IF ttContract.DCEvent = "TARJ7" OR
-         ttContract.DCEvent = "TARJ9" OR
+      IF LOOKUP(ttContract.DCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 OR
          ttContract.DCEvent = "BONO_VOIP" THEN NEXT.
 
       FIND FIRST DayCampaign WHERE
@@ -742,24 +741,26 @@ DO TRANSACTION:
    /* ADDLINE-20 Additional Line 
       IF the Customer reactivates the below additional line tariff's then,
       checking if convergent active OR not, based on that closing the old one AND creating the new discount */
-   IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
-      FIND FIRST Customer NO-LOCK WHERE
-                 Customer.Custnum = MobSub.Custnum NO-ERROR.
-      FOR EACH DiscountPlan NO-LOCK WHERE
-               DiscountPlan.Brand    = gcBrand                         AND
-               LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
-               DiscountPlan.ValidTo >= TODAY,
-         FIRST DPMember NO-LOCK WHERE
-               DPMember.DPID       = DiscountPlan.DPID    AND
-               DPMember.HostTable  = "MobSub"             AND
-               DPMember.KeyValue   = STRING(MobSub.MsSeq):
-         IF fCheckExistingConvergent(Customer.CustIDType, Customer.OrgID) THEN DO:
-            fCreateAddLineDiscount(MobSub.MsSeq,
-                                   MobSub.CLIType,
-                                   TODAY).
-            IF RETURN-VALUE BEGINS "ERROR" THEN
-               RETURN RETURN-VALUE.
-         END.
+   IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN
+      RUN pReacAddLineDisc(MobSub.CustNum,
+                           MobSub.MsSeq,
+                           MobSub.CLIType).
+
+   /* ADDLINE-267 fixing reactivation of partial terminated mobile line of convergent cases */
+   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                     CLIType.Brand      = gcBrand                           AND
+                     CLIType.CLIType    = MobSub.CLIType                    AND
+                     CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
+                    (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
+                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN DO:
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobSub.Brand   = gcBrand        AND
+               bMobSub.AgrCust = MobSub.CustNum AND
+               bMobSub.MsSeq  <> MobSub.MsSeq   AND
+               LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+         RUN pReacAddLineDisc(bMobSub.CustNum,
+                              bMobSub.MsSeq,
+                              bMobSub.CLIType).
       END.
    END.
 
@@ -1079,3 +1080,40 @@ PROCEDURE pChangeDelType:
    END.  
 
 END PROCEDURE.
+
+PROCEDURE pReacAddLineDisc:
+   
+   DEF INPUT PARAM iiCustNum AS INT  NO-UNDO.
+   DEF INPUT PARAM iiMsSeq   AS INT  NO-UNDO.
+   DEF INPUT PARAM icCLIType AS CHAR NO-UNDO.
+
+   DEF VAR lcAddLineDiscList AS CHAR NO-UNDO.
+
+   lcAddLineDiscList = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}) +
+                       ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}).
+
+   FIND FIRST Customer NO-LOCK WHERE
+              Customer.Custnum = iiCustNum NO-ERROR.
+   FOR EACH DiscountPlan NO-LOCK WHERE
+            DiscountPlan.Brand    = gcBrand AND
+     LOOKUP(DiscountPlan.DPRuleID, lcAddLineDiscList) > 0 AND
+            DiscountPlan.ValidTo >= TODAY,
+      FIRST DPMember NO-LOCK WHERE
+            DPMember.DPID       = DiscountPlan.DPID AND
+            DPMember.HostTable  = "MobSub" AND
+            DPMember.KeyValue   = STRING(iiMsSeq):
+      IF (DiscountPlan.DPRuleID = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS})    AND
+          fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,icCLIType))                        OR
+         (DiscountPlan.DPRuleID = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}) AND
+          fCheckExisting2PConvergent(Customer.CustIDType,Customer.OrgID,icCLIType))                      THEN DO:
+         fCreateAddLineDiscount(iiMsSeq,
+                                icCLIType,
+                                TODAY,
+                                DiscountPlan.DPRuleID).
+         IF RETURN-VALUE BEGINS "ERROR" THEN
+            RETURN RETURN-VALUE.
+      END.
+   END.
+
+END PROCEDURE.
+

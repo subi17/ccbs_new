@@ -105,28 +105,37 @@ PROCEDURE pAnalyzeEDR:
    
    IF LOOKUP(STRING(ttEDR.SuccessCode),"1,3") = 0 THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SUCCESS_CODE_VALUE}.
-   ELSE IF LOOKUP(STRING(ttEDR.NewSC),"0,7,107,3,103,9,109") = 0 THEN
+   ELSE IF LOOKUP(STRING(ttEDR.NewSC),"0,7,107,3,103,9,109,10,110,11,111,12,112") = 0 THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SERVICE_CLASS_VALUE}.
    ELSE IF ttEDR.SuccessCode EQ 1 AND
-      LOOKUP(STRING(ttEDR.NewSC),"0,7,3,9") = 0 THEN
+      LOOKUP(STRING(ttEDR.NewSC),"0,7,3,9,10,11,12") = 0 THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SERVICE_CLASS_INCONSISTENT}.
    ELSE IF ttEDR.SuccessCode EQ 3 AND
-      LOOKUP(STRING(ttEDR.NewSC),"0,107,103,109") = 0 THEN
+      LOOKUP(STRING(ttEDR.NewSC),"0,107,103,109,110,111,112") = 0 THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SERVICE_CLASS_INCONSISTENT}.
-   ELSE IF LOOKUP(ttEDR.clitype,"TARJ6,TARJ7,TARJ9") = 0 THEN
+   ELSE IF LOOKUP(ttEDR.clitype,"TARJ6,TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") = 0 THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SUBSCRIPTION_TYPE}.
    ELSE IF (ttEDR.clitype EQ "TARJ6" AND
             ttEDR.ServiceFeeType NE "SC7") OR
            (ttEDR.clitype EQ "TARJ7" AND
             ttEDR.ServiceFeeType NE "SC3") OR
            (ttEDR.clitype EQ "TARJ9" AND
-            ttEDR.ServiceFeeType NE "SC9") THEN
+            ttEDR.ServiceFeeType NE "SC9") OR
+           (ttEDR.clitype EQ "TARJ10" AND
+            ttEDR.ServiceFeeType NE "SC10") OR
+           (ttEDR.clitype EQ "TARJ11" AND
+            ttEDR.ServiceFeeType NE "SC11") OR
+           (ttEDR.clitype EQ "TARJ12" AND
+            ttEDR.ServiceFeeType NE "SC12") THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SERVICE_CLASS_MISMATCH}.
    ELSE IF (ttEDR.DateST < TODAY - 1) OR
            (ttEDR.DateSt < TODAY AND
-           ((ttEDR.CLIType EQ "TARJ6" AND TIME > 1200)  OR /* 00:20 */
-            (ttEDR.CLIType EQ "TARJ7" AND TIME > 43200) OR /* 12:00 */
-            (ttEDR.CLIType EQ "TARJ9" AND TIME > 43200))) THEN
+           ((ttEDR.CLIType EQ "TARJ6"  AND TIME > 1200)  OR /* 00:20 */
+            (ttEDR.CLIType EQ "TARJ7"  AND TIME > 43200) OR /* 12:00 */
+            (ttEDR.CLIType EQ "TARJ9"  AND TIME > 43200) OR
+            (ttEDR.CLIType EQ "TARJ10" AND TIME > 43200) OR
+            (ttEDR.CLIType EQ "TARJ11" AND TIME > 43200) OR
+            (ttEDR.CLIType EQ "TARJ12" AND TIME > 43200))) THEN
       ttEDR.ErrorCode = {&EDR_ERROR_DELAYED}.
 
 END.
@@ -231,8 +240,7 @@ PROCEDURE pHandleEDR:
                           lcResult).
 
    END.
-   ELSE IF ttEDR.CLIType EQ "TARJ7" OR
-           ttEDR.CLIType EQ "TARJ9" THEN DO:
+   ELSE IF LOOKUP(ttEDR.CLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
    
       /* Restriction for termination and RESET provisioning */
       IF TIME >= 33600 AND TIME < 36900 THEN /* 09:20-10:15 */
@@ -361,6 +369,78 @@ PROCEDURE pHandleEDR:
                                               "TEMPLATE",
                                               1,
                                               "LADEL1_PRE_PLUS_RESET",
+                                              ldeNow,
+                                              "",
+                                              FALSE, /* fees */
+                                              FALSE, /* sms */
+                                              "",
+                                              {&REQUEST_SOURCE_SCRIPT},
+                                              0, /* father request */
+                                              FALSE,
+                                              OUTPUT lcResult).
+                  IF liRequest = 0 THEN
+                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                      "MobSub",
+                                      STRING(MobSub.MsSeq),
+                                      MobSub.CustNum,
+                                      "PREP_VOICE",
+                                      "PREP_VOICE deactivation request failed; " +
+                                      lcResult).
+               END.
+               ELSE IF ttEDR.CLIType EQ "TARJ10" AND
+                  ttEDR.ServiceFeeType = "SC10" THEN DO:
+                  liRequest = fServiceRequest(MobSub.MsSeq,
+                                              "TEMPLATE",
+                                              1,
+                                              "TARJ10_RESET",
+                                              ldeNow,
+                                              "",
+                                              FALSE, /* fees */
+                                              FALSE, /* sms */
+                                              "",
+                                              {&REQUEST_SOURCE_SCRIPT},
+                                              0, /* father request */
+                                              FALSE,
+                                              OUTPUT lcResult).
+                  IF liRequest = 0 THEN
+                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                      "MobSub",
+                                      STRING(MobSub.MsSeq),
+                                      MobSub.CustNum,
+                                      "PREP_VOICE",
+                                      "PREP_VOICE deactivation request failed; " +
+                                      lcResult).
+               END.
+               ELSE IF ttEDR.CLIType EQ "TARJ11" AND
+                  ttEDR.ServiceFeeType = "SC11" THEN DO:
+                  liRequest = fServiceRequest(MobSub.MsSeq,
+                                              "TEMPLATE",
+                                              1,
+                                              "TARJ11_RESET",
+                                              ldeNow,
+                                              "",
+                                              FALSE, /* fees */
+                                              FALSE, /* sms */
+                                              "",
+                                              {&REQUEST_SOURCE_SCRIPT},
+                                              0, /* father request */
+                                              FALSE,
+                                              OUTPUT lcResult).
+                  IF liRequest = 0 THEN
+                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                      "MobSub",
+                                      STRING(MobSub.MsSeq),
+                                      MobSub.CustNum,
+                                      "PREP_VOICE",
+                                      "PREP_VOICE deactivation request failed; " +
+                                      lcResult).
+               END.
+               ELSE IF ttEDR.CLIType EQ "TARJ12" AND
+                  ttEDR.ServiceFeeType = "SC12" THEN DO:
+                  liRequest = fServiceRequest(MobSub.MsSeq,
+                                              "TEMPLATE",
+                                              1,
+                                              "TARJ12_RESET",
                                               ldeNow,
                                               "",
                                               FALSE, /* fees */

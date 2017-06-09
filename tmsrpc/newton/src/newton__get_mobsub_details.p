@@ -153,7 +153,7 @@ add_string(resp_struct, "mandate_id", MsOwner.MandateId).
 add_datetime(resp_struct, "mandate_date", MsOwner.Mandatedate). 
 
 /* Reset Date of benefits */
-IF MobSub.CLIType = "TARJ7" OR MobSub.CLIType = "TARJ9" THEN
+IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN
    FOR FIRST ServiceLimit NO-LOCK WHERE
              ServiceLimit.GroupCode = MobSub.CLIType:
        FIND FIRST MServiceLimit WHERE
@@ -470,8 +470,6 @@ IF MobSub.MultiSIMType > 0 AND
          add_boolean(resp_struct,"multisim_warning_for_secondary",TRUE).
    END.
 END.
-
-
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

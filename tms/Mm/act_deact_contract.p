@@ -368,7 +368,7 @@ PROCEDURE pCheckContract:
    IF NOT AVAIL Customer THEN RETURN "ERROR:Customer not found".
 
    IF LOOKUP(lcContract,lcBONOContracts +
-             ",BONO_VOIP,VOICE3000,VOICE100") > 0 THEN DO:
+             ",BONO_VOIP,VOICE3000,VOICE100,VOICE200") > 0 THEN DO:
       lcError = fHandleContract(lcContract,lcInputAction).
    END. /* IF LOOKUP(lcContract,lcBONOContracts */
    ELSE IF LOOKUP(lcContract,"BB,LTE") > 0 THEN

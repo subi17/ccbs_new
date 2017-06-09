@@ -1,3 +1,7 @@
+"1" "Additional line CONT10" "ADDLINE" 138 1 1
+"1" "Additional line CONT15" "ADDLINE" 140 1 1
+"1" "Additional line CONT26" "ADDLINE" 142 1 1
+"1" "Additional line CONT25" "ADDLINE" 144 1 1
 "1" "Data bundle change" "BTC-DENY" 21 0 1
 "1" "Bundle List" "Bundle" 87 1 1
 "1" "Bundle List" "Bundle" 42 1 1
@@ -61,5 +65,9 @@
 "1" "CONTDSL35" "PERCONTR" 130 1 53
 "1" "CONTFH45_300" "PERCONTR" 131 1 54
 "1" "CONTFH35_50" "PERCONTR" 133 1 55
+"1" "CONT27" "PERCONTR" 134 1 56
+"1" "TARJ10" "PERCONTR" 135 1 57
+"1" "TARJ11" "PERCONTR" 136 1 58
+"1" "TARJ12" "PERCONTR" 137 1 59
 "1" "ST CHANGE" "STC-IDType" 1 0 1
 "1" "ST CHANGE" "STC-IDType" 3 0 2

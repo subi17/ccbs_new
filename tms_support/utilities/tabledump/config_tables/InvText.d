@@ -1215,6 +1215,7 @@ Tu pedido
 -----------
 Número de teléfono: #MSISDN
 Modalidad: Renuevo
+#CTNAME
 
 #CAMPAIGN
 #FATIME
@@ -1268,6 +1269,7 @@ Your order
 ------------
 Phone number: #MSISDN
 Type: Renuevo
+#CTNAME
 
 #CAMPAIGN
 #FATIME
@@ -1329,6 +1331,7 @@ Your order
 ------------
 Phone number: #MSISDN
 Type: Renuevo
+#CTNAME
 
 Your products
 ---------------
@@ -1383,6 +1386,7 @@ Tu pedido
 ----------
 Número de teléfono: #MSISDN
 Modalidad: Renuevo
+#CTNAME
 
 Tus productos
 ---------------
@@ -1784,6 +1788,59 @@ nuevo telefono. Llamanos lo antes posible al 622 para confirmar tus datos, la ll
 114 29/09/08 04/02/14 "SMS" "STC_DONE" 1 "STC Done" "Ya esta hecho el cambio de suscripcion que pediste, tienes #CLITYPE. Mas info sobre tu tarifa en www.yoigo.com o llamando al 622." 1 5 "" "" "I" "1" 0 0 0 "" no "" "" "R2" "" "STC" yes
 473 05/02/14 31/12/49 "SMS" "STC_DONE" 1 "STC Done" "Ya esta hecho el cambio de tarifa que pediste, ahora tienes #CLITYPE. Tienes toda la info sobre tu tarifa en www.yoigo.com" 1 5 "" "" "I" "1" 0 0 0 "" no "" "" "R2" "" "" yes
 474 05/02/14 31/12/49 "SMS" "STC_Requested" 1 "STC Requested SMS" "Tu cambio a la tarifa #CLITYPE se hara el #DATE. Si no lo pediste llama al 622. +info en www.yoigo.com" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "" yes
+535 29/05/17 31/12/49 "SMS" "TARJ10Act" 1 "Yoigo info:Welcome SMS  - New adds LA PREPAGO 1GB + 20min" "Yoigo info: Bienvenido a La Prepago de 1 GB: 1GB a alta veloc hasta 4G y 20 min gratis por 8,5 Eur/mes. Despues llamar 3 cent/min + 20 cent establec. IVA incl." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+536 29/05/17 31/12/49 "SMS" "TARJ10DeAct" 1 "Warning SMS - Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 7,03 Eur para renovar el GB y los
+minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63 cent/MB
+IVA incl." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+537 29/05/17 31/12/49 "SMS" "TARJ10RenewalNOK" 1 "Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 7,03 Eur para renovar el GB y los
+minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63 cent/MB
+IVA incl." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+538 29/05/17 31/12/49 "SMS" "TARJ10RenewalOk" 1 "Warning  SMS - 1 GB +20min successful renewal" "Yoigo info: Ya tienes 1 GB a alta veloc. + 20 min hasta el dia #DATE.
+Recuerda ese dia tener al menos 8 euros de saldo para que se renueve para
+el mes siguiente" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+539 29/05/17 31/12/49 "SMS" "TARJ10RenewalReminder" 1 "Warning SMS - Reminder the day before renewal" "Yoigo info: Manana a primera hora se renueva el GB a alta veloc y los 20
+min gratis de tu tarifa. Recuerda tener al menos 7,02 Eur de saldo para que se activen." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+540 29/05/17 31/12/49 "SMS" "TARJ10STC" 1 "STC to La prepago de 1GB" "Yoigo info: Tu cambio de tarifa a la Prepago de 1GB se hara el 1 de
+proximo mes. Recuerda tener ese dia al menos 7,02 EUR de saldo para que se
+active la tarifa" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+541 29/05/17 31/12/49 "SMS" "TARJ10STCScheduled" 1 "STC SMS - STC already scheduled SMS (La Prepago 1GB)" "Yoigo info: Tu cambio a la Tarifa de 1GB se hara maÃ±ana por ela maÃ±ana.
+Recuerda tener minimo 8 euros de saldo para renovar la cuota." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+542 29/05/17 31/12/49 "SMS" "TARJ11ACT" 1 "Welcome SMS  - New adds LA prepago 2GB +50min" "Yoigo info: Bienvenido a La Prepago de 2 GB: 2GB a alta veloc hasta 4G y 50 min gratis por 10 E/mes. Despues llamar a 3 cen/min + 20 cen de establec. IVA incl." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+543 29/05/17 31/12/49 "SMS" "TARJ11DeAct" 1 "Warning SMS - Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 8,26 E para renovar los GB y
+minutos de tu tarifa. Recarga ahora o navega a baja velocidad a 3,63
+cent/MB IVA incluido" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+544 29/05/17 31/12/49 "SMS" "TARJ11RenewalNOK" 1 "Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 8,26 E para renovar los GB y
+minutos de tu tarifa. Recarga ahora o navega a baja velocidad a 3,63
+cent/MB IVA incluido" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+545 29/05/17 31/12/49 "SMS" "TARJ11RenewalOK" 1 "Warning  SMS - 2 GB +50min successful renewal" "Yoigo info: Ya tienes 2 GB a alta veloc. + 50 min hasta el dia #DATE.
+Recuerda ese dia tener al menos 8,26 euros de saldo para que se renueve la
+tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+546 29/05/17 31/12/49 "SMS" "TARJ11RenewalReminder" 1 "Warning SMS - Reminder the day before renewal" "Yoigo info: Manana a primera hora se renuevan los GB a alta veloc y los 50
+min gratis de tu tarifa. Recuerda tener minimo 8,26E de saldo para poder
+activarlos" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+547 29/05/17 31/12/49 "SMS" "TARJ11STC" 1 "STC to La prepago de 2GB" "Yoigo info: Tu cambio de tarifa a la Prepago 2GB se hara manana a primera
+hora. Recuerda tener como minimo un saldo 8,26 euros para que se active la
+tarifa" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+548 29/05/17 31/12/49 "SMS" "TARJ11STCScheduled" 1 "STC SMS - STC already scheduled SMS (La Prepago 2GB)" "Yoigo info: Tu cambio de tarifa a la Prepago 2GB se hara el 1 del proximo
+mes. Recuerda ese dia tener como minimo un saldo de 8,26 para que se active la tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+549 29/05/17 31/12/49 "SMS" "TARJ12Act" 1 "Welcome SMS  - New adds LA prepago 4GB + 100min" "Yoigo info: Bienvenido a La Prepago de 4GB: 4GB a alta veloc hasta 4G y 100 min gratis por 15 E/mes. Despues llamadas a 3 cent/min + 20cent estab. llam IVA incl" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+550 29/05/17 31/12/49 "SMS" "TARJ12DeAct" 1 "Warning SMS - Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 12,40 Eur para renovar los GB y
+los minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63
+cen/MB IVA incl" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_bundle" yes
+551 29/05/17 31/12/49 "SMS" "TARJ12RenewalNOK" 1 "Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 12,40 Eur para renovar los GB y
+los minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63
+cen/MB IVA incl" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+552 29/05/17 31/12/49 "SMS" "TARJ12RenewalOK" 1 "Warning  SMS - 4 GB + 100min successful renewal" "Yoigo info: Ya tienes 4 GB a alta veloc. +100 min hasta el dia #DATE.
+Recuerda ese dia tener al menos 12,40 Eur de saldo para que se renueve la
+tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+553 29/05/17 31/12/49 "SMS" "TARJ12RenewalReminder" 1 "Warning SMS - Reminder the day before renewal" "Yoigo info: Manana a primera hora se renuevan los GBs y los 100 min gratis
+de tu tarifa. Recuerda tener al menos 12,40 Eur de saldo para poder
+activarlos." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_bundle" yes
+554 29/05/17 31/12/49 "SMS" "TARJ12STC" 1 "STC to La prepago de 4GB" "Yoigo info: Tu cambio de tarifa az la Prpeago de 4GB se hara maÃ±aina a
+primera hora. Recuerda tener al menos 12,40 Eur de saldo para que se active la tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+555 29/05/17 31/12/49 "SMS" "TARJ12STCScheduled" 1 "STC SMS - STC already scheduled SMS (La Prepago 4GB)" "Yoigo info: Tu cambio de tarifa a la Prepago 4GB se hara el 1 del proximo
+mes. Recuerda ese dia tener al menos 12,40 Eur de saldo para que se active
+la tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_bundle" yes
 69 01/01/08 19/10/11 "SMS" "TARJ2_CONT" 1 "Change of subscription type SMS" "It is already done the change from Tarjeta 2 to Contrato, thus we are. The balance that you have will be discounted from you invoice and your calls to Yoigo already are 0 cents/min." 5 5 "" "" "I" "1" 0 0 0 "" no "" "" "" "" "" yes
 70 01/01/08 19/10/11 "SMS" "TARJ2_CONT" 1 "Change of subscription type SMS" "Ya esta hecho el cambio de Tarjeta 2 a Contrato, así somos. El saldo que tenías, lo descontaremos de tu factura y tus llamadas a Yoigos ya son 0 cent/min." 1 5 "" "" "I" "1" 0 0 0 "" no "" "" "" "" "" yes
 73 01/01/08 19/10/11 "SMS" "TARJ2_CONT2" 1 "Change of subscription type SMS" "It is already done the change from Tarjeta 2 to Contrato 2, thus we are. Forget to make top up. The balance that you have will be discounted from you invoice." 5 5 "" "" "I" "1" 0 0 0 "" no "" "" "" "" "" yes
@@ -1881,7 +1938,7 @@ nuevo telefono. Llamanos lo antes posible al 622 para confirmar tus datos, la ll
 460 01/11/13 31/12/49 "SMS" "UpsellTARJ7Act" 1 "Upsell activation request received" "En este momento te estamos activando tus 300 MB a alta velocidad. En breve podras utilizarlos." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "Upsell" yes
 461 01/11/13 31/12/49 "SMS" "UpsellTARJ7Failed" 1 "TARJ7 Upsell failed due to AIR or base bundle not active" "Por un error en los sistemas no se han activado los 300 MB a alta velocidad y no se te han cobrado los 3 E.Lo sentimos ¿puedes intentarlo mas tarde?" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "Upsell" yes
 462 01/11/13 31/12/49 "SMS" "UpsellTARJ7NoBal" 1 "Upsell activation failed, no balance" "No podemos activar tus 300 MB a alta veloc porque no tienes saldo suficiente. Recuerda, necesitas minimo  3E. Haz una recarga e intentalo de nuevo" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "Upsell" yes
-479 01/01/15 31/12/49 "SMS" "VOICE100Limit" 1 "VOICE100 minutes limit is exceeded" "Has usado todos los min. incluidos en tu Tarifa Plana. Desde ahora y hasta fin de mes llamadas a 0 cent/min +20 cent establec. IVA incluido." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "Voice_Limit" yes
+479 01/01/15 31/12/49 "SMS" "VOICE100Limit" 1 "VOICE100 or VOICE200 minutes limit is exceeded" "Has usado todos los min. incluidos en tu Tarifa Plana. Desde ahora y hasta fin de mes llamadas a 0 cent/min +20 cent establec. IVA incluido." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "Voice_Limit" yes
 411 01/12/12 31/12/49 "SMS" "VOICE3000Limit" 1 "The VOICE3000 contract limit is exceeded" "Has llegado al limite de 3000 minutos de tu promocion. A partir de ahora tus llamadas a fijos y moviles nacionales son 1 cent/min (imp no incl.)" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "22622" "Voice_Limit" yes
 529 01/10/16 31/12/49 "SMS" "VOICE4800Limit" 1 "The VOICE4800 contract limit is reached" "Recuerda, para hacer un uso razonable de tu tarifa hay un limite de 5000 min/mes. Te quedan 200 min. Despues: llam. nac. 14,52 cent/min y estb. llam. 18,15 cent." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "" yes
 530 01/10/16 31/12/49 "SMS" "VOICE5000Limit" 1 "The VOICE5000 contract limit is reached" "Para hacer un uso razonable de tu tarifa hay un limite de 5000 min/mes. Los has superado. A partir de ahora: llam. nac. 14,52 cent/min y estb. llam. 18,15 cent." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "" yes

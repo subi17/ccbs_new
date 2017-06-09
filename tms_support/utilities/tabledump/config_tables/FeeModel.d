@@ -26,6 +26,7 @@
 "CONT24MF" "Contrato 24 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT25MF" "Contrato 25 MonthlyFee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT26MF" "Contrato 26" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONT27MF" "LA INFINITA 2 GB DTO." "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT7MF" "Contrato 7 Service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT8MF" "La del Uno service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT9MF" "Contrato 9 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -620,6 +621,9 @@
 "PREREN7" "Pre paid - V3x BLUE" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PREREN8" "Pre paid - N70 WHITE" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PREREN9" "Pre paid - N70 SILVER" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PRETARJ10BUNDLE" "La prepago de 1 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PRETARJ11BUNDLE" "La prepago de 2 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PRETARJ12BUNDLE" "La prepago de 4 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "RECONNECTION" "Reconnection Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "Reparacion" "Reparacion" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "RVTERM" "Terminal Residual Amount" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0

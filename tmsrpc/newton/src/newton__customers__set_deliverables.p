@@ -41,7 +41,8 @@ DEF VAR piCustNum AS INT NO-UNDO.
 DEF VAR liDelType AS INT NO-UNDO.
 DEF VAR pcDeliveryChannel AS CHAR NO-UNDO.
 DEF VAR pcInvoiceGrouping AS CHAR NO-UNDO.
-DEF VAR llUpdate AS LOG NO-UNDO.
+DEF VAR llUpdate AS LOG  NO-UNDO.
+DEF VAR lcMemo   AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
@@ -49,7 +50,8 @@ lcStruct = validate_request(pcStruct,"itemizations,delivery_channel,invoice_targ
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcUserName = "VISTA_" + get_string(pcStruct,"username").
-katun = pcUserName. 
+katun = pcUserName.
+lcMemo = "Agent" + CHR(255) + "VISTA".
 
 IF LOOKUP("reason",lcStruct) > 0 THEN 
    pcReason = get_string(pcStruct,"reason").
@@ -148,7 +150,9 @@ IF liDelType > 0 AND Customer.DelType <> liDelType THEN DO:
    END. /* ELSE DO: */
 
    FIND CURRENT Customer NO-LOCK.
-   RUN StarEventMakeModifyEvent(lhCustomer).
+   RUN StarEventMakeModifyEventWithMemo(lhCustomer, 
+                                        {&STAR_EVENT_USER}, 
+                                        lcMemo).
    fCleanEventObjects().
    llUpdate = TRUE.
 END. /* IF liDelType > 0 AND Customer.DelType <> liDelType */

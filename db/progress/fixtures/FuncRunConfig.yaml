@@ -238,7 +238,7 @@ bulkload: FuncRunConfig
 bulkload: FuncRunConfig
   ConfName: "IRCBilledCheck"
   FRConfigID: 21
-  RunQty: 15
+  RunQty: 1
   Description: "Check billed invoice row counters against CDRs"
   NotifyMail: "sergey.strizhov@qvantel.com,toni.valve@qvantel.com"
   RunCommand: "/opt/local/bin/xfear -bg_batch Inv/funcrun_chk_irc_billed.p tms#HOST.pf #PARAM"
@@ -287,7 +287,6 @@ bulkload: FuncRunConfig
   RunCommand: "/opt/local/bin/xfear -bg_batch funcrun_ifs_invoice.p tms.pf #PARAM"
   StatusInterval: 1000
   Brand: "1"
-  Active: TRUE 
 
 bulkload: FuncRunConfig
   ConfName: "InvoicesReadyForIFS"
