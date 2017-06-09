@@ -72,6 +72,7 @@ ASSIGN
 
 DEF VAR ldaEventDate AS DATE NO-UNDO. 
 DEF VAR liEventTime AS INT NO-UNDO. 
+DEF VAR ldEventlogDateStart AS DEC NO-UNDO.
 
 fSplitTS(idLastDump,
          OUTPUT ldaEventDate,
@@ -81,12 +82,24 @@ FOR EACH Eventlog NO-LOCK WHERE
          Eventlog.Eventdate >= ldaEventDate AND
          EventLog.EventDate < TODAY AND
          Eventlog.tablename = "MsOwner" USE-INDEX EventDate:
+
+   ldEventlogDateStart = fHMS2TS(EventLog.EventDate, "00:00:00").
    
    FIND FIRST MsOwner NO-LOCK WHERE
               MsOwner.Brand = gcBrand AND
               MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
               MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,CHR(255))) NO-ERROR.
-   IF AVAIL MsOwner THEN fCollect().
+   IF AVAIL MsOwner THEN 
+      fCollect().   
+   ELSE DO:
+      /* YTS-10342 fix. New MSOwner-search to be able to find MSOwners 
+         whose TSEnd is changed after midnight beforoe dump start.*/
+      FIND FIRST MSOwner NO-LOCK WHERE
+                 MsOwner.Brand = "1" AND
+                 MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
+                 MSOwner.TSBegin >= ldEventlogDateStart NO-ERROR.
+      IF AVAIL MsOwner THEN fCollect().       
+   END.    
       
 END. 
 
