@@ -180,6 +180,23 @@ FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
 
 END.
 
+/* Function returns True if a tariff can be defined as fixedonly (2P) tariff.
+NOTE: False is returned in real false cases and also in error cases. */
+FUNCTION fIsFixedOnly RETURNS LOGICAL
+   (icCLIType AS CHARACTER):
+
+   DEFINE BUFFER bCLIType FOR CLIType.
+   
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = icCLIType                         AND
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}) THEN 
+      RETURN TRUE.
+
+   RETURN FALSE.
+
+END.
+
 /* Check if Convergent tariff OR FixedOnly tariff */ 
 FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
    (icCLITypeConv    AS CHARACTER,
@@ -321,6 +338,33 @@ FUNCTION fCheckExisting2PConvergent RETURNS LOGICAL
 
    END.
 
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* Return true if tarif belongs to convergent additional line */
+FUNCTION fIsAddLineTariff RETURNS LOGICAL
+   (INPUT icCli AS CHAR):
+   DEFINE BUFFER bMobSub FOR MobSub.
+   FOR FIRST bMobSub NO-LOCK WHERE
+             bMobSub.Brand = Syst.Parameters:gcBrand AND
+             bMobSub.CLI   = icCli AND
+      LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0, 
+         EACH DiscountPlan NO-LOCK WHERE
+              DiscountPlan.Brand  = Syst.Parameters:gcBrand AND
+       LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," 
+                                   + {&ADDLINE_DISCOUNTS_20}) > 0 AND
+              DiscountPlan.ValidTo >= TODAY,
+         FIRST DPMember NO-LOCK WHERE
+               DPMember.DPID       = DiscountPlan.DPID AND
+               DPMember.HostTable  = "MobSub" AND
+               DPMember.KeyValue   = STRING(bMobSub.MsSeq) AND
+               DPMember.ValidTo   >= TODAY AND
+               DPMember.ValidFrom <= DPMember.ValidTo:
+         
+         RETURN TRUE.
+   END.
+ 
    RETURN FALSE.
 
 END FUNCTION.
