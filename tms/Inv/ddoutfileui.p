@@ -68,14 +68,14 @@ FORM
    lcInvID[1] COLON 20
       LABEL "Invoices"
       HELP  "Invoices"
-      FORMAT "X(12)"
+      FORMAT "X(14)"
    "-"
    lcInvID[2]
       NO-LABEL
       HELP "Invoices"
       VALIDATE(INPUT lcInvID[2] >= INPUT lcInvID[1],
                "Invalid definition")
-      FORMAT "X(12)"
+      FORMAT "X(14)"
       SKIP           
             
    liInvType COLON 20
@@ -103,7 +103,7 @@ FORM
    lcFile COLON 20
       LABEL "File Name"
       HELP "Name of the output file"
-      FORMAT "X(50)"
+      FORMAT "X(58)" VIEW-AS EDITOR SIZE 55 BY 1 
       SKIP
    lcTransDir COLON 20
       LABEL "Transfer Directory"
@@ -315,7 +315,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                        0,
                        "",
                        FALSE,  /* schema validation disabled */
-                       FALSE,  /* input files */
+                       "",  /* input files */
                        OUTPUT liCount,
                        OUTPUT liFiles,
                        OUTPUT lcError).
