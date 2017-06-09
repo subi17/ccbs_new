@@ -746,7 +746,7 @@ FUNCTION fBankByBillCode RETURNS CHAR
    (icBillCode AS CHAR):
    CASE icBillCode:
       WHEN "RVTERM1EF" THEN RETURN "UNO-E".
-      WHEN "RVTERMBSF" THEN RETURN "Yoigo". /* "Sabadell" - YPR-3565 */
+      WHEN "RVTERMBSF" THEN RETURN "Sabadell".
       WHEN "RVTERMF" THEN RETURN "Yoigo".
       WHEN "RVTERMBCF" THEN RETURN "Cetelem".
    END CASE.
