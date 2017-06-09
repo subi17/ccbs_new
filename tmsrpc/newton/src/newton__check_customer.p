@@ -41,7 +41,7 @@ DEF VAR lcAddLineAllowed AS CHAR NO-UNDO.
 DEF VAR liActLimit       AS INT  NO-UNDO.
 DEF VAR liacts           AS INT NO-UNDO.
 
-top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string]") EQ ?
+top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string]").
 IF top_array EQ ? THEN RETURN.
 
 pcTenant   = get_string(param_toplevel_id, "0").
