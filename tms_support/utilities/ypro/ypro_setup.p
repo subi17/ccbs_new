@@ -402,6 +402,36 @@ FUNCTION fGetNextMXSeq RETURNS INTEGER ():
 
 END FUNCTION.
 
+FUNCTION fGetNextBDestID RETURNS INTEGER ():
+
+   DEFINE BUFFER BDest FOR BDest.
+
+   FIND LAST BDest USE-INDEX BDestID NO-LOCK NO-ERROR.
+
+   IF AVAILABLE BDest
+   THEN RETURN BDest.BDestID + 1.
+
+   RETURN 1.
+
+END FUNCTION.
+
+FUNCTION fGetNextTariffNum RETURNS INTEGER ():
+
+   DEFINE BUFFER Tariff FOR Tariff.
+
+   FIND LAST Tariff USE-INDEX tariffnum NO-LOCK NO-ERROR.
+
+   IF NOT AVAILABLE Tariff
+   THEN DO:
+      CURRENT-VALUE(tariff) = 1.
+      RETURN 1.
+   END.
+
+   CURRENT-VALUE(tariff) = Tariff.Tariffnum + 1.
+   RETURN CURRENT-VALUE(tariff).
+
+END FUNCTION.
+
 FUNCTION fCreateMatrix RETURNS LOGICAL
    ( icMXName  AS CHARACTER,
      icMXKey   AS CHARACTER,
@@ -452,6 +482,101 @@ FUNCTION fCreateMXItem RETURNS LOGICAL
       MXItem.MXSeq   = iiMXSeq
       MXItem.MXName  = icMXName
       MXItem.MXValue = icMXValue.
+
+END FUNCTION.
+
+FUNCTION fCreateTariff RETURNS LOGICAL
+   ( iiCCN AS INTEGER,
+     icBillCode AS CHARACTER,
+     icBDest AS CHARACTER,
+     icPriceList AS CHARACTER ):
+
+   FIND FIRST Tariff EXCLUSIVE-LOCK WHERE
+      Tariff.Brand     = "1"            AND
+      Tariff.CCN       = iiCCN          AND
+      Tariff.PriceList = icPriceList    AND
+      Tariff.BDest     = icBDest        AND
+      Tariff.ValidFrom = DATE(6,1,2017) AND
+      Tariff.ValidTo   = DATE(12,31,2052) AND
+      Tariff.BillCode  = icBillCode
+   NO-ERROR.
+
+   IF NOT AVAILABLE Tariff
+   THEN DO:
+      CREATE Tariff.
+      Tariff.TariffNum = fGetNextTariffNum().
+   END.
+
+   ASSIGN
+      Tariff.Brand       = "1"
+      Tariff.CCN         = iiCCN
+      Tariff.PriceList   = icPriceList
+      Tariff.BDest       = icBDest
+      Tariff.ValidFrom   = DATE(6,1,2017)
+      Tariff.ValidTo     = DATE(12,31,2052)
+      Tariff.BillCode    = icBillCode
+      Tariff.TZTo[1]     = "2400"
+      Tariff.Discount[4] = YES
+      Tariff.DayType[1]  = 1
+      Tariff.TZName[1]   = "Off Peak"
+      Tariff.TZName[2]   = "Peak"
+      Tariff.TZName[3]   = "Off Peak"
+      Tariff.TariffType  = 0
+      Tariff.DataType    = 1.
+
+END FUNCTION.
+
+/* TMRItemValue */
+FUNCTION fCreateTMRItemValue RETURNS LOGICAL
+   ( iiTMRuleSeq AS INTEGER,
+     icCounterItemValues AS CHARACTER ):
+
+   FIND FIRST TMRItemValue EXCLUSIVE-LOCK WHERE
+      TMRItemValue.TMRuleSeq = iiTMRuleSeq AND
+      TMRItemValue.ToDate  = DATE(12,31,2049) AND
+      TMRItemValue.CounterItemValues = icCounterItemValues
+   NO-ERROR.
+
+   IF NOT AVAILABLE TMRItemValue
+   THEN DO:
+      CREATE TMRItemValue.
+   END.
+
+   ASSIGN
+      TMRItemValue.TMRuleSeq = iiTMRuleSeq
+      TMRItemValue.FromDate  = DATE(6,1,2017)
+      TMRItemValue.ToDate  = DATE(12,31,2049)
+      TMRItemValue.CounterItemValues = icCounterItemValues.
+
+END FUNCTION.
+
+/* BDest */
+FUNCTION fCreateBDest RETURNS LOGICAL
+   ( icBDest AS CHARACTER,
+     icBDName AS CHARACTER,
+     iiCCN AS INTEGER ):
+
+   FIND FIRST BDest EXCLUSIVE-LOCK WHERE
+      BDest.Brand  = "1" AND
+      BDest.CCN    = iiCCN AND
+      BDest.BDName = icBDName AND
+      BDest.BDest  = icBDest
+   NO-ERROR.
+
+   IF NOT AVAILABLE BDest
+   THEN DO:
+      CREATE BDest.
+      BDest.BDestID = fGetNextBDestID().
+   END.
+
+   ASSIGN
+      BDest.Brand    = "1"
+      BDest.CCN      = iiCCN
+      BDest.BDName   = icBDName
+      BDest.BDest    = icBDest
+      BDest.FromDate = DATE(6,1,2017)
+      BDest.ToDate   = DATE(12,31,2049)
+      .
 
 END FUNCTION.
 
@@ -518,3 +643,30 @@ fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
 fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+
+
+fCreateTariff(81,"VOICE5000","VOICE5000","CONTRATO8").
+fCreateTariff(30,"VOICE5000CF","VOICE5000","CONTRATO8").
+fCreateTariff(51,"SMS5000","SMS5000","CONTRATO8").
+fCreateTariff(2,"INT_VOICE100","INT_VOICE100","CONTRATO8").
+
+fCreateTariff(81,"VOICE5000","VOICE5000","CONTRATOS").
+fCreateTariff(30,"VOICE5000CF","VOICE5000","CONTRATOS").
+fCreateTariff(51,"SMS5000","SMS5000","CONTRATOS").
+fCreateTariff(2,"INT_VOICE100","INT_VOICE100","CONTRATOS").
+
+fCreateTariff(1081,"FIX_VOICE1000","FIX_VOICE1000","CONTRATOFIXED").
+fCreateTariff(1002,"INT_FIX_VOICE1000","INT_FIX_VOICE1000","CONTRATOFIXED").
+
+
+fCreateBDest("VOICE5000","Voice 5000 Minutes",81).
+fCreateBDest("SMS5000","SMS 5000 QTY",51).
+fCreateBDest("INT_VOICE100","International voice 100 Minutes",2).
+
+fCreateBDest("FIX_VOICE1000","Fixed Voice 1000 Minutes",1081).
+fCreateBDest("INT_FIX_VOICE1000","International Fixed Voice 1000 Minutes",1002).
+
+fCreateTMRItemValue(43,"SMS5000").
+fCreateTMRItemValue(44,"INT_VOICE100").
+fCreateTMRItemValue(45,"FIX_VOICE1000").
+fCreateTMRItemValue(46,"INT_FIX_VOICE1000").
