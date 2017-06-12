@@ -223,9 +223,6 @@ DO:
               lbOrderCustomer.OrderId = Order.OrderId AND
               lbOrderCustomer.RowType = 1             NO-ERROR.
 
-    IF NOT fCheckOngoingConvergentOrder(lbOrderCustomer.CustIdType,
-                                        lbOrderCustomer.CustID,
-                                        Order.CliType) THEN DO:
        /* If Main Line is Closed and customer has no other main line then removing the additional line discount */
        FOR EACH OrderCustomer NO-LOCK WHERE
                 OrderCustomer.Brand      = gcBrand                    AND
@@ -244,10 +241,16 @@ DO:
               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20}) > 0 NO-ERROR.
           IF AVAILABLE OrderAction THEN DO:
              IF (LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0    AND
+                 NOT fCheckOngoingConvergentOrder(lbOrderCustomer.CustIdType,
+                                                  lbOrderCustomer.CustID,
+                                                  Order.CliType)          AND
                  NOT fCheckExistingConvergent(lbOrderCustomer.CustIdType,
                                               lbOrderCustomer.CustID,
                                               Order.CliType))             OR
                 (LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0 AND
+                 NOT fCheckOngoing2PConvergentOrder(lbOrderCustomer.CustIdType,
+                                                    lbOrderCustomer.CustID,
+                                                    Order.CliType)        AND
                  NOT fCheckExisting2PConvergent(lbOrderCustomer.CustIdType,
                                                 lbOrderCustomer.CustID,
                                                 Order.CliType))           THEN DO:
@@ -264,7 +267,6 @@ DO:
 
        fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
                                       lbOrderCustomer.CustID).
-   END.
 END. 
 
 FOR EACH MNPProcess WHERE
