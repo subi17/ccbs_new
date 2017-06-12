@@ -101,12 +101,11 @@ FOR EACH Eventlog NO-LOCK WHERE
                        MsOwner.Brand = "1" AND
                        MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
                        MSOwner.TSBegin >= idLastDump NO-ERROR.
-/*            IF AVAIL MsOwner THEN DO: /* now we got a correct MSOwner */
-               fCollect().   
-            END. */            
          END.
       END.                 
-      fCollect().   
+      IF AVAIL MsOwner THEN DO: /* now we got a correct MSOwner */
+         fCollect().   
+      END.
    END.     
    
    ELSE DO: /* with first search MSOwner not available */
