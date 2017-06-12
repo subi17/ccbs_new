@@ -319,7 +319,8 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
              bMobSub.Brand   = Syst.Parameters:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.PayType = FALSE                   AND
-             bMobSub.MsStatus <> {&MSSTATUS_MOBILE_NOT_ACTIVE}:
+            (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}     OR
+             bMobSub.MsStatus = {&MSSTATUS_BARRED}):
     
       IF fIsConvergentAddLineOK(bMobSub.CLIType,icCliType) THEN 
          RETURN TRUE.
