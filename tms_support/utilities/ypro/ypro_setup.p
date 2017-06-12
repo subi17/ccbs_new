@@ -274,15 +274,15 @@ FUNCTION create_limit returns log (INPUT lcCode as CHAR,
 END.
 
 create_group("VOICE5000", "Voice 5000").
-create_group("VOICE200", "Voice 200").
+/*create_group("VOICE200", "Voice 200").*/
 create_group("INT_VOICE100", "International Voice 100").
 create_group("FIX_VOICE1000", "National fixed voice 1000").
 create_group("INT_FIX_VOICE1000", "International fixed Voice 1000").
 create_group("SMS5000", "SMS 5000").
 
-create_limit("VOICE5000", "National calls", "_MIN",5000.0, 1, 1,"VOICE100").
-create_limit("VOICE200", "National calls", "_MIN",200.0, 1, 1, "VOICE100").
-create_limit("INT_VOICE100", "International calls", "_MIN",100.0, 1, 1,"VOICE100").
+create_limit("VOICE5000", "National calls", "_MIN",5000.0, 4, 1,"VOICE100").
+/*create_limit("VOICE200", "National calls", "_MIN",200.0, 4, 1, "VOICE100").*/
+create_limit("INT_VOICE100", "International calls", "_MIN",100.0, 4, 1,"VOICE100").
 create_limit("FIX_VOICE1000", "National fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
 create_limit("INT_FIX_VOICE1000", "International fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
 create_limit("SMS5000", "National sms", "_QTY",5000.0, 2, 5,"SMS").
@@ -318,7 +318,7 @@ FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
       SLGAnalyse.BillCode = icBillCode
       SLGAnalyse.CCN      = iiCCN
       SLGAnalyse.BDest    = icBDest
-      SLGAnalyse.Prior    = 0
+      SLGAnalyse.Prior    = 20
       SLGAnalyse.ValidFrom = ldaFrom
       SLGAnalyse.ValidTo  = DATE(12,31,2049)
       SLGAnalyse.ServiceLimitGroup = icServiceLimitGroup
@@ -375,7 +375,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcListofClitypes):
    lcCli = ENTRY(liLoop,lcListOfClitypes).
 
    fcreateVoiceSLGAnalyses(lcCli,"VOICE5000").
-   fcreateVoiceSLGAnalyses(lcCli,"VOICE200").
+   /*fcreateVoiceSLGAnalyses(lcCli,"VOICE200").*/
    fcreateVoiceSLGAnalyses(lcCli,"INT_VOICE100").
    fcreateSMSSLGAnalyses(lcCli,"SMS5000").
 
@@ -579,65 +579,107 @@ FUNCTION fCreateBDest RETURNS LOGICAL
       .
 
 END FUNCTION.
-
+/* Verde */
 fCreateMatrix("Convergent 5GB  mobile", "PERCONTR", 1, 40).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
+/* Azul */
 fCreateMatrix("CONTDSL59", "PERCONTR", 1, 44).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH59_50", "PERCONTR", 1, 45).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH69_300", "PERCONTR", 1, 46).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
+/* Naranda */
 fCreateMatrix("CONTDSL39", "PERCONTR", 1, 47).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
-
-fCreateMatrix("CONTDSL52", "PERCONTR", 1, 48).
-fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
-fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH39_50", "PERCONTR", 1, 49).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH49_300", "PERCONTR", 1, 50).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+
+/* Morada */
+fCreateMatrix("CONTDSL52", "PERCONTR", 1, 48).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH52_50", "PERCONTR", 1, 51).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH62_300", "PERCONTR", 1, 52).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
-
-fCreateMatrix("CONT26", "PERCONTR", 1, 42).
-fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
-fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
+/* La infinita 5GB */
+fCreateMatrix("CONT26", "PERCONTR", 1, 42).
+/*fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").*/
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+
+/* La del cerp 1,5GB */
 fCreateMatrix("CONT10", "PERCONTR", 1, 43).
 fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
-fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
-fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+/*fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").*/
+/*fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").*/
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
+/* La Sinfin */
 fCreateMatrix("Per.contract usage", "PERCONTR", 1, 41).
-fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
-fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+/*fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").*/
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
+/* La del cero 5GB */
 fCreateMatrix("Per.contract usage", "PERCONTR", 1, 29).
 fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
 fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
