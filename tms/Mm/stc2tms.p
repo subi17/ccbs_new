@@ -1084,7 +1084,7 @@ PROCEDURE pFinalize:
               SUBST("Wrong order status: &1",Order.statusCode)).
       END.
    END.
-
+   
    /* request handled succesfully */
    fReqStatus(2,"").
 
