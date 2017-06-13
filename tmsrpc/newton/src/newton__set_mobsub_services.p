@@ -141,13 +141,13 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
    /*YPRO*/
-   /*SVAs*/
+   /*SVAs*
    IF fIsSVA(pcValue) THEN DO:
          
       
 
    END.
-
+   */
    /* SERVICES */
    FOR FIRST SubSer NO-LOCK WHERE
      SubSer.MsSeq = Mobsub.MsSeq AND
