@@ -5,5 +5,5 @@ ADD FIELD "DontSharePersData" OF "OrderCustomer" AS LOGICAL
   COLUMN-LABEL "DontSharePersData"
   POSITION 76
   HELP "Do Not Share Personal Data among Mas Movil Group"
-  ORDER 295
+  ORDER 1150
 
