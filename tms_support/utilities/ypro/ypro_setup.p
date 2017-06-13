@@ -40,58 +40,55 @@ FUNCTION fcreateCustcat RETURNS CHAR (
    RELEASE bCustCat.
 END FUNCTION.
 
-fcreateCustCat("20", "21", "PRO SOHO Company CIF", 25, 35, TRUE, "PRO-Company").
-fcreateCustCat("20", "22", "Big Companies CIF", 25, 35, TRUE, "PRO-Company").
-fcreateCustCat("40", "42", "PRO Self-employee NIF", 5, 7, TRUE, "PRO-Self-employed").
-fcreateCustCat("41", "43", "PRO Self-employee NIE", 5, 7, TRUE, "PRO-Self-employed").
+fcreateCustCat("20", "22", "PRO SOHO Company CIF", 25, 35, TRUE, "PRO-SOHO-COMPANY").
+fcreateCustCat("20", "21", "Big Companies CIF", 25, 35, TRUE, "").
+fcreateCustCat("20", "23", "PRO SOHO Company CIF", 25, 35, TRUE, "SOHO-COMPANY").
+fcreateCustCat("40", "42", "PRO Self-employee NIF", 5, 7, TRUE, "PRO-SOHO-AUTONOMO").
+fcreateCustCat("41", "43", "PRO Self-employee NIE", 5, 7, TRUE, "PRO-SOHO-AUTONOMO").
+fcreateCustCat("40", "44", "Self-employee NIF", 5, 7, TRUE, "SOHO-AUTONOMO").
+fcreateCustCat("41", "45", "Self-employee NIE", 5, 7, TRUE, "SOHO-AUTONOMO").
 
+FIND FIRST CustCat WHERE
+           custcat.brand EQ "1" AND
+           custcat.category EQ "10".
+   ASSIGN Custcat.segment = "CONSUMER"
+          Custcat.catname = "Residential NIF".
+FIND FIRST CustCat WHERE
+           custcat.brand EQ "1" AND
+           custcat.category EQ "11".
+   ASSIGN Custcat.segment = "CONSUMER"
+          Custcat.catname = "Residential NIE".
+FIND FIRST CustCat WHERE
+           custcat.brand EQ "1" AND
+           custcat.category EQ "12".
+   ASSIGN Custcat.segment = "CONSUMER".
+FIND FIRST CustCat WHERE
+           custcat.brand EQ "1" AND
+           custcat.category EQ "13".
+   ASSIGN Custcat.segment = "CONSUMER".
 FIND FIRST CustCat WHERE 
            custcat.brand EQ "1" AND
            custcat.category EQ "20".
-   ASSIGN Custcat.catname = "SOHO Company CIF"
-          Custcat.segment = "Company".
+   ASSIGN Custcat.catname = "Company CIF"
+          Custcat.segment = "COMPANY".
+FIND FIRST CustCat WHERE
+           custcat.brand EQ "1" AND
+           custcat.category EQ "31".
+   ASSIGN Custcat.catname = "VIP - MM group external customer".
 FIND FIRST CustCat WHERE
            custcat.brand EQ "1" AND
            custcat.category EQ "40".
    ASSIGN Custcat.catname = "Self Employee NIF"
           Custcat.mobsublimit = 5
           CustCat.activationlimit = 7
-          Custcat.segment = "Self-employed".
+          Custcat.segment = "AUTONOMO".
 FIND FIRST CustCat WHERE
            custcat.brand EQ "1" AND
            custcat.category EQ "41".
    ASSIGN Custcat.catname = "Self Employee NIE"
           Custcat.mobsublimit = 5
           CustCat.activationlimit = 7
-          Custcat.segment = "Self-employed".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "10".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "11".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "12".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "13".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "30".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "31".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "99".
-   ASSIGN Custcat.segment = "Consumer".
+          Custcat.segment = "AUTONOMO".
 
 IF NOT CAN-FIND (FIRST Tmscodes WHERE
            tmscodes.codegroup EQ "order" AND
@@ -285,7 +282,7 @@ create_limit("VOICE5000", "National calls", "_MIN",5000.0, 4, 1,"VOICE100").
 create_limit("INT_VOICE100", "International calls", "_MIN",100.0, 4, 1,"VOICE100").
 create_limit("FIX_VOICE1000", "National fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
 create_limit("INT_FIX_VOICE1000", "International fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
-create_limit("SMS5000", "National sms", "_QTY",5000.0, 2, 5,"SMS").
+create_limit("SMS5000", "National sms", "_QTY",5000.0, 5, 5,"SMS").
 
 FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
    ( icClitype AS CHARACTER,
