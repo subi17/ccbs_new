@@ -94,22 +94,22 @@ IF NOT AVAIL InvGroup THEN DO:
          IF InvGroup.invGroup EQ "VAT1" THEN DO:
             bInvGroup.invGroup = "VAT2".
             bInvGroup.invform = "VAT2".
-            bInvGroup.IGName = REPLACE(bInvGroup.IGName, " 1", " 2").
+            bInvGroup.IGName = REPLACE(InvGroup.IGName, " 1", " 2").
          END.
          ELSE IF InvGroup.invGroup EQ "IGIC1" THEN DO:
             bInvGroup.invGroup = "IGIC2".
             bInvGroup.invform = "IGIC2".
-            bInvGroup.IGName = REPLACE(bInvGroup.IGName, " 1", " 2").
+            bInvGroup.IGName = REPLACE(InvGroup.IGName, " 1", " 2").
          END.
          ELSE IF InvGroup.invGroup EQ "IPSIC1" THEN DO:
             bInvGroup.invGroup = "IPSIC2".
             bInvGroup.invform = "IPSIC2".
-            bInvGroup.IGName = REPLACE(bInvGroup.IGName, " 1", " 2").
+            bInvGroup.IGName = REPLACE(InvGroup.IGName, " 1", " 2").
          END.
          ELSE IF InvGroup.invGroup EQ "IPSIM1" THEN DO:
             bInvGroup.invGroup = "IPSIM2".
             bInvGroup.invform = "IPSIM2".
-            bInvGroup.IGName = REPLACE(bInvGroup.IGName, " 1", " 2").
+            bInvGroup.IGName = REPLACE(InvGroup.IGName, " 1", " 2").
          END.
          ELSE IF InvGroup.invGroup EQ "YOIGO" THEN DO:
             bInvGroup.invGroup = "MASMOVIL".
