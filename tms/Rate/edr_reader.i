@@ -462,31 +462,7 @@ PROCEDURE pHandleEDR:
                                       "PREP_VOICE deactivation request failed; " +
                                       lcResult).
                END.
-               ELSE IF ttEDR.CLIType EQ "TARJ13" AND
-                  ttEDR.ServiceFeeType = "SC20" THEN DO:
-                  liRequest = fServiceRequest(MobSub.MsSeq,
-                                              "TEMPLATE",
-                                              1,
-                                              "TARJ13_RESET",
-                                              ldeNow,
-                                              "",
-                                              FALSE, /* fees */
-                                              FALSE, /* sms */
-                                              "",
-                                              {&REQUEST_SOURCE_SCRIPT},
-                                              0, /* father request */
-                                              FALSE,
-                                              OUTPUT lcResult).
-                  IF liRequest = 0 THEN
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "MobSub",
-                                      STRING(MobSub.MsSeq),
-                                      MobSub.CustNum,
-                                      "PREP_VOICE",
-                                      "PREP_VOICE deactivation request failed; " +
-                                      lcResult).
-               END.
-               
+
                IF llActivatePromo THEN DO:
 
                   FIND FIRST bOrigrequest NO-LOCK where
