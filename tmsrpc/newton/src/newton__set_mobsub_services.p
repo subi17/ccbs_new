@@ -128,16 +128,26 @@ IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR
 DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    pcStruct = get_struct(pcInputArray, STRING(liInputCounter - 1)).
 
-   lcStruct = validate_request(pcStruct,"service_id!,value!,param").
+   lcStruct = validate_request(pcStruct,"service_id!,value!,param,param2").
    IF lcStruct EQ ? THEN RETURN.
 
    pcServiceId = get_string(pcStruct, "service_id").
    pcValue = get_string(pcStruct, "value").
    IF LOOKUP('param', lcStruct) GT 0 THEN
     pcParam = get_string(pcStruct, "param").
+   IF LOOKUP('param2', lcStruct) GT 0 THEN
+    pcParam = get_string(pcStruct, "param2").
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+   /*YPRO*/
+   /*SVAs*
+   IF fIsSVA(pcValue) THEN DO:
+         
+      
+
+   END.
+   */
    /* SERVICES */
    FOR FIRST SubSer NO-LOCK WHERE
      SubSer.MsSeq = Mobsub.MsSeq AND
