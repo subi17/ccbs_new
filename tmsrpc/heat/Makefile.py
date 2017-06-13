@@ -20,27 +20,35 @@ def getpf(pf):
     return '{0}.pf'.format(pf)
 
 @target
-def build(*a):
+def build(match, *a):
+    '''build$|buildextapi'''
     if len(parameters) != 1:
         raise PikeException('Expected build_dir as parameter')
     build_dir = parameters[0]
     mkdir_p(build_dir)
     shutil.copy2('Makefile.py', build_dir)
-    require('rpcmethods.pl', [])
+    if match == 'build':
+        require('compile_and_do_pl', [])
+    else:
+        require('do_pl', [])
     shutil.move('rpcmethods.pl', build_dir)
 
-@target('compile')
+@target
 def rpcmethods_pl(match, *a):
-    """rpcmethods.pl"""
-    if os.path.exists(match):
-        os.unlink(match)
-    call([dlc + '/bin/prolib', match, '-create'])
+    """compile_and_do_pl|do_pl"""
+    if os.path.exists('rpcmethods.pl'):
+        os.unlink('rpcmethods.pl')
+
+    if match == 'compile_and_do_pl':
+        require('compile', [])
+
+    call([dlc + '/bin/prolib', 'rpcmethods.pl', '-create'])
     for dir, _dirs, files in os.walk('rpcmethods'):
         for file in files:
             if file.endswith('.r') \
             or file.endswith('.help') \
             or file.endswith('.sig'):
-                call([dlc + '/bin/prolib', match, '-add',
+                call([dlc + '/bin/prolib', 'rpcmethods.pl', '-add',
                       os.path.join(dir, file)])
 
 @target
