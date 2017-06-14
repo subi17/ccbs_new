@@ -406,7 +406,7 @@ def terminal(*a):
         else:
             args.append(pp)
 
-    args.extend(['-p', program])
+    args.extend(['-p', program + '.p'])
 
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
