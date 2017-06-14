@@ -380,17 +380,19 @@ def terminal(*a):
     program = parameters[0]
     del parameters[0]
 
+    dbcount = 0
     remove_from_parameters = []
     if any(x in parameters for x in ['all', 'all_except_cdr']):
         remove_from_parameters = databases + ['all', 'all_except_cdr']
+        dbcount += len(databases)
         args.extend(['-pf', getpf('../db/progress/store/all')])
         if 'all' in parameters:
             remove_from_parameters.extend(cdr_databases)
+            dbcount += len(cdr_databases)
             cdr_dict = active_cdr_db_pf()
             for db in cdr_dict:
                 args.extend(cdr_dict[db])
 
-    dbcount = 0
     for pp in [item for item in parameters if item not in remove_from_parameters]:
         if pp in databases:
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
@@ -451,17 +453,19 @@ def batch(*a):
 
     args = ['-b', '-p', batch_module + '.p']
 
+    dbcount = 0
     remove_from_parameters = []
     if any(x in parameters for x in ['all', 'all_except_cdr']):
         remove_from_parameters = databases + ['all', 'all_except_cdr']
         args.extend(['-pf', getpf('../db/progress/store/all')])
+        dbcount += len(databases)
         if 'all' in parameters:
             remove_from_parameters.extend(cdr_databases)
+            dbcount += len(cdr_databases)
             cdr_dict = active_cdr_db_pf()
             for db in cdr_dict:
                 args.extend(cdr_dict[db])
 
-    dbcount = 0
     for pp in [item for item in parameters if item not in remove_from_parameters]:
         if pp in databases:
             args.extend(['-pf', getpf('../db/progress/store/{0}{1}'.format(pp, '_alt' if pp in altdbs else ''))])
@@ -530,17 +534,19 @@ def idbatch(*a):
 
     args = ['-b', '-p', batch_module + '.p']
 
+    dbcount = 0
     remove_from_parameters = []
     if any(x in parameters for x in ['all', 'all_except_cdr']):
         remove_from_parameters = databases + ['all', 'all_except_cdr']
         args.extend(['-pf', getpf('../db/progress/store/all')])
+        dbcount += len(databases)
         if 'all' in parameters:
             remove_from_parameters.extend(cdr_databases)
+            dbcount += len(cdr_databases)
             cdr_dict = active_cdr_db_pf()
             for db in cdr_dict:
                 args.extend(cdr_dict[db])
 
-    dbcount = 0
     for pp in [item for item in parameters if item not in remove_from_parameters]:
         if pp in databases:
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
