@@ -331,11 +331,15 @@ def clean(*a):
 
 @target
 def cui(*a):
-    '''cui|vim|vimbatch'''
+    '''cui$|forcecui|vim$|vimbatch'''
+
+    if a[0] == 'cui' and os.path.isfile('../maintenance'):
+        print('Service break ongoing - aborting!')
+        sys.exit(5)
 
     args = ['-pf', getpf('../db/progress/store/all')]
 
-    if a[0] == 'cui':
+    if a[0] == 'cui' or a[0] == 'forcecui':
         program = 'Syst/tmslogin.p'
         args.extend(['-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4'])
     else: # Only vim should use this block internally...
@@ -417,7 +421,7 @@ def terminal(*a):
 def batch(*a):
     '''batch|mbatch'''
 
-    if os.path.exists('../var/run/servicebreak'):
+    if os.path.isfile('../maintenance'):
         print('Service break ongoing - aborting!')
         sys.exit(5)
 
@@ -491,7 +495,7 @@ def batch(*a):
 
 @target
 def idbatch(*a):
-    if os.path.exists('../var/run/servicebreak'):
+    if os.path.isfile('../maintenance'):
         print('Service break ongoing - aborting!')
         sys.exit(5)
 
