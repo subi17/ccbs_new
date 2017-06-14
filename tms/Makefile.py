@@ -377,34 +377,34 @@ def terminal(*a):
         raise PikeException('Expected a module to run as a parameter')
 
     cdr_dict = {}
-    all_in_parameters = False
+    program = parameters[0]
+    del parameters[0]
 
-    if 'all' in parameters[1:]:
-        all_in_parameters = True
+    remove_from_parameters = []
+    if any(x in parameters for x in ['all', 'all_except_cdr']):
+        remove_from_parameters = databases + ['all', 'all_except_cdr']
         args.extend(['-pf', getpf('../db/progress/store/all')])
-        cdr_dict = active_cdr_db_pf()
-        for db in cdr_dict:
-            args.extend(cdr_dict[db])
+        if 'all' in parameters:
+            remove_from_parameters.extend(cdr_databases)
+            cdr_dict = active_cdr_db_pf()
+            for db in cdr_dict:
+                args.extend(cdr_dict[db])
 
     dbcount = 0
-    for pp in parameters[1:]:
+    for pp in [item for item in parameters if item not in remove_from_parameters]:
         if pp in databases:
-            if all_in_parameters:
-                continue
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
             dbcount += 1
         elif pp in cdr_databases:
-            if all_in_parameters:
-                continue
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()            
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
                 dbcount += 1
-        elif pp != 'all':
+        else:
             args.append(pp)
 
-    args.extend(['-p', parameters[0]])
+    args.extend(['-p', program])
 
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
@@ -427,6 +427,7 @@ def batch(*a):
 
     assert len(parameters) > 0, 'Which module to run?'
     batch_module = parameters[0]
+    del parameters[0]
     
     module_base = os.path.basename(batch_module)
     if 'tenant' in globals():
@@ -450,30 +451,28 @@ def batch(*a):
 
     args = ['-b', '-p', batch_module + '.p']
 
-    all_in_parameters = False
-    if 'all' in parameters[1:]:
-        all_in_parameters = True
+    remove_from_parameters = []
+    if any(x in parameters for x in ['all', 'all_except_cdr']):
+        remove_from_parameters = databases + ['all', 'all_except_cdr']
         args.extend(['-pf', getpf('../db/progress/store/all')])
-        cdr_dict = active_cdr_db_pf()
-        for db in cdr_dict:
-            args.extend(cdr_dict[db])
+        if 'all' in parameters:
+            remove_from_parameters.extend(cdr_databases)
+            cdr_dict = active_cdr_db_pf()
+            for db in cdr_dict:
+                args.extend(cdr_dict[db])
 
     dbcount = 0
-    for pp in parameters[1:]:
+    for pp in [item for item in parameters if item not in remove_from_parameters]:
         if pp in databases:
-            if all_in_parameters:
-                continue
             args.extend(['-pf', getpf('../db/progress/store/{0}{1}'.format(pp, '_alt' if pp in altdbs else ''))])
             dbcount += 1
         elif pp in cdr_databases:
-            if all_in_parameters:
-                continue
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
                 dbcount += 1
-        elif pp != 'all':
+        else:
             args.append(pp)
 
     if dbcount != 0:
@@ -501,6 +500,8 @@ def idbatch(*a):
 
     assert len(parameters) > 0, 'Which module to run?'
     batch_module = parameters[0]
+    del parameters[0]
+
     module_base = os.path.basename(batch_module)
     if 'tenant' in globals():
         module_base = '{0}_{1}'.format(module_base,tenant)
@@ -508,7 +509,7 @@ def idbatch(*a):
     cdr_dict = {}
 
     try:
-        batchid = int(parameters[1])
+        batchid = int(parameters[0])
         if batchid in databases:
             raise IndexError
     except ValueError:
@@ -517,7 +518,9 @@ def idbatch(*a):
     except IndexError:
         print('No batch ID given - aborting!')
         sys.exit(5)
-     
+
+    del parameters[0]
+
     if os.path.exists('../var/run/%s_%s.pid' % (module_base, batchid)):
         print('Lockfile %s_%s.pid exists - aborting!' % (module_base, batchid))
         sys.exit(5)
@@ -527,30 +530,28 @@ def idbatch(*a):
 
     args = ['-b', '-p', batch_module + '.p']
 
-    all_in_parameters = False
-    if 'all' in parameters[1:]:
-        all_in_parameters = True
+    remove_from_parameters = []
+    if any(x in parameters for x in ['all', 'all_except_cdr']):
+        remove_from_parameters = databases + ['all', 'all_except_cdr']
         args.extend(['-pf', getpf('../db/progress/store/all')])
-        cdr_dict = active_cdr_db_pf()
-        for db in cdr_dict:
-            args.extend(cdr_dict[db])
+        if 'all' in parameters:
+            remove_from_parameters.extend(cdr_databases)
+            cdr_dict = active_cdr_db_pf()
+            for db in cdr_dict:
+                args.extend(cdr_dict[db])
 
     dbcount = 0
-    for pp in parameters[2:]:
+    for pp in [item for item in parameters if item not in remove_from_parameters]:
         if pp in databases:
-            if all_in_parameters:
-                continue
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
             dbcount += 1
         elif pp in cdr_databases:
-            if all_in_parameters:
-                continue
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
                 dbcount += 1
-        elif pp != 'all':
+        else:
             args.append(pp)
     try:
         idx = args.index("-param")
