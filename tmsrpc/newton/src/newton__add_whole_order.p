@@ -627,7 +627,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR ldBirthDay   AS DATE NO-UNDO. 
    DEF VAR llSelfEmployed AS LOGICAL NO-UNDO. 
    DEF VAR ldFoundationDate AS DATE NO-UNDO. 
-   DEF VAR data            AS CHAR EXTENT 41  NO-UNDO.
+   DEF VAR data            AS CHAR EXTENT 42  NO-UNDO.
    DEF VAR lcIdOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR liSubLimit AS INT NO-UNDO. 
@@ -823,6 +823,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             data[LOOKUP("territory_owner", gcCustomerStructStringFields)]
          OrderCustomer.CoverageToken =
             data[LOOKUP("coverage_token", gcCustomerStructStringFields)]
+         /* YDR-2532 */
+         OrderCustomer.AddressId =
+            data[LOOKUP("address_id", gcCustomerStructStringFields)]
          OrderCustomer.SelfEmployed       = llSelfEmployed 
          OrderCustomer.FoundationDate     = ldFoundationDate
          OrderCustomer.Birthday           = ldBirthday
@@ -1330,7 +1333,8 @@ gcCustomerStructFields = "birthday," +
                          "hand," + 
                          "km," +
                          "territory_owner," +
-                         "coverage_token".
+                         "coverage_token" +
+                         "address_id". /* YDR-2532 */
 
 /* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
@@ -1373,7 +1377,8 @@ gcCustomerStructStringFields = "city," +
                                "hand," + 
                                "km," +
                                "territory_owner," +
-                               "coverage_token".   /* EXTENT value count 41 */
+                               "coverage_token" +
+                               "address_id".   /* EXTENT value count 42 */
 
 /* common validation */
 /* YBP-513 */

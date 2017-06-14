@@ -14,7 +14,6 @@
 
 DEF VAR lcConURL AS CHAR NO-UNDO.
 DEF VAR liPrintXML AS INT NO-UNDO.
-DEF VAR lcAddressId AS CHAR NO-UNDO.
 
 /*For testing*/
 liPrintXML = 0.
@@ -280,15 +279,14 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
 /* YDR-2532 */
    
          fAddCharacteristic(lcCharacteristicsArray,      /*base*/
-                            "Territory Owner",             /*param name*/
+                            "TerritoryOwner",             /*param name*/
                             OrderCustomer.TerritoryOwner,  /*param value*/
                             "").                         /*old value*/
 
-         lcAddressId = OrderCustomer.Gescal + " " + OrderCustomer.Block.
 
          fAddCharacteristic(lcCharacteristicsArray, /*base*/
                             "AddressId",            /*param name*/
-                            lcAddressId,    /*param value*/
+                            OrderCustomer.AddressId,    /*param value*/
                             "").                   /*old value*/
 
 
