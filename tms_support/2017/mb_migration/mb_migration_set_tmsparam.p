@@ -9,7 +9,7 @@ FUNCTION fSetTMSParamC RETURNS LOGICAL
     icParamCode AS CHAR, /*This is used when seeking the data*/
     icParamName AS CHAR, /*Parameter description / name*/
     icParamValue AS CHAR): /*Value that is set to parameter.*/
-   FIND FIRST TMSParam NO-LOCK WHERE
+   FIND FIRST TMSParam  WHERE
               TMSParam.Brand EQ icBrand AND
               TMSParam.ParamGroup EQ lcgParamGroup AND
               TMSParam.ParamCode EQ icParamCode NO-ERROR.
@@ -38,7 +38,7 @@ FUNCTION fSetTMSParamI RETURNS LOGICAL
     icParamCode AS CHAR, /*This is used when seeking the data*/
     icParamName AS CHAR, /*Parameter description / name*/
     iiParamValue AS INT): /*Value that is set to parameter.*/
-   FIND FIRST TMSParam NO-LOCK WHERE
+   FIND FIRST TMSParam  WHERE
               TMSParam.Brand EQ icBrand AND
               TMSParam.ParamGroup EQ lcgParamGroup AND
               TMSParam.ParamCode EQ icParamCode NO-ERROR.
