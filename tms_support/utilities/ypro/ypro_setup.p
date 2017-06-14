@@ -4,6 +4,7 @@ DEF BUFFER bservicelimitTarget FOR ServiceLimitTarget.
 DEF BUFFER bSLGAnalyse FOR SLGAnalyse.
 DEF BUFFER tempSLGAnalyse FOR SLGAnalyse.
 
+
 DEF VAR ldaFrom AS DATE INIT TODAY.
 DEF VAR limode AS INT INIT 1.
 DEF VAR laskuri AS INT.
@@ -11,6 +12,104 @@ DEF VAR laskuri AS INT.
 DEFINE VARIABLE giMXSeq AS INTEGER NO-UNDO.
 DEFINE VARIABLE giSlSeq AS INTEGER NO-UNDO.
 
+/* BillItem */
+FUNCTION fCreateBillItem RETURNS LOGICAL
+   ( icBillCode AS CHARACTER ):
+
+   FIND FIRST BillItem EXCLUSIVE-LOCK WHERE
+      BillItem.Brand     = "1"       AND
+      BillItem.BillCode = icBillCode
+   NO-ERROR.
+
+   IF NOT AVAILABLE BillItem
+   THEN DO:
+      CREATE BillItem.
+      CREATE BItemGroup.
+   END.
+
+   ASSIGN
+      BItemGroup.BIGName = "PRO"
+      BITEMGroup.BIGroup = "48"
+      BItemGroup.Brand     = "1"
+      BItemGroup.grouptype = 1
+      BItemGroup.invoiceorder = 33
+      BillItem.Brand     = "1"
+      BillItem.BillCode = icBillCode
+      BillItem.BIName = "PRO monthly fee"
+      BillItem.AccNum = 70518100
+      BillItem.BIGroup = "48"
+      BillItem.EUAccNum = 70518100
+      BillItem.FSAccNum = 70518100
+      BillItem.Brand = "1"
+      BillItem.EUConAccNum = 70518100
+      BillItem.CostCentre = "SL"
+      BillItem.AltAccNum = 70518100
+      BillItem.TaxClass = "1"
+      BillItem.SAPRid = "070"
+      BillItem.VIPAccNum = 70518100.
+
+END FUNCTION.
+
+FUNCTION fCreatePriceList RETURNS LOGICAL
+   ( icPricelist AS CHARACTER ):
+
+   FIND FIRST Pricelist EXCLUSIVE-LOCK WHERE
+      pricelist.Brand     = "1"       AND
+      pricelist.pricelist = icpricelist
+   NO-ERROR.
+
+   IF NOT AVAILABLE pricelist
+   THEN DO:
+      CREATE pricelist.
+
+   ASSIGN
+      Pricelist.AutoCreate = "" 
+      Pricelist.Brand      = "1"
+      Pricelist.Currency   = "EUR"
+      Pricelist.CurrUnit   = TRUE
+      Pricelist.DedicList  = FALSE
+      Pricelist.InclVAT    = FALSE
+      Pricelist.Memo       = "PRO pricelist"
+      Pricelist.PLName     = "PRO fee for " + icPricelist
+      Pricelist.Prefix     = ""
+      Pricelist.PriceList  = icPriceList
+      Pricelist.Rounding   = 4.
+   END.
+END FUNCTION.
+
+FUNCTION fCreateFMItem RETURNS LOGICAL
+   ( icItemName AS CHARACTER,
+     icFeemodel AS CHARACTER,
+     icPricelist AS CHARACTER,
+     idamt AS DEC ):
+
+   FIND FIRST FMItem EXCLUSIVE-LOCK WHERE
+      fmitem.Brand     = "1"       AND
+      fmitem.feemodel = icfeemodel AND
+      fmitem.billcode = icItemName AND
+      fmitem.pricelist = icPricelist
+   NO-ERROR.
+
+   IF NOT AVAILABLE fmitem
+   THEN DO:
+      CREATE fmitem.
+
+   ASSIGN
+      fmitem.Amount            = idamt 
+      fmitem.BillCode          = icitemname
+      fmitem.BillCycle         = 2
+      fmitem.BillMethod        = FALSE
+      fmitem.BillType          = "MF" 
+      fmitem.Brand             = "1"
+      fmitem.BrokenRental      = 0
+      fmitem.FeeModel          = icFeemodel
+      fmitem.FromDate          = TODAY
+      fmitem.Interval          = 1
+      fmitem.PriceList         = icPricelist
+      fmitem.ServiceLimitGroup = ""
+      fmitem.ToDate            = 12/31/49.
+   END.
+END FUNCTION.
 
 FUNCTION fcreateCustcat RETURNS CHAR (
    INPUT icbasecat AS CHAR,
@@ -39,6 +138,44 @@ FUNCTION fcreateCustcat RETURNS CHAR (
    DISP bcustcat.
    RELEASE bCustCat.
 END FUNCTION.
+
+
+
+fCreateBillItem("CONTPROMF").
+/*fCreateBillItem("CONTFHPROMF").*/
+
+
+fCreatePriceList("CONTDSL39_PRO").
+fCreatePriceList("CONTFH39_50_PRO").
+fCreatePriceList("CONTFH49_300_PRO").
+fCreatePriceList("CONTDSL48_PRO").
+fCreatePriceList("CONTFH48_50_PRO").
+fCreatePriceList("CONTFH58_300_PRO").
+fCreatePriceList("CONTDSL52_PRO").
+fCreatePriceList("CONTFH52_50_PRO").
+fCreatePriceList("CONTFH62_300_PRO").
+fCreatePriceList("CONTDSL59_PRO").
+fCreatePriceList("CONTFH59_50_PRO").
+fCreatePriceList("CONTFH69_300_PRO").
+fCreatePriceList("CONT10_PRO").
+fCreatePriceList("CONT15_PRO").
+fCreatePriceList("CONT26_PRO").
+fCreatePriceList("CONT25_PRO").
+
+fCreateFMItem("CONTPROMF","CONTDSLMF","CONTDSL39_PRO",2.77).
+fCreateFMItem("CONTPROMF","CONTDSLMF","CONTDSL48_PRO",1.98).
+fCreateFMItem("CONTPROMF","CONTDSLMF","CONTDSL52_PRO",7.02).
+fCreateFMItem("CONTPROMF","CONTDSLMF","CONTDSL59_PRO",8.24).
+
+fCreateFMItem("CONTPROMF","CONTFHMF","CONTFH39_50_PRO",2.77).
+fCreateFMItem("CONTPROMF","CONTFHMF","CONTFH48_50_PRO",1.98).
+fCreateFMItem("CONTPROMF","CONTFHMF","CONTFH52_50_PRO",7.02).
+fCreateFMItem("CONTPROMF","CONTFHMF","CONTFH59_50_PRO",8.24).
+
+fCreateFMItem("CONTPROMF","CONTFHMF","CONTFH49_300_PRO",3.50).
+fCreateFMItem("CONTPROMF","CONTFHMF","CONTFH58_300_PRO",2.72).
+fCreateFMItem("CONTPROMF","CONTFHMF","CONTFH62_300_PRO",7.76).
+fCreateFMItem("CONTPROMF","CONTFHMF","CONTFH69_300_PRO",8.98).
 
 fcreateCustCat("20", "22", "PRO SOHO Company CIF", 25, 35, TRUE, "PRO-SOHO-COMPANY").
 fcreateCustCat("20", "21", "Big Companies CIF", 25, 35, TRUE, "").
