@@ -1,4 +1,5 @@
 {Syst/tmsconst.i}
+DEF INPUT PARAM icInputFile AS CHAR NO-UNDO. 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
 IMPORT lcHostName.
@@ -11,7 +12,7 @@ IF LOOKUP(lcHostName,SUBST("&1,&2",
    RETURN.
 END.
 
-input from ../tms_support/utilities/tabledump/tmsparam_staging_update.d.
+input from value(icInputFile).
 
 DEFINE TEMP-TABLE tttmsparam like tmsparam.
 repeat:

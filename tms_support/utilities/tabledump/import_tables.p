@@ -47,10 +47,11 @@ repeat:
    RUN utilities/tabledump/import_table.p lcLine lcFolder.
 end.
 
-run utilities/tabledump/tmsparam_staging_update.p.
-
-IF LOOKUP(lcHostName,'merga') > 0 THEN
-   RUN utilities/tabledump/tmsparam_merga_update.p.
+run utilities/tabledump/tmsparam_staging_update.p(
+    "../tms_support/utilities/tabledump/tmsparam_staging_update.d").
+IF LOOKUP(lcHostName,'yanai') > 0 THEN
+   RUN utilities/tabledump/tmsparam_staging_update.p(
+    "../tms_support/utilities/tabledump/tmsparam_uat_update.d").
 
 MESSAGE "Import done" VIEW-AS ALERT-BOX.
 QUIT.
