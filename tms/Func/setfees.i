@@ -47,6 +47,83 @@
 {Syst/eventval.i}
 {Func/financed_terminal.i}
 
+FUNCTION fCreateFixedfee RETURNS LOGICAL
+   ( iiPeriod      AS INTEGER,
+     iiFeeCust     AS INTEGER,
+     icCalcObj     AS CHARACTER,
+     idaValidFrom  AS DATE,
+     idPrice       AS DECIMAL,
+     iiMsseq       AS INTEGER,
+     icContractID  AS CHARACTER,
+     icSourceTable AS CHARACTER,
+     icSourceKey   AS CHARACTER,
+     iiOrderId     AS INTEGER,
+     icFinancedResult AS CHARACTER,
+     iiIFSSTatus   AS INTEGER,
+     icMemo        AS CHARACTER):
+
+   DEFINE VARIABLE liEndPeriod      AS INTEGER   NO-UNDO.   
+   DEFINE VARIABLE liFCnt           AS INTEGER   NO-UNDO.
+   DEFINE BUFFER xFixedFee FOR FixedFee.
+
+   IF FMItem.FFEndDate NE ? AND FMItem.FFItemQty = 0
+   THEN liEndPeriod = YEAR(FMItem.FFEndDate) * 100 +
+                      MONTH(FMItem.FFEndDate).
+   ELSE liEndPeriod = 999999.
+
+   /* We have TO make a contract fee + Billable contract items */
+   CREATE xFixedFee.
+   /* get an individual sequence FOR a NEW coint record */
+   ASSIGN
+      xFixedFee.Brand     = gcBrand
+      xFixedFee.FFNum     = NEXT-VALUE(Contract) /* sequence FOR contract */
+      xFixedFee.BegPeriod = iiPeriod            /* beginning InstDuePeriod  */
+      xFixedFee.CustNum   = iiFeeCust  /* customer no.            */
+      xFixedFee.CalcObj   = icCalcObj
+      xFixedFee.BegDate   = idaValidFrom
+      xFixedFee.BillCode  = FMItem.BillCode   /* BillCode code           */
+      xFixedFee.Amt       = IF idPrice NE ?
+                            THEN idPrice
+                            ELSE FMItem.Amount
+      xFixedFee.BillMethod = FMItem.BillCycle /* TO be Billed BEFOREHAND */
+      xFixedFee.Interval  = FMItem.Interval   /* Billing Interval MONTHS */
+      xFixedFee.EndPeriod = liEndPeriod
+      xFixedFee.HostTable = IF iiMSSeq > 0
+                            THEN "MobSub"
+                            ELSE "Customer"
+      xFixedFee.KeyValue  = IF iiMSSeq > 0
+                            THEN STRING(iiMSSeq)
+                            ELSE STRING(Customer.CustNum)
+      xFixedFee.CLI       = MsOwner.CLI WHEN AVAILABLE MsOwner
+      xFixedFee.InclAmt      = FMItem.InclAmt
+      xFixedFee.InclUnit     = FMItem.InclUnit
+      xFixedFee.InclBillCode = FMItem.InclBillCode
+      xFixedFee.ServiceLimitGroup = FMItem.ServiceLimitGroup
+      xFixedFee.Contract     = icContractID
+      xFixedFee.InUse        = TRUE
+      xFixedFee.FeeModel     = FMItem.FeeModel
+      xFixedFee.VATIncl      = PriceList.InclVat
+      xFixedFee.SourceTable  = icSourceTable
+      xFixedFee.SourceKey    = icSourceKey
+      /* order id should be assigned only for payterm contracts which
+         are sent to terminal financing bank file*/
+      xFixedFee.OrderID      = iiOrderId
+      xFixedFee.FinancedResult = icFinancedResult WHEN iiOrderId > 0
+      xFixedFee.IFSstatus    = iiIFSStatus
+      xFixedFee.CalcAmt      = xFixedFee.Amt.
+
+   /* divide memo into separate lines */
+   DO liFCnt = 1 TO NUM-ENTRIES(icMemo,"¤"):
+      IF liFCnt > 5 THEN LEAVE.
+      xFixedFee.Memo[liFCnt] = ENTRY(liFCnt,icMemo,"¤").
+   END.
+
+   fMakeContract(xFixedFee.FFNum,
+                 FMItem.FFItemQty).   
+
+END.   
+
+
 FUNCTION fMakeSetfees RETURNS INTEGER
    ( icFeeModel    AS CHARACTER, 
      iiCustNum     AS INTEGER, 
@@ -244,62 +321,11 @@ FUNCTION fMakeSetfees RETURNS INTEGER
       END. /* DO FOR xSingleFee */
 
       ELSE DO FOR xFixedFee TRANSACTION: /* A PERIODICAL FEE * */
-
-         IF FMItem.FFEndDate NE ? AND FMItem.FFItemQty = 0
-         THEN liEndPeriod = YEAR(FMItem.FFEndDate) * 100 +
-                            MONTH(FMItem.FFEndDate).
-         ELSE liEndPeriod = 999999.
-
-         /* We have TO make a contract fee + Billable contract items */
-         CREATE xFixedFee.
-         /* get an individual sequence FOR a NEW coint record */
-         ASSIGN         
-            xFixedFee.Brand     = gcBrand 
-            xFixedFee.FFNum     = NEXT-VALUE(Contract) /* sequence FOR contract */
-            xFixedFee.BegPeriod = iiPeriod            /* beginning InstDuePeriod  */
-            xFixedFee.CustNum   = liFeeCust  /* customer no.            */
-            xFixedFee.CalcObj   = icCalcObj     
-            xFixedFee.BegDate   = idaValidFrom
-            xFixedFee.BillCode  = FMItem.BillCode   /* BillCode code           */
-            xFixedFee.Amt       = IF idPrice NE ?
-                                  THEN idPrice
-                                  ELSE FMItem.Amount
-            xFixedFee.BillMethod = FMItem.BillCycle /* TO be Billed BEFOREHAND */
-            xFixedFee.Interval  = FMItem.Interval   /* Billing Interval MONTHS */
-            xFixedFee.EndPeriod = liEndPeriod
-            xFixedFee.HostTable = IF iiMSSeq > 0
-                                  THEN "MobSub"
-                                  ELSE "Customer"
-            xFixedFee.KeyValue  = IF iiMSSeq > 0
-                                  THEN STRING(iiMSSeq)
-                                  ELSE STRING(Customer.CustNum)
-            xFixedFee.CLI       = MsOwner.CLI WHEN AVAILABLE MsOwner
-            xFixedFee.InclAmt      = FMItem.InclAmt
-            xFixedFee.InclUnit     = FMItem.InclUnit
-            xFixedFee.InclBillCode = FMItem.InclBillCode
-            xFixedFee.ServiceLimitGroup = FMItem.ServiceLimitGroup
-            xFixedFee.Contract     = icContractID
-            xFixedFee.InUse        = TRUE
-            xFixedFee.FeeModel     = FMItem.FeeModel
-            xFixedFee.VATIncl      = PriceList.InclVat
-            xFixedFee.SourceTable  = icSourceTable  
-            xFixedFee.SourceKey    = icSourceKey  
-            /* order id should be assigned only for payterm contracts which 
-               are sent to terminal financing bank file*/
-            xFixedFee.OrderID      = iiOrderId 
-            xFixedFee.FinancedResult = lcFinancedResult WHEN iiOrderId > 0
-            xFixedFee.IFSstatus    = liIFSStatus 
-            xFixedFee.CalcAmt      = xFixedFee.Amt
-            liCreated              = liCreated + 1.
-
-         /* divide memo into separate lines */
-         DO liFCnt = 1 TO NUM-ENTRIES(icMemo,"¤"):
-            IF liFCnt > 5 THEN LEAVE.
-            xFixedFee.Memo[liFCnt] = ENTRY(liFCnt,icMemo,"¤").
-         END.
-
-         fMakeContract(xFixedFee.FFNum,
-                       FMItem.FFItemQty).
+         fCreateFixedfee(iiperiod, liFeeCust, icCalcObj, idaValidFrom,
+                         idPrice, iiMSSeq, icContractID, icSourceTable,
+                         icSourceKey, iiOrderId, lcFinancedResult, 
+                         liIFSStatus, icMemo). 
+         liCreated = liCreated + 1.
 
       END. /* DO FOR xFixedFee */
 
