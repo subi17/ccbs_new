@@ -13,5 +13,5 @@ UPDATE FIELD "Clitype" OF "CLIType"
 UPDATE FIELD "Clitype" OF "MobSub"
   FORMAT "x(13)"
 
-ADD FIELD "CLIType" OF "Order" 
+UPDATE FIELD "CLIType" OF "Order" 
   FORMAT "x(13)"

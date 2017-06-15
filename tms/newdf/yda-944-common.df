@@ -10,7 +10,7 @@ UPDATE FIELD "InvSeq" OF "HighUsage"
 UPDATE FIELD "ArAccNum" OF "CustCat"
   FORMAT ">>>>>>>9"
 
-ADD FIELD "ARAccNum" OF "Invoice"
+UPDATE FIELD "ARAccNum" OF "Invoice"
   FORMAT ">>>>>>>9"
 
 UPDATE FIELD "Concerns" OF "SingleFee"
