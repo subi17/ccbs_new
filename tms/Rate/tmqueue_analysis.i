@@ -151,6 +151,7 @@ FUNCTION fUpsellBundleCountNew RETURN INT
                     DayCampaign.DCEvent EQ     "CONT24" OR
                     DayCampaign.DCEvent EQ     "CONT25" OR
                     DayCampaign.DCEvent EQ     "CONT26" OR
+                    DayCampaign.DCEvent EQ     "CONT27" OR
                     DayCampaign.DCEvent BEGINS "CONTS"  OR
                     DayCampaign.DCEvent BEGINS "CONTF"  OR
                     DayCampaign.DCEvent BEGINS "CONTD"  OR
@@ -463,6 +464,7 @@ PROCEDURE pUpdateTMCounterLimit:
       icContract EQ "CONT24" OR
       icContract EQ "CONT25" OR
       icContract EQ "CONT26" OR
+      icContract EQ "CONT27" OR
       icContract BEGINS "DUB" OR icContract BEGINS "CONTS" OR
       icContract BEGINS "CONTF" OR icContract EQ "CONTD9" THEN
       liTMRuleSeq = INT(lcBaseContracts) NO-ERROR.
