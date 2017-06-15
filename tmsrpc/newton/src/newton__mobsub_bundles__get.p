@@ -202,8 +202,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
        add_boolean(lcOptionsStruct, "upcoming_data_bundle", llUpComingDataBundle).
    END.
    /* pass number of activations in case of UPSELL */
-   ELSE IF pcBundleId = "HSPA_ROAM_EU" OR
-      pcBundleId MATCHES("*_UPSELL") THEN DO:
+   ELSE IF pcBundleId MATCHES("*_UPSELL") THEN DO:
       liActivations = fGetUpSellCount(pcBundleId,
                                       piMsSeq,
                                       MobSub.Custnum,
