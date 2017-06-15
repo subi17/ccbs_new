@@ -159,11 +159,8 @@ FOR EACH DayCampaign NO-LOCK WHERE
    END.
 END.
 
-
 IF MobSub.CliType = "TARJ6" THEN
    add_string(lcResultArray,"", "TARJ_UPSELL|" + STRING(Mobsub.MsSeq)).
-   
-add_string(lcResultArray,"", "HSPA_ROAM_EU|" + STRING(Mobsub.MsSeq)).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
