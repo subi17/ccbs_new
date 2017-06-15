@@ -13,7 +13,7 @@
 &IF "{&YOIGOPROFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE YOIGOPROFUNC_I YES
-
+{Func/fmakemsreq.i}
 {Func/orderfunc.i}
 
 FUNCTION fIsPro RETURNS LOGICAL
@@ -31,12 +31,16 @@ FUNCTION fMakeProActRequest RETURNS INT(
    INPUT iiMsSeq AS INT,
    INPUT icContr AS CHAR,
    INPUT idActStamp AS DEC,
-   INPUT iiMsRequest AS INT):
+   INPUT icParam1 AS CHAR,
+   INPUT ocParam2 AS CHAR,
+   INPUT icAction AS CHAR):
    DEF VAR liRequest AS INT NO-UNDO.
-   DEF VAR lcError         AS CHAR NO-UNDO.
-   DEF BUFFER bRequest FOR MsRequest.
+   DEF VAR liReqType AS INT NO-UNDO.
+   DEF VAR lcError AS CHAR NO-UNDO.
+   DEF BUFFER bOwner FOR MSOwner. 
+   FIND FIRST bOwner WHERE bOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    DO TRANS:
-      liRequest = fPCActionRequest(iiMsSeq,
+      /*liRequest = fPCActionRequest(iiMsSeq,
                                    icContr,
                                    "act",
                                    idActStamp,
@@ -48,26 +52,22 @@ FUNCTION fMakeProActRequest RETURNS INT(
                                    "",
                                    0,
                                    0,
-                                  OUTPUT lcError).
-      IF liRequest = 0 THEN DO:
-         /* write possible error to a memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(MsRequest.MsSeq),
-                          MsRequest.Custnum,
-                          icContr + " activation failed",
-                          lcError).
-          RETURN liRequest.
-       END.
-       FIND FIRST bRequest EXCLUSIVE-LOCK WHERE
-                  bRequest.MsRequest EQ liRequest NO-ERROR.
-       IF NOT AVAIL bRequest THEN RETURN 0.
-
-       bRequest.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
+                                  OUTPUT lcError).*/
+      IF icAction EQ "act" THEN liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
+      ELSE liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
+      fCreateRequest(liReqType,0,katun,FALSE,FALSE).
+      ASSIGN bCreaReq.MsSeq      = iiMsSeq
+             bCreaReq.CLI        = bOwner.CLI
+             bCreaReq.CustNum    = bOwner.CustNum
+             bCreaReq.ReqCparam2 = icAction
+             bCreaReq.ReqCparam4 = icContr
+             bCreaReq.Crestamp   = fmakets()
+             bCreaReq.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
+             bCreaReq.CreateFees = FALSE.
 
    END. /*Trans*/  
+   RETURN bCreaReq.MsRequest.
 END.
-
 
 /*Function returns TRUE if the order exsists and it is done for PRO customer.*/
 FUNCTION fIsProOrder RETURNS LOGICAL
