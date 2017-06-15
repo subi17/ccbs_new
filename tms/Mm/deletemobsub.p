@@ -948,8 +948,8 @@ PROCEDURE pTerminate:
       /* YDR-2495 Auto STC for Convergent After Mobile Line Termination to Fixed Line  */
       liRequest = fConvFixedSTCReq(MobSub.CLIType,
                                    MobSub.MsSeq,
-                                   IF llOutport THEN fMake2Dt(fLastDayOfMonth(TODAY + 5) + 1,0)
-                                   ELSE fMake2Dt(fLastDayOfMonth(TODAY) + 1,0),
+                                   IF llOutport THEN fMake2Dt(TODAY + 5,0)
+                                   ELSE fMake2Dt(TODAY + 1,0),
                                    {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                    MsRequest.MsRequest).
    END.      
