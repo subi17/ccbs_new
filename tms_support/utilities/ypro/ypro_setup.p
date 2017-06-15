@@ -101,7 +101,7 @@ FUNCTION fCreateFMItem RETURNS LOGICAL
       fmitem.BillMethod        = FALSE
       fmitem.BillType          = "MF" 
       fmitem.Brand             = "1"
-      fmitem.BrokenRental      = 0
+      fmitem.BrokenRental      = 1
       fmitem.FeeModel          = icFeemodel
       fmitem.FromDate          = TODAY
       fmitem.Interval          = 1

@@ -45,7 +45,6 @@
 {Func/create_eventlog.i}
 {Func/fixedlinefunc.i}
 {Func/msisdn_prefix.i}
-{Func/profunc.i}
 
 DEF INPUT  PARAMETER iiMSRequest AS INT  NO-UNDO.
 
@@ -412,25 +411,14 @@ IF NOT AVAIL mobsub THEN DO:
                           OrderTopup.VatAmount * 100).
    END.
    
-   /* YPRO-18 */
-   IF fIsPro(Customer.category) THEN DO:
-      CREATE Segmentation.
-      ASSIGN
-         Segmentation.MsSeq   = Order.MsSeq
-         Segmentation.SegmentCode  = "S1"
-         Segmentation.SegmentOffer = "OFA"
-         Segmentation.SegmentDate  = TODAY
-         Segmentation.SegmentCreation = fMakeTS().   
-   END.
-   ELSE DO:
-      CREATE Segmentation.
-      ASSIGN
-         Segmentation.MsSeq   = Order.MsSeq
-         Segmentation.SegmentCode  = "SN"
-         Segmentation.SegmentOffer = "OFF"
-         Segmentation.SegmentDate  = TODAY
-         Segmentation.SegmentCreation = fMakeTS().
-   END.
+   CREATE Segmentation.
+   ASSIGN
+      Segmentation.MsSeq   = Order.MsSeq
+      Segmentation.SegmentCode  = "SN"
+      Segmentation.SegmentOffer = "OFF"
+      Segmentation.SegmentDate  = TODAY
+      Segmentation.SegmentCreation = fMakeTS().
+   
    CREATE msowner.
    ASSIGN
       MSOwner.CLI       = Mobsub.cli
