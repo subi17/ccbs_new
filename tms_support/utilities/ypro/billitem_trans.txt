@@ -14,10 +14,6 @@ VOICE5000CF;1;Spanish;Bono Ilimitado
 VOICE5000CF;2;Catalan;Bono Il limitat
 VOICE5000CF;3;Basque;Mugagabea bonus
 VOICE5000CF;5;English;Unlimited Bonus
-VOICE200;1;Spanish;Bono Nacional 200min
-VOICE200;2;Catalan;Bono Nacional 200 minuts
-VOICE200;3;Basque;National Bond 200 minutu 
-VOICE200;5;English;National 200 minute Bonus
 INT_VOICE100;1;Spanish;Bono Internacional 100min
 INT_VOICE100;2;Catalan;Bono Internacional 100 minuts
 INT_VOICE100;3;Basque;Nazioarteko Bond 100 minutu
@@ -34,3 +30,25 @@ SMS5000;1;Spanish;Bono SMS Ilimitado
 SMS5000;2;Catalan;Bono SMS il·limitat
 SMS5000;3;Basque;Bono SMS mugagabea
 SMS5000;5;English;Unlimited SMS Bonus
+FAXTOEMAIL;1;Spanish;FAX TO EMAIL
+FAXTOEMAIL;2;Catalan;FAX TO EMAIL
+FAXTOEMAIL;3;Basque;FAX TO EMAIL
+FAXTOEMAIL;5;English;FAX TO EMAIL
+OFFICE365;1;Spanish;OFFICE 365 ESSENTIALS
+OFFICE365;Catalan;OFFICE 365 ESSENTIALS
+OFFICE365;3;Basque;OFFICE 365 ESSENTIALS
+OFFICE365;5;English;OFFICE 365 ESSENTIALS
+SAGEONE;1;Spanish;SAGE ONE
+SAGEONE;2;Catalan;SAGE ONE
+SAGEONE;3;Basque;SAGE ONE
+SAGEONE;5;English;SAGE ONE
+IPFIJA;1;Spanish;IP FIJA
+IPFIJA;2;Catalan;IP FIJA
+IPFIJA;3;Basque;IP FIJA
+IPFIJA;5;English;IP FIJA
+
+
+
+
+
+

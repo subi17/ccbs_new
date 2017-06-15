@@ -30,8 +30,8 @@ DEFINE TEMP-TABLE ttBillItem NO-UNDO
 DEFINE VAR icIncDir   AS CHARACTER NO-UNDO.
 DEFINE VAR icSpoolDir AS CHARACTER NO-UNDO.
 
-icIncDir = "/apps/xfera/kaaikas/ccbs/tms_support/utilities/ypro/".
-icSpoolDir = "/apps/xfera/kaaikas/ccbs/tms_support/utilities/ypro/spool/".
+icIncDir = "/apps/xfera/ilsavola/ccbs/tms_support/utilities/ypro/". /*TODO update for production later*/
+icSpoolDir = "/apps/xfera/ilsavola/ccbs/tms_support/utilities/ypro/spool/".
 
 DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile   AS CHARACTER NO-UNDO.

@@ -12,7 +12,7 @@
 {Syst/tmsconst.i}
 &IF "{&YOIGOPROFUNC_I}" NE "YES"
 &THEN
-&GLOBAL-DEFINE YOIGOPROFINC_I YES
+&GLOBAL-DEFINE YOIGOPROFUNC_I YES
 
 {Func/orderfunc.i}
 
@@ -27,54 +27,47 @@ FUNCTION fIsPro RETURNS LOGICAL
    RETURN FALSE.
 END.
 
-FUNCTION fMakeProAckRequest RETURNS LOGICAL (
+FUNCTION fMakeProActRequest RETURNS INT(
    INPUT iiMsSeq AS INT,
    INPUT icContr AS CHAR,
    INPUT idActStamp AS DEC,
    INPUT iiMsRequest AS INT):
    DEF VAR liRequest AS INT NO-UNDO.
    DEF VAR lcError         AS CHAR NO-UNDO.
+   DEF BUFFER bRequest FOR MsRequest.
+   DO TRANS:
+      liRequest = fPCActionRequest(iiMsSeq,
+                                   icContr,
+                                   "act",
+                                   idActStamp,
+                                   TRUE, /* fees */
+                                   {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                   "",
+                                   iiMsRequest,
+                                   FALSE,
+                                   "",
+                                   0,
+                                   0,
+                                  OUTPUT lcError).
+      IF liRequest = 0 THEN DO:
+         /* write possible error to a memo */
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "MobSub",
+                          STRING(MsRequest.MsSeq),
+                          MsRequest.Custnum,
+                          icContr + " activation failed",
+                          lcError).
+          RETURN liRequest.
+       END.
+       FIND FIRST bRequest EXCLUSIVE-LOCK WHERE
+                  bRequest.MsRequest EQ liRequest NO-ERROR.
+       IF NOT AVAIL bRequest THEN RETURN 0.
 
-   liRequest = fPCActionRequest(iiMsSeq,
-                                icContr,
-                                "act",
-                                idActStamp,
-                                TRUE, /* fees */
-                                {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
-                                "",
-                                iiMsRequest,
-                                FALSE,
-                                "",
-                                0,
-                                0,
-                                OUTPUT lcError).
-   IF liRequest = 0 THEN
-      /* write possible error to a memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
-                       STRING(MsRequest.MsSeq),
-                       MsRequest.Custnum,
-                       icContr + " activation failed",
-                       lcError).
+       bRequest.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
+
+   END. /*Trans*/  
 END.
 
-FUNCTION fProMobileAct RETURN LOGICAL 
-   (INPUT iimsseq AS INT,
-    INPUT idactstamp AS DEC,
-    INPUT iiMsrequest AS INT):
-   fMakeProAckRequest(iimsseq,"FLEX_UPSELL_500MB",idactstamp,iiMsrequest).
-   fMakeProAckRequest(iimsseq,"VOICE5000",idactstamp,iiMsrequest).
-   fMakeProAckRequest(iimsseq,"INT_VOICE100",idactstamp,iiMsrequest).
-   fMakeProAckRequest(iimsseq,"SMS5000",idactstamp,iiMsrequest).
-END.    
-
-FUNCTION fProFixedAct RETURN LOGICAL
-   (INPUT iimsseq AS INT,
-    INPUT idactstamp AS DEC,
-    INPUT iiMsrequest AS INT):
-   fMakeProAckRequest(iimsseq,"FIX_VOICE1000",idactstamp,iiMsrequest).
-   fMakeProAckRequest(iimsseq,"INT_FIX_VOICE1000",idactstamp,iiMsrequest).
-END.
 
 /*Function returns TRUE if the order exsists and it is done for PRO customer.*/
 FUNCTION fIsProOrder RETURNS LOGICAL

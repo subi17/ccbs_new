@@ -4,6 +4,7 @@ DEF BUFFER bservicelimitTarget FOR ServiceLimitTarget.
 DEF BUFFER bSLGAnalyse FOR SLGAnalyse.
 DEF BUFFER tempSLGAnalyse FOR SLGAnalyse.
 
+
 DEF VAR ldaFrom AS DATE INIT TODAY.
 DEF VAR limode AS INT INIT 1.
 DEF VAR laskuri AS INT.
@@ -11,6 +12,104 @@ DEF VAR laskuri AS INT.
 DEFINE VARIABLE giMXSeq AS INTEGER NO-UNDO.
 DEFINE VARIABLE giSlSeq AS INTEGER NO-UNDO.
 
+/* BillItem */
+FUNCTION fCreateBillItem RETURNS LOGICAL
+   ( icBillCode AS CHARACTER ):
+
+   FIND FIRST BillItem EXCLUSIVE-LOCK WHERE
+      BillItem.Brand     = "1"       AND
+      BillItem.BillCode = icBillCode
+   NO-ERROR.
+
+   IF NOT AVAILABLE BillItem
+   THEN DO:
+      CREATE BillItem.
+      CREATE BItemGroup.
+   END.
+
+   ASSIGN
+      BItemGroup.BIGName = "PRO"
+      BITEMGroup.BIGroup = "48"
+      BItemGroup.Brand     = "1"
+      BItemGroup.grouptype = 1
+      BItemGroup.invoiceorder = 33
+      BillItem.Brand     = "1"
+      BillItem.BillCode = icBillCode
+      BillItem.BIName = "PRO monthly fee"
+      BillItem.AccNum = 70518100
+      BillItem.BIGroup = "48"
+      BillItem.EUAccNum = 70518100
+      BillItem.FSAccNum = 70518100
+      BillItem.Brand = "1"
+      BillItem.EUConAccNum = 70518100
+      BillItem.CostCentre = "SL"
+      BillItem.AltAccNum = 70518100
+      BillItem.TaxClass = "1"
+      BillItem.SAPRid = "070"
+      BillItem.VIPAccNum = 70518100.
+
+END FUNCTION.
+
+FUNCTION fCreatePriceList RETURNS LOGICAL
+   ( icPricelist AS CHARACTER ):
+
+   FIND FIRST Pricelist EXCLUSIVE-LOCK WHERE
+      pricelist.Brand     = "1"       AND
+      pricelist.pricelist = icpricelist
+   NO-ERROR.
+
+   IF NOT AVAILABLE pricelist
+   THEN DO:
+      CREATE pricelist.
+
+   ASSIGN
+      Pricelist.AutoCreate = "" 
+      Pricelist.Brand      = "1"
+      Pricelist.Currency   = "EUR"
+      Pricelist.CurrUnit   = TRUE
+      Pricelist.DedicList  = FALSE
+      Pricelist.InclVAT    = FALSE
+      Pricelist.Memo       = "PRO pricelist"
+      Pricelist.PLName     = "PRO fee for " + icPricelist
+      Pricelist.Prefix     = ""
+      Pricelist.PriceList  = icPriceList
+      Pricelist.Rounding   = 4.
+   END.
+END FUNCTION.
+
+FUNCTION fCreateFMItem RETURNS LOGICAL
+   ( icItemName AS CHARACTER,
+     icFeemodel AS CHARACTER,
+     icPricelist AS CHARACTER,
+     idamt AS DEC ):
+
+   FIND FIRST FMItem EXCLUSIVE-LOCK WHERE
+      fmitem.Brand     = "1"       AND
+      fmitem.feemodel = icfeemodel AND
+      fmitem.billcode = icItemName AND
+      fmitem.pricelist = icPricelist
+   NO-ERROR.
+
+   IF NOT AVAILABLE fmitem
+   THEN DO:
+      CREATE fmitem.
+
+   ASSIGN
+      fmitem.Amount            = idamt 
+      fmitem.BillCode          = icitemname
+      fmitem.BillCycle         = 2
+      fmitem.BillMethod        = FALSE
+      fmitem.BillType          = "MF" 
+      fmitem.Brand             = "1"
+      fmitem.BrokenRental      = 0
+      fmitem.FeeModel          = icFeemodel
+      fmitem.FromDate          = TODAY
+      fmitem.Interval          = 1
+      fmitem.PriceList         = icPricelist
+      fmitem.ServiceLimitGroup = ""
+      fmitem.ToDate            = 12/31/49.
+   END.
+END FUNCTION.
 
 FUNCTION fcreateCustcat RETURNS CHAR (
    INPUT icbasecat AS CHAR,
@@ -40,58 +139,99 @@ FUNCTION fcreateCustcat RETURNS CHAR (
    RELEASE bCustCat.
 END FUNCTION.
 
-fcreateCustCat("20", "21", "PRO SOHO Company CIF", 25, 35, TRUE, "PRO-Company").
-fcreateCustCat("20", "22", "Big Companies CIF", 25, 35, TRUE, "PRO-Company").
-fcreateCustCat("40", "42", "PRO Self-employee NIF", 5, 7, TRUE, "PRO-Self-employed").
-fcreateCustCat("41", "43", "PRO Self-employee NIE", 5, 7, TRUE, "PRO-Self-employed").
 
+
+fCreateBillItem("CONTPROMF").
+/*fCreateBillItem("CONTFHPROMF").*/
+
+
+fCreatePriceList("PRO_CONTDSL39").
+fCreatePriceList("PRO_CONTFH39_50").
+fCreatePriceList("PRO_CONTFH49_300").
+fCreatePriceList("PRO_CONTDSL48").
+fCreatePriceList("PRO_CONTFH48_50").
+fCreatePriceList("PRO_CONTFH58_300").
+fCreatePriceList("PRO_CONTDSL52").
+fCreatePriceList("PRO_CONTFH52_50").
+fCreatePriceList("PRO_CONTFH62_300").
+fCreatePriceList("PRO_CONTDSL59").
+fCreatePriceList("PRO_CONTFH59_50").
+fCreatePriceList("PRO_CONTFH69_300").
+fCreatePriceList("PRO_CONT10").
+fCreatePriceList("PRO_CONT15").
+fCreatePriceList("PRO_CONT26").
+fCreatePriceList("PRO_CONT25").
+
+fCreateFMItem("CONTPROMF","CONTDSLMF","PRO_CONTDSL39",2.77).
+fCreateFMItem("CONTPROMF","CONTDSLMF","PRO_CONTDSL48",1.98).
+fCreateFMItem("CONTPROMF","CONTDSLMF","PRO_CONTDSL52",7.02).
+fCreateFMItem("CONTPROMF","CONTDSLMF","PRO_CONTDSL59",8.24).
+
+fCreateFMItem("CONTPROMF","CONTFHMF","PRO_CONTFH39_50",2.77).
+fCreateFMItem("CONTPROMF","CONTFHMF","PRO_CONTFH48_50",1.98).
+fCreateFMItem("CONTPROMF","CONTFHMF","PRO_CONTFH52_50",7.02).
+fCreateFMItem("CONTPROMF","CONTFHMF","PRO_CONTFH59_50",8.24).
+
+fCreateFMItem("CONTPROMF","CONTFHMF","PRO_CONTFH49_300",3.50).
+fCreateFMItem("CONTPROMF","CONTFHMF","PRO_CONTFH58_300",2.72).
+fCreateFMItem("CONTPROMF","CONTFHMF","PRO_CONTFH62_300",7.76).
+fCreateFMItem("CONTPROMF","CONTFHMF","PRO_CONTFH69_300",8.98).
+
+fCreateFMItem("CONTPROMF","CONT10MF","PRO_CONT10",0.08).
+fCreateFMItem("CONTPROMF","CONT15MF","PRO_CONT15",4.30).
+fCreateFMItem("CONTPROMF","CONT25MF","PRO_CONT25",2.55).
+fCreateFMItem("CONTPROMF","CONT26MF","PRO_CONT26",2.34).
+
+
+fcreateCustCat("20", "22", "PRO SOHO Company CIF", 25, 35, TRUE, "PRO-SOHO-COMPANY").
+fcreateCustCat("20", "21", "Big Companies CIF", 25, 35, TRUE, "").
+fcreateCustCat("20", "23", "PRO SOHO Company CIF", 25, 35, TRUE, "SOHO-COMPANY").
+fcreateCustCat("40", "42", "PRO Self-employee NIF", 5, 7, TRUE, "PRO-SOHO-AUTONOMO").
+fcreateCustCat("41", "43", "PRO Self-employee NIE", 5, 7, TRUE, "PRO-SOHO-AUTONOMO").
+fcreateCustCat("40", "44", "Self-employee NIF", 5, 7, TRUE, "SOHO-AUTONOMO").
+fcreateCustCat("41", "45", "Self-employee NIE", 5, 7, TRUE, "SOHO-AUTONOMO").
+
+FIND FIRST CustCat WHERE
+           custcat.brand EQ "1" AND
+           custcat.category EQ "10".
+   ASSIGN Custcat.segment = "CONSUMER"
+          Custcat.catname = "Residential NIF".
+FIND FIRST CustCat WHERE
+           custcat.brand EQ "1" AND
+           custcat.category EQ "11".
+   ASSIGN Custcat.segment = "CONSUMER"
+          Custcat.catname = "Residential NIE".
+FIND FIRST CustCat WHERE
+           custcat.brand EQ "1" AND
+           custcat.category EQ "12".
+   ASSIGN Custcat.segment = "CONSUMER".
+FIND FIRST CustCat WHERE
+           custcat.brand EQ "1" AND
+           custcat.category EQ "13".
+   ASSIGN Custcat.segment = "CONSUMER".
 FIND FIRST CustCat WHERE 
            custcat.brand EQ "1" AND
            custcat.category EQ "20".
-   ASSIGN Custcat.catname = "SOHO Company CIF"
-          Custcat.segment = "Company".
+   ASSIGN Custcat.catname = "Company CIF"
+          Custcat.segment = "COMPANY".
+FIND FIRST CustCat WHERE
+           custcat.brand EQ "1" AND
+           custcat.category EQ "31".
+   ASSIGN Custcat.catname = "VIP - MM group external customer".
 FIND FIRST CustCat WHERE
            custcat.brand EQ "1" AND
            custcat.category EQ "40".
    ASSIGN Custcat.catname = "Self Employee NIF"
           Custcat.mobsublimit = 5
           CustCat.activationlimit = 7
-          Custcat.segment = "Self-employed".
+          Custcat.segment = "AUTONOMO".
 FIND FIRST CustCat WHERE
            custcat.brand EQ "1" AND
            custcat.category EQ "41".
    ASSIGN Custcat.catname = "Self Employee NIE"
           Custcat.mobsublimit = 5
           CustCat.activationlimit = 7
-          Custcat.segment = "Self-employed".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "10".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "11".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "12".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "13".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "30".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "31".
-   ASSIGN Custcat.segment = "Consumer".
-FIND FIRST CustCat WHERE
-           custcat.brand EQ "1" AND
-           custcat.category EQ "99".
-   ASSIGN Custcat.segment = "Consumer".
+          Custcat.segment = "AUTONOMO".
 
 IF NOT CAN-FIND (FIRST Tmscodes WHERE
            tmscodes.codegroup EQ "order" AND
@@ -138,7 +278,8 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                              INPUT icEvent AS CHAR,
                                              INPUT icname AS CHAR,
                                              INPUT icdctype AS CHAR,
-                                             INPUT iiUpdateMode AS INT):
+                                             INPUT iiUpdateMode AS INT,
+                                             INPUT iiTarget AS INT):
    FIND FIRST Daycampaign WHERE
               Daycampaign.brand EQ "1" AND
               Daycampaign.dcevent EQ icBaseDCEvent NO-ERROR.
@@ -149,12 +290,14 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
 
       CREATE ttDaycampaign.
       BUFFER-COPY daycampaign TO ttDaycampaign.
-      ttDaycampaign.dctype = icDctype.
-      ttDaycampaign.dcevent = icevent.
-      ttDaycampaign.billcode = icevent + "MF".
-      ttDaycampaign.feemodel = icevent + "MF".
-      ttDaycampaign.dcname = icName.
-      ttDaycampaign.bundleupsell = "".
+      ASSIGN
+      ttDaycampaign.dctype = icDctype
+      ttDaycampaign.dcevent = icevent
+      /*ttDaycampaign.billcode = icevent + "MF"
+      ttDaycampaign.feemodel = icevent + "MF"*/
+      ttDaycampaign.dcname = icName
+      ttDaycampaign.bundleupsell = ""
+      ttDaycampaign.bundletarget = iiTarget.
 
       IF iiUpdateMode NE 0 THEN DO:
          CREATE Daycampaign.
@@ -166,14 +309,18 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
 END.
 
 /*  old ones, can be removec */
-fcreateDaycampaign("FLEX_UPSELL","FLEX_UPSELL_500MB","Flex upsell national GPRS","6",limode).
-fcreateDaycampaign("FLEX_UPSELL","FLEX_UPSELL_5GB","Flex upsell national GPRS","6",limode).
-fcreateDaycampaign("VOICE100","VOICE5000","Cont national voice","1",limode).
-fcreateDaycampaign("VOICE100","VOICE200","Cont national voice","1",limode).
-fcreateDaycampaign("VOICE100","INT_VOICE100","Cont international voice","1",limode).
-fcreateDaycampaign("VOICE100","FIX_VOICE1000","Fixed national voice","1",limode).
-fcreateDaycampaign("VOICE100","INT_FIX_VOICE1000","Fixed international voice","1",limode).
-fcreateDaycampaign("VOICE100","SMS5000","National SMS","1",limode).
+fcreateDaycampaign("FLEX_UPSELL","FLEX_UPSELL_500MB","Flex upsell national GPRS","6",limode,0).
+fcreateDaycampaign("FLEX_UPSELL","FLEX_UPSELL_5GB","Flex upsell national GPRS","6",limode,0).
+fcreateDaycampaign("VOICE100","VOICE5000","Cont national voice","1",limode,0).
+fcreateDaycampaign("VOICE100","VOICE200","Cont national voice","1",limode,0).
+fcreateDaycampaign("VOICE100","INT_VOICE100","Cont international voice","1",limode,0).
+fcreateDaycampaign("VOICE100","FIX_VOICE1000","Fixed national voice","1",limode,1).
+fcreateDaycampaign("VOICE100","INT_FIX_VOICE1000","Fixed international voice","1",limode,1).
+fcreateDaycampaign("VOICE100","SMS5000","National SMS","1",limode,0).
+
+FOR EACH TMSParam WHERE INDEX(TMSParam.charval,"FLEX_UPSELL") > 0:
+   TMSParam.charval = TMSParam.charval + ",FLEX_UPSELL_500MB,FLEX_UPSELL_5GB".
+END.
 
 
 FUNCTION create_group returns log (INPUT lcCode as CHAR, INPUT lcName AS CHAR):
@@ -220,34 +367,65 @@ FUNCTION create_limit returns log (INPUT lcCode as CHAR,
           servicelimit.firstmonthcalc = 0
           servicelimit.lastmonthcalc = 0
           servicelimit.webdisp = 1.
-
-   FIND FIRST Servicelimit WHERE
-              Servicelimit.groupcode EQ lcbaseGroup NO-ERROR.
-   IF AVAIL servicelimit THEN DO:
-      FOR EACH servicelimittarget WHERE
-               servicelimittarget.slseq eq Servicelimit.slseq:
-         CREATE bservicelimitTarget.
-         BUFFER-COPY servicelimittarget EXCEPT slseq TO bservicelimittarget.
-         ASSIGN bservicelimittarget.slseq = laskuri
-                bservicelimittarget.insiderate = lcCode.
-      END.         
+   IF lcbaseGroup NE "SMS" THEN DO:
+      FIND FIRST Servicelimit WHERE
+                 Servicelimit.groupcode EQ lcbaseGroup NO-ERROR.
+      IF AVAIL servicelimit THEN DO:
+         FOR EACH servicelimittarget WHERE
+                  servicelimittarget.slseq eq Servicelimit.slseq:
+            CREATE bservicelimitTarget.
+            BUFFER-COPY servicelimittarget EXCEPT slseq TO bservicelimittarget.
+            ASSIGN bservicelimittarget.slseq = laskuri
+                   bservicelimittarget.insiderate = lcCode.
+         END.         
+      END.
+   END.
+   ELSE DO:
+      CREATE servicelimittarget.
+      ASSIGN
+         Servicelimittarget.InsideRate = lcCode
+         Servicelimittarget.OutsideRate = ""
+         Servicelimittarget.ServiceLimitMT = 0
+         Servicelimittarget.ServiceLMember = "12100001"
+         Servicelimittarget.SLSeq = laskuri.
+      CREATE servicelimittarget.
+      ASSIGN
+         Servicelimittarget.InsideRate = lcCode
+         Servicelimittarget.OutsideRate = ""
+         Servicelimittarget.ServiceLimitMT = 0
+         Servicelimittarget.ServiceLMember = "12100002"
+         Servicelimittarget.SLSeq = laskuri.
+      CREATE servicelimittarget.
+      ASSIGN
+         Servicelimittarget.InsideRate = lcCode
+         Servicelimittarget.OutsideRate = ""
+         Servicelimittarget.ServiceLimitMT = 0
+         Servicelimittarget.ServiceLMember = "12100003"
+         Servicelimittarget.SLSeq = laskuri.
+      CREATE servicelimittarget.
+      ASSIGN
+         Servicelimittarget.InsideRate = lcCode
+         Servicelimittarget.OutsideRate = ""
+         Servicelimittarget.ServiceLimitMT = 0
+         Servicelimittarget.ServiceLMember = "12100004"
+         Servicelimittarget.SLSeq = laskuri.         
    END.
    return true.
 END.
 
 create_group("VOICE5000", "Voice 5000").
-create_group("VOICE200", "Voice 200").
+/*create_group("VOICE200", "Voice 200").*/
 create_group("INT_VOICE100", "International Voice 100").
 create_group("FIX_VOICE1000", "National fixed voice 1000").
 create_group("INT_FIX_VOICE1000", "International fixed Voice 1000").
 create_group("SMS5000", "SMS 5000").
 
-create_limit("VOICE5000", "National calls", "_MIN",5000.0, 1, 1,"VOICE100").
-create_limit("VOICE200", "National calls", "_MIN",200.0, 1, 1, "VOICE100").
-create_limit("INT_VOICE100", "International calls", "_MIN",100.0, 1, 1,"VOICE100").
+create_limit("VOICE5000", "National calls", "_MIN",5000.0, 4, 1,"VOICE100").
+/*create_limit("VOICE200", "National calls", "_MIN",200.0, 4, 1, "VOICE100").*/
+create_limit("INT_VOICE100", "International calls", "_MIN",100.0, 4, 1,"VOICE100").
 create_limit("FIX_VOICE1000", "National fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
 create_limit("INT_FIX_VOICE1000", "International fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
-create_limit("SMS5000", "National sms", "_QTY",5000.0, 2, 5,"VOICE100").
+create_limit("SMS5000", "National sms", "_QTY",5000.0, 5, 5,"SMS").
 
 FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
    ( icClitype AS CHARACTER,
@@ -280,7 +458,7 @@ FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
       SLGAnalyse.BillCode = icBillCode
       SLGAnalyse.CCN      = iiCCN
       SLGAnalyse.BDest    = icBDest
-      SLGAnalyse.Prior    = 0
+      SLGAnalyse.Prior    = 20
       SLGAnalyse.ValidFrom = ldaFrom
       SLGAnalyse.ValidTo  = DATE(12,31,2049)
       SLGAnalyse.ServiceLimitGroup = icServiceLimitGroup
@@ -293,16 +471,13 @@ END FUNCTION.
 FUNCTION fcreateFixSLGAnalyses RETURNS LOGICAL (INPUT icClitype AS CHAR,
                                              INPUT icbasegroup AS CHAR,
                                              INPUT icgroup AS CHAR):
-   MESSAGE icgroup VIEW-AS ALERT-BOX.
    FIND FIRST SLGAnalyse where INDEX(SLGAnalyse.servicelimitgroup,
                                      icGroup) > 0 AND
                                      SLGANalyse.clitype EQ icclitype NO-ERROR.
    IF NOT AVAIL SLGanalyse THEN DO:     
-      MESSAGE "2" VIEW-AS ALERT-BOX.
       FOR EACH tempSLGAnalyse no-lock where INDEX(tempSLGAnalyse.servicelimitgroup, 
                                         icBaseGroup) > 0 AND 
                                         tempSLGANalyse.clitype EQ icclitype:
-         MESSAGE "3" VIEW-AS ALERT-BOX.
          CREATE bSLGAnalyse.
          BUFFER-COPY tempSLGAnalyse TO bSLGAnalyse.
          ASSIGN
@@ -340,7 +515,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcListofClitypes):
    lcCli = ENTRY(liLoop,lcListOfClitypes).
 
    fcreateVoiceSLGAnalyses(lcCli,"VOICE5000").
-   fcreateVoiceSLGAnalyses(lcCli,"VOICE200").
+   /*fcreateVoiceSLGAnalyses(lcCli,"VOICE200").*/
    fcreateVoiceSLGAnalyses(lcCli,"INT_VOICE100").
    fcreateSMSSLGAnalyses(lcCli,"SMS5000").
 
@@ -364,6 +539,36 @@ FUNCTION fGetNextMXSeq RETURNS INTEGER ():
    END.
 
    RETURN 1.
+
+END FUNCTION.
+
+FUNCTION fGetNextBDestID RETURNS INTEGER ():
+
+   DEFINE BUFFER BDest FOR BDest.
+
+   FIND LAST BDest USE-INDEX BDestID NO-LOCK NO-ERROR.
+
+   IF AVAILABLE BDest
+   THEN RETURN BDest.BDestID + 1.
+
+   RETURN 1.
+
+END FUNCTION.
+
+FUNCTION fGetNextTariffNum RETURNS INTEGER ():
+
+   DEFINE BUFFER Tariff FOR Tariff.
+
+   FIND LAST Tariff USE-INDEX tariffnum NO-LOCK NO-ERROR.
+
+   IF NOT AVAILABLE Tariff
+   THEN DO:
+      CURRENT-VALUE(tariff) = 1.
+      RETURN 1.
+   END.
+
+   CURRENT-VALUE(tariff) = Tariff.Tariffnum + 1.
+   RETURN CURRENT-VALUE(tariff).
 
 END FUNCTION.
 
@@ -420,66 +625,230 @@ FUNCTION fCreateMXItem RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fCreateTariff RETURNS LOGICAL
+   ( iiCCN AS INTEGER,
+     icBillCode AS CHARACTER,
+     icBDest AS CHARACTER,
+     icPriceList AS CHARACTER ):
+
+   FIND FIRST Tariff EXCLUSIVE-LOCK WHERE
+      Tariff.Brand     = "1"            AND
+      Tariff.CCN       = iiCCN          AND
+      Tariff.PriceList = icPriceList    AND
+      Tariff.BDest     = icBDest        AND
+      Tariff.ValidFrom = DATE(6,1,2017) AND
+      Tariff.ValidTo   = DATE(12,31,2052) AND
+      Tariff.BillCode  = icBillCode
+   NO-ERROR.
+
+   IF NOT AVAILABLE Tariff
+   THEN DO:
+      CREATE Tariff.
+      Tariff.TariffNum = fGetNextTariffNum().
+   END.
+
+   ASSIGN
+      Tariff.Brand       = "1"
+      Tariff.CCN         = iiCCN
+      Tariff.PriceList   = icPriceList
+      Tariff.BDest       = icBDest
+      Tariff.ValidFrom   = DATE(6,1,2017)
+      Tariff.ValidTo     = DATE(12,31,2052)
+      Tariff.BillCode    = icBillCode
+      Tariff.TZTo[1]     = "2400"
+      Tariff.Discount[4] = YES
+      Tariff.DayType[1]  = 1
+      Tariff.TZName[1]   = "Off Peak"
+      Tariff.TZName[2]   = "Peak"
+      Tariff.TZName[3]   = "Off Peak"
+      Tariff.TariffType  = 0
+      Tariff.DataType    = 1.
+
+END FUNCTION.
+
+/* TMRItemValue */
+FUNCTION fCreateTMRItemValue RETURNS LOGICAL
+   ( iiTMRuleSeq AS INTEGER,
+     icCounterItemValues AS CHARACTER ):
+
+   FIND FIRST TMRItemValue EXCLUSIVE-LOCK WHERE
+      TMRItemValue.TMRuleSeq = iiTMRuleSeq AND
+      TMRItemValue.ToDate  = DATE(12,31,2049) AND
+      TMRItemValue.CounterItemValues = icCounterItemValues
+   NO-ERROR.
+
+   IF NOT AVAILABLE TMRItemValue
+   THEN DO:
+      CREATE TMRItemValue.
+   END.
+
+   ASSIGN
+      TMRItemValue.TMRuleSeq = iiTMRuleSeq
+      TMRItemValue.FromDate  = DATE(6,1,2017)
+      TMRItemValue.ToDate  = DATE(12,31,2049)
+      TMRItemValue.CounterItemValues = icCounterItemValues.
+
+END FUNCTION.
+
+/* BDest */
+FUNCTION fCreateBDest RETURNS LOGICAL
+   ( icBDest AS CHARACTER,
+     icBDName AS CHARACTER,
+     iiCCN AS INTEGER ):
+
+   FIND FIRST BDest EXCLUSIVE-LOCK WHERE
+      BDest.Brand  = "1" AND
+      BDest.CCN    = iiCCN AND
+      BDest.BDName = icBDName AND
+      BDest.BDest  = icBDest
+   NO-ERROR.
+
+   IF NOT AVAILABLE BDest
+   THEN DO:
+      CREATE BDest.
+      BDest.BDestID = fGetNextBDestID().
+   END.
+
+   ASSIGN
+      BDest.Brand    = "1"
+      BDest.CCN      = iiCCN
+      BDest.BDName   = icBDName
+      BDest.BDest    = icBDest
+      BDest.FromDate = DATE(6,1,2017)
+      BDest.ToDate   = DATE(12,31,2049)
+      .
+
+END FUNCTION.
+/* Verde */
 fCreateMatrix("Convergent 5GB  mobile", "PERCONTR", 1, 40).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
+/* Azul */
 fCreateMatrix("CONTDSL59", "PERCONTR", 1, 44).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH59_50", "PERCONTR", 1, 45).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH69_300", "PERCONTR", 1, 46).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
+/* Naranda */
 fCreateMatrix("CONTDSL39", "PERCONTR", 1, 47).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
-
-fCreateMatrix("CONTDSL52", "PERCONTR", 1, 48).
-fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
-fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH39_50", "PERCONTR", 1, 49).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH49_300", "PERCONTR", 1, 50).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+
+/* Morada */
+fCreateMatrix("CONTDSL52", "PERCONTR", 1, 48).
+fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH52_50", "PERCONTR", 1, 51).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
 fCreateMatrix("CONTFH62_300", "PERCONTR", 1, 52).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
-
-fCreateMatrix("CONT26", "PERCONTR", 1, 42).
-fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
-fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
+/* La infinita 5GB */
+fCreateMatrix("CONT26", "PERCONTR", 1, 42).
+/*fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").*/
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
+fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+
+/* La del cerp 1,5GB */
 fCreateMatrix("CONT10", "PERCONTR", 1, 43).
 fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
-fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
-fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
+/*fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").*/
+/*fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").*/
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
+/* La Sinfin */
 fCreateMatrix("Per.contract usage", "PERCONTR", 1, 41).
-fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
-fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
+/*fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
+fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").*/
+fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
 
+/* La del cero 5GB */
 fCreateMatrix("Per.contract usage", "PERCONTR", 1, 29).
 fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
 fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+
+
+fCreateTariff(81,"VOICE5000","VOICE5000","CONTRATO8").
+fCreateTariff(30,"VOICE5000CF","VOICE5000","CONTRATO8").
+fCreateTariff(51,"SMS5000","SMS5000","CONTRATO8").
+fCreateTariff(2,"INT_VOICE100","INT_VOICE100","CONTRATO8").
+
+fCreateTariff(81,"VOICE5000","VOICE5000","CONTRATOS").
+fCreateTariff(30,"VOICE5000CF","VOICE5000","CONTRATOS").
+fCreateTariff(51,"SMS5000","SMS5000","CONTRATOS").
+fCreateTariff(2,"INT_VOICE100","INT_VOICE100","CONTRATOS").
+
+fCreateTariff(1081,"FIX_VOICE1000","FIX_VOICE1000","CONTRATOFIXED").
+fCreateTariff(1002,"INT_FIX_VOICE1000","INT_FIX_VOICE1000","CONTRATOFIXED").
+
+
+fCreateBDest("VOICE5000","Voice 5000 Minutes",81).
+fCreateBDest("SMS5000","SMS 5000 QTY",51).
+fCreateBDest("INT_VOICE100","International voice 100 Minutes",2).
+
+fCreateBDest("FIX_VOICE1000","Fixed Voice 1000 Minutes",1081).
+fCreateBDest("INT_FIX_VOICE1000","International Fixed Voice 1000 Minutes",1002).
+
+fCreateTMRItemValue(43,"SMS5000").
+fCreateTMRItemValue(44,"INT_VOICE100").
+fCreateTMRItemValue(45,"FIX_VOICE1000").
+fCreateTMRItemValue(46,"INT_FIX_VOICE1000").

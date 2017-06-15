@@ -577,6 +577,11 @@ IF NOT AVAIL mobsub THEN DO:
    END. /* IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO: */
 
    IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN DO:
+      RUN Mm/orderaction_exec.p (MobSub.MsSeq,
+                      Order.OrderID,
+                      ldeActivationTS,
+                      MsRequest.MsRequest,
+                      {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}). 
       fReqStatus(2,"").
       RETURN.
    END.

@@ -30,6 +30,10 @@ DEF VAR lcAllPostpaidContracts AS CHAR NO-UNDO.
 DEF VAR lcFHParam AS CHAR NO-UNDO. 
 DEF VAR lcSHParam AS CHAR NO-UNDO. 
 
+FIND FIRST MSRequest WHERE
+           MSRequest.brand EQ gcBrand AND
+           MsRequest.msRequest = iiOrigRequest NO-ERROR.
+
 FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MobSub THEN RETURN "ERROR:Subscription not available".
 
@@ -64,7 +68,17 @@ ORDERACTION_LOOP:
 FOR EACH OrderAction NO-LOCK WHERE
          OrderAction.Brand     = gcBrand AND
          OrderAction.OrderId   = iiOrderId:
-
+   IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND
+      OrderAction.ItemType NE "BundleItem" THEN NEXT.
+   ELSE IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND
+           OrderAction.ItemType EQ "BundleItem" THEN DO:
+      FIND FIRST DayCampaign WHERE
+              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.DCEvent = OrderAction.ItemKey
+      NO-LOCK NO-ERROR.
+      IF AVAIL DayCampaign AND 
+               Daycampaign.bundletarget NE {&DC_BUNDLE_TARGET_FIXED} THEN NEXT.
+   END.
    CASE OrderAction.ItemType:
       WHEN "BundleItem" THEN DO:
          /* DSS Order Action will be executed in separate block   */
@@ -101,6 +115,9 @@ FOR EACH OrderAction NO-LOCK WHERE
                        "Creation failed. " + RETURN-VALUE).
    END.   
 END.
+
+IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN 
+   RETURN "".
 
 /* DSS Order Action will be executed now other */
 /* data bundle request has been created        */
