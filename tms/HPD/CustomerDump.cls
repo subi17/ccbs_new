@@ -92,6 +92,14 @@ CLASS HPD.CustomerDump FINAL INHERITS GenericDump:
                           THEN STRING(LOOKUP(lhMainTable::Category, lcSelfEmpCategories) > 0)
                           */
                           ELSE STRING(mSelfEmployed()).
+         WHEN "SubLimit"
+         THEN IF ilCheckOnly
+              THEN RETURN "OK".
+              ELSE RETURN "".
+         WHEN "ActLimit"
+         THEN IF ilCheckOnly
+              THEN RETURN "OK".
+              ELSE RETURN "".
          WHEN "Segment"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
