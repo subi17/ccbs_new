@@ -292,7 +292,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
 
          fAddCharacteristic(lcCharacteristicsArray,     /*base*/
                             "Caracteristicatecnica",    /*param name*/
-                            CLIType.Caracteristicatecnica, /*param value*/
+                            "DHCP", /*param value*/
                             "").                         /*old value*/
 /* YDR-2532 */
 
