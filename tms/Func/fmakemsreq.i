@@ -1532,6 +1532,14 @@ FUNCTION fConvFixedSTCReq RETURNS INTEGER
                                    iiMsRequest,
                                    "",    /*contract_id*/
                                    OUTPUT lcError).
+
+      IF liRequest = 0 THEN
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "MobSub",
+                          STRING(iiMsSeq),
+                          0,
+                          "STC to " + lcResult + "failed",
+                          lcError).
    END.
 
    RETURN liRequest.

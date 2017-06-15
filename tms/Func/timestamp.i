@@ -519,44 +519,6 @@ FUNCTION fMonthlyStamps RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fMakeShiftedTS RETURNS DECIMAL
-   (ideTime   AS DECIMAL,
-    icAdd     AS CHARACTER):
-   
-   DEFINE VARIABLE lcType      AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE liValue     AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE liAdd       AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE ldtDateTime AS DATETIME  NO-UNDO.
-   DEFINE VARIABLE ldaDate     AS DATE      NO-UNDO.
-   DEFINE VARIABLE lcTime      AS CHARACTER NO-UNDO.
-
-   IF icAdd = "" OR icAdd = ? OR ideTime = ?
-   THEN RETURN ideTime.
-   
-   ASSIGN lcType  = SUBSTRING(icAdd, LENGTH(icAdd), 1)
-          liValue = INTEGER(SUBSTRING(icAdd, 1, LENGTH(icAdd) - 1)).
-   
-   CASE lcType:
-      WHEN "h" THEN
-         ASSIGN liAdd = liValue * 60 * 60.
-      WHEN "m" THEN
-         ASSIGN liAdd = liValue * 60.
-      WHEN "s" THEN
-         ASSIGN liAdd = liValue.
-      OTHERWISE
-         RETURN ideTime.
-   END CASE.
-   
-   ASSIGN ldtDateTime = ADD-INTERVAL(fTimeStamp2DateTime(ideTime), liAdd, "seconds")
-          ldaDate     = DATE(ENTRY(1, STRING(ldtDateTime), " "))
-          lcTime      = ENTRY(2, STRING(ldtDateTime), " ")
-          lcTime      = SUBSTRING(lcTime, 1, INDEX(lcTime,".") - 1)
-          ideTime     = fHMS2TS(ldaDate, lcTime).
-   
-   RETURN ideTime.
-   
-END FUNCTION.
-
 &ENDIF
 
 
