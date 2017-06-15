@@ -9,7 +9,7 @@
    the priority order defined in SLGAnalyse. 
 */
 
-&GLOBAL-DEFINE MOBILE_SUBTYPES                 "CONTD,CONTF,CONTS,CONTFF,CONTSF,CONT6,CONT7,CONT8,CONT9,CONT10,CONT15,CONT23,CONT24,CONT25,CONT26"
+&GLOBAL-DEFINE MOBILE_SUBTYPES                 "CONTD,CONTF,CONTS,CONTFF,CONTSF,CONT6,CONT7,CONT8,CONT9,CONT10,CONT15,CONT23,CONT24,CONT25,CONT26,CONT27"
 &GLOBAL-DEFINE ADSL-CONVERGENT-SUBTYPES        "CONTDSL35,CONTDSL39,CONTDSL40,CONTDSL45,CONTDSL48,CONTDSL52,CONTDSL58,CONTDSL59"
 &GLOBAL-DEFINE FIBER-CONVERGENT-SUBTYPES-LIST1 "CONTFH35_50,CONTFH39_50,CONTFH40_50,CONTFH45_50,CONTFH48_50,CONTFH52_50,CONTFH58_50,CONTFH59_50"
 &GLOBAL-DEFINE FIBER-CONVERGENT-SUBTYPES-LIST2 "CONTFH45_300,CONTFH49_300,CONTFH50_300,CONTFH55_300,CONTFH58_300,CONTFH62_300,CONTFH68_300,CONTFH69_300"
@@ -599,6 +599,11 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                   ttCall.DCEvent   = ttServiceLimit.GroupCode.
 
                fTariff().
+            
+               IF rc ne 0 THEN DO:
+                  ttCall.errorcode = {&CDR_ERROR_NO_RATE_PLAN_FOUND}.
+                  RETURN FALSE. 
+               END.
                      
                ldTotalPrice = ldTotalPrice + bPrice.
                            
@@ -687,13 +692,13 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
 
             fTariff().
                        
-            ldTotalPrice = ldTotalPrice + bprice.                              
-                                              
             IF rc ne 0 THEN DO:
                ttCall.errorcode = {&CDR_ERROR_NO_RATE_PLAN_FOUND}.
                RETURN FALSE. 
             END.
                  
+            ldTotalPrice = ldTotalPrice + bprice.                              
+
             ttCall.BillCode = bsub-prod.
          END.
          
