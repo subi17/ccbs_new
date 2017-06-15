@@ -865,6 +865,11 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                   ttCall.DCEvent   = ttServiceLimit.GroupCode.
 
                fTariff().
+               
+               IF rc ne 0 THEN DO:
+                  ttCall.errorcode = {&CDR_ERROR_NO_RATE_PLAN_FOUND}.
+                  RETURN FALSE. 
+               END.
                      
                ldTotalPrice = ldTotalPrice + bPrice.
                            
