@@ -1899,7 +1899,7 @@ PROCEDURE pGetCTNAME:
          OTHERWISE lcList = "".
        END.
 
-       IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 OR fIsConvergenceTariff(Order.CLIType) THEN DO:
+       IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26,CONT27") > 0 OR fIsConvergenceTariff(Order.CLIType) THEN DO:
 
           llAddLineDiscount = FALSE.
 
