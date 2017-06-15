@@ -83,7 +83,7 @@ FUNCTION fSetMDUB RETURNS INT
                ocError = pcBundleId + " termination is not allowed".
             ELSE liReturnValue = 2. /* Ongoing Termination */
          END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
-         ELSE IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId = {&TARJ_UPSELL} THEN DO:
+         ELSE IF pcBundleId = {&TARJ_UPSELL} THEN DO:
             ocError = pcBundleId + " termination is not allowed".
          END.
          /* Customer level - As of now DSS only */
@@ -114,7 +114,7 @@ FUNCTION fSetMDUB RETURNS INT
 
             liReturnValue = 3. /* Ongoing Activation */
          END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
-         ELSE IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId = {&TARJ_UPSELL} THEN .
+         ELSE IF pcBundleId = {&TARJ_UPSELL} THEN .
          /* Customer level - As of now DSS only */
          ELSE DO:
             IF pcBundleId = {&DSS} OR
@@ -290,7 +290,7 @@ IF NOT AVAIL DayCampaign THEN
 ASSIGN lcMemoTitle = DayCampaign.DcName
        lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
-IF LOOKUP(pcBundleId,lcBONOContracts + ",HSPA_ROAM_EU,BONO_VOIP") > 0 OR
+IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") > 0 OR
    pcBundleId = {&DSS} OR pcBundleId = {&TARJ_UPSELL} THEN DO:
 
    liReturnValue = fSetMDUB(piMsSeq,
@@ -316,7 +316,7 @@ ELSE lcError = "Invalid Bundle Id: " + pcBundleId .
 
 IF lcError NE "" THEN RETURN appl_err(lcError).  
 
-IF pcBundleId MATCHES ("*_UPSELL") OR pcBundleId EQ "HSPA_ROAM_EU" THEN DO:
+IF pcBundleId MATCHES ("*_UPSELL") THEN DO:
    
    liReturnValue = fGetUpsellCount(
                       pcBundleId,
