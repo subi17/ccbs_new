@@ -22,6 +22,8 @@ gcBrand = "1".
 {Func/barrfunc.i}
 {Mm/fbundle.i}
 {Func/service.i}
+{Func/vasfunc.i}
+{Func/profunc.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -31,6 +33,7 @@ DEF VAR pcInputArray AS CHAR NO-UNDO.
 DEF VAR pcStruct AS CHAR NO-UNDO.
 DEF VAR pcServiceId AS CHAR NO-UNDO.
 DEF VAR pcValue AS CHAR NO-UNDO.
+DEF VAR pcParam2 AS CHAR NO-UNDO.
 DEF VAR pcParam AS CHAR NO-UNDO.
 DEF VAR lcStruct AS CHAR NO-UNDO.
 DEF VAR plSendSMS AS LOGICAL NO-UNDO INITIAL TRUE.
@@ -62,6 +65,8 @@ DEF VAR lcBarringCode  AS CHAR NO-UNDO.
 DEF VAR orBarring      AS ROWID NO-UNDO.
 DEF VAR lcOnOff        AS CHAR NO-UNDO.
 DEF VAR llOngoing      AS LOG NO-UNDO.
+DEF VAR liParams       AS INT NO-UNDO.
+DEF VAR liSVARequest   AS INT NO-UNDO.
 
 DEF BUFFER bReq  FOR MsRequest.
 DEF BUFFER bSubReq FOR MsRequest.
@@ -136,18 +141,29 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    IF LOOKUP('param', lcStruct) GT 0 THEN
     pcParam = get_string(pcStruct, "param").
    IF LOOKUP('param2', lcStruct) GT 0 THEN
-    pcParam = get_string(pcStruct, "param2").
+    pcParam2 = get_string(pcStruct, "param2").
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
    /*YPRO*/
-   /*SVAs*
-   IF fIsSVA(pcValue) THEN DO:
-         
-      
-
-   END.
-   */
+   /*SVAs*/
+   IF fIsSVA(pcServiceId, OUTPUT liParams) THEN DO:
+      IF liParams EQ 2 THEN DO:
+         IF pcParam EQ "" OR pcParam2 EQ "" THEN
+            RETURN appl_err("Missing SVA parameter").
+      END.
+      ELSE IF liParams EQ 1 THEN DO:
+         IF pcParam EQ "" OR pcParam2 EQ "" THEN
+            RETURN appl_err("Missing SVA parameter").
+      END.
+      ELSE IF liParams EQ 0 THEN DO:
+      END.
+      liSVARequest = fMakeProActRequest(MobSub.MsSeq,
+                                        pcServiceId,
+                                        0,
+                                        0).
+   END. /*YPRO*/
+   
    /* SERVICES */
    FOR FIRST SubSer NO-LOCK WHERE
      SubSer.MsSeq = Mobsub.MsSeq AND

@@ -47,7 +47,7 @@ END.
 def var lcRet as char no-undo.
 
 lcRet = fAddText("SVA_FAXTOMAIL", 
-"Nombre Cliente: #CUSTNUM 
+"Nombre Cliente: #CUSTNAME
 ORDER ID: #ORDERID
 #CUSTTYPE: #CUSTID
 Dirección de correo electrónico: #EMAIL
@@ -58,7 +58,7 @@ if lcRet NE "" THEN MESSAGE lcRet VIEW-AS ALERT-BOX.
 lcRet = "".
 
 lcRet = fAddText("SVA_OFFICE365", 
-"Nombre Cliente: #CUSTNUM 
+"Nombre Cliente: #CUSTNAME
 ORDER ID: #ORDERID
 #CUSTTYPE: #CUSTID
 Dirección de correo electrónico: #EMAIL",
@@ -68,7 +68,7 @@ if lcRet NE "" THEN MESSAGE lcRet VIEW-AS ALERT-BOX.
 lcRet = "".
 
 lcRet = fAddText("SVA_IP_FIJA_YOIGO", 
-"Nombre Cliente: #CUSTNUM 
+"Nombre Cliente: #CUSTNAME
 ORDER ID: #ORDERID
 #CUSTTYPE: #CUSTID",
 "SVA_ IP FIJA YOIGO #STATUS"  ).
@@ -77,7 +77,7 @@ if lcRet NE "" THEN MESSAGE lcRet VIEW-AS ALERT-BOX.
 lcRet = "".
 
 lcRet = fAddText("SVA_Centralita_PRO", 
-"Nombre Cliente: #CUSTNUM 
+"Nombre Cliente: #CUSTNAME 
 ORDER ID: #ORDERID
 #CUSTTYPE: #CUSTID",
 "Centralita PRO  #STATUS"  ).
