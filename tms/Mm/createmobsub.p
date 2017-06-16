@@ -45,7 +45,6 @@
 {Func/create_eventlog.i}
 {Func/fixedlinefunc.i}
 {Func/msisdn_prefix.i}
-{Func/profunc.i}
 
 DEF INPUT  PARAMETER iiMSRequest AS INT  NO-UNDO.
 
@@ -412,25 +411,14 @@ IF NOT AVAIL mobsub THEN DO:
                           OrderTopup.VatAmount * 100).
    END.
    
-   /* YPRO-18 */
-   IF fIsPro(Customer.category) THEN DO:
-      CREATE Segmentation.
-      ASSIGN
-         Segmentation.MsSeq   = Order.MsSeq
-         Segmentation.SegmentCode  = "S1"
-         Segmentation.SegmentOffer = "OFA"
-         Segmentation.SegmentDate  = TODAY
-         Segmentation.SegmentCreation = fMakeTS().   
-   END.
-   ELSE DO:
-      CREATE Segmentation.
-      ASSIGN
-         Segmentation.MsSeq   = Order.MsSeq
-         Segmentation.SegmentCode  = "SN"
-         Segmentation.SegmentOffer = "OFF"
-         Segmentation.SegmentDate  = TODAY
-         Segmentation.SegmentCreation = fMakeTS().
-   END.
+   CREATE Segmentation.
+   ASSIGN
+      Segmentation.MsSeq   = Order.MsSeq
+      Segmentation.SegmentCode  = "SN"
+      Segmentation.SegmentOffer = "OFF"
+      Segmentation.SegmentDate  = TODAY
+      Segmentation.SegmentCreation = fMakeTS().
+   
    CREATE msowner.
    ASSIGN
       MSOwner.CLI       = Mobsub.cli
@@ -743,7 +731,7 @@ FIND FIRST OrderAction WHERE
            OrderAction.ItemKey NE {&DSS} NO-LOCK NO-ERROR.
 
 IF NOT AVAIL OrderAction AND
-   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") = 0 AND
+   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26,CONT27") = 0 AND
    NOT MobSub.CLIType BEGINS "CONTFH" AND
    NOT MobSub.CLITYpe BEGINS "CONTDSL" THEN DO:
 

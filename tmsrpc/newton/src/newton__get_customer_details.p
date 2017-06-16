@@ -61,6 +61,11 @@
                     person_idr;string;
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+
+{Syst/commpaa.i}
+katun = "NewtonRPC".
+gcBrand = "1".
+
 {Func/profunc.i}
 
 /* Input parameters */
@@ -101,9 +106,6 @@ IF NUM-ENTRIES(top_array) >= 2 THEN DO:
 END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
 {Func/fcustdata.i}
 {Syst/tmsconst.i}
 {Func/barrfunc.i}

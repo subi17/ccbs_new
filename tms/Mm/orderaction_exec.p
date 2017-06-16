@@ -116,6 +116,9 @@ FOR EACH OrderAction NO-LOCK WHERE
    END.   
 END.
 
+IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN 
+   RETURN "".
+
 /* DSS Order Action will be executed now other */
 /* data bundle request has been created        */
 FOR EACH OrderAction NO-LOCK WHERE

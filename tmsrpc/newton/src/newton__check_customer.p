@@ -12,6 +12,7 @@
                    subscription_limit;int;mandatory;
                    reason;string;optional;possible fail reason, returned if order_allowed = false
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
+                   segment;string;mandatory;
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -35,10 +36,11 @@ DEF VAR llOrderAllowed   AS LOG  NO-UNDO.
 DEF VAR lcReason         AS CHAR NO-UNDO.
 DEF VAR lcReturnStruct   AS CHAR NO-UNDO.
 DEF VAR liSubLimit       AS INT  NO-UNDO.
-DEF VAR lisubs           AS INT NO-UNDO. 
+DEF VAR lisubs           AS INT  NO-UNDO.
 DEF VAR lcAddLineAllowed AS CHAR NO-UNDO. 
 DEF VAR liActLimit       AS INT  NO-UNDO.
-DEF VAR liacts           AS INT NO-UNDO.
+DEF VAR liacts           AS INT  NO-UNDO.
+DEF VAR lcSegment        AS CHAR NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string]").
 IF top_array EQ ? THEN RETURN.
@@ -57,6 +59,12 @@ FIND FIRST Customer NO-LOCK WHERE
            Customer.OrgID      = pcPersonId AND
            Customer.CustIDType = pcIdType   AND
            Customer.Roles     NE "inactive" NO-ERROR.
+
+FIND FIRST CustCat NO-LOCK WHERE
+           CustCat.Brand    = gcBrand AND
+           CustCat.Category = Customer.Category NO-ERROR.
+IF AVAILABLE CustCat THEN
+   lcSegment = CustCat.Segment.
 
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
@@ -121,7 +129,7 @@ lcReturnStruct = add_struct(response_toplevel_id, "").
 add_boolean(lcReturnStruct, 'order_allowed', llOrderAllowed).
 add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
 IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
-add_string(lcReturnStruct, 'additional_line_allowed', lcAddLineAllowed).
+add_string(lcReturnStruct, 'additional_line_allowed',lcAddLineAllowed).
 
 IF liSubs >= liSubLimit THEN
    add_boolean(lcReturnStruct,"subscription_limit_reached",TRUE).
@@ -132,6 +140,7 @@ IF liActs >= liActLimit THEN
 ELSE
    add_boolean(lcReturnStruct,"activation_limit_reached",FALSE).
 
+add_string(lcReturnStruct, 'segment',lcSegment).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
