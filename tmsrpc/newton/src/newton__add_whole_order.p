@@ -346,6 +346,7 @@ DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
+DEF VAR lcPROContracts         AS CHAR NO-UNDO.
 DEF VAR lcIPLContracts         AS CHAR NO-UNDO.
 DEF VAR lcFLATContracts        AS CHAR NO-UNDO.
 DEF VAR lcCONTDContracts       AS CHAR NO-UNDO.
@@ -1503,12 +1504,14 @@ ELSE IF LOOKUP(pcSubType,lcBundleCLITypes) > 0 AND
 IF pcDataBundleType > "" THEN
 DO:
    lcBONOContracts = fCParamC("BONO_CONTRACTS").
-   IF LOOKUP(pcDataBundleType,lcBONOContracts) = 0 THEN
-      RETURN appl_err(SUBST("Incorrect data bundle type: &1", 
-                      pcDataBundleType)).
+   lcPROContracts = fCParamC("PRO_CONTRACTS").
 
    DO liCount = 1 TO NUM-ENTRIES(pcDataBundleType):
-       IF NOT fIsBundleAllowed(pcSubType,ENTRY(liCount,pcDataBundleType),
+      IF LOOKUP(pcDataBundleType,lcBONOContracts) = 0 AND
+         LOOKUP(pcDataBundleType,lcPROContracts) = 0 THEN
+         RETURN appl_err(SUBST("Incorrect data bundle type: &1",
+                         pcDataBundleType)).                                        
+      IF NOT fIsBundleAllowed(pcSubType,ENTRY(liCount,pcDataBundleType),
                                OUTPUT lcError) THEN
           RETURN appl_err(lcError).
    END.
