@@ -43,6 +43,7 @@ DEF VAR lcAddLineAllowed AS CHAR NO-UNDO.
 DEF VAR liActLimit       AS INT  NO-UNDO.
 DEF VAR liacts           AS INT  NO-UNDO.
 DEF VAR lcSegment        AS CHAR NO-UNDO.
+DEF VAR llProCust        AS LOG  NO-UNDO.
 DEF VAR llCustCatPro     AS LOG  NO-UNDO.
 DEF VAR lcPROChannels    AS CHAR NO-UNDO.
 
@@ -74,12 +75,15 @@ IF AVAILABLE CustCat THEN
    ASSIGN
       llCustCatPro = custcat.pro
       lcSegment = CustCat.Segment.
+ELSE 
+   lcSegment = "NEW".
+IF INDEX(pcChannel,"PRO") > 0 THEN llProCust.
 
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,
-   fIsPro(Customer.category),
+   llProCust,
    piOrders,
    OUTPUT lcReason, 
    OUTPUT liSubLimit,
