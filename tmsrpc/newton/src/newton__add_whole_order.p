@@ -1507,8 +1507,8 @@ DO:
    lcPROContracts = fCParamC("PRO_CONTRACTS").
 
    DO liCount = 1 TO NUM-ENTRIES(pcDataBundleType):
-      IF LOOKUP(pcDataBundleType,lcBONOContracts) = 0 AND
-         LOOKUP(pcDataBundleType,lcPROContracts) = 0 THEN
+      IF LOOKUP(ENTRY(licount,pcDataBundleType),lcBONOContracts) = 0 AND
+         LOOKUP(ENTRY(licount,pcDataBundleType),lcPROContracts) = 0 THEN
          RETURN appl_err(SUBST("Incorrect data bundle type: &1",
                          pcDataBundleType)).                                        
       IF NOT fIsBundleAllowed(pcSubType,ENTRY(liCount,pcDataBundleType),
