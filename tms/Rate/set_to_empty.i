@@ -18,5 +18,6 @@ ASSIGN
  lcPrefix              = ""
  lcAddPrefix           = ""
  lcChargedsubs         = ""
- lcCdrId               = ""
- lcServiceName         = "".
+ lcServiceName         = ""
+ lcTranslatedAddress   = ""
+ lcNetWorkOwner        = "".
