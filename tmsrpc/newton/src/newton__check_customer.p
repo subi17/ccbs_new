@@ -62,22 +62,31 @@ IF NUM-ENTRIES(top_array) > 5 THEN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+IF INDEX(pcChannel,"PRO") > 0 THEN llProCust = TRUE.
 FIND FIRST Customer NO-LOCK WHERE
            Customer.Brand      = gcBrand    AND
            Customer.OrgID      = pcPersonId AND
            Customer.CustIDType = pcIdType   AND
            Customer.Roles     NE "inactive" NO-ERROR.
-
-FIND FIRST CustCat NO-LOCK WHERE
-           CustCat.Brand    = gcBrand AND
-           CustCat.Category = Customer.Category NO-ERROR.
-IF AVAILABLE CustCat THEN
-   ASSIGN
-      llCustCatPro = custcat.pro
+IF AVAIL Customer THEN DO:
+   FIND FIRST CustCat WHERE 
+              Custcat.brand EQ "1" AND
+              CustCat.category EQ Customer.category NO-ERROR.
+   IF AVAIL CustCat THEN
+      llCustCatPro = CustCat.pro.
+      lcSegment = CustCat.Segment. 
+END.
+ELSE DO:
+   FIND FIRST CustCat NO-LOCK WHERE
+              Custcat.brand EQ "1" AND
+              Custcat.custidtype EQ pcIdType AND
+              CustCat.selfemployed EQ plSelfEmployed AND
+              CustCat.pro EQ llProCust NO-ERROR.
+   IF AVAIL CustCat THEN
       lcSegment = CustCat.Segment.
-ELSE 
+END.
+IF lcSegment = "" THEN
    lcSegment = "NEW".
-IF INDEX(pcChannel,"PRO") > 0 THEN llProCust.
 
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
