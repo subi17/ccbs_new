@@ -161,7 +161,9 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
       liSVARequest = fMakeProActRequest(MobSub.MsSeq,
                                         pcServiceId,
                                         0,
-                                        0).
+                                        pcParam,
+                                        pcParam2,
+                                        pcValue).
    END. /*YPRO*/
    
    /* SERVICES */
