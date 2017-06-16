@@ -4,7 +4,7 @@
  * @input       none;no input
  * @output      array of string;read-only method names
 */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEF VAR resp_array AS CHAR NO-UNDO.
 resp_array = add_array(response_toplevel_id, "").
 
