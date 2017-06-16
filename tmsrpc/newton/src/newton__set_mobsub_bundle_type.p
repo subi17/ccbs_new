@@ -76,6 +76,7 @@ ASSIGN
    pcChannel = get_string(pcStruct,"channel")
       WHEN LOOKUP("channel", lcstruct) > 0
    plExcludeTermPenalty = get_bool(pcStruct,"exclude_term_penalty")
+      OKUP("upgrade_upsell", lcstruct) > 0
       WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.

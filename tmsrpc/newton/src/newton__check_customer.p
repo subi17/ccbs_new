@@ -6,6 +6,7 @@
             self_employed;bool;mandatory;
             orders;int;mandatory;
             clitype;string;optional;
+            order_channel;string;optional;
  *          
  * @output   check_customer;struct;mandatory; response structure
  * @check_customer order_allowed;boolean;mandatory;
@@ -29,6 +30,7 @@ DEF VAR pcIdType         AS CHAR NO-UNDO.
 DEF VAR plSelfEmployed   AS LOG  NO-UNDO.
 DEF VAR piOrders         AS INT  NO-UNDO.
 DEF VAR pcCliType        AS CHAR NO-UNDO.
+DEF VAR pcChannel        AS CHAR NO-UNDO.
 DEF VAR top_array        AS CHAR NO-UNDO.
 
 /* Local variable */
@@ -41,16 +43,21 @@ DEF VAR lcAddLineAllowed AS CHAR NO-UNDO.
 DEF VAR liActLimit       AS INT  NO-UNDO.
 DEF VAR liacts           AS INT  NO-UNDO.
 DEF VAR lcSegment        AS CHAR NO-UNDO.
+DEF VAR llCustCatPro     AS LOG  NO-UNDO.
+DEF VAR lcPROChannels    AS CHAR NO-UNDO.
 
-top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string]").
+top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string]").
 IF top_array EQ ? THEN RETURN.
 
 pcPersonId     = get_string(param_toplevel_id, "0").
 pcIdType       = get_string(param_toplevel_id, "1").
 plSelfEmployed = get_bool(param_toplevel_id, "2").
 piOrders       = get_int(param_toplevel_id, "3").
-IF NUM-ENTRIES(top_array) >= 5 THEN
+IF NUM-ENTRIES(top_array) = 5 THEN
    pcCliType   = get_string(param_toplevel_id, "4").
+IF NUM-ENTRIES(top_array) > 5 THEN
+   pcCliType   = get_string(param_toplevel_id, "4").
+   pcChannel   = get_string(param_toplevel_id, "5").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -64,7 +71,9 @@ FIND FIRST CustCat NO-LOCK WHERE
            CustCat.Brand    = gcBrand AND
            CustCat.Category = Customer.Category NO-ERROR.
 IF AVAILABLE CustCat THEN
-   lcSegment = CustCat.Segment.
+   ASSIGN
+      llCustCatPro = custcat.pro
+      lcSegment = CustCat.Segment.
 
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
@@ -72,11 +81,33 @@ llOrderAllowed = fSubscriptionLimitCheck(
    plSelfEmployed,
    fIsPro(Customer.category),
    piOrders,
-   OUTPUT lcReason,
+   OUTPUT lcReason, 
    OUTPUT liSubLimit,
    OUTPUT lisubs,
    OUTPUT liActLimit,
    OUTPUT liActs).
+
+lcPROChannels = fCParamC("PRO_CHANNELS").
+
+IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
+   IF AVAIL Customer AND NOT llCustCatPro THEN
+      llOrderAllowed = FALSE.
+   ELSE IF NOT AVAIL Customer THEN DO:
+      FOR EACH OrderCustomer WHERE
+               OrderCustomer.brand EQ gcBrand AND
+               OrderCustomer.custidtype EQ pcIdType AND
+               OrderCustomer.custid EQ pcPersonId AND
+               OrderCustomer.PRO EQ FALSE,
+          FIRST Order WHERE 
+                Order.brand EQ gcBrand AND
+                Order.orderid EQ ordercustomer.orderid AND
+                LOOKUP(Order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0:
+          llOrderAllowed = FALSE.
+          LEAVE.
+       END.
+
+   END.
+END.
 
 /* Removed legacy main-additional line code, as it is not 
    required any more to support it */ 

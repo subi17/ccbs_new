@@ -115,6 +115,7 @@ END FUNCTION.
 /* Add TMSParam                              */
 
 FUNCTION faddTMSParam RETURNS LOGICAL (INPUT icParam AS CHAR,
+                                       INPUT icgroup AS CHAR,
                                        INPUT icValue AS CHAR):
    FIND FIRST TMSParam WHERE
               TMSParam.brand EQ "1" AND
@@ -124,7 +125,7 @@ FUNCTION faddTMSParam RETURNS LOGICAL (INPUT icParam AS CHAR,
       ASSIGN
          TMSParam.brand = "1"
          TMSParam.paramcode = icParam
-         TMSParam.paramgroup = "Bundles"
+         TMSParam.paramgroup = icgroup
          TMSParam.paramname = "PRO contracts"
          TMSParam.paramtype = "C"
          TMSParam.charval = icValue.
@@ -164,9 +165,11 @@ END FUNCTION.
 
 fCreateBillItem("CONTPROMF").
 /*fCreateBillItem("CONTFHPROMF").*/
-faddTMSParam("PRO_CONTRACTS","VOICE200,VOICE5000,SMS5000,INT_VOICE100," +
-             "INT_FIX_VOICE1000,FLEX_UPSELL_5GB,FLEX_UPSELL_500MB" +
-             "FIX_VOICE1000").
+faddTMSParam("PRO_CONTRACTS","Bundles","VOICE200,VOICE5000,SMS5000," +
+             "INT_VOICE100,INT_FIX_VOICE1000,FLEX_UPSELL_5GB," +
+             "FLEX_UPSELL_500MB,FIX_VOICE1000").
+faddTMSParam("PRO_CHANNELS","PRO",
+             "Telesales_PRO,Fusion_Telesales_PRO").
 
 fCreatePriceList("PRO_CONTDSL39").
 fCreatePriceList("PRO_CONTFH39_50").
