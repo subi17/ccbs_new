@@ -219,12 +219,12 @@ fCreateFMItem("CENTRALITAMF","CENTRALITAMF","COMMON",0.00).
 */
 
 fcreateCustCat("20", "22", "PRO SOHO Company CIF", 25, 35, TRUE, "PRO-SOHO-COMPANY").
-fcreateCustCat("20", "21", "Big Companies CIF", 25, 35, TRUE, "").
+fcreateCustCat("20", "21", "Big Companies CIF", 25, 35, FALSE, "").
 fcreateCustCat("20", "23", "PRO SOHO Company CIF", 25, 35, TRUE, "SOHO-COMPANY").
 fcreateCustCat("40", "42", "PRO Self-employee NIF", 5, 7, TRUE, "PRO-SOHO-AUTONOMO").
 fcreateCustCat("41", "43", "PRO Self-employee NIE", 5, 7, TRUE, "PRO-SOHO-AUTONOMO").
-fcreateCustCat("40", "44", "Self-employee NIF", 5, 7, TRUE, "SOHO-AUTONOMO").
-fcreateCustCat("41", "45", "Self-employee NIE", 5, 7, TRUE, "SOHO-AUTONOMO").
+fcreateCustCat("40", "44", "Self-employee NIF", 5, 7, FALSE, "SOHO-AUTONOMO").
+fcreateCustCat("41", "45", "Self-employee NIE", 5, 7, FALSE, "SOHO-AUTONOMO").
 
 FIND FIRST CustCat WHERE
            custcat.brand EQ "1" AND
@@ -267,6 +267,10 @@ FIND FIRST CustCat WHERE
           Custcat.mobsublimit = 5
           CustCat.activationlimit = 7
           Custcat.segment = "AUTONOMO".
+
+FOR EACH CustCat:
+   CustCat.segment = CAPS(CustCat.segment).
+END.
 
 IF NOT CAN-FIND (FIRST Tmscodes WHERE
            tmscodes.codegroup EQ "order" AND
