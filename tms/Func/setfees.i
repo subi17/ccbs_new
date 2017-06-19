@@ -343,7 +343,7 @@ FUNCTION fMakeSetfees RETURNS INTEGER
       FOR EACH FMItem NO-LOCK WHERE
                FMItem.Brand     = gcBrand       AND
                FMItem.FeeModel  = icFeeModel    AND
-               FMItem.PriceList = "PRO_" + lcFMPriceList AND
+               FMItem.PriceList = "PRO_" + Mobsub.clitype AND
                FMItem.FromDate <= idaValidFrom  AND
                FMItem.ToDate   >= idaValidFrom,
                BillItem NO-LOCK WHERE
