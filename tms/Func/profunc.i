@@ -172,7 +172,6 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    lcMailDir = "/tmp/". /*To be sure that we have some place*/
    lcMailDir = fCParam("YPRO", "YPRO_SVA_email_dir").
    lcMailFile = lcMailDir + "SVA_email" + STRING(bMsRequest.Msrequest) + ".txt".
-   if bMsRequest.
 
    SendMaileInvoice("", "", lcMailFile).
 
