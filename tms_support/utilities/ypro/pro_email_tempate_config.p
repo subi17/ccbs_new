@@ -13,8 +13,9 @@ FUNCTION fAddText RETURNS CHAR
               TMSCodes.FieldName = "KEYVALUE" AND
               TMSCodes.CodeGroup = "EMAIL" AND
               TMSCodes.CodeValue = icKeyvalue NO-ERROR.
-   IF NOT AVAIL TMSCodes THEN DO:
-      CREATE TMSCodes.
+   IF NOT AVAIL TMSCodes THEN  DO:
+   CREATE TMSCodes.
+
       ASSIGN
          TMSCodes.TableName = "Invtext"
          TMSCodes.FieldName = "KEYVALUE" 
@@ -24,14 +25,13 @@ FUNCTION fAddText RETURNS CHAR
    END.
 
 
-   FIND FIRST InvText NO-LOCK  WHERE
+   FIND FIRST InvText /*NO-LOCK*/  WHERE
               InvText.Brand EQ "1" AND
               InvText.Target EQ "EMAIL" AND
               InvText.KeyValue EQ icKeyValue AND
               InvText.ToDate GE TODAY NO-ERROR.
-   IF AVAIL InvText THEN RETURN "InvText already exists " + icKeyValue.
-
-   CREATE InvText.
+   IF NOT AVAIL InvText THEN  CREATE InvText.
+   ELSE message "updating it" VIEW-AS ALERT-BOX.
    ASSIGN InvText.Brand = "1"
           InvText.Language = 1
           InvText.FromDate = TODAY
@@ -67,7 +67,7 @@ Dirección de correo electrónico: #EMAIL",
 if lcRet NE "" THEN MESSAGE lcRet VIEW-AS ALERT-BOX.
 lcRet = "".
 
-lcRet = fAddText("SVA_IP_FIJA_YOIGO", 
+lcRet = fAddText("SVA_IPFIJA", 
 "Nombre Cliente: #CUSTNAME
 ORDER ID: #ORDERID
 #CUSTTYPE: #CUSTID",
@@ -76,7 +76,7 @@ ORDER ID: #ORDERID
 if lcRet NE "" THEN MESSAGE lcRet VIEW-AS ALERT-BOX.
 lcRet = "".
 
-lcRet = fAddText("SVA_Centralita_PRO", 
+lcRet = fAddText("SVA_CentralitaPRO", 
 "Nombre Cliente: #CUSTNAME 
 ORDER ID: #ORDERID
 #CUSTTYPE: #CUSTID",

@@ -15,6 +15,14 @@
 &GLOBAL-DEFINE YOIGOPROFUNC_I YES
 {Func/fmakemsreq.i}
 {Func/orderfunc.i}
+{Func/femailinvoice.i}
+{Func/email.i}
+
+
+DEF TEMP-TABLE ttOrderList
+   FIELD OrderID AS INT
+   INDEX OrderID OrderID DESC.
+
 
 FUNCTION fIsPro RETURNS LOGICAL
    (icCategory AS CHAR):
@@ -27,18 +35,183 @@ FUNCTION fIsPro RETURNS LOGICAL
    RETURN FALSE.
 END.
 
+/*tested, ok*/
+/*Function seeks COFF order for given Msrequest.
+If the order is not found the function returns an error code.*/
+FUNCTION fFindCOFFOrder RETURNS CHAR
+   (iiMsSeq AS INT):
+   DEF BUFFER bOrder FOR Order.
+
+   EMPTY TEMP-TABLE ttOrderList.
+   FOR EACH  bOrder NO-LOCK WHERE
+             bOrder.MsSeq EQ iiMsSeq:
+      IF fIsConvergenceTariff(bOrder.CLIType) THEN DO:
+        CREATE ttOrderList.
+        ASSIGN ttOrderList.OrderID = bOrder.OrderId.
+      END.
+   END.
+   FIND FIRST ttOrderList NO-ERROR.
+   IF AVAIL ttORderList THEN RETURN STRING(ttOrderList.OrderID).
+
+   RETURN "ERROR: Order not found for mobsub " + STRING(iiMsSeq).
+END.
+
+
+FUNCTION fParseEmailByRequest RETURNS CHAR
+   (iiMsRequest AS INT,
+    icTemplate AS CHAR):
+   DEF VAR lcOutput AS CHAR NO-UNDO.
+   DEF VAR lcMailHeader AS CHAR NO-UNDO.
+   DEF VAR lcReplace AS CHAR NO-UNDO.
+   DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER bCustomer FOR Customer.
+   FIND FIRST bMsRequest NO-LOCK WHERE
+              bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
+   IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
+                                   STRING(iiMsRequest).
+   FIND FIRST bCustomer NO-LOCK WHERE
+              bCustomer.CustNum EQ bMsRequest.CustNum.
+    IF NOT AVAIL bCustomer THEN
+       RETURN "ERROR: Costomer of requst not found " + STRING(iiMsRequest).
+
+   lcOutput = fGetEmailText("EMAIL",
+                               icTemplate,
+                               1,
+                               OUTPUT lcMailHeader).
+   message lcOutput VIEW-AS ALERT-BOX.                            
+   IF lcOutput EQ ""/* OR lcMailHeader EQ ""*/ THEN
+      RETURN "ERROR: Email content fetching error" +
+             STRING(BCustomer.CustID) + " " +
+             STRING(icTemplate).
+
+   /*Seek tags:*/
+   IF INDEX(lcOutput, "#CUSTNAME") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTNAME", 
+         (bCustomer.CustName + " " + bCustomer.FirstName + " ")   ).
+   END.
+   IF INDEX(lcOutput, "#ORDERID") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, 
+                         "#ORDERID", 
+                         fFindCOFFOrder(bMsRequest.MsSeq)).
+   END.
+   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
+   END.
+   IF INDEX(lcOutput, "#CUSTID") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Custid)).
+   END.
+   IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
+      lcReplace = ENTRY(2,bMSRequest.ReqCparam1, "|").
+      lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
+   END.
+   IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
+      lcReplace = ENTRY(1,bMsRequest.Reqcparam1, "|").
+      lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
+   END.
+
+   RETURN lcOutput.
+
+END.
+
+
+FUNCTION fSendEmailByRequest RETURNS CHAR
+   (iiMsRequest AS INT,
+    icTemplate AS CHAR):
+   DEF VAR lcOutput AS CHAR NO-UNDO.
+   DEF VAR lcMailFile AS CHAR NO-UNDO.
+   DEF VAR lcMailHeader AS CHAR NO-UNDO.
+   DEF VAR lcReplace AS CHAR NO-UNDO.
+   DEF VAR lcMailDir AS CHAR NO-UNDO.
+   DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER bCustomer FOR Customer.
+   FIND FIRST bMsRequest NO-LOCK WHERE
+              bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
+   IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
+                                   STRING(iiMsRequest).
+   FIND FIRST bCustomer NO-LOCK WHERE
+              bCustomer.CustNum EQ bMsRequest.CustNum.
+    IF NOT AVAIL bCustomer THEN
+       RETURN "ERROR: Costomer of requst not found " + STRING(iiMsRequest).
+
+   lcOutput = fGetEmailText("EMAIL",
+                               icTemplate,
+                               1,
+                               OUTPUT lcMailHeader).
+   message lcOutput VIEW-AS ALERT-BOX.                            
+   IF lcOutput EQ ""/* OR lcMailHeader EQ ""*/ THEN
+      RETURN "ERROR: Email content fetching error" +
+             STRING(BCustomer.CustID) + " " +
+             STRING(icTemplate).
+
+   /*Seek tags:*/
+   IF INDEX(lcOutput, "#CUSTNAME") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTNAME", 
+         (bCustomer.CustName + " " + bCustomer.FirstName + " ")   ).
+   END.
+   IF INDEX(lcOutput, "#ORDERID") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, 
+                         "#ORDERID", 
+                         fFindCOFFOrder(bMsRequest.MsSeq)).
+   END.
+   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
+   END.
+   IF INDEX(lcOutput, "#CUSTID") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Custid)).
+   END.
+   IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
+      lcReplace = ENTRY(2,bMSRequest.ReqCparam1, "|").
+      lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
+   END.
+   IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
+      lcReplace = ENTRY(1,bMsRequest.Reqcparam1, "|").
+      lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
+   END.
+
+   /*Set email sending parameters*/
+   lcMailDir = "/tmp/". /*To be sure that we have some place*/
+   lcMailDir = fCParam("YPRO", "YPRO_SVA_email_dir").
+   lcMailFile = lcMailDir + "SVA_email" + STRING(bMsRequest.Msrequest) + ".txt".
+   if bMsRequest.
+
+   SendMaileInvoice("", "", lcMailFile).
+
+   /*Used email file removal or saving to logs?*/
+
+   RETURN lcOutput.
+
+END.
+
+
+   
+/*'off', 'on', 'cancel activation', 'cancel deactivation'*/
 FUNCTION fMakeProActRequest RETURNS INT(
    INPUT iiMsSeq AS INT,
    INPUT icContr AS CHAR,
    INPUT idActStamp AS DEC,
    INPUT icParam1 AS CHAR,
-   INPUT ocParam2 AS CHAR,
-   INPUT icAction AS CHAR):
+   INPUT icParam2 AS CHAR,
+   INPUT icAction AS CHAR, 
+   OUTPUT ocErr AS CHAR):
    DEF VAR liRequest AS INT NO-UNDO.
    DEF VAR liReqType AS INT NO-UNDO.
    DEF VAR lcError AS CHAR NO-UNDO.
+   DEF VAR lcParams AS CHAR NO-UNDO.
+
    DEF BUFFER bOwner FOR MSOwner. 
+   DEF BUFFER bMsRequest FOR MsRequest.
    FIND FIRST bOwner WHERE bOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+
+   IF NOT AVAIL bOwner THEN RETURN 0.
+
+   IF icParam1 NE "" THEN DO:
+      lcParams =  icParam1.
+      IF icParam2 NE "" THEN DO:
+         lcParams = lcParams + "|" + icParam2. 
+      END.
+      
+   END.
+
    DO TRANS:
       /*liRequest = fPCActionRequest(iiMsSeq,
                                    icContr,
@@ -53,14 +226,40 @@ FUNCTION fMakeProActRequest RETURNS INT(
                                    0,
                                    0,
                                   OUTPUT lcError).*/
-      IF icAction EQ "act" THEN liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
-      ELSE liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
+      IF icAction BEGINS "cancel" THEN DO:
+         IF icAction EQ "cancel activation" THEN 
+            liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
+         ELSE IF icAction EQ "cancel deactivation" THEN
+            liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
+         ELSE DO:
+            ocErr = "Incorrect request".
+            RETURN 0.
+         END.
+         
+         FIND FIRST MsRequest WHERE
+                    MsRequest.Brand EQ gcBrand AND
+                    MsRequest.ReqType EQ liReqType AND
+                    MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING}.
+         IF NOT AVAIL MsRequest THEN DO:
+            ocErr = "Cancellation not possible, request not found".
+            RETURN 0.
+         END.
+         fReqStatus(4, "SVA Operation Cancellation").
+         RETURN MsRequest.MsRequest.
+        
+      END.
+      ELSE IF icAction EQ "on" THEN 
+         liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
+      ELSE if icAction EQ "off" THEN 
+         liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
+
       fCreateRequest(liReqType,0,katun,FALSE,FALSE).
       ASSIGN bCreaReq.MsSeq      = iiMsSeq
              bCreaReq.CLI        = bOwner.CLI
              bCreaReq.CustNum    = bOwner.CustNum
              bCreaReq.ReqCparam2 = icAction
              bCreaReq.ReqCparam4 = icContr
+             bCreaReq.ReqCparam1 = lcParams
              bCreaReq.Crestamp   = fmakets()
              bCreaReq.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
              bCreaReq.CreateFees = FALSE.
@@ -68,6 +267,8 @@ FUNCTION fMakeProActRequest RETURNS INT(
    END. /*Trans*/  
    RETURN bCreaReq.MsRequest.
 END.
+
+
 
 /*Function returns TRUE if the order exsists and it is done for PRO customer.*/
 FUNCTION fIsProOrder RETURNS LOGICAL
