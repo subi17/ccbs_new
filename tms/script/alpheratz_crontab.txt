@@ -1,0 +1,74 @@
+# Document Management System cronjobs added 9.11.2015
+# dms_casefile_reader.p every 5 minutes
+1,6,11,16,21,26,31,36,41,46,51,56 * * * * pike -C /apps/yoigo/tms batch -- Mc/dms_casefile_reader  all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py dms_casefile_reader >> /scratch/cron/batch.log
+# dms_create_file_start1.p every 15 minutes in mon-sat
+1,16,31,46 * * * 1,2,3,4,5,6 pike -C /apps/yoigo/tms batch -- Mc/dms_create_file_start1 all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py dms_create_file_start1 >> /scratch/cron/batch.log
+# dms_create_file_start1.p same schedule but not in hours 3 and 4 in Sunday
+# This change prevent problems in daylight saving changegs YPR-3002
+1,16,31,46 0,1,2,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * 0 pike -C /apps/yoigo/tms batch -- Mc/dms_create_file_start1 all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py dms_create_file_start1 >> /scratch/cron/batch.log
+
+
+# amq_cron_sender.p every 15 minutes
+14,29,44,59 * * * * pike -C /apps/yoigo/tms batch -- Gwy/amq_cron_sender  all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py amq_cron_sender >> /scratch/cron/batch.log
+#
+# dms_doc_provided.p - execute every day 18:24
+24 18 * * * pike -C /apps/yoigo/tms batch -- Mc/dms_doc_provided all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py dms_doc_provided.p >> /scratch/cron/batch.log
+
+# dms_create_file_start1.p every 15 minutes in - original for all days without sunday night special rule
+#1,16,31,46 * * * *  pike -C /apps/yoigo/tms batch -- dms_create_file_start1 all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py dms_create_file_start1 >> /scratch/cron/batch.log
+#
+# Q25 reminder functionality. SMS message log generation done 5AM.
+0 9 * * *  pike -C /apps/yoigo/tms batch -- Mm/q25_reminder_collection all -param 0 tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py q25_reminder_collection >> /scratch/cron/batch.log
+# Q25 reminder functionality. SMS message sending start at around 10 each day.
+0 9 * * *  pike -C /apps/yoigo/tms batch -- Mm/q25_reminder_collection all -param 1 tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py q25_reminder_collection >> /scratch/cron/batch.log
+# Q25 reminder final message functionality. SMS message log generation at 21st day or next available normal weekday 5AM.
+45 14 16,17,18,19 * *  pike -C /apps/yoigo/tms batch -- Mm/q25_final_msg_collection all -param 0 tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py q25_final_msg_collection >> /scratch/cron/batch.log
+# Q25 actual SMS sending starts at 10AM, 21th day or next normal weekday.
+55 15 16,17,18,19 * *  pike -C /apps/yoigo/tms batch -- Mm/q25_final_msg_collection all -param 1 tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py q25_final_msg_collection >> /scratch/cron/batch.log
+# Q25 Push Notification starts at 10AM, 13th day of the month.
+#0 10 13 * *  pike -C /apps/yoigo/tms batch -- q25_final_msg_collection all -param 2 tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py q25_final_msg_collection >> /scratch/cron/batch.log
+48 09 19 * *  pike -C /apps/yoigo/tms batch -- Mm/q25_final_msg_collection all -param 2 tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py q25_final_msg_collection >> /scratch/cron/batch.log
+#
+# executing request type process in cron batch mode for every 5 mintues.
+1,6,11,16,21,26,31,36,41,46,51,56 * * * * pike -C /apps/yoigo/tms batch -- Syst/request_daemon all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py request_daemon >> /scratch/cron/batch.log
+# next for testing YOT-4336 "customer satisfaction value" in Vista
+44 * * * * pike -C /apps/yoigo/tms batch -- Mc/update_satisfactionvalue all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py update_satisfactionvalue >> /scratch/cron/batch.log
+
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 1 all -param tenant=yoigo
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 2 all -param tenant=yoigo
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 3 all -param tenant=yoigo
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 4 all -param tenant=yoigo
+# HRLP list generator.
+0 5 * * *  pike -C /apps/yoigo/tms batch -- Ar/ifs_q25hrlp_list_generator all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py ifs_q25hrlp_list_generator >> /scratch/cron/batch.log
+# HRLP redirection remover
+#1,16,31,46 * * * *  pike -C /apps/yoigo/tms batch -- ifs_q25hrlp_remove_redir all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py ifs_q25hrlp_remove_redir >> /scratch/cron/batch.log
+# HRLP response handler.
+#0 * * * *  pike -C /apps/yoigo/tms batch -- ifs_q25hrlp_list_reader all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py ifs_q25hrlp_list_reader >> /scratch/cron/batch.log
+#Google billing related changes:
+# gb_refund_handler.p every 15 minutes
+0,15,30,45 * * * * pike -C /apps/yoigo/tms batch -- Ar/gb_refund_handler all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py gb_refund_handler >> /scratch/cron/batch.log
+# gb_response_transfer.p once a day at 02:00
+0 2 * * * pike -C /apps/yoigo/tms batch -- Ar/gb_response_transfer all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py gb_response_transfer >> /scratch/cron/batch.log
+#
+# Cancel pending ICC change requests (older than 60 days)
+#20 12 * * * pike -C /apps/yoigo/tms batch -- cancel_pending_icc_req all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py cancel_pending_icc_req >> /scratch/cron/batch.log
+#Masmovil convergent file handling
+01 * * * * pike -C /apps/yoigo/tms batch -- Mc/read_salfile_batch all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py read_salfile_batch >> /scratch/cron/batch.log
+05 * * * * pike -C /apps/yoigo/tms batch -- Mc/create_centrefile_batch all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py create_centrefile_batch >> /scratch/cron/batch.log
+5 8,14,20 * * 1,2,3,4,5 pike -C /apps/yoigo/tms batch -- Mnp/mnp_release_hold_orders all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py mnp_release_hold_orders >> /scratch/cron/batch.log
+00 * * * * pike -C /apps/yoigo/tms batch -- Mc/create_logistics_file all tenant=yoigo > /scratch/cron/icc_cron.cron 2>&1
+# Highspender
+3 14 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param IGIC1 tenant=yoigo > /scratch/cron/highspendercron1.cron 2>&1
+4 14 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param IPSIC1 tenant=yoigo > /scratch/cron/highspendercron2.cron 2>&1
+5 14 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param IPSIM1 tenant=yoigo > /scratch/cron/highspendercron3.cron 2>&1
+6 14 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param UNKNOWN tenant=yoigo > /scratch/cron/highspendercron4.cron 2>&1
+7 14 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param VAT1 tenant=yoigo > /scratch/cron/highspendercron5.cron 2>&1
+#0,5,10,15,20,25,29,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms batch -- sms_tms_sender_mock all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py sms_tms_sender_mock >> /scratch/cron/batch.log
+
+#March2017 Promotion handler is run hourly
+1 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * * pike -C /apps/yoigo/tms batch -- Mm/march2017_Azul_update all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py march2017_Azul_update.p >> /scratch/cron/batch.log
+
+
+#MNP
+0,5,10,15,20,25,29,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms batch -- Mnp/mnpautohandle all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py mnpautohandle >> /scratch/cron/batch.log
+

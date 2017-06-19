@@ -39,6 +39,14 @@ db_locations = {
                   'prepedr': '/db1/prepedr/prepedr',
                   'fraudcdr': '/db1/fraudcdr/fraudcdr',
                   'reratelog': '/db1/reratelog/reratelog'},
+    'sadachbia': {'common': '/db1/common/common',
+                  'ordercanal': '/db1/ordercanal/ordercanal',
+                  'mobile': '/db1/mobile/mobile',
+                  'counter': '/db1/counter/counter',
+                  'star': '/db1/star/star',
+                  'prepedr': '/db1/prepedr/prepedr',
+                  'fraudcdr': '/db1/fraudcdr/fraudcdr',
+                  'reratelog': '/db1/reratelog/reratelog'},
     'spica': {'common': 'alpheratz.int.asp.qvantel.net:common',
              'ordercanal': 'alpheratz.int.asp.qvantel.net:ordercanal',
              'mobile': 'alpheratz.int.asp.qvantel.net:mobile',
@@ -105,6 +113,24 @@ db_locations = {
              'reratelog': 'pallas.int.asp.qvantel.net:reratelog'}
 }
 
+# Alternative database location (on different partitions/remote hosts)
+# for production servers. There will be alternative pf file only for the databases
+# listed in here. There might be a need for alternative databases for example in monitoring cases
+# and also when replica server needs to connect to the main server
+
+db_alternative_locations = {
+    'arneb': {'common': 'pallas.int.asp.qvantel.net:common',
+              'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
+              'mobile': 'pallas.int.asp.qvantel.net:mobile',
+              'counter': 'pallas.int.asp.qvantel.net:counter',
+              'star': 'pallas.int.asp.qvantel.net:star'},
+    'pallas': {'common': 'arneb.int.asp.qvantel.net:common',
+               'ordercanal': 'arneb.int.asp.qvantel.net:ordercanal',
+               'mobile': 'arneb.int.asp.qvantel.net:mobile',
+               'counter': 'arneb.int.asp.qvantel.net:counter',
+               'star': 'arneb.int.asp.qvantel.net:star'}
+}
+
 db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
                 'ordercanal': ['biw', 'wdog', ('apw', 4)],
                 'mobile': ['biw', 'wdog', ('apw', 4)],
@@ -164,6 +190,19 @@ def db_full_path(db_name, suffix='.db', host=None):
 
     return '{0}{1}'.format(locs.get(db_name, '{0}/{1}'.format(getcwd(), db_name)), suffix)
 
+def db_alternative_full_path(db_name, suffix='.db', host=None):
+
+    if environment == 'development':
+        return ''
+
+    host = host or gethostname()
+
+    if host in db_alternative_locations:
+        locs = db_alternative_locations[host]
+        if db_name in locs:
+            return '{0}{1}'.format(locs[db_name], suffix)
+    return ''
+
 @target(initialize_dependencies)
 def initialize(*a): pass
 
@@ -200,7 +239,7 @@ def database_file(match, deps, db_dir, db_name):
                     ['\(6715\)$', '\(6718\)$', '\(451\)$',
                      '0 Percent complete.', '^$',
                      '\(6720\)$', '\(6722\)$', '\(1365\)$', '\(334\)$'])
-            if tenancies:
+            if len(tenancies) > 1:
                 callgrep([dlc + '/bin/proutil', match, '-C', 'enablemultitenancy'], ['Multi'])
             break
     else:
@@ -296,6 +335,7 @@ def startup_parameter_file(match, deps, db_name):
 def connect_parameter_file(match, deps, db_name):
     '''([_a-zA-Z0-9]+)\.pf'''
     path = db_full_path(db_name, '').split(':')
+    alternativepath = db_alternative_full_path(db_name, '').split(':')
 
     fd = open(db_name + '.pf', 'wt')
     if len(path) > 1:
@@ -306,10 +346,27 @@ def connect_parameter_file(match, deps, db_name):
         fd.write('-db %s\n' % path[0])
     fd.write('-ld %s\n' % db_name)
     fd.close()
+
     for tenant in tenancies:
         with open('{0}_{1}.pf'.format(db_name, tenant), 'wt') as fd:
             fd.write('-pf {0}/{1}.pf\n'.format(getcwd(), db_name))
             fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
+
+    if alternativepath[0]:
+        fd = open('{0}_alt.pf'.format(db_name), 'wt')
+        if len(alternativepath) > 1:
+            fd.write('-db %s\n' % alternativepath[1])
+            fd.write('-H %s\n' % alternativepath[0])
+            fd.write('-S %s\n' % alternativepath[1])
+        else:
+            fd.write('-db %s\n' % alternativepath[0])
+        fd.write('-ld %s\n' % db_name)
+        fd.close()
+
+        for tenant in tenancies:
+            with open('{0}_alt_{1}.pf'.format(db_name, tenant), 'wt') as fd:
+                fd.write('-pf {0}/{1}_alt.pf\n'.format(getcwd(), db_name))
+                fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
 
 @target
 @applies_to(['tenant_none'] + [ 'tenant_{0}'.format(x) for x in tenancies ])
