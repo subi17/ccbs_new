@@ -14,6 +14,7 @@ gcbrand = "1".
 {Syst/eventlog.i}
 {Func/fmakemsreq.i}
 {Func/barrfunc.i}
+{Func/msreqfunc.i}
 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR lcInDir AS CHAR NO-UNDO.
@@ -33,6 +34,11 @@ DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
 
+lcLogDir = "/tmp/".
+lcErrDir =  "/tmp/".
+lcInDir =  "/tmp/".
+lcOutDir =  "/tmp/".
+
 
 lcLogDir = fCParam("YPRO", "YPRO_SVA_log_base_dir").
 lcErrDir = fCParam("YPRO", "YPRO_SVA_err_base_dir").
@@ -51,9 +57,11 @@ REPEAT:
    IF SEARCH(lcInputFile) NE ? THEN DO:
 
       IF fCheckFileNameChars(lcFileName) EQ FALSE THEN NEXT.
+      if lcfilename begins "sva" then message lcfilename VIEW-AS ALERT-BOX.
 
       /*Accept only activation files*/
-      IF NOT lcFileName BEGINS "sva_" THEN NEXT.
+      IF NOT lcFileName MATCHES "sva_*.txt" THEN NEXT.
+      IF lcFileName MATCHES "*log*" THEN NEXT.
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
    END.
@@ -69,10 +77,10 @@ REPEAT:
               lcFilename  " "
               STRING(TODAY,"99.99.99") " "
               STRING(TIME,"hh:mm:ss") SKIP.
+   OUTPUT STREAM sLog CLOSE.              
 
    RUN pReadFileData.
 
-   OUTPUT STREAM sLog CLOSE.
    fMove2TransDir(lcErrorLog, "", lcLogDir).
    /*fMove2TransDir(lcInputFile, "", lcProcDir).*/
    IF SESSION:BATCH AND lcInputFile NE "" THEN
@@ -113,6 +121,10 @@ PROCEDURE pReadFileData:
          lcSetStatus = entry(3,lcline,";")
          lcFaxtoEmailNumber = entry(4,lcLine,";")
          /*lcFaxtoEmailEmail = entry(5,lcLine,";")*/ .
+/*      message lcfixednum VIEW-AS ALERT-BOX.
+      message lcservicecode VIEW-AS ALERT-BOX.
+      message lcsetstatus VIEW-AS ALERT-BOX.
+      message lcfaxtoemailnumber VIEW-AS ALERT-BOX.*/
       
       FIND FIRST MobSub NO-LOCK WHERE 
                  MobSub.brand EQ gcBrand AND
@@ -120,6 +132,9 @@ PROCEDURE pReadFileData:
                  Mobsub.Paytype EQ FALSE NO-ERROR.
       IF NOT AVAIL Mobsub THEN DO:
          lcErrText = lcLine + ";ERROR: Subscription not found".
+         OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
+         PUT STREAM sLog UNFORMATTED lcErrText SKIP.
+         OUTPUT STREAM sLog CLOSE.
          NEXT. /*next line*/
       END.
       /*Allowed state transitions:
@@ -131,7 +146,11 @@ PROCEDURE pReadFileData:
          liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
       ELSE DO:
          lcErrText = lcLine + "Incorrect action code " + lcSetStatus.
+         OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
+         PUT STREAM sLog UNFORMATTED lcErrText SKIP.
+         OUTPUT STREAM sLog CLOSE.
          NEXT.
+ 
       END.
       liReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
 
@@ -142,13 +161,20 @@ PROCEDURE pReadFileData:
       IF NOT AVAIL MsRequest THEN DO:
          lcErrText = lcLine + ";" + "Action not allowed: Reauested " + 
                      lcSetStatus.
-         fReqSStatus(2, "Incorrect SVA action").            
+         OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
+         PUT STREAM sLog UNFORMATTED lcErrText SKIP.
+         OUTPUT STREAM sLog CLOSE.
+                     
+         fReqStatus(2, "Incorrect SVA action").            
          NEXT.
       END.
       /*Make actual status change for the request and create / remove fee*/
 
       /*fSendEmailByRequest*/
       fReqStatus(4, "Cancel SVA request ").
+      OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
+      PUT STREAM sLog UNFORMATTED "Operation done" SKIP.
+      OUTPUT STREAM sLog CLOSE.
 
    END.
 END PROCEDURE.
