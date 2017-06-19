@@ -56,10 +56,10 @@ plSelfEmployed = get_bool(param_toplevel_id, "2").
 piOrders       = get_int(param_toplevel_id, "3").
 IF NUM-ENTRIES(top_array) = 5 THEN
    pcCliType   = get_string(param_toplevel_id, "4").
-IF NUM-ENTRIES(top_array) > 5 THEN
+IF NUM-ENTRIES(top_array) > 5 THEN DO:
    pcCliType   = get_string(param_toplevel_id, "4").
    pcChannel   = get_string(param_toplevel_id, "5").
-
+END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF INDEX(pcChannel,"PRO") > 0 THEN llProCust = TRUE.

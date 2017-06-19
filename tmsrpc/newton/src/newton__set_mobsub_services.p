@@ -51,6 +51,7 @@ DEF VAR lcSalesman AS CHAR NO-UNDO.
 DEF VAR lcInfo AS CHAR NO-UNDO.
 DEF VAR lcServCom AS CHAR NO-UNDO.
 DEF VAR ocError AS CHAR NO-UNDO.
+DEF VAR lcErr AS CHAR NO-UNDO.
 DEF VAR liValidate AS INT  NO-UNDO.
 DEF VAR pcSetServiceId AS CHAR NO-UNDO.
 DEF VAR pcUser AS CHAR NO-UNDO.
@@ -147,6 +148,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
 
    /*YPRO*/
    /*SVAs*/
+   /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
    IF fIsSVA(pcServiceId, OUTPUT liParams) THEN DO:
       IF liParams EQ 2 THEN DO:
          IF pcParam EQ "" OR pcParam2 EQ "" THEN
@@ -163,7 +165,17 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                                         0,
                                         pcParam,
                                         pcParam2,
-                                        pcValue).
+                                        pcValue,
+                                        lcErr).
+      IF lcErr NE "" THEN appl_err("SVA request failure " + lcErr).
+      IF liSVARequest NE 0 THEN DO:
+         lcErr = fSendEmailByRequest(liSVARequest, pcServiceID).
+         IF lcErr NE "" THEN appl_err("SVA email failure " + lcErr).
+      END.
+
+      add_boolean(response_toplevel_id, "", TRUE).
+
+         
    END. /*YPRO*/
    
    /* SERVICES */

@@ -209,6 +209,15 @@ fCreateFMItem("CONTPROMF","CONT25MF","PRO_CONT25",2.55).
 fCreateFMItem("CONTPROMF","CONT26MF","PRO_CONT26",2.34).
 
 
+/*YPRO-83: SVA configs */
+/* DO NOT USE; these 
+fCreateFMItem("FAXTOEMAILMF","FAXTOEMAILMF","COMMON",9.00). 
+fCreateFMItem("OFFICE365MF","OFFICE365MF","COMMON",4.20). 
+fCreateFMItem("SAGEONEMF","SAGEONEMF","COMMON",8.00). 
+fCreateFMItem("IPFIJAMF","IPFIJAMF","COMMON",12.00).
+fCreateFMItem("CENTRALITAMF","CENTRALITAMF","COMMON",0.00). 
+*/
+
 fcreateCustCat("20", "22", "PRO SOHO Company CIF", 25, 35, TRUE, "PRO-SOHO-COMPANY").
 fcreateCustCat("20", "21", "Big Companies CIF", 25, 35, FALSE, "").
 fcreateCustCat("20", "23", "PRO SOHO Company CIF", 25, 35, TRUE, "SOHO-COMPANY").
