@@ -70,8 +70,9 @@ FUNCTION fIsBundle RETURNS LOGIC
    FOR FIRST bPerContract NO-LOCK WHERE 
              bPerContract.Brand = gcBrand AND
              bPerContract.DCEvent = icDCEvent AND
-             LOOKUP(STRING(bPerContract.DCType),
-                    {&PERCONTRACT_RATING_PACKAGE}) > 0:
+             ((LOOKUP(STRING(bPerContract.DCType), /*TODO FIX UGLY SOLUTION ypro*/
+                    {&PERCONTRACT_RATING_PACKAGE}) > 0) OR
+             (icDCEvent EQ "FLEX_UPSELL_5GB" or icDCEvent EQ "FLEX_UPSELL_500MB")):
       llBundle = TRUE.              
    END.
       
@@ -87,7 +88,7 @@ FUNCTION fIsBundleAllowed RETURNS LOGIC
    DEF VAR lcResult AS CHAR NO-UNDO. 
    
    IF NOT fIsBundle(icDCEvent) THEN DO:
-      ocInfo = "Not a bundle".
+      ocInfo = "Not a bundle" + icDCEvent.
       RETURN FALSE.
    END.
    
