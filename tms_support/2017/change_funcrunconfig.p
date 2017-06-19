@@ -19,7 +19,7 @@ FOR EACH FuncRunConfig EXCLUSIVE-LOCK:
                   " -clientlog /scratch/log/funcrun/" +
                   lcProgram + ".log tenant=yoigo umask=0000 " +
                   ( IF INDEX(FuncRunConfig.RunCommand,"#HOST") > 0
-                    THEN "alt=common "
+                    THEN "alt=common@arneb "
                     ELSE "" )
                   + "&".
    

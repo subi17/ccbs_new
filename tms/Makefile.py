@@ -1,5 +1,6 @@
 from pike import *
 from subprocess import call, Popen, PIPE
+from socket import gethostname
 from ast import literal_eval
 import tempfile
 import shutil
@@ -439,7 +440,11 @@ def batch(*a):
     if 'alt' in globals():
         for altdb in alt.split(','):
             if os.path.isfile('{0}/db/progress/store/{1}_alt.pf'.format(relpath, altdb)):
-                altdbs.append(altdb)
+                if len(altdb.split('@')) > 1:
+                    if altdb.split('@')[1] == gethostname():
+                        altdbs.append(altdb.split('@')[0])
+                else:
+                    altdbs.append(altdb)
 
     cdr_dict = {}
 

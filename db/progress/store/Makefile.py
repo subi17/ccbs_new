@@ -115,10 +115,20 @@ db_locations = {
 
 # Alternative database location (on different partitions/remote hosts)
 # for production servers. There will be alternative pf file only for the databases
-# listed in here
+# listed in here. There might be a need for alternative databases for example in monitoring cases
+# and also when replica server needs to connect to the main server
 
 db_alternative_locations = {
-    'arneb': {'common': 'pallas.int.asp.qvantel.net:common'}
+    'arneb': {'common': 'pallas.int.asp.qvantel.net:common',
+              'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
+              'mobile': 'pallas.int.asp.qvantel.net:mobile',
+              'counter': 'pallas.int.asp.qvantel.net:counter',
+              'star': 'pallas.int.asp.qvantel.net:star'},
+    'pallas': {'common': 'arneb.int.asp.qvantel.net:common',
+               'ordercanal': 'arneb.int.asp.qvantel.net:ordercanal',
+               'mobile': 'arneb.int.asp.qvantel.net:mobile',
+               'counter': 'arneb.int.asp.qvantel.net:counter',
+               'star': 'arneb.int.asp.qvantel.net:star'}
 }
 
 db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
