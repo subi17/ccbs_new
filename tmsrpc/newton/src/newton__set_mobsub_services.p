@@ -169,7 +169,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                                         lcErr).
       IF lcErr NE "" THEN appl_err("SVA request failure " + lcErr).
       IF liSVARequest NE 0 THEN DO:
-         lcErr = fSendEmailByRequest(liSVARequest).
+         lcErr = fSendEmailByRequest(liSVARequest, pcServiceID).
          IF lcErr NE "" THEN appl_err("SVA email failure " + lcErr).
       END.
 
