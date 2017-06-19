@@ -1357,7 +1357,7 @@ gcCustomerStructFields = "birthday," +
                          "hand," + 
                          "km," +
                          "territory_owner," +
-                         "coverage_token" +
+                         "coverage_token," +
                          "pro".
 
 /* note: check that data variable has correct EXTENT value */
