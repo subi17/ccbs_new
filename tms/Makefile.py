@@ -487,19 +487,30 @@ def batch(*a):
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
 
-    logfile = open('../var/log/%s.log' % module_base, 'a')
-    if not skip_timelog:
-        logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
-        logfile.flush()
-    cmd = Popen(mpro + args, stdout=logfile)
-    while cmd.poll() is None:
-        try:
-            cmd.wait()
-        except KeyboardInterrupt:
-            cmd.send_signal(2)
-    if a[0] == 'batch':
-      os.unlink('../var/run/%s.pid' % module_base)
-    sys.exit(cmd.returncode)
+    logfile = None
+    try:
+        if a[0] == 'batch':
+            logfile = open('../var/log/%s.log' % module_base, 'a')
+            if not skip_timelog:
+                logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
+                logfile.flush()
+            cmd = Popen(mpro + args, stdout=logfile)
+        else:
+            cmd = Popen(mpro + args, stdout=PIPE)
+
+        while cmd.poll() is None:
+            try:
+                cmd.wait()
+                if a[0] != 'batch':
+                    print cmd.stdout.read()
+            except KeyboardInterrupt:
+                cmd.send_signal(2)
+        if a[0] == 'batch':
+          os.unlink('../var/run/%s.pid' % module_base)
+        sys.exit(cmd.returncode)
+    finally:
+        if logfile is not None:
+           logfile.close()
 
 @target
 def idbatch(*a):
