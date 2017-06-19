@@ -358,6 +358,7 @@ fcreateDaycampaign("VOICE100","INT_FIX_VOICE1000","Fixed international voice","1
 fcreateDaycampaign("VOICE100","SMS5000","National SMS","1",limode,0).
 
 FOR EACH TMSParam WHERE INDEX(TMSParam.charval,"FLEX_UPSELL") > 0:
+   IF LOOKUP("FLEX_UPSELL_500MB", TMSParam.charval) eq 0 then
    TMSParam.charval = TMSParam.charval + ",FLEX_UPSELL_500MB,FLEX_UPSELL_5GB".
 END.
 

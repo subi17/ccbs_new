@@ -1511,7 +1511,7 @@ DO:
          (LOOKUP(ENTRY(licount,pcDataBundleType),lcPROContracts) = 0 OR
          INDEX(pcChannel,"PRO") = 0 )THEN
          RETURN appl_err(SUBST("Incorrect data bundle type: &1",
-                         pcDataBundleType)).                                        
+                         ENTRY(licount,pcDataBundleType))).                                        
       IF NOT fIsBundleAllowed(pcSubType,ENTRY(liCount,pcDataBundleType),
                                OUTPUT lcError) THEN
           RETURN appl_err(lcError).
