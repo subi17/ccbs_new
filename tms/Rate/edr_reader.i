@@ -366,84 +366,16 @@ PROCEDURE pHandleEDR:
                END.
 
                /* YPR-2200 - Reset Voice Package during renewal */
-               IF ttEDR.CLIType EQ "TARJ9" AND
-                  ttEDR.ServiceFeeType = "SC9" THEN DO:
+               IF ((ttEDR.CLIType EQ "TARJ9"  AND ttEDR.ServiceFeeType = "SC9" ) OR
+                   (ttEDR.CLIType EQ "TARJ10" AND ttEDR.ServiceFeeType = "SC10") OR
+                   (ttEDR.CLIType EQ "TARJ11" AND ttEDR.ServiceFeeType = "SC11") OR
+                   (ttEDR.CLIType EQ "TARJ12" AND ttEDR.ServiceFeeType = "SC12") OR 
+                   (ttEDR.CLIType EQ "TARJ12" AND ttEDR.ServiceFeeType = "SC20")) THEN 
+               DO:
                   liRequest = fServiceRequest(MobSub.MsSeq,
                                               "TEMPLATE",
                                               1,
                                               "LADEL1_PRE_PLUS_RESET",
-                                              ldeNow,
-                                              "",
-                                              FALSE, /* fees */
-                                              FALSE, /* sms */
-                                              "",
-                                              {&REQUEST_SOURCE_SCRIPT},
-                                              0, /* father request */
-                                              FALSE,
-                                              OUTPUT lcResult).
-                  IF liRequest = 0 THEN
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "MobSub",
-                                      STRING(MobSub.MsSeq),
-                                      MobSub.CustNum,
-                                      "PREP_VOICE",
-                                      "PREP_VOICE deactivation request failed; " +
-                                      lcResult).
-               END.
-               ELSE IF ttEDR.CLIType EQ "TARJ10" AND
-                  ttEDR.ServiceFeeType = "SC10" THEN DO:
-                  liRequest = fServiceRequest(MobSub.MsSeq,
-                                              "TEMPLATE",
-                                              1,
-                                              "TARJ10_RESET",
-                                              ldeNow,
-                                              "",
-                                              FALSE, /* fees */
-                                              FALSE, /* sms */
-                                              "",
-                                              {&REQUEST_SOURCE_SCRIPT},
-                                              0, /* father request */
-                                              FALSE,
-                                              OUTPUT lcResult).
-                  IF liRequest = 0 THEN
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "MobSub",
-                                      STRING(MobSub.MsSeq),
-                                      MobSub.CustNum,
-                                      "PREP_VOICE",
-                                      "PREP_VOICE deactivation request failed; " +
-                                      lcResult).
-               END.
-               ELSE IF ttEDR.CLIType EQ "TARJ11" AND
-                  ttEDR.ServiceFeeType = "SC11" THEN DO:
-                  liRequest = fServiceRequest(MobSub.MsSeq,
-                                              "TEMPLATE",
-                                              1,
-                                              "TARJ11_RESET",
-                                              ldeNow,
-                                              "",
-                                              FALSE, /* fees */
-                                              FALSE, /* sms */
-                                              "",
-                                              {&REQUEST_SOURCE_SCRIPT},
-                                              0, /* father request */
-                                              FALSE,
-                                              OUTPUT lcResult).
-                  IF liRequest = 0 THEN
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "MobSub",
-                                      STRING(MobSub.MsSeq),
-                                      MobSub.CustNum,
-                                      "PREP_VOICE",
-                                      "PREP_VOICE deactivation request failed; " +
-                                      lcResult).
-               END.
-               ELSE IF ttEDR.CLIType EQ "TARJ12" AND
-                  ttEDR.ServiceFeeType = "SC12" THEN DO:
-                  liRequest = fServiceRequest(MobSub.MsSeq,
-                                              "TEMPLATE",
-                                              1,
-                                              "TARJ12_RESET",
                                               ldeNow,
                                               "",
                                               FALSE, /* fees */
