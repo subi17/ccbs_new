@@ -511,17 +511,19 @@ def batch(*a):
         else:
             cmd = Popen(mpro + args, stdout=PIPE)
 
-        while cmd.poll() is None:
+        try:
+            cmd.wait()
+            if a[0] != 'batch':
+                cmdoutput = cmd.stdout.read().rstrip('\n')
+                if cmdoutput:
+                    print cmdoutput
+        except KeyboardInterrupt:
             try:
-                cmd.wait()
-                if a[0] != 'batch':
-                    cmdoutput = cmd.stdout.read().rstrip('\n')
-                    if cmdoutput:
-                        print cmdoutput
-            except KeyboardInterrupt:
                 cmd.send_signal(2)
-            else:
-                sys.exit(cmd.returncode)
+            except OSError:
+                pass
+        else:
+            sys.exit(cmd.returncode)
     finally:
         if a[0] == 'batch':
           os.unlink('../var/run/%s.pid' % module_base)
@@ -612,13 +614,15 @@ def idbatch(*a):
             logfile.flush()
         cmd = Popen(mpro + args, stdout=logfile)
 
-        while cmd.poll() is None:
+        try:
+            cmd.wait()
+        except KeyboardInterrupt:
             try:
-                cmd.wait()
-            except KeyboardInterrupt:
                 cmd.send_signal(2)
-            else:
-                sys.exit(cmd.returncode)
+            except OSError:
+                pass
+        else:
+            sys.exit(cmd.returncode)
     finally:
         os.unlink('../var/run/%s_%s.pid' % (module_base, batchid))
         if logfile is not None:
