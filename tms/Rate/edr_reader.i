@@ -638,6 +638,7 @@ PROCEDURE pHandleEDR:
                                          "",
                                          0,
                                          0,
+                                         "",
                                          OUTPUT lcResult). 
             IF liRequest = 0 THEN  
                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -683,6 +684,7 @@ PROCEDURE pHandleEDR:
                                       "",
                                       0,
                                       0,
+                                      "",
                                       OUTPUT lcResult). 
          IF liRequest = 0 THEN  
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,

@@ -202,9 +202,9 @@ FUNCTION fMakeProActRequest RETURNS INT(
    FIND FIRST bOwner WHERE bOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 
    IF NOT AVAIL bOwner THEN RETURN 0.
-
+   lcParams = "SVA". /*To indicate that we are handling SVA request.*/
    IF icParam1 NE "" THEN DO:
-      lcParams =  icParam1.
+      lcParams =  lcParams + "|" + icParam1.
       IF icParam2 NE "" THEN DO:
          lcParams = lcParams + "|" + icParam2. 
       END.
@@ -212,57 +212,47 @@ FUNCTION fMakeProActRequest RETURNS INT(
    END.
 
    DO TRANS:
-      /*liRequest = fPCActionRequest(iiMsSeq,
+   IF icAction BEGINS "cancel" THEN DO:
+      IF icAction EQ "cancel activation" THEN 
+         liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
+      ELSE IF icAction EQ "cancel deactivation" THEN
+         liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
+      ELSE DO:
+         ocErr = "Incorrect request".
+         RETURN 0.
+      END.
+         
+      FIND FIRST MsRequest WHERE
+                 MsRequest.Brand EQ gcBrand AND
+                 MsRequest.ReqType EQ liReqType AND
+                 MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING}.
+      IF NOT AVAIL MsRequest THEN DO:
+         ocErr = "Cancellation not possible, request not found".
+         RETURN 0.
+      END.
+      fReqStatus(4, "SVA Operation Cancellation").
+      RETURN MsRequest.MsRequest.
+        
+   END.
+   ELSE IF icAction EQ "on" THEN 
+      icAction = "act".
+   ELSE if icAction EQ "off" THEN 
+      icAction = "term".
+
+      liRequest = fPCActionRequest(iiMsSeq,
                                    icContr,
-                                   "act",
+                                   icAction,
                                    idActStamp,
                                    TRUE, /* fees */
                                    {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
                                    "",
-                                   iiMsRequest,
+                                   0,
                                    FALSE,
                                    "",
                                    0,
                                    0,
-                                  OUTPUT lcError).*/
-      IF icAction BEGINS "cancel" THEN DO:
-         IF icAction EQ "cancel activation" THEN 
-            liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
-         ELSE IF icAction EQ "cancel deactivation" THEN
-            liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
-         ELSE DO:
-            ocErr = "Incorrect request".
-            RETURN 0.
-         END.
-         
-         FIND FIRST MsRequest WHERE
-                    MsRequest.Brand EQ gcBrand AND
-                    MsRequest.ReqType EQ liReqType AND
-                    MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING}.
-         IF NOT AVAIL MsRequest THEN DO:
-            ocErr = "Cancellation not possible, request not found".
-            RETURN 0.
-         END.
-         fReqStatus(4, "SVA Operation Cancellation").
-         RETURN MsRequest.MsRequest.
-        
-      END.
-      ELSE IF icAction EQ "on" THEN 
-         liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
-      ELSE if icAction EQ "off" THEN 
-         liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
-
-      fCreateRequest(liReqType,0,katun,FALSE,FALSE).
-      ASSIGN bCreaReq.MsSeq      = iiMsSeq
-             bCreaReq.CLI        = bOwner.CLI
-             bCreaReq.CustNum    = bOwner.CustNum
-             bCreaReq.ReqCparam2 = icAction
-             bCreaReq.ReqCparam4 = icContr
-             bCreaReq.ReqCparam1 = lcParams
-             bCreaReq.Crestamp   = fmakets()
-             bCreaReq.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
-             bCreaReq.CreateFees = FALSE.
-
+                                   lcParams,
+                                   OUTPUT lcError).
    END. /*Trans*/  
    RETURN bCreaReq.MsRequest.
 END.

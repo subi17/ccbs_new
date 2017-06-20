@@ -298,6 +298,7 @@ PROCEDURE pPeriodicalContract:
                                 "",
                                 ldeResidualFee,
                                 0,
+                                "",
                                 OUTPUT lcResult).
  
    IF liRequest = 0 THEN 

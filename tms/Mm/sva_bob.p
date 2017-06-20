@@ -149,6 +149,7 @@ PROCEDURE pReadFileData:
          OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
          PUT STREAM sLog UNFORMATTED lcErrText SKIP.
          OUTPUT STREAM sLog CLOSE.
+        
          NEXT.
  
       END.
@@ -165,13 +166,12 @@ PROCEDURE pReadFileData:
          PUT STREAM sLog UNFORMATTED lcErrText SKIP.
          OUTPUT STREAM sLog CLOSE.
                      
-         fReqStatus(2, "Incorrect SVA action").            
          NEXT.
       END.
       /*Make actual status change for the request and create / remove fee*/
 
       /*fSendEmailByRequest*/
-      fReqStatus(4, "Cancel SVA request ").
+      fReqStatus(6, "Execute SVA operation ").
       OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
       PUT STREAM sLog UNFORMATTED "Operation done" SKIP.
       OUTPUT STREAM sLog CLOSE.

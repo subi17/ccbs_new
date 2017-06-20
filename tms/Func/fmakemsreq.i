@@ -783,6 +783,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
     INPUT  icSMS          AS CHAR,   /* sms */
     INPUT  ideResidualFee AS DEC,    /* payterm residual fee */
     INPUT  iiPerContID    AS INT,    /* Periodical Contract-ID */
+    INPUT  icSVAParams    AS CHAR,   /* Parameters to be stoerd for SVA vase*/
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liReqType  AS INT  NO-UNDO.
@@ -871,6 +872,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    ASSIGN bCreaReq.ReqSource   = icSource
           bCreaReq.ReqCParam2  = icActType
           bCreaReq.ReqCParam3  = icContrType
+          bCreaReq.ReqCparam6  = icSVAParams
           bCreaReq.ReqIParam3  = iiPerContID 
           bCreaReq.ReqIParam2  = liWaitFor
           bCreaReq.ReqDParam2  = ideResidualFee

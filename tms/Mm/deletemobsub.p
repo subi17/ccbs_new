@@ -566,6 +566,7 @@ PROCEDURE pTerminate:
                           "",
                           0,
                           ttContract.PerContID,
+                          "",
                           OUTPUT lcError).
 
       fLocalMemo("Customer",

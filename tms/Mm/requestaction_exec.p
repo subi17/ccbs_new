@@ -285,6 +285,7 @@ PROCEDURE pPeriodicalContract:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcResult).
    END.
    
@@ -465,6 +466,7 @@ PROCEDURE pPeriodicalContract:
                                         "",
                                         0,
                                         bDCCLI.PerContractId,
+                                        "",
                                         OUTPUT lcResult).
          END. /* FOR EACH bDCCLI */
          IF NOT llFound THEN RETURN.
@@ -484,6 +486,7 @@ PROCEDURE pPeriodicalContract:
                                         "",
                                         0,
                                         0,
+                                        "",
                                         OUTPUT lcResult).
    END.
          
@@ -502,6 +505,7 @@ PROCEDURE pPeriodicalContract:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcResult).
    END.
    

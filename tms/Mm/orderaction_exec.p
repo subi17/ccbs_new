@@ -306,6 +306,7 @@ PROCEDURE pPeriodicalContract:
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcResult).
    END.
  
@@ -513,6 +514,7 @@ PROCEDURE pQ25Extension:
                              "",
                              0,
                              liPercontractId,
+                             "",
                              OUTPUT lcResult).
 
    katun = lcOrigKatun.

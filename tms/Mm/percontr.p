@@ -42,6 +42,9 @@
 {Func/fprepaidfee.i}
 {Func/fcreditreq.i}
 {Func/fsendsms.i}
+{Func/profunc.i}
+
+DEF VAR lcEmailErr AS CHAR NO-UNDO.
 
 FUNCTION fUpdateServicelCounterMSID RETURNS LOGICAL
    ( iiCustNum AS INTEGER,
@@ -178,6 +181,18 @@ END.
 /* is there another request that should be completed first */
 IF MsRequest.ReqStat = 0 THEN DO:
 
+   /*YPRO SVA special handling for PRO customers*/
+   IF MsRequest.ReqCParam6 BEGINS "SVA" THEN DO:
+      /*YPRO-84: go to waitinf for bob tool in state 19.*/
+      fReqStatus({&REQUEST_STATUS_CONFIRMATION_PENDING},""). /*19*/
+      lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest, 
+                                       MsRequest.ReqCparam2).
+
+      IF lcEmailErr NE "" THEN RETURN "ERROR: " + lcEmailErr.                                 
+      NEXT.
+
+   END.
+   
    IF MsRequest.ReqIParam2 > 0 THEN DO:
       FIND FIRST bPendRequest WHERE
                  bPendRequest.MsRequest = MsRequest.ReqIParam2
@@ -207,6 +222,7 @@ IF MsRequest.ReqStat = 0 THEN DO:
       RETURN "ERROR:Another request that this depends on has not been " +
              "completed".
    END. /* IF LOOKUP(MsRequest.ReqCParam3,{&DSS_BUNDLES}) > 0 AND */
+
 END. /* IF MsRequest.ReqStat = 0 THEN DO: */
 
 liOrigStatus = MsRequest.ReqStatus.
@@ -219,6 +235,12 @@ END.
 
 /* activate or continue periodical contract */
 WHEN 8 THEN DO:
+   /*SVA activation / YPRO*/
+/*   IF MsRequest.ReqCParam6 BEGINS "SVA" THEN DO:
+      CASE MsRequest.ReqStatus:
+      WHEN {&REQUEST_STATUS_HLR_DONE} /*6Ä*/ THEN RUN pContractActivation.
+   END.
+*/   
    IF MsRequest.ReqCParam2 = "update" 
    /* maintenance of a contract */
    THEN RUN pMaintainContract.
@@ -269,6 +291,7 @@ END.
 WHEN 9 THEN DO:
 
    CASE MsRequest.ReqStatus:
+   WHEN 6 THEN RUN pContractTermination. /*SVA, YPRO*/
    WHEN 0 THEN RUN pContractTermination.
    WHEN 8 THEN RUN pFinalize(INPUT 9). /* Trigger only Deactivation SMS */
    END CASE.
@@ -1770,6 +1793,7 @@ PROCEDURE pFinalize:
                                       "",
                                       0,
                                       0,
+                                      "",
                                       OUTPUT lcError).
          IF liRequest = 0 THEN
             /* write possible error to a memo */

@@ -373,6 +373,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcError).
       END. /* ELSE DO: */
       IF liCreated > 0 THEN 
