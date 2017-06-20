@@ -39,7 +39,7 @@ def active_cdr_db_pf():
     args.extend(['-pf', getpf('../../db/progress/store/common')])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
-    dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+    dict = literal_eval(cdr_fetch.communicate()[0])
 
     if 'tenancies' in globals():
         uandp = userandpass()

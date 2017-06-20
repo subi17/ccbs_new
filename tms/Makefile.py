@@ -98,7 +98,7 @@ def active_cdr_db_pf():
     args.extend(['-pf', getpf('../db/progress/store/common')])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
-    dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+    dict = literal_eval(cdr_fetch.communicate()[0])
 
     if 'tenancies' in globals():
         uandp = userandpass()
@@ -348,7 +348,12 @@ def cui(*a):
 
     if a[0] == 'cui' or a[0] == 'forcecui':
         program = 'Syst/tmslogin.p'
-        args.extend(['-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4'])
+        for pp in parameters:
+            args.append(pp)
+        if not '-clientlog' in args:
+            args.extend(['-clientlog', '../var/log/tms_ui.log'])
+        if not any(x in args for x in ['-logginglevel', '-logentrytypes']):
+            args.extend(['-logginglevel', '4'])
     else: # Only vim should use this block internally...
         if len(parameters) == 0:
             raise PikeException('Expected a module to run as a parameter')
@@ -506,17 +511,19 @@ def batch(*a):
         else:
             cmd = Popen(mpro + args, stdout=PIPE)
 
-        while cmd.poll() is None:
+        try:
+            cmd.wait()
+            if a[0] != 'batch':
+                cmdoutput = cmd.stdout.read().rstrip('\n')
+                if cmdoutput:
+                    print cmdoutput
+        except KeyboardInterrupt:
             try:
-                cmd.wait()
-                if a[0] != 'batch':
-                    cmdoutput = cmd.stdout.read().rstrip('\n')
-                    if cmdoutput:
-                        print cmdoutput
-            except KeyboardInterrupt:
                 cmd.send_signal(2)
-            else:
-                sys.exit(cmd.returncode)
+            except OSError:
+                pass
+        else:
+            sys.exit(cmd.returncode)
     finally:
         if a[0] == 'batch':
           os.unlink('../var/run/%s.pid' % module_base)
@@ -607,13 +614,15 @@ def idbatch(*a):
             logfile.flush()
         cmd = Popen(mpro + args, stdout=logfile)
 
-        while cmd.poll() is None:
+        try:
+            cmd.wait()
+        except KeyboardInterrupt:
             try:
-                cmd.wait()
-            except KeyboardInterrupt:
                 cmd.send_signal(2)
-            else:
-                sys.exit(cmd.returncode)
+            except OSError:
+                pass
+        else:
+            sys.exit(cmd.returncode)
     finally:
         os.unlink('../var/run/%s_%s.pid' % (module_base, batchid))
         if logfile is not None:
