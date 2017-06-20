@@ -336,9 +336,13 @@ FUNCTION fGetSegment RETURNS CHAR
               bOC.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
               NO-ERROR.
    IF AVAIL bOC THEN DO:
-      IF bOC.CustIdType EQ "CIF" THEN RETURN "Company".
-      ELSE IF bOC.SelfEmployed EQ TRUE THEN RETURN "Self-employed".
-      ELSE RETURN "Consumer".
+      FIND FIRST CustCat NO-LOCK WHERE
+                 CustCat.Brand = gcBrand AND
+                 CustCat.Category = bOC.Category
+                 NO-ERROR.
+      IF AVAIL CustCat THEN
+         RETURN CustCat.Segment.
+      RETURN "Consumer".
    END.
    ELSE RETURN "-".
 END.   
