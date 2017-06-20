@@ -7,6 +7,7 @@ import shutil
 import time
 import glob
 import errno
+import resource
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
@@ -16,6 +17,11 @@ myself = os.path.basename(os.getcwd())
 nonp_source = ['script/' + x for x in os.listdir('script')]
 skip_timelog = False
 show_file = False
+
+# Setrlimit will do same command as "ulimit -c 4000"
+_, hardlimit = resource.getrlimit(resource.RLIMIT_CORE)
+if hardlimit == resource.RLIM_INFINITY or hardlimit >= 4096000:
+    resource.setrlimit(resource.RLIMIT_CORE,(4096000, hardlimit))
 
 if 'umask' in globals():
     os.umask(int(umask))
@@ -349,6 +355,8 @@ def cui(*a):
         if a[0] == 'vimbatch':
             args.extend(['-b'])
         program = parameters[0]
+        if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
+            os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
 
     if 'current_dir' in globals():
         os.environ['PROPATH'] = current_dir + ',' + os.environ['PROPATH']
@@ -502,13 +510,16 @@ def batch(*a):
             try:
                 cmd.wait()
                 if a[0] != 'batch':
-                    print cmd.stdout.read()
+                    cmdoutput = cmd.stdout.read().rstrip('\n')
+                    if cmdoutput:
+                        print cmdoutput
             except KeyboardInterrupt:
                 cmd.send_signal(2)
+            else:
+                sys.exit(cmd.returncode)
+    finally:
         if a[0] == 'batch':
           os.unlink('../var/run/%s.pid' % module_base)
-        sys.exit(cmd.returncode)
-    finally:
         if logfile is not None:
            logfile.close()
 
@@ -588,18 +599,25 @@ def idbatch(*a):
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
 
-    logfile = open('../var/log/%s_%s.log' % (module_base, batchid), 'a')
-    if not skip_timelog:
-        logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
-        logfile.flush()
-    cmd = Popen(mpro + args, stdout=logfile)
-    while cmd.poll() is None:
-        try:
-            cmd.wait()
-        except KeyboardInterrupt:
-            cmd.send_signal(2)
-    os.unlink('../var/run/%s_%s.pid' % (module_base, batchid))
-    sys.exit(cmd.returncode)
+    logfile = None
+    try:
+        logfile = open('../var/log/%s_%s.log' % (module_base, batchid), 'a')
+        if not skip_timelog:
+            logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
+            logfile.flush()
+        cmd = Popen(mpro + args, stdout=logfile)
+
+        while cmd.poll() is None:
+            try:
+                cmd.wait()
+            except KeyboardInterrupt:
+                cmd.send_signal(2)
+            else:
+                sys.exit(cmd.returncode)
+    finally:
+        os.unlink('../var/run/%s_%s.pid' % (module_base, batchid))
+        if logfile is not None:
+           logfile.close()
 
 @target
 def editor(*a):
@@ -612,6 +630,9 @@ def editor(*a):
         tenant = "yoigo"
     elif a[0] == 'meditor':
         tenant = "masmovil"
+
+    if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
+        os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
 
     args = parameters or (['-pf', getpf('../db/progress/store/all')])
     args = mpro + args + ['-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']

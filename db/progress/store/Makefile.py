@@ -491,7 +491,7 @@ def _migrate(migration_file, direction, a2t_data):
     df_file, database = mig2df(migration_file, direction,
                                a2t_data, a2t_from_database, environment)
 
-    pfile = tempfile.NamedTemporaryFile(suffix='.p', mode='rt+')
+    pfile = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
     pfile.write('SESSION:SUPPRESS-WARNINGS = TRUE.\n')
     pfile.write('SESSION:NUMERIC-FORMAT = "American".\n')
     pfile.write('RUN prodict/load_df("{0},,").\n'.format(df_file.name))
