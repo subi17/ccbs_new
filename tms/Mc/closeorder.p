@@ -227,8 +227,9 @@ DO:
        FOR EACH OrderCustomer NO-LOCK WHERE
                 OrderCustomer.Brand      = gcBrand                    AND
                 OrderCustomer.CustIDType = lbOrderCustomer.CustIDType AND
-                OrderCustomer.CustID     = lbOrderCustomer.CustID,
-           EACH lbOrder NO-LOCK WHERE
+                OrderCustomer.CustID     = lbOrderCustomer.CustID     AND
+                OrderCustomer.RowType    = 1,
+          FIRST lbOrder NO-LOCK WHERE
                 lbOrder.Brand      = gcBrand                           AND
                 lbOrder.OrderID    = OrderCustomer.OrderID             AND
                 lbOrder.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} AND
