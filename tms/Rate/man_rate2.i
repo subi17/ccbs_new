@@ -431,6 +431,9 @@
  
          /* data, voice and other packages */
          fPackageCalculation().
+
+         IF ttCall.ErrorCode EQ 0 AND
+            NOT AVAIL tttariff THEN ttCall.ErrorCode = 7005.
             
          IF ttCall.ErrorCode > 0 THEN DO:
             ttCall.InvSeq = 0.
