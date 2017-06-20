@@ -7,6 +7,7 @@ import shutil
 import time
 import glob
 import errno
+import resource
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
@@ -16,6 +17,11 @@ myself = os.path.basename(os.getcwd())
 nonp_source = ['script/' + x for x in os.listdir('script')]
 skip_timelog = False
 show_file = False
+
+# Setrlimit will do same command as "ulimit -c 4000"
+_, hardlimit = resource.getrlimit(resource.RLIMIT_CORE)
+if hardlimit == resource.RLIM_INFINITY or hardlimit >= 4096000:
+    resource.setrlimit(resource.RLIMIT_CORE,(4096000, hardlimit))
 
 if 'umask' in globals():
     os.umask(int(umask))
