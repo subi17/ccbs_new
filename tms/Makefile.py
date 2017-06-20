@@ -98,7 +98,7 @@ def active_cdr_db_pf():
     args.extend(['-pf', getpf('../db/progress/store/common')])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
-    dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+    dict = literal_eval(cdr_fetch.communicate()[0])
 
     if 'tenancies' in globals():
         uandp = userandpass()
@@ -348,7 +348,12 @@ def cui(*a):
 
     if a[0] == 'cui' or a[0] == 'forcecui':
         program = 'Syst/tmslogin.p'
-        args.extend(['-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4'])
+        for pp in parameters:
+            args.append(pp)
+        if not '-clientlog' in args:
+            args.extend(['-clientlog', '../var/log/tms_ui.log'])
+        if not any(x in args for x in ['-logginglevel', '-logentrytypes']):
+            args.extend(['-logginglevel', '4'])
     else: # Only vim should use this block internally...
         if len(parameters) == 0:
             raise PikeException('Expected a module to run as a parameter')
