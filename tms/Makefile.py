@@ -500,7 +500,6 @@ def batch(*a):
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
 
-
     if a[0] == 'batch':
         with open('../var/log/%s.log' % module_base, 'a') as logfile:
             if not skip_timelog:
