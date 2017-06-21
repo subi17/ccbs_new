@@ -23,7 +23,6 @@ DEF TEMP-TABLE ttOrderList
    FIELD OrderID AS INT
    INDEX OrderID OrderID DESC.
 
-
 FUNCTION fIsPro RETURNS LOGICAL
    (icCategory AS CHAR):
 
@@ -55,6 +54,7 @@ FUNCTION fFindCOFFOrder RETURNS CHAR
 
    RETURN "ERROR: Order not found for mobsub " + STRING(iiMsSeq).
 END.
+
 
 
 FUNCTION fParseEmailByRequest RETURNS CHAR
