@@ -519,8 +519,8 @@ def batch(*a):
     else:
         try:
             cmd = Popen(mpro + args, stdout=PIPE, bufsize=1)
-        with cmd.stdout:
-	        for line in iter(cmd.stdout.readline, b''):
+            with cmd.stdout:
+	            for line in iter(cmd.stdout.readline, b''):
                     print line,
             cmd.wait()
         except KeyboardInterrupt:
@@ -607,7 +607,7 @@ def idbatch(*a):
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
 
-	with open('../var/log/%s_%s.log' % (module_base, batchid), 'a') as logfile:
+    with open('../var/log/%s_%s.log' % (module_base, batchid), 'a') as logfile:
         if not skip_timelog:
             logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
             logfile.flush()
