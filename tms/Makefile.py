@@ -500,23 +500,28 @@ def batch(*a):
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
 
-    logfile = None
-    try:
-        if a[0] == 'batch':
-            logfile = open('../var/log/%s.log' % module_base, 'a')
+    if a[0] == 'batch':
+        with open('../var/log/%s.log' % module_base, 'a') as logfile:
             if not skip_timelog:
                 logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
                 logfile.flush()
-            cmd = Popen(mpro + args, stdout=logfile)
-        else:
-            cmd = Popen(mpro + args, stdout=PIPE)
-
+            try:
+                call(mpro + args, stdout=logfile, stderr=logfile)
+            except KeyboardInterrupt:
+                pass
+            except CalledProcessError:
+                sys.exit(CalledProcessError.returncode)
+            else:
+                sys.exit(0)
+            finally:
+                os.unlink('../var/run/%s.pid' % module_base)
+    else:
         try:
+            cmd = Popen(mpro + args, stdout=PIPE, bufsize=1)
+            with cmd.stdout:
+                for line in iter(cmd.stdout.readline, b''):
+                    print line,
             cmd.wait()
-            if a[0] != 'batch':
-                cmdoutput = cmd.stdout.read().rstrip('\n')
-                if cmdoutput:
-                    print cmdoutput
         except KeyboardInterrupt:
             try:
                 cmd.send_signal(2)
@@ -524,11 +529,6 @@ def batch(*a):
                 pass
         else:
             sys.exit(cmd.returncode)
-    finally:
-        if a[0] == 'batch':
-          os.unlink('../var/run/%s.pid' % module_base)
-        if logfile is not None:
-           logfile.close()
 
 @target
 def idbatch(*a):
@@ -606,27 +606,20 @@ def idbatch(*a):
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
 
-    logfile = None
-    try:
-        logfile = open('../var/log/%s_%s.log' % (module_base, batchid), 'a')
+    with open('../var/log/%s_%s.log' % (module_base, batchid), 'a') as logfile:
         if not skip_timelog:
             logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
             logfile.flush()
-        cmd = Popen(mpro + args, stdout=logfile)
-
         try:
-            cmd.wait()
+            call(mpro + args, stdout=logfile, stderr=logfile)
         except KeyboardInterrupt:
-            try:
-                cmd.send_signal(2)
-            except OSError:
-                pass
+            pass
+        except CalledProcessError:
+            sys.exit(CalledProcessError.returncode)
         else:
-            sys.exit(cmd.returncode)
-    finally:
-        os.unlink('../var/run/%s_%s.pid' % (module_base, batchid))
-        if logfile is not None:
-           logfile.close()
+            sys.exit(0)
+        finally:
+            os.unlink('../var/run/%s_%s.pid' % (module_base, batchid))
 
 @target
 def editor(*a):
