@@ -65,6 +65,11 @@ FOR EACH daycampaign NO-LOCK:
       ELSE lcStatus = "Inactive".
       add_string(top_struct, "price", lcPrice).
       add_string(top_struct, "status", lcStatus).
+
+     /*This can be covered with wider solution in near future when we
+       implement mapping for contract categories*/
+      add_string(top_struct, "category", "pro").
+
    END.
 
 END.
