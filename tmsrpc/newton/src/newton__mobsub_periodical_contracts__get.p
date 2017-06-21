@@ -81,11 +81,9 @@ FOR EACH daycampaign NO-LOCK:
         implement mapping for contract categories*/
       add_string(top_struct, "category", "pro").
    END.
-
-
 END.
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-   END.
+END.
           
