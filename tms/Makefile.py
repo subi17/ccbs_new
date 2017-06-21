@@ -520,7 +520,7 @@ def batch(*a):
         try:
             cmd = Popen(mpro + args, stdout=PIPE, bufsize=1)
             with cmd.stdout:
-	            for line in iter(cmd.stdout.readline, b''):
+                for line in iter(cmd.stdout.readline, b''):
                     print line,
             cmd.wait()
         except KeyboardInterrupt:
