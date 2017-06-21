@@ -72,18 +72,16 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                fMarkOrderStamp(bfOrder.OrderID,"Close",0.0).
 
                /* YDR-2495 creating STC request to fixed only when mobile part is terminated */
-               IF icStatus = {&ORDER_STATUS_CLOSED}  THEN DO:
-                  FIND FIRST MobSub NO-LOCK WHERE
-                             MobSub.MsSeq = bfOrder.MsSeq NO-ERROR.
-                  IF AVAILABLE MobSub THEN DO:
-                     IF MobSub.CLIType  EQ bfOrder.CLIType             AND
-                        MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN
-                        liRequest = fConvFixedSTCReq(bfOrder.CLIType,
-                                                     bfOrder.MsSeq,
-                                                     fMake2Dt(TODAY + 1,0),
-                                                     {&REQUEST_SOURCE_ORDER_CANCELLATION},
-                                                     0).
-                  END.
+               FIND FIRST MobSub NO-LOCK WHERE
+                          MobSub.MsSeq = bfOrder.MsSeq NO-ERROR.
+               IF AVAILABLE MobSub THEN DO:
+                  IF MobSub.CLIType  EQ bfOrder.CLIType             AND
+                     MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN
+                     liRequest = fConvFixedSTCReq(bfOrder.CLIType,
+                                                  bfOrder.MsSeq,
+                                                  fMake2Dt(TODAY + 1,0),
+                                                  {&REQUEST_SOURCE_ORDER_CANCELLATION},
+                                                  0).
                END.
 
                FIND FIRST OrderAccessory OF bfOrder WHERE
