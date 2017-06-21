@@ -40,36 +40,46 @@ IF NOT AVAILABLE MobSub THEN
 
 top_array = add_array(response_toplevel_id, "").
 
-
-FOR EACH daycampaign NO-LOCK: 
+FOR EACH daycampaign NO-LOCK:
    liParams = 0.
    llgSVA = fIsSVA(daycampaign.dcevent, liParams).
    IF llgSVA EQ TRUE THEN DO:
       top_struct = add_struct(top_array, "").
-      add_string(top_struct, "service_id", daycampaign.dcname).
-      
+      add_string(top_struct, "service_id", daycampaign.dcevent).
+
       FIND FIRST FMItem NO-LOCK WHERE
                  FMItem.Brand EQ gcBrand AND
                  FMItem.FeeModel EQ daycampaign.feemodel NO-ERROR.
-      IF AVAIL FMItem THEN lcPrice = STRING(FMItem.Amount).
-      ELSE lcPrice = "".
-      
+      IF AVAIL FMItem THEN liPrice = FMItem.Amount.
+      ELSE liPrice = 0.
+
       FIND FIRST MsRequest NO-LOCK WHERE
                  MsRequest.MsSeq EQ piMsSeq AND
                  MsRequest.ReqStatus EQ 2 AND /*completed*/
-                 (MsRequest.ReqType EQ 8 /*OR
-                 MsRequest.ReqType EQ 9*/ ) AND
+                 (MsRequest.ReqType EQ 8 OR
+                 MsRequest.ReqType EQ 9 ) AND
                  MsRequest.ReqCparam2 EQ daycampaign.dcname
                  USE-INDEX MsActStamp NO-ERROR.
-      IF AVAIL MsRequest THEN lcStatus = "Active".
-      ELSE lcStatus = "Inactive".
-      add_string(top_struct, "price", lcPrice).
-      add_string(top_struct, "status", lcStatus).
+      IF AVAIL MsRequest THEN DO:
+         IF MsRequest.ReqType EQ 8 AND
+            MsRequest.ReqStatus EQ 19 THEN
+            liStatus = 2. /*Pending activation*/
+         ELSE IF MsRequest.ReqType EQ 9 AND
+            MsRequest.ReqStatus EQ 19 THEN
+            liStatus = 3. /*Pending deactivation*/
+         ELSE IF MsRequest.ReqType EQ 8 AND
+            MsRequest.ReqStatus EQ 2 THEN
+            liStatus = 1. /* activation done*/
+         ELSE liStatus = 0. /*Inactive*/
+      END.
+      ELSE liStatus = 0. /*Inactive, never requested activation*/
 
-     /*This can be covered with wider solution in near future when we
-       implement mapping for contract categories*/
+      add_int(top_struct, "price", liPrice).
+      add_int(top_struct, "status", liStatus).
+
+      /*This can be covered with wider solution in near future when we
+        implement mapping for contract categories*/
       add_string(top_struct, "category", "pro").
-
    END.
 
 END.
