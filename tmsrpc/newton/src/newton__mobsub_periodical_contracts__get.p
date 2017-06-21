@@ -50,7 +50,7 @@ FOR EACH daycampaign NO-LOCK:
       
       FIND FIRST FMItem NO-LOCK WHERE
                  FMItem.Brand EQ gcBrand AND
-                 FMItem.FeeModel EQ daycampaign.dcname NO-ERROR.
+                 FMItem.FeeModel EQ daycampaign.feemodel NO-ERROR.
       IF AVAIL FMItem THEN lcPrice = STRING(FMItem.Amount).
       ELSE lcPrice = "".
       
