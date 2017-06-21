@@ -82,6 +82,7 @@ FOR EACH daycampaign NO-LOCK:
       add_string(top_struct, "category", "pro").
    END.
 
+
 END.
 
 FINALLY:
