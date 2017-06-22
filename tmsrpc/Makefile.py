@@ -180,5 +180,7 @@ def build(*a):
     for file in glob('*_config.json'):
         shutil.copy(file, build_dir)
 
+    if a[0] == 'buildextapi':
+        print('Using r-files located on rpcmethods directories. Please make sure that you have executed a command "pike compile" on a tmsrpc directory!')
     for rpc in rpcs.keys():
-        require('%s>build' % rpc, [os.path.join(build_dir, rpc)])
+        require('{0}>{1}'.format(rpc,a[0]), [os.path.join(build_dir, rpc)])
