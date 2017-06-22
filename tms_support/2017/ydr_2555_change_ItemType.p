@@ -20,7 +20,12 @@ FOR EACH BillItem EXCLUSIVE-LOCK WHERE
          BillItem.BillCode EQ "DISCFH3002PDWN" OR
          BillItem.BillCode EQ "DISCFH300P" OR
          BillItem.BillCode EQ "DISCFH300PDWN" OR
-         BillItem.BillCode EQ "FTERMPERIOD"):
+         BillItem.BillCode EQ "FTERMPERIOD" OR
+         BillItem.BillCode EQ "DISCFHDSL" OR
+         BillItem.BillCode EQ "DISCFTERMPERIOD" OR
+         BillItem.BillCode EQ "F905WOVAT" OR
+         BillItem.BillCode EQ "F905WVAT" OR
+         BillItem.BillCode EQ "CONVDISC"):
 
    ASSIGN BillItem.ItemType = 1.
 /*      DISPLAY BillItem.BIGroup BIName BillItem.BillCode. */
