@@ -416,6 +416,11 @@ IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
 
 fSetOrderStatus(Order.OrderId,lcNewStatus).
 
+IF llDoEvent THEN DO:
+   RUN StarEventMakeModifyEvent(lhOrder).
+   fCleanEventObjects().
+END.
+
 /* Release pending additional lines orders, in case of pending convergent 
    main line order is released */
 /* YTS-10832 fix, checking correct status of order */
@@ -426,10 +431,6 @@ IF fIsConvergenceTariff(Order.CLIType) THEN DO:
        fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
                                        OrderCustomer.CustID) . 
    END.   
-END.
-IF llDoEvent THEN DO:
-   RUN StarEventMakeModifyEvent(lhOrder).
-   fCleanEventObjects().
 END.
 
 RETURN "".
