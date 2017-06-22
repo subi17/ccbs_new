@@ -1,11 +1,13 @@
 from pike import *
 from subprocess import call, Popen, PIPE
+from socket import gethostname
 from ast import literal_eval
 import tempfile
 import shutil
 import time
 import glob
 import errno
+import resource
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
@@ -16,6 +18,14 @@ nonp_source = ['script/' + x for x in os.listdir('script')]
 skip_timelog = False
 show_file = False
 
+# Setrlimit will do same command as "ulimit -c 4000"
+_, hardlimit = resource.getrlimit(resource.RLIMIT_CORE)
+if hardlimit == resource.RLIM_INFINITY or hardlimit >= 4096000:
+    resource.setrlimit(resource.RLIMIT_CORE,(4096000, hardlimit))
+
+if 'umask' in globals():
+    os.umask(int(umask))
+
 def userandpass():
     if 'tenancies' in globals():
         if 'tenant' in globals():
@@ -24,7 +34,7 @@ def userandpass():
             t = ''
         if t == '':
             for t, tdict in tenancies.items():
-                if tdict['tenanttype'] == 'Super':
+                if tdict['tenanttype'] == 'Super' or len(tenancies) == 1:
                     return ['-U', '{0}@{1}'.format(tdict['username'], tdict['domain']), '-P', tdict['password'] ]
             raise ValueError('Tenant is mandatory as a super tenant is not specified')
         elif t in tenancies:
@@ -68,7 +78,7 @@ def getpf(pf):
 
         if temptenant == '':
             for temptenant, tdict in tenancies.items():
-                if tdict['tenanttype'] == 'Super':
+                if tdict['tenanttype'] == 'Super' or len(tenancies) == 1:
                     return '{0}_{1}.pf'.format(pf, temptenant)
             raise ValueError('Tenant is mandatory as a super tenant is not specified')
         elif temptenant in tenancies:
@@ -88,7 +98,7 @@ def active_cdr_db_pf():
     args.extend(['-pf', getpf('../db/progress/store/common')])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
-    dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+    dict = literal_eval(cdr_fetch.communicate()[0])
 
     if 'tenancies' in globals():
         uandp = userandpass()
@@ -202,16 +212,16 @@ def compile(match, *a):
             compiledir = '/tmsapps'
         else:
             compiledir = 'r'
-        compilecommand = 'COMPILE %s SAVE INTO {0}.'
+        compilecommand = 'COMPILE %s SAVE INTO {0} NO-ERROR.'
     elif match == 'compilec':
         compiledir = None
-        compilecommand = 'COMPILE %s.'
+        compilecommand = 'COMPILE %s NO-ERROR.'
     elif match == 'preprocess':
         compiledir = 'pp'
-        compilecommand = 'COMPILE %s PREPROCESS {0}/%s.'
+        compilecommand = 'COMPILE %s PREPROCESS {0}/%s NO-ERROR.'
     else:
         compiledir = 'xref'
-        compilecommand = 'COMPILE %s XREF {0}/%s.'
+        compilecommand = 'COMPILE %s XREF {0}/%s NO-ERROR.'
 
     if 'dir' in globals():
         compiledir = dir
@@ -246,7 +256,7 @@ def _compile(compilecommand, compiledir):
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
 
-    procedure_file = make_compiler(compilecommand, source_files, show='name' if show_file else '.')
+    compile_p = make_compiler(compilecommand, source_files, show='name' if show_file else '.')
 
     if environment == 'safeproduction':
         os.environ['PROPATH'] = os.environ['PROPATH'].split(',', 1)[1]
@@ -254,10 +264,18 @@ def _compile(compilecommand, compiledir):
     if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
         os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
 
-    comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', procedure_file.name], stdout=PIPE)
-    call('/bin/cat', stdin=comp.stdout)
-    if comp.wait() != 0:
-        raise PikeException('Compilation failed')
+    processes = []
+    for file in compile_p:
+        comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', file], stdout=PIPE)
+        processes.append(comp)
+
+    comp_error = False
+    for comp in processes:
+        call('/bin/cat', stdin=comp.stdout)
+        comp.wait()
+
+    for file in compile_p:
+        os.unlink(file)
 
     print('')
 
@@ -270,17 +288,48 @@ def mkdir_p(directory):
         else:
             raise
 
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in xrange(0, len(l), n):
+        yield l[i:i + n]
+
 def make_compiler(cline, files, show='.'):
-    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
-    compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n')
-    for ff in files:
-        if show == '.':
-            compiler.write('PUT UNFORMATTED \'.\'.\n')
-        elif show == 'name':
-            compiler.write('PUT UNFORMATTED \'%s~n\'.\n' % ff)
-        compiler.write(cline.replace('%s', ff) + '\n')
-    compiler.flush()
-    return compiler
+    if not 'multi' in globals():
+        global multi
+        multi = 1
+    else:
+        if multi.isdigit() == False or int(multi) > 16 or int(multi) < 1:
+            raise PikeException('multi must be integer from 1 to 16')
+        multi = int(multi)
+
+    compiler_p_list = []
+    for subfiles in chunks(files, (len(files) + multi - 1) // multi):
+        compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+', delete=False)
+        compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n\n')
+        compiler.write('FUNCTION fCheckError RETURNS LOGICAL ():\n')
+        compiler.write('   IF ERROR-STATUS:ERROR = NO\n')
+        compiler.write('   THEN RETURN FALSE.\n\n')
+        compiler.write('   DEFINE VARIABLE liError AS INTEGER   NO-UNDO.\n')
+        compiler.write('   PUT UNFORMATTED SKIP.\n')
+        compiler.write('   DO liError = 1 TO ERROR-STATUS:NUM-MESSAGES:\n')
+        compiler.write('      PUT UNFORMATTED (IF COMPILER:WARNING THEN "Warning: " ELSE "ERROR: ") +\n')
+        compiler.write('         ERROR-STATUS:GET-MESSAGE(liError) SKIP.\n')
+        compiler.write('   END.\n\n')
+        compiler.write('   RETURN TRUE.\n\n')
+        compiler.write('END FUNCTION.\n')
+
+        for ff in subfiles:
+            if show == '.':
+                compiler.write('PUT UNFORMATTED \'.\'.\n')
+            elif show == 'name':
+                compiler.write('PUT UNFORMATTED \'%s~n\'.\n' % ff)
+            compiler.write(cline.replace('%s', ff) + '\n')
+            compiler.write('fCheckError().\n')
+
+        compiler.flush()
+        compiler_p_list.append(compiler.name)
+
+    return compiler_p_list
 
 @target
 def clean(*a):
@@ -289,19 +338,30 @@ def clean(*a):
 
 @target
 def cui(*a):
-    '''cui|vim|vimbatch'''
+    '''cui$|forcecui|vim$|vimbatch'''
+
+    if a[0] == 'cui' and os.path.isfile('../maintenance'):
+        print('Service break ongoing - aborting!')
+        sys.exit(5)
 
     args = ['-pf', getpf('../db/progress/store/all')]
 
-    if a[0] == 'cui':
+    if a[0] == 'cui' or a[0] == 'forcecui':
         program = 'Syst/tmslogin.p'
-        args.extend(['-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4'])
+        for pp in parameters:
+            args.append(pp)
+        if not '-clientlog' in args:
+            args.extend(['-clientlog', '../var/log/tms_ui.log'])
+        if not any(x in args for x in ['-logginglevel', '-logentrytypes']):
+            args.extend(['-logginglevel', '4'])
     else: # Only vim should use this block internally...
         if len(parameters) == 0:
             raise PikeException('Expected a module to run as a parameter')
         if a[0] == 'vimbatch':
             args.extend(['-b'])
         program = parameters[0]
+        if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
+            os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
 
     if 'current_dir' in globals():
         os.environ['PROPATH'] = current_dir + ',' + os.environ['PROPATH']
@@ -331,34 +391,36 @@ def terminal(*a):
         raise PikeException('Expected a module to run as a parameter')
 
     cdr_dict = {}
-    all_in_parameters = False
-
-    if 'all' in parameters[1:]:
-        all_in_parameters = True
-        args.extend(['-pf', getpf('../db/progress/store/all')])
-        cdr_dict = active_cdr_db_pf()
-        for db in cdr_dict:
-            args.extend(cdr_dict[db])
+    program = parameters[0]
+    del parameters[0]
 
     dbcount = 0
-    for pp in parameters[1:]:
+    remove_from_parameters = []
+    if any(x in parameters for x in ['all', 'all_except_cdr']):
+        remove_from_parameters = databases + ['all', 'all_except_cdr']
+        dbcount += len(databases)
+        args.extend(['-pf', getpf('../db/progress/store/all')])
+        if 'all' in parameters:
+            remove_from_parameters.extend(cdr_databases)
+            dbcount += len(cdr_databases)
+            cdr_dict = active_cdr_db_pf()
+            for db in cdr_dict:
+                args.extend(cdr_dict[db])
+
+    for pp in [item for item in parameters if item not in remove_from_parameters]:
         if pp in databases:
-            if all_in_parameters:
-                continue
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
             dbcount += 1
         elif pp in cdr_databases:
-            if all_in_parameters:
-                continue
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()            
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
                 dbcount += 1
-        elif pp != 'all':
+        else:
             args.append(pp)
 
-    args.extend(['-p', parameters[0]])
+    args.extend(['-p', program + '.p'])
 
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
@@ -375,16 +437,27 @@ def terminal(*a):
 def batch(*a):
     '''batch|mbatch'''
 
-    if os.path.exists('../var/run/servicebreak'):
+    if os.path.isfile('../maintenance'):
         print('Service break ongoing - aborting!')
         sys.exit(5)
 
     assert len(parameters) > 0, 'Which module to run?'
     batch_module = parameters[0]
+    del parameters[0]
     
     module_base = os.path.basename(batch_module)
     if 'tenant' in globals():
         module_base = '{0}_{1}'.format(module_base,tenant)
+
+    altdbs = []
+    if 'alt' in globals():
+        for altdb in alt.split(','):
+            if os.path.isfile('{0}/db/progress/store/{1}_alt.pf'.format(relpath, altdb)):
+                if len(altdb.split('@')) > 1:
+                    if altdb.split('@')[1] == gethostname():
+                        altdbs.append(altdb.split('@')[0])
+                else:
+                    altdbs.append(altdb)
 
     cdr_dict = {}
 
@@ -398,57 +471,75 @@ def batch(*a):
 
     args = ['-b', '-p', batch_module + '.p']
 
-    all_in_parameters = False
-    if 'all' in parameters[1:]:
-        all_in_parameters = True
-        args.extend(['-pf', getpf('../db/progress/store/all')])
-        cdr_dict = active_cdr_db_pf()
-        for db in cdr_dict:
-            args.extend(cdr_dict[db])
-
     dbcount = 0
-    for pp in parameters[1:]:
+    remove_from_parameters = []
+    if any(x in parameters for x in ['all', 'all_except_cdr']):
+        remove_from_parameters = databases + ['all', 'all_except_cdr']
+        args.extend(['-pf', getpf('../db/progress/store/all')])
+        dbcount += len(databases)
+        if 'all' in parameters:
+            remove_from_parameters.extend(cdr_databases)
+            dbcount += len(cdr_databases)
+            cdr_dict = active_cdr_db_pf()
+            for db in cdr_dict:
+                args.extend(cdr_dict[db])
+
+    for pp in [item for item in parameters if item not in remove_from_parameters]:
         if pp in databases:
-            if all_in_parameters:
-                continue
-            args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
+            args.extend(['-pf', getpf('../db/progress/store/{0}{1}'.format(pp, '_alt' if pp in altdbs else ''))])
             dbcount += 1
         elif pp in cdr_databases:
-            if all_in_parameters:
-                continue
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
                 dbcount += 1
-        elif pp != 'all':
+        else:
             args.append(pp)
 
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
 
-    logfile = open('../var/log/%s.log' % module_base, 'a')
-    if not skip_timelog:
-        logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
-        logfile.flush()
-    cmd = Popen(mpro + args, stdout=logfile)
-    while cmd.poll() is None:
+    if a[0] == 'batch':
+        with open('../var/log/%s.log' % module_base, 'a') as logfile:
+            if not skip_timelog:
+                logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
+                logfile.flush()
+            try:
+                call(mpro + args, stdout=logfile, stderr=logfile)
+            except KeyboardInterrupt:
+                pass
+            except CalledProcessError:
+                sys.exit(CalledProcessError.returncode)
+            else:
+                sys.exit(0)
+            finally:
+                os.unlink('../var/run/%s.pid' % module_base)
+    else:
         try:
+            cmd = Popen(mpro + args, stdout=PIPE, bufsize=1)
+            with cmd.stdout:
+                for line in iter(cmd.stdout.readline, b''):
+                    print line,
             cmd.wait()
         except KeyboardInterrupt:
-            cmd.send_signal(2)
-    if a[0] == 'batch':
-      os.unlink('../var/run/%s.pid' % module_base)
-    sys.exit(cmd.returncode)
+            try:
+                cmd.send_signal(2)
+            except OSError:
+                pass
+        else:
+            sys.exit(cmd.returncode)
 
 @target
 def idbatch(*a):
-    if os.path.exists('../var/run/servicebreak'):
+    if os.path.isfile('../maintenance'):
         print('Service break ongoing - aborting!')
         sys.exit(5)
 
     assert len(parameters) > 0, 'Which module to run?'
     batch_module = parameters[0]
+    del parameters[0]
+
     module_base = os.path.basename(batch_module)
     if 'tenant' in globals():
         module_base = '{0}_{1}'.format(module_base,tenant)
@@ -456,7 +547,7 @@ def idbatch(*a):
     cdr_dict = {}
 
     try:
-        batchid = int(parameters[1])
+        batchid = int(parameters[0])
         if batchid in databases:
             raise IndexError
     except ValueError:
@@ -465,7 +556,9 @@ def idbatch(*a):
     except IndexError:
         print('No batch ID given - aborting!')
         sys.exit(5)
-     
+
+    del parameters[0]
+
     if os.path.exists('../var/run/%s_%s.pid' % (module_base, batchid)):
         print('Lockfile %s_%s.pid exists - aborting!' % (module_base, batchid))
         sys.exit(5)
@@ -475,30 +568,30 @@ def idbatch(*a):
 
     args = ['-b', '-p', batch_module + '.p']
 
-    all_in_parameters = False
-    if 'all' in parameters[1:]:
-        all_in_parameters = True
-        args.extend(['-pf', getpf('../db/progress/store/all')])
-        cdr_dict = active_cdr_db_pf()
-        for db in cdr_dict:
-            args.extend(cdr_dict[db])
-
     dbcount = 0
-    for pp in parameters[2:]:
+    remove_from_parameters = []
+    if any(x in parameters for x in ['all', 'all_except_cdr']):
+        remove_from_parameters = databases + ['all', 'all_except_cdr']
+        args.extend(['-pf', getpf('../db/progress/store/all')])
+        dbcount += len(databases)
+        if 'all' in parameters:
+            remove_from_parameters.extend(cdr_databases)
+            dbcount += len(cdr_databases)
+            cdr_dict = active_cdr_db_pf()
+            for db in cdr_dict:
+                args.extend(cdr_dict[db])
+
+    for pp in [item for item in parameters if item not in remove_from_parameters]:
         if pp in databases:
-            if all_in_parameters:
-                continue
             args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
             dbcount += 1
         elif pp in cdr_databases:
-            if all_in_parameters:
-                continue
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
             if pp in cdr_dict:
                 args.extend(cdr_dict[pp])
                 dbcount += 1
-        elif pp != 'all':
+        else:
             args.append(pp)
     try:
         idx = args.index("-param")
@@ -513,18 +606,20 @@ def idbatch(*a):
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
 
-    logfile = open('../var/log/%s_%s.log' % (module_base, batchid), 'a')
-    if not skip_timelog:
-        logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
-        logfile.flush()
-    cmd = Popen(mpro + args, stdout=logfile)
-    while cmd.poll() is None:
+    with open('../var/log/%s_%s.log' % (module_base, batchid), 'a') as logfile:
+        if not skip_timelog:
+            logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
+            logfile.flush()
         try:
-            cmd.wait()
+            call(mpro + args, stdout=logfile, stderr=logfile)
         except KeyboardInterrupt:
-            cmd.send_signal(2)
-    os.unlink('../var/run/%s_%s.pid' % (module_base, batchid))
-    sys.exit(cmd.returncode)
+            pass
+        except CalledProcessError:
+            sys.exit(CalledProcessError.returncode)
+        else:
+            sys.exit(0)
+        finally:
+            os.unlink('../var/run/%s_%s.pid' % (module_base, batchid))
 
 @target
 def editor(*a):
@@ -537,6 +632,9 @@ def editor(*a):
         tenant = "yoigo"
     elif a[0] == 'meditor':
         tenant = "masmovil"
+
+    if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
+        os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
 
     args = parameters or (['-pf', getpf('../db/progress/store/all')])
     args = mpro + args + ['-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
