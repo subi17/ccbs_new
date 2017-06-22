@@ -294,7 +294,7 @@ IF ServCom.ActType = 0 THEN DO:
                  OUTPUT ldaActiveDate,
                  OUTPUT liActiveTime).
 
-        IF LOOKUP(bMsRequest.ReqCparam3,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 AND 
+        IF LOOKUP(bMsRequest.ReqCparam3,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 AND 
            bMsRequest.ReqType = 8 THEN
            lcShaperProfile = lcShaperProfile +
                              ",RESET_DAY=" + STRING(DAY(ldaActiveDate)).
@@ -400,7 +400,7 @@ BY ttSolog.ActStamp:
                     bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
                     LOOKUP(STRING(bMsRequest.ReqStat),"4,9,99,3") = 0 AND
                     bMsRequest.ActStamp = MsRequest.ActStamp AND
-                    LOOKUP(bMsRequest.ReqCparam2,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0
+                    LOOKUP(bMsRequest.ReqCparam2,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0
               USE-INDEX MsSeq NO-ERROR.
          IF AVAILABLE bMsRequest THEN
             ASSIGN lcServiceClass = ""
@@ -481,6 +481,11 @@ BY ttSolog.ActStamp:
                lcServiceClass = ",SERVICECLASS=0012".
             ELSE lcServiceClass = "".
          END. /* WHEN "TARJ12" THEN DO: */
+         WHEN "TARJ13" THEN DO:
+            IF MsRequest.ReqIParam1 EQ 1 THEN
+               lcServiceClass = ",SERVICECLASS=0020".
+            ELSE lcServiceClass = "".
+         END. /* WHEN "TARJ13" THEN DO: */
          OTHERWISE
             lcServiceClass = (IF AVAIL ProvCliType AND
                                        ProvCliType.ServiceClass > "" THEN
