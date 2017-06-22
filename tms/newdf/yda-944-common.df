@@ -1,0 +1,68 @@
+UPDATE FIELD "InvSeq" OF "InvSeq"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "InvSeq" OF "InvASub"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "InvSeq" OF "HighUsage"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "ArAccNum" OF "CustCat"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "ARAccNum" OF "Invoice"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "Concerns" OF "SingleFee"
+  FORMAT "99999999"
+
+UPDATE FIELD "InvNum" OF "Invoice"
+  FORMAT "zzzzzzzz9"
+
+UPDATE FIELD "InvNum" OF "SubInvoice" 
+  FORMAT "zzzzzzzz9"
+
+UPDATE FIELD "InvNum" OF "InvRow"
+  FORMAT "zzzzzzzz9"
+
+UPDATE FIELD "InvRowNum" OF "InvRow"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "CreditInvNum" OF "InvRow"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "CrInvNum" OF "Invoice"
+  FORMAT "zzzzzzzz9"
+
+UPDATE FIELD "CrInvNum" OF "SubInvoice" 
+  FORMAT "zzzzzzzz9"
+
+UPDATE FIELD "Clitype" OF "SLGAnalyse"
+  FORMAT "x(13)"
+
+UPDATE FIELD "OrderId" OF "FixedFee"
+  FORMAT "->>>>>>>>9"
+
+UPDATE FIELD "AccNum" OF "Account"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "DDAllocation" OF "BankAccount"
+  FORMAT "ZZ9.99"
+
+UPDATE FIELD "DDAllocation" OF "BankAccount"
+  FORMAT "ZZ9.99"
+
+UPDATE FIELD "AccNum" OF "BillItem"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "EUAccNum" OF "BillItem"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "EUConAccNum" OF "BillItem"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "FSAccNum" OF "BillItem"
+  FORMAT ">>>>>>>9"
+
+UPDATE FIELD "AltAccNum" OF "BillItem"
+  FORMAT ">>>>>>>9"
