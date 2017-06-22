@@ -1,4 +1,4 @@
 echo "SOG SCREENS"
 sleep 2
-screen -t request  1 xfear -screen Gwy/sogrequest -clientlog /scratch/log/sog/sreq.log
-screen -t response 2 xfear -screen Gwy/sogresponse -clientlog /scratch/log/sog/sres.log 
+screen -t request  1 pike -C /apps/yoigo/tms terminal -- Gwy/sogrequest common ordercanal mobile counter star reratelog -clientlog /scratch/log/sog/sreq.log tenant=yoigo umask=0022
+screen -t response 2 pike -C /apps/yoigo/tms terminal -- Gwy/sogresponse common ordercanal mobile counter star reratelog -clientlog /scratch/log/sog/sres.log tenant=yoigo umask=0022
