@@ -16,14 +16,14 @@ show_file = False
 def getpf(pf):
     if 'tenancies' in globals():
         for tenant in tenancies:
-            if tenancies[tenant].get('tenanttype', '') == 'Super':
+            if tenancies[tenant].get('tenanttype', '') == 'Super' or len(tenancies) == 1:
                 return '{0}_{1}.pf'.format(pf, tenant)
     return '{0}.pf'.format(pf)
 
 def userandpass():
     if 'tenancies' in globals():
         for t, tdict in tenancies.items():
-            if tdict['tenanttype'] == 'Super':
+            if tdict['tenanttype'] == 'Super' or len(tenancies) == 1:
                 return ['-U', '{0}@{1}'.format(tdict['username'], tdict['domain']), '-P', tdict['password'] ]
         raise ValueError('Cannot identify a super tenant')
     else:
@@ -39,7 +39,7 @@ def active_cdr_db_pf():
     args.extend(['-pf', getpf('../../db/progress/store/common')])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
-    dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+    dict = literal_eval(cdr_fetch.communicate()[0])
 
     if 'tenancies' in globals():
         uandp = userandpass()
@@ -49,27 +49,35 @@ def active_cdr_db_pf():
     return dict
 
 @target
-def build(*a):
+def build(match, *a):
+    '''build$|buildextapi'''
     if len(parameters) != 1:
         raise PikeException('Expected build_dir as parameter')
     build_dir = parameters[0]
     mkdir_p(build_dir)
     shutil.copy2('Makefile.py', build_dir)
-    require('rpcmethods.pl', [])
+    if match == 'build':
+        require('compile_and_do_pl', [])
+    else:
+        require('do_pl', [])
     shutil.move('rpcmethods.pl', build_dir)
 
-@target('compile')
+@target
 def rpcmethods_pl(match, *a):
-    """rpcmethods.pl"""
-    if os.path.exists(match):
-        os.unlink(match)
-    call([dlc + '/bin/prolib', match, '-create'])
+    """compile_and_do_pl|do_pl"""
+    if os.path.exists('rpcmethods.pl'):
+        os.unlink('rpcmethods.pl')
+
+    if match == 'compile_and_do_pl':
+        require('compile', [])
+
+    call([dlc + '/bin/prolib', 'rpcmethods.pl', '-create'])
     for dir, _dirs, files in os.walk('rpcmethods'):
         for file in files:
             if file.endswith('.r') \
             or file.endswith('.help') \
             or file.endswith('.sig'):
-                call([dlc + '/bin/prolib', match, '-add',
+                call([dlc + '/bin/prolib', 'rpcmethods.pl', '-add',
                       os.path.join(dir, file)])
 
 @target
