@@ -29,7 +29,7 @@ DEF VAR ldaStart                   AS DATE NO-UNDO.
 DEF VAR ldaEND                     AS DATE NO-UNDO.
 DEF VAR lcCLIType                  AS CHAR NO-UNDO.
 DEF VAR lcBundle                   AS CHAR NO-UNDO.
-DEF VAR liBIGroupType              AS INT  NO-UNDO.
+DEF VAR liBIType                   AS INT  NO-UNDO.
 
 DEF STREAM sFile.
 
@@ -234,14 +234,11 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
          ASSIGN lcCLIType = ""
                 lcBundle  = "".
 
-      ASSIGN liBIGroupType = -1.
+      ASSIGN liBIType = -1.
       FOR FIRST BillItem NO-LOCK WHERE
                 BillItem.Brand    = Invoice.Brand AND
-                BillItem.BillCode = InvRowCounter.BillCode,
-         FIRST BitemGroup NO-LOCK WHERE
-               BitemGroup.Brand   = BillItem.Brand AND
-               BitemGroup.BIGroup = BillItem.BIGroup:
-         ASSIGN liBIGroupType = BitemGroup.GroupType.
+                BillItem.BillCode = InvRowCounter.BillCode:
+         ASSIGN liBIType = BillItem.ItemType. /* Mobile, Fixedline... */
       END.
       /* Dump Invoice Rows */
       PUT STREAM sFile UNFORMATTED
@@ -264,7 +261,7 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
                  ROUND(InvRowCounter.Amount,4)            lcDelimiter
                  lcBundle                                 lcDelimiter
                  SubInvoice.FixedNumber                   lcDelimiter
-                 liBIGroupType                            SKIP.
+                 liBIType                                 SKIP.
 
    END. /* FOR EACH InvRowCounter */
 
@@ -291,14 +288,11 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
          ASSIGN lcCLIType = ""
                 lcBundle  = "".
 
-      ASSIGN liBIGroupType = -1.
+      ASSIGN liBIType = -1.
       FOR FIRST BillItem NO-LOCK WHERE
                 BillItem.Brand    = Invoice.Brand AND
-                BillItem.BillCode = InvRow.BillCode,
-         FIRST BitemGroup NO-LOCK WHERE
-               BitemGroup.Brand   = BillItem.Brand AND
-               BitemGroup.BIGroup = BillItem.BIGroup:
-         ASSIGN liBIGroupType = BitemGroup.GroupType.
+                BillItem.BillCode = InvRow.BillCode:
+         ASSIGN liBIType = BillItem.ItemType. /* Mobile, Fixedline... */
       END.
 
          /* Dump Invoice Rows */ 
@@ -322,7 +316,7 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
                     ROUND(InvRow.Amt,4)              lcDelimiter
                     lcBundle                         lcDelimiter
                     SubInvoice.FixedNumber           lcDelimiter
-                    liBIGroupType                    SKIP.
+                    liBIType                         SKIP.
 
    END. /* FOR EACH InvRow NO-LOCK WHERE */   
 END. /* for EACH Invoice NO-LOCK USE-INDEX InvDate WHERE */
