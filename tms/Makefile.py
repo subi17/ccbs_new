@@ -435,7 +435,7 @@ def terminal(*a):
 
 @target
 def batch(*a):
-    '''batch|mbatch'''
+    '''batch|mbatch|idmbatch'''
 
     if os.path.isfile('../maintenance'):
         print('Service break ongoing - aborting!')
@@ -497,6 +497,14 @@ def batch(*a):
         else:
             args.append(pp)
 
+    if a[0] == 'idbatch':
+        try:
+            idx = args.index("-param")
+        except ValueError:
+            pass
+        else:
+            args[idx + 1] = 'batchid={0}'.format(args[idx + 1])
+
     if dbcount != 0:
         args.extend(['-h', str(dbcount + 4)])
 
@@ -529,97 +537,6 @@ def batch(*a):
                 pass
         else:
             sys.exit(cmd.returncode)
-
-@target
-def idbatch(*a):
-    if os.path.isfile('../maintenance'):
-        print('Service break ongoing - aborting!')
-        sys.exit(5)
-
-    assert len(parameters) > 0, 'Which module to run?'
-    batch_module = parameters[0]
-    del parameters[0]
-
-    module_base = os.path.basename(batch_module)
-    if 'tenant' in globals():
-        module_base = '{0}_{1}'.format(module_base,tenant)
-
-    cdr_dict = {}
-
-    try:
-        batchid = int(parameters[0])
-        if batchid in databases:
-            raise IndexError
-    except ValueError:
-        print('Batch ID must be a number - aborting!')
-        sys.exit(5)
-    except IndexError:
-        print('No batch ID given - aborting!')
-        sys.exit(5)
-
-    del parameters[0]
-
-    if os.path.exists('../var/run/%s_%s.pid' % (module_base, batchid)):
-        print('Lockfile %s_%s.pid exists - aborting!' % (module_base, batchid))
-        sys.exit(5)
-    fd = open('../var/run/%s_%s.pid' % (module_base, batchid), 'w')
-    fd.write(str(os.getpid()))
-    fd.close()
-
-    args = ['-b', '-p', batch_module + '.p']
-
-    dbcount = 0
-    remove_from_parameters = []
-    if any(x in parameters for x in ['all', 'all_except_cdr']):
-        remove_from_parameters = databases + ['all', 'all_except_cdr']
-        args.extend(['-pf', getpf('../db/progress/store/all')])
-        dbcount += len(databases)
-        if 'all' in parameters:
-            remove_from_parameters.extend(cdr_databases)
-            dbcount += len(cdr_databases)
-            cdr_dict = active_cdr_db_pf()
-            for db in cdr_dict:
-                args.extend(cdr_dict[db])
-
-    for pp in [item for item in parameters if item not in remove_from_parameters]:
-        if pp in databases:
-            args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
-            dbcount += 1
-        elif pp in cdr_databases:
-            if not cdr_dict:
-                cdr_dict = active_cdr_db_pf()
-            if pp in cdr_dict:
-                args.extend(cdr_dict[pp])
-                dbcount += 1
-        else:
-            args.append(pp)
-    try:
-        idx = args.index("-param")
-    except ValueError:
-        args.extend(["-param", 'batchid=%s' % batchid])
-    else:
-        try:
-            args[idx + 1] = 'batchid=%s,%s' % (batchid, args[idx + 1])
-        except IndexError:
-            args.append('batchid=%s' % batchid)
-
-    if dbcount != 0:
-        args.extend(['-h', str(dbcount + 4)])
-
-    with open('../var/log/%s_%s.log' % (module_base, batchid), 'a') as logfile:
-        if not skip_timelog:
-            logfile.write(time.strftime('%F %T %Z') + ' {0}\n'.format('='*50))
-            logfile.flush()
-        try:
-            call(mpro + args, stdout=logfile, stderr=logfile)
-        except KeyboardInterrupt:
-            pass
-        except CalledProcessError:
-            sys.exit(CalledProcessError.returncode)
-        else:
-            sys.exit(0)
-        finally:
-            os.unlink('../var/run/%s_%s.pid' % (module_base, batchid))
 
 @target
 def editor(*a):
