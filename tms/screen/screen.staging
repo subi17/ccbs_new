@@ -1,0 +1,45 @@
+echo "-- Staging Screens --"
+echo $REQRUNDATE
+sleep 1
+
+screen 1 pike -C /apps/yoigo/tms terminal -- Gwy/orderrun common ordercanal mobile counter star reratelog mcdr -clientlog /scratch/log/requester/orderrun.log -logthreshold 1048576 -logginglevel 1 tenant=yoigo
+screen 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ5.log -logthreshold 1048576 -logginglevel 1 -param 5,$REQRUNDATE tenant=yoigo
+screen 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ1.log -logthreshold 1048576 -logginglevel 1 -param 1,$REQRUNDATE tenant=yoigo
+# -logentrytypes DB.Connects,4GLTrace:2
+screen 3 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ2.log -logthreshold 1048576 -logentrytypes "Temp-tables" -logginglevel 4 -param 2,$REQRUNDATE tenant=yoigo
+screen 4 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ3.log -logthreshold 1048576 -logentrytypes "Temp-tables" -logginglevel 4 -param 3,$REQRUNDATE tenant=yoigo
+screen 4 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ6.log -logthreshold 1048576 -logginglevel 1 -param 6,$REQRUNDATE tenant=yoigo
+screen 4 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ7.log -logthreshold 1048576 -logginglevel 1 -param 7,$REQRUNDATE tenant=yoigo
+screen 4 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ10.log -logthreshold 1048576 -logginglevel 1 -param 10,$REQRUNDATE tenant=yoigo
+
+screen 5 pike -C /apps/yoigo/tms terminal -- Gwy/topup_queue common ordercanal mobile counter star reratelog tenant=yoigo
+screen 6 pike -C /apps/yoigo/tms terminal -- test/fake/fake_solog_response common ordercanal mobile counter star reratelog -clientlog /scratch/log/sog/sres.log tenant=yoigo
+screen 7 pike -C /apps/yoigo/tms terminal -- Mnp/mnpsendnc common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnpsendnc.log tenant=yoigo
+screen 8 pike -C /apps/yoigo/tms terminal -- Mnp/mnpresp common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnpresp.log tenant=yoigo
+screen 9 pike -C /apps/yoigo/tms terminal -- Mnp/mnpanalyse common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnpanalyse.log tenant=yoigo
+screen 10 pike -C /apps/yoigo/tms terminal -- Mnp/mnperr_resend common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnperr_resend.log tenant=yoigo
+
+screen 11 pike -C /apps/yoigo/tms terminal -- Gwy/roi_history_send all tenant=yoigo
+screen 12 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo
+screen 13 pike -C /apps/yoigo/tms terminal -- Mm/te_analyses common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr tenant=yoigo
+screen 14 pike -C /apps/yoigo/tms terminal -- Rate/run_triggerrate common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr tenant=yoigo
+screen 15 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ8.log -logthreshold 1048576 -logginglevel 1 -param 8,$REQRUNDATE tenant=yoigo
+screen 16 pike -C /apps/yoigo/tms terminal -- Gwy/topup_request common ordercanal mobile counter star reratelog tenant=yoigo
+
+#screen 15 python /apps/tms/python/callalarm.py 1
+#screen 16 python /apps/tms/python/callalarm.py 2
+
+screen 17 pike -C /apps/yoigo/tms terminal -- Gwy/sogrequest common ordercanal mobile counter star reratelog -clientlog /scratch/log/sog/sreq.log tenant=yoigo
+
+# commented until connection in use again (UAT is using same prodigy, and it is in testing use. 1.6.2017 screen 18 xfear Gwy/sogresponse
+
+screen 19 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ4.log -logthreshold 1048576 -logginglevel 1 -param 4,$REQRUNDATE tenant=yoigo
+screen 20 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ9.log -logthreshold 1048576 -logginglevel 1 -param 9,$REQRUNDATE tenant=yoigo
+screen 21 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ11.log -logthreshold 1048576 -logginglevel 1 -param 11,$REQRUNDATE tenant=yoigo
+
+#screen 22 xfear test/fake/sms_hpd_sender_mock
+
+screen 23 pike -C /apps/yoigo/tms terminal -- Gwy/sms_hpd_sender all tenant=yoigo
+
+# NOTE! Check that callalarm_sender don't send message to real customers !!!
+# screen 4 /home/anttis/screen/xfear callalarm_sender
