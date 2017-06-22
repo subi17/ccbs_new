@@ -211,6 +211,7 @@
                     km;string;optional;km
                     territory_owner;string;optional;territory owner
                     coverage_token;string;mandatory;
+                    address_id;string;optional;address id;
  * @q25_data   q25_extension;boolean;optional;Extension of the Quota 25
                q25_discount;double;optional;Discount amount over the Quota 25
                per_contract_id;int;mandatory;installment contract id (related to q25)
@@ -823,7 +824,6 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             data[LOOKUP("territory_owner", gcCustomerStructStringFields)]
          OrderCustomer.CoverageToken =
             data[LOOKUP("coverage_token", gcCustomerStructStringFields)]
-         /* YDR-2532 */
          OrderCustomer.AddressId =
             data[LOOKUP("address_id", gcCustomerStructStringFields)]
          OrderCustomer.SelfEmployed       = llSelfEmployed 
@@ -1334,7 +1334,7 @@ gcCustomerStructFields = "birthday," +
                          "km," +
                          "territory_owner," +
                          "coverage_token" +
-                         "address_id". /* YDR-2532 */
+                         "address_id".
 
 /* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
