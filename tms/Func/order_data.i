@@ -113,7 +113,7 @@ FUNCTION fGetOfferSMSValues RETURNS LOGICAL
                                liLanguage,
                                ldaOrderDate).
 
-   IF LOOKUP(CLIType.CLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN
+   IF LOOKUP(CLIType.CLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN
       odeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CommercialFee.
    ELSE IF CLiType.CompareFee > 0 THEN
       odeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CompareFee.

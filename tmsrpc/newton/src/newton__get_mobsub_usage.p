@@ -120,7 +120,6 @@ DEF VAR lcUpsellId AS CHAR NO-UNDO.
 DEF VAR liCount AS INT NO-UNDO.
 DEF VAR liRstTime AS INT NO-UNDO. 
 DEF VAR ldaRstDate AS DATE NO-UNDO.
-DEF VAR lcResetTemplate AS CHAR NO-UNDO.
 
 DEF BUFFER bServiceLimit FOR ServiceLimit.
 
@@ -156,7 +155,7 @@ ASSIGN
 
 first_level_struct = add_struct(response_toplevel_id, "").
 
-IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:  
+IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:  
    FOR EACH ServiceLimit NO-LOCK WHERE
             ServiceLimit.GroupCode = MobSub.CliType,
        FIRST MServiceLimit WHERE
@@ -184,25 +183,19 @@ IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
                                        DAY(ldaActDate),
                                        YEAR(TODAY)).
                
-            /* YTS-9086 - TARJ7 does not have voice bundle thus only TARJ9 check. 
+            /* YTS-9086 - TARJ7 does not have voice bundle thus only other prepaid check. 
                TMS Counter reset request used for period start time. */
             RELEASE MsRequest.
 
-            IF LOOKUP(MobSub.CliType,"TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
-               CASE MobSub.CliType:
-                  WHEN "TARJ9"  THEN lcResetTemplate = "LADEL1_PRE_PLUS_RESET".
-                  WHEN "TARJ10" THEN lcResetTemplate = "TARJ10_RESET".
-                  WHEN "TARJ11" THEN lcResetTemplate = "TARJ11_RESET".
-                  WHEN "TARJ12" THEN lcResetTemplate = "TARJ12_RESET".
-                  OTHERWISE lcResetTemplate = "".
-               END CASE.
+            IF LOOKUP(MobSub.CliType,"TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
+               
                FIND FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
                           MsRequest.MsSeq = MobSub.MsSeq AND
                           MsRequest.ActStamp >= fHMS2TS(ldaPrepRenewal,"00:00:00") AND
                           MsRequest.ActStamp <= fHMS2TS(ldaPrepRenewal,"23:59:59") AND
                           MsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
                           MsRequest.ReqStatus <= {&REQUEST_STATUS_DONE} AND
-                          MsRequest.ReqCParam2 = lcResetTemplate
+                          MsRequest.ReqCParam2 = "LADEL1_PRE_PLUS_RESET"
                           NO-ERROR.
                IF AVAIL MsRequest THEN DO:
                   fSplitTS(MsRequest.ActStamp,OUTPUT ldaRstDate, OUTPUT liRstTime).
@@ -248,7 +241,7 @@ END. /* ELSE IF MobSub.CliType = "TARJ7" THEN DO: */
 
 EMPTY TEMP-TABLE ttCDR.
 
-ldaCDRCollectFrom = (IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 AND
+ldaCDRCollectFrom = (IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 AND
                          ldaPrepRenewal < first_of_month THEN ldaPrepRenewal
                      ELSE first_of_month).
 
@@ -287,14 +280,10 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
 
    IF ttCDR.ErrorCode NE 0 THEN NEXT.
 
-   /* Only Package data once TARJ7-12 is activated */
-   IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
+   /* Only Package data once TARJ7-13 is activated */
+   IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
 
-      IF ((ttCDR.CLIType EQ "TARJ7" AND MobSub.CLIType EQ "TARJ7") OR
-          (ttCDR.CLIType EQ "TARJ9" AND MobSub.CLIType EQ "TARJ9") OR
-          (ttCDR.CLIType EQ "TARJ10" AND MobSub.CLIType EQ "TARJ10") OR
-          (ttCDR.CLIType EQ "TARJ11" AND MobSub.CLIType EQ "TARJ11") OR
-          (ttCDR.CLIType EQ "TARJ12" AND MobSub.CLIType EQ "TARJ12")) AND
+      IF ttCDR.CLIType EQ MobSub.CLIType AND
          ttCDR.DateSt >= ldaPrepRenewal THEN DO:
 
          IF ttCDR.DateST NE ldaPrepRenewal OR
@@ -307,7 +296,7 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
                END.
             END.
             ELSE IF ttCDR.EventType EQ "CALL" AND
-                    LOOKUP(ttCDR.CLIType,"TARJ9,TARJ10,TARJ11,TARJ12") > 0 AND
+                    LOOKUP(ttCDR.CLIType,"TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 AND
                     ttCDR.Accumulator > 0 THEN DO:  
                ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
             END.
@@ -702,7 +691,7 @@ IF MobSub.CliType = "TARJ6" THEN DO:
     add_double(first_level_struct,"data_bundle_usage_day",
                ldeTARJ6DataUsageDaily).
 END. /* IF MobSub.CliType = "TARJ6" THEN DO: */
-ELSE IF LOOKUP(MobSub.CLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN
+ELSE IF LOOKUP(MobSub.CLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN
    ASSIGN
       ldeTotalDataBundleUsage = ldePrepDataUsageMonthly / 1024
       ldeTotalDataBundleLimit = ldePrepDataLimit
