@@ -497,7 +497,7 @@ def batch(*a):
         else:
             args.append(pp)
 
-    if a[0] == 'idbatch':
+    if a[0] == 'idmbatch':
         try:
             idx = args.index("-param")
         except ValueError:
