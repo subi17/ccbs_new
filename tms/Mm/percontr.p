@@ -189,7 +189,7 @@ IF MsRequest.ReqStat = 0 THEN DO:
                                        MsRequest.ReqCparam2).
 
       IF lcEmailErr NE "" THEN RETURN "ERROR: " + lcEmailErr.                                 
-      NEXT.
+      RETURN.
 
    END.
    

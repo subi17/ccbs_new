@@ -20,7 +20,8 @@
 /*This function provides a dirty solution.
 Later in YPRO project we will consider if it is reason to make 
 1) tmsparam to configure the SVAs
-2) own table to configure SVA needs*/
+2) own table to configure SVA needs
+3) make wider solution safe mapping table for the services */
 FUNCTION fIsSVA RETURNS LOGICAL
    (INPUT icService AS CHAR,
     OUTPUT oiParams AS INT):

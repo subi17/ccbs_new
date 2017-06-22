@@ -26,8 +26,8 @@ DEF VAR params_struct   AS CHAR NO-UNDO.
 
 DEF VAR llgSVA AS LOGICAL NO-UNDO.
 DEF VAR liParams AS INT NO-UNDO.
-DEF VAR lcPrice AS CHAR NO-UNDO.
-DEF VAR lcStatus AS CHAR NO-UNDO.
+DEF VAR ldPrice AS DECIMAL NO-UNDO.
+DEF VAR liStatus AS INT NO-UNDO.
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_pos_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -50,31 +50,31 @@ FOR EACH daycampaign NO-LOCK:
       FIND FIRST FMItem NO-LOCK WHERE
                  FMItem.Brand EQ gcBrand AND
                  FMItem.FeeModel EQ daycampaign.feemodel NO-ERROR.
-      IF AVAIL FMItem THEN liPrice = FMItem.Amount.
-      ELSE liPrice = 0.
+      IF AVAIL FMItem THEN ldPrice = FMItem.Amount.
+      ELSE ldPrice = 0.
 
       FIND FIRST MsRequest NO-LOCK WHERE
                  MsRequest.MsSeq EQ piMsSeq AND
-                 MsRequest.ReqStatus EQ 2 AND /*completed*/
-                 (MsRequest.ReqType EQ 8 OR
-                 MsRequest.ReqType EQ 9 ) AND
+                 /*MsRequest.ReqStatus EQ {&REQYEST_STATUS_DONE} AND*/ 
+                 (MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} OR
+                 MsRequest.ReqType EQ {&REQTYPE_CONTRACT_TERMINATION} ) AND
                  MsRequest.ReqCparam2 EQ daycampaign.dcname
                  USE-INDEX MsActStamp NO-ERROR.
       IF AVAIL MsRequest THEN DO:
-         IF MsRequest.ReqType EQ 8 AND
-            MsRequest.ReqStatus EQ 19 THEN
+         IF MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+            MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
             liStatus = 2. /*Pending activation*/
-         ELSE IF MsRequest.ReqType EQ 9 AND
-            MsRequest.ReqStatus EQ 19 THEN
+         ELSE IF MsRequest.ReqType EQ {&REQTYPE_CONTRACT_TERMINATION} AND
+            MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
             liStatus = 3. /*Pending deactivation*/
-         ELSE IF MsRequest.ReqType EQ 8 AND
-            MsRequest.ReqStatus EQ 2 THEN
+         ELSE IF MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+            MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} THEN
             liStatus = 1. /* activation done*/
          ELSE liStatus = 0. /*Inactive*/
       END.
       ELSE liStatus = 0. /*Inactive, never requested activation*/
 
-      add_int(top_struct, "price", liPrice).
+      add_double(top_struct, "price", ldPrice).
       add_int(top_struct, "status", liStatus).
 
       /*This can be covered with wider solution in near future when we

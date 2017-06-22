@@ -16,23 +16,23 @@ gcbrand = "1".
 {Func/barrfunc.i}
 {Func/msreqfunc.i}
 
-DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR lcInDir AS CHAR NO-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
 DEF VAR lcInputFile AS CHAR NO-UNDO.
 DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF VAR lcErrDir AS CHAR NO-UNDO.
 DEF VAR lcOutDir AS CHAR NO-UNDO.
-DEF VAR lcLogOutDir AS CHAR NO-UNDO.
-DEF VAR lcTableName AS CHAR NO-UNDO.
 DEF VAR ldCurrentTimeTS AS DEC NO-UNDO.
 DEF VAR lcErrorLog AS CHAR NO-UNDO.
+DEF VAR lcLog AS CHAR NO-UNDO.
 DEF VAR liReqType AS INT NO-UNDO.
 DEF VAR liReqStatus AS INT NO-UNDO.
-
+DEF VAR lcSpoolDir AS CHAR NO-UNDO.
+DEF VAR lcInProcessedDir AS CHAR NO-UNDO.
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
+DEF STREAM sErr.
 
 lcLogDir = "/tmp/".
 lcErrDir =  "/tmp/".
@@ -42,12 +42,16 @@ lcOutDir =  "/tmp/".
 
 lcLogDir = fCParam("YPRO", "YPRO_SVA_log_base_dir").
 lcErrDir = fCParam("YPRO", "YPRO_SVA_err_base_dir").
-lcInDir = fCParam("YPRO", "YPRO_SVA_in_base_dir").
+lcInDir = fCParam("YPRO", "YPRO_SVA_in_base_dir") + "/incoming/".
 lcOutDir = fCParam("YPRO", "YPRO_SVA_out_base_dir").
+lcSpoolDir = fCParam("YPRO", "YPRO_SVA_in_base_dir") + "/spool/".
+lcInProcessedDir = fCParam("YPRO", "YPRO_SVA_in_base_dir") + "/processed/".
+
+
 
 /*File handling logic starts*/
 /* File reading and parsing */
-INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcInDir).
+INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcInDir ).
 REPEAT:
 
    IMPORT STREAM sFile UNFORMATTED lcFileName.
@@ -61,13 +65,14 @@ REPEAT:
 
       /*Accept only activation files*/
       IF NOT lcFileName MATCHES "sva_*.txt" THEN NEXT.
-      IF lcFileName MATCHES "*log*" THEN NEXT.
+      /*IF lcFileName MATCHES "*log*" THEN NEXT.*/
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
    END.
    ELSE NEXT.
-
-   lcErrorLog = lcLogDir + lcFileName + ".LOG".
+   
+   lcErrorLog = lcSpoolDir + lcFileName + "_ERRORS.LOG".
+   lcLog = lcSpoolDir + lcFileName + ".LOG".
 
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile).
 
@@ -81,8 +86,9 @@ REPEAT:
 
    RUN pReadFileData.
 
-   fMove2TransDir(lcErrorLog, "", lcLogDir).
-   /*fMove2TransDir(lcInputFile, "", lcProcDir).*/
+   fMove2TransDir(lcErrorLog, "", lcErrDir).
+   fMove2TransDir(lcLog, "", lcLogDir).
+   fMove2TransDir(lcInputFile, "", lcInProcessedDir).
    IF SESSION:BATCH AND lcInputFile NE "" THEN
       fBatchLog("FINISH", lcInputFile).
 END.
@@ -132,9 +138,13 @@ PROCEDURE pReadFileData:
                  Mobsub.Paytype EQ FALSE NO-ERROR.
       IF NOT AVAIL Mobsub THEN DO:
          lcErrText = lcLine + ";ERROR: Subscription not found".
-         OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
+         OUTPUT STREAM sErr TO VALUE(lcErrorLog) append.
+         PUT STREAM sErr UNFORMATTED lcErrText SKIP.
+         OUTPUT STREAM sErr CLOSE.
+         OUTPUT STREAM sLog TO VALUE(lcLog) append.
          PUT STREAM sLog UNFORMATTED lcErrText SKIP.
          OUTPUT STREAM sLog CLOSE.
+
          NEXT. /*next line*/
       END.
       /*Allowed state transitions:
@@ -146,10 +156,13 @@ PROCEDURE pReadFileData:
          liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
       ELSE DO:
          lcErrText = lcLine + "Incorrect action code " + lcSetStatus.
-         OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
+         OUTPUT STREAM sErr TO VALUE(lcErrorLog) append.
+         PUT STREAM sErr UNFORMATTED lcErrText SKIP.
+         OUTPUT STREAM sErr CLOSE.
+         OUTPUT STREAM sLog TO VALUE(lcLog) append.
          PUT STREAM sLog UNFORMATTED lcErrText SKIP.
          OUTPUT STREAM sLog CLOSE.
-        
+       
          NEXT.
  
       END.
@@ -162,9 +175,13 @@ PROCEDURE pReadFileData:
       IF NOT AVAIL MsRequest THEN DO:
          lcErrText = lcLine + ";" + "Action not allowed: Reauested " + 
                      lcSetStatus.
-         OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
+         OUTPUT STREAM sErr TO VALUE(lcErrorLog) append.
+         PUT STREAM sErr UNFORMATTED lcErrText SKIP.
+         OUTPUT STREAM sErr CLOSE.
+         OUTPUT STREAM sLog TO VALUE(lcLog) append.
          PUT STREAM sLog UNFORMATTED lcErrText SKIP.
          OUTPUT STREAM sLog CLOSE.
+
                      
          NEXT.
       END.
@@ -172,7 +189,7 @@ PROCEDURE pReadFileData:
 
       /*fSendEmailByRequest*/
       fReqStatus(6, "Execute SVA operation ").
-      OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
+      OUTPUT STREAM sLog TO VALUE(lcLog) append.
       PUT STREAM sLog UNFORMATTED "Operation done" SKIP.
       OUTPUT STREAM sLog CLOSE.
 

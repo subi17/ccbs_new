@@ -71,7 +71,7 @@ if LcRet NE "" THEN
 lcRet = fCreateEntryC("YPRO_SVA_out_base_dir", /*param code*/
               "YPRO",              /*param group*/
               "Base level directory for Outgoing SVA",  /*param name*/ 
-              "/mnt/store/riftp/sva/processed/"). /*actual parameter value*/
+              "/mnt/store/riftp/sva/outgoing/"). /*actual parameter value*/
 
 if LcRet NE "" THEN
    MESSAGE lcRet VIEW-AS ALERT-BOX.
