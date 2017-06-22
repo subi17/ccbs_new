@@ -370,7 +370,7 @@ PROCEDURE pHandleEDR:
                    (ttEDR.CLIType EQ "TARJ10" AND ttEDR.ServiceFeeType = "SC10") OR
                    (ttEDR.CLIType EQ "TARJ11" AND ttEDR.ServiceFeeType = "SC11") OR
                    (ttEDR.CLIType EQ "TARJ12" AND ttEDR.ServiceFeeType = "SC12") OR 
-                   (ttEDR.CLIType EQ "TARJ12" AND ttEDR.ServiceFeeType = "SC20")) THEN 
+                   (ttEDR.CLIType EQ "TARJ13" AND ttEDR.ServiceFeeType = "SC20")) THEN 
                DO:
                   liRequest = fServiceRequest(MobSub.MsSeq,
                                               "TEMPLATE",

@@ -120,7 +120,6 @@ DEF VAR lcUpsellId AS CHAR NO-UNDO.
 DEF VAR liCount AS INT NO-UNDO.
 DEF VAR liRstTime AS INT NO-UNDO. 
 DEF VAR ldaRstDate AS DATE NO-UNDO.
-DEF VAR lcResetTemplate AS CHAR NO-UNDO.
 
 DEF BUFFER bServiceLimit FOR ServiceLimit.
 
@@ -189,21 +188,14 @@ IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
             RELEASE MsRequest.
 
             IF LOOKUP(MobSub.CliType,"TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
-               CASE MobSub.CliType:
-                  WHEN "TARJ9"  THEN lcResetTemplate = "LADEL1_PRE_PLUS_RESET".
-                  WHEN "TARJ10" THEN lcResetTemplate = "LADEL1_PRE_PLUS_RESET".
-                  WHEN "TARJ11" THEN lcResetTemplate = "LADEL1_PRE_PLUS_RESET".
-                  WHEN "TARJ12" THEN lcResetTemplate = "LADEL1_PRE_PLUS_RESET".
-                  WHEN "TARJ13" THEN lcResetTemplate = "LADEL1_PRE_PLUS_RESET".
-                  OTHERWISE lcResetTemplate = "".
-               END CASE.
+               
                FIND FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
                           MsRequest.MsSeq = MobSub.MsSeq AND
                           MsRequest.ActStamp >= fHMS2TS(ldaPrepRenewal,"00:00:00") AND
                           MsRequest.ActStamp <= fHMS2TS(ldaPrepRenewal,"23:59:59") AND
                           MsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
                           MsRequest.ReqStatus <= {&REQUEST_STATUS_DONE} AND
-                          MsRequest.ReqCParam2 = lcResetTemplate
+                          MsRequest.ReqCParam2 = "LADEL1_PRE_PLUS_RESET"
                           NO-ERROR.
                IF AVAIL MsRequest THEN DO:
                   fSplitTS(MsRequest.ActStamp,OUTPUT ldaRstDate, OUTPUT liRstTime).
@@ -289,14 +281,9 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
    IF ttCDR.ErrorCode NE 0 THEN NEXT.
 
    /* Only Package data once TARJ7-13 is activated */
-   IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
+   IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
 
-      IF ((ttCDR.CLIType EQ "TARJ7" AND MobSub.CLIType EQ "TARJ7") OR
-          (ttCDR.CLIType EQ "TARJ9" AND MobSub.CLIType EQ "TARJ9") OR
-          (ttCDR.CLIType EQ "TARJ10" AND MobSub.CLIType EQ "TARJ10") OR
-          (ttCDR.CLIType EQ "TARJ11" AND MobSub.CLIType EQ "TARJ11") OR
-          (ttCDR.CLIType EQ "TARJ12" AND MobSub.CLIType EQ "TARJ12") OR
-          (ttCDR.CLIType EQ "TARJ13" AND MobSub.CLIType EQ "TARJ13")) AND
+      IF ttCDR.CLIType EQ MobSub.CLIType AND
          ttCDR.DateSt >= ldaPrepRenewal THEN DO:
 
          IF ttCDR.DateST NE ldaPrepRenewal OR
