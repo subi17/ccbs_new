@@ -29,7 +29,7 @@ DEF STREAM Sout.
 
 ASSIGN lcLogDir     = fCParam("PrepaidBundle","PrepaidBundle_LogDir")
        ldeNow       = fMakeTS()
-       lcGroupCodes = "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12".
+       lcGroupCodes = "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13".
 
 IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
 
