@@ -1,7 +1,7 @@
 ADD FIELD "ItemType" OF "BillItem" AS integer 
   FORMAT ">>9"
   INITIAL "0"
-  LABEL "Billing Item type"
+  LABEL "Item Type"
   HELP "Type 0 for mobile 1 for convergent"
   ORDER 390
 
