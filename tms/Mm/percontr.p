@@ -1363,7 +1363,7 @@ PROCEDURE pFinalize:
       END. /* FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE */
    END. /* IF LOOKUP(lcDCEvent,lcFLATContracts) > 0 AND */
 
-   IF LOOKUP(lcDCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
+   IF LOOKUP(lcDCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
       CASE iiRequestType:
          WHEN 8 THEN ASSIGN lcSMSText = lcDCEvent + "RenewalOK"
                             ldaPrepResetDate = ADD-INTERVAL(ldtActDate,1,"months").
@@ -1395,7 +1395,11 @@ PROCEDURE pFinalize:
            WHEN "MDUB5" THEN ASSIGN
               lcSMSText = REPLACE(lcSMSText,"#BUNDLE", "12")
               lcSender = "22644".
-           WHEN "TARJ7" OR WHEN "TARJ9" OR WHEN "TARJ10" OR WHEN "TARJ11" OR WHEN "TARJ12" THEN
+           WHEN "TARJ7" OR WHEN "TARJ9" 
+                        OR WHEN "TARJ10" 
+                        OR WHEN "TARJ11" 
+                        OR WHEN "TARJ12" 
+                        OR WHEN "TARJ13" THEN
               ASSIGN lcSMSText = REPLACE(lcSMSText,"#DATE",
                                          STRING(DAY(ldaPrepResetDate)) + "/" +
                                          STRING(MONTH(ldaPrepResetDate)))
@@ -2101,7 +2105,7 @@ PROCEDURE pContractTermination:
             ldNewEndStamp = fSecOffSet(ldNewEndStamp,-1). 
          END.
 
-         IF LOOKUP(lcDCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
+         IF LOOKUP(lcDCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
             FOR FIRST bServiceLimit WHERE
                       bServiceLimit.GroupCode = "TARJ7_UPSELL",
                 FIRST bMServiceLimit EXCLUSIVE-LOCK WHERE
