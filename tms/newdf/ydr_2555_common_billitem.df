@@ -1,0 +1,12 @@
+ADD FIELD "ItemType" OF "BillItem" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Billing Item type"
+  HELP "Type 0 for mobile 1 for convergent"
+  ORDER 390
+
+.
+PSC
+cpstream=1252
+.
+
