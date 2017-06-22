@@ -1,6 +1,6 @@
 echo "MNP HANDLER SCREENS"
 sleep 2
-screen 1 xfear -screen Mnp/mnpresp -clientlog /scratch/log/mnp/mnpresp.log
-screen 2 xfear -screen Mnp/mnpanalyse -clientlog /scratch/log/mnp/mnpanalyse.log
-screen 3 xfear -screen Mnp/mnperr_resend -clientlog /scratch/log/mnp/mnperr_resend.log
-screen 4 xfear -screen Mnp/mnpsendnc -clientlog /scratch/log/mnp/mnpsendnc.log
+screen 1 pike -C /apps/yoigo/tms terminal -- Mnp/mnpresp common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnpresp.log tenant=yoigo umask=0022
+screen 2 pike -C /apps/yoigo/tms terminal -- Mnp/mnpanalyse common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnpanalyse.log tenant=yoigo umask=0022
+screen 3 pike -C /apps/yoigo/tms terminal -- Mnp/mnperr_resend common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnperr_resend.log tenant=yoigo umask=0022
+screen 4 pike -C /apps/yoigo/tms terminal -- Mnp/mnpsendnc common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnpsendnc.log tenant=yoigo umask=0022
