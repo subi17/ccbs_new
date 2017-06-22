@@ -342,6 +342,10 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       ELSE IF ttCall.ServiceClass = {&SC_TARJ12_INSIDE_DATABUNDLE1}
       OR ttCall.ServiceClass = {&SC_TARJ12_INSIDE_DATABUNDLE2} THEN
          mod_bsub = "GPRSDATA_TARJ12".
+      /* TARJ13 case */
+      ELSE IF ttCall.ServiceClass = {&SC_TARJ13_INSIDE_DATABUNDLE1}
+      OR ttCall.ServiceClass = {&SC_TARJ13_INSIDE_DATABUNDLE2} THEN
+         mod_bsub = "GPRSDATA_TARJ13".
    END.
 
    IF dest_recid = ? OR 
