@@ -219,6 +219,10 @@
 "CLIType" "StatusCode" "MobSub" "0" "Inactive" "" "" 1
 "CLIType" "StatusCode" "MobSub" "1" "Active" "" "" 1
 "CLIType" "StatusCode" "MobSub" "2" "Retired" "" "" 1
+"CLIType" "TariffType" "MobSub" "0" "MobileOnly" "" "" 1
+"CLIType" "TariffType" "MobSub" "1" "Convergent" "" "" 1
+"CLIType" "TariffType" "MobSub" "2" "FixedOnly" "" "" 1
+"CLIType" "TariffType" "MobSub" "3" "Fusion" "" "" 1
 "CLIType" "UsageType" "MobSub" "1" "Voice" "" "" 1
 "CLIType" "UsageType" "MobSub" "2" "Data" "" "" 1
 "CLIType" "WebStatusCode" "MobSub" "0" "Inactive" "" "" 1
@@ -1381,6 +1385,7 @@
 "Salesman" "SmPrefix" "IFS" "AN" "ATAKAM EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AO" "AON CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AP" "Apple" "" "28" 1
+"Salesman" "SmPrefix" "IFS" "AW" "AON WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AX" "Axia" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "BE" "BYMOVIL EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BF" "Backoffice Fusion" "" "15" 1
@@ -1388,25 +1393,44 @@
 "Salesman" "SmPrefix" "IFS" "BL" "Vista internal users" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "BM" "BYMOVIL RETENCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BR" "BYMOVIL RECEPCION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "BW" "B12 WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BY" "ByMovil" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "CA" "Carrefour" "" "12" 0
 "Salesman" "SmPrefix" "IFS" "CL" "Casturtel Leon" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "CN" "CANCELACIONES MARKTEL" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CP" "CASTURTEL PALENCIA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CR" "" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CT" "CASTURTEL EMISION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "D2" "DOOR TO DOOR" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "DX" "Dextra" "" "27" 0
+"Salesman" "SmPrefix" "IFS" "EB" "EMERGIA BACKOFFICE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EM" "" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EO" "CELLCOM EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EU" "Emision Unisono" "" "15" 0
+"Salesman" "SmPrefix" "IFS" "FR" "FACTORIA INBOUND OF" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "FW" "FACTORIA INBOUND ON" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "GC" "GSS CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GE" "GSS EMISION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "GM" "GSS MADRID OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GR" "GSS RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GS" "GSS" "" "15" 0
+"Salesman" "SmPrefix" "IFS" "GW" "GSS WEB" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KC" "KONECTA CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KH" "K-HABLS" "" "27" 0
+"Salesman" "SmPrefix" "IFS" "KN" "KONECTA OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KW" "KONECTA WEB" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MA" "MADISON OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MC" "MADISON CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MD" "Mundo Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "MG" "MGM" "" "14" 0
+"Salesman" "SmPrefix" "IFS" "MI" "MARKTEL INBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MK" "MARKTEL CROSS-SELL" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MM" "Media Markt" "" "18" 0
+"Salesman" "SmPrefix" "IFS" "MO" "MARKTEL ONLINE" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MR" "MARKTEL INBOUND OF" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MT" "MARKTEL OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MW" "MARKTEL INBOUND ON" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PE" "Phone House Televenta Emision" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PH" "The Phone House" "" "11" 0
 "Salesman" "SmPrefix" "IFS" "PJ" "PhoneHouse Retencion Jerez" "" "15" 1
