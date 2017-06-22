@@ -524,7 +524,7 @@ REPEAT WITH FRAME sel:
      
         IF icTriggerConfID = "SPECIAL_FILE" THEN DO:
         
-           UPDATE lcTriggerItemsFile FORMAT "X(50)" LABEL "INPUT FILENAME" WITH OVERLAY CENTERED FRAME File.
+           UPDATE lcTriggerItemsFile FORMAT "X(60)" LABEL "INPUT FILENAME" WITH OVERLAY CENTERED FRAME File.
 
            IF INPUT lcTriggerItemsFile = "" THEN DO: hide frame file no-pause. NEXT LOOP. END.
 

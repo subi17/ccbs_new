@@ -421,7 +421,7 @@ FOR EACH DCCLI WHERE
                                  DCCLI.RenewalDate,
                                  DCCLI.ValidTo,
                                  DCCLI.ValidToOrig,
-                                 TODAY,
+                                 TODAY - 1,
                                  DayCampaign.TermFeeCalc).
 
    ldeCurrPen = TRUNCATE(ldeCurrPen * ldePrice,0).

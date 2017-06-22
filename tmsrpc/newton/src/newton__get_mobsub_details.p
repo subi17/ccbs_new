@@ -148,7 +148,7 @@ add_string(resp_struct, "mandate_id", MsOwner.MandateId).
 add_datetime(resp_struct, "mandate_date", MsOwner.Mandatedate). 
 
 /* Reset Date of benefits */
-IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN
+IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN
    FOR FIRST ServiceLimit NO-LOCK WHERE
              ServiceLimit.GroupCode = MobSub.CLIType:
        FIND FIRST MServiceLimit WHERE
