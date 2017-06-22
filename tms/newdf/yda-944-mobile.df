@@ -1,0 +1,23 @@
+UPDATE FIELD "MsRequest" OF "MSRequest"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "Solog" OF "MSRequest"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "SoLog" OF "Solog"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "MsRequest" OF "Solog"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "Clitype" OF "MSOwner"
+  FORMAT "x(13)"
+
+UPDATE FIELD "CliType" OF "TermMobsub" 
+  FORMAT "x(13)"
+
+UPDATE FIELD "CLIType" OF "CTServEl"
+  FORMAT "x(13)"
+
+UPDATE FIELD "CLIType" OF "CTServPac"
+  FORMAT "x(13)"
