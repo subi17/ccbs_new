@@ -1,6 +1,6 @@
 echo "TM Counters SCREENs"
 sleep 2
-screen 1 xfear -screen Rate/tmqueue_analysis tms.pf
-screen 2 xfear -screen Rate/tmqueue_analysis tms.pf
-screen 3 xfear -screen Rate/tmqueue_analysis tms.pf
-screen 4 xfear -screen Rate/tmqueue_analysis tms.pf
+screen 1 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo umask=0022
+screen 2 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo umask=0022
+screen 3 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo umask=0022
+screen 4 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo umask=0022
