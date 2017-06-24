@@ -50,6 +50,7 @@ FUNCTION fAnalBsub RETURNS LOGICAL
    DEF VAR lcRoamGPRSZone            AS CHAR NO-UNDO. 
    DEF VAR lcBRoamZone               AS CHAR NO-UNDO.
    DEF VAR lcARoamZone               AS CHAR NO-UNDO.
+   DEF VAR lcBNumber                 AS CHAR NO-UNDO. 
 
    ASSIGN
       b_foc       = FALSE  
@@ -385,7 +386,8 @@ FUNCTION fAnalBsub RETURNS LOGICAL
 
       FIND FIRST BDest WHERE RECID(BDest) = dest_recid NO-LOCK.
 
-      IF CAN-FIND(FIRST BDestTrans NO-LOCK WHERE
+      IF BDest.BDest NE "ROAM_EU" AND
+         CAN-FIND(FIRST BDestTrans NO-LOCK WHERE
                         BDestTrans.BDestId EQ BDest.BdestId) THEN DO:
          
          IF lcTranslatedAddress EQ "" THEN 
@@ -429,6 +431,47 @@ FUNCTION fAnalBsub RETURNS LOGICAL
             dest_recid = ?
             oiErrCode  = {&CDR_TRANSLATED_ADDRESS_NOT_FOUND}.
 
+      END.
+      
+      IF ttCall.BDest EQ "ROAM_EU" AND
+         (ttCall.Spocmt EQ 3 OR
+          ttCall.Spocmt EQ 4) THEN DO:
+
+         lcBNumber = ttCall.Gsmbnr.
+
+         IF liOrigBType NE 1 THEN DO:
+            FIND FIRST rzItem WHERE
+                       rzItem.PlmnCode = lcNetworkowner
+            NO-LOCK NO-ERROR.
+            IF AVAIL rzItem THEN 
+               lcBNumber = rzItem.CountryPrefix + lcBNumber.
+            ELSE lcBNumber = "".
+         END.
+         
+         IF lcBNumber > "" THEN
+         DO b = LENGTH(lcBNumber) TO 1 BY -1:
+
+            FIND FIRST BDestTrans NO-LOCK  WHERE
+                       BDestTrans.BDestID = BDest.BDestID AND
+                       BDestTrans.TranslateNumber = SUBSTRING(lcBNumber,1,b) AND
+                       BDestTrans.Todate >= ttCall.DateST AND
+                       BDestTrans.FromDate <= ttCall.DateST NO-ERROR.
+            IF NOT AVAIL BDestTrans THEN NEXT.
+
+            IF INDEX(BDestTrans.RatingZone,"SHORT") > 0 AND
+               BDestTrans.TranslateNumber NE lcBNumber THEN NEXT.
+
+            mod_bsub = BDestTrans.BDest.
+            FIND FIRST Bdest NO-LOCK WHERE 
+                       Bdest.Brand = msowner.Brand AND
+                       BDest.BDest = mod_bsub AND
+                       BDest.Todate >= ttCall.DateSt AND
+                       Bdest.FromDate <= ttCall.DateSt NO-ERROR.
+
+            IF NOT AVAIL BDest THEN dest_recid = ?.
+            ELSE dest_recid = RECID(BDest).
+            LEAVE.
+         END.
       END.
    
       IF dest_recid NE ? THEN ASSIGN
