@@ -251,6 +251,45 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       IF Mod_bsub =  "ROAM_EU" AND ttCall.gsmbnr = "633800800" then
       mod_bsub = ttCall.Gsmbnr.
       
+      IF mod_bsub EQ "ROAM_EU" AND
+         (ttCall.Spocmt EQ 3 OR
+          ttCall.Spocmt EQ 4) THEN DO:
+
+         lcBNumber = ttCall.Gsmbnr.
+
+         IF liOrigBType NE 1 THEN DO:
+            FIND FIRST rzItem WHERE
+                       rzItem.PlmnCode = lcNetworkowner
+            NO-LOCK NO-ERROR.
+            IF AVAIL rzItem THEN 
+               lcBNumber = rzItem.CountryPrefix + lcBNumber.
+            ELSE lcBNumber = "".
+         END.
+
+         FIND FIRST BDest NO-LOCK WHERE
+                    BDest.Brand = lcRateBrand AND
+                    BDest.BDest = "ROAM_EU" AND
+                    BDest.ToDate >= ttCall.DateSt AND
+                    BDest.FromDate <= ttCall.DateSt NO-ERROR.
+         
+         IF lcBNumber > "" AND AVAIL BDest THEN
+         DO b = LENGTH(lcBNumber) TO 1 BY -1:
+
+            FIND FIRST BDestTrans NO-LOCK  WHERE
+                       BDestTrans.BDestID = BDest.BDestID AND
+                       BDestTrans.TranslateNumber = SUBSTRING(lcBNumber,1,b) AND
+                       BDestTrans.Todate >= ttCall.DateST AND
+                       BDestTrans.FromDate <= ttCall.DateST NO-ERROR.
+            IF NOT AVAIL BDestTrans THEN NEXT.
+
+            IF INDEX(BDestTrans.RatingZone,"SHORT") > 0 AND
+               BDestTrans.TranslateNumber NE lcBNumber THEN NEXT.
+
+            mod_bsub = BDestTrans.BDest.
+            LEAVE.
+         END.
+      END.
+      
       /* destination type is not used with roaming */
       FIND FIRST BDest WHERE 
                  BDest.Brand = lcRateBrand AND 
@@ -431,47 +470,6 @@ FUNCTION fAnalBsub RETURNS LOGICAL
             dest_recid = ?
             oiErrCode  = {&CDR_TRANSLATED_ADDRESS_NOT_FOUND}.
 
-      END.
-      
-      IF ttCall.BDest EQ "ROAM_EU" AND
-         (ttCall.Spocmt EQ 3 OR
-          ttCall.Spocmt EQ 4) THEN DO:
-
-         lcBNumber = ttCall.Gsmbnr.
-
-         IF liOrigBType NE 1 THEN DO:
-            FIND FIRST rzItem WHERE
-                       rzItem.PlmnCode = lcNetworkowner
-            NO-LOCK NO-ERROR.
-            IF AVAIL rzItem THEN 
-               lcBNumber = rzItem.CountryPrefix + lcBNumber.
-            ELSE lcBNumber = "".
-         END.
-         
-         IF lcBNumber > "" THEN
-         DO b = LENGTH(lcBNumber) TO 1 BY -1:
-
-            FIND FIRST BDestTrans NO-LOCK  WHERE
-                       BDestTrans.BDestID = BDest.BDestID AND
-                       BDestTrans.TranslateNumber = SUBSTRING(lcBNumber,1,b) AND
-                       BDestTrans.Todate >= ttCall.DateST AND
-                       BDestTrans.FromDate <= ttCall.DateST NO-ERROR.
-            IF NOT AVAIL BDestTrans THEN NEXT.
-
-            IF INDEX(BDestTrans.RatingZone,"SHORT") > 0 AND
-               BDestTrans.TranslateNumber NE lcBNumber THEN NEXT.
-
-            mod_bsub = BDestTrans.BDest.
-            FIND FIRST Bdest NO-LOCK WHERE 
-                       Bdest.Brand = msowner.Brand AND
-                       BDest.BDest = mod_bsub AND
-                       BDest.Todate >= ttCall.DateSt AND
-                       Bdest.FromDate <= ttCall.DateSt NO-ERROR.
-
-            IF NOT AVAIL BDest THEN dest_recid = ?.
-            ELSE dest_recid = RECID(BDest).
-            LEAVE.
-         END.
       END.
    
       IF dest_recid NE ? THEN ASSIGN
