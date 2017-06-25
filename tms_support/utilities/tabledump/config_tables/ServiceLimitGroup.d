@@ -84,6 +84,7 @@
 "1" "TARJ10" "La prepago de 1 GB" 29/05/17 31/12/49
 "1" "TARJ11" "La prepago de 2 GB" 29/05/17 31/12/49
 "1" "TARJ12" "La prepago de 4 GB" 29/05/17 31/12/49
+"1" "TARJ13" "La prepago de llamadas ilimitadas" 20/06/17 31/12/49
 "1" "TARJ6" "TARJ6 Bundle" 01/08/13 31/12/49
 "1" "TARJ7" "TARJ7 Bundle" 01/11/13 31/12/49
 "1" "TARJ7_UPSELL" "TARJ7 Upsell" 01/11/13 31/12/49
