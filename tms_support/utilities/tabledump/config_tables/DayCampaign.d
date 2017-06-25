@@ -121,6 +121,7 @@
 "TARJ10" 29/05/17 4 31/12/49 "PRETARJ10BUNDLE" 0 "" "" "La prepago de 1 GB" 93 0 "1" "1" 4 4 0 0 "PRETARJ10BUNDLE" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0 2
 "TARJ11" 29/05/17 4 31/12/49 "PRETARJ11BUNDLE" 0 "" "" "La prepago de 2 GB" 93 0 "1" "1" 4 4 0 0 "PRETARJ11BUNDLE" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0 2
 "TARJ12" 29/05/17 4 31/12/49 "PRETARJ12BUNDLE" 0 "" "" "La prepago de 4 GB" 93 0 "1" "1" 4 4 0 0 "PRETARJ12BUNDLE" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0 2
+"TARJ13" 20/06/17 4 31/12/49 "PRETARJ13BUNDLE" 0 "" "" "La prepago de llamadas ilimitadas" 93 0 "1" "1" 4 4 0 0 "PRETARJ13BUNDLE" "" "" 0 1 0 yes 1 0 0 1 "" 0 2
 "TARJ6" 01/08/13 4 31/12/49 "" 0 "" "" "Tarjeta 6 Bundle" 93 0 "1" "4" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 2 "TARJ_UPSELL" 0 2
 "TARJ7" 01/11/13 4 31/12/49 "" 0 "" "" "La del uno 650 MB" 93 0 "1" "4" 4 4 0 0 "TARJ7_BundleFee" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0 2
 "TARJ7_UPSELL" 01/11/13 4 31/12/49 "" 0 "" "" "Ampliación 300 MB" 93 0 "1" "6" 1 3 1 0 "TARJ7_UPSELLFee" "" "" 2 1 0 yes 999 0 0 1 "" 0 2
