@@ -376,3 +376,5 @@
 144 "SubsTypeFrom" "CONTFH59_50"
 144 "SubsTypeFrom" "CONTFH69_300"
 144 "SubsTypeTo" "CONT25"
+145 "PerContract" "TARJ13"
+145 "SubsTypeTo" "TARJ13"
