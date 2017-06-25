@@ -991,6 +991,7 @@
 "GPRSDATA_TARJ10" "GPRS Data TARJ10" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/17 1078
 "GPRSDATA_TARJ11" "GPRS Data TARJ11" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/17 1079
 "GPRSDATA_TARJ12" "GPRS Data TARJ12" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/17 1080
+"GPRSDATA_TARJ13" "GPRS Data TARJ13" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 20/06/17 1082
 "GPRSDATA_TARJ7" "GPRS data tarj7" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/10/15 1002
 "GPRSDATA_TARJ9" "GPRS data tarj9" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/10/15 1003
 "GPRSDATA_UPGRADE" "GPRS data Upgrade Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 26/03/12 779
