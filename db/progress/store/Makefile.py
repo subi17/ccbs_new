@@ -21,6 +21,13 @@ if not 'tenancies' in globals():
 # Configure database location (on different partitions/remote hosts)
 # for production servers. All databases not found in this dictionary
 # will be assumed/created in the current directory
+#
+# If the value has ':' delimeted list then:
+#   - 1. entry is a host name
+#   - 2. entry is a database name (the actual file name of the database basename without db extension)
+#
+# If the value is not ':' delimeted list then the value is database location with absolute path
+# but without the db extension
 
 db_locations = {
     'alpheratz': {'common': '/db1/common/common',
@@ -117,18 +124,22 @@ db_locations = {
 # for production servers. There will be alternative pf file only for the databases
 # listed in here. There might be a need for alternative databases for example in monitoring cases
 # and also when replica server needs to connect to the main server
+#
+# If the value has ':' delimeted list then:
+#   - 1. entry is a host name
+#   - 2. entry is a database name (the actual file name of the database basename without db extension)
+#   - 3. entry is the -S parameter value (if available otherwise it is same as 2. entry value)
+#
+# If the value is not ':' delimeted list then the value is database location with absolute path
+# but without the db extension
 
 db_alternative_locations = {
-    'arneb': {'common': 'pallas.int.asp.qvantel.net:common',
-              'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
-              'mobile': 'pallas.int.asp.qvantel.net:mobile',
-              'counter': 'pallas.int.asp.qvantel.net:counter',
-              'star': 'pallas.int.asp.qvantel.net:star'},
-    'pallas': {'common': 'arneb.int.asp.qvantel.net:common',
-               'ordercanal': 'arneb.int.asp.qvantel.net:ordercanal',
-               'mobile': 'arneb.int.asp.qvantel.net:mobile',
-               'counter': 'arneb.int.asp.qvantel.net:counter',
-               'star': 'arneb.int.asp.qvantel.net:star'}
+    'arneb': {'common': 'pallas.int.asp.qvantel.net:common'},
+    'pallas': {'common': 'arneb.int.asp.qvantel.net:common:pcommonrepl',
+               'ordercanal': 'arneb.int.asp.qvantel.net:ordercanal:pordercanalrepl',
+               'mobile': 'arneb.int.asp.qvantel.net:mobile:pmobilerepl',
+               'counter': 'arneb.int.asp.qvantel.net:counter:pcounterrepl',
+               'star': 'arneb.int.asp.qvantel.net:star:pstarrepl'}
 }
 
 db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
@@ -190,7 +201,7 @@ def db_full_path(db_name, suffix='.db', host=None):
 
     return '{0}{1}'.format(locs.get(db_name, '{0}/{1}'.format(getcwd(), db_name)), suffix)
 
-def db_alternative_full_path(db_name, suffix='.db', host=None):
+def db_alternative_full_path(db_name, host=None):
 
     if environment == 'development':
         return ''
@@ -200,7 +211,7 @@ def db_alternative_full_path(db_name, suffix='.db', host=None):
     if host in db_alternative_locations:
         locs = db_alternative_locations[host]
         if db_name in locs:
-            return '{0}{1}'.format(locs[db_name], suffix)
+            return locs[db_name]
     return ''
 
 @target(initialize_dependencies)
@@ -335,7 +346,7 @@ def startup_parameter_file(match, deps, db_name):
 def connect_parameter_file(match, deps, db_name):
     '''([_a-zA-Z0-9]+)\.pf'''
     path = db_full_path(db_name, '').split(':')
-    alternativepath = db_alternative_full_path(db_name, '').split(':')
+    alternativepath = db_alternative_full_path(db_name).split(':')
 
     fd = open(db_name + '.pf', 'wt')
     if len(path) > 1:
@@ -357,7 +368,7 @@ def connect_parameter_file(match, deps, db_name):
         if len(alternativepath) > 1:
             fd.write('-db %s\n' % alternativepath[1])
             fd.write('-H %s\n' % alternativepath[0])
-            fd.write('-S %s\n' % alternativepath[1])
+            fd.write('-S %s\n' % alternativepath[len(alternativepath) - 1])
         else:
             fd.write('-db %s\n' % alternativepath[0])
         fd.write('-ld %s\n' % db_name)

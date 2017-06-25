@@ -27,6 +27,7 @@
 "TARJETA10" "La prepago de 1 GB" "" "" "1"
 "TARJETA11" "La prepago de 2 GB" "" "" "1"
 "TARJETA12" "La prepago de 4 GB" "" "" "1"
+"TARJETA13" "La prepago de llamadas ilimitadas" "" "" "1"
 "TARJETA2" "Tarjeta 2 (Pre paid)" "" "" "1"
 "TARJETA4" "Tarjeta 4 (Pre paid)" "" "" "1"
 "TARJETA5" "Tarjeta 5 (Pre paid)" "" "" "1"
