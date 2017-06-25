@@ -456,7 +456,10 @@ PROCEDURE pInitialize:
          END.
       END.
    END.
-   
+
+   IF DumpFile.FileCategory = "HPD"
+   THEN RETURN "".
+
    /* table to be dumped */
    CREATE BUFFER lhTable FOR TABLE DumpFile.MainTable 
       IN WIDGET-POOL "DumpFile".
