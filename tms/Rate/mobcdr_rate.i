@@ -50,7 +50,6 @@ FUNCTION fAnalBsub RETURNS LOGICAL
    DEF VAR lcRoamGPRSZone            AS CHAR NO-UNDO. 
    DEF VAR lcBRoamZone               AS CHAR NO-UNDO.
    DEF VAR lcARoamZone               AS CHAR NO-UNDO.
-   DEF VAR lcBNumber                 AS CHAR NO-UNDO. 
 
    ASSIGN
       b_foc       = FALSE  
@@ -252,19 +251,9 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       mod_bsub = ttCall.Gsmbnr.
       
       IF mod_bsub EQ "ROAM_EU" AND
+         liOrigBType EQ 1 AND
          (ttCall.Spocmt EQ 3 OR
           ttCall.Spocmt EQ 4) THEN DO:
-
-         lcBNumber = ttCall.Gsmbnr.
-
-         IF liOrigBType NE 1 THEN DO:
-            FIND FIRST rzItem WHERE
-                       rzItem.PlmnCode = lcNetworkowner
-            NO-LOCK NO-ERROR.
-            IF AVAIL rzItem THEN 
-               lcBNumber = rzItem.CountryPrefix + lcBNumber.
-            ELSE lcBNumber = "".
-         END.
 
          FIND FIRST BDest NO-LOCK WHERE
                     BDest.Brand = lcRateBrand AND
@@ -272,18 +261,18 @@ FUNCTION fAnalBsub RETURNS LOGICAL
                     BDest.ToDate >= ttCall.DateSt AND
                     BDest.FromDate <= ttCall.DateSt NO-ERROR.
          
-         IF lcBNumber > "" AND AVAIL BDest THEN
-         DO b = LENGTH(lcBNumber) TO 1 BY -1:
+         IF ttCall.Gsmbnr > "" AND AVAIL BDest THEN
+         DO b = LENGTH(ttCall.Gsmbnr) TO 1 BY -1:
 
             FIND FIRST BDestTrans NO-LOCK  WHERE
                        BDestTrans.BDestID = BDest.BDestID AND
-                       BDestTrans.TranslateNumber = SUBSTRING(lcBNumber,1,b) AND
+                       BDestTrans.TranslateNumber = SUBSTRING(ttCall.Gsmbnr,1,b) AND
                        BDestTrans.Todate >= ttCall.DateST AND
                        BDestTrans.FromDate <= ttCall.DateST NO-ERROR.
             IF NOT AVAIL BDestTrans THEN NEXT.
 
             IF INDEX(BDestTrans.RatingZone,"SHORT") > 0 AND
-               BDestTrans.TranslateNumber NE lcBNumber THEN NEXT.
+               BDestTrans.TranslateNumber NE ttCall.Gsmbnr THEN NEXT.
 
             mod_bsub = BDestTrans.BDest.
             LEAVE.
