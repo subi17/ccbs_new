@@ -29,6 +29,7 @@
 "TARJETA10" "La prepago de 1 GB" "" "EUR" 4 no yes "" "" no "1"
 "TARJETA11" "La prepago de 2 GB" "" "EUR" 4 no yes "" "" no "1"
 "TARJETA12" "La prepago de 4 GB" "" "EUR" 4 no yes "" "" no "1"
+"TARJETA13" "La prepago de llamadas ilimitadas" "" "EUR" 4 no yes "" "" no "1"
 "TARJETA2" "Tarjeta" "Tarjeta 2 subscription type specific price list" "EUR" 4 no yes "" "" no "1"
 "TARJETA4" "Tarjeta4" "Tarjeta 4 subscription type specific price list" "EUR" 4 no yes "" "" no "1"
 "TARJETA5" "Tarjeta4" "Tarjeta 4 subscription type specific price list" "EUR" 4 no yes "" "" no "1"
