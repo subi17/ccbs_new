@@ -1429,6 +1429,18 @@
 6539 "SchedDate" "1" yes 29/05/15
 6539 "SchedTime" "00.00" no 29/05/15
 6539 "TiePeriod" "1" yes 29/05/15
+6587 "BankAccount" "1" yes 29/05/15
+6587 "CreditCheck" "1" yes 29/05/15
+6587 "FailedRequest" "1" yes 29/05/15
+6587 "FreePerYear" "4" no 29/05/15
+6587 "MobsubInDays" "30" yes 29/05/15
+6587 "OngoingMNP" "1" yes 29/05/15
+6587 "OnLastDay" "0" no 29/05/15
+6587 "OperatorBarr" "1" yes 29/05/15
+6587 "PerMonth" "1" no 29/05/15
+6587 "SchedDate" "1" yes 29/05/15
+6587 "SchedTime" "00.00" no 29/05/15
+6587 "TiePeriod" "1" yes 29/05/15
 10000904 "Invoice Attach" "0" no 01/01/11
 10000904 "ReportCode" "4" no 01/01/11
 10000905 "Not allowed" "" no 01/01/11
