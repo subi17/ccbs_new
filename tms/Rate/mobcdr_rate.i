@@ -250,6 +250,35 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       IF Mod_bsub =  "ROAM_EU" AND ttCall.gsmbnr = "633800800" then
       mod_bsub = ttCall.Gsmbnr.
       
+      IF mod_bsub EQ "ROAM_EU" AND
+         liOrigBType EQ 1 AND
+         (ttCall.Spocmt EQ 3 OR
+          ttCall.Spocmt EQ 4) THEN DO:
+
+         FIND FIRST BDest NO-LOCK WHERE
+                    BDest.Brand = lcRateBrand AND
+                    BDest.BDest = "ROAM_EU" AND
+                    BDest.ToDate >= ttCall.DateSt AND
+                    BDest.FromDate <= ttCall.DateSt NO-ERROR.
+         
+         IF ttCall.Gsmbnr > "" AND AVAIL BDest THEN
+         DO b = LENGTH(ttCall.Gsmbnr) TO 1 BY -1:
+
+            FIND FIRST BDestTrans NO-LOCK  WHERE
+                       BDestTrans.BDestID = BDest.BDestID AND
+                       BDestTrans.TranslateNumber = SUBSTRING(ttCall.Gsmbnr,1,b) AND
+                       BDestTrans.Todate >= ttCall.DateST AND
+                       BDestTrans.FromDate <= ttCall.DateST NO-ERROR.
+            IF NOT AVAIL BDestTrans THEN NEXT.
+
+            IF INDEX(BDestTrans.RatingZone,"SHORT") > 0 AND
+               BDestTrans.TranslateNumber NE ttCall.Gsmbnr THEN NEXT.
+
+            mod_bsub = BDestTrans.BDest.
+            LEAVE.
+         END.
+      END.
+      
       /* destination type is not used with roaming */
       FIND FIRST BDest WHERE 
                  BDest.Brand = lcRateBrand AND 
@@ -385,7 +414,8 @@ FUNCTION fAnalBsub RETURNS LOGICAL
 
       FIND FIRST BDest WHERE RECID(BDest) = dest_recid NO-LOCK.
 
-      IF CAN-FIND(FIRST BDestTrans NO-LOCK WHERE
+      IF BDest.BDest NE "ROAM_EU" AND
+         CAN-FIND(FIRST BDestTrans NO-LOCK WHERE
                         BDestTrans.BDestId EQ BDest.BdestId) THEN DO:
          
          IF lcTranslatedAddress EQ "" THEN 
