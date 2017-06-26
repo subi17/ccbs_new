@@ -76,17 +76,8 @@ IF AVAIL Customer THEN DO:
       llCustCatPro = CustCat.pro.
       lcSegment = CustCat.Segment. 
 END.
-ELSE DO:
-   FIND FIRST CustCat NO-LOCK WHERE
-              Custcat.brand EQ "1" AND
-              Custcat.custidtype EQ pcIdType AND
-              CustCat.selfemployed EQ plSelfEmployed AND
-              CustCat.pro EQ llProCust NO-ERROR.
-   IF AVAIL CustCat THEN
-      lcSegment = CustCat.Segment.
-END.
-IF lcSegment = "" THEN
-   lcSegment = "NEW".
+ELSE
+   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProCust).
 
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,

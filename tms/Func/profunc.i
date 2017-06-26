@@ -290,6 +290,58 @@ FUNCTION fIs2PTariff RETURNS LOGICAL
    RETURN FALSE.
 END.
 
+/* Find correct customer segment */
+FUNCTION fgetCustSegment RETURNS CHAR
+   (icIdType AS CHAR,
+    ilSelfemployed AS LOG,
+    ilProCust AS LOG):
+   DEF VAR lcSegment AS CHAR NO-UNDO.
+   IF ilProCust THEN DO:
+      FIND FIRST CustCat NO-LOCK WHERE
+                 Custcat.brand EQ Syst.Parameters:gcBrand AND
+                 Custcat.custidtype EQ icIdType AND
+                 CustCat.selfemployed EQ ilSelfEmployed AND
+                 CustCat.pro EQ ilProCust NO-ERROR.
+      IF AVAIL CustCat THEN
+         lcSegment = CustCat.Segment.
+   END.
+   ELSE DO:
+      IF icIDType EQ "CIF" THEN DO:
+         FIND FIRST CustCat NO-LOCK WHERE
+                    Custcat.brand EQ Syst.Parameters:gcBrand AND
+                    Custcat.category EQ "23" NO-ERROR.
+         lcSegment = CustCat.Segment.
+      END.
+      ELSE IF icIDType EQ "NIF" AND ilSelfEmployed THEN DO:
+         FIND FIRST CustCat NO-LOCK WHERE
+                    Custcat.brand EQ Syst.Parameters:gcBrand AND
+                    Custcat.category EQ "44" NO-ERROR.
+         lcSegment = CustCat.Segment.
+      END.
+      ELSE IF icIDType EQ "NIF" AND NOT ilSelfEmployed THEN DO:
+         FIND FIRST CustCat NO-LOCK WHERE
+                    Custcat.brand EQ Syst.Parameters:gcBrand AND
+                    Custcat.category EQ "10" NO-ERROR.
+         lcSegment = CustCat.Segment.
+      END.
+      ELSE IF icIDType EQ "NIE" AND ilSelfEmployed THEN DO:
+         FIND FIRST CustCat NO-LOCK WHERE
+                    Custcat.brand EQ Syst.Parameters:gcBrand AND
+                    Custcat.category EQ "45" NO-ERROR.
+         lcSegment = CustCat.Segment.
+      END.
+      ELSE IF icIDType EQ "NIE" AND NOT ilSelfEmployed THEN DO:
+         FIND FIRST CustCat NO-LOCK WHERE
+                    Custcat.brand EQ Syst.Parameters:gcBrand AND
+                    Custcat.category EQ "11" NO-ERROR.
+         lcSegment = CustCat.Segment.
+      END.
+   END.
+   IF lcSegment = "" THEN
+      lcSegment = "NEW". /* Unknown, should not come here */
+
+   RETURN lcSegment.
+END.
 
 /*STC is restricted from Prepaid to postpaid and 2P*/
 FUNCTION fValidateProSTC RETURNS CHAR
