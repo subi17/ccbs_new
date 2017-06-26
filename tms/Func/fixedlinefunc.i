@@ -254,7 +254,8 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
             bOrder.Brand      EQ Syst.Parameters:gcBrand AND
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
             bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND 
-            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
+           (bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
+            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}),
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID:
@@ -262,6 +263,38 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
       IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
          RETURN TRUE.
 
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* Function checks for ongoing 2P convergent for a customer */
+FUNCTION fCheckOngoing2PConvergentOrder RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+
+   FOR EACH bOrderCustomer NO-LOCK WHERE
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.orderid    EQ bOrderCustomer.Orderid  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
+            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
+      FIRST bOrderFusion NO-LOCK WHERE
+            bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
+            bOrderFusion.OrderID = bOrder.OrderID:
+
+      IF fIsConvergentORFixedOnly(bOrder.CLIType) THEN
+         RETURN TRUE.
    END.
 
    RETURN FALSE.
@@ -286,7 +319,8 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
              bMobSub.Brand   = Syst.Parameters:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.PayType = FALSE                   AND
-             bMobSub.MsStatus <> {&MSSTATUS_MOBILE_NOT_ACTIVE}:
+            (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}     OR
+             bMobSub.MsStatus = {&MSSTATUS_BARRED}):
     
       IF fIsConvergentAddLineOK(bMobSub.CLIType,icCliType) THEN 
          RETURN TRUE.
