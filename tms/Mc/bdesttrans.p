@@ -51,9 +51,9 @@ DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 
 form
-    bdesttrans.Bdest
+    bdesttrans.Bdest FORMAT "X(13)"
     bdesttrans.translatenumber      /* COLUMN-LABEL FORMAT */
-    bdesttrans.ratingZone     /* COLUMN-LABEL FORMAT */
+    bdesttrans.ratingZone FORMAT "X(6)"    /* COLUMN-LABEL FORMAT */
     bdesttrans.fromdate     /* COLUMN-LABEL FORMAT */
     bdesttrans.todate     /* COLUMN-LABEL FORMAT */
              /* COLUMN-LABEL FORMAT */
