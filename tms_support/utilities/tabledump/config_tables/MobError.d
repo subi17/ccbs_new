@@ -73,6 +73,7 @@
 9062 "Non-billable call received (TAP3)" "" "" "" "" "" "" "" "" "" ""
 9063 "Non-billable SMS sent (TAP3)" "" "" "" "" "" "" "" "" "" ""
 9064 "Non-billable  SMS received (TAP3)" "" "" "" "" "" "" "" "" "" ""
+9066 "Non-billable MMS received (TAP3)" "" "" "" "" "" "" "" "" "" ""
 9067 "Non-billable GPRS usage (TAP3)" "" "" "" "" "" "" "" "" "" ""
 9070 "SMS delivery (CCGW)" "" "" "" "" "" "" "" "" "" ""
 9071 "SMS submit (CCGW)" "" "" "" "" "" "" "" "" "" ""
