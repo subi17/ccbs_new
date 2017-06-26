@@ -45,6 +45,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF VAR lcResult   AS CHAR    NO-UNDO. 
    DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
    DEF VAR llCancelFusion AS LOGICAL NO-UNDO INIT FALSE.
+   DEF VAR liRequest  AS INT NO-UNDO.
 
    DEF BUFFER OrderPayment FOR OrderPayment.
    DEF BUFFER MsRequest FOR MsRequest.
@@ -70,6 +71,19 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
             when "6" then fMarkOrderStamp(bfOrder.OrderID,"Delivery",0.0).
             when "7" or when "8" or when "9" then do:
                fMarkOrderStamp(bfOrder.OrderID,"Close",0.0).
+
+               /* YDR-2495 creating STC request to fixed only when mobile part is terminated */
+               FIND FIRST MobSub NO-LOCK WHERE
+                          MobSub.MsSeq = bfOrder.MsSeq NO-ERROR.
+               IF AVAILABLE MobSub THEN DO:
+                  IF MobSub.CLIType  EQ bfOrder.CLIType             AND
+                     MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN
+                     liRequest = fConvFixedSTCReq(bfOrder.CLIType,
+                                                  bfOrder.MsSeq,
+                                                  fMake2Dt(TODAY + 1,0),
+                                                  {&REQUEST_SOURCE_ORDER_CANCELLATION},
+                                                  0).
+               END.
 
                FIND FIRST OrderAccessory OF bfOrder WHERE
                           OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) 

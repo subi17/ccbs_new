@@ -468,6 +468,15 @@ PROCEDURE pDiscountPlanMember:
                               OrderAction.ItemType = "AddLineDiscount" AND
                               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) THEN RETURN "".
          END.
+         /* ADDLINE-330 bug fix */
+         IF fCheckExisting2PConvergent(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) OR
+            fCheckOngoing2PConvergentOrder(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) THEN DO:
+            IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                              OrderAction.Brand    = gcBrand           AND
+                              OrderAction.OrderID  = Order.OrderID     AND
+                              OrderAction.ItemType = "AddLineDiscount" AND
+                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0) THEN RETURN "".
+         END.
       END.
    END.
 
