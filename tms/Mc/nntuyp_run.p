@@ -164,7 +164,10 @@ form
        HELP "Display MPM on specification (if not then display '----')"
        FORMAT "Yes/No" SKIP
     BillItem.CostCentre LABEL "Cost Centre" SKIP
-WITH  OVERLAY ROW 3 CENTERED COLOR value(cfc) TITLE COLOR value(ctc)
+    BillItem.ItemType  LABEL "Item Type ."
+       HELP "Billing Item Type (0=mobile, 1=covergent)"
+       FORMAT ">>9" SKIP
+WITH  OVERLAY ROW 2 CENTERED COLOR value(cfc) TITLE COLOR value(ctc)
     fr-header WITH side-labels FRAME lis.
 
 {Func/brand.i}
@@ -907,6 +910,7 @@ PROCEDURE update-mode-general:
             BillItem.SAPRid
             BillItem.DispMPM
             BillItem.CostCentre
+            BillItem.ItemType
      WITH FRAME lis EDITING:
             
                READKEY.
