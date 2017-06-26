@@ -103,8 +103,10 @@ llOrderAllowed = fSubscriptionLimitCheck(
 lcPROChannels = fCParamC("PRO_CHANNELS").
 
 IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
-   IF AVAIL Customer AND NOT llCustCatPro THEN
+   IF AVAIL Customer AND NOT llCustCatPro THEN DO:
       llOrderAllowed = FALSE.
+      lcReason = "non PRO customer".
+   END.
    ELSE IF NOT AVAIL Customer THEN DO:
       FOR EACH OrderCustomer WHERE
                OrderCustomer.brand EQ gcBrand AND
@@ -116,6 +118,29 @@ IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
                 Order.orderid EQ ordercustomer.orderid AND
                 LOOKUP(Order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0:
           llOrderAllowed = FALSE.
+          lcReason = "ongoing non PRO order".
+          LEAVE.
+       END.
+
+   END.
+END.
+ELSE IF LOOKUP(pcChannel,"self,POS,Fusion_POS") > 0 THEN DO:
+   IF AVAIL Customer AND llCustCatPro THEN DO:
+      llOrderAllowed = FALSE.
+      lcReason = "customer already exists with PRO category".
+   END.
+   ELSE DO:
+      FOR EACH OrderCustomer WHERE
+               OrderCustomer.brand EQ gcBrand AND
+               OrderCustomer.custidtype EQ pcIdType AND
+               OrderCustomer.custid EQ pcPersonId AND
+               OrderCustomer.PRO EQ FALSE,
+          FIRST Order WHERE
+                Order.brand EQ gcBrand AND
+                Order.orderid EQ ordercustomer.orderid AND
+                LOOKUP(Order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0:
+          llOrderAllowed = FALSE.
+          lcReason = "customer already exists with PRO category".
           LEAVE.
        END.
 

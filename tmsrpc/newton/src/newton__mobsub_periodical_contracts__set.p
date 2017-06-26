@@ -51,8 +51,6 @@ DEF VAR ocError AS CHAR NO-UNDO.
 DEF VAR lcErr AS CHAR NO-UNDO.
 DEF VAR liValidate AS INT  NO-UNDO.
 DEF VAR pcSetServiceId AS CHAR NO-UNDO.
-DEF VAR pcUser AS CHAR NO-UNDO.
-DEF VAR cCheckMsBarringKatun AS CHAR NO-UNDO. 
 DEF VAR pcReqList      AS CHAR NO-UNDO.
 DEF VAR lcFromStat     AS CHAR NO-UNDO.
 DEF VAR lcToStat       AS CHAR NO-UNDO.
@@ -66,32 +64,22 @@ DEF VAR liSVARequest   AS INT NO-UNDO.
 DEF BUFFER bReq  FOR MsRequest.
 DEF BUFFER bSubReq FOR MsRequest.
 
-
-
-pcReqList = validate_request(param_toplevel_id, "int,string,string,array,[struct]").
+pcReqList = validate_request(param_toplevel_id, "int,array").
 IF pcReqList EQ ? THEN RETURN.
 
 piMsSeq = get_int(param_toplevel_id, "0").
-pcUserLevel = get_string(param_toplevel_id, "1").
-pcUser = "VISTA_" + get_string(param_toplevel_id, "2").
-pcInputArray = get_array(param_toplevel_id, "3").
+pcInputArray = get_array(param_toplevel_id, "1").
 
-IF NUM-ENTRIES(pcReqList) >= 5 THEN RETURN appl_err("too many parameters").
+IF NUM-ENTRIES(pcReqList) >= 3 THEN RETURN appl_err("too many parameters").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-IF TRIM(pcUser) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 FIND Mobsub NO-LOCK
 WHERE Mobsub.MsSeq = piMsSeq NO-ERROR.
 IF NOT AVAILABLE Mobsub THEN
     RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
 
-katun = pcUser.
-IF pcUserLevel EQ "Operator" THEN 
-   cCheckMsBarringKatun = "NewtonAd". 
-ELSE 
-   cCheckMsBarringKatun = "NewtonCC". 
+katun = "Newton".
 
 DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    pcStruct = get_struct(pcInputArray, STRING(liInputCounter - 1)).
