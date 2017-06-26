@@ -294,7 +294,8 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
                Order.CliType BEGINS "TARJ9" OR 
                Order.CliType BEGINS "TARJ10" OR 
                Order.CliType BEGINS "TARJ11" OR 
-               Order.CliType BEGINS "TARJ12" THEN DO:
+               Order.CliType BEGINS "TARJ12" OR
+               Order.CliType BEGINS "TARJ13" THEN DO:
 
                IF InvRow.Amt >= 0 THEN
                   FOR EACH TopUpSchemeRow NO-LOCK WHERE
@@ -1896,10 +1897,11 @@ PROCEDURE pGetCTNAME:
          WHEN "TARJ10" THEN lcList = "20 min/mes gratis,".
          WHEN "TARJ11" THEN lcList = "50 min/mes gratis,".
          WHEN "TARJ12" THEN lcList = "100 min/mes gratis,".
+         WHEN "TARJ13" THEN lcList = "5000 min/mes gratis,".
          OTHERWISE lcList = "".
        END.
 
-       IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 OR fIsConvergenceTariff(Order.CLIType) THEN DO:
+       IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26,CONT27") > 0 OR fIsConvergenceTariff(Order.CLIType) THEN DO:
 
           llAddLineDiscount = FALSE.
 

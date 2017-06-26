@@ -21,6 +21,13 @@ if not 'tenancies' in globals():
 # Configure database location (on different partitions/remote hosts)
 # for production servers. All databases not found in this dictionary
 # will be assumed/created in the current directory
+#
+# If the value has ':' delimeted list then:
+#   - 1. entry is a host name
+#   - 2. entry is a database name (the actual file name of the database basename without db extension)
+#
+# If the value is not ':' delimeted list then the value is database location with absolute path
+# but without the db extension
 
 db_locations = {
     'alpheratz': {'common': '/db1/common/common',
@@ -32,6 +39,14 @@ db_locations = {
                   'fraudcdr': '/db1/fraudcdr/fraudcdr',
                   'reratelog': '/db1/reratelog/reratelog'},
     'angetenar': {'common': '/db1/common/common',
+                  'ordercanal': '/db1/ordercanal/ordercanal',
+                  'mobile': '/db1/mobile/mobile',
+                  'counter': '/db1/counter/counter',
+                  'star': '/db1/star/star',
+                  'prepedr': '/db1/prepedr/prepedr',
+                  'fraudcdr': '/db1/fraudcdr/fraudcdr',
+                  'reratelog': '/db1/reratelog/reratelog'},
+    'sadachbia': {'common': '/db1/common/common',
                   'ordercanal': '/db1/ordercanal/ordercanal',
                   'mobile': '/db1/mobile/mobile',
                   'counter': '/db1/counter/counter',
@@ -105,6 +120,28 @@ db_locations = {
              'reratelog': 'pallas.int.asp.qvantel.net:reratelog'}
 }
 
+# Alternative database location (on different partitions/remote hosts)
+# for production servers. There will be alternative pf file only for the databases
+# listed in here. There might be a need for alternative databases for example in monitoring cases
+# and also when replica server needs to connect to the main server
+#
+# If the value has ':' delimeted list then:
+#   - 1. entry is a host name
+#   - 2. entry is a database name (the actual file name of the database basename without db extension)
+#   - 3. entry is the -S parameter value (if available otherwise it is same as 2. entry value)
+#
+# If the value is not ':' delimeted list then the value is database location with absolute path
+# but without the db extension
+
+db_alternative_locations = {
+    'arneb': {'common': 'pallas.int.asp.qvantel.net:common'},
+    'pallas': {'common': 'arneb.int.asp.qvantel.net:common:pcommonrepl',
+               'ordercanal': 'arneb.int.asp.qvantel.net:ordercanal:pordercanalrepl',
+               'mobile': 'arneb.int.asp.qvantel.net:mobile:pmobilerepl',
+               'counter': 'arneb.int.asp.qvantel.net:counter:pcounterrepl',
+               'star': 'arneb.int.asp.qvantel.net:star:pstarrepl'}
+}
+
 db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
                 'ordercanal': ['biw', 'wdog', ('apw', 4)],
                 'mobile': ['biw', 'wdog', ('apw', 4)],
@@ -164,6 +201,19 @@ def db_full_path(db_name, suffix='.db', host=None):
 
     return '{0}{1}'.format(locs.get(db_name, '{0}/{1}'.format(getcwd(), db_name)), suffix)
 
+def db_alternative_full_path(db_name, host=None):
+
+    if environment == 'development':
+        return ''
+
+    host = host or gethostname()
+
+    if host in db_alternative_locations:
+        locs = db_alternative_locations[host]
+        if db_name in locs:
+            return locs[db_name]
+    return ''
+
 @target(initialize_dependencies)
 def initialize(*a): pass
 
@@ -200,7 +250,7 @@ def database_file(match, deps, db_dir, db_name):
                     ['\(6715\)$', '\(6718\)$', '\(451\)$',
                      '0 Percent complete.', '^$',
                      '\(6720\)$', '\(6722\)$', '\(1365\)$', '\(334\)$'])
-            if tenancies:
+            if len(tenancies) > 1:
                 callgrep([dlc + '/bin/proutil', match, '-C', 'enablemultitenancy'], ['Multi'])
             break
     else:
@@ -296,6 +346,7 @@ def startup_parameter_file(match, deps, db_name):
 def connect_parameter_file(match, deps, db_name):
     '''([_a-zA-Z0-9]+)\.pf'''
     path = db_full_path(db_name, '').split(':')
+    alternativepath = db_alternative_full_path(db_name).split(':')
 
     fd = open(db_name + '.pf', 'wt')
     if len(path) > 1:
@@ -306,10 +357,27 @@ def connect_parameter_file(match, deps, db_name):
         fd.write('-db %s\n' % path[0])
     fd.write('-ld %s\n' % db_name)
     fd.close()
+
     for tenant in tenancies:
         with open('{0}_{1}.pf'.format(db_name, tenant), 'wt') as fd:
             fd.write('-pf {0}/{1}.pf\n'.format(getcwd(), db_name))
             fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
+
+    if alternativepath[0]:
+        fd = open('{0}_alt.pf'.format(db_name), 'wt')
+        if len(alternativepath) > 1:
+            fd.write('-db %s\n' % alternativepath[1])
+            fd.write('-H %s\n' % alternativepath[0])
+            fd.write('-S %s\n' % alternativepath[len(alternativepath) - 1])
+        else:
+            fd.write('-db %s\n' % alternativepath[0])
+        fd.write('-ld %s\n' % db_name)
+        fd.close()
+
+        for tenant in tenancies:
+            with open('{0}_alt_{1}.pf'.format(db_name, tenant), 'wt') as fd:
+                fd.write('-pf {0}/{1}_alt.pf\n'.format(getcwd(), db_name))
+                fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
 
 @target
 @applies_to(['tenant_none'] + [ 'tenant_{0}'.format(x) for x in tenancies ])
@@ -434,7 +502,7 @@ def _migrate(migration_file, direction, a2t_data):
     df_file, database = mig2df(migration_file, direction,
                                a2t_data, a2t_from_database, environment)
 
-    pfile = tempfile.NamedTemporaryFile(suffix='.p', mode='rt+')
+    pfile = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
     pfile.write('SESSION:SUPPRESS-WARNINGS = TRUE.\n')
     pfile.write('SESSION:NUMERIC-FORMAT = "American".\n')
     pfile.write('RUN prodict/load_df("{0},,").\n'.format(df_file.name))
@@ -583,7 +651,7 @@ def active_cdr_db_pf(tenant):
         args.extend(['-pf', 'common.pf'])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
-    dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+    dict = literal_eval(cdr_fetch.communicate()[0])
 
     if not tenant == '':
         uandp = ['-U', '{0}@{1}'.format(tenancies[tenant]['username'], tenancies[tenant]['domain']), '-P', tenancies[tenant]['password']]

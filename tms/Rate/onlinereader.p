@@ -1013,7 +1013,7 @@ DO TRANS:
 
           /* data, voice and other packages */
          fPackageCalculation().
-                  
+
          IF ttCall.ErrorCode > 0 THEN DO:
             ttCall.InvSeq = 0.
             fBCopy().

@@ -125,7 +125,13 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)).
    add_string(lcResultStruct,"name", DayCampaign.DCName).
    add_int(lcResultStruct,"status", DayCampaign.StatusCode).
-   
+
+   FIND FIRST CCN WHERE CCN.Brand = "1" AND CCN.CCN = DayCampaign.CCN NO-LOCK NO-ERROR.
+   add_string(lcResultStruct,"category", (IF AVAIL CCN THEN (IF INDEX(CCN.CCNName,"Roaming") > 0 THEN "Roaming" 
+                                                             ELSE IF INDEX(CCN.CCNName,"International") > 0 THEN "International" 
+                                                             ELSE "National") 
+                                          ELSE "National")).
+
    FIND FIRST FMItem NO-LOCK WHERE
               FMItem.Brand     = gcBrand              AND
               FMItem.FeeModel  = DayCampaign.FeeModel AND
@@ -149,7 +155,12 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
           END.
           ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
              add_double(lcResultStruct,"voice_amount", ServiceLimit.InclAmt).
-
+          ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE} THEN 
+             add_double(lcResultStruct,"fixed2mobile_voice_amount", ServiceLimit.InclAmt).   
+          ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE_BDEST} THEN 
+             add_double(lcResultStruct,"fixed2fixed_voice_amount", ServiceLimit.InclAmt).   
+          ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_SMS} THEN 
+             add_double(lcResultStruct,"sms_amount", ServiceLimit.InclAmt).       
       END. /* FOR EACH ServiceLimit WHERE */
    END. /* IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO: */
    

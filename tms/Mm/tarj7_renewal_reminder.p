@@ -28,7 +28,7 @@ DEF VAR lcGroupCodes          AS CHAR NO-UNDO.
 DEF STREAM Sout.
 
 ASSIGN lcLogDir     = fCParam("PrepaidBundle","PrepaidBundle_LogDir")
-       lcGroupCodes = "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12".
+       lcGroupCodes = "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13".
 
 IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
 

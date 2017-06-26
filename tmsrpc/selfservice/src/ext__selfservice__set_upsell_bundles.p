@@ -3,7 +3,7 @@
  *
  * @input  transaction_id;string;mandatory;transaction id
            msisdn;string;mandatory;subscription msisdn number
-           upsell_bundle_id;string;mandatory;upsell bundle id(eg:CONTD1_UPSELL/MDUB_UPSELL/DSS_UPSELL,HSPA_ROAM_EU)
+           upsell_bundle_id;string;mandatory;upsell bundle id(eg:CONTD1_UPSELL/MDUB_UPSELL/DSS_UPSELL)
  * @output     struct;mandatory;response struct
  * @response   transaction_id;string;transaction id
                result;boolean;True
@@ -102,7 +102,7 @@ IF (pcUpsellId = "DATA200_UPSELL" OR
     lcApplicationId <> "505" THEN
    RETURN appl_err(SUBST("&1 activation is allowed from LP only", pcUpsellId)).
 
-IF pcUpsellId EQ {&HSPA_ROAM_EU} OR pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
+IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
 
    /* Check if subscription type is not compatible with bundle */
    IF fMatrixAnalyse(gcBrand,

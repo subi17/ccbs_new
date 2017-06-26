@@ -268,6 +268,20 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
        lcOptionsStruct = add_struct(lcResultStruct,"options").
        add_boolean(lcOptionsStruct, "upcoming_data_bundle", llUpComingDataBundle).
    END.
+   ELSE IF pcBundleId MATCHES("*_UPSELL") THEN DO:
+      liActivations = fGetUpSellCount(pcBundleId,
+                                      piMsSeq,
+                                      MobSub.Custnum,
+                                      OUTPUT lcError).
+       add_int(lcResultStruct, "activations",liActivations).
+       /* ydr_1905 addition for web visibility
+       IF pcBundleId MATCHES("*_UPSELL") AND
+          fGetCurrentSpecificBundle(Mobsub.MsSeq,pcBundle) EQ "" THEN
+          liActAllowed = 0.
+       add_int(lcResultStruct, "activation_allowed",liActAllowed).
+       */
+   END.
+   ELSE lcError = "Invalid Bundle Id: " + pcBundleId .
 END.
 
 FINALLY:

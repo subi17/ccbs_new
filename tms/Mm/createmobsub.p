@@ -507,8 +507,8 @@ IF NOT AVAIL mobsub THEN DO:
 
       lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
       
-       /* TARJ7 and TARJ9 have their own Welcome SMSes */
-       IF LOOKUP(MobSub.CliType, "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN
+       /* prepais tariffs have their own Welcome SMSes */
+       IF LOOKUP(MobSub.CliType, "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN
           lcSMSText = fGetSMSTxt(MobSub.CliType + "Act",
                                  TODAY,
                                  Customer.Language,
@@ -736,7 +736,7 @@ FIND FIRST OrderAction WHERE
            OrderAction.ItemKey NE {&DSS} NO-LOCK NO-ERROR.
 
 IF NOT AVAIL OrderAction AND
-   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") = 0 AND
+   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26,CONT27") = 0 AND
    NOT MobSub.CLIType BEGINS "CONTFH" AND
    NOT MobSub.CLITYpe BEGINS "CONTDSL" THEN DO:
 

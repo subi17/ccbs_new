@@ -1018,7 +1018,7 @@ PROCEDURE pTerminatePackage:
       to avoid creating Data bundle clitypes TARJ7, TARJ9 (Newclitype) service termination request */
 
    IF lcRetainBundle > "" AND 
-      LOOKUP(lcRetainBundle, "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") = 0 THEN DO:
+      LOOKUP(lcRetainBundle, "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") = 0 THEN DO:
       /* SHAPER should be created from 1st day of next month */
       RUN pCopyPackage(icNewCLIType,
                        icServPac,

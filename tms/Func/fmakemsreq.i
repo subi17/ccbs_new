@@ -1499,5 +1499,52 @@ FUNCTION fInstallmentChangeRequest RETURNS INTEGER
      
 END FUNCTION.
 
+FUNCTION fConvFixedSTCReq RETURNS INTEGER
+   (INPUT icCLIType   AS CHAR,
+    INPUT iiMsSeq     AS INT,
+    INPUT ideActStamp AS DEC,
+    INPUT icReqSource AS CHAR,
+    INPUT iiMsRequest AS INT):
+
+   DEF VAR liRequest AS INT  NO-UNDO.
+   DEF VAR lcError   AS CHAR NO-UNDO.
+   DEF VAR lcResult  AS CHAR NO-UNDO.
+
+   IF fListMatrix(gcBrand,
+                  "CONVFIXEDSTC",
+                  "SubsTypeFrom;SubsTypeTo",
+                  icCLIType,
+                  OUTPUT lcResult) = 1 THEN DO:
+      liRequest = fCTChangeRequest(iiMsSeq,
+                                   lcResult,
+                                   "",    /* lcBundleID */
+                                   "",    /* lcBankAcc = bank code validation is already done in newton */
+                                   ideActStamp,
+                                   0,     /* liCreditcheck 0 = Credit check ok */
+                                   0,     /* extend contract 0=no extend_term_contract */
+                                   ""     /* pcSalesman */,
+                                   FALSE, /* charge */
+                                   TRUE,  /* send sms */
+                                   "",
+                                   0,
+                                   icReqSource,
+                                   0,     /* piOrderID */
+                                   iiMsRequest,
+                                   "",    /*contract_id*/
+                                   OUTPUT lcError).
+
+      IF liRequest = 0 THEN
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "MobSub",
+                          STRING(iiMsSeq),
+                          0,
+                          "STC to " + lcResult + "failed",
+                          lcError).
+   END.
+
+   RETURN liRequest.
+
+END FUNCTION.
+
 &ENDIF            
  

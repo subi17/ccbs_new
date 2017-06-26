@@ -128,7 +128,7 @@ FUNCTION fSetMDUB RETURNS INT
                ocError = pcBundleId + " termination is not allowed".
             ELSE liReturnValue = 2. /* Ongoing Termination */
          END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
-         ELSE IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId = {&TARJ_UPSELL} THEN DO:
+         ELSE IF pcBundleId = {&TARJ_UPSELL} THEN DO:
             ocError = pcBundleId + " termination is not allowed".
          END.
          /* Customer level - As of now DSS only */
@@ -182,7 +182,7 @@ FUNCTION fSetMDUB RETURNS INT
             END.
             liReturnValue = 3. /* Ongoing Activation */
          END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
-         ELSE IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId = {&TARJ_UPSELL} THEN .
+         ELSE IF pcBundleId = {&TARJ_UPSELL} THEN .
          /* Customer level - As of now DSS only */
          ELSE DO:
             IF pcBundleId = {&DSS} OR fIsDSSActive(Mobsub.Custnum,ldeActStamp) OR fOngoingDSSAct(Mobsub.Custnum) THEN

@@ -1128,7 +1128,8 @@ IF NOT llErrors THEN DO:
                Order.CliType BEGINS "TARJ9" OR
                Order.CliType BEGINS "TARJ10" OR
                Order.CliType BEGINS "TARJ11" OR 
-               Order.CliType BEGINS "TARJ12" THEN
+               Order.CliType BEGINS "TARJ12" OR
+               Order.CliType BEGINS "TARJ13" THEN
                FOR EACH TopUpSchemeRow NO-LOCK WHERE
                         TopUpSchemeRow.BillCode = InvRow.BillCode AND
                         TopUpSchemeRow.Amount = InvRow.Amt:
@@ -1924,10 +1925,11 @@ FOR FIRST CLIType NO-LOCK WHERE
       WHEN "TARJ10" THEN lcList = "20 min/mes gratis,".
       WHEN "TARJ11" THEN lcList = "50 min/mes gratis,".
       WHEN "TARJ12" THEN lcList = "100 min/mes gratis,".
+      WHEN "TARJ13" THEN lcList = "5000 min/mes gratis,".
       OTHERWISE lcList = "".
     END.
 
-    IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26") > 0 THEN DO:
+    IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26,CONT27") > 0 THEN DO:
        /* ADDLINE-144 Additional Line Renewal Email Changes */
        llAddLineDiscount = FALSE.
 

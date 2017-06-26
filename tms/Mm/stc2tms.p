@@ -711,14 +711,17 @@ PROCEDURE pUpdateSubscription:
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
 
-   ASSIGN Mobsub.CLIType    = MsRequest.ReqCParam2
-          Mobsub.BillTarget = liBillTarg
-          Mobsub.Paytype    = (CLIType.PayType = 2)
+   ASSIGN Mobsub.CLIType       = MsRequest.ReqCParam2
+          Mobsub.BillTarget    = liBillTarg
+          Mobsub.Paytype       = (CLIType.PayType = 2)
           Mobsub.TariffActDate = ldtActDate
           MobSub.TariffActTS   = ldeNewBeginTs
-          MobSub.FixedNumber = lcFixedNumber
-          MobSub.MsStatus = {&MSSTATUS_ACTIVE} WHEN
-                            MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}.
+          MobSub.FixedNumber   = lcFixedNumber
+          MobSub.CLI           = MobSub.FixedNumber WHEN
+                                 MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}
+          MobSub.MsStatus      = {&MSSTATUS_ACTIVE} WHEN
+                                 MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+                                 MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
    
@@ -887,7 +890,7 @@ PROCEDURE pFinalize:
     IF bOldType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} AND
        bOldType.CLIType EQ "TARJ6"                    AND
        CLIType.PayType  EQ {&CLITYPE_PAYTYPE_PREPAID} AND
-       LOOKUP(CLIType.CLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN DO:
+       LOOKUP(CLIType.CLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
 
        FIND FIRST ServiceLimit NO-LOCK WHERE
                   ServiceLimit.Groupcode EQ CLIType.CLIType AND

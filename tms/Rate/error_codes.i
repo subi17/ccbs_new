@@ -72,4 +72,7 @@
 
 &GLOBAL-DEFINE CDR_ERROR_UNKNOWN_MSISDN_FIXED              6001 /* Unknown fixed line CDR for the Billing System */
 &GLOBAL-DEFINE CDR_ERROR_MSISDN_NOT_ACTIVE_FIXED           6002 /* Fixed line number not active in the BS when connection was opened */
+
+&GLOBAL-DEFINE CDR_ERROR_NON_BILLABLE_ROAM_MT_CALL         9062 /* */
+&GLOBAL-DEFINE CDR_ERROR_NON_BILLABLE_ROAM_MT_MMS          9066 /* */
 &ENDIF

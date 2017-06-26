@@ -270,7 +270,7 @@ PROCEDURE pPeriodicalContract:
       /* Temporary check due to ongoing orders created before 5.6.2017
          TODO: REMOVE THE "THEN BLOCK" AFTER THERE ARE NO PENDING VOICE200 RELATED ORDERS */
       IF ttAction.ActionKey EQ "VOICE200" AND
-         ( (NOT AVAILABLE Order AND fTSToDate(MsRequest.CreStamp) < RequestAction.ValidFrom) OR /* normal STC */
+         ( (NOT AVAILABLE Order AND fTSToDate(bOrigRequest.CreStamp) < RequestAction.ValidFrom) OR /* normal STC */
            (AVAILABLE Order AND fTSToDate(Order.CrStamp) < RequestAction.ValidFrom) ) /* New or STC order */
       THEN liRequest = 1.
       ELSE liRequest = fPCActionRequest(liMsSeq,
@@ -746,7 +746,7 @@ PROCEDURE pServicePackage:
             ELSE lcParam = "".
          END.
          ELSE IF SubSer.SSStat  = 2 AND SubSer.ServCom = "BB" AND
-                LOOKUP(icCLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0
+                LOOKUP(icCLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0
                 THEN lcParam = "3".
          ELSE RETURN.
 

@@ -991,6 +991,7 @@
 "GPRSDATA_TARJ10" "GPRS Data TARJ10" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/17 1078
 "GPRSDATA_TARJ11" "GPRS Data TARJ11" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/17 1079
 "GPRSDATA_TARJ12" "GPRS Data TARJ12" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/17 1080
+"GPRSDATA_TARJ13" "GPRS Data TARJ13" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 20/06/17 1082
 "GPRSDATA_TARJ7" "GPRS data tarj7" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/10/15 1002
 "GPRSDATA_TARJ9" "GPRS data tarj9" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/10/15 1003
 "GPRSDATA_UPGRADE" "GPRS data Upgrade Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 26/03/12 779
@@ -1024,6 +1025,8 @@
 "ROAMSMS_EUINT" "Roaming SMS EU-INT" 55 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/05/12 855
 "ROAM_EU" "Roaming EU" 5 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/12/06 627
 "ROAM_EUINT" "Roaming international destin" 801 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/12/06 628
+"ROAM_EU_FREE" "Roaming EU Free and Emergency" 5 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 15/06/17 1083
+"ROAM_EU_HTS" "Roaming EU HTS" 5 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 15/06/17 1084
 "ROAM_INTEU" "Roaming international destin" 802 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/12/06 629
 "ROGPRS" "Roaming GPRS" 92 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 630
 "ROGPRS_EU" "Roaming GPRS in EU" 91 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 631

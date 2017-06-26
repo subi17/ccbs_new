@@ -14,7 +14,7 @@ while True:
    loop = loop + 1
    now = datetime.today()
    print loop, now.strftime('%m.%d.%Y %H:%M:%S')
-   os.system('/opt/local/bin/xfear -batch Gwy/callalarm_batch tms.pf ' + node + ' > /scratch/cron/callalarm_' + node + '.cron 2>&1')
+   os.system('pike -C /apps/yoigo/tms mbatch -- Gwy/callalarm_batch all tenant=yoigo umask=0000 -param ' + node + ' > /scratch/cron/callalarm_' + node + '.cron 2>&1')
    time.sleep(5)
    if not os.path.exists('/apps/tms/lock/callalarm_batch_' + node + '.lock'):
       break

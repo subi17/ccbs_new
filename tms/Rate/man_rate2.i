@@ -49,15 +49,14 @@
 
    anal:
    REPEAT WITH FRAME MobCDR:   
-   
+
+      {Rate/set_to_empty.i}
       
       ASSIGN 
          ttCall.ErrorCode = 0
          old_price        = ttCall.Amount
          mi-no            = ttCall.CLI
-         oiErrorCode      = 0
-         lcMSRN           = ""
-         lcTranslatedAddress = "".
+         oiErrorCode      = 0.
 
       IF ttCall.DateSt = 6/10/2014 AND
          ttCall.Spocmt = 93 AND
@@ -150,8 +149,7 @@
          ldeRoamarg           = 0 
          CreditType           = 0 
          rate-plcode          = ""
-         lcNotifyNumber       = ""
-         lcNetWorkOwner       = "".
+         lcNotifyNumber       = "".
 
       llRoamind = IF ttCall.RoamingInd = 1 THEN TRUE ELSE FALSE.
 
@@ -431,7 +429,7 @@
  
          /* data, voice and other packages */
          fPackageCalculation().
-            
+
          IF ttCall.ErrorCode > 0 THEN DO:
             ttCall.InvSeq = 0.
             fBCopy().
