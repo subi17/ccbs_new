@@ -199,6 +199,17 @@ FUNCTION fFinalBillableCheck RETURNS INTEGER:
       ttCall.CCN = 98 AND
       ttCall.Amount = 0 
    THEN RETURN {&CDR_ERROR_FREE_VOICE_MAIL_CALL_FORWARDING}.
+
+   IF ttCall.DateSt >= 6/15/2017 THEN DO:
+
+      IF ttCall.SpoCMT EQ 7 AND
+         ttCall.BDest EQ "ROAM_EU" THEN 
+         RETURN {&CDR_ERROR_NON_BILLABLE_ROAM_MT_CALL}.
+
+      IF ttCall.SpoCMT EQ 96 THEN
+         RETURN {&CDR_ERROR_NON_BILLABLE_ROAM_MT_MMS}.
+
+   END.
    
    RETURN 0.
    
