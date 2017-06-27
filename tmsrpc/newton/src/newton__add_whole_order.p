@@ -1333,7 +1333,7 @@ gcCustomerStructFields = "birthday," +
                          "hand," + 
                          "km," +
                          "territory_owner," +
-                         "coverage_token" +
+                         "coverage_token," +
                          "address_id".
 
 /* note: check that data variable has correct EXTENT value */
@@ -1377,7 +1377,7 @@ gcCustomerStructStringFields = "city," +
                                "hand," + 
                                "km," +
                                "territory_owner," +
-                               "coverage_token" +
+                               "coverage_token," +
                                "address_id".   /* EXTENT value count 42 */
 
 /* common validation */
