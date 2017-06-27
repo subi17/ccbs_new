@@ -139,7 +139,7 @@
                                                      Order.CLIType)                     AND
                       fCheckOngoing2PConvergentOrder(OrderCustomer.CustIdType,
                                                      OrderCustomer.CustId,
-                                                     Order.CLIType))      
+                                                     Order.CLIType)) OR      
                       /* Additional Line with mobile only ALFMO-5
                          Move Mobile only tariff order to 76 queue, 
                          if customer has ongoing mobile only order */
