@@ -46,6 +46,7 @@ DEF VAR lcSegment        AS CHAR NO-UNDO.
 DEF VAR llProCust        AS LOG  NO-UNDO.
 DEF VAR llCustCatPro     AS LOG  NO-UNDO.
 DEF VAR lcPROChannels    AS CHAR NO-UNDO.
+DEF VAR lcCategory       AS CHAR NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string]").
 IF top_array EQ ? THEN RETURN.
@@ -77,7 +78,8 @@ IF AVAIL Customer THEN DO:
       lcSegment = CustCat.Segment. 
 END.
 ELSE
-   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProCust).
+   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProCust,
+                               lccategory).
 
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
