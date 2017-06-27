@@ -204,11 +204,13 @@ FUNCTION fMakeProActRequest RETURNS INT(
    IF NOT AVAIL bOwner THEN RETURN 0.
    lcParams = "SVA". /*To indicate that we are handling SVA request.*/
    IF icParam1 NE "" THEN DO:
-      lcParams =  lcParams + "|" + icParam1.
-      IF icParam2 NE "" THEN DO:
-         lcParams = lcParams + "|" + icParam2. 
-      END.
-      
+      IF icParam1 EQ "no" THEN lcParams =  lcParams + "_NO_WAIT".
+      ELSE DO:
+         lcParams =  lcParams + "|" + icParam1.
+         IF icParam2 NE "" THEN DO:
+            lcParams = lcParams + "|" + icParam2. 
+         END.
+      END. 
    END.
 
    DO TRANS:

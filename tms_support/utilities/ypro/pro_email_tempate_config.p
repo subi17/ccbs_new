@@ -76,7 +76,7 @@ ORDER ID: #ORDERID
 if lcRet NE "" THEN MESSAGE lcRet VIEW-AS ALERT-BOX.
 lcRet = "".
 
-lcRet = fAddText("SVA_CentralitaPRO", 
+lcRet = fAddText("SVA_Centralita", 
 "Nombre Cliente: #CUSTNAME 
 ORDER ID: #ORDERID
 #CUSTTYPE: #CUSTID",

@@ -182,12 +182,16 @@ END.
 IF MsRequest.ReqStat = 0 THEN DO:
 
    /*YPRO SVA special handling for PRO customers*/
-   IF MsRequest.ReqCParam6 BEGINS "SVA" THEN DO:
+   IF MsRequest.ReqCParam6 BEGINS "SVA_NO_WAIT" THEN DO:
+      lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest,
+                                       "SVA_" + MsRequest.ReqCparam3).
+      IF lcEmailErr NE "" THEN RETURN "ERROR: " + lcEmailErr.      
+   END.
+   ELSE IF MsRequest.ReqCParam6 BEGINS "SVA" THEN DO:
       /*YPRO-84: go to waitinf for bob tool in state 19.*/
       fReqStatus({&REQUEST_STATUS_CONFIRMATION_PENDING},""). /*19*/
       lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest, 
-                                       MsRequest.ReqCparam2).
-
+                                       "SVA_" + MsRequest.ReqCparam3).
       IF lcEmailErr NE "" THEN RETURN "ERROR: " + lcEmailErr.                                 
       RETURN.
 
