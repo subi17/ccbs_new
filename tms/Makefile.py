@@ -452,7 +452,7 @@ def batch(*a):
     altdbs = []
     if 'alt' in globals():
         for altdb in alt.split(','):
-            if os.path.isfile('{0}/db/progress/store/{1}_alt.pf'.format(relpath, altdb)):
+            if os.path.isfile('{0}/db/progress/store/{1}_alt.pf'.format(relpath, altdb if len(altdb.split('@')) == 0 else altdb.split('@')[0])):
                 if len(altdb.split('@')) > 1:
                     if altdb.split('@')[1] == gethostname():
                         altdbs.append(altdb.split('@')[0])
