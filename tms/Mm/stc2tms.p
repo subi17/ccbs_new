@@ -453,8 +453,11 @@ PROCEDURE pFeesAndServices:
             EXCLUSIVE-LOCK.
          bMember.ValidTo = ldtActDate - 1. 
 
+         /* Additional Line with mobile only ALFMO-5 
+             Added {&ADDLINE_DISCOUNTS_HM} */
          IF llAddLineDisc = FALSE AND
-            LOOKUP(DiscountPlan.DPRuleID,{&ADDLINE_DISCOUNTS} + {&ADDLINE_DISCOUNTS_20}) > 0
+            LOOKUP(DiscountPlan.DPRuleID,
+                   {&ADDLINE_DISCOUNTS} + {&ADDLINE_DISCOUNTS_20} + {&ADDLINE_DISCOUNTS_HM}) > 0
             THEN ASSIGN llAddLineDisc = TRUE
                         lcAddLineDisc = DiscountPlan.DPRuleID
                         .
@@ -488,6 +491,17 @@ PROCEDURE pFeesAndServices:
                                 CLIType.CLIType,
                                 ldtActDate,
                                 ENTRY(LOOKUP(CLIType.CLIType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_20})).
+         IF RETURN-VALUE BEGINS "ERROR" THEN
+            RETURN RETURN-VALUE.
+      END.
+    
+      /* Additional Line with mobile only ALFMO-5 */
+      IF lcAddLineDisc = ENTRY(LOOKUP(bOLDType.CLIType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_HM}) AND
+         fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN DO:
+         fCreateAddLineDiscount(MsRequest.MsSeq,
+                                CLIType.CLIType,
+                                ldtActDate,
+                                ENTRY(LOOKUP(CLIType.CLIType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_HM})).
          IF RETURN-VALUE BEGINS "ERROR" THEN
             RETURN RETURN-VALUE.
       END.
@@ -755,6 +769,26 @@ PROCEDURE pUpdateSubscription:
                                IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) THEN fLastDayOfMonth(TODAY)
                                ELSE ldtActDate - 1).
       END.
+   END.
+   /* Additional Line with mobile only ALFMO-5 
+      IF STC happened and the new main line is not mobile only or matrix doesn't meet
+      then close the additional line discount */
+   IF bOldType.LineType   = {&CLITYPE_LINETYPE_MAIN} AND
+      bOldType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
+     (fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) OR       
+      NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,CLIType.CLIType)) THEN       
+   DO:
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobSub.Brand   = gcBrand          AND
+               bMobSub.AgrCust = Customer.CustNum AND
+               bMobSub.MsSeq  <> MsRequest.MsSeq  AND
+               LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) THEN fLastDayOfMonth(TODAY)
+                               ELSE ldtActDate - 1).
+      END. 
    END.
 
 END PROCEDURE.

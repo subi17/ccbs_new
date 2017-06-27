@@ -136,7 +136,21 @@
                                                      Order.CLIType)                     AND
                       fCheckOngoing2PConvergentOrder(OrderCustomer.CustIdType,
                                                      OrderCustomer.CustId,
-                                                     Order.CLIType))                    THEN DO:
+                                                     Order.CLIType))      
+                      /* Additional Line with mobile only ALFMO-5
+                         Move Mobile only tariff order to 76 queue, 
+                         if customer has ongoing mobile only order */
+                     (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                                     OrderAction.Brand    = gcBrand           AND
+                                     OrderAction.OrderID  = Order.OrderId     AND
+                                     OrderAction.ItemType = "AddLineDiscount" AND
+                             LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0) AND
+                      NOT fCheckExistingMobileOnly(OrderCustomer.CustIDType,
+                                                   OrderCustomer.CustID,
+                                                   Order.CLIType) AND
+                      fCheckOngoingMobileOnly(OrderCustomer.CustIdType,
+                                              OrderCustomer.CustId,
+                                              Order.CLIType)) THEN DO:
                      IF llDoEvent THEN DO:
                         lh76Order = BUFFER Order:HANDLE.
                         RUN StarEventInitialize(lh76Order).

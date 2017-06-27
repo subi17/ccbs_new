@@ -932,6 +932,14 @@ PROCEDURE pTerminate:
                      MobSub.MsSeq,
                      fLastDayOfMonth(TODAY),
                      FALSE).
+      /* Additional Line with mobile only ALFMO-5
+         For Main Mobile only Line Termination */
+      fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
+                     MobSub.MsSeq,
+                     fLastDayOfMonth(TODAY),
+                     FALSE).
+
+
    END.
 
    /* COFF Partial termination */
@@ -968,13 +976,15 @@ PROCEDURE pTerminate:
    IF AVAIL MSISDN THEN RELEASE MSISDN.
 
    /* ADDLine-20 Additional Line 
-      ADDLINE-323 fixed bug */
+      ADDLINE-323 fixed bug 
+      Additional Line with mobile only ALFMO-5 */
    IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
                      bCLIType.Brand      = Syst.Parameters:gcBrand           AND
                      bCLIType.CLIType    = TermMobSub.CLIType                AND
                      bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
                     (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
-                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN DO:
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} )) THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = gcBrand            AND
                bMobSub.AgrCust = TermMobSub.CustNum AND

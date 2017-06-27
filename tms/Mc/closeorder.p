@@ -271,6 +271,56 @@ DO:
    END.
 END. 
 
+/* Additional Line with mobile only ALFMO-5 
+   If Mobile only Main Line is Closed and customer has no other mobile only 
+   main line then remove the mobile only additional line discount */
+
+FIND FIRST lbOrderCustomer NO-LOCK WHERE
+           lbOrderCustomer.Brand   = gcBrand       AND
+           lbOrderCustomer.OrderId = Order.OrderId AND
+           lbOrderCustomer.RowType = 1             NO-ERROR.
+IF AVAILABLE lbOrderCustomer THEN DO:
+   /* If Main Line is Closed and customer has no other mobile only 
+      main line then removing the additional line discount */
+   FOR EACH OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand      = gcBrand                    AND
+            OrderCustomer.CustIDType = lbOrderCustomer.CustIDType AND
+            OrderCustomer.CustID     = lbOrderCustomer.CustID     AND
+            OrderCustomer.RowType    = 1,
+      FIRST lbOrder NO-LOCK WHERE
+            lbOrder.Brand      = gcBrand                           AND
+            lbOrder.OrderID    = OrderCustomer.OrderID             AND
+            lbOrder.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+     LOOKUP(lbOrder.CLIType, {&ADDLINE_CLITYPES}) > 0:         
+      FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
+                 OrderAction.Brand    = gcBrand           AND
+                 OrderAction.OrderID  = lbOrder.OrderID   AND
+                 OrderAction.ItemType = "AddLineDiscount" AND
+          LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 NO-ERROR.
+      IF AVAILABLE OrderAction THEN 
+      DO:
+         IF NOT fCheckOngoingMobileOnly(lbOrderCustomer.CustIdType,
+                                        lbOrderCustomer.CustID,
+                                        Order.CliType) AND
+            NOT fCheckExistingMobileOnly(lbOrderCustomer.CustIdType,
+                                         lbOrderCustomer.CustID,
+                                         Order.CliType) THEN 
+         DO:
+            DELETE OrderAction.
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "Order",
+                             STRING(lbOrder.OrderID),
+                             0,
+                             "ADDLINE DISCOUNT ORDERACTION REMOVED",
+                             "Removed AddLineDiscount Item from OrderAction").
+
+            fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
+                                           lbOrderCustomer.CustID).
+         END.
+      END.
+   END.
+END.
+
 FOR EACH MNPProcess WHERE
    MNPProcess.OrderID = Order.OrderId AND
    MNPProcess.MNPType = {&MNP_TYPE_IN} AND

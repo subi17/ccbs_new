@@ -70,6 +70,10 @@ IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
       lcAddLineAllowed = "OK".
    ELSE IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId,pcCliType) THEN 
       lcAddLineAllowed = "OK".
+   ELSE IF fCheckExistingMobileOnly(pcIdType,pcPersonId,pcCliType) THEN 
+      lcAddLineAllowed = "MOBILE_ONLY". /* Additional Line with mobile only ALFMO-5 */
+   ELSE IF fCheckOngoingMobileOnly(pcIdType,pcPersonId,pcCliType) THEN 
+      lcAddLineAllowed = "MOBILE_ONLY". /* Additional Line with mobile only ALFMO-5 */
    ELSE lcAddLineAllowed = "NO_MAIN_LINE".
 END.
 

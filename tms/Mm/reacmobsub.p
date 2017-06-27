@@ -1085,8 +1085,15 @@ PROCEDURE pReacAddLineDisc:
 
    DEF VAR lcAddLineDiscList AS CHAR NO-UNDO.
 
+   /* Additional Line with mobile only ALFMO-5  
+      Added code to reactivate the mobile only 
+      additional line discount if additional line 
+      reactivated and still have one existing mobile 
+      only and meet the matrix*/
+
    lcAddLineDiscList = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}) +
-                       ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}).
+                       ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}) + 
+                       ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}).
 
    FIND FIRST Customer NO-LOCK WHERE
               Customer.Custnum = iiCustNum NO-ERROR.
@@ -1101,7 +1108,10 @@ PROCEDURE pReacAddLineDisc:
       IF (DiscountPlan.DPRuleID = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS})    AND
           fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,icCLIType))                        OR
          (DiscountPlan.DPRuleID = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}) AND
-          fCheckExisting2PConvergent(Customer.CustIDType,Customer.OrgID,icCLIType))                      THEN DO:
+          fCheckExisting2PConvergent(Customer.CustIDType,Customer.OrgID,icCLIType)) OR 
+         (DiscountPlan.DPRuleID = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) AND
+          fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,icCLIType) AND
+          NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,icCLIType)) THEN DO:
          fCreateAddLineDiscount(iiMsSeq,
                                 icCLIType,
                                 TODAY,

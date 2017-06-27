@@ -437,4 +437,19 @@ IF fIsConvergenceTariff(Order.CLIType) THEN DO:
    END.   
 END.
 
+/* Additional Line with mobile only ALFMO-5  
+   Release pending additional lines orders, in case of pending 
+   main Moblie only line order is released */
+ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                       CLIType.Brand      = gcBrand                           AND
+                       CLIType.CLIType    = Order.CliType                     AND
+                       CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
+                       CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND 
+                       (lcNewStatus = {&ORDER_STATUS_NEW}  OR
+                        lcNewStatus = {&ORDER_STATUS_MNP}) THEN 
+DO:
+   fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
+                                   OrderCustomer.CustID). 
+END.
+
 RETURN "".

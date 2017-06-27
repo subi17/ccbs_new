@@ -359,4 +359,90 @@ FUNCTION fCheckExisting2PConvergent RETURNS LOGICAL
 
 END FUNCTION.
 
+/* Additional Line with mobile only ALFMO-5  */ 
+FUNCTION fIsMobileOnlyAddLineOK RETURNS LOGICAL
+   (icCLIType    AS CHARACTER,
+    icCLITypeAddLine AS CHARACTER):
+
+   DEF VAR lcResult AS CHAR NO-UNDO.
+
+   DEF BUFFER bCLIType FOR CLIType.
+   
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = icCLIType                         AND
+                     bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:
+      
+      IF fMatrixAnalyse(Syst.Parameters:gcBrand,
+                        "ADDLINEHM",
+                        "SubsTypeFrom;SubsTypeTo",
+                        icCLIType + ";" + icCLITypeAddLine,
+                        OUTPUT lcResult) = 1 THEN
+         RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END.
+
+/* Function checks for existing Mobile Only for a customer 
+   Additional Line with mobile only ALFMO-5 */
+FUNCTION fCheckExistingMobileOnly RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
+
+   DEFINE BUFFER bCustomer FOR Customer.
+   DEFINE BUFFER bMobSub   FOR MobSub.
+
+   FOR FIRST bCustomer WHERE
+             bCustomer.Brand      = Syst.Parameters:gcBrand AND
+             bCustomer.OrgId      = icCustID                AND
+             bCustomer.CustidType = icCustIDType            AND
+             bCustomer.Roles     NE "inactive"              NO-LOCK,
+       EACH  bMobSub NO-LOCK WHERE
+             bMobSub.Brand   = Syst.Parameters:gcBrand AND
+             bMobSub.InvCust = bCustomer.CustNum       AND
+             bMobSub.PayType = FALSE AND
+             bMobSub.MsStatus <> {&MSSTATUS_MOBILE_NOT_ACTIVE}:
+
+       IF fIsMobileOnlyAddLineOK(bMobSub.CLIType,icCliType) THEN
+          RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* Function checks for ongoing mobile only for a customer 
+   Additional Line with mobile only ALFMO-5  */
+FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+
+   FOR EACH bOrderCustomer NO-LOCK WHERE
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.orderid    EQ bOrderCustomer.Orderid  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
+            LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
+
+      IF fIsMobileOnlyAddLineOK(bOrder.CLIType,icCliType) THEN
+         RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 &ENDIF
