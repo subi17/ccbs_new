@@ -40,6 +40,8 @@ DEFINE VARIABLE ldeMonthAmt      AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE ldeMonthFrom     AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthTo       AS DECIMAL   NO-UNDO.
 
+DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
+
 lcStructType = validate_request(param_toplevel_id, "int,string,struct,[boolean]").
 IF lcStructType EQ ? THEN RETURN.
 
@@ -161,6 +163,18 @@ ELSE IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN DO:
             DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
       RETURN appl_err("Discount Plan not allowed").
    END.
+END.
+
+FOR EACH bDiscountPlan WHERE
+         bDiscountPlan.Brand = gcBrand AND
+  LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20} + {&ADDLINE_DISCOUNTS_HM}) > 0,
+  FIRST DPMember WHERE
+        DPMember.DPId       = bDiscountPlan.DPId   AND
+        DPMember.HostTable  = "MobSub"             AND
+        DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+        DPMember.ValidTo   >= ldaValidFrom         AND
+        DPMember.ValidFrom <= ldaValidTo:
+   RETURN appl_err("Discount Plan already exists").
 END.
 
 FIND FIRST DPMember WHERE

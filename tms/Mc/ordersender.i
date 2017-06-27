@@ -114,6 +114,9 @@
                           OrderCustomer.Brand   = gcBrand       AND
                           OrderCustomer.OrderId = Order.OrderId AND
                           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+
+               IF AVAIL OrderCustomer THEN
+               DO:
                
                   IF (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                                      OrderAction.Brand    = gcBrand           AND
@@ -167,7 +170,7 @@
 
                      NEXT {1}.
                   END.
-
+               END.
             END.    
             
             /* YDR-1825 MNP SIM ONLY Orders
