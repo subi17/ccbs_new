@@ -459,6 +459,8 @@ create_group("INT_VOICE100", "International Voice 100").
 create_group("FIX_VOICE1000", "National fixed voice 1000").
 create_group("INT_FIX_VOICE1000", "International fixed Voice 1000").
 create_group("SMS5000", "SMS 5000").
+create_group("FLEX_UPSELL_500MB", "Mobile Data Usage Flex Upsell 500MB").
+create_group("FLEX_UPSELL_5GB", "Mobile Data Usage Flex Upsell 5GB").
 
 create_limit("VOICE5000", "National calls", "_MIN",5000.0, 4, 1,"VOICE100").
 /*create_limit("VOICE200", "National calls", "_MIN",200.0, 4, 1, "VOICE100").*/
@@ -466,6 +468,9 @@ create_limit("INT_VOICE100", "International calls", "_MIN",100.0, 4, 1,"VOICE100
 create_limit("FIX_VOICE1000", "National fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
 create_limit("INT_FIX_VOICE1000", "International fixed calls", "_MIN",1000.0, 1, 1,"VOICE100").
 create_limit("SMS5000", "National sms", "_QTY",5000.0, 5, 5,"SMS").
+create_limit("FLEX_UPSELL_500MB", "Flex Upsell 500MB", "",500.0, 7, 4,"FLEX_UPSELL").
+create_limit("FLEX_UPSELL_5GB", "Flex Upsell 5GB", "",5000.0, 7, 4,"FLEX_UPSELL").
+
 
 FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
    ( icClitype AS CHARACTER,
