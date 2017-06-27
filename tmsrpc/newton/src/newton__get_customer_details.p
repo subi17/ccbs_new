@@ -44,6 +44,7 @@
        self_employed;boolean; is customer self employed
        profession;string; customer profession
        site_name;string; employer company
+       segment;string;customer segment
  * @company_contact title;string;
                     fname;string;
                     lname;string;
@@ -274,6 +275,12 @@ IF (Customer.Category EQ "40" OR Customer.Category EQ "41") THEN
 add_boolean(top_struct,"self_employed",llSelfEmployed).
 add_string(top_struct, "profession", Customer.Profession).
 add_string(top_struct, "site_name", Customer.CompanyName).
+
+FIND FIRST CustCat WHERE 
+           CustCat.brand EQ gcBrand AND
+           CustCat.category EQ Customer.category NO-ERROR.
+IF AVAIL custcat THEN           
+   add_string(top_struct, "segment", CustCat.Segment).
 
 llLimitNotReached = fSubscriptionLimitCheck(
    Customer.orgId,
