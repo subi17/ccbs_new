@@ -1662,8 +1662,7 @@ PROCEDURE local-find-others.
                                       BUFFER OrderCustomer).
          ASSIGN
             lcAuthCustId     = OrderCustomer.AuthCustId
-            lcAuthCustIdType = OrderCustomer.AuthCustIdType
-
+            lcAuthCustIdType = OrderCustomer.AuthCustIdType.
 
          IF Order.InvCustRole = 1 THEN lcInvCust = lcAgrCust.
          IF Order.UserRole    = 1 THEN lcUser    = lcAgrCust.
