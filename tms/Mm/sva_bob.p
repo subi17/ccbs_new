@@ -15,6 +15,7 @@ gcbrand = "1".
 {Func/fmakemsreq.i}
 {Func/barrfunc.i}
 {Func/msreqfunc.i}
+{Func/profunc.i}
 
 DEF VAR lcInDir AS CHAR NO-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
@@ -107,6 +108,7 @@ PROCEDURE pReadFileData:
    DEF VAR lcSetStatus AS CHAR NO-UNDO.
    DEF VAR lcFaxToEmailNumber AS CHAR NO-UNDO.
    DEF VAR lcErrText AS CHAR NO-UNDO.
+   DEF VAR lcEmailErr AS CHAR NO-UNDO.
 
    FILE_LINE:
    REPEAT TRANS:
@@ -155,6 +157,10 @@ PROCEDURE pReadFileData:
          liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
       ELSE IF lcSetStatus EQ "Inactive" THEN
          liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
+      ELSE IF lcSetStatus EQ "cancel_active" THEN
+         liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
+      ELSE IF lcSetStatus EQ "cancel_inactive" THEN
+               liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
       ELSE DO:
          lcErrText = lcLine + "Incorrect action code " + lcSetStatus.
          OUTPUT STREAM sErr TO VALUE(lcErrorLog) append.
@@ -188,7 +194,14 @@ PROCEDURE pReadFileData:
       END.
       /*Make actual status change for the request and create / remove fee*/
 
-      /*fSendEmailByRequest*/
+      IF lcSetStatus begins "cancel" THEN DO:
+         lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest,
+                      "SVA_" + MsRequest.ReqCparam3).
+         IF lcEmailErr NE "" THEN MESSAGE "ERROR: " + lcEmailErr 
+            VIEW-AS ALERT-BOX.
+         fReqStatus(4, "SVA operation cancelled ").
+
+      END.
       fReqStatus(6, "Execute SVA operation ").
       OUTPUT STREAM sLog TO VALUE(lcLog) append.
       PUT STREAM sLog UNFORMATTED "Operation done" SKIP.
