@@ -369,10 +369,9 @@ FUNCTION fIsMobileOnlyAddLineOK RETURNS LOGICAL
    DEF BUFFER bCLIType FOR CLIType.
    
    IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
-                     bCLIType.CLIType    = icCLIType                         AND
-                     bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
-                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:
+               bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+               bCLIType.CLIType    = icCLIType                         AND
+               bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:
       
       IF fMatrixAnalyse(Syst.Parameters:gcBrand,
                         "ADDLINEHM",

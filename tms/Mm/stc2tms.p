@@ -773,8 +773,7 @@ PROCEDURE pUpdateSubscription:
    /* Additional Line with mobile only ALFMO-5 
       IF STC happened and the new main line is not mobile only or matrix doesn't meet
       then close the additional line discount */
-   IF bOldType.LineType   = {&CLITYPE_LINETYPE_MAIN} AND
-      bOldType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
+   IF bOldType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
      (fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) OR       
       NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,CLIType.CLIType)) THEN       
    DO:
