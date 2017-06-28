@@ -617,7 +617,7 @@ END.
 
 /* Additional Line with mobile only ALFMO-5  
    Release pending additional lines orders, in case of pending 
-   main Moblie only line order is released */
+   mnp main Moblie only line order is released */
 IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
                   CLIType.Brand      = gcBrand                           AND
                   CLIType.CLIType    = Order.CliType                     AND                      CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN 
