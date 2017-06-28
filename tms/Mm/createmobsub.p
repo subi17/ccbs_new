@@ -614,7 +614,17 @@ ELSE DO:
       Mobsub.Icc = Order.ICC
       Mobsub.imsi = IMSI.IMSI WHEN AVAIL IMSI.
 END.
-   
+
+/* Additional Line with mobile only ALFMO-5  
+   Release pending additional lines orders, in case of pending 
+   main Moblie only line order is released */
+IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                  CLIType.Brand      = gcBrand                           AND
+                  CLIType.CLIType    = Order.CliType                     AND                      CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN 
+DO:
+   fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
+                                   OrderCustomer.CustID). 
+END.
 fSetOrderStatus(Order.OrderId,"6").  
 fMarkOrderStamp(Order.OrderID,
                 "Delivery",
