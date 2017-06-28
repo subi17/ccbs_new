@@ -224,7 +224,8 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    IF fIsConvergenceTariff(NewCLIType.Clitype) AND
       (fIsConvergenceTariff(MobSub.CLItype) EQ FALSE OR
        NOT fCheckConvergentSTCCompability(NewCLIType.CLIType,
-                                          MobSub.clitype)) THEN DO:
+                                          MobSub.clitype)) AND
+      piOrderID EQ 0 THEN DO:
       ocError = "Function not allowed due to business rules!".
       RETURN FALSE.
    END.
@@ -232,7 +233,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    /* partial convergent to mobile */
    IF (mobsub.msstatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
        mobsub.msstatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND 
-      piOrderID EQ 0 THEN DO:
+       piOrderID EQ 0 THEN DO:
 
       IF CAN-FIND(FIRST Order NO-LOCK WHERE
                         Order.MsSeq = mobsub.msseq AND
