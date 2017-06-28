@@ -171,6 +171,9 @@ faddTMSParam("PRO_CONTRACTS","Bundles","VOICE200,VOICE5000,SMS5000," +
 faddTMSParam("PRO_CHANNELS","PRO",
              "Telesales_PRO,Fusion_Telesales_PRO").
 
+faddTMSParam("SVA_BO_EMAIL_ADDRESS","PRO",
+             "kari.aikas@qvantel.com").
+
 fCreatePriceList("PRO_CONTDSL39").
 fCreatePriceList("PRO_CONTFH39_50").
 fCreatePriceList("PRO_CONTFH49_300").

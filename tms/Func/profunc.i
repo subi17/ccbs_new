@@ -168,15 +168,17 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    END.
 
    /*Set email sending parameters*/
-   lcMailDir = "/tmp/". /*To be sure that we have some place*/
+   /*lcMailDir = "/tmp/". /*To be sure that we have some place*/
    lcMailDir = fCParam("YPRO", "YPRO_SVA_email_dir").
    lcMailFile = lcMailDir + "SVA_email" + STRING(bMsRequest.Msrequest) + ".txt".
-
-   SendMaileInvoice("", "", lcMailFile).
+   */
+   xMailAddr = fCParam("YPRO", "SVA_BO_EMAIL_ADDRESS").
+   xMailSubj = lcMailHeader.
+   SendMaileInvoice(lcOutput, "", "").
 
    /*Used email file removal or saving to logs?*/
 
-   RETURN lcOutput.
+   RETURN "".
 
 END.
 
@@ -260,18 +262,17 @@ END.
 
 
 
-/*Function returns TRUE if the order exsists and it is done for PRO customer.*/
+/*Function returns TRUE if the order exsists and it is done from PRO channel.*/
 FUNCTION fIsProOrder RETURNS LOGICAL
    (iiOrderID as INT):
-   DEF BUFFER OrderCustomer FOR OrderCustomer.
 
-   FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand EQ  Syst.Parameters:gcBrand AND
-              Ordercustomer.OrderID EQ iiOrderID AND
-              OrderCustomer.Rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
+   FIND FIRST Order NO-LOCK WHERE
+              Order.Brand EQ  Syst.Parameters:gcBrand AND
+              Order.OrderID EQ iiOrderID NO-ERROR.
 
-   IF NOT AVAIL OrderCustomer THEN RETURN FALSE.
-   RETURN fIsPRO(Ordercustomer.Category).
+   IF INDEX(Order.orderchannel,"PRO") > 0 THEN
+      RETURN TRUE.
+   ELSE RETURN FALSE.
    
 END.
 /*Function returns True if a tariff can be defined as 2P tariff.
