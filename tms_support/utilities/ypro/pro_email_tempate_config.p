@@ -46,7 +46,7 @@ END.
 
 def var lcRet as char no-undo.
 
-lcRet = fAddText("SVA_FAXTOMAIL", 
+lcRet = fAddText("SVA_FAXTOEMAIL", 
 "Nombre Cliente: #CUSTNAME
 ORDER ID: #ORDERID
 #CUSTTYPE: #CUSTID

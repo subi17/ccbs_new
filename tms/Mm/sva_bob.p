@@ -202,7 +202,8 @@ PROCEDURE pReadFileData:
          fReqStatus(4, "SVA operation cancelled ").
 
       END.
-      fReqStatus(6, "Execute SVA operation ").
+      ELSE
+         fReqStatus(6, "Execute SVA operation ").
       OUTPUT STREAM sLog TO VALUE(lcLog) append.
       PUT STREAM sLog UNFORMATTED "Operation done" SKIP.
       OUTPUT STREAM sLog CLOSE.
