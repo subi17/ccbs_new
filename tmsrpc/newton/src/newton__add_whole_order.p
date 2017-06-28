@@ -7,6 +7,8 @@
             address_data;struct;optional
             device_data;struct;optional
             contact_data;struct;optional
+            mobile_pouser_data;struct:optional
+            fixed_pouser_data;struct:optional
             fusion_data;struct;optional
             q25_data;struct;optional
  * @order_data salesman;string;optional;id of the seller
@@ -177,6 +179,20 @@
                  longitude;string;optional;
                  person_id;string;optional;contact person id
                  id_type;string;optional;NIF,NIE,CIF or Passport
+ * @mobile_pouser_data fname;string;mandatory;
+                      lname;string;mandatory;
+                      lname2;string;optional;
+                      person_id;string;mandatory;contact person id
+                      id_type;string;mandatory;NIF,NIE or Passport
+                      company_id;string;optional;
+                      site_name;string;optional;
+ * @fixed_pouser_data fname;string;mandatory;
+                      lname;string;mandatory;
+                      lname2;string;optional;
+                      person_id;string;mandatory;contact person id
+                      id_type;string;mandatory;NIF,NIE or Passport
+                      company_id;string;optional;
+                      site_name;string;optional;
  * @fusion_data  fixed_line_number_type;string;mandatory;NEW/MNP
                  fixed_line_number;string;optional;
                  fixed_line_mnp_old_operator_name;string;optional;
@@ -695,7 +711,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       IF data[LOOKUP("person_id", gcCustomerStructStringFields)] ne "" THEN
           lcIdOrderCustomer = data[LOOKUP("person_id", gcCustomerStructStringFields)].
       IF data[LOOKUP("company_id", gcCustomerStructStringFields)] ne "" AND
-          piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+         LOOKUP(STRING(piRowType),"{&ORDERCUSTOMER_ROWTYPE_AGREEMENT}," +
+                                  "{&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}," +
+                                  "{&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}") > 0
       THEN DO:
           lcContactId = lcIdOrderCustomer.
           lcIdOrderCustomer = data[LOOKUP("company_id", gcCustomerStructStringFields)].
