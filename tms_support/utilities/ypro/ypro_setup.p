@@ -3,7 +3,7 @@ DEF BUFFER bTMSCodes FOR TMSCodes.
 DEF BUFFER bservicelimitTarget FOR ServiceLimitTarget.
 DEF BUFFER bSLGAnalyse FOR SLGAnalyse.
 DEF BUFFER tempSLGAnalyse FOR SLGAnalyse.
-
+DEF BUFFER breqstatus FOR requeststatus.
 
 DEF VAR ldaFrom AS DATE INIT TODAY.
 DEF VAR limode AS INT INIT 1.
@@ -771,6 +771,11 @@ fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 /* Azul */
 fCreateMatrix("CONTDSL59", "PERCONTR", 1, 44).
@@ -779,6 +784,11 @@ fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 fCreateMatrix("CONTFH59_50", "PERCONTR", 1, 45).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
@@ -786,6 +796,11 @@ fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 fCreateMatrix("CONTFH69_300", "PERCONTR", 1, 46).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
@@ -793,6 +808,11 @@ fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 /* Naranda */
 fCreateMatrix("CONTDSL39", "PERCONTR", 1, 47).
@@ -802,6 +822,11 @@ fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
 fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 fCreateMatrix("CONTFH39_50", "PERCONTR", 1, 49).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
@@ -810,6 +835,11 @@ fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
 fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 fCreateMatrix("CONTFH49_300", "PERCONTR", 1, 50).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
@@ -818,6 +848,11 @@ fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
 fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 /* Morada */
 fCreateMatrix("CONTDSL52", "PERCONTR", 1, 48).
@@ -826,6 +861,11 @@ fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 fCreateMatrix("CONTFH52_50", "PERCONTR", 1, 51).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
@@ -833,6 +873,11 @@ fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 fCreateMatrix("CONTFH62_300", "PERCONTR", 1, 52).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
@@ -840,6 +885,11 @@ fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 /* La infinita 5GB */
 fCreateMatrix("CONT26", "PERCONTR", 1, 42).
@@ -848,6 +898,11 @@ fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").*/
 fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 /* La del cerp 1,5GB */
 fCreateMatrix("CONT10", "PERCONTR", 1, 43).
@@ -855,6 +910,11 @@ fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
 /*fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").*/
 /*fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").*/
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 /* La Sinfin */
 fCreateMatrix("Per.contract usage", "PERCONTR", 1, 41).
@@ -863,6 +923,11 @@ fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").*/
 fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_5GB").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 /* La del cero 5GB */
 fCreateMatrix("Per.contract usage", "PERCONTR", 1, 29).
@@ -870,6 +935,11 @@ fCreateMXItem(giMXSeq, "PerContract", "VOICE200").
 fCreateMXItem(giMXSeq, "PerContract", "VOICE5000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_VOICE100").
 fCreateMXItem(giMXSeq, "PerContract", "SMS5000").
+fCreateMXItem(giMXSeq, "PerContract", "OFFICE365").
+fCreateMXItem(giMXSeq, "PerContract", "FAXTOEMAIL").
+fCreateMXItem(giMXSeq, "PerContract", "CENTRALITA").
+fCreateMXItem(giMXSeq, "PerContract", "SAGEONE").
+fCreateMXItem(giMXSeq, "PerContract", "IPFIJA").
 
 
 fCreateTariff(81,"VOICE5000","VOICE5000","CONTRATO8").
@@ -897,3 +967,32 @@ fCreateTMRItemValue(43,"SMS5000").
 fCreateTMRItemValue(44,"INT_VOICE100").
 fCreateTMRItemValue(45,"FIX_VOICE1000").
 fCreateTMRItemValue(46,"INT_FIX_VOICE1000").
+
+/* new request status for SVA in 8 and 9 requests */
+FIND FIRST requeststatus WHERE
+           requeststatus.brand EQ "1" AND
+           requeststatus.reqtype EQ 8 AND
+           requeststatus.reqstatus EQ 6 NO-ERROR.
+IF NOT AVAIL requeststatus THEN DO:
+   FIND FIRST breqstatus WHERE
+              breqstatus.brand EQ "1" AND
+              breqstatus.reqtype EQ 8 AND
+              breqstatus.reqstatus EQ 0 NO-ERROR.
+   CREATE RequestStatus.
+   BUFFER-COPY breqstatus EXCEPT breqstatus.reqstatus TO requeststatus.
+   ASSIGN requeststatus.reqstatus = 6.
+END.
+
+FIND FIRST requeststatus WHERE
+           requeststatus.brand EQ "1" AND
+           requeststatus.reqtype EQ 9 AND
+           requeststatus.reqstatus EQ 6 NO-ERROR.
+IF NOT AVAIL requeststatus THEN DO:
+   FIND FIRST breqstatus WHERE
+              breqstatus.brand EQ "1" AND
+              breqstatus.reqtype EQ 9 AND
+              breqstatus.reqstatus EQ 0 NO-ERROR.
+   CREATE RequestStatus.
+   BUFFER-COPY breqstatus EXCEPT breqstatus.reqstatus TO requeststatus.
+   ASSIGN requeststatus.reqstatus = 6.
+END.           
