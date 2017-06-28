@@ -95,6 +95,7 @@
                   mark_post_3rd;boolean;optional;
                   mark_sms_3rd;boolean;optional;
                   mark_email_3rd;boolean;optional;
+                  mark_dont_share_personal_data;boolean;optional;
                   mark_bank_3rd;boolean;optional;
                   language;string;optional;
                   latitude;string;optional;
@@ -131,6 +132,7 @@
                   mark_post_3rd;boolean;optional;
                   mark_sms_3rd;boolean;optional;
                   mark_email_3rd;boolean;optional;
+                  mark_dont_share_personal_data;boolean;optional;
                   mark_bank_3rd;boolean;optional;
                   language;string;optional;
                   latitude;string;optional;
@@ -171,9 +173,10 @@
                  mark_post_3rd;boolean;optional;
                  mark_sms_3rd;boolean;optional;
                  mark_email_3rd;boolean;optional;
+                 mark_dont_share_personal_data;boolean;optional;
                  mark_bank_3rd;boolean;optional;
                  language;string;optional;
-                 latitude;string;optional;
+                 lantitude;string;optional;
                  longitude;string;optional;
                  person_id;string;optional;contact person id
                  id_type;string;optional;NIF,NIE,CIF or Passport
@@ -211,6 +214,7 @@
                     km;string;optional;km
                     territory_owner;string;optional;territory owner
                     coverage_token;string;mandatory;
+                    address_id;string;optional;address id;
  * @q25_data   q25_extension;boolean;optional;Extension of the Quota 25
                q25_discount;double;optional;Discount amount over the Quota 25
                per_contract_id;int;mandatory;installment contract id (related to q25)
@@ -315,7 +319,6 @@ DEF VAR piDeliverySecure AS INT NO-UNDO.
 DEF VAR plKeepInstallment AS LOG NO-UNDO. 
 DEF VAR pcUpsHours AS CHAR NO-UNDO. 
 DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
-DEF VAR llCustPro AS LOGICAL NO-UNDO.
 DEF VAR pcIdentifiedSmsNumber AS CHAR NO-UNDO.
 DEF VAR plMultiOrder AS LOGICAL NO-UNDO.
 DEF VAR pcGescal AS CHAR NO-UNDO. 
@@ -332,21 +335,19 @@ DEF VAR lcPayType AS CHAR NO-UNDO.
 DEF VAR lcOldPayType AS CHAR NO-UNDO. 
 DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
-DEF VAR pcDataBundleType AS CHAR NO-UNDO. 
-DEF VAR pcDataBundleTypeArray AS CHAR NO-UNDO.
-DEF VAR pcMobsubBundleType AS CHAR NO-UNDO. 
-DEF VAR plDSSActivate    AS LOG NO-UNDO. 
-DEF VAR plBonoVoipActivate AS LOG NO-UNDO.
-DEF VAR plByPassRules AS LOG NO-UNDO.
-DEF VAR lcdelivery_channel AS CHAR NO-UNDO.
-DEF VAR pcUsageType AS CHAR NO-UNDO. 
+DEF VAR pcAdditionalBundleList  AS CHAR NO-UNDO. 
+DEF VAR pcAdditionalBundleArray AS CHAR NO-UNDO.
+DEF VAR pcMobsubBundleType      AS CHAR NO-UNDO. 
+DEF VAR plDSSActivate           AS LOG  NO-UNDO. 
+DEF VAR plBonoVoipActivate      AS LOG  NO-UNDO.
+DEF VAR plByPassRules           AS LOG  NO-UNDO.
+DEF VAR lcdelivery_channel      AS CHAR NO-UNDO.
+DEF VAR pcUsageType             AS CHAR NO-UNDO. 
 
-DEF VAR liCount                AS INT  NO-UNDO.
+DEF VAR liBundleCnt            AS INT  NO-UNDO.
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
-DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
-DEF VAR lcPROContracts         AS CHAR NO-UNDO.
 DEF VAR lcIPLContracts         AS CHAR NO-UNDO.
 DEF VAR lcFLATContracts        AS CHAR NO-UNDO.
 DEF VAR lcCONTDContracts       AS CHAR NO-UNDO.
@@ -388,23 +389,22 @@ DEF VAR lcContactIdType AS CHARACTER NO-UNDO.
 DEF VAR lcId AS CHARACTER NO-UNDO. 
 DEF VAR llPendingMainLineOrder AS LOG NO-UNDO. 
    
-DEF VAR pcFixedInstallAddress AS CHAR NO-UNDO. 
-DEF VAR lcFixedLineNumberType AS CHAR NO-UNDO. 
-DEF VAR lcFixedLineNumber AS CHAR NO-UNDO. 
-DEF VAR lcFixedLineMNPOldOperName AS CHAR NO-UNDO.
-DEF VAR lcFixedLineMNPOldOperCode AS CHAR NO-UNDO.
-DEF VAR lcFixedLineSerialNbr AS CHAR NO-UNDO.
-DEF VAR lcFixedLineMNPTime AS CHAR NO-UNDO. 
-DEF VAR lcFixedLineProduct AS CHAR NO-UNDO. 
-DEF VAR lcFixedLineCustomerType AS CHAR NO-UNDO. 
-DEF VAR plSendOffer AS LOG NO-UNDO. 
-DEF VAR plResignationPeriod AS LOG NO-UNDO. 
-DEF VAR plPromotion AS LOG NO-UNDO.
-DEF VAR llROIClose AS LOG NO-UNDO. 
-
-DEF VAR lcPayment                        AS CHAR    NO-UNDO.
-DEF VAR pcPaypalPayerid                  AS CHAR    NO-UNDO.
-DEF VAR liLanguage                       AS INTEGER NO-UNDO.
+DEF VAR pcFixedInstallAddress     AS CHAR    NO-UNDO. 
+DEF VAR lcFixedLineNumberType     AS CHAR    NO-UNDO. 
+DEF VAR lcFixedLineNumber         AS CHAR    NO-UNDO. 
+DEF VAR lcFixedLineMNPOldOperName AS CHAR    NO-UNDO.
+DEF VAR lcFixedLineMNPOldOperCode AS CHAR    NO-UNDO.
+DEF VAR lcFixedLineSerialNbr      AS CHAR    NO-UNDO.
+DEF VAR lcFixedLineMNPTime        AS CHAR    NO-UNDO. 
+DEF VAR lcFixedLineProduct        AS CHAR    NO-UNDO. 
+DEF VAR lcFixedLineCustomerType   AS CHAR    NO-UNDO. 
+DEF VAR lcPayment                 AS CHAR    NO-UNDO.
+DEF VAR pcPaypalPayerid           AS CHAR    NO-UNDO.
+DEF VAR plSendOffer               AS LOGICAL NO-UNDO. 
+DEF VAR plResignationPeriod       AS LOGICAL NO-UNDO. 
+DEF VAR plPromotion               AS LOGICAL NO-UNDO.
+DEF VAR llROIClose                AS LOGICAL NO-UNDO. 
+DEF VAR liLanguage                AS INTEGER NO-UNDO.
 /* q25_data */
 DEF VAR llq25_extension   AS LOGICAL NO-UNDO. /* Quota 25 extension */
 DEF VAR ldeq25_discount   AS DECIMAL NO-UNDO. /* Discount amount over Quota 25 */
@@ -425,7 +425,8 @@ DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
 DEF VAR pcAdditionaLineDiscount AS CHAR NO-UNDO.
 DEF BUFFER AddLineDiscountPlan FOR DiscountPlan.
 
-/* April promotion CONVDISC */
+/* April promotion CONVDISC (OR) 
+   Convergent new Adds Promotion */
 DEF BUFFER ConvDiscountPlan FOR DiscountPlan.
 
 DEF VAR lcItemParam AS CHAR NO-UNDO.
@@ -433,8 +434,6 @@ DEF VAR lcItemParam AS CHAR NO-UNDO.
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
 DEF BUFFER lbMobSub FOR MobSub. 
-
-DEF VAR llCheckConvergent AS LOGICAL NO-UNDO.
 
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
@@ -526,16 +525,14 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
    IF LOOKUP("additional_bundle",lcOrderStruct) > 0 THEN
    DO:
-      pcDataBundleTypeArray = get_array(pcOrderStruct,"additional_bundle").
+      pcAdditionalBundleArray = get_array(pcOrderStruct,"additional_bundle").
 
-      DO liCount = 0 TO get_paramcount(pcDataBundleTypeArray) - 1:
-         ASSIGN pcDataBundleType = pcDataBundleType +
-                                   (IF pcDataBundleType <> "" THEN "," ELSE "")
-                                   +
-                                   get_string(pcDataBundleTypeArray, 
-                                              STRING(liCount)).
+      DO liBundleCnt = 0 TO get_paramcount(pcAdditionalBundleArray) - 1:
+         ASSIGN pcAdditionalBundleList = pcAdditionalBundleList + (IF pcAdditionalBundleList <> "" THEN "," ELSE "") + get_string(pcAdditionalBundleArray, STRING(liBundleCnt)).
       END.
-   END.   
+
+   END.
+
    IF LOOKUP("subscription_bundle",lcOrderStruct) > 0 THEN
       pcMobsubBundleType = get_string(pcOrderStruct,"subscription_bundle").
 
@@ -630,29 +627,29 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
      (INPUT pcStructId AS CHARACTER,
       INPUT pcStructFields AS CHARACTER,
       INPUT piRowType AS INTEGER,
-      INPUT plUpdate  AS LOGICAL,
-      INPUT plCheckConv AS LOGICAL):
+      INPUT plUpdate  AS LOGICAL):
 
-   DEF VAR lcFError AS CHAR NO-UNDO. 
-   DEF VAR iData AS INTEGER NO-UNDO. 
-   DEF VAR lcc   AS CHARACTER NO-UNDO. 
-   DEF VAR lii   AS INTEGER NO-UNDO. 
-   DEF VAR lcField AS CHARACTER NO-UNDO. 
-   DEF VAR liFieldIndex AS INTEGER NO-UNDO. 
-   DEF VAR lcMarkOut    AS CHARACTER NO-UNDO. 
-   DEF VAR lcMarketing  AS CHARACTER NO-UNDO. 
-   DEF VAR ldBirthDay   AS DATE NO-UNDO. 
-   DEF VAR llSelfEmployed AS LOGICAL NO-UNDO. 
-   DEF VAR ldFoundationDate AS DATE NO-UNDO. 
-   DEF VAR data            AS CHAR EXTENT 41  NO-UNDO.
-   DEF VAR lcIdOrderCustomer AS CHARACTER NO-UNDO. 
+   DEF VAR lcFError              AS CHARACTER NO-UNDO. 
+   DEF VAR lcc                   AS CHARACTER NO-UNDO. 
+   DEF VAR lcField               AS CHARACTER NO-UNDO. 
+   DEF VAR lcMarkOut             AS CHARACTER NO-UNDO. 
+   DEF VAR lcMarketing           AS CHARACTER NO-UNDO. 
+   DEF VAR data                  AS CHARACTER NO-UNDO EXTENT 42.
+   DEF VAR lcIdOrderCustomer     AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
-   DEF VAR liSubLimit AS INT NO-UNDO. 
-   DEF VAR liSubs AS INT NO-UNDO. 
-   DEF VAR liDelType  AS INT NO-UNDO.
-   DEF VAR liActLimit AS INT NO-UNDO.
-   DEF VAR liActs AS INT NO-UNDO.
-
+   DEF VAR ldBirthDay            AS DATE      NO-UNDO.
+   DEF VAR ldFoundationDate      AS DATE      NO-UNDO. 
+   DEF VAR iData                 AS INTEGER   NO-UNDO. 
+   DEF VAR lii                   AS INTEGER   NO-UNDO. 
+   DEF VAR liFieldIndex          AS INTEGER   NO-UNDO.
+   DEF VAR liSubLimit            AS INTEGER   NO-UNDO. 
+   DEF VAR liSubs                AS INTEGER   NO-UNDO. 
+   DEF VAR liDelType             AS INTEGER   NO-UNDO.
+   DEF VAR liActLimit            AS INTEGER   NO-UNDO.
+   DEF VAR liActs                AS INTEGER   NO-UNDO. 
+   DEF VAR llSelfEmployed        AS LOGICAL   NO-UNDO. 
+   DEF VAR llIsProCustomer       AS LOGICAL   NO-UNDO INIT FALSE.
+   
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
    data[LOOKUP("country", gcCustomerStructStringFields)] = "ES".
@@ -660,9 +657,13 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
 
    /* YBP-533 */
    lcc = validate_request(pcStructId, pcStructFields).
+
    DO lii = 1 TO NUM-ENTRIES(lcc):
+
       lcField = ENTRY(lii, lcc).
+
       liFieldIndex = LOOKUP(lcField, gcCustomerStructStringFields).
+
       IF lcField BEGINS "mark_" THEN 
       DO:
          IF NOT get_bool(pcStructId, lcField) THEN
@@ -697,12 +698,15 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          plCustDataRetr = get_bool(pcStructId, lcField).
       END.
       ELSE IF lcField EQ "identified_cust_sms_number" THEN
-         DO:
-             pcIdentifiedSmsNumber = get_string(pcStructId, lcField).
+      DO:
+         pcIdentifiedSmsNumber = get_string(pcStructId, lcField).
+      END.
+      ELSE IF lcField EQ "pro" THEN 
+      DO:
+          llIsProCustomer = get_bool(pcStructId, lcField).
       END.
       ELSE IF liFieldIndex EQ 0 THEN
          lcFError = SUBST("Unknown data field `&1`", lcField).
-      
       ELSE
          data[liFieldIndex] = get_string(pcStructId, lcField).
    END. /* DO lii = */
@@ -720,19 +724,23 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
           lcIdtypeOrderCustomer = "CIF".
       END. /* data[LOOKUP("company_id", ... */
       
+      IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN 
+      DO:
+          IF lcIdOrderCustomer EQ "" THEN
+              lcFError = "Expected either person_id or company_id".
+
+          /* Additional mobile line for PRO customer */      
+          IF llIsProCustomer AND NOT fIsConvergenceTariff(pcSubType) THEN
+          DO:
+              /* This is to validate, whether this additional mobile line is compatable with existing convergent */
+              IF NOT (fCheckExistingConvergent (lcIdtypeOrderCustomer, lcIdOrderCustomer, pcSubType) OR fCheckOngoingConvergentOrder (lcIdtypeOrderCustomer, lcIdOrderCustomer, pcSubType)) THEN
+                  lcFError = "PRO customer is allowed for mobile lines, only when there exists atleast one active convergent subscription or an ongoing convergent order".                                  
+          END.
+      END.
+
       IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} THEN
          pcUpsHours = data[LOOKUP("ups_hours", gcCustomerStructStringFields)].
-      
-      IF lcIdOrderCustomer EQ "" AND piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
-          lcFError = "Expected either person_id or company_id".
-      IF plCheckConv AND
-         NOT(fCheckExistingConvergent (lcIdtypeOrderCustomer, 
-                                       lcIdOrderCustomer,
-                                       pcCLI) OR
-             fCheckOngoingConvergentOrder (lcIdtypeOrderCustomer,
-                                           lcIdOrderCustomer,
-                                           pcCLI)) THEN
-            lcFError = "Expected Convergent for PRO".                                  
+            
       /* YTS-2453 */
       IF NOT plBypassRules AND
          lcFError = "" AND 
@@ -744,7 +752,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          lcIdOrderCustomer,
          lcIdTypeOrderCustomer,
          llSelfEmployed,
-         llCustPro,
+         llIsProCustomer,
          1,
          OUTPUT lcFError,
          OUTPUT liSubLimit,
@@ -779,80 +787,50 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       
       /* ordercustomer handling */
       ASSIGN
-         OrderCustomer.FirstName          = 
-            data[LOOKUP("fname", gcCustomerStructStringFields)]
-         OrderCustomer.Surname1           = 
-            data[LOOKUP("lname", gcCustomerStructStringFields)]
-         OrderCustomer.Surname2           = 
-            data[LOOKUP("lname2", gcCustomerStructStringFields)]
-         OrderCustomer.Company            = 
-            data[LOOKUP("site_name", gcCustomerStructStringFields)]
-         OrderCustomer.Profession         = 
-            data[LOOKUP("profession", gcCustomerStructStringFields)]
-         OrderCustomer.Region             = 
-            data[LOOKUP("region", gcCustomerStructStringFields)]
-         OrderCustomer.ZipCode            = 
-            data[LOOKUP("zip", gcCustomerStructStringFields)]
-         OrderCustomer.PostOffice         = 
-            data[LOOKUP("city", gcCustomerStructStringFields)]
-         OrderCustomer.Country            = 
-            data[LOOKUP("country", gcCustomerStructStringFields)]
-         OrderCustomer.Nationality        = 
-            data[LOOKUP("nationality", gcCustomerStructStringFields)]
-         OrderCustomer.Email              = 
-            data[LOOKUP("email", gcCustomerStructStringFields)]
-         OrderCustomer.custtitle          = 
-            data[LOOKUP("title", gcCustomerStructStringFields)]
-         OrderCustomer.MobileNumber       = 
-            data[LOOKUP("sms_number", gcCustomerStructStringFields)]
-         OrderCustomer.FixedNumber        = 
-            data[LOOKUP("phone_number", gcCustomerStructStringFields)]
-         OrderCustomer.AddressCodC        = 
-            data[LOOKUP("street_code", gcCustomerStructStringFields)]
-         OrderCustomer.AddressCodP        = 
-            data[LOOKUP("city_code", gcCustomerStructStringFields)]
-         OrderCustomer.AddressCodM        = 
-            data[LOOKUP("municipality_code", gcCustomerStructStringFields)] 
-         OrderCustomer.Street             =
-            data[LOOKUP("street", gcCustomerStructStringFields)]
-         OrderCustomer.BuildingNum        = 
-            data[LOOKUP("street_number", gcCustomerStructStringFields)]
-         OrderCustomer.AddressCompl       =
-            data[LOOKUP("additional_address", gcCustomerStructStringFields)]
-         OrderCustomer.Latitude = 
-            data[LOOKUP("latitude", gcCustomerStructStringFields)] 
-         OrderCustomer.Longitude = 
-            data[LOOKUP("longitude", gcCustomerStructStringFields)] 
-         OrderCustomer.KialaCode = 
-            data[LOOKUP("kiala_code", gcCustomerStructStringFields)] 
-         OrderCustomer.Gescal = 
-            data[LOOKUP("gescal", gcCustomerStructStringFields)] 
-         OrderCustomer.Floor = 
-            data[LOOKUP("floor", gcCustomerStructStringFields)]
-         OrderCustomer.StreetType = 
-            data[LOOKUP("street_type", gcCustomerStructStringFields)] 
-         OrderCustomer.BisDuplicate = 
-            data[LOOKUP("bis_duplicate", gcCustomerStructStringFields)] 
-         OrderCustomer.Block = 
-            data[LOOKUP("block", gcCustomerStructStringFields)] 
-         OrderCustomer.Door = 
-            data[LOOKUP("door", gcCustomerStructStringFields)] 
-         OrderCustomer.Letter = 
-            data[LOOKUP("letter", gcCustomerStructStringFields)] 
-         OrderCustomer.Stair = 
-            data[LOOKUP("stair", gcCustomerStructStringFields)] 
-         OrderCustomer.Hand = 
-            data[LOOKUP("hand", gcCustomerStructStringFields)] 
-         OrderCustomer.Km = 
-            data[LOOKUP("km", gcCustomerStructStringFields)] 
-         OrderCustomer.TerritoryOwner =
-            data[LOOKUP("territory_owner", gcCustomerStructStringFields)]
-         OrderCustomer.CoverageToken =
-            data[LOOKUP("coverage_token", gcCustomerStructStringFields)]
+         OrderCustomer.FirstName          = data[LOOKUP("fname", gcCustomerStructStringFields)]
+         OrderCustomer.Surname1           = data[LOOKUP("lname", gcCustomerStructStringFields)]
+         OrderCustomer.Surname2           = data[LOOKUP("lname2", gcCustomerStructStringFields)]
+         OrderCustomer.Company            = data[LOOKUP("site_name", gcCustomerStructStringFields)]
+         OrderCustomer.Profession         = data[LOOKUP("profession", gcCustomerStructStringFields)]
+         OrderCustomer.Region             = data[LOOKUP("region", gcCustomerStructStringFields)]
+         OrderCustomer.ZipCode            = data[LOOKUP("zip", gcCustomerStructStringFields)]
+         OrderCustomer.PostOffice         = data[LOOKUP("city", gcCustomerStructStringFields)]
+         OrderCustomer.Country            = data[LOOKUP("country", gcCustomerStructStringFields)]
+         OrderCustomer.Nationality        = data[LOOKUP("nationality", gcCustomerStructStringFields)]
+         OrderCustomer.Email              = data[LOOKUP("email", gcCustomerStructStringFields)]
+         OrderCustomer.custtitle          = data[LOOKUP("title", gcCustomerStructStringFields)]
+         OrderCustomer.MobileNumber       = data[LOOKUP("sms_number", gcCustomerStructStringFields)]
+         OrderCustomer.FixedNumber        = data[LOOKUP("phone_number", gcCustomerStructStringFields)]
+         OrderCustomer.AddressCodC        = data[LOOKUP("street_code", gcCustomerStructStringFields)]
+         OrderCustomer.AddressCodP        = data[LOOKUP("city_code", gcCustomerStructStringFields)]
+         OrderCustomer.AddressCodM        = data[LOOKUP("municipality_code", gcCustomerStructStringFields)] 
+         OrderCustomer.Street             = data[LOOKUP("street", gcCustomerStructStringFields)]
+         OrderCustomer.BuildingNum        = data[LOOKUP("street_number", gcCustomerStructStringFields)]
+         OrderCustomer.AddressCompl       = data[LOOKUP("additional_address", gcCustomerStructStringFields)]
+         OrderCustomer.Latitude           = data[LOOKUP("latitude", gcCustomerStructStringFields)] 
+         OrderCustomer.Longitude          = data[LOOKUP("longitude", gcCustomerStructStringFields)] 
+         OrderCustomer.KialaCode          = data[LOOKUP("kiala_code", gcCustomerStructStringFields)] 
+         OrderCustomer.Gescal             = data[LOOKUP("gescal", gcCustomerStructStringFields)] 
+         OrderCustomer.Floor              = data[LOOKUP("floor", gcCustomerStructStringFields)]
+         OrderCustomer.StreetType         = data[LOOKUP("street_type", gcCustomerStructStringFields)] 
+         OrderCustomer.BisDuplicate       = data[LOOKUP("bis_duplicate", gcCustomerStructStringFields)] 
+         OrderCustomer.Block              = data[LOOKUP("block", gcCustomerStructStringFields)] 
+         OrderCustomer.Door               = data[LOOKUP("door", gcCustomerStructStringFields)] 
+         OrderCustomer.Letter             = data[LOOKUP("letter", gcCustomerStructStringFields)] 
+         OrderCustomer.Stair              = data[LOOKUP("stair", gcCustomerStructStringFields)] 
+         OrderCustomer.Hand               = data[LOOKUP("hand", gcCustomerStructStringFields)] 
+         OrderCustomer.Km                 = data[LOOKUP("km", gcCustomerStructStringFields)] 
+         OrderCustomer.ExtInvRef          = data[LOOKUP("invoice_ref", gcCustomerStructStringFields)]
+         OrderCustomer.TerritoryOwner     = data[LOOKUP("territory_owner", gcCustomerStructStringFields)]
+         OrderCustomer.CoverageToken      = data[LOOKUP("coverage_token", gcCustomerStructStringFields)]
+         OrderCustomer.AddressId          = data[LOOKUP("address_id", gcCustomerStructStringFields)] 
+         OrderCustomer.pro                = llIsProCustomer
          OrderCustomer.SelfEmployed       = llSelfEmployed 
          OrderCustomer.FoundationDate     = ldFoundationDate
          OrderCustomer.Birthday           = ldBirthday
          OrderCustomer.Language           = STRING(liLanguage)
+         OrderCustomer.DontSharePersData   = (LOOKUP("dont_share_personal_data",
+                                              lcMarketing, "|") NE 0)
          OrderCustomer.OperSMSMarketing   = (LOOKUP("SMS", lcMarketing, "|") NE 0)
          OrderCustomer.OperEmailMarketing = (LOOKUP("Email", lcMarketing, "|") NE 0)
          OrderCustomer.OperPostMarketing  = (LOOKUP("Post", lcMarketing, "|") NE 0)
@@ -861,13 +839,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.OutPostMarketing   = (LOOKUP("Post", lcMarkOut, "|") NE 0)
          OrderCustomer.OutBankMarketing   = (LOOKUP("Bank", lcMarkOut, "|") NE 0)
          OrderCustomer.OperAllMarketing   = lcMarketing NE ""
-         OrderCustomer.ExtInvRef          = 
-            data[LOOKUP("invoice_ref", gcCustomerStructStringFields)]
- 
-         OrderCustomer.Address = OrderCustomer.Street 
-         OrderCustomer.CustDataRetr = plCustdataRetr
-         OrderCustomer.MSISDNForIdent = pcIdentifiedSmsNumber
-         OrderCustomer.pro = llCustPro.
+         OrderCustomer.Address            = OrderCustomer.Street 
+         OrderCustomer.CustDataRetr       = plCustdataRetr
+         OrderCustomer.MSISDNForIdent     = pcIdentifiedSmsNumber.
 
          IF OrderCustomer.BuildingNum NE "" THEN 
             OrderCustomer.Address = OrderCustomer.Address + " " +
@@ -915,8 +889,6 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                
          END.
    END.
-
-
 
    IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
    DO:
@@ -1322,6 +1294,7 @@ gcCustomerStructFields = "birthday," +
                          "lname2," +
                          "mark_email," +
                          "mark_email_3rd," +
+                         "mark_dont_share_personal_data," +
                          "mark_post," +
                          "mark_post_3rd," +
                          "mark_sms," +
@@ -1358,9 +1331,9 @@ gcCustomerStructFields = "birthday," +
                          "km," +
                          "territory_owner," +
                          "coverage_token," +
-                         "pro".
+                         "address_id," +
+                         "pro". 
 
-/* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
                                "city_code," +
                                "street_code," +
@@ -1401,7 +1374,8 @@ gcCustomerStructStringFields = "city," +
                                "hand," + 
                                "km," +
                                "territory_owner," +
-                               "coverage_token".   /* EXTENT value count 41 */
+                               "coverage_token," +
+                               "address_id".   /* EXTENT value count 42 */
 
 /* common validation */
 /* YBP-513 */
@@ -1441,6 +1415,13 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 FIND CLIType NO-LOCK WHERE CLIType.Brand = gcBrand AND CLIType.CliType = pcSubType NO-ERROR.
 IF NOT AVAIL CLIType THEN
    RETURN appl_err(SUBST("Unknown CLIType &1", pcSubType)).   
+ELSE IF INDEX(pcChannel,"PRO") > 0 THEN
+DO:
+    IF CliType.PayType = {&CLITYPE_PAYTYPE_PREPAID} THEN     
+        RETURN appl_err("Prepaid subscriptions are not allowed for PRO customer(s)").
+    ELSE IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN    
+        RETURN appl_err("Fixed only subscription types are not allowed for PRO customer(s)").
+END.
 
 /* Fixed only convergent subscription types */
 IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN
@@ -1501,19 +1482,11 @@ ELSE IF LOOKUP(pcSubType,lcBundleCLITypes) > 0 AND
    pcNumberType <> "renewal" THEN
    RETURN appl_err("Subscription based data bundle is missing").
 
-IF pcDataBundleType > "" THEN
+IF pcAdditionalBundleList > "" THEN
 DO:
-   lcBONOContracts = fCParamC("BONO_CONTRACTS").
-   lcPROContracts = fCParamC("PRO_CONTRACTS").
-
-   DO liCount = 1 TO NUM-ENTRIES(pcDataBundleType):
-      IF LOOKUP(ENTRY(licount,pcDataBundleType),lcBONOContracts) = 0 AND
-         (LOOKUP(ENTRY(licount,pcDataBundleType),lcPROContracts) = 0 OR
-         INDEX(pcChannel,"PRO") = 0 )THEN
-         RETURN appl_err(SUBST("Incorrect data bundle type: &1",
-                         ENTRY(licount,pcDataBundleType))).                                        
-      IF NOT fIsBundleAllowed(pcSubType,ENTRY(liCount,pcDataBundleType),
-                               OUTPUT lcError) THEN
+   DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
+                                           
+      IF NOT fIsBundleAllowed(pcSubType,ENTRY(liBundleCnt,pcAdditionalBundleList),OUTPUT lcError) THEN
           RETURN appl_err(lcError).
    END.
 END.
@@ -1664,28 +1637,21 @@ DO:
    lccTemp = validate_request(pcContactStruct, gcCustomerStructFields).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-/* YPRO-18 */
-IF INDEX(pcChannel,"PRO") > 0 THEN DO:
-   llCustPro = TRUE.
-   IF clitype.paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
-      RETURN appl_err("Prepaid not allowed for PRO").
-   IF NOT fIsConvergenceTariff (clitype.clitype) THEN 
-      llCheckConvergent EQ TRUE.
-END.
-/* YBP-536 */ /* YPRO-18 check ongoing/existing convergent for pro */ 
-lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE, llCheckConvergent).
+   
+/* YBP-536 */
+lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-537 */ 
 IF pcAddressStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_DELIVERY}, FALSE, FALSE).
+   lcError = fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_DELIVERY}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-538 */ 
 IF pcContactStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE, FALSE).
+   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1852,7 +1818,6 @@ IF pcFusionStruct > "" THEN DO:
    lcError = fCreateOrderCustomer(pcFixedInstallAddress, 
                                   gcCustomerStructFields,
                                   {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL},
-                                  FALSE,
                                   FALSE).
    IF lcError <> "" THEN RETURN appl_err(lcError).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -1927,13 +1892,15 @@ IF AVAIL DiscountPlan THEN DO:
                       lcItemParam).
 END.
 
-/* Apply CONVDISC discount to convergent tariff with STC order - April promo */
+/* Apply CONVDISC discount to convergent tariff with STC order - 
+   April promo (OR) Convergent New Adds Promotion */
 IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
    FIND FIRST ConvDiscountPlan WHERE
-              ConvDiscountPlan.Brand = gcBrand AND
-              ConvDiscountPlan.DPRuleID = "CONVDISC" AND
-              ConvDiscountPlan.ValidFrom <= TODAY AND
-              ConvDiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+              ConvDiscountPlan.Brand      = gcBrand         AND
+             (ConvDiscountPlan.DPRuleID   = "CONVDISC"      OR
+              ConvDiscountPlan.DPRuleID   = "CONVDISC20_3") AND
+              ConvDiscountPlan.ValidFrom <= TODAY           AND
+              ConvDiscountPlan.ValidTo   >= TODAY           NO-LOCK NO-ERROR.
    IF AVAIL ConvDiscountPlan THEN
       fCreateOrderAction(Order.Orderid,
                          "Discount",
@@ -1961,16 +1928,16 @@ IF plCheck THEN
                pcSalesMan).
 
 /* YBP-550 */
-fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, TRUE, FALSE).
+fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, TRUE).
 pcAccount = "".
 
 /* YBP-551 */
 IF pcAddressStruct > "" THEN 
-   fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, 4, TRUE, FALSE).
+   fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, 4, TRUE).
 
 /* YBP-552 */
 IF pcContactStruct > "" THEN 
-   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, TRUE, FALSE).
+   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, TRUE).
    
 /* YBP-553 */
 /* should be called only after rowtype=1 creation */
@@ -1978,8 +1945,7 @@ IF pcFixedInstallAddress > "" THEN
    fCreateOrderCustomer(pcFixedInstallAddress,
                         gcCustomerStructFields,
                         {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL},
-                        TRUE,
-                        FALSE). 
+                        TRUE). 
 
 /* YBP-555 */
 /* mobsub handling */
@@ -2287,9 +2253,9 @@ END.
 
 /* YBP-574 */ 
 /* add databundle */
-IF pcDataBundleType > "" THEN
-DO liCount = 1 TO NUM-ENTRIES(pcDataBundleType):
-   fCreateOrderAction(Order.Orderid,"BundleItem", ENTRY(liCount, pcDataBundleType),"").
+IF pcAdditionalBundleList > "" THEN
+DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
+   fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
 END.
 IF pcMobSubBundleType > "" THEN DO:
    lcOnlyVoiceContracts = fCParamC("ONLY_VOICE_CONTRACTS").
