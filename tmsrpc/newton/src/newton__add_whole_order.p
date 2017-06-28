@@ -420,7 +420,8 @@ DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
 DEF VAR pcAdditionaLineDiscount AS CHAR NO-UNDO.
 DEF BUFFER AddLineDiscountPlan FOR DiscountPlan.
 
-/* April promotion CONVDISC */
+/* April promotion CONVDISC (OR) 
+   Convergent new Adds Promotion */
 DEF BUFFER ConvDiscountPlan FOR DiscountPlan.
 
 DEF VAR lcItemParam AS CHAR NO-UNDO.
@@ -1883,13 +1884,15 @@ IF AVAIL DiscountPlan THEN DO:
                       lcItemParam).
 END.
 
-/* Apply CONVDISC discount to convergent tariff with STC order - April promo */
+/* Apply CONVDISC discount to convergent tariff with STC order - 
+   April promo (OR) Convergent New Adds Promotion */
 IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
    FIND FIRST ConvDiscountPlan WHERE
-              ConvDiscountPlan.Brand = gcBrand AND
-              ConvDiscountPlan.DPRuleID = "CONVDISC" AND
-              ConvDiscountPlan.ValidFrom <= TODAY AND
-              ConvDiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+              ConvDiscountPlan.Brand      = gcBrand         AND
+             (ConvDiscountPlan.DPRuleID   = "CONVDISC"      OR
+              ConvDiscountPlan.DPRuleID   = "CONVDISC20_3") AND
+              ConvDiscountPlan.ValidFrom <= TODAY           AND
+              ConvDiscountPlan.ValidTo   >= TODAY           NO-LOCK NO-ERROR.
    IF AVAIL ConvDiscountPlan THEN
       fCreateOrderAction(Order.Orderid,
                          "Discount",
