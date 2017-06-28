@@ -136,7 +136,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
                                icTemplate,
                                1,
                                OUTPUT lcMailHeader).
-   message lcOutput VIEW-AS ALERT-BOX.                            
+   
    IF lcOutput EQ ""/* OR lcMailHeader EQ ""*/ THEN
       RETURN "ERROR: Email content fetching error" +
              STRING(BCustomer.CustID) + " " +
