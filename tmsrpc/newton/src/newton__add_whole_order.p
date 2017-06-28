@@ -259,9 +259,9 @@ DEF VAR lcDeviceStruct  AS CHAR NO-UNDO.
 DEF VAR pcCustomerStruct AS CHAR NO-UNDO.
 
 DEF VAR pcAddressStruct AS CHAR NO-UNDO.
-DEF VAR lcAddressStruct AS CHAR NO-UNDO.
 DEF VAR pcContactStruct AS CHAR NO-UNDO.
-DEF VAR lcContactStruct AS CHAR NO-UNDO.
+DEF VAR pcFixedLinePortabilityUserStruct AS CHAR NO-UNDO.
+DEF VAR pcMobileLinePortabilityUserStruct AS CHAR NO-UNDO.
 DEF VAR pcFusionStruct  AS CHAR NO-UNDO. 
 DEF VAR lcFusionStructFields AS CHAR NO-UNDO. 
 
@@ -1382,7 +1382,7 @@ top_struct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_struct_fields = validate_request(top_struct, 
-   "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data,q25_data,order_inspection_data,accessory_data").
+   "order_data!,customer_data!,address_data,device_data,contact_data,fixed_pouser_data,mobile_pouser_data,fusion_data,q25_data,order_inspection_data,accessory_data").
 IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
@@ -1394,6 +1394,10 @@ pcDeviceStruct    = get_struct(top_struct, "device_data") WHEN
                        LOOKUP("device_data",top_struct_fields) > 0 
 pcContactStruct   = get_struct(top_struct, "contact_data") WHEN
                        LOOKUP("contact_data",top_struct_fields) > 0
+pcFixedLinePortabilityUserStruct = get_struct(top_struct, "fixed_pouser_data") WHEN
+                       LOOKUP("fixed_pouser_data",top_struct_fields) > 0
+pcMobileLinePortabilityUserStruct = get_struct(top_struct, "mobile_pouser_data") WHEN
+                       LOOKUP("mobile_pouser_data",top_struct_fields) > 0
 pcFusionStruct    = get_struct(top_struct, "fusion_data") WHEN
                        LOOKUP("fusion_data",top_struct_fields) > 0
 pcAccessoryStruct = get_struct(top_struct, "accessory_data") WHEN
@@ -1628,6 +1632,16 @@ DO:
    lccTemp = validate_request(pcContactStruct, gcCustomerStructFields).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
+IF pcFixedLinePortabilityUserStruct > "" THEN
+DO:
+   lccTemp = validate_request(pcFixedLinePortabilityUserStruct, gcCustomerStructStringFields).
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+END.
+IF pcMobileLinePortabilityUserStruct > "" THEN
+DO:
+   lccTemp = validate_request(pcMobileLinePortabilityUserStruct, gcCustomerStructStringFields).
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+END.
  
 /* YBP-536 */ 
 lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
@@ -1643,6 +1657,16 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* YBP-538 */ 
 IF pcContactStruct > "" THEN
    lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE).
+IF lcError <> "" THEN appl_err(lcError).
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF pcMobileLinePortabilityUserStruct > "" THEN
+   lcError = fCreateOrderCustomer(pcMobileLinePortabilityUserStruct, gcCustomerStructStringFields, {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}, FALSE).
+IF lcError <> "" THEN appl_err(lcError).
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF pcFixedLinePortabilityUserStruct > "" THEN
+   lcError = fCreateOrderCustomer(pcFixedLinePortabilityUserStruct, gcCustomerStructStringFields, {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1917,17 +1941,23 @@ IF plCheck THEN
                pcSalesMan).
 
 /* YBP-550 */
-fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, TRUE).
+fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, TRUE).
 pcAccount = "".
 
 /* YBP-551 */
 IF pcAddressStruct > "" THEN 
-   fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, 4, TRUE).
+   fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_DELIVERY}, TRUE).
 
 /* YBP-552 */
 IF pcContactStruct > "" THEN 
-   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, TRUE).
-   
+   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, TRUE).
+
+IF pcMobileLinePortabilityUserStruct > "" THEN
+   fCreateOrderCustomer(pcMobileLinePortabilityUserStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}, TRUE).
+
+IF pcFixedLinePortabilityUserStruct > "" THEN
+   fCreateOrderCustomer(pcFixedLinePortabilityUserStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}, TRUE).
+
 /* YBP-553 */
 /* should be called only after rowtype=1 creation */
 IF pcFixedInstallAddress > "" THEN 
