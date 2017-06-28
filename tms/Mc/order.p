@@ -187,6 +187,8 @@ DEF VAR liSMSTxt     AS INT                    NO-UNDO.
 DEF VAR liOCTxt      AS INT                    NO-UNDO. 
 DEF VAR NPStatName   AS CHAR                   NO-UNDO.
 DEF VAR lcUser       AS CHAR                   NO-UNDO.
+DEF VAR lcAuthCustId AS CHAR                   NO-UNDO.
+DEF VAR lcAuthCustIdType AS CHAR               NO-UNDO.
 DEF VAR lcInvCust    AS CHAR                   NO-UNDO.
 DEF VAR lcAgrCust    AS CHAR                   NO-UNDO. 
 DEF VAR ldeSwitchTS  AS DE                     NO-UNDO.
@@ -384,11 +386,11 @@ form
     SKIP
 
     "ContractID ...:" Order.ContractID 
-    "O. IDType:" AT 48 Order.OrdererIDType
+    "AuthCType:" AT 48 lcAuthCustIdType
     SKIP
 
     "MSISDN .......:" Order.CLI FORMAT "X(30)"
-    "OrdererID:" AT 48 Order.OrdererID
+    "AuthCusID:" AT 48 lcAuthCustId
     SKIP
     
     "ICC ..........:" Order.ICC FORMAT "X(30)" 
@@ -1646,6 +1648,10 @@ PROCEDURE local-find-others.
    if avail salesman then SMName = salesman.smname.
    else SMName = "".
 
+   ASSIGN
+      lcAuthCustId     = ""
+      lcAuthCustIdType = "".
+
    FOR EACH OrderCustomer OF Order NO-LOCK:
       CASE OrderCustomer.RowType:
       WHEN 1 THEN DO:
@@ -1654,6 +1660,10 @@ PROCEDURE local-find-others.
                NO-LOCK NO-ERROR.
          lcAgrCust = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
                                       BUFFER OrderCustomer).
+         ASSIGN
+            lcAuthCustId     = OrderCustomer.AuthCustId
+            lcAuthCustIdType = OrderCustomer.AuthCustIdType
+
 
          IF Order.InvCustRole = 1 THEN lcInvCust = lcAgrCust.
          IF Order.UserRole    = 1 THEN lcUser    = lcAgrCust.
@@ -1754,8 +1764,8 @@ PROCEDURE local-disp-lis:
          lcStatus
          Order.ContractID
          Order.Orderer
-         Order.OrdererIDType
-         Order.OrdererID
+         lcAuthCustIdType
+         lcAuthCustId
          Order.OrdererIP
          Order.CLIType
          Order.CLI 

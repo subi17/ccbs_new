@@ -1664,23 +1664,6 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
                                 lcError).
             END.
          END.
-         ELSE IF OrderCustomer.RowType = 1 AND
-                 NOT Order.PayType         AND
-                 NOT CAN-FIND(FIRST lbMobSub WHERE
-                              lbMobSub.Brand    = gcBrand       AND
-                              lbMobSub.MsSeq   <> Order.MsSeq   AND
-                              lbMobSub.CustNum  = Order.CustNum AND
-                              NOT lbMobSub.PayType) THEN
-         DO:
-            FIND FIRST Customer EXCLUSIVE-LOCK WHERE
-                       Customer.CustNum = oiCustomer NO-ERROR.
-            IF AVAILABLE Customer THEN
-            DO:
-               ASSIGN Customer.AuthCustID     = Order.OrdererID
-                      Customer.AuthCustIDType = Order.OrdererIDType.
-               RELEASE Customer.
-            END.
-         END.
       END.
 
       RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,3,FALSE,TRUE,OUTPUT oiCustomer).

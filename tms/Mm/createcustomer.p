@@ -332,14 +332,11 @@ ELSE DO:
                Customer.FoundationDate  = OrderCustomer.FoundationDate WHEN
                                           OrderCustomer.CustIdType = "CIF"
                Customer.Profession      = TRIM(OrderCustomer.Profession) WHEN
-                                          TRIM(OrderCustomer.Profession) > "".
-
-            IF iiRole = 1 AND OrderCustomer.CustIdType = "CIF" AND
-               Customer.CustIdType = "CIF" THEN DO:
-               IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN ASSIGN
-                  Customer.AuthCustId      = OrderCustomer.AuthCustId
-                  Customer.AuthCustIdType  = OrderCustomer.AuthCustIdType.
-            END.
+                                          TRIM(OrderCustomer.Profession) > ""
+               Customer.AuthCustId      = OrderCustomer.AuthCustId
+                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+               Customer.AuthCustIdType  = OrderCustomer.AuthCustIdType
+                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
 
             fUpdEmailDelType(Order.OrderId).
 

@@ -322,21 +322,6 @@ IF NOT AVAIL mobsub THEN DO:
                              lcError).
          END.
       END.
-      ELSE IF OrderCustomer.Rowtype = 1 AND
-              CliType.PayType = 1 AND
-              NOT CAN-FIND(FIRST lbMobSubAD1 WHERE
-                                 lbMobSubAD1.Brand     = gcBrand AND
-                                 lbMobSubAD1.MsSeq    <> MobSub.MsSeq AND
-                                 lbMobSubAD1.CustNum   = MobSub.CustNum AND
-                                 NOT lbMobSubAD1.PayType) THEN DO:
-         FIND FIRST Customer EXCLUSIVE-LOCK WHERE
-                    Customer.CustNum = MsRequest.Custnum NO-ERROR.
-         IF AVAILABLE Customer THEN DO:      
-            ASSIGN Customer.AuthCustId     = Order.OrdererID
-                   Customer.AuthCustIdType = Order.OrdererIDType.
-            RELEASE Customer.
-         END.
-      END.
    END.
 
    IF MobSub.InvCust = 0 THEN MobSub.InvCust = MobSub.AgrCust.
