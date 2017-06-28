@@ -133,9 +133,9 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
        RETURN "ERROR: Costomer of requst not found " + STRING(iiMsRequest).
 
    lcOutput = fGetEmailText("EMAIL",
-                               icTemplate,
-                               1,
-                               OUTPUT lcMailHeader).
+                             icTemplate,
+                             1,
+                             OUTPUT lcMailHeader).
    
    IF lcOutput EQ ""/* OR lcMailHeader EQ ""*/ THEN
       RETURN "ERROR: Email content fetching error" +
@@ -172,8 +172,10 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    lcMailDir = fCParam("YPRO", "YPRO_SVA_email_dir").
    lcMailFile = lcMailDir + "SVA_email" + STRING(bMsRequest.Msrequest) + ".txt".
    */
-   xMailAddr = fCParam("YPRO", "SVA_BO_EMAIL_ADDRESS").
-   xMailSubj = lcMailHeader.
+   ASSIGN
+      xMailFrom = fCParamC("DefEmailSender")
+      xMailAddr = fCParam("YPRO", "SVA_BO_EMAIL_ADDRESS")
+      xMailSubj = lcMailHeader.
    SendMaileInvoice(lcOutput, "", "").
 
    /*Used email file removal or saving to logs?*/
