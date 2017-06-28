@@ -286,7 +286,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
                             OrderCustomer.AddressId,    /*param value*/
                             "").                   /*old value*/
          fAddCharacteristic(lcCharacteristicsArray,     /*base*/
-                            "Caracteristicatecnica",    /*param name*/
+                            "CaracteristicaTecnica",    /*param name*/
                             "DHCP", /*param value*/
                             "").                         /*old value*/
 /* YDR-2532 */
