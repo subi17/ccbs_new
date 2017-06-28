@@ -240,10 +240,9 @@ END.
 /* activate or continue periodical contract */
 WHEN 8 THEN DO:
    /*SVA activation / YPRO*/
-   IF MsRequest.ReqCParam6 BEGINS "SVA" THEN DO:
-      CASE MsRequest.ReqStatus:
-      WHEN {&REQUEST_STATUS_HLR_DONE} /*6Ä*/ THEN RUN pContractActivation.
-   END.
+   IF MsRequest.ReqCParam6 BEGINS "SVA" AND 
+      MsRequest.ReqStatus EQ {&REQUEST_STATUS_HLR_DONE} THEN
+      RUN pContractActivation.
    
    IF MsRequest.ReqCParam2 = "update" 
    /* maintenance of a contract */
