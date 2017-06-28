@@ -100,11 +100,11 @@ FUNCTION fParseEmailByRequest RETURNS CHAR
       lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Custid)).
    END.
    IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
-      lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
+      lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
       lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
    END.
    IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
-      lcReplace = ENTRY(1,bMsRequest.Reqcparam6, "|").
+      lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
       lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
    END.
 
@@ -159,11 +159,11 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
       lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Custid)).
    END.
    IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
-      lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
+      lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
       lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
    END.
    IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
-      lcReplace = ENTRY(1,bMsRequest.Reqcparam6, "|").
+      lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
       lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
    END.
 
