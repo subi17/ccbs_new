@@ -124,9 +124,10 @@ PROCEDURE pReadFileData:
          lcErrText = ""
          lcFixedNum = entry(1,lcline,";")
          lcServiceCode = entry(2,lcline,";")
-         lcSetStatus = entry(3,lcline,";")
-         lcFaxtoEmailNumber = entry(4,lcLine,";")
-         /*lcFaxtoEmailEmail = entry(5,lcLine,";")*/ .
+         lcSetStatus = entry(3,lcline,";").
+         IF NUM-ENTRIES(lcline) > 3 THEN
+            lcFaxtoEmailNumber = entry(4,lcLine,";").
+         /*lcFaxtoEmailEmail = entry(5,lcLine,";")*/
 /*      message lcfixednum VIEW-AS ALERT-BOX.
       message lcservicecode VIEW-AS ALERT-BOX.
       message lcsetstatus VIEW-AS ALERT-BOX.
