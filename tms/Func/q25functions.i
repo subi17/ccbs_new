@@ -8,7 +8,7 @@
   CREATED ......: 19.11.15
   CHANGED ......: 
   ------------------------------------------------------------------------*/
-&IF "{&Q25FUNCTIONS}" NE "YES"
+&IF "{&fQ25FUNCTIONS}" NE "YES"
 &THEN
 
 &GLOBAL-DEFINE fQ25FUNCTIONS YES
