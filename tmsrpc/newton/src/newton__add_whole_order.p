@@ -95,6 +95,7 @@
                   mark_post_3rd;boolean;optional;
                   mark_sms_3rd;boolean;optional;
                   mark_email_3rd;boolean;optional;
+                  mark_dont_share_personal_data;boolean;optional;
                   mark_bank_3rd;boolean;optional;
                   language;string;optional;
                   latitude;string;optional;
@@ -131,6 +132,7 @@
                   mark_post_3rd;boolean;optional;
                   mark_sms_3rd;boolean;optional;
                   mark_email_3rd;boolean;optional;
+                  mark_dont_share_personal_data;boolean;optional;
                   mark_bank_3rd;boolean;optional;
                   language;string;optional;
                   latitude;string;optional;
@@ -171,9 +173,10 @@
                  mark_post_3rd;boolean;optional;
                  mark_sms_3rd;boolean;optional;
                  mark_email_3rd;boolean;optional;
+                 mark_dont_share_personal_data;boolean;optional;
                  mark_bank_3rd;boolean;optional;
                  language;string;optional;
-                 latitude;string;optional;
+                 lantitude;string;optional;
                  longitude;string;optional;
                  person_id;string;optional;contact person id
                  id_type;string;optional;NIF,NIE,CIF or Passport
@@ -211,6 +214,7 @@
                     km;string;optional;km
                     territory_owner;string;optional;territory owner
                     coverage_token;string;mandatory;
+                    address_id;string;optional;address id;
  * @q25_data   q25_extension;boolean;optional;Extension of the Quota 25
                q25_discount;double;optional;Discount amount over the Quota 25
                per_contract_id;int;mandatory;installment contract id (related to q25)
@@ -331,14 +335,14 @@ DEF VAR lcPayType AS CHAR NO-UNDO.
 DEF VAR lcOldPayType AS CHAR NO-UNDO. 
 DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
-DEF VAR pcAdditionalBundleList AS CHAR NO-UNDO. 
+DEF VAR pcAdditionalBundleList  AS CHAR NO-UNDO. 
 DEF VAR pcAdditionalBundleArray AS CHAR NO-UNDO.
-DEF VAR pcMobsubBundleType AS CHAR NO-UNDO. 
-DEF VAR plDSSActivate    AS LOG NO-UNDO. 
-DEF VAR plBonoVoipActivate AS LOG NO-UNDO.
-DEF VAR plByPassRules AS LOG NO-UNDO.
-DEF VAR lcdelivery_channel AS CHAR NO-UNDO.
-DEF VAR pcUsageType AS CHAR NO-UNDO. 
+DEF VAR pcMobsubBundleType      AS CHAR NO-UNDO. 
+DEF VAR plDSSActivate           AS LOG  NO-UNDO. 
+DEF VAR plBonoVoipActivate      AS LOG  NO-UNDO.
+DEF VAR plByPassRules           AS LOG  NO-UNDO.
+DEF VAR lcdelivery_channel      AS CHAR NO-UNDO.
+DEF VAR pcUsageType             AS CHAR NO-UNDO. 
 
 DEF VAR liBundleCnt            AS INT  NO-UNDO.
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
@@ -421,7 +425,8 @@ DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
 DEF VAR pcAdditionaLineDiscount AS CHAR NO-UNDO.
 DEF BUFFER AddLineDiscountPlan FOR DiscountPlan.
 
-/* April promotion CONVDISC */
+/* April promotion CONVDISC (OR) 
+   Convergent new Adds Promotion */
 DEF BUFFER ConvDiscountPlan FOR DiscountPlan.
 
 DEF VAR lcItemParam AS CHAR NO-UNDO.
@@ -523,7 +528,7 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
       pcAdditionalBundleArray = get_array(pcOrderStruct,"additional_bundle").
 
       DO liBundleCnt = 0 TO get_paramcount(pcAdditionalBundleArray) - 1:
-         ASSIGN pcAdditionalBundleList = pcAdditionalBundleList + (IF pcAdditionalBundleList <> "" THEN "," ELSE "") + get_string(pcDataBundleTypeArray, STRING(liBundleCnt)).
+         ASSIGN pcAdditionalBundleList = pcAdditionalBundleList + (IF pcAdditionalBundleList <> "" THEN "," ELSE "") + get_string(pcAdditionalBundleArray, STRING(liBundleCnt)).
       END.
 
    END.
@@ -629,7 +634,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR lcField               AS CHARACTER NO-UNDO. 
    DEF VAR lcMarkOut             AS CHARACTER NO-UNDO. 
    DEF VAR lcMarketing           AS CHARACTER NO-UNDO. 
-   DEF VAR data                  AS CHARACTER NO-UNDO EXTENT 41.
+   DEF VAR data                  AS CHARACTER NO-UNDO EXTENT 42.
    DEF VAR lcIdOrderCustomer     AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR ldBirthDay            AS DATE      NO-UNDO.
@@ -818,11 +823,14 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.ExtInvRef          = data[LOOKUP("invoice_ref", gcCustomerStructStringFields)]
          OrderCustomer.TerritoryOwner     = data[LOOKUP("territory_owner", gcCustomerStructStringFields)]
          OrderCustomer.CoverageToken      = data[LOOKUP("coverage_token", gcCustomerStructStringFields)]
+         OrderCustomer.AddressId          = data[LOOKUP("address_id", gcCustomerStructStringFields)] 
          OrderCustomer.pro                = llIsProCustomer
          OrderCustomer.SelfEmployed       = llSelfEmployed 
          OrderCustomer.FoundationDate     = ldFoundationDate
          OrderCustomer.Birthday           = ldBirthday
          OrderCustomer.Language           = STRING(liLanguage)
+         OrderCustomer.DontSharePersData   = (LOOKUP("dont_share_personal_data",
+                                              lcMarketing, "|") NE 0)
          OrderCustomer.OperSMSMarketing   = (LOOKUP("SMS", lcMarketing, "|") NE 0)
          OrderCustomer.OperEmailMarketing = (LOOKUP("Email", lcMarketing, "|") NE 0)
          OrderCustomer.OperPostMarketing  = (LOOKUP("Post", lcMarketing, "|") NE 0)
@@ -1286,6 +1294,7 @@ gcCustomerStructFields = "birthday," +
                          "lname2," +
                          "mark_email," +
                          "mark_email_3rd," +
+                         "mark_dont_share_personal_data," +
                          "mark_post," +
                          "mark_post_3rd," +
                          "mark_sms," +
@@ -1322,9 +1331,9 @@ gcCustomerStructFields = "birthday," +
                          "km," +
                          "territory_owner," +
                          "coverage_token," +
-                         "pro".
+                         "address_id," +
+                         "pro". 
 
-/* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
                                "city_code," +
                                "street_code," +
@@ -1365,7 +1374,8 @@ gcCustomerStructStringFields = "city," +
                                "hand," + 
                                "km," +
                                "territory_owner," +
-                               "coverage_token".   /* EXTENT value count 41 */
+                               "coverage_token," +
+                               "address_id".   /* EXTENT value count 42 */
 
 /* common validation */
 /* YBP-513 */
@@ -1877,13 +1887,15 @@ IF AVAIL DiscountPlan THEN DO:
                       lcItemParam).
 END.
 
-/* Apply CONVDISC discount to convergent tariff with STC order - April promo */
+/* Apply CONVDISC discount to convergent tariff with STC order - 
+   April promo (OR) Convergent New Adds Promotion */
 IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
    FIND FIRST ConvDiscountPlan WHERE
-              ConvDiscountPlan.Brand = gcBrand AND
-              ConvDiscountPlan.DPRuleID = "CONVDISC" AND
-              ConvDiscountPlan.ValidFrom <= TODAY AND
-              ConvDiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+              ConvDiscountPlan.Brand      = gcBrand         AND
+             (ConvDiscountPlan.DPRuleID   = "CONVDISC"      OR
+              ConvDiscountPlan.DPRuleID   = "CONVDISC20_3") AND
+              ConvDiscountPlan.ValidFrom <= TODAY           AND
+              ConvDiscountPlan.ValidTo   >= TODAY           NO-LOCK NO-ERROR.
    IF AVAIL ConvDiscountPlan THEN
       fCreateOrderAction(Order.Orderid,
                          "Discount",
