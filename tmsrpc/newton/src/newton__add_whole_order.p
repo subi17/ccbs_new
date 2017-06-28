@@ -1623,7 +1623,7 @@ DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
    
-/* YBP-536 */ /* YPRO-18 check ongoing/existing convergent for pro */ 
+/* YBP-536 */
 lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
