@@ -758,9 +758,9 @@ FUNCTION fDelivSIM RETURNS LOG
    /* YDR-896: Add admin id in case of CIF order customer */
    IF AgreeCustomer.CustIdType = "CIF" THEN
    ASSIGN
-      ttOneDelivery.NIE           = Order.OrdererID WHEN Order.OrdererIDType = "NIE"
-      ttOneDelivery.NIF           = Order.OrdererID WHEN Order.OrdererIDType = "NIF"
-      ttOneDelivery.PassPort      = Order.OrdererID WHEN Order.OrdererIDType = "PassPort".
+      ttOneDelivery.NIE           = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "NIE"
+      ttOneDelivery.NIF           = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "NIF"
+      ttOneDelivery.PassPort      = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "PassPort".
 
    IF Order.OrderType eq 2 THEN DO:
       /* Overwrite certain expeptional values */

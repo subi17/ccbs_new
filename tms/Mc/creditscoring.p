@@ -183,7 +183,7 @@ IF pcActionType EQ "ORDER" THEN DO:
       ASSIGN pcCIF          = OrderCustomer.CustId                      /*  1 */
              pcZIP          = OrderCustomer.ZIP                         /*  2 */
              pcAddress       = OrderCustomer.Address                    /*  4 */
-             pcRepId         = Order.OrdererID                          /*  5 */
+             pcRepId         = OrderCustomer.AuthCustId                 /*  5 */
              pcRepName       = OrderCustomer.FirstName                  /*  6 */
              pcRepFSurname   = OrderCustomer.SurName1                   /*  7 */
              pcRepSSurname   = OrderCustomer.SurName2                   /*  8 */

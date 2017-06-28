@@ -129,8 +129,6 @@ DEF VAR lccTemp AS CHARACTER NO-UNDO.
 DEF VAR lcError AS CHARACTER NO-UNDO. 
 
 DEFINE VARIABLE lcIdType AS CHARACTER NO-UNDO.  
-DEFINE VARIABLE lcContactId AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcContactIdType AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcId AS CHARACTER NO-UNDO. 
 
 FUNCTION fGetOrderFields RETURNS LOGICAL :
@@ -191,6 +189,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEFINE VARIABLE data            AS CHAR EXTENT 19 NO-UNDO.
    DEFINE VARIABLE lcIdOrderCustomer AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE lcContactId AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcContactIdType AS CHARACTER NO-UNDO.
 
    lcFError = "".
    
@@ -239,8 +239,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       lcIdtypeOrderCustomer = data[LOOKUP("id_type", gcCustomerStructStringFields)].
       IF data[LOOKUP("person_id", gcCustomerStructStringFields)] ne "" THEN
           lcIdOrderCustomer = data[LOOKUP("person_id", gcCustomerStructStringFields)].
-      IF data[LOOKUP("company_id", gcCustomerStructStringFields)] ne "" THEN 
-      DO:
+      IF data[LOOKUP("company_id", gcCustomerStructStringFields)] ne "" AND
+         piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+      THEN DO:
           lcContactId = lcIdOrderCustomer.
           lcIdOrderCustomer = data[LOOKUP("company_id", gcCustomerStructStringFields)].
           lcContactIdType = lcIdtypeOrderCustomer.
@@ -259,6 +260,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.OrderId         = liOrderId
          OrderCustomer.CustId          = lcIdOrderCustomer 
          OrderCustomer.CustIdType      = lcIdtypeOrderCustomer
+         OrderCustomer.AuthCustId      = lcContactId
+         OrderCustomer.AuthCustIdType  = lcContactIdType
          OrderCustomer.RowType         = piRowType
          OrderCustomer.BankCode        = pcAccount
       .
@@ -383,8 +386,6 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.InvCustRole     = 1
       Order.UserRole        = 1
       Order.StatusCode      = "1"
-      Order.OrdererId       = lcContactId
-      Order.OrdererIDType   = lcContactIdType 
       Order.CLI             = pcCLI
       Order.CLIType         = pcSubType
       Order.mnpstatus       = INT(pcNumberType EQ "mnp")

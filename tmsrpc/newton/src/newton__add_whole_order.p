@@ -378,8 +378,6 @@ DEF VAR ldaOrderDate AS DATE NO-UNDO.
 DEF VAR liOrderTime  AS INT  NO-UNDO.
 
 DEF VAR lcIdType AS CHARACTER NO-UNDO.  
-DEF VAR lcContactId AS CHARACTER NO-UNDO. 
-DEF VAR lcContactIdType AS CHARACTER NO-UNDO. 
 DEF VAR lcId AS CHARACTER NO-UNDO. 
 DEF VAR llPendingMainLineOrder AS LOG NO-UNDO. 
    
@@ -635,6 +633,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR liDelType  AS INT NO-UNDO.
    DEF VAR liActLimit AS INT NO-UNDO.
    DEF VAR liActs AS INT NO-UNDO.
+   DEF VAR lcContactId AS CHARACTER NO-UNDO.
+   DEF VAR lcContactIdType AS CHARACTER NO-UNDO.
 
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
@@ -694,8 +694,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       lcIdtypeOrderCustomer = data[LOOKUP("id_type", gcCustomerStructStringFields)].
       IF data[LOOKUP("person_id", gcCustomerStructStringFields)] ne "" THEN
           lcIdOrderCustomer = data[LOOKUP("person_id", gcCustomerStructStringFields)].
-      IF data[LOOKUP("company_id", gcCustomerStructStringFields)] ne "" THEN 
-      DO:
+      IF data[LOOKUP("company_id", gcCustomerStructStringFields)] ne "" AND
+          piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+      THEN DO:
           lcContactId = lcIdOrderCustomer.
           lcIdOrderCustomer = data[LOOKUP("company_id", gcCustomerStructStringFields)].
           lcContactIdType = lcIdtypeOrderCustomer.
@@ -746,6 +747,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.OrderId         = liOrderId
          OrderCustomer.CustId          = lcIdOrderCustomer 
          OrderCustomer.CustIdType      = lcIdtypeOrderCustomer
+         OrderCustomer.AuthCustId      = lcContactId
+         OrderCustomer.AuthCustIdType  = lcContactIdType
          OrderCustomer.RowType         = piRowType
          OrderCustomer.BankCode        = pcAccount
          OrderCustomer.DataChecked     = ?
@@ -878,12 +881,12 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                OrderCustomer.MobileNumber = bOrderCustomer.MobileNumber
                   WHEN NOT OrderCustomer.MobileNumber > ""
 
-               OrderCustomer.CustID = (IF lcContactId > "" THEN
-                  lcContactId ELSE bOrderCustomer.CustID)
+               OrderCustomer.CustID = (IF bOrderCustomer.AuthCustId > "" THEN
+                  bOrderCustomer.AuthCustId ELSE bOrderCustomer.CustID)
                   WHEN NOT OrderCustomer.CustId > ""
 
-               OrderCustomer.CustIDType = (IF lcContactIdType > "" THEN
-                  lcContactIdType ELSE bOrderCustomer.CustIDType)
+               OrderCustomer.CustIDType = (IF bOrderCustomer.AuthCustIdType > "" THEN
+                  bOrderCustomer.AuthCustIdType ELSE bOrderCustomer.CustIDType)
                   WHEN NOT OrderCustomer.CustIDType > "".
                
          END.
@@ -1015,8 +1018,6 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.InvCustRole     = 1
       Order.UserRole        = 1
       Order.StatusCode      = "1"
-      Order.OrdererId       = lcContactId
-      Order.OrdererIDType   = lcContactIdType 
       Order.CLI        = pcCLI
       Order.CLIType    = pcSubType
       Order.mnpstatus  = INT(pcNumberType EQ "mnp")

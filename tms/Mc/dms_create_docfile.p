@@ -983,9 +983,9 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    /*Nationality: ES*/
    STRING(OrderCustomer.Nationality) + lcDelim +
    /*Doc ID Type: NIF*/
-   STRING(Order.OrdererIDType)  + lcDelim +
+   STRING(OrderCustomer.AuthCustIdType)  + lcDelim +
    /*Doc ID: 44903161P*/
-   STRING(Order.Ordererid)        +  lcDelim +
+   STRING(OrderCustomer.AuthCustId)      +  lcDelim +
    /*Tariff Type: CONT15*/
    STRING(Order.CLIType)          + lcDelim +
    /*Previous Tariff: CONT*/

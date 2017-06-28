@@ -265,15 +265,12 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.OutMarkPOST  = OrderCustomer.OutPostMarketing
    Customer.OutMarkBank  = OrderCustomer.OutBankMarketing.
 
-   ASSIGN
-   Customer.AuthCustId      = Order.OrdererID WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
-   Customer.AuthCustIdType  = Order.OrdererIDType WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
+   IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+      OrderCustomer.CustIdType = "CIF"
+   THEN ASSIGN
+           Customer.AuthCustId     = OrderCustomer.AuthCustId
+           Customer.AuthCustIdType = OrderCustomer.AuthCustIdType
+           .
 
    /* Electronic Invoice Project - update email and delivery type */
    fUpdEmailDelType(iiorder).

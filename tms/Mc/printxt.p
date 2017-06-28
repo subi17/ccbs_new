@@ -794,8 +794,8 @@ IF NOT llErrors THEN DO:
       /* Corporate customer */
       IF OrderCustomer.CustIDType EQ "CIF" THEN DO:
          ASSIGN
-            lcTagCustIDType  = Order.OrdererIDType
-            lcTagCustID      = Order.OrdererID
+            lcTagCustIDType  = OrderCustomer.AuthCustIdType
+            lcTagCustID      = OrderCustomer.AuthCustId
             lcTagCompanyName = OrderCustomer.Company
             lcTagCompanyCIF  = OrderCustomer.CustId
             lcTagLastName2   = OrderCustomer.SurName2

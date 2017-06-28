@@ -337,8 +337,8 @@ ELSE DO:
             IF iiRole = 1 AND OrderCustomer.CustIdType = "CIF" AND
                Customer.CustIdType = "CIF" THEN DO:
                IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN ASSIGN
-                  Customer.AuthCustId      = Order.OrdererID
-                  Customer.AuthCustIdType  = Order.OrdererIDType.
+                  Customer.AuthCustId      = OrderCustomer.AuthCustId
+                  Customer.AuthCustIdType  = OrderCustomer.AuthCustIdType.
             END.
 
             fUpdEmailDelType(Order.OrderId).

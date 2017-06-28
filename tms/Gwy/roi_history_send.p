@@ -221,13 +221,14 @@ FUNCTION fFillCustomerStruct RETURNS LOGICAL
    add_boolean(pcStruct,"mark_email_3rd",OrderCustomer.OutEMailMarketing).
    add_boolean(pcStruct,"mark_post_3rd",OrderCustomer.OutPostMarketing).
    add_string(pcStruct,"id_type",OrderCustomer.CustIdType).
- 
-   IF Order.OrdererId NE "" AND OrderCustomer.RowType NE 5 THEN DO:
-      add_string(pcStruct,"person_id",Order.OrdererId).
+
+   IF OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+      OrderCustomer.CustIdType = "CIF"
+   THEN DO:
+      add_string(pcStruct,"person_id",OrderCustomer.AuthCustId).
       add_string(pcStruct,"company_id",OrderCustomer.CustId).
    END.
-   ELSE 
-      add_string(pcStruct,"person_id",OrderCustomer.CustId).
+   ELSE add_string(pcStruct,"person_id",OrderCustomer.CustId).
 
    IF OrderCustomer.BuildingNum NE "" THEN
       add_string(pcStruct,"building_number",OrderCustomer.BuildingNum).
