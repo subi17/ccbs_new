@@ -981,6 +981,9 @@ IF NOT AVAIL requeststatus THEN DO:
    CREATE RequestStatus.
    BUFFER-COPY breqstatus EXCEPT breqstatus.reqstatus TO requeststatus.
    ASSIGN requeststatus.reqstatus = 6.
+   CREATE RequestStatus.
+   BUFFER-COPY breqstatus EXCEPT breqstatus.reqstatus TO requeststatus.
+   ASSIGN requeststatus.reqstatus = 19.
 END.
 
 FIND FIRST requeststatus WHERE
@@ -995,4 +998,7 @@ IF NOT AVAIL requeststatus THEN DO:
    CREATE RequestStatus.
    BUFFER-COPY breqstatus EXCEPT breqstatus.reqstatus TO requeststatus.
    ASSIGN requeststatus.reqstatus = 6.
+   CREATE RequestStatus.
+   BUFFER-COPY breqstatus EXCEPT breqstatus.reqstatus TO requeststatus.
+   ASSIGN requeststatus.reqstatus = 19.
 END.           
