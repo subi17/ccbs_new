@@ -180,12 +180,12 @@
                  person_id;string;optional;contact person id
                  id_type;string;optional;NIF,NIE,CIF or Passport
  * @mobile_pouser_data fname;string;mandatory;
-                      lname;string;mandatory;
-                      lname2;string;optional;
-                      person_id;string;mandatory;contact person id
-                      id_type;string;mandatory;NIF,NIE or Passport
-                      company_id;string;optional;
-                      site_name;string;optional;
+                       lname;string;mandatory;
+                       lname2;string;optional;
+                       person_id;string;mandatory;contact person id
+                       id_type;string;mandatory;NIF,NIE or Passport
+                       company_id;string;optional;
+                       site_name;string;optional;
  * @fixed_pouser_data fname;string;mandatory;
                       lname;string;mandatory;
                       lname2;string;optional;
@@ -1394,6 +1394,14 @@ gcCustomerStructStringFields = "city," +
                                "territory_owner," +
                                "coverage_token".   /* EXTENT value count 41 */
 
+gcPoUserStructFields = "fname!," +
+                       "lname!," +
+                       "lname2," +
+                       "person_id!," +
+                       "id_type!," +
+                       "company_id," +
+                       "site_name".
+
 /* common validation */
 /* YBP-513 */
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
@@ -1653,12 +1661,12 @@ DO:
 END.
 IF pcFixedLinePortabilityUserStruct > "" THEN
 DO:
-   lccTemp = validate_request(pcFixedLinePortabilityUserStruct, gcCustomerStructStringFields).
+   lccTemp = validate_request(pcFixedLinePortabilityUserStruct, gcPoUserStructFields).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 IF pcMobileLinePortabilityUserStruct > "" THEN
 DO:
-   lccTemp = validate_request(pcMobileLinePortabilityUserStruct, gcCustomerStructStringFields).
+   lccTemp = validate_request(pcMobileLinePortabilityUserStruct, gcPoUserStructFields).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
  
@@ -1680,12 +1688,12 @@ IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF pcMobileLinePortabilityUserStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcMobileLinePortabilityUserStruct, gcCustomerStructStringFields, {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}, FALSE).
+   lcError = fCreateOrderCustomer(pcMobileLinePortabilityUserStruct, gcPoUserStructFields, {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF pcFixedLinePortabilityUserStruct > "" THEN
-   lcError = fCreateOrderCustomer(pcFixedLinePortabilityUserStruct, gcCustomerStructStringFields, {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}, FALSE).
+   lcError = fCreateOrderCustomer(pcFixedLinePortabilityUserStruct, gcPoUserStructFields, {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
