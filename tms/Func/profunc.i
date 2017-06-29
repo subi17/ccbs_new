@@ -157,7 +157,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
       lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
    END.
    IF INDEX(lcOutput, "#CUSTID") > 0 THEN DO:
-      lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Custid)).
+      lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Orgid)).
    END.
    IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
       lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").

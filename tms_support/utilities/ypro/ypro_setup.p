@@ -168,10 +168,10 @@ fCreateBillItem("CONTPROMF").
 faddTMSParam("PRO_CONTRACTS","Bundles","VOICE200,VOICE5000,SMS5000," +
              "INT_VOICE100,INT_FIX_VOICE1000,FLEX_UPSELL_5GB," +
              "FLEX_UPSELL_500MB,FIX_VOICE1000").
-faddTMSParam("PRO_CHANNELS","PRO",
+faddTMSParam("PRO_CHANNELS","YPRO",
              "Telesales_PRO,Fusion_Telesales_PRO").
 
-faddTMSParam("SVA_BO_EMAIL_ADDRESS","PRO",
+faddTMSParam("SVA_BO_EMAIL_ADDRESS","YPRO",
              "kari.aikas@qvantel.com").
 
 fCreatePriceList("PRO_CONTDSL39").

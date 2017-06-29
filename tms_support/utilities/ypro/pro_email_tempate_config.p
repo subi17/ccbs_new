@@ -85,6 +85,8 @@ ORDER ID: #ORDERID
 if lcRet NE "" THEN MESSAGE lcRet VIEW-AS ALERT-BOX.
 lcRet = "".
 
+MESSAGE "Go check and Correct line changes in CUI tool. F5-F3-F1" VIEW-AS ALERT-BOX.
+
 
 
 
