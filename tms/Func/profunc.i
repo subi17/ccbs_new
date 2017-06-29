@@ -17,6 +17,7 @@
 {Func/orderfunc.i}
 {Func/femailinvoice.i}
 {Func/email.i}
+{Func/fixedlinefunc.i}
 
 DEF TEMP-TABLE ttOrderList
    FIELD OrderID AS INT

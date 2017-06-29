@@ -1742,6 +1742,8 @@ PROCEDURE pFinalize:
                                              LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND 
                                              MsRequest.ReqCParam3 = "VOICE100" USE-INDEX MsSeq NO-LOCK)       THEN      
           LEAVE.
+      ELSE IF fIsProSubscription(MsOwner.MsSeq) THEN 
+          LEAVE.    
       ELSE 
       DO:
           FIND FIRST ServiceLimit WHERE ServiceLimit.GroupCode = "VOICE100" NO-LOCK NO-ERROR.
