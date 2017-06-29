@@ -170,6 +170,8 @@ faddTMSParam("PRO_CONTRACTS","Bundles","VOICE200,VOICE5000,SMS5000," +
              "FLEX_UPSELL_500MB,FIX_VOICE1000").
 faddTMSParam("PRO_CHANNELS","YPRO",
              "Telesales_PRO,Fusion_Telesales_PRO").
+faddTMSParam("NON_PRO_CHANNELS","YPRO",
+             "self,POS,Fusion_POS,ccorder").
 
 faddTMSParam("SVA_BO_EMAIL_ADDRESS","YPRO",
              "kari.aikas@qvantel.com").

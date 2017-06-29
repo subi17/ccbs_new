@@ -46,6 +46,7 @@ DEF VAR lcSegment        AS CHAR NO-UNDO.
 DEF VAR llProCust        AS LOG  NO-UNDO.
 DEF VAR llCustCatPro     AS LOG  NO-UNDO.
 DEF VAR lcPROChannels    AS CHAR NO-UNDO.
+DEF VAR lcnonPROChannels    AS CHAR NO-UNDO.
 DEF VAR lcCategory       AS CHAR NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string]").
@@ -94,6 +95,7 @@ llOrderAllowed = fSubscriptionLimitCheck(
    OUTPUT liActs).
 
 lcPROChannels = fCParamC("PRO_CHANNELS").
+lcnonPROChannels = fCParamC("NON_PRO_CHANNELS").
 
 IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
    IF AVAIL Customer AND NOT llCustCatPro THEN DO:
@@ -117,7 +119,7 @@ IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
 
    END.
 END.
-ELSE IF LOOKUP(pcChannel,"self,POS,Fusion_POS") > 0 THEN DO:
+ELSE IF LOOKUP(pcChannel,lcnonPROChannels) > 0 THEN DO:
    IF AVAIL Customer AND llCustCatPro THEN DO:
       llOrderAllowed = FALSE.
       lcReason = "customer already exists with PRO category".
