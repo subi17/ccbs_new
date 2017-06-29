@@ -142,6 +142,7 @@ PROCEDURE pTerminate:
    DEF VAR llCloseRVTermFee   AS LOG  NO-UNDO INIT TRUE.
    DEF VAR lcResult           AS CHAR NO-UNDO. 
    DEF VAR ldeActStamp        AS DEC  NO-UNDO.  
+   DEF VAR ldtCloseDate       AS DATE NO-UNDO. /* Mobile only additional line ALFMO-5 */
 
    DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
@@ -932,11 +933,18 @@ PROCEDURE pTerminate:
                      MobSub.MsSeq,
                      fLastDayOfMonth(TODAY),
                      FALSE).
-      /* Additional Line with mobile only ALFMO-5
-         For Main Mobile only Line Termination */
+      
+      /* Additional Line with mobile only ALFMO-5 */
+      IF MONTH(MobSub.ActivationDate) = MONTH(TODAY) AND 
+         YEAR(MobSub.ActivationDate) = YEAR(TODAY) THEN
+         ASSIGN ldtCloseDate = fLastDayOfMonth(TODAY).
+      ELSE IF MONTH(MobSub.ActivationDate) < MONTH(TODAY) OR
+           YEAR(MobSub.ActivationDate) < YEAR(TODAY) THEN
+         ASSIGN ldtCloseDate = TODAY.
+
       fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
                      MobSub.MsSeq,
-                     fLastDayOfMonth(TODAY),
+                     ldtCloseDate,
                      FALSE).
 
 
@@ -1006,10 +1014,19 @@ PROCEDURE pTerminate:
                bMobSub.AgrCust = TermMobSub.CustNum AND
                bMobSub.MsSeq  <> TermMobSub.MsSeq   AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+         
+         /* Additional Line with mobile only ALFMO-5 */
+         IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) AND 
+            YEAR(bMobSub.ActivationDate) = YEAR(TODAY) THEN
+            ASSIGN ldtCloseDate = fLastDayOfMonth(TODAY).
+         ELSE IF MONTH(bMobSub.ActivationDate) < MONTH(TODAY) OR
+            YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
+            ASSIGN ldtCloseDate = TODAY.
+
          fCloseAddLineDiscount(bMobSub.CustNum,
                                bMobSub.MsSeq,
                                bMobSub.CLIType,
-                               fLastDayOfMonth(TODAY)).
+                               ldtCloseDate).
       END.
    END. 
    /* Find Original request */

@@ -525,6 +525,7 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liLoop AS INT NO-UNDO. 
    DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
    DEF VAR liSecs AS INT NO-UNDO. 
+   DEF VAR ldtCloseDate AS DATE NO-UNDO.
    
    DEF BUFFER bOwner FOR MsOwner.
    DEF BUFFER bMobSub FOR MobSub.
@@ -782,11 +783,19 @@ PROCEDURE pUpdateSubscription:
                bMobSub.AgrCust = Customer.CustNum AND
                bMobSub.MsSeq  <> MsRequest.MsSeq  AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+
+         /* Additional Line with mobile only ALFMO-5 */
+         IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) AND 
+            YEAR(bMobSub.ActivationDate) = YEAR(TODAY) THEN
+            ASSIGN ldtCloseDate = fLastDayOfMonth(TODAY).
+         ELSE IF MONTH(bMobSub.ActivationDate) < MONTH(TODAY) OR
+            YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
+            ASSIGN ldtCloseDate = ldtActDate - 1.
+
          fCloseAddLineDiscount(bMobSub.CustNum,
                                bMobSub.MsSeq,
                                bMobSub.CLIType,
-                               IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) THEN fLastDayOfMonth(TODAY)
-                               ELSE ldtActDate - 1).
+                               ldtCloseDate).
       END. 
    END.
 
