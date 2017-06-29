@@ -18,10 +18,10 @@
 {Func/femailinvoice.i}
 {Func/email.i}
 
-
 DEF TEMP-TABLE ttOrderList
    FIELD OrderID AS INT
    INDEX OrderID OrderID DESC.
+DEF STREAM soutfile.
 
 FUNCTION fIsPro RETURNS LOGICAL
    (icCategory AS CHAR):
@@ -123,6 +123,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    DEF VAR lcMailDir AS CHAR NO-UNDO.
    DEF BUFFER bMsRequest FOR MsRequest.
    DEF BUFFER bCustomer FOR Customer.
+   
    FIND FIRST bMsRequest NO-LOCK WHERE
               bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
    IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
@@ -168,15 +169,18 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    END.
 
    /*Set email sending parameters*/
-   /*lcMailDir = "/tmp/". /*To be sure that we have some place*/
+   lcMailDir = "/tmp/". /*To be sure that we have some place*/
    lcMailDir = fCParam("YPRO", "YPRO_SVA_email_dir").
    lcMailFile = lcMailDir + "SVA_email" + STRING(bMsRequest.Msrequest) + ".txt".
-   */
+  
+   OUTPUT STREAM soutfile to VALUE(lcMailFile).
+   PUT STREAM soutfile UNFORMATTED lcOutput skip.
+
    ASSIGN
       xMailFrom = fCParamC("DefEmailSender")
       xMailAddr = fCParam("YPRO", "SVA_BO_EMAIL_ADDRESS")
       xMailSubj = lcMailHeader.
-   SendMaileInvoice(lcOutput, "", "").
+   SendMaileInvoice("", "", lcMailFile).
 
    /*Used email file removal or saving to logs?*/
 
