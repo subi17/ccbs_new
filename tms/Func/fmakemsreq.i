@@ -146,10 +146,11 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
     INPUT  icDMSInfo      AS CHAR,   /* For DMS usage contract_id, channel */
     OUTPUT ocResult       AS CHAR).
 
-   DEF VAR llCRes      AS LOG  NO-UNDO.
-   DEF VAR lcCReqTime  AS CHAR NO-UNDO.
-   DEF VAR liCReqTime  AS INT  NO-UNDO.
-   DEF VAR ldtCReqDate AS DATE NO-UNDO.
+   DEF VAR llCRes        AS LOG  NO-UNDO.
+   DEF VAR lcCReqTime    AS CHAR NO-UNDO.
+   DEF VAR liCReqTime    AS INT  NO-UNDO.
+   DEF VAR ldtCReqDate   AS DATE NO-UNDO.
+   DEF VAR llProCustomer AS LOGI NO-UNDO.
 
    ocResult = fChkRequest(iiMsSeq,
                           0,
@@ -205,6 +206,9 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
                           icCreator).
    IF ocResult > "" THEN RETURN 0.                       
    
+   /* PRO */
+   ASSIGN llProCustomer = fIsProSubscription(iiMsSeq).
+
    fCreateRequest(0,
                   fMakeTS(),
                   icCreator,
@@ -225,6 +229,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
           bCreaReq.ReqDParam2  = ideFee
           bCreaReq.ReqIParam1  = iiCreditCheck
           bCreaReq.ReqIParam2  = iiOrderID
+          bCreaReq.ReqIParam3  = (IF llProCustomer THEN 1 ELSE 0) /* This is for request action rules, so only bundles specific to PRO customer are activated*/
           bCreaReq.ReqIParam5  = iiRequestFlags
           bCreaReq.Salesman    = icSalesman
           bCreaReq.ReqSource   = icSource

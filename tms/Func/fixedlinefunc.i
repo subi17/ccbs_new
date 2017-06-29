@@ -326,4 +326,26 @@ FUNCTION fCheckExisting2PConvergent RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fIsProSubscription RETURNS LOGICAL
+   (INPUT iiMsSeq   AS INT):
+
+   DEFINE BUFFER bMobSub   FOR MobSub.
+   DEFINE BUFFER bCustomer FOR Customer.
+   DEFINE BUFFER bCustCat  FOR CustCat.
+
+   FIND FIRST bMobSub WHERE bMobSub.MsSeq = iiMsSeq AND bMobSub.PayType = FALSE NO-LOCK NO-ERROR.
+   IF AVAIL bMobsub THEN 
+   DO:
+       FIND FIRST bCustomer WHERE bCustomer.CustNum = bMobSub.InvCust AND bCustomer.Roles <> "inactive" NO-LOCK NO-ERROR.
+       IF AVAIL bCustomer THEN 
+       DO:
+           FIND FIRST bCustCat WHERE bCustCat.Brand = Syst.Parameters:gcBrand AND bCustCat.Category = bCustomer.Category AND bCustCat.Pro = TRUE NO-LOCK NO-ERROR.
+           IF AVAIL bCustCat THEN 
+               RETURN TRUE.    
+       END.        
+   END.    
+
+   RETURN FALSE.
+
+END FUNCTION.
 &ENDIF
