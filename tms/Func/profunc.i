@@ -196,7 +196,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
       xMailFrom = fCParamC("DefEmailSender")
       xMailAddr = fCParam("YPRO", "SVA_BO_EMAIL_ADDRESS")
       xMailSubj = lcMailHeader.
-   SendMaileInvoice("", "", lcMailFile).
+   SendMaileInvoice(lcOutput, "", "").
 
    /*Used email file removal or saving to logs?*/
 
