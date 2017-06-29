@@ -34,20 +34,22 @@ DEF VAR pcChannel        AS CHAR NO-UNDO.
 DEF VAR top_array        AS CHAR NO-UNDO.
 
 /* Local variable */
-DEF VAR llOrderAllowed   AS LOG  NO-UNDO.
-DEF VAR lcReason         AS CHAR NO-UNDO.
-DEF VAR lcReturnStruct   AS CHAR NO-UNDO.
-DEF VAR liSubLimit       AS INT  NO-UNDO.
-DEF VAR lisubs           AS INT  NO-UNDO.
-DEF VAR lcAddLineAllowed AS CHAR NO-UNDO. 
-DEF VAR liActLimit       AS INT  NO-UNDO.
-DEF VAR liacts           AS INT  NO-UNDO.
-DEF VAR lcSegment        AS CHAR NO-UNDO.
-DEF VAR llProCust        AS LOG  NO-UNDO.
-DEF VAR llCustCatPro     AS LOG  NO-UNDO.
-DEF VAR lcPROChannels    AS CHAR NO-UNDO.
-DEF VAR lcnonPROChannels    AS CHAR NO-UNDO.
-DEF VAR lcCategory       AS CHAR NO-UNDO.
+DEF VAR llOrderAllowed       AS LOG  NO-UNDO.
+DEF VAR lcReason             AS CHAR NO-UNDO.
+DEF VAR lcReturnStruct       AS CHAR NO-UNDO.
+DEF VAR liSubLimit           AS INT  NO-UNDO.
+DEF VAR lisubs               AS INT  NO-UNDO.
+DEF VAR lcAddLineAllowed     AS CHAR NO-UNDO. 
+DEF VAR liActLimit           AS INT  NO-UNDO.
+DEF VAR liacts               AS INT  NO-UNDO.
+DEF VAR lcSegment            AS CHAR NO-UNDO.
+DEF VAR llProChannel         AS LOG  NO-UNDO.
+DEF VAR llCustCatPro         AS LOG  NO-UNDO.
+DEF VAR lcPROChannels        AS CHAR NO-UNDO.
+DEF VAR lcnonPROChannels     AS CHAR NO-UNDO.
+DEF VAR lcCategory           AS CHAR NO-UNDO.
+DEF VAR llPROOngoingOrder    AS LOGI NO-UNDO.
+DEF VAR llNonProOngoingOrder AS LOGI NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string]").
 IF top_array EQ ? THEN RETURN.
@@ -56,37 +58,40 @@ pcPersonId     = get_string(param_toplevel_id, "0").
 pcIdType       = get_string(param_toplevel_id, "1").
 plSelfEmployed = get_bool(param_toplevel_id, "2").
 piOrders       = get_int(param_toplevel_id, "3").
+
 IF NUM-ENTRIES(top_array) = 5 THEN
    pcCliType   = get_string(param_toplevel_id, "4").
-IF NUM-ENTRIES(top_array) > 5 THEN DO:
+ELSE IF NUM-ENTRIES(top_array) > 5 THEN 
+DO:
    pcCliType   = get_string(param_toplevel_id, "4").
    pcChannel   = get_string(param_toplevel_id, "5").
 END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF INDEX(pcChannel,"PRO") > 0 THEN llProCust = TRUE.
+IF INDEX(pcChannel,"PRO") > 0 THEN 
+    llProChannel = TRUE.
+
 FIND FIRST Customer NO-LOCK WHERE
            Customer.Brand      = gcBrand    AND
            Customer.OrgID      = pcPersonId AND
            Customer.CustIDType = pcIdType   AND
            Customer.Roles     NE "inactive" NO-ERROR.
-IF AVAIL Customer THEN DO:
-   FIND FIRST CustCat WHERE 
-              Custcat.brand EQ "1" AND
-              CustCat.category EQ Customer.category NO-ERROR.
+IF AVAIL Customer THEN 
+DO:
+   FIND FIRST CustCat WHERE Custcat.brand EQ "1" AND CustCat.category EQ Customer.category NO-LOCK NO-ERROR.
    IF AVAIL CustCat THEN
-      llCustCatPro = CustCat.pro.
-      lcSegment = CustCat.Segment. 
+      ASSIGN 
+          llCustCatPro = CustCat.pro
+          lcSegment    = CustCat.Segment. 
 END.
 ELSE
-   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProCust,
-                               lccategory).
+   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, INPUT-OUTPUT lccategory).
 
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,
-   llProCust,
+   llProChannel,
    piOrders,
    OUTPUT lcReason, 
    OUTPUT liSubLimit,
@@ -97,48 +102,71 @@ llOrderAllowed = fSubscriptionLimitCheck(
 lcPROChannels = fCParamC("PRO_CHANNELS").
 lcnonPROChannels = fCParamC("NON_PRO_CHANNELS").
 
-IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
-   IF AVAIL Customer AND NOT llCustCatPro THEN DO:
+IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
+DO:
+   IF AVAIL Customer AND NOT llCustCatPro THEN 
+   DO:
       llOrderAllowed = FALSE.
       lcReason = "non PRO customer".
    END.
-   ELSE IF NOT AVAIL Customer THEN DO:
+   ELSE IF NOT AVAIL Customer THEN 
+   DO:
       FOR EACH OrderCustomer WHERE
-               OrderCustomer.brand EQ gcBrand AND
-               OrderCustomer.custidtype EQ pcIdType AND
-               OrderCustomer.custid EQ pcPersonId AND
-               OrderCustomer.PRO EQ FALSE,
-          FIRST Order WHERE 
-                Order.brand EQ gcBrand AND
-                Order.orderid EQ ordercustomer.orderid AND
-                LOOKUP(Order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0:
-          llOrderAllowed = FALSE.
-          lcReason = "ongoing non PRO order".
-          LEAVE.
-       END.
+               OrderCustomer.Brand      EQ gcBrand    AND
+               OrderCustomer.CustIdType EQ pcIdType   AND
+               OrderCustomer.CustId     EQ pcPersonId NO-LOCK:
 
+          IF OrderCustomer.PRO EQ FALSE THEN 
+          DO:    
+              FIND FIRST Order WHERE Order.Brand EQ gcBrand AND Order.OrderId EQ OrderCustomer.OrderId NO-LOCK NO-ERROR.
+              IF AVAIL Order AND LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN 
+              DO:
+                  llOrderAllowed = FALSE.
+                  lcReason = "ongoing non PRO order".
+                  LEAVE.    
+              END.
+          END.
+          ELSE 
+              ASSIGN llPROOngoingOrder = TRUE.
+      END.
+
+      /* Assume, there is no ongoing order for customer selected from PRO channels */
+      IF NOT llPROOngoingOrder AND NOT llCustCatPro THEN 
+      DO:
+          FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
+          IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+          DO:
+              llOrderAllowed = FALSE.
+              lcReason = "Mobile line for non-pro customer from PRO channel".
+          END.
+      END.
    END.
 END.
-ELSE IF LOOKUP(pcChannel,lcnonPROChannels) > 0 THEN DO:
-   IF AVAIL Customer AND llCustCatPro THEN DO:
+ELSE IF LOOKUP(pcChannel,lcnonPROChannels) > 0 THEN 
+DO:
+   IF AVAIL Customer AND llCustCatPro THEN 
+   DO:
       llOrderAllowed = FALSE.
       lcReason = "customer already exists with PRO category".
    END.
-   ELSE DO:
-      FOR EACH OrderCustomer WHERE
-               OrderCustomer.brand EQ gcBrand AND
-               OrderCustomer.custidtype EQ pcIdType AND
-               OrderCustomer.custid EQ pcPersonId AND
-               OrderCustomer.PRO EQ FALSE,
-          FIRST Order WHERE
-                Order.brand EQ gcBrand AND
-                Order.orderid EQ ordercustomer.orderid AND
-                LOOKUP(Order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0:
-          llOrderAllowed = FALSE.
-          lcReason = "customer already exists with PRO category".
-          LEAVE.
-       END.
+   ELSE IF NOT AVAIL Customer THEN 
+   DO:
+      FOR EACH OrderCustomer WHERE OrderCustomer.Brand      EQ gcBrand    AND
+                                   OrderCustomer.CustIdType EQ pcIdType   AND
+                                   OrderCustomer.CustId     EQ pcPersonId NO-LOCK:
 
+          IF OrderCustomer.PRO EQ TRUE THEN 
+          DO:
+              FIND FIRST Order WHERE Order.Brand EQ gcBrand AND Order.OrderId EQ OrderCustomer.OrderId NO-LOCK NO-ERROR. 
+              IF AVAIL Order AND LOOKUP(Order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN
+              DO:
+                  llOrderAllowed = FALSE.
+                  lcReason = "Ongoing pro order".
+                  LEAVE.
+              END.        
+          END.
+          
+       END.
    END.
 END.
 
@@ -150,6 +178,10 @@ IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
       lcAddLineAllowed = "OK".
    ELSE IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId,pcCliType) THEN 
       lcAddLineAllowed = "OK".
+   ELSE IF fCheckExistingMobileOnly(pcIdType,pcPersonId,pcCliType) THEN 
+      lcAddLineAllowed = "MOBILE_ONLY". /* Additional Line with mobile only ALFMO-5 */
+   ELSE IF fCheckOngoingMobileOnly(pcIdType,pcPersonId,pcCliType) THEN 
+      lcAddLineAllowed = "MOBILE_ONLY". /* Additional Line with mobile only ALFMO-5 */
    ELSE lcAddLineAllowed = "NO_MAIN_LINE".
 END.
 
