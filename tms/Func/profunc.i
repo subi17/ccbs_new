@@ -170,7 +170,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
       lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
    END.
 
-   IF INDEX(lcOutput, "#STATUS") > 0 THEN DO:
+   IF INDEX(lcMailHeader, "#STATUS") > 0 THEN DO:
       IF msrequest.reqtype EQ 9 THEN DO:
          IF msrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
             lcstatus = "3 - Pending deactivation".
@@ -181,7 +181,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
             lcstatus = "2 - Pending activation".
          ELSE lcStatus = "1 - Active".
       END.
-      lcOutput = REPLACE(lcMailHeader, "#STATUS", lcstatus).
+      lcMailHeader = REPLACE(lcMailHeader, "#STATUS", lcstatus).
    END.
 
    /*Set email sending parameters*/
