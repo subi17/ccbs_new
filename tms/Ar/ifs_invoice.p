@@ -13,6 +13,7 @@
 {Func/finvbal.i}
 {Func/timestamp.i}
 {Syst/tmsconst.i}
+{Func/fixedlinefunc.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -334,7 +335,7 @@ END FUNCTION.
 OUTPUT STREAM sLog TO VALUE(icFile).
 
 ASSIGN
-   lcSkipSlsCode = fCParamC("SalesInvSkipProdCode").
+   lcSkipSlsCode = fCParamC("SalesInvSkipProdCode")
    lcFusionDelType = SUBST("&1,&2",
                {&INV_DEL_TYPE_FUSION_EMAIL},
                {&INV_DEL_TYPE_FUSION_EMAIL_PENDING}).
@@ -466,7 +467,19 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
             WHEN "CONTD" THEN lcPayType = "30".
             WHEN "TARJRD1" THEN lcPayType = "40".
             OTHERWISE DO:
-               IF Order.PayType THEN lcPayType = "10".
+               /* YOT-5126 Convergent, Fixed and Additional line */
+               IF fIsFixedOnly(Order.CliType) THEN DO: /* FIXED DSL/TFH */
+                  IF Order.CliType BEGINS "CONTDSL" THEN lcPayType = "62".
+                  ELSE lcPayType = "63". /* CONTTFH */
+               END.
+               ELSE IF fIsConvergentORFixedOnly(Order.CliType) THEN DO:
+                  IF Order.CliType BEGINS "CONTDSL" THEN lcPayType = "60".
+                  ELSE lcPayType = "61". /* Convergent CONTTFH */
+               END.
+               ELSE IF fIsAddLineOrder(Order.OrderID) THEN DO: /* Additional */
+                  lcPayType = "68". /* Mobile line */
+               END.
+               ELSE IF Order.PayType THEN lcPayType = "10".
                ELSE lcPayType = "20".
             END.
             END CASE.
@@ -503,7 +516,20 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                    MsOwner.PayType = FALSE:
             IF INDEX(MsOwner.CLIType,"CONTRD") > 0 OR
                MsOwner.CLIType EQ "CONTD" THEN 
-               lcPayType = "30".       
+               lcPayType = "30".
+            /* YOT-5126 Convergent, Fixed and Additional line */
+            ELSE IF fIsFixedOnly(MsOwner.CLIType) THEN DO: /* FIXED DSL/TFH */
+               IF MsOwner.CLIType BEGINS "CONTDSL" THEN lcPayType = "62".
+               ELSE lcPayType = "63". /* CONTTFH */
+            END.
+            ELSE IF fIsConvergentORFixedOnly(MsOwner.CLIType) THEN DO:
+               IF MsOwner.CLIType BEGINS "CONTDSL" THEN lcPayType = "60".
+               ELSE lcPayType = "61".  /* Convergent CONTTFH */
+            END.
+            ELSE IF fIsAddLineTariff(SubInvoice.CLI) THEN DO: /* Additional */
+               lcPayType = "68". /* Mobile line */
+            END.
+
          END.      
 
          CREATE ttSub.

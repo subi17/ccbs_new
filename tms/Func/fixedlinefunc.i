@@ -403,4 +403,21 @@ FUNCTION fIsAddLineTariff RETURNS LOGICAL
 
 END FUNCTION.
 
+/* Return true if order made for convergent additional line */
+FUNCTION fIsAddLineOrder RETURNS LOGICAL
+   (INPUT iiOrderId AS INT):
+   DEFINE BUFFER bOrderAction FOR OrderAction.
+
+   FOR FIRST bOrderAction NO-LOCK WHERE
+             bOrderAction.Brand = Syst.Parameters:gcBrand AND
+             bOrderAction.OrderId   = iiOrderId AND
+             bOrderAction.ItemType = "AddLineDiscount":
+         
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 &ENDIF
