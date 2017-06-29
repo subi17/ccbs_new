@@ -69,7 +69,9 @@ DEF VAR lcCashResult          AS CHARACTER NO-UNDO.
 DEF VAR ldePayInAdv           AS DECIMAL   NO-UNDO.
 DEF VAR lcBundleCLITypes      AS CHARACTER NO-UNDO.
 DEF VAR ldeResidualAmount     AS DECIMAL   NO-UNDO.
-DEF VAR lcUPSCode             AS CHARACTER NO-UNDO. 
+DEF VAR lcUPSCode             AS CHARACTER NO-UNDO.
+DEFINE VARIABLE piMobileDonorHolder AS INTEGER INITIAL ? NO-UNDO.
+DEFINE VARIABLE piFixDonorHolder AS INTEGER INITIAL ? NO-UNDO.
 
 /* Parameter and result struct indentifiers */
 DEFINE VARIABLE gcParamStruct AS CHARACTER NO-UNDO. 
@@ -242,6 +244,18 @@ IF pcActionType EQ "ORDER" THEN DO:
              pcDelTelphone   = OrderCustomer.MobileNumber              /* 16 */
              pcDelMail       = OrderCustomer.Email.                    /* 17 */
    END.
+
+   ASSIGN
+      piMobileDonorHolder =
+         INTEGER(CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
+                    OrderCustomer.Brand = "1" AND
+                    OrderCustomer.OrderId = piId AND
+                    OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}))
+      piFixDonorHolder =
+         INTEGER(CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
+                    OrderCustomer.Brand = "1" AND
+                    OrderCustomer.OrderId = piId AND
+                    OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER})).
 END.
 /* YDR-323 STC */
 ELSE IF LOOKUP(pcActionType, "NORMAL,RENEWAL_STC") > 0 THEN DO:
@@ -449,6 +463,12 @@ DO:
    add_string  (gcParamStruct, "payment_method", lcPaymentMethod).
    add_double  (gcParamStruct, "buyback_price", ldeResidualAmount).
    add_string  (gcParamStruct, "kiala_code", lcUPSCode).
+
+   IF piMobileDonorHolder NE ?
+   THEN add_int  (gcParamStruct, "MobileDonorholder", piMobileDonorHolder).
+
+   IF piFixDonorHolder NE ?
+   THEN add_int  (gcParamStruct, "FixDonorholder", piFixDonorHolder).
 
    DEFINE VARIABLE lcResult AS LONGCHAR.
 
