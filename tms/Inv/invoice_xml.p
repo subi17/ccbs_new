@@ -513,7 +513,13 @@ PROCEDURE pInvoice2XML:
       lhXML:END-ELEMENT("CustomerAddress").
   
       lhXML:WRITE-DATA-ELEMENT("CustomerTaxZone",Invoice.TaxZone).
- 
+      
+      FIND FIRST CustCat NO-LOCK WHERE Customer.Category = CustCat.Category.
+         IF AVAILABLE CustCat THEN
+            lhXML:WRITE-DATA-ELEMENT("Segment",CustCat.Segment).
+         ELSE
+            lhXML:WRITE-DATA-ELEMENT("Segment","").
+             
       lhXML:END-ELEMENT("Customer").
 
       RUN pGetInvoiceRowData.
@@ -726,7 +732,18 @@ PROCEDURE pSubInvoice2XML:
 
       IF ttSub.OldCLIType > "" THEN DO:
          lhXML:START-ELEMENT("OldContractType").
-         lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName).
+         
+
+      FIND FIRST CustCat NO-LOCK WHERE Customer.Category = CustCat.Category.
+         IF AVAILABLE CustCat THEN DO:
+            IF CustCat.Segment BEGINS "PRO" THEN
+               lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName + "PRO").
+            ELSE
+               lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName).
+         END.
+         ELSE
+            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName).
+         
          lhXML:WRITE-DATA-ELEMENT("TariffType",ttSub.OldCLIType).
          lhXML:WRITE-DATA-ELEMENT("TariffDate",ttSub.TariffActDate).
          lhXML:END-ELEMENT("OldContractType").
