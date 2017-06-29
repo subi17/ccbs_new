@@ -188,15 +188,15 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    /*lcMailDir = "/tmp/". /*To be sure that we have some place*/
    lcMailDir = fCParam("YPRO", "YPRO_SVA_email_dir").
    lcMailFile = lcMailDir + "SVA_email" + STRING(bMsRequest.Msrequest) + ".txt".
-   */
+   
    OUTPUT STREAM soutfile to VALUE(lcMailFile).
    PUT STREAM soutfile UNFORMATTED lcOutput skip.
-
+   */
    ASSIGN
       xMailFrom = fCParamC("DefEmailSender")
       xMailAddr = fCParam("YPRO", "SVA_BO_EMAIL_ADDRESS")
       xMailSubj = lcMailHeader.
-   SendMaileInvoice(lcOutput, "", "").
+      SendMaileInvoice(lcOutput, "", "").
 
    /*Used email file removal or saving to logs?*/
 
