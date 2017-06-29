@@ -121,6 +121,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    DEF VAR lcMailHeader AS CHAR NO-UNDO.
    DEF VAR lcReplace AS CHAR NO-UNDO.
    DEF VAR lcMailDir AS CHAR NO-UNDO.
+   DEF VAR lcStatus AS CHAR NO-UNDO.
    DEF BUFFER bMsRequest FOR MsRequest.
    DEF BUFFER bCustomer FOR Customer.
    
@@ -166,6 +167,20 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
       lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
       lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
+   END.
+
+   IF INDEX(lcOutput, "#STATUS") > 0 THEN DO:
+      IF msrequest.reqtype EQ 9 THEN DO:
+         IF msrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+            lcstatus = "3 - Pending deactivation".
+         ELSE lcStatus = "0 - Inactive".
+      END.
+      IF msrequest.reqtype EQ 8 THEN DO:
+         IF msrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+            lcstatus = "2 - Pending activation".
+         ELSE lcStatus = "1 - Active".
+      END.
+      lcOutput = REPLACE(lcMailHeader, "#STATUS", lcstatus).
    END.
 
    /*Set email sending parameters*/
