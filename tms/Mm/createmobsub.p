@@ -102,6 +102,48 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhMsOwner).
 END.
 
+FUNCTION fCreatePoUser RETURNS LOGICAL
+   (iiMsSeq AS INTEGER,
+    BUFFER ibOrderCustomer FOR OrderCustomer):
+
+   DEFINE VARIABLE liLineType AS INTEGER NO-UNDO.
+
+   CASE ibOrderCustomer.RowType:
+      WHEN {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}
+      THEN liLineType = 1.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}
+      THEN liLineType = 2.
+      OTHERWISE RETURN TRUE.
+   END CASE.
+
+   FIND FIRST PoUser EXCLUSIVE-LOCK WHERE
+      PoUser.MsSeq    = iiMsSeq AND
+      PoUser.LineType = liLineType
+   NO-ERROR.
+
+   IF NOT AVAILABLE PoUser
+   THEN CREATE PoUser.
+
+   ASSIGN
+      PoUser.MsSeq     = iiMsSeq
+      PoUser.LineType  = liLineType
+      PoUser.Company   = ibOrderCustomer.Company WHEN ibOrderCustomer.CustIdType EQ "CIF"
+      PoUser.CompanyId = ibOrderCustomer.CustId WHEN ibOrderCustomer.CustIdType EQ "CIF"
+      PoUser.CustName  = OrderCustomer.Surname1
+      PoUser.SurName2  = OrderCustomer.Surname2
+      PoUser.FirstName = OrderCustomer.FirstName.
+
+   IF ibOrderCustomer.CustIdType EQ "CIF"
+   THEN ASSIGN
+           PoUser.PersonId     = ibOrderCustomer.AuthCustId
+           PoUser.PersonIdType = ibOrderCustomer.AuthCustIdType.
+   ELSE ASSIGN
+           PoUser.PersonId     = ibOrderCustomer.CustId
+           PoUser.PersonIdType = ibOrderCustomer.CustIdType.
+
+   RETURN FALSE.
+
+END FUNCTION.
 
 FIND FIRST MSRequest WHERE 
            MSRequest.MSrequest = iiMSrequest
@@ -296,15 +338,24 @@ IF NOT AVAIL mobsub THEN DO:
             OrderCustomer.OrderID = Order.OrderID:
 
       CASE OrderCustomer.RowType:
-      WHEN 1 THEN MobSub.AgrCust = OrderCustomer.CustNum.
-      WHEN 2 THEN MobSub.InvCust = OrderCustomer.CustNum.
-      WHEN 3 THEN MobSub.CustNum = OrderCustomer.CustNum.
-      WHEN 6 THEN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
+         WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+         THEN MobSub.AgrCust = OrderCustomer.CustNum.
+         WHEN 2
+         THEN MobSub.InvCust = OrderCustomer.CustNum.
+         WHEN 3
+         THEN MobSub.CustNum = OrderCustomer.CustNum.
+         WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+         THEN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
+         WHEN {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER} OR
+         WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}
+         THEN fCreatePoUser(Order.MSSeq, BUFFER OrderCustomer).
       END CASE.
       
       /* Create contact data for corporate customers */
       IF llCorporate AND 
-         (OrderCustomer.Rowtype = 1 OR OrderCustomer.Rowtype = 5) THEN DO:
+         (OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} OR
+          OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT})
+      THEN DO:
          
          RUN Mm/createcustcontact.p(
              Order.OrderId,
