@@ -1,0 +1,121 @@
+ADD TABLE "PoUser"
+  AREA "Sta_Data_64"
+  LABEL "Mobile Subscriber"
+  DESCRIPTION "Portability user"
+  DUMP-NAME "pouser"
+
+ADD FIELD "MsSeq" OF "PoUser" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "SubSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "SubSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "CustNum" OF "PoUser" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer's number"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "LineType" OF "PoUser" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Line type"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "LineType"
+  HELP "Line type (1=Mobile, 2=Fixed)"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "Company" OF "PoUser" AS character 
+  DESCRIPTION "Company name"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Company"
+  POSITION 5
+  MAX-WIDTH 40
+  COLUMN-LABEL "Company"
+  HELP "Company name"
+  ORDER 40
+
+ADD FIELD "CompanyId" OF "PoUser" AS character 
+  FORMAT "x(11)"
+  INITIAL ""
+  LABEL "Comp.ID"
+  POSITION 7
+  MAX-WIDTH 22
+  HELP "Customer's organisation ID (CIF)"
+  ORDER 60
+
+ADD FIELD "PersonIdType" OF "PoUser" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "PersonIdType"
+  POSITION 8
+  MAX-WIDTH 16
+  COLUMN-LABEL "PersonIdType"
+  HELP "Person ID Type (NIF/NIE/PASSPORT)"
+  ORDER 70
+
+ADD FIELD "PersonId" OF "PoUser" AS character 
+  FORMAT "x(11)"
+  INITIAL ""
+  LABEL "PersonId"
+  POSITION 9
+  MAX-WIDTH 22
+  COLUMN-LABEL "PersonId"
+  HELP "Person ID"
+  ORDER 80
+
+ADD FIELD "CustName" OF "PoUser" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Customer's name"
+  POSITION 10
+  MAX-WIDTH 60
+  COLUMN-LABEL "Customer's name"
+  HELP "Customer's name"
+  ORDER 90
+
+ADD FIELD "SurName2" OF "PoUser" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Second Surname"
+  POSITION 11
+  MAX-WIDTH 60
+  COLUMN-LABEL "2.Surname"
+  HELP "Second surname"
+  ORDER 100
+
+ADD FIELD "FirstName" OF "PoUser" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Forename"
+  POSITION 12
+  MAX-WIDTH 40
+  COLUMN-LABEL "Forename"
+  HELP "Customer's forename"
+  ORDER 110
+
+ADD INDEX "CustNum" ON "PoUser" 
+  AREA "Sta_Index_64"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "LineType" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000002263
