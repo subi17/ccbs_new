@@ -105,7 +105,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
             RETURN appl_err("Missing SVA parameter").
       END.
       ELSE IF liParams EQ 1 THEN DO:
-         IF pcParam EQ "" OR pcParam2 EQ "" THEN
+         IF pcParam EQ "" THEN
             RETURN appl_err("Missing SVA parameter").
       END.
       ELSE IF liParams EQ 0 THEN DO:
