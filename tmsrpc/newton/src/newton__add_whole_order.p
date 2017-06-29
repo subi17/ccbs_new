@@ -655,6 +655,10 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    data[LOOKUP("country", gcCustomerStructStringFields)] = "ES".
    data[LOOKUP("nationality", gcCustomerStructStringFields)] = "ES".
 
+   /* YPRO-18 check pro order from channel */
+   IF INDEX(pcChannel,"PRO") > 0 THEN
+      llIsProCustomer = TRUE.
+
    /* YBP-533 */
    lcc = validate_request(pcStructId, pcStructFields).
 
@@ -700,10 +704,6 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       ELSE IF lcField EQ "identified_cust_sms_number" THEN
       DO:
          pcIdentifiedSmsNumber = get_string(pcStructId, lcField).
-      END.
-      ELSE IF lcField EQ "pro" THEN 
-      DO:
-          llIsProCustomer = get_bool(pcStructId, lcField).
       END.
       ELSE IF liFieldIndex EQ 0 THEN
          lcFError = SUBST("Unknown data field `&1`", lcField).
@@ -1331,8 +1331,7 @@ gcCustomerStructFields = "birthday," +
                          "km," +
                          "territory_owner," +
                          "coverage_token," +
-                         "address_id," +
-                         "pro". 
+                         "address_id". 
 
 gcCustomerStructStringFields = "city," +
                                "city_code," +
