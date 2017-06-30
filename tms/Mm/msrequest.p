@@ -135,7 +135,7 @@ form
     MsRequest.MSSeq      COLON 18   
        LABEL "Subscription ID"
     MsRequest.CLI        COLON 18
-    MsRequest.CustNum    COLON 18 
+    MsRequest.CustNum    COLON 18 FORMAT ">>>>>>>>9"
        lcCustName NO-LABEL FORMAT "X(30)" SKIP(1)
 
     MsRequest.ReqType     COLON 18 FORMAT ">>9"
