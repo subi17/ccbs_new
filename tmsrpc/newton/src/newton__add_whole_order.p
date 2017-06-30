@@ -176,7 +176,7 @@
                  mark_dont_share_personal_data;boolean;optional;
                  mark_bank_3rd;boolean;optional;
                  language;string;optional;
-                 lantitude;string;optional;
+                 latitude;string;optional;
                  longitude;string;optional;
                  person_id;string;optional;contact person id
                  id_type;string;optional;NIF,NIE,CIF or Passport
