@@ -57,7 +57,10 @@ FUNCTION fTerminateSVAs RETURNS LOGICAL
    FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.MsSeq EQ iiMsSeq AND
             MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-            MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE}:
+            MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE}
+            BREAK BY MsRequest.ReqCparam3
+            BY MsRequest.actstamp DESC:
+      IF NOT FIRST-OF(MsRequest.ReqCparam3) THEN NEXT.
       IF NOT fisSVA(msRequest.reqcparam3, liAmt) THEN NEXT.
       IF CAN-FIND(FIRST bMsRequest NO-LOCK WHERE
                         bMsRequest.MsSeq EQ iiMsSeq AND
