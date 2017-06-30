@@ -116,8 +116,23 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                                         pcParam,
                                         pcParam2,
                                         pcValue,
-                                        lcErr).
+                                        lcErr). 
       IF lcErr NE "" THEN appl_err("SVA request failure " + lcErr).
+      lcErr = fSendEmailByRequest(liSVARequest,
+                                  "SVA_" + pcServiceId).
+      IF lcErr NE "" THEN appl_err("SVA email request failure " + lcErr).
+
+      CREATE Memo.
+      ASSIGN
+          Memo.CreStamp  = {&nowTS}
+          Memo.Brand     = gcBrand
+          Memo.HostTable = "MobSub"
+          Memo.KeyValue  = STRING(Mobsub.MsSeq)
+          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
+          Memo.CreUser   = "VISTA"
+          Memo.MemoTitle = "SVA operation"
+          Memo.MemoText  = pcValue + " " + pcServiceId
+          Memo.CustNum   = mobsub.custnum.
    END. /*YPRO*/
 END.   
 

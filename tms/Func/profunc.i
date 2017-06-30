@@ -279,7 +279,7 @@ FUNCTION fMakeProActRequest RETURNS INT(
                                    lcParams,
                                    OUTPUT lcError).
    END. /*Trans*/  
-   RETURN bCreaReq.MsRequest.
+   RETURN liRequest. /*bCreaReq.MsRequest.*/
 END.
 
 
