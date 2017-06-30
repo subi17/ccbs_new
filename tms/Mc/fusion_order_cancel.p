@@ -67,6 +67,19 @@ ELSE IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
                                       OUTPUT lcError) EQ FALSE THEN
       RETURN SUBST("Cancel message creation failed: &1", lcError).
 
+   FOR FIRST FusionMessage NO-LOCK WHERE
+             FusionMessage.OrderID = OrderFusion.OrderID AND
+             FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} AND
+             FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}:
+      IF llDoEvent THEN DO:
+         &GLOBAL-DEFINE STAR_EVENT_USER katun
+         {Func/lib/eventlog.i}
+         DEFINE VARIABLE lhFusionMessage AS HANDLE NO-UNDO.
+         lhFusionMessage = BUFFER FusionMessage:HANDLE.
+         RUN StarEventInitialize(lhFusionMessage).
+         RUN StarEventMakeCreateEvent(lhFusionMessage).
+      END.
+   END.
    RETURN "OK: Fixed line order cancellation message created".
 
 END.
