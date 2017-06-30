@@ -178,7 +178,8 @@ PROCEDURE pReadFileData:
       FIND FIRST MsRequest WHERE
                  MsRequest.Brand EQ gcBrand AND
                  MsRequest.ReqType EQ liReqType AND
-                 MsRequest.ReqStatus EQ liReqStatus.
+                 MsRequest.ReqStatus EQ liReqStatus AND
+                 MsRequest.ReqCParam3 EQ lcServicecode.
       IF NOT AVAIL MsRequest THEN DO:
          lcErrText = lcLine + ";" + "Action not allowed: Reauested " + 
                      lcSetStatus.
