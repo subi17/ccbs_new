@@ -13,7 +13,6 @@
                                penalty fee
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-
 {Syst/commali.i}
 {Func/cparam2.i}
 

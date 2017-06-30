@@ -230,9 +230,7 @@ DEF VAR liMultiSimOrder LIKE Order.OrderID NO-UNDO.
 DEF VAR liRequestId AS INT NO-UNDO. 
 DEF VAR lcDeliveryType AS CHAR NO-UNDO. 
 DEF VAR liDeliveryType AS INT NO-UNDO. 
-DEF VAR lcKialaCode AS CHAR NO-UNDO. 
 DEF VAR lcSIMonlyMNP AS CHAR NO-UNDO.   /* Added since this is used in ordersender.i */
-DEF VAR llDontSharePersData AS LOG FORMAT "Yes/No".
 
 DEF BUFFER UserCust    FOR Customer.
 DEF BUFFER InvCustomer FOR Customer.
@@ -313,12 +311,12 @@ form
         lcProfession NO-LABEL FORMAT "X(14)"
     SKIP	 
 	 
-    "Courier Code .:" lcKialaCode NO-LABEL format "X(25)"
+    "Courier Code .:" OrderCustomer.KialaCode NO-LABEL format "X(25)"
       "Marketing:" AT 50
     SKIP
 
     "Email ........:" OrderCustomer.Email FORMAT "X(30)"
-      "DontSharePD:" AT 50 llDontSharePersData
+      "DontSharePD:" AT 50 OrderCustomer.DontSharePersData
       "Bank:" AT 69  OrderCustomer.OutBankMarketing
     SKIP
     
@@ -2010,11 +2008,7 @@ PROCEDURE local-update-customer:
       FIND Nationality WHERE
            Nationality.Nationality = OrderCustomer.Nationality NO-LOCK NO-ERROR.
       lcNationality = IF AVAILABLE Nationality THEN Nationality.NtName ELSE "".
-	  
-      IF OrderCustomer.KialaCode > "" THEN 
-         lcKialaCode = OrderCustomer.KialaCode.
-      ELSE lcKialaCode = "".	  
-	  
+	  	  
       IF OrderCustomer.Profession > "" THEN DO:
          FIND FIRST TMSCodes WHERE
                     TMSCodes.TableName = "OrderCustomer" AND
@@ -2023,13 +2017,7 @@ PROCEDURE local-update-customer:
               NO-LOCK NO-ERROR.
          IF AVAILABLE TMSCodes THEN lcProfession = TMSCodes.CodeName.
       END.
-      
-      FIND FIRST Customer WHERE Customer.CustNum = OrderCustomer.CustNum
-         NO-LOCK NO-ERROR.
-      IF AVAILABLE Customer THEN    
-         llDontSharePersData = Customer.DontSharePersData.
-      ELSE llDontSharePersData = FALSE.	  
-	  
+      	  
       FIND FIRST orderpayment NO-LOCK WHERE
                  orderpayment.brand = gcBrand AND
                  orderpayment.orderid = Order.OrderID
@@ -2072,8 +2060,8 @@ PROCEDURE local-update-customer:
          OrderCustomer.OutBankMarketing
          OrderCustomer.FoundationDate
          OrderCustomer.Profession lcProfession
-         lcKialaCode
-         llDontSharePersData		 
+         OrderCustomer.KialaCode
+         OrderCustomer.DontSharePersData		 
       WITH FRAME fCustomer.
   
       IF AVAIL OrderPayment THEN 
