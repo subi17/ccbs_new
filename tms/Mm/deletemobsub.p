@@ -29,6 +29,7 @@
 {Func/fixedlinefunc.i}
 {Func/orderfunc.i}
 {Mc/dpmember.i}
+{Func/vasfunc.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -278,6 +279,12 @@ PROCEDURE pTerminate:
                  WHEN 0 THEN fReqStatus(4,"Cancelled by subs. termination").
                  WHEN 3 THEN fReqStatus(9,"Handled by subs. termination").
             END.
+   END.
+   
+   /* if pro and fixedline terminated, terminate SVAs also */
+   IF (lcTerminationType EQ {&TERMINATION_TYPE_FULL} AND
+       fIsConvergenceTariff(Mobsub.CliType)) THEN DO:
+      fTerminateSVAs(liMsSeq, FALSE).
    END.
 
    /* Cancel existing periodical contract activation requests */

@@ -30,6 +30,7 @@
 {Func/barrfunc.i}
 {Func/fixedlinefunc.i}
 {Func/fsendsms.i}
+{Func/vasfunc.i}
 
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
@@ -753,6 +754,11 @@ PROCEDURE pUpdateSubscription:
                                ELSE ldtActDate - 1).
       END.
    END.
+   /* YPRO. If fixedline is terminated from convergent, also SVAs should be
+      terminated. */
+   IF fIsConvergenceTariff(bOldType.CliType) AND 
+      NOT fIsConvergenceTariff(CLIType.CliType) THEN 
+      fTerminateSVAs(Mobsub.msseq, FALSE).
 
 END PROCEDURE.
 
