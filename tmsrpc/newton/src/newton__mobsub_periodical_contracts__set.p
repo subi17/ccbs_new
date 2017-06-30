@@ -118,9 +118,6 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                                         pcValue,
                                         lcErr).
       IF lcErr NE "" THEN appl_err("SVA request failure " + lcErr).
-
-      add_boolean(response_toplevel_id, "", TRUE).
-         
    END. /*YPRO*/
 END.   
 
