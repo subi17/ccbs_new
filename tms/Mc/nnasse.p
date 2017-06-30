@@ -380,7 +380,7 @@ ASSIGN
 IF lcPassword = ? THEN lcPassword = "".
  
 form
-    Customer.CustNum    format ">>>>>>>9" column-label "CustNbr"
+    Customer.CustNum    format ">>>>>>>>9" column-label "CustNbr"
     lcCustName          format "x(32)"    column-label "Name"
     Customer.ZipCode    format "x(5)"     column-label "Zip"
     Customer.PostOffice format "x(10)"    column-label "Post.Addr"
