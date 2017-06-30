@@ -114,7 +114,7 @@ IF icFilter NE "" THEN
 form
     MsRequest.MsRequest   FORMAT ">>>>>>>>9"
     MsRequest.CLI         COLUMN-LABEL "MSISDN"   FORMAT "X(12)"
-    MsRequest.CustNum     COLUMN-LABEL "Cust.Nbr" 
+    MsRequest.CustNum     COLUMN-LABEL "Cust.Nbr" FORMAT ">>>>>>>>9"
     lcCustName            COLUMN-LABEL "Name"     FORMAT "X(15)" 
     ldtActivate           COLUMN-LABEL "Activate" FORMAT "99-99-99"
     ldtHandled            COLUMN-LABEL "Handled"  FORMAT "99-99-99"
