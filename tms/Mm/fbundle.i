@@ -57,22 +57,24 @@ END FUNCTION. /* FUNCTION fOngoingContractTerm */
 FUNCTION fIsBundle RETURNS LOGIC
    (icDCEvent AS CHAR):
  
-   DEF VAR llBundle AS LOG  NO-UNDO.
-   DEF VAR liCount  AS INT  NO-UNDO.
-   
+   DEF VAR llBundle            AS LOG  NO-UNDO.
+   DEF VAR liCount             AS INT  NO-UNDO.
+   DEF VAR lcPROFlexUpsellList AS CHAR NO-UNDO.
+
    DEF BUFFER bPerContract FOR DayCampaign.
    
    /* DUB is not considered as exchangable bundle */
    IF icDCEvent EQ "DUB" THEN RETURN FALSE.
    
-   llBundle = FALSE.
+   ASSIGN
+      llBundle            = FALSE
+      lcPROFlexUpsellList = fCParamC("PRO_FLEX_UPSELL_LIST").
    
    FOR FIRST bPerContract NO-LOCK WHERE 
              bPerContract.Brand = gcBrand AND
              bPerContract.DCEvent = icDCEvent AND
-             ((LOOKUP(STRING(bPerContract.DCType), /*TODO FIX UGLY SOLUTION ypro*/
-                    {&PERCONTRACT_RATING_PACKAGE}) > 0) OR
-             (icDCEvent EQ "FLEX_UPSELL_5GB" or icDCEvent EQ "FLEX_UPSELL_500MB")):
+             ((LOOKUP(STRING(bPerContract.DCType), {&PERCONTRACT_RATING_PACKAGE}) > 0) OR 
+              (LOOKUP(icDCEvent, lcPROFlexUpsellList) > 0)): 
       llBundle = TRUE.              
    END.
       

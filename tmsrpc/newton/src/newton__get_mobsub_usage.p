@@ -27,8 +27,8 @@
               fixed_bundle_usage;double;mandatory;fixed line bundle usage
               fixed_bdest_limit;int;mandatory;fixed line bundle destination limit
               fixed_bdest_usage;int;mandatory;fixed line bundle destination usage
-              flex_upsell_500mb;int;mandatory;Mobile Data Usage Flex Upsell 500mb
-              flex_upsell_5gb;int;mandatory;Mobile Data Usage Flex Upsell 5gb
+              flex_500mb_upsell;int;mandatory;Mobile Data Usage Flex Upsell 500mb
+              flex_5gb_upsell;int;mandatory;Mobile Data Usage Flex Upsell 5gb
 
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
@@ -556,9 +556,9 @@ DO liLoop = 1 TO 5:
                CASE DayCampaign.DCEvent:
                   WHEN "DATA200_UPSELL" THEN 
                      lcData200Bundle= DayCampaign.DCEvent.
-                  WHEN "FLEX_UPSELL_500MB" THEN 
+                  WHEN "FLEX_500MB_UPSELL" THEN 
                      lcFlexData500MB = DayCampaign.DCEvent.
-                  WHEN "FLEX_UPSELL_5GB" THEN 
+                  WHEN "FLEX_5GB_UPSELL" THEN 
                      lcFlexData5GB = DayCampaign.DCEvent.
                   OTHERWISE 
                      lcUpSellBundle = DayCampaign.DCEvent.
@@ -750,8 +750,8 @@ add_double(first_level_struct, "fixed_bundle_limit", ldeFixedBundleLimit).
 add_double(first_level_struct, "fixed_bundle_usage", ldeFixedBundleUsage).
 add_int(first_level_struct,    "fixed_bdest_limit", liFixedBdestLimit).
 add_int(first_level_struct,    "fixed_bdest_usage", liFixedBdestUsage).
-add_int(first_level_struct,    "flex_upsell_500mb", liFlexData500MB).
-add_int(first_level_struct,    "flex_upsell_5gb", liFlexData5GB).
+add_int(first_level_struct,    "flex_500mb_upsell", liFlexData500MB).
+add_int(first_level_struct,    "flex_5gb_upsell", liFlexData5GB).
 
 FINALLY:
    EMPTY TEMP-TABLE ttCDR.
