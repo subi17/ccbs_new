@@ -1897,7 +1897,6 @@ PROCEDURE pGetCTNAME:
          WHEN "TARJ10" THEN lcList = "20 min/mes gratis,".
          WHEN "TARJ11" THEN lcList = "50 min/mes gratis,".
          WHEN "TARJ12" THEN lcList = "100 min/mes gratis,".
-         WHEN "TARJ13" THEN lcList = "5000 min/mes gratis,".
          OTHERWISE lcList = "".
        END.
 
