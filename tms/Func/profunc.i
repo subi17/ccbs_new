@@ -250,7 +250,8 @@ FUNCTION fMakeProActRequest RETURNS INT(
       FIND FIRST MsRequest WHERE
                  MsRequest.Brand EQ gcBrand AND
                  MsRequest.ReqType EQ liReqType AND
-                 MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING}.
+                 MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
+                 MsRequest.ReqCParam6 EQ icContr NO-ERROR.
       IF NOT AVAIL MsRequest THEN DO:
          ocErr = "Cancellation not possible, request not found".
          RETURN 0.
