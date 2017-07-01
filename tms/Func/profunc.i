@@ -73,7 +73,7 @@ FUNCTION fParseEmailByRequest RETURNS CHAR
    FIND FIRST bCustomer NO-LOCK WHERE
               bCustomer.CustNum EQ bMsRequest.CustNum.
     IF NOT AVAIL bCustomer THEN
-       RETURN "ERROR: Costomer of requst not found " + STRING(iiMsRequest).
+       RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
 
    lcOutput = fGetEmailText("EMAIL",
                                icTemplate,
@@ -133,7 +133,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    FIND FIRST bCustomer NO-LOCK WHERE
               bCustomer.CustNum EQ bMsRequest.CustNum.
     IF NOT AVAIL bCustomer THEN
-       RETURN "ERROR: Costomer of requst not found " + STRING(iiMsRequest).
+       RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
 
    lcOutput = fGetEmailText("EMAIL",
                              icTemplate,
@@ -278,7 +278,7 @@ FUNCTION fMakeProActRequest RETURNS INT(
                                    0,
                                    0,
                                    lcParams,
-                                   OUTPUT lcError).
+                                   OUTPUT ocErr).
    END. /*Trans*/  
    RETURN liRequest. /*bCreaReq.MsRequest.*/
 END.
