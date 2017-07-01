@@ -162,15 +162,18 @@ FUNCTION fGetActiveBundle RETURNS CHAR
    (iiMsSeq      AS INT,
     idActiveTime AS DEC):
 
-   DEF VAR lcBundleList AS CHAR NO-UNDO.
-   DEF VAR liLoop       AS INT NO-UNDO.
-   DEF VAR licount      AS INT NO-UNDO.
+   DEF VAR lcBundleList        AS CHAR NO-UNDO.
+   DEF VAR liLoop              AS INT  NO-UNDO.
+   DEF VAR licount             AS INT  NO-UNDO.
+   DEF VAR lcPROFlexUpsellList AS CHAR NO-UNDO.
+
    licount = NUM-ENTRIES({&REQ_ONGOING_STATUSES}).
 
    DEF BUFFER bMServiceLimit FOR MServiceLimit.
    DEF BUFFER bServiceLimit  FOR ServiceLimit.
    DEF BUFFER bDayCampaign   FOR DayCampaign.
 
+   ASSIGN lcPROFlexUpsellList = fCParamC("PRO_FLEX_UPSELL_LIST").
    /* Fetch all active bundles */
    FINDBUNDLES:
    FOR EACH bMServiceLimit NO-LOCK WHERE
@@ -181,8 +184,7 @@ FUNCTION fGetActiveBundle RETURNS CHAR
       FIRST bDayCampaign NO-LOCK WHERE 
             bDayCampaign.Brand   = gcBrand AND
             bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
-            LOOKUP(STRING(bDayCampaign.DCType),
-                   {&PERCONTRACT_RATING_PACKAGE}) > 0 AND
+            (LOOKUP(STRING(bDayCampaign.DCType),{&PERCONTRACT_RATING_PACKAGE}) > 0 OR (LOOKUP(icDCEvent, lcPROFlexUpsellList) > 0)) AND
             STRING(bDayCampaign.DCType) <> {&DCTYPE_CUMULATIVE_RATING}:
 
       /* Should not return DSS in active bundle list */
