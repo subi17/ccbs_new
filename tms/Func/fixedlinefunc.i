@@ -403,8 +403,7 @@ FUNCTION fCheckExistingMobileOnly RETURNS LOGICAL
        EACH  bMobSub NO-LOCK WHERE
              bMobSub.Brand   = Syst.Parameters:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
-             bMobSub.PayType = FALSE AND
-             bMobSub.MsStatus <> {&MSSTATUS_MOBILE_NOT_ACTIVE}:
+             bMobSub.PayType = FALSE:
 
        IF fIsMobileOnlyAddLineOK(bMobSub.CLIType,icCliType) THEN
           RETURN TRUE.

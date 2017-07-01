@@ -457,10 +457,11 @@ PROCEDURE pFeesAndServices:
              Added {&ADDLINE_DISCOUNTS_HM} */
          IF llAddLineDisc = FALSE AND
             LOOKUP(DiscountPlan.DPRuleID,
-                   {&ADDLINE_DISCOUNTS} + {&ADDLINE_DISCOUNTS_20} + {&ADDLINE_DISCOUNTS_HM}) > 0
+                   {&ADDLINE_DISCOUNTS} + "," + 
+                   {&ADDLINE_DISCOUNTS_20} + "," + 
+                   {&ADDLINE_DISCOUNTS_HM}) > 0
             THEN ASSIGN llAddLineDisc = TRUE
-                        lcAddLineDisc = DiscountPlan.DPRuleID
-                        .
+                        lcAddLineDisc = DiscountPlan.DPRuleID.
          
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
 

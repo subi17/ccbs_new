@@ -1091,9 +1091,12 @@ PROCEDURE pReacAddLineDisc:
       reactivated and still have one existing mobile 
       only and meet the matrix*/
 
-   lcAddLineDiscList = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}) +
-                       ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}) + 
-                       ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}).
+   lcAddLineDiscList = 
+   ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), 
+         {&ADDLINE_DISCOUNTS}) + "," +
+   ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), 
+         {&ADDLINE_DISCOUNTS_20}) + "," + 
+   ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}).
 
    FIND FIRST Customer NO-LOCK WHERE
               Customer.Custnum = iiCustNum NO-ERROR.
