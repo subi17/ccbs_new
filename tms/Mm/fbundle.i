@@ -184,7 +184,7 @@ FUNCTION fGetActiveBundle RETURNS CHAR
       FIRST bDayCampaign NO-LOCK WHERE 
             bDayCampaign.Brand   = gcBrand AND
             bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
-            (LOOKUP(STRING(bDayCampaign.DCType),{&PERCONTRACT_RATING_PACKAGE}) > 0 OR (LOOKUP(icDCEvent, lcPROFlexUpsellList) > 0)) AND
+            (LOOKUP(STRING(bDayCampaign.DCType),{&PERCONTRACT_RATING_PACKAGE}) > 0 OR (LOOKUP(bDayCampaign.DCType, lcPROFlexUpsellList) > 0)) AND
             STRING(bDayCampaign.DCType) <> {&DCTYPE_CUMULATIVE_RATING}:
 
       /* Should not return DSS in active bundle list */
