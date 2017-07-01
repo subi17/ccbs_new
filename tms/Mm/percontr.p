@@ -1880,7 +1880,8 @@ PROCEDURE pContractTermination:
    DEF VAR liCnt AS INT NO-UNDO.
    DEF VAR liEndPeriodPostpone AS INT  NO-UNDO.
    DEF VAR ldtActDatePostpone  AS DATE NO-UNDO.
-   DEF VAR llActiveInstallment AS LOG NO-UNDO.  
+   DEF VAR llActiveInstallment AS LOG  NO-UNDO.  
+   DEF VAR lcPROFlexUpsellList AS CHAR NO-UNDO. 
 
    DEF VAR llFMFee AS LOG  NO-UNDO. 
    DEF VAR liDSSMsSeq AS INT NO-UNDO. 
@@ -1894,6 +1895,8 @@ PROCEDURE pContractTermination:
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bMServiceLPool   FOR MServiceLPool.
    DEF BUFFER bDCCLI           FOR DCCLI.
+
+   ASSIGN lcPROFlexUpsellList = fCParamC("PRO_FLEX_UPSELL_LIST").
 
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -2056,7 +2059,8 @@ PROCEDURE pContractTermination:
    END.
 
    /* terminate contract (service package) */
-   IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN DO:
+   IF ((LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0)  OR 
+       (LOOKUP(DayCampaign.DCEvent, lcPROFlexUpsellList)         > 0)) THEN DO:
 
       ASSIGN
          ldEndStamp = MsRequest.ActStamp
