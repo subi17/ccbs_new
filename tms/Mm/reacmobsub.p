@@ -746,19 +746,13 @@ DO TRANSACTION:
                            MobSub.MsSeq,
                            MobSub.CLIType).
 
-   /* ADDLINE-267 fixing reactivation of partial terminated mobile line 
-      of convergent cases.
-      Additional Line with mobile only ALFMO-5  
-      If Main line is getting reactivated then
-      activate the additional line discount */
+   /* ADDLINE-267 fixing reactivation of partial terminated mobile line of convergent cases */
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
                      CLIType.Brand      = gcBrand                           AND
                      CLIType.CLIType    = MobSub.CLIType                    AND
                      CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
                     (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
-                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR 
-                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} )) 
-   THEN DO:
+                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} )) THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = gcBrand        AND
                bMobSub.AgrCust = MobSub.CustNum AND
@@ -770,6 +764,23 @@ DO TRANSACTION:
       END.
    END.
 
+   /* Additional Line with mobile only ALFMO-5  
+      If Main line is getting reactivated then
+      activate the additional line discount */
+   ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                    CLIType.Brand      = gcBrand                           AND
+                    CLIType.CLIType    = MobSub.CLIType                    AND                      CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) 
+   THEN DO:
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobSub.Brand   = gcBrand        AND
+               bMobSub.AgrCust = MobSub.CustNum AND
+               bMobSub.MsSeq  <> MobSub.MsSeq   AND
+               LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+         RUN pReacAddLineDisc(bMobSub.CustNum,
+                              bMobSub.MsSeq,
+                              bMobSub.CLIType).
+      END.
+   END.
    /* YDR-2037 */
    RUN pRecoverSTC IN THIS-PROCEDURE (BUFFER MobSub, BUFFER MsRequest).
 
