@@ -3218,8 +3218,7 @@ PROCEDURE pTerminateServicePackage:
       IF AVAILABLE bPerContract AND LOOKUP(bPerContract.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN 
       DO:
          lcAllActiveBundleList = fGetActiveBundle(iiMsSeq,fSecOffSet(MsRequest.ActStamp,1)).
-
-         IF LOOKUP(icDCEvent,lcSkipBundleWithShaperFromTermList) = 0 THEN 
+ 
          DO liCount = 1 TO NUM-ENTRIES(lcAllActiveBundleList):
 
              IF LOOKUP(ENTRY(liCount,lcAllActiveBundleList), lcSkipBundleWithShaperFromTermList) > 0 THEN 
@@ -3228,8 +3227,7 @@ PROCEDURE pTerminateServicePackage:
              ASSIGN lcBundles = lcBundles + (IF lcBundles <> "" THEN "," ELSE "") + ENTRY(liCount,lcAllActiveBundleList).
 
          END.
-         ELSE 
-             lcBundles = lcAllActiveBundleList.
+
       END.
 
       /* No need to terminate SHAPER and HSDPA if
