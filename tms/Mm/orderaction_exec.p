@@ -68,17 +68,21 @@ ORDERACTION_LOOP:
 FOR EACH OrderAction NO-LOCK WHERE
          OrderAction.Brand     = gcBrand AND
          OrderAction.OrderId   = iiOrderId:
-   IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND
-      OrderAction.ItemType NE "BundleItem" THEN NEXT.
-   ELSE IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND
-           OrderAction.ItemType EQ "BundleItem" THEN DO:
-      FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = gcBrand AND
-              DayCampaign.DCEvent = OrderAction.ItemKey
-      NO-LOCK NO-ERROR.
-      IF AVAIL DayCampaign AND 
-               Daycampaign.bundletarget NE {&DC_BUNDLE_TARGET_FIXED} THEN NEXT.
-   END.
+   
+   IF OrderAction.ItemType = "BundleItem" THEN     
+   DO:
+       FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = OrderAction.ItemKey NO-LOCK NO-ERROR.
+       IF AVAIL DayCampaign THEN 
+       DO:
+           IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND Daycampaign.BundleTarget NE {&DC_BUNDLE_TARGET_FIXED} THEN 
+               NEXT ORDERACTION_LOOP.
+           ELSE IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_CREATE} AND Daycampaign.BundleTarget NE {&DC_BUNDLE_TARGET_MOBILE} THEN
+               NEXT ORDERACTION_LOOP.
+       END.
+       ELSE 
+           NEXT ORDERACTION_LOOP.
+   END.    
+
    CASE OrderAction.ItemType:
       WHEN "BundleItem" THEN DO:
          /* DSS Order Action will be executed in separate block   */
