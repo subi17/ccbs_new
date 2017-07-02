@@ -30,6 +30,7 @@
 {Func/barrfunc.i}
 {Func/fixedlinefunc.i}
 {Func/fsendsms.i}
+{Func/vasfunc.i}
 
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
@@ -756,6 +757,11 @@ PROCEDURE pUpdateSubscription:
                                ELSE ldtActDate - 1).
       END.
    END.
+   /* YPRO. If fixedline is terminated from convergent, also SVAs should be
+      terminated. */
+   IF fIsConvergenceTariff(bOldType.CliType) AND 
+      NOT fIsConvergenceTariff(CLIType.CliType) THEN 
+      fTerminateSVAs(Mobsub.msseq, FALSE).
 
 END PROCEDURE.
 
@@ -1374,6 +1380,7 @@ PROCEDURE pCloseContracts:
                                         (IF lcContract EQ "PMDUB" THEN "PMDUBDeActSTC" ELSE ""), /* SMS for PMDUB STC Deactivation */
                                         0,
                                         (IF AVAIL DayCampaign AND DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN liContractID ELSE 0),
+                                        "",
                                         OUTPUT lcError).
          IF liTerminate = 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -1483,6 +1490,7 @@ PROCEDURE pCloseContracts:
                        "",
                        0,
                        0,
+                       "",
                        OUTPUT lcError).
       IF liRequest = 0 THEN
          /* Write memo */

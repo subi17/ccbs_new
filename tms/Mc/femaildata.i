@@ -21,6 +21,7 @@
 {Mnp/mnp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
+{Func/profunc.i}
 
 &SCOPED-DEFINE ORDERTYPE_MNP_EN "Portability"
 &SCOPED-DEFINE ORDERTYPE_MNP_SP "Portabilidad"
@@ -1826,9 +1827,6 @@ PROCEDURE pGetCTNAME:
       END. /* IF lcBundleInfo > "" THEN DO: */
    END. /* DO liCount = 1 TO liNumEntries: */
 
-
-
-
    /* clitype and language have now their final values */
    IF  lcCLIType > "" THEN DO:
       lcBundle = "".
@@ -1861,6 +1859,8 @@ PROCEDURE pGetCTNAME:
       END.
    END. /* lcCLIType */
 
+   /*YPRO-21*/
+   IF fIsProOrder(iiOrderNBR) EQ TRUE THEN lcTagCTName = lcTagCTName + " PRO".
    IF lcErrTxt NE "" THEN DO:
       olgErr = TRUE.
       lcResult = (lcErrTxt).

@@ -11,6 +11,7 @@
 {Func/orderfunc.i}
 {Mnp/mnpoutchk.i}
 {Mc/orderfusion.i}
+{Func/profunc.i}
 
 DEF INPUT PARAMETER iiOrder        AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.
@@ -24,6 +25,7 @@ DEF VAR lcOldStatus     AS CHAR NO-UNDO.
 DEF VAR lcNewStatus     AS CHAR NO-UNDO. 
 DEF VAR lcError         AS CHAR NO-UNDO.
 DEF VAR llCompanyScoringNeeded AS LOG NO-UNDO. 
+DEF VAR liRequest       AS INT NO-UNDO.
 
 DEF BUFFER lbOrder          FOR Order.
 
@@ -430,7 +432,7 @@ IF fIsConvergenceTariff(Order.CLIType) THEN DO:
        
        fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
                                        OrderCustomer.CustID) . 
-   END.   
+   END.
 END.
 
 RETURN "".

@@ -70,6 +70,7 @@ DEF VAR ldePayInAdv           AS DECIMAL   NO-UNDO.
 DEF VAR lcBundleCLITypes      AS CHARACTER NO-UNDO.
 DEF VAR ldeResidualAmount     AS DECIMAL   NO-UNDO.
 DEF VAR lcUPSCode             AS CHARACTER NO-UNDO. 
+DEF VAR lcSegment             AS CHARACTER NO-UNDO.
 
 /* Parameter and result struct indentifiers */
 DEFINE VARIABLE gcParamStruct AS CHARACTER NO-UNDO. 
@@ -194,7 +195,14 @@ IF pcActionType EQ "ORDER" THEN DO:
              lcOfferId     = Order.Offer
              lcSubsType    = Order.CLIType.
              lcKindOfNumber = "N".
-   
+
+      /* YPRO-25 Segment field WITH Customer Category */
+      FIND FIRST CustCat NO-LOCK WHERE
+                 CustCat.Brand    = gcBrand AND
+                 CustCat.Category = OrderCustomer.Category NO-ERROR.
+      IF AVAILABLE CustCat THEN
+        lcSegment = CustCat.Segment.
+
       IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN DO:
          lcDataBundle = fGetDataBundleInOrderAction(Order.OrderID,
                                                     Order.CLIType).
@@ -330,6 +338,13 @@ ELSE IF LOOKUP(pcActionType, "NORMAL,RENEWAL_STC") > 0 THEN DO:
                                 MsRequest.ReqCParam2
                              ELSE Mobsub.CliType).
 
+   /* YPRO-25 Segment field WITH Customer Category */
+   FIND FIRST CustCat NO-LOCK WHERE
+              CustCat.Brand    = gcBrand AND
+              CustCat.Category = Customer.Category NO-ERROR.
+   IF AVAILABLE CustCat THEN
+     lcSegment = CustCat.Segment.
+
    FIND FIRST bContactPerson WHERE
               bContactPerson.Brand = "1" AND
               bContactPerson.Custnum = Customer.Custnum AND
@@ -449,6 +464,7 @@ DO:
    add_string  (gcParamStruct, "payment_method", lcPaymentMethod).
    add_double  (gcParamStruct, "buyback_price", ldeResidualAmount).
    add_string  (gcParamStruct, "kiala_code", lcUPSCode).
+   add_string  (gcParamStruct, "segment", lcSegment).
 
    DEFINE VARIABLE lcResult AS LONGCHAR.
 
