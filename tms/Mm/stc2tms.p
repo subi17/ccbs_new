@@ -758,6 +758,12 @@ PROCEDURE pUpdateSubscription:
    /* ADDLINE-324 Additional Line Discounts
       CHANGE: If STC happened on convergent, AND the customer does not have any other fully convergent
       then CLOSE the all addline discounts to (STC Date - 1) */
+
+   /* Mobile only additional line ALFMO-5 */
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.DPRuleID = ENTRY(LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
+
    IF fIsConvergenceTariff(bOldType.CliType) AND NOT fIsConvergenceTariff(CLIType.CliType) AND
       NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType)     THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
@@ -772,12 +778,17 @@ PROCEDURE pUpdateSubscription:
                                ELSE ldtActDate - 1).
       END.
    END.
+
    /* Additional Line with mobile only ALFMO-5 
       IF STC happened and the new main line is not mobile only or matrix doesn't meet
       then close the additional line discount */
-   IF bOldType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
-     (fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) OR       
-      NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,CLIType.CLIType)) THEN       
+   ELSE IF AVAIL DiscountPlan AND 
+      bOldType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
+      NOT CAN-FIND(FIRST DPMember WHERE
+                   DPMember.DPId      = DiscountPlan.DPId AND
+                   DPMember.HostTable = "MobSub" AND
+                   DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
+                   DPMember.ValidTo   <> 12/31/49) THEN
    DO:
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = gcBrand          AND
@@ -793,11 +804,12 @@ PROCEDURE pUpdateSubscription:
             YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
             ASSIGN ldtCloseDate = ldtActDate - 1.
 
-         fCloseAddLineDiscount(bMobSub.CustNum,
-                               bMobSub.MsSeq,
-                               bMobSub.CLIType,
-                               ldtCloseDate).
-      END. 
+         fCloseDiscount(ENTRY(LOOKUP(bMobSub.CLIType, {&ADDLINE_CLITYPES}), 
+                        {&ADDLINE_DISCOUNTS_HM}),
+                        bMobSub.MsSeq,
+                        ldtCloseDate,
+                        FALSE).      
+      END.
    END.
 
 END PROCEDURE.
