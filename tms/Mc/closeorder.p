@@ -299,10 +299,7 @@ IF AVAILABLE lbOrderCustomer THEN DO:
           LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 NO-ERROR.
       IF AVAILABLE OrderAction THEN 
       DO:
-         IF NOT fCheckOngoingMobileOnly(lbOrderCustomer.CustIdType,
-                                        lbOrderCustomer.CustID,
-                                        Order.CliType) AND
-            NOT fCheckExistingMobileOnly(lbOrderCustomer.CustIdType,
+         IF NOT fCheckExistingMobileOnly(lbOrderCustomer.CustIdType,
                                          lbOrderCustomer.CustID,
                                          Order.CliType) THEN 
          DO:
