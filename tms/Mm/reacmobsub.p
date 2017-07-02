@@ -746,13 +746,19 @@ DO TRANSACTION:
                            MobSub.MsSeq,
                            MobSub.CLIType).
 
-   /* ADDLINE-267 fixing reactivation of partial terminated mobile line of convergent cases */
+   /* ADDLINE-267 fixing reactivation of partial terminated mobile line 
+      of convergent cases.
+      Additional Line with mobile only ALFMO-5  
+      If Main line is getting reactivated then
+      activate the additional line discount */
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
                      CLIType.Brand      = gcBrand                           AND
                      CLIType.CLIType    = MobSub.CLIType                    AND
                      CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
                     (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
-                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN DO:
+                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR 
+                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} )) 
+   THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = gcBrand        AND
                bMobSub.AgrCust = MobSub.CustNum AND
