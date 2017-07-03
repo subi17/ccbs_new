@@ -250,6 +250,7 @@ katun = "NewtonRPC".
 {Func/smsmessage.i}
 {Mc/orderfusion.i}
 {Func/fixedlinefunc.i}
+{Func/profunc.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
