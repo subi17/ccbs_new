@@ -260,7 +260,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID,
-      FIRST CliType WHERE CliType.Brand = Syst.Parameters:gcBrand AND CliType.CliType = bMobSub.CliType NO-LOCK:
+      FIRST CliType WHERE CliType.Brand = Syst.Parameters:gcBrand AND CliType.CliType = bOrder.CliType NO-LOCK:
 
       IF CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
           NEXT.
