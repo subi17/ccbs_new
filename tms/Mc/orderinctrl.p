@@ -424,15 +424,11 @@ IF llDoEvent THEN DO:
 END.
 
 /* Release pending additional lines orders, in case of pending convergent 
-   mail line order is released */
-/* YTS-10832 FIX */
+   main line order is released */
+/* YTS-10832 fix, checking correct status of order */
 IF fIsConvergenceTariff(Order.CLIType) THEN DO:
-   IF (lcOldStatus EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}       OR
-       lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
-       lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} OR
-       lcOldStatus EQ {&ORDER_STATUS_OFFER_SENT})               AND
-      (lcNewStatus = {&ORDER_STATUS_NEW}  OR
-       lcNewStatus = {&ORDER_STATUS_MNP}) THEN DO:
+   IF lcNewStatus = {&ORDER_STATUS_NEW}  OR
+      lcNewStatus = {&ORDER_STATUS_MNP} THEN DO:
        
        fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
                                        OrderCustomer.CustID) . 

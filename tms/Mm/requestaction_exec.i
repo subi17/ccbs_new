@@ -419,6 +419,7 @@ PROCEDURE pDoRulesAllow:
             END. 
          END.
          END CASE. 
+         
          IF olMatch = FALSE AND
             LOOKUP("+", RequestActionRule.ParamValue) > 0 THEN RETURN.
 
