@@ -223,7 +223,6 @@ FUNCTION fMakeProActRequest RETURNS INT(
    DEF VAR lcParams AS CHAR NO-UNDO.
 
    DEF BUFFER bOwner FOR MSOwner. 
-   DEF BUFFER bMsRequest FOR MsRequest.
    FIND FIRST bOwner WHERE bOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 
    IF NOT AVAIL bOwner THEN RETURN 0.
@@ -249,17 +248,17 @@ FUNCTION fMakeProActRequest RETURNS INT(
          RETURN 0.
       END.
          
-      FIND FIRST bMsRequest WHERE
-                 bMsRequest.Brand EQ gcBrand AND
-                 bMsRequest.ReqType EQ liReqType AND
-                 bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
-                 bMsRequest.ReqCParam3 EQ icContr NO-ERROR.
-      IF NOT AVAIL bMsRequest THEN DO:
+      FIND FIRST MsRequest WHERE
+                 MsRequest.Brand EQ gcBrand AND
+                 MsRequest.ReqType EQ liReqType AND
+                 MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
+                 MsRequest.ReqCParam3 EQ icContr NO-ERROR.
+      IF NOT AVAIL MsRequest THEN DO:
          ocErr = "Cancellation not possible, request not found".
          RETURN 0.
       END.
       fReqStatus(4, "SVA Operation Cancellation").
-      RETURN bMsRequest.MsRequest.
+      RETURN MsRequest.MsRequest.
         
    END.
    ELSE IF icAction EQ "on" THEN 
