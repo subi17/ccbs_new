@@ -253,7 +253,7 @@ FUNCTION fMakeProActRequest RETURNS INT(
                  bMsRequest.Brand EQ gcBrand AND
                  bMsRequest.ReqType EQ liReqType AND
                  bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
-                 bMsRequest.ReqCParam6 EQ icContr NO-ERROR.
+                 bMsRequest.ReqCParam3 EQ icContr NO-ERROR.
       IF NOT AVAIL bMsRequest THEN DO:
          ocErr = "Cancellation not possible, request not found".
          RETURN 0.
