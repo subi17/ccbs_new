@@ -94,6 +94,9 @@ def active_cdr_db_pf():
     else:
         connection_type = "local"
 
+    if 'dbstate' in globals():
+        connetiontype += ',{0}'.format(dbstate)
+
     args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
     args.extend(['-pf', getpf('../db/progress/store/common')])
 
