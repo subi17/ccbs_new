@@ -96,17 +96,6 @@ FUNCTION fActivateTARJ7Promo RETURN LOGICAL
    RETURN FALSE.
 END.
 
-FUNCTION fIsProOrder RETURNS LOGICAL
-   (iiOrderID as INT):
-
-   FIND FIRST Order NO-LOCK WHERE Order.Brand EQ  Syst.Parameters:gcBrand AND Order.OrderID EQ iiOrderID NO-ERROR.
-   IF AVAIL Order AND INDEX(Order.orderchannel,"PRO") > 0 THEN
-       RETURN TRUE.
-   ELSE 
-       RETURN FALSE.
-  
-END FUNCTION.
-
 FUNCTION fChkTiming RETURNS CHARACTER
    (icOldCLIType AS CHAR,
     icNewCLIType AS CHAR,
