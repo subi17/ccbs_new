@@ -391,25 +391,4 @@ FUNCTION fIsProSubscription RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fIsProOrder RETURNS LOGICAL
-   (INPUT iiOrderId   AS INT):
-
-   DEFINE BUFFER bOrder         FOR Order.
-   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
-
-   FIND FIRST bOrder WHERE bOrder.Brand = Syst.Parameters:gcBrand AND bOrder.OrderId = iiOrderId NO-LOCK NO-ERROR.
-   IF AVAIL bOrder THEN 
-   DO:
-       FIND FIRST bOrderCustomer WHERE bOrderCustomer.Brand   = Syst.Parameters:gcBrand            AND 
-                                       bOrderCustomer.OrderId = bOrder.OrderId                     AND 
-                                       bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
-       IF AVAIL bOrderCustomer AND bOrderCustomer.PRO THEN 
-           RETURN TRUE.
-   END.
-
-   RETURN FALSE.
-
-END FUNCTION.
-
-
 &ENDIF
