@@ -1152,6 +1152,7 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
    DEFINE VARIABLE liReqType     AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcSpecial     AS CHARACTER NO-UNDO.
    DEFINE VARIABLE llProCustomer AS LOGICAL   NO-UNDO INIT FALSE.
+   DEFINE VARIABLE liOrderId     AS INTEGER   NO-UNDO.
 
    IF (icReqParam EQ "CREATE" OR
       icReqParam EQ "CREATE-FIXED") AND
@@ -1190,8 +1191,12 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
    IF idActStamp = ? OR idActStamp = 0 THEN
       idActStamp = fMakeTS().
 
-   IF liReqType = {&REQTYPE_SUBSCRIPTION_CREATE} THEN   
-       ASSIGN llProCustomer = fIsProOrder(INT(icReqParam2)).
+   IF liReqType = {&REQTYPE_SUBSCRIPTION_CREATE} THEN 
+   DO:  
+       ASSIGN
+           liOrderId     = INT(icReqParam2) 
+           llProCustomer = fIsProOrder(liOrderId).
+   END.
      
    fCreateRequest(liReqType,
                   idActStamp,
