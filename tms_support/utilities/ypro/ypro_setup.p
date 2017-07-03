@@ -973,7 +973,8 @@ fCreateTMRItemValue(44,"INT_VOICE100").
 fCreateTMRItemValue(45,"FIX_VOICE1000").
 fCreateTMRItemValue(46,"INT_FIX_VOICE1000").
 
-/* new request status for SVA in 8 and 9 requests */
+/* new request status for SVA in 8 and 9 requests not needed, because no
+   actions in these states
 FIND FIRST requeststatus WHERE
            requeststatus.brand EQ "1" AND
            requeststatus.reqtype EQ 8 AND
@@ -1006,4 +1007,5 @@ IF NOT AVAIL requeststatus THEN DO:
    CREATE RequestStatus.
    BUFFER-COPY breqstatus EXCEPT breqstatus.reqstatus TO requeststatus.
    ASSIGN requeststatus.reqstatus = 19.
-END.           
+END.
+*/

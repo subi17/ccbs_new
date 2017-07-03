@@ -92,6 +92,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF VAR lcServiceArray AS CHAR NO-UNDO.
    DEF VAR lcContactStruct AS CHAR NO-UNDO.
    DEF VAR lcAddressStruct AS CHAR NO-UNDO.
+   DEF VAR lcClientStruct AS CHAR NO-UNDO.
    DEF VAR lcOutputStruct AS CHAR NO-UNDO.
    DEF VAR lcCharacteristicsArray AS CHAR NO-UNDO.
    DEF VAR lcOrderType AS CHAR NO-UNDO.
@@ -183,7 +184,9 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    add_string(lcOutputStruct, "createdBy", "YOIGO").
    add_string(lcOutputStruct, "createdDate", 
               Class.timedate:ConvertToISO8601(ldaCreDate)). 
-
+   lcClientStruct = add_struct(lcOutputStruct, "Client").
+   add_string(lcClientStruct, "clientID", OrderCustomer.CustId).
+   add_string(lcClientStruct, "type", OrderCustomer.CustIdType). 
    /*Installation*/
    lcInstallationStruct = add_struct(lcOutputStruct, "Installation").
    lcContactStruct = add_struct(lcInstallationStruct, "Contact").
