@@ -913,7 +913,8 @@ PROCEDURE pTerminate:
                bMobsub.Brand    = gcBrand        AND
                bMobSub.CustNum  = MobSub.CustNum AND
                bMobSub.MsSeq   <> liMsSeq        AND 
-               bMobSub.PayType  = NO:
+               bMobSub.PayType  = NO AND
+               bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}:
          llCallProc = NO.
          LEAVE.
       END.
