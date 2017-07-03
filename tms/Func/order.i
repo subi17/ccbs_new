@@ -323,10 +323,12 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       Customer.Category = OrderCustomer.Category.      
       fgetCustSegment(OrderCustomer.CustIDType, OrderCustomer.SelfEmployed,
                       ordercustomer.pro, lcCategory).
-      
-      IF lcCategory > "" THEN
+      IF Ordercustomer.Category EQ "" THEN  
+      IF lcCategory > "" THEN DO:
          Customer.Category = lcCategory.
-
+         IF Ordercustomer.Category EQ "" THEN 
+            Ordercustomer.Category = lcCategory.
+      END.
       IF iiTarget = 1 THEN DO:
          /* new user account */
          create_account(Customer.CustNum,?,?).
