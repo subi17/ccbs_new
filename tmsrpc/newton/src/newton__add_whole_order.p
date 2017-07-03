@@ -250,6 +250,7 @@ katun = "NewtonRPC".
 {Func/smsmessage.i}
 {Mc/orderfusion.i}
 {Func/fixedlinefunc.i}
+{Func/profunc.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
@@ -649,7 +650,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR liActs                AS INTEGER   NO-UNDO. 
    DEF VAR llSelfEmployed        AS LOGICAL   NO-UNDO. 
    DEF VAR llIsProCustomer       AS LOGICAL   NO-UNDO INIT FALSE.
-   
+   DEF VAR lcCategory            AS CHARACTER NO-UNDO.
+
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
    data[LOOKUP("country", gcCustomerStructStringFields)] = "ES".
@@ -888,6 +890,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                   WHEN NOT OrderCustomer.CustIDType > "".
                
          END.
+         fgetCustSegment(lcIdtypeOrderCustomer, llSelfEmployed,
+                         llIsProCustomer, lcCategory).
+         OrderCustomer.category = lcCategory.
    END.
 
    IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
