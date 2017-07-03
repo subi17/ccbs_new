@@ -1132,6 +1132,18 @@ PROCEDURE pCheckServiceLinks:
   
 END PROCEDURE.
 
+FUNCTION fIsOrderForProCustomer RETURNS LOGICAL
+   (INPUT iiOrderID AS INTEGER):
+
+   FIND FIRST Order NO-LOCK WHERE Order.Brand = gcBrand AND Order.OrderID = iiOrderID NO-ERROR.
+
+   IF INDEX(Order.orderchannel,"PRO") > 0 THEN
+       RETURN TRUE.
+   ELSE 
+       RETURN FALSE.
+   
+END FUNCTION.
+
 FUNCTION fSubscriptionRequest RETURNS INTEGER
    (INPUT  iiMSSeq       AS INT,    /* MSSeq */
     INPUT  icCli         AS CHAR,
@@ -1195,7 +1207,7 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
    DO:  
        ASSIGN
            liOrderId     = INT(icReqParam2) 
-           llProCustomer = fIsProOrder(liOrderId).
+           llProCustomer = fIsOrderForProCustomer(liOrderId).
    END.
      
    fCreateRequest(liReqType,
