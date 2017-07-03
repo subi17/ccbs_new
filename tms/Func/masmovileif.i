@@ -109,6 +109,8 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
+   DEF BUFFER bHolderOrderCustomer FOR OrderCustomer.
+   
    DEF BUFFER OrderFusion FOR OrderFusion.
    DEF BUFFER CLIType FOR CliType.
 
@@ -135,6 +137,12 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    
    IF NOT AVAIL bOrderCustomer THEN
       RETURN "ERROR: Customer data not found " + STRING(iiOrderID) .
+
+   FIND FIRST bHolderOrderCustomer NO-LOCK WHERE 
+              bHolderOrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
+              bHolderOrderCustomer.OrderId EQ iiOrderid AND 
+              bHolderOrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}
+              NO-ERROR.
    
    FIND FIRST OrderFusion NO-LOCK WHERE
               OrderFusion.Brand EQ Syst.Parameters:gcBrand AND
@@ -239,16 +247,22 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
                          "donoroperator",        /*param name*/
                          OrderFusion.FixedCurrOperCode,  /*param value*/
                          "").                    /*old value*/
-
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
                          "portabilitytype",      /*param name*/
                          "I", /*port in = I*/    /*param value*/
                          "").                    /*old value*/
-    fAddCharacteristic(lcCharacteristicsArray,  /*base*/
+      fAddCharacteristic(lcCharacteristicsArray,  /*base*/
+                         "receptoroperator",        /*param name*/
+                         "00031",/*must be 0031*/   /*param value*/
+                         "").                      /*old value*/
+   END.
+   
+   IF AVAILABLE bHolderOrderCustomer
+   THEN DO:
+      fAddCharacteristic(lcCharacteristicsArray,  /*base*/
                       "receptoroperator",        /*param name*/
                       "00031",/*must be 0031*/   /*param value*/
-                      "").                      /*old value*/
- 
+                      "").   
    END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
