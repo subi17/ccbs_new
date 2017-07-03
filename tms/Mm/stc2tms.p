@@ -706,14 +706,17 @@ PROCEDURE pUpdateSubscription:
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
 
-   ASSIGN Mobsub.CLIType    = MsRequest.ReqCParam2
-          Mobsub.BillTarget = liBillTarg
-          Mobsub.Paytype    = (CLIType.PayType = 2)
+   ASSIGN Mobsub.CLIType       = MsRequest.ReqCParam2
+          Mobsub.BillTarget    = liBillTarg
+          Mobsub.Paytype       = (CLIType.PayType = 2)
           Mobsub.TariffActDate = ldtActDate
           MobSub.TariffActTS   = ldeNewBeginTs
-          MobSub.FixedNumber = lcFixedNumber
-          MobSub.MsStatus = {&MSSTATUS_ACTIVE} WHEN
-                            MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}.
+          MobSub.FixedNumber   = lcFixedNumber
+          MobSub.CLI           = MobSub.FixedNumber WHEN
+                                 MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}
+          MobSub.MsStatus      = {&MSSTATUS_ACTIVE} WHEN
+                                 MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+                                 MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
    
