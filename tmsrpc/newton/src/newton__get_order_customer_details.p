@@ -39,6 +39,7 @@
                        contact_person;array;
  *  @delivery_address  delivery_struct;struct
  *  @contact_person    contact_struct;struct
+ *  @line_holder       line_holder_struct;struct
  *  @delivery_struct   street_code;string;address validation C code
                        city_code;string;address validation P code
                        title;string;title of the person for the delivery
@@ -65,6 +66,14 @@
                      city;string;city for the contact person
                      region;string;region for the contact person
                      country;string;country for the contact person
+ *  @line_holder_struct line_type;string;line type mobile or fixed
+                        company_id;string;company cif id
+                        company;string;company name
+                        first_name;string;first name of the holder
+                        surname_1;string;first surname of the holder
+                        surname_2;string;second surname of the holder
+                        customer_id_type;string;person id type of the holder
+                        customer_id;string;person id of the holder
  */
 
 
@@ -74,10 +83,50 @@ DEFINE VARIABLE piOrderId              AS INTEGER   NO-UNDO.
 DEFINE VARIABLE top_struct            AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcOrderCustomerArray  AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcOrderCustomerStruct AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcError               AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcError               AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piOrderId = get_pos_int(param_toplevel_id, "0").
+
+FUNCTION fAddHolderCustomer RETURN LOGICAL
+   (INPUT piRowType AS INTEGER):
+
+   DEFINE VARIABLE lcStruct       AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llCompany      AS LOGICAL   INITIAL FALSE NO-UNDO.
+
+   FIND OrderCustomer WHERE
+     OrderCustomer.Brand = "1"         AND
+     OrderCustomer.OrderId = piOrderId AND
+     OrderCustomer.RowType = piRowType NO-LOCK NO-ERROR.
+
+   IF NOT AVAILABLE OrderCustomer
+   THEN RETURN.
+
+   lcStruct = add_struct(top_struct, "line_holder").
+
+   add_string(lcStuct, "line_type", IF piRowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}
+                                    THEN "mobile" ELSE "fixed").
+
+   IF OrderCustomer.CustIdType EQ "CIF"
+   THEN DO:
+      add_string(lcStuct, "company_id", OrderCustomer.CustId).
+      add_string(lcStruct, "company" , OrderCustomer.Company).
+      llCompany = TRUE.
+   END.
+
+   add_string(lcStruct, "first_name" , OrderCustomer.FirstName  ).
+   add_string(lcStruct, "surname1"   , OrderCustomer.SurName1   ).
+   add_string(lcStruct, "surname2"   , OrderCustomer.SurName2   ).
+
+   add_string(lcStruct, "customer_id_type", IF llCompany
+                                            THEN OrderCustomer.AuthCustIDType
+                                            ELSE OrderCustomer.CustIdType).
+   add_string(lcStruct, "customer_id", IF llCompany
+                                       THEN OrderCustomer.AuthCustID
+                                       ELSE OrderCustomer.CustId).
+   RETURN TRUE.
+
+END FUNCTION.
 
 FUNCTION fAddOrderCustomer RETURN LOGICAL
    (INPUT piRowType AS INTEGER, OUTPUT pcError AS CHARACTER):
@@ -112,29 +161,11 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
          THEN lcStructName = "delivery_address".
          WHEN {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
          THEN lcStructName = "contact_address".
-         WHEN {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}
-         THEN lcStructName = "mobile_holder".
-         WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}
-         THEN lcStructName = "fixed_holder".
       END CASE.
       lcStruct = add_struct(top_struct, lcStructName).
    END.
    ELSE
       lcStruct = top_struct.
-
-"line_holder" => {
-"line_type" => "mobile" or "fixed",
-"id_type" => "CIF",
-"id" => "20223019Q",
-"company" => "Some company",
-"title" => "Sr.",
-"first_name" => "jurgi",
-"surname1" => "Hernández",
-"surname2" => "Audicana",
-"customer_id_type" => "NIF",
-"customer_id" => "20223019Q",
-},
-
 
    lcLanguage = "".
    IF INTEGER(OrderCustomer.Language) > 0 THEN
@@ -148,10 +179,9 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
    add_string(lcStruct, "city_code"  , OrderCustomer.AddressCodP).
    add_string(lcStruct, "municipality_code", OrderCustomer.AddressCodM).
 
-   IF piRowType eq 1 THEN
-      add_string(lcStruct, "company" , OrderCustomer.Company ).
+   IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+   THEN add_string(lcStruct, "company" , OrderCustomer.Company).
 
-     
    add_string(lcStruct, "zip"        , OrderCustomer.ZipCode ).
    add_string(lcStruct, "city"       , OrderCustomer.PostOffice ).
    add_string(lcstruct, "region"     , OrderCustomer.Region  ).
@@ -171,7 +201,7 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
 
    add_int(lcStruct,"additional_documentation",OrderCustomer.AdditionalDoc).
      
-   IF piRowType = 1 THEN
+   IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
    DO:
       add_string(  lcStruct, "contact_number_fix", OrderCustomer.FixedNumber ). 
       add_string(  lcStruct, "contact_number_mobile", OrderCustomer.MobileNumber ). 
@@ -197,19 +227,17 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
       add_int(     lcStruct, "post_3rd"   , 
                    INTEGER(OrderCustomer.OutPostMarketing  )).
    END.
+
    RETURN TRUE.
 END.
 
 top_struct = add_struct(response_toplevel_id, "").
 
-fAddOrderCustomer(1, OUTPUT lcError).
+fAddOrderCustomer({&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, OUTPUT lcError).
 IF lcError <> "" THEN
    RETURN appl_err(SUBST("OrderCustomer for order &1 not found", piOrderId)).
 
-fAddOrderCustomer(4, lcError).
-fAddOrderCustomer(5, lcError).
-
-
-
-
-
+fAddOrderCustomer({&ORDERCUSTOMER_ROWTYPE_DELIVERY}, lcError).
+fAddOrderCustomer({&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, lcError).
+fAddHolderCustomer({&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}).
+fAddHolderCustomer({&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}).
