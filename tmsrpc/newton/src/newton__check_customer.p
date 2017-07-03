@@ -109,7 +109,16 @@ DO:
       llOrderAllowed = FALSE.
       lcReason = "non PRO customer".
    END.
-   ELSE IF NOT AVAIL Customer THEN 
+   ELSE IF AVAIL Customer THEN 
+   DO:
+       IF NOT (fCheckExistingConvergent    (pcIdType, pcPersonId, pcCliType) OR 
+               fCheckOngoingConvergentOrder(pcIdType, pcPersonId, pcCliType)) THEN
+       DO:
+           llOrderAllowed = FALSE.
+           lcReason = "Additional mobile line is not compatible with respective to main convergent line".
+       END.   
+   END.
+   ELSE 
    DO:
       FOR EACH OrderCustomer WHERE
                OrderCustomer.Brand      EQ gcBrand    AND

@@ -1102,7 +1102,12 @@ PROCEDURE pInitialize:
 END PROCEDURE. /* pInitialize */
 
 PROCEDURE pUpdateNewOwner:
- 
+   
+   DEF VAR lcErrMsg     AS CHAR NO-UNDO.
+
+   DEFINE BUFFER bf_NewCustomer FOR Customer.
+   DEFINE BUFFER bf_NewCustCat  FOR CustCat.
+   
    llReady = FALSE.
 
    UpdateAgrCust:
@@ -1243,6 +1248,21 @@ PROCEDURE pUpdateNewOwner:
                   MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
                   NEXT.
                END.
+
+               /* Validate, if existing customer*/   
+               FIND FIRST bf_NewCustomer WHERE bf_NewCustomer.Brand      = gcBrand                 AND 
+                                               bf_NewCustomer.CustIdType = lcNewCustIDType         AND 
+                                               bf_NewCustomer.OrgId      = INPUT lcNewCustId       NO-LOCK NO-ERROR.
+               IF AVAIL bf_NewCustomer THEN
+               DO:
+                   ASSIGN lcErrMsg = fCheckACCCompability(bCurrentCust.CustNum,bf_NewCustomer.CustNum). 
+                   IF lcErrMsg <> "" THEN
+                   DO:
+                       MESSAGE lcErrMsg VIEW-AS ALERT-BOX ERROR.
+                       NEXT.
+                   END.       
+               END.
+
             END.
              
          END.

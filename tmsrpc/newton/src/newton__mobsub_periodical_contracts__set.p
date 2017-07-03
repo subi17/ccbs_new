@@ -117,10 +117,11 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                                         pcParam2,
                                         pcValue,
                                         lcErr). 
-      IF lcErr NE "" THEN appl_err("SVA request failure " + lcErr).
+      IF lcErr NE "" OR liSVARequest EQ 0 OR 
+         liSVARequest EQ ? THEN RETURN appl_err("SVA request failure " + lcErr).
       lcErr = fSendEmailByRequest(liSVARequest,
                                   "SVA_" + pcServiceId).
-      IF lcErr NE "" THEN appl_err("SVA email request failure " + lcErr).
+      IF lcErr NE "" THEN RETURN appl_err("SVA email request failure " + lcErr).
 
       CREATE Memo.
       ASSIGN

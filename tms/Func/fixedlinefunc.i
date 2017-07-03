@@ -259,8 +259,12 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
             bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}),
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
-            bOrderFusion.OrderID = bOrder.OrderID:
+            bOrderFusion.OrderID = bOrder.OrderID,
+      FIRST CliType WHERE CliType.Brand = Syst.Parameters:gcBrand AND CliType.CliType = bOrder.CliType NO-LOCK:
 
+      IF CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
+          NEXT.
+          
       IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
          RETURN TRUE.
 
@@ -321,8 +325,12 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.PayType = FALSE                   AND
             (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}     OR
-             bMobSub.MsStatus = {&MSSTATUS_BARRED}):
-    
+             bMobSub.MsStatus = {&MSSTATUS_BARRED}),
+       FIRST CliType WHERE CliType.Brand = Syst.Parameters:gcBrand AND CliType.CliType = bMobSub.CliType NO-LOCK:
+      
+      IF CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
+          NEXT.
+
       IF fIsConvergentAddLineOK(bMobSub.CLIType,icCliType) THEN 
          RETURN TRUE.
 

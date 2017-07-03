@@ -1149,9 +1149,11 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
     INPUT  icReqSource   AS CHAR,
     OUTPUT ocResult      AS CHAR).
 
-   DEFINE VARIABLE liReqType AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE lcSpecial AS CHARACTER NO-UNDO.
-      
+   DEFINE VARIABLE liReqType     AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcSpecial     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llProCustomer AS LOGICAL   NO-UNDO INIT FALSE.
+   DEFINE VARIABLE liOrderId     AS INTEGER   NO-UNDO.
+
    IF (icReqParam EQ "CREATE" OR
       icReqParam EQ "CREATE-FIXED") AND
       (iiMSSeq  = 0 OR
@@ -1189,6 +1191,13 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
    IF idActStamp = ? OR idActStamp = 0 THEN
       idActStamp = fMakeTS().
 
+   IF liReqType = {&REQTYPE_SUBSCRIPTION_CREATE} THEN 
+   DO:  
+       ASSIGN
+           liOrderId     = INT(icReqParam2) 
+           llProCustomer = fIsProOrder(liOrderId).
+   END.
+     
    fCreateRequest(liReqType,
                   idActStamp,
                   icCreator,
@@ -1205,6 +1214,7 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
       bCreaReq.ReqCParam4 = icReqParam4
       bCreaReq.ReqCParam6 = icReqParam6
       bCreaReq.ReqIParam1 = iiTrafficType
+      bCreaReq.ReqIParam4 = (IF llProCustomer THEN 1 ELSE 0) /* This is for request action rules, so only bundles specific to PRO customer are activated */
       bCreaReq.ReqDParam2 = ideCharge
       bCreaReq.ReqSource  = icReqSource
       liReqCreated        = bCreaReq.MsRequest.

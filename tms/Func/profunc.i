@@ -162,7 +162,9 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
       lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Orgid)).
    END.
    IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
-      lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
+      IF NUM-ENTRIES(bMSRequest.ReqCparam6) > 2 THEN
+         lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
+      ELSE lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
       lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
    END.
    IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
@@ -171,13 +173,13 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    END.
 
    IF INDEX(lcMailHeader, "#STATUS") > 0 THEN DO:
-      IF msrequest.reqtype EQ 9 THEN DO:
-         IF msrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+      IF bmsrequest.reqtype EQ 9 THEN DO:
+         IF bmsrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
             lcstatus = "3 - Pending deactivation".
          ELSE lcStatus = "0 - Inactive".
       END.
-      IF msrequest.reqtype EQ 8 THEN DO:
-         IF msrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+      IF bmsrequest.reqtype EQ 8 THEN DO:
+         IF bmsrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
             lcstatus = "2 - Pending activation".
          ELSE lcStatus = "1 - Active".
       END.
@@ -221,7 +223,6 @@ FUNCTION fMakeProActRequest RETURNS INT(
    DEF VAR lcParams AS CHAR NO-UNDO.
 
    DEF BUFFER bOwner FOR MSOwner. 
-   DEF BUFFER bMsRequest FOR MsRequest.
    FIND FIRST bOwner WHERE bOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 
    IF NOT AVAIL bOwner THEN RETURN 0.
@@ -251,7 +252,7 @@ FUNCTION fMakeProActRequest RETURNS INT(
                  MsRequest.Brand EQ gcBrand AND
                  MsRequest.ReqType EQ liReqType AND
                  MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
-                 MsRequest.ReqCParam6 EQ icContr NO-ERROR.
+                 MsRequest.ReqCParam3 EQ icContr NO-ERROR.
       IF NOT AVAIL MsRequest THEN DO:
          ocErr = "Cancellation not possible, request not found".
          RETURN 0.
