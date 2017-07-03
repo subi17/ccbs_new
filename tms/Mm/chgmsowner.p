@@ -1104,7 +1104,6 @@ END PROCEDURE. /* pInitialize */
 PROCEDURE pUpdateNewOwner:
    
    DEF VAR lcErrMsg     AS CHAR NO-UNDO.
-   DEF VAR lcTempCustId AS CHAR NO-UNDO.
 
    DEFINE BUFFER bf_NewCustomer FOR Customer.
    DEFINE BUFFER bf_NewCustCat  FOR CustCat.
@@ -1251,11 +1250,9 @@ PROCEDURE pUpdateNewOwner:
                END.
 
                /* Validate, if existing customer*/   
-               ASSIGN lcTempCustId = INPUT INPUT lcNewCustId.
-
                FIND FIRST bf_NewCustomer WHERE bf_NewCustomer.Brand      = gcBrand                 AND 
                                                bf_NewCustomer.CustIdType = lcNewCustIDType         AND 
-                                               bf_NewCustomer.OrgId      = lcTempCustId            NO-LOCK NO-ERROR.
+                                               bf_NewCustomer.OrgId      = INPUT lcNewCustId       NO-LOCK NO-ERROR.
                IF AVAIL bf_NewCustomer THEN
                DO:
                    ASSIGN lcErrMsg = fCheckACCCompability(bCurrentCust.CustNum,bf_NewCustomer.CustNum). 
