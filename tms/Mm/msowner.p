@@ -101,7 +101,7 @@ form
     MsOwner.AgrCust    FORMAT ">>>>>>>>9"
     MsOwner.InvCust    FORMAT ">>>>>>>>9"
     MSOwner.CustNum    format ">>>>>>>>9"  COLUMN-LABEL "User"
-    lcCustName         FORMAT "x(14)" COLUMN-LABEL "User Name"
+    lcCustName         FORMAT "x(10)" COLUMN-LABEL "User Name"
     ldtBegDate         FORMAT "99-99-99" COLUMN-LABEL "DateFrom"
        HELP "Begin date"
     lcBegTime          FORMAT "xx:xx:xx" COLUMN-LABEL "TimeFrom"
