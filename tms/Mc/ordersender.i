@@ -105,7 +105,8 @@
             
             /* Move Mobile only tariff order to 76 queue, if customer 
                has ongoing convergent order */
-            IF CAN-FIND(FIRST CLIType NO-LOCK WHERE 
+            IF Order.StatusCode NE {&ORDER_STATUS_ONGOING} AND
+               CAN-FIND(FIRST CLIType NO-LOCK WHERE 
                               CLIType.Brand      = gcBrand       AND 
                               CLIType.CLIType    = Order.CLIType AND 
                               CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
