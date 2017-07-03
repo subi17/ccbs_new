@@ -39,7 +39,7 @@
                        contact_person;array;
  *  @delivery_address  delivery_struct;struct
  *  @contact_person    contact_struct;struct
- *  @line_holder       line_holder_struct;struct
+ *  @line_holder       line_holder;struct
  *  @delivery_struct   street_code;string;address validation C code
                        city_code;string;address validation P code
                        title;string;title of the person for the delivery
@@ -66,14 +66,14 @@
                      city;string;city for the contact person
                      region;string;region for the contact person
                      country;string;country for the contact person
- *  @line_holder_struct line_type;string;line type mobile or fixed
-                        company_id;string;company cif id
-                        company;string;company name
-                        first_name;string;first name of the holder
-                        surname_1;string;first surname of the holder
-                        surname_2;string;second surname of the holder
-                        customer_id_type;string;person id type of the holder
-                        customer_id;string;person id of the holder
+ *  @line_holder       line_type;string;line type mobile or fixed
+                       company_id;string;company cif id
+                       company;string;company name
+                       first_name;string;first name of the holder
+                       surname_1;string;first surname of the holder
+                       surname_2;string;second surname of the holder
+                       customer_id_type;string;person id type of the holder
+                       customer_id;string;person id of the holder
  */
 
 
