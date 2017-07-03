@@ -397,10 +397,12 @@ FUNCTION fIsProOrder RETURNS LOGICAL
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
 
-   FIND FIRST bOrder WHERE bOrder.Brand = gcBrand AND bOrder.OrderId = iiOrderId NO-LOCK NO-ERROR.
+   FIND FIRST bOrder WHERE bOrder.Brand = Syst.Parameters:gcBrand AND bOrder.OrderId = iiOrderId NO-LOCK NO-ERROR.
    IF AVAIL bOrder THEN 
    DO:
-       FIND FIRST bOrderCustomer WHERE bOrderCustomer.Brand = gcBrand AND bOrderCustomer.OrderId = bOrder.OrderId AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
+       FIND FIRST bOrderCustomer WHERE bOrderCustomer.Brand   = Syst.Parameters:gcBrand            AND 
+                                       bOrderCustomer.OrderId = bOrder.OrderId                     AND 
+                                       bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
        IF AVAIL bOrderCustomer AND bOrderCustomer.PRO THEN 
            RETURN TRUE.
    END.
