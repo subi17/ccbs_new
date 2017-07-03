@@ -609,6 +609,7 @@ DO TRANSACTION:
                        "", 
                        0,
                        ttContract.PerContID,
+                       "",
                        OUTPUT lcError).
 
       DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,

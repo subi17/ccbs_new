@@ -410,7 +410,7 @@ IF NOT AVAIL mobsub THEN DO:
                           OrderTopup.Amount * 100,
                           OrderTopup.VatAmount * 100).
    END.
-
+   
    CREATE Segmentation.
    ASSIGN
       Segmentation.MsSeq   = Order.MsSeq
@@ -418,7 +418,7 @@ IF NOT AVAIL mobsub THEN DO:
       Segmentation.SegmentOffer = "OFF"
       Segmentation.SegmentDate  = TODAY
       Segmentation.SegmentCreation = fMakeTS().
-
+   
    CREATE msowner.
    ASSIGN
       MSOwner.CLI       = Mobsub.cli
@@ -493,7 +493,7 @@ IF NOT AVAIL mobsub THEN DO:
                                 {&REQUEST_ACTIONLIST_ALL}).
 
    /* Welcome SMS for all tariffs (Excluding Corporate) */
-   IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO:
+   IF LOOKUP(Customer.category,"20,21,22,40,41,42,43") = 0 THEN DO:
 
       lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
       
@@ -565,6 +565,11 @@ IF NOT AVAIL mobsub THEN DO:
    END. /* IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO: */
 
    IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN DO:
+      RUN Mm/orderaction_exec.p (MobSub.MsSeq,
+                      Order.OrderID,
+                      ldeActivationTS,
+                      MsRequest.MsRequest,
+                      {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}). 
       fReqStatus(2,"").
       RETURN.
    END.

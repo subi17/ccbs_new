@@ -140,6 +140,7 @@ PROCEDURE pDSSContract:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcError).
       IF liRequest = 0 THEN 
          RETURN "ERROR:Bundle activation request creation failed; " + lcError.
@@ -158,6 +159,7 @@ PROCEDURE pDSSContract:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcError).
       IF liRequest = 0 THEN 
          RETURN "ERROR:Bundle termination request creation failed; " + lcError.
@@ -516,6 +518,7 @@ PROCEDURE pHandleOtherServices:
                        "",
                        0,
                        0,
+                       "",
                        OUTPUT lcError).
       IF liRequest = 0 THEN
          /* Write memo */

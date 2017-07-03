@@ -42,6 +42,9 @@
 {Func/fprepaidfee.i}
 {Func/fcreditreq.i}
 {Func/fsendsms.i}
+{Func/profunc.i}
+
+DEF VAR lcEmailErr AS CHAR NO-UNDO.
 
 FUNCTION fUpdateServicelCounterMSID RETURNS LOGICAL
    ( iiCustNum AS INTEGER,
@@ -178,6 +181,22 @@ END.
 /* is there another request that should be completed first */
 IF MsRequest.ReqStat = 0 THEN DO:
 
+   /*YPRO SVA special handling for PRO customers*/
+   IF MsRequest.ReqCParam6 BEGINS "SVA_NO_WAIT" THEN DO:
+      lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest,
+                                       "SVA_" + MsRequest.ReqCparam3).
+      IF lcEmailErr NE "" THEN RETURN "ERROR: " + lcEmailErr.      
+   END.
+   ELSE IF MsRequest.ReqCParam6 BEGINS "SVA" THEN DO:
+      /*YPRO-84: go to waitinf for bob tool in state 19.*/
+      fReqStatus({&REQUEST_STATUS_CONFIRMATION_PENDING},""). /*19*/
+      lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest, 
+                                       "SVA_" + MsRequest.ReqCparam3).
+      IF lcEmailErr NE "" THEN RETURN "ERROR: " + lcEmailErr.                                 
+      RETURN.
+
+   END.
+   
    IF MsRequest.ReqIParam2 > 0 THEN DO:
       FIND FIRST bPendRequest WHERE
                  bPendRequest.MsRequest = MsRequest.ReqIParam2
@@ -207,6 +226,7 @@ IF MsRequest.ReqStat = 0 THEN DO:
       RETURN "ERROR:Another request that this depends on has not been " +
              "completed".
    END. /* IF LOOKUP(MsRequest.ReqCParam3,{&DSS_BUNDLES}) > 0 AND */
+
 END. /* IF MsRequest.ReqStat = 0 THEN DO: */
 
 liOrigStatus = MsRequest.ReqStatus.
@@ -219,6 +239,11 @@ END.
 
 /* activate or continue periodical contract */
 WHEN 8 THEN DO:
+   /*SVA activation / YPRO*/
+   IF MsRequest.ReqCParam6 BEGINS "SVA" AND 
+      MsRequest.ReqStatus EQ {&REQUEST_STATUS_HLR_DONE} THEN
+      RUN pContractActivation.
+   
    IF MsRequest.ReqCParam2 = "update" 
    /* maintenance of a contract */
    THEN RUN pMaintainContract.
@@ -269,6 +294,7 @@ END.
 WHEN 9 THEN DO:
 
    CASE MsRequest.ReqStatus:
+   WHEN 6 THEN RUN pContractTermination. /*SVA, YPRO*/
    WHEN 0 THEN RUN pContractTermination.
    WHEN 8 THEN RUN pFinalize(INPUT 9). /* Trigger only Deactivation SMS */
    END CASE.
@@ -1716,6 +1742,8 @@ PROCEDURE pFinalize:
                                              LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND 
                                              MsRequest.ReqCParam3 = "VOICE100" USE-INDEX MsSeq NO-LOCK)       THEN      
           LEAVE.
+      ELSE IF fIsProSubscription(MsOwner.MsSeq) THEN 
+          LEAVE.    
       ELSE 
       DO:
           FIND FIRST ServiceLimit WHERE ServiceLimit.GroupCode = "VOICE100" NO-LOCK NO-ERROR.
@@ -1774,6 +1802,7 @@ PROCEDURE pFinalize:
                                       "",
                                       0,
                                       0,
+                                      "",
                                       OUTPUT lcError).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
@@ -1851,7 +1880,8 @@ PROCEDURE pContractTermination:
    DEF VAR liCnt AS INT NO-UNDO.
    DEF VAR liEndPeriodPostpone AS INT  NO-UNDO.
    DEF VAR ldtActDatePostpone  AS DATE NO-UNDO.
-   DEF VAR llActiveInstallment AS LOG NO-UNDO.  
+   DEF VAR llActiveInstallment AS LOG  NO-UNDO.  
+   DEF VAR lcPROFlexUpsellList AS CHAR NO-UNDO. 
 
    DEF VAR llFMFee AS LOG  NO-UNDO. 
    DEF VAR liDSSMsSeq AS INT NO-UNDO. 
@@ -1865,6 +1895,8 @@ PROCEDURE pContractTermination:
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bMServiceLPool   FOR MServiceLPool.
    DEF BUFFER bDCCLI           FOR DCCLI.
+
+   ASSIGN lcPROFlexUpsellList = fCParamC("PRO_FLEX_UPSELL_LIST").
 
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -2027,7 +2059,8 @@ PROCEDURE pContractTermination:
    END.
 
    /* terminate contract (service package) */
-   IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN DO:
+   IF ((LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0)  OR 
+       (LOOKUP(DayCampaign.DCEvent, lcPROFlexUpsellList)         > 0)) THEN DO:
 
       ASSIGN
          ldEndStamp = MsRequest.ActStamp
@@ -3145,17 +3178,22 @@ PROCEDURE pTerminateServicePackage:
    DEF INPUT  PARAMETER idaTerminationDate AS DATE NO-UNDO.
    DEF OUTPUT PARAMETER olSubRequest       AS LOG  NO-UNDO.
  
-   DEF VAR liService    AS INT  NO-UNDO.
-   DEF VAR lcBundles    AS CHAR NO-UNDO.
-   DEF VAR lcOldCLIType AS CHAR NO-UNDO.
+   DEF VAR liCount               AS INT  NO-UNDO.
+   DEF VAR liService             AS INT  NO-UNDO.
+   DEF VAR lcBundles             AS CHAR NO-UNDO.
+   DEF VAR lcOldCLIType          AS CHAR NO-UNDO.
+   DEF VAR lcAllActiveBundleList AS CHAR NO-UNDO.
 
-   DEF VAR lcOnlyVoiceContracts  AS CHAR NO-UNDO.
+   DEF VAR lcOnlyVoiceContracts                AS CHAR NO-UNDO.
+   DEF VAR lcSkipBundleWithShaperFromTermList  AS CHAR NO-UNDO.
 
    DEF BUFFER bPerContract FOR DayCampaign.
    DEF BUFFER bOrigRequest FOR MsRequest.
     
-   ASSIGN olSubRequest = FALSE
-          lcOnlyVoiceContracts = fCParamC("ONLY_VOICE_CONTRACTS").
+   ASSIGN 
+       olSubRequest                       = FALSE
+       lcOnlyVoiceContracts               = fCParamC("ONLY_VOICE_CONTRACTS")
+       lcSkipBundleWithShaperFromTermList = fCParamC("SKIP_BUNDLE_WITH_SP_FROM_TERMINATION").
 
    IF MsRequest.OrigRequest > 0 THEN 
       FIND FIRST bOrigRequest NO-LOCK WHERE
@@ -3174,22 +3212,28 @@ PROCEDURE pTerminateServicePackage:
        bOrigRequest.ReqType   = {&REQTYPE_BUNDLE_CHANGE}) THEN RETURN "".
 
    /* No need to find retain bundle list for VOIP */
-   IF icDCEvent <> "BONO_VOIP" THEN DO:
-      FIND FIRST bPerContract WHERE
-                 bPerContract.Brand = gcBrand AND
-                 bPerContract.DCEvent = icDCEvent NO-LOCK NO-ERROR.
-      IF AVAILABLE bPerContract AND 
-         LOOKUP(bPerContract.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN DO:
-         lcBundles = fGetActiveBundle(iiMsSeq,
-                                      fSecOffSet(MsRequest.ActStamp,1)).
-         lcBundles = REPLACE(lcBundles,"BONO_VOIP","").
+   IF icDCEvent <> "BONO_VOIP" THEN 
+   DO:
+      FIND FIRST bPerContract WHERE bPerContract.Brand = gcBrand AND bPerContract.DCEvent = icDCEvent NO-LOCK NO-ERROR.
+      IF AVAILABLE bPerContract AND LOOKUP(bPerContract.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN 
+      DO:
+         lcAllActiveBundleList = fGetActiveBundle(iiMsSeq,fSecOffSet(MsRequest.ActStamp,1)).
+ 
+         DO liCount = 1 TO NUM-ENTRIES(lcAllActiveBundleList):
+
+             IF LOOKUP(ENTRY(liCount,lcAllActiveBundleList), lcSkipBundleWithShaperFromTermList) > 0 THEN 
+                 NEXT.
+
+             ASSIGN lcBundles = lcBundles + (IF lcBundles <> "" THEN "," ELSE "") + ENTRY(liCount,lcAllActiveBundleList).
+
+         END.
+
       END.
 
       /* No need to terminate SHAPER and HSDPA if
          ongoing STC/BTC with data bundle */
-      IF (lcBundles = "" OR LOOKUP(lcBundles,lcOnlyVoiceContracts) > 0) AND
-         fBundleWithSTC(iiMsSeq,fSecOffSet(MsRequest.ActStamp,1),FALSE)
-      THEN RETURN "".
+      IF (lcBundles = "" OR LOOKUP(lcBundles,lcOnlyVoiceContracts) > 0) AND fBundleWithSTC(iiMsSeq,fSecOffSet(MsRequest.ActStamp,1),FALSE) THEN 
+          RETURN "".
    END.
 
    /* service packages that need to be deactivated */

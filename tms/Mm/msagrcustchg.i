@@ -6,10 +6,42 @@
 {Mnp/mnpoutchk.i}
 {Func/orderchk.i}
 {Func/fixedlinefunc.i}
+{Func/profunc.i}
 
 &SCOPED-DEFINE ACC_OLB_BARRINGS_NOT_ALLOWED "Y_HURG"
    
-   
+FUNCTION fCheckACCCompability RETURNS CHARACTER
+   (INPUT iiCustSRC AS INT,
+    INPUT iiCustDST AS INT):
+   DEF BUFFER bCustCatSRC FOR CustCat.
+   DEF BUFFER bCustCatDST FOR CustCat.
+   DEF BUFFER bCustomerSRC FOR Customer.
+   DEF BUFFER bCustomerDST FOR Customer.
+
+   FIND FIRST bCustomerSRC NO-LOCK WHERE
+              bCustomerSRC.Custnum EQ iiCustSRC NO-ERROR.
+   IF NOT AVAIL bCustomerSRC THEN RETURN "Customer not found".
+
+   FIND FIRST bCustomerDST NO-LOCK WHERE
+              bCustomerDST.Custnum EQ iiCustDST NO-ERROR.
+   IF NOT AVAIL bCustomerDST THEN RETURN "Customer not found".
+
+   FIND FIRST bCustCatSRC NO-LOCK WHERE
+              bCustCatSRC.Brand EQ gcBrand AND
+              bCustCatSRC.Category EQ bCustomerSRC.Category NO-ERROR.
+   IF NOT AVAIL bCustCatSRC THEN RETURN "Incorrect customer category".
+
+   FIND FIRST bCustCatDST NO-LOCK WHERE
+              bCustCatDST.Brand EQ gcBrand AND
+              bCustCatDST.Category EQ bCustomerDST.Category NO-ERROR.
+   IF NOT AVAIL bCustCatSRC THEN RETURN "Incorrect customer category".
+
+   IF bCustCatSRC.PRO EQ bCustCatDST.PRO THEN RETURN "".
+
+   RETURN "ACC is not allwed between PRO-NON PRO customers".
+
+END.
+
 FUNCTION fPreCheckSubscriptionForACC RETURNS CHARACTER
    (INPUT iiMsSeq AS INT):
    
@@ -190,6 +222,7 @@ PROCEDURE pCheckTargetCustomerForACC:
       NOT fSubscriptionLimitCheck(INPUT bACCNewCust.OrgId,
                                   INPUT bACCNewCust.CustIdType,
                                   INPUT NO,
+                                  fIsPro(bACCNewCust.Category),
                                   1,
                                   OUTPUT ocMessage,
                                   OUTPUT liSubLimit,

@@ -11,7 +11,8 @@
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 {Func/femailinvoice.i}
-      
+{Func/profunc.i}
+
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    {Func/lib/eventlog.i}
@@ -201,6 +202,8 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    DEF BUFFER InvCust  FOR Customer.
    DEF BUFFER UserCust FOR Customer.
 
+   DEF VAR lcCategory AS CHAR NO-UNDO.
+
    FIND Customer WHERE
         Customer.CustNum = iiCustNum EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAILABLE Customer THEN RETURN FALSE.     
@@ -318,16 +321,11 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
 
       /* category according to id type */
       Customer.Category = OrderCustomer.Category.      
-      FIND FIRST CustCat NO-LOCK WHERE
-         CustCat.Brand = gcBrand AND
-         LOOKUP(OrderCustomer.CustIDType,CustCat.CustIDType) > 0 AND
-         CustCat.SelfEmployed = OrderCustomer.SelfEmployed NO-ERROR.  
-      IF NOT AVAILABLE CustCat THEN    
-      FIND FIRST CustCat NO-LOCK WHERE
-         CustCat.Brand = gcBrand AND
-         LOOKUP(OrderCustomer.CustIDType,CustCat.CustIDType) > 0 NO-ERROR.
-      IF AVAIL CustCat THEN
-         Customer.Category = CustCat.Category.
+      fgetCustSegment(OrderCustomer.CustIDType, OrderCustomer.SelfEmployed,
+                      ordercustomer.pro, lcCategory).
+      
+      IF lcCategory > "" THEN
+         Customer.Category = lcCategory.
 
       IF iiTarget = 1 THEN DO:
          /* new user account */

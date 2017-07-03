@@ -66,6 +66,7 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
 
 END.   
 
+
 /*Function returns True if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */
 FUNCTION fIsConvergenceTariff RETURNS LOGICAL
@@ -354,6 +355,29 @@ FUNCTION fCheckExisting2PConvergent RETURNS LOGICAL
          RETURN TRUE.
 
    END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fIsProSubscription RETURNS LOGICAL
+   (INPUT iiMsSeq   AS INT):
+
+   DEFINE BUFFER bMobSub   FOR MobSub.
+   DEFINE BUFFER bCustomer FOR Customer.
+   DEFINE BUFFER bCustCat  FOR CustCat.
+
+   FIND FIRST bMobSub WHERE bMobSub.MsSeq = iiMsSeq AND bMobSub.PayType = FALSE NO-LOCK NO-ERROR.
+   IF AVAIL bMobsub THEN 
+   DO:
+       FIND FIRST bCustomer WHERE bCustomer.CustNum = bMobSub.InvCust AND bCustomer.Roles <> "inactive" NO-LOCK NO-ERROR.
+       IF AVAIL bCustomer THEN 
+       DO:
+           FIND FIRST bCustCat WHERE bCustCat.Brand = Syst.Parameters:gcBrand AND bCustCat.Category = bCustomer.Category AND bCustCat.Pro = TRUE NO-LOCK NO-ERROR.
+           IF AVAIL bCustCat THEN 
+               RETURN TRUE.    
+       END.        
+   END.    
 
    RETURN FALSE.
 
