@@ -1190,7 +1190,8 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
    IF idActStamp = ? OR idActStamp = 0 THEN
       idActStamp = fMakeTS().
 
-   ASSIGN llProCustomer = fIsProSubscription(iiMsSeq).
+   IF liReqType = {&REQTYPE_SUBSCRIPTION_CREATE} THEN   
+       ASSIGN llProCustomer = fIsProOrder(INT(icReqParam2)).
      
    fCreateRequest(liReqType,
                   idActStamp,
