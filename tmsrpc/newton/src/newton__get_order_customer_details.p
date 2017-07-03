@@ -107,14 +107,34 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
 
    IF piRowType <> 1 THEN
    DO:
-      IF piRowType = 4 THEN 
-         lcStructName = "delivery_address".
-      ELSE IF piRowType = 5 THEN 
-         lcStructName = "contact_address".
+      CASE piRowType:
+         WHEN {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
+         THEN lcStructName = "delivery_address".
+         WHEN {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
+         THEN lcStructName = "contact_address".
+         WHEN {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}
+         THEN lcStructName = "mobile_holder".
+         WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}
+         THEN lcStructName = "fixed_holder".
+      END CASE.
       lcStruct = add_struct(top_struct, lcStructName).
    END.
    ELSE
       lcStruct = top_struct.
+
+"line_holder" => {
+"line_type" => "mobile" or "fixed",
+"id_type" => "CIF",
+"id" => "20223019Q",
+"company" => "Some company",
+"title" => "Sr.",
+"first_name" => "jurgi",
+"surname1" => "Hernández",
+"surname2" => "Audicana",
+"customer_id_type" => "NIF",
+"customer_id" => "20223019Q",
+},
+
 
    lcLanguage = "".
    IF INTEGER(OrderCustomer.Language) > 0 THEN
