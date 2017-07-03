@@ -173,13 +173,13 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    END.
 
    IF INDEX(lcMailHeader, "#STATUS") > 0 THEN DO:
-      IF msrequest.reqtype EQ 9 THEN DO:
-         IF msrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+      IF bmsrequest.reqtype EQ 9 THEN DO:
+         IF bmsrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
             lcstatus = "3 - Pending deactivation".
          ELSE lcStatus = "0 - Inactive".
       END.
-      IF msrequest.reqtype EQ 8 THEN DO:
-         IF msrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+      IF bmsrequest.reqtype EQ 8 THEN DO:
+         IF bmsrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
             lcstatus = "2 - Pending activation".
          ELSE lcStatus = "1 - Active".
       END.
@@ -249,17 +249,17 @@ FUNCTION fMakeProActRequest RETURNS INT(
          RETURN 0.
       END.
          
-      FIND FIRST MsRequest WHERE
-                 MsRequest.Brand EQ gcBrand AND
-                 MsRequest.ReqType EQ liReqType AND
-                 MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
-                 MsRequest.ReqCParam6 EQ icContr NO-ERROR.
-      IF NOT AVAIL MsRequest THEN DO:
+      FIND FIRST bMsRequest WHERE
+                 bMsRequest.Brand EQ gcBrand AND
+                 bMsRequest.ReqType EQ liReqType AND
+                 bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
+                 bMsRequest.ReqCParam6 EQ icContr NO-ERROR.
+      IF NOT AVAIL bMsRequest THEN DO:
          ocErr = "Cancellation not possible, request not found".
          RETURN 0.
       END.
       fReqStatus(4, "SVA Operation Cancellation").
-      RETURN MsRequest.MsRequest.
+      RETURN bMsRequest.MsRequest.
         
    END.
    ELSE IF icAction EQ "on" THEN 
