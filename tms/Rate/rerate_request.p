@@ -39,7 +39,9 @@ FUNCTION fIsCurrentDB RETURNS LOGICAL
    DEFINE VARIABLE lcDBPhysicalName AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lii              AS INTEGER   NO-UNDO.
 
-   lcDBPhysicalName = PDBNAME("mcdr").
+   ASSIGN
+      lcDBPhysicalName = PDBNAME("mcdr")
+      lcDBPhysicalName = ENTRY(NUM-ENTRIES(lcDBPhysicalName,"/"), lcDBPhysicalName, "/").
 
    DO lii = 0 TO 1:
       FOR FIRST DBConfig NO-LOCK WHERE
@@ -47,7 +49,7 @@ FUNCTION fIsCurrentDB RETURNS LOGICAL
                 DBConfig.TableName = icTableName AND
                 DBConfig.DBState = lii:
 
-         IF lcDBPhysicalName = DBConfig.DirectConnect + "/" + DBConfig.DBConnName
+         IF lcDBPhysicalName = DBConfig.DBConnName
          THEN DO:
             ASSIGN
                odaValidFrom = DBConfig.FromDate
@@ -107,8 +109,7 @@ RUN pInitializeRerate IN lhCustRerate.
 
 llReportStarted = FALSE.
 
-
-IF iiRequest > 0 OR llCurrentDB = FALSE THEN RUN pGetAllRequests.
+IF iiRequest > 0 THEN RUN pGetAllRequests.
 ELSE RUN pGetCustomerRequests(liCustNum).
 
 IF VALID-HANDLE(lhSubsRerate) THEN DO:
