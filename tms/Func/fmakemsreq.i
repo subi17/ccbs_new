@@ -48,6 +48,7 @@
 {Func/fcustdata.i}
 {Syst/tmsconst.i}
 {Func/fixedlinefunc.i}
+{Func/profunc.i}
 
 DEF BUFFER bReqOwner FOR MsOwner.
 DEF BUFFER bReqComp  FOR ServCom.
