@@ -181,7 +181,7 @@ PROCEDURE pReadFileData:
                  MsRequest.ReqStatus EQ liReqStatus AND
                  MsRequest.ReqCParam3 EQ lcServicecode.
       IF NOT AVAIL MsRequest THEN DO:
-         lcErrText = lcLine + ";" + "Action not allowed: Reauested " + 
+         lcErrText = lcLine + ";" + "Action not allowed: Requested " + 
                      lcSetStatus.
          OUTPUT STREAM sErr TO VALUE(lcErrorLog) append.
          PUT STREAM sErr UNFORMATTED lcErrText SKIP.
@@ -203,8 +203,21 @@ PROCEDURE pReadFileData:
          fReqStatus(4, "SVA operation cancelled ").
 
       END.
-      ELSE
+      ELSE DO:
          fReqStatus(6, "Execute SVA operation ").
+         /* in case of incativation inactivate also latest activation 
+            request */
+         IF lcSetStatus EQ "Inactive" THEN DO:
+           FIND FIRST MsRequest WHERE
+                      MsRequest.Brand EQ gcBrand AND
+                      MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+                      MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} AND
+                      MsRequest.ReqCParam3 EQ lcServicecode.
+           IF AVAIL MsRequest THEN
+              fReqStatus(9, "SVA operation, inactivated").
+
+         END.
+      END.
       OUTPUT STREAM sLog TO VALUE(lcLog) append.
       PUT STREAM sLog UNFORMATTED "Operation done" SKIP.
       OUTPUT STREAM sLog CLOSE.
