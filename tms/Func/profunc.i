@@ -19,6 +19,11 @@
 {Func/email.i}
 {Func/fixedlinefunc.i}
 
+DEF TEMP-TABLE ttOrderList
+   FIELD OrderID AS INT
+   INDEX OrderID OrderID DESC.
+DEF STREAM soutfile.
+
 FUNCTION fIsPro RETURNS LOGICAL
    (icCategory AS CHAR):
 
@@ -171,6 +176,178 @@ FUNCTION fValidateProSTC RETURNS CHAR
       
    RETURN "".
 END.
+
+/*tested, ok*/
+/*Function seeks COFF order for given Msrequest.
+If the order is not found the function returns an error code.*/
+FUNCTION fFindCOFFOrder RETURNS CHAR
+   (iiMsSeq AS INT):
+   DEF BUFFER bOrder FOR Order.
+
+   EMPTY TEMP-TABLE ttOrderList.
+   FOR EACH  bOrder NO-LOCK WHERE
+             bOrder.MsSeq EQ iiMsSeq:
+      IF fIsConvergenceTariff(bOrder.CLIType) THEN DO:
+        CREATE ttOrderList.
+        ASSIGN ttOrderList.OrderID = bOrder.OrderId.
+      END.
+   END.
+   FIND FIRST ttOrderList NO-ERROR.
+   IF AVAIL ttORderList THEN RETURN STRING(ttOrderList.OrderID).
+
+   RETURN "ERROR: Order not found for mobsub " + STRING(iiMsSeq).
+END.
+
+
+
+FUNCTION fParseEmailByRequest RETURNS CHAR
+   (iiMsRequest AS INT,
+    icTemplate AS CHAR):
+   DEF VAR lcOutput AS CHAR NO-UNDO.
+   DEF VAR lcMailHeader AS CHAR NO-UNDO.
+   DEF VAR lcReplace AS CHAR NO-UNDO.
+   DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER bCustomer FOR Customer.
+   FIND FIRST bMsRequest NO-LOCK WHERE
+              bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
+   IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
+                                   STRING(iiMsRequest).
+   FIND FIRST bCustomer NO-LOCK WHERE
+              bCustomer.CustNum EQ bMsRequest.CustNum.
+    IF NOT AVAIL bCustomer THEN
+       RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
+
+   lcOutput = fGetEmailText("EMAIL",
+                               icTemplate,
+                               1,
+                               OUTPUT lcMailHeader).
+   IF lcOutput EQ ""/* OR lcMailHeader EQ ""*/ THEN
+      RETURN "ERROR: Email content fetching error" +
+             STRING(BCustomer.CustID) + " " +
+             STRING(icTemplate).
+
+   /*Seek tags:*/
+   IF INDEX(lcOutput, "#CUSTNAME") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTNAME", 
+         (bCustomer.CustName + " " + bCustomer.FirstName + " ")   ).
+   END.
+   IF INDEX(lcOutput, "#ORDERID") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, 
+                         "#ORDERID", 
+                         fFindCOFFOrder(bMsRequest.MsSeq)).
+   END.
+   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
+   END.
+   IF INDEX(lcOutput, "#CUSTID") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Custid)).
+   END.
+   IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
+      lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
+      lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
+   END.
+   IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
+      lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
+      lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
+   END.
+
+   RETURN lcOutput.
+
+END.
+
+
+FUNCTION fSendEmailByRequest RETURNS CHAR
+   (iiMsRequest AS INT,
+    icTemplate AS CHAR):
+   DEF VAR lcOutput AS CHAR NO-UNDO.
+   DEF VAR lcMailFile AS CHAR NO-UNDO.
+   DEF VAR lcMailHeader AS CHAR NO-UNDO.
+   DEF VAR lcReplace AS CHAR NO-UNDO.
+   DEF VAR lcMailDir AS CHAR NO-UNDO.
+   DEF VAR lcStatus AS CHAR NO-UNDO.
+   DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER bCustomer FOR Customer.
+   
+   FIND FIRST bMsRequest NO-LOCK WHERE
+              bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
+   IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
+                                   STRING(iiMsRequest).
+   FIND FIRST bCustomer NO-LOCK WHERE
+              bCustomer.CustNum EQ bMsRequest.CustNum.
+    IF NOT AVAIL bCustomer THEN
+       RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
+
+   lcOutput = fGetEmailText("EMAIL",
+                             icTemplate,
+                             1,
+                             OUTPUT lcMailHeader).
+   
+   IF lcOutput EQ ""/* OR lcMailHeader EQ ""*/ THEN
+      RETURN "ERROR: Email content fetching error" +
+             STRING(BCustomer.CustID) + " " +
+             STRING(icTemplate).
+
+   /*Seek tags:*/
+   IF INDEX(lcOutput, "#CUSTNAME") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTNAME", 
+         (bCustomer.CustName + " " + bCustomer.FirstName + " ")   ).
+   END.
+   IF INDEX(lcOutput, "#ORDERID") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, 
+                         "#ORDERID", 
+                         fFindCOFFOrder(bMsRequest.MsSeq)).
+   END.
+   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
+   END.
+   IF INDEX(lcOutput, "#CUSTID") > 0 THEN DO:
+      lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Orgid)).
+   END.
+   IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
+      IF NUM-ENTRIES(bMSRequest.ReqCparam6) > 2 THEN
+         lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
+      ELSE lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
+      lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
+   END.
+   IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
+      lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
+      lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
+   END.
+
+   IF INDEX(lcMailHeader, "#STATUS") > 0 THEN DO:
+      IF bmsrequest.reqtype EQ 9 THEN DO:
+         IF bmsrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+            lcstatus = "3 - Pending deactivation".
+         ELSE lcStatus = "0 - Inactive".
+      END.
+      IF bmsrequest.reqtype EQ 8 THEN DO:
+         IF bmsrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+            lcstatus = "2 - Pending activation".
+         ELSE lcStatus = "1 - Active".
+      END.
+      lcMailHeader = REPLACE(lcMailHeader, "#STATUS", lcstatus).
+   END.
+
+   /*Set email sending parameters*/
+   /*lcMailDir = "/tmp/". /*To be sure that we have some place*/
+   lcMailDir = fCParam("YPRO", "YPRO_SVA_email_dir").
+   lcMailFile = lcMailDir + "SVA_email" + STRING(bMsRequest.Msrequest) + ".txt".
+   
+   OUTPUT STREAM soutfile to VALUE(lcMailFile).
+   PUT STREAM soutfile UNFORMATTED lcOutput skip.
+   */
+   ASSIGN
+      xMailFrom = fCParamC("DefEmailSender")
+      xMailAddr = fCParam("YPRO", "SVA_BO_EMAIL_ADDRESS")
+      xMailSubj = lcMailHeader.
+      SendMaileInvoice(lcOutput, "", "").
+
+   /*Used email file removal or saving to logs?*/
+
+   RETURN "".
+
+END.
+
 
 &ENDIF
 
